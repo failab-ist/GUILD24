@@ -1,0 +1,311 @@
+# NPC_TRAIT_QA
+
+DOC=NPC_TRAIT_QA
+OWNER=qa,npc,trait,roster,living_npc_cap
+
+DOC_VERSION=2.2.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+
+
+Status values are NOT stored here.
+This file defines acceptance criteria only.
+
+## NPC-Q01 — PERSISTENT IDENTITY
+SETUP:
+Meet and revisit same NPC.
+
+EXPECT:
+Same:
+- identity
+- Job
+- Traits
+- accumulated growth/history
+
+PASS:
+NPC does not regenerate as a new character.
+
+## NPC-Q02 — JOB IDENTITY
+SETUP:
+Inspect all active Jobs.
+
+EXPECT:
+Job differences come from:
+- base stats
+- growth
+
+PASS:
+No hidden Job-ID passive is required for identity.
+
+## NPC-Q03 — NO HIDDEN JOB EFFECT
+SETUP:
+Compare same item/effect on different Jobs with equal relevant stats where possible.
+
+EXPECT:
+No secret Job-ID modification to:
+- item effect
+- hazard defense
+- loot
+- escape
+- purchase interest
+- removed/noncanonical family/hazard keys such as `undead`
+
+PASS:
+Differences are explainable by stats/visible traits, with no legacy Job-specific exception.
+
+## NPC-Q04 — JOB FAMILY COVERAGE
+SETUP:
+Evaluate each playable Job across all Dungeon Families.
+
+EXPECT:
+Each Job has:
+- >=2 meaningful natural stat advantages
+- some pressure areas requiring preparation
+
+PASS:
+No Job is mandatory for a Family and no Job solves all Families.
+
+## TRAIT-Q01 — DIRECTION SIGNAL
+SETUP:
+Inspect Positive/Mixed/Negative traits.
+
+EXPECT:
+GREEN/YELLOW/RED meaning is reinforced by icon/label.
+
+PASS:
+Color alone is not required to understand direction.
+
+## TRAIT-Q02 — TRAIT COUNT READABILITY
+SETUP:
+Generate/advance many NPCs.
+
+EXPECT:
+Normal visible trait count stays around <=3–4.
+
+PASS:
+NPC panel does not become modifier-wall gameplay.
+
+## TRAIT-Q03 — MUTUAL EXCLUSION
+SETUP:
+Generate large sample.
+
+EXPECT:
+Never coexist:
+- 용감함 + 겁쟁이
+- 대식가 + 소식가
+- 신중함 + 무모함
+- 구두쇠 + 충동구매
+- 강골 + 허약함
+- 행운아 + 불운아
+
+PASS:
+No invalid pair appears.
+
+## TRAIT-Q04 — GREED/MISER INDEPENDENCE
+SETUP:
+Generate large sample.
+
+EXPECT:
+`탐욕 + 구두쇠` may coexist.
+
+PASS:
+No mutual-exclusion rule blocks them.
+
+## TRAIT-Q05 — RARITY INDEPENDENCE
+SETUP:
+Sample Common/Epic NPCs.
+
+EXPECT:
+Trait quality is not directly dictated by NPC rarity.
+
+PASS:
+Epic can have negative traits; Common can have strong combinations.
+
+## TRAIT-Q06 — SOFT SPAWN GUARD
+SETUP:
+Sample many NPC generations.
+
+EXPECT:
+Extreme unusable negative bundles are not common enough to erase play value.
+
+PASS:
+Guard is soft, not `rarity = good traits`.
+
+## TRAIT-Q07 — CATEGORY AFFINITY SCOPE
+SETUP:
+Use category-affinity trait on multi-effect item.
+
+EXPECT:
+Only intended category core effect is amplified.
+
+PASS:
+Unrelated hazard counters/penalties are not multiplied automatically.
+
+## TRAIT-Q08 — INFORMATION RELIABILITY TRAIT
+SETUP:
+Use any canonical Trait that explicitly makes NPC-reported information unreliable.
+
+EXPECT:
+- the Trait effect is understandable to the player
+- reported information may differ only as defined by that Trait
+- underlying actual game state remains unchanged unless the Trait explicitly says otherwise
+- no unrelated price/item bonus is implied
+
+PASS:
+Information reliability changes without silently changing destination routing or unrelated systems.
+
+## TRAIT-Q09 — TRAIT MODIFICATION RARITY
+SETUP:
+Play/simulate full runs.
+
+EXPECT:
+Permanent Trait editing is rare.
+
+PASS:
+It does not function like routine equipment swapping.
+
+## TRAIT-Q10 — RED REMOVAL EVENT
+SETUP:
+Trigger approved Rare Trait event.
+
+EXPECT:
+Player chooses one NPC and one RED trait to remove.
+
+PASS:
+No automatic random removal from unintended NPC.
+
+## TRAIT-Q11 — POSITIVE ADD EVENT
+SETUP:
+Trigger approved Epic Trait event.
+
+EXPECT:
+Player chooses 1 of 3 positive trait options for one NPC.
+
+PASS:
+Choice is explicit.
+
+## TRAIT-Q12 — NO FORCED RANDOM NEGATIVE
+SETUP:
+Play normal events.
+
+EXPECT:
+Invested NPC does not receive random permanent negative trait without explicit risk/reward choice.
+
+PASS:
+No forced punishment path.
+
+
+## TRAIT-Q13 — NO LEGACY RESOLUTION KEYS
+SETUP:
+Audit all active Trait definitions and expedition-resolution references.
+
+EXPECT:
+No active Trait effect reads/writes:
+- `long`
+- `thirst`
+- `wet` as Hazard
+- `armor` as Hazard
+- `undead` as Hazard
+
+PASS:
+Traits resolve only through current canonical systems.
+Old source fields may exist only as inert migration/dead data pending safe cleanup.
+
+## TRAIT-Q14 — SUPPLY MIGRATION SAFETY
+SETUP:
+Inspect any Trait previously or currently associated with food amount, long expedition, or Supply behavior, including 대식가/소식가.
+
+EXPECT:
+- no legacy `long` value is carried over automatically
+- any active Supply-related Trait effect uses the canonical Supply/Supply Burden model
+- the effect is visible/understandable to the player
+- unresolved Trait effects are not invented by implementation
+
+PASS:
+No hidden legacy long/thirst mechanic survives through Trait code.
+
+## DEST-Q01 — RANDOM DESTINATION
+SETUP:
+Generate multi-Gate customer set.
+
+EXPECT:
+Default destination is random among currently eligible open Gates.
+
+PASS:
+No auto-best-fit routing.
+
+## DEST-Q02 — LIMITED REASSIGN EVENT
+SETUP:
+Trigger destination-change event.
+
+EXPECT:
+- one not-yet-finalized NPC
+- one change
+- player chooses another open Gate
+- finalized NPC ineligible
+
+PASS:
+No automatic optimization.
+
+## NPC-Q05 — NEWCOMER CURVE
+SETUP:
+Sample newcomer near current Day.
+
+EXPECT:
+No-item forecast usually ≈ 접전~불리.
+Good preparation can reach ≈ 접전~우세.
+
+PASS:
+Newcomers are usable but not free aces.
+
+## NPC-Q06 — INVESTED NPC CURVE
+SETUP:
+Sample returning invested NPC near same Day.
+
+EXPECT:
+No-item ≈ 접전~우세.
+Good preparation can create reliable ace.
+
+PASS:
+Long-term investment has visible power.
+
+## NPC-Q07 — HIGH-ROLL NEWCOMER
+SETUP:
+Sample many newcomers.
+
+EXPECT:
+Rare strong newcomer can exist.
+
+PASS:
+Exception exists without becoming average replacement strategy.
+
+## NPC-Q08 — TRUSTED REGULAR / ROSTER FEEL TARGET
+SETUP:
+Normal full-run playtests across several seeds / Customer-build states.
+
+EXPECT:
+- mid/late run naturally produces around 2–4 trusted regulars
+- some newcomer/replacement flow remains visible
+- living NPC count never exceeds 22
+- temporary Recovery does not create a free cap slot
+- Death creates future capacity for normal newcomer generation
+- the roster does not flood the Player with endless unfamiliar NPCs
+- the roster does not collapse into the exact same tiny set every day
+
+PASS:
+Living NPC Cap=22 supports a memorable small core without one-NPC monopoly, roster inflation, or attachment dilution.
+
+FAIL SIGNALS:
+- Cap 22 is reached so early/often that Rookie/Royal newcomer events routinely become unusable
+- fresh NPC flow consistently dilutes the 2–4 trusted-regular target
+- the same tiny roster monopolizes visits across the run
+
+## NPC-Q09 — LONG-TERM VALUE
+SETUP:
+Compare selective investment vs repeatedly discarding weak NPCs.
+
+EXPECT:
+Investment creates future value through existing:
+growth/wallet/loyalty/revisit/final-roster channels.
+
+PASS:
+No separate punishment system is needed to make care matter.
