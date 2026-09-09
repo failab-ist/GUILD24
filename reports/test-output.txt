@@ -1,0 +1,25 @@
+PASS day0 → day1 → night → day2 and v3 save
+PASS pricing and actual acquisition cost; wallet and stock conservation
+PASS all paid modes obey wallet, unknown modes rejected, refusal keys safe
+PASS tasting grants first half-price subsidy once
+PASS trait source of truth; showoff price benefit without XP bonus
+PASS showoff actual route fixed before sale and 150% benefit
+PASS coupon pending capped; order-dependent; water interaction retained
+PASS atomic cart validates funds, capacity and supply without mutation
+PASS cold storage restricted to food, expiry and slot growth preserved
+PASS night only once, empty night neutral, visitor forecast exact
+PASS save v1 migration preserves paid history and RNG; v2 cart resumes
+PASS seed and mid-day save replay deterministic
+PASS bankruptcy, upgrade, final supply and boss one-shot preserved
+PASS all effect keys presented and names readable
+PASS headless 30-day smoke
+PASS seven relic windows, stable offers, phase gating and no duplicate purchase
+PASS window deferral and expiration; purchases blocked during sale
+PASS fridge existing stock only once, future stock and expiry finite
+PASS no pre-reveal; dead NPCs release active capacity; contradictory traits absent
+PASS tier bands and family diversity
+PASS bulk discount quote equals actual debit; reroll does not farm pity
+PASS empty provisioning cannot grind knowledge
+PASS same SKU bulk across separate offers; board does not change rookie level
+PASS actual v0.1 engine fixture imports and continues through next morning
+23 revision groups passed

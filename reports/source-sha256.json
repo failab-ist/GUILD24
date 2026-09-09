@@ -1,0 +1,21 @@
+{
+  "dist/data/catalog.js": "730e81d8c36de4ff8edca24a78a9d8326e16f29709dd580001714ea9934d423a",
+  "dist/data/relics.js": "33d750d17c31e425590d187d0761052a0902c77aceffb60acebc3dadb77e417e",
+  "dist/favicon.svg": "7daedd0c2b6efdaa2e6abbe60f08bbfa6775cc459c38f4eb4cf368da7b8619d6",
+  "dist/index.html": "4cdf5a1bfe758ca1c23c8650da007edec6238761b0b2bdf7debc9adf3e485d4f",
+  "dist/systems/adventurer.js": "55ad741b93b05bcf4b1ff3e1d81c9442d8757cf21e83e24dd6d1c905be4522fc",
+  "dist/systems/dungeon.js": "94abc2171dc67da394196576de6b9e228f8a13897dc867dcda41aaa556fcd7eb",
+  "dist/systems/meta.js": "040e6d0fc898fd0a2eadc21eb0bf72bcc829bcfb1153637affa9fa23ba8c1381",
+  "dist/systems/relics.js": "818864a3179c3eea6015f70a2d7477549a18488c86bfd0809611981a315d5035",
+  "dist/systems/rng.js": "117115ca2170232bab1af891e555c6f3e3e93e311d49c896bbd11cb7f8185d32",
+  "dist/systems/run.js": "62d5ae7c3b26d652b738d92def92af4ad6dbaec09bbb43017fff93be33b18128",
+  "dist/systems/save.js": "3535576ba727b8a3cde9b5798266a2f52155e4b73a5ffa3936a53a308340429c",
+  "dist/systems/shop.js": "79dd6d5c94d23597c9276a0fdb17e1d2bdbd82c1ffb1d08c32df520b728e3778",
+  "dist/systems/simulation.js": "5986e3bbd617e2b0d0704144fdc92df745c77af6a315b686e0dc5e136fba921d",
+  "dist/ui/app.js": "79a75c87bbe263707127fd12a25761158bed46bcb4f5799329919c26910cc62f",
+  "dist/ui/art.js": "f873bf6e4ee579ba7c8207bf145e0c939e75dae6da592cc6275acf4ebb451d55",
+  "dist/ui/audio.js": "454012dd7add210db42df142a751bd5a29517ed878cc5869ee3f6adf7ac91f93",
+  "dist/ui/presentation.js": "17683cd810116d6268b1c4fc360dfec2b9442a307a7105562b613297424c85db",
+  "dist/ui/revision.css": "0a4290de6e3bdea56962839d1b36239004e352c7fa6d7ded5021261fcd0d7835",
+  "dist/ui/style.css": "f006ae72a8019f33de3d3949f67374aa9bde9e2486bcb5a2e7c9e98f6540fa7e"
+}

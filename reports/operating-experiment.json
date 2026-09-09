@@ -1,0 +1,24 @@
+{
+  "parameter": "operating",
+  "baseline": 60,
+  "candidate": 65,
+  "seedsPerStrategy": 300,
+  "cohorts": [
+    {
+      "pricing": "adaptive",
+      "build": "hybrid",
+      "reach": 0.9966666666666667,
+      "clear": 0.2633333333333333,
+      "gold": 3667.1,
+      "deaths": 4.1
+    },
+    {
+      "pricing": "vip",
+      "build": "vip",
+      "reach": 0.9666666666666667,
+      "clear": 0.49666666666666665,
+      "gold": 1620,
+      "deaths": 4.163333333333333
+    }
+  ]
+}
