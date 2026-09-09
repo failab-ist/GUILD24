@@ -57,8 +57,29 @@ dungeons:[
 hazards:{poison:'독',bind:'속박',corrosion:'부식',mire:'진창',fire:'화염',fear:'공포',dark:'어둠',cold:'냉기',whiteout:'화이트아웃'},
 facilities:[],
 events:[
-['logistics','물류대란','발주 후보 -2 · 매입가 +15%',{offers:-2,price:1.15}],['oneplus','본사 1+1 행사','일반 상품 한 종의 발주 수량 2배',{double:1}],['expedition','길드 원정주간','방문객 +2',{visitors:2}],['overflow','몬스터 범람','던전 위험과 보상 동시 증가',{danger:1.12,reward:1.3}],['manaPrice','마석 가격 폭등','마법 상품 매입가 +35%',{magicPrice:1.35}],['coldwave','한파','모든 원정에 냉기 위험 추가',{cold:1}],['shortage','포션 공급 중단','포션 발주 확률 급감',{potionWeight:0.08}],['rookie','신입 모험가 시즌','새로운 견습 모험가 합류',{rookie:1}],['royal','왕립 기사단 방문','고레벨 · 희귀 모험가 합류 기회',{royal:1}],['blackmarket','암시장 상인','희귀 이상 특별 발주 · 높은 매입가',{blackmarket:1}],['audit','본사 재고 감사','누적 폐기 6개 이상이면 감사 비용 발생',{audit:1}],['festival','왕도 축제','음식과 음료 구매 의사 증가',{foodDemand:0.2}],['strike','길드 파업','방문객 -1',{visitors:-1}],['unknown','미확인 게이트','고위험 · 고보상 임시 던전 추가',{unknown:1}],['tasting','본사 반값 행사','오늘 첫 반값 판매에 본사 50G 지원',{tasting:1}]
-].map(([id,name,description,effects])=>({id,name,description,effects})),
+['logistics','물류대란','길이 막혔다. 물건은 왔다. 평소보다 비쌀 뿐이다.','오늘 매입가 +15%',{price:1.15}],
+['oneplus','본사 1+1 행사','본사에서 행사 공문이 내려왔다.','지정 상품 1종 · 발주 수량 2배',{double:1}],
+['pilgrimage','게이트 순례주간','순례 행렬이 게이트 구역을 지나간다.','오늘 1~3명의 모험가가 예정된 목적지가 아닌 다른 열린 게이트로 향할 수 있습니다.',{pilgrimage:1}],
+['overflow','몬스터 범람','게이트 밖까지 소리가 들린다.','오늘 원정 위험 증가 · 원정 보상 증가',{danger:1.12,reward:1.3}],
+['manaPrice','마석 가격 폭등','마석 값이 또 올랐다.','오늘 특수 상품 매입가 +35%',{magicPrice:1.35}],
+['coldwave','한파','북쪽 바람이 게이트 구역까지 내려왔다.','적용 가능한 게이트에 냉기 위험 추가',{cold:1}],
+['shortage','포션 공급 중단','포션 상자가 오지 않았다.','오늘 포션 발주 등장 확률 크게 감소',{potionWeight:0.08}],
+['rookie','신입 모험가 시즌','길드 게시판에 새 이름이 늘었다.','오늘 신규 · 견습 모험가 합류 가능성 증가',{rookie:1}],
+['royal','왕립 기사단 방문','왕립 기사단 마차가 멈췄다.','오늘 고레벨 · 희귀 신규 모험가 합류 기회',{royal:1}],
+['blackmarket','암시장 상인','정문으로 들어온 사람은 아니다.','오늘 희귀 이상 특별 발주 · 매입가 높음',{blackmarket:1}],
+['audit','본사 재고 감사','본사에서 장부를 보러 왔다.','누적 폐기 기준 초과 · 감사 비용 발생',{audit:1}],
+['festival','왕도 축제','왕도 축제가 시작됐다.','오늘 음식 · 음료 구매 의사 증가',{foodDemand:0.2}],
+['strike','길드 파업','길드 정문에 현수막이 걸렸다.','오늘 방문객 -1',{visitors:-1}],
+['unknown','미확인 게이트','지도에 없던 문이 열렸다.','오늘 고위험 · 고보상 임시 게이트 1개 추가',{unknown:1}],
+['tasting','본사 반값 행사','오늘 반값은 본사가 한 번 낸다.','오늘 첫 50% 판매 · 본사 지원 +50G',{tasting:1}],
+['poisonfog','독안개','게이트 주변에 누런 안개가 깔렸다.','적용 가능한 게이트에 독 위험 추가',{poison:1}],
+['caravan','보급 상단 도착','보급 상단이 하루 일찍 도착했다.','오늘 발주 후보 +2',{offers:2}],
+['payday','길드 급여일','오늘은 길드 급여일이다.','오늘 방문 모험가 구매 예산 +20%',{wallet:1.2}],
+['clinic','치유소 휴무','치유소 앞에 휴무 팻말이 붙었다.','오늘 의료 상품 구매 의사 증가',{medicalDemand:0.2}],
+['wastecover','본사 폐기 지원','오늘 폐기비는 본사 부담이다.','오늘 폐기 비용 0G',{wasteFree:1}],
+['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2',{visitors:2},.35],
+['nightshift','본사 야간 근무 수칙','1. 마감 전 창고를 확인한다.\n2. 폐기 상품은 따로 둔다.\n3. 뒷문은 잠근다.\n5. 새벽 두 시 이후에는 창밖을 보지 않는다.\n4번 규정은 없습니다.','오늘 점포 유지비 0G',{overheadFree:1},.35]
+].map(([id,name,reveal,description,effects,weight=1])=>({id,name,reveal,description,effects,weight})),
 contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으로 시작',unlock:null},{id:'delivery',name:'새벽배송 가맹점',description:'발주 +1 · 매입가 +5%',unlock:'day10'},{id:'guild',name:'길드 제휴점',description:'방문객 +1 · 운영비 +20G',unlock:'regular3'},{id:'budget',name:'알뜰 가맹점',description:'초기자금 +250G · 희귀 발주 확률 소폭 감소',unlock:'run1'},{id:'premium',name:'프리미엄 상권',description:'희귀 모험가 확률 증가 · 운영비 +25G',unlock:'level15'}],
 unlocks:{cold5:['설원 생환',5],fear5:['공포 원정 생환',5],poison10:['독 치료·예방',10],mage10:['마법사 최고 레벨',10],level15:['모험가 최고 레벨',15],fire12:['화염 골렘 처치',12],boss1:['마왕 토벌',1],escape10:['성공적인 탈출',10],wounded5:['중상에서 생환',5],revenue3000:['누적 매출',3000],knowledge15:['몬스터 관찰',15],regular3:['단골 달성',3],day10:['최고 도달 DAY',10],run1:['런 완료',1]}
 };
