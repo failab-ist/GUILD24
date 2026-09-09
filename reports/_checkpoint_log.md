@@ -142,3 +142,45 @@ balance observation: 120 seeds: all 30 Traits reachable through generation and g
                      No PASS3 numeric changed (V2_4_EXECUTION_PLAN.md §10).
 remaining issue:     NONE
 next chunk:          E — Final Expedition
+
+## CHUNK E — FINAL EXPEDITION
+start HEAD:          593ef46
+end/commit:          e0cd448
+files changed:       dist/data/catalog.js; dist/systems/{run,shop,save}.js; dist/ui/app.js; package.json;
+                     tests/{revision,vocabulary}.cjs; tests/final.cjs (new)
+KEEP/PATCH/REPLACE:  REPLACE D30 generation and resolution. KEEP prepare(), the Individual Final Power
+                     formula, the 0.88-1.12 roll and support=1 (no Job-diversity synergy) — all three
+                     already matched canonical and were left untouched.
+tests run:           npm test -> PASS (core + 23 revision + 14 DELTA + 9 vocabulary + 12 events +
+                     10 relic/order + 11 traits + 7 final + canonical D0-D30)
+implementation note: BIGGEST BUG FIXED — the old boss() re-ran Dungeon.resolve on every member AFTER a
+                     successful clear, so individual injury/death judgements could overturn a won Final
+                     (FINAL-001 postClearNormalResolve=NO). The Final now resolves once and calls
+                     Dungeon.resolve zero times; a test spies on it to keep it that way.
+                     Canonical defines no per-NPC outcome for the Final, on clear or on failure, so none
+                     was invented: the Final produces one verdict plus a finalReport for presentation.
+                     PLACEMENT DECISION: the zero-survivor Run Fail sits at Final entry (boss()), not at
+                     D30 dawn, because CORE_RUN/RELIC guarantee the D30 Relic window and FINAL section 3
+                     guarantees Family disclosure before Final lock. Ending at dawn would have skipped
+                     both. The departure button now enables at exactly finalRequired(), which is 0 when
+                     there are no survivors.
+                     The Final gate carries power = bossPower/3 for the qualitative per-NPC forecast
+                     only; it feeds no resolution path.
+stale tests updated: 2 — a revision setup entered D30 with nobody introduced (now a zero-survivor fail),
+                     and tests/vocabulary.cjs referenced the retired makeDungeon('boss').
+design proposal:     NONE
+balance observation: BOSS POWER — needs User approval before any change (V2_4_EXECUTION_PLAN.md §10).
+                     159 D30 parties across balanced/adaptive/hybrid and skilled/adaptive/expedition:
+                       Raw Party Power  p10 145 | median 165 | p90 201 | max 302
+                       bossPower 230; median x best roll 1.12 = 185
+                       only 9% of parties could clear even on a top roll
+                       observed clear|reach: balanced 0.05, skilled 0.07
+                     Candidate for consideration: bossPower in the 165-185 band would put a median party
+                     at the threshold and let the roll decide. NOT APPLIED — 230 remains the provisional
+                     retained Source baseline, and canonical leaves the exact value unfixed.
+                     PRE-EXISTING, NOT A REGRESSION: the `protective`/half/vip simulation cohort reaches
+                     D30 0/60 and ends at -34G. Measured at pre-adoption 8620d84 it was already 0/60 at
+                     -32G, so this is an existing policy artefact, not caused by A-E. Examine properly in
+                     Chunk G alongside the new minimal-engagement and poverty policies.
+remaining issue:     NONE
+next chunk:          F — UI / UX / Visual Redesign + Copy (fresh Opus xhigh session, per the plan)
