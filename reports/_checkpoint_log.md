@@ -110,3 +110,35 @@ balance observation: 40 playing runs: reach 1.00, deaths/run 4.95, avg Gold 4334
                      No PASS3 numeric changed (V2_4_EXECUTION_PLAN.md §10).
 remaining issue:     NONE
 next chunk:          D — NPC / Trait / Sale
+
+## CHUNK D — NPC / TRAIT / SALE
+start HEAD:          5d50aed
+end/commit:          d429076
+files changed:       dist/data/{catalog,relics}.js; dist/systems/{adventurer,dungeon,shop}.js;
+                     dist/ui/{presentation,app}.js; package.json; tests/delta.cjs; tests/traits.cjs (new)
+KEEP/PATCH/REPLACE:  REPLACE the Trait catalog (20 -> frozen 30), the semantic-tone model and the NPC
+                     name pool. PATCH exclusions (6 -> 9), 대식가/소식가 axes, trait visibility, Sale
+                     purchase bias, visitor revisit weight, recovery duration, terminology.
+                     KEEP prepare/resolve structure, Purchase Intent, visitor selection and the rare
+                     Trait events — the 13 new Traits reuse them, no new subsystem.
+tests run:           npm test -> PASS (core + 23 revision + 14 DELTA + 9 vocabulary + 12 events +
+                     10 relic/order + 11 traits + canonical D0-D30)
+implementation note: Trait effects now split into resolution keys and behaviour keys. prepare() skips the
+                     behaviour set (priceBias/buyBias/rareBias/commonBias/shyBias/revisitMult/
+                     recoveryDelta/foodSupplyDelta/supplyPerItem/injuredCombat) and the owning system
+                     reads them instead — keeps one source of truth per effect.
+                     Food native core and Supply are now separate axes: trait foodMult touches native
+                     Stat/recovery only, while kitchen/fresh24 still cover Supply + native per RELIC
+                     boostScope. This is why 대식가 can raise survival and lower Supply at once.
+                     HONESTY BUG FIXED: Presentation.traits() hid Traits below loyalty 21 while
+                     prepare() resolved all of them, so invisible Traits changed expedition outcomes.
+                     tones live in the catalog per effect; Presentation.rows(e,tones) keeps the old
+                     sign-based fallback for Item effects only, which state their own costs.
+stale tests updated: 1 — the DELTA trait group asserted the deleted player-facing quality-label map;
+                     replaced with an internal-direction check plus a guard that the map stays deleted.
+design proposal:     NONE
+balance observation: 120 seeds: all 30 Traits reachable through generation and growth. 40 playing runs:
+                     reach 1.00, deaths/run 5.00, avg Gold 4319 — unchanged from Chunk C within noise.
+                     No PASS3 numeric changed (V2_4_EXECUTION_PLAN.md §10).
+remaining issue:     NONE
+next chunk:          E — Final Expedition
