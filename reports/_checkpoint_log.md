@@ -51,3 +51,34 @@ balance observation: 30-seed balanced/adaptive/hybrid vs pre-adoption: deaths/ru
                      V2_4_EXECUTION_PLAN.md §10).
 remaining issue:     NONE
 next chunk:          B — Event
+
+## CHUNK B — EVENT
+start HEAD:          c3ee771
+end/commit:          (this commit)
+files changed:       dist/data/catalog.js; dist/systems/shop.js; dist/ui/app.js; package.json;
+                     tests/events.cjs (new)
+KEEP/PATCH/REPLACE:  REPLACE event selection (74% uniform pick -> 35% weighted draw from an
+                     eligibility-filtered pool) and the catalog (15 -> canonical 22).
+                     PATCH morning() ordering, Night route causality, 1+1 fulfilment, wallet handling.
+                     KEEP the existing destination/claimedDestination split, Purchase Intent path,
+                     visitor-count modifier and Night presentation - 순례주간 and the new Events
+                     reuse them rather than adding systems.
+tests run:           npm test -> PASS (core + 23 revision + 14 DELTA + 9 vocabulary + 12 events +
+                     canonical D0-D30)
+implementation note: morning() had to be reordered - Gates and expectedVisitors are now built BEFORE
+                     the Event draw, because 한파/독안개/순례주간 eligibility is judged against today's
+                     actual Gate hazards and visitor count. Event Gate effects are applied before
+                     generateOffers() so Known Hazard / pity / coverage logic sees them (EVENT 8-1).
+                     Event data gained `reveal` (flavour) and `weight`; `s.eventSeen` is persisted but
+                     not yet consumed - the focused reveal composition is Chunk F.
+                     n.eventBudget is a today-only pot spent before n.money; the persistent Wallet is
+                     never touched, so 길드 급여일 cannot compound through walletCarry.
+                     Canonical 02 says one promo SKU is designated, so the common-item preference now
+                     falls back to any offer rather than leaving the Event inert.
+stale tests updated: none - the existing suite passed unchanged.
+design proposal:     NONE
+balance observation: 80 playing runs: observed event rate 0.360 against eligible days reached
+                     (canonical 0.35), 7.92 events per full run vs the 7.7 target, 80/80 reached D30,
+                     all 22 events observed. No PASS3 numeric changed (V2_4_EXECUTION_PLAN.md §10).
+remaining issue:     NONE
+next chunk:          C — Order / Reroll + Relic
