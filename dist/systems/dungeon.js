@@ -10,7 +10,7 @@ function prepare(n,d,facilities=[]){
  let power=copies;
  for(const[k,v]of Object.entries(item.effects)){
   if(k==='potion')continue;
-  let value=v*power;const nutrition=['supply','survival'].includes(k);if(nutrition&&item.category==='food')value*=mult.foodMult;if(nutrition&&['food','drink'].includes(item.category))value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);if(item.effects.potion&&k==='survival')value*=mult.potionMult;if(facilities.includes('expeditionMeal')&&['food','fresh','drink'].includes(item.category)&&d.hazards.includes(k)&&v>0)value*=1.25;if(k==='survival')value*=mult.defenseMult*mult.healMult;
+  let value=v*power;const nutrition=['supply','survival'].includes(k);if(nutrition&&item.category==='food')value*=mult.foodMult;if(nutrition&&['food','drink'].includes(item.category))value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);if(item.effects.potion&&k==='survival')value*=mult.potionMult;if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)&&v>0&&(d.hazards.includes(k)||k==='supply'&&d.requiredSupply>0))value*=1.25;if(k==='survival')value*=mult.defenseMult*mult.healMult;
   e[k]=(e[k]||0)+value;
  }
  const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
