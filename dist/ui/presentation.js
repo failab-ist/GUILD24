@@ -6,6 +6,10 @@ const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','inju
 const days=new Set(['recoveryDelta']);
 const mult=new Set(['xpMult','foodMult','potionMult','revisitMult']);
 const negative=new Set(['fatigue','injuryRisk','variance']);
+// Canonical player-facing Hazard pressure (DUNGEON_HAZARD 'HAZARD PLAYER-FACING PRESSURE').
+// All 9 Hazards are explained the same way. Rendered inline, so there is no hover-only path.
+const hazardPressure={poison:'강인함 압박',bind:'기동 압박',corrosion:'강인함 압박',mire:'기동 압박',fire:'강인함 압박',fear:'정신 압박',dark:'정신 중심 + 기동 보조 압박',cold:'강인함 압박',whiteout:'정신 중심 + 기동 보조 압박'};
+function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
 const util={duplicate:'다음 소비품 효과 2회 적용 · 쿠폰도 1칸 사용 · 중첩 불가',revive:'사망 판정을 중상으로 변경',curePoison:'독 대응 상품',potion:'포션'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
@@ -25,5 +29,5 @@ function preview(n,d,fac,item){const visible={...n,traits:traits(n)},before=G.Du
 function returning(n){if(!n.introduced||n.newToday||!n.records.length)return null;const r=n.records.at(-1),changes=(r.changes||[]).filter(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));if(r.injury>n.injury)changes.push(n.injury?'부상 완화':'부상 회복');if(r.recovery>0&&!n.recovery)changes.push('휴식 종료');return {day:r.day,outcome:r.outcome,changes,impact:r.events?.[0]?.text||null};}
 function modeLabel(mode){return D.pricing[mode]?.label||({normal:'정가(이전)',discount:'25% 할인(이전)',free:'무료 제공(이전)',supply:'최종 원정 보급'}[mode])||'이전 거래';}
 function amount(key,value){const v=percent.has(key)?value*100:value;return (Math.round(v*10)/10)+(percent.has(key)?'%p':'');}
-G.Presentation={returning,amount,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel};
+G.Presentation={returning,amount,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows};
 })(globalThis);
