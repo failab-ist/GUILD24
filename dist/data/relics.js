@@ -36,14 +36,11 @@ D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,p
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 D.balance.relicPriceScale=1;D.balance.walletBase=70;D.balance.walletLevel=18;D.balance.walletCarry=.28;
-D.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],['frugal','impulse'],['strong','frail'],['lucky','unlucky']];
+D.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],['frugal','impulse'],['strong','frail'],['lucky','unlucky'],['collector','thrifty'],['stamina','weary'],['social','shy']];
 D.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['corrosion'],['corrosion','mire'],['corrosion','mire']],fire:[['fire'],['fire'],['fire']],crypt:[['fear'],['fear','dark'],['fear','dark']],snow:[['cold'],['cold','whiteout'],['cold','whiteout']]};
 D.categories={food:'음식',drink:'음료',medicine:'의료',tool:'야외장비',insurance:'보험',magic:'특수'};
 D.roles={stat:'능력 보강',supply:'보급',direct:'전문 대응',hybrid:'복합 대응',condition:'컨디션',insurance:'생환 보험',risk:'위험·보상',economy:'원정 수익',utility:'특수 운용'};
 // Functional roles are declared per ITEM ACTIVE CATALOG, not inferred from effect shape.
 D.itemRoles={rice:['supply'],water:['supply'],ramen:['supply','hybrid'],bar:['supply','stat'],choco:['supply','stat'],coffee:['supply','stat'],bandage:['insurance'],potion:['stat'],ice:['supply','direct'],battery:['direct'],rope:['direct','stat'],candy:['supply','stat','hybrid'],lava:['supply','stat','hybrid'],energy:['supply','stat'],wine:['supply','direct','risk'],kit:['insurance'],mask:['direct'],heat:['direct'],cloak:['hybrid'],coating:['direct'],boots:['direct'],snowgoggles:['direct'],highpotion:['stat'],antidote:['direct'],stone:['insurance'],mana:['stat'],premium:['supply','economy'],ion:['supply','hybrid'],tree:['insurance'],coupon:['utility']};
 for(const it of D.items){it.fresh=it.category==='fresh';if(it.fresh)it.category='food';it.roles=D.itemRoles[it.id]||[];}
-const positive=['eater','impulse','genius','strong','potionbody','drinker','lucky'],negative=['frugal','pyrophobia'];
-for(const t of D.traits)t.direction=positive.includes(t.id)?'positive':negative.includes(t.id)?'negative':'mixed';
-D.traitDirections={positive:'▲ 이점',mixed:'◆ 양면',negative:'▼ 약점'};
 })(globalThis);

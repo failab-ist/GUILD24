@@ -1,29 +1,34 @@
 (function(G){
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function prepare(n,d,facilities=[]){
- // caffeineMult/alcoholMult are inert accumulators; the Traits that fed them leave the pool in the Trait chunk.
- let e={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit,escape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,luck:0,variance:0};const why=[],events=[],mult={foodMult:1,defenseMult:1,healMult:1,potionMult:1,caffeineMult:1,alcoholMult:1};
- for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){if(k in mult)mult[k]*=v;else if(k==='priceBias'||k==='buyBias'){continue;}else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}
- if(n.injury){e.survival-=n.injury*5;e.combat-=n.injury*3;why.push('남아 있는 부상으로 생존·전투 감소');}e.mobility-=n.fatigue*.4;
+ let e={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit,escape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,luck:0,variance:0};const why=[],events=[],mult={foodMult:1,potionMult:1};
+ const behaviour=new Set(['priceBias','buyBias','rareBias','commonBias','shyBias','revisitMult','recoveryDelta','foodSupplyDelta','supplyPerItem','injuredCombat']);
+ const traitSum=k=>n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects[k]||0),0);
+ const foodSupplyDelta=traitSum('foodSupplyDelta'),supplyPerItem=traitSum('supplyPerItem');
+ for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){if(k in mult)mult[k]*=v;else if(behaviour.has(k))continue;else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}
+ if(n.injury){e.survival-=n.injury*5;e.combat-=n.injury*3;why.push('남아 있는 부상으로 강인함·투력 감소');const grit=traitSum('injuredCombat');if(grit){e.combat+=grit;why.push('악바리: 부상 중에도 투력 +'+grit);}}e.mobility-=n.fatigue*.4;
  let duplicate=0;
  for(const id of n.pack){const item=D.itemBy[id];if(item.effects.duplicate){duplicate=1;continue;}const copies=1+duplicate;duplicate=0;if(copies>1)why.push('황금 1+1: '+item.name+' 효과 '+copies+'회');
  let power=copies;
  for(const[k,v]of Object.entries(item.effects)){
   if(k==='potion')continue;
-  let value=v*power;const nutrition=['supply','survival'].includes(k);if(nutrition&&item.category==='food')value*=mult.foodMult;if(nutrition&&['food','drink'].includes(item.category))value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);if(item.effects.potion&&k==='survival')value*=mult.potionMult;if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)&&v>0&&(d.hazards.includes(k)||k==='supply'&&d.requiredSupply>0))value*=1.25;if(k==='survival')value*=mult.defenseMult*mult.healMult;
-  e[k]=(e[k]||0)+value;
+  let value=v*power;const isFood=item.category==='food',isFD=isFood||item.category==='drink';
+  if(k==='supply'&&isFood)value=Math.max(1,value+foodSupplyDelta);
+  if(k==='supply'&&isFD)value+=supplyPerItem;
+  if(k==='survival'&&isFood)value*=mult.foodMult;
+  if(['supply','survival'].includes(k)&&isFD)value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);if(item.effects.potion&&k==='survival')value*=mult.potionMult;if(facilities.includes('expeditionMeal')&&isFD&&v>0&&(d.hazards.includes(k)||k==='supply'&&d.requiredSupply>0))value*=1.25;  e[k]=(e[k]||0)+value;
  }
  const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
  if(item.effects.survival>=10)why.push(item.name+': 생존 능력 보강');
  }
- if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))why.push('대식가: 음식의 보급·강인함 +40%');
+ if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))why.push('대식가: 음식 고유 효과 +30% · 음식 1개당 보급 -1');
  const required=d.requiredSupply||0,actual=e.supply||0,deficit=required>0?Math.max(0,required-actual):0;
  const penalty=deficit>0?Math.min(.3,deficit*.06):0;
  if(penalty)for(const k of G.Adventurer.keys)e[k]*=1-penalty;
  const hazards=d.hazards.map(h=>hazardState(h,e,d));
  let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
- if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))events.push({id:'eater-food',text:'대식가가 음식의 보급·강인함 효과를 40% 더 얻었다.'});
- if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 40% 증가했다.'});
+ if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
+ if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 30% 증가했다.'});
  return {effects:e,hazard,hazards,supply:{required,actual,deficit,penalty},why,events};
 }
 function tierWeights(day){
@@ -58,7 +63,7 @@ function resolve(n,d,r,facilities=[],options={}){
  if(['부상','중상'].includes(outcome)&&r.next()<clamp(e.injuryGuard,0,.9)){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('치료용품·강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'부상 방어 효과가 부상 단계를 낮췄다.'});}
  if(outcome==='사망')n.alive=false;
  n.injury=outcome==='중상'?2:outcome==='부상'?1:Math.max(0,n.injury-1);
- n.recovery=outcome==='중상'?r.int(2,4):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
+ n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
  n.fatigue=clamp(n.fatigue+3+(e.fatigue||0),0,20);
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?1.4:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);let loot=n.alive?Math.round((35+d.day*8)*(outcome==='퇴각'?.08:won?1:.18)*(1+e.loot)*(d.reward||1)):0;

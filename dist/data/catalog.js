@@ -44,8 +44,39 @@ jobs:[
 {id:'berserker',name:'광전사',color:'#db6464',stats:[21,13,12,7],growth:[4,2.4,1.9,1.3],ranks:['투사','광전사','혈전사','전장의 재앙'],unlock:'wounded5'}
 ],
 traits:[
-['brave','용감함','공포 저항 증가, 퇴각이 늦음',{fear:9,escape:-0.06}],['coward','겁쟁이','잘 도망치지만 전투·보상 감소',{combat:-3,escape:0.19,loot:-0.12}],['eater','대식가','음식의 포만감·보급·강인함 +40%',{foodMult:1.4}],['small','소식가','음식 효용 감소, 보급 +5',{foodMult:0.7,supply:5}],['careful','신중함','상품 강인함 효과 증가, 전리품 감소',{defenseMult:1.25,loot:-0.08}],['reckless','무모함','전투 증가, 위험한 퇴각 판단',{combat:7,escape:-0.08,injuryRisk:0.035}],['greed','탐욕','전리품 증가, 퇴각 지연',{loot:0.3,escape:-0.07}],['frugal','구두쇠','120G 초과 상품 구매 의사 −16%p',{priceBias:-0.16}],['impulse','충동구매','추가 상품 구매에 적극적',{buyBias:0.12}],['showoff','허세','목적지를 과장해서 말할 수 있음 · 실제 목적지는 바뀌지 않음',{}],['genius','천재','경험치 획득 +25%',{xpMult:1.25}],['strong','강골','중상 확률 감소',{injuryGuard:0.23}],['frail','허약함','강인함 감소, 상품 강인함 효과 증가',{survival:-5,healMult:1.35}],['potionbody','포션체질','포션 효과 +40%',{potionMult:1.4}],['caffeine','카페인중독','카페인 기동 효과 +40% · 원정 후 피로 -3',{caffeineMult:1.4,fatigue:-3}],['drinker','술고래','곡주 저항 효과 증가, 기동 페널티 완화',{alcoholMult:1.45}],['pyrophobia','화염공포증','화염 저항 −9',{fire:-9}],['undead','언데드혐오','언데드 전투 증가, 공포 취약',{undead:10,fear:-5}],['lucky','행운아','작은 판정·전리품 보너스',{luck:0.045,loot:0.07}],['unlucky','불운아','결과 변동폭 증가, 극희귀 전리품 기회',{variance:0.1,rareLoot:0.025}]
-].map(([id,name,description,effects])=>({id,name,description,effects})),
+// NPC_TRAIT ACTIVE TRAIT CATALOG (FROZEN, 30). `direction` is internal only.
+// Every material effect carries an explicit semantic tone; meaning is never inferred from the sign.
+['brave','용감함','mixed',{fear:9,escape:-0.06},{fear:'benefit',escape:'cost'}],
+['coward','겁쟁이','mixed',{combat:-3,escape:0.19,loot:-0.12},{combat:'cost',escape:'benefit',loot:'cost'}],
+['eater','대식가','mixed',{foodMult:1.3,foodSupplyDelta:-1},{foodMult:'benefit',foodSupplyDelta:'cost'},'위험 대응·보험·위험보상 효과는 커지지 않습니다.'],
+['small','소식가','mixed',{foodMult:0.8,foodSupplyDelta:1},{foodMult:'cost',foodSupplyDelta:'benefit'},'위험 대응·보험·위험보상 효과는 줄어들지 않습니다.'],
+['careful','신중함','mixed',{injuryRisk:-0.04,loot:-0.08},{injuryRisk:'benefit',loot:'cost'}],
+['reckless','무모함','mixed',{combat:7,escape:-0.08,injuryRisk:0.035},{combat:'benefit',escape:'cost',injuryRisk:'cost'}],
+['greed','탐욕','mixed',{loot:0.3,escape:-0.07},{loot:'benefit',escape:'cost'}],
+['frugal','구두쇠','negative',{priceBias:-0.16},{priceBias:'cost'},'비싼 상품일수록 구매를 망설입니다.'],
+['impulse','충동구매','positive',{buyBias:0.12},{buyBias:'benefit'}],
+['showoff','허세','mixed',{},{},'게이트가 여럿이면 말한 목적지가 실제와 다를 수 있습니다. 실제 배정과 가격·상품 취향은 바뀌지 않습니다.'],
+['genius','천재','positive',{xpMult:1.25},{xpMult:'benefit'}],
+['strong','강골','positive',{injuryGuard:0.23},{injuryGuard:'benefit'}],
+['frail','허약함','negative',{survival:-5,recoveryDelta:1},{survival:'cost',recoveryDelta:'cost'}],
+['potionbody','포션체질','positive',{potionMult:1.3},{potionMult:'benefit'}],
+['pyrophobia','화염공포증','negative',{fire:-9},{fire:'cost'}],
+['lucky','행운아','positive',{luck:0.045,loot:0.07},{luck:'benefit',loot:'benefit'}],
+['unlucky','불운아','negative',{luck:-0.045,loot:-0.07},{luck:'cost',loot:'cost'},'숨은 전투 변동폭은 바뀌지 않습니다.'],
+['collector','수집가','mixed',{rareBias:0.12,commonBias:-0.05},{rareBias:'benefit',commonBias:'cost'}],
+['thrifty','실속파','mixed',{commonBias:0.10,rareBias:-0.10},{commonBias:'benefit',rareBias:'cost'}],
+['social','사교적인','positive',{revisitMult:1.25},{revisitMult:'benefit'}],
+['shy','낯가림','negative',{shyBias:-0.10},{shyBias:'cost'},'세 번째 방문부터는 이 부담이 사라집니다.'],
+['mender','회복체질','positive',{recoveryDelta:-1},{recoveryDelta:'benefit'}],
+['stamina','지구력','positive',{fatigue:-1},{fatigue:'benefit'}],
+['weary','쉽게 지침','negative',{fatigue:1},{fatigue:'cost'}],
+['sharpeye','눈썰미','positive',{dark:6,whiteout:6},{dark:'benefit',whiteout:'benefit'}],
+['antitoxin','해독가','positive',{poison:8},{poison:'benefit'}],
+['coldhand','수족냉증','negative',{cold:-9},{cold:'cost'}],
+['prepared','준비성','positive',{supplyPerItem:1},{supplyPerItem:'benefit'}],
+['grit','악바리','mixed',{injuredCombat:6,fatigue:1},{injuredCombat:'benefit',fatigue:'cost'},'부상·중상 상태에서만 투력이 오릅니다.'],
+['aloof','냉담한','mixed',{revisitMult:0.80,cold:6},{revisitMult:'cost',cold:'benefit'}]
+].map(([id,name,direction,effects,tones,note=''])=>({id,name,direction,effects,tones,note})),
 dungeons:[
 {id:'spider',name:'독거미 동굴',short:'독거미 동굴',base:2,icon:'🕷',color:'#a4b980',hazards:['poison','bind'],monster:'독거미 여왕',weakness:'화염',reward:1},
 {id:'fire',name:'화염 골렘 광산',short:'골렘 광산',base:3,icon:'◆',color:'#ea9561',hazards:['fire'],monster:'화염 골렘',weakness:'강한 전투력',reward:1.15},
@@ -81,7 +112,7 @@ events:[
 ['nightshift','본사 야간 근무 수칙','1. 마감 전 창고를 확인한다.\n2. 폐기 상품은 따로 둔다.\n3. 뒷문은 잠근다.\n5. 새벽 두 시 이후에는 창밖을 보지 않는다.\n4번 규정은 없습니다.','오늘 점포 유지비 0G',{overheadFree:1},.35]
 ].map(([id,name,reveal,description,effects,weight=1])=>({id,name,reveal,description,effects,weight})),
 contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으로 시작',unlock:null},{id:'delivery',name:'새벽배송 가맹점',description:'발주 +1 · 매입가 +5%',unlock:'day10'},{id:'guild',name:'길드 제휴점',description:'방문객 +1 · 운영비 +20G',unlock:'regular3'},{id:'budget',name:'알뜰 가맹점',description:'초기자금 +250G · 희귀 발주 확률 소폭 감소',unlock:'run1'},{id:'premium',name:'프리미엄 상권',description:'희귀 모험가 확률 증가 · 운영비 +25G',unlock:'level15'}],
-unlocks:{cold5:['설원 생환',5],fear5:['공포 원정 생환',5],poison10:['독 치료·예방',10],mage10:['마법사 최고 레벨',10],level15:['모험가 최고 레벨',15],fire12:['화염 골렘 처치',12],boss1:['마왕 토벌',1],escape10:['성공적인 탈출',10],wounded5:['중상에서 생환',5],revenue3000:['누적 매출',3000],knowledge15:['몬스터 관찰',15],regular3:['단골 달성',3],day10:['최고 도달 DAY',10],run1:['런 완료',1]}
+unlocks:{cold5:['설원 생환',5],fear5:['공포 원정 생환',5],poison10:['독 치료·예방',10],mage10:['마법사 최고 레벨',10],level15:['모험가 최고 레벨',15],fire12:['화염 골렘 처치',12],boss1:['마왕 토벌',1],escape10:['성공적인 탈출',10],wounded5:['중상에서 생환',5],revenue3000:['누적 매출',3000],knowledge15:['보급 생환',15],regular3:['단골 달성',3],day10:['최고 도달 DAY',10],run1:['런 완료',1]}
 };
 G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:230,combatNoise:.175,rerollBase:30};
 G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intent:.18,loyalty:6}};

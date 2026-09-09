@@ -47,7 +47,7 @@ class Game{
  this.generateOffers();
  let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
  let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
- for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+ for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
  s.visitorBreakdown={base:baseVisitors,board:(s.dayFacilities.includes('board')?1:0)+(s.dayFacilities.includes('hub')?2:0),contract:s.contract==='guild'?1:0,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
  for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('showoff')&&s.dungeons.length>1&&this.rng.next()<D.balance.showoffLie){const bigger=s.dungeons.map((d,i)=>({d,i})).filter(x=>x.i!==n.destination&&x.d.power>=s.dungeons[n.destination].power);if(bigger.length)n.claimedDestination=this.rng.pick(bigger).i;}n.money=Math.min(1800,Math.round(D.balance.walletBase+n.level*D.balance.walletLevel+this.rng.int(0,75)+n.money*D.balance.walletCarry));n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;n.newToday=!n.introduced;}
  if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
@@ -74,9 +74,7 @@ class Game{
  const price=Math.round(it.sell*rule.mult),d=this.run.dungeons[n.destination]||this.run.dungeons[0],p=it.effects;
  let fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0),need=.53+Math.min(.29,fit*.012);
  if(n.injury&&it.category==='medicine')need+=.25;if(n.pack.length)need-=.1;
- for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(price>D.balance.frugalThreshold)need+=t.priceBias||0;}
- if(n.traits.includes('eater')&&['food','fresh'].includes(it.category))need+=.12;
- if(n.traits.includes('caffeine')&&p.caffeine)need+=.2;
+ for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(price>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(n.visits<=2)need+=t.shyBias||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=.1;
  if(this.run.event?.effects.foodDemand&&['food','fresh','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
  if(this.run.event?.effects.medicalDemand&&it.category==='medicine')need+=this.run.event.effects.medicalDemand;
