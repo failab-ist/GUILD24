@@ -31,7 +31,7 @@ function phaseAction(){
  if(s.phase==='sell')return '<span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+btn(s.cursor+1===s.queue.length?'영업 종료 · 밤 결과':'손님 보내기','depart','primary');
  if(s.phase==='night')return btn('전체 건너뛰기','closing','secondary')+btn(s.nightCursor+1>=s.results.length?'정산으로 이동':'다음 결과','night-next','primary');
  if(s.phase==='closing')return btn('다음 날','close','primary');
- if(s.phase==='final')return btn('점포지원','relics','secondary')+btn('마왕성으로 출발','boss','primary',s.team.length?'':'disabled');
+ if(s.phase==='final')return btn('점포지원','relics','secondary')+btn('마왕성으로 출발','boss','primary',s.team.length===game.finalRequired()?'':'disabled');
  if(s.phase==='end')return btn('다음 점포 열기','new','primary');
  return '';
 }

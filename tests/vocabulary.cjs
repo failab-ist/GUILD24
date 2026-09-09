@@ -77,7 +77,7 @@ test('DUN-Q17: Supply Burden eligibility and the single shared deficit penalty',
  assert.deepEqual([...seen[1]],[0],'T1 never receives Supply Burden');
  assert.deepEqual([...seen[2]].sort(),[0,3],'T2 starts from required Supply 3');
  assert.deepEqual([...seen[3]].sort(),[0,5],'T3 starts from required Supply 5');
- assert.equal(g.makeDungeon('boss').requiredSupply,0,'D30 Final rolls no extra Supply Burden');
+ assert.equal(g.makeFinal().requiredSupply,0,'D30 Final rolls no extra Supply Burden');
 
  const n={...g.run.npcs[0],traits:[],pack:[]},d={...g.makeDungeon('spider',2),requiredSupply:5};
  const bare=Dungeon.prepare(n,d),fed=Dungeon.prepare({...n,pack:['rice','premium']},d);
