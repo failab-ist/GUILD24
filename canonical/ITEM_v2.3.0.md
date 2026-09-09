@@ -3,8 +3,8 @@
 DOC=ITEM
 OWNER=item,catalog,category,role,counter,supply,insurance
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -180,7 +180,8 @@ Each Food/Drink Item defines:
 - explicit Hazard Counter if any
 - explicit RiskReward if any
 
-Exact Supply values=PASS3
+Supply values are canonical v2.3 starting values listed in ACTIVE CATALOG.
+Full-run simulation/playtest may tune the numbers while preserving Supply > 0 for every active Food/Drink.
 
 No Item may:
 - create thirst
@@ -307,11 +308,11 @@ Rules:
 - retreat loot ≈ almost none
 - does not own Death -> Severe conversion
 
-PASS3 starting target:
-escapeBonus≈+45–60%p
-finalEscapeCap≈90–95%
+approved v2.3 starting value:
+escapeBonus=+50%p
+finalEscapeCap≈90–95% tuning band
 
-exact value=UNRESOLVED
+The +50%p bonus is implementation-fixed for the initial v2.3 full-run baseline and may be rebalanced after simulation/playtest.
 
 ### 세계수 생환부적
 rarity=Epic
@@ -367,40 +368,46 @@ Canonical:
 
 ## ACTIVE CATALOG
 
-Exact numeric values/prices/shelf life=PASS3 unless separately canonicalized.
+Exact numeric values/prices/shelf life=PASS3 unless separately canonicalized. Initial v2.3 implementation retains current canonical-compatible Source values; approved Supply/Insurance starting values in this document override them.
 
 ### Common / Rarity 0
 
 1. 삼각김밥
 category=Food
 roles=[Supply]
+supplyValue=5
 identity=cheap basic expedition supply
 
 2. 생수
 category=Drink
 roles=[Supply]
+supplyValue=3
 identity=cheap basic expedition supply
 
 3. 컵라면
 category=Food
 roles=[Supply,HybridCounter]
+supplyValue=5
 counter=cold(low)
 identity=cheap supply with light Cold flexibility
 
 4. 핫바
 category=Food
 roles=[Supply,Stat]
+supplyValue=4
 identity=basic supply + Combat/expedition support
 
 5. 초코바
 category=Food
-roles=[Stat]
+roles=[Supply,Stat]
+supplyValue=2
 identity=cheap quick Stat support
 hiddenPostFatigue=NO
 
 6. 캔커피
 category=Drink
 roles=[Supply,Stat]
+supplyValue=2
 identity=Mobility support
 caffeineStack=NO
 
@@ -418,6 +425,7 @@ identity=basic universal recovery
 9. 얼음컵
 category=Drink
 roles=[Supply,DirectCounter]
+supplyValue=2
 mainCounter=fire
 identity=cheap Fire specialist
 
@@ -436,7 +444,8 @@ identity=Bind specialist
 
 12. 집중 사탕
 category=Food
-roles=[Stat,HybridCounter]
+roles=[Supply,Stat,HybridCounter]
+supplyValue=1
 counter=fear(low)
 identity=affordable Spirit/Fear support
 
@@ -445,6 +454,7 @@ identity=affordable Spirit/Fear support
 13. 불룡볶음면
 category=Food
 roles=[Supply,Stat,HybridCounter]
+supplyValue=5
 counter=cold(moderate)
 identity=Combat + Cold flexible Food
 rule=HotPack remains stronger pure-Cold specialist
@@ -452,12 +462,14 @@ rule=HotPack remains stronger pure-Cold specialist
 14. 에너지드링크
 category=Drink
 roles=[Supply,Stat]
+supplyValue=3
 identity=strong Mobility support
 caffeineStack=NO
 
 15. 용사의 곡주
 category=Drink
 roles=[Supply,DirectCounter,RiskReward]
+supplyValue=3
 mainCounter=fear
 identity=Fear specialist with explicit Mobility trade-off
 
@@ -532,12 +544,14 @@ jobSpecificEffect=NO
 27. 길드 프리미엄 도시락
 category=Food
 roles=[Supply,Economy]
+supplyValue=7
 identity=Premium Food / expedition economy
 rule=must not dominate survival+supply+loot+general stats simultaneously
 
 28. 쿨링 이온음료
 category=Drink
 roles=[Supply,HybridCounter]
+supplyValue=4
 counter=fire(moderate)
 identity=Premium/Fresh-friendly Fire alternative
 rule=IceCup remains stronger pure-Fire specialist

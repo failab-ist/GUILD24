@@ -3,8 +3,8 @@
 DOC=CORE_RUN_QA
 OWNER=qa,core_run,run_flow
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 Status values are NOT stored here.
@@ -257,7 +257,7 @@ No progression softlock or missing required phase.
 ## FINAL DETAIL QA OWNERSHIP
 
 Detailed Final Family / party / Power / Roll / clear acceptance criteria are owned by:
--> FINAL_EXPEDITION_v2.2.0.md
+-> FINAL_EXPEDITION_v2.3.0.md
 
 CORE_RUN_QA retains only Run-flow, D30 timing, stock timing, save/resume, and complete-loop integration checks.
 

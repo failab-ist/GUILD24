@@ -3,8 +3,8 @@
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,injury,death,closing,settlement
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -65,6 +65,11 @@ Zero-result Night:
 softlock=NO
 즉시 Closing으로 진행 가능해야 한다.
 
+게이트 순례주간:
+- Night header/summary may show `실제 변경 N명`
+- affected NPC result shows `예상 목적지 -> 실제 목적지`
+- no separate Event result screen is added
+
 ## RESULT STRUCTURE
 
 각 Result는 기본적으로:
@@ -110,6 +115,7 @@ Possible:
 - Fatigue/Condition
 - Death
 - Wallet/Loyalty/Revisit-related change if player-relevant
+- canonical Event-caused destination delta when it materially changed the expedition
 
 ## RESULT OUTCOMES
 
@@ -426,11 +432,11 @@ Canonical save:
 ## QA
 
 Acceptance criteria:
-- CORE_RUN_QA_v2.2.0.md
-- DUNGEON_ITEM_QA_v2.2.0.md
-- NPC_TRAIT_QA_v2.2.0.md
-- ECONOMY_ORDER_QA_v2.2.0.md
-- UI_UX_QA_v2.2.0.md
+- CORE_RUN_QA_v2.3.0.md
+- DUNGEON_ITEM_QA_v2.3.0.md
+- NPC_TRAIT_QA_v2.3.0.md
+- ECONOMY_ORDER_QA_v2.3.0.md
+- UI_UX_QA_v2.3.0.md
 
 ## RELATED
 

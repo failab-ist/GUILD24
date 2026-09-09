@@ -3,8 +3,8 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,supply_burden,forecast,counter
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -122,8 +122,26 @@ foodDrinkHiddenCombo=NO
 Purpose:
 장거리/장시간 원정의 준비 압박을 별도 Hazard가 아니라 원정 전체 보급 문제로 표현한다.
 
-Gate/Event/Final may define a Supply requirement.
+Tier eligibility:
+- T1 = NO
+- T2 = eligible
+- T3 = eligible
+- D30 Final = no additional random Supply Burden modifier
+
+v2.3 starting values:
+```text
+T2 Supply Burden chance = 35% per generated Gate
+T2 requiredSupply = 3
+
+T3 Supply Burden chance = 55% per generated Gate
+T3 requiredSupply = 5
+```
+
+These are approved starting values for v2.3 implementation.
+Full-run simulation/playtest may tune frequency/requirement/scaling without changing the one-system contract.
+
 Food/Drink provide visible `Supply` values.
+All active Food/Drink have Supply > 0 according to ITEM.
 
 Resolution:
 - actualSupply >= requiredSupply => no Supply Deficit
@@ -134,10 +152,14 @@ Resolution:
 
 Player-facing:
 - Supply Burden is visible before Order when active
+- required Supply is visible
+- current prepared Supply is visible where preparation is shown
 - Item Supply contribution is visible
 - exact deficit formula remains hidden
 
-Exact frequency/requirement/scaling=PASS3
+Slot contract:
+Supply Burden must not turn T3 into a forced 3-slot tax.
+A normal T2/T3 route with Supply Burden must still respect the canonical <=2 meaningful required-prep-slot contract.
 
 ## TIER CONTRACT
 
@@ -389,8 +411,9 @@ Player gets ingredients, not formula.
 
 ## COMBAT VARIANCE
 
-baseNoise=UNRESOLVED
-PASS3.test=[baseline≈±13.5%,±15%,±17.5%]
+baseNoise=±17.5%
+baseNoiseCoefficient=0.175
+status=APPROVED_V2.2_STARTING_VALUE
 
 Goal:
 - border cases can swing
@@ -398,8 +421,8 @@ Goal:
 - grown NPC advantage remains trustworthy
 - RNG must not erase long-term growth
 
-If base variance changes:
-rebaseline variance-related Traits.
+Full-run simulation/playtest must rebaseline outcome spread after v2.3 adoption.
+If the value later changes, variance-related balance must be rechecked; no Trait may expose or require knowledge of the hidden exact noise percentage.
 
 ## BALANCE TARGET
 

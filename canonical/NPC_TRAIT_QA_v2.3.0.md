@@ -3,8 +3,8 @@
 DOC=NPC_TRAIT_QA
 OWNER=qa,npc,trait,roster,living_npc_cap
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 Status values are NOT stored here.
@@ -96,6 +96,9 @@ Never coexist:
 - 구두쇠 + 충동구매
 - 강골 + 허약함
 - 행운아 + 불운아
+- 수집가 + 실속파
+- 지구력 + 쉽게 지침
+- 사교적인 + 낯가림
 
 PASS:
 No invalid pair appears.
@@ -149,6 +152,7 @@ EXPECT:
 - reported information may differ only as defined by that Trait
 - underlying actual game state remains unchanged unless the Trait explicitly says otherwise
 - no unrelated price/item bonus is implied
+- tutorial language teaches the broader Trait/Event destination-uncertainty rule rather than presenting 허세 as a central system
 
 PASS:
 Information reliability changes without silently changing destination routing or unrelated systems.
@@ -218,10 +222,51 @@ EXPECT:
 - no legacy `long` value is carried over automatically
 - any active Supply-related Trait effect uses the canonical Supply/Supply Burden model
 - the effect is visible/understandable to the player
-- unresolved Trait effects are not invented by implementation
+- active effects match the frozen NPC_TRAIT catalog; no legacy effect is inferred or invented
 
 PASS:
 No hidden legacy long/thirst mechanic survives through Trait code.
+
+## TRAIT-Q15 — ACTIVE CATALOG FREEZE
+SETUP:
+Audit all selectable/generated Trait IDs.
+
+EXPECT:
+- exactly 30 active canonical Traits
+- names/directions/effects match NPC_TRAIT ACTIVE TRAIT CATALOG
+- 카페인중독 / 술고래 / 언데드혐오 are not active selectable Traits
+- 평정심 is not in the active pool
+- no extra source-only Trait leaks into generation
+
+PASS:
+Trait pool identity is frozen for the v2.3 implementation baseline.
+
+## TRAIT-Q16 — SOCIAL / REVISIT DIFFERENTIATION
+SETUP:
+Compare 사교적인, 낯가림, 냉담한 over repeated visits.
+
+EXPECT:
+- 사교적인 changes revisit selection weight only
+- 낯가림 creates an early-visit purchase hurdle that expires after 2 visits
+- 냉담한 reduces revisit weight but provides the explicit Cold-response benefit
+- no Trait secretly creates a new relationship subsystem
+
+PASS:
+The three Traits create distinct play consequences rather than duplicate `more regular customer` outcomes.
+
+## TRAIT-Q17 — CONDITION / SUPPLY / HAZARD TRAITS
+SETUP:
+Exercise 회복체질, 지구력, 쉽게 지침, 눈썰미, 해독가, 수족냉증, 준비성, 악바리, 대식가, 소식가.
+
+EXPECT:
+- effects resolve only through existing Recovery/Fatigue/Hazard/Supply/Injury systems
+- 대식가/소식가 modify Food native core + integer Supply as canonicalized, not legacy long/thirst
+- 준비성 adds +1 Supply per Food/Drink
+- 악바리 reads current injury state and adds its stated Fatigue cost
+- no Trait modifies hidden baseNoise
+
+PASS:
+New/reworked Traits are readable, testable, and do not create hidden micro-systems.
 
 ## DEST-Q01 — RANDOM DESTINATION
 SETUP:

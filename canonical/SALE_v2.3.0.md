@@ -3,8 +3,8 @@
 DOC=SALE
 OWNER=sale,customer,price,refusal,purchase_flow
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -18,8 +18,9 @@ base=2
 Lv10+=3
 
 destination:
-defaultShow=finalAssignedGate
-traitInfoReliabilityMayVary=YES
+playerFacingLabel=예상 목적지
+defaultExpectedEqualsActual=YES
+explicitTraitOrEventMayVary=YES
 
 normalFreeSale=NO
 exactSuccessProb=HIDDEN
@@ -97,7 +98,7 @@ Morning/Order에서 공개 가능:
 - Job
 - Trait
 - Wallet
-- 실제 목적지
+- 목적지 정보
 
 Customer로 실제 등장한 시점부터
 introduced/notebook 등록 가능.
@@ -107,14 +108,22 @@ Canonical NPC rule:
 
 ## DESTINATION
 
-Normal NPC:
-Sale에서 Engine이 확정한 현재 목적지를 보여준다.
+Player-facing label:
+`예상 목적지`
 
-목적지가 아직 확정 전 State라면
-Player-facing Label도 실제 상태에 맞춘다.
+Default:
+- expected destination = actual assigned destination
+- destination is random among eligible open Gates according to NPC_TRAIT
 
-Example:
-`예정 목적지`
+Canonical uncertainty:
+- an explicitly defined Trait may alter what the NPC reports without changing actual destination
+- an explicitly defined Event may change actual destination while leaving the earlier expected destination as the player-facing expectation
+- no other system may silently falsify destination information
+
+On `게이트 순례주간`:
+- Sale still shows the NPC's expected destination
+- affected NPC identity and changed actual destination remain hidden
+- Night reveals actual changed destination for affected NPCs
 
 System must not auto-route NPC to:
 - best Job fit
@@ -122,17 +131,9 @@ System must not auto-route NPC to:
 - safest Dungeon
 - hardest Dungeon
 
-Canonical routing:
+Canonical routing / information reliability:
 -> NPC_TRAIT
-
-Visible Trait effects may alter the reliability of reported information
-only when explicitly defined in the Trait rule.
-
-Information-reliability Traits:
-- may change what the NPC reports
-- do not change actual assigned destination unless explicitly stated
-- do not imply unrelated price/item bonuses
-
+-> EVENT
 
 ## INVENTORY VIEW
 
@@ -410,10 +411,10 @@ Detailed presentation:
 ## QA
 
 Acceptance criteria:
-- CORE_RUN_QA_v2.2.0.md
-- ECONOMY_ORDER_QA_v2.2.0.md
-- NPC_TRAIT_QA_v2.2.0.md
-- UI_UX_QA_v2.2.0.md
+- CORE_RUN_QA_v2.3.0.md
+- ECONOMY_ORDER_QA_v2.3.0.md
+- NPC_TRAIT_QA_v2.3.0.md
+- UI_UX_QA_v2.3.0.md
 
 ## RELATED
 

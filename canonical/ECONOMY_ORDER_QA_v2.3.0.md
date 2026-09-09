@@ -3,8 +3,8 @@
 DOC=ECONOMY_ORDER_QA
 OWNER=qa,economy,order,reroll
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 Status values are NOT stored here.
@@ -28,10 +28,10 @@ SETUP:
 Use items whose percentage price creates fractional values if applicable.
 
 EXPECT:
-UI price, affordability check, payment, history, Closing use one identical rounding rule.
+UI price, affordability check, payment, history, Closing use canonical nearest-integer half-up (`Math.round` for nonnegative Gold).
 
 PASS:
-No 1G mismatch between displayed and charged values.
+No 1G mismatch between displayed and charged values; x.5 rounds upward.
 
 ## ECO-Q03 — 50% ROLE
 SETUP:
@@ -180,14 +180,14 @@ Reroll cannot bypass progression.
 
 ## ORD-Q08 — REROLL COST TARGET
 SETUP:
-Use 4 rerolls before PASS3 finalization.
+Use 4 rerolls on a fresh Day.
 
 EXPECT:
-Starting balance candidate is approximately:
+Approved v2.3 starting curve:
 30→60→120→240G
 
 PASS:
-Implementation either matches approved final values or is explicitly flagged for PASS3 tuning.
+Implementation matches the starting curve; later full-run balance may tune it explicitly.
 
 ## ORD-Q09 — TIER FORECAST TIMING
 SETUP:

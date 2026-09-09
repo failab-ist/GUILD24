@@ -3,8 +3,8 @@
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 Status values are NOT stored here.
@@ -213,15 +213,20 @@ SETUP:
 Test expeditions with and without active Supply Burden using different Food/Drink Supply totals.
 
 EXPECT:
-- Supply Burden is visible before Order when active
+- T1 never receives Supply Burden
+- T2 starts from 35% Gate chance / required Supply 3
+- T3 starts from 55% Gate chance / required Supply 5
+- D30 Final receives no extra random Supply Burden
+- Supply Burden and required Supply are visible before Order
 - Food/Drink contribute visible Supply
 - sufficient Supply avoids Supply Deficit
 - insufficient Supply creates one shared expedition-wide penalty
 - no thirst/hunger/caffeine subsystem is created
 - excess Supply alone gives no extra success bonus
+- T3 Supply Burden still has a viable <=2 meaningful required-prep-slot route
 
 PASS:
-Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system.
+Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system, and the approved v2.3 starting eligibility/values are implemented.
 
 ## DUN-Q18 — HAZARD ROUTE COVERAGE
 SETUP:
@@ -394,10 +399,10 @@ SETUP:
 Use in losing expeditions.
 
 EXPECT:
-Raises escape/retreat chance without increasing combat success directly.
+Uses approved v2.3 starting escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
 
 PASS:
-Acts as insurance, not success item.
+Acts as probabilistic lower-tier insurance, not a success item or Death->Severe conversion.
 
 ## ITEM-Q12 — RETREAT REWARD
 SETUP:
@@ -459,7 +464,8 @@ SETUP:
 Audit all Food/Drink effects and expedition resolution.
 
 EXPECT:
-- Food/Drink use visible Supply values
+- every active Food/Drink has visible Supply > 0
+- catalog Supply values match ITEM starting table
 - no Item creates/cleanses thirst
 - no hidden Food+Drink pairing
 - no caffeine stacking
@@ -494,15 +500,15 @@ Catalog supports preparation and Relic builds without filler or strict universal
 
 ## SIM-Q01 — COMBAT VARIANCE
 SETUP:
-Compare approved candidates:
-current / ±15% / ±17.5%
+Run full-run simulations/playtests with canonical baseNoise ±17.5%.
 
 EXPECT:
 Borderline outcomes can swing.
 Strong invested NPC remains trustworthy.
+The hidden exact variance is not exposed to the Player or encoded as a knowledge-check Trait.
 
 PASS:
-Final chosen value passes both tension and growth-confidence goals.
+±17.5% is used as the v2.3 baseline and any later retune is supported by outcome evidence.
 
 ## SIM-Q02 — ROLE USAGE
 SETUP:

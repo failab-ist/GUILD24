@@ -3,8 +3,8 @@
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 Status values are NOT stored here.
@@ -385,3 +385,19 @@ Internal Power/Party Power is not exposed as another player stat.
 
 PASS:
 No player stat remains mislabeled as `전투`.
+
+## UI-Q33 — DESTINATION UNCERTAINTY / PILGRIMAGE RESULT
+SETUP:
+Trigger the destination reliability tutorial, 허세, and 게이트 순례주간.
+
+EXPECT:
+- Tutorial says: `특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.`
+- Tutorial does not frame 허세 as the whole destination system
+- Sale label uses 예상 목적지 where uncertainty is possible
+- 게이트 순례주간 Morning reveal states 1–3 affected range
+- actual N / affected identity / changed Gate remain hidden until Night
+- Night shows actual changed count and expected -> actual destination on affected NPC results
+
+PASS:
+Information is uncertain but not unfairly opaque, and no extra Event-result phase is created.
+

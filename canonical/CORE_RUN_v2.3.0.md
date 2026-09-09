@@ -3,8 +3,8 @@
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -345,7 +345,8 @@ Meta knowledge/unlocks may exist where explicitly specified,
 but should not replace Run decision-making.
 
 Knowledge:
--> relevant Knowledge spec/CORE rules when finalized
+-> use only explicitly defined current CORE/Meta rules
+-> no separate additional Knowledge subsystem/spec is required for v2.3 Full Adoption
 
 ## PRODUCT / TECH CONSTRAINTS
 
@@ -381,7 +382,7 @@ systems where possible.
 
 ## QA
 
-Acceptance criteria -> CORE_RUN_QA_v2.2.0.md
+Acceptance criteria -> CORE_RUN_QA_v2.3.0.md
 
 ## RELATED
 

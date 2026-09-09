@@ -3,8 +3,8 @@
 DOC=RELIC_QA
 OWNER=qa,relic,store_build
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 Status values are NOT stored here.
@@ -137,11 +137,13 @@ SETUP:
 Inspect D0 and later windows.
 
 EXPECT:
-D0 Keystone=NO.
-Midgame+ Keystone eligible according to canonical progression.
+- D0/D5 Keystone=NO
+- D10+ Keystone eligible
+- no separate fixed Keystone quota/probability is required
+- normal candidate pool + soft build bias rules still apply
 
 PASS:
-No early Keystone leak.
+No pre-D10 Keystone leak and no hidden guaranteed Keystone completion path.
 
 ## REL-Q13 — D30 RELEVANCE
 SETUP:

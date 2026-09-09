@@ -3,8 +3,8 @@
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,living_npc_cap,destination,revisit
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -14,7 +14,7 @@ jobs=[전사,궁수,마법사,사제,도적,광전사]
 jobIdentity=BaseStats+Growth
 hiddenJobBonus=NO
 
-traits.targetPool≈28–30
+traits.activePool=30
 traits.maxVisiblePerNPC≈3–4
 
 traitDirection:
@@ -96,7 +96,7 @@ natural=[투력]
 secondary=[강인함]
 pressure=[정신/Condition 관리]
 
-Exact base/growth numbers=PASS3/current canonical data table when finalized.
+Exact base/growth numbers=PASS3. Initial v2.3 implementation retains the current canonical-compatible Source Job table, then rebalances after full-run simulation/playtest.
 
 ## JOB RULES
 
@@ -201,7 +201,7 @@ Soft spawn guard may prevent extreme unusable negative bundles.
 
 ## TRAIT COUNT
 
-poolTarget≈28–30
+poolSize=30
 
 perNPCTarget:
 visible/readable <=3–4
@@ -221,6 +221,9 @@ pairs:
 - 구두쇠 ↔ 충동구매
 - 강골 ↔ 허약함
 - 행운아 ↔ 불운아
+- 수집가 ↔ 실속파
+- 지구력 ↔ 쉽게 지침
+- 사교적인 ↔ 낯가림
 
 탐욕:
 independent=YES
@@ -274,9 +277,8 @@ If an existing Trait concept still needs a Supply-related identity,
 it must be redefined through the visible canonical Supply/Supply Burden system
 and explicitly approved before implementation.
 
-`대식가` / `소식가` remain a canonical mutual-exclusion pair,
-but this patch does not canonize an old `long` modifier as their effect.
-Exact affected Trait effects remain subject to Trait catalog finalization.
+`대식가` / `소식가` use only the visible Food native-core/Supply rules defined in the final Trait catalog below.
+No legacy `long` value is carried over.
 
 
 ## TRAIT MODIFICATION
@@ -444,7 +446,20 @@ System must not auto-route based on:
 - best counter fit
 
 Purpose:
-Player solves preparation around the assigned destination.
+Player solves preparation around the assigned destination while accepting limited, explicitly signaled information uncertainty.
+
+Player-facing destination is generally presented as `예상 목적지`.
+By default it matches the actual assigned destination.
+Only an explicitly canonical Trait/Event may make expected/reported destination differ from actual destination.
+
+허세:
+- may make the NPC report a different expected destination
+- does not itself change the actual assigned destination
+- has no unrelated price/Item preference bonus
+
+게이트 순례주간:
+- EVENT may change the actual destination of 1–3 visitors after their expected destination exists
+- affected identity/new destination remain hidden until Night as defined in EVENT
 
 ### LIMITED PLAYER INTERVENTION
 
@@ -495,25 +510,152 @@ Exact formulas:
 Relics may modify these systems,
 but Character identity remains owned by NPC/Trait system.
 
-## TRAIT CATALOG STATUS
+## ACTIVE TRAIT CATALOG
 
-Target pool structure is canonical.
-Exact final 28–30 Trait IDs/effects/numeric values are not fully finalized here.
+traitCatalogStatus=FROZEN
+activeTraitCount=30
+numericStatus=APPROVED_V2.2_STARTING_VALUES
 
-traitCatalogStatus=PENDING_CANONICAL_FINALIZATION
+Rules:
+- numeric values below are the implementation baseline for v2.3
+- full-run simulation/playtest may rebalance values after adoption
+- no active Trait may read/write `long`, `thirst`, `wet`, `armor`, `undead`, caffeine-stack, or hidden Job-ID effects
+- every material effect is player-readable
+- Traits reuse existing Stats / Hazard / Supply / Condition / Wallet / Loyalty / Revisit systems; no Trait-only subsystem
 
-Source audit requirement:
-- any Trait using removed/noncanonical keys must be REWORK or REMOVE before acceptance
-- do not translate legacy values 1:1 into Supply or another current system without explicit approval
+Direction legend:
+- ▲ GREEN = positive
+- ◆ YELLOW = mixed / situational / benefit+cost
+- ▼ RED = negative
 
-Do not invent large numbers of new Trait effects.
+### Existing / reworked 17
 
-Confirmed canonical entries/rules include:
-- 구두쇠 naming
-- 탐욕 independent from 구두쇠
-- mutual exclusion pairs above
-- 허세(YELLOW): 여러 Gate에서 보고 목적지를 과장/오보할 수 있음; 실제 목적지는 바뀌지 않으며 별도 가격/Item 선호 보너스 없음
-- GREEN/YELLOW/RED direction model
+1. **용감함 ◆**
+   - fear 대응 +9
+   - escape -6%p
+
+2. **겁쟁이 ◆**
+   - 투력 -3
+   - escape +19%p
+   - loot -12%
+
+3. **대식가 ◆**
+   - Food native Stat/recovery +30%
+   - each Food Item Supply -1, minimum 1
+   - Hazard Counter/Insurance/RiskReward magnitude is not amplified
+
+4. **소식가 ◆**
+   - Food native Stat/recovery -20%
+   - each Food Item Supply +1
+   - Hazard Counter/Insurance/RiskReward magnitude is not amplified
+
+5. **신중함 ◆**
+   - injuryRisk -4%p
+   - loot -8%
+
+6. **무모함 ◆**
+   - 투력 +7
+   - escape -8%p
+   - injuryRisk +3.5%p
+
+7. **탐욕 ◆**
+   - loot +30%
+   - escape -7%p
+
+8. **구두쇠 ▼**
+   - expensive-price resistance as defined by Sale/Economy threshold
+   - starting priceBias -16%p above the canonical expensive threshold
+
+9. **충동구매 ▲**
+   - buyBias +12%p
+
+10. **허세 ◆**
+    - when multiple Gates exist, reported/expected destination may be wrong
+    - actual assigned destination is not changed by this Trait
+    - no price/Item preference bonus
+
+11. **천재 ▲**
+    - EXP gain +25%
+
+12. **강골 ▲**
+    - injuryGuard +23%p
+
+13. **허약함 ▼**
+    - 강인함 -5
+    - Severe Injury recovery duration +1 day
+
+14. **포션체질 ▲**
+    - Potion native Stat/recovery +30%
+    - no automatic Counter/Insurance amplification
+
+15. **화염공포증 ▼**
+    - fire 대응 -9
+
+16. **행운아 ▲**
+    - luck +4.5%p
+    - loot +7%
+
+17. **불운아 ▼**
+    - luck -4.5%p
+    - loot -7%
+    - does not modify hidden combat variance
+
+### New 13
+
+18. **수집가 ◆**
+    - Rare+ purchase interest +12%p
+    - Common/Uncommon purchase interest -5%p
+
+19. **실속파 ◆**
+    - Common/Uncommon purchase interest +10%p
+    - Rare+ purchase interest -10%p
+
+20. **사교적인 ▲**
+    - revisit selection weight ×1.25
+
+21. **낯가림 ▼**
+    - first 2 visits: buyBias -10%p
+    - from 3rd visit onward: this penalty no longer applies
+
+22. **회복체질 ▲**
+    - Severe Injury recovery duration -1 day, minimum 1 day
+
+23. **지구력 ▲**
+    - expedition Fatigue gain -1
+
+24. **쉽게 지침 ▼**
+    - expedition Fatigue gain +1
+
+25. **눈썰미 ▲**
+    - dark 대응 +6
+    - whiteout 대응 +6
+
+26. **해독가 ▲**
+    - poison 대응 +8
+
+27. **수족냉증 ▼**
+    - cold 대응 -9
+
+28. **준비성 ▲**
+    - each Food/Drink Item Supply +1
+
+29. **악바리 ◆**
+    - while currently Injured/Severely Injured: 투력 +6 for expedition preparation
+    - expedition Fatigue gain +1
+
+30. **냉담한 ◆**
+    - revisit selection weight ×0.80
+    - cold 대응 +6
+    - both effects are explicitly shown; the Cold bonus is intentional character flavor, not hidden wordplay
+
+Removed source concepts from active v2.3 Trait pool:
+- 카페인중독
+- 술고래
+- 언데드혐오
+
+Reason:
+Their old active identities depend on removed/legacy effect paths or over-specific hidden Item/family behavior.
+Do not preserve them as inert selectable Traits.
 
 ## PASS3 METRICS
 

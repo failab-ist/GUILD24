@@ -4,8 +4,8 @@ DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,easter_egg
 # EVENT — CANONICAL
 
-DOC_VERSION=2.2.0  
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0  
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 ---
 
@@ -256,6 +256,8 @@ Sale에 영향을 주는 Effect만 Compact하게 유지한다.
 ## NIGHT
 
 원정 결과에 Event가 실제 영향을 줬다면 Causality에 필요할 때만 표시한다.
+`게이트 순례주간`은 예외적으로 실제 변경 인원 N과 affected NPC의 예상->실제 목적지를 Night에서 공개한다.
+새 Result Phase를 만들지 않고 기존 Night presentation을 재사용한다.
 
 ## CLOSING
 
@@ -519,6 +521,7 @@ FAIL 시 우선순위:
 # 11. CANONICAL EVENT CATALOG
 
 총 22종.
+eventCatalogStatus=FROZEN
 
 Work는 임의로 Event를 추가하거나
 Effect / Trigger / Role을 재설계하지 않는다.
@@ -572,30 +575,44 @@ REVEAL COPY:
 지정 상품 1종 · 발주 수량 2배
 ```
 
-## 03. 길드 원정주간
+## 03. 게이트 순례주간
 
-TYPE: Customer / Opportunity + Workload  
+TYPE: Destination / Uncertainty + Preparation  
 WEIGHT: 1.0
 
-EFFECT:
+ELIGIBILITY:
+- today has >=2 open Gates
+- expected visitor count >=3
 
-```text
-오늘 방문객 +2
-```
-
-기존 Visitor 상한 / Flow가 있다면 그대로 따른다.
+If either condition fails, exclude this Event from today's eligible pool.
 
 REVEAL COPY:
 
-> 오늘은 갑옷 소리가 유난히 많다.
+> 순례 행렬이 게이트 구역을 지나간다.
 
 ```text
-오늘 방문객 +2
+오늘 1~3명의 모험가가 예정된 목적지가 아닌 다른 열린 게이트로 향할 수 있습니다.
 ```
 
-QA:
+EFFECT:
+- internally roll affectedCount uniformly from 1,2,3
+- select that many visiting NPCs using seeded Run RNG
+- each selected NPC keeps the expected/reported destination shown to the Player
+- each selected NPC's actual destination changes to a different currently open Gate
+- do not reveal affectedCount, affected NPC identity, or changed destination during Morning/Order/Sale
+- no auto-best-fit routing; the replacement Gate is random among other eligible open Gates
+- this Event does not alter Trait, Wallet, Loyalty, purchase preference, or Living NPC Cap
 
-추가 매출 기회보다 Sale 노동량 증가가 더 크게 느껴지면 FAIL.
+NIGHT RESULT:
+- Night displays `게이트 순례주간 · 실제 변경 N명`
+- each affected NPC result identifies `예상 목적지 -> 실제 목적지`
+- unaffected NPCs do not need extra Event copy
+- this uses the existing Night result presentation; no separate Event-result phase/screen
+
+DESIGN INTENT:
+The Player knows the day's uncertainty range before preparation,
+but only learns who actually wandered and where after the expedition.
+This creates value for Hybrid/flexible preparation without turning destination information into arbitrary hidden punishment.
 
 ## 04. 몬스터 범람
 
@@ -1172,7 +1189,7 @@ Flavor와 실제 Gameplay Effect는 분리한다.
 
 ## Mixed / RiskReward
 
-- 길드 원정주간
+- 게이트 순례주간
 - 몬스터 범람
 - 한파
 - 독안개
@@ -1290,6 +1307,11 @@ NO라면 제거 / 수정 후보.
 - Roster Cap을 무시하지 않는가?
 - Regular 형성을 해치지 않는가?
 - 장기 투자 NPC 가치를 파괴하지 않는가?
+- 게이트 순례주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
+- Morning에 1~3명 범위는 공개하되 실제 N/대상/변경 Gate는 숨기는가?
+- 실제 affectedCount가 seeded RNG 1~3으로 결정되는가?
+- affected NPC는 다른 열린 Gate로만 이동하는가?
+- Night에서 실제 N과 affected NPC의 예상->실제 목적지가 정확히 공개되는가?
 
 ## Easter Egg
 

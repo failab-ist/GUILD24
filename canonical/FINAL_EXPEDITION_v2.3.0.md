@@ -4,8 +4,8 @@ DOC=FINAL_EXPEDITION
 OWNER=final,boss,D30,final_party,final_hazard,boss_power
 # FINAL EXPEDITION — CANONICAL
 
-DOC_VERSION=2.2.0  
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0  
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 ---
 
@@ -166,9 +166,15 @@ Final threat disclosure 이후, Final lock 전에는 기존 Canonical이 허용�
 
 포함:
 - 출전 NPC 선택
-- 합법적인 Item / Supply 준비
+- 합법적인 Item / 보급품 준비
 - D30 Relic decision
 - 기타 기존 시스템이 허용하는 Final-relevant management choice
+
+Supply Burden boundary:
+- D30 Final does not roll an additional random Supply Burden modifier
+- Food/Drink may still be chosen for their ordinary Stat/Counter/other canonical effects
+- no Final-only Supply requirement is invented
+- canonical ownership -> DUNGEON_HAZARD / ITEM
 
 Final lock 이후에는 Relic 구매나 일반 management action으로 이미 잠긴 Final state를 소급 변경할 수 없다.
 

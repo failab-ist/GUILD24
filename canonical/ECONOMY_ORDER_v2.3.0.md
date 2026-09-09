@@ -3,8 +3,8 @@
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -81,21 +81,25 @@ Rule:
 
 Gold values=Integer
 
-하나의 동일한 rounding rule을:
-- UI 표시
+Canonical rule:
+
+```text
+roundingRule = nearest integer, half-up for nonnegative Gold
+implementationReference = Math.round
+```
+
+The same rounded integer must be used for:
+- UI display
 - affordability check
 - actual payment
 - history
-- settlement
+- settlement / Closing
 
-에 동일하게 사용한다.
+Examples:
+- 37.4G -> 37G
+- 37.5G -> 38G
 
-roundingRule=UNRESOLVED_CANONICAL
-
-Requirement:
-UI / affordability / payment / history / settlement must use one identical integer rule.
-
-Until finalized, do not invent a new rounding rule to resolve a conflict; report the conflict for canonical decision.
+No subsystem may use a different floor/ceil rule for the same Gold amount.
 
 ## SPECIAL ZERO-PRICE ACTION
 
@@ -237,8 +241,7 @@ Each Offer follows current:
 - rarity rules
 - coverage rules
 
-Exact rarity weights/pity values:
-PASS3 / canonical data when finalized
+Exact rarity weights/pity values=PASS3. Initial v2.3 implementation retains the current canonical-compatible Source baseline, then rebalances after full-run simulation/playtest.
 
 Offer system should create uncertainty without making preparation pure blind luck.
 

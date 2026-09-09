@@ -3,8 +3,8 @@
 DOC=COPY_WORLD_VOICE
 OWNER=copy,voice,flavor,dialogue,terminology,culture
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 > Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Canonical.
 >
@@ -237,9 +237,12 @@ FUNCTION은:
 
 ## GOOD
 
-### 허세
+### Trait Effect
 
-실제 목적지와 다른 정보를 말할 수 있다.
+수족냉증  \
+냉기 대응 감소
+
+Trait 기능 예시는 특정 한 Trait을 Tutorial 대표로 만들지 않는다.
 
 ### Item Effect
 
@@ -935,6 +938,11 @@ System은 계속 해설하지 않는다.
 
 필요한 Gameplay Information은 유지한다.
 Copy Polish 때문에 Rule 설명을 빼지 않는다.
+
+목적지 신뢰도는 특정 Trait 이름을 중심으로 가르치지 않는다.
+Canonical Function wording:
+
+> 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.
 
 App Onboarding 문체를 피한다.
 

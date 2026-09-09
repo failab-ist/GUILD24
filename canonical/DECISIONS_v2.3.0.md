@@ -3,8 +3,8 @@
 DOC=DECISIONS
 OWNER=decisions,high_value_decisions
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 Only high-value decisions that are easy to accidentally reverse.
 Detailed rules live only in their owning Canonical Specs.
@@ -218,3 +218,45 @@ meaningfulNightEvent=EMPHASIZE
 rule=Customer build may alter traffic/mix but must not make repetitive workload its primary reward
 trustedRegularTarget=preserve
 livingNpcCap=respect
+
+## ECO-003
+GoldRounding=nearestIntegerHalfUp
+implementationReference=Math.round
+oneRuleAcross=[UI,affordability,payment,history,closing]
+
+## RELIC-004
+KeystoneEligibleFrom=D10
+separateKeystoneHardRate=NO
+normalPoolAndSoftBuildBias=YES
+
+## DUN-005
+baseNoise=±17.5%
+baseNoiseCoefficient=0.175
+status=v2.3StartingValue
+exactNoisePlayerFacing=HIDDEN
+
+## DUN-006
+SupplyBurden.T1=NO
+SupplyBurden.T2=eligible
+SupplyBurden.T3=eligible
+SupplyBurden.starting=[T2:35%/required3,T3:55%/required5]
+FinalExtraRandomSupplyBurden=NO
+allActiveFoodDrinkSupplyPositive=YES
+
+## ITEM-003
+ReturnStone.escapeBonus=+50%p
+role=probabilisticEscapeInsurance
+DeathToSevereOwnership=WorldTreeOnly
+
+## TRAIT-002
+activeTraitCatalog=30
+traitCatalogStatus=FROZEN
+legacyActiveTraitsRemoved=[카페인중독,술고래,언데드혐오]
+hiddenCombatVarianceTrait=NO
+
+## DEST-002
+playerFacingDestination=예상 목적지
+defaultExpectedEqualsActual=YES
+explicitTraitOrEventMayCreateDifference=YES
+tutorialRule=특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있음
+

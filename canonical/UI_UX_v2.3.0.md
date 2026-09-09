@@ -3,8 +3,8 @@
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -212,6 +212,7 @@ Next / Skip / Skip All
 Importance hierarchy:
 - routine success=compact
 - meaningful growth/injury/death/decisive Item/callback=stronger visual emphasis
+- on 게이트 순례주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
 
 Avoid:
 - debug log layout
@@ -327,6 +328,11 @@ Forecast should be clearly labeled as estimate.
 
 First forecast tutorial explains:
 actual expedition may differ from prediction.
+
+Destination reliability tutorial explains the system-level rule, not one specific Trait:
+`특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.`
+
+Do not center the tutorial around 허세.
 
 Canonical logic:
 -> DUNGEON_HAZARD
@@ -500,7 +506,7 @@ restructure composition before polishing color/shadow/radius.
 
 ## QA
 
-Acceptance criteria -> UI_UX_QA_v2.2.0.md
+Acceptance criteria -> UI_UX_QA_v2.3.0.md
 
 ## RELATED
 

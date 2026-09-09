@@ -3,8 +3,8 @@
 DOC=RELIC
 OWNER=relic,store_build,utility,foundation,hybrid,keystone
 
-DOC_VERSION=2.2.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.2.0
+DOC_VERSION=2.3.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
 
 
 ## KEY
@@ -22,8 +22,9 @@ currency=G
 buy<=1
 defer=YES
 baseEligible=[Foundation,Hybrid,Utility]
-KeystoneEligible=midgame+
-KeystoneStart=UNRESOLVED_CANONICAL
+KeystoneEligible=D10+
+KeystoneStart=D10
+KeystoneSeparateHardRate=NO
 
 pool=30
 Foundation=12
@@ -140,8 +141,10 @@ Rule:
 필수 Piece를 보장하지 않는다.
 
 Keystone:
-- D0 eligible=NO
-- midgame+ eligible
+- D0/D5 eligible=NO
+- D10/D15/D20/D25/D30 eligible=YES
+- no separate fixed Keystone appearance probability is added
+- eligible Keystone competes in the normal candidate pool
 - related build pieces may softly raise weight
 - guaranteed completion=NO
 
@@ -161,7 +164,7 @@ Hybrid=8
 Keystone=6
 - 1 per Primary Build
 - build engine/completion piece
-- midgame+
+- eligible from D10
 
 Utility=4
 - general support
@@ -509,7 +512,7 @@ priceFixedForWindow=YES
 relative direction:
 Foundation < Hybrid/Utility < Keystone
 
-Exact base prices=PASS3
+Exact base prices=PASS3. Initial v2.3 implementation retains current canonical-compatible Source base prices, then rebalances after full-run simulation/playtest.
 Price should follow actual ROI, not label alone.
 
 ## GOLD ROLE
