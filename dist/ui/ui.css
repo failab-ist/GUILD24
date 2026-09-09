@@ -129,12 +129,16 @@ input[type=text],.seed-field{background:var(--sunk);border:1px solid var(--line)
 .special-event p{font-size:var(--t-sm);color:var(--dim);margin:var(--s2) 0}
 
 /* ---- ORDER ---- management. Funds first, offers compact, confirm sticky. */
-.order-budget{display:flex;gap:var(--s4);flex-shrink:0;padding:8px var(--gutter);background:var(--sunk);border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.order-funds{flex-shrink:0;padding:8px var(--gutter) 10px;background:var(--sunk);border-bottom:1px solid var(--line)}
+.order-funds .scr-eyebrow{margin-bottom:4px}
+.order-budget{display:flex;gap:var(--s4);font-variant-numeric:tabular-nums}
 .order-budget>div{display:grid;min-width:0}
 .order-budget span{font-size:var(--t-xs);color:var(--dim)}
 .order-budget strong{font-size:var(--t-lg);color:var(--gold);letter-spacing:-.02em}
 .order-budget>div:last-child strong{color:var(--text)}
 .order-screen{max-width:900px}
+.order-screen>.today-gates{margin-top:0;border-top:0}
+.order-screen>.today-gates summary,.order-screen>.owned-relics summary{padding-top:4px}
 .next-forecast{display:flex;flex-wrap:wrap;gap:var(--s1) var(--s3);align-items:baseline;padding:var(--s2) 0 var(--s3);font-size:var(--t-sm);color:var(--dim);border-bottom:1px solid var(--line-soft)}
 .next-forecast b{color:var(--text);font-variant-numeric:tabular-nums}
 .next-forecast small{font-size:var(--t-xs);color:var(--faint)}
@@ -398,7 +402,8 @@ input[type=text],.seed-field{background:var(--sunk);border:1px solid var(--line)
  .phase-action{padding:12px var(--gutter) max(12px,env(safe-area-inset-bottom))}
  .phase-action>span{width:auto;margin-right:auto}
  .phase-action .primary{flex:0 0 auto;min-width:200px}
- .order-budget{padding:10px var(--gutter);gap:var(--s6)}
+ .order-funds{padding:10px var(--gutter) 12px}
+ .order-budget{gap:var(--s6)}
  .order-budget strong{font-size:var(--t-xl)}
  .order-list{grid-template-columns:1fr 1fr;column-gap:var(--s6)}
  .relic-choices{grid-template-columns:repeat(3,1fr)}

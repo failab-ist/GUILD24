@@ -37,9 +37,13 @@ function serve(){
 async function drive(page,target,seed){
  await page.evaluate(`localStorage.clear()`);
  await page.reload({waitUntil:'load'});
+ await page.click('#modal-root details summary');
  await page.fill('#seed',seed);
  await page.click('[data-action="start"]');                 // real first-run flow
  await page.click('#modal-root [data-action="buy-relic"]'); // DAY 0 free store support
+ // The coach marks are a first-use overlay; by the captured day a player has passed them.
+ // UI-Q19/Q20 get their own capture below.
+ if(target!=='coach')await page.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
  const until=async pred=>{for(let i=0;i<800;i++){if(await page.evaluate(pred))return true;await page.evaluate(`${STEP}()`);}return false;};
  const reached=await until(GOAL[target]);
  if(!reached)throw Error('could not drive the run to '+target);

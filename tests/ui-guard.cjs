@@ -50,4 +50,33 @@ test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{
   assert.ok(Presentation.hazardPressure[key].includes('중심')&&Presentation.hazardPressure[key].includes('보조'),key+' names a primary and a secondary axis');
  assert.equal(Presentation.hazardRows(['cold']).at(0).name,'냉기');
 });
+
+test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is explained inline',()=>{
+ assert.ok(/modal='event'/.test(app),'an Event day opens with a focused reveal before Gate detail');
+ assert.ok(app.includes('eventSeen'),'the reveal is consumed exactly once');
+ assert.ok(!/<aside class="event-line"/.test(app),'the Event is no longer buried in the Morning stack');
+ assert.ok(app.includes('Presentation.hazardRows'),'Gate Hazards render their canonical pressure line');
+ assert.ok(!/title="/.test(app),'no hover-only title= tooltip survives in the render path');
+ assert.ok(!/class="tag"/.test(app),'the old chip vocabulary is gone');
+});
+
+test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order screen carries the canonical hierarchy',()=>{
+ const order=app.slice(app.indexOf('function orders('),app.indexOf('function inventory('));
+ assert.ok(app.includes('본사 발주')&&app.includes('order-funds'),'the DAY stamp and persistent funds sit above the scroll surface');
+ for(const label of ['보유','선택 발주','발주 후'])assert.ok(app.includes(label),'funds summary shows '+label);
+ assert.ok(order.includes('gateSummary()'),'today Gate/Hazard is reachable without leaving Order');
+ assert.ok(order.includes('nextForecast()'),'the next-day Tier forecast is present');
+ assert.ok(order.includes('발주 후보 전체 교환'),'the reroll control names its full-offer scope');
+ assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
+ assert.ok(order.includes('발주 교환권'),'the free first use is called out');
+ assert.ok(/발주 '\+fmt\(game.cartTotal\(\)\)\+'G · 발주 확정/.test(app),'the sticky confirm states the amount');
+ assert.ok(!/store-panel|Art.scene\(game\)[^;]*order/.test(order),'no store scene in the Order composition');
+});
+
+test('UI-Q02: no dashboard slop in the phase shells',()=>{
+ assert.ok(!app.includes('phase-strip'),'the numbered stepper is replaced by a quiet phase rail');
+ assert.ok(!app.includes('function header('),'the dead desktop topbar is gone');
+ assert.ok(!/upgrade-grid|detail-stats.*repeat\(4/.test(css),'no 4-up KPI tile row survives');
+ assert.ok(/\.detail-stats\{display:grid;grid-template-columns:1fr 1fr/.test(css),'core stats are a 2x2');
+});
 console.log(count+' ui guard groups passed');
