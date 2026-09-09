@@ -3,8 +3,8 @@
 DOC=DECISIONS
 OWNER=decisions,high_value_decisions
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 Only high-value decisions that are easy to accidentally reverse.
 Detailed rules live only in their owning Canonical Specs.
@@ -232,7 +232,7 @@ normalPoolAndSoftBuildBias=YES
 ## DUN-005
 baseNoise=±17.5%
 baseNoiseCoefficient=0.175
-status=v2.3StartingValue
+status=v2.4StartingValue
 exactNoisePlayerFacing=HIDDEN
 
 ## DUN-006
@@ -260,3 +260,34 @@ defaultExpectedEqualsActual=YES
 explicitTraitOrEventMayCreateDifference=YES
 tutorialRule=특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있음
 
+## RELIC-005
+internalTaxonomyPlayerFacing=NO
+milestoneWindowFocusedReveal=[D5,D10,D15,D20,D25,D30]
+ownedRelicReadOnlyQuickView=[MORNING,ORDER,SALE]
+
+## TRAIT-003
+playerFacingTraitDirectionQualityLabel=NO
+internalDirection=KEEP
+effectSemanticTone=[benefit,cost,neutral]
+semanticToneInferredFromNumericSign=NO
+
+## META-002
+MonsterKnowledgeGain=requiresAtLeast1SuppliedItem+nonDeathReturn
+nakedScoutKnowledgeGain=NO
+playerProgressLabel=보급 생환 N회
+
+## META-003
+minimalEngagementDayFarmingEfficient=NO
+newInactivityPunishmentSubsystem=NO
+dailyOverheadStarting=60G
+exactOverheadAndMetaRewardTuning=PASS3_AFTER_V2.4_SIMULATION
+
+## COPY-002
+normalNpcNameVoice=한국식+판타지+유쾌한비틀기
+strongWesternHighFantasyMajority=NO
+randomSyllableSoup=NO
+
+## UI-005
+allCanonicalHazardsExplainStatPressure=YES
+hoverOnlyHazardInfo=NO
+mobileWidthsQA=[360,390,430]

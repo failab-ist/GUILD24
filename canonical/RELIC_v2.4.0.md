@@ -3,8 +3,8 @@
 DOC=RELIC
 OWNER=relic,store_build,utility,foundation,hybrid,keystone
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 ## KEY
@@ -74,6 +74,18 @@ Goal:
 cand=3
 buy<=1
 currency=G
+firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION
+defer=YES
+
+새 Milestone Window가 생성되면
+해당 Day의 첫 유효 Management 진입에서 후보 3개를 1회 Focused Reveal한다.
+
+Player may:
+- 구매
+- 나중에 결정
+
+`나중에 결정`은 기존 Defer다.
+후보/가격은 바뀌지 않는다.
 
 ### D30
 cand=3
@@ -81,8 +93,11 @@ buy<=1
 currency=G
 timing=before final expedition lock
 eligible=futureRelevantOnly
+firstReveal=FOCUSED_ONCE_AT_WINDOW_CREATION
+defer=YES
 
 D30 후보는 Final 준비/원정에 실제 의미가 있어야 한다.
+Final lock 전에 해당 Window의 1회 Focused Reveal이 보장되어야 한다.
 
 ## WINDOW STATE
 
@@ -95,9 +110,15 @@ persist:
 - candidatePrices
 - purchased
 - expiryDay
+- focusedRevealSeen
 
 save/load => same(candidates,prices,state)
 reload => no reroll
+
+focusedReveal:
+- D5/D10/D15/D20/D25/D30의 새 Window는 1회만 Player에게 명확히 보여준다.
+- Save/Reload로 Focused Reveal을 반복 재생하거나 후보를 다시 뽑을 수 없다.
+- D0는 영업 전 Relic 선택 자체가 시작 Flow이므로 중복 Reveal을 추가하지 않는다.
 
 defer:
 - 구매하지 않고 닫기 가능
@@ -111,6 +132,15 @@ reopenAllowed:
 reopenBlocked:
 - Active Sale
 - Night Resolution
+
+ownedRelicQuickView:
+mode=READ_ONLY
+availablePhases=[Morning,Order,Sale]
+
+Rules:
+- 이미 보유한 점포지원의 이름/효과/조건은 Morning/Order/Sale에서 빠르게 확인 가능
+- Sale에서는 읽기만 가능
+- Quick View가 Relic 구매/Defer timing을 우회하지 않는다
 
 expiry:
 next relic window begins
@@ -512,7 +542,7 @@ priceFixedForWindow=YES
 relative direction:
 Foundation < Hybrid/Utility < Keystone
 
-Exact base prices=PASS3. Initial v2.3 implementation retains current canonical-compatible Source base prices, then rebalances after full-run simulation/playtest.
+Exact base prices=PASS3. Initial v2.4 implementation retains current canonical-compatible Source base prices, then rebalances after full-run simulation/playtest.
 Price should follow actual ROI, not label alone.
 
 ## GOLD ROLE
@@ -539,8 +569,26 @@ Relic description must make clear:
 - what changes
 - trigger/condition
 - meaningful limit
+- price when currently purchasable
 
 Material hidden modifier=NO
+
+Internal design taxonomy:
+- Foundation
+- Hybrid
+- Keystone
+- Utility
+- Rotation / VIP / Premium / Expedition / Fresh / Customer Build Axis
+
+playerFacingTaxonomy=NO
+
+Do not show Player-facing labels such as:
+- `신선식품 · 기반`
+- `단골 육성 · 기반`
+- `고마진 · 키스톤`
+
+These are Director/implementation organization terms.
+Player should discover build synergy from actual effects and combinations.
 
 Exact internal coefficient may stay hidden when not needed,
 but effect existence/condition must be player-readable.

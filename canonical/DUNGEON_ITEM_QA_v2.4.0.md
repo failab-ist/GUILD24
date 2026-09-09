@@ -3,8 +3,8 @@
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 Status values are NOT stored here.
@@ -226,7 +226,7 @@ EXPECT:
 - T3 Supply Burden still has a viable <=2 meaningful required-prep-slot route
 
 PASS:
-Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system, and the approved v2.3 starting eligibility/values are implemented.
+Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system, and the approved v2.4 starting eligibility/values are implemented.
 
 ## DUN-Q18 — HAZARD ROUTE COVERAGE
 SETUP:
@@ -399,7 +399,7 @@ SETUP:
 Use in losing expeditions.
 
 EXPECT:
-Uses approved v2.3 starting escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
+Uses approved v2.4 starting escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
 
 PASS:
 Acts as probabilistic lower-tier insurance, not a success item or Death->Severe conversion.
@@ -508,7 +508,7 @@ Strong invested NPC remains trustworthy.
 The hidden exact variance is not exposed to the Player or encoded as a knowledge-check Trait.
 
 PASS:
-±17.5% is used as the v2.3 baseline and any later retune is supported by outcome evidence.
+±17.5% is used as the v2.4 baseline and any later retune is supported by outcome evidence.
 
 ## SIM-Q02 — ROLE USAGE
 SETUP:
@@ -519,3 +519,26 @@ Supply, Direct, Hybrid, Stat, Insurance, RiskReward and explicit Utility all rec
 
 PASS:
 No role is effectively dead or always mandatory.
+
+## DUN-Q21 — HAZARD EXPLANATION CONSISTENCY
+SETUP:
+Inspect all 9 canonical Hazards in Gate/preparation UI on desktop and touch/mobile.
+
+EXPECT:
+Every Hazard exposes the canonical short pressure explanation:
+- poison / corrosion / fire / cold -> 강인함
+- bind / mire -> 기동
+- fear -> 정신
+- dark / whiteout -> 정신 중심 + 기동 보조
+
+Desktop:
+hover/focus access works where tooltip is used.
+
+Mobile:
+tap or inline access provides the same information.
+
+PASS:
+- no canonical Hazard is name-only while another receives a detailed effect line
+- no hover-only information
+- `slow` is not presented as a separate canonical Hazard
+- exact hidden formula remains hidden

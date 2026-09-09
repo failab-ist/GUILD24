@@ -3,8 +3,8 @@
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 ## KEY
@@ -241,7 +241,7 @@ Each Offer follows current:
 - rarity rules
 - coverage rules
 
-Exact rarity weights/pity values=PASS3. Initial v2.3 implementation retains the current canonical-compatible Source baseline, then rebalances after full-run simulation/playtest.
+Exact rarity weights/pity values=PASS3. Initial v2.4 implementation retains the current canonical-compatible Source baseline, then rebalances after full-run simulation/playtest.
 
 Offer system should create uncertainty without making preparation pure blind luck.
 
@@ -453,6 +453,9 @@ Compare:
 - Relic-heavy
 - Item-heavy
 - adaptive
+- naked/minimal-prep
+- zero-sale / zero-order / zero-supply minimal-engagement
+- poverty/minimum-spend
 
 Reject:
 - one price mode always optimal
@@ -462,6 +465,12 @@ Reject:
 - Relic never-buy
 - reroll spam as guaranteed solution
 - no-reroll pure RNG frustration
+- zero-engagement play remaining economically/Meta-efficient into late Day bands
+
+Minimal-engagement correction must reuse existing economy/meta pressure.
+Do not create a standalone punishment subsystem.
+
+Exact overhead/reward rebalance remains PASS3 after integrated v2.4 simulation.
 
 ## RELATED
 item roles -> ITEM

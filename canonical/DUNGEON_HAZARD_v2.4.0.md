@@ -3,8 +3,8 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,supply_burden,forecast,counter
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 ## KEY
@@ -93,6 +93,32 @@ T1=cold
 T2=cold+whiteout
 T3=strong(cold)+strong(whiteout)
 
+## HAZARD PLAYER-FACING PRESSURE
+
+Every canonical Hazard exposes a consistent short explanation
+of what core Stat/readiness it pressures.
+
+Canonical pressure labels:
+- poison / 독 -> 강인함 압박
+- bind / 속박 -> 기동 압박
+- corrosion / 부식 -> 강인함 압박
+- mire / 진창 -> 기동 압박
+- fire / 화염 -> 강인함 압박
+- fear / 공포 -> 정신 압박
+- dark / 어둠 -> 정신 중심 + 기동 보조 압박
+- cold / 냉기 -> 강인함 압박
+- whiteout / 화이트아웃 -> 정신 중심 + 기동 보조 압박
+
+Rules:
+- explanatory information only; exact success formula stays hidden
+- all 9 canonical Hazards follow the same presentation contract
+- `slow` is not shown as a separate Hazard
+- SLIME secondary player-facing Hazard is `진창`
+- do not explain only some Hazards while leaving others name-only
+
+Interaction ownership:
+-> UI_UX
+
 ## GLOBAL PRESSURES
 
 ### FATIGUE
@@ -128,7 +154,7 @@ Tier eligibility:
 - T3 = eligible
 - D30 Final = no additional random Supply Burden modifier
 
-v2.3 starting values:
+v2.4 starting values:
 ```text
 T2 Supply Burden chance = 35% per generated Gate
 T2 requiredSupply = 3
@@ -137,7 +163,7 @@ T3 Supply Burden chance = 55% per generated Gate
 T3 requiredSupply = 5
 ```
 
-These are approved starting values for v2.3 implementation.
+These are approved starting values for v2.4 implementation.
 Full-run simulation/playtest may tune frequency/requirement/scaling without changing the one-system contract.
 
 Food/Drink provide visible `Supply` values.
@@ -285,7 +311,8 @@ job -> NPC_TRAIT
 
 runStart.starterFamilies=3/5
 
-Family knowledge should emerge through actual Gate appearances.
+Family knowledge should emerge through supplied expeditions and successful return, not zero-supply scouting.
+Exact Monster Knowledge gain contract -> CORE_RUN.
 
 family4.eligible≈D4–7
 family5.eligible≈D8–12
@@ -413,7 +440,7 @@ Player gets ingredients, not formula.
 
 baseNoise=±17.5%
 baseNoiseCoefficient=0.175
-status=APPROVED_V2.2_STARTING_VALUE
+status=APPROVED_V2.4_STARTING_VALUE
 
 Goal:
 - border cases can swing
@@ -421,7 +448,7 @@ Goal:
 - grown NPC advantage remains trustworthy
 - RNG must not erase long-term growth
 
-Full-run simulation/playtest must rebaseline outcome spread after v2.3 adoption.
+Full-run simulation/playtest must rebaseline outcome spread after v2.4 adoption.
 If the value later changes, variance-related balance must be rechecked; no Trait may expose or require knowledge of the hidden exact noise percentage.
 
 ## BALANCE TARGET

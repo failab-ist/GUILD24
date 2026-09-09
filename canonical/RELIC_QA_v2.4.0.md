@@ -3,8 +3,8 @@
 DOC=RELIC_QA
 OWNER=qa,relic,store_build
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 Status values are NOT stored here.
@@ -439,3 +439,47 @@ Only the 30 canonical Relic blueprints are active.
 PASS:
 No excluded facility is offered, owned, or applied as a hidden modifier.
 
+## REL-Q38 — MILESTONE FOCUSED REVEAL
+SETUP:
+Reach D5/D10/D15/D20/D25/D30 with a new Relic window.
+
+EXPECT:
+- each new milestone window is visibly presented once
+- candidate IDs/prices are already fixed
+- Player may Buy or choose `나중에 결정`
+- defer keeps the same window
+- Save/Reload does not replay/reroll the reveal as an exploit
+
+PASS:
+A valid Relic window cannot silently exist in the background so the Player misses the milestone choice.
+
+## REL-Q39 — INTERNAL TAXONOMY IS NOT PLAYER-FACING
+SETUP:
+Inspect candidate and owned-Relic UI.
+
+EXPECT:
+Player does not see:
+- Foundation / Hybrid / Keystone / Utility
+- Build Axis names as quality/category coaching
+- labels such as `신선식품 · 기반`
+
+Player does see:
+- name
+- effect
+- condition/limit
+- price when relevant
+
+PASS:
+Build discovery comes from effects, not Director taxonomy labels.
+
+## REL-Q40 — OWNED RELIC QUICK VIEW
+SETUP:
+Own multiple Relics and inspect Morning, Order, Sale.
+
+EXPECT:
+- owned Relics are quickly readable in all three phases
+- Sale access is read-only
+- purchase/defer timing cannot be bypassed
+
+PASS:
+Store-build information needed for decisions is available without enabling illegal Relic actions.

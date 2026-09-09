@@ -3,8 +3,8 @@
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,living_npc_cap,destination,revisit
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 ## KEY
@@ -17,10 +17,9 @@ hiddenJobBonus=NO
 traits.activePool=30
 traits.maxVisiblePerNPC≈3–4
 
-traitDirection:
-GREEN=Positive
-YELLOW=Mixed
-RED=Negative
+traitDirectionInternal=[POSITIVE,MIXED,NEGATIVE]
+playerFacingTraitDirectionLabel=NO
+effectSemanticTone=[benefit,cost,neutral]
 
 targetTrustedRegulars/run≈2–4
 livingNpcCap=22
@@ -96,7 +95,7 @@ natural=[투력]
 secondary=[강인함]
 pressure=[정신/Condition 관리]
 
-Exact base/growth numbers=PASS3. Initial v2.3 implementation retains the current canonical-compatible Source Job table, then rebalances after full-run simulation/playtest.
+Exact base/growth numbers=PASS3. Initial v2.4 implementation retains the current canonical-compatible Source Job table, then rebalances after full-run simulation/playtest.
 
 ## JOB RULES
 
@@ -172,28 +171,47 @@ Natural soft synergy through shared systems=YES
 
 ## TRAIT DIRECTION
 
-GREEN:
-pure positive
+Internal Trait direction exists for:
+- generation / soft spawn guard
+- Event eligibility
+- balance audit
 
-YELLOW:
-mixed / situational / benefit+cost
+Internal directions:
+- POSITIVE = pure positive
+- MIXED = situational / benefit+cost
+- NEGATIVE = pure negative
 
-RED:
-pure negative
+Player-facing:
+traitLevelDirectionLabel=NO
+traitLevelDirectionIcon=NO
+traitLevelDirectionColorBand=NO
 
-UI:
-color + icon/label
-colorOnly=NO
+Do not show:
+- 이점 / 양면 / 약점
+- ▲ / ◆ / ▼ as Trait quality labels
 
-Recommended semantics:
-▲ GREEN
-◆ YELLOW
-▼ RED
+Player judges the Trait from its actual effects.
 
-Trait color means effect direction, not rarity.
+Every material player-facing Trait effect has explicit semantic metadata:
+- `benefit` = helpful in the stated context
+- `cost` = harmful in the stated context
+- `neutral` = scope/condition/clarification
 
-NPC rarity != trait quality
+semanticToneInferredFromNumericSign=NO
 
+Examples:
+- injuryRisk -4%p = benefit
+- escape -8%p = cost
+- cold 대응 +6 = benefit
+
+A negative number can be helpful.
+A positive number can be harmful.
+
+UI may reinforce semantic tone with color,
+but color alone must not carry meaning.
+Effect text must remain understandable without color.
+
+NPC rarity != trait quality.
 Epic NPC may have negative Traits.
 Common NPC may have excellent Trait combinations.
 
@@ -287,11 +305,11 @@ Persistent Trait editing is rare.
 
 Rare Event:
 - choose one NPC
-- remove one RED Trait
+- remove one internal NEGATIVE Trait
 
 Epic Event:
 - choose one NPC
-- choose 1 of 3 positive Trait options
+- choose 1 of 3 internal POSITIVE Trait options
 
 Forced random negative Trait onto invested NPC:
 generally NO
@@ -514,141 +532,169 @@ but Character identity remains owned by NPC/Trait system.
 
 traitCatalogStatus=FROZEN
 activeTraitCount=30
-numericStatus=APPROVED_V2.2_STARTING_VALUES
+numericStatus=APPROVED_V2.4_STARTING_VALUES
 
 Rules:
-- numeric values below are the implementation baseline for v2.3
+- numeric values below are the implementation baseline for v2.4
 - full-run simulation/playtest may rebalance values after adoption
 - no active Trait may read/write `long`, `thirst`, `wet`, `armor`, `undead`, caffeine-stack, or hidden Job-ID effects
 - every material effect is player-readable
 - Traits reuse existing Stats / Hazard / Supply / Condition / Wallet / Loyalty / Revisit systems; no Trait-only subsystem
-
-Direction legend:
-- ▲ GREEN = positive
-- ◆ YELLOW = mixed / situational / benefit+cost
-- ▼ RED = negative
+- `internalDirection` is not player-facing
+- `[benefit] / [cost] / [neutral]` is semantic presentation metadata
+- UI must not infer meaning from numeric sign
 
 ### Existing / reworked 17
 
-1. **용감함 ◆**
-   - fear 대응 +9
-   - escape -6%p
+1. **용감함**
+   - internalDirection=MIXED
+   - [benefit] fear 대응 +9
+   - [cost] escape -6%p
 
-2. **겁쟁이 ◆**
-   - 투력 -3
-   - escape +19%p
-   - loot -12%
+2. **겁쟁이**
+   - internalDirection=MIXED
+   - [cost] 투력 -3
+   - [benefit] escape +19%p
+   - [cost] loot -12%
 
-3. **대식가 ◆**
-   - Food native Stat/recovery +30%
-   - each Food Item Supply -1, minimum 1
-   - Hazard Counter/Insurance/RiskReward magnitude is not amplified
+3. **대식가**
+   - internalDirection=MIXED
+   - [benefit] Food native Stat/recovery +30%
+   - [cost] each Food Item Supply -1, minimum 1
+   - [neutral] Hazard Counter/Insurance/RiskReward magnitude is not amplified
 
-4. **소식가 ◆**
-   - Food native Stat/recovery -20%
-   - each Food Item Supply +1
-   - Hazard Counter/Insurance/RiskReward magnitude is not amplified
+4. **소식가**
+   - internalDirection=MIXED
+   - [cost] Food native Stat/recovery -20%
+   - [benefit] each Food Item Supply +1
+   - [neutral] Hazard Counter/Insurance/RiskReward magnitude is not amplified
 
-5. **신중함 ◆**
-   - injuryRisk -4%p
-   - loot -8%
+5. **신중함**
+   - internalDirection=MIXED
+   - [benefit] injuryRisk -4%p
+   - [cost] loot -8%
 
-6. **무모함 ◆**
-   - 투력 +7
-   - escape -8%p
-   - injuryRisk +3.5%p
+6. **무모함**
+   - internalDirection=MIXED
+   - [benefit] 투력 +7
+   - [cost] escape -8%p
+   - [cost] injuryRisk +3.5%p
 
-7. **탐욕 ◆**
-   - loot +30%
-   - escape -7%p
+7. **탐욕**
+   - internalDirection=MIXED
+   - [benefit] loot +30%
+   - [cost] escape -7%p
 
-8. **구두쇠 ▼**
-   - expensive-price resistance as defined by Sale/Economy threshold
-   - starting priceBias -16%p above the canonical expensive threshold
+8. **구두쇠**
+   - internalDirection=NEGATIVE
+   - [cost] expensive-price resistance as defined by Sale/Economy threshold
+   - [cost] starting priceBias -16%p above the canonical expensive threshold
 
-9. **충동구매 ▲**
-   - buyBias +12%p
+9. **충동구매**
+   - internalDirection=POSITIVE
+   - [benefit] buyBias +12%p
 
-10. **허세 ◆**
-    - when multiple Gates exist, reported/expected destination may be wrong
-    - actual assigned destination is not changed by this Trait
-    - no price/Item preference bonus
+10. **허세**
+    - internalDirection=MIXED
+    - [cost] when multiple Gates exist, reported/expected destination may be wrong
+    - [neutral] actual assigned destination is not changed by this Trait
+    - [neutral] no price/Item preference bonus
 
-11. **천재 ▲**
-    - EXP gain +25%
+11. **천재**
+    - internalDirection=POSITIVE
+    - [benefit] EXP gain +25%
 
-12. **강골 ▲**
-    - injuryGuard +23%p
+12. **강골**
+    - internalDirection=POSITIVE
+    - [benefit] injuryGuard +23%p
 
-13. **허약함 ▼**
-    - 강인함 -5
-    - Severe Injury recovery duration +1 day
+13. **허약함**
+    - internalDirection=NEGATIVE
+    - [cost] 강인함 -5
+    - [cost] Severe Injury recovery duration +1 day
 
-14. **포션체질 ▲**
-    - Potion native Stat/recovery +30%
-    - no automatic Counter/Insurance amplification
+14. **포션체질**
+    - internalDirection=POSITIVE
+    - [benefit] Potion native Stat/recovery +30%
+    - [neutral] no automatic Counter/Insurance amplification
 
-15. **화염공포증 ▼**
-    - fire 대응 -9
+15. **화염공포증**
+    - internalDirection=NEGATIVE
+    - [cost] fire 대응 -9
 
-16. **행운아 ▲**
-    - luck +4.5%p
-    - loot +7%
+16. **행운아**
+    - internalDirection=POSITIVE
+    - [benefit] luck +4.5%p
+    - [benefit] loot +7%
 
-17. **불운아 ▼**
-    - luck -4.5%p
-    - loot -7%
-    - does not modify hidden combat variance
+17. **불운아**
+    - internalDirection=NEGATIVE
+    - [cost] luck -4.5%p
+    - [cost] loot -7%
+    - [neutral] does not modify hidden combat variance
 
 ### New 13
 
-18. **수집가 ◆**
-    - Rare+ purchase interest +12%p
-    - Common/Uncommon purchase interest -5%p
+18. **수집가**
+    - internalDirection=MIXED
+    - [benefit] Rare+ purchase interest +12%p
+    - [cost] Common/Uncommon purchase interest -5%p
 
-19. **실속파 ◆**
-    - Common/Uncommon purchase interest +10%p
-    - Rare+ purchase interest -10%p
+19. **실속파**
+    - internalDirection=MIXED
+    - [benefit] Common/Uncommon purchase interest +10%p
+    - [cost] Rare+ purchase interest -10%p
 
-20. **사교적인 ▲**
-    - revisit selection weight ×1.25
+20. **사교적인**
+    - internalDirection=POSITIVE
+    - [benefit] revisit selection weight ×1.25
 
-21. **낯가림 ▼**
-    - first 2 visits: buyBias -10%p
-    - from 3rd visit onward: this penalty no longer applies
+21. **낯가림**
+    - internalDirection=NEGATIVE
+    - [cost] first 2 visits: buyBias -10%p
+    - [neutral] from 3rd visit onward: this penalty no longer applies
 
-22. **회복체질 ▲**
-    - Severe Injury recovery duration -1 day, minimum 1 day
+22. **회복체질**
+    - internalDirection=POSITIVE
+    - [benefit] Severe Injury recovery duration -1 day, minimum 1 day
 
-23. **지구력 ▲**
-    - expedition Fatigue gain -1
+23. **지구력**
+    - internalDirection=POSITIVE
+    - [benefit] expedition Fatigue gain -1
 
-24. **쉽게 지침 ▼**
-    - expedition Fatigue gain +1
+24. **쉽게 지침**
+    - internalDirection=NEGATIVE
+    - [cost] expedition Fatigue gain +1
 
-25. **눈썰미 ▲**
-    - dark 대응 +6
-    - whiteout 대응 +6
+25. **눈썰미**
+    - internalDirection=POSITIVE
+    - [benefit] dark 대응 +6
+    - [benefit] whiteout 대응 +6
 
-26. **해독가 ▲**
-    - poison 대응 +8
+26. **해독가**
+    - internalDirection=POSITIVE
+    - [benefit] poison 대응 +8
 
-27. **수족냉증 ▼**
-    - cold 대응 -9
+27. **수족냉증**
+    - internalDirection=NEGATIVE
+    - [cost] cold 대응 -9
 
-28. **준비성 ▲**
-    - each Food/Drink Item Supply +1
+28. **준비성**
+    - internalDirection=POSITIVE
+    - [benefit] each Food/Drink Item Supply +1
 
-29. **악바리 ◆**
-    - while currently Injured/Severely Injured: 투력 +6 for expedition preparation
-    - expedition Fatigue gain +1
+29. **악바리**
+    - internalDirection=MIXED
+    - [benefit] while currently Injured/Severely Injured: 투력 +6 for expedition preparation
+    - [cost] expedition Fatigue gain +1
 
-30. **냉담한 ◆**
-    - revisit selection weight ×0.80
-    - cold 대응 +6
-    - both effects are explicitly shown; the Cold bonus is intentional character flavor, not hidden wordplay
+30. **냉담한**
+    - internalDirection=MIXED
+    - [cost] revisit selection weight ×0.80
+    - [benefit] cold 대응 +6
+    - [neutral] Cold bonus is intentional character flavor, not hidden wordplay
 
-Removed source concepts from active v2.3 Trait pool:
+Removed source concepts from active v2.4 Trait pool:
 - 카페인중독
 - 술고래
 - 언데드혐오

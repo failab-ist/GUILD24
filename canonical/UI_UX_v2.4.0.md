@@ -3,8 +3,8 @@
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 ## KEY
@@ -353,10 +353,67 @@ every resistance/internal coefficient as equal-priority numbers.
 Hazard-specific information should appear
 where it is relevant to current destination/preparation.
 
+## TRAIT PRESENTATION
+
+Trait profile/card prioritizes:
+1. Trait name
+2. actual effects
+3. condition/scope when needed
+
+Do not player-face internal Trait direction taxonomy:
+- 이점
+- 양면
+- 약점
+- ▲ / ◆ / ▼ quality label
+
+Internal POSITIVE/MIXED/NEGATIVE remains for generation/Event logic.
+
+Each material effect uses canonical data-driven semantic tone:
+- benefit
+- cost
+- neutral
+
+Meaning must not be inferred from numeric sign.
+
+Example:
+`신중함`
+- injuryRisk -4%p = benefit
+- loot -8% = cost
+
+Semantic color may reinforce the effect line,
+but wording itself must remain understandable without color.
+
+Do not turn Trait header/background into a green/yellow/red quality grade.
+
+Canonical:
+-> NPC_TRAIT
+
 ## HAZARD NUDGE
 
 System should help the player notice relevant risk
 without solving the puzzle.
+
+Every known canonical Hazard provides:
+- Hazard name
+- short Stat/readiness pressure explanation from DUNGEON_HAZARD
+
+Examples:
+- 냉기 · 강인함 압박
+- 화이트아웃 · 정신 중심 / 기동 보조
+- 부식 · 강인함 압박
+- 진창 · 기동 압박
+
+Interaction:
+PC:
+- hover and keyboard focus may show tooltip/detail
+
+Mobile/touch:
+- tap or inline disclosure provides equivalent information
+
+hoverOnly=NO
+
+Gate summary may show the short pressure line directly when clearer.
+Do not explain only some Hazards while leaving others name-only.
 
 Allowed:
 - clear Hazard labels
@@ -371,6 +428,9 @@ Avoid:
 
 Rule:
 clarify ingredients, do not provide the answer.
+
+Exact Hazard pressure ownership:
+-> DUNGEON_HAZARD
 
 ## ITEM INFO
 
@@ -395,7 +455,28 @@ Relic Window:
 - each candidate shows effect/condition/price clearly
 - Buy / Defer obvious
 - active window availability visible in management phases
-- no reopen during Active Sale/Night
+- no purchase-window reopen during Active Sale/Night
+
+Milestone reveal:
+- D5/D10/D15/D20/D25/D30 new Window receives one focused reveal
+- Player can Buy or choose `나중에 결정`
+- dismiss/defer does not reroll candidates/prices
+- Save/Reload does not replay the reveal as an exploit
+
+Candidate cards must NOT expose internal design taxonomy:
+- Foundation / Hybrid / Keystone / Utility
+- Rotation / VIP / Premium / Expedition / Fresh / Customer Axis
+- `신선식품 · 기반` style labels
+
+Player discovers synergy from effects.
+
+Owned Relic Quick View:
+- Morning=YES
+- Order=YES
+- Sale=YES
+- readOnly=YES
+- shows owned Relic name + actual effect/condition
+- does not allow purchase/defer/change timing during Sale
 
 Relic should look like a meaningful Run-build choice,
 not a minor facility settings menu.
@@ -435,6 +516,12 @@ Secondary navigation may include:
 - Reference/Knowledge
 - HQ/catalog/help
 
+Monster Knowledge progress wording:
+`보급 생환 N회`
+
+Do not use:
+`관찰 N회`
+
 Secondary navigation must not compete visually
 with current Phase objective.
 
@@ -471,20 +558,40 @@ When width is narrow:
 - simplify
 - move secondary detail
 - keep primary actions large
+- reduce unnecessary side gutter
+- current decision/action must be obvious in the first viewport
+- decorative/game-object art must not push required decision information excessively below the fold
 
 Do not:
 shrink all fonts/control sizes to fit desktop columns.
 
+Required v2.4 mobile visual QA widths:
+- 360px
+- 390px
+- 430px
+
+At each width verify with actual browser screenshot/manual inspection:
+- no zoom required for core text
+- current phase question/action is obvious
+- no desktop composition merely scaled down
+- no clipped sticky action / safe-area overlap
+- game scene remains useful, not a space-consuming poster above the decision
+
 ## ACCESSIBILITY / SIGNALS
 
 Do not rely on color alone for:
-- Trait direction
+- Trait effect benefit/cost semantics
 - danger/preparedness
 - selected state
 - disabled state
 
 Use:
 icon / label / shape / text reinforcement.
+
+Trait exception:
+do not reintroduce `이점/양면/약점` or ▲/◆/▼ as quality labels merely for accessibility.
+The effect sentence itself carries the meaning;
+semantic color/icon is reinforcement only.
 
 Contrast must remain readable
 across dark backgrounds and brand accents.
@@ -506,7 +613,7 @@ restructure composition before polishing color/shadow/radius.
 
 ## QA
 
-Acceptance criteria -> UI_UX_QA_v2.3.0.md
+Acceptance criteria -> UI_UX_QA_v2.4.0.md
 
 ## RELATED
 

@@ -3,8 +3,8 @@
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,injury,death,closing,settlement
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 ## KEY
@@ -432,11 +432,11 @@ Canonical save:
 ## QA
 
 Acceptance criteria:
-- CORE_RUN_QA_v2.3.0.md
-- DUNGEON_ITEM_QA_v2.3.0.md
-- NPC_TRAIT_QA_v2.3.0.md
-- ECONOMY_ORDER_QA_v2.3.0.md
-- UI_UX_QA_v2.3.0.md
+- CORE_RUN_QA_v2.4.0.md
+- DUNGEON_ITEM_QA_v2.4.0.md
+- NPC_TRAIT_QA_v2.4.0.md
+- ECONOMY_ORDER_QA_v2.4.0.md
+- UI_UX_QA_v2.4.0.md
 
 ## RELATED
 

@@ -3,8 +3,8 @@
 DOC=ECONOMY_ORDER_QA
 OWNER=qa,economy,order,reroll
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 Status values are NOT stored here.
@@ -183,7 +183,7 @@ SETUP:
 Use 4 rerolls on a fresh Day.
 
 EXPECT:
-Approved v2.3 starting curve:
+Approved v2.4 starting curve:
 30→60→120→240G
 
 PASS:
@@ -313,3 +313,22 @@ Next-day hidden:
 
 PASS:
 Today's Gate/Hazard is the primary preparation context, while tomorrow contributes only the allowed Tier probability forecast.
+
+## ECO-Q12 — MINIMAL-ENGAGEMENT ECONOMY
+SETUP:
+Simulate repeated:
+- zero sale
+- zero order
+- zero expedition supply
+and compare against normal engaged/adaptive play.
+
+EXPECT:
+- zero-engagement route steadily loses economic position through existing costs/opportunity cost
+- it is not a reliable late-run economy strategy
+- normal engaged play produces materially better cash/future value
+- no standalone inactivity tax/meter is added
+
+PASS:
+A player cannot efficiently reach late Day bands simply by spending almost nothing and advancing turns.
+
+Exact overhead curve / reward weighting remains PASS3.

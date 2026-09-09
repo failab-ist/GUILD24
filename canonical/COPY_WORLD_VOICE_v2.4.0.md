@@ -3,8 +3,8 @@
 DOC=COPY_WORLD_VOICE
 OWNER=copy,voice,flavor,dialogue,terminology,culture
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 > Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Canonical.
 >
@@ -176,11 +176,12 @@ Source 내부 이름과 Player UI 용어를 구분한다.
 - `survival` = **강인함**
 - `mobility` = **기동**
 - `spirit` = **정신**
+- Monster Knowledge progress = **보급 생환 N회**
+- old Monster Knowledge progress wording `관찰 N회` = 사용하지 않음
 
 실제 싸움 / battle 자체는 **전투**라고 쓴다.
 
 내부 계산용:
-
 - Power
 - Party Power
 
@@ -571,153 +572,26 @@ COPY_WORLD_VOICE는 그 Event의 전역 Voice / Context 원칙만 제공하며, 
 Player-facing Name Voice는 COPY_WORLD_VOICE가 소유한다.
 NPC의 Gameplay generation / stats / traits / progression은 NPC_TRAIT가 소유한다.
 
-일반 Name Pool 안에 극히 낮은 확률로 다음 Rare Reference Name을 포함할 수 있다.
+다음 Exact Name은 Rare Reference NPC로 유지한다.
 
 초기 승인:
-
 - 요화니우스
 - 상혀크
 - 진호르
 
-모르는 Player에게는 그냥 Fantasy NPC 이름처럼 보여야 한다.
+중요:
+normal Name Pool의 기본 Voice 자체도 `한국식 + 판타지 + 유쾌한 비틀기`다.
+따라서 Rare Reference와 일반 이름이 완전히 다른 언어권처럼 느껴지면 안 된다.
+
+`요화니우스`는 일반 Name Voice의 강한 Tone Anchor이기도 하지만,
+이 Exact Name의 전용 Easter Egg 조건은 아래 Rare Reference 규칙을 따른다.
+
+모르는 Player에게는 그냥 이 세계의 자연스러운 NPC 이름처럼 보여야 한다.
 
 Reference NPC 이름 자체가 첫 번째 Easter Egg다.
-관련 Special Copy는 **해당 NPC가 실제 Run에 존재할 때만** Eligible하다.
+관련 Special Copy는 해당 NPC가 실제 Run에 존재할 때만 Eligible하다.
 
 관련 NPC가 없는 Run에서 전용 Meme을 일반 System Message나 다른 NPC에게 출력하지 않는다.
-
-## 9.1 요화니우스 — 임요환 / 3연벙 계열
-
-핵심은 숫자 `3` 자체가 아니다.
-같거나 매우 유사한 행동이 실제로 세 번 반복되는 Context가 핵심이다.
-
-BAD:
-
-- DAY 3이라서 출력
-- 상품 3개라서 출력
-- 세 번째 NPC라서 출력
-- 능력치가 3이라서 출력
-
-사용 조건:
-
-1. 요화니우스가 실제 Run에 존재한다.
-2. 요화니우스와 관련된 같거나 매우 유사한 행동이 실제로 세 번 반복된다.
-3. 현재 Source가 이미 보유한 History만으로 이를 정확히 판정할 수 있다.
-
-Copy 방향:
-
-> 설마 세 번은 아니겠지.
-
-실제 세 번째 반복:
-
-> 세 번째다.
-
-현재 데이터만으로 정확히 판정할 수 없다면 **요화니우스 이름만 사용하고 Special Copy는 구현하지 않는다.**
-
-새 Counter / History / Save Field를 만들지 않는다.
-
-## 9.2 상혀크 — Faker / 기습숭배 계열
-
-핵심은:
-
-> "상혀크가 잘했으므로 칭찬한다."
-
-가 아니다.
-
-핵심은:
-
-> 평범하고 관계없는 상황에서 갑자기 찬양이 튀어나오는 뜬금없음.
-
-이다.
-
-단, 상혀크가 실제로 존재하는 Run이어야 한다.
-
-### Initial Harness
-
-대상:
-
-- NPC name = 상혀크
-
-출력 위치:
-
-- 기존 Sale 거래 종료 후 / 해당 NPC 퇴장 직전의 현재 출력 Hook
-
-조건:
-
-- 상혀크의 재방문
-- 구매 거래 정상 종료
-- 기존 Visit Count만으로 단 한 번의 희귀 노출 지점을 만들 수 있을 때
-
-기본 후보:
-
-- 상혀크의 2번째 방문 거래 종료
-
-`2번째` 자체는 Meme 의미가 아니다.
-새 Seen Flag 없이 반복 출력만 피하기 위해 기존 데이터를 재사용하는 Harness다.
-
-Copy:
-
-> 문득 타이 상 혀크가 대단하다는 생각이 들었다.
-
-승인된 대체 방향:
-
-> 젠장. 또 타이 상 혀크입니다.
-
-이 문장은 NPC Dialogue가 아니라 짧은 Narration / System Flavor다.
-
-BAD:
-
-- 상혀크 원정 성공 때마다 출력
-- Level Up 때마다 출력
-- 좋은 Result 때마다 출력
-- 상혀크가 없는 Run에서 출력
-- 다른 NPC에게 출력
-
-구조:
-
-**상혀크가 실제 존재  
-→ 평범한 순간  
-→ 갑작스러운 찬양**
-
-## 9.3 진호르 — 홍진호 / 숫자 2 계열
-
-진호르가 실제 Run에 존재해야 한다.
-
-핵심은 화면 어디엔가 숫자 `2`가 있는 것이 아니다.
-**진호르 자신의 현재 상황과 숫자 2가 자연스럽게 연결되어야 한다.**
-
-### Initial Harness
-
-대상:
-
-- NPC name = 진호르
-
-출력 위치:
-
-- 기존 구매 완료 NPC Reaction
-
-우선 조건:
-
-- 현재 거래에서 실제 구매 Item 수 = 2
-
-Copy:
-
-> 두 개요. 두 개.
-
-현재 거래 정보만 사용한다.
-
-반복 노출이 과하면 현재 존재하는 Visit Count와 결합한다.
-새 Seen Flag는 만들지 않는다.
-
-추가 후보는 실제 기존 2+1 상황과 진호르의 구매가 자연스럽게 연결될 때만 사용할 수 있다.
-
-금지:
-
-- 진호르가 없는데 DAY 22라서 출력
-- 재고가 2라서 출력
-- 숫자 2가 아무 곳에서나 보여서 출력
-- Reward를 실제 2배로 변경
-- Meme 때문에 Balance 변경
 
 # 10. CULTURAL REFERENCE CONTEXT CHECK
 
@@ -982,21 +856,64 @@ Copy를 장황하게 써서 Severity를 표현하지 않는다.
 
 NPC 이름도 World Voice의 일부다.
 
-기본 Name Pool은:
+## 15.1 MAIN VOICE — 한국식 + 판타지 + 유쾌한 비틀기
 
+normal Name Pool의 중심은:
+
+`한국어 어감`
++
+`판타지식 변형`
++
+`가끔 자연스러운 말장난`
+
+이다.
+
+목표:
+정통 서양 High-Fantasy 인명록이 아니라,
+한국어 Player가 읽자마자 기억하고 피식할 수 있는 생활형 Fantasy 이름.
+
+Tone Anchor 예시:
+- 요화니우스
+- 지오니아
+- 민자이
+- 고쉬스앵
+
+이 예시는 방향 기준이다.
+모든 이름을 Meme/실존인물 패러디로 만들라는 뜻이 아니다.
+
+Good pool mix:
+- 한국어 어감이 남아 있는 Fantasy 변형
+- 익숙한 음절을 한두 번 비튼 이름
+- 말장난을 알아채도 되고 못 알아채도 자연스러운 이름
+- 드물게 더 정통 Fantasy스러운 이름
+
+Strong Western High-Fantasy names may exist,
+but they must not dominate the normal pool.
+
+Avoid a pool where:
+`노아 / 바엘 / 카엘 / 아몬 / 레온 ...`
+같은 서양/성서/정통 Fantasy 느낌이 연속적으로 주류를 이룬다.
+
+## 15.2 READABILITY
+
+기본 Name Pool은:
 - 한국어 화자가 한 번에 읽을 수 있다.
-- 현실 한국 실명 그대로는 아니다.
+- 현실 한국 실명 그대로만 반복하지 않는다.
+- 말장난을 모르면 이름 자체가 붕괴하지 않는다.
 - 의미 없는 Random Syllable Soup을 피한다.
 - 특정 접미사를 남발하지 않는다.
+- 한두 개의 음절 규칙으로 전체 Pool이 자동 생성된 티가 나지 않는다.
 
 Reject:
-
 - 의미 없는 띄어쓰기
 - 읽기 어려운 음절
 - Random Syllable Soup
 - 모든 이름이 `-우스 / -엘 / -리온` 계열
+- 서양 High-Fantasy 이름이 normal pool의 대부분
+- 모든 이름이 억지 Meme이라 세계가 개그 명단처럼 보이는 상태
 
-Rare Reference Name도 모르는 Player에게는 자연스러운 Fantasy Name처럼 보여야 한다.
+Rare Reference Name도 모르는 Player에게는
+normal Name Voice 안에서 자연스럽게 섞여 보여야 한다.
 
 # 16. GLOBAL COPY SCOPE
 
@@ -1073,6 +990,10 @@ Copy 수정 때문에 Source 구조를 먼저 Refactor하지 않는다.
 - Meme / Easter Egg가 관련 NPC / Context 없이 출력되는가?
 - Reference 때문에 새 시스템이 생겼는가?
 - Copy 때문에 기존 Gameplay Rule이나 Balance가 달라졌는가?
+- normal NPC Name Pool이 한국식+판타지+유쾌한 비틀기보다 서양 High-Fantasy 이름에 치우쳤는가?
+- 이름이 Random Syllable Soup 또는 억지 Meme 목록처럼 보이는가?
+- Monster Knowledge 진행도가 아직 `관찰 N회`로 표시되는가?
+
 
 # 19. FINAL COPY FILTER
 

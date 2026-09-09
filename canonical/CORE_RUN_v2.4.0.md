@@ -3,8 +3,8 @@
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 ## KEY
@@ -16,7 +16,8 @@ realTimeGameplay=NO
 
 startGold=1200G
 inventoryCapacity=24
-dailyOverhead=60G
+dailyOverheadStarting=60G
+dailyOverheadExactStatus=PASS3_AFTER_MINIMAL_ENGAGEMENT_SIM
 baseVisitors/day=3–6
 dailyOrderOffers=6
 
@@ -179,7 +180,16 @@ Capacity modifiers may come from explicit Relic/contract effects.
 
 ## DAILY ECONOMIC BASE
 
-dailyOverhead=60G
+dailyOverheadStarting=60G
+dailyOverheadExactStatus=PASS3_AFTER_MINIMAL_ENGAGEMENT_SIM
+
+60G is the v2.4 implementation starting baseline,
+not a final post-simulation freeze.
+
+Any later base-overhead change requires:
+- integrated v2.4 multi-seed evidence
+- minimal-engagement vs normal-play comparison
+- Designer approval
 
 Base order offers:
 6/day
@@ -346,7 +356,79 @@ but should not replace Run decision-making.
 
 Knowledge:
 -> use only explicitly defined current CORE/Meta rules
--> no separate additional Knowledge subsystem/spec is required for v2.3 Full Adoption
+-> no separate additional Knowledge subsystem/spec is required for v2.4 Full Adoption
+
+### MONSTER KNOWLEDGE — SUPPLIED SURVIVAL
+
+Monster/Family Knowledge progress is earned only when:
+1. an NPC enters that expedition carrying >=1 supplied Item
+2. that expedition returns without `사망`
+
+Then:
+that Family Knowledge +=1
+
+No supplied Item:
+Knowledge gain=0
+
+Death:
+Knowledge gain=0
+
+Purpose:
+- prevent zero-cost naked scouting from farming permanent information
+- keep Monster Knowledge tied to an actual store/preparation decision
+
+Reuse the existing cross-run Knowledge/progress state.
+Do not create a new Knowledge subsystem.
+
+Player-facing progress term:
+`보급 생환 N회`
+
+Do not use the old progress wording:
+`관찰 N회`
+
+Exact reveal thresholds for hazard/weakness entries remain unchanged unless separately specified.
+
+### MINIMAL-ENGAGEMENT / DAY-FARMING BOUNDARY
+
+A strategy that repeatedly does:
+- 0 meaningful sale
+- 0 order investment
+- 0 expedition supply
+- advance Day with minimal interaction
+
+must not be an efficient way to:
+- reach late Day bands
+- farm Meta XP/unlocks
+- compete with normal engaged play
+
+Day number alone must not be the primary source of permanent reward.
+
+Meaningful existing-system contributions may include:
+- actual sales/economy
+- supplied survival / Knowledge
+- NPC relationship/growth
+- discovery
+- Final result
+
+Do not add a new:
+- diligence gauge
+- inactivity punishment meter
+- forced action tax
+
+Use existing:
+- economy/overhead
+- Dungeon pressure
+- NPC long-term value
+- Meta reward weighting
+
+to make engaged play clearly superior.
+
+Exact XP weights / overhead tuning / collapse point:
+PASS3 after integrated v2.4 simulation.
+
+Balance FAIL signal:
+repeated zero-sale / zero-order / zero-supply play can routinely coast into D20+,
+especially D25+, while remaining economically or Meta-efficient.
 
 ## PRODUCT / TECH CONSTRAINTS
 
@@ -382,7 +464,7 @@ systems where possible.
 
 ## QA
 
-Acceptance criteria -> CORE_RUN_QA_v2.3.0.md
+Acceptance criteria -> CORE_RUN_QA_v2.4.0.md
 
 ## RELATED
 

@@ -3,8 +3,8 @@
 DOC=NPC_TRAIT_QA
 OWNER=qa,npc,trait,roster,living_npc_cap
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 Status values are NOT stored here.
@@ -64,15 +64,20 @@ Each Job has:
 PASS:
 No Job is mandatory for a Family and no Job solves all Families.
 
-## TRAIT-Q01 — DIRECTION SIGNAL
+## TRAIT-Q01 — EFFECT SEMANTIC PRESENTATION
+
 SETUP:
-Inspect Positive/Mixed/Negative traits.
+Inspect POSITIVE/MIXED/NEGATIVE internal Traits including mixed-sign effects.
 
 EXPECT:
-GREEN/YELLOW/RED meaning is reinforced by icon/label.
+- Player does not see `이점/양면/약점` or ▲/◆/▼ Trait quality labels
+- internal direction still exists for generation/Event rules
+- every material effect uses canonical `benefit/cost/neutral` semantic metadata
+- UI does not infer meaning from numeric sign alone
+- effect wording remains understandable without color
 
 PASS:
-Color alone is not required to understand direction.
+Player judges the Trait from actual effects while implementation retains internal direction safely.
 
 ## TRAIT-Q02 — TRAIT COUNT READABILITY
 SETUP:
@@ -172,7 +177,7 @@ SETUP:
 Trigger approved Rare Trait event.
 
 EXPECT:
-Player chooses one NPC and one RED trait to remove.
+Player chooses one NPC and one internal NEGATIVE Trait to remove.
 
 PASS:
 No automatic random removal from unintended NPC.
@@ -239,7 +244,7 @@ EXPECT:
 - no extra source-only Trait leaks into generation
 
 PASS:
-Trait pool identity is frozen for the v2.3 implementation baseline.
+Trait pool identity is frozen for the v2.4 implementation baseline.
 
 ## TRAIT-Q16 — SOCIAL / REVISIT DIFFERENTIATION
 SETUP:

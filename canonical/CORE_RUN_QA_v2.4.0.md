@@ -3,8 +3,8 @@
 DOC=CORE_RUN_QA
 OWNER=qa,core_run,run_flow
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 Status values are NOT stored here.
@@ -78,10 +78,13 @@ SETUP:
 Complete a normal day.
 
 EXPECT:
-Daily overhead=60G unless modified by explicit canonical effect.
+- v2.4 starting baseline daily overhead=60G unless modified by explicit canonical effect
+- exactly one base overhead charge occurs per completed normal Day
+- final post-simulation base overhead may change only through approved PASS3 tuning
 
 PASS:
-Closing and final Gold use the same actual overhead value.
+Closing and final Gold use the same actual overhead value,
+with no duplicate/missing charge and no silent balance change.
 
 ## RUN-Q07 — BASE VISITOR RANGE
 SETUP:
@@ -257,7 +260,7 @@ No progression softlock or missing required phase.
 ## FINAL DETAIL QA OWNERSHIP
 
 Detailed Final Family / party / Power / Roll / clear acceptance criteria are owned by:
--> FINAL_EXPEDITION_v2.3.0.md
+-> FINAL_EXPEDITION_v2.4.0.md
 
 CORE_RUN_QA retains only Run-flow, D30 timing, stock timing, save/resume, and complete-loop integration checks.
 
@@ -304,3 +307,47 @@ Existing downstream preparation/future-value consequences may still occur.
 PASS:
 No-sale remains a valid strategic action.
 
+## RUN-Q29 — MONSTER KNOWLEDGE REQUIRES SUPPLIED SURVIVAL
+SETUP:
+For the same Family, resolve:
+A. no supplied Item, survives
+B. >=1 supplied Item, dies
+C. >=1 supplied Item, survives
+
+EXPECT:
+- A: Knowledge +0
+- B: Knowledge +0
+- C: Knowledge +1
+
+Player-facing progress text:
+`보급 생환 N회`
+
+PASS:
+Zero-cost naked scouting cannot farm Monster Knowledge and old `관찰 N회` progress wording is not used.
+
+## RUN-Q30 — MINIMAL-ENGAGEMENT / DAY-FARMING
+SETUP:
+Multi-seed compare:
+A. normal engaged play
+B. repeated zero-sale / zero-order / zero-supply day advancement
+C. poverty/minimum-spend play
+
+Track:
+- Day reached
+- Gold
+- Meta XP/unlocks
+- NPC growth/value
+- Knowledge
+- Final viability
+
+EXPECT:
+- normal engaged play is clearly superior in economy/meta/progression
+- Day number alone is not an efficient permanent-reward farm
+- B does not routinely coast into D20+ / D25+ while remaining economically or Meta-efficient
+- no new inactivity punishment subsystem is required
+
+PASS:
+Existing economy/dungeon/NPC/meta systems create the opportunity cost naturally.
+
+Exact reward/overhead tuning:
+PASS3 after integrated v2.4 simulation.

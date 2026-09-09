@@ -4,8 +4,8 @@ DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,easter_egg
 # EVENT — CANONICAL
 
-DOC_VERSION=2.3.0  
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0  
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 ---
 

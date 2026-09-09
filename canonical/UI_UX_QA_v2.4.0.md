@@ -3,8 +3,8 @@
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile
 
-DOC_VERSION=2.3.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.3.0
+DOC_VERSION=2.4.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
 
 
 Status values are NOT stored here.
@@ -286,14 +286,17 @@ PASS:
 Controls remain reachable.
 
 ## UI-Q24 — COLOR-INDEPENDENT SIGNAL
+
 SETUP:
-Inspect Traits/preparedness/selected/disabled states.
+Inspect Trait effect lines, preparedness, selected, disabled states.
 
 EXPECT:
-Icon/label/shape/text reinforces color.
+- Trait benefit/cost meaning is not inferred from color alone
+- effect wording remains clear without color
+- preparedness/selected/disabled states also have text/icon/shape reinforcement
 
 PASS:
-Meaning is not color-only.
+Meaning is not color-only and Trait header color is not used as a hidden quality grade.
 
 ## UI-Q25 — ITEM DECISION INFO
 SETUP:
@@ -401,3 +404,83 @@ EXPECT:
 PASS:
 Information is uncertain but not unfairly opaque, and no extra Event-result phase is created.
 
+## UI-Q34 — TRAIT HEADER DOES NOT PRE-JUDGE QUALITY
+SETUP:
+Open NPCs with positive, mixed, and negative internal Traits.
+
+EXPECT:
+- no Player-facing `이점/양면/약점`
+- no ▲/◆/▼ Trait quality label
+- each effect line follows canonical semantic tone metadata
+- mixed Trait can visibly contain both helpful and harmful lines
+
+PASS:
+Player reads effects and makes the judgment.
+
+## UI-Q35 — HAZARD EFFECT ACCESS
+SETUP:
+Inspect all canonical Hazards on PC and mobile.
+
+EXPECT:
+- each Hazard provides its short Stat-pressure explanation
+- PC hover/focus works where tooltip is used
+- mobile tap/inline gives equivalent information
+- current Gate summary can surface the explanation without encyclopedia hopping
+
+PASS:
+No hover-only or inconsistent Hazard explanation.
+
+## UI-Q36 — RELIC VISIBILITY / QUICK VIEW
+SETUP:
+Own Relics and move through Morning -> Order -> Sale.
+
+EXPECT:
+Owned Relic effects remain quickly accessible in all three phases.
+Sale view is read-only.
+
+PASS:
+Player can recall store-build effects while making decisions without violating purchase timing.
+
+## UI-Q37 — RELIC MILESTONE REVEAL
+SETUP:
+Reach D5/D10/D15/D20/D25/D30.
+
+EXPECT:
+New candidate window receives one focused reveal.
+Buy / `나중에 결정` are clear.
+
+PASS:
+D10/D15 etc. never feel like the Relic choice simply failed to appear.
+
+## UI-Q38 — MOBILE 360 / 390 / 430 SCREENSHOT QA
+SETUP:
+Capture actual browser screenshots at 360px, 390px, 430px for:
+- Morning
+- Order
+- Sale
+- Night
+- Closing
+- Relic reveal
+- Final prep
+
+EXPECT:
+- core text readable without zoom
+- unnecessary side gutter minimized
+- current decision/action is clear in first viewport
+- game art/object does not push necessary decision information excessively downward
+- layout is recomposed, not merely shrunken desktop
+- sticky action/safe area remains reachable
+
+PASS:
+All three widths are practically playable and do not feel like a tiny desktop page.
+
+## UI-Q39 — MONSTER KNOWLEDGE PROGRESS COPY
+SETUP:
+Open Monster Knowledge/Codex with progress.
+
+EXPECT:
+Progress label is:
+`보급 생환 N회`
+
+PASS:
+Old `관찰 N회` progress wording is absent.
