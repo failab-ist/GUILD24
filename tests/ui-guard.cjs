@@ -7,6 +7,7 @@ for(const f of ['data/catalog','data/relics','systems/rng','systems/adventurer',
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const app=read('dist/ui/app.js'),css=read('dist/ui/ui.css'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
+const fn=name=>{const a=app.indexOf('function '+name+'(');const b=app.indexOf('\nfunction ',a+1);return app.slice(a,b<0?app.length:b);};
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 
 test('§8.1: Playwright is a devDependency and never enters the shipped build',()=>{
@@ -39,6 +40,54 @@ test('UI §RESPONSIVE RULE: the sheet is authored mobile-first',()=>{
  assert.ok(css.includes('env(safe-area-inset-bottom)')&&css.includes('env(safe-area-inset-top)'),'safe areas are honoured');
 });
 
+test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',()=>{
+ assert.equal((css.match(/border-radius:(?!0)/g)||[]).length,0,'no rounded containers anywhere');
+ assert.ok(!/box-shadow:[^;]*blur|filter:blur/.test(css),'depth is hard offset and bevel, never blur');
+ assert.ok(!/\.card\b|\.kpi|\.tile-grid|\.phase-strip|\.hud-readout|\.day-plate/.test(css),'no card/KPI/stepper vocabulary survives');
+ assert.ok(!app.includes('function header('),'the dead desktop topbar is gone');
+ assert.ok(!app.includes('phase-strip'),'the numbered stepper is gone');
+ assert.ok(!/class="tag"/.test(app),'the old chip helper is gone; a price tag is a named object');
+ assert.ok(css.includes('image-rendering:pixelated'),'art renders unsmoothed');
+ // green is the sign, the price tag and the approval stamp — never a ground
+ for(const rule of ['body{','.stage{','.p-order{','.p-morning{'])
+  assert.ok(!/#([0-9a-f]{0,2})(3f9d63|7ddc9f)/i.test(css.slice(css.indexOf(rule),css.indexOf(rule)+240)),'green is not a page ground in '+rule);
+ assert.ok(css.includes('.stamp{background:var(--sign)'),'green is reserved for the approval stamp');
+});
+
+test('UI-Q01: Morning and Order are different screens, not one template',()=>{
+ const morning=fn('morningScreen'),order=fn('orderForm')+fn('orderScreen');
+ assert.ok(morning.includes('Art.scene(game)')&&morning.includes('class="room"'),'Morning is the store scene itself');
+ assert.ok(morning.includes('class="slate"')&&morning.includes('class="hang"'),'the day and its numbers are objects in the room');
+ assert.ok(morning.includes('class="notices"'),'Gates are plank notices');
+ assert.ok(!order.includes('Art.scene'),'ORDER removes the store scene from its composition');
+ assert.ok(order.includes('class="form"')&&order.includes('발 주 서'),'Order is a paper order form');
+ assert.ok(order.includes('class="pricetag"')&&order.includes('class="dial"'),'offers carry a price tag and a counter dial');
+ for(const shared of ['class="room"','class="slate"','class="notices"'])
+  assert.ok(!order.includes(shared),'Order does not reuse the Morning composition: '+shared);
+});
+
+test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is explained inline',()=>{
+ assert.ok(/modal='event'/.test(app),'an Event day opens with a focused reveal before Gate detail');
+ assert.ok(app.includes('eventSeen'),'the reveal is consumed exactly once');
+ assert.ok(app.includes('class="flyer"'),'after the reveal the Event stays as a flyer on the notice board');
+ assert.ok(app.includes('Presentation.hazardRows'),'Gate Hazards render their canonical pressure line');
+ assert.ok(!/title="/.test(app),'no hover-only title= tooltip survives in the render path');
+ assert.ok(!/[❄\u{1F577}☾◆◉♜]/u.test(app),'gate marks are drawn sprites, never emoji');
+ assert.ok(app.includes('Art.mark(')&&app.includes('Art.glyph('),'sprites are used for marks and UI glyphs');
+});
+
+test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hierarchy',()=>{
+ const order=fn('orderForm')+fn('orderScreen');
+ assert.ok(order.includes('본사 발주')||order.includes('발 주 서'),'the form is titled as the HQ order');
+ for(const label of ['보유','선택','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
+ assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
+ assert.ok(order.includes('tierLine()'),'the next-day Tier forecast is present and secondary');
+ assert.ok(order.includes('후보 전체 교환'),'the reroll names its full-offer scope');
+ assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
+ assert.ok(order.includes('발주 교환권'),'the free first use is called out');
+ assert.ok(/발주 '\+fmt\(game.cartTotal\(\)\)\+'G · 발주 확정/.test(app),'the docked stamp states the amount');
+});
+
 test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{
  const pressure={poison:'강인함',bind:'기동',corrosion:'강인함',mire:'기동',fire:'강인함',fear:'정신',dark:'정신',cold:'강인함',whiteout:'정신'};
  assert.deepEqual(Object.keys(Presentation.hazardPressure).sort(),Object.keys(DATA.hazards).sort(),'every canonical Hazard is explained');
@@ -51,32 +100,32 @@ test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{
  assert.equal(Presentation.hazardRows(['cold']).at(0).name,'냉기');
 });
 
-test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is explained inline',()=>{
- assert.ok(/modal='event'/.test(app),'an Event day opens with a focused reveal before Gate detail');
- assert.ok(app.includes('eventSeen'),'the reveal is consumed exactly once');
- assert.ok(!/<aside class="event-line"/.test(app),'the Event is no longer buried in the Morning stack');
- assert.ok(app.includes('Presentation.hazardRows'),'Gate Hazards render their canonical pressure line');
- assert.ok(!/title="/.test(app),'no hover-only title= tooltip survives in the render path');
- assert.ok(!/class="tag"/.test(app),'the old chip vocabulary is gone');
+test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
+ const sale=fn('saleScreen');
+ const order=['Art.scene(game)','customer','returningSummary(n)','destPlate(n)','statGrid(n)','traitRows(n)','kitLine(n)','readout(n)','shelf()'];
+ let at=-1;for(const part of order){const i=sale.indexOf(part);assert.ok(i>at,'Sale stacks '+part+' in canonical mobile order');at=i;}
+ assert.ok(app.includes('예상 목적지')&&!app.includes("'말한 목적지'"),'the destination label is 예상 목적지');
+ assert.ok(!app.includes("modal==='saleItem'"),'item and price resolve inline, with no modal round trip');
+ assert.ok(app.includes("selected=selected===id?null:id"),'tapping a product toggles its panel in place');
+ assert.ok(app.includes("Math.round(D.pricing[mode].mult*100)")&&app.includes("<em>'+pct+'%</em>"),'price modes read as 50/100/150%');
+ for(const reason of ['소지금 부족','오늘 거절됨','가방 가득'])assert.ok(app.includes(reason),'a blocked price says why: '+reason);
+ assert.ok(app.includes('Adventurer.slots(n)'),'remaining consumer slots are readable');
+ for(const bad of ['성공 확률','사망 확률','안전 점수'])assert.ok(!app.includes(bad),'no exact probability or master safety score');
 });
 
-test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order screen carries the canonical hierarchy',()=>{
- const order=app.slice(app.indexOf('function orders('),app.indexOf('function inventory('));
- assert.ok(app.includes('본사 발주')&&app.includes('order-funds'),'the DAY stamp and persistent funds sit above the scroll surface');
- for(const label of ['보유','선택 발주','발주 후'])assert.ok(app.includes(label),'funds summary shows '+label);
- assert.ok(order.includes('gateSummary()'),'today Gate/Hazard is reachable without leaving Order');
- assert.ok(order.includes('nextForecast()'),'the next-day Tier forecast is present');
- assert.ok(order.includes('발주 후보 전체 교환'),'the reroll control names its full-offer scope');
- assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
- assert.ok(order.includes('발주 교환권'),'the free first use is called out');
- assert.ok(/발주 '\+fmt\(game.cartTotal\(\)\)\+'G · 발주 확정/.test(app),'the sticky confirm states the amount');
- assert.ok(!/store-panel|Art.scene\(game\)[^;]*order/.test(order),'no store scene in the Order composition');
+test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progress wording',()=>{
+ assert.ok(!/traitDirections|▲|◆ 양면|▼/.test(app),'no Trait quality label reaches the render path');
+ assert.ok(!app.includes('buildNames'),'no Relic Build Axis name is rendered');
+ assert.ok(!app.includes('관찰'),'Monster Knowledge progress is 보급 생환 N회');
+ assert.ok(app.includes('보급 생환'),'the canonical progress wording is present');
+ assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
+ assert.ok(/focusedRevealSeen/.test(app),'the Relic milestone reveal is once per window');
 });
 
-test('UI-Q02: no dashboard slop in the phase shells',()=>{
- assert.ok(!app.includes('phase-strip'),'the numbered stepper is replaced by a quiet phase rail');
- assert.ok(!app.includes('function header('),'the dead desktop topbar is gone');
- assert.ok(!/upgrade-grid|detail-stats.*repeat\(4/.test(css),'no 4-up KPI tile row survives');
- assert.ok(/\.detail-stats\{display:grid;grid-template-columns:1fr 1fr/.test(css),'core stats are a 2x2');
+test('NIGHT_CLOSING §DEBUG LANGUAGE: the Night copy stays in the world',()=>{
+ const night=fn('nightScreen')+fn('beat')+fn('whyLine')+fn('changedRows')+fn('outcomeReason');
+ for(const word of ['판정','보정 적용','위험도','RNG','threshold','coefficient','디버그'])
+  assert.ok(!night.includes(word),'Night copy still says '+word);
+ assert.ok(!/영구 사망 처리/.test(app),'no process language for death');
 });
 console.log(count+' ui guard groups passed');
