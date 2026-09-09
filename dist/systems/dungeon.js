@@ -1,6 +1,7 @@
 (function(G){
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function prepare(n,d,facilities=[]){
+ // caffeineMult/alcoholMult are inert accumulators; the Traits that fed them leave the pool in the Trait chunk.
  let e={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit,escape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,luck:0,variance:0};const why=[],events=[],mult={foodMult:1,defenseMult:1,healMult:1,potionMult:1,caffeineMult:1,alcoholMult:1};
  for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){if(k in mult)mult[k]*=v;else if(k==='priceBias'||k==='buyBias'){continue;}else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}
  if(n.injury){e.survival-=n.injury*5;e.combat-=n.injury*3;why.push('남아 있는 부상으로 생존·전투 감소');}e.mobility-=n.fatigue*.4;
@@ -8,30 +9,29 @@ function prepare(n,d,facilities=[]){
  for(const id of n.pack){const item=D.itemBy[id];if(item.effects.duplicate){duplicate=1;continue;}const copies=1+duplicate;duplicate=0;if(copies>1)why.push('황금 1+1: '+item.name+' 효과 '+copies+'회');
  let power=copies;
  for(const[k,v]of Object.entries(item.effects)){
-  if(['potion','caffeine','alcohol'].includes(k))continue;
-  let value=v*power;const nutrition=['food','supply','survival'].includes(k);if(nutrition&&item.category==='food')value*=mult.foodMult;if(nutrition&&['food','drink'].includes(item.category))value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);if(item.effects.potion&&k==='survival')value*=mult.potionMult;if(item.effects.caffeine&&k==='mobility')value*=mult.caffeineMult;if(facilities.includes('expeditionMeal')&&['food','fresh','drink'].includes(item.category)&&d.hazards.includes(k)&&v>0)value*=1.25;if(k==='survival')value*=mult.defenseMult*mult.healMult;if(item.effects.alcohol){if(k==='fear')value*=mult.alcoholMult;if(k==='mobility'&&mult.alcoholMult>1)value*=.3;}
+  if(k==='potion')continue;
+  let value=v*power;const nutrition=['supply','survival'].includes(k);if(nutrition&&item.category==='food')value*=mult.foodMult;if(nutrition&&['food','drink'].includes(item.category))value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);if(item.effects.potion&&k==='survival')value*=mult.potionMult;if(facilities.includes('expeditionMeal')&&['food','fresh','drink'].includes(item.category)&&d.hazards.includes(k)&&v>0)value*=1.25;if(k==='survival')value*=mult.defenseMult*mult.healMult;
   e[k]=(e[k]||0)+value;
  }
  const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
  if(item.effects.survival>=10)why.push(item.name+': 생존 능력 보강');
  }
- if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))why.push('대식가: 음식의 포만감·보급·강인함 +40%');
- e.survival-=e.thirst||0;
+ if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))why.push('대식가: 음식의 보급·강인함 +40%');
+ const required=d.requiredSupply||0,actual=e.supply||0,deficit=required>0?Math.max(0,required-actual):0;
+ const penalty=deficit>0?Math.min(.3,deficit*.06):0;
+ if(penalty)for(const k of G.Adventurer.keys)e[k]*=1-penalty;
  const hazards=d.hazards.map(h=>hazardState(h,e,d));
- const supply=(d.supplyPressure||0)*7,provisions=(e.food||0)+(e.supply||0)+e.survival*.08;
- const supplyGap=Math.max(0,supply-provisions);
- let hazard=(hazards.reduce((v,h)=>v+h.gap,0)+supplyGap*.5)/Math.max(1,Math.sqrt(hazards.length));
- if(d.tags?.includes('undead')&&e.undead)e.combat+=e.undead;
- if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))events.push({id:'eater-food',text:'대식가가 음식의 포만감·보급·강인함 효과를 40% 더 얻었다.'});
+ let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
+ if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))events.push({id:'eater-food',text:'대식가가 음식의 보급·강인함 효과를 40% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 40% 증가했다.'});
- return {effects:e,hazard,hazards,supply:{pressure:d.supplyPressure||0,gap:supplyGap},why,events};
+ return {effects:e,hazard,hazards,supply:{required,actual,deficit,penalty},why,events};
 }
 function tierWeights(day){
- const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.8,.2,0]],[8,[.7,.3,0]],[12,[.65,.35,0]],[13,[.58,.4,.02]],[18,[.2,.65,.15]],[19,[.15,.6,.25]],[24,[.05,.5,.45]],[25,[0,.5,.5]],[29,[0,.45,.55]]];
+ const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
 function hazardState(h,e,d){
- const rules={poison:['survival',.3],fire:['survival',.32],cold:['survival',.3],corrosion:['survival',.3],bind:['mobility',.4],slow:['mobility',.4],fear:['spirit',.4],dark:['spirit',.3,'mobility',.12],whiteout:['spirit',.3,'mobility',.12]};
+ const rules={poison:['survival',.3],fire:['survival',.32],cold:['survival',.3],corrosion:['survival',.3],bind:['mobility',.4],mire:['mobility',.4],fear:['spirit',.4],dark:['spirit',.3,'mobility',.12],whiteout:['spirit',.3,'mobility',.12]};
  const rule=rules[h]||['survival',.2],threat=14+(d.scale||1)*2,defense=(e[h]||0)+e[rule[0]]*rule[1]+(rule[2]?e[rule[2]]*rule[3]:0),gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
@@ -44,7 +44,7 @@ function resolve(n,d,r,facilities=[],options={}){
  const score=ability*noise;const combatSuccess=score>=d.power;
  const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);
  const affected=envRoll<environment;
- const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))})),{key:'supply',weight:p.supply.gap*.006/Math.max(1,Math.sqrt(d.hazards.length))}];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
+ const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))})),{key:'supply',weight:p.supply.deficit*.02/Math.max(1,Math.sqrt(d.hazards.length))}];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  const escapeRoll=r.next(),escapeChance=clamp(.48+e.mobility*.005+e.escape+e.luck-(d.scale||1)*.024,.15,.94);
  let outcome=combatSuccess?(score>d.power*1.26&&!affected?'대성공':'성공'):(escapeRoll<escapeChance?'퇴각':'부상');
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');

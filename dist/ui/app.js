@@ -35,7 +35,7 @@ function phaseAction(){
  if(s.phase==='end')return btn('다음 점포 열기','new','primary');
  return '';
 }
-function gateSummary(){return '<div class="gate-summary">'+game.run.dungeons.map(d=>'<div><b>'+E(d.name)+'</b><span>'+d.hazards.map(h=>D.hazards[h]).join(' · ')+'</span><small>보급 부담 '+['낮음','보통','높음'][d.supplyPressure||0]+'</small></div>').join('')+'</div>';}
+function gateSummary(){return '<div class="gate-summary">'+game.run.dungeons.map(d=>'<div><b>'+E(d.name)+'</b><span>'+d.hazards.map(h=>D.hazards[h]).join(' · ')+'</span><small>'+(d.requiredSupply?'보급 부담 · 필요 보급 '+d.requiredSupply:'보급 부담 없음')+'</small></div>').join('')+'</div>';}
 function nextForecast(){
  const day=game.run.day+1;if(day>=30)return '<div class="next-forecast"><b>내일 예보</b><span>'+(day===30?'마왕성 최종 원정':'이번 영업의 마지막 날')+'</span></div>';
  return '<div class="next-forecast"><b>내일 Tier 예보</b><span>'+Dungeon.tierWeights(day).map((w,i)=>'T'+(i+1)+' '+(Math.round(w*1000)/10)+'%').join(' · ')+'</span><small>종류·손님은 미정</small></div>';
@@ -49,7 +49,7 @@ function orderBudget(){
 }
 function forecast(n,extra=null){
  const d=game.run.dungeons[n.claimedDestination??n.destination]||game.run.dungeons[0],v={...n,traits:Presentation.traits(n),pack:extra?[...n.pack,extra]:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
- return '<div class="expedition-forecast"><div><span>전투 전망</span><b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b></div><div class="hazard-readiness">'+p.hazards.map(h=>'<span>'+D.hazards[h.key]+' <b>'+h.label+'</b></span>').join('')+'</div><small>보급 부담 '+['낮음','보통','높음'][d.supplyPressure||0]+' · 부상 '+n.injury+' · 누적 피로 '+n.fatigue+'</small></div>';
+ return '<div class="expedition-forecast"><div><span>전투 전망</span><b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b></div><div class="hazard-readiness">'+p.hazards.map(h=>'<span>'+D.hazards[h.key]+' <b>'+h.label+'</b></span>').join('')+'</div><small>'+(d.requiredSupply?'필요 보급 '+d.requiredSupply+' · 준비 보급 '+Math.round(p.supply.actual):'보급 부담 없음')+' · 부상 '+n.injury+' · 누적 피로 '+n.fatigue+'</small></div>';
 }
 function returningSummary(n){const r=Presentation.returning(n);if(!r)return '';return '<aside class="returning-summary" aria-label="지난 방문 이후"><b>지난 원정 · DAY '+r.day+' '+E(r.outcome)+'</b>'+(r.changes.length?'<p>'+r.changes.map(E).join(' · ')+'</p>':'')+(r.impact?'<p>'+E(r.impact)+'</p>':'')+'</aside>';}
 function saleScreen(){
