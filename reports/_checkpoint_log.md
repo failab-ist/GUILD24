@@ -82,3 +82,31 @@ balance observation: 80 playing runs: observed event rate 0.360 against eligible
                      all 22 events observed. No PASS3 numeric changed (V2_4_EXECUTION_PLAN.md §10).
 remaining issue:     NONE
 next chunk:          C — Order / Reroll + Relic
+
+## CHUNK C — ORDER / REROLL + RELIC
+start HEAD:          803b9f0
+end/commit:          b498fe5
+files changed:       dist/systems/{run,relics,save,dungeon,simulation}.js; dist/ui/app.js; package.json;
+                     tests/delta.cjs; tests/relic-order.cjs (new)
+KEEP/PATCH/REPLACE:  KEEP the base reroll curve, pity integrity, relic pool/windows/Keystone gate and the
+                     existing next-day forecast UI. PATCH the 발주 교환권 step (real bug), relic window
+                     state, taxonomy leak, coldcase eligibility, expeditionMeal gating, liquidation
+                     rounding. REMOVE the dead `upgrade` phase.
+tests run:           npm test -> PASS (core + 23 revision + 14 DELTA + 9 vocabulary + 12 events +
+                     10 relic/order + canonical D0-D30)
+implementation note: REAL BUG FOUND by verifying instead of assuming — `발주 교환권` subtracted a step, so
+                     the free use did NOT consume the first daily step (0/30/60 instead of the canonical
+                     0/60/120/240). The plan had this subsystem marked MATCH; the base curve did match,
+                     the Relic interaction did not.
+                     CORRECTION to the plan: the next-day Tier forecast already existed in the Order
+                     screen (app.js nextForecast). It was reclassified from ADD to KEEP + verify, and now
+                     reads a single engine value (P.tierForecast) so UI and engine cannot drift.
+                     tierForecast returns null for D30 — no normal Tier progression exists there.
+                     REL-Q39 is guarded by a source scan of dist/ui/app.js, since the render path needs a
+                     DOM to exercise directly.
+stale tests updated: 1 — the DELTA reroll group asserted the buggy 0->30 relic step; corrected to 0->60.
+design proposal:     NONE
+balance observation: 40 playing runs: reach 1.00, deaths/run 4.95, avg Gold 4334, relic spend 2690/run.
+                     No PASS3 numeric changed (V2_4_EXECUTION_PLAN.md §10).
+remaining issue:     NONE
+next chunk:          D — NPC / Trait / Sale
