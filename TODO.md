@@ -1,21 +1,73 @@
 # Work queue
 
-v2.4 Full Adoption is complete through Chunk H on `claude/v2.4-full-adoption` (HEAD `d24c35d`).
-Design documents (`canonical/`) are frozen at v2.4.0 and were not changed at any point.
+**v2.4 is closed.** The adoption is complete, verified and merged; nothing below is a v2.4
+task. Design documents (`canonical/`) are frozen at v2.4.0 and were never changed.
 Start from `reports/V2_4_FINAL_REPORT.md`.
 
-**No balance numeric may change without explicit User approval** —
-`reports/V2_4_EXECUTION_PLAN.md` §10 is the gate.
+**No v2.5 design is pre-implemented in this source.** The v2.5 section is a record of
+intended direction only — none of it is canonical yet, and none of it may be built before
+its Canonical exists.
 
-| ID | Priority | Status | Item | Where |
-| --- | --- | --- | --- | --- |
-| U01 | P0 | **USER DECISION** | Final difficulty. Decide whether the baseline is a fresh account (clear 3.3%) or a progressed one (15.8%), then decide whether Boss Power moves at all. Measured, not applied. | FINAL REPORT §10-1 |
-| U02 | P0 | **USER DECISION** | Minimal-engagement meta farming. Per run normal play wins on every axis, but per player action a no-sale / meta-farm run is 2.7-3.6x more XP-efficient and still ~1.7x when repeated. Unlocks stay locked without engagement. Decide whether this is a problem and, if so, the direction for the discovery-reward term. | FINAL REPORT §10-2 |
-| U03 | P0 | DECISION | Merge `claude/v2.4-full-adoption` to `main` — after U01 and U02. | FINAL REPORT §14 |
-| B01 | P1 | BUG — OPEN | Report generator (`npm run audit`) references a retired v2.1 item and aborts partway. `reports/COVERAGE.md` and `reports/TRAITS.md` are stale at v2.1 content as a result. Shipped game unaffected; the generator is not part of `npm test`. | FINAL REPORT §6-C |
-| A01 | P1 | BLOCKED — NOT DELIVERED | Approved 203-name package. Approved but not adopted; carries a production gender-tag matching requirement. No partial adoption exists. | FINAL REPORT §11 |
-| A02 | P1 | BLOCKED — NOT DELIVERED | Production NPC asset pool. The 5 PNGs currently in the build are layout-test examples, not a content decision. Swapping the pool requires no screen or layout change. | FINAL REPORT §7, §11 |
-| P01 | P2 | HUMAN PLAYTEST | Sale rhythm, Night pacing, event frequency feel, new-player learning curve, NPC attachment, whether preparation feels like judgement, real-device handling, and whether the farming efficiency edge actually feels attractive. | FINAL REPORT §10-5 |
-| V01 | P2 | TODO | Deeper verification not attempted this pass: per-relic causal ROI, per-hazard independent pity counters, full-unlock-state strategy comparison, revisit payback timing. | FINAL REPORT §13 |
+---
 
-Completed chunk records live in `reports/_checkpoint_log.md`, not here.
+## v2.4 — OPEN, NON-BLOCKING
+
+Carried past the v2.4 close deliberately. None of these blocks release.
+
+| ID | Item |
+| --- | --- |
+| B01 | The report generator behind `npm run audit` references an item retired in Chunk A and aborts, leaving `reports/COVERAGE.md` and `reports/TRAITS.md` at v2.1 content. The shipped game is unaffected and the generator is not part of `npm test`. |
+| D01 | `README.md` is current; `WORK_STATE.md` is current; the head section of `reports/AUDIT.md` still describes the pre-v2.4 era (it reads as a dated record, not as current state). |
+| R01 | Wording / flavour review of the 114 NPC lines — `reports/COPY_REVIEW.md`. Taste only; the lines that made unfounded causal claims were corrected before the v2.4 close. |
+
+## v2.4 — USER DECISIONS, DEFERRED TO v2.5
+
+Measured, recorded, and **not applied**. Both are absorbed by v2.5 work below.
+
+| ID | Item |
+| --- | --- |
+| U01 | Final difficulty / Boss Power baseline account state — fresh account clears 3.3%, a progressed one 15.9%. Superseded by the v2.5 Final redesign. |
+| U02 | Global Meta XP minimal-engagement farming — a low-interaction run is ~2.6x more XP-efficient per player action, ~1.7x when repeated, while unlocks stay shut. **Not carried as a standalone balance task**: v2.5 redesigns Global Meta Progression around Job Mastery, so this is superseded / absorbed by that work. |
+
+---
+
+## v2.5 — PLANNED / CANONICAL PENDING
+
+Direction of travel only. Each needs its Canonical before any implementation.
+
+### Final / Boss
+- 7 Boss / Final redesign
+- Boss reveal timing / Final information UX
+- Boss / Final balance tuning
+
+### Meta progression
+- Job Mastery meta progression — **absorbs U02**, the Global Meta XP farming problem
+- Franchise Grade redesign
+- Franchise Grade based Start Contract unlock
+- Start Contract merit / demerit review
+- Percentage-based operating-cost demerit
+
+### Balance
+- Job base / growth rebalance
+- Economy / daily operating-cost rebalance
+- D30 prior-stock economy tuning
+
+### Content / identity
+- 203 character name / content adoption
+- Fixed Character ID ↔ Name ↔ Portrait adoption
+- Production NPC asset adoption
+- v2.5 Voice / Wit / COPY polish
+
+### Tooling / documentation
+- Audit / report generator repair (**B01**)
+- Stale README / TODO / WORK_STATE cleanup (**D01**)
+
+### Verification
+- Deeper verification — per-relic causal ROI, per-hazard pity counters, full-unlock-state
+  strategy comparison, revisit payback timing
+- Human playtest — sale rhythm, night pacing, event frequency, learning curve, NPC
+  attachment, whether preparation feels like judgement, real-device handling
+
+---
+
+Completed chunk records live in `reports/_checkpoint_log.md`.
