@@ -55,6 +55,12 @@ async function drive(page,target,seed){
  // without rendering means marking as seen what a player would already have seen.
  if(target!=='relic')await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;if(s.event)s.eventSeen=true;})()`);
  await page.evaluate(`Guild24.render()`);
+ // The store-support window is a takeover, not a screen: force it open so the capture is
+ // the thing itself and not the Morning behind it.
+ if(target==='relic'){
+  await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.relicWindow)s.relicWindow.focusedRevealSeen=false;Guild24.render();})()`);
+  await page.waitForTimeout(120);
+ }
  await page.waitForTimeout(150);
 }
 
