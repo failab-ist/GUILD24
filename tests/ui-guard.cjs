@@ -165,6 +165,15 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
  for(const call of ['Presentation.nightTone(r)','Presentation.nightVerdict(r)','Presentation.nightHappened(r)','Presentation.nightWhy(r)'])
   assert.ok(b.includes(call),'the beat reads '+call+' rather than its own copy');
  assert.ok(fn('changedRows').includes('Presentation.nightChanges(r)'),'WHAT CHANGED comes from the same report');
+ // compactness is about copy: a routine beat drops the quote, never the adventurer
+ assert.ok(/portrait\(n,heavy\?150:132,'returner'/.test(b),'both weights render a real figure, not a thumbnail');
+ assert.ok(/\.pfp\.returner\{[^}]*width:min\(44vw,190px\)/.test(css)&&/\.pfp\.returner\.light\{[^}]*width:min\(40vw,172px\)/.test(css),
+  'the routine figure steps down one size and stays a character');
+ assert.ok(b.includes("heavy?'<blockquote>'"),'only a weighted beat spends a quote');
+ assert.ok(!app.includes('다시는 가게 문을 열지 않는다'),'the permanence line is not duplicated under the death flavour');
+ assert.ok(!css.includes('.gone-note'),'the removed death line leaves no dead rule behind');
+ assert.ok(fn('beat').includes('weighty(r)')&&app.includes('Presentation.nightWeight(r)'),
+  'presentation weight is decided in one place');
  for(const dead of ['function outcomeReason','function whyLine','function beatTone','function changeToken'])
   assert.ok(!app.includes(dead),'the duplicated screen-local copy helper is gone: '+dead);
 });

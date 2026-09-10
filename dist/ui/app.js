@@ -242,12 +242,10 @@ function nightScreen(){
 // presented as an ordinary success.
 function beat(r){
  const n=game.run.npcs.find(x=>x.id===r.npcId),tone=Presentation.nightTone(r),heavy=weighty(r);
- const art=n&&Scene.npcArt(n),verdict=Presentation.nightVerdict(r);
- const why=Presentation.nightWhy(r);
+ const verdict=Presentation.nightVerdict(r),why=Presentation.nightWhy(r);
  return '<article class="beat t-'+tone+(heavy?'':' quiet')+'">'
  +'<div class="stand-in">'
-  +(heavy&&art?'<img class="returner" src="'+art+'" alt="" draggable="false">'
-              :portrait(n,heavy?96:72,'returner small'))
+  +portrait(n,heavy?150:132,'returner'+(heavy?'':' light'))
   +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
    +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')+'</div>'
@@ -256,12 +254,11 @@ function beat(r){
  +(why?'<p class="why"><i aria-hidden="true"></i>'+E(why)+'</p>':'')
  +'<div class="changed">'+changedRows(r)+'</div>'
  +supplyNote(r)
- +(tone==='gone'?'<p class="gone-note">다시는 가게 문을 열지 않는다.</p>':'')
  +(heavy?'<blockquote>'+E(r.quote)+'</blockquote>':'')+'</article>';
 }
-// Importance decides presentation weight: a quiet return must not cost the same
-// screen time as a death or a level-up (UI-Q31).
-function weighty(r){return r.outcome!=='성공'||r.rescued||r.avoidedDeath||(r.events||[]).length>0||(r.changes||[]).some(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));}
+// Importance decides how much copy a beat spends, never how big the adventurer is
+// (UI-Q31). Presentation owns the rule so screen and tests share it.
+const weighty=r=>Presentation.nightWeight(r);
 // The one line that says what the player's own product did for this adventurer.
 function supplyNote(r){const lines=Presentation.supplyLines(r);
  return lines.length?'<p class="influence">'+E(lines[0].text)+'</p>':'';}

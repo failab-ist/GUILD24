@@ -47,6 +47,14 @@ function nightHappened(r){
  if(r.outcome==='부상')return r.combatWon?'전투를 이겼지만 돌아오는 길은 험했다.'
                                         :'원정을 끝내지 못하고 다친 채 돌아왔다.';
  return r.outcome==='대성공'?'예상보다 일찍 게이트에서 나왔다.':'원정을 마치고 돌아왔다.';}
+/* Importance decides presentation weight. Compactness is about how much COPY a routine
+   result spends, never about shrinking the adventurer: a quiet beat drops the quote and
+   the extra blocks and keeps the character. Anything the resolution actually recorded as
+   growth — a level, a trait, a promotion, kit, or a stat that really moved — counts as
+   meaningful, not only a level-up. */
+function nightWeight(r){
+ return r.outcome!=='성공'||r.rescued||r.avoidedDeath
+  ||(r.events||[]).length>0||(r.changes||[]).length>0||(r.statChanges||[]).length>0;}
 /* WHY names only what actually acted. A Hazard that was fully covered has no incident
    weight, so it can never be drawn as the cause — no false attribution is possible. */
 function nightWhy(r){const bits=[];
@@ -101,5 +109,5 @@ function supplyImpact(r){return supplyLines(r).map(l=>({...l,who:r.name,
 function modeLabel(mode){return D.pricing[mode]?.label||({normal:'정가(이전)',discount:'25% 할인(이전)',free:'무료 제공(이전)',supply:'최종 원정 보급'}[mode])||'이전 거래';}
 function amount(key,value){const v=percent.has(key)?value*100:value;return (Math.round(v*10)/10)+(percent.has(key)?'%p':'');}
 G.Presentation={returning,amount,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
- nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,supplyLines,supplyImpact};
+ nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,supplyLines,supplyImpact};
 })(globalThis);

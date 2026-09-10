@@ -4,7 +4,8 @@
 // real resolver over a wide spread of seeds, packs and gates, and asserts the
 // presentation layer never contradicts the state it is describing. It also pins the
 // specific contradictions visual QA caught, as fixtures, so they cannot come back.
-const assert=require('node:assert/strict');
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
 for(const f of ['data/catalog','data/relics','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 const D=DATA,P=Presentation;
 let groups=0;const test=(name,fn)=>{fn();groups++;console.log('PASS '+name);};
@@ -37,6 +38,7 @@ function checkOne(r){
   assert.ok(DEATH_WORDS.test(happened),'a death says so: '+happened);
   assert.ok(!/돌아왔다|빠져나왔다|이겼/.test(happened),'no survival language on a death: '+happened);
   assert.ok(!LIVING.test(r.quote),'no living dialogue on a death: '+r.quote);
+  assert.ok(!/다시는 가게 문을 열지 않는다/.test(happened),'the permanence line is not duplicated');
   assert.equal(r.combatWon,false,'a death only follows a lost fight');
  }else{
   assert.ok(!DEATH_WORDS.test(happened),'no death language on a survival: '+happened);
@@ -152,6 +154,27 @@ test('supply impact names a real product and a real effect, or says nothing',()=
 });
 
 // The exact combinations visual QA caught, pinned so they cannot return.
+test('presentation weight is about copy, and death flavour matches the actual history',()=>{
+ let quiet=0,loud=0;
+ for(const {n,r} of all){
+  const heavy=P.nightWeight(r);heavy?loud++:quiet++;
+  // any growth the resolution actually recorded counts as meaningful, not only a level-up
+  if((r.statChanges||[]).length||(r.changes||[]).length)
+   assert.ok(heavy,'a result showing real growth is not treated as routine');
+  if(r.outcome!=='성공')assert.ok(heavy,'only a plain success can be routine');
+  if(!heavy){
+   assert.equal(r.outcome,'성공','a routine beat is a plain success');
+   assert.deepEqual(P.nightChanges(r).filter(c=>c.kind==='up'),[],'a routine beat has no growth to show');
+  }
+  if(r.outcome==='사망'){
+   const receipt=/영수증/.test(r.quote);
+   assert.equal(receipt,n.history.length>0,'a receipt line only appears when there were purchases');
+   assert.ok(r.quote.length>0,'a death always carries one flavour line');
+  }
+ }
+ assert.ok(quiet>0&&loud>0,'both weights occur in the sample (quiet '+quiet+', weighted '+loud+')');
+});
+
 test('the contradictions found in visual QA stay fixed',()=>{
  const base={name:'테스트',dungeonName:'슬라임 하수도 I',level:3,xp:0,loot:0,changes:[],statChanges:[],
   events:[],injury:0,recovery:0,environmentHurt:false,cause:null,rescued:false,avoidedDeath:false};
@@ -180,6 +203,15 @@ test('the contradictions found in visual QA stay fixed',()=>{
  const bare={...base,outcome:'성공',combatWon:true,xp:20,loot:30,
   events:[{id:'hazard',hazards:['poison'],items:[],prevented:true}]};
  assert.deepEqual(P.supplyImpact(bare),[],'nothing carried means nothing claimed');
+ // visible stat growth is material: it must not be filed as a routine result
+ assert.ok(P.nightWeight({...base,outcome:'성공',combatWon:true,xp:26,loot:86,
+  statChanges:[{key:'combat',before:18,after:21},{key:'survival',before:14,after:15}]}),
+  'a success showing stat growth is emphasised, not treated as routine');
+ assert.ok(!P.nightWeight({...base,outcome:'성공',combatWon:true,xp:26,loot:86}),
+  'a plain success with nothing to report stays routine');
+ // the permanence line is carried by the label and WHAT_HAPPENED, not by an extra line
+ assert.ok(!read('dist/ui/app.js').includes('다시는 가게 문을 열지 않는다'),
+  'the duplicated death line is gone from the screen');
 });
 
 console.log(groups+' night groups passed');
