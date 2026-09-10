@@ -184,3 +184,43 @@ balance observation: BOSS POWER — needs User approval before any change (V2_4_
                      Chunk G alongside the new minimal-engagement and poverty policies.
 remaining issue:     NONE
 next chunk:          F — UI / UX / Visual Redesign + Copy (fresh Opus xhigh session, per the plan)
+
+## CHUNK F — UI / UX / VISUAL REDESIGN + COPY  *(IN PROGRESS — Morning / Order / Sale approved-or-under-review; Night / Closing / Relic / Final still on the old markup)*
+start HEAD:          e0cd448 (branch rebased off claude/v2.4-full-adoption; the designated branch had
+                     been pointing at pre-adoption 8620d84)
+commits so far:      61f52be typography split + Morning/Order overflow gate
+                     b783bc1 ASSETS.md — Pretendard as the information face
+                     350e165 POS readout, printed quick marks, paper approval area
+                     0939aca Sale — the customer at the counter, in three layers
+files changed:       dist/ui/{app,ui.css,art,presentation}.js; dist/ui/scene.js (new);
+                     dist/ui/fonts/* + dist/ui/vendor/* (vendored, see reports/ASSETS.md);
+                     dist/ui/assets/npc/npc-01..05.png (supplied NPC asset examples);
+                     tools/{vendor-assets.py,qa-visual.cjs} (new); tests/{ui-guard,assets}.cjs (new);
+                     package.json (devDependencies + `assets` / `qa:visual` scripts)
+KEEP/PATCH/REPLACE:  REPLACE all presentation source. KEEP the phase machine, render() -> per-phase
+                     dispatch, action() dispatch, state, Save and RNG — none of them were touched.
+                     Gameplay Design / Rule / Formula / Catalog unchanged; canonical/** unchanged
+                     (`git diff --name-only -- canonical/` is empty at every commit).
+tests run:           npm test -> PASS (adds 11 ui-guard groups + 3 asset groups)
+                     npm run qa:visual -> clean, 21 captures at 360 / 390 / 430 (reports/ui/)
+                     reports/ui/sale-npc/ — all 5 supplied NPC assets x 360 / 390 / 430, plus the
+                     open-register and last-customer states
+implementation note: SALE is built as a presentation architecture, not a card component. The NPC sticker
+                     is an immutable payload placed in one square customer slot (object-fit:contain),
+                     never cropped, stretched, letterboxed or recoloured; rarity, identity and the reveal
+                     are separate DOM layers over the same <img>. Production art swaps in via
+                     Scene.npcPool, or per NPC via Scene.manifest['npc.<id>'], with no screen changes.
+                     The waiting line is one identical back per customer; only the count is public.
+                     FIXED: Scene.npcPool resolved paths against dist/ instead of dist/ui, so no sticker
+                     had ever loaded.
+environment note:    ENVIRONMENT CONSTRAINT, NOT A DESIGN LIMITATION — this execution environment's
+                     egress proxy blocks jsDelivr / unpkg / esm.sh and the CC0 asset hosts
+                     (OpenGameArt / Kenney / itch). Presentation dependencies were therefore taken from
+                     npm and vendored locally (Galmuri, Pretendard, anime.js — all recorded with licences
+                     in reports/ASSETS.md). Nothing about the visual direction was scaled down because of
+                     it; a future environment with egress can serve the same files from a CDN unchanged.
+gameplay findings:   RECORDED ONLY, NOT FIXED (per the Chunk F brief) — none newly found this pass.
+                     The `protective`/half/vip cohort result carried over from Chunk E stands unexamined
+                     until Chunk G.
+remaining in F:      Night / Closing / Relic / Final composition; the full UI-Q01..UI-Q39 walk;
+                     final checkpoint entry.
