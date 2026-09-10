@@ -1,3 +1,13 @@
+/* ---- type: Galmuri, a bitmap pixel family (SIL OFL 1.1, (c) Lee Minseo).
+   Vendored and subset locally by tools/vendor-assets.py - no runtime request.
+   Bitmap faces are crisp only at their design size and integer multiples, so the whole
+   scale is 12 / 15 / 24 / 30 / 45px and nothing in between. Hierarchy comes from family,
+   weight, case and colour rather than from a dozen sizes. */
+@font-face{font-family:'Galmuri';src:url('fonts/Galmuri11.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Galmuri';src:url('fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'GalmuriBody';src:url('fonts/Galmuri14.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'GalmuriNum';src:url('fonts/GalmuriMono11.woff2') format('woff2');font-weight:400;font-display:block}
+
 /* GUILD24 v2.4 — game UI, not web UI.
    Direction: diegetic pixel-art. Every element is an OBJECT in the store — a signboard, a
    plank notice, a chalk slate, an order form, a price tag, a rubber stamp — never a container
@@ -20,14 +30,22 @@
  --text:#efe7d5;--dim:#a89c85;--faint:#7a705f;
  --tone-benefit:#9fd07f;--tone-cost:#e39075;--tone-neutral:#b3ab96;
  --r0:#b4bba6;--r1:#98c79b;--r2:#8ec6dd;--r3:#c2a2d6;--r4:#f0cd72;
- --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
- --t-xs:.8125rem;--t-sm:.875rem;--t-md:1rem;--t-lg:1.125rem;--t-xl:1.375rem;--t-2xl:1.75rem;--t-3xl:2.25rem;
+ --mono:'GalmuriNum','Galmuri',ui-monospace,monospace;
+ --ui:'Galmuri','Apple SD Gothic Neo',sans-serif;
+ --body:'GalmuriBody','Galmuri','Apple SD Gothic Neo',sans-serif;
+ --t-xs:12px;--t-sm:15px;--t-md:15px;--t-lg:24px;--t-xl:24px;--t-2xl:30px;--t-3xl:45px;
  --gutter:16px;
+ --tex-tile:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2248%22%20height%3D%2236%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2248%22%20height%3D%2236%22%20fill%3D%22%23c6bda8%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23cbc3ae%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2218%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23cbc3ae%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%220%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23c2b9a4%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%2218%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23c2b9a4%22%2F%3E%3C%2Fsvg%3E");
+ --tex-cork:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%23a97f4a%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%223%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2214%22%20y%3D%221%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%229%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2218%22%20y%3D%227%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2216%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2214%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2218%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2220%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23bd9159%22%2F%3E%3C%2Fsvg%3E");
+ --tex-paper:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23efe7d2%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%222%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e3d9bf%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%225%22%20width%3D%223%22%20height%3D%221%22%20fill%3D%22%23e6dcc4%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e3d9bf%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2213%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e8dfc7%22%2F%3E%3C%2Fsvg%3E");
+ --tex-wood:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2212%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2232%22%20height%3D%2212%22%20fill%3D%22%23241a12%22%2F%3E%3Crect%20y%3D%221%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%232f2217%22%2F%3E%3Crect%20y%3D%225%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%231b130d%22%2F%3E%3Crect%20y%3D%228%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%2331241a%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%223%22%20width%3D%229%22%20height%3D%221%22%20fill%3D%22%232b1f15%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2210%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%232b1f15%22%2F%3E%3C%2Fsvg%3E");
+ --tex-metal:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%228%22%20height%3D%228%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%2339434b%22%2F%3E%3Crect%20y%3D%222%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%23414c55%22%2F%3E%3Crect%20y%3D%226%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%23313a41%22%2F%3E%3C%2Fsvg%3E");
  /* legacy hooks still used by the phases not yet recomposed */
  --ground:var(--soil);--edge:#ffffff1a;--accent:var(--gold);--go:var(--sign);--go-ink:#08170e;--bad:var(--blood);--warn:#e2b262;
  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:36px;
- font-family:'Apple SD Gothic Neo','Malgun Gothic',system-ui,-apple-system,'Segoe UI',sans-serif;
- font-size:16px;line-height:1.6;
+ font-family:var(--body);
+ font-size:15px;line-height:1.7;
+ -webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
@@ -89,160 +107,155 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .r0{--rare:var(--r0)}.r1{--rare:var(--r1)}.r2{--rare:var(--r2)}.r3{--rare:var(--r3)}.r4{--rare:var(--r4)}
 
 /* =====================================================================
-   MORNING — a place, seen from the doorway.
-   The store scene IS the screen. Numbers live on a chalk slate inside it.
-   Gates are plank notices nailed to the wall below.
+   MORNING — the store is the screen.
+   Four stacked bands build a room; the interface hangs on their surfaces.
    ===================================================================== */
-.p-morning{background:var(--soil)}
-.room{position:relative;flex:1 1 auto;min-height:176px;max-height:56dvh;overflow:hidden;
- box-shadow:inset 0 -6px 0 #0b0806,0 4px 0 #0b0806}
-.room .store-art{position:absolute;inset:0;width:100%;height:100%}
-/* cold dawn light from the top, warm floor at the bottom, shutter shadow overhead */
-.room .light{position:absolute;inset:0;pointer-events:none;
- background:linear-gradient(180deg,#0a1620e6 0,#0a162066 22%,#00000000 48%,#170f0899 88%,#12100cf2 100%),
-            radial-gradient(120% 60% at 50% 6%,#79c6de2e 0,#79c6de00 60%)}
-.room .shutter{position:absolute;left:0;right:0;top:0;height:34px;pointer-events:none;
- background:repeating-linear-gradient(180deg,#2b3238 0 4px,#1d2329 4px 8px);box-shadow:0 4px 0 #00000073}
-/* the day hangs in the room like a sign */
-.hang{position:absolute;left:var(--gutter);top:46px;display:grid;gap:2px;padding:8px 12px 10px;
- background:var(--wood);color:#f3ead2;
- box-shadow:inset 2px 2px 0 #ffffff1f,inset -2px -3px 0 #00000073,4px 4px 0 #00000080}
-.hang .k{font:800 var(--t-xs)/1 var(--mono);letter-spacing:.34em;color:#e8c98d}
-.hang b{font:800 2.5rem/.86 var(--mono);letter-spacing:-.02em}
-.hang i{font-style:normal;font-size:var(--t-xs);color:#d6c4a2}
-/* the day's numbers, chalked on a slate propped against the counter */
-.slate{position:absolute;right:var(--gutter);bottom:14px;padding:10px 14px 12px;background:var(--slate);
- box-shadow:inset 2px 2px 0 #ffffff12,inset -3px -3px 0 #00000080,4px 4px 0 #00000080;min-width:150px}
-.slate p{display:flex;justify-content:space-between;gap:12px;align-items:baseline;color:var(--chalk-dim);font-size:var(--t-xs);line-height:1.9}
-.slate b{font:800 var(--t-xl)/1 var(--mono);color:var(--chalk)}
-.slate .coin{color:var(--gold)}
-
-.p-morning .stage-scroll{flex:0 1 auto;padding:18px var(--gutter) 20px}
-/* an Event is a flyer taped over the notice board */
-.flyer{display:block;width:100%;text-align:left;position:relative;margin:0 0 22px;padding:14px 16px 16px;
- background:var(--paper);color:var(--ink);border:0;border-radius:0;
- box-shadow:4px 5px 0 #00000080;min-height:0}
-.flyer:hover{background:#f0e7cf}
-.flyer:before,.flyer:after{content:'';position:absolute;top:-9px;width:46px;height:18px;background:#e8dcc088;
- box-shadow:inset 0 0 0 1px #ffffff40}
-.flyer:before{left:10px;transform:rotate(-4deg)}
-.flyer:after{right:10px;transform:rotate(3deg)}
-.flyer .tagline{display:block;font:800 var(--t-xs)/1 var(--mono);letter-spacing:.24em;color:#8a6a2e;margin-bottom:6px}
-.flyer b{display:block;font-size:var(--t-lg);letter-spacing:-.02em;margin-bottom:4px}
-.flyer span{font-size:var(--t-sm);color:var(--ink-2);line-height:1.5}
-/* gate notices: wooden planks nailed to the wall */
-.notices{display:grid;gap:16px}
-.plank{position:relative;padding:12px 14px 14px 14px;background:var(--wood);
- background-image:repeating-linear-gradient(180deg,#ffffff08 0 1px,#00000000 1px 7px);
- box-shadow:inset 0 3px 0 var(--fam,#caa46a),inset 2px 0 0 #ffffff14,inset -3px -3px 0 #00000073,5px 5px 0 #00000080}
-.plank .nail{position:absolute;width:6px;height:6px;background:#c9b690;box-shadow:inset -2px -2px 0 #00000073;top:9px}
-.plank .nail.l{left:8px}.plank .nail.r{right:8px}
-.plank .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.plank h2{font-size:var(--t-lg);letter-spacing:-.02em;color:#f6eed8;text-shadow:0 2px 0 #00000073}
-.plank .mark{flex-shrink:0;background:#00000047;padding:2px;box-shadow:inset -2px -2px 0 #00000059}
-.plank .load{margin-top:8px;display:inline-block;font:800 var(--t-xs)/1 var(--mono);letter-spacing:.08em;
- padding:5px 8px;color:#3b2a17;background:#c9ab73;box-shadow:2px 2px 0 #00000059}
-.plank .load.free{background:transparent;color:#bfae8d;box-shadow:none;padding:0;font-family:inherit;font-weight:400;letter-spacing:0;font-size:var(--t-sm)}
-.relic-strip{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:20px;padding-top:14px;
- box-shadow:inset 0 2px 0 #ffffff0f}
-.relic-strip .lab{font:800 var(--t-xs)/1 var(--mono);letter-spacing:.16em;color:var(--faint)}
-.relic-strip .plate{padding:6px 9px;background:#7a6435;color:#2a2110;font-size:var(--t-xs);font-weight:750;
- box-shadow:inset 2px 2px 0 #ffffff17,inset -2px -2px 0 #00000073}
-.p-morning .dock{display:flex;gap:10px;align-items:stretch;background:linear-gradient(0deg,#0d0a08 60%,#0d0a0800)}
-/* the shutter pull */
-.pull{flex:1;min-height:58px;background:var(--wood-lit);color:#fdf6e3;font-size:var(--t-lg);font-weight:800;letter-spacing:.02em;
- box-shadow:inset 0 3px 0 #ffffff2b,inset 0 -5px 0 #00000073,4px 4px 0 #00000080}
-.pull:hover{background:#6d4f33}
-.brass{min-height:58px;padding:8px 12px;background:#8a7038;color:#2a2110;font-weight:800;font-size:var(--t-sm);
- box-shadow:inset 2px 2px 0 #ffffff4d,inset -2px -2px 0 #00000059,4px 4px 0 #00000080}
+.p-morning{background:#100c09}
+.store{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.band{position:relative;flex-shrink:0;width:100%}
+.band .band-art{display:block;width:100%;height:auto}
+.band.ceiling{aspect-ratio:360/72}
+.band.wall{flex:1 1 auto;min-height:104px;overflow:hidden;background:var(--tex-tile),#c6bda8;background-size:48px 36px}
+.band.wall .band-art{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto}
+.band.counter{aspect-ratio:360/120;height:auto}
+.band.wall:after{content:'';position:absolute;inset:0;
+ background:linear-gradient(180deg,#0a121ac4 0,#0a121a3d 42%,#00000000 70%,#140d0866 100%)}
+/* the shop sign hanging from the ceiling carries the day */
+.daysign{position:absolute;left:50%;top:78%;transform:translateX(-50%);z-index:2;display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.daysign i{font:400 12px/1 var(--ui);font-style:normal;letter-spacing:.3em;color:#a9e8c4}
+.daysign b{font:400 24px/1 var(--mono);color:#f4fff8}
+.branchplate{position:absolute;right:6px;bottom:5px;z-index:2;padding:3px 6px;font:400 12px/1 var(--ui);
+ color:#2a2318;background:#c9b98f;box-shadow:inset 1px 1px 0 #ffffff8c,inset -1px -1px 0 #00000059}
+/* ---- notice board: the day's gates, pinned to cork ---- */
+.board{flex:0 1 auto;min-height:0;max-height:54%;overflow-y:auto;overscroll-behavior:contain;outline:none;
+ background:var(--tex-cork),#a97f4a;
+ box-shadow:inset 0 0 0 6px #4a3018,inset 0 0 0 10px #6b4526,inset 0 8px 18px #00000073,0 -4px 0 #00000059}
+.board-rail{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+ margin:10px 10px 0;padding:7px 12px;background:#4a3018;color:#e7d3a8;
+ font:400 12px/1.5 var(--ui);letter-spacing:.06em;
+ box-shadow:inset 0 2px 0 #ffffff1f,inset 0 -3px 0 #00000073,0 3px 0 #00000059}
+.board-rail b{margin-left:auto;font:400 12px/1 var(--mono);color:#fff0c9}
+.board-rail b+b{margin-left:0}
+.pinned{display:grid;gap:12px;padding:12px 10px 14px}
+/* a pinned paper slip */
+.slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;
+ background:var(--tex-paper),#efe7d2;color:#2c2418;border:0;border-radius:0;
+ box-shadow:0 4px 0 #00000073,0 0 0 1px #00000038}
+.slip:hover{background:var(--tex-paper),#f5eeda}
+.slip:active{transform:none;box-shadow:0 3px 0 #00000073}
+.slip .pin{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:14px;height:14px;
+ background:#c4453c;box-shadow:inset -3px -3px 0 #8b2b25,inset 3px 3px 0 #e3776c,0 3px 0 #00000059}
+.slip.gate{padding-left:52px;--edge:var(--fam)}
+.slip.gate:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--fam,#caa46a)}
+.slip .crest{position:absolute;left:12px;top:14px;width:32px;height:32px;display:grid;place-items:center;background:#00000014}
+.slip>b{display:block;font:400 15px/1.4 var(--body);letter-spacing:-.01em;margin-bottom:6px}
+.slip .hazards{display:grid;gap:3px}
+.slip .hazards li{display:flex;align-items:center;gap:6px;font:400 12px/1.5 var(--ui);color:#5b4f39}
+.slip .hazards .hz-icon{flex-shrink:0;color:#8a3f2c}
+.slip .hazards i{font-style:normal;font-weight:700;color:#2c2418}
+.slip .foot{display:block;margin-top:7px;font:400 12px/1 var(--ui);color:#8a7d61}
+.stamp-line{display:inline-block;margin-top:8px;padding:3px 7px;font:400 12px/1.3 var(--ui);letter-spacing:.08em;
+ color:#8a3f2c;box-shadow:inset 0 0 0 2px #8a3f2c;transform:rotate(-2deg)}
+.slip.event{padding-top:16px}
+.slip.event .stamp-line{margin:0 0 6px;color:#2f7a4d;box-shadow:inset 0 0 0 2px #2f7a4d}
+.slip.event .body{display:block;font:400 12px/1.6 var(--ui);color:#5b4f39}
+/* ---- counter band: the till and the store support tray ---- */
+.till{position:absolute;left:50%;top:8%;transform:translateX(-50%);z-index:2;display:flex;align-items:baseline;gap:7px;white-space:nowrap}
+.till i{font:400 12px/1 var(--ui);font-style:normal;color:#9fd8b6}
+.till b{font:400 24px/1 var(--mono);color:#8df0b4;text-shadow:0 0 6px #3fe08c66}
+.tray{position:absolute;left:90px;bottom:6px;right:8px;z-index:2;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.tray .plate{min-height:26px;min-width:0;padding:4px 8px;font:400 12px/1 var(--ui);color:#2b2211;background:#c3a259;
+ box-shadow:inset 2px 2px 0 #ffe3a8,inset -2px -2px 0 #8a6a2c,2px 2px 0 #00000073}
+.tray .plate:hover{background:#d3b169}
+/* ---- dock: the shutter pull ---- */
+.p-morning .dock{display:flex;gap:10px;align-items:stretch;background:#0b0806;box-shadow:inset 0 3px 0 #ffffff0f}
+.pull{flex:1;min-height:58px;padding:0;background:
+ repeating-linear-gradient(180deg,#7c5c3a 0 6px,#6a4d30 6px 12px);color:#fdf6e3;
+ box-shadow:inset 0 3px 0 #a37c4f,inset 0 -5px 0 #3f2c1a,4px 4px 0 #00000080}
+.pull span{display:block;font:700 24px/58px var(--ui);letter-spacing:.08em}
+.pull:hover{background:repeating-linear-gradient(180deg,#8a6742 0 6px,#77563a 6px 12px)}
+.brass{min-height:58px;padding:8px 12px;background:#8a7038;color:#2a2110;font:400 12px/1.5 var(--ui);
+ box-shadow:inset 2px 2px 0 #e0c07a,inset -2px -2px 0 #4f3d17,4px 4px 0 #00000080}
 .brass:hover{background:#9a7e40}
 
 /* =====================================================================
-   ORDER — a paper, filled. Back room: dark wood and a shelf silhouette.
-   One order form clipped to a board; offers are ruled lines on it.
+   ORDER — a paper, filled. The back room: a dark wood desk, one order form
+   clipped to it, offers as ruled lines with a crate, a price tag and a stamped dial.
    ===================================================================== */
-.p-order{background:
- repeating-linear-gradient(90deg,#00000000 0 46px,#0000002e 46px 50px),
- repeating-linear-gradient(180deg,#241a12 0 3px,#1e150e 3px 9px),#1e150e}
-.p-order .stage-scroll{padding:14px var(--gutter) 22px}
-.form{background:var(--paper);color:var(--ink);box-shadow:5px 6px 0 #00000080;padding:0 0 4px}
-/* torn top and bottom edges */
+.p-order{background:var(--tex-wood),#1e150e;background-size:64px 24px}
+.p-order .stage-scroll{padding:22px var(--gutter) 22px}
+.clip{position:relative;z-index:3;width:78px;height:22px;margin:0 auto -10px;
+ background:linear-gradient(180deg,#9aa3ab 0 8px,#6e777f 8px 22px);
+ box-shadow:inset 2px 2px 0 #cfd6dc,inset -2px -2px 0 #454d54,3px 4px 0 #00000080}
+.form{position:relative;background:var(--tex-paper),#efe7d2;color:var(--ink);box-shadow:5px 6px 0 #00000080;padding:0 0 4px}
 .form:before,.form:after{content:'';display:block;height:8px;
- background:linear-gradient(-45deg,var(--paper) 25%,#00000000 25%) 0 0/12px 8px repeat-x,
-            linear-gradient(45deg,var(--paper) 25%,#00000000 25%) 0 0/12px 8px repeat-x}
+ background:linear-gradient(-45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x,
+            linear-gradient(45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x}
 .form:before{transform:scaleY(-1)}
-.form-head{padding:12px 16px 10px;position:relative;box-shadow:inset 0 -3px 0 var(--ink)}
-.form-head .corp{font:800 var(--t-xs)/1 var(--mono);letter-spacing:.26em;color:var(--ink-2)}
-.form-head h1{font-size:var(--t-2xl);letter-spacing:.14em;margin:4px 0 2px;font-weight:800}
-.form-head .docno{font:700 var(--t-xs)/1 var(--mono);letter-spacing:.1em;color:var(--ink-2)}
-.form-head .seal{position:absolute;right:62px;top:12px;width:52px;height:52px;display:grid;place-items:center;
- color:#2f7a4d;font:800 var(--t-xs)/1.2 var(--mono);text-align:center;letter-spacing:.1em;
- box-shadow:inset 0 0 0 3px #2f7a4d;opacity:.72;transform:rotate(-8deg)}
-/* the register, printed on the form */
+.form-head{padding:14px 16px 10px;position:relative;box-shadow:inset 0 -3px 0 var(--ink)}
+.form-head .corp{font:400 12px/1 var(--ui);letter-spacing:.16em;color:var(--ink-2)}
+.form-head h1{font:700 36px/1.05 var(--ui);letter-spacing:.16em;margin:6px 0 4px}
+.form-head .docno{font:400 12px/1 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
+.form-head .seal{position:absolute;right:56px;top:14px;opacity:.8;transform:rotate(-9deg)}
 .reg{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;padding:12px 16px;
  background:repeating-linear-gradient(180deg,#00000000 0 27px,var(--paper-rule) 27px 28px)}
-.reg div{display:grid;gap:1px}
-.reg label{font:700 var(--t-xs)/1 var(--mono);letter-spacing:.12em;color:var(--ink-2)}
-.reg b{font:800 var(--t-xl)/1 var(--mono);letter-spacing:-.02em}
-.reg .op{font:800 var(--t-lg)/1 var(--mono);color:var(--ink-2);padding-bottom:2px}
+.reg div{display:grid;gap:2px}
+.reg label{font:400 12px/1 var(--ui);letter-spacing:.1em;color:var(--ink-2)}
+.reg b{font:400 24px/1 var(--mono)}
+.reg .op{font:400 24px/1 var(--mono);color:var(--ink-2);padding-bottom:1px}
 .reg .out b{color:#2f7a4d}
 .reg .out.short b{color:#a1372c}
-/* the two reference lines, printed small */
-.memo{padding:10px 16px;font-size:var(--t-sm);color:var(--ink-2);box-shadow:inset 0 -1px 0 var(--paper-rule);display:grid;gap:5px}
+.memo{padding:10px 16px;font:400 12px/1.7 var(--ui);color:var(--ink-2);box-shadow:inset 0 -2px 0 var(--paper-rule)}
 .memo b{color:var(--ink)}
-.memo .r{display:block;line-height:1.7}
-.memo .r b{margin:0 2px}
-.memo .tier{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700}
-.memo .sub{display:block;font-size:var(--t-xs);color:#8a7c60}
-.memo .look{background:transparent;box-shadow:none;color:#2f7a4d;font-weight:800;font-size:var(--t-sm);
- padding:4px 0;min-height:32px;min-width:0;text-decoration:underline;text-underline-offset:3px}
+.memo .r{display:block}
+.memo .tier{font-family:var(--mono);color:var(--ink)}
+.memo .sub{display:block;color:#8a7c60}
+.memo .look{background:transparent;box-shadow:none;color:#2f7a4d;font:400 12px/1 var(--ui);
+ padding:6px 0;min-height:32px;min-width:0;text-decoration:underline;text-underline-offset:3px}
 .memo .look:hover{background:transparent;color:#1f5c39}
 .memo .look:active{transform:none}
-/* offers: ruled lines on the form */
 .lines{padding:0 0 8px}
-.line{position:relative;display:grid;grid-template-columns:26px 44px 1fr;gap:0 10px;padding:12px 16px 10px;
- box-shadow:inset 0 -1px 0 var(--paper-rule)}
+.line{position:relative;display:grid;grid-template-columns:24px 46px 1fr;gap:0 10px;padding:12px 16px 10px;
+ box-shadow:inset 0 -2px 0 var(--paper-rule)}
 .line:nth-child(even){background:#00000008}
-.line.on{background:#2f7a4d14;box-shadow:inset 4px 0 0 #2f7a4d,inset 0 -1px 0 var(--paper-rule)}
-.line .no{font:700 var(--t-xs)/1.6 var(--mono);color:var(--ink-2);padding-top:3px}
-.line .crate{width:44px;height:44px;display:grid;place-items:center;background:#cdbf9d;
- box-shadow:inset 2px 2px 0 #ffffff5c,inset -2px -2px 0 #0000002e,inset 0 4px 0 var(--rare,#b9ab88)}
+.line.on{background:#2f7a4d12;box-shadow:inset 5px 0 0 #2f7a4d,inset 0 -2px 0 var(--paper-rule)}
+.line .no{font:400 12px/1.9 var(--mono);color:var(--ink-2)}
+.crate-art{position:relative;display:block;width:var(--sz);height:var(--sz)}
+.crate-art svg{position:absolute;inset:0;width:100%;height:100%}
+.crate-in{position:absolute;inset:0;display:grid;place-items:center}
 .line .col{min-width:0}
-.line .nm{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding-right:62px;min-height:26px}
-.line .nm b{font-size:var(--t-md);letter-spacing:-.01em}
-.line .kind{font:700 var(--t-xs)/1 var(--mono);color:var(--ink-2);letter-spacing:.04em}
-.line .fx{margin-top:4px;font-size:var(--t-sm);color:#4b4231;line-height:1.45}
-.line .fx i{font-style:normal;font-family:var(--mono);font-weight:700}
+.line .nm{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding-right:62px;min-height:24px}
+.line .nm b{font:400 15px/1.4 var(--body)}
+.line .kind{font:400 12px/1 var(--ui);color:var(--ink-2)}
+.line .fx{margin-top:4px;font:400 12px/1.6 var(--ui);color:#4b4231;display:block}
+.line .fx i{font-style:normal;font-family:var(--mono)}
 .line .fx .cost{color:#a1372c}
-.line .have{margin-top:4px;font:700 var(--t-xs)/1.6 var(--mono);color:var(--ink-2);letter-spacing:.02em;display:block}
-/* the price tag hangs off the right edge of the form */
-.line .pricetag{position:absolute;right:-6px;top:14px;padding:6px 10px 7px 14px;background:var(--sign);color:#f4fff6;
- font:800 var(--t-md)/1 var(--mono);box-shadow:3px 3px 0 #00000059;
- clip-path:polygon(8px 0,100% 0,100% 100%,8px 100%,0 50%)}
-.line .pricetag i{font-style:normal;font-size:var(--t-xs);opacity:.85;margin-left:1px}
-.line .buy{margin-top:2px;font:700 var(--t-xs)/1 var(--mono);color:var(--ink-2);text-align:right}
-/* the counter dial */
-.dial{grid-column:1/-1;display:flex;align-items:center;gap:4px;margin-top:10px;flex-wrap:wrap}
-.dial button{min-width:44px;padding:0 6px;background:#a89264;color:#1f1809;font-weight:800;font-family:var(--mono);
- box-shadow:inset 2px 2px 0 #ffffff5c,inset -2px -2px 0 #00000047,3px 3px 0 #00000038}
+.line .have{margin-top:4px;font:400 12px/1.7 var(--mono);color:var(--ink-2);display:block}
+.tag-art{position:absolute;right:-8px;top:12px;display:block;width:96px;height:40px;color:#2f7a4d;
+ filter:drop-shadow(3px 3px 0 #00000047)}
+.tag-art svg{position:absolute;inset:0;width:100%;height:100%}
+.tag-art b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1px;padding-left:12px;
+ white-space:nowrap;font:400 24px/1 var(--mono);color:#f2fbf4}
+.tag-art b i{font-style:normal;font-size:12px;opacity:.85}
+.dial{grid-column:1/-1;display:flex;align-items:center;gap:4px;margin-top:10px}
+.dial button{min-width:44px;padding:0 6px;background:#a89264;color:#1f1809;font:400 24px/1 var(--mono);
+ box-shadow:inset 2px 2px 0 #d8c69a,inset -2px -2px 0 #6f5c33,3px 3px 0 #00000038}
 .dial button:hover{background:#b8a173}
-.dial button:disabled{opacity:.35}
-.dial output{min-width:46px;text-align:center;font:800 var(--t-xl)/44px var(--mono);background:#f3ecd8;color:#1f1809;
- box-shadow:inset 2px 2px 0 #00000038,inset -2px -2px 0 #ffffff59}
+.dial button:disabled{opacity:.3}
+.dial output{min-width:48px;text-align:center;font:400 24px/44px var(--mono);background:#fbf6e6;color:#1f1809;
+ box-shadow:inset 2px 2px 0 #00000038,inset -2px -2px 0 #ffffff8c}
+.dial .unit{font:400 12px/1 var(--ui);color:var(--ink-2);margin-left:2px}
 .dial .set{display:flex;gap:4px;margin-left:auto}
-.dial .set button{font-size:var(--t-sm);padding:0 4px;min-width:46px;background:transparent;color:#6b5b38;
+.dial .set button{font:400 15px/1 var(--body);padding:0 4px;min-width:46px;background:transparent;color:#6b5b38;
  box-shadow:inset 0 0 0 2px #00000024}
 .dial .set button:hover{background:#00000010}
-.dial .set{padding-left:6px}
 .rubber{display:block;width:calc(100% - 32px);margin:12px 16px 6px;background:transparent;color:#7a5a2a;
- font-weight:800;font-size:var(--t-sm);letter-spacing:.04em;
- box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.85}
+ font:400 15px/1 var(--body);letter-spacing:.04em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.85}
 .rubber:hover{background:#00000008;opacity:1}
-.rubber:disabled{opacity:.35}
-.form .note{padding:0 16px 10px;font-size:var(--t-xs);color:var(--ink-2)}
-.p-order .dock{display:flex;gap:10px;background:linear-gradient(0deg,#150f0a 62%,#150f0a00)}
-.p-order .dock .stamp{flex:1;min-height:58px;font-size:var(--t-lg)}
-
+.rubber:disabled{opacity:.3}
+.form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
+.p-order .dock{display:flex;gap:10px;background:#150f0a;box-shadow:inset 0 3px 0 #ffffff14}
+.p-order .dock .stamp{flex:1;min-height:58px;font:700 24px/1 var(--ui)}
 /* =====================================================================
    Phases not yet recomposed keep working on the new material tokens.
    They are next in the Chunk F order and will get their own grammar.

@@ -12,9 +12,13 @@ const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap
 
 test('§8.1: Playwright is a devDependency and never enters the shipped build',()=>{
  assert.ok(pkg.devDependencies?.playwright,'playwright is declared in devDependencies');
- assert.ok(!pkg.dependencies,'the game itself has no runtime dependencies');
- for(const file of walk('dist'))
+ assert.ok(!pkg.dependencies?.playwright,'playwright is never a runtime dependency');
+ // Presentation libraries are allowed, but they are vendored into dist/ by `npm run assets`,
+ // so the shipped game needs no install at all. tests/assets.cjs proves the vendored copies.
+ for(const file of walk('dist')){
+  if(!/\.(js|css|html|json|md)$/.test(file))continue;
   assert.ok(!read(file).toLowerCase().includes('playwright'),file+' references playwright');
+ }
  assert.ok(!pkg.scripts.test.includes('qa:visual')&&!pkg.scripts.test.includes('qa-visual'),'npm test does not depend on the browser harness');
  assert.equal(pkg.scripts['qa:visual'],'node tools/qa-visual.cjs');
  const harness=read('tools/qa-visual.cjs');
@@ -43,11 +47,13 @@ test('UI §RESPONSIVE RULE: the sheet is authored mobile-first',()=>{
 test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',()=>{
  assert.equal((css.match(/border-radius:(?!0)/g)||[]).length,0,'no rounded containers anywhere');
  assert.ok(!/box-shadow:[^;]*blur|filter:blur/.test(css),'depth is hard offset and bevel, never blur');
- assert.ok(!/\.card\b|\.kpi|\.tile-grid|\.phase-strip|\.hud-readout|\.day-plate/.test(css),'no card/KPI/stepper vocabulary survives');
+ assert.ok(!/\.card\b|\.kpi|\.tile-grid|\.phase-strip|\.hud-readout|\.day-plate|\.gate-plate\b/.test(css),'no card/KPI/stepper vocabulary survives');
  assert.ok(!app.includes('function header('),'the dead desktop topbar is gone');
  assert.ok(!app.includes('phase-strip'),'the numbered stepper is gone');
  assert.ok(!/class="tag"/.test(app),'the old chip helper is gone; a price tag is a named object');
  assert.ok(css.includes('image-rendering:pixelated'),'art renders unsmoothed');
+ assert.ok(css.includes('-webkit-font-smoothing:none'),'the bitmap face is not antialiased away');
+ assert.ok(/@font-face\{font-family:'Galmuri'/.test(css),'the pixel family is the type system');
  // green is the sign, the price tag and the approval stamp — never a ground
  for(const rule of ['body{','.stage{','.p-order{','.p-morning{'])
   assert.ok(!/#([0-9a-f]{0,2})(3f9d63|7ddc9f)/i.test(css.slice(css.indexOf(rule),css.indexOf(rule)+240)),'green is not a page ground in '+rule);
@@ -56,20 +62,22 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
 
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
  const morning=fn('morningScreen'),order=fn('orderForm')+fn('orderScreen');
- assert.ok(morning.includes('Art.scene(game)')&&morning.includes('class="room"'),'Morning is the store scene itself');
- assert.ok(morning.includes('class="slate"')&&morning.includes('class="hang"'),'the day and its numbers are objects in the room');
- assert.ok(morning.includes('class="notices"'),'Gates are plank notices');
- assert.ok(!order.includes('Art.scene'),'ORDER removes the store scene from its composition');
+ for(const part of ['Scene.ceiling()','Scene.wall(','Scene.counter()'])
+  assert.ok(morning.includes(part),'Morning is built from the store itself: '+part);
+ assert.ok(morning.includes('class="daysign"')&&morning.includes('class="till"'),'the day and the float are objects in the room');
+ assert.ok(morning.includes('class="board"')&&morning.includes('class="pinned"'),'Gates are notices pinned to the board');
+ assert.ok(!/Scene\.(ceiling|wall|counter)|Art\.scene/.test(order),'ORDER carries no store scene');
  assert.ok(order.includes('class="form"')&&order.includes('발 주 서'),'Order is a paper order form');
- assert.ok(order.includes('class="pricetag"')&&order.includes('class="dial"'),'offers carry a price tag and a counter dial');
- for(const shared of ['class="room"','class="slate"','class="notices"'])
+ assert.ok(order.includes('Scene.priceTag(')&&order.includes('Scene.crate(')&&order.includes('Scene.seal('),
+  'offers carry a real price tag, stock crate and corporate seal');
+ for(const shared of ['class="board"','class="daysign"','class="pinned"','class="till"'])
   assert.ok(!order.includes(shared),'Order does not reuse the Morning composition: '+shared);
 });
 
 test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is explained inline',()=>{
  assert.ok(/modal='event'/.test(app),'an Event day opens with a focused reveal before Gate detail');
  assert.ok(app.includes('eventSeen'),'the reveal is consumed exactly once');
- assert.ok(app.includes('class="flyer"'),'after the reveal the Event stays as a flyer on the notice board');
+ assert.ok(app.includes('class="slip event"'),'after the reveal the Event stays pinned to the notice board');
  assert.ok(app.includes('Presentation.hazardRows'),'Gate Hazards render their canonical pressure line');
  assert.ok(!/title="/.test(app),'no hover-only title= tooltip survives in the render path');
  assert.ok(!/[❄\u{1F577}☾◆◉♜]/u.test(app),'gate marks are drawn sprites, never emoji');
@@ -85,7 +93,7 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(order.includes('후보 전체 교환'),'the reroll names its full-offer scope');
  assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
  assert.ok(order.includes('발주 교환권'),'the free first use is called out');
- assert.ok(/발주 '\+fmt\(game.cartTotal\(\)\)\+'G · 발주 확정/.test(app),'the docked stamp states the amount');
+ assert.ok(/발주 '\+fmt\(game\.cartTotal\(\)\)\+'G · 확정/.test(app),'the docked stamp states the amount');
 });
 
 test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{

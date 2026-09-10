@@ -23,6 +23,39 @@ function stage(phase,label,head,body,dock){
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="'+label+'">'+body+'</main>'
  +(dock?'<div class="dock">'+dock+'</div>':'')+'</div>';
 }
+// ---- game feel ------------------------------------------------------------
+// anime.js (MIT, vendored at ui/vendor/) drives the presentation beats: the shutter
+// lifting, the till counting up, notices settling on the board, the approval stamp
+// landing. Presentation only — every one of these is a no-op when the library is
+// absent or the player asked for reduced motion, and none of them touch game state.
+const motionOK=()=>typeof anime==='object'&&!!anime.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
+let lastTill=null;
+function playPhase(phase){
+ if(!motionOK())return;
+ const A=anime.animate;
+ if(phase==='morning'){
+  const shutter=$('.band.ceiling .band-art');
+  if(shutter)A(shutter,{translateY:[-14,0],duration:420,ease:'outQuad'});
+  const slips=[...document.querySelectorAll('.pinned .slip')];
+  if(slips.length)A(slips,{translateY:[-10,0],opacity:[0,1],duration:260,delay:anime.stagger(70),ease:'outQuad'});
+  const till=$('.till .coin');
+  if(till){const to=game.run.money,from=lastTill===null?to:lastTill;lastTill=to;
+   if(from!==to){const box={v:from};A(box,{v:to,duration:520,ease:'outQuad',onUpdate:()=>{till.textContent=fmt(box.v);}});}}
+ }
+ if(phase==='order'){
+  const form=$('.form');
+  if(form)A(form,{translateY:[16,0],opacity:[0,1],duration:280,ease:'outQuad'});
+ }
+ if(phase==='night'){
+  const beat=$('.beat');
+  if(beat)A(beat,{scale:[.96,1],opacity:[0,1],duration:300,ease:'outQuad'});
+ }
+}
+// the approval stamp lands before the phase advances
+function stampPress(el){
+ if(!motionOK()||!el)return;
+ anime.animate(el,{scale:[1.08,1],duration:180,ease:'outQuad'});
+}
 function render(){
  const s=game.run;Sound.sync(game.account.settings.muted,s?.phase);
  if(!s){$('#app').innerHTML=stage('start','새 점포','','<p class="eyebrow">GUILD24</p><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">초기 자금 1,200G · 창고 24칸 · 30일 영업</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),btn('첫 영업 준비','new','stamp'));if(!modal)setModal('new');return;}
@@ -32,7 +65,7 @@ function render(){
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
  if(phase==='foundation')modal='relics';else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
- renderModal();requestAnimationFrame(showCoach);
+ renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -43,11 +76,16 @@ const hazardList=(keys,states)=>keys.length?'<ul class="hazards">'+Presentation.
  return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span>'+E(h.pressure)+'</span>'+(st?'<em class="'+(['취약','불안'].includes(st.label)?'lack':'')+'">'+st.label+'</em>':'')+'</li>';}).join('')+'</ul>':'';
 // A Gate is a plank notice nailed to the wall: family colour burned along the top edge,
 // the gate mark branded into it, the supply requirement stamped underneath.
+// A Gate is a paper notice pinned to the board: family colour along the top, the hazard
+// pictogram beside each pressure line, the supply requirement stamped at the foot.
 function gatePlate(d){const b=sigilOf(d);
- return '<article class="plank" style="--fam:'+(b.color||'#caa46a')+'"><span class="nail l"></span><span class="nail r"></span>'
- +'<div class="head">'+Art.mark(b.id||d.id,32)+'<h2>'+E(d.name)+'</h2></div>'
- +hazardList(Presentation.known(d,game))
- +'<p class="load'+(d.requiredSupply?'':' free')+'">'+(d.requiredSupply?'보급 '+d.requiredSupply+' 필요':'보급 부담 없음')+'</p></article>';}
+ return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
+ +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
+ +'<b>'+E(d.name)+'</b>'
+ +'<ul class="hazards">'+Presentation.hazardRows(Presentation.known(d,game)).map(h=>
+   '<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(h.pressure)+'</span></li>').join('')+'</ul>'
+ +(d.requiredSupply?'<span class="stamp-line load">보급 '+d.requiredSupply+' 필요</span>':'<span class="foot">보급 부담 없음</span>')
+ +'</article>';}
 function tierLine(){const f=game.tierForecast();return f?'T1 '+f.percent[0]+'% · T2 '+f.percent[1]+'% · T3 '+f.percent[2]+'%':'마왕성 최종 원정';}
 function specialUI(){const s=game.run,e=s.special;if(!e||e.used)return '';if(e.kind==='route'){const n=game.current();if(s.phase!=='sell'||!n||n.pack.length||n.history.some(h=>h.day===s.day)||s.dungeons.length<2)return '';return '<details class="special-event"><summary>길드 원정 배치조정 · 오늘 한 번</summary><p>아직 거래하지 않은 '+E(n.name)+'의 목적지를 바꿀 수 있습니다.</p>'+s.dungeons.map((d,i)=>btn(E(d.name),'special','','data-id="'+n.id+'" data-value="'+i+'"')).join('')+'</details>';}if(!['morning','order'].includes(s.phase))return '';const candidates=s.npcs.filter(n=>n.alive&&n.introduced);return '<details class="special-event"><summary>'+(e.kind==='remove'?'길드 상담 · 특성 하나 정리':'길드 특별 훈련 · 새 특성 배우기')+'</summary>'+candidates.map(n=>{const choices=e.kind==='remove'?n.traits.filter(t=>D.traitBy[t].direction==='negative'):e.candidates.filter(t=>!n.traits.includes(t)&&n.traits.length<Math.min(4,n.traitSlots)&&!D.traitExclusions.some(pair=>pair.includes(t)&&pair.some(id=>n.traits.includes(id))));return choices.length?'<div><b>'+E(n.name)+'</b>'+choices.map(t=>btn(D.traitBy[t].name+' · '+Presentation.traitText(t),'special','','data-id="'+n.id+'" data-value="'+t+'"')).join('')+'</div>':'';}).join('')+'<p>원하지 않으면 선택하지 않아도 됩니다. 오늘 영업 준비가 끝나면 기회가 지나갑니다.</p></details>';}
 // MORNING — situation / open. The day as a plate, Gates as objects, a HUD readout,
@@ -55,17 +93,33 @@ function specialUI(){const s=game.run,e=s.special;if(!e||e.used)return '';if(e.k
 // MORNING — a place, seen from the doorway before the shutter goes up.
 // The store scene is the screen; the day hangs in it as a sign and the day's numbers
 // are chalked on a slate propped against the counter. Gates are plank notices below.
+// MORNING — the store is the screen. The room is built out of horizontal bands
+// (ceiling and shutter, shelving wall, notice board, counter) and the interface hangs on
+// those surfaces: the day on the shop sign, today's gates pinned to the board, the till
+// showing the float, the store support sitting on the counter.
 function morningScreen(){
  const s=game.run;
- const room='<div class="room">'+Art.scene(game)+'<div class="shutter"></div><div class="light"></div>'
- +'<div class="hang"><span class="k">DAY</span><b>'+String(s.day).padStart(2,'0')+'</b><i>'+E(s.branch)+'</i></div>'
- +'<div class="slate" id="visitor-count"><p>오늘 손님 <b>'+s.queue.length+'</b></p><p>열린 게이트 <b>'+s.dungeons.length+'</b></p><p>자금 <b class="coin">'+fmt(s.money)+'</b></p></div></div>';
- const body=(s.event?'<button class="flyer" data-action="event-again"><span class="tagline">오늘의 게시</span><b>'+E(s.event.name)+'</b><span>'+E(s.event.description)+'</span></button>':'')
- +'<div class="notices">'+s.dungeons.map(gatePlate).join('')+'</div>'
- +relicStrip()+specialUI();
- const dock=relicWindowLink()+'<button class="pull" data-action="begin-order">문 열기</button>';
- return stage('morning','아침',room,body,dock);
+ return '<div class="stage p-morning">'+menuFab()
+ +'<div class="store">'
+  +'<div class="band ceiling">'+Scene.ceiling()+'<span class="daysign"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></div>'
+  +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span></div>'
+  +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
+   +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
+   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
+  +'<div class="band counter">'+Scene.counter()
+   +'<span class="till"><i>보유</i><b class="coin">'+fmt(s.money)+'</b></span>'
+   +relicTray()+'</div>'
+ +'</div>'
+ +'<div class="dock">'+relicWindowLink()+'<button class="pull" data-action="begin-order"><span>문 열기</span></button></div></div>';
 }
+// The Event stays on the board as the notice it is, after its focused reveal.
+function eventSlip(e){
+ return '<button class="slip event" data-action="event-again"><span class="pin"></span>'
+ +'<span class="stamp-line">오늘의 게시</span><b>'+E(e.name)+'</b><span class="body">'+E(e.description)+'</span></button>';}
+// Store support sits on the counter as small brass plates, not a list.
+function relicTray(){const owned=game.ownedRelics();if(!owned.length)return '';
+ return '<span class="tray">'+owned.slice(0,5).map(r=>'<button class="plate" data-action="relics">'+E(r.name)+'</button>').join('')
+ +(owned.length>5?'<button class="plate more" data-action="relics">+'+(owned.length-5)+'</button>':'')+'</span>';}
 // Owned store support reads as small brass plates screwed to the wall, not a list.
 function relicStrip(){const owned=game.ownedRelics();if(!owned.length)return '';
  return '<div class="relic-strip"><span class="lab">점포지원</span>'+owned.map(r=>'<button class="plate" data-action="relics">'+E(r.name)+'</button>').join('')+'</div>';}
@@ -86,7 +140,7 @@ function saleScreen(){
  if(!n)return stage('sale','영업','','<p class="muted">영업을 마치는 중입니다.</p>','');
  const body='<div class="stagelight">'+Art.scene(game)+'</div>'
  +'<button class="customer" data-action="npc" data-id="'+n.id+'"><span class="portrait">'+Art.avatar(n,76)+'</span>'
- +'<span class="who"><span class="name">'+E(n.name)+'</span><span class="job">Lv.'+n.level+' '+D.jobBy[n.job].name+'</span><span class="purse">소지금 '+fmt(n.money)+'G</span></span><span class="go">기록 ›</span></button>'
+ +'<span class="who"><span class="name">'+E(n.name)+'</span><span class="job">Lv.'+n.level+' '+D.jobBy[n.job].name+'</span><span class="purse">소지금 '+fmt(n.money)+'G</span></span><span class="go">기록 ></span></button>'
  +'<div class="loyal"><span>단골도</span><span class="track"><span style="width:'+Math.min(100,n.loyalty)+'%"></span></span><span>'+n.loyalty+'</span></div>'
  +returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+kitLine(n)+readout(n)+specialUI()+shelf()+ownedRelicView();
  const dock='<div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)+'</div>'
@@ -189,26 +243,29 @@ function statGrid(n){const values=Dungeon.prepare({...n,traits:Presentation.trai
 // clipped to the board; offers are ruled lines on it with a price tag hanging off the
 // right edge and a stamped counter dial. No store scene anywhere in this composition.
 function orderScreen(){
- return stage('order','발주','',orderForm(),'<button class="stamp" data-action="finish-order">'+(game.cartTotal()?'발주 '+fmt(game.cartTotal())+'G · 발주 확정':'추가 발주 없이 영업 시작')+'</button>');
+ return stage('order','발주','',orderForm(),'<button class="stamp" data-action="finish-order">'+(game.cartTotal()?'발주 '+fmt(game.cartTotal())+'G · 확정':'영업 시작')+'</button>');
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
- return '<div class="form">'
- +'<div class="form-head"><span class="corp">길드리테일 본사</span><h1>발 주 서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span class="seal">승인<br>대기</span></div>'
- +'<div class="reg" id="order-register" aria-label="발주 자금"><div><label>보유</label><b>'+fmt(s.money)+'</b></div><span class="op" aria-hidden="true">−</span>'
+ return '<div class="clip"></div><div class="form">'
+ +'<div class="form-head"><span class="corp">길드리테일 본사 · 물류1과</span><h1>발 주 서</h1>'
+ +'<span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+' · 제'+String(s.day).padStart(3,'0')+'호</span>'
+ +'<span class="seal">'+Scene.seal(52,'#2f7a4d')+'</span></div>'
+ +'<div class="reg" id="order-register" aria-label="발주 자금"><div><label>보유</label><b>'+fmt(s.money)+'</b></div><span class="op" aria-hidden="true">-</span>'
  +'<div><label>선택</label><b>'+fmt(total)+'</b></div><span class="op" aria-hidden="true">=</span>'
  +'<div class="out'+(after<0?' short':'')+'"><label>발주 후</label><b>'+fmt(after)+'</b></div></div>'
  +'<div class="memo"><p class="r">오늘 <b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+' <button class="look" data-action="gates">위험 보기</button></p>'
  +'<p class="r">내일 게이트 <span class="tier">'+tierLine()+'</span> <span class="sub">종류와 손님은 아직 미정</span></p></div>'
  +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
   return '<li class="line r'+it.rarity+(q?' on':'')+'"><span class="no">'+String(i+1).padStart(2,'0')+'</span>'
-  +'<span class="crate">'+Art.itemIcon(it.id,32)+'</span>'
+  +Scene.crate(Art.itemIcon(it.id,30),46)
   +'<span class="col"><span class="nm"><b>'+E(it.name)+'</b><span class="kind">'+D.categories[it.category]+' · '+it.roles.map(r=>D.roles[r]).join('/')+'</span></span>'
   +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join(' · ')+'</span>'
   +'<span class="have">매입 '+o.price+'G · 이익 +'+(it.sell-o.price)+'G<br>재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+'</span></span>'
-  +'<span class="pricetag">'+it.sell+'<i>G</i></span>'
-  +'<span class="dial">'+btn('−','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
+  +Scene.priceTag(it.sell+'<i>G</i>')
+  +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
    +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?'disabled':''))
+   +'<span class="unit">개</span>'
    +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" '+(v>max?'disabled':''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'"')+'</span></span></li>';
  }).join('')+'</ol>'
  +'<button class="rubber" data-action="reroll" '+(price>s.money||held?'disabled':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
@@ -364,7 +421,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  const newly=game.account.unlocked.filter(k=>!oldUnlocks.includes(k));if(newly.length){const names=[...D.items,...D.jobs,...D.facilities,...D.contracts].filter(x=>newly.includes(x.unlock)).map(x=>x.name);toast('본사 해금 · '+names.join(' · '));sound('rare');}
  }catch(err){toast(err.message);}
 }
-document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled)action(el);});
+document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled){if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);}});
 document.addEventListener('keydown',ev=>{if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new'))setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase);});
