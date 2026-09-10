@@ -75,7 +75,10 @@ function resolve(n,d,r,facilities=[],options={}){
      Closing and the returning-visitor line. */
   p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
- n.records.push({...report,debug:undefined});
+ /* The persisted record is the report without its development payload. The key is
+   removed, not set to undefined: an own property that JSON drops would make a reloaded
+   run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */
+ {const {debug:_dev,...record}=report;n.records.push(record);}
  /* A death line that implies a shopkeeping history is only used when that history exists;
    otherwise a history-independent variant. Chosen from state, never from a roll, so no
    RNG draw is consumed and every downstream result stays identical. */
