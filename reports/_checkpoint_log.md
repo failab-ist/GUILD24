@@ -252,3 +252,59 @@ late corrections:    NPC production art was adopted in Sale only; every other su
                      and the actual adventurer.
 remaining issue:     NONE
 next chunk:          G — see reports/SESSION_HANDOFF_v2.4.md. Do not redo A-F.
+
+## CHUNK G — SAVE / FULL INTEGRATION / TESTS / SIMULATION  *(CLOSED)*
+start HEAD:          6d2cf2b
+end/commit:          779121d (+ follow-up through d24c35d)
+files changed:       dist/systems/{save,dungeon,simulation}.js; dist/ui/{presentation,app}.js;
+                     tests/{integration,simulation,longitudinal}.cjs (new); tests/{balance,experiment}.cjs;
+                     tests/{balance-results-v5,longitudinal-results-v5}.json; tools/report.cjs;
+                     reports/{BALANCE,AUDIT,RELICS}.md; package.json
+KEEP/PATCH/REPLACE:  PATCH the Save contract, the persisted NPC record shape and the Night Skip rule's
+                     location. EXTEND the simulation harness. KEEP every gameplay rule, formula and
+                     catalog value — `dist/data/` has a zero diff for the whole chunk.
+tests run:           npm test -> PASS (adds 9 integration and 11 simulation groups; 131 checks total)
+                     npm run balance 300 -> 21 strategies x 300 seeds = 6,300 runs
+                     npm run longitudinal 60 12 -> 3 cohorts x 60 trajectories x 12 runs = 2,160 runs
+implementation note: Three implementation bugs fixed — an incomplete Save contract, an unvalidated
+                     Relic window day, and a persisted NPC record key that JSON drops (which made
+                     save->load->continue equivalence unprovable by structural equality).
+                     The Night Skip rule was already correct but untestable; it moved into the
+                     presentation layer so the real rule is driven in Node rather than read.
+                     FOLLOW-UP: every seed in the harness started from a fresh account and nothing said
+                     so, which made the Final numbers read as the game's ceiling. The per-run body was
+                     extracted so one account can be carried across successive Runs; the fresh-account
+                     benchmark is preserved exactly (414 pre-existing output keys compare deep-equal
+                     across 9 cohorts) and is now pinned as a contract.
+balance observation: RECORDED, NOT APPLIED — see reports/AUDIT.md G-1..G-10.
+                     Boss Power: fresh account clear 3.3% / progressed 15.8%; party power 174.5 -> 188.2;
+                     margin -55.9 -> -41.6. The fresh-account-only conclusion from earlier in the chunk
+                     is corrected: progression narrows the gap substantially but does not close it.
+                     Meta XP: normal play wins per run, but a no-sale / meta-farm run is 2.7-3.6x more
+                     efficient per player action and still ~1.7x when repeated, while ending with 7.9
+                     unlocks against 13.7. Daily overhead 60->65G moves nothing. All left unchanged.
+                     RUN-Q15 PASS; 1/2/3-person Final measured; DUN-Q20 PASS.
+remaining issue:     NONE in source.
+next chunk:          H — documentation only.
+
+## CHUNK H — FINAL DOCUMENTATION  *(CLOSED)*
+start HEAD:          d24c35d
+end/commit:          (this commit)
+files changed:       reports/V2_4_FINAL_REPORT.md (new); README.md; WORK_STATE.md; TODO.md;
+                     reports/ITEM-PRICES.md (regenerated); reports/_checkpoint_log.md
+KEEP/PATCH/REPLACE:  Documentation only. Zero `dist/` diff, zero `canonical/` diff, no balance value
+                     touched. Written against the repository as it stands, not against session memory.
+tests run:           npm test -> PASS, 0 failures (unchanged; H touched no source)
+implementation note: reports/V2_4_FINAL_REPORT.md is the owner-facing report: what changed in play
+                     terms, what was fixed, what was verified, what the simulation found, and what
+                     still needs a User decision. README / WORK_STATE / TODO were still describing the
+                     v2.1 build and were reset to v2.4.
+findings:            ONE NEW IMPLEMENTATION BUG, FILED NOT FIXED (H does not change code) — the report
+                     generator behind `npm run audit` still references an item retired in Chunk A and
+                     aborts partway. reports/ITEM-PRICES.md regenerated successfully before the abort;
+                     reports/COVERAGE.md and reports/TRAITS.md remain at v2.1 content as a result.
+                     The shipped game contains no reference to that item and the generator is not part
+                     of `npm test`, so `dist/` is unaffected.
+remaining issue:     The bug above, plus two User decisions (Final difficulty baseline, minimal-
+                     engagement farming efficiency). Both are recorded in the final report §10.
+next chunk:          NONE. v2.4 adoption is complete pending User balance decisions and merge approval.
