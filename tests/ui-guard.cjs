@@ -166,9 +166,12 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
   assert.ok(b.includes(call),'the beat reads '+call+' rather than its own copy');
  assert.ok(fn('changedRows').includes('Presentation.nightChanges(r)'),'WHAT CHANGED comes from the same report');
  // compactness is about copy: a routine beat drops the quote, never the adventurer
- assert.ok(/portrait\(n,heavy\?150:132,'returner'/.test(b),'both weights render a real figure, not a thumbnail');
- assert.ok(/\.pfp\.returner\{[^}]*width:min\(44vw,190px\)/.test(css)&&/\.pfp\.returner\.light\{[^}]*width:min\(40vw,172px\)/.test(css),
-  'the routine figure steps down one size and stays a character');
+ assert.ok(/portrait\(n,150,'returner'\)/.test(b),'every outcome renders the same NPC art size');
+ assert.ok(!/heavy\s*\?[^)]*returner/.test(b),'the figure is never branched on importance');
+ assert.ok(/\.pfp\.returner\{[^}]*width:min\(44vw,190px\);height:min\(44vw,190px\)/.test(css),
+  'one NPC size rule for Night');
+ assert.equal((css.match(/\.pfp\.returner[^{]*\{[^}]*width:/g)||[]).length,1,
+  'no second rule resizes the NPC for any outcome');
  assert.ok(b.includes("heavy?'<blockquote>'"),'only a weighted beat spends a quote');
  assert.ok(!app.includes('다시는 가게 문을 열지 않는다'),'the permanence line is not duplicated under the death flavour');
  assert.ok(!css.includes('.gone-note'),'the removed death line leaves no dead rule behind');

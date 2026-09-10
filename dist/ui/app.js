@@ -245,7 +245,7 @@ function beat(r){
  const verdict=Presentation.nightVerdict(r),why=Presentation.nightWhy(r);
  return '<article class="beat t-'+tone+(heavy?'':' quiet')+'">'
  +'<div class="stand-in">'
-  +portrait(n,heavy?150:132,'returner'+(heavy?'':' light'))
+  +portrait(n,150,'returner')
   +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
    +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')+'</div>'

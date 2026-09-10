@@ -512,11 +512,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the beat */
 .beat{position:relative}
 .stand-in{display:flex;align-items:flex-end;gap:14px;margin-bottom:16px}
-/* The adventurer keeps their presence on every beat. A routine night is lighter in copy,
-   not in character: the figure steps down one size, it never becomes an icon. */
+/* One NPC size for every outcome. Importance changes how much copy a beat spends, the
+   quote, the change tokens and the tone — never how big the adventurer is. */
 .pfp.returner{width:min(44vw,190px);height:min(44vw,190px);
  filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 14px #ffd79a3d)}
-.pfp.returner.light{width:min(40vw,172px);height:min(40vw,172px)}
 .beat.quiet .stand-in{gap:12px;margin-bottom:12px}
 .beat .who{flex:1 1 auto;min-width:0;padding-bottom:4px}
 .verdict{font:700 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
