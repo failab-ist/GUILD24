@@ -114,6 +114,44 @@ function hazardIcon(key,size=20){
  return `<svg class="hz-icon" width="${size}" height="${size}" viewBox="0 0 20 20" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
 }
 
+
+/* ---- customer cards ----------------------------------------------------------
+   NPC art is an immutable payload: an approximately square transparent PNG holding a
+   character plus their own lifestyle vignette. The card never crops or distorts it —
+   the art is contained, so hair, props and the vignette all survive whatever margins a
+   given sticker happens to have. Production art drops into npcPool (or a manifest that
+   replaces it) with no layout work; the card layers stay independent of the image. */
+const npcPool=['ui/assets/npc/npc-01.png','ui/assets/npc/npc-02.png','ui/assets/npc/npc-03.png',
+               'ui/assets/npc/npc-04.png','ui/assets/npc/npc-05.png'];
+function npcArt(n){
+ if(!n||!npcPool.length)return null;
+ const file=manifest['npc.'+n.id]||npcPool[Math.abs(n.appearance||0)%npcPool.length];
+ return file;
+}
+/* One card back for every unrevealed customer. It carries the store's mark and nothing
+   else: no silhouette, no colour, no rarity, no per-customer variation of any kind. */
+function cardBack(){
+ let s=r(0,0,120,150,'#2a2118')+r(4,4,112,142,'#3b2f21')+r(8,8,104,134,'#241c14');
+ for(let y=14;y<138;y+=12)for(let x=14;x<108;x+=12)s+=r(x,y,4,4,'#2f2618');
+ s+=r(26,54,68,42,'#4a3b28')+r(30,58,60,34,'#2a2118');
+ s+=`<path d="M44 66H76L58 88Z" fill="#8a7038"/>`+r(44,62,32,3,'#8a7038');
+ s+=r(4,4,112,3,'#54432d')+r(4,143,112,3,'#161009');
+ return `<svg class="back-art" viewBox="0 0 120 150" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
+}
+/* A short back-wall strip: enough store to place the counter, never competing with the customer. */
+function shelfStrip(seed=3){
+ const rd=rng(seed);let s=r(0,0,360,64,'#c6bda8');
+ for(let y=-6;y<64;y+=18)for(let x=0;x<360;x+=24)s+=r(x,y,23,17,((x/24)+((y+6)/18))%2?'#cbc3ae':'#c2b9a4');
+ const goods=['#d9a05e','#c0705c','#8fb4a0','#d8c98a','#a58bbd','#7fa8c4'];
+ for(const [x0,w] of [[6,120],[236,118]]){
+  s+=r(x0,40,w,4,'#a8834f')+r(x0,44,w,3,'#7c5c34');
+  for(let i=0;i*18<w-10;i++)s+=r(x0+4+i*18,20,13,20,goods[Math.floor(rd()*goods.length)])+r(x0+6+i*18,23,9,5,'#f0ead6');}
+ /* a bracket lamp over the waiting line — light, not signage: the customer owns the wall */
+ s+=r(216,0,4,9,'#4a3a24')+r(200,9,36,5,'#6b5029')+r(203,14,30,9,'#f2d999')+r(206,23,24,4,'#d0a960');
+ for(let i=0;i<6;i++)s+=r(198-i*5,27+i*6,40+i*10,6,i<2?'#ffe6ad26':'#ffe6ad12');
+ s+=r(0,58,360,6,'#a2977f');
+ return svg(360,64,s,'band-art','xMidYMax');
+}
 /* ---- asset slots -------------------------------------------------------------
    Every scene asset resolves through slot(), so a production PNG/SVG can replace a
    procedural one later by registering it in Scene.manifest without touching any screen.
@@ -133,5 +171,6 @@ const anchors={
 };
 const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),
- seal,crate,priceTag,hazardIcon,manifest,slot,anchors,anchorStyle};
+ seal,crate,priceTag,hazardIcon,manifest,slot,anchors,anchorStyle,
+ npcArt,npcPool,cardBack,shelfStrip};
 })(globalThis);

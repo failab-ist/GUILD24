@@ -57,3 +57,20 @@ Regenerate the vendored copies with `npm run assets`.
 (store ceiling, shelving wall, counter, corporate seal, stock crate, price tag, nine Hazard
 pictograms). Originally authored for this project on its 4px grid, so no third-party
 licence applies and the style stays coherent with the existing art.
+
+## NPC customer stickers — `dist/ui/assets/npc/npc-01..05.png`
+
+Supplied by the project as examples of the production NPC asset format, not as finished
+cards: a character plus their own lifestyle vignette on a transparent surround, roughly
+square (377×358 / 361×365 / 364×367 / 368×362 / 362×370), with 3–10px of transparent
+margin and, in one case, content touching the frame edge.
+
+The Sale screen treats them as an immutable payload:
+- contained at their own aspect ratio inside one square customer slot — never cropped,
+  stretched, letterboxed to a fixed pixel box, or recoloured;
+- the transparent surround is preserved, so the silhouette stays organic;
+- nothing is baked into the artwork — rarity, name, level, job and the reveal are
+  separate DOM layers over the same `<img>`.
+
+Production art replaces these by editing `Scene.npcPool`, or per NPC by registering
+`Scene.manifest['npc.<npcId>']`. No screen, layout or per-NPC rule changes.

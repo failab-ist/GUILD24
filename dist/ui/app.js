@@ -50,6 +50,17 @@ function playPhase(phase){
   const beat=$('.beat');
   if(beat)A(beat,{scale:[.96,1],opacity:[0,1],duration:300,ease:'outQuad'});
  }
+ // SALE reveal: the next back walks up to the counter and turns face up. It only ever
+ // moves layers that are already laid out, so nothing shifts and no reflow is queued.
+ if(phase==='sell'){
+  const fig=$('.who .figure'),tag=$('.who .nameplate'),br=$('.bracket'),pool=$('.pool');
+  if(fig)A(fig,{translateX:[26,0],translateY:[8,0],opacity:[0,1],duration:260,ease:'outQuad'});
+  if(pool)A(pool,{opacity:[0,.42],duration:340,ease:'outQuad'});
+  if(br)A(br,{opacity:[0,1],scale:[1.06,1],duration:220,delay:150,ease:'outQuad'});
+  if(tag)A(tag,{translateY:[10,0],opacity:[0,1],duration:200,delay:120,ease:'outQuad'});
+  const waits=[...document.querySelectorAll('.line-up .wait')];
+  if(waits.length)A(waits,{translateX:[16,0],duration:240,delay:anime.stagger(45),ease:'outQuad'});
+ }
 }
 // the approval stamp lands before the phase advances
 function stampPress(el){
@@ -137,17 +148,56 @@ function readout(n,extra=null){
  +(compact?'':'<p class="estimate">지금의 능력과 준비로 본 예상. 실제 원정은 달라질 수 있다.</p>')+'</div>';}
 function returningSummary(n){const r=Presentation.returning(n);if(!r)return '';
  return '<aside class="since" aria-label="지난 방문 이후"><b>지난 원정 · DAY '+r.day+' '+E(r.outcome)+'</b>'+(r.changes.length?'<p>'+r.changes.map(E).join(' · ')+'</p>':'')+(r.impact?'<p>'+E(r.impact)+'</p>':'')+'</aside>';}
+// SALE — the customer is at the counter. Three layers read down the screen:
+// WHO IS HERE (the waiting line as identical backs, the active customer as the single
+// large foreground object), WHAT IS KNOWN about them (the counter surface), and WHAT TO
+// SELL (the display case and the register). The NPC payload is an immutable, roughly
+// square transparent sticker: it is placed, never boxed — contained at its own aspect
+// ratio, standing on the counter line, silhouette free on every side. Rarity, identity
+// and reveal are separate layers over it, so a production sticker with any margin drops
+// in with no per-NPC layout work.
 function saleScreen(){
  const s=game.run,n=game.current();
- if(!n)return stage('sale','영업','','<p class="muted">영업을 마치는 중입니다.</p>','');
- const body='<div class="stagelight">'+Art.scene(game)+'</div>'
- +'<button class="customer" data-action="npc" data-id="'+n.id+'"><span class="portrait">'+Art.avatar(n,76)+'</span>'
- +'<span class="who"><span class="name">'+E(n.name)+'</span><span class="job">Lv.'+n.level+' '+D.jobBy[n.job].name+'</span><span class="purse">소지금 '+fmt(n.money)+'G</span></span><span class="go">기록 ></span></button>'
- +'<div class="loyal"><span>단골도</span><span class="track"><span style="width:'+Math.min(100,n.loyalty)+'%"></span></span><span>'+n.loyalty+'</span></div>'
- +returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+kitLine(n)+readout(n)+specialUI()+shelf()+ownedRelicView();
- const dock='<div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)+'</div>'
- +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp');
- return stage('sale','영업','',body,dock);
+ if(!n)return '<div class="stage p-sale">'+menuFab()+'<main class="stage-scroll" id="phase-content" tabindex="-1"><p class="muted">영업을 마치는 중입니다.</p></main></div>';
+ const waiting=Math.max(0,s.queue.length-s.cursor-1);
+ return '<div class="stage p-sale">'+menuFab()
+ +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
+  +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
+  +standee(n)+waitingLine(waiting)
+ +'</section>'
+ +'<div class="counter-edge" aria-hidden="true"></div>'
+ +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
+  +'<div class="dossier">'+returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+kitLine(n)+readout(n)+specialUI()+'</div>'
+  +shelf()+ownedRelicView()
+ +'</main>'
+ +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)+'</div>'
+ +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
+}
+// The waiting line. Every customer still outside is the same back — no face, silhouette,
+// colour, rarity or name leaks out of it. Only how many are left is public.
+function waitingLine(waiting){
+ if(!waiting)return '<div class="line-up last"><span class="left">마지막 손님</span></div>';
+ const backs=Array.from({length:Math.min(waiting,4)},(_,i)=>
+  '<span class="wait" style="--i:'+i+'" aria-hidden="true">'+Scene.cardBack()+'</span>').join('');
+ return '<div class="line-up" aria-label="대기 손님 '+waiting+'명"><span class="fan">'+backs+'</span>'
+ +'<span class="left">대기 '+waiting+'</span></div>';
+}
+// The active customer. Layers, bottom to top: light pool -> contact shadow -> the NPC
+// sticker itself -> the rarity bracket -> the identity plate. Nothing is baked into the
+// artwork and nothing crops it: object-fit contain, standing on the counter line.
+function standee(n){
+ const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
+ return '<button class="who r'+n.rarity+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+' 기록 보기">'
+ +'<span class="pose">'
+  +'<span class="pool" aria-hidden="true"></span>'
+  +(art?'<img class="figure" src="'+art+'" alt="" draggable="false">'
+       :'<span class="figure fallback">'+Art.avatar(n,140)+'</span>')
+  +'<span class="stand" aria-hidden="true"></span>'
+  +'<span class="bracket" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'
+ +'</span>'
+ +'<span class="nameplate">'+(rank?'<i class="rank">'+E(rank)+'</i>':'')
+  +'<b>'+E(n.name)+'</b><span>Lv.'+n.level+' '+job+'</span></span>'
+ +'</button>';
 }
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
@@ -295,7 +345,8 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    const blocked=q.debit>n.money?'소지금 부족':n.refused.includes(it.id+':'+mode)?'오늘 거절됨':full?'가방 가득':'';
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
- return '<div class="tillpanel"><h4>보급 후 변화</h4><ul class="effects">'
+ return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho">'+E(n.name)+'에게 판매</p>')
+ +'<h4>보급 후 변화</h4><ul class="effects">'
  +(changes.length?changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join(''):'<li><span>이 손님의 준비는 달라지지 않는다</span><b></b></li>')
  +'</ul>'+readout(n,it.id)
  +'<details><summary>전체 효과 · 상품 설명</summary>'+effectList(it)+'<p class="smalltext">'+E(it.description)+'</p></details>'

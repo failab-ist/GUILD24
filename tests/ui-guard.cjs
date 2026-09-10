@@ -6,7 +6,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 for(const f of ['data/catalog','data/relics','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const app=read('dist/ui/app.js'),css=read('dist/ui/ui.css'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
+const app=read('dist/ui/app.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
 const fn=name=>{const a=app.indexOf('function '+name+'(');const b=app.indexOf('\nfunction ',a+1);return app.slice(a,b<0?app.length:b);};
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 
@@ -110,8 +110,18 @@ test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{
 
 test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
  const sale=fn('saleScreen');
- const order=['Art.scene(game)','customer','returningSummary(n)','destPlate(n)','statGrid(n)','traitRows(n)','kitLine(n)','readout(n)','shelf()'];
+ const order=['Scene.shelfStrip()','standee(n)','waitingLine(','returningSummary(n)','destPlate(n)','statGrid(n)','traitRows(n)','kitLine(n)','readout(n)','shelf()'];
  let at=-1;for(const part of order){const i=sale.indexOf(part);assert.ok(i>at,'Sale stacks '+part+' in canonical mobile order');at=i;}
+ // the active customer is a placed sticker, never a cropped or stretched thumbnail
+ assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
+ assert.ok(!/\.figure\{[^}]*object-fit:cover/.test(css),'the NPC payload is never cover-cropped');
+ assert.ok(/\.pose\{[^}]*width:100%;height:var\(--figh\)/.test(css),'the customer slot is one square box for any sticker');
+ // the waiting line leaks nothing about who is next
+ const wait=fn('waitingLine').replace(/^\s*\/\/.*$/gm,'');
+ for(const leak of ['name','rarity','job','level','npcArt','avatar'])
+  assert.ok(!wait.includes(leak),'the waiting line does not leak '+leak);
+ assert.ok(wait.includes('Scene.cardBack()'),'every waiting customer is the same back');
+ assert.ok(!/function cardBack\([^)]/.test(scene),'the card back takes no per-customer argument');
  assert.ok(app.includes('예상 목적지')&&!app.includes("'말한 목적지'"),'the destination label is 예상 목적지');
  assert.ok(!app.includes("modal==='saleItem'"),'item and price resolve inline, with no modal round trip');
  assert.ok(app.includes("selected=selected===id?null:id"),'tapping a product toggles its panel in place');
