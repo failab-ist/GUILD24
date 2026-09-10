@@ -54,3 +54,116 @@ schemaVersion 3. 자동저장 키를 유지하며 v1/v2/v3를 검증·변환한�
 유물별 수치는 시작값이다. 음식·음료 강화는 부작용도 함께 키우며, 설명에 명시했다. 복수 곱연산은 발주 할인 최저 45%로 제한한다. 현재 자동 정책은 사람의 전문적 운영·보스 준비를 완전히 구현하지 않으며, 조건부 성과를 인과 ROI로 오해하면 안 된다.
 
 일부 PASS 2 품질 요구와 PASS 3 수용 기준은 아직 사람의 플레이로 검증되지 않았다. 핵심 시스템 구현 완료와 최종 게임 디자인 검증 완료를 구분한다. 자세한 범위는 PLAYTEST.md와 BALANCE.md를 따른다.
+
+---
+
+# CHUNK G — v2.4 통합 / Save / 시뮬레이션 관측 기록
+
+`canonical/` 는 읽기 전용이며 이 챕터에서 변경하지 않았다. 아래 분류는
+`V2_4_EXECUTION_PLAN` §10의 규칙을 따른다.
+
+- **IMPLEMENTATION BUG** — Canonical 값/규칙이 잘못 구현됨 → Source를 고쳤다.
+- **BALANCE OBSERVATION** — Canonical 시작값/PASS3 값이 올바르게 구현되었으나 결과가
+  나쁨 → 근거와 후보값만 기록하고 **아무것도 바꾸지 않았다.**
+
+측정 근거: `reports/BALANCE.md` (300 Seed × 20 전략 = 6,000 Run),
+원시 집계 `tests/balance-results-v5.json`.
+
+## G-1. IMPLEMENTATION BUG — 수정함
+
+| 항목 | Canonical | 증상 | 수정 |
+| --- | --- | --- | --- |
+| Save 계약 누락 필드 | `CORE_RUN` §SAVE/LOAD | `Save.valid`가 Event 정체·공개 여부, Night/판매 커서, Final 구성, 튜토리얼 상태를 검사하지 않아 손상된 저장을 받아들였다 | 각 필드에 절을 추가했다. `tests/integration.cjs`가 필드를 하나씩 망가뜨려 각 절이 실제로 동작함을 확인한다 |
+| Relic Window 일자 | `RELIC` / `CORE_RUN` §RELIC WINDOWS | `milestoneDay`가 정수이기만 하면 통과했다 | `[0,5,10,15,20,25,30]` 중 하나여야 한다 |
+| 저장된 NPC 기록의 `debug` 키 | `CORE_RUN` §SAVE/LOAD | `n.records`에 `debug: undefined`를 넣어, JSON이 키를 버리는 탓에 저장 전 Run과 복원 후 Run이 구조적으로 달랐다. 읽는 코드는 없었으나 save→load→continue 동등성을 구조 비교로 증명할 수 없게 만들었다 | 키를 `undefined`로 두지 않고 제거한다. 실시간 리포트의 개발용 payload는 그대로다 |
+
+Skip 규칙(`NIGHT_CLOSING` §SKIP CONTRACT)은 구현 자체가 이미 계약을 지키고 있었다 —
+버그가 아니라 **검증 불가** 상태였다. 규칙을 Night 화면의 클릭 핸들러에서
+`Presentation.nightSkip`으로 옮겨 Node에서 실제 규칙을 구동해 검증한다. 동작은 동일하다.
+
+## G-2. BALANCE OBSERVATION — 기록만, 변경 없음
+
+### B-1. `bossPower 230` — 현 구조에서 과다
+
+`FINAL_EXPEDITION` §9는 Boss Power의 exact numeric을 확정값이 아니라고 명시하고
+Full Run Balance 결과를 보고 조정하도록 한다. 230은 v2.4 승인 시작값이 아니라
+**잠정 유지된 Source 기준선**이며, 옛 Final 구조(scale 5.5, clear 후 resolve) 기준으로
+튜닝된 값이다.
+
+측정 (300 Seed, DAY30 도달 Run 기준):
+
+| 지표 | 값 |
+| --- | --- |
+| 참여 전략 16종의 평균 Assault | 169.6 ~ 191.9 |
+| `balanced/adaptive/hybrid` 평균 Assault | 173.9 |
+| Boss Power(230) 대비 평균 여유 | −38.1 ~ −60.4 |
+| 3인 편성 비율 | 거의 모든 전략에서 100% |
+| 도달 후 승률 | 0.7% ~ 16.3% |
+
+`FINAL_EXPEDITION` §11-B는 "정상적으로 성장시킨 3인 파티가 충분히 준비했을 때
+현실적으로 Clear 가능한가?"를 확인 항목으로 둔다. 현재 값에서는 모든 전략이 3인 만편성으로도
+평균 40~60 부족하다.
+
+**후보(증거일 뿐, 지시가 아님):** Roll이 0.88~1.12 균등이므로 Boss Power를 관측된 평균
+Assault 부근(약 170~190)에 두면 자동 정책의 도달 후 승률이 대략 반반이 된다. Canonical은
+목표 클리어율 수치를 명시하지 않으므로 **정확한 값 선택은 사용자 결정 사항이다.**
+이 챕터에서 `D.balance.bossPower`는 230 그대로다.
+
+### B-2. Meta XP — DAY당 효율이 무참여 플레이에서 더 높음
+
+`META-003`의 `minimalEngagementDayFarmingEfficient=NO`는 동결된 **결과** 요구이고,
+`meta.js:finish`의 가중치(`day*3 + win*100 + discoveries*5 + maxLevel*3 + regulars*5`)는
+PASS3다.
+
+| 전략 | Run당 Meta XP | 진행 DAY당 Meta XP |
+| --- | --- | --- |
+| balanced / adaptive / hybrid | 346.5 | 11.6 |
+| zero-sale | 170.5 | 15.6 |
+| zero-supply | 192.7 | 13.2 |
+| zero-order | 210.7 | 11.7 |
+| poverty | 224.8 | 10.9 |
+
+Run 단위로는 정상 참여가 두 배 가까이 앞서고 네 전략 모두 파산으로 끝나므로 RUN-Q30의
+PASS 조건은 충족한다. 그러나 **짧은 무참여 Run을 반복하면 진행 DAY당 효율은 정상 플레이를
+앞선다**(zero-sale 15.6 대 11.6).
+
+원인을 항별로 분해했다(40 Seed, 평균 기여값):
+
+| 전략 | 합계 | `day*3` | `win*100` | `discoveries*5` | `maxLevel*3` | `regulars*5` |
+| --- | --- | --- | --- | --- | --- | --- |
+| balanced | 345.9 | 90.0 | 7.5 | 135.6 | 44.0 | 68.9 |
+| zero-sale | 169.4 | 33.3 | 0.0 | 117.3 | 18.8 | 0.0 |
+| zero-supply | 192.9 | 44.0 | 0.0 | 125.6 | 23.3 | 0.0 |
+| poverty | 221.7 | 61.0 | 0.0 | 130.6 | 28.7 | 1.4 |
+
+주된 기여는 `day*3`이 아니라 **`discoveries*5`** 다. 이 항은 참여도와 거의 무관하게
+117~136으로 평평하고, 무참여 Run에서는 총합의 69%를 차지한다(정상 참여는 39%).
+DAY당으로 보면 zero-sale 10.7 대 balanced 4.5 — 맨몸 원정이 Hazard 사건을 오히려 더 많이
+발생시키기 때문이다.
+
+**후보(증거일 뿐, 지시가 아님):** `discoveries` 항을 보급 생환 조건과 묶거나 가중치를 낮추는
+방향. 비활동 게이지·나체런 세금 같은 별도 징벌 시스템은 `RUN-Q30` NOTE에 따라 금지되어 있으므로
+후보에 포함하지 않는다. 이 챕터에서 가중치는 그대로다.
+
+### B-3. `dailyOverhead 60G` — 소폭 인상은 도달률을 움직이지 못함
+
+`reports/BALANCE.md` 부록 A 참조. 60G → 65G에서 도달률 99.7% → 99.3%,
+최종 Gold 3,970 → 3,867. 배포값은 60G 그대로다. 미적용.
+
+### B-4. `protective/half/vip` 전략은 DAY30에 도달하지 못한다
+
+반값 전용 판매는 운영비·발주비를 회수하지 못해 평균 DAY 19.8에서 파산한다(도달률 0%).
+v3 기준선에서도 동일했다. 반값을 금지할 근거가 아니라 선택적 투자가 필요한 이유이며,
+어떤 Canonical 값도 잘못 구현되지 않았다. 미적용.
+
+## G-3. 재기준선
+
+`tests/balance-results-v3.json` / `-v4.json`은 v2.4 채택 이전 측정이라 삭제했다.
+Chunk A~F에서 아이템·특성·해저드·이벤트 어휘가 전면 교체되어 RNG 소비 경로가 달라졌으므로
+그 수치는 v2.4 근거로 인용할 수 없다. 현재 기준선은 `tests/balance-results-v5.json`이다.
+
+## G-4. 남은 검증
+
+`RUN-Q15`(장기 투자 NPC 대 마지막 날 신규)와 `FINAL_EXPEDITION` §11-C(1~2인 파티 Clear)는
+현재 자동 정책이 항상 레벨 상위 3인을 뽑기 때문에 이 챕터의 측정으로는 답하지 못한다.
+`PLAYTEST.md`의 사람 플레이 항목으로 남긴다.
