@@ -53,8 +53,9 @@ function playPhase(phase){
  // SALE reveal: the next back walks up to the counter and turns face up. It only ever
  // moves layers that are already laid out, so nothing shifts and no reflow is queued.
  if(phase==='sell'){
-  const fig=$('.who .figure'),tag=$('.who .nameplate'),br=$('.bracket'),pool=$('.pool');
-  if(fig)A(fig,{translateX:[26,0],translateY:[8,0],opacity:[0,1],duration:260,ease:'outQuad'});
+  const face=$('.who .face'),fig=$('.who .figure'),tag=$('.who .nameplate'),br=$('.bracket'),pool=$('.pool');
+  if(face)A(face,{translateX:[22,0],opacity:[0,1],duration:240,ease:'outQuad'});
+  if(fig)A(fig,{translateY:[10,0],opacity:[0,1],duration:280,delay:60,ease:'outQuad'});
   if(pool)A(pool,{opacity:[0,.42],duration:340,ease:'outQuad'});
   if(br)A(br,{opacity:[0,1],scale:[1.06,1],duration:220,delay:150,ease:'outQuad'});
   if(tag)A(tag,{translateY:[10,0],opacity:[0,1],duration:200,delay:120,ease:'outQuad'});
@@ -188,16 +189,15 @@ function waitingLine(waiting){
 function standee(n){
  const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
  return '<button class="who r'+n.rarity+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+' 기록 보기">'
- +'<span class="pose">'
+ +'<span class="face">'
   +'<span class="pool" aria-hidden="true"></span>'
   +(art?'<img class="figure" src="'+art+'" alt="" draggable="false">'
        :'<span class="figure fallback">'+Art.avatar(n,140)+'</span>')
   +'<span class="stand" aria-hidden="true"></span>'
   +'<span class="bracket" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'
- +'</span>'
- +'<span class="nameplate">'+(rank?'<i class="rank">'+E(rank)+'</i>':'')
-  +'<b>'+E(n.name)+'</b><span>Lv.'+n.level+' '+job+'</span></span>'
- +'</button>';
+  +'<span class="nameplate">'+(rank?'<i class="rank">'+E(rank)+'</i>':'')
+   +'<b>'+E(n.name)+'</b><span>Lv.'+n.level+' '+job+'</span></span>'
+ +'</span></button>';
 }
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');

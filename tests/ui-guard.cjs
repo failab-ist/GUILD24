@@ -115,7 +115,11 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
  assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
  assert.ok(!/\.figure\{[^}]*object-fit:cover/.test(css),'the NPC payload is never cover-cropped');
- assert.ok(/\.pose\{[^}]*width:100%;height:var\(--figh\)/.test(css),'the customer slot is one square box for any sticker');
+ assert.ok(/\.figure\{[^}]*width:var\(--artw\);height:var\(--artw\)/.test(css),'the payload box is square, so no sticker is squashed to fit');
+ // the face and the backs are one deck: same proportion, and the payload overhangs the face
+ assert.ok(/\.face\{[^}]*aspect-ratio:4\/5/.test(css)&&/\.line-up \.wait\{[^}]*aspect-ratio:4\/5/.test(css),
+  'the revealed card and the waiting backs share one card proportion');
+ assert.ok(/--artw:calc\(var\(--cardw\)\*1\.0[1-9]\)/.test(css),'the artwork is wider than the card face, never sealed inside it');
  // the waiting line leaks nothing about who is next
  const wait=fn('waitingLine').replace(/^\s*\/\/.*$/gm,'');
  for(const leak of ['name','rarity','job','level','npcArt','avatar'])

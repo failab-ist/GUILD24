@@ -42,6 +42,7 @@
  --tex-cork:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%23a97f4a%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%223%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2214%22%20y%3D%221%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%229%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2218%22%20y%3D%227%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2216%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2214%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2218%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2220%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23bd9159%22%2F%3E%3C%2Fsvg%3E");
  --tex-paper:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23efe7d2%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%222%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e3d9bf%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%225%22%20width%3D%223%22%20height%3D%221%22%20fill%3D%22%23e6dcc4%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e3d9bf%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2213%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e8dfc7%22%2F%3E%3C%2Fsvg%3E");
  --tex-wood:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2212%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2232%22%20height%3D%2212%22%20fill%3D%22%23241a12%22%2F%3E%3Crect%20y%3D%221%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%232f2217%22%2F%3E%3Crect%20y%3D%225%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%231b130d%22%2F%3E%3Crect%20y%3D%228%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%2331241a%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%223%22%20width%3D%229%22%20height%3D%221%22%20fill%3D%22%232b1f15%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2210%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%232b1f15%22%2F%3E%3C%2Fsvg%3E");
+ --tex-deck:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2212%22%20height%3D%2212%22%20fill%3D%22%23241c14%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%224%22%20height%3D%224%22%20fill%3D%22%232f2618%22%2F%3E%3C%2Fsvg%3E");
  --tex-metal:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%228%22%20height%3D%228%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%2339434b%22%2F%3E%3Crect%20y%3D%222%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%23414c55%22%2F%3E%3Crect%20y%3D%226%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%23313a41%22%2F%3E%3C%2Fsvg%3E");
  /* legacy hooks still used by the phases not yet recomposed */
  --ground:var(--soil);--edge:#ffffff1a;--accent:var(--gold);--go:var(--sign);--go-ink:#08170e;--bad:var(--blood);--warn:#e2b262;
@@ -299,50 +300,62 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale{background:#191208}
 /* ---- layer 1 : who is here --------------------------------------------------- */
 .front{position:relative;flex:0 0 auto;display:grid;grid-template-columns:auto minmax(0,1fr);
- align-items:end;gap:6px;padding:12px var(--gutter) 0;overflow:hidden;
+ align-items:end;gap:6px;padding:calc(var(--cardw)*.09 + 8px) var(--gutter) 0;overflow:hidden;
  background:linear-gradient(180deg,#0d0904 0,#241a10 58%,#3b2a19 100%);
- --figh:min(58vw,252px)}
+ --cardw:min(56vw,232px)}
 .front .backwall{position:absolute;left:0;right:0;top:0;z-index:0;line-height:0}
 .front .backwall .band-art{display:block;width:100%;height:auto}
 .front .backwall:after{content:'';position:absolute;inset:0;
  background:linear-gradient(180deg,#0b0803a6 0,#0b08033d 44%,#191208f0 100%)}
-/* the active customer: light pool, contact shadow, the sticker, the rarity bracket, the plate */
-.who{position:relative;z-index:2;display:block;width:var(--figh);max-width:100%;min-width:0;
- padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;text-align:left}
+/* The active customer is the one card in the deck turned face up. The face is the same
+   physical object as the backs beside it — same 4:5 proportion, same square corners, same
+   double frame, same dotted field — so the two read as one deck. The sticker is NOT sealed
+   into it: the art box is square and larger than the face, so the vignette overhangs the
+   top and both sides and the silhouette stays organic. Layers, bottom to top:
+   card base -> rarity light -> NPC payload -> contact shadow -> rarity bracket and mark
+   -> the nameplate. Nothing is baked into the artwork. */
+.who{position:relative;z-index:2;display:block;width:var(--cardw);max-width:100%;min-width:0;
+ padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;text-align:left;
+ --artw:calc(var(--cardw)*1.06)}
+.who .face{margin-bottom:calc(var(--cardw)*.08 + 14px)}
 .who:hover{background:transparent}
 .who:active{transform:none}
-.pose{position:relative;display:block;width:100%;height:var(--figh)}
-.pool{position:absolute;z-index:0;left:50%;bottom:-6px;width:calc(var(--figh)*1.12);height:calc(var(--figh)*.82);
- transform:translateX(-50%);opacity:.42;
- background:radial-gradient(56% 54% at 50% 66%,var(--rare,#b4bba6) 0,#00000000 100%)}
-.figure{position:relative;z-index:2;display:block;width:100%;height:100%;
+.face{position:relative;display:block;width:100%;max-width:100%;aspect-ratio:4/5;
+ background:var(--tex-deck),#241c14;background-size:12px 12px;
+ box-shadow:inset 0 0 0 4px #3b2f21,inset 0 0 0 8px #241c14,0 0 0 3px #2a2118,5px 6px 0 #00000099}
+.pool{position:absolute;z-index:0;left:50%;top:4%;width:var(--artw);height:calc(var(--artw)*.86);
+ transform:translateX(-50%);opacity:.3;
+ background:radial-gradient(56% 54% at 50% 62%,var(--rare,#b4bba6) 0,#00000000 100%)}
+/* the payload overhangs the face on three sides, so this is a customer standing on a card,
+   not a picture cropped into one */
+.figure{position:absolute;z-index:2;left:50%;top:calc(var(--cardw)*-.09);
+ width:var(--artw);height:var(--artw);margin-left:calc(var(--artw)/-2);
  object-fit:contain;object-position:50% 100%;image-rendering:auto;
  filter:drop-shadow(0 3px 0 #00000066) drop-shadow(0 0 12px #0000008c)}
 .figure.fallback{display:grid;place-items:center}
-.stand{position:absolute;z-index:1;left:50%;bottom:0;width:calc(var(--figh)*.62);height:8px;
- transform:translateX(-50%);background:#00000099;box-shadow:0 -4px 0 #00000047}
-/* rarity is a targeting bracket around the payload box, never a border drawn on the art */
-.bracket{position:absolute;z-index:3;inset:0;pointer-events:none}
-.bracket i{position:absolute;width:16px;height:16px;opacity:.9}
+.stand{position:absolute;z-index:1;left:50%;top:calc(var(--cardw)*.93);width:calc(var(--cardw)*.58);
+ height:7px;transform:translateX(-50%);background:#00000099}
+/* rarity: corner brackets and one small mark on the frame — never the whole card coloured */
+.bracket{position:absolute;z-index:3;left:4px;right:4px;top:4px;height:calc(var(--cardw)*.95);pointer-events:none}
+.bracket i{position:absolute;width:15px;height:15px;opacity:.92}
 .bracket i:nth-child(1){left:0;top:0;box-shadow:inset 3px 0 0 var(--rare,#b4bba6),inset 0 3px 0 var(--rare,#b4bba6)}
 .bracket i:nth-child(2){right:0;top:0;box-shadow:inset -3px 0 0 var(--rare,#b4bba6),inset 0 3px 0 var(--rare,#b4bba6)}
 .bracket i:nth-child(3){left:0;bottom:0;box-shadow:inset 3px 0 0 var(--rare,#b4bba6),inset 0 -3px 0 var(--rare,#b4bba6)}
 .bracket i:nth-child(4){right:0;bottom:0;box-shadow:inset -3px 0 0 var(--rare,#b4bba6),inset 0 -3px 0 var(--rare,#b4bba6)}
-/* identity: a wooden plate nailed to the counter front, not a caption under a picture */
-.who .nameplate{position:relative;z-index:4;display:grid;gap:1px;margin:6px 0 14px;padding:7px 15px 8px 15px;
- width:max-content;min-width:64%;max-width:100%;background:var(--tex-wood),#5b4227;color:#f5ead0;
- box-shadow:inset 5px 0 0 var(--rare,#b4bba6),inset 0 3px 0 #ffffff2e,inset 0 -4px 0 #00000080,4px 4px 0 #0000008c}
-.who .nameplate b{font:400 16px/1.25 var(--f-plate);-webkit-font-smoothing:none;letter-spacing:.02em;
+/* the nameplate is screwed across the card's bottom edge; the text is never in the artwork */
+.who .rank{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.18em;color:var(--rare,#b4bba6)}
+.who .nameplate{position:absolute;z-index:5;left:8px;right:8px;bottom:calc(var(--cardw)*-.08);display:grid;gap:1px;
+ padding:7px 12px 8px 13px;background:var(--tex-wood),#4a3627;background-size:32px 12px;color:#f5ead0;
+ box-shadow:inset 4px 0 0 var(--rare,#b4bba6),inset 0 2px 0 #ffffff21,inset 0 -3px 0 #00000080,3px 3px 0 #00000073}
+.who .nameplate b{font:400 16px/1.2 var(--f-plate);-webkit-font-smoothing:none;letter-spacing:.02em;
  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.who .nameplate>span{font:400 12px/1.35 var(--ui);color:#c6b391}
-.who .nameplate .rank{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.16em;
- color:var(--rare,#b4bba6);margin-bottom:2px}
+.who .nameplate>span{font:400 12px/1.3 var(--ui);color:#c6b391}
 /* the waiting line: identical backs, nothing but the count is public */
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:16px}
 .line-up .fan{display:flex;align-items:flex-end}
-.line-up .wait{display:block;width:36px;height:46px;margin-left:-21px;
+.line-up .wait{display:block;width:40px;aspect-ratio:4/5;margin-left:-23px;
  margin-bottom:calc(var(--i) * 4px);filter:brightness(calc(1 - var(--i) * .14))}
-.line-up .wait .back-art{display:block;width:100%;height:100%;box-shadow:2px 2px 0 #000000a6}
+.line-up .wait .back-art{display:block;width:100%;height:100%;box-shadow:0 0 0 2px #2a2118,2px 3px 0 #000000a6}
 .line-up .left{font:400 11px/1 var(--f-led);letter-spacing:.06em;color:#c2ae8b}
 .line-up.last .left{color:#8d8067}
 /* the counter edge divides who is here from what is decided */
