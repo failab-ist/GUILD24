@@ -101,14 +101,16 @@ function morningScreen(){
  const s=game.run;
  return '<div class="stage p-morning">'+menuFab()
  +'<div class="store">'
-  +'<div class="band ceiling">'+Scene.ceiling()+'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></div>'
+  +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
+   +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
    +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
-  +'<div class="band counter">'+Scene.counter()
-   +'<span class="till" style="'+Scene.anchorStyle('till')+'"><i>보유</i><b class="coin">'+fmt(s.money)+'</b></span>'
-   +relicTray()+'</div>'
+  +'<div class="band counter"><span class="mount">'+Scene.counter()
+   +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유</span>'
+   +'<span class="till" style="'+Scene.anchorStyle('till')+'" aria-label="보유 자금 '+fmt(s.money)+'G"><b class="coin">'+fmt(s.money)+'</b><i>G</i></span>'
+   +relicTray()+'</span></div>'
  +'</div>'
  +'<div class="dock">'+relicWindowLink()+'<button class="pull" data-action="begin-order"><span>문 열기</span></button></div></div>';
 }
@@ -257,7 +259,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
  // two groups: what today needs, and the signal for tomorrow's order
  +'<div class="brief"><div class="when"><span class="k">오늘</span>'
  +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
- +'<div class="when"><span class="k">내일</span><p class="tier">'+tierLine()+'</p><p class="sub">종류와 손님은 아직 미정</p></div></div>'
+ +'<div class="when"><span class="k">내일</span><p class="tier">'+tierLine()+'</p></div></div>'
  +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
   return '<li class="line r'+it.rarity+(q?' on':'')+'">'
   +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
@@ -293,7 +295,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    const blocked=q.debit>n.money?'소지금 부족':n.refused.includes(it.id+':'+mode)?'오늘 거절됨':full?'가방 가득':'';
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
- return '<div class="counter"><h4>보급 후 변화</h4><ul class="effects">'
+ return '<div class="tillpanel"><h4>보급 후 변화</h4><ul class="effects">'
  +(changes.length?changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join(''):'<li><span>이 손님의 준비는 달라지지 않는다</span><b></b></li>')
  +'</ul>'+readout(n,it.id)
  +'<details><summary>전체 효과 · 상품 설명</summary>'+effectList(it)+'<p class="smalltext">'+E(it.description)+'</p></details>'

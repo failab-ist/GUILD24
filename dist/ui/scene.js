@@ -64,10 +64,10 @@ function wall(seed=7){
 function counter(){
  let s=r(0,0,360,120,'#b8b0a0');
  for(let y=68;y<120;y+=16)for(let x=0;x<360;x+=22)s+=r(x,y,21,15,(x/22+y/16)%2?'#bdb5a4':'#b1a998');
- s+=r(104,0,152,46,'#39434b')+r(104,0,152,4,'#5d6a74')                          // register
-  +r(112,6,136,32,'#141b1f')+r(116,9,128,26,'#123021')
-  +r(104,40,152,6,'#2a333a');
- for(let i=0;i<7;i++)s+=r(112+i*20,48,16,7,'#57636c');
+ s+=r(100,0,160,58,'#39434b')+r(100,0,160,4,'#66737d')+r(100,54,160,4,'#232a30')   // register casing
+  +r(104,19,152,34,'#20272c')+r(108,21,144,30,'#101a15')+r(110,23,140,26,'#0d2418')  // recessed display
+  +r(108,21,144,2,'#000000')+r(100,4,160,15,'#3f4952');                             // bezel + caption strip
+ for(let i=0;i<7;i++)s+=r(110+i*21,60,17,7,'#57636c');
  s+=r(252,4,58,38,'#efe6c8')+r(252,4,58,8,'#d9a447')                            // promo standee
   +r(257,18,46,3,'#8a7f63')+r(257,26,34,3,'#8a7f63')+r(272,42,16,5,'#c9bfa0');
  s+=r(20,52,320,10,'#c6a26c')+r(20,62,320,4,'#8a6435')+r(26,66,308,34,'#6b4a2e') // counter
@@ -128,7 +128,8 @@ function slot(name,fallback,cls='band-art'){
    the art so a production replacement only has to restate these, never touch a screen. */
 const anchors={
  daysign:{band:'ceiling',left:31.1,top:65.2,width:37.8,height:34.8},
- till:{band:'counter',left:31.1,top:5,width:37.8,height:26.7}
+ tillLabel:{band:'counter',left:27.8,top:3.3,width:44.4,height:12.5},
+ till:{band:'counter',left:30.6,top:19.2,width:38.9,height:21.7}
 };
 const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),

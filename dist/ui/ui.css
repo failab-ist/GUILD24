@@ -118,11 +118,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-morning{background:#100c09}
 .store{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .band{position:relative;flex-shrink:0;width:100%}
+/* anchors are percentages of the ART, so the mount is exactly the art's box */
+.band .mount{position:relative;display:block;width:100%}
 .band .band-art{display:block;width:100%;height:auto}
-.band.ceiling{aspect-ratio:360/92}
 .band.wall{flex:1 1 auto;min-height:104px;overflow:hidden;background:var(--tex-tile),#c6bda8;background-size:48px 36px}
 .band.wall .band-art{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto}
-.band.counter{aspect-ratio:360/120;height:auto}
 .band.wall:after{content:'';position:absolute;inset:0;
  background:linear-gradient(180deg,#0a121ac4 0,#0a121a3d 42%,#00000000 70%,#140d0866 100%)}
 /* the shop sign hanging from the ceiling carries the day */
@@ -165,10 +165,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .slip.event .stamp-line{margin:0 0 6px;color:#2f7a4d;box-shadow:inset 0 0 0 2px #2f7a4d}
 .slip.event .body{display:block;font:400 13px/1.6 var(--ui);color:#5f5440}
 /* ---- counter band: the till and the store support tray ---- */
-.till{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;white-space:nowrap}
-.till i{font:700 12px/1 var(--f-sign);font-style:normal;color:#8ec8a6;-webkit-font-smoothing:none}
-.till b{font:400 24px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 6px #3fe08c66;-webkit-font-smoothing:none}
-.tray{position:absolute;left:90px;bottom:6px;right:8px;z-index:2;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.till-cap{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden;
+ white-space:nowrap;font:600 11px/1 var(--ui);letter-spacing:.22em;color:#8e9aa3;text-shadow:0 1px 0 #10161a}
+.till{position:absolute;z-index:2;display:flex;align-items:baseline;justify-content:center;gap:2px;overflow:hidden;white-space:nowrap}
+.till i{font:400 13px/1 var(--f-led);font-style:normal;color:#5fd196;-webkit-font-smoothing:none;text-shadow:0 0 5px #3fe08c4d}
+.till b{font:400 24px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 7px #3fe08c73;-webkit-font-smoothing:none}
+.tray{position:absolute;left:34%;bottom:5%;right:2%;z-index:2;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
 .tray .plate{min-height:34px;min-width:0;padding:8px 10px;font:400 12px/1 var(--f-plate);-webkit-font-smoothing:none;color:#463a1c;background:#a78d52;opacity:.75;
  box-shadow:inset 2px 2px 0 #ffe3a8,inset -2px -2px 0 #8a6a2c,2px 2px 0 #00000073}
 .tray .plate:hover{background:#d3b169}
@@ -265,18 +267,25 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .dial button:disabled{opacity:.3}
 .dial output{min-width:50px;text-align:center;font:600 20px/44px var(--ui);font-variant-numeric:tabular-nums;
  background:#fbf6e6;color:#1f1809;box-shadow:inset 2px 2px 0 #00000033,inset -2px -2px 0 #ffffff8c}
-.dial .set{display:flex;gap:4px;margin-left:auto}
+.dial .set{display:flex;gap:2px;margin-left:auto;align-items:center}
 .dial .set button{flex:0 0 auto}
-.dial .set button{min-width:44px;padding:0 4px;background:transparent;color:#8a7c60;font:400 13px/1 var(--ui);
- box-shadow:inset 0 0 0 1px #00000024}
-.dial .set button:hover{background:#00000008;color:#4b4231}
+.dial .set button{min-width:44px;min-height:44px;padding:0 4px;background:transparent;color:#9c8f72;font:400 13px/44px var(--ui);
+ box-shadow:none;border-bottom:1px dotted #00000038;border-radius:0}
+.dial .set button:hover{background:transparent;color:#4b4231;border-bottom-color:#4b4231}
+.dial .set button:active{transform:none;color:#2f7a4d;border-bottom-color:#2f7a4d}
 .rubber{display:block;width:calc(100% - 32px);margin:12px 16px 6px;background:transparent;color:#7a5a2a;
  font:600 14px/1 var(--ui);letter-spacing:.02em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.8}
 .rubber:hover{background:#00000008;opacity:1}
 .rubber:disabled{opacity:.28}
 .form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
-.p-order .dock{display:flex;gap:10px;background:#150f0a;box-shadow:inset 0 3px 0 #ffffff14}
-.p-order .dock .stamp{flex:1;min-height:54px;font:600 20px/1 var(--ui);letter-spacing:.04em}
+.p-order .dock{position:relative;display:flex;gap:10px;padding-top:16px;
+ background:var(--tex-paper),#e6ddc6;box-shadow:0 -5px 0 #00000059}
+.p-order .dock:before{content:'';position:absolute;left:0;right:0;top:0;height:8px;
+ background:linear-gradient(-45deg,#e6ddc6 25%,#00000000 25%) 0 0/12px 8px repeat-x,
+            linear-gradient(45deg,#e6ddc6 25%,#00000000 25%) 0 0/12px 8px repeat-x;transform:scaleY(-1);transform-origin:top}
+.p-order .dock .stamp{flex:1;min-height:54px;font:600 20px/1 var(--ui);letter-spacing:.04em;
+ background:#2f7a4d;color:#f0fbf3;
+ box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #2a231766}
 /* =====================================================================
    Phases not yet recomposed keep working on the new material tokens.
    They are next in the Chunk F order and will get their own grammar.
@@ -340,9 +349,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .good .price b{font-family:var(--mono);color:var(--gold)}
 .good .price span{font-size:var(--t-xs);color:var(--faint)}
 .good.open{background:#ffffff0f}
-.counter{padding:12px 0 16px;background:#ffffff08;box-shadow:inset 0 -3px 0 var(--gold);margin-bottom:8px}
-.counter h4{font:800 var(--t-xs)/1 var(--mono);letter-spacing:.14em;color:var(--faint);margin-bottom:6px}
-.counter .effects{margin-bottom:12px}
+.tillpanel{padding:12px 0 16px;background:#ffffff08;box-shadow:inset 0 -3px 0 var(--gold);margin-bottom:8px}
+.tillpanel h4{font:800 var(--t-xs)/1 var(--mono);letter-spacing:.14em;color:var(--faint);margin-bottom:6px}
+.tillpanel .effects{margin-bottom:12px}
 .tills{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:sticky;bottom:0;padding:12px 0 8px;
  background:linear-gradient(0deg,var(--soil) 72%,#17130f00)}
 .tills button{display:grid;gap:3px;justify-items:center;padding:10px 2px;min-height:74px}
