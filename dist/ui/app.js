@@ -478,7 +478,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'start':{const seed=$('#seed')?.value.trim()||'g24-'+Date.now().toString(36);if(s&&s.phase!=='end')game.end(false,'점주가 영업을 마감했습니다.');game.start(seed,contract);selected=null;setModal(null);render();break;}
  case'qty':game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound('quantity');render();break;
  case'confirm-order':game.confirmOrder();sound('order');render();break;
- case'night-skip':{let i=(s.nightCursor||0)+1;while(i<s.results.length&&!weighty(s.results[i]))i++;s.nightCursor=Math.min(s.results.length,i);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();break;}
+ case'night-skip':{s.nightCursor=Presentation.nightSkip(s.results,s.nightCursor);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();break;}
  case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();const result=s.results[s.nightCursor];if(result)sound(result.outcome==='사망'?'death':result.outcome==='중상'?'severe':result.outcome==='부상'?'injury':result.outcome==='대성공'?'great':result.discoveries?.length?'discovery':result.changes?.length?'level':'return');break;
  case'event-seen':setModal(null);render();break;
  case'event-again':setModal('event');break;
