@@ -1,14 +1,58 @@
 {
  "widths": [
+  320,
   360,
   390,
-  430
+  430,
+  600
  ],
  "height": 780,
  "captured": "2026-09-10",
  "results": [
   {
    "screen": "morning",
+   "width": 320,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "order",
+   "width": 320,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "sale",
+   "width": 320,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "night",
+   "width": 320,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "closing",
+   "width": 320,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "relic",
+   "width": 320,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "final",
+   "width": 320,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "morning",
    "width": 360,
    "fails": [],
    "warn": []
@@ -130,6 +174,48 @@
   {
    "screen": "final",
    "width": 430,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "morning",
+   "width": 600,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "order",
+   "width": 600,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "sale",
+   "width": 600,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "night",
+   "width": 600,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "closing",
+   "width": 600,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "relic",
+   "width": 600,
+   "fails": [],
+   "warn": []
+  },
+  {
+   "screen": "final",
+   "width": 600,
    "fails": [],
    "warn": []
   }

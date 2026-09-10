@@ -141,6 +141,45 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  for(const bad of ['성공 확률','사망 확률','안전 점수'])assert.ok(!app.includes(bad),'no exact probability or master safety score');
 });
 
+test('NPC PRODUCTION ART: one resolver for every player-facing portrait',()=>{
+ // The adoption gap was that each surface kept its own pre-existing avatar call, so
+ // adopting production art in Sale did not reach Night, the notebook or the Final muster.
+ assert.ok(/function portrait\(n,size/.test(app),'a single portrait resolver exists');
+ assert.ok(/function portrait\([^)]*\)\{[\s\S]{0,220}Scene\.npcArt\(n\)/.test(app),
+  'the resolver reads the production art source');
+ for(const fnName of ['beat','npcCard','npcDetail']){
+  const body=fn(fnName);
+  assert.ok(/portrait\(/.test(body),fnName+' renders its NPC through the shared resolver');
+  assert.ok(!/Art\.avatar\(/.test(body),fnName+' no longer calls the legacy avatar directly');
+ }
+ // Art.avatar survives only as the missing-asset fallback, inside the resolver and the
+ // Sale figure it backs.
+ const calls=(app.match(/Art\.avatar\(/g)||[]).length;
+ assert.equal(calls,2,'the legacy avatar is only the fallback (resolver + Sale figure)');
+ assert.ok(/\.pfp\{[^}]*object-fit:contain/.test(css),'the portrait box contains, never crops or stretches');
+ assert.ok(/\.pfp\{[^}]*width:var\(--pfp[^)]*\);height:var\(--pfp/.test(css),'the portrait box is square at every size');
+});
+
+test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
+ const b=fn('beat');
+ for(const call of ['Presentation.nightTone(r)','Presentation.nightVerdict(r)','Presentation.nightHappened(r)','Presentation.nightWhy(r)'])
+  assert.ok(b.includes(call),'the beat reads '+call+' rather than its own copy');
+ assert.ok(fn('changedRows').includes('Presentation.nightChanges(r)'),'WHAT CHANGED comes from the same report');
+ for(const dead of ['function outcomeReason','function whyLine','function beatTone','function changeToken'])
+  assert.ok(!app.includes(dead),'the duplicated screen-local copy helper is gone: '+dead);
+});
+
+test('CLOSING supply impact names the actual product and the actual adventurer',()=>{
+ assert.ok(fn('closingScreen').includes('Presentation.supplyImpact(r)'),'Closing reads the attribution helper');
+ const build=read('dist/ui/app.js')+read('dist/ui/presentation.js')+read('dist/systems/dungeon.js');
+ for(const rejected of ['환경 부담을 줄였다','대응 보급이','환경 피해를 막았다'])
+  assert.ok(!build.includes(rejected),'the rejected generic supply wording is gone: '+rejected);
+ assert.ok(/supplyLines[\s\S]{0,400}items\.join\(' · '\)\+' → '/.test(read('dist/ui/presentation.js')),
+  'an impact line reads product -> result');
+ assert.ok(/if\(!items\.length\)continue;/.test(read('dist/ui/presentation.js')),
+  'an event with no attributable item is never reported');
+});
+
 test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progress wording',()=>{
  assert.ok(!/traitDirections|▲|◆ 양면|▼/.test(app),'no Trait quality label reaches the render path');
  assert.ok(!app.includes('buildNames'),'no Relic Build Axis name is rendered');

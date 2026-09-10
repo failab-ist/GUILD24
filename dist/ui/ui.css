@@ -515,7 +515,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .returner{display:block;flex:0 0 auto;width:min(44vw,190px);height:min(44vw,190px);
  object-fit:contain;object-position:50% 100%;image-rendering:auto;
  filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 14px #ffd79a3d)}
-.returner.small{width:auto;height:auto;filter:none;display:grid;place-items:end}
+.returner.small{filter:drop-shadow(0 2px 0 #00000073)}
 .beat.quiet .stand-in{gap:12px;margin-bottom:12px}
 .beat .who{flex:1 1 auto;min-width:0;padding-bottom:4px}
 .verdict{font:700 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
@@ -607,8 +607,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .purse b i{font-style:normal;font-size:15px;margin-left:3px;color:#b3a68b}
 .impact{margin-top:14px;padding-top:11px;box-shadow:inset 0 2px 0 #2c241826}
 .impact h4{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#6b6350;margin-bottom:7px}
-.impact p{font:400 13px/1.6 var(--ui);color:#4a4335}
+.impact p{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
+ font:400 13px/1.6 var(--ui);color:#4a4335;padding:3px 0}
 .impact p b{color:#2c2418;font-weight:600}
+.impact p b:after{content:' →';color:#8a8270;font-weight:400}
+.impact p span{color:#4a4335}
 .print .foot{margin-top:12px;font:400 11px/1.6 var(--ui);color:#8a8270}
 /* =====================================================================
    MODAL LAYER — the utility drawer. Not a phase, so it stays quiet: a panel that
@@ -739,6 +742,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .loyalty .bar{height:6px;background:#00000073;box-shadow:inset 1px 1px 0 #00000080}
 .loyalty .bar span{display:block;height:100%;background:var(--gold)}
 .rare-badge{display:inline-block}
+/* every player-facing NPC portrait: a square box, the sticker contained inside it, so
+   the same customer is the same person at 60px in the notebook and 190px in Night */
+.pfp{display:block;flex:0 0 auto;width:var(--pfp,56px);height:var(--pfp,56px);
+ object-fit:contain;object-position:50% 100%;image-rendering:auto}
+.pfp.fallback{display:grid;place-items:center}
 /* the loadout: who is carrying what through the gate */
 .final-team{display:grid;gap:9px;margin-bottom:20px}
 .final-member{display:block;width:100%;text-align:left;padding:11px 12px;background:#1c1512;border-radius:0;

@@ -149,6 +149,15 @@ function readout(n,extra=null){
  +(compact?'':'<p class="estimate">지금의 능력과 준비로 본 예상. 실제 원정은 달라질 수 있다.</p>')+'</div>';}
 function returningSummary(n){const r=Presentation.returning(n);if(!r)return '';
  return '<aside class="since" aria-label="지난 방문 이후"><b>지난 원정 · DAY '+r.day+' '+E(r.outcome)+'</b>'+(r.changes.length?'<p>'+r.changes.map(E).join(' · ')+'</p>':'')+(r.impact?'<p>'+E(r.impact)+'</p>':'')+'</aside>';}
+// Every player-facing NPC portrait resolves here, so a customer keeps the same face
+// walking from Sale to Night to the notebook to the Final muster. The production sticker
+// is roughly square and is only ever contained inside a square box — no crop, no stretch,
+// nothing baked in. Art.avatar is the fallback for an NPC with no production asset yet.
+function portrait(n,size,cls=''){
+ const art=n&&Scene.npcArt(n);
+ return art?'<img class="pfp '+cls+'" src="'+art+'" alt="" draggable="false" style="--pfp:'+size+'px">'
+           :'<span class="pfp fallback '+cls+'" style="--pfp:'+size+'px">'+Art.avatar(n,size)+'</span>';
+}
 // SALE — the customer is at the counter. Three layers read down the screen:
 // WHO IS HERE (the waiting line as identical backs, the active customer as the single
 // large foreground object), WHAT IS KNOWN about them (the counter surface), and WHAT TO
@@ -231,56 +240,35 @@ function nightScreen(){
 // The tone of a beat is the actual outcome, never a score: 대성공 warm, 퇴각/부상 ember,
 // 중상 blood, 사망 bone. 위기에서 생환 keeps its own reading so the rescue is not
 // presented as an ordinary success.
-function beatTone(r){return r.outcome==='사망'?'gone':r.outcome==='중상'?'severe':
- ['부상','퇴각'].includes(r.outcome)?'hurt':r.outcome==='대성공'?'great':'safe';}
 function beat(r){
- const n=game.run.npcs.find(x=>x.id===r.npcId),tone=beatTone(r),heavy=weighty(r);
- const art=n&&Scene.npcArt(n),verdict=r.rescued&&tone!=='gone'?'위기에서 생환':r.outcome;
- const why=whyLine(r);
+ const n=game.run.npcs.find(x=>x.id===r.npcId),tone=Presentation.nightTone(r),heavy=weighty(r);
+ const art=n&&Scene.npcArt(n),verdict=Presentation.nightVerdict(r);
+ const why=Presentation.nightWhy(r);
  return '<article class="beat t-'+tone+(heavy?'':' quiet')+'">'
  +'<div class="stand-in">'
   +(heavy&&art?'<img class="returner" src="'+art+'" alt="" draggable="false">'
-              :'<span class="returner small">'+Art.avatar(n,heavy?84:52)+'</span>')
+              :portrait(n,heavy?96:72,'returner small'))
   +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
    +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')+'</div>'
  +'</div>'
- +'<p class="what">'+E(outcomeReason(r))+'</p>'
- +(why?'<p class="why"><i aria-hidden="true"></i>'+why+'</p>':'')
+ +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
+ +(why?'<p class="why"><i aria-hidden="true"></i>'+E(why)+'</p>':'')
  +'<div class="changed">'+changedRows(r)+'</div>'
- +((r.events||[]).length?'<p class="influence">'+E(r.events[0].text)+'</p>':'')
+ +supplyNote(r)
  +(tone==='gone'?'<p class="gone-note">다시는 가게 문을 열지 않는다.</p>':'')
  +(heavy?'<blockquote>'+E(r.quote)+'</blockquote>':'')+'</article>';
 }
 // Importance decides presentation weight: a quiet return must not cost the same
 // screen time as a death or a level-up (UI-Q31).
 function weighty(r){return r.outcome!=='성공'||r.rescued||r.avoidedDeath||(r.events||[]).length>0||(r.changes||[]).some(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));}
-function whyLine(r){const bits=[];
- if(r.combatWon===false)bits.push('적을 물리치지 못했다.');else if(r.combatWon===true)bits.push('적을 물리쳤다.');
- if(r.environmentHurt)bits.push(r.cause&&r.cause!=='accident'?(D.hazards[r.cause]||'보급 부담')+' 때문에 원정 내내 고전했다.':'원정 중 예상치 못한 사고가 있었다.');
- return E(bits.join(' '));}
-// WHAT CHANGED — only what actually moved, each one a stamped token rather than a line
-// of a ledger. Growth reads as before -> after so the change is visible, not asserted.
-// The resolution writes these as sentences; this splits each into its own label and value
-// so a level-up, a new trait, a promotion and a piece of kit are told apart at a glance.
-function changeToken(text){
- let m=/^Lv\.\s*(.+)$/.exec(text);                       if(m)return ['up','레벨','Lv. '+E(m[1])];
- m=/^새 특성\s*[「'"']?(.+?)[」'"']?$/.exec(text);            if(m)return ['up','새 특성',E(m[1])];
- m=/^(.*?)\s*승급$/.exec(text);                           if(m)return ['up','승급',E(m[1])];
- m=/^(.+?)\s*·\s*(전투\s*\+\d+)$/.exec(text);            if(m)return ['up','장비',E(m[1])+' <em>'+E(m[2])+'</em>'];
- return ['up','변화',E(text)];
-}
-function changedRows(r){const tok=(cls,label,value)=>
-  '<span class="tok '+cls+'"><i>'+E(label)+'</i><b>'+value+'</b></span>';
- const out=[];
- (r.changes||[]).slice(0,3).forEach(c=>out.push(tok(...changeToken(c))));
- (r.statChanges||[]).slice(0,4).forEach(x=>{const label=Presentation.labels[x.key];
-  if(label)out.push(tok('up',label,Math.round(x.before)+' → '+Math.round(x.after)));});
- if(r.recovery)out.push(tok('down','휴식',r.recovery+'일'));
- else if(r.injury)out.push(tok('down','남은 부상','강인함 -'+(r.injury*5)+' · 투력 -'+(r.injury*3)));
- out.push(tok('','경험치','+'+r.xp));
- out.push(tok('gain','전리품',r.loot+'G'));
- return out.join('');}
+// The one line that says what the player's own product did for this adventurer.
+function supplyNote(r){const lines=Presentation.supplyLines(r);
+ return lines.length?'<p class="influence">'+E(lines[0].text)+'</p>':'';}
+// WHAT CHANGED — Presentation decides what actually moved; this only stamps it.
+function changedRows(r){
+ return Presentation.nightChanges(r).map(c=>'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
+  +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>').join('');}
 // CLOSING — `오늘 장사는 어땠을까?`. Economics only; the expedition story belongs to Night.
 // The object is the till roll the register printed when the shutter came down: a narrow
 // strip torn at both ends, lying on the dark counter under the same lamp. Not the order
@@ -291,7 +279,9 @@ function closingScreen(){
  const s=game.run,d=s.daily,margin=d.revenue-d.cogs;
  const profit=margin+(d.subsidy||0)+(d.commission||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
  const line=(label,value,cls='')=>'<div class="row '+cls+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
- const impact=s.results.filter(r=>r.events?.length).slice(0,3);
+ /* only what an actual sold item actually did, named product first. A sale with no
+    meaningful expedition contribution simply does not appear. */
+ const impact=s.results.flatMap(r=>Presentation.supplyImpact(r)).slice(0,4);
  const body='<div class="tape">'
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
@@ -304,7 +294,7 @@ function closingScreen(){
   +'<div class="block">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)+line('재고 정리',d.liquidation)+'</div>'
   +'<div class="purse"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b></div>'
   +(impact.length?'<div class="impact"><h4>오늘의 보급 영향</h4>'
-    +impact.map(r=>'<p><b>'+E(r.name)+'</b> '+E(r.events[0].text)+'</p>').join('')+'</div>':'')
+    +impact.map(l=>'<p><b>'+E(l.items.join(' · '))+'</b><span>'+E(l.who)+'의 '+E(l.effect)+'</span></p>').join('')+'</div>':'')
   +'<p class="foot">미판매 재고는 자산으로 남는다. 발주 지출과 판매 원가를 손익에서 두 번 빼지 않는다.</p>'
  +'</div>'
  +'<div class="tear bottom" aria-hidden="true"></div></div>';
@@ -405,7 +395,6 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  +'<details><summary>전체 효과 · 상품 설명</summary>'+effectList(it)+'<p class="smalltext">'+E(it.description)+'</p></details>'
  +'<p class="smalltext">'+(st.expires===null?'유통기한 없음':'폐기까지 '+(st.expires-s.day)+'일')+' · 가장 먼저 폐기될 재고부터 나간다</p>'
  +'<div class="tills">'+actions+'</div></div>';}
-function outcomeReason(r){if(r.outcome==='사망')return '전투에서 밀린 뒤 돌아오지 못했다.';if(r.avoidedDeath)return '보급이 마지막 순간의 사망을 막았다.';if(r.outcome==='중상')return '큰 부상을 입었다. 회복할 시간이 필요하다.';if(r.outcome==='퇴각')return '원정은 끝내지 못했지만 무사히 빠져나왔다.';if(r.outcome==='부상')return (r.combatWon??r.debug?.combatSuccess)?'전투를 이겼지만 돌아오는 길은 험했다.':'원정을 끝내지 못하고 다친 채 돌아왔다.';return r.outcome==='대성공'?'예상보다 일찍 게이트에서 나왔다.':'원정을 마치고 돌아왔다.';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>'<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p></div>').join('')+'</details>';}
 function relicTakeover(){const s=game.run,w=s.relicWindow;
@@ -424,7 +413,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
 function endBanner(){const s=game.run,a=game.account;
  return '<div class="end-banner"><span class="eyebrow">'+(s.win?'THE GATE IS CLOSED':'END OF THIS RUN')+'</span><h2>'+(s.win?'우리가 키운 애들이, 해냈다.':'이번 점포의 영업이 끝났다.')+'</h2><p>'+E(s.endReason)+'</p>'
  +'<div class="row wrap"><span class="meta-xp">점주 XP +'+(s.metaReward||0)+'</span><span class="muted">가맹등급 '+a.grade+' · 누적 '+a.xp+' XP · '+a.runs+'번째 런</span>'+btn('해금 확인','codex','bare')+'</div></div>';}
-function npcCard(n,action='npc'){const s=game.run;return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${action==='team'&&(!n.alive||n.recovery)?'disabled':''}><div class="row">${Art.avatar(n,56)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${Adventurer.rank(n)}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${action==='team'?(s.team.includes(n.id)?'선택됨':'원정대 선택'):'기록 보기'}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
+function npcCard(n,action='npc'){const s=game.run;return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${action==='team'&&(!n.alive||n.recovery)?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${Adventurer.rank(n)}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${action==='team'?(s.team.includes(n.id)?'선택됨':'원정대 선택'):'기록 보기'}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
 function finalScreen(){
@@ -451,7 +440,7 @@ function endScreen(){const s=game.run;
 function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업을 시작하면 모험가 수첩이 열린다.</p>';
  return '<p class="smalltext">이름을 누르면 마지막 보급과 원정 기록을 볼 수 있다. 사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'
  +s.npcs.filter(n=>n.introduced).sort((a,b)=>Number(b.alive)-Number(a.alive)||b.loyalty-a.loyalty).map(n=>npcCard(n)).join('')+'</div>';}
-function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';return `<div class="npc-detail"><div class="identity">${Art.avatar(n,92)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${Adventurer.rank(n)} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p><p>남은 부상 ${n.injury} · 피로 ${n.fatigue} · 휴식 ${n.recovery}일</p><p class="muted">${n.loyalty>=51?'성장 잠재력: '+(n.potential>=1.18?'빠른 성장':n.potential>=1.1?'꾸준한 성장':'착실한 성장'):'더 친해지면 성장 잠재력과 남은 특성을 알 수 있습니다.'}</p><h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
+function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${Adventurer.rank(n)} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p><p>남은 부상 ${n.injury} · 피로 ${n.fatigue} · 휴식 ${n.recovery}일</p><p class="muted">${n.loyalty>=51?'성장 잠재력: '+(n.potential>=1.18?'빠른 성장':n.potential>=1.1?'꾸준한 성장':'착실한 성장'):'더 친해지면 성장 잠재력과 남은 특성을 알 수 있습니다.'}</p><h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 function unlockProgress(key){if(!key)return '기본 제공';const [label,target]=D.unlocks[key];const val=game.account.progress[key]||0;return game.account.unlocked.includes(key)?'해금 완료':`${label} ${Math.min(val,target)}/${target}`;}
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:codexTab==='contracts'?D.contracts:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 가맹등급 ${a.grade} · ${fmt(a.xp)} XP</h3><p class="smalltext">${['','신입 점주','초기자금 +50G','일반 상품 +1 추가','기본 창고 +2 추가','리롤 비용 감소 추가','첫 던전 정보 +1 추가'][a.grade]} · 이전 등급 혜택 누적</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${(a.discoveries||[]).length}개</summary>${(a.discoveries||[]).map(e=>`<p class="discovery">${E(e.text)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['contracts','시작 계약']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='monsters'?D.dungeons.map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${it.unlock&&!a.unlocked.includes(it.unlock)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3><p>${E(it.description||'길드 등록 직업.')}</p>${it.effects?effectList(it):''}<p class="gold-text" style="margin-top:8px">${unlockProgress(it.unlock)}</p></div>`).join('')}</div>`;}
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 상품 기본 매입가의 50%를 회수합니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${st.expires===null?'유통기한 없음':(st.expires-s.day)+'일 남음'}</p>${['morning','order','night','closing','final'].includes(s.phase)?btn('1개 정리 +'+Math.floor(it.buy*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}

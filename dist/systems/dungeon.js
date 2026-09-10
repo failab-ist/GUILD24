@@ -58,9 +58,9 @@ function resolve(n,d,r,facilities=[],options={}){
   const deficit=clamp(1-score/d.power,0,1);deathChance=clamp(.04+deficit*.16+e.injuryRisk-e.survival*.0007,.012,.22);
   if(deathRoll<deathChance)outcome='사망';else if(injuryRoll<.42+e.injuryRisk-e.injuryGuard*.25)outcome='중상';
  }else if(affected||r.next()<e.injuryRisk){outcome=injuryRoll<.13-e.injuryGuard*.12?'중상':'부상';}
- if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&r.next()<clamp(e.escape,.0,.96)){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
- if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
- if(['부상','중상'].includes(outcome)&&r.next()<clamp(e.injuryGuard,0,.9)){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('치료용품·강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'부상 방어 효과가 부상 단계를 낮췄다.'});}
+ if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&r.next()<clamp(e.escape,.0,.96)){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
+ if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
+ if(['부상','중상'].includes(outcome)&&r.next()<clamp(e.injuryGuard,0,.9)){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('치료용품·강골이 부상 단계를 완화');p.events.push({id:'injury-guard',items:n.pack.filter(id=>D.itemBy[id].effects.injuryGuard),text:'부상 방어 효과가 부상 단계를 낮췄다.'});}
  if(outcome==='사망')n.alive=false;
  n.injury=outcome==='중상'?2:outcome==='부상'?1:Math.max(0,n.injury-1);
  n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
@@ -69,7 +69,11 @@ function resolve(n,d,r,facilities=[],options={}){
  const changes=G.Adventurer.grow(n,xp,r);let loot=n.alive?Math.round((35+d.day*8)*(outcome==='퇴각'?.08:won?1:.18)*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money+=loot;
- if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<clamp(.06+bare.hazard*.012-bare.effects.survival*.001,.02,.48);p.events.push({id:'hazard-'+d.id,text:mitigated.map(h=>D.hazards[h]).join('·')+(prevented?' 대응 보급이 환경 피해를 막았다.':' 대응 보급이 원정의 환경 부담을 줄였다.'),prevented});}}
+ if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<clamp(.06+bare.hazard*.012-bare.effects.survival*.001,.02,.48);
+  /* structure only: which Hazards were actually mitigated and which carried Items did it.
+     The sentence is composed in the presentation layer so one wording serves Night,
+     Closing and the returning-visitor line. */
+  p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
  n.records.push({...report,debug:undefined});
  report.quote=outcome==='사망'?'마지막 영수증만 카운터에 남았다.':avoidedDeath?'사장님, 이거 없었으면 못 돌아왔어요.':rescued?'챙겨 간 보급이 귀환을 도왔어요.':outcome==='중상'?'며칠만 쉬고 올게요. 제 자리 남겨 둬요.':outcome==='부상'?'좀 다쳤지만, 살아 돌아왔어요.':changes.length?'조금은 익숙해진 것 같아요.':report.items.length?'다녀왔습니다.':affected?'예상하지 못한 일이 있었어요. 잠깐 쉬어야겠어요.':outcome==='퇴각'?'일단 살고 봐야죠. 내일 다시 올게요.':'다녀왔습니다. 늘 먹던 걸로 주세요.';

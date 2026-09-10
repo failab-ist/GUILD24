@@ -26,8 +26,80 @@ function traitText(id){const t=D.traitBy[id],parts=traitEffects(id).map(r=>r.lab
 function known(d,g){return d.hazards;}
 function preview(n,d,fac,item){const visible={...n,traits:traits(n)},before=G.Dungeon.prepare(visible,d,fac).effects,after=G.Dungeon.prepare({...visible,pack:[...visible.pack,item]},d,fac).effects;
  return Object.keys(labels).filter(k=>!['priceBias','buyBias','luck','variance'].includes(k)&&Math.abs((before[k]||0)-(after[k]||0))>.001).map(k=>({key:k,label:labels[k],before:before[k]||0,after:after[k]||0,bad:negative.has(k)?after[k]>before[k]:after[k]<before[k]}));}
-function returning(n){if(!n.introduced||n.newToday||!n.records.length)return null;const r=n.records.at(-1),changes=(r.changes||[]).filter(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));if(r.injury>n.injury)changes.push(n.injury?'부상 완화':'부상 회복');if(r.recovery>0&&!n.recovery)changes.push('휴식 종료');return {day:r.day,outcome:r.outcome,changes,impact:r.events?.[0]?.text||null};}
+function returning(n){if(!n.introduced||n.newToday||!n.records.length)return null;const r=n.records.at(-1),changes=(r.changes||[]).filter(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));if(r.injury>n.injury)changes.push(n.injury?'부상 완화':'부상 회복');if(r.recovery>0&&!n.recovery)changes.push('휴식 종료');return {day:r.day,outcome:r.outcome,changes,impact:supplyLines(r)[0]?.text||null};}
+/* ---- NIGHT: one resolved state, told four ways --------------------------------
+   Outcome label, WHAT_HAPPENED, WHY and WHAT_CHANGED all read off the same report, so
+   they cannot contradict each other. Nothing here decides anything: the resolution has
+   already happened and this only describes it. Kept in the presentation module rather
+   than in the screen so the whole outcome matrix is testable without a browser. */
+function nightTone(r){return r.outcome==='사망'?'gone':r.outcome==='중상'?'severe':
+ ['부상','퇴각'].includes(r.outcome)?'hurt':r.outcome==='대성공'?'great':'safe';}
+/* A rescue is never dressed up as an ordinary success, and never as a death. */
+function nightVerdict(r){return r.rescued&&r.outcome!=='사망'?'위기에서 생환':r.outcome;}
+function nightHappened(r){
+ if(r.outcome==='사망')return '전투에서 밀린 뒤 돌아오지 못했다.';
+ if(r.avoidedDeath)return '보급이 마지막 순간의 사망을 막았다.';
+ if(r.outcome==='중상')return '큰 부상을 입었다. 회복할 시간이 필요하다.';
+ /* 퇴각 and 부상 both reach here from a won fight as well as a lost one — the injury
+    guard can turn a won-fight injury into a retreat — so the line has to say which. */
+ if(r.outcome==='퇴각')return r.combatWon?'전투는 이겼지만 원정을 끝내지 못하고 빠져나왔다.'
+                                        :'원정은 끝내지 못했지만 무사히 빠져나왔다.';
+ if(r.outcome==='부상')return r.combatWon?'전투를 이겼지만 돌아오는 길은 험했다.'
+                                        :'원정을 끝내지 못하고 다친 채 돌아왔다.';
+ return r.outcome==='대성공'?'예상보다 일찍 게이트에서 나왔다.':'원정을 마치고 돌아왔다.';}
+/* WHY names only what actually acted. A Hazard that was fully covered has no incident
+   weight, so it can never be drawn as the cause — no false attribution is possible. */
+function nightWhy(r){const bits=[];
+ if(r.combatWon===false)bits.push('적을 물리치지 못했다.');
+ else if(r.combatWon===true)bits.push('적을 물리쳤다.');
+ if(r.environmentHurt)bits.push(r.cause&&r.cause!=='accident'
+  ?(D.hazards[r.cause]||'보급 부담')+' 때문에 원정 내내 고전했다.'
+  :'원정 중 예상치 못한 사고가 있었다.');
+ return bits.join(' ');}
+/* WHAT CHANGED — only what actually moved. A change the resolution wrote as a sentence
+   is split into its own label and value; anything that resolved to zero is left out. */
+function nightChange(text){
+ if(/^Lv\./.test(text))                          return {kind:'up',label:'레벨',value:text};
+ let m=null;
+ m=/^새 특성\s*[「'"]?(.+?)[」'"]?$/.exec(text);   if(m)return {kind:'up',label:'새 특성',value:m[1]};
+ m=/^(.*?)\s*승급$/.exec(text);                  if(m)return {kind:'up',label:'승급',value:m[1]};
+ m=/^(.+?)\s*·\s*(전투\s*\+\d+)$/.exec(text);   if(m)return {kind:'up',label:'장비',value:m[1],extra:m[2]};
+ return {kind:'up',label:'변화',value:text};}
+function nightChanges(r){const out=[];
+ for(const c of (r.changes||[]).slice(0,3))out.push(nightChange(c));
+ for(const x of (r.statChanges||[]).slice(0,4)){const label=labels[x.key];
+  if(label)out.push({kind:'up',label,value:Math.round(x.before)+' → '+Math.round(x.after)});}
+ if(r.recovery)out.push({kind:'down',label:'휴식',value:r.recovery+'일'});
+ else if(r.injury)out.push({kind:'down',label:'남은 부상',value:'강인함 -'+(r.injury*5)+' · 투력 -'+(r.injury*3)});
+ if(r.xp)out.push({kind:'',label:'경험치',value:'+'+r.xp});
+ if(r.loot)out.push({kind:'gain',label:'전리품',value:r.loot+'G'});
+ return out;}
+
+/* ---- SUPPLY IMPACT -------------------------------------------------------------
+   What the player actually sold, and what it actually did for that adventurer. Built
+   from the resolution's own events, so only a real contribution is named and only the
+   items that carried it. An event with no attributable item is not reported: a sale
+   with no meaningful expedition impact is simply absent. */
+const itemName=id=>D.itemBy[id]?.name||null;
+function supplyEffect(ev,r){
+ if(ev.id==='hazard'){const names=(ev.hazards||[]).map(h=>D.hazards[h]).filter(Boolean).join('·');
+  if(!names)return null;return names+(ev.prevented?' 피해 방지':' 위험 감소');}
+ if(ev.id==='escape')return r.avoidedDeath?'사망 위기에서 생환':'퇴각에 기여';
+ if(ev.id==='revive')return '사망을 중상으로';
+ if(ev.id==='injury-guard')return '부상 완화';
+ return null;}
+function supplyLines(r){const out=[];
+ for(const ev of r.events||[]){
+  const effect=supplyEffect(ev,r);if(!effect)continue;
+  const items=[...new Set((ev.items||[]).map(itemName).filter(Boolean))];
+  if(!items.length)continue;                       /* nothing honest to attribute */
+  out.push({items,effect,text:items.join(' · ')+' → '+effect});}
+ return out;}
+/* The same lines with the adventurer named, for Closing where the NPC is not on screen. */
+function supplyImpact(r){return supplyLines(r).map(l=>({...l,who:r.name,
+ text:l.items.join(' · ')+' → '+r.name+'의 '+l.effect}));}
 function modeLabel(mode){return D.pricing[mode]?.label||({normal:'정가(이전)',discount:'25% 할인(이전)',free:'무료 제공(이전)',supply:'최종 원정 보급'}[mode])||'이전 거래';}
 function amount(key,value){const v=percent.has(key)?value*100:value;return (Math.round(v*10)/10)+(percent.has(key)?'%p':'');}
-G.Presentation={returning,amount,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows};
+G.Presentation={returning,amount,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
+ nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,supplyLines,supplyImpact};
 })(globalThis);
