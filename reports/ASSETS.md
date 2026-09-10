@@ -20,6 +20,18 @@ Regenerate the vendored copies with `npm run assets`.
   Galmuri14 15px (body) · Galmuri11 12px (labels) · Galmuri11 Bold 12/24px (display) ·
   GalmuriMono11 12px (numerals).
 
+### Pretendard 1.3.9 — information UI face
+- source: npm `pretendard` (https://github.com/orioncactus/pretendard), (c) Kil Hyung-jin
+- licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
+  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL-Pretendard.txt`).
+- why: type carries two jobs and they must not be mixed. Galmuri is the atmosphere face
+  (signage, document titles, diegetic readouts); Pretendard is the information face — every
+  value, effect line, price, count and control label, including both primary actions. A
+  system stack was rejected: Korean fallbacks differ per platform, so readability could not
+  be guaranteed and the QA screenshots would not represent what a player sees.
+- how: Regular + SemiBold subset to the same glyph set by `tools/vendor-assets.py`
+  (1.5 MB each -> 59 KB each). Five faces ship in total at 192 KB.
+
 ### anime.js 4.5.0 — animation runtime
 - source: npm `animejs` (https://animejs.com), (c) Julian Garnier
 - licence: **MIT** (SPDX: MIT) — commercial use YES, modification YES, attribution: keep the notice
