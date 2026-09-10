@@ -190,11 +190,13 @@ function standee(n){
  const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
  return '<button class="who r'+n.rarity+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+' 기록 보기">'
  +'<span class="face">'
-  +'<span class="pool" aria-hidden="true"></span>'
-  +(art?'<img class="figure" src="'+art+'" alt="" draggable="false">'
-       :'<span class="figure fallback">'+Art.avatar(n,140)+'</span>')
-  +'<span class="stand" aria-hidden="true"></span>'
-  +'<span class="bracket" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'
+  +'<span class="portrait">'
+   +'<span class="pool" aria-hidden="true"></span>'
+   +(art?'<img class="figure" src="'+art+'" alt="" draggable="false">'
+        :'<span class="figure fallback">'+Art.avatar(n,140)+'</span>')
+   +'<span class="stand" aria-hidden="true"></span>'
+   +'<span class="bracket" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'
+  +'</span>'
   +'<span class="nameplate">'+(rank?'<i class="rank">'+E(rank)+'</i>':'')
    +'<b>'+E(n.name)+'</b><span>Lv.'+n.level+' '+job+'</span></span>'
  +'</span></button>';

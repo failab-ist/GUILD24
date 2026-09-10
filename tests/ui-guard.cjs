@@ -117,8 +117,14 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  assert.ok(!/\.figure\{[^}]*object-fit:cover/.test(css),'the NPC payload is never cover-cropped');
  assert.ok(/\.figure\{[^}]*width:var\(--artw\);height:var\(--artw\)/.test(css),'the payload box is square, so no sticker is squashed to fit');
  // the face and the backs are one deck: same proportion, and the payload overhangs the face
- assert.ok(/\.face\{[^}]*aspect-ratio:4\/5/.test(css)&&/\.line-up \.wait\{[^}]*aspect-ratio:4\/5/.test(css),
-  'the revealed card and the waiting backs share one card proportion');
+ // one deck geometry: the card's height is content, and the backs are the same shape
+ // scaled, so front and back agree at any width instead of only where they were drawn
+ assert.ok(/--cardh:calc\([^;]*var\(--artw\)[^;]*var\(--over\)[^;]*var\(--plateh\)\)/.test(css),
+  'the card height is derived from the payload and the plate, not a fixed ratio');
+ assert.ok(/\.line-up \.wait\{[^}]*width:calc\(var\(--cardw\)\*var\(--deck\)\);height:calc\(var\(--cardh\)\*var\(--deck\)\)/.test(css),
+  'the waiting backs are the card scaled, so front and back stay one deck');
+ assert.ok(/\.who \.nameplate\{[^}]*min-height:var\(--plateh\)/.test(css)&&/\.portrait\{[^}]*height:calc\(var\(--artw\) - var\(--over\)\)/.test(css),
+  'the plate sizes itself and the portrait box reserves exactly the payload height');
  assert.ok(/--artw:calc\(var\(--cardw\)\*1\.0[1-9]\)/.test(css),'the artwork is wider than the card face, never sealed inside it');
  // the waiting line leaks nothing about who is next
  const wait=fn('waitingLine').replace(/^\s*\/\/.*$/gm,'');

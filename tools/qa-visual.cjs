@@ -3,10 +3,14 @@
 // from the outside through tools/preview.cjs. Never part of `npm test`.
 // Chromium is preinstalled at /opt/pw-browsers — never run `playwright install`.
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
-const WIDTHS=[360,390,430],HEIGHT=780,PORT=Number(process.env.QA_PORT||5199);
+// The gate runs 360 / 390 / 430 x 780. QA_WIDTHS / QA_HEIGHT / QA_SCREENS sweep wider by
+// hand — e.g. a landscape phone, a 320 handset, a tablet — without editing this file.
+const list=(v,d)=>v?String(v).split(',').map(x=>x.trim()).filter(Boolean):d;
+const WIDTHS=list(process.env.QA_WIDTHS,[360,390,430]).map(Number);
+const HEIGHT=Number(process.env.QA_HEIGHT||780),PORT=Number(process.env.QA_PORT||5199);
 const OUT=path.resolve(__dirname,'../reports/ui');
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
-const SCREENS=['morning','order','sale','night','closing','relic','final'];
+const SCREENS=list(process.env.QA_SCREENS,['morning','order','sale','night','closing','relic','final']);
 
 // Page-side driver. Starts through the real UI, then advances days through the game's
 // own public API, so every screenshot is the shipped build a player would see.
@@ -130,13 +134,60 @@ async function audit(page,width,screen){
    &&el.children.length===0&&(el.textContent||'').trim().length>1
    &&getComputedStyle(el).position!=='absolute');
   const layer=new Map(leaves.map(el=>[el,pinned(el)]));
-  for(let i=0;i<leaves.length;i++)for(let j=i+1;j<leaves.length;j++){
+  // An inline run that wraps has one box per line; its bounding rect is the union of them
+  // and spills across lines it does not occupy, which reads as a collision that is not
+  // there. Compare the per-line boxes instead.
+  const boxes=el=>{const c=clip(el),out=[];
+   for(const r of el.getClientRects()){
+    const b={left:Math.max(r.left,c.left),right:Math.min(r.right,c.right),
+             top:Math.max(r.top,c.top),bottom:Math.min(r.bottom,c.bottom)};
+    if(b.right>b.left&&b.bottom>b.top)out.push(b);}
+   return out.length?out:[c];};
+  const rects=new Map(leaves.map(el=>[el,boxes(el)]));
+  outer:for(let i=0;i<leaves.length;i++)for(let j=i+1;j<leaves.length;j++){
    if(layer.get(leaves[i])!==layer.get(leaves[j]))continue;
    if(leaves[i].contains(leaves[j])||leaves[j].contains(leaves[i]))continue;
-   const a=clip(leaves[i]),b=clip(leaves[j]);
-   const ox=Math.min(a.right,b.right)-Math.max(a.left,b.left),oy=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
-   if(ox>4&&oy>4)fails.push(`text collision: "${(leaves[i].textContent||'').trim().slice(0,10)}" over "${(leaves[j].textContent||'').trim().slice(0,10)}"`);
-   if(fails.length>10)break;
+   for(const a of rects.get(leaves[i]))for(const b of rects.get(leaves[j])){
+    const ox=Math.min(a.right,b.right)-Math.max(a.left,b.left),oy=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+    if(ox>4&&oy>4){fails.push(`text collision: "${(leaves[i].textContent||'').trim().slice(0,10)}" over "${(leaves[j].textContent||'').trim().slice(0,10)}"`);
+     if(fails.length>10)break outer;}
+   }
+  }
+  // the customer card: the frame, the nameplate and the payload must stay in register at
+  // every width and height, not only the ones the card was drawn at
+  const face=document.querySelector('.who .face');
+  if(face){
+   const fr=face.getBoundingClientRect(),cs=getComputedStyle(face);
+   const inset=parseFloat(cs.paddingLeft)||0;
+   const plate=face.querySelector('.nameplate'),port=face.querySelector('.portrait'),art=face.querySelector('.figure');
+   if(plate){
+    const p=plate.getBoundingClientRect();
+    if(p.left<fr.left+inset-2.5||p.right>fr.right-inset+2.5||p.bottom>fr.bottom-inset+2.5||p.top<fr.top+inset-2.5)
+     fails.push(`nameplate out of the card frame (plate ${Math.round(p.left)},${Math.round(p.top)},${Math.round(p.right)},${Math.round(p.bottom)} vs card inset ${Math.round(fr.left+inset)},${Math.round(fr.top+inset)},${Math.round(fr.right-inset)},${Math.round(fr.bottom-inset)})`);
+   }
+   if(plate&&port){
+    const p=plate.getBoundingClientRect(),q=port.getBoundingClientRect();
+    if(q.bottom>p.top+0.5)fails.push(`the portrait box overlaps the nameplate by ${Math.round(q.bottom-p.top)}px`);
+   }
+   // the payload overhangs the card on three sides but must never reach the plate,
+   // and must never be scaled to a non-square box
+   if(art&&plate){
+    const a=art.getBoundingClientRect(),p=plate.getBoundingClientRect();
+    if(a.bottom>p.top+0.5)fails.push(`the NPC payload runs into the nameplate by ${Math.round(a.bottom-p.top)}px`);
+    if(Math.abs(a.width-a.height)>1.5)fails.push(`the NPC payload box is not square: ${Math.round(a.width)}x${Math.round(a.height)}`);
+    if(a.width<fr.width)fails.push(`the NPC payload is narrower than the card (${Math.round(a.width)} < ${Math.round(fr.width)}): it reads as sealed in`);
+    if(a.top>fr.top-1)fails.push('the NPC payload no longer overhangs the top of the card');
+   }
+   const front=document.querySelector('.front');
+   if(front&&art){
+    const a=art.getBoundingClientRect(),f=front.getBoundingClientRect();
+    if(a.top<f.top-0.5)fails.push(`the NPC payload is clipped by the shop front by ${Math.round(f.top-a.top)}px`);
+   }
+   const wait=document.querySelector('.line-up .wait');
+   if(wait){
+    const w=wait.getBoundingClientRect(),rf=fr.width/fr.height,rw=w.width/w.height;
+    if(Math.abs(rf-rw)>0.05)fails.push(`the revealed card and the waiting backs are not one deck: ${rf.toFixed(2)} vs ${rw.toFixed(2)}`);
+   }
   }
   const bar=document.querySelector('.dock');
   if(bar&&bar.children.length){

@@ -300,60 +300,80 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale{background:#191208}
 /* ---- layer 1 : who is here --------------------------------------------------- */
 .front{position:relative;flex:0 0 auto;display:grid;grid-template-columns:auto minmax(0,1fr);
- align-items:end;gap:6px;padding:calc(var(--cardw)*.09 + 8px) var(--gutter) 0;overflow:hidden;
+ align-items:end;gap:6px;padding:calc(var(--over) - var(--frame) + 8px) var(--gutter) 0;overflow:hidden;
  background:linear-gradient(180deg,#0d0904 0,#241a10 58%,#3b2a19 100%);
- --cardw:min(56vw,232px)}
+ /* ONE deck geometry, declared once. The card's height is content — frame, the payload's
+    visible height, the nameplate — so the plate can never reach the artwork. The waiting
+    backs are the same shape scaled by --deck, so front and back stay one deck at every
+    width instead of agreeing only where the numbers happened to be drawn. */
+ /* the card also yields to a short viewport, so the counter and the send-off key are
+    never pushed off screen: the term below is the height budget left after the counter
+    edge, the scroll's own padding and the dock. It never binds on a portrait phone. */
+ --cardw:max(88px,min(56vw,232px,calc(90dvh - 226px)));--frame:10px;--plateh:62px;--gapb:9px;--deck:.185;
+ --artw:calc(var(--cardw)*1.06);--over:max(calc(var(--frame) + 6px),calc(var(--cardw)*.12));
+ --cardh:calc(var(--frame)*2 + var(--artw) - var(--over) + var(--gapb) + var(--plateh))}
 .front .backwall{position:absolute;left:0;right:0;top:0;z-index:0;line-height:0}
 .front .backwall .band-art{display:block;width:100%;height:auto}
 .front .backwall:after{content:'';position:absolute;inset:0;
  background:linear-gradient(180deg,#0b0803a6 0,#0b08033d 44%,#191208f0 100%)}
-/* The active customer is the one card in the deck turned face up. The face is the same
-   physical object as the backs beside it — same 4:5 proportion, same square corners, same
-   double frame, same dotted field — so the two read as one deck. The sticker is NOT sealed
-   into it: the art box is square and larger than the face, so the vignette overhangs the
-   top and both sides and the silhouette stays organic. Layers, bottom to top:
-   card base -> rarity light -> NPC payload -> contact shadow -> rarity bracket and mark
-   -> the nameplate. Nothing is baked into the artwork. */
+/* The active customer is the one card in the deck turned face up: same square corners,
+   same dark double frame, same dotted field as the backs beside it, so the two read as one
+   deck. The sticker is NOT sealed into it — the payload box is square and wider than the
+   card, hung above its top edge, so the vignette overhangs on three sides and the
+   silhouette stays organic.
+
+   GEOMETRY. Nothing here is a magic number measured against another magic number, because
+   that is what drifted at widths other than the ones it was drawn at. The card is a flow
+   column: one portrait box whose height is exactly the payload's visible height, then the
+   nameplate at its natural height. So the plate can grow — a long name, a wrapped job, a
+   larger type scale, a future locale — and the card grows with it. The plate can never
+   reach the artwork, and the frame, the plate and the card edge stay aligned at every
+   width and height, because they are all measured from the same padding box.
+
+   Layers, bottom to top: card base -> rarity light -> NPC payload -> contact shadow ->
+   rarity bracket -> the nameplate. Nothing is baked into the artwork. */
 .who{position:relative;z-index:2;display:block;width:var(--cardw);max-width:100%;min-width:0;
- padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;text-align:left;
- --artw:calc(var(--cardw)*1.06)}
-.who .face{margin-bottom:calc(var(--cardw)*.08 + 14px)}
+ padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;text-align:left}
 .who:hover{background:transparent}
 .who:active{transform:none}
-.face{position:relative;display:block;width:100%;max-width:100%;aspect-ratio:4/5;
+.face{position:relative;display:flex;flex-direction:column;width:100%;max-width:100%;
+ padding:var(--frame);margin-bottom:14px;
  background:var(--tex-deck),#241c14;background-size:12px 12px;
- box-shadow:inset 0 0 0 4px #3b2f21,inset 0 0 0 8px #241c14,0 0 0 3px #2a2118,5px 6px 0 #00000099}
-.pool{position:absolute;z-index:0;left:50%;top:4%;width:var(--artw);height:calc(var(--artw)*.86);
+ box-shadow:inset 0 0 0 3px #2a2118,inset 0 0 0 7px #3b2f21,inset 0 0 0 10px #1d160d,
+            5px 6px 0 #00000099}
+/* the portrait box: exactly as tall as the part of the payload that sits on the card */
+.portrait{position:relative;flex:0 0 auto;width:100%;height:calc(var(--artw) - var(--over))}
+.pool{position:absolute;z-index:0;left:50%;bottom:0;width:var(--artw);height:calc(var(--artw)*.8);
  transform:translateX(-50%);opacity:.3;
  background:radial-gradient(56% 54% at 50% 62%,var(--rare,#b4bba6) 0,#00000000 100%)}
-/* the payload overhangs the face on three sides, so this is a customer standing on a card,
-   not a picture cropped into one */
-.figure{position:absolute;z-index:2;left:50%;top:calc(var(--cardw)*-.09);
+.figure{position:absolute;z-index:2;left:50%;top:calc(var(--over)*-1);
  width:var(--artw);height:var(--artw);margin-left:calc(var(--artw)/-2);
  object-fit:contain;object-position:50% 100%;image-rendering:auto;
  filter:drop-shadow(0 3px 0 #00000066) drop-shadow(0 0 12px #0000008c)}
 .figure.fallback{display:grid;place-items:center}
-.stand{position:absolute;z-index:1;left:50%;top:calc(var(--cardw)*.93);width:calc(var(--cardw)*.58);
- height:7px;transform:translateX(-50%);background:#00000099}
-/* rarity: corner brackets and one small mark on the frame — never the whole card coloured */
-.bracket{position:absolute;z-index:3;left:4px;right:4px;top:4px;height:calc(var(--cardw)*.95);pointer-events:none}
+.stand{position:absolute;z-index:1;left:50%;bottom:0;width:calc(var(--cardw)*.58);height:7px;
+ transform:translateX(-50%);background:#00000099}
+/* rarity: corner brackets on the portrait box and one small mark on the plate — the card
+   itself is never washed in the rarity colour */
+.bracket{position:absolute;z-index:3;inset:0;pointer-events:none}
 .bracket i{position:absolute;width:15px;height:15px;opacity:.92}
 .bracket i:nth-child(1){left:0;top:0;box-shadow:inset 3px 0 0 var(--rare,#b4bba6),inset 0 3px 0 var(--rare,#b4bba6)}
 .bracket i:nth-child(2){right:0;top:0;box-shadow:inset -3px 0 0 var(--rare,#b4bba6),inset 0 3px 0 var(--rare,#b4bba6)}
 .bracket i:nth-child(3){left:0;bottom:0;box-shadow:inset 3px 0 0 var(--rare,#b4bba6),inset 0 -3px 0 var(--rare,#b4bba6)}
 .bracket i:nth-child(4){right:0;bottom:0;box-shadow:inset -3px 0 0 var(--rare,#b4bba6),inset 0 -3px 0 var(--rare,#b4bba6)}
-/* the nameplate is screwed across the card's bottom edge; the text is never in the artwork */
+/* the nameplate sits in the card's lower band, inside the frame; text is never in the artwork */
 .who .rank{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.18em;color:var(--rare,#b4bba6)}
-.who .nameplate{position:absolute;z-index:5;left:8px;right:8px;bottom:calc(var(--cardw)*-.08);display:grid;gap:1px;
- padding:7px 12px 8px 13px;background:var(--tex-wood),#4a3627;background-size:32px 12px;color:#f5ead0;
+.who .nameplate{position:relative;z-index:5;flex:0 0 auto;display:grid;align-content:center;gap:1px;
+ margin-top:var(--gapb);min-height:var(--plateh);box-sizing:border-box;padding:7px 12px 8px 13px;background:var(--tex-wood),#4a3627;background-size:32px 12px;color:#f5ead0;
  box-shadow:inset 4px 0 0 var(--rare,#b4bba6),inset 0 2px 0 #ffffff21,inset 0 -3px 0 #00000080,3px 3px 0 #00000073}
 .who .nameplate b{font:400 16px/1.2 var(--f-plate);-webkit-font-smoothing:none;letter-spacing:.02em;
  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .who .nameplate>span{font:400 12px/1.3 var(--ui);color:#c6b391}
 /* the waiting line: identical backs, nothing but the count is public */
-.line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:16px}
+.line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
-.line-up .wait{display:block;width:40px;aspect-ratio:4/5;margin-left:-23px;
+.line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
+ margin-left:calc(var(--cardw)*var(--deck)*-.58);
  margin-bottom:calc(var(--i) * 4px);filter:brightness(calc(1 - var(--i) * .14))}
 .line-up .wait .back-art{display:block;width:100%;height:100%;box-shadow:0 0 0 2px #2a2118,2px 3px 0 #000000a6}
 .line-up .left{font:400 11px/1 var(--f-led);letter-spacing:.06em;color:#c2ae8b}
