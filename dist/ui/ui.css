@@ -42,6 +42,8 @@
  --tex-cork:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%23a97f4a%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%223%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2214%22%20y%3D%221%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%229%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2218%22%20y%3D%227%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2216%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2214%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2218%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2220%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23bd9159%22%2F%3E%3C%2Fsvg%3E");
  --tex-paper:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%23efe7d2%22%2F%3E%3Crect%20x%3D%221%22%20y%3D%222%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e3d9bf%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%225%22%20width%3D%223%22%20height%3D%221%22%20fill%3D%22%23e6dcc4%22%2F%3E%3Crect%20x%3D%225%22%20y%3D%2210%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e3d9bf%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2213%22%20width%3D%222%22%20height%3D%221%22%20fill%3D%22%23e8dfc7%22%2F%3E%3C%2Fsvg%3E");
  --tex-wood:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2212%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2232%22%20height%3D%2212%22%20fill%3D%22%23241a12%22%2F%3E%3Crect%20y%3D%221%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%232f2217%22%2F%3E%3Crect%20y%3D%225%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%231b130d%22%2F%3E%3Crect%20y%3D%228%22%20width%3D%2232%22%20height%3D%221%22%20fill%3D%22%2331241a%22%2F%3E%3Crect%20x%3D%226%22%20y%3D%223%22%20width%3D%229%22%20height%3D%221%22%20fill%3D%22%232b1f15%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2210%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%232b1f15%22%2F%3E%3C%2Fsvg%3E");
+ --bolt:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%226%22%20height%3D%226%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%226%22%20height%3D%226%22%20fill%3D%22%23c8a35e%22%2F%3E%3Crect%20width%3D%226%22%20height%3D%222%22%20fill%3D%22%23e8ce9a%22%2F%3E%3Crect%20y%3D%224%22%20width%3D%226%22%20height%3D%222%22%20fill%3D%22%238a6b34%22%2F%3E%3C%2Fsvg%3E");
+ --zig:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%229%22%3E%3Cpath%20d%3D%22M0%209%20L0%204%20L3%200%20L6%204%20L9%200%20L12%204%20L12%209%20Z%22%20fill%3D%22%23000%22%2F%3E%3C%2Fsvg%3E");
  --tex-deck:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2212%22%20height%3D%2212%22%20fill%3D%22%23241c14%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%224%22%20height%3D%224%22%20fill%3D%22%232f2618%22%2F%3E%3C%2Fsvg%3E");
  --tex-metal:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%228%22%20height%3D%228%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%2339434b%22%2F%3E%3Crect%20y%3D%222%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%23414c55%22%2F%3E%3Crect%20y%3D%226%22%20width%3D%228%22%20height%3D%221%22%20fill%3D%22%23313a41%22%2F%3E%3C%2Fsvg%3E");
  /* legacy hooks still used by the phases not yet recomposed */
@@ -558,6 +560,220 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:linear-gradient(180deg,#080a1000 0,#080a1000 calc(var(--sky) - 40px),#0c0e14 var(--sky),#0a0c12 100%)}
 .p-night.cold .returner{filter:grayscale(1) brightness(.42) contrast(1.1) drop-shadow(0 3px 0 #00000099)}
 .p-night.cold .verdict{text-shadow:3px 3px 0 #000000cc}
+/* =====================================================================
+   CLOSING — the till roll the register printed when the shutter came down.
+   Economics only; the expedition story stayed in Night. The object is deliberately not
+   the order form: that is a wide sheet a person fills in, this is a narrow tape a
+   machine printed. Torn at both ends, lying on the dark counter under the same lamp,
+   every figure monospace and right-aligned on a dotted leader, subtotals ruled off, and
+   the money actually in the drawer stamped last.
+   ===================================================================== */
+.p-closing{background:#140f08}
+.p-closing .stage-scroll{padding:18px var(--gutter) 26px;background:var(--tex-wood),#241a10;background-size:32px 12px}
+.p-closing .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0f0b06;box-shadow:inset 0 3px 0 #ffffff12}
+.p-closing .dock .stamp{margin-left:auto;min-height:52px;min-width:140px;font:600 17px/1 var(--ui);
+ background:#2f7a4d;color:#f0fbf3;
+ box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
+.p-closing .dock .danger-text{flex:1 1 100%;font:400 13px/1.4 var(--ui)}
+.tape{position:relative;width:100%;max-width:344px;margin:0 auto;filter:drop-shadow(5px 7px 0 #00000073)}
+.tear{height:9px;background:var(--tex-paper),#efe7d2;background-size:16px 16px}
+.tear.top{-webkit-mask:var(--zig);mask:var(--zig);-webkit-mask-size:12px 9px;mask-size:12px 9px}
+.tear.bottom{-webkit-mask:var(--zig);mask:var(--zig);-webkit-mask-size:12px 9px;mask-size:12px 9px;transform:scaleY(-1)}
+.print{padding:16px 16px 15px;background:var(--tex-paper),#efe7d2;background-size:16px 16px;color:#2c2418}
+.print .head{text-align:center;padding-bottom:11px;margin-bottom:11px;box-shadow:inset 0 -2px 0 #2c241826}
+.print .head b{display:block;font:700 24px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.14em}
+.print .head span{display:block;margin-top:5px;font:400 12px/1.5 var(--f-led);color:#6b6350;letter-spacing:.04em}
+.print .block{padding:9px 0;box-shadow:inset 0 -1px 0 #2c241826}
+/* label, dotted leader, figure: the tape's own way of setting a line */
+.print .row{display:flex;align-items:baseline;gap:6px;padding:3px 0;font:400 13px/1.6 var(--ui)}
+.print .row span{color:#5f5847;white-space:nowrap}
+.print .row:after{content:'';order:1;flex:1 1 auto;min-width:14px;align-self:center;height:0;
+ border-bottom:2px dotted #2c24184d}
+.print .row b{order:2;font:400 15px/1.4 var(--f-led);font-variant-numeric:tabular-nums;color:#2c2418}
+.print .row.sum{margin-top:5px;padding-top:7px;box-shadow:inset 0 2px 0 #2c241833}
+.print .row.sum span{color:#2c2418;font-weight:600}
+.print .row.sum b{font-size:17px}
+.print .profit{margin:10px 0;padding:10px 12px;background:#2c24180d;
+ box-shadow:inset 0 0 0 2px #2c241826,inset 0 -3px 0 #2f7a4d}
+.print .profit span{font-weight:600;color:#2c2418}
+.print .profit b{font-size:21px;color:#256b41}
+.print .profit.loss{box-shadow:inset 0 0 0 2px #2c241826,inset 0 -3px 0 #a1372c}
+.print .profit.loss b{color:#a1372c}
+/* the drawer: what is actually in it, stamped at the foot of the tape */
+.purse{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding:12px 13px;
+ background:#2c2418;color:#f2e7cd}
+.purse span{font:600 12px/1 var(--ui);letter-spacing:.16em;color:#b3a68b}
+.purse b{margin-left:auto;font:400 28px/1 var(--f-led);font-variant-numeric:tabular-nums;color:var(--gold)}
+.purse b i{font-style:normal;font-size:15px;margin-left:3px;color:#b3a68b}
+.impact{margin-top:14px;padding-top:11px;box-shadow:inset 0 2px 0 #2c241826}
+.impact h4{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#6b6350;margin-bottom:7px}
+.impact p{font:400 13px/1.6 var(--ui);color:#4a4335}
+.impact p b{color:#2c2418;font-weight:600}
+.print .foot{margin-top:12px;font:400 11px/1.6 var(--ui);color:#8a8270}
+/* =====================================================================
+   MODAL LAYER — the utility drawer. Not a phase, so it stays quiet: a panel that
+   slides over whatever screen is behind it, with the same bevel language as everything
+   else and no colour of its own.
+   ===================================================================== */
+.modal-shade{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;
+ padding:0;background:#05040399;overflow:hidden}
+.modal{position:relative;display:flex;flex-direction:column;width:100%;max-width:640px;max-height:92dvh;
+ background:var(--tex-wood),#241a10;background-size:32px 12px;color:#efe3c8;
+ box-shadow:inset 0 4px 0 #ffffff21,inset 0 0 0 2px #00000073,0 -6px 0 #00000073}
+.modal.narrow{max-width:460px}
+.modal-header{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:14px var(--gutter) 12px;
+ box-shadow:inset 0 -3px 0 #6b502959}
+.modal-header h2{flex:1 1 auto;min-width:0;font:400 19px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f6ecd3}
+.modal-header .bare{flex:0 0 auto;min-width:44px;min-height:44px;background:transparent;box-shadow:none;
+ color:#a2947c;font:400 14px/1 var(--ui)}
+.modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px var(--gutter) 18px;
+ font:400 14px/1.6 var(--ui);color:#c6b391}
+.modal-body h3{color:#f2e7cd}
+.modal-footer{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:10px;padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));
+ background:#1a120a;box-shadow:inset 0 3px 0 #ffffff12}
+.modal-footer .stamp{flex:1 1 auto;min-height:52px;font:600 17px/1 var(--ui);background:#2f7a4d;color:#f0fbf3;
+ box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
+.modal-footer button{min-height:48px;padding:12px 16px;background:#3a2c1d;color:#efe3c8;
+ box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+.modal-footer .danger{background:#5c2a24;color:#f6dfd9}
+
+/* =====================================================================
+   RELIC — 점포지원. Head office sent a crate, and what is bolted into the shop is
+   chosen out of it. So the takeover is a delivery: a stencilled crate lid, then the
+   fixtures themselves as heavy brass plates, bolted at the corners, with the price
+   stamped into the metal. Nothing about it is a shop screen or a form.
+   ===================================================================== */
+.relic-takeover{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;
+ background:#120c06;overflow:hidden}
+.relic-takeover .scroll{flex:1 1 auto;min-height:0;overflow-y:auto;padding:0 var(--gutter) 20px}
+.relic-open{position:relative;margin:0 calc(var(--gutter) * -1) 18px;padding:22px var(--gutter) 18px;
+ background:var(--tex-wood),#4a3627;background-size:32px 12px;text-align:center;
+ box-shadow:inset 0 5px 0 #ffffff26,inset 0 -5px 0 #00000080,0 5px 0 #00000073}
+.relic-open .label{display:inline-block;margin-bottom:9px;padding:4px 10px;
+ font:400 12px/1 var(--f-led);letter-spacing:.18em;color:#2a2118;background:#c8a35e;
+ box-shadow:2px 2px 0 #00000059}
+.relic-open h2{font:700 28px/1.15 var(--f-sign);-webkit-font-smoothing:none;color:#f8efd8;
+ text-shadow:2px 2px 0 #00000073}
+.relic-open p{margin-top:8px;font:400 13px/1.6 var(--ui);color:#d3bf98}
+.discovery{margin:0 0 14px;padding:9px 12px;font:400 13px/1.5 var(--ui);color:#e8d9b0;
+ background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
+.relic-choices{display:grid;gap:12px}
+/* a fixture, not a card: a brass plate with a bolt in each corner */
+.relic-plate{position:relative;padding:15px 16px 14px;
+ background:var(--bolt) left 7px top 7px/6px 6px no-repeat,var(--bolt) right 7px top 7px/6px 6px no-repeat,
+            var(--bolt) left 7px bottom 7px/6px 6px no-repeat,var(--bolt) right 7px bottom 7px/6px 6px no-repeat,
+            var(--tex-metal) 0 0/8px 8px,#4a4033;
+ box-shadow:inset 0 0 0 2px #7d6a45,inset 0 3px 0 #ffffff26,inset 0 -4px 0 #00000080,4px 4px 0 #00000080}
+.relic-plate h3{font:400 18px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f8efd8;
+ padding:0 14px;text-align:center}
+.relic-plate p{margin-top:8px;font:400 13px/1.65 var(--ui);color:#c9bda3}
+.relic-plate .cost{display:block;margin:12px 0 10px;padding:7px 0;text-align:center;
+ font:400 20px/1 var(--f-led);color:var(--gold);background:#00000059;
+ box-shadow:inset 2px 2px 0 #00000080,inset 0 -2px 0 #ffffff14}
+.relic-plate .stamp{width:100%;min-height:50px;font:600 16px/1 var(--ui);background:#2f7a4d;color:#f0fbf3;
+ box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
+.relic-plate .stamp[disabled]{background:#33291c;color:#8a7d64;box-shadow:inset 0 0 0 2px #ffffff14,3px 3px 0 #00000059}
+.relic-plate.owned{box-shadow:inset 0 0 0 2px var(--sign-lit),inset 0 3px 0 #ffffff26,inset 0 -4px 0 #00000080,4px 4px 0 #00000080}
+.relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+ padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));background:#0c0805;
+ box-shadow:inset 0 3px 0 #ffffff12}
+.relic-takeover .close p{flex:1 1 auto;font:400 13px/1.5 var(--ui);color:#a2947c}
+.relic-takeover .close .stamp{flex:0 0 auto;min-height:50px;min-width:150px;font:600 16px/1 var(--ui);
+ background:#3a2c1d;color:#efe3c8;
+ box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+
+/* =====================================================================
+   FINAL — 제0게이트. Not a shop screen: the mouth of the gate itself, cold stone and
+   ember, the confirmed threat carved above it, the party mustered in front of it, and
+   one lever to leave. Both Families are disclosed above every choice, and the D30
+   store-support decision stays reachable from the dock until the party is locked.
+   ===================================================================== */
+.p-final{background:#0d0a0c}
+.p-final .stage-scroll{padding:0 var(--gutter) 26px;background:linear-gradient(180deg,#1a1114 0,#120d10 44%,#0d0a0c 100%)}
+.p-final .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0a0709;box-shadow:inset 0 3px 0 #ffffff12}
+.p-final .dock .stamp{flex:1 1 auto;min-height:56px;font:600 19px/1 var(--ui);letter-spacing:.04em;
+ background:#8a2f26;color:#ffeee9;
+ box-shadow:inset 0 0 0 2px #ffeee94d,inset 0 0 0 4px #8a2f26,inset 0 0 0 6px #ffeee926,3px 3px 0 #00000080}
+.p-final .dock .stamp[disabled]{background:#33211d;color:#8d7168;box-shadow:inset 0 0 0 2px #ffffff14,3px 3px 0 #00000059}
+.p-final .dock .danger{min-height:52px;padding:12px 16px;background:#5c2a24;color:#f6dfd9;
+ box-shadow:inset 2px 2px 0 #ffffff1a,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+/* the gate mouth */
+.gate-zero{position:relative;margin:0 calc(var(--gutter) * -1) 20px;padding:26px var(--gutter) 22px;text-align:center;
+ background:radial-gradient(76% 62% at 50% 108%,#5e1f16 0,#2a1214 46%,#150e10 100%)}
+.gate-zero:after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:#8a2f26}
+.gate-zero .mark{display:block;margin:0 auto 10px}
+.gate-zero .label{display:inline-block;padding:4px 10px;font:400 12px/1 var(--f-led);letter-spacing:.22em;
+ color:#f6dfd9;background:#8a2f26;box-shadow:2px 2px 0 #00000073}
+.gate-zero h1{margin-top:10px;font:700 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.06em;
+ color:#f8ece6;text-shadow:3px 3px 0 #00000099}
+/* the confirmed threat, carved above the mouth */
+.threat{margin:0 0 20px;padding:13px 14px;background:#00000047;
+ box-shadow:inset 0 3px 0 #8a2f26,inset -2px -2px 0 #00000059}
+.threat h2{font:600 11px/1 var(--ui);letter-spacing:.18em;color:#b09a92;margin-bottom:10px}
+.fams{display:grid;gap:7px;margin-bottom:11px}
+.fam{display:flex;align-items:center;gap:9px;padding:7px 10px;font:400 14px/1.3 var(--ui);color:#f2e0da;
+ background:#00000047;box-shadow:inset 4px 0 0 var(--fam,#8a2f26)}
+.threat .hazards b{color:#e8a08e}
+.threat .hazards span{color:#a4938e}
+/* the muster */
+.party-head{display:flex;align-items:baseline;gap:10px;padding:7px 0;margin-bottom:11px;
+ box-shadow:inset 0 -3px 0 #ffffff1a}
+.party-head h2{font:400 16px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f2e7cd}
+.party-head .count{margin-left:auto;font:400 15px/1 var(--f-led);color:var(--gold)}
+.npc-grid,.unlock-grid,.contract-grid{display:grid;gap:9px;margin-bottom:18px}
+/* one adventurer on the muster list — a tag, not a profile card */
+.npc-card{display:block;width:100%;text-align:left;padding:11px 12px;background:#1c1512;border-radius:0;
+ box-shadow:inset 3px 0 0 var(--rare,var(--r0)),inset 0 -2px 0 #ffffff12}
+.npc-card:hover{background:#241a16}
+.npc-card:active{transform:none}
+.npc-card .row{display:flex;align-items:flex-start;gap:11px}
+.npc-card .row>div{flex:1 1 auto;min-width:0}
+.npc-card h3{font:600 16px/1.25 var(--ui);color:#f2e7cd}
+.npc-card p{font:400 12px/1.5 var(--ui);color:#a2947c}
+.npc-card.chosen{background:#2a2116;box-shadow:inset 3px 0 0 var(--gold),inset 0 0 0 2px #c8a35e59,inset 0 -2px 0 #ffffff12}
+.npc-card.dead{opacity:.45}
+.npc-card[disabled]{opacity:.4}
+.loyalty{margin-top:9px}
+.loyalty .row.between{display:flex;justify-content:space-between;gap:10px;
+ font:400 11px/1 var(--ui);color:#8d8067;margin-bottom:5px}
+.loyalty .bar{height:6px;background:#00000073;box-shadow:inset 1px 1px 0 #00000080}
+.loyalty .bar span{display:block;height:100%;background:var(--gold)}
+.rare-badge{display:inline-block}
+/* the loadout: who is carrying what through the gate */
+.final-team{display:grid;gap:9px;margin-bottom:20px}
+.final-member{display:block;width:100%;text-align:left;padding:11px 12px;background:#1c1512;border-radius:0;
+ box-shadow:inset 0 0 0 2px #ffffff12}
+.final-member.active{background:#2a2116;box-shadow:inset 0 0 0 2px var(--gold)}
+.final-member:active{transform:none}
+.final-member>b{display:block;font:600 15px/1.3 var(--ui);color:#f2e7cd;margin-bottom:8px}
+.final-member .pack{display:flex;flex-wrap:wrap;gap:7px}
+.final-member .slot{min-width:56px;min-height:44px;display:grid;place-items:center;padding:4px;
+ font:400 11px/1 var(--ui);color:#7d7059;background:#00000047;box-shadow:inset 2px 2px 0 #00000073}
+.final-member .slot.filled{background:#3a2c1d;color:transparent}
+.final-order{margin:0 0 16px;background:#00000038;box-shadow:inset 0 0 0 2px #ffffff0f}
+.final-order>summary{padding:13px 14px;font:400 14px/1.4 var(--f-plate);-webkit-font-smoothing:none;
+ color:#e8d9b0;cursor:pointer;min-height:48px;display:flex;align-items:center}
+.final-order .form{margin:0}
+/* shared secondary surfaces */
+.owned-relics,.special-event{margin:0 0 14px;background:#00000038;box-shadow:inset 0 0 0 2px #ffffff0f}
+.owned-relics>summary,.special-event>summary{padding:12px 14px;min-height:48px;display:flex;align-items:center;
+ font:400 14px/1.4 var(--ui);color:#cbb98d;cursor:pointer}
+.owned-relics>div,.special-event>div,.special-event>p{padding:0 14px 12px;font:400 13px/1.6 var(--ui);color:#a2947c}
+.owned-relics>div b{color:#f2e7cd}
+.special-event button{margin:0 14px 8px 0;min-height:44px;padding:10px 14px;background:#3a2c1d;color:#efe3c8;
+ box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+.menu-list{display:grid;gap:9px}
+.menu-list button{width:100%;min-height:52px;padding:14px 16px;text-align:left;font:400 15px/1 var(--ui);
+ background:#3a2c1d;color:#efe3c8;box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+.end-banner{margin:0 calc(var(--gutter) * -1) 20px;padding:26px var(--gutter) 22px;text-align:center;
+ background:radial-gradient(76% 62% at 50% 108%,#2f7a4d 0,#1c3a2a 46%,#12100c 100%)}
+.end-banner .eyebrow{font:400 12px/1 var(--f-led);letter-spacing:.22em;color:#a8d9bb}
+.end-banner h2{margin-top:11px;font:700 26px/1.25 var(--f-sign);-webkit-font-smoothing:none;color:#f6ecd3}
+.end-banner p{margin-top:9px;font:400 14px/1.6 var(--ui);color:#cbb98d}
+.end-banner .row.wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin-top:14px;
+ font:400 12px/1.5 var(--ui)}
+.end-banner .meta-xp{color:var(--gold);font-weight:600}
+.end-banner .bare{min-height:44px;padding:10px 14px;background:#00000047;color:#cbb98d;box-shadow:inset 0 0 0 2px #ffffff1a}
 /* ============ 600px+ ============ */
 @media(min-width:600px){
  :root{--gutter:24px}

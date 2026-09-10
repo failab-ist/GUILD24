@@ -281,23 +281,37 @@ function changedRows(r){const tok=(cls,label,value)=>
  out.push(tok('','경험치','+'+r.xp));
  out.push(tok('gain','전리품',r.loot+'G'));
  return out.join('');}
-// CLOSING — economics. The one place a ledger belongs, so it is a slip of paper.
+// CLOSING — `오늘 장사는 어땠을까?`. Economics only; the expedition story belongs to Night.
+// The object is the till roll the register printed when the shutter came down: a narrow
+// strip torn at both ends, lying on the dark counter under the same lamp. Not the order
+// form — that is a wide sheet a person fills in; this is a tape a machine printed, so
+// every figure is monospace and right-aligned on a dotted leader, subtotals rule off,
+// and the money actually in the drawer is the last thing stamped on it.
 function closingScreen(){
  const s=game.run,d=s.daily,margin=d.revenue-d.cogs;
  const profit=margin+(d.subsidy||0)+(d.commission||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
- const line=(label,value)=>'<div><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
+ const line=(label,value,cls='')=>'<div class="row '+cls+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
  const impact=s.results.filter(r=>r.events?.length).slice(0,3);
- const body='<div class="slip"><div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span></div>'
- +'<div class="lines">'+line('매출',d.revenue)+line('판매 원가',-d.cogs)
- +'<div class="sum"><span>판매 마진</span><b>'+fmt(margin)+'</b></div>'
- +line('운영비',-d.operating)+line('폐기 원가',-d.wasteCost)+line('발주 교환',-d.rerollSpent)+line('본사 지원·수당',(d.subsidy||0)+(d.commission||0))+'</div>'
- +'<div class="profit'+(profit<0?' loss':'')+'"><span>영업 손익</span><b>'+(profit>0?'+':'')+fmt(profit)+'</b></div>'
- +'<div class="lines">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)+line('재고 정리',d.liquidation)+'</div>'
- +'<div class="purse"><span>보유 자금</span><b>'+fmt(s.money)+'G</b></div>'
- +(impact.length?'<div class="impact"><h4>오늘의 보급 영향</h4>'+impact.map(r=>'<p><b>'+E(r.name)+'</b> '+E(r.events[0].text)+'</p>').join('')+'</div>':'')
- +'<p class="foot">미판매 재고는 자산으로 남는다. 발주 지출과 판매 원가를 손익에서 두 번 빼지 않는다.</p></div><div class="slip-edge" aria-hidden="true"></div>';
+ const body='<div class="tape">'
+ +'<div class="tear top" aria-hidden="true"></div>'
+ +'<div class="print">'
+  +'<div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span>영업 종료</span></div>'
+  +'<div class="block">'+line('매출',d.revenue)+line('판매 원가',-d.cogs)
+   +line('판매 마진',margin,'sum')+'</div>'
+  +'<div class="block">'+line('운영비',-d.operating)+line('폐기 원가',-d.wasteCost)
+   +line('발주 교환',-d.rerollSpent)+line('본사 지원·수당',(d.subsidy||0)+(d.commission||0))+'</div>'
+  +'<div class="row profit'+(profit<0?' loss':'')+'"><span>영업 손익</span><b>'+(profit>0?'+':'')+fmt(profit)+'</b></div>'
+  +'<div class="block">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)+line('재고 정리',d.liquidation)+'</div>'
+  +'<div class="purse"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b></div>'
+  +(impact.length?'<div class="impact"><h4>오늘의 보급 영향</h4>'
+    +impact.map(r=>'<p><b>'+E(r.name)+'</b> '+E(r.events[0].text)+'</p>').join('')+'</div>':'')
+  +'<p class="foot">미판매 재고는 자산으로 남는다. 발주 지출과 판매 원가를 손익에서 두 번 빼지 않는다.</p>'
+ +'</div>'
+ +'<div class="tear bottom" aria-hidden="true"></div></div>';
  const dock=(s.money<0?'<p class="danger-text">운영비가 부족하다.</p>'+btn('재고 정리','stock')+btn('폐점','retire','danger'):'')+btn('다음 날','close','stamp');
- return stage('closing','마감','',body,dock);
+ return '<div class="stage p-closing">'+menuFab()
+ +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="마감">'+body+'</main>'
+ +'<div class="dock">'+dock+'</div></div>';
 }
 const coachSteps={
  morning:[['visitors','#visitor-count','오늘 방문할 인원이다. 시설·계약·사건에 따라 달라진다.'],['gates','.notices','열린 게이트가 어떤 능력을 압박하는지 보고 준비할 상품을 생각해 보자.']],
