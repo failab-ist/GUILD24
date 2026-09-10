@@ -6,7 +6,7 @@
 const assert=require('node:assert/strict');
 for(const f of ['data/catalog','data/relics','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
-const SEEDS=12;
+const SEEDS=14;
 const run=policy=>Debug.simulate(SEEDS,policy,null,'adaptive','hybrid');
 const cache={};const cached=p=>cache[p]??=run(p);
 
@@ -88,6 +88,80 @@ test('PASS3 GATE: Chunk G reports Boss Power evidence and leaves the value alone
  assert.equal(DATA.balance.bossPower,230,'the retained Source baseline is untouched by simulation');
  assert.ok(r.final.resolved>0,'the margin against it is measured');
  assert.ok(Number.isFinite(r.final.assault/r.final.resolved),'the assault the Boss was met with is reported as a number');
+});
+
+test('the fresh-account benchmark is labelled as one, and progression is measured separately',()=>{
+ // The regression baseline: every simulate() seed starts from a first-time account, so its
+ // Final numbers must never be read as the game's ceiling. trajectory() is the other half.
+ const seen=[];
+ const originalFresh=Meta.fresh;
+ Meta.fresh=function(){seen.push(1);return originalFresh.apply(this,arguments);};
+ try{Debug.simulate(3,'balanced',null,'adaptive','hybrid');}finally{Meta.fresh=originalFresh;}
+ assert.equal(seen.length,3,'simulate() builds one fresh account per seed');
+ assert.equal(typeof Debug.trajectory,'function','the longitudinal mode exists alongside it');
+});
+
+test('CROSS-RUN META: one account really carries forward, and nothing is inserted into it',()=>{
+ const t=Debug.trajectory({trajectories:4,runs:5,prefix:'test-meta'});
+ assert.equal(t.byIndex.length,5,'one cohort per Run index');
+ assert.equal(t.byIndex[0].gradeAtStart,1,'Run 0 starts at the fresh grade');
+ assert.equal(t.byIndex[0].unlockedAtStart,0,'Run 0 starts with nothing unlocked');
+ assert.ok(t.byIndex.at(-1).gradeAtStart>1,'the account actually gained grade across Runs');
+ assert.ok(t.byIndex.at(-1).unlockedAtStart>0,'and actually gained unlocks');
+ for(let i=1;i<t.byIndex.length;i++){
+  assert.ok(t.byIndex[i].gradeAtStart>=t.byIndex[i-1].gradeAtStart,'grade never goes backwards');
+  assert.ok(t.byIndex[i].xpAtStart>t.byIndex[i-1].xpAtStart,'Meta XP accumulates across Runs');
+ }
+ // Every unlock held at the end is one the unlock table can actually grant, and every grade
+ // is one the XP thresholds actually produce — nothing was written into the account directly.
+ for(const a of t.accountsEnd){
+  assert.ok(a.unlocked.every(k=>k in DATA.unlocks),'only real unlock keys');
+  assert.equal(a.grade,[0,120,300,550,850,1250].filter(x=>a.xp>=x).length,'grade follows the XP thresholds');
+ }
+ // The contract mode may only ever pick something the account has unlocked.
+ const best=Debug.trajectory({trajectories:2,runs:3,contract:'best',prefix:'test-best'});
+ for(const idx of best.byIndex)for(const id of Object.keys(idx.contracts)){
+  const c=DATA.contracts.find(c=>c.id===id);
+  assert.ok(c,'a real contract');
+  if(c.unlock)assert.ok(idx.unlockedAtStart>0,'a gated contract only appears once something is unlocked');
+ }
+});
+
+test('RUN-Q30: the adversarial meta-farm is measured per action, not only per Run',()=>{
+ const farm=cached('meta-farm'),engaged=cached('balanced');
+ assert.equal(farm.revenue,0,'the farm sells nothing');
+ assert.equal(farm.spend,0,'and buys nothing');
+ assert.equal(farm.relicSpend,0,'and never pays for a Relic');
+ assert.ok(farm.actionsPerRun<engaged.actionsPerRun,'the farm costs fewer player actions per Run');
+ assert.ok(Number.isFinite(farm.metaXPPerAction)&&Number.isFinite(engaged.metaXPPerAction),'both report XP per action');
+ assert.ok(farm.metaXPPerRun<engaged.metaXPPerRun,'per Run the farm still earns less');
+});
+
+test('FINAL party size 1 / 2 / 3 is measured at the same D30 state without changing it',()=>{
+ const r=cached('balanced');
+ for(const size of [1,2,3]){
+  const b=r.partySize[size];
+  assert.ok(b.samples>0,size+'-person party sampled');
+  assert.ok(b.power>0,size+'-person party has power');
+  assert.ok(b.assaultLo<b.assaultHi,size+'-person assault has a spread');
+ }
+ const p=size=>r.partySize[size].power/r.partySize[size].samples;
+ assert.ok(p(3)>p(2)&&p(2)>p(1),'more legal adventurers is more party power');
+ // The counterfactual is arithmetic on copies: the run that produced it is unaffected.
+ assert.equal(r.final.reached,r.partySize[3].samples>0?r.reached30:r.final.reached,'the real Final still resolved normally');
+ assert.equal(r.final.cleared,r.wins,'and its clears still agree with the Run wins');
+ // clearChance is the exact probability of power*roll >= bossPower for roll ~ U(0.88,1.12).
+ assert.equal(Debug.clearChance(100,230),0,'a hopeless party clears never');
+ assert.equal(Debug.clearChance(1000,230),1,'an overwhelming party clears always');
+ assert.ok(Math.abs(Debug.clearChance(230,230)-.5)<1e-9,'power equal to Boss Power is a coin flip');
+});
+
+test('RUN-Q15: invested regulars and late newcomers are classified from the run own history',()=>{
+ const r=cached('balanced');
+ assert.ok(r.q15.runs>0,'D30 states were classified');
+ assert.ok(r.q15.invested.length>0,'invested regulars were found');
+ assert.ok(r.q15.invested.every(Number.isFinite)&&r.q15.newcomer.every(Number.isFinite),'values are numbers');
+ assert.ok(r.q15.chosenInvested+r.q15.chosenNewcomer>0,'the strongest legal party was classified too');
 });
 
 console.log(count+' simulation groups passed');
