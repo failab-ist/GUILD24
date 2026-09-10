@@ -222,5 +222,16 @@ environment note:    ENVIRONMENT CONSTRAINT, NOT A DESIGN LIMITATION — this ex
 gameplay findings:   RECORDED ONLY, NOT FIXED (per the Chunk F brief) — none newly found this pass.
                      The `protective`/half/vip cohort result carried over from Chunk E stands unexamined
                      until Chunk G.
-remaining in F:      Night / Closing / Relic / Final composition; the full UI-Q01..UI-Q39 walk;
-                     final checkpoint entry.
+screens done:        Morning, Order, Sale (approved as the Sale visual baseline), Night, Closing,
+                     Relic takeover, Final, plus the modal layer. Each phase has its own composition
+                     and its own physical object; none reuses another phase's shell:
+                       Morning  store interior, cork board, till
+                       Order    order form clipped to a board, crates and price tags
+                       Sale     the customer deck — face-up card at the counter, display case, register
+                       Night    the closed shop, one lamp, the returning adventurer
+                       Closing  the till roll the register printed at close
+                       Relic    a delivery crate of bolted brass fixtures
+                       Final    the mouth of 제0게이트
+                     FIXED ON THE WAY: the relic takeover had no base CSS at all and rendered
+                     invisibly into the modal root; the whole modal layer was unstyled.
+remaining in F:      the full UI-Q01..UI-Q39 walk; final checkpoint entry.
