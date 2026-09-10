@@ -207,4 +207,35 @@ test('NIGHT_CLOSING §DEBUG LANGUAGE: the Night copy stays in the world',()=>{
   assert.ok(!night.includes(word),'Night copy still says '+word);
  assert.ok(!/영구 사망 처리/.test(app),'no process language for death');
 });
+test('SALE: the customer line is a balloon on the character, not a system notification',()=>{
+ // COPY_WORLD_VOICE §11 lines have to reach the player, and they have to read as this
+ // customer speaking. The balloon lives inside the scene next to the card, never as a
+ // fixed banner or a bottom toast.
+ assert.ok(/\+speech\(n\)\+standee\(n\)/.test(app),'the balloon sits in the scene with the customer');
+ assert.ok(/\.say\{[^}]*grid-row:1/.test(css),'it takes the row above the customer, not an overlay');
+ assert.ok(!/\.say\{[^}]*position:fixed/.test(css),'it is not a fixed screen notification');
+ assert.ok(/\.say:after\{[^}]*border-top-color/.test(css),'it has a tail pointing down at the character');
+ assert.ok(/\.say:after\{[^}]*var\(--cardw\)/.test(css),'the tail is aimed at the card, not at the room');
+ // It must not eat the decision: no clipping, no ellipsis, no shrink-to-fit.
+ assert.ok(!/\.say[^{]*\{[^}]*text-overflow/.test(css),'a sentence is never ellipsised');
+ assert.ok(!/\.say[^{]*\{[^}]*white-space:nowrap/.test(css),'a long line is allowed to wrap');
+ assert.ok(!/\.say>span\{[^}]*max-height/.test(css),'the text is not clamped to a height');
+ // The menu pin owns the top-right corner; the balloon keeps clear of it.
+ assert.ok(/\.say\{[^}]*max-width:min\(calc\(100% - 44px\)/.test(css),'the balloon stops short of the menu button');
+});
+
+test('SALE: the toast is the system channel only, and it really hides',()=>{
+ // NPC reactions have one owner. The toast is for what the shop itself reports — an unlock,
+ // a save, an action that could not be carried out.
+ assert.ok(!/toast\(game\.run\.notice\)/.test(app),'no NPC line is routed to the toast');
+ assert.ok(!/toast\([^)]*\.say/.test(app),'the spoken line never reaches the toast');
+ assert.ok(/#toast\{/.test(css),'the toast the remaining system calls use is styled');
+ // Chunk F dropped the toast rules when three sheets became one, which left it as an
+ // unstyled slab in the page flow. Its resting state has to be genuinely invisible.
+ const rule=css.slice(css.indexOf('#toast{'),css.indexOf('#toast.show'));
+ assert.ok(/position:fixed/.test(rule),'the toast floats above the screen');
+ assert.ok(/visibility:hidden/.test(rule)&&/opacity:0/.test(rule),'at rest it is not on screen at all');
+ assert.ok(/#toast\.show\{[^}]*visibility:visible/.test(css),'showing it makes it visible again');
+});
+
 console.log(count+' ui guard groups passed');

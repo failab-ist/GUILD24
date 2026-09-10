@@ -173,7 +173,7 @@ function saleScreen(){
  return '<div class="stage p-sale">'+menuFab()
  +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
   +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
-  +standee(n)+waitingLine(waiting)
+  +speech(n)+standee(n)+waitingLine(waiting)
  +'</section>'
  +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
@@ -195,6 +195,17 @@ function waitingLine(waiting){
 // The active customer. Layers, bottom to top: light pool -> contact shadow -> the NPC
 // sticker itself -> the rarity bracket -> the identity plate. Nothing is baked into the
 // artwork and nothing crops it: object-fit contain, standing on the counter line.
+/* The customer's line lives above their head with the tail pointing down at them, so it
+   reads as this person speaking rather than as a system notice. One bubble serves the whole
+   sale: the greeting on arrival, then the purchase or refusal reaction in the same place.
+   It is never dismissed on a timer — it is replaced by the next thing this customer says,
+   or by the next customer, so a reaction can still be read while the remaining slots are
+   being decided. Only lines attributed to the customer at the counter are shown. */
+function speech(n){
+ const said=game.run.say;
+ if(!said||said.npc!==n.id||!said.text)return '';
+ return '<p class="say" role="status" aria-live="polite"><span>'+E(said.text)+'</span></p>';
+}
 function standee(n){
  const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
  return '<button class="who r'+n.rarity+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+' 기록 보기">'
@@ -489,7 +500,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'tip':game.account.tutorial??={};game.account.tutorial[id]=true;game.save();render();break;
  case'open':game.open();selected=null;render();break;
  case'select':selected=selected===id?null:id;render();sound('button');if(selected)requestAnimationFrame(()=>$('.sale-product.open')?.scrollIntoView({block:'nearest'}));break;
- case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;}else{sound('refusal');toast(game.run.notice);}render();break;}
+ case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;}else{sound('refusal');}render();break;}
  case'depart':game.depart();selected=null;render();sound(s.phase==='night'?'return':'depart');break;
  case'close':game.closeDay();selected=null;render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
  case'reroll':game.reroll();render();break;

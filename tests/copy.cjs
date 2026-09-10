@@ -142,4 +142,55 @@ test('the variant layer changes sentences only — it touches no rule and no num
  }
 });
 
+test('§11 / SALE: a spoken line fits the bubble in at most two rows',()=>{
+ // The bubble does not clip, ellipsise or shrink text — so "at most two rows" has to be a
+ // rule about the writing. 360px is the narrowest supported width; the bubble spans the
+ // scene's gutters there, and Pretendard at 15px puts well over 24 Korean glyphs on a row.
+ // A generous per-row budget still catches a line long enough to push the customer down.
+ const ROWS=2,PER_ROW=24;
+ const spoken=[...Object.values(V).filter(Array.isArray).flat(),
+  ...Object.values(V.trait).flat(),
+  ...['full','half','overcharge'].flatMap(k=>S[k]),
+  ...Object.values(S.refuse).flat()];
+ for(const line of spoken){
+  const n=line.replace(/[“”]/g,'').length;
+  assert.ok(n<=ROWS*PER_ROW,'a spoken line stays within two rows of the bubble ('+n+'자): '+line);
+ }
+ // The Night lines share the same discipline in their own block.
+ for(const line of [...Copy.deathPool(),...Copy.livingPool()]){
+  const n=line.replace(/[“”]/g,'').length;
+  assert.ok(n<=ROWS*PER_ROW,'a Night line stays within two rows ('+n+'자): '+line);
+ }
+});
+
+test('SALE: the customer speaks, the system does not speak through them',()=>{
+ const app=read('dist/ui/app.js');
+ // One bubble, and it only renders a line attributed to the customer at the counter.
+ assert.ok(/function speech\(n\)/.test(app),'the sale screen has a single speech bubble');
+ assert.ok(/said\.npc!==n\.id/.test(app),'a line belonging to another customer is not shown');
+ assert.equal((app.match(/class="say"/g)||[]).length,1,'exactly one bubble exists');
+ // An NPC reaction never goes through the global toast — one owner, no duplicate.
+ assert.ok(!/toast\(game\.run\.notice\)/.test(app),'NPC reactions do not use the toast');
+ assert.ok(!/toast\(.*run\.say/.test(app),'the spoken line never goes to the toast');
+ // The system channel and the customer channel are separate fields, so a system message
+ // cannot be attributed to a customer.
+ const shop=read('dist/systems/shop.js');
+ for(const call of ['Copy.arrive','Copy.buy','Copy.refuse'])
+  assert.ok(new RegExp('s(?:\\.run)?\\.say=\\{npc:[^}]*'+call.replace('.','\\.')).test(shop),
+   call+' writes the customer channel, not the system one');
+ assert.ok(/s\.notice='발주 완료\.'/.test(shop),'system messages still use the system channel');
+});
+
+test('SALE: a reaction is replaced, never expired on a timer',()=>{
+ const app=read('dist/ui/app.js');
+ const speech=app.slice(app.indexOf('function speech('),app.indexOf('function standee('));
+ assert.ok(!/setTimeout|setInterval/.test(speech),'the bubble runs on no timer of its own');
+ // What replaces it is the engine writing the next line: the next thing this customer says,
+ // or the next customer arriving. Nothing clears it in between, so a reaction stays readable
+ // while the remaining supply slots are decided.
+ const shop=read('dist/systems/shop.js');
+ assert.ok(/arrive\(\)\{[^}]*\.say=/.test(shop.replace(/\n/g,'')),'a new customer sets their own line');
+ assert.ok(/s\.say=null/.test(shop),'the line is cleared when the day turns over, not by a timer');
+});
+
 console.log(count+' copy groups passed');
