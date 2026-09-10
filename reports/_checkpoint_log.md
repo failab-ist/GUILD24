@@ -185,13 +185,19 @@ balance observation: BOSS POWER — needs User approval before any change (V2_4_
 remaining issue:     NONE
 next chunk:          F — UI / UX / Visual Redesign + Copy (fresh Opus xhigh session, per the plan)
 
-## CHUNK F — UI / UX / VISUAL REDESIGN + COPY  *(IN PROGRESS — Morning / Order / Sale approved-or-under-review; Night / Closing / Relic / Final still on the old markup)*
+## CHUNK F — UI / UX / VISUAL REDESIGN + COPY  *(CLOSED)*
 start HEAD:          e0cd448 (branch rebased off claude/v2.4-full-adoption; the designated branch had
                      been pointing at pre-adoption 8620d84)
-commits so far:      61f52be typography split + Morning/Order overflow gate
-                     b783bc1 ASSETS.md — Pretendard as the information face
+end/commit:          731d36f (18 commits; integrated into claude/v2.4-full-adoption by fast-forward)
+key commits:         61f52be typography split + Morning/Order overflow gate
                      350e165 POS readout, printed quick marks, paper approval area
                      0939aca Sale — the customer at the counter, in three layers
+                     616dde4 Sale — the deck's face-up card (approved visual baseline)
+                     face406 Sale — one deck geometry that holds at every resolution
+                     1f3dd60 Night — the shop after closing, and whoever came back
+                     c9f39cf Closing, the store-support delivery, Final and the modal layer
+                     6750163 NPC art adoption, Night matrix, actual supply attribution
+                     9b0d3a4 + 731d36f Night — compact is less copy, one NPC size everywhere
 files changed:       dist/ui/{app,ui.css,art,presentation}.js; dist/ui/scene.js (new);
                      dist/ui/fonts/* + dist/ui/vendor/* (vendored, see reports/ASSETS.md);
                      dist/ui/assets/npc/npc-01..05.png (supplied NPC asset examples);
@@ -201,8 +207,9 @@ KEEP/PATCH/REPLACE:  REPLACE all presentation source. KEEP the phase machine, re
                      dispatch, action() dispatch, state, Save and RNG — none of them were touched.
                      Gameplay Design / Rule / Formula / Catalog unchanged; canonical/** unchanged
                      (`git diff --name-only -- canonical/` is empty at every commit).
-tests run:           npm test -> PASS (adds 11 ui-guard groups + 3 asset groups)
+tests run:           npm test -> PASS (adds 14 ui-guard, 6 night and 3 asset groups)
                      npm run qa:visual -> clean, 21 captures at 360 / 390 / 430 (reports/ui/)
+                     swept clean at 11 widths (320-1200) x 5 heights (360-1180), plus landscape
                      reports/ui/sale-npc/ — all 5 supplied NPC assets x 360 / 390 / 430, plus the
                      open-register and last-customer states
 implementation note: SALE is built as a presentation architecture, not a card component. The NPC sticker
@@ -234,4 +241,14 @@ screens done:        Morning, Order, Sale (approved as the Sale visual baseline)
                        Final    the mouth of 제0게이트
                      FIXED ON THE WAY: the relic takeover had no base CSS at all and rendered
                      invisibly into the modal root; the whole modal layer was unstyled.
-remaining in F:      the full UI-Q01..UI-Q39 walk; final checkpoint entry.
+late corrections:    NPC production art was adopted in Sale only; every other surface kept its own
+                     Art.avatar call. One resolver, portrait(n,size), now serves Sale, Night, the
+                     notebook and the Final muster, with Art.avatar left as the missing-asset fallback.
+                     Night's outcome copy was split across four screen-local helpers, which allowed
+                     contradictions; label, WHAT_HAPPENED, WHY and WHAT_CHANGED now read one resolved
+                     report through Presentation, and tests/night.cjs pins the whole outcome matrix.
+                     Closing's supply line had the rejected generic wording baked into the resolver;
+                     the event now carries structure only and Presentation names the actual product
+                     and the actual adventurer.
+remaining issue:     NONE
+next chunk:          G — see reports/SESSION_HANDOFF_v2.4.md. Do not redo A-F.
