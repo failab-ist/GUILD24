@@ -19,6 +19,9 @@ Carried past the v2.4 close deliberately. None of these blocks release.
 | B01 | The report generator behind `npm run audit` references an item retired in Chunk A and aborts, leaving `reports/COVERAGE.md` and `reports/TRAITS.md` at v2.1 content. The shipped game is unaffected and the generator is not part of `npm test`. |
 | D01 | `README.md` is current; `WORK_STATE.md` is current; the head section of `reports/AUDIT.md` still describes the pre-v2.4 era (it reads as a dated record, not as current state). |
 | R01 | Wording / flavour review of the 114 NPC lines — `reports/COPY_REVIEW.md`. Taste only; the lines that made unfounded causal claims were corrected before the v2.4 close. |
+| C01 | Split `dist/ui/app.js` (61KB, 29% of the source). Deliberately not done at the v2.4 close — the file is inside an IIFE, so 69 shared bindings would have to be rehomed, and density has to be unpicked first or the split buys nothing. Do it as a standalone task when v2.5 next touches that file. See `reports/CODE_REVIEW_v2.4.md` §3. |
+| C02 | The font-subset check scans every character in `dist`, comments included, so Korean comments grow the shipped font (+2.4% this pass). Excluding comments from the scan is more correct but needs care not to strip `//` inside strings. |
+| C03 | No remote CI. The pre-commit hook (`npm run hooks`) is a local line of defence only. |
 
 ## v2.4 — USER DECISIONS, DEFERRED TO v2.5
 
@@ -61,6 +64,9 @@ Direction of travel only. Each needs its Canonical before any implementation.
 ### Tooling / documentation
 - Audit / report generator repair (**B01**)
 - Stale README / TODO / WORK_STATE cleanup (**D01**)
+- `app.js` split, once density is unpicked (**C01**)
+- Font subset should ignore comments (**C02**)
+- Remote CI (**C03**)
 
 ### Verification
 - Deeper verification — per-relic causal ROI, per-hazard pity counters, full-unlock-state

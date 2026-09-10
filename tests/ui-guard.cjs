@@ -238,4 +238,14 @@ test('SALE: the toast is the system channel only, and it really hides',()=>{
  assert.ok(/#toast\.show\{[^}]*visibility:visible/.test(css),'showing it makes it visible again');
 });
 
+test('render: a same-view redraw keeps the keyboard where it was',()=>{
+ // render() replaces #app wholesale, which drops focus. Scroll was already restored; focus
+ // was not, so a keyboard user was thrown back to the top of the screen on every pick.
+ const fn=app.slice(app.indexOf('function render()'),app.indexOf('\nfunction ',app.indexOf('function render()')+1));
+ assert.ok(/const focusKey=/.test(fn),'the focused control is captured before the wipe');
+ assert.ok(/data-action=/.test(fn),'it is found again by the same handle the click delegation uses');
+ assert.ok(/if\(!changed&&focusKey\)/.test(fn),'it is only restored when the view did not change');
+ assert.ok(/if\(changed\)\$\('#phase-content'\)\.focus/.test(fn),'a new screen still focuses its own body');
+});
+
 console.log(count+' ui guard groups passed');

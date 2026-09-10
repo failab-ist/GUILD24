@@ -3,7 +3,7 @@
 // CORE_RUN_QA RUN-Q10/Q11/Q12/Q13/Q19/Q20 and NIGHT_CLOSING §SKIP CONTRACT §SAVE/RESUME.
 // These drive the real engine: a round trip is asserted by continuing the run, never by
 // comparing serialised shape alone.
-const assert=require('node:assert/strict');
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const copy=x=>JSON.parse(JSON.stringify(x));
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
@@ -256,6 +256,31 @@ test('NIGHT_CLOSING §SKIP CONTRACT: reading every beat and skipping every beat 
   step(read);step(skip);
  }
  assert.deepEqual(skip.run.npcs,read.run.npcs,'and the same roster afterwards');
+});
+
+test('CORE_RUN §SAVE/LOAD: the validator reads as named checks, and each one still bites',()=>{
+ // Save.valid was one 5,278-character line of 126 conditions — the function that guards
+ // save integrity, and the one this project keeps extending. It is now named checks. This
+ // pins the readability so it cannot silently collapse back, and re-asserts that the
+ // clauses still reject: the structure changed, the behaviour must not.
+ const src=fs.readFileSync(path.join(__dirname,'..','dist/systems/save.js'),'utf8');
+ const longest=Math.max(...src.split('\n').map(l=>l.length));
+ assert.ok(longest<400,'no line in the validator is a wall of conditions (longest '+longest+')');
+ for(const name of ['accountOk','runShapeOk','rosterOk','npcOk','stockOk','progressOk','finalOk','relicWindowOk'])
+  assert.ok(src.includes('function '+name),'the check is named: '+name);
+ // Behaviour, not shape: one broken field per clause, each must be refused.
+ const g=fresh('validator');while(g.run.phase!=='sell')step(g);
+ g.run.event={...DATA.events[0]};g.run.say={npc:g.run.npcs[0].id,text:'x'};g.save();
+ const raw=JSON.parse(Save.export(g.account,g.run));
+ assert.ok(Save.valid(raw),'the live run still validates');
+ const broken=m=>{const c=copy(raw);m(c);return Save.valid(c);};
+ for(const [why,mutate] of [
+  ['account',s=>s.account.grade=0],['run shape',s=>s.run.day=31],
+  ['roster',s=>s.run.queue.push('nope')],['npc',s=>s.run.npcs[0].job='nope'],
+  ['stock',s=>s.run.inventory[0]&&(s.run.inventory[0].item='nope')],
+  ['progress',s=>s.run.cursor=-1],['relic window',s=>s.run.relicWindow.milestoneDay=7],
+  ['spoken line',s=>s.run.say.npc='nope'],['event',s=>s.run.event={id:'nope'}]])
+  assert.equal(broken(mutate),false,'still refused: '+why);
 });
 
 console.log(count+' integration groups passed');
