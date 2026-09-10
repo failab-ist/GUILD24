@@ -474,6 +474,90 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .tills button:nth-child(1){--key:#8ec6dd}
 .tills button:nth-child(2){--key:var(--gold);background:#4a3620;box-shadow:inset 2px 2px 0 #ffffff33,inset -3px -3px 0 #00000080,3px 3px 0 #00000080}
 .tills button:nth-child(3){--key:#d98a5a}
+/* =====================================================================
+   NIGHT — the shop after closing, one lamp on, and whoever came back.
+   Nothing here is borrowed from the trading day: no paper, no shelf, no counter, no
+   card. A dark room, the street through the window, and one person at a time. The
+   outcome is the loudest thing on screen; WHY is chalked on the slate; WHAT CHANGED is
+   a handful of stamped tokens. A death cools the whole room.
+   ===================================================================== */
+.p-night{background:#0a0d16}
+.p-night .nightband{position:absolute;left:0;right:0;top:0;z-index:0;line-height:0;pointer-events:none}
+.p-night .nightband .band-art{display:block;width:100%;height:auto}
+.p-night .nightband:after{content:'';position:absolute;left:0;right:0;bottom:0;height:56%;
+ background:linear-gradient(180deg,#0a0d1600 0,#0a0d16 100%)}
+.p-night .stage-scroll{position:relative;z-index:1;display:flex;flex-direction:column;padding:0 var(--gutter) 24px;
+ background:linear-gradient(180deg,#0a0d1600 0,#0a0d1600 calc(var(--sky) - 40px),#100c07 var(--sky),#140f08 100%);
+ --sky:min(33vw,120px)}
+.p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
+.p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
+.p-night .dock .bare[disabled]{color:#4c5062}
+.p-night .dock .stamp{margin-left:auto;min-height:52px;min-width:132px;font:600 17px/1 var(--ui);
+ background:#2f7a4d;color:#f0fbf3;
+ box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
+/* the rail of return tags: the night's progress as objects, one per adventurer out today */
+/* a short beat sits in the middle of the room rather than clinging to the top of it;
+   a long one falls back to normal flow so nothing scrolls out of reach */
+.beat-room{flex:1 1 auto;display:flex;flex-direction:column;justify-content:safe center;min-height:0}
+.rail{position:relative;flex:0 0 auto;display:flex;align-items:flex-start;gap:6px;
+ margin-top:calc(var(--sky) + 10px);padding-bottom:18px}
+.rail:before{content:'';position:absolute;left:0;right:0;top:1px;height:2px;background:#4a3a24}
+.rail .rtag{position:relative;display:block;width:15px;height:27px;flex:0 0 auto}
+.rail .rtag .tag-art{display:block;width:100%;height:100%}
+.rail .count{margin-left:auto;align-self:center;font:400 12px/1 var(--f-led);color:#7d8496}
+.event-note{margin:0 0 14px;padding:8px 11px;font:400 13px/1.5 var(--ui);color:#cbb98d;
+ background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
+/* the beat */
+.beat{position:relative}
+.stand-in{display:flex;align-items:flex-end;gap:14px;margin-bottom:16px}
+.returner{display:block;flex:0 0 auto;width:min(44vw,190px);height:min(44vw,190px);
+ object-fit:contain;object-position:50% 100%;image-rendering:auto;
+ filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 14px #ffd79a3d)}
+.returner.small{width:auto;height:auto;filter:none;display:grid;place-items:end}
+.beat.quiet .stand-in{gap:12px;margin-bottom:12px}
+.beat .who{flex:1 1 auto;min-width:0;padding-bottom:4px}
+.verdict{font:700 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
+ color:var(--tone,#e8d9b0);text-shadow:3px 3px 0 #00000099;margin-bottom:8px;
+ padding-bottom:7px;box-shadow:inset 0 -4px 0 var(--tone,#e8d9b0)}
+.beat.quiet .verdict{font-size:26px;padding-bottom:5px;box-shadow:inset 0 -3px 0 var(--tone,#e8d9b0)}
+.beat .who h3{font:600 19px/1.25 var(--ui);color:#f2e7cd}
+.beat .place{font:400 13px/1.4 var(--ui);color:#8f94a6}
+.beat .route{margin-top:4px;font:400 13px/1.4 var(--ui);color:var(--gold)}
+.t-great{--tone:#f0cd72}
+.t-safe{--tone:#9fd6a8}
+.t-hurt{--tone:#e0925a}
+.t-severe{--tone:#d1584b}
+.t-gone{--tone:#cfd3dd}
+/* WHAT HAPPENED, then WHY chalked on the slate */
+.beat .what{font:400 17px/1.55 var(--ui);color:#eee3c6;margin-bottom:12px}
+.beat.quiet .what{font-size:15px}
+.beat .why{display:flex;gap:10px;align-items:flex-start;margin-bottom:16px;padding:10px 12px;
+ font:400 14px/1.55 var(--ui);color:#b9bccb;background:#0f131e;
+ box-shadow:inset 2px 2px 0 #00000073,inset -2px -2px 0 #ffffff0f}
+.beat .why i{flex:0 0 auto;width:4px;align-self:stretch;background:var(--tone,#e8d9b0);opacity:.7}
+/* WHAT CHANGED — stamped tokens, only for what actually moved */
+.changed{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.tok{display:inline-grid;gap:2px;padding:6px 10px 7px;background:var(--tex-metal),#39434b;background-size:8px 8px;
+ box-shadow:inset 0 2px 0 #ffffff26,inset 0 -3px 0 #00000080,2px 2px 0 #00000073}
+.tok i{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.12em;color:#9aa6b2}
+.tok b{font:400 15px/1.1 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
+.tok b em{font-style:normal;color:#9fd6a8}
+.tok.up b{color:#9fd6a8}
+.tok.gain b{color:var(--gold)}
+.tok.down{background:var(--tex-metal),#4a2f2c;background-size:8px 8px}
+.tok.down b{color:#e8927f}
+.beat .influence{font:400 13px/1.55 var(--ui);color:#cbb98d;margin-bottom:12px}
+.gone-note{font:400 14px/1.5 var(--ui);color:#cfd3dd;margin-bottom:12px;padding:9px 12px;
+ background:#0d0f16;box-shadow:inset 0 0 0 2px #cfd3dd26}
+.beat blockquote{font:400 15px/1.7 var(--ui);color:#b9bccb;padding:2px 0 2px 14px;
+ box-shadow:inset 3px 0 0 #3a4152}
+/* a death cools the room: the lamp light drains out of the scene and the figure with it */
+.p-night.cold{background:#080a10}
+.p-night.cold .nightband .band-art{filter:saturate(.35) brightness(.7)}
+.p-night.cold .stage-scroll{--sky:min(33vw,120px);
+ background:linear-gradient(180deg,#080a1000 0,#080a1000 calc(var(--sky) - 40px),#0c0e14 var(--sky),#0a0c12 100%)}
+.p-night.cold .returner{filter:grayscale(1) brightness(.42) contrast(1.1) drop-shadow(0 3px 0 #00000099)}
+.p-night.cold .verdict{text-shadow:3px 3px 0 #000000cc}
 /* ============ 600px+ ============ */
 @media(min-width:600px){
  :root{--gutter:24px}

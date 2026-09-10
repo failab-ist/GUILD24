@@ -205,29 +205,51 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  return '<div class="kit"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
  +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방</b>'+Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],20):'')+'</i>').join('')+'</span></div>';}
-// NIGHT — a result beat, not a report. One returning adventurer, the outcome as a
-// display word, WHAT_HAPPENED -> WHY -> WHAT_CHANGED read down the page. A routine
-// return collapses to a quiet inline line; consequence takes the whole beat.
+// NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
+// the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
+// the loudest thing on screen as a display word, then WHY on the slate, then WHAT CHANGED
+// as brass tokens. A routine return is a short beat; a death takes the whole room and the
+// lamp goes cold. The rail of return tags is the night's progress — one tag per
+// adventurer who went out, and a tag says nothing about a result not yet read.
 function nightScreen(){
  const s=game.run,at=s.nightCursor||0,r=s.results[at],last=at+1>=s.results.length;
- const body='<div class="night-head"><span class="label">밤의 귀환</span>'+pips(s.results.length,at)+'</div>'
- +(s.pilgrimage?'<p class="event-note">게이트 순례주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
- +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>');
+ const rail=s.results.length?'<div class="rail" aria-label="귀환 '+Math.min(at+1,s.results.length)+' / '+s.results.length+'">'
+  +s.results.slice(0,12).map((_,k)=>'<span class="rtag">'+Scene.returnTag(k===at?'now':k<at?'done':'wait')+'</span>').join('')
+  +'<span class="count">'+Math.min(at+1,s.results.length)+' / '+s.results.length+'</span></div>':'';
  const dock=btn('건너뛰기','night-skip','bare',last?'disabled':'')+btn('전체 건너뛰기','closing','bare')
  +btn(last?'정산으로':'다음','night-next','stamp');
- return stage('night','밤','',body,dock);
+ return '<div class="stage p-night'+(r&&r.outcome==='사망'?' cold':'')+'">'+menuFab()
+ +'<div class="nightband" aria-hidden="true">'+Scene.nightRoom()+'</div>'
+ +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
+  +rail
+  +'<div class="beat-room">'
+   +(s.pilgrimage?'<p class="event-note">게이트 순례주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
+   +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>')
+  +'</div>'
+ +'</main><div class="dock">'+dock+'</div></div>';
 }
+// The tone of a beat is the actual outcome, never a score: 대성공 warm, 퇴각/부상 ember,
+// 중상 blood, 사망 bone. 위기에서 생환 keeps its own reading so the rescue is not
+// presented as an ordinary success.
+function beatTone(r){return r.outcome==='사망'?'gone':r.outcome==='중상'?'severe':
+ ['부상','퇴각'].includes(r.outcome)?'hurt':r.outcome==='대성공'?'great':'safe';}
 function beat(r){
- const n=game.run.npcs.find(x=>x.id===r.npcId),grave=r.outcome==='사망',hurt=['중상','부상','퇴각'].includes(r.outcome);
- const heavy=weighty(r);
- return '<article class="beat '+(grave?'grave ':hurt?'hurt ':'')+(heavy?'':'quiet')+'"><span class="portrait">'+Art.avatar(n,heavy?92:52)+'</span>'
- +'<p class="verdict">'+E(r.rescued&&!grave?'위기에서 귀환':r.outcome)+'</p>'
- +'<h3 class="who">'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
- +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
+ const n=game.run.npcs.find(x=>x.id===r.npcId),tone=beatTone(r),heavy=weighty(r);
+ const art=n&&Scene.npcArt(n),verdict=r.rescued&&tone!=='gone'?'위기에서 생환':r.outcome;
+ const why=whyLine(r);
+ return '<article class="beat t-'+tone+(heavy?'':' quiet')+'">'
+ +'<div class="stand-in">'
+  +(heavy&&art?'<img class="returner" src="'+art+'" alt="" draggable="false">'
+              :'<span class="returner small">'+Art.avatar(n,heavy?84:52)+'</span>')
+  +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'
+   +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
+   +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')+'</div>'
+ +'</div>'
  +'<p class="what">'+E(outcomeReason(r))+'</p>'
- +'<p class="why">'+whyLine(r)+'</p>'
+ +(why?'<p class="why"><i aria-hidden="true"></i>'+why+'</p>':'')
  +'<div class="changed">'+changedRows(r)+'</div>'
  +((r.events||[]).length?'<p class="influence">'+E(r.events[0].text)+'</p>':'')
+ +(tone==='gone'?'<p class="gone-note">다시는 가게 문을 열지 않는다.</p>':'')
  +(heavy?'<blockquote>'+E(r.quote)+'</blockquote>':'')+'</article>';
 }
 // Importance decides presentation weight: a quiet return must not cost the same
@@ -237,12 +259,27 @@ function whyLine(r){const bits=[];
  if(r.combatWon===false)bits.push('적을 물리치지 못했다.');else if(r.combatWon===true)bits.push('적을 물리쳤다.');
  if(r.environmentHurt)bits.push(r.cause&&r.cause!=='accident'?(D.hazards[r.cause]||'보급 부담')+' 때문에 원정 내내 고전했다.':'원정 중 예상치 못한 사고가 있었다.');
  return E(bits.join(' '));}
-function changedRows(r){const out=[];
- (r.changes||[]).slice(0,3).forEach(c=>out.push('<p class="up">'+E(c)+'</p>'));
- (r.statChanges||[]).slice(0,4).forEach(x=>out.push('<p class="up">'+Presentation.labels[x.key]+' '+Math.round(x.before)+' → '+Math.round(x.after)+'</p>'));
- if(r.recovery)out.push('<p class="down">휴식 '+r.recovery+'일</p>');
- else if(r.injury)out.push('<p class="down">남은 부상 · 강인함 -'+(r.injury*5)+' · 투력 -'+(r.injury*3)+'</p>');
- out.push('<p>경험치 +'+r.xp+' · 전리품 '+r.loot+'G</p>');
+// WHAT CHANGED — only what actually moved, each one a stamped token rather than a line
+// of a ledger. Growth reads as before -> after so the change is visible, not asserted.
+// The resolution writes these as sentences; this splits each into its own label and value
+// so a level-up, a new trait, a promotion and a piece of kit are told apart at a glance.
+function changeToken(text){
+ let m=/^Lv\.\s*(.+)$/.exec(text);                       if(m)return ['up','레벨','Lv. '+E(m[1])];
+ m=/^새 특성\s*[「'"']?(.+?)[」'"']?$/.exec(text);            if(m)return ['up','새 특성',E(m[1])];
+ m=/^(.*?)\s*승급$/.exec(text);                           if(m)return ['up','승급',E(m[1])];
+ m=/^(.+?)\s*·\s*(전투\s*\+\d+)$/.exec(text);            if(m)return ['up','장비',E(m[1])+' <em>'+E(m[2])+'</em>'];
+ return ['up','변화',E(text)];
+}
+function changedRows(r){const tok=(cls,label,value)=>
+  '<span class="tok '+cls+'"><i>'+E(label)+'</i><b>'+value+'</b></span>';
+ const out=[];
+ (r.changes||[]).slice(0,3).forEach(c=>out.push(tok(...changeToken(c))));
+ (r.statChanges||[]).slice(0,4).forEach(x=>{const label=Presentation.labels[x.key];
+  if(label)out.push(tok('up',label,Math.round(x.before)+' → '+Math.round(x.after)));});
+ if(r.recovery)out.push(tok('down','휴식',r.recovery+'일'));
+ else if(r.injury)out.push(tok('down','남은 부상','강인함 -'+(r.injury*5)+' · 투력 -'+(r.injury*3)));
+ out.push(tok('','경험치','+'+r.xp));
+ out.push(tok('gain','전리품',r.loot+'G'));
  return out.join('');}
 // CLOSING — economics. The one place a ledger belongs, so it is a slip of paper.
 function closingScreen(){

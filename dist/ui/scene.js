@@ -152,6 +152,46 @@ function shelfStrip(seed=3){
  s+=r(0,58,360,6,'#a2977f');
  return svg(360,64,s,'band-art','xMidYMax');
 }
+/* ---- night ---------------------------------------------------------------------
+   The shop after closing, seen from inside: the street door, the window beside it and a
+   single lamp still burning over the counter. Nothing of the trading day is in it — no
+   shelves, no board, no counter — so Night cannot be mistaken for Morning or Sale. */
+function nightRoom(seed=7){
+ const rd=rng(seed);let s=r(0,0,360,120,'#0e0a06');
+ /* the shop window: frame, then the street through it */
+ s+=r(18,10,222,80,'#0b1020');
+ for(let i=0;i<30;i++){const x=Math.floor(rd()*212)+22,y=Math.floor(rd()*40)+14;s+=r(x,y,2,2,rd()>.6?'#cdd8ef':'#6d7a9c');}
+ s+=r(66,20,12,12,'#e8e4c8')+r(64,23,2,6,'#e8e4c8')+r(78,23,2,6,'#e8e4c8')+r(69,17,6,2,'#e8e4c8')+r(69,32,6,2,'#e8e4c8');
+ for(const [x0,w,h] of [[20,30,24],[54,16,30],[74,26,18],[106,20,28],[132,30,20],[168,18,32],[192,26,22],[222,18,26]]){
+  s+=r(x0,90-h,w,h,'#0a0f1c');
+  for(let k=0;k<2;k++){const wx=x0+4+k*(w-11),wy=94-h+k*7;if(wx+5<x0+w)s+=r(wx,wy,5,5,rd()>.45?'#e0b464':'#141b2c');}}
+ for(let i=0;i<24;i++)s+=r(Math.floor(rd()*212)+22,Math.floor(rd()*62)+14,1,7,'#2f4066');
+ s+=r(14,6,230,5,'#2a2118')+r(14,6,5,86,'#2a2118')+r(236,6,5,86,'#2a2118')+r(126,10,3,80,'#2a2118')
+  +r(14,86,230,6,'#3b2f21');
+ /* the street door beside it */
+ s+=r(256,4,84,92,'#2a2118')+r(261,9,74,87,'#4a3928')+r(268,16,60,34,'#0b1020');
+ for(let i=0;i<8;i++){const x=Math.floor(rd()*52)+272,y=Math.floor(rd()*26)+20;s+=r(x,y,2,2,'#6d7a9c');}
+ s+=r(268,16,60,3,'#2a2118')+r(268,50,60,3,'#2a2118')+r(272,60,52,26,'#3f3020')+r(322,62,6,6,'#c8a35e');
+ /* the wall and floor inside, and the one lamp still burning over where they stand */
+ s+=r(0,92,360,28,'#160f08')+r(0,92,360,3,'#2a2118')+r(0,112,360,8,'#241a10')+r(0,112,360,2,'#3b2f21');
+ /* the lamp hangs in the room, in front of the glass. Its light belongs to the figure
+    standing under it, not to the street, so no cone is drawn into the window. */
+ s+=r(126,0,3,14,'#3b2f21')+r(114,14,27,5,'#6b5029')+r(117,19,21,9,'#f2d999')+r(121,28,13,4,'#d0a960')
+  +r(124,32,7,3,'#ffeec2');
+ return svg(360,120,s,'band-art','xMidYMax');
+}
+/* A return tag on the rail: one per adventurer who went out today. It says nothing about
+   the result until that beat is reached — only which one is being read now. */
+function returnTag(state){
+ const face=state==='now'?'#efdfb4':state==='done'?'#6b5b3f':'#332c20';
+ const ink=state==='now'?'#2a2118':'#0f0c07';
+ let s=r(0,0,14,2,'#6b5029')+r(6,2,2,4,'#8a7038');
+ s+=r(1,6,12,18,face)+r(1,6,12,2,'#ffffff33')+r(1,22,12,2,'#00000066');
+ s+=r(4,11,6,2,ink)+r(4,15,4,2,ink);
+ if(state==='now')s+=r(0,5,14,1,'#ffe6ad')+r(0,24,14,1,'#00000080');
+ return `<svg class="tag-art" viewBox="0 0 14 25" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
+}
+
 /* ---- asset slots -------------------------------------------------------------
    Every scene asset resolves through slot(), so a production PNG/SVG can replace a
    procedural one later by registering it in Scene.manifest without touching any screen.
@@ -172,5 +212,5 @@ const anchors={
 const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),
  seal,crate,priceTag,hazardIcon,manifest,slot,anchors,anchorStyle,
- npcArt,npcPool,cardBack,shelfStrip};
+ npcArt,npcPool,cardBack,shelfStrip,nightRoom,returnTag};
 })(globalThis);
