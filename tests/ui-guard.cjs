@@ -67,7 +67,7 @@ test('UI-Q01: Morning and Order are different screens, not one template',()=>{
  assert.ok(morning.includes('class="daysign"')&&morning.includes('class="till"'),'the day and the float are objects in the room');
  assert.ok(morning.includes('class="board"')&&morning.includes('class="pinned"'),'Gates are notices pinned to the board');
  assert.ok(!/Scene\.(ceiling|wall|counter)|Art\.scene/.test(order),'ORDER carries no store scene');
- assert.ok(order.includes('class="form"')&&order.includes('발 주 서'),'Order is a paper order form');
+ assert.ok(order.includes('class="form"')&&order.includes('발주서'),'Order is a paper order form');
  assert.ok(order.includes('Scene.priceTag(')&&order.includes('Scene.crate(')&&order.includes('Scene.seal('),
   'offers carry a real price tag, stock crate and corporate seal');
  for(const shared of ['class="board"','class="daysign"','class="pinned"','class="till"'])
@@ -86,7 +86,7 @@ test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is expl
 
 test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hierarchy',()=>{
  const order=fn('orderForm')+fn('orderScreen');
- assert.ok(order.includes('본사 발주')||order.includes('발 주 서'),'the form is titled as the HQ order');
+ assert.ok(order.includes('본사 발주')||order.includes('발주서'),'the form is titled as the HQ order');
  for(const label of ['보유','선택','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
  assert.ok(order.includes('tierLine()'),'the next-day Tier forecast is present and secondary');

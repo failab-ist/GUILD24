@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Vendor Chunk F presentation assets into dist/ so the game stays static and local.
 
-  Galmuri (SIL OFL 1.1, (c) Lee Minseo) -> dist/ui/fonts/*.woff2, subset to the glyphs
-    this build can actually render. Every player-visible string in GUILD24 is a literal in
-    dist/**/*.js, so the union of those characters plus ASCII is a complete, safe subset.
+  Galmuri (SIL OFL 1.1, (c) Lee Minseo) -> the ATMOSPHERE face: signage, document titles,
+    diegetic readouts. Pretendard (SIL OFL 1.1, (c) Kil Hyung-jin) -> the INFORMATION face:
+    every value, effect line and control label. Both are subset to the glyphs this build can
+    actually render; every player-visible string in GUILD24 is a literal in dist/**/*.js, so
+    the union of those characters plus ASCII is a complete, safe subset.
   anime.js (MIT, (c) Julian Garnier) -> dist/ui/vendor/anime.umd.min.js
 
 Run: npm run assets. The output is committed; the game never fetches anything at runtime.
@@ -13,9 +15,11 @@ from fontTools import subset
 
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC=os.path.join(ROOT,'node_modules','galmuri','dist')
+PRE=os.path.join(ROOT,'node_modules','pretendard','dist','public','static')
 OUT=os.path.join(ROOT,'dist','ui','fonts')
 VEN=os.path.join(ROOT,'dist','ui','vendor')
-FACES=['Galmuri14','Galmuri11','Galmuri11-Bold','GalmuriMono11']
+FACES=['Galmuri14','Galmuri11-Bold','GalmuriMono11']
+UI_FACES=[('Pretendard-Regular','Pretendard'),('Pretendard-SemiBold','Pretendard-SemiBold')]
 
 def glyphs():
     chars=set()
@@ -34,6 +38,17 @@ def main():
     os.makedirs(OUT,exist_ok=True); os.makedirs(VEN,exist_ok=True)
     text=glyphs()
     print(f'subsetting to {len(text)} glyphs')
+    def cut(src,dst):
+        opts=subset.Options(flavor='woff2',desubroutinize=True,layout_features=['*'],
+                            notdef_outline=True,recalc_bounds=True)
+        font=subset.load_font(src,opts)
+        sub=subset.Subsetter(options=opts); sub.populate(text=text); sub.subset(font)
+        subset.save_font(font,dst,opts); font.close()
+        print(f'  {os.path.basename(dst)}  {os.path.getsize(src)//1024}K -> {os.path.getsize(dst)//1024}K')
+    for src_name,out_name in UI_FACES:
+        cut(os.path.join(PRE,src_name+'.otf'),os.path.join(OUT,out_name+'.woff2'))
+    shutil.copyfile(os.path.join(ROOT,'node_modules','pretendard','dist','LICENSE.txt'),
+                    os.path.join(OUT,'OFL-Pretendard.txt'))
     for face in FACES:
         src=os.path.join(SRC,face+'.woff2')
         dst=os.path.join(OUT,face+'.woff2')

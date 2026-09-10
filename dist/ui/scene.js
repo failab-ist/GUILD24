@@ -10,15 +10,15 @@ const rng=n=>{let s=n*2654435761%2147483647;return()=>(s=s*48271%2147483647)/214
 
 /* ---- ceiling: shutter still down, panel lights, the shop sign the DAY hangs on ---- */
 function ceiling(){
- let s=r(0,0,360,72,'#20262b');
- for(let y=0;y<24;y+=6)s+=r(0,y,360,4,'#3b444c')+r(0,y+4,360,2,'#232a30');   // shutter slats
- s+=r(0,24,360,3,'#141a1f');
- for(let x=0;x<360;x+=46)s+=r(x,27,44,20,'#2b3238')+r(x,47,44,2,'#1a2025');   // ceiling panels
- s+=r(24,33,108,7,'#f2e7c2')+r(24,40,108,2,'#8d8467')                         // light tubes
-  +r(228,33,108,7,'#f2e7c2')+r(228,40,108,2,'#8d8467');
- s+=r(132,49,3,9,'#4d5157')+r(225,49,3,9,'#4d5157');                          // sign rods
- s+=r(118,58,124,14,'#2f7a4d')+r(118,58,124,3,'#7ddc9f')+r(118,69,124,3,'#12301f');
- return svg(360,72,s,'band-art');
+ let s=r(0,0,360,92,'#20262b');
+ for(let y=0;y<26;y+=6)s+=r(0,y,360,4,'#3b444c')+r(0,y+4,360,2,'#232a30');
+ s+=r(0,26,360,3,'#141a1f');
+ for(let x=0;x<360;x+=46)s+=r(x,29,44,22,'#2b3238')+r(x,51,44,2,'#1a2025');
+ s+=r(24,35,108,8,'#f2e7c2')+r(24,43,108,2,'#8d8467')
+  +r(228,35,108,8,'#f2e7c2')+r(228,43,108,2,'#8d8467');
+ s+=r(126,53,3,8,'#4d5157')+r(231,53,3,8,'#4d5157');
+ s+=r(112,60,136,32,'#2f7a4d')+r(112,60,136,4,'#7ddc9f')+r(112,88,136,4,'#12301f');
+ return svg(360,92,s,'band-art');
 }
 /* ---- back wall: store fixtures top to bottom, anchored to the counter ---- */
 function wall(seed=7){
@@ -94,8 +94,8 @@ function crate(inner,size=48){
 }
 /* ---- a punched price tag on a string ---- */
 function priceTag(text,tone='sign'){
- return `<span class="tag-art tone-${tone}"><svg viewBox="0 0 96 40" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">`
- +`<path d="M16 0H96V40H16L0 20Z" fill="currentColor"/>`+r(9,17,6,6,'#00000059')
+ return `<span class="tag-art tone-${tone}"><svg viewBox="0 0 78 32" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">`
+ +`<path d="M13 0H78V32H13L0 16Z" fill="currentColor"/>`+r(7,13,5,5,'#00000059')
  +`</svg><b>${text}</b></span>`;
 }
 /* ---- hazard pictograms: one sign per canonical Hazard, readable at 20px ---- */
@@ -124,6 +124,13 @@ function slot(name,fallback,cls='band-art'){
  return file?`<img class="${cls}" src="${file}" alt="" aria-hidden="true">`:fallback();
 }
 
+/* Where the interface may sit on the art, as a percentage of each band. Published with
+   the art so a production replacement only has to restate these, never touch a screen. */
+const anchors={
+ daysign:{band:'ceiling',left:31.1,top:65.2,width:37.8,height:34.8},
+ till:{band:'counter',left:31.1,top:5,width:37.8,height:26.7}
+};
+const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),
- seal,crate,priceTag,hazardIcon,manifest,slot};
+ seal,crate,priceTag,hazardIcon,manifest,slot,anchors,anchorStyle};
 })(globalThis);

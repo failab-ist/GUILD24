@@ -35,7 +35,7 @@ function serve(){
 }
 
 async function drive(page,target,seed){
- await page.evaluate(`localStorage.clear()`);
+ await page.addInitScript(()=>{try{localStorage.clear();}catch(e){}});
  await page.reload({waitUntil:'load'});
  await page.click('#modal-root details summary');
  await page.fill('#seed',seed);
@@ -71,31 +71,89 @@ async function audit(page,width,screen){
   const fails=[],warn=[];
   const de=document.documentElement;
   if(de.scrollWidth>width+1)fails.push(`horizontal overflow: documentElement ${de.scrollWidth}px > ${width}px`);
-  const body=document.querySelector('.screen-body');
-  if(body&&body.scrollWidth>body.clientWidth+1)fails.push(`screen-body scrolls sideways (${body.scrollWidth}>${body.clientWidth})`);
-  for(const el of document.querySelectorAll('.screen-body *')){
+  const body=document.querySelector('.stage-scroll,.board');
+  if(body&&body.scrollWidth>body.clientWidth+1)fails.push(`scroll surface scrolls sideways (${body.scrollWidth}>${body.clientWidth})`);
+  // an element is only on screen if it survives every clipping ancestor, not just the viewport:
+  // content scrolled past the end of a scroll surface is clipped, never overlapping the dock
+  const vis=el=>{
    const r=el.getBoundingClientRect();
-   if(r.width&&r.right>width+1)fails.push(`element past the right edge: ${el.className||el.tagName} right=${Math.round(r.right)}`);
+   if(r.width<=0||r.height<=0||r.bottom<=0||r.top>=innerHeight)return false;
+   for(let n=el.parentElement;n&&n!==document.body;n=n.parentElement){
+    const o=getComputedStyle(n);
+    if(o.overflowY==='visible'&&o.overflowX==='visible')continue;
+    const c=n.getBoundingClientRect();
+    if(r.bottom<=c.top+1||r.top>=c.bottom-1||r.right<=c.left+1||r.left>=c.right-1)return false;
+   }
+   return true;};
+  // the rect a player can actually see: intersected with every clipping ancestor, so a row
+  // half-scrolled under the dock is not reported as overlapping it
+  const clip=el=>{
+   let r=el.getBoundingClientRect();
+   let box={left:r.left,top:r.top,right:r.right,bottom:r.bottom};
+   for(let n=el.parentElement;n&&n!==document.body;n=n.parentElement){
+    const o=getComputedStyle(n);
+    if(o.overflowY==='visible'&&o.overflowX==='visible')continue;
+    const c=n.getBoundingClientRect();
+    box={left:Math.max(box.left,c.left),top:Math.max(box.top,c.top),
+         right:Math.min(box.right,c.right),bottom:Math.min(box.bottom,c.bottom)};
+   }
+   return box;};
+  const name=el=>(typeof el.className==='string'?el.className:el.getAttribute('class'))||el.tagName;
+  // shapes inside an <svg> are clipped by its viewport, so they are not layout overflow
+  const layout=el=>!el.closest('svg');
+  for(const el of document.querySelectorAll('.stage *')){
+   if(!vis(el)||!layout(el))continue;
+   const r=el.getBoundingClientRect();
+   if(r.right>width+1)fails.push(`past the right edge: ${name(el)} right=${Math.round(r.right)}`);
+   if(r.left<-1)fails.push(`past the left edge: ${name(el)} left=${Math.round(r.left)}`);
    if(fails.length>6)break;
   }
-  const header=document.querySelector('.game-header');
-  if(header&&header.getBoundingClientRect().top<0)fails.push('header clipped above the viewport');
-  const bar=document.querySelector('.phase-action');
+  // an element must stay inside the material it belongs to
+  const contained=[['.tag-art','.form'],['.daysign','.band.ceiling'],['.till','.band.counter'],
+                   ['.slip','.board'],['.tray','.band.counter'],['.dial','.line'],['.ledger','.form']];
+  for(const [inner,outer] of contained){
+   for(const el of document.querySelectorAll(inner)){
+    if(!vis(el))continue;
+    const host=el.closest(outer)||document.querySelector(outer);
+    if(!host)continue;
+    const a=clip(el),b=host.getBoundingClientRect();
+    if(a.right>b.right+1.5||a.left<b.left-1.5||a.bottom>b.bottom+1.5||a.top<b.top-1.5)
+     fails.push(`${inner} leaves ${outer} (${Math.round(a.left)},${Math.round(a.top)},${Math.round(a.right)},${Math.round(a.bottom)} vs ${Math.round(b.left)},${Math.round(b.top)},${Math.round(b.right)},${Math.round(b.bottom)})`);
+   }
+  }
+  // no two pieces of text may sit on top of each other
+  // scrolling content passing under an opaque pinned layer is not a collision, so only
+  // compare text that shares a layer
+  const pinned=el=>{for(let n=el;n&&n!==document.body;n=n.parentElement){
+   const p=getComputedStyle(n).position;if(p==='sticky'||p==='fixed')return true;}return false;};
+  const leaves=[...document.querySelectorAll('.stage *')].filter(el=>vis(el)&&layout(el)
+   &&el.children.length===0&&(el.textContent||'').trim().length>1
+   &&getComputedStyle(el).position!=='absolute');
+  const layer=new Map(leaves.map(el=>[el,pinned(el)]));
+  for(let i=0;i<leaves.length;i++)for(let j=i+1;j<leaves.length;j++){
+   if(layer.get(leaves[i])!==layer.get(leaves[j]))continue;
+   if(leaves[i].contains(leaves[j])||leaves[j].contains(leaves[i]))continue;
+   const a=clip(leaves[i]),b=clip(leaves[j]);
+   const ox=Math.min(a.right,b.right)-Math.max(a.left,b.left),oy=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+   if(ox>4&&oy>4)fails.push(`text collision: "${(leaves[i].textContent||'').trim().slice(0,10)}" over "${(leaves[j].textContent||'').trim().slice(0,10)}"`);
+   if(fails.length>10)break;
+  }
+  const bar=document.querySelector('.dock');
   if(bar&&bar.children.length){
    const r=bar.getBoundingClientRect();
-   if(r.bottom>innerHeight+1)fails.push(`sticky action below the fold (bottom=${Math.round(r.bottom)}, viewport=${innerHeight})`);
-   const primary=bar.querySelector('.primary');
-   if(!primary)fails.push('no primary action in the sticky bar');
-   else{const p=primary.getBoundingClientRect();if(p.height<44)fails.push(`primary action ${Math.round(p.height)}px tall`);}
+   if(r.bottom>innerHeight+1)fails.push(`dock below the fold (bottom=${Math.round(r.bottom)}, viewport=${innerHeight})`);
   }
-  // 44px touch contract on every repeated/primary control that is actually on screen.
+  const REPEATED='.dial button,.tills button,.good,.npc-card,.rubber,.dock button,.slip,.set button';
   for(const el of document.querySelectorAll('button:not(:disabled), summary')){
    const r=el.getBoundingClientRect();
-   if(!r.width||!r.height)continue;
-   if(r.height<43.5||r.width<43.5)fails.push(`touch target ${Math.round(r.width)}x${Math.round(r.height)}: ${(el.textContent||'').trim().slice(0,14)}`);
+   if(!r.width||!r.height||!vis(el))continue;
+   const primary=el.matches(REPEATED);
+   if(primary&&(r.height<43.5||r.width<43.5))
+    fails.push(`touch target ${Math.round(r.width)}x${Math.round(r.height)}: ${(el.textContent||'').trim().slice(0,14)}`);
+   else if(!primary&&(r.height<32||r.width<32))
+    warn.push(`small secondary target ${Math.round(r.width)}x${Math.round(r.height)}: ${(el.textContent||'').trim().slice(0,14)}`);
    if(fails.length>12)break;
   }
-  // Hazard pressure: every named Hazard on screen states its pressure inline — no hover needed.
   const named=[...document.querySelectorAll('.hazards li')];
   for(const li of named){
    const key=li.dataset.hazard,note=(li.querySelector('span')?.textContent||'').trim();
@@ -104,8 +162,7 @@ async function audit(page,width,screen){
    else if(!note.includes(PRESSURE[key]))fails.push(`hazard ${key} pressure line reads "${note}"`);
   }
   if(['morning','sale','final'].includes(screen)&&!named.length)warn.push('no hazard rows rendered on this capture');
-  // Nothing may hide meaning behind a hover-only tooltip.
-  for(const el of document.querySelectorAll('.screen-body [title]'))fails.push(`hover-only title= on ${el.className||el.tagName}`);
+  for(const el of document.querySelectorAll('.stage [title]'))fails.push(`hover-only title= on ${el.className||el.tagName}`);
   return {fails,warn};
  },{width,screen,PRESSURE});
 }

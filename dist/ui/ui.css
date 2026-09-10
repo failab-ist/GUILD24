@@ -1,19 +1,17 @@
-/* ---- type: Galmuri, a bitmap pixel family (SIL OFL 1.1, (c) Lee Minseo).
-   Vendored and subset locally by tools/vendor-assets.py - no runtime request.
-   Bitmap faces are crisp only at their design size and integer multiples, so the whole
-   scale is 12 / 15 / 24 / 30 / 45px and nothing in between. Hierarchy comes from family,
-   weight, case and colour rather than from a dozen sizes. */
-@font-face{font-family:'Galmuri';src:url('fonts/Galmuri11.woff2') format('woff2');font-weight:400;font-display:block}
+/* ---- type: two roles, never mixed up.
+   ATMOSPHERE — Galmuri, a bitmap pixel family (SIL OFL-1.1, (c) Lee Minseo). Signage,
+     document titles, world labels and diegetic readouts only. Bitmap faces are crisp just
+     at their design size and integer multiples, so display type stays on 12/24/36/48
+     (Galmuri11) or 15/30/45 (Galmuri14).
+   INFORMATION — Pretendard (SIL OFL-1.1, (c) Kil Hyung-jin). Every value, effect line,
+     price, count and control label, at any size. The game feel comes from the material,
+     the frame and the motion; the text stays easy to read.
+   Both are subset and vendored locally by tools/vendor-assets.py - no runtime request. */
+@font-face{font-family:'Pretendard';src:url('fonts/Pretendard.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Pretendard';src:url('fonts/Pretendard-SemiBold.woff2') format('woff2');font-weight:600;font-display:block}
 @font-face{font-family:'Galmuri';src:url('fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:block}
 @font-face{font-family:'GalmuriBody';src:url('fonts/Galmuri14.woff2') format('woff2');font-weight:400;font-display:block}
 @font-face{font-family:'GalmuriNum';src:url('fonts/GalmuriMono11.woff2') format('woff2');font-weight:400;font-display:block}
-
-/* GUILD24 v2.4 — game UI, not web UI.
-   Direction: diegetic pixel-art. Every element is an OBJECT in the store — a signboard, a
-   plank notice, a chalk slate, an order form, a price tag, a rubber stamp — never a container
-   holding a label/value pair. Materials carry hierarchy; there are no cards, no hairline
-   dividers, no radii and no blur. Everything sits on a 4px grid.
-   Green is the shop sign, the price tag and the approval stamp. It is never a background. */
 
 :root{
  color-scheme:dark;
@@ -24,16 +22,21 @@
  --paper:#e9dfc4;--paper-2:#ddd1b2;--paper-rule:#c6b894;--ink:#2b2419;--ink-2:#6a5c42;
  --steel:#39434c;--steel-dark:#232a31;
  --slate:#1a231e;--chalk:#dbe4d1;--chalk-dim:#8d9b8c;
- --sign:#3f9d63;--sign-lit:#7ddc9f;--sign-ink:#0e2417;
+ --sign:#3d8b5b;--sign-lit:#7ddc9f;--sign-ink:#0e2417;
  --gold:#f2b134;--blood:#c8433a;--frost:#79c6de;--ember:#e4703a;--dusk:#8a7fd0;
  /* ---- ink on dark ---- */
  --text:#efe7d5;--dim:#a89c85;--faint:#7a705f;
  --tone-benefit:#9fd07f;--tone-cost:#e39075;--tone-neutral:#b3ab96;
  --r0:#b4bba6;--r1:#98c79b;--r2:#8ec6dd;--r3:#c2a2d6;--r4:#f0cd72;
- --mono:'GalmuriNum','Galmuri',ui-monospace,monospace;
- --ui:'Galmuri','Apple SD Gothic Neo',sans-serif;
- --body:'GalmuriBody','Galmuri','Apple SD Gothic Neo',sans-serif;
- --t-xs:12px;--t-sm:15px;--t-md:15px;--t-lg:24px;--t-xl:24px;--t-2xl:30px;--t-3xl:45px;
+ /* information (default) */
+ --ui:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+ --body:var(--ui);
+ --mono:'Pretendard',system-ui,sans-serif;
+ /* atmosphere — opt in, never the default */
+ --f-sign:'Galmuri','Pretendard',sans-serif;
+ --f-plate:'GalmuriBody','Galmuri','Pretendard',sans-serif;
+ --f-led:'GalmuriNum','Galmuri',ui-monospace,monospace;
+ --t-xs:12px;--t-sm:13px;--t-md:15px;--t-lg:18px;--t-xl:22px;--t-2xl:28px;--t-3xl:40px;
  --gutter:16px;
  --tex-tile:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2248%22%20height%3D%2236%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2248%22%20height%3D%2236%22%20fill%3D%22%23c6bda8%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23cbc3ae%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2218%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23cbc3ae%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%220%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23c2b9a4%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%2218%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23c2b9a4%22%2F%3E%3C%2Fsvg%3E");
  --tex-cork:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22%23a97f4a%22%2F%3E%3Crect%20x%3D%222%22%20y%3D%223%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2214%22%20y%3D%221%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%227%22%20y%3D%229%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2218%22%20y%3D%227%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%224%22%20y%3D%2216%22%20width%3D%222%22%20height%3D%223%22%20fill%3D%22%23bd9159%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2214%22%20width%3D%223%22%20height%3D%222%22%20fill%3D%22%238c6738%22%2F%3E%3Crect%20x%3D%2220%22%20y%3D%2218%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23936d3c%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%2220%22%20width%3D%222%22%20height%3D%222%22%20fill%3D%22%23bd9159%22%2F%3E%3C%2Fsvg%3E");
@@ -43,9 +46,9 @@
  /* legacy hooks still used by the phases not yet recomposed */
  --ground:var(--soil);--edge:#ffffff1a;--accent:var(--gold);--go:var(--sign);--go-ink:#08170e;--bad:var(--blood);--warn:#e2b262;
  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:36px;
- font-family:var(--body);
- font-size:15px;line-height:1.7;
- -webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed;
+ font-family:var(--ui);
+ font-size:15px;line-height:1.6;
+ -webkit-text-size-adjust:100%;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
@@ -56,7 +59,9 @@ svg{display:block;image-rendering:pixelated}
 b,strong{font-weight:750}
 small,.smalltext{font-size:var(--t-sm);line-height:1.5;color:var(--dim)}
 .muted{color:var(--dim)}.gold-text{color:var(--gold)}.danger-text{color:var(--blood)}
-.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.num,.mono{font-variant-numeric:tabular-nums}
+/* pixel faces must never be antialiased away; Pretendard must never be pixelated */
+.f-sign,.f-plate,.f-led{-webkit-font-smoothing:none;font-smooth:never}
 .row{display:flex;align-items:center;gap:12px}.wrap{flex-wrap:wrap}.between{justify-content:space-between}
 .stack{display:grid;gap:12px}
 
@@ -74,9 +79,9 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 .bare:hover{background:transparent;color:var(--text)}
 .bare:active{transform:none;box-shadow:none}
 /* the approval stamp — the one green control in the game */
-.stamp{background:var(--sign);color:var(--sign-ink);font-weight:800;letter-spacing:.06em;
- box-shadow:inset 0 0 0 2px #ffffff59,inset 0 0 0 5px var(--sign),inset 2px 2px 0 #ffffff33,4px 4px 0 #00000080}
-.stamp:hover{background:#48ac6e}
+.stamp{background:var(--sign);color:#eafaf0;font-weight:600;letter-spacing:.04em;
+ box-shadow:inset 0 0 0 2px #ffffff40,inset 0 0 0 5px var(--sign),inset 2px 2px 0 #ffffff26,4px 4px 0 #00000080}
+.stamp:hover{background:#469a67}
 summary{min-height:44px;padding:10px 0;cursor:pointer;color:var(--dim);font-size:var(--t-sm)}
 input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2px 0 #00000080;padding:12px;width:100%;color:var(--text)}
 
@@ -84,8 +89,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .stage{position:relative;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--soil);
  padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
 .stage-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;outline:none;scrollbar-width:thin}
-.menu-pin{position:absolute;top:calc(env(safe-area-inset-top) + 8px);right:calc(env(safe-area-inset-right) + 8px);z-index:30;
- width:40px;height:40px;min-width:40px;min-height:40px;padding:8px;background:#0f0c0acc;color:var(--dim);
+.menu-pin{position:absolute;top:calc(env(safe-area-inset-top) + 6px);right:calc(env(safe-area-inset-right) + 6px);z-index:30;
+ width:44px;height:44px;min-width:44px;min-height:44px;padding:10px;background:#0f0c0acc;color:var(--dim);
  box-shadow:inset 2px 2px 0 #ffffff14,inset -2px -2px 0 #00000080,3px 3px 0 #00000073}
 .dock{flex-shrink:0;padding:12px var(--gutter) max(12px,env(safe-area-inset-bottom))}
 
@@ -114,27 +119,27 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .store{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .band{position:relative;flex-shrink:0;width:100%}
 .band .band-art{display:block;width:100%;height:auto}
-.band.ceiling{aspect-ratio:360/72}
+.band.ceiling{aspect-ratio:360/92}
 .band.wall{flex:1 1 auto;min-height:104px;overflow:hidden;background:var(--tex-tile),#c6bda8;background-size:48px 36px}
 .band.wall .band-art{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto}
 .band.counter{aspect-ratio:360/120;height:auto}
 .band.wall:after{content:'';position:absolute;inset:0;
  background:linear-gradient(180deg,#0a121ac4 0,#0a121a3d 42%,#00000000 70%,#140d0866 100%)}
 /* the shop sign hanging from the ceiling carries the day */
-.daysign{position:absolute;left:50%;top:78%;transform:translateX(-50%);z-index:2;display:flex;align-items:baseline;gap:8px;white-space:nowrap}
-.daysign i{font:400 12px/1 var(--ui);font-style:normal;letter-spacing:.3em;color:#a9e8c4}
-.daysign b{font:400 24px/1 var(--mono);color:#f4fff8}
-.branchplate{position:absolute;right:6px;bottom:5px;z-index:2;padding:3px 6px;font:400 12px/1 var(--ui);
- color:#2a2318;background:#c9b98f;box-shadow:inset 1px 1px 0 #ffffff8c,inset -1px -1px 0 #00000059}
+.daysign{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;white-space:nowrap;color:#eafaf0}
+.daysign i{font:700 12px/1 var(--f-sign);font-style:normal;letter-spacing:.26em;color:#a9e8c4;-webkit-font-smoothing:none}
+.daysign b{font:400 24px/1 var(--f-led);color:#f4fff8;-webkit-font-smoothing:none}
+.branchplate{position:absolute;right:6px;bottom:5px;z-index:2;padding:2px 5px;font:400 12px/1 var(--f-plate);
+ color:#5a5040;background:#c4b48c;opacity:.62;-webkit-font-smoothing:none}
 /* ---- notice board: the day's gates, pinned to cork ---- */
 .board{flex:0 1 auto;min-height:0;max-height:54%;overflow-y:auto;overscroll-behavior:contain;outline:none;
  background:var(--tex-cork),#a97f4a;
  box-shadow:inset 0 0 0 6px #4a3018,inset 0 0 0 10px #6b4526,inset 0 8px 18px #00000073,0 -4px 0 #00000059}
 .board-rail{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
- margin:10px 10px 0;padding:7px 12px;background:#4a3018;color:#e7d3a8;
- font:400 12px/1.5 var(--ui);letter-spacing:.06em;
+ margin:10px 10px 0;padding:8px 12px;background:#4a3018;color:#e7d3a8;
+ font:700 12px/1.5 var(--f-sign);letter-spacing:.06em;-webkit-font-smoothing:none;
  box-shadow:inset 0 2px 0 #ffffff1f,inset 0 -3px 0 #00000073,0 3px 0 #00000059}
-.board-rail b{margin-left:auto;font:400 12px/1 var(--mono);color:#fff0c9}
+.board-rail b{margin-left:auto;font:400 13px/1 var(--ui);font-variant-numeric:tabular-nums;color:#fff0c9;letter-spacing:0}
 .board-rail b+b{margin-left:0}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
@@ -148,23 +153,23 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .slip.gate{padding-left:52px;--edge:var(--fam)}
 .slip.gate:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--fam,#caa46a)}
 .slip .crest{position:absolute;left:12px;top:14px;width:32px;height:32px;display:grid;place-items:center;background:#00000014}
-.slip>b{display:block;font:400 15px/1.4 var(--body);letter-spacing:-.01em;margin-bottom:6px}
+.slip>b{display:block;font:400 15px/1.4 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:7px;color:#241d12}
 .slip .hazards{display:grid;gap:3px}
-.slip .hazards li{display:flex;align-items:center;gap:6px;font:400 12px/1.5 var(--ui);color:#5b4f39}
+.slip .hazards li{display:flex;align-items:center;gap:7px;font:400 13px/1.55 var(--ui);color:#5f5440}
 .slip .hazards .hz-icon{flex-shrink:0;color:#8a3f2c}
-.slip .hazards i{font-style:normal;font-weight:700;color:#2c2418}
-.slip .foot{display:block;margin-top:7px;font:400 12px/1 var(--ui);color:#8a7d61}
-.stamp-line{display:inline-block;margin-top:8px;padding:3px 7px;font:400 12px/1.3 var(--ui);letter-spacing:.08em;
+.slip .hazards i{font-style:normal;font-weight:600;color:#2c2418;min-width:3.4em}
+.slip .foot{display:block;margin-top:8px;font:400 13px/1 var(--ui);color:#8a7d61}
+.stamp-line{display:inline-block;margin-top:8px;padding:4px 8px;font:600 12px/1.3 var(--ui);letter-spacing:.04em;
  color:#8a3f2c;box-shadow:inset 0 0 0 2px #8a3f2c;transform:rotate(-2deg)}
 .slip.event{padding-top:16px}
 .slip.event .stamp-line{margin:0 0 6px;color:#2f7a4d;box-shadow:inset 0 0 0 2px #2f7a4d}
-.slip.event .body{display:block;font:400 12px/1.6 var(--ui);color:#5b4f39}
+.slip.event .body{display:block;font:400 13px/1.6 var(--ui);color:#5f5440}
 /* ---- counter band: the till and the store support tray ---- */
-.till{position:absolute;left:50%;top:8%;transform:translateX(-50%);z-index:2;display:flex;align-items:baseline;gap:7px;white-space:nowrap}
-.till i{font:400 12px/1 var(--ui);font-style:normal;color:#9fd8b6}
-.till b{font:400 24px/1 var(--mono);color:#8df0b4;text-shadow:0 0 6px #3fe08c66}
+.till{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;white-space:nowrap}
+.till i{font:700 12px/1 var(--f-sign);font-style:normal;color:#8ec8a6;-webkit-font-smoothing:none}
+.till b{font:400 24px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 6px #3fe08c66;-webkit-font-smoothing:none}
 .tray{position:absolute;left:90px;bottom:6px;right:8px;z-index:2;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.tray .plate{min-height:26px;min-width:0;padding:4px 8px;font:400 12px/1 var(--ui);color:#2b2211;background:#c3a259;
+.tray .plate{min-height:34px;min-width:0;padding:8px 10px;font:400 12px/1 var(--f-plate);-webkit-font-smoothing:none;color:#463a1c;background:#a78d52;opacity:.75;
  box-shadow:inset 2px 2px 0 #ffe3a8,inset -2px -2px 0 #8a6a2c,2px 2px 0 #00000073}
 .tray .plate:hover{background:#d3b169}
 /* ---- dock: the shutter pull ---- */
@@ -172,18 +177,19 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .pull{flex:1;min-height:58px;padding:0;background:
  repeating-linear-gradient(180deg,#7c5c3a 0 6px,#6a4d30 6px 12px);color:#fdf6e3;
  box-shadow:inset 0 3px 0 #a37c4f,inset 0 -5px 0 #3f2c1a,4px 4px 0 #00000080}
-.pull span{display:block;font:700 24px/58px var(--ui);letter-spacing:.08em}
+.pull span{display:block;font:600 20px/58px var(--ui);letter-spacing:.06em}
 .pull:hover{background:repeating-linear-gradient(180deg,#8a6742 0 6px,#77563a 6px 12px)}
-.brass{min-height:58px;padding:8px 12px;background:#8a7038;color:#2a2110;font:400 12px/1.5 var(--ui);
+.brass{min-height:58px;padding:8px 12px;background:#8a7038;color:#2a2110;font:600 12px/1.45 var(--ui);
  box-shadow:inset 2px 2px 0 #e0c07a,inset -2px -2px 0 #4f3d17,4px 4px 0 #00000080}
 .brass:hover{background:#9a7e40}
 
 /* =====================================================================
-   ORDER — a paper, filled. The back room: a dark wood desk, one order form
-   clipped to it, offers as ruled lines with a crate, a price tag and a stamped dial.
+   ORDER — a paper, filled. A dark wood desk, one clipped form, offers as ruled
+   lines with a crate, a price tag and a stamped dial. Reading order per line:
+   identity + price, then the effect that matters, then the economics, then quantity.
    ===================================================================== */
 .p-order{background:var(--tex-wood),#1e150e;background-size:64px 24px}
-.p-order .stage-scroll{padding:22px var(--gutter) 22px}
+.p-order .stage-scroll{padding:22px var(--gutter) 30px}
 .clip{position:relative;z-index:3;width:78px;height:22px;margin:0 auto -10px;
  background:linear-gradient(180deg,#9aa3ab 0 8px,#6e777f 8px 22px);
  box-shadow:inset 2px 2px 0 #cfd6dc,inset -2px -2px 0 #454d54,3px 4px 0 #00000080}
@@ -192,70 +198,85 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:linear-gradient(-45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x,
             linear-gradient(45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x}
 .form:before{transform:scaleY(-1)}
-.form-head{padding:14px 16px 10px;position:relative;box-shadow:inset 0 -3px 0 var(--ink)}
-.form-head .corp{font:400 12px/1 var(--ui);letter-spacing:.16em;color:var(--ink-2)}
-.form-head h1{font:700 36px/1.05 var(--ui);letter-spacing:.16em;margin:6px 0 4px}
-.form-head .docno{font:400 12px/1 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
-.form-head .seal{position:absolute;right:56px;top:14px;opacity:.8;transform:rotate(-9deg)}
-.reg{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;padding:12px 16px;
- background:repeating-linear-gradient(180deg,#00000000 0 27px,var(--paper-rule) 27px 28px)}
-.reg div{display:grid;gap:2px}
-.reg label{font:400 12px/1 var(--ui);letter-spacing:.1em;color:var(--ink-2)}
-.reg b{font:400 24px/1 var(--mono)}
-.reg .op{font:400 24px/1 var(--mono);color:var(--ink-2);padding-bottom:1px}
-.reg .out b{color:#2f7a4d}
-.reg .out.short b{color:#a1372c}
-.memo{padding:10px 16px;font:400 12px/1.7 var(--ui);color:var(--ink-2);box-shadow:inset 0 -2px 0 var(--paper-rule)}
-.memo b{color:var(--ink)}
-.memo .r{display:block}
-.memo .tier{font-family:var(--mono);color:var(--ink)}
-.memo .sub{display:block;color:#8a7c60}
-.memo .look{background:transparent;box-shadow:none;color:#2f7a4d;font:400 12px/1 var(--ui);
- padding:6px 0;min-height:32px;min-width:0;text-decoration:underline;text-underline-offset:3px}
-.memo .look:hover{background:transparent;color:#1f5c39}
-.memo .look:active{transform:none}
-.lines{padding:0 0 8px}
-.line{position:relative;display:grid;grid-template-columns:24px 46px 1fr;gap:0 10px;padding:12px 16px 10px;
+/* the document says what it is and nothing more */
+.form-head{padding:14px 76px 12px 16px;position:relative;box-shadow:inset 0 -3px 0 var(--ink)}
+.form-head h1{font:700 36px/1 var(--f-sign);letter-spacing:.1em;-webkit-font-smoothing:none}
+.form-head .docno{display:block;margin-top:7px;font:400 12px/1 var(--ui);font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.form-head .seal{position:absolute;right:16px;top:16px;opacity:.7;transform:rotate(-9deg)}
+/* ledger: one aligned money column, the result leading */
+.ledger{padding:10px 16px 12px;display:grid;gap:2px;box-shadow:inset 0 -2px 0 var(--paper-rule)}
+.ledger div{display:flex;align-items:baseline;gap:12px}
+.ledger span{font:400 13px/1.7 var(--ui);color:var(--ink-2)}
+.ledger b{margin-left:auto;font:400 18px/1.5 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ledger .pick b{color:#8a6a2c}
+.ledger .out{margin-top:5px;padding-top:7px;box-shadow:inset 0 2px 0 var(--ink)}
+.ledger .out span{font-weight:600;color:var(--ink)}
+.ledger .out b{font:600 28px/1.1 var(--ui);color:var(--ink)}
+.ledger .out b i{font-style:normal;font-size:15px;margin-left:2px;opacity:.7}
+.ledger .out.short b{color:#a1372c}
+/* today vs tomorrow, spatially separated */
+.brief{padding:10px 16px 12px;display:grid;gap:9px;box-shadow:inset 0 -2px 0 var(--paper-rule)}
+.brief .when{display:grid;grid-template-columns:38px minmax(0,1fr);gap:2px 10px;align-items:baseline}
+.brief .when>*:not(.k){grid-column:2}
+.brief .k{font:700 12px/1.6 var(--f-sign);-webkit-font-smoothing:none;color:#8a6a2c;letter-spacing:.1em}
+.brief p{font:400 13px/1.6 var(--ui);color:#4b4231}
+.brief p b{font-weight:600;color:var(--ink)}
+.brief .tier{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
+.brief .sub{font-size:12px;color:#8a7c60}
+.brief .look{display:inline-block;margin-left:8px;vertical-align:baseline;background:transparent;box-shadow:none;
+ color:#7a5a2a;font:600 12px/1 var(--ui);padding:9px 2px;min-height:32px;min-width:0;
+ border-bottom:2px solid #7a5a2a4d}
+.brief .look:hover{background:#00000008}
+.brief .look:active{transform:none}
+/* one offer, one ruled line */
+.lines{padding:2px 0 8px}
+.line{position:relative;display:grid;grid-template-columns:22px 46px minmax(0,1fr);gap:0 10px;padding:12px 16px 10px;
  box-shadow:inset 0 -2px 0 var(--paper-rule)}
-.line:nth-child(even){background:#00000008}
-.line.on{background:#2f7a4d12;box-shadow:inset 5px 0 0 #2f7a4d,inset 0 -2px 0 var(--paper-rule)}
-.line .no{font:400 12px/1.9 var(--mono);color:var(--ink-2)}
+.line:nth-child(even){background:#00000006}
+.line.on{background:#2f7a4d10;box-shadow:inset 5px 0 0 #2f7a4d,inset 0 -2px 0 var(--paper-rule)}
+.line .no{font:400 12px/2 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72}
 .crate-art{position:relative;display:block;width:var(--sz);height:var(--sz)}
 .crate-art svg{position:absolute;inset:0;width:100%;height:100%}
 .crate-in{position:absolute;inset:0;display:grid;place-items:center}
 .line .col{min-width:0}
-.line .nm{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding-right:62px;min-height:24px}
-.line .nm b{font:400 15px/1.4 var(--body)}
-.line .kind{font:400 12px/1 var(--ui);color:var(--ink-2)}
-.line .fx{margin-top:4px;font:400 12px/1.6 var(--ui);color:#4b4231;display:block}
-.line .fx i{font-style:normal;font-family:var(--mono)}
+/* 1 identity + price on one baseline, the tag inside the paper */
+.line .nm{display:flex;align-items:center;gap:10px;min-width:0}
+.line .nm b{font:600 17px/1.35 var(--ui);letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
+.line .kind{display:block;margin-top:1px;font:400 12px/1.5 var(--ui);color:#9c8f72}
+/* 3 the effect that decides the purchase */
+.line .fx{display:block;margin-top:6px;font:400 14px/1.55 var(--ui);color:#3c3527}
+.line .fx i{font-style:normal;font-variant-numeric:tabular-nums;font-weight:600}
 .line .fx .cost{color:#a1372c}
-.line .have{margin-top:4px;font:400 12px/1.7 var(--mono);color:var(--ink-2);display:block}
-.tag-art{position:absolute;right:-8px;top:12px;display:block;width:96px;height:40px;color:#2f7a4d;
- filter:drop-shadow(3px 3px 0 #00000047)}
+.line .fx em{font-style:normal;color:#b0a488}
+/* 4 economics and stock, tertiary */
+.line .have{display:block;margin-top:5px;font:400 12px/1.5 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72}
+/* the price tag hangs at the end of the name row, never off the paper */
+.tag-art{position:relative;flex:0 0 auto;display:block;width:78px;height:32px;margin-left:auto;color:#357f52;
+ filter:drop-shadow(2px 2px 0 #00000038)}
 .tag-art svg{position:absolute;inset:0;width:100%;height:100%}
-.tag-art b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1px;padding-left:12px;
- white-space:nowrap;font:400 24px/1 var(--mono);color:#f2fbf4}
-.tag-art b i{font-style:normal;font-size:12px;opacity:.85}
-.dial{grid-column:1/-1;display:flex;align-items:center;gap:4px;margin-top:10px}
-.dial button{min-width:44px;padding:0 6px;background:#a89264;color:#1f1809;font:400 24px/1 var(--mono);
- box-shadow:inset 2px 2px 0 #d8c69a,inset -2px -2px 0 #6f5c33,3px 3px 0 #00000038}
+.tag-art b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1px;padding-left:10px;
+ white-space:nowrap;font:600 17px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2fbf4}
+.tag-art b i{font-style:normal;font-size:12px;opacity:.85;font-weight:400}
+/* 5 quantity: the dial leads, the quick set stays quiet */
+.dial{grid-column:1/-1;display:flex;align-items:center;gap:4px;margin-top:11px;flex-wrap:wrap}
+.dial button{min-width:46px;padding:0 6px;background:#a89264;color:#1f1809;font:600 20px/1 var(--ui);
+ box-shadow:inset 2px 2px 0 #d8c69a,inset -2px -2px 0 #6f5c33,3px 3px 0 #00000033}
 .dial button:hover{background:#b8a173}
 .dial button:disabled{opacity:.3}
-.dial output{min-width:48px;text-align:center;font:400 24px/44px var(--mono);background:#fbf6e6;color:#1f1809;
- box-shadow:inset 2px 2px 0 #00000038,inset -2px -2px 0 #ffffff8c}
-.dial .unit{font:400 12px/1 var(--ui);color:var(--ink-2);margin-left:2px}
+.dial output{min-width:50px;text-align:center;font:600 20px/44px var(--ui);font-variant-numeric:tabular-nums;
+ background:#fbf6e6;color:#1f1809;box-shadow:inset 2px 2px 0 #00000033,inset -2px -2px 0 #ffffff8c}
 .dial .set{display:flex;gap:4px;margin-left:auto}
-.dial .set button{font:400 15px/1 var(--body);padding:0 4px;min-width:46px;background:transparent;color:#6b5b38;
- box-shadow:inset 0 0 0 2px #00000024}
-.dial .set button:hover{background:#00000010}
+.dial .set button{flex:0 0 auto}
+.dial .set button{min-width:44px;padding:0 4px;background:transparent;color:#8a7c60;font:400 13px/1 var(--ui);
+ box-shadow:inset 0 0 0 1px #00000024}
+.dial .set button:hover{background:#00000008;color:#4b4231}
 .rubber{display:block;width:calc(100% - 32px);margin:12px 16px 6px;background:transparent;color:#7a5a2a;
- font:400 15px/1 var(--body);letter-spacing:.04em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.85}
+ font:600 14px/1 var(--ui);letter-spacing:.02em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.8}
 .rubber:hover{background:#00000008;opacity:1}
-.rubber:disabled{opacity:.3}
+.rubber:disabled{opacity:.28}
 .form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
 .p-order .dock{display:flex;gap:10px;background:#150f0a;box-shadow:inset 0 3px 0 #ffffff14}
-.p-order .dock .stamp{flex:1;min-height:58px;font:700 24px/1 var(--ui)}
+.p-order .dock .stamp{flex:1;min-height:54px;font:600 20px/1 var(--ui);letter-spacing:.04em}
 /* =====================================================================
    Phases not yet recomposed keep working on the new material tokens.
    They are next in the Chunk F order and will get their own grammar.

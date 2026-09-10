@@ -101,13 +101,13 @@ function morningScreen(){
  const s=game.run;
  return '<div class="stage p-morning">'+menuFab()
  +'<div class="store">'
-  +'<div class="band ceiling">'+Scene.ceiling()+'<span class="daysign"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></div>'
+  +'<div class="band ceiling">'+Scene.ceiling()+'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
    +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
   +'<div class="band counter">'+Scene.counter()
-   +'<span class="till"><i>보유</i><b class="coin">'+fmt(s.money)+'</b></span>'
+   +'<span class="till" style="'+Scene.anchorStyle('till')+'"><i>보유</i><b class="coin">'+fmt(s.money)+'</b></span>'
    +relicTray()+'</div>'
  +'</div>'
  +'<div class="dock">'+relicWindowLink()+'<button class="pull" data-action="begin-order"><span>문 열기</span></button></div></div>';
@@ -247,26 +247,31 @@ function orderScreen(){
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  return '<div class="clip"></div><div class="form">'
- +'<div class="form-head"><span class="corp">길드리테일 본사 · 물류1과</span><h1>발 주 서</h1>'
- +'<span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+' · 제'+String(s.day).padStart(3,'0')+'호</span>'
- +'<span class="seal">'+Scene.seal(52,'#2f7a4d')+'</span></div>'
- +'<div class="reg" id="order-register" aria-label="발주 자금"><div><label>보유</label><b>'+fmt(s.money)+'</b></div><span class="op" aria-hidden="true">-</span>'
- +'<div><label>선택</label><b>'+fmt(total)+'</b></div><span class="op" aria-hidden="true">=</span>'
- +'<div class="out'+(after<0?' short':'')+'"><label>발주 후</label><b>'+fmt(after)+'</b></div></div>'
- +'<div class="memo"><p class="r">오늘 <b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+' <button class="look" data-action="gates">위험 보기</button></p>'
- +'<p class="r">내일 게이트 <span class="tier">'+tierLine()+'</span> <span class="sub">종류와 손님은 아직 미정</span></p></div>'
+ +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span>'
+ +'<span class="seal">'+Scene.seal(48,'#2f7a4d')+'</span></div>'
+ // the ledger: labels step back, the three figures align on one column, the result leads
+ +'<div class="ledger" id="order-register" aria-label="발주 자금">'
+ +'<div><span>보유</span><b>'+fmt(s.money)+'</b></div>'
+ +'<div class="pick"><span>선택 발주</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
+ +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
+ // two groups: what today needs, and the signal for tomorrow's order
+ +'<div class="brief"><div class="when"><span class="k">오늘</span>'
+ +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
+ +'<div class="when"><span class="k">내일</span><p class="tier">'+tierLine()+'</p><p class="sub">종류와 손님은 아직 미정</p></div></div>'
  +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
-  return '<li class="line r'+it.rarity+(q?' on':'')+'"><span class="no">'+String(i+1).padStart(2,'0')+'</span>'
+  return '<li class="line r'+it.rarity+(q?' on':'')+'">'
+  +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
   +Scene.crate(Art.itemIcon(it.id,30),46)
-  +'<span class="col"><span class="nm"><b>'+E(it.name)+'</b><span class="kind">'+D.categories[it.category]+' · '+it.roles.map(r=>D.roles[r]).join('/')+'</span></span>'
-  +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join(' · ')+'</span>'
-  +'<span class="have">매입 '+o.price+'G · 이익 +'+(it.sell-o.price)+'G<br>재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+'</span></span>'
-  +Scene.priceTag(it.sell+'<i>G</i>')
+  +'<span class="col">'
+   +'<span class="nm"><b>'+E(it.name)+'</b>'+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
+   +'<span class="kind">'+D.categories[it.category]+' · '+it.roles.map(r=>D.roles[r]).join(' / ')+'</span>'
+   +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
+   +'<span class="have">매입 '+o.price+'G · 이익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+'</span>'
+  +'</span>'
   +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
    +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?'disabled':''))
-   +'<span class="unit">개</span>'
-   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" '+(v>max?'disabled':''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'"')+'</span></span></li>';
+   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?'disabled':''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'"')+'</span></span></li>';
  }).join('')+'</ol>'
  +'<button class="rubber" data-action="reroll" '+(price>s.money||held?'disabled':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(held?'<p class="note">선택한 수량을 0으로 되돌리면 후보를 교환할 수 있다.</p>':'')
