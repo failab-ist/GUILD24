@@ -6,12 +6,16 @@
 // specific contradictions visual QA caught, as fixtures, so they cannot come back.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const read=p=>fs.readFileSync(path.join(__dirname,'..',p),'utf8');
-for(const f of ['data/catalog','data/relics','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 const D=DATA,P=Presentation;
 let groups=0;const test=(name,fn)=>{fn();groups++;console.log('PASS '+name);};
 
 const OUTCOMES=['대성공','성공','퇴각','부상','중상','사망'];
-const LIVING=/쉬고 올게요|다녀왔습니다|다시 올게요|살아 돌아왔어요|못 돌아왔어요|익숙해진|잠깐 쉬어야|늘 먹던|귀환을 도왔어요/;
+// A death must never carry a living adventurer's line. Membership in the living pool is the
+// real rule, so it stays true as variants are added; the literal pattern is kept as a second
+// net for the pinned fixtures, which are written by hand rather than drawn from a pool.
+const LIVING_PATTERN=/쉬고 올게요|다녀왔습니다|다시 올게요|살아 돌아왔어요|못 돌아왔어요|익숙해진|잠깐 쉬어야|늘 먹던|귀환을 도왔어요/;
+const LIVING={test:q=>LIVING_PATTERN.test(q)||Copy.livingPool().includes(q)};
 const DEATH_WORDS=/돌아오지 못했|마지막 영수증/;
 // placeholders, and the engine wording NIGHT_CLOSING forbids in player-facing copy
 const PLACEHOLDER=/undefined|NaN|\[object Object\]|\bnull\b/;

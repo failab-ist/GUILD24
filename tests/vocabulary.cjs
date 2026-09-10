@@ -1,7 +1,7 @@
 // Chunk A acceptance: canonical Hazard vocabulary, ACTIVE ITEM CATALOG and Supply Burden.
 // Covers DUN-Q01/Q04/Q17/Q18/Q19, ITEM-Q09/Q17/Q19, ITEM-Q02/Q03/Q11, SIM-Q01.
 const assert=require('node:assert/strict');
-for(const f of ['data/catalog','data/relics','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 
 const CANON_HAZARDS=['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'];
