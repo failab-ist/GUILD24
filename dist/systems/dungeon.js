@@ -82,8 +82,7 @@ function resolve(n,d,r,facilities=[],options={}){
  /* A death line that implies a shopkeeping history is only used when that history exists;
    otherwise a history-independent variant. Chosen from state, never from a roll, so no
    RNG draw is consumed and every downstream result stays identical. */
- report.quote=outcome==='사망'?(n.history.length?'마지막 영수증만 카운터에 남았다.'
-  :n.records.length>1?'수첩에 남은 건 지난 원정 기록뿐이다.':'문을 열고 들어온 그날이 마지막이었다.'):avoidedDeath?'사장님, 이거 없었으면 못 돌아왔어요.':rescued?'챙겨 간 보급이 귀환을 도왔어요.':outcome==='중상'?'며칠만 쉬고 올게요. 제 자리 남겨 둬요.':outcome==='부상'?'좀 다쳤지만, 살아 돌아왔어요.':changes.length?'조금은 익숙해진 것 같아요.':report.items.length?'다녀왔습니다.':affected?'예상하지 못한 일이 있었어요. 잠깐 쉬어야겠어요.':outcome==='퇴각'?'일단 살고 봐야죠. 내일 다시 올게요.':'다녀왔습니다. 늘 먹던 걸로 주세요.';
+ report.quote=G.Copy.night(report,n);
  n.pack=[];return report;
 }
 G.Dungeon={prepare,estimate,resolve,tierWeights,hazardState};
