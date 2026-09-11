@@ -130,4 +130,51 @@ test('RUN-Q14/Q16: the D30 Relic window and Family disclosure come before Final 
  assert.equal(g.canBuyRelic(),false,'management cannot retroactively change a locked Final');
 });
 
+test('FINAL: the shared modifier order runs in order, and with no Trait defined it changes nothing',()=>{
+ // Steps 4 and 7 are the only places a Boss attaches. Until one does, step 4 hands back
+ // the prepared effects and step 7 hands back the baseline, so the Final is decided by
+ // exactly the same numbers the ordinary prepare produced.
+ for(let i=0;i<30;i++){
+  const g=atFinal('order-'+i),s=g.run,d=s.dungeons[0];
+  const team=g.finalEligible().slice(0,g.finalRequired());
+  for(const n of team)g.selectFinal(n.id);
+  const preps=s.team.map(id=>Dungeon.prepare(s.npcs.find(n=>n.id===id),d,s.facilities));
+  const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.58+p.effects.survival*.32
+   +p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35,0);
+  g.boss();
+  assert.ok(Math.abs(s.bossDebug.power-expected)<1e-9,'party power is the plain sum of the prepared contributions');
+  assert.equal(s.bossDebug.bossPower,DATA.balance.bossPower,'no Boss modifies the baseline yet');
+  assert.ok(s.bossDebug.roll>=.88&&s.bossDebug.roll<=1.12,'the Final roll stays in its approved band');
+  assert.equal(s.bossDebug.assault,s.bossDebug.power*s.bossDebug.roll);
+  assert.equal(s.finalReport.cleared,s.bossDebug.assault>=s.bossDebug.bossPower,'one CLEAR/FAIL, read straight off the comparison');
+ }
+});
+
+test('FINAL: the Lock freezes what the Final was decided from, and reload cannot move it',()=>{
+ const g=atFinal('lock');
+ for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);
+ const s=g.run,d=s.dungeons[0];
+ g.boss();
+ const l=s.finalLock;
+ assert.equal(l.bossId,s.bossId,'the Boss that was actually fought');
+ assert.deepEqual(l.families,d.families,'the Family pair it was fought on');
+ assert.equal(l.revenue,s.stats.revenue,'the committed sales figure is the one Economy already keeps');
+ assert.equal(l.members.length,s.finalReport.members.length,'every participant is in the lock');
+ for(const m of l.members){
+  assert.ok(s.npcs.some(n=>n.id===m.npcId),'a participant that exists');
+  for(const k of ['combat','survival','mobility','spirit'])assert.ok(Number.isFinite(m.stats[k]),'a frozen '+k);
+ }
+ assert.equal('sealBreakCount' in l,s.bossId==='SLOTH','only a SLOTH Run locks a break count');
+ // the lock survives the round trip intact
+ const back=Save.import(Save.export(g.account,s));
+ assert.deepEqual(back.run.finalLock,l,'the lock reloads exactly as it was written');
+ // and a lock that points at nobody, or carries no sales figure, is refused
+ for(const wreck of [x=>x.run.finalLock.members[0].npcId='npc-nope',
+                     x=>delete x.run.finalLock.revenue,
+                     x=>x.run.finalLock.families=['spider']]){
+  const bad=JSON.parse(Save.export(g.account,s));wreck(bad);
+  assert.equal(Save.valid(bad),false,'a tampered Final lock is refused');
+ }
+});
+
 console.log(count+' final groups passed');

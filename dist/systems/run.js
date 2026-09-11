@@ -15,15 +15,42 @@ P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};
 P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};
 P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.team.includes(npcId))return;const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');n.pack.push(s.inventory[i].item);n.history.push({day:30,item:s.inventory[i].item,mode:'supply',paid:0});s.inventory.splice(i,1);this.save();};
+/* FINAL_EXPEDITION: one participant's contribution. Internal only - Final Power is never
+   surfaced as another Player Stat. */
+const individualPower=(e,hazard)=>e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16-hazard*.35;
+
+/* Step 4 of the shared Final order: the participant-side Boss modifier. PRIDE, ENVY,
+   LUST and GLUTTONY's raw-Stat adjustment each rewrite this Final-only snapshot and
+   nothing else - the NPC's stored Stats are never touched. No Boss defines one yet, so
+   the snapshot is the prepared effects as they stand. */
+P.finalSnapshot=function(n,prep,d){return prep.effects;};
+
+/* Step 7: the Boss-side modifier. GREED adds to the Boss, SLOTH subtracts from it, and
+   WRATH is the baseline that adds nothing - which is what every Boss does today. */
+P.effectiveBossPower=function(partyPower){return D.balance.bossPower;};
+
 P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  const required=this.finalRequired();
  if(!required)return this.end(false,'출전할 수 있는 모험가가 없어 마왕성 원정을 시작하지 못했습니다.');
  if(s.team.length!==required)throw Error(required+'명으로 원정대를 구성해 주세요.');
  const d=s.dungeons[0],team=s.team.map(id=>s.npcs.find(n=>n.id===id));
- // Final reuses the ordinary prepare; there is no Final-only combat or survival judgement.
- const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));
- const power=preparations.reduce((sum,p)=>sum+p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35,0);
- const roll=.88+this.rng.next()*.24,bossPower=D.balance.bossPower,assault=power*roll,cleared=assault>=bossPower;
+ /* The shared Final order (BOSS / FINAL_EXPEDITION). Steps 1-3 are the ordinary prepare:
+    locked NPC state, locked Item/Supply/equipment, then the Family Hazard result. Final
+    reuses it; there is no Final-only combat or survival judgement. A Boss Trait attaches
+    at exactly two places, step 4 and step 7, and the rest of the order does not move. */
+ const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
+ const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d));         // 4
+ const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,preparations[i].hazard),0); // 5-6
+ const bossPower=this.effectiveBossPower(power);                                   // 7
+ const roll=.88+this.rng.next()*.24,assault=power*roll,cleared=assault>=bossPower; // 8-9
+ /* Final Lock: what the Final was actually decided from, frozen. Reload may not re-roll
+    it, re-target it, or re-read a later state (BOSS-Q02). Boss-specific entries join this
+    as their Traits land; the committed sales figure is the one Economy already keeps. */
+ s.finalLock={bossId:s.bossId,families:[...d.families],revenue:s.stats.revenue,
+  members:team.map((n,i)=>({npcId:n.id,hazard:preparations[i].hazard,
+   stats:{combat:snapshots[i].combat,survival:snapshots[i].survival,
+          mobility:snapshots[i].mobility,spirit:snapshots[i].spirit}}))};
+ if(s.sealBreakCount!==undefined)s.finalLock.sealBreakCount=s.sealBreakCount;
  s.bossDebug={power,roll,assault,bossPower};s.results=[];
  s.finalReport={cleared,families:d.familyNames,members:team.map((n,i)=>({npcId:n.id,name:n.name,level:n.level,job:n.job,items:[...n.pack],hazard:Math.round(preparations[i].hazard*10)/10,why:preparations[i].why.slice(0,3)}))};
  for(const n of team)n.pack=[];

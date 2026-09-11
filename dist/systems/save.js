@@ -86,6 +86,7 @@ function progressOk(r,ids,D){
  if(r.say && (typeof r.say.text!=='string' || !ids.includes(r.say.npc))) return false;
  if(r.special && (typeof r.special.kind!=='string' || typeof r.special.used!=='boolean')) return false;
  if(r.final && !finalOk(r.final,D)) return false;
+ if(r.finalLock && !finalLockOk(r.finalLock,ids)) return false;
  if(r.finalReport && !(typeof r.finalReport.cleared==='boolean'
    && Array.isArray(r.finalReport.members)
    && r.finalReport.members.every(m=>ids.includes(m.npcId)))) return false;
@@ -107,6 +108,20 @@ function bossOk(r,D){
  return Array.isArray(r.slothDays) && r.slothDays.length===2
   && new Set(r.slothDays).size===2 && r.slothDays.every(d=>[15,20,25].includes(d))
   && Number.isInteger(r.sealBreakCount) && r.sealBreakCount>=0 && r.sealBreakCount<=3;
+}
+
+/* What the Final was locked against. Reload restores this rather than recomputing it, so
+   a Boss cannot be re-targeted and a committed sales figure cannot be re-read from a
+   later state. */
+function finalLockOk(l,ids){
+ return !!l.bossId
+  && Array.isArray(l.families) && l.families.length===2
+  && Number.isFinite(l.revenue)
+  && Array.isArray(l.members) && l.members.length>0 && l.members.length<=3
+  && l.members.every(m=>ids.includes(m.npcId) && Number.isFinite(m.hazard)
+    && !!m.stats && ['combat','survival','mobility','spirit'].every(k=>Number.isFinite(m.stats[k])))
+  && (l.sealBreakCount===undefined
+    || (Number.isInteger(l.sealBreakCount) && l.sealBreakCount>=0 && l.sealBreakCount<=3));
 }
 
 /* The final expedition: two different Families, revealed on D30. */
