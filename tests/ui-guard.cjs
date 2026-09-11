@@ -299,4 +299,22 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
   assert.ok(!prose.includes(term),'no internal design term reaches the player: '+term);
 });
 
+test('COPY §Run abandon: the abandon says it costs everything, and promises nothing',()=>{
+ // The action that reaches this is app.js case'start'. What the engine does is asserted in
+ // integration.cjs; what the player is told is asserted here, because the old copy promised
+ // a reward for the very thing the amendment made reward-free.
+ const start=app.match(/case'start':\{[^}]*\}/)[0];
+ assert.ok(!/game\.end\(/.test(start),'starting a new Run does not route through the settlement path');
+ assert.ok(/game\.start\(/.test(start),'it starts the next Run through the ordinary fresh-Run path');
+
+ assert.ok(app.includes('현재 런 포기 · 새 점포 준비'),'the destructive action is named as the spec names it');
+ assert.ok(app.includes('현재 런을 보상 없이 포기하고 새 점포를 시작합니다.'),'and the confirmation says what it costs');
+ assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
+
+ // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
+ // since the Meta replacement, so any remaining promise of one is a lie, not just off-tone.
+ for(const banned of ['점주 XP','보상 받기','누적 '])
+  assert.ok(!app.includes(banned),'no legacy reward promise survives: '+banned);
+});
+
 console.log(count+' ui guard groups passed');

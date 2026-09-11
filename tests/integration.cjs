@@ -137,6 +137,39 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
  }finally{delete global.localStorage;}
 });
 
+test('CORE_RUN §CURRENT RUN ABANDON: starting a new Run settles nothing from the old one',()=>{
+ // The engine contract, checked where the abandon actually happens: start() on a Game that
+ // already has a live run. app.js reaches this by calling start() and nothing else.
+ const g=fresh('abandon');
+ for(let i=0;i<40&&g.run.phase!=='end';i++)step(g);   // play far enough to have something to lose
+ assert.ok(g.run.day>1,'the precondition is a run with progress in it');
+ g.account.matrix.warrior.WRATH=true;g.account.knowledge.snow=3;
+ g.account.tutorial.skipped=true;g.account.settings.muted=false;
+ const before=copy(g.account),liveRun=g.run;
+
+ g.start('abandon-next');
+
+ assert.deepEqual(copy(g.account),before,'the abandoned Run credits the account with nothing at all');
+ assert.equal(g.account.runs,before.runs,'runs does not count an abandoned Run');
+ assert.equal(g.account.wins,before.wins,'and neither does wins');
+ assert.equal(liveRun.rewarded,false,'Meta.finish never ran: the settle-once guard is still unset');
+ assert.equal(liveRun.phase!=='end',true,'the old Run was discarded, not ended through the settlement path');
+ // Account-scoped state survives; run-scoped state is a fresh Run, not a patched old one.
+ assert.equal(Meta.totalJobMastery(g.account),1,'Job Mastery is exactly what was already earned');
+ assert.deepEqual(g.account.knowledge,before.knowledge,'Monster Knowledge is preserved');
+ assert.equal(g.account.knowledge.snow,3,'including what the abandoned Run itself had recorded');
+ assert.deepEqual(g.account.tutorial,{skipped:true},'so is Tutorial completion');
+ assert.equal(g.account.settings.muted,false,'and Settings');
+ assert.equal(g.run.day,1,'the new Run starts at Day 1 through the ordinary fresh-Run path');
+ assert.notEqual(g.run.seed,liveRun.seed,'it is a new Run, not the old one rewound');
+
+ // A Run that really ends still settles: abandon is not a way to disable settlement.
+ const h=fresh('settles');
+ h.end(false,'운영비를 지급하지 못해 폐점했습니다.');
+ assert.equal(h.account.runs,1,'an ordinary end still counts the Run');
+ assert.equal(h.run.rewarded,true,'and still settles exactly once');
+});
+
 test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind',()=>{
  const store=new Map();
  global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
