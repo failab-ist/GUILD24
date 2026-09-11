@@ -137,6 +137,38 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
  }finally{delete global.localStorage;}
 });
 
+test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind',()=>{
+ const store=new Map();
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ try{
+  const g=fresh('reset');
+  // an account that has actually progressed, plus a run in flight and every legacy key present
+  g.account.matrix.warrior.WRATH=true;g.account.knowledge.snow=4;g.account.tutorial.skipped=true;
+  g.account.runs=3;g.autosave=true;g.save();
+  for(const v of ['v1','v2','v3','v4','v5'])store.set('guild24.save.'+v,'{"version":'+v.slice(1)+'}');
+  g.run.money+=1;g.save();   // so the .backup key exists too
+  assert.ok(store.get('guild24.save.v6')&&store.get('guild24.save.v6.backup'),'the precondition is a real save');
+
+  assert.equal(Save.reset(),true,'the reset reports success');
+  assert.equal(store.size,0,'every key this game owns is gone - current, backup and legacy alike');
+
+  // What a player does next: a fresh account, then a reload. Nothing comes back.
+  Save.error=null;
+  assert.equal(Save.read(),null,'there is nothing left to read');
+  assert.equal(Save.error,null,'and no leftover legacy key makes it warn about an older save');
+  const after=Meta.fresh();
+  assert.equal(Meta.totalJobMastery(after),0,'Job Mastery is back to zero');
+  assert.equal(Meta.distinctBossClear(after),0,'so is Distinct Boss Clear');
+  assert.equal(Meta.grade(after),1,'and the Franchise Grade');
+  assert.deepEqual(after.knowledge,{},'Monster Knowledge is gone');
+  assert.deepEqual(after.tutorial,{},'and the guide is offered again, with no reset-only code to do it');
+  assert.equal(after.runs,0,'the run count does not survive either');
+  // The reset is the only destructive path: it never invents a partial variant.
+  assert.equal(typeof Save.reset,'function');
+  assert.equal(Object.keys(Save).filter(k=>/reset/i.test(k)).length,1,'there is exactly one reset entry point');
+ }finally{delete global.localStorage;}
+});
+
 // --- DETERMINISM -------------------------------------------------------------------
 
 test('CORE_RUN §RUN RANDOMNESS: the same seed and the same inputs produce the same run',()=>{

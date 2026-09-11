@@ -1,5 +1,9 @@
 (function(G){
 const KEY='guild24.save.v6';
+/* Every schema this game has ever written, current one apart. Read() uses it to tell a
+   player their old save cannot be continued; reset() uses the same list to erase it, so a
+   version bump is made in one place and both paths follow. */
+const LEGACY=['v1','v2','v3','v4','v5'];
 
 /* Save validation. One clause out of line and the save is refused.
    Each check stands alone under its own name. This function was extended twice in v2.4
@@ -180,7 +184,7 @@ G.Save={
   if(typeof localStorage==='undefined')return null;
   if(!localStorage.getItem(KEY)&&!localStorage.getItem(KEY+'.backup')){
    /* Only an older format is left. The original is never erased; the player is told in plain words. */
-   if(['v1','v2','v3','v4','v5'].some(v=>localStorage.getItem('guild24.save.'+v)))
+   if(LEGACY.some(v=>localStorage.getItem('guild24.save.'+v)))
     this.error='규칙 개편으로 이전 영업은 이어갈 수 없습니다. 새 점포를 열어 주세요. 이전 저장 원본은 보관됩니다.';
    return null;
   }
@@ -210,6 +214,23 @@ G.Save={
    if(!progressOk(r,ids,D))return false;
    return true;
   }catch(e){return false;}
+ },
+
+ /* Full game data reset. Everything this game owns lives under the current key, its backup
+    and the legacy keys, so those are derived from the two constants above rather than listed
+    again here. The legacy keys have to go too: leaving them would make the very next read()
+    warn about an older save, which is not a first launch. There is no partial variant - the
+    caller starts over from Meta.fresh(), which is the same path a new player takes. */
+ reset(){
+  if(typeof localStorage==='undefined')return false;
+  try{
+   for(const key of [KEY,KEY+'.backup',...LEGACY.map(v=>'guild24.save.'+v)])localStorage.removeItem(key);
+   this.error=null;
+   return true;
+  }catch(e){
+   this.error='저장 삭제에 실패했습니다. 브라우저 저장소를 확인해 주세요.';
+   return false;
+  }
  },
 
  export(account,run){return JSON.stringify({version:6,account,run},null,2);},
