@@ -1,28 +1,51 @@
-# SPEC_INDEX
+# GUILD24 DESIGN SSOT INDEX
 
 DOC=SPEC_INDEX
-OWNER=spec_index,canonical_routing,version_policy,source_access
+OWNER=spec_index,design_ssot_routing,version_policy,source_access
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=FROZEN
 FREEZE_DATE=2026-09-11
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 
+## TERMINOLOGY / AUTHORITY
+
+**GUILD24 Design SSOT** is the authoritative design source for the project.
+
+Document classes:
+- gameplay / system / UX / copy documents = **Authoritative Design Spec**
+- QA acceptance documents = **Design QA Spec**
+- this file = **Design SSOT Index**
+
+The legacy project term `Canonical` is deprecated as the primary document-class label.
+Old commits, reports, or untouched metadata may still contain `Canonical` for compatibility/history.
+That legacy label does not create a second design authority.
+
+Authority order:
+1. User's newest approved decision
+2. current GUILD24 Design SSOT
+3. current Source
+4. older chat / proposal / report / historical spec
+
+DESIGN TRUTH = Design SSOT
+IMPLEMENTATION TRUTH = Source
+
 ## FREEZE / PASS3 POLICY
 
-`FREEZE_STATUS=FROZEN` means all behavior/structure decisions required for the v2.5 Canonical set are frozen.
+`FREEZE_STATUS=FROZEN` means all behavior/structure decisions required for the v2.5 Design SSOT are frozen.
 
 `PASS3` markers are numeric/presentation tuning work, not permission to redesign a mechanic.
 
-For an existing mechanic with a canonical-compatible Source baseline:
+For an existing mechanic with a Design-SSOT-compatible Source baseline:
 - Source baseline may be retained provisionally where the owning Spec explicitly allows it.
 
 For a newly added v2.5 mechanic whose exact numeric is marked PASS3 and has no prior Source baseline:
 - do not invent a hidden replacement subsystem
-- keep the mechanic structure exactly as Canonical
+- keep the mechanic structure exactly as the owning Authoritative Design Spec
 - tuning constants must live in the owning system/table
-- report the chosen provisional tuning values before final production merge when the owning Spec marks them PASS3
+- report provisional tuning values before final production merge when the owning Spec marks them PASS3
 
 PASS3 does not reopen:
 - Boss identity / reveal schedule
@@ -34,20 +57,20 @@ PASS3 does not reopen:
 
 ## VERSION POLICY
 
-canonicalSet=v2.5.0
+designSsotVersion=v2.5.0
 filenamePattern=`<DOC>_vMAJOR.MINOR.PATCH.md`
 
-MAJOR = Canonical contract/structure change
+MAJOR = authoritative design contract/structure change
 MINOR = approved rule/content expansion without broad contract break
 PATCH = clarification/typo/non-behavioral correction
 
 Rule:
 When a Project Source filename version changes,
-update this SPEC_INDEX reference in the same Canonical set.
+update this SPEC_INDEX reference in the same Design SSOT set.
 
-## CANONICAL FILE SET
+## DESIGN SSOT FILE SET
 
-Current Project Sources must contain only the latest Canonical Set versions of these MD files:
+Current Project Sources contain 23 authoritative v2.5.0 MD files:
 
 - `SPEC_INDEX_v2.5.0.md`
 - `00_GAME_CORE_v2.5.0.md`
@@ -73,8 +96,8 @@ Current Project Sources must contain only the latest Canonical Set versions of t
 - `RELIC_QA_v2.5.0.md`
 - `UI_UX_QA_v2.5.0.md`
 
-Canonical file count=23.
-ZIP is backup/transfer only and is not a Canonical Source.
+Design SSOT file count=23.
+ZIP is backup/transfer only and is not itself an authoritative Design Spec.
 
 ## CORE
 GAME/CORE -> 00_GAME_CORE_v2.5.0.md
@@ -90,11 +113,13 @@ JOB BASE/GROWTH MASTERY EFFECT CHANNEL -> NPC_TRAIT_v2.5.0.md
 ## BOSS
 BOSS IDENTITY / ROSTER / TRAIT -> BOSS_v2.5.0.md
 BOSS REVEAL TIMING -> BOSS_v2.5.0.md
+BOSS FINAL-SNAPSHOT MODIFIER -> BOSS_v2.5.0.md
 SLOTH SEAL OPPORTUNITY / DIFFICULTY STATE -> BOSS_v2.5.0.md
 
 ## FINAL
 D30 FINAL PARTY / FINAL POWER / CLEAR -> FINAL_EXPEDITION_v2.5.0.md
 FINAL FAMILY DISCLOSURE / FINAL HAZARD POOL -> FINAL_EXPEDITION_v2.5.0.md
+FINAL CALCULATION ORDER / LOCK -> FINAL_EXPEDITION_v2.5.0.md
 FINAL BALANCE / QA CONTRACT -> FINAL_EXPEDITION_v2.5.0.md
 
 ## ECONOMY / ORDER
@@ -106,6 +131,7 @@ CUMULATIVE GROSS SALES -> ECONOMY_ORDER_v2.5.0.md
 ## NPC / TRAIT
 JOB/GROWTH -> NPC_TRAIT_v2.5.0.md
 TRAIT/LOYALTY/WALLET/REVISIT -> NPC_TRAIT_v2.5.0.md
+TRUSTED REGULAR STATE OWNERSHIP -> NPC_TRAIT_v2.5.0.md
 ROSTER/LIVING NPC CAP/DESTINATION/PRE-REVEAL -> NPC_TRAIT_v2.5.0.md
 
 ## DUNGEON
@@ -144,12 +170,14 @@ PHASE UI/MOBILE -> UI_UX_v2.5.0.md
 TUTORIAL/COACH MARK -> UI_UX_v2.5.0.md
 EVENT REVEAL/FORECAST UI -> UI_UX_v2.5.0.md
 BOSS/RELIC REVEAL ORDER UI -> UI_UX_v2.5.0.md
+BOSS FINAL MODIFIER PREVIEW / BOSS ART -> UI_UX_v2.5.0.md
 META PROGRESSION UI -> UI_UX_v2.5.0.md
 
 ## COPY / WORLD VOICE
 PLAYER COPY/TERMINOLOGY/DATA-FUNCTION-FLAVOR -> COPY_WORLD_VOICE_v2.5.0.md
 NPC DIALOGUE/RESULT VARIATION/CALLBACK COPY -> COPY_WORLD_VOICE_v2.5.0.md
 CULTURE/RARE NPC REFERENCE VOICE -> COPY_WORLD_VOICE_v2.5.0.md
+BOSS REVEAL EXACT COPY -> COPY_WORLD_VOICE_v2.5.0.md
 BOSS/META COPY EXPRESSION -> COPY_WORLD_VOICE_v2.5.0.md
 
 ## QA
@@ -168,7 +196,7 @@ COPY -> COPY_WORLD_VOICE_v2.5.0.md (embedded Copy QA)
 ## WORK STATE
 IMPORTANT DESIGN DECISIONS -> DECISIONS_v2.5.0.md
 
-Runtime work files (NOT Project Sources):
+Runtime work files (NOT Design SSOT):
 CURRENT TASK QUEUE -> TODO.md
 CURRENT CHECKPOINT -> WORK_STATE.md
 
@@ -189,19 +217,19 @@ night/injury/death/closing/settlement    -> NIGHT_CLOSING_v2.5.0.md
 ui/ux/tutorial/mobile/event-reveal       -> UI_UX_v2.5.0.md
 copy/voice/flavor/dialogue/terminology   -> COPY_WORLD_VOICE_v2.5.0.md
 event/daily-event/easter-egg             -> EVENT_v2.5.0.md
-final/D30/final-party/family/clear        -> FINAL_EXPEDITION_v2.5.0.md
+final/D30/final-party/family/clear       -> FINAL_EXPEDITION_v2.5.0.md
 
 core-run QA                              -> CORE_RUN_QA_v2.5.0.md
 order/economy QA                         -> ECONOMY_ORDER_QA_v2.5.0.md
 npc/trait QA                             -> NPC_TRAIT_QA_v2.5.0.md
 dungeon/item/preparation QA              -> DUNGEON_ITEM_QA_v2.5.0.md
-relic/build/sloth-window QA               -> RELIC_QA_v2.5.0.md
-ui/ux/reveal-order QA                     -> UI_UX_QA_v2.5.0.md
+relic/build/sloth-window QA              -> RELIC_QA_v2.5.0.md
+ui/ux/reveal-order QA                    -> UI_UX_QA_v2.5.0.md
 ```
 
 ## PROJECT SOURCE ACCESS RULE
 
-Do not classify a Canonical file as MISSING merely because it is absent from initial session context.
+Do not classify an authoritative Design Spec as MISSING merely because it is absent from initial session context.
 
 Required sequence:
 1. Open `SPEC_INDEX_v2.5.0.md`.
@@ -217,8 +245,8 @@ Task
 -> WORK_STATE
 -> this index
 -> exact indexed filename Search/Open
--> owning Spec
--> related QA
+-> owning Authoritative Design Spec
+-> related Design QA Spec
 -> Source Search
 -> needed Code only
 -> Target Test

@@ -4,9 +4,10 @@ DOC=COPY_WORLD_VOICE
 OWNER=copy,voice,flavor,dialogue,terminology,culture
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
-> Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Canonical.
+> Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Authoritative Design Spec.
 >
 > 이 문서는 Gameplay Rule / Balance / Item Effect / Trait Function / NPC progression을 변경하지 않는다.
 > 현재 게임 위에서 정보 전달을 명확하게 유지하면서 GUILD24의 생활감, Character, 재치를 만든다.
@@ -77,7 +78,7 @@ Copy / Flavor / Joke / Meme 하나를 위해 현재 없는 Gameplay / UI / Dialo
 
 COPY_WORLD_VOICE는 Gameplay Content의 소유 문서가 아니다.
 
-다음 Rule은 기존 Canonical이 계속 소유한다.
+다음 Rule은 기존 owning Authoritative Design Spec이 계속 소유한다.
 
 - Item Category / Functional Role / Effect / Counter / Insurance / Interaction / Item Pool
   - -> ITEM
@@ -562,7 +563,7 @@ NPC:
 전체 체감 약 1–2% 이하.
 한 Run에 하나도 없어도 정상이다.
 
-이번 Copy Canonical에서 직접 다루는 LEVEL 3은:
+이번 COPY_WORLD_VOICE Authoritative Design Spec에서 직접 다루는 LEVEL 3은:
 
 **희귀 Reference NPC + 해당 NPC 전용 Easter Egg**
 
@@ -600,7 +601,7 @@ Reference NPC 이름 자체가 첫 번째 Easter Egg다.
 # 10. CULTURAL REFERENCE CONTEXT CHECK
 
 새 Reference를 Work가 임의로 추가하지 않는다.
-새 후보가 필요하면 Design Candidate로 보고하고 User 승인 후 Canonical에 추가한다.
+새 후보가 필요하면 Design Candidate로 보고하고 User 승인 후 owning Authoritative Design Spec에 추가한다.
 
 후보마다 확인한다.
 
@@ -818,7 +819,7 @@ System은 계속 해설하지 않는다.
 Copy Polish 때문에 Rule 설명을 빼지 않는다.
 
 목적지 신뢰도는 특정 Trait 이름을 중심으로 가르치지 않는다.
-Canonical Function wording:
+Authoritative Function wording:
 
 > 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.
 
@@ -999,21 +1000,205 @@ Copy 수정 때문에 Source 구조를 먼저 Refactor하지 않는다.
 - Monster Knowledge 진행도가 아직 `관찰 N회`로 표시되는가?
 
 
+
+
+- D5 Boss Flavor가 Trait을 암시하되 exact Function을 미리 공개하지 않는가?
+- D15 Boss copy가 실제 Trait effect를 정확히 말하고 별도 공략 조언으로 대체하지 않는가?
+- Player-facing Boss copy에 Run / Final Snapshot / Factor / Modifier 같은 내부 설계어가 노출되는가?
+- GLUTTONY Player-facing copy가 `장비`가 아니라 `보급품` 용어를 사용하는가?
+- ENVY 문구가 능력치 감소가 최종전 동안 유지됨을 명확히 하는가?
+- LUST가 `비단골=4 Stats 감소 / 단골=영향 없음`으로 정확히 설명되는가?
+- D30이 실제 두 Family의 T2 Hazard pressure를 그대로 보여주며 별도 공략문을 덧붙이지 않는가?
+
 # 18.5 BOSS / META COPY BOUNDARY
 
 Boss fixed Player-facing names follow BOSS exactly.
 Do not rename `색욕` to a softer synonym or substitute another sin label.
 
-Boss reveal copy may dramatize the character, but must not hide the actual D15 Trait effect.
-Sloth Seal choice must state the real trade-off with the Relic opportunity.
+Boss reveal copy follows the same DATA / FUNCTION / FLAVOR split used elsewhere:
+- D5 = identity + short FLAVOR; Trait Function remains hidden
+- D15 = exact Trait FUNCTION + necessary current DATA
+- D30 = exact Family/Hazard DATA needed for the Final decision
+
+Do not attach separate strategy advice to the D15 rule explanation.
+The game gives the ingredients; the Player decides the response.
+
+Player-facing Boss copy must not use internal design/runtime terms such as:
+- Run
+- Relic Window
+- Final Snapshot
+- Final Power
+- Factor
+- Modifier
+- sealBreakCount
+- effectiveBossPower
+
+when an approved world/player term exists.
+
+## D5 — 길드 토벌 공고
+
+Header:
+
+> 길드 토벌 공고
+
+Sub:
+
+> 이번 토벌 대상
+
+### 분노의 마왕 래스
+
+> 공성추도 없이 성문이 안쪽으로 무너졌다.
+
+### 오만의 마왕 프라이드
+
+> 검은 갑주에는 아직 흠집 하나 남지 않았다.
+
+### 질투의 마왕 엔비
+
+> 승전 보고서마다 가장 빛나던 이름 하나가 붉게 지워져 있었다.
+
+### 탐욕의 마왕 그리드
+
+> 금고가 빈 마을일수록, 놈의 군세는 이상할 만큼 강했다.
+
+### 폭식의 마왕 글러트니
+
+> 최정예 토벌대의 보급품만 유난히 처참한 꼴로 발견됐다.
+
+### 색욕의 마왕 러스트
+
+> 오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.
+
+### 나태의 마왕 슬로스
+
+> 놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.
+
+Button:
+
+> 토벌 대상 확인
+
+D5 Flavor:
+- Trait을 암시할 수 있다
+- exact Function을 공개하지 않는다
+- 별도 전략 조언을 붙이지 않는다
+
+## D15 — 길드 정보 보고
+
+Intro:
+
+> 길드 정보원이 추가 정보를 확보했다.
+
+### 분노의 마왕 래스
+
+**특성 — 특수 효과 없음**
+
+> 별도의 변칙은 확인되지 않았다.  
+> 래스는 순수한 전력으로 맞선다.
+
+### 오만의 마왕 프라이드
+
+**특성 — 오만의 갑주**
+
+> 최종전에서 모든 출전자의 투력이 감소한다.  
+> 강인함·기동·정신은 그대로 적용된다.
+
+### 질투의 마왕 엔비
+
+**특성 — 질투의 시선**
+
+> 최종전에서 가장 크게 기여하는 모험가 한 명이 표적이 된다.  
+> 표적의 투력·강인함·기동·정신은 최종전 동안 감소한다.
+
+### 탐욕의 마왕 그리드
+
+**특성 — 탐욕의 장부**
+
+> 최종전까지 누적 총매출이 목표에 미달하면, 부족한 만큼 그리드가 강해진다.  
+> 강화에는 한도가 있으며, 목표를 넘겨도 추가 이득은 없다.
+
+DATA:
+
+```text
+목표 매출      [value]G
+현재 매출      [value]G
+달성률         [value]%
+탐욕 강화      +[value]%
+```
+
+### 폭식의 마왕 글러트니
+
+**특성 — 폭식의 권능**
+
+> 최종전에서 [등급] 이상 보급품의 능력치 증가 효과가 감소한다.  
+> 대응·보급·보험·기타 특수 효과는 그대로 적용된다.
+
+### 색욕의 마왕 러스트
+
+**특성 — 매혹의 권능**
+
+> 단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.  
+> 단골은 영향을 받지 않는다.
+
+### 나태의 마왕 슬로스
+
+**특성 — 나태의 봉인**
+
+> 슬로스에게는 세 개의 봉인이 남아 있다.  
+> 15일·20일·25일 중 두 차례와 30일에, 유물을 받는 대신 봉인 하나를 풀 수 있다.  
+> 봉인을 풀면 그때의 유물은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.
+
+Button:
+
+> 정보 확인
+
+PASS3 values are DATA.
+Do not invent a numeric value in prose before PASS3 is approved.
+
+## D30 — 최종 정찰 보고
+
+Header:
+
+> 최종 정찰 보고
+
+Intro:
+
+> 마왕군의 최종 전장이 확인됐다.
+
+Then show the two selected Family names and each Family's actual T2 Hazard pressure information.
+
+Authoritative Hazard wording:
+
+```text
+독 · 강인함 압박
+속박 · 기동 압박
+
+부식 · 강인함 압박
+진창 · 기동 압박
+
+화염 · 강인함 압박
+
+공포 · 정신 압박
+어둠 · 정신 중심 + 기동 보조 압박
+
+냉기 · 강인함 압박
+화이트아웃 · 정신 중심 + 기동 보조 압박
+```
+
+Button:
+
+> 최종 준비
+
+Do not add a strategy-summary sentence after these facts.
+The information itself is the decision material.
 
 Meta copy:
 - use Job Mastery / 직업 숙련 language consistently with META
 - do not present legacy Global Meta XP as current progression
 - Franchise Grade language must not imply direct gameplay power
-- Franchise Grade may communicate Start Contract availability unlocked by Grade; do not phrase an unlocked contract's effect as an automatic Grade bonus
+- Franchise Grade may communicate Start Contract availability unlocked by Grade
 - do not present legacy Day / Run-count / regular-customer / adventurer-level Start Contract gates as current Meta progress
 - Monster Knowledge progress remains `보급 생환 N회`
+
 
 # 19. FINAL COPY FILTER
 

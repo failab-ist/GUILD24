@@ -2,10 +2,11 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear
-# FINAL EXPEDITION — CANONICAL
+# FINAL EXPEDITION — AUTHORITATIVE DESIGN SPEC
 
 DOC_VERSION=2.5.0  
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ---
 
@@ -35,10 +36,10 @@ Final은 기존:
 
 Final만을 위한 별도 Class Synergy, 전용 Combat System, 전용 생존 판정은 추가하지 않는다.
 
-v2.5 Boss Identity / Boss Trait / Sloth Seal state는 별도 Canonical이 소유한다.
--> BOSS
 
-FINAL_EXPEDITION은 그 Boss state를 입력으로 받아 기존 Final resolution을 수행한다.
+v2.5 Boss Identity / Boss Trait / Sloth Seal state is owned by BOSS.
+FINAL_EXPEDITION receives that Boss state as input and performs the existing Final resolution.
+
 
 ---
 
@@ -50,19 +51,19 @@ Final 시작 시:
 
 1. 서로 다른 기존 Dungeon Family 2개를 랜덤 선택한다.
 2. 선택된 두 Family를 플레이어에게 공개한다.
-3. 이 Family 공개는 **D30 Relic decision / Sloth Seal decision보다 먼저** 이루어진다.
+3. Family 공개는 D30 Relic decision / Sloth Seal decision보다 먼저 이루어진다.
 4. 공개 이후 Final 파티 선택 및 최종 준비가 가능하다.
 5. 각 Family의 기존 T2 Hazard를 가져온다.
 6. 두 Family의 T2 Hazard를 하나의 Final Hazard Pool로 합쳐 사용한다.
 7. 선택된 Family 조합은 생성된 Final state이며 Save/Load로 다시 뽑히지 않는다.
 
-Final Hazard Pool에는 각 Family의 canonical **Hazard key**만 들어간다.
+Final Hazard Pool에는 각 Family의 authoritative **Hazard key**만 들어간다.
 Family의 non-Hazard second axis는 별도 Final modifier로 중복 추가하지 않는다.
-예: FIRE의 higher Dungeon Combat Power는 Final Hazard Pool에 들어가지 않으며, 마왕 자체의 강함 축은 Boss Power가 소유한다.
+예: FIRE의 higher Dungeon Combat Power는 Final Hazard Pool에 들어가지 않으며, 마왕 자체의 강함 축은 effective Boss Power가 소유한다.
 
 Family의 T2 정의 자체는 이 문서에서 재정의하지 않는다.
 
-Canonical:
+Authoritative:
 → DUNGEON_HAZARD
 
 ---
@@ -97,9 +98,8 @@ Final Hazard Scale = 4.6
 역할 분리:
 
 ```text
-마왕 Identity / Trait / effective Boss modifier = BOSS
+마왕 자체의 강함 = effective Boss Power
 환경 압박 = 선택된 두 Family의 T2 Hazard
-Final 계산 / 비교 = FINAL_EXPEDITION
 ```
 
 Final이 별도의 T3 Dungeon처럼 동작하도록 만들지 않는다.
@@ -110,11 +110,9 @@ Final이 별도의 T3 Dungeon처럼 동작하도록 만들지 않는다.
 
 선택된 두 Family는 다음보다 먼저 공개한다.
 
-- D30 Relic decision
-- Sloth D30 Seal decision when applicable
 - Final 출전 NPC 선택
 - Final 보급품 / 준비 결정
-- 기타 Final-relevant management decision
+- D30 Relic decision을 포함한 Final-relevant management decision
 
 플레이어는 공개된 두 Family를 보고:
 
@@ -126,7 +124,7 @@ Final이 별도의 T3 Dungeon처럼 동작하도록 만들지 않는다.
 
 Final에서 정확한 성공 확률이나 내부 Power Formula를 Player에게 직접 노출하지 않는다.
 
-Player-facing 정보 공개 원칙은 기존 Canonical을 따른다.
+Player-facing 정보 공개 원칙은 기존 Design SSOT를 따른다.
 
 ---
 
@@ -171,7 +169,7 @@ Final 전용:
 
 # 4.1 FINAL PREP / LOCK / STOCK
 
-D30 Family disclosure와 필요한 Boss/Sloth reveal 이후, Final lock 전에는 기존 Canonical이 허용하는 Final-relevant 준비를 완료할 수 있다.
+D30 Family disclosure와 필요한 Boss/Sloth reveal 이후, Final lock 전에는 기존 Design SSOT가 허용하는 Final-relevant 준비를 완료할 수 있다.
 
 포함:
 - 출전 NPC 선택
@@ -181,16 +179,28 @@ D30 Family disclosure와 필요한 Boss/Sloth reveal 이후, Final lock 전에�
 
 Supply Burden boundary:
 - D30 Final does not roll an additional random Supply Burden modifier
-- Food/Drink may still be chosen for their ordinary Stat/Counter/other canonical effects
+- Food/Drink may still be chosen for their ordinary Stat/Counter/other authoritative effects
 - no Final-only Supply requirement is invented
-- canonical ownership -> DUNGEON_HAZARD / ITEM
+- authoritative ownership -> DUNGEON_HAZARD / ITEM
+
+Final Lock 시점에 확정:
+- 출전 NPC
+- NPC Final Snapshot
+- 적용 Item / Supply state
+- Final Family Pair
+- Hazard preparation state
+- Boss Trait application state
+- ENVY target when applicable
+- GREED committed gross-sales snapshot
+- LUST trusted-regular state
+- SLOTH sealBreakCount
 
 Final lock 이후에는 Relic 구매나 일반 management action으로 이미 잠긴 Final state를 소급 변경할 수 없다.
 
-D30 stock / expiry는 별도 Override가 없는 한 일반 Canonical stock/expiry 규칙을 따른다.
+D30 stock / expiry는 별도 Override가 없는 한 일반 Design SSOT stock/expiry 규칙을 따른다.
 플레이어는 Final commitment 전에 해당 재고가 Final 준비에 실제 사용 가능한지 이해할 수 있어야 한다.
 
-Canonical stock / Relic / UI:
+Authoritative stock / Relic / UI:
 -> ITEM
 -> RELIC
 -> UI_UX
@@ -216,9 +226,41 @@ Prepare에는 기존 시스템에서 반영하는 요소를 그대로 사용한�
 - Final Hazard Pool에 대한 환경피해 (`hazard`)
 
 각 요소의 기본 계산 / Item Effect / Trait Effect / Hazard 계산은
-각 소유 Canonical을 따른다.
+각 owning Authoritative Design Spec을 따른다.
 
 ---
+
+
+# 5.1 FINAL CALCULATION ORDER
+
+Shared order:
+
+```text
+1. locked NPC base/growth/current Condition state
+2. locked Item / Supply / equipment effects
+3. Final Family Hazard preparation result
+4. participant-side Boss Final Snapshot modifier
+5. Individual Final Power
+6. Party sum
+7. Boss-side effective Boss modifier
+8. Final Roll
+9. CLEAR / FAIL
+```
+
+Participant-side Boss mechanics are owned by BOSS:
+- PRIDE
+- ENVY
+- GLUTTONY raw-Stat Item adjustment
+- LUST
+
+Boss-side modifiers are owned by BOSS:
+- GREED
+- SLOTH
+
+WRATH adds no special Boss modifier.
+
+This ordering does not redefine the individual Boss mechanics.
+Final Power remains internal and is not introduced as a Player-facing Stat.
 
 # 6. INDIVIDUAL FINAL POWER
 
@@ -239,8 +281,6 @@ Individual Final Power
 - `투력`은 Player-facing `combat` Stat 용어다.
 - `환경피해`는 Prepare가 Final Hazard Pool을 기준으로 계산한 값이다.
 - Final Power는 내부 계산값이며 별도 Player Stat으로 추가하지 않는다.
-- Boss Trait이 특정 Final input/contribution을 수정하는 경우 BOSS가 정의한 범위에서만 임시 적용한 뒤 이 Final 계산을 사용한다.
-- Boss Trait은 원본 NPC 영구 Stat을 직접 변조하지 않는다.
 
 ---
 
@@ -305,19 +345,18 @@ Full Run Playtest에서 체감 검증한다.
 Final 판정:
 
 ```text
-Rolled Party Power >= Boss Power
+Rolled Party Power >= effective Boss Power
 → 마왕 토벌 성공
 
-Rolled Party Power < Boss Power
+Rolled Party Power < effective Boss Power
 → 마왕 토벌 실패
 ```
 
-Final 비교에는 BOSS가 제공하는 해당 Run의 `effective Boss Power`를 사용한다.
+effective Boss Power는 Final의 마왕 자체 강함을 담당한다.
 
-- WRATH baseline / Boss별 Trait / Sloth Seal Break에 따른 Boss-side modifier ownership -> BOSS
-- 비교 공식 / Final Roll / Clear 결과 ownership -> FINAL_EXPEDITION
+effective Boss Power exact numeric value는 현재 구조 확정값이 아니다.
 
-Exact Boss numeric tuning은 BOSS / Final PASS3 contract를 따른다.
+Full Run Balance 결과를 보고 조정한다.
 
 ---
 
@@ -383,7 +422,7 @@ T2답게:
 - 아무 준비 없이 Level / 투력만 올려도 쉽게 뚫리지는 않는가?
 - 장기 투자 NPC가 Last-day Random Newcomer보다 Final에서 의미 있게 작동하는가?
 
-Boss Power는 Full Run 결과를 보고 최종 튜닝한다.
+effective Boss Power는 Full Run 결과를 보고 최종 튜닝한다.
 
 ---
 
@@ -393,7 +432,7 @@ Boss Power는 Full Run 결과를 보고 최종 튜닝한다.
 
 - 매우 잘 성장한 에이스 1~2명으로도 극단적으로 Final Clear가 가능한가?
 - 1~2인 Clear를 시스템적으로 금지하지 않는다.
-- 지나치게 쉽거나 사실상 절대 불가능할 때만 Boss Power / 계수를 검토한다.
+- 지나치게 쉽거나 사실상 절대 불가능할 때만 effective Boss Power / 계수를 검토한다.
 
 우선 추가하지 않는 것:
 
@@ -431,13 +470,12 @@ Boss Power는 Full Run 결과를 보고 최종 튜닝한다.
 확인:
 - 선택된 두 Family가 Save/Load로 바뀌지 않는가?
 - Save/Load가 Family reroll 수단이 되지 않는가?
-- BOSS가 제공한 Boss ID / Trait / Sloth state가 Reload로 변하지 않는가?
 - Final lock 이후 관리 행동이 이미 잠긴 결과를 바꾸지 않는가?
 
 ## G. FINAL PREP / STOCK TIMING
 
 확인:
-- 두 Family가 D30 Relic/Sloth decision보다 먼저 공개되고, 그 후 파티 / Item 판단이 가능한가?
+- 두 Family 공개 후 파티 / Item / D30 Relic 판단이 가능한가?
 - D30 재고/유통기한 표시와 실제 Final 사용 가능 상태가 일치하는가?
 - Player가 commitment 전에 사용할 수 없는 재고를 사용할 수 있다고 오해하지 않는가?
 
@@ -474,7 +512,7 @@ REMOVE / DO NOT USE:
 
 FINAL_EXPEDITION이 소유:
 
-- D30 Final resolution Flow
+- D30 Final Flow
 - Final Family 2종 Selection
 - Family Disclosure Timing
 - Final Hazard Pool 구성 방식
@@ -483,14 +521,11 @@ FINAL_EXPEDITION이 소유:
 - Final Power Formula
 - Party 합산
 - Final Roll
-- effective Boss Power와의 Clear 비교
+- Boss Clear 판정
 - Run Clear / Fail 조건
 - Final 전용 Balance / QA Contract
 
 FINAL_EXPEDITION이 소유하지 않음:
-
-Boss Identity / Boss Trait / Sloth Seal / Boss-side modifier
-→ BOSS
 
 Dungeon Family / T1-T3 Hazard 정의
 → DUNGEON_HAZARD

@@ -4,7 +4,8 @@ DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 
 ## KEY
@@ -99,7 +100,7 @@ Event가 발생한 날:
 2. 확인 후 Event가 반영된 Morning Situation을 보여준다.
 3. 별도의 EVENT Phase는 만들지 않는다.
 
-Canonical Event timing/effect:
+Authoritative Event timing/effect:
 -> EVENT
 
 Do not:
@@ -123,7 +124,7 @@ Recommended hierarchy:
 2. persistent funds summary
 3. compact current-day Gate / known Hazard reference
 4. compact next-day Tier forecast (secondary)
-5. offer list + quantity (base=6; canonical modifiers may increase count)
+5. offer list + quantity (base=6; authoritative modifiers may increase count)
 6. Full-offer reroll + current cost/state
 7. sticky confirm
 
@@ -175,7 +176,7 @@ Useful changes include when actually relevant:
 - notable previous expedition outcome
 - prior meaningful Item/callback history
 
-Full canonical profile remains accessible.
+Full authoritative profile remains accessible.
 Do not hide important current Stats/Traits behind history.
 
 Item selection:
@@ -334,7 +335,7 @@ Destination reliability tutorial explains the system-level rule, not one specifi
 
 Do not center the tutorial around 허세.
 
-Canonical logic:
+Authoritative logic:
 -> DUNGEON_HAZARD
 
 ## STAT PRESENTATION
@@ -368,7 +369,7 @@ Do not player-face internal Trait direction taxonomy:
 
 Internal POSITIVE/MIXED/NEGATIVE remains for generation/Event logic.
 
-Each material effect uses canonical data-driven semantic tone:
+Each material effect uses authoritative data-driven semantic tone:
 - benefit
 - cost
 - neutral
@@ -385,7 +386,7 @@ but wording itself must remain understandable without color.
 
 Do not turn Trait header/background into a green/yellow/red quality grade.
 
-Canonical:
+Authoritative:
 -> NPC_TRAIT
 
 ## HAZARD NUDGE
@@ -393,7 +394,7 @@ Canonical:
 System should help the player notice relevant risk
 without solving the puzzle.
 
-Every known canonical Hazard provides:
+Every known authoritative Hazard provides:
 - Hazard name
 - short Stat/readiness pressure explanation from DUNGEON_HAZARD
 
@@ -448,12 +449,14 @@ Useful:
 Secondary encyclopedia remains optional reference,
 not required navigation for basic decisions.
 
+
 ## BOSS / FINAL REVEAL UI
 
-Boss gameplay ownership -> BOSS
-Final Family ownership -> FINAL_EXPEDITION
+Boss gameplay ownership -> BOSS  
+Final Family ownership -> FINAL_EXPEDITION  
+Exact Player-facing wording -> COPY_WORLD_VOICE
 
-Reveal sequence must preserve decision value:
+Existing reveal sequence remains:
 
 D5:
 `Boss Identity` focused reveal -> D5 Relic reveal
@@ -464,12 +467,116 @@ D15:
 D30:
 `Final Family Pair` focused reveal -> D30 Relic window decision (`Relic 획득` vs `봉인 해제` for Sloth) -> Final preparation / lock
 
+### D5 — 길드 토벌 공고
+
+Presentation identity:
+`in-world 길드 토벌 공고`
+
+Primary hierarchy:
+1. Boss D5/D15 BASE illustration
+2. fixed Player-facing Boss name
+3. short Boss-specific Flavor
+4. continuation to existing D5 Relic reveal
+
+The Flavor may hint at the Trait.
+The exact Trait Function remains hidden.
+
+Boss art is a primary game object.
+Do not reduce it to a tiny icon beside a dashboard card.
+
+### D15 — 길드 정보 보고
+
+Presentation identity:
+`길드 정보 보고`
+
+Primary hierarchy:
+1. same D5/D15 BASE Boss illustration
+2. Boss identity
+3. exact Trait name
+4. exact material Trait effect
+5. relevant current DATA when applicable
+
+Do not replace Function with strategy advice.
+The Player receives the rule and decides the response.
+
+Do not expose:
+- exact Final success probability
+- hidden Final Power
+- internal Factor / Modifier terminology
+
+### D30 — 최종 정찰 보고
+
+Presentation identity:
+`최종 정찰 보고`
+
+Show:
+- exactly two Final Families
+- each selected Family's actual authoritative T2 Hazard set
+- each Hazard's authoritative Stat-pressure label
+
+Important:
+`two Families` does NOT mean exactly two Hazard keys.
+
+Do not expose:
+- exact Hazard formula
+- exact Final success probability
+- internal Final Power
+
+### FINAL MODIFIER PREVIEW
+
+Before Final Lock, whenever a Boss changes a Player-visible value, show:
+
+`original → applied`
+
+Required:
+
+PRIDE:
+- each participant's 투력
+
+ENVY:
+- targeted participant's 투력 / 강인함 / 기동 / 정신
+
+GLUTTONY:
+- affected 보급품 raw Stat contribution
+
+LUST:
+- each affected non-regular participant's 투력 / 강인함 / 기동 / 정신
+
+GREED shows:
+- 목표 매출
+- 현재 매출
+- 달성률
+- 현재 탐욕 강화 %
+
+SLOTH shows:
+- 봉인 해제 상태
+- 현재 위협 단계
+
+Do not expose exact Final success probability.
+
+### FINAL BOSS ART
+
+Normal six Bosses:
+
+`Final prep / confrontation / result -> D30 BATTLE`
+
+SLOTH:
+
+- SB0 -> BASE reuse
+- SB1 -> D30 SB1
+- SB2 -> D30 SB2
+- SB3 -> D30 SB3
+
+The Final Boss is a primary game object.
+Do not present the Final confrontation as text/name-only when the authoritative Boss illustration is available.
+
 Rules:
-- do not show Relic choice first and reveal its relevant Boss/Family information afterward
-- Boss Trait effect must be understandable without exposing hidden exact success probability
-- Sloth choice must visually communicate `Relic 획득` vs `봉인 해제` as mutually exclusive use of that window
+- do not show Relic choice first and reveal relevant Boss/Family information afterward
+- Sloth choice must visually communicate `Relic 획득` vs `봉인 해제` as mutually exclusive
 - Boss reveal is not a new permanent Phase
 - reveal Seen state is stable across Save/Reload
+- Boss art must not push required decision information excessively below the fold on mobile
+
 
 ## RELIC UI
 
@@ -504,7 +611,7 @@ Owned Relic Quick View:
 Relic should look like a meaningful Run-build choice,
 not a minor facility settings menu.
 
-Canonical:
+Authoritative:
 -> RELIC
 
 ## EVENT PRESENTATION
@@ -527,8 +634,9 @@ Do not:
 - repeat the full Event explanation in every Phase
 - create a separate EVENT Phase solely for presentation
 
-Canonical Event rule/catalog:
+Authoritative Event rule/catalog:
 -> EVENT
+
 
 ## META UI
 
@@ -554,6 +662,7 @@ Start Contract UI:
 - locked non-default contracts communicate their required Franchise Grade
 - an unlocked contract is shown as available for selection, not as an automatically active bonus
 - do not present legacy Day / Run-count / regular-customer / adventurer-level conditions as current unlock truth
+
 
 ## NAVIGATION
 
@@ -676,6 +785,4 @@ relic choice -> RELIC
 forecast -> DUNGEON_HAZARD
 event reveal -> EVENT
 final expedition -> FINAL_EXPEDITION
-boss -> BOSS
-meta -> META
 copy/voice -> COPY_WORLD_VOICE

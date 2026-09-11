@@ -4,7 +4,8 @@ DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,living_npc_cap,destination,revisit
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 
 ## KEY
@@ -98,7 +99,8 @@ natural=[투력]
 secondary=[강인함]
 pressure=[정신/Condition 관리]
 
-Exact base/growth numbers=PASS3. Initial v2.5 implementation retains the current canonical-compatible Source Job table, then rebalances after full-run simulation/playtest.
+Exact base/growth numbers=PASS3. Initial v2.5 implementation retains the current Design-SSOT-compatible Source Job table, then rebalances after full-run simulation/playtest.
+
 
 ## JOB MASTERY / CROSS-RUN JOB POWER BOUNDARY
 
@@ -130,7 +132,7 @@ If future visible Job Passives are ever added:
 - hidden modifiers prohibited
 - requires explicit Director/User approval
 
-Legacy/source special cases are not canonical exceptions.
+Legacy/source special cases are not authoritative exceptions.
 Examples that must not survive as hidden rules:
 - Job-specific Item amplification
 - Job-specific Hazard defense
@@ -150,7 +152,7 @@ Forbidden:
 Dungeon affinity emerges from:
 Stats + Items + visible Traits
 
-Canonical:
+Authoritative:
 -> DUNGEON_HAZARD
 
 ## JOB × ITEM
@@ -164,7 +166,7 @@ Each Job should have:
 
 Item effect does not change secretly because of Job ID.
 
-Canonical:
+Authoritative:
 -> ITEM
 
 ## TRAIT PURPOSE
@@ -289,12 +291,12 @@ No automatic multiplier to unrelated:
 - Poison counter
 - penalty magnitude
 
-Canonical item scope:
+Authoritative item scope:
 -> ITEM
 
 ## LEGACY / REMOVED SYSTEM REFERENCES
 
-Trait logic must use current canonical systems only.
+Trait logic must use current authoritative systems only.
 
 Forbidden active Trait resolution keys:
 - `long`
@@ -305,13 +307,13 @@ Forbidden active Trait resolution keys:
 
 Rules:
 - `long` is not a Hazard. Long-expedition preparation is owned by `SUPPLY_BURDEN` in DUNGEON_HAZARD.
-- `thirst` is not a canonical Condition/penalty system.
+- `thirst` is not a authoritative Condition/penalty system.
 - `wet` is flavor only.
-- `armor` and `undead` are not canonical Hazards.
+- `armor` and `undead` are not authoritative Hazards.
 - old source Trait modifiers that reference these keys must not be preserved automatically.
 
 If an existing Trait concept still needs a Supply-related identity,
-it must be redefined through the visible canonical Supply/Supply Burden system
+it must be redefined through the visible authoritative Supply/Supply Burden system
 and explicitly approved before implementation.
 
 `대식가` / `소식가` use only the visible Food native-core/Supply rules defined in the final Trait catalog below.
@@ -420,7 +422,7 @@ Visitor-count modifiers:
 - change only today's visitor count
 - do not increase Living NPC Cap
 - do not force-create new NPCs
-- do not change introduced/fresh selection weighting unless another Canonical rule explicitly says so
+- do not change introduced/fresh selection weighting unless another Design SSOT rule explicitly says so
 
 Newcomer generation follows existing NPC/Event generation rules and cannot exceed the cap.
 
@@ -487,7 +489,7 @@ Player solves preparation around the assigned destination while accepting limite
 
 Player-facing destination is generally presented as `예상 목적지`.
 By default it matches the actual assigned destination.
-Only an explicitly canonical Trait/Event may make expected/reported destination differ from actual destination.
+Only an explicitly authoritative Trait/Event may make expected/reported destination differ from actual destination.
 
 허세:
 - may make the NPC report a different expected destination
@@ -529,10 +531,23 @@ Do not reveal:
 On actual appearance:
 NPC becomes introduced/notebook-visible.
 
-Canonical sale reveal:
+Design SSOT sale reveal:
 -> SALE
 
 ## WALLET / LOYALTY / REVISIT
+
+### TRUSTED REGULAR STATE OWNERSHIP
+
+`Trusted Regular / 단골` is an ordinary NPC relationship classification owned by NPC_TRAIT.
+
+Rules:
+- it remains the same relationship state used outside Boss logic
+- BOSS may read this state at Final Lock
+- BOSS must not define a separate Loyalty threshold or alternate regular classification
+- LUST does not freeze the D15 relationship state; the Final Lock state is authoritative for that Final
+
+Exact ordinary Loyalty / relationship calculation remains in its existing owner/tuning path.
+
 
 These systems support long-term customer value.
 
@@ -607,7 +622,7 @@ Rules:
 8. **구두쇠**
    - internalDirection=NEGATIVE
    - [cost] expensive-price resistance as defined by Sale/Economy threshold
-   - [cost] starting priceBias -16%p above the canonical expensive threshold
+   - [cost] starting priceBias -16%p above the authoritative expensive threshold
 
 9. **충동구매**
    - internalDirection=POSITIVE
@@ -713,7 +728,7 @@ Rules:
     - [benefit] cold 대응 +6
     - [neutral] Cold bonus is intentional character flavor, not hidden wordplay
 
-Removed source concepts from the active v2.5 Trait pool:
+Removed source concepts from active v2.5 Trait pool:
 - 카페인중독
 - 술고래
 - 언데드혐오
@@ -760,6 +775,4 @@ sale reveal/pricing -> SALE
 night result/death/injury -> NIGHT_CLOSING
 run flow -> CORE_RUN
 final participation -> FINAL_EXPEDITION
-boss participant clear signal -> BOSS
-job unlock/mastery matrix -> META
 relic VIP/customer builds -> RELIC

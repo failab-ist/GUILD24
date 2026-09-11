@@ -4,10 +4,11 @@ DOC=DECISIONS
 OWNER=decisions,high_value_decisions
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 Only high-value decisions that are easy to accidentally reverse.
-Detailed rules live only in their owning Canonical Specs.
+Detailed rules live only in their owning Authoritative Design Specs.
 
 ## CORE-001
 rule=RPG world played from behind convenience-store counter
@@ -35,9 +36,7 @@ RELIC=StoreBuild
 ITEM=ExpeditionPreparation
 DUNGEON=Stat/HazardPuzzle
 EVENT=DailyDecisionModifier
-BOSS=FinalOpponentIdentity+BossTrait
-FINAL=RunCulminationResolution
-META=JobMastery+Unlock+Knowledge
+FINAL=RunCulmination
 COPY=PlayerFacingVoice
 
 ## SYS-002
@@ -63,7 +62,7 @@ forcedAverageNormalization=NO
 
 ## RELIC-003
 relic=발주 교환권
-effect=매일 첫 canonical Full-offer Reroll 비용 0G
+effect=매일 첫 authoritative Full-offer Reroll 비용 0G
 freeUseConsumesFirstRerollStep=YES
 singleOfferSwap=NO
 pityAdvance=NO
@@ -204,7 +203,7 @@ crossRunHallOfFameDependency=NO
 ## FINAL-001
 rule=D30 Final reuses existing Dungeon/NPC/Item systems; separate combat minigame prohibited
 normalGateGeneration=NO
-familyRoll=2 distinct canonical Families
+familyRoll=2 distinct authoritative Dungeon Families
 familyHazardSource=existing T2 Hazard keys only
 finalHazardScale=4.6
 bossIdentityTraitOwnership=BOSS
@@ -304,10 +303,11 @@ minimalEngagementLateCoastEfficient=NO
 newInactivityPunishmentSubsystem=NO
 exactEconomyTuningOwner=CORE_RUN+ECONOMY_ORDER
 
+
 ## BOSS-001
 bossPool=[WRATH,PRIDE,ENVY,GREED,GLUTTONY,LUST,SLOTH]
 selection=pureRNGOnePerRun
-reveal=[D5:Identity,D15:Trait,D30:FamilyPair]
+reveal=[D5:Identity,D15:exactTrait,D30:FamilyPair]
 revealBeforeSameDayRelicDecision=YES
 fixedBossFamilyPair=NO
 
@@ -316,6 +316,51 @@ SlothOpportunityDays=exactly2of[D15,D20,D25]+D30
 SlothSealBreakGold=0
 SlothSealBreakConsumesRelicWindowAcquisition=YES
 SlothDifficultyOrder=[3breaks:weakest,2breaks:weak,1break:slightlyBelowWrath,0breaks:strongest]
+
+## BOSS-003
+PrideFinalEffect=allParticipantsVisibleCombatStatReduction
+PrideOtherStatsUnaffected=YES
+PridePersistentNpcMutation=NO
+PrideFactor=PASS3
+
+## BOSS-004
+EnvyTarget=singleHighestPrePenaltyFinalContributor
+EnvyTie=stableNpcId
+EnvyEffect=all4StatsReducedForEntireFinal
+EnvyPersistentNpcMutation=NO
+EnvyFactor=PASS3
+
+## BOSS-005
+GreedMetric=CumulativeGrossSales
+GreedPenalty=continuousShortfallToCappedBossStrengthening
+GreedPlayerReadable=[target,current,achievementRatio,currentStrengtheningRate]
+GreedInternalBossPowerHidden=YES
+
+## BOSS-006
+GluttonyAffected=highEndSupplyRawStatContribution
+GluttonyUnaffected=[HazardCounter,Supply,Insurance,Utility,explicitNonStatSpecial]
+GluttonyExtraConsumption=NO
+GluttonyPlayerTerm=보급품
+
+## BOSS-007
+LustProtection=existingTrustedRegularStateAtFinalLock
+LustNonRegularEffect=all4StatsSameFactorReduction
+LustRegularEffect=NONE
+LustOwnRelationshipThreshold=NO
+LustFactor=PASS3
+
+## BOSS-008
+BossVisualBase=[D5,D15]
+NormalBossFinalVisual=D30_BATTLE
+SlothFinalVisual=[SB0:BASE,SB1:D30_SB1,SB2:D30_SB2,SB3:D30_SB3]
+SlothD30SB0SeparateAsset=NO
+
+## COPY-003
+BossRevealVoice=[D5:길드토벌공고,D15:길드정보보고,D30:최종정찰보고]
+D5BossFlavor=TraitHintWithoutExactFunction
+D15BossCopy=ExactTraitFunctionNoStrategyAdvice
+D30BossCopy=FamilyAndActualT2HazardPressure
+PlayerFacingInternalDesignTerms=NO
 
 ## COPY-002
 normalNpcNameVoice=한국식+판타지+유쾌한비틀기

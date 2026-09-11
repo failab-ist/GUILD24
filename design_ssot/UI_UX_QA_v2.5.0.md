@@ -4,7 +4,8 @@ DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=DESIGN_QA_SPEC
 
 
 Status values are NOT stored here.
@@ -77,7 +78,7 @@ Values remain visible and correct.
 
 ## UI-Q06 — ORDER OFFERS
 SETUP:
-Open mobile/desktop Order with base offer count, then with any canonical offer-count modifier.
+Open mobile/desktop Order with base offer count, then with any authoritative offer-count modifier.
 
 EXPECT:
 Base count=6. Modified counts may exceed 6. In both cases the offer list remains compact and scannable.
@@ -411,7 +412,7 @@ Open NPCs with positive, mixed, and negative internal Traits.
 EXPECT:
 - no Player-facing `이점/양면/약점`
 - no ▲/◆/▼ Trait quality label
-- each effect line follows canonical semantic tone metadata
+- each effect line follows authoritative semantic tone metadata
 - mixed Trait can visibly contain both helpful and harmful lines
 
 PASS:
@@ -419,7 +420,7 @@ Player reads effects and makes the judgment.
 
 ## UI-Q35 — HAZARD EFFECT ACCESS
 SETUP:
-Inspect all canonical Hazards on PC and mobile.
+Inspect all authoritative Hazards on PC and mobile.
 
 EXPECT:
 - each Hazard provides its short Stat-pressure explanation
@@ -485,14 +486,13 @@ Progress label is:
 PASS:
 Old `관찰 N회` progress wording is absent.
 
-
 ## UI-Q40 — BOSS / RELIC REVEAL ORDER
 SETUP:
 Reach D5, D15, D30 with relevant Boss state.
 
 EXPECT:
 - D5 Identity is read before D5 Relic choice
-- D15 Trait is read before D15 Relic choice
+- D15 exact Trait is read before D15 Relic choice
 - D30 Family Pair is read before D30 Relic/Sloth choice
 - Save/Reload does not reorder or replay reveals as an exploit
 
@@ -527,4 +527,55 @@ EXPECT:
 - legacy Day / Run-count / regular-customer / adventurer-level contract gates are absent as current progression truth
 
 PASS:
-UI matches META_v2.5.0, exposes the Grade -> Start Contract availability relationship, and does not resurrect legacy XP/Grade direct bonuses or legacy contract gates.
+UI matches META_v2.5.0 and does not resurrect legacy progression truth.
+
+## UI-Q43 — BOSS REVEAL PRESENTATION / FINAL PREVIEW / VISUAL STATE
+SETUP:
+Reach D5 and D15 for multiple Bosses, then enter Final with:
+- PRIDE
+- ENVY
+- GREED
+- GLUTTONY
+- LUST
+- one non-SLOTH ordinary Boss
+- SLOTH at Seal Break 0 and at 1/2/3 where practical
+
+EXPECT:
+
+D5:
+- in-world `길드 토벌 공고` framing
+- correct D5/D15 BASE art
+- correct fixed Boss name
+- correct Boss-specific Flavor
+- exact Trait remains hidden
+
+D15:
+- `길드 정보 보고` framing
+- same BASE identity art
+- exact Trait Function visible
+- no strategy advice replacing Function
+- no internal design terminology in Player-facing copy
+
+D30:
+- `최종 정찰 보고` framing
+- exactly two Families
+- each Family's actual T2 Hazard set
+- authoritative Hazard pressure wording
+- Family count is not mistaken for a fixed Hazard-key count
+
+Final preview:
+- PRIDE participant 투력 original -> applied
+- ENVY target 4 Stats original -> applied
+- GLUTTONY affected 보급품 raw Stat original -> applied
+- LUST affected non-regular participant 4 Stats original -> applied
+- GREED display matches actual applied strengthening
+- SLOTH displayed state matches Seal state
+
+Final art:
+- ordinary Boss uses D30 BATTLE
+- SLOTH SB0 reuses BASE
+- SLOTH SB1/SB2/SB3 uses matching D30 state
+- Final confrontation is not text/name-only
+
+PASS:
+Boss art, exact information timing, and previewed applied values match the actual Final resolution without creating a new permanent Phase or exposing exact success probability.
