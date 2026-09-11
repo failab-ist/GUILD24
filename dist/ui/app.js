@@ -7,6 +7,25 @@ const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;}}return [...m.values()];};
 function toast(msg){$('#toast').textContent=msg;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
 function sound(kind='sale'){Sound.sync(game.account.settings.muted,game.run?.phase);Sound.play(kind==='rare'?'relic':kind);}
+/* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
+   Remember which control answered the last press by what it does rather than by object
+   identity, then put the keyboard back on its replacement. Used by #app and by
+   #modal-root, which had no restore at all: a redraw under an open modal dropped focus
+   to <body> and made a keyboard user tab back from the top of the document. */
+function holdFocus(container){const el=document.activeElement;
+ if(!container||!el||el===document.body||!container.contains(el))return null;
+ const a=el.dataset.action,id=el.dataset.id;
+ if(!a||/["\\]/.test(a)||(id&&/["\\]/.test(id)))return null;
+ const key='[data-action="'+a+'"]'+(id?'[data-id="'+id+'"]':'');
+ return {key,nth:[...container.querySelectorAll(key)].indexOf(el)};}
+
+/* The control that answered the last press is often disabled by it (a quantity driven to
+   zero or to the cap), and a disabled button cannot take focus: fall to its nearest live
+   neighbour inside the same group rather than back to the top. */
+function restoreFocus(container,hold){if(!container||!hold)return;
+ const t=container.querySelectorAll(hold.key)[hold.nth];
+ (t&&!t.disabled?t:t?.parentElement?.querySelector('[data-action]:not(:disabled)'))?.focus({preventScroll:true});}
+
 function setModal(value){if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';previousFocus=document.activeElement;modal=value;renderModal();if(value){document.body.style.overflow='hidden';setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}else{document.body.style.overflow='';previousFocus?.focus?.();}requestAnimationFrame(showCoach);}
 let lastPhase=null;
 // ---- stage primitives ----------------------------------------------------
@@ -77,20 +96,14 @@ function render(){
     The handle is the data-action/data-id the click delegation already uses, plus the
     control's place among its namesakes: the quantity dial alone puts 30 buttons under
     data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
- const focusHold=(()=>{const el=document.activeElement;
-  if(!el||el===document.body||!$('#app')?.contains(el))return null;
-  const a=el.dataset.action,id=el.dataset.id;
-  if(!a||/["\\]/.test(a)||(id&&/["\\]/.test(id)))return null;
-  const key='[data-action="'+a+'"]'+(id?'[data-id="'+id+'"]':'');
-  return {key,nth:[...$('#app').querySelectorAll(key)].indexOf(el)};})();
+ const focusHold=holdFocus($('#app'));
  $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">하나를 고르면 영업이 시작된다.</p></div>','');
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  /* The control that answered the last press is often disabled by it (a quantity driven to
     zero or to the cap), and a disabled button cannot take focus: fall to its nearest live
     neighbour inside the same group rather than back to the top. */
- if(!changed&&focusHold){const t=$('#app').querySelectorAll(focusHold.key)[focusHold.nth];
-  (t&&!t.disabled?t:t?.parentElement?.querySelector('[data-action]:not(:disabled)'))?.focus({preventScroll:true});}
+ if(!changed)restoreFocus($('#app'),focusHold);
  // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
  /* The Boss reveal joins the beat that already exists rather than becoming a Phase of its
     own (UI_UX: `Boss reveal is not a new permanent Phase`). It goes ahead of the Relic
@@ -512,7 +525,8 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
 
 function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';document.body.style.overflow='';return;}
- if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';return;}
+ const hold=holdFocus(root);
+ if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
  let title='',body='',footer='',narrow=false;const s=game.run;
  if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
   title=stage==='d30'?c.d30.header:stage==='d15'?'길드 정보 보고':c.d5.header;
@@ -533,7 +547,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='retireConfirm'){title='이번 영업을 마감할까요?';body='<p>현재 런의 자원과 모험가는 다음 런으로 이어지지 않습니다. 지금까지의 활동으로 점주 XP를 받습니다.</p>';footer=btn('계속 영업','dismiss')+btn('폐점 · 보상 받기','retire-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${game.run?.phase!=='foundation'&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';
+ root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${game.run?.phase!=='foundation'&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
 }
 async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;const oldUnlocks=[...game.account.unlocked];try{
  if(activeCoach&&activeCoach[3]===a)finishCoach();

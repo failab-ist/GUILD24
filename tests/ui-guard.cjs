@@ -238,21 +238,34 @@ test('SALE: the toast is the system channel only, and it really hides',()=>{
  assert.ok(/#toast\.show\{[^}]*visibility:visible/.test(css),'showing it makes it visible again');
 });
 
-test('render: a same-view redraw keeps the keyboard where it was',()=>{
- // render() replaces #app wholesale, which drops focus. Scroll was already restored; focus
- // was not, so a keyboard user was thrown back to the top of the screen on every pick.
- // There is no DOM here, so this group is a smoke guard on the three properties the fix
- // depends on. The behaviour itself — the right control, a disabled control, an open modal,
- // a changed view — is driven in a real browser by `npm run qa:visual`.
- const fn=app.slice(app.indexOf('function render()'),app.indexOf('\nfunction ',app.indexOf('function render()')+1));
- assert.ok(/document\.activeElement/.test(fn),'the focused control is captured before the wipe');
- assert.ok(/data-action=/.test(fn),'it is found again by the same handle the click delegation uses');
- assert.ok(/!changed&&/.test(fn),'it is only restored when the view did not change');
- assert.ok(/if\(changed\)\$\('#phase-content'\)\.focus/.test(fn),'a new screen still focuses its own body');
+test('C04: a redraw keeps the keyboard where it was, on #app and inside an open modal',()=>{
+ // Replacing a surface wholesale destroys the focused control. #app already put the
+ // keyboard back; #modal-root did not, so a redraw under an open modal (shop menu ->
+ // sound on/off) dropped focus to <body> and made a keyboard user tab back from the top
+ // of the document. Both surfaces now hold and restore through one implementation.
+ // There is no DOM here, so this group guards the properties the fix depends on; the
+ // behaviour itself is driven in a real browser by `npm run qa:visual`.
+ const hold=app.slice(app.indexOf('function holdFocus'),app.indexOf('function restoreFocus'));
+ const back=app.slice(app.indexOf('function restoreFocus'),app.indexOf('\nfunction ',app.indexOf('function restoreFocus')+1));
+ assert.ok(/document\.activeElement/.test(hold),'the focused control is captured before the wipe');
+ assert.ok(/data-action=/.test(hold),'it is found again by the same handle the click delegation uses');
  // The handle is not unique on its own: the order screen puts 30 qty buttons under one
  // data-action with no data-id, so a first-match lookup restores the wrong product's key.
- assert.ok(/querySelectorAll\(/.test(fn),'the restore chooses among same-handle controls, not the first match');
- assert.ok(/disabled/.test(fn),'a control disabled by the press it answered does not swallow the focus');
+ assert.ok(/querySelectorAll\(/.test(hold)&&/nth/.test(hold),'the handle is disambiguated by position among its peers');
+ assert.ok(/querySelectorAll\(/.test(back)&&/hold\.nth/.test(back),'the restore chooses among same-handle controls, not the first match');
+ assert.ok(/disabled/.test(back),'a control disabled by the press it answered does not swallow the focus');
+
+ const render=app.slice(app.indexOf('function render()'),app.indexOf('\nfunction ',app.indexOf('function render()')+1));
+ assert.ok(/holdFocus\(\$\('#app'\)\)/.test(render),'#app captures before its wipe');
+ assert.ok(/!changed\)restoreFocus\(\$\('#app'\)/.test(render),'and restores only when the view did not change');
+ assert.ok(/if\(changed\)\$\('#phase-content'\)\.focus/.test(render),'a new screen still focuses its own body');
+
+ const rm=app.slice(app.indexOf('function renderModal()'),app.indexOf('\nasync function action'));
+ assert.ok(/const hold=holdFocus\(root\)/.test(rm),'the modal captures before its wipe too');
+ assert.equal((rm.match(/restoreFocus\(root,hold\)/g)||[]).length,2,
+  'both the takeover and the ordinary sheet restore, not just one of them');
+ assert.ok(rm.indexOf('const hold=holdFocus(root)')<rm.indexOf('root.innerHTML=`'),
+  'the capture happens before the rebuild, not after it');
 });
 
 test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is meant to inform',()=>{
