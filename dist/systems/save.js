@@ -13,14 +13,21 @@ const PHASES=['foundation','morning','order','sell','night','closing','final','e
 const RELIC_WINDOWS=[0,5,10,15,20,25,30];
 
 /* Account: what is kept across Runs. Unlock keys and discovered goods must exist in the catalog. */
+/* Account: what is kept across Runs. The Job x Boss matrix is the only progression truth,
+   so it is checked as the exact current Cartesian set - every Job, every Boss, a boolean in
+   each cell. A partial or unknown-key matrix is malformed, not partial progress, and is
+   refused rather than read. Mastery, distinct clears and the Grade are derived from it, so
+   there is no cached value here that could disagree with it. */
 function accountOk(a,D){
- return !!a
-  && Array.isArray(a.unlocked) && a.unlocked.every(k=>k in D.unlocks)
-  && Array.isArray(a.discovered) && a.discovered.every(k=>D.itemBy[k])
-  && !!a.progress && !!a.knowledge && !!a.settings
-  && (a.tutorial===undefined || (typeof a.tutorial==='object' && !!a.tutorial))
-  && Number.isFinite(a.xp)
-  && Number.isInteger(a.grade) && a.grade>=1 && a.grade<=6;
+ if(!a||!a.knowledge||!a.settings)return false;
+ if(!Array.isArray(a.discovered)||!a.discovered.every(k=>D.itemBy[k]))return false;
+ if(a.tutorial!==undefined&&(typeof a.tutorial!=='object'||!a.tutorial))return false;
+ const m=a.matrix,jobs=D.jobs.map(j=>j.id),bosses=D.bosses.map(b=>b.id);
+ if(!m||typeof m!=='object')return false;
+ if(Object.keys(m).length!==jobs.length)return false;
+ return jobs.every(job=>{const row=m[job];
+  return !!row&&typeof row==='object'&&Object.keys(row).length===bosses.length
+   &&bosses.every(boss=>typeof row[boss]==='boolean');});
 }
 
 /* The shape of a Run: the arrays and values that must be there, with DAY and phase in real range. */

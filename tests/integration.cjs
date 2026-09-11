@@ -199,7 +199,7 @@ test('RUN-Q13 / NIGHT_CLOSING §SAVE/RESUME: a reload mid-report neither changes
   if(g.run.phase!=='night')break;
   nights++;
   const results=copy(g.run.results),npcs=copy(g.run.npcs),money=g.run.money,
-   xp=g.account.xp,knowledge=copy(g.account.knowledge),progress=copy(g.account.progress),deaths=g.run.stats.deaths;
+   matrix=copy(g.account.matrix),knowledge=copy(g.account.knowledge),deaths=g.run.stats.deaths;
   for(let cursor=0;cursor<=g.run.results.length;cursor++){
    g.run.nightCursor=cursor;
    const h=reload(g);
@@ -207,9 +207,9 @@ test('RUN-Q13 / NIGHT_CLOSING §SAVE/RESUME: a reload mid-report neither changes
    assert.deepEqual(h.run.npcs,npcs,'no NPC state is recalculated on resume');
    assert.equal(h.run.money,money,'no Closing revenue is duplicated');
    assert.equal(h.run.stats.deaths,deaths,'no death is counted twice');
-   assert.equal(h.account.xp,xp,'no Meta reward is duplicated');
+   assert.deepEqual(h.account.matrix,matrix,'no progression cell is written twice');
    assert.deepEqual(h.account.knowledge,knowledge,'no Knowledge is duplicated');
-   assert.deepEqual(h.account.progress,progress,'no unlock progress is duplicated');
+
    assert.equal(h.run.nightCursor,cursor,'the reading position is what resumes, not the resolution');
   }
   g.run.nightCursor=0;
@@ -300,7 +300,14 @@ test('CORE_RUN §SAVE/LOAD: the validator reads as named checks, and each one st
  assert.ok(Save.valid(raw),'the live run still validates');
  const broken=m=>{const c=copy(raw);m(c);return Save.valid(c);};
  for(const [why,mutate] of [
-  ['account',s=>s.account.grade=0],['run shape',s=>s.run.day=31],
+  // The matrix is the only progression truth, so a partial or mistyped one is malformed
+  // rather than partial progress, and is refused rather than read as a smaller account.
+  ['account: a missing Job row',s=>delete s.account.matrix[DATA.jobs[0].id]],
+  ['account: a missing Boss cell',s=>delete s.account.matrix[DATA.jobs[0].id][DATA.bosses[0].id]],
+  ['account: an unknown Job row',s=>s.account.matrix.sorcerer={}],
+  ['account: a non-boolean cell',s=>s.account.matrix[DATA.jobs[0].id][DATA.bosses[0].id]=1],
+  ['account: no matrix at all',s=>delete s.account.matrix],
+  ['run shape',s=>s.run.day=31],
   ['roster',s=>s.run.queue.push('nope')],['npc',s=>s.run.npcs[0].job='nope'],
   ['stock',s=>s.run.inventory[0]&&(s.run.inventory[0].item='nope')],
   ['progress',s=>s.run.cursor=-1],['relic window',s=>s.run.relicWindow.milestoneDay=7],

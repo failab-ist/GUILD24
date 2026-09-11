@@ -1,6 +1,8 @@
 /* Content definitions. New items use the same declarative effect vocabulary. */
 (function(G){
-const item=(id,name,rarity,buy,sell,category,days,icon,brand,description,effects,unlock=null)=>({id,name,rarity,buy,sell,category,days,icon,brand,description,effects,unlock});
+/* `metaUnlock` is how many distinct Bosses must have been beaten before this may appear.
+   ITEM declares exactly one meta-locked Item, so every other entry leaves it unset. */
+const item=(id,name,rarity,buy,sell,category,days,icon,brand,description,effects,metaUnlock=null)=>({id,name,rarity,buy,sell,category,days,icon,brand,description,effects,metaUnlock});
 G.DATA={brand:{name:'GUILD24',korean:'길드24',company:'길드리테일',slogan:'던전 가기 전, 길드24.',branches:['제7게이트점','독거미점','북부게이트점','왕도외곽점']},
 rarities:['일반','고급','희귀','영웅','전설'], npcRarities:['평범','유망','희귀','영웅','전설'],
 items:[
@@ -16,9 +18,9 @@ item('ice','얼음컵',0,25,60,'drink',4,'ice','용사픽','화염 대응. 가�
 item('battery','랜턴 건전지',0,40,85,'tool',0,'battery','귀환안심','어둠 속 시야를 확보한다.',{dark:17,spirit:3}),
 item('rope','경량 로프',0,50,105,'tool',0,'battery','귀환안심','매듭을 풀고 감았다. 다시 묶어야 한다.',{mobility:4,bind:12}),
 item('candy','집중 사탕',0,35,75,'food',5,'choco','용사픽','시험 전에도 잘 팔린다.',{spirit:7,fear:5,supply:1}),
-item('lava','불룡볶음면',1,65,135,'food',4,'ramen','원정한끼','용 그림은 장식이 아니다.',{combat:8,cold:12,supply:5},'cold5'),
+item('lava','불룡볶음면',1,65,135,'food',4,'ramen','원정한끼','용 그림은 장식이 아니다.',{combat:8,cold:12,supply:5}),
 item('energy','에너지드링크',1,70,150,'drink',5,'energy','MANA+','오늘 쓸 기운을 당겨왔다.',{mobility:13,supply:3}),
-item('wine','용사의 곡주',1,60,130,'drink',5,'wine','원정한끼','공포를 잊게 한다. 발걸음은 살짝 꼬인다.',{fear:24,mobility:-5,supply:3},'fear5'),
+item('wine','용사의 곡주',1,60,130,'drink',5,'wine','원정한끼','공포를 잊게 한다. 발걸음은 살짝 꼬인다.',{fear:24,mobility:-5,supply:3}),
 item('kit','구급키트',1,120,240,'medicine',7,'kit','귀환안심','중상 위험을 줄여주는 원정 보험.',{survival:10,injuryGuard:0.65}),
 item('mask','방진마스크',1,90,180,'tool',0,'mask','귀환안심','독과 가스 환경에 대응한다.',{poison:20}),
 item('heat','핫팩',1,55,120,'tool',0,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:22}),
@@ -27,21 +29,21 @@ item('coating','부식 방지 코팅제',1,70,150,'tool',0,'cloak','귀환안심
 item('boots','진창용 원정 장화',1,65,135,'tool',0,'battery','귀환안심','밑창에 진흙이 잘 붙지 않는다.',{mire:22,mobility:3}),
 item('snowgoggles','설원 고글',1,60,125,'tool',0,'battery','귀환안심','눈보라 속에서도 앞이 남는다.',{whiteout:22}),
 item('highpotion','상급 포션',2,150,300,'medicine',7,'potion','길드초이스','작은 병에 진하게 담았다.',{survival:27,potion:1}),
-item('antidote','농축 해독제',2,220,450,'medicine',7,'antidote','귀환안심','독 대응을 크게 높인다.',{poison:42,survival:5,curePoison:1},'poison10'),
+item('antidote','농축 해독제',2,220,450,'medicine',7,'antidote','귀환안심','독 대응을 크게 높인다.',{poison:42,survival:5,curePoison:1}),
 item('stone','귀환석',2,260,520,'insurance',0,'stone','귀환안심','탈출 보정. 사망·중상 위기에서도 같은 수치의 추가 귀환 기회 1회.',{escape:0.5}),
 item('mana','마석 보조배터리',2,240,500,'magic',0,'mana','MANA+','잡념까지 충전하지는 않는다.',{combat:4,spirit:25}),
 item('premium','길드 프리미엄 도시락',2,280,560,'fresh',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:14,supply:7,loot:0.2}),
 item('ion','쿨링 이온음료',2,200,400,'drink',5,'water','MANA+','얼음컵만큼 시원하진 않지만 오래 간다.',{fire:12,supply:4}),
-item('tree','세계수 생환부적',3,600,1200,'insurance',0,'stone','길드초이스','사망 판정을 한 번 중상으로 바꾼다.',{revive:1},'level15'),
-item('coupon','황금 1+1 쿠폰',4,1000,2000,'magic',0,'coupon','길드초이스','먼저 제공하면 다음 소모품의 효과를 복제한다. 슬롯 1칸.',{duplicate:1},'boss1')
+item('tree','세계수 생환부적',3,600,1200,'insurance',0,'stone','길드초이스','사망 판정을 한 번 중상으로 바꾼다.',{revive:1}),
+item('coupon','황금 1+1 쿠폰',4,1000,2000,'magic',0,'coupon','길드초이스','먼저 제공하면 다음 소모품의 효과를 복제한다. 슬롯 1칸.',{duplicate:1},1)
 ],
 jobs:[
 {id:'warrior',name:'전사',color:'#db8857',stats:[16,17,9,10],growth:[3.2,3,1.4,1.6],ranks:['수습 전사','전사','기사','왕립 수호자']},
 {id:'archer',name:'궁수',color:'#77ac79',stats:[14,11,18,10],growth:[2.7,1.9,3.1,1.5],ranks:['견습 궁수','궁수','명사수','바람 추적자']},
 {id:'mage',name:'마법사',color:'#a494dc',stats:[19,8,10,16],growth:[3.9,1.4,1.6,2.6],ranks:['견습 마법사','마법사','마도사','대마법사 후보']},
 {id:'priest',name:'사제',color:'#e4ca8b',stats:[10,16,9,21],growth:[2,2.9,1.4,3.6],ranks:['수습 사제','사제','주교','빛의 대행자']},
-{id:'rogue',name:'도적',color:'#79b6b5',stats:[15,10,22,9],growth:[2.8,1.8,3.7,1.4],ranks:['풋내기 도적','도적','그림자','밤의 유령'],unlock:'escape10'},
-{id:'berserker',name:'광전사',color:'#db6464',stats:[21,13,12,7],growth:[4,2.4,1.9,1.3],ranks:['투사','광전사','혈전사','전장의 재앙'],unlock:'wounded5'}
+{id:'rogue',name:'도적',color:'#79b6b5',stats:[15,10,22,9],growth:[2.8,1.8,3.7,1.4],ranks:['풋내기 도적','도적','그림자','밤의 유령'],metaUnlock:3},
+{id:'berserker',name:'광전사',color:'#db6464',stats:[21,13,12,7],growth:[4,2.4,1.9,1.3],ranks:['투사','광전사','혈전사','전장의 재앙'],metaUnlock:6}
 ],
 traits:[
 // NPC_TRAIT ACTIVE TRAIT CATALOG (FROZEN, 30). `direction` is internal only.
@@ -123,8 +125,11 @@ events:[
 ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2',{visitors:2},.35],
 ['nightshift','본사 야간 근무 수칙','1. 마감 전 창고를 확인한다.\n2. 폐기 상품은 따로 둔다.\n3. 뒷문은 잠근다.\n5. 새벽 두 시 이후에는 창밖을 보지 않는다.\n4번 규정은 없습니다.','오늘 점포 유지비 0G',{overheadFree:1},.35]
 ].map(([id,name,reveal,description,effects,weight=1])=>({id,name,reveal,description,effects,weight})),
-contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으로 시작',unlock:null},{id:'delivery',name:'새벽배송 가맹점',description:'발주 +1 · 매입가 +5%',unlock:'day10'},{id:'guild',name:'길드 제휴점',description:'방문객 +1 · 운영비 +20G',unlock:'regular3'},{id:'budget',name:'알뜰 가맹점',description:'초기자금 +250G · 희귀 발주 확률 소폭 감소',unlock:'run1'},{id:'premium',name:'프리미엄 상권',description:'희귀 모험가 확률 증가 · 운영비 +25G',unlock:'level15'}],
-unlocks:{cold5:['설원 생환',5],fear5:['공포 원정 생환',5],poison10:['독 치료·예방',10],mage10:['마법사 최고 레벨',10],level15:['모험가 최고 레벨',15],fire12:['화염 골렘 처치',12],boss1:['마왕 토벌',1],escape10:['성공적인 탈출',10],wounded5:['중상에서 생환',5],revenue3000:['누적 매출',3000],knowledge15:['보급 생환',15],regular3:['단골 달성',3],day10:['최고 도달 DAY',10],run1:['런 완료',1]}
+contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으로 시작',grade:null},
+{id:'delivery',name:'새벽배송 가맹점',description:'발주 +1 · 매입가 +5%',grade:2},
+{id:'guild',name:'길드 제휴점',description:'방문객 +1 · 운영비 +20G',grade:3},
+{id:'budget',name:'알뜰 가맹점',description:'초기자금 +250G · 희귀 발주 확률 소폭 감소',grade:4},
+{id:'premium',name:'프리미엄 상권',description:'희귀 모험가 확률 증가 · 운영비 +25G',grade:5}]
 };
 /* Boss Trait tuning. Every one of these is PASS3 and none is approved yet, so they are
    null on purpose: a Trait with no value applies nothing, and the Final stays exactly the

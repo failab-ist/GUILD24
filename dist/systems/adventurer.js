@@ -7,7 +7,7 @@ const names=["요화니우스","상혀크","진호르","지오니아","민자이
 function name(r,rarity){return r.pick(names);}
 function create(r,index,day,account,opts={}){
  const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?[51,30,14,4,1]:[60,27,10,2.5,.5]);
- const pool=D.jobs.filter(j=>!j.unlock||account.unlocked.includes(j.unlock));const job=r.pick(pool);
+ const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
  const level=Math.max(1,r.int(1,3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
  let potential=1+rarity*.06+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));

@@ -31,7 +31,7 @@ test('RUN-Q30: no minimal-engagement policy is an efficient permanent-reward far
  for(const policy of ['zero-sale','zero-order','zero-supply','poverty']){
   const r=cached(policy);
   assert.ok(r.averageDay<engaged.averageDay,policy+' does not reach as far as engaged play');
-  assert.ok(r.metaXPPerRun<engaged.metaXPPerRun,policy+' earns less Meta XP per run than engaged play');
+  assert.equal(r.masteryPerRun,0,policy+' earns no Job Mastery at all, because it never clears a Final');
   assert.ok(r.knowledgePerRun<engaged.knowledgePerRun,policy+' learns less about the Gates than engaged play');
   // Canonical asks whether minimal engagement ROUTINELY coasts to the late bands, not
   // whether one seed in three hundred ever gets there: the 300-seed run has poverty at
@@ -60,9 +60,9 @@ test('DUN-Q20: preparation is measured per progression band, prepared against ba
 
 test('the extended metric set the report cites is actually produced',()=>{
  const r=cached('balanced');
- for(const key of ['dayReached','metaXP','metaUnlocks','metaGrade','knowledge','revenue','spend','npc','bands','final'])
+ for(const key of ['dayReached','metaMastery','metaDistinct','metaGrade','knowledge','revenue','spend','npc','bands','final'])
   assert.ok(r[key]!==undefined,'metric present: '+key);
- for(const key of ['averageDay','metaXPPerRun','metaXPPerDay','metaXPPerKiloGold','knowledgePerRun'])
+ for(const key of ['averageDay','masteryPerRun','distinctPerRun','clearsPerRun','knowledgePerRun'])
   assert.ok(Number.isFinite(r[key]),'derived metric is a number: '+key);
  assert.equal(Object.values(r.dayReached).reduce((a,b)=>a+b,0),SEEDS,'every run lands in the Day-reached distribution');
  assert.equal(r.npc.samples,SEEDS,'NPC long-term value is sampled once per run');
@@ -79,7 +79,7 @@ test('the simulation observes the run and never rewrites it',()=>{
  const b=Debug.simulate(4,'balanced',null,'adaptive','hybrid');
  assert.deepEqual(b.days,a.days,'the same seeds produce the same per-Day measurements');
  assert.deepEqual(b.bands,a.bands,'and the same per-band measurements');
- assert.equal(b.metaXP,a.metaXP,'and the same Meta reward');
+ assert.equal(b.metaMastery,a.metaMastery,'and the same Meta reward');
  assert.equal(b.final.margin,a.final.margin,'and the same Final margin');
 });
 
@@ -105,25 +105,29 @@ test('CROSS-RUN META: one account really carries forward, and nothing is inserte
  const t=Debug.trajectory({trajectories:4,runs:5,prefix:'test-meta'});
  assert.equal(t.byIndex.length,5,'one cohort per Run index');
  assert.equal(t.byIndex[0].gradeAtStart,1,'Run 0 starts at the fresh grade');
- assert.equal(t.byIndex[0].unlockedAtStart,0,'Run 0 starts with nothing unlocked');
- assert.ok(t.byIndex.at(-1).gradeAtStart>1,'the account actually gained grade across Runs');
- assert.ok(t.byIndex.at(-1).unlockedAtStart>0,'and actually gained unlocks');
+ assert.equal(t.byIndex[0].masteryAtStart,0,'Run 0 starts with no Job Mastery');
+ assert.equal(t.byIndex[0].distinctAtStart,0,'and no Boss beaten');
+ // Progression is now earned only by clearing a Final, so a cohort that never clears one
+ // stays at the fresh state - which is the property, not a failure to progress.
+ const cleared=t.accountsEnd.some(a=>a.distinct>0);
+ if(cleared)assert.ok(t.byIndex.at(-1).masteryAtStart>=t.byIndex[0].masteryAtStart,'Mastery never goes backwards');
  for(let i=1;i<t.byIndex.length;i++){
   assert.ok(t.byIndex[i].gradeAtStart>=t.byIndex[i-1].gradeAtStart,'grade never goes backwards');
-  assert.ok(t.byIndex[i].xpAtStart>t.byIndex[i-1].xpAtStart,'Meta XP accumulates across Runs');
+  assert.ok(t.byIndex[i].masteryAtStart>=t.byIndex[i-1].masteryAtStart,'Job Mastery never goes backwards');
  }
- // Every unlock held at the end is one the unlock table can actually grant, and every grade
- // is one the XP thresholds actually produce — nothing was written into the account directly.
+ // Every Grade is one the matrix actually produces - nothing was written into the account
+ // directly, and nothing is cached that could disagree with it.
  for(const a of t.accountsEnd){
-  assert.ok(a.unlocked.every(k=>k in DATA.unlocks),'only real unlock keys');
-  assert.equal(a.grade,[0,120,300,550,850,1250].filter(x=>a.xp>=x).length,'grade follows the XP thresholds');
+  assert.ok(a.mastery>=0&&a.mastery<=42,'Total Job Mastery stays in range');
+  assert.ok(a.distinct>=0&&a.distinct<=7,'Distinct Boss Clear stays in range');
+  assert.equal(a.grade,Math.min(6,Math.floor(a.mastery/7)+1),'the Grade is derived from the matrix, not stored');
  }
  // The contract mode may only ever pick something the account has unlocked.
  const best=Debug.trajectory({trajectories:2,runs:3,contract:'best',prefix:'test-best'});
  for(const idx of best.byIndex)for(const id of Object.keys(idx.contracts)){
   const c=DATA.contracts.find(c=>c.id===id);
   assert.ok(c,'a real contract');
-  if(c.unlock)assert.ok(idx.unlockedAtStart>0,'a gated contract only appears once something is unlocked');
+  if(c.grade)assert.ok(idx.gradeAtStart>=c.grade,'a gated contract only appears once the Grade allows it');
  }
 });
 
@@ -133,8 +137,8 @@ test('RUN-Q30: the adversarial meta-farm is measured per action, not only per Ru
  assert.equal(farm.spend,0,'and buys nothing');
  assert.equal(farm.relicSpend,0,'and never pays for a Relic');
  assert.ok(farm.actionsPerRun<engaged.actionsPerRun,'the farm costs fewer player actions per Run');
- assert.ok(Number.isFinite(farm.metaXPPerAction)&&Number.isFinite(engaged.metaXPPerAction),'both report XP per action');
- assert.ok(farm.metaXPPerRun<engaged.metaXPPerRun,'per Run the farm still earns less');
+ assert.equal(farm.masteryPerRun,0,'and earns no permanent progression whatsoever');
+ assert.equal(farm.distinctPerRun,0,'no Boss is beaten by advancing Days');
 });
 
 test('FINAL party size 1 / 2 / 3 is measured at the same D30 state without changing it',()=>{

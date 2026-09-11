@@ -22,7 +22,7 @@ const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-b
 const contribution=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35;
 
 function blank(runs,policy,pricing,build){
- return {runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaXP:0,metaUnlocks:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,
+ return {runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,
   npc:{samples:0,alive:0,level:0,maxLevel:0,loyalty:0,regulars:0,wallet:0,growth:0},bands:{},
   final:{reached:0,party:0,full:0,resolved:0,power:0,assault:0,margin:0,cleared:0},
   /* Party-size counterfactual: the strongest legal 1 / 2 / 3 party at the SAME generated D30
@@ -35,7 +35,7 @@ function blank(runs,policy,pricing,build){
 function derive(out,count){
  for(const [day,values]of Object.entries(out.wallets)){if(!Array.isArray(values))continue;values.sort((a,b)=>a-b);out.wallets[day]={count:values.length,mean:values.reduce((a,b)=>a+b,0)/values.length,p10:values[Math.floor(values.length*.1)],median:values[Math.floor(values.length*.5)],p90:values[Math.floor(values.length*.9)]};}
  const days=Object.entries(out.dayReached).reduce((a,[d,n])=>a+Number(d)*n,0);
- return {...out,averageDay:days/count,metaXPPerRun:out.metaXP/count,metaXPPerDay:out.metaXP/Math.max(1,days),metaXPPerKiloGold:out.spend?out.metaXP/(out.spend/1000):null,metaXPPerAction:out.actions?out.metaXP/out.actions:null,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
+ return {...out,averageDay:days/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
 }
 
 /* One Run, played by `ctx.policy` on the account the caller owns. The account is NOT copied
@@ -130,7 +130,7 @@ function playRun(g,out,ctx){
  for(const tag of Object.keys(D.buildNames)){const n=s.facilities.filter(id=>D.relicBy[id]?.tags.includes(tag)).length;const bins=out.buildCounts[tag]??={};const k=Math.min(5,n);bins[k]=(bins[k]||0)+1;}
  for(const id of s.facilities){const b=out.relicOutcomes[id]??={runs:0,wins:0,death:0,gold:0};b.runs++;b.wins+=Number(!!s.win);b.death+=s.stats.deaths;b.gold+=s.money;}
  for(const npc of s.npcs.filter(n=>s.team.includes(n.id))){(out.jobs[npc.job]??={}).bossParticipation=((out.jobs[npc.job]||{}).bossParticipation||0)+1;}
- out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaXP+=s.metaReward||0;out.metaUnlocks+=g.account.unlocked.length;out.metaGrade+=g.account.grade;out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
+ out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
  {const alive=s.npcs.filter(n=>n.alive&&n.introduced);out.npc.samples++;out.npc.alive+=alive.length;out.npc.level+=alive.reduce((a,n)=>a+n.level,0);out.npc.maxLevel+=alive.length?Math.max(...alive.map(n=>n.level)):0;out.npc.loyalty+=alive.reduce((a,n)=>a+n.loyalty,0);out.npc.regulars+=s.stats.regulars;out.npc.wallet+=alive.reduce((a,n)=>a+n.money,0);out.npc.growth+=alive.reduce((a,n)=>a+n.level-1,0);}
  if(s.bossDebug){out.final.resolved++;out.final.power+=s.bossDebug.power;out.final.assault+=s.bossDebug.assault;out.final.margin+=s.bossDebug.assault-s.bossDebug.bossPower;out.final.cleared+=Number(!!s.win);}
  out.wins+=Number(!!s.win);out.bankrupt+=Number(s.day<30);out.deaths+=s.stats.deaths;out.money+=s.money;
@@ -160,15 +160,15 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
   for(let i=0;i<runs;i++){
-   const before={grade:account.grade,unlocked:account.unlocked.length,xp:account.xp};
+   const before={grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)};
    const g=new G.Game(account);g.autosave=false;
    /* Which start contract the trajectory uses is a strategy choice, not a Meta fact, so it is
       the caller's: 'standard' holds it constant and isolates what grade and unlocks alone do,
       'best' takes the most advanced contract the account has actually earned. `start` rejects
       a locked contract, so neither mode can grant something the account has not unlocked. */
    let started=contract;
-   if(contract==='best'){started='standard';for(const c of D.contracts)if(!c.unlock||account.unlocked.includes(c.unlock))started=c.id;}
-   const available=D.contracts.filter(c=>!c.unlock||account.unlocked.includes(c.unlock)).length;
+   if(contract==='best'){started='standard';for(const c of D.contracts)if(G.Meta.contractUnlocked(account,c))started=c.id;}
+   const available=D.contracts.filter(c=>G.Meta.contractUnlocked(account,c)).length;
    g.start(prefix+'-'+t+'-'+i,started);
    const grade=before.grade;
    const bucket=byGrade[grade]??=blank(0,policy,pricing,build);
@@ -177,19 +177,19 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
       than replaying it: one Run, counted once in each view. */
    bucket.runs++;bucket.dayReached[g.run.day]=(bucket.dayReached[g.run.day]||0)+1;
    bucket.reached30+=Number(g.run.day===30);bucket.wins+=Number(!!g.run.win);
-   bucket.metaXP+=g.run.metaReward||0;bucket.metaUnlocks+=before.unlocked;bucket.metaGrade+=grade;
+   bucket.metaMastery+=before.mastery;bucket.metaDistinct+=before.distinct;bucket.metaGrade+=grade;
    if(g.run.bossDebug){bucket.final.resolved++;bucket.final.power+=g.run.bossDebug.power;bucket.final.assault+=g.run.bossDebug.assault;bucket.final.margin+=g.run.bossDebug.assault-g.run.bossDebug.bossPower;bucket.final.cleared+=Number(!!g.run.win);}
    bucket.money+=g.run.money;bucket.deaths+=g.run.stats.deaths;
    byIndex[i].contracts??={};byIndex[i].contracts[started]=(byIndex[i].contracts[started]||0)+1;
    byIndex[i].gradeAtStart??=0;byIndex[i].gradeAtStart+=grade;
-   byIndex[i].unlockedAtStart??=0;byIndex[i].unlockedAtStart+=before.unlocked;
-   byIndex[i].xpAtStart??=0;byIndex[i].xpAtStart+=before.xp;
+   byIndex[i].masteryAtStart??=0;byIndex[i].masteryAtStart+=before.mastery;
+   byIndex[i].distinctAtStart??=0;byIndex[i].distinctAtStart+=before.distinct;
    byIndex[i].contractsAvailable??=0;byIndex[i].contractsAvailable+=available;
   }
-  accountsEnd.push({grade:account.grade,xp:account.xp,unlocked:[...account.unlocked]});
+  accountsEnd.push({grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
  }
  return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
-  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,unlockedAtStart:o.unlockedAtStart/trajectories,xpAtStart:o.xpAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
+  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
   byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,derive(o,o.runs)])),
   accountsEnd};
 }

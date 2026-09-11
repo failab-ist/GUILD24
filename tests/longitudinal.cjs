@@ -5,7 +5,7 @@
 // Measurement only — no canonical numeric is read from a result here.
 const fs=require('node:fs');for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const trajectories=Number(process.argv[2])||60,runs=Number(process.argv[3])||12;
-const out={version:5,canonicalSet:'GUILD24_CANONICAL_v2.4.0',trajectories,runsPerTrajectory:runs,
+const out={version:5,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',trajectories,runsPerTrajectory:runs,
  note:'One account per trajectory, carried across Runs. Run index 0 is the fresh-account case and is directly comparable to the balance cohorts. Seeds are deterministic and distinct per trajectory and Run index.',
  cohorts:[]};
 // `standard` holds the start contract fixed so the only thing that changes across Runs is what
@@ -20,9 +20,9 @@ for(const plan of plans){
  const r=Debug.trajectory({trajectories,runs,policy:plan.policy,pricing:plan.pricing,build:plan.build,contract:plan.contract,prefix:'meta-'+plan.policy+'-'+plan.contract});
  out.cohorts.push({label:plan.label,...r});
  console.log(JSON.stringify({label:plan.label,
-  first:{reach:r.byIndex[0].reachRate,clear:r.byIndex[0].overallClearRate,grade:r.byIndex[0].gradeAtStart,xp:Math.round(r.byIndex[0].metaXPPerRun)},
-  last:{reach:r.byIndex.at(-1).reachRate,clear:r.byIndex.at(-1).overallClearRate,grade:Number(r.byIndex.at(-1).gradeAtStart.toFixed(1)),xp:Math.round(r.byIndex.at(-1).metaXPPerRun)},
+  first:{reach:r.byIndex[0].reachRate,clear:r.byIndex[0].overallClearRate,grade:r.byIndex[0].gradeAtStart,mastery:Number(r.byIndex[0].masteryAtStart.toFixed(1))},
+  last:{reach:r.byIndex.at(-1).reachRate,clear:r.byIndex.at(-1).overallClearRate,grade:Number(r.byIndex.at(-1).gradeAtStart.toFixed(1)),mastery:Number(r.byIndex.at(-1).masteryAtStart.toFixed(1))},
   endGrade:Number((r.accountsEnd.reduce((a,x)=>a+x.grade,0)/r.accountsEnd.length).toFixed(1)),
-  endUnlocks:Number((r.accountsEnd.reduce((a,x)=>a+x.unlocked.length,0)/r.accountsEnd.length).toFixed(1))}));
+  endMastery:Number((r.accountsEnd.reduce((a,x)=>a+x.mastery,0)/r.accountsEnd.length).toFixed(1))}));
  fs.writeFileSync('tests/longitudinal-results-v5.json',JSON.stringify(out,null,2));
 }

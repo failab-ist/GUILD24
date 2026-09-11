@@ -79,5 +79,121 @@ test('the retired single-Boss identity is gone and nothing was invented to repla
    f+' carries no trace of the retired identity');
 });
 
+/* META v2.5: the Job x Boss matrix is the only progression truth. */
+const clear=(a,bossId,jobs)=>Meta.finish(a,{rewarded:false,bossId,finalReport:{members:jobs.map(job=>({job}))}},true);
+
+test('META-Q02/Q03/Q04/Q05: a clear credits each distinct Job that went, once, and a failure credits nothing',()=>{
+ const a=Meta.fresh();
+ clear(a,'WRATH',['warrior','warrior','archer']);      // Q04 + the duplicate-in-party case
+ assert.equal(Meta.jobMastery(a,'warrior'),1,'a Job represented twice still earns one cell');
+ assert.equal(Meta.jobMastery(a,'archer'),1,'each distinct Job in the party earns its own');
+ assert.equal(Meta.totalJobMastery(a),2);
+ clear(a,'WRATH',['warrior']);                          // Q03 duplicate pair
+ assert.equal(Meta.jobMastery(a,'warrior'),1,'repeating a pair already held adds nothing');
+ clear(a,'PRIDE',['warrior']);
+ assert.equal(Meta.jobMastery(a,'warrior'),2,'a new Boss with the same Job does add');
+ const before=Meta.totalJobMastery(a);
+ Meta.finish(a,{rewarded:false,bossId:'ENVY',finalReport:{members:[{job:'mage'}]}},false);
+ assert.equal(Meta.totalJobMastery(a),before,'a failed Final credits nothing at all');
+ // and a run settles exactly once
+ const run={rewarded:false,bossId:'ENVY',finalReport:{members:[{job:'mage'}]}};
+ clear(a,'ENVY',['mage']);Meta.finish(a,run,true);Meta.finish(a,run,true);
+ assert.equal(Meta.jobMastery(a,'mage'),1,'the rewarded guard still holds');
+});
+
+test('META-Q06/Q11: distinct clears count Bosses, and the Grade is derived from Mastery alone',()=>{
+ const a=Meta.fresh();
+ clear(a,'WRATH',['warrior']);clear(a,'WRATH',['archer']);clear(a,'WRATH',['mage']);
+ assert.equal(Meta.distinctBossClear(a),1,'the same Boss with three Jobs is still one Boss');
+ assert.equal(Meta.totalJobMastery(a),3,'but three Mastery');
+ for(const [mastery,expected] of [[0,1],[6,1],[7,2],[13,2],[14,3],[21,4],[28,5],[34,5],[35,6],[42,6]]){
+  const b=Meta.fresh();let n=0;
+  outer:for(const job of Meta.JOBS())for(const boss of Meta.BOSSES()){if(n>=mastery)break outer;b.matrix[job][boss]=true;n++;}
+  assert.equal(Meta.totalJobMastery(b),mastery);
+  assert.equal(Meta.grade(b),expected,mastery+' Mastery is Grade '+expected);
+ }
+ assert.equal(Meta.grade({matrix:Meta.freshMatrix()}),1,'a fresh account is Grade 1');
+});
+
+test('META-Q07/Q08/Q09/Q10 + NPC-Q09: the 1/3/6 gates open exactly what they say, and nothing before',()=>{
+ const a=Meta.fresh();
+ assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(a,j)).map(j=>j.id),['warrior','archer','mage','priest'],
+  'a fresh account generates only the four starting Jobs');
+ assert.equal(DATA.items.filter(i=>Meta.itemUnlocked(a,i)).length,29,'and 29 of the 30 Items are eligible');
+ assert.equal(Meta.itemUnlocked(a,DATA.itemBy.coupon),false,'the coupon is the one that is not');
+ const bosses=Meta.BOSSES();
+ const beat=n=>{const b=Meta.fresh();for(let i=0;i<n;i++)clear(b,bosses[i],['warrior']);return b;};
+ assert.equal(Meta.itemUnlocked(beat(1),DATA.itemBy.coupon),true,'one distinct clear opens the coupon');
+ assert.equal(Meta.jobUnlocked(beat(2),DATA.jobBy.rogue),false,'two does not open 도적');
+ assert.equal(Meta.jobUnlocked(beat(3),DATA.jobBy.rogue),true,'three does');
+ assert.equal(Meta.jobUnlocked(beat(5),DATA.jobBy.berserker),false,'five does not open 광전사');
+ assert.equal(Meta.jobUnlocked(beat(6),DATA.jobBy.berserker),true,'six does');
+});
+
+test('META-Q11/Q15/Q16: the Grade gates Start Contracts and grants nothing else',()=>{
+ const a=Meta.fresh();
+ assert.deepEqual(DATA.contracts.filter(c=>Meta.contractUnlocked(a,c)).map(c=>c.id),['standard'],
+  'a fresh account may only take the default contract');
+ for(const [grade,id] of [[2,'delivery'],[3,'guild'],[4,'budget'],[5,'premium']]){
+  const b={matrix:Meta.freshMatrix()};let n=0;
+  outer:for(const job of Meta.JOBS())for(const boss of Meta.BOSSES()){if(n>=(grade-1)*7)break outer;b.matrix[job][boss]=true;n++;}
+  assert.equal(Meta.grade(b),grade);
+  assert.ok(Meta.contractUnlocked(b,DATA.contracts.find(c=>c.id===id)),'Grade '+grade+' opens '+id);
+ }
+ // Grade 6 opens no further contract - it is prestige, not another unlock
+ const six={matrix:Meta.freshMatrix()};for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())six.matrix[job][boss]=true;
+ assert.equal(Meta.grade(six),6);
+ assert.deepEqual(Meta.opened(six).contracts,DATA.contracts.map(c=>c.id),'every contract is open by Grade 5 already');
+ // the Grade is never a bonus: starting gold and capacity do not move with it
+ const g1=new Game(Meta.fresh());g1.autosave=false;g1.start('grade-1');
+ const g6=new Game(six.matrix?{...Meta.fresh(),matrix:six.matrix}:Meta.fresh());g6.autosave=false;g6.start('grade-1');
+ assert.equal(g6.run.money,g1.run.money,'starting funds do not move with the Grade');
+ assert.equal(g6.capacity(),g1.capacity(),'and neither does warehouse capacity');
+ assert.equal(g6.run.inventory.length,g1.run.inventory.length,'and no extra stock is handed out');
+});
+
+test('META-Q01/Q14 + RUN-Q30: the legacy XP ladder and its fourteen keys are gone, with nothing left accruing',()=>{
+ assert.equal(DATA.unlocks,undefined,'the legacy unlock table is removed');
+ for(const name of ['bump','check'])assert.equal(Meta[name],undefined,'Meta.'+name+' is gone');
+ const a=Meta.fresh();
+ for(const k of ['xp','grade','unlocked','progress','lastUnlocks'])
+  assert.ok(!(k in a),'a fresh account carries no '+k);
+ // advancing Days earns no progression whatsoever
+ const g=new Game(Meta.fresh());g.autosave=false;g.start('farm');
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ for(let i=0;i<8&&g.run.phase!=='end';i++){
+  if(g.run.phase==='morning')g.beginOrder();else if(g.run.phase==='order')g.open();
+  else if(g.run.phase==='sell')g.depart();else if(g.run.phase==='night')g.finishNight();
+  else if(g.run.phase==='closing'&&g.closeDay()===false)break;
+ }
+ assert.equal(Meta.totalJobMastery(g.account),0,'no Mastery from advancing Days');
+ assert.equal(Meta.grade(g.account),1,'and no Grade');
+ for(const f of ['dist/systems/shop.js','dist/systems/run.js','dist/ui/app.js'])
+  assert.ok(!require('node:fs').readFileSync(require('node:path').join(__dirname,'..',f),'utf8').includes('account.xp'),
+   f+' reads no account XP');
+});
+
+test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide multiplier exists',()=>{
+ // Mastery that does not cross an unlock gate must change nothing at all. Twelve Mastery
+ // across only two distinct Bosses leaves the Job pool exactly as it was, so any difference
+ // in the adventurers it rolls would be a bonus leaking in where none is approved.
+ const plain=Meta.fresh(),masterly=Meta.fresh();
+ for(const job of Meta.JOBS())for(const boss of Meta.BOSSES().slice(0,2))masterly.matrix[job][boss]=true;
+ assert.equal(Meta.totalJobMastery(masterly),12,'real Mastery');
+ assert.equal(Meta.grade(masterly),2,'and a real Grade');
+ assert.equal(Meta.distinctBossClear(masterly),2,'but below every content gate');
+ assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(masterly,j)).map(j=>j.id),
+                  DATA.jobs.filter(j=>Meta.jobUnlocked(plain,j)).map(j=>j.id),'so the Job pool is unchanged');
+ const a=new Game(plain),b=new Game(masterly);a.autosave=b.autosave=false;
+ a.start('mastery');b.start('mastery');
+ const strip=n=>({job:n.job,level:n.level,stats:n.stats,potential:n.potential});
+ assert.deepEqual(b.run.npcs.map(strip),a.run.npcs.map(strip),
+  'twelve Mastery rolls exactly the same adventurers with exactly the same Stats');
+ assert.equal(b.run.money,a.run.money,'and the same starting funds');
+ assert.equal(b.capacity(),a.capacity(),'and the same warehouse');
+ // the Job table itself carries no per-account channel to begin with
+ for(const j of DATA.jobs)assert.equal(j.masteryBonus,undefined,j.id+' has no mastery power field yet');
+});
+
 test('v0.1 fixture intentionally rejected without reinterpretation',()=>{const fs=require('node:fs');const old=fs.readFileSync(require('node:path').join(__dirname,'fixtures/v01-sale.json'),'utf8');assert.throws(()=>Save.import(old));});
 console.log(checks+' revision groups passed');

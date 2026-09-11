@@ -127,7 +127,10 @@ test('COPY-001/UI-Q32/UI-Q39: player-facing terminology',()=>{
  assert.equal(Presentation.labels.survival,'강인함');
  assert.equal(Presentation.labels.mobility,'기동');
  assert.equal(Presentation.labels.spirit,'정신');
- assert.equal(DATA.unlocks.knowledge15[0],'보급 생환');
+ // META keeps the Monster Knowledge wording; it used to live on a retired unlock key and
+ // now only exists where it is actually rendered.
+ assert.ok(fs.readFileSync(__dirname+'/../dist/ui/app.js','utf8').includes('보급 생환'),
+  'Monster Knowledge progress still reads 보급 생환 N회');
  for(const f of ['ui/app','ui/presentation','data/catalog'])
   assert.ok(!fs.readFileSync(__dirname+'/../dist/'+f+'.js','utf8').includes('관찰'),f+' still says 관찰');
 });
