@@ -116,4 +116,79 @@ test('ECO-Q02: one rounding rule across every Gold path',()=>{
  assert.ok(!/Math\.floor\([^)]*buy/.test(src),'no floor rule survives on a Gold path');
 });
 
+/* Sloth reuses the Relic window's whole lifecycle rather than adding a choice path of its
+   own (REL-Q42/43/44). These drive that reuse; the difficulty numbers behind it are PASS3
+   and unset, so nothing here approves a value. */
+function slothRun(seed){const g=new Game();g.autosave=false;g.start(seed);
+ g.run.bossId='SLOTH';g.run.slothDays=[15,20];g.run.sealBreakCount=0;
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);return g;}
+
+test('REL-Q42: a SLOTH Run gets exactly three opportunities, two of D15/D20/D25 plus D30, and never D10',()=>{
+ const seen=new Set();
+ for(let i=0;i<300&&seen.size<7;i++){const g=new Game();g.autosave=false;g.start('sched-'+i);
+  seen.add(g.run.bossId);
+  if(g.run.bossId!=='SLOTH')continue;
+  const days=g.run.slothDays;
+  assert.equal(days.length,2);
+  assert.ok(days.every(d=>[15,20,25].includes(d)),'drawn from D15/D20/D25 only');
+  const opportunities=[0,5,10,15,20,25,30].filter(d=>g.isSealOpportunity(d));
+  assert.deepEqual(opportunities,[...days,30].sort((a,b)=>a-b),'three opportunities, and D30 is always one');
+  assert.ok(!g.isSealOpportunity(10),'D10 is never an opportunity');
+  assert.ok(!g.isSealOpportunity(5),'and neither is D5');
+ }
+ // a Run facing anyone else is offered none of it
+ for(let i=0;i<40;i++){const g=new Game();g.autosave=false;g.start('nosloth-'+i);
+  if(g.run.bossId==='SLOTH')continue;
+  for(const d of [0,5,10,15,20,25,30])assert.equal(g.isSealOpportunity(d),false,'no seal on a '+g.run.bossId+' Run');
+ }
+});
+
+test('REL-Q43: one window yields at most one of [Relic, Seal Break], and reload cannot take both',()=>{
+ const g=slothRun('excl');
+ g.run.day=15;g.morning();
+ const w=g.run.relicWindow;
+ assert.equal(w.milestoneDay,15);
+ assert.ok(w.slothSealOpportunity,'D15 is an opportunity for this Run');
+ assert.ok(g.canBuyRelic()&&g.canBreakSeal(),'both branches are open before either is taken');
+ const gold=g.run.money;
+ g.breakSeal();
+ assert.equal(g.run.money,gold,'breaking a seal costs no Gold');
+ assert.equal(g.run.sealBreakCount,1);
+ assert.equal(g.canBuyRelic(),false,'the window has no acquisition left');
+ assert.equal(g.canBreakSeal(),false,'and the seal cannot be broken twice from one window');
+ assert.throws(()=>g.buyRelic(w.candidateIds[0]),'the Relic is refused outright');
+ const back=Save.import(Save.export(g.account,g.run));
+ assert.equal(back.run.sealBreakCount,1,'the commitment persists');
+ assert.equal(back.run.relicWindow.consumedBySealBreak,true,'and so does what it consumed');
+ const h=new Game(back.account,back.run);h.autosave=false;
+ assert.equal(h.canBuyRelic(),false,'reloading does not hand the Relic back');
+ // the reverse order is just as exclusive
+ const g2=slothRun('excl2');g2.run.day=15;g2.morning();
+ g2.buyRelic(g2.run.relicWindow.candidateIds[0]);
+ assert.equal(g2.canBreakSeal(),false,'taking the Relic spends the same one acquisition');
+ assert.throws(()=>g2.breakSeal());
+});
+
+test('REL-Q44: deferring stays ordinary, and an unspent opportunity awards nothing',()=>{
+ const g=slothRun('defer');
+ g.run.day=15;g.morning();
+ assert.ok(g.canBreakSeal(),'the opportunity is open');
+ g.run.day=20;g.morning();            // walked past D15 without committing either branch
+ assert.equal(g.run.sealBreakCount,0,'no seal is awarded for letting it lapse');
+ assert.ok(g.run.relicWindow.slothSealOpportunity,'D20 is the next opportunity');
+ assert.equal(g.run.relicWindow.consumedBySealBreak,undefined,'the fresh window is unspent');
+ // D30 is always the last one, and the count cannot pass three
+ g.run.sealBreakCount=3;g.run.day=30;g.morning();
+ assert.ok(g.run.relicWindow.slothSealOpportunity,'D30 is an opportunity');
+ assert.equal(g.canBreakSeal(),false,'but there is no fourth seal to break');
+});
+
+test('a Save that claims both a Relic and a Seal Break from one window is refused',()=>{
+ const g=slothRun('tamper');g.run.day=15;g.morning();
+ g.breakSeal();
+ const bad=JSON.parse(Save.export(g.account,g.run));
+ bad.run.relicWindow.purchased=bad.run.relicWindow.candidateIds[0];
+ assert.equal(Save.valid(bad),false,'one window cannot have produced both');
+});
+
 console.log(count+' relic/order groups passed');

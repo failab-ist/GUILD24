@@ -453,7 +453,18 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
   return '<article class="relic-plate'+(mine?' owned':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
   +btn(mine?'설치됨':'구매','buy-relic','stamp','data-id="'+id+'" '+(!game.canBuyRelic()||s.money<price?'disabled':''))+'</article>';}).join('')+'</div></div>'
- +'<div class="close">'+(first?'<p>하나를 골라야 영업이 시작된다.</p>':'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+ +sealChoice() +'<div class="close">'+(first?'<p>하나를 골라야 영업이 시작된다.</p>':'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+
+/* Sloth's seal is not a second choice path: it is the other thing this window's one
+   acquisition can be spent on, so it sits beside the candidates and says as much.
+   Shown only on a Run that is actually facing SLOTH, and only on an opportunity Day. */
+function sealChoice(){const s=game.run,w=s.relicWindow;
+ if(!w||!w.slothSealOpportunity)return '';
+ const broken=s.sealBreakCount||0;
+ if(w.consumedBySealBreak)return '<div class="seal-choice done"><b>봉인 해제 '+broken+' / 3</b><p>이번 점포지원은 받지 않는다.</p></div>';
+ return '<div class="seal-choice"><b>봉인 해제 '+broken+' / 3</b>'
+  +'<p>점포지원을 받는 대신 봉인 하나를 풀 수 있다. 둘 중 하나만 고를 수 있다.</p>'
+  +btn('봉인 해제','break-seal','stamp',game.canBreakSeal()?'':'disabled')+'</div>';}
 function endBanner(){const s=game.run,a=game.account;
  return '<div class="end-banner"><span class="eyebrow">'+(s.win?'THE GATE IS CLOSED':'END OF THIS RUN')+'</span><h2>'+(s.win?'우리가 키운 애들이, 해냈다.':'이번 점포의 영업이 끝났다.')+'</h2><p>'+E(s.endReason)+'</p>'
  +'<div class="row wrap"><span class="meta-xp">점주 XP +'+(s.metaReward||0)+'</span><span class="muted">가맹등급 '+a.grade+' · 누적 '+a.xp+' XP · '+a.runs+'번째 런</span>'+btn('해금 확인','codex','bare')+'</div></div>';}
@@ -558,6 +569,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'boss-seen':{const st=bossRevealStage();
   if(st==='d30')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
   game.save();setModal(null);render();break;}
+ case'break-seal':game.breakSeal();render();break;
  case'menu':setModal('menu');break;
  case'begin-order':game.beginOrder();render();break;
  case'finish-order':game.finishOrder();render();break;

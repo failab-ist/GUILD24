@@ -146,6 +146,8 @@ function relicWindowOk(w,D){
   && RELIC_WINDOWS.includes(w.milestoneDay)
   && Number.isInteger(w.expiryDay)
   && typeof w.focusedRevealSeen==='boolean'
+  && [w.slothSealOpportunity,w.consumedBySealBreak,w.sealBreakCommitted].every(x=>x===undefined||typeof x==='boolean')
+  && !(w.consumedBySealBreak&&w.purchased)
   && (!w.purchased || w.candidateIds.includes(w.purchased));
 }
 

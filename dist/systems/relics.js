@@ -3,8 +3,29 @@ const D=G.DATA,P=G.Game.prototype,food=it=>['food','fresh','drink'].includes(it.
 function known(g){return [...new Set(g.run.dungeons.flatMap(d=>d.hazards))];}
 function counter(it,hazards){return hazards.some(h=>(it.effects[h]||0)>0||(h==='bind'||h==='mire')&&(it.effects.mobility||0)>0);}
 P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&(day!==0||r.kind==='foundation')&&(r.kind!=='keystone'||day>=10)&&(day!==30||r.finalUseful&&(r.id!=='rotation'||s.previousSales>=6)&&(r.id!=='logisticsHQ'||s.previousSales>=8)));const cool=pool.filter(r=>!previous.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags);let eligible=pool;if((i===1||day===0&&i===2)&&pool.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=pool.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=this.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}
- s.relicWindow={milestoneDay:day,candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+this.rng.next()*.3))),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day===0?1:day+5};this.save();};
-P.canBuyRelic=function(){const s=this.run,w=s.relicWindow;return ['foundation','morning','order','final'].includes(s.phase)&&w&&!w.purchased&&(w.milestoneDay===0||s.day<w.expiryDay)&&s.facilities.filter(id=>D.relicBy[id]).length<7;};
+ s.relicWindow={milestoneDay:day,slothSealOpportunity:this.isSealOpportunity(day),candidateIds:chosen.map(r=>r.id),candidatePrices:chosen.map(r=>day===0?0:Math.round(r.price*D.balance.relicPriceScale*(.85+this.rng.next()*.3))),purchased:null,focusedRevealSeen:day===0,expiryDay:day===30?31:day===0?1:day+5};this.save();};
+/* Sloth's seals are not a second choice path: they are the other thing this window's one
+   acquisition can be spent on. Two of D15/D20/D25 were drawn with the Run and D30 always
+   counts, so the opportunity Days are already fixed before the player sees any of them. */
+P.isSealOpportunity=function(day){const s=this.run;
+ return s.bossId==='SLOTH'&&(day===30||(s.slothDays||[]).includes(day));};
+
+/* Breaking one costs no Gold and takes the window's acquisition instead. Deferring stays
+   the ordinary behaviour - an opportunity that expires unspent awards nothing. */
+P.canBreakSeal=function(){const s=this.run,w=s.relicWindow;
+ return s.bossId==='SLOTH'&&!!w&&!!w.slothSealOpportunity&&!w.consumedBySealBreak&&!w.purchased
+  && (s.sealBreakCount||0)<3
+  && ['foundation','morning','order','final'].includes(s.phase)
+  && (w.milestoneDay===0||s.day<w.expiryDay);};
+
+P.breakSeal=function(){const s=this.run,w=s.relicWindow;
+ if(!this.canBreakSeal())throw Error('지금 봉인을 풀 수 없습니다.');
+ w.consumedBySealBreak=true;w.sealBreakCommitted=true;w.purchaseDay=s.day;
+ s.sealBreakCount=(s.sealBreakCount||0)+1;
+ s.notice='봉인 하나가 풀렸다. 이번 점포지원은 받지 않는다.';
+ this.save();};
+
+P.canBuyRelic=function(){const s=this.run,w=s.relicWindow;return ['foundation','morning','order','final'].includes(s.phase)&&w&&!w.purchased&&!w.consumedBySealBreak&&(w.milestoneDay===0||s.day<w.expiryDay)&&s.facilities.filter(id=>D.relicBy[id]).length<7;};
 P.buyRelic=function(id){const s=this.run,w=s.relicWindow;if(!this.canBuyRelic()||!w.candidateIds.includes(id)||this.has(id))throw Error('지금 구매할 수 없는 점포지원입니다.');const price=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money<price)throw Error('점포지원 구매 자금이 부족합니다.');s.money-=price;s.daily.relicSpent=(s.daily.relicSpent||0)+price;s.stats.relicSpent=(s.stats.relicSpent||0)+price;s.facilities.push(id);w.purchased=id;w.purchaseDay=s.phase==='foundation'?0:s.day;
  const extension=id==='fridge'?1:id==='fresh24'?2:id==='coldcase'?1:0;if(extension)for(const st of s.inventory){const it=D.itemBy[st.item];if(st.expires!==null&&st.expires>s.day&&food(it)&&(id!=='coldcase'||it.rarity>=2&&it.fresh)){st.extensions??=[];if(!st.extensions.includes(id)){st.expires+=extension;st.extensions.push(id);}}}
  if(s.phase==='foundation')this.morning();else{s.notice=D.relicBy[id].name+' 설치. 방문객·운영비 효과는 다음 날부터 적용됩니다.';if(Object.keys(s.cart||{}).length){try{this.validateCart(s.cart);}catch(e){s.cart={};}}}this.save();};
