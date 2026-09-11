@@ -30,7 +30,7 @@ PASS3 does not reopen:
 - Sloth Relic trade-off
 - Job × Boss Mastery matrix
 - 1/3/6 unlock gates
-- Franchise Grade no-gameplay-effect boundary
+- Franchise Grade source / no-direct-modifier boundary / Start Contract gate ownership
 
 ## VERSION POLICY
 
@@ -84,6 +84,7 @@ RUN/PHASE/SAVE -> CORE_RUN_v2.5.0.md
 JOB MASTERY / JOB×BOSS CLEAR MATRIX -> META_v2.5.0.md
 DISTINCT BOSS CLEAR / UNLOCK -> META_v2.5.0.md
 FRANCHISE GRADE / MONSTER KNOWLEDGE -> META_v2.5.0.md
+START CONTRACT UNLOCK / FRANCHISE GRADE GATE -> META_v2.5.0.md
 JOB BASE/GROWTH MASTERY EFFECT CHANNEL -> NPC_TRAIT_v2.5.0.md
 
 ## BOSS

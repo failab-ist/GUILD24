@@ -513,14 +513,18 @@ No UI implies both can be obtained from the same window.
 
 ## UI-Q42 — META PROGRESSION PRESENTATION
 SETUP:
-Open Meta/HQ progression on accounts with different matrix states.
+Open Meta/HQ progression on accounts with different matrix states and Franchise Grades.
 
 EXPECT:
 - no Global Meta XP progress bar is presented as current truth
 - Job × Boss clear cells are readable
 - per-Job Mastery and Total Mastery derive consistently
 - Distinct Boss unlock milestones 1/3/6 are clear
-- Franchise Grade is presented as prestige/status, not a hidden stat boost
+- Franchise Grade derives from Total Job Mastery
+- Franchise Grade is presented as prestige/status plus Start Contract availability gate, not a hidden stat boost
+- locked non-default Start Contracts communicate their required Franchise Grade
+- unlocked Start Contracts are selectable options, not automatically active Grade bonuses
+- legacy Day / Run-count / regular-customer / adventurer-level contract gates are absent as current progression truth
 
 PASS:
-UI matches META_v2.5.0 without resurrecting legacy XP/Grade gameplay claims.
+UI matches META_v2.5.0, exposes the Grade -> Start Contract availability relationship, and does not resurrect legacy XP/Grade direct bonuses or legacy contract gates.

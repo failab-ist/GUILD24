@@ -156,7 +156,13 @@ Stock:
 - 붕대×1
 - 하급포션×1
 
-No hidden extra starting resources unless explicitly defined by selected start contract/meta option.
+No hidden extra starting resources unless explicitly defined by selected Start Contract.
+
+Start Contract availability / unlock ownership:
+-> META
+
+A selected Start Contract may modify Run start only through that contract's explicit effect.
+Franchise Grade itself does not directly grant the selected contract effect.
 
 ## INVENTORY
 

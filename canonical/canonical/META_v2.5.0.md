@@ -42,6 +42,8 @@ unlock:
 franchiseGrade=RETAINED
 franchiseGradeSource=totalJobMastery
 franchiseGradeGameplayEffect=NONE
+franchiseGradeContentGate=START_CONTRACT
+startContractUnlockMapping=PASS3_START_CONTRACT_UNLOCK_TUNING
 
 ---
 
@@ -202,17 +204,27 @@ Initial normal Job pool:
 [전사,궁수,마법사,사제]
 ```
 
-No other legacy XP/Grade unlock is silently retained.
+No other legacy XP-based unlock is silently retained.
+Franchise Grade Start Contract unlocks are defined separately below and are not part of the 1/3/6 Boss-clear gates.
 
 ---
 
 ## FRANCHISE GRADE
 
-Franchise Grade is retained as account prestige/status.
+Franchise Grade is retained as account prestige/status and as the cross-run unlock tier for Start Contract availability.
 
 Source:
 ```text
 Total Job Mastery
+```
+
+Progression chain:
+```text
+Job × Boss Clear Matrix
+-> Job Mastery per Job
+-> Total Job Mastery
+-> Franchise Grade
+-> Start Contract availability
 ```
 
 Rules:
@@ -222,14 +234,47 @@ Rules:
 - Grade does not directly modify Relic power
 - Grade does not directly modify Item power
 - Grade is not the gate for the approved 1/3/6 Boss-clear unlocks
+- Grade IS the cross-run gate for non-default Start Contract availability
+- the default/standard Start Contract remains available on a fresh account
+- unlocking a Start Contract does not automatically apply its effect
+- a Start Contract effect applies only when the Player explicitly selects that unlocked contract for a Run
+- the selected contract's explicit effect belongs to the contract/Run-start option, not to Franchise Grade itself
 
-Existing Source behavior that gives Grade direct gameplay bonuses is legacy and must be removed/reassigned only when another owning Canonical explicitly says so.
+Mandatory boundary:
+```text
+Franchise Grade direct gameplay bonus = NO
+Franchise Grade Start Contract availability gate = YES
+```
 
-Exact display-grade thresholds=PASS3_PRESENTATION_TUNING.
-Changing display thresholds must not change the 1/3/6 unlock rules.
+Legacy direct Grade benefits are removed and must not be restored as implicit rewards, including:
+- starting Gold bonus
+- generic Item / offer-count bonus
+- generic Inventory / warehouse-capacity bonus
+- generic Reroll-cost discount
+- automatic first-dungeon-information bonus
 
-Start Contract / Store Type sidegrade expansion is not added by implication here.
-Until separately approved in an owning Canonical, legacy Grade-gated contract/store-type gameplay is not Canonical v2.5 behavior.
+Existing Source behavior that grants such direct Grade bonuses is legacy and must be removed during v2.5 adoption unless an explicit selected Start Contract itself owns a stated effect.
+
+Legacy Start Contract progression gates are also not v2.5 Meta truth merely because they exist in Source.
+The following legacy unlock keys must not remain as the cross-run unlock source:
+```text
+day10
+regular3
+run1
+level15
+```
+
+Exact display-grade thresholds and the exact mapping from Franchise Grade to each non-default Start Contract:
+```text
+PASS3_START_CONTRACT_UNLOCK_TUNING
+```
+
+PASS3 may tune those thresholds/mappings only inside this frozen structure:
+- Franchise Grade source remains Total Job Mastery
+- Franchise Grade remains the Start Contract availability gate
+- Grade itself remains free of direct gameplay modifiers
+- Distinct Boss Clear 1/3/6 unlocks remain a separate progression axis
+- no legacy Day / Run-count / regular-customer / adventurer-level gate is silently restored
 
 ---
 
@@ -266,6 +311,7 @@ Monster Knowledge is separate from Job Mastery and Distinct Boss Clear Count.
 ## CROSS-RUN POWER BOUNDARY
 
 Forbidden:
+- direct Franchise Grade stat/economy bonus ladder
 - Hall of Fame dependency
 - legendary-adventurer cameo requirement
 - hidden account-wide combat multiplier
@@ -278,6 +324,7 @@ Permitted:
 - Job × Boss Mastery matrix
 - explicit visible Job Mastery Base/Growth adjustment owned by NPC_TRAIT
 - Franchise Grade prestige/status
+- Franchise Grade gating of selectable Start Contracts
 
 Thus the old blanket rule `permanentCombatPowerMeta=NO` is replaced by:
 ```text
@@ -293,6 +340,7 @@ Cross-run account persistence must preserve:
 - 7 Boss-cleared flags or equivalent derived set
 - approved unlock state derivable from Distinct Boss Clear Count
 - Franchise Grade or sufficient Total Job Mastery to derive it
+- Start Contract availability derivable from Franchise Grade
 - Monster Knowledge progress
 
 Run save and account Meta state may use separate storage structures.
@@ -316,6 +364,7 @@ Migration policy must preserve data safety but must not keep removed gameplay be
 Do not silently map:
 - old XP amount -> fake Job Mastery cells
 - old Grade -> fake Boss clears
+- old `day10` / `regular3` / `run1` / `level15` contract gates -> v2.5 Start Contract unlock truth
 
 If incompatible Meta schema cannot be migrated truthfully:
 - preserve old stored bytes as backup where existing save policy supports it
@@ -358,8 +407,10 @@ Sixth distinct Boss clear unlocks 광전사.
 ### META-Q10 — INITIAL JOB POOL
 Fresh v2.5 account normal NPC Jobs are 전사/궁수/마법사/사제 until unlocks apply.
 
-### META-Q11 — FRANCHISE GRADE
-Grade derives from Total Job Mastery and has no direct gameplay modifier.
+### META-Q11 — FRANCHISE GRADE SOURCE / BOUNDARY
+Grade derives from Total Job Mastery.
+Grade itself adds no direct combat/NPC/economy/Relic/Item modifier.
+Grade gates non-default Start Contract availability.
 
 ### META-Q12 — MONSTER KNOWLEDGE
 Supplied-survival Knowledge behavior remains unchanged and separate from Mastery.
@@ -367,8 +418,17 @@ Supplied-survival Knowledge behavior remains unchanged and separate from Mastery
 ### META-Q13 — SAVE/RELOAD
 Reload cannot duplicate matrix progress or Boss unlock count.
 
-### META-Q14 — NO LEGACY POWER
-Removed XP/Grade bonuses do not remain as hidden modifiers.
+### META-Q14 — NO LEGACY POWER / GATES
+Removed XP/Grade direct bonuses do not remain as hidden modifiers.
+Legacy `day10` / `regular3` / `run1` / `level15` Start Contract gates are not silently retained as v2.5 Meta truth.
+
+### META-Q15 — FRANCHISE GRADE START CONTRACT GATE
+When Total Job Mastery changes Franchise Grade, Start Contract availability follows the canonical Grade unlock table.
+An unlocked contract does not become active until the Player explicitly selects it for a Run.
+
+### META-Q16 — SEPARATE PROGRESSION AXES
+Distinct Boss Clear 1/3/6 remains independent from Franchise Grade Start Contract availability.
+A Boss clear affects Start Contract availability only indirectly when the resulting Job Mastery changes Total Job Mastery enough to change Franchise Grade.
 
 ---
 

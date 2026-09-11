@@ -198,6 +198,7 @@ maxJobMasteryPerJob=7
 maxTotalJobMastery=42
 permanentCombatPowerMeta=JOB_MASTERY_ONLY_IF_EXPLICIT_AND_VISIBLE
 FranchiseGradeGameplayEffect=NO
+FranchiseGradeStartContractGate=YES
 crossRunHallOfFameDependency=NO
 
 ## FINAL-001
@@ -288,7 +289,10 @@ playerProgressLabel=보급 생환 N회
 distinctBossUnlocks=[1:황금1+1쿠폰,3:도적,6:광전사]
 duplicateBossClearDoesNotAdvanceDistinctBossCount=YES
 FranchiseGradeSource=TotalJobMastery
-legacyGradeGameplayGate=NO
+FranchiseGradeStartContractGate=YES
+FranchiseGradeDirectGameplayBonus=NO
+StartContractUnlockMapping=PASS3_START_CONTRACT_UNLOCK_TUNING
+legacyStartContractGates=[day10,regular3,run1,level15]->REMOVED_AS_META_TRUTH
 
 ## META-004
 JobMasteryCredit=successfulFinal+representedJob+uniqueJobBossPair

@@ -540,11 +540,20 @@ Player-facing Meta presentation must make these source-of-truth concepts distinc
 - Total Job Mastery
 - Distinct Boss Clear 0..7
 - approved 1/3/6 unlock milestones
-- Franchise Grade as prestige/status
+- Franchise Grade derived from Total Job Mastery
+- Start Contract availability gated by Franchise Grade
 - Monster Knowledge `보급 생환 N회`
 
 Do not present legacy Global Meta XP as current progression.
-Franchise Grade must not imply hidden gameplay bonuses.
+
+Franchise Grade itself must not imply hidden gameplay bonuses.
+Its progression function is to open selectable Start Contract options.
+
+Start Contract UI:
+- default/standard contract is available from a fresh account
+- locked non-default contracts communicate their required Franchise Grade
+- an unlocked contract is shown as available for selection, not as an automatically active bonus
+- do not present legacy Day / Run-count / regular-customer / adventurer-level conditions as current unlock truth
 
 ## NAVIGATION
 

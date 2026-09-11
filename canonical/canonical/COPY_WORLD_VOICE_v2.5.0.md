@@ -1011,6 +1011,8 @@ Meta copy:
 - use Job Mastery / 직업 숙련 language consistently with META
 - do not present legacy Global Meta XP as current progression
 - Franchise Grade language must not imply direct gameplay power
+- Franchise Grade may communicate Start Contract availability unlocked by Grade; do not phrase an unlocked contract's effect as an automatic Grade bonus
+- do not present legacy Day / Run-count / regular-customer / adventurer-level Start Contract gates as current Meta progress
 - Monster Knowledge progress remains `보급 생환 N회`
 
 # 19. FINAL COPY FILTER
