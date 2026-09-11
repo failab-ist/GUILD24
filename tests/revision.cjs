@@ -9,7 +9,7 @@ test('coupon pending capped; explicit duplication; ordinary effects additive',()
 test('atomic cart validates funds, capacity and supply without mutation',()=>{const g=fresh();const before=copy(g.run);assert.throws(()=>g.setQuantity(0,999));assert.deepEqual(g.run,before);g.setQuantity(0,1);const cost=g.cartTotal();assert.equal(g.run.money,before.money);assert.throws(()=>g.open());g.confirmOrder();assert.equal(g.run.money,before.money-cost);assert.equal(g.cartTotal(),0);const money=g.run.money;g.confirmOrder();assert.equal(g.run.money,money);});
 test('warehouse capacity and finite shelf life; slot growth preserved',()=>{const g=fresh();g.run.inventory=[];g.run.facilities=['fridge'];g.stock('battery',24);assert.equal(g.canStock(DATA.itemBy.battery),false);assert.equal(g.canStock(DATA.itemBy.rice),false);g.run.inventory=[];g.stock('rice',2);assert.equal(Adventurer.slots({level:9}),2);assert.equal(Adventurer.slots({level:10}),3);g.run.day=4;g.morning();assert.equal(g.run.inventory.length,0);});
 test('night only once, empty night neutral, visitor forecast exact',()=>{const g=fresh();const count=g.run.queue.length;g.open();while(g.run.phase==='sell')g.depart();assert.equal(g.run.results.length,count);const money=g.run.money;g.night();assert.equal(g.run.money,money);const h=fresh();h.run.queue=[];h.open();assert.match(h.run.regionReport,/없었다/);});
-test('old prototype rejected; v5 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,5);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
+test('old prototype rejected; v6 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,6);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
 test('seed and mid-day save replay deterministic',()=>{let a=fresh('replay2'),b=fresh('replay2');a.order(0);b.order(0);b.save();const state=Save.import(Save.export(b.account,b.run));b=new Game(state.account,state.run);b.autosave=false;a.open();b.open();while(a.run.phase==='sell'){a.depart();b.depart();}assert.deepEqual(a.run,b.run);});
 test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.stock("potion",1);g.supplyFinal(n.id,g.run.inventory[0].id);assert.equal(n.history.at(-1).mode,'supply');g.boss();const xp=g.account.xp;g.boss();assert.equal(g.account.xp,xp);const h=fresh();h.run.phase='closing';h.run.money=-1;h.run.inventory=[];h.closeDay();assert.equal(h.run.phase,'end');});
 test('all effect keys presented and names readable',()=>{for(const it of DATA.items){const rows=Presentation.rows(it.effects);assert.ok(rows.length);for(const key of Object.keys(it.effects))assert.ok(rows.some(r=>r.key===key)||key==='jobBonus');}const r=new RNG('names');for(let i=0;i<500;i++)assert.ok(!/\s/.test(Adventurer.name(r,0)));});
@@ -24,5 +24,60 @@ test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const
 test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','delivery'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
 test('empty provisioning cannot grind knowledge',()=>{const g=fresh();g.open();while(g.run.phase==='sell')g.depart();assert.deepEqual(g.account.knowledge,{});});
 test('same SKU bulk across separate offers; board does not change rookie level',()=>{const g=fresh();g.run.facilities=['bulk'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:2},{item:'water',price:25,quantity:2}];g.setQuantity(0,2);g.setQuantity(1,1);assert.equal(g.cartTotal(),71);g.confirmOrder();assert.equal(g.run.inventory.reduce((a,x)=>a+x.cost,0),71);const a=fresh('board-level'),b=fresh('board-level');a.run.facilities=[];b.run.facilities=['board'];assert.equal(a.addNPC().level,b.addNPC().level);});
+test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other seeded result',()=>{
+ const ids=new Set();
+ for(let i=0;i<80;i++){const g=fresh('boss-'+i);
+  assert.ok(DATA.bossBy[g.run.bossId],'the Run carries a real Boss id');
+  ids.add(g.run.bossId);
+  assert.deepEqual(g.run.bossReveal,{identitySeen:false,traitSeen:false},'nothing is revealed yet');
+  const again=fresh('boss-'+i);
+  assert.equal(again.run.bossId,g.run.bossId,'the same seed deals the same Boss');
+ }
+ assert.equal(ids.size,7,'every Boss is reachable across seeds');
+ // The Boss comes from a stream derived from the run seed rather than the main one, so
+ // the main stream is untouched. These three are what the build produced for these seeds
+ // BEFORE the Boss was added: if dealing a Boss ever consumes a main-stream draw, the
+ // run stops matching its own history here.
+ for(const [seed,order,intro] of [
+  ['sig-0',['fire','slime','spider','crypt','snow'],[4,11]],
+  ['sig-1',['slime','crypt','spider','snow','fire'],[4,9]],
+  ['sig-2',['crypt','snow','spider','fire','slime'],[4,11]]]){
+  const g=new Game();g.autosave=false;g.start(seed);
+  assert.deepEqual(g.run.familyOrder,order,seed+' still draws the same Family order');
+  assert.deepEqual(g.run.familyIntro,intro,seed+' still draws the same Family introduction Days');
+ }
+});
+
+test('BOSS-Q11: SLOTH carries two distinct opportunity Days and no breaks yet; others carry no SLOTH state',()=>{
+ let sloth=0,other=0;
+ for(let i=0;i<400&&(sloth<8||other<8);i++){const g=fresh('sloth-'+i),r=g.run;
+  if(r.bossId==='SLOTH'){sloth++;
+   assert.equal(r.slothDays.length,2,'exactly two opportunity Days');
+   assert.equal(new Set(r.slothDays).size,2,'the two Days are distinct');
+   assert.ok(r.slothDays.every(d=>[15,20,25].includes(d)),'chosen from D15/D20/D25 only');
+   assert.ok(!r.slothDays.includes(10),'D10 is never an opportunity');
+   assert.equal(r.sealBreakCount,0,'a fresh Run has broken no seal');
+   assert.deepEqual(fresh('sloth-'+i).run.slothDays,r.slothDays,'the same seed picks the same Days');
+  }else{other++;
+   assert.equal(r.slothDays,undefined,'a non-SLOTH Run stores no opportunity Days');
+   assert.equal(r.sealBreakCount,undefined,'a non-SLOTH Run stores no break count');
+  }
+  assert.ok(Save.valid(JSON.parse(Save.export(g.account,g.run))),'the Boss state saves and validates');
+ }
+ assert.ok(sloth>0&&other>0,'both shapes were actually exercised');
+});
+
+test('the retired single-Boss identity is gone and nothing was invented to replace it',()=>{
+ const final=DATA.dungeonBy.final;
+ assert.equal(final.monster,undefined,'the Final gate no longer names a fixed Boss');
+ assert.equal(final.weakness,undefined,'and carries no placeholder weakness line');
+ const ui=require('node:fs').readFileSync(require('node:path').join(__dirname,'../dist/ui/app.js'),'utf8');
+ assert.ok(/monsters'\?D\.dungeons\.filter\(d=>d\.id!=='final'\)/.test(ui.replace(/\s+/g,'')),
+  'Monster Knowledge lists only Families that can actually accrue it');
+ for(const f of ['dist/data/catalog.js','dist/ui/app.js'])
+  assert.ok(!require('node:fs').readFileSync(require('node:path').join(__dirname,'..',f),'utf8').includes('아르카돈'),
+   f+' carries no trace of the retired identity');
+});
+
 test('v0.1 fixture intentionally rejected without reinterpretation',()=>{const fs=require('node:fs');const old=fs.readFileSync(require('node:path').join(__dirname,'fixtures/v01-sale.json'),'utf8');assert.throws(()=>Save.import(old));});
 console.log(checks+' revision groups passed');

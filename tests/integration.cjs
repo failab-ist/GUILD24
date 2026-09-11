@@ -87,7 +87,32 @@ test('CORE_RUN §SAVE/LOAD: the Final state a D30 run generated is part of the s
  assert.equal(Save.valid(ended),false,'an ended run without a verdict is refused');
 });
 
-test('CORE_RUN §SAVE/LOAD: v4 is refused cleanly and the original bytes are preserved',()=>{
+test('CORE_RUN §SAVE/LOAD: a v2.4 save is never read as a v2.5 save',()=>{
+ const store=new Map();
+ global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+ try{
+  const g=fresh('v5-reject');
+  // what v2.4 actually wrote: its own version, its own key, and no Boss on the run
+  const account={version:1,xp:0,grade:1,unlocked:[],knowledge:{},progress:{},discovered:[],
+   runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true},lastUnlocks:[]};
+  const run={...g.run,version:5};delete run.bossId;delete run.bossReveal;
+  for(const [label,payload] of [
+   ['an in-progress run',JSON.stringify({version:5,account,run})],
+   ['an account-only save',JSON.stringify({version:5,account,run:null})]]){
+   store.clear();Save.error=null;
+   store.set('guild24.save.v5',payload);
+   assert.equal(Save.read(),null,label+' written by v2.4 does not load');
+   assert.ok(Save.error&&/새 점포/.test(Save.error),label+': the player is told, not shown an error code');
+   assert.equal(store.get('guild24.save.v5'),payload,label+': the v5 bytes are left untouched');
+   assert.equal(store.get('guild24.save.v6'),undefined,label+': nothing is migrated into the v6 key');
+  }
+  // the same shape is refused by the validator itself, not only by the key it sits under
+  assert.equal(Save.valid({version:5,account,run:null}),false,'a v5 payload is not a valid v6 save');
+  assert.equal(Save.valid({version:6,account,run}),false,'a run with no Boss is refused');
+ }finally{delete global.localStorage;}
+});
+
+test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original bytes are preserved',()=>{
  const store=new Map();
  global.localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
  try{
@@ -98,16 +123,16 @@ test('CORE_RUN §SAVE/LOAD: v4 is refused cleanly and the original bytes are pre
   assert.equal(Save.read(),null,'a v4 save does not load');
   assert.ok(Save.error&&/새 점포/.test(Save.error),'the player is told in their own language, not with an error code');
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are left untouched');
-  // A v5 write over an existing v5 save keeps the previous bytes under .backup.
+  // A v6 write over an existing v6 save keeps the previous bytes under .backup.
   g.autosave=true;g.save();
-  const first=store.get('guild24.save.v5');
+  const first=store.get('guild24.save.v6');
   g.run.money+=1;g.save();
-  assert.equal(store.get('guild24.save.v5.backup'),first,'the previous save is preserved as a backup');
+  assert.equal(store.get('guild24.save.v6.backup'),first,'the previous save is preserved as a backup');
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are still there afterwards');
   // A corrupted head falls back to the backup rather than losing the run.
-  store.set('guild24.save.v5','{not json');
+  store.set('guild24.save.v6','{not json');
   const recovered=Save.read();
-  assert.ok(recovered&&recovered.version===5,'the backup is read when the head is unreadable');
+  assert.ok(recovered&&recovered.version===6,'the backup is read when the head is unreadable');
   assert.equal(recovered.run.money,g.run.money-1,'the recovered run is the previous save, not an invention');
  }finally{delete global.localStorage;}
 });

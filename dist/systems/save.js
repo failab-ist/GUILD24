@@ -1,5 +1,5 @@
 (function(G){
-const KEY='guild24.save.v5';
+const KEY='guild24.save.v6';
 
 /* Save validation. One clause out of line and the save is refused.
    Each check stands alone under its own name. This function was extended twice in v2.4
@@ -95,6 +95,20 @@ function progressOk(r,ids,D){
  return true;
 }
 
+/* The Boss this Run was dealt. One identity, its two reveal flags, and - only when that
+   identity is SLOTH - the seal opportunity Days and the breaks committed so far. Reload
+   must not be able to re-roll or undo any of it, so all of it is checked here, and a
+   non-SLOTH Run must not be carrying SLOTH state at all. */
+function bossOk(r,D){
+ if(!D.bossBy[r.bossId])return false;
+ const seen=r.bossReveal;
+ if(!seen || typeof seen.identitySeen!=='boolean' || typeof seen.traitSeen!=='boolean')return false;
+ if(r.bossId!=='SLOTH')return r.slothDays===undefined && r.sealBreakCount===undefined;
+ return Array.isArray(r.slothDays) && r.slothDays.length===2
+  && new Set(r.slothDays).size===2 && r.slothDays.every(d=>[15,20,25].includes(d))
+  && Number.isInteger(r.sealBreakCount) && r.sealBreakCount>=0 && r.sealBreakCount<=3;
+}
+
 /* The final expedition: two different Families, revealed on D30. */
 function finalOk(f,D){
  return Array.isArray(f.families) && f.families.length===2
@@ -123,7 +137,7 @@ G.Save={
 
  write(account,run){
   try{
-   const json=JSON.stringify({version:5,account,run});
+   const json=JSON.stringify({version:6,account,run});
    const previous=localStorage.getItem(KEY);
    if(previous)localStorage.setItem(KEY+'.backup',previous);
    localStorage.setItem(KEY,json);
@@ -139,7 +153,7 @@ G.Save={
   if(typeof localStorage==='undefined')return null;
   if(!localStorage.getItem(KEY)&&!localStorage.getItem(KEY+'.backup')){
    /* Only an older format is left. The original is never erased; the player is told in plain words. */
-   if(['v1','v2','v3','v4'].some(v=>localStorage.getItem('guild24.save.'+v)))
+   if(['v1','v2','v3','v4','v5'].some(v=>localStorage.getItem('guild24.save.'+v)))
     this.error='규칙 개편으로 이전 영업은 이어갈 수 없습니다. 새 점포를 열어 주세요. 이전 저장 원본은 보관됩니다.';
    return null;
   }
@@ -157,10 +171,11 @@ G.Save={
  valid(s){
   try{
    const D=G.DATA,a=s?.account,r=s?.run;
-   if(s?.version!==5)return false;
+   if(s?.version!==6)return false;
    if(!accountOk(a,D))return false;
    if(r===null)return true;              // an account-only save, with no run in progress
    if(!runShapeOk(r))return false;
+   if(!bossOk(r,D))return false;
    const ids=r.npcs.map(n=>n.id);
    if(!rosterOk(r,ids))return false;
    if(!r.npcs.every(n=>npcOk(n,D)))return false;
@@ -170,7 +185,7 @@ G.Save={
   }catch(e){return false;}
  },
 
- export(account,run){return JSON.stringify({version:5,account,run},null,2);},
+ export(account,run){return JSON.stringify({version:6,account,run},null,2);},
  import(raw){
   const s=JSON.parse(raw);
   if(!this.valid(s))throw Error('이 버전의 저장 파일이 아닙니다.');

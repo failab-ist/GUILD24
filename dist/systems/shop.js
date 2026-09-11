@@ -5,10 +5,13 @@ class Game{
  save(){if(this.run)this.run.rngState=this.rng.state;if(this.autosave&&typeof localStorage!=='undefined')G.Save.write(this.account,this.run);}
  start(seed,contract='standard'){
  if(!D.contracts.some(c=>c.id===contract&&(!c.unlock||this.account.unlocked.includes(c.unlock))))throw Error('잠겨 있는 시작 계약입니다.');
- this.rng=new G.RNG(seed);this.run={version:5,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1200+(this.account.grade>=2?50:0)+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ this.rng=new G.RNG(seed);this.run={version:6,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1200+(this.account.grade>=2?50:0)+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
  for(const[id,num]of[['rice',2],['water',2],['bandage',1],['potion',1]])this.stock(id,num);
  if(this.account.grade>=3)this.stock(this.rng.pick(D.items.filter(i=>i.rarity===0)).id,1);
- for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];this.run.phase='foundation';this.relicWindow(0);return this.run;
+ for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
+ const boss=new G.RNG(String(seed)+':boss');this.run.bossId=boss.pick(D.bosses).id;this.run.bossReveal={identitySeen:false,traitSeen:false};
+ if(this.run.bossId==='SLOTH'){this.run.slothDays=boss.shuffle([15,20,25]).slice(0,2).sort((a,b)=>a-b);this.run.sealBreakCount=0;}
+this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
  capacity(){return 24+(this.account.grade>=4?2:0)+(this.has('warehouse')?10:0);}
  has(id){return this.run.facilities.includes(id);}

@@ -83,9 +83,21 @@ dungeons:[
 {id:'crypt',name:'망자역 지하묘지',short:'망자역',base:3,icon:'☾',color:'#b3a1d0',hazards:['fear','dark'],tags:['undead'],monster:'망자역 차장',weakness:'정신과 시야 확보',reward:1.1},
 {id:'snow',name:'북부 설원 폐허',short:'설원 폐허',base:4,icon:'❄',color:'#a0d5e0',hazards:['cold','whiteout'],monster:'서리 거인',weakness:'강인함과 정신',reward:1.25},
 {id:'slime',name:'슬라임 하수도',short:'슬라임 하수도',base:2,icon:'◉',color:'#8ac3a8',hazards:['corrosion','mire'],monster:'산성 슬라임',weakness:'강인함과 기동',reward:1},
-{id:'final',name:'제0게이트 — 마왕성',short:'마왕성',base:5,icon:'♜',color:'#e28e9c',hazards:[],monster:'마왕 아르카돈',weakness:'아직 기록 없음',reward:2}
+{id:'final',name:'제0게이트 — 마왕성',short:'마왕성',base:5,icon:'♜',color:'#e28e9c',hazards:[],reward:2}
 ],
 hazards:{poison:'독',bind:'속박',corrosion:'부식',mire:'진창',fire:'화염',fear:'공포',dark:'어둠',cold:'냉기',whiteout:'화이트아웃'},
+// BOSS ROSTER (BOSS_v2.5.0 / PLAYER-FACING IDENTITY). One of these is dealt per Run and
+// never re-rolled. `name` is the authoritative Player-facing name; the production name
+// pool binds portraits by the same id but does not own identity.
+bosses:[
+['WRATH','분노','분노의 마왕 래스'],
+['PRIDE','오만','오만의 마왕 프라이드'],
+['ENVY','질투','질투의 마왕 엔비'],
+['GREED','탐욕','탐욕의 마왕 그리드'],
+['GLUTTONY','폭식','폭식의 마왕 글러트니'],
+['LUST','색욕','색욕의 마왕 러스트'],
+['SLOTH','나태','나태의 마왕 슬로스']
+].map(([id,sin,name])=>({id,sin,name})),
 facilities:[],
 events:[
 ['logistics','물류대란','길이 막혔다. 물건은 왔다. 평소보다 비쌀 뿐이다.','오늘 매입가 +15%',{price:1.15}],
@@ -116,5 +128,5 @@ unlocks:{cold5:['설원 생환',5],fear5:['공포 원정 생환',5],poison10:['�
 };
 G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:230,combatNoise:.175,rerollBase:30};
 G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intent:.18,loyalty:6}};
-G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));
+G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);
