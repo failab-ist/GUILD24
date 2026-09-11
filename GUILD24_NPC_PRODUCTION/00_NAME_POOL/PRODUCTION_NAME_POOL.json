@@ -1,0 +1,1727 @@
+{
+  "package": {
+    "project": "GUILD24 / 던전 앞 편의점",
+    "name": "NPC_NAME_POOL_PRODUCTION_SORTED",
+    "source_package": "NPC_NAME_POOL v1.1.0",
+    "purpose": "Normal portrait production binding convenience only; names/genders unchanged",
+    "normal_count": 200,
+    "normal_m": 100,
+    "normal_f": 100,
+    "easter_count": 3,
+    "boss_count": 7
+  },
+  "binding_rule": {
+    "normal_asset_path": "NORMAL/<M|F>/<001-100>.png",
+    "normal_name_lookup": "gender folder + 3-digit slot",
+    "neutral_workflow": "N is temporary only. After visual sorting, assign N images to whichever of M/F is short so final counts are M=100 and F=100. Then number 001-100 inside that final folder.",
+    "manual_catalog_edit_required": false,
+    "note": "specific portrait-to-name binding becomes the shared slot number after assets are finalized"
+  },
+  "normal": {
+    "M": [
+      {
+        "slot": "001",
+        "gender": "M",
+        "name": "민자이",
+        "original_id": "N001",
+        "asset_filename": "001.png",
+        "asset_path": "NORMAL/M/001.png"
+      },
+      {
+        "slot": "002",
+        "gender": "M",
+        "name": "고쉬스앵",
+        "original_id": "N002",
+        "asset_filename": "002.png",
+        "asset_path": "NORMAL/M/002.png"
+      },
+      {
+        "slot": "003",
+        "gender": "M",
+        "name": "마루진",
+        "original_id": "N003",
+        "asset_filename": "003.png",
+        "asset_path": "NORMAL/M/003.png"
+      },
+      {
+        "slot": "004",
+        "gender": "M",
+        "name": "한도람",
+        "original_id": "N004",
+        "asset_filename": "004.png",
+        "asset_path": "NORMAL/M/004.png"
+      },
+      {
+        "slot": "005",
+        "gender": "M",
+        "name": "태오람",
+        "original_id": "N005",
+        "asset_filename": "005.png",
+        "asset_path": "NORMAL/M/005.png"
+      },
+      {
+        "slot": "006",
+        "gender": "M",
+        "name": "도하르",
+        "original_id": "N006",
+        "asset_filename": "006.png",
+        "asset_path": "NORMAL/M/006.png"
+      },
+      {
+        "slot": "007",
+        "gender": "M",
+        "name": "산도르",
+        "original_id": "N007",
+        "asset_filename": "007.png",
+        "asset_path": "NORMAL/M/007.png"
+      },
+      {
+        "slot": "008",
+        "gender": "M",
+        "name": "장보르",
+        "original_id": "N008",
+        "asset_filename": "008.png",
+        "asset_path": "NORMAL/M/008.png"
+      },
+      {
+        "slot": "009",
+        "gender": "M",
+        "name": "박하르",
+        "original_id": "N009",
+        "asset_filename": "009.png",
+        "asset_path": "NORMAL/M/009.png"
+      },
+      {
+        "slot": "010",
+        "gender": "M",
+        "name": "오름찬",
+        "original_id": "N010",
+        "asset_filename": "010.png",
+        "asset_path": "NORMAL/M/010.png"
+      },
+      {
+        "slot": "011",
+        "gender": "M",
+        "name": "로엔담",
+        "original_id": "N011",
+        "asset_filename": "011.png",
+        "asset_path": "NORMAL/M/011.png"
+      },
+      {
+        "slot": "012",
+        "gender": "M",
+        "name": "베르한",
+        "original_id": "N012",
+        "asset_filename": "012.png",
+        "asset_path": "NORMAL/M/012.png"
+      },
+      {
+        "slot": "013",
+        "gender": "M",
+        "name": "파크지송",
+        "original_id": "N013",
+        "asset_filename": "013.png",
+        "asset_path": "NORMAL/M/013.png"
+      },
+      {
+        "slot": "014",
+        "gender": "M",
+        "name": "봉쥬노",
+        "original_id": "N014",
+        "asset_filename": "014.png",
+        "asset_path": "NORMAL/M/014.png"
+      },
+      {
+        "slot": "015",
+        "gender": "M",
+        "name": "지드라고니아",
+        "original_id": "N015",
+        "asset_filename": "015.png",
+        "asset_path": "NORMAL/M/015.png"
+      },
+      {
+        "slot": "016",
+        "gender": "M",
+        "name": "유제삭",
+        "original_id": "N016",
+        "asset_filename": "016.png",
+        "asset_path": "NORMAL/M/016.png"
+      },
+      {
+        "slot": "017",
+        "gender": "M",
+        "name": "모다크",
+        "original_id": "N017",
+        "asset_filename": "017.png",
+        "asset_path": "NORMAL/M/017.png"
+      },
+      {
+        "slot": "018",
+        "gender": "M",
+        "name": "장마르",
+        "original_id": "N018",
+        "asset_filename": "018.png",
+        "asset_path": "NORMAL/M/018.png"
+      },
+      {
+        "slot": "019",
+        "gender": "M",
+        "name": "우바크",
+        "original_id": "N019",
+        "asset_filename": "019.png",
+        "asset_path": "NORMAL/M/019.png"
+      },
+      {
+        "slot": "020",
+        "gender": "M",
+        "name": "세베크",
+        "original_id": "N020",
+        "asset_filename": "020.png",
+        "asset_path": "NORMAL/M/020.png"
+      },
+      {
+        "slot": "021",
+        "gender": "M",
+        "name": "자가르",
+        "original_id": "N021",
+        "asset_filename": "021.png",
+        "asset_path": "NORMAL/M/021.png"
+      },
+      {
+        "slot": "022",
+        "gender": "M",
+        "name": "파도르",
+        "original_id": "N022",
+        "asset_filename": "022.png",
+        "asset_path": "NORMAL/M/022.png"
+      },
+      {
+        "slot": "023",
+        "gender": "M",
+        "name": "홍차드",
+        "original_id": "N023",
+        "asset_filename": "023.png",
+        "asset_path": "NORMAL/M/023.png"
+      },
+      {
+        "slot": "024",
+        "gender": "M",
+        "name": "도라지오",
+        "original_id": "N024",
+        "asset_filename": "024.png",
+        "asset_path": "NORMAL/M/024.png"
+      },
+      {
+        "slot": "025",
+        "gender": "M",
+        "name": "보리안",
+        "original_id": "N025",
+        "asset_filename": "025.png",
+        "asset_path": "NORMAL/M/025.png"
+      },
+      {
+        "slot": "026",
+        "gender": "M",
+        "name": "차우엔",
+        "original_id": "N051",
+        "asset_filename": "026.png",
+        "asset_path": "NORMAL/M/026.png"
+      },
+      {
+        "slot": "027",
+        "gender": "M",
+        "name": "리븐헌",
+        "original_id": "N052",
+        "asset_filename": "027.png",
+        "asset_path": "NORMAL/M/027.png"
+      },
+      {
+        "slot": "028",
+        "gender": "M",
+        "name": "이유넬",
+        "original_id": "N053",
+        "asset_filename": "028.png",
+        "asset_path": "NORMAL/M/028.png"
+      },
+      {
+        "slot": "029",
+        "gender": "M",
+        "name": "최연센",
+        "original_id": "N054",
+        "asset_filename": "029.png",
+        "asset_path": "NORMAL/M/029.png"
+      },
+      {
+        "slot": "030",
+        "gender": "M",
+        "name": "이제도르",
+        "original_id": "N055",
+        "asset_filename": "030.png",
+        "asset_path": "NORMAL/M/030.png"
+      },
+      {
+        "slot": "031",
+        "gender": "M",
+        "name": "이그라수",
+        "original_id": "N056",
+        "asset_filename": "031.png",
+        "asset_path": "NORMAL/M/031.png"
+      },
+      {
+        "slot": "032",
+        "gender": "M",
+        "name": "원비노",
+        "original_id": "N057",
+        "asset_filename": "032.png",
+        "asset_path": "NORMAL/M/032.png"
+      },
+      {
+        "slot": "033",
+        "gender": "M",
+        "name": "정우센",
+        "original_id": "N058",
+        "asset_filename": "033.png",
+        "asset_path": "NORMAL/M/033.png"
+      },
+      {
+        "slot": "034",
+        "gender": "M",
+        "name": "마돈세크",
+        "original_id": "N059",
+        "asset_filename": "034.png",
+        "asset_path": "NORMAL/M/034.png"
+      },
+      {
+        "slot": "035",
+        "gender": "M",
+        "name": "조세로",
+        "original_id": "N060",
+        "asset_filename": "035.png",
+        "asset_path": "NORMAL/M/035.png"
+      },
+      {
+        "slot": "036",
+        "gender": "M",
+        "name": "박테민",
+        "original_id": "N061",
+        "asset_filename": "036.png",
+        "asset_path": "NORMAL/M/036.png"
+      },
+      {
+        "slot": "037",
+        "gender": "M",
+        "name": "도토릭",
+        "original_id": "N062",
+        "asset_filename": "037.png",
+        "asset_path": "NORMAL/M/037.png"
+      },
+      {
+        "slot": "038",
+        "gender": "M",
+        "name": "구마유샤",
+        "original_id": "N063",
+        "asset_filename": "038.png",
+        "asset_path": "NORMAL/M/038.png"
+      },
+      {
+        "slot": "039",
+        "gender": "M",
+        "name": "미수가르",
+        "original_id": "N064",
+        "asset_filename": "039.png",
+        "asset_path": "NORMAL/M/039.png"
+      },
+      {
+        "slot": "040",
+        "gender": "M",
+        "name": "솔바울",
+        "original_id": "N065",
+        "asset_filename": "040.png",
+        "asset_path": "NORMAL/M/040.png"
+      },
+      {
+        "slot": "041",
+        "gender": "M",
+        "name": "달마지오",
+        "original_id": "N066",
+        "asset_filename": "041.png",
+        "asset_path": "NORMAL/M/041.png"
+      },
+      {
+        "slot": "042",
+        "gender": "M",
+        "name": "참세르",
+        "original_id": "N067",
+        "asset_filename": "042.png",
+        "asset_path": "NORMAL/M/042.png"
+      },
+      {
+        "slot": "043",
+        "gender": "M",
+        "name": "민들로",
+        "original_id": "N068",
+        "asset_filename": "043.png",
+        "asset_path": "NORMAL/M/043.png"
+      },
+      {
+        "slot": "044",
+        "gender": "M",
+        "name": "담비르",
+        "original_id": "N069",
+        "asset_filename": "044.png",
+        "asset_path": "NORMAL/M/044.png"
+      },
+      {
+        "slot": "045",
+        "gender": "M",
+        "name": "호두안",
+        "original_id": "N070",
+        "asset_filename": "045.png",
+        "asset_path": "NORMAL/M/045.png"
+      },
+      {
+        "slot": "046",
+        "gender": "M",
+        "name": "밤톨란",
+        "original_id": "N071",
+        "asset_filename": "046.png",
+        "asset_path": "NORMAL/M/046.png"
+      },
+      {
+        "slot": "047",
+        "gender": "M",
+        "name": "두루미르",
+        "original_id": "N072",
+        "asset_filename": "047.png",
+        "asset_path": "NORMAL/M/047.png"
+      },
+      {
+        "slot": "048",
+        "gender": "M",
+        "name": "송로안",
+        "original_id": "N073",
+        "asset_filename": "048.png",
+        "asset_path": "NORMAL/M/048.png"
+      },
+      {
+        "slot": "049",
+        "gender": "M",
+        "name": "감초르",
+        "original_id": "N074",
+        "asset_filename": "049.png",
+        "asset_path": "NORMAL/M/049.png"
+      },
+      {
+        "slot": "050",
+        "gender": "M",
+        "name": "대쥬안",
+        "original_id": "N075",
+        "asset_filename": "050.png",
+        "asset_path": "NORMAL/M/050.png"
+      },
+      {
+        "slot": "051",
+        "gender": "M",
+        "name": "데프틴",
+        "original_id": "N101",
+        "asset_filename": "051.png",
+        "asset_path": "NORMAL/M/051.png"
+      },
+      {
+        "slot": "052",
+        "gender": "M",
+        "name": "쇼메르",
+        "original_id": "N102",
+        "asset_filename": "052.png",
+        "asset_path": "NORMAL/M/052.png"
+      },
+      {
+        "slot": "053",
+        "gender": "M",
+        "name": "카니온",
+        "original_id": "N103",
+        "asset_filename": "053.png",
+        "asset_path": "NORMAL/M/053.png"
+      },
+      {
+        "slot": "054",
+        "gender": "M",
+        "name": "피네트",
+        "original_id": "N104",
+        "asset_filename": "054.png",
+        "asset_path": "NORMAL/M/054.png"
+      },
+      {
+        "slot": "055",
+        "gender": "M",
+        "name": "벤기르",
+        "original_id": "N105",
+        "asset_filename": "055.png",
+        "asset_path": "NORMAL/M/055.png"
+      },
+      {
+        "slot": "056",
+        "gender": "M",
+        "name": "마티아",
+        "original_id": "N106",
+        "asset_filename": "056.png",
+        "asset_path": "NORMAL/M/056.png"
+      },
+      {
+        "slot": "057",
+        "gender": "M",
+        "name": "오네르",
+        "original_id": "N107",
+        "asset_filename": "057.png",
+        "asset_path": "NORMAL/M/057.png"
+      },
+      {
+        "slot": "058",
+        "gender": "M",
+        "name": "스메브",
+        "original_id": "N108",
+        "asset_filename": "058.png",
+        "asset_path": "NORMAL/M/058.png"
+      },
+      {
+        "slot": "059",
+        "gender": "M",
+        "name": "리헨스",
+        "original_id": "N109",
+        "asset_filename": "059.png",
+        "asset_path": "NORMAL/M/059.png"
+      },
+      {
+        "slot": "060",
+        "gender": "M",
+        "name": "바이페르",
+        "original_id": "N110",
+        "asset_filename": "060.png",
+        "asset_path": "NORMAL/M/060.png"
+      },
+      {
+        "slot": "061",
+        "gender": "M",
+        "name": "오두막스",
+        "original_id": "N111",
+        "asset_filename": "061.png",
+        "asset_path": "NORMAL/M/061.png"
+      },
+      {
+        "slot": "062",
+        "gender": "M",
+        "name": "누룬지오",
+        "original_id": "N112",
+        "asset_filename": "062.png",
+        "asset_path": "NORMAL/M/062.png"
+      },
+      {
+        "slot": "063",
+        "gender": "M",
+        "name": "된자르",
+        "original_id": "N113",
+        "asset_filename": "063.png",
+        "asset_path": "NORMAL/M/063.png"
+      },
+      {
+        "slot": "064",
+        "gender": "M",
+        "name": "생가르",
+        "original_id": "N114",
+        "asset_filename": "064.png",
+        "asset_path": "NORMAL/M/064.png"
+      },
+      {
+        "slot": "065",
+        "gender": "M",
+        "name": "참케르",
+        "original_id": "N115",
+        "asset_filename": "065.png",
+        "asset_path": "NORMAL/M/065.png"
+      },
+      {
+        "slot": "066",
+        "gender": "M",
+        "name": "대쥬르",
+        "original_id": "N116",
+        "asset_filename": "066.png",
+        "asset_path": "NORMAL/M/066.png"
+      },
+      {
+        "slot": "067",
+        "gender": "M",
+        "name": "고드렐",
+        "original_id": "N117",
+        "asset_filename": "067.png",
+        "asset_path": "NORMAL/M/067.png"
+      },
+      {
+        "slot": "068",
+        "gender": "M",
+        "name": "버드나르",
+        "original_id": "N118",
+        "asset_filename": "068.png",
+        "asset_path": "NORMAL/M/068.png"
+      },
+      {
+        "slot": "069",
+        "gender": "M",
+        "name": "태베크",
+        "original_id": "N119",
+        "asset_filename": "069.png",
+        "asset_path": "NORMAL/M/069.png"
+      },
+      {
+        "slot": "070",
+        "gender": "M",
+        "name": "설라크",
+        "original_id": "N120",
+        "asset_filename": "070.png",
+        "asset_path": "NORMAL/M/070.png"
+      },
+      {
+        "slot": "071",
+        "gender": "M",
+        "name": "다시마로",
+        "original_id": "N121",
+        "asset_filename": "071.png",
+        "asset_path": "NORMAL/M/071.png"
+      },
+      {
+        "slot": "072",
+        "gender": "M",
+        "name": "옥수렌",
+        "original_id": "N122",
+        "asset_filename": "072.png",
+        "asset_path": "NORMAL/M/072.png"
+      },
+      {
+        "slot": "073",
+        "gender": "M",
+        "name": "감자크",
+        "original_id": "N123",
+        "asset_filename": "073.png",
+        "asset_path": "NORMAL/M/073.png"
+      },
+      {
+        "slot": "074",
+        "gender": "M",
+        "name": "앵두르",
+        "original_id": "N124",
+        "asset_filename": "074.png",
+        "asset_path": "NORMAL/M/074.png"
+      },
+      {
+        "slot": "075",
+        "gender": "M",
+        "name": "가마솔",
+        "original_id": "N125",
+        "asset_filename": "075.png",
+        "asset_path": "NORMAL/M/075.png"
+      },
+      {
+        "slot": "076",
+        "gender": "M",
+        "name": "룰레인",
+        "original_id": "N151",
+        "asset_filename": "076.png",
+        "asset_path": "NORMAL/M/076.png"
+      },
+      {
+        "slot": "077",
+        "gender": "M",
+        "name": "스코렌",
+        "original_id": "N152",
+        "asset_filename": "077.png",
+        "asset_path": "NORMAL/M/077.png"
+      },
+      {
+        "slot": "078",
+        "gender": "M",
+        "name": "프레이든",
+        "original_id": "N153",
+        "asset_filename": "078.png",
+        "asset_path": "NORMAL/M/078.png"
+      },
+      {
+        "slot": "079",
+        "gender": "M",
+        "name": "택욘",
+        "original_id": "N154",
+        "asset_filename": "079.png",
+        "asset_path": "NORMAL/M/079.png"
+      },
+      {
+        "slot": "080",
+        "gender": "M",
+        "name": "문호젠",
+        "original_id": "N155",
+        "asset_filename": "080.png",
+        "asset_path": "NORMAL/M/080.png"
+      },
+      {
+        "slot": "081",
+        "gender": "M",
+        "name": "솔키르",
+        "original_id": "N156",
+        "asset_filename": "081.png",
+        "asset_path": "NORMAL/M/081.png"
+      },
+      {
+        "slot": "082",
+        "gender": "M",
+        "name": "제스틴",
+        "original_id": "N157",
+        "asset_filename": "082.png",
+        "asset_path": "NORMAL/M/082.png"
+      },
+      {
+        "slot": "083",
+        "gender": "M",
+        "name": "로구엔",
+        "original_id": "N158",
+        "asset_filename": "083.png",
+        "asset_path": "NORMAL/M/083.png"
+      },
+      {
+        "slot": "084",
+        "gender": "M",
+        "name": "트래븐",
+        "original_id": "N159",
+        "asset_filename": "084.png",
+        "asset_path": "NORMAL/M/084.png"
+      },
+      {
+        "slot": "085",
+        "gender": "M",
+        "name": "도란테",
+        "original_id": "N160",
+        "asset_filename": "085.png",
+        "asset_path": "NORMAL/M/085.png"
+      },
+      {
+        "slot": "086",
+        "gender": "M",
+        "name": "나루베",
+        "original_id": "N161",
+        "asset_filename": "086.png",
+        "asset_path": "NORMAL/M/086.png"
+      },
+      {
+        "slot": "087",
+        "gender": "M",
+        "name": "산드람",
+        "original_id": "N162",
+        "asset_filename": "087.png",
+        "asset_path": "NORMAL/M/087.png"
+      },
+      {
+        "slot": "088",
+        "gender": "M",
+        "name": "메아룬",
+        "original_id": "N163",
+        "asset_filename": "088.png",
+        "asset_path": "NORMAL/M/088.png"
+      },
+      {
+        "slot": "089",
+        "gender": "M",
+        "name": "쵸베른",
+        "original_id": "N164",
+        "asset_filename": "089.png",
+        "asset_path": "NORMAL/M/089.png"
+      },
+      {
+        "slot": "090",
+        "gender": "M",
+        "name": "골모크",
+        "original_id": "N165",
+        "asset_filename": "090.png",
+        "asset_path": "NORMAL/M/090.png"
+      },
+      {
+        "slot": "091",
+        "gender": "M",
+        "name": "장도크",
+        "original_id": "N166",
+        "asset_filename": "091.png",
+        "asset_path": "NORMAL/M/091.png"
+      },
+      {
+        "slot": "092",
+        "gender": "M",
+        "name": "메도르",
+        "original_id": "N167",
+        "asset_filename": "092.png",
+        "asset_path": "NORMAL/M/092.png"
+      },
+      {
+        "slot": "093",
+        "gender": "M",
+        "name": "그루멜",
+        "original_id": "N168",
+        "asset_filename": "093.png",
+        "asset_path": "NORMAL/M/093.png"
+      },
+      {
+        "slot": "094",
+        "gender": "M",
+        "name": "베루안",
+        "original_id": "N169",
+        "asset_filename": "094.png",
+        "asset_path": "NORMAL/M/094.png"
+      },
+      {
+        "slot": "095",
+        "gender": "M",
+        "name": "부엔기",
+        "original_id": "N170",
+        "asset_filename": "095.png",
+        "asset_path": "NORMAL/M/095.png"
+      },
+      {
+        "slot": "096",
+        "gender": "M",
+        "name": "갈데오",
+        "original_id": "N171",
+        "asset_filename": "096.png",
+        "asset_path": "NORMAL/M/096.png"
+      },
+      {
+        "slot": "097",
+        "gender": "M",
+        "name": "주렌타",
+        "original_id": "N172",
+        "asset_filename": "097.png",
+        "asset_path": "NORMAL/M/097.png"
+      },
+      {
+        "slot": "098",
+        "gender": "M",
+        "name": "바소트",
+        "original_id": "N173",
+        "asset_filename": "098.png",
+        "asset_path": "NORMAL/M/098.png"
+      },
+      {
+        "slot": "099",
+        "gender": "M",
+        "name": "모시락",
+        "original_id": "N174",
+        "asset_filename": "099.png",
+        "asset_path": "NORMAL/M/099.png"
+      },
+      {
+        "slot": "100",
+        "gender": "M",
+        "name": "도르레오",
+        "original_id": "N175",
+        "asset_filename": "100.png",
+        "asset_path": "NORMAL/M/100.png"
+      }
+    ],
+    "F": [
+      {
+        "slot": "001",
+        "gender": "F",
+        "name": "지오니아",
+        "original_id": "N026",
+        "asset_filename": "001.png",
+        "asset_path": "NORMAL/F/001.png"
+      },
+      {
+        "slot": "002",
+        "gender": "F",
+        "name": "나린솔",
+        "original_id": "N027",
+        "asset_filename": "002.png",
+        "asset_path": "NORMAL/F/002.png"
+      },
+      {
+        "slot": "003",
+        "gender": "F",
+        "name": "다래온",
+        "original_id": "N028",
+        "asset_filename": "003.png",
+        "asset_path": "NORMAL/F/003.png"
+      },
+      {
+        "slot": "004",
+        "gender": "F",
+        "name": "소담린",
+        "original_id": "N029",
+        "asset_filename": "004.png",
+        "asset_path": "NORMAL/F/004.png"
+      },
+      {
+        "slot": "005",
+        "gender": "F",
+        "name": "가람비",
+        "original_id": "N030",
+        "asset_filename": "005.png",
+        "asset_path": "NORMAL/F/005.png"
+      },
+      {
+        "slot": "006",
+        "gender": "F",
+        "name": "모아린",
+        "original_id": "N031",
+        "asset_filename": "006.png",
+        "asset_path": "NORMAL/F/006.png"
+      },
+      {
+        "slot": "007",
+        "gender": "F",
+        "name": "새온비",
+        "original_id": "N032",
+        "asset_filename": "007.png",
+        "asset_path": "NORMAL/F/007.png"
+      },
+      {
+        "slot": "008",
+        "gender": "F",
+        "name": "여울라",
+        "original_id": "N033",
+        "asset_filename": "008.png",
+        "asset_path": "NORMAL/F/008.png"
+      },
+      {
+        "slot": "009",
+        "gender": "F",
+        "name": "은결비",
+        "original_id": "N034",
+        "asset_filename": "009.png",
+        "asset_path": "NORMAL/F/009.png"
+      },
+      {
+        "slot": "010",
+        "gender": "F",
+        "name": "초롱하",
+        "original_id": "N035",
+        "asset_filename": "010.png",
+        "asset_path": "NORMAL/F/010.png"
+      },
+      {
+        "slot": "011",
+        "gender": "F",
+        "name": "아라온",
+        "original_id": "N036",
+        "asset_filename": "011.png",
+        "asset_path": "NORMAL/F/011.png"
+      },
+      {
+        "slot": "012",
+        "gender": "F",
+        "name": "세아린",
+        "original_id": "N037",
+        "asset_filename": "012.png",
+        "asset_path": "NORMAL/F/012.png"
+      },
+      {
+        "slot": "013",
+        "gender": "F",
+        "name": "보름하",
+        "original_id": "N038",
+        "asset_filename": "013.png",
+        "asset_path": "NORMAL/F/013.png"
+      },
+      {
+        "slot": "014",
+        "gender": "F",
+        "name": "나래온",
+        "original_id": "N039",
+        "asset_filename": "014.png",
+        "asset_path": "NORMAL/F/014.png"
+      },
+      {
+        "slot": "015",
+        "gender": "F",
+        "name": "미르아",
+        "original_id": "N040",
+        "asset_filename": "015.png",
+        "asset_path": "NORMAL/F/015.png"
+      },
+      {
+        "slot": "016",
+        "gender": "F",
+        "name": "다온설",
+        "original_id": "N041",
+        "asset_filename": "016.png",
+        "asset_path": "NORMAL/F/016.png"
+      },
+      {
+        "slot": "017",
+        "gender": "F",
+        "name": "서리안",
+        "original_id": "N042",
+        "asset_filename": "017.png",
+        "asset_path": "NORMAL/F/017.png"
+      },
+      {
+        "slot": "018",
+        "gender": "F",
+        "name": "카르미나",
+        "original_id": "N043",
+        "asset_filename": "018.png",
+        "asset_path": "NORMAL/F/018.png"
+      },
+      {
+        "slot": "019",
+        "gender": "F",
+        "name": "진달레아",
+        "original_id": "N044",
+        "asset_filename": "019.png",
+        "asset_path": "NORMAL/F/019.png"
+      },
+      {
+        "slot": "020",
+        "gender": "F",
+        "name": "수지엘",
+        "original_id": "N045",
+        "asset_filename": "020.png",
+        "asset_path": "NORMAL/F/020.png"
+      },
+      {
+        "slot": "021",
+        "gender": "F",
+        "name": "카리냐",
+        "original_id": "N046",
+        "asset_filename": "021.png",
+        "asset_path": "NORMAL/F/021.png"
+      },
+      {
+        "slot": "022",
+        "gender": "F",
+        "name": "개나리아",
+        "original_id": "N047",
+        "asset_filename": "022.png",
+        "asset_path": "NORMAL/F/022.png"
+      },
+      {
+        "slot": "023",
+        "gender": "F",
+        "name": "메이실",
+        "original_id": "N048",
+        "asset_filename": "023.png",
+        "asset_path": "NORMAL/F/023.png"
+      },
+      {
+        "slot": "024",
+        "gender": "F",
+        "name": "모레아",
+        "original_id": "N049",
+        "asset_filename": "024.png",
+        "asset_path": "NORMAL/F/024.png"
+      },
+      {
+        "slot": "025",
+        "gender": "F",
+        "name": "김고웬",
+        "original_id": "N050",
+        "asset_filename": "025.png",
+        "asset_path": "NORMAL/F/025.png"
+      },
+      {
+        "slot": "026",
+        "gender": "F",
+        "name": "킴연느",
+        "original_id": "N076",
+        "asset_filename": "026.png",
+        "asset_path": "NORMAL/F/026.png"
+      },
+      {
+        "slot": "027",
+        "gender": "F",
+        "name": "전지엔",
+        "original_id": "N077",
+        "asset_filename": "027.png",
+        "asset_path": "NORMAL/F/027.png"
+      },
+      {
+        "slot": "028",
+        "gender": "F",
+        "name": "송헤이오",
+        "original_id": "N078",
+        "asset_filename": "028.png",
+        "asset_path": "NORMAL/F/028.png"
+      },
+      {
+        "slot": "029",
+        "gender": "F",
+        "name": "소네진",
+        "original_id": "N079",
+        "asset_filename": "029.png",
+        "asset_path": "NORMAL/F/029.png"
+      },
+      {
+        "slot": "030",
+        "gender": "F",
+        "name": "킴타리",
+        "original_id": "N080",
+        "asset_filename": "030.png",
+        "asset_path": "NORMAL/F/030.png"
+      },
+      {
+        "slot": "031",
+        "gender": "F",
+        "name": "박시네아",
+        "original_id": "N081",
+        "asset_filename": "031.png",
+        "asset_path": "NORMAL/F/031.png"
+      },
+      {
+        "slot": "032",
+        "gender": "F",
+        "name": "배두니아",
+        "original_id": "N082",
+        "asset_filename": "032.png",
+        "asset_path": "NORMAL/F/032.png"
+      },
+      {
+        "slot": "033",
+        "gender": "F",
+        "name": "하지웬",
+        "original_id": "N083",
+        "asset_filename": "033.png",
+        "asset_path": "NORMAL/F/033.png"
+      },
+      {
+        "slot": "034",
+        "gender": "F",
+        "name": "정유메",
+        "original_id": "N084",
+        "asset_filename": "034.png",
+        "asset_path": "NORMAL/F/034.png"
+      },
+      {
+        "slot": "035",
+        "gender": "F",
+        "name": "박은비나",
+        "original_id": "N085",
+        "asset_filename": "035.png",
+        "asset_path": "NORMAL/F/035.png"
+      },
+      {
+        "slot": "036",
+        "gender": "F",
+        "name": "민드레아",
+        "original_id": "N086",
+        "asset_filename": "036.png",
+        "asset_path": "NORMAL/F/036.png"
+      },
+      {
+        "slot": "037",
+        "gender": "F",
+        "name": "금잔느",
+        "original_id": "N087",
+        "asset_filename": "037.png",
+        "asset_path": "NORMAL/F/037.png"
+      },
+      {
+        "slot": "038",
+        "gender": "F",
+        "name": "모크렌",
+        "original_id": "N088",
+        "asset_filename": "038.png",
+        "asset_path": "NORMAL/F/038.png"
+      },
+      {
+        "slot": "039",
+        "gender": "F",
+        "name": "목레아",
+        "original_id": "N089",
+        "asset_filename": "039.png",
+        "asset_path": "NORMAL/F/039.png"
+      },
+      {
+        "slot": "040",
+        "gender": "F",
+        "name": "복샤나",
+        "original_id": "N090",
+        "asset_filename": "040.png",
+        "asset_path": "NORMAL/F/040.png"
+      },
+      {
+        "slot": "041",
+        "gender": "F",
+        "name": "살구엔",
+        "original_id": "N091",
+        "asset_filename": "041.png",
+        "asset_path": "NORMAL/F/041.png"
+      },
+      {
+        "slot": "042",
+        "gender": "F",
+        "name": "달무리아",
+        "original_id": "N092",
+        "asset_filename": "042.png",
+        "asset_path": "NORMAL/F/042.png"
+      },
+      {
+        "slot": "043",
+        "gender": "F",
+        "name": "반디루",
+        "original_id": "N093",
+        "asset_filename": "043.png",
+        "asset_path": "NORMAL/F/043.png"
+      },
+      {
+        "slot": "044",
+        "gender": "F",
+        "name": "라이라크",
+        "original_id": "N094",
+        "asset_filename": "044.png",
+        "asset_path": "NORMAL/F/044.png"
+      },
+      {
+        "slot": "045",
+        "gender": "F",
+        "name": "오미자니아",
+        "original_id": "N095",
+        "asset_filename": "045.png",
+        "asset_path": "NORMAL/F/045.png"
+      },
+      {
+        "slot": "046",
+        "gender": "F",
+        "name": "보리샤",
+        "original_id": "N096",
+        "asset_filename": "046.png",
+        "asset_path": "NORMAL/F/046.png"
+      },
+      {
+        "slot": "047",
+        "gender": "F",
+        "name": "유자샤",
+        "original_id": "N097",
+        "asset_filename": "047.png",
+        "asset_path": "NORMAL/F/047.png"
+      },
+      {
+        "slot": "048",
+        "gender": "F",
+        "name": "해바라니",
+        "original_id": "N098",
+        "asset_filename": "048.png",
+        "asset_path": "NORMAL/F/048.png"
+      },
+      {
+        "slot": "049",
+        "gender": "F",
+        "name": "라벤느",
+        "original_id": "N099",
+        "asset_filename": "049.png",
+        "asset_path": "NORMAL/F/049.png"
+      },
+      {
+        "slot": "050",
+        "gender": "F",
+        "name": "자두아",
+        "original_id": "N100",
+        "asset_filename": "050.png",
+        "asset_path": "NORMAL/F/050.png"
+      },
+      {
+        "slot": "051",
+        "gender": "F",
+        "name": "타래안",
+        "original_id": "N126",
+        "asset_filename": "051.png",
+        "asset_path": "NORMAL/F/051.png"
+      },
+      {
+        "slot": "052",
+        "gender": "F",
+        "name": "카라멜리",
+        "original_id": "N127",
+        "asset_filename": "052.png",
+        "asset_path": "NORMAL/F/052.png"
+      },
+      {
+        "slot": "053",
+        "gender": "F",
+        "name": "아지랑",
+        "original_id": "N128",
+        "asset_filename": "053.png",
+        "asset_path": "NORMAL/F/053.png"
+      },
+      {
+        "slot": "054",
+        "gender": "F",
+        "name": "차부나니",
+        "original_id": "N129",
+        "asset_filename": "054.png",
+        "asset_path": "NORMAL/F/054.png"
+      },
+      {
+        "slot": "055",
+        "gender": "F",
+        "name": "인젤미",
+        "original_id": "N130",
+        "asset_filename": "055.png",
+        "asset_path": "NORMAL/F/055.png"
+      },
+      {
+        "slot": "056",
+        "gender": "F",
+        "name": "제시콧",
+        "original_id": "N131",
+        "asset_filename": "056.png",
+        "asset_path": "NORMAL/F/056.png"
+      },
+      {
+        "slot": "057",
+        "gender": "F",
+        "name": "복숭애",
+        "original_id": "N132",
+        "asset_filename": "057.png",
+        "asset_path": "NORMAL/F/057.png"
+      },
+      {
+        "slot": "058",
+        "gender": "F",
+        "name": "시나몽",
+        "original_id": "N133",
+        "asset_filename": "058.png",
+        "asset_path": "NORMAL/F/058.png"
+      },
+      {
+        "slot": "059",
+        "gender": "F",
+        "name": "다르미",
+        "original_id": "N134",
+        "asset_filename": "059.png",
+        "asset_path": "NORMAL/F/059.png"
+      },
+      {
+        "slot": "060",
+        "gender": "F",
+        "name": "팔레",
+        "original_id": "N135",
+        "asset_filename": "060.png",
+        "asset_path": "NORMAL/F/060.png"
+      },
+      {
+        "slot": "061",
+        "gender": "F",
+        "name": "세냥",
+        "original_id": "N136",
+        "asset_filename": "061.png",
+        "asset_path": "NORMAL/F/061.png"
+      },
+      {
+        "slot": "062",
+        "gender": "F",
+        "name": "바그니",
+        "original_id": "N137",
+        "asset_filename": "062.png",
+        "asset_path": "NORMAL/F/062.png"
+      },
+      {
+        "slot": "063",
+        "gender": "F",
+        "name": "차잔느",
+        "original_id": "N138",
+        "asset_filename": "063.png",
+        "asset_path": "NORMAL/F/063.png"
+      },
+      {
+        "slot": "064",
+        "gender": "F",
+        "name": "수겐",
+        "original_id": "N139",
+        "asset_filename": "064.png",
+        "asset_path": "NORMAL/F/064.png"
+      },
+      {
+        "slot": "065",
+        "gender": "F",
+        "name": "오란데",
+        "original_id": "N140",
+        "asset_filename": "065.png",
+        "asset_path": "NORMAL/F/065.png"
+      },
+      {
+        "slot": "066",
+        "gender": "F",
+        "name": "마카렌",
+        "original_id": "N141",
+        "asset_filename": "066.png",
+        "asset_path": "NORMAL/F/066.png"
+      },
+      {
+        "slot": "067",
+        "gender": "F",
+        "name": "자몽드",
+        "original_id": "N142",
+        "asset_filename": "067.png",
+        "asset_path": "NORMAL/F/067.png"
+      },
+      {
+        "slot": "068",
+        "gender": "F",
+        "name": "모카벨",
+        "original_id": "N143",
+        "asset_filename": "068.png",
+        "asset_path": "NORMAL/F/068.png"
+      },
+      {
+        "slot": "069",
+        "gender": "F",
+        "name": "비닐라",
+        "original_id": "N144",
+        "asset_filename": "069.png",
+        "asset_path": "NORMAL/F/069.png"
+      },
+      {
+        "slot": "070",
+        "gender": "F",
+        "name": "새초미",
+        "original_id": "N145",
+        "asset_filename": "070.png",
+        "asset_path": "NORMAL/F/070.png"
+      },
+      {
+        "slot": "071",
+        "gender": "F",
+        "name": "아리둥",
+        "original_id": "N146",
+        "asset_filename": "071.png",
+        "asset_path": "NORMAL/F/071.png"
+      },
+      {
+        "slot": "072",
+        "gender": "F",
+        "name": "몽그리",
+        "original_id": "N147",
+        "asset_filename": "072.png",
+        "asset_path": "NORMAL/F/072.png"
+      },
+      {
+        "slot": "073",
+        "gender": "F",
+        "name": "고구메",
+        "original_id": "N148",
+        "asset_filename": "073.png",
+        "asset_path": "NORMAL/F/073.png"
+      },
+      {
+        "slot": "074",
+        "gender": "F",
+        "name": "호테카",
+        "original_id": "N149",
+        "asset_filename": "074.png",
+        "asset_path": "NORMAL/F/074.png"
+      },
+      {
+        "slot": "075",
+        "gender": "F",
+        "name": "수세나",
+        "original_id": "N150",
+        "asset_filename": "075.png",
+        "asset_path": "NORMAL/F/075.png"
+      },
+      {
+        "slot": "076",
+        "gender": "F",
+        "name": "나파콧",
+        "original_id": "N176",
+        "asset_filename": "076.png",
+        "asset_path": "NORMAL/F/076.png"
+      },
+      {
+        "slot": "077",
+        "gender": "F",
+        "name": "봉수애",
+        "original_id": "N177",
+        "asset_filename": "077.png",
+        "asset_path": "NORMAL/F/077.png"
+      },
+      {
+        "slot": "078",
+        "gender": "F",
+        "name": "맨드라민",
+        "original_id": "N178",
+        "asset_filename": "078.png",
+        "asset_path": "NORMAL/F/078.png"
+      },
+      {
+        "slot": "079",
+        "gender": "F",
+        "name": "참웨라",
+        "original_id": "N179",
+        "asset_filename": "079.png",
+        "asset_path": "NORMAL/F/079.png"
+      },
+      {
+        "slot": "080",
+        "gender": "F",
+        "name": "물망쵸",
+        "original_id": "N180",
+        "asset_filename": "080.png",
+        "asset_path": "NORMAL/F/080.png"
+      },
+      {
+        "slot": "081",
+        "gender": "F",
+        "name": "달고네",
+        "original_id": "N181",
+        "asset_filename": "081.png",
+        "asset_path": "NORMAL/F/081.png"
+      },
+      {
+        "slot": "082",
+        "gender": "F",
+        "name": "야콰",
+        "original_id": "N182",
+        "asset_filename": "082.png",
+        "asset_path": "NORMAL/F/082.png"
+      },
+      {
+        "slot": "083",
+        "gender": "F",
+        "name": "단쥬",
+        "original_id": "N183",
+        "asset_filename": "083.png",
+        "asset_path": "NORMAL/F/083.png"
+      },
+      {
+        "slot": "084",
+        "gender": "F",
+        "name": "주메니",
+        "original_id": "N184",
+        "asset_filename": "084.png",
+        "asset_path": "NORMAL/F/084.png"
+      },
+      {
+        "slot": "085",
+        "gender": "F",
+        "name": "비녜",
+        "original_id": "N185",
+        "asset_filename": "085.png",
+        "asset_path": "NORMAL/F/085.png"
+      },
+      {
+        "slot": "086",
+        "gender": "F",
+        "name": "노르게",
+        "original_id": "N186",
+        "asset_filename": "086.png",
+        "asset_path": "NORMAL/F/086.png"
+      },
+      {
+        "slot": "087",
+        "gender": "F",
+        "name": "바넬",
+        "original_id": "N187",
+        "asset_filename": "087.png",
+        "asset_path": "NORMAL/F/087.png"
+      },
+      {
+        "slot": "088",
+        "gender": "F",
+        "name": "실타렌",
+        "original_id": "N188",
+        "asset_filename": "088.png",
+        "asset_path": "NORMAL/F/088.png"
+      },
+      {
+        "slot": "089",
+        "gender": "F",
+        "name": "비자룬",
+        "original_id": "N189",
+        "asset_filename": "089.png",
+        "asset_path": "NORMAL/F/089.png"
+      },
+      {
+        "slot": "090",
+        "gender": "F",
+        "name": "누가렛",
+        "original_id": "N190",
+        "asset_filename": "090.png",
+        "asset_path": "NORMAL/F/090.png"
+      },
+      {
+        "slot": "091",
+        "gender": "F",
+        "name": "양프네",
+        "original_id": "N191",
+        "asset_filename": "091.png",
+        "asset_path": "NORMAL/F/091.png"
+      },
+      {
+        "slot": "092",
+        "gender": "F",
+        "name": "데야",
+        "original_id": "N192",
+        "asset_filename": "092.png",
+        "asset_path": "NORMAL/F/092.png"
+      },
+      {
+        "slot": "093",
+        "gender": "F",
+        "name": "리보나",
+        "original_id": "N193",
+        "asset_filename": "093.png",
+        "asset_path": "NORMAL/F/093.png"
+      },
+      {
+        "slot": "094",
+        "gender": "F",
+        "name": "자게미",
+        "original_id": "N194",
+        "asset_filename": "094.png",
+        "asset_path": "NORMAL/F/094.png"
+      },
+      {
+        "slot": "095",
+        "gender": "F",
+        "name": "쿠레미",
+        "original_id": "N195",
+        "asset_filename": "095.png",
+        "asset_path": "NORMAL/F/095.png"
+      },
+      {
+        "slot": "096",
+        "gender": "F",
+        "name": "아프리마",
+        "original_id": "N196",
+        "asset_filename": "096.png",
+        "asset_path": "NORMAL/F/096.png"
+      },
+      {
+        "slot": "097",
+        "gender": "F",
+        "name": "레니콧",
+        "original_id": "N197",
+        "asset_filename": "097.png",
+        "asset_path": "NORMAL/F/097.png"
+      },
+      {
+        "slot": "098",
+        "gender": "F",
+        "name": "바라게",
+        "original_id": "N198",
+        "asset_filename": "098.png",
+        "asset_path": "NORMAL/F/098.png"
+      },
+      {
+        "slot": "099",
+        "gender": "F",
+        "name": "구세라",
+        "original_id": "N199",
+        "asset_filename": "099.png",
+        "asset_path": "NORMAL/F/099.png"
+      },
+      {
+        "slot": "100",
+        "gender": "F",
+        "name": "바울리",
+        "original_id": "N200",
+        "asset_filename": "100.png",
+        "asset_path": "NORMAL/F/100.png"
+      }
+    ]
+  },
+  "easter": [
+    {
+      "id": "E001",
+      "name": "요화니우스",
+      "gender": "M",
+      "pool": "easter",
+      "random_eligible": false,
+      "asset_gender_tag": "M",
+      "specific_asset_id": null
+    },
+    {
+      "id": "E002",
+      "name": "상혀크",
+      "gender": "M",
+      "pool": "easter",
+      "random_eligible": false,
+      "asset_gender_tag": "M",
+      "specific_asset_id": null
+    },
+    {
+      "id": "E003",
+      "name": "진호르",
+      "gender": "M",
+      "pool": "easter",
+      "random_eligible": false,
+      "asset_gender_tag": "M",
+      "specific_asset_id": null
+    }
+  ],
+  "boss": [
+    {
+      "id": "B001",
+      "boss_id": "WRATH",
+      "sin": "분노",
+      "name": "래스",
+      "full_name": "분노의 마왕 래스",
+      "pool": "boss",
+      "random_eligible": false,
+      "fixed_identity": true
+    },
+    {
+      "id": "B002",
+      "boss_id": "PRIDE",
+      "sin": "오만",
+      "name": "프라이드",
+      "full_name": "오만의 마왕 프라이드",
+      "pool": "boss",
+      "random_eligible": false,
+      "fixed_identity": true
+    },
+    {
+      "id": "B003",
+      "boss_id": "ENVY",
+      "sin": "질투",
+      "name": "엔비",
+      "full_name": "질투의 마왕 엔비",
+      "pool": "boss",
+      "random_eligible": false,
+      "fixed_identity": true
+    },
+    {
+      "id": "B004",
+      "boss_id": "GREED",
+      "sin": "탐욕",
+      "name": "그리드",
+      "full_name": "탐욕의 마왕 그리드",
+      "pool": "boss",
+      "random_eligible": false,
+      "fixed_identity": true
+    },
+    {
+      "id": "B005",
+      "boss_id": "GLUTTONY",
+      "sin": "폭식",
+      "name": "글러트니",
+      "full_name": "폭식의 마왕 글러트니",
+      "pool": "boss",
+      "random_eligible": false,
+      "fixed_identity": true
+    },
+    {
+      "id": "B006",
+      "boss_id": "LUST",
+      "sin": "색욕",
+      "name": "러스트",
+      "full_name": "색욕의 마왕 러스트",
+      "pool": "boss",
+      "random_eligible": false,
+      "fixed_identity": true
+    },
+    {
+      "id": "B007",
+      "boss_id": "SLOTH",
+      "sin": "나태",
+      "name": "슬로스",
+      "full_name": "나태의 마왕 슬로스",
+      "pool": "boss",
+      "random_eligible": false,
+      "fixed_identity": true
+    }
+  ]
+}

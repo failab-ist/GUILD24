@@ -1,0 +1,1006 @@
+{
+  "M": [
+    {
+      "original_id": "N001",
+      "slot": "001",
+      "name": "민자이"
+    },
+    {
+      "original_id": "N002",
+      "slot": "002",
+      "name": "고쉬스앵"
+    },
+    {
+      "original_id": "N003",
+      "slot": "003",
+      "name": "마루진"
+    },
+    {
+      "original_id": "N004",
+      "slot": "004",
+      "name": "한도람"
+    },
+    {
+      "original_id": "N005",
+      "slot": "005",
+      "name": "태오람"
+    },
+    {
+      "original_id": "N006",
+      "slot": "006",
+      "name": "도하르"
+    },
+    {
+      "original_id": "N007",
+      "slot": "007",
+      "name": "산도르"
+    },
+    {
+      "original_id": "N008",
+      "slot": "008",
+      "name": "장보르"
+    },
+    {
+      "original_id": "N009",
+      "slot": "009",
+      "name": "박하르"
+    },
+    {
+      "original_id": "N010",
+      "slot": "010",
+      "name": "오름찬"
+    },
+    {
+      "original_id": "N011",
+      "slot": "011",
+      "name": "로엔담"
+    },
+    {
+      "original_id": "N012",
+      "slot": "012",
+      "name": "베르한"
+    },
+    {
+      "original_id": "N013",
+      "slot": "013",
+      "name": "파크지송"
+    },
+    {
+      "original_id": "N014",
+      "slot": "014",
+      "name": "봉쥬노"
+    },
+    {
+      "original_id": "N015",
+      "slot": "015",
+      "name": "지드라고니아"
+    },
+    {
+      "original_id": "N016",
+      "slot": "016",
+      "name": "유제삭"
+    },
+    {
+      "original_id": "N017",
+      "slot": "017",
+      "name": "모다크"
+    },
+    {
+      "original_id": "N018",
+      "slot": "018",
+      "name": "장마르"
+    },
+    {
+      "original_id": "N019",
+      "slot": "019",
+      "name": "우바크"
+    },
+    {
+      "original_id": "N020",
+      "slot": "020",
+      "name": "세베크"
+    },
+    {
+      "original_id": "N021",
+      "slot": "021",
+      "name": "자가르"
+    },
+    {
+      "original_id": "N022",
+      "slot": "022",
+      "name": "파도르"
+    },
+    {
+      "original_id": "N023",
+      "slot": "023",
+      "name": "홍차드"
+    },
+    {
+      "original_id": "N024",
+      "slot": "024",
+      "name": "도라지오"
+    },
+    {
+      "original_id": "N025",
+      "slot": "025",
+      "name": "보리안"
+    },
+    {
+      "original_id": "N051",
+      "slot": "026",
+      "name": "차우엔"
+    },
+    {
+      "original_id": "N052",
+      "slot": "027",
+      "name": "리븐헌"
+    },
+    {
+      "original_id": "N053",
+      "slot": "028",
+      "name": "이유넬"
+    },
+    {
+      "original_id": "N054",
+      "slot": "029",
+      "name": "최연센"
+    },
+    {
+      "original_id": "N055",
+      "slot": "030",
+      "name": "이제도르"
+    },
+    {
+      "original_id": "N056",
+      "slot": "031",
+      "name": "이그라수"
+    },
+    {
+      "original_id": "N057",
+      "slot": "032",
+      "name": "원비노"
+    },
+    {
+      "original_id": "N058",
+      "slot": "033",
+      "name": "정우센"
+    },
+    {
+      "original_id": "N059",
+      "slot": "034",
+      "name": "마돈세크"
+    },
+    {
+      "original_id": "N060",
+      "slot": "035",
+      "name": "조세로"
+    },
+    {
+      "original_id": "N061",
+      "slot": "036",
+      "name": "박테민"
+    },
+    {
+      "original_id": "N062",
+      "slot": "037",
+      "name": "도토릭"
+    },
+    {
+      "original_id": "N063",
+      "slot": "038",
+      "name": "구마유샤"
+    },
+    {
+      "original_id": "N064",
+      "slot": "039",
+      "name": "미수가르"
+    },
+    {
+      "original_id": "N065",
+      "slot": "040",
+      "name": "솔바울"
+    },
+    {
+      "original_id": "N066",
+      "slot": "041",
+      "name": "달마지오"
+    },
+    {
+      "original_id": "N067",
+      "slot": "042",
+      "name": "참세르"
+    },
+    {
+      "original_id": "N068",
+      "slot": "043",
+      "name": "민들로"
+    },
+    {
+      "original_id": "N069",
+      "slot": "044",
+      "name": "담비르"
+    },
+    {
+      "original_id": "N070",
+      "slot": "045",
+      "name": "호두안"
+    },
+    {
+      "original_id": "N071",
+      "slot": "046",
+      "name": "밤톨란"
+    },
+    {
+      "original_id": "N072",
+      "slot": "047",
+      "name": "두루미르"
+    },
+    {
+      "original_id": "N073",
+      "slot": "048",
+      "name": "송로안"
+    },
+    {
+      "original_id": "N074",
+      "slot": "049",
+      "name": "감초르"
+    },
+    {
+      "original_id": "N075",
+      "slot": "050",
+      "name": "대쥬안"
+    },
+    {
+      "original_id": "N101",
+      "slot": "051",
+      "name": "데프틴"
+    },
+    {
+      "original_id": "N102",
+      "slot": "052",
+      "name": "쇼메르"
+    },
+    {
+      "original_id": "N103",
+      "slot": "053",
+      "name": "카니온"
+    },
+    {
+      "original_id": "N104",
+      "slot": "054",
+      "name": "피네트"
+    },
+    {
+      "original_id": "N105",
+      "slot": "055",
+      "name": "벤기르"
+    },
+    {
+      "original_id": "N106",
+      "slot": "056",
+      "name": "마티아"
+    },
+    {
+      "original_id": "N107",
+      "slot": "057",
+      "name": "오네르"
+    },
+    {
+      "original_id": "N108",
+      "slot": "058",
+      "name": "스메브"
+    },
+    {
+      "original_id": "N109",
+      "slot": "059",
+      "name": "리헨스"
+    },
+    {
+      "original_id": "N110",
+      "slot": "060",
+      "name": "바이페르"
+    },
+    {
+      "original_id": "N111",
+      "slot": "061",
+      "name": "오두막스"
+    },
+    {
+      "original_id": "N112",
+      "slot": "062",
+      "name": "누룬지오"
+    },
+    {
+      "original_id": "N113",
+      "slot": "063",
+      "name": "된자르"
+    },
+    {
+      "original_id": "N114",
+      "slot": "064",
+      "name": "생가르"
+    },
+    {
+      "original_id": "N115",
+      "slot": "065",
+      "name": "참케르"
+    },
+    {
+      "original_id": "N116",
+      "slot": "066",
+      "name": "대쥬르"
+    },
+    {
+      "original_id": "N117",
+      "slot": "067",
+      "name": "고드렐"
+    },
+    {
+      "original_id": "N118",
+      "slot": "068",
+      "name": "버드나르"
+    },
+    {
+      "original_id": "N119",
+      "slot": "069",
+      "name": "태베크"
+    },
+    {
+      "original_id": "N120",
+      "slot": "070",
+      "name": "설라크"
+    },
+    {
+      "original_id": "N121",
+      "slot": "071",
+      "name": "다시마로"
+    },
+    {
+      "original_id": "N122",
+      "slot": "072",
+      "name": "옥수렌"
+    },
+    {
+      "original_id": "N123",
+      "slot": "073",
+      "name": "감자크"
+    },
+    {
+      "original_id": "N124",
+      "slot": "074",
+      "name": "앵두르"
+    },
+    {
+      "original_id": "N125",
+      "slot": "075",
+      "name": "가마솔"
+    },
+    {
+      "original_id": "N151",
+      "slot": "076",
+      "name": "룰레인"
+    },
+    {
+      "original_id": "N152",
+      "slot": "077",
+      "name": "스코렌"
+    },
+    {
+      "original_id": "N153",
+      "slot": "078",
+      "name": "프레이든"
+    },
+    {
+      "original_id": "N154",
+      "slot": "079",
+      "name": "택욘"
+    },
+    {
+      "original_id": "N155",
+      "slot": "080",
+      "name": "문호젠"
+    },
+    {
+      "original_id": "N156",
+      "slot": "081",
+      "name": "솔키르"
+    },
+    {
+      "original_id": "N157",
+      "slot": "082",
+      "name": "제스틴"
+    },
+    {
+      "original_id": "N158",
+      "slot": "083",
+      "name": "로구엔"
+    },
+    {
+      "original_id": "N159",
+      "slot": "084",
+      "name": "트래븐"
+    },
+    {
+      "original_id": "N160",
+      "slot": "085",
+      "name": "도란테"
+    },
+    {
+      "original_id": "N161",
+      "slot": "086",
+      "name": "나루베"
+    },
+    {
+      "original_id": "N162",
+      "slot": "087",
+      "name": "산드람"
+    },
+    {
+      "original_id": "N163",
+      "slot": "088",
+      "name": "메아룬"
+    },
+    {
+      "original_id": "N164",
+      "slot": "089",
+      "name": "쵸베른"
+    },
+    {
+      "original_id": "N165",
+      "slot": "090",
+      "name": "골모크"
+    },
+    {
+      "original_id": "N166",
+      "slot": "091",
+      "name": "장도크"
+    },
+    {
+      "original_id": "N167",
+      "slot": "092",
+      "name": "메도르"
+    },
+    {
+      "original_id": "N168",
+      "slot": "093",
+      "name": "그루멜"
+    },
+    {
+      "original_id": "N169",
+      "slot": "094",
+      "name": "베루안"
+    },
+    {
+      "original_id": "N170",
+      "slot": "095",
+      "name": "부엔기"
+    },
+    {
+      "original_id": "N171",
+      "slot": "096",
+      "name": "갈데오"
+    },
+    {
+      "original_id": "N172",
+      "slot": "097",
+      "name": "주렌타"
+    },
+    {
+      "original_id": "N173",
+      "slot": "098",
+      "name": "바소트"
+    },
+    {
+      "original_id": "N174",
+      "slot": "099",
+      "name": "모시락"
+    },
+    {
+      "original_id": "N175",
+      "slot": "100",
+      "name": "도르레오"
+    }
+  ],
+  "F": [
+    {
+      "original_id": "N026",
+      "slot": "001",
+      "name": "지오니아"
+    },
+    {
+      "original_id": "N027",
+      "slot": "002",
+      "name": "나린솔"
+    },
+    {
+      "original_id": "N028",
+      "slot": "003",
+      "name": "다래온"
+    },
+    {
+      "original_id": "N029",
+      "slot": "004",
+      "name": "소담린"
+    },
+    {
+      "original_id": "N030",
+      "slot": "005",
+      "name": "가람비"
+    },
+    {
+      "original_id": "N031",
+      "slot": "006",
+      "name": "모아린"
+    },
+    {
+      "original_id": "N032",
+      "slot": "007",
+      "name": "새온비"
+    },
+    {
+      "original_id": "N033",
+      "slot": "008",
+      "name": "여울라"
+    },
+    {
+      "original_id": "N034",
+      "slot": "009",
+      "name": "은결비"
+    },
+    {
+      "original_id": "N035",
+      "slot": "010",
+      "name": "초롱하"
+    },
+    {
+      "original_id": "N036",
+      "slot": "011",
+      "name": "아라온"
+    },
+    {
+      "original_id": "N037",
+      "slot": "012",
+      "name": "세아린"
+    },
+    {
+      "original_id": "N038",
+      "slot": "013",
+      "name": "보름하"
+    },
+    {
+      "original_id": "N039",
+      "slot": "014",
+      "name": "나래온"
+    },
+    {
+      "original_id": "N040",
+      "slot": "015",
+      "name": "미르아"
+    },
+    {
+      "original_id": "N041",
+      "slot": "016",
+      "name": "다온설"
+    },
+    {
+      "original_id": "N042",
+      "slot": "017",
+      "name": "서리안"
+    },
+    {
+      "original_id": "N043",
+      "slot": "018",
+      "name": "카르미나"
+    },
+    {
+      "original_id": "N044",
+      "slot": "019",
+      "name": "진달레아"
+    },
+    {
+      "original_id": "N045",
+      "slot": "020",
+      "name": "수지엘"
+    },
+    {
+      "original_id": "N046",
+      "slot": "021",
+      "name": "카리냐"
+    },
+    {
+      "original_id": "N047",
+      "slot": "022",
+      "name": "개나리아"
+    },
+    {
+      "original_id": "N048",
+      "slot": "023",
+      "name": "메이실"
+    },
+    {
+      "original_id": "N049",
+      "slot": "024",
+      "name": "모레아"
+    },
+    {
+      "original_id": "N050",
+      "slot": "025",
+      "name": "김고웬"
+    },
+    {
+      "original_id": "N076",
+      "slot": "026",
+      "name": "킴연느"
+    },
+    {
+      "original_id": "N077",
+      "slot": "027",
+      "name": "전지엔"
+    },
+    {
+      "original_id": "N078",
+      "slot": "028",
+      "name": "송헤이오"
+    },
+    {
+      "original_id": "N079",
+      "slot": "029",
+      "name": "소네진"
+    },
+    {
+      "original_id": "N080",
+      "slot": "030",
+      "name": "킴타리"
+    },
+    {
+      "original_id": "N081",
+      "slot": "031",
+      "name": "박시네아"
+    },
+    {
+      "original_id": "N082",
+      "slot": "032",
+      "name": "배두니아"
+    },
+    {
+      "original_id": "N083",
+      "slot": "033",
+      "name": "하지웬"
+    },
+    {
+      "original_id": "N084",
+      "slot": "034",
+      "name": "정유메"
+    },
+    {
+      "original_id": "N085",
+      "slot": "035",
+      "name": "박은비나"
+    },
+    {
+      "original_id": "N086",
+      "slot": "036",
+      "name": "민드레아"
+    },
+    {
+      "original_id": "N087",
+      "slot": "037",
+      "name": "금잔느"
+    },
+    {
+      "original_id": "N088",
+      "slot": "038",
+      "name": "모크렌"
+    },
+    {
+      "original_id": "N089",
+      "slot": "039",
+      "name": "목레아"
+    },
+    {
+      "original_id": "N090",
+      "slot": "040",
+      "name": "복샤나"
+    },
+    {
+      "original_id": "N091",
+      "slot": "041",
+      "name": "살구엔"
+    },
+    {
+      "original_id": "N092",
+      "slot": "042",
+      "name": "달무리아"
+    },
+    {
+      "original_id": "N093",
+      "slot": "043",
+      "name": "반디루"
+    },
+    {
+      "original_id": "N094",
+      "slot": "044",
+      "name": "라이라크"
+    },
+    {
+      "original_id": "N095",
+      "slot": "045",
+      "name": "오미자니아"
+    },
+    {
+      "original_id": "N096",
+      "slot": "046",
+      "name": "보리샤"
+    },
+    {
+      "original_id": "N097",
+      "slot": "047",
+      "name": "유자샤"
+    },
+    {
+      "original_id": "N098",
+      "slot": "048",
+      "name": "해바라니"
+    },
+    {
+      "original_id": "N099",
+      "slot": "049",
+      "name": "라벤느"
+    },
+    {
+      "original_id": "N100",
+      "slot": "050",
+      "name": "자두아"
+    },
+    {
+      "original_id": "N126",
+      "slot": "051",
+      "name": "타래안"
+    },
+    {
+      "original_id": "N127",
+      "slot": "052",
+      "name": "카라멜리"
+    },
+    {
+      "original_id": "N128",
+      "slot": "053",
+      "name": "아지랑"
+    },
+    {
+      "original_id": "N129",
+      "slot": "054",
+      "name": "차부나니"
+    },
+    {
+      "original_id": "N130",
+      "slot": "055",
+      "name": "인젤미"
+    },
+    {
+      "original_id": "N131",
+      "slot": "056",
+      "name": "제시콧"
+    },
+    {
+      "original_id": "N132",
+      "slot": "057",
+      "name": "복숭애"
+    },
+    {
+      "original_id": "N133",
+      "slot": "058",
+      "name": "시나몽"
+    },
+    {
+      "original_id": "N134",
+      "slot": "059",
+      "name": "다르미"
+    },
+    {
+      "original_id": "N135",
+      "slot": "060",
+      "name": "팔레"
+    },
+    {
+      "original_id": "N136",
+      "slot": "061",
+      "name": "세냥"
+    },
+    {
+      "original_id": "N137",
+      "slot": "062",
+      "name": "바그니"
+    },
+    {
+      "original_id": "N138",
+      "slot": "063",
+      "name": "차잔느"
+    },
+    {
+      "original_id": "N139",
+      "slot": "064",
+      "name": "수겐"
+    },
+    {
+      "original_id": "N140",
+      "slot": "065",
+      "name": "오란데"
+    },
+    {
+      "original_id": "N141",
+      "slot": "066",
+      "name": "마카렌"
+    },
+    {
+      "original_id": "N142",
+      "slot": "067",
+      "name": "자몽드"
+    },
+    {
+      "original_id": "N143",
+      "slot": "068",
+      "name": "모카벨"
+    },
+    {
+      "original_id": "N144",
+      "slot": "069",
+      "name": "비닐라"
+    },
+    {
+      "original_id": "N145",
+      "slot": "070",
+      "name": "새초미"
+    },
+    {
+      "original_id": "N146",
+      "slot": "071",
+      "name": "아리둥"
+    },
+    {
+      "original_id": "N147",
+      "slot": "072",
+      "name": "몽그리"
+    },
+    {
+      "original_id": "N148",
+      "slot": "073",
+      "name": "고구메"
+    },
+    {
+      "original_id": "N149",
+      "slot": "074",
+      "name": "호테카"
+    },
+    {
+      "original_id": "N150",
+      "slot": "075",
+      "name": "수세나"
+    },
+    {
+      "original_id": "N176",
+      "slot": "076",
+      "name": "나파콧"
+    },
+    {
+      "original_id": "N177",
+      "slot": "077",
+      "name": "봉수애"
+    },
+    {
+      "original_id": "N178",
+      "slot": "078",
+      "name": "맨드라민"
+    },
+    {
+      "original_id": "N179",
+      "slot": "079",
+      "name": "참웨라"
+    },
+    {
+      "original_id": "N180",
+      "slot": "080",
+      "name": "물망쵸"
+    },
+    {
+      "original_id": "N181",
+      "slot": "081",
+      "name": "달고네"
+    },
+    {
+      "original_id": "N182",
+      "slot": "082",
+      "name": "야콰"
+    },
+    {
+      "original_id": "N183",
+      "slot": "083",
+      "name": "단쥬"
+    },
+    {
+      "original_id": "N184",
+      "slot": "084",
+      "name": "주메니"
+    },
+    {
+      "original_id": "N185",
+      "slot": "085",
+      "name": "비녜"
+    },
+    {
+      "original_id": "N186",
+      "slot": "086",
+      "name": "노르게"
+    },
+    {
+      "original_id": "N187",
+      "slot": "087",
+      "name": "바넬"
+    },
+    {
+      "original_id": "N188",
+      "slot": "088",
+      "name": "실타렌"
+    },
+    {
+      "original_id": "N189",
+      "slot": "089",
+      "name": "비자룬"
+    },
+    {
+      "original_id": "N190",
+      "slot": "090",
+      "name": "누가렛"
+    },
+    {
+      "original_id": "N191",
+      "slot": "091",
+      "name": "양프네"
+    },
+    {
+      "original_id": "N192",
+      "slot": "092",
+      "name": "데야"
+    },
+    {
+      "original_id": "N193",
+      "slot": "093",
+      "name": "리보나"
+    },
+    {
+      "original_id": "N194",
+      "slot": "094",
+      "name": "자게미"
+    },
+    {
+      "original_id": "N195",
+      "slot": "095",
+      "name": "쿠레미"
+    },
+    {
+      "original_id": "N196",
+      "slot": "096",
+      "name": "아프리마"
+    },
+    {
+      "original_id": "N197",
+      "slot": "097",
+      "name": "레니콧"
+    },
+    {
+      "original_id": "N198",
+      "slot": "098",
+      "name": "바라게"
+    },
+    {
+      "original_id": "N199",
+      "slot": "099",
+      "name": "구세라"
+    },
+    {
+      "original_id": "N200",
+      "slot": "100",
+      "name": "바울리"
+    }
+  ]
+}
