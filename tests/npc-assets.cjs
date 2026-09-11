@@ -90,4 +90,24 @@ test('the rename record can still trace every production slot back to its origin
   assert.equal(new Set(rows.map(r=>r.sha256)).size,100,g+' images are 100 distinct pictures');
  }
 });
+test('the shipped build carries a derived portrait for every production image',()=>{
+ // dist never holds the art itself: `npm run assets` derives WebP from the production drop,
+ // capped at the largest size the UI can paint at 2x. Sources under the cap are copied at
+ // native size. This checks the derivation covers the drop exactly and stayed addressable.
+ const dist=path.resolve(__dirname,'..','dist/ui/assets/npc');
+ const webp=d=>fs.readdirSync(path.join(dist,d)).filter(f=>f.endsWith('.webp')).sort();
+ for(const g of ['M','F'])
+  assert.deepEqual(webp('normal/'+g),SLOTS.map(s=>s+'.webp'),'shipped normal/'+g+' mirrors the 100 slots');
+ assert.deepEqual(webp('easter'),pool.easter.map(e=>e.id+'.webp'),'shipped Easter is addressed by id, ASCII only');
+ assert.deepEqual(webp('boss'),list('04_BOSS').map(f=>f.replace(/\.png$/,'.webp')),
+  'shipped Boss keeps every production state filename');
+ // the placeholder pool the current build still draws from must survive regeneration
+ for(let i=1;i<=5;i++)
+  assert.ok(fs.existsSync(path.join(dist,'npc-0'+i+'.png')),'the placeholder portrait survives: npc-0'+i);
+ assert.ok(fs.readFileSync(path.join(dist,'manifest.js'),'utf8').includes('G.NPCAssets'),
+  'the generated manifest registers itself');
+ assert.ok(fs.readFileSync(path.resolve(__dirname,'..','dist/index.html'),'utf8')
+   .includes('ui/assets/npc/manifest.js'),'the build loads the manifest');
+});
+
 console.log(count+' npc asset groups passed');
