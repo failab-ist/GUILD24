@@ -51,9 +51,14 @@ async function drive(page,target,seed){
  const until=async pred=>{for(let i=0;i<800;i++){if(await page.evaluate(pred))return true;await page.evaluate(`${STEP}()`);}return false;};
  const reached=await until(GOAL[target]);
  if(!reached)throw Error('could not drive the run to '+target);
- // A milestone Relic window and an Event day each own one focused reveal. Skipping days
- // without rendering means marking as seen what a player would already have seen.
- if(target!=='relic')await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;if(s.event)s.eventSeen=true;})()`);
+ // A milestone Relic window, an Event day and each Boss reveal own one focused reveal.
+ // Skipping days without rendering means marking as seen what a player would already
+ // have seen; otherwise the capture is a takeover instead of the screen under it.
+ // The Boss reveal sits ahead of the Relic window in the chain, so it has to be cleared
+ // for every target - including `relic`, whose whole point is to capture the takeover
+ // underneath it. Only the Relic window's own seen flag is target-specific.
+ await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.event)s.eventSeen=true;if(s.bossReveal){s.bossReveal.identitySeen=true;s.bossReveal.traitSeen=true;s.bossReveal.familySeen=true;}})()`);
+ if(target!=='relic')await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;})()`);
  await page.evaluate(`Guild24.render()`);
  // The store-support window is a takeover, not a screen: force it open so the capture is
  // the thing itself and not the Morning behind it.
