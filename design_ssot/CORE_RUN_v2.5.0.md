@@ -4,7 +4,8 @@ DOC=CORE_RUN
 OWNER=run,phase,save,day_flow
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 
 ## KEY
@@ -403,6 +404,67 @@ Flavor should use existing:
 - result
 
 systems where possible.
+
+## APPROVED_AMENDMENT_2026_09_12 — RUN ABANDON / DEEP SAVE
+
+### CURRENT RUN ABANDON
+
+Player-facing identity=`현재 런 포기`.
+
+Starting a new Run while another Run is active means:
+**abandon the current Run with no settlement and start a fresh Run.**
+
+Abandoned Run must NOT trigger:
+- `Meta.finish()`
+- Run settlement
+- Job Mastery
+- Boss Clear credit
+- Job × Boss matrix mutation
+- unlock/reward grant
+- Run-completion reward
+- `runs` / `wins` progress
+- any other benefit derived from the abandoned Run
+
+Account-scoped state is preserved:
+- `account.matrix`
+- derived Meta progression
+- Monster Knowledge
+- already-earned unlocks
+- Tutorial completion
+- Settings
+- other account-scoped persistent state
+
+Run-scoped state is discarded:
+- Day / Phase / Gold / Inventory
+- Run NPC roster
+- Run Relics / facilities
+- Gate / Event / Order state
+- Deep Expedition schedule / assignment / sponsorship / result
+- Boss / Final state
+- all other run-scoped state
+
+The next Run uses the ordinary fresh-Run start path.
+Do not add a reset-only initialization path.
+
+Full game-data reset remains a separate action and still deletes account-scoped
+progress, Knowledge, unlocks, Tutorial and Settings.
+
+### DEEP EXPEDITION SAVE CONTRACT
+
+Deep Expedition is Run state. Save/Load preserves:
+- this Run's D7/D14/D21/D28 occurrence schedule
+- today's chosen base Gate once generated/revealed
+- unassigned / assigned / expired state
+- nominated NPC
+- sponsorship-paid state
+- replaced destination
+- already-generated result
+
+Reload must not:
+- reroll the schedule or chosen base Gate
+- duplicate/refund sponsorship
+- reopen a consumed/expired nomination
+- create a second expedition/result
 
 ## QA
 

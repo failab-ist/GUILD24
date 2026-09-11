@@ -4,7 +4,8 @@ DOC=NPC_TRAIT_QA
 OWNER=qa,npc,trait,roster,living_npc_cap
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=DESIGN_QA_SPEC
 
 
 Status values are NOT stored here.
@@ -384,3 +385,22 @@ EXPECT:
 
 PASS:
 Job identity remains BaseStats+Growth and Mastery does not create a second hidden Job system.
+
+## APPROVED_AMENDMENT_2026_09_12 — DEEP NPC REWARD QA
+
+Deep Success:
+- ordinary expedition result rewards/consequences remain
+- bonus EXP uses existing Growth system
+- bonus uses existing NPC Wallet/money channel
+
+Deep Great Success:
+- greater bonus EXP than Success
+- greater Wallet reward than Success
+
+FAIL if:
+- separate `deepWallet` pool is added
+- Day/Tier multiplier is added to the special Deep bonus without approval
+- automatic Level +1 is used instead of EXP
+- direct Loyalty / Trusted Regular granted
+- new Deep currency / permanent Stat / buff / Mastery added
+- failure outcome receives Deep bonus EXP/Wallet

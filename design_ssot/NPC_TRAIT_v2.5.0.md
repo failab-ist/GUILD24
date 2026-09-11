@@ -562,6 +562,59 @@ Exact formulas:
 Relics may modify these systems,
 but Character identity remains owned by NPC/Trait system.
 
+## APPROVED_AMENDMENT_2026_09_12 — DEEP EXPEDITION NPC REWARD
+
+Deep Expedition reward identity:
+**spend Store Gold now to increase one NPC's future value.**
+
+Deep Success:
+- keep the ordinary expedition's existing NPC-side result rewards/consequences
+- add additional EXP through the existing EXP/Growth system
+- add additional NPC Wallet
+
+Deep Great Success:
+- keep the ordinary Great Success NPC-side reward behavior
+- add a larger additional EXP/Growth bonus than Deep Success
+- add a larger NPC Wallet bonus than Deep Success
+
+Exact values=PASS3.
+
+Deep bonus structure has only two bonus bands: Success and Great Success.
+Do not add a separate Day/Tier multiplier to the Deep bonus; the ordinary expedition
+reward already carries its existing Day/Tier value.
+
+NPC Wallet reward uses the existing persisted NPC Wallet/money channel.
+Do not create `deepWallet` or another stored Wallet pool; later visits continue to use
+the ordinary Wallet/carry rules.
+
+Do not grant automatic `Level +1`.
+Use the existing EXP/Growth curve; Level Up may occur naturally.
+
+Do not directly grant:
+- Loyalty
+- Trusted Regular
+- automatic revisit
+- relationship rank
+
+Do not add:
+- Deep permanent Stat
+- Deep currency
+- Deep equipment progression
+- Deep Mastery
+- permanent Deep buff
+
+Retreat / Injury / Severe Injury / Death:
+- no **special Deep** bonus EXP
+- no **special Deep** Wallet reward
+- existing ordinary outcome rewards/consequences remain unchanged
+
+Intended return:
+sponsorship / extra preparation
+-> NPC success
+-> extra EXP/Growth + higher Wallet
+-> future customer/roster value
+-> stronger late-run value.
+
 ## ACTIVE TRAIT CATALOG
 
 traitCatalogStatus=FROZEN

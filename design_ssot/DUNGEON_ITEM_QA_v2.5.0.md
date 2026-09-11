@@ -4,7 +4,8 @@ DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=DESIGN_QA_SPEC
 
 
 Status values are NOT stored here.
@@ -556,3 +557,44 @@ EXPECT:
 
 PASS:
 META gates availability only; ITEM continues to own the effect.
+
+## APPROVED_AMENDMENT_2026_09_12 — GREAT SUCCESS / DEEP EXPEDITION QA
+
+### GREAT SUCCESS
+PASS:
+- failed expedition cannot become Great Success
+- ordinary combat/environment/injury/escape resolution occurs first without Great Success
+- only final ordinary `성공` may upgrade to `대성공`
+- injury/retreat/severe injury/death cannot coexist with Great Success
+- margin uses prepared pre-noise Combat ability rather than lucky combat noise
+- larger prepared Combat margin never lowers Great Success chance
+- Great Success remains below 100% certainty
+- signal threshold matches actual Great Success calculation
+- no new hidden master-readiness Stat
+
+### DEEP SCHEDULE
+PASS:
+- only D7/D14/D21/D28 candidate windows
+- exactly 2 or 3 actual occurrences
+- at least one D7/D14
+- at least one D21/D28
+- Save/Load does not reroll
+
+### DEEP GATE
+PASS:
+- base is one of today's highest-Tier actual Gates
+- tie is deterministic/seeded
+- Family unchanged
+- Tier unchanged
+- Hazard set unchanged
+- required Combat Power = base Gate Power × one PASS3 Deep factor
+- no additive / Day-specific Deep Power curve
+- ordinary Item/Supply resolution used once
+- one expedition / one result
+- no T4 / extra Hazard / second roll
+
+### EVENT EXCLUSION
+PASS:
+- actual Deep Day produces no Normal Event
+- Deep is not selected from Event catalog
+- no automatic 35% chance compensation

@@ -4,7 +4,8 @@ DOC=SALE
 OWNER=sale,customer,price,refusal,purchase_flow
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 
 ## KEY
@@ -407,6 +408,83 @@ Do not solve pacing by removing a decision that can change after a purchase/refu
 
 Detailed presentation:
 -> UI_UX
+
+## APPROVED_AMENDMENT_2026_09_12 — DEEP EXPEDITION NOMINATION
+
+Deep Expedition stays inside the ordinary one-customer-at-a-time Sale flow.
+No separate Sale Phase is added.
+
+While today's Deep Expedition is unassigned, **any ordinary current visiting NPC**
+who is already eligible to be served may expose:
+`심층원정에 추천`
+
+No additional Job / Level / rarity gate is added.
+
+Nomination is allowed only **before the first committed purchase/supply
+transaction for that NPC on that Day**.
+The Store must be able to pay the fixed sponsorship amount.
+
+Player may:
+- nominate current NPC
+- skip current NPC and wait for a later visitor
+- nominate nobody
+
+Future visitor identity remains hidden under normal Sale rules.
+
+On nomination confirmation:
+1. charge sponsorship exactly once
+2. mark today's Deep Expedition assigned
+3. replace that NPC's actual destination for today with the Deep Gate
+4. make the Deep destination the relevant Player-facing destination
+5. recalculate forecast
+6. continue ordinary Sale flow
+
+After confirmation:
+- no cancellation
+- no NPC swap
+- no second nominee
+- no sponsorship refund
+- no later Trait/Event/Special destination reassignment may overwrite the Deep destination
+
+Deep nomination and any other explicit Player destination-reassignment action are
+mutually exclusive for that NPC on that Day. If a Player destination reassignment
+was already consumed on that NPC, that NPC cannot then be nominated for Deep Expedition.
+
+Any pre-existing reported/claimed destination ambiguity (for example a Trait) is
+resolved by the explicit Deep nomination: after confirmation the Player-facing
+destination is the confirmed Deep Gate.
+
+If nobody is nominated by Sale end:
+- sponsorship=0
+- no NPC penalty
+- no Store penalty
+- opportunity expires for that Day
+
+After nomination, ordinary Sale rules remain:
+- sell nothing allowed
+- 50 / 100 / 150
+- Wallet
+- purchase slots
+- Item
+- Supply
+- refusal logic
+
+No free Item / free sale / Deep-only purchase slot.
+
+Deep nomination is an explicit authoritative destination replacement.
+Once confirmed, ordinary Trait/Event destination logic may not silently overwrite
+the confirmed Deep destination afterward.
+
+Save/Load persistence -> CORE_RUN.
+
+Embedded SALE acceptance:
+- one nominee maximum
+- current visitor only
+- no extra Job/Level/rarity eligibility
+- nomination before first committed transaction
+- unaffordable sponsorship cannot confirm
+- confirmed Deep destination cannot be overwritten
+- skip/expiry costs 0 and adds no penalty
 
 ## QA
 

@@ -1200,6 +1200,49 @@ Meta copy:
 - Monster Knowledge progress remains `보급 생환 N회`
 
 
+## APPROVED_AMENDMENT_2026_09_12 — LOCKED PLAYER-FACING TERMS
+
+### Deep Expedition
+Locked term=`심층원정`.
+
+Do not rename to `긴급의뢰`, `길드 긴급의뢰`, `특별원정`, `고난도 의뢰`
+without later User approval.
+
+### Great Success opportunity
+Exact required signal:
+`대성공을 노려볼 만합니다.`
+
+Do not replace with vague wording that omits `대성공`.
+
+### Run abandon
+Identity=`현재 런 포기`.
+
+Preferred destructive action:
+`현재 런 포기 · 새 점포 준비`
+
+Required confirmation meaning:
+`현재 런을 보상 없이 포기하고 새 점포를 시작합니다.`
+
+Do not imply XP, settlement, compensation or reward.
+
+### Sponsorship
+Preferred concept=`원정 후원금`.
+
+It is a Store Gold sink, not a refundable deposit.
+
+Deep Expedition voice communicates:
+- deeper/harder version of today's Gate
+- optional nomination
+- Store sponsorship
+- NPC Growth/Wallet return
+- **unlike normal Great Success**, no Store Gold payout even on Deep Great Success
+
+Copy QA:
+- exact signal remains `대성공을 노려볼 만합니다.`
+- `심층원정` term is not replaced by a synonym
+- Run abandon never promises XP/settlement/reward
+- Deep copy never promises Store cash payout
+
 # 19. FINAL COPY FILTER
 
 새 Text마다 순서대로 묻는다.

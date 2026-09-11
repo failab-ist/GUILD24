@@ -371,3 +371,76 @@ randomSyllableSoup=NO
 allCanonicalHazardsExplainStatPressure=YES
 hoverOnlyHazardInfo=NO
 mobileWidthsQA=[360,390,430]
+
+## APPROVED_AMENDMENT_2026_09_12 — USER APPROVED DECISIONS
+
+### Current Run abandon
+Active Run -> new Run = no-reward abandon.
+No settlement / Meta.finish / Mastery / Boss clear / matrix / unlock / reward.
+Account-scoped progression / Knowledge / Tutorial / Settings remain.
+
+### NPC Wallet
+Global baseline increases from D1.
+Existing variation / Level / carry remain.
+No new Day inflation.
+Purchase intent unchanged pending Stage 9.
+150% intent is not eased.
+
+### Great Success
+- only after ordinary Success
+- chance uses prepared final Combat Power - Gate required Combat Power margin
+- larger margin -> higher chance
+- never guaranteed
+- exact signal=`대성공을 노려볼 만합니다.`
+- exact placement chosen by Work
+- Tutorial teaches Great Success + extra reward
+- normal Great Success gives Store Gold
+- same-day sale not required
+- Gold scales with Gate/Tier
+Exact numeric tuning=PASS3.
+
+### Deep Expedition / 심층원정
+Occurrence:
+- D7/D14/D21/D28
+- 2–3 per Run
+- at least one D7/D14
+- at least one D21/D28
+- seeded/persisted
+
+Event:
+- actual Deep Expedition Day -> NO Normal Daily Event
+
+Gate:
+- one highest-Tier actual Gate
+- same Family/Tier/Hazard
+- only Combat requirement increases
+- one expedition / one result
+- no T4 / extra Hazard / second roll
+
+Nomination:
+- one current visitor
+- before first transaction
+- sponsorship
+- today's destination replaced
+- forecast recalculated
+- no cancel/swap
+- skip allowed
+
+Reward:
+- Success -> NPC extra EXP/Growth + NPC Wallet
+- Great Success -> larger EXP/Growth + Wallet
+- Store Gold=0 for both
+- normal Great Success cash bonus suppressed
+- no direct Loyalty / Regular / new currency / permanent buff
+
+Tutorial:
+- first actual occurrence in account lifetime
+- not once per Run
+- Run abandon preserves
+- full data reset clears
+
+### Economy target
+`D29 Closing End = D30 Prep Start Gold`
+Normal engaged-play target center=`median ≈ 1,500G`.
+
+Use active economy and Player-chosen spending before inflation/tax solutions.

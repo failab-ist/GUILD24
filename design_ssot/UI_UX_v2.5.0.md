@@ -768,6 +768,100 @@ Before accepting a major UI revision, ask:
 If YES:
 restructure composition before polishing color/shadow/radius.
 
+## APPROVED_AMENDMENT_2026_09_12 — GREAT SUCCESS / DEEP EXPEDITION / RUN ABANDON UX
+
+### GREAT SUCCESS OPPORTUNITY SIGNAL
+
+When the authoritative Great Success opportunity condition is met, show:
+
+`대성공을 노려볼 만합니다.`
+
+The word `대성공` is mandatory.
+
+Exact placement is Work implementation choice, but it must:
+- appear before departure
+- appear while Player can still change that NPC's preparation
+- update when preparation changes
+- hide exact Great Success %
+- hide internal Combat margin/formula
+- not become a master safety score
+
+### GREAT SUCCESS TUTORIAL
+
+Contextual Tutorial explicitly teaches:
+- `대성공` exists
+- it is above ordinary Success
+- extra preparation can raise its chance
+- Great Success has an additional reward
+- on a **normal expedition**, Great Success gives the Store an additional Gold bonus
+
+Player should understand why another useful Item can matter even when ordinary
+Success already looks likely.
+
+### DEEP EXPEDITION MORNING
+
+Actual Deep Expedition Day:
+- no Normal Event reveal
+- Deep Expedition is the special Morning operational beat
+- existing Morning -> Order flow remains
+- no new permanent Phase
+
+Before Order, Player can identify:
+- `심층원정` available today
+- base Gate / Family / Tier / known Hazard
+- sponsorship cost exists
+- NPC gets additional Growth / Wallet on success
+- participation optional
+
+### FIRST-EVER DEEP EXPEDITION TUTORIAL
+
+Trigger:
+the account's **first actual Deep Expedition occurrence during play**.
+
+Not once per Run and not shown before the feature actually occurs.
+
+Completion is account-scoped:
+- current Run abandon -> preserved
+- new Run -> preserved
+- full game-data reset -> deleted
+- after full reset, next first actual occurrence shows it again
+
+Reuse existing Tutorial persistence.
+
+Tutorial must clearly teach:
+1. `심층원정` exists
+2. it is optional
+3. required Combat Power is higher than the ordinary Gate version
+4. one actual visiting NPC can be nominated
+5. nomination costs Store sponsorship Gold
+6. Success gives extra NPC EXP/Growth + Wallet
+7. unlike a normal Great Success, Deep Expedition Store Gold return is 0 even on Great Success
+
+Tutorial appears before the first nomination decision and must not leave
+actionable Morning/Order information obscured after dismissal.
+
+### DEEP SALE UI
+
+While nomination is legal, show `심층원정에 추천`.
+
+After nomination:
+- sponsorship payment clear
+- changed destination clear
+- updated forecast clear
+- ordinary Sale continues
+
+### RUN ABANDON UX
+
+Identity=`현재 런 포기`.
+
+Preferred action:
+`현재 런 포기 · 새 점포 준비`
+
+Confirmation must clearly communicate:
+`현재 런을 보상 없이 포기하고 새 점포를 시작합니다.`
+
+Legacy XP / settlement / reward promise must not appear.
+
 ## QA
 
 Acceptance criteria -> UI_UX_QA_v2.5.0.md

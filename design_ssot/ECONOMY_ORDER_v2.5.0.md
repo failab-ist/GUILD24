@@ -4,7 +4,8 @@ DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 
 ## KEY
@@ -418,6 +419,97 @@ Order screen must make decision inputs directly readable:
 - reroll cost/state
 
 Detailed visual layout -> UI_UX
+
+## APPROVED_AMENDMENT_2026_09_12 — WALLET / GREAT SUCCESS GOLD / D30 CASH TARGET
+
+### NPC WALLET GLOBAL BASELINE
+
+Raise the NPC Wallet **global baseline from D1**.
+
+Preserve the existing Wallet model's:
+- NPC-to-NPC variation
+- existing Level contribution
+- existing Wallet carry
+- existing Trait / Event / Relic interactions
+
+Do not add a new Day-based Wallet inflation system or a separate Wallet-growth subsystem.
+
+Purpose:
+from early game, the default 2 purchase slots should more often support a real
+decision between enough preparation, extra preparation to chase Great Success,
+and conserving stock/cash.
+
+Exact baseline increase=PASS3.
+
+### PURCHASE INTENT BOUNDARY
+
+This amendment does not change purchase intent.
+Keep current 50% / 100% / 150% intent first and measure after Wallet rebaseline.
+
+If 100% refusal remains excessive, later Director/User approval is required.
+150% purchase intent must not be made easier as part of this amendment.
+
+### NORMAL GREAT SUCCESS STORE GOLD
+
+Normal expedition:
+- ordinary Success -> no extra Store Gold
+- Great Success -> additional Store Gold bonus
+
+Same-day sale to that NPC is not required.
+
+The bonus scales with the expedition's existing Gate/Tier value.
+Exact amount/scaling=PASS3.
+
+Deep Expedition exception:
+- Success -> Store Gold 0
+- Great Success -> Store Gold 0
+- normal Great Success Store Gold bonus is suppressed
+- no separate Deep/Guild cash prize
+
+### DEEP EXPEDITION SPONSORSHIP COST
+
+Deep Expedition uses one **single fixed sponsorship amount** across all Deep Expedition occurrences.
+There are no selectable payment tiers and no Day/Tier multiplier.
+
+The sponsorship itself grants no Stat, Supply, Counter, Insurance or other expedition effect.
+It only commits the Store to the Deep Expedition opportunity.
+
+Exact fixed sponsorship amount=PASS3.
+
+If the Store cannot afford the sponsorship, nomination cannot be confirmed.
+If no NPC is nominated, no sponsorship is charged.
+
+### D29 CLOSING -> D30 PREP START GOLD KPI
+
+Primary economy KPI:
+`D29 Closing End Gold = D30 Prep Start Gold`
+
+Definition:
+Gold after D29 settlement/overhead and before any D30 Relic, Order, reroll,
+or other D30 preparation spend.
+
+Normal engaged-play target center:
+`median ≈ 1,500G`
+
+The primary target cohort uses the existing normal/adaptive engaged strategy set.
+Naked/minimal-engagement, deliberate hoarding and other stress strategies are reported
+separately and do not define the 1,500G center.
+
+This is a balance center, not a forced per-Run value.
+
+Stage 9 reports at minimum:
+P10 / P25 / median / P75 / P90
+plus Gold In / Gold Out decomposition.
+
+Do not default to Day-based Item price inflation, broad inflation, arbitrary
+taxes or excessive overhead escalation to hit the target.
+
+First tune the active economy through:
+- Wallet baseline
+- increased sale/reorder activity
+- extra preparation to chase Great Success
+- Deep Expedition sponsorship
+- existing Relic/reroll/overhead/waste spending
 
 ## PASS3 METRICS
 

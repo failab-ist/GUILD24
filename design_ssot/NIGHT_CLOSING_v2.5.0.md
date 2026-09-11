@@ -4,7 +4,8 @@ DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,injury,death,closing,settlement
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 
 ## KEY
@@ -429,6 +430,56 @@ Resume must not:
 
 Canonical save:
 -> CORE_RUN
+
+## APPROVED_AMENDMENT_2026_09_12 — GREAT SUCCESS / DEEP EXPEDITION RESULT
+
+### GREAT SUCCESS
+
+Night explicitly distinguishes ordinary Success from `대성공`.
+
+For Great Success show:
+- outcome=`대성공`
+- honest causal explanation using existing rules
+- actual NPC changes
+- for normal expedition only, Store Great Success Gold bonus when earned
+
+Do not expose exact Success %, Great Success %, hidden margin or formula.
+
+### NORMAL GREAT SUCCESS GOLD
+
+Normal Great Success:
+- additional Store Gold
+- same rounded amount in result/history/Closing
+- same-day sale not required
+
+Ordinary Success:
+- no extra Store Gold
+
+### DEEP EXPEDITION RESULT
+
+Use existing outcome vocabulary once.
+
+Deep Success / Great Success shows:
+- Deep Expedition identity
+- NPC bonus EXP/Growth
+- NPC Wallet reward
+- any actual ordinary injury/death consequence
+
+Deep Expedition Store Gold reward=0.
+This includes Deep Great Success.
+Normal Great Success Store Gold bonus is suppressed.
+
+Closing shows sponsorship outflow clearly.
+Do not show a matching Deep cash payout.
+
+Economic read:
+`sponsorship / extra preparation outflow -> NPC future value`
+
+Embedded result acceptance:
+- `대성공` cannot coexist with Injury/Severe Injury/Retreat/Death
+- normal Great Success Store bonus is applied exactly once
+- Deep Great Success Store bonus remains 0
+- Deep bonus EXP/Wallet is reported as NPC change, not Store income
 
 ## QA
 

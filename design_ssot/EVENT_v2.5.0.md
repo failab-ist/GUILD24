@@ -5,7 +5,8 @@ OWNER=event,daily_event,event_catalog,event_hazard,easter_egg
 # EVENT — CANONICAL
 
 DOC_VERSION=2.5.0  
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 ---
 
@@ -73,6 +74,7 @@ Normal Daily Event는 다음 날에 발생하지 않는다.
 - D20
 - D25
 - D30
+- 실제 `심층원정` 발생일 (D7 / D14 / D21 / D28 중 해당 Run에 배정된 날)
 
 D5 / D10 / D15 / D20 / D25는 Relic Window Day이므로 Event를 겹치지 않는다.
 
@@ -85,11 +87,11 @@ D0에도 Normal Daily Event는 없다.
 
 Event Eligible Day:
 
-D3–D29 중 Relic Window Day가 아닌 날.
+D3–D29 중 Relic Window Day가 아니며, 해당 Run의 실제 심층원정 발생일도 아닌 날.
 
 Eligible Day 수:
 
-22일.
+기존 22일에서 심층원정 발생일 2–3일을 제외한 **19–20일**.
 
 ## 1-3. 발생 확률
 
@@ -100,14 +102,55 @@ dailyEventChance = 35%
 목표 평균:
 
 ```text
-22 × 0.35 ≈ 7.7 Events / Run
+19–20 × 0.35 ≈ 6.65–7.0 Events / Run
 ```
 
-정상적인 30일 Run에서 약 7–8회의 Event 체감을 시작값으로 한다.
+심층원정 통합 후 정상적인 30일 Run에서 약 6.7–7.0회의 Normal Event 기대값을 시작값으로 한다.
+실제 분포는 Stage 9에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
 
 기존 74% 발생률은 사용하지 않는다.
 
 ---
+
+## APPROVED_AMENDMENT_2026_09_12 — DEEP EXPEDITION DAY EXCLUSION
+
+If Deep Expedition is scheduled to occur today:
+**Normal Daily Event does not occur that Day, regardless of whether the Player later nominates an NPC.**
+
+Deep Expedition is not a Normal Daily Event and is not selected from the
+22-event catalog.
+
+For D7 / D14 / D21 / D28:
+1. read this Run's persisted Deep Expedition schedule
+2. if Deep Expedition is active today:
+   - skip Normal Event roll
+   - do not select/apply Normal Event
+3. otherwise:
+   - use ordinary EVENT eligibility / 35% roll
+
+Therefore the previous `22 eligible days` is the pre-Deep baseline.
+With 2–3 Deep Expedition occurrences, actual Normal-Event eligible days are
+**19–20 per Run**.
+
+At unchanged 35%:
+expected Normal Events become approximately **6.65–7.0 per Run** before other
+eligibility exclusions.
+
+Do not automatically raise `dailyEventChance` to compensate.
+Stage 9 measures actual Event count; any later chance rebalance requires approval.
+
+On Deep Expedition Days:
+- no Normal Event Focused Reveal
+- Deep notice / first-use Tutorial may be the special Morning beat under UI_UX
+
+Because Normal Event is suppressed, Event-added 한파/독안개 cannot coexist with
+Deep Expedition on the same Day. No special Event-Hazard merge rule is added.
+
+Embedded EVENT QA:
+- scheduled Deep Day -> no Normal Event roll or Event selection
+- no nomination later that Day does not restore an Event
+- non-Deep D7/D14/D21/D28 still use ordinary Event rules
+- `dailyEventChance` remains 35% until later approved rebalance
 
 # 2. EVENT SELECTION
 

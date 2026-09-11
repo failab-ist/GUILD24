@@ -4,7 +4,8 @@ DOC=ECONOMY_ORDER_QA
 OWNER=qa,economy,order,reroll
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=DESIGN_QA_SPEC
 
 
 Status values are NOT stored here.
@@ -343,3 +344,37 @@ Cumulative Gross Sales equals the sum of the exact same actual rounded sale valu
 
 PASS:
 GREED does not read a duplicate or differently rounded revenue counter.
+
+## APPROVED_AMENDMENT_2026_09_12 — WALLET / GREAT SUCCESS GOLD / D30 CASH QA
+
+### WALLET
+PASS:
+- global Wallet baseline is higher from D1
+- ordinary NPC variation remains
+- existing Level / carry behavior remains
+- purchase-intent parameters unchanged
+- Stage 9 measures 2-slot affordability/use
+
+### NORMAL GREAT SUCCESS GOLD
+PASS:
+- ordinary Success -> no extra Store Gold
+- normal Great Success -> extra Store Gold
+- same-day sale not required
+- bonus follows Gate/Tier scale
+- Deep Great Success -> Store Gold 0
+
+### DEEP SPONSORSHIP
+PASS:
+- one fixed sponsorship amount across Deep occurrences
+- exact amount is PASS3
+- no payment tiers / Day/Tier scaling
+- no Stat/Supply effect from sponsorship
+- unaffordable sponsorship cannot be confirmed
+- skip charges 0
+
+### D30 PREP START GOLD
+Stage 9 reports P10/P25/median/P75/P90.
+Target center for normal engaged play:
+`median ≈ 1,500G`.
+
+Report Gold In / Out by channel and explain target miss causes.

@@ -7,7 +7,8 @@ DOC_VERSION=2.5.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=FROZEN
-FREEZE_DATE=2026-09-11
+FREEZE_DATE=2026-09-12
+LAST_APPROVED_AMENDMENT=2026-09-12
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 
 ## TERMINOLOGY / AUTHORITY
@@ -225,6 +226,43 @@ npc/trait QA                             -> NPC_TRAIT_QA_v2.5.0.md
 dungeon/item/preparation QA              -> DUNGEON_ITEM_QA_v2.5.0.md
 relic/build/sloth-window QA              -> RELIC_QA_v2.5.0.md
 ui/ux/reveal-order QA                    -> UI_UX_QA_v2.5.0.md
+```
+
+## APPROVED_AMENDMENT_2026_09_12 — ROUTING ADDITIONS
+
+RUN ABANDON / NEW RUN WITHOUT SETTLEMENT -> CORE_RUN_v2.5.0.md
+DEEP EXPEDITION PERSISTED RUN STATE -> CORE_RUN_v2.5.0.md
+
+NPC WALLET GLOBAL BASELINE -> ECONOMY_ORDER_v2.5.0.md
+D29 CLOSING / D30 PREP START GOLD TARGET -> ECONOMY_ORDER_v2.5.0.md
+NORMAL GREAT-SUCCESS STORE GOLD BONUS -> ECONOMY_ORDER_v2.5.0.md
+
+GREAT SUCCESS ELIGIBILITY / MARGIN / PROBABILITY -> DUNGEON_HAZARD_v2.5.0.md
+DEEP EXPEDITION SCHEDULE / GATE VARIANT / POWER -> DUNGEON_HAZARD_v2.5.0.md
+
+DEEP EXPEDITION NPC NOMINATION / SALE TIMING / DESTINATION -> SALE_v2.5.0.md
+DEEP EXPEDITION DAY NORMAL-EVENT EXCLUSION -> EVENT_v2.5.0.md
+DEEP EXPEDITION NPC EXP/GROWTH + WALLET REWARD -> NPC_TRAIT_v2.5.0.md
+
+GREAT SUCCESS SIGNAL / TUTORIAL -> UI_UX_v2.5.0.md
+FIRST-EVER DEEP EXPEDITION TUTORIAL -> UI_UX_v2.5.0.md
+
+GREAT SUCCESS EXACT SIGNAL COPY / 심층원정 TERM / RUN ABANDON COPY
+-> COPY_WORLD_VOICE_v2.5.0.md
+
+GREAT SUCCESS / DEEP RESULT REPORTING -> NIGHT_CLOSING_v2.5.0.md
+
+Search routing:
+```text
+run/abandon/forfeit/new-run-no-reward        -> CORE_RUN_v2.5.0.md
+wallet/global-baseline/d30-prep-gold         -> ECONOMY_ORDER_v2.5.0.md
+great-success/margin/over-preparation        -> DUNGEON_HAZARD_v2.5.0.md
+deep-expedition/gate/power/schedule          -> DUNGEON_HAZARD_v2.5.0.md
+deep-expedition/nomination/sale              -> SALE_v2.5.0.md
+deep-expedition/event-exclusion              -> EVENT_v2.5.0.md
+deep-expedition/npc-reward                   -> NPC_TRAIT_v2.5.0.md
+great-success/tutorial/deep-tutorial         -> UI_UX_v2.5.0.md
+great-success-copy/심층원정-copy              -> COPY_WORLD_VOICE_v2.5.0.md
 ```
 
 ## PROJECT SOURCE ACCESS RULE

@@ -579,3 +579,42 @@ Final art:
 
 PASS:
 Boss art, exact information timing, and previewed applied values match the actual Final resolution without creating a new permanent Phase or exposing exact success probability.
+
+## APPROVED_AMENDMENT_2026_09_12 — GREAT SUCCESS / DEEP TUTORIAL / NOMINATION QA
+
+### GREAT SUCCESS SIGNAL
+PASS:
+- exact copy `대성공을 노려볼 만합니다.`
+- visible while preparation can still change
+- updates with preparation
+- exact % / margin / formula hidden
+
+### GREAT SUCCESS TUTORIAL
+PASS:
+- explicitly teaches Great Success exists
+- extra preparation can raise its chance
+- Great Success has additional reward
+
+### FIRST DEEP TUTORIAL
+PASS:
+- not shown before actual first Deep occurrence
+- shown on account's first actual occurrence
+- not repeated next Run
+- survives current Run abandon
+- full reset clears it
+- after full reset, appears again on next first occurrence
+- teaches optionality, harder Combat, nomination, sponsorship,
+  NPC EXP/Wallet reward, Store Gold return=0
+
+### NOMINATION UX
+PASS:
+- one NPC maximum
+- current visitor only
+- before first committed transaction
+- sponsorship exactly once
+- destination + forecast update
+- no cancel/swap
+- skip has no cost/penalty
+- future visitor identity remains hidden
+
+Mobile follows existing touch/hierarchy rules.

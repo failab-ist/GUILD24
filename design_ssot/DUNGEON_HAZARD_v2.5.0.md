@@ -4,7 +4,8 @@ DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,supply_burden,forecast,counter
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 
 
 ## KEY
@@ -452,6 +453,117 @@ Goal:
 
 Full-run simulation/playtest must rebaseline outcome spread after v2.5 adoption.
 If the value later changes, variance-related balance must be rechecked; no Trait may expose or require knowledge of the hidden exact noise percentage.
+
+## APPROVED_AMENDMENT_2026_09_12 — GREAT SUCCESS / DEEP EXPEDITION
+
+### GREAT SUCCESS — OVER-PREPARATION
+
+Great Success is an upper result the Player can intentionally chase by stronger preparation.
+
+Resolution:
+1. resolve the ordinary expedition first **without assigning Great Success**
+2. complete the existing combat/environment/injury/escape resolution
+3. only a final ordinary outcome of `성공` is eligible to upgrade to `대성공`
+4. Great Success chance uses the margin between:
+   - the NPC's prepared Combat ability before hidden combat-variance/noise
+   - Gate required Combat Power
+5. larger positive preparation margin -> higher Great Success chance
+6. make a separate Great Success roll only for an eligible ordinary Success
+7. Great Success remains probabilistic and no preparation state guarantees it
+
+This means `대성공` does not coexist with `부상/중상/퇴각/사망`.
+A lucky combat-noise roll by itself must not be treated as extra preparation.
+
+Exact threshold / curve / maximum probability=PASS3.
+
+Do not create:
+- Great-Success-only Stat
+- master readiness score
+- new hidden Hazard aggregate
+- second expedition-resolution system
+
+Hazard / Supply / Insurance / Trait rules remain in their existing systems.
+Great Success uses Combat-Power margin after ordinary Success qualification.
+
+When the Player-facing Great Success opportunity threshold is met,
+presentation must explicitly signal the opportunity.
+Exact copy -> COPY_WORLD_VOICE.
+Presentation -> UI_UX.
+Signal threshold=PASS3 and must match the actual calculation.
+
+### DEEP EXPEDITION / 심층원정
+
+Identity:
+redirect one actual visiting NPC into a deeper version of one of today's existing Gates.
+
+Not:
+- new Phase
+- second expedition
+- new Family
+- T4
+- two-roll expedition
+- separate combat subsystem
+
+Occurrence windows:
+D7 / D14 / D21 / D28.
+
+Each Run:
+- exactly 2 or 3 occurrences
+- at least 1 from D7/D14
+- at least 1 from D21/D28
+- Run-seeded / persisted
+- no Save/Load reroll
+- future occurrence dates hidden
+
+Exact 2-vs-3 weighting=PASS3.
+
+On an actual Deep Expedition Day, Normal Daily Event does not occur.
+Event exclusion owner -> EVENT.
+
+Base Gate:
+1. use today's already-generated actual Gates
+2. find highest Tier present
+3. choose one of those highest-Tier Gates
+4. ties use deterministic Run-seeded selection
+
+Keep:
+- Family
+- Tier
+- Hazard set
+- ordinary Item / Supply / Trait interaction
+
+Only difficulty-axis change:
+**required Combat Power increases through a multiplier on the selected base Gate Power.**
+
+`deepRequiredPower = baseGateRequiredPower × deepPowerFactor`
+
+Exact `deepPowerFactor`=PASS3.
+Do not use a separate additive curve or Day/Tier-specific Deep formula.
+
+Do not inflate Hazard magnitude/count to manufacture difficulty.
+
+Forecast uses the raised Deep Combat requirement but does not expose:
+- exact hidden Power
+- exact Success %
+- exact Great Success %
+- internal margin formula
+
+Before Order commitment, Player can identify:
+- Deep Expedition exists today
+- base Gate / Family / Tier / known Hazard
+- exact sponsorship Gold cost
+- success benefits NPC Growth / Wallet
+- participation is optional
+
+NPC nomination flow -> SALE.
+
+The nominated NPC undertakes exactly one expedition.
+Deep Expedition replaces that NPC's ordinary destination for the Day.
+No second segment / second roll / second result.
+
+Deep Expedition Store Gold reward is always 0.
+NPC reward -> NPC_TRAIT.
+Normal Great Success Store Gold -> ECONOMY_ORDER.
 
 ## BALANCE TARGET
 

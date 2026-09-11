@@ -4,7 +4,8 @@ DOC=CORE_RUN_QA
 OWNER=qa,core_run,run_flow
 
 DOC_VERSION=2.5.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.5.0
+DOC_AUTHORITY=DESIGN_QA_SPEC
 
 
 Status values are NOT stored here.
@@ -376,3 +377,25 @@ Final Family Pair is disclosed before D30 Relic/Sloth choice and before Final lo
 
 PASS:
 The D30 decision never occurs with intentionally-late information hidden until afterward.
+
+## APPROVED_AMENDMENT_2026_09_12 — RUN ABANDON / DEEP SAVE QA
+
+### RUN ABANDON
+PASS:
+- abandon active Run and start new Run
+- `Meta.finish()` not called
+- no Mastery / Boss clear / matrix mutation / unlock / reward
+- `runs` / `wins` not increased by abandon
+- existing Knowledge / Tutorial / Settings preserved
+- Run-scoped state replaced
+- no legacy XP/reward copy
+
+### DEEP SAVE
+PASS:
+- occurrence schedule stable across reload
+- selected base Gate stable after generation/reveal
+- nomination stable
+- sponsorship not duplicated/refunded
+- destination replacement stable
+- expired/consumed opportunity cannot reopen
+- resolved expedition/result cannot reroll
