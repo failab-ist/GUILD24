@@ -224,6 +224,63 @@ async function audit(page,width,screen){
  },{width,screen,PRESSURE});
 }
 
+// Keyboard focus across a redraw. Not a capture: it drives real presses and reads
+// document.activeElement, so it lives here, where a real browser is already running, and
+// not in the DOM-less node suite. #app is replaced wholesale on every redraw, so focus has
+// to be put back by hand — and the handle has to name one control, not a class of them.
+async function focusProbe(page){
+ const fails=[],warn=[];
+ const where=()=>page.evaluate(`(()=>{const el=document.activeElement;if(!el)return {tag:'none'};
+  return {tag:el.tagName,id:el.id||'',action:el.dataset.action||'',index:el.dataset.index??'',
+   text:(el.textContent||'').trim().slice(0,12),inModal:!!el.closest('#modal-root')};})()`);
+
+ await drive(page,'order','qa-focus-keyboard');
+ const dial=await page.evaluate(`document.querySelectorAll('#app [data-action="qty"]').length`);
+ if(dial<6)fails.push(`the quantity dial rendered ${dial} controls; the probe needs the order screen`);
+ else{
+  // the densest repeat control in the game: every button here shares one data-action and
+  // carries no data-id, so a first-match restore lands on the wrong product's minus key
+  const last=dial>10?Math.floor(dial/5)-1:0;
+  await page.evaluate(`(()=>{const b=[...document.querySelectorAll('#app [data-action="qty"]')]
+   .filter(x=>x.dataset.index==='${last}'&&x.textContent.trim()==='+')[0];b.focus();})()`);
+  const before=await where();
+  await page.evaluate(`document.activeElement.click()`);
+  const after=await where();
+  if(after.action!=='qty'||after.index!==before.index||after.text!==before.text)
+   fails.push(`a same-view redraw moved the keyboard from ${before.action}[${before.index}]"${before.text}" to ${after.action}[${after.index}]"${after.text}"`);
+
+  // pressing minus to zero disables the key that was just pressed; a disabled button
+  // cannot hold focus, so the fall-back must stay inside the same dial
+  await page.evaluate(`(()=>{const b=[...document.querySelectorAll('#app [data-action="qty"]')]
+   .filter(x=>x.dataset.index==='${last}'&&x.textContent.trim()==='-')[0];if(b&&!b.disabled)b.click();})()`);
+  const zeroed=await where();
+  if(zeroed.action!=='qty'||zeroed.index!==String(last))
+   fails.push(`disabling the pressed control dropped the keyboard to ${zeroed.tag}#${zeroed.id} instead of its neighbour`);
+ }
+
+ // a modal owns focus, and the restore correctly declines to reach into it. What it cannot
+ // help with is renderModal() rebuilding #modal-root wholesale on every redraw, which
+ // destroys the focused control inside it. That predates the focus work and lives in a
+ // different owner, so it is reported (TODO C04) rather than failed on here.
+ await page.click('#app [data-action="menu"]');
+ await page.waitForTimeout(60);
+ const opened=await where();
+ if(!opened.inModal)fails.push('opening the menu did not move focus into the modal');
+ await page.evaluate(`Guild24.render()`);
+ const kept=await where();
+ if(!kept.inModal)warn.push(`C04: a redraw under an open modal drops focus to ${kept.tag}#${kept.id} (renderModal rebuilds #modal-root)`);
+ await page.evaluate(`(()=>{document.querySelector('#modal-root [data-action="dismiss"]')?.click();})()`);
+
+ // a changed view belongs to no previous control: it focuses its own body
+ await drive(page,'sale','qa-focus-keyboard');
+ await page.evaluate(`(()=>{document.querySelector('#app [data-action="select"]')?.focus();})()`);
+ await page.evaluate(`(()=>{Guild24.game.depart();Guild24.render();})()`);
+ const moved=await where();
+ if(moved.id!=='phase-content'&&!moved.inModal)
+  fails.push(`a changed view left the keyboard on ${moved.tag}#${moved.id}"${moved.text}" instead of the screen body`);
+ return {fails,warn};
+}
+
 (async()=>{
  let playwright;try{playwright=require('playwright');}catch(e){console.error('playwright is a devDependency. run: npm install');process.exit(1);}
  if(!fs.existsSync(EXECUTABLE)){console.error('chromium not found at '+EXECUTABLE);process.exit(1);}
@@ -248,6 +305,14 @@ async function audit(page,width,screen){
    }
    await context.close();
   }
+  const ctx=await browser.newContext({viewport:{width:390,height:HEIGHT},deviceScaleFactor:1,isMobile:true,hasTouch:true,locale:'ko-KR'});
+  const kb=await ctx.newPage();
+  kb.on('pageerror',e=>{console.error('  page error @focus: '+e.message);failed++;});
+  await kb.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+  const focus=await focusProbe(kb);
+  failed+=focus.fails.length;
+  console.log(`${focus.fails.length?'FAIL':'PASS'} keyboard focus across a redraw${focus.fails.length?'\n  - '+focus.fails.join('\n  - '):''}${focus.warn.length?'\n  ? '+focus.warn.join('\n  ? '):''}`);
+  await ctx.close();
  }finally{
   await browser.close();server.kill();
  }

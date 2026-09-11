@@ -241,11 +241,18 @@ test('SALE: the toast is the system channel only, and it really hides',()=>{
 test('render: a same-view redraw keeps the keyboard where it was',()=>{
  // render() replaces #app wholesale, which drops focus. Scroll was already restored; focus
  // was not, so a keyboard user was thrown back to the top of the screen on every pick.
+ // There is no DOM here, so this group is a smoke guard on the three properties the fix
+ // depends on. The behaviour itself — the right control, a disabled control, an open modal,
+ // a changed view — is driven in a real browser by `npm run qa:visual`.
  const fn=app.slice(app.indexOf('function render()'),app.indexOf('\nfunction ',app.indexOf('function render()')+1));
- assert.ok(/const focusKey=/.test(fn),'the focused control is captured before the wipe');
+ assert.ok(/document\.activeElement/.test(fn),'the focused control is captured before the wipe');
  assert.ok(/data-action=/.test(fn),'it is found again by the same handle the click delegation uses');
- assert.ok(/if\(!changed&&focusKey\)/.test(fn),'it is only restored when the view did not change');
+ assert.ok(/!changed&&/.test(fn),'it is only restored when the view did not change');
  assert.ok(/if\(changed\)\$\('#phase-content'\)\.focus/.test(fn),'a new screen still focuses its own body');
+ // The handle is not unique on its own: the order screen puts 30 qty buttons under one
+ // data-action with no data-id, so a first-match lookup restores the wrong product's key.
+ assert.ok(/querySelectorAll\(/.test(fn),'the restore chooses among same-handle controls, not the first match');
+ assert.ok(/disabled/.test(fn),'a control disabled by the press it answered does not swallow the focus');
 });
 
 console.log(count+' ui guard groups passed');

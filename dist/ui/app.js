@@ -72,18 +72,25 @@ function render(){
  const s=game.run;Sound.sync(game.account.settings.muted,s?.phase);
  if(!s){$('#app').innerHTML=stage('start','새 점포','','<p class="eyebrow">GUILD24</p><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">초기 자금 1,200G · 창고 24칸 · 30일 영업</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),btn('첫 영업 준비','new','stamp'));if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
- /* innerHTML을 통째로 갈아끼우므로 포커스가 사라진다. 화면이 그대로인 재렌더에서는
-    같은 조작 대상으로 되돌려 놓는다 — 그러지 않으면 키보드 사용자는 물건을 하나 고를
-    때마다 화면 맨 처음으로 튕긴다. 대상은 위임 클릭이 쓰는 data-action/data-id로 찾는다. */
- const focusKey=(()=>{const el=document.activeElement;
+ /* Replacing #app wholesale drops focus. On a redraw of the same view it goes back on the
+    same control, or a keyboard user is thrown to the top of the screen on every pick.
+    The handle is the data-action/data-id the click delegation already uses, plus the
+    control's place among its namesakes: the quantity dial alone puts 30 buttons under
+    data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
+ const focusHold=(()=>{const el=document.activeElement;
   if(!el||el===document.body||!$('#app')?.contains(el))return null;
   const a=el.dataset.action,id=el.dataset.id;
   if(!a||/["\\]/.test(a)||(id&&/["\\]/.test(id)))return null;
-  return '[data-action="'+a+'"]'+(id?'[data-id="'+id+'"]':'');})();
+  const key='[data-action="'+a+'"]'+(id?'[data-id="'+id+'"]':'');
+  return {key,nth:[...$('#app').querySelectorAll(key)].indexOf(el)};})();
  $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">하나를 고르면 영업이 시작된다.</p></div>','');
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
- if(!changed&&focusKey)$('#app '+focusKey)?.focus({preventScroll:true});
+ /* The control that answered the last press is often disabled by it (a quantity driven to
+    zero or to the cap), and a disabled button cannot take focus: fall to its nearest live
+    neighbour inside the same group rather than back to the top. */
+ if(!changed&&focusHold){const t=$('#app').querySelectorAll(focusHold.key)[focusHold.nth];
+  (t&&!t.disabled?t:t?.parentElement?.querySelector('[data-action]:not(:disabled)'))?.focus({preventScroll:true});}
  // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
  if(phase==='foundation')modal='relics';else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);

@@ -1,8 +1,10 @@
 (function(G){
 const D=G.DATA;
 
-/* 계정 — Run을 넘어 남는 것. 누적 경험치가 가맹등급을 올리고, 진행도가 해금을 연다.
-   v2.5에서 Job Mastery 중심으로 재설계될 자리라, 무엇이 어디서 올라가는지 읽히게 둔다. */
+/* The account: what is left once a Run ends. Accumulated XP raises the franchise grade,
+   progress counters open unlocks. This is the file v2.5's Job Mastery redesign opens first,
+   so keep it legible what rises where.
+   ASCII comments on purpose: the subset check scans every character in dist/. */
 
 const GRADE_STEPS=[0,120,300,550,850,1250];
 
@@ -11,7 +13,7 @@ function fresh(){
   runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true},lastUnlocks:[]};
 }
 
-/* 진행도가 목표에 닿은 해금을 연다. 등급은 누적 경험치가 넘긴 문턱의 개수다. */
+/* Open every unlock whose progress reached its target. The grade is how many XP thresholds were passed. */
 function check(a){
  const newly=[];
  for(const [id,[,target]] of Object.entries(D.unlocks))
@@ -21,13 +23,13 @@ function check(a){
  return newly;
 }
 
-/* 진행도 한 칸. max면 누적이 아니라 최고 기록을 남긴다(최고 레벨 같은 것). */
+/* One step of progress. With max it keeps the best record instead of a running total (highest level and the like). */
 function bump(a,k,n=1,max=false){
  a.progress[k]=max?Math.max(a.progress[k]||0,n):(a.progress[k]||0)+n;
 }
 
-/* 원정 하나가 계정에 남기는 것. 던전 지식은 보급을 받은 모험가가 살아 돌아왔을 때만
-   쌓인다 — 맨몸으로 내보내 지식을 파밍하는 경로는 없다. */
+/* What one expedition leaves on the account. Dungeon knowledge accrues only when a supplied
+   adventurer comes home alive: there is no route that farms knowledge by sending people out bare. */
 function observe(a,report,n){
  a.discoveries??=[];
  report.discoveries=[];
@@ -52,8 +54,8 @@ function observe(a,report,n){
  return check(a);
 }
 
-/* Run 종료 보상. 한 판은 한 번만 정산된다(rewarded 가드).
-   가중치는 PASS3 항목이며 사용자 승인 없이 바꾸지 않는다. */
+/* End-of-run reward. A run settles exactly once (the rewarded guard).
+   The weights are a PASS3 item and are not changed without the user's approval. */
 function finish(a,run,win){
  if(run.rewarded)return;
  run.rewarded=true;

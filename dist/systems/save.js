@@ -1,15 +1,18 @@
 (function(G){
 const KEY='guild24.save.v5';
 
-/* 저장 검증. 한 절이라도 어긋나면 그 저장은 받아들이지 않는다.
-   각 검사는 이름을 갖고 따로 서 있다 — 이 함수는 v2.4에서만 두 번 확장됐고
-   앞으로도 상태가 늘 때마다 손대는 자리라, 무엇을 검사하는지 읽히는 것이 중요하다.
-   순서는 값싼 검사부터다. 중간에 무엇이 던지든 바깥 try가 받아 거절로 돌린다. */
+/* Save validation. One clause out of line and the save is refused.
+   Each check stands alone under its own name. This function was extended twice in v2.4
+   alone and gets touched again every time run state grows, so what it checks has to be
+   readable. Cheap checks run first; anything that throws on the way is caught by the
+   outer try and turned into a refusal.
+   Comments here are ASCII on purpose: the subset check scans every character in dist/,
+   so Korean in a comment is shipped font bytes for text no player ever sees. */
 
 const PHASES=['foundation','morning','order','sell','night','closing','final','end'];
 const RELIC_WINDOWS=[0,5,10,15,20,25,30];
 
-/* 계정 — Run을 넘어 유지되는 것. 해금 키와 발견 상품은 실제 카탈로그에 있어야 한다. */
+/* Account: what is kept across Runs. Unlock keys and discovered goods must exist in the catalog. */
 function accountOk(a,D){
  return !!a
   && Array.isArray(a.unlocked) && a.unlocked.every(k=>k in D.unlocks)
@@ -20,7 +23,7 @@ function accountOk(a,D){
   && Number.isInteger(a.grade) && a.grade>=1 && a.grade<=6;
 }
 
-/* Run의 뼈대 — 있어야 할 배열과 값이 있고, DAY와 단계가 실재하는 범위인가. */
+/* The shape of a Run: the arrays and values that must be there, with DAY and phase in real range. */
 function runShapeOk(r){
  return !!r
   && ['npcs','inventory','facilities','offers','queue','dungeons','results','team','reportHistory']
@@ -32,7 +35,7 @@ function runShapeOk(r){
   && PHASES.includes(r.phase);
 }
 
-/* 명단 — 같은 모험가가 두 번 있지 않고, 대기열과 최종팀이 실재하는 사람만 가리킨다. */
+/* The roster: no adventurer twice, and the queue and final team point only at people who exist. */
 function rosterOk(r,ids){
  return new Set(ids).size===ids.length
   && r.queue.every(id=>ids.includes(id))
@@ -40,7 +43,7 @@ function rosterOk(r,ids){
   && r.team.length<=3;
 }
 
-/* 모험가 한 명 — 직업·특성·소지품이 전부 실재하는 카탈로그 항목인가. */
+/* One adventurer: job, traits and pack are all real catalog entries. */
 function npcOk(n,D){
  return typeof n.id==='string' && typeof n.name==='string'
   && !!D.jobBy[n.job]
@@ -54,7 +57,7 @@ function npcOk(n,D){
   && typeof n.alive==='boolean';
 }
 
-/* 재고 · 발주 후보 · 오늘의 게이트. 은퇴한 어휘를 읽는 항목은 여기서 걸린다. */
+/* Stock, order candidates and today's gates. An entry naming retired vocabulary is caught here. */
 function stockOk(r,D){
  return r.inventory.every(st=>D.itemBy[st.item] && typeof st.id==='string'
     && (st.expires===null || Number.isFinite(st.expires)))
@@ -65,8 +68,9 @@ function stockOk(r,D){
     && (d.requiredSupply===undefined || (Number.isInteger(d.requiredSupply) && d.requiredSupply>=0)));
 }
 
-/* 진행 중인 판이 들고 있는 나머지 — 읽던 위치, 오늘의 사건, 손님의 한마디,
-   점포지원 갱신 상태, 최종 구성. 저장/불러오기가 재추첨이 되지 않게 하는 절들이다. */
+/* The rest of what a run in progress carries: where it was reading, today's event, the
+   customer's line, the store-support window, the final line-up. These are the clauses that
+   stop save/load from turning into a re-roll. */
 function progressOk(r,ids,D){
  if(!Number.isInteger(r.cursor) || r.cursor<0) return false;
  if(r.phase==='sell' && r.cursor>=r.queue.length) return false;
@@ -91,7 +95,7 @@ function progressOk(r,ids,D){
  return true;
 }
 
-/* 최종 원정 — 서로 다른 두 Family가 D30에 공개돼 있어야 한다. */
+/* The final expedition: two different Families, revealed on D30. */
 function finalOk(f,D){
  return Array.isArray(f.families) && f.families.length===2
   && new Set(f.families).size===2 && f.families.every(x=>D.familyTiers[x])
@@ -99,7 +103,7 @@ function finalOk(f,D){
   && Array.isArray(f.hazards) && f.hazards.every(h=>h in D.hazards);
 }
 
-/* 점포지원 갱신 — 후보와 가격이 고정돼 있어야 불러오기가 재추첨이 되지 않는다. */
+/* Store-support window: candidates and prices must stay pinned, or loading becomes a re-roll. */
 function relicWindowOk(w,D){
  return Array.isArray(w.candidateIds)
   && new Set(w.candidateIds).size===w.candidateIds.length
@@ -134,12 +138,12 @@ G.Save={
  read(){
   if(typeof localStorage==='undefined')return null;
   if(!localStorage.getItem(KEY)&&!localStorage.getItem(KEY+'.backup')){
-   /* 이전 형식만 남아 있는 경우. 원본은 지우지 않고, 사람 말로 알린다. */
+   /* Only an older format is left. The original is never erased; the player is told in plain words. */
    if(['v1','v2','v3','v4'].some(v=>localStorage.getItem('guild24.save.'+v)))
     this.error='규칙 개편으로 이전 영업은 이어갈 수 없습니다. 새 점포를 열어 주세요. 이전 저장 원본은 보관됩니다.';
    return null;
   }
-  /* 최신 저장이 읽히지 않으면 직전 백업으로 내려간다. */
+  /* If the newest save will not read, fall back to the previous backup. */
   for(const key of [KEY,KEY+'.backup'])try{
    const raw=localStorage.getItem(key);
    if(!raw)continue;
@@ -155,7 +159,7 @@ G.Save={
    const D=G.DATA,a=s?.account,r=s?.run;
    if(s?.version!==5)return false;
    if(!accountOk(a,D))return false;
-   if(r===null)return true;              // 계정만 있고 진행 중인 Run이 없는 저장
+   if(r===null)return true;              // an account-only save, with no run in progress
    if(!runShapeOk(r))return false;
    const ids=r.npcs.map(n=>n.id);
    if(!rosterOk(r,ids))return false;
