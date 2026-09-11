@@ -36,18 +36,11 @@ D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,p
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 D.balance.relicPriceScale=1;D.balance.walletBase=70;D.balance.walletLevel=18;D.balance.walletCarry=.28;
-D.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],['frugal','impulse'],['strong','frail'],['lucky','unlucky']];
-D.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['corrosion'],['corrosion','slow'],['corrosion','slow']],fire:[['fire'],['fire'],['fire']],crypt:[['fear'],['fear','dark'],['fear','dark']],snow:[['cold'],['cold','whiteout'],['cold','whiteout']]};
-// Coverage gaps: existing goods retain IDs and prices; useful across professions.
-D.itemBy.battery.effects.spirit=3;
-const item=(id,name,buy,sell,category,effects,description)=>({id,name,rarity:0,buy,sell,category,days:category==='food'?5:0,icon:category==='food'?'choco':'battery',brand:'귀환안심',effects,description});
-D.items.push(item('rope','경량 로프',50,105,'tool',{mobility:4,bind:12},'매듭을 풀고 감았다. 다시 묶어야 한다.'),item('candy','집중 사탕',35,75,'food',{spirit:7,fear:5,food:1},'시험 전에도 잘 팔린다.'));
-D.items.push(item('boots','진창 장화',65,135,'tool',{slow:22,mobility:3},'밑창에 진흙이 잘 붙지 않는다.'),item('compass','방풍 나침반',60,125,'tool',{whiteout:22},'바늘을 가리지 말 것.'),item('goggles','탐사 고글',75,155,'tool',{dark:10,whiteout:10,bind:6},'시야가 좁아도 길은 남아 있다.'));
+D.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],['frugal','impulse'],['strong','frail'],['lucky','unlucky'],['collector','thrifty'],['stamina','weary'],['social','shy']];
+D.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['corrosion'],['corrosion','mire'],['corrosion','mire']],fire:[['fire'],['fire'],['fire']],crypt:[['fear'],['fear','dark'],['fear','dark']],snow:[['cold'],['cold','whiteout'],['cold','whiteout']]};
 D.categories={food:'음식',drink:'음료',medicine:'의료',tool:'야외장비',insurance:'보험',magic:'특수'};
-D.roles={stat:'능력 보강',direct:'전문 대응',hybrid:'복합 대응',condition:'컨디션',insurance:'생환 보험',risk:'위험·보상',economy:'원정 수익'};
-for(const it of D.items){it.fresh=it.category==='fresh';if(it.fresh)it.category='food';const e=it.effects,counters=Object.keys(e).filter(k=>k in D.hazards&&k!=='supply'&&e[k]>0);it.roles=it.id==='coupon'?['economy']:it.id==='dragon'?['risk']:['ramen','lava','candy'].includes(it.id)?['hybrid']:e.escape||e.revive||e.injuryGuard?['insurance']:counters.length>1?['hybrid']:counters.length===1?['direct']:e.fatigue?['condition']:['stat'];if(e.injuryRisk||e.thirst)it.roles.push('risk');if(e.loot)it.roles.push('economy');}
-const positive=['eater','impulse','genius','strong','potionbody','drinker','lucky'],negative=['frugal','pyrophobia'];
-for(const t of D.traits)t.direction=positive.includes(t.id)?'positive':negative.includes(t.id)?'negative':'mixed';
-D.traitDirections={positive:'▲ 이점',mixed:'◆ 양면',negative:'▼ 약점'};
-D.itemBy=Object.fromEntries(D.items.map(i=>[i.id,i]));
+D.roles={stat:'능력 보강',supply:'보급',direct:'전문 대응',hybrid:'복합 대응',condition:'컨디션',insurance:'생환 보험',risk:'위험·보상',economy:'원정 수익',utility:'특수 운용'};
+// Functional roles are declared per ITEM ACTIVE CATALOG, not inferred from effect shape.
+D.itemRoles={rice:['supply'],water:['supply'],ramen:['supply','hybrid'],bar:['supply','stat'],choco:['supply','stat'],coffee:['supply','stat'],bandage:['insurance'],potion:['stat'],ice:['supply','direct'],battery:['direct'],rope:['direct','stat'],candy:['supply','stat','hybrid'],lava:['supply','stat','hybrid'],energy:['supply','stat'],wine:['supply','direct','risk'],kit:['insurance'],mask:['direct'],heat:['direct'],cloak:['hybrid'],coating:['direct'],boots:['direct'],snowgoggles:['direct'],highpotion:['stat'],antidote:['direct'],stone:['insurance'],mana:['stat'],premium:['supply','economy'],ion:['supply','hybrid'],tree:['insurance'],coupon:['utility']};
+for(const it of D.items){it.fresh=it.category==='fresh';if(it.fresh)it.category='food';it.roles=D.itemRoles[it.id]||[];}
 })(globalThis);

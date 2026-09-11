@@ -1,5 +1,6 @@
 {
   "parameter": "operating",
+  "canonicalSet": "GUILD24_CANONICAL_v2.4.0",
   "baseline": 60,
   "candidate": 65,
   "seedsPerStrategy": 300,
@@ -7,18 +8,18 @@
     {
       "pricing": "adaptive",
       "build": "hybrid",
-      "reach": 0.9966666666666667,
-      "clear": 0.2633333333333333,
-      "gold": 3667.1,
-      "deaths": 4.1
+      "reach": 0.9933333333333333,
+      "clear": 0.08666666666666667,
+      "gold": 3867.193333333333,
+      "deaths": 4.753333333333333
     },
     {
       "pricing": "vip",
       "build": "vip",
-      "reach": 0.9666666666666667,
-      "clear": 0.49666666666666665,
-      "gold": 1620,
-      "deaths": 4.163333333333333
+      "reach": 0.99,
+      "clear": 0.16666666666666666,
+      "gold": 1943.36,
+      "deaths": 4.613333333333333
     }
   ]
 }

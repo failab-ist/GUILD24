@@ -1,6 +1,6 @@
 // Runtime acceptance evidence; Canonical QA files remain immutable.
 const assert=require('node:assert/strict');
-for(const f of ['data/catalog','data/relics','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const originalMorning=Game.prototype.morning,originalBuy=Game.prototype.buyRelic;
 let windows=new Map(),days=[],deferredPurchases=0,completed=0;

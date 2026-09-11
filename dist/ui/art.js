@@ -26,6 +26,24 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='coupon')s=rect(4,11,35,23,'#e8c567')+rect(7,14,29,17,'#846d3d')+`<text x="21" y="26" text-anchor="middle" fill="#f7db82" font-family="monospace" font-size="10" font-weight="bold">1+1</text>`;
  return `<svg class="item-art" width="${size}" height="${size}" viewBox="0 0 44 44" shape-rendering="crispEdges" role="img" aria-label="${esc(it.name)}">${s}</svg>`;
 }
+// Gate marks and UI glyphs. Pixel sprites on the same 4px grid as the rest of the art —
+// the interface never falls back to emoji for a game object (UI_UX ACCESSIBILITY/SIGNALS).
+function mark(family,size=32){const c=DATA.dungeonBy[family]?.color||'#cbd5b6';let s='';
+ if(family==='spider')s=rect(12,10,8,8,c)+rect(10,14,12,4,c)+rect(4,8,4,4,c)+rect(8,12,2,2,c)+rect(24,8,4,4,c)+rect(22,12,2,2,c)+rect(4,20,4,4,c)+rect(8,18,2,2,c)+rect(24,20,4,4,c)+rect(22,18,2,2,c)+rect(14,20,4,6,c)+rect(13,4,2,4,c)+rect(17,4,2,4,c);
+ if(family==='fire')s=rect(14,4,4,4,c)+rect(12,8,8,4,c)+rect(8,12,16,6,c)+rect(6,18,20,8,c)+rect(10,26,12,2,'#f3d78a')+rect(12,14,8,8,'#f6e3ab')+rect(14,18,4,4,'#fffbe8');
+ if(family==='crypt')s=rect(10,4,12,4,c)+rect(6,8,4,16,c)+rect(22,8,4,16,c)+rect(10,20,12,4,c)+rect(12,8,8,12,'#2a2436')+rect(14,10,4,4,c)+rect(4,24,24,4,c);
+ if(family==='snow')s=rect(14,2,4,28,c)+rect(2,14,28,4,c)+rect(6,6,4,4,c)+rect(22,6,4,4,c)+rect(6,22,4,4,c)+rect(22,22,4,4,c)+rect(10,10,12,12,'#e6f6fb')+rect(14,14,4,4,c);
+ if(family==='slime')s=rect(8,12,16,4,c)+rect(4,16,24,10,c)+rect(10,8,10,4,c)+rect(10,18,4,4,'#22392f')+rect(18,18,4,4,'#22392f')+rect(6,26,20,2,'#2c4a3d');
+ if(family==='final')s=rect(4,4,6,8,c)+rect(14,4,4,8,c)+rect(22,4,6,8,c)+rect(4,12,24,4,c)+rect(8,16,16,14,c)+rect(14,20,4,10,'#2b1418')+rect(10,18,4,4,'#2b1418')+rect(18,18,4,4,'#2b1418');
+ if(!s)s=rect(8,8,16,16,c);
+ return `<svg class="mark" width="${size}" height="${size}" viewBox="0 0 32 32" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;}
+function glyph(name,size=24){const c='currentColor';let s='';
+ if(name==='menu')s=rect(3,5,18,3,c)+rect(3,11,18,3,c)+rect(3,17,18,3,c);
+ if(name==='coin')s=rect(8,3,8,2,c)+rect(5,5,14,2,c)+rect(3,7,18,10,c)+rect(5,17,14,2,c)+rect(8,19,8,2,c)+rect(10,8,4,8,'#1c1815')+rect(8,10,8,4,'#1c1815');
+ if(name==='person')s=rect(9,3,6,6,c)+rect(6,11,12,7,c)+rect(4,13,2,5,c)+rect(18,13,2,5,c)+rect(7,18,4,3,c)+rect(13,18,4,3,c);
+ if(name==='next')s=rect(6,3,3,3,c)+rect(9,6,3,3,c)+rect(12,9,3,6,c)+rect(9,15,3,3,c)+rect(6,18,3,3,c);
+ if(name==='stamp')s=rect(4,4,16,3,c)+rect(4,7,3,10,c)+rect(17,7,3,10,c)+rect(4,17,16,3,c)+rect(9,9,6,6,c);
+ return `<svg class="glyph" width="${size}" height="${size}" viewBox="0 0 24 24" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;}
 function scene(game){const s=game.run,n=s.phase==='sell'?game.current():null,night=['night','end'].includes(s.phase),entering=scene.lastId!==n?.id;scene.lastId=n?.id;const rects=[];let scenery='';const shelf=(x,y)=>{let z=rect(x,y,123,86,'#566e60')+rect(x+5,y+6,113,72,'#2b4b43');for(let j=0;j<3;j++){z+=rect(x+3,y+23+j*25,117,5,'#bcae8c');for(let k=0;k<7;k++){const c=['#bcd9af','#d9b281','#cc8771','#9ac2bc','#e2d5a9'][(j+k)%5];z+=rect(x+10+k*15,y+9+j*25,9,13,c)+rect(x+12+k*15,y+12+j*25,5,4,'#e8e4cd');}}return z;};
  for(let y=207;y<390;y+=24)for(let x=16;x<783;x+=32)rects.push(rect(x,y,31,23,((x/32+y/24)|0)%2?'#c6c6aa':'#bdbfa4'));
  scenery+=rect(0,0,800,430,night?'#152b30':'#283d39')+rect(16,18,768,70,'#315d4f')+rect(17,23,766,5,'#e0bd74')+rect(17,80,766,7,'#b9784f')+`<text x="47" y="64" fill="#f2eed4" font-size="33" font-family="monospace" font-weight="bold" letter-spacing="2">GUILD<tspan fill="#dfb46d">24</tspan></text><text x="750" y="59" text-anchor="end" fill="#d4dfca" font-size="15" font-family="sans-serif">던전 가기 전, 길드24.</text>`;
@@ -43,7 +61,7 @@ function scene(game){const s=game.run,n=s.phase==='sell'?game.current():null,nig
  if(n?.pack.length&&s.phase==='sell')n.pack.forEach((id,i)=>scenery+=`<g transform="translate(${330+i*37} 249)">${itemIcon(id,37)}</g>`);
  const installed=s.facilities;installed.forEach((id,i)=>{const x=30+(i%3)*82,y=292+Math.floor(i/3)*40;scenery+=rect(x,y,70,30,'#42685a')+rect(x+3,y+3,64,7,'#e2bc72')+`<text x="${x+35}" y="${y+23}" text-anchor="middle" fill="#e4e5ca" font-size="9" font-family="sans-serif">${esc(DATA.facilities.find(f=>f.id===id).name)}</text>`;});
  scenery+=rect(16,390,768,8,'#577666')+rect(16,398,768,32,'#34544a')+`<text x="41" y="419" fill="#a8bdac" font-family="monospace" font-size="11">${night?'CLOSED · SEE YOU TOMORROW':'OPEN · ADVENTURERS WELCOME'}</text><text x="759" y="419" text-anchor="end" fill="#c9c8a5" font-size="11" font-family="sans-serif">${esc(s.branch)}</text>`;
- return `<svg viewBox="0 0 800 430" class="store-art" role="img" aria-label="길드24 매장 내부. 계산대, 손님, 상품 매대, 냉장고와 설치한 설비." shape-rendering="crispEdges">${scenery}</svg>`;
+ return `<svg viewBox="0 0 800 430" preserveAspectRatio="xMidYMax slice" class="store-art" role="img" aria-label="길드24 매장 내부. 계산대, 손님, 상품 매대, 냉장고와 설치한 설비." shape-rendering="crispEdges">${scenery}</svg>`;
 }
-G.Art={avatar,itemIcon,scene,esc};
+G.Art={avatar,itemIcon,scene,mark,glyph,esc};
 })(globalThis);
