@@ -92,7 +92,14 @@ function render(){
  if(!changed&&focusHold){const t=$('#app').querySelectorAll(focusHold.key)[focusHold.nth];
   (t&&!t.disabled?t:t?.parentElement?.querySelector('[data-action]:not(:disabled)'))?.focus({preventScroll:true});}
  // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
- if(phase==='foundation')modal='relics';else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
+ /* The Boss reveal joins the beat that already exists rather than becoming a Phase of its
+    own (UI_UX: `Boss reveal is not a new permanent Phase`). It goes ahead of the Relic
+    window on the same Day, because the Relic decision is the one it is meant to inform
+    (REL-Q41, UI-Q40): D5 identity, D15 the exact Trait, D30 the two Families. */
+ if(phase==='foundation')modal='relics';
+ else if(bossRevealDue())modal='boss';
+ else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
+ else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
@@ -471,10 +478,48 @@ function stockModal(){const s=game.run;return `<p class="muted" style="margin-bo
 function newRun(){return `<div class="eyebrow">길드리테일 가맹 계약</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">기본 자금 1,200G · 창고 24칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">계약서를 접어 카운터 아래 넣었다. 시작 재고는 창고에 있다.</div><h3 style="margin-bottom:10px">시작 계약</h3><div class="contract-grid">${D.contracts.map(c=>{const locked=c.unlock&&!game.account.unlocked.includes(c.unlock);return `<button class="contract ${contract===c.id?'active':''}" data-action="contract" data-id="${c.id}" ${locked?'disabled':''}><strong>${c.name}${locked?' · 잠김':''}</strong><span class="muted">${c.description}</span>${locked?'<br><small>'+unlockProgress(c.unlock)+'</small>':''}</button>`;}).join('')}</div><details style="margin-top:15px"><summary class="smalltext">재현용 Seed 지정</summary><label class="smalltext" for="seed">비워 두면 새로운 Seed로 시작합니다.</label><input id="seed" class="seed-field" placeholder="예: guild24-first-shift" maxlength="80"></details>${game.run&&game.run.phase!=='end'?'<p class="danger-text" style="margin-top:14px">진행 중인 점포는 여기서 마감됩니다. 점주 XP를 받고 새로운 런을 시작합니다.</p>':''}`;}
 function settings(){return `<div class="stack"><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="row wrap">${btn('저장 내보내기','export','stamp')}${btn('저장 가져오기','import')}</div><div class="row wrap">${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div><hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="muted">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p>${game.run&&game.run.phase!=='end'?btn('현재 런 마감 · 새 점포 준비','new','danger'):''}<small>버전 0.4 · 로컬 실행 지원 · 외부 연결 없음</small></div>`;}
 function help(){return `<div class="stack"><h3>점포지원</h3><p>DAY 0에는 무료로 하나를 선택합니다. DAY 5·10·15·20·25·30에는 자금을 써서 구매합니다. 사지 않은 후보는 다음 구매 기회 전날까지 보류할 수 있습니다. 판매 중에는 구매할 수 없습니다.</p><h3>발주</h3><p>기본 방문객은 3~6명. 시설·계약·이벤트와 활동 가능한 모험가 수에 따라 달라집니다. 아침에 표시된 인원은 오늘 실제 방문할 인원입니다. 게이트는 초반 1곳에서 후반 최대 3곳까지 열리고, 임시 게이트가 추가될 수 있습니다.</p><p>수량을 고른 뒤 발주를 확정합니다. 남은 재고와 유통기한, 운영비도 확인하세요.</p><h3>판매와 관계</h3><p>목적지·능력·특성을 보고 상품을 고릅니다. 바가지는 수입과 관계를 맞바꾸고, 반값은 이익을 포기해 손님에게 투자합니다. 정가는 기본 거래입니다. 같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다.</p><p>단골도는 구매 의사와 재방문에 영향을 줍니다. 능력을 직접 올리지는 않습니다. 손님의 특성은 처음부터 전부 표시되며, 표시된 특성이 원정에서 실제로 작용하는 특성입니다.</p><h3>원정과 마감</h3><p>판매한 소비품은 그날 원정에서 사용됩니다. 기본 2칸, Lv.10부터 최대 3칸입니다. 밤에는 귀환 결과를 보고, 마감에서 거래와 보급의 작용을 확인합니다.</p><p>사망은 이번 영업에서 영구적입니다. 중상은 며칠의 휴식이 필요합니다. 30일에는 마지막 발주와 점포지원을 결정하고, 최대 3명에게 보급해 마왕성으로 보냅니다.</p><p>영업이 끝나면 상품 해금·몬스터 지식·발견·가맹등급은 남습니다. 모험가·재고·돈·설비는 다음 영업에 이어지지 않습니다.</p><p>적자일 때는 재고 정리로 운영비를 충당할 수 있습니다. 시간을 재촉하는 제한은 없습니다.</p></div>`;}
+/* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
+   cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
+function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
+ if(s.day>=30&&s.phase==='final')return !s.bossReveal.familySeen;
+ if(!['morning','order'].includes(s.phase))return false;
+ if(s.day>=15&&!s.bossReveal.traitSeen)return true;
+ return s.day>=5&&!s.bossReveal.identitySeen;}
+
+function bossRevealStage(){const s=game.run;
+ if(s.day>=30&&s.phase==='final')return 'd30';
+ return s.day>=15&&!s.bossReveal.traitSeen?'d15':'d5';}
+
+/* Boss art is a game object here, not an icon beside a card (UI_UX). The decision the
+   reveal leads into stays above the fold on a phone, so the art sits under the facts. */
+function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bossRevealStage();
+ const art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
+ const plate=art?'<figure class="boss-art"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'';
+ if(stage==='d30'){const d=s.dungeons[0];
+  return '<div class="boss-reveal d30"><p class="lede">'+E(c.d30.intro)+'</p>'
+   +'<div class="fams">'+(d.families||[]).map(id=>{const f=D.dungeonBy[id];
+     return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+E(f.name)+'</b>'
+      +hazardList(D.familyTiers[id][1])+'</article>';}).join('')
+   +'</div>'+plate+'</div>';}
+ if(stage==='d15'){const [name,lines]=c.d15.trait[s.bossId];
+  return '<div class="boss-reveal d15"><p class="lede">'+E(c.d15.intro)+'</p>'
+   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
+   +'<p class="trait-name">특성 — '+E(name)+'</p>'
+   +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>'
+   +plate+'</div>';}
+ return '<div class="boss-reveal d5"><p class="lede">'+E(c.d5.sub)+'</p>'
+  +'<h3 class="boss-name">'+E(b.name)+'</h3>'
+  +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
+
 function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';document.body.style.overflow='';return;}
  if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';return;}
  let title='',body='',footer='',narrow=false;const s=game.run;
- if(modal==='new'){title='새 점포 준비';body=(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')+newRun();footer=btn('첫 점포지원 고르기','start','stamp');narrow=true;}
+ if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
+  title=stage==='d30'?c.d30.header:stage==='d15'?'길드 정보 보고':c.d5.header;
+  body=bossReveal();
+  footer=btn(stage==='d30'?c.d30.button:stage==='d15'?c.d15.button:c.d5.button,'boss-seen','stamp');
+  narrow=stage!=='d30';}
+ else if(modal==='new'){title='새 점포 준비';body=(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')+newRun();footer=btn('첫 점포지원 고르기','start','stamp');narrow=true;}
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(gatePlate).join('')+'</div>';}
  else if(modal==='menu'){title='점포 메뉴';body='<div class="menu-list">'+btn('모험가 수첩','roster')+btn('본사 · 도감','codex')+btn('점주 가이드','help')+btn('설정 · 저장','settings')+btn('소리 켜기 / 끄기','sound')+'</div>';narrow=true;}
@@ -496,6 +541,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'coach-skip':finishCoach(true);break;
  case'coach-next':{const actionName=activeCoach?.[3];finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
  case'special':game.specialAction(id,el.dataset.value);render();break;
+ case'boss-seen':{const st=bossRevealStage();
+  if(st==='d30')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
+  game.save();setModal(null);render();break;}
  case'menu':setModal('menu');break;
  case'begin-order':game.beginOrder();render();break;
  case'finish-order':game.finishOrder();render();break;

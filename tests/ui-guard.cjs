@@ -255,4 +255,35 @@ test('render: a same-view redraw keeps the keyboard where it was',()=>{
  assert.ok(/disabled/.test(fn),'a control disabled by the press it answered does not swallow the focus');
 });
 
+test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is meant to inform',()=>{
+ const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"));
+ const boss=chain.indexOf("modal='boss'"),event=chain.indexOf("modal='event'"),relic=chain.indexOf("focusedRevealSeen");
+ assert.ok(boss>=0&&event>=0&&relic>=0,'all three focused reveals are in one chain');
+ assert.ok(boss<event&&boss<relic,'the Boss reveal is offered ahead of the Event and the Relic window');
+ assert.ok(!/phase==='boss'/.test(app),'the reveal is a beat in the existing chain, not a new Phase');
+ // seen state is persisted per stage, so a reload cannot replay or reorder a reveal
+ for(const flag of ['identitySeen','traitSeen','familySeen'])
+  assert.ok(app.includes(flag),'the '+flag+' reveal is consumed exactly once');
+ assert.ok(/case'boss-seen'/.test(app)&&/game\.save\(\)/.test(app),'consuming a reveal is written to the save');
+});
+
+test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',()=>{
+ const c=Copy.boss;
+ assert.equal(c.d5.header,'길드 토벌 공고');
+ assert.equal(c.d15.intro,'길드 정보원이 추가 정보를 확보했다.');
+ assert.equal(c.d30.header,'최종 정찰 보고');
+ for(const b of DATA.bosses){
+  assert.ok(c.d5.flavor[b.id],b.id+' has its D5 Flavor');
+  assert.ok(c.d15.trait[b.id],b.id+' has its D15 Trait');
+ }
+ // D5 hints; it never states the Function. D15 states it.
+ for(const [id,line] of Object.entries(c.d5.flavor))
+  assert.ok(!/감소한다|증가한다|적용된다/.test(line),id+"'s D5 Flavor does not give the Function away");
+ // the one value PASS3 still owns stays a slot, not prose
+ assert.ok(c.d15.trait.GLUTTONY[1][0].includes('[등급]'),'the rarity boundary is a DATA slot until PASS3 approves it');
+ const prose=JSON.stringify(c);
+ for(const term of ['Run','Final Snapshot','Final Power','Factor','Modifier','sealBreakCount','effectiveBossPower'])
+  assert.ok(!prose.includes(term),'no internal design term reaches the player: '+term);
+});
+
 console.log(count+' ui guard groups passed');

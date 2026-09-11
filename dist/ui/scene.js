@@ -192,6 +192,21 @@ function returnTag(state){
  return `<svg class="tag-art" viewBox="0 0 14 25" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
 }
 
+/* ---- Boss art ----------------------------------------------------------------
+   The Boss is a game object in its own right, so it resolves the same way a portrait
+   does: from the Run state, never from a stored filename. Day comes first. Six Bosses
+   wear their battle form only on the last day; SLOTH wears its base form until then no
+   matter how many seals are already broken, and on D30 shows the form its break count
+   earned. Zero breaks reuses the base form - there is no D30 SB0 art and none is needed
+   (BOSS: `Gameplay truth is bossId + sealBreakCount, not an asset filename`). */
+function bossArt(bossId,day,sealBreakCount){
+ const a=G.NPCAssets,prefix=a&&a.boss&&a.boss[bossId];
+ if(!prefix)return null;
+ const form=bossId!=='SLOTH' ? (day>=30?'D30':'D05-D15')
+   : (day<30||!sealBreakCount ? a.slothZero : 'D30_SB'+sealBreakCount);
+ return a.base+'boss/'+prefix+'_'+bossId+'_'+form+a.ext;
+}
+
 /* ---- asset slots -------------------------------------------------------------
    Every scene asset resolves through slot(), so a production PNG/SVG can replace a
    procedural one later by registering it in Scene.manifest without touching any screen.
@@ -212,5 +227,5 @@ const anchors={
 const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),
  seal,crate,priceTag,hazardIcon,manifest,slot,anchors,anchorStyle,
- npcArt,npcPool,cardBack,shelfStrip,nightRoom,returnTag};
+ npcArt,npcPool,bossArt,cardBack,shelfStrip,nightRoom,returnTag};
 })(globalThis);

@@ -98,5 +98,33 @@ const Copy={
  livingPool(){return [...night.avoided,...night.rescued,...night.severe,...night.hurt,
   ...night.retreat,...night.grew,...night.supplied,...night.shaken,...night.plain];}
 };
+
+/* COPY_WORLD_VOICE 18.5 - BOSS REVEAL. Verbatim from the spec: D5 gives identity and a
+   Flavor line that may hint at the Trait but never states it, D15 gives the exact
+   Function, D30 gives the Family facts and nothing else. No strategy advice is appended
+   anywhere - the information itself is the decision material. GLUTTONY's rarity boundary
+   is a DATA slot, not prose, and stays empty until PASS3 approves it. */
+Copy.boss={
+ d5:{header:'길드 토벌 공고',sub:'이번 토벌 대상',button:'토벌 대상 확인',
+  flavor:{
+   WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',
+   PRIDE:'검은 갑주에는 아직 흠집 하나 남지 않았다.',
+   ENVY:'승전 보고서마다 가장 빛나던 이름 하나가 붉게 지워져 있었다.',
+   GREED:'금고가 빈 마을일수록, 놈의 군세는 이상할 만큼 강했다.',
+   GLUTTONY:'최정예 토벌대의 보급품만 유난히 처참한 꼴로 발견됐다.',
+   LUST:'오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.',
+   SLOTH:'놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.'}},
+ d15:{intro:'길드 정보원이 추가 정보를 확보했다.',button:'정보 확인',
+  trait:{
+   WRATH:['특수 효과 없음',['별도의 변칙은 확인되지 않았다.','래스는 순수한 전력으로 맞선다.']],
+   PRIDE:['오만의 갑주',['최종전에서 모든 출전자의 투력이 감소한다.','강인함·기동·정신은 그대로 적용된다.']],
+   ENVY:['질투의 시선',['최종전에서 가장 크게 기여하는 모험가 한 명이 표적이 된다.','표적의 투력·강인함·기동·정신은 최종전 동안 감소한다.']],
+   GREED:['탐욕의 장부',['최종전까지 누적 총매출이 목표에 미달하면, 부족한 만큼 그리드가 강해진다.','강화에는 한도가 있으며, 목표를 넘겨도 추가 이득은 없다.']],
+   GLUTTONY:['폭식의 권능',['최종전에서 [등급] 이상 보급품의 능력치 증가 효과가 감소한다.','대응·보급·보험·기타 특수 효과는 그대로 적용된다.']],
+   LUST:['매혹의 권능',['단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.','단골은 영향을 받지 않는다.']],
+   SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 유물을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 유물은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
+ d30:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'최종 준비'}
+};
+
 G.Copy=Copy;
 })(globalThis);

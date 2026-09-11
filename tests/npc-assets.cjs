@@ -70,16 +70,33 @@ test('BOSS: every state the runtime can derive has a file, and no file is unreac
  assert.equal(files.size,16,'six Boss x two forms, plus the four SLOTH forms');
 });
 
-test('BOSS: SLOTH at zero breaks reuses its D5/D15 form, and no D30_SB0 file is expected',()=>{
- const files=new Set(list('04_BOSS'));
- // the derivation under test, written as the runtime will write it
- const sloth=n=>n===0?'B007_SLOTH_D05-D15_SB0.png':'B007_SLOTH_D30_SB'+n+'.png';
- for(const day of [5,15,30])assert.equal(sloth(0),'B007_SLOTH_D05-D15_SB0.png',
-  'zero breaks resolves to the same form on DAY '+day);
- for(const n of [0,1,2,3])assert.ok(files.has(sloth(n)),'break count '+n+' resolves to a real file');
- assert.ok(!files.has('B007_SLOTH_D30_SB0.png'),'no D30_SB0 asset exists, and none is required');
+test('BOSS: the shipped derivation reads the Day first, so a broken seal never leaks the battle form early',()=>{
+ require('../dist/ui/assets/npc/manifest.js');require('../dist/ui/art.js');require('../dist/ui/scene.js');
+ const dist=path.resolve(__dirname,'..','dist');
+ const art=(id,day,breaks)=>Scene.bossArt(id,day,breaks);
+ const shipped=f=>fs.existsSync(path.join(dist,f));
+ const BASE='B007_SLOTH_D05-D15_SB0';
+ // Seals are broken on D15/D20/D25, so the count is already above zero well before the
+ // Final. The Day decides the form; the count only chooses which D30 form.
+ for(const [day,breaks] of [[15,1],[20,2],[25,2],[29,3]])
+  assert.ok(art('SLOTH',day,breaks).includes(BASE),
+   'DAY '+day+' with '+breaks+' break(s) still shows the base form');
+ assert.ok(art('SLOTH',5,0).includes(BASE),'and so does DAY 5 with none');
+ assert.ok(art('SLOTH',30,0).includes(BASE),'zero breaks reuses the base form on DAY 30 too');
+ for(const n of [1,2,3])
+  assert.ok(art('SLOTH',30,n).includes('B007_SLOTH_D30_SB'+n),'DAY 30 with '+n+' break(s) shows SB'+n);
+ // every form the runtime can reach is a file that ships, and D30_SB0 is neither
+ for(const [id,day,breaks] of [['SLOTH',5,0],['SLOTH',15,1],['SLOTH',30,0],['SLOTH',30,1],['SLOTH',30,2],['SLOTH',30,3]])
+  assert.ok(shipped(art(id,day,breaks)),id+' D'+day+'/'+breaks+' resolves to a shipped file');
+ assert.ok(!shipped('ui/assets/npc/boss/B007_SLOTH_D30_SB0.webp'),'no D30_SB0 asset exists, and none is required');
+ // the six ordinary Bosses wear their battle form only on the last day
+ for(const id of ['WRATH','PRIDE','ENVY','GREED','GLUTTONY','LUST']){
+  for(const day of [5,15,29]) assert.ok(art(id,day).includes('_D05-D15'),id+' keeps its base form on DAY '+day);
+  assert.ok(art(id,30).includes('_D30'),id+' wears its battle form on DAY 30');
+  for(const day of [5,30]) assert.ok(shipped(art(id,day)),id+' DAY '+day+' resolves to a shipped file');
+ }
+ assert.equal(art('NOBODY',30),null,'an unknown identity resolves to nothing rather than a broken path');
 });
-
 test('the rename record can still trace every production slot back to its original file',()=>{
  const map=JSON.parse(fs.readFileSync(path.join(root,'02_NORMAL_WORK/RENAME_MAPPING.json'),'utf8'));
  for(const g of ['M','F']){

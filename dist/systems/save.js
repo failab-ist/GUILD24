@@ -104,6 +104,7 @@ function bossOk(r,D){
  if(!D.bossBy[r.bossId])return false;
  const seen=r.bossReveal;
  if(!seen || typeof seen.identitySeen!=='boolean' || typeof seen.traitSeen!=='boolean')return false;
+ if(seen.familySeen!==undefined && typeof seen.familySeen!=='boolean')return false;
  if(r.bossId!=='SLOTH')return r.slothDays===undefined && r.sealBreakCount===undefined;
  return Array.isArray(r.slothDays) && r.slothDays.length===2
   && new Set(r.slothDays).size===2 && r.slothDays.every(d=>[15,20,25].includes(d))
