@@ -3,8 +3,8 @@
 DOC=CORE_RUN_QA
 OWNER=qa,core_run,run_flow
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 Status values are NOT stored here.
@@ -78,7 +78,7 @@ SETUP:
 Complete a normal day.
 
 EXPECT:
-- v2.4 starting baseline daily overhead=60G unless modified by explicit canonical effect
+- v2.5 retained starting baseline daily overhead=60G unless modified by explicit canonical effect
 - exactly one base overhead charge occurs per completed normal Day
 - final post-simulation base overhead may change only through approved PASS3 tuning
 
@@ -230,7 +230,7 @@ Run-specific:
 reset appropriately.
 
 PASS:
-No unintended permanent combat/NPC power carries over.
+No unintended NPC/run state carries over. Only explicit META/NPC_TRAIT Job Mastery cross-run adjustment may affect an unlocked Job; no hidden account-wide power carries over.
 
 ## RUN-Q19 — SAVE/RESUME COMPLETE STATE
 SETUP:
@@ -260,7 +260,13 @@ No progression softlock or missing required phase.
 ## FINAL DETAIL QA OWNERSHIP
 
 Detailed Final Family / party / Power / Roll / clear acceptance criteria are owned by:
--> FINAL_EXPEDITION_v2.4.0.md
+-> FINAL_EXPEDITION_v2.5.0.md
+
+Boss identity / reveal / Trait / Sloth acceptance criteria are owned by:
+-> BOSS_v2.5.0.md
+
+Meta progression acceptance criteria are owned by:
+-> META_v2.5.0.md
 
 CORE_RUN_QA retains only Run-flow, D30 timing, stock timing, save/resume, and complete-loop integration checks.
 
@@ -335,19 +341,38 @@ C. poverty/minimum-spend play
 Track:
 - Day reached
 - Gold
-- Meta XP/unlocks
 - NPC growth/value
 - Knowledge
 - Final viability
 
 EXPECT:
-- normal engaged play is clearly superior in economy/meta/progression
-- Day number alone is not an efficient permanent-reward farm
-- B does not routinely coast into D20+ / D25+ while remaining economically or Meta-efficient
+- legacy Global Meta XP is not awarded for Day advancement
+- Job Mastery / Distinct Boss progression cannot be earned without a successful Final clear
 - no new inactivity punishment subsystem is required
 
 PASS:
-Existing economy/dungeon/NPC/meta systems create the opportunity cost naturally.
+Removed Global Meta XP cannot be farmed by minimal Day advancement; remaining run-economy viability is evaluated separately.
 
-Exact reward/overhead tuning:
-PASS3 after integrated v2.4 simulation.
+Exact overhead tuning:
+PASS3 after integrated simulation.
+
+
+## RUN-Q31 — BOSS RUN-STATE SAVE
+SETUP:
+Save/reload before and after D5/D15 and during a SLOTH run.
+
+EXPECT:
+Boss ID, reveal-seen flags, selected Sloth opportunity Days, and committed Seal Break count remain stable.
+
+PASS:
+Run save cannot reroll or duplicate Boss progression.
+
+## RUN-Q32 — D30 INFORMATION ORDER
+SETUP:
+Enter D30 with a normal Boss and with SLOTH.
+
+EXPECT:
+Final Family Pair is disclosed before D30 Relic/Sloth choice and before Final lock.
+
+PASS:
+The D30 decision never occurs with intentionally-late information hidden until afterward.

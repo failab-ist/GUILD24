@@ -4,8 +4,8 @@ DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,easter_egg
 # EVENT — CANONICAL
 
-DOC_VERSION=2.4.0  
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0  
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 ---
 
@@ -77,6 +77,7 @@ Normal Daily Event는 다음 날에 발생하지 않는다.
 D5 / D10 / D15 / D20 / D25는 Relic Window Day이므로 Event를 겹치지 않는다.
 
 D30은 Final Day이므로 Normal Event를 발생시키지 않는다.
+D5/D15/D30 Boss reveal은 Normal Event가 아니며 BOSS가 소유한다.
 
 D0에도 Normal Daily Event는 없다.
 

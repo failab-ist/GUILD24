@@ -3,8 +3,8 @@
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,supply_burden,forecast,counter
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -154,7 +154,7 @@ Tier eligibility:
 - T3 = eligible
 - D30 Final = no additional random Supply Burden modifier
 
-v2.4 starting values:
+v2.5 retained starting values:
 ```text
 T2 Supply Burden chance = 35% per generated Gate
 T2 requiredSupply = 3
@@ -163,7 +163,7 @@ T3 Supply Burden chance = 55% per generated Gate
 T3 requiredSupply = 5
 ```
 
-These are approved starting values for v2.4 implementation.
+These are approved retained starting values for v2.5 implementation.
 Full-run simulation/playtest may tune frequency/requirement/scaling without changing the one-system contract.
 
 Food/Drink provide visible `Supply` values.
@@ -359,6 +359,8 @@ D30:
 normal Gate/Tier progression=NO
 Final composition/resolution:
 -> FINAL_EXPEDITION
+Boss identity/trait:
+-> BOSS
 
 Exact percentages=PASS3 tuning targets.
 
@@ -448,7 +450,7 @@ Goal:
 - grown NPC advantage remains trustworthy
 - RNG must not erase long-term growth
 
-Full-run simulation/playtest must rebaseline outcome spread after v2.4 adoption.
+Full-run simulation/playtest must rebaseline outcome spread after v2.5 adoption.
 If the value later changes, variance-related balance must be rechecked; no Trait may expose or require knowledge of the hidden exact noise percentage.
 
 ## BALANCE TARGET
@@ -480,3 +482,4 @@ order/tier forecast -> ECONOMY_ORDER
 forecast UI -> UI_UX
 night causality -> NIGHT_CLOSING
 final expedition -> FINAL_EXPEDITION
+boss modifier -> BOSS

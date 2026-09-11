@@ -3,8 +3,8 @@
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -137,6 +137,19 @@ Item balance considers:
 
 Canonical item role -> ITEM
 
+## CUMULATIVE GROSS SALES METRIC
+
+Canonical gross sales for any cross-system read (including GREED) is:
+```text
+Cumulative Gross Sales
+= sum of actual rounded sale prices from committed sales before the read point
+```
+
+Use the same rounded sale value used for payment/history/Closing.
+Do not maintain a second hidden Boss-only revenue counter.
+
+Boss consumer -> BOSS
+
 ## MARGIN
 
 For each sale:
@@ -241,7 +254,7 @@ Each Offer follows current:
 - rarity rules
 - coverage rules
 
-Exact rarity weights/pity values=PASS3. Initial v2.4 implementation retains the current canonical-compatible Source baseline, then rebalances after full-run simulation/playtest.
+Exact rarity weights/pity values=PASS3. Initial v2.5 implementation retains the current canonical-compatible Source baseline, then rebalances after full-run simulation/playtest.
 
 Offer system should create uncertainty without making preparation pure blind luck.
 
@@ -465,12 +478,12 @@ Reject:
 - Relic never-buy
 - reroll spam as guaranteed solution
 - no-reroll pure RNG frustration
-- zero-engagement play remaining economically/Meta-efficient into late Day bands
+- zero-engagement play remaining economically efficient into late Day bands while retaining realistic Final viability
 
-Minimal-engagement correction must reuse existing economy/meta pressure.
+Minimal-engagement correction must reuse existing economy / Dungeon / NPC long-term pressure.
 Do not create a standalone punishment subsystem.
 
-Exact overhead/reward rebalance remains PASS3 after integrated v2.4 simulation.
+Exact overhead rebalance remains PASS3 after integrated v2.5 simulation.
 
 ## RELATED
 item roles -> ITEM

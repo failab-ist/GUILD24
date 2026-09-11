@@ -3,8 +3,8 @@
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -183,11 +183,11 @@ Capacity modifiers may come from explicit Relic/contract effects.
 dailyOverheadStarting=60G
 dailyOverheadExactStatus=PASS3_AFTER_MINIMAL_ENGAGEMENT_SIM
 
-60G is the v2.4 implementation starting baseline,
+60G is the v2.5 retained implementation starting baseline,
 not a final post-simulation freeze.
 
 Any later base-overhead change requires:
-- integrated v2.4 multi-seed evidence
+- integrated v2.5 multi-seed evidence
 - minimal-engagement vs normal-play comparison
 - Designer approval
 
@@ -270,17 +270,21 @@ D30=Final Expedition / Boss Day.
 
 D30 is the Run culmination and must reuse the systems built during the Run rather than introducing a separate combat minigame.
 
-Detailed ownership:
+Detailed Final resolution ownership:
 - Final Family selection / disclosure
 - Final Hazard Pool
 - Final party size / survivor fallback
-- Final Power / Roll / Boss clear
+- Final Power / Roll / clear comparison
 - Run Clear / Fail
 - Final-specific balance and QA
 
 -> FINAL_EXPEDITION
 
-D30 Relic purchase remains before Final lock.
+Boss identity / Boss Trait / Sloth Seal state:
+-> BOSS
+
+D30 order constraint:
+Boss/Final Family disclosure -> D30 Relic or Sloth decision -> Final preparation -> Final lock.
 Normal management actions may not retroactively change Final state after lock.
 
 ## SAVE / LOAD
@@ -301,6 +305,8 @@ At minimum preserve:
 - Relic owned/window state
 - Events/choices that affect current Run
 - Final generated state when applicable
+- Boss generated/reveal state when applicable
+- Sloth opportunity/Seal state when applicable
 - seeded/random state required for deterministic continuation
 
 Save/Load must not intentionally provide free rerolls.
@@ -346,89 +352,19 @@ Canonical NPC value:
 
 Core Run identity resets each Run.
 
-No cross-run:
-- Hall of Fame dependency
-- legendary adventurer cameo system
-- permanent combat power progression
+Cross-run progression / Knowledge / unlock truth is owned by:
+-> META
 
-Meta knowledge/unlocks may exist where explicitly specified,
-but should not replace Run decision-making.
+v2.5 removes legacy Global Meta XP.
+Run Day advancement itself grants no Job Mastery or Boss-clear progress.
 
-Knowledge:
--> use only explicitly defined current CORE/Meta rules
--> no separate additional Knowledge subsystem/spec is required for v2.4 Full Adoption
+Explicit exception to the old blanket power ban:
+- visible Job Mastery adjustment may affect that Job's Base Stats / Growth only when defined by NPC_TRAIT / META
+- no hidden account-wide combat multiplier is allowed
 
-### MONSTER KNOWLEDGE — SUPPLIED SURVIVAL
-
-Monster/Family Knowledge progress is earned only when:
-1. an NPC enters that expedition carrying >=1 supplied Item
-2. that expedition returns without `사망`
-
-Then:
-that Family Knowledge +=1
-
-No supplied Item:
-Knowledge gain=0
-
-Death:
-Knowledge gain=0
-
-Purpose:
-- prevent zero-cost naked scouting from farming permanent information
-- keep Monster Knowledge tied to an actual store/preparation decision
-
-Reuse the existing cross-run Knowledge/progress state.
-Do not create a new Knowledge subsystem.
-
-Player-facing progress term:
-`보급 생환 N회`
-
-Do not use the old progress wording:
-`관찰 N회`
-
-Exact reveal thresholds for hazard/weakness entries remain unchanged unless separately specified.
-
-### MINIMAL-ENGAGEMENT / DAY-FARMING BOUNDARY
-
-A strategy that repeatedly does:
-- 0 meaningful sale
-- 0 order investment
-- 0 expedition supply
-- advance Day with minimal interaction
-
-must not be an efficient way to:
-- reach late Day bands
-- farm Meta XP/unlocks
-- compete with normal engaged play
-
-Day number alone must not be the primary source of permanent reward.
-
-Meaningful existing-system contributions may include:
-- actual sales/economy
-- supplied survival / Knowledge
-- NPC relationship/growth
-- discovery
-- Final result
-
-Do not add a new:
-- diligence gauge
-- inactivity punishment meter
-- forced action tax
-
-Use existing:
-- economy/overhead
-- Dungeon pressure
-- NPC long-term value
-- Meta reward weighting
-
-to make engaged play clearly superior.
-
-Exact XP weights / overhead tuning / collapse point:
-PASS3 after integrated v2.4 simulation.
-
-Balance FAIL signal:
-repeated zero-sale / zero-order / zero-supply play can routinely coast into D20+,
-especially D25+, while remaining economically or Meta-efficient.
+Boss-generated run state is Run state and must be persisted without reroll.
+Boss identity / reveal / trait / Sloth state ownership:
+-> BOSS
 
 ## PRODUCT / TECH CONSTRAINTS
 
@@ -464,7 +400,7 @@ systems where possible.
 
 ## QA
 
-Acceptance criteria -> CORE_RUN_QA_v2.4.0.md
+Acceptance criteria -> CORE_RUN_QA_v2.5.0.md
 
 ## RELATED
 
@@ -479,4 +415,6 @@ night/closing -> NIGHT_CLOSING
 presentation/mobile -> UI_UX
 event/day modifier -> EVENT
 final expedition -> FINAL_EXPEDITION
+boss identity/trait -> BOSS
+meta/mastery/knowledge -> META
 player-facing copy -> COPY_WORLD_VOICE

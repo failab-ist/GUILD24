@@ -3,8 +3,8 @@
 DOC=ECONOMY_ORDER_QA
 OWNER=qa,economy,order,reroll
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 Status values are NOT stored here.
@@ -183,7 +183,7 @@ SETUP:
 Use 4 rerolls on a fresh Day.
 
 EXPECT:
-Approved v2.4 starting curve:
+Approved retained v2.5 starting curve:
 30→60→120→240G
 
 PASS:
@@ -331,4 +331,15 @@ EXPECT:
 PASS:
 A player cannot efficiently reach late Day bands simply by spending almost nothing and advancing turns.
 
-Exact overhead curve / reward weighting remains PASS3.
+Exact overhead curve / economy tuning remains PASS3.
+
+
+## ECO-Q META/BOSS — CUMULATIVE GROSS SALES CONSISTENCY
+SETUP:
+Create a known sequence of rounded committed sales and inspect Closing plus GREED input metric.
+
+EXPECT:
+Cumulative Gross Sales equals the sum of the exact same actual rounded sale values used by payment/history/Closing.
+
+PASS:
+GREED does not read a duplicate or differently rounded revenue counter.

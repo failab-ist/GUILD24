@@ -3,8 +3,8 @@
 DOC=RELIC_QA
 OWNER=qa,relic,store_build
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 Status values are NOT stored here.
@@ -483,3 +483,55 @@ EXPECT:
 
 PASS:
 Store-build information needed for decisions is available without enabling illegal Relic actions.
+
+
+## REL-Q41 — BOSS REVEAL PRECEDES SAME-DAY RELIC
+SETUP:
+Reach D5, D15, D30 with a fresh milestone window.
+
+EXPECT:
+- D5 Boss Identity reveal completes before D5 Relic focused reveal
+- D15 Boss Trait reveal completes before D15 Relic focused reveal
+- D30 Final Family disclosure completes before D30 Relic focused reveal
+
+PASS:
+Relic choice never appears before the information intentionally granted for that Day.
+
+## REL-Q42 — SLOTH OPPORTUNITY SCHEDULE
+SETUP:
+Run many seeded SLOTH runs.
+
+EXPECT:
+- exactly 2 distinct opportunity Days selected from D15/D20/D25
+- D30 always opportunity
+- D10 never opportunity
+- selected Days persist on Save/Load
+
+PASS:
+Every SLOTH run has exactly three valid opportunities with no reroll exploit.
+
+## REL-Q43 — SLOTH MUTUAL EXCLUSION
+SETUP:
+At a SLOTH opportunity window, choose Seal Break.
+
+EXPECT:
+- Gold cost=0
+- Seal Break count +1
+- no Relic is acquired from that window
+- acquisition opportunity is consumed
+- reload cannot obtain both outcomes
+
+PASS:
+One window produces at most one of [Relic, Seal Break].
+
+## REL-Q44 — SLOTH DEFER / EXPIRY
+SETUP:
+Open a SLOTH opportunity and defer without committing either outcome.
+
+EXPECT:
+- ordinary window reopen rules remain valid until expiry / D30 Final lock
+- no Seal Break is auto-awarded
+- after committing either Relic or Seal Break, the other branch is unavailable
+
+PASS:
+Sloth reuses the existing Relic window lifecycle without a duplicate choice path.

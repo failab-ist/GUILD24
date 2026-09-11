@@ -3,8 +3,8 @@
 DOC=NPC_TRAIT_QA
 OWNER=qa,npc,trait,roster,living_npc_cap
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 Status values are NOT stored here.
@@ -244,7 +244,7 @@ EXPECT:
 - no extra source-only Trait leaks into generation
 
 PASS:
-Trait pool identity is frozen for the v2.4 implementation baseline.
+Trait pool identity is frozen for the v2.5 retained implementation baseline.
 
 ## TRAIT-Q16 — SOCIAL / REVISIT DIFFERENTIATION
 SETUP:
@@ -359,3 +359,28 @@ growth/wallet/loyalty/revisit/final-roster channels.
 
 PASS:
 No separate punishment system is needed to make care matter.
+
+
+## NPC-Q09 — META JOB UNLOCK POOL
+SETUP:
+Inspect fresh account, after 3 distinct Boss clears, after 6 distinct Boss clears.
+
+EXPECT:
+- fresh normal Job pool=[전사,궁수,마법사,사제]
+- 도적 joins only after META 3-Boss unlock
+- 광전사 joins only after META 6-Boss unlock
+
+PASS:
+Locked Jobs do not leak into normal NPC generation.
+
+## NPC-Q10 — JOB MASTERY EFFECT OWNERSHIP
+SETUP:
+Inspect any implemented Job Mastery power adjustment.
+
+EXPECT:
+- effect modifies only visible Job Base/Growth channel defined here
+- no hidden generic account-wide combat/Final multiplier
+- exact values match the approved PASS3 Job table when available
+
+PASS:
+Job identity remains BaseStats+Growth and Mastery does not create a second hidden Job system.

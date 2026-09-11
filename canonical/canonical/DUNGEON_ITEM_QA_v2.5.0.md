@@ -3,8 +3,8 @@
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 Status values are NOT stored here.
@@ -226,7 +226,7 @@ EXPECT:
 - T3 Supply Burden still has a viable <=2 meaningful required-prep-slot route
 
 PASS:
-Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system, and the approved v2.4 starting eligibility/values are implemented.
+Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system, and the approved v2.5 retained starting eligibility/values are implemented.
 
 ## DUN-Q18 — HAZARD ROUTE COVERAGE
 SETUP:
@@ -399,7 +399,7 @@ SETUP:
 Use in losing expeditions.
 
 EXPECT:
-Uses approved v2.4 starting escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
+Uses approved v2.5 retained starting escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
 
 PASS:
 Acts as probabilistic lower-tier insurance, not a success item or Death->Severe conversion.
@@ -508,7 +508,7 @@ Strong invested NPC remains trustworthy.
 The hidden exact variance is not exposed to the Player or encoded as a knowledge-check Trait.
 
 PASS:
-±17.5% is used as the v2.4 baseline and any later retune is supported by outcome evidence.
+±17.5% is used as the v2.5 retained baseline and any later retune is supported by outcome evidence.
 
 ## SIM-Q02 — ROLE USAGE
 SETUP:
@@ -542,3 +542,17 @@ PASS:
 - no hover-only information
 - `slow` is not presented as a separate canonical Hazard
 - exact hidden formula remains hidden
+
+
+## ITEM-Q META — GOLDEN 1+1 UNLOCK
+SETUP:
+Inspect Item offer/acquisition eligibility before and after first distinct Boss clear.
+
+EXPECT:
+- 황금 1+1 쿠폰 remains canonical Item ID 30
+- before META unlock it does not appear through normal acquisition
+- after first distinct Boss clear it becomes eligible under its normal Item rules
+- Item effect itself is unchanged by the unlock system
+
+PASS:
+META gates availability only; ITEM continues to own the effect.

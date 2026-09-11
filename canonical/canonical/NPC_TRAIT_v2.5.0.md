@@ -3,13 +3,16 @@
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,living_npc_cap,destination,revisit
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
 
 jobs=[전사,궁수,마법사,사제,도적,광전사]
+initialUnlockedJobs=[전사,궁수,마법사,사제]
+metaUnlockedJobs=[도적,광전사]
+jobUnlockOwnership=META
 
 jobIdentity=BaseStats+Growth
 hiddenJobBonus=NO
@@ -95,7 +98,23 @@ natural=[투력]
 secondary=[강인함]
 pressure=[정신/Condition 관리]
 
-Exact base/growth numbers=PASS3. Initial v2.4 implementation retains the current canonical-compatible Source Job table, then rebalances after full-run simulation/playtest.
+Exact base/growth numbers=PASS3. Initial v2.5 implementation retains the current canonical-compatible Source Job table, then rebalances after full-run simulation/playtest.
+
+## JOB MASTERY / CROSS-RUN JOB POWER BOUNDARY
+
+Meta progress source -> META
+
+Job Mastery power may affect only the owning Job's visible Base Stats / Growth identity.
+It may not create a hidden generic account-wide combat multiplier.
+
+Rules:
+- Job × Boss clear matrix and Mastery count are owned by META
+- Base/Growth effect channel is owned by NPC_TRAIT
+- before unlock, 도적/광전사 are not eligible for normal NPC Job generation
+- unlock thresholds are owned by META
+- Mastery Base/Growth effect must be Player-readable when the PASS3 table is numerically activated
+- exact Mastery Base/Growth adjustment table=PASS3_AFTER_JOB_BASE_GROWTH_REBALANCE
+- no hidden Final-only Job Mastery multiplier
 
 ## JOB RULES
 
@@ -532,10 +551,10 @@ but Character identity remains owned by NPC/Trait system.
 
 traitCatalogStatus=FROZEN
 activeTraitCount=30
-numericStatus=APPROVED_V2.4_STARTING_VALUES
+numericStatus=APPROVED_V2.5_RETAINED_STARTING_VALUES
 
 Rules:
-- numeric values below are the implementation baseline for v2.4
+- numeric values below are the retained implementation baseline for v2.5
 - full-run simulation/playtest may rebalance values after adoption
 - no active Trait may read/write `long`, `thirst`, `wet`, `armor`, `undead`, caffeine-stack, or hidden Job-ID effects
 - every material effect is player-readable
@@ -694,7 +713,7 @@ Rules:
     - [benefit] cold 대응 +6
     - [neutral] Cold bonus is intentional character flavor, not hidden wordplay
 
-Removed source concepts from active v2.4 Trait pool:
+Removed source concepts from the active v2.5 Trait pool:
 - 카페인중독
 - 술고래
 - 언데드혐오
@@ -741,4 +760,6 @@ sale reveal/pricing -> SALE
 night result/death/injury -> NIGHT_CLOSING
 run flow -> CORE_RUN
 final participation -> FINAL_EXPEDITION
+boss participant clear signal -> BOSS
+job unlock/mastery matrix -> META
 relic VIP/customer builds -> RELIC

@@ -3,8 +3,8 @@
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,injury,death,closing,settlement
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -392,6 +392,7 @@ CLOSING owns:
 ## D30 / FINAL
 
 Normal Night expedition resolution does not own D30 Final resolution.
+Boss identity/trait/Sloth state is owned by BOSS; Closing does not mutate it.
 
 Final Family / party / Power / Boss clear / post-clear contract:
 -> FINAL_EXPEDITION
@@ -432,11 +433,11 @@ Canonical save:
 ## QA
 
 Acceptance criteria:
-- CORE_RUN_QA_v2.4.0.md
-- DUNGEON_ITEM_QA_v2.4.0.md
-- NPC_TRAIT_QA_v2.4.0.md
-- ECONOMY_ORDER_QA_v2.4.0.md
-- UI_UX_QA_v2.4.0.md
+- CORE_RUN_QA_v2.5.0.md
+- DUNGEON_ITEM_QA_v2.5.0.md
+- NPC_TRAIT_QA_v2.5.0.md
+- ECONOMY_ORDER_QA_v2.5.0.md
+- UI_UX_QA_v2.5.0.md
 
 ## RELATED
 

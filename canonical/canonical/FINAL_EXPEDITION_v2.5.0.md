@@ -1,11 +1,11 @@
 # 《던전 앞 편의점 / GUILD24》
 
 DOC=FINAL_EXPEDITION
-OWNER=final,boss,D30,final_party,final_hazard,boss_power
+OWNER=final,D30,final_party,final_hazard,final_power,final_clear
 # FINAL EXPEDITION — CANONICAL
 
-DOC_VERSION=2.4.0  
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0  
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 ---
 
@@ -35,6 +35,11 @@ Final은 기존:
 
 Final만을 위한 별도 Class Synergy, 전용 Combat System, 전용 생존 판정은 추가하지 않는다.
 
+v2.5 Boss Identity / Boss Trait / Sloth Seal state는 별도 Canonical이 소유한다.
+-> BOSS
+
+FINAL_EXPEDITION은 그 Boss state를 입력으로 받아 기존 Final resolution을 수행한다.
+
 ---
 
 # 1. D30 FINAL STRUCTURE
@@ -45,10 +50,11 @@ Final 시작 시:
 
 1. 서로 다른 기존 Dungeon Family 2개를 랜덤 선택한다.
 2. 선택된 두 Family를 플레이어에게 공개한다.
-3. 공개는 Final 파티 선택 및 최종 준비보다 먼저 이루어진다.
-4. 각 Family의 기존 T2 Hazard를 가져온다.
-5. 두 Family의 T2 Hazard를 하나의 Final Hazard Pool로 합쳐 사용한다.
-6. 선택된 Family 조합은 생성된 Final state이며 Save/Load로 다시 뽑히지 않는다.
+3. 이 Family 공개는 **D30 Relic decision / Sloth Seal decision보다 먼저** 이루어진다.
+4. 공개 이후 Final 파티 선택 및 최종 준비가 가능하다.
+5. 각 Family의 기존 T2 Hazard를 가져온다.
+6. 두 Family의 T2 Hazard를 하나의 Final Hazard Pool로 합쳐 사용한다.
+7. 선택된 Family 조합은 생성된 Final state이며 Save/Load로 다시 뽑히지 않는다.
 
 Final Hazard Pool에는 각 Family의 canonical **Hazard key**만 들어간다.
 Family의 non-Hazard second axis는 별도 Final modifier로 중복 추가하지 않는다.
@@ -91,8 +97,9 @@ Final Hazard Scale = 4.6
 역할 분리:
 
 ```text
-마왕 자체의 강함 = Boss Power
+마왕 Identity / Trait / effective Boss modifier = BOSS
 환경 압박 = 선택된 두 Family의 T2 Hazard
+Final 계산 / 비교 = FINAL_EXPEDITION
 ```
 
 Final이 별도의 T3 Dungeon처럼 동작하도록 만들지 않는다.
@@ -103,9 +110,11 @@ Final이 별도의 T3 Dungeon처럼 동작하도록 만들지 않는다.
 
 선택된 두 Family는 다음보다 먼저 공개한다.
 
+- D30 Relic decision
+- Sloth D30 Seal decision when applicable
 - Final 출전 NPC 선택
 - Final 보급품 / 준비 결정
-- D30 Relic decision을 포함한 Final-relevant management decision
+- 기타 Final-relevant management decision
 
 플레이어는 공개된 두 Family를 보고:
 
@@ -162,7 +171,7 @@ Final 전용:
 
 # 4.1 FINAL PREP / LOCK / STOCK
 
-Final threat disclosure 이후, Final lock 전에는 기존 Canonical이 허용하는 Final-relevant 준비를 완료할 수 있다.
+D30 Family disclosure와 필요한 Boss/Sloth reveal 이후, Final lock 전에는 기존 Canonical이 허용하는 Final-relevant 준비를 완료할 수 있다.
 
 포함:
 - 출전 NPC 선택
@@ -230,6 +239,8 @@ Individual Final Power
 - `투력`은 Player-facing `combat` Stat 용어다.
 - `환경피해`는 Prepare가 Final Hazard Pool을 기준으로 계산한 값이다.
 - Final Power는 내부 계산값이며 별도 Player Stat으로 추가하지 않는다.
+- Boss Trait이 특정 Final input/contribution을 수정하는 경우 BOSS가 정의한 범위에서만 임시 적용한 뒤 이 Final 계산을 사용한다.
+- Boss Trait은 원본 NPC 영구 Stat을 직접 변조하지 않는다.
 
 ---
 
@@ -301,11 +312,12 @@ Rolled Party Power < Boss Power
 → 마왕 토벌 실패
 ```
 
-Boss Power는 Final의 마왕 자체 강함을 담당한다.
+Final 비교에는 BOSS가 제공하는 해당 Run의 `effective Boss Power`를 사용한다.
 
-Boss Power exact numeric value는 현재 구조 확정값이 아니다.
+- WRATH baseline / Boss별 Trait / Sloth Seal Break에 따른 Boss-side modifier ownership -> BOSS
+- 비교 공식 / Final Roll / Clear 결과 ownership -> FINAL_EXPEDITION
 
-Full Run Balance 결과를 보고 조정한다.
+Exact Boss numeric tuning은 BOSS / Final PASS3 contract를 따른다.
 
 ---
 
@@ -419,12 +431,13 @@ Boss Power는 Full Run 결과를 보고 최종 튜닝한다.
 확인:
 - 선택된 두 Family가 Save/Load로 바뀌지 않는가?
 - Save/Load가 Family reroll 수단이 되지 않는가?
+- BOSS가 제공한 Boss ID / Trait / Sloth state가 Reload로 변하지 않는가?
 - Final lock 이후 관리 행동이 이미 잠긴 결과를 바꾸지 않는가?
 
 ## G. FINAL PREP / STOCK TIMING
 
 확인:
-- 두 Family 공개 후 파티 / Item / D30 Relic 판단이 가능한가?
+- 두 Family가 D30 Relic/Sloth decision보다 먼저 공개되고, 그 후 파티 / Item 판단이 가능한가?
 - D30 재고/유통기한 표시와 실제 Final 사용 가능 상태가 일치하는가?
 - Player가 commitment 전에 사용할 수 없는 재고를 사용할 수 있다고 오해하지 않는가?
 
@@ -461,7 +474,7 @@ REMOVE / DO NOT USE:
 
 FINAL_EXPEDITION이 소유:
 
-- D30 Final Flow
+- D30 Final resolution Flow
 - Final Family 2종 Selection
 - Family Disclosure Timing
 - Final Hazard Pool 구성 방식
@@ -470,11 +483,14 @@ FINAL_EXPEDITION이 소유:
 - Final Power Formula
 - Party 합산
 - Final Roll
-- Boss Clear 판정
+- effective Boss Power와의 Clear 비교
 - Run Clear / Fail 조건
 - Final 전용 Balance / QA Contract
 
 FINAL_EXPEDITION이 소유하지 않음:
+
+Boss Identity / Boss Trait / Sloth Seal / Boss-side modifier
+→ BOSS
 
 Dungeon Family / T1-T3 Hazard 정의
 → DUNGEON_HAZARD

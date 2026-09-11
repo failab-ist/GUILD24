@@ -3,8 +3,8 @@
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -448,6 +448,29 @@ Useful:
 Secondary encyclopedia remains optional reference,
 not required navigation for basic decisions.
 
+## BOSS / FINAL REVEAL UI
+
+Boss gameplay ownership -> BOSS
+Final Family ownership -> FINAL_EXPEDITION
+
+Reveal sequence must preserve decision value:
+
+D5:
+`Boss Identity` focused reveal -> D5 Relic reveal
+
+D15:
+`Boss Trait` focused reveal -> D15 Relic window decision (`Relic 획득` vs `봉인 해제` when Sloth opportunity)
+
+D30:
+`Final Family Pair` focused reveal -> D30 Relic window decision (`Relic 획득` vs `봉인 해제` for Sloth) -> Final preparation / lock
+
+Rules:
+- do not show Relic choice first and reveal its relevant Boss/Family information afterward
+- Boss Trait effect must be understandable without exposing hidden exact success probability
+- Sloth choice must visually communicate `Relic 획득` vs `봉인 해제` as mutually exclusive use of that window
+- Boss reveal is not a new permanent Phase
+- reveal Seen state is stable across Save/Reload
+
 ## RELIC UI
 
 Relic Window:
@@ -507,6 +530,22 @@ Do not:
 Canonical Event rule/catalog:
 -> EVENT
 
+## META UI
+
+Meta gameplay ownership -> META
+
+Player-facing Meta presentation must make these source-of-truth concepts distinct:
+- Job × Boss clear matrix
+- Job Mastery 0..7 per Job
+- Total Job Mastery
+- Distinct Boss Clear 0..7
+- approved 1/3/6 unlock milestones
+- Franchise Grade as prestige/status
+- Monster Knowledge `보급 생환 N회`
+
+Do not present legacy Global Meta XP as current progression.
+Franchise Grade must not imply hidden gameplay bonuses.
+
 ## NAVIGATION
 
 Primary Phase action stays obvious.
@@ -565,7 +604,7 @@ When width is narrow:
 Do not:
 shrink all fonts/control sizes to fit desktop columns.
 
-Required v2.4 mobile visual QA widths:
+Required v2.5 mobile visual QA widths:
 - 360px
 - 390px
 - 430px
@@ -613,7 +652,7 @@ restructure composition before polishing color/shadow/radius.
 
 ## QA
 
-Acceptance criteria -> UI_UX_QA_v2.4.0.md
+Acceptance criteria -> UI_UX_QA_v2.5.0.md
 
 ## RELATED
 
@@ -628,4 +667,6 @@ relic choice -> RELIC
 forecast -> DUNGEON_HAZARD
 event reveal -> EVENT
 final expedition -> FINAL_EXPEDITION
+boss -> BOSS
+meta -> META
 copy/voice -> COPY_WORLD_VOICE

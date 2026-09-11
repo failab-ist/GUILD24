@@ -3,8 +3,8 @@
 DOC=00_GAME_CORE
 OWNER=game_core,core_fantasy,core_loop,system_ownership
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## BRAND
@@ -126,7 +126,9 @@ ITEM = Expedition Preparation
 DUNGEON = Stat/Hazard Puzzle
 FORECAST = 판단 재료
 EVENT = Daily Decision Modifier
-FINAL = Run Culmination
+BOSS = Final Opponent Identity / Boss-specific Decision Modifier
+FINAL = Run Culmination / Resolution
+META = Cross-run Mastery / Unlock / Knowledge
 COPY = Player-facing Voice / Expression
 
 각 시스템은 다른 시스템의 역할을 불필요하게 침범하지 않는다.
@@ -152,3 +154,9 @@ COPY = Player-facing Voice / Expression
 - 최종 원정이 그 Run 전체의 결과처럼 느껴져야 한다.
 
 세부 규칙/수치/구현 상태는 각 Canonical System Spec을 따른다.
+
+
+## RELATED OWNERSHIP
+Boss detailed rule -> BOSS
+Final resolution -> FINAL_EXPEDITION
+Cross-run progression -> META

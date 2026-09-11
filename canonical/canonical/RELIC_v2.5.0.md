@@ -3,8 +3,8 @@
 DOC=RELIC
 OWNER=relic,store_build,utility,foundation,hybrid,keystone
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -37,6 +37,9 @@ buildAxes=[Rotation,VIP,Premium,Expedition,Fresh,Customer]
 candidateRerollByReload=NO
 ownedNonstackableRepeat=NO
 immediateUnboughtRepeat=NO
+slothSealChoiceUsesRelicWindow=YES
+slothSealBreakGoldCost=0
+slothSealBreakConsumesWindowAcquisition=YES
 
 ## ROLE
 RELIC =
@@ -99,6 +102,39 @@ defer=YES
 D30 후보는 Final 준비/원정에 실제 의미가 있어야 한다.
 Final lock 전에 해당 Window의 1회 Focused Reveal이 보장되어야 한다.
 
+D30 Boss/Final ordering:
+- Final Family disclosure happens before the D30 Relic focused reveal/decision
+- if Boss=SLOTH, the D30 Seal option is resolved through this same acquisition window
+- Final lock occurs only after the D30 Relic/Seal choice opportunity has been handled
+
+### SLOTH SEAL-BREAK WINDOW OVERRIDE
+
+Canonical Boss rule -> BOSS
+
+When Boss=SLOTH:
+- exactly 2 of [D15,D20,D25] are selected as Seal opportunities
+- D30 is always a Seal opportunity
+- D10 is never a Seal opportunity
+
+At a selected opportunity, this Relic window offers one mutually exclusive acquisition outcome:
+
+A. acquire <=1 normal Relic under the ordinary window rules
+B. break 1 Sloth Seal for 0G
+
+Seal Break:
+- grants no Relic
+- consumes this window's acquisition opportunity
+- committed state persists
+- cannot be duplicated/reversed by Save/Load
+
+Defer remains the ordinary window behavior until window expiry / Final lock.
+If the Player has not committed either branch, no free Seal Break is auto-awarded.
+
+Persist additional state when applicable:
+- slothSealOpportunity=YES/NO
+- consumedBySealBreak=YES/NO
+- sealBreakCommitted=YES/NO
+
 ## WINDOW STATE
 
 At window creation:
@@ -117,6 +153,7 @@ reload => no reroll
 
 focusedReveal:
 - D5/D10/D15/D20/D25/D30의 새 Window는 1회만 Player에게 명확히 보여준다.
+- D5 Boss Identity / D15 Boss Trait / D30 Final Family처럼 같은 날 선행 공개가 있으면 그 공개가 먼저 끝난 뒤 Relic Focused Reveal을 연다.
 - Save/Reload로 Focused Reveal을 반복 재생하거나 후보를 다시 뽑을 수 없다.
 - D0는 영업 전 Relic 선택 자체가 시작 Flow이므로 중복 Reveal을 추가하지 않는다.
 
@@ -542,7 +579,7 @@ priceFixedForWindow=YES
 relative direction:
 Foundation < Hybrid/Utility < Keystone
 
-Exact base prices=PASS3. Initial v2.4 implementation retains current canonical-compatible Source base prices, then rebalances after full-run simulation/playtest.
+Exact base prices=PASS3. Initial v2.5 implementation retains current canonical-compatible Source base prices, then rebalances after full-run simulation/playtest.
 Price should follow actual ROI, not label alone.
 
 ## GOLD ROLE
@@ -602,6 +639,7 @@ Persist at minimum:
 - prices
 - purchased/deferred state
 - immediate-repeat cooldown state
+- Sloth opportunity / consumedBySealBreak state when applicable
 
 Save/Load must not become an offer reroll method.
 
@@ -637,6 +675,7 @@ Reject:
 ## RELATED
 run/save -> CORE_RUN
 final expedition -> FINAL_EXPEDITION
+boss/sloth seal -> BOSS
 gold/order/reroll -> ECONOMY_ORDER
 sale phase -> SALE
 npc value -> NPC_TRAIT

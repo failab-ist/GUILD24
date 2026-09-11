@@ -3,8 +3,8 @@
 DOC=SALE
 OWNER=sale,customer,price,refusal,purchase_flow
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -411,10 +411,10 @@ Detailed presentation:
 ## QA
 
 Acceptance criteria:
-- CORE_RUN_QA_v2.4.0.md
-- ECONOMY_ORDER_QA_v2.4.0.md
-- NPC_TRAIT_QA_v2.4.0.md
-- UI_UX_QA_v2.4.0.md
+- CORE_RUN_QA_v2.5.0.md
+- ECONOMY_ORDER_QA_v2.5.0.md
+- NPC_TRAIT_QA_v2.5.0.md
+- UI_UX_QA_v2.5.0.md
 
 ## RELATED
 
@@ -426,3 +426,9 @@ dungeon forecast -> DUNGEON_HAZARD
 run/phase -> CORE_RUN
 night result -> NIGHT_CLOSING
 presentation -> UI_UX
+
+
+## CROSS-SYSTEM REVENUE SIGNAL
+
+Committed sale revenue contributes to Canonical Cumulative Gross Sales owned by ECONOMY_ORDER.
+BOSS/GREED may read that metric; SALE does not create a Boss-only sales counter.

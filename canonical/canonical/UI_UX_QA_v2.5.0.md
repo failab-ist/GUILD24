@@ -3,8 +3,8 @@
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 Status values are NOT stored here.
@@ -484,3 +484,43 @@ Progress label is:
 
 PASS:
 Old `관찰 N회` progress wording is absent.
+
+
+## UI-Q40 — BOSS / RELIC REVEAL ORDER
+SETUP:
+Reach D5, D15, D30 with relevant Boss state.
+
+EXPECT:
+- D5 Identity is read before D5 Relic choice
+- D15 Trait is read before D15 Relic choice
+- D30 Family Pair is read before D30 Relic/Sloth choice
+- Save/Reload does not reorder or replay reveals as an exploit
+
+PASS:
+The Player receives information before the decision it is intended to affect.
+
+## UI-Q41 — SLOTH WINDOW CHOICE CLARITY
+SETUP:
+Open a selected SLOTH opportunity window.
+
+EXPECT:
+Player can distinguish the mutually exclusive outcomes:
+- acquire normal Relic
+- break one Sloth Seal for 0G
+
+PASS:
+No UI implies both can be obtained from the same window.
+
+## UI-Q42 — META PROGRESSION PRESENTATION
+SETUP:
+Open Meta/HQ progression on accounts with different matrix states.
+
+EXPECT:
+- no Global Meta XP progress bar is presented as current truth
+- Job × Boss clear cells are readable
+- per-Job Mastery and Total Mastery derive consistently
+- Distinct Boss unlock milestones 1/3/6 are clear
+- Franchise Grade is presented as prestige/status, not a hidden stat boost
+
+PASS:
+UI matches META_v2.5.0 without resurrecting legacy XP/Grade gameplay claims.

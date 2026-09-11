@@ -3,8 +3,8 @@
 DOC=DECISIONS
 OWNER=decisions,high_value_decisions
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 Only high-value decisions that are easy to accidentally reverse.
 Detailed rules live only in their owning Canonical Specs.
@@ -35,7 +35,9 @@ RELIC=StoreBuild
 ITEM=ExpeditionPreparation
 DUNGEON=Stat/HazardPuzzle
 EVENT=DailyDecisionModifier
-FINAL=RunCulmination
+BOSS=FinalOpponentIdentity+BossTrait
+FINAL=RunCulminationResolution
+META=JobMastery+Unlock+Knowledge
 COPY=PlayerFacingVoice
 
 ## SYS-002
@@ -190,8 +192,13 @@ D30=Final Expedition culmination
 lastDayRandomNPCShouldNotReplaceInvestedNPCValue=YES
 
 ## META-001
+GlobalMetaXP=REMOVED
+JobBossClearMatrix=6x7
+maxJobMasteryPerJob=7
+maxTotalJobMastery=42
+permanentCombatPowerMeta=JOB_MASTERY_ONLY_IF_EXPLICIT_AND_VISIBLE
+FranchiseGradeGameplayEffect=NO
 crossRunHallOfFameDependency=NO
-permanentCombatPowerMeta=NO
 
 ## FINAL-001
 rule=D30 Final reuses existing Dungeon/NPC/Item systems; separate combat minigame prohibited
@@ -199,7 +206,8 @@ normalGateGeneration=NO
 familyRoll=2 distinct canonical Families
 familyHazardSource=existing T2 Hazard keys only
 finalHazardScale=4.6
-bossStrengthAxis=BossPower
+bossIdentityTraitOwnership=BOSS
+bossStrengthAxis=effectiveBossPowerFromBOSS
 maxPartySize=3
 survivorFallback=[3+=choose3,2=2,1=1,0=RunFail]
 jobDiversitySynergy=NO
@@ -232,7 +240,7 @@ normalPoolAndSoftBuildBias=YES
 ## DUN-005
 baseNoise=±17.5%
 baseNoiseCoefficient=0.175
-status=v2.4StartingValue
+status=v2.5RetainedStartingValue
 exactNoisePlayerFacing=HIDDEN
 
 ## DUN-006
@@ -277,10 +285,33 @@ nakedScoutKnowledgeGain=NO
 playerProgressLabel=보급 생환 N회
 
 ## META-003
-minimalEngagementDayFarmingEfficient=NO
+distinctBossUnlocks=[1:황금1+1쿠폰,3:도적,6:광전사]
+duplicateBossClearDoesNotAdvanceDistinctBossCount=YES
+FranchiseGradeSource=TotalJobMastery
+legacyGradeGameplayGate=NO
+
+## META-004
+JobMasteryCredit=successfulFinal+representedJob+uniqueJobBossPair
+failMasteryGain=NO
+duplicatePairMasteryGain=NO
+
+## RUN-002
+minimalEngagementLateCoastEfficient=NO
 newInactivityPunishmentSubsystem=NO
-dailyOverheadStarting=60G
-exactOverheadAndMetaRewardTuning=PASS3_AFTER_V2.4_SIMULATION
+exactEconomyTuningOwner=CORE_RUN+ECONOMY_ORDER
+
+## BOSS-001
+bossPool=[WRATH,PRIDE,ENVY,GREED,GLUTTONY,LUST,SLOTH]
+selection=pureRNGOnePerRun
+reveal=[D5:Identity,D15:Trait,D30:FamilyPair]
+revealBeforeSameDayRelicDecision=YES
+fixedBossFamilyPair=NO
+
+## BOSS-002
+SlothOpportunityDays=exactly2of[D15,D20,D25]+D30
+SlothSealBreakGold=0
+SlothSealBreakConsumesRelicWindowAcquisition=YES
+SlothDifficultyOrder=[3breaks:weakest,2breaks:weak,1break:slightlyBelowWrath,0breaks:strongest]
 
 ## COPY-002
 normalNpcNameVoice=한국식+판타지+유쾌한비틀기

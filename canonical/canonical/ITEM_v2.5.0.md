@@ -3,8 +3,8 @@
 DOC=ITEM
 OWNER=item,catalog,category,role,counter,supply,insurance
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
 ## KEY
@@ -23,6 +23,9 @@ Utility
 ]
 
 activeCatalogCount=30
+initialMetaEligibleCatalogCount=29
+metaLockedItems=[황금 1+1 쿠폰]
+metaUnlockOwnership=META
 catalogTarget≈30
 catalogSoftCap=32
 newItemRule=REWORK_EXISTING_BEFORE_ADD
@@ -180,7 +183,7 @@ Each Food/Drink Item defines:
 - explicit Hazard Counter if any
 - explicit RiskReward if any
 
-Supply values are canonical v2.4 starting values listed in ACTIVE CATALOG.
+Supply values are canonical v2.5 retained starting values listed in ACTIVE CATALOG.
 Full-run simulation/playtest may tune the numbers while preserving Supply > 0 for every active Food/Drink.
 
 No Item may:
@@ -308,11 +311,11 @@ Rules:
 - retreat loot ≈ almost none
 - does not own Death -> Severe conversion
 
-approved v2.4 starting value:
+approved v2.5 retained starting value:
 escapeBonus=+50%p
 finalEscapeCap≈90–95% tuning band
 
-The +50%p bonus is implementation-fixed for the initial v2.4 full-run baseline and may be rebalanced after simulation/playtest.
+The +50%p bonus is implementation-fixed for the v2.5 retained full-run baseline and may be rebalanced after simulation/playtest.
 
 ### 세계수 생환부적
 rarity=Epic
@@ -368,7 +371,7 @@ Canonical:
 
 ## ACTIVE CATALOG
 
-Exact numeric values/prices/shelf life=PASS3 unless separately canonicalized. Initial v2.4 implementation retains current canonical-compatible Source values; approved Supply/Insurance starting values in this document override them.
+Exact numeric values/prices/shelf life=PASS3 unless separately canonicalized. Initial v2.5 implementation retains current canonical-compatible Source values; approved Supply/Insurance starting values in this document override them.
 
 ### Common / Rarity 0
 
@@ -571,6 +574,9 @@ category=Special
 roles=[Utility]
 identity=explicit next-consumable duplication interaction
 slotCost=1
+metaUnlock=distinctBossClear>=1
+beforeUnlockOfferEligible=NO
+unlockOwnership=META
 
 ## CATALOG BUILD SUPPORT
 
@@ -701,6 +707,7 @@ Reject:
 - build Relic with too few usable SKUs
 
 ## RELATED
+meta unlock -> META
 dungeon/hazard/supply -> DUNGEON_HAZARD
 job/trait -> NPC_TRAIT
 relic/build -> RELIC

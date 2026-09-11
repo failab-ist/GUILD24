@@ -3,8 +3,8 @@
 DOC=COPY_WORLD_VOICE
 OWNER=copy,voice,flavor,dialogue,terminology,culture
 
-DOC_VERSION=2.4.0
-CANONICAL_SET=GUILD24_CANONICAL_v2.4.0
+DOC_VERSION=2.5.0
+CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 > Player-facing Copy / Terminology / Flavor / NPC Voice / Culture Reference의 Canonical.
 >
@@ -93,6 +93,10 @@ COPY_WORLD_VOICE는 Gameplay Content의 소유 문서가 아니다.
   - -> EVENT
 - D30 Final mechanics / party / Power / clear
   - -> FINAL_EXPEDITION
+- Boss Identity / Boss Trait / fixed Boss names / Sloth Seal rule
+  - -> BOSS
+- Job Mastery / Franchise Grade / Meta unlock / Monster Knowledge rule
+  - -> META
 
 COPY_WORLD_VOICE가 소유하는 것은:
 
@@ -994,6 +998,20 @@ Copy 수정 때문에 Source 구조를 먼저 Refactor하지 않는다.
 - 이름이 Random Syllable Soup 또는 억지 Meme 목록처럼 보이는가?
 - Monster Knowledge 진행도가 아직 `관찰 N회`로 표시되는가?
 
+
+# 18.5 BOSS / META COPY BOUNDARY
+
+Boss fixed Player-facing names follow BOSS exactly.
+Do not rename `색욕` to a softer synonym or substitute another sin label.
+
+Boss reveal copy may dramatize the character, but must not hide the actual D15 Trait effect.
+Sloth Seal choice must state the real trade-off with the Relic opportunity.
+
+Meta copy:
+- use Job Mastery / 직업 숙련 language consistently with META
+- do not present legacy Global Meta XP as current progression
+- Franchise Grade language must not imply direct gameplay power
+- Monster Knowledge progress remains `보급 생환 N회`
 
 # 19. FINAL COPY FILTER
 
