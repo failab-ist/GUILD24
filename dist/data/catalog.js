@@ -126,6 +126,22 @@ events:[
 contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으로 시작',unlock:null},{id:'delivery',name:'새벽배송 가맹점',description:'발주 +1 · 매입가 +5%',unlock:'day10'},{id:'guild',name:'길드 제휴점',description:'방문객 +1 · 운영비 +20G',unlock:'regular3'},{id:'budget',name:'알뜰 가맹점',description:'초기자금 +250G · 희귀 발주 확률 소폭 감소',unlock:'run1'},{id:'premium',name:'프리미엄 상권',description:'희귀 모험가 확률 증가 · 운영비 +25G',unlock:'level15'}],
 unlocks:{cold5:['설원 생환',5],fear5:['공포 원정 생환',5],poison10:['독 치료·예방',10],mage10:['마법사 최고 레벨',10],level15:['모험가 최고 레벨',15],fire12:['화염 골렘 처치',12],boss1:['마왕 토벌',1],escape10:['성공적인 탈출',10],wounded5:['중상에서 생환',5],revenue3000:['누적 매출',3000],knowledge15:['보급 생환',15],regular3:['단골 달성',3],day10:['최고 도달 DAY',10],run1:['런 완료',1]}
 };
+/* Boss Trait tuning. Every one of these is PASS3 and none is approved yet, so they are
+   null on purpose: a Trait with no value applies nothing, and the Final stays exactly the
+   WRATH baseline. Stage 9 measures candidates against the final RNG baseline and Stage 10
+   fills these in once they are approved. Writing a plausible-looking number here would
+   make an unapproved guess look like a decision. */
+G.DATA.bossTuning={
+ prideCombatFactor:null,        // PRIDE: every participant's Final 투력 x this
+ envyStatFactor:null,           // ENVY: the single ace's four Stats x this
+ greedRevenueTarget:null,       // GREED: cumulative gross sales the Run is measured against
+ greedShortfallSlope:null,      // GREED: Boss Power added per Gold of shortfall
+ greedShortfallCap:null,        // GREED: the most that shortfall can ever add
+ gluttonyRarityThreshold:null,  // GLUTTONY: supplies at or above this rarity are attenuated
+ gluttonyStatFactor:null,       // GLUTTONY: their raw-Stat contribution x this
+ lustStatFactor:null,           // LUST: a non-regular participant's four Stats x this
+ slothBossPower:null            // SLOTH: effective Boss Power by break count [0,1,2,3]
+};
 G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:230,combatNoise:.175,rerollBase:30};
 G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intent:.18,loyalty:6}};
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));

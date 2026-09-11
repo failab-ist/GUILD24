@@ -15,5 +15,10 @@ function create(r,index,day,account,opts={}){
 }
 function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-=18+n.level*7;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
  const notes=[];if(n.level>old){notes.push('Lv.'+old+' → Lv.'+n.level);for(let milestone=Math.floor(old/5)+1;milestone<=Math.floor(n.level/5);milestone++){if(n.traits.length<Math.min(4,n.traitSlots)&&r.next()<.65){let t=r.pick(D.traits.filter(t=>!n.traits.includes(t.id)&&!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>n.traits.includes(id)))));n.traits.push(t.id);notes.push('새 특성 「'+t.name+'」');}n.rank=Math.min(3,Math.floor(n.level/5));if(milestone<=3)notes.push(D.jobBy[n.job].ranks[Math.min(3,milestone)]+' 승급');}}return notes;}
-G.Adventurer={create,name,grow,keys,rank:n=>D.jobBy[n.job].ranks[Math.min(3,Math.floor(n.level/5))],slots:n=>n.level>=10?3:2};
+/* Trusted Regular / 단골. NPC_TRAIT owns this state, so the judgement lives here and
+   nothing else re-states the threshold - a Boss that reads it (LUST) consumes the result
+   rather than keeping a number of its own. */
+const TRUSTED_REGULAR=51;
+const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
+G.Adventurer={create,name,grow,keys,isTrustedRegular,TRUSTED_REGULAR,rank:n=>D.jobBy[n.job].ranks[Math.min(3,Math.floor(n.level/5))],slots:n=>n.level>=10?3:2};
 })(globalThis);

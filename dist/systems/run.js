@@ -19,15 +19,59 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
    surfaced as another Player Stat. */
 const individualPower=(e,hazard)=>e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16-hazard*.35;
 
-/* Step 4 of the shared Final order: the participant-side Boss modifier. PRIDE, ENVY,
-   LUST and GLUTTONY's raw-Stat adjustment each rewrite this Final-only snapshot and
-   nothing else - the NPC's stored Stats are never touched. No Boss defines one yet, so
-   the snapshot is the prepared effects as they stand. */
-P.finalSnapshot=function(n,prep,d){return prep.effects;};
+const STATS=['combat','survival','mobility','spirit'];
 
-/* Step 7: the Boss-side modifier. GREED adds to the Boss, SLOTH subtracts from it, and
-   WRATH is the baseline that adds nothing - which is what every Boss does today. */
-P.effectiveBossPower=function(partyPower){return D.balance.bossPower;};
+/* Step 4 of the shared Final order: the participant-side Boss modifier. Each Boss rewrites
+   this Final-only snapshot and nothing else - the NPC's stored Stats are never touched, so
+   a Run that fails leaves its adventurers exactly as they were. Steps 1-3 have already
+   settled, which is why GLUTTONY subtracts from the snapshot here instead of shrinking the
+   supply earlier: attenuating an Item before step 3 would quietly weaken its Hazard
+   preparation too, and Counter, Supply, Insurance and Utility are explicitly out of scope.
+   Every factor below is PASS3 and unset, so today every Boss returns the snapshot intact. */
+P.finalSnapshot=function(n,prep,d,context){
+ const t=D.bossTuning,boss=this.run.bossId,e={...prep.effects};
+ if(boss==='PRIDE'&&t.prideCombatFactor!=null)e.combat*=t.prideCombatFactor;
+ if(boss==='ENVY'&&t.envyStatFactor!=null&&context&&context.envyTargetNpcId===n.id)
+  for(const k of STATS)e[k]*=t.envyStatFactor;
+ if(boss==='LUST'&&t.lustStatFactor!=null&&!G.Adventurer.isTrustedRegular(n))
+  for(const k of STATS)e[k]*=t.lustStatFactor;
+ if(boss==='GLUTTONY'&&t.gluttonyStatFactor!=null&&t.gluttonyRarityThreshold!=null)
+  for(const c of prep.itemStats||[]){
+   if(c.rarity<t.gluttonyRarityThreshold)continue;
+   for(const k of STATS)if(c.stats[k])e[k]-=c.stats[k]*(1-t.gluttonyStatFactor);
+  }
+ return e;
+};
+
+/* ENVY targets the single largest pre-ENVY contributor. The order puts the modifier at
+   step 4 and the individual power at step 5, so the target has to be chosen from a pass of
+   step 5 run before step 4 - and once chosen it does not move, even though its own penalty
+   makes it no longer the largest. Ties fall to the stable NPC id. */
+P.envyTarget=function(team,preparations){
+ let best=null,bestPower=-Infinity;
+ team.forEach((n,i)=>{const p=individualPower(preparations[i].effects,preparations[i].hazard);
+  if(p>bestPower||(p===bestPower&&best&&n.id<best))
+   {bestPower=p;best=n.id;}});
+ return best;
+};
+
+/* Step 7: the Boss-side modifier. GREED strengthens the Boss by whatever the Run failed to
+   earn, capped; SLOTH weakens it by however many seals were broken; WRATH is the baseline
+   that adds nothing. The sales figure is the one the shop already keeps - GREED reads it,
+   it does not count again. Every value is PASS3 and unset, so today this is the baseline
+   for all seven. */
+P.effectiveBossPower=function(partyPower,lock){
+ const t=D.bossTuning,s=this.run,base=D.balance.bossPower;
+ if(s.bossId==='GREED'&&t.greedRevenueTarget!=null&&t.greedShortfallSlope!=null&&t.greedShortfallCap!=null){
+  const shortfall=Math.max(0,t.greedRevenueTarget-(lock?lock.revenue:s.stats.revenue));
+  return base+Math.min(shortfall*t.greedShortfallSlope,t.greedShortfallCap);
+ }
+ if(s.bossId==='SLOTH'&&Array.isArray(t.slothBossPower)){
+  const v=t.slothBossPower[lock?lock.sealBreakCount:s.sealBreakCount];
+  if(v!=null)return v;
+ }
+ return base;
+};
 
 P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  const required=this.finalRequired();
@@ -39,18 +83,20 @@ P.boss=function(){const s=this.run;if(s.phase!=='final')return;
     reuses it; there is no Final-only combat or survival judgement. A Boss Trait attaches
     at exactly two places, step 4 and step 7, and the rest of the order does not move. */
  const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
- const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d));         // 4
+ const context=s.bossId==='ENVY'?{envyTargetNpcId:this.envyTarget(team,preparations)}:null; // 4 target pass
+ const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d,context));  // 4
  const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,preparations[i].hazard),0); // 5-6
- const bossPower=this.effectiveBossPower(power);                                   // 7
+ const bossPower=this.effectiveBossPower(power,{revenue:s.stats.revenue,sealBreakCount:s.sealBreakCount}); // 7
  const roll=.88+this.rng.next()*.24,assault=power*roll,cleared=assault>=bossPower; // 8-9
  /* Final Lock: what the Final was actually decided from, frozen. Reload may not re-roll
     it, re-target it, or re-read a later state (BOSS-Q02). Boss-specific entries join this
     as their Traits land; the committed sales figure is the one Economy already keeps. */
  s.finalLock={bossId:s.bossId,families:[...d.families],revenue:s.stats.revenue,
-  members:team.map((n,i)=>({npcId:n.id,hazard:preparations[i].hazard,
+  members:team.map((n,i)=>({npcId:n.id,hazard:preparations[i].hazard,regular:G.Adventurer.isTrustedRegular(n),
    stats:{combat:snapshots[i].combat,survival:snapshots[i].survival,
           mobility:snapshots[i].mobility,spirit:snapshots[i].spirit}}))};
  if(s.sealBreakCount!==undefined)s.finalLock.sealBreakCount=s.sealBreakCount;
+ if(context)s.finalLock.envyTargetNpcId=context.envyTargetNpcId;
  s.bossDebug={power,roll,assault,bossPower};s.results=[];
  s.finalReport={cleared,families:d.familyNames,members:team.map((n,i)=>({npcId:n.id,name:n.name,level:n.level,job:n.job,items:[...n.pack],hazard:Math.round(preparations[i].hazard*10)/10,why:preparations[i].why.slice(0,3)}))};
  for(const n of team)n.pack=[];

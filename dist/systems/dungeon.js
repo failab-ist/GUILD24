@@ -7,9 +7,14 @@ function prepare(n,d,facilities=[]){
  const foodSupplyDelta=traitSum('foodSupplyDelta'),supplyPerItem=traitSum('supplyPerItem');
  for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){if(k in mult)mult[k]*=v;else if(behaviour.has(k))continue;else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}
  if(n.injury){e.survival-=n.injury*5;e.combat-=n.injury*3;why.push('남아 있는 부상으로 강인함·투력 감소');const grit=traitSum('injuredCombat');if(grit){e.combat+=grit;why.push('악바리: 부상 중에도 투력 +'+grit);}}e.mobility-=n.fatigue*.4;
+ /* What each supply actually contributed to the four Stats, kept beside the totals it
+    is already part of. GLUTTONY attenuates exactly this at the Final snapshot and
+    nothing else - Counter, Supply, Insurance and Utility effects are not in here, so
+    they cannot be caught by it. Recording is all this does; `e` is unchanged. */
+ const statKeys=['combat','survival','mobility','spirit'],itemStats=[];
  let duplicate=0;
  for(const id of n.pack){const item=D.itemBy[id];if(item.effects.duplicate){duplicate=1;continue;}const copies=1+duplicate;duplicate=0;if(copies>1)why.push('황금 1+1: '+item.name+' 효과 '+copies+'회');
- let power=copies;
+ let power=copies;const from={};
  for(const[k,v]of Object.entries(item.effects)){
   if(k==='potion')continue;
   let value=v*power;const isFood=item.category==='food',isFD=isFood||item.category==='drink';
@@ -17,7 +22,9 @@ function prepare(n,d,facilities=[]){
   if(k==='supply'&&isFD)value+=supplyPerItem;
   if(k==='survival'&&isFood)value*=mult.foodMult;
   if(['supply','survival'].includes(k)&&isFD)value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);if(item.effects.potion&&k==='survival')value*=mult.potionMult;if(facilities.includes('expeditionMeal')&&isFD&&v>0&&(d.hazards.includes(k)||k==='supply'&&d.requiredSupply>0))value*=1.25;  e[k]=(e[k]||0)+value;
+  if(statKeys.includes(k)&&value)from[k]=(from[k]||0)+value;
  }
+ if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
  const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
  if(item.effects.survival>=10)why.push(item.name+': 생존 능력 보강');
  }
@@ -29,7 +36,7 @@ function prepare(n,d,facilities=[]){
  let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 30% 증가했다.'});
- return {effects:e,hazard,hazards,supply:{required,actual,deficit,penalty},why,events};
+ return {effects:e,hazard,hazards,itemStats,supply:{required,actual,deficit,penalty},why,events};
 }
 function tierWeights(day){
  const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];

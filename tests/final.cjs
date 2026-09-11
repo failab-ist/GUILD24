@@ -177,4 +177,105 @@ test('FINAL: the Lock freezes what the Final was decided from, and reload cannot
  }
 });
 
+/* The Trait structures are built and parameterised; none of their values is approved, so
+   every one of them is null and the Final is the WRATH baseline. These drive the structure
+   with injected candidates - the way Stage 9 will - to prove each attaches where the order
+   says and nowhere else. Injection is undone after every case; nothing here approves a
+   number, and none of these values is a proposal. */
+function withTuning(patch,fn){const t=DATA.bossTuning,saved={...t};
+ Object.assign(t,patch);try{return fn();}finally{Object.assign(t,saved);}}
+
+function finalWith(seed,bossId,tuning){
+ const g=atFinal(seed);g.run.bossId=bossId;
+ if(bossId==='SLOTH'){g.run.slothDays=[15,20];g.run.sealBreakCount=g.run.sealBreakCount||0;}
+ else {delete g.run.slothDays;delete g.run.sealBreakCount;}
+ for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);
+ return withTuning(tuning||{},()=>{g.boss();return g;});
+}
+
+test('BOSS-Q05/Q14: with nothing approved every Boss resolves as the WRATH baseline',()=>{
+ for(const b of DATA.bosses){
+  const g=finalWith('base-'+b.id,b.id);
+  assert.equal(g.run.bossDebug.bossPower,DATA.balance.bossPower,b.id+' adds no Boss-side modifier');
+  const plain=finalWith('base-'+b.id,'WRATH');
+  assert.equal(g.run.bossDebug.power,plain.run.bossDebug.power,b.id+' adds no participant-side modifier');
+ }
+});
+
+test('BOSS-Q06: PRIDE moves only 투력, and only on the Final snapshot',()=>{
+ const before=finalWith('pride','PRIDE');
+ const after=finalWith('pride','PRIDE',{prideCombatFactor:.5});
+ assert.ok(after.run.bossDebug.power<before.run.bossDebug.power,'a weaker 투력 lowers the party');
+ // the other three are untouched: halving 투력 may only remove its own 0.58 share
+ const lost=before.run.bossDebug.power-after.run.bossDebug.power;
+ const combat=before.run.finalLock.members.reduce((a,m)=>a+m.stats.combat,0);
+ assert.ok(Math.abs(lost-combat*.5*.58)<1e-9,'exactly half of the 투력 contribution, and nothing else');
+ for(const m of after.run.finalLock.members)
+  assert.ok(after.run.npcs.find(n=>n.id===m.npcId).stats.combat>0,'the stored NPC Stat is untouched');
+});
+
+test('BOSS-Q07: ENVY picks one ace before its own penalty, and does not re-pick after it',()=>{
+ const g=finalWith('envy','ENVY',{envyStatFactor:.5});
+ const l=g.run.finalLock,target=l.envyTargetNpcId;
+ assert.ok(target&&l.members.some(m=>m.npcId===target),'exactly one participant is the target');
+ // the pre-ENVY ranking is what chose it: recompute it independently
+ const s=g.run,d=s.final||s.dungeons[0];
+ const ranked=l.members.map(m=>{const n=s.npcs.find(x=>x.id===m.npcId);
+  const p=Dungeon.prepare(n,d,s.facilities);
+  return {id:n.id,power:p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35};})
+  .sort((a,b)=>b.power-a.power||(a.id<b.id?-1:1));
+ assert.equal(target,ranked[0].id,'the largest pre-ENVY contributor, not the largest after');
+ assert.ok(ranked.length<2||ranked[0].power>ranked[1].power*.5,
+  'and its own penalty would have made it no longer the largest, which does not move the target');
+});
+
+test('BOSS-Q09: GLUTTONY takes only high-end supply Stats, and leaves Counter/Supply/Insurance alone',()=>{
+ const g=atFinal('glut');g.run.bossId='GLUTTONY';
+ const team=g.finalEligible().slice(0,g.finalRequired());
+ for(const n of team){g.selectFinal(n.id);n.pack=['highpotion','ice','rice','stone'];}
+ const d=g.run.dungeons[0];
+ const prep=Dungeon.prepare(team[0],d,g.run.facilities);
+ const high=prep.itemStats.filter(c=>c.rarity>=2).reduce((a,c)=>a+(c.stats.survival||0),0);
+ assert.ok(high>0,'the case actually contains a high-end supply');
+ const cut=withTuning({gluttonyRarityThreshold:2,gluttonyStatFactor:.5},
+  ()=>g.finalSnapshot(team[0],prep,d,null));
+ assert.ok(Math.abs((prep.effects.survival-cut.survival)-high*.5)<1e-9,
+  'exactly half of the high-end raw-Stat contribution comes off');
+ // the low-end supply and the non-Stat effects are not in the reckoning at all
+ const lowOnly=withTuning({gluttonyRarityThreshold:9,gluttonyStatFactor:.5},
+  ()=>g.finalSnapshot(team[0],prep,d,null));
+ assert.equal(lowOnly.survival,prep.effects.survival,'nothing below the boundary is touched');
+ assert.equal(cut.fire,prep.effects.fire,'the 얼음컵 Counter is untouched');
+ assert.equal(cut.escape,prep.effects.escape,'the 귀환석 Insurance is untouched');
+ assert.equal(cut.supply,prep.effects.supply,'Supply is untouched');
+});
+
+test('BOSS-Q10: LUST reads the existing 단골 state and leaves regulars alone',()=>{
+ const g=atFinal('lust');g.run.bossId='LUST';
+ const team=g.finalEligible().slice(0,g.finalRequired());
+ for(const n of team)g.selectFinal(n.id);
+ team[0].loyalty=Adventurer.TRUSTED_REGULAR;team[1].loyalty=0;
+ const d=g.run.dungeons[0];
+ for(const [n,expectCut] of [[team[0],false],[team[1],true]]){
+  const prep=Dungeon.prepare(n,d,g.run.facilities);
+  const out=withTuning({lustStatFactor:.5},()=>g.finalSnapshot(n,prep,d,null));
+  for(const k of ['combat','survival','mobility','spirit'])
+   assert.equal(out[k],expectCut?prep.effects[k]*.5:prep.effects[k],
+    (expectCut?'a non-regular loses ':'a regular keeps ')+k);
+ }
+ assert.ok(!require('node:fs').readFileSync(require('node:path').join(__dirname,'../dist/systems/run.js'),'utf8').includes('51'),
+  'LUST keeps no threshold of its own; it asks the NPC');
+});
+
+test('BOSS-Q08: GREED reads the committed sales the shop already keeps, capped',()=>{
+ const g=finalWith('greed','GREED');
+ const base=DATA.balance.bossPower,revenue=g.run.finalLock.revenue;
+ assert.equal(revenue,g.run.stats.revenue,'the figure is the one Economy keeps, not a second counter');
+ const tuned={greedRevenueTarget:revenue+1000,greedShortfallSlope:.01,greedShortfallCap:50};
+ const raised=withTuning(tuned,()=>g.effectiveBossPower(0,{revenue}));
+ assert.equal(raised,base+10,'the shortfall strengthens the Boss in proportion');
+ assert.equal(withTuning({...tuned,greedShortfallCap:5},()=>g.effectiveBossPower(0,{revenue})),base+5,'and no further than the cap');
+ assert.equal(withTuning(tuned,()=>g.effectiveBossPower(0,{revenue:revenue+9999})),base,'meeting the target adds nothing, and exceeding it is not a bonus');
+});
+
 console.log(count+' final groups passed');

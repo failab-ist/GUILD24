@@ -119,7 +119,9 @@ function finalLockOk(l,ids){
   && Array.isArray(l.families) && l.families.length===2
   && Number.isFinite(l.revenue)
   && Array.isArray(l.members) && l.members.length>0 && l.members.length<=3
+  && (l.envyTargetNpcId===undefined || ids.includes(l.envyTargetNpcId))
   && l.members.every(m=>ids.includes(m.npcId) && Number.isFinite(m.hazard)
+    && (m.regular===undefined || typeof m.regular==='boolean')
     && !!m.stats && ['combat','survival','mobility','spirit'].every(k=>Number.isFinite(m.stats[k])))
   && (l.sealBreakCount===undefined
     || (Number.isInteger(l.sealBreakCount) && l.sealBreakCount>=0 && l.sealBreakCount<=3));

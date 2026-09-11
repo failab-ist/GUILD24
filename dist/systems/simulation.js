@@ -82,7 +82,7 @@ function playRun(g,out,ctx){
      kept coming back and reached the canonical 단골 threshold; a newcomer has been to the
      counter at most once. No new NPC-value system: the value is the Final contribution
      `boss()` itself would sum, measured bare so it describes the adventurer, not the stock. */
-  const invested=s.npcs.filter(n=>n.alive&&n.introduced&&n.visits>=5&&n.loyalty>=51);
+  const invested=s.npcs.filter(n=>n.alive&&n.introduced&&n.visits>=5&&G.Adventurer.isTrustedRegular(n));
   const newcomer=s.npcs.filter(n=>n.alive&&n.visits<=1);
   if(!invested.length&&!newcomer.length)return;
   out.q15.runs++;
@@ -91,7 +91,7 @@ function playRun(g,out,ctx){
   /* Does the automated best-3 actually end up made of newcomers? */
   const chosen=eligible.slice().sort((a,b)=>bare(b)-bare(a)).slice(0,Math.min(3,eligible.length));
   for(const n of chosen){
-   const isInvested=n.introduced&&n.visits>=5&&n.loyalty>=51,isNew=n.visits<=1;
+   const isInvested=n.introduced&&n.visits>=5&&G.Adventurer.isTrustedRegular(n),isNew=n.visits<=1;
    if(isInvested){out.q15.chosenInvested++;out.q15.powerInvested+=bare(n);}
    else if(isNew){out.q15.chosenNewcomer++;out.q15.powerNewcomer+=bare(n);}
   }
