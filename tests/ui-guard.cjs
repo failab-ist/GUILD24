@@ -830,4 +830,25 @@ test('D-24: the feel layer is optional, and it never animates a redraw of the sa
  assert.ok(!/account\.\w*cue|run\.\w*cue/.test(app),'the marker is never written into a save');
 });
 
+// D-30 / D-35. Found by opening the codex in the acceptance sweep: a recorded discovery that
+// carries no sentence of its own was printed as the literal word "undefined", and the window
+// still called itself 본사 · 해금 도감 after the menu entry had been cut back to 도감.
+test('D-30 / D-35: the notebook says what happened, or says nothing, and the window is 도감',()=>{
+ assert.ok(app.includes("modal==='codex'){title='도감'"),'the codex window is named the way the menu names it');
+ assert.ok(!/본사 · 해금 도감/.test(app),'the old title is gone, not left beside the new one');
+ const P=globalThis.Presentation;
+ assert.equal(P.eventLine({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'}),
+  '대식가가 음식의 고유 효과를 30% 더 얻었다.','an event that wrote its own line keeps it');
+ // the one that printed undefined: a Hazard mitigation carries the Hazards, not a sentence
+ assert.equal(P.eventLine({id:'hazard',hazards:['poison','corrosion'],prevented:true}),'독·부식 피해 방지',
+  'and one that did not is described from what it holds');
+ assert.equal(P.eventLine({id:'hazard',hazards:['fire']}),'화염 위험 감소','down to whether the damage landed');
+ for(const nothing of [{id:'hazard',hazards:[]},{id:'unknown-thing'},{},null])
+  assert.equal(P.eventLine(nothing),null,'an event with nothing to say is left out: '+JSON.stringify(nothing));
+ assert.ok(fn('codex').includes('discoveryLines(a)')&&!fn('codex').includes('E(e.text)'),
+  'the notebook reads through that owner rather than printing a field that may not be there');
+ assert.ok(app.includes('discoveryLines=a=>')&&app.includes('.filter(Boolean)'),
+  'and the count matches the lines, because both come from the same filtered list');
+});
+
 console.log(count+' ui guard groups passed');

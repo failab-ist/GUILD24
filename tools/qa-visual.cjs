@@ -6,11 +6,22 @@ const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('
 // The gate runs 360 / 390 / 430 x 780. QA_WIDTHS / QA_HEIGHT / QA_SCREENS sweep wider by
 // hand — e.g. a landscape phone, a 320 handset, a tablet — without editing this file.
 const list=(v,d)=>v?String(v).split(',').map(x=>x.trim()).filter(Boolean):d;
-const WIDTHS=list(process.env.QA_WIDTHS,[360,390,430]).map(Number);
+const WIDTHS=list(process.env.QA_WIDTHS,[360,390,430,1280]).map(Number);
 const HEIGHT=Number(process.env.QA_HEIGHT||780),PORT=Number(process.env.QA_PORT||5199);
+// D-35. The gate used to be phones only, so the width the game is most often played at was
+// never audited. A desktop width is a different device, not a wide phone: no touch, a
+// pointer, and a taller viewport. Anything at or past this is driven as a desktop.
+const DESKTOP=Number(process.env.QA_DESKTOP_FROM||1024);
+const isDesktop=w=>w>=DESKTOP;
+const heightFor=w=>process.env.QA_HEIGHT?HEIGHT:(isDesktop(w)?880:HEIGHT);
 const OUT=path.resolve(__dirname,'../reports/ui');
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
-const SCREENS=list(process.env.QA_SCREENS,['morning','order','sale','night','closing','relic','final']);
+// The seven phase screens, plus the five surfaces D-35 names that the gate never opened:
+// the Event notice, the two endings, the codex and the store menu. Modal targets are driven
+// to a phase and then opened, so what is audited is the takeover over the screen under it.
+const SCREENS=list(process.env.QA_SCREENS,['morning','order','sale','night','closing','relic','final',
+ 'event','end','endfail','codex','menu']);
+const MODAL={event:'event',codex:'codex',menu:'menu'};
 
 // Page-side driver. Starts through the real UI, then advances days through the game's
 // own public API, so every screenshot is the shipped build a player would see.
@@ -60,6 +71,23 @@ async function drive(page,target,seed){
  await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.event)s.eventSeen=true;if(s.bossReveal){s.bossReveal.identitySeen=true;s.bossReveal.traitSeen=true;s.bossReveal.familySeen=true;}})()`);
  if(target!=='relic')await page.evaluate(`(()=>{const s=Guild24.game.run;if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;})()`);
  await page.evaluate(`Guild24.render()`);
+ // The two endings. `end` sends whoever can go and takes what the Final gives; `endfail`
+ // reaches D30 with nobody able to go, which the Final owns as its own failure. Neither
+ // fabricates a report - both run the real path and capture the screen it leaves behind.
+ if(target==='end'||target==='endfail'){
+  if(target==='endfail')await page.evaluate(`(()=>{for(const n of Guild24.game.run.npcs)n.alive=false;})()`);
+  else await page.evaluate(`(()=>{const g=Guild24.game;for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);})()`);
+  await page.evaluate(`(()=>{Guild24.game.boss();Guild24.render();})()`);
+  await page.waitForTimeout(150);
+ }
+ // The Event notice, the codex and the store menu are takeovers over a screen, reached the
+ // way a player reaches them: the notice is still unseen on its Day, the other two are a click.
+ if(target==='event')await page.evaluate(`(()=>{const s=Guild24.game.run;s.eventSeen=false;Guild24.render();})()`);
+ if(target==='codex'||target==='menu'){
+  await page.evaluate(`(()=>{document.querySelector('[data-action="menu"]').click();})()`);
+  await page.waitForTimeout(120);
+  if(target==='codex'){await page.evaluate(`(()=>{document.querySelector('#modal-root [data-action="codex"]').click();})()`);await page.waitForTimeout(150);}
+ }
  // The store-support window is a takeover, not a screen: force it open so the capture is
  // the thing itself and not the Morning behind it.
  if(target==='relic'){
@@ -76,14 +104,24 @@ const GOAL={
  night:  `Guild24.game.run.day>=6&&Guild24.game.run.phase==='night'&&Guild24.game.run.results.length>0`,
  closing:`Guild24.game.run.day>=6&&Guild24.game.run.phase==='closing'`,
  relic:  `Guild24.game.run.day===10&&Guild24.game.run.phase==='morning'`,
- final:  `Guild24.game.run.phase==='final'`
+ final:  `Guild24.game.run.phase==='final'`,
+ // the Event notice is the Morning opening beat, so it is captured on a Day that has one
+ event:  `Guild24.game.run.phase==='morning'&&!!Guild24.game.run.event`,
+ // both endings, driven to the screen a player is left on rather than faked
+ end:    `Guild24.game.run.phase==='final'`,
+ endfail:`Guild24.game.run.phase==='final'`,
+ codex:  `Guild24.game.run.day>=6&&Guild24.game.run.phase==='morning'`,
+ menu:   `Guild24.game.run.day>=6&&Guild24.game.run.phase==='morning'`
 };
 
 const PRESSURE={poison:'강인함',bind:'기동',corrosion:'강인함',mire:'기동',fire:'강인함',fear:'정신',dark:'정신',cold:'강인함',whiteout:'정신'};
 
-async function audit(page,width,screen){
- return page.evaluate(({width,screen,PRESSURE})=>{
+async function audit(page,width,screen,desktop){
+ return page.evaluate(({width,screen,PRESSURE,desktop})=>{
   const fails=[],warn=[];
+  // A takeover is the surface under audit when one is open: sweeping only `.stage` would
+  // pass a modal that runs off the edge or stacks its own text.
+  const ROOTS='.stage *, #modal-root *';
   const de=document.documentElement;
   if(de.scrollWidth>width+1)fails.push(`horizontal overflow: documentElement ${de.scrollWidth}px > ${width}px`);
   const body=document.querySelector('.stage-scroll,.board');
@@ -93,6 +131,10 @@ async function audit(page,width,screen){
   const vis=el=>{
    const r=el.getBoundingClientRect();
    if(r.width<=0||r.height<=0||r.bottom<=0||r.top>=innerHeight)return false;
+   // A closed <details> still lays its content out in Chromium: the rects are real, the
+   // pixels are not. Nothing inside one is on screen until the player opens it.
+   for(let d=el.closest('details');d;d=d.parentElement?.closest('details'))
+    if(!d.open&&!el.closest('summary'))return false;
    for(let n=el.parentElement;n&&n!==document.body;n=n.parentElement){
     const o=getComputedStyle(n);
     if(o.overflowY==='visible'&&o.overflowX==='visible')continue;
@@ -116,7 +158,7 @@ async function audit(page,width,screen){
   const name=el=>(typeof el.className==='string'?el.className:el.getAttribute('class'))||el.tagName;
   // shapes inside an <svg> are clipped by its viewport, so they are not layout overflow
   const layout=el=>!el.closest('svg');
-  for(const el of document.querySelectorAll('.stage *')){
+  for(const el of document.querySelectorAll(ROOTS)){
    if(!vis(el)||!layout(el))continue;
    const r=el.getBoundingClientRect();
    if(r.right>width+1)fails.push(`past the right edge: ${name(el)} right=${Math.round(r.right)}`);
@@ -141,7 +183,10 @@ async function audit(page,width,screen){
   // compare text that shares a layer
   const pinned=el=>{for(let n=el;n&&n!==document.body;n=n.parentElement){
    const p=getComputedStyle(n).position;if(p==='sticky'||p==='fixed')return true;}return false;};
-  const leaves=[...document.querySelectorAll('.stage *')].filter(el=>vis(el)&&layout(el)
+  // A takeover paints over the screen it opened from. Text on the screen underneath is not
+  // colliding with the modal's text - it is behind it - so the two are never compared.
+  const surface=el=>el.closest('#modal-root')?'modal':'stage';
+  const leaves=[...document.querySelectorAll(ROOTS)].filter(el=>vis(el)&&layout(el)
    &&el.children.length===0&&(el.textContent||'').trim().length>1
    &&getComputedStyle(el).position!=='absolute');
   const layer=new Map(leaves.map(el=>[el,pinned(el)]));
@@ -157,6 +202,7 @@ async function audit(page,width,screen){
   const rects=new Map(leaves.map(el=>[el,boxes(el)]));
   outer:for(let i=0;i<leaves.length;i++)for(let j=i+1;j<leaves.length;j++){
    if(layer.get(leaves[i])!==layer.get(leaves[j]))continue;
+   if(surface(leaves[i])!==surface(leaves[j]))continue;
    if(leaves[i].contains(leaves[j])||leaves[j].contains(leaves[i]))continue;
    for(const a of rects.get(leaves[i]))for(const b of rects.get(leaves[j])){
     const ox=Math.min(a.right,b.right)-Math.max(a.left,b.left),oy=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
@@ -214,9 +260,10 @@ async function audit(page,width,screen){
    const r=el.getBoundingClientRect();
    if(!r.width||!r.height||!vis(el))continue;
    const primary=el.matches(REPEATED);
-   if(primary&&(r.height<43.5||r.width<43.5))
-    fails.push(`touch target ${Math.round(r.width)}x${Math.round(r.height)}: ${(el.textContent||'').trim().slice(0,14)}`);
-   else if(!primary&&(r.height<32||r.width<32))
+   const floor=desktop?32:43.5;
+   if(primary&&(r.height<floor||r.width<floor))
+    fails.push(`${desktop?'click':'touch'} target ${Math.round(r.width)}x${Math.round(r.height)}: ${(el.textContent||'').trim().slice(0,14)}`);
+   else if(!primary&&(r.height<(desktop?24:32)||r.width<(desktop?24:32)))
     warn.push(`small secondary target ${Math.round(r.width)}x${Math.round(r.height)}: ${(el.textContent||'').trim().slice(0,14)}`);
    if(fails.length>12)break;
   }
@@ -228,9 +275,9 @@ async function audit(page,width,screen){
    else if(!note.includes(PRESSURE[key]))fails.push(`hazard ${key} pressure line reads "${note}"`);
   }
   if(['morning','sale','final'].includes(screen)&&!named.length)warn.push('no hazard rows rendered on this capture');
-  for(const el of document.querySelectorAll('.stage [title]'))fails.push(`hover-only title= on ${el.className||el.tagName}`);
+  for(const el of document.querySelectorAll('.stage [title], #modal-root [title]'))fails.push(`hover-only title= on ${el.className||el.tagName}`);
   return {fails,warn};
- },{width,screen,PRESSURE});
+ },{width,screen,PRESSURE,desktop});
 }
 
 // Keyboard focus across a redraw. Not a capture: it drives real presses and reads
@@ -306,7 +353,9 @@ async function focusProbe(page){
  const results=[];let failed=0;
  try{
   for(const width of WIDTHS){
-   const context=await browser.newContext({viewport:{width,height:HEIGHT},deviceScaleFactor:2,isMobile:true,hasTouch:true,locale:'ko-KR'});
+   const desktop=isDesktop(width),height=heightFor(width);
+   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:desktop?1:2,
+    isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR'});
    const page=await context.newPage();
    page.on('pageerror',e=>{console.error(`  page error @${width}: ${e.message}`);failed++;});
    await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
@@ -314,7 +363,7 @@ async function focusProbe(page){
     await drive(page,screen,'qa-v24-'+screen);
     const file=path.join(OUT,`${screen}-${width}.png`);
     await page.screenshot({path:file});
-    const {fails,warn}=await audit(page,width,screen);
+    const {fails,warn}=await audit(page,width,screen,desktop);
     results.push({screen,width,fails,warn});
     failed+=fails.length;
     console.log(`${fails.length?'FAIL':'PASS'} ${screen} @${width}${fails.length?'\n  - '+fails.join('\n  - '):''}${warn.length?'\n  ? '+warn.join('\n  ? '):''}`);

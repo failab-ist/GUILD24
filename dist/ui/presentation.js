@@ -105,6 +105,11 @@ function nightChanges(r){const out=[];
    items that carried it. An event with no attributable item is not reported: a sale
    with no meaningful expedition impact is simply absent. */
 const itemName=id=>D.itemBy[id]?.name||null;
+/* One owner turns a resolution event into words. The discovery notebook reads it too: an
+   event that authors its own `text` keeps it, and one that does not - a Hazard mitigation
+   carries the Hazards it covered instead - is described from what it actually holds. An
+   event with nothing to say is left out rather than printed as a blank. */
+function eventLine(ev,r){if(!ev)return null;return ev.text||supplyEffect(ev,r||{})||null;}
 function supplyEffect(ev,r){
  if(ev.id==='hazard'){const names=(ev.hazards||[]).map(h=>D.hazards[h]).filter(Boolean).join('·');
   if(!names)return null;return names+(ev.prevented?' 피해 방지':' 위험 감소');}
@@ -140,5 +145,5 @@ function amount(key,value,moved=true){
  return stat(value,moved);
 }
 G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
- nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightRank,nightSkip,supplyLines,supplyImpact};
+ eventLine,nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightRank,nightSkip,supplyLines,supplyImpact};
 })(globalThis);
