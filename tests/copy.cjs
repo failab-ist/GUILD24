@@ -198,6 +198,26 @@ test('SALE: a reaction is replaced, never expired on a timer',()=>{
  assert.ok(/s\.say=null/.test(shop),'the line is cleared when the day turns over, not by a timer');
 });
 
+test('D-5 / EVENT §3-1: an Event says what it switched on, at the precision the rest of the catalog uses',()=>{
+ const by=id=>DATA.events.find(e=>e.id===id);
+ /* These five described their effect in the abstract while every other Event in the catalog
+    gave a figure, so the player could not tell what had actually changed. Each number below
+    is the one its own rule applies. */
+ assert.ok(/요구 전력 \+12% · 원정 보상 \+30%/.test(by('overflow').description),'몬스터 범람 states both multipliers');
+ assert.equal(by('overflow').effects.danger,1.12);assert.equal(by('overflow').effects.reward,1.3);
+ assert.ok(/구매 의사 \+20%p/.test(by('festival').description),'왕도 축제 states the intent it adds');
+ assert.equal(by('festival').effects.foodDemand,.2);
+ assert.ok(/구매 의사 \+20%p/.test(by('clinic').description),'치유소 휴무 too');
+ assert.equal(by('clinic').effects.medicalDemand,.2);
+ assert.ok(/6건부터 1건당 5G[^·]*· 최대 100G/.test(by('audit').description),'본사 재고 감사 states the trigger and the cap');
+ assert.ok(/waste>=6\?Math\.min\(100,s\.stats\.waste\*5\)/.test(read('dist/systems/shop.js')),'which is the rule it applies');
+ assert.ok(/특별 발주 1건 · 매입가 \+35%/.test(by('blackmarket').description),'암시장 상인 states the markup');
+ assert.ok(/rollOffer\(2,1\.35\)/.test(read('dist/systems/shop.js')),'which is the offer it rolls');
+ // and nothing in the catalog went back to describing an effect without saying what it is
+ for(const e of DATA.events)
+  assert.ok(!/(위험|보상|의사|매입가) (증가|감소)$/.test(e.description),e.name+' still describes its effect in the abstract');
+});
+
 test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually moves',()=>{
  /* foodMult and potionMult multiply exactly one contribution - survival, from food and from
     potions. They were labelled 음식/포션 고유 효과, which claims every effect the item has. */

@@ -660,6 +660,22 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'the roster shows the count against the line');
  assert.ok(roster.includes('s.stats.deaths'),'read from the Run own count, not a second tally');
 
+ /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
+    the form showed only a per-SKU 재고 N. The warehouse is on it now, from the same grouping
+    the shelf and the stock modal read - open by default, foldable on a phone. */
+ assert.ok(fn('orderForm').includes('stockBrief()'),'the order form shows the warehouse');
+ const brief=fn('stockBrief');
+ assert.ok(brief.includes('groupStock()'),'reusing the existing grouping, not a second one');
+ assert.ok(brief.includes('game.capacity()')&&brief.includes('s.inventory.length'),'used against total slots');
+ assert.ok(brief.includes('<details class="stock-brief" open>'),'open by default, and foldable');
+
+ /* D-15. A codex entry is three things - the name, what it does, the story about it - and they
+    were all one weight, with the tale sitting above the effects as though it were a rule. */
+ const entry=fn('codex');
+ assert.ok(entry.indexOf('effectList(it)')<entry.indexOf('class="tale"'),'the effects come before the tale');
+ assert.ok(/\.unlock \.tale\{[^}]*font-style:italic/.test(css),'and the tale is set in its own voice');
+ assert.ok(/\.unlock h3\{/.test(css)&&/\.unlock\{/.test(css),'the entry is a card with a lead, not unstyled flow');
+
  /* D-8. Two different pieces of money are on screen during a sale. Neither is just 소지금. */
  assert.ok(!/'소지금 부족'/.test(app+read('dist/systems/shop.js')),'no bare 소지금 refusal survives');
  assert.ok(app.includes('손님 소지금 부족'),'the customer purse is named as the customer\'s');
