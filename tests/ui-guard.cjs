@@ -269,7 +269,7 @@ test('C04: a redraw keeps the keyboard where it was, on #app and inside an open 
 });
 
 test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is meant to inform',()=>{
- const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"));
+ const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')modal='relics'"));
  const boss=chain.indexOf("modal='boss'"),event=chain.indexOf("modal='event'"),relic=chain.indexOf("focusedRevealSeen");
  assert.ok(boss>=0&&event>=0&&relic>=0,'all three focused reveals are in one chain');
  assert.ok(boss<event&&boss<relic,'the Boss reveal is offered ahead of the Event and the Relic window');
@@ -380,6 +380,32 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.ok(/\['deep','\.slip\.deep'/.test(app),'the first Deep Expedition teaches itself on the notice');
  assert.ok(/\['great','\.great-signal'/.test(app),'and Great Success on its own signal');
  assert.ok(!/deepTutorial|tutorialDeep/.test(app),'no separate tutorial state was introduced');
+});
+
+test('UI_UX: the first store support is not a one-way door, and the menu names both resets',()=>{
+ // D-29. Committing the contract used to be irreversible: the foundation takeover owns the
+ // screen, so the only way back to the contract screen was to spend the Run. Nothing has been
+ // played at that point, so the contract screen may win over the takeover.
+ assert.ok(app.includes("if(phase==='foundation'&&modal!=='new')modal='relics'"),
+  'the contract screen can be reopened during the foundation takeover');
+ assert.ok(fn('relicTakeover').includes("'recontract'"),'and the way back is offered there');
+ assert.ok(app.includes("case'recontract'"),'the action exists');
+ const recontract=app.slice(app.indexOf("case'recontract'"),app.indexOf("case'recontract'")+160);
+ assert.ok(!/game\.end\(|runs\+\+/.test(recontract),'going back never spends the Run');
+ // an unopened store is not something the player is abandoning, so it is not described as one
+ for(const f of [fn('newRun'),fn('renderModal')])
+  if(f.includes('현재 런 포기 · 새 점포 준비')||f.includes('보상 없이 포기'))
+   assert.ok(f.includes("'foundation'"),'the abandon wording is withheld before the store opens');
+
+ // D-30 / D-31~33: both destructive actions are named in the menu, not buried in 설정,
+ // and they are named apart - one ends this Run, the other ends everything.
+ const menu=app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900);
+ assert.ok(menu.includes("btn('도감','codex')"),'the codex is just 도감');
+ assert.ok(!menu.includes('본사 · 도감'),'the old label is gone');
+ assert.ok(menu.includes("btn('현재 런 포기','new','danger')"),'the Run reset is in the menu');
+ assert.ok(menu.includes("btn('모든 게임 데이터 초기화','reset','danger')"),'and the full reset');
+ assert.ok(/foundation'\]\.includes\(game\.run\.phase\)\?btn\('현재 런 포기'/.test(menu),
+  'the Run reset is absent when there is no Run to abandon, rather than present and inert');
 });
 
 console.log(count+' ui guard groups passed');
