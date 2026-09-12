@@ -685,15 +685,20 @@ const isLocked=e=>(e.metaUnlock&&Meta.distinctBossClear(game.account)<e.metaUnlo
    grade, the mastery of each Job, the Job x Boss grid those two are derived from, and what
    the next threshold opens. Nothing here is stored - matrix is the only progression truth
    and every figure is computed from it when the panel renders. */
-function nextUnlock(){const a=game.account,d=Meta.distinctBossClear(a),g=Meta.grade(a);
- const byBoss=[...D.items,...D.jobs].filter(e=>e.metaUnlock&&d<e.metaUnlock)
-  .sort((x,y)=>x.metaUnlock-y.metaUnlock)[0];
- const byGrade=D.contracts.filter(c=>c.grade&&g<c.grade).sort((x,y)=>x.grade-y.grade)[0];
- const out=[];
- if(byBoss)out.push('서로 다른 마왕 '+byBoss.metaUnlock+'종 토벌 · '+byBoss.name+' ('+d+' / '+byBoss.metaUnlock+')');
- if(byGrade)out.push('가맹등급 '+byGrade.grade+' · '+byGrade.name+' (직업 숙련 '
-  +Meta.totalJobMastery(a)+' / '+((byGrade.grade-1)*7)+')');
- return out.length?out:['더 열릴 것은 없습니다. 남은 것은 아직 잡지 못한 마왕뿐입니다.'];}
+/* Standing progression is a list, not a notification. What is already open and what is not
+   yet open read at the same level here - the moment something opens is the result screen's
+   job, and that one only ever appears on the Run that opened it. */
+function gatedContent(){return [...D.items,...D.jobs].filter(e=>e.metaUnlock)
+ .map(e=>({name:e.name,need:'서로 다른 마왕 '+e.metaUnlock+'종 토벌',
+   have:Meta.distinctBossClear(game.account),want:e.metaUnlock,rank:e.metaUnlock,kind:'boss'}))
+ .concat(D.contracts.filter(c=>c.grade).map(c=>({name:c.name,need:'가맹등급 '+c.grade,
+   have:Meta.totalJobMastery(game.account),want:(c.grade-1)*7,rank:c.grade+10,kind:'grade'})))
+ .sort((x,y)=>x.rank-y.rank);}
+/* The two thresholds run on different counters, so "next" is the nearest of each rather than
+   the first two overall - otherwise the Boss-gated ones crowd the grade line off the list. */
+function unlockLists(){const all=gatedContent(),open=all.filter(e=>e.have<e.want);
+ return {done:all.filter(e=>e.have>=e.want),
+         next:['boss','grade'].map(k=>open.find(e=>e.kind===k)).filter(Boolean)};}
 function progressPanel(){const a=game.account;
  /* the grade, the total and the distinct count are already stated in the codex header
     directly above this, so the panel does not say them a second time. */
@@ -708,7 +713,16 @@ function progressPanel(){const a=game.account;
        +(done?'토벌':'미토벌')+'">'+(done?'●':'·')+'</span></td>';}).join('')
     +'<td class="tally">'+Meta.jobMastery(a,j.id)+' / 7</td></tr>';}).join('')
  +'</tbody></table>'
- +'<div class="next"><h4>다음 해금</h4>'+nextUnlock().map(t=>'<p>'+E(t)+'</p>').join('')+'</div></div>';}
+ +unlockBoard()+'</div>';}
+function unlockBoard(){const {done,next}=unlockLists();
+ // something already open does not need a counter saying it is open
+ const line=(e,show)=>'<p><b>'+E(e.name)+'</b><span>'+E(e.need)+(show?' · '+e.have+' / '+e.want:'')+'</span></p>';
+ return '<div class="unlocks">'
+ +'<div><h4>해금 완료</h4>'+(done.length?done.map(e=>line(e,false)).join('')
+   :'<p class="none">아직 본사에서 내려온 것이 없다.</p>')+'</div>'
+ +'<div><h4>다음 해금</h4>'+(next.length?next.map(e=>line(e,true)).join('')
+   :'<p class="none">본사가 내줄 것은 다 내줬다. 남은 것은 아직 잡지 못한 마왕뿐이다.</p>')+'</div>'
+ +'</div>';}
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:codexTab==='contracts'?D.contracts:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 ${GRADE_COPY[Meta.grade(a)].label}</h3><p class="smalltext">${GRADE_COPY[Meta.grade(a)].flavor}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${(a.discoveries||[]).length}개</summary>${(a.discoveries||[]).map(e=>`<p class="discovery">${E(e.text)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['contracts','시작 계약']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3><p>${E(it.description||'길드 등록 직업.')}</p>${it.effects?effectList(it):''}<p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 상품 기본 매입가의 50%를 회수합니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${st.expires===null?'유통기한 없음':(st.expires-s.day)+'일 남음'}</p>${['morning','order','night','closing','final'].includes(s.phase)?btn('1개 정리 +'+Math.floor(it.buy*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 function newRun(){return `<div class="eyebrow">길드리테일 가맹 계약</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">기본 자금 1,200G · 창고 24칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">계약서를 접어 카운터 아래 넣었다. 시작 재고는 창고에 있다.</div><h3 style="margin-bottom:10px">시작 계약</h3><div class="contract-grid">${D.contracts.map(c=>{const locked=!Meta.contractUnlocked(game.account,c);return `<button class="contract ${contract===c.id?'active':''}" data-action="contract" data-id="${c.id}" ${locked?'disabled':''}><strong>${c.name}${locked?' · 잠김':''}</strong><span class="muted">${c.description}</span>${locked?'<br><small>'+unlockProgress(c)+'</small>':''}</button>`;}).join('')}</div><details style="margin-top:15px"><summary class="smalltext">재현용 Seed 지정</summary><label class="smalltext" for="seed">비워 두면 새로운 Seed로 시작합니다.</label><input id="seed" class="seed-field" placeholder="예: guild24-first-shift" maxlength="80" value="${game.run?.phase==='foundation'?E(game.run.seed):''}"></details>${game.run?.phase==='foundation'?'<p class="smalltext" style="margin-top:10px">계약만 바꿉니다. 이 점포의 점포지원 후보와 첫 모험가는 그대로입니다.</p>':''}${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. 보상은 없습니다.</p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 가맹등급 · 해금은 지워지지 않습니다.</p>':''}`;}
@@ -853,7 +867,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'import-go':$('#save-file').click();break;
 
  }
- const opened=game.run?.unlocked||[];if(opened.length){toast('본사 해금 · '+opened.join(' · '));sound('rare');game.run.unlocked=[];}
+ /* Unlocks are credited by Meta.finish, which only runs as a Run ends - so this always fires
+    on the ending, where the statement already names what opened and keeps naming it. A toast
+    would say the same thing in a second channel and then take it away. The cue stays. */
+ const opened=game.run?.unlocked||[];
+ if(opened.length){sound('rare');
+  if(game.run.phase!=='end'){toast('본사 해금 · '+opened.join(' · '));game.run.unlocked=[];}}
  }catch(err){toast(err.message);}
 }
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled){if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);}});

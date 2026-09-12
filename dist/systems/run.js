@@ -105,5 +105,9 @@ P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  s.bossDebug={power,roll,assault,bossPower};s.results=[];
  s.finalReport={cleared,families:d.familyNames,members:team.map((n,i)=>({npcId:n.id,name:n.name,level:n.level,job:n.job,items:[...n.pack],hazard:Math.round(preparations[i].hazard*10)/10,why:preparations[i].why.slice(0,3)}))};
  for(const n of team)n.pack=[];
- this.end(cleared,cleared?'마왕 토벌 성공. 마지막 보급이 왕도를 지켰습니다.':'마왕성 원정 실패. 남은 이야기는 다음 점주에게 이어집니다.');};
+ /* The ending is about this store and the people who kept coming back to it, not about a
+    result code. Thirty days of ordering, pricing and supplying is what put them at that gate. */
+ this.end(cleared,cleared
+  ?'서른 날 동안 이 가게를 드나든 사람들이, 끝내 마왕을 쓰러뜨렸다.'
+  :'원정대는 마왕성 앞에서 멈췄다. 이 점포의 서른 날은 여기까지다.');};
 })(globalThis);

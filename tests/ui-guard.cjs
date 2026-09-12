@@ -611,8 +611,21 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  // ...and the three the header already states are not repeated inside the panel
  assert.ok(!/Meta\.totalJobMastery|Meta\.distinctBossClear|GRADE_COPY/.test(panel),
   'the panel does not restate what the codex header says directly above it');
- assert.ok(fn('nextUnlock').includes('metaUnlock')&&fn('nextUnlock').includes('c.grade'),
-  'and what the next threshold opens, from the catalog rather than a written-out list');
+ assert.ok(fn('gatedContent').includes('metaUnlock')&&fn('gatedContent').includes('c.grade'),
+  'and what each threshold opens, from the catalog rather than a written-out list');
+ /* standing progression is a list, not a notification: what is open and what is not yet open
+    read at the same level, and the moment-of-unlock line belongs to the result screen only */
+ const board=fn('unlockBoard');
+ assert.ok(board.includes('해금 완료')&&board.includes('다음 해금'),'both sides are named');
+ assert.ok(board.indexOf('<div><h4>해금 완료')<board.indexOf('<div><h4>다음 해금')
+   &&(board.match(/<h4>/g)||[]).length===2,'and they are the same kind of block');
+ assert.ok(!board.includes('본사 해금'),'the standing view never uses the moment wording');
+ assert.ok(led.includes('본사 해금')&&led.includes('s.unlocked'),
+  'which stays on the ending, for the Run that actually opened something');
+ /* ...and it is actually reachable there: unlocks are only ever credited as a Run ends, so
+    the in-play toast would drain them before the ending could name them */
+ assert.ok(/if\(game\.run\.phase!=='end'\)\{toast\('본사 해금/.test(app),
+  'the toast stands down on the ending instead of consuming what the ending reports');
  assert.ok(!/account\.progress|a\.progressCache|persist/.test(panel),'nothing about it is stored');
 
  /* D-8. Two different pieces of money are on screen during a sale. Neither is just 소지금. */

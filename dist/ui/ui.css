@@ -922,8 +922,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .matrix td.open{color:#6b6152}
 .matrix td.tally{font-variant-numeric:tabular-nums;color:#cbb98d;white-space:nowrap}
 .matrix tr.locked th,.matrix tr.locked td{opacity:.45}
-.progress-panel .next h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
-.progress-panel .next p{margin:0 0 4px;font:400 13px/1.6 var(--ui);color:#cbb98d}
+.unlocks{display:grid;gap:14px}
+.unlocks h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
+.unlocks p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 5px;
+ font:400 13px/1.5 var(--ui)}
+.unlocks p b{font-weight:400;color:#efe3c8}
+.unlocks p span{color:#a2947c;font-variant-numeric:tabular-nums}
+.unlocks p.none{color:#8a7d61}
 /* the ending states what opened, in the same voice the toast uses in play */
 .end-tape .opened{margin-top:10px;padding:9px 11px;background:#2c241814}
 .end-tape .opened span{display:block;font:600 11px/1 var(--ui);letter-spacing:.14em;color:#8a7d61}

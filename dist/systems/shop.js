@@ -129,12 +129,21 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(this.deepDay(s.day)){const top=Math.max(...s.dungeons.map(d=>d.tier));
   const pool=s.dungeons.map((d,i)=>i).filter(i=>s.dungeons[i].tier===top);
   s.deep.today={day:s.day,gateIndex:new G.RNG(String(s.seed)+':deep:'+s.day).pick(pool),nomineeId:null,paid:0};}
- if((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)this.addNPC({rookie:!!ev.rookie,royal:!!ev.royal});
+ /* EVENT 신입 모험가 시즌: the event used to create an NPC and stop there - which the third-day
+    intake does anyway - and pass a rookie flag that Adventurer.create never reads, so nothing
+    about the day actually changed. The arrival is held here and seated below, in one of the
+    day's own visit slots. No new Level band and no extra visitor: the Day-based level rule is
+    untouched and the headcount is the headcount. */
+ const arrival=((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)?this.addNPC({royal:!!ev.royal}):null;
  if(s.pity.npc>=8){const fresh=s.npcs.filter(n=>!n.introduced);if(fresh.length&&this.rng.next()<.6){fresh[0].rarity=Math.max(1,fresh[0].rarity);fresh[0].potential+=.05;}}
  this.generateOffers();
  let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
  let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
  for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+ /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
+    than by adding a slot. The number of weighted draws is unchanged, so a Day without the
+    event is bit-for-bit what it was. */
+ if(ev.rookie&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
  s.visitorBreakdown={base:baseVisitors,board:(s.dayFacilities.includes('board')?1:0)+(s.dayFacilities.includes('hub')?2:0),contract:s.contract==='guild'?1:0,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
  for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('showoff')&&s.dungeons.length>1&&this.rng.next()<D.balance.showoffLie){const bigger=s.dungeons.map((d,i)=>({d,i})).filter(x=>x.i!==n.destination&&x.d.power>=s.dungeons[n.destination].power);if(bigger.length)n.claimedDestination=this.rng.pick(bigger).i;}n.money=Math.min(1800,Math.round(D.balance.walletBase+n.level*D.balance.walletLevel+this.rng.int(0,75)+n.money*D.balance.walletCarry));n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;n.newToday=!n.introduced;}
  if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
