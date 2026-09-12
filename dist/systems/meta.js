@@ -67,15 +67,26 @@ function observe(a,report,n){
 /* End of run. A run settles exactly once (the rewarded guard). A clear marks one cell for
    each distinct Job that actually went - repeating a pair it already holds adds nothing,
    and a failure adds nothing at all. */
+/* The result screen may only report what actually moved, so the credit step records the
+   before/after of the values it changes. This is run-scoped presentation, not a second
+   progression truth: matrix stays the only authority and every number here is derived from
+   it on the spot. A Job that was already credited for this Boss moved nothing and is not
+   listed. Run abandon never reaches this function, so it records nothing either. */
 function finish(a,run,win){
  if(run.rewarded)return [];
  run.rewarded=true;
  a.runs++;
+ run.metaGain=null;
  if(!win)return [];
  a.wins++;
- const before=opened(a);
+ const before=opened(a),wasGrade=grade(a);
  const jobs=[...new Set((run.finalReport?.members||[]).map(m=>m.job))];
+ const wasMastery=Object.fromEntries(jobs.map(job=>[job,jobMastery(a,job)]));
  for(const job of jobs)if(a.matrix[job]&&run.bossId in a.matrix[job])a.matrix[job][run.bossId]=true;
+ run.metaGain={
+  jobs:jobs.filter(job=>jobMastery(a,job)>wasMastery[job])
+           .map(job=>({job,from:wasMastery[job],to:jobMastery(a,job)})),
+  grade:grade(a)>wasGrade?{from:wasGrade,to:grade(a)}:null};
  const after=opened(a);
  const names=[...D.items,...D.jobs,...D.contracts];
  return ['items','jobs','contracts'].flatMap(k=>after[k].filter(id=>!before[k].includes(id)))

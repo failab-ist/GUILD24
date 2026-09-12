@@ -508,7 +508,14 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
         && /\.p-morning \.band\.counter \.mount\{--roomw:(\d+)px/.test(desktop),'both caps are desktop-only');
  const ceil=+desktop.match(/\.band\.ceiling \.mount\{--roomw:(\d+)px/)[1];
  const till=+desktop.match(/\.band\.counter \.mount\{--roomw:(\d+)px/)[1];
- assert.ok(ceil<=640&&till<=640,'neither piece of furniture is free to grow with the window');
+ assert.ok(ceil<=820&&till<=820,'neither piece of furniture is free to grow with the window');
+ /* ...and a wide window is not a reason to set the decision smaller so more of the shop
+    fits in frame: the extra width goes to the notices, at a size that reads across a desk. */
+ const wide=css.slice(css.indexOf('@media(min-width:900px)'));
+ assert.ok(/\.p-morning \.board\{width:min\(860px/.test(wide),'the notices take the width a wide screen gives');
+ assert.ok(/\.p-morning \.board-rail\{font-size:1[5-9]px/.test(wide)
+        && /\.p-morning \.slip\.gate>b\{font-size:2\dpx/.test(wide),
+  'and the decision steps up with it rather than staying at phone size');
  /* The anchored overlays are percentages of their own art, so capping the art box moves them
     with it. What has to hold is that each one is centred on its art - that is what puts the
     day and the float on the centre line of the screen once the box is centred. */
@@ -574,9 +581,39 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!css.includes('.end-banner'),'and so is the hero it sat on, rule and all');
  assert.ok(bannerFn.includes('class="tape end-tape"')&&bannerFn.includes('class="print"'),
   'the closing statement is printed on the tape the player already reads every night');
- assert.ok(/class="row"><span>가맹등급/.test(bannerFn)&&/class="row"><span>직업 숙련/.test(bannerFn),
-  'the standing totals sit in the ledger rather than in a caption under a headline');
  assert.ok(!/번째 런/.test(app),'and the count is stores, not 런');
+
+ /* META §PROGRESSION UI. The statement reports what this Run moved and nothing else, so a
+    number that did not change never appears on it. */
+ const led=fn('ledger');
+ assert.ok(!/Meta\.grade\(a\)|Meta\.totalJobMastery\(a\)/.test(bannerFn+led),
+  'the ending never prints a standing total that this Run did not move');
+ assert.ok(led.includes('s.metaGain')&&/gain\?\.jobs/.test(led),'it reports the recorded before/after instead');
+ assert.ok(/g\.from\+' → '\+g\.to/.test(led)&&/gain\.grade\.from\+' → '\+gain\.grade\.to/.test(led),
+  'as the move each one made');
+ assert.ok(/gain\?\.grade\?/.test(led),'and the grade line only when the grade actually rose');
+ const metaSrc=read('dist/systems/meta.js');
+ assert.ok(/jobs:jobs\.filter\(job=>jobMastery\(a,job\)>wasMastery\[job\]\)/.test(metaSrc),
+  'a Job already credited for this Boss moved nothing and is not listed');
+ assert.ok(/if\(!win\)\{?[\s\S]{0,40}return \[\]/.test(metaSrc)&&/run\.metaGain=null;\n if\(!win\)/.test(metaSrc),
+  'a failure records no gain at all');
+
+ /* ...and the whole state is reachable at any time, in the codex the player already has. */
+ const cx=fn('codex');
+ assert.ok(cx.includes("['progress','진행도']"),'progression is a tab on the existing codex, not a new screen');
+ assert.ok(cx.includes('progressPanel()'),'and it renders in the same grid as every other tab');
+ const panel=fn('progressPanel'),screen=cx+panel;
+ for(const [what,re] of [['the current grade',/GRADE_COPY\[Meta\.grade\(a\)\]/],
+                         ['each Job mastery',/Meta\.jobMastery\(a,j\.id\)/],
+                         ['the Job x Boss grid',/a\.matrix\?\.\[j\.id\]\?\.\[b\.id\]/],
+                         ['distinct Boss clears',/Meta\.distinctBossClear\(a\)/]])
+  assert.ok(re.test(screen),'the codex shows '+what);
+ // ...and the three the header already states are not repeated inside the panel
+ assert.ok(!/Meta\.totalJobMastery|Meta\.distinctBossClear|GRADE_COPY/.test(panel),
+  'the panel does not restate what the codex header says directly above it');
+ assert.ok(fn('nextUnlock').includes('metaUnlock')&&fn('nextUnlock').includes('c.grade'),
+  'and what the next threshold opens, from the catalog rather than a written-out list');
+ assert.ok(!/account\.progress|a\.progressCache|persist/.test(panel),'nothing about it is stored');
 
  /* D-8. Two different pieces of money are on screen during a sale. Neither is just 소지금. */
  assert.ok(!/'소지금 부족'/.test(app+read('dist/systems/shop.js')),'no bare 소지금 refusal survives');

@@ -597,12 +597,20 @@ function endBanner(){const s=game.run,a=game.account;
  +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제 0 게이트 폐쇄':'영업 종료')+' · '+E(s.branch)+'</span></div>'
  +'<p class="closed">'+(s.win?'우리가 키운 애들이, 해냈다.':'이번 점포의 영업이 끝났다.')+'</p>'
  +'<p class="reason">'+E(s.endReason)+'</p>'
- +'<div class="block">'
-  +'<div class="row"><span>가맹등급</span><b>'+Meta.grade(a)+'</b></div>'
-  +'<div class="row"><span>직업 숙련</span><b>'+Meta.totalJobMastery(a)+' / 42</b></div>'
-  +'<div class="row"><span>지금까지 연 점포</span><b>'+a.runs+'</b></div>'
- +'</div>'+btn('해금 확인','codex','bare')
- +'</div><div class="tear bottom"></div></div>';}
+ +ledger()+'</div><div class="tear bottom"></div></div>';}
+/* META §PROGRESSION UI. The statement reports what this Run moved and nothing else. A number
+   that did not change is not a result: on a failure the standing totals are not the story,
+   and on a clear a Job already credited for this Boss moved nothing, so it is not listed as
+   though it had. Meta.finish records the before/after; the whole state lives in the codex,
+   reachable from the store menu at any time. */
+function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
+ const row=(label,value)=>'<div class="row"><span>'+label+'</span><b>'+value+'</b></div>';
+ const moved=(gain?.jobs||[]).map(g=>row(E(D.jobBy[g.job]?.name||g.job)+' 숙련',g.from+' → '+g.to)).join('')
+  +(gain?.grade?row('가맹등급',gain.grade.from+' → '+gain.grade.to):'');
+ const opened=(s.unlocked||[]).length
+  ?'<div class="opened"><span>본사 해금</span><b>'+E(s.unlocked.join(' · '))+'</b></div>':'';
+ return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+opened
+  +(moved||opened?btn('도감에서 보기','codex','bare'):'');}
 function npcCard(n,action='npc'){const s=game.run;return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${action==='team'&&(!n.alive||n.recovery)?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${Adventurer.rank(n)}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${action==='team'?(s.team.includes(n.id)?'선택됨':'원정대 선택'):'기록 보기'}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
@@ -635,8 +643,20 @@ function finalScreen(){
  const dock=relicWindowLink()+(need?btn('마왕성으로 출발','boss','stamp',s.team.length===need?'':'disabled'):btn('출전 불가 · 런 종료','retire','danger'));
  return stage('final','최종 원정','',body,dock);
 }
+/* Whoever went to the castle is the ending. run.js clears s.results when the Final resolves,
+   so after D30 the end screen had the statement and then nothing - the people the player
+   spent thirty days raising, and the last thing the store handed them, were computed into
+   finalReport and never shown. They close the screen now, with the faces the player knows. */
+function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)return '';
+ return '<section class="sent-off"><h3>'+(rep.cleared?'제 0 게이트를 닫고 온 사람들':'마왕성으로 보낸 사람들')+'</h3>'
+ +'<div class="went">'+rep.members.map(m=>{const n=s.npcs.find(x=>x.id===m.npcId);
+   const carried=(m.items||[]).map(id=>D.itemBy[id]?.name).filter(Boolean);
+   return '<article class="goer">'+portrait(n,88)
+    +'<div><b>'+E(m.name)+'</b><span class="who-line">Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span>'
+    +'<span class="carried">'+(carried.length?'마지막 보급 · '+E(carried.join(' · ')):'빈손으로 갔다')+'</span></div>'
+    +'</article>';}).join('')+'</div></section>';}
 function endScreen(){const s=game.run;
- return stage('end','영업 종료','',endBanner()+s.results.map(beat).join(''),btn('다음 점포 열기','new','stamp'));}
+ return stage('end','영업 종료','',endBanner()+sentOff()+s.results.map(beat).join(''),btn('다음 점포 열기','new','stamp'));}
 function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업을 시작하면 모험가 수첩이 열린다.</p>';
  return '<p class="smalltext">이름을 누르면 마지막 보급과 원정 기록을 볼 수 있다. 사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'
  +s.npcs.filter(n=>n.introduced).sort((a,b)=>Number(b.alive)-Number(a.alive)||b.loyalty-a.loyalty).map(n=>npcCard(n)).join('')+'</div>';}
@@ -661,7 +681,35 @@ function unlockProgress(entry){const a=game.account;
 const isLocked=e=>(e.metaUnlock&&Meta.distinctBossClear(game.account)<e.metaUnlock)
  ||(e.grade&&Meta.grade(game.account)<e.grade);
 
-function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:codexTab==='contracts'?D.contracts:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 ${GRADE_COPY[Meta.grade(a)].label}</h3><p class="smalltext">${GRADE_COPY[Meta.grade(a)].flavor}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${(a.discoveries||[]).length}개</summary>${(a.discoveries||[]).map(e=>`<p class="discovery">${E(e.text)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['contracts','시작 계약']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3><p>${E(it.description||'길드 등록 직업.')}</p>${it.effects?effectList(it):''}<p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+/* META §PROGRESSION UI, in the codex the player already has rather than a new screen: the
+   grade, the mastery of each Job, the Job x Boss grid those two are derived from, and what
+   the next threshold opens. Nothing here is stored - matrix is the only progression truth
+   and every figure is computed from it when the panel renders. */
+function nextUnlock(){const a=game.account,d=Meta.distinctBossClear(a),g=Meta.grade(a);
+ const byBoss=[...D.items,...D.jobs].filter(e=>e.metaUnlock&&d<e.metaUnlock)
+  .sort((x,y)=>x.metaUnlock-y.metaUnlock)[0];
+ const byGrade=D.contracts.filter(c=>c.grade&&g<c.grade).sort((x,y)=>x.grade-y.grade)[0];
+ const out=[];
+ if(byBoss)out.push('서로 다른 마왕 '+byBoss.metaUnlock+'종 토벌 · '+byBoss.name+' ('+d+' / '+byBoss.metaUnlock+')');
+ if(byGrade)out.push('가맹등급 '+byGrade.grade+' · '+byGrade.name+' (직업 숙련 '
+  +Meta.totalJobMastery(a)+' / '+((byGrade.grade-1)*7)+')');
+ return out.length?out:['더 열릴 것은 없습니다. 남은 것은 아직 잡지 못한 마왕뿐입니다.'];}
+function progressPanel(){const a=game.account;
+ /* the grade, the total and the distinct count are already stated in the codex header
+    directly above this, so the panel does not say them a second time. */
+ return '<div class="progress-panel">'
+ +'<table class="matrix"><thead><tr><th scope="col">직업</th>'
+ +D.bosses.map(b=>'<th scope="col">'+E(b.sin)+'</th>').join('')
+ +'<th scope="col">숙련</th></tr></thead><tbody>'
+ +D.jobs.map(j=>{const locked=!Meta.jobUnlocked(a,j);
+   return '<tr'+(locked?' class="locked"':'')+'><th scope="row">'+E(j.name)+'</th>'
+    +D.bosses.map(b=>{const done=!!a.matrix?.[j.id]?.[b.id];
+      return '<td class="'+(done?'done':'open')+'"><span aria-label="'+E(b.name)+' '
+       +(done?'토벌':'미토벌')+'">'+(done?'●':'·')+'</span></td>';}).join('')
+    +'<td class="tally">'+Meta.jobMastery(a,j.id)+' / 7</td></tr>';}).join('')
+ +'</tbody></table>'
+ +'<div class="next"><h4>다음 해금</h4>'+nextUnlock().map(t=>'<p>'+E(t)+'</p>').join('')+'</div></div>';}
+function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:codexTab==='contracts'?D.contracts:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 ${GRADE_COPY[Meta.grade(a)].label}</h3><p class="smalltext">${GRADE_COPY[Meta.grade(a)].flavor}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${(a.discoveries||[]).length}개</summary>${(a.discoveries||[]).map(e=>`<p class="discovery">${E(e.text)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['contracts','시작 계약']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3><p>${E(it.description||'길드 등록 직업.')}</p>${it.effects?effectList(it):''}<p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 상품 기본 매입가의 50%를 회수합니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${st.expires===null?'유통기한 없음':(st.expires-s.day)+'일 남음'}</p>${['morning','order','night','closing','final'].includes(s.phase)?btn('1개 정리 +'+Math.floor(it.buy*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 function newRun(){return `<div class="eyebrow">길드리테일 가맹 계약</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">기본 자금 1,200G · 창고 24칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">계약서를 접어 카운터 아래 넣었다. 시작 재고는 창고에 있다.</div><h3 style="margin-bottom:10px">시작 계약</h3><div class="contract-grid">${D.contracts.map(c=>{const locked=!Meta.contractUnlocked(game.account,c);return `<button class="contract ${contract===c.id?'active':''}" data-action="contract" data-id="${c.id}" ${locked?'disabled':''}><strong>${c.name}${locked?' · 잠김':''}</strong><span class="muted">${c.description}</span>${locked?'<br><small>'+unlockProgress(c)+'</small>':''}</button>`;}).join('')}</div><details style="margin-top:15px"><summary class="smalltext">재현용 Seed 지정</summary><label class="smalltext" for="seed">비워 두면 새로운 Seed로 시작합니다.</label><input id="seed" class="seed-field" placeholder="예: guild24-first-shift" maxlength="80" value="${game.run?.phase==='foundation'?E(game.run.seed):''}"></details>${game.run?.phase==='foundation'?'<p class="smalltext" style="margin-top:10px">계약만 바꿉니다. 이 점포의 점포지원 후보와 첫 모험가는 그대로입니다.</p>':''}${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. 보상은 없습니다.</p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 가맹등급 · 해금은 지워지지 않습니다.</p>':''}`;}
 function settings(){return `<div class="stack"><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="row wrap">${btn('저장 내보내기','export','stamp')}${btn('저장 가져오기','import')}</div><div class="row wrap">${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div><hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="muted">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p>${game.run&&game.run.phase!=='end'?btn('현재 지점 포기','new','danger'):''}<div class="row wrap">${btn('모든 게임 데이터 초기화','reset','danger')}</div><small>버전 0.4 · 로컬 실행 지원 · 외부 연결 없음</small></div>`;}
