@@ -3,7 +3,7 @@
 // V2_4_EXECUTION_PLAN §8.1 Playwright boundary contract.
 // Everything that needs a real viewport lives in `npm run qa:visual` (UI-Q38), never here.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const app=read('dist/ui/app.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
@@ -318,9 +318,17 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(!/game\.end\(/.test(start),'starting a new Run does not route through the settlement path');
  assert.ok(/game\.start\(/.test(start),'it starts the next Run through the ordinary fresh-Run path');
 
- assert.ok(app.includes('현재 런 포기 · 새 점포 준비'),'the destructive action is named as the spec names it');
- assert.ok(app.includes('현재 런을 보상 없이 포기하고 새 점포를 시작합니다.'),'and the confirmation says what it costs');
+ /* Director 2026-09-12: 런 is engine vocabulary, and "포기 · 새 점포 준비" said the same
+    thing twice. One phrase now, in the store's own voice, and the confirmation still states
+    the cost. The behaviour it describes is unchanged - see integration.cjs. */
+ assert.ok(app.includes('현재 지점 포기'),'the destructive action is named once, in the world voice');
+ assert.ok(app.includes('지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. 보상은 없습니다.'),
+  'and the confirmation says what it costs');
+ assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
+ // ...and it is told apart from the full wipe, which is the other destructive action
+ assert.ok(fn('newRun').includes('본사 기록은 그대로 남습니다'),
+  'abandoning a store is distinguished from erasing the account');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
  // since the Meta replacement, so any remaining promise of one is a lie, not just off-tone.
@@ -416,7 +424,7 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
   'the carried seed is shown rather than applied behind the player');
  // an unopened store is not something the player is abandoning, so it is not described as one
  for(const f of [fn('newRun'),fn('renderModal')])
-  if(f.includes('현재 런 포기 · 새 점포 준비')||f.includes('보상 없이 포기'))
+  if(f.includes('현재 지점 포기')||f.includes('모두 포기하고'))
    assert.ok(f.includes("'foundation'"),'the abandon wording is withheld before the store opens');
 
  // D-30 / D-31~33: both destructive actions are named in the menu, not buried in 설정,
@@ -424,10 +432,10 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  const menu=app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900);
  assert.ok(menu.includes("btn('도감','codex')"),'the codex is just 도감');
  assert.ok(!menu.includes('본사 · 도감'),'the old label is gone');
- assert.ok(menu.includes("btn('현재 런 포기','new','danger')"),'the Run reset is in the menu');
+ assert.ok(menu.includes("btn('현재 지점 포기','new','danger')"),'the store abandon is in the menu');
  assert.ok(menu.includes("btn('모든 게임 데이터 초기화','reset','danger')"),'and the full reset');
- assert.ok(/foundation'\]\.includes\(game\.run\.phase\)\?btn\('현재 런 포기'/.test(menu),
-  'the Run reset is absent when there is no Run to abandon, rather than present and inert');
+ assert.ok(/foundation'\]\.includes\(game\.run\.phase\)\?btn\('현재 지점 포기'/.test(menu),
+  'it is absent when there is no store to abandon, rather than present and inert');
 });
 
 test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the taxonomy is not said at all',()=>{
@@ -476,21 +484,69 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
 });
 
 test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every width',()=>{
- // D-1 / D-4. The Morning bands are drawn from art sized to the column, so a wider column made
- // the ceiling and the counter taller and squeezed the notice board out: measured at 1280 the
- // board was 14px tall holding 272px of gates. The room keeps one column from tablet width up
- // and the board takes the width that was going spare, at full height.
- assert.ok(/\.p-morning \.store\{display:grid/.test(css),'the room and the board share the width at desktop');
- assert.ok(/\.p-morning \.store>\.board\{grid-area:1\/2\/4\/3;max-height:none/.test(css),
-  'and the board is no longer capped to a fraction of the column');
- assert.ok(/\.p-morning \.board-rail\{padding-right:/.test(css),'the rail keeps clear of the menu pin');
- // mobile keeps the stacked room: the desktop rule lives inside a min-width query
+ /* D-1 / D-4. Morning is read in one order - DAY, today's expedition, the Gates and their
+    Hazards, the float, the shutter - and the room has to be built in that order rather than
+    giving the furniture its share first. Two earlier attempts are what these assertions pin
+    against: the bands sized from art (board 14px tall holding 272px of gates at 1280) and the
+    two-column room that followed it (board 778px tall holding 121px, off in a side column
+    while DAY and the till sat at x=439 of 1280). Geometry is measured in the browser, not
+    here; what Node can hold is the composition that produces it. */
+ const morning=fn('morningScreen');
+ const at=(hay,needle)=>hay.indexOf(needle);
+ assert.ok(at(morning,'class="board"')>at(morning,'class="band ceiling"'),'the board hangs under the day sign');
+ assert.ok(at(morning,'class="board"')<at(morning,'class="band wall"'),'and above the room, not after it');
+ assert.ok(at(morning,'class="band wall"')<at(morning,'class="band counter"'),'the float stays below the room');
+ assert.ok(!/\.p-morning \.store\{display:grid/.test(css),'the side-column room is gone');
+ // the board is an object hung on the wall: as tall as what is pinned to it, and centred
+ assert.ok(/\.board\{[^}]*width:min\(680px,94%\)[^}]*margin:0 auto/.test(css),'the board is a centred object, not a full-bleed strip');
+ assert.ok(/\.board\{[^}]*flex:0 1 auto/.test(css),'it takes its height from its content');
+ assert.ok(/\.band\.wall\{flex:1 1 auto/.test(css),'the scenery absorbs the slack instead of claiming it');
+ // the furniture stops growing with the window, which is what pushed the decision out
+ assert.ok(/\.band \.mount\{[^}]*max-width:var\(--roomw/.test(css),'the art box is capped');
  const desktop=css.slice(css.indexOf('@media(min-width:600px)'));
- assert.ok(desktop.includes('.p-morning .store{display:grid'),'the two-column room is desktop-only');
- assert.ok(!/\.p-morning \.store\{display:grid/.test(css.slice(0,css.indexOf('@media(min-width:600px)'))),
-  'nothing about it reaches the phone layout');
+ assert.ok(/\.p-morning \.band\.ceiling \.mount\{--roomw:(\d+)px/.test(desktop)
+        && /\.p-morning \.band\.counter \.mount\{--roomw:(\d+)px/.test(desktop),'both caps are desktop-only');
+ const ceil=+desktop.match(/\.band\.ceiling \.mount\{--roomw:(\d+)px/)[1];
+ const till=+desktop.match(/\.band\.counter \.mount\{--roomw:(\d+)px/)[1];
+ assert.ok(ceil<=640&&till<=640,'neither piece of furniture is free to grow with the window');
+ /* The anchored overlays are percentages of their own art, so capping the art box moves them
+    with it. What has to hold is that each one is centred on its art - that is what puts the
+    day and the float on the centre line of the screen once the box is centred. */
+ for(const [name,a] of Object.entries(globalThis.Scene.anchors))
+  assert.equal(Math.round((a.left+a.width/2)*10)/10,50,name+' is centred on its own art');
+
+ /* The counter carries the float and nothing else. A promo standee and a crate stack used to
+    flank the register and the store-support plates sat on top of it, so the one thing the
+    player reads there was the smallest object on the surface. */
+ const counterArt=globalThis.Scene.counter();
+ for(const [fill,what] of [['#efe6c8','the promo standee'],['#a5763f','the crate stack']])
+  assert.ok(!counterArt.includes(fill),what+' is gone from the counter');
+ assert.ok(/width="232"[^>]*fill="#39434b"/.test(counterArt),'and the register took that width');
+ /* The counter is a body that lands, not a slab hanging over the floor: it runs the full art
+    width and its plinth reaches the bottom edge, and the band continues that edge column
+    either side of the capped art so it reads as one fixture across the room. */
+ assert.ok(/x="0" y="112" width="360" height="8"/.test(counterArt),'the counter stands on a plinth at the floor');
+ assert.ok(/x="0" y="50" width="360"/.test(counterArt),'and runs the full width of the art');
+ assert.ok(/\.band\.counter\{background:linear-gradient\(180deg,[\s\S]*?#3c2817 93\.33%\)/.test(css),
+  'the band continues the counter either side of the art, plinth included');
+ assert.ok(!app.includes('relicTray')&&!app.includes('relicStrip'),'and the brass plates are off the counter');
+ assert.ok(!css.includes('.tray{'),'with no orphan rule left behind');
+ assert.ok(/modal==='menu'/.test(app)&&app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900).includes("btn('점포지원','relics')"),
+  'the standing store-support list moved to the store menu rather than being lost');
+ const posDisplay=globalThis.Scene.anchors.till,posCap=globalThis.Scene.anchors.tillLabel;
+ assert.ok(posDisplay.width>38.9&&posCap.width>44.4,'the till took back the width the dressing was using');
+ assert.ok(/\.till b\{font:400 2[5-9]px/.test(css),'and the float is set at the size that surface now allows');
  // and no global type scale was pushed up to compensate
  assert.ok(!/@media\(min-width:900px\)\{[^}]*:root\{[^}]*font-size/.test(css),'no blanket font-size increase at desktop');
+
+ /* D-5 / EVENT §3-1. The board notice used to print the effect line alone. The catalog keeps
+    the situation and the effect apart already, so the notice says both and rules them off. */
+ assert.ok(fn('eventSlip').includes('E(e.reveal)')&&fn('eventSlip').includes('E(e.description)'),
+  'the notice says what happened as well as what it switched on');
+ assert.ok(/\.slip\.event \.effect\{[^}]*border-top/.test(css),'and the two are set apart');
+ assert.ok(/\.slip\.event \.flavor\{[^}]*white-space:pre-line/.test(css)
+        && /\.event-reveal \.flavor\{[^}]*white-space:pre-line/.test(css),
+  'a situation authored across lines keeps its lines, on the board and in the reveal');
 
  // D-9. The slots say the count as well as showing it - a row of boxes has to be counted first.
  assert.ok(fn('kitLine').includes("가방 '+n.pack.length+' / '+slots"),'the bag states used / total');

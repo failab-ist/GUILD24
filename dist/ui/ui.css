@@ -119,13 +119,36 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    Four stacked bands build a room; the interface hangs on their surfaces.
    ===================================================================== */
 .p-morning{background:#100c09}
-.store{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+/* The room reads top to bottom in the order the morning is decided: the day sign, the
+   notice board on the wall under it, the room itself, the counter with the float, the
+   shutter. The wall is the only band that grows, so the scenery takes what is left after
+   the decision rather than before it. */
+.store{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
+ background:linear-gradient(180deg,#0a121a8c 0,#0a121a3d 45%,#140d0866 100%),var(--tex-tile),#c6bda8;
+ background-size:auto,48px 36px}
 .band{position:relative;flex-shrink:0;width:100%}
-/* anchors are percentages of the ART, so the mount is exactly the art's box */
-.band .mount{position:relative;display:block;width:100%}
+/* anchors are percentages of the ART, so the mount is exactly the art's box. Capping the
+   mount stops the ceiling and the counter from growing with the column - left uncapped they
+   took 422px of an 860px viewport at 1280 and the decision got the remainder. The cap is
+   centred, so the day sign and the till (both anchored to the middle of their art) land on
+   the middle of the screen. */
+.band .mount{position:relative;display:block;width:100%;max-width:var(--roomw,100%);margin:0 auto}
 .band .band-art{display:block;width:100%;height:auto}
-.band.wall{flex:1 1 auto;min-height:104px;overflow:hidden;background:var(--tex-tile),#c6bda8;background-size:48px 36px}
-.band.wall .band-art{position:absolute;left:0;right:0;bottom:0;width:100%;height:auto}
+/* each band still spans the screen: outside the capped art it carries that art's own ground -
+   the ceiling's panelling, the floor tiling the counter stands on */
+.band.ceiling{background:#20262b}
+/* The counter art is capped so the register does not grow with the window, so the band
+   continues the counter's own edge column either side of it - slab, front edge, body, plinth
+   at the heights the art draws them (50/60/65/112 of 120). Above the slab the room carries on
+   as wall. Without this the counter reads as an island floating in the middle of the floor. */
+.band.counter{background:linear-gradient(180deg,
+  #0000 0,#0000 41.67%,#c6a26c 41.67%,#c6a26c 50%,#8a6435 50%,#8a6435 54.17%,
+  #6b4a2e 54.17%,#6b4a2e 93.33%,#3c2817 93.33%),var(--tex-tile),#c6bda8;
+ background-size:auto,48px 36px}
+.band.wall{flex:1 1 auto;min-height:32px;overflow:hidden;background:var(--tex-tile),#c6bda8;background-size:48px 36px}
+/* the wall art is authored to slice, so let it cover whatever height the wall is left with -
+   anchored to the bottom it showed only a washed sliver of floor once the board took the room */
+.band.wall .band-art{position:absolute;inset:0;width:100%;height:100%}
 .band.wall:after{content:'';position:absolute;inset:0;
  background:linear-gradient(180deg,#0a121ac4 0,#0a121a3d 42%,#00000000 70%,#140d0866 100%)}
 /* the shop sign hanging from the ceiling carries the day */
@@ -134,13 +157,20 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .daysign b{font:400 24px/1 var(--f-led);color:#f4fff8;-webkit-font-smoothing:none}
 .branchplate{position:absolute;right:6px;bottom:5px;z-index:2;padding:2px 5px;font:400 12px/1 var(--f-plate);
  color:#5a5040;background:#c4b48c;opacity:.62;-webkit-font-smoothing:none}
-/* ---- notice board: the day's gates, pinned to cork ---- */
-.board{flex:0 1 auto;min-height:0;max-height:54%;overflow-y:auto;overscroll-behavior:contain;outline:none;
+/* ---- notice board: the day's gates, pinned to cork ----
+   A board hung on the wall, so it is as tall as what is pinned to it. It used to be a
+   full-bleed strip that either got squeezed to 14px or, as a column, stood 778px tall
+   holding 121px of notices - 84% bare cork. It now hugs its content and only scrolls on a
+   day that genuinely overflows. */
+.board{position:relative;z-index:2;flex:0 1 auto;min-height:0;max-height:62%;width:min(680px,94%);
+ margin:0 auto -6px;overflow-y:auto;overscroll-behavior:contain;outline:none;
  background:var(--tex-cork),#a97f4a;
- box-shadow:inset 0 0 0 6px #4a3018,inset 0 0 0 10px #6b4526,inset 0 8px 18px #00000073,0 -4px 0 #00000059}
+ box-shadow:inset 0 0 0 6px #4a3018,inset 0 0 0 10px #6b4526,inset 0 8px 18px #00000073,
+  0 6px 0 #00000059,0 10px 22px #00000073}
+/* the board's own header: the first thing read after the day */
 .board-rail{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
- margin:10px 10px 0;padding:8px 12px;background:#4a3018;color:#e7d3a8;
- font:700 12px/1.5 var(--f-sign);letter-spacing:.06em;-webkit-font-smoothing:none;
+ margin:10px 10px 0;padding:9px 12px;background:#4a3018;color:#f0dcb2;
+ font:700 15px/1.4 var(--f-sign);letter-spacing:.06em;-webkit-font-smoothing:none;
  box-shadow:inset 0 2px 0 #ffffff1f,inset 0 -3px 0 #00000073,0 3px 0 #00000059}
 .board-rail b{margin-left:auto;font:400 13px/1 var(--ui);font-variant-numeric:tabular-nums;color:#fff0c9;letter-spacing:0}
 .board-rail b+b{margin-left:0}
@@ -157,6 +187,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .slip.gate:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--fam,#caa46a)}
 .slip .crest{position:absolute;left:12px;top:14px;width:32px;height:32px;display:grid;place-items:center;background:#00000014}
 .slip>b{display:block;font:400 15px/1.4 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:7px;color:#241d12}
+/* the Gate name is the decision the morning is about, so it outranks everything else pinned up */
+.slip.gate>b{font-size:18px;margin-bottom:8px}
 .slip .hazards{display:grid;gap:3px}
 .slip .hazards li{display:flex;align-items:center;gap:7px;font:400 13px/1.55 var(--ui);color:#5f5440}
 .slip .hazards .hz-icon{flex-shrink:0;color:#8a3f2c}
@@ -167,16 +199,20 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .slip.event{padding-top:16px}
 .slip.event .stamp-line{margin:0 0 6px;color:#2f7a4d;box-shadow:inset 0 0 0 2px #2f7a4d}
 .slip.event .body{display:block;font:400 13px/1.6 var(--ui);color:#5f5440}
+/* EVENT §3-1: what happened, then what it switched on. The situation keeps the line breaks
+   it was authored with; the effect is a stated fact, ruled off from the story above it. */
+.slip.event .flavor{display:block;white-space:pre-line;font:400 13px/1.7 var(--ui);color:#5f5440;font-style:italic}
+.slip.event .effect{display:block;margin-top:8px;padding-top:8px;border-top:1px dashed #b3a685;
+ font:600 13px/1.6 var(--ui);color:#2c2418}
+.event-reveal .flavor{margin:0;white-space:pre-line;font:400 15px/1.7 var(--ui);color:#cbbba0;font-style:italic}
+.event-reveal .effect{margin:14px 0 0;padding-top:12px;border-top:1px dashed #ffffff26;
+ font:600 14px/1.6 var(--ui);color:var(--gold)}
 /* ---- counter band: the till and the store support tray ---- */
 .till-cap{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden;
  white-space:nowrap;font:600 11px/1 var(--ui);letter-spacing:.22em;color:#8e9aa3;text-shadow:0 1px 0 #10161a}
 .till{position:absolute;z-index:2;display:flex;align-items:baseline;justify-content:center;gap:2px;overflow:hidden;white-space:nowrap}
-.till i{font:400 13px/1 var(--f-led);font-style:normal;color:#5fd196;-webkit-font-smoothing:none;text-shadow:0 0 5px #3fe08c4d}
-.till b{font:400 24px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 7px #3fe08c73;-webkit-font-smoothing:none}
-.tray{position:absolute;left:34%;bottom:5%;right:2%;z-index:2;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.tray .plate{min-height:34px;min-width:0;padding:8px 10px;font:400 12px/1 var(--f-plate);-webkit-font-smoothing:none;color:#463a1c;background:#a78d52;opacity:.75;
- box-shadow:inset 2px 2px 0 #ffe3a8,inset -2px -2px 0 #8a6a2c,2px 2px 0 #00000073}
-.tray .plate:hover{background:#d3b169}
+.till i{font:400 15px/1 var(--f-led);font-style:normal;color:#5fd196;-webkit-font-smoothing:none;text-shadow:0 0 5px #3fe08c4d}
+.till b{font:400 28px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 7px #3fe08c73;-webkit-font-smoothing:none}
 /* ---- dock: the shutter pull ---- */
 .p-morning .dock{display:flex;gap:10px;align-items:stretch;background:#0b0806;box-shadow:inset 0 3px 0 #ffffff0f}
 .pull{flex:1;min-height:58px;padding:0;background:
@@ -891,20 +927,17 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  .modal{max-height:88dvh;box-shadow:inset 0 0 0 3px #ffffff1a}
  .p-morning .dock .pull{flex:0 0 auto;min-width:280px;margin-left:auto}
  .p-order .dock .stamp{flex:0 0 auto;min-width:300px;margin-left:auto}
- /* MORNING at tablet width and up. The room's bands are drawn from art sized to the column,
-    so as the column gets wider the ceiling and the counter get taller and push the notice
-    board out: measured at 1280 the board was 14px tall holding 272px of gates, while the
-    scenery took 659px of an 860px viewport. The store is the screen, but the gates are the
-    decision - so the room keeps one column and the board takes the width that was going
-    spare, at full height, instead of being squeezed between two pieces of furniture. */
- .p-morning .store{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,36%);
-  grid-template-rows:auto minmax(0,1fr) auto}
- .p-morning .store>.band.ceiling{grid-area:1/1}
- .p-morning .store>.band.wall{grid-area:2/1}
- .p-morning .store>.band.counter{grid-area:3/1}
- .p-morning .store>.board{grid-area:1/2/4/3;max-height:none;min-height:0}
- /* the menu pin sits in the corner the board now reaches into, so the rail keeps clear of it */
- .p-morning .board-rail{padding-right:58px}
+ /* MORNING at tablet width and up. The room's furniture is art sized to the column, so left
+    alone the ceiling and the counter grow with the window and the decision gets the
+    remainder - at 1280 they took 422px of 860 between them. Capping the art box holds the
+    room at a human size and, because the day sign and the till are anchored to the middle
+    of their own art, centres both of them on the screen. The counter is capped harder than
+    the ceiling: the float is secondary to the Gates above it. */
+ .p-morning .band.ceiling .mount{--roomw:560px}
+ .p-morning .band.counter .mount{--roomw:560px}
+ /* the register is the only object left on this surface, so the float is set to fill it */
+ .p-morning .till b{font-size:34px}
+ .p-morning .till i{font-size:18px}
 }
 /* ============ 900px+ ============ */
 @media(min-width:900px){

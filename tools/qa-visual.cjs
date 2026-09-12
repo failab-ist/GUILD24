@@ -125,7 +125,7 @@ async function audit(page,width,screen){
   }
   // an element must stay inside the material it belongs to
   const contained=[['.tag-art','.form'],['.daysign','.band.ceiling'],['.till','.band.counter'],
-                   ['.slip','.board'],['.tray','.band.counter'],['.dial','.line'],['.ledger','.form']];
+                   ['.slip','.board'],['.dial','.line'],['.ledger','.form']];
   for(const [inner,outer] of contained){
    for(const el of document.querySelectorAll(inner)){
     if(!vis(el))continue;
