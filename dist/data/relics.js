@@ -1,16 +1,20 @@
 (function(G){
 const D=G.DATA;
+/* What counts as a 고가상품 for 길드 보증 진열대. It was a bare 200 inside shop.js and the
+   relic's own description never said it, so the player could not tell which sales it covered.
+   One name, read by the rule and by the sentence that describes it. */
+D.balance.guaranteeMinPrice=200;
 const rows=[
 ['bulk','묶음발주 계약','foundation',['rotation'],260,'같은 상품을 한 번에 3개 이상 발주하면 3번째부터 매입가 15% 할인.'],
 ['rotation','회전 진열대','foundation',['rotation'],240,'하루 6건 이상 판매하면 다음 날 첫 대량발주가 10% 저렴해진다.'],
 ['stamp','단골 스탬프 기계','foundation',['vip'],260,'유료 구매의 단골도 증가량 +50%. 무료 보급과 생환에는 적용하지 않는다.'],
 ['member','회원 관리대장','foundation',['vip'],260,'다음 날부터 이미 만난 손님의 방문 가중치 +40%.'],
 ['showcase','프리미엄 쇼케이스','foundation',['premium'],280,'희귀 이상 발주 가중치 +70%. 다음 날부터 운영비 +10G.'],
-['guarantee','길드 보증 진열대','foundation',['premium'],280,'하루 첫 고가상품 판매 1건에 본사가 정가의 20%를 부담. 점주는 선택 가격 전액 수령.'],
+['guarantee','길드 보증 진열대','foundation',['premium'],280,'하루 한 번, 정가 '+D.balance.guaranteeMinPrice+'G 이상 상품을 처음 팔 때 본사가 정가의 20%를 부담한다. 점주는 선택한 가격을 전액 받는다.'],
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],260,'알려진 게이트 위험에 대응하는 상품의 발주 가중치 +80%.'],
 ['medicine','긴급보급 선반','foundation',['expedition'],260,'치료·야외장비·보험 상품 발주 가중치 +60%, 공급 수량 +1.'],
 ['fridge','대형 냉장고','foundation',['fresh'],260,'음식·음료 유통기한 +1일. 보유 중인 해당 재고도 획득 시 한 번 연장.'],
-['kitchen','즉석식품 코너','foundation',['fresh'],280,'음식·음료의 포만감·보급·강인함 효과 +20%. 저항과 부작용은 그대로.'],
+['kitchen','즉석식품 코너','foundation',['fresh'],280,'음식·음료의 보급·강인함 효과 +20%. 위험 대응과 부작용은 그대로.'],
 ['board','길드 전광판','foundation',['customer'],260,'다음 날부터 방문객 +1명. 활동 가능한 인원 내에서 방문.'],
 ['rookieBoard','신입 모집 게시판','foundation',['customer'],240,'다음 날부터 신규 손님 선택 가중치 +70%. 후반 신입도 현재 시기에 맞는 레벨로 합류.'],
 ['groupFlyer','공동구매 전단','hybrid',['rotation','customer'],400,'오늘 방문객 6명 이상이면 3개 이상 묶음발주 매입가 10% 할인.'],
@@ -25,7 +29,7 @@ const rows=[
 ['lifetime','평생 단골제','keystone',['vip'],740,'단골도 60 이상 생환 고객에게 하루 한 번 소지금 +25G. 다음 방문 선택 가중치 +50%.'],
 ['royalCert','왕도 프리미엄 인증','keystone',['premium'],760,'희귀 이상 바가지 판매에 정가의 12% 본사 수당.'],
 ['expeditionCert','길드24 원정전문점 인증','keystone',['expedition'],700,'알려진 위험이 있으면 발주 후보에 해당 위험 대응 역할을 최소 1종 확보. 교환에도 유지.'],
-['fresh24','24시간 신선체계','keystone',['fresh'],740,'음식·음료 유통기한 +2일, 포만감·보급·강인함 효과 +25%.'],
+['fresh24','24시간 신선체계','keystone',['fresh'],740,'음식·음료 유통기한 +2일, 보급·강인함 효과 +25%.'],
 ['hub','지역 거점점 계약','keystone',['customer'],700,'다음 날부터 방문객 +2명, 운영비 +35G. 활동 가능한 인원 내에서 방문.'],
 ['warehouse','후방 창고 증설','utility',[],360,'창고 용량 +10칸.'],
 ['terminal','본사 추가발주권','utility',[],380,'다음 발주 후보 생성부터 후보 +2개.'],

@@ -198,4 +198,44 @@ test('SALE: a reaction is replaced, never expired on a timer',()=>{
  assert.ok(/s\.say=null/.test(shop),'the line is cleared when the day turns over, not by a timer');
 });
 
+test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually moves',()=>{
+ /* foodMult and potionMult multiply exactly one contribution - survival, from food and from
+    potions. They were labelled 음식/포션 고유 효과, which claims every effect the item has. */
+ const dungeon=read('dist/systems/dungeon.js');
+ assert.ok(/k==='survival'&&isFood\)value\*=mult\.foodMult/.test(dungeon),'foodMult reaches survival only');
+ assert.ok(/item\.effects\.potion&&k==='survival'\)value\*=mult\.potionMult/.test(dungeon),'and so does potionMult');
+ assert.equal(Presentation.labels.foodMult,'음식의 강인함','so the label names that channel');
+ assert.equal(Presentation.labels.potionMult,'포션의 강인함','and so does the potion one');
+ for(const id of ['eater','small'])
+  assert.ok(!DATA.traitBy[id].note,'with the channel named, '+id+' no longer needs a note denying the others');
+
+ /* A threshold the player is subject to is not written out by hand next to the rule that
+    uses it - both read the same constant, so the sentence cannot drift from the behaviour. */
+ assert.ok(Presentation.labels.priceBias.startsWith(String(DATA.balance.frugalThreshold)),
+  'the frugal label is built from the threshold it describes');
+ const guarantee=DATA.relicBy.guarantee.description;
+ assert.ok(guarantee.includes(DATA.balance.guaranteeMinPrice+'G'),'the guild guarantee states what 고가상품 means');
+ assert.ok(read('dist/systems/shop.js').includes('D.balance.guaranteeMinPrice'),'from the same constant the rule reads');
+
+ /* 포만감 was a third named effect in two Relic descriptions. There is no such channel. */
+ for(const id of ['kitchen','fresh24']){
+  assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
+  assert.ok(/보급·강인함/.test(DATA.relicBy[id].description),'and names the two it does move');
+ }
+
+ /* D-16: the description slot is flavour. Where it only restated the effect line it told the
+    player nothing they could not read one line up. Rules that live ONLY there are kept. */
+ for(const [id,banned] of [['ice','화염 대응'],['bandage','부상을 한 단계'],['kit','중상 위험을 줄여'],
+                           ['antidote','독 대응을 크게'],['mask','독과 가스 환경에 대응'],
+                           ['battery','어둠 속 시야를 확보'],['tree','사망 판정을 한 번 중상으로'],
+                           ['coupon','다음 소모품의 효과를 복제']]){
+  const it=DATA.items.find(x=>x.id===id);
+  assert.ok(it,'the catalog still has an item called '+id);
+  assert.ok(!it.description.includes(banned),it.name+' flavour no longer restates its own effect line');
+ }
+ const stone=DATA.items.find(x=>x.id==='stone');
+ assert.ok(stone&&/한 번 더 돌아올 기회/.test(stone.description),
+  'the return stone keeps the rule that is only written there');
+});
+
 console.log(count+' copy groups passed');
