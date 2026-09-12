@@ -7,6 +7,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const copy=x=>JSON.parse(JSON.stringify(x));
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
+const source=p=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'..',p),'utf8');
 
 // A deterministic driver: given the same state it always takes the same action, so any
 // difference between two runs is the engine's, never the script's.
@@ -388,8 +389,13 @@ test('CORE_RUN §RUN RANDOMNESS: the same seed and the same inputs produce the s
 
 test('RUN-Q19 / RUN-Q20: save → load → continue equals an uninterrupted run, at every phase',()=>{
  const phases=['foundation','morning','order','sell','night','closing','final'];
+ /* Reaching the Final means surviving to D30, which now also means not losing
+    D.balance.deathLimit adventurers on the way - the scripted policy here sells nothing, so
+    'resume-final' closes on day 19 with ten gone. The phase reached is what this test needs;
+    which seed gets there is not part of the contract. */
+ const seeds={final:'resume-final-3'};
  for(const at of phases){
-  const seed='resume-'+at;
+  const seed=seeds[at]||'resume-'+at;
   const straight=play(fresh(seed));
   const g=fresh(seed);
   let turns=0,cut=false;
@@ -549,6 +555,75 @@ test('CORE_RUN §SAVE/LOAD: the validator reads as named checks, and each one st
   ['progress',s=>s.run.cursor=-1],['relic window',s=>s.run.relicWindow.milestoneDay=7],
   ['spoken line',s=>s.run.say.npc='nope'],['event',s=>s.run.event={id:'nope'}]])
   assert.equal(broken(mutate),false,'still refused: '+why);
+});
+
+test('CORE_RUN §RUN FAIL: a store ends when too many of the people it sent stop coming back',()=>{
+ const limit=DATA.balance.deathLimit;
+ assert.ok(Number.isInteger(limit)&&limit>0,'the failure line is a named constant');
+
+ // one short of it the store keeps trading; on it, it does not
+ const below=fresh('deaths-below');below.run.phase='closing';below.run.stats.deaths=limit-1;
+ assert.equal(below.closeDay(),true,'one short of the line the day still closes');
+ assert.notEqual(below.run.phase,'end','and the store is still open');
+
+ const at=fresh('deaths-at');at.run.phase='closing';at.run.stats.deaths=limit;
+ at.closeDay();
+ assert.equal(at.run.phase,'end','on the line the store closes');
+ assert.equal(at.run.win,false,'as a failure');
+ assert.ok(at.run.endReason.includes('소문'),'named for what happened: '+at.run.endReason);
+
+ /* Money is not the reason and cannot rescue it: the liquidation offer exists to keep trading,
+    and there is nothing left to keep trading for. */
+ const rich=fresh('deaths-rich');rich.run.phase='closing';rich.run.stats.deaths=limit;
+ rich.run.money=9999;rich.closeDay();
+ assert.equal(rich.run.phase,'end','a full till does not hold the doors open');
+ const broke=fresh('deaths-broke');broke.run.phase='closing';broke.run.stats.deaths=limit;
+ broke.run.money=-500;broke.closeDay();
+ assert.equal(broke.run.phase,'end','and an empty one is not offered a way back');
+ assert.ok(!/운영비|재고/.test(broke.run.notice||''),'no liquidation prompt for a Run already over');
+ assert.ok(broke.run.endReason.includes('소문'),'the cause reported is the deaths, not the money');
+});
+
+test('CORE_RUN §RUN FAIL: only a death counts, and the night that reaches the line is read in full',()=>{
+ const limit=DATA.balance.deathLimit;
+ /* s.stats.deaths is the count night() has always kept - it rises only where the report left
+    the adventurer dead, so an injury or a stay in recovery was never in it. */
+ const shop=source('dist/systems/shop.js'),dungeon=source('dist/systems/dungeon.js');
+ assert.ok(/else s\.stats\.deaths\+\+/.test(shop),'the counter is the existing one');
+ assert.ok(/if\(outcome==='사망'\)n\.alive=false/.test(dungeon),'and alive drops only on a death');
+
+ // the check is in closeDay, which runs after the night has been finished and read
+ const run=source('dist/systems/run.js');
+ const close=run.slice(run.indexOf('P.closeDay='),run.indexOf('P.tierForecast='));
+ assert.ok(close.includes('deathLimit'),'the line is checked as the day closes');
+ assert.ok(close.indexOf('deathLimit')<close.indexOf('s.money<0'),
+  'before the money branch, so a finished Run is never offered liquidation');
+ const night=source('dist/systems/shop.js');
+ assert.ok(!night.includes('deathLimit'),'night() still reports the whole evening before anything ends it');
+
+ // a Run at the line still carries its full set of results from that night
+ const g=fresh('deaths-night');g.run.phase='closing';g.run.stats.deaths=limit;
+ const before=g.run.results.length;g.closeDay();
+ assert.equal(g.run.results.length,before,'the evening that reached the line is left intact');
+});
+
+test('FINAL: reaching D30 with nobody to send is a Final failure, not an unpaid overhead',()=>{
+ /* The UI used to send this to retire, which closes the store for overheads it had in fact
+    paid. boss() has always owned this ending. */
+ const app=source('dist/ui/app.js');
+ assert.ok(/출전 불가 · 런 종료','boss'/.test(app),'the button goes to the Final, not to retire');
+ assert.ok(/case'boss':if\(!game\.finalRequired\(\)\)\{game\.boss\(\)/.test(app),
+  'and with nobody to send there is no party to confirm first');
+
+ const g=fresh('final-empty');
+ g.run.phase='final';g.run.day=30;g.run.team=[];
+ for(const n of g.run.npcs)n.alive=false;
+ g.run.money=5000;
+ g.boss();
+ assert.equal(g.run.phase,'end','the Run ends');
+ assert.ok(g.run.endReason.includes('출전할 수 있는 모험가가 없어'),
+  'for the reason it actually happened: '+g.run.endReason);
+ assert.ok(!/운영비/.test(g.run.endReason),'never for overheads that were paid');
 });
 
 console.log(count+' integration groups passed');

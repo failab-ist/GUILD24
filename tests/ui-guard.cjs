@@ -624,9 +624,41 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'which stays on the ending, for the Run that actually opened something');
  /* ...and it is actually reachable there: unlocks are only ever credited as a Run ends, so
     the in-play toast would drain them before the ending could name them */
- assert.ok(/if\(game\.run\.phase!=='end'\)\{toast\('본사 해금/.test(app),
+ assert.ok(/game\.run\.phase!=='end'\)\{toast\('본사 해금/.test(app),
   'the toast stands down on the ending instead of consuming what the ending reports');
+ /* ...and because the ending keeps the list on screen, the list alone cannot gate the cue -
+    opening the codex or moving a tab would sound it again. It belongs to the click that
+    created it, which is the one where Meta.finish assigned a fresh array. */
+ assert.ok(/const wasOpen=game\.run\?\.unlocked;/.test(app),'the click captures what was open before it');
+ assert.ok(/opened\.length&&opened!==wasOpen\)sound\('rare'\)/.test(app),
+  'and the unlock cue sounds only on the click that opened something');
+ assert.ok(!/game\.boss\(\);setModal\(null\);render\(\);sound\('rare'\)/.test(app),
+  'the Final no longer sounds it unconditionally, unlock or not');
  assert.ok(!/account\.progress|a\.progressCache|persist/.test(panel),'nothing about it is stored');
+
+ /* A store closes for a reason, and the headline is the reason. One win/fail pair cannot say
+    it - a DAY 9 bankruptcy read 마왕을 토벌하지 못했다 for a store that never met the Boss. */
+ const head=fn('endHeadline');
+ assert.ok(head.includes("s.finalReport")&&head.includes('마왕이 쓰러졌다.')&&head.includes('마왕을 토벌하지 못했다.'),
+  'the Final headline is gated on the Final having actually resolved');
+ assert.ok(/s\.stats\.deaths>=D\.balance\.deathLimit\)return '너무 많은 모험가가 돌아오지 못했다\.'/.test(head),
+  'the death ending names the deaths');
+ assert.ok(/s\.money<0\)return '운영비를 마련하지 못해 점포 문을 닫았다\.'/.test(head),'the bankruptcy names the money');
+ assert.ok(head.includes("return '이번 점포의 영업이 끝났다.'"),'and anything else keeps the plain close');
+ assert.ok(!/s\.win\?'우리가 키운 애들이/.test(app),'the old win/fail pair is gone');
+ assert.ok(!/서른 날/.test(app)&&!/서른 날/.test(read('dist/systems/run.js')),
+  'and so is the 서른 날 phrasing');
+
+ /* The failure line is not a hidden threshold: it is stated before it matters and the count
+    is visible while it climbs, in the book that already lists the dead. */
+ assert.ok(fn('help').includes('D.balance.deathLimit')&&fn('help').includes('점포가 문을 닫을 때'),
+  'the guide names every way a store ends, from the constant rather than a written-out number');
+ for(const rule of ['운영비를 감당하지 못하면','재고를 정리해','마왕을 토벌하지 못해도'])
+  assert.ok(fn('help').includes(rule),'the guide covers: '+rule);
+ const roster=fn('rosterList');
+ assert.ok(roster.includes('돌아오지 못한 사람')&&roster.includes('D.balance.deathLimit'),
+  'the roster shows the count against the line');
+ assert.ok(roster.includes('s.stats.deaths'),'read from the Run own count, not a second tally');
 
  /* D-8. Two different pieces of money are on screen during a sale. Neither is just 소지금. */
  assert.ok(!/'소지금 부족'/.test(app+read('dist/systems/shop.js')),'no bare 소지금 refusal survives');

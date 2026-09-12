@@ -910,6 +910,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .menu-list{display:grid;gap:9px}
 .menu-list button{width:100%;min-height:52px;padding:14px 16px;text-align:left;font:400 15px/1 var(--ui);
  background:#3a2c1d;color:#efe3c8;box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+.lost-count{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:11px;
+ padding:9px 11px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14;
+ font:400 15px/1.4 var(--ui);color:#efe3c8}
+.lost-count b{font-variant-numeric:tabular-nums;color:var(--gold)}
+.lost-count span{font-size:13px;color:#a2947c}
+.lost-count.near{box-shadow:inset 0 0 0 2px #8a2f26}
+.lost-count.near b{color:#e8907c}
 /* META progression, inside the codex: the grade, each Job's mastery, and the Job x Boss grid
    the two of them are derived from. A table because it is a table - six rows against seven
    columns - not a new progression screen. */

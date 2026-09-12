@@ -9,7 +9,16 @@ P.specialAction=function(npcId,value){const s=this.run,e=s.special,n=s.npcs.find
      destination is final, so the reassignment is refused rather than silently ignored. */
   if(s.deep?.today?.nomineeId===npcId)throw Error('심층원정에 나서기로 한 손님의 배치는 바꿀 수 없습니다.');
   const index=Number(value);if(!Number.isInteger(index)||!s.dungeons[index]||index===n.destination)throw Error('다른 게이트를 선택해 주세요.');n.destination=index;n.claimedDestination=index;e.npcId=npcId;}else{if(!['morning','order'].includes(s.phase))throw Error('영업 준비 중에 선택할 수 있습니다.');if(e.kind==='remove'){if(!n.traits.includes(value)||D.traitBy[value]?.direction!=='negative')throw Error('제거할 약점을 선택해 주세요.');n.traits=n.traits.filter(t=>t!==value);}else{if(!e.candidates.includes(value)||n.traits.includes(value)||n.traits.length>=Math.min(4,n.traitSlots)||D.traitExclusions.some(pair=>pair.includes(value)&&pair.some(t=>n.traits.includes(t))))throw Error('이 특성을 배울 수 없습니다.');n.traits.push(value);}}e.used=true;s.specialUsed=true;s.notice='길드 지원을 받았습니다.';this.save();};
-P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;if(s.money<0){if(s.inventory.length){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요.';this.save();return false;}this.end(false,'운영비를 지급하지 못해 폐점했습니다.');return;}
+/* A store can also end because too many of the people it sent stopped coming back. The count
+   is the one night() has always kept - s.stats.deaths rises only where the report leaves the
+   adventurer dead, so injuries and recovery were never in it. Checked here rather than in
+   night(): by now the whole evening has been read, including the death that reached the line.
+   Before the money branch, because that branch offers liquidation to keep trading and there is
+   nothing left to keep trading for. */
+P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;
+ if(s.stats.deaths>=G.DATA.balance.deathLimit)
+  return this.end(false,'소문이 퍼지자 모험가들의 발길이 끊겼고, 더는 장사를 이어갈 수 없었다.');
+ if(s.money<0){if(s.inventory.length){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요.';this.save();return false;}this.end(false,'장사를 이어갈 자금이 바닥났다.');return;}
  this.nextDay();this.save();return true;};
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){this.run.day++;this.morning();};
@@ -108,6 +117,6 @@ P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  /* The ending is about this store and the people who kept coming back to it, not about a
     result code. Thirty days of ordering, pricing and supplying is what put them at that gate. */
  this.end(cleared,cleared
-  ?'서른 날 동안 이 가게를 드나든 사람들이, 끝내 마왕을 쓰러뜨렸다.'
-  :'원정대는 마왕성 앞에서 멈췄다. 이 점포의 서른 날은 여기까지다.');};
+  ?'우리 점포에서 떠난 원정대가 해냈다.'
+  :'이 점포에서 할 수 있는 일은 여기까지였다.');};
 })(globalThis);

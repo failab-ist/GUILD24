@@ -22,7 +22,7 @@ const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-b
 const contribution=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35;
 
 function blank(runs,policy,pricing,build){
- return {runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
+ return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
   /* 2026-09-12 amendment, measurement only. greatByBand buckets Great Success by how far the
      prepared Combat ability ran ahead of the Gate, which is the thing Stage 9 has to judge the
      curve on; prepStartGold samples the D29 close, before any D30 preparation spend. */
@@ -48,7 +48,10 @@ function derive(out,count){
   deepCostP75:pct(out.deepCosts,.75),deepCostP90:pct(out.deepCosts,.9),
   greatSuccessRate:out.great.success?out.great.great/out.great.success:0,greatStoreGoldPerRun:out.great.storeGold/count,
   prepStartGoldMedian:pct(out.prepStartGold,.5),prepStartGoldP10:pct(out.prepStartGold,.1),prepStartGoldP25:pct(out.prepStartGold,.25),
-  prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
+  prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,
+  deathsP10:pct(out.deathsPerRun,.1),deathsMedian:pct(out.deathsPerRun,.5),deathsP90:pct(out.deathsPerRun,.9),
+  deathFailRate:out.endedBy.deaths/count,deathFailDayMedian:pct(out.deathFailDay,.5),
+  endedBy:out.endedBy,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
 }
 
 /* One Run, played by `ctx.policy` on the account the caller owns. The account is NOT copied
@@ -177,6 +180,13 @@ function playRun(g,out,ctx){
  {const alive=s.npcs.filter(n=>n.alive&&n.introduced);out.npc.samples++;out.npc.alive+=alive.length;out.npc.level+=alive.reduce((a,n)=>a+n.level,0);out.npc.maxLevel+=alive.length?Math.max(...alive.map(n=>n.level)):0;out.npc.loyalty+=alive.reduce((a,n)=>a+n.loyalty,0);out.npc.regulars+=s.stats.regulars;out.npc.wallet+=alive.reduce((a,n)=>a+n.money,0);out.npc.growth+=alive.reduce((a,n)=>a+n.level-1,0);}
  if(s.bossDebug){out.final.resolved++;out.final.power+=s.bossDebug.power;out.final.assault+=s.bossDebug.assault;out.final.margin+=s.bossDebug.assault-s.bossDebug.bossPower;out.final.cleared+=Number(!!s.win);}
  out.wins+=Number(!!s.win);out.bankrupt+=Number(s.day<30);out.deaths+=s.stats.deaths;out.money+=s.money;
+ /* Measurement only for the death limit (Stage 9 baseline 10, not a settled number): how many
+    a Run loses, how often that ends one, on which Day, and how the four endings divide. The
+    production rule reads D.balance.deathLimit - nothing here feeds back into play. */
+ out.deathsPerRun.push(s.stats.deaths);
+ const byDeaths=s.stats.deaths>=D.balance.deathLimit;
+ out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
+ if(byDeaths)out.deathFailDay.push(s.day);
  return s;
 }
 

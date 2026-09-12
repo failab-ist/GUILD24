@@ -163,4 +163,57 @@ test('EVENT 01: 물류대란 raises buy price without cutting the offer count',(
  assert.deepEqual(DATA.events.find(e=>e.id==='caravan').effects,{offers:2});
 });
 
+test('EVENT 신입 모험가 시즌: the new face actually turns up, in one of the day own slots',()=>{
+ /* The event used to create an NPC and stop there, which the third-day intake does anyway.
+    What it owes the player is an arrival they can actually serve today. */
+ let days=0,seated=0,sizes=[];
+ for(let i=0;i<120;i++){
+  const g=fresh('rookie-'+i);force(g,'rookie');
+  for(let d=0;d<30&&g.run.phase!=='end';d++){
+   const s=g.run;s.money=5000;
+   if(s.phase==='morning'&&s.event&&s.event.id==='rookie'){
+    days++;
+    const newest=s.npcs[s.npcs.length-1];
+    if(s.queue.includes(newest.id))seated++;
+    sizes.push(s.queue.length);
+   }
+   advance(g);
+  }
+ }
+ assert.ok(days>=20,'the event fired often enough to mean anything: '+days);
+ assert.equal(seated,days,'the new adventurer is in the day queue every time');
+ // one of the day's own slots, not an extra one: the headcount stays in its ordinary band
+ assert.ok(Math.max(...sizes)<=8,'no visitor was added to make room: max queue '+Math.max(...sizes));
+});
+
+test('EVENT 신입 모험가 시즌: the arrival follows the Day-based Level rule, with no band of its own',()=>{
+ /* Not "Lv.1-3" - Adventurer.create adds the Day's own progression to that base, so a late
+    event arrives higher. What must hold is that rookie gets no rule of its own. */
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
+ assert.ok(!/opts\.rookie/.test(src),'create reads no rookie flag');
+ assert.ok(/r\.int\(1,3\)\+Math\.floor\(\(day-1\)\*\.25\)/.test(src),'the Day-based rule is the one rule');
+
+ const band=day=>[Math.max(1,1+Math.floor((day-1)*.25)),3+Math.floor((day-1)*.25)];
+ const seen=[];
+ for(let i=0;i<120;i++){
+  const g=fresh('rookielv-'+i);force(g,'rookie');
+  for(let d=0;d<30&&g.run.phase!=='end';d++){
+   const s=g.run;s.money=5000;
+   if(s.phase==='morning'&&s.event&&s.event.id==='rookie'){
+    const n=s.npcs[s.npcs.length-1],[lo,hi]=band(s.day);
+    assert.ok(n.level>=lo&&n.level<=hi,
+     'day '+s.day+' arrival is Lv.'+n.level+', outside the Day rule band '+lo+'-'+hi);
+    seen.push({day:s.day,level:n.level});
+   }
+   advance(g);
+  }
+ }
+ assert.ok(seen.length>=20,'enough arrivals to compare: '+seen.length);
+ // and the rule really does move with the Day rather than sitting at 1-3
+ const late=seen.filter(x=>x.day>=17),early=seen.filter(x=>x.day<=8);
+ if(late.length&&early.length)
+  assert.ok(Math.min(...late.map(x=>x.level))>=Math.min(...early.map(x=>x.level)),
+   'a late arrival never starts below an early one');
+});
+
 console.log(count+' event groups passed');
