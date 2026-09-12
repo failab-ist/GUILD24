@@ -180,14 +180,18 @@ async function audit(page,width,screen){
     const p=plate.getBoundingClientRect(),q=port.getBoundingClientRect();
     if(q.bottom>p.top+0.5)fails.push(`the portrait box overlaps the nameplate by ${Math.round(q.bottom-p.top)}px`);
    }
-   // the payload overhangs the card on three sides but must never reach the plate,
-   // and must never be scaled to a non-square box
+   // The payload used to be required to overhang the card, which suited placeholder stickers
+   // that carried their own transparent margin. The production portraits have almost none -
+   // median under 2%, many zero on every side - so overhanging meant painted artwork leaving
+   // the frame. It is now required to stay inside it, still square and still clear of the plate.
    if(art&&plate){
     const a=art.getBoundingClientRect(),p=plate.getBoundingClientRect();
     if(a.bottom>p.top+0.5)fails.push(`the NPC payload runs into the nameplate by ${Math.round(a.bottom-p.top)}px`);
     if(Math.abs(a.width-a.height)>1.5)fails.push(`the NPC payload box is not square: ${Math.round(a.width)}x${Math.round(a.height)}`);
-    if(a.width<fr.width)fails.push(`the NPC payload is narrower than the card (${Math.round(a.width)} < ${Math.round(fr.width)}): it reads as sealed in`);
-    if(a.top>fr.top-1)fails.push('the NPC payload no longer overhangs the top of the card');
+    const out={left:fr.left-a.left,right:a.right-fr.right,top:fr.top-a.top,bottom:a.bottom-fr.bottom};
+    for(const [side,px] of Object.entries(out))
+     if(px>1)fails.push(`the NPC payload leaves the card at the ${side} by ${Math.round(px)}px`);
+    if(a.width<fr.width*.8)fails.push(`the NPC payload is much narrower than the card (${Math.round(a.width)} vs ${Math.round(fr.width)}): it reads as sealed in`);
    }
    const front=document.querySelector('.front');
    if(front&&art){

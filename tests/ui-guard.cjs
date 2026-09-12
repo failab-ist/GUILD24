@@ -115,17 +115,28 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
  assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
  assert.ok(!/\.figure\{[^}]*object-fit:cover/.test(css),'the NPC payload is never cover-cropped');
- assert.ok(/\.figure\{[^}]*width:var\(--artw\);height:var\(--artw\)/.test(css),'the payload box is square, so no sticker is squashed to fit');
+ // the square box is the portrait, and the payload fills it - so no portrait is squashed, and
+ // none of it leaves the frame either. The production art has almost no transparent margin, so
+ // anything outside the box would be painted artwork rather than padding.
+ assert.ok(/--artw:calc\(var\(--cardw\) - var\(--frame\)\*2\)/.test(css),'the payload box is the card inside its frame');
+ assert.ok(/\.portrait\{[^}]*height:var\(--artw\)/.test(css),'and it is square, so no portrait is squashed to fit');
+ assert.ok(/\.figure\{[^}]*width:100%;height:100%/.test(css),'the payload fills that box and no more');
+ assert.ok(/\.face\{[^}]*overflow:hidden/.test(css),'the card is the boundary, whatever silhouette arrives');
  // the face and the backs are one deck: same proportion, and the payload overhangs the face
  // one deck geometry: the card's height is content, and the backs are the same shape
  // scaled, so front and back agree at any width instead of only where they were drawn
- assert.ok(/--cardh:calc\([^;]*var\(--artw\)[^;]*var\(--over\)[^;]*var\(--plateh\)\)/.test(css),
+ assert.ok(/--cardh:calc\([^;]*var\(--artw\)[^;]*var\(--plateh\)\)/.test(css),
   'the card height is derived from the payload and the plate, not a fixed ratio');
+ assert.ok(!css.includes('--over'),'the overhang the placeholder stickers needed is gone with them');
  assert.ok(/\.line-up \.wait\{[^}]*width:calc\(var\(--cardw\)\*var\(--deck\)\);height:calc\(var\(--cardh\)\*var\(--deck\)\)/.test(css),
   'the waiting backs are the card scaled, so front and back stay one deck');
- assert.ok(/\.who \.nameplate\{[^}]*min-height:var\(--plateh\)/.test(css)&&/\.portrait\{[^}]*height:calc\(var\(--artw\) - var\(--over\)\)/.test(css),
-  'the plate sizes itself and the portrait box reserves exactly the payload height');
- assert.ok(/--artw:calc\(var\(--cardw\)\*1\.0[1-9]\)/.test(css),'the artwork is wider than the card face, never sealed inside it');
+ assert.ok(/\.who \.nameplate\{[^}]*min-height:var\(--plateh\)/.test(css),
+  'the plate sizes itself, so it grows with a long name instead of clipping it');
+ // the artwork used to be drawn wider than the card on purpose, back when the placeholder
+ // stickers carried their own transparent margin and only that margin crossed the edge. The
+ // production portraits have almost none, so it is the card's inside that sets the size now.
+ assert.ok(/--frame:([0-9]+)px/.test(css)&&Number(css.match(/--frame:([0-9]+)px/)[1])<=8,
+  'the frame is tight, so containing the artwork costs the face as little scale as possible');
  // the waiting line leaks nothing about who is next
  const wait=fn('waitingLine').replace(/^\s*\/\/.*$/gm,'');
  for(const leak of ['name','rarity','job','level','npcArt','avatar'])

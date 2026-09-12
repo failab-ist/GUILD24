@@ -302,7 +302,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale{background:#191208}
 /* ---- layer 1 : who is here --------------------------------------------------- */
 .front{position:relative;flex:0 0 auto;display:grid;grid-template-columns:auto minmax(0,1fr);
- grid-template-rows:auto auto;align-items:end;gap:6px;padding:calc(var(--over) - var(--frame) + 8px) var(--gutter) 0;overflow:hidden;
+ grid-template-rows:auto auto;align-items:end;gap:6px;padding:8px var(--gutter) 0;overflow:hidden;
  background:linear-gradient(180deg,#0d0904 0,#241a10 58%,#3b2a19 100%);
  /* ONE deck geometry, declared once. The card's height is content — frame, the payload's
     visible height, the nameplate — so the plate can never reach the artwork. The waiting
@@ -311,9 +311,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  /* the card also yields to a short viewport, so the counter and the send-off key are
     never pushed off screen: the term below is the height budget left after the counter
     edge, the scroll's own padding and the dock. It never binds on a portrait phone. */
- --cardw:max(88px,min(56vw,232px,calc(90dvh - 300px)));--frame:10px;--plateh:62px;--gapb:9px;--deck:.185;
- --artw:calc(var(--cardw)*1.06);--over:max(calc(var(--frame) + 6px),calc(var(--cardw)*.12));
- --cardh:calc(var(--frame)*2 + var(--artw) - var(--over) + var(--gapb) + var(--plateh))}
+ /* The payload used to be drawn larger than the card and pulled up over the frame, because the
+    placeholder stickers carried generous transparent margins of their own and only that margin
+    crossed the edge. The production portraits do not: measured across all 200, the median
+    transparent margin is under 2% and many are 0 on every side, so it was real painted artwork
+    leaving the card on three sides. The art now lives inside the frame, and --frame is tightened
+    so containing it costs the face as little scale as possible. */
+ --cardw:max(88px,min(56vw,232px,calc(90dvh - 300px)));--frame:7px;--plateh:62px;--gapb:9px;--deck:.185;
+ --artw:calc(var(--cardw) - var(--frame)*2);
+ --cardh:calc(var(--frame)*2 + var(--artw) + var(--gapb) + var(--plateh))}
 .front .backwall{position:absolute;left:0;right:0;top:0;z-index:0;line-height:0}
 .front .backwall .band-art{display:block;width:100%;height:auto}
 .front .backwall:after{content:'';position:absolute;inset:0;
@@ -339,17 +345,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .who:hover{background:transparent}
 .who:active{transform:none}
 .face{position:relative;display:flex;flex-direction:column;width:100%;max-width:100%;
- padding:var(--frame);margin-bottom:14px;
+ padding:var(--frame);margin-bottom:14px;overflow:hidden;
  background:var(--tex-deck),#241c14;background-size:12px 12px;
  box-shadow:inset 0 0 0 3px #2a2118,inset 0 0 0 7px #3b2f21,inset 0 0 0 10px #1d160d,
             5px 6px 0 #00000099}
-/* the portrait box: exactly as tall as the part of the payload that sits on the card */
-.portrait{position:relative;flex:0 0 auto;width:100%;height:calc(var(--artw) - var(--over))}
+/* the portrait box: the square the payload lives in, entirely inside the frame */
+.portrait{position:relative;flex:0 0 auto;width:100%;height:var(--artw)}
 .pool{position:absolute;z-index:0;left:50%;bottom:0;width:var(--artw);height:calc(var(--artw)*.8);
  transform:translateX(-50%);opacity:.3;
  background:radial-gradient(56% 54% at 50% 62%,var(--rare,#b4bba6) 0,#00000000 100%)}
-.figure{position:absolute;z-index:2;left:50%;top:calc(var(--over)*-1);
- width:var(--artw);height:var(--artw);margin-left:calc(var(--artw)/-2);
+/* contain, inside the box, standing on its floor: whatever aspect ratio a portrait has, the
+   whole of it is on the card and none of it is cropped. */
+.figure{position:absolute;z-index:2;left:0;top:0;width:100%;height:100%;
  object-fit:contain;object-position:50% 100%;image-rendering:auto;
  filter:drop-shadow(0 3px 0 #00000066) drop-shadow(0 0 12px #0000008c)}
 .figure.fallback{display:grid;place-items:center}
@@ -879,7 +886,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  --deskcard:300px;
  .front{--cardw:max(88px,min(56vw,300px,calc(90dvh - 300px)))}
  .say{grid-row:2;grid-column:2;align-self:start;justify-self:start;
-  margin:calc(var(--over) + 18px) 0 0 14px;max-width:min(46ch,420px)}
+  /* the bubble used to be pushed down past the payload's overhang; there is no overhang now */
+  margin:18px 0 0 14px;max-width:min(46ch,420px)}
  .say:after{top:22px;left:-9px;
   border:9px solid transparent;border-right-color:var(--paper);border-left:0;border-bottom-width:9px}
 }
