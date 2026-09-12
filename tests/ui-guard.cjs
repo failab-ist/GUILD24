@@ -475,4 +475,43 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/dungeons\[n\.claimedDestination/.test(app),'nothing reads the destination around it any more');
 });
 
+test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every width',()=>{
+ // D-1 / D-4. The Morning bands are drawn from art sized to the column, so a wider column made
+ // the ceiling and the counter taller and squeezed the notice board out: measured at 1280 the
+ // board was 14px tall holding 272px of gates. The room keeps one column from tablet width up
+ // and the board takes the width that was going spare, at full height.
+ assert.ok(/\.p-morning \.store\{display:grid/.test(css),'the room and the board share the width at desktop');
+ assert.ok(/\.p-morning \.store>\.board\{grid-area:1\/2\/4\/3;max-height:none/.test(css),
+  'and the board is no longer capped to a fraction of the column');
+ assert.ok(/\.p-morning \.board-rail\{padding-right:/.test(css),'the rail keeps clear of the menu pin');
+ // mobile keeps the stacked room: the desktop rule lives inside a min-width query
+ const desktop=css.slice(css.indexOf('@media(min-width:600px)'));
+ assert.ok(desktop.includes('.p-morning .store{display:grid'),'the two-column room is desktop-only');
+ assert.ok(!/\.p-morning \.store\{display:grid/.test(css.slice(0,css.indexOf('@media(min-width:600px)'))),
+  'nothing about it reaches the phone layout');
+ // and no global type scale was pushed up to compensate
+ assert.ok(!/@media\(min-width:900px\)\{[^}]*:root\{[^}]*font-size/.test(css),'no blanket font-size increase at desktop');
+
+ // D-9. The slots say the count as well as showing it - a row of boxes has to be counted first.
+ assert.ok(fn('kitLine').includes("가방 '+n.pack.length+' / '+slots"),'the bag states used / total');
+ assert.ok(/\.kit \.slots i\{[^}]*width:34px/.test(css),'and the slots are big enough to read at a glance');
+ assert.ok(!css.includes('.kit .slots{display:grid'),'without becoming a panel of their own');
+
+ // D-12. One Hazard reads as one row, and the block is set apart from the forecasts above it.
+ assert.ok(/\.readout \.hazards li\{[^}]*padding:7px 8px/.test(css),'each Hazard is its own banded row');
+ assert.ok(/\.readout \.hazards\{gap:0/.test(css),'the rows are separated by the band, not by a gap');
+
+ // D-21. Six outcomes in three volumes, and the routine one is not made small.
+ for(const [outcome,rank] of [['성공','quiet'],['퇴각','routine'],['부상','routine'],
+                              ['중상','major'],['사망','major'],['대성공','major']])
+  assert.equal(Presentation.nightRank({outcome,events:[],changes:[],statChanges:[]}),rank,outcome+' is told as '+rank);
+ assert.equal(Presentation.nightRank({outcome:'퇴각',rescued:true,events:[],changes:[],statChanges:[]}),'major',
+  'a rescue is a major beat: it was nearly a death');
+ assert.equal(Presentation.nightRank({outcome:'성공',changes:['Lv.2 → Lv.3'],events:[],statChanges:[]}),'routine',
+  'a success that actually grew someone is not silent');
+ assert.ok(/\.beat\.major \.verdict\{font-size:44px/.test(css)&&/\.beat\.routine \.verdict\{font-size:30px/.test(css),
+  'the raised beats are raised, and the routine ones keep a real voice');
+ assert.ok(!/\.beat\.routine[^{]*\{[^}]*font-size:1[0-3]px/.test(css),'no routine beat is shrunk into small print');
+});
+
 console.log(count+' ui guard groups passed');

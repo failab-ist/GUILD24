@@ -329,7 +329,10 @@ function standee(n){
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  return '<div class="kit"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
- +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방</b>'+Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],20):'')+'</i>').join('')+'</span></div>';}
+ /* how many slots are left is a decision on every sale, so it says the count as well as
+    showing it - a row of boxes has to be counted before it can be used. */
+ +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
+  +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span></div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
 // the loudest thing on screen as a display word, then WHY on the slate, then WHAT CHANGED
@@ -358,8 +361,10 @@ function nightScreen(){
 // presented as an ordinary success.
 function beat(r){
  const n=game.run.npcs.find(x=>x.id===r.npcId),tone=Presentation.nightTone(r),heavy=weighty(r);
+ /* NIGHT_CLOSING §RESULT OUTCOMES: six outcomes in three volumes, not two. */
+ const rank=Presentation.nightRank(r);
  const verdict=Presentation.nightVerdict(r),why=Presentation.nightWhy(r);
- return '<article class="beat t-'+tone+(heavy?'':' quiet')+'">'
+ return '<article class="beat '+rank+' t-'+tone+(heavy?'':' quiet')+'">'
  +'<div class="stand-in">'
   +portrait(n,150,'returner')
   +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'

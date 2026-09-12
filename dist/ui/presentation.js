@@ -55,6 +55,15 @@ function nightHappened(r){
 function nightWeight(r){
  return r.outcome!=='성공'||r.rescued||r.avoidedDeath
   ||(r.events||[]).length>0||(r.changes||[]).length>0||(r.statChanges||[]).length>0;}
+/* How loudly a result is told. There are six outcomes and they were being told in two volumes,
+   so a 부상 shouted as loudly as a 사망. The everyday ones - came back, pulled out, hurt - share
+   one voice; the ones that actually change what the player does next get raised. 중상 belongs
+   with the loud ones because it spends recovery days, so it decides the next several mornings.
+   This is about emphasis, never about saying less: a routine beat keeps its full copy. */
+const LOUD=new Set(['대성공','중상','사망']);
+function nightRank(r){
+ if(LOUD.has(r.outcome)||r.rescued||r.avoidedDeath)return 'major';
+ return nightWeight(r)?'routine':'quiet';}
 /* SKIP CONTRACT (NIGHT_CLOSING). Skip is a cursor move and nothing else: it names the
    next beat worth reading and stops at the end of the list. It never resolves, re-resolves
    or reorders a report, so the outcome the player skipped past is the outcome they already
@@ -131,5 +140,5 @@ function amount(key,value,moved=true){
  return stat(value,moved);
 }
 G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
- nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightSkip,supplyLines,supplyImpact};
+ nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightRank,nightSkip,supplyLines,supplyImpact};
 })(globalThis);

@@ -461,10 +461,17 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .kit{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:9px 0;
  box-shadow:inset 0 1px 0 #ffffff14,inset 0 -1px 0 #ffffff14;font:400 13px/1.4 var(--ui);color:#a2947c}
 .kit b{color:#f2e7cd;font-weight:600}
-.kit .slots{display:flex;gap:5px;margin-left:auto;align-items:center}
-.kit .slot-label{color:#a2947c;margin-right:2px}
-.kit .slots i{width:28px;height:28px;display:grid;place-items:center;background:#00000047;box-shadow:inset 2px 2px 0 #00000073}
-.kit .slots i.full{background:#3a2c1d}
+/* D-9. How many supply slots this customer has, and how many are already spent, is a decision
+   the player makes on every sale - it was the quietest thing in the row. The slots keep their
+   place in the customer's own line rather than becoming a panel of their own; they are just
+   given the weight of something you are meant to count. */
+.kit .slots{display:flex;gap:6px;margin-left:auto;align-items:center;padding:4px 6px;background:#00000047;
+ box-shadow:inset 0 0 0 1px #ffffff14}
+.kit .slot-label{color:#cbb98d;margin-right:4px;font-weight:600}
+.kit .slots i{width:34px;height:34px;display:grid;place-items:center;background:#00000059;
+ box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff0f}
+.kit .slots i.full{background:#3a2c1d;box-shadow:inset 2px 2px 0 #ffffff1f,inset 0 0 0 1px var(--gold)}
+.kit .slots i.free{box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff29}
 /* the readiness readout carries more weight than the rows above it: it is what the sale turns on */
 .readout{margin:0 0 4px;padding:11px 12px;background:#120d07;
  box-shadow:inset 0 0 0 2px #6b502959,inset 2px 2px 0 #ffffff0f,3px 3px 0 #00000059}
@@ -485,8 +492,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .readout .tip[open]{display:block;width:100%}
 .detail-stat.moved strong{color:var(--gold)}
 .readout .estimate{margin-top:8px;font:400 12px/1.5 var(--ui);color:#8d8067}
-.readout .hazards b{color:var(--warn)}
+/* D-12. `부식 → 강인함 압박 → 취약` is one sentence about one Hazard, but stacked at a 2px gap
+   the rows ran together and read as a paragraph. Each Hazard is now its own banded row with the
+   verdict on the right, so the eye can take one at a time, and the block is set apart from the
+   two forecasts above it rather than continuing out of them. */
+.readout .hazards{gap:0;margin-top:10px;box-shadow:inset 0 1px 0 #ffffff14}
+.readout .hazards li{gap:10px;padding:7px 8px;background:#ffffff08;box-shadow:inset 0 -1px 0 #00000059}
+.readout .hazards li:nth-child(even){background:#ffffff03}
+.readout .hazards b{color:var(--warn);min-width:4.2em}
 .readout .hazards span{color:#a2947c}
+.readout .hazards em{font-size:var(--t-sm)}
 .since{margin:0 0 14px;padding:10px 12px;background:#00000038;box-shadow:inset 3px 0 0 var(--gold);font:400 13px/1.5 var(--ui)}
 .since b{color:var(--gold);display:block;font-weight:600}
 .since p{color:#a2947c;margin-top:2px}
@@ -580,6 +595,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  color:var(--tone,#e8d9b0);text-shadow:3px 3px 0 #00000099;margin-bottom:8px;
  padding-bottom:7px;box-shadow:inset 0 -4px 0 var(--tone,#e8d9b0)}
 .beat.quiet .verdict{font-size:26px;padding-bottom:5px;box-shadow:inset 0 -3px 0 var(--tone,#e8d9b0)}
+/* D-21. Six outcomes were told in two volumes, so 부상 shouted as loudly as 사망. The everyday
+   returns - 성공 / 퇴각 / 부상 - share one voice; 대성공 / 중상 / 사망 and a rescue are raised,
+   because those are the ones that change what the player does on the following mornings. This
+   is emphasis only: a routine beat keeps all of its copy at full size. */
+.beat.routine .verdict{font-size:30px}
+.beat.major .verdict{font-size:44px;box-shadow:inset 0 -5px 0 var(--tone,#e8d9b0)}
+.beat.major .who h3{font-size:21px}
 .beat .who h3{font:600 19px/1.25 var(--ui);color:#f2e7cd}
 .beat .place{font:400 13px/1.4 var(--ui);color:#8f94a6}
 .beat .route{margin-top:4px;font:400 13px/1.4 var(--ui);color:var(--gold)}
@@ -869,6 +891,20 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  .modal{max-height:88dvh;box-shadow:inset 0 0 0 3px #ffffff1a}
  .p-morning .dock .pull{flex:0 0 auto;min-width:280px;margin-left:auto}
  .p-order .dock .stamp{flex:0 0 auto;min-width:300px;margin-left:auto}
+ /* MORNING at tablet width and up. The room's bands are drawn from art sized to the column,
+    so as the column gets wider the ceiling and the counter get taller and push the notice
+    board out: measured at 1280 the board was 14px tall holding 272px of gates, while the
+    scenery took 659px of an 860px viewport. The store is the screen, but the gates are the
+    decision - so the room keeps one column and the board takes the width that was going
+    spare, at full height, instead of being squeezed between two pieces of furniture. */
+ .p-morning .store{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,36%);
+  grid-template-rows:auto minmax(0,1fr) auto}
+ .p-morning .store>.band.ceiling{grid-area:1/1}
+ .p-morning .store>.band.wall{grid-area:2/1}
+ .p-morning .store>.band.counter{grid-area:3/1}
+ .p-morning .store>.board{grid-area:1/2/4/3;max-height:none;min-height:0}
+ /* the menu pin sits in the corner the board now reaches into, so the rail keeps clear of it */
+ .p-morning .board-rail{padding-right:58px}
 }
 /* ============ 900px+ ============ */
 @media(min-width:900px){
