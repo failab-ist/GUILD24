@@ -6,7 +6,7 @@ const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;}}return [...m.values()];};
 function toast(msg){$('#toast').textContent=msg;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
-function sound(kind='sale'){Sound.sync(game.account.settings.muted,game.run?.phase);Sound.play(kind==='rare'?'relic':kind);}
+function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind==='rare'?'relic':kind);}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
@@ -82,13 +82,29 @@ function playPhase(phase){
   if(waits.length)A(waits,{translateX:[16,0],duration:240,delay:anime.stagger(45),ease:'outQuad'});
  }
 }
+/* Beats that happen inside a Phase rather than on the way into one. A redraw rebuilds the
+   whole screen, so an entry animation attached to an element would replay on every click:
+   the action names what just happened and the next draw plays that one thing. The marker
+   lives for exactly one render and is not state anyone can read back. */
+let cue=null;
+function playCue(){const c=cue;cue=null;
+ if(!c||!motionOK())return;
+ const A=anime.animate;
+ // picking a product opens the price panel under it - the panel arrives, the list does not jump
+ if(c==='select'){const open=$('.good.open + .tillpanel');if(open)A(open,{opacity:[0,1],translateY:[-8,0],duration:190,ease:'outQuad'});}
+ // a sale lands in the bag: the slot row settles and the customer answers
+ if(c==='sale'){const slots=$('.kit .slots');if(slots)A(slots,{scale:[1.05,1],duration:240,ease:'outQuad'});
+  const said=$('.say');if(said)A(said,{opacity:[0,1],translateY:[6,0],duration:220,ease:'outQuad'});}
+ // a refusal is the same channel saying no, so it moves rather than appears
+ if(c==='refuse'){const said=$('.say');if(said)A(said,{translateX:[0,-5,4,-2,0],duration:280,ease:'outQuad'});}
+}
 // the approval stamp lands before the phase advances
 function stampPress(el){
  if(!motionOK()||!el)return;
  anime.animate(el,{scale:[1.08,1],duration:180,ease:'outQuad'});
 }
 function render(){
- const s=game.run;Sound.sync(game.account.settings.muted,s?.phase);
+ const s=game.run;Sound.sync(game.account.settings.muted,s?.phase,game.account.settings);
  if(!s){$('#app').innerHTML=stage('start','새 점포','','<p class="eyebrow">GUILD24</p><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">초기 자금 1,200G · 창고 24칸 · 30일 영업</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),btn('첫 영업 준비','new','stamp'));if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
  /* Replacing #app wholesale drops focus. On a redraw of the same view it goes back on the
@@ -117,7 +133,7 @@ function render(){
  else if(bossRevealDue())modal='boss';
  else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
- renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);
+ renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -753,7 +769,18 @@ function unlockBoard(){const {done,next}=unlockLists();
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:codexTab==='contracts'?D.contracts:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 ${GRADE_COPY[Meta.grade(a)].label}</h3><p class="smalltext">${GRADE_COPY[Meta.grade(a)].flavor}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${(a.discoveries||[]).length}개</summary>${(a.discoveries||[]).map(e=>`<p class="discovery">${E(e.text)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['contracts','시작 계약']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 상품 기본 매입가의 50%를 회수합니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${st.expires===null?'유통기한 없음':(st.expires-s.day)+'일 남음'}</p>${['morning','order','night','closing','final'].includes(s.phase)?btn('1개 정리 +'+Math.floor(it.buy*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 function newRun(){return `<div class="eyebrow">길드리테일 가맹 계약</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">기본 자금 1,200G · 창고 24칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">계약서를 접어 카운터 아래 넣었다. 시작 재고는 창고에 있다.</div><h3 style="margin-bottom:10px">시작 계약</h3><div class="contract-grid">${D.contracts.map(c=>{const locked=!Meta.contractUnlocked(game.account,c);return `<button class="contract ${contract===c.id?'active':''}" data-action="contract" data-id="${c.id}" ${locked?'disabled':''}><strong>${c.name}${locked?' · 잠김':''}</strong><span class="muted">${c.description}</span>${locked?'<br><small>'+unlockProgress(c)+'</small>':''}</button>`;}).join('')}</div><details style="margin-top:15px"><summary class="smalltext">재현용 Seed 지정</summary><label class="smalltext" for="seed">비워 두면 새로운 Seed로 시작합니다.</label><input id="seed" class="seed-field" placeholder="예: guild24-first-shift" maxlength="80" value="${game.run?.phase==='foundation'?E(game.run.seed):''}"></details>${game.run?.phase==='foundation'?'<p class="smalltext" style="margin-top:10px">계약만 바꿉니다. 이 점포의 점포지원 후보와 첫 모험가는 그대로입니다.</p>':''}${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. 보상은 없습니다.</p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 가맹등급 · 해금은 지워지지 않습니다.</p>':''}`;}
-function settings(){return `<div class="stack"><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="row wrap">${btn('저장 내보내기','export','stamp')}${btn('저장 가져오기','import')}</div><div class="row wrap">${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div><hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="muted">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p>${game.run&&game.run.phase!=='end'?btn('현재 지점 포기','new','danger'):''}<div class="row wrap">${btn('모든 게임 데이터 초기화','reset','danger')}</div><small>버전 0.4 · 로컬 실행 지원 · 외부 연결 없음</small></div>`;}
+/* Two levels, one row each, with the number said out loud beside the control - the slider
+   position alone is not a readable value. The master switch above them is the existing
+   mute, so this adds controls and no fourth channel: there are no voices to balance. */
+function mixer(){const st=game.account.settings,d=Sound.defaults;
+ const row=(key,label,value)=>`<div class="mix-row"><label for="mix-${key}">${label}</label>`
+  +`<input id="mix-${key}" type="range" min="0" max="100" step="5" data-mix="${key}" value="${Math.round(value*100)}" aria-describedby="mix-${key}-val">`
+  +`<b id="mix-${key}-val" class="gold-text">${Math.round(value*100)}%</b></div>`;
+ return `<div class="mixer" role="group" aria-label="소리 크기">`
+  +row('bgm','배경음',Number.isFinite(st.bgm)?st.bgm:d.bgm)
+  +row('sfx','효과음',Number.isFinite(st.sfx)?st.sfx:d.sfx)
+  +`</div>`;}
+function settings(){return `<div class="stack"><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="row wrap">${btn('저장 내보내기','export','stamp')}${btn('저장 가져오기','import')}</div><div class="row wrap">${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}<hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="muted">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p>${game.run&&game.run.phase!=='end'?btn('현재 지점 포기','new','danger'):''}<div class="row wrap">${btn('모든 게임 데이터 초기화','reset','danger')}</div><small>버전 0.4 · 로컬 실행 지원 · 외부 연결 없음</small></div>`;}
 function help(){return `<div class="stack"><h3>점포지원</h3><p>DAY 0에는 무료로 하나를 선택합니다. DAY 5·10·15·20·25·30에는 자금을 써서 구매합니다. 사지 않은 후보는 다음 구매 기회 전날까지 보류할 수 있습니다. 판매 중에는 구매할 수 없습니다.</p><h3>발주</h3><p>기본 방문객은 3~6명. 시설·계약·이벤트와 활동 가능한 모험가 수에 따라 달라집니다. 아침에 표시된 인원은 오늘 실제 방문할 인원입니다. 게이트는 초반 1곳에서 후반 최대 3곳까지 열리고, 임시 게이트가 추가될 수 있습니다.</p><p>수량을 고른 뒤 발주를 확정합니다. 남은 재고와 유통기한, 운영비도 확인하세요.</p><h3>판매와 관계</h3><p>목적지·능력·특성을 보고 상품을 고릅니다. 바가지는 수입과 관계를 맞바꾸고, 반값은 이익을 포기해 손님에게 투자합니다. 정가는 기본 거래입니다. 같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다.</p><p>단골도는 구매 의사와 재방문에 영향을 줍니다. 능력을 직접 올리지는 않습니다. 손님의 특성은 처음부터 전부 표시되며, 표시된 특성이 원정에서 실제로 작용하는 특성입니다.</p><h3>원정과 마감</h3><p>판매한 소비품은 그날 원정에서 사용됩니다. 기본 2칸, Lv.10부터 최대 3칸입니다. 밤에는 귀환 결과를 보고, 마감에서 거래와 보급의 작용을 확인합니다.</p><p>사망은 이번 영업에서 영구적입니다. 중상은 며칠의 휴식이 필요합니다. 30일에는 마지막 발주와 점포지원을 결정하고, 최대 3명에게 보급해 마왕성으로 보냅니다.</p><p>영업이 끝나면 상품 해금·몬스터 지식·발견·가맹등급은 남습니다. 모험가·재고·돈·설비는 다음 영업에 이어지지 않습니다.</p><p>적자일 때는 재고 정리로 운영비를 충당할 수 있습니다. 시간을 재촉하는 제한은 없습니다.</p><h3>점포가 문을 닫을 때</h3><p>운영비를 감당하지 못하면 폐점합니다. 재고가 남아 있다면 재고를 정리해 그날의 운영비를 채우고 영업을 이어갈 수 있습니다.</p><p>돌아오지 못한 모험가가 ${D.balance.deathLimit}명에 이르면 소문이 퍼져 더 이상 손님이 오지 않습니다. 그 시점에 영업이 끝납니다. 현재 수는 모험가 수첩에서 확인할 수 있습니다.</p><p>30일에 마왕을 토벌하지 못해도 이 점포의 영업은 거기서 끝납니다.</p></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
@@ -829,14 +856,14 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'coach-skip':finishCoach(true);break;
  case'coach-next':{const actionName=activeCoach?.[3];finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
  case'special':game.specialAction(id,el.dataset.value);render();break;
- case'deep-nominate':game.nominateDeep(id);sound('rare');render();break;
+ case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;
  case'boss-seen':{const st=bossRevealStage();
   if(st==='d30')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
   game.save();setModal(null);render();break;}
- case'break-seal':game.breakSeal();render();break;
+ case'break-seal':game.breakSeal();sound('boss');render();break;
  case'menu':setModal('menu');break;
- case'begin-order':game.beginOrder();render();break;
- case'finish-order':game.finishOrder();render();break;
+ case'begin-order':game.beginOrder();sound('open');render();break;
+ case'finish-order':game.finishOrder();sound('order');render();break;
  case'shop':setModal(null);break;
  case'new':contract='standard';setModal('new');break;
  /* Back to the contract screen from the very first store support. The Run has not been played,
@@ -867,13 +894,13 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'closing':game.finishNight();game.save();render();break;
  case'tip':game.account.tutorial??={};game.account.tutorial[id]=true;game.save();render();break;
  case'open':game.open();selected=null;render();break;
- case'select':selected=selected===id?null:id;render();sound('button');if(selected)requestAnimationFrame(()=>$('.sale-product.open')?.scrollIntoView({block:'nearest'}));break;
- case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;}else{sound('refusal');}render();break;}
+ case'select':selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');if(selected)requestAnimationFrame(()=>$('.sale-product.open')?.scrollIntoView({block:'nearest'}));break;
+ case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}render();break;}
  case'depart':game.depart();selected=null;render();sound(s.phase==='night'?'return':'depart');break;
- case'close':game.closeDay();selected=null;render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
- case'reroll':game.reroll();render();break;
+ case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
+ case'reroll':game.reroll();sound('spend');render();break;
  case'stock':setModal('stock');break;
- case'liquidate':game.liquidate(id);render();break;
+ case'liquidate':game.liquidate(id);sound('gold');render();break;
  case'roster':setModal('roster');break;
  case'npc':setModal('npc:'+id);break;
  case'codex':setModal('codex');break;
@@ -882,8 +909,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'settings':setModal('settings');break;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound();render();break;
  case'dismiss':if(s?.phase==='foundation')return;setModal(null);break;
- case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];render();break;
- case'supply-target':supplyNPC=id;render();break;
+ case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
+ case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this
     ending - boss() answers !finalRequired() with its own reason. It used to be wired to
@@ -917,6 +944,16 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled){if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);}});
 document.addEventListener('keydown',ev=>{if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new'))setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
-window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase);});
+window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);});
+/* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
+   drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
+   would replace the control under the pointer and end the drag. */
+document.addEventListener('input',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
+ const key=el.dataset.mix,v=Math.min(100,Math.max(0,Number(el.value)||0))/100;
+ game.account.settings[key]=v;
+ Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);
+ const out=$('#'+el.id+'-val');if(out)out.textContent=Math.round(v*100)+'%';});
+document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
+ game.save();if(el.dataset.mix==='sfx')sound('button');});
 window.Guild24={get game(){return game;},render,simulate:Debug.simulate,showDebug:()=>setModal('debug')};render();
 })();

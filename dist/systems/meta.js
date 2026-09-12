@@ -21,7 +21,7 @@ function freshMatrix(){
 
 function fresh(){
  return {version:2,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true}};
+  runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1}};
 }
 
 /* How many distinct Bosses this Job has beaten, 0..7. */

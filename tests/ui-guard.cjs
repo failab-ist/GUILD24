@@ -747,4 +747,87 @@ test('D-27: the named items are drawn as themselves, and no two of them share a 
  assert.deepEqual(shared,[],'no two products are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
 });
 
+// D-22 / D-23. There are no audio files here: every sound is synthesised, so a volume control
+// is a gain node. The contract is that the player owns two of them, that a level survives a
+// reload, and that no voice sneaks past a bus straight to the speakers.
+test('D-22 / §B-16: two player-owned buses under one master, and a level that is saved',()=>{
+ const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ assert.ok(/bgmBus=ctx\.createGain\(\)/.test(audio)&&/sfxBus=ctx\.createGain\(\)/.test(audio),'music and effects have their own gain');
+ assert.ok(/bgmBus\.connect\(master\)/.test(audio)&&/sfxBus\.connect\(master\)/.test(audio),'both buses run through one master');
+ // every tone() call has to name a bus; the default falls to the effects bus, never to the output
+ assert.ok(/gain\.connect\(bus\|\|sfxBus\|\|ctx\.destination\)/.test(audio),'a voice reaches the output through a bus');
+ assert.equal((audio.match(/connect\(ctx\.destination\)/g)||[]).length,1,'only the master touches the destination');
+ // the music was mixed a quarter as quiet as the smallest click, which is what "BGM is too quiet" was
+ const bgmVoice=Number(audio.match(/BGM_VOICE=([\d.]+)/)[1]),sfxVoice=Number(audio.match(/SFX_VOICE=([\d.]+)/)[1]);
+ assert.ok(bgmVoice>=sfxVoice/3,'music is in the same range as the effects, not a quarter of the quietest one');
+ assert.deepEqual(Sound.mix({bgm:.4,sfx:.9}),{bgm:.4,sfx:.9},'the levels are read off the settings object');
+ assert.deepEqual(Sound.mix({bgm:9,sfx:-1}),{bgm:1,sfx:0},'and clamped, not trusted');
+ assert.deepEqual(Sound.mix({}),Sound.defaults,'a save from before the mixer defaults at the audio layer');
+ const fresh=globalThis.Meta.fresh();
+ assert.equal(fresh.settings.muted,true,'sound still starts off, as the copy says');
+ for(const k of ['bgm','sfx'])assert.equal(fresh.settings[k],1,k+' starts at its design maximum');
+ // presentation preference, so it is checked for shape when present the way tutorial is
+ const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:6}));
+ const withSettings=v=>{const s=base();s.account.settings={muted:true,...v};return s;};
+ assert.equal(Save.valid(withSettings({})),true,'a save with no levels at all is still a save');
+ assert.equal(Save.valid(withSettings({bgm:.5,sfx:0})),true,'real levels are accepted');
+ for(const bad of [{bgm:'loud'},{bgm:7},{sfx:-0.5},{sfx:null}])
+  assert.equal(Save.valid(withSettings(bad)),false,'a malformed level is refused: '+JSON.stringify(bad));
+ // and the screen actually offers them, with the number said out loud beside each slider
+ const ui=fn('mixer');
+ for(const k of ['bgm','sfx'])assert.ok(ui.includes(`data-mix="${k}"`)||ui.includes('data-mix="${key}"'),'a control exists');
+ assert.ok(ui.includes("row('bgm','배경음'")&&ui.includes("row('sfx','효과음'"),'both channels are named in Korean');
+ assert.ok(ui.includes('mix-${key}-val'),'each slider says its own value');
+ assert.ok(!/voice/i.test(ui),'no voice channel is invented: there are no voices');
+ assert.ok(fn('settings').includes('소리 켜기')&&fn('settings').includes('mixer()'),'the master mute stays, with the two levels under it');
+ assert.ok(/\.mix-row input\[type=range\]\{[^}]*height:24px/.test(css),'the slider is thumb-sized');
+ assert.ok(/\.mix-row\{[^}]*min-height:44px/.test(css),'and its row keeps the touch target');
+});
+
+test('D-23: every cue the UI asks for exists, and every step of an ordinary day has one',()=>{
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ const asked=[...app.matchAll(/sound\('([a-z]+)'\)/g)].map(m=>m[1]);
+ assert.ok(asked.length>0,'the UI does ask for sound');
+ for(const kind of asked)
+  assert.ok(kind==='rare'||Sound.cues.includes(kind),kind+' is a real cue, not a typo that falls back to a click');
+ // the priority list: an order confirmed, a sale, gold moving either way, a product picked,
+ // a store support taken, a result that matters, and the confirmations that end a phase
+ const cueFor=action=>{const i=app.indexOf("case'"+action+"'");assert.ok(i>0,action+' is a real action');
+  const seg=app.slice(i,app.indexOf("\n case'",i+1));const m=seg.match(/sound\(([^)]*)\)/);return m?m[1]:null;};
+ assert.equal(cueFor('finish-order'),"'order'",'confirming the order is the order cue, not a generic click');
+ assert.equal(cueFor('begin-order'),"'open'",'opening the doors is the shutter going up');
+ assert.equal(cueFor('close'),"'close'",'ending the day closes');
+ assert.equal(cueFor('liquidate'),"'gold'",'clearing stock is gold coming in');
+ assert.equal(cueFor('reroll'),"'spend'",'a reroll is gold going out');
+ assert.equal(cueFor('deep-nominate'),"'spend'",'sponsorship is a payment, not the store-support fanfare');
+ assert.equal(cueFor('break-seal'),"'boss'",'breaking a seal is a Boss decision and is heard as one');
+ assert.ok(cueFor('select'),'picking a product off the shelf answers');
+ assert.ok(cueFor('buy-relic'),'taking a store support answers');
+ assert.ok(cueFor('sell')&&cueFor('sell').includes('overcharge'),'a sale is priced in the cue it makes');
+ assert.ok(/sound\('refusal'\)/.test(app),'and a refusal sounds different from a sale');
+ assert.ok(/result\.outcome==='사망'\?'death'/.test(app),'the night result is heard by what it was');
+ // gold in and gold out are mirror cues, so one is never mistaken for the other
+ const gold=[659,784];assert.ok(Sound.cues.includes('gold')&&Sound.cues.includes('spend'),'both directions exist');
+ assert.ok(/spend:\[784,659\]/.test(read('dist/ui/audio.js')),'spend falls where gold rises: '+gold.join());
+});
+
+test('D-24: the feel layer is optional, and it never animates a redraw of the same view',()=>{
+ assert.ok(/matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/.test(app),'the OS setting is read');
+ assert.ok(/const motionOK=\(\)=>typeof anime==='object'&&!!anime\.animate&&!matchMedia/.test(app),
+  'and motion is off when the library is missing as well as when motion is reduced');
+ // every animation call sits behind that check
+ for(const name of ['playPhase','playCue','stampPress'])
+  assert.ok(fn(name).includes('if(!motionOK()')||fn(name).includes('||!motionOK()'),name+' stands down on its own');
+ const elsewhere=app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'')
+  .split('\n').filter(l=>!l.trimStart().startsWith('//')&&!l.trimStart().startsWith('*')&&!l.includes('const motionOK=')).join('\n');
+ assert.ok(!/anime\.(animate|stagger)/.test(elsewhere),'nothing animates outside the three guarded places');
+ // a redraw replaces the screen, so an entry animation would replay on every click:
+ // the phase beats run only when the view actually changed, the in-phase ones on a one-shot marker
+ assert.ok(/if\(changed\)playPhase\(phase\);playCue\(\);/.test(app),'the phase beat is gated on the view changing');
+ assert.ok(/function playCue\(\)\{const c=cue;cue=null;/.test(app),'and the in-phase marker is consumed by the draw that uses it');
+ assert.ok(/cue=selected\?'select':null/.test(app)&&/cue='sale'/.test(app)&&/cue='refuse'/.test(app),
+  'picking, selling and being refused are each their own beat');
+ assert.ok(!/account\.\w*cue|run\.\w*cue/.test(app),'the marker is never written into a save');
+});
+
 console.log(count+' ui guard groups passed');

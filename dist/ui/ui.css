@@ -87,6 +87,13 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 .stamp:hover{background:#469a67}
 summary{min-height:44px;padding:10px 0;cursor:pointer;color:var(--dim);font-size:var(--t-sm)}
 input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2px 0 #00000080;padding:12px;width:100%;color:var(--text)}
+/* Volume: a labelled slider on a sunken rail, sized so a thumb can hold it on a phone. */
+.mixer{display:grid;gap:10px;width:100%}
+.mix-row{display:grid;grid-template-columns:64px 1fr 48px;align-items:center;gap:12px;min-height:44px}
+.mix-row label{color:var(--dim);font-size:var(--t-sm)}
+.mix-row b{text-align:right;font:400 var(--t-sm)/1 var(--f-led)}
+.mix-row input[type=range]{width:100%;height:24px;margin:0;background:transparent;accent-color:var(--gold);cursor:pointer}
+.mix-row input[type=range]:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
 /* ---- stage: the only shared frame ---- */
 .stage{position:relative;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--soil);

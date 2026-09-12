@@ -24,6 +24,11 @@ const RELIC_WINDOWS=[0,5,10,15,20,25,30];
    there is no cached value here that could disagree with it. */
 function accountOk(a,D){
  if(!a||!a.knowledge||!a.settings)return false;
+ /* Mix levels are a presentation preference, not progression truth: checked for shape when
+    present, the way tutorial is, and defaulted by the audio layer when a save predates them.
+    A save that carries a level carries a real one - a string or a 7 is malformed, not old. */
+ for(const k of ['bgm','sfx'])
+  if(a.settings[k]!==undefined&&!(Number.isFinite(a.settings[k])&&a.settings[k]>=0&&a.settings[k]<=1))return false;
  if(!Array.isArray(a.discovered)||!a.discovered.every(k=>D.itemBy[k]))return false;
  if(a.tutorial!==undefined&&(typeof a.tutorial!=='object'||!a.tutorial))return false;
  const m=a.matrix,jobs=D.jobs.map(j=>j.id),bosses=D.bosses.map(b=>b.id);
