@@ -174,7 +174,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=.1;
  if(this.run.event?.effects.foodDemand&&['food','fresh','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
  if(this.run.event?.effects.medicalDemand&&it.category==='medicine')need+=this.run.event.effects.medicalDemand;
- const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.balance.guaranteeMinPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=debit/Math.max(1,wallet),chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent,.08,.97);
+ const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=debit/Math.max(1,wallet),chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent,.08,.97);
  return {price,debit,guarantee,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){

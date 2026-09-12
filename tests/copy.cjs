@@ -213,9 +213,13 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     uses it - both read the same constant, so the sentence cannot drift from the behaviour. */
  assert.ok(Presentation.labels.priceBias.startsWith(String(DATA.balance.frugalThreshold)),
   'the frugal label is built from the threshold it describes');
- const guarantee=DATA.relicBy.guarantee.description;
- assert.ok(guarantee.includes(DATA.balance.guaranteeMinPrice+'G'),'the guild guarantee states what 고가상품 means');
- assert.ok(read('dist/systems/shop.js').includes('D.balance.guaranteeMinPrice'),'from the same constant the rule reads');
+ const guarantee=DATA.relicBy.guarantee;
+ assert.ok(guarantee.description.includes(guarantee.minPrice+'G'),'the guild guarantee states what 고가상품 means');
+ assert.ok(read('dist/systems/shop.js').includes('D.relicBy.guarantee.minPrice'),'from the same number the rule reads');
+ /* the existing threshold given a name, not a new tuning lever: it belongs to the relic whose
+    rule it is, and never became a Balance/PASS3 parameter */
+ assert.ok(!('guaranteeMinPrice' in DATA.balance),'it is not owned by D.balance');
+ assert.ok(!read('dist/data/relics.js').includes('D.balance.guaranteeMinPrice'),'and nothing puts it there');
 
  /* 포만감 was a third named effect in two Relic descriptions. There is no such channel. */
  for(const id of ['kitchen','fresh24']){

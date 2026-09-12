@@ -2,15 +2,16 @@
 const D=G.DATA;
 /* What counts as a 고가상품 for 길드 보증 진열대. It was a bare 200 inside shop.js and the
    relic's own description never said it, so the player could not tell which sales it covered.
-   One name, read by the rule and by the sentence that describes it. */
-D.balance.guaranteeMinPrice=200;
+   Naming it lets the rule and the sentence read the same number - it belongs to this relic,
+   not to D.balance: it is the existing threshold given a name, not a new tuning lever. */
+const GUARANTEE_MIN_PRICE=200;
 const rows=[
 ['bulk','묶음발주 계약','foundation',['rotation'],260,'같은 상품을 한 번에 3개 이상 발주하면 3번째부터 매입가 15% 할인.'],
 ['rotation','회전 진열대','foundation',['rotation'],240,'하루 6건 이상 판매하면 다음 날 첫 대량발주가 10% 저렴해진다.'],
 ['stamp','단골 스탬프 기계','foundation',['vip'],260,'유료 구매의 단골도 증가량 +50%. 무료 보급과 생환에는 적용하지 않는다.'],
 ['member','회원 관리대장','foundation',['vip'],260,'다음 날부터 이미 만난 손님의 방문 가중치 +40%.'],
 ['showcase','프리미엄 쇼케이스','foundation',['premium'],280,'희귀 이상 발주 가중치 +70%. 다음 날부터 운영비 +10G.'],
-['guarantee','길드 보증 진열대','foundation',['premium'],280,'하루 한 번, 정가 '+D.balance.guaranteeMinPrice+'G 이상 상품을 처음 팔 때 본사가 정가의 20%를 부담한다. 점주는 선택한 가격을 전액 받는다.'],
+['guarantee','길드 보증 진열대','foundation',['premium'],280,'하루 한 번, 정가 '+GUARANTEE_MIN_PRICE+'G 이상 상품을 처음 팔 때 본사가 정가의 20%를 부담한다. 점주는 선택한 가격을 전액 받는다.'],
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],260,'알려진 게이트 위험에 대응하는 상품의 발주 가중치 +80%.'],
 ['medicine','긴급보급 선반','foundation',['expedition'],260,'치료·야외장비·보험 상품 발주 가중치 +60%, 공급 수량 +1.'],
 ['fridge','대형 냉장고','foundation',['fresh'],260,'음식·음료 유통기한 +1일. 보유 중인 해당 재고도 획득 시 한 번 연장.'],
@@ -36,7 +37,8 @@ const rows=[
 ['delivery','발주 교환권','utility',[],340,'매일 첫 발주 교환 무료. 이후 30G부터 교환 비용이 두 배씩 증가.'],
 ['efficiency','운영 효율 매뉴얼','utility',[],320,'다음 날부터 기본 운영비 15G 절감.']
 ];
-D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,finalUseful:['bulk','rotation','logisticsHQ','kitchen','expeditionMeal','dawnBulk','fresh24','delivery','warehouse'].includes(id)}));
+D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,
+ ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{}),finalUseful:['bulk','rotation','logisticsHQ','kitchen','expeditionMeal','dawnBulk','fresh24','delivery','warehouse'].includes(id)}));
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 /* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
