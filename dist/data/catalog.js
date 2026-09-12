@@ -187,7 +187,10 @@ G.DATA.bossTuning={
 };
 /* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
    Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
-G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:30,easterChance:.01};
+/* fireCombat is the §O easing of the fire Family's combat requirement. It is named here rather
+   than held as a constant inside shop.js so a balance candidate can be compared against it from
+   the harness without editing production. The value is unchanged by that move. */
+G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:30,easterChance:.01,fireCombat:.92};
 /* ECONOMY_ORDER §PURCHASE INTENT (Stage 10, approved).
    `mult` is what the customer is charged and is unchanged. `intentMult` is the price the
    customer JUDGES the offer at - the purchase-intent threshold. For 할인 and 바가지 the two are

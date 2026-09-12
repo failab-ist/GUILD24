@@ -3,8 +3,9 @@
    a wide margin - the `one Family is always hardest` clause of DUNGEON_HAZARD BALANCE TARGET.
    Its combat requirement is eased; its Hazard identity and Stat mapping are untouched, so what
    makes a fire Gate a fire Gate is unchanged. Provisional: re-measured, and if FIRE is still
-   consistently worst by 10%p a further candidate is reported rather than applied. */
-const FIRE_COMBAT=.92;
+   consistently worst by 10%p a further candidate is reported rather than applied. The factor
+   itself lives in D.balance.fireCombat so the balance harness can compare a candidate against
+   it without a production edit - the same reason guarantee.minPrice carries a name. */
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 class Game{
  constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;}
@@ -113,7 +114,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,requiredSupply:0,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,requiredSupply:this.burden(tier),power:(21+s.day*1.7+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?FIRE_COMBAT:1),reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,requiredSupply:this.burden(tier),power:(21+s.day*1.7+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?D.balance.fireCombat:1),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
