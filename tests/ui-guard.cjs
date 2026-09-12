@@ -28,8 +28,12 @@ test('§8.1: Playwright is a devDependency and never enters the shipped build',(
 
 test('CORE_RUN: the build still runs from the filesystem with one local stylesheet',()=>{
  const sheets=[...html.matchAll(/<link[^>]+stylesheet[^>]*>/g)].map(m=>m[0]);
- assert.equal(sheets.length,1,'exactly one stylesheet is linked');
- assert.ok(sheets[0].includes('ui/ui.css'),'it is the consolidated sheet');
+ /* The Director review added ui/director-review.css as a separate override layer over the
+    consolidated sheet. What this clause has always been protecting is the offline contract -
+    every sheet is local and nothing is fetched - so it names the sheets that may be linked
+    rather than counting to one. A third sheet, or any remote one, still fails here. */
+ assert.deepEqual(sheets.map(s=>(s.match(/href="([^"]+)"/)||[])[1]),['ui/ui.css','ui/director-review.css'],
+  'exactly the consolidated sheet and the review override, in that order, and nothing else');
  assert.ok(!/https?:\/\//.test(html.replace(/<meta[^>]*>/g,'')),'no external origin is fetched');
  assert.equal((css.match(/^:root\{/gm)||[]).length,1,'the sheet defines exactly one :root token block');
  for(const dead of ['.stage-grid','.layout{','.store-panel','.sell-toolbar','.statsbar','.item-grid'])
@@ -110,7 +114,10 @@ test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{
 
 test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
  const sale=fn('saleScreen');
- const order=['Scene.shelfStrip()','standee(n)','waitingLine(','returningSummary(n)','destPlate(n)','statGrid(n)','traitRows(n)','kitLine(n)','readout(n)','shelf()'];
+ /* The Director review moved the bag out of the dossier and up beside the adventurer, so the
+    lower column no longer grows a row just to repeat slot information. It is read with the
+    customer now rather than after their Traits; everything below it keeps its order. */
+ const order=['Scene.shelfStrip()','standee(n)','kitLine(n)','waitingLine(','returningSummary(n)','destPlate(n)','statGrid(n)','traitRows(n)','readout(n)','shelf()'];
  let at=-1;for(const part of order){const i=sale.indexOf(part);assert.ok(i>at,'Sale stacks '+part+' in canonical mobile order');at=i;}
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
  assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
@@ -662,12 +669,21 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 
  /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
     the form showed only a per-SKU 재고 N. The warehouse is on it now, from the same grouping
-    the shelf and the stock modal read - open by default, foldable on a phone. */
+    the shelf and the stock modal read. Director review: it opens for a player who has never
+    folded it, and once folded it stays folded on later Days and across a reload until they
+    open it again - a presentation preference on the account, not run state. */
  assert.ok(fn('orderForm').includes('stockBrief()'),'the order form shows the warehouse');
  const brief=fn('stockBrief');
  assert.ok(brief.includes('groupStock()'),'reusing the existing grouping, not a second one');
  assert.ok(brief.includes('game.capacity()')&&brief.includes('s.inventory.length'),'used against total slots');
- assert.ok(brief.includes('<details class="stock-brief" open>'),'open by default, and foldable');
+ assert.ok(brief.includes("settings.stockBriefOpen!==false")&&brief.includes("(opened?'open':'')"),
+  'open by default, and foldable');
+ assert.ok(/stock\.addEventListener\('toggle'[\s\S]{0,200}stockBriefOpen=stock\.open;game\.save\(\)/.test(app),
+  'folding it writes the preference so the next Day and the next reload honour it');
+ // eleven products used to be eleven rows: the override sheet reads them across instead
+ const review=read('dist/ui/director-review.css');
+ assert.ok(/\.stock-brief ul\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/.test(review),'two columns on a phone');
+ assert.ok(/@media\(min-width:600px\)\{[\s\S]*?\.stock-brief ul\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/.test(review),'three on a wider form');
 
  /* D-15. A codex entry is three things - the name, what it does, the story about it - and they
     were all one weight, with the tale sitting above the effects as though it were a rule. */
