@@ -908,15 +908,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .menu-list{display:grid;gap:9px}
 .menu-list button{width:100%;min-height:52px;padding:14px 16px;text-align:left;font:400 15px/1 var(--ui);
  background:#3a2c1d;color:#efe3c8;box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
-.end-banner{margin:0 calc(var(--gutter) * -1) 20px;padding:26px var(--gutter) 22px;text-align:center;
- background:radial-gradient(76% 62% at 50% 108%,#2f7a4d 0,#1c3a2a 46%,#12100c 100%)}
-.end-banner .eyebrow{font:400 12px/1 var(--f-led);letter-spacing:.22em;color:#a8d9bb}
-.end-banner h2{margin-top:11px;font:700 26px/1.25 var(--f-sign);-webkit-font-smoothing:none;color:#f6ecd3}
-.end-banner p{margin-top:9px;font:400 14px/1.6 var(--ui);color:#cbb98d}
-.end-banner .row.wrap{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin-top:14px;
- font:400 12px/1.5 var(--ui)}
-.end-banner .meta-xp{color:var(--gold);font-weight:600}
-.end-banner .bare{min-height:44px;padding:10px 14px;background:#00000047;color:#cbb98d;box-shadow:inset 0 0 0 2px #ffffff1a}
+/* the last statement for a store, printed on the tape the night closing already uses */
+.end-tape{margin-bottom:20px}
+/* its own class names: .verdict / .why belong to the Night beat and carry a display word
+   with a rule under it, which is not what a printed statement is */
+.end-tape .closed{margin:12px 0 0;font:400 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
+.end-tape .reason{margin:7px 0 12px;font:400 14px/1.65 var(--ui);color:#5f5847}
+.end-tape .bare{width:100%;margin-top:12px;min-height:44px;padding:10px 14px;font:400 14px/1 var(--ui);
+ color:#5f5847;background:#2c241814;box-shadow:inset 0 0 0 2px #2c241833}
+.end-tape .bare:hover{background:#2c241824}
 /* ============ 600px+ ============ */
 @media(min-width:600px){
  :root{--gutter:24px}

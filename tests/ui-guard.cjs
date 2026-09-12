@@ -566,6 +566,31 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  // and no global type scale was pushed up to compensate
  assert.ok(!/@media\(min-width:900px\)\{[^}]*:root\{[^}]*font-size/.test(css),'no blanket font-size increase at desktop');
 
+ /* D-2. The end of a store was announced on a landing banner with an English eyebrow over a
+    gradient hero and a loose row of numbers beneath it. It is a statement from head office,
+    so it prints on the same tape the night closing already uses. */
+ const bannerFn=fn('endBanner');
+ assert.ok(!/THE GATE IS CLOSED|END OF THIS RUN/.test(app),'the generic English eyebrow is gone');
+ assert.ok(!css.includes('.end-banner'),'and so is the hero it sat on, rule and all');
+ assert.ok(bannerFn.includes('class="tape end-tape"')&&bannerFn.includes('class="print"'),
+  'the closing statement is printed on the tape the player already reads every night');
+ assert.ok(/class="row"><span>가맹등급/.test(bannerFn)&&/class="row"><span>직업 숙련/.test(bannerFn),
+  'the standing totals sit in the ledger rather than in a caption under a headline');
+ assert.ok(!/번째 런/.test(app),'and the count is stores, not 런');
+
+ /* D-8. Two different pieces of money are on screen during a sale. Neither is just 소지금. */
+ assert.ok(!/'소지금 부족'/.test(app+read('dist/systems/shop.js')),'no bare 소지금 refusal survives');
+ assert.ok(app.includes('손님 소지금 부족'),'the customer purse is named as the customer\'s');
+ assert.ok(app.includes('>보유 골드<')&&app.includes('<span>보유 골드</span>'),'and the float is named as the shop\'s');
+
+ /* D-13 / D-26: the forecast reads as the shopkeeper sizing someone up, and the boots are
+    named for what they are for rather than for one Hazard they happen to answer. */
+ assert.ok(!app.includes('지금의 능력과 준비로 본 예상'),'the spec-sheet disclaimer is gone');
+ assert.ok(/estimate">[^<]*게이트 안에서 어떻게 될지까지는 아무도 모른다/.test(app),
+  'the forecast still says it is a forecast, in the shop own voice');
+ assert.ok(!read('dist/data/catalog.js').includes('진창용 원정 장화'),'the boots are renamed');
+ assert.ok(read('dist/data/catalog.js').includes("item('boots','원정용 장화'"),'and keep their id');
+
  /* D-5 / EVENT §3-1. The board notice used to print the effect line alone. The catalog keeps
     the situation and the effect apart already, so the notice says both and rules them off. */
  assert.ok(fn('eventSlip').includes('E(e.reveal)')&&fn('eventSlip').includes('E(e.description)'),

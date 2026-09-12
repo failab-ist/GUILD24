@@ -6,7 +6,7 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 
 const CANON_HAZARDS=['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'];
 const LEGACY=['thirst','caffeine','alcohol','long','wet','armor','undead','slow','food'];
-const CATALOG=['삼각김밥','생수','컵라면','핫바','초코바','캔커피','붕대','하급 포션','얼음컵','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','핫팩','방수망토','부식 방지 코팅제','진창용 원정 장화','설원 고글','상급 포션','농축 해독제','귀환석','마석 보조배터리','길드 프리미엄 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰'];
+const CATALOG=['삼각김밥','생수','컵라면','핫바','초코바','캔커피','붕대','하급 포션','얼음컵','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','핫팩','방수망토','부식 방지 코팅제','원정용 장화','설원 고글','상급 포션','농축 해독제','귀환석','마석 보조배터리','길드 프리미엄 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰'];
 
 test('DUN-Q04/Q19: exactly the 9 canonical Hazards, mire present, slow absent',()=>{
  assert.deepEqual(Object.keys(DATA.hazards).sort(),[...CANON_HAZARDS].sort());

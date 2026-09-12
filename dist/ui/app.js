@@ -189,7 +189,7 @@ function morningScreen(){
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span></div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
-   +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유</span>'
+   +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유 골드</span>'
    +'<span class="till" style="'+Scene.anchorStyle('till')+'" aria-label="보유 자금 '+fmt(s.money)+'G"><b class="coin">'+fmt(s.money)+'</b><i>G</i></span>'
    +'</span></div>'
  +'</div>'
@@ -258,7 +258,7 @@ function readout(n,extra=null){
  +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  +hazardList(p.hazards.map(h=>h.key),p.hazards)
- +(compact?'':'<p class="estimate">지금의 능력과 준비로 본 예상. 실제 원정은 달라질 수 있다.</p>')+'</div>';}
+ +(compact?'':'<p class="estimate">오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다. 게이트 안에서 어떻게 될지까지는 아무도 모른다.</p>')+'</div>';}
 function returningSummary(n){const r=Presentation.returning(n);if(!r)return '';
  return '<aside class="since" aria-label="지난 방문 이후"><b>지난 원정 · DAY '+r.day+' '+E(r.outcome)+'</b>'+(r.changes.length?'<p>'+r.changes.map(E).join(' · ')+'</p>':'')+(r.impact?'<p>'+E(r.impact)+'</p>':'')+'</aside>';}
 // Every player-facing NPC portrait resolves here, so a customer keeps the same face
@@ -400,7 +400,7 @@ function changedRows(r){
  if(r.storeBonus)extra.push({kind:'gold',label:'대성공 본사 보상',value:'+'+fmt(r.storeBonus)+'G'});
  if(r.deep&&(r.deep.bonusXp||r.deep.bonusWallet)){
   if(r.deep.bonusXp)extra.push({kind:'level',label:Copy.deep.reward,value:'경험치 +'+r.deep.bonusXp});
-  if(r.deep.bonusWallet)extra.push({kind:'gold',label:Copy.deep.reward,value:'소지금 +'+fmt(r.deep.bonusWallet)+'G'});
+  if(r.deep.bonusWallet)extra.push({kind:'gold',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
  }
  return [...Presentation.nightChanges(r),...extra].map(c=>'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
   +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>').join('');}
@@ -447,7 +447,7 @@ const coachSteps={
     clears it and the next first occurrence teaches it again. No new persistence was added. */
  morning:[['visitors','#visitor-count','오늘 방문할 인원이다. 시설·계약·사건에 따라 달라진다.'],['gates','.notices','열린 게이트가 어떤 능력을 압박하는지 보고 준비할 상품을 생각해 보자.'],['deep','.slip.deep','오늘은 심층원정이 열렸다. 같은 게이트의 더 깊은 구역이라 요구 전투력만 올라간다. 손님 한 명을 추천해 보낼 수 있고, 후원금은 그 모험가의 희귀도와 레벨에 따라 달라진다. 성공하면 그 모험가의 성장과 소지금이 늘지만, 가게가 버는 돈은 대성공이어도 없다. 추천하지 않아도 된다.']],
  order:[['gold','#order-register','수량을 고르는 동안 보유 자금과 발주 후 자금이 여기 남는다.'],['quantity','.dial','수량을 고른다. 같은 상품을 여러 개 발주할 수 있다.'],['reroll','.rubber','발주 후보 전체를 교환한다. 같은 날 반복할수록 비용이 올라간다.'],['confirm','.dock .stamp','발주를 확정하면 현재 재고로 영업을 시작한다.']],
- sell:[['npc','.customer','손님을 눌러 특성과 원정 기록을 살펴보자.','npc'],['great','.great-signal','준비가 요구치를 크게 앞서면 대성공이 나올 수 있다. 일반 원정에서 대성공이 나오면 본사가 가게에 보상을 더 준다. 확정은 아니고, 더 좋은 보급을 하나 더 들려 보낼수록 확률이 오른다.'],['destination','.dest-plate','이 손님이 향할 게이트다. 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.'],['forecast','.readout','원정 전망은 지금의 능력과 준비로 본 예상이다. 실제 결과는 예상과 달라질 수 있다.'],['inventory','.good','진열대 전체에서 고른다. 판매한 소비품은 오늘 원정에서 쓰인다.'],['pricing','.tills','50%는 손님에게 투자, 100%는 기본 거래, 150%는 지금의 수입을 늘리는 선택이다.']],
+ sell:[['npc','.customer','손님을 눌러 특성과 원정 기록을 살펴보자.','npc'],['great','.great-signal','준비가 요구치를 크게 앞서면 대성공이 나올 수 있다. 일반 원정에서 대성공이 나오면 본사가 가게에 보상을 더 준다. 확정은 아니고, 더 좋은 보급을 하나 더 들려 보낼수록 확률이 오른다.'],['destination','.dest-plate','이 손님이 향할 게이트다. 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.'],['forecast','.readout','원정 전망은 오늘 이 사람의 몸 상태와 챙긴 보급을 보고 가늠한 것이다. 게이트가 그대로 따라 주지는 않는다.'],['inventory','.good','진열대 전체에서 고른다. 판매한 소비품은 오늘 원정에서 쓰인다.'],['pricing','.tills','50%는 손님에게 투자, 100%는 기본 거래, 150%는 지금의 수입을 늘리는 선택이다.']],
  night:[['result','.beat','한 명씩 결과와 원인, 변화를 확인한다. 건너뛰기로 넘기거나 전체 건너뛰기로 정산에 갈 수 있다.']],
  closing:[['receipt','.slip','판매 마진에서 운영비와 폐기를 뺀 영업 손익이다. 발주와 점포지원 투자는 아래에 따로 적힌다.']]
 };
@@ -497,7 +497,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
  +'<span class="seal">'+Scene.seal(48,'#2f7a4d')+'</span></div>'
  // the ledger: labels step back, the three figures align on one column, the result leads
  +'<div class="ledger" id="order-register" aria-label="발주 자금">'
- +'<div><span>보유</span><b>'+fmt(s.money)+'</b></div>'
+ +'<div><span>보유 골드</span><b>'+fmt(s.money)+'</b></div>'
  +'<div class="pick"><span>선택 발주</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
  +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
  // two groups: what today needs, and the signal for tomorrow's order
@@ -542,7 +542,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  const changes=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  const actions=isFinal?btn('<strong>'+E(n.name)+'에게 보급</strong>','supply','stamp',full?'disabled':'')
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
-   const blocked=q.debit>n.money?'소지금 부족':n.refused.includes(it.id+':'+mode)?'오늘 거절됨':full?'가방 가득':'';
+   const blocked=q.debit>n.money?'손님 소지금 부족':n.refused.includes(it.id+':'+mode)?'오늘 거절됨':full?'가방 가득':'';
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
  return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho">'+E(n.name)+'에게 판매</p>')
@@ -588,9 +588,21 @@ function sealChoice(){const s=game.run,w=s.relicWindow;
  return '<div class="seal-choice"><b>봉인 해제 '+broken+' / 3</b>'
   +'<p>점포지원을 받는 대신 봉인 하나를 풀 수 있다. 둘 중 하나만 고를 수 있다.</p>'
   +btn('봉인 해제','break-seal','stamp',game.canBreakSeal()?'':'disabled')+'</div>';}
+/* The end of a store is a statement from head office, so it is printed on the same tape the
+   player reads every night rather than announced on a landing banner. The English eyebrow,
+   the hero headline and the loose row of numbers under it are gone: what closed the store is
+   the first line, and the standing totals sit in the ledger where standing totals live. */
 function endBanner(){const s=game.run,a=game.account;
- return '<div class="end-banner"><span class="eyebrow">'+(s.win?'THE GATE IS CLOSED':'END OF THIS RUN')+'</span><h2>'+(s.win?'우리가 키운 애들이, 해냈다.':'이번 점포의 영업이 끝났다.')+'</h2><p>'+E(s.endReason)+'</p>'
- +'<div class="row wrap"><span class="muted">가맹등급 '+Meta.grade(a)+' · 직업 숙련 '+Meta.totalJobMastery(a)+' / 42 · '+a.runs+'번째 런</span>'+btn('해금 확인','codex','bare')+'</div></div>';}
+ return '<div class="tape end-tape"><div class="tear top"></div><div class="print">'
+ +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제 0 게이트 폐쇄':'영업 종료')+' · '+E(s.branch)+'</span></div>'
+ +'<p class="closed">'+(s.win?'우리가 키운 애들이, 해냈다.':'이번 점포의 영업이 끝났다.')+'</p>'
+ +'<p class="reason">'+E(s.endReason)+'</p>'
+ +'<div class="block">'
+  +'<div class="row"><span>가맹등급</span><b>'+Meta.grade(a)+'</b></div>'
+  +'<div class="row"><span>직업 숙련</span><b>'+Meta.totalJobMastery(a)+' / 42</b></div>'
+  +'<div class="row"><span>지금까지 연 점포</span><b>'+a.runs+'</b></div>'
+ +'</div>'+btn('해금 확인','codex','bare')
+ +'</div><div class="tear bottom"></div></div>';}
 function npcCard(n,action='npc'){const s=game.run;return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${action==='team'&&(!n.alive||n.recovery)?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${Adventurer.rank(n)}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${action==='team'?(s.team.includes(n.id)?'선택됨':'원정대 선택'):'기록 보기'}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).

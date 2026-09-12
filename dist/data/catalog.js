@@ -26,7 +26,7 @@ item('mask','방진마스크',1,90,180,'tool',0,'mask','귀환안심','독과 �
 item('heat','핫팩',1,55,120,'tool',0,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:22}),
 item('cloak','방수망토',1,75,160,'tool',0,'cloak','귀환안심','부식과 진창에 두루 쓴다. 어느 쪽도 전문가만은 못하다.',{corrosion:14,mire:14}),
 item('coating','부식 방지 코팅제',1,70,150,'tool',0,'cloak','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:22}),
-item('boots','진창용 원정 장화',1,65,135,'tool',0,'battery','귀환안심','밑창에 진흙이 잘 붙지 않는다.',{mire:22,mobility:3}),
+item('boots','원정용 장화',1,65,135,'tool',0,'battery','귀환안심','밑창에 진흙이 잘 붙지 않는다.',{mire:22,mobility:3}),
 item('snowgoggles','설원 고글',1,60,125,'tool',0,'battery','귀환안심','눈보라 속에서도 앞이 남는다.',{whiteout:22}),
 item('highpotion','상급 포션',2,150,300,'medicine',7,'potion','길드초이스','작은 병에 진하게 담았다.',{survival:27,potion:1}),
 item('antidote','농축 해독제',2,220,450,'medicine',7,'antidote','귀환안심','독 대응을 크게 높인다.',{poison:42,survival:5,curePoison:1}),
