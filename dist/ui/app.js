@@ -120,6 +120,12 @@ function render(){
     zero or to the cap), and a disabled button cannot take focus: fall to its nearest live
     neighbour inside the same group rather than back to the top. */
  if(!changed)restoreFocus($('#app'),focusHold);
+ /* The warehouse is a native disclosure, but its preference is an account-level presentation
+    choice: it opens for a new player and, once folded, stays folded on later Days and reloads
+    until the player opens it again. It is not progression and does not need another state owner. */
+ const stock=$('.stock-brief');if(stock){stock.open=game.account.settings.stockBriefOpen!==false;
+  stock.addEventListener('toggle',()=>{if(game.account.settings.stockBriefOpen===stock.open)return;
+   game.account.settings.stockBriefOpen=stock.open;game.save();});}
  // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
  /* The Boss reveal joins the beat that already exists rather than becoming a Phase of its
     own (UI_UX: `Boss reveal is not a new permanent Phase`). It goes ahead of the Relic
@@ -275,8 +281,11 @@ function readout(n,extra=null){
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  +hazardList(p.hazards.map(h=>h.key),p.hazards)
  +(compact?'':'<p class="estimate">오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다. 게이트 안에서 어떻게 될지까지는 아무도 모른다.</p>')+'</div>';}
+/* Returning history is useful reference, not the current decision. It therefore starts folded
+   to one line; opening it is local reading state and does not hide current Stats or Traits. */
 function returningSummary(n){const r=Presentation.returning(n);if(!r)return '';
- return '<aside class="since" aria-label="지난 방문 이후"><b>지난 원정 · DAY '+r.day+' '+E(r.outcome)+'</b>'+(r.changes.length?'<p>'+r.changes.map(E).join(' · ')+'</p>':'')+(r.impact?'<p>'+E(r.impact)+'</p>':'')+'</aside>';}
+ return '<details class="since" aria-label="지난 방문 이후"><summary><b>지난 원정 · DAY '+r.day+' '+E(r.outcome)+'</b></summary>'
+  +'<div class="since-body">'+(r.changes.length?'<p>'+r.changes.map(E).join(' · ')+'</p>':'')+(r.impact?'<p>'+E(r.impact)+'</p>':'')+'</div></details>';}
 // Every player-facing NPC portrait resolves here, so a customer keeps the same face
 // walking from Sale to Night to the notebook to the Final muster. The production sticker
 // is roughly square and is only ever contained inside a square box — no crop, no stretch,
@@ -301,11 +310,11 @@ function saleScreen(){
  return '<div class="stage p-sale">'+menuFab()
  +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
   +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
-  +speech(n)+standee(n)+waitingLine(waiting)
+  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+waitingLine(waiting)+'</div>'
  +'</section>'
  +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
-  +'<div class="dossier">'+returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+kitLine(n)+readout(n)+deepOfferUI(n)+specialUI()+'</div>'
+  +'<div class="dossier">'+returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+readout(n)+deepOfferUI(n)+specialUI()+'</div>'
   +shelf()+ownedRelicView()
  +'</main>'
  /* D-34. Every price on this screen is a judgement against what the store has, and the
@@ -323,8 +332,7 @@ function waitingLine(waiting){
  const backs=Array.from({length:Math.min(waiting,4)},(_,i)=>
   '<span class="wait" style="--i:'+i+'" aria-hidden="true">'+Scene.cardBack()+'</span>').join('');
  return '<div class="line-up" aria-label="대기 손님 '+waiting+'명"><span class="fan">'+backs+'</span>'
- +'<span class="left">대기 '+waiting+'</span></div>';
-}
+ +'<span class="left">대기 '+waiting+'</span></div>';}
 // The active customer. Layers, bottom to top: light pool -> contact shadow -> the NPC
 // sticker itself -> the rarity bracket -> the identity plate. Nothing is baked into the
 // artwork and nothing crops it: object-fit contain, standing on the counter line.
@@ -352,8 +360,7 @@ function standee(n){
   +'</span>'
   +'<span class="nameplate">'+(rank?'<i class="rank">'+E(rank)+'</i>':'')
    +'<b>'+E(n.name)+'</b><span>Lv.'+n.level+' '+job+'</span></span>'
- +'</span></button>';
-}
+ +'</span></button>';}
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  return '<div class="kit"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
@@ -382,8 +389,7 @@ function nightScreen(){
    +(s.pilgrimage?'<p class="event-note">게이트 순례주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
    +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>')
   +'</div>'
- +'</main><div class="dock">'+dock+'</div></div>';
-}
+ +'</main><div class="dock">'+dock+'</div></div>';}
 // The tone of a beat is the actual outcome, never a score: 대성공 warm, 퇴각/부상 ember,
 // 중상 blood, 사망 bone. 위기에서 생환 keeps its own reading so the rescue is not
 // presented as an ordinary success.
@@ -404,8 +410,7 @@ function beat(r){
  +(why?'<p class="why"><i aria-hidden="true"></i>'+E(why)+'</p>':'')
  +'<div class="changed">'+changedRows(r)+'</div>'
  +supplyNote(r)
- +(heavy?'<blockquote>'+E(r.quote)+'</blockquote>':'')+'</article>';
-}
+ +(heavy?'<blockquote>'+E(r.quote)+'</blockquote>':'')+'</article>';}
 // Importance decides how much copy a beat spends, never how big the adventurer is
 // (UI-Q31). Presentation owns the rule so screen and tests share it.
 const weighty=r=>Presentation.nightWeight(r);
@@ -512,10 +517,11 @@ function statGrid(n){const values=Dungeon.prepare({...n,traits:Presentation.trai
 /* ECONOMY_ORDER §ORDER. Half of what to order is decided by what is already on the shelf, and
    the form never showed it - each offer row carried a 재고 N for its own SKU and nothing said
    what else was in the warehouse or how much room was left. Same grouping the shelf and the
-   stock modal already read. Open by default so a desk sees it without asking; a phone can fold
-   it away. */
+   stock modal already read. It opens the first time; after the player folds it, that preference
+   survives later Days and reloads until they open it again. */
 function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.length,cap=game.capacity();
- return '<details class="stock-brief" open><summary><span class="k">창고</span>'
+ const opened=game.account.settings.stockBriefOpen!==false;
+ return '<details class="stock-brief" '+(opened?'open':'')+'><summary><span class="k">창고</span>'
  +'<b>'+used+' / '+cap+'칸</b>'+(stocks.length?'<i>'+stocks.length+'종</i>':'')+'</summary>'
  +(stocks.length?'<ul>'+stocks.map(st=>{const it=D.itemBy[st.item],left=st.expires===null?null:st.expires-s.day;
    return '<li>'+Art.itemIcon(it.id,20)+'<b>'+E(it.name)+'</b><span>'+st.count+'개</span>'
@@ -553,18 +559,21 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
   +'</span>'
   +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
-   +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?'disabled':''))
+   +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?'disabled':'')
    +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?'disabled':''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'"')+'</span></span></li>';
  }).join('')+'</ol>'
  +'<button class="rubber" data-action="reroll" '+(price>s.money||held?'disabled':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(held?'<p class="note">선택한 수량을 0으로 되돌리면 후보를 교환할 수 있다.</p>':'')
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}
+/* Sparse player-facing grouping only where the distinction helps comparison. Internal
+   category/role taxonomy stays hidden; this reads the item's actual potion marker. */
+const itemKind=it=>it.effects?.potion?'포션':'';
 function shelf(isFinal=false){const s=game.run,stocks=groupStock();
  return '<section class="shelf"><div class="shelf-head"><h2>'+(isFinal?'대원에게 보급':'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span></div><div class="goods">'
- +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id;
+ +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it);
   return '<button class="good r'+it.rarity+(open?' open':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
-  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+'</b><span>'+Presentation.rows(it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · ')+'</span></span>'
+  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+Presentation.rows(it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · ')+'</span></span>'
   +'<span class="price"><b>'+it.sell+'G</b><span>재고 '+st.count+'</span></span></button>'+(open?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
 function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.phase==='final'?s.npcs.find(x=>x.id===supplyNPC):game.current();
