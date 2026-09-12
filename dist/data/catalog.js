@@ -136,13 +136,21 @@ contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으�
    WRATH baseline. Stage 9 measures candidates against the final RNG baseline and Stage 10
    fills these in once they are approved. Writing a plausible-looking number here would
    make an unapproved guess look like a decision. */
-/* DUNGEON_HAZARD / ECONOMY_ORDER / NPC_TRAIT, 2026-09-12 amendment. Every value here is PASS3.
-   Stage 9 measures candidates and Stage 10 applies exactly one approved set; null means "not
-   approved yet", and the code falls back to the Source rule it replaces rather than guess a
-   number. deepPowerFactor carries the one starting value the Director set. */
-G.DATA.greatSuccess={marginThreshold:null,chanceSlope:null,chanceCap:null,storeGoldScale:null};
-G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:null,sponsorship:null,
- successExp:null,greatExp:null,successWallet:null,greatWallet:null};
+/* DUNGEON_HAZARD / ECONOMY_ORDER / NPC_TRAIT, 2026-09-12 amendment.
+   EVERY VALUE HERE IS A STAGE 9 MEASUREMENT BASELINE, NOT A SETTLED ONE. The Director set
+   them so the integrated measurement has something real to measure; Stage 9 reports the actual
+   distributions and proposes candidates, and Stage 10 applies exactly one approved set.
+   signalMargin is not a gate on the roll - it is only where the player is told the attempt is
+   worth chasing, so it has to be read off the same margin the roll uses. The cap keeps Great
+   Success below certainty at every level of preparation. */
+G.DATA.greatSuccess={signalMargin:.26,chanceSlope:1.2,chanceCap:.45,storeGoldScale:.5};
+G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
+ /* 원정 후원금 = sponsorBase x (1 + rarityStep x rarity) x (1 + levelStep x (Level - 1)),
+    rounded to 10G. Who you send is the decision, so the price is the NPC's rarity and current
+    Level and nothing else - not the Gate Tier, not the Day, not the Deep Power, not any item
+    price, and not a hidden worth score. Stage 9 measurement baseline. */
+ sponsorBase:250,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
+ successExp:40,greatExp:90,successWallet:60,greatWallet:150};
 
 G.DATA.bossTuning={
  prideCombatFactor:null,        // PRIDE: every participant's Final 투력 x this

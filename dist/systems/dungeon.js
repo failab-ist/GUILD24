@@ -48,16 +48,24 @@ function hazardState(h,e,d){
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 function estimate(n,d,facilities){const e=prepare(n,d,facilities).effects,ratio=(e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16)/d.power;return ratio>1.2?'우세':ratio>=.8?'접전':'불리';}
-/* DUNGEON_HAZARD §GREAT SUCCESS. The chance rises with how far the PREPARED Combat ability
-   ran ahead of the Gate's requirement, and never reaches certainty. Exact threshold / curve /
-   cap are PASS3; while they are unapproved the Source's own 1.26 margin rule stands in, so
-   Great Success keeps happening and Stage 9 has something to measure. That carried rule is a
-   step, not a curve - replacing it is what Stage 10 is for. */
+/* DUNGEON_HAZARD §GREAT SUCCESS. The chance rises with how far the PREPARED Combat ability ran
+   ahead of what the Gate requires, and the cap keeps it short of certainty at every level of
+   preparation - no amount of preparation guarantees 대성공.
+     marginRatio = (prepared Combat ability - Gate required Power) / Gate required Power
+     chance      = min(cap, max(0, marginRatio x slope))
+   There is no threshold on the roll: a small positive margin already earns a small chance.
+   signalMargin is only where the player is told the attempt is worth chasing, and it reads the
+   same margin, so what is signalled and what is rolled cannot drift apart. Stage 9 baseline. */
 function greatSuccessChance(margin){
- const g=D.greatSuccess||{};
- if(g.marginThreshold===null||g.marginThreshold===undefined)return margin>=.26?1:0;
- if(margin<g.marginThreshold)return 0;
- return Math.min(g.chanceCap,(margin-g.marginThreshold)*g.chanceSlope);
+ const g=D.greatSuccess;
+ return Math.min(g.chanceCap,Math.max(0,margin*g.chanceSlope));
+}
+/* Whether this preparation is worth telling the player about. UI_UX owns where it is shown;
+   the number lives here so the signal and the roll are read off one calculation. */
+function greatSuccessSignal(n,d,facilities=[]){
+ const e=prepare(n,d,facilities).effects;
+ const margin=(e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16)/d.power-1;
+ return margin>=D.greatSuccess.signalMargin;
 }
 function resolve(n,d,r,facilities=[],options={}){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
@@ -116,5 +124,5 @@ function resolve(n,d,r,facilities=[],options={}){
  report.quote=G.Copy.night(report,n);
  n.pack=[];return report;
 }
-G.Dungeon={prepare,estimate,resolve,tierWeights,hazardState};
+G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState};
 })(globalThis);

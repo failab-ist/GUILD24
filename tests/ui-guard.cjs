@@ -317,4 +317,15 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
   assert.ok(!app.includes(banned),'no legacy reward promise survives: '+banned);
 });
 
+test('the shipped UI actually parses: every dist script is valid JavaScript',()=>{
+ // This suite reads app.js as text, and a text check is happy with a file no browser can run.
+ // One stray line comment inside a single-line function shipped a SyntaxError that `npm test`
+ // blessed and only the browser harness caught. Parse what we ship.
+ const vm=require('node:vm');
+ for(const file of walk('dist')){
+  if(!file.endsWith('.js'))continue;
+  assert.doesNotThrow(()=>new vm.Script(read(file),{filename:file}),file+' does not parse');
+ }
+});
+
 console.log(count+' ui guard groups passed');

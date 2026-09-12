@@ -35,7 +35,11 @@ const rows=[
 D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,finalUseful:['bulk','rotation','logisticsHQ','kitchen','expeditionMeal','dawnBulk','fresh24','delivery','warehouse'].includes(id)}));
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
-D.balance.relicPriceScale=1;D.balance.walletBase=70;D.balance.walletLevel=18;D.balance.walletCarry=.28;
+/* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
+   purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not
+   the settled figure. Level contribution, carry and per-NPC variation are unchanged, and no
+   Day-based Wallet inflation was added - this one number is the whole lever. */
+D.balance.relicPriceScale=1;D.balance.walletBase=90;D.balance.walletLevel=18;D.balance.walletCarry=.28;
 D.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],['frugal','impulse'],['strong','frail'],['lucky','unlucky'],['collector','thrifty'],['stamina','weary'],['social','shy']];
 D.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['corrosion'],['corrosion','mire'],['corrosion','mire']],fire:[['fire'],['fire'],['fire']],crypt:[['fear'],['fear','dark'],['fear','dark']],snow:[['cold'],['cold','whiteout'],['cold','whiteout']]};
 D.categories={food:'음식',drink:'음료',medicine:'의료',tool:'야외장비',insurance:'보험',magic:'특수'};

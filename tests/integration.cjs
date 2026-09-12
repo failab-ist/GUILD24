@@ -229,15 +229,14 @@ test('DUNGEON_HAZARD / CORE_RUN §DEEP EXPEDITION: the schedule and the Gate are
 });
 
 test('DUNGEON_HAZARD §DEEP EXPEDITION: only the required Power changes, and only for the nominee',()=>{
- const sponsorship=DATA.deepTuning.sponsorship;
- DATA.deepTuning.sponsorship=120;              // PASS3; forced here so the flow can be exercised
- try{
+ {
   const g=drivenToDeepSale();
   const t=g.run.deep.today,base=g.run.dungeons[t.gateIndex],n=g.current();
+  g.run.money=5000;
   assert.ok(g.canNominateDeep(n),'an untraded current visitor can be nominated');
-  const moneyBefore=g.run.money;
+  const moneyBefore=g.run.money,cost=g.deepCost(n);
   g.nominateDeep(n.id);
-  assert.equal(g.run.money,moneyBefore-120,'the sponsorship is charged exactly once');
+  assert.equal(g.run.money,moneyBefore-cost,'the sponsorship is charged exactly once');
   assert.equal(g.run.deep.today.nomineeId,n.id,'today is assigned');
 
   const deep=g.gateFor(n);
@@ -261,16 +260,38 @@ test('DUNGEON_HAZARD §DEEP EXPEDITION: only the required Power changes, and onl
   assert.equal(g.deepOffer(),null,'there is nothing left to offer once today is assigned');
   const reloaded=reload(g);
   assert.equal(reloaded.run.deep.today.nomineeId,n.id,'the nomination survives a reload');
-  assert.equal(reloaded.run.deep.today.paid,120,'and so does the sponsorship, without refund');
+  assert.equal(reloaded.run.deep.today.paid,cost,'and so does the sponsorship, without refund');
   assert.equal(reloaded.deepOffer(),null,'a reload cannot reopen a spent nomination');
- }finally{DATA.deepTuning.sponsorship=sponsorship;}
+ }
+});
+
+test('ECONOMY_ORDER §DEEP EXPEDITION SPONSORSHIP: the price is the adventurer, and nothing else',()=>{
+ const g=fresh('cost'),t=DATA.deepTuning;
+ const cost=(rarity,level)=>g.deepCost({rarity,level});
+ // exactly the approved starting formula, rounded to a readable step
+ for(const rarity of [0,1,2,3,4])for(const level of [1,3,7,12,20]){
+  const raw=t.sponsorBase*(1+t.sponsorRarityStep*rarity)*(1+t.sponsorLevelStep*(level-1));
+  assert.equal(cost(rarity,level),Math.round(raw/t.sponsorRounding)*t.sponsorRounding,
+   'r'+rarity+' Lv.'+level);
+  assert.equal(cost(rarity,level)%t.sponsorRounding,0,'and lands on the rounding step');
+ }
+ // it rises with both axes, so who you send is a real decision
+ for(const level of [1,10,20])for(const r of [0,1,2,3])
+  assert.ok(cost(r+1,level)>cost(r,level),'a rarer adventurer costs more at Lv.'+level);
+ for(const rarity of [0,2,4])for(const lv of [1,5,10,15])
+  assert.ok(cost(rarity,lv+1)>=cost(rarity,lv),'an abler adventurer never costs less at r'+rarity);
+ // and it reads nothing else: not the Gate, the Day, the Deep Power or any item price
+ const before=cost(2,10);
+ g.run.day=29;g.run.dungeons.forEach(d=>{d.tier=3;d.power*=4;d.reward*=3;});
+ const keep=t.powerFactor;t.powerFactor=9;
+ try{assert.equal(cost(2,10),before,'the price does not move with Day, Tier, reward or Deep Power');}
+ finally{t.powerFactor=keep;}
 });
 
 test('SALE §DEEP EXPEDITION NOMINATION: the current visitor only, and only before they trade',()=>{
- const sponsorship=DATA.deepTuning.sponsorship;
- DATA.deepTuning.sponsorship=120;
- try{
+ {
   const g=drivenToDeepSale(),n=g.current();
+  g.run.money=5000;
   const other=g.run.npcs.find(x=>x.id!==n.id);
   assert.equal(g.canNominateDeep(other),false,'someone who is not at the counter cannot be nominated');
   assert.throws(()=>g.nominateDeep(other.id),'and asking anyway is refused');
@@ -287,17 +308,18 @@ test('SALE §DEEP EXPEDITION NOMINATION: the current visitor only, and only befo
   g.depart();
   assert.equal(g.run.deep.today.nomineeId,null,'skipping leaves today unassigned');
   assert.equal(g.run.deep.today.paid,0,'and charges nothing');
- }finally{DATA.deepTuning.sponsorship=sponsorship;}
+ }
 });
 
 test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the Store gets nothing',()=>{
  const t=DATA.deepTuning,keep={...t};
- Object.assign(t,{sponsorship:120,successExp:40,greatExp:90,successWallet:60,greatWallet:150});
+ Object.assign(t,{successExp:40,greatExp:90,successWallet:60,greatWallet:150});
  const scale=DATA.greatSuccess.storeGoldScale;DATA.greatSuccess.storeGoldScale=.5;
  try{
   let checked=0;
   for(let i=0;i<40&&checked<3;i++){
    let g;try{g=drivenToDeepSale();}catch(e){break;}
+   g.run.money=5000;
    const n=g.current(),before={money:g.run.money,wallet:n.money,xp:n.xp,level:n.level};
    g.nominateDeep(n.id);
    const paid=before.money-g.run.money;
@@ -322,6 +344,33 @@ test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the 
   }
   assert.ok(checked>0,'at least one Deep Expedition actually resolved');
  }finally{Object.assign(DATA.deepTuning,keep);DATA.greatSuccess.storeGoldScale=scale;}
+});
+
+test('SALE §DEEP EXPEDITION NOMINATION: Deep and an explicit destination reassignment exclude each other',()=>{
+ const g=drivenToDeepSale(),n=g.current();
+ // the route support is the only explicit Player destination reassignment in the Source, and
+ // it happens in the same window as a nomination: the current visitor, before they trade.
+ g.run.special={kind:'route',used:false,candidates:[]};
+ if(g.run.dungeons.length>1){
+  const other=g.run.dungeons.map((d,i)=>i).find(i=>i!==n.destination);
+  g.specialAction(n.id,other);
+  assert.equal(g.run.special.npcId,n.id,'the reassignment records who it was spent on');
+  assert.equal(g.canNominateDeep(n),false,'a reassigned NPC can no longer be nominated');
+  assert.throws(()=>g.nominateDeep(n.id),/배치를 조정/,'and asking anyway is refused by name');
+ }
+ // the other direction: a confirmed Deep destination is final, so a later reassignment is
+ // refused rather than quietly ignored
+ const h=drivenToDeepSale(),m=h.current();
+ h.run.special={kind:'route',used:false,candidates:[]};
+ h.nominateDeep(m.id);
+ if(h.run.dungeons.length>1){
+  const other=h.run.dungeons.map((d,i)=>i).find(i=>i!==m.destination);
+  assert.throws(()=>h.specialAction(m.id,other),/심층원정/,'the Deep destination cannot be reassigned');
+  assert.equal(h.gateFor(m).deep,true,'and the nominee still walks into the Deep Gate');
+ }
+ // the rule is enforced by the two existing actions refusing each other, not by a third one
+ assert.equal(h.run.special.kind,'route','the existing guild support is still the only reassignment');
+ assert.equal(h.run.deep.today.nomineeId,m.id,'and the nomination is still the only Deep state');
 });
 
 // --- DETERMINISM -------------------------------------------------------------------

@@ -48,22 +48,36 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  claimedGateFor(n){const s=this.run,t=s.deep?.today;
   if(n&&t&&t.nomineeId===n.id)return this.gateFor(n);
   return s.dungeons[n?.claimedDestination??n?.destination]||s.dungeons[0];}
- /* What today's Deep is offering, or null when there is nothing to offer: no Deep today, one
-    already nominated, or - while the sponsorship amount is still PASS3 - no price to charge. */
- deepOffer(){const s=this.run,t=s.deep?.today,cost=D.deepTuning.sponsorship;
-  if(!t||t.nomineeId||cost===null)return null;
+ /* ECONOMY_ORDER §DEEP EXPEDITION SPONSORSHIP. The price is the adventurer, not the trip:
+    a rarer or more experienced NPC costs more to send, so choosing who to invest in is the
+    decision. Reads only rarity and current Level - never the Gate, the Day, the Deep Power or
+    any item price - and rounds to a readable step. Coefficients are a Stage 9 baseline. */
+ deepCost(n){const t=D.deepTuning;
+  if(!n)return null;
+  const raw=t.sponsorBase*(1+t.sponsorRarityStep*n.rarity)*(1+t.sponsorLevelStep*(n.level-1));
+  return Math.round(raw/t.sponsorRounding)*t.sponsorRounding;}
+ /* What today's Deep is offering, or null when there is nothing to offer: no Deep today, or
+    one already nominated. The price belongs to the candidate, so it is not part of the offer. */
+ deepOffer(){const s=this.run,t=s.deep?.today;
+  if(!t||t.nomineeId)return null;
   const base=s.dungeons[t.gateIndex];
-  return {gate:base,gateIndex:t.gateIndex,cost,required:base.power*D.deepTuning.powerFactor};}
+  return {gate:base,gateIndex:t.gateIndex,required:base.power*D.deepTuning.powerFactor};}
  /* SALE §DEEP EXPEDITION NOMINATION: the current visitor only, before their first committed
     transaction today, and only if the Store can pay. No Job / Level / rarity gate is added. */
  canNominateDeep(n){const s=this.run,offer=this.deepOffer();
   return !!offer&&s.phase==='sell'&&!!n&&this.current()?.id===n.id
-   &&!n.pack.length&&!n.history.some(h=>h.day===s.day)&&s.money>=offer.cost;}
+   &&!n.pack.length&&!n.history.some(h=>h.day===s.day)&&s.money>=this.deepCost(n)
+   /* the other half of the same rule: an NPC whose destination was already reassigned by an
+      explicit Player action today cannot then be sent on the Deep Expedition. */
+   &&!(s.special?.kind==='route'&&s.special.used&&s.special.npcId===n.id);}
  nominateDeep(npcId){const s=this.run,n=s.npcs.find(x=>x.id===npcId),offer=this.deepOffer();
   if(!offer)throw Error('오늘은 추천할 심층원정이 없습니다.');
+  if(s.special?.kind==='route'&&s.special.used&&s.special.npcId===npcId)
+   throw Error('이미 배치를 조정한 손님은 심층원정에 추천할 수 없습니다.');
   if(!this.canNominateDeep(n))throw Error('아직 거래하지 않은 현재 손님만 추천할 수 있습니다.');
-  s.money-=offer.cost;s.daily.spent+=offer.cost;s.stats.spent+=offer.cost;
-  s.deep.today.nomineeId=n.id;s.deep.today.paid=offer.cost;
+  const cost=this.deepCost(n);
+  s.money-=cost;s.daily.spent+=cost;s.stats.spent+=cost;
+  s.deep.today.nomineeId=n.id;s.deep.today.paid=cost;
   n.destination=offer.gateIndex;n.claimedDestination=offer.gateIndex;n.destinationFinal=true;
   s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
  addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:s.contract==='premium',...opts});

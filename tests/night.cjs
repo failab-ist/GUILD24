@@ -240,11 +240,15 @@ test('DUNGEON_HAZARD §GREAT SUCCESS: only a settled ordinary Success upgrades, 
   assert.ok(!['부상','중상','퇴각','사망'].includes(rep.outcome)||rep.outcome!=='대성공');
  }
  assert.ok(great>0&&success>0,'both outcomes occur across the sample');
- // the margin is the prepared ability against the Gate, so every upgrade sits above the
- // threshold and no unprepared expedition is carried into 대성공 by a lucky roll
- assert.ok(Math.min(...margins.great)>=Math.max(...margins.plain)||great<total,
-  'upgrades are drawn from the high-margin side');
- assert.ok(margins.great.every(m=>m>=.26),'every upgrade cleared the carried margin rule');
+ // the margin is the prepared ability against the Gate, so no expedition that was behind the
+ // Gate is carried into 대성공 by a lucky roll, and the upgrade rate climbs with the margin
+ assert.ok(margins.great.every(m=>m>0),'nothing under-prepared was upgraded');
+ const rate=ms=>{const hi=ms.filter(m=>m>=.26).length;return hi;};
+ const highGreat=rate(margins.great),highPlain=rate(margins.plain);
+ assert.ok(highGreat/(highGreat+highPlain)>great/(great+success),
+  'a larger prepared margin upgrades more often than the sample as a whole');
+ // and preparation never buys certainty: the cap holds at every margin
+ assert.ok(highPlain>0,'even well-prepared expeditions still come back as an ordinary 성공');
 
  // the roll is always drawn, so an expedition costs the same randomness whatever it returns
  const a=new RNG('draw'),b=new RNG('draw');
@@ -273,6 +277,31 @@ test('ECONOMY_ORDER §NORMAL GREAT SUCCESS STORE GOLD: paid on 대성공 only, n
   assert.ok(normal.every(x=>x.outcome==='대성공'||x.storeBonus===0),'an ordinary Success pays nothing');
   assert.ok(sample(true).every(x=>x.storeBonus===0),'a Deep 대성공 pays the Store nothing at all');
  }finally{DATA.greatSuccess.storeGoldScale=scale;}
+});
+
+test('DUNGEON_HAZARD §GREAT SUCCESS: the starting curve rises with the margin and never reaches certainty',()=>{
+ // The shipped curve is a Stage 9 measurement baseline. What must hold whatever the numbers
+ // become: it never falls as preparation rises, it is capped short of 1, and the signal the
+ // player is shown reads the same margin the roll uses.
+ const g=DATA.greatSuccess;
+ assert.ok(g.chanceCap<1,'no preparation can guarantee 대성공: cap '+g.chanceCap);
+ let prev=-1;
+ for(let m=-.5;m<=3;m+=.05){
+  const chance=Math.min(g.chanceCap,Math.max(0,m*g.chanceSlope));
+  assert.ok(chance>=prev-1e-9,'a larger prepared margin never lowers the chance at '+m.toFixed(2));
+  assert.ok(chance<1,'and never reaches certainty at '+m.toFixed(2));
+  prev=chance;
+ }
+ assert.equal(Math.min(g.chanceCap,Math.max(0,-.3*g.chanceSlope)),0,'being behind the Gate earns no chance');
+
+ // signal and roll read one calculation: at the signal margin the chance is real but partial
+ const atSignal=Math.min(g.chanceCap,Math.max(0,g.signalMargin*g.chanceSlope));
+ assert.ok(atSignal>0&&atSignal<g.chanceCap+1e-9,'the signal marks a worthwhile attempt, not a promise');
+ const n=Adventurer.create(new RNG('signal'),1,10,Meta.fresh());
+ const easy={...DATA.dungeonBy.slime,day:5,tier:1,hazards:[],scale:1.2,power:1,reward:1};
+ const hard={...easy,power:10000};
+ assert.equal(Dungeon.greatSuccessSignal(n,easy,[]),true,'an overwhelming margin is signalled');
+ assert.equal(Dungeon.greatSuccessSignal(n,hard,[]),false,'a hopeless one is not');
 });
 
 console.log(groups+' night groups passed');

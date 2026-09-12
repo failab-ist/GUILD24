@@ -26,7 +26,7 @@ function blank(runs,policy,pricing,build){
   /* 2026-09-12 amendment, measurement only. greatByBand buckets Great Success by how far the
      prepared Combat ability ran ahead of the Gate, which is the thing Stage 9 has to judge the
      curve on; prepStartGold samples the D29 close, before any D30 preparation spend. */
-  great:{success:0,great:0,storeGold:0,byBand:{}},deepDays:0,deepTaken:0,deepSponsor:0,
+  great:{success:0,great:0,storeGold:0,byBand:{}},deepDays:0,deepTaken:0,deepOffered:0,deepSponsor:0,deepCosts:[],deepByRarity:{},deepByLevel:{},deepSkipped:0,
   prepStartGold:[],wallet2Slot:{samples:0,afford:0,used:0},
   npc:{samples:0,alive:0,level:0,maxLevel:0,loyalty:0,regulars:0,wallet:0,growth:0},bands:{},
   final:{reached:0,party:0,full:0,resolved:0,power:0,assault:0,margin:0,cleared:0},
@@ -43,7 +43,9 @@ function pct(xs,q){if(!xs||!xs.length)return 0;const a=[...xs].sort((x,y)=>x-y);
 function derive(out,count){
  for(const [day,values]of Object.entries(out.wallets)){if(!Array.isArray(values))continue;values.sort((a,b)=>a-b);out.wallets[day]={count:values.length,mean:values.reduce((a,b)=>a+b,0)/values.length,p10:values[Math.floor(values.length*.1)],median:values[Math.floor(values.length*.5)],p90:values[Math.floor(values.length*.9)]};}
  const days=Object.entries(out.dayReached).reduce((a,[d,n])=>a+Number(d)*n,0);
- return {...out,averageDay:days/count,easterPerRun:out.easter/count,deepDaysPerRun:out.deepDays/count,deepTakenPerRun:out.deepTaken/count,
+ return {...out,averageDay:days/count,easterPerRun:out.easter/count,deepDaysPerRun:out.deepDays/count,deepTakenPerRun:out.deepTaken/count,deepOfferedPerRun:out.deepOffered/count,deepSponsorPerRun:out.deepSponsor/count,deepSkippedPerRun:out.deepSkipped/count,
+  deepCostP10:pct(out.deepCosts,.1),deepCostP25:pct(out.deepCosts,.25),deepCostMedian:pct(out.deepCosts,.5),
+  deepCostP75:pct(out.deepCosts,.75),deepCostP90:pct(out.deepCosts,.9),
   greatSuccessRate:out.great.success?out.great.great/out.great.success:0,greatStoreGoldPerRun:out.great.storeGold/count,
   prepStartGoldMedian:pct(out.prepStartGold,.5),prepStartGoldP10:pct(out.prepStartGold,.1),prepStartGoldP25:pct(out.prepStartGold,.25),
   prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
@@ -130,7 +132,18 @@ function playRun(g,out,ctx){
    else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:2)+2)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=140){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;continue;}try{g.setQuantity(i,(s.cart?.[i]||0)+1);act();(out.items[o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}}
    g.confirmOrder();act();day.peak+=s.inventory.length;g.open();act();
   }else if(s.phase==='sell'){
-   const n=g.current();if(!engagement.sell){g.depart();act();continue;}if(policy==='neglect'&&n.level<Math.max(...s.npcs.filter(x=>x.alive).map(x=>x.level))-2){g.depart();act();continue;}const d=s.dungeons[n.claimedDestination??n.destination];let attempts=0;
+   const n=g.current();if(!engagement.sell){g.depart();act();continue;}if(policy==='neglect'&&n.level<Math.max(...s.npcs.filter(x=>x.alive).map(x=>x.level))-2){g.depart();act();continue;}
+   /* 2026-09-12 amendment, measurement only. An engaged shop takes the Deep Expedition when it
+      is offered and affordable, which is the upper bound on participation rather than a model of
+      how a player chooses - Stage 9 reports offers and takes separately so both are visible. */
+   if(s.deep?.today&&!s.deep.today.nomineeId)out.deepOffered+=Number(!!g.canNominateDeep(n));
+   if(s.deep?.today&&!s.deep.today.nomineeId&&!g.canNominateDeep(n)&&s.money<g.deepCost(n))out.deepSkipped++;
+   if(engagement.order&&g.canNominateDeep(n)){const cost=g.deepCost(n);g.nominateDeep(n.id);act();
+    out.deepSponsor+=cost;out.deepCosts.push(cost);
+    const byR=out.deepByRarity[n.rarity]??={takes:0,gold:0,level:0};byR.takes++;byR.gold+=cost;byR.level+=n.level;
+    const band=n.level<5?'1-4':n.level<10?'5-9':n.level<15?'10-14':'15+';
+    const byL=out.deepByLevel[band]??={takes:0,gold:0};byL.takes++;byL.gold+=cost;}
+   const d=g.claimedGateFor(n);let attempts=0;
    while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0)});}
    options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
    if(!s.inventory.length)out.stockouts++;g.depart();act();
