@@ -60,28 +60,21 @@ function wall(seed=7){
  s+=r(306,238,48,5,'#1d262a');
  return svg(360,250,s,'band-art','xMidYMax');
 }
-/* ---- counter: the register, the counter body it stands on, floor ---- */
-/* The counter carries the float, and nothing else. A promo standee and a stack of crates used
-   to flank the register and the store-support plates sat on top of it, so the till - the one
-   thing on this surface the player reads - was the smallest object on it, and the counter
-   stopped short of the floor so the whole thing read as hovering. The dressing is gone, the
-   register takes that width back, and the counter is a solid body standing on a plinth: its
-   own drawers instead of props, landed on the floor rather than floating over it. */
+/* ---- counter: the register, standing on its own low plinth ---- */
+/* The float is the only thing on this part of the screen the player reads, and it kept
+   losing to the furniture around it - first a promo standee and a crate stack, then the
+   store-support plates, then a full-width counter with drawers that turned the register
+   into a fitting on someone else's cabinet. There is no counter now. The register is the
+   object, at the size that makes it readable at a glance, on a plinth just deep enough to
+   stand on. Either side of it the store floor is left alone. */
 function counter(){
- /* Above the counter the art draws nothing: the band's own wall shows through, so the room
-    behind the register is the same surface on the art as it is either side of it. */
- let s=r(64,0,232,56,'#39434b')+r(64,0,232,4,'#66737d')+r(64,52,232,4,'#232a30')     // register casing
-  +r(70,18,220,34,'#20272c')+r(74,20,212,30,'#101a15')+r(76,22,208,26,'#0d2418')  // recessed display
-  +r(74,20,212,2,'#000000')+r(64,4,232,14,'#3f4952');                             // bezel + caption strip
- /* The counter runs the width of the room. Its edge column is a plain vertical stack, so the
-    band continues it either side of the art in CSS and the register reads as standing on one
-    long fixture rather than on an island floating in the middle of the floor. */
- s+=r(0,50,360,10,'#c6a26c')+r(0,60,360,5,'#8a6435')      // counter top slab and its front edge
-  +r(0,65,360,47,'#6b4a2e')+r(0,112,360,8,'#3c2817');     // body, standing on a plinth
- for(let i=0;i<4;i++){const x=74+i*56;                    // the till station's own drawers
-  s+=r(x,72,44,16,'#5e4028')+r(x,92,44,14,'#5e4028')
-   +r(x+16,78,12,3,'#8a6435')+r(x+16,97,12,3,'#8a6435');}
- for(let i=0;i<9;i++)s+=r(76+i*24,52,20,6,'#57636c');     // keys, on the slab in front
+ // the register: casing, recessed display, caption strip, keypad
+ let s=r(54,6,252,60,'#39434b')+r(54,6,252,4,'#66737d')+r(54,62,252,4,'#232a30')
+  +r(59,24,242,38,'#20272c')+r(61,26,238,34,'#101a15')+r(63,28,234,30,'#0d2418')
+  +r(61,26,238,2,'#000000')+r(54,10,252,14,'#3f4952');
+ for(let i=0;i<9;i++)s+=r(74+i*24,58,20,6,'#57636c');
+ // a short, shallow plinth - enough that the register is standing rather than hovering
+ s+=r(48,66,264,7,'#c6a26c')+r(56,73,248,11,'#6b4a2e')+r(52,84,256,6,'#3c2817');
  return svg(360,120,s,'band-art');
 }
 /* ---- GUILD24 corporate seal, used on the order form and the approval stamp ---- */
@@ -237,8 +230,8 @@ function slot(name,fallback,cls='band-art'){
    the art so a production replacement only has to restate these, never touch a screen. */
 const anchors={
  daysign:{band:'ceiling',left:31.1,top:65.2,width:37.8,height:34.8},
- tillLabel:{band:'counter',left:18.9,top:3.3,width:62.2,height:11.7},
- till:{band:'counter',left:21.1,top:18.3,width:57.8,height:25}
+ tillLabel:{band:'counter',left:15,top:8.3,width:70,height:11.7},
+ till:{band:'counter',left:17.5,top:23.3,width:65,height:25}
 };
 const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),

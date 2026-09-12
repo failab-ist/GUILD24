@@ -521,14 +521,16 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  const counterArt=globalThis.Scene.counter();
  for(const [fill,what] of [['#efe6c8','the promo standee'],['#a5763f','the crate stack']])
   assert.ok(!counterArt.includes(fill),what+' is gone from the counter');
- assert.ok(/width="232"[^>]*fill="#39434b"/.test(counterArt),'and the register took that width');
- /* The counter is a body that lands, not a slab hanging over the floor: it runs the full art
-    width and its plinth reaches the bottom edge, and the band continues that edge column
-    either side of the capped art so it reads as one fixture across the room. */
- assert.ok(/x="0" y="112" width="360" height="8"/.test(counterArt),'the counter stands on a plinth at the floor');
- assert.ok(/x="0" y="50" width="360"/.test(counterArt),'and runs the full width of the art');
- assert.ok(/\.band\.counter\{background:linear-gradient\(180deg,[\s\S]*?#3c2817 93\.33%\)/.test(css),
-  'the band continues the counter either side of the art, plinth included');
+ /* There is no counter either. A full-width slab with drawers turned the register back into
+    a fitting on someone else's cabinet, so the register is the object now: it stands on a
+    short plinth and the floor is left open on both sides of it. */
+ assert.ok(/width="252"[^>]*fill="#39434b"/.test(counterArt),'the register is the object, at a size that reads');
+ assert.ok(!/width="360"/.test(counterArt),'nothing spans the room down here any more');
+ assert.ok(/y="66" width="264"/.test(counterArt)&&/y="84" width="256"/.test(counterArt),
+  'it stands on a short plinth rather than hovering');
+ assert.ok(!/#5e4028|#8a6435/.test(counterArt),'the drawers and the counter run are gone');
+ assert.ok(!/\.band\.counter\{background:linear-gradient\(180deg,[^)]*#c6a26c/.test(css),
+  'and the band no longer continues a counter either side of the art');
  assert.ok(!app.includes('relicTray')&&!app.includes('relicStrip'),'and the brass plates are off the counter');
  assert.ok(!css.includes('.tray{'),'with no orphan rule left behind');
  assert.ok(/modal==='menu'/.test(app)&&app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900).includes("btn('점포지원','relics')"),

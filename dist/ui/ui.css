@@ -137,13 +137,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* each band still spans the screen: outside the capped art it carries that art's own ground -
    the ceiling's panelling, the floor tiling the counter stands on */
 .band.ceiling{background:#20262b}
-/* The counter art is capped so the register does not grow with the window, so the band
-   continues the counter's own edge column either side of it - slab, front edge, body, plinth
-   at the heights the art draws them (50/60/65/112 of 120). Above the slab the room carries on
-   as wall. Without this the counter reads as an island floating in the middle of the floor. */
-.band.counter{background:linear-gradient(180deg,
-  #0000 0,#0000 41.67%,#c6a26c 41.67%,#c6a26c 50%,#8a6435 50%,#8a6435 54.17%,
-  #6b4a2e 54.17%,#6b4a2e 93.33%,#3c2817 93.33%),var(--tex-tile),#c6bda8;
+/* There is no counter to continue any more - the register stands on its own plinth and the
+   band is the store floor it stands on, left open either side of it. The ground reads as
+   ground because it darkens away from the wall, not because furniture is drawn across it. */
+.band.counter{background:linear-gradient(180deg,#00000000 0,#0000000f 46%,#00000026 100%),
+  var(--tex-tile),#c6bda8;
  background-size:auto,48px 36px}
 .band.wall{flex:1 1 auto;min-height:32px;overflow:hidden;background:var(--tex-tile),#c6bda8;background-size:48px 36px}
 /* the wall art is authored to slice, so let it cover whatever height the wall is left with -
