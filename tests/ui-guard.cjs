@@ -720,4 +720,31 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!/\.beat\.routine[^{]*\{[^}]*font-size:1[0-3]px/.test(css),'no routine beat is shrunk into small print');
 });
 
+// D-27. Seven products were named in the feedback because they were drawn as something else.
+// The test is not "an icon exists" — every id already returned an <svg>. It is that the picture
+// a player sees for one product is not the picture they see for another.
+test('D-27: the named items are drawn as themselves, and no two of them share a drawing',()=>{
+ const Art=require('../dist/ui/art.js')&&globalThis.Art,D=globalThis.DATA;
+ const named=['rope','candy','coating','boots','goggles','ion','tree','potionHigh','potion'];
+ const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
+ const drawn=new Map();
+ for(const it of D.items){
+  const shapes=body(Art.itemIcon(it.id));
+  assert.ok(shapes.length>0,it.name+' is drawn, not an empty frame');
+  (drawn.get(shapes)||drawn.set(shapes,[]).get(shapes)).push(it);
+ }
+ for(const id of named){
+  const it=D.itemBy[id]||D.items.find(x=>x.icon===id);
+  assert.ok(it,id+' is a real item or icon key');
+  const others=drawn.get(body(Art.itemIcon(it.id))).filter(x=>x.id!==it.id);
+  assert.equal(others.length,0,it.name+' has its own drawing, not '+others.map(x=>x.name).join('/')+"'s");
+ }
+ // 하급/상급 포션 were the clearest case: same key, so the same picture at the size these render.
+ assert.notEqual(D.itemBy.potion.icon,D.itemBy.highpotion.icon,'the two potions do not share an icon key');
+ // Nothing on the shelf is drawn as something else any more. The two cup ramen still share a
+ // key, but the branch colours 불룡볶음면 by its own id, so the pictures differ.
+ const shared=[...drawn.values()].filter(g=>g.length>1);
+ assert.deepEqual(shared,[],'no two products are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
+});
+
 console.log(count+' ui guard groups passed');

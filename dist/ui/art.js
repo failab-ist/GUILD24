@@ -22,8 +22,34 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='battery'||p==='mana')s=rect(14,5,15,4,'#c6d0c5')+rect(10,9,23,28,p==='mana'?'#a49ad5':'#d0ad69')+rect(10,19,23,15,'#435956')+rect(18,14,7,2,'#f6e4b4')+rect(20,12,2,6,'#f6e4b4')+rect(17,26,9,3,p==='mana'?'#b5dfdf':'#e0c793');
  if(p==='cloak')s=`<path d="M16 5H26L31 14L37 37H6L11 14Z" fill="#7da4a2"/><path d="M16 6L13 14H29L25 6Z" fill="#4b7474"/>`+rect(20,17,2,19,'#a1c2b3');
  if(p==='stone')s=`<path d="M20 4L34 15L29 34L20 40L9 31L6 16Z" fill="#8ebbc1"/><path d="M20 4L17 22L6 16Z" fill="#d0e6d9"/><path d="M17 22L20 40L34 15Z" fill="#6f939e"/>`;
- if(p==='lunch')s=rect(5,13,33,23,id==='tree'?'#abd2a5':'#554f58')+rect(7,15,29,19,'#e9dfc2')+rect(9,17,12,15,'#f1eddb')+rect(24,17,10,6,'#a6b97b')+rect(24,25,10,7,id==='tree'?'#7aad8b':'#d29167')+rect(18,21,3,3,'#9d705e');
+ if(p==='lunch')s=rect(5,13,33,23,'#554f58')+rect(7,15,29,19,'#e9dfc2')+rect(9,17,12,15,'#f1eddb')+rect(24,17,10,6,'#a6b97b')+rect(24,25,10,7,'#d29167')+rect(18,21,3,3,'#9d705e');
  if(p==='coupon')s=rect(4,11,35,23,'#e8c567')+rect(7,14,29,17,'#846d3d')+`<text x="21" y="26" text-anchor="middle" fill="#f7db82" font-family="monospace" font-size="10" font-weight="bold">1+1</text>`;
+ /* D-27. Seven products were drawn as something else: a rope, a pair of boots, goggles and a
+    tube of coating all wore the lantern battery, the focus sweets wore the chocolate bar, the
+    ion drink wore the water bottle and the world-tree charm wore the return stone. At the size
+    these render, that is the same picture. Each has its own now, on the same 4px grid. */
+ if(p==='potionHigh')s=rect(15,2,14,6,'#d8b465')+rect(17,8,10,5,base)+rect(12,13,20,4,'#8f2f2e')
+  +rect(9,17,26,20,'#b0413f')+rect(9,17,26,2,'#d4726d')+rect(12,20,4,14,'#e07b78')
+  +rect(15,23,16,10,base)+rect(17,25,12,2,'#8f2f2e')+rect(17,29,12,2,'#8f2f2e');
+ if(p==='ion')s=rect(18,3,8,4,'#cfd9cf')+rect(15,7,14,6,'#7fb6c4')+rect(13,13,18,24,'#9fd4dc')
+  +rect(13,19,18,6,'#4e8ba0')+rect(16,26,12,3,'#eff7f4')+rect(13,13,4,24,'#d7eef0');
+ if(p==='candy')s=`<path d="M4 13L13 21L4 31Z" fill="#e9b9cc"/><path d="M40 13L31 21L40 31Z" fill="#e9b9cc"/>`
+  +rect(11,19,3,7,'#c98aa4')+rect(30,19,3,7,'#c98aa4')+rect(13,11,18,21,'#f0dce6')
+  +rect(16,15,12,13,'#d3708f')+rect(19,19,6,5,'#f7eef3');
+ if(p==='rope')s=`<path d="M22 9C34 9 39 15 39 22C39 29 34 35 22 35C10 35 5 29 5 22C5 15 10 9 22 9ZM22 16C15 16 12 19 12 22C12 25 15 28 22 28C29 28 32 25 32 22C32 19 29 16 22 16Z" fill="#c2a173" fill-rule="evenodd"/>`
+  +rect(14,10,3,4,'#8e7049')+rect(21,9,3,4,'#8e7049')+rect(28,10,3,4,'#8e7049')
+  +rect(14,30,3,4,'#8e7049')+rect(28,30,3,4,'#8e7049')+rect(6,20,3,4,'#8e7049')+rect(35,20,3,4,'#8e7049')
+  +rect(20,33,4,8,'#b18d5c')+rect(19,40,6,3,'#8e7049');
+ if(p==='boots')s=rect(11,4,14,4,'#a8856a')+rect(12,8,12,18,'#7a5c45')+rect(12,26,22,8,'#6d5340')
+  +rect(32,28,4,6,'#6d5340')+rect(10,34,28,5,'#2f261f')+rect(14,12,8,2,'#d9c3a6')+rect(14,18,8,2,'#d9c3a6');
+ if(p==='goggles')s=rect(2,18,40,6,'#4a5a63')+rect(5,12,34,17,'#697c86')+rect(8,15,11,11,'#7fb8cc')
+  +rect(25,15,11,11,'#7fb8cc')+rect(19,19,6,3,'#4a5a63')+rect(9,16,4,4,'#dff2f6')+rect(26,16,4,4,'#dff2f6');
+ if(p==='coating')s=rect(17,2,10,5,'#8d968c')+rect(27,4,5,3,'#8d968c')+rect(13,8,18,29,'#cfd6cc')
+  +rect(13,8,5,29,'#e8eee6')+rect(15,16,14,10,'#6d8c6d')+rect(18,19,8,4,'#e8eee6')
+  +rect(34,3,2,2,'#9fb6a4')+rect(37,6,2,2,'#9fb6a4')+rect(34,9,2,2,'#9fb6a4');
+ if(p==='amulet')s=rect(14,5,16,2,'#8a7a5a')+rect(20,7,4,4,'#8a7a5a')
+  +`<path d="M22 10C35 14 35 32 22 40C9 32 9 14 22 10Z" fill="#8fc79a"/>`
+  +`<path d="M22 14C30 18 30 30 22 36Z" fill="#5f9d71"/>`+rect(21,15,2,21,'#dff0dd');
  return `<svg class="item-art" width="${size}" height="${size}" viewBox="0 0 44 44" shape-rendering="crispEdges" role="img" aria-label="${esc(it.name)}">${s}</svg>`;
 }
 // Gate marks and UI glyphs. Pixel sprites on the same 4px grid as the rest of the art —
