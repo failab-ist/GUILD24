@@ -126,5 +126,30 @@ Copy.boss={
  d30:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'최종 준비'}
 };
 
+/* COPY_WORLD_VOICE §LOCKED PLAYER-FACING TERMS, 2026-09-12. Two of these are exact: the Great
+   Success signal must contain 대성공 and read word for word, and 심층원정 is not to be renamed
+   to 긴급의뢰 / 특별원정 / 고난도 의뢰. The sponsorship is a Store Gold sink, never a deposit,
+   so nothing here may promise it back. The Deep voice says what the Store gets - the
+   adventurer's growth - and never a cash payout, 대성공 included. */
+Copy.great={signal:'대성공을 노려볼 만합니다.'};
+Copy.deep={
+ term:'심층원정',sponsor:'원정 후원금',
+ header:'길드 심층원정 공고',
+ intro:'오늘 하루, 길드가 더 깊은 구역의 정찰을 의뢰했다.',
+ gate:'대상 게이트',
+ note:'같은 게이트의 더 깊은 구역이다. 위험 특성은 그대로이고, 요구 전투력만 올라간다.',
+ cost:'후원금은 추천하는 모험가에 따라 달라진다. 희귀하고 노련한 모험가일수록 비싸다.',
+ gain:'성공하면 그 모험가의 성장과 소지금이 늘어난다.',
+ sink:'후원금은 돌려받지 않는다. 이 원정으로 가게가 버는 돈은 없다.',
+ optional:'추천하지 않아도 된다. 오늘 안에 추천하지 않으면 기회는 지나간다.',
+ action:'심층원정에 추천',
+ done:'심층원정에 나선다',
+ paid:'원정 후원금 지급',
+ blocked:'이미 배치를 조정한 손님은 추천할 수 없다.',
+ poor:'후원금이 모자란다.',
+ result:'심층원정',
+ reward:'심층원정 보상'
+};
+
 G.Copy=Copy;
 })(globalThis);

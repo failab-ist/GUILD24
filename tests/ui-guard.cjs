@@ -328,4 +328,58 @@ test('the shipped UI actually parses: every dist script is valid JavaScript',()=
  }
 });
 
+test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked words exactly',()=>{
+ // GREAT SUCCESS SIGNAL. The words are locked, so the screen must not carry its own copy of
+ // them, and it must be computed from the same margin the roll uses rather than re-derived.
+ assert.equal(Copy.great.signal,'대성공을 노려볼 만합니다.','the exact signal is the locked string');
+ assert.ok(app.includes('Copy.great.signal'),'the screen prints that string rather than its own');
+ assert.ok(!/노려볼 만합니다/.test(app.replace('Copy.great.signal','')),'no second copy of the wording');
+ assert.ok(app.includes('Dungeon.greatSuccessSignal('),'the signal is read from the engine, not recomputed in the UI');
+ const readout=fn('readout'),readoutCode=readout.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ assert.ok(readout.includes('greatSuccessSignal'),'it lives in the forecast, before departure');
+ assert.ok(!/[0-9]+%/.test(readoutCode),'and never exposes a percentage');
+ assert.ok(!/margin|readiness|chance/i.test(readoutCode),'nor a margin, a chance or a readiness score');
+
+ // 심층원정 is a locked term: no synonym may reach a player-facing string.
+ assert.equal(Copy.deep.term,'심층원정');
+ // the rule may be *named* in a comment; what must not happen is a synonym reaching a player.
+ const strip=x=>x.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ for(const banned of ['긴급의뢰','특별원정','고난도 의뢰']){
+  assert.ok(!JSON.stringify(Copy).includes(banned),'no Copy string renames the Deep term to '+banned);
+  for(const [name,src] of [['app.js',app],['shop.js',read('dist/systems/shop.js')]])
+   assert.ok(!strip(src).includes(banned),name+' renames the Deep term to '+banned);
+ }
+ assert.equal(Copy.deep.sponsor,'원정 후원금');
+ // it is a sink, so nothing may offer it back
+ for(const refundish of ['환불','돌려드','반환'])
+  assert.ok(!JSON.stringify(Copy.deep).includes(refundish),'the sponsorship is never promised back: '+refundish);
+
+ // the Morning notice is a notice on the existing board, not a new Phase or a takeover
+ const slip=fn('deepSlip');
+ assert.ok(slip.includes('class="slip deep"'),'the Deep Day beat is a pinned slip');
+ assert.ok(!/setModal|takeover/.test(slip),'it never takes the screen over');
+ for(const part of ['c.note','c.cost','c.gain','c.sink','c.optional'])
+  assert.ok(slip.includes(part),'before Order the player is told: '+part);
+
+ // the Sale affordance appears only while the nomination is legal
+ const offer=fn('deepOfferUI');
+ assert.ok(offer.includes('game.canNominateDeep(n)'),'the offer asks the engine whether it is legal');
+ assert.ok(offer.includes('game.deepCost(n)'),'and prices it per adventurer');
+ assert.ok(app.includes("case'deep-nominate'"),'the action is wired');
+
+ // Night and Closing report the two returns in the right columns
+ const changed=fn('changedRows');
+ assert.ok(changed.includes('r.storeBonus'),'a normal 대성공 names the Store Gold it earned');
+ assert.ok(changed.includes('r.deep.bonusWallet')&&changed.includes('r.deep.bonusXp'),
+  'a Deep return is reported as the adventurer\'s change');
+ const closing=fn('closingScreen');
+ assert.ok(closing.includes('Copy.deep.sponsor'),'Closing names the sponsorship outflow');
+ assert.ok(closing.includes("d.greatSuccess"),'and the Great Success income');
+
+ // both tutorials are ordinary coach marks, so they inherit the account-scoped persistence
+ assert.ok(/\['deep','\.slip\.deep'/.test(app),'the first Deep Expedition teaches itself on the notice');
+ assert.ok(/\['great','\.great-signal'/.test(app),'and Great Success on its own signal');
+ assert.ok(!/deepTutorial|tutorialDeep/.test(app),'no separate tutorial state was introduced');
+});
+
 console.log(count+' ui guard groups passed');

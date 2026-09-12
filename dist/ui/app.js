@@ -135,6 +135,29 @@ function gatePlate(d){const b=sigilOf(d);
  +(d.requiredSupply?'<span class="stamp-line load">보급 '+d.requiredSupply+' 필요</span>':'<span class="foot">보급 부담 없음</span>')
  +'</article>';}
 function tierLine(){const f=game.tierForecast();return f?'T1 '+f.percent[0]+'% · T2 '+f.percent[1]+'% · T3 '+f.percent[2]+'%':'마왕성 최종 원정';}
+/* UI_UX §DEEP SALE UI. Offered only while a nomination is still legal, so it never appears as
+   a disabled control the player has to reason about. Once taken it states what left the till
+   and that the destination changed - the forecast above has already been recomputed against
+   the Deep Gate, because it reads the same Gate the night will resolve. */
+function deepOfferUI(n){
+ const s=game.run,t=s.deep?.today;if(!t||!n)return '';
+ const c=Copy.deep;
+ if(t.nomineeId===n.id)
+  return '<div class="deep-taken"><b>'+E(c.term)+'</b>'
+   +'<p>'+E(c.paid)+' '+fmt(t.paid)+'G · '+E(s.dungeons[t.gateIndex].name)+'</p>'
+   +'<p class="smalltext">'+E(c.sink)+'</p></div>';
+ if(t.nomineeId)return '';
+ const cost=game.deepCost(n),routed=s.special?.kind==='route'&&s.special.used&&s.special.npcId===n.id;
+ if(game.canNominateDeep(n))
+  return '<details class="special-event deep-offer"><summary>'+E(c.term)+' · '+E(c.action)+'</summary>'
+   +'<p>'+E(c.gate)+' '+E(s.dungeons[t.gateIndex].name)+' — '+E(c.note)+'</p>'
+   +'<p>'+E(c.gain)+' '+E(c.sink)+'</p>'
+   +btn(E(c.action)+' · '+E(c.sponsor)+' '+fmt(cost)+'G','deep-nominate','danger','data-id="'+n.id+'"')
+   +'</details>';
+ // not offered: say why in one line rather than showing a dead control
+ if(routed||s.money<cost)
+  return '<p class="smalltext deep-blocked">'+E(c.term)+' — '+E(routed?c.blocked:c.poor)+'</p>';
+ return '';}
 function specialUI(){const s=game.run,e=s.special;if(!e||e.used)return '';if(e.kind==='route'){const n=game.current();if(s.phase!=='sell'||!n||n.pack.length||n.history.some(h=>h.day===s.day)||s.dungeons.length<2)return '';
   /* a confirmed Deep destination is final for that NPC, so the reassignment is not offered */
   if(s.deep?.today?.nomineeId===n.id)return '';return '<details class="special-event"><summary>길드 원정 배치조정 · 오늘 한 번</summary><p>아직 거래하지 않은 '+E(n.name)+'의 목적지를 바꿀 수 있습니다.</p>'+s.dungeons.map((d,i)=>btn(E(d.name),'special','','data-id="'+n.id+'" data-value="'+i+'"')).join('')+'</details>';}if(!['morning','order'].includes(s.phase))return '';const candidates=s.npcs.filter(n=>n.alive&&n.introduced);return '<details class="special-event"><summary>'+(e.kind==='remove'?'길드 상담 · 특성 하나 정리':'길드 특별 훈련 · 새 특성 배우기')+'</summary>'+candidates.map(n=>{const choices=e.kind==='remove'?n.traits.filter(t=>D.traitBy[t].direction==='negative'):e.candidates.filter(t=>!n.traits.includes(t)&&n.traits.length<Math.min(4,n.traitSlots)&&!D.traitExclusions.some(pair=>pair.includes(t)&&pair.some(id=>n.traits.includes(id))));return choices.length?'<div><b>'+E(n.name)+'</b>'+choices.map(t=>btn(D.traitBy[t].name+' · '+Presentation.traitText(t),'special','','data-id="'+n.id+'" data-value="'+t+'"')).join('')+'</div>':'';}).join('')+'<p>원하지 않으면 선택하지 않아도 됩니다. 오늘 영업 준비가 끝나면 기회가 지나갑니다.</p></details>';}
@@ -156,7 +179,7 @@ function morningScreen(){
   +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
    +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
-   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
+   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
    +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유</span>'
    +'<span class="till" style="'+Scene.anchorStyle('till')+'" aria-label="보유 자금 '+fmt(s.money)+'G"><b class="coin">'+fmt(s.money)+'</b><i>G</i></span>'
@@ -165,6 +188,25 @@ function morningScreen(){
  +'<div class="dock">'+relicWindowLink()+'<button class="pull" data-action="begin-order"><span>문 열기</span></button></div></div>';
 }
 // The Event stays on the board as the notice it is, after its focused reveal.
+/* UI_UX §DEEP EXPEDITION MORNING. On a Deep Day no Normal Event happens, so this is the Day's
+   special operational beat. It is a notice on the same board, not a new Phase or a takeover:
+   before committing the Order the player can see that there is one, which Gate it deepens,
+   its Family/Tier/known Hazards, that a sponsorship is owed and how it is priced, what the
+   adventurer gains, that the Store gains no cash, and that taking it is optional. */
+function deepSlip(){
+ const s=game.run,t=s.deep?.today;if(!t)return '';
+ const c=Copy.deep,base=s.dungeons[t.gateIndex],taken=!!t.nomineeId;
+ const who=taken?s.npcs.find(n=>n.id===t.nomineeId):null;
+ return '<div class="slip deep"><span class="pin"></span>'
+ +'<span class="stamp-line">'+E(c.header)+'</span>'
+ +'<b>'+E(c.term)+' · '+E(base.name)+'</b>'
+ +'<span class="body">'+E(taken?E(who?.name||'')+' 님이 '+c.done+'.':c.intro)+'</span>'
+ +'<ul class="hazards">'+Presentation.hazardRows(Presentation.known(base,game)).map(h=>
+   '<li><b>'+E(h.name)+'</b><span>'+E(h.pressure)+'</span></li>').join('')+'</ul>'
+ +'<span class="body">'+E(c.note)+'</span>'
+ +(taken?'<span class="body">'+E(c.paid)+' '+fmt(t.paid)+'G · '+E(c.sink)+'</span>'
+        :'<span class="body">'+E(c.cost)+' '+E(c.gain)+'</span><span class="body">'+E(c.sink)+' '+E(c.optional)+'</span>')
+ +'</div>';}
 function eventSlip(e){
  return '<button class="slip event" data-action="event-again"><span class="pin"></span>'
  +'<span class="stamp-line">오늘의 게시</span><b>'+E(e.name)+'</b><span class="body">'+E(e.description)+'</span></button>';}
@@ -181,8 +223,14 @@ function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())r
 function readout(n,extra=null){
  const compact=!!extra,d=game.claimedGateFor(n);
  const v={...n,traits:Presentation.traits(n),pack:extra?[...n.pack,extra]:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
+ /* DUNGEON_HAZARD §GREAT SUCCESS signal. It sits in the forecast the player is already reading,
+    before departure and while the preparation can still change, and it is recomputed from the
+    same margin the roll uses - so it moves as items are added. It says the attempt is worth
+    chasing and nothing more: no percentage, no margin, no readiness score. */
+ const signal=Dungeon.greatSuccessSignal(v,d,game.run.facilities);
  return '<div class="readout"><div class="top"><span>전투 전망<b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b></span>'
  +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span></div>'
+ +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  +hazardList(p.hazards.map(h=>h.key),p.hazards)
  +(compact?'':'<p class="estimate">지금의 능력과 준비로 본 예상. 실제 원정은 달라질 수 있다.</p>')+'</div>';}
 function returningSummary(n){const r=Presentation.returning(n);if(!r)return '';
@@ -215,7 +263,7 @@ function saleScreen(){
  +'</section>'
  +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
-  +'<div class="dossier">'+returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+kitLine(n)+readout(n)+specialUI()+'</div>'
+  +'<div class="dossier">'+returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+kitLine(n)+readout(n)+deepOfferUI(n)+specialUI()+'</div>'
   +shelf()+ownedRelicView()
  +'</main>'
  +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)+'</div>'
@@ -297,7 +345,8 @@ function beat(r){
   +portrait(n,150,'returner')
   +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
-   +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')+'</div>'
+   +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
+   +(r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
  +'</div>'
  +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
  +(why?'<p class="why"><i aria-hidden="true"></i>'+E(why)+'</p>':'')
@@ -313,7 +362,16 @@ function supplyNote(r){const lines=Presentation.supplyLines(r);
  return lines.length?'<p class="influence">'+E(lines[0].text)+'</p>':'';}
 // WHAT CHANGED — Presentation decides what actually moved; this only stamps it.
 function changedRows(r){
- return Presentation.nightChanges(r).map(c=>'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
+ /* NIGHT_CLOSING 2026-09-12: a normal 대성공 also pays the Store, and a 심층원정 pays it
+    nothing at all - what it returns is the adventurer's growth and money, reported as their
+    change and never as Store income. Both are stated once, beside the ordinary changes. */
+ const extra=[];
+ if(r.storeBonus)extra.push({kind:'gold',label:'대성공 본사 보상',value:'+'+fmt(r.storeBonus)+'G'});
+ if(r.deep&&(r.deep.bonusXp||r.deep.bonusWallet)){
+  if(r.deep.bonusXp)extra.push({kind:'level',label:Copy.deep.reward,value:'경험치 +'+r.deep.bonusXp});
+  if(r.deep.bonusWallet)extra.push({kind:'gold',label:Copy.deep.reward,value:'소지금 +'+fmt(r.deep.bonusWallet)+'G'});
+ }
+ return [...Presentation.nightChanges(r),...extra].map(c=>'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
   +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>').join('');}
 // CLOSING — `오늘 장사는 어땠을까?`. Economics only; the expedition story belongs to Night.
 // The object is the till roll the register printed when the shutter came down: a narrow
@@ -323,7 +381,7 @@ function changedRows(r){
 // and the money actually in the drawer is the last thing stamped on it.
 function closingScreen(){
  const s=game.run,d=s.daily,margin=d.revenue-d.cogs;
- const profit=margin+(d.subsidy||0)+(d.commission||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
+ const profit=margin+(d.subsidy||0)+(d.commission||0)+(d.greatSuccess||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
  const line=(label,value,cls='')=>'<div class="row '+cls+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
  /* only what an actual sold item actually did, named product first. A sale with no
     meaningful expedition contribution simply does not appear. */
@@ -335,9 +393,11 @@ function closingScreen(){
   +'<div class="block">'+line('매출',d.revenue)+line('판매 원가',-d.cogs)
    +line('판매 마진',margin,'sum')+'</div>'
   +'<div class="block">'+line('운영비',-d.operating)+line('폐기 원가',-d.wasteCost)
-   +line('발주 교환',-d.rerollSpent)+line('본사 지원·수당',(d.subsidy||0)+(d.commission||0))+'</div>'
+   +line('발주 교환',-d.rerollSpent)+line('본사 지원·수당',(d.subsidy||0)+(d.commission||0))
+   +(d.greatSuccess?line('대성공 본사 보상',d.greatSuccess):'')+'</div>'
   +'<div class="row profit'+(profit<0?' loss':'')+'"><span>영업 손익</span><b>'+(profit>0?'+':'')+fmt(profit)+'</b></div>'
-  +'<div class="block">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)+line('재고 정리',d.liquidation)+'</div>'
+  +'<div class="block">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)
+   +(d.deepSponsor?line(Copy.deep.sponsor,-d.deepSponsor):'')+line('재고 정리',d.liquidation)+'</div>'
   +'<div class="purse"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b></div>'
   +(impact.length?'<div class="impact"><h4>오늘의 보급 영향</h4>'
     +impact.map(l=>'<p><b>'+E(l.items.join(' · '))+'</b><span>'+E(l.who)+'의 '+E(l.effect)+'</span></p>').join('')+'</div>':'')
@@ -350,9 +410,13 @@ function closingScreen(){
  +'<div class="dock">'+dock+'</div></div>';
 }
 const coachSteps={
- morning:[['visitors','#visitor-count','오늘 방문할 인원이다. 시설·계약·사건에 따라 달라진다.'],['gates','.notices','열린 게이트가 어떤 능력을 압박하는지 보고 준비할 상품을 생각해 보자.']],
+ /* UI_UX §FIRST-EVER DEEP EXPEDITION TUTORIAL. It is keyed to the notice, so it appears the
+    first time a Deep Expedition actually occurs and never before the feature exists. Completion
+    is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
+    clears it and the next first occurrence teaches it again. No new persistence was added. */
+ morning:[['visitors','#visitor-count','오늘 방문할 인원이다. 시설·계약·사건에 따라 달라진다.'],['gates','.notices','열린 게이트가 어떤 능력을 압박하는지 보고 준비할 상품을 생각해 보자.'],['deep','.slip.deep','오늘은 심층원정이 열렸다. 같은 게이트의 더 깊은 구역이라 요구 전투력만 올라간다. 손님 한 명을 추천해 보낼 수 있고, 후원금은 그 모험가의 희귀도와 레벨에 따라 달라진다. 성공하면 그 모험가의 성장과 소지금이 늘지만, 가게가 버는 돈은 대성공이어도 없다. 추천하지 않아도 된다.']],
  order:[['gold','#order-register','수량을 고르는 동안 보유 자금과 발주 후 자금이 여기 남는다.'],['quantity','.dial','수량을 고른다. 같은 상품을 여러 개 발주할 수 있다.'],['reroll','.rubber','발주 후보 전체를 교환한다. 같은 날 반복할수록 비용이 올라간다.'],['confirm','.dock .stamp','발주를 확정하면 현재 재고로 영업을 시작한다.']],
- sell:[['npc','.customer','손님을 눌러 특성과 원정 기록을 살펴보자.','npc'],['destination','.dest-plate','이 손님이 향할 게이트다. 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.'],['forecast','.readout','원정 전망은 지금의 능력과 준비로 본 예상이다. 실제 결과는 예상과 달라질 수 있다.'],['inventory','.good','진열대 전체에서 고른다. 판매한 소비품은 오늘 원정에서 쓰인다.'],['pricing','.tills','50%는 손님에게 투자, 100%는 기본 거래, 150%는 지금의 수입을 늘리는 선택이다.']],
+ sell:[['npc','.customer','손님을 눌러 특성과 원정 기록을 살펴보자.','npc'],['great','.great-signal','준비가 요구치를 크게 앞서면 대성공이 나올 수 있다. 일반 원정에서 대성공이 나오면 본사가 가게에 보상을 더 준다. 확정은 아니고, 더 좋은 보급을 하나 더 들려 보낼수록 확률이 오른다.'],['destination','.dest-plate','이 손님이 향할 게이트다. 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.'],['forecast','.readout','원정 전망은 지금의 능력과 준비로 본 예상이다. 실제 결과는 예상과 달라질 수 있다.'],['inventory','.good','진열대 전체에서 고른다. 판매한 소비품은 오늘 원정에서 쓰인다.'],['pricing','.tills','50%는 손님에게 투자, 100%는 기본 거래, 150%는 지금의 수입을 늘리는 선택이다.']],
  night:[['result','.beat','한 명씩 결과와 원인, 변화를 확인한다. 건너뛰기로 넘기거나 전체 건너뛰기로 정산에 갈 수 있다.']],
  closing:[['receipt','.slip','판매 마진에서 운영비와 폐기를 뺀 영업 손익이다. 발주와 점포지원 투자는 아래에 따로 적힌다.']]
 };
@@ -360,8 +424,12 @@ let activeCoach=null;
 function showCoach(){
  const root=$('#coach-root');if(!root)return;root.innerHTML='';activeCoach=null;
  const tutorial=game.account.tutorial||{};if(tutorial.skipped||modal)return;
- const steps=coachSteps[game.run?.phase]||[],step=steps.find(x=>!tutorial['coach-'+x[0]]);if(!step)return;
- const target=$(step[1]);if(!target||!target.getClientRects().length)return;
+ /* Skip a step whose target is not on this screen rather than stopping at it: a contextual
+    mark (a Deep notice, a Great Success signal) only exists on some Days, and stopping would
+    hold back every mark behind it until that Day came. */
+ const steps=coachSteps[game.run?.phase]||[];
+ const step=steps.find(x=>!tutorial['coach-'+x[0]]&&$(x[1])?.getClientRects().length);if(!step)return;
+ const target=$(step[1]);
  const view=target.getBoundingClientRect();if(view.top<80||view.bottom>innerHeight-100){target.scrollIntoView({block:'center',behavior:'instant'});}
  const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8),height=Math.min(b.height+8,180),bottom=top+height;
  const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<innerHeight?bottom+12:Math.max(12,top-bh-12);
@@ -588,6 +656,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'coach-skip':finishCoach(true);break;
  case'coach-next':{const actionName=activeCoach?.[3];finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
  case'special':game.specialAction(id,el.dataset.value);render();break;
+ case'deep-nominate':game.nominateDeep(id);sound('rare');render();break;
  case'boss-seen':{const st=bossRevealStage();
   if(st==='d30')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
   game.save();setModal(null);render();break;}

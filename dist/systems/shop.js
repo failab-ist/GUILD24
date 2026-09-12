@@ -76,7 +76,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    throw Error('이미 배치를 조정한 손님은 심층원정에 추천할 수 없습니다.');
   if(!this.canNominateDeep(n))throw Error('아직 거래하지 않은 현재 손님만 추천할 수 있습니다.');
   const cost=this.deepCost(n);
-  s.money-=cost;s.daily.spent+=cost;s.stats.spent+=cost;
+  s.money-=cost;s.daily.deepSponsor+=cost;s.stats.spent+=cost;
   s.deep.today.nomineeId=n.id;s.deep.today.paid=cost;
   n.destination=offer.gateIndex;n.claimedDestination=offer.gateIndex;n.destinationFinal=true;
   s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
@@ -110,7 +110,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
  rollEvent(){const s=this.run,fired=this.rng.next()<.35;if(!this.eventEligibleDay(s.day)||!fired)return null;
   const pool=D.events.filter(e=>this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
- morning(){const s=this.run;s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
+ morning(){const s=this.run;s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
  const expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=Math.max(0,n.injury-1);n.status=n.injury?'부상':'건강';}}n.fatigue=Math.max(0,n.fatigue-2);n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
  if([5,10,15,20,25,30].includes(s.day))this.relicWindow(s.day);if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];this.generateOffers();this.save();return;}
