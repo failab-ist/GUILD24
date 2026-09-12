@@ -35,7 +35,18 @@ function blank(runs,policy,pricing,build){
   partySize:{1:{samples:0,power:0,chance:0,assaultLo:0,assaultHi:0},2:{samples:0,power:0,chance:0,assaultLo:0,assaultHi:0},3:{samples:0,power:0,chance:0,assaultLo:0,assaultHi:0}},
   /* RUN-Q15: the Final value of an invested regular against a late newcomer, classified from
      the visit and loyalty history the run already keeps. */
-  q15:{runs:0,invested:[],newcomer:[],chosenInvested:0,chosenNewcomer:0,powerInvested:0,powerNewcomer:0}};
+  q15:{runs:0,invested:[],newcomer:[],chosenInvested:0,chosenNewcomer:0,powerInvested:0,powerNewcomer:0},
+  /* Stage 9 / SC-4. Job performance is not one number: the same Job reads differently against
+     a Family than it does against a Boss, and a Job Balance call made from either alone is the
+     `one Job acts as a key` failure DUNGEON_HAZARD BALANCE TARGET rejects. Both axes, crossed. */
+  familyJob:{},bossJob:{},
+  /* Stage 9 / SE-2. How concentrated a Run's investment is: how many distinct people were
+     supplied at all, how many were supplied repeatedly, and what share went to the one who
+     got the most. A one-NPC funnel and `everyone drifts past equally` are both failures. */
+  concentration:{runs:0,supplied:[],repeat:[],topShare:[]},
+  /* Stage 9 / SE-4. A loss that missed by a little is a different Run from one that was never
+     close, and only the first teaches anything. Measured from the resolved Final margin. */
+  nearMiss:{losses:0,margins:[],within10:0,within25:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
 function pct(xs,q){if(!xs||!xs.length)return 0;const a=[...xs].sort((x,y)=>x-y);
@@ -51,6 +62,12 @@ function derive(out,count){
   prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,
   deathsP10:pct(out.deathsPerRun,.1),deathsMedian:pct(out.deathsPerRun,.5),deathsP90:pct(out.deathsPerRun,.9),
   deathFailRate:out.endedBy.deaths/count,deathFailDayMedian:pct(out.deathFailDay,.5),
+  suppliedPerRun:out.concentration.runs?out.concentration.supplied.reduce((a,b)=>a+b,0)/out.concentration.runs:0,
+  repeatSuppliedPerRun:out.concentration.runs?out.concentration.repeat.reduce((a,b)=>a+b,0)/out.concentration.runs:0,
+  topShareMedian:pct(out.concentration.topShare,.5),
+  nearMissWithin10:out.nearMiss.losses?out.nearMiss.within10/out.nearMiss.losses:0,
+  nearMissWithin25:out.nearMiss.losses?out.nearMiss.within25/out.nearMiss.losses:0,
+  lossMarginMedian:pct(out.nearMiss.margins,.5),lossMarginP90:pct(out.nearMiss.margins,.9),
   endedBy:out.endedBy,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
 }
 
@@ -78,7 +95,7 @@ function playRun(g,out,ctx){
   out.great.storeGold+=report.storeBonus||0;
   if(report.deep)out.deepTaken++;
  }
- for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
+ for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)],[out.familyJob,(d?.family||report.dungeon)+':'+npc.job]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
  function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]);return (build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:380))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
@@ -172,13 +189,29 @@ function playRun(g,out,ctx){
  for(const tag of Object.keys(D.buildNames)){const n=s.facilities.filter(id=>D.relicBy[id]?.tags.includes(tag)).length;const bins=out.buildCounts[tag]??={};const k=Math.min(5,n);bins[k]=(bins[k]||0)+1;}
  for(const id of s.facilities){const b=out.relicOutcomes[id]??={runs:0,wins:0,death:0,gold:0};b.runs++;b.wins+=Number(!!s.win);b.death+=s.stats.deaths;b.gold+=s.money;}
  for(const npc of s.npcs.filter(n=>s.team.includes(n.id))){(out.jobs[npc.job]??={}).bossParticipation=((out.jobs[npc.job]||{}).bossParticipation||0)+1;}
+ /* SC-4 item 5: which Jobs actually went against which Boss, and whether that Final cleared.
+    Read off the report the Final already wrote, so it counts who was sent, not who was alive. */
+ if(s.finalReport&&s.bossId)for(const m of s.finalReport.members||[]){
+  const b=out.bossJob[s.bossId+':'+m.job]??={sent:0,cleared:0};b.sent++;b.cleared+=Number(!!s.win);}
+ /* SE-2: how the Run's supply was spread across the people who came in. Counted from each
+    adventurer's own purchase history, which is the only record of what was actually sold. */
+ {const seen=s.npcs.map(n=>(n.history||[]).length).filter(k=>k>0);
+  const total=seen.reduce((a,b)=>a+b,0);
+  out.concentration.runs++;out.concentration.supplied.push(seen.length);
+  out.concentration.repeat.push(seen.filter(k=>k>=3).length);
+  out.concentration.topShare.push(total?Math.max(...seen,0)/total:0);}
  out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
  /* measurement only - how often a Rare Reference identity actually turns up, so the starting
     chance can be judged on evidence in Stage 9 rather than on the number itself. */
  {const seen=s.npcs.filter(n=>G.Adventurer.EASTER.some(e=>e.name===n.name)).length;out.easter+=seen;out.easterRuns+=Number(seen>0);}
  out.deepDays+=(s.deep?.days||[]).length;
  {const alive=s.npcs.filter(n=>n.alive&&n.introduced);out.npc.samples++;out.npc.alive+=alive.length;out.npc.level+=alive.reduce((a,n)=>a+n.level,0);out.npc.maxLevel+=alive.length?Math.max(...alive.map(n=>n.level)):0;out.npc.loyalty+=alive.reduce((a,n)=>a+n.loyalty,0);out.npc.regulars+=s.stats.regulars;out.npc.wallet+=alive.reduce((a,n)=>a+n.money,0);out.npc.growth+=alive.reduce((a,n)=>a+n.level-1,0);}
- if(s.bossDebug){out.final.resolved++;out.final.power+=s.bossDebug.power;out.final.assault+=s.bossDebug.assault;out.final.margin+=s.bossDebug.assault-s.bossDebug.bossPower;out.final.cleared+=Number(!!s.win);}
+ if(s.bossDebug){out.final.resolved++;out.final.power+=s.bossDebug.power;out.final.assault+=s.bossDebug.assault;out.final.margin+=s.bossDebug.assault-s.bossDebug.bossPower;out.final.cleared+=Number(!!s.win);
+  /* SE-4: for a Final that failed, how far short it fell, as a share of what was required.
+     A loss inside a tenth is one the player can reason about; one at 60% never was close. */
+  if(!s.win&&s.bossDebug.bossPower>0){const short=(s.bossDebug.bossPower-s.bossDebug.assault)/s.bossDebug.bossPower;
+   out.nearMiss.losses++;out.nearMiss.margins.push(short);
+   out.nearMiss.within10+=Number(short<=.10);out.nearMiss.within25+=Number(short<=.25);}}
  out.wins+=Number(!!s.win);out.bankrupt+=Number(s.day<30);out.deaths+=s.stats.deaths;out.money+=s.money;
  /* Measurement only for the death limit (Stage 9 baseline 10, not a settled number): how many
     a Run loses, how often that ends one, on which Day, and how the four endings divide. The
@@ -207,7 +240,29 @@ function simulate(count=100,policy='balanced',account=null,pricing='adaptive',bu
    contract all come from the real Meta system reacting to real results.
    Returns one cohort per Run index, so FRESH ACCOUNT and PROGRESSED ACCOUNT Final viability
    can be read apart, plus the same cohorts bucketed by the grade actually held. */
-function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard'}={}){
+/* SC-5 / SB-8 — Job Mastery structure comparison, HARNESS ONLY.
+   No document says whether Mastery adjusts a Job's visible Base, its Growth, or both, so the
+   three candidates are compared here and exactly one is implemented in production after the
+   Director picks it (Stage 10). Nothing in the shipped game reads any of this: the patch is
+   applied to the catalog for the duration of one simulated Run and taken off again, and the
+   default mode is 'none', which is the game as it actually plays today.
+   `step` is a HARNESS magnitude for the comparison, not a proposed value - the real table is
+   PASS3_AFTER_JOB_BASE_GROWTH_REBALANCE. It is stated with every result it produces.
+   Mastery rank is the Job's own distinct Boss clears (0..7), so this only ever moves the
+   owning Job's own visible channels - never a hidden account-wide multiplier (NPC-Q10). */
+function masteryPatch(account,mode,step){
+ if(mode==='none'||!step)return ()=>{};
+ const saved=D.jobs.map(j=>({j,stats:j.stats.slice(),growth:j.growth.slice()}));
+ for(const j of D.jobs){
+  const rank=G.Meta.jobMastery(account,j.id);
+  if(!rank)continue;
+  const k=1+rank*step;
+  if(mode==='base'||mode==='both')j.stats=j.stats.map(v=>v*k);
+  if(mode==='growth'||mode==='both')j.growth=j.growth.map(v=>v*k);
+ }
+ return ()=>{for(const r of saved){r.j.stats=r.stats;r.j.growth=r.growth;}};
+}
+function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard',mastery='none',masteryStep=0}={}){
  const byIndex=[],byGrade={},accountsEnd=[];
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
@@ -222,10 +277,12 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    let started=contract;
    if(contract==='best'){started='standard';for(const c of D.contracts)if(G.Meta.contractUnlocked(account,c))started=c.id;}
    const available=D.contracts.filter(c=>G.Meta.contractUnlocked(account,c)).length;
+   const unpatch=masteryPatch(account,mastery,masteryStep);
    g.start(prefix+'-'+t+'-'+i,started);
    const grade=before.grade;
    const bucket=byGrade[grade]??=blank(0,policy,pricing,build);
    playRun(g,byIndex[i],{policy,pricing,build,seed:t});
+   unpatch();
    /* The grade bucket re-reads the same Run from the per-index cohort's last entry rather
       than replaying it: one Run, counted once in each view. */
    bucket.runs++;bucket.dayReached[g.run.day]=(bucket.dayReached[g.run.day]||0)+1;
@@ -247,5 +304,8 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
   accountsEnd};
 }
 
-G.Debug={simulate,trajectory,clearChance,contribution};
+/* masteryPatch is exported so a measurement script can also hold Mastery rank FIXED and ask
+   what each structure does at that rank - the accrual rate and the structure are two different
+   questions, and at the measured clear rate the first one swamps the second. Harness only. */
+G.Debug={simulate,trajectory,clearChance,contribution,masteryPatch};
 })(globalThis);

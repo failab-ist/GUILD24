@@ -13,44 +13,55 @@ const engaged=data.cohorts.filter(x=>!MINIMAL.includes(x.policy));
 const minimal=data.cohorts.filter(x=>MINIMAL.includes(x.policy));
 const seeds=data.seedsPerStrategy;
 const band=(dist,lo,hi)=>Object.entries(dist).filter(([d])=>Number(d)>=lo&&Number(d)<=hi).reduce((a,[,n])=>a+n,0);
+/* Stage 6 replaced global Meta XP with the Job x Boss matrix, and this report still asked for
+   XP per Run / per DAY / per action - every one of those columns printed an em dash. The same
+   three units, on the thing v2.5 actually grants: Job Mastery, which is only ever credited by
+   a Final clear. Derived here rather than in the harness: they are ratios of numbers it
+   already reports, and a second stored counter would be a second truth. */
+const mastPerRun=x=>x.masteryPerRun;
+const mastPerDay=x=>x.averageDay>0?x.masteryPerRun/x.averageDay:0;
+const mastPerAction=x=>x.actionsPerRun>0?x.masteryPerRun/x.actionsPerRun:0;
+const knowPerAction=x=>x.actionsPerRun>0?x.knowledgePerRun/x.actionsPerRun:0;
 
 let md='# BALANCE — v2.4 재기준선 (Chunk G)\n\n'
 +'Canonical Set '+data.canonicalSet+'. 각 전략 '+seeds+' Seed, '+data.cohorts.length+'개 전략 조합, 총 '+(seeds*data.cohorts.length).toLocaleString('en-US')+' Run. 모든 조합은 `'+data.seedPrefix+'0~'+(seeds-1)+'`을 사용한다.\n\n'
 +'**이 문서는 측정 결과다. 여기의 어떤 수치도 Canonical 값을 바꾸지 않았다.** Chunk A~F에서 아이템·특성·해저드·이벤트 어휘가 전면 교체되어 RNG 소비 경로가 달라졌으므로, v2.4 이전의 `balance-results-v3/v4`는 폐기했고 v2.4 근거로 인용할 수 없다. 원시 집계는 `tests/balance-results-v5.json`에 있다.\n\n'
 +'자동 정책 비교이며 사람의 첫 클리어율이 아니다. DAY30 도달률의 분모는 전체 Run, 도달 후 보스 승률의 분모는 DAY30 도달 Run이다. '+seeds+'회에서 관측값이 50%이면 단순 이항 95% 오차폭은 약 ±'+(1.96*Math.sqrt(.25/seeds)*100).toFixed(1)+'%p다. 작은 순위 차이에 의미를 부여하지 않는다.\n\n';
 
-md+='## 1. 전략별 종합\n\n'+table(['정책 / 가격 / 유물 방향','평균 도달 DAY','DAY30 도달','도달 후 승률','전체 클리어','평균 사망','평균 최종 Gold','Meta XP / Run','Knowledge / Run','평균 유물 지출']);
-for(const x of data.cohorts)md+=row([x.policy+' / '+x.pricing+' / '+x.build,num(x.averageDay),pct(x.reachRate),x.reached30?pct(x.bossWinGivenReach):'분모 0',pct(x.overallClearRate),num(x.averageDeaths),num(x.averageMoney),num(x.metaXPPerRun),num(x.knowledgePerRun),num(x.relicSpend/x.runs)]);
+md+='## 1. 전략별 종합\n\n'+table(['정책 / 가격 / 유물 방향','평균 도달 DAY','DAY30 도달','도달 후 승률','전체 클리어','평균 사망','평균 최종 Gold','직업 숙련 / Run','Knowledge / Run','평균 유물 지출']);
+for(const x of data.cohorts)md+=row([x.policy+' / '+x.pricing+' / '+x.build,num(x.averageDay),pct(x.reachRate),x.reached30?pct(x.bossWinGivenReach):'분모 0',pct(x.overallClearRate),num(x.averageDeaths),num(x.averageMoney),num3(mastPerRun(x)),num(x.knowledgePerRun),num(x.relicSpend/x.runs)]);
 
 md+='\n## 2. RUN-Q30 / ECO-Q12 — 최소 참여·DAY 파밍\n\n'
 +'A. 정상 참여 플레이 = `balanced/adaptive/hybrid`. B. 반복 무판매·무발주·무보급 = `zero-sale` / `zero-order` / `zero-supply`. C. 최소 지출 = `poverty`.\n\n'
 +'`zero-sale`은 발주는 하되 아무것도 팔지 않는다. `zero-order`는 발주하지 않고 초기 재고만 판다. `zero-supply`는 발주도 판매도 하지 않아 원정대가 항상 맨몸으로 나간다. `poverty`는 하루 최저가 1개만, 현금 600G를 남길 때만 발주한다. `meta-farm`은 적대적 사례다 — 발주·판매·보급을 전부 버리고 유료 유물도 사지 않으며, 첫 정산에 초기 재고를 정리해 현금으로 바꿔 최소 조작으로 최대한 오래 버틴다.\n\n'
 +'`행동 수`는 플레이어가 실제로 수행해야 하는 조작(발주 수량 지정·확정·개점·판매 시도·손님 응대·밤 넘김·정산·재고 정리·유물 선택·최종 편성)의 횟수다. 상호작용 비용의 대리 지표이며, 정확한 체감 시간이 아니다.\n\n'
-+table(['전략','평균 도달 DAY','D20+ 도달','D25+ 도달','DAY30 도달','평균 최종 Gold','Meta XP / Run','Meta XP / DAY','Meta XP / 행동','행동 수 / Run','Knowledge / Run','NPC 평균 Lv','단골 수']);
-for(const x of [c,...minimal])md+=row([x.policy,num(x.averageDay),pct(band(x.dayReached,20,30)/x.runs),pct(band(x.dayReached,25,30)/x.runs),pct(x.reachRate),num(x.averageMoney),num(x.metaXPPerRun),num(x.metaXPPerDay),num3(x.metaXPPerAction),num(x.actionsPerRun),num(x.knowledgePerRun),num(x.npc.level/Math.max(1,x.npc.alive)),num(x.npc.regulars/x.runs)]);
++table(['전략','평균 도달 DAY','D20+ 도달','D25+ 도달','DAY30 도달','평균 최종 Gold','직업 숙련 / Run','숙련 / DAY','숙련 / 행동','행동 수 / Run','Knowledge / Run','NPC 평균 Lv','단골 수']);
+for(const x of [c,...minimal])md+=row([x.policy,num(x.averageDay),pct(band(x.dayReached,20,30)/x.runs),pct(band(x.dayReached,25,30)/x.runs),pct(x.reachRate),num(x.averageMoney),num3(mastPerRun(x)),num3(mastPerDay(x)),num3(mastPerAction(x)),num(x.actionsPerRun),num(x.knowledgePerRun),num(x.npc.level/Math.max(1,x.npc.alive)),num(x.npc.regulars/x.runs)]);
 // The verdict states the canonical conditions and what each one measured, so a later
 // run that changes one of them says which one. RUN-Q30 asks whether B "routinely" coasts
 // into D20+/D25+ while staying efficient — not whether it ever gets there once.
 const conditions=[
  ['정상 참여 플레이가 도달 DAY에서 우월', minimal.every(x=>x.averageDay<c.averageDay)],
- ['정상 참여 플레이가 Run당 Meta XP에서 우월', minimal.every(x=>x.metaXPPerRun<c.metaXPPerRun)],
+ ['정상 참여 플레이가 Run당 직업 숙련에서 우월', minimal.every(x=>mastPerRun(x)<mastPerRun(c))],
  ['정상 참여 플레이가 Knowledge에서 우월', minimal.every(x=>x.knowledgePerRun<c.knowledgePerRun)],
  ['정상 참여 플레이가 경제 결과에서 우월', minimal.every(x=>x.averageMoney<c.averageMoney)],
  ['최소 참여로 DAY30을 상시 도달하지 못함', minimal.every(x=>x.reachRate<.05)],
  ['최소 참여가 D25+로 상시 진입하지 못함', minimal.every(x=>band(x.dayReached,25,30)/x.runs<.25)],
- ['정상 참여 플레이가 진행 DAY당 Meta XP에서 우월', minimal.every(x=>x.metaXPPerDay<c.metaXPPerDay)],
- ['정상 참여 플레이가 플레이어 행동당 Meta XP에서 우월', minimal.every(x=>x.metaXPPerAction===null||x.metaXPPerAction<c.metaXPPerAction)]];
+ ['정상 참여 플레이가 진행 DAY당 직업 숙련에서 우월', minimal.every(x=>mastPerDay(x)<mastPerDay(c))],
+ ['정상 참여 플레이가 플레이어 행동당 직업 숙련에서 우월', minimal.every(x=>mastPerAction(x)<mastPerAction(c))],
+ ['최소 참여가 행동당 Knowledge에서 정상 참여를 넘지 못함', minimal.every(x=>knowPerAction(x)<=knowPerAction(c))]];
 md+='\n'+table(['RUN-Q30 / ECO-Q12 조건','결과']);
 for(const [name,ok]of conditions)md+=row([name,ok?'충족':'**미충족**']);
 const failed=conditions.filter(([,ok])=>!ok);
 md+='\n판정: '+(failed.length?'**조건부 — 미충족 '+failed.length+'건.**':'**PASS.**')
-+' 최소 참여 전략은 모두 파산으로 끝났고(최종 Gold 음수), Run 단위로는 DAY30 도달·Meta XP·Knowledge·경제 결과 어느 축에서도 정상 참여 플레이에 미치지 못한다. 별도 비활동 패널티 시스템은 추가하지 않았다 — 기존 운영비·발주·고객 성장의 기회비용만으로 격차가 생겼다.\n'
++' 최소 참여 전략은 모두 파산으로 끝났고(최종 Gold 음수), Run 단위로는 DAY30 도달·직업 숙련·Knowledge·경제 결과 어느 축에서도 정상 참여 플레이에 미치지 못한다. 별도 비활동 패널티 시스템은 추가하지 않았다 — 기존 운영비·발주·고객 성장의 기회비용만으로 격차가 생겼다.\n'
 +'\n**단위를 Run에서 투입량으로 바꾸면 순위가 뒤집힌다.**\n\n'
 +table(['단위','정상 참여','최소 참여 최고값','뒤집힘'])
-+row(['Run당 Meta XP',num(c.metaXPPerRun),num(Math.max(...minimal.map(x=>x.metaXPPerRun))),Math.max(...minimal.map(x=>x.metaXPPerRun))>c.metaXPPerRun?'예':'아니오'])
-+row(['진행 DAY당 Meta XP',num(c.metaXPPerDay),num(Math.max(...minimal.map(x=>x.metaXPPerDay))),Math.max(...minimal.map(x=>x.metaXPPerDay))>c.metaXPPerDay?'**예**':'아니오'])
-+row(['플레이어 행동당 Meta XP',num3(c.metaXPPerAction),num3(Math.max(...minimal.map(x=>x.metaXPPerAction??0))),Math.max(...minimal.map(x=>x.metaXPPerAction??0))>c.metaXPPerAction?'**예**':'아니오'])
-+'\n행동당 Meta XP는 가장 직접적인 착취 지표다 — 플레이어가 실제로 지불하는 비용은 게임 내 DAY가 아니라 조작 횟수이기 때문이다. Meta XP 가중치는 PASS3 항목이므로 이 작업에서 바꾸지 않았다. 반복 farm Run에서 이 우위가 유지되는지는 §5.3의 `meta-farm / repeated` 궤적이 답한다. 근거와 후보는 BALANCE OBSERVATION으로 `reports/AUDIT.md`에 기록했다.\n';
++row(['Run당 직업 숙련',num3(mastPerRun(c)),num3(Math.max(...minimal.map(mastPerRun))),Math.max(...minimal.map(mastPerRun))>mastPerRun(c)?'**예**':'아니오'])
++row(['진행 DAY당 직업 숙련',num3(mastPerDay(c)),num3(Math.max(...minimal.map(mastPerDay))),Math.max(...minimal.map(mastPerDay))>mastPerDay(c)?'**예**':'아니오'])
++row(['플레이어 행동당 직업 숙련',num3(mastPerAction(c)),num3(Math.max(...minimal.map(mastPerAction))),Math.max(...minimal.map(mastPerAction))>mastPerAction(c)?'**예**':'아니오'])
++row(['플레이어 행동당 Knowledge',num3(knowPerAction(c)),num3(Math.max(...minimal.map(knowPerAction))),Math.max(...minimal.map(knowPerAction))>knowPerAction(c)?'**예**':'아니오'])
++'\n행동당 진행도는 가장 직접적인 착취 지표다 — 플레이어가 실제로 지불하는 비용은 게임 내 DAY가 아니라 조작 횟수이기 때문이다. v2.4에서는 이 단위에서 순위가 뒤집혔다(Meta XP가 DAY 경과만으로도 쌓였기 때문이다). v2.5는 직업 숙련을 **Final 클리어에만** 부여하므로 하루를 흘려보내서 얻을 수 있는 진행도가 구조적으로 0이다 — 남은 축은 보급 생환으로만 쌓이는 Knowledge뿐이며 위 표의 마지막 행이 그 축을 함께 본다. 반복 farm Run에서 이 관계가 유지되는지는 §5.3의 `meta-farm / repeated` 궤적이 답한다.\n';
 
 md+='\n## 3. DUN-Q20 — 준비의 필요성 / 맨몸 원정\n\n'
 +'A = `zero-supply` (반복 무준비), B = `balanced/adaptive/hybrid` (해저드 인지 준비). DAY 구간별 원정 결과다.\n\n'
@@ -115,8 +126,8 @@ if(fs.existsSync('tests/longitudinal-results-v5.json')){
   +'하나의 계정을 '+L.runsPerTrajectory+'회 연속 Run에 그대로 이어 사용했다. 궤적 '+L.trajectories+'개 × Run '+L.runsPerTrajectory+'회 = 궤적당 '+(L.trajectories*L.runsPerTrajectory).toLocaleString('en-US')+' Run. '
   +'**등급·해금·시작 계약은 전부 실제 Meta 시스템이 준 것이다** — 게임 내 능력치를 직접 주입하지 않았다. Run index 0이 §1~§5의 신규 계정 벤치마크와 같은 조건이다.\n\n';
   for(const co of L.cohorts){
-   md+='### '+co.label+'\n\n'+table(['Run #','시작 등급','시작 해금 수','시작 누적 XP','선택 가능 계약','DAY30 도달','도달 후 승률','전체 클리어','평균 파티 전력','Boss 여유','Meta XP / Run','행동 수 / Run','XP / 행동']);
-   for(const r of co.byIndex)md+=row([r.runIndex,num(r.gradeAtStart),num(r.unlockedAtStart),num(r.xpAtStart),num(r.contractsAvailable),pct(r.reachRate),r.reached30?pct(r.bossWinGivenReach):'분모 0',pct(r.overallClearRate),r.final.resolved?num(r.final.power/r.final.resolved):'—',r.final.resolved?num(r.final.margin/r.final.resolved):'—',num(r.metaXPPerRun),num(r.actionsPerRun),num3(r.metaXPPerAction)]);
+   md+='### '+co.label+'\n\n'+table(['Run #','시작 등급','시작 누적 숙련','시작 서로 다른 마왕','선택 가능 계약','DAY30 도달','도달 후 승률','전체 클리어','평균 파티 전력','Boss 여유','직업 숙련 / Run','행동 수 / Run','숙련 / 행동']);
+   for(const r of co.byIndex)md+=row([r.runIndex,num(r.gradeAtStart),num(r.masteryAtStart),num(r.distinctAtStart),num(r.contractsAvailable),pct(r.reachRate),r.reached30?pct(r.bossWinGivenReach):'분모 0',pct(r.overallClearRate),r.final.resolved?num(r.final.power/r.final.resolved):'—',r.final.resolved?num(r.final.margin/r.final.resolved):'—',num3(mastPerRun(r)),num(r.actionsPerRun),num3(mastPerAction(r))]);
    const g=Object.entries(co.byGrade).sort((a,b)=>Number(a[0])-Number(b[0]));
    if(g.length>1){md+='\n실제 보유 등급 기준으로 다시 묶은 같은 Run들:\n\n'+table(['시작 등급','Run 수','DAY30 도달','도달 후 승률','전체 클리어','평균 파티 전력','Boss 여유']);
     for(const [grade,r] of g)md+=row([grade,r.runs,pct(r.reachRate),r.reached30?pct(r.bossWinGivenReach):'분모 0',pct(r.overallClearRate),r.final.resolved?num(r.final.power/r.final.resolved):'—',r.final.resolved?num(r.final.margin/r.final.resolved):'—']);}
@@ -127,13 +138,13 @@ if(fs.existsSync('tests/longitudinal-results-v5.json')){
   const pool=co=>{const p=co.byIndex.slice(1),runs=p.length*co.trajectories,S=f=>p.reduce((a,r)=>a+f(r),0);
    const resolved=S(r=>r.final.resolved);
    return {runs,clear:S(r=>r.wins)/runs,power:resolved?S(r=>r.final.power)/resolved:null,margin:resolved?S(r=>r.final.margin)/resolved:null,
-    xp:S(r=>r.metaXP)/runs,actions:S(r=>r.actions)/runs,xpPerAction:S(r=>r.metaXP)/Math.max(1,S(r=>r.actions))};};
+    mastery:S(r=>r.metaMastery)/runs,actions:S(r=>r.actions)/runs,masteryPerAction:S(r=>r.metaMastery)/Math.max(1,S(r=>r.actions))};};
   md+='### FRESH ACCOUNT 대 PROGRESSED ACCOUNT\n\n'
   +'Run 0(등급 1 · 해금 0)과 이후 모든 Run을 합산해 비교한다. 단일 Run index의 표본 잡음을 피하기 위해 진행 계정 쪽은 풀링했다.\n\n'
-  +table(['궤적','계정 상태','Run 수','전체 클리어','평균 파티 전력','Boss 여유','Meta XP / Run','행동 수 / Run','XP / 행동']);
+  +table(['궤적','계정 상태','Run 수','전체 클리어','평균 파티 전력','Boss 여유','직업 숙련 / Run','행동 수 / Run','숙련 / 행동']);
   for(const co of L.cohorts){const f=co.byIndex[0],p=pool(co);
-   md+=row([co.label,'FRESH (Run 0)',co.trajectories,pct(f.overallClearRate),f.final.resolved?num(f.final.power/f.final.resolved):'—',f.final.resolved?num(f.final.margin/f.final.resolved):'—',num(f.metaXPPerRun),num(f.actionsPerRun),num3(f.metaXPPerAction)]);
-   md+=row([co.label,'PROGRESSED (Run 1+)',p.runs,pct(p.clear),p.power===null?'—':num(p.power),p.margin===null?'—':num(p.margin),num(p.xp),num(p.actions),num3(p.xpPerAction)]);}
+   md+=row([co.label,'FRESH (Run 0)',co.trajectories,pct(f.overallClearRate),f.final.resolved?num(f.final.power/f.final.resolved):'—',f.final.resolved?num(f.final.margin/f.final.resolved):'—',num3(mastPerRun(f)),num(f.actionsPerRun),num3(mastPerAction(f))]);
+   md+=row([co.label,'PROGRESSED (Run 1+)',p.runs,pct(p.clear),p.power===null?'—':num(p.power),p.margin===null?'—':num(p.margin),num3(p.mastery),num(p.actions),num3(p.masteryPerAction)]);}
   const e=L.cohorts[0],ef=e.byIndex[0],ep=pool(e);
   md+='\n**§5의 신규 계정 클리어율을 게임의 최종 난이도로 읽어서는 안 된다.** 같은 자동 정책이 계정 성장만으로 '+pct(ef.overallClearRate)+' → '+pct(ep.clear)+'로 움직인다. '
   +'다만 평균 파티 전력은 '+num(ef.final.power/ef.final.resolved)+' → '+num(ep.power)+'로 +'+num(ep.power-ef.final.power/ef.final.resolved)+'에 그치고, Boss Power 대비 여유는 최고 등급에서도 '+num(ep.margin)+'로 음수를 유지한다. '
