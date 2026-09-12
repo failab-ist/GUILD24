@@ -531,6 +531,31 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!/#5e4028|#8a6435/.test(counterArt),'the drawers and the counter run are gone');
  assert.ok(!/\.band\.counter\{background:linear-gradient\(180deg,[^)]*#c6a26c/.test(css),
   'and the band no longer continues a counter either side of the art');
+ /* The band ends where the plinth does. Left taller, the register hovered over a strip of
+    empty floor between it and the action bar. */
+ assert.ok(counterArt.includes('viewBox="0 0 360 90"'),
+  'the counter band is as tall as the object in it, so the register lands on the dock');
+ assert.ok(/y="84"[^>]*height="6"/.test(counterArt),'the plinth is the last thing in it');
+
+ /* UI_UX: on the day the player faces the Boss, the standing screen says which Boss. It used
+    to open on a generic 마왕성 plate with a 28px procedural mark, identical every Run. */
+ const fin=fn('finalScreen');
+ assert.ok(fin.includes('Scene.bossArt(s.bossId,s.day,s.sealBreakCount)'),
+  'the Final resolves Boss art from the Run, the same call the D5 / D15 reveals make');
+ assert.ok(fin.includes('D.bossBy[s.bossId]')&&/<h1>'\+E\(b\.name\)/.test(fin),
+  'and names the Boss it is about');
+ assert.ok(!/<h1>마왕성<\/h1>/.test(fin),'the generic castle plate is not the headline any more');
+ assert.ok(fin.includes('제 0 게이트 · 마왕성'),'the castle stays as the place, under the name');
+ assert.ok(/class="boss-face"/.test(fin),'the art is a figure, not an icon beside a card');
+ assert.ok(/\.gate-zero \.boss-face img\{[^}]*object-fit:contain/.test(css),
+  'a silhouette is never cropped to fit');
+ /* Mobile is not the desktop composition scaled down: the phone sizes the art against the
+    viewport so it stays identifiable, and the desktop stands it beside the facts so the
+    roster the player has to choose from is not pushed off. */
+ assert.ok(/\.gate-zero \.boss-face img\{[^}]*height:32vh/.test(css),'the phone sizes the Boss against the viewport');
+ assert.ok(desktop.includes('.p-final .gate-zero{display:flex'),'and only the desktop stands it beside the facts');
+ assert.ok(!/\.p-final \.gate-zero\{display:flex/.test(css.slice(0,css.indexOf('@media(min-width:600px)'))),
+  'that row never reaches the phone layout');
  assert.ok(!app.includes('relicTray')&&!app.includes('relicStrip'),'and the brass plates are off the counter');
  assert.ok(!css.includes('.tray{'),'with no orphan rule left behind');
  assert.ok(/modal==='menu'/.test(app)&&app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900).includes("btn('점포지원','relics')"),

@@ -598,7 +598,17 @@ function finalScreen(){
  const s=game.run,d=s.dungeons[0],need=game.finalRequired();
  if(!s.team.includes(supplyNPC))supplyNPC=s.team[0]||null;
  const roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level);
- const body='<div class="gate-zero">'+Art.mark('final',56)+'<span class="label">제 0 게이트</span><h1>마왕성</h1></div>'
+ /* UI_UX: the Boss is a primary game object, and on the day the player finally faces it the
+    standing screen has to say which one. It used to open on a generic 마왕성 plate with a
+    28px procedural mark, so every Run's last day looked identical. Identity and art resolve
+    from the Run exactly as the D5 / D15 reveals do - Scene.bossArt reads bossId, day and
+    sealBreakCount, so SLOTH shows the form its broken seals earned and the others their
+    battle form - and the castle stays as the place, under the name of who is in it. */
+ const b=D.bossBy[s.bossId],art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
+ const body='<div class="gate-zero">'
+ +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
+      :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
+ +'<div class="who"><span class="label">제 0 게이트 · 마왕성</span><h1>'+E(b.name)+'</h1></div></div>'
  +'<section class="threat"><h2>확인된 위협</h2><div class="fams">'
  +(d.families||[]).map(id=>{const b=D.dungeonBy[id];return '<span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>';}).join('')
  +'</div>'+hazardList(d.hazards)+'</section>'

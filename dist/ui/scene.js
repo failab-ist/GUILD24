@@ -75,7 +75,9 @@ function counter(){
  for(let i=0;i<9;i++)s+=r(74+i*24,58,20,6,'#57636c');
  // a short, shallow plinth - enough that the register is standing rather than hovering
  s+=r(48,66,264,7,'#c6a26c')+r(56,73,248,11,'#6b4a2e')+r(52,84,256,6,'#3c2817');
- return svg(360,120,s,'band-art');
+ /* The band ends where the plinth does, so the register comes down onto the action bar
+    instead of hovering over a strip of empty floor above it. */
+ return svg(360,90,s,'band-art');
 }
 /* ---- GUILD24 corporate seal, used on the order form and the approval stamp ---- */
 function seal(size=56,ink='#2f7a4d'){
@@ -230,8 +232,8 @@ function slot(name,fallback,cls='band-art'){
    the art so a production replacement only has to restate these, never touch a screen. */
 const anchors={
  daysign:{band:'ceiling',left:31.1,top:65.2,width:37.8,height:34.8},
- tillLabel:{band:'counter',left:15,top:8.3,width:70,height:11.7},
- till:{band:'counter',left:17.5,top:23.3,width:65,height:25}
+ tillLabel:{band:'counter',left:15,top:11.1,width:70,height:15.6},
+ till:{band:'counter',left:17.5,top:31.1,width:65,height:33.3}
 };
 const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),
