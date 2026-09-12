@@ -419,4 +419,49 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
   'the Run reset is absent when there is no Run to abandon, rather than present and inert');
 });
 
+test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the taxonomy is not said at all',()=>{
+ // D-7. The role/category tables organise the catalogue; they are not what a player decides
+ // with, and UI-Q39 says they never reach a render path. The DATA stays - ordering weights and
+ // Relic conditions read `category`, and delta.cjs asserts both tables.
+ assert.ok(DATA.categories&&DATA.roles,'the tables are still there for the systems that read them');
+ for(const label of [...Object.values(DATA.roles),...Object.values(DATA.categories)])
+  assert.ok(!app.includes("'"+label+"'")&&!app.includes('>'+label+'<'),
+   'internal taxonomy is not rendered: '+label);
+ assert.ok(!/D\.categories\[|D\.roles\[/.test(app),'and no render path looks it up');
+
+ // D-10. Two ways to fail an expedition, said apart, in the vocabulary each already owns.
+ const readout=fn('readout');
+ assert.ok(readout.includes('전투 전망')&&readout.includes('환경 전망'),'both forecasts are named');
+ assert.ok(readout.includes('Dungeon.estimate('),'the fight keeps its own canonical verdict');
+ assert.ok(/\['취약','불안','대응','충분'\]/.test(readout),
+  'the environment summary is the worst of the Hazard states already on screen');
+ for(const invented of ['안전','위험함','보통','양호'])
+  assert.ok(!readout.includes("'"+invented+"'"),'no new forecast label was invented: '+invented);
+
+ // D-11. Always-available help, keyboard-reachable because it is a native <details>.
+ assert.ok(readout.includes("<details class=\"tip\""),'the ? is a details, so it needs no script');
+ assert.equal((readout.match(/\+help\(/g)||[]).length,2,'one helper, used by both forecasts');
+ assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');
+ assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
+
+ // D-14. Collapsed is the decision; expanded is only what collapsed could not say.
+ const till=fn('till');
+ assert.ok(till.includes('shown.has(r.key)')||till.includes('!shown.has'),
+  'the expander filters out what the change list already showed');
+ assert.ok(!/effectList\(it\)/.test(till),'the full effect list is not repeated under the preview');
+ assert.ok(fn('codex').includes('effectList(it)'),'it still lives in the Codex, where it is the point');
+
+ // D-18. One display rule, in Presentation, used by both places that show a stat.
+ assert.equal(Presentation.stat(19.43,false),'19','a plain value is a whole number');
+ assert.equal(Presentation.stat(19,true),'19','a moved value with no decimal does not grow one');
+ assert.equal(Presentation.stat(22.87,true),'22.9','a moved value keeps the digit that shows it moved');
+ assert.equal(Presentation.amount('combat',22.87),'22.9','the change list reads the same rule');
+ assert.ok(fn('statGrid').includes('Presentation.stat('),'the stat grid reads it too');
+ assert.ok(!/Math\.round\(values\[k\]\)/.test(app),'and no longer rounds on its own');
+
+ // the preview, the forecast and the night all read one Gate - a Deep nominee included
+ assert.ok(till.includes('game.claimedGateFor(n)'),'the supply preview uses the same Gate as the forecast');
+ assert.ok(!/dungeons\[n\.claimedDestination/.test(app),'nothing reads the destination around it any more');
+});
+
 console.log(count+' ui guard groups passed');

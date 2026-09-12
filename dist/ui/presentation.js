@@ -114,7 +114,22 @@ function supplyLines(r){const out=[];
 function supplyImpact(r){return supplyLines(r).map(l=>({...l,who:r.name,
  text:l.items.join(' · ')+' → '+r.name+'의 '+l.effect}));}
 function modeLabel(mode){return D.pricing[mode]?.label||({normal:'정가(이전)',discount:'25% 할인(이전)',free:'무료 제공(이전)',supply:'최종 원정 보급'}[mode])||'이전 거래';}
-function amount(key,value){const v=percent.has(key)?value*100:value;return (Math.round(v*10)/10)+(percent.has(key)?'%p':'');}
-G.Presentation={returning,amount,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
+/* UI_UX §PLAYER STAT TERMINOLOGY - one display rule, shared by every stat the player reads.
+   Growth adds `growth * potential`, so the stored value is fractional almost always; showing
+   that everywhere made every stat read `19.0`, and rounding everywhere hid the one digit that
+   actually matters - what a Trait or an item just changed. So: a plain value reads as a whole
+   number, and a value shown because something moved it keeps one decimal, and only when that
+   decimal is not zero. Display only: the stored value and every gameplay judgement are
+   untouched, and nothing here is ever rounded back into the run. */
+function stat(value,moved=false){
+ const v=Math.round(value*10)/10;
+ if(!moved)return String(Math.round(value));
+ return Number.isInteger(v)?String(v):v.toFixed(1);
+}
+function amount(key,value,moved=true){
+ if(percent.has(key))return (Math.round(value*1000)/10)+'%p';
+ return stat(value,moved);
+}
+G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
  nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightSkip,supplyLines,supplyImpact};
 })(globalThis);

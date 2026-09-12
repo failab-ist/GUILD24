@@ -232,8 +232,23 @@ function readout(n,extra=null){
     same margin the roll uses - so it moves as items are added. It says the attempt is worth
     chasing and nothing more: no percentage, no margin, no readiness score. */
  const signal=Dungeon.greatSuccessSignal(v,d,game.run.facilities);
- return '<div class="readout"><div class="top"><span>전투 전망<b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b></span>'
- +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span></div>'
+ /* Two forecasts, said apart. An expedition can fail two different ways - beaten in the fight,
+    or worn down by the environment - and one blended verdict hides which. Both read their own
+    canonical vocabulary: the fight is Dungeon.estimate (우세/접전/불리), the environment is the
+    weakest Hazard state already computed for the rows below (충분/대응/불안/취약). No new label
+    and no new calculation: the summary IS the worst of the rows the player can see. */
+ const worst=p.hazards.length
+  ?['취약','불안','대응','충분'].find(l=>p.hazards.some(h=>h.label===l))
+  :null;
+ const help=(label,body)=>'<details class="tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
+ return '<div class="readout">'
+ +'<div class="top">'
+  +'<span class="fore">전투 전망<b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b>'
+   +help('전투 전망','이 손님의 지금 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 확정된 결과가 아니다.')+'</span>'
+  +'<span class="fore">환경 전망<b>'+(worst||'위험 없음')+'</b>'
+   +help('환경 전망','게이트의 위험 특성을 지금의 능력과 보급으로 어떻게 버틸지 본 예상이다. 가장 약한 대응을 기준으로 말한다. 확정된 결과가 아니다.')+'</span>'
+  +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
+ +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  +hazardList(p.hazards.map(h=>h.key),p.hazards)
  +(compact?'':'<p class="estimate">지금의 능력과 준비로 본 예상. 실제 원정은 달라질 수 있다.</p>')+'</div>';}
@@ -451,7 +466,13 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
  +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'+hazardList(Presentation.known(d,game))+'</div></div>';}
 function statGrid(n){const values=Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),game.run.facilities).effects;
- return '<div class="detail-stats">'+Adventurer.keys.map(k=>'<div class="detail-stat"><label>'+Presentation.labels[k]+'</label><strong>'+Math.round(values[k])+'</strong></div>').join('')+'</div>';}
+ /* One display rule for every stat the player reads: a plain value is a whole number, and a
+    value something moved keeps the one decimal that shows it moved. Presentation owns it, so
+    this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
+    The adventurer's own stat is the baseline: whatever a Trait, a Relic or a supplied item has
+    added on top is what the decimal is there to show. */
+ return '<div class="detail-stats">'+Adventurer.keys.map(k=>{const moved=values[k]!==n.stats[k];
+  return '<div class="detail-stat'+(moved?' moved':'')+'"><label>'+Presentation.labels[k]+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong></div>';}).join('')+'</div>';}
 // ORDER — a paper, filled. The back room: dark wood and shelving. One order form
 // clipped to the board; offers are ruled lines on it with a price tag hanging off the
 // right edge and a stamped counter dial. No store scene anywhere in this composition.
@@ -477,7 +498,10 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
   +Scene.crate(Art.itemIcon(it.id,30),46)
   +'<span class="col">'
    +'<span class="nm"><b>'+E(it.name)+'</b>'+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
-   +'<span class="kind">'+D.categories[it.category]+' · '+it.roles.map(r=>D.roles[r]).join(' / ')+'</span>'
+   /* UI-Q39: `야외장비 · 능력 보강 / 전문 대응` is the internal taxonomy the catalogue is
+      organised by, not something a player decides with - and it never reaches a render path.
+      The data stays: ordering weights and Relic conditions read `category`. What the row
+      needs is right underneath it, in the effects summary. */
    +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
    +'<span class="have">매입 '+o.price+'G · 이익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+'</span>'
   +'</span>'
@@ -500,7 +524,10 @@ function shelf(isFinal=false){const s=game.run,stocks=groupStock();
 function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.phase==='final'?s.npcs.find(x=>x.id===supplyNPC):game.current();
  if(!st||!n)return '';
  const it=D.itemBy[st.item],isFinal=s.phase==='final',full=n.pack.length>=Adventurer.slots(n);
- const changes=Presentation.preview(n,s.dungeons[n.claimedDestination??n.destination]||s.dungeons[0],s.facilities,it.id);
+ /* The same Gate the forecast below and the night itself use. Reading n.destination directly
+    computed a Deep nominee's preview against their ordinary Gate while the forecast two lines
+    down was already showing the Deep one. */
+ const changes=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  const actions=isFinal?btn('<strong>'+E(n.name)+'에게 보급</strong>','supply','stamp',full?'disabled':'')
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
    const blocked=q.debit>n.money?'소지금 부족':n.refused.includes(it.id+':'+mode)?'오늘 거절됨':full?'가방 가득':'';
@@ -510,7 +537,17 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  +'<h4>보급 후 변화</h4><ul class="effects">'
  +(changes.length?changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join(''):'<li><span>이 손님의 준비는 달라지지 않는다</span><b></b></li>')
  +'</ul>'+readout(n,it.id)
- +'<details><summary>전체 효과 · 상품 설명</summary>'+effectList(it)+'<p class="smalltext">'+E(it.description)+'</p></details>'
+ /* ITEM-Q03: collapsed is the decision - what changes for this customer, and the forecast.
+    Expanded is what the collapsed view cannot say: effects that did not move this customer's
+    preview (a Counter they do not need today, an insurance that only fires on a bad outcome)
+    and the product's own description. Repeating the numbers already shown above just made the
+    panel longer without making the decision easier. */
+ +(()=>{const shown=new Set(changes.map(r=>r.key));
+   const rest=Presentation.rows(it.effects).filter(r=>!shown.has(r.key));
+   if(!rest.length&&!it.description)return '';
+   return '<details><summary>이 손님에게 안 걸리는 효과 · 상품 설명</summary>'
+    +(rest.length?'<ul class="effects">'+rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>':'')
+    +(it.description?'<p class="smalltext">'+E(it.description)+'</p>':'')+'</details>';})()
  +'<p class="smalltext">'+(st.expires===null?'유통기한 없음':'폐기까지 '+(st.expires-s.day)+'일')+' · 가장 먼저 폐기될 재고부터 나간다</p>'
  +'<div class="tills">'+actions+'</div></div>';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
