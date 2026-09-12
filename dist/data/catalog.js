@@ -136,6 +136,14 @@ contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으�
    WRATH baseline. Stage 9 measures candidates against the final RNG baseline and Stage 10
    fills these in once they are approved. Writing a plausible-looking number here would
    make an unapproved guess look like a decision. */
+/* DUNGEON_HAZARD / ECONOMY_ORDER / NPC_TRAIT, 2026-09-12 amendment. Every value here is PASS3.
+   Stage 9 measures candidates and Stage 10 applies exactly one approved set; null means "not
+   approved yet", and the code falls back to the Source rule it replaces rather than guess a
+   number. deepPowerFactor carries the one starting value the Director set. */
+G.DATA.greatSuccess={marginThreshold:null,chanceSlope:null,chanceCap:null,storeGoldScale:null};
+G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:null,sponsorship:null,
+ successExp:null,greatExp:null,successWallet:null,greatWallet:null};
+
 G.DATA.bossTuning={
  prideCombatFactor:null,        // PRIDE: every participant's Final 투력 x this
  envyStatFactor:null,           // ENVY: the single ace's four Stats x this

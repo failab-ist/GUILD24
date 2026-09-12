@@ -48,6 +48,17 @@ function hazardState(h,e,d){
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 function estimate(n,d,facilities){const e=prepare(n,d,facilities).effects,ratio=(e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16)/d.power;return ratio>1.2?'우세':ratio>=.8?'접전':'불리';}
+/* DUNGEON_HAZARD §GREAT SUCCESS. The chance rises with how far the PREPARED Combat ability
+   ran ahead of the Gate's requirement, and never reaches certainty. Exact threshold / curve /
+   cap are PASS3; while they are unapproved the Source's own 1.26 margin rule stands in, so
+   Great Success keeps happening and Stage 9 has something to measure. That carried rule is a
+   step, not a curve - replacing it is what Stage 10 is for. */
+function greatSuccessChance(margin){
+ const g=D.greatSuccess||{};
+ if(g.marginThreshold===null||g.marginThreshold===undefined)return margin>=.26?1:0;
+ if(margin<g.marginThreshold)return 0;
+ return Math.min(g.chanceCap,(margin-g.marginThreshold)*g.chanceSlope);
+}
 function resolve(n,d,r,facilities=[],options={}){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
 
@@ -58,7 +69,7 @@ function resolve(n,d,r,facilities=[],options={}){
  const affected=envRoll<environment;
  const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))})),{key:'supply',weight:p.supply.deficit*.02/Math.max(1,Math.sqrt(d.hazards.length))}];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  const escapeRoll=r.next(),escapeChance=clamp(.48+e.mobility*.005+e.escape+e.luck-(d.scale||1)*.024,.15,.94);
- let outcome=combatSuccess?(score>d.power*1.26&&!affected?'대성공':'성공'):(escapeRoll<escapeChance?'퇴각':'부상');
+ let outcome=combatSuccess?'성공':(escapeRoll<escapeChance?'퇴각':'부상');
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  const injuryRoll=r.next(),deathRoll=r.next();let rescued=false,deathChance=0,avoidedDeath=false;
  if(!combatSuccess&&outcome==='부상'){
@@ -68,6 +79,19 @@ function resolve(n,d,r,facilities=[],options={}){
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&r.next()<clamp(e.escape,.0,.96)){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
  if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
  if(['부상','중상'].includes(outcome)&&r.next()<clamp(e.injuryGuard,0,.9)){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('치료용품·강골이 부상 단계를 완화');p.events.push({id:'injury-guard',items:n.pack.filter(id=>D.itemBy[id].effects.injuryGuard),text:'부상 방어 효과가 부상 단계를 낮췄다.'});}
+ /* Only now, with the ordinary outcome settled, may a 성공 become 대성공. Assigning it right
+    after combat let a later environmental injury overwrite it, and judging it on the post-noise
+    score let a lucky hidden roll pass itself off as preparation - so it is judged on `ability`,
+    which is the prepared Combat ability before noise. The roll is always drawn, so the draw
+    count of an expedition does not depend on its outcome. */
+ const greatMargin=ability/d.power-1,greatRoll=r.next();
+ if(outcome==='성공'&&greatRoll<greatSuccessChance(greatMargin))outcome='대성공';
+ /* ECONOMY_ORDER §NORMAL GREAT SUCCESS STORE GOLD. It follows the Gate/Tier value the
+    expedition already carries, and a same-day sale is not required. A Deep Expedition always
+    returns 0 Store Gold, so the bonus is suppressed there rather than added and subtracted.
+    Scale is PASS3: while unapproved there is no bonus, exactly as an ordinary Success. */
+ const storeBonus=outcome==='대성공'&&!d.deep&&D.greatSuccess.storeGoldScale!==null
+  ?Math.round((35+d.day*8)*(d.reward||1)*D.greatSuccess.storeGoldScale):0;
  if(outcome==='사망')n.alive=false;
  n.injury=outcome==='중상'?2:outcome==='부상'?1:Math.max(0,n.injury-1);
  n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
@@ -81,7 +105,7 @@ function resolve(n,d,r,facilities=[],options={}){
      The sentence is composed in the presentation layer so one wording serves Night,
      Closing and the returning-visitor line. */
   p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */

@@ -8,6 +8,16 @@ class Game{
  this.rng=new G.RNG(seed);this.run={version:6,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1200+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
  for(const[id,num]of[['rice',2],['water',2],['bandage',1],['potion',1]])this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
+ /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
+    stream derived from the run seed, so it costs the run stream nothing and a reload cannot
+    re-roll it. Exactly one of D7/D14 and one of D21/D28, plus a third on a PASS3 weighting -
+    while that weighting is unapproved the Run holds the minimum two rather than a guessed mix.
+    Future dates stay hidden: only the Day that has arrived is ever shown. */
+ const deep=new G.RNG(String(seed)+':deep');
+ {const early=deep.pick([7,14]),late=deep.pick([21,28]),third=deep.next();
+  const days=[early,late],odds=D.deepTuning.threeOccurrenceChance;
+  if(odds!==null&&third<odds)days.push(deep.pick([7,14,21,28].filter(d=>d!==early&&d!==late)));
+  this.run.deep={days:days.sort((a,b)=>a-b),today:null};}
  const boss=new G.RNG(String(seed)+':boss');this.run.bossId=boss.pick(D.bosses).id;this.run.bossReveal={identitySeen:false,traitSeen:false};
  if(this.run.bossId==='SLOTH'){this.run.slothDays=boss.shuffle([15,20,25]).slice(0,2).sort((a,b)=>a-b);this.run.sealBreakCount=0;}
 this.run.phase='foundation';this.relicWindow(0);return this.run;
@@ -21,6 +31,41 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     the whole easter egg and a player who misses it loses nothing. The roll is always drawn so
     the draw count of creating a customer does not depend on who is left; a given identity is
     offered once per Run, dead or alive, because it is a fixed identity rather than a name. */
+ /* The Gate a customer actually walks into. A Deep nominee keeps the base Gate's Family, Tier
+    and Hazard set - only the required Combat Power rises, by one global factor - and this is the
+    single object the forecast and the night result both read, so what the player was shown is
+    what was resolved. A later destination reassignment cannot overwrite a confirmed Deep
+    destination, because the nomination, not n.destination, is what selects the Gate here. */
+ gateFor(n){const s=this.run,t=s.deep?.today;
+  if(!n)return null;
+  if(!t||t.nomineeId!==n.id)return s.dungeons[n.destination];
+  const base=s.dungeons[t.gateIndex];
+  return {...base,power:base.power*D.deepTuning.powerFactor,deep:true};}
+ /* The Gate the player is shown for a customer. A confirmed Deep nomination is authoritative,
+    so it settles any claimed-destination ambiguity a Trait introduced; otherwise what the player
+    sees is what the customer claimed. For a nominee this and gateFor return the same Gate, which
+    is what keeps the forecast and the night result the same thing. */
+ claimedGateFor(n){const s=this.run,t=s.deep?.today;
+  if(n&&t&&t.nomineeId===n.id)return this.gateFor(n);
+  return s.dungeons[n?.claimedDestination??n?.destination]||s.dungeons[0];}
+ /* What today's Deep is offering, or null when there is nothing to offer: no Deep today, one
+    already nominated, or - while the sponsorship amount is still PASS3 - no price to charge. */
+ deepOffer(){const s=this.run,t=s.deep?.today,cost=D.deepTuning.sponsorship;
+  if(!t||t.nomineeId||cost===null)return null;
+  const base=s.dungeons[t.gateIndex];
+  return {gate:base,gateIndex:t.gateIndex,cost,required:base.power*D.deepTuning.powerFactor};}
+ /* SALE §DEEP EXPEDITION NOMINATION: the current visitor only, before their first committed
+    transaction today, and only if the Store can pay. No Job / Level / rarity gate is added. */
+ canNominateDeep(n){const s=this.run,offer=this.deepOffer();
+  return !!offer&&s.phase==='sell'&&!!n&&this.current()?.id===n.id
+   &&!n.pack.length&&!n.history.some(h=>h.day===s.day)&&s.money>=offer.cost;}
+ nominateDeep(npcId){const s=this.run,n=s.npcs.find(x=>x.id===npcId),offer=this.deepOffer();
+  if(!offer)throw Error('오늘은 추천할 심층원정이 없습니다.');
+  if(!this.canNominateDeep(n))throw Error('아직 거래하지 않은 현재 손님만 추천할 수 있습니다.');
+  s.money-=offer.cost;s.daily.spent+=offer.cost;s.stats.spent+=offer.cost;
+  s.deep.today.nomineeId=n.id;s.deep.today.paid=offer.cost;
+  n.destination=offer.gateIndex;n.claimedDestination=offer.gateIndex;n.destinationFinal=true;
+  s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
  addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:s.contract==='premium',...opts});
   const spare=G.Adventurer.EASTER.filter(e=>!s.npcs.some(x=>x.name===e.name));
   if(this.rng.next()<D.balance.easterChance&&spare.length)n.name=this.rng.pick(spare).name;
@@ -43,10 +88,15 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.audit)return s.stats.waste>=6;
   if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22;
   return true;}
- eventEligibleDay(day){return day>=3&&day<=29&&![5,10,15,20,25].includes(day);}
+ /* EVENT §DEEP EXPEDITION DAY EXCLUSION: a Day this Run actually holds a 심층원정 produces no
+    Normal Event, whether or not the player later nominates anyone. rollEvent draws before it
+    asks this, so suppressing an Event costs the run stream no draw. The 35% chance is NOT
+    compensated for the days this removes - Stage 9 measures the real count. */
+ eventEligibleDay(day){return day>=3&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day);}
+ deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
  rollEvent(){const s=this.run,fired=this.rng.next()<.35;if(!this.eventEligibleDay(s.day)||!fired)return null;
   const pool=D.events.filter(e=>this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
- morning(){const s=this.run;s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
+ morning(){const s=this.run;s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
  const expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=Math.max(0,n.injury-1);n.status=n.injury?'부상':'건강';}}n.fatigue=Math.max(0,n.fatigue-2);n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
  if([5,10,15,20,25,30].includes(s.day))this.relicWindow(s.day);if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];this.generateOffers();this.save();return;}
@@ -58,6 +108,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
   if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
  if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+ /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
+    chosen once the Gates are final so the recorded Power is the real one. The tie is broken on
+    a stream derived from the seed and the Day, which keeps the run stream's draw count on a
+    Deep Day identical to any other Day. Family, Tier and Hazards are the base Gate's. */
+ if(this.deepDay(s.day)){const top=Math.max(...s.dungeons.map(d=>d.tier));
+  const pool=s.dungeons.map((d,i)=>i).filter(i=>s.dungeons[i].tier===top);
+  s.deep.today={day:s.day,gateIndex:new G.RNG(String(s.seed)+':deep:'+s.day).pick(pool),nomineeId:null,paid:0};}
  if((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)this.addNPC({rookie:!!ev.rookie,royal:!!ev.royal});
  if(s.pity.npc>=8){const fresh=s.npcs.filter(n=>!n.introduced);if(fresh.length&&this.rng.next()<.6){fresh[0].rarity=Math.max(1,fresh[0].rarity);fresh[0].potential+=.05;}}
  this.generateOffers();
@@ -87,7 +144,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
- const price=Math.round(it.sell*rule.mult),d=this.run.dungeons[n.destination]||this.run.dungeons[0],p=it.effects;
+ const price=Math.round(it.sell*rule.mult),d=this.gateFor(n)||this.run.dungeons[0],p=it.effects;
  let fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0),need=.53+Math.min(.29,fit*.012);
  if(n.injury&&it.category==='medicine')need+=.25;if(n.pack.length)need-=.1;
  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(price>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(n.visits<=2)need+=t.shyBias||0;}
@@ -122,7 +179,20 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;const units=q*(o.promo?2:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
  loyal(n,amount){const was=G.Adventurer.isTrustedRegular(n);n.loyalty=clamp(n.loyalty+amount,0,100);if(!was&&G.Adventurer.isTrustedRegular(n))this.run.stats.regulars++;}
  depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n)this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
- night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=s.dungeons[n.destination];const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=(n.pilgrim?'순례 행렬을 따라 '+n.name+'은 예상 목적지 ':'허세를 부린 '+n.name+'은 말했던 ')+s.dungeons[n.claimedDestination].name+' 대신 '+d.name+'으로 향했다.';n.records.at(-1).routeChange=rep.routeChange;}s.results.push(rep);if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=12;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=25;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+ night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=(n.pilgrim?'순례 행렬을 따라 '+n.name+'은 예상 목적지 ':'허세를 부린 '+n.name+'은 말했던 ')+s.dungeons[n.claimedDestination].name+' 대신 '+d.name+'으로 향했다.';n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
+     Two bands only - Success and Great Success - with no extra Day/Tier multiplier, because the
+     ordinary reward already carries that. EXP goes through the ordinary growth curve (no
+     automatic Level +1) and the Wallet bonus uses the ordinary persisted money channel, so a
+     later visit carries it under the existing Wallet rules. A failed outcome earns no special
+     Deep bonus and keeps its ordinary handling. Amounts are PASS3; while unapproved they are 0. */
+  if(d.deep&&n.alive&&['성공','대성공'].includes(rep.outcome)){
+   const t=D.deepTuning,great=rep.outcome==='대성공';
+   const bonusXp=(great?t.greatExp:t.successExp)||0,bonusWallet=(great?t.greatWallet:t.successWallet)||0;
+   rep.deep={great,bonusXp,bonusWallet};
+   if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
+   if(bonusWallet)n.money+=bonusWallet;
+  }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
+  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=12;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=25;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  s.daily.operating=ev.overheadFree?0:D.balance.operating+(s.contract==='guild'?20:0)+(s.contract==='premium'?25:0)+(s.dayFacilities?.includes('showcase')?10:0)+(s.dayFacilities?.includes('hub')?35:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }

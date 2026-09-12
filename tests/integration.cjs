@@ -36,6 +36,19 @@ function step(g){
 }
 function play(g,limit=4000){let turns=0;while(g.run.phase!=='end'&&turns++<limit)if(!step(g))break;return g;}
 function fresh(seed){const g=new Game();g.autosave=false;g.start(seed);return g;}
+// Drive a Run to the Sale phase of one of its own Deep Days, with a customer at the counter.
+function drivenToDeepSale(){
+ for(let i=0;i<60;i++){
+  const g=fresh('deep-sale-'+i);
+  for(let n=0;n<400&&g.run.phase!=='end';n++){
+   const s=g.run;
+   if(s.phase==='sell'&&s.deep.today&&g.current()&&!g.current().pack.length
+      &&!g.current().history.some(h=>h.day===s.day))return g;
+   if(!step(g))break;
+  }
+ }
+ throw Error('no Run reached the Sale phase of a Deep Day');
+}
 function reload(g){g.save();const s=Save.import(Save.export(g.account,g.run));const h=new Game(s.account,s.run);h.autosave=false;return h;}
 
 // --- SAVE CONTRACT -----------------------------------------------------------------
@@ -200,6 +213,115 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
   assert.equal(typeof Save.reset,'function');
   assert.equal(Object.keys(Save).filter(k=>/reset/i.test(k)).length,1,'there is exactly one reset entry point');
  }finally{delete global.localStorage;}
+});
+
+test('DUNGEON_HAZARD / CORE_RUN §DEEP EXPEDITION: the schedule and the Gate are decided once',()=>{
+ for(let i=0;i<40;i++){
+  const g=fresh('deep-'+i),d=g.run.deep.days;
+  assert.ok(d.length===2||d.length===3,'exactly two or three occurrences');
+  assert.equal(new Set(d).size,d.length,'no Day twice');
+  assert.ok(d.every(x=>[7,14,21,28].includes(x)),'only the four candidate windows');
+  assert.ok(d.some(x=>x===7||x===14),'at least one of D7/D14');
+  assert.ok(d.some(x=>x===21||x===28),'at least one of D21/D28');
+  assert.deepEqual(fresh('deep-'+i).run.deep.days,d,'the same seed schedules the same Days');
+  assert.deepEqual(reload(g).run.deep.days,d,'and a reload does not re-roll them');
+ }
+});
+
+test('DUNGEON_HAZARD §DEEP EXPEDITION: only the required Power changes, and only for the nominee',()=>{
+ const sponsorship=DATA.deepTuning.sponsorship;
+ DATA.deepTuning.sponsorship=120;              // PASS3; forced here so the flow can be exercised
+ try{
+  const g=drivenToDeepSale();
+  const t=g.run.deep.today,base=g.run.dungeons[t.gateIndex],n=g.current();
+  assert.ok(g.canNominateDeep(n),'an untraded current visitor can be nominated');
+  const moneyBefore=g.run.money;
+  g.nominateDeep(n.id);
+  assert.equal(g.run.money,moneyBefore-120,'the sponsorship is charged exactly once');
+  assert.equal(g.run.deep.today.nomineeId,n.id,'today is assigned');
+
+  const deep=g.gateFor(n);
+  assert.equal(deep.family,base.family,'Family is the base Gate\'s');
+  assert.equal(deep.tier,base.tier,'so is Tier');
+  assert.deepEqual(deep.hazards,base.hazards,'and the Hazard set');
+  assert.equal(deep.power,base.power*DATA.deepTuning.powerFactor,'only the required Power rises');
+  assert.equal(deep.deep,true,'and it is marked as the Deep variant');
+  // the forecast the player reads and the Gate the night resolves are the same object
+  assert.deepEqual(g.claimedGateFor(n),deep,'the shown Gate is the resolved Gate');
+  // everyone else walks into their ordinary Gate
+  for(const other of g.run.npcs)if(other.id!==n.id)
+   assert.ok(!g.gateFor(other)?.deep,'a Deep Gate is not handed to anyone else: '+other.name);
+
+  // a confirmed Deep destination is not overwritten by a later reassignment
+  if(g.run.dungeons.length>1){
+   n.destination=n.destination===0?1:0;
+   assert.equal(g.gateFor(n).power,deep.power,'a later destination change does not move the nominee');
+  }
+  // and nobody else can be nominated afterwards
+  assert.equal(g.deepOffer(),null,'there is nothing left to offer once today is assigned');
+  const reloaded=reload(g);
+  assert.equal(reloaded.run.deep.today.nomineeId,n.id,'the nomination survives a reload');
+  assert.equal(reloaded.run.deep.today.paid,120,'and so does the sponsorship, without refund');
+  assert.equal(reloaded.deepOffer(),null,'a reload cannot reopen a spent nomination');
+ }finally{DATA.deepTuning.sponsorship=sponsorship;}
+});
+
+test('SALE §DEEP EXPEDITION NOMINATION: the current visitor only, and only before they trade',()=>{
+ const sponsorship=DATA.deepTuning.sponsorship;
+ DATA.deepTuning.sponsorship=120;
+ try{
+  const g=drivenToDeepSale(),n=g.current();
+  const other=g.run.npcs.find(x=>x.id!==n.id);
+  assert.equal(g.canNominateDeep(other),false,'someone who is not at the counter cannot be nominated');
+  assert.throws(()=>g.nominateDeep(other.id),'and asking anyway is refused');
+  // once they have bought something today the window is closed
+  n.history.push({day:g.run.day,item:'rice',mode:'full',paid:10});
+  assert.equal(g.canNominateDeep(n),false,'not after the first committed transaction');
+  n.history.pop();
+  // and the Store must be able to pay
+  const money=g.run.money;g.run.money=10;
+  assert.equal(g.canNominateDeep(n),false,'not without the sponsorship in the till');
+  g.run.money=money;
+  assert.equal(g.canNominateDeep(n),true,'otherwise it is offered, with no Job or Level gate');
+  // skipping costs nothing at all
+  g.depart();
+  assert.equal(g.run.deep.today.nomineeId,null,'skipping leaves today unassigned');
+  assert.equal(g.run.deep.today.paid,0,'and charges nothing');
+ }finally{DATA.deepTuning.sponsorship=sponsorship;}
+});
+
+test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the Store gets nothing',()=>{
+ const t=DATA.deepTuning,keep={...t};
+ Object.assign(t,{sponsorship:120,successExp:40,greatExp:90,successWallet:60,greatWallet:150});
+ const scale=DATA.greatSuccess.storeGoldScale;DATA.greatSuccess.storeGoldScale=.5;
+ try{
+  let checked=0;
+  for(let i=0;i<40&&checked<3;i++){
+   let g;try{g=drivenToDeepSale();}catch(e){break;}
+   const n=g.current(),before={money:g.run.money,wallet:n.money,xp:n.xp,level:n.level};
+   g.nominateDeep(n.id);
+   const paid=before.money-g.run.money;
+   while(g.run.phase==='sell')g.depart();
+   const rep=g.run.results.find(r=>r.npcId===n.id);
+   if(!rep)continue;
+   checked++;
+   assert.ok(rep.deep,'the result knows it was a Deep Expedition');
+   assert.equal(rep.storeBonus,0,'a Deep Expedition returns the Store no Gold, 대성공 included');
+   if(['성공','대성공'].includes(rep.outcome)){
+    const great=rep.outcome==='대성공';
+    assert.equal(rep.deep.bonusXp,great?90:40,'the EXP bonus has two bands and no Day/Tier multiplier');
+    assert.equal(rep.deep.bonusWallet,great?150:60,'and so does the Wallet bonus');
+    assert.ok(n.money>=before.wallet+rep.deep.bonusWallet-rep.loot||n.money>before.wallet,
+     'the Wallet bonus lands in the ordinary persisted money channel');
+   }else{
+    assert.equal(rep.deep.bonusXp,0,'a failed outcome earns no special Deep EXP');
+    assert.equal(rep.deep.bonusWallet,0,'and no special Deep Wallet');
+   }
+   assert.ok(paid>0,'the sponsorship left the till');
+   assert.ok(!('deepWallet' in n),'no second Wallet pool was created');
+  }
+  assert.ok(checked>0,'at least one Deep Expedition actually resolved');
+ }finally{Object.assign(DATA.deepTuning,keep);DATA.greatSuccess.storeGoldScale=scale;}
 });
 
 // --- DETERMINISM -------------------------------------------------------------------

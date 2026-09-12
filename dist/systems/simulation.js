@@ -23,6 +23,11 @@ const contribution=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobi
 
 function blank(runs,policy,pricing,build){
  return {runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
+  /* 2026-09-12 amendment, measurement only. greatByBand buckets Great Success by how far the
+     prepared Combat ability ran ahead of the Gate, which is the thing Stage 9 has to judge the
+     curve on; prepStartGold samples the D29 close, before any D30 preparation spend. */
+  great:{success:0,great:0,storeGold:0,byBand:{}},deepDays:0,deepTaken:0,deepSponsor:0,
+  prepStartGold:[],wallet2Slot:{samples:0,afford:0,used:0},
   npc:{samples:0,alive:0,level:0,maxLevel:0,loyalty:0,regulars:0,wallet:0,growth:0},bands:{},
   final:{reached:0,party:0,full:0,resolved:0,power:0,assault:0,margin:0,cleared:0},
   /* Party-size counterfactual: the strongest legal 1 / 2 / 3 party at the SAME generated D30
@@ -32,10 +37,16 @@ function blank(runs,policy,pricing,build){
      the visit and loyalty history the run already keeps. */
   q15:{runs:0,invested:[],newcomer:[],chosenInvested:0,chosenNewcomer:0,powerInvested:0,powerNewcomer:0}};
 }
+/* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
+function pct(xs,q){if(!xs||!xs.length)return 0;const a=[...xs].sort((x,y)=>x-y);
+ return a[Math.min(a.length-1,Math.max(0,Math.round(q*(a.length-1))))];}
 function derive(out,count){
  for(const [day,values]of Object.entries(out.wallets)){if(!Array.isArray(values))continue;values.sort((a,b)=>a-b);out.wallets[day]={count:values.length,mean:values.reduce((a,b)=>a+b,0)/values.length,p10:values[Math.floor(values.length*.1)],median:values[Math.floor(values.length*.5)],p90:values[Math.floor(values.length*.9)]};}
  const days=Object.entries(out.dayReached).reduce((a,[d,n])=>a+Number(d)*n,0);
- return {...out,averageDay:days/count,easterPerRun:out.easter/count,easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
+ return {...out,averageDay:days/count,easterPerRun:out.easter/count,deepDaysPerRun:out.deepDays/count,deepTakenPerRun:out.deepTaken/count,
+  greatSuccessRate:out.great.success?out.great.great/out.great.success:0,greatStoreGoldPerRun:out.great.storeGold/count,
+  prepStartGoldMedian:pct(out.prepStartGold,.5),prepStartGoldP10:pct(out.prepStartGold,.1),prepStartGoldP25:pct(out.prepStartGold,.25),
+  prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
 }
 
 /* One Run, played by `ctx.policy` on the account the caller owns. The account is NOT copied
@@ -51,7 +62,18 @@ function playRun(g,out,ctx){
  const originalSell=g.sell.bind(g);g.sell=(id,mode)=>{const m=out.modes[mode]??={attempts:0,accepted:0,revenue:0,profit:0,loyalty:0};m.attempts++;act();const n=g.current(),st=s.inventory.find(x=>x.id===id),old=n.loyalty;const ok=originalSell(id,mode);if(ok){m.accepted++;m.revenue+=n.history.at(-1).paid;m.profit+=n.history.at(-1).paid-(st.cost||0);m.loyalty+=n.loyalty-old;(out.items[st.item]??={ordered:0,sold:0}).sold++;}return ok;};
  const originalNight=g.night.bind(g);g.night=()=>{const day=stat(s.day);day.slots+=s.queue.reduce((a,id)=>a+G.Adventurer.slots(s.npcs.find(n=>n.id===id)),0);day.consumed+=s.queue.reduce((a,id)=>a+s.npcs.find(n=>n.id===id).pack.length,0);
  for(const id of s.queue){const n=s.npcs.find(n=>n.id===id),d=s.dungeons[n.destination],a=G.Dungeon.prepare({...n,pack:[]},d,s.facilities),b=G.Dungeon.prepare(n,d,s.facilities);const ability=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16;out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
- originalNight();for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
+ originalNight();
+ /* 2026-09-12 amendment measurement. Banding by prepared Combat margin is what lets Stage 9
+    judge the Great Success curve on evidence instead of on the shipped number. */
+ for(const report of s.results){
+  if(['성공','대성공'].includes(report.outcome)){out.great.success++;
+   const m=report.greatMargin,band=m<0?'<0':m<.1?'0-.1':m<.26?'.1-.26':m<.5?'.26-.5':m<1?'.5-1':'1+';
+   const bb=out.great.byBand[band]??={success:0,great:0};bb.success++;
+   if(report.outcome==='대성공'){out.great.great++;bb.great++;}}
+  out.great.storeGold+=report.storeBonus||0;
+  if(report.deep)out.deepTaken++;
+ }
+ for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
  function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]);return (build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:380))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
@@ -118,7 +140,11 @@ function playRun(g,out,ctx){
       the first Closing is an ordinary 재고 정리 action and buys more days per interaction. */
    if(engagement.liquidateOpening)while(s.inventory.length){g.liquidate(s.inventory[0].id);act();}
    while(s.money<0&&s.inventory.length){g.liquidate(s.inventory[0].id);act();}
-   g.closeDay();act();
+   /* ECONOMY_ORDER §D29 CLOSING -> D30 PREP START GOLD. Sampled after the D29 settlement and
+      before any D30 preparation spend, which is the only point that answers whether D30 choices
+      are constrained. Measurement only. */
+   const wasDay=s.day;g.closeDay();act();
+   if(wasDay===29)out.prepStartGold.push(s.money);
   }
   else if(s.phase==='final'){buySupport();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
    measureFinal();
@@ -134,6 +160,7 @@ function playRun(g,out,ctx){
  /* measurement only - how often a Rare Reference identity actually turns up, so the starting
     chance can be judged on evidence in Stage 9 rather than on the number itself. */
  {const seen=s.npcs.filter(n=>G.Adventurer.EASTER.some(e=>e.name===n.name)).length;out.easter+=seen;out.easterRuns+=Number(seen>0);}
+ out.deepDays+=(s.deep?.days||[]).length;
  {const alive=s.npcs.filter(n=>n.alive&&n.introduced);out.npc.samples++;out.npc.alive+=alive.length;out.npc.level+=alive.reduce((a,n)=>a+n.level,0);out.npc.maxLevel+=alive.length?Math.max(...alive.map(n=>n.level)):0;out.npc.loyalty+=alive.reduce((a,n)=>a+n.loyalty,0);out.npc.regulars+=s.stats.regulars;out.npc.wallet+=alive.reduce((a,n)=>a+n.money,0);out.npc.growth+=alive.reduce((a,n)=>a+n.level-1,0);}
  if(s.bossDebug){out.final.resolved++;out.final.power+=s.bossDebug.power;out.final.assault+=s.bossDebug.assault;out.final.margin+=s.bossDebug.assault-s.bossDebug.bossPower;out.final.cleared+=Number(!!s.win);}
  out.wins+=Number(!!s.win);out.bankrupt+=Number(s.day<30);out.deaths+=s.stats.deaths;out.money+=s.money;

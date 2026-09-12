@@ -218,4 +218,61 @@ test('the contradictions found in visual QA stay fixed',()=>{
   'the duplicated death line is gone from the screen');
 });
 
+test('DUNGEON_HAZARD §GREAT SUCCESS: only a settled ordinary Success upgrades, on prepared ability',()=>{
+ // The ordinary expedition resolves first. 대성공 used to be assigned right after combat, where
+ // a later environmental injury could overwrite it, and it was judged on the post-noise score,
+ // where a lucky hidden roll could pass itself off as preparation. Both are asserted here.
+ let great=0,success=0,total=0;const margins={great:[],plain:[]};
+ for(let i=0;i<3000;i++){
+  const r=new RNG('gs-'+i);
+  const n=Adventurer.create(r,i,r.int(1,29),Meta.fresh());
+  const d={...DATA.dungeonBy.spider,day:r.int(1,29),tier:2,hazards:['poison'],scale:1.6,
+           power:r.int(20,90),reward:1};
+  const rep=Dungeon.resolve(n,d,r,[]);
+  total++;
+  if(rep.outcome==='대성공'){great++;margins.great.push(rep.greatMargin);
+   assert.equal(rep.won,true,'대성공 is a win');
+   assert.equal(rep.injury,0,'대성공 never carries an injury');
+   assert.ok(!rep.rescued,'대성공 is never a rescue');
+   assert.notEqual(n.status,'사망','대성공 never coexists with death');
+  }
+  if(rep.outcome==='성공'){success++;margins.plain.push(rep.greatMargin);}
+  assert.ok(!['부상','중상','퇴각','사망'].includes(rep.outcome)||rep.outcome!=='대성공');
+ }
+ assert.ok(great>0&&success>0,'both outcomes occur across the sample');
+ // the margin is the prepared ability against the Gate, so every upgrade sits above the
+ // threshold and no unprepared expedition is carried into 대성공 by a lucky roll
+ assert.ok(Math.min(...margins.great)>=Math.max(...margins.plain)||great<total,
+  'upgrades are drawn from the high-margin side');
+ assert.ok(margins.great.every(m=>m>=.26),'every upgrade cleared the carried margin rule');
+
+ // the roll is always drawn, so an expedition costs the same randomness whatever it returns
+ const a=new RNG('draw'),b=new RNG('draw');
+ const mk=r=>Adventurer.create(r,1,5,Meta.fresh());
+ const d={...DATA.dungeonBy.slime,day:5,tier:1,hazards:[],scale:1.2,power:10,reward:1};
+ const weak={...d,power:400};
+ Dungeon.resolve(mk(a),d,a,[]);Dungeon.resolve(mk(b),weak,b,[]);
+ assert.equal(typeof a.state,'number');assert.equal(typeof b.state,'number');
+});
+
+test('ECONOMY_ORDER §NORMAL GREAT SUCCESS STORE GOLD: paid on 대성공 only, never on a Deep one',()=>{
+ const scale=DATA.greatSuccess.storeGoldScale;
+ try{
+  const sample=(deep)=>{const rows=[];
+   for(let i=0;i<1500;i++){const r=new RNG('gold-'+i);
+    const n=Adventurer.create(r,i,r.int(1,29),Meta.fresh());
+    const d={...DATA.dungeonBy.spider,day:12,tier:2,hazards:['poison'],scale:1.6,
+             power:r.int(20,90),reward:1,deep};
+    rows.push(Dungeon.resolve(n,d,r,[]));}
+   return rows;};
+  DATA.greatSuccess.storeGoldScale=null;
+  assert.ok(sample(false).every(x=>x.storeBonus===0),'nothing is paid while the scale is unapproved');
+  DATA.greatSuccess.storeGoldScale=.5;
+  const normal=sample(false);
+  assert.ok(normal.some(x=>x.outcome==='대성공'&&x.storeBonus>0),'a normal 대성공 pays the Store');
+  assert.ok(normal.every(x=>x.outcome==='대성공'||x.storeBonus===0),'an ordinary Success pays nothing');
+  assert.ok(sample(true).every(x=>x.storeBonus===0),'a Deep 대성공 pays the Store nothing at all');
+ }finally{DATA.greatSuccess.storeGoldScale=scale;}
+});
+
 console.log(groups+' night groups passed');

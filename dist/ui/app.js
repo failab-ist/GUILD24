@@ -177,7 +177,7 @@ function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())r
  return '<button class="brass" data-action="relics">점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
 // The readiness readout. Qualitative only: 우세/접전/불리 and 취약/불안/대응/충분.
 function readout(n,extra=null){
- const compact=!!extra,d=game.run.dungeons[n.claimedDestination??n.destination]||game.run.dungeons[0];
+ const compact=!!extra,d=game.claimedGateFor(n);
  const v={...n,traits:Presentation.traits(n),pack:extra?[...n.pack,extra]:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
  return '<div class="readout"><div class="top"><span>전투 전망<b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b></span>'
  +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span></div>'
@@ -373,10 +373,10 @@ function finishCoach(skip=false){
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}</span>${tr.note?`<small>${E(tr.note)}</small>`:''}</div>`;}).join('')}</div>`;}
-function destPlate(n){const d=game.run.dungeons[n.claimedDestination??n.destination];if(!d)return '';const b=sigilOf(d);
+function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
  +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'+hazardList(Presentation.known(d,game))+'</div></div>';}
-function statGrid(n){const values=Dungeon.prepare({...n,traits:Presentation.traits(n)},game.run.dungeons[n.claimedDestination??n.destination]||game.run.dungeons[0],game.run.facilities).effects;
+function statGrid(n){const values=Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),game.run.facilities).effects;
  return '<div class="detail-stats">'+Adventurer.keys.map(k=>'<div class="detail-stat"><label>'+Presentation.labels[k]+'</label><strong>'+Math.round(values[k])+'</strong></div>').join('')+'</div>';}
 // ORDER — a paper, filled. The back room: dark wood and shelving. One order form
 // clipped to the board; offers are ruled lines on it with a price tag hanging off the

@@ -138,6 +138,25 @@ function finalLockOk(l,ids){
     || (Number.isInteger(l.sealBreakCount) && l.sealBreakCount>=0 && l.sealBreakCount<=3));
 }
 
+/* DUNGEON_HAZARD / CORE_RUN §DEEP EXPEDITION SAVE CONTRACT. The schedule is decided once per
+   Run and today's base Gate once it is generated, so a reload can neither re-roll them nor
+   reopen a nomination that was already spent. A Day with no Deep carries no `today` at all. */
+function deepOk(r,ids){
+ const p=r.deep;
+ if(!p||!Array.isArray(p.days))return false;
+ if(p.days.length<2||p.days.length>3)return false;
+ if(new Set(p.days).size!==p.days.length)return false;
+ if(!p.days.every(d=>[7,14,21,28].includes(d)))return false;
+ if(!p.days.some(d=>d===7||d===14)||!p.days.some(d=>d===21||d===28))return false;
+ if(p.today===null)return true;
+ const t=p.today;
+ return !!t && p.days.includes(t.day)
+  && Number.isInteger(t.gateIndex) && t.gateIndex>=0 && t.gateIndex<r.dungeons.length
+  && (t.nomineeId===null || ids.includes(t.nomineeId))
+  && Number.isFinite(t.paid) && t.paid>=0
+  && (t.nomineeId!==null || t.paid===0);
+}
+
 /* The final expedition: two different Families, revealed on D30. */
 function finalOk(f,D){
  return Array.isArray(f.families) && f.families.length===2
@@ -208,6 +227,7 @@ G.Save={
    if(!runShapeOk(r))return false;
    if(!bossOk(r,D))return false;
    const ids=r.npcs.map(n=>n.id);
+   if(!deepOk(r,ids))return false;
    if(!rosterOk(r,ids))return false;
    if(!r.npcs.every(n=>npcOk(n,D)))return false;
    if(!stockOk(r,D))return false;

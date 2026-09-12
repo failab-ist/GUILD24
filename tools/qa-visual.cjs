@@ -244,8 +244,14 @@ async function focusProbe(page){
  if(dial<6)fails.push(`the quantity dial rendered ${dial} controls; the probe needs the order screen`);
  else{
   // the densest repeat control in the game: every button here shares one data-action and
-  // carries no data-id, so a first-match restore lands on the wrong product's minus key
-  const last=dial>10?Math.floor(dial/5)-1:0;
+  // carries no data-id, so a first-match restore lands on the wrong product's minus key.
+  // Pick the LAST row the store can actually afford to raise: a disabled button cannot take
+  // focus at all, so probing a fixed index turns an ordinary poor-run into a false failure.
+  const last=await page.evaluate(`(()=>{const rows=[...document.querySelectorAll('#app [data-action="qty"]')]
+   .filter(x=>x.textContent.trim()==='+'&&!x.disabled).map(x=>Number(x.dataset.index));
+   return rows.length?Math.max(...rows):-1;})()`);
+  if(last<0)fails.push('no affordable quantity control on the order screen; the probe needs one');
+  else{
   await page.evaluate(`(()=>{const b=[...document.querySelectorAll('#app [data-action="qty"]')]
    .filter(x=>x.dataset.index==='${last}'&&x.textContent.trim()==='+')[0];b.focus();})()`);
   const before=await where();
@@ -261,6 +267,7 @@ async function focusProbe(page){
   const zeroed=await where();
   if(zeroed.action!=='qty'||zeroed.index!==String(last))
    fails.push(`disabling the pressed control dropped the keyboard to ${zeroed.tag}#${zeroed.id} instead of its neighbour`);
+  }
  }
 
  // a modal owns focus, and the restore correctly declines to reach into it. What it cannot

@@ -20,17 +20,37 @@ test('EVENT-003: catalog is exactly the canonical 22 with the two rare easter eg
  for(const e of DATA.events)assert.ok(e.reveal&&e.description,e.id+' needs reveal and effect copy');
 });
 
-test('EVENT-001: eligible days are D3-D29 minus every Relic window day',()=>{
- const g=fresh();
+test('EVENT-001 / §DEEP EXPEDITION DAY EXCLUSION: eligible days drop the Relic windows and this Run\'s Deep Days',()=>{
+ const g=fresh(),deep=g.run.deep.days;
+ assert.ok(deep.length>=2&&deep.length<=3,'the Run holds two or three Deep Days');
  for(let day=0;day<=30;day++){
-  const want=day>=3&&day<=29&&![5,10,15,20,25].includes(day);
+  const want=day>=3&&day<=29&&![5,10,15,20,25].includes(day)&&!deep.includes(day);
   assert.equal(g.eventEligibleDay(day),want,'day '+day);
  }
- assert.equal([...Array(31).keys()].filter(d=>g.eventEligibleDay(d)).length,22,'22 eligible days');
+ // 22 was the pre-Deep baseline; a Run now carries 19 or 20 eligible Days, and the 35% chance
+ // is deliberately NOT raised to compensate - Stage 9 measures what actually happens.
+ const eligible=[...Array(31).keys()].filter(d=>g.eventEligibleDay(d)).length;
+ assert.equal(eligible,22-deep.length,'each Deep Day removes exactly one eligible Day');
+ assert.ok(eligible>=19&&eligible<=20,'19-20 eligible Days per Run: '+eligible);
+ // suppression does not depend on anyone being nominated, and costs the run stream no draw
+ for(const day of deep)assert.equal(g.eventEligibleDay(day),false,'D'+day+' never rolls an Event');
+});
+
+test('EVENT §DEEP EXPEDITION DAY EXCLUSION: suppressing an Event costs the run stream no draw',()=>{
+ // rollEvent draws before it asks about eligibility, so a Deep Day consumes the same randomness
+ // as any other Day. If that ever stops being true every seed after D7 moves.
+ const g=fresh();
+ const before=g.rng.state;g.run.day=g.run.deep.days[0];g.rollEvent();const deepCost=g.rng.state;
+ const h=fresh();
+ const start=h.rng.state;h.run.day=[...Array(30).keys()].find(d=>h.eventEligibleDay(d));h.rollEvent();
+ assert.notEqual(before,deepCost,'a draw was still taken on the Deep Day');
+ assert.notEqual(start,h.rng.state,'and on an ordinary eligible Day');
 });
 
 test('EVENT-001: daily chance is 35%, never the retired 74%',()=>{
- const g=fresh('rate');g.run.day=7;
+ // an ordinary eligible Day for this Run: D7 is a candidate Deep window, and on a Run that
+ // actually holds it the chance is 0 by design rather than 35%.
+ const g=fresh('rate');g.run.day=[...Array(30).keys()].find(d=>g.eventEligibleDay(d));
  let fired=0;const N=6000;
  for(let i=0;i<N;i++)if(g.rollEvent())fired++;
  const rate=fired/N;
@@ -39,7 +59,7 @@ test('EVENT-001: daily chance is 35%, never the retired 74%',()=>{
 });
 
 test('EVENT-003: rare easter eggs land clearly less often than an ordinary Event',()=>{
- const g=fresh('weight');g.run.day=7;
+ const g=fresh('weight');g.run.day=[...Array(30).keys()].find(d=>g.eventEligibleDay(d));
  const seen={};for(let i=0;i<20000;i++){const e=g.rollEvent();if(e)seen[e.id]=(seen[e.id]||0)+1;}
  const rare=(seen.bard||0)+(seen.nightshift||0);
  const normal=Object.entries(seen).filter(([id])=>!['bard','nightshift'].includes(id));
