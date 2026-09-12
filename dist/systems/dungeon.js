@@ -2,7 +2,7 @@
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 function prepare(n,d,facilities=[]){
  let e={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit,escape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,luck:0,variance:0};const why=[],events=[],mult={foodMult:1,potionMult:1};
- const behaviour=new Set(['priceBias','buyBias','rareBias','commonBias','shyBias','revisitMult','recoveryDelta','foodSupplyDelta','supplyPerItem','injuredCombat']);
+ const behaviour=new Set(['priceBias','buyBias','rareBias','commonBias','revisitMult','recoveryDelta','foodSupplyDelta','supplyPerItem','injuredCombat']);
  const traitSum=k=>n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects[k]||0),0);
  const foodSupplyDelta=traitSum('foodSupplyDelta'),supplyPerItem=traitSum('supplyPerItem');
  for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){if(k in mult)mult[k]*=v;else if(behaviour.has(k))continue;else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}

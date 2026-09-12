@@ -68,7 +68,10 @@ traits:[
 ['collector','수집가','mixed',{rareBias:0.12,commonBias:-0.05},{rareBias:'benefit',commonBias:'cost'}],
 ['thrifty','실속파','mixed',{commonBias:0.10,rareBias:-0.10},{commonBias:'benefit',rareBias:'cost'}],
 ['social','사교적인','positive',{revisitMult:1.25},{revisitMult:'benefit'}],
-['shy','낯가림','negative',{shyBias:-0.10},{shyBias:'cost'},'세 번째 방문부터는 이 부담이 사라집니다.'],
+/* A Trait is who somebody is, so it does not wear off. This one used to stop applying from
+   the third visit, which left the only Trait in the pool that could become nothing at all
+   mid-run. It is the same hurdle, permanently. */
+['shy','낯가림','negative',{buyBias:-0.10},{buyBias:'cost'}],
 ['mender','회복체질','positive',{recoveryDelta:-1},{recoveryDelta:'benefit'}],
 ['stamina','지구력','positive',{fatigue:-1},{fatigue:'benefit'}],
 ['weary','쉽게 지침','negative',{fatigue:1},{fatigue:'cost'}],

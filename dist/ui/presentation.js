@@ -1,8 +1,8 @@
 (function(G){
 const D=G.DATA;
-const labels={supply:'보급',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식 고유 효과',potionMult:'포션 고유 효과',foodSupplyDelta:'음식 1개당 보급',supplyPerItem:'음식·음료 1개당 보급',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',shyBias:'초기 방문 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 보정',injuryGuard:'부상 방어',injuryRisk:'부상 위험',loot:'전리품',xpMult:'경험치',luck:'행운 보정',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:'120G 초과 구매 의사',buyBias:'구매 의사'};
-const percent=new Set(['escape','injuryGuard','injuryRisk','loot','luck','variance','rareLoot','priceBias','buyBias','rareBias','commonBias','shyBias']);
-const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','injuryRisk','escape','rareLoot','rareBias','commonBias','shyBias','luck']);
+const labels={supply:'보급',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식 고유 효과',potionMult:'포션 고유 효과',foodSupplyDelta:'음식 1개당 보급',supplyPerItem:'음식·음료 1개당 보급',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 보정',injuryGuard:'부상 방어',injuryRisk:'부상 위험',loot:'전리품',xpMult:'경험치',luck:'행운 보정',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:'120G 초과 구매 의사',buyBias:'구매 의사'};
+const percent=new Set(['escape','injuryGuard','injuryRisk','loot','luck','variance','rareLoot','priceBias','buyBias','rareBias','commonBias']);
+const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','injuryRisk','escape','rareLoot','rareBias','commonBias','luck']);
 const days=new Set(['recoveryDelta']);
 const mult=new Set(['xpMult','foodMult','potionMult','revisitMult']);
 const negative=new Set(['fatigue','injuryRisk','variance']);

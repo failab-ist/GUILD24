@@ -107,8 +107,17 @@ test('TRAIT-Q16 / SALE: purchase and revisit Traits use the existing systems',()
  assert.ok(need(['collector'],common)<need([],common),'수집가 wants Common less');
  assert.ok(need(['thrifty'],common)>need([],common),'실속파 wants Common more');
  assert.ok(need(['thrifty'],rare)<need([],rare),'실속파 wants Rare+ less');
- n.visits=1;assert.ok(need(['shy'],common)<need([],common),'낯가림 hesitates early');
- n.visits=3;assert.equal(need(['shy'],common),need([],common),'낯가림 penalty ends from the third visit');
+ // A Trait is who somebody is, so it applies for as long as they have it. 낯가림 was the one
+ // Trait in the pool that could become nothing at all part-way through a Run.
+ for(const visits of [1,3,12]){
+  n.visits=visits;
+  assert.ok(need(['shy'],common)<need([],common),'낯가림 still hesitates on visit '+visits);
+ }
+ // no Trait may quietly stop applying as a Run goes on: nothing in the intent path reads
+ // how far along the customer is.
+ const intent=fs.readFileSync(__dirname+'/../dist/systems/shop.js','utf8')
+  .split('\n').find(l=>l.includes('for(const id of n.traits)'));
+ assert.ok(!/visits|n\.day|s\.day/.test(intent),'purchase intent does not gate a Trait on run progress');
  assert.equal(DATA.traitBy.social.effects.revisitMult,1.25);
  assert.equal(DATA.traitBy.aloof.effects.revisitMult,0.80);
  const src=fs.readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
@@ -149,6 +158,48 @@ test('COPY-002: NPC name voice is Korean-flavoured fantasy, not a Western or syl
  assert.ok(suffix/names.length<.25,'no -우스/-엘/-리온 monoculture: '+suffix+'/'+names.length);
  for(const n of names)assert.ok(n.length>=2&&n.length<=6&&!/\s/.test(n),'unreadable name: '+n);
  for(const gone of ['노아','바엘','카엘','아몬','레온'])assert.ok(!names.includes(gone),'retired Western-majority name '+gone);
+});
+
+test('NPC_TRAIT: a Trait is who somebody is, so none of them wears off during a Run',()=>{
+ // A Trait may depend on the situation - what is being sold, what the Gate presses on, whether
+ // they are hurt - and those conditions come back. What it may not do is stop applying because
+ // the Run has gone on: a Trait that is worth nothing from visit 3 is a Trait the player stops
+ // being able to plan around, and it reads as a bug rather than a personality.
+ // Measured rather than read: for every Trait, whatever it is worth on the first visit of the
+ // first Day it must still be worth late in the Run. Source scanning cannot tell a Trait gate
+ // apart from the ordinary Day curve that sits on the same line.
+ const g2=fresh('trait-permanence');
+ const probe=(traits,{visits,day})=>{
+  const base=g2.run.npcs[0];
+  const n={...JSON.parse(JSON.stringify(base)),traits,visits,money:9999,pack:[],alive:true,injury:0};
+  g2.run.day=day;g2.run.queue=[n.id];g2.run.cursor=0;
+  const i=g2.run.npcs.findIndex(x=>x.id===n.id);g2.run.npcs[i]=n;
+  const d=g2.run.dungeons[0];
+  const eff=Dungeon.prepare(n,d,g2.run.facilities).effects;
+  return {common:g2.interest(n,DATA.itemBy.rice,'full').chance,
+          rare:g2.interest(n,DATA.itemBy.highpotion,'full').chance,
+          eff};
+ };
+ const early={visits:1,day:1},late={visits:12,day:29};
+ for(const t of DATA.traits){
+  const a0=probe([],early),a1=probe([t.id],early);
+  const b0=probe([],late),b1=probe([t.id],late);
+  const delta=(x,y)=>({common:y.common-x.common,rare:y.rare-x.rare,
+   eff:Object.fromEntries(Object.keys(y.eff).map(k=>[k,(y.eff[k]||0)-(x.eff[k]||0)]))});
+  const A=delta(a0,a1),B=delta(b0,b1);
+  for(const ch of ['common','rare'])
+   if(Math.abs(A[ch])>1e-9)
+    assert.ok(Math.abs(B[ch])>1e-9,t.name+' stops affecting purchase intent ('+ch+') later in the Run');
+  for(const k of Object.keys(A.eff))
+   if(Math.abs(A.eff[k])>1e-9)
+    assert.ok(Math.abs(B.eff[k])>1e-9,t.name+' stops affecting '+k+' later in the Run');
+ }
+ // and the catalogue no longer promises one wears off
+ for(const t of DATA.traits){
+  const text=(t.note||'')+' '+Object.keys(t.effects).join(' ');
+  for(const expiry of ['사라집니다','없어집니다','이후에는'])
+   assert.ok(!text.includes(expiry),t.name+' promises to stop applying: '+t.note);
+ }
 });
 
 console.log(count+' trait groups passed');
