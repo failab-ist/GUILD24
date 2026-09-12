@@ -31,9 +31,16 @@ const names=[
  "달고네","야콰","단쥬","주메니","비녜","노르게","바넬","실타렌","비자룬","누가렛",
  "양프네","데야","리보나","자게미","쿠레미","아프리마","레니콧","바라게","구세라","바울리"];
 function name(r,rarity){return r.pick(names);}
-/* Where a name's portrait lives, from its position in the pool. Nothing per-NPC is stored,
-   so a save carried forward cannot hold a portrait id that no longer addresses anything. */
+/* COPY_WORLD_VOICE 9 - the Rare Reference identities. They are random_eligible:false, so they
+   are never in `names` and never consume one of the 200 normal slots; they carry their own
+   fixed asset id instead. Who may appear and how often is the Shop's business (SHOP.addNPC);
+   this file only owns who they are. Checked against the production pool by npc-assets.cjs. */
+const EASTER=[{id:'E001',name:'요화니우스'},{id:'E002',name:'상혀크'},{id:'E003',name:'진호르'}];
+/* Where a name's portrait lives. Nothing per-NPC is stored, so a save carried forward cannot
+   hold a portrait id that no longer addresses anything - a normal name resolves to its slot
+   from its position in the pool, a Rare Reference name to its own fixed asset id. */
 const SLOTS=100,portraits=new Map(names.map((n,i)=>[n,{gender:i<SLOTS?'M':'F',slot:(i%SLOTS)+1}]));
+for(const e of EASTER)portraits.set(e.name,{easter:e.id});
 const portraitOf=name=>portraits.get(name)||null;
 function create(r,index,day,account,opts={}){
  const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?[51,30,14,4,1]:[60,27,10,2.5,.5]);
@@ -50,5 +57,5 @@ function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-
    rather than keeping a number of its own. */
 const TRUSTED_REGULAR=51;
 const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
-G.Adventurer={create,name,names,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,rank:n=>D.jobBy[n.job].ranks[Math.min(3,Math.floor(n.level/5))],slots:n=>n.level>=10?3:2};
+G.Adventurer={create,name,names,EASTER,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,rank:n=>D.jobBy[n.job].ranks[Math.min(3,Math.floor(n.level/5))],slots:n=>n.level>=10?3:2};
 })(globalThis);

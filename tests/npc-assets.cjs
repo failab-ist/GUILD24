@@ -48,6 +48,22 @@ test('EASTER: three fixed identities, named on the file, never in the random poo
  }
  const normal=new Set([...pool.normal.M,...pool.normal.F].map(e=>e.name));
  for(const e of pool.easter)assert.ok(!normal.has(e.name),e.name+' is not also a normal name');
+
+ // The shipped identities are the production ones, and each addresses its own fixed asset -
+ // never one of the 200 normal slots, so an Easter visitor consumes no normal binding.
+ require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/systems/rng.js');
+ require('../dist/systems/meta.js');require('../dist/systems/adventurer.js');
+ require('../dist/ui/assets/npc/manifest.js');require('../dist/ui/art.js');require('../dist/ui/scene.js');
+ const A=globalThis.Adventurer;
+ assert.deepEqual(A.EASTER,pool.easter.map(e=>({id:e.id,name:e.name})),
+  'the shipped identities are the production ones, ids and names, in order');
+ for(const e of pool.easter){
+  assert.deepEqual(A.portraitOf(e.name),{easter:e.id},e.name+' resolves to its own fixed asset id');
+  assert.equal(globalThis.Scene.npcArt({id:'npc-e',name:e.name}),'ui/assets/npc/easter/'+e.id+'.webp',
+   'and the shipped build addresses that file: '+e.id);
+  assert.ok(fs.existsSync(path.resolve(__dirname,'..','dist/ui/assets/npc/easter',e.id+'.webp')),
+   'the shipped asset exists: '+e.id);
+ }
 });
 
 test('NORMAL: the shipped name pool is the production pool, in the order that binds it',()=>{
@@ -72,8 +88,8 @@ test('NORMAL: the shipped name pool is the production pool, in the order that bi
  // random_eligible:false means exactly that - the three fixed identities are not in the pool
  // a visitor is drawn from, and the runtime has no slot to give them.
  for(const e of pool.easter){
-  assert.ok(!A.names.includes(e.name),e.name+' is never drawn as a random visitor');
-  assert.equal(A.portraitOf(e.name),null,e.name+' has no normal slot');
+  assert.ok(!A.names.includes(e.name),e.name+' is never drawn from the normal pool');
+  assert.ok(!A.portraitOf(e.name).slot,e.name+' holds no normal slot; it carries its own asset id');
  }
  // a fixed identity is still bindable, by NPC id through the manifest, not by name
  globalThis.Scene.manifest['npc.npc-easter']='ui/assets/npc/easter/E001.webp';

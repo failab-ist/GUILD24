@@ -22,7 +22,7 @@ const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-b
 const contribution=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35;
 
 function blank(runs,policy,pricing,build){
- return {runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,
+ return {runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
   npc:{samples:0,alive:0,level:0,maxLevel:0,loyalty:0,regulars:0,wallet:0,growth:0},bands:{},
   final:{reached:0,party:0,full:0,resolved:0,power:0,assault:0,margin:0,cleared:0},
   /* Party-size counterfactual: the strongest legal 1 / 2 / 3 party at the SAME generated D30
@@ -35,7 +35,7 @@ function blank(runs,policy,pricing,build){
 function derive(out,count){
  for(const [day,values]of Object.entries(out.wallets)){if(!Array.isArray(values))continue;values.sort((a,b)=>a-b);out.wallets[day]={count:values.length,mean:values.reduce((a,b)=>a+b,0)/values.length,p10:values[Math.floor(values.length*.1)],median:values[Math.floor(values.length*.5)],p90:values[Math.floor(values.length*.9)]};}
  const days=Object.entries(out.dayReached).reduce((a,[d,n])=>a+Number(d)*n,0);
- return {...out,averageDay:days/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
+ return {...out,averageDay:days/count,easterPerRun:out.easter/count,easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
 }
 
 /* One Run, played by `ctx.policy` on the account the caller owns. The account is NOT copied
@@ -131,6 +131,9 @@ function playRun(g,out,ctx){
  for(const id of s.facilities){const b=out.relicOutcomes[id]??={runs:0,wins:0,death:0,gold:0};b.runs++;b.wins+=Number(!!s.win);b.death+=s.stats.deaths;b.gold+=s.money;}
  for(const npc of s.npcs.filter(n=>s.team.includes(n.id))){(out.jobs[npc.job]??={}).bossParticipation=((out.jobs[npc.job]||{}).bossParticipation||0)+1;}
  out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
+ /* measurement only - how often a Rare Reference identity actually turns up, so the starting
+    chance can be judged on evidence in Stage 9 rather than on the number itself. */
+ {const seen=s.npcs.filter(n=>G.Adventurer.EASTER.some(e=>e.name===n.name)).length;out.easter+=seen;out.easterRuns+=Number(seen>0);}
  {const alive=s.npcs.filter(n=>n.alive&&n.introduced);out.npc.samples++;out.npc.alive+=alive.length;out.npc.level+=alive.reduce((a,n)=>a+n.level,0);out.npc.maxLevel+=alive.length?Math.max(...alive.map(n=>n.level)):0;out.npc.loyalty+=alive.reduce((a,n)=>a+n.loyalty,0);out.npc.regulars+=s.stats.regulars;out.npc.wallet+=alive.reduce((a,n)=>a+n.money,0);out.npc.growth+=alive.reduce((a,n)=>a+n.level-1,0);}
  if(s.bossDebug){out.final.resolved++;out.final.power+=s.bossDebug.power;out.final.assault+=s.bossDebug.assault;out.final.margin+=s.bossDebug.assault-s.bossDebug.bossPower;out.final.cleared+=Number(!!s.win);}
  out.wins+=Number(!!s.win);out.bankrupt+=Number(s.day<30);out.deaths+=s.stats.deaths;out.money+=s.money;

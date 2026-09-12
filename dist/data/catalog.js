@@ -147,7 +147,9 @@ G.DATA.bossTuning={
  lustStatFactor:null,           // LUST: a non-regular participant's four Stats x this
  slothBossPower:null            // SLOTH: effective Boss Power by break count [0,1,2,3]
 };
-G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:230,combatNoise:.175,rerollBase:30};
+/* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
+   Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
+G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:230,combatNoise:.175,rerollBase:30,easterChance:.01};
 G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intent:.18,loyalty:6}};
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);

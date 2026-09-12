@@ -42,15 +42,14 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
   assert.equal(g.run.bossId,new RNG(String(seed)+':boss').pick(DATA.bosses).id,
    seed+': the Boss is dealt by the derived stream, not by the run stream');
  }
- // And these are the main stream's own anchors. sig-1 / sig-2 are unchanged since before the
- // Boss existed. sig-0 moved exactly once, at the Stage 8 name pool: `addNPC` re-rolls a name
- // that collides with a living NPC, and at 200 names the collision these nine openers used to
- // hit no longer happens, so the stream reaches familyOrder one draw earlier. A move here that
- // no intended RNG change explains means something leaked into the run stream.
+ // And these are the main stream's own anchors. They moved twice in Stage 8, both times for a
+ // recorded reason: the 200-name pool changed how often `addNPC` re-rolls a colliding name,
+ // and the Rare Reference roll added one always-drawn value per customer created. A move here
+ // that no intended RNG change explains means something leaked into the run stream.
  for(const [seed,order,intro] of [
-  ['sig-0',['snow','spider','fire','crypt','slime'],[7,8]],
-  ['sig-1',['slime','crypt','spider','snow','fire'],[4,9]],
-  ['sig-2',['crypt','snow','spider','fire','slime'],[4,11]]]){
+  ['sig-0',['snow','fire','slime','spider','crypt'],[5,10]],
+  ['sig-1',['crypt','slime','snow','spider','fire'],[5,10]],
+  ['sig-2',['fire','crypt','spider','snow','slime'],[5,9]]]){
   const g=new Game();g.autosave=false;g.start(seed);
   assert.deepEqual(g.run.familyOrder,order,seed+' still draws the same Family order');
   assert.deepEqual(g.run.familyIntro,intro,seed+' still draws the same Family introduction Days');
@@ -205,4 +204,40 @@ test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide 
 });
 
 test('v0.1 fixture intentionally rejected without reinterpretation',()=>{const fs=require('node:fs');const old=fs.readFileSync(require('node:path').join(__dirname,'fixtures/v01-sale.json'),'utf8');assert.throws(()=>Save.import(old));});
+test('COPY §9: a Rare Reference identity turns up rarely, once per Run, and changes nothing but the name',()=>{
+ const EASTER=Adventurer.EASTER.map(e=>e.name),seen=new Set();
+ let runs=0,visits=0,dupRuns=0;
+ for(let i=0;i<250;i++){
+  const g=new Game();g.autosave=false;g.start('easter-'+i);
+  for(let step=0;step<45&&g.run.phase!=='end';step++){const s=g.run;
+   if(s.phase==='morning')g.beginOrder();else if(s.phase==='order')g.open();
+   else if(s.phase==='sell')g.depart();else if(s.phase==='night')g.finishNight();
+   else if(s.phase==='closing'){if(g.closeDay()===false)break;}else break;}
+  const found=g.run.npcs.filter(n=>EASTER.includes(n.name)).map(n=>n.name);
+  found.forEach(n=>seen.add(n));
+  if(new Set(found).size!==found.length)dupRuns++;
+  runs++;visits+=found.length;
+ }
+ assert.equal(dupRuns,0,'the same identity never appears twice in one Run');
+ assert.ok(visits>0,'the identities are reachable at all');
+ assert.equal(seen.size,3,'all three are reachable across Runs, not just the first');
+ // rare, and rare because of the chance rather than because it is nearly impossible
+ assert.ok(visits/runs<1,'a Rare Reference visitor stays rare: '+(visits/runs).toFixed(3)+' per Run');
+ assert.equal(DATA.balance.easterChance,.01,'the approved starting chance, unchanged by Work');
+
+ // Only the name differs. The identity is the whole easter egg: no stat, trait, rarity or
+ // level rides on it, so a player who misses the reference loses nothing.
+ const build=chance=>{const g=new Game();g.autosave=false;g.start('easter-shape');
+  DATA.balance.easterChance=chance;const n=g.addNPC();DATA.balance.easterChance=.01;return n;};
+ const plain=build(0),rare=build(1);
+ assert.ok(EASTER.includes(rare.name),'forcing the roll produces a Rare Reference visitor');
+ assert.ok(!EASTER.includes(plain.name),'not forcing it produces an ordinary one');
+ for(const k of ['job','rarity','level','traits','stats','potential','traitSlots'])
+  assert.deepEqual(rare[k],plain[k],'the identity changes nothing but the name: '+k);
+
+ // it is a name, not a system: no phase, currency or unlock came with it
+ const src=require('node:fs').readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
+ assert.ok(!/easterPhase|easterCurrency|easterUnlock/.test(src),'no Easter subsystem was introduced');
+});
+
 console.log(checks+' revision groups passed');

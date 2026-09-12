@@ -133,7 +133,8 @@ function npcArt(n){
  const override=manifest['npc.'+n.id];
  if(override)return override;
  const A=G.NPCAssets,at=G.Adventurer?.portraitOf(n.name);
- if(A&&at)return A.base+'normal/'+at.gender+'/'+String(at.slot).padStart(3,'0')+A.ext;
+ if(A&&at)return A.base+(at.easter?'easter/'+at.easter
+                                 :'normal/'+at.gender+'/'+String(at.slot).padStart(3,'0'))+A.ext;
  return npcPool.length?npcPool[Math.abs(n.appearance||0)%npcPool.length]:null;
 }
 /* One card back for every unrevealed customer. It carries the store's mark and nothing

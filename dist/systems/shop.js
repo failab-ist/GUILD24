@@ -16,7 +16,16 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  has(id){return this.run.facilities.includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
  stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:it.days?this.run.day+it.days+G.Relics.shelf(this,it):null,cost:cost??it.buy});}
- addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:s.contract==='premium',...opts});for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);s.npcs.push(n);return n;}
+ /* COPY_WORLD_VOICE 9: rarely the visitor is a Rare Reference identity instead of an ordinary
+    one. Only the name changes - no stat, trait, rarity or reward differs, so the reference is
+    the whole easter egg and a player who misses it loses nothing. The roll is always drawn so
+    the draw count of creating a customer does not depend on who is left; a given identity is
+    offered once per Run, dead or alive, because it is a fixed identity rather than a name. */
+ addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:s.contract==='premium',...opts});
+  const spare=G.Adventurer.EASTER.filter(e=>!s.npcs.some(x=>x.name===e.name));
+  if(this.rng.next()<D.balance.easterChance&&spare.length)n.name=this.rng.pick(spare).name;
+  else for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
+  s.npcs.push(n);return n;}
  burden(tier){const roll=this.rng.next();return tier===2&&roll<.35?3:tier===3&&roll<.55?5:0;}
  finalEligible(){return this.run.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery);}
  makeFinal(){const s=this.run,base=D.dungeonBy.final;
