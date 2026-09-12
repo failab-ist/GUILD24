@@ -390,8 +390,19 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
   'the contract screen can be reopened during the foundation takeover');
  assert.ok(fn('relicTakeover').includes("'recontract'"),'and the way back is offered there');
  assert.ok(app.includes("case'recontract'"),'the action exists');
- const recontract=app.slice(app.indexOf("case'recontract'"),app.indexOf("case'recontract'")+160);
+ const recontract=app.slice(app.indexOf("case'recontract'"),app.indexOf("case'recontract'")+220);
  assert.ok(!/game\.end\(|runs\+\+/.test(recontract),'going back never spends the Run');
+ // ...and it must not become a free re-roll either. The DAY 0 store support has already been
+ // shown by then, so returning keeps this store's seed: changing the contract changes the
+ // contract. Only an explicitly typed seed, or abandoning a store that has opened, makes a
+ // new world. (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
+ const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+700);
+ assert.ok(start.includes("s?.phase==='foundation'?s.seed"),
+  'returning from an unopened store reuses its seed instead of minting a new one');
+ assert.ok(start.indexOf('typed||')<start.indexOf("'g24-'+Date.now()"),
+  'a typed seed still wins, and a fresh seed is the last resort');
+ assert.ok(fn('newRun').includes("game.run?.phase==='foundation'?E(game.run.seed)"),
+  'the carried seed is shown rather than applied behind the player');
  // an unopened store is not something the player is abandoning, so it is not described as one
  for(const f of [fn('newRun'),fn('renderModal')])
   if(f.includes('현재 런 포기 · 새 점포 준비')||f.includes('보상 없이 포기'))
