@@ -123,10 +123,18 @@ function hazardIcon(key,size=20){
    replaces it) with no layout work; the card layers stay independent of the image. */
 const npcPool=['ui/assets/npc/npc-01.png','ui/assets/npc/npc-02.png','ui/assets/npc/npc-03.png',
                'ui/assets/npc/npc-04.png','ui/assets/npc/npc-05.png'];
+/* A customer's portrait is their name. The production pool binds each name to one
+   gender folder and slot, so the address is derived rather than stored: nothing per-NPC
+   has to be saved, and a save carried forward cannot point at a slot that moved.
+   Scene.manifest still overrides by NPC id, which is how a fixed identity (an Easter
+   portrait) is bound without giving the pool a second addressing rule. */
 function npcArt(n){
- if(!n||!npcPool.length)return null;
- const file=manifest['npc.'+n.id]||npcPool[Math.abs(n.appearance||0)%npcPool.length];
- return file;
+ if(!n)return null;
+ const override=manifest['npc.'+n.id];
+ if(override)return override;
+ const A=G.NPCAssets,at=G.Adventurer?.portraitOf(n.name);
+ if(A&&at)return A.base+'normal/'+at.gender+'/'+String(at.slot).padStart(3,'0')+A.ext;
+ return npcPool.length?npcPool[Math.abs(n.appearance||0)%npcPool.length]:null;
 }
 /* One card back for every unrevealed customer. It carries the store's mark and nothing
    else: no silhouette, no colour, no rarity, no per-customer variation of any kind. */

@@ -139,8 +139,12 @@ test('COPY-002: NPC name voice is Korean-flavoured fantasy, not a Western or syl
  const src=fs.readFileSync(__dirname+'/../dist/systems/adventurer.js','utf8');
  const names=JSON.parse(src.match(/const names=(\[[\s\S]*?\]);/)[1]);
  assert.equal(new Set(names).size,names.length,'no duplicate names');
- assert.ok(names.length>=60,'pool is large enough for the Living NPC Cap');
- for(const anchor of ['요화니우스','지오니아','민자이','고쉬스앵'])assert.ok(names.includes(anchor),'missing tone anchor '+anchor);
+ assert.equal(names.length,200,'the pool is the full production pool, not a sample of it');
+ // §15 lists four tone anchors as direction. Three of them are ordinary names and are in the
+ // pool; 요화니우스 is also a §9 Rare Reference identity, which the production pool marks
+ // random_eligible:false, so it is deliberately not among the names a visitor is drawn from.
+ for(const anchor of ['지오니아','민자이','고쉬스앵'])assert.ok(names.includes(anchor),'missing tone anchor '+anchor);
+ assert.ok(!names.includes('요화니우스'),'the Rare Reference identity is not a random visitor');
  const suffix=names.filter(n=>/(우스|엘|리온)$/.test(n)).length;
  assert.ok(suffix/names.length<.25,'no -우스/-엘/-리온 monoculture: '+suffix+'/'+names.length);
  for(const n of names)assert.ok(n.length>=2&&n.length<=6&&!/\s/.test(n),'unreadable name: '+n);

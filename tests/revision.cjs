@@ -34,12 +34,21 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
   assert.equal(again.run.bossId,g.run.bossId,'the same seed deals the same Boss');
  }
  assert.equal(ids.size,7,'every Boss is reachable across seeds');
- // The Boss comes from a stream derived from the run seed rather than the main one, so
- // the main stream is untouched. These three are what the build produced for these seeds
- // BEFORE the Boss was added: if dealing a Boss ever consumes a main-stream draw, the
- // run stops matching its own history here.
+ // The Boss comes from a stream derived from the run seed rather than the main one. That
+ // is asserted directly: the same derived stream, rebuilt from the seed alone, deals the
+ // same Boss - so the Boss is not read off the main stream at all.
+ for(const seed of ['sig-0','sig-1','sig-2','sig-3']){
+  const g=new Game();g.autosave=false;g.start(seed);
+  assert.equal(g.run.bossId,new RNG(String(seed)+':boss').pick(DATA.bosses).id,
+   seed+': the Boss is dealt by the derived stream, not by the run stream');
+ }
+ // And these are the main stream's own anchors. sig-1 / sig-2 are unchanged since before the
+ // Boss existed. sig-0 moved exactly once, at the Stage 8 name pool: `addNPC` re-rolls a name
+ // that collides with a living NPC, and at 200 names the collision these nine openers used to
+ // hit no longer happens, so the stream reaches familyOrder one draw earlier. A move here that
+ // no intended RNG change explains means something leaked into the run stream.
  for(const [seed,order,intro] of [
-  ['sig-0',['fire','slime','spider','crypt','snow'],[4,11]],
+  ['sig-0',['snow','spider','fire','crypt','slime'],[7,8]],
   ['sig-1',['slime','crypt','spider','snow','fire'],[4,9]],
   ['sig-2',['crypt','snow','spider','fire','slime'],[4,11]]]){
   const g=new Game();g.autosave=false;g.start(seed);

@@ -82,10 +82,15 @@ test('the line is chosen from saved state, so it costs no randomness and survive
  assert.equal(Copy.arrive(b.run.npcs[0],b.run.day,false),line,'a reload keeps the same line');
 });
 
-test('COPY-002 / §9: the approved Rare Reference names are in the pool, with no dedicated meme',()=>{
+test('COPY-002 / §9: the approved Rare Reference names are reserved, with no dedicated meme',()=>{
  const src=read('dist/systems/adventurer.js');
+ // §9 keeps these three as Rare Reference identities and makes their special copy eligible
+ // only when such an NPC is actually in the Run. The production pool marks all three
+ // random_eligible:false and gives each its own fixed portrait, so they are reserved rather
+ // than drawn: no random visitor may ever be one of them.
+ const names=JSON.parse(src.match(/const names=(\[[\s\S]*?\]);/)[1]);
  for(const name of ['요화니우스','상혀크','진호르'])
-  assert.ok(src.includes('"'+name+'"'),'canonical Rare Reference name is adoptable: '+name);
+  assert.ok(!names.includes(name),'Rare Reference name is reserved, not dealt at random: '+name);
  // §9 — the name itself is the easter egg. No reference NPC may own special copy yet, and
  // nothing may print a meme at an unrelated NPC or through a system message.
  for(const file of ['dist/data/copy.js','dist/ui/app.js','dist/ui/presentation.js','dist/systems/shop.js','dist/systems/dungeon.js'])

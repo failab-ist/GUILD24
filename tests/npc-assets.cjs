@@ -50,6 +50,38 @@ test('EASTER: three fixed identities, named on the file, never in the random poo
  for(const e of pool.easter)assert.ok(!normal.has(e.name),e.name+' is not also a normal name');
 });
 
+test('NORMAL: the shipped name pool is the production pool, in the order that binds it',()=>{
+ // The pool is not hand-maintained: it is the production binding, so it is checked against
+ // the production binding rather than against a copy of itself. Order carries the binding -
+ // the array position IS the gender folder and the slot - so order is asserted, not membership.
+ require('../dist/data/catalog.js');require('../dist/data/relics.js');require('../dist/systems/rng.js');
+ require('../dist/systems/meta.js');require('../dist/systems/adventurer.js');
+ require('../dist/ui/assets/npc/manifest.js');require('../dist/ui/art.js');require('../dist/ui/scene.js');
+ const A=globalThis.Adventurer,expected=[...pool.normal.M,...pool.normal.F].map(e=>e.name);
+ assert.equal(expected.length,200,'the production pool is 200 normal names');
+ assert.deepEqual(A.names,expected,'the shipped pool is the production pool, in binding order');
+ assert.equal(new Set(A.names).size,200,'no name appears twice, so no name addresses two portraits');
+
+ for(const g of ['M','F'])for(const e of pool.normal[g]){
+  const at=A.portraitOf(e.name);
+  assert.deepEqual(at,{gender:g,slot:Number(e.slot)},'name binds to its own slot: '+g+'/'+e.slot+' '+e.name);
+  assert.equal(globalThis.Scene.npcArt({id:'npc-x',name:e.name}),
+   'ui/assets/npc/normal/'+g+'/'+e.slot+'.webp','and the shipped build addresses that file: '+e.name);
+ }
+
+ // random_eligible:false means exactly that - the three fixed identities are not in the pool
+ // a visitor is drawn from, and the runtime has no slot to give them.
+ for(const e of pool.easter){
+  assert.ok(!A.names.includes(e.name),e.name+' is never drawn as a random visitor');
+  assert.equal(A.portraitOf(e.name),null,e.name+' has no normal slot');
+ }
+ // a fixed identity is still bindable, by NPC id through the manifest, not by name
+ globalThis.Scene.manifest['npc.npc-easter']='ui/assets/npc/easter/E001.webp';
+ assert.equal(globalThis.Scene.npcArt({id:'npc-easter',name:A.names[0]}),'ui/assets/npc/easter/E001.webp',
+  'the id override still wins over the derived address');
+ delete globalThis.Scene.manifest['npc.npc-easter'];
+});
+
 test('BOSS: every state the runtime can derive has a file, and no file is unreachable',()=>{
  const files=new Set(list('04_BOSS'));
  assert.equal(pool.boss.length,7,'seven fixed Boss identities');
