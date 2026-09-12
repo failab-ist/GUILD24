@@ -271,29 +271,17 @@ function simulate(count=100,policy='balanced',account=null,pricing='adaptive',bu
    contract all come from the real Meta system reacting to real results.
    Returns one cohort per Run index, so FRESH ACCOUNT and PROGRESSED ACCOUNT Final viability
    can be read apart, plus the same cohorts bucketed by the grade actually held. */
-/* SC-5 / SB-8 — Job Mastery structure comparison, HARNESS ONLY.
-   No document says whether Mastery adjusts a Job's visible Base, its Growth, or both, so the
-   three candidates are compared here and exactly one is implemented in production after the
-   Director picks it (Stage 10). Nothing in the shipped game reads any of this: the patch is
-   applied to the catalog for the duration of one simulated Run and taken off again, and the
-   default mode is 'none', which is the game as it actually plays today.
-   `step` is a HARNESS magnitude for the comparison, not a proposed value - the real table is
-   PASS3_AFTER_JOB_BASE_GROWTH_REBALANCE. It is stated with every result it produces.
-   Mastery rank is the Job's own distinct Boss clears (0..7), so this only ever moves the
-   owning Job's own visible channels - never a hidden account-wide multiplier (NPC-Q10). */
-function masteryPatch(account,mode,step){
- if(mode==='none'||!step)return ()=>{};
- const saved=D.jobs.map(j=>({j,stats:j.stats.slice(),growth:j.growth.slice()}));
- for(const j of D.jobs){
-  const rank=G.Meta.jobMastery(account,j.id);
-  if(!rank)continue;
-  const k=1+rank*step;
-  if(mode==='base'||mode==='both')j.stats=j.stats.map(v=>v*k);
-  if(mode==='growth'||mode==='both')j.growth=j.growth.map(v=>v*k);
- }
- return ()=>{for(const r of saved){r.j.stats=r.stats;r.j.growth=r.growth;}};
+/* Job Mastery isolation, HARNESS ONLY. Mastery is a spawn-Level bonus on the owning Job's new
+   adventurers, and an account that has it also has unlocked Jobs, contracts and items - so a
+   tier-to-tier difference cannot say which of the two did the work. This neutralises the bonus
+   table while leaving every unlock in place, so the same account can be measured with and
+   without it. The roll is still drawn either way, so the seeded stream does not move. */
+function masterySpawnPatch(){
+ const table=G.Adventurer.MASTERY_SPAWN,saved=table.map(row=>row.slice());
+ for(let i=0;i<table.length;i++)table[i]=[];
+ return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard',mastery='none',masteryStep=0}={}){
+function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard'}={}){
  const byIndex=[],byGrade={},accountsEnd=[];
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
@@ -308,12 +296,10 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    let started=contract;
    if(contract==='best'){started='standard';for(const c of D.contracts)if(G.Meta.contractUnlocked(account,c))started=c.id;}
    const available=D.contracts.filter(c=>G.Meta.contractUnlocked(account,c)).length;
-   const unpatch=masteryPatch(account,mastery,masteryStep);
    g.start(prefix+'-'+t+'-'+i,started);
    const grade=before.grade;
    const bucket=byGrade[grade]??=blank(0,policy,pricing,build);
    playRun(g,byIndex[i],{policy,pricing,build,seed:t});
-   unpatch();
    /* The grade bucket re-reads the same Run from the per-index cohort's last entry rather
       than replaying it: one Run, counted once in each view. */
    bucket.runs++;bucket.dayReached[g.run.day]=(bucket.dayReached[g.run.day]||0)+1;
@@ -335,8 +321,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
   accountsEnd};
 }
 
-/* masteryPatch is exported so a measurement script can also hold Mastery rank FIXED and ask
-   what each structure does at that rank - the accrual rate and the structure are two different
-   questions, and at the measured clear rate the first one swamps the second. Harness only. */
-G.Debug={simulate,trajectory,clearChance,contribution,masteryPatch};
+/* masterySpawnPatch is exported so a measurement script can hold an account FIXED and ask what
+   the Mastery bonus alone contributes, with the unlocks it came with held constant. Harness only. */
+G.Debug={simulate,trajectory,clearChance,contribution,masterySpawnPatch};
 })(globalThis);
