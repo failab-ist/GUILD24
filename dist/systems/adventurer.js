@@ -42,10 +42,31 @@ const EASTER=[{id:'E001',name:'요화니우스'},{id:'E002',name:'상혀크'},{i
 const SLOTS=100,portraits=new Map(names.map((n,i)=>[n,{gender:i<SLOTS?'M':'F',slot:(i%SLOTS)+1}]));
 for(const e of EASTER)portraits.set(e.name,{easter:e.id});
 const portraitOf=name=>portraits.get(name)||null;
+/* META / NPC_TRAIT §JOB MASTERY (Stage 10, approved structure).
+   Mastery does NOT multiply a Job's Base Stats or its Growth. What beating Bosses with a Job
+   earns is that the Job's people turn up better prepared: the ordinary spawn Level is decided
+   first, and Mastery then rolls once for a chance at +1, +2 or +3 Levels on top.
+   The roll is single and mutually exclusive - +1/+2/+3 never stack - and it is ALWAYS drawn,
+   including at Mastery 0, so an account's Mastery cannot shift the seeded stream out from
+   under a comparison. Rows are [p(+1), p(+2), p(+3)] by Mastery rank 0..7.
+   NPC-Q10 / NPC-Q03: this touches only the owning Job. There is no hidden account-wide
+   multiplier and no combat bonus anywhere - a Mastery NPC is an ordinary NPC of its Level.
+   The probabilities are a first balance candidate and are re-measured (§K-3). */
+const MASTERY_SPAWN=[[],[.05],[.10],[.15,.05],[.20,.10],[.25,.15],[.30,.20,.05],[.35,.25,.10]];
+function masterySpawnBonus(r,account,jobId){
+ const roll=r.next();
+ const row=MASTERY_SPAWN[Math.min(MASTERY_SPAWN.length-1,G.Meta.jobMastery(account,jobId))]||[];
+ const p1=row[0]||0,p2=row[1]||0,p3=row[2]||0;
+ if(roll<p3)return 3;
+ if(roll<p3+p2)return 2;
+ if(roll<p3+p2+p1)return 1;
+ return 0;
+}
 function create(r,index,day,account,opts={}){
  const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?[51,30,14,4,1]:[60,27,10,2.5,.5]);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
- const level=Math.max(1,r.int(1,3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
+ const spawnLevel=Math.max(1,r.int(1,3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
+ const level=spawnLevel+masterySpawnBonus(r,account,job.id);
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
  let potential=1+rarity*.06+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));
  return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,traitSlots:rarity>=2?4:3,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],rank:Math.floor(level/5),introduced:false};
@@ -57,5 +78,5 @@ function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-
    rather than keeping a number of its own. */
 const TRUSTED_REGULAR=51;
 const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
-G.Adventurer={create,name,names,EASTER,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,rank:n=>D.jobBy[n.job].ranks[Math.min(3,Math.floor(n.level/5))],slots:n=>n.level>=10?3:2};
+G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,EASTER,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,rank:n=>D.jobBy[n.job].ranks[Math.min(3,Math.floor(n.level/5))],slots:n=>n.level>=10?3:2};
 })(globalThis);

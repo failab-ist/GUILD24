@@ -37,13 +37,20 @@ item('ion','쿨링 이온음료',2,200,400,'drink',5,'ion','MANA+','얼음컵만
 item('tree','세계수 생환부적',3,600,1200,'insurance',0,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,1000,2000,'magic',0,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1)
 ],
+/* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
+   full-run rebaseline existed; this is that rebaseline. The shape of the change: a Job with a
+   strong opening trades away slope, a Job with a weak opening gets it back, and the spread
+   between the four base Jobs stays narrow enough that abandoning a grown NPC to re-roll into
+   another Job is never the automatic answer. 도적 is a small unlock reward over the base four
+   and 광전사 a clear step above 도적 - without either becoming mandatory.
+   Stat order: 투력 / 강인함 / 기동 / 정신. */
 jobs:[
-{id:'warrior',name:'전사',color:'#db8857',stats:[16,17,9,10],growth:[3.2,3,1.4,1.6],ranks:['수습 전사','전사','기사','왕립 수호자']},
-{id:'archer',name:'궁수',color:'#77ac79',stats:[14,11,18,10],growth:[2.7,1.9,3.1,1.5],ranks:['견습 궁수','궁수','명사수','바람 추적자']},
-{id:'mage',name:'마법사',color:'#a494dc',stats:[19,8,10,16],growth:[3.9,1.4,1.6,2.6],ranks:['견습 마법사','마법사','마도사','대마법사 후보']},
-{id:'priest',name:'사제',color:'#e4ca8b',stats:[10,16,9,21],growth:[2,2.9,1.4,3.6],ranks:['수습 사제','사제','주교','빛의 대행자']},
-{id:'rogue',name:'도적',color:'#79b6b5',stats:[15,10,22,9],growth:[2.8,1.8,3.7,1.4],ranks:['풋내기 도적','도적','그림자','밤의 유령'],metaUnlock:3},
-{id:'berserker',name:'광전사',color:'#db6464',stats:[21,13,12,7],growth:[4,2.4,1.9,1.3],ranks:['투사','광전사','혈전사','전장의 재앙'],metaUnlock:6}
+{id:'warrior',name:'전사',color:'#db8857',stats:[17,18,9,10],growth:[2.8,2.6,1.5,1.6],ranks:['수습 전사','전사','기사','왕립 수호자']},
+{id:'archer',name:'궁수',color:'#77ac79',stats:[14,11,19,10],growth:[2.6,2,3,1.6],ranks:['견습 궁수','궁수','명사수','바람 추적자']},
+{id:'mage',name:'마법사',color:'#a494dc',stats:[18,9,10,17],growth:[3.3,1.6,1.8,2.7],ranks:['견습 마법사','마법사','마도사','대마법사 후보']},
+{id:'priest',name:'사제',color:'#e4ca8b',stats:[10,16,9,20],growth:[2.2,2.7,1.6,3],ranks:['수습 사제','사제','주교','빛의 대행자']},
+{id:'rogue',name:'도적',color:'#79b6b5',stats:[15,11,21,9],growth:[2.8,2,3.4,1.5],ranks:['풋내기 도적','도적','그림자','밤의 유령'],metaUnlock:3},
+{id:'berserker',name:'광전사',color:'#db6464',stats:[21,14,12,7],growth:[3.6,2.4,1.9,1.3],ranks:['투사','광전사','혈전사','전장의 재앙'],metaUnlock:6}
 ],
 traits:[
 // NPC_TRAIT ACTIVE TRAIT CATALOG (FROZEN, 30). `direction` is internal only.
@@ -146,7 +153,12 @@ contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으�
    signalMargin is not a gate on the roll - it is only where the player is told the attempt is
    worth chasing, so it has to be read off the same margin the roll uses. The cap keeps Great
    Success below certainty at every level of preparation. */
-G.DATA.greatSuccess={signalMargin:.26,chanceSlope:1.2,chanceCap:.45,storeGoldScale:.5};
+/* Stage 10, approved. The curve is gentler than the Stage 9 baseline (slope 1.2 / cap .45)
+   and the Store reward stops scaling with the Gate's own value: a Great Success now pays a
+   flat amount for the Day band it happened in, so the reward is legible before it is earned.
+   Deep Expeditions still pay 0. 100/200/300 are provisional and re-measured. */
+G.DATA.greatSuccess={signalMargin:.26,chanceSlope:.8,chanceCap:.30,
+ storeGoldByBand:[{maxDay:10,gold:100},{maxDay:20,gold:200},{maxDay:30,gold:300}]};
 G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
  /* 원정 후원금 = sponsorBase x (1 + rarityStep x rarity) x (1 + levelStep x (Level - 1)),
     rounded to 10G. Who you send is the decision, so the price is the NPC's rarity and current
@@ -155,20 +167,34 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
  sponsorBase:250,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
  successExp:40,greatExp:90,successWallet:60,greatWallet:150};
 
+/* Stage 10, approved. Until now every field was null and the production Traits were inert,
+   which is why the Stage 9 per-Boss spread was Family and Gate variance rather than gimmick.
+   greedRevenueTarget is the one value that could not be approved in advance: it is 90% of the
+   median cumulative gross sales an engaged Run makes under the NEW economy, so it was measured
+   after the rest of this adoption landed and filled in from that measurement. */
 G.DATA.bossTuning={
- prideCombatFactor:null,        // PRIDE: every participant's Final 투력 x this
- envyStatFactor:null,           // ENVY: the single ace's four Stats x this
- greedRevenueTarget:null,       // GREED: cumulative gross sales the Run is measured against
- greedShortfallSlope:null,      // GREED: Boss Power added per Gold of shortfall
- greedShortfallCap:null,        // GREED: the most that shortfall can ever add
- gluttonyRarityThreshold:null,  // GLUTTONY: supplies at or above this rarity are attenuated
- gluttonyStatFactor:null,       // GLUTTONY: their raw-Stat contribution x this
- lustStatFactor:null,           // LUST: a non-regular participant's four Stats x this
- slothBossPower:null            // SLOTH: effective Boss Power by break count [0,1,2,3]
+ prideCombatFactor:0.85,        // PRIDE: every participant's Final 투력 x this
+ envyStatFactor:0.88,           // ENVY: the single ace's four Stats x this
+ greedRevenueTarget:18800,      // GREED: cumulative gross sales the Run is measured against
+                                //   = 90% of the median engaged Run's gross sales measured on
+                                //   the Stage 10 economy (median 20,909 across the engaged
+                                //   strategies, 200 seeds each), rounded to 100G.
+ greedShortfallCap:20,          // GREED: the most that a total shortfall can add to Boss Power
+ gluttonyRarityThreshold:2,     // GLUTTONY: supplies at or above this rarity are attenuated
+ gluttonyStatFactor:0.70,       // GLUTTONY: their raw-Stat contribution x this
+ lustStatFactor:0.90,           // LUST: a non-regular participant's four Stats x this
+ slothBossPower:[225,195,180,165] // SLOTH: effective Boss Power by break count [0,1,2,3]
 };
 /* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
    Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
-G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:230,combatNoise:.175,rerollBase:30,easterChance:.01};
-G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intent:.18,loyalty:6}};
+G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:30,easterChance:.01};
+/* ECONOMY_ORDER §PURCHASE INTENT (Stage 10, approved).
+   `mult` is what the customer is charged and is unchanged. `intentMult` is the price the
+   customer JUDGES the offer at - the purchase-intent threshold. For 할인 and 바가지 the two are
+   the same number, so nothing about them moves. 정가 is judged at 65 while still being charged
+   100: a properly prepared product sold at list stops failing on intent RNG, because the
+   economy's difficulty is meant to sit in what was ordered, what was kept in stock, and how
+   each sale was priced - not in a die roll against a fair offer. */
+G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:6}};
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);

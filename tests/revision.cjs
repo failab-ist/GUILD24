@@ -3,7 +3,13 @@ const copy=x=>JSON.parse(JSON.stringify(x));const fresh=seed=>{let g=new Game();
 test('pricing and actual acquisition cost; wallet and stock conservation',()=>{for(const mode of Object.keys(DATA.pricing)){const g=fresh();g.order(0);const st=g.run.inventory.at(-1);assert.equal(st.cost,g.run.offers[0].price);g.open();const n=g.current();n.money=9999;const before=g.run.money,wallet=n.money;accept(g,()=>g.sell(st.id,mode));const paid=Math.round(DATA.itemBy[st.item].sell*DATA.pricing[mode].mult);assert.equal(g.run.money-before,paid);assert.equal(wallet-n.money,paid);assert.equal(g.run.daily.cogs,st.cost);assert.ok(n.loyalty>=0);}});
 test('all paid modes obey wallet, unknown modes rejected, refusal keys safe',()=>{const g=fresh();g.open();g.current().money=0;for(const mode of Object.keys(DATA.pricing))assert.throws(()=>g.sell(g.run.inventory[0].id,mode));assert.throws(()=>g.interest(g.current(),DATA.itemBy.water,'free'));const n=g.current();n.money=999;const original=g.rng.next;g.rng.next=()=>.999;assert.equal(g.sell(g.run.inventory[0].id,'full'),false);g.rng.next=original;assert.ok(n.refused[0].includes(':full'));assert.throws(()=>g.sell(g.run.inventory[0].id,'full'));});
 test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.event=DATA.events.find(e=>e.id==='tasting');g.open();g.current().money=999;accept(g,()=>g.sell(g.run.inventory[0].id,'half'));accept(g,()=>g.sell(g.run.inventory[0].id,'half'));assert.equal(g.run.daily.subsidy,50);});
-test('trait source of truth; showoff changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.potion;n.money=999;n.traits=[];const a=g.interest(n,it).chance;n.traits=['frugal'];assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias)<1e-9);n.traits=['showoff'];assert.equal(Dungeon.prepare(n,g.run.dungeons[0]).effects.xpMult,1);assert.equal(DATA.traitBy.showoff.effects.overchargeBias,undefined);assert.equal(DATA.traitBy.showoff.effects.rareBias,undefined);});
+/* Stage 10: the price a Trait's 구매의사 reacts to is the JUDGED price (pricing.intentMult), not
+   what is charged. 하급 포션 at 140G used to cross frugalThreshold at 정가 and no longer does -
+   it is judged at 91 - so the aversion is shown on an item that still crosses it at 195. */
+test('trait source of truth; showoff changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=9999;n.traits=[];
+ assert.ok(Math.round(it.sell*DATA.pricing.full.intentMult)>DATA.balance.frugalThreshold,'the item is judged above the frugal threshold at 정가');
+ assert.ok(Math.round(DATA.itemBy.potion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
+ const a=g.interest(n,it).chance;n.traits=['frugal'];assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias)<1e-9);n.traits=['showoff'];assert.equal(Dungeon.prepare(n,g.run.dungeons[0]).effects.xpMult,1);assert.equal(DATA.traitBy.showoff.effects.overchargeBias,undefined);assert.equal(DATA.traitBy.showoff.effects.rareBias,undefined);});
 test('showoff actual route fixed before sale without price benefit',()=>{const g=fresh();g.run.day=15;g.run.npcs.forEach(n=>n.traits=['showoff']);g.morning();g.beginOrder();g.open();const n=g.current(),dest=n.destination;n.money=999;const yes=g.interest(n,DATA.itemBy.water,'overcharge').chance;n.traits=[];const no=g.interest(n,DATA.itemBy.water,'overcharge').chance;assert.equal(yes,no);g.depart();assert.equal(n.destination,dest);});
 test('coupon pending capped; explicit duplication; ordinary effects additive',()=>{const g=fresh(),n={...g.run.npcs[0],traits:[]},d=g.run.dungeons[0];const e=pack=>Dungeon.prepare({...n,pack},d).effects;assert.equal(e(['coupon','coupon','highpotion']).survival,e(['coupon','highpotion']).survival);assert.equal(e(['highpotion','coupon']).survival+27,e(['coupon','highpotion']).survival);assert.equal(e(['lava','water']).thirst,DATA.itemBy.lava.effects.thirst);assert.equal(e(['coupon','tree']).revive,2);});
 test('atomic cart validates funds, capacity and supply without mutation',()=>{const g=fresh();const before=copy(g.run);assert.throws(()=>g.setQuantity(0,999));assert.deepEqual(g.run,before);g.setQuantity(0,1);const cost=g.cartTotal();assert.equal(g.run.money,before.money);assert.throws(()=>g.open());g.confirmOrder();assert.equal(g.run.money,before.money-cost);assert.equal(g.cartTotal(),0);const money=g.run.money;g.confirmOrder();assert.equal(g.run.money,money);});
@@ -18,7 +24,11 @@ test('headless 30-day smoke',()=>{const a=Debug.simulate(3,'balanced');assert.eq
 
 test('seven relic windows, stable offers, phase gating and no duplicate purchase',()=>{const g=new Game();g.autosave=false;g.start('window');assert.equal(g.run.phase,'foundation');const w=copy(g.run.relicWindow);assert.equal(w.candidateIds.length,3);assert.equal(new Set(w.candidateIds).size,3);assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].kind==='foundation'));g.buyRelic(w.candidateIds[0]);for(const day of [5,10,15,20,25,30]){g.run.day=day;g.morning();const offer=copy(g.run.relicWindow);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.relicWindow,offer);g.run.money=10000;const id=offer.candidateIds[0];g.buyRelic(id);assert.throws(()=>g.buyRelic(id));}assert.equal(g.run.facilities.length,7);assert.ok(g.run.relicWindow.candidateIds.every(id=>DATA.relicBy[id].finalUseful));});
 test('window deferral and expiration; purchases blocked during sale',()=>{const g=fresh();g.run.day=5;g.morning();const w=copy(g.run.relicWindow);g.run.day=9;g.morning();assert.deepEqual(g.run.relicWindow,w);g.beginOrder();g.open();assert.throws(()=>g.buyRelic(w.candidateIds[0]));g.run.day=10;g.morning();assert.equal(g.run.relicWindow.milestoneDay,10);});
-test('fridge existing stock only once, future stock and expiry finite',()=>{const g=fresh();g.run.facilities=[];const st=g.run.inventory.find(x=>x.item==='water'),before=st.expires;g.run.relicWindow={milestoneDay:5,candidateIds:['fridge'],candidatePrices:[0],purchased:null,expiryDay:10};g.buyRelic('fridge');assert.equal(st.expires,before+1);g.run.day=2;g.morning();assert.equal(st.expires,before+1);g.stock('water',1);assert.equal(g.run.inventory.at(-1).expires,2+5+1);});
+/* Stage 10: the Job Mastery spawn roll draws once per NPC, so the seeded stream moved and the
+   DAY 0 window can now offer a shelf-life relic - which would leave the opening stock already
+   extended and silently make this test about the wrong thing. The clean state this test needs
+   is both: no facility, and no extension already recorded on the stock. */
+test('fridge existing stock only once, future stock and expiry finite',()=>{const g=fresh();g.run.facilities=[];for(const x of g.run.inventory)delete x.extensions;const st=g.run.inventory.find(x=>x.item==='water'),before=st.expires;g.run.relicWindow={milestoneDay:5,candidateIds:['fridge'],candidatePrices:[0],purchased:null,expiryDay:10};g.buyRelic('fridge');assert.equal(st.expires,before+1);g.run.day=2;g.morning();assert.equal(st.expires,before+1);g.stock('water',1);assert.equal(g.run.inventory.at(-1).expires,2+5+1);});
 test('no pre-reveal; dead NPCs release active capacity; contradictory traits absent',()=>{const g=fresh();assert.ok(g.run.npcs.every(n=>!n.introduced));g.open();assert.equal(g.run.npcs.filter(n=>n.introduced).length,1);while(g.run.npcs.filter(n=>n.alive).length<22)g.addNPC();g.run.npcs[0].alive=false;assert.ok(g.addNPC());for(const n of g.run.npcs)for(const pair of DATA.traitExclusions)assert.ok(!pair.every(t=>n.traits.includes(t)));});
 test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const g=fresh('tier-'+seed);assert.ok(g.run.dungeons.every(d=>d.tier===1));assert.equal(g.run.familyOrder.length,5);g.run.day=29;g.morning();assert.ok(g.run.dungeons.every(d=>d.tier>=2));if(!g.run.event?.effects.unknown)assert.equal(new Set(g.run.dungeons.map(d=>d.family)).size,g.run.dungeons.length);}});
 test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','delivery'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
@@ -46,10 +56,14 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
  // recorded reason: the 200-name pool changed how often `addNPC` re-rolls a colliding name,
  // and the Rare Reference roll added one always-drawn value per customer created. A move here
  // that no intended RNG change explains means something leaked into the run stream.
+ /* Stage 10 re-baselined these. The Job Mastery spawn bonus draws once per NPC created - always,
+    including at Mastery 0, so the stream cannot depend on an account's progress - and start()
+    creates nine, so the whole run stream shifted. That is the only sanctioned move in this
+    adoption; any future change here without one to point at means something leaked. */
  for(const [seed,order,intro] of [
-  ['sig-0',['snow','fire','slime','spider','crypt'],[5,10]],
-  ['sig-1',['crypt','slime','snow','spider','fire'],[5,10]],
-  ['sig-2',['fire','crypt','spider','snow','slime'],[5,9]]]){
+  ['sig-0',['slime','snow','crypt','fire','spider'],[5,9]],
+  ['sig-1',['slime','spider','crypt','snow','fire'],[6,12]],
+  ['sig-2',['slime','snow','spider','crypt','fire'],[5,10]]]){
   const g=new Game();g.autosave=false;g.start(seed);
   assert.deepEqual(g.run.familyOrder,order,seed+' still draws the same Family order');
   assert.deepEqual(g.run.familyIntro,intro,seed+' still draws the same Family introduction Days');
@@ -194,13 +208,39 @@ test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide 
                   DATA.jobs.filter(j=>Meta.jobUnlocked(plain,j)).map(j=>j.id),'so the Job pool is unchanged');
  const a=new Game(plain),b=new Game(masterly);a.autosave=b.autosave=false;
  a.start('mastery');b.start('mastery');
- const strip=n=>({job:n.job,level:n.level,stats:n.stats,potential:n.potential});
- assert.deepEqual(b.run.npcs.map(strip),a.run.npcs.map(strip),
-  'twelve Mastery rolls exactly the same adventurers with exactly the same Stats');
  assert.equal(b.run.money,a.run.money,'and the same starting funds');
  assert.equal(b.capacity(),a.capacity(),'and the same warehouse');
- // the Job table itself carries no per-account channel to begin with
- for(const j of DATA.jobs)assert.equal(j.masteryBonus,undefined,j.id+' has no mastery power field yet');
+ /* Stage 10 gives Mastery its approved channel: the owning Job's people turn up at a higher
+    spawn Level more often. What NPC-Q10 / NPC-Q03 still forbid is everything else, and this is
+    where that is held. Mastery on ONE Job must leave every other Job's adventurer untouched -
+    the bonus roll is drawn for every NPC whatever its Job, so the stream cannot shift and any
+    difference outside the mastered Job would be a leak. */
+ const one=Meta.fresh();
+ for(const boss of Meta.BOSSES().slice(0,2))one.matrix.warrior[boss]=true;
+ assert.equal(Meta.jobMastery(one,'warrior'),2,'one Job carries Mastery');
+ for(const j of DATA.jobs)if(j.id!=='warrior')assert.equal(Meta.jobMastery(one,j.id),0,j.id+' has none');
+ assert.equal(Meta.distinctBossClear(one),2,'and it stays below every content gate, so the Job pool is identical');
+ const c=new Game(one);c.autosave=false;c.start('mastery');
+ const strip=n=>({job:n.job,level:n.level,stats:n.stats,potential:n.potential});
+ assert.deepEqual(c.run.npcs.map(n=>n.job),a.run.npcs.map(n=>n.job),'the same Jobs are drawn in the same order');
+ for(let i=0;i<a.run.npcs.length;i++){
+  if(a.run.npcs[i].job==='warrior')continue;
+  assert.deepEqual(strip(c.run.npcs[i]),strip(a.run.npcs[i]),
+   'Mastery in 전사 did not touch the '+a.run.npcs[i].job+' at index '+i);
+ }
+ for(let i=0;i<a.run.npcs.length;i++)if(a.run.npcs[i].job==='warrior')
+  assert.ok(c.run.npcs[i].level>=a.run.npcs[i].level,'a mastered 전사 is never spawned lower');
+ // and the power still arrives as Level, never as a stat channel on the Job table
+ for(const j of DATA.jobs)assert.equal(j.masteryBonus,undefined,j.id+' has no mastery power field');
+ /* the bonus is a single mutually exclusive roll, and its expected value is the approved one */
+ for(const [rank,expected] of [[0,0],[1,.05],[3,.25],[6,.85],[7,1.15]]){
+  const acct=Meta.fresh();
+  for(let k=0;k<rank;k++)acct.matrix.warrior[Meta.BOSSES()[k]]=true;
+  const r=new RNG('mastery-ev-'+rank);let sum=0;
+  for(let k=0;k<40000;k++){const v=Adventurer.masterySpawnBonus(r,acct,'warrior');
+   assert.ok(v===0||v===1||v===2||v===3,'one roll yields one of +0/+1/+2/+3');sum+=v;}
+  assert.ok(Math.abs(sum/40000-expected)<.03,'Mastery '+rank+' averages about +'+expected+' Levels');
+ }
 });
 
 test('v0.1 fixture intentionally rejected without reinterpretation',()=>{const fs=require('node:fs');const old=fs.readFileSync(require('node:path').join(__dirname,'fixtures/v01-sale.json'),'utf8');assert.throws(()=>Save.import(old));});

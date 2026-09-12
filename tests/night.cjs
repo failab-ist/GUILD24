@@ -260,23 +260,26 @@ test('DUNGEON_HAZARD §GREAT SUCCESS: only a settled ordinary Success upgrades, 
 });
 
 test('ECONOMY_ORDER §NORMAL GREAT SUCCESS STORE GOLD: paid on 대성공 only, never on a Deep one',()=>{
- const scale=DATA.greatSuccess.storeGoldScale;
- try{
-  const sample=(deep)=>{const rows=[];
-   for(let i=0;i<1500;i++){const r=new RNG('gold-'+i);
-    const n=Adventurer.create(r,i,r.int(1,29),Meta.fresh());
-    const d={...DATA.dungeonBy.spider,day:12,tier:2,hazards:['poison'],scale:1.6,
-             power:r.int(20,90),reward:1,deep};
-    rows.push(Dungeon.resolve(n,d,r,[]));}
-   return rows;};
-  DATA.greatSuccess.storeGoldScale=null;
-  assert.ok(sample(false).every(x=>x.storeBonus===0),'nothing is paid while the scale is unapproved');
-  DATA.greatSuccess.storeGoldScale=.5;
-  const normal=sample(false);
-  assert.ok(normal.some(x=>x.outcome==='대성공'&&x.storeBonus>0),'a normal 대성공 pays the Store');
-  assert.ok(normal.every(x=>x.outcome==='대성공'||x.storeBonus===0),'an ordinary Success pays nothing');
-  assert.ok(sample(true).every(x=>x.storeBonus===0),'a Deep 대성공 pays the Store nothing at all');
- }finally{DATA.greatSuccess.storeGoldScale=scale;}
+ /* Stage 10 approved a flat reward per Day band in place of a share of the Gate's own value,
+    so what a 대성공 is worth can be known before it is chased. A Deep one still pays nothing. */
+ const sample=(deep,day)=>{const rows=[];
+  for(let i=0;i<1500;i++){const r=new RNG('gold-'+i);
+   const n=Adventurer.create(r,i,r.int(1,29),Meta.fresh());
+   const d={...DATA.dungeonBy.spider,day,tier:2,hazards:['poison'],scale:1.6,
+            power:r.int(20,90),reward:1,deep};
+   rows.push(Dungeon.resolve(n,d,r,[]));}
+  return rows;};
+ for(const [day,gold] of [[5,100],[12,200],[27,300]]){
+  const rows=sample(false,day);
+  const great=rows.filter(x=>x.outcome==='대성공');
+  assert.ok(great.length,'DAY '+day+' produced a 대성공 to price');
+  assert.ok(great.every(x=>x.storeBonus===gold),'DAY '+day+' pays a flat '+gold+'G, whatever the Gate was worth');
+  assert.ok(rows.every(x=>x.outcome==='대성공'||x.storeBonus===0),'an ordinary Success pays nothing');
+ }
+ assert.ok(sample(true,12).every(x=>x.storeBonus===0),'a Deep 대성공 pays the Store nothing at all');
+ // the bands are contiguous and cover every Day a Run can reach
+ const bands=DATA.greatSuccess.storeGoldByBand;
+ for(let day=1;day<=30;day++)assert.ok(bands.find(b=>day<=b.maxDay),'DAY '+day+' falls in a band');
 });
 
 test('DUNGEON_HAZARD §GREAT SUCCESS: the starting curve rises with the margin and never reaches certainty',()=>{

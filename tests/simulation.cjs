@@ -46,14 +46,24 @@ test('RUN-Q30: no minimal-engagement policy is an efficient permanent-reward far
 
 test('DUN-Q20: preparation is measured per progression band, prepared against bare',()=>{
  const engaged=cached('balanced'),bare=cached('zero-supply');
+ /* Stage 10 tightened the Run economy deliberately, and bare play no longer survives into the
+    later bands at all - it averages around DAY 10 where it used to reach DAY 15. That is the
+    point of the change, so the contract is stated as what it now is: prepared play is sampled
+    everywhere and carries Items everywhere; bare play carries nothing in any band it does
+    reach, and does not reach the late ones. */
  const bands=['D1-3','D4-7','D8-12','D13-18'];
  for(const band of bands){
-  const a=engaged.bands[band],b=bare.bands[band];
+  const a=engaged.bands[band];
   assert.ok(a&&a.expeditions>0,band+' is sampled for prepared play');
-  assert.ok(b&&b.expeditions>0,band+' is sampled for bare play');
   assert.ok(a.packed>0,band+' prepared play actually carries Items');
-  assert.equal(b.packed,0,band+' bare play carries nothing');
  }
+ const bareBands=bands.filter(b=>bare.bands[b]&&bare.bands[b].expeditions>0);
+ assert.ok(bareBands.length>=2,'bare play is sampled in the early bands');
+ for(const band of bareBands)assert.equal(bare.bands[band].packed,0,band+' bare play carries nothing');
+ assert.ok(!bare.bands['D19-29']||bare.bands['D19-29'].expeditions===0,
+  'and repeated bare play does not reach the last band at all');
+ assert.ok(bare.averageDay<engaged.averageDay*.6,
+  'bare play ends far short of prepared play, rather than coasting alongside it');
  assert.ok(engaged.impact.samples>0,'the prepared-vs-bare counterfactual is sampled');
  assert.ok(engaged.impact.preparedAbility>engaged.impact.characterAbility,'preparation adds ability over the character alone');
 });
@@ -83,9 +93,12 @@ test('the simulation observes the run and never rewrites it',()=>{
  assert.equal(b.final.margin,a.final.margin,'and the same Final margin');
 });
 
-test('PASS3 GATE: Chunk G reports Boss Power evidence and leaves the value alone',()=>{
+/* Stage 10 approved a new WRATH baseline (230 -> 200) as part of the balance adoption. What
+   this gate still holds is what it was written for: the harness MEASURES against whatever the
+   approved baseline is and never writes one of its own. */
+test('PASS3 GATE: the harness reports Boss Power evidence and leaves the value alone',()=>{
  const r=cached('balanced');
- assert.equal(DATA.balance.bossPower,230,'the retained Source baseline is untouched by simulation');
+ assert.equal(DATA.balance.bossPower,200,'the approved Source baseline is untouched by simulation');
  assert.ok(r.final.resolved>0,'the margin against it is measured');
  assert.ok(Number.isFinite(r.final.assault/r.final.resolved),'the assault the Boss was met with is reported as a number');
 });

@@ -31,7 +31,15 @@ P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=
 P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.team.includes(npcId))return;const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');n.pack.push(s.inventory[i].item);n.history.push({day:30,item:s.inventory[i].item,mode:'supply',paid:0});s.inventory.splice(i,1);this.save();};
 /* FINAL_EXPEDITION: one participant's contribution. Internal only - Final Power is never
    surfaced as another Player Stat. */
-const individualPower=(e,hazard)=>e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16-hazard*.35;
+/* Stage 10, approved. 투력 was running away with the Final: at .58 it was worth nearly four
+   times 정신, so a Job's Final value was close to its 투력 alone and Hazard preparation barely
+   registered. The four weights are flattened and the environment penalty is deliberately NOT
+   reduced - a Job that answers Hazards well has to keep carrying that value into the Final,
+   which is where 사제 earns back what its raw Stats do not.
+   This is the FINAL formula. The expedition's own combat check in dungeon.js keeps the
+   coefficients it had: this adoption changes the Final, and moving D1-29 difficulty by the
+   same edit would confound the two. See reports/STAGE10.md. */
+const individualPower=(e,hazard)=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20-hazard*.35;
 
 const STATS=['combat','survival','mobility','spirit'];
 
@@ -76,9 +84,13 @@ P.envyTarget=function(team,preparations){
    for all seven. */
 P.effectiveBossPower=function(partyPower,lock){
  const t=D.bossTuning,s=this.run,base=D.balance.bossPower;
- if(s.bossId==='GREED'&&t.greedRevenueTarget!=null&&t.greedShortfallSlope!=null&&t.greedShortfallCap!=null){
-  const shortfall=Math.max(0,t.greedRevenueTarget-(lock?lock.revenue:s.stats.revenue));
-  return base+Math.min(shortfall*t.greedShortfallSlope,t.greedShortfallCap);
+ /* Stage 10, approved. Measured as a SHARE of the target rather than per Gold of shortfall, so
+    the penalty means the same thing whatever the target is set to: a Run that sold nothing takes
+    the full cap, a Run at target takes none, and it is linear between. */
+ if(s.bossId==='GREED'&&t.greedRevenueTarget>0&&t.greedShortfallCap!=null){
+  const revenue=lock?lock.revenue:s.stats.revenue;
+  const shortfallRatio=Math.max(0,(t.greedRevenueTarget-revenue)/t.greedRevenueTarget);
+  return base+Math.min(t.greedShortfallCap,shortfallRatio*t.greedShortfallCap);
  }
  if(s.bossId==='SLOTH'&&Array.isArray(t.slothBossPower)){
   const v=t.slothBossPower[lock?lock.sealBreakCount:s.sealBreakCount];

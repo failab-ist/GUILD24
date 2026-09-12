@@ -98,8 +98,11 @@ function resolve(n,d,r,facilities=[],options={}){
     expedition already carries, and a same-day sale is not required. A Deep Expedition always
     returns 0 Store Gold, so the bonus is suppressed there rather than added and subtracted.
     Scale is PASS3: while unapproved there is no bonus, exactly as an ordinary Success. */
- const storeBonus=outcome==='대성공'&&!d.deep&&D.greatSuccess.storeGoldScale!==null
-  ?Math.round((35+d.day*8)*(d.reward||1)*D.greatSuccess.storeGoldScale):0;
+ /* Stage 10, approved. A flat amount for the Day band rather than a share of the Gate's own
+    value: the player can know what a Great Success is worth before deciding to chase one. A
+    Deep Expedition still pays the Store nothing. */
+ const storeBonus=outcome==='대성공'&&!d.deep
+  ?(D.greatSuccess.storeGoldByBand.find(b=>d.day<=b.maxDay)?.gold||0):0;
  if(outcome==='사망')n.alive=false;
  n.injury=outcome==='중상'?2:outcome==='부상'?1:Math.max(0,n.injury-1);
  n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';

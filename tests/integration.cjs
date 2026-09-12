@@ -27,7 +27,13 @@ function step(g){
     try{g.sell(st.id,'full');}catch(e){}}
    g.depart();return true;}
   case'night':g.finishNight();return true;
-  case'closing':g.closeDay();return true;
+  /* closeDay refuses while the till is short and offers stock clearance instead - the same
+     choice the Closing screen puts in front of the player. The driver has to take it, or a Run
+     that goes into the red simply never advances. With nothing left to clear, the store closes. */
+  case'closing':{
+   if(g.closeDay()!==false)return true;
+   if(s.inventory.length){g.liquidate(s.inventory[0].id);return true;}
+   g.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');return true;}
   case'final':{
    const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort((a,b)=>b.level-a.level).slice(0,g.finalRequired());
    for(const n of team)g.selectFinal(n.id);
@@ -49,6 +55,17 @@ function drivenToDeepSale(){
   }
  }
  throw Error('no Run reached the Sale phase of a Deep Day');
+}
+/* Drive a Run all the way to its Final. Under the Stage 10 economy a store can go under before
+   DAY 30, so which seed gets there is no longer a fixed fact - the helper keeps trying rather
+   than pinning one that happens to survive today. */
+function drivenToFinal(prefix){
+ for(let i=0;i<80;i++){
+  const g=fresh(prefix+'-'+i);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  for(let n=0;n<4000&&g.run.day<30&&g.run.phase!=='end';n++)if(!step(g))break;
+  if(g.run.phase==='final')return g;
+ }
+ throw Error('no Run reached the Final');
 }
 function reload(g){g.save();const s=Save.import(Save.export(g.account,g.run));const h=new Game(s.account,s.run);h.autosave=false;return h;}
 
@@ -83,8 +100,7 @@ test('CORE_RUN §SAVE/LOAD: every persisted v2.4 field survives, and a damaged o
 });
 
 test('CORE_RUN §SAVE/LOAD: the Final state a D30 run generated is part of the save',()=>{
- const g=fresh('save-final');g.buyRelic(g.run.relicWindow.candidateIds[0]);
- while(g.run.day<30&&g.run.phase!=='end')step(g);
+ const g=drivenToFinal('save-final');
  assert.equal(g.run.phase,'final','the driver reached the Final');
  const round=Save.import(Save.export(g.account,g.run));
  assert.deepEqual(round.run.final,g.run.final,'the generated Final survives');

@@ -113,7 +113,13 @@ test('FINAL 6/7/8: Party Power is a plain sum with no Job-diversity synergy, rol
   k.boss();
   const r=k.run.bossDebug.roll;
   assert.ok(r>=.88&&r<=1.12,'roll '+r+' inside 0.88-1.12');
-  assert.equal(k.run.bossDebug.bossPower,DATA.balance.bossPower);
+  /* Stage 10 switched the approved Boss numerics on, so the Power a Final is judged against is
+     no longer always the WRATH baseline: SLOTH reads its seal table and GREED adds a shortfall
+     up to its cap. Everything else still faces the baseline exactly. */
+  const t=DATA.bossTuning,bp=k.run.bossDebug.bossPower;
+  if(k.run.bossId==='SLOTH')assert.equal(bp,t.slothBossPower[k.run.sealBreakCount],'SLOTH reads its seal table');
+  else if(k.run.bossId==='GREED')assert.ok(bp>=DATA.balance.bossPower&&bp<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
+  else assert.equal(bp,DATA.balance.bossPower,k.run.bossId+' faces the baseline');
   assert.ok(Math.abs(k.run.bossDebug.assault-k.run.bossDebug.power*r)<1e-9,'assault is Party Power x roll');
  }
  assert.ok(varied,'party state was captured before resolution');
@@ -139,11 +145,22 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
   const team=g.finalEligible().slice(0,g.finalRequired());
   for(const n of team)g.selectFinal(n.id);
   const preps=s.team.map(id=>Dungeon.prepare(s.npcs.find(n=>n.id===id),d,s.facilities));
-  const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.58+p.effects.survival*.32
-   +p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35,0);
+  const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+p.effects.survival*.34
+   +p.effects.mobility*.27+p.effects.spirit*.20-p.hazard*.35,0);
   g.boss();
-  assert.ok(Math.abs(s.bossDebug.power-expected)<1e-9,'party power is the plain sum of the prepared contributions');
-  assert.equal(s.bossDebug.bossPower,DATA.balance.bossPower,'no Boss modifies the baseline yet');
+  /* Stage 10 switched the approved Boss Traits on, so only WRATH still faces the Final with its
+     participants untouched - it is the one Run where the party sum can be checked against the
+     ordinary prepare. For every other Boss the sum is taken over MODIFIED contributions, and
+     re-deriving those here would only be testing the implementation against a copy of itself;
+     what stays checked for all seven is the shape: no diversity synergy in the roll, the roll
+     band, assault = power x roll, and one CLEAR/FAIL read straight off the comparison. */
+  if(s.bossId==='WRATH')
+   assert.ok(Math.abs(s.bossDebug.power-expected)<1e-9,'party power is the plain sum of the prepared contributions');
+  const t=DATA.bossTuning;
+  if(s.bossId==='SLOTH')assert.equal(s.bossDebug.bossPower,t.slothBossPower[s.sealBreakCount],'SLOTH reads its seal table');
+  else if(s.bossId==='GREED')assert.ok(s.bossDebug.bossPower>=DATA.balance.bossPower
+   &&s.bossDebug.bossPower<=DATA.balance.bossPower+t.greedShortfallCap,'GREED adds at most its cap');
+  else assert.equal(s.bossDebug.bossPower,DATA.balance.bossPower,s.bossId+' faces the baseline');
   assert.ok(s.bossDebug.roll>=.88&&s.bossDebug.roll<=1.12,'the Final roll stays in its approved band');
   assert.equal(s.bossDebug.assault,s.bossDebug.power*s.bossDebug.roll);
   assert.equal(s.finalReport.cleared,s.bossDebug.assault>=s.bossDebug.bossPower,'one CLEAR/FAIL, read straight off the comparison');
@@ -193,23 +210,39 @@ function finalWith(seed,bossId,tuning){
  return withTuning(tuning||{},()=>{g.boss();return g;});
 }
 
-test('BOSS-Q05/Q14: with nothing approved every Boss resolves as the WRATH baseline',()=>{
+/* Stage 10 approved every one of these, so this is no longer "nothing attaches" - it is where
+   each Boss attaches, on which side, and that it attaches nowhere else. WRATH stays the
+   reference: no Boss-side modifier and no participant-side one, which is what makes it the
+   baseline the other six are read against. */
+test('BOSS-Q05/Q14: each Boss attaches on its approved side, and WRATH on neither',()=>{
+ const t=DATA.bossTuning,base=DATA.balance.bossPower;
+ const BOSS_SIDE={SLOTH:1,GREED:1},PARTY_SIDE={PRIDE:1,ENVY:1,LUST:1,GLUTTONY:1};
  for(const b of DATA.bosses){
-  const g=finalWith('base-'+b.id,b.id);
-  assert.equal(g.run.bossDebug.bossPower,DATA.balance.bossPower,b.id+' adds no Boss-side modifier');
-  const plain=finalWith('base-'+b.id,'WRATH');
-  assert.equal(g.run.bossDebug.power,plain.run.bossDebug.power,b.id+' adds no participant-side modifier');
+  const g=finalWith('base-'+b.id,b.id),plain=finalWith('base-'+b.id,'WRATH');
+  const bp=g.run.bossDebug.bossPower,power=g.run.bossDebug.power,ref=plain.run.bossDebug.power;
+  if(b.id==='SLOTH')assert.equal(bp,t.slothBossPower[0],'SLOTH at nought breaks reads its own table');
+  else if(b.id==='GREED')assert.ok(bp>=base&&bp<=base+t.greedShortfallCap,'GREED adds a shortfall within its cap');
+  else assert.equal(bp,base,b.id+' leaves the Boss side alone');
+  if(PARTY_SIDE[b.id])assert.ok(power<=ref+1e-9,b.id+' only ever reduces a participant, never raises one');
+  if(!PARTY_SIDE[b.id])assert.ok(Math.abs(power-ref)<1e-9,b.id+' leaves the participants alone');
+  assert.ok(BOSS_SIDE[b.id]||PARTY_SIDE[b.id]||b.id==='WRATH','every Boss is accounted for on one side or neither');
  }
+ // WRATH is the reference both ways
+ const w=finalWith('base-WRATH','WRATH');
+ assert.equal(w.run.bossDebug.bossPower,base,'WRATH is the baseline itself');
 });
 
 test('BOSS-Q06: PRIDE moves only 투력, and only on the Final snapshot',()=>{
- const before=finalWith('pride','PRIDE');
+ /* Stage 10 approved prideCombatFactor, so the unmodified side has to be injected rather than
+    assumed: 1 is PRIDE with its Trait neutralised, which is what the halved case is read
+    against. The share a Final 투력 point carries is .50 now, not .58. */
+ const before=finalWith('pride','PRIDE',{prideCombatFactor:1});
  const after=finalWith('pride','PRIDE',{prideCombatFactor:.5});
  assert.ok(after.run.bossDebug.power<before.run.bossDebug.power,'a weaker 투력 lowers the party');
- // the other three are untouched: halving 투력 may only remove its own 0.58 share
+ // the other three are untouched: halving 투력 may only remove its own 0.50 share
  const lost=before.run.bossDebug.power-after.run.bossDebug.power;
  const combat=before.run.finalLock.members.reduce((a,m)=>a+m.stats.combat,0);
- assert.ok(Math.abs(lost-combat*.5*.58)<1e-9,'exactly half of the 투력 contribution, and nothing else');
+ assert.ok(Math.abs(lost-combat*.5*.50)<1e-9,'exactly half of the 투력 contribution, and nothing else');
  for(const m of after.run.finalLock.members)
   assert.ok(after.run.npcs.find(n=>n.id===m.npcId).stats.combat>0,'the stored NPC Stat is untouched');
 });
@@ -222,7 +255,7 @@ test('BOSS-Q07: ENVY picks one ace before its own penalty, and does not re-pick 
  const s=g.run,d=s.final||s.dungeons[0];
  const ranked=l.members.map(m=>{const n=s.npcs.find(x=>x.id===m.npcId);
   const p=Dungeon.prepare(n,d,s.facilities);
-  return {id:n.id,power:p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35};})
+  return {id:n.id,power:p.effects.combat*.50+p.effects.survival*.34+p.effects.mobility*.27+p.effects.spirit*.20-p.hazard*.35};})
   .sort((a,b)=>b.power-a.power||(a.id<b.id?-1:1));
  assert.equal(target,ranked[0].id,'the largest pre-ENVY contributor, not the largest after');
  assert.ok(ranked.length<2||ranked[0].power>ranked[1].power*.5,
@@ -271,11 +304,16 @@ test('BOSS-Q08: GREED reads the committed sales the shop already keeps, capped',
  const g=finalWith('greed','GREED');
  const base=DATA.balance.bossPower,revenue=g.run.finalLock.revenue;
  assert.equal(revenue,g.run.stats.revenue,'the figure is the one Economy keeps, not a second counter');
- const tuned={greedRevenueTarget:revenue+1000,greedShortfallSlope:.01,greedShortfallCap:50};
- const raised=withTuning(tuned,()=>g.effectiveBossPower(0,{revenue}));
- assert.equal(raised,base+10,'the shortfall strengthens the Boss in proportion');
- assert.equal(withTuning({...tuned,greedShortfallCap:5},()=>g.effectiveBossPower(0,{revenue})),base+5,'and no further than the cap');
- assert.equal(withTuning(tuned,()=>g.effectiveBossPower(0,{revenue:revenue+9999})),base,'meeting the target adds nothing, and exceeding it is not a bonus');
+ /* Stage 10 approved the shortfall as a SHARE of the target rather than an amount per Gold, so
+    the penalty means the same thing whatever the target is set to. A Run that sold nothing
+    takes the whole cap, a Run at target takes none, and it is linear in between. */
+ const target=1000,tuned={greedRevenueTarget:target,greedShortfallCap:20};
+ const at=rev=>withTuning(tuned,()=>g.effectiveBossPower(0,{revenue:rev}));
+ assert.equal(at(0),base+20,'a Run that sold nothing takes the whole cap');
+ assert.equal(at(target/2),base+10,'the shortfall strengthens the Boss in proportion');
+ assert.equal(at(target),base,'meeting the target adds nothing');
+ assert.equal(at(target+9999),base,'and exceeding it is not a bonus');
+ assert.equal(withTuning({...tuned,greedShortfallCap:5},()=>g.effectiveBossPower(0,{revenue:0})),base+5,'and no further than the cap');
 });
 
 console.log(count+' final groups passed');

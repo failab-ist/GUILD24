@@ -46,7 +46,16 @@ function blank(runs,policy,pricing,build){
   concentration:{runs:0,supplied:[],repeat:[],topShare:[]},
   /* Stage 9 / SE-4. A loss that missed by a little is a different Run from one that was never
      close, and only the first teaches anything. Measured from the resolved Final margin. */
-  nearMiss:{losses:0,margins:[],within10:0,within25:0}};
+  nearMiss:{losses:0,margins:[],within10:0,within25:0},
+  /* Stage 10 §Q. The Gold ledger the Run already writes per Day (reportHistory), summed by
+     where it came from and where it went, so SALE-origin share is read rather than guessed.
+     Overhead is sampled with the Core Roster that produced it, so the Day x quality formula
+     can be checked against the store it was charged to. spawnByMastery counts what the Job
+     Mastery spawn roll actually did, per rank. All measurement-only. */
+  goldIn:{sale:0,greatSuccess:0,subsidy:0,liquidation:0},
+  goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0},
+  overhead:{samples:[],coreLevel:[],coreRarity:[]},
+  reachBy:{10:0,20:0,30:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
 function pct(xs,q){if(!xs||!xs.length)return 0;const a=[...xs].sort((x,y)=>x-y);
@@ -62,6 +71,12 @@ function derive(out,count){
   prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,
   deathsP10:pct(out.deathsPerRun,.1),deathsMedian:pct(out.deathsPerRun,.5),deathsP90:pct(out.deathsPerRun,.9),
   deathFailRate:out.endedBy.deaths/count,deathFailDayMedian:pct(out.deathFailDay,.5),
+  reach10:out.reachBy[10]/count,reach20:out.reachBy[20]/count,reach30:out.reachBy[30]/count,
+  goldInTotal:Object.values(out.goldIn).reduce((a,b)=>a+b,0),
+  goldOutTotal:Object.values(out.goldOut).reduce((a,b)=>a+b,0),
+  saleOriginShare:(()=>{const t=Object.values(out.goldIn).reduce((a,b)=>a+b,0);return t?out.goldIn.sale/t:0;})(),
+  overheadMedian:pct(out.overhead.samples,.5),overheadP10:pct(out.overhead.samples,.1),overheadP90:pct(out.overhead.samples,.9),
+  coreLevelMedian:pct(out.overhead.coreLevel,.5),coreRarityMedian:pct(out.overhead.coreRarity,.5),
   suppliedPerRun:out.concentration.runs?out.concentration.supplied.reduce((a,b)=>a+b,0)/out.concentration.runs:0,
   repeatSuppliedPerRun:out.concentration.runs?out.concentration.repeat.reduce((a,b)=>a+b,0)/out.concentration.runs:0,
   topShareMedian:pct(out.concentration.topShare,.5),
@@ -169,6 +184,11 @@ function playRun(g,out,ctx){
    if(!s.inventory.length)out.stockouts++;g.depart();act();
   }else if(s.phase==='night'){g.finishNight();act();}
   else if(s.phase==='closing'){
+   /* Stage 10 §Q. The roster the overhead was charged against, sampled on the Day it was
+      charged, so the Day x quality formula can be read back against the store it billed. */
+   {const core=g.coreRoster();
+    out.overhead.coreLevel.push(core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1);
+    out.overhead.coreRarity.push(core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0);}
    /* The opening stock is the only stock a meta-farm run ever holds; turning it into cash on
       the first Closing is an ordinary 재고 정리 action and buys more days per interaction. */
    if(engagement.liquidateOpening)while(s.inventory.length){g.liquidate(s.inventory[0].id);act();}
@@ -200,6 +220,17 @@ function playRun(g,out,ctx){
   out.concentration.runs++;out.concentration.supplied.push(seen.length);
   out.concentration.repeat.push(seen.filter(k=>k>=3).length);
   out.concentration.topShare.push(total?Math.max(...seen,0)/total:0);}
+ /* Stage 10 §Q. Where the Gold came from and where it went, read off the per-Day ledger the
+    Run already keeps rather than a second set of counters inside play. */
+ for(const d of s.reportHistory||[]){
+  out.goldIn.sale+=d.revenue||0;out.goldIn.greatSuccess+=d.greatSuccess||0;
+  out.goldIn.subsidy+=d.subsidy||0;out.goldIn.liquidation+=d.liquidation||0;
+  out.goldOut.order+=d.spent||0;out.goldOut.operating+=d.operating||0;
+  out.goldOut.relic+=d.relicSpent||0;out.goldOut.deepSponsor+=d.deepSponsor||0;
+  out.goldOut.commission+=d.commission||0;out.goldOut.waste+=d.wasteCost||0;
+  if(d.operating)out.overhead.samples.push(d.operating);
+ }
+ for(const d of [10,20,30])if(s.day>=d)out.reachBy[d]++;
  out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
  /* measurement only - how often a Rare Reference identity actually turns up, so the starting
     chance can be judged on evidence in Stage 9 rather than on the number itself. */

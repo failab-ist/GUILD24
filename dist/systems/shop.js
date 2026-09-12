@@ -1,11 +1,17 @@
 (function(G){
+/* Stage 10, approved (§O). Stage 9 measured FIRE as the hardest Family for all six Jobs and by
+   a wide margin - the `one Family is always hardest` clause of DUNGEON_HAZARD BALANCE TARGET.
+   Its combat requirement is eased; its Hazard identity and Stat mapping are untouched, so what
+   makes a fire Gate a fire Gate is unchanged. Provisional: re-measured, and if FIRE is still
+   consistently worst by 10%p a further candidate is reported rather than applied. */
+const FIRE_COMBAT=.92;
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 class Game{
  constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;}
  save(){if(this.run)this.run.rngState=this.rng.state;if(this.autosave&&typeof localStorage!=='undefined')G.Save.write(this.account,this.run);}
  start(seed,contract='standard'){
  if(!D.contracts.some(c=>c.id===contract&&G.Meta.contractUnlocked(this.account,c)))throw Error('잠겨 있는 시작 계약입니다.');
- this.rng=new G.RNG(seed);this.run={version:6,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1200+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ this.rng=new G.RNG(seed);this.run={version:6,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1000+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
  for(const[id,num]of[['rice',2],['water',2],['bandage',1],['potion',1]])this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
@@ -23,6 +29,20 @@ class Game{
 this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
  capacity(){return 24+(this.has('warehouse')?10:0);}
+ /* ECONOMY_ORDER §OPERATING COST (Stage 10, approved). Overhead follows the Day AND the quality
+    of the roster the player has actually built, so a store that grows good adventurers keeps
+    having to sell well to hold on to them - the pressure does not fall away after the mid-game.
+    Averaging the WHOLE pool would reward hoarding level-1 bodies to dilute the figure, so it is
+    the Core Roster: the six best adventurers still alive in the pool, by Level then Rarity.
+    Recovering adventurers count - they are still on the books. Fewer than six, everyone.
+    Nothing is persisted: both averages are derived from the roster as it stands. */
+ coreRoster(){return this.run.npcs.filter(n=>n.alive)
+  .sort((a,b)=>b.level-a.level||b.rarity-a.rarity).slice(0,6);}
+ overheadBase(){const core=this.coreRoster();
+  const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
+  const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
+  const dayBase=90+2*(this.run.day-1);
+  return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}
  has(id){return this.run.facilities.includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
  stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:it.days?this.run.day+it.days+G.Relics.shelf(this,it):null,cost:cost??it.buy});}
@@ -93,7 +113,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,requiredSupply:0,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,requiredSupply:this.burden(tier),power:21+s.day*1.7+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3,reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,requiredSupply:this.burden(tier),power:(21+s.day*1.7+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?FIRE_COMBAT:1),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
@@ -168,13 +188,17 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
  const price=Math.round(it.sell*rule.mult),d=this.gateFor(n)||this.run.dungeons[0],p=it.effects;
+ /* What the customer weighs the offer against. Identical to `price` for 할인 and 바가지; for
+    정가 it is the lower judged price the approved threshold sets. It never changes what is
+    charged or what has to be affordable - only how willingly the offer is taken. */
+ const judged=Math.round(it.sell*(rule.intentMult??rule.mult));
  let fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0),need=.53+Math.min(.29,fit*.012);
  if(n.injury&&it.category==='medicine')need+=.25;if(n.pack.length)need-=.1;
- for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(price>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;}
+ for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=.1;
  if(this.run.event?.effects.foodDemand&&['food','fresh','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
  if(this.run.event?.effects.medicalDemand&&it.category==='medicine')need+=this.run.event.effects.medicalDemand;
- const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=debit/Math.max(1,wallet),chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent,.08,.97);
+ const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet),chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent,.08,.97);
  return {price,debit,guarantee,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){
@@ -216,7 +240,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=12;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=25;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
- s.daily.operating=ev.overheadFree?0:D.balance.operating+(s.contract==='guild'?20:0)+(s.contract==='premium'?25:0)+(s.dayFacilities?.includes('showcase')?10:0)+(s.dayFacilities?.includes('hub')?35:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+ const extras=(s.contract==='guild'?20:0)+(s.contract==='premium'?25:0)+(s.dayFacilities?.includes('showcase')?10:0)+(s.dayFacilities?.includes('hub')?35:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+ s.daily.operating=ev.overheadFree?0:Math.round((this.overheadBase()+extras)/10)*10;
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
 G.Game=Game;
