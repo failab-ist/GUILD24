@@ -308,7 +308,12 @@ function saleScreen(){
   +'<div class="dossier">'+returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+kitLine(n)+readout(n)+deepOfferUI(n)+specialUI()+'</div>'
   +shelf()+ownedRelicView()
  +'</main>'
- +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)+'</div>'
+ /* D-34. Every price on this screen is a judgement against what the store has, and the
+    store's gold was the one number not on it - Morning, Order and Closing all show it and
+    Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
+    than becoming a readout of its own. */
+ +'<div class="dock"><div class="queue"><span>손님 '+(s.cursor+1)+' / '+s.queue.length+'</span>'+pips(s.queue.length,s.cursor)
+ +'<span class="on-hand">보유 골드 <b>'+fmt(s.money)+'</b>G</span></div>'
  +btn(s.cursor+1===s.queue.length?'영업 종료':'손님 보내기','depart','stamp')+'</div></div>';
 }
 // The waiting line. Every customer still outside is the same back — no face, silhouette,
@@ -599,7 +604,13 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  const first=w.milestoneDay===0,until=w.expiryDay===31?'마왕성 출발 전까지':'DAY '+(w.expiryDay-1)+'까지';
  return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll">'
  +'<div class="relic-open"><span class="label">'+(first?'DAY 0':'DAY '+w.milestoneDay)+'</span><h2>'+(first?'첫 점포지원을 고른다':'점포지원이 도착했다')+'</h2>'
- +'<p>'+(first?'하나는 무료다. 고르면 영업이 시작된다.':until+' 구매할 수 있다 · 자금 '+fmt(s.money)+'G')+'</p></div>'
+ /* D-34. With all seven slots filled every 구매 greys out, and this line went on saying the
+    window was open until DAY N. A disabled action says why it is disabled, on the line that
+    would otherwise contradict it. The seven is the same literal ownedRelicView prints - it
+    is the rule's own number, not a balance parameter to be promoted. */
+ +'<p>'+(first?'하나는 무료다. 고르면 영업이 시작된다.'
+   :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
+   :until+' 구매할 수 있다 · 자금 '+fmt(s.money)+'G')+'</p></div>'
  +(w.purchased?'<p class="discovery">설치 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
  +'<div class="relic-choices">'+w.candidateIds.map((id,i)=>{const r=D.relicBy[id],price=w.candidatePrices[i],mine=w.purchased===id;
   return '<article class="relic-plate'+(mine?' owned':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'

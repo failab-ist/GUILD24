@@ -876,4 +876,26 @@ test('D-1 / UI-Q38: a desk is not a wide phone, and the decision gets the width'
  assert.ok(/\.front\{--cardw:max\(88px,min\(56vw,300px/.test(css),'the card size rule the parser was eating is reachable again');
 });
 
+// D-34. The roguelike-UX gap pass, reporting only what a real screen actually lacked.
+// Two gaps of the five patterns held: the most-watched resource was missing from the one
+// phase that spends it, and a disabled action gave no reason on a screen that contradicted it.
+test('D-34: the store float is on the screen that spends it, and a closed window says it is closed',()=>{
+ const sale=fn('saleScreen');
+ assert.ok(sale.includes('class="on-hand"')&&sale.includes('보유 골드'),
+  'the Sale dock carries the store float, named the way D-8 names it');
+ assert.ok(sale.indexOf('class="on-hand"')>sale.indexOf('class="dock"'),
+  'on the strip that is already pinned there, not as a readout of its own');
+ // D-8 drew the line between the two purses; this screen is where they are read together
+ assert.ok(!/class="on-hand"[^>]*>\s*소지금/.test(app),'and never labelled 소지금, which is the customer\'s');
+ assert.ok(/\.p-sale \.dock \.on-hand\{/.test(css),'it has its own rule');
+ assert.ok(!/^\.on-hand\{/m.test(css),'under a name the Order form has not already taken');
+ // the Order form's own gold panel is untouched by it
+ assert.ok(/^\.purse\{display:flex/m.test(css),'the Order purse is still the Order purse');
+ // every slot filled: the line that used to promise a purchase now says there is no room
+ const win=fn('relicWindow')||app.slice(app.indexOf('relic-takeover'),app.indexOf('function sealChoice'));
+ assert.ok(win.includes("game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다."),
+  'a full store says so where it used to say the window is open until DAY N');
+ assert.ok(win.includes('구매할 수 있다 · 자금'),'and still says the open case when it is open');
+});
+
 console.log(count+' ui guard groups passed');
