@@ -851,4 +851,29 @@ test('D-30 / D-35: the notebook says what happened, or says nothing, and the win
   'and the count matches the lines, because both come from the same filtered list');
 });
 
+// D-1 at a desk. Measured at 1280x880 before this: the SALE counter band spent 331px showing
+// a 232px card while the whole decision was folded into a 453px letterbox holding 1297px of
+// content - three screens of scrolling with 1048px of width going to a single column.
+test('D-1 / UI-Q38: a desk is not a wide phone, and the decision gets the width',()=>{
+ const desk=css.slice(css.indexOf('@media(min-width:1024px)'));
+ assert.ok(css.includes('@media(min-width:1024px)'),'the sheet has a desktop tier at all');
+ assert.ok(/\.p-sale \.stage-scroll\{[^}]*display:grid/.test(desk)
+        && /\.p-sale \.stage-scroll\{[^}]*grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,1fr\)/.test(desk),
+  'the Sale decision surface is two columns there');
+ assert.ok(/\.p-sale \.shelf\{grid-column:2/.test(desk),'the shelf takes the second column');
+ assert.ok(/\.p-sale \.dossier\{grid-column:1/.test(desk),'and who this is stays beside it, not above it');
+ // the tier is additive: nothing here may reach a phone
+ assert.ok(!/@media/.test(desk.slice(desk.indexOf('{')+1,desk.indexOf('/* ---- Boss reveal'))),
+  'the desktop tier is one block and does not nest another query');
+ // A custom property written outside a rule is not a declaration: the parser swallowed it
+ // together with the rule that followed, and the desktop customer card silently lost its
+ // size for it. Nothing may sit between a media query brace and its first selector.
+ for(const m of css.matchAll(/@media[^{]*\{\s*([^\s{}][^{}]*?)(?=[{])/g)){
+  const head=m[1].trim();
+  assert.ok(!/^--[\w-]+\s*:/.test(head),
+   'a bare custom property sits directly inside a media block and will be dropped with the rule after it: '+head.slice(0,40));
+ }
+ assert.ok(/\.front\{--cardw:max\(88px,min\(56vw,300px/.test(css),'the card size rule the parser was eating is reachable again');
+});
+
 console.log(count+' ui guard groups passed');
