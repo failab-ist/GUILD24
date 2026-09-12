@@ -54,7 +54,7 @@ function blank(runs,policy,pricing,build){
      Mastery spawn roll actually did, per rank. All measurement-only. */
   goldIn:{sale:0,greatSuccess:0,subsidy:0,liquidation:0},
   goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0},
-  overhead:{samples:[],coreLevel:[],coreRarity:[]},
+  overhead:{samples:[],byBand:{},coreLevel:[],coreRarity:[]},bossRuns:{},
   reachBy:{10:0,20:0,30:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
@@ -76,6 +76,7 @@ function derive(out,count){
   goldOutTotal:Object.values(out.goldOut).reduce((a,b)=>a+b,0),
   saleOriginShare:(()=>{const t=Object.values(out.goldIn).reduce((a,b)=>a+b,0);return t?out.goldIn.sale/t:0;})(),
   overheadMedian:pct(out.overhead.samples,.5),overheadP10:pct(out.overhead.samples,.1),overheadP90:pct(out.overhead.samples,.9),
+  overheadByBand:Object.fromEntries(Object.entries(out.overhead.byBand).map(([b,v])=>[b,{p25:pct(v,.25),median:pct(v,.5),p75:pct(v,.75)}])),
   coreLevelMedian:pct(out.overhead.coreLevel,.5),coreRarityMedian:pct(out.overhead.coreRarity,.5),
   suppliedPerRun:out.concentration.runs?out.concentration.supplied.reduce((a,b)=>a+b,0)/out.concentration.runs:0,
   repeatSuppliedPerRun:out.concentration.runs?out.concentration.repeat.reduce((a,b)=>a+b,0)/out.concentration.runs:0,
@@ -228,7 +229,8 @@ function playRun(g,out,ctx){
   out.goldOut.order+=d.spent||0;out.goldOut.operating+=d.operating||0;
   out.goldOut.relic+=d.relicSpent||0;out.goldOut.deepSponsor+=d.deepSponsor||0;
   out.goldOut.commission+=d.commission||0;out.goldOut.waste+=d.wasteCost||0;
-  if(d.operating)out.overhead.samples.push(d.operating);
+  if(d.operating){out.overhead.samples.push(d.operating);
+   (out.overhead.byBand[d.day<=10?'D1-10':d.day<=20?'D11-20':'D21-30']??=[]).push(d.operating);}
  }
  for(const d of [10,20,30])if(s.day>=d)out.reachBy[d]++;
  out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
@@ -250,6 +252,10 @@ function playRun(g,out,ctx){
  out.deathsPerRun.push(s.stats.deaths);
  const byDeaths=s.stats.deaths>=D.balance.deathLimit;
  out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
+ /* Per-Boss conditional clear: only Runs whose Final actually resolved, so WRATH (no Trait) can
+    be read apart from the six that carry one. */
+ if(s.bossDebug){const b=out.bossRuns[s.bossId]??={resolved:0,cleared:0,margin:0};
+  b.resolved++;b.cleared+=Number(!!s.win);b.margin+=s.bossDebug.assault-s.bossDebug.bossPower;}
  if(byDeaths)out.deathFailDay.push(s.day);
  return s;
 }

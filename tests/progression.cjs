@@ -9,6 +9,31 @@
 const fs=require('node:fs');
 for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const D=globalThis.DATA,seeds=Number(process.argv[2])||300;
+const CANDIDATE=process.argv.includes('--candidate');
+
+/* The next balance pass, E1 + F1 + H1, injected HARNESS-ONLY. Nothing below is written to the
+   catalog on disk: D.balance and D.bossTuning are plain data so they are assigned and restored
+   here, and the overhead formula is reached through Game.prototype exactly the way this file
+   already reaches Meta.jobUnlocked. Production keeps the approved Stage 10 values either way,
+   and the two sides of the comparison run the same seeds.
+     E1  the fixed Day pressure eases and the maintenance of a grown Roster carries more of it
+     F1  the six Boss Traits ease; WRATH, the Final formula and the revenue target do not move
+     H1  fire's combat requirement eases again; the environment coefficient is not touched */
+function withCandidate(fn){
+ if(!CANDIDATE)return fn();
+ const t=D.bossTuning,b=D.balance,proto=globalThis.Game.prototype;
+ const saved={tuning:{...t},sloth:t.slothBossPower.slice(),fire:b.fireCombat,overhead:proto.overheadBase};
+ t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
+ t.greedShortfallCap=15;t.slothBossPower=[220,190,175,160];
+ b.fireCombat=0.90;
+ proto.overheadBase=function(){const core=this.coreRoster();
+  const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
+  const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
+  return (90+1*(this.run.day-1))*(1+.05*(avgLevel-1))*(1+.12*avgRarity);};
+ try{return fn();}
+ finally{Object.assign(t,saved.tuning);t.slothBossPower=saved.sloth;b.fireCombat=saved.fire;
+  proto.overheadBase=saved.overhead;}
+}
 
 /* The five tiers of §C. Each is built through the real matrix, so the Grade it implies, the
    Jobs it opens and the items it unlocks are the real ones - nothing is inserted by hand.
@@ -39,15 +64,23 @@ function withAllJobs(fn){
 }
 
 const pct=x=>Number.isFinite(x)?(x*100).toFixed(1)+'%':'—';
-const out={version:1,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',seedsPerTier:seeds,
- note:'Account progression tiers built through the real Job x Boss matrix. Deterministic strategy heuristics, not human play.',
+const ARM=CANDIDATE?'candidate':'baseline';
+const FILE='tests/progression-results-v5'+(CANDIDATE?'-candidate':'')+'.json';
+const out={version:2,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',seedsPerTier:seeds,arm:ARM,
+ note:'Account progression tiers built through the real Job x Boss matrix. Deterministic strategy heuristics, not human play. `arm` says whether the E1+F1+H1 candidate was injected for the duration of the measurement.',
  tiers:[],forcedUnlock:null};
+console.log('== arm:',ARM,'==');
 
-console.log('tier'.padEnd(20),'등급 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
+/* Two play qualities, because the targets are written against the first of them. `beginner` is
+   the first-run-like policy the Fresh D30 target is read from; `balanced` is skilled play, an
+   analysis axis rather than a target. Both are heuristics, not people. */
+const POLICIES=[['beginner','배우는 중'],['balanced','숙련']];
+console.log('tier'.padEnd(20),'정책      등급 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
+for(const [policy,policyLabel] of POLICIES)
 for(const t of TIERS){
  const account=accountFor(t);
- const r=globalThis.Debug.simulate(seeds,'balanced',account,'adaptive','hybrid');
- const row={...t,grade:globalThis.Meta.grade(account),mastery:globalThis.Meta.totalJobMastery(account),
+ const r=withCandidate(()=>globalThis.Debug.simulate(seeds,policy,account,'adaptive','hybrid'));
+ const row={...t,policy,grade:globalThis.Meta.grade(account),mastery:globalThis.Meta.totalJobMastery(account),
   distinct:globalThis.Meta.distinctBossClear(account),
   reach10:r.reach10,reach20:r.reach20,reach30:r.reach30,
   finalGivenReach:r.bossWinGivenReach,clear:r.overallClearRate,deaths:r.averageDeaths,
@@ -58,18 +91,20 @@ for(const t of TIERS){
   prepStartGoldP25:r.prepStartGoldP25,prepStartGoldMedian:r.prepStartGoldMedian,prepStartGoldP75:r.prepStartGoldP75,
   great:r.great,greatSuccessRate:r.greatSuccessRate,greatStoreGoldPerRun:r.greatStoreGoldPerRun,
   deepOfferedPerRun:r.deepOfferedPerRun,deepTakenPerRun:r.deepTakenPerRun,deepSponsorPerRun:r.deepSponsorPerRun,
-  familyJob:r.familyJob,bossJob:r.bossJob,npcLevel:r.npc.alive?r.npc.level/r.npc.alive:0};
+  familyJob:r.familyJob,bossJob:r.bossJob,npcLevel:r.npc.alive?r.npc.level/r.npc.alive:0,
+  overheadByBand:r.overheadByBand,bossRuns:r.bossRuns,modes:r.modes,
+  goldInTotal:r.goldInTotal,goldOutTotal:r.goldOutTotal,relicSpendPerRun:r.relicSpend/seeds};
  out.tiers.push(row);
- console.log(t.label.padEnd(20),String(row.grade).padStart(2),String(row.mastery).padStart(4),
+ console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(row.grade).padStart(2),String(row.mastery).padStart(4),
   String(row.distinct).padStart(6),pct(row.reach10).padStart(8),pct(row.reach20).padStart(7),
   pct(row.reach30).padStart(7),pct(row.finalGivenReach).padStart(10),pct(row.clear).padStart(10),
   row.deaths.toFixed(2).padStart(9));
- fs.writeFileSync('tests/progression-results-v5.json',JSON.stringify(out,null,2));
+ fs.writeFileSync(FILE,JSON.stringify(out,null,2));
 }
 
 /* 도적 / 광전사 against the base four, at Mastery 0 so the Job is the only difference. */
 console.log('\n=== §A-1 forced-unlock Job comparison (Mastery 0, simulation only) ===');
-const forced=withAllJobs(()=>globalThis.Debug.simulate(seeds,'balanced',globalThis.Meta.fresh(),'adaptive','hybrid'));
+const forced=withCandidate(()=>withAllJobs(()=>globalThis.Debug.simulate(seeds,'balanced',globalThis.Meta.fresh(),'adaptive','hybrid')));
 out.forcedUnlock={familyJob:forced.familyJob,bossJob:forced.bossJob,jobs:forced.jobs,
  reach30:forced.reach30,clear:forced.overallClearRate};
 const KO={warrior:'전사',archer:'궁수',mage:'마법사',priest:'사제',rogue:'도적',berserker:'광전사'};
@@ -82,5 +117,5 @@ for(const id of Object.keys(KO)){
   pct(j.success/j.expeditions).padStart(8),pct(j.death/j.expeditions).padStart(8),
   String(bj.sent).padStart(10),pct(bj.sent?bj.cleared/bj.sent:NaN).padStart(12));
 }
-fs.writeFileSync('tests/progression-results-v5.json',JSON.stringify(out,null,2));
-console.log('\nwritten: tests/progression-results-v5.json');
+fs.writeFileSync(FILE,JSON.stringify(out,null,2));
+console.log('\nwritten: '+FILE);

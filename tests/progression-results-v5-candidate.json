@@ -1,0 +1,5791 @@
+{
+  "version": 2,
+  "canonicalSet": "GUILD24_DESIGN_SSOT_v2.5.0",
+  "seedsPerTier": 300,
+  "arm": "candidate",
+  "note": "Account progression tiers built through the real Job x Boss matrix. Deterministic strategy heuristics, not human play. `arm` says whether the E1+F1+H1 candidate was injected for the duration of the measurement.",
+  "tiers": [
+    {
+      "key": "fresh",
+      "label": "Fresh First Run",
+      "jobs": 0,
+      "bosses": 0,
+      "policy": "beginner",
+      "grade": 1,
+      "mastery": 0,
+      "distinct": 0,
+      "reach10": 0.9966666666666667,
+      "reach20": 0.5066666666666667,
+      "reach30": 0.18333333333333332,
+      "finalGivenReach": 0.09090909090909091,
+      "clear": 0.016666666666666666,
+      "deaths": 3.506666666666667,
+      "endedBy": {
+        "deaths": 3,
+        "bankrupt": 242,
+        "finalFail": 50,
+        "cleared": 5
+      },
+      "deathFailDayMedian": 28,
+      "goldIn": {
+        "sale": 2980556,
+        "greatSuccess": 30300,
+        "subsidy": 3140,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 2173683,
+        "operating": 830530,
+        "relic": 216088,
+        "deepSponsor": 128660,
+        "commission": 6092,
+        "waste": 49772
+      },
+      "saleOriginShare": 0.9889050947645585,
+      "overheadP10": 110,
+      "overheadMedian": 130,
+      "overheadP90": 170,
+      "coreLevelMedian": 5.333333333333333,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 255,
+      "prepStartGoldMedian": 1156,
+      "prepStartGoldP75": 2382,
+      "great": {
+        "success": 2648,
+        "great": 236,
+        "storeGold": 30300,
+        "byBand": {
+          "0-.1": {
+            "success": 716,
+            "great": 32
+          },
+          "<0": {
+            "success": 681,
+            "great": 0
+          },
+          ".1-.26": {
+            "success": 871,
+            "great": 108
+          },
+          ".26-.5": {
+            "success": 354,
+            "great": 94
+          },
+          ".5-1": {
+            "success": 26,
+            "great": 2
+          }
+        }
+      },
+      "greatSuccessRate": 0.0891238670694864,
+      "greatStoreGoldPerRun": 101,
+      "deepOfferedPerRun": 1.3266666666666667,
+      "deepTakenPerRun": 1.3266666666666667,
+      "deepSponsorPerRun": 428.8666666666667,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 1383,
+          "success": 128,
+          "retreat": 574,
+          "injury": 384,
+          "severe": 246,
+          "death": 51,
+          "consumed": 1408
+        },
+        "fire:archer": {
+          "expeditions": 1480,
+          "success": 69,
+          "retreat": 646,
+          "injury": 476,
+          "severe": 234,
+          "death": 55,
+          "consumed": 1526
+        },
+        "fire:priest": {
+          "expeditions": 1328,
+          "success": 28,
+          "retreat": 561,
+          "injury": 418,
+          "severe": 252,
+          "death": 69,
+          "consumed": 1312
+        },
+        "fire:mage": {
+          "expeditions": 1543,
+          "success": 110,
+          "retreat": 595,
+          "injury": 506,
+          "severe": 276,
+          "death": 56,
+          "consumed": 1569
+        },
+        "snow:warrior": {
+          "expeditions": 1442,
+          "success": 168,
+          "retreat": 546,
+          "injury": 417,
+          "severe": 270,
+          "death": 41,
+          "consumed": 1522
+        },
+        "crypt:warrior": {
+          "expeditions": 1460,
+          "success": 206,
+          "retreat": 506,
+          "injury": 444,
+          "severe": 256,
+          "death": 48,
+          "consumed": 1470
+        },
+        "slime:warrior": {
+          "expeditions": 1442,
+          "success": 275,
+          "retreat": 462,
+          "injury": 433,
+          "severe": 233,
+          "death": 39,
+          "consumed": 1443
+        },
+        "snow:archer": {
+          "expeditions": 1530,
+          "success": 101,
+          "retreat": 662,
+          "injury": 504,
+          "severe": 211,
+          "death": 52,
+          "consumed": 1562
+        },
+        "crypt:mage": {
+          "expeditions": 1501,
+          "success": 192,
+          "retreat": 578,
+          "injury": 456,
+          "severe": 230,
+          "death": 45,
+          "consumed": 1526
+        },
+        "slime:archer": {
+          "expeditions": 1400,
+          "success": 150,
+          "retreat": 571,
+          "injury": 410,
+          "severe": 225,
+          "death": 44,
+          "consumed": 1356
+        },
+        "slime:priest": {
+          "expeditions": 1445,
+          "success": 89,
+          "retreat": 559,
+          "injury": 463,
+          "severe": 266,
+          "death": 68,
+          "consumed": 1415
+        },
+        "crypt:archer": {
+          "expeditions": 1570,
+          "success": 117,
+          "retreat": 718,
+          "injury": 457,
+          "severe": 221,
+          "death": 57,
+          "consumed": 1562
+        },
+        "spider:archer": {
+          "expeditions": 1404,
+          "success": 138,
+          "retreat": 597,
+          "injury": 403,
+          "severe": 217,
+          "death": 49,
+          "consumed": 1400
+        },
+        "spider:priest": {
+          "expeditions": 1322,
+          "success": 69,
+          "retreat": 528,
+          "injury": 451,
+          "severe": 219,
+          "death": 55,
+          "consumed": 1260
+        },
+        "spider:mage": {
+          "expeditions": 1407,
+          "success": 174,
+          "retreat": 476,
+          "injury": 473,
+          "severe": 225,
+          "death": 59,
+          "consumed": 1397
+        },
+        "spider:warrior": {
+          "expeditions": 1349,
+          "success": 231,
+          "retreat": 492,
+          "injury": 382,
+          "severe": 207,
+          "death": 37,
+          "consumed": 1353
+        },
+        "snow:priest": {
+          "expeditions": 1366,
+          "success": 41,
+          "retreat": 568,
+          "injury": 453,
+          "severe": 242,
+          "death": 62,
+          "consumed": 1303
+        },
+        "snow:mage": {
+          "expeditions": 1549,
+          "success": 123,
+          "retreat": 600,
+          "injury": 503,
+          "severe": 266,
+          "death": 57,
+          "consumed": 1619
+        },
+        "crypt:priest": {
+          "expeditions": 1412,
+          "success": 60,
+          "retreat": 600,
+          "injury": 429,
+          "severe": 256,
+          "death": 67,
+          "consumed": 1446
+        },
+        "slime:mage": {
+          "expeditions": 1406,
+          "success": 179,
+          "retreat": 506,
+          "injury": 458,
+          "severe": 222,
+          "death": 41,
+          "consumed": 1422
+        }
+      },
+      "bossJob": {
+        "GLUTTONY:mage": {
+          "sent": 5,
+          "cleared": 3
+        },
+        "GLUTTONY:warrior": {
+          "sent": 2,
+          "cleared": 2
+        },
+        "WRATH:priest": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "WRATH:archer": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "GLUTTONY:priest": {
+          "sent": 8,
+          "cleared": 1
+        },
+        "GREED:mage": {
+          "sent": 11,
+          "cleared": 1
+        },
+        "GREED:warrior": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "GREED:archer": {
+          "sent": 15,
+          "cleared": 0
+        },
+        "ENVY:archer": {
+          "sent": 8,
+          "cleared": 0
+        },
+        "ENVY:mage": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "GREED:priest": {
+          "sent": 8,
+          "cleared": 1
+        },
+        "LUST:warrior": {
+          "sent": 7,
+          "cleared": 0
+        },
+        "LUST:mage": {
+          "sent": 7,
+          "cleared": 0
+        },
+        "WRATH:warrior": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "WRATH:mage": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "ENVY:warrior": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "PRIDE:mage": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "PRIDE:warrior": {
+          "sent": 8,
+          "cleared": 0
+        },
+        "PRIDE:archer": {
+          "sent": 7,
+          "cleared": 2
+        },
+        "PRIDE:priest": {
+          "sent": 4,
+          "cleared": 1
+        },
+        "SLOTH:warrior": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "SLOTH:mage": {
+          "sent": 7,
+          "cleared": 2
+        },
+        "ENVY:priest": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "GLUTTONY:archer": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "SLOTH:priest": {
+          "sent": 6,
+          "cleared": 1
+        },
+        "SLOTH:archer": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "LUST:archer": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "LUST:priest": {
+          "sent": 3,
+          "cleared": 0
+        }
+      },
+      "npcLevel": 7.263942573163998,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 120
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 140,
+          "p75": 150
+        },
+        "D21-30": {
+          "p25": 170,
+          "median": 180,
+          "p75": 190
+        }
+      },
+      "bossRuns": {
+        "GLUTTONY": {
+          "resolved": 6,
+          "cleared": 2,
+          "margin": -55.818819742033924
+        },
+        "WRATH": {
+          "resolved": 6,
+          "cleared": 0,
+          "margin": -217.64533605146462
+        },
+        "GREED": {
+          "resolved": 13,
+          "cleared": 1,
+          "margin": -412.922706592754
+        },
+        "ENVY": {
+          "resolved": 8,
+          "cleared": 0,
+          "margin": -334.14638321580844
+        },
+        "LUST": {
+          "resolved": 7,
+          "cleared": 0,
+          "margin": -299.5253993139426
+        },
+        "PRIDE": {
+          "resolved": 8,
+          "cleared": 1,
+          "margin": -356.20971193042215
+        },
+        "SLOTH": {
+          "resolved": 7,
+          "cleared": 1,
+          "margin": -245.77078583448727
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 25179,
+          "accepted": 14123,
+          "revenue": 1443010,
+          "profit": 759036,
+          "loyalty": 16533
+        },
+        "half": {
+          "attempts": 16404,
+          "accepted": 12033,
+          "revenue": 1165197,
+          "profit": 31687,
+          "loyalty": 76368
+        },
+        "overcharge": {
+          "attempts": 5285,
+          "accepted": 2715,
+          "revenue": 372349,
+          "profit": 257064,
+          "loyalty": -7867
+        }
+      },
+      "goldInTotal": 3013996,
+      "goldOutTotal": 3404825,
+      "relicSpendPerRun": 780.8466666666667
+    },
+    {
+      "key": "early",
+      "label": "Early Meta",
+      "jobs": 2,
+      "bosses": 2,
+      "trim": 1,
+      "policy": "beginner",
+      "grade": 1,
+      "mastery": 3,
+      "distinct": 2,
+      "reach10": 0.9833333333333333,
+      "reach20": 0.4766666666666667,
+      "reach30": 0.13,
+      "finalGivenReach": 0.02564102564102564,
+      "clear": 0.0033333333333333335,
+      "deaths": 3.216666666666667,
+      "endedBy": {
+        "deaths": 1,
+        "bankrupt": 260,
+        "finalFail": 38,
+        "cleared": 1
+      },
+      "deathFailDayMedian": 27,
+      "goldIn": {
+        "sale": 2702509,
+        "greatSuccess": 28900,
+        "subsidy": 2610,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 2007950,
+        "operating": 802060,
+        "relic": 195102,
+        "deepSponsor": 126610,
+        "commission": 3450,
+        "waste": 46973
+      },
+      "saleOriginShare": 0.9884748423474745,
+      "overheadP10": 110,
+      "overheadMedian": 130,
+      "overheadP90": 170,
+      "coreLevelMedian": 5.333333333333333,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 280,
+      "prepStartGoldMedian": 663,
+      "prepStartGoldP75": 1281,
+      "great": {
+        "success": 2578,
+        "great": 247,
+        "storeGold": 28900,
+        "byBand": {
+          "0-.1": {
+            "success": 684,
+            "great": 24
+          },
+          "<0": {
+            "success": 636,
+            "great": 0
+          },
+          ".1-.26": {
+            "success": 893,
+            "great": 126
+          },
+          ".26-.5": {
+            "success": 341,
+            "great": 88
+          },
+          ".5-1": {
+            "success": 24,
+            "great": 9
+          }
+        }
+      },
+      "greatSuccessRate": 0.09581070597362297,
+      "greatStoreGoldPerRun": 96.33333333333333,
+      "deepOfferedPerRun": 1.31,
+      "deepTakenPerRun": 1.31,
+      "deepSponsorPerRun": 422.03333333333336,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 1293,
+          "success": 109,
+          "retreat": 536,
+          "injury": 383,
+          "severe": 220,
+          "death": 45,
+          "consumed": 1250
+        },
+        "fire:archer": {
+          "expeditions": 1417,
+          "success": 66,
+          "retreat": 651,
+          "injury": 423,
+          "severe": 229,
+          "death": 48,
+          "consumed": 1354
+        },
+        "fire:priest": {
+          "expeditions": 1335,
+          "success": 30,
+          "retreat": 560,
+          "injury": 423,
+          "severe": 256,
+          "death": 66,
+          "consumed": 1261
+        },
+        "fire:mage": {
+          "expeditions": 1424,
+          "success": 84,
+          "retreat": 553,
+          "injury": 465,
+          "severe": 259,
+          "death": 63,
+          "consumed": 1358
+        },
+        "snow:warrior": {
+          "expeditions": 1412,
+          "success": 170,
+          "retreat": 567,
+          "injury": 404,
+          "severe": 237,
+          "death": 34,
+          "consumed": 1374
+        },
+        "crypt:warrior": {
+          "expeditions": 1422,
+          "success": 211,
+          "retreat": 519,
+          "injury": 437,
+          "severe": 209,
+          "death": 46,
+          "consumed": 1415
+        },
+        "slime:warrior": {
+          "expeditions": 1369,
+          "success": 246,
+          "retreat": 457,
+          "injury": 423,
+          "severe": 211,
+          "death": 32,
+          "consumed": 1362
+        },
+        "snow:archer": {
+          "expeditions": 1545,
+          "success": 119,
+          "retreat": 645,
+          "injury": 463,
+          "severe": 263,
+          "death": 55,
+          "consumed": 1510
+        },
+        "crypt:mage": {
+          "expeditions": 1497,
+          "success": 177,
+          "retreat": 582,
+          "injury": 441,
+          "severe": 247,
+          "death": 50,
+          "consumed": 1460
+        },
+        "slime:archer": {
+          "expeditions": 1396,
+          "success": 128,
+          "retreat": 615,
+          "injury": 409,
+          "severe": 204,
+          "death": 40,
+          "consumed": 1290
+        },
+        "slime:priest": {
+          "expeditions": 1385,
+          "success": 85,
+          "retreat": 538,
+          "injury": 444,
+          "severe": 270,
+          "death": 48,
+          "consumed": 1293
+        },
+        "crypt:archer": {
+          "expeditions": 1453,
+          "success": 128,
+          "retreat": 645,
+          "injury": 417,
+          "severe": 216,
+          "death": 47,
+          "consumed": 1431
+        },
+        "spider:archer": {
+          "expeditions": 1378,
+          "success": 175,
+          "retreat": 561,
+          "injury": 392,
+          "severe": 215,
+          "death": 35,
+          "consumed": 1334
+        },
+        "spider:priest": {
+          "expeditions": 1302,
+          "success": 62,
+          "retreat": 521,
+          "injury": 414,
+          "severe": 244,
+          "death": 61,
+          "consumed": 1240
+        },
+        "spider:mage": {
+          "expeditions": 1339,
+          "success": 157,
+          "retreat": 462,
+          "injury": 451,
+          "severe": 218,
+          "death": 51,
+          "consumed": 1247
+        },
+        "spider:warrior": {
+          "expeditions": 1272,
+          "success": 224,
+          "retreat": 437,
+          "injury": 367,
+          "severe": 211,
+          "death": 33,
+          "consumed": 1192
+        },
+        "snow:priest": {
+          "expeditions": 1294,
+          "success": 49,
+          "retreat": 521,
+          "injury": 415,
+          "severe": 244,
+          "death": 65,
+          "consumed": 1234
+        },
+        "snow:mage": {
+          "expeditions": 1508,
+          "success": 118,
+          "retreat": 575,
+          "injury": 507,
+          "severe": 264,
+          "death": 44,
+          "consumed": 1402
+        },
+        "crypt:priest": {
+          "expeditions": 1389,
+          "success": 71,
+          "retreat": 592,
+          "injury": 452,
+          "severe": 213,
+          "death": 61,
+          "consumed": 1332
+        },
+        "slime:mage": {
+          "expeditions": 1347,
+          "success": 169,
+          "retreat": 498,
+          "injury": 426,
+          "severe": 213,
+          "death": 41,
+          "consumed": 1278
+        }
+      },
+      "bossJob": {
+        "GLUTTONY:warrior": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "GLUTTONY:mage": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "GLUTTONY:priest": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "WRATH:mage": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "WRATH:priest": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "GREED:priest": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "GREED:mage": {
+          "sent": 10,
+          "cleared": 0
+        },
+        "GREED:archer": {
+          "sent": 7,
+          "cleared": 1
+        },
+        "GLUTTONY:archer": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "PRIDE:priest": {
+          "sent": 7,
+          "cleared": 0
+        },
+        "PRIDE:warrior": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "PRIDE:archer": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "ENVY:archer": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "ENVY:mage": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "ENVY:priest": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "WRATH:warrior": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "ENVY:warrior": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "PRIDE:mage": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "GREED:warrior": {
+          "sent": 6,
+          "cleared": 2
+        },
+        "LUST:archer": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "LUST:priest": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "SLOTH:mage": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "SLOTH:warrior": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "SLOTH:archer": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "LUST:mage": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "LUST:warrior": {
+          "sent": 7,
+          "cleared": 0
+        },
+        "SLOTH:priest": {
+          "sent": 1,
+          "cleared": 0
+        }
+      },
+      "npcLevel": 7.110229759299781,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 120
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 140,
+          "p75": 150
+        },
+        "D21-30": {
+          "p25": 170,
+          "median": 170,
+          "p75": 180
+        }
+      },
+      "bossRuns": {
+        "GLUTTONY": {
+          "resolved": 7,
+          "cleared": 0,
+          "margin": -279.7829274619357
+        },
+        "WRATH": {
+          "resolved": 2,
+          "cleared": 0,
+          "margin": -71.50842675861708
+        },
+        "GREED": {
+          "resolved": 9,
+          "cleared": 1,
+          "margin": -299.749774853375
+        },
+        "PRIDE": {
+          "resolved": 6,
+          "cleared": 0,
+          "margin": -355.13604298780183
+        },
+        "ENVY": {
+          "resolved": 5,
+          "cleared": 0,
+          "margin": -217.37315916099675
+        },
+        "LUST": {
+          "resolved": 5,
+          "cleared": 0,
+          "margin": -251.60991228315788
+        },
+        "SLOTH": {
+          "resolved": 5,
+          "cleared": 0,
+          "margin": -202.7461385344352
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 24399,
+          "accepted": 13733,
+          "revenue": 1392530,
+          "profit": 734092,
+          "loyalty": 15362
+        },
+        "half": {
+          "attempts": 14987,
+          "accepted": 10955,
+          "revenue": 1047689,
+          "profit": 28658,
+          "loyalty": 68806
+        },
+        "overcharge": {
+          "attempts": 3886,
+          "accepted": 1929,
+          "revenue": 262290,
+          "profit": 181173,
+          "loyalty": -5721
+        }
+      },
+      "goldInTotal": 2734019,
+      "goldOutTotal": 3182145,
+      "relicSpendPerRun": 684.8033333333333
+    },
+    {
+      "key": "mid",
+      "label": "Mid Meta",
+      "jobs": 4,
+      "bosses": 3,
+      "policy": "beginner",
+      "grade": 2,
+      "mastery": 12,
+      "distinct": 3,
+      "reach10": 0.9666666666666667,
+      "reach20": 0.5033333333333333,
+      "reach30": 0.17,
+      "finalGivenReach": 0.13725490196078433,
+      "clear": 0.023333333333333334,
+      "deaths": 3.1333333333333333,
+      "endedBy": {
+        "deaths": 3,
+        "bankrupt": 246,
+        "finalFail": 44,
+        "cleared": 7
+      },
+      "deathFailDayMedian": 25,
+      "goldIn": {
+        "sale": 2851969,
+        "greatSuccess": 43300,
+        "subsidy": 3315,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 2118386,
+        "operating": 826060,
+        "relic": 211363,
+        "deepSponsor": 129070,
+        "commission": 4246,
+        "waste": 44586
+      },
+      "saleOriginShare": 0.9839180096212495,
+      "overheadP10": 110,
+      "overheadMedian": 130,
+      "overheadP90": 170,
+      "coreLevelMedian": 5.666666666666667,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 166,
+      "prepStartGoldMedian": 423,
+      "prepStartGoldP75": 1176,
+      "great": {
+        "success": 3344,
+        "great": 355,
+        "storeGold": 43300,
+        "byBand": {
+          "0-.1": {
+            "success": 850,
+            "great": 42
+          },
+          "<0": {
+            "success": 778,
+            "great": 0
+          },
+          ".1-.26": {
+            "success": 1165,
+            "great": 179
+          },
+          ".26-.5": {
+            "success": 512,
+            "great": 121
+          },
+          ".5-1": {
+            "success": 39,
+            "great": 13
+          }
+        }
+      },
+      "greatSuccessRate": 0.10616028708133972,
+      "greatStoreGoldPerRun": 144.33333333333334,
+      "deepOfferedPerRun": 1.3233333333333333,
+      "deepTakenPerRun": 1.3233333333333333,
+      "deepSponsorPerRun": 430.23333333333335,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 1123,
+          "success": 134,
+          "retreat": 435,
+          "injury": 330,
+          "severe": 182,
+          "death": 42,
+          "consumed": 1112
+        },
+        "fire:archer": {
+          "expeditions": 1230,
+          "success": 80,
+          "retreat": 545,
+          "injury": 370,
+          "severe": 194,
+          "death": 41,
+          "consumed": 1227
+        },
+        "fire:rogue": {
+          "expeditions": 1244,
+          "success": 91,
+          "retreat": 584,
+          "injury": 337,
+          "severe": 188,
+          "death": 44,
+          "consumed": 1200
+        },
+        "fire:mage": {
+          "expeditions": 1177,
+          "success": 127,
+          "retreat": 478,
+          "injury": 350,
+          "severe": 188,
+          "death": 34,
+          "consumed": 1177
+        },
+        "fire:priest": {
+          "expeditions": 1066,
+          "success": 45,
+          "retreat": 430,
+          "injury": 338,
+          "severe": 190,
+          "death": 63,
+          "consumed": 1013
+        },
+        "snow:warrior": {
+          "expeditions": 1173,
+          "success": 180,
+          "retreat": 410,
+          "injury": 353,
+          "severe": 177,
+          "death": 53,
+          "consumed": 1228
+        },
+        "crypt:warrior": {
+          "expeditions": 1139,
+          "success": 176,
+          "retreat": 387,
+          "injury": 338,
+          "severe": 193,
+          "death": 45,
+          "consumed": 1153
+        },
+        "slime:warrior": {
+          "expeditions": 1127,
+          "success": 237,
+          "retreat": 358,
+          "injury": 358,
+          "severe": 153,
+          "death": 21,
+          "consumed": 1162
+        },
+        "snow:archer": {
+          "expeditions": 1239,
+          "success": 117,
+          "retreat": 540,
+          "injury": 386,
+          "severe": 163,
+          "death": 33,
+          "consumed": 1322
+        },
+        "snow:mage": {
+          "expeditions": 1173,
+          "success": 132,
+          "retreat": 427,
+          "injury": 365,
+          "severe": 212,
+          "death": 37,
+          "consumed": 1220
+        },
+        "spider:priest": {
+          "expeditions": 983,
+          "success": 73,
+          "retreat": 368,
+          "injury": 328,
+          "severe": 173,
+          "death": 41,
+          "consumed": 872
+        },
+        "spider:warrior": {
+          "expeditions": 1041,
+          "success": 203,
+          "retreat": 346,
+          "injury": 295,
+          "severe": 176,
+          "death": 21,
+          "consumed": 1006
+        },
+        "spider:rogue": {
+          "expeditions": 1147,
+          "success": 181,
+          "retreat": 447,
+          "injury": 325,
+          "severe": 158,
+          "death": 36,
+          "consumed": 1058
+        },
+        "spider:archer": {
+          "expeditions": 1119,
+          "success": 133,
+          "retreat": 474,
+          "injury": 311,
+          "severe": 165,
+          "death": 36,
+          "consumed": 1092
+        },
+        "slime:priest": {
+          "expeditions": 1028,
+          "success": 64,
+          "retreat": 401,
+          "injury": 343,
+          "severe": 187,
+          "death": 33,
+          "consumed": 980
+        },
+        "slime:rogue": {
+          "expeditions": 1273,
+          "success": 199,
+          "retreat": 516,
+          "injury": 352,
+          "severe": 167,
+          "death": 39,
+          "consumed": 1248
+        },
+        "snow:rogue": {
+          "expeditions": 1195,
+          "success": 143,
+          "retreat": 500,
+          "injury": 360,
+          "severe": 161,
+          "death": 31,
+          "consumed": 1208
+        },
+        "crypt:rogue": {
+          "expeditions": 1225,
+          "success": 148,
+          "retreat": 522,
+          "injury": 354,
+          "severe": 163,
+          "death": 38,
+          "consumed": 1183
+        },
+        "crypt:priest": {
+          "expeditions": 1074,
+          "success": 73,
+          "retreat": 470,
+          "injury": 316,
+          "severe": 181,
+          "death": 34,
+          "consumed": 1015
+        },
+        "snow:priest": {
+          "expeditions": 1039,
+          "success": 53,
+          "retreat": 405,
+          "injury": 357,
+          "severe": 179,
+          "death": 45,
+          "consumed": 1005
+        },
+        "slime:archer": {
+          "expeditions": 1107,
+          "success": 135,
+          "retreat": 452,
+          "injury": 323,
+          "severe": 165,
+          "death": 32,
+          "consumed": 1075
+        },
+        "crypt:mage": {
+          "expeditions": 1143,
+          "success": 179,
+          "retreat": 441,
+          "injury": 316,
+          "severe": 172,
+          "death": 35,
+          "consumed": 1115
+        },
+        "crypt:archer": {
+          "expeditions": 1201,
+          "success": 115,
+          "retreat": 500,
+          "injury": 364,
+          "severe": 176,
+          "death": 46,
+          "consumed": 1137
+        },
+        "slime:mage": {
+          "expeditions": 1061,
+          "success": 175,
+          "retreat": 363,
+          "injury": 323,
+          "severe": 174,
+          "death": 26,
+          "consumed": 1090
+        },
+        "spider:mage": {
+          "expeditions": 1061,
+          "success": 151,
+          "retreat": 349,
+          "injury": 346,
+          "severe": 181,
+          "death": 34,
+          "consumed": 1018
+        }
+      },
+      "bossJob": {
+        "GREED:mage": {
+          "sent": 8,
+          "cleared": 3
+        },
+        "GREED:priest": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "GLUTTONY:warrior": {
+          "sent": 11,
+          "cleared": 2
+        },
+        "GLUTTONY:archer": {
+          "sent": 7,
+          "cleared": 3
+        },
+        "PRIDE:mage": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "PRIDE:warrior": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "WRATH:priest": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "WRATH:warrior": {
+          "sent": 7,
+          "cleared": 0
+        },
+        "GREED:warrior": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "GREED:rogue": {
+          "sent": 4,
+          "cleared": 3
+        },
+        "LUST:mage": {
+          "sent": 6,
+          "cleared": 2
+        },
+        "LUST:rogue": {
+          "sent": 8,
+          "cleared": 1
+        },
+        "GLUTTONY:rogue": {
+          "sent": 10,
+          "cleared": 0
+        },
+        "GREED:archer": {
+          "sent": 5,
+          "cleared": 2
+        },
+        "WRATH:archer": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "ENVY:mage": {
+          "sent": 3,
+          "cleared": 2
+        },
+        "ENVY:archer": {
+          "sent": 3,
+          "cleared": 1
+        },
+        "GLUTTONY:mage": {
+          "sent": 4,
+          "cleared": 1
+        },
+        "GLUTTONY:priest": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "PRIDE:archer": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "PRIDE:priest": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "WRATH:mage": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "ENVY:rogue": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "ENVY:priest": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "LUST:priest": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "SLOTH:archer": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "SLOTH:mage": {
+          "sent": 6,
+          "cleared": 0
+        },
+        "SLOTH:warrior": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "SLOTH:rogue": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "LUST:archer": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "LUST:warrior": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "PRIDE:rogue": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "SLOTH:priest": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "ENVY:warrior": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "WRATH:rogue": {
+          "sent": 2,
+          "cleared": 0
+        }
+      },
+      "npcLevel": 7.3266684679816265,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 130
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 150,
+          "p75": 160
+        },
+        "D21-30": {
+          "p25": 170,
+          "median": 180,
+          "p75": 190
+        }
+      },
+      "bossRuns": {
+        "GREED": {
+          "resolved": 9,
+          "cleared": 3,
+          "margin": -113.92935133163661
+        },
+        "GLUTTONY": {
+          "resolved": 12,
+          "cleared": 2,
+          "margin": -294.9539758189138
+        },
+        "PRIDE": {
+          "resolved": 4,
+          "cleared": 0,
+          "margin": -255.52408467106835
+        },
+        "WRATH": {
+          "resolved": 6,
+          "cleared": 0,
+          "margin": -268.2538622315093
+        },
+        "LUST": {
+          "resolved": 8,
+          "cleared": 1,
+          "margin": -317.63126941034216
+        },
+        "ENVY": {
+          "resolved": 5,
+          "cleared": 1,
+          "margin": -197.52638503661788
+        },
+        "SLOTH": {
+          "resolved": 7,
+          "cleared": 0,
+          "margin": -456.86259497621745
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 24158,
+          "accepted": 13608,
+          "revenue": 1384495,
+          "profit": 728826,
+          "loyalty": 15445
+        },
+        "half": {
+          "attempts": 16210,
+          "accepted": 11839,
+          "revenue": 1127942,
+          "profit": 32264,
+          "loyalty": 74883
+        },
+        "overcharge": {
+          "attempts": 5020,
+          "accepted": 2469,
+          "revenue": 339532,
+          "profit": 234653,
+          "loyalty": -7277
+        }
+      },
+      "goldInTotal": 2898584,
+      "goldOutTotal": 3333711,
+      "relicSpendPerRun": 747.0433333333333
+    },
+    {
+      "key": "late",
+      "label": "Late Meta",
+      "jobs": 4,
+      "bosses": 6,
+      "policy": "beginner",
+      "grade": 4,
+      "mastery": 24,
+      "distinct": 6,
+      "reach10": 0.98,
+      "reach20": 0.5,
+      "reach30": 0.21,
+      "finalGivenReach": 0.3333333333333333,
+      "clear": 0.07,
+      "deaths": 2.7266666666666666,
+      "endedBy": {
+        "deaths": 1,
+        "bankrupt": 236,
+        "finalFail": 42,
+        "cleared": 21
+      },
+      "deathFailDayMedian": 25,
+      "goldIn": {
+        "sale": 3045814,
+        "greatSuccess": 95200,
+        "subsidy": 3010,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 2276471,
+        "operating": 866280,
+        "relic": 226040,
+        "deepSponsor": 134520,
+        "commission": 6478,
+        "waste": 32576
+      },
+      "saleOriginShare": 0.9687629610969891,
+      "overheadP10": 110,
+      "overheadMedian": 140,
+      "overheadP90": 180,
+      "coreLevelMedian": 6.5,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 223,
+      "prepStartGoldMedian": 746,
+      "prepStartGoldP75": 1956,
+      "great": {
+        "success": 5228,
+        "great": 738,
+        "storeGold": 95200,
+        "byBand": {
+          ".1-.26": {
+            "success": 1764,
+            "great": 267
+          },
+          "0-.1": {
+            "success": 1166,
+            "great": 55
+          },
+          "<0": {
+            "success": 873,
+            "great": 0
+          },
+          ".26-.5": {
+            "success": 1216,
+            "great": 349
+          },
+          ".5-1": {
+            "success": 209,
+            "great": 67
+          }
+        }
+      },
+      "greatSuccessRate": 0.1411629686304514,
+      "greatStoreGoldPerRun": 317.3333333333333,
+      "deepOfferedPerRun": 1.3466666666666667,
+      "deepTakenPerRun": 1.3466666666666667,
+      "deepSponsorPerRun": 448.4,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 1007,
+          "success": 184,
+          "retreat": 381,
+          "injury": 268,
+          "severe": 145,
+          "death": 29,
+          "consumed": 1049
+        },
+        "fire:mage": {
+          "expeditions": 1036,
+          "success": 146,
+          "retreat": 378,
+          "injury": 326,
+          "severe": 151,
+          "death": 35,
+          "consumed": 1085
+        },
+        "fire:berserker": {
+          "expeditions": 982,
+          "success": 167,
+          "retreat": 341,
+          "injury": 287,
+          "severe": 159,
+          "death": 28,
+          "consumed": 985
+        },
+        "fire:priest": {
+          "expeditions": 966,
+          "success": 77,
+          "retreat": 418,
+          "injury": 279,
+          "severe": 165,
+          "death": 27,
+          "consumed": 1024
+        },
+        "fire:rogue": {
+          "expeditions": 936,
+          "success": 64,
+          "retreat": 452,
+          "injury": 250,
+          "severe": 141,
+          "death": 29,
+          "consumed": 933
+        },
+        "crypt:rogue": {
+          "expeditions": 1008,
+          "success": 130,
+          "retreat": 448,
+          "injury": 283,
+          "severe": 116,
+          "death": 31,
+          "consumed": 1019
+        },
+        "crypt:warrior": {
+          "expeditions": 933,
+          "success": 236,
+          "retreat": 283,
+          "injury": 256,
+          "severe": 131,
+          "death": 27,
+          "consumed": 1048
+        },
+        "crypt:mage": {
+          "expeditions": 1009,
+          "success": 243,
+          "retreat": 329,
+          "injury": 272,
+          "severe": 143,
+          "death": 22,
+          "consumed": 1046
+        },
+        "crypt:priest": {
+          "expeditions": 969,
+          "success": 129,
+          "retreat": 387,
+          "injury": 256,
+          "severe": 157,
+          "death": 40,
+          "consumed": 986
+        },
+        "crypt:archer": {
+          "expeditions": 936,
+          "success": 169,
+          "retreat": 354,
+          "injury": 247,
+          "severe": 144,
+          "death": 22,
+          "consumed": 932
+        },
+        "snow:mage": {
+          "expeditions": 1032,
+          "success": 172,
+          "retreat": 368,
+          "injury": 299,
+          "severe": 163,
+          "death": 30,
+          "consumed": 1103
+        },
+        "snow:rogue": {
+          "expeditions": 974,
+          "success": 97,
+          "retreat": 389,
+          "injury": 305,
+          "severe": 153,
+          "death": 30,
+          "consumed": 950
+        },
+        "snow:priest": {
+          "expeditions": 999,
+          "success": 103,
+          "retreat": 388,
+          "injury": 289,
+          "severe": 182,
+          "death": 37,
+          "consumed": 1003
+        },
+        "snow:berserker": {
+          "expeditions": 941,
+          "success": 200,
+          "retreat": 294,
+          "injury": 271,
+          "severe": 156,
+          "death": 20,
+          "consumed": 922
+        },
+        "snow:warrior": {
+          "expeditions": 1066,
+          "success": 202,
+          "retreat": 353,
+          "injury": 314,
+          "severe": 162,
+          "death": 35,
+          "consumed": 1060
+        },
+        "slime:warrior": {
+          "expeditions": 991,
+          "success": 284,
+          "retreat": 289,
+          "injury": 263,
+          "severe": 128,
+          "death": 27,
+          "consumed": 1032
+        },
+        "slime:rogue": {
+          "expeditions": 911,
+          "success": 127,
+          "retreat": 354,
+          "injury": 278,
+          "severe": 132,
+          "death": 20,
+          "consumed": 917
+        },
+        "slime:berserker": {
+          "expeditions": 1002,
+          "success": 271,
+          "retreat": 289,
+          "injury": 279,
+          "severe": 134,
+          "death": 29,
+          "consumed": 983
+        },
+        "slime:priest": {
+          "expeditions": 884,
+          "success": 117,
+          "retreat": 314,
+          "injury": 273,
+          "severe": 152,
+          "death": 28,
+          "consumed": 895
+        },
+        "spider:mage": {
+          "expeditions": 966,
+          "success": 256,
+          "retreat": 280,
+          "injury": 280,
+          "severe": 130,
+          "death": 20,
+          "consumed": 1009
+        },
+        "spider:rogue": {
+          "expeditions": 904,
+          "success": 134,
+          "retreat": 380,
+          "injury": 242,
+          "severe": 124,
+          "death": 24,
+          "consumed": 859
+        },
+        "spider:warrior": {
+          "expeditions": 920,
+          "success": 230,
+          "retreat": 279,
+          "injury": 241,
+          "severe": 143,
+          "death": 27,
+          "consumed": 922
+        },
+        "fire:archer": {
+          "expeditions": 978,
+          "success": 122,
+          "retreat": 416,
+          "injury": 253,
+          "severe": 154,
+          "death": 33,
+          "consumed": 993
+        },
+        "slime:mage": {
+          "expeditions": 1016,
+          "success": 223,
+          "retreat": 310,
+          "injury": 307,
+          "severe": 151,
+          "death": 25,
+          "consumed": 980
+        },
+        "spider:priest": {
+          "expeditions": 958,
+          "success": 141,
+          "retreat": 317,
+          "injury": 316,
+          "severe": 150,
+          "death": 34,
+          "consumed": 958
+        },
+        "spider:berserker": {
+          "expeditions": 990,
+          "success": 258,
+          "retreat": 329,
+          "injury": 238,
+          "severe": 145,
+          "death": 20,
+          "consumed": 1013
+        },
+        "spider:archer": {
+          "expeditions": 849,
+          "success": 181,
+          "retreat": 307,
+          "injury": 227,
+          "severe": 110,
+          "death": 24,
+          "consumed": 802
+        },
+        "crypt:berserker": {
+          "expeditions": 978,
+          "success": 220,
+          "retreat": 292,
+          "injury": 285,
+          "severe": 156,
+          "death": 25,
+          "consumed": 1005
+        },
+        "slime:archer": {
+          "expeditions": 896,
+          "success": 188,
+          "retreat": 306,
+          "injury": 253,
+          "severe": 130,
+          "death": 19,
+          "consumed": 872
+        },
+        "snow:archer": {
+          "expeditions": 942,
+          "success": 157,
+          "retreat": 356,
+          "injury": 278,
+          "severe": 130,
+          "death": 21,
+          "consumed": 959
+        }
+      },
+      "bossJob": {
+        "LUST:priest": {
+          "sent": 3,
+          "cleared": 1
+        },
+        "LUST:warrior": {
+          "sent": 8,
+          "cleared": 2
+        },
+        "LUST:berserker": {
+          "sent": 8,
+          "cleared": 5
+        },
+        "SLOTH:mage": {
+          "sent": 8,
+          "cleared": 0
+        },
+        "SLOTH:rogue": {
+          "sent": 7,
+          "cleared": 3
+        },
+        "SLOTH:warrior": {
+          "sent": 9,
+          "cleared": 2
+        },
+        "GREED:rogue": {
+          "sent": 6,
+          "cleared": 1
+        },
+        "GREED:warrior": {
+          "sent": 4,
+          "cleared": 3
+        },
+        "WRATH:rogue": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "WRATH:priest": {
+          "sent": 6,
+          "cleared": 3
+        },
+        "WRATH:archer": {
+          "sent": 9,
+          "cleared": 5
+        },
+        "GREED:berserker": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "GREED:mage": {
+          "sent": 4,
+          "cleared": 1
+        },
+        "GLUTTONY:archer": {
+          "sent": 3,
+          "cleared": 2
+        },
+        "GLUTTONY:warrior": {
+          "sent": 6,
+          "cleared": 3
+        },
+        "WRATH:mage": {
+          "sent": 4,
+          "cleared": 3
+        },
+        "WRATH:warrior": {
+          "sent": 5,
+          "cleared": 3
+        },
+        "GREED:priest": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "GLUTTONY:mage": {
+          "sent": 7,
+          "cleared": 3
+        },
+        "GLUTTONY:rogue": {
+          "sent": 4,
+          "cleared": 1
+        },
+        "PRIDE:mage": {
+          "sent": 5,
+          "cleared": 0
+        },
+        "PRIDE:archer": {
+          "sent": 4,
+          "cleared": 0
+        },
+        "PRIDE:priest": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "PRIDE:rogue": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "GLUTTONY:priest": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "GLUTTONY:berserker": {
+          "sent": 8,
+          "cleared": 2
+        },
+        "ENVY:mage": {
+          "sent": 3,
+          "cleared": 1
+        },
+        "ENVY:berserker": {
+          "sent": 3,
+          "cleared": 0
+        },
+        "ENVY:archer": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "PRIDE:warrior": {
+          "sent": 5,
+          "cleared": 2
+        },
+        "SLOTH:priest": {
+          "sent": 6,
+          "cleared": 2
+        },
+        "WRATH:berserker": {
+          "sent": 6,
+          "cleared": 1
+        },
+        "PRIDE:berserker": {
+          "sent": 2,
+          "cleared": 1
+        },
+        "ENVY:priest": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "LUST:archer": {
+          "sent": 5,
+          "cleared": 2
+        },
+        "LUST:mage": {
+          "sent": 2,
+          "cleared": 1
+        },
+        "LUST:rogue": {
+          "sent": 1,
+          "cleared": 1
+        },
+        "SLOTH:berserker": {
+          "sent": 10,
+          "cleared": 5
+        },
+        "SLOTH:archer": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "ENVY:rogue": {
+          "sent": 2,
+          "cleared": 1
+        },
+        "GREED:archer": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "ENVY:warrior": {
+          "sent": 1,
+          "cleared": 1
+        }
+      },
+      "npcLevel": 7.824574961360123,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 130
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 150,
+          "p75": 160
+        },
+        "D21-30": {
+          "p25": 170,
+          "median": 180,
+          "p75": 190
+        }
+      },
+      "bossRuns": {
+        "LUST": {
+          "resolved": 9,
+          "cleared": 4,
+          "margin": 31.507297527933304
+        },
+        "SLOTH": {
+          "resolved": 14,
+          "cleared": 4,
+          "margin": -327.63230814996723
+        },
+        "GREED": {
+          "resolved": 7,
+          "cleared": 2,
+          "margin": -113.62583011262038
+        },
+        "WRATH": {
+          "resolved": 11,
+          "cleared": 5,
+          "margin": -162.3164099039965
+        },
+        "GLUTTONY": {
+          "resolved": 11,
+          "cleared": 4,
+          "margin": -141.91705916865882
+        },
+        "PRIDE": {
+          "resolved": 7,
+          "cleared": 1,
+          "margin": -226.88920977232152
+        },
+        "ENVY": {
+          "resolved": 4,
+          "cleared": 1,
+          "margin": -170.29227006280803
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 23685,
+          "accepted": 13163,
+          "revenue": 1358040,
+          "profit": 713879,
+          "loyalty": 14456
+        },
+        "half": {
+          "attempts": 17902,
+          "accepted": 13124,
+          "revenue": 1259692,
+          "profit": 35473,
+          "loyalty": 81823
+        },
+        "overcharge": {
+          "attempts": 6160,
+          "accepted": 3057,
+          "revenue": 428082,
+          "profit": 294787,
+          "loyalty": -9063
+        }
+      },
+      "goldInTotal": 3144024,
+      "goldOutTotal": 3542365,
+      "relicSpendPerRun": 810.0866666666667
+    },
+    {
+      "key": "near",
+      "label": "Near-complete Meta",
+      "jobs": 5,
+      "bosses": 7,
+      "policy": "beginner",
+      "grade": 6,
+      "mastery": 35,
+      "distinct": 7,
+      "reach10": 0.9833333333333333,
+      "reach20": 0.5133333333333333,
+      "reach30": 0.21666666666666667,
+      "finalGivenReach": 0.49230769230769234,
+      "clear": 0.10666666666666667,
+      "deaths": 2.216666666666667,
+      "endedBy": {
+        "deaths": 0,
+        "bankrupt": 235,
+        "finalFail": 33,
+        "cleared": 32
+      },
+      "deathFailDayMedian": 0,
+      "goldIn": {
+        "sale": 3038865,
+        "greatSuccess": 125000,
+        "subsidy": 2480,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 2278440,
+        "operating": 885980,
+        "relic": 227465,
+        "deepSponsor": 138710,
+        "commission": 5302,
+        "waste": 28336
+      },
+      "saleOriginShare": 0.9597390682316678,
+      "overheadP10": 110,
+      "overheadMedian": 140,
+      "overheadP90": 180,
+      "coreLevelMedian": 7,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 228,
+      "prepStartGoldMedian": 748,
+      "prepStartGoldP75": 1548,
+      "great": {
+        "success": 6741,
+        "great": 965,
+        "storeGold": 125000,
+        "byBand": {
+          ".1-.26": {
+            "success": 2294,
+            "great": 327
+          },
+          ".26-.5": {
+            "success": 1727,
+            "great": 464
+          },
+          "0-.1": {
+            "success": 1374,
+            "great": 75
+          },
+          "<0": {
+            "success": 1029,
+            "great": 0
+          },
+          ".5-1": {
+            "success": 317,
+            "great": 99
+          }
+        }
+      },
+      "greatSuccessRate": 0.14315383474261978,
+      "greatStoreGoldPerRun": 416.6666666666667,
+      "deepOfferedPerRun": 1.3566666666666667,
+      "deepTakenPerRun": 1.3566666666666667,
+      "deepSponsorPerRun": 462.3666666666667,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 986,
+          "success": 219,
+          "retreat": 343,
+          "injury": 247,
+          "severe": 154,
+          "death": 23,
+          "consumed": 1028
+        },
+        "fire:mage": {
+          "expeditions": 958,
+          "success": 175,
+          "retreat": 324,
+          "injury": 280,
+          "severe": 156,
+          "death": 23,
+          "consumed": 999
+        },
+        "fire:berserker": {
+          "expeditions": 987,
+          "success": 188,
+          "retreat": 347,
+          "injury": 280,
+          "severe": 149,
+          "death": 23,
+          "consumed": 1020
+        },
+        "fire:priest": {
+          "expeditions": 911,
+          "success": 103,
+          "retreat": 367,
+          "injury": 267,
+          "severe": 138,
+          "death": 36,
+          "consumed": 937
+        },
+        "fire:rogue": {
+          "expeditions": 990,
+          "success": 203,
+          "retreat": 407,
+          "injury": 238,
+          "severe": 119,
+          "death": 23,
+          "consumed": 1022
+        },
+        "fire:archer": {
+          "expeditions": 990,
+          "success": 158,
+          "retreat": 420,
+          "injury": 266,
+          "severe": 120,
+          "death": 26,
+          "consumed": 998
+        },
+        "slime:warrior": {
+          "expeditions": 982,
+          "success": 277,
+          "retreat": 295,
+          "injury": 265,
+          "severe": 131,
+          "death": 14,
+          "consumed": 980
+        },
+        "slime:priest": {
+          "expeditions": 851,
+          "success": 144,
+          "retreat": 312,
+          "injury": 247,
+          "severe": 127,
+          "death": 21,
+          "consumed": 897
+        },
+        "crypt:archer": {
+          "expeditions": 950,
+          "success": 186,
+          "retreat": 354,
+          "injury": 252,
+          "severe": 128,
+          "death": 30,
+          "consumed": 933
+        },
+        "crypt:berserker": {
+          "expeditions": 1048,
+          "success": 258,
+          "retreat": 307,
+          "injury": 314,
+          "severe": 143,
+          "death": 26,
+          "consumed": 1054
+        },
+        "crypt:warrior": {
+          "expeditions": 1070,
+          "success": 280,
+          "retreat": 314,
+          "injury": 300,
+          "severe": 163,
+          "death": 13,
+          "consumed": 1173
+        },
+        "snow:priest": {
+          "expeditions": 943,
+          "success": 137,
+          "retreat": 323,
+          "injury": 290,
+          "severe": 154,
+          "death": 39,
+          "consumed": 977
+        },
+        "slime:archer": {
+          "expeditions": 922,
+          "success": 230,
+          "retreat": 324,
+          "injury": 235,
+          "severe": 116,
+          "death": 17,
+          "consumed": 914
+        },
+        "slime:mage": {
+          "expeditions": 872,
+          "success": 248,
+          "retreat": 231,
+          "injury": 238,
+          "severe": 133,
+          "death": 22,
+          "consumed": 865
+        },
+        "snow:mage": {
+          "expeditions": 1006,
+          "success": 208,
+          "retreat": 325,
+          "injury": 305,
+          "severe": 147,
+          "death": 21,
+          "consumed": 1002
+        },
+        "crypt:mage": {
+          "expeditions": 945,
+          "success": 250,
+          "retreat": 271,
+          "injury": 250,
+          "severe": 154,
+          "death": 20,
+          "consumed": 1002
+        },
+        "spider:priest": {
+          "expeditions": 911,
+          "success": 157,
+          "retreat": 327,
+          "injury": 261,
+          "severe": 144,
+          "death": 22,
+          "consumed": 934
+        },
+        "spider:berserker": {
+          "expeditions": 930,
+          "success": 279,
+          "retreat": 243,
+          "injury": 249,
+          "severe": 139,
+          "death": 20,
+          "consumed": 941
+        },
+        "snow:berserker": {
+          "expeditions": 939,
+          "success": 204,
+          "retreat": 303,
+          "injury": 257,
+          "severe": 151,
+          "death": 24,
+          "consumed": 950
+        },
+        "spider:archer": {
+          "expeditions": 905,
+          "success": 241,
+          "retreat": 326,
+          "injury": 212,
+          "severe": 110,
+          "death": 16,
+          "consumed": 886
+        },
+        "spider:mage": {
+          "expeditions": 910,
+          "success": 258,
+          "retreat": 251,
+          "injury": 262,
+          "severe": 112,
+          "death": 27,
+          "consumed": 926
+        },
+        "spider:warrior": {
+          "expeditions": 944,
+          "success": 286,
+          "retreat": 265,
+          "injury": 255,
+          "severe": 121,
+          "death": 17,
+          "consumed": 932
+        },
+        "snow:warrior": {
+          "expeditions": 1025,
+          "success": 244,
+          "retreat": 311,
+          "injury": 274,
+          "severe": 166,
+          "death": 30,
+          "consumed": 1036
+        },
+        "snow:archer": {
+          "expeditions": 1083,
+          "success": 219,
+          "retreat": 403,
+          "injury": 296,
+          "severe": 144,
+          "death": 21,
+          "consumed": 1090
+        },
+        "slime:berserker": {
+          "expeditions": 950,
+          "success": 286,
+          "retreat": 258,
+          "injury": 261,
+          "severe": 125,
+          "death": 20,
+          "consumed": 945
+        },
+        "slime:rogue": {
+          "expeditions": 959,
+          "success": 304,
+          "retreat": 311,
+          "injury": 218,
+          "severe": 117,
+          "death": 9,
+          "consumed": 985
+        },
+        "crypt:rogue": {
+          "expeditions": 920,
+          "success": 259,
+          "retreat": 309,
+          "injury": 213,
+          "severe": 120,
+          "death": 19,
+          "consumed": 955
+        },
+        "crypt:priest": {
+          "expeditions": 894,
+          "success": 132,
+          "retreat": 349,
+          "injury": 222,
+          "severe": 169,
+          "death": 22,
+          "consumed": 933
+        },
+        "spider:rogue": {
+          "expeditions": 964,
+          "success": 318,
+          "retreat": 318,
+          "injury": 222,
+          "severe": 88,
+          "death": 18,
+          "consumed": 978
+        },
+        "snow:rogue": {
+          "expeditions": 1063,
+          "success": 290,
+          "retreat": 349,
+          "injury": 278,
+          "severe": 123,
+          "death": 23,
+          "consumed": 1112
+        }
+      },
+      "bossJob": {
+        "LUST:priest": {
+          "sent": 3,
+          "cleared": 2
+        },
+        "LUST:archer": {
+          "sent": 3,
+          "cleared": 1
+        },
+        "LUST:warrior": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "WRATH:berserker": {
+          "sent": 4,
+          "cleared": 3
+        },
+        "WRATH:mage": {
+          "sent": 6,
+          "cleared": 4
+        },
+        "WRATH:archer": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "SLOTH:mage": {
+          "sent": 9,
+          "cleared": 3
+        },
+        "SLOTH:warrior": {
+          "sent": 5,
+          "cleared": 3
+        },
+        "SLOTH:priest": {
+          "sent": 4,
+          "cleared": 2
+        },
+        "GREED:mage": {
+          "sent": 7,
+          "cleared": 3
+        },
+        "GREED:rogue": {
+          "sent": 11,
+          "cleared": 4
+        },
+        "GREED:warrior": {
+          "sent": 8,
+          "cleared": 3
+        },
+        "GLUTTONY:rogue": {
+          "sent": 7,
+          "cleared": 4
+        },
+        "GLUTTONY:berserker": {
+          "sent": 10,
+          "cleared": 7
+        },
+        "GLUTTONY:archer": {
+          "sent": 8,
+          "cleared": 2
+        },
+        "SLOTH:rogue": {
+          "sent": 7,
+          "cleared": 4
+        },
+        "SLOTH:archer": {
+          "sent": 10,
+          "cleared": 6
+        },
+        "PRIDE:priest": {
+          "sent": 3,
+          "cleared": 1
+        },
+        "PRIDE:archer": {
+          "sent": 4,
+          "cleared": 2
+        },
+        "GREED:berserker": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "GLUTTONY:warrior": {
+          "sent": 8,
+          "cleared": 6
+        },
+        "PRIDE:rogue": {
+          "sent": 5,
+          "cleared": 4
+        },
+        "GREED:priest": {
+          "sent": 2,
+          "cleared": 0
+        },
+        "PRIDE:berserker": {
+          "sent": 2,
+          "cleared": 2
+        },
+        "SLOTH:berserker": {
+          "sent": 4,
+          "cleared": 3
+        },
+        "ENVY:mage": {
+          "sent": 5,
+          "cleared": 3
+        },
+        "ENVY:priest": {
+          "sent": 1,
+          "cleared": 0
+        },
+        "WRATH:rogue": {
+          "sent": 4,
+          "cleared": 1
+        },
+        "PRIDE:warrior": {
+          "sent": 3,
+          "cleared": 2
+        },
+        "PRIDE:mage": {
+          "sent": 4,
+          "cleared": 1
+        },
+        "GLUTTONY:priest": {
+          "sent": 1,
+          "cleared": 1
+        },
+        "LUST:berserker": {
+          "sent": 2,
+          "cleared": 2
+        },
+        "LUST:rogue": {
+          "sent": 6,
+          "cleared": 1
+        },
+        "ENVY:rogue": {
+          "sent": 5,
+          "cleared": 4
+        },
+        "ENVY:berserker": {
+          "sent": 4,
+          "cleared": 3
+        },
+        "GLUTTONY:mage": {
+          "sent": 2,
+          "cleared": 1
+        },
+        "ENVY:archer": {
+          "sent": 3,
+          "cleared": 2
+        },
+        "LUST:mage": {
+          "sent": 5,
+          "cleared": 2
+        },
+        "GREED:archer": {
+          "sent": 3,
+          "cleared": 1
+        },
+        "WRATH:warrior": {
+          "sent": 2,
+          "cleared": 0
+        }
+      },
+      "npcLevel": 8.187763190487987,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 130
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 150,
+          "p75": 160
+        },
+        "D21-30": {
+          "p25": 180,
+          "median": 190,
+          "p75": 200
+        }
+      },
+      "bossRuns": {
+        "LUST": {
+          "resolved": 8,
+          "cleared": 3,
+          "margin": -95.07488256368651
+        },
+        "WRATH": {
+          "resolved": 7,
+          "cleared": 3,
+          "margin": 19.74005184870913
+        },
+        "SLOTH": {
+          "resolved": 13,
+          "cleared": 7,
+          "margin": -36.27114335474374
+        },
+        "GREED": {
+          "resolved": 12,
+          "cleared": 4,
+          "margin": -20.399922603840366
+        },
+        "GLUTTONY": {
+          "resolved": 12,
+          "cleared": 7,
+          "margin": 161.8743670070601
+        },
+        "PRIDE": {
+          "resolved": 7,
+          "cleared": 4,
+          "margin": -55.0369400466852
+        },
+        "ENVY": {
+          "resolved": 6,
+          "cleared": 4,
+          "margin": 56.41745813333
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 22079,
+          "accepted": 12205,
+          "revenue": 1276570,
+          "profit": 669890,
+          "loyalty": 13938
+        },
+        "half": {
+          "attempts": 19022,
+          "accepted": 13820,
+          "revenue": 1289305,
+          "profit": 36983,
+          "loyalty": 86871
+        },
+        "overcharge": {
+          "attempts": 6782,
+          "accepted": 3379,
+          "revenue": 472990,
+          "profit": 326397,
+          "loyalty": -9897
+        }
+      },
+      "goldInTotal": 3166345,
+      "goldOutTotal": 3564233,
+      "relicSpendPerRun": 823.9033333333333
+    },
+    {
+      "key": "fresh",
+      "label": "Fresh First Run",
+      "jobs": 0,
+      "bosses": 0,
+      "policy": "balanced",
+      "grade": 1,
+      "mastery": 0,
+      "distinct": 0,
+      "reach10": 0.9966666666666667,
+      "reach20": 0.94,
+      "reach30": 0.7833333333333333,
+      "finalGivenReach": 0.05106382978723404,
+      "clear": 0.04,
+      "deaths": 4.763333333333334,
+      "endedBy": {
+        "deaths": 9,
+        "bankrupt": 56,
+        "finalFail": 223,
+        "cleared": 12
+      },
+      "deathFailDayMedian": 28,
+      "goldIn": {
+        "sale": 6134362,
+        "greatSuccess": 42800,
+        "subsidy": 6210,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 4115146,
+        "operating": 1219770,
+        "relic": 516666,
+        "deepSponsor": 245230,
+        "commission": 10188,
+        "waste": 65056
+      },
+      "saleOriginShare": 0.9920739040122445,
+      "overheadP10": 110,
+      "overheadMedian": 140,
+      "overheadP90": 190,
+      "coreLevelMedian": 6.666666666666667,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 767,
+      "prepStartGoldMedian": 1349,
+      "prepStartGoldP75": 2233,
+      "great": {
+        "success": 3448,
+        "great": 330,
+        "storeGold": 42800,
+        "byBand": {
+          ".1-.26": {
+            "success": 1150,
+            "great": 160
+          },
+          "0-.1": {
+            "success": 861,
+            "great": 37
+          },
+          "<0": {
+            "success": 900,
+            "great": 0
+          },
+          ".26-.5": {
+            "success": 486,
+            "great": 120
+          },
+          ".5-1": {
+            "success": 51,
+            "great": 13
+          }
+        }
+      },
+      "greatSuccessRate": 0.095707656612529,
+      "greatStoreGoldPerRun": 142.66666666666666,
+      "deepOfferedPerRun": 2.36,
+      "deepTakenPerRun": 2.36,
+      "deepSponsorPerRun": 817.4333333333333,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 2088,
+          "success": 174,
+          "retreat": 854,
+          "injury": 655,
+          "severe": 325,
+          "death": 80,
+          "consumed": 3164
+        },
+        "fire:archer": {
+          "expeditions": 2071,
+          "success": 117,
+          "retreat": 982,
+          "injury": 629,
+          "severe": 278,
+          "death": 65,
+          "consumed": 3147
+        },
+        "fire:priest": {
+          "expeditions": 1909,
+          "success": 48,
+          "retreat": 841,
+          "injury": 591,
+          "severe": 337,
+          "death": 92,
+          "consumed": 2821
+        },
+        "fire:mage": {
+          "expeditions": 1983,
+          "success": 142,
+          "retreat": 835,
+          "injury": 610,
+          "severe": 323,
+          "death": 73,
+          "consumed": 3005
+        },
+        "crypt:archer": {
+          "expeditions": 2021,
+          "success": 166,
+          "retreat": 921,
+          "injury": 573,
+          "severe": 297,
+          "death": 64,
+          "consumed": 3063
+        },
+        "crypt:mage": {
+          "expeditions": 1969,
+          "success": 240,
+          "retreat": 780,
+          "injury": 557,
+          "severe": 323,
+          "death": 69,
+          "consumed": 2997
+        },
+        "crypt:warrior": {
+          "expeditions": 2051,
+          "success": 254,
+          "retreat": 757,
+          "injury": 598,
+          "severe": 372,
+          "death": 70,
+          "consumed": 3083
+        },
+        "crypt:priest": {
+          "expeditions": 1897,
+          "success": 101,
+          "retreat": 847,
+          "injury": 531,
+          "severe": 339,
+          "death": 79,
+          "consumed": 2874
+        },
+        "snow:mage": {
+          "expeditions": 2016,
+          "success": 156,
+          "retreat": 807,
+          "injury": 635,
+          "severe": 342,
+          "death": 76,
+          "consumed": 3061
+        },
+        "snow:priest": {
+          "expeditions": 1958,
+          "success": 79,
+          "retreat": 858,
+          "injury": 623,
+          "severe": 321,
+          "death": 77,
+          "consumed": 2910
+        },
+        "snow:warrior": {
+          "expeditions": 1962,
+          "success": 195,
+          "retreat": 783,
+          "injury": 579,
+          "severe": 334,
+          "death": 71,
+          "consumed": 2930
+        },
+        "snow:archer": {
+          "expeditions": 2035,
+          "success": 144,
+          "retreat": 923,
+          "injury": 589,
+          "severe": 298,
+          "death": 81,
+          "consumed": 3075
+        },
+        "slime:mage": {
+          "expeditions": 1977,
+          "success": 230,
+          "retreat": 759,
+          "injury": 582,
+          "severe": 335,
+          "death": 71,
+          "consumed": 2974
+        },
+        "slime:archer": {
+          "expeditions": 1981,
+          "success": 201,
+          "retreat": 924,
+          "injury": 503,
+          "severe": 288,
+          "death": 65,
+          "consumed": 3008
+        },
+        "slime:warrior": {
+          "expeditions": 1985,
+          "success": 281,
+          "retreat": 754,
+          "injury": 586,
+          "severe": 301,
+          "death": 63,
+          "consumed": 2955
+        },
+        "spider:warrior": {
+          "expeditions": 2110,
+          "success": 288,
+          "retreat": 803,
+          "injury": 620,
+          "severe": 334,
+          "death": 65,
+          "consumed": 3178
+        },
+        "spider:priest": {
+          "expeditions": 1878,
+          "success": 103,
+          "retreat": 759,
+          "injury": 616,
+          "severe": 340,
+          "death": 60,
+          "consumed": 2718
+        },
+        "spider:archer": {
+          "expeditions": 1888,
+          "success": 190,
+          "retreat": 845,
+          "injury": 483,
+          "severe": 303,
+          "death": 67,
+          "consumed": 2839
+        },
+        "slime:priest": {
+          "expeditions": 1902,
+          "success": 118,
+          "retreat": 751,
+          "injury": 632,
+          "severe": 329,
+          "death": 72,
+          "consumed": 2785
+        },
+        "spider:mage": {
+          "expeditions": 1855,
+          "success": 221,
+          "retreat": 676,
+          "injury": 595,
+          "severe": 294,
+          "death": 69,
+          "consumed": 2776
+        }
+      },
+      "bossJob": {
+        "LUST:mage": {
+          "sent": 23,
+          "cleared": 5
+        },
+        "LUST:warrior": {
+          "sent": 34,
+          "cleared": 2
+        },
+        "LUST:priest": {
+          "sent": 26,
+          "cleared": 3
+        },
+        "WRATH:mage": {
+          "sent": 21,
+          "cleared": 0
+        },
+        "WRATH:warrior": {
+          "sent": 21,
+          "cleared": 1
+        },
+        "WRATH:archer": {
+          "sent": 30,
+          "cleared": 2
+        },
+        "SLOTH:archer": {
+          "sent": 26,
+          "cleared": 1
+        },
+        "SLOTH:priest": {
+          "sent": 18,
+          "cleared": 0
+        },
+        "SLOTH:mage": {
+          "sent": 31,
+          "cleared": 1
+        },
+        "GLUTTONY:priest": {
+          "sent": 29,
+          "cleared": 1
+        },
+        "GLUTTONY:warrior": {
+          "sent": 35,
+          "cleared": 2
+        },
+        "GLUTTONY:mage": {
+          "sent": 28,
+          "cleared": 2
+        },
+        "SLOTH:warrior": {
+          "sent": 27,
+          "cleared": 1
+        },
+        "WRATH:priest": {
+          "sent": 21,
+          "cleared": 0
+        },
+        "GREED:mage": {
+          "sent": 24,
+          "cleared": 2
+        },
+        "GREED:archer": {
+          "sent": 31,
+          "cleared": 0
+        },
+        "GREED:warrior": {
+          "sent": 26,
+          "cleared": 6
+        },
+        "ENVY:priest": {
+          "sent": 24,
+          "cleared": 0
+        },
+        "ENVY:mage": {
+          "sent": 22,
+          "cleared": 0
+        },
+        "GLUTTONY:archer": {
+          "sent": 31,
+          "cleared": 1
+        },
+        "LUST:archer": {
+          "sent": 25,
+          "cleared": 2
+        },
+        "GREED:priest": {
+          "sent": 18,
+          "cleared": 1
+        },
+        "PRIDE:priest": {
+          "sent": 20,
+          "cleared": 1
+        },
+        "PRIDE:warrior": {
+          "sent": 26,
+          "cleared": 0
+        },
+        "PRIDE:mage": {
+          "sent": 25,
+          "cleared": 2
+        },
+        "ENVY:archer": {
+          "sent": 15,
+          "cleared": 0
+        },
+        "PRIDE:archer": {
+          "sent": 28,
+          "cleared": 0
+        },
+        "ENVY:warrior": {
+          "sent": 20,
+          "cleared": 0
+        }
+      },
+      "npcLevel": 9.232476046394352,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 120
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 150,
+          "p75": 160
+        },
+        "D21-30": {
+          "p25": 170,
+          "median": 180,
+          "p75": 190
+        }
+      },
+      "bossRuns": {
+        "LUST": {
+          "resolved": 36,
+          "cleared": 4,
+          "margin": -1264.5670239467681
+        },
+        "WRATH": {
+          "resolved": 31,
+          "cleared": 1,
+          "margin": -1496.7446715768513
+        },
+        "SLOTH": {
+          "resolved": 34,
+          "cleared": 1,
+          "margin": -1833.9696480531802
+        },
+        "GLUTTONY": {
+          "resolved": 41,
+          "cleared": 2,
+          "margin": -1736.0801082235025
+        },
+        "GREED": {
+          "resolved": 33,
+          "cleared": 3,
+          "margin": -1254.1205496025034
+        },
+        "ENVY": {
+          "resolved": 27,
+          "cleared": 0,
+          "margin": -1590.1835349623418
+        },
+        "PRIDE": {
+          "resolved": 33,
+          "cleared": 1,
+          "margin": -1560.978308352688
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 44598,
+          "accepted": 25997,
+          "revenue": 2694150,
+          "profit": 1410772,
+          "loyalty": 31333
+        },
+        "half": {
+          "attempts": 31243,
+          "accepted": 23582,
+          "revenue": 2108762,
+          "profit": 61960,
+          "loyalty": 150354
+        },
+        "overcharge": {
+          "attempts": 18715,
+          "accepted": 9784,
+          "revenue": 1331450,
+          "profit": 916907,
+          "loyalty": -28288
+        }
+      },
+      "goldInTotal": 6183372,
+      "goldOutTotal": 6172056,
+      "relicSpendPerRun": 2032.8233333333333
+    },
+    {
+      "key": "early",
+      "label": "Early Meta",
+      "jobs": 2,
+      "bosses": 2,
+      "trim": 1,
+      "policy": "balanced",
+      "grade": 1,
+      "mastery": 3,
+      "distinct": 2,
+      "reach10": 0.99,
+      "reach20": 0.93,
+      "reach30": 0.8,
+      "finalGivenReach": 0.07083333333333333,
+      "clear": 0.056666666666666664,
+      "deaths": 4.586666666666667,
+      "endedBy": {
+        "deaths": 3,
+        "bankrupt": 57,
+        "finalFail": 223,
+        "cleared": 17
+      },
+      "deathFailDayMedian": 27,
+      "goldIn": {
+        "sale": 6042357,
+        "greatSuccess": 54500,
+        "subsidy": 4985,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 4107675,
+        "operating": 1205300,
+        "relic": 509733,
+        "deepSponsor": 239710,
+        "commission": 9924,
+        "waste": 59313
+      },
+      "saleOriginShare": 0.9902513044421668,
+      "overheadP10": 110,
+      "overheadMedian": 140,
+      "overheadP90": 190,
+      "coreLevelMedian": 6.666666666666667,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 704,
+      "prepStartGoldMedian": 1254,
+      "prepStartGoldP75": 1971,
+      "great": {
+        "success": 3700,
+        "great": 401,
+        "storeGold": 54500,
+        "byBand": {
+          ".1-.26": {
+            "success": 1269,
+            "great": 188
+          },
+          "0-.1": {
+            "success": 899,
+            "great": 33
+          },
+          "<0": {
+            "success": 889,
+            "great": 0
+          },
+          ".26-.5": {
+            "success": 584,
+            "great": 163
+          },
+          ".5-1": {
+            "success": 59,
+            "great": 17
+          }
+        }
+      },
+      "greatSuccessRate": 0.10837837837837838,
+      "greatStoreGoldPerRun": 181.66666666666666,
+      "deepOfferedPerRun": 2.33,
+      "deepTakenPerRun": 2.33,
+      "deepSponsorPerRun": 799.0333333333333,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 2031,
+          "success": 201,
+          "retreat": 806,
+          "injury": 594,
+          "severe": 348,
+          "death": 82,
+          "consumed": 3047
+        },
+        "fire:archer": {
+          "expeditions": 2068,
+          "success": 133,
+          "retreat": 990,
+          "injury": 578,
+          "severe": 298,
+          "death": 69,
+          "consumed": 3063
+        },
+        "fire:priest": {
+          "expeditions": 1898,
+          "success": 41,
+          "retreat": 857,
+          "injury": 595,
+          "severe": 304,
+          "death": 101,
+          "consumed": 2790
+        },
+        "fire:mage": {
+          "expeditions": 1980,
+          "success": 141,
+          "retreat": 797,
+          "injury": 635,
+          "severe": 333,
+          "death": 74,
+          "consumed": 2963
+        },
+        "crypt:archer": {
+          "expeditions": 2034,
+          "success": 199,
+          "retreat": 908,
+          "injury": 559,
+          "severe": 298,
+          "death": 70,
+          "consumed": 3038
+        },
+        "crypt:mage": {
+          "expeditions": 1912,
+          "success": 248,
+          "retreat": 757,
+          "injury": 491,
+          "severe": 339,
+          "death": 77,
+          "consumed": 2854
+        },
+        "crypt:warrior": {
+          "expeditions": 2046,
+          "success": 277,
+          "retreat": 745,
+          "injury": 608,
+          "severe": 356,
+          "death": 60,
+          "consumed": 3073
+        },
+        "crypt:priest": {
+          "expeditions": 1917,
+          "success": 87,
+          "retreat": 861,
+          "injury": 560,
+          "severe": 331,
+          "death": 78,
+          "consumed": 2848
+        },
+        "snow:mage": {
+          "expeditions": 2056,
+          "success": 173,
+          "retreat": 813,
+          "injury": 661,
+          "severe": 350,
+          "death": 59,
+          "consumed": 3088
+        },
+        "snow:priest": {
+          "expeditions": 1905,
+          "success": 76,
+          "retreat": 812,
+          "injury": 623,
+          "severe": 305,
+          "death": 89,
+          "consumed": 2843
+        },
+        "snow:warrior": {
+          "expeditions": 2062,
+          "success": 239,
+          "retreat": 805,
+          "injury": 593,
+          "severe": 344,
+          "death": 81,
+          "consumed": 3056
+        },
+        "snow:archer": {
+          "expeditions": 1999,
+          "success": 158,
+          "retreat": 907,
+          "injury": 577,
+          "severe": 295,
+          "death": 62,
+          "consumed": 2998
+        },
+        "slime:mage": {
+          "expeditions": 1958,
+          "success": 222,
+          "retreat": 736,
+          "injury": 602,
+          "severe": 329,
+          "death": 69,
+          "consumed": 2856
+        },
+        "slime:archer": {
+          "expeditions": 1984,
+          "success": 188,
+          "retreat": 923,
+          "injury": 548,
+          "severe": 271,
+          "death": 54,
+          "consumed": 2910
+        },
+        "slime:warrior": {
+          "expeditions": 1967,
+          "success": 320,
+          "retreat": 745,
+          "injury": 546,
+          "severe": 295,
+          "death": 61,
+          "consumed": 2989
+        },
+        "spider:warrior": {
+          "expeditions": 2004,
+          "success": 353,
+          "retreat": 715,
+          "injury": 565,
+          "severe": 320,
+          "death": 51,
+          "consumed": 2997
+        },
+        "spider:archer": {
+          "expeditions": 1938,
+          "success": 225,
+          "retreat": 849,
+          "injury": 547,
+          "severe": 272,
+          "death": 45,
+          "consumed": 2859
+        },
+        "spider:mage": {
+          "expeditions": 1884,
+          "success": 201,
+          "retreat": 737,
+          "injury": 623,
+          "severe": 268,
+          "death": 55,
+          "consumed": 2763
+        },
+        "slime:priest": {
+          "expeditions": 1799,
+          "success": 122,
+          "retreat": 686,
+          "injury": 598,
+          "severe": 325,
+          "death": 68,
+          "consumed": 2624
+        },
+        "spider:priest": {
+          "expeditions": 1796,
+          "success": 96,
+          "retreat": 739,
+          "injury": 550,
+          "severe": 340,
+          "death": 71,
+          "consumed": 2602
+        }
+      },
+      "bossJob": {
+        "LUST:warrior": {
+          "sent": 30,
+          "cleared": 2
+        },
+        "LUST:mage": {
+          "sent": 25,
+          "cleared": 0
+        },
+        "LUST:archer": {
+          "sent": 32,
+          "cleared": 1
+        },
+        "WRATH:warrior": {
+          "sent": 30,
+          "cleared": 2
+        },
+        "WRATH:mage": {
+          "sent": 17,
+          "cleared": 0
+        },
+        "WRATH:priest": {
+          "sent": 22,
+          "cleared": 0
+        },
+        "WRATH:archer": {
+          "sent": 33,
+          "cleared": 4
+        },
+        "SLOTH:archer": {
+          "sent": 25,
+          "cleared": 3
+        },
+        "SLOTH:mage": {
+          "sent": 34,
+          "cleared": 0
+        },
+        "SLOTH:priest": {
+          "sent": 24,
+          "cleared": 0
+        },
+        "GLUTTONY:warrior": {
+          "sent": 28,
+          "cleared": 7
+        },
+        "GREED:archer": {
+          "sent": 25,
+          "cleared": 2
+        },
+        "GREED:warrior": {
+          "sent": 28,
+          "cleared": 7
+        },
+        "GREED:mage": {
+          "sent": 26,
+          "cleared": 5
+        },
+        "ENVY:priest": {
+          "sent": 24,
+          "cleared": 0
+        },
+        "ENVY:warrior": {
+          "sent": 24,
+          "cleared": 0
+        },
+        "GLUTTONY:mage": {
+          "sent": 36,
+          "cleared": 3
+        },
+        "GLUTTONY:priest": {
+          "sent": 20,
+          "cleared": 2
+        },
+        "SLOTH:warrior": {
+          "sent": 22,
+          "cleared": 3
+        },
+        "LUST:priest": {
+          "sent": 24,
+          "cleared": 0
+        },
+        "PRIDE:mage": {
+          "sent": 27,
+          "cleared": 2
+        },
+        "PRIDE:archer": {
+          "sent": 28,
+          "cleared": 0
+        },
+        "GLUTTONY:archer": {
+          "sent": 33,
+          "cleared": 3
+        },
+        "PRIDE:warrior": {
+          "sent": 29,
+          "cleared": 1
+        },
+        "PRIDE:priest": {
+          "sent": 24,
+          "cleared": 0
+        },
+        "ENVY:archer": {
+          "sent": 24,
+          "cleared": 0
+        },
+        "GREED:priest": {
+          "sent": 14,
+          "cleared": 4
+        },
+        "ENVY:mage": {
+          "sent": 12,
+          "cleared": 0
+        }
+      },
+      "npcLevel": 9.162509448223734,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 120
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 150,
+          "p75": 160
+        },
+        "D21-30": {
+          "p25": 170,
+          "median": 180,
+          "p75": 190
+        }
+      },
+      "bossRuns": {
+        "LUST": {
+          "resolved": 37,
+          "cleared": 1,
+          "margin": -1691.8671703136467
+        },
+        "WRATH": {
+          "resolved": 34,
+          "cleared": 2,
+          "margin": -1442.7606564151797
+        },
+        "SLOTH": {
+          "resolved": 35,
+          "cleared": 2,
+          "margin": -1954.496946003402
+        },
+        "GLUTTONY": {
+          "resolved": 39,
+          "cleared": 5,
+          "margin": -1480.3540928041184
+        },
+        "GREED": {
+          "resolved": 31,
+          "cleared": 6,
+          "margin": -1048.7872063912623
+        },
+        "ENVY": {
+          "resolved": 28,
+          "cleared": 0,
+          "margin": -1364.4969350373267
+        },
+        "PRIDE": {
+          "resolved": 36,
+          "cleared": 1,
+          "margin": -1749.8636599151814
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 43775,
+          "accepted": 25494,
+          "revenue": 2642775,
+          "profit": 1384062,
+          "loyalty": 31176
+        },
+        "half": {
+          "attempts": 30703,
+          "accepted": 23143,
+          "revenue": 2086983,
+          "profit": 59730,
+          "loyalty": 148780
+        },
+        "overcharge": {
+          "attempts": 18479,
+          "accepted": 9624,
+          "revenue": 1312599,
+          "profit": 904306,
+          "loyalty": -27790
+        }
+      },
+      "goldInTotal": 6101842,
+      "goldOutTotal": 6131655,
+      "relicSpendPerRun": 2008.9066666666668
+    },
+    {
+      "key": "mid",
+      "label": "Mid Meta",
+      "jobs": 4,
+      "bosses": 3,
+      "policy": "balanced",
+      "grade": 2,
+      "mastery": 12,
+      "distinct": 3,
+      "reach10": 0.9966666666666667,
+      "reach20": 0.92,
+      "reach30": 0.7533333333333333,
+      "finalGivenReach": 0.11061946902654868,
+      "clear": 0.08333333333333333,
+      "deaths": 4.21,
+      "endedBy": {
+        "deaths": 5,
+        "bankrupt": 69,
+        "finalFail": 201,
+        "cleared": 25
+      },
+      "deathFailDayMedian": 28,
+      "goldIn": {
+        "sale": 5868075,
+        "greatSuccess": 72200,
+        "subsidy": 4530,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 3999791,
+        "operating": 1204940,
+        "relic": 494416,
+        "deepSponsor": 237360,
+        "commission": 9452,
+        "waste": 58784
+      },
+      "saleOriginShare": 0.9870929324006422,
+      "overheadP10": 110,
+      "overheadMedian": 150,
+      "overheadP90": 190,
+      "coreLevelMedian": 6.833333333333333,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 725,
+      "prepStartGoldMedian": 1195,
+      "prepStartGoldP75": 1921,
+      "great": {
+        "success": 4309,
+        "great": 515,
+        "storeGold": 72200,
+        "byBand": {
+          ".1-.26": {
+            "success": 1489,
+            "great": 217
+          },
+          "0-.1": {
+            "success": 1052,
+            "great": 44
+          },
+          "<0": {
+            "success": 839,
+            "great": 0
+          },
+          ".26-.5": {
+            "success": 831,
+            "great": 218
+          },
+          ".5-1": {
+            "success": 98,
+            "great": 36
+          }
+        }
+      },
+      "greatSuccessRate": 0.11951728939429102,
+      "greatStoreGoldPerRun": 240.66666666666666,
+      "deepOfferedPerRun": 2.28,
+      "deepTakenPerRun": 2.28,
+      "deepSponsorPerRun": 791.2,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 1536,
+          "success": 173,
+          "retreat": 642,
+          "injury": 429,
+          "severe": 251,
+          "death": 41,
+          "consumed": 2292
+        },
+        "fire:archer": {
+          "expeditions": 1580,
+          "success": 116,
+          "retreat": 732,
+          "injury": 440,
+          "severe": 237,
+          "death": 55,
+          "consumed": 2324
+        },
+        "fire:rogue": {
+          "expeditions": 1612,
+          "success": 136,
+          "retreat": 775,
+          "injury": 414,
+          "severe": 240,
+          "death": 47,
+          "consumed": 2392
+        },
+        "fire:mage": {
+          "expeditions": 1525,
+          "success": 136,
+          "retreat": 628,
+          "injury": 448,
+          "severe": 249,
+          "death": 64,
+          "consumed": 2275
+        },
+        "fire:priest": {
+          "expeditions": 1506,
+          "success": 54,
+          "retreat": 663,
+          "injury": 453,
+          "severe": 276,
+          "death": 60,
+          "consumed": 2236
+        },
+        "crypt:warrior": {
+          "expeditions": 1666,
+          "success": 257,
+          "retreat": 594,
+          "injury": 515,
+          "severe": 256,
+          "death": 44,
+          "consumed": 2512
+        },
+        "crypt:archer": {
+          "expeditions": 1464,
+          "success": 154,
+          "retreat": 667,
+          "injury": 373,
+          "severe": 217,
+          "death": 53,
+          "consumed": 2146
+        },
+        "crypt:rogue": {
+          "expeditions": 1616,
+          "success": 186,
+          "retreat": 704,
+          "injury": 457,
+          "severe": 217,
+          "death": 52,
+          "consumed": 2358
+        },
+        "crypt:mage": {
+          "expeditions": 1572,
+          "success": 243,
+          "retreat": 646,
+          "injury": 388,
+          "severe": 249,
+          "death": 46,
+          "consumed": 2318
+        },
+        "slime:warrior": {
+          "expeditions": 1611,
+          "success": 309,
+          "retreat": 560,
+          "injury": 451,
+          "severe": 247,
+          "death": 44,
+          "consumed": 2383
+        },
+        "snow:archer": {
+          "expeditions": 1583,
+          "success": 143,
+          "retreat": 697,
+          "injury": 460,
+          "severe": 209,
+          "death": 74,
+          "consumed": 2337
+        },
+        "spider:warrior": {
+          "expeditions": 1548,
+          "success": 253,
+          "retreat": 549,
+          "injury": 441,
+          "severe": 256,
+          "death": 49,
+          "consumed": 2251
+        },
+        "spider:archer": {
+          "expeditions": 1460,
+          "success": 153,
+          "retreat": 658,
+          "injury": 402,
+          "severe": 205,
+          "death": 42,
+          "consumed": 2080
+        },
+        "slime:rogue": {
+          "expeditions": 1618,
+          "success": 246,
+          "retreat": 727,
+          "injury": 386,
+          "severe": 212,
+          "death": 47,
+          "consumed": 2370
+        },
+        "spider:mage": {
+          "expeditions": 1438,
+          "success": 201,
+          "retreat": 526,
+          "injury": 429,
+          "severe": 243,
+          "death": 39,
+          "consumed": 2095
+        },
+        "snow:priest": {
+          "expeditions": 1494,
+          "success": 54,
+          "retreat": 657,
+          "injury": 454,
+          "severe": 266,
+          "death": 63,
+          "consumed": 2141
+        },
+        "snow:mage": {
+          "expeditions": 1493,
+          "success": 160,
+          "retreat": 606,
+          "injury": 457,
+          "severe": 223,
+          "death": 47,
+          "consumed": 2224
+        },
+        "snow:warrior": {
+          "expeditions": 1628,
+          "success": 232,
+          "retreat": 595,
+          "injury": 511,
+          "severe": 256,
+          "death": 34,
+          "consumed": 2430
+        },
+        "slime:mage": {
+          "expeditions": 1486,
+          "success": 232,
+          "retreat": 523,
+          "injury": 430,
+          "severe": 236,
+          "death": 65,
+          "consumed": 2260
+        },
+        "spider:rogue": {
+          "expeditions": 1565,
+          "success": 234,
+          "retreat": 687,
+          "injury": 397,
+          "severe": 209,
+          "death": 38,
+          "consumed": 2194
+        },
+        "spider:priest": {
+          "expeditions": 1475,
+          "success": 87,
+          "retreat": 638,
+          "injury": 468,
+          "severe": 236,
+          "death": 46,
+          "consumed": 2114
+        },
+        "slime:priest": {
+          "expeditions": 1528,
+          "success": 108,
+          "retreat": 631,
+          "injury": 487,
+          "severe": 247,
+          "death": 55,
+          "consumed": 2232
+        },
+        "snow:rogue": {
+          "expeditions": 1624,
+          "success": 166,
+          "retreat": 694,
+          "injury": 466,
+          "severe": 240,
+          "death": 58,
+          "consumed": 2384
+        },
+        "slime:archer": {
+          "expeditions": 1549,
+          "success": 178,
+          "retreat": 685,
+          "injury": 419,
+          "severe": 218,
+          "death": 49,
+          "consumed": 2318
+        },
+        "crypt:priest": {
+          "expeditions": 1482,
+          "success": 98,
+          "retreat": 642,
+          "injury": 420,
+          "severe": 271,
+          "death": 51,
+          "consumed": 2188
+        }
+      },
+      "bossJob": {
+        "WRATH:priest": {
+          "sent": 23,
+          "cleared": 0
+        },
+        "WRATH:warrior": {
+          "sent": 21,
+          "cleared": 2
+        },
+        "WRATH:rogue": {
+          "sent": 17,
+          "cleared": 1
+        },
+        "SLOTH:mage": {
+          "sent": 22,
+          "cleared": 2
+        },
+        "SLOTH:archer": {
+          "sent": 23,
+          "cleared": 4
+        },
+        "GLUTTONY:priest": {
+          "sent": 17,
+          "cleared": 3
+        },
+        "GLUTTONY:warrior": {
+          "sent": 34,
+          "cleared": 4
+        },
+        "LUST:warrior": {
+          "sent": 22,
+          "cleared": 4
+        },
+        "LUST:rogue": {
+          "sent": 17,
+          "cleared": 4
+        },
+        "SLOTH:rogue": {
+          "sent": 14,
+          "cleared": 1
+        },
+        "SLOTH:warrior": {
+          "sent": 29,
+          "cleared": 5
+        },
+        "GREED:warrior": {
+          "sent": 24,
+          "cleared": 5
+        },
+        "GREED:archer": {
+          "sent": 24,
+          "cleared": 3
+        },
+        "PRIDE:mage": {
+          "sent": 25,
+          "cleared": 0
+        },
+        "PRIDE:warrior": {
+          "sent": 18,
+          "cleared": 2
+        },
+        "GREED:mage": {
+          "sent": 24,
+          "cleared": 2
+        },
+        "WRATH:archer": {
+          "sent": 19,
+          "cleared": 2
+        },
+        "WRATH:mage": {
+          "sent": 19,
+          "cleared": 1
+        },
+        "GLUTTONY:rogue": {
+          "sent": 31,
+          "cleared": 6
+        },
+        "SLOTH:priest": {
+          "sent": 11,
+          "cleared": 3
+        },
+        "PRIDE:archer": {
+          "sent": 16,
+          "cleared": 0
+        },
+        "ENVY:warrior": {
+          "sent": 22,
+          "cleared": 2
+        },
+        "ENVY:mage": {
+          "sent": 9,
+          "cleared": 1
+        },
+        "GLUTTONY:archer": {
+          "sent": 22,
+          "cleared": 2
+        },
+        "LUST:archer": {
+          "sent": 20,
+          "cleared": 2
+        },
+        "LUST:mage": {
+          "sent": 23,
+          "cleared": 4
+        },
+        "GREED:priest": {
+          "sent": 11,
+          "cleared": 2
+        },
+        "PRIDE:rogue": {
+          "sent": 19,
+          "cleared": 0
+        },
+        "PRIDE:priest": {
+          "sent": 18,
+          "cleared": 1
+        },
+        "GLUTTONY:mage": {
+          "sent": 19,
+          "cleared": 0
+        },
+        "GREED:rogue": {
+          "sent": 19,
+          "cleared": 6
+        },
+        "ENVY:archer": {
+          "sent": 12,
+          "cleared": 0
+        },
+        "ENVY:rogue": {
+          "sent": 12,
+          "cleared": 0
+        },
+        "ENVY:priest": {
+          "sent": 11,
+          "cleared": 0
+        },
+        "LUST:priest": {
+          "sent": 11,
+          "cleared": 1
+        }
+      },
+      "npcLevel": 9.146604559941162,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 130
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 150,
+          "p75": 160
+        },
+        "D21-30": {
+          "p25": 170,
+          "median": 180,
+          "p75": 190
+        }
+      },
+      "bossRuns": {
+        "WRATH": {
+          "resolved": 33,
+          "cleared": 2,
+          "margin": -1449.5056727997855
+        },
+        "SLOTH": {
+          "resolved": 33,
+          "cleared": 5,
+          "margin": -1591.1637493410167
+        },
+        "GLUTTONY": {
+          "resolved": 41,
+          "cleared": 5,
+          "margin": -1393.3400999899588
+        },
+        "LUST": {
+          "resolved": 31,
+          "cleared": 5,
+          "margin": -1154.9763041322624
+        },
+        "GREED": {
+          "resolved": 34,
+          "cleared": 6,
+          "margin": -955.1114737205319
+        },
+        "PRIDE": {
+          "resolved": 32,
+          "cleared": 1,
+          "margin": -1516.8751241255059
+        },
+        "ENVY": {
+          "resolved": 22,
+          "cleared": 1,
+          "margin": -1123.9369578305718
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 42394,
+          "accepted": 24454,
+          "revenue": 2527340,
+          "profit": 1321475,
+          "loyalty": 29558
+        },
+        "half": {
+          "attempts": 30465,
+          "accepted": 22990,
+          "revenue": 2060198,
+          "profit": 58510,
+          "loyalty": 147477
+        },
+        "overcharge": {
+          "attempts": 18233,
+          "accepted": 9410,
+          "revenue": 1280537,
+          "profit": 881407,
+          "loyalty": -27248
+        }
+      },
+      "goldInTotal": 5944805,
+      "goldOutTotal": 6004743,
+      "relicSpendPerRun": 1946.1133333333332
+    },
+    {
+      "key": "late",
+      "label": "Late Meta",
+      "jobs": 4,
+      "bosses": 6,
+      "policy": "balanced",
+      "grade": 4,
+      "mastery": 24,
+      "distinct": 6,
+      "reach10": 1,
+      "reach20": 0.91,
+      "reach30": 0.7333333333333333,
+      "finalGivenReach": 0.3,
+      "clear": 0.22,
+      "deaths": 3.6633333333333336,
+      "endedBy": {
+        "deaths": 2,
+        "bankrupt": 78,
+        "finalFail": 154,
+        "cleared": 66
+      },
+      "deathFailDayMedian": 28,
+      "goldIn": {
+        "sale": 6022030,
+        "greatSuccess": 137400,
+        "subsidy": 6200,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 4142757,
+        "operating": 1225290,
+        "relic": 495166,
+        "deepSponsor": 232780,
+        "commission": 14256,
+        "waste": 48783
+      },
+      "saleOriginShare": 0.9767095982081312,
+      "overheadP10": 110,
+      "overheadMedian": 150,
+      "overheadP90": 200,
+      "coreLevelMedian": 7.666666666666667,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 781,
+      "prepStartGoldMedian": 1398,
+      "prepStartGoldP75": 2404,
+      "great": {
+        "success": 7004,
+        "great": 943,
+        "storeGold": 137400,
+        "byBand": {
+          ".26-.5": {
+            "success": 1678,
+            "great": 449
+          },
+          ".1-.26": {
+            "success": 2400,
+            "great": 331
+          },
+          "0-.1": {
+            "success": 1471,
+            "great": 69
+          },
+          "<0": {
+            "success": 1144,
+            "great": 0
+          },
+          ".5-1": {
+            "success": 311,
+            "great": 94
+          }
+        }
+      },
+      "greatSuccessRate": 0.13463735008566532,
+      "greatStoreGoldPerRun": 458,
+      "deepOfferedPerRun": 2.22,
+      "deepTakenPerRun": 2.22,
+      "deepSponsorPerRun": 775.9333333333333,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 1316,
+          "success": 214,
+          "retreat": 518,
+          "injury": 344,
+          "severe": 207,
+          "death": 33,
+          "consumed": 1950
+        },
+        "fire:mage": {
+          "expeditions": 1284,
+          "success": 216,
+          "retreat": 488,
+          "injury": 364,
+          "severe": 180,
+          "death": 36,
+          "consumed": 1937
+        },
+        "fire:berserker": {
+          "expeditions": 1278,
+          "success": 239,
+          "retreat": 455,
+          "injury": 356,
+          "severe": 199,
+          "death": 29,
+          "consumed": 1865
+        },
+        "fire:priest": {
+          "expeditions": 1236,
+          "success": 103,
+          "retreat": 541,
+          "injury": 350,
+          "severe": 196,
+          "death": 46,
+          "consumed": 1843
+        },
+        "fire:rogue": {
+          "expeditions": 1320,
+          "success": 120,
+          "retreat": 587,
+          "injury": 345,
+          "severe": 218,
+          "death": 50,
+          "consumed": 1956
+        },
+        "crypt:mage": {
+          "expeditions": 1238,
+          "success": 299,
+          "retreat": 432,
+          "injury": 291,
+          "severe": 181,
+          "death": 35,
+          "consumed": 1837
+        },
+        "crypt:priest": {
+          "expeditions": 1233,
+          "success": 143,
+          "retreat": 503,
+          "injury": 362,
+          "severe": 179,
+          "death": 46,
+          "consumed": 1827
+        },
+        "crypt:archer": {
+          "expeditions": 1220,
+          "success": 222,
+          "retreat": 491,
+          "injury": 309,
+          "severe": 164,
+          "death": 34,
+          "consumed": 1873
+        },
+        "crypt:warrior": {
+          "expeditions": 1396,
+          "success": 320,
+          "retreat": 465,
+          "injury": 384,
+          "severe": 193,
+          "death": 34,
+          "consumed": 2144
+        },
+        "snow:warrior": {
+          "expeditions": 1330,
+          "success": 277,
+          "retreat": 437,
+          "injury": 371,
+          "severe": 204,
+          "death": 41,
+          "consumed": 2051
+        },
+        "snow:rogue": {
+          "expeditions": 1315,
+          "success": 146,
+          "retreat": 581,
+          "injury": 379,
+          "severe": 179,
+          "death": 30,
+          "consumed": 1967
+        },
+        "snow:mage": {
+          "expeditions": 1334,
+          "success": 227,
+          "retreat": 499,
+          "injury": 368,
+          "severe": 197,
+          "death": 43,
+          "consumed": 2024
+        },
+        "crypt:rogue": {
+          "expeditions": 1319,
+          "success": 197,
+          "retreat": 552,
+          "injury": 360,
+          "severe": 176,
+          "death": 34,
+          "consumed": 1900
+        },
+        "slime:warrior": {
+          "expeditions": 1291,
+          "success": 342,
+          "retreat": 401,
+          "injury": 353,
+          "severe": 169,
+          "death": 26,
+          "consumed": 1963
+        },
+        "crypt:berserker": {
+          "expeditions": 1315,
+          "success": 317,
+          "retreat": 437,
+          "injury": 352,
+          "severe": 172,
+          "death": 37,
+          "consumed": 2001
+        },
+        "slime:mage": {
+          "expeditions": 1288,
+          "success": 303,
+          "retreat": 398,
+          "injury": 370,
+          "severe": 173,
+          "death": 44,
+          "consumed": 1880
+        },
+        "slime:priest": {
+          "expeditions": 1168,
+          "success": 164,
+          "retreat": 432,
+          "injury": 336,
+          "severe": 185,
+          "death": 51,
+          "consumed": 1733
+        },
+        "slime:berserker": {
+          "expeditions": 1377,
+          "success": 373,
+          "retreat": 414,
+          "injury": 353,
+          "severe": 203,
+          "death": 34,
+          "consumed": 2005
+        },
+        "snow:berserker": {
+          "expeditions": 1281,
+          "success": 276,
+          "retreat": 425,
+          "injury": 368,
+          "severe": 178,
+          "death": 34,
+          "consumed": 1901
+        },
+        "spider:priest": {
+          "expeditions": 1266,
+          "success": 145,
+          "retreat": 483,
+          "injury": 386,
+          "severe": 204,
+          "death": 48,
+          "consumed": 1851
+        },
+        "spider:mage": {
+          "expeditions": 1328,
+          "success": 302,
+          "retreat": 423,
+          "injury": 384,
+          "severe": 183,
+          "death": 36,
+          "consumed": 1947
+        },
+        "slime:rogue": {
+          "expeditions": 1254,
+          "success": 203,
+          "retreat": 547,
+          "injury": 302,
+          "severe": 174,
+          "death": 28,
+          "consumed": 1803
+        },
+        "spider:rogue": {
+          "expeditions": 1279,
+          "success": 214,
+          "retreat": 536,
+          "injury": 319,
+          "severe": 181,
+          "death": 29,
+          "consumed": 1854
+        },
+        "snow:archer": {
+          "expeditions": 1339,
+          "success": 223,
+          "retreat": 537,
+          "injury": 362,
+          "severe": 186,
+          "death": 31,
+          "consumed": 1955
+        },
+        "snow:priest": {
+          "expeditions": 1263,
+          "success": 146,
+          "retreat": 518,
+          "injury": 354,
+          "severe": 207,
+          "death": 38,
+          "consumed": 1928
+        },
+        "slime:archer": {
+          "expeditions": 1218,
+          "success": 246,
+          "retreat": 465,
+          "injury": 287,
+          "severe": 182,
+          "death": 38,
+          "consumed": 1861
+        },
+        "fire:archer": {
+          "expeditions": 1264,
+          "success": 148,
+          "retreat": 589,
+          "injury": 310,
+          "severe": 174,
+          "death": 43,
+          "consumed": 1833
+        },
+        "spider:archer": {
+          "expeditions": 1189,
+          "success": 225,
+          "retreat": 487,
+          "injury": 295,
+          "severe": 147,
+          "death": 35,
+          "consumed": 1730
+        },
+        "spider:warrior": {
+          "expeditions": 1273,
+          "success": 334,
+          "retreat": 410,
+          "injury": 325,
+          "severe": 173,
+          "death": 31,
+          "consumed": 1904
+        },
+        "spider:berserker": {
+          "expeditions": 1247,
+          "success": 320,
+          "retreat": 408,
+          "injury": 332,
+          "severe": 162,
+          "death": 25,
+          "consumed": 1840
+        }
+      },
+      "bossJob": {
+        "LUST:priest": {
+          "sent": 10,
+          "cleared": 4
+        },
+        "LUST:berserker": {
+          "sent": 15,
+          "cleared": 6
+        },
+        "LUST:warrior": {
+          "sent": 18,
+          "cleared": 7
+        },
+        "WRATH:rogue": {
+          "sent": 10,
+          "cleared": 4
+        },
+        "WRATH:mage": {
+          "sent": 15,
+          "cleared": 5
+        },
+        "WRATH:archer": {
+          "sent": 14,
+          "cleared": 5
+        },
+        "GLUTTONY:priest": {
+          "sent": 16,
+          "cleared": 3
+        },
+        "GLUTTONY:warrior": {
+          "sent": 15,
+          "cleared": 8
+        },
+        "GLUTTONY:archer": {
+          "sent": 20,
+          "cleared": 5
+        },
+        "LUST:archer": {
+          "sent": 17,
+          "cleared": 5
+        },
+        "GLUTTONY:rogue": {
+          "sent": 18,
+          "cleared": 7
+        },
+        "GLUTTONY:mage": {
+          "sent": 19,
+          "cleared": 5
+        },
+        "SLOTH:mage": {
+          "sent": 20,
+          "cleared": 1
+        },
+        "SLOTH:warrior": {
+          "sent": 21,
+          "cleared": 5
+        },
+        "SLOTH:priest": {
+          "sent": 16,
+          "cleared": 1
+        },
+        "GREED:berserker": {
+          "sent": 16,
+          "cleared": 10
+        },
+        "GREED:warrior": {
+          "sent": 17,
+          "cleared": 7
+        },
+        "GREED:mage": {
+          "sent": 23,
+          "cleared": 11
+        },
+        "WRATH:priest": {
+          "sent": 12,
+          "cleared": 1
+        },
+        "GREED:priest": {
+          "sent": 15,
+          "cleared": 3
+        },
+        "GLUTTONY:berserker": {
+          "sent": 17,
+          "cleared": 8
+        },
+        "WRATH:warrior": {
+          "sent": 16,
+          "cleared": 7
+        },
+        "WRATH:berserker": {
+          "sent": 14,
+          "cleared": 5
+        },
+        "ENVY:warrior": {
+          "sent": 17,
+          "cleared": 3
+        },
+        "GREED:archer": {
+          "sent": 23,
+          "cleared": 11
+        },
+        "PRIDE:warrior": {
+          "sent": 22,
+          "cleared": 8
+        },
+        "PRIDE:berserker": {
+          "sent": 14,
+          "cleared": 5
+        },
+        "ENVY:mage": {
+          "sent": 13,
+          "cleared": 3
+        },
+        "ENVY:archer": {
+          "sent": 9,
+          "cleared": 1
+        },
+        "LUST:rogue": {
+          "sent": 18,
+          "cleared": 4
+        },
+        "PRIDE:priest": {
+          "sent": 13,
+          "cleared": 2
+        },
+        "PRIDE:archer": {
+          "sent": 15,
+          "cleared": 3
+        },
+        "PRIDE:rogue": {
+          "sent": 12,
+          "cleared": 3
+        },
+        "ENVY:berserker": {
+          "sent": 17,
+          "cleared": 5
+        },
+        "PRIDE:mage": {
+          "sent": 23,
+          "cleared": 6
+        },
+        "SLOTH:berserker": {
+          "sent": 17,
+          "cleared": 3
+        },
+        "SLOTH:archer": {
+          "sent": 19,
+          "cleared": 2
+        },
+        "LUST:mage": {
+          "sent": 12,
+          "cleared": 4
+        },
+        "SLOTH:rogue": {
+          "sent": 12,
+          "cleared": 3
+        },
+        "ENVY:priest": {
+          "sent": 10,
+          "cleared": 0
+        },
+        "ENVY:rogue": {
+          "sent": 12,
+          "cleared": 3
+        },
+        "GREED:rogue": {
+          "sent": 8,
+          "cleared": 6
+        }
+      },
+      "npcLevel": 9.516397338403042,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 130
+        },
+        "D11-20": {
+          "p25": 140,
+          "median": 150,
+          "p75": 160
+        },
+        "D21-30": {
+          "p25": 180,
+          "median": 190,
+          "p75": 200
+        }
+      },
+      "bossRuns": {
+        "LUST": {
+          "resolved": 30,
+          "cleared": 10,
+          "margin": -197.44197635994163
+        },
+        "WRATH": {
+          "resolved": 27,
+          "cleared": 9,
+          "margin": -423.59685030666265
+        },
+        "GLUTTONY": {
+          "resolved": 35,
+          "cleared": 12,
+          "margin": -411.64797172594785
+        },
+        "SLOTH": {
+          "resolved": 35,
+          "cleared": 5,
+          "margin": -1247.721285392759
+        },
+        "GREED": {
+          "resolved": 34,
+          "cleared": 16,
+          "margin": 301.3534217124069
+        },
+        "ENVY": {
+          "resolved": 26,
+          "cleared": 5,
+          "margin": -670.2770980054054
+        },
+        "PRIDE": {
+          "resolved": 33,
+          "cleared": 9,
+          "margin": -739.7557849669811
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 39882,
+          "accepted": 23075,
+          "revenue": 2442490,
+          "profit": 1276317,
+          "loyalty": 27516
+        },
+        "half": {
+          "attempts": 31731,
+          "accepted": 23887,
+          "revenue": 2164510,
+          "profit": 60385,
+          "loyalty": 152861
+        },
+        "overcharge": {
+          "attempts": 20038,
+          "accepted": 10201,
+          "revenue": 1415030,
+          "profit": 972533,
+          "loyalty": -29769
+        }
+      },
+      "goldInTotal": 6165630,
+      "goldOutTotal": 6159032,
+      "relicSpendPerRun": 1952.0533333333333
+    },
+    {
+      "key": "near",
+      "label": "Near-complete Meta",
+      "jobs": 5,
+      "bosses": 7,
+      "policy": "balanced",
+      "grade": 6,
+      "mastery": 35,
+      "distinct": 7,
+      "reach10": 1,
+      "reach20": 0.94,
+      "reach30": 0.79,
+      "finalGivenReach": 0.4050632911392405,
+      "clear": 0.32,
+      "deaths": 3.0766666666666667,
+      "endedBy": {
+        "deaths": 0,
+        "bankrupt": 63,
+        "finalFail": 141,
+        "cleared": 96
+      },
+      "deathFailDayMedian": 0,
+      "goldIn": {
+        "sale": 6277513,
+        "greatSuccess": 181100,
+        "subsidy": 5360,
+        "liquidation": 0
+      },
+      "goldOut": {
+        "order": 4304114,
+        "operating": 1289150,
+        "relic": 526502,
+        "deepSponsor": 246440,
+        "commission": 12282,
+        "waste": 41946
+      },
+      "saleOriginShare": 0.9711539636690933,
+      "overheadP10": 120,
+      "overheadMedian": 150,
+      "overheadP90": 200,
+      "coreLevelMedian": 8.333333333333334,
+      "coreRarityMedian": 0.6666666666666666,
+      "prepStartGoldP25": 741,
+      "prepStartGoldMedian": 1417,
+      "prepStartGoldP75": 2482,
+      "great": {
+        "success": 8899,
+        "great": 1259,
+        "storeGold": 181100,
+        "byBand": {
+          ".26-.5": {
+            "success": 2343,
+            "great": 616
+          },
+          ".1-.26": {
+            "success": 3046,
+            "great": 423
+          },
+          ".5-1": {
+            "success": 476,
+            "great": 142
+          },
+          "0-.1": {
+            "success": 1760,
+            "great": 77
+          },
+          "<0": {
+            "success": 1273,
+            "great": 0
+          },
+          "1+": {
+            "success": 1,
+            "great": 1
+          }
+        }
+      },
+      "greatSuccessRate": 0.14147657040116868,
+      "greatStoreGoldPerRun": 603.6666666666666,
+      "deepOfferedPerRun": 2.283333333333333,
+      "deepTakenPerRun": 2.283333333333333,
+      "deepSponsorPerRun": 821.4666666666667,
+      "familyJob": {
+        "fire:warrior": {
+          "expeditions": 1366,
+          "success": 262,
+          "retreat": 509,
+          "injury": 356,
+          "severe": 205,
+          "death": 34,
+          "consumed": 2037
+        },
+        "fire:mage": {
+          "expeditions": 1311,
+          "success": 220,
+          "retreat": 464,
+          "injury": 401,
+          "severe": 190,
+          "death": 36,
+          "consumed": 1966
+        },
+        "fire:berserker": {
+          "expeditions": 1330,
+          "success": 230,
+          "retreat": 487,
+          "injury": 369,
+          "severe": 209,
+          "death": 35,
+          "consumed": 1940
+        },
+        "fire:priest": {
+          "expeditions": 1310,
+          "success": 133,
+          "retreat": 538,
+          "injury": 368,
+          "severe": 224,
+          "death": 47,
+          "consumed": 1953
+        },
+        "fire:rogue": {
+          "expeditions": 1395,
+          "success": 321,
+          "retreat": 559,
+          "injury": 330,
+          "severe": 157,
+          "death": 28,
+          "consumed": 2115
+        },
+        "snow:mage": {
+          "expeditions": 1326,
+          "success": 284,
+          "retreat": 470,
+          "injury": 353,
+          "severe": 188,
+          "death": 31,
+          "consumed": 1995
+        },
+        "snow:priest": {
+          "expeditions": 1239,
+          "success": 171,
+          "retreat": 485,
+          "injury": 346,
+          "severe": 199,
+          "death": 38,
+          "consumed": 1828
+        },
+        "snow:archer": {
+          "expeditions": 1291,
+          "success": 236,
+          "retreat": 540,
+          "injury": 331,
+          "severe": 157,
+          "death": 27,
+          "consumed": 1931
+        },
+        "snow:warrior": {
+          "expeditions": 1312,
+          "success": 321,
+          "retreat": 438,
+          "injury": 358,
+          "severe": 165,
+          "death": 30,
+          "consumed": 2042
+        },
+        "snow:berserker": {
+          "expeditions": 1258,
+          "success": 283,
+          "retreat": 413,
+          "injury": 334,
+          "severe": 195,
+          "death": 33,
+          "consumed": 1841
+        },
+        "crypt:warrior": {
+          "expeditions": 1379,
+          "success": 349,
+          "retreat": 419,
+          "injury": 351,
+          "severe": 223,
+          "death": 37,
+          "consumed": 2052
+        },
+        "crypt:priest": {
+          "expeditions": 1319,
+          "success": 211,
+          "retreat": 529,
+          "injury": 328,
+          "severe": 207,
+          "death": 44,
+          "consumed": 1995
+        },
+        "crypt:rogue": {
+          "expeditions": 1371,
+          "success": 421,
+          "retreat": 462,
+          "injury": 320,
+          "severe": 137,
+          "death": 31,
+          "consumed": 2154
+        },
+        "crypt:berserker": {
+          "expeditions": 1379,
+          "success": 323,
+          "retreat": 429,
+          "injury": 413,
+          "severe": 177,
+          "death": 37,
+          "consumed": 2101
+        },
+        "crypt:archer": {
+          "expeditions": 1321,
+          "success": 268,
+          "retreat": 518,
+          "injury": 332,
+          "severe": 176,
+          "death": 27,
+          "consumed": 1980
+        },
+        "slime:rogue": {
+          "expeditions": 1413,
+          "success": 440,
+          "retreat": 481,
+          "injury": 340,
+          "severe": 131,
+          "death": 21,
+          "consumed": 2138
+        },
+        "slime:berserker": {
+          "expeditions": 1349,
+          "success": 394,
+          "retreat": 400,
+          "injury": 337,
+          "severe": 188,
+          "death": 30,
+          "consumed": 1937
+        },
+        "crypt:mage": {
+          "expeditions": 1338,
+          "success": 317,
+          "retreat": 458,
+          "injury": 330,
+          "severe": 208,
+          "death": 25,
+          "consumed": 1998
+        },
+        "slime:priest": {
+          "expeditions": 1226,
+          "success": 191,
+          "retreat": 455,
+          "injury": 370,
+          "severe": 173,
+          "death": 37,
+          "consumed": 1824
+        },
+        "slime:mage": {
+          "expeditions": 1295,
+          "success": 357,
+          "retreat": 396,
+          "injury": 343,
+          "severe": 169,
+          "death": 30,
+          "consumed": 1959
+        },
+        "fire:archer": {
+          "expeditions": 1322,
+          "success": 188,
+          "retreat": 598,
+          "injury": 342,
+          "severe": 161,
+          "death": 33,
+          "consumed": 2014
+        },
+        "spider:rogue": {
+          "expeditions": 1324,
+          "success": 402,
+          "retreat": 464,
+          "injury": 283,
+          "severe": 146,
+          "death": 29,
+          "consumed": 2000
+        },
+        "spider:archer": {
+          "expeditions": 1234,
+          "success": 284,
+          "retreat": 458,
+          "injury": 302,
+          "severe": 169,
+          "death": 21,
+          "consumed": 1801
+        },
+        "spider:mage": {
+          "expeditions": 1292,
+          "success": 325,
+          "retreat": 421,
+          "injury": 347,
+          "severe": 172,
+          "death": 27,
+          "consumed": 1967
+        },
+        "spider:priest": {
+          "expeditions": 1188,
+          "success": 181,
+          "retreat": 452,
+          "injury": 322,
+          "severe": 205,
+          "death": 28,
+          "consumed": 1744
+        },
+        "slime:archer": {
+          "expeditions": 1299,
+          "success": 286,
+          "retreat": 517,
+          "injury": 333,
+          "severe": 138,
+          "death": 25,
+          "consumed": 2002
+        },
+        "slime:warrior": {
+          "expeditions": 1331,
+          "success": 382,
+          "retreat": 400,
+          "injury": 343,
+          "severe": 179,
+          "death": 27,
+          "consumed": 2000
+        },
+        "snow:rogue": {
+          "expeditions": 1391,
+          "success": 402,
+          "retreat": 505,
+          "injury": 288,
+          "severe": 166,
+          "death": 30,
+          "consumed": 2180
+        },
+        "spider:warrior": {
+          "expeditions": 1268,
+          "success": 352,
+          "retreat": 387,
+          "injury": 340,
+          "severe": 164,
+          "death": 25,
+          "consumed": 1899
+        },
+        "spider:berserker": {
+          "expeditions": 1250,
+          "success": 365,
+          "retreat": 355,
+          "injury": 336,
+          "severe": 174,
+          "death": 20,
+          "consumed": 1840
+        }
+      },
+      "bossJob": {
+        "LUST:priest": {
+          "sent": 16,
+          "cleared": 5
+        },
+        "LUST:berserker": {
+          "sent": 16,
+          "cleared": 10
+        },
+        "LUST:mage": {
+          "sent": 12,
+          "cleared": 8
+        },
+        "WRATH:warrior": {
+          "sent": 13,
+          "cleared": 8
+        },
+        "WRATH:berserker": {
+          "sent": 17,
+          "cleared": 13
+        },
+        "WRATH:archer": {
+          "sent": 19,
+          "cleared": 7
+        },
+        "SLOTH:berserker": {
+          "sent": 15,
+          "cleared": 5
+        },
+        "SLOTH:mage": {
+          "sent": 18,
+          "cleared": 5
+        },
+        "SLOTH:archer": {
+          "sent": 17,
+          "cleared": 3
+        },
+        "GLUTTONY:rogue": {
+          "sent": 29,
+          "cleared": 10
+        },
+        "GLUTTONY:warrior": {
+          "sent": 22,
+          "cleared": 7
+        },
+        "GLUTTONY:mage": {
+          "sent": 23,
+          "cleared": 7
+        },
+        "GLUTTONY:archer": {
+          "sent": 20,
+          "cleared": 5
+        },
+        "GREED:mage": {
+          "sent": 20,
+          "cleared": 14
+        },
+        "GREED:archer": {
+          "sent": 26,
+          "cleared": 15
+        },
+        "GREED:warrior": {
+          "sent": 21,
+          "cleared": 12
+        },
+        "WRATH:rogue": {
+          "sent": 17,
+          "cleared": 11
+        },
+        "WRATH:priest": {
+          "sent": 5,
+          "cleared": 1
+        },
+        "WRATH:mage": {
+          "sent": 13,
+          "cleared": 8
+        },
+        "GREED:priest": {
+          "sent": 12,
+          "cleared": 6
+        },
+        "ENVY:berserker": {
+          "sent": 14,
+          "cleared": 2
+        },
+        "ENVY:archer": {
+          "sent": 13,
+          "cleared": 3
+        },
+        "ENVY:rogue": {
+          "sent": 19,
+          "cleared": 3
+        },
+        "SLOTH:warrior": {
+          "sent": 14,
+          "cleared": 3
+        },
+        "LUST:warrior": {
+          "sent": 15,
+          "cleared": 6
+        },
+        "LUST:archer": {
+          "sent": 15,
+          "cleared": 5
+        },
+        "SLOTH:rogue": {
+          "sent": 29,
+          "cleared": 11
+        },
+        "PRIDE:archer": {
+          "sent": 16,
+          "cleared": 4
+        },
+        "PRIDE:priest": {
+          "sent": 11,
+          "cleared": 3
+        },
+        "PRIDE:mage": {
+          "sent": 17,
+          "cleared": 4
+        },
+        "GREED:berserker": {
+          "sent": 19,
+          "cleared": 13
+        },
+        "GREED:rogue": {
+          "sent": 19,
+          "cleared": 12
+        },
+        "ENVY:mage": {
+          "sent": 21,
+          "cleared": 5
+        },
+        "ENVY:priest": {
+          "sent": 5,
+          "cleared": 3
+        },
+        "ENVY:warrior": {
+          "sent": 15,
+          "cleared": 8
+        },
+        "PRIDE:rogue": {
+          "sent": 23,
+          "cleared": 10
+        },
+        "LUST:rogue": {
+          "sent": 22,
+          "cleared": 11
+        },
+        "PRIDE:warrior": {
+          "sent": 18,
+          "cleared": 8
+        },
+        "GLUTTONY:berserker": {
+          "sent": 9,
+          "cleared": 4
+        },
+        "PRIDE:berserker": {
+          "sent": 14,
+          "cleared": 7
+        },
+        "GLUTTONY:priest": {
+          "sent": 17,
+          "cleared": 3
+        },
+        "SLOTH:priest": {
+          "sent": 15,
+          "cleared": 0
+        }
+      },
+      "npcLevel": 9.957781271053223,
+      "overheadByBand": {
+        "D1-10": {
+          "p25": 110,
+          "median": 120,
+          "p75": 130
+        },
+        "D11-20": {
+          "p25": 150,
+          "median": 160,
+          "p75": 170
+        },
+        "D21-30": {
+          "p25": 180,
+          "median": 190,
+          "p75": 210
+        }
+      },
+      "bossRuns": {
+        "LUST": {
+          "resolved": 32,
+          "cleared": 15,
+          "margin": 141.86974283810972
+        },
+        "WRATH": {
+          "resolved": 28,
+          "cleared": 16,
+          "margin": -61.97831822348823
+        },
+        "SLOTH": {
+          "resolved": 36,
+          "cleared": 9,
+          "margin": -915.7858984318669
+        },
+        "GLUTTONY": {
+          "resolved": 40,
+          "cleared": 12,
+          "margin": -233.0310579127668
+        },
+        "GREED": {
+          "resolved": 39,
+          "cleared": 24,
+          "margin": 382.65742142760064
+        },
+        "ENVY": {
+          "resolved": 29,
+          "cleared": 8,
+          "margin": -268.93099806534565
+        },
+        "PRIDE": {
+          "resolved": 33,
+          "cleared": 12,
+          "margin": -419.1361455036384
+        }
+      },
+      "modes": {
+        "full": {
+          "attempts": 38989,
+          "accepted": 22261,
+          "revenue": 2388065,
+          "profit": 1248003,
+          "loyalty": 26435
+        },
+        "half": {
+          "attempts": 34012,
+          "accepted": 25546,
+          "revenue": 2293776,
+          "profit": 68108,
+          "loyalty": 161920
+        },
+        "overcharge": {
+          "attempts": 22545,
+          "accepted": 11426,
+          "revenue": 1595672,
+          "profit": 1098291,
+          "loyalty": -33216
+        }
+      },
+      "goldInTotal": 6463973,
+      "goldOutTotal": 6420434,
+      "relicSpendPerRun": 2073.346666666667
+    }
+  ],
+  "forcedUnlock": {
+    "familyJob": {
+      "fire:warrior": {
+        "expeditions": 1325,
+        "success": 129,
+        "retreat": 549,
+        "injury": 385,
+        "severe": 221,
+        "death": 41,
+        "consumed": 1999
+      },
+      "fire:mage": {
+        "expeditions": 1316,
+        "success": 87,
+        "retreat": 555,
+        "injury": 433,
+        "severe": 205,
+        "death": 36,
+        "consumed": 1957
+      },
+      "fire:berserker": {
+        "expeditions": 1399,
+        "success": 278,
+        "retreat": 495,
+        "injury": 374,
+        "severe": 213,
+        "death": 39,
+        "consumed": 2160
+      },
+      "fire:priest": {
+        "expeditions": 1198,
+        "success": 41,
+        "retreat": 525,
+        "injury": 381,
+        "severe": 203,
+        "death": 48,
+        "consumed": 1747
+      },
+      "fire:rogue": {
+        "expeditions": 1381,
+        "success": 114,
+        "retreat": 651,
+        "injury": 392,
+        "severe": 187,
+        "death": 37,
+        "consumed": 2093
+      },
+      "crypt:archer": {
+        "expeditions": 1241,
+        "success": 96,
+        "retreat": 565,
+        "injury": 348,
+        "severe": 186,
+        "death": 46,
+        "consumed": 1772
+      },
+      "crypt:mage": {
+        "expeditions": 1290,
+        "success": 150,
+        "retreat": 514,
+        "injury": 376,
+        "severe": 195,
+        "death": 55,
+        "consumed": 1948
+      },
+      "crypt:berserker": {
+        "expeditions": 1385,
+        "success": 343,
+        "retreat": 418,
+        "injury": 382,
+        "severe": 208,
+        "death": 34,
+        "consumed": 2227
+      },
+      "crypt:warrior": {
+        "expeditions": 1427,
+        "success": 192,
+        "retreat": 546,
+        "injury": 422,
+        "severe": 230,
+        "death": 37,
+        "consumed": 2127
+      },
+      "crypt:priest": {
+        "expeditions": 1287,
+        "success": 77,
+        "retreat": 596,
+        "injury": 357,
+        "severe": 205,
+        "death": 52,
+        "consumed": 1887
+      },
+      "slime:priest": {
+        "expeditions": 1176,
+        "success": 83,
+        "retreat": 472,
+        "injury": 390,
+        "severe": 192,
+        "death": 39,
+        "consumed": 1729
+      },
+      "slime:mage": {
+        "expeditions": 1233,
+        "success": 150,
+        "retreat": 474,
+        "injury": 359,
+        "severe": 201,
+        "death": 49,
+        "consumed": 1804
+      },
+      "slime:rogue": {
+        "expeditions": 1412,
+        "success": 230,
+        "retreat": 604,
+        "injury": 360,
+        "severe": 177,
+        "death": 41,
+        "consumed": 2069
+      },
+      "slime:berserker": {
+        "expeditions": 1305,
+        "success": 363,
+        "retreat": 391,
+        "injury": 350,
+        "severe": 179,
+        "death": 22,
+        "consumed": 2005
+      },
+      "slime:archer": {
+        "expeditions": 1246,
+        "success": 120,
+        "retreat": 546,
+        "injury": 348,
+        "severe": 192,
+        "death": 40,
+        "consumed": 1814
+      },
+      "snow:warrior": {
+        "expeditions": 1306,
+        "success": 146,
+        "retreat": 492,
+        "injury": 398,
+        "severe": 228,
+        "death": 42,
+        "consumed": 1917
+      },
+      "snow:archer": {
+        "expeditions": 1225,
+        "success": 94,
+        "retreat": 559,
+        "injury": 353,
+        "severe": 183,
+        "death": 36,
+        "consumed": 1832
+      },
+      "snow:berserker": {
+        "expeditions": 1353,
+        "success": 317,
+        "retreat": 455,
+        "injury": 358,
+        "severe": 190,
+        "death": 33,
+        "consumed": 2108
+      },
+      "snow:priest": {
+        "expeditions": 1196,
+        "success": 54,
+        "retreat": 547,
+        "injury": 352,
+        "severe": 200,
+        "death": 43,
+        "consumed": 1778
+      },
+      "slime:warrior": {
+        "expeditions": 1396,
+        "success": 252,
+        "retreat": 505,
+        "injury": 402,
+        "severe": 202,
+        "death": 35,
+        "consumed": 2089
+      },
+      "crypt:rogue": {
+        "expeditions": 1363,
+        "success": 171,
+        "retreat": 581,
+        "injury": 392,
+        "severe": 185,
+        "death": 34,
+        "consumed": 2054
+      },
+      "spider:priest": {
+        "expeditions": 1203,
+        "success": 70,
+        "retreat": 497,
+        "injury": 392,
+        "severe": 198,
+        "death": 46,
+        "consumed": 1715
+      },
+      "spider:archer": {
+        "expeditions": 1218,
+        "success": 134,
+        "retreat": 533,
+        "injury": 329,
+        "severe": 190,
+        "death": 32,
+        "consumed": 1808
+      },
+      "spider:mage": {
+        "expeditions": 1213,
+        "success": 128,
+        "retreat": 456,
+        "injury": 396,
+        "severe": 187,
+        "death": 46,
+        "consumed": 1795
+      },
+      "fire:archer": {
+        "expeditions": 1248,
+        "success": 61,
+        "retreat": 591,
+        "injury": 366,
+        "severe": 192,
+        "death": 38,
+        "consumed": 1869
+      },
+      "snow:rogue": {
+        "expeditions": 1425,
+        "success": 178,
+        "retreat": 602,
+        "injury": 379,
+        "severe": 221,
+        "death": 45,
+        "consumed": 2146
+      },
+      "snow:mage": {
+        "expeditions": 1288,
+        "success": 117,
+        "retreat": 513,
+        "injury": 396,
+        "severe": 213,
+        "death": 49,
+        "consumed": 1956
+      },
+      "spider:rogue": {
+        "expeditions": 1291,
+        "success": 220,
+        "retreat": 556,
+        "injury": 329,
+        "severe": 144,
+        "death": 42,
+        "consumed": 1863
+      },
+      "spider:warrior": {
+        "expeditions": 1301,
+        "success": 203,
+        "retreat": 472,
+        "injury": 388,
+        "severe": 195,
+        "death": 43,
+        "consumed": 1954
+      },
+      "spider:berserker": {
+        "expeditions": 1256,
+        "success": 344,
+        "retreat": 380,
+        "injury": 323,
+        "severe": 184,
+        "death": 25,
+        "consumed": 1890
+      }
+    },
+    "bossJob": {
+      "LUST:berserker": {
+        "sent": 18,
+        "cleared": 4
+      },
+      "LUST:rogue": {
+        "sent": 25,
+        "cleared": 4
+      },
+      "WRATH:berserker": {
+        "sent": 25,
+        "cleared": 10
+      },
+      "WRATH:archer": {
+        "sent": 13,
+        "cleared": 2
+      },
+      "WRATH:rogue": {
+        "sent": 19,
+        "cleared": 3
+      },
+      "SLOTH:priest": {
+        "sent": 20,
+        "cleared": 2
+      },
+      "SLOTH:archer": {
+        "sent": 8,
+        "cleared": 0
+      },
+      "SLOTH:mage": {
+        "sent": 16,
+        "cleared": 3
+      },
+      "GLUTTONY:rogue": {
+        "sent": 22,
+        "cleared": 5
+      },
+      "GLUTTONY:priest": {
+        "sent": 12,
+        "cleared": 1
+      },
+      "GLUTTONY:archer": {
+        "sent": 18,
+        "cleared": 3
+      },
+      "WRATH:priest": {
+        "sent": 14,
+        "cleared": 4
+      },
+      "WRATH:mage": {
+        "sent": 15,
+        "cleared": 4
+      },
+      "LUST:priest": {
+        "sent": 12,
+        "cleared": 1
+      },
+      "LUST:mage": {
+        "sent": 14,
+        "cleared": 2
+      },
+      "SLOTH:berserker": {
+        "sent": 26,
+        "cleared": 3
+      },
+      "SLOTH:warrior": {
+        "sent": 22,
+        "cleared": 3
+      },
+      "GREED:mage": {
+        "sent": 21,
+        "cleared": 4
+      },
+      "GREED:priest": {
+        "sent": 16,
+        "cleared": 0
+      },
+      "GREED:warrior": {
+        "sent": 20,
+        "cleared": 3
+      },
+      "GREED:berserker": {
+        "sent": 28,
+        "cleared": 9
+      },
+      "GREED:archer": {
+        "sent": 18,
+        "cleared": 2
+      },
+      "ENVY:berserker": {
+        "sent": 25,
+        "cleared": 6
+      },
+      "ENVY:archer": {
+        "sent": 11,
+        "cleared": 1
+      },
+      "GLUTTONY:warrior": {
+        "sent": 9,
+        "cleared": 4
+      },
+      "GLUTTONY:mage": {
+        "sent": 8,
+        "cleared": 0
+      },
+      "PRIDE:archer": {
+        "sent": 18,
+        "cleared": 3
+      },
+      "PRIDE:rogue": {
+        "sent": 16,
+        "cleared": 1
+      },
+      "PRIDE:warrior": {
+        "sent": 19,
+        "cleared": 5
+      },
+      "WRATH:warrior": {
+        "sent": 16,
+        "cleared": 4
+      },
+      "ENVY:mage": {
+        "sent": 19,
+        "cleared": 1
+      },
+      "ENVY:warrior": {
+        "sent": 11,
+        "cleared": 0
+      },
+      "PRIDE:berserker": {
+        "sent": 16,
+        "cleared": 1
+      },
+      "ENVY:priest": {
+        "sent": 11,
+        "cleared": 0
+      },
+      "LUST:archer": {
+        "sent": 12,
+        "cleared": 2
+      },
+      "GREED:rogue": {
+        "sent": 14,
+        "cleared": 6
+      },
+      "PRIDE:mage": {
+        "sent": 18,
+        "cleared": 0
+      },
+      "GLUTTONY:berserker": {
+        "sent": 24,
+        "cleared": 8
+      },
+      "ENVY:rogue": {
+        "sent": 13,
+        "cleared": 1
+      },
+      "PRIDE:priest": {
+        "sent": 15,
+        "cleared": 2
+      },
+      "SLOTH:rogue": {
+        "sent": 16,
+        "cleared": 1
+      },
+      "LUST:warrior": {
+        "sent": 12,
+        "cleared": 2
+      }
+    },
+    "jobs": {
+      "warrior": {
+        "expeditions": 6755,
+        "success": 922,
+        "retreat": 2564,
+        "injury": 1995,
+        "severe": 1076,
+        "death": 198,
+        "consumed": 10086,
+        "bossParticipation": 109
+      },
+      "mage": {
+        "expeditions": 6340,
+        "success": 632,
+        "retreat": 2512,
+        "injury": 1960,
+        "severe": 1001,
+        "death": 235,
+        "consumed": 9460,
+        "bossParticipation": 111
+      },
+      "berserker": {
+        "expeditions": 6698,
+        "success": 1645,
+        "retreat": 2139,
+        "injury": 1787,
+        "severe": 974,
+        "death": 153,
+        "consumed": 10390,
+        "bossParticipation": 162
+      },
+      "priest": {
+        "expeditions": 6060,
+        "success": 325,
+        "retreat": 2637,
+        "injury": 1872,
+        "severe": 998,
+        "death": 228,
+        "consumed": 8856,
+        "bossParticipation": 100
+      },
+      "rogue": {
+        "expeditions": 6872,
+        "success": 913,
+        "retreat": 2994,
+        "injury": 1852,
+        "severe": 914,
+        "death": 199,
+        "consumed": 10225,
+        "bossParticipation": 125
+      },
+      "archer": {
+        "expeditions": 6178,
+        "success": 505,
+        "retreat": 2794,
+        "injury": 1744,
+        "severe": 943,
+        "death": 192,
+        "consumed": 9095,
+        "bossParticipation": 98
+      }
+    },
+    "reach30": 0.7833333333333333,
+    "clear": 0.13333333333333333
+  }
+}
