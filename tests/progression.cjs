@@ -47,11 +47,11 @@ function withCandidate(fn){
  if(USE.eco){b.warehouse=ECO.warehouse;b.orderOffers=ECO.offers;b.rerollBase=ECO.rerollBase;
   D.deepTuning.sponsorBase=ECO.sponsorBase;D.openingStock=ECO.openingStock;}
  if(USE.abl){
-  /* Common to B/C/D/E. The sponsorship becomes a single fixed amount the way the SSOT describes
-     it - the rarity and level steps go to zero rather than the formula being replaced, so Deep's
-     reward, its Power and its Store Gold 0 are all still exactly what ships. */
+  /* Common to B/C/D/E. The sponsorship keeps its shape - base x rarity step x level step, rounded
+     to 10G - and only the base moves, 250 to 350. Who you send still decides what it costs.
+     Deep's reward, its Power and its Store Gold 0 are exactly what ships. */
   D.openingStock=ECO.openingStock;b.rerollBase=ECO.rerollBase;
-  D.deepTuning.sponsorBase=350;D.deepTuning.sponsorRarityStep=0;D.deepTuning.sponsorLevelStep=0;
+  D.deepTuning.sponsorBase=350;
   if(ARM_ABL.warehouse)b.warehouse=ARM_ABL.warehouse;
   if(ARM_ABL.offers)b.orderOffers=ARM_ABL.offers;}
  if(USE.f1){t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
