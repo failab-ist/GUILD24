@@ -198,13 +198,14 @@ G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6
    100: a properly prepared product sold at list stops failing on intent RNG, because the
    economy's difficulty is meant to sit in what was ordered, what was kept in stock, and how
    each sale was priced - not in a die roll against a fair offer. */
-G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:6}};
-/* How the judged price enters the decision. PROVISIONAL, reported for approval: intentPivot is
-   the measured median 정가 burden (judged price over purse, across offers the customer can
-   afford) and intentWeight is how much a deviation from it is worth. Neither is a price
-   multiplier, and they live here rather than in `pricing` because that table is the set of
-   pricing modes - several callers iterate its keys expecting exactly 할인 / 정가 / 바가지. */
-G.DATA.balance.intentPivot=.36;G.DATA.balance.intentWeight=.5;
+G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1,
+  /* Only 정가 weighs the judged price against the purse. PROVISIONAL, reported for approval:
+     intentPivot is the measured median 정가 burden and intentWeight is what a deviation from it
+     is worth, so the term redistributes around ordinary weight instead of taxing every offer.
+     할인 and 바가지 carry no weight and are decided exactly as they were before this existed -
+     their acceptance is not this patch's to move. */
+  intentPivot:.36,intentWeight:.5},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:6}};
+
 /* Three shapes of the ordering decision, named here so a balance candidate can be measured
    against them from the harness without a production edit: how many candidates a Day offers,
    how much the store can hold, and what it opens with. Values are exactly what the code carried

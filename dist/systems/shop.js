@@ -200,14 +200,14 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(this.run.event?.effects.foodDemand&&['food','fresh','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
  if(this.run.event?.effects.medicalDemand&&it.category==='medicine')need+=this.run.event.effects.medicalDemand;
  const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
- /* The judged price reaches the decision here. Until now it only reached the label and the
-    refusal wording, so the approved 정가 threshold could not move an acceptance either way:
-    chance read the flat per-mode sentiment and nothing about what the offer costs against this
-    customer's purse. `intentPivot` is the measured median 정가 burden, so the term redistributes
-    around ordinary weight rather than taxing every offer - a light offer gains, a heavy one
-    loses, and judging 정가 at .65 instead of 1.00 is worth about half the pivot to the customer.
-    Both constants are PROVISIONAL and reported for approval; nothing else about pricing moves. */
- const chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent+D.balance.intentWeight*(D.balance.intentPivot-burden),.08,.97);
+ /* The judged price reaches the decision here, for the mode that declares a weight for it -
+    only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
+    at all: chance read the flat per-mode sentiment and nothing about what the offer costs
+    against this customer's purse. The term is centred on the measured median 정가 burden, so it
+    redistributes rather than taxes - a light offer gains, a heavy one loses. 할인 and 바가지
+    declare no weight, so their term is zero and they are decided exactly as they always were. */
+ const weight=rule.intentWeight||0;
+ const chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent+weight*((rule.intentPivot||0)-burden),.08,.97);
  return {price,debit,guarantee,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){

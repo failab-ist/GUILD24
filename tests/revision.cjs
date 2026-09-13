@@ -280,4 +280,33 @@ test('COPY §9: a Rare Reference identity turns up rarely, once per Run, and cha
  assert.ok(!/easterPhase|easterCurrency|easterUnlock/.test(src),'no Easter subsystem was introduced');
 });
 
+/* ECONOMY_ORDER §PURCHASE INTENT. The judged price is 정가's mechanism and only 정가's: the
+   threshold has to reach the decision, and 할인 / 바가지 have to decide exactly as they did
+   before that wiring existed. Both halves are asserted, because the first one alone is what
+   made the term leak into the other two modes. */
+test('정가 threshold reaches the decision, and 할인/바가지 are untouched by it',()=>{
+ const g=fresh();g.open();const n=g.current();n.money=400;n.traits=[];
+ const rule=DATA.pricing.full;
+ assert.ok(rule.intentWeight>0&&rule.intentPivot>0,'정가 declares a weight for the judged price');
+ for(const mode of ['half','overcharge'])
+  assert.ok(!DATA.pricing[mode].intentWeight,mode+' declares none');
+
+ /* Turning 정가's weight off is exactly the pre-wiring decision, so it is the control. */
+ const off=(fn)=>{const w=rule.intentWeight;rule.intentWeight=0;try{return fn();}finally{rule.intentWeight=w;}};
+ let fullMoved=0;
+ for(const it of DATA.items){
+  for(const mode of ['half','overcharge'])
+   assert.deepEqual(g.interest(n,it,mode),off(()=>g.interest(n,it,mode)),
+    mode+' decides the same as before the judged price reached chance');
+  if(g.interest(n,it,'full').chance!==off(()=>g.interest(n,it,'full')).chance)fullMoved++;
+ }
+ assert.ok(fullMoved>DATA.items.length/2,'and 정가 actually moves - '+fullMoved+' of '+DATA.items.length);
+
+ /* And what moves it is the threshold: judged at 1.00 the same offer is weighed more heavily. */
+ const it=DATA.itemBy.highpotion,at65=g.interest(n,it,'full').chance;
+ const m=rule.intentMult;rule.intentMult=1;
+ const at100=g.interest(n,it,'full').chance;rule.intentMult=m;
+ assert.ok(at65>at100,'.65 is worth something to the customer: '+at65.toFixed(3)+' vs '+at100.toFixed(3));
+});
+
 console.log(checks+' revision groups passed');
