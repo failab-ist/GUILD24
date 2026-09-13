@@ -7,6 +7,10 @@ let windows=new Map(),days=[],deferredPurchases=0,completed=0;
 Game.prototype.morning=function(){
  originalMorning.call(this);
  const s=this.run,w=s.relicWindow;
+ /* Per Run, not per suite: the engaged policy now weighs reroll every Day, so whether one
+    particular seed survives to D30 is an economy fact rather than a Relic one. Several Runs are
+    driven and each is asserted on its own; the lifecycle claims below need one that gets there. */
+ if(s.day===1){days=[];windows=new Map();}
  days.push(s.day);
  const saved=Save.import(Save.export(this.account,s));
  assert.deepEqual(saved.run.relicWindow,w,'window survives save/load');
@@ -41,8 +45,12 @@ Game.prototype.buyRelic=function(id){
  if(w.milestoneDay>0&&s.day>w.milestoneDay)deferredPurchases++;
 };
 try{
- Debug.simulate(1,'balanced',null,'full','hybrid');
- assert.equal(completed,1,'actual run reaches D30');
+ /* `skilled` rather than `balanced`: this suite is about the Relic window's lifecycle over a
+    natural D0-D30, and the engaged reroll policy makes whether a given Run survives an economy
+    question. skilled is engaged and does not reroll, so it drives the lifecycle without the
+    economy deciding whether the test can run at all. */
+ Debug.simulate(4,'skilled',null,'full','hybrid');
+ assert.ok(completed>=1,'at least one actual run reaches D30');
  assert.ok(deferredPurchases>0,'deferred purchase exercised');
  console.log('PASS REL-Q01–05 / 07–09 / 13 / 25: natural D0–D30 progression, deferred purchase, expiry, cooldown and Save stability');
 }finally{Game.prototype.morning=originalMorning;Game.prototype.buyRelic=originalBuy;}

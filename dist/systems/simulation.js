@@ -22,8 +22,15 @@ const levers=policy=>ENGAGEMENT[policy]||{order:'full',sell:true,finalSupply:tru
    `spender` is the same policy with those four brakes loosened, using only sinks the game
    already has - Order, supply, Relic, reroll, Deep sponsorship. No new sink, no new system. */
 const SPEND={
- 'default':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:0},
- 'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:600}};
+ 'default':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:false},
+ /* Reroll is the second half of the ordering decision - take this sheet, or pay to look again -
+    so an engaged policy has to actually weigh it. Both engaged policies now do, using the poor-
+    sheet test that was already here and each policy's own cashFloor as the floor. No reroll
+    reserve and no new threshold: the policy rerolls while the sheet is poor and stops as soon as
+    it is not, or as soon as the next reroll would take the till under the floor it already
+    keeps. The price doubles within a Day and resets the next morning, so this converges. */
+ 'balanced':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
+ 'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
 /* Boss clear is `power * roll >= bossPower` with roll uniform on [0.88, 1.12], so the clear
@@ -71,6 +78,16 @@ function blank(runs,policy,pricing,build){
   goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0,reroll:0},
   overhead:{samples:[],byBand:{},coreLevel:[],coreRarity:[]},bossRuns:{},
   refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
+  /* Three different shortages that the old single `stockouts` counter ran together. It rose when
+     the shelf happened to be empty after the last customer left, which is neither "the store had
+     nothing to sell today" nor "a customer was turned away empty". Counted apart:
+       emptyStart      SALE opened with an empty shelf
+       earlyDepletion  the shelf ran out while customers were still queued (once per Day)
+       saleGap.noStock a customer for whom nothing could be offered at all
+     capacityDay is the same correction on the other side: Days where the ceiling refused at
+     least one order the policy wanted, counted once, next to the raw attempt count. */
+  shortage:{emptyStart:0,earlyDepletion:0,capacityDay:0,saleDays:0,orderDays:0},
+  rerollDepth:{},
   /* What a Day's offer sheet actually looks like. Shrinking the sheet only makes ordering a
      decision if the slots left are still a choice, so the counter guarantee - which replaces the
      LAST slot rather than adding one - has to be counted against the sheet it is replacing in. */
@@ -123,6 +140,8 @@ function playRun(g,out,ctx){
  /* The counter guarantee overwrites the last slot, so whether it fired can only be read from the
     state BEFORE the sheet is rolled. Measurement only - the call is passed straight through. */
  const nominees={};
+ /* Per-Day flags for the shortage and capacity metrics, cleared as each Day's ORDER opens. */
+ let capacityHit=false,depletedToday=false;
  const originalOffers=g.generateOffers.bind(g);g.generateOffers=(opts)=>{
   const armed=(s.pity.counter||0)>=3||g.has('expeditionCert');
   const r=originalOffers(opts);if(armed)out.offerShape.pityFired++;return r;};
@@ -195,7 +214,7 @@ function playRun(g,out,ctx){
  while(s.phase!=='end'&&turns++<1000){
   if(s.phase==='foundation'){buySupport();continue;}
   if(s.phase==='morning'){g.beginOrder();act();continue;}
-  if(s.phase==='order'){buySupport();
+  if(s.phase==='order'){buySupport();capacityHit=false;depletedToday=false;out.shortage.orderDays++;
    {const o=out.offerShape,known=G.Relics.known(g),items=s.offers.map(x=>D.itemBy[x.item]);
     const uniq=new Set(s.offers.map(x=>x.item)).size;
     const counters=items.filter(it=>G.Relics.counter(it,known)).length;
@@ -204,24 +223,31 @@ function playRun(g,out,ctx){
     o.counterSlots+=counters;o.counterHeavy+=Number(counters*2>=s.offers.length);
     o.thin+=Number(s.offers.length-counters<=3);
     o.missingCounterDays+=Number(need.some(h=>!items.some(it=>G.Relics.counter(it,[h]))));}
-   /* Reroll is a sink the engaged policies never touched. A spender takes one when the sheet is
-      poor for today's Gate and the money is there to act on a better one - the existing action,
-      priced by the existing curve, with nothing about either changed. */
-   if(spend.reroll&&s.money>spend.reroll){
-    const best=s.offers.reduce((a,o)=>o.quantity?Math.max(a,itemValue(null,D.itemBy[o.item],s.dungeons[0])):a,0);
-    if(best<8&&s.money-g.rerollPrice()>spend.reroll){const cost=g.rerollPrice();
-     try{g.reroll();act();out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}catch(e){}}}
+   /* Take this sheet or pay to look again. The same poor-sheet test as before, applied after
+      every reroll rather than once, so each further payment is weighed against the sheet it
+      would replace. It is not "reroll until the wanted item appears": it stops the moment the
+      sheet is no longer poor, and the doubling price against a fixed floor bounds the rest. */
+   if(spend.reroll){let used=0;
+    const poor=()=>s.offers.reduce((a,o)=>o.quantity?Math.max(a,itemValue(null,D.itemBy[o.item],s.dungeons[0])):a,0)<8;
+    while(poor()&&s.money-g.rerollPrice()>=spend.cashFloor&&used<20){
+     const cost=g.rerollPrice();
+     try{g.reroll();}catch(e){break;}
+     act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}
+    out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
    const offers=s.offers.map((o,i)=>({o,i})).sort((a,b)=>{const v=o=>itemValue(null,D.itemBy[o.item],s.dungeons[0])/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;return v(b.o)-v(a.o);});
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
-   else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;continue;}
+   else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;capacityHit=true;continue;}
     /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
        warehouse ceiling - and setQuantity throws for it. Counting only the pre-check reported a
        flat zero while the ceiling was really binding, so the throw is counted here too. */
     try{g.setQuantity(i,(s.cart?.[i]||0)+1);act();(out.items[o.item]??={ordered:0,sold:0}).ordered++;}
-    catch(e){if(String(e?.message||'').includes('창고'))out.capacityBlocked++;}}}
+    catch(e){if(String(e?.message||'').includes('창고')){out.capacityBlocked++;capacityHit=true;}}}}
+   if(capacityHit)out.shortage.capacityDay++;
    g.confirmOrder();act();day.peak+=s.inventory.length;g.open();act();
+   /* SALE opened. An empty shelf here is a different failure from running out mid-Day. */
+   if(s.phase==='sell'||s.queue.length){out.shortage.saleDays++;if(!s.inventory.length)out.shortage.emptyStart++;}
   }else if(s.phase==='sell'){
    const n=g.current();if(!engagement.sell){g.depart();act();continue;}if(policy==='neglect'&&n.level<Math.max(...s.npcs.filter(x=>x.alive).map(x=>x.level))-2){g.depart();act();continue;}
    /* 2026-09-12 amendment, measurement only. An engaged shop takes the Deep Expedition when it
@@ -241,6 +267,9 @@ function playRun(g,out,ctx){
    while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0)});}
    options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
    if(!s.inventory.length)out.stockouts++;
+   /* The shelf ran out with customers still to come. Once per Day: the flag is cleared when the
+      Day's SALE opens, not here, so a Day with three empty-handed customers still counts one. */
+   if(!s.inventory.length&&s.cursor+1<s.queue.length&&!depletedToday){depletedToday=true;out.shortage.earlyDepletion++;}
    /* And the same question one level up: a visitor who leaves with an empty slot. Slot pressure,
       an empty shelf and a wallet that cannot reach any shelf price are different problems from a
       refusal, and only this split says which one the 정가 threshold was ever able to touch. */
