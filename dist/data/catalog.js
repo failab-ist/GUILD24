@@ -199,5 +199,17 @@ G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6
    economy's difficulty is meant to sit in what was ordered, what was kept in stock, and how
    each sale was priced - not in a die roll against a fair offer. */
 G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.16,loyalty:-3},full:{label:'정가',mult:1,intentMult:.65,intent:0,loyalty:1},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:6}};
+/* How the judged price enters the decision. PROVISIONAL, reported for approval: intentPivot is
+   the measured median 정가 burden (judged price over purse, across offers the customer can
+   afford) and intentWeight is how much a deviation from it is worth. Neither is a price
+   multiplier, and they live here rather than in `pricing` because that table is the set of
+   pricing modes - several callers iterate its keys expecting exactly 할인 / 정가 / 바가지. */
+G.DATA.balance.intentPivot=.36;G.DATA.balance.intentWeight=.5;
+/* Three shapes of the ordering decision, named here so a balance candidate can be measured
+   against them from the harness without a production edit: how many candidates a Day offers,
+   how much the store can hold, and what it opens with. Values are exactly what the code carried
+   inline before - 6 offers, 24 slots, six opening items - and nothing about them moves here. */
+G.DATA.balance.orderOffers=6;G.DATA.balance.warehouse=24;
+G.DATA.openingStock=[['rice',2],['water',2],['bandage',1],['potion',1]];
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);
