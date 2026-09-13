@@ -458,7 +458,33 @@
       },
       "goldInTotal": 3013996,
       "goldOutTotal": 3404825,
-      "relicSpendPerRun": 780.8466666666667
+      "relicSpendPerRun": 780.8466666666667,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 4167,
+          "roll": 6889
+        },
+        "half": {
+          "price": 1927,
+          "need": 1534,
+          "roll": 910
+        },
+        "overcharge": {
+          "price": 2570,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 10441,
+        "noStock": 2894,
+        "wallet": 10508,
+        "refusedAll": 410,
+        "other": 4486
+      },
+      "stockouts": 3047,
+      "capacityBlocked": 0
     },
     {
       "key": "early",
@@ -910,7 +936,33 @@
       },
       "goldInTotal": 2734019,
       "goldOutTotal": 3182145,
-      "relicSpendPerRun": 684.8033333333333
+      "relicSpendPerRun": 684.8033333333333,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 3879,
+          "roll": 6787
+        },
+        "half": {
+          "price": 1781,
+          "need": 1428,
+          "roll": 823
+        },
+        "overcharge": {
+          "price": 1957,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 9584,
+        "noStock": 3062,
+        "wallet": 10431,
+        "refusedAll": 432,
+        "other": 4268
+      },
+      "stockouts": 3211,
+      "capacityBlocked": 0
     },
     {
       "key": "mid",
@@ -1438,7 +1490,33 @@
       },
       "goldInTotal": 2898584,
       "goldOutTotal": 3333711,
-      "relicSpendPerRun": 747.0433333333333
+      "relicSpendPerRun": 747.0433333333333,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 3817,
+          "roll": 6733
+        },
+        "half": {
+          "price": 1779,
+          "need": 1689,
+          "roll": 903
+        },
+        "overcharge": {
+          "price": 2551,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 10059,
+        "noStock": 3156,
+        "wallet": 10253,
+        "refusedAll": 536,
+        "other": 4384
+      },
+      "stockouts": 3324,
+      "capacityBlocked": 0
     },
     {
       "key": "late",
@@ -2039,7 +2117,33 @@
       },
       "goldInTotal": 3144024,
       "goldOutTotal": 3542365,
-      "relicSpendPerRun": 810.0866666666667
+      "relicSpendPerRun": 810.0866666666667,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 4060,
+          "roll": 6462
+        },
+        "half": {
+          "price": 1793,
+          "need": 1908,
+          "roll": 1077
+        },
+        "overcharge": {
+          "price": 3103,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 10598,
+        "noStock": 3267,
+        "wallet": 10042,
+        "refusedAll": 451,
+        "other": 4621
+      },
+      "stockouts": 3444,
+      "capacityBlocked": 0
     },
     {
       "key": "near",
@@ -2632,7 +2736,33 @@
       },
       "goldInTotal": 3166345,
       "goldOutTotal": 3564233,
-      "relicSpendPerRun": 823.9033333333333
+      "relicSpendPerRun": 823.9033333333333,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 3853,
+          "roll": 6021
+        },
+        "half": {
+          "price": 1711,
+          "need": 2175,
+          "roll": 1316
+        },
+        "overcharge": {
+          "price": 3403,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 10660,
+        "noStock": 3082,
+        "wallet": 9972,
+        "refusedAll": 418,
+        "other": 4676
+      },
+      "stockouts": 3243,
+      "capacityBlocked": 0
     },
     {
       "key": "fresh",
@@ -3087,7 +3217,33 @@
       },
       "goldInTotal": 6183372,
       "goldOutTotal": 6172056,
-      "relicSpendPerRun": 2032.8233333333333
+      "relicSpendPerRun": 2032.8233333333333,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 8643,
+          "roll": 9958
+        },
+        "half": {
+          "price": 2409,
+          "need": 3508,
+          "roll": 1744
+        },
+        "overcharge": {
+          "price": 8931,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 23335,
+        "noStock": 888,
+        "wallet": 8479,
+        "refusedAll": 346,
+        "other": 6488
+      },
+      "stockouts": 976,
+      "capacityBlocked": 0
     },
     {
       "key": "early",
@@ -3543,7 +3699,33 @@
       },
       "goldInTotal": 6101842,
       "goldOutTotal": 6131655,
-      "relicSpendPerRun": 2008.9066666666668
+      "relicSpendPerRun": 2008.9066666666668,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 8449,
+          "roll": 9832
+        },
+        "half": {
+          "price": 2349,
+          "need": 3453,
+          "roll": 1758
+        },
+        "overcharge": {
+          "price": 8855,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 22837,
+        "noStock": 868,
+        "wallet": 8861,
+        "refusedAll": 315,
+        "other": 6357
+      },
+      "stockouts": 943,
+      "capacityBlocked": 0
     },
     {
       "key": "mid",
@@ -4071,7 +4253,33 @@
       },
       "goldInTotal": 5944805,
       "goldOutTotal": 6004743,
-      "relicSpendPerRun": 1946.1133333333332
+      "relicSpendPerRun": 1946.1133333333332,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 8300,
+          "roll": 9640
+        },
+        "half": {
+          "price": 2230,
+          "need": 3483,
+          "roll": 1762
+        },
+        "overcharge": {
+          "price": 8823,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 22175,
+        "noStock": 1079,
+        "wallet": 8652,
+        "refusedAll": 321,
+        "other": 6432
+      },
+      "stockouts": 1161,
+      "capacityBlocked": 0
     },
     {
       "key": "late",
@@ -4672,7 +4880,33 @@
       },
       "goldInTotal": 6165630,
       "goldOutTotal": 6159032,
-      "relicSpendPerRun": 1952.0533333333333
+      "relicSpendPerRun": 1952.0533333333333,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 7858,
+          "roll": 8949
+        },
+        "half": {
+          "price": 2234,
+          "need": 3684,
+          "roll": 1926
+        },
+        "overcharge": {
+          "price": 9837,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 21974,
+        "noStock": 1023,
+        "wallet": 8666,
+        "refusedAll": 298,
+        "other": 6498
+      },
+      "stockouts": 1093,
+      "capacityBlocked": 0
     },
     {
       "key": "near",
@@ -5277,7 +5511,33 @@
       },
       "goldInTotal": 6463973,
       "goldOutTotal": 6420434,
-      "relicSpendPerRun": 2073.346666666667
+      "relicSpendPerRun": 2073.346666666667,
+      "refusal": {
+        "full": {
+          "price": 0,
+          "need": 8016,
+          "roll": 8712
+        },
+        "half": {
+          "price": 2229,
+          "need": 3951,
+          "roll": 2286
+        },
+        "overcharge": {
+          "price": 11119,
+          "need": 0,
+          "roll": 0
+        }
+      },
+      "saleGap": {
+        "filled": 22442,
+        "noStock": 995,
+        "wallet": 8632,
+        "refusedAll": 327,
+        "other": 7031
+      },
+      "stockouts": 1088,
+      "capacityBlocked": 0
     }
   ],
   "forcedUnlock": {

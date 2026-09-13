@@ -2,7 +2,7 @@
   "version": 2,
   "canonicalSet": "GUILD24_DESIGN_SSOT_v2.5.0",
   "seedsPerTier": 300,
-  "arm": "baseline",
+  "arm": "f1",
   "note": "Account progression tiers built through the real Job x Boss matrix. Deterministic strategy heuristics, not human play. `arm` says whether the E1+F1+H1 candidate was injected for the duration of the measurement.",
   "tiers": [
     {
@@ -400,7 +400,7 @@
         "GREED": {
           "resolved": 8,
           "cleared": 0,
-          "margin": -333.46680402742913
+          "margin": -332.0758465806207
         },
         "WRATH": {
           "resolved": 8,
@@ -410,27 +410,27 @@
         "PRIDE": {
           "resolved": 8,
           "cleared": 0,
-          "margin": -439.40898315202367
+          "margin": -409.11807563429187
         },
         "SLOTH": {
           "resolved": 7,
           "cleared": 0,
-          "margin": -324.3734449149255
+          "margin": -289.3734449149255
         },
         "ENVY": {
           "resolved": 6,
           "cleared": 0,
-          "margin": -378.87947011952497
+          "margin": -364.1058796466242
         },
         "LUST": {
           "resolved": 7,
           "cleared": 2,
-          "margin": -162.02067116650403
+          "margin": -158.82766994638368
         },
         "GLUTTONY": {
           "resolved": 7,
           "cleared": 1,
-          "margin": -295.33643526413533
+          "margin": -294.5916828341285
         }
       },
       "modes": {
@@ -887,27 +887,27 @@
         "SLOTH": {
           "resolved": 12,
           "cleared": 1,
-          "margin": -753.1396588571433
+          "margin": -693.1396588571433
         },
         "GLUTTONY": {
           "resolved": 12,
           "cleared": 0,
-          "margin": -434.1400354644304
+          "margin": -430.22422990541133
         },
         "GREED": {
           "resolved": 11,
           "cleared": 0,
-          "margin": -476.4785840060324
+          "margin": -471.2533180485856
         },
         "ENVY": {
           "resolved": 6,
           "cleared": 0,
-          "margin": -361.5439623379632
+          "margin": -347.7185818843278
         },
         "PRIDE": {
           "resolved": 8,
           "cleared": 1,
-          "margin": -491.20068061547613
+          "margin": -460.7087581800884
         },
         "WRATH": {
           "resolved": 7,
@@ -1436,12 +1436,12 @@
         "LUST": {
           "resolved": 11,
           "cleared": 1,
-          "margin": -439.8358674946181
+          "margin": -432.83697182312915
         },
         "GREED": {
           "resolved": 16,
           "cleared": 7,
-          "margin": -326.1999649892854
+          "margin": -321.9590075424768
         },
         "WRATH": {
           "resolved": 8,
@@ -1451,22 +1451,22 @@
         "ENVY": {
           "resolved": 8,
           "cleared": 1,
-          "margin": -294.34095915390446
+          "margin": -269.01165476430333
         },
         "SLOTH": {
           "resolved": 9,
           "cleared": 1,
-          "margin": -541.5908092451416
+          "margin": -496.5908092451416
         },
         "GLUTTONY": {
           "resolved": 14,
           "cleared": 2,
-          "margin": -409.65878797682797
+          "margin": -409.46935149401406
         },
         "PRIDE": {
           "resolved": 6,
           "cleared": 0,
-          "margin": -388.65022525354436
+          "margin": -367.7152077852451
         }
       },
       "modes": {
@@ -1534,14 +1534,14 @@
       "reach10": 0.9933333333333333,
       "reach20": 0.58,
       "reach30": 0.3,
-      "finalGivenReach": 0.36666666666666664,
-      "clear": 0.11,
+      "finalGivenReach": 0.37777777777777777,
+      "clear": 0.11333333333333333,
       "deaths": 2.9233333333333333,
       "endedBy": {
         "deaths": 1,
         "bankrupt": 209,
-        "finalFail": 57,
-        "cleared": 33
+        "finalFail": 56,
+        "cleared": 34
       },
       "deathFailDayMedian": 24,
       "goldIn": {
@@ -1886,15 +1886,15 @@
         },
         "SLOTH:berserker": {
           "sent": 12,
-          "cleared": 2
+          "cleared": 3
         },
         "SLOTH:warrior": {
           "sent": 10,
-          "cleared": 2
+          "cleared": 3
         },
         "SLOTH:rogue": {
           "sent": 4,
-          "cleared": 1
+          "cleared": 2
         },
         "SLOTH:mage": {
           "sent": 6,
@@ -2063,17 +2063,17 @@
         "LUST": {
           "resolved": 15,
           "cleared": 8,
-          "margin": 45.30176983849617
+          "margin": 53.02176009452975
         },
         "SLOTH": {
           "resolved": 14,
-          "cleared": 3,
-          "margin": -420.1033820883607
+          "cleared": 4,
+          "margin": -350.1033820883607
         },
         "GREED": {
           "resolved": 12,
           "cleared": 3,
-          "margin": -220.7363965286296
+          "margin": -218.50926886905518
         },
         "WRATH": {
           "resolved": 10,
@@ -2083,17 +2083,17 @@
         "GLUTTONY": {
           "resolved": 20,
           "cleared": 9,
-          "margin": -89.5672320038875
+          "margin": -87.59208306338415
         },
         "ENVY": {
           "resolved": 9,
           "cleared": 3,
-          "margin": -264.4698269804237
+          "margin": -236.7196350976518
         },
         "PRIDE": {
           "resolved": 10,
           "cleared": 3,
-          "margin": -247.12744650359735
+          "margin": -199.69443068282015
         }
       },
       "modes": {
@@ -2161,14 +2161,14 @@
       "reach10": 0.9966666666666667,
       "reach20": 0.5666666666666667,
       "reach30": 0.26,
-      "finalGivenReach": 0.41025641025641024,
-      "clear": 0.10666666666666667,
+      "finalGivenReach": 0.4358974358974359,
+      "clear": 0.11333333333333333,
       "deaths": 2.6433333333333335,
       "endedBy": {
         "deaths": 0,
         "bankrupt": 222,
-        "finalFail": 46,
-        "cleared": 32
+        "finalFail": 44,
+        "cleared": 34
       },
       "deathFailDayMedian": 0,
       "goldIn": {
@@ -2633,15 +2633,15 @@
         },
         "ENVY:archer": {
           "sent": 5,
-          "cleared": 0
+          "cleared": 2
         },
         "ENVY:berserker": {
           "sent": 5,
-          "cleared": 0
+          "cleared": 1
         },
         "ENVY:rogue": {
           "sent": 4,
-          "cleared": 0
+          "cleared": 1
         },
         "GREED:berserker": {
           "sent": 4,
@@ -2653,11 +2653,11 @@
         },
         "ENVY:warrior": {
           "sent": 1,
-          "cleared": 0
+          "cleared": 1
         },
         "ENVY:mage": {
           "sent": 5,
-          "cleared": 0
+          "cleared": 1
         },
         "SLOTH:warrior": {
           "sent": 3,
@@ -2690,7 +2690,7 @@
         "GLUTTONY": {
           "resolved": 12,
           "cleared": 6,
-          "margin": 135.55039556596316
+          "margin": 140.81465366210205
         },
         "WRATH": {
           "resolved": 12,
@@ -2700,17 +2700,17 @@
         "SLOTH": {
           "resolved": 10,
           "cleared": 3,
-          "margin": -325.3628846167365
+          "margin": -275.3628846167365
         },
         "PRIDE": {
           "resolved": 7,
           "cleared": 1,
-          "margin": -265.3824509043276
+          "margin": -235.22936775764714
         },
         "GREED": {
           "resolved": 11,
           "cleared": 7,
-          "margin": 123.91570113244111
+          "margin": 126.14442453669645
         },
         "LUST": {
           "resolved": 19,
@@ -2719,8 +2719,8 @@
         },
         "ENVY": {
           "resolved": 7,
-          "cleared": 0,
-          "margin": -184.6059425142634
+          "cleared": 2,
+          "margin": -162.4319623334747
         }
       },
       "modes": {
@@ -2788,14 +2788,14 @@
       "reach10": 0.99,
       "reach20": 0.94,
       "reach30": 0.8266666666666667,
-      "finalGivenReach": 0.0846774193548387,
-      "clear": 0.07,
+      "finalGivenReach": 0.08870967741935484,
+      "clear": 0.07333333333333333,
       "deaths": 4.75,
       "endedBy": {
         "deaths": 6,
         "bankrupt": 46,
-        "finalFail": 227,
-        "cleared": 21
+        "finalFail": 226,
+        "cleared": 22
       },
       "deathFailDayMedian": 26,
       "goldIn": {
@@ -3102,7 +3102,7 @@
         },
         "PRIDE:priest": {
           "sent": 23,
-          "cleared": 1
+          "cleared": 2
         },
         "PRIDE:archer": {
           "sent": 21,
@@ -3146,7 +3146,7 @@
         },
         "PRIDE:warrior": {
           "sent": 35,
-          "cleared": 0
+          "cleared": 2
         }
       },
       "npcLevel": 9.223790322580646,
@@ -3171,7 +3171,7 @@
         "LUST": {
           "resolved": 37,
           "cleared": 1,
-          "margin": -1473.5666289912808
+          "margin": -1463.0360903719122
         },
         "WRATH": {
           "resolved": 34,
@@ -3181,27 +3181,27 @@
         "SLOTH": {
           "resolved": 34,
           "cleared": 3,
-          "margin": -2088.7603604124033
+          "margin": -1918.760360412403
         },
         "GLUTTONY": {
           "resolved": 44,
           "cleared": 4,
-          "margin": -1751.1718628266356
+          "margin": -1734.934853054037
         },
         "GREED": {
           "resolved": 39,
           "cleared": 5,
-          "margin": -1176.7945474361647
+          "margin": -1175.1549197765905
         },
         "PRIDE": {
           "resolved": 35,
-          "cleared": 2,
-          "margin": -1776.83999716447
+          "cleared": 3,
+          "margin": -1642.2691416338303
         },
         "ENVY": {
           "resolved": 25,
           "cleared": 1,
-          "margin": -1416.6598520357336
+          "margin": -1353.641458927363
         }
       },
       "modes": {
@@ -3653,17 +3653,17 @@
         "LUST": {
           "resolved": 39,
           "cleared": 4,
-          "margin": -1528.8578203710354
+          "margin": -1513.5141108182802
         },
         "SLOTH": {
           "resolved": 36,
           "cleared": 1,
-          "margin": -2101.633688799135
+          "margin": -1921.6336887991354
         },
         "GLUTTONY": {
           "resolved": 46,
           "cleared": 7,
-          "margin": -1787.090529695507
+          "margin": -1771.837335775779
         },
         "WRATH": {
           "resolved": 35,
@@ -3673,17 +3673,17 @@
         "GREED": {
           "resolved": 33,
           "cleared": 5,
-          "margin": -1088.5401008929866
+          "margin": -1087.012441318519
         },
         "ENVY": {
           "resolved": 25,
           "cleared": 2,
-          "margin": -1103.28341976017
+          "margin": -1033.1529190962651
         },
         "PRIDE": {
           "resolved": 36,
           "cleared": 2,
-          "margin": -1848.624871903002
+          "margin": -1708.6465701004931
         }
       },
       "modes": {
@@ -3751,14 +3751,14 @@
       "reach10": 1,
       "reach20": 0.94,
       "reach30": 0.82,
-      "finalGivenReach": 0.08943089430894309,
-      "clear": 0.07333333333333333,
+      "finalGivenReach": 0.1016260162601626,
+      "clear": 0.08333333333333333,
       "deaths": 4.1433333333333335,
       "endedBy": {
         "deaths": 2,
         "bankrupt": 52,
-        "finalFail": 224,
-        "cleared": 22
+        "finalFail": 221,
+        "cleared": 25
       },
       "deathFailDayMedian": 29,
       "goldIn": {
@@ -4122,7 +4122,7 @@
         },
         "ENVY:rogue": {
           "sent": 24,
-          "cleared": 2
+          "cleared": 4
         },
         "ENVY:archer": {
           "sent": 17,
@@ -4150,11 +4150,11 @@
         },
         "PRIDE:rogue": {
           "sent": 13,
-          "cleared": 0
+          "cleared": 1
         },
         "PRIDE:warrior": {
           "sent": 18,
-          "cleared": 0
+          "cleared": 2
         },
         "PRIDE:archer": {
           "sent": 20,
@@ -4162,7 +4162,7 @@
         },
         "ENVY:warrior": {
           "sent": 26,
-          "cleared": 1
+          "cleared": 3
         },
         "LUST:mage": {
           "sent": 19,
@@ -4174,7 +4174,7 @@
         },
         "ENVY:mage": {
           "sent": 14,
-          "cleared": 2
+          "cleared": 3
         },
         "SLOTH:priest": {
           "sent": 19,
@@ -4182,7 +4182,7 @@
         },
         "ENVY:priest": {
           "sent": 15,
-          "cleared": 0
+          "cleared": 1
         }
       },
       "npcLevel": 9.224538701174215,
@@ -4207,7 +4207,7 @@
         "LUST": {
           "resolved": 34,
           "cleared": 5,
-          "margin": -1196.8477553010287
+          "margin": -1185.6852887396722
         },
         "WRATH": {
           "resolved": 32,
@@ -4217,27 +4217,27 @@
         "SLOTH": {
           "resolved": 38,
           "cleared": 1,
-          "margin": -2238.678971684653
+          "margin": -2048.6789716846524
         },
         "GLUTTONY": {
           "resolved": 40,
           "cleared": 6,
-          "margin": -1426.9008021398706
+          "margin": -1420.7084886394593
         },
         "GREED": {
           "resolved": 38,
           "cleared": 6,
-          "margin": -1078.261336712591
+          "margin": -1077.248570755144
         },
         "ENVY": {
           "resolved": 32,
-          "cleared": 2,
-          "margin": -1462.133627942973
+          "cleared": 4,
+          "margin": -1368.548263514256
         },
         "PRIDE": {
           "resolved": 32,
-          "cleared": 0,
-          "margin": -1697.5580718967092
+          "cleared": 1,
+          "margin": -1576.7218820301277
         }
       },
       "modes": {
@@ -4305,14 +4305,14 @@
       "reach10": 1,
       "reach20": 0.9533333333333334,
       "reach30": 0.8466666666666667,
-      "finalGivenReach": 0.25984251968503935,
-      "clear": 0.22,
+      "finalGivenReach": 0.2795275590551181,
+      "clear": 0.23666666666666666,
       "deaths": 3.7133333333333334,
       "endedBy": {
         "deaths": 3,
         "bankrupt": 43,
-        "finalFail": 188,
-        "cleared": 66
+        "finalFail": 183,
+        "cleared": 71
       },
       "deathFailDayMedian": 25,
       "goldIn": {
@@ -4669,7 +4669,7 @@
         },
         "GLUTTONY:warrior": {
           "sent": 23,
-          "cleared": 6
+          "cleared": 7
         },
         "GLUTTONY:mage": {
           "sent": 24,
@@ -4685,19 +4685,19 @@
         },
         "GLUTTONY:priest": {
           "sent": 17,
-          "cleared": 3
+          "cleared": 4
         },
         "SLOTH:warrior": {
           "sent": 23,
-          "cleared": 2
+          "cleared": 3
         },
         "SLOTH:mage": {
           "sent": 23,
-          "cleared": 2
+          "cleared": 4
         },
         "SLOTH:archer": {
           "sent": 20,
-          "cleared": 2
+          "cleared": 5
         },
         "GREED:mage": {
           "sent": 24,
@@ -4709,7 +4709,7 @@
         },
         "PRIDE:archer": {
           "sent": 13,
-          "cleared": 3
+          "cleared": 4
         },
         "PRIDE:mage": {
           "sent": 24,
@@ -4737,7 +4737,7 @@
         },
         "SLOTH:rogue": {
           "sent": 15,
-          "cleared": 0
+          "cleared": 1
         },
         "GLUTTONY:berserker": {
           "sent": 21,
@@ -4745,7 +4745,7 @@
         },
         "GLUTTONY:archer": {
           "sent": 23,
-          "cleared": 10
+          "cleared": 11
         },
         "LUST:berserker": {
           "sent": 15,
@@ -4765,7 +4765,7 @@
         },
         "PRIDE:warrior": {
           "sent": 22,
-          "cleared": 6
+          "cleared": 7
         },
         "PRIDE:berserker": {
           "sent": 11,
@@ -4785,7 +4785,7 @@
         },
         "PRIDE:priest": {
           "sent": 13,
-          "cleared": 2
+          "cleared": 3
         },
         "ENVY:warrior": {
           "sent": 16,
@@ -4797,7 +4797,7 @@
         },
         "SLOTH:berserker": {
           "sent": 17,
-          "cleared": 6
+          "cleared": 8
         },
         "ENVY:priest": {
           "sent": 14,
@@ -4834,7 +4834,7 @@
         "LUST": {
           "resolved": 36,
           "cleared": 10,
-          "margin": -605.6355044014932
+          "margin": -594.6042570424198
         },
         "WRATH": {
           "resolved": 36,
@@ -4843,28 +4843,28 @@
         },
         "GLUTTONY": {
           "resolved": 43,
-          "cleared": 14,
-          "margin": -450.7375615017623
+          "cleared": 15,
+          "margin": -440.707783486801
         },
         "SLOTH": {
           "resolved": 37,
-          "cleared": 5,
-          "margin": -1430.6531171067934
+          "cleared": 8,
+          "margin": -1245.653117106793
         },
         "GREED": {
           "resolved": 36,
           "cleared": 13,
-          "margin": -195.17404051935077
+          "margin": -194.86685966828693
         },
         "PRIDE": {
           "resolved": 34,
-          "cleared": 7,
-          "margin": -1065.995541942014
+          "cleared": 8,
+          "margin": -910.9156749452256
         },
         "ENVY": {
           "resolved": 32,
           "cleared": 5,
-          "margin": -1044.6798595518585
+          "margin": -946.1944861264875
         }
       },
       "modes": {
@@ -4932,14 +4932,14 @@
       "reach10": 1,
       "reach20": 0.96,
       "reach30": 0.8566666666666667,
-      "finalGivenReach": 0.38132295719844356,
-      "clear": 0.32666666666666666,
+      "finalGivenReach": 0.40077821011673154,
+      "clear": 0.3433333333333333,
       "deaths": 3.486666666666667,
       "endedBy": {
         "deaths": 2,
         "bankrupt": 41,
-        "finalFail": 159,
-        "cleared": 98
+        "finalFail": 154,
+        "cleared": 103
       },
       "deathFailDayMedian": 28,
       "goldIn": {
@@ -5304,11 +5304,11 @@
         },
         "SLOTH:berserker": {
           "sent": 18,
-          "cleared": 2
+          "cleared": 4
         },
         "SLOTH:archer": {
           "sent": 17,
-          "cleared": 0
+          "cleared": 1
         },
         "SLOTH:mage": {
           "sent": 13,
@@ -5332,11 +5332,11 @@
         },
         "SLOTH:warrior": {
           "sent": 23,
-          "cleared": 4
+          "cleared": 8
         },
         "SLOTH:priest": {
           "sent": 14,
-          "cleared": 2
+          "cleared": 4
         },
         "GREED:warrior": {
           "sent": 19,
@@ -5392,7 +5392,7 @@
         },
         "ENVY:warrior": {
           "sent": 16,
-          "cleared": 6
+          "cleared": 7
         },
         "PRIDE:rogue": {
           "sent": 27,
@@ -5408,7 +5408,7 @@
         },
         "SLOTH:rogue": {
           "sent": 35,
-          "cleared": 9
+          "cleared": 12
         },
         "ENVY:archer": {
           "sent": 17,
@@ -5424,7 +5424,7 @@
         },
         "ENVY:berserker": {
           "sent": 19,
-          "cleared": 6
+          "cleared": 8
         },
         "PRIDE:priest": {
           "sent": 16,
@@ -5465,7 +5465,7 @@
         "LUST": {
           "resolved": 34,
           "cleared": 15,
-          "margin": -115.26596939275552
+          "margin": -112.62775582401213
         },
         "WRATH": {
           "resolved": 36,
@@ -5474,28 +5474,28 @@
         },
         "SLOTH": {
           "resolved": 40,
-          "cleared": 6,
-          "margin": -1174.43939618863
+          "cleared": 10,
+          "margin": -974.4393961886301
         },
         "GLUTTONY": {
           "resolved": 41,
           "cleared": 21,
-          "margin": 49.93536073974997
+          "margin": 61.96608542867767
         },
         "GREED": {
           "resolved": 40,
           "cleared": 20,
-          "margin": 261.4605535414113
+          "margin": 262.4672024775815
         },
         "PRIDE": {
           "resolved": 34,
           "cleared": 10,
-          "margin": -742.4189696659331
+          "margin": -587.1464238646629
         },
         "ENVY": {
           "resolved": 32,
-          "cleared": 10,
-          "margin": -390.03207822649244
+          "cleared": 11,
+          "margin": -280.438605409043
         }
       },
       "modes": {
@@ -5912,7 +5912,7 @@
       },
       "ENVY:berserker": {
         "sent": 23,
-        "cleared": 2
+        "cleared": 3
       },
       "ENVY:rogue": {
         "sent": 15,
@@ -5948,7 +5948,7 @@
       },
       "ENVY:priest": {
         "sent": 8,
-        "cleared": 0
+        "cleared": 1
       },
       "GREED:mage": {
         "sent": 11,
@@ -5976,7 +5976,7 @@
       },
       "ENVY:warrior": {
         "sent": 18,
-        "cleared": 2
+        "cleared": 3
       },
       "LUST:rogue": {
         "sent": 17,
@@ -6058,6 +6058,6 @@
       }
     },
     "reach30": 0.84,
-    "clear": 0.16
+    "clear": 0.16333333333333333
   }
 }

@@ -55,6 +55,7 @@ function blank(runs,policy,pricing,build){
   goldIn:{sale:0,greatSuccess:0,subsidy:0,liquidation:0},
   goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0},
   overhead:{samples:[],byBand:{},coreLevel:[],coreRarity:[]},bossRuns:{},
+  refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
   reachBy:{10:0,20:0,30:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
@@ -97,7 +98,13 @@ function playRun(g,out,ctx){
  const act=(n=1)=>{out.actions+=n;};
  const stat=d=>out.days[d]??={samples:0,cash:0,wallet:0,level:0,inventory:0,peak:0,visitors:0,actual:0,consumed:0,slots:0,waste:0,revenue:0,cogs:0,spent:0,operating:0,loyalty:0,injury:0,death:0,overAffordable:0,fullAffordable:0,halfOnly:0,offers:0};
  function itemValue(n,it,d){const known=policy==='skilled'?d.hazards:G.Presentation?G.Presentation.known(d,g):d.hazards;let v=(it.effects.combat||0)*.55+(it.effects.survival||0)*.6+(it.effects.mobility||0)*.25+(it.effects.spirit||0)*.3+(d.requiredSupply||0)*(it.effects.supply||0)*.2+known.reduce((a,h)=>a+Math.max(0,it.effects[h]||0)*.5,0);if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
- const originalSell=g.sell.bind(g);g.sell=(id,mode)=>{const m=out.modes[mode]??={attempts:0,accepted:0,revenue:0,profit:0,loyalty:0};m.attempts++;act();const n=g.current(),st=s.inventory.find(x=>x.id===id),old=n.loyalty;const ok=originalSell(id,mode);if(ok){m.accepted++;m.revenue+=n.history.at(-1).paid;m.profit+=n.history.at(-1).paid-(st.cost||0);m.loyalty+=n.loyalty-old;(out.items[st.item]??={ordered:0,sold:0}).sold++;}return ok;};
+ const originalSell=g.sell.bind(g);g.sell=(id,mode)=>{const m=out.modes[mode]??={attempts:0,accepted:0,revenue:0,profit:0,loyalty:0};m.attempts++;act();const n=g.current(),st=s.inventory.find(x=>x.id===id),old=n.loyalty;const ok=originalSell(id,mode);if(ok){m.accepted++;m.revenue+=n.history.at(-1).paid;m.profit+=n.history.at(-1).paid-(st.cost||0);m.loyalty+=n.loyalty-old;(out.items[st.item]??={ordered:0,sold:0}).sold++;}
+  /* Why an offer did not close, measurement only. The purchase-intent threshold moved for 정가
+     and the acceptance rate did not, so the refusal has to be decomposed before anyone moves a
+     second number: the reason the shop already records is price burden / low need / the roll. */
+  else{const r=n.refusalReasons?.at(-1)?.reason||'choice';const g2=out.refusal[mode]??={price:0,need:0,roll:0};
+   g2[r==='price'?'price':r==='need'?'need':'roll']++;}
+  return ok;};
  const originalNight=g.night.bind(g);g.night=()=>{const day=stat(s.day);day.slots+=s.queue.reduce((a,id)=>a+G.Adventurer.slots(s.npcs.find(n=>n.id===id)),0);day.consumed+=s.queue.reduce((a,id)=>a+s.npcs.find(n=>n.id===id).pack.length,0);
  for(const id of s.queue){const n=s.npcs.find(n=>n.id===id),d=s.dungeons[n.destination],a=G.Dungeon.prepare({...n,pack:[]},d,s.facilities),b=G.Dungeon.prepare(n,d,s.facilities);const ability=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16;out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
  originalNight();
@@ -182,7 +189,20 @@ function playRun(g,out,ctx){
    const d=g.claimedGateFor(n);let attempts=0;
    while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0)});}
    options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
-   if(!s.inventory.length)out.stockouts++;g.depart();act();
+   if(!s.inventory.length)out.stockouts++;
+   /* And the same question one level up: a visitor who leaves with an empty slot. Slot pressure,
+      an empty shelf and a wallet that cannot reach any shelf price are different problems from a
+      refusal, and only this split says which one the 정가 threshold was ever able to touch. */
+   {const gap=out.saleGap;
+    if(n.pack.length>=G.Adventurer.slots(n))gap.filled++;
+    else if(!s.inventory.length)gap.noStock++;
+    else{const purse=n.money+(n.eventBudget||0);
+     let affordable=0,fresh=0;
+     for(const st of s.inventory){const it=D.itemBy[st.item];
+      if(purse>=g.interest(n,it,'full').debit)affordable++;
+      if(!n.refused.includes(it.id+':full'))fresh++;}
+     if(!affordable)gap.wallet++;else if(!fresh)gap.refusedAll++;else gap.other++;}}
+   g.depart();act();
   }else if(s.phase==='night'){g.finishNight();act();}
   else if(s.phase==='closing'){
    /* Stage 10 §Q. The roster the overhead was charged against, sampled on the Day it was

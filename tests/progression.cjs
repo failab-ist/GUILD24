@@ -9,7 +9,13 @@
 const fs=require('node:fs');
 for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const D=globalThis.DATA,seeds=Number(process.argv[2])||300;
-const CANDIDATE=process.argv.includes('--candidate');
+/* --arm e1 | f1 | h1 | all  (default: baseline). The three are also run one at a time, because a
+   combined arm cannot say which of them moved a number - and the first combined run produced
+   exactly that ambiguity: fire success rose while every other Family rose with it. */
+const ARMARG=(process.argv.find(a=>a.startsWith('--arm='))||'').split('=')[1]
+ ||(process.argv.includes('--candidate')?'all':'');
+const USE={e1:ARMARG==='e1'||ARMARG==='all',f1:ARMARG==='f1'||ARMARG==='all',h1:ARMARG==='h1'||ARMARG==='all'};
+const CANDIDATE=USE.e1||USE.f1||USE.h1;
 
 /* The next balance pass, E1 + F1 + H1, injected HARNESS-ONLY. Nothing below is written to the
    catalog on disk: D.balance and D.bossTuning are plain data so they are assigned and restored
@@ -23,10 +29,10 @@ function withCandidate(fn){
  if(!CANDIDATE)return fn();
  const t=D.bossTuning,b=D.balance,proto=globalThis.Game.prototype;
  const saved={tuning:{...t},sloth:t.slothBossPower.slice(),fire:b.fireCombat,overhead:proto.overheadBase};
- t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
- t.greedShortfallCap=15;t.slothBossPower=[220,190,175,160];
- b.fireCombat=0.90;
- proto.overheadBase=function(){const core=this.coreRoster();
+ if(USE.f1){t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
+  t.greedShortfallCap=15;t.slothBossPower=[220,190,175,160];}
+ if(USE.h1)b.fireCombat=0.90;
+ if(USE.e1)proto.overheadBase=function(){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
   return (90+1*(this.run.day-1))*(1+.05*(avgLevel-1))*(1+.12*avgRarity);};
@@ -64,8 +70,8 @@ function withAllJobs(fn){
 }
 
 const pct=x=>Number.isFinite(x)?(x*100).toFixed(1)+'%':'—';
-const ARM=CANDIDATE?'candidate':'baseline';
-const FILE='tests/progression-results-v5'+(CANDIDATE?'-candidate':'')+'.json';
+const ARM=CANDIDATE?(ARMARG==='all'?'candidate':ARMARG):'baseline';
+const FILE='tests/progression-results-v5'+(CANDIDATE?'-'+(ARMARG==='all'?'candidate':ARMARG):'')+'.json';
 const out={version:2,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',seedsPerTier:seeds,arm:ARM,
  note:'Account progression tiers built through the real Job x Boss matrix. Deterministic strategy heuristics, not human play. `arm` says whether the E1+F1+H1 candidate was injected for the duration of the measurement.',
  tiers:[],forcedUnlock:null};
@@ -93,7 +99,8 @@ for(const t of TIERS){
   deepOfferedPerRun:r.deepOfferedPerRun,deepTakenPerRun:r.deepTakenPerRun,deepSponsorPerRun:r.deepSponsorPerRun,
   familyJob:r.familyJob,bossJob:r.bossJob,npcLevel:r.npc.alive?r.npc.level/r.npc.alive:0,
   overheadByBand:r.overheadByBand,bossRuns:r.bossRuns,modes:r.modes,
-  goldInTotal:r.goldInTotal,goldOutTotal:r.goldOutTotal,relicSpendPerRun:r.relicSpend/seeds};
+  goldInTotal:r.goldInTotal,goldOutTotal:r.goldOutTotal,relicSpendPerRun:r.relicSpend/seeds,
+  refusal:r.refusal,saleGap:r.saleGap,stockouts:r.stockouts,capacityBlocked:r.capacityBlocked};
  out.tiers.push(row);
  console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(row.grade).padStart(2),String(row.mastery).padStart(4),
   String(row.distinct).padStart(6),pct(row.reach10).padStart(8),pct(row.reach20).padStart(7),
