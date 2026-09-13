@@ -15,8 +15,14 @@ const D=globalThis.DATA,seeds=Number(process.argv[2])||300;
 const ARMARG=(process.argv.find(a=>a.startsWith('--arm='))||'').split('=')[1]
  ||(process.argv.includes('--candidate')?'all':'');
 const has=k=>ARMARG===k||ARMARG==='all'||(ARMARG==='f1h1'&&(k==='f1'||k==='h1'));
-const USE={e1:has('e1'),f1:has('f1'),h1:has('h1')};
-const CANDIDATE=USE.e1||USE.f1||USE.h1;
+const USE={e1:has('e1'),f1:has('f1'),h1:has('h1'),eco:ARMARG==='eco'};
+const CANDIDATE=USE.e1||USE.f1||USE.h1||USE.eco;
+/* The economy package, as one arm. Every value here is data the game already reads, so the arm
+   assigns and restores it - no production edit, and no rule of the systems it touches changes:
+   the counter ceiling, the Warehouse Relic, the rescue, Deep's reward and its rarity/level
+   coefficients, and Store Gold 0 for a Deep Great Success are all exactly as they ship. */
+const ECO={warehouse:18,offers:5,rerollBase:50,sponsorBase:350,
+ openingStock:[['rice',1],['water',1],['bandage',1],['potion',1]]};
 
 /* The next balance pass, E1 + F1 + H1, injected HARNESS-ONLY. Nothing below is written to the
    catalog on disk: D.balance and D.bossTuning are plain data so they are assigned and restored
@@ -29,7 +35,11 @@ const CANDIDATE=USE.e1||USE.f1||USE.h1;
 function withCandidate(fn){
  if(!CANDIDATE)return fn();
  const t=D.bossTuning,b=D.balance,proto=globalThis.Game.prototype;
- const saved={tuning:{...t},sloth:t.slothBossPower.slice(),fire:b.fireCombat,overhead:proto.overheadBase};
+ const saved={tuning:{...t},sloth:t.slothBossPower.slice(),fire:b.fireCombat,overhead:proto.overheadBase,
+  warehouse:b.warehouse,offers:b.orderOffers,rerollBase:b.rerollBase,
+  sponsorBase:D.deepTuning.sponsorBase,openingStock:D.openingStock};
+ if(USE.eco){b.warehouse=ECO.warehouse;b.orderOffers=ECO.offers;b.rerollBase=ECO.rerollBase;
+  D.deepTuning.sponsorBase=ECO.sponsorBase;D.openingStock=ECO.openingStock;}
  if(USE.f1){t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
   t.greedShortfallCap=15;t.slothBossPower=[220,190,175,160];}
  if(USE.h1)b.fireCombat=0.90;
@@ -39,7 +49,8 @@ function withCandidate(fn){
   return (90+1*(this.run.day-1))*(1+.05*(avgLevel-1))*(1+.12*avgRarity);};
  try{return fn();}
  finally{Object.assign(t,saved.tuning);t.slothBossPower=saved.sloth;b.fireCombat=saved.fire;
-  proto.overheadBase=saved.overhead;}
+  proto.overheadBase=saved.overhead;b.warehouse=saved.warehouse;b.orderOffers=saved.offers;
+  b.rerollBase=saved.rerollBase;D.deepTuning.sponsorBase=saved.sponsorBase;D.openingStock=saved.openingStock;}
 }
 
 /* The five tiers of §C. Each is built through the real matrix, so the Grade it implies, the
@@ -104,7 +115,8 @@ for(const t of TIERS){
   refusal:r.refusal,saleGap:r.saleGap,stockouts:r.stockouts,capacityBlocked:r.capacityBlocked,
   offerShape:r.offerShape,deepNominee:r.deepNominee,deepSkippedPerRun:r.deepSkippedPerRun,
   deepCostMedian:r.deepCostMedian,deepCostP25:r.deepCostP25,deepCostP75:r.deepCostP75,
-  deepByRarity:r.deepByRarity,deepByLevel:r.deepByLevel,deepDaysPerRun:r.deepDaysPerRun};
+  deepByRarity:r.deepByRarity,deepByLevel:r.deepByLevel,deepDaysPerRun:r.deepDaysPerRun,
+  rescue:r.rescue,revenuePerRun:r.goldIn.sale/seeds};
  out.tiers.push(row);
  console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(row.grade).padStart(2),String(row.mastery).padStart(4),
   String(row.distinct).padStart(6),pct(row.reach10).padStart(8),pct(row.reach20).padStart(7),
