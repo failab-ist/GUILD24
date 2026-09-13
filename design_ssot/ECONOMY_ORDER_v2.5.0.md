@@ -283,8 +283,8 @@ It is not a single-offer swap.
 Same-day cost:
 escalating
 
-PASS3 starting curve:
-30G -> 60G -> 120G -> 240G
+Curve (v2.5 final):
+50G -> 100G -> 200G -> 400G -> 800G -> x2 thereafter
 
 next day:
 cost/resetCount=RESET
@@ -443,11 +443,17 @@ Exact baseline increase=PASS3.
 
 ### PURCHASE INTENT BOUNDARY
 
-This amendment does not change purchase intent.
-Keep current 50% / 100% / 150% intent first and measure after Wallet rebaseline.
+What the customer is CHARGED is unchanged: 할인 x0.50, 정가 x1.00, 바가지 x1.50.
 
-If 100% refusal remains excessive, later Director/User approval is required.
-150% purchase intent must not be made easier as part of this amendment.
+What the customer JUDGES the offer at is a separate threshold:
+할인 0.50 / 정가 **0.65** / 바가지 1.50.
+정가 is judged below what it charges so a properly prepared product at list price stops failing
+on intent alone. This is a threshold, not an acceptance rate - 정가 is not fixed at 65%.
+
+The judged price reaches the decision through the offer's weight against the customer's purse,
+for 정가 only: `intentPivot=0.36` `intentWeight=0.50` (v2.5 final), centred on the measured
+median 정가 burden so the term redistributes rather than taxes.
+할인 and 바가지 carry no such term and are decided exactly as they were.
 
 ### NORMAL GREAT SUCCESS STORE GOLD
 
@@ -457,8 +463,8 @@ Normal expedition:
 
 Same-day sale to that NPC is not required.
 
-The bonus scales with the expedition's existing Gate/Tier value.
-Exact amount/scaling=PASS3.
+The bonus is a flat amount for the Day band it happened in:
+D1-10 100G / D11-20 200G / D21-30 300G (v2.5 final), so the reward is legible before it is earned.
 
 Deep Expedition exception:
 - Success -> Store Gold 0
@@ -468,13 +474,17 @@ Deep Expedition exception:
 
 ### DEEP EXPEDITION SPONSORSHIP COST
 
-Deep Expedition uses one **single fixed sponsorship amount** across all Deep Expedition occurrences.
+The sponsorship is priced by **the adventurer being sent**, not by the trip: a rarer or more
+experienced NPC costs more, so choosing who to invest in is the decision.
 There are no selectable payment tiers and no Day/Tier multiplier.
+
+`sponsorship = sponsorBase x (1 + sponsorRarityStep x rarity) x (1 + sponsorLevelStep x (Level - 1))`
+rounded to `sponsorRounding`.
+
+`sponsorBase=350` `sponsorRarityStep=0.20` `sponsorLevelStep=0.05` `sponsorRounding=10` (v2.5 final).
 
 The sponsorship itself grants no Stat, Supply, Counter, Insurance or other expedition effect.
 It only commits the Store to the Deep Expedition opportunity.
-
-Exact fixed sponsorship amount=PASS3.
 
 If the Store cannot afford the sponsorship, nomination cannot be confirmed.
 If no NPC is nominated, no sponsorship is charged.

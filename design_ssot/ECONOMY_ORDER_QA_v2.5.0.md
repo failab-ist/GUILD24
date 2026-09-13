@@ -365,8 +365,7 @@ PASS:
 
 ### DEEP SPONSORSHIP
 PASS:
-- one fixed sponsorship amount across Deep occurrences
-- exact amount is PASS3
+- sponsorship is priced from the nominated NPC's rarity and current Level
 - no payment tiers / Day/Tier scaling
 - no Stat/Supply effect from sponsorship
 - unaffordable sponsorship cannot be confirmed

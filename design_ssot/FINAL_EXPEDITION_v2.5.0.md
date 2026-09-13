@@ -269,10 +269,10 @@ Final Power remains internal and is not introduced as a Player-facing Stat.
 ```text
 Individual Final Power
 =
-  투력 × 0.58
-+ 강인함 × 0.32
-+ 기동 × 0.24
-+ 정신 × 0.16
+  투력 × 0.50
++ 강인함 × 0.34
++ 기동 × 0.27
++ 정신 × 0.20
 - 환경피해 × 0.35
 ```
 

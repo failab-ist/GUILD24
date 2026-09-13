@@ -203,7 +203,7 @@ Purpose:
 - strongest expression of ordinary Final fundamentals
 - no special counter tax
 
-WRATH effective Boss Power numeric -> PASS3 with FINAL balance.
+WRATH effective Boss Power=200 (v2.5 final). It is the unmodified baseline every other Boss is measured against.
 
 ---
 
@@ -232,7 +232,7 @@ Rules:
 - Player sees `original -> applied` before Final commitment
 - no hidden contribution-coefficient-only implementation may replace this visible Stat change
 
-`prideCombatFactor=PASS3`
+`prideCombatFactor=0.90` (v2.5 final)
 
 ---
 
@@ -265,7 +265,7 @@ Rules:
 - no new persistent Condition
 - Player sees all affected values as `original -> applied`
 
-`envyStatFactor=PASS3`
+`envyStatFactor=0.92` (v2.5 final)
 
 ---
 
@@ -305,9 +305,9 @@ Therefore:
 - exceeding target does not create an unlimited Player bonus
 
 Exact:
-- greedRevenueTarget=PASS3
-- shortfallSlope=PASS3
-- shortfallCap=PASS3
+- greedRevenueTarget=18800 (v2.5 final)
+- shortfall is measured as a SHARE of the target, so the penalty means the same thing whatever the target is
+- shortfallCap=15 (v2.5 final)
 
 No separate wealth meter.
 No hidden Boss-only revenue definition.
@@ -354,8 +354,8 @@ Unaffected scope remains 100%:
 - explicit non-Stat special effect
 
 High-end boundary and reduction factor:
-- affectedRarityThreshold=PASS3
-- gluttonyStatFactor=PASS3
+- affectedRarityThreshold=2 (v2.5 final)
+- gluttonyStatFactor=0.80 (v2.5 final)
 
 Rules:
 - no extra inventory unit is secretly consumed
@@ -414,7 +414,7 @@ Rules:
 - Player sees affected values as `original -> applied`
 - LUST must not create its own alternate regular classification
 
-`lustStatFactor=PASS3`
+`lustStatFactor=0.95` (v2.5 final)
 
 LUST tests relationship investment, not Job composition.
 
@@ -469,7 +469,7 @@ Let `sealBreakCount` be committed Seal Break choices by Final Lock.
 0 breaks = strongest SLOTH / hardest-side Boss
 ```
 
-Exact Boss Power values/factors for [0,1,2,3] breaks=PASS3.
+Effective Boss Power for [0,1,2,3] breaks=[220,190,175,160] (v2.5 final).
 
 Seal Break count is not a permanent Meta resource.
 

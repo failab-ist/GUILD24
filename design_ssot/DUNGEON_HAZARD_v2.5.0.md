@@ -66,6 +66,11 @@ T1=fire
 T2=fire + increasedCombatPower
 T3=strong(fire) + highCombatPower
 
+Gate required Combat Power carries a Family factor `fireCombat=0.90` (v2.5 final).
+FIRE measured as the hardest Family for every Job, which the BALANCE TARGET clause below
+rejects; the requirement is eased while the Hazard identity and Stat mapping stay untouched.
+FIRE is still the hardest Family after it, and ships that way for v2.5.
+
 armorHazard=NO
 
 ### CRYPT — 망자역

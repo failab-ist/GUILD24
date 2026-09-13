@@ -15,16 +15,15 @@ targetPlaytime=30–50 min
 turnBased=YES
 realTimeGameplay=NO
 
-startGold=1200G
-inventoryCapacity=24
-dailyOverheadStarting=60G
-dailyOverheadExactStatus=PASS3_AFTER_MINIMAL_ENGAGEMENT_SIM
+startGold=1000G
+inventoryCapacity=18
+dailyOverhead=DayAndCoreRosterScaled
 baseVisitors/day=3–6
 dailyOrderOffers=6
 
 startStock:
-- 삼각김밥×2
-- 생수×2
+- 삼각김밥×1
+- 생수×1
 - 붕대×1
 - 하급포션×1
 
@@ -148,12 +147,12 @@ Canonical:
 
 At new run:
 
-Gold=1200G
-InventoryCapacity=24
+Gold=1000G
+InventoryCapacity=18
 
 Stock:
-- 삼각김밥×2
-- 생수×2
+- 삼각김밥×1
+- 생수×1
 - 붕대×1
 - 하급포션×1
 
@@ -167,7 +166,7 @@ Franchise Grade itself does not directly grant the selected contract effect.
 
 ## INVENTORY
 
-baseCapacity=24
+baseCapacity=18
 
 Inventory stores physical stock units.
 Shelf-life/expiry behavior is Item/stock data.
@@ -187,11 +186,16 @@ Capacity modifiers may come from explicit Relic/contract effects.
 
 ## DAILY ECONOMIC BASE
 
-dailyOverheadStarting=60G
-dailyOverheadExactStatus=PASS3_AFTER_MINIMAL_ENGAGEMENT_SIM
+dailyOverhead follows the Day AND the roster the Store has actually built (v2.5 final):
 
-60G is the v2.5 retained implementation starting baseline,
-not a final post-simulation freeze.
+`overhead = (90 + 2 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)`
+charged rounded to 10G.
+
+Core Roster = the six best living adventurers, by Level then Rarity (all of them if fewer).
+Averaging the whole pool would pay the Store to hoard Level-1 bodies to dilute the figure.
+Nothing is persisted; both averages derive from the roster as it stands.
+
+A Store that grows good adventurers keeps having to sell well to hold on to them.
 
 Any later base-overhead change requires:
 - integrated v2.5 multi-seed evidence
