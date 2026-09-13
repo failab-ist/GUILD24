@@ -15,8 +15,13 @@ const D=globalThis.DATA,seeds=Number(process.argv[2])||300;
 const ARMARG=(process.argv.find(a=>a.startsWith('--arm='))||'').split('=')[1]
  ||(process.argv.includes('--candidate')?'all':'');
 const has=k=>ARMARG===k||ARMARG==='all'||(ARMARG==='f1h1'&&(k==='f1'||k==='h1'));
-const USE={e1:has('e1'),f1:has('f1'),h1:has('h1'),eco:ARMARG==='eco'};
-const CANDIDATE=USE.e1||USE.f1||USE.h1||USE.eco;
+/* The 5-arm ablation. A is production as it stands. B moves only what the other arms hold in
+   common - a four-item opening shelf, the 50/100/200/400 reroll curve and a flat 350G
+   sponsorship - so C and D each isolate one knob against it and E shows the interaction. */
+const ABL={b:{},c:{warehouse:18},d:{offers:5},e:{warehouse:18,offers:5}};
+const ARM_ABL=ABL[ARMARG]||null;
+const USE={e1:has('e1'),f1:has('f1'),h1:has('h1'),eco:ARMARG==='eco',abl:!!ARM_ABL};
+const CANDIDATE=USE.e1||USE.f1||USE.h1||USE.eco||USE.abl;
 /* The economy package, as one arm. Every value here is data the game already reads, so the arm
    assigns and restores it - no production edit, and no rule of the systems it touches changes:
    the counter ceiling, the Warehouse Relic, the rescue, Deep's reward and its rarity/level
@@ -37,9 +42,18 @@ function withCandidate(fn){
  const t=D.bossTuning,b=D.balance,proto=globalThis.Game.prototype;
  const saved={tuning:{...t},sloth:t.slothBossPower.slice(),fire:b.fireCombat,overhead:proto.overheadBase,
   warehouse:b.warehouse,offers:b.orderOffers,rerollBase:b.rerollBase,
-  sponsorBase:D.deepTuning.sponsorBase,openingStock:D.openingStock};
+  sponsorBase:D.deepTuning.sponsorBase,openingStock:D.openingStock,
+  sponsorRarityStep:D.deepTuning.sponsorRarityStep,sponsorLevelStep:D.deepTuning.sponsorLevelStep};
  if(USE.eco){b.warehouse=ECO.warehouse;b.orderOffers=ECO.offers;b.rerollBase=ECO.rerollBase;
   D.deepTuning.sponsorBase=ECO.sponsorBase;D.openingStock=ECO.openingStock;}
+ if(USE.abl){
+  /* Common to B/C/D/E. The sponsorship becomes a single fixed amount the way the SSOT describes
+     it - the rarity and level steps go to zero rather than the formula being replaced, so Deep's
+     reward, its Power and its Store Gold 0 are all still exactly what ships. */
+  D.openingStock=ECO.openingStock;b.rerollBase=ECO.rerollBase;
+  D.deepTuning.sponsorBase=350;D.deepTuning.sponsorRarityStep=0;D.deepTuning.sponsorLevelStep=0;
+  if(ARM_ABL.warehouse)b.warehouse=ARM_ABL.warehouse;
+  if(ARM_ABL.offers)b.orderOffers=ARM_ABL.offers;}
  if(USE.f1){t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
   t.greedShortfallCap=15;t.slothBossPower=[220,190,175,160];}
  if(USE.h1)b.fireCombat=0.90;
@@ -50,7 +64,8 @@ function withCandidate(fn){
  try{return fn();}
  finally{Object.assign(t,saved.tuning);t.slothBossPower=saved.sloth;b.fireCombat=saved.fire;
   proto.overheadBase=saved.overhead;b.warehouse=saved.warehouse;b.orderOffers=saved.offers;
-  b.rerollBase=saved.rerollBase;D.deepTuning.sponsorBase=saved.sponsorBase;D.openingStock=saved.openingStock;}
+  b.rerollBase=saved.rerollBase;D.deepTuning.sponsorBase=saved.sponsorBase;D.openingStock=saved.openingStock;
+  D.deepTuning.sponsorRarityStep=saved.sponsorRarityStep;D.deepTuning.sponsorLevelStep=saved.sponsorLevelStep;}
 }
 
 /* The five tiers of §C. Each is built through the real matrix, so the Grade it implies, the
@@ -116,7 +131,7 @@ for(const t of TIERS){
   offerShape:r.offerShape,deepNominee:r.deepNominee,deepSkippedPerRun:r.deepSkippedPerRun,
   deepCostMedian:r.deepCostMedian,deepCostP25:r.deepCostP25,deepCostP75:r.deepCostP75,
   deepByRarity:r.deepByRarity,deepByLevel:r.deepByLevel,deepDaysPerRun:r.deepDaysPerRun,
-  rescue:r.rescue,revenuePerRun:r.goldIn.sale/seeds};
+  rescue:r.rescue,revenuePerRun:r.goldIn.sale/seeds,shortage:r.shortage,rerollDepth:r.rerollDepth};
  out.tiers.push(row);
  console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(row.grade).padStart(2),String(row.mastery).padStart(4),
   String(row.distinct).padStart(6),pct(row.reach10).padStart(8),pct(row.reach20).padStart(7),
