@@ -18,13 +18,32 @@ P.specialAction=function(npcId,value){const s=this.run,e=s.special,n=s.npcs.find
 P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;
  if(s.stats.deaths>=G.DATA.balance.deathLimit)
   return this.end(false,'소문이 퍼지자 모험가들의 발길이 끊겼고, 더는 장사를 이어갈 수 없었다.');
- if(s.money<0){if(s.inventory.length){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요.';this.save();return false;}this.end(false,'장사를 이어갈 자금이 바닥났다.');return;}
+ if(s.money<0){if(s.inventory.length&&this.canRescue()){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요. (회생 '+(s.rescueUsed||0)+' / '+this.rescueLimit()+')';this.save();return false;}this.end(false,'장사를 이어갈 자금이 바닥났다.');return;}
  this.nextDay();this.save();return true;};
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){this.run.day++;this.morning();};
 P.rerollPrice=function(){const n=this.run.rerollCount||0;return this.has('delivery')&&n===0?0:D.balance.rerollBase*2**Math.min(20,n);};
 P.reroll=function(){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간에 교환할 수 있습니다.');if(Object.values(s.cart||{}).some(Boolean))throw Error('선택한 수량을 먼저 발주하거나 0으로 바꿔 주세요.');const price=this.rerollPrice();if(s.money<price)throw Error('교환 비용이 부족합니다.');this.generateOffers({advancePity:false});s.cart={};s.money-=price;s.daily.rerollSpent=(s.daily.rerollSpent||0)+price;s.stats.spent+=price;s.rerollCount=(s.rerollCount||0)+1;this.save();};
-P.liquidate=function(stockId){const s=this.run;if(!['morning','order','night','closing','final'].includes(s.phase))return;let i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)return;const st=s.inventory[i],price=Math.round(D.itemBy[st.item].buy*.5);s.inventory.splice(i,1);s.money+=price;s.daily.liquidation=(s.daily.liquidation||0)+price;s.notice=D.itemBy[st.item].name+' 재고 정리 · '+price+'G 회수';this.save();};
+/* 재고 정리 is an emergency, not a savings account. It exists so a Closing that came up short
+   makes the player decide what to give up, and it stops being available the moment the till is
+   square again. The rules are enforced here rather than in the UI: CLOSING only, only while the
+   till is short, at half of what THAT stock actually cost to buy, and at most three separate
+   deficit Closings per Run. One rescue is one such Closing - inside it any number of items may
+   go until the till reaches zero. When the third is spent and the till is short again, the store
+   closes with stock still on the shelf. */
+P.rescueLimit=function(){return D.balance.rescueLimit;};
+P.canRescue=function(){const s=this.run;
+ return s.phase==='closing'&&s.money<0&&
+  ((s.rescueDay===s.day)||(s.rescueUsed||0)<this.rescueLimit());};
+P.liquidate=function(stockId){const s=this.run;
+ if(!this.canRescue())return false;
+ const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)return false;
+ const st=s.inventory[i],price=Math.round((st.cost??D.itemBy[st.item].buy)*.5);
+ if(s.rescueDay!==s.day){s.rescueUsed=(s.rescueUsed||0)+1;s.rescueDay=s.day;}
+ s.inventory.splice(i,1);s.money+=price;s.daily.liquidation=(s.daily.liquidation||0)+price;
+ s.notice=D.itemBy[st.item].name+' 재고 정리 · '+price+'G 회수'
+  +(s.money>=0?' · 회생 완료':'')+' (회생 '+s.rescueUsed+' / '+this.rescueLimit()+')';
+ this.save();return true;};
 P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.save();};
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};
 P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};

@@ -642,4 +642,54 @@ test('FINAL: reaching D30 with nobody to send is a Final failure, not an unpaid 
  assert.ok(!/운영비/.test(g.run.endReason),'never for overheads that were paid');
 });
 
+/* 회생 / 재고 정리. The shelf is an emergency, not a deposit account: the rule is enforced by
+   the engine, not by whether the UI happens to draw a button. */
+test('RESCUE: clearing stock is a short-Closing action, priced at what that stock cost',()=>{
+ const g=fresh('rescue-rule'),s=g.run;
+ g.stock('ramen',1);const st=s.inventory.at(-1);st.cost=80;
+ for(const phase of ['morning','order','sell','night','final']){
+  s.phase=phase;s.money=-100;
+  assert.equal(g.liquidate(st.id),false,'no clearing in '+phase);}
+ s.phase='closing';s.money=50;
+ assert.equal(g.liquidate(st.id),false,'and none while the till is square');
+ s.money=-100;const before=s.money;
+ assert.equal(g.liquidate(st.id),true);
+ assert.equal(s.money-before,40,'half of what that stock cost, rounded');
+ assert.equal(s.rescueUsed,1,'one short Closing is one rescue');
+});
+
+test('RESCUE: it ends the moment the till reaches zero, and three Closings is the whole Run',()=>{
+ const g=fresh('rescue-cap'),s=g.run;
+ for(let i=0;i<12;i++)g.stock('ramen',1);
+ s.phase='closing';s.money=-10;
+ const ids=s.inventory.map(x=>x.id);
+ assert.equal(g.liquidate(ids[0]),true,'the first clears the deficit');
+ assert.ok(s.money>=0);
+ assert.equal(g.liquidate(ids[1]),false,'and nothing more may be sold once it is square');
+
+ /* The Closing above was the first rescue, so two remain; the one after that is refused with
+    stock still on the shelf. */
+ for(const day of [4,5]){s.day=day;s.money=-10;
+  assert.equal(g.liquidate(s.inventory[0].id),true,'rescue on DAY '+day);}
+ assert.equal(s.rescueUsed,DATA.balance.rescueLimit);
+ s.day=7;s.money=-10;
+ assert.equal(g.liquidate(s.inventory[0].id),false,'the fourth is refused');
+ assert.ok(s.inventory.length,'with stock still on the shelf');
+ assert.equal(g.canRescue(),false);
+ g.closeDay();
+ assert.equal(s.phase,'end','and the store closes');
+});
+
+test('RESCUE: the count survives a save and a load, and a forged one is refused',()=>{
+ const g=fresh('rescue-save'),s=g.run;
+ g.stock('ramen',1);s.phase='closing';s.money=-10;g.liquidate(s.inventory[0].id);
+ assert.equal(s.rescueUsed,1);
+ const round=copy({version:6,account:g.account,run:s});
+ assert.ok(Save.valid(round),'a run carrying a rescue count is valid');
+ assert.equal(round.run.rescueUsed,1,'and the count is what is written');
+ for(const bad of [{rescueUsed:DATA.balance.rescueLimit+1},{rescueUsed:-1},{rescueUsed:1.5},{rescueUsed:undefined}]){
+  const forged=copy(round);Object.assign(forged.run,bad);
+  assert.equal(Save.valid(forged),false,'refused: '+JSON.stringify(bad));}
+});
+
 console.log(count+' integration groups passed');

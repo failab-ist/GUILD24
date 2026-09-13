@@ -109,9 +109,14 @@ test('ORD-Q09/Q10/Q11: next-day Tier forecast is exact and exposes nothing else'
 test('ECO-Q02: one rounding rule across every Gold path',()=>{
  const g=fresh('rounding');const s=g.run;
  g.stock('ramen',1); // buy 45 -> liquidation must round, not floor
- const st=s.inventory.at(-1),before=s.money;
- s.phase='morning';g.liquidate(st.id);
- assert.equal(s.money-before,Math.round(DATA.itemBy.ramen.buy*.5),'liquidation uses Math.round');
+ const st=s.inventory.at(-1);
+ /* 재고 정리 is a Closing rescue now, so the rounding is checked where the rule allows it. */
+ s.phase='morning';assert.equal(g.liquidate(st.id),false,'no cashing out outside a short Closing');
+ s.phase='closing';assert.equal(g.liquidate(st.id),false,'and not while the till is square');
+ s.money=-10;const before=s.money;
+ assert.equal(g.liquidate(st.id),true);
+ assert.equal(s.money-before,Math.round(st.cost*.5),'liquidation uses Math.round');
+ assert.equal(st.cost,DATA.itemBy.ramen.buy,'and it is what that stock cost, not the catalog price');
  const src=fs.readFileSync(__dirname+'/../dist/systems/run.js','utf8');
  assert.ok(!/Math\.floor\([^)]*buy/.test(src),'no floor rule survives on a Gold path');
 });

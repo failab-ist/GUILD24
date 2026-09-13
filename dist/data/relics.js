@@ -50,6 +50,10 @@ D.balance.relicPriceScale=1;D.balance.walletBase=90;D.balance.walletLevel=18;D.b
    baseline, not a settled number: the rate, the Day it lands on and how it differs between
    bare and prepared play are measured before anyone moves it. */
 D.balance.deathLimit=10;
+/* How many deficit Closings a Run may trade its way out of by clearing stock. Three, so the
+   shelf is an emergency and not a deposit account: one rescue is one short Closing, and inside
+   it the player keeps choosing what to give up until the till reaches zero. */
+D.balance.rescueLimit=3;
 D.traitExclusions=[['brave','coward'],['eater','small'],['careful','reckless'],['frugal','impulse'],['strong','frail'],['lucky','unlucky'],['collector','thrifty'],['stamina','weary'],['social','shy']];
 D.familyTiers={spider:[['poison'],['poison','bind'],['poison','bind']],slime:[['corrosion'],['corrosion','mire'],['corrosion','mire']],fire:[['fire'],['fire'],['fire']],crypt:[['fear'],['fear','dark'],['fear','dark']],snow:[['cold'],['cold','whiteout'],['cold','whiteout']]};
 D.categories={food:'음식',drink:'음료',medicine:'의료',tool:'야외장비',insurance:'보험',magic:'특수'};

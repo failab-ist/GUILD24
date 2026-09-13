@@ -40,7 +40,7 @@ function accountOk(a,D){
 }
 
 /* The shape of a Run: the arrays and values that must be there, with DAY and phase in real range. */
-function runShapeOk(r){
+function runShapeOk(r,D){
  return !!r
   && ['npcs','inventory','facilities','offers','queue','dungeons','results','team','reportHistory']
      .every(k=>Array.isArray(r[k]))
@@ -48,7 +48,12 @@ function runShapeOk(r){
   && Number.isInteger(r.day) && r.day>=1 && r.day<=30
   && Number.isFinite(r.money)
   && typeof r.seed==='string' && Number.isFinite(r.rngState)
-  && PHASES.includes(r.phase);
+  && PHASES.includes(r.phase)
+  /* How many deficit Closings this Run has already traded its way out of. Required, and bounded
+     by the rule - a save that claims more rescues than the Run is allowed, or a fractional
+     count, is not a Run this build produced. */
+  && Number.isInteger(r.rescueUsed) && r.rescueUsed>=0 && r.rescueUsed<=D.balance.rescueLimit
+  && Number.isInteger(r.rescueDay) && r.rescueDay>=0 && r.rescueDay<=30;
 }
 
 /* The roster: no adventurer twice, and the queue and final team point only at people who exist. */
@@ -229,7 +234,7 @@ G.Save={
    if(s?.version!==6)return false;
    if(!accountOk(a,D))return false;
    if(r===null)return true;              // an account-only save, with no run in progress
-   if(!runShapeOk(r))return false;
+   if(!runShapeOk(r,D))return false;
    if(!bossOk(r,D))return false;
    const ids=r.npcs.map(n=>n.id);
    if(!deepOk(r,ids))return false;

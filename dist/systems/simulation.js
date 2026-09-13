@@ -14,12 +14,27 @@ const ENGAGEMENT={
  'meta-farm':{order:false,sell:false,finalSupply:false,relics:'free',liquidateOpening:true}};
 const levers=policy=>ENGAGEMENT[policy]||{order:'full',sell:true,finalSupply:true};
 
+/* How much of its money a policy is willing to commit. The engaged policies were written to
+   survive, not to invest: they stop ordering at two items per expected visitor, keep 140G back
+   at all times, will not touch a Relic unless 380G remains afterwards, and never reroll an offer
+   sheet at all. That is why a skilled run finishes holding gold it had no rule to spend, and it
+   makes every measurement of "the survivors are too rich" partly a statement about the policy.
+   `spender` is the same policy with those four brakes loosened, using only sinks the game
+   already has - Order, supply, Relic, reroll, Deep sponsorship. No new sink, no new system. */
+const SPEND={
+ 'default':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:0},
+ 'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:600}};
+const spending=policy=>SPEND[policy]||SPEND.default;
+
 /* Boss clear is `power * roll >= bossPower` with roll uniform on [0.88, 1.12], so the clear
    chance of a given party is exact arithmetic. Sampling it would only add noise. */
 const ROLL_LO=.88,ROLL_HI=1.12;
 const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-bossPower/power)/(ROLL_HI-ROLL_LO)));
-/* The same contribution `run.js:boss()` sums, per adventurer. */
-const contribution=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16-p.hazard*.35;
+/* The same contribution `run.js:boss()` sums, per adventurer. These four numbers are the Final
+   coefficients and must track run.js - they were left at the pre-Stage-10 .58/.32/.24/.16 when
+   the formula moved, so every Final contribution this harness reported was measured against a
+   formula the game no longer uses. */
+const contribution=p=>p.effects.combat*.50+p.effects.survival*.34+p.effects.mobility*.27+p.effects.spirit*.20-p.hazard*.35;
 
 function blank(runs,policy,pricing,build){
  return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
@@ -53,9 +68,16 @@ function blank(runs,policy,pricing,build){
      can be checked against the store it was charged to. spawnByMastery counts what the Job
      Mastery spawn roll actually did, per rank. All measurement-only. */
   goldIn:{sale:0,greatSuccess:0,subsidy:0,liquidation:0},
-  goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0},
+  goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0,reroll:0},
   overhead:{samples:[],byBand:{},coreLevel:[],coreRarity:[]},bossRuns:{},
   refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
+  /* What a Day's offer sheet actually looks like. Shrinking the sheet only makes ordering a
+     decision if the slots left are still a choice, so the counter guarantee - which replaces the
+     LAST slot rather than adding one - has to be counted against the sheet it is replacing in. */
+  offerShape:{days:0,slots:0,unique:0,dupes:0,counterSlots:0,counterHeavy:0,pityFired:0,
+   missingCounterDays:0,rerolls:0,rerollSpend:0,thin:0},
+  deepNominee:{count:0,cost:0,levelAtNomination:0,levelAtEnd:0,grew:0,alive:0,finalSeat:0,rarity:0,finalSeats:0},
+  rescue:{events:0,gold:0,runs:0,used:[]},
   reachBy:{10:0,20:0,30:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
@@ -92,12 +114,18 @@ function derive(out,count){
    here: `simulate` hands in a fresh one per seed, `trajectory` hands in the same one every
    time so real Meta progression carries forward. */
 function playRun(g,out,ctx){
- const {policy,pricing,build,seed}=ctx,engagement=levers(policy),s=g.run;
+ const {policy,pricing,build,seed}=ctx,engagement=levers(policy),spend=spending(policy),s=g.run;
  let turns=0;const seenWindows=new Set();let previousCandidates=[];
  /* Interaction-cost proxy: one tick per action a player would actually have to perform. */
  const act=(n=1)=>{out.actions+=n;};
  const stat=d=>out.days[d]??={samples:0,cash:0,wallet:0,level:0,inventory:0,peak:0,visitors:0,actual:0,consumed:0,slots:0,waste:0,revenue:0,cogs:0,spent:0,operating:0,loyalty:0,injury:0,death:0,overAffordable:0,fullAffordable:0,halfOnly:0,offers:0};
  function itemValue(n,it,d){const known=policy==='skilled'?d.hazards:G.Presentation?G.Presentation.known(d,g):d.hazards;let v=(it.effects.combat||0)*.55+(it.effects.survival||0)*.6+(it.effects.mobility||0)*.25+(it.effects.spirit||0)*.3+(d.requiredSupply||0)*(it.effects.supply||0)*.2+known.reduce((a,h)=>a+Math.max(0,it.effects[h]||0)*.5,0);if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
+ /* The counter guarantee overwrites the last slot, so whether it fired can only be read from the
+    state BEFORE the sheet is rolled. Measurement only - the call is passed straight through. */
+ const nominees={};
+ const originalOffers=g.generateOffers.bind(g);g.generateOffers=(opts)=>{
+  const armed=(s.pity.counter||0)>=3||g.has('expeditionCert');
+  const r=originalOffers(opts);if(armed)out.offerShape.pityFired++;return r;};
  const originalSell=g.sell.bind(g);g.sell=(id,mode)=>{const m=out.modes[mode]??={attempts:0,accepted:0,revenue:0,profit:0,loyalty:0};m.attempts++;act();const n=g.current(),st=s.inventory.find(x=>x.id===id),old=n.loyalty;const ok=originalSell(id,mode);if(ok){m.accepted++;m.revenue+=n.history.at(-1).paid;m.profit+=n.history.at(-1).paid-(st.cost||0);m.loyalty+=n.loyalty-old;(out.items[st.item]??={ordered:0,sold:0}).sold++;}
   /* Why an offer did not close, measurement only. The purchase-intent threshold moved for 정가
      and the acceptance rate did not, so the refusal has to be decomposed before anyone moves a
@@ -120,7 +148,7 @@ function playRun(g,out,ctx){
  }
  for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)],[out.familyJob,(d?.family||report.dungeon)+':'+npc.job]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
- function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]);return (build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:380))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
+ function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;if(!seenWindows.has(w.milestoneDay)){seenWindows.add(w.milestoneDay);out.offerRepeats+=w.candidateIds.filter(id=>previousCandidates.includes(id)).length;previousCandidates=[...w.candidateIds];for(const id of w.candidateIds)out.relicOffers[id]=(out.relicOffers[id]||0)+1;out.windowDiversity.push(new Set(w.candidateIds.flatMap(id=>D.relicBy[id].tags)).size);}if(build==='none'&&s.phase!=='foundation')return;if(engagement.relics==='free'&&s.phase!=='foundation')return;const candidates=w.candidateIds.slice().sort((a,b)=>{const val=id=>{const r=D.relicBy[id],tags=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]);return (build==='hybrid'?r.tags.filter(t=>tags.includes(t)).length:r.tags.includes(build)?3:0)+(r.kind==='keystone'?.5:0);};return val(b)-val(a);});for(const id of candidates){const cost=w.candidatePrices[w.candidateIds.indexOf(id)];if(s.money-cost<(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve))continue;const purchaseDay=s.phase==='foundation'?0:s.day;g.buyRelic(id);act();out.relicSpend+=cost;const r=out.relicPurchases[id]??={count:0,day:0,spend:0};r.count++;r.day+=purchaseDay;r.spend+=cost;break;}}
 
  /* --- D30 measurement, run on copies before the real Final is committed. -----------------
     Nothing here touches g.rng or any live object: the Boss chance is arithmetic, and every
@@ -168,11 +196,31 @@ function playRun(g,out,ctx){
   if(s.phase==='foundation'){buySupport();continue;}
   if(s.phase==='morning'){g.beginOrder();act();continue;}
   if(s.phase==='order'){buySupport();
+   {const o=out.offerShape,known=G.Relics.known(g),items=s.offers.map(x=>D.itemBy[x.item]);
+    const uniq=new Set(s.offers.map(x=>x.item)).size;
+    const counters=items.filter(it=>G.Relics.counter(it,known)).length;
+    const need=[...new Set(s.dungeons.flatMap(d=>d.hazards||[]))].filter(h=>known.includes(h));
+    o.days++;o.slots+=s.offers.length;o.unique+=uniq;o.dupes+=s.offers.length-uniq;
+    o.counterSlots+=counters;o.counterHeavy+=Number(counters*2>=s.offers.length);
+    o.thin+=Number(s.offers.length-counters<=3);
+    o.missingCounterDays+=Number(need.some(h=>!items.some(it=>G.Relics.counter(it,[h]))));}
+   /* Reroll is a sink the engaged policies never touched. A spender takes one when the sheet is
+      poor for today's Gate and the money is there to act on a better one - the existing action,
+      priced by the existing curve, with nothing about either changed. */
+   if(spend.reroll&&s.money>spend.reroll){
+    const best=s.offers.reduce((a,o)=>o.quantity?Math.max(a,itemValue(null,D.itemBy[o.item],s.dungeons[0])):a,0);
+    if(best<8&&s.money-g.rerollPrice()>spend.reroll){const cost=g.rerollPrice();
+     try{g.reroll();act();out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}catch(e){}}}
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
    const offers=s.offers.map((o,i)=>({o,i})).sort((a,b)=>{const v=o=>itemValue(null,D.itemBy[o.item],s.dungeons[0])/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;return v(b.o)-v(a.o);});
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
-   else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:2)+2)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=140){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;continue;}try{g.setQuantity(i,(s.cart?.[i]||0)+1);act();(out.items[o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}}
+   else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;continue;}
+    /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
+       warehouse ceiling - and setQuantity throws for it. Counting only the pre-check reported a
+       flat zero while the ceiling was really binding, so the throw is counted here too. */
+    try{g.setQuantity(i,(s.cart?.[i]||0)+1);act();(out.items[o.item]??={ordered:0,sold:0}).ordered++;}
+    catch(e){if(String(e?.message||'').includes('창고'))out.capacityBlocked++;}}}
    g.confirmOrder();act();day.peak+=s.inventory.length;g.open();act();
   }else if(s.phase==='sell'){
    const n=g.current();if(!engagement.sell){g.depart();act();continue;}if(policy==='neglect'&&n.level<Math.max(...s.npcs.filter(x=>x.alive).map(x=>x.level))-2){g.depart();act();continue;}
@@ -185,7 +233,10 @@ function playRun(g,out,ctx){
     out.deepSponsor+=cost;out.deepCosts.push(cost);
     const byR=out.deepByRarity[n.rarity]??={takes:0,gold:0,level:0};byR.takes++;byR.gold+=cost;byR.level+=n.level;
     const band=n.level<5?'1-4':n.level<10?'5-9':n.level<15?'10-14':'15+';
-    const byL=out.deepByLevel[band]??={takes:0,gold:0};byL.takes++;byL.gold+=cost;}
+    const byL=out.deepByLevel[band]??={takes:0,gold:0};byL.takes++;byL.gold+=cost;
+    /* Who was sponsored, and what became of them. A sponsorship is an investment in one
+       adventurer, so the sink can only be judged next to the growth and the Final seat it buys. */
+    (nominees[n.id]??={levelAtNomination:n.level,rarity:n.rarity,cost:0}).cost+=cost;}
    const d=g.claimedGateFor(n);let attempts=0;
    while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0)});}
    options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
@@ -212,8 +263,13 @@ function playRun(g,out,ctx){
     out.overhead.coreRarity.push(core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0);}
    /* The opening stock is the only stock a meta-farm run ever holds; turning it into cash on
       the first Closing is an ordinary 재고 정리 action and buys more days per interaction. */
-   if(engagement.liquidateOpening)while(s.inventory.length){g.liquidate(s.inventory[0].id);act();}
-   while(s.money<0&&s.inventory.length){g.liquidate(s.inventory[0].id);act();}
+   /* 재고 정리 is now a Closing-only rescue, capped per Run, so the adversarial policy can no
+      longer cash the opening shelf out on DAY 1 - it can only trade its way out of a short
+      Closing, the same as anyone else. The loop stops when the till is square or the rule
+      refuses, and the refusal is what ends a Run that has spent its three rescues. */
+   const rescueBefore=s.rescueUsed||0;
+   while(s.money<0&&s.inventory.length&&g.liquidate(s.inventory[0].id))act();
+   if((s.rescueUsed||0)>rescueBefore){out.rescue.events++;out.rescue.gold+=s.daily.liquidation||0;}
    /* ECONOMY_ORDER §D29 CLOSING -> D30 PREP START GOLD. Sampled after the D29 settlement and
       before any D30 preparation spend, which is the only point that answers whether D30 choices
       are constrained. Measurement only. */
@@ -249,6 +305,7 @@ function playRun(g,out,ctx){
   out.goldOut.order+=d.spent||0;out.goldOut.operating+=d.operating||0;
   out.goldOut.relic+=d.relicSpent||0;out.goldOut.deepSponsor+=d.deepSponsor||0;
   out.goldOut.commission+=d.commission||0;out.goldOut.waste+=d.wasteCost||0;
+  out.goldOut.reroll+=d.rerollSpent||0;
   if(d.operating){out.overhead.samples.push(d.operating);
    (out.overhead.byBand[d.day<=10?'D1-10':d.day<=20?'D11-20':'D21-30']??=[]).push(d.operating);}
  }
@@ -269,6 +326,15 @@ function playRun(g,out,ctx){
  /* Measurement only for the death limit (Stage 9 baseline 10, not a settled number): how many
     a Run loses, how often that ends one, on which Day, and how the four endings divide. The
     production rule reads D.balance.deathLimit - nothing here feeds back into play. */
+ /* What each sponsorship bought: the Levels that adventurer went on to gain, whether they lived,
+    and whether they took one of the three Final seats. */
+ for(const [id,rec] of Object.entries(nominees)){
+  const n=s.npcs.find(x=>x.id===id),d=out.deepNominee;
+  d.count++;d.cost+=rec.cost;d.levelAtNomination+=rec.levelAtNomination;d.rarity+=rec.rarity;
+  if(n){d.levelAtEnd+=n.level;d.grew+=n.level-rec.levelAtNomination;d.alive+=Number(n.alive);
+   d.finalSeat+=Number((s.team||[]).includes(id));}}
+ out.deepNominee.finalSeats+=(s.team||[]).length;
+ out.rescue.used.push(s.rescueUsed||0);out.rescue.runs+=Number((s.rescueUsed||0)>0);
  out.deathsPerRun.push(s.stats.deaths);
  const byDeaths=s.stats.deaths>=D.balance.deathLimit;
  out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
