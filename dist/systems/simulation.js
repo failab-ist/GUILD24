@@ -142,6 +142,28 @@ function playRun(g,out,ctx){
  const nominees={};
  /* Per-Day flags for the shortage and capacity metrics, cleared as each Day's ORDER opens. */
  let capacityHit=false,depletedToday=false;
+ /* The candidate order the ordering loop below uses. Shared with the planner so the two cannot
+    drift: whatever the loop would work through is what the plan walks. */
+ const sortedOffers=()=>s.offers.map((o,i)=>({o,i})).sort((a,b)=>{
+  const v=o=>itemValue(null,D.itemBy[o.item],s.dungeons[0])/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;
+  return v(b.o)-v(a.o);});
+ /* What that loop would spend on the sheet as it stands, computed without touching any state.
+    Same rounds, same stock target, same floor, same capacity rule - it is the ordering loop,
+    dry. The reroll decision leaves room for this, so looking again can never cost the store the
+    money it was about to buy stock with. Prices are summed as listed; the cart's relic quote can
+    come out slightly under, which makes the plan a conservative estimate rather than a loose one. */
+ const plannedOrderSpend=(sorted,money)=>{
+  let cost=0,count=0;const left={};
+  const target=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack;
+  for(let round=0;round<4;round++)for(const {o,i} of sorted){
+   if(s.inventory.length+count>=target)return cost;
+   const remaining=left[i]===undefined?o.quantity:left[i];
+   if(!remaining)continue;
+   if(money-cost-o.price<spend.cashFloor)continue;
+   if(s.inventory.length+count+1>g.capacity())continue;
+   left[i]=remaining-1;cost+=o.price;count++;
+  }
+  return cost;};
  const originalOffers=g.generateOffers.bind(g);g.generateOffers=(opts)=>{
   const armed=(s.pity.counter||0)>=3||g.has('expeditionCert');
   const r=originalOffers(opts);if(armed)out.offerShape.pityFired++;return r;};
@@ -223,20 +245,22 @@ function playRun(g,out,ctx){
     o.counterSlots+=counters;o.counterHeavy+=Number(counters*2>=s.offers.length);
     o.thin+=Number(s.offers.length-counters<=3);
     o.missingCounterDays+=Number(need.some(h=>!items.some(it=>G.Relics.counter(it,[h]))));}
-   /* Take this sheet or pay to look again. The same poor-sheet test as before, applied after
-      every reroll rather than once, so each further payment is weighed against the sheet it
-      would replace. It is not "reroll until the wanted item appears": it stops the moment the
-      sheet is no longer poor, and the doubling price against a fixed floor bounds the rest. */
+   /* Take this sheet or pay to look again. Same poor-sheet test as before, re-applied after each
+      reroll, and the price is now weighed against what the store is about to spend on stock as
+      well as against the floor: the till has to still clear cashFloor AFTER both the next reroll
+      and the order this sheet would produce. That is what stops looking from eating the buying.
+      Not "reroll until the wanted item shows up" - it stops the moment the sheet is not poor. */
    if(spend.reroll){let used=0;
     const poor=()=>s.offers.reduce((a,o)=>o.quantity?Math.max(a,itemValue(null,D.itemBy[o.item],s.dungeons[0])):a,0)<8;
-    while(poor()&&s.money-g.rerollPrice()>=spend.cashFloor&&used<20){
-     const cost=g.rerollPrice();
+    while(poor()&&used<20){
+     const cost=g.rerollPrice(),planned=plannedOrderSpend(sortedOffers(),s.money);
+     if(s.money-cost-planned<spend.cashFloor)break;
      try{g.reroll();}catch(e){break;}
      act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}
     out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
-   const offers=s.offers.map((o,i)=>({o,i})).sort((a,b)=>{const v=o=>itemValue(null,D.itemBy[o.item],s.dungeons[0])/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;return v(b.o)-v(a.o);});
+   const offers=sortedOffers();
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
    else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;capacityHit=true;continue;}
     /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
