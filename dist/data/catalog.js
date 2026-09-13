@@ -164,7 +164,7 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
     rounded to 10G. Who you send is the decision, so the price is the NPC's rarity and current
     Level and nothing else - not the Gate Tier, not the Day, not the Deep Power, not any item
     price, and not a hidden worth score. Stage 9 measurement baseline. */
- sponsorBase:250,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
+ sponsorBase:350,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
  successExp:40,greatExp:90,successWallet:60,greatWallet:150};
 
 /* Stage 10, approved. Until now every field was null and the production Traits were inert,
@@ -190,7 +190,7 @@ G.DATA.bossTuning={
 /* fireCombat is the §O easing of the fire Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
    the harness without editing production. The value is unchanged by that move. */
-G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:30,easterChance:.01,fireCombat:.92};
+G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.92};
 /* ECONOMY_ORDER §PURCHASE INTENT (Stage 10, approved).
    `mult` is what the customer is charged and is unchanged. `intentMult` is the price the
    customer JUDGES the offer at - the purchase-intent threshold. For 할인 and 바가지 the two are
@@ -208,9 +208,11 @@ G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.1
 
 /* Three shapes of the ordering decision, named here so a balance candidate can be measured
    against them from the harness without a production edit: how many candidates a Day offers,
-   how much the store can hold, and what it opens with. Values are exactly what the code carried
-   inline before - 6 offers, 24 slots, six opening items - and nothing about them moves here. */
-G.DATA.balance.orderOffers=6;G.DATA.balance.warehouse=24;
-G.DATA.openingStock=[['rice',2],['water',2],['bandage',1],['potion',1]];
+   how much the store can hold, and what it opens with. v2.5 final: 6 candidates, 18 slots and a
+   four-item opening shelf. The five-arm ablation kept six candidates - a five-slot sheet cost
+   5-8 points of skilled D30 reach and raised rescue dependence by 7 - and took the 18 slots,
+   which produce about one capacity decision per eight order Days at almost no survival cost. */
+G.DATA.balance.orderOffers=6;G.DATA.balance.warehouse=18;
+G.DATA.openingStock=[['rice',1],['water',1],['bandage',1],['potion',1]];
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);

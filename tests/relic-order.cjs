@@ -7,16 +7,18 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const copy=x=>JSON.parse(JSON.stringify(x));
 function fresh(seed='relic-order'){const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g;}
 
-test('ORD-Q08: base Full-offer Reroll follows the 30/60/120/240 curve and resets daily',()=>{
+test('ORD-Q08: base Full-offer Reroll doubles within the Day and resets the next morning',()=>{
  const g=fresh();g.beginOrder();g.run.facilities=[];
- for(const price of [30,60,120,240]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
+ const base=DATA.balance.rerollBase;
+ for(const price of [base,base*2,base*4,base*8]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
  g.run.day++;g.morning();g.beginOrder();g.run.facilities=[];
- assert.equal(g.rerollPrice(),30,'next Day resets the cost');
+ assert.equal(g.rerollPrice(),base,'next Day resets the cost');
 });
 
 test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free and consumes its step',()=>{
  const g=fresh('reroll-relic');g.beginOrder();g.run.facilities=['delivery'];
- for(const price of [0,60,120,240]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
+ const base=DATA.balance.rerollBase;
+ for(const price of [0,base*2,base*4,base*8]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
  g.run.day++;g.morning();g.beginOrder();g.run.facilities=['delivery'];
  assert.equal(g.rerollPrice(),0,'next Day restores the free first Reroll');
 });

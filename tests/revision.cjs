@@ -56,14 +56,15 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
  // recorded reason: the 200-name pool changed how often `addNPC` re-rolls a colliding name,
  // and the Rare Reference roll added one always-drawn value per customer created. A move here
  // that no intended RNG change explains means something leaked into the run stream.
- /* Stage 10 re-baselined these. The Job Mastery spawn bonus draws once per NPC created - always,
-    including at Mastery 0, so the stream cannot depend on an account's progress - and start()
-    creates nine, so the whole run stream shifted. That is the only sanctioned move in this
-    adoption; any future change here without one to point at means something leaked. */
+ /* Stage 10 re-baselined these once for the Job Mastery spawn roll. The v2.5 final adoption
+    moved them again, for one reason: the opening shelf is four items instead of six, and each
+    stocked item draws an id from the run stream, so two draws that used to happen before the
+    roster is built no longer do. Any future move here without a change to point at means
+    something leaked into the run stream. */
  for(const [seed,order,intro] of [
-  ['sig-0',['slime','snow','crypt','fire','spider'],[5,9]],
-  ['sig-1',['slime','spider','crypt','snow','fire'],[6,12]],
-  ['sig-2',['slime','snow','spider','crypt','fire'],[5,10]]]){
+  ['sig-0',['fire','snow','slime','spider','crypt'],[6,11]],
+  ['sig-1',['fire','crypt','snow','spider','slime'],[6,12]],
+  ['sig-2',['fire','slime','spider','crypt','snow'],[7,8]]]){
   const g=new Game();g.autosave=false;g.start(seed);
   assert.deepEqual(g.run.familyOrder,order,seed+' still draws the same Family order');
   assert.deepEqual(g.run.familyIntro,intro,seed+' still draws the same Family introduction Days');
