@@ -14,7 +14,8 @@ const D=globalThis.DATA,seeds=Number(process.argv[2])||300;
    exactly that ambiguity: fire success rose while every other Family rose with it. */
 const ARMARG=(process.argv.find(a=>a.startsWith('--arm='))||'').split('=')[1]
  ||(process.argv.includes('--candidate')?'all':'');
-const USE={e1:ARMARG==='e1'||ARMARG==='all',f1:ARMARG==='f1'||ARMARG==='all',h1:ARMARG==='h1'||ARMARG==='all'};
+const has=k=>ARMARG===k||ARMARG==='all'||(ARMARG==='f1h1'&&(k==='f1'||k==='h1'));
+const USE={e1:has('e1'),f1:has('f1'),h1:has('h1')};
 const CANDIDATE=USE.e1||USE.f1||USE.h1;
 
 /* The next balance pass, E1 + F1 + H1, injected HARNESS-ONLY. Nothing below is written to the
@@ -80,7 +81,7 @@ console.log('== arm:',ARM,'==');
 /* Two play qualities, because the targets are written against the first of them. `beginner` is
    the first-run-like policy the Fresh D30 target is read from; `balanced` is skilled play, an
    analysis axis rather than a target. Both are heuristics, not people. */
-const POLICIES=[['beginner','배우는 중'],['balanced','숙련']];
+const POLICIES=[['beginner','배우는 중'],['balanced','숙련'],['spender','숙련+지출']];
 console.log('tier'.padEnd(20),'정책      등급 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
 for(const [policy,policyLabel] of POLICIES)
 for(const t of TIERS){
@@ -100,7 +101,10 @@ for(const t of TIERS){
   familyJob:r.familyJob,bossJob:r.bossJob,npcLevel:r.npc.alive?r.npc.level/r.npc.alive:0,
   overheadByBand:r.overheadByBand,bossRuns:r.bossRuns,modes:r.modes,
   goldInTotal:r.goldInTotal,goldOutTotal:r.goldOutTotal,relicSpendPerRun:r.relicSpend/seeds,
-  refusal:r.refusal,saleGap:r.saleGap,stockouts:r.stockouts,capacityBlocked:r.capacityBlocked};
+  refusal:r.refusal,saleGap:r.saleGap,stockouts:r.stockouts,capacityBlocked:r.capacityBlocked,
+  offerShape:r.offerShape,deepNominee:r.deepNominee,deepSkippedPerRun:r.deepSkippedPerRun,
+  deepCostMedian:r.deepCostMedian,deepCostP25:r.deepCostP25,deepCostP75:r.deepCostP75,
+  deepByRarity:r.deepByRarity,deepByLevel:r.deepByLevel,deepDaysPerRun:r.deepDaysPerRun};
  out.tiers.push(row);
  console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(row.grade).padStart(2),String(row.mastery).padStart(4),
   String(row.distinct).padStart(6),pct(row.reach10).padStart(8),pct(row.reach20).padStart(7),

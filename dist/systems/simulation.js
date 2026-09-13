@@ -77,7 +77,7 @@ function blank(runs,policy,pricing,build){
   offerShape:{days:0,slots:0,unique:0,dupes:0,counterSlots:0,counterHeavy:0,pityFired:0,
    missingCounterDays:0,rerolls:0,rerollSpend:0,thin:0},
   deepNominee:{count:0,cost:0,levelAtNomination:0,levelAtEnd:0,grew:0,alive:0,finalSeat:0,rarity:0,finalSeats:0},
-  rescue:{events:0,gold:0,runs:0,used:[]},
+  rescue:{events:0,gold:0,items:0,runs:0,used:[]},
   reachBy:{10:0,20:0,30:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
@@ -267,9 +267,13 @@ function playRun(g,out,ctx){
       longer cash the opening shelf out on DAY 1 - it can only trade its way out of a short
       Closing, the same as anyone else. The loop stops when the till is square or the rule
       refuses, and the refusal is what ends a Run that has spent its three rescues. */
-   const rescueBefore=s.rescueUsed||0;
-   while(s.money<0&&s.inventory.length&&g.liquidate(s.inventory[0].id))act();
-   if((s.rescueUsed||0)>rescueBefore){out.rescue.events++;out.rescue.gold+=s.daily.liquidation||0;}
+   const rescueBefore=s.rescueUsed||0,liquidBefore=s.daily.liquidation||0;
+   while(s.money<0&&s.inventory.length&&g.liquidate(s.inventory[0].id)){act();out.rescue.items++;}
+   if((s.rescueUsed||0)>rescueBefore){out.rescue.events++;
+    /* The rescue happens AFTER closeDay has already written the day into reportHistory, so the
+       gold it raised is not in that row - it is counted here or it is counted nowhere. */
+    const raised=(s.daily.liquidation||0)-liquidBefore;
+    out.rescue.gold+=raised;out.goldIn.liquidation+=raised;}
    /* ECONOMY_ORDER §D29 CLOSING -> D30 PREP START GOLD. Sampled after the D29 settlement and
       before any D30 preparation spend, which is the only point that answers whether D30 choices
       are constrained. Measurement only. */
