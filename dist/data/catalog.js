@@ -167,30 +167,35 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
  sponsorBase:350,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
  successExp:40,greatExp:90,successWallet:60,greatWallet:150};
 
-/* Stage 10, approved. Until now every field was null and the production Traits were inert,
+/* v2.5 final (F1). The Stage 10 factors ease once more, as the five-arm ablation measured them:
+   PRIDE .85->.90, ENVY .88->.92, GLUTTONY .70->.80, LUST .90->.95, GREED shortfall cap 20->15,
+   SLOTH 225/195/180/165 -> 220/190/175/160. WRATH's 200 and the revenue target do not move, so
+   the baseline Boss is unchanged and only the gimmicks soften. SLOTH is still the hardest Boss
+   by a wide margin and ships that way - that is on the playtest follow-up, not in this change.
+   Stage 10, approved. Until now every field was null and the production Traits were inert,
    which is why the Stage 9 per-Boss spread was Family and Gate variance rather than gimmick.
    greedRevenueTarget is the one value that could not be approved in advance: it is 90% of the
    median cumulative gross sales an engaged Run makes under the NEW economy, so it was measured
    after the rest of this adoption landed and filled in from that measurement. */
 G.DATA.bossTuning={
- prideCombatFactor:0.85,        // PRIDE: every participant's Final 투력 x this
- envyStatFactor:0.88,           // ENVY: the single ace's four Stats x this
+ prideCombatFactor:0.90,        // PRIDE: every participant's Final 투력 x this
+ envyStatFactor:0.92,           // ENVY: the single ace's four Stats x this
  greedRevenueTarget:18800,      // GREED: cumulative gross sales the Run is measured against
                                 //   = 90% of the median engaged Run's gross sales measured on
                                 //   the Stage 10 economy (median 20,909 across the engaged
                                 //   strategies, 200 seeds each), rounded to 100G.
- greedShortfallCap:20,          // GREED: the most that a total shortfall can add to Boss Power
+ greedShortfallCap:15,          // GREED: the most that a total shortfall can add to Boss Power
  gluttonyRarityThreshold:2,     // GLUTTONY: supplies at or above this rarity are attenuated
- gluttonyStatFactor:0.70,       // GLUTTONY: their raw-Stat contribution x this
- lustStatFactor:0.90,           // LUST: a non-regular participant's four Stats x this
- slothBossPower:[225,195,180,165] // SLOTH: effective Boss Power by break count [0,1,2,3]
+ gluttonyStatFactor:0.80,       // GLUTTONY: their raw-Stat contribution x this
+ lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
+ slothBossPower:[220,190,175,160] // SLOTH: effective Boss Power by break count [0,1,2,3]
 };
 /* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
    Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
 /* fireCombat is the §O easing of the fire Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
    the harness without editing production. The value is unchanged by that move. */
-G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.92};
+G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90};
 /* ECONOMY_ORDER §PURCHASE INTENT (Stage 10, approved).
    `mult` is what the customer is charged and is unchanged. `intentMult` is the price the
    customer JUDGES the offer at - the purchase-intent threshold. For 할인 and 바가지 the two are

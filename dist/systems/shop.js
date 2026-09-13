@@ -3,7 +3,9 @@
    a wide margin - the `one Family is always hardest` clause of DUNGEON_HAZARD BALANCE TARGET.
    Its combat requirement is eased; its Hazard identity and Stat mapping are untouched, so what
    makes a fire Gate a fire Gate is unchanged. Provisional: re-measured, and if FIRE is still
-   consistently worst by 10%p a further candidate is reported rather than applied. The factor
+   consistently worst by 10%p a further candidate is reported rather than applied. v2.5 final
+   (H1): .92 -> .90, which narrowed the gap to the next Family by about a third. fire is still
+   the hardest Family and ships that way, on the playtest follow-up. The factor
    itself lives in D.balance.fireCombat so the balance harness can compare a candidate against
    it without a production edit - the same reason guarantee.minPrice carries a name. */
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
