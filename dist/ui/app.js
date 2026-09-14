@@ -314,7 +314,7 @@ function saleScreen(){
  +'</section>'
  +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
-  +'<div class="dossier">'+returningSummary(n)+destPlate(n)+statGrid(n)+traitRows(n)+readout(n)+deepOfferUI(n)+specialUI()+'</div>'
+  +'<div class="dossier">'+returningSummary(n)+statGrid(n)+traitRows(n)+deepOfferUI(n)+specialUI()+'</div>'
   +shelf()+ownedRelicView()
  +'</main>'
  /* D-34. Every price on this screen is a judgement against what the store has, and the
@@ -579,8 +579,11 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
 /* Sparse player-facing grouping only where the distinction helps comparison. Internal
    category/role taxonomy stays hidden; this reads the item's actual potion marker. */
 const itemKind=it=>it.effects?.potion?'포션':'';
-function shelf(isFinal=false){const s=game.run,stocks=groupStock();
- return '<section class="shelf"><div class="shelf-head"><h2>'+(isFinal?'대원에게 보급':'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span></div><div class="goods">'
+function shelf(isFinal=false){
+   const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
+   return '<section class="shelf">'
+   +(n?'<div class="core-decision-env">'+destPlate(n)+readout(n,st?st.item:null)+'</div>':'')
+   +'<div class="shelf-head"><h2>'+(isFinal?'대원에게 보급':'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span></div><div class="goods">'
  +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it);
   return '<button class="good r'+it.rarity+(open?' open':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
   +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+Presentation.rows(it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · ')+'</span></span>'

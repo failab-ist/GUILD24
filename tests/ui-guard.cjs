@@ -117,7 +117,7 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  /* The Director review moved the bag out of the dossier and up beside the adventurer, so the
     lower column no longer grows a row just to repeat slot information. It is read with the
     customer now rather than after their Traits; everything below it keeps its order. */
- const order=['Scene.shelfStrip()','standee(n)','kitLine(n)','waitingLine(','returningSummary(n)','destPlate(n)','statGrid(n)','traitRows(n)','readout(n)','shelf()'];
+ const order=['Scene.shelfStrip()','standee(n)','kitLine(n)','waitingLine(','returningSummary(n)','statGrid(n)','traitRows(n)','shelf()'];
  let at=-1;for(const part of order){const i=sale.indexOf(part);assert.ok(i>at,'Sale stacks '+part+' in canonical mobile order');at=i;}
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
  assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
