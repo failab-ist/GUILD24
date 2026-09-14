@@ -1,86 +1,65 @@
-# 던전 앞 편의점 · 길드24 v2.4
+# 던전 앞 편의점 · 길드24
 
-던전 앞 편의점을 운영하는 게임입니다. 모험가에게 무엇을 얼마에 파는지가 그들의 원정 결과를 바꾸고,
-30일 뒤 마왕성 원정에 함께 갈 사람을 만듭니다.
+브라우저에서 실행되는 모바일 우선 싱글플레이 상점 운영 게임.
 
-v2.4 설계서 전체를 반영한 빌드입니다. 핵심 시스템 구현과 자동 회귀 검증이 완료됐고,
-최종 밸런스 확정과 사람의 반복 플레이 판정은 남아 있습니다.
-반영 내용과 검증 결과 전문은 `reports/V2_4_FINAL_REPORT.md`에 있습니다.
+## Project
 
-## 실행
+- Product / design direction: `GAME_VISION.md`
+- Contributor / agent workflow: `AGENTS.md`
+- Current work state: `WORK_STATE.md`
+- Third-party licenses: `LICENSES.md`
 
-`dist/index.html`을 브라우저로 엽니다. 설치·로그인·외부 API·외부 폰트 없이 실행됩니다.
-폰트와 애니메이션 라이브러리는 모두 빌드 안에 포함돼 있습니다(`reports/ASSETS.md`).
-휴대전화에서 파일 실행이 제한되면 정적 웹서버에 올려 사용하세요.
+## Current Design Truth
 
-개발용 서버는 `node tools/preview.cjs`입니다. 저장은 브라우저와 실행 주소별로 분리됩니다.
-주소나 기기를 옮길 때 설정에서 JSON 저장 내보내기·가져오기를 사용하세요. 기본 소리는 꺼져 있습니다.
+Design SSOT entry point:
 
-## 한 Run
+- `design_ssot/SPEC_INDEX_v2.6.1.md`
 
-1. DAY0에 점포지원 3개 중 하나를 무료로 선택합니다.
-2. **아침** — 오늘의 사건, 열린 게이트와 알려진 위험, 예상 방문 인원을 확인합니다.
-   위험마다 원정대를 어떻게 압박하는지 설명이 붙습니다.
-3. **발주** — 자금 흐름(보유 · 선택 · 발주 후 잔액)을 보며 수량을 정합니다.
-   다음 날 Tier 확률 예보가 보조 정보로 제공되고, 전체 후보 교환 비용은 30 → 60 → 120 → 240입니다.
-4. **판매** — 손님이 한 번에 한 명씩 옵니다. 손님 신원은 영업 전에 공개되지 않습니다.
-   바가지 150% · 정가 100% · 반값 50% 중 하나로 팔며, 보급은 기본 2칸, Lv10부터 3칸입니다.
-   같은 상품은 유통기한이 가까운 것부터 나갑니다.
-5. **밤** — 모험가별 결과를 무슨 일이 있었는지 → 왜 → 무엇이 바뀌었는지 순서로 읽습니다.
-   건너뛰어도 이미 확정된 결과와 보상은 달라지지 않습니다.
-6. **마감** — 매출·원가·마진·운영비·폐기·잔액을 정리합니다.
-7. DAY5·10·15·20·25·30에 점포지원 후보 3개가 갱신됩니다. 후보와 가격은 저장되며
-   다음 갱신 전까지 보류할 수 있습니다.
-8. **DAY30** — 두 개의 던전 Family가 파티 구성 전에 공개됩니다. 마지막 점포지원·발주·보급을
-   마친 뒤 최대 3명을 마왕성으로 보냅니다. 판정은 한 번뿐이며, 클리어 후 추가 판정은 없습니다.
-   생존자가 3명 미만이면 2명 또는 1명으로도 출전합니다.
+Use the owner Spec / QA routed by that index.
+Old versioned specs are historical unless the current owner explicitly declares them as `BASE_DOCUMENT`.
 
-허세를 부리는 손님은 실제 목적지를 바꾸지 않습니다. 더 위험한 곳으로 간다고 과장할 수 있고,
-바가지 구매 의사가 상대적으로 높습니다. 구매 보장이나 지갑 제한 면제는 아닙니다.
+Current corrective execution document:
 
-## v2.4의 주요 내용
+- `GUILD24_v2.6.1_ADOPTION_RECOVERY_PLAN.md`
 
-- 던전 위험 **9종**(독·속박·부식·진창·화염·공포·어둠·냉기·화이트아웃). 모두 대응 상품으로 막을 수
-  있는 것으로 통일했습니다. 위험마다 주력 대응 1종 + 대안 2종 이상이 존재합니다.
-- 상품 **30종**. 음식·음료의 지속력은 "보급"이라는 하나의 값으로 통일했습니다.
-- 특성 **30종**, 상호배제 **9쌍**. 품질 등급 라벨 대신 효과의 의미를 설명합니다.
-  화면에 보이는 특성이 실제로 원정 결과에 작용하는 특성과 일치합니다.
-- 이벤트 **22종**, 하루 발생 확률 35%. 적용될 수 없는 이벤트는 뽑히지 않습니다.
-- 점포지원 **30종**, 6개 운영 방향, 7번의 갱신. 내부 분류 용어는 화면에 나오지 않습니다.
-- 5개 던전 Family × 3 Tier. Tier II·III는 확률적으로 최소 보급량을 요구하며,
-  모자라면 원정대 전체가 하나의 페널티를 받습니다.
-- 최종 원정은 공개된 두 Family의 위험이 합쳐진 하나의 무대에서 한 번만 판정합니다.
-- 화면은 단계마다 다른 장소입니다. 360px 기준으로 작성했고 모든 조작 대상은 최소 44px입니다.
-- 저장 형식 v5. 이전 형식은 거부되며 원본은 보존됩니다.
-  어느 단계에서 저장하고 다시 불러와도 끊지 않고 진행한 판과 같은 결과로 이어집니다.
+Future v2.7 planning (not part of v2.6.1 recovery):
 
-## 명령
+- `GUILD24_v2.7_CORE_PLAY_REVISION_PLAN.md`
 
-| 명령 | 하는 일 |
-| --- | --- |
-| `npm test` | 전체 자동 회귀 검증 (외부 설치 불필요) |
-| `npm run dev` | 개발용 정적 서버 |
-| `npm run balance` | 새 계정 기준 다중 전략·다중 시드 시뮬레이션 |
-| `npm run longitudinal` | 계정이 성장하는 연속 Run 시뮬레이션 |
-| `npm run report` | 시뮬레이션 결과로 밸런스 보고서 재생성 |
-| `npm run qa:visual` | 실제 브라우저 화면 촬영 검증 |
-| `npm run assets` | 폰트·라이브러리 재수집 |
+Copy extraction baseline:
 
-## 문서
+- `V2_6_COPY_FULL_AUDIT.md`
+  - reference/extraction only; not Design Truth
 
-| 문서 | 내용 |
-| --- | --- |
-| `reports/V2_4_FINAL_REPORT.md` | **v2.4 최종 반영 및 검증 보고서 — 여기부터 읽으세요** |
-| `reports/BALANCE.md` | 시뮬레이션 측정 결과 전문 |
-| `reports/AUDIT.md` | 발견된 문제의 분류 기록 (구현 버그 / 밸런스 관찰) |
-| `reports/_checkpoint_log.md` | 단계별 작업 기록 |
-| `reports/ASSETS.md` | 포함된 폰트·라이브러리의 출처와 라이선스 |
-| `canonical/` | 설계 문서 (읽기 전용) |
+## Runtime Source
 
-## 아직 완료로 판정하지 않은 것
+- `dist/`
+- root `index.html` redirects to `dist/index.html`
+- no build step is required for runtime
 
-- 최종 난이도(보스 파워)와 최소 참여 파밍 효율은 측정을 마쳤고 **사용자 판단 대기 중**입니다.
-  이번 채택에서 밸런스 수치는 하나도 바꾸지 않았습니다.
-- 사람이 DAY1부터 DAY30까지 반복 플레이하며 느끼는 애착·가격의 아까움·죽음의 납득 가능성.
-- 승인된 203종 이름 패키지와 프로덕션 모험가 에셋 풀은 아직 반영되지 않았습니다.
-  현재 포함된 5장은 배치 검증용 예시입니다.
+## Development
+
+Use the scripts defined in `package.json`.
+
+Primary commands:
+
+- `npm test`
+- `npm run test:revision`
+- `npm run test:coverage`
+- `npm run test:regression`
+- `npm run test:relic`
+- `npm run test:night`
+- `npm run test:refusal`
+- `npm run measure`
+- `npm run longitudinal`
+- `npm run mastery`
+- `npm run report`
+- `npm run traits`
+- `npm run autoplay`
+- `npm run preview`
+- `npm run ui:test`
+
+## Assets
+
+- `GUILD24_NPC_PRODUCTION/` is the current character production pipeline/reference source.
+- Runtime assets live under `dist/assets/`.
