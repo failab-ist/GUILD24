@@ -543,28 +543,30 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
  return '<div class="clip"></div><div class="form">'
  +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span>'
  +'<span class="seal">'+Scene.seal(48,'#2f7a4d')+'</span></div>'
- // the ledger: labels step back, the three figures align on one column, the result leads
- +'<div class="ledger" id="order-register" aria-label="발주 자금">'
- +'<div><span>보유 골드</span><b>'+fmt(s.money)+'</b></div>'
- +'<div class="pick"><span>선택 발주</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
- +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
- // two groups: what today needs, and the signal for tomorrow's order
- +'<div class="brief"><div class="when"><span class="k">오늘</span>'
- +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
- +'<div class="when"><span class="k">내일</span><p class="tier">'+tierLine()+'</p></div></div>'
- +stockBrief()
- +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
-  return '<li class="line r'+it.rarity+(q?' on':'')+'">'
-  +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
-  +Scene.crate(Art.itemIcon(it.id,30),46)
-  +'<span class="col">'
-   +'<span class="nm"><b>'+E(it.name)+'</b>'+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
-   /* UI-Q39: `야외장비 · 능력 보강 / 전문 대응` is the internal taxonomy the catalogue is
-      organised by, not something a player decides with - and it never reaches a render path.
-      The data stays: ordering weights and Relic conditions read `category`. What the row
-      needs is right underneath it, in the effects summary. */
-   +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
-   +'<span class="have">매입 '+o.price+'G · 이익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+'</span>'
+   +'<div class="ledger" id="order-register" aria-label="발주 대금">'
+   +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
+   +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'
+   +'<div><span>보유 골드</span><b>'+fmt(s.money)+'</b></div>'
+   +'<div class="pick"><span>발주 금액</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
+   +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
+   // two groups: what today needs, and the signal for tomorrow's order
+   +'<div class="brief"><div class="when"><span class="k">오늘</span>'
+   +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
+   +'<div class="when"><span class="k">내일</span><p class="tier">'+tierLine()+'</p></div></div>'
+   +stockBrief()
+   +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
+    const sl = it.days ? (it.days + Relics.shelf(game, it)) : null;
+    return '<li class="line r'+it.rarity+(q?' on':'')+'">'
+    +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
+    +Scene.crate(Art.itemIcon(it.id,30),46)
+    +'<span class="col">'
+     +'<span class="nm"><b>'+E(it.name)+'</b>'+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
+     /* UI-Q39: `야외채집 · 마력 보강 / 주문 제작` is the internal taxonomy the catalogue is
+        organised by, not something a player decides with - and it never reaches a render path.
+        The data stays: ordering weights and Relic conditions read `category`. What the row
+        needs is right underneath it, in the effects summary. */
+     +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
+     +'<span class="have">매입 '+o.price+'G · 수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+' · 유통기한 '+(sl?sl+'일':'없음')+'</span>'
   +'</span>'
   +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'

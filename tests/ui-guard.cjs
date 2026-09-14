@@ -91,7 +91,7 @@ test('UI-Q03 / UI-Q35: Morning opens on the Event, and every Gate Hazard is expl
 test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hierarchy',()=>{
  const order=fn('orderForm')+fn('orderScreen');
  assert.ok(order.includes('본사 발주')||order.includes('발주서'),'the form is titled as the HQ order');
- for(const label of ['보유','선택','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
+ for(const label of ['운영비(예상)','창고 잔여 칸','보유','발주 금액','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
  assert.ok(order.includes('tierLine()'),'the next-day Tier forecast is present and secondary');
  assert.ok(order.includes('후보 전체 교환'),'the reroll names its full-offer scope');

@@ -46,6 +46,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
   const dayBase=90+2*(this.run.day-1);
   return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}
+ expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
+  const extras=(s.contract==='guild'?20:0)+(s.contract==='premium'?25:0)+(s.dayFacilities?.includes('showcase')?10:0)+(s.dayFacilities?.includes('hub')?35:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  return ev.overheadFree?0:Math.round((this.overheadBase()+extras)/10)*10;}
  has(id){return this.run.facilities.includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
  stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:it.days?this.run.day+it.days+G.Relics.shelf(this,it):null,cost:cost??it.buy});}
