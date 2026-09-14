@@ -958,7 +958,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'closing':game.finishNight();game.save();render();break;
  case'tip':game.account.tutorial??={};game.account.tutorial[id]=true;game.save();render();break;
  case'open':game.open();selected=null;render();break;
- case'select':selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');if(selected)requestAnimationFrame(()=>$('.sale-product.open')?.scrollIntoView({block:'nearest'}));break;
+ case'select':selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');if(selected)requestAnimationFrame(()=>$('.good.open')?.scrollIntoView({block:'nearest'}));break;
  case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}render();break;}
  case'depart':game.depart();selected=null;render();sound(s.phase==='night'?'return':'depart');break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
