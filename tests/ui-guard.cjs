@@ -97,7 +97,7 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(order.includes('후보 전체 교환'),'the reroll names its full-offer scope');
  assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
  assert.ok(order.includes('발주 교환권'),'the free first use is called out');
- assert.ok(/발주 '\+fmt\(game\.cartTotal\(\)\)\+'G · 확정/.test(app),'the docked stamp states the amount');
+ assert.ok(/발주 '\+fmt\([^)]+\)\+'G · 확정/.test(app),'the docked stamp states the amount');
 });
 
 test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{
@@ -809,7 +809,7 @@ test('D-23: every cue the UI asks for exists, and every step of an ordinary day 
  // a store support taken, a result that matters, and the confirmations that end a phase
  const cueFor=action=>{const i=app.indexOf("case'"+action+"'");assert.ok(i>0,action+' is a real action');
   const seg=app.slice(i,app.indexOf("\n case'",i+1));const m=seg.match(/sound\(([^)]*)\)/);return m?m[1]:null;};
- assert.equal(cueFor('finish-order'),"'order'",'confirming the order is the order cue, not a generic click');
+ assert.equal(cueFor('confirm-order'),"'order'",'confirming the order is the order cue, not a generic click');
  assert.equal(cueFor('begin-order'),"'open'",'opening the doors is the shutter going up');
  assert.equal(cueFor('close'),"'close'",'ending the day closes');
  assert.equal(cueFor('liquidate'),"'gold'",'clearing stock is gold coming in');

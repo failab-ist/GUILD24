@@ -533,7 +533,11 @@ function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.leng
     +(left===null?'<em class="keeps">기한 없음</em>':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')+'</ul>'
   :'<p class="none">창고가 비어 있다.</p>')+'</details>';}
 function orderScreen(){
- return stage('order','발주','',orderForm(),'<button class="stamp" data-action="finish-order">'+(game.cartTotal()?'발주 '+fmt(game.cartTotal())+'G · 확정':'영업 시작')+'</button>');
+ const cart = game.cartTotal();
+ return stage('order','발주','',orderForm(),'<div class="row wrap" style="justify-content:center;gap:8px">'
+  +(cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
+  +'<button class="stamp" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>'
+  +'</div>');
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  return '<div class="clip"></div><div class="form">'
@@ -922,7 +926,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'break-seal':game.breakSeal();sound('boss');render();break;
  case'menu':setModal('menu');break;
  case'begin-order':game.beginOrder();sound('open');render();break;
- case'finish-order':game.finishOrder();sound('order');render();break;
+ case'confirm-order':game.confirmOrder();sound('order');render();break;
+ case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
  case'new':contract='standard';setModal('new');break;
  /* Back to the contract screen from the very first store support. The Run has not been played,
