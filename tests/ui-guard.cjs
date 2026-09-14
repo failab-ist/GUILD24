@@ -35,7 +35,7 @@ test('CORE_RUN: the build still runs from the filesystem with one local styleshe
  assert.deepEqual(sheets.map(s=>(s.match(/href="([^"]+)"/)||[])[1]),['ui/ui.css','ui/director-review.css'],
   'exactly the consolidated sheet and the review override, in that order, and nothing else');
  assert.ok(!/https?:\/\//.test(html.replace(/<meta[^>]*>/g,'')),'no external origin is fetched');
- assert.ok((css.match(/^:root\{/gm)||[]).length >= 1,'the sheet defines :root token blocks');
+ assert.equal((css.match(/^:root\{/gm)||[]).length, 3,'the sheet defines :root token blocks');
  for(const dead of ['.stage-grid','.layout{','.store-panel','.sell-toolbar','.statsbar','.item-grid'])
   assert.ok(!css.includes(dead),'dead legacy selector '+dead+' is gone');
 });
@@ -43,7 +43,7 @@ test('CORE_RUN: the build still runs from the filesystem with one local styleshe
 test('UI §RESPONSIVE RULE: the sheet is authored mobile-first',()=>{
  const min=(css.match(/@media\(min-width/g)||[]).length,max=(css.match(/@media\(max-width/g)||[]).length;
  assert.ok(min>=2,'tablet/desktop are added with min-width queries');
- assert.ok(max <= 1,'only specific exceptions use max-width');
+ assert.equal(max, 1,'only specific exceptions use max-width');
  assert.ok(/button\{[^}]*min-height:44px/.test(css),'the 44px touch contract is in the base sheet');
  assert.ok(css.includes('env(safe-area-inset-bottom)')&&css.includes('env(safe-area-inset-top)'),'safe areas are honoured');
 });

@@ -478,6 +478,15 @@ test('RUN-Q13 / NIGHT_CLOSING §SAVE/RESUME: a reload mid-report neither changes
 
 // --- SKIP CONTRACT -----------------------------------------------------------------
 
+test('NIGHT_CLOSING §SKIP CONTRACT: "다음" and "전체 건너뛰기" only, no single skip, nightSkip removed', () => {
+  assert.equal(Presentation.nightSkip, undefined, 'nightSkip API must be completely removed');
+  
+  const app = require('fs').readFileSync('dist/ui/app.js', 'utf8');
+  assert.ok(app.includes("btn('전체 건너뛰기'"), '전체 건너뛰기 UI button must exist');
+  assert.ok(app.includes("'다음'"), '다음 UI button must exist');
+  assert.ok(!app.includes("btn('건너뛰기'"), 'No standalone skip button');
+});
+
 
 test('NIGHT_CLOSING §SKIP CONTRACT: reading every beat and skipping every beat end the same day',()=>{
  const read=fresh('skip-equal'),skip=fresh('skip-equal');
