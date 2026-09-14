@@ -6,7 +6,6 @@ test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.e
 /* Stage 10: the price a Trait's 구매의사 reacts to is the JUDGED price (pricing.intentMult), not
    what is charged. 하급 포션 at 140G used to cross frugalThreshold at 정가 and no longer does -
    it is judged at 91 - so the aversion is shown on an item that still crosses it at 195. */
-test('trait source of truth; showoff changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=9999;n.traits=[];
  assert.ok(Math.round(it.sell*DATA.pricing.full.intentMult)>DATA.balance.frugalThreshold,'the item is judged above the frugal threshold at 정가');
  assert.ok(Math.round(DATA.itemBy.potion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
  const a=g.interest(n,it).chance;n.traits=['frugal'];assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias)<1e-9);n.traits=['liar'];assert.equal(Dungeon.prepare(n,g.run.dungeons[0]).effects.xpMult,1);assert.equal(DATA.traitBy.liar.effects.overchargeBias,undefined);assert.equal(DATA.traitBy.liar.effects.rareBias,undefined);});

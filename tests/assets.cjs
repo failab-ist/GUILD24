@@ -30,7 +30,7 @@ test('the pixel font subset covers every character this build can render',()=>{
  }
  const face=path.join(root,'dist/ui/fonts/Galmuri14.woff2');
  const cmap=execFileSync('python3',['-c',
-  "import sys\nfrom fontTools.ttLib import TTFont\nf=TTFont(sys.argv[1])\nsys.stdout.write(''.join(chr(c) for c in f.getBestCmap()))",face],
+  "import sys\nfrom fontTools.ttLib import TTFont\nf=TTFont(sys.argv[1])\nsys.stdout.buffer.write(''.join(chr(c) for c in f.getBestCmap()).encode('utf-8'))",face],
   {encoding:'utf8',maxBuffer:1<<22});
  const have=new Set(cmap);
  // a character the family itself never carried (data-only symbols) is not a stale subset

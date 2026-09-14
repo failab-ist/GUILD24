@@ -891,8 +891,8 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
   /* Both destructive actions are named here rather than hidden inside 설정, and they are
      named apart: one ends this Run, the other ends everything. The Run one is absent when
      there is no Run to abandon rather than present and inert. */
-  
-  +btn('모든 진행 데이터 삭제','reset','danger')+'</div>';narrow=true;}
+  +(game.run&&!['new','foundation'].includes(game.run.phase)?btn('현재 지점 포기','new','danger'):'')
+  +btn('모든 게임 데이터 초기화','reset','danger')+'</div>';narrow=true;}
  else if(modal==='roster'){title='모험가 수첩';body=rosterList();}
  else if(modal.startsWith('npc:')){title='우리 점포의 모험가';body=npcDetail(modal.slice(4));footer=btn('수첩으로','roster');}
  else if(modal==='codex'){title='도감';body=codex();}
@@ -901,7 +901,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='settings'){title='영업 설정';body=settings();narrow=true;}
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다. 남은 슬롯과 보급을 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
  else if(modal==='retireConfirm'){title='이번 영업을 마감할까요?';body='<p>이 지점의 자금과 모험가는 다음 점포로 이어지지 않습니다.</p>';footer=btn('계속 영업','dismiss')+btn('폐점','retire-go','danger');narrow=true;}
- else if(modal==='resetConfirm'){title='모든 게임 데이터 초기화';body='<p>이 브라우저에 보관된 GUILD24 저장을 전부 지웁니다. 현재 영업, 모험가, 재고, 자금, 점포지원과 함께 직업 숙련 · 마왕 토벌 기록 · 가맹등급 · 몬스터 지식 · 해금과 점주 가이드 진행까지 남지 않습니다.</p><p class="danger-text">되돌릴 수 없습니다. 남기고 싶다면 먼저 저장을 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
+ else if(modal==='resetConfirm'){title='폐업 결재';body='현재의 모든 진행 상황을 포기하고 새로운 상회로 다시 시작합니다. 동의하십니까?';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('폐업 결재','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
  root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${game.run?.phase!=='foundation'&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
@@ -988,7 +988,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'reset':setModal('resetConfirm');break;
  /* Nothing is touched until this point. Erasing every key and starting from Meta.fresh()
     is exactly the first-launch path, so no separate reset state exists to go stale. */
- case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;setModal(null);render();toast(ok?'게임 데이터를 초기화했습니다.':Save.error);break;}
+ case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;setModal(null);render();toast(ok?'폐업 결재가 수리되어 새 상회로 시작합니다.':Save.error);break;}
  case'import-go':$('#save-file').click();break;
 
  }

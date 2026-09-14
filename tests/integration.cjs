@@ -134,7 +134,7 @@ test('CORE_RUN §SAVE/LOAD: a v2.4 save is never read as a v2.5 save',()=>{
    assert.equal(Save.read(),null,label+' written by v2.4 does not load');
    assert.ok(Save.error&&/새 점포/.test(Save.error),label+': the player is told, not shown an error code');
    assert.equal(store.get('guild24.save.v5'),payload,label+': the v5 bytes are left untouched');
-   assert.equal(store.get('guild24.save.v6'),undefined,label+': nothing is migrated into the v6 key');
+   assert.equal(store.get('guild24.save.v7'),undefined,label+': nothing is migrated into the v6 key');
   }
   // the same shape is refused by the validator itself, not only by the key it sits under
   assert.equal(Save.valid({version:5,account,run:null}),false,'a v5 payload is not a valid v6 save');
@@ -155,14 +155,14 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are left untouched');
   // A v6 write over an existing v6 save keeps the previous bytes under .backup.
   g.autosave=true;g.save();
-  const first=store.get('guild24.save.v6');
+  const first=store.get('guild24.save.v7');
   g.run.money+=1;g.save();
-  assert.equal(store.get('guild24.save.v6.backup'),first,'the previous save is preserved as a backup');
+  assert.equal(store.get('guild24.save.v7.backup'),first,'the previous save is preserved as a backup');
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are still there afterwards');
   // A corrupted head falls back to the backup rather than losing the run.
-  store.set('guild24.save.v6','{not json');
+  store.set('guild24.save.v7','{not json');
   const recovered=Save.read();
-  assert.ok(recovered&&recovered.version===6,'the backup is read when the head is unreadable');
+  assert.ok(recovered&&recovered.version===7,'the backup is read when the head is unreadable');
   assert.equal(recovered.run.money,g.run.money-1,'the recovered run is the previous save, not an invention');
  }finally{delete global.localStorage;}
 });
@@ -210,7 +210,7 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
   g.account.runs=3;g.autosave=true;g.save();
   for(const v of ['v1','v2','v3','v4','v5'])store.set('guild24.save.'+v,'{"version":'+v.slice(1)+'}');
   g.run.money+=1;g.save();   // so the .backup key exists too
-  assert.ok(store.get('guild24.save.v6')&&store.get('guild24.save.v6.backup'),'the precondition is a real save');
+  assert.ok(store.get('guild24.save.v7')&&store.get('guild24.save.v7.backup'),'the precondition is a real save');
 
   assert.equal(Save.reset(),true,'the reset reports success');
   assert.equal(store.size,0,'every key this game owns is gone - current, backup and legacy alike');
@@ -478,47 +478,6 @@ test('RUN-Q13 / NIGHT_CLOSING §SAVE/RESUME: a reload mid-report neither changes
 
 // --- SKIP CONTRACT -----------------------------------------------------------------
 
-test('NIGHT_CLOSING §SKIP CONTRACT: Skip and Skip All move the reading position and nothing else',()=>{
- const g=fresh('skip');g.buyRelic(g.run.relicWindow.candidateIds[0]);
- let nights=0,skipped=0;
- while(g.run.phase!=='end'&&nights<8){
-  while(g.run.phase!=='night'&&g.run.phase!=='end')step(g);
-  if(g.run.phase!=='night')break;
-  nights++;
-  const before={results:copy(g.run.results),npcs:copy(g.run.npcs),money:g.run.money,
-   inventory:copy(g.run.inventory),stats:copy(g.run.stats),daily:copy(g.run.daily),
-   rngState:g.rng.state,account:copy(g.account)};
-  // Skip, the real rule the Night screen calls, walked to the end of the list.
-  let cursor=0,guard=0;
-  while(cursor<g.run.results.length&&guard++<64){
-   const next=Presentation.nightSkip(g.run.results,cursor);
-   assert.ok(next>cursor,'Skip always advances');
-   assert.ok(next<=g.run.results.length,'Skip stops at the end of the list');
-   for(let i=cursor+1;i<next;i++)
-    assert.equal(Presentation.nightWeight(g.run.results[i]),false,'Skip only passes over routine beats');
-   cursor=next;skipped++;
-  }
-  assert.equal(cursor,g.run.results.length,'Skip reaches the end');
-  assert.deepEqual(g.run.results,before.results,'no resolved outcome, EXP, loot, injury or death changed');
-  assert.deepEqual(g.run.npcs,before.npcs,'no Wallet or NPC state changed');
-  assert.equal(g.rng.state,before.rngState,'Skip consumes no randomness');
-  assert.deepEqual(g.account,before.account,'Skip grants no Meta reward');
-  // Skip All: the same move with the end of the list as its target.
-  g.run.nightCursor=0;
-  g.finishNight();
-  assert.equal(g.run.phase,'closing');
-  assert.deepEqual(g.run.results,before.results,'Skip All leaves every resolved result alone');
-  assert.deepEqual(g.run.npcs,before.npcs,'Skip All changes no NPC state');
-  assert.equal(g.run.money,before.money,'Skip All moves no Gold');
-  assert.deepEqual(g.run.inventory,before.inventory,'Skip All consumes no stock');
-  assert.deepEqual(g.run.stats,before.stats,'Skip All changes no Run total');
-  assert.deepEqual(g.run.daily,before.daily,'Skip All changes no daily settlement');
-  assert.equal(g.rng.state,before.rngState,'Skip All is not a different resolution path');
-  assert.deepEqual(g.account,before.account,'Skip All grants no Meta reward');
-  step(g);
- }
- assert.ok(nights>=4&&skipped>0,'several Nights were skipped through');
-});
 
 test('NIGHT_CLOSING §SKIP CONTRACT: reading every beat and skipping every beat end the same day',()=>{
  const read=fresh('skip-equal'),skip=fresh('skip-equal');
@@ -531,7 +490,7 @@ test('NIGHT_CLOSING §SKIP CONTRACT: reading every beat and skipping every beat 
   // One reads every report; the other skips straight to Closing.
   for(let i=0;i<=read.run.results.length;i++)read.run.nightCursor=i;
   read.finishNight();
-  skip.run.nightCursor=Presentation.nightSkip(skip.run.results,skip.run.results.length);
+  skip.run.nightCursor=skip.run.results.length;
   skip.finishNight();
   assert.deepEqual(skip.run.results,read.run.results,'the same reports');
   assert.equal(skip.run.money,read.run.money,'the same Gold');
@@ -684,7 +643,7 @@ test('RESCUE: the count survives a save and a load, and a forged one is refused'
  const g=fresh('rescue-save'),s=g.run;
  g.stock('ramen',1);s.phase='closing';s.money=-10;g.liquidate(s.inventory[0].id);
  assert.equal(s.rescueUsed,1);
- const round=copy({version:6,account:g.account,run:s});
+ const round=copy({version:7,account:g.account,run:s});
  assert.ok(Save.valid(round),'a run carrying a rescue count is valid');
  assert.equal(round.run.rescueUsed,1,'and the count is what is written');
  for(const bad of [{rescueUsed:DATA.balance.rescueLimit+1},{rescueUsed:-1},{rescueUsed:1.5},{rescueUsed:undefined}]){

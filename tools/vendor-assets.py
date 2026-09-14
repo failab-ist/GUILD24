@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
 """Vendor Chunk F presentation assets into dist/ so the game stays static and local.
 
   Galmuri (SIL OFL 1.1, (c) Lee Minseo) -> the ATMOSPHERE face: signage, document titles,

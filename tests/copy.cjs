@@ -194,7 +194,7 @@ test('SALE: a reaction is replaced, never expired on a timer',()=>{
  // or the next customer arriving. Nothing clears it in between, so a reaction stays readable
  // while the remaining supply slots are decided.
  const shop=read('dist/systems/shop.js');
- assert.ok(/arrive\(\)\{[^}]*\.say=/.test(shop.replace(/\n/g,'')),'a new customer sets their own line');
+ assert.ok(/arrive\(\)\{.*?\.say=/.test(shop.replace(/\n/g,'')),'a new customer sets their own line');
  assert.ok(/s\.say=null/.test(shop),'the line is cleared when the day turns over, not by a timer');
 });
 

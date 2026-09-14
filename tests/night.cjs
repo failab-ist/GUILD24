@@ -67,9 +67,9 @@ function checkOne(r){
  for(const c of ch){assert.ok(c.label&&c.value,'every change token has a label and a value');
   assert.ok(!/undefined|NaN/.test(c.label+c.value),'no placeholder in a change token');}
  assert.equal(ch.some(c=>c.label==='경험치'),!!r.xp,'경험치 appears exactly when some was gained');
- assert.equal(ch.some(c=>c.label==='전리품'),!!r.loot,'전리품 appears exactly when some was gained');
+ assert.equal(ch.some(c=>c.label==='NPC 소지금 획득'),!!r.loot,'NPC 소지금 획득 appears exactly when some was gained');
  if(r.outcome==='사망'){
-  assert.ok(!ch.some(c=>c.label==='경험치'||c.label==='전리품'),'a death reports no gain');
+  assert.ok(!ch.some(c=>c.label==='경험치'||c.label==='NPC 소지금 획득'),'a death reports no gain');
   assert.ok(!ch.some(c=>c.kind==='up'&&c.label==='레벨'),'a death reports no growth');
  }
  assert.equal(ch.some(c=>c.label==='휴식'),!!r.recovery,'휴식 appears exactly when rest was set');
@@ -122,7 +122,7 @@ test('the sampled matrix actually covers every supported outcome and causal vari
 });
 
 test('every resolved result is described the same way by label, story, cause and change',()=>{
- for(const {r} of all)checkOne(r);
+ for(const {n,r} of all){ global.game = { run: { npcs: [n] } }; checkOne(r); }
 });
 
 test('the next persistent NPC state matches the outcome that was told',()=>{
