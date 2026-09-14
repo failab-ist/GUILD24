@@ -434,13 +434,12 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
   if(f.includes('현재 지점 포기')||f.includes('모두 포기하고'))
    assert.ok(f.includes("'foundation'"),'the abandon wording is withheld before the store opens');
 
- // D-30 / D-31~33: both destructive actions are named in the menu, not buried in 설정,
- // and they are named apart - one ends this Run, the other ends everything.
+ // D-30 / D-31~33: Full Reset moved to Settings.
  const menu=app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900);
  assert.ok(menu.includes("btn('도감','codex')"),'the codex is just 도감');
  assert.ok(!menu.includes('본사 · 도감'),'the old label is gone');
  assert.ok(menu.includes("btn('현재 지점 포기','new','danger')"),'the store abandon is in the menu');
- assert.ok(menu.includes("btn('모든 게임 데이터 초기화','reset','danger')"),'and the full reset');
+ assert.ok(!menu.includes('모든 게임 데이터 초기화') && !menu.includes('Full Data Reset'),'full reset is removed from menu');
  assert.ok(/foundation'\]\.includes\(game\.run\.phase\)\?btn\('현재 지점 포기'/.test(menu),
   'it is absent when there is no store to abandon, rather than present and inert');
 });
@@ -792,10 +791,10 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  // and the screen actually offers them, with the number said out loud beside each slider
  const ui=fn('mixer');
  for(const k of ['bgm','sfx'])assert.ok(ui.includes(`data-mix="${k}"`)||ui.includes('data-mix="${key}"'),'a control exists');
- assert.ok(ui.includes("row('bgm','배경음'")&&ui.includes("row('sfx','효과음'"),'both channels are named in Korean');
+ assert.ok(ui.includes("row('bgm','BGM'")&&ui.includes("row('sfx','SFX'"),'both channels are named as spec requires');
  assert.ok(ui.includes('mix-${key}-val'),'each slider says its own value');
  assert.ok(!/voice/i.test(ui),'no voice channel is invented: there are no voices');
- assert.ok(fn('settings').includes('소리 켜기')&&fn('settings').includes('mixer()'),'the master mute stays, with the two levels under it');
+ assert.ok(fn('settings').includes('Sound On')&&fn('settings').includes('mixer()'),'the master mute stays, with the two levels under it');
  assert.ok(/\.mix-row input\[type=range\]\{[^}]*height:24px/.test(css),'the slider is thumb-sized');
  assert.ok(/\.mix-row\{[^}]*min-height:44px/.test(css),'and its row keeps the touch target');
 });
