@@ -41,7 +41,7 @@ function prepare(n,d,facilities=[]){
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 30% 증가했다.'});
- e.effectiveFatigue=effectiveFatigue;
+ e.effectiveFatigue=effectiveFatigue; e.fatigueRecovery=fatigueRecovery;
  return {effects:e,hazard,hazards,itemStats,supply:{required,actual,deficit,penalty},why,events};
 }
 function tierWeights(day){
@@ -87,7 +87,7 @@ function resolve(n,d,r,facilities=[],options={}){
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  const injuryRoll=r.next(),deathRoll=r.next();let rescued=false,deathChance=0,avoidedDeath=false;
  if(!combatSuccess&&outcome==='부상'){
-  const deficit=clamp(1-score/d.power,0,1);deathChance=clamp(.04+deficit*.16+e.injuryRisk-e.survival*.0007,.012,.22);
+  const deficit=clamp(1-score/d.power,0,1);deathChance=clamp(.04+deficit*.16-e.survival*.0007,.012,.22);
   if(deathRoll<deathChance)outcome='사망';else if(injuryRoll<.42+e.injuryRisk-e.injuryGuard*.25)outcome='중상';
  }else if(affected||r.next()<e.injuryRisk){outcome=injuryRoll<.13-e.injuryGuard*.12?'중상':'부상';}
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&r.next()<clamp(e.escape,.0,.96)){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
@@ -112,7 +112,7 @@ function resolve(n,d,r,facilities=[],options={}){
  if(outcome==='사망')n.alive=false;
  n.injury=outcome==='중상'?2:outcome==='부상'?1:Math.max(0,n.injury-1);
  n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
- let outcomeFatigue=0;if(outcome==='성공'||outcome==='대성공')outcomeFatigue=1;else if(outcome==='퇴각')outcomeFatigue=2;else if(outcome==='부상')outcomeFatigue=3;const actualOutcomeFatigueGain=Math.max(0,outcomeFatigue+(e.fatigue||0));n.fatigue=clamp(e.effectiveFatigue+actualOutcomeFatigueGain,0,20);
+ let outcomeFatigue=0;if(outcome==='성공'||outcome==='대성공')outcomeFatigue=2;else if(outcome==='퇴각')outcomeFatigue=3;else if(outcome==='부상')outcomeFatigue=4;else if(outcome==='중상'||outcome==='사망')outcomeFatigue=0;const actualOutcomeFatigueGain=outcome==='사망'?0:Math.max(0,outcomeFatigue+(e.fatigue||0));n.fatigue=clamp(e.effectiveFatigue+actualOutcomeFatigueGain,0,20);
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?1.4:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);let loot=n.alive?Math.round((35+d.day*8)*(outcome==='퇴각'?.08:won?1:.18)*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
@@ -122,7 +122,7 @@ function resolve(n,d,r,facilities=[],options={}){
      The sentence is composed in the presentation layer so one wording serves Night,
      Closing and the returning-visitor line. */
   p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,fatigueRecovery:e.fatigueRecovery,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */

@@ -24,7 +24,7 @@ test('FATIGUE: Outcome gains', () => {
   const r = new RNG(1);
   
   
-  const expectedGains = { '성공': 1, '대성공': 1, '도주': 2, '경상': 3, '중상': 0, '사망': 0, '퇴각': 2, '부상': 3 };
+  const expectedGains = { '성공': 2, '대성공': 2, '퇴각': 3, '부상': 4, '중상': 0, '사망': 0, '도주': 3, '경상': 4 };
   const seen = new Set();
   
   for (let i = 0; i < 2000; i++) {
