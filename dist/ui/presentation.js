@@ -161,5 +161,5 @@ function amount(key,value,moved=true){
  return stat(value,moved);
 }
 G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
- eventLine,nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightRank,nightSkip,supplyLines,supplyImpact};
+ eventLine,nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);
