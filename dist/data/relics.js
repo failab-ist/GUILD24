@@ -34,7 +34,7 @@ const rows=[
 ['hub','지역 거점점 계약','keystone',['customer'],700,'다음 날부터 방문객 +2명, 운영비 +35G. 활동 가능한 인원 내에서 방문.'],
 ['warehouse','후방 창고 증설','utility',[],360,'창고 용량 +10칸.'],
 ['terminal','본사 추가발주권','utility',[],380,'다음 발주 후보 생성부터 후보 +2개.'],
-['delivery','발주 교환권','utility',[],340,'매일 첫 발주 교환 무료. 이후 30G부터 교환 비용이 두 배씩 증가.'],
+['delivery','발주 교환권','utility',[],340,'매일 첫 발주 교환 무료. 이후 50G부터 교환 비용이 두 배씩 증가.'],
 ['efficiency','운영 효율 매뉴얼','utility',[],320,'다음 날부터 기본 운영비 15G 절감.']
 ];
 D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,
