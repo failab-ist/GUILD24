@@ -7,7 +7,6 @@
 - Product / design direction: `GAME_VISION.md`
 - Contributor / agent workflow: `AGENTS.md`
 - Current work state: `WORK_STATE.md`
-- Third-party licenses: `LICENSES.md`
 
 ## Current Design Truth
 
