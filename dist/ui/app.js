@@ -571,8 +571,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?'disabled':''))
    +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?'disabled':''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'"')+'</span></span></li>';
  }).join('')+'</ol>'
- +'<button class="rubber" data-action="reroll" '+(price>s.money||held?'disabled':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
- +(held?'<p class="note">선택한 수량을 0으로 되돌리면 후보를 교환할 수 있다.</p>':'')
+ +'<button class="rubber" data-action="reroll" '+(price>s.money?'disabled':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}
 /* Sparse player-facing grouping only where the distinction helps comparison. Internal
