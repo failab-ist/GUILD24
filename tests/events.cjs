@@ -110,13 +110,37 @@ test('EVENT 03: 게이트 순례주간 needs two Gates and three expected visito
 
 test('EVENT 18: 길드 급여일 is a today-only budget and never edits the persistent Wallet',()=>{
  const g=fresh('payday');force(g,'payday');
- let guard=0;while(guard++<60){advance(g);if(g.run.event?.id==='payday')break;}
- assert.equal(g.run.event?.id,'payday');
- const visitors=g.run.queue.map(id=>g.run.npcs.find(n=>n.id===id));
- assert.ok(visitors.length&&visitors.every(n=>n.eventBudget>0),'visitors receive a temporary budget');
- for(const n of visitors)assert.equal(n.eventBudget,Math.round(n.money*.2));
- g.rollEvent=()=>null;advance(g);
- assert.ok(g.run.npcs.every(n=>!n.eventBudget),'the Event bonus is gone the next day');
+   let guard=0;while(guard++<60){advance(g);if(g.run.event?.id==='payday')break;}
+   assert.equal(g.run.event?.id,'payday');
+   g.beginOrder(); g.open();
+   const visitors=[];
+   while(g.run.phase==='sell'){
+    const n = g.current();
+    visitors.push(n);
+    assert.ok(n.eventBudget>0,'visitors receive a temporary budget on arrival');
+    assert.equal(n.eventBudget,Math.round(n.money*.2));
+    g.depart();
+   }
+   g.rollEvent=()=>null;
+   g.finishNight(); g.closeDay();
+   g.beginOrder(); g.open();
+   assert.ok(g.run.npcs.every(n=>!n.eventBudget),'the Event bonus is gone the next day');
+});
+
+test('EVENT 18 + RICH: arrival order applies rich +50, cap 2000, then eventBudget', () => {
+   const g = fresh('payday-rich'); force(g, 'payday');
+   let guard=0;while(guard++<60){advance(g);if(g.run.event?.id==='payday')break;}
+   const n = g.run.npcs[0];
+   n.traits = ['rich'];
+   n.money = 1980;
+   g.run.queue = [n.id];
+   g.run.cursor = 0;
+   g.beginOrder(); g.open();
+   assert.equal(n.money, 2000, 'rich +50 caps at 2000');
+   assert.equal(n.eventBudget, Math.round(2000 * 0.2), 'eventBudget is calculated on post-rich capped Wallet');
+   g.depart();
+   g.rollEvent=()=>null;
+   g.finishNight(); g.closeDay();
 });
 
 test('EVENT 02: 본사 1+1 delivers double units for a single order cost',()=>{
