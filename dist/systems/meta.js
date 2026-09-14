@@ -20,8 +20,8 @@ function freshMatrix(){
 }
 
 function fresh(){
- return {version:2,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1}};
+ return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
+  runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{}};
 }
 
 /* How many distinct Bosses this Job has beaten, 0..7. */
@@ -48,7 +48,7 @@ function opened(a){
   contracts:D.contracts.filter(c=>!c.grade||g>=c.grade).map(c=>c.id)};
 }
 
-const itemUnlocked=(a,it)=>!it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;
+const itemUnlocked=(a,it,day=1)=>{if(it.id==='premium')return !!a.unlocks?.premium&&day>=10;if(it.id==='tree')return !!a.unlocks?.tree&&day>=14;return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
 const jobUnlocked=(a,j)=>!j.metaUnlock||distinctBossClear(a)>=j.metaUnlock;
 const contractUnlocked=(a,c)=>!c.grade||grade(a)>=c.grade;
 

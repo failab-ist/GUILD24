@@ -1,7 +1,7 @@
 // Chunk G re-baseline. Every seeded number in this project predates the v2.4 adoption and
 // is re-measured here; balance-results-v3/v4 were removed as pre-adoption evidence.
 // This harness MEASURES. It never tunes: no canonical numeric is written from a result.
-const fs=require('node:fs');for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+const fs=require('node:fs');for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])require('../dist/'+f+'.js');
 const seeds=Number(process.argv[2])||300,out={version:5,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',seedsPerStrategy:seeds,seedPrefix:'revision-',note:'Deterministic strategy heuristics; not human first-clear rates. Counterfactual comparison reuses initial RNG state; branch consumption may diverge.',cohorts:[]};
 // The engaged strategies carry the run comparison; the minimal-engagement strategies are the
 // direct subject of RUN-Q30 / ECO-Q12 / DUN-Q20, and `meta-farm` is the adversarial case that

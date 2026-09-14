@@ -1,9 +1,9 @@
 (function(G){
-const KEY='guild24.save.v6';
+const KEY='guild24.save.v7';
 /* Every schema this game has ever written, current one apart. Read() uses it to tell a
    player their old save cannot be continued; reset() uses the same list to erase it, so a
    version bump is made in one place and both paths follow. */
-const LEGACY=['v1','v2','v3','v4','v5'];
+const LEGACY=['v1','v2','v3','v4','v5','v6'];
 
 /* Save validation. One clause out of line and the save is refused.
    Each check stands alone under its own name. This function was extended twice in v2.4
@@ -24,6 +24,7 @@ const RELIC_WINDOWS=[0,5,10,15,20,25,30];
    there is no cached value here that could disagree with it. */
 function accountOk(a,D){
  if(!a||!a.knowledge||!a.settings)return false;
+ if(a.unlocks&&typeof a.unlocks!=='object')return false;
  /* Mix levels are a presentation preference, not progression truth: checked for shape when
     present, the way tutorial is, and defaulted by the audio layer when a save predates them.
     A save that carries a level carries a real one - a string or a 7 is malformed, not old. */
@@ -197,7 +198,7 @@ G.Save={
 
  write(account,run){
   try{
-   const json=JSON.stringify({version:6,account,run});
+   const json=JSON.stringify({version:7,account,run});
    const previous=localStorage.getItem(KEY);
    if(previous)localStorage.setItem(KEY+'.backup',previous);
    localStorage.setItem(KEY,json);
@@ -231,7 +232,7 @@ G.Save={
  valid(s){
   try{
    const D=G.DATA,a=s?.account,r=s?.run;
-   if(s?.version!==6)return false;
+   if(s?.version!==7)return false;
    if(!accountOk(a,D))return false;
    if(r===null)return true;              // an account-only save, with no run in progress
    if(!runShapeOk(r,D))return false;
@@ -263,7 +264,7 @@ G.Save={
   }
  },
 
- export(account,run){return JSON.stringify({version:6,account,run},null,2);},
+ export(account,run){return JSON.stringify({version:7,account,run},null,2);},
  import(raw){
   const s=JSON.parse(raw);
   if(!this.valid(s))throw Error('이 버전의 저장 파일이 아닙니다.');

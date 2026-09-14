@@ -5,7 +5,7 @@ const D=G.DATA,copy=x=>JSON.parse(JSON.stringify(x));
    supply — and a minimal-engagement policy drops exactly the named lever and nothing else,
    so the comparison against engaged play stays like-for-like. `meta-farm` is the adversarial
    case: it drops every lever AND refuses paid Relics, then liquidates the opening stock, so
-   the run lasts as long as 1,200G of overhead allows at the lowest possible interaction. */
+   the run lasts as long as 1,000G of overhead allows at the lowest possible interaction. */
 const ENGAGEMENT={
  'zero-sale':{order:'full',sell:false,finalSupply:true},
  'zero-order':{order:false,sell:true,finalSupply:true},

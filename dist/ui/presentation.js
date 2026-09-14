@@ -1,6 +1,6 @@
 (function(G){
 const D=G.DATA;
-const labels={supply:'보급',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 강인함',potionMult:'포션의 강인함',foodSupplyDelta:'음식 1개당 보급',supplyPerItem:'음식·음료 1개당 보급',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 보정',injuryGuard:'부상 방어',injuryRisk:'부상 위험',loot:'전리품',xpMult:'경험치',luck:'행운 보정',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사'};
+const labels={supply:'보급',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 강인함',potionMult:'포션의 강인함',foodSupplyDelta:'음식 1개당 보급',supplyPerItem:'음식·음료 1개당 보급',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'NPC 소지금 획득',xpMult:'경험치',luck:'행운 보정',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사'};
 const percent=new Set(['escape','injuryGuard','injuryRisk','loot','luck','variance','rareLoot','priceBias','buyBias','rareBias','commonBias']);
 const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','injuryRisk','escape','rareLoot','rareBias','commonBias','luck']);
 const days=new Set(['recoveryDelta']);
@@ -35,7 +35,7 @@ function returning(n){if(!n.introduced||n.newToday||!n.records.length)return nul
 function nightTone(r){return r.outcome==='사망'?'gone':r.outcome==='중상'?'severe':
  ['부상','퇴각'].includes(r.outcome)?'hurt':r.outcome==='대성공'?'great':'safe';}
 /* A rescue is never dressed up as an ordinary success, and never as a death. */
-function nightVerdict(r){return r.rescued&&r.outcome!=='사망'?'위기에서 생환':r.outcome;}
+function nightVerdict(r){return r.rescued&&r.outcome!=='death'?'위기에서 생환':r.outcome;}
 function nightHappened(r){
  if(r.outcome==='사망')return '전투에서 밀린 뒤 돌아오지 못했다.';
  if(r.avoidedDeath)return '보급이 마지막 순간의 사망을 막았다.';
@@ -68,9 +68,7 @@ function nightRank(r){
    next beat worth reading and stops at the end of the list. It never resolves, re-resolves
    or reorders a report, so the outcome the player skipped past is the outcome they already
    have. Skip All is the same move with the end of the list as its target. */
-function nightSkip(results,cursor){let i=(cursor||0)+1;
- while(i<results.length&&!nightWeight(results[i]))i++;
- return Math.min(results.length,i);}
+
 /* WHY names only what actually acted. A Hazard that was fully covered has no incident
    weight, so it can never be drawn as the cause — no false attribution is possible. */
 function nightWhy(r){const bits=[];
@@ -79,6 +77,12 @@ function nightWhy(r){const bits=[];
  if(r.environmentHurt)bits.push(r.cause&&r.cause!=='accident'
   ?(D.hazards[r.cause]||'보급 부담')+' 때문에 원정 내내 고전했다.'
   :'원정 중 예상치 못한 사고가 있었다.');
+ if(r.events){
+  for(const ev of r.events){
+   if(ev.text)bits.push(ev.text);
+   else if(ev.id==='hazard'&&ev.prevented)bits.push((ev.hazards.map(h=>D.hazards[h]).join(', '))+' 환경을 철저한 준비로 극복했다.');
+  }
+ }
  return bits.join(' ');}
 /* WHAT CHANGED — only what actually moved. A change the resolution wrote as a sentence
    is split into its own label and value; anything that resolved to zero is left out. */
@@ -94,9 +98,21 @@ function nightChanges(r){const out=[];
  for(const x of (r.statChanges||[]).slice(0,4)){const label=labels[x.key];
   if(label)out.push({kind:'up',label,value:Math.round(x.before)+' → '+Math.round(x.after)});}
  if(r.recovery)out.push({kind:'down',label:'휴식',value:r.recovery+'일'});
- else if(r.injury)out.push({kind:'down',label:'남은 부상',value:'강인함 -'+(r.injury*5)+' · 투력 -'+(r.injury*3)});
+ else if(r.injury){
+  const n=game.run.npcs.find(x=>x.id===r.npcId);
+  if(n){
+   const penalty=r.injury===2?30:15;
+   const combat=n.traits.includes('stubborn')?'+20%':'-'+penalty+'%';
+   out.push({kind:'down',label:'남은 부상',value:'생존 -'+penalty+'% · 투력 '+combat});
+  }
+ }
+ if(r.fatigue!==undefined){
+  const delta=r.fatigueDelta;
+  const deltaStr=delta>0?'+'+delta:delta;
+  out.push({kind:delta>0?'down':'up',label:'누적 피로',value:r.fatigue+' ('+deltaStr+')'});
+ }
  if(r.xp)out.push({kind:'',label:'경험치',value:'+'+r.xp});
- if(r.loot)out.push({kind:'gain',label:'전리품',value:r.loot+'G'});
+ if(r.loot)out.push({kind:'gain',label:'NPC 소지금 획득',value:r.loot+'G'});
  return out;}
 
 /* ---- SUPPLY IMPACT -------------------------------------------------------------
