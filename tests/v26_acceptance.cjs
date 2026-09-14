@@ -8,9 +8,10 @@ const Game = globalThis.Game;
 const Dungeon = globalThis.Dungeon;
 
 let count = 0;
+let failCount = 0;
 function test(name, fn) {
   try { fn(); count++; console.log('PASS ' + name); }
-  catch (e) { console.error('FAIL ' + name + '\n' + e.stack); }
+  catch (e) { failCount++; console.error('FAIL ' + name + '\n' + e.stack); process.exitCode = 1; }
 }
 
 const fresh = (seed = 1) => { const g = new Game(); g.autosave = false; g.start('v26-' + seed); return g; };
