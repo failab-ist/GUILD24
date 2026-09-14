@@ -112,7 +112,7 @@ function resolve(n,d,r,facilities=[],options={}){
  if(outcome==='사망')n.alive=false;
  n.injury=outcome==='중상'?2:outcome==='부상'?1:Math.max(0,n.injury-1);
  n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
- let outcomeFatigue=0;if(outcome==='성공'||outcome==='대성공')outcomeFatigue=1;else if(outcome==='도주')outcomeFatigue=2;else if(outcome==='경상')outcomeFatigue=3;const actualOutcomeFatigueGain=Math.max(0,outcomeFatigue+(e.fatigue||0));n.fatigue=clamp(e.effectiveFatigue+actualOutcomeFatigueGain,0,20);
+ let outcomeFatigue=0;if(outcome==='성공'||outcome==='대성공')outcomeFatigue=1;else if(outcome==='퇴각')outcomeFatigue=2;else if(outcome==='부상')outcomeFatigue=3;const actualOutcomeFatigueGain=Math.max(0,outcomeFatigue+(e.fatigue||0));n.fatigue=clamp(e.effectiveFatigue+actualOutcomeFatigueGain,0,20);
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?1.4:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);let loot=n.alive?Math.round((35+d.day*8)*(outcome==='퇴각'?.08:won?1:.18)*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
