@@ -21,7 +21,12 @@ P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;
  if(s.money<0){if(s.inventory.length&&this.canRescue()){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요. (회생 '+(s.rescueUsed||0)+' / '+this.rescueLimit()+')';this.save();return false;}this.end(false,'장사를 이어갈 자금이 바닥났다.');return;}
  this.nextDay();this.save();return true;};
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
-P.nextDay=function(){this.run.day++;this.morning();};
+P.nextDay=function(){
+  this.run.day++;
+  if(this.run.day===10&&!this.account.unlocks?.premium){this.account.unlocks??={};this.account.unlocks.premium=true;this.run.toast='새 상품 해금 · 길드 프리미엄 도시락';}
+  if(this.run.day===14&&!this.account.unlocks?.tree){this.account.unlocks??={};this.account.unlocks.tree=true;this.run.toast='새 상품 해금 · 세계수 생환부적';}
+  this.morning();
+};
 P.rerollPrice=function(){const n=this.run.rerollCount||0;return this.has('delivery')&&n===0?0:D.balance.rerollBase*2**Math.min(20,n);};
 P.reroll=function(){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간에 교환할 수 있습니다.');const price=this.rerollPrice();if(s.money<price)throw Error('교환 비용이 부족합니다.');this.generateOffers({advancePity:false});s.cart={};s.money-=price;s.daily.rerollSpent=(s.daily.rerollSpent||0)+price;s.stats.spent+=price;s.rerollCount=(s.rerollCount||0)+1;this.save();};
 /* 재고 정리 is an emergency, not a savings account. It exists so a Closing that came up short

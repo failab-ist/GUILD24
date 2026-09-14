@@ -229,4 +229,62 @@ test('WALLET: 2000 cap', () => {
   assert.equal(n.money, 2000, 'Arrive rich 2000 cap');
 });
 
+test('UNLOCK: D10 / D14 Activation and Gate', () => {
+  const g = fresh();
+  
+  const checkOffer = (targetItem) => {
+    const oldWeighted = g.rng.weighted;
+    let foundInPool = false;
+    g.rng.weighted = (pool, weightFn) => {
+      if (Array.isArray(pool) && pool.some(it => it.id === targetItem)) foundInPool = true;
+      return oldWeighted.call(g.rng, pool, weightFn);
+    };
+    g.generateOffers({advancePity: false});
+    g.rng.weighted = oldWeighted;
+    return foundInPool;
+  };
+
+  // D9 Premium check
+  g.run.day = 9;
+  assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['premium'], g.run.day), false, 'D9 premium blocked (Meta)');
+  assert.equal(checkOffer('premium'), false, 'D9 premium excluded from actual Offer generation path');
+  
+  g.nextDay(); // Transitions to D10
+  assert.equal(g.account.unlocks.premium, true, 'D10 premium activated');
+  assert.equal(g.run.toast, '새 상품 해금 · 길드 프리미엄 도시락', 'D10 toast');
+  assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['premium'], g.run.day), true, 'D10 premium candidate eligible (Meta)');
+  assert.equal(checkOffer('premium'), true, 'D10 premium eligible in actual Offer generation path');
+  
+  // D13 Tree check
+  g.run.day = 13;
+  assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['tree'], g.run.day), false, 'D13 tree blocked (Meta)');
+  assert.equal(checkOffer('tree'), false, 'D13 tree excluded from actual Offer generation path');
+  
+  g.nextDay(); // Transitions to D14
+  assert.equal(g.account.unlocks.tree, true, 'D14 tree activated');
+  assert.equal(g.run.toast, '새 상품 해금 · 세계수 생환부적', 'D14 toast');
+  assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['tree'], g.run.day), true, 'D14 tree candidate eligible (Meta)');
+  assert.equal(checkOffer('tree'), true, 'D14 tree eligible in actual Offer generation path');
+  
+  // Abandon
+  g.end(false, 'abandon');
+  assert.equal(g.account.unlocks.premium, true, 'Abandon preserves premium');
+  assert.equal(g.account.unlocks.tree, true, 'Abandon preserves tree');
+  
+  // New Run Pre-Day Gate
+  const g2 = new Game(g.account, null);
+  g2.start('v26-new');
+  assert.equal(g2.run.day, 1, 'New run starts at D1');
+  assert.equal(globalThis.Meta.itemUnlocked(g2.account, DATA.itemBy['premium'], g2.run.day), false, 'D1 premium blocked despite account unlock');
+  assert.equal(globalThis.Meta.itemUnlocked(g2.account, DATA.itemBy['tree'], g2.run.day), false, 'D1 tree blocked despite account unlock');
+  g2.run.day = 10;
+  assert.equal(globalThis.Meta.itemUnlocked(g2.account, DATA.itemBy['premium'], g2.run.day), true, 'D10 premium eligible in new run');
+  assert.equal(globalThis.Meta.itemUnlocked(g2.account, DATA.itemBy['tree'], g2.run.day), false, 'D10 tree still blocked in new run');
+  
+  // Full Reset
+  const freshMeta = globalThis.Meta.fresh();
+  assert.equal(freshMeta.unlocks.premium, false, 'Reset clears premium');
+  assert.equal(freshMeta.unlocks.tree, false, 'Reset clears tree');
+});
+
 console.log(count + ' tests passed.');

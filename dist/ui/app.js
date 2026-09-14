@@ -1003,6 +1003,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  const opened=game.run?.unlocked||[];
  if(opened.length&&opened!==wasOpen)sound('rare');
  if(opened.length&&game.run.phase!=='end'){toast('본사 해금 · '+opened.join(' · '));game.run.unlocked=[];}
+ if(game.run?.toast){toast(game.run.toast);delete game.run.toast;game.save();}
  }catch(err){toast(err.message);}
 }
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled){if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);}});
