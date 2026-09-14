@@ -174,7 +174,7 @@ test('ORDER: Full Cycle Validation', () => {
 test('WALLET: First formula', () => {
   const g = fresh(); g.morning();
   const n = g.run.npcs.find(x => x.id === g.run.queue[0]);
-  assert.ok(n.money >= 100 + n.level*8 && n.money <= 160 + n.level*8, 'First visit formula');
+  assert.ok(n.money >= 150 + n.level*8 && n.money <= 210 + n.level*8, 'First visit formula');
 });
 
 test('WALLET: Revisit', () => {
@@ -192,7 +192,7 @@ test('WALLET: Revisit', () => {
     n2.money = 500;
     const oldRngInt = g.rng.int;
     g.rng.int = () => 10;
-    n2.money = Math.min(2000, Math.round((n2.introduced ? n2.money : 100) + n2.level * 8 + g.rng.int(0, 60)));
+    n2.money = Math.min(2000, Math.round((n2.introduced ? n2.money : 150) + n2.level * 8 + g.rng.int(0, 60)));
     g.rng.int = oldRngInt;
     assert.equal(n2.money, 500 + n2.level*8 + 10, 'Revisit formula via force');
   }
@@ -218,7 +218,7 @@ test('WALLET: 2000 cap', () => {
   // Forcing morning
   const oldRngInt = g.rng.int;
   g.rng.int = () => 50;
-  n.money = Math.min(2000, Math.round((n.introduced ? n.money : 100) + n.level * 8 + g.rng.int(0, 60)));
+  n.money = Math.min(2000, Math.round((n.introduced ? n.money : 150) + n.level * 8 + g.rng.int(0, 60)));
   g.rng.int = oldRngInt;
   assert.equal(n.money, 2000, 'Morning 2000 cap');
   
