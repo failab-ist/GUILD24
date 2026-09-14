@@ -660,4 +660,25 @@ test('RESCUE: the count survives a save and a load, and a forged one is refused'
   assert.equal(Save.valid(forged),false,'refused: '+JSON.stringify(bad));}
 });
 
+test('NPC-Q66 — MAJOR INJURY RECOVERY', () => {
+ const g = new Game();
+ g.autosave = false;
+ g.start('q66-test');
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ const n = g.run.npcs[0];
+ n.alive = true;
+ n.introduced = true;
+ n.injury = 2;
+ n.status = '중상';
+ n.recovery = 1;
+ g.beginOrder();
+ g.open();
+ while(g.run.phase === 'sell') g.depart();
+ g.finishNight();
+ g.closeDay();
+ assert.equal(n.recovery, 0, 'recovery reaches completion');
+ assert.equal(n.injury, 0, 'injury becomes 0 directly');
+ assert.equal(n.status, '건강', 'status becomes healthy');
+});
+
 console.log(count+' integration groups passed');
