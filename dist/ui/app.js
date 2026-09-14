@@ -428,7 +428,8 @@ function changedRows(r){
   if(r.deep.bonusXp)extra.push({kind:'level',label:Copy.deep.reward,value:'경험치 +'+r.deep.bonusXp});
   if(r.deep.bonusWallet)extra.push({kind:'gold',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
  }
- return [...Presentation.nightChanges(r),...extra].map(c=>'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
+ const n = game.run.npcs.find(x=>x.id===r.npcId);
+ return [...Presentation.nightChanges(r, n),...extra].map(c=>'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
   +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>').join('');}
 // CLOSING — `오늘 장사는 어땠을까?`. Economics only; the expedition story belongs to Night.
 // The object is the till roll the register printed when the shutter came down: a narrow

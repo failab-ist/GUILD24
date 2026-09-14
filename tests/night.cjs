@@ -22,13 +22,13 @@ const PLACEHOLDER=/undefined|NaN|\[object Object\]|\bnull\b/;
 const ENGINE=/판정 진행|보정 적용|상태 판정|위험도 계산|영구 사망 처리|\bRNG\b|threshold|coefficient|\bresolve\b/i;
 
 // every player-facing string this screen can print, for one report
-function surface(r){
+function surface(r, n){
  return [P.nightVerdict(r),P.nightHappened(r),P.nightWhy(r),r.quote,
-  ...P.nightChanges(r).flatMap(c=>[c.label,c.value,c.extra||'']),
+  ...P.nightChanges(r, n).flatMap(c=>[c.label,c.value,c.extra||'']),
   ...P.supplyLines(r).map(l=>l.text),...P.supplyImpact(r).map(l=>l.text)];
 }
-function checkOne(r){
- const all=surface(r),joined=all.join(' | ');
+function checkOne(r, n){
+ const all=surface(r, n),joined=all.join(' | ');
  assert.ok(!PLACEHOLDER.test(joined),'no placeholder in "'+joined+'"');
  assert.ok(!ENGINE.test(joined),'no engine wording in "'+joined+'"');
  for(const s of all)assert.equal(typeof s,'string','every player-facing value is a string');
@@ -63,7 +63,7 @@ function checkOne(r){
  }
  if(!r.environmentHurt)assert.ok(!/때문에|사고가 있었다/.test(why),'no incident language without an incident');
  // D — WHAT_CHANGED reports only what moved, and nothing that resolved to zero
- const ch=P.nightChanges(r);
+ const ch=P.nightChanges(r, n);
  for(const c of ch){assert.ok(c.label&&c.value,'every change token has a label and a value');
   assert.ok(!/undefined|NaN/.test(c.label+c.value),'no placeholder in a change token');}
  assert.equal(ch.some(c=>c.label==='경험치'),!!r.xp,'경험치 appears exactly when some was gained');
@@ -122,7 +122,7 @@ test('the sampled matrix actually covers every supported outcome and causal vari
 });
 
 test('every resolved result is described the same way by label, story, cause and change',()=>{
- for(const {n,r} of all){ global.game = { run: { npcs: [n] } }; checkOne(r); }
+ for(const {n,r} of all){ checkOne(r, n); }
 });
 
 test('the next persistent NPC state matches the outcome that was told',()=>{
@@ -166,10 +166,10 @@ test('presentation weight is about copy, and death flavour matches the actual hi
   if((r.statChanges||[]).length||(r.changes||[]).length)
    assert.ok(heavy,'a result showing real growth is not treated as routine');
   if(r.outcome!=='성공')assert.ok(heavy,'only a plain success can be routine');
-  if(!heavy){
-   assert.equal(r.outcome,'성공','a routine beat is a plain success');
-   assert.deepEqual(P.nightChanges(r).filter(c=>c.kind==='up'),[],'a routine beat has no growth to show');
-  }
+   if(!heavy){
+    assert.equal(r.outcome,'성공','a routine beat is a plain success');
+    assert.deepEqual(P.nightChanges(r, n).filter(c=>c.kind==='up'),[],'a routine beat has no growth to show');
+   }
   if(r.outcome==='사망'){
    const receipt=/영수증/.test(r.quote);
    assert.equal(receipt,n.history.length>0,'a receipt line only appears when there were purchases');

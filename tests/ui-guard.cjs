@@ -182,7 +182,7 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
  const b=fn('beat');
  for(const call of ['Presentation.nightTone(r)','Presentation.nightVerdict(r)','Presentation.nightHappened(r)','Presentation.nightWhy(r)'])
   assert.ok(b.includes(call),'the beat reads '+call+' rather than its own copy');
- assert.ok(fn('changedRows').includes('Presentation.nightChanges(r)'),'WHAT CHANGED comes from the same report');
+ assert.ok(fn('changedRows').includes('Presentation.nightChanges(r, n)'),'WHAT CHANGED comes from the same report');
  // compactness is about copy: a routine beat drops the quote, never the adventurer
  assert.ok(/portrait\(n,150,'returner'\)/.test(b),'every outcome renders the same NPC art size');
  assert.ok(!/heavy\s*\?[^)]*returner/.test(b),'the figure is never branched on importance');

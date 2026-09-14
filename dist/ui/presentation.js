@@ -93,13 +93,13 @@ function nightChange(text){
  m=/^(.*?)\s*승급$/.exec(text);                  if(m)return {kind:'up',label:'승급',value:m[1]};
  m=/^(.+?)\s*·\s*(전투\s*\+\d+)$/.exec(text);   if(m)return {kind:'up',label:'장비',value:m[1],extra:m[2]};
  return {kind:'up',label:'변화',value:text};}
-function nightChanges(r){const out=[];
+function nightChanges(r, npc){const out=[];
  for(const c of (r.changes||[]).slice(0,3))out.push(nightChange(c));
  for(const x of (r.statChanges||[]).slice(0,4)){const label=labels[x.key];
   if(label)out.push({kind:'up',label,value:Math.round(x.before)+' → '+Math.round(x.after)});}
  if(r.recovery)out.push({kind:'down',label:'휴식',value:r.recovery+'일'});
  else if(r.injury){
-  const n=game.run.npcs.find(x=>x.id===r.npcId);
+  const n=npc;
   if(n){
    const penalty=r.injury===2?30:15;
    const combat=n.traits.includes('stubborn')?'+20%':'-'+penalty+'%';
