@@ -203,6 +203,13 @@ test('the contradictions found in visual QA stay fixed',()=>{
  const labelsOut=P.nightChanges(junk).map(c=>c.label);
  assert.ok(!labelsOut.includes(undefined)&&!labelsOut.some(l=>/undefined/.test(l)));
  assert.ok(labelsOut.includes('투력'),'a known stat still reports');
+ 
+ // injury penalty text matches the specific trait logic
+ const injuredBase = {...base, outcome:'부상', combatWon:false, injury:1};
+ const p1 = P.nightChanges(injuredBase, {traits:[]}).find(c=>c.label==='남은 부상')?.value;
+ assert.equal(p1, '생존 -20% · 투력 -15%', 'base injury penalty');
+ const p2 = P.nightChanges(injuredBase, {traits:['grit']}).find(c=>c.label==='남은 부상')?.value;
+ assert.equal(p2, '생존 -20% · 투력 +20%', 'grit replaces combat penalty');
  // a hazard event with no carried item is not attributed to anything
  const bare={...base,outcome:'성공',combatWon:true,xp:20,loot:30,
   events:[{id:'hazard',hazards:['poison'],items:[],prevented:true}]};

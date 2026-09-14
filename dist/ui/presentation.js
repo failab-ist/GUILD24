@@ -98,14 +98,13 @@ function nightChanges(r, npc){const out=[];
  for(const x of (r.statChanges||[]).slice(0,4)){const label=labels[x.key];
   if(label)out.push({kind:'up',label,value:Math.round(x.before)+' → '+Math.round(x.after)});}
  if(r.recovery)out.push({kind:'down',label:'휴식',value:r.recovery+'일'});
- else if(r.injury){
-  const n=npc;
-  if(n){
-   const penalty=r.injury===2?30:15;
-   const combat=n.traits.includes('stubborn')?'+20%':'-'+penalty+'%';
-   out.push({kind:'down',label:'남은 부상',value:'생존 -'+penalty+'% · 투력 '+combat});
+  else if(r.injury===1){
+   const n=npc;
+   if(n){
+    const combat=n.traits.includes('grit')?'+20%':'-15%';
+    out.push({kind:'down',label:'남은 부상',value:'생존 -20% · 투력 '+combat});
+   }
   }
- }
  if(r.fatigue!==undefined){
   const delta=r.fatigueDelta;
   const deltaStr=delta>0?'+'+delta:delta;

@@ -731,8 +731,10 @@ function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업
 function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  let cond=[];
  if(n.injury){
-  let penalty=n.injury===2?30:15;let combat=n.traits.includes('stubborn')?'+20%':'-'+penalty+'%';
-  cond.push('부상 효과: 생존 -'+penalty+'% · 투력 '+combat);
+  if(n.injury===1){
+   let combat=n.traits.includes('grit')?'+20%':'-15%';
+   cond.push('부상 효과: 생존 -20% · 투력 '+combat);
+  }
   if(n.recovery)cond.push('남은 휴식: '+n.recovery+'일');
   cond.push('회복 방법: '+n.recovery+'일 대기 또는 치료용품 보급');
  }
