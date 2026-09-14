@@ -26,8 +26,8 @@ Game.prototype.morning = function() {
   origMorning.call(this);
   const day = this.run.day;
   if ([1, 10, 20, 30].includes(day)) {
-    for (const n of this.run.queue) {
-      metrics.wallet[day].push(typeof n === 'string' ? n : n.money);
+    for (const nid of this.run.queue) { const n = this.run.npcs.find(x=>x.id===nid);
+      metrics.wallet[day].push(n.money);
       metrics.wallet_samples++;
       if (n.money === 2000) metrics.cap_hits++;
     }
@@ -37,21 +37,21 @@ Game.prototype.morning = function() {
 // Hook resolve
 const origResolve = Dungeon.resolve;
 Dungeon.resolve = function(n, d, r, facilities, options) {
+  const preFatigue = n.fatigue || 0;
   const ret = origResolve.call(this, n, d, r, facilities, options);
   
   const rep = n.records[n.records.length - 1];
   if (!rep) return;
 
-  if (rep.fatigue >= 10) metrics.fatigue_ge_10++;
-  if (rep.fatigue === 20) metrics.fatigue_eq_20++;
+  if (n.fatigue >= 10) metrics.fatigue_ge_10++;
+  if (n.fatigue === 20) metrics.fatigue_eq_20++;
   
   if (rep.fatigueRecovery > 0) {
     metrics.fatigue_recovery_count++;
     metrics.fatigue_recovery_amount += rep.fatigueRecovery;
   }
   
-  // Track outcome gains using the actual variables we injected in fix_dungeon
-  metrics.outcome_gain[rep.outcome] = (metrics.outcome_gain[rep.outcome] || 0) + (rep.outcomeFatigueGain || 0);
+  metrics.outcome_gain[rep.outcome] = (metrics.outcome_gain[rep.outcome] || 0) + (n.fatigue - preFatigue + (rep.fatigueRecovery || 0));
   return ret;
 };
 
