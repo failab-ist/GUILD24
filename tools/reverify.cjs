@@ -34,66 +34,76 @@ console.log(`  sensitive: ${hSensitive.toFixed(3)} (Delta: ${(hSensitive-hPoison
 
 // Dual: dark + whiteout (sharpeye / nearsight)
 const dSnow = g.makeDungeon('snow'); dSnow.tier = 2; dSnow.hazards = ['dark', 'whiteout'];
-const hSnowBase = Dungeon.prepare(nHaz, dSnow).hazard;
-const hSharpeye = Dungeon.prepare({...nHaz, traits:['sharpeye']}, dSnow).hazard;
-const hNearsight = Dungeon.prepare({...nHaz, traits:['nearsight']}, dSnow).hazard;
-console.log(`Dual Hazard [dark + whiteout]:`);
-console.log(`  Base: ${hSnowBase.toFixed(3)}`);
-console.log(`  sharpeye: ${hSharpeye.toFixed(3)} (Delta: ${(hSharpeye-hSnowBase).toFixed(3)})`);
-console.log(`  nearsight: ${hNearsight.toFixed(3)} (Delta: ${(hNearsight-hSnowBase).toFixed(3)})`);
+
+const hSnowBase = Dungeon.prepare(nHaz, dSnow);
+const baseDark = hSnowBase.hazards.find(h=>h.key==='dark').gap;
+const baseWhiteout = hSnowBase.hazards.find(h=>h.key==='whiteout').gap;
+
+const hSharpeye = Dungeon.prepare({...nHaz, traits:['sharpeye']}, dSnow);
+const sharpDark = hSharpeye.hazards.find(h=>h.key==='dark').gap;
+const sharpWhiteout = hSharpeye.hazards.find(h=>h.key==='whiteout').gap;
+
+const hNearsight = Dungeon.prepare({...nHaz, traits:['nearsight']}, dSnow);
+const nearDark = hNearsight.hazards.find(h=>h.key==='dark').gap;
+const nearWhiteout = hNearsight.hazards.find(h=>h.key==='whiteout').gap;
+
+console.log(`Dual Hazard Component Breakdown [dark + whiteout]:`);
+console.log(`Base:`);
+console.log(`  - dark component gap: ${baseDark}`);
+console.log(`  - whiteout component gap: ${baseWhiteout}`);
+console.log(`sharpeye:`);
+console.log(`  - dark component gap: ${sharpDark} (Delta: ${sharpDark - baseDark})`);
+console.log(`  - whiteout component gap: ${sharpWhiteout} (Delta: ${sharpWhiteout - baseWhiteout})`);
+console.log(`nearsight:`);
+console.log(`  - dark component gap: ${nearDark} (Delta: ${nearDark - baseDark})`);
+console.log(`  - whiteout component gap: ${nearWhiteout} (Delta: ${nearWhiteout - baseWhiteout})`);
 
 // --------------------------------------------------
 // 2. INFLUENCE HIERARCHY
 // --------------------------------------------------
 console.log("\n[ INFLUENCE HIERARCHY ]");
 
-const getWinRate = (modN, modD, options={}) => {
+const getWinRate = (modN, modD, facilities=[]) => {
   let wins = 0;
   for(let i=0; i<10000; i++) {
     const clone = JSON.parse(JSON.stringify(modN));
-    Dungeon.resolve(clone, modD, new RNG('h'+i), [], options);
+    Dungeon.resolve(clone, modD, new RNG('h'+i), facilities);
     const rep = clone.records[clone.records.length-1];
     if(rep.outcome === '성공' || rep.outcome === '대성공') wins++;
   }
   return wins / 10000;
 };
 
-// Target a middle-ground state: base win rate ~ 40-50%
-const dHier = g.makeDungeon('crypt'); dHier.tier = 2; dHier.power = 32; dHier.hazards = ['dark']; // Moderate power
-// Start at Level 1, 20 stats.
+const dHier = g.makeDungeon('crypt'); dHier.tier = 2; dHier.power = 30; dHier.hazards = ['dark', 'fear'];
 const nBase = JSON.parse(JSON.stringify(nHaz));
-nBase.pack = ['rice', 'water', 'water']; // Pass supply check
+nBase.pack = ['water', 'candy']; // Has drink and food (mitigates fear)
 
 const wBase = getWinRate(nBase, dHier);
 console.log(`Baseline Win Rate: ${(wBase*100).toFixed(1)}%`);
 
-
-// Layer 1: Level Up
 const nLevel = {...nBase, level: 3, stats: {combat:30, survival:30, mobility:30, spirit:30}};
 const wLevel = getWinRate(nLevel, dHier);
 console.log(`+ Level (+2, +10 stats): ${(wLevel*100).toFixed(1)}% (Delta: ${((wLevel-wBase)*100).toFixed(1)}%p)`);
 
-// Layer 2: Growth (Adventurer.grow applies random stat bonuses)
 const nGrow = JSON.parse(JSON.stringify(nBase));
-Adventurer.grow(nGrow, 500, new RNG('grow')); // some XP
+Adventurer.grow(nGrow, 500, new RNG('grow'));
 const wGrow = getWinRate(nGrow, dHier);
-console.log(`+ Growth (+XP): ${(wGrow*100).toFixed(1)}% (Delta: ${((wGrow-wBase)*100).toFixed(1)}%p)`);
+console.log(`+ Growth (+500 XP): ${(wGrow*100).toFixed(1)}% (Delta: ${((wGrow-wBase)*100).toFixed(1)}%p)`);
 
-// Layer 3: Equipment
 const nEquip = {...nBase, equipment: { power: 10, name: 'sword' }};
 const wEquip = getWinRate(nEquip, dHier);
 console.log(`+ Equipment (Power +10): ${(wEquip*100).toFixed(1)}% (Delta: ${((wEquip-wBase)*100).toFixed(1)}%p)`);
 
-// Layer 4: Sold Item (battery)
-const nItem = {...nBase, pack: ['rice', 'water', 'water', 'battery']};
+const nItem = {...nBase, pack: ['water', 'candy', 'battery']};
 const wItem = getWinRate(nItem, dHier);
-console.log(`+ Sold Item (battery): ${(wItem*100).toFixed(1)}% (Delta: ${((wItem-wBase)*100).toFixed(1)}%p)`);
+console.log(`+ Sold Item (battery, mitigates dark): ${(wItem*100).toFixed(1)}% (Delta: ${((wItem-wBase)*100).toFixed(1)}%p)`);
 
-// Layer 5: Store Support (prayer)
-const wSupport = getWinRate(nBase, dHier, { support: 'prayer' });
-console.log(`+ Store Support (prayer): ${(wSupport*100).toFixed(1)}% (Delta: ${((wSupport-wBase)*100).toFixed(1)}%p)`);
+const wSupport = getWinRate(nBase, dHier, ['kitchen']);
+console.log(`+ Store Support (kitchen, buffs water/candy): ${(wSupport*100).toFixed(1)}% (Delta: ${((wSupport-wBase)*100).toFixed(1)}%p)`);
 
-// Layer 6: Trait (strong)
-const nTrait = {...nBase, traits: ['strong']};
+const wEvent = getWinRate(nBase, dHier, ['expeditionMeal']);
+console.log(`+ Event (expeditionMeal, buffs candy fear mitigation): ${(wEvent*100).toFixed(1)}% (Delta: ${((wEvent-wBase)*100).toFixed(1)}%p)`);
+
+const nTrait = {...nBase, traits: ['sharpeye']}; // mitigates dark
 const wTrait = getWinRate(nTrait, dHier);
-console.log(`+ Trait (strong): ${(wTrait*100).toFixed(1)}% (Delta: ${((wTrait-wBase)*100).toFixed(1)}%p)`);
+console.log(`+ Trait (sharpeye, mitigates dark): ${(wTrait*100).toFixed(1)}% (Delta: ${((wTrait-wBase)*100).toFixed(1)}%p)`);
