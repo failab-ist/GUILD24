@@ -508,14 +508,37 @@ function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).m
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
  +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'+hazardList(Presentation.known(d,game))+'</div></div>';}
-function statGrid(n){const values=Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),game.run.facilities).effects;
- /* One display rule for every stat the player reads: a plain value is a whole number, and a
-    value something moved keeps the one decimal that shows it moved. Presentation owns it, so
-    this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
-    The adventurer's own stat is the baseline: whatever a Trait, a Relic or a supplied item has
-    added on top is what the decimal is there to show. */
- return '<div class="detail-stats">'+Adventurer.keys.map(k=>{const moved=values[k]!==n.stats[k];
-  return '<div class="detail-stat'+(moved?' moved':'')+'"><label>'+Presentation.labels[k]+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong></div>';}).join('')+'</div>';}
+function statGrid(n){
+   const tList = Presentation.traits(n);
+   const prep = Dungeon.prepare({...n,traits:tList},game.claimedGateFor(n),game.run.facilities);
+   const values = prep.effects;
+   /* One display rule for every stat the player reads: a plain value is a whole number, and a
+      value something moved keeps the one decimal that shows it moved. Presentation owns it, so
+      this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
+      The adventurer's own stat is the baseline: whatever a Trait, a Relic or a supplied item has
+      added on top is what the decimal is there to show. */
+   return '<div class="detail-stats">'+Adventurer.keys.map(k=>{
+    const moved = values[k]!==n.stats[k];
+    let sources = '';
+    if(moved){
+      const list = [];
+      for(const tid of tList){
+        const v = D.traitBy[tid].effects[k];
+        if(v) list.push({name: D.traitBy[tid].name, v: v});
+      }
+      for(const st of prep.itemStats){
+        const v = st.stats[k];
+        if(v) list.push({name: D.itemBy[st.item].name, v: v});
+      }
+      if(list.length > 0) {
+        sources = '<div class="stat-sources">' + list.map(x => '<span class="source '+(x.v>0?'helpful':'harmful')+'">'+E(x.name)+' <b>'+(x.v>0?'+':'')+Presentation.stat(x.v, true)+'</b></span>').join('') + '</div>';
+      }
+    }
+    const inner = '<label>'+Presentation.labels[k]+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
+    if(sources) return '<details class="detail-stat'+(moved?' moved':'')+'"><summary>'+inner+'</summary>'+sources+'</details>';
+    return '<div class="detail-stat">'+inner+'</div>';
+   }).join('')+'</div>';
+}
 // ORDER — a paper, filled. The back room: dark wood and shelving. One order form
 // clipped to the board; offers are ruled lines on it with a price tag hanging off the
 // right edge and a stamped counter dial. No store scene anywhere in this composition.
