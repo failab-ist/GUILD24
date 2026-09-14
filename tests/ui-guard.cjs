@@ -431,16 +431,16 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
   'the carried seed is shown rather than applied behind the player');
  // an unopened store is not something the player is abandoning, so it is not described as one
  for(const f of [fn('newRun'),fn('renderModal')])
-  if(f.includes('현재 지점 포기')||f.includes('모두 포기하고'))
+  if(f.includes('현재 지원 포기')||f.includes('모두 포기하고'))
    assert.ok(f.includes("'foundation'"),'the abandon wording is withheld before the store opens');
 
  // D-30 / D-31~33: Full Reset moved to Settings.
  const menu=app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900);
  assert.ok(menu.includes("btn('도감','codex')"),'the codex is just 도감');
  assert.ok(!menu.includes('본사 · 도감'),'the old label is gone');
- assert.ok(menu.includes("btn('현재 지점 포기','new','danger')"),'the store abandon is in the menu');
+ assert.ok(menu.includes("btn('현재 지원 포기','new','danger')"),'the store abandon is in the menu');
  assert.ok(!menu.includes('모든 게임 데이터 초기화') && !menu.includes('Full Data Reset'),'full reset is removed from menu');
- assert.ok(/foundation'\]\.includes\(game\.run\.phase\)\?btn\('현재 지점 포기'/.test(menu),
+ assert.ok(/foundation'\]\.includes\(game\.run\.phase\)\?btn\('현재 지원 포기'/.test(menu),
   'it is absent when there is no store to abandon, rather than present and inert');
 });
 
