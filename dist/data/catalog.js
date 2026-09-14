@@ -64,7 +64,7 @@ traits:[
 ['greed','탐욕','mixed',{loot:0.3,escape:-0.07},{loot:'benefit',escape:'cost'}],
 ['frugal','구두쇠','negative',{priceBias:-0.16},{priceBias:'cost'},'비싼 상품일수록 구매를 망설입니다.'],
 ['impulse','충동구매','positive',{buyBias:0.12},{buyBias:'benefit'}],
-['liar','거짓말쟁이','mixed',{},{},'50% 확률로 예상 목적지가 거짓으로 표시될 수 있습니다. 실제 배정은 바뀌지 않습니다.'],
+['liar','거짓말쟁이','mixed',{},{},'50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.'],
 ['genius','천재','positive',{xpMult:1.25},{xpMult:'benefit'}],
 ['strong','강골','positive',{injuryGuard:0.23},{injuryGuard:'benefit'}],
 ['frail','허약함','negative',{survivalPercent:-0.10,recoveryDelta:1},{survivalPercent:'cost',recoveryDelta:'cost'}],
@@ -204,7 +204,7 @@ G.DATA.bossTuning={
 /* fireCombat is the §O easing of the fire Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
    the harness without editing production. The value is unchanged by that move. */
-G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,showoffLie:.6,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90};
+G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90};
 /* ECONOMY_ORDER §PURCHASE INTENT (Stage 10, approved).
    `mult` is what the customer is charged and is unchanged. `intentMult` is the price the
    customer JUDGES the offer at - the purchase-intent threshold. For 할인 and 바가지 the two are
