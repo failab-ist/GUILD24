@@ -681,4 +681,53 @@ test('NPC-Q66 — MAJOR INJURY RECOVERY', () => {
  assert.equal(n.status, '건강', 'status becomes healthy');
 });
 
+test('SAVE V7 EXACT CONTRACT', () => {
+ const g = new Game();
+ g.autosave = false;
+ g.start('v7-contract');
+ 
+ // 1. new Run -> run.version === 7
+ assert.equal(g.run.version, 7, 'a new run is created at version 7');
+ 
+ // 2. Save.valid()가 run.version !== 7 reject
+ const raw = JSON.parse(Save.export(g.account, g.run));
+ assert.ok(Save.valid(raw), 'the exported v7 shape is valid');
+ raw.run.version = 6;
+ assert.equal(Save.valid(raw), false, 'a run.version !== 7 is rejected');
+ raw.run.version = 7;
+ 
+ // 3. unlocks.premium non-boolean -> Save.valid() === false
+ raw.account.unlocks.premium = "true";
+ assert.equal(Save.valid(raw), false, 'premium as string is refused');
+ delete raw.account.unlocks.premium;
+ assert.equal(Save.valid(raw), false, 'missing premium is refused');
+ raw.account.unlocks.premium = false;
+ 
+ // 4. unlocks.tree non-boolean -> Save.valid() === false
+ raw.account.unlocks.tree = 1;
+ assert.equal(Save.valid(raw), false, 'tree as number is refused');
+ delete raw.account.unlocks.tree;
+ assert.equal(Save.valid(raw), false, 'missing tree is refused');
+ raw.account.unlocks.tree = false;
+ 
+ // 5. Meta.fresh() -> premium === false, tree === false, valid account shape
+ const fresh = Meta.fresh();
+ assert.equal(fresh.unlocks.premium, false, 'fresh account premium is false boolean');
+ assert.equal(fresh.unlocks.tree, false, 'fresh account tree is false boolean');
+ assert.ok(Save.valid({version:7, account:fresh, run:null}), 'fresh account alone is a valid save payload');
+ 
+ // 5.1 extra keys in unlocks do not invalidate
+ const extraRaw = JSON.parse(Save.export(g.account, g.run));
+ extraRaw.account.unlocks.unrelatedKey = true;
+ assert.ok(Save.valid(extraRaw), 'extra key in unlocks does not invalidate the save');
+ 
+ // 6. fresh account + new Run -> export/save -> import/load -> 정상
+ const h = new Game(Meta.fresh());
+ h.start('fresh-test');
+ const payload = Save.export(h.account, h.run);
+ const loaded = Save.import(payload);
+ assert.equal(loaded.account.unlocks.premium, false);
+ assert.equal(loaded.run.version, 7);
+});
+
 console.log(count+' integration groups passed');

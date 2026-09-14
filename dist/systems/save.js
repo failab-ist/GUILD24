@@ -24,7 +24,8 @@ const RELIC_WINDOWS=[0,5,10,15,20,25,30];
    there is no cached value here that could disagree with it. */
 function accountOk(a,D){
  if(!a||!a.knowledge||!a.settings)return false;
- if(a.unlocks&&typeof a.unlocks!=='object')return false;
+ if(!a.unlocks||typeof a.unlocks!=='object')return false;
+ if(typeof a.unlocks.premium!=='boolean'||typeof a.unlocks.tree!=='boolean')return false;
  /* Mix levels are a presentation preference, not progression truth: checked for shape when
     present, the way tutorial is, and defaulted by the audio layer when a save predates them.
     A save that carries a level carries a real one - a string or a 7 is malformed, not old. */
@@ -235,6 +236,7 @@ G.Save={
    if(s?.version!==7)return false;
    if(!accountOk(a,D))return false;
    if(r===null)return true;              // an account-only save, with no run in progress
+   if(r?.version!==7)return false;
    if(!runShapeOk(r,D))return false;
    if(!bossOk(r,D))return false;
    const ids=r.npcs.map(n=>n.id);
