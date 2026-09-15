@@ -10,11 +10,16 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 ## INHERITANCE
 
-All unchanged Run/phase/abandon **mechanics** inherit `CORE_RUN_v2.6.1.md`.
+All unchanged Run/phase/abandon mechanics inherit `CORE_RUN_v2.6.1.md`.
 This patch owns only v2.7 Run-start inventory, Save generation, and D0~D30 Final timeline changes.
 
-The exact Player-facing Run-abandon action label does **not** inherit as v2.7 truth because the current inherited documents contain two later canonical wordings.
-The abandon function/semantics remain unchanged; exact v2.7 wording is owned by `COPY_WORLD_VOICE_v2.7.0.md` and is currently User-approval unresolved.
+The v2.7 Player-facing Run-abandon label remains:
+
+```text
+현재 지점 포기
+```
+
+The abandon function/semantics remain unchanged.
 
 ## SAVE v8 — EXACT
 
@@ -31,14 +36,15 @@ LEGACY = v1~v7
 
 Rules:
 - New Run initializes `run.version=8`.
-- v1~v7 cannot continue as a v2.7 Run.
+- v1~v7 **Run state** cannot continue as a v2.7 Run.
 - Do not migrate v1~v7 Run state into v8.
-- Show clear fresh-start guidance when only legacy Run data exists.
-- Do not automatically delete legacy bytes merely because they cannot continue.
+- When valid v7 Account/Meta progression exists, preserve only that validated Account/Meta state under `META_v2.7.0.md`; this is not Run continuation.
+- Show clear fresh-Run guidance when only legacy Run data exists.
+- Do not automatically delete legacy bytes merely because their Run cannot continue.
 - Full Data Reset remains the explicit game-owned data deletion action.
 
 Reason:
-v2.7 changes active Item IDs, normal Bag capacity, Level milestone behavior, Final prereveal state, and persistent recent-expedition data. Partial in-place continuation is not an approved migration path.
+v2.7 changes active Item IDs, normal Bag capacity, Level milestone behavior, Final prereveal state, and persistent recent-expedition data. Partial in-place Run continuation is not an approved migration path.
 
 ## START STOCK — v2.7
 
@@ -112,5 +118,6 @@ NPC growth/level -> `NPC_TRAIT_v2.7.0.md`
 Item/start-stock identity -> `ITEM_v2.7.0.md`
 D25 Final generation -> `FINAL_EXPEDITION_v2.7.0.md`
 Boss reveal -> `BOSS_v2.7.0.md`
+Account/Meta preservation -> `META_v2.7.0.md`
 Presentation -> `UI_UX_v2.7.0.md`
 Player-facing abandon wording -> `COPY_WORLD_VOICE_v2.7.0.md`
