@@ -214,8 +214,24 @@ Required beats:
 - D25 `FINAL까지 5일` + exact persisted Final Family/Hazard disclosure
 - D30 reuse D25 state; no new Family reroll reveal
 
+The inherited v2.6 wording that frames Final Family discovery as a new D30 `최종 정찰 보고` is superseded in timing.
+If that existing report framing is reused, it belongs to the D25 disclosure beat.
+
 Boss reveal timing -> `BOSS_v2.7.0.md`.
 Final state -> `FINAL_EXPEDITION_v2.7.0.md`.
+
+## FINAL MODIFIER PREVIEW — v2.7 DELTA
+
+Keep the inherited rule that a Boss-caused change to a Player-visible value is shown as actual `original -> applied` data before Final lock.
+
+For GLUTTONY specifically, the inherited Rare+/raw-Stat preview scope is stale.
+Use the current `BOSS_v2.7.0.md` truth:
+- preview the positive Core-Stat contribution originating from Items before -> after the ×0.50 Boss effect
+- no Rarity threshold
+- do not show Counter / Supply / Insurance / Utility / harmful RiskReward penalty as reduced by this effect
+
+Player-facing identity uses `탐식의 마왕 글러트니`.
+Exact changed Trait title/prose remains owned by `COPY_WORLD_VOICE_v2.7.0.md`.
 
 ## TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
 
@@ -355,4 +371,5 @@ Sale interaction -> `SALE_v2.7.0.md`
 Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
 Night result -> `NIGHT_CLOSING_v2.7.0.md`
 Final timeline -> `CORE_RUN_v2.7.0.md`
+Boss modifier truth -> `BOSS_v2.7.0.md`
 Copy -> `COPY_WORLD_VOICE_v2.7.0.md`
