@@ -130,11 +130,19 @@ The exact Supply-deficit penalty formula remains hidden and inherits the current
 
 ## EXCESS SUPPLY -> FATIGUE — EXACT v2.7 ORDER
 
+For this calculation:
+
+```text
+preparedSupply = final Food/Drink Supply after all valid Item/Trait/Relic adjustments
+```
+
+This is the same `preparedSupply` field exposed by `NIGHT_CLOSING_v2.7.0.md`.
+
 Food/Drink Supply is processed as:
 
 ```text
 excessSupply
-= max(0, finalFoodDrinkSupply - requiredSupply)
+= max(0, preparedSupply - requiredSupply)
 
 preRecovery
 = min(currentFatigue, excessSupply)
@@ -151,11 +159,14 @@ rawOutcomeFatigueGain
 Severe Injury / Death:
 rawOutcomeFatigueGain = 0
 
-postOutcomeFatigueGain
+actualOutcomeFatigueGain
 = max(0, rawOutcomeFatigueGain - remainingSupplyBuffer)
 
+outcomeBufferUsed
+= rawOutcomeFatigueGain - actualOutcomeFatigueGain
+
 finalFatigue
-= clamp(fatigueBeforeExpedition + postOutcomeFatigueGain, 0, 20)
+= clamp(fatigueBeforeExpedition + actualOutcomeFatigueGain, 0, 20)
 ```
 
 Meaning:
@@ -164,18 +175,21 @@ Meaning:
 3. Any still-remaining Supply buffers this expedition's resulting Fatigue gain 1:1.
 4. Leftover Supply does not become Power, success chance, Loot, Hazard defense, or a persisted next-expedition buffer.
 
+Field naming is shared with `NIGHT_CLOSING_v2.7.0.md`.
+Do not introduce a second live `postOutcomeFatigueGain` field name for the same value.
+
 ## PREPARATION SEQUENCE OVERRIDE
 
 The v2.6 prepare sequence is updated only where needed:
 
 ```text
 A. NPC Base + Equipment
-B. evaluate Bag Item Stat / Counter / final Food-Drink Supply
+B. evaluate Bag Item Stat / Counter / preparedSupply
 C. pay required Supply, calculate preRecovery, fatigueBeforeExpedition, remainingSupplyBuffer
 D. apply NPC-side Trait / Injury / Fatigue modifiers using fatigueBeforeExpedition
 E. add Sold Item Core Stat contribution
 F. apply existing Supply Deficit / Hazard calculations
-G. after actual expedition Outcome is known, apply outcome Fatigue then remainingSupplyBuffer
+G. after actual expedition Outcome is known, calculate rawOutcomeFatigueGain, outcomeBufferUsed, actualOutcomeFatigueGain, finalFatigue
 ```
 
 Do not consume the outcome buffer before the actual Outcome exists.
