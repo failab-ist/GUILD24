@@ -10,9 +10,12 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 ## INHERITANCE
 
-All unchanged v2.6.1 SALE desktop/mobile hierarchy, Menu/Settings composition, Night controls, touch-target requirements, scroll/focus continuity, portrait preload, and Order phase flow inherit `UI_UX_v2.6.1.md`.
+All unchanged v2.6.1 SALE desktop/mobile hierarchy, Menu/Settings **functional composition**, Night controls, touch-target requirements, scroll/focus continuity, portrait preload, and Order phase flow inherit `UI_UX_v2.6.1.md`.
 
 This patch adds only v2.7 information-boundary, handling, Final-timeline, and visual-language changes.
+
+The Menu still contains the same Run-abandon action in the same functional location, but the inherited exact label `현재 지점 포기` is **not** frozen as v2.7 copy truth.
+Exact v2.7 wording is owned by `COPY_WORLD_VOICE_v2.7.0.md` and remains User-approval unresolved.
 
 ## CORE UI PRINCIPLE
 
@@ -293,8 +296,9 @@ Material direction:
 
 ## MENU / SETTINGS VISUAL ONLY
 
-Functional composition remains exactly inherited from v2.6.1.
-Do not redefine Menu/Settings functions in v2.7.
+Functional composition remains exactly inherited from v2.6.1 **except that exact Run-abandon wording is not inherited as v2.7 truth**.
+The Run-abandon action remains top-level and remains separate from Full Data Reset.
+Exact label -> `COPY_WORLD_VOICE_v2.7.0.md`.
 
 Visual direction:
 - Menu = one surface + row navigation, not dashboard-card grid
