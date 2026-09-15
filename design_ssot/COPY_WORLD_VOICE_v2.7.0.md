@@ -15,6 +15,8 @@ All unchanged DATA / FUNCTION / FLAVOR separation, voice, dialogue, culture, ter
 v2.7 is not a broad dialogue rewrite.
 This patch owns only copy that would otherwise teach a stale or nonexistent mechanic.
 
+Where an inherited v2.5 example names a Rule/value that changed in a current v2.7 owner, the current owner wins and the stale example is not Design Truth.
+
 ## TRUTH-CRITICAL COPY — v2.7
 
 Priority:
@@ -55,6 +57,61 @@ Do not remap the Potion line to `Special` merely because stale Source used that 
 
 This patch does not create a second localized-category taxonomy.
 Exact Korean display strings, where needed, must preserve these six identities and follow approved existing copy style; they must not invent a seventh category or restore `Medical`.
+
+## INHERITED EXAMPLE OVERRIDES
+
+The following inherited v2.5 copy/function examples are explicitly superseded:
+
+### 불룡볶음면
+
+The old copy note that describes it as `투력 support` is stale.
+Current function truth is owned by `ITEM_v2.7.0.md`:
+
+```text
+강인함 +5
+냉기 Counter +6
+Supply 4
+```
+
+Existing flavor such as `용 그림은 장식이 아니다.` may remain only as Flavor; it must not be used to imply the retired combat-stat function.
+
+### GLUTTONY / 탐식
+
+Internal ID remains `GLUTTONY`.
+Player-facing identity follows `BOSS_v2.7.0.md`:
+
+```text
+탐식
+탐식의 마왕 글러트니
+```
+
+All inherited `폭식 / 폭식의 마왕 글러트니 / 폭식의 권능` wording is stale.
+
+The inherited D15 function text that says `[등급] 이상 보급품` is also stale because v2.7 has no Rarity threshold for this Boss effect.
+Current mechanic truth is:
+- all positive Core-Stat contribution originating from Items is reduced to 50%
+- Hazard Counter / Supply / Insurance / Utility / harmful RiskReward penalty are unaffected
+
+Exact final player-facing D15 trait title and prose for this changed mechanic are:
+
+```text
+UNRESOLVED — USER APPROVAL REQUIRED
+```
+
+Do not reuse the old Rare+-based sentence as placeholder truth.
+
+### Final Family / Hazard reveal timing
+
+The inherited `D30 — 최종 정찰 보고` timing is superseded.
+Current timing is:
+
+```text
+D25 = exact persisted Final Family Pair / Hazard Pool reveal
+D30 = reuse the already-known persisted state; no new Family reveal/reroll
+```
+
+If the existing `최종 정찰 보고` header/copy block is reused, it belongs to the D25 disclosure beat rather than a new D30 reveal.
+Do not add a second D30 Family-intro copy that implies newly generated information.
 
 ## MORNING / SUPPLY COPY
 
@@ -141,6 +198,8 @@ when the resolved report cannot prove that exact cause.
 ## RELATED
 
 Item truth -> `ITEM_v2.7.0.md`
+Boss identity/trait function -> `BOSS_v2.7.0.md`
+Final reveal timing -> `CORE_RUN_v2.7.0.md` / `FINAL_EXPEDITION_v2.7.0.md`
 Event function -> `EVENT_v2.7.0.md`
 Sale/UI -> `SALE_v2.7.0.md` / `UI_UX_v2.7.0.md`
 Night causality -> `NIGHT_CLOSING_v2.7.0.md`
