@@ -10,6 +10,22 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Status values are not stored here. FAIL is valid evidence.
 
+## INHERITED QA OVERRIDES
+
+The following inherited `CORE_RUN_QA_v2.5.0.md` expectations are stale and are explicitly superseded:
+
+- `RUN-Q01` old `1200G / 24칸 / 삼각김밥×2 / 생수×2 / 붕대×1 / 하급포션×1`
+  - current Run baseline remains `Gold=1000G`, `InventoryCapacity=18`
+  - v2.7 start stock is owned by `CORE_RUN_v2.7.0.md` / `RUN-Q72`
+- `RUN-Q06` fixed `60G` base-overhead expectation
+  - current overhead must follow the current `CORE_RUN` / Closing economy truth; QA must not preserve the stale fixed-60 value
+- `RUN-Q26` Lv10+ third Consumer Slot expectation
+  - superseded by `SALE_v2.7.0.md`: every ordinary SALE Bag has exactly 2 slots
+- `RUN-Q32` D30-first Final Family disclosure expectation
+  - superseded by v2.7 D25 prereveal; D30 reuses the already-persisted state
+
+All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
+
 ## RUN-Q70 — SAVE V8 EXACT
 
 EXPECT:
