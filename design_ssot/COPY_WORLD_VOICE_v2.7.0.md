@@ -60,7 +60,7 @@ Exact Korean display strings, where needed, must preserve these six identities a
 
 ## INHERITED EXAMPLE OVERRIDES
 
-The following inherited v2.5 copy/function examples are explicitly superseded or unresolved where two later canonical paths conflict.
+The following inherited v2.5 copy/function examples are explicitly superseded where current v2.7 owner truth changed.
 
 ### 불룡볶음면
 
@@ -92,13 +92,15 @@ Current mechanic truth is:
 - all positive Core-Stat contribution originating from Items is reduced to 50%
 - Hazard Counter / Supply / Insurance / Utility / harmful RiskReward penalty are unaffected
 
-Exact final player-facing D15 trait title and prose for this changed mechanic are:
+Exact v2.7 D15 player-facing copy:
 
 ```text
-UNRESOLVED — USER APPROVAL REQUIRED
+탐식의 권능
+아이템의 투력·강인함·기동·정신 증가량 50% 감소
+환경 대응·보급·보험 효과는 유지
 ```
 
-Do not reuse the old Rare+-based sentence as placeholder truth.
+Do not reuse the old Rare+-based sentence.
 
 ### Final Family / Hazard reveal timing
 
@@ -115,18 +117,14 @@ Do not add a second D30 Family-intro copy that implies newly generated informati
 
 ### Current Run abandon label
 
-There is an inherited canonical wording conflict:
-- `COPY_WORLD_VOICE_v2.5.0.md` approved amendment uses `현재 런 포기` / preferred `현재 런 포기 · 새 점포 준비`
-- current v2.6.1 `CORE_RUN` / `UI_UX` use `현재 지점 포기`
-
-The underlying abandon mechanic is resolved and unchanged.
-The exact v2.7 Player-facing action label is:
+Exact v2.7 Player-facing action label:
 
 ```text
-UNRESOLVED — USER APPROVAL REQUIRED
+현재 지점 포기
 ```
 
-Do not silently choose either historical label during v2.7 Source adoption.
+The older v2.5 Copy amendment candidate `현재 런 포기 / 현재 런 포기 · 새 점포 준비` is superseded.
+The function remains the current Run-only abandon action; Account/Meta preservation and Full Data Reset remain separate mechanics.
 
 ## MORNING / SUPPLY COPY
 
@@ -178,23 +176,22 @@ Forbidden solution script:
 
 Tutorial may point to the relevant UI value without selecting the answer for the Player.
 
-## EVENT 05 — COPY STATUS
+## EVENT 05 — EXACT PLAYER COPY
 
 Mechanic ownership -> `EVENT_v2.7.0.md`.
 
-Required copy truth:
-- the Event is Potion-category buy-price pressure
-- actual mechanical effect is current-day Potion buy price +35%
+Required mechanic truth:
+- Potion-category buy-price pressure
+- current-day Potion buy price +35%
 - retired `마석 가격 폭등` / `Special 매입가 +35%` wording is forbidden
 
-Exact player-facing Event title and flavor/reveal sentence are:
+Exact player-facing copy:
 
 ```text
-UNRESOLVED — USER APPROVAL REQUIRED
+포션 가격 폭등
+포션 값이 또 올랐다.
+오늘 포션 매입가 +35%
 ```
-
-Do not promote a candidate Event name/flavor line from planning discussion into Design Truth without User approval.
-The unresolved wording does not change the already-resolved Event mechanic.
 
 ## RESULT CAUSALITY COPY
 
