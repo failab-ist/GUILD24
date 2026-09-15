@@ -14,15 +14,9 @@ All Event timing, frequency, selection, reveal, Hazard-event, Deep-Day exclusion
 
 This patch changes only stale Item-category references created by the v2.7 catalog migration.
 
-## EVENT 05 — POTION PRICE SURGE
+## EVENT 05 — POTION PRICE PRESSURE
 
-The former player-facing `마석 가격 폭등` event is migrated because `마석 보조배터리` is retired and `Special` is not the Potion category.
-
-Player-facing event:
-
-```text
-포션 가격 폭등
-```
+The former Event-05 gameplay identity tied to retired Mana/Special classification is migrated to the v2.7 Potion category.
 
 TYPE:
 ```text
@@ -33,13 +27,7 @@ Weight remains unchanged.
 
 Effect:
 ```text
-오늘 Potion 매입가 +35%
-```
-
-Reveal copy:
-```text
-포션 값이 또 올랐다.
-오늘 Potion 매입가 +35%
+current-day Potion buy price +35%
 ```
 
 Rules:
@@ -49,6 +37,8 @@ Rules:
 - does not target Field Gear / Insurance
 - does not create a new magic-item category
 - effect lasts only for the Event day as ordinary Event rules already define
+
+Exact player-facing title/reveal copy -> `COPY_WORLD_VOICE_v2.7.0.md`.
 
 ## CATEGORY AUDIT
 
