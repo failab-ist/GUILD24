@@ -10,6 +10,12 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Status values are not stored here.
 
+Conflicting base expectations are superseded as follows:
+- base Fresh tests that expect generic Supply amplification are replaced by `REL-Q72~Q75`
+- base Reroll-price example values are replaced by `REL-Q81`, which follows current `ECONOMY_ORDER_v2.6.1.md`
+- base D30 Family-reveal timing is replaced by `REL-Q78`
+All other non-conflicting base QA remains inherited.
+
 ## REL-Q70 — SINGLE RELIC VS BUILD VALUE
 
 PASS direction:
@@ -130,3 +136,16 @@ PASS direction:
 - completed Fresh build materially changes Food/Drink choices
 - dedicated Field Gear remains stronger/reliable on its narrow Hazard target unless the actual combined build tradeoff justifies the Food/Drink alternative
 - Fresh is powerful through coherent build accumulation, not one universal Food item
+
+## REL-Q81 — REROLL RELIC USES CURRENT ECONOMY CURVE
+
+With `발주 교환권`:
+- first canonical Full-offer Reroll of the Day = 0G
+- free use consumes the first daily Reroll step
+- next same-Day Reroll uses the second current `ECONOMY_ORDER` step
+- under current v2.6.1 economy this means `0 -> 100 -> 200 -> 400 ...`
+- next Day restores the free first use
+- pity is not advanced by Reroll
+
+PASS:
+No stale `0 -> 60 -> 120` base-QA curve survives as v2.7 truth.
