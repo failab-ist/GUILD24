@@ -37,17 +37,26 @@ EXPECT:
 
 PASS only if all are 8.
 
-## RUN-Q71 — LEGACY V1~V7 SAFETY
+## RUN-Q71 — V7 ACCOUNT PRESERVATION / RUN RESET
 
-SETUP: leave v1~v7 save bytes with no valid v8 current save.
+SETUP:
+- no valid current v8 save
+- valid current v7 save with known Account/Meta progression and an active legacy Run
 
 EXPECT:
-- old Player Run cannot continue as v2.7
-- clear fresh-start guidance
-- legacy bytes not silently deleted merely because they are incompatible
-- no Bandage-to-Herb-Tea migration
+- v7 Run state does not continue as v2.7
+- a fresh v8 Run is created
+- validated v7 Account/Meta progression is carried forward according to `META_v2.7.0.md`
+- legacy v7 bytes are not silently deleted by the import
+- retired Run inventory/NPC/Bag/Final state is not copied
+- no Bandage-to-Herb-Tea conversion occurs
 
-PASS: fresh v8 start is explicit and legacy Player Run data is not misrepresented as migrated.
+Also verify:
+- once a valid v8 save exists, later loads do not repeatedly re-import v7
+- malformed v7 Account/Meta is not partially coerced into progression
+- v1~v6 Account/Meta is not automatically imported by this v2.7 rule
+
+PASS: account progression is preserved where valid, while legacy Run continuation remains impossible.
 
 ## RUN-Q72 — START STOCK
 
