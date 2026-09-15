@@ -520,33 +520,12 @@ function statGrid(n){
    return '<div class="detail-stats">'+Adventurer.keys.map(k=>{
     const moved = values[k]!==n.stats[k];
     let sources = '';
-    if(moved){
-      const list = [];
-      if(k==='combat'&&n.equipment.power) list.push({name:'장비 ('+n.equipment.name+')', v:n.equipment.power});
-      
-      for(const tid of tList){
-        const eff = D.traitBy[tid].effects;
-        if(eff[k]) list.push({name: D.traitBy[tid].name, v: eff[k]});
-        if(k==='combat' && eff.combatPercent) list.push({name: D.traitBy[tid].name, v: eff.combatPercent * 100, isPct: true});
-        if(k==='combat' && n.injury && eff.injuredCombatPercent) list.push({name: D.traitBy[tid].name, v: eff.injuredCombatPercent * 100, isPct: true});
-        if(k==='survival' && eff.survivalPercent) list.push({name: D.traitBy[tid].name, v: eff.survivalPercent * 100, isPct: true});
+          if(moved){
+        const list = prep.effects.sources?.[k] || [];
+        if(list.length > 0) {
+          sources = '<div class="stat-sources">' + list.map(x => '<span class="source '+(x.v>0?'helpful':'harmful')+'">'+E(x.name)+' <b>'+(x.v>0?'+':'')+(x.isPct ? Math.round(x.v)+'%' : Presentation.stat(x.v, true))+'</b></span>').join('') + '</div>';
+        }
       }
-      for(const st of prep.itemStats){
-        if(st.stats[k]) list.push({name: D.itemBy[st.item].name, v: st.stats[k]});
-      }
-      
-      const fatigue = values.effectiveFatigue || 0;
-      if((k==='mobility'||k==='spirit') && fatigue>=10){
-        list.push({name: fatigue>=20?'극심한 피로':'피로 누적', v: fatigue>=20?-25:-10, isPct: true});
-      }
-      if(prep.supply.penalty){
-        list.push({name: '보급 부족', v: -Math.round(prep.supply.penalty * 100), isPct: true});
-      }
-      
-      if(list.length > 0) {
-        sources = '<div class="stat-sources">' + list.map(x => '<span class="source '+(x.v>0?'helpful':'harmful')+'">'+E(x.name)+' <b>'+(x.v>0?'+':'')+(x.isPct ? x.v+'%' : Presentation.stat(x.v, true))+'</b></span>').join('') + '</div>';
-      }
-    }
     const inner = '<label>'+Presentation.labels[k]+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
     if(sources) return '<details class="detail-stat'+(moved?' moved':'')+'"><summary>'+inner+'</summary>'+sources+'</details>';
     return '<div class="detail-stat'+(moved?' moved':'')+'">'+inner+'</div>';
