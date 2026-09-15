@@ -58,7 +58,7 @@ That document is an execution prerequisite, not v2.7 Design Truth.
 
 ## CURRENT DESIGN SSOT FILE SET
 
-Current file set = 23 files:
+Current file set = 22 files:
 
 - `SPEC_INDEX_v2.7.0.md`
 - `00_GAME_CORE_v2.5.0.md`
@@ -76,13 +76,14 @@ Current file set = 23 files:
 - `EVENT_v2.7.0.md`
 - `BOSS_v2.7.0.md`
 - `FINAL_EXPEDITION_v2.7.0.md`
-- `DECISIONS_v2.5.0.md`
 - `CORE_RUN_QA_v2.7.0.md`
 - `ECONOMY_ORDER_QA_v2.6.1.md`
 - `NPC_TRAIT_QA_v2.7.0.md`
 - `DUNGEON_ITEM_QA_v2.7.0.md`
 - `RELIC_QA_v2.7.0.md`
 - `UI_UX_QA_v2.7.0.md`
+
+`DECISIONS_v2.5.0.md` is historical only and is intentionally excluded from the current v2.7 SSOT set because it contains duplicated/superseded values that now belong only to current owner Specs.
 
 ## ROUTING
 
@@ -130,9 +131,9 @@ Changed owners only:
 Unchanged detailed economy/order rules stay in `ECONOMY_ORDER_v2.6.1.md`.
 Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
 
-## PROMOTED-VISION STATUS
+## PROMOTED-VISION / HISTORY STATUS
 
-The previous `GUILD24_v2.7_PLUS_VISION.md` and discussion/audit reports are planning/history references only after this promotion.
+The previous `GUILD24_v2.7_PLUS_VISION.md`, `DECISIONS_v2.5.0.md`, and discussion/audit reports are planning/history references only after this promotion.
 They are not parallel Design SSOT and must not override the owner files routed above.
 
 v2.8+ deferred concepts are not part of this SSOT and must not be implemented during v2.7 adoption unless the User explicitly promotes them.
