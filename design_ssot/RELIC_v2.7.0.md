@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged Relic acquisition windows, candidate generation, defer, save stability, build axes, non-Fresh blueprints, and Sloth window lifecycle inherit `RELIC_v2.5.0.md`.
 
-This patch changes v2.7 build-value interpretation, Fresh values/scope, Expedition category filters, and D30 Final-information ordering.
+This patch changes v2.7 build-value interpretation, Fresh values/scope, Expedition category filters, D30 Final-information ordering, and stale Reroll-price examples that no longer match the current Economy owner.
 
 ## RELIC POWER / BUILD HIERARCHY
 
@@ -44,6 +44,27 @@ For build effects that can be meaningfully expressed as Final Party Power, a coh
 
 Do not implement this by adding generic Power to every Relic.
 Economy/visitor/order builds should express value through their actual channels.
+
+## REROLL RELIC ECONOMY OVERRIDE
+
+`발주 교환권` keeps its existing functional identity:
+
+```text
+each Day's first canonical Full-offer Reroll = 0G
+free use consumes the first daily Reroll step
+```
+
+All paid Reroll costs after that use the current authoritative curve from `ECONOMY_ORDER_v2.6.1.md`.
+
+With the current curve:
+
+```text
+normal: 50 -> 100 -> 200 -> 400 -> 800 -> x2 thereafter
+with 발주 교환권: 0 -> 100 -> 200 -> 400 -> 800 -> x2 thereafter
+```
+
+The inherited v2.5 example `0 -> 60 -> 120 -> 240 ...` is superseded and is not v2.7 Design Truth.
+Reroll still does not advance pity.
 
 ## FRESH — LARGE FRIDGE
 
@@ -177,6 +198,7 @@ Do not duplicate SLOTH Boss Power numbers here.
 ## RELATED
 
 Item/category -> `ITEM_v2.7.0.md`
+Economy/Reroll -> `ECONOMY_ORDER_v2.6.1.md`
 Order/UI -> `UI_UX_v2.7.0.md`
 D25 Final state -> `FINAL_EXPEDITION_v2.7.0.md`
 Sloth Boss value -> `BOSS_v2.7.0.md`
