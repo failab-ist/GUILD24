@@ -25,30 +25,37 @@ Exact:
 - Full Data Reset remains the explicit user action that clears game-owned Account/Meta data
 - v2.7 does not change the meaning of existing Account/Meta progression fields merely because the Run schema changes
 
-### V7 -> V8 ACCOUNT PRESERVATION — USER DECISION REQUIRED
+### V7 -> V8 ACCOUNT PRESERVATION — EXACT
 
-The current approved text does **not** resolve whether validated v7 Account/Meta progression is carried into a new v8 envelope while the old Run is discarded.
-
-```text
-UNRESOLVED — USER APPROVAL REQUIRED
-```
-
-Do not guess between:
+When no valid current v8 save exists and a valid current v7 save is available:
 
 ```text
-A. preserve validated v7 Account/Meta progression -> start only a fresh v8 Run
-or
-B. v8 starts a fresh Account/Meta as well as a fresh Run
+validated v7 Account/Meta state
+-> carry forward into v8 Account/Meta
+
+v7 Run state
+-> do not migrate
+-> start a fresh v8 Run
 ```
 
-This is a data-preservation boundary, not a balance-tuning detail.
-Until User resolution:
-- do not delete or rewrite the existing v7 bytes automatically
-- do not claim account migration is supported
-- do not claim account reset is intended
-- v2.7 Source Save adoption remains blocked on this exact policy
+Preserve the validated Account/Meta progression already owned by the current Meta schema, including its current:
+- Job × Boss clear matrix / derived Job Mastery
+- distinct Boss clear progression
+- Franchise Grade / Start Contract availability
+- Monster Knowledge
+- approved unlock state
+- other currently validated Account/Meta flags required by those systems
 
-This unresolved does not change ordinary same-version behavior:
+Rules:
+- this is Account/Meta preservation only, not v7 Run continuation
+- retired v7 Run inventory/NPC/Bag/Final state is not copied into v8
+- do not partially coerce malformed v7 Account/Meta fields into valid progression
+- if the v7 Account/Meta payload does not pass its current validation, do not claim that progression was migrated
+- legacy v7 bytes are not silently deleted by the import
+- once a valid v8 save exists, normal loading uses v8 and does not repeatedly re-import v7
+- no automatic v1~v6 Account/Meta import is added by this v2.7 rule
+
+Ordinary same-version behavior remains:
 - Run Abandon preserves Account/Meta
 - Full Data Reset clears Account/Meta
 
@@ -74,7 +81,7 @@ If first-clear full-run evidence later shows the game is too hard, report a bala
 - start stock
 - D25 persisted Final state
 
-META owns only Account/Meta truth and the account-side preservation decision once User-approved.
+META owns Account/Meta truth and the v7 -> v8 Account/Meta preservation policy.
 Do not duplicate retired Item-ID migration or Final-state repair logic here.
 
 ## RELATED
