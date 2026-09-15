@@ -10,6 +10,9 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Status values are not stored here. FAIL is valid evidence.
 
+The base document's v7-specific `RUN-Q61 / RUN-Q62` expectations are superseded by `RUN-Q70 / RUN-Q71` below. They are historical inherited QA, not live v2.7 acceptance.
+All other non-conflicting base QA remains inherited.
+
 ## RUN-Q70 — SAVE V8 EXACT
 
 EXPECT:
