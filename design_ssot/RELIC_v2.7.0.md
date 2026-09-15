@@ -157,6 +157,9 @@ When `원정 도시락 코너`'s active-Supply condition also applies:
 => base positive native Stat ×2.45
 ```
 
+Food-affinity Trait percentages that target the same positive native Core-Stat channel join this same base-additive pool under `ITEM_v2.7.0.md`.
+Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a second sequential layer.
+
 This high point is an allowed coherent-build reward.
 
 ## EXPEDITION RELIC CATEGORY MIGRATION
@@ -197,7 +200,7 @@ Do not duplicate SLOTH Boss Power numbers here.
 
 ## RELATED
 
-Item/category -> `ITEM_v2.7.0.md`
+Item/category/composition -> `ITEM_v2.7.0.md`
 Economy/Reroll -> `ECONOMY_ORDER_v2.6.1.md`
 Order/UI -> `UI_UX_v2.7.0.md`
 D25 Final state -> `FINAL_EXPEDITION_v2.7.0.md`
