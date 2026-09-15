@@ -266,6 +266,29 @@ PASS:
 - no hidden poison Condition/cure subsystem
 - its v2.7 gameplay identity is the dedicated Poison Hazard specialist
 
+## ITEM-Q80 — FOOD TRAIT × FRESH STACKING
+
+Use a Food Item with a positive native Core Stat and controlled Trait/Relic state.
+
+EXPECT base-additive modifier composition from `ITEM_v2.7.0.md`:
+
+```text
+대식가 + 즉석식품 코너 + 24시간 신선체계
+= base ×2.50
+
+대식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= base ×2.75
+
+소식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= base ×2.25
+```
+
+PASS:
+- Trait and Relic native-Stat percentages are summed from Item base
+- no sequential Trait×Relic multiplicative layer
+- Counter / Supply / Insurance / Loot / Utility / harmful RiskReward penalty do not enter the native-Stat modifier pool
+- GLUTTONY, when present in Final, applies after the Item-side positive Core-Stat contribution is resolved
+
 ## SIM-Q70 — THREE PREPARATION AXES
 
 Full-run simulation/playtest must demonstrate that common rational Bag decisions can trade among:
