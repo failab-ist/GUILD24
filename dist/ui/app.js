@@ -306,8 +306,12 @@ function portrait(n,size,cls=''){
 function saleScreen(){
  const s=game.run,n=game.current();
  if(!n)return '<div class="stage p-sale">'+menuFab()+'<main class="stage-scroll" id="phase-content" tabindex="-1"><p class="muted">영업을 마치는 중입니다.</p></main></div>';
- const waiting=Math.max(0,s.queue.length-s.cursor-1);
- return '<div class="stage p-sale">'+menuFab()
+   const waiting=Math.max(0,s.queue.length-s.cursor-1);
+   const nextNpcId = s.queue[s.cursor+1];
+   const nextNpc = nextNpcId ? s.npcs.find(x=>x.id===nextNpcId) : null;
+   const preloadArt = nextNpc ? Scene.npcArt(nextNpc) : null;
+   const preloadHtml = preloadArt ? '<img src="'+preloadArt+'" style="display:none" aria-hidden="true">' : '';
+   return '<div class="stage p-sale">'+menuFab()+preloadHtml
  +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
   +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
   +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+waitingLine(waiting)+'</div>'
