@@ -1,0 +1,97 @@
+# CORE_RUN
+
+DOC=CORE_RUN
+OWNER=run,phase,save,day_flow,abandon,final_timeline
+DOC_VERSION=2.7.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
+DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
+BASE_DOCUMENT=CORE_RUN_v2.6.1.md
+PATCH_TYPE=CORE_PLAY_REVISION
+
+## INHERITANCE
+
+All unchanged Run/phase/abandon behavior inherits `CORE_RUN_v2.6.1.md`.
+This patch owns only v2.7 Run-start inventory, Save generation, and D0~D30 Final timeline changes.
+
+## SAVE v8 — EXACT
+
+v2.7 uses a new incompatible Run schema.
+
+```text
+KEY = guild24.save.v8
+Envelope version = 8
+Export version = 8
+Validation version = 8
+run.version = 8
+LEGACY = v1~v7
+```
+
+Rules:
+- New Run initializes `run.version=8`.
+- v1~v7 cannot continue as a v2.7 Run.
+- Do not migrate v1~v7 Run state into v8.
+- Show clear fresh-start guidance when only legacy Run data exists.
+- Do not automatically delete legacy bytes merely because they cannot continue.
+- Full Data Reset remains the explicit game-owned data deletion action.
+
+Reason:
+v2.7 changes active Item IDs, normal Bag capacity, Level milestone behavior, Final prereveal state, and persistent recent-expedition data. Partial in-place continuation is not an approved migration path.
+
+## START STOCK — v2.7
+
+Keep the ordinary start quantity count, but replace the retired Bandage slot.
+
+```text
+삼각김밥 ×1
+생수 ×1
+진정 허브티 ×1
+하급 포션 ×1
+```
+
+`bandage` is retired and is not an active v2.7 Item ID.
+No legacy Bandage stock is silently converted into 진정 허브티.
+
+Item identity/prices/effects -> `ITEM_v2.7.0.md`.
+
+## FINAL TIMELINE — EXACT
+
+Reuse existing Morning/management surfaces; do not add a new permanent Final dashboard or new Phase.
+
+```text
+D0  : inform Player that D30 Final is the Run objective
+D5  : Boss information flow owned by BOSS
+D10 : FINAL까지 20일 signal
+D15 : additional Boss information flow owned by BOSS
+D20 : FINAL까지 10일 signal + Recon dispatch beat
+D25 : FINAL까지 5일 signal + exact Final Family Pair / Hazard Pool generated, revealed, persisted
+D30 : reuse the persisted D25 Final state exactly; no Family/Hazard reroll
+```
+
+D20 Recon creates no separate combat/minigame/resource system.
+Its gameplay payoff is the D25 exact Final Family/Hazard disclosure owned by `FINAL_EXPEDITION_v2.7.0.md`.
+
+D25 does not grant:
+- guaranteed Counter stock
+- free Final Item
+- special D25 shop
+- forced correct preparation
+
+The remaining D25~D29 Order / Stock / NPC growth / preservation decisions are the preparation window.
+
+## D25 STATE SAFETY
+
+For a valid v8 Run:
+- D25 Final generated state is persisted when created.
+- Save/Load cannot reroll it.
+- D30 reads that exact persisted state.
+
+A malformed v8 state that is D25+ but lacks required Final prereveal state is invalid rather than silently rerolled through ordinary play.
+Implementation recovery/debug tooling may repair fixtures, but normal Player Save/Load is not a reroll path.
+
+## RELATED
+
+NPC growth/level -> `NPC_TRAIT_v2.7.0.md`
+Item/start-stock identity -> `ITEM_v2.7.0.md`
+D25 Final generation -> `FINAL_EXPEDITION_v2.7.0.md`
+Boss reveal -> `BOSS_v2.7.0.md`
+Presentation -> `UI_UX_v2.7.0.md`
