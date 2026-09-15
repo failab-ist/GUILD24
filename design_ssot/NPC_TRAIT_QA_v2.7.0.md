@@ -10,6 +10,25 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Status values are not stored here.
 
+## INHERITED QA OVERRIDES
+
+The v2.6.1 QA patch and current v2.7 rules supersede conflicting expectations in the older `NPC_TRAIT_QA_v2.5.0.md` base.
+
+Explicitly stale:
+- inherited `TRAIT-Q15` exact active Trait count 30
+  - current active Trait count remains 37 under `NPC_TRAIT_v2.6.1.md`
+- inherited Food-affinity/native-recovery assumptions
+  - v2.7 uses the exact Food Core-Stat/Supply scope in `NPC_TRAIT_v2.7.0.md`
+- inherited Potionbody +30% expectation from the old Trait catalog
+  - v2.7 exact Potion positive native Core-Stat factor is ×1.15
+- any inherited expectation that a Level milestone grants a Trait, Rank/Title reward, or third ordinary Bag slot
+
+The older base contains two sections both labeled `NPC-Q09`.
+For v2.7 audit references, distinguish them by section title (`LONG-TERM VALUE` vs `META JOB UNLOCK POOL`) rather than treating the duplicated numeric label as one test identity.
+Do not create a runtime rule from this documentation-ID collision.
+
+All other inherited QA remains only where it does not conflict with a current owner or current patch.
+
 ## NPC-Q70 — LEVEL-UP ONLY GROWS CORE STATS
 
 SETUP: level NPCs across Lv5/Lv10/Lv15 milestones.
