@@ -8,7 +8,28 @@ DOC_AUTHORITY=DESIGN_QA_SPEC
 BASE_DOCUMENT=DUNGEON_ITEM_QA_v2.5.0.md
 PATCH_TYPE=CORE_PLAY_REVISION
 
-Status values are not stored here. This patch supersedes stale v2.5 expectations for third-slot, Medical category, Potion/Injury line, Item catalog, and Fatigue/Supply values.
+Status values are not stored here.
+
+## INHERITED QA OVERRIDES
+
+The following inherited v2.5 expectations are stale and explicitly superseded:
+
+- `DUN-Q07` third Lv10+ slot as insurance/flex/luxury
+  - v2.7 ordinary Bag is exactly 2 slots at every Level
+- `ITEM-Q01` category set containing `Medical`
+  - v2.7 exact set is Food / Drink / Potion / Field Gear / Insurance / Special
+- `ITEM-Q06` Bandage/First-Aid injury-insurance line
+  - 붕대 is retired; 구급키트 is Aftercare Insurance; Potion is a separate raw-Power category
+- `ITEM-Q07` 불룡볶음면 Combat identity
+  - current exact effect is 강인함 +5 / 냉기 +6 / Supply 4
+- `ITEM-Q08` 마석 보조배터리 active Spirit/Special identity
+  - retired; its catalog slot is 중급 포션
+- `ITEM-Q18` generic Fresh core boost to Supply/native recovery
+  - current Fresh Relics use the exact scopes in `RELIC_v2.7.0.md`; generic Supply amplification/native-recovery blanket behavior is not inherited
+- any v2.5 active-catalog numeric bundle that conflicts with `ITEM_v2.7.0.md`
+- any v2.5 Fatigue/Supply value that conflicts with `DUNGEON_HAZARD_v2.7.0.md`
+
+All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
 
 ## DUN-Q70 — PREPARED POWER WEIGHTS
 
@@ -91,6 +112,8 @@ Controlled cases must verify exact order:
 4. unused remainder is discarded
 
 PASS:
+- `preparedSupply`, `preRecovery`, `remainingSupplyBuffer`, `outcomeBufferUsed`, `actualOutcomeFatigueGain`, `finalFatigue` match the current owner arithmetic
+- no duplicate `postOutcomeFatigueGain` truth is used for the same result
 - no excess-Supply Power/success/Loot/Hazard bonus
 - no next-expedition buffer persistence
 - Severe/Death raw outcome Fatigue remains 0
@@ -137,8 +160,11 @@ All:
 - Supply 0
 - Counter 0
 - Insurance 0
+- same ordinary Potion-family shelf-life behavior
 
-PASS: no hidden generic success bonus beyond Core Stat contribution.
+PASS:
+- no hidden generic success bonus beyond Core Stat contribution
+- 중급 포션 does not inherit retired 마석 보조배터리의 non-expiring/tool-like shelf behavior merely from slot reuse
 
 ## ITEM-Q73 — HAZARD COUNTER VALUES
 
