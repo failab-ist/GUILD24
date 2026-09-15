@@ -22,10 +22,8 @@ The following inherited `UI_UX_QA_v2.5.0.md` / `UI_UX_QA_v2.6.1.md` expectations
   - Counter / Supply / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
 - inherited `폭식` player-facing identity/copy is stale
   - identity follows `BOSS_v2.7.0.md`: `탐식의 마왕 글러트니`
-- inherited `UI-Q71` exact top-level text `현재 지점 포기`
-  - v2.7 still requires the same top-level Run-abandon action and keeps it outside Settings
-  - exact v2.7 Player-facing label is owned by `COPY_WORLD_VOICE_v2.7.0.md` and remains User-approval unresolved
-  - QA must not freeze either historical wording until that copy decision is approved
+- older v2.5 Copy candidates using `현재 런 포기` wording are superseded
+  - v2.7 exact top-level label remains `현재 지점 포기`
 
 All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
 
@@ -192,8 +190,9 @@ Other routine primary actions use their v2.7 material direction rather than gene
 ## UI-Q96 — MENU / SETTINGS VISUAL GRAMMAR
 
 PASS:
-- inherited functional composition unchanged except exact Run-abandon copy remains delegated to current COPY owner
+- inherited functional composition unchanged
 - Run-abandon action remains top-level and separate from Full Data Reset
+- exact Run-abandon label is `현재 지점 포기`
 - Menu uses one surface + row navigation rather than dashboard-card grid
 - Settings uses one utility panel
 - destructive action separated
