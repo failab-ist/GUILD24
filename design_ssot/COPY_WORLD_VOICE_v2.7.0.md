@@ -39,19 +39,22 @@ Do not rewrite unrelated NPC dialogue merely to make the text feel newer.
 
 ## ITEM CATEGORY TERMINOLOGY
 
-Player-facing category terminology must match `ITEM_v2.7.0.md`:
+Authoritative player-facing category identities are owned by `ITEM_v2.7.0.md`:
 
 ```text
-음식 / Food
-음료 / Drink
-포션 / Potion
-야외장비 / Field Gear
-보험 / Insurance
-특수 / Special
+Food
+Drink
+Potion
+Field Gear
+Insurance
+Special
 ```
 
-`의료 / Medical` is not an active v2.7 player category.
-Do not call the Potion line `특수` merely because stale source data used that key.
+`Medical` is not an active v2.7 category.
+Do not remap the Potion line to `Special` merely because stale Source used that key.
+
+This patch does not create a second localized-category taxonomy.
+Exact Korean display strings, where needed, must preserve these six identities and follow approved existing copy style; they must not invent a seventh category or restore `Medical`.
 
 ## MORNING / SUPPLY COPY
 
@@ -63,7 +66,7 @@ Where required Supply is known, prefer direct data:
 필요 보급 5
 ```
 
-Do not restate it as AI-like recommendation prose such as:
+Do not restate it as recommendation prose such as:
 - `오늘은 보급 준비가 중요합니다`
 - `추천 준비: 음식`
 
@@ -103,22 +106,23 @@ Forbidden solution script:
 
 Tutorial may point to the relevant UI value without selecting the answer for the Player.
 
-## EVENT 05 — EXACT PLAYER COPY
+## EVENT 05 — COPY STATUS
 
 Mechanic ownership -> `EVENT_v2.7.0.md`.
 
-Player-facing title:
+Required copy truth:
+- the Event is Potion-category buy-price pressure
+- actual mechanical effect is current-day Potion buy price +35%
+- retired `마석 가격 폭등` / `Special 매입가 +35%` wording is forbidden
+
+Exact player-facing Event title and flavor/reveal sentence are:
+
 ```text
-포션 가격 폭등
+UNRESOLVED — USER APPROVAL REQUIRED
 ```
 
-Reveal:
-```text
-포션 값이 또 올랐다.
-오늘 포션 매입가 +35%
-```
-
-Do not use the retired `마석 가격 폭등` / `Special 매입가 +35%` wording.
+Do not promote a candidate Event name/flavor line from planning discussion into Design Truth without User approval.
+The unresolved wording does not change the already-resolved Event mechanic.
 
 ## RESULT CAUSALITY COPY
 
