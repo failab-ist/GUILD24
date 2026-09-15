@@ -83,13 +83,28 @@ The remaining D25~D29 Order / Stock / NPC growth / preservation decisions are th
 
 ## D25 STATE SAFETY
 
-For a valid v8 Run:
+For every normally created valid v8 Run:
 - D25 Final generated state is persisted when created.
 - Save/Load cannot reroll it.
 - D30 reads that exact persisted state.
 
-A malformed v8 state that is D25+ but lacks required Final prereveal state is invalid rather than silently rerolled through ordinary play.
-Implementation recovery/debug tooling may repair fixtures, but normal Player Save/Load is not a reroll path.
+### Development / controlled-migration repair boundary
+
+If a development fixture, development Save, or explicitly controlled migration/debug state is already represented as a v8 Run at D25+ but lacks the required Final prereveal state:
+
+```text
+first valid entry
+-> generate the authoritative Final Family Pair / Hazard Pool exactly once
+-> persist immediately
+-> all later loads reuse that persisted state
+```
+
+Rules:
+- use the same authoritative seeded/fixed Final-selection principle as ordinary D25 generation
+- this is a one-time repair, never a reroll/fishing path
+- normal valid v8 Player Saves must already contain the D25 state
+- this boundary does not authorize v1~v7 Player Run continuation into v8
+- malformed ordinary Player state must not repeatedly regenerate the Final state on entry/reload
 
 ## RELATED
 
