@@ -14,6 +14,10 @@ All unchanged Night controls, result sequencing, Closing, Wallet terminology, re
 
 This patch updates v2.7 Fatigue/Supply result truth, Item Aftercare proof, and recent-expedition snapshot output.
 
+The v2.6.1 `성공/대성공 +2, 퇴각 +3, 부상 +4` Outcome-Fatigue table is superseded.
+Current numeric Outcome-Fatigue truth is owned only by `DUNGEON_HAZARD_v2.7.0.md`.
+Do not keep the v2.6.1 table as an alternate live expectation.
+
 ## RESULT FATIGUE FIELDS — v2.7
 
 Resolved report/runtime must distinguish at least:
