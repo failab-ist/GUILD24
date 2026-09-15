@@ -106,3 +106,4 @@ PASS:
 - Insurance unchanged
 - RiskReward penalty magnitude unchanged
 - no inherited native-recovery multiplier remains active
+- when Fresh Relics also modify the positive native Core Stat, Food-affinity percentage follows `ITEM_v2.7.0.md` base-additive composition rather than a sequential Trait×Relic multiplier
