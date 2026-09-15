@@ -9,8 +9,10 @@ FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-15
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
+NON_BLOCKING_PLAYER_COPY_UNRESOLVED=EVENT05_EXACT_TITLE_AND_FLAVOR,GLUTTONY_D15_TRAIT_TITLE_AND_PROSE
 BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
 SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
+V2_7_SOURCE_EDIT_GATE=BLOCKED_UNTIL_V2_6_1_ADOPTION_RECOVERY_CLOSE
 
 ## AUTHORITY
 
@@ -41,15 +43,27 @@ Rules:
 
 `DIRECTOR DOCUMENT BASELINE` means an approved implementation starting value that is intentionally pending simulation/full-run validation. It is not permission for WORK or frozen QA to auto-tune Production values.
 
+`NON_BLOCKING_PLAYER_COPY_UNRESOLVED` means the underlying mechanic/ownership is resolved, but exact Player-facing wording still requires User approval. Candidate wording from planning/history must not be promoted automatically.
+
 ## IMPLEMENTATION ENTRY GATE
 
 Design SSOT is promoted to v2.7 now.
-Source implementation still follows this dependency gate:
+
+**Current phase is SSOT-only for v2.7. Do not edit v2.7 Source yet.**
+
+Source implementation follows this dependency gate exactly:
 
 ```text
-close the existing v2.6.1 Adoption Recovery acceptance
+finish and close the existing v2.6.1 Adoption Recovery acceptance
+-> User/Director confirms recovery close
 -> begin v2.7 source adoption
 ```
+
+Until that close:
+- v2.7 owner Specs/QA may be audited/amended
+- Current Source remains the v2.6.1 recovery implementation target
+- do not mix v2.7 runtime changes into unfinished v2.6.1 recovery work
+- do not use uncommitted/partial v2.6.1 work as a v2.7 adoption base
 
 The prerequisite recovery execution document remains:
 `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
@@ -119,14 +133,14 @@ Changed owners only:
 - NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, latest expedition snapshot
 - DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing
 - ITEM: categories, 30-item catalog rebalance, Potion line, Counter values, Insurance hierarchy
-- RELIC: build-value boundary, Fresh rebalance, category migration, D30 known-Final ordering
+- RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
 - SALE: exactly 2 slots, sequential Counter Handling, preview boundary, revisit quick surface
 - NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write
 - UI_UX: information boundary, conditional arithmetic, D25 presentation, material/typography pass
-- COPY_WORLD_VOICE: truth-critical copy and v2.7 terminology
+- COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, and v2.7 terminology
 - FINAL_EXPEDITION: D25 persisted Final state, mean Hazard-gap penalty, Final Insurance no-op
-- BOSS: PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained
+- BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained
 
 Unchanged detailed economy/order rules stay in `ECONOMY_ORDER_v2.6.1.md`.
 Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
