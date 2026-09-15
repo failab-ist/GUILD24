@@ -29,13 +29,13 @@ LEGACY = v1~v7
 Rules:
 - New Run initializes `run.version=8`.
 - v1~v7 cannot continue as a v2.7 Run.
-- Do not migrate v1~v7 Player Run state into v8.
+- Do not migrate v1~v7 Run state into v8.
 - Show clear fresh-start guidance when only legacy Run data exists.
 - Do not automatically delete legacy bytes merely because they cannot continue.
 - Full Data Reset remains the explicit game-owned data deletion action.
 
 Reason:
-v2.7 changes active Item IDs, normal Bag capacity, Level milestone behavior, Final prereveal state, and persistent recent-expedition data. Partial in-place Player continuation is not an approved migration path.
+v2.7 changes active Item IDs, normal Bag capacity, Level milestone behavior, Final prereveal state, and persistent recent-expedition data. Partial in-place continuation is not an approved migration path.
 
 ## START STOCK — v2.7
 
@@ -80,28 +80,13 @@ The remaining D25~D29 Order / Stock / NPC growth / preservation decisions are th
 
 ## D25 STATE SAFETY
 
-For every normally-created valid v8 Run:
+For a valid v8 Run:
 - D25 Final generated state is persisted when created.
 - Save/Load cannot reroll it.
 - D30 reads that exact persisted state.
 
-### Development / controlled-migration repair boundary
-
-If a development fixture, development Save, or controlled migration/debug state is already represented as a v8 Run at D25+ but lacks the required Final prereveal state:
-
-```text
-first valid entry
--> generate the authoritative Final Family Pair / Hazard Pool exactly once
--> persist immediately
--> all later loads reuse that persisted state
-```
-
-Rules:
-- the one-time repair uses the same authoritative seeded/fixed Final selection principle as ordinary D25 generation
-- it is not a reroll/fishing path
-- subsequent entry/reload may not regenerate the state
-- this boundary does not authorize v1~v7 Player Run continuation into v8
-- normal valid v8 Saves must already carry the persisted state after D25
+A malformed v8 state that is D25+ but lacks required Final prereveal state is invalid rather than silently rerolled through ordinary play.
+Implementation recovery/debug tooling may repair fixtures, but normal Player Save/Load is not a reroll path.
 
 ## RELATED
 
