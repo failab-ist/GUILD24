@@ -53,37 +53,42 @@ Do not collapse Hazard Counter into generic Power.
 
 The exact active-catalog table below controls approved multi-effect exceptions; do not remove an explicit listed effect merely to force a role-count heuristic.
 
-## FOOD NATIVE-STAT MODIFIER COMPOSITION — USER DECISION REQUIRED
+## FOOD / FRESH POSITIVE NATIVE-STAT COMPOSITION — EXACT
 
-Known current rules:
-- `NPC_TRAIT_v2.7.0.md` owns Food Trait affinity (`대식가 / 소식가`)
-- `RELIC_v2.7.0.md` owns Fresh Relic native-Stat bonuses
-- Fresh Relic-to-Relic native-Stat bonuses are base-additive within the Relic layer
-
-Cross-layer composition is **not yet approved**:
+When multiple approved Trait/Relic effects modify the same Food/Drink **positive native Core-Stat contribution**, they use one base-additive modifier pool.
 
 ```text
-UNRESOLVED — USER APPROVAL REQUIRED
+resolved positive native Core Stat
+= base Item positive native Core Stat
+× (1 + sum of applicable native-Stat percentage modifiers)
 ```
 
-Do not guess whether:
+Rules:
+- each percentage reads the Item table's base positive native Core Stat
+- Food Trait affinity and Fresh Relic native-Stat bonuses add from the same base; do not multiply Trait and Relic layers sequentially
+- do not round each modifier layer separately; use the existing final Core-Stat arithmetic/rounding convention after the combined modifier is resolved
+- only modifiers that explicitly target positive native Core Stat enter this pool
+- Hazard Counter / Supply / Insurance / Loot / Utility / harmful RiskReward penalties remain separate channels
+
+Examples of modifier totals:
 
 ```text
-A. Food Trait % + Fresh Relic % are all additive from Item base
-or
-B. Trait and Relic layers multiply sequentially
+대식가 + 즉석식품 코너 + 24시간 신선체계
+= +30% +40% +80%
+= base ×2.50
+
+대식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= +30% +40% +80% +25%
+= base ×2.75
+
+소식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= -20% +40% +80% +25%
+= base ×2.25
 ```
 
-This affects completed Fresh-build output materially.
-Until User resolution, WORK may inspect/prepare adoption but must not freeze or implement a production stacking formula for this cross-layer case.
+Drink has no Food-affinity Trait modifier, so the same three Fresh native-Stat bonuses alone remain base ×2.45 when all conditions apply.
 
-This unresolved applies only to the positive native Core-Stat cross-layer percentage composition.
-Already-resolved boundaries remain unchanged:
-- Supply deltas use their explicit integer/owner rules
-- Hazard Counter is not automatically multiplied by Food affinity
-- Insurance is not automatically multiplied
-- RiskReward penalty magnitude is not automatically multiplied
-- GLUTTONY applies only after the final positive Item Core-Stat contribution has been produced
+GLUTTONY's Final reduction, when applicable, occurs after the final Item-side positive Core-Stat contribution has been produced, as owned by `BOSS_v2.7.0.md`.
 
 ## HAZARD COUNTER BASELINE
 
@@ -272,6 +277,7 @@ Food/Drink category-affinity or Fresh Relic effects do not automatically multipl
 - RiskReward penalty
 - unrelated special effects
 
+Exact Trait modifiers -> `NPC_TRAIT_v2.7.0.md`.
 Exact Fresh Relic effects -> `RELIC_v2.7.0.md`.
 
 ## INFORMATION
