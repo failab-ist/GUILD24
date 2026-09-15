@@ -70,6 +70,31 @@ For Severe Injury / Death, final expedition-result Fatigue gain remains exactly 
 
 Base outcome Fatigue and Supply buffering -> `DUNGEON_HAZARD_v2.7.0.md`.
 
+## FOOD AFFINITY TRAIT SCOPE — v2.7
+
+The inherited `native Stat/recovery` wording for `eater / 대식가` and `small / 소식가` is superseded.
+
+`eater / 대식가`:
+```text
+Food positive native Core-Stat contribution +30%
+each Food Item Supply -1, minimum 1
+```
+
+`small / 소식가`:
+```text
+Food positive native Core-Stat contribution -20%
+each Food Item Supply +1
+```
+
+Scope for both:
+- applies only to the Food Item's own positive Core-Stat contribution and stated Supply adjustment
+- does not amplify/reduce Hazard Counter
+- does not amplify/reduce Insurance
+- does not amplify/reduce RiskReward penalty magnitude
+- does not create or modify a separate native-recovery subsystem
+
+Food/Drink Item truth -> `ITEM_v2.7.0.md`.
+
 ## POTIONBODY — v2.7
 
 `potionbody / 포션체질`:
@@ -112,5 +137,5 @@ Result proof -> `NIGHT_CLOSING_v2.7.0.md`
 
 Bag/transaction -> `SALE_v2.7.0.md`
 Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
-Item/Potion -> `ITEM_v2.7.0.md`
+Item/Potion/Food -> `ITEM_v2.7.0.md`
 Night causality -> `NIGHT_CLOSING_v2.7.0.md`
