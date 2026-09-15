@@ -6,7 +6,7 @@
 const assert=require('node:assert/strict');
 for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
-const SEEDS=14;
+const SEEDS=35;
 const run=policy=>Debug.simulate(SEEDS,policy,null,'adaptive','hybrid');
 const cache={};const cached=p=>cache[p]??=run(p);
 

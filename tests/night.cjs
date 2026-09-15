@@ -168,7 +168,7 @@ test('presentation weight is about copy, and death flavour matches the actual hi
   if(r.outcome!=='성공')assert.ok(heavy,'only a plain success can be routine');
    if(!heavy){
     assert.equal(r.outcome,'성공','a routine beat is a plain success');
-    assert.deepEqual(P.nightChanges(r, n).filter(c=>c.kind==='up'),[],'a routine beat has no growth to show');
+    assert.deepEqual(P.nightChanges(r, n).filter(c=>c.kind==='up' && c.label!=='보급 휴식' && c.label!=='최종 피로'),[],'a routine beat has no growth to show');
    }
   if(r.outcome==='사망'){
    const receipt=/영수증/.test(r.quote);

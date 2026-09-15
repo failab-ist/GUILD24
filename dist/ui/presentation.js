@@ -105,11 +105,11 @@ function nightChanges(r, npc){const out=[];
     out.push({kind:'down',label:'남은 부상',value:'생존 -20% · 투력 '+combat});
    }
   }
- if(r.fatigue!==undefined){
-  const delta=r.fatigueDelta;
-  const deltaStr=delta>0?'+'+delta:delta;
-  out.push({kind:delta>0?'down':'up',label:'누적 피로',value:r.fatigue+' ('+deltaStr+')'});
- }
+  if(r.finalFatigue!==undefined){
+   if(r.fatigueRecovery>0) out.push({kind:'up',label:'보급 휴식',value:'피로 -'+r.fatigueRecovery});
+   if(r.actualOutcomeFatigueGain>0) out.push({kind:'down',label:'탐험 피로',value:'+'+r.actualOutcomeFatigueGain});
+   out.push({kind:r.netFatigueDelta>0?'down':'up',label:'최종 피로',value:r.finalFatigue+''});
+  }
  if(r.xp)out.push({kind:'',label:'경험치',value:'+'+r.xp});
  if(r.loot)out.push({kind:'gain',label:'NPC 소지금 획득',value:r.loot+'G'});
  return out;}
