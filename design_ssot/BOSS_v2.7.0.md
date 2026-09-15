@@ -14,6 +14,12 @@ Boss pool/identity, seeded one-Boss-per-Run generation, save stability, D5 Ident
 
 This patch changes Final-information timing and the PRIDE/GREED/GLUTTONY/SLOTH v2.7 balance rules, and preserves the already-approved player-facing `탐식` terminology.
 
+Inherited base QA applies only where it does not conflict with this patch.
+In particular:
+- inherited `BOSS-Q03` D30-first Family disclosure is superseded by D25 disclosure / D30 reuse
+- inherited `BOSS-Q09` Rare+ / raw-Stat GLUTTONY expectation is superseded by the v2.7 all-Item-positive-Core-Stat ×0.50 scope
+- inherited numeric examples for PRIDE / GREED / SLOTH are superseded by the v2.7 values below
+
 ## BOSS IDENTITY TERMINOLOGY OVERRIDE
 
 Internal Boss ID remains:
@@ -31,6 +37,9 @@ Name = 탐식의 마왕 글러트니
 
 The inherited v2.5 player-facing `폭식 / 폭식의 마왕 글러트니` wording is superseded and is not v2.7 Design Truth.
 This terminology override does not change the GLUTTONY mechanic.
+
+The inherited D15 Rare+-based GLUTTONY player prose is also stale.
+Exact v2.7 Trait title/prose is owned by `COPY_WORLD_VOICE_v2.7.0.md` and remains User-approval unresolved.
 
 ## WRATH — BASELINE RETAINED
 
@@ -198,6 +207,53 @@ Use the inherited Boss/Final modifier order, with v2.7 Item/Fresh/Final values f
 GLUTTONY's Item-stat reduction occurs after Item-side positive Stat amplification and before Individual Final Power is computed.
 
 Final formula -> `FINAL_EXPEDITION_v2.7.0.md`.
+
+## v2.7 ACCEPTANCE OVERRIDES
+
+The inherited Boss acceptance suite remains valid except where replaced here.
+
+### BOSS-Q70 — FINAL INFO TIMING
+PASS:
+- D5 Boss Identity reveal remains
+- D15 exact Trait reveal remains
+- exact Final Family/Hazard state is revealed on D25
+- D30 does not regenerate or newly reveal a different Family/Hazard state
+- D30 Relic/SLOTH choice reads the already-known persisted state
+
+### BOSS-Q71 — PRIDE NUMERIC
+PASS:
+- Final-only 투력 factor is exactly 0.92
+- other three Core Stats remain unchanged by PRIDE
+- preview and Final resolution use the same applied value
+
+### BOSS-Q72 — GREED CAP
+PASS:
+- existing revenue metric/target path is reused
+- applied shortfall strengthening caps at +12 Boss Power
+- target met returns to 200 baseline
+- maximum shortfall cannot exceed 212 through GREED alone
+
+### BOSS-Q73 — GLUTTONY SCOPE
+PASS:
+- every positive Core-Stat contribution originating from Items is multiplied by 0.50
+- no Rarity threshold remains
+- NPC natural/base/growth/equipment Stats are unchanged
+- Hazard Counter / Supply / Insurance / Utility / harmful RiskReward penalty are unchanged
+- previewed changed Item Stat matches actual Final resolution
+
+### BOSS-Q74 — SLOTH POWER BY BREAK COUNT
+PASS exact:
+```text
+0 = 225
+1 = 210
+2 = 190
+3 = 165
+```
+
+Also PASS:
+- exactly 3 opportunity windows remain
+- each window is Relic OR Seal, never both
+- 3 Break produces a materially larger stability return than 2 Break in balance measurement
 
 ## v2.7 BALANCE QA
 
