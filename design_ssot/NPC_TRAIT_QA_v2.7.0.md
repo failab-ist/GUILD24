@@ -73,3 +73,17 @@ PASS:
 - Item presence alone does not create a cause token
 - claimed/expected destination is not serialized as actual destination
 - liar/destination behavior remains correctly represented by actual result data
+
+## NPC-Q76 — FOOD AFFINITY TRAIT SCOPE
+
+SETUP: use Food Items with positive Core Stat, Supply, Hazard Counter, and/or RiskReward components on `eater` and `small` NPCs.
+
+EXPECT:
+- eater: Food positive native Core Stat +30%; each Food Supply -1, minimum 1
+- small: Food positive native Core Stat -20%; each Food Supply +1
+
+PASS:
+- Hazard Counter unchanged
+- Insurance unchanged
+- RiskReward penalty magnitude unchanged
+- no inherited native-recovery multiplier remains active
