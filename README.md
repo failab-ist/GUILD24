@@ -12,20 +12,30 @@
 
 Design SSOT entry point:
 
-- `design_ssot/SPEC_INDEX_v2.6.1.md`
+- `design_ssot/SPEC_INDEX_v2.7.0.md`
 
 Use the owner Spec / QA routed by that index.
-Old versioned specs are historical unless the current owner explicitly declares them as `BASE_DOCUMENT`.
+Only changed owners were versioned to v2.7; unchanged owners are intentionally referenced at their latest earlier version.
+Older versions are historical/inherited only when the current owner explicitly declares them as `BASE_DOCUMENT`.
 
-Current corrective execution document:
-
-- `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
-
-Future v2.7+ planning vision (not part of v2.6.1 recovery):
+The previous planning file:
 
 - `GUILD24_v2.7_PLUS_VISION.md`
 
-`v2.7+` is a planning/roadmap label. The runtime semantic version targeted by that vision is v2.7.0 when formally adopted into owner Specs / QA.
+is now planning/history reference only. It is not parallel Design Truth after v2.7 owner-Spec promotion.
+
+## Current Implementation Gate
+
+Current Source has not adopted v2.7 yet.
+Before v2.7 implementation, the existing v2.6.1 Adoption Recovery must close against its frozen recovery acceptance.
+
+Prerequisite execution document:
+
+- `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
+
+Exact task routing / gate status:
+
+- `WORK_STATE.md`
 
 Copy extraction baseline:
 
