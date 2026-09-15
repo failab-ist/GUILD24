@@ -81,7 +81,7 @@ EXPECT:
 - Supply unchanged
 - Counter unchanged
 
-Stacking with Instant Food Corner uses base-additive bonuses:
+Fresh-to-Fresh stacking uses base-additive bonuses:
 ```text
 +40% +80% => base ×2.20
 ```
@@ -91,7 +91,17 @@ With active Expedition Meal stat condition:
 +40% +80% +25% => base ×2.45
 ```
 
-PASS: no multiplicative drift.
+When a Food-affinity Trait also applies, its native-Stat percentage joins the same base-additive pool under `ITEM_v2.7.0.md`.
+Example:
+```text
+대식가 +40% +80% +25%
+=> +30% +40% +80% +25%
+=> base ×2.75
+```
+
+PASS:
+- no multiplicative drift between Fresh pieces
+- no sequential Trait×Fresh multiplication
 
 ## REL-Q76 — CHILLED SHOWCASE / DAWN DELIVERY CATEGORY
 
