@@ -1,7 +1,7 @@
 # ITEM
 
 DOC=ITEM
-OWNER=item,catalog,category,role,counter,supply,insurance,potion
+OWNER=item,catalog,category,role,counter,supply,insurance,potion,modifier_composition
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -52,6 +52,38 @@ Do not hide:
 Do not collapse Hazard Counter into generic Power.
 
 The exact active-catalog table below controls approved multi-effect exceptions; do not remove an explicit listed effect merely to force a role-count heuristic.
+
+## FOOD NATIVE-STAT MODIFIER COMPOSITION — USER DECISION REQUIRED
+
+Known current rules:
+- `NPC_TRAIT_v2.7.0.md` owns Food Trait affinity (`대식가 / 소식가`)
+- `RELIC_v2.7.0.md` owns Fresh Relic native-Stat bonuses
+- Fresh Relic-to-Relic native-Stat bonuses are base-additive within the Relic layer
+
+Cross-layer composition is **not yet approved**:
+
+```text
+UNRESOLVED — USER APPROVAL REQUIRED
+```
+
+Do not guess whether:
+
+```text
+A. Food Trait % + Fresh Relic % are all additive from Item base
+or
+B. Trait and Relic layers multiply sequentially
+```
+
+This affects completed Fresh-build output materially.
+Until User resolution, WORK may inspect/prepare adoption but must not freeze or implement a production stacking formula for this cross-layer case.
+
+This unresolved applies only to the positive native Core-Stat cross-layer percentage composition.
+Already-resolved boundaries remain unchanged:
+- Supply deltas use their explicit integer/owner rules
+- Hazard Counter is not automatically multiplied by Food affinity
+- Insurance is not automatically multiplied
+- RiskReward penalty magnitude is not automatically multiplied
+- GLUTTONY applies only after the final positive Item Core-Stat contribution has been produced
 
 ## HAZARD COUNTER BASELINE
 
