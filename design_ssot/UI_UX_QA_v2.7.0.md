@@ -14,10 +14,10 @@ Status values are not stored here. FAIL is valid evidence.
 
 The following inherited `UI_UX_QA_v2.5.0.md` / `UI_UX_QA_v2.6.1.md` expectations are stale and are explicitly superseded:
 
-- `UI-Q40` / `UI-Q43` D30-first Final Family reveal
+- inherited `UI-Q40` / `UI-Q43` D30-first Final Family reveal
   - v2.7 exact Family/Hazard disclosure occurs on D25
   - D30 reuses the already-known persisted state and must not present it as newly generated/revealed
-- `UI-Q43` GLUTTONY preview wording based on Rare+ / old raw-Stat scope
+- inherited `UI-Q43` GLUTTONY preview wording based on Rare+ / old raw-Stat scope
   - v2.7 follows `BOSS_v2.7.0.md`: all positive Core-Stat contribution originating from Items is reduced to 50%; no Rarity threshold
   - Counter / Supply / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
 - inherited `폭식` player-facing identity/copy is stale
@@ -29,14 +29,16 @@ The following inherited `UI_UX_QA_v2.5.0.md` / `UI_UX_QA_v2.6.1.md` expectations
 
 All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
 
-## UI-Q70 — MORNING REQUIRED SUPPLY
+v2.7-added UI QA IDs begin at `UI-Q80` so they do not collide with inherited v2.6.1 `UI-Q61~Q74` IDs.
+
+## UI-Q80 — MORNING REQUIRED SUPPLY
 
 PASS:
 - Morning keeps current compact Gate/Hazard structure
 - required Supply is shown as exact `필요 보급 N`
 - no added recommendation paragraph / easy-medium-hard Supply label
 
-## UI-Q71 — ORDER ITEM HIERARCHY
+## UI-Q81 — ORDER ITEM HIERARCHY
 
 Inspect desktop/mobile offers.
 
@@ -47,7 +49,7 @@ PASS:
 - no today-fit/recommended badge
 - no automatic best-fit ranking
 
-## UI-Q72 — ORDER WAREHOUSE COLLAPSE
+## UI-Q82 — ORDER WAREHOUSE COLLAPSE
 
 Mobile:
 - capacity summary remains always visible
@@ -55,7 +57,7 @@ Mobile:
 - used/remaining capacity is not hidden by collapse
 - current ORDER-session open/closed state remains stable through ordinary rerenders
 
-## UI-Q73 — DANGER DETAIL DOES NOT GIVE ANSWER
+## UI-Q83 — DANGER DETAIL DOES NOT GIVE ANSWER
 
 PASS detail may show:
 - Hazard
@@ -68,7 +70,7 @@ FAIL if it exposes:
 - optimal combination
 - exact hidden Hazard requirement/formula
 
-## UI-Q74 — FOUR CORE STATS REMAIN VISIBLE
+## UI-Q84 — FOUR CORE STATS REMAIN VISIBLE
 
 SALE primary decision surface keeps:
 - 투력
@@ -81,14 +83,14 @@ PASS:
 - actual applied source labels remain truthful
 - calculation breakdown is drill-down detail
 
-## UI-Q75 — ITEM VS GATE INFORMATION BOUNDARY
+## UI-Q85 — ITEM VS GATE INFORMATION BOUNDARY
 
 PASS:
 - Item shows exact Stat/Counter/Supply
 - Gate shows qualitative readiness
 - exact Gate Counter threshold stays hidden
 
-## UI-Q76 — UNCOMMITTED PREVIEW
+## UI-Q86 — UNCOMMITTED PREVIEW
 
 Select/focus an uncommitted Item.
 
@@ -106,7 +108,7 @@ Must not show hypothetical:
 After actual purchase commit:
 PASS: current Forecast/readiness may update before remaining-slot decision.
 
-## UI-Q77 — TWO-SLOT HANDLING
+## UI-Q87 — TWO-SLOT HANDLING
 
 All ordinary NPC levels:
 PASS:
@@ -117,7 +119,7 @@ PASS:
 - drag not required
 - no third ghost slot
 
-## UI-Q78 — SEQUENTIAL TRANSACTION
+## UI-Q88 — SEQUENTIAL TRANSACTION
 
 Within one customer:
 - first slot transaction resolves purchase/refusal
@@ -128,7 +130,7 @@ FAIL:
 - two-slot cart checkout
 - both items committed atomically as one bundle
 
-## UI-Q79 — SUPPLY/FATIGUE CONDITIONAL ARITHMETIC
+## UI-Q89 — SUPPLY/FATIGUE CONDITIONAL ARITHMETIC
 
 Controlled setup with known Fatigue/Supply/Trait.
 
@@ -138,7 +140,7 @@ PASS:
 - conditional success/great/retreat/injury Night values match owner arithmetic
 - no single Outcome is predicted as guaranteed
 
-## UI-Q80 — RETURNING NPC LAST BAG
+## UI-Q90 — RETURNING NPC LAST BAG
 
 Returning customer with snapshot:
 PASS:
@@ -148,13 +150,13 @@ PASS:
 - mobile Wallet/Destination/Forecast hierarchy not displaced
 - expanded causal text only from proven tokens
 
-## UI-Q81 — QUEUE UNCERTAINTY
+## UI-Q91 — QUEUE UNCERTAINTY
 
 PASS:
 future customer Job/Level/Destination/preparation need/importance is not newly revealed.
 Existing authorized queue-count info may remain.
 
-## UI-Q82 — NIGHT v2.7 RESULT TRUTH
+## UI-Q92 — NIGHT v2.7 RESULT TRUTH
 
 PASS:
 - actual Supply preRecovery/outcome buffer use can be read when relevant
@@ -163,7 +165,7 @@ PASS:
 - no invented `전투 부족` / `독 대응 부족` diagnosis
 - inherited `다음 / 전체 건너뛰기` controls remain exact
 
-## UI-Q83 — FINAL TIMELINE
+## UI-Q93 — FINAL TIMELINE
 
 PASS:
 - D0 objective notice
@@ -173,7 +175,7 @@ PASS:
 - D30 reuses known state
 - no permanent new Final dashboard required
 
-## UI-Q84 — TUTORIAL TEACHES READING, NOT SKU ANSWER
+## UI-Q94 — TUTORIAL TEACHES READING, NOT SKU ANSWER
 
 PASS:
 Tutorial explains Stat pressure / Counter contribution / readiness and Supply->Fatigue order.
@@ -181,13 +183,13 @@ Tutorial explains Stat pressure / Counter contribution / readiness and Supply->F
 FAIL:
 Tutorial instructs a specific correct SKU for a Hazard as the solution.
 
-## UI-Q85 — STRONG GREEN SEMANTIC
+## UI-Q95 — STRONG GREEN SEMANTIC
 
 PASS:
 Strong Sign Green is reserved for `영업 시작`.
 Other routine primary actions use their v2.7 material direction rather than generic green CTA repetition.
 
-## UI-Q86 — MENU / SETTINGS VISUAL GRAMMAR
+## UI-Q96 — MENU / SETTINGS VISUAL GRAMMAR
 
 PASS:
 - inherited functional composition unchanged except exact Run-abandon copy remains delegated to current COPY owner
@@ -197,7 +199,7 @@ PASS:
 - destructive action separated
 - no new control framework
 
-## UI-Q87 — TYPOGRAPHY EXACT
+## UI-Q97 — TYPOGRAPHY EXACT
 
 PASS:
 - Atmosphere = Mulmaru
@@ -207,7 +209,7 @@ PASS:
 - no runtime network font request
 - license notice retained
 
-## UI-Q88 — TYPOGRAPHY RESPONSIVE QA
+## UI-Q98 — TYPOGRAPHY RESPONSIVE QA
 
 Verify at minimum:
 - mobile 360~390
@@ -221,7 +223,7 @@ PASS:
 - 50/100/150 quickly distinguishable
 - no missing Korean/player-facing glyph
 
-## UI-Q89 — ANTI-GENERIC MATERIAL PASS
+## UI-Q99 — ANTI-GENERIC MATERIAL PASS
 
 PASS direction:
 - existing store/paper/wood/metal/slate/receipt language remains recognizable
