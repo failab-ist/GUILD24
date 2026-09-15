@@ -7,7 +7,7 @@ DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.6.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=FROZEN_FOR_ADOPTION_RECOVERY
 FREEZE_DATE=2026-09-14
-LAST_APPROVED_AMENDMENT=2026-09-14
+LAST_APPROVED_AMENDMENT=2026-09-15
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 
 ## AUTHORITY
@@ -112,6 +112,11 @@ UI/UX QA -> `UI_UX_QA_v2.6.1.md`
 
 Current corrective implementation plan:
 `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
+
+Routing correction — 2026-09-15:
+- the stale earlier reference `GUILD24_v2.6.1_ADOPTION_RECOVERY_PLAN.md` is superseded
+- the Final Implementation Plan above is the current execution document
+- this routing correction changes no v2.6.1 game Design rule, number, UX requirement, or QA expectation
 
 The Recovery Plan is an execution document, not a second Design authority.
 If a conflict exists, this Index + owning current Design SSOT controls.
