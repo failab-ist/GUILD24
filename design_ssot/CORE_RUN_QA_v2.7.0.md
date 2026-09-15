@@ -10,9 +10,6 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Status values are not stored here. FAIL is valid evidence.
 
-The base document's v7-specific `RUN-Q61 / RUN-Q62` expectations are superseded by `RUN-Q70 / RUN-Q71` below. They are historical inherited QA, not live v2.7 acceptance.
-All other non-conflicting base QA remains inherited.
-
 ## RUN-Q70 — SAVE V8 EXACT
 
 EXPECT:
@@ -29,12 +26,12 @@ PASS only if all are 8.
 SETUP: leave v1~v7 save bytes with no valid v8 current save.
 
 EXPECT:
-- old Run cannot continue as v2.7
+- old Player Run cannot continue as v2.7
 - clear fresh-start guidance
 - legacy bytes not silently deleted merely because they are incompatible
 - no Bandage-to-Herb-Tea migration
 
-PASS: fresh v8 start is explicit and legacy data is not misrepresented as migrated.
+PASS: fresh v8 start is explicit and legacy Player Run data is not misrepresented as migrated.
 
 ## RUN-Q72 — START STOCK
 
@@ -92,3 +89,19 @@ PASS:
 - Console runtime error = 0
 - no phase blocker
 - no save-version/reference error
+
+## RUN-Q77 — D25 DEVELOPMENT REPAIR IS ONE-TIME
+
+SETUP:
+Use a development fixture/development Save/controlled migration state that is already a valid v8 Run at D25+ but lacks Final prereveal state.
+
+EXPECT:
+- first valid entry generates the authoritative Final Family Pair/Hazard Pool exactly once
+- generated state is persisted immediately
+- save/reload and later entry reuse the exact same state
+- no second generation/reroll path exists
+
+PASS:
+- repair cannot be used for Final fishing
+- ordinary valid D25+ v8 Saves already contain the state
+- this repair path does not make v1~v7 Player Run continuation legal
