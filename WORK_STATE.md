@@ -7,9 +7,9 @@ STATE: DESIGN_SSOT_FROZEN / SOURCE_RECOVERY_PENDING
 ## Truth
 
 - Design SSOT: `design_ssot/SPEC_INDEX_v2.6.1.md`
-- Execution plan: `GUILD24_v2.6.1_ADOPTION_RECOVERY_PLAN.md`
+- Execution plan: `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
 - Implementation truth: `dist/`
-- Future v2.7 plan is excluded from current recovery.
+- Future v2.7+ vision is excluded from current recovery.
 
 ## Current Gate
 
@@ -24,6 +24,12 @@ Known recovery blocker before source patch:
 
 Superseded SSOT versions and stale generated/historical artifacts are removed from the current working tree in the hygiene pass.
 Do not use deleted old SPEC_INDEX / package manifests as current Design Truth.
+
+## Future Planning
+
+- approved future Director vision: `GUILD24_v2.7_PLUS_VISION.md`
+- planning label `v2.7+` does not change the current v2.6.1 implementation scope
+- when v2.7 begins, the approved vision must be promoted into the relevant owner Specs / QA before WORK implementation
 
 ## Next
 
