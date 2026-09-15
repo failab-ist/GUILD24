@@ -92,7 +92,9 @@ Scope for both:
 - does not amplify/reduce Insurance
 - does not amplify/reduce RiskReward penalty magnitude
 - does not create or modify a separate native-recovery subsystem
+- when Fresh Relics also modify the same Food positive native Core Stat, the Trait percentage joins the same base-additive modifier pool; do not multiply Trait and Relic layers sequentially
 
+Cross-system native-Stat composition -> `ITEM_v2.7.0.md`.
 Food/Drink Item truth -> `ITEM_v2.7.0.md`.
 
 ## POTIONBODY — v2.7
