@@ -40,7 +40,7 @@ The inherited v2.5 player-facing `폭식 / 폭식의 마왕 글러트니` wordin
 This terminology override does not change the GLUTTONY mechanic.
 
 The inherited D15 Rare+-based GLUTTONY player prose is also stale.
-Exact v2.7 Trait title/prose is owned by `COPY_WORLD_VOICE_v2.7.0.md` and remains User-approval unresolved.
+Exact v2.7 Trait title/prose is owned by `COPY_WORLD_VOICE_v2.7.0.md`.
 
 ## WRATH — BASELINE RETAINED
 
