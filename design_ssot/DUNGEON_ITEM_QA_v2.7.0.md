@@ -228,6 +228,18 @@ PASS: no stale v2.5 Stat bundles survive.
 PASS:
 `황금 1+1 쿠폰` canonical buy/sell = 500/1000 and existing explicit duplication interaction remains intact.
 
+## ITEM-Q79 — ANTIDOTE ROLE BOUNDARY
+
+`농축 해독제`:
+- Field Gear Rare
+- 180 / 360
+- poison Counter +18
+
+PASS:
+- no generic positive Core Stat
+- no hidden poison Condition/cure subsystem
+- its v2.7 gameplay identity is the dedicated Poison Hazard specialist
+
 ## SIM-Q70 — THREE PREPARATION AXES
 
 Full-run simulation/playtest must demonstrate that common rational Bag decisions can trade among:
