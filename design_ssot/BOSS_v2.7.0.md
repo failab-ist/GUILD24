@@ -12,7 +12,25 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Boss pool/identity, seeded one-Boss-per-Run generation, save stability, D5 Identity reveal, D15 exact Trait reveal, ENVY targeting, LUST regular protection, meta-clear signal, and all unchanged Boss rules inherit `BOSS_v2.5.0.md`.
 
-This patch changes Final-information timing and the PRIDE/GREED/GLUTTONY/SLOTH v2.7 balance rules.
+This patch changes Final-information timing and the PRIDE/GREED/GLUTTONY/SLOTH v2.7 balance rules, and preserves the already-approved player-facing `탐식` terminology.
+
+## BOSS IDENTITY TERMINOLOGY OVERRIDE
+
+Internal Boss ID remains:
+
+```text
+GLUTTONY
+```
+
+Player-facing identity is:
+
+```text
+Sin = 탐식
+Name = 탐식의 마왕 글러트니
+```
+
+The inherited v2.5 player-facing `폭식 / 폭식의 마왕 글러트니` wording is superseded and is not v2.7 Design Truth.
+This terminology override does not change the GLUTTONY mechanic.
 
 ## WRATH — BASELINE RETAINED
 
@@ -160,8 +178,8 @@ It does not erase the opportunity cost of a Relic's remaining-Run economy/access
 Simulation target for sacrificed potential value:
 
 ```text
-D30 Relic opportunity       ≈ Party-equivalent 3~6
-D15~D25 Relic opportunity   ≈ Party-equivalent 6~10 each
+D30 Relic opportunity        ≈ Party-equivalent 3~6
+D15~D25 Relic opportunity    ≈ Party-equivalent 6~10 each
 3-break total potential cost ≈ 15~26
 ```
 
@@ -204,3 +222,4 @@ Relic/Seal window -> `RELIC_v2.7.0.md`
 Meta -> `META_v2.7.0.md`
 Item/GLUTTONY contribution -> `ITEM_v2.7.0.md`
 UI reveal -> `UI_UX_v2.7.0.md`
+Copy/terminology -> `COPY_WORLD_VOICE_v2.7.0.md`
