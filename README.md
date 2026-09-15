@@ -19,11 +19,13 @@ Old versioned specs are historical unless the current owner explicitly declares 
 
 Current corrective execution document:
 
-- `GUILD24_v2.6.1_ADOPTION_RECOVERY_PLAN.md`
+- `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
 
-Future v2.7 planning (not part of v2.6.1 recovery):
+Future v2.7+ planning vision (not part of v2.6.1 recovery):
 
-- `GUILD24_v2.7_CORE_PLAY_REVISION_PLAN.md`
+- `GUILD24_v2.7_PLUS_VISION.md`
+
+`v2.7+` is a planning/roadmap label. The runtime semantic version targeted by that vision is v2.7.0 when formally adopted into owner Specs / QA.
 
 Copy extraction baseline:
 
