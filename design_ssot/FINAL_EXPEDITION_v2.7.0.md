@@ -14,6 +14,17 @@ All unchanged Final party size, survivor fallback, no class synergy, Final Roll,
 
 This patch moves Family/Hazard disclosure to D25 and replaces Final Hazard aggregation/power penalty.
 
+The following inherited v2.5 text is explicitly stale and does not remain live v2.7 truth:
+- D30 generation / first disclosure of the Final Family Pair
+- `Final Hazard Scale = 4.6` as a standalone Final formula
+- Individual Final Power using `환경피해 × 0.35`
+- Playtest text that evaluates the old `환경피해 × 0.35` path
+- Implementation guardrail wording that says to reuse the old Final Power formula unchanged
+- any inherited QA/ownership wording that assumes Family information first appears on D30
+
+v2.7 uses the rules below plus current routed owners from `SPEC_INDEX_v2.7.0.md`.
+Inherited cross-spec references to older versioned filenames are not routing authority.
+
 ## D25 FINAL STATE GENERATION — EXACT
 
 On D25, before ordinary D25 management decisions that can use the information:
@@ -57,6 +68,7 @@ Tier = T2
 
 Exact threat ownership -> `DUNGEON_HAZARD_v2.7.0.md`.
 No separate Final-only Hazard defense table.
+No standalone inherited `scale=4.6` path is used in v2.7 Final resolution.
 
 ## FINAL HAZARD AGGREGATION — v2.7 BASELINE
 
@@ -134,6 +146,45 @@ Full-run/Final simulation must record:
 
 FIRE's ordinary `higher Combat Power` second axis is not automatically inserted as a new Hazard.
 If Final Family Pair itself becomes a larger RNG difficulty source than intended Boss differentiation, treat it as a `BALANCE FINDING` in FINAL_EXPEDITION and make the smallest owner-level adjustment after approval.
+
+## v2.7 ACCEPTANCE OVERRIDES
+
+Where inherited Final QA/playtest language conflicts, use these checks.
+
+### FINAL-Q70 — D25 DISCLOSURE / D30 REUSE
+PASS:
+- exact two-Family state and Hazard Pool are generated/revealed/persisted on D25
+- Save/Load cannot reroll them
+- D30 uses the exact same state
+- no new D30 generation path exists
+
+### FINAL-Q71 — HAZARD THREAT SOURCE
+PASS:
+- each Final Hazard uses current D30/T2 threat and defense/gap truth from `DUNGEON_HAZARD_v2.7.0.md`
+- no standalone old `scale=4.6` Final path survives
+
+### FINAL-Q72 — MEAN GAP PENALTY
+For each participant:
+PASS exact:
+```text
+FinalMeanHazardGap = sum(gaps) / hazardCount
+FinalHazardPenalty = FinalMeanHazardGap × 1.70
+```
+
+No inherited `환경피해 ×0.35` path contributes in parallel.
+
+### FINAL-Q73 — INDIVIDUAL FINAL POWER
+PASS exact:
+```text
+투력*.50 + 강인함*.34 + 기동*.27 + 정신*.20 - FinalMeanHazardGap*1.70
+```
+using the Boss modifier ordering owned by current BOSS.
+
+### FINAL-Q74 — INSURANCE NO-OP
+PASS:
+- 구급키트 / 귀환석 / 세계수 생환부적 do not alter ordinary Final CLEAR/FAIL resolution
+- Final prep clearly communicates no Final effect and blocks placement when practical
+- normal SALE/ordinary expedition usefulness remains unchanged
 
 ## RELATED
 
