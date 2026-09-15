@@ -19,6 +19,7 @@ In particular:
 - inherited `BOSS-Q03` D30-first Family disclosure is superseded by D25 disclosure / D30 reuse
 - inherited `BOSS-Q09` Rare+ / raw-Stat GLUTTONY expectation is superseded by the v2.7 all-Item-positive-Core-Stat ×0.50 scope
 - inherited numeric examples for PRIDE / GREED / SLOTH are superseded by the v2.7 values below
+- inherited `BOSS-Q14` PASS3 tuning permission is superseded: v2.7 `DIRECTOR DOCUMENT BASELINE` values are fixed implementation starting values during adoption; frozen QA may report a `BALANCE FINDING` but may not auto-tune them. Any numeric change requires a separate approved owner-spec update.
 
 ## BOSS IDENTITY TERMINOLOGY OVERRIDE
 
