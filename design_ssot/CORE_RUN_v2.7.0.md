@@ -10,8 +10,11 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 ## INHERITANCE
 
-All unchanged Run/phase/abandon behavior inherits `CORE_RUN_v2.6.1.md`.
+All unchanged Run/phase/abandon **mechanics** inherit `CORE_RUN_v2.6.1.md`.
 This patch owns only v2.7 Run-start inventory, Save generation, and D0~D30 Final timeline changes.
+
+The exact Player-facing Run-abandon action label does **not** inherit as v2.7 truth because the current inherited documents contain two later canonical wordings.
+The abandon function/semantics remain unchanged; exact v2.7 wording is owned by `COPY_WORLD_VOICE_v2.7.0.md` and is currently User-approval unresolved.
 
 ## SAVE v8 — EXACT
 
@@ -95,3 +98,4 @@ Item/start-stock identity -> `ITEM_v2.7.0.md`
 D25 Final generation -> `FINAL_EXPEDITION_v2.7.0.md`
 Boss reveal -> `BOSS_v2.7.0.md`
 Presentation -> `UI_UX_v2.7.0.md`
+Player-facing abandon wording -> `COPY_WORLD_VOICE_v2.7.0.md`
