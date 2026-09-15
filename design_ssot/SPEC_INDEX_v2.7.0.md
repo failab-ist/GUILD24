@@ -8,7 +8,8 @@ DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-15
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
+SSOT_AUDIT_STATUS=FINAL_CONFLICT_SWEEP_PENDING_USER_DECISIONS
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=FOOD_NATIVE_STAT_TRAIT_RELIC_STACKING,V7_TO_V8_ACCOUNT_PRESERVATION_POLICY
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=EVENT05_EXACT_TITLE_AND_FLAVOR,GLUTTONY_D15_TRAIT_TITLE_AND_PROSE,RUN_ABANDON_ACTION_LABEL
 BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
 SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
@@ -45,6 +46,27 @@ Rules:
 
 `NON_BLOCKING_PLAYER_COPY_UNRESOLVED` means the underlying mechanic/ownership is resolved, but exact Player-facing wording still requires User approval. Candidate wording from planning/history must not be promoted automatically.
 
+`IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED` means the final SSOT conflict audit found a material rule boundary that cannot be safely guessed. It must be User-resolved before the affected v2.7 adoption task begins.
+
+## PATCH / INHERITANCE RESOLUTION RULE
+
+For every routed patch-style v2.7 owner/QA document:
+
+```text
+current routed owner patch
+> its declared BASE_DOCUMENT
+> older base chain
+```
+
+Therefore:
+- an explicit current patch override supersedes conflicting base prose/QA even if the base remains physically present
+- inherited content is live only when it does not conflict with the current patch or another current routed owner
+- versioned cross-spec filenames written inside an older inherited base are historical references, not routing authority
+- cross-owner lookup always resolves through this current SPEC_INDEX
+- current QA overrides conflicting inherited QA; old test IDs/examples do not create a second Design Truth
+
+Do not edit historical base files merely to erase superseded text when an explicit current override is sufficient.
+
 ## IMPLEMENTATION ENTRY GATE
 
 Design SSOT is promoted to v2.7 now.
@@ -56,6 +78,7 @@ Source implementation follows this dependency gate exactly:
 ```text
 finish and close the existing v2.6.1 Adoption Recovery acceptance
 -> User/Director confirms recovery close
+-> resolve any remaining v2.7 implementation-blocking Design unresolved items
 -> begin v2.7 source adoption
 ```
 
@@ -128,22 +151,51 @@ UI/UX QA -> `UI_UX_QA_v2.7.0.md`
 
 Changed owners only:
 
-- CORE_RUN: Save v8, start stock, D0~D30 Final timeline
+- CORE_RUN: Save v8, start stock, D0~D30 Final timeline, controlled D25 repair boundary
 - META: v8 account/save alignment; no new fail-to-power Meta system
-- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, latest expedition snapshot
-- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing
-- ITEM: categories, 30-item catalog rebalance, Potion line, Counter values, Insurance hierarchy
+- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot
+- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming
+- ITEM: categories, 30-item catalog rebalance, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary
 - RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
 - SALE: exactly 2 slots, sequential Counter Handling, preview boundary, revisit quick surface
 - NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write
-- UI_UX: information boundary, conditional arithmetic, D25 presentation, material/typography pass
+- UI_UX: information boundary, conditional arithmetic, D25 presentation, material/typography pass, unresolved abandon-label delegation
 - COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, and v2.7 terminology
-- FINAL_EXPEDITION: D25 persisted Final state, mean Hazard-gap penalty, Final Insurance no-op
-- BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained
+- FINAL_EXPEDITION: D25 persisted Final state, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
+- BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; inherited Boss-QA overrides
 
 Unchanged detailed economy/order rules stay in `ECONOMY_ORDER_v2.6.1.md`.
 Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
+
+## FINAL SSOT AUDIT — OPEN USER DECISIONS
+
+The 2026-09-15 final cross-owner/inheritance audit found two material boundaries that are not safe to infer from existing approved text.
+
+### 1. FOOD_NATIVE_STAT_TRAIT_RELIC_STACKING
+
+Resolved pieces already exist:
+- Food Trait affinity (`대식가/소식가`) changes Food positive native Core Stat
+- Fresh Relics change Food/Drink positive native Core Stat
+- Fresh Relic-to-Relic bonuses are explicitly base-additive
+
+Unresolved:
+- whether the Food Trait percentage and Fresh Relic percentage bonuses are also base-additive with each other, or whether Trait and Relic layers multiply sequentially
+
+This changes completed Fresh-build output materially and must not be guessed by WORK.
+
+### 2. V7_TO_V8_ACCOUNT_PRESERVATION_POLICY
+
+Resolved:
+- v1~v7 **Run state** cannot continue as a v2.7 Run
+- v8 uses a fresh incompatible Run schema
+- old bytes are not silently deleted
+- Account/Meta progression mechanics themselves are unchanged
+
+Unresolved:
+- whether validated current v7 Account/Meta progression is carried forward into a fresh v8 envelope while discarding only the old Run, or whether v8 starts a fresh Account as well
+
+This is a data-preservation boundary and must be User-approved before Save v8 adoption.
 
 ## PROMOTED-VISION / HISTORY STATUS
 
