@@ -45,7 +45,7 @@ D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',ex
    purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not
    the settled figure. Level contribution, carry and per-NPC variation are unchanged, and no
    Day-based Wallet inflation was added - this one number is the whole lever. */
-D.balance.relicPriceScale=1;D.balance.walletBase=90;D.balance.walletLevel=18;D.balance.walletCarry=.28;
+D.balance.relicPriceScale=1;
 /* How many adventurers can fail to come back before a store is finished. Stage 9 measurement
    baseline, not a settled number: the rate, the Day it lands on and how it differs between
    bare and prepared play are measured before anyone moves it. */
