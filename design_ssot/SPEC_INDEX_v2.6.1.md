@@ -111,7 +111,7 @@ UI/UX QA -> `UI_UX_QA_v2.6.1.md`
 ## RECOVERY EXECUTION DOCUMENT
 
 Current corrective implementation plan:
-`GUILD24_v2.6.1_ADOPTION_RECOVERY_PLAN.md`
+`GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
 
 The Recovery Plan is an execution document, not a second Design authority.
 If a conflict exists, this Index + owning current Design SSOT controls.
