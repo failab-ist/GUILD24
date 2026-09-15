@@ -208,7 +208,7 @@ Unlisted implementation-only flavor fields/shelf lives inherit the previous Item
 | 21 | 원정용 장화 | Field Gear U | 65 / 135 | 진창 +16 | Mire Main |
 | 22 | 설원 고글 | Field Gear U | 60 / 125 | 화이트아웃 +16 | Whiteout Main |
 | 23 | 상급 포션 | Potion R | 150 / 300 | 투력 +12 | — |
-| 24 | 농축 해독제 | Field Gear R | 180 / 360 | 독 +18; retain only actually implemented explicit poison-cure utility, no new poison Condition system | Poison Main |
+| 24 | 농축 해독제 | Field Gear R | 180 / 360 | 독 +18 | Poison Main |
 | 25 | 귀환석 | Insurance R | 260 / 520 | Emergency Escape +50%p path | Severe/Death Insurance |
 | 26 | 중급 포션 | Potion U | 110 / 230 | 투력 +9 | — |
 | 27 | 길드 프리미엄 도시락 | Food R | 280 / 560 | 강인함 +6, Supply 7, Loot +20% | — |
@@ -222,6 +222,8 @@ Retired active identities:
 붕대
 마석 보조배터리
 ```
+
+No active Item creates a separate poison Condition/cure subsystem in v2.7.
 
 ## CATEGORY AFFINITY BOUNDARY
 
