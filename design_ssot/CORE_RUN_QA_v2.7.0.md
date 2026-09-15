@@ -105,3 +105,19 @@ PASS:
 - Console runtime error = 0
 - no phase blocker
 - no save-version/reference error
+
+## RUN-Q77 — D25 CONTROLLED REPAIR IS ONE-TIME
+
+SETUP:
+Use only a development fixture, development Save, or explicitly controlled migration/debug state that is already represented as v8 at D25+ but lacks the required Final prereveal state.
+
+EXPECT:
+- first valid entry generates the authoritative Final Family Pair/Hazard Pool exactly once using the ordinary seeded/fixed selection principle
+- generated state persists immediately
+- save/reload and later entry reuse the exact same state
+- no second generation/reroll path exists
+
+PASS:
+- repair cannot be used for Final fishing
+- ordinary valid D25+ v8 Player Saves already contain the state
+- this repair path does not authorize v1~v7 Player Run continuation
