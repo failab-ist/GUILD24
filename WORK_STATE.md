@@ -1,37 +1,59 @@
 # WORK_STATE
 
 DATE: 2026-09-15
-VERSION: v2.6.1 Adoption Recovery
-STATE: DESIGN_SSOT_FROZEN / SOURCE_RECOVERY_PENDING
+VERSION: v2.7 Design Promoted / v2.6.1 Recovery Gate
+STATE: DESIGN_SSOT_V2_7_PROMOTED / SOURCE_V2_6_1_RECOVERY_PENDING
 
 ## Truth
 
-- Design SSOT: `design_ssot/SPEC_INDEX_v2.6.1.md`
-- Execution plan: `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
+- Current Design SSOT: `design_ssot/SPEC_INDEX_v2.7.0.md`
 - Implementation truth: `dist/`
-- Future v2.7+ vision is excluded from current recovery.
+- Current Source has **not** adopted v2.7 yet.
+- v2.7 source adoption is gated behind closure of the existing v2.6.1 Adoption Recovery acceptance.
 
-## Current Gate
+## Active Implementation Gate
 
-v2.5 PASS / measurement history is historical evidence only.
-v2.6.1 acceptance is not closed until current Owner Specs / QA are adopted into Source and runtime smoke passes.
+Before any v2.7 Source implementation:
 
-Known recovery blocker before source patch:
+```text
+complete v2.6.1 Adoption Recovery
+-> freeze / run its acceptance QA
+-> close the recovery gate
+-> begin v2.7 adoption from SPEC_INDEX_v2.7.0.md
+```
 
-- Night presentation can hit `ReferenceError: game is not defined` during the SALE → NIGHT injury/report path.
+Prerequisite recovery execution document:
+`GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
 
-## Repository Hygiene
+For that prerequisite recovery cycle only, its frozen acceptance target remains the routed v2.6.1 owner Specs/QA under:
+`design_ssot/SPEC_INDEX_v2.6.1.md`
 
-Superseded SSOT versions and stale generated/historical artifacts are removed from the current working tree in the hygiene pass.
-Do not use deleted old SPEC_INDEX / package manifests as current Design Truth.
+This is an explicit implementation prerequisite target, not the current forward Design SSOT.
+Do not introduce v2.7 changes early while closing the recovery cycle.
 
-## Future Planning
+## Current Recovery Status
 
-- approved future Director vision: `GUILD24_v2.7_PLUS_VISION.md`
-- planning label `v2.7+` does not change the current v2.6.1 implementation scope
-- when v2.7 begins, the approved vision must be promoted into the relevant owner Specs / QA before WORK implementation
+v2.6.1 acceptance is not closed until its frozen recovery scope is adopted into Source and runtime smoke passes.
+
+Known recovery blocker from the current recovery state:
+- Night presentation can hit `ReferenceError: game is not defined` during the SALE -> NIGHT injury/report path.
+
+Do not mix that recovery fix cycle with v2.7 implementation.
+
+## v2.7 Design Status
+
+v2.7 Owner Specs / QA are now promoted.
+Entry point:
+`design_ssot/SPEC_INDEX_v2.7.0.md`
+
+Important:
+- Director baseline balance values are implementation starting values pending full-run validation.
+- frozen QA reports balance findings; it does not auto-tune them.
+- `GUILD24_v2.7_PLUS_VISION.md` is now planning/history reference only, not parallel Design Truth.
+- v2.8+ deferred ideas are outside v2.7 adoption.
 
 ## Next
 
-Run v2.6.1 Adoption Recovery against the current Owner Specs / QA, then frozen QA / browser smoke.
-Anything outside current Owner Specs is a separate finding; do not silently change Design.
+1. Close the current v2.6.1 Adoption Recovery cycle without adding v2.7 behavior.
+2. Freeze/record the recovered Source baseline.
+3. Start v2.7 adoption by reading `SPEC_INDEX_v2.7.0.md` and only the routed changed owners/QA needed for each task.
