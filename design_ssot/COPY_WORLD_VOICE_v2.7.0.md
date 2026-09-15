@@ -60,7 +60,7 @@ Exact Korean display strings, where needed, must preserve these six identities a
 
 ## INHERITED EXAMPLE OVERRIDES
 
-The following inherited v2.5 copy/function examples are explicitly superseded:
+The following inherited v2.5 copy/function examples are explicitly superseded or unresolved where two later canonical paths conflict.
 
 ### 불룡볶음면
 
@@ -112,6 +112,21 @@ D30 = reuse the already-known persisted state; no new Family reveal/reroll
 
 If the existing `최종 정찰 보고` header/copy block is reused, it belongs to the D25 disclosure beat rather than a new D30 reveal.
 Do not add a second D30 Family-intro copy that implies newly generated information.
+
+### Current Run abandon label
+
+There is an inherited canonical wording conflict:
+- `COPY_WORLD_VOICE_v2.5.0.md` approved amendment uses `현재 런 포기` / preferred `현재 런 포기 · 새 점포 준비`
+- current v2.6.1 `CORE_RUN` / `UI_UX` use `현재 지점 포기`
+
+The underlying abandon mechanic is resolved and unchanged.
+The exact v2.7 Player-facing action label is:
+
+```text
+UNRESOLVED — USER APPROVAL REQUIRED
+```
+
+Do not silently choose either historical label during v2.7 Source adoption.
 
 ## MORNING / SUPPLY COPY
 
@@ -200,6 +215,7 @@ when the resolved report cannot prove that exact cause.
 Item truth -> `ITEM_v2.7.0.md`
 Boss identity/trait function -> `BOSS_v2.7.0.md`
 Final reveal timing -> `CORE_RUN_v2.7.0.md` / `FINAL_EXPEDITION_v2.7.0.md`
+Run abandon function/UI -> `CORE_RUN_v2.7.0.md` / `UI_UX_v2.7.0.md`
 Event function -> `EVENT_v2.7.0.md`
 Sale/UI -> `SALE_v2.7.0.md` / `UI_UX_v2.7.0.md`
 Night causality -> `NIGHT_CLOSING_v2.7.0.md`
