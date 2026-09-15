@@ -10,6 +10,21 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Status values are not stored here. FAIL is valid evidence.
 
+## INHERITED QA OVERRIDES
+
+The following inherited `UI_UX_QA_v2.5.0.md` expectations are stale and are explicitly superseded:
+
+- `UI-Q40` / `UI-Q43` D30-first Final Family reveal
+  - v2.7 exact Family/Hazard disclosure occurs on D25
+  - D30 reuses the already-known persisted state and must not present it as newly generated/revealed
+- `UI-Q43` GLUTTONY preview wording based on Rare+ / old raw-Stat scope
+  - v2.7 follows `BOSS_v2.7.0.md`: all positive Core-Stat contribution originating from Items is reduced to 50%; no Rarity threshold
+  - Counter / Supply / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
+- inherited `폭식` player-facing identity/copy is stale
+  - identity follows `BOSS_v2.7.0.md`: `탐식의 마왕 글러트니`
+
+All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
+
 ## UI-Q70 — MORNING REQUIRED SUPPLY
 
 PASS:
