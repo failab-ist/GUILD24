@@ -51,6 +51,8 @@ Do not hide:
 
 Do not collapse Hazard Counter into generic Power.
 
+The exact active-catalog table below controls approved multi-effect exceptions; do not remove an explicit listed effect merely to force a role-count heuristic.
+
 ## HAZARD COUNTER BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`
@@ -89,6 +91,11 @@ Supply = 0
 Hazard Counter = 0
 Insurance = 0
 ```
+
+Shelf-life contract:
+- all three Potion tiers use the same ordinary Potion-family shelf-life behavior
+- `중급 포션` does **not** inherit the retired `마석 보조배터리` non-expiring/tool-like shelf behavior merely because it reuses that catalog slot
+- until separately rebalanced, reuse the existing retained Potion shelf-life baseline shared by 하급/상급 포션
 
 The former player-facing `마석 보조배터리` catalog entry is retired and its active catalog slot becomes `중급 포션`.
 Do not keep a second active Spirit-battery SKU under Special.
