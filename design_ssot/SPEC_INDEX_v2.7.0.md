@@ -148,14 +148,14 @@ Changed owners only:
 
 - CORE_RUN: Save v8, fresh Run boundary, start stock, D0~D30 Final timeline, controlled D25 repair boundary, D30 `출전 NPC 선택 -> FINAL 판매 -> 결과` progression
 - META: preserve validated current v7 Account/Meta into v8 while discarding legacy Run state; no new fail-to-power Meta system
-- ECONOMY_ORDER: inherit v2.6.1 Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract and information boundary
-- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot
-- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract
-- ITEM: categories, 30-item catalog rebalance, stronger flat native Core-Stat Item baseline, aligned Counter-specialist/premium pricing, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition
+- ECONOMY_ORDER: inherit v2.6.1 Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract and information boundary; replace fixed all-Run rarity weights with Day-band rarity progression so Epic preparation naturally becomes common in late Run without a separate D20 hard unlock
+- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot; ordinary Injury keeps existing Stat penalty but recovery now requires Success/Great Success, Retreat does not clear Injury, and injured re-expedition carries extra Severe/Death risk
+- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract; higher ordinary expedition death-risk baseline plus explicit injured re-expedition risk
+- ITEM: categories, expanded 40-item active catalog, stronger flat native Core-Stat Item baseline, aligned Counter-specialist/premium pricing, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition, plus 10 Epic late-Run-value Items (5 Family hybrid Field Gear + 5 top-end Food/Drink/Potion)
 - RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
 - SALE: exactly 2 slots, sequential Counter Handling, preview boundary, truthful post-commit delta/source boundary, removal of non-decision flavor disclosure, revisit quick surface, same-item refusal price ceiling
-- NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write
+- NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write, persistent-Injury continuity across Retreat
 - UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, refusal-price disabled state, decision-only SALE detail, truthful post-commit delta display, material/typography pass, exact `현재 지점 포기` label
 - COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, v2.7 terminology, Event 05 / GLUTTONY / Run-abandon exact copy
 - FINAL_EXPEDITION: D25 persisted Final state, D30 Final SALE preparation, `선택 -> 판매 -> 결과`, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
