@@ -1,7 +1,7 @@
 # DUNGEON_HAZARD
 
 DOC=DUNGEON_HAZARD
-OWNER=dungeon,family,hazard,supply_burden,forecast,counter,fatigue,prepared_power
+OWNER=dungeon,family,hazard,supply_burden,forecast,counter,fatigue,prepared_power,death_risk
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Family identities, Hazard-to-Stat mappings, readiness labels, Day/Tier generation, combat variance, Deep Expedition structure, and unchanged Supply-Burden eligibility inherit `DUNGEON_HAZARD_v2.6.0.md`.
 
-This patch overrides v2.6 prepared-Power weights, Hazard threat scale, Fatigue values/penalties, excess-Supply processing, stale third-slot wording, and the next-day Gate forecast disclosure contract.
+This patch overrides v2.6 prepared-Power weights, Hazard threat scale, Fatigue values/penalties, excess-Supply processing, ordinary combat-failure Death risk, stale third-slot wording, and the next-day Gate forecast disclosure contract.
 
 ## PREPARED POWER — v2.7 BASELINE
 
@@ -85,6 +85,75 @@ T3
 A naturally strong, invested NPC may need fewer Item resources.
 A weak-fit NPC may need more.
 No canonical route may require a third normal Bag slot.
+
+The new Epic layer in `ITEM_v2.7.0.md` improves late-Run slot efficiency but is not a mandatory T3 key.
+A valid T3 route must still exist without drawing one exact Epic SKU.
+
+## ORDINARY COMBAT-FAILURE DEATH RISK — v2.7 BASELINE
+
+`DIRECTOR DOCUMENT BASELINE`
+
+v2.7 intentionally increases ordinary expedition lethality while preserving the existing resolution shape:
+
+```text
+combat failure
+-> escape check
+-> only if escape fails, injury / severe / death branch
+```
+
+Do not create a separate random instant-death roll on successful combat or a new environment-only death subsystem.
+
+For the existing post-combat-failure / failed-escape death branch:
+
+```text
+deficit
+= clamp(1 - combatScore / requiredCombatPower, 0, 1)
+
+healthyDeathChance
+= clamp(
+    0.06
+  + deficit × 0.22
+  - effectiveSurvival × 0.0007,
+  0.02,
+  0.30
+)
+```
+
+If the NPC **began the expedition with ordinary Injury (`injury=1`)**:
+
+```text
+deathChance
+= clamp(healthyDeathChance + 0.10, 0.02, 0.40)
+```
+
+Otherwise:
+```text
+deathChance = healthyDeathChance
+```
+
+Meaning:
+- well-prepared / high-survival NPCs still rarely die
+- visibly poor combat preparation creates materially higher risk
+- repeating expeditions with an injured NPC is a deliberate danger
+- Death risk still depends on actual failed combat/escape state rather than being a flat every-trip tax
+
+Exact Injury persistence and injured Severe escalation -> `NPC_TRAIT_v2.7.0.md`.
+
+## INJURED RE-EXPEDITION SEVERE ESCALATION
+
+When an NPC **began** the expedition at `injury=1`, the existing non-death branch after failed combat/escape receives:
+
+```text
+Severe Injury transition chance +15%p
+```
+
+Rules:
+- apply to the same Severe-vs-ordinary Injury decision point already used by the ordinary resolution
+- do not create a second independent Severe roll
+- apply the +15%p before the normal clamp used by that branch
+- the ordinary Injury Stat penalty itself remains unchanged under `NPC_TRAIT_v2.7.0.md`
+
+This modifier is about the danger of sending an already-wounded adventurer back out, not about making the four visible Stats secretly lower than their listed Injury penalty.
 
 ## FATIGUE OUTCOME BASELINE
 
@@ -204,6 +273,8 @@ Expose exact decision ingredients:
 - departure Fatigue after preRecovery
 - remaining Supply buffer
 - conditional final Fatigue for each relevant possible Outcome
+- existing Injury state and its visible Stat penalties
+- that sending an injured NPC again increases Severe/Death risk, without exposing the exact hidden probability
 
 Do not expose:
 - hidden Supply-deficit formula
@@ -256,7 +327,8 @@ Presentation owner -> `ECONOMY_ORDER_v2.7.0.md` / `UI_UX_v2.7.0.md`.
 
 ## RELATED
 
-Item Supply/Counter -> `ITEM_v2.7.0.md`
+Item Supply/Counter/Epic preparation -> `ITEM_v2.7.0.md`
+Injury persistence/re-expedition state -> `NPC_TRAIT_v2.7.0.md`
 Fatigue Trait -> `NPC_TRAIT_v2.7.0.md`
 Sale preview -> `SALE_v2.7.0.md`
 Night resolved fields -> `NIGHT_CLOSING_v2.7.0.md`
