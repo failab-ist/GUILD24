@@ -1339,7 +1339,50 @@ After actual purchase:
 
 Current qualitative Forecast / Readiness may update.
 
-## 15.6 Motion baseline
+## 15.6 Refusal price monotonicity — approved
+
+A same-customer, same-item refusal creates a price ceiling for the rest of that visit.
+
+Rule:
+
+```text
+if a price mode is refused for the same SKU
+→ every higher price mode for that same SKU is disabled for that customer visit
+→ lower price modes may still be attempted
+```
+
+Exact examples:
+
+```text
+50% refused
+→ 100% disabled
+→ 150% disabled
+
+100% refused
+→ 150% disabled
+→ 50% may still be attempted
+
+150% refused
+→ 100% / 50% may still be attempted
+```
+
+Why:
+
+- a customer who refused the same product at a lower price must not later accept it at a higher price because of another RNG roll
+- otherwise price negotiation becomes retry/fishing rather than a coherent judgment
+- the player should be able to infer a consistent upper bound from an actual refusal
+
+UI:
+
+- blocked higher-price buttons become visibly disabled
+- the reason must be readable, e.g. the customer already refused this item at a lower price
+- the lock applies only to the same customer + same SKU + current visit
+- it must not silently lock unrelated items
+- a new customer visit starts from that visit's normal pricing state unless another owner explicitly defines persistent behavior
+
+This is a coherence rule, not a new loyalty/purchase-intent subsystem.
+
+## 15.7 Motion baseline
 
 Short local motion is useful only if it clarifies state:
 
@@ -1393,6 +1436,79 @@ Existing queue-count information may remain.
 ---
 
 # 17. P1 — ANTI-AI-SLOP VISUAL / UX PASS
+
+## 17.0 MORNING next-day Gate forecast — required
+
+The next-day forecast is player decision information and must be visible in MORNING before ORDER.
+
+It must expose both:
+
+1. **how many Gates may open tomorrow**
+2. **how dangerous tomorrow's Gates are likely to be by Tier**
+
+Required MORNING signal:
+
+```text
+내일 전망
+
+게이트 수
+1개 xx% · 2개 xx% · 3개 xx%
+
+게이트 위험도
+T1 xx% · T2 xx% · T3 xx%
+```
+
+When Gate count is deterministic for the next Day, show the fixed result rather than a fake distribution:
+
+```text
+게이트 수
+2개 확정
+```
+
+Exact copy/layout may follow the current UI language, but the data contract is:
+
+### Gate count forecast
+
+- expose the exact next-day Gate-count probability distribution when count is randomized
+- if next-day count is fixed by the current Day-band rule, expose the fixed count
+- the forecast must use the same seeded/current run generation rules that will actually determine the next Day
+- do not reveal which Family will occupy those Gates
+- do not reveal the exact future Gate combination
+- Save/Load must not be able to change the forecast independently from the actual next-day generation state
+
+### Tier forecast
+
+- expose the exact next-day T1 / T2 / T3 probability distribution
+- this is the existing future-risk signal used for stock / quantity / reroll / cash-reserve judgment
+
+### Information boundary
+
+This is a secondary future signal, not the primary current-day preparation context.
+
+Current-day open Gate / known Hazard remains the primary information for today's Order/Sale.
+
+Do not reveal:
+
+- next-day Family
+- exact next-day Gate identities/composition
+- next-day Hazard set
+- future visitor identity
+- future visitor destination
+- expedition success/death probability
+- recommended stock or quantity
+
+Design intent:
+
+> **내일 얼마나 많이, 얼마나 위험한지는 안다. 정확히 무엇이 필요한지는 모른다.**
+
+This improves two distinct ORDER judgments:
+
+- **Gate count forecast** → how much stock / cash reserve may be needed
+- **Tier forecast** → how premium / defensive / risky tomorrow's preparation may need to be
+
+The same forecast may also remain available compactly in ORDER so the player does not need to navigate back to remember it.
+
+If Gate-count forecast or Tier forecast is absent from MORNING, that is an implementation mismatch against the v2.7 information contract.
 
 ## 17.1 Purpose
 
@@ -1743,6 +1859,61 @@ If full-run evidence later shows balance problems:
 > report Balance Finding first.
 
 Do not invent Meta power to patch difficulty.
+
+---
+
+# 19-A. LATEST CONFIRMED SALE / MORNING INFORMATION AMENDMENTS
+
+These are current approved v2.7 decisions and supersede older ambiguous planning wording.
+
+## 19-A.1 Post-commit feedback boundary
+
+Uncommitted Item selection must not preview derived answer changes such as:
+
+- `접전 -> 우세`
+- `불안 -> 충분`
+
+After an actual purchase commits, the customer's **current** Forecast / Readiness / deterministic Supply-Fatigue state may update before the Player judges the remaining slot.
+
+Purpose:
+
+> prevent preview fishing before commitment, while still allowing the Player to learn from the consequence of an actual transaction.
+
+## 19-A.2 Same-item refusal creates a price ceiling
+
+For the same customer + same SKU + same visit:
+
+```text
+50% refused  -> 100% / 150% disabled
+100% refused -> 150% disabled
+150% refused -> lower prices may still be attempted
+```
+
+Higher-price options must be visibly disabled after a lower-price refusal.
+
+Do not apply this lock to unrelated SKUs.
+
+Purpose:
+
+> prevent repeated RNG fishing where the same customer rejects a lower price and then buys the same item at a higher price.
+
+## 19-A.3 MORNING must expose next-day Gate count + Tier forecast
+
+Before ORDER, MORNING must show:
+
+- next-day Gate-count forecast
+- next-day Tier probability forecast
+
+Keep hidden:
+
+- Family
+- exact Gate composition
+- Hazards
+- future customer/destination
+
+Purpose:
+
+> let the Player judge both **quantity pressure** and **difficulty pressure** without revealing the exact solution.
 
 ---
 
