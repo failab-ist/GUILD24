@@ -130,3 +130,26 @@ PASS:
 - repair cannot be used for Final fishing
 - ordinary valid D25+ v8 Player Saves already contain the state
 - this repair path does not authorize v1~v7 Player Run continuation
+
+## RUN-Q78 — D30 SELECT -> FINAL SALE -> RESULT
+
+Controlled D30 with at least one eligible Final participant.
+
+PASS exact progression:
+
+```text
+D30 known Final state
+-> D30 Relic/SLOTH decision when applicable
+-> Final participant selection
+-> Final SALE preparation
+-> Final Lock
+-> one Final result
+```
+
+PASS:
+- Final SALE reuses the ordinary SALE handling layer rather than adding a separate combat-game phase
+- participant selection is committed before Final SALE starts
+- after committed Final SALE transactions begin, Save/Load cannot reopen participant selection or erase committed/refused sale state for fishing
+- no post-sale free-equip step exists
+- one Final Lock occurs after all selected participants finish Final SALE
+- exactly one Final result resolves from that locked state
