@@ -108,6 +108,21 @@ Thus with WRATH base 200:
 
 Displayed strengthening must still derive from the actual applied Greed bonus.
 
+### GREED snapshot timing under v2.7 Final SALE
+
+D30 Final now resolves through:
+
+```text
+출전 NPC 선택 -> FINAL 판매 -> Final Lock -> 결과
+```
+
+The existing Gross-Sales metric remains authoritative.
+Successful Final SALE transactions are ordinary real sales and therefore contribute to the same gross-sales total exactly once.
+
+The committed GREED gross-sales snapshot is taken at **Final Lock after Final SALE has completed**.
+Do not snapshot before the selected Final participants have finished their sale interactions.
+Do not exclude or double-count D30 Final sales.
+
 ## GLUTTONY — v2.7 EFFECT SCOPE
 
 The prior `Rare+ Item raw Stat ×0.80` rule is superseded.
@@ -233,6 +248,8 @@ PASS:
 - applied shortfall strengthening caps at +12 Boss Power
 - target met returns to 200 baseline
 - maximum shortfall cannot exceed 212 through GREED alone
+- D30 Final sales are included exactly once in the gross-sales snapshot
+- snapshot occurs at Final Lock after Final SALE completes
 
 ### BOSS-Q73 — GLUTTONY SCOPE
 PASS:
@@ -274,7 +291,7 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 
 ## RELATED
 
-Final state/formula -> `FINAL_EXPEDITION_v2.7.0.md`
+Final state/formula/Final SALE -> `FINAL_EXPEDITION_v2.7.0.md`
 Relic/Seal window -> `RELIC_v2.7.0.md`
 Meta -> `META_v2.7.0.md`
 Item/GLUTTONY contribution -> `ITEM_v2.7.0.md`
