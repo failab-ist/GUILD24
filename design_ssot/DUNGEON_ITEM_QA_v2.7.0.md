@@ -1,7 +1,7 @@
 # DUNGEON_ITEM_QA
 
 DOC=DUNGEON_ITEM_QA
-OWNER=qa,dungeon,item,hazard,preparation,fatigue,supply
+OWNER=qa,dungeon,item,hazard,preparation,fatigue,supply,injury,death_risk
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
@@ -28,7 +28,7 @@ The following inherited v2.5 expectations are stale and explicitly superseded:
   - current Fresh Relics use the exact scopes in `RELIC_v2.7.0.md`; generic Supply amplification/native-recovery blanket behavior is not inherited
 - any v2.5 active-catalog numeric bundle that conflicts with `ITEM_v2.7.0.md`
 - any earlier v2.7 draft Item Stat/price bundle that conflicts with the current active catalog in `ITEM_v2.7.0.md`
-- any v2.5 Fatigue/Supply value that conflicts with `DUNGEON_HAZARD_v2.7.0.md`
+- any v2.5 Fatigue/Supply/Death-risk value that conflicts with `DUNGEON_HAZARD_v2.7.0.md`
 
 All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
 
@@ -75,6 +75,7 @@ PASS:
 - strong natural Stat/growth can reduce Item needs
 - weak-fit NPC may need more
 - no viable route requires a third normal Bag slot
+- drawing one exact Epic SKU is never required for a viable T3 route
 
 ## DUN-Q73 — FATIGUE OUTCOME TABLE
 
@@ -126,6 +127,55 @@ PASS:
 - exact hidden deficit formula remains hidden from player UI
 - public required/prepared/deficit quantities are correct
 
+## DUN-Q77 — ORDINARY DEATH BASELINE
+
+Controlled failed-combat + failed-escape cases.
+
+EXPECT:
+```text
+deficit = clamp(1 - combatScore / requiredCombatPower, 0, 1)
+healthyDeathChance = clamp(0.06 + deficit*0.22 - effectiveSurvival*0.0007, 0.02, 0.30)
+```
+
+PASS:
+- Death roll occurs only in the existing failed-combat / failed-escape branch
+- healthy cap is exactly 30%
+- minimum is exactly 2%
+- no random instant-death path is added to successful combat
+- environment-only incidents do not create a second Death subsystem
+
+## DUN-Q78 — INJURED RE-EXPEDITION RISK
+
+Controlled identical NPC/Gate/RNG state except departure Injury state.
+
+EXPECT when departure `injury=1`:
+- ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
+- Death chance adds +10%p to the healthy formula and caps at 40%
+- Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
+- no extra independent Death/Severe roll is created
+
+PASS:
+- injured departure is materially riskier than healthy departure
+- exact hidden probability is not exposed to Player UI
+
+## DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY
+
+Start at `injury=1`.
+
+EXPECT:
+```text
+성공 -> injury 0
+대성공 -> injury 0
+퇴각 -> injury 1
+부상 -> injury 1
+```
+
+PASS:
+- Retreat does not clear ordinary Injury
+- generic completion/non-Injury result does not clear it
+- Severe recovery remains its separate inherited rule
+- First Aid Aftercare may still override persistent Injury exactly as ITEM owns
+
 ## ITEM-Q70 — PLAYER CATEGORY EXACT
 
 Every active Item maps to exactly one of:
@@ -139,14 +189,15 @@ PASS:
 - 농축 해독제 = Field Gear
 - 구급키트 = Insurance
 
-## ITEM-Q71 — ACTIVE CATALOG EXACT 30
+## ITEM-Q71 — ACTIVE CATALOG EXACT 40
 
 PASS:
-- exactly 30 active Items
+- exactly 40 active Items
 - 붕대 inactive/retired
 - 마석 보조배터리 inactive/retired
 - 진정 허브티 active
 - 중급 포션 active
+- exactly 10 new Epic preparation Items from current `ITEM_v2.7.0.md` are active
 - no retired ID leaks into Order/Sale generation
 
 ## ITEM-Q72 — POTION LADDER
@@ -155,13 +206,14 @@ EXPECT:
 - 하급: 70/140, 투력 +8
 - 중급: 110/230, 투력 +12
 - 상급: 150/300, 투력 +16
+- 최상급: 190/400, 투력 +24
 
 All:
 - Potion category
 - Supply 0
 - Counter 0
 - Insurance 0
-- same ordinary Potion-family shelf-life behavior
+- same ordinary Potion-family shelf-life behavior unless explicitly overridden
 
 PASS:
 - no hidden generic success bonus beyond Core Stat contribution
@@ -169,7 +221,7 @@ PASS:
 
 ## ITEM-Q73 — HAZARD COUNTER VALUES
 
-Exact Item Counter values:
+Exact pre-Epic Main/Lower/Hybrid Item Counter values:
 - antidote poison +18
 - mask poison +12
 - rope bind +16
@@ -187,7 +239,7 @@ Exact Item Counter values:
 - goggles whiteout +16
 
 PASS:
-- specialist Field Gear does not retain stale generic positive Core Stats
+- specialist Field Gear does not retain stale generic positive Core Stats except explicit current catalog exceptions
 - Hybrid remains weaker per target than dedicated specialist
 
 ## ITEM-Q74 — SPIRIT STAT ROUTE
@@ -293,7 +345,7 @@ PASS:
 
 ## ITEM-Q81 — REBALANCED PRICE TABLE
 
-PASS exact Buy/Sell for changed prices:
+PASS exact Buy/Sell for changed original-catalog prices:
 
 ```text
 캔커피                40 / 85
@@ -308,7 +360,7 @@ PASS exact Buy/Sell for changed prices:
 ```
 
 PASS:
-- unchanged catalog prices remain exactly as listed in `ITEM_v2.7.0.md`
+- unchanged original-catalog prices remain exactly as listed in `ITEM_v2.7.0.md`
 - no stale 180/360 antidote or 200/400 ion price survives
 - Main Hazard specialist price bands remain practically comparable rather than rarity-only inflated
 
@@ -324,6 +376,47 @@ PASS direction:
 - Fresh/Potionbody can increase the owned Item contribution, but Counter/Supply/Insurance channels remain outside that native-Stat amplification
 
 Exact base Item values must match the current active catalog.
+
+## ITEM-Q83 — EPIC FAMILY HYBRIDS
+
+EXPECT exact new Epic Field Gear:
+
+```text
+거미줄 방호세트   150/320  독+12 / 속박+12
+연금 방수슈트     150/320  부식+12 / 진창+12
+성화 랜턴         150/320  공포+12 / 어둠+12
+백설 방한고글     150/320  냉기+12 / 화이트아웃+12
+마그마 냉각장비   160/340  화염+14 / 투력+6
+```
+
+PASS:
+- each dual-Hazard value remains below the owning dedicated Main specialist value
+- FIRE item does not invent a second FIRE Hazard
+- `마그마 냉각장비 투력+6` is an explicit exception only
+
+## ITEM-Q84 — EPIC TOP-END STAT/SUPPLY ITEMS
+
+EXPECT:
+
+```text
+결전 특선 도시락       Food E    180/380  강인함+12 / Supply9
+용사 특식 핫바         Food E    170/360  투력+8 / Supply7
+초고속 에너지드링크    Drink E   160/340  기동+18 / Supply2
+대현자 허브엘릭서      Drink E   160/340  정신+20 / Supply2
+최상급 포션            Potion E  190/400  투력+24
+```
+
+PASS:
+- ordinary category modifier rules apply
+- no Epic-only hidden multiplier
+- these Items improve one-slot late-Run value without adding Bag slots
+
+## ITEM-Q85 — NO D20 HARD UNLOCK FOR NEW EPICS
+
+PASS:
+- all 10 new Epic preparation Items use the ordinary Epic pool
+- no per-Item `day>=20` hard eligibility gate exists for them
+- practical late-Run frequency comes only from current `ECONOMY_ORDER_v2.7.0.md` Day-band Rarity progression plus existing general eligibility rules
 
 ## SIM-Q70 — THREE PREPARATION AXES
 
@@ -344,6 +437,7 @@ PASS direction:
 - one appropriate Item can change an expedition decision
 - late-game Stat Items are not decorative dead picks
 - generic Potion is not the universal best answer over Counter/Food choices
+- Epic improves slot efficiency but does not become mandatory for T3 viability
 
 ## SIM-Q72 — REQUIRED METRICS
 
@@ -355,4 +449,7 @@ Record at minimum:
 - Supply use split: required / preRecovery / outcomeBuffer / waste
 - Potion tier offer/order/sale/use
 - Counter lower/upper/hybrid use
+- Epic offer/order/sale/use by Day band and category
+- healthy vs injured re-expedition outcome distribution
+- healthy vs injured death/severe rates after failed combat/escape
 - Item dead-pick / universal-best rates
