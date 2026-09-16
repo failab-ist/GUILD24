@@ -21,12 +21,13 @@ The following inherited v2.5 expectations are stale and explicitly superseded:
 - `ITEM-Q06` Bandage/First-Aid injury-insurance line
   - 붕대 is retired; 구급키트 is Aftercare Insurance; Potion is a separate raw-Power category
 - `ITEM-Q07` 불룡볶음면 Combat identity
-  - current exact effect is 강인함 +5 / 냉기 +6 / Supply 4
+  - current exact effect is 강인함 +8 / 냉기 +6 / Supply 4
 - `ITEM-Q08` 마석 보조배터리 active Spirit/Special identity
   - retired; its catalog slot is 중급 포션
 - `ITEM-Q18` generic Fresh core boost to Supply/native recovery
   - current Fresh Relics use the exact scopes in `RELIC_v2.7.0.md`; generic Supply amplification/native-recovery blanket behavior is not inherited
 - any v2.5 active-catalog numeric bundle that conflicts with `ITEM_v2.7.0.md`
+- any earlier v2.7 draft Item Stat/price bundle that conflicts with the current active catalog in `ITEM_v2.7.0.md`
 - any v2.5 Fatigue/Supply value that conflicts with `DUNGEON_HAZARD_v2.7.0.md`
 
 All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
@@ -151,9 +152,9 @@ PASS:
 ## ITEM-Q72 — POTION LADDER
 
 EXPECT:
-- 하급: 70/140, 투력 +6
-- 중급: 110/230, 투력 +9
-- 상급: 150/300, 투력 +12
+- 하급: 70/140, 투력 +8
+- 중급: 110/230, 투력 +12
+- 상급: 150/300, 투력 +16
 
 All:
 - Potion category
@@ -193,8 +194,8 @@ PASS:
 
 `진정 허브티`:
 - Drink Common
-- 50/100
-- 정신 +10
+- 40/85
+- 정신 +15
 - Supply 2
 - no explicit fear/dark/whiteout Counter
 
@@ -235,19 +236,20 @@ No second full resolve after Aftercare.
 ## ITEM-Q77 — FOOD/DRINK BASELINE VALUES
 
 Audit the exact active table in `ITEM_v2.7.0.md`, including:
-- Rice survival +5 / Supply5
-- Water survival +4 / Supply3
-- Bar combat +4 / Supply4
-- Choco mobility +5 / Supply4
-- Coffee mobility +8 / Supply2
-- Energy mobility +10 / Supply2
-- Lava survival +5 / cold6 / Supply4
-- Premium Lunch survival +6 / Supply7 / loot20%
+- Rice survival +8 / Supply5
+- Water survival +6 / Supply3
+- Bar combat +6 / Supply4
+- Choco mobility +8 / Supply4
+- Coffee mobility +12 / Supply2
+- Herb Tea spirit +15 / Supply2
+- Energy mobility +15 / Supply2
+- Lava survival +8 / cold6 / Supply4
+- Premium Lunch survival +10 / Supply7 / loot20%
 - Ramen cold10 / Supply5
 - Ice fire10 / Supply1
 - Candy fear10 / Supply3
 
-PASS: no stale v2.5 Stat bundles survive.
+PASS: no stale v2.5 or earlier v2.7 Stat bundle survives.
 
 ## ITEM-Q78 — GOLDEN COUPON PRICE
 
@@ -258,7 +260,7 @@ PASS:
 
 `농축 해독제`:
 - Field Gear Rare
-- 180 / 360
+- 80 / 170
 - poison Counter +18
 
 PASS:
@@ -288,6 +290,40 @@ PASS:
 - no sequential Trait×Relic multiplicative layer
 - Counter / Supply / Insurance / Loot / Utility / harmful RiskReward penalty do not enter the native-Stat modifier pool
 - GLUTTONY, when present in Final, applies after the Item-side positive Core-Stat contribution is resolved
+
+## ITEM-Q81 — REBALANCED PRICE TABLE
+
+PASS exact Buy/Sell for changed prices:
+
+```text
+캔커피                40 / 85
+진정 허브티           40 / 85
+얼음컵                30 / 65
+랜턴 건전지           45 / 95
+구급키트             100 / 210
+핫팩                  60 / 130
+농축 해독제           80 / 170
+길드 프리미엄 도시락 170 / 360
+쿨링 이온음료         80 / 170
+```
+
+PASS:
+- unchanged catalog prices remain exactly as listed in `ITEM_v2.7.0.md`
+- no stale 180/360 antidote or 200/400 ion price survives
+- Main Hazard specialist price bands remain practically comparable rather than rarity-only inflated
+
+## ITEM-Q82 — DIRECT STAT ITEM RELEVANCE
+
+Controlled representative mid/late-Run NPCs around a marginal Forecast state.
+
+PASS direction:
+- selling one appropriate direct-Stat Item produces a perceptible current Core-Stat change
+- representative marginal cases can cross a qualitative Forecast boundary because of one appropriate Item
+- NPC long-term Growth remains the main body of strength rather than being replaced by Item scaling
+- no Day/Level percentage-scaling Item system exists
+- Fresh/Potionbody can increase the owned Item contribution, but Counter/Supply/Insurance channels remain outside that native-Stat amplification
+
+Exact base Item values must match the current active catalog.
 
 ## SIM-Q70 — THREE PREPARATION AXES
 
