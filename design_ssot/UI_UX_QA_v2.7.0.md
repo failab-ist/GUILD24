@@ -276,3 +276,52 @@ PASS:
 
 If ORDER repeats the forecast:
 PASS only when the values exactly match MORNING and are not regenerated independently.
+
+## UI-Q102 — SALE NON-DECISION DETAIL REMOVAL
+
+PASS:
+- `이 손님에게 안 걸리는 효과` is absent from the SALE customer decision surface
+- flavor-only `상품 설명` disclosure is absent from SALE
+- exact actionable Item effects remain readable
+- no replacement accordion/modal is added solely to preserve the removed flavor
+
+FAIL:
+- a disclosure control remains that visually implies strategic information but opens only flavor text
+
+## UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
+
+Controlled purchase with current `집중 사탕` (`공포 +10 / Supply 3`) and no other changing source.
+
+PASS:
+- direct Item result does not show 투력/강인함/기동/정신 as if granted by 집중 사탕
+- 공포 Counter and Supply update truthfully
+- if Supply causes an actual Fatigue penalty-band transition, only the resulting effective 기동/정신 change may appear and its Fatigue/Condition source is readable
+- Supply/Fatigue does not raise 투력/강인함
+- main current-state values update consistently with runtime resolution
+
+Also PASS:
+- no generic `보급 후 변화` calculation compares mismatched before/after stages and makes unrelated Stats rise together
+- every displayed delta is traceable to an authoritative source
+
+## UI-Q104 — FINAL SELECT -> SALE -> RESULT
+
+Controlled D30 Final with eligible participants.
+
+PASS order:
+
+```text
+출전 NPC 선택
+-> FINAL 판매
+-> 결과
+```
+
+PASS:
+- participant selection is confirmed before Final SALE begins
+- selected participants are handled one at a time using the familiar SALE interaction
+- each participant has exactly two visible Item slots
+- price / Wallet / affordability / refusal / inventory state remain readable
+- Final no-effect Items are blocked/clearly marked according to `FINAL_EXPEDITION_v2.7.0.md`
+- Boss-caused visible Item changes use the current Final truth
+- there is no separate attack/QTE/combat-control layer
+- there is no second free-equip screen after Final SALE
+- after all participant sale interactions finish, the UI advances to the one Final result
