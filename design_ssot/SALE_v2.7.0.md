@@ -109,6 +109,46 @@ Before the Player judges the remaining slot, current decision information may up
 
 A refusal does not grant the Item effect.
 
+## SAME-ITEM REFUSAL PRICE CEILING — EXACT
+
+For the same customer + same SKU + same visit, an actual refusal creates a price ceiling for the remainder of that visit.
+
+Rule:
+
+```text
+if a price mode is refused for the same SKU
+-> every higher price mode for that same SKU is disabled for that customer visit
+-> lower price modes may still be attempted
+```
+
+Exact cases:
+
+```text
+50% refused
+-> 100% disabled
+-> 150% disabled
+
+100% refused
+-> 150% disabled
+-> 50% may still be attempted
+
+150% refused
+-> 100% / 50% may still be attempted
+```
+
+Rules:
+- this lock applies only to the same customer + same SKU + current visit
+- it must not lock unrelated SKUs
+- a new customer visit begins from that visit's normal pricing state unless another owner explicitly defines persistence
+- higher-price controls blocked by this rule must be visibly disabled
+- the reason for the disabled state must be readable in UI
+- do not reroll purchase acceptance at a higher price after the same customer already refused the lower price for that SKU
+
+Purpose:
+prevent retry/RNG fishing where a lower-price refusal can paradoxically be followed by a higher-price purchase of the same item.
+
+This is a coherence rule for the existing 50/100/150 pricing system, not a new Loyalty or negotiation subsystem.
+
 ## RETURNING NPC — LAST EXPEDITION QUICK SURFACE
 
 When a returning NPC has a recent-expedition snapshot owned by `NPC_TRAIT_v2.7.0.md`, show one compact quick surface:
