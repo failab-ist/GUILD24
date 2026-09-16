@@ -1154,3 +1154,56 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
   .front { gap: 24px; }
   .front-side { display: flex; flex-direction: column; gap: 12px; }
 }
+
+/* ---- SALE Core Decision area (UI_UX_v2.6.1 SALE DESKTOP/MOBILE AUTHORITY) --------
+   The decision the sale turns on - how this expedition looks, where it is going, and what
+   the customer can actually pay - sits beside the portrait instead of in a second column
+   under it. The forecast is rendered in both places and shown in exactly one: a wide
+   screen reads it upper-right, a phone reads it where the reading order puts it, right
+   after the last expedition. Neither ever sees two.
+   Authored phone-first, like the rest of this sheet: what follows is the phone, and the
+   min-width block at the end hands the desktop its own sizes back. */
+.front-side .readout.core-desk{display:none}
+.dossier .readout.core-mob{display:block;margin:0 0 14px}
+.kit .npc-wallet{color:#9c8d70}
+.kit .npc-wallet b{color:var(--gold);font:600 15px/1 var(--f-led);margin-left:5px}
+/* the environment pressure a phone folds away - a real control, at thumb size */
+.env-press{margin-top:8px}
+.env-press>summary{display:flex;align-items:center;gap:6px;min-height:44px;padding:0 2px;
+ font:600 13px/1.4 var(--ui);color:#cbb98d;cursor:pointer;list-style:none}
+.env-press>summary::-webkit-details-marker{display:none}
+.env-press>summary:after{content:'\25be';font-size:11px;color:#9c8d70;transition:transform .12s}
+.env-press[open]>summary:after{transform:rotate(180deg)}
+.env-press>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* Phone: the top band is a face and a status line, not a stage. The band is shortened by
+   shortening the whole card - --cardw drives the art box and the plate together, so the
+   customer stays uncropped while the rows below gain the height. --deck is left alone:
+   the waiting backs scale from the same geometry and blow up with it. */
+.p-sale .front{--cardw:max(88px,min(42vw,162px,calc(90dvh - 300px)));--plateh:52px;padding-top:6px}
+.p-sale .front-side{gap:7px}
+.p-sale .front-side .dest-plate{margin:0;padding:7px 9px;grid-template-columns:26px 1fr;gap:7px}
+.p-sale .front-side .dest-plate label{margin-bottom:2px;font-size:10px}
+.p-sale .front-side .dest-plate h3{margin-bottom:0;font-size:14px}
+.p-sale .front-side .dest-plate .hazards{display:none}
+.p-sale .kit{gap:3px 8px;padding:5px 0;font-size:12px;line-height:1.35}
+.p-sale .kit .slots{padding:3px 5px;gap:5px;margin-left:0}
+.p-sale .kit .slots i{width:30px;height:30px}
+
+@media(min-width:1024px){
+ .front-side .readout.core-desk{display:block;margin:0}
+ .dossier .readout.core-mob{display:none}
+ .p-sale .front{--cardw:max(88px,min(56vw,300px,calc(90dvh - 300px)));--plateh:62px;padding-top:8px}
+ .p-sale .front-side{gap:12px}
+ .p-sale .front-side .dest-plate{margin:0;padding:11px 12px;grid-template-columns:38px 1fr;gap:10px}
+ .p-sale .front-side .dest-plate label{margin-bottom:4px;font-size:11px}
+ .p-sale .front-side .dest-plate h3{margin-bottom:6px;font-size:17px}
+ .p-sale .front-side .dest-plate .hazards{display:block}
+ /* Director resolution: the bag is a touch target and a capacity the player counts at a
+    glance, so it gets real size. Presentation only - capacity is unchanged. */
+ .p-sale .kit{align-items:flex-start;gap:12px;padding:11px 13px;font-size:13px;line-height:1.4;
+  background:#00000038;box-shadow:inset 0 0 0 1px #ffffff14}
+ .p-sale .kit .slots{padding:7px 9px;gap:9px;margin-left:auto}
+ .p-sale .kit .slots i{width:52px;height:52px}
+ .p-sale .kit .slot-label{font-size:14px;margin-right:7px}
+}
