@@ -109,6 +109,47 @@ Before the Player judges the remaining slot, current decision information may up
 
 A refusal does not grant the Item effect.
 
+## POST-COMMIT DELTA SOURCE TRUTH — EXACT
+
+Do not present a generic aggregate panel that makes unrelated values appear to rise together merely because one Item was committed.
+
+In particular, a generic `보급 후 변화` treatment must not compare unlike calculation stages or reapply unrelated modifiers to every displayed Stat.
+
+Rules:
+- an Item directly changes only the exact channels stated by `ITEM_v2.7.0.md`
+- if a post-commit delta is shown, the changed value must be actual and its source must be provable
+- ordinary current-state UI should prefer updating the primary Stat/Forecast/Readiness values in place rather than emitting a long synthetic delta list
+- Supply/Fatigue may indirectly change effective **기동/정신** only when the canonical Fatigue penalty band actually changes
+- any such indirect 기동/정신 delta is Fatigue/Condition-derived and must not be presented as a hidden Item Stat effect
+- Supply/Fatigue recovery does not indirectly increase **투력/강인함** under the current canonical Fatigue rule
+- Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope; they may not cause unrelated channels to move silently
+
+Example boundary:
+- current `집중 사탕` has `공포 +10 / Supply 3`
+- it has no direct positive four-Core-Stat contribution
+- therefore a direct 투력/강인함 increase attributed to 집중 사탕 is invalid
+- a 기동/정신 change is valid only if the actual Supply/Fatigue arithmetic crosses a canonical Fatigue penalty boundary, and that cause must remain readable
+
+## SALE DECISION-ONLY DETAIL — REMOVE NON-DECISION DISCLOSURES
+
+Remove the following SALE-only expandable/detail treatments from the customer decision surface:
+
+```text
+이 손님에게 안 걸리는 효과
+상품 설명
+```
+
+when `상품 설명` contains only flavor text rather than a current decision effect.
+
+Rules:
+- SALE shows the exact Item effects that can actually matter to the current transaction/expedition
+- do not create a disclosure control that looks strategically important but opens only flavor prose
+- flavor text may continue to exist in Item data or another existing non-decision context; this rule does not require adding a new catalog/detail screen
+- do not hide actual Counter / Core Stat / Supply / penalty / Insurance behavior merely to remove flavor
+
+Purpose:
+reduce false information weight on the decision screen and keep SALE focused on actionable truth.
+
 ## SAME-ITEM REFUSAL PRICE CEILING — EXACT
 
 For the same customer + same SKU + same visit, an actual refusal creates a price ceiling for the remainder of that visit.
