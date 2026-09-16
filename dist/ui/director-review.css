@@ -113,6 +113,12 @@
  .front-side .kit,.front-side .readout.core-desk{grid-column:1 / -1}
  .front-side .dest-plate{grid-column:1;align-self:end}
  .front-side .line-up{grid-column:2;align-self:end;margin-top:0}
+ /* The deck is a fan: every back is pulled left over the one before it, the first one
+    included, so the whole fan hangs a card's worth outside its own box. That bled onto
+    bare wall while the deck had a row to itself; sharing a row with the destination it
+    lands on the panel instead. The first back has nothing to overlap, so it keeps its
+    place and the fan stays inside the column. */
+ .front-side .line-up .wait:first-child{margin-left:0}
 }
 
 @media(prefers-reduced-motion:reduce){
