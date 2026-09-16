@@ -290,18 +290,35 @@ FAIL:
 
 ## UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
 
-Controlled purchase with current `집중 사탕` (`공포 +10 / Supply 3`) and no other changing source.
+Use current `집중 사탕` (`공포 +10 / Supply 3`) in three controlled setups.
+
+### Case A — no active Supply Deficit change, no Fatigue penalty-band change
 
 PASS:
-- direct Item result does not show 투력/강인함/기동/정신 as if granted by 집중 사탕
-- 공포 Counter and Supply update truthfully
-- if Supply causes an actual Fatigue penalty-band transition, only the resulting effective 기동/정신 change may appear and its Fatigue/Condition source is readable
-- Supply/Fatigue does not raise 투력/강인함
-- main current-state values update consistently with runtime resolution
+- direct effect shows 공포 Counter / Supply only
+- 투력/강인함/기동/정신 do not rise
+- no hidden direct Core-Stat effect is attributed to 집중 사탕
 
-Also PASS:
-- no generic `보급 후 변화` calculation compares mismatched before/after stages and makes unrelated Stats rise together
-- every displayed delta is traceable to an authoritative source
+### Case B — its Supply reduces an active Supply Deficit
+
+PASS:
+- effective 투력/강인함/기동/정신 and readiness may rise if the canonical unified Supply Deficit system actually changes them
+- any displayed Core-Stat delta is attributed to `보급 부족 완화` or equivalent system source
+- UI does not imply that 집중 사탕 directly grants those Stats
+- exact hidden deficit formula remains undisclosed
+
+### Case C — excess Supply crosses a Fatigue penalty band
+
+PASS:
+- effective 기동/정신 may rise according to the current Fatigue owner
+- displayed delta is attributed to `피로 완화` / Condition source
+- direct Item effect remains separately readable
+
+All cases:
+- main current-state values match runtime preparation truth
+- direct Item effect and derived system effects are not conflated
+- a generic `보급 후 변화` block is allowed only if those source classes are immediately distinguishable
+- otherwise the synthetic block is removed and current-state values update in place with source treatment
 
 ## UI-Q104 — FINAL SELECT -> SALE -> RESULT
 
