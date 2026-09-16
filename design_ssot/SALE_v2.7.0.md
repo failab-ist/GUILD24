@@ -111,24 +111,36 @@ A refusal does not grant the Item effect.
 
 ## POST-COMMIT DELTA SOURCE TRUTH — EXACT
 
-Do not present a generic aggregate panel that makes unrelated values appear to rise together merely because one Item was committed.
+Do not present a generic aggregate panel that makes every changed value look like a direct Item Stat effect.
 
-In particular, a generic `보급 후 변화` treatment must not compare unlike calculation stages or reapply unrelated modifiers to every displayed Stat.
+Current preparation can legitimately change through more than one channel after a Supply Item is committed:
+
+```text
+A. direct Item effect
+B. Supply Deficit relief
+C. current-Fatigue recovery / Fatigue penalty-band change
+D. another explicitly owned Trait / Relic / Boss modifier
+```
 
 Rules:
 - an Item directly changes only the exact channels stated by `ITEM_v2.7.0.md`
 - if a post-commit delta is shown, the changed value must be actual and its source must be provable
 - ordinary current-state UI should prefer updating the primary Stat/Forecast/Readiness values in place rather than emitting a long synthetic delta list
-- Supply/Fatigue may indirectly change effective **기동/정신** only when the canonical Fatigue penalty band actually changes
-- any such indirect 기동/정신 delta is Fatigue/Condition-derived and must not be presented as a hidden Item Stat effect
-- Supply/Fatigue recovery does not indirectly increase **투력/강인함** under the current canonical Fatigue rule
-- Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope; they may not cause unrelated channels to move silently
+- the inherited Supply Deficit system may change effective expedition preparation across all four Core Stats / Hazard readiness when Prepared Supply moves toward the Required Supply threshold; this is a **Supply Deficit effect**, not a hidden direct Item Stat
+- excess Supply that reduces current Fatigue may restore effective 기동/정신 when a canonical Fatigue penalty band changes; this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
+- exact hidden Supply-deficit formula remains hidden under `DUNGEON_HAZARD_v2.7.0.md`; source attribution does not expose that formula
+- Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope
 
 Example boundary:
 - current `집중 사탕` has `공포 +10 / Supply 3`
 - it has no direct positive four-Core-Stat contribution
-- therefore a direct 투력/강인함 increase attributed to 집중 사탕 is invalid
-- a 기동/정신 change is valid only if the actual Supply/Fatigue arithmetic crosses a canonical Fatigue penalty boundary, and that cause must remain readable
+- if there is no Supply Deficit change and no Fatigue penalty-band change, selling it must not create a Core-Stat delta
+- if its Supply reduces an existing Supply Deficit, effective 투력/강인함/기동/정신 may legitimately rise through the unified Supply Deficit system
+- if excess Supply crosses a Fatigue penalty band, effective 기동/정신 may also rise through Fatigue recovery
+- those indirect changes must be presented as `보급 부족 완화` / `피로 완화` or equivalent source-readable system effects, never as if 집중 사탕 itself granted those Stats
+
+A generic heading such as `보급 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
+If that distinction is not readable, prefer removing the synthetic delta block and updating the primary current-state values with source labels instead.
 
 ## SALE DECISION-ONLY DETAIL — REMOVE NON-DECISION DISCLOSURES
 
@@ -227,7 +239,7 @@ Normal SALE behavior for the same Item remains unchanged.
 ## RELATED
 
 NPC growth/recent snapshot -> `NPC_TRAIT_v2.7.0.md`
-Hazard/Fatigue preview -> `DUNGEON_HAZARD_v2.7.0.md`
+Hazard/Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
 Item effects -> `ITEM_v2.7.0.md`
 Night proof -> `NIGHT_CLOSING_v2.7.0.md`
 Presentation -> `UI_UX_v2.7.0.md`
