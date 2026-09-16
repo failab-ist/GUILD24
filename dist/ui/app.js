@@ -987,7 +987,18 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'closing':game.finishNight();game.save();render();break;
  case'tip':game.account.tutorial??={};game.account.tutorial[id]=true;game.save();render();break;
  case'open':game.open();selected=null;render();break;
- case'select':selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');if(selected)requestAnimationFrame(()=>$('.good.open')?.scrollIntoView({block:'nearest'}));break;
+ /* SALE scroll continuity. Opening one good closes another, and when the one that closes
+    sits above the viewport the shelf below it slides up by the height of the panel that
+    went away - the row the player just tapped walks off under their thumb. Restoring the
+    raw scrollTop cannot help: the same offset now points at different content. Anchor on
+    the tapped row instead and put it back on the pixel it was on, which is what "keep the
+    product area you were looking at" actually means. */
+ case'select':{
+  const y0=el.getBoundingClientRect().top;
+  selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');
+  const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
+  if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
+  break;}
  case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}render();break;}
  case'depart':game.depart();selected=null;render();sound(s.phase==='night'?'return':'depart');break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
