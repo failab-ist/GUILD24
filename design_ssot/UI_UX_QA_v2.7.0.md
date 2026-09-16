@@ -229,3 +229,50 @@ PASS direction:
 - no round-all-card/dashboard proliferation
 - no unnecessary gradient/shadow/icon-every-row pattern
 - touch targets are not sacrificed for visual styling
+
+## UI-Q100 — SALE REFUSAL PRICE CEILING
+
+Controlled same customer + same SKU visit.
+
+Case A:
+- refuse at 50%
+
+PASS:
+- 100% and 150% controls become disabled and non-interactive for that SKU
+- reason is readable
+- lower-price refusal does not trigger a new higher-price acceptance roll
+
+Case B:
+- refuse at 100%
+
+PASS:
+- 150% disabled
+- 50% may remain usable
+
+Case C:
+- refuse at 150%
+
+PASS:
+- 100% / 50% may remain usable
+
+Isolation PASS:
+- unrelated SKU price controls remain unaffected
+- new customer visit does not inherit the previous visit lock unless another owner explicitly defines it
+
+## UI-Q101 — MORNING NEXT-DAY GATE FORECAST
+
+Before ORDER on controlled next-Day states:
+
+PASS:
+- MORNING shows next-day Gate-count forecast
+- randomized count shows exact probability per possible count
+- deterministic count shows fixed count rather than fake split
+- MORNING shows exact next-day T1/T2/T3 probability forecast
+- values match `DUNGEON_HAZARD_v2.7.0.md` / `ECONOMY_ORDER_v2.7.0.md`
+- current-day Gate/Hazard remains more prominent as today's preparation context
+- next-day Family / exact Gate composition / Hazard set remain hidden
+- future customer identity/destination remains hidden
+- no recommended Item/category/quantity is added
+
+If ORDER repeats the forecast:
+PASS only when the values exactly match MORNING and are not regenerated independently.
