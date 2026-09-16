@@ -253,7 +253,7 @@ function eventSlip(e){
 function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())return '';
  return '<button class="brass" data-action="relics">점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
 // The readiness readout. Qualitative only: 우세/접전/불리 and 취약/불안/대응/충분.
-function readout(n,extra=null){
+function readout(n,extra=null,cls=''){
  const compact=!!extra,d=game.claimedGateFor(n);
  const v={...n,traits:Presentation.traits(n),pack:extra?[...n.pack,extra]:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
  /* DUNGEON_HAZARD §GREAT SUCCESS signal. It sits in the forecast the player is already reading,
@@ -270,7 +270,8 @@ function readout(n,extra=null){
   ?['취약','불안','대응','충분'].find(l=>p.hazards.some(h=>h.label===l))
   :null;
  const help=(label,body)=>'<details class="tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
- return '<div class="readout">'
+ const mob=cls==='core-mob';
+ return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   +'<span class="fore">전투 전망<b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b>'
    +help('전투 전망','이 손님의 지금 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 확정된 결과가 아니다.')+'</span>'
@@ -279,7 +280,12 @@ function readout(n,extra=null){
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
- +hazardList(p.hazards.map(h=>h.key),p.hazards)
+ /* A phone has no room to stand the hazard rows beside a portrait and the shelf both.
+    The verdict stays on the face of the block; the pressure that produced it is one tap
+    away rather than gone. */
+ +(mob&&p.hazards.length
+   ?'<details class="env-press"><summary>환경 압박 '+p.hazards.length+'건</summary>'+hazardList(p.hazards.map(h=>h.key),p.hazards)+'</details>'
+   :hazardList(p.hazards.map(h=>h.key),p.hazards))
  +(compact?'':'<p class="estimate">오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다. 게이트 안에서 어떻게 될지까지는 아무도 모른다.</p>')+'</div>';}
 /* Returning history is useful reference, not the current decision. It therefore starts folded
    to one line; opening it is local reading state and does not hide current Stats or Traits. */
@@ -311,14 +317,20 @@ function saleScreen(){
    const nextNpc = nextNpcId ? s.npcs.find(x=>x.id===nextNpcId) : null;
    const preloadArt = nextNpc ? Scene.npcArt(nextNpc) : null;
    const preloadHtml = preloadArt ? '<img src="'+preloadArt+'" style="display:none" aria-hidden="true">' : '';
+   const st=s.inventory.find(x=>x.id===selected);
    return '<div class="stage p-sale">'+menuFab()+preloadHtml
  +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
   +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
-  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+waitingLine(waiting)+'</div>'
+  /* UI_UX v2.6.1 SALE AUTHORITY: portrait left, Core Decision upper-right. The forecast,
+    the expected destination and the customer's wallet belong to one hierarchy beside the
+    face, not to a second column underneath it. Only one forecast is ever visible - the
+    desktop copy sits here, the phone's rejoins the reading order after the last
+    expedition - so nothing is duplicated on screen. */
+ +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+waitingLine(waiting)+'</div>'
  +'</section>'
  +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
-  +'<div class="dossier">'+returningSummary(n)+statGrid(n)+traitRows(n)+deepOfferUI(n)+specialUI()+'</div>'
+  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+traitRows(n)+deepOfferUI(n)+specialUI()+'</div>'
   +shelf()+ownedRelicView()
  +'</main>'
  /* D-34. Every price on this screen is a judgement against what the store has, and the
@@ -367,7 +379,10 @@ function standee(n){
  +'</span></button>';}
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
+ /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
+    already picked a product - it reads here, before pricing, in the same block as the bag. */
  return '<div class="kit"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
+ +'<span class="npc-wallet">소지 <b>'+fmt(n.money)+'G</b></span>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. */
  +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
@@ -601,7 +616,6 @@ const itemKind=it=>it.effects?.potion?'포션':'';
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    return '<section class="shelf">'
-   +(n?'<div class="core-decision-env">'+destPlate(n)+readout(n,st?st.item:null)+'</div>':'')
    +'<div class="shelf-head"><h2>'+(isFinal?'대원에게 보급':'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span></div><div class="goods">'
  +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it);
   return '<button class="good r'+it.rarity+(open?' open':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
@@ -987,7 +1001,18 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'closing':game.finishNight();game.save();render();break;
  case'tip':game.account.tutorial??={};game.account.tutorial[id]=true;game.save();render();break;
  case'open':game.open();selected=null;render();break;
- case'select':selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');if(selected)requestAnimationFrame(()=>$('.good.open')?.scrollIntoView({block:'nearest'}));break;
+ /* SALE scroll continuity. Opening one good closes another, and when the one that closes
+    sits above the viewport the shelf below it slides up by the height of the panel that
+    went away - the row the player just tapped walks off under their thumb. Restoring the
+    raw scrollTop cannot help: the same offset now points at different content. Anchor on
+    the tapped row instead and put it back on the pixel it was on, which is what "keep the
+    product area you were looking at" actually means. */
+ case'select':{
+  const y0=el.getBoundingClientRect().top;
+  selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');
+  const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
+  if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
+  break;}
  case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}render();break;}
  case'depart':game.depart();selected=null;render();sound(s.phase==='night'?'return':'depart');break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;

@@ -88,6 +88,67 @@
  .stock-brief li{padding:4px;font-size:12px}
 }
 
+/* The Core Decision column is wide on a desktop, and the bag was stacking into a tall
+   panel that used a sixth of its width and left the rest idle - the same idle space the
+   bag was moved here to use. The status lines read down the left of the column, the bag
+   takes the right of it at a size worth aiming a cursor at, and the panel gets shorter
+   as well as fuller. Presentation only: capacity is unchanged. */
+@media(min-width:1024px){
+ .front-side .kit{grid-template-columns:minmax(0,1fr) auto;align-items:center;
+  gap:4px 16px;padding:11px 13px;font-size:13px}
+ .front-side .kit>span:not(.slots){grid-column:1}
+ .front-side .kit .slots{grid-column:2;grid-row:1 / span 3;align-content:center;
+  grid-template-columns:repeat(3,52px);gap:8px;padding:8px}
+ .front-side .kit .slots i{width:52px;height:52px}
+ .front-side .kit .slot-label{font-size:14px}
+ /* What was left over after the decision blocks moved up here was bare back wall between
+    the destination and the counter. The forecast is the densest block of the three, so it
+    takes the slack instead of the wall: its rows breathe and its closing line sits on the
+    counter edge, which is where the column should end. */
+ /* What was left over after the decision blocks moved up here was a band of bare back wall
+    beside the waiting deck, which sat alone on a row of its own. The deck is small and the
+    destination is short, so they share that row: the column ends where the counter does and
+    the wall stops showing through the middle of the decision. */
+ .front-side{display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:end;gap:8px 12px}
+ .front-side .kit,.front-side .readout.core-desk{grid-column:1 / -1}
+ .front-side .dest-plate{grid-column:1;align-self:end}
+ .front-side .line-up{grid-column:2;align-self:end;margin-top:0}
+ /* The deck is a fan: every back is pulled left over the one before it, the first one
+    included, so the whole fan hangs a card's worth outside its own box. That bled onto
+    bare wall while the deck had a row to itself; sharing a row with the destination it
+    lands on the panel instead. The first back has nothing to overlap, so it keeps its
+    place and the fan stays inside the column. */
+ .front-side .line-up .wait:first-child{margin-left:0}
+}
+
 @media(prefers-reduced-motion:reduce){
  .since>summary:after{transition:none}
 }
+
+/* MORNING — wherever the fitted room art stopped, the bare wall tile showed through and
+   read as a placeholder checkerboard rather than as a wall: beside the notice board, and
+   to either side of the counter. The tile stays, because it is the store's wall - what it
+   was missing is light. The room is lit from its middle now and falls off into unlit
+   corners, so the strips the art does not reach read as the rest of a room rather than as
+   nothing, and the counter gets the skirting the fitted middle of it already implied.
+   Presentation only: no layout, no art files, no gameplay. */
+.p-morning .store{isolation:isolate;background:linear-gradient(180deg,#1b1610 0,#2a2319 36%,#33291d 100%)}
+/* The board hangs on the upper wall, above the tiling, and that strip was painting the
+   floor tile anyway - the widest bare checker on the screen. It becomes what it is: wall
+   in the ceiling's shadow. */
+/* The counter band is floor and counter, not more wall. It was repeating the same checker
+   to either side of the register, which is where the second mark was. */
+.p-morning .band.counter{background:linear-gradient(180deg,#4a3826 0,#38291a 38%,#241a10 100%)}
+.p-morning .store>.band{position:relative;z-index:0}
+.p-morning .store:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
+ background:
+  linear-gradient(90deg,#0e0a06f5 0,#0e0a06d9 5%,#0e0a0699 11%,#0e0a064d 16%,#0e0a061a 21%,#0000 26%,
+   #0000 74%,#0e0a061a 79%,#0e0a064d 84%,#0e0a0699 89%,#0e0a06d9 95%,#0e0a06f5 100%),
+  radial-gradient(150% 100% at 50% 42%,#0000 46%,#12100b4d 74%,#0e0a06b3 100%)}
+/* where the wall meets the counter: a skirting board, then the floor falling into shadow */
+.p-morning .band.counter:before{content:'';position:absolute;left:0;right:0;top:0;height:11px;z-index:1;
+ background:linear-gradient(180deg,#9c8055 0,#7a6140 45%,#4a3720 100%);
+ box-shadow:0 3px 7px #00000059}
+/* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
+.p-morning .store>.board{position:relative;z-index:2}
+.p-morning .daysign,.p-morning .till,.p-morning .till-cap,.p-morning .branchplate{z-index:2}
