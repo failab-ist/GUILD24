@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged Final party size, survivor fallback, no class synergy, Final Roll, Boss-state input, one-resolution structure, and stock/lock boundaries inherit `FINAL_EXPEDITION_v2.5.0.md`.
 
-This patch moves Family/Hazard disclosure to D25 and replaces Final Hazard aggregation/power penalty.
+This patch moves Family/Hazard disclosure to D25, replaces Final Hazard aggregation/power penalty, and makes D30 preparation reuse the ordinary SALE interaction before the one Final result.
 
 The following inherited v2.5 text is explicitly stale and does not remain live v2.7 truth:
 - D30 generation / first disclosure of the Final Family Pair
@@ -21,6 +21,7 @@ The following inherited v2.5 text is explicitly stale and does not remain live v
 - Playtest text that evaluates the old `환경피해 × 0.35` path
 - Implementation guardrail wording that says to reuse the old Final Power formula unchanged
 - any inherited QA/ownership wording that assumes Family information first appears on D30
+- any inherited Final-preparation presentation that jumps directly from party selection/preparation into resolution without the current v2.7 Final SALE step
 
 v2.7 uses the rules below plus current routed owners from `SPEC_INDEX_v2.7.0.md`.
 Inherited cross-spec references to older versioned filenames are not routing authority.
@@ -51,11 +52,108 @@ It consumes the exact persisted D25 Final state.
 Ordering:
 - persisted Final Families/Hazards are already known from D25
 - D30 Relic / SLOTH window resolves under that known state
-- Final-relevant preparation completes
-- Final Lock
-- one Final resolution
+- Final party selection resolves
+- selected participants complete Final SALE preparation
+- Final Lock occurs
+- one Final resolution occurs
 
 Any stale D30 generation path that can produce a different Pair/Pool is invalid.
+
+## D30 PLAYER FLOW — EXACT
+
+Player-facing Final flow is:
+
+```text
+출전 NPC 선택
+-> FINAL 판매
+-> 결과
+```
+
+Purpose:
+Final must remain the culmination of the shop-management decisions learned during the Run rather than switching to an opaque separate combat interaction.
+
+### 1. Final party selection
+
+Use the inherited current Final party-size / survivor-fallback rules.
+
+The Player selects the Final participants first.
+When the Player confirms party selection and enters Final SALE:
+- the participant set is committed for this Final attempt
+- ordinary participant swapping after committed Final sales begin is not allowed
+- Save/Load must not be usable to erase already committed/refused Final sale transactions or reopen the party-selection decision after that boundary
+
+### 2. Final SALE preparation
+
+Process selected participants one at a time through the existing SALE handling language.
+
+For each selected participant:
+
+```text
+2 visible Bag slots
+-> choose/focus slot
+-> choose Item
+-> choose 50% / 100% / 150% price
+-> commit transaction
+-> purchase or refusal resolves
+-> current Final preparation state updates
+-> judge remaining slot
+```
+
+Exact SALE ownership -> `SALE_v2.7.0.md`.
+
+Reuse ordinary rules unless this Final owner explicitly overrides them:
+- exactly 2 Item slots per participant
+- NPC Wallet / affordability
+- actual inventory stock consumption
+- purchase/refusal
+- same-SKU refusal price ceiling
+- real Player Gold revenue
+- sequential transaction state
+
+Final SALE is a real sale, not free equipping.
+Therefore ordinary gross-sale accounting remains real.
+For GREED, the existing Boss-owned committed gross-sales snapshot is taken at Final Lock **after** Final SALE has completed; no special exclusion is created for these D30 sales.
+
+The Player may finish a participant with an empty slot / no additional purchase; Final SALE does not guarantee two successful purchases.
+
+No normal future-customer queue is introduced inside Final SALE.
+Only the already selected Final participants are processed.
+
+### 3. Final-specific Item boundary
+
+Items marked by this owner as `Final 효과 없음` must be visibly blocked from Final Bag placement when practical.
+
+Current no-effect Insurance:
+- 구급키트
+- 귀환석
+- 세계수 생환부적
+
+Boss-caused visible Item changes, including GLUTTONY, must use the current Boss/UI preview truth during Final SALE so the Player is selling against the actual Final state.
+
+### 4. Result
+
+After all selected participants finish Final SALE:
+- commit Final Lock
+- snapshot the Final state
+- resolve the existing single Final calculation once
+- show the Final result
+
+Do not add:
+- attack selection
+- combat QTE
+- separate Final combat resource
+- repeated turn-by-turn Boss battle
+- a second post-sale equipment screen that lets the Player bypass sale acceptance
+
+The climax is the consequence of:
+
+```text
+who was selected
++ what they actually bought
++ their Run growth/condition
++ known Final Hazards
++ known Boss rule
+```
 
 ## FINAL HAZARD THREAT
 
@@ -186,6 +284,51 @@ PASS:
 - Final prep clearly communicates no Final effect and blocks placement when practical
 - normal SALE/ordinary expedition usefulness remains unchanged
 
+### FINAL-Q75 — SELECT -> SALE -> RESULT
+
+Controlled D30 with three eligible survivors.
+
+PASS exact Player-facing order:
+
+```text
+출전 NPC 선택
+-> FINAL 판매
+-> 결과
+```
+
+PASS:
+- participant selection is confirmed before Final SALE begins
+- selected participants are processed one at a time
+- each uses exactly two SALE Bag slots
+- Wallet / affordability / inventory / price / refusal rules are real
+- committed/refused Final transactions cannot be erased by Save/Load fishing
+- no second free-equip screen bypasses purchase acceptance
+- after all selected participants finish, one Final Lock and one result occur
+
+### FINAL-Q76 — FINAL SALE ECONOMY / GREED SNAPSHOT
+
+PASS:
+- successful Final sales grant ordinary Player Gold revenue
+- inventory stock is actually consumed
+- Gross Sales includes those ordinary Final sales
+- GREED committed gross-sales snapshot occurs at Final Lock after Final SALE
+- no special Final-sale exclusion or duplicate counting exists
+
+## v2.7 BALANCE QA
+
+Measure separately:
+- Mastery-0 early/first-clear attempts
+- partially progressed Meta runs
+- mature runs
+- Final participant count 1/2/3
+- Final SALE successful/refused/empty-slot distribution
+- Boss clear rate by Boss
+- Final Party Raw Power distribution
+- Final Item quality and price mode
+
+Do not auto-tune Final/Boss values during frozen QA.
+Report `BALANCE FINDING` and run a separate approved tuning cycle.
+
 ## RELATED
 
 Timeline/save -> `CORE_RUN_v2.7.0.md`
@@ -193,4 +336,5 @@ Hazard truth -> `DUNGEON_HAZARD_v2.7.0.md`
 Item/Insurance -> `ITEM_v2.7.0.md`
 Boss -> `BOSS_v2.7.0.md`
 Relic D30 window -> `RELIC_v2.7.0.md`
+Sale handling -> `SALE_v2.7.0.md`
 UI -> `UI_UX_v2.7.0.md`
