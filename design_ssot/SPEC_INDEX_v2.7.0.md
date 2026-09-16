@@ -7,7 +7,7 @@ DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
-LAST_APPROVED_AMENDMENT=2026-09-15
+LAST_APPROVED_AMENDMENT=2026-09-17
 SSOT_AUDIT_STATUS=FINAL_CONFLICT_SWEEP_COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
@@ -96,7 +96,7 @@ Current file set = 22 files:
 - `00_GAME_CORE_v2.5.0.md`
 - `CORE_RUN_v2.7.0.md`
 - `META_v2.7.0.md`
-- `ECONOMY_ORDER_v2.6.1.md`
+- `ECONOMY_ORDER_v2.7.0.md`
 - `NPC_TRAIT_v2.7.0.md`
 - `DUNGEON_HAZARD_v2.7.0.md`
 - `ITEM_v2.7.0.md`
@@ -109,7 +109,7 @@ Current file set = 22 files:
 - `BOSS_v2.7.0.md`
 - `FINAL_EXPEDITION_v2.7.0.md`
 - `CORE_RUN_QA_v2.7.0.md`
-- `ECONOMY_ORDER_QA_v2.6.1.md`
+- `ECONOMY_ORDER_QA_v2.7.0.md`
 - `NPC_TRAIT_QA_v2.7.0.md`
 - `DUNGEON_ITEM_QA_v2.7.0.md`
 - `RELIC_QA_v2.7.0.md`
@@ -122,9 +122,9 @@ Current file set = 22 files:
 GAME/CORE -> `00_GAME_CORE_v2.5.0.md`
 RUN/PHASE/SAVE/FINAL-TIMELINE -> `CORE_RUN_v2.7.0.md`
 META/UNLOCK/JOB-MASTERY/CROSS-RUN -> `META_v2.7.0.md`
-PRICE/GOLD/WALLET/ORDER/REROLL -> `ECONOMY_ORDER_v2.6.1.md`
+PRICE/GOLD/WALLET/ORDER/REROLL/NEXT-DAY-GATE-FORECAST -> `ECONOMY_ORDER_v2.7.0.md`
 NPC/JOB/TRAIT/GROWTH/REVISIT/RECENT-SNAPSHOT -> `NPC_TRAIT_v2.7.0.md`
-DUNGEON/FAMILY/HAZARD/PREPARED-POWER/SUPPLY/FATIGUE -> `DUNGEON_HAZARD_v2.7.0.md`
+DUNGEON/FAMILY/HAZARD/PREPARED-POWER/SUPPLY/FATIGUE/GATE-GENERATION -> `DUNGEON_HAZARD_v2.7.0.md`
 ITEM/CATALOG/CATEGORY/COUNTER/POTION/INSURANCE/MODIFIER-COMPOSITION -> `ITEM_v2.7.0.md`
 RELIC/STORE-BUILD/FRESH/SLOTH-WINDOW -> `RELIC_v2.7.0.md`
 SALE/CUSTOMER/PRICE/REFUSAL/BAG-HANDLING -> `SALE_v2.7.0.md`
@@ -136,7 +136,7 @@ BOSS/SLOTH -> `BOSS_v2.7.0.md`
 FINAL/D25-PREREVEAL/FINAL-HAZARD/FINAL-POWER -> `FINAL_EXPEDITION_v2.7.0.md`
 
 CORE RUN QA -> `CORE_RUN_QA_v2.7.0.md`
-ORDER/ECONOMY QA -> `ECONOMY_ORDER_QA_v2.6.1.md`
+ORDER/ECONOMY QA -> `ECONOMY_ORDER_QA_v2.7.0.md`
 NPC/TRAIT QA -> `NPC_TRAIT_QA_v2.7.0.md`
 DUNGEON/ITEM QA -> `DUNGEON_ITEM_QA_v2.7.0.md`
 RELIC QA -> `RELIC_QA_v2.7.0.md`
@@ -148,19 +148,19 @@ Changed owners only:
 
 - CORE_RUN: Save v8, fresh Run boundary, start stock, D0~D30 Final timeline, controlled D25 repair boundary
 - META: preserve validated current v7 Account/Meta into v8 while discarding legacy Run state; no new fail-to-power Meta system
+- ECONOMY_ORDER: inherit v2.6.1 Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract and information boundary
 - NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot
-- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming
+- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract
 - ITEM: categories, 30-item catalog rebalance, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition
 - RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
-- SALE: exactly 2 slots, sequential Counter Handling, preview boundary, revisit quick surface
+- SALE: exactly 2 slots, sequential Counter Handling, preview boundary, revisit quick surface, same-item refusal price ceiling
 - NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write
-- UI_UX: information boundary, conditional arithmetic, D25 presentation, material/typography pass, exact `현재 지점 포기` label
+- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, refusal-price disabled state, material/typography pass, exact `현재 지점 포기` label
 - COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, v2.7 terminology, Event 05 / GLUTTONY / Run-abandon exact copy
 - FINAL_EXPEDITION: D25 persisted Final state, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
 - BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; inherited Boss-QA overrides
 
-Unchanged detailed economy/order rules stay in `ECONOMY_ORDER_v2.6.1.md`.
 Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
 
 ## PROMOTED-VISION / HISTORY STATUS
