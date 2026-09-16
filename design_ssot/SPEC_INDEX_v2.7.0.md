@@ -8,7 +8,7 @@ DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-17
-SSOT_AUDIT_STATUS=FINAL_CONFLICT_SWEEP_COMPLETE
+SSOT_AUDIT_STATUS=FINAL_CONFLICT_SWEEP_COMPLETE_WITH_LATEST_APPROVED_AMENDMENTS
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
 BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
@@ -127,13 +127,13 @@ NPC/JOB/TRAIT/GROWTH/REVISIT/RECENT-SNAPSHOT -> `NPC_TRAIT_v2.7.0.md`
 DUNGEON/FAMILY/HAZARD/PREPARED-POWER/SUPPLY/FATIGUE/GATE-GENERATION -> `DUNGEON_HAZARD_v2.7.0.md`
 ITEM/CATALOG/CATEGORY/COUNTER/POTION/INSURANCE/MODIFIER-COMPOSITION -> `ITEM_v2.7.0.md`
 RELIC/STORE-BUILD/FRESH/SLOTH-WINDOW -> `RELIC_v2.7.0.md`
-SALE/CUSTOMER/PRICE/REFUSAL/BAG-HANDLING -> `SALE_v2.7.0.md`
+SALE/CUSTOMER/PRICE/REFUSAL/PURCHASE-FLOW/DELTA-TRUTH/BAG-HANDLING -> `SALE_v2.7.0.md`
 NIGHT/INJURY/RESULT/CAUSALITY/FATIGUE-RESULT/CLOSING -> `NIGHT_CLOSING_v2.7.0.md`
 UI/UX/MOBILE/TUTORIAL/TYPOGRAPHY/VISUAL -> `UI_UX_v2.7.0.md`
 COPY/VOICE/TERMINOLOGY/TRUTH-CRITICAL-COPY -> `COPY_WORLD_VOICE_v2.7.0.md`
 EVENT -> `EVENT_v2.7.0.md`
-BOSS/SLOTH -> `BOSS_v2.7.0.md`
-FINAL/D25-PREREVEAL/FINAL-HAZARD/FINAL-POWER -> `FINAL_EXPEDITION_v2.7.0.md`
+BOSS/SLOTH/BOSS-FINAL-MODIFIER -> `BOSS_v2.7.0.md`
+FINAL/D25-PREREVEAL/FINAL-PARTY/FINAL-SALE/FINAL-HAZARD/FINAL-POWER -> `FINAL_EXPEDITION_v2.7.0.md`
 
 CORE RUN QA -> `CORE_RUN_QA_v2.7.0.md`
 ORDER/ECONOMY QA -> `ECONOMY_ORDER_QA_v2.7.0.md`
@@ -146,26 +146,26 @@ UI/UX QA -> `UI_UX_QA_v2.7.0.md`
 
 Changed owners only:
 
-- CORE_RUN: Save v8, fresh Run boundary, start stock, D0~D30 Final timeline, controlled D25 repair boundary
+- CORE_RUN: Save v8, fresh Run boundary, start stock, D0~D30 Final timeline, controlled D25 repair boundary, D30 `출전 NPC 선택 -> FINAL 판매 -> 결과` progression
 - META: preserve validated current v7 Account/Meta into v8 while discarding legacy Run state; no new fail-to-power Meta system
 - ECONOMY_ORDER: inherit v2.6.1 Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract and information boundary
 - NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot
 - DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract
-- ITEM: categories, 30-item catalog rebalance, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition
+- ITEM: categories, 30-item catalog rebalance, stronger flat native Core-Stat Item baseline, aligned Counter-specialist/premium pricing, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition
 - RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
-- SALE: exactly 2 slots, sequential Counter Handling, preview boundary, revisit quick surface, same-item refusal price ceiling
+- SALE: exactly 2 slots, sequential Counter Handling, preview boundary, truthful post-commit delta/source boundary, removal of non-decision flavor disclosure, revisit quick surface, same-item refusal price ceiling
 - NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write
-- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, refusal-price disabled state, material/typography pass, exact `현재 지점 포기` label
+- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, refusal-price disabled state, decision-only SALE detail, truthful post-commit delta display, material/typography pass, exact `현재 지점 포기` label
 - COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, v2.7 terminology, Event 05 / GLUTTONY / Run-abandon exact copy
-- FINAL_EXPEDITION: D25 persisted Final state, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
-- BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; inherited Boss-QA overrides
+- FINAL_EXPEDITION: D25 persisted Final state, D30 Final SALE preparation, `선택 -> 판매 -> 결과`, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
+- BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; GREED snapshot occurs after Final SALE at Final Lock; inherited Boss-QA overrides
 
 Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
 
 ## PROMOTED-VISION / HISTORY STATUS
 
-The previous `GUILD24_v2.7_PLUS_VISION.md`, `DECISIONS_v2.5.0.md`, and discussion/audit reports are planning/history references only after this promotion.
+`GUILD24_v2.7_VISION_DETAILED_UPDATED_v3.md`, `DECISIONS_v2.5.0.md`, and discussion/audit reports are planning/history/context references only after SSOT promotion.
 They are not parallel Design SSOT and must not override the owner files routed above.
 
 v2.8+ deferred concepts are not part of this SSOT and must not be implemented during v2.7 adoption unless the User explicitly promotes them.
