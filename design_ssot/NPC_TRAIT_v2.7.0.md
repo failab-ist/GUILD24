@@ -45,6 +45,70 @@ NPC Level / Job / Rarity / Trait may not increase ordinary SALE consumer-slot ca
 
 Normal Bag capacity is owned by `SALE_v2.7.0.md` and is exactly 2.
 
+## ORDINARY INJURY — v2.7 PERSISTENCE / RE-EXPEDITION RISK
+
+The inherited ordinary Injury Stat penalty remains unchanged:
+
+```text
+injury=1
+투력 -15% on NPC Base+Equipment unless grit replacement applies
+강인함 -20% on NPC Base+Equipment
+```
+
+Do **not** raise these Stat penalties merely because Injury now persists more meaningfully.
+The increased cost of Injury in v2.7 comes from persistence and re-expedition risk, not a second simultaneous Stat-penalty buff.
+
+### Natural recovery
+
+Ordinary Injury no longer disappears merely because the NPC completed another expedition without receiving a fresh Injury result.
+
+Exact natural recovery:
+
+```text
+injury=1 + next actual Outcome 성공
+-> injury=0
+
+injury=1 + next actual Outcome 대성공
+-> injury=0
+
+injury=1 + next actual Outcome 퇴각
+-> injury=1 유지
+
+injury=1 + next actual Outcome 부상
+-> injury=1 유지
+```
+
+`중상` and `사망` follow their own existing state transitions.
+
+This makes `부상` a persistent risk decision:
+`다시 보낼 수는 있지만, 안전하게 돌아와야 회복된다.`
+
+Item Aftercare may still remove/lower persistent Injury exactly as owned by `ITEM_v2.7.0.md`; this is separate from natural recovery.
+
+### Injured re-expedition escalation
+
+When an NPC departs while already `injury=1`:
+- ordinary Injury Stat penalties above apply
+- the expedition's Severe Injury escalation receives an additional **+15%p** baseline
+- the expedition's Death chance receives an additional **+10%p** baseline
+- these are outcome-risk modifiers, not hidden changes to the four Core Stats
+- they apply only while the NPC begins the expedition already injured
+
+Exact ordinary Death baseline/caps -> `DUNGEON_HAZARD_v2.7.0.md`.
+
+The intent is not to make an injured NPC unusable.
+It is to make repeat deployment a deliberate risk rather than a nearly free one-Day condition clear.
+
+## SEVERE INJURY — UNCHANGED RECOVERY IDENTITY
+
+`injury=2` remains unavailable during its recovery period under the inherited rule.
+When that recovery completes:
+```text
+injury 2 -> 0 directly
+```
+
+Do not convert natural Severe recovery into `injury 2 -> 1`.
+
 ## FATIGUE TRAITS — RESULT SCOPE
 
 The existing result-fatigue modifiers remain:
@@ -138,6 +202,6 @@ Result proof -> `NIGHT_CLOSING_v2.7.0.md`
 ## RELATED
 
 Bag/transaction -> `SALE_v2.7.0.md`
-Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
-Item/Potion/Food -> `ITEM_v2.7.0.md`
+Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.7.0.md`
+Item/Potion/Food/Aftercare -> `ITEM_v2.7.0.md`
 Night causality -> `NIGHT_CLOSING_v2.7.0.md`
