@@ -1186,9 +1186,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .front-side .dest-plate label{margin-bottom:2px;font-size:10px}
 .p-sale .front-side .dest-plate h3{margin-bottom:0;font-size:14px}
 .p-sale .front-side .dest-plate .hazards{display:none}
-.p-sale .kit{gap:3px 8px;padding:5px 0;font-size:12px;line-height:1.35}
-.p-sale .kit .slots{padding:3px 5px;gap:5px;margin-left:0}
-.p-sale .kit .slots i{width:30px;height:30px}
 
 @media(min-width:1024px){
  .front-side .readout.core-desk{display:block;margin:0}
@@ -1199,11 +1196,4 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  .p-sale .front-side .dest-plate label{margin-bottom:4px;font-size:11px}
  .p-sale .front-side .dest-plate h3{margin-bottom:6px;font-size:17px}
  .p-sale .front-side .dest-plate .hazards{display:block}
- /* Director resolution: the bag is a touch target and a capacity the player counts at a
-    glance, so it gets real size. Presentation only - capacity is unchanged. */
- .p-sale .kit{align-items:flex-start;gap:12px;padding:11px 13px;font-size:13px;line-height:1.4;
-  background:#00000038;box-shadow:inset 0 0 0 1px #ffffff14}
- .p-sale .kit .slots{padding:7px 9px;gap:9px;margin-left:auto}
- .p-sale .kit .slots i{width:52px;height:52px}
- .p-sale .kit .slot-label{font-size:14px;margin-right:7px}
 }

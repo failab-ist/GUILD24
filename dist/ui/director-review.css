@@ -88,6 +88,33 @@
  .stock-brief li{padding:4px;font-size:12px}
 }
 
+/* The Core Decision column is wide on a desktop, and the bag was stacking into a tall
+   panel that used a sixth of its width and left the rest idle - the same idle space the
+   bag was moved here to use. The status lines read down the left of the column, the bag
+   takes the right of it at a size worth aiming a cursor at, and the panel gets shorter
+   as well as fuller. Presentation only: capacity is unchanged. */
+@media(min-width:1024px){
+ .front-side .kit{grid-template-columns:minmax(0,1fr) auto;align-items:center;
+  gap:4px 16px;padding:11px 13px;font-size:13px}
+ .front-side .kit>span:not(.slots){grid-column:1}
+ .front-side .kit .slots{grid-column:2;grid-row:1 / span 3;align-content:center;
+  grid-template-columns:repeat(3,52px);gap:8px;padding:8px}
+ .front-side .kit .slots i{width:52px;height:52px}
+ .front-side .kit .slot-label{font-size:14px}
+ /* What was left over after the decision blocks moved up here was bare back wall between
+    the destination and the counter. The forecast is the densest block of the three, so it
+    takes the slack instead of the wall: its rows breathe and its closing line sits on the
+    counter edge, which is where the column should end. */
+ /* What was left over after the decision blocks moved up here was a band of bare back wall
+    beside the waiting deck, which sat alone on a row of its own. The deck is small and the
+    destination is short, so they share that row: the column ends where the counter does and
+    the wall stops showing through the middle of the decision. */
+ .front-side{display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:end;gap:8px 12px}
+ .front-side .kit,.front-side .readout.core-desk{grid-column:1 / -1}
+ .front-side .dest-plate{grid-column:1;align-self:end}
+ .front-side .line-up{grid-column:2;align-self:end;margin-top:0}
+}
+
 @media(prefers-reduced-motion:reduce){
  .since>summary:after{transition:none}
 }
