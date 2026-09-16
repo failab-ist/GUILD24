@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged Night controls, result sequencing, Closing, Wallet terminology, result-proof causality boundary, and presentation-data boundary inherit `NIGHT_CLOSING_v2.6.1.md`.
 
-This patch updates v2.7 Fatigue/Supply result truth, Item Aftercare proof, and recent-expedition snapshot output.
+This patch updates v2.7 Fatigue/Supply result truth, Item Aftercare proof, recent-expedition snapshot output, and persistent-Injury continuity.
 
 The v2.6.1 `성공/대성공 +2, 퇴각 +3, 부상 +4` Outcome-Fatigue table is superseded.
 Current numeric Outcome-Fatigue truth is owned only by `DUNGEON_HAZARD_v2.7.0.md`.
@@ -67,6 +67,32 @@ Rules:
 - actual Outcome Fatigue gain must not be confused with net Fatigue delta
 - Severe Injury / Death actual result Fatigue gain is 0 under the v2.7 owner rule
 
+## ORDINARY INJURY RESULT CONTINUITY — v2.7
+
+Natural ordinary-Injury recovery is owned by `NPC_TRAIT_v2.7.0.md`.
+Night/result truth must preserve it exactly.
+
+If the NPC began the expedition at `injury=1`:
+
+```text
+actual Outcome 성공 / 대성공
+-> persistent ordinary Injury clears naturally
+
+actual Outcome 퇴각
+-> persistent ordinary Injury remains
+
+actual Outcome 부상
+-> persistent ordinary Injury remains
+```
+
+Do not display Retreat as natural Injury recovery.
+Do not clear ordinary Injury merely because the result was not a fresh `부상` token.
+
+If an already-injured NPC incurs Severe/Death escalation, report the actual final outcome/state only.
+Do not expose exact hidden death probability.
+
+Player-facing result may truthfully state that the NPC departed already injured when that state materially affected the expedition, but must not fabricate an exact cause such as `부상 때문에 죽었다` unless the runtime proves that counterfactual claim.
+
 ## FIRST AID KIT AFTERCARE — RESULT TRUTH
 
 `구급키트` does not rewrite the expedition Outcome.
@@ -89,7 +115,7 @@ After an expedition result is fully resolved, write the latest snapshot owned by
 - completed Day
 - actual destination
 - final Outcome
-- exact accepted/purchased Bag Item IDs
+- exact Item IDs actually accepted/purchased in the completed Bag
 - only contribution/cause tokens already proven by the resolved report
 
 Do not write a claimed/expected destination in place of actual destination.
@@ -104,12 +130,14 @@ v2.7 adds new provable contribution types for:
 - Supply preRecovery
 - Supply outcome Fatigue buffer
 - First Aid Kit Aftercare
+- persistent Injury retained/cleared state
 
-It does not add system-authored failure diagnosis such as `전투 부족` or `독 대응 부족` when exact causality is not proven.
+It does not add system-authored failure diagnosis such as `전투 부족`, `독 대응 부족`, or `부상 때문에 사망` when exact causality is not proven.
 
 ## RELATED
 
-Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
+Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.7.0.md`
+Injury natural recovery/re-expedition state -> `NPC_TRAIT_v2.7.0.md`
 Insurance/Aftercare -> `ITEM_v2.7.0.md`
 Recent snapshot -> `NPC_TRAIT_v2.7.0.md`
 Sale revisit display -> `SALE_v2.7.0.md`
