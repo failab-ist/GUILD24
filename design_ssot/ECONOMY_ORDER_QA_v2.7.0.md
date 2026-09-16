@@ -1,7 +1,7 @@
 # ECONOMY_ORDER_QA
 
 DOC=ECONOMY_ORDER_QA
-OWNER=qa,economy,order,reroll,wallet,gate_count_forecast,tier_forecast
+OWNER=qa,economy,order,reroll,wallet,gate_count_forecast,tier_forecast,rarity_progression
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
@@ -71,7 +71,62 @@ PASS:
 - ORDER may repeat the same forecast compactly
 - repeated ORDER presentation matches MORNING and does not generate a second value
 
+## ORD-Q86 — DAY-BAND RARITY WEIGHTS EXACT
+
+For ordinary ORDER Rarity selection, EXPECT exact normalized rows:
+
+| Day | Common | Uncommon | Rare | Epic | Legendary |
+|---|---:|---:|---:|---:|---:|
+| D1–3 | 68 | 24 | 7 | 1 | 0 |
+| D4–7 | 63 | 25 | 11 | 1 | 0 |
+| D8–12 | 58 | 27 | 12 | 2 | 1 |
+| D13–19 | 53 | 27 | 15 | 4 | 1 |
+| D20–24 | 46 | 26 | 17 | 10 | 1 |
+| D25–29 | 39 | 25 | 19 | 16 | 1 |
+| D30 | 34 | 24 | 21 | 20 | 1 |
+
+PASS:
+- each row sums to exactly 100
+- correct row is selected from current Run Day
+- no stale all-Run `55/27/12/5/1` table remains as the live normal path
+
+## ORD-Q87 — EPIC PROGRESSION WITHOUT HARD D20 UNLOCK
+
+Using the 10 new Epic preparation Items from `ITEM_v2.7.0.md`:
+
+PASS:
+- they are eligible through the ordinary Epic pool whenever other general eligibility allows
+- no dedicated `day >= 20` gate exists for these 10 Items
+- early Epic appearance remains possible but rare through Day-band weights
+- D20+ Epic frequency rises because the shared Epic weight rises, not because a hidden second unlock system activates
+
+## ORD-Q88 — REROLL RESPECTS CURRENT-DAY RARITY BAND
+
+PASS:
+- rerolled offers use the same Day-band Rarity distribution as the original current-Day offers
+- Reroll does not fall back to the old fixed Rarity table
+- Reroll does not bypass Item/meta eligibility
+- existing pity rules do not create a separate Day-independent base table
+
+## ORD-Q89 — LATE-RUN OFFER MIX MEASUREMENT
+
+Simulation/measurement across D20–D30 must record at minimum:
+- Epic offers per Day
+- Epic offers by category
+- Rare/Epic share of total offers
+- reroll contribution to Epic exposure
+- Legendary exposure
+
+BALANCE PASS direction:
+- late Run visibly shifts toward Rare/Epic preparation choices
+- Epic does not become so common that Common/Uncommon stock decisions disappear
+- Legendary remains exceptional
+
+Do not auto-tune weights during frozen QA; report a balance finding if measured play contradicts the intended progression.
+
 ## RELATED
 
 Generation owner -> `DUNGEON_HAZARD_v2.7.0.md`
+Rarity progression owner -> `ECONOMY_ORDER_v2.7.0.md`
+Item catalog -> `ITEM_v2.7.0.md`
 Presentation QA -> `UI_UX_QA_v2.7.0.md`
