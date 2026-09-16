@@ -52,6 +52,46 @@ Replace qualitative Supply-burden wording with exact public requirement:
 
 Do not add explanatory recommendation prose or new Supply qualitative labels.
 
+## MORNING — NEXT-DAY GATE FORECAST — REQUIRED
+
+Before ORDER, Morning must expose both next-day Gate quantity pressure and Tier difficulty pressure.
+
+Required information:
+
+```text
+내일 전망
+
+게이트 수
+1개 xx% · 2개 xx% · 3개 xx%
+
+게이트 위험도
+T1 xx% · T2 xx% · T3 xx%
+```
+
+If next-day Gate count is deterministic, show the fixed result instead of a fake distribution:
+
+```text
+게이트 수
+2개 확정
+```
+
+Rules:
+- Gate-count probability/fixed-count truth follows `DUNGEON_HAZARD_v2.7.0.md`
+- Tier probability truth follows `DUNGEON_HAZARD_v2.7.0.md`
+- current-day Gate/Hazard remains the primary preparation information
+- next-day forecast is a secondary future signal
+- do not reveal next-day Family / exact Gate composition / Hazard set
+- do not reveal future customer identity / destination
+- do not add recommended Item/category/quantity prose
+- ORDER may repeat the same forecast compactly; it must not generate a second value
+
+Design intent:
+
+```text
+내일 얼마나 많이, 얼마나 위험한지는 안다.
+정확히 무엇이 필요한지는 모른다.
+```
+
 ## ORDER — ITEM INFORMATION HIERARCHY
 
 Do not add redundant role chips.
@@ -143,6 +183,23 @@ Do not show hypothetical derived answer changes such as:
 - Great Success signal change
 
 After an actual purchase commits, current Forecast/readiness may update because the current state has actually changed.
+
+## SALE — REFUSAL PRICE CEILING UI
+
+Follow `SALE_v2.7.0.md`.
+
+For the same customer + same SKU + current visit:
+- after 50% refusal, 100% and 150% controls are disabled
+- after 100% refusal, 150% is disabled
+- after 150% refusal, lower-price controls may remain usable
+
+Requirements:
+- disabled higher-price states are visually distinct and non-interactive
+- Player can read why the option is blocked; exact short copy may be implementation/localization-owned unless separately frozen
+- do not disable unrelated SKUs
+- do not carry the same-SKU visit lock into a later visit unless another owner explicitly defines persistence
+
+The UI must not invite a higher-price reroll after a lower-price refusal.
 
 ## SUPPLY / FATIGUE PREVIEW
 
@@ -375,6 +432,7 @@ Avoid:
 ## RELATED
 
 Sale interaction -> `SALE_v2.7.0.md`
+Economy/Order forecast -> `ECONOMY_ORDER_v2.7.0.md`
 Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
 Night result -> `NIGHT_CLOSING_v2.7.0.md`
 Final timeline -> `CORE_RUN_v2.7.0.md`
