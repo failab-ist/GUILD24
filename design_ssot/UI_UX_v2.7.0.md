@@ -168,6 +168,30 @@ explicit penalty
 
 Do not expose the Gate's exact Counter requirement.
 
+## SALE — DECISION-ONLY ITEM DETAIL
+
+The SALE customer decision surface does not show expandable sections that look strategically meaningful but only contain non-actionable flavor.
+
+Remove from SALE:
+
+```text
+이 손님에게 안 걸리는 효과
+상품 설명
+```
+
+when `상품 설명` is flavor-only.
+
+Keep directly readable:
+- exact Core Stat effect
+- exact Hazard Counter
+- exact Supply
+- explicit penalty
+- Insurance behavior when relevant
+- price / stock / affordability
+
+Flavor text may remain in Item data or another already-existing non-decision context.
+This rule does not require a new encyclopedia/detail screen.
+
 ## SALE — UNCOMMITTED PREVIEW
 
 Follow `SALE_v2.7.0.md`.
@@ -183,6 +207,21 @@ Do not show hypothetical derived answer changes such as:
 - Great Success signal change
 
 After an actual purchase commits, current Forecast/readiness may update because the current state has actually changed.
+
+## SALE — POST-COMMIT DELTA SOURCE TRUTH
+
+Prefer updating the current Stat/Forecast/Readiness values in place after a committed purchase.
+Do not use a generic `보급 후 변화` list that makes unrelated values appear to move together.
+
+If delta text is shown:
+- every changed line must be an actual runtime change
+- the cause must be attributable to the committed Item or another explicit current source
+- an Item may directly change only the channels listed in `ITEM_v2.7.0.md`
+- Supply/Fatigue recovery may indirectly restore effective 기동/정신 only when the canonical Fatigue penalty band changes
+- that indirect change must read as Fatigue/Condition-derived
+- Supply/Fatigue must not make 투력/강인함 rise under the current Fatigue rule
+
+A direct-stat-less Item such as current `집중 사탕` must not visually appear to grant unrelated 투력/강인함.
 
 ## SALE — REFUSAL PRICE CEILING UI
 
