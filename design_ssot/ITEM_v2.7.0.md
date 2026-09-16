@@ -90,6 +90,28 @@ Drink has no Food-affinity Trait modifier, so the same three Fresh native-Stat b
 
 GLUTTONY's Final reduction, when applicable, occurs after the final Item-side positive Core-Stat contribution has been produced, as owned by `BOSS_v2.7.0.md`.
 
+## DIRECT CORE-STAT ITEM VALUE — APPROVED v2.7 REBALANCE
+
+Flat native Core-Stat Item values are intentionally higher than the prior v2.7 draft baseline.
+
+Reason:
+- NPC Level/Growth remains the long-term body of strength
+- but one appropriate Stat Item must still create a perceptible, decision-relevant change on a mid/late-Run NPC
+- do not add a new Day/Level percentage-scaling Item system merely to create late-game relevance
+- use the exact flat values in the active catalog below
+
+Fresh / Food-affinity / Potionbody modifiers continue to use their existing owned composition rules from these revised base Item values.
+
+## ITEM PRICE ALIGNMENT — APPROVED v2.7 REBALANCE
+
+Item price should follow actual gameplay breadth/slot value, not Rarity label alone.
+
+Rules:
+- narrow Main Hazard specialists with similar +16~18 Counter value should remain in comparable practical SALE bands
+- Rarity may justify a modest premium but must not make a simple single-Hazard answer practically unsellable to the customers who need it
+- broad multi-role Food / strong Insurance / exceptional Utility may remain materially more expensive
+- exact Buy/Sell values are the active catalog values below
+
 ## HAZARD COUNTER BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`
@@ -117,9 +139,9 @@ Hazard Threat/readiness -> `DUNGEON_HAZARD_v2.7.0.md`.
 
 | Item | Rarity | Buy / Sell | Effect |
 |---|---:|---:|---|
-| 하급 포션 | Common | 70 / 140 | 투력 +6 |
-| 중급 포션 | Uncommon | 110 / 230 | 투력 +9 |
-| 상급 포션 | Rare | 150 / 300 | 투력 +12 |
+| 하급 포션 | Common | 70 / 140 | 투력 +8 |
+| 중급 포션 | Uncommon | 110 / 230 | 투력 +12 |
+| 상급 포션 | Rare | 150 / 300 | 투력 +16 |
 
 All three:
 ```text
@@ -150,9 +172,9 @@ The active catalog slot is replaced by:
 진정 허브티
 Category = Drink
 Rarity = Common
-Buy / Sell = 50 / 100
+Buy / Sell = 40 / 85
 Shelf Life = 5
-정신 +10
+정신 +15
 Supply 2
 ```
 
@@ -170,7 +192,7 @@ Start-stock ownership -> `CORE_RUN_v2.7.0.md`.
 ```text
 Category = Insurance
 Rarity = Uncommon
-Buy / Sell = 120 / 240
+Buy / Sell = 100 / 210
 ```
 
 It does not change the resolved expedition Outcome.
@@ -229,34 +251,34 @@ Unlisted implementation-only flavor fields/shelf lives inherit the previous Item
 
 | # | Item | Category / Rarity | Buy / Sell | v2.7 Effect | Hazard Role |
 |---:|---|---|---:|---|---|
-| 1 | 삼각김밥 | Food C | 35 / 70 | 강인함 +5, Supply 5 | — |
-| 2 | 생수 | Drink C | 25 / 55 | 강인함 +4, Supply 3 | — |
+| 1 | 삼각김밥 | Food C | 35 / 70 | 강인함 +8, Supply 5 | — |
+| 2 | 생수 | Drink C | 25 / 55 | 강인함 +6, Supply 3 | — |
 | 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 5 | Cold Lower |
-| 4 | 핫바 | Food C | 40 / 80 | 투력 +4, Supply 4 | — |
-| 5 | 초코바 | Food C | 30 / 65 | 기동 +5, Supply 4 | — |
-| 6 | 캔커피 | Drink C | 35 / 75 | 기동 +8, Supply 2 | Stat route |
-| 7 | 진정 허브티 | Drink C | 50 / 100 | 정신 +10, Supply 2 | Stat route |
-| 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +6 | — |
-| 9 | 얼음컵 | Drink C | 25 / 60 | 화염 +10, Supply 1 | Fire Lower |
-| 10 | 랜턴 건전지 | Field Gear C | 40 / 85 | 어둠 +16 | Dark Main |
+| 4 | 핫바 | Food C | 40 / 80 | 투력 +6, Supply 4 | — |
+| 5 | 초코바 | Food C | 30 / 65 | 기동 +8, Supply 4 | — |
+| 6 | 캔커피 | Drink C | 40 / 85 | 기동 +12, Supply 2 | Stat route |
+| 7 | 진정 허브티 | Drink C | 40 / 85 | 정신 +15, Supply 2 | Stat route |
+| 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +8 | — |
+| 9 | 얼음컵 | Drink C | 30 / 65 | 화염 +10, Supply 1 | Fire Lower |
+| 10 | 랜턴 건전지 | Field Gear C | 45 / 95 | 어둠 +16 | Dark Main |
 | 11 | 경량 로프 | Field Gear C | 50 / 105 | 속박 +16 | Bind Main |
 | 12 | 집중 사탕 | Food C | 35 / 75 | 공포 +10, Supply 3 | Fear Lower |
-| 13 | 불룡볶음면 | Food U | 65 / 135 | 강인함 +5, 냉기 +6, Supply 4 | Cold Hybrid |
-| 14 | 에너지드링크 | Drink U | 70 / 150 | 기동 +10, Supply 2 | Stat route |
+| 13 | 불룡볶음면 | Food U | 65 / 135 | 강인함 +8, 냉기 +6, Supply 4 | Cold Hybrid |
+| 14 | 에너지드링크 | Drink U | 70 / 150 | 기동 +15, Supply 2 | Stat route |
 | 15 | 용사의 곡주 | Drink U | 60 / 130 | 공포 +18, 기동 -4, Supply 1 | Fear Main / RiskReward |
-| 16 | 구급키트 | Insurance U | 120 / 240 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
+| 16 | 구급키트 | Insurance U | 100 / 210 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear U | 65 / 135 | 독 +12 | Poison Lower |
-| 18 | 핫팩 | Field Gear U | 55 / 120 | 냉기 +18 | Cold Main |
+| 18 | 핫팩 | Field Gear U | 60 / 130 | 냉기 +18 | Cold Main |
 | 19 | 방수망토 | Field Gear U | 75 / 160 | 부식 +6, 진창 +6 | Dual Hybrid |
 | 20 | 부식 방지 코팅제 | Field Gear U | 70 / 150 | 부식 +18 | Corrosion Main |
 | 21 | 원정용 장화 | Field Gear U | 65 / 135 | 진창 +16 | Mire Main |
 | 22 | 설원 고글 | Field Gear U | 60 / 125 | 화이트아웃 +16 | Whiteout Main |
-| 23 | 상급 포션 | Potion R | 150 / 300 | 투력 +12 | — |
-| 24 | 농축 해독제 | Field Gear R | 180 / 360 | 독 +18 | Poison Main |
+| 23 | 상급 포션 | Potion R | 150 / 300 | 투력 +16 | — |
+| 24 | 농축 해독제 | Field Gear R | 80 / 170 | 독 +18 | Poison Main |
 | 25 | 귀환석 | Insurance R | 260 / 520 | Emergency Escape +50%p path | Severe/Death Insurance |
-| 26 | 중급 포션 | Potion U | 110 / 230 | 투력 +9 | — |
-| 27 | 길드 프리미엄 도시락 | Food R | 280 / 560 | 강인함 +6, Supply 7, Loot +20% | — |
-| 28 | 쿨링 이온음료 | Drink R | 200 / 400 | 화염 +18, Supply 1 | Fire Main |
+| 26 | 중급 포션 | Potion U | 110 / 230 | 투력 +12 | — |
+| 27 | 길드 프리미엄 도시락 | Food R | 170 / 360 | 강인함 +10, Supply 7, Loot +20% | — |
+| 28 | 쿨링 이온음료 | Drink R | 80 / 170 | 화염 +18, Supply 1 | Fire Main |
 | 29 | 세계수 생환부적 | Insurance E | 600 / 1200 | Death -> Severe Injury once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
 
