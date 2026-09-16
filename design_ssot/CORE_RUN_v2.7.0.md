@@ -64,7 +64,7 @@ Item identity/prices/effects -> `ITEM_v2.7.0.md`.
 
 ## FINAL TIMELINE — EXACT
 
-Reuse existing Morning/management surfaces; do not add a new permanent Final dashboard or new Phase.
+Reuse existing Morning/management/SALE/Final surfaces; do not add a new permanent Final dashboard or a separate combat-game Phase.
 
 ```text
 D0  : inform Player that D30 Final is the Run objective
@@ -73,7 +73,7 @@ D10 : FINAL까지 20일 signal
 D15 : additional Boss information flow owned by BOSS
 D20 : FINAL까지 10일 signal + Recon dispatch beat
 D25 : FINAL까지 5일 signal + exact Final Family Pair / Hazard Pool generated, revealed, persisted
-D30 : reuse the persisted D25 Final state exactly; no Family/Hazard reroll
+D30 : reuse the persisted D25 Final state exactly; resolve Final as 출전 NPC 선택 -> FINAL 판매 -> 결과
 ```
 
 D20 Recon creates no separate combat/minigame/resource system.
@@ -86,6 +86,25 @@ D25 does not grant:
 - forced correct preparation
 
 The remaining D25~D29 Order / Stock / NPC growth / preservation decisions are the preparation window.
+
+## D30 FINAL FLOW — EXACT
+
+After the already-known D25 Final state and the D30 Relic/SLOTH decision are resolved:
+
+```text
+Final participant selection
+-> Final SALE preparation
+-> Final Lock
+-> one Final result
+```
+
+Rules:
+- participant selection is confirmed before Final SALE begins
+- Final SALE reuses the ordinary SALE interaction layer; it is not a new top-level day-loop Phase and not a separate combat minigame
+- selected participants are processed according to `FINAL_EXPEDITION_v2.7.0.md` / `SALE_v2.7.0.md`
+- after committed Final sales begin, Save/Load must not reopen participant selection or erase committed/refused transactions for fishing
+- after all selected participants finish Final SALE, Final Lock snapshots the authoritative Final state and one result resolves
+- no second free-equip/preparation step exists after Final SALE
 
 ## D25 STATE SAFETY
 
@@ -116,7 +135,8 @@ Rules:
 
 NPC growth/level -> `NPC_TRAIT_v2.7.0.md`
 Item/start-stock identity -> `ITEM_v2.7.0.md`
-D25 Final generation -> `FINAL_EXPEDITION_v2.7.0.md`
+D25/D30 Final flow -> `FINAL_EXPEDITION_v2.7.0.md`
+Final sale interaction -> `SALE_v2.7.0.md`
 Boss reveal -> `BOSS_v2.7.0.md`
 Account/Meta preservation -> `META_v2.7.0.md`
 Presentation -> `UI_UX_v2.7.0.md`
