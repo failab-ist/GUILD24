@@ -1,7 +1,7 @@
 # NPC_TRAIT_QA
 
 DOC=NPC_TRAIT_QA
-OWNER=qa,npc,trait,growth,condition,revisit,recent_expedition
+OWNER=qa,npc,trait,growth,condition,revisit,recent_expedition,injury
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
@@ -22,6 +22,7 @@ Explicitly stale:
 - inherited Potionbody +30% expectation from the old Trait catalog
   - v2.7 exact Potion positive native Core-Stat factor is ×1.15
 - any inherited expectation that a Level milestone grants a Trait, Rank/Title reward, or third ordinary Bag slot
+- any inherited ordinary-Injury recovery path that clears `injury=1` merely because the next expedition does not resolve to a fresh Injury result
 
 The older base contains two sections both labeled `NPC-Q09`.
 For v2.7 audit references, distinguish them by section title (`LONG-TERM VALUE` vs `META JOB UNLOCK POOL`) rather than treating the duplicated numeric label as one test identity.
@@ -107,3 +108,45 @@ PASS:
 - RiskReward penalty magnitude unchanged
 - no inherited native-recovery multiplier remains active
 - when Fresh Relics also modify the positive native Core Stat, Food-affinity percentage follows `ITEM_v2.7.0.md` base-additive composition rather than a sequential Trait×Relic multiplier
+
+## NPC-Q77 — ORDINARY INJURY PENALTY UNCHANGED
+
+SETUP: compare healthy vs `injury=1` with no grit.
+
+EXPECT:
+```text
+투력 -15% on NPC Base+Equipment
+강인함 -20% on NPC Base+Equipment
+```
+
+PASS:
+- v2.7 persistence/risk changes do not silently raise these visible Stat penalties
+- Sold Item contribution remains outside this NPC-side percentage unless another current owner explicitly says otherwise
+
+## NPC-Q78 — ORDINARY INJURY NATURAL RECOVERY
+
+Start at `injury=1` and force each actual outcome.
+
+EXPECT:
+```text
+성공 -> injury=0
+대성공 -> injury=0
+퇴각 -> injury=1
+부상 -> injury=1
+```
+
+PASS:
+- Retreat does not cure ordinary Injury
+- merely completing another expedition does not cure Injury
+- Severe/Death follow their own outcome/state paths
+- First Aid Aftercare may still override the persistent state after outcome resolution exactly as ITEM owns
+
+## NPC-Q79 — INJURED RE-EXPEDITION RISK FLAG
+
+SETUP: same NPC/Gate except departure Injury state.
+
+PASS:
+- `injury=1` departure activates the +10%p Death-risk baseline and +15%p Severe-transition baseline owned by `DUNGEON_HAZARD_v2.7.0.md`
+- the modifier applies only because the NPC **began** that expedition injured
+- recovery during/after result cannot retroactively erase the risk state used for that expedition
+- exact hidden probability is not exposed as a Player-facing percentage
