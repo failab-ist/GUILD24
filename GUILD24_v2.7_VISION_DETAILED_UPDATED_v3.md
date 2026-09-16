@@ -48,12 +48,12 @@ Current Design SSOT has already been promoted to:
 
 `design_ssot/SPEC_INDEX_v2.7.0.md`
 
-The final cross-owner conflict sweep is complete.
+The final cross-owner conflict sweep is complete, with the latest approved amendments added afterward and routed into the same v2.7 owner set.
 
 Current index status:
 
 ```text
-SSOT_AUDIT_STATUS = FINAL_CONFLICT_SWEEP_COMPLETE
+SSOT_AUDIT_STATUS = FINAL_CONFLICT_SWEEP_COMPLETE_WITH_LATEST_APPROVED_AMENDMENTS
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED = NONE
 SOURCE_ADOPTION_STATUS = NOT_YET_ADOPTED
@@ -624,12 +624,36 @@ Primary role:
 Potion line is now explicit:
 
 ```text
-하급 포션   투력 +6
-중급 포션   투력 +9
-상급 포션   투력 +12
+하급 포션   투력 +8
+중급 포션   투력 +12
+상급 포션   투력 +16
 ```
 
-All:
+v2.7 also raises the flat native Core-Stat contribution of ordinary Food/Drink Stat routes.
+The previous values were too easy to become visually and strategically negligible against mid/late-Run NPC growth.
+
+The rebalance principle is:
+
+> **NPC growth remains the long-term body of strength, but one appropriate Item must still be felt when it is sold late in the Run.**
+
+Representative current native-Stat baselines include:
+
+```text
+삼각김밥       강인함 +8
+생수           강인함 +6
+핫바           투력 +6
+초코바         기동 +8
+캔커피         기동 +12
+진정 허브티    정신 +15
+불룡볶음면     강인함 +8
+에너지드링크   기동 +15
+길드 프리미엄 도시락 강인함 +10
+```
+
+Fresh / Food-affinity amplification still works from these Item base values through the existing additive modifier rule.
+No new late-game percentage-scaling system is added.
+
+All Potion tiers:
 
 - Supply 0
 - Counter 0
@@ -685,6 +709,21 @@ The point is not that these exact names are the vision.
 The point is:
 
 > the 30-item catalog now expresses distinct preparation lanes without requiring a larger content count.
+
+The same pass also realigns prices by gameplay role rather than rarity alone.
+
+Important current examples:
+
+```text
+농축 해독제          80 / 170
+쿨링 이온음료        80 / 170
+길드 프리미엄 도시락 170 / 360
+구급키트             100 / 210
+```
+
+Narrow Main Hazard specialists should generally live near the same economic band.
+A simple `+18 Counter` Item should not become practically unsellable only because its rarity label is Rare.
+Higher prices are reserved for genuinely broader value such as multi-role premium Food, strong Insurance, or exceptional utility.
 
 ## 8.4 Hazard specialist structure
 
@@ -1081,6 +1120,32 @@ Not:
 
 > a new minigame added on Day 30.
 
+The D30 climax now deliberately reuses the game's core retail action instead of jumping from party selection into an opaque combat calculation.
+
+Player-facing Final flow:
+
+```text
+출전 NPC 선택
+→ FINAL 판매
+→ 결과
+```
+
+After the Final party is confirmed, the selected NPCs are handled one by one through the familiar SALE logic.
+The Player sells the actual Final items to them, sees acceptance/refusal and the current prepared state, then proceeds to the one Final result.
+
+This keeps the Boss battle legible as:
+
+> **누구를 데려갈지 고르고, 무엇을 팔아 준비시켰는지의 결과**
+
+rather than a detached combat screen.
+
+Final SALE is not a new minigame:
+- ordinary 2-slot handling is reused
+- Wallet / price / refusal / stock rules remain meaningful
+- Final-only no-effect Items are blocked
+- Boss-specific changes are shown on the preparation information that they actually modify
+- no extra attack/QTE/combat-input layer is added
+
 ## 13.2 Hazard aggregation direction
 
 Current Final uses each participant's actual gap against the persisted Final Hazard Pool.
@@ -1171,6 +1236,9 @@ shortfallCap = +12 Boss Power
 ```
 
 The point is to make economic performance matter without overwhelming the rest of the Final.
+
+Because D30 Final now contains real SALE transactions, successful Final sales count as ordinary Gross Sales exactly once.
+GREED's committed snapshot is taken at Final Lock after the Final SALE sequence completes.
 
 ## 14.4 GLUTTONY / 탐식
 
@@ -1382,7 +1450,39 @@ UI:
 
 This is a coherence rule, not a new loyalty/purchase-intent subsystem.
 
-## 15.7 Motion baseline
+## 15.7 Decision-only detail / truthful delta
+
+SALE should not contain expandable sections that look decision-relevant but contain only flavor.
+
+Remove from the SALE decision surface:
+
+- `이 손님에게 안 걸리는 효과`
+- `상품 설명` when it only exposes flavor text
+
+Keep the exact effect that can actually matter to the transaction and expedition.
+
+Also remove the generic habit of showing a large `보급 후 변화` list that makes unrelated Stats appear to move together.
+
+After a real purchase commits:
+
+- update the main current state in place
+- if a delta is shown, it must be an actual changed value with a proven source
+- an Item can directly change only the exact channels written on that Item
+- Supply may indirectly change **기동/정신** only when canonical Fatigue penalty recovery actually changes those effective Stats
+- such an indirect change must read as Fatigue/condition-derived, not as the Item secretly granting that Stat
+- Supply/Fatigue must not make unrelated **투력/강인함** rise
+
+Example:
+
+`집중 사탕` in the current v2.7 catalog is `공포 +10 / Supply 3`.
+It has no direct four-Core-Stat increase.
+If selling it causes 투력 or 강인함 to rise, that is not a valid direct Item effect.
+
+The intent is:
+
+> **보여주는 변화는 적게, 하지만 보이는 변화는 전부 진짜여야 한다.**
+
+## 15.8 Motion baseline
 
 Short local motion is useful only if it clarifies state:
 
@@ -1915,6 +2015,40 @@ Purpose:
 
 > let the Player judge both **quantity pressure** and **difficulty pressure** without revealing the exact solution.
 
+## 19-A.4 SALE detail cleanup / delta truth
+
+Remove the SALE-only `이 손님에게 안 걸리는 효과` and flavor-only `상품 설명` disclosure.
+
+Do not present unrelated recomputed Stats under a generic `보급 후 변화` block.
+After commit, only actual current-state changes may be shown, and indirect Fatigue-derived Stat changes must be source-readable.
+
+## 19-A.5 Item value / price rebalance
+
+v2.7 raises flat native Core-Stat Item values so direct Stat purchases remain perceptible in mid/late Run play.
+It does this by increasing existing flat Item values rather than adding a new scaling system.
+
+At the same time, narrow Hazard specialist prices are compressed into comparable economic bands so a useful Counter Item can actually be sold to ordinary relevant NPCs.
+
+Exact catalog values remain owned only by `ITEM_v2.7.0.md`.
+
+## 19-A.6 D30 Final uses the core retail loop
+
+Final Player flow is:
+
+```text
+출전 NPC 선택
+→ FINAL 판매
+→ 결과
+```
+
+Party selection is confirmed before Final SALE.
+Selected participants are then prepared through the ordinary sequential two-slot sale interaction.
+After all selected participants finish Final SALE, Final Lock occurs and the Boss result resolves once.
+
+Purpose:
+
+> make the climax readable through the same decisions the Player learned for the entire Run, rather than switching to an opaque combat interaction.
+
 ---
 
 # 20. FULL-RUN VALIDATION — WHAT v2.7 MUST PROVE
@@ -1933,10 +2067,14 @@ Required questions:
 8. Does NIGHT explain proven consequences clearly?
 9. Does D25 Final prereveal change D25~D29 Order/Warehouse/NPC decisions?
 10. Does SALE feel like handling a customer rather than submitting a form?
-11. Does UI provide arithmetic without turning preparation into answer-following?
-12. Does the visual system read as GUILD24 rather than a generic application?
-13. Does any player-facing copy imply a rule the engine does not implement?
-14. Can a player finish a Run and describe what kind of store/build they operated?
+11. Do direct Stat Items still create a visible, decision-relevant change on representative late-Run NPCs?
+12. Are narrow Counter specialists actually affordable enough to enter real SALE decisions?
+13. Does FINAL read clearly as `선택 → 판매 → 결과`, without introducing a separate combat minigame?
+14. Are every displayed post-commit Stat delta and readiness change traceable to a real source?
+15. Does UI provide arithmetic without turning preparation into answer-following?
+16. Does the visual system read as GUILD24 rather than a generic application?
+17. Does any player-facing copy imply a rule the engine does not implement?
+18. Can a player finish a Run and describe what kind of store/build they operated?
 
 If the implementation is technically complete but these answers remain weak, v2.7 is not finished.
 
@@ -1958,7 +2096,7 @@ After v2.6.1 Recovery closes:
 8. SALE sequential handling + information boundary
 9. Last Expedition snapshot + NIGHT causality
 10. D0~D30 timeline / D25 persistence
-11. Final formula / Final no-op Insurance
+11. Final formula / Final SALE / Final no-op Insurance
 12. Boss v2.7 modifiers / SLOTH
 13. Event/copy migration
 14. Anti-AI-Slop visual / typography pass
@@ -1993,7 +2131,7 @@ Key v2.7 owners:
 - Event → `EVENT_v2.7.0.md`
 - Boss / Sloth → `BOSS_v2.7.0.md`
 - Final → `FINAL_EXPEDITION_v2.7.0.md`
-- Economy / Order current unchanged detail → `ECONOMY_ORDER_v2.6.1.md`
+- Economy / Order / next-day forecast → `ECONOMY_ORDER_v2.7.0.md`
 - Game core identity → `00_GAME_CORE_v2.5.0.md`
 
 Always start from:
@@ -2018,7 +2156,7 @@ That is no longer desirable.
 
 Deferred ideas now belong in:
 
-`GUILD24_v2.8_PLUS_DEFERRED.md`
+`GUILD24_v2.8_PLUS_DEFERRED_DETAILED.md`
 
 Examples moved there:
 
