@@ -210,18 +210,31 @@ After an actual purchase commits, current Forecast/readiness may update because 
 
 ## SALE — POST-COMMIT DELTA SOURCE TRUTH
 
-Prefer updating the current Stat/Forecast/Readiness values in place after a committed purchase.
-Do not use a generic `보급 후 변화` list that makes unrelated values appear to move together.
+Prefer updating current Stat/Forecast/Readiness values in place after a committed purchase.
+Do not make a derived preparation change look like a hidden direct Item effect.
 
 If delta text is shown:
 - every changed line must be an actual runtime change
-- the cause must be attributable to the committed Item or another explicit current source
-- an Item may directly change only the channels listed in `ITEM_v2.7.0.md`
-- Supply/Fatigue recovery may indirectly restore effective 기동/정신 only when the canonical Fatigue penalty band changes
-- that indirect change must read as Fatigue/Condition-derived
-- Supply/Fatigue must not make 투력/강인함 rise under the current Fatigue rule
+- each changed line must expose a readable source class when the cause is not the Item's direct listed effect
+- an Item directly changes only the channels listed in `ITEM_v2.7.0.md`
+- reducing an active **Supply Deficit** may legitimately improve effective 투력/강인함/기동/정신 and Hazard readiness through the inherited unified Supply system
+- this must read as `보급 부족 완화` or equivalent system-source feedback, not as if the Item itself granted those four Stats
+- excess Supply that lowers current Fatigue may restore effective 기동/정신 when a Fatigue penalty band changes; this must read as `피로 완화` / Condition-derived feedback
+- do not expose the hidden Supply-deficit formula merely to explain the delta
 
-A direct-stat-less Item such as current `집중 사탕` must not visually appear to grant unrelated 투력/강인함.
+Current `집중 사탕` is the canonical clarity example:
+
+```text
+직접 효과 = 공포 대응 +10 / Supply 3
+```
+
+Therefore:
+- without a Supply Deficit change or Fatigue penalty-band change, it must not show a Core-Stat increase
+- if its Supply reduces an active Supply Deficit, all four effective Core Stats may rise as a **보급 부족 완화** result
+- if excess Supply also crosses a Fatigue penalty band, 기동/정신 may additionally recover as a **피로 완화** result
+
+A generic `보급 후 변화` block is acceptable only when direct Item effects and derived system effects are clearly separated.
+If that distinction is not immediately readable, remove the synthetic block and update the primary current-state values with source labels instead.
 
 ## SALE — REFUSAL PRICE CEILING UI
 
@@ -345,10 +358,12 @@ Hazard tutorial teaches:
 
 Supply/Fatigue tutorial teaches:
 - required Supply is paid first
-- remaining Supply reduces current Fatigue
+- a Supply Deficit applies one expedition-wide preparation penalty through the existing unified Supply system
+- remaining Supply beyond the requirement reduces current Fatigue
 - further remaining Supply reduces that expedition's Fatigue gain
 - conditional Night numbers are exact arithmetic, not predicted Outcome
 
+Do not teach the hidden Supply-deficit formula.
 Do not teach `독이면 X 아이템을 사세요` or equivalent solution scripts.
 
 ## VISUAL MATERIAL — ANTI-GENERIC UI PASS
