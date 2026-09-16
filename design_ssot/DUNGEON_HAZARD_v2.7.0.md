@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Family identities, Hazard-to-Stat mappings, readiness labels, Day/Tier generation, combat variance, Deep Expedition structure, and unchanged Supply-Burden eligibility inherit `DUNGEON_HAZARD_v2.6.0.md`.
 
-This patch overrides v2.6 prepared-Power weights, Hazard threat scale, Fatigue values/penalties, excess-Supply processing, and stale third-slot wording.
+This patch overrides v2.6 prepared-Power weights, Hazard threat scale, Fatigue values/penalties, excess-Supply processing, stale third-slot wording, and the next-day Gate forecast disclosure contract.
 
 ## PREPARED POWER — v2.7 BASELINE
 
@@ -212,10 +212,53 @@ Do not expose:
 
 Conditional Fatigue rows are arithmetic, not Outcome prediction.
 
+## NEXT-DAY GATE FORECAST — v2.7 DISCLOSURE
+
+The inherited Day/Gate progression and controlled-random generation remain authoritative.
+This patch changes what the Player is told before ORDER.
+
+Before ORDER commitment, expose both:
+
+1. next-day Gate-count forecast
+2. next-day Tier forecast
+
+### Gate-count forecast
+
+When the inherited next-Day Gate count is randomized, expose the exact probability distribution across the possible counts for that next Day.
+
+When the inherited next-Day Gate count is deterministic, expose the fixed count as confirmed information.
+
+Rules:
+- derive the forecast from the same canonical seeded/current-run generation rules that govern the actual next Day
+- do not create a second forecast-only RNG path
+- Save/Load must not reroll the forecast independently from the actual next-Day generation state
+- do not reveal next-day Family
+- do not reveal exact next-day Gate identities/composition
+- do not reveal next-day Hazard set
+
+### Tier forecast
+
+Retain exact next-day T1/T2/T3 probability disclosure.
+
+### Design boundary
+
+Current-day open Gate / known Hazard remains the primary preparation truth.
+The next-day forecast is a secondary planning signal.
+
+Design intent:
+
+```text
+내일 얼마나 많이, 얼마나 위험한지는 안다.
+정확히 무엇이 필요한지는 모른다.
+```
+
+Presentation owner -> `ECONOMY_ORDER_v2.7.0.md` / `UI_UX_v2.7.0.md`.
+
 ## RELATED
 
 Item Supply/Counter -> `ITEM_v2.7.0.md`
 Fatigue Trait -> `NPC_TRAIT_v2.7.0.md`
 Sale preview -> `SALE_v2.7.0.md`
 Night resolved fields -> `NIGHT_CLOSING_v2.7.0.md`
+Next-day forecast presentation -> `ECONOMY_ORDER_v2.7.0.md`
 Final Hazard aggregation -> `FINAL_EXPEDITION_v2.7.0.md`
