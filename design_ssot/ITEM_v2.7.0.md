@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Unchanged Item interaction, inventory consumption, price-mode ownership, explicit Special interaction, and general visibility rules inherit `ITEM_v2.5.0.md`.
 
-This patch replaces the v2.5 player-facing category set, active catalog values, Potion/Injury line, and Hazard counter matrix.
+This patch replaces the v2.5 player-facing category set, active catalog values, Potion/Injury line, Hazard counter matrix, and active catalog count.
 
 ## PLAYER-FACING CATEGORY — EXACT
 
@@ -29,7 +29,7 @@ Special
 Category follows gameplay use rather than physical object shape.
 
 Contracts:
-- Food = high Supply / Fatigue management + small secondary value
+- Food = high Supply / Fatigue management + small-to-medium secondary Core Stat value
 - Drink = lower Supply + sharper Stat/Counter/RiskReward value
 - Potion = generic immediate raw-Power specialist
 - Field Gear = narrow Hazard specialist or explicit Hazard Hybrid
@@ -110,6 +110,7 @@ Rules:
 - narrow Main Hazard specialists with similar +16~18 Counter value should remain in comparable practical SALE bands
 - Rarity may justify a modest premium but must not make a simple single-Hazard answer practically unsellable to the customers who need it
 - broad multi-role Food / strong Insurance / exceptional Utility may remain materially more expensive
+- Epic late-Run Items may command a slot-efficiency premium, but 50% pricing must remain a plausible NPC-investment route rather than becoming fake affordability
 - exact Buy/Sell values are the active catalog values below
 
 ## HAZARD COUNTER BASELINE
@@ -118,18 +119,21 @@ Rules:
 
 | Hazard | Main / Upper | Lower | Hybrid / Natural alternative |
 |---|---|---|---|
-| poison | 농축 해독제 +18 | 방진마스크 +12 | 강인함 / 해독가 |
-| bind | 경량 로프 +16 | — | 기동 / Stat support |
-| corrosion | 부식 방지 코팅제 +18 | — | 방수망토 +6 / 강인함 |
-| mire | 원정용 장화 +16 | — | 방수망토 +6 / 기동 |
-| fire | 쿨링 이온음료 +18 | 얼음컵 +10 | 강인함 / 내열성 |
-| fear | 용사의 곡주 +18 | 집중 사탕 +10 | 정신 |
-| dark | 랜턴 건전지 +16 | — | 정신+기동 / 눈썰미 |
-| cold | 핫팩 +18 | 컵라면 +10 | 불룡볶음면 +6 / 강인함 |
-| whiteout | 설원 고글 +16 | — | 정신+기동 / 눈썰미 |
+| poison | 농축 해독제 +18 | 방진마스크 +12 | 강인함 / 해독가 / 거미줄 방호세트 +12 |
+| bind | 경량 로프 +16 | — | 기동 / Stat support / 거미줄 방호세트 +12 |
+| corrosion | 부식 방지 코팅제 +18 | — | 방수망토 +6 / 강인함 / 연금 방수슈트 +12 |
+| mire | 원정용 장화 +16 | — | 방수망토 +6 / 기동 / 연금 방수슈트 +12 |
+| fire | 쿨링 이온음료 +18 | 얼음컵 +10 | 강인함 / 내열성 / 마그마 냉각장비 +14 |
+| fear | 용사의 곡주 +18 | 집중 사탕 +10 | 정신 / 성화 랜턴 +12 |
+| dark | 랜턴 건전지 +16 | — | 정신+기동 / 눈썰미 / 성화 랜턴 +12 |
+| cold | 핫팩 +18 | 컵라면 +10 | 불룡볶음면 +6 / 강인함 / 백설 방한고글 +12 |
+| whiteout | 설원 고글 +16 | — | 정신+기동 / 눈썰미 / 백설 방한고글 +12 |
 
-Dedicated Field Gear specialist Items carry no generic positive Core Stat unless a future explicit Item design changes that.
+Dedicated single-Hazard Field Gear specialist Items carry no generic positive Core Stat unless an explicit active-catalog exception says otherwise.
 Their cost is narrow coverage.
+
+Epic Family Hybrid Field Gear intentionally trades per-Hazard peak strength for one-slot breadth.
+It must not become stronger on each covered Hazard than the dedicated Main specialist for that Hazard.
 
 Hazard Threat/readiness -> `DUNGEON_HAZARD_v2.7.0.md`.
 
@@ -142,8 +146,9 @@ Hazard Threat/readiness -> `DUNGEON_HAZARD_v2.7.0.md`.
 | 하급 포션 | Common | 70 / 140 | 투력 +8 |
 | 중급 포션 | Uncommon | 110 / 230 | 투력 +12 |
 | 상급 포션 | Rare | 150 / 300 | 투력 +16 |
+| 최상급 포션 | Epic | 190 / 400 | 투력 +24 |
 
-All three:
+All four:
 ```text
 Category = Potion
 Supply = 0
@@ -152,9 +157,9 @@ Insurance = 0
 ```
 
 Shelf-life contract:
-- all three Potion tiers use the same ordinary Potion-family shelf-life behavior
+- all Potion tiers use the same ordinary Potion-family shelf-life behavior unless an explicit row later says otherwise
 - `중급 포션` does **not** inherit the retired `마석 보조배터리` non-expiring/tool-like shelf behavior merely because it reuses that catalog slot
-- until separately rebalanced, reuse the existing retained Potion shelf-life baseline shared by 하급/상급 포션
+- `최상급 포션` is the top-end pure raw-Power slot-efficiency option, not a Hazard specialist
 
 The former player-facing `마석 보조배터리` catalog entry is retired and its active catalog slot becomes `중급 포션`.
 Do not keep a second active Spirit-battery SKU under Special.
@@ -182,6 +187,100 @@ It is a generic Spirit Stat route, not a Fear/Dark/Whiteout Counter.
 Use a new active Item ID; do not reuse retired `bandage` as the new Drink identity.
 
 Start-stock ownership -> `CORE_RUN_v2.7.0.md`.
+
+## EPIC LATE-RUN VALUE LAYER — EXACT v2.7
+
+v2.7 adds 10 Epic preparation Items.
+They are not D20-hard-unlocked.
+Their late-Run identity comes from the Day-band Rarity weights owned by `ECONOMY_ORDER_v2.7.0.md`.
+
+Design split:
+
+```text
+5 Epic Field Gear
+= Family-shaped one-slot Hybrid breadth
+
+5 Epic Food/Drink/Potion
+= top-end direct Stat / Supply slot efficiency
+```
+
+Purpose:
+- D20+ preparation must not feel like the Player is still choosing only the same early/mid SKU power ceiling
+- late-Run progression should improve **what one slot can do**, not add a third normal Bag slot
+- Epic must remain optional high-efficiency preparation; T3 must still have viable routes without drawing one exact Epic SKU
+
+### EPIC FIELD GEAR — FAMILY HYBRIDS
+
+```text
+거미줄 방호세트
+Field Gear / Epic
+150 / 320
+독 +12
+속박 +12
+
+연금 방수슈트
+Field Gear / Epic
+150 / 320
+부식 +12
+진창 +12
+
+성화 랜턴
+Field Gear / Epic
+150 / 320
+공포 +12
+어둠 +12
+
+백설 방한고글
+Field Gear / Epic
+150 / 320
+냉기 +12
+화이트아웃 +12
+
+마그마 냉각장비
+Field Gear / Epic
+160 / 340
+화염 +14
+투력 +6
+```
+
+FIRE uses one Hazard plus its existing higher-combat identity instead of inventing a second FIRE Hazard.
+The `투력 +6` on `마그마 냉각장비` is an explicit catalog exception; it is not permission for generic specialist Field Gear to gain Core Stats.
+
+### EPIC FOOD / DRINK / POTION — TOP-END PREPARATION
+
+```text
+결전 특선 도시락
+Food / Epic
+180 / 380
+강인함 +12
+Supply 9
+
+용사 특식 핫바
+Food / Epic
+170 / 360
+투력 +8
+Supply 7
+
+초고속 에너지드링크
+Drink / Epic
+160 / 340
+기동 +18
+Supply 2
+
+대현자 허브엘릭서
+Drink / Epic
+160 / 340
+정신 +20
+Supply 2
+
+최상급 포션
+Potion / Epic
+190 / 400
+투력 +24
+```
+
+Fresh/Food-affinity/Potionbody rules apply normally by category.
+No separate Epic-only amplifier is created.
 
 ## INSURANCE HIERARCHY — v2.7
 
@@ -281,8 +380,18 @@ Unlisted implementation-only flavor fields/shelf lives inherit the previous Item
 | 28 | 쿨링 이온음료 | Drink R | 80 / 170 | 화염 +18, Supply 1 | Fire Main |
 | 29 | 세계수 생환부적 | Insurance E | 600 / 1200 | Death -> Severe Injury once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
+| 31 | 거미줄 방호세트 | Field Gear E | 150 / 320 | 독 +12, 속박 +12 | Spider Hybrid |
+| 32 | 연금 방수슈트 | Field Gear E | 150 / 320 | 부식 +12, 진창 +12 | Slime Hybrid |
+| 33 | 성화 랜턴 | Field Gear E | 150 / 320 | 공포 +12, 어둠 +12 | Crypt Hybrid |
+| 34 | 백설 방한고글 | Field Gear E | 150 / 320 | 냉기 +12, 화이트아웃 +12 | Snow Hybrid |
+| 35 | 마그마 냉각장비 | Field Gear E | 160 / 340 | 화염 +14, 투력 +6 | Fire Hybrid |
+| 36 | 결전 특선 도시락 | Food E | 180 / 380 | 강인함 +12, Supply 9 | Top-end survival/supply |
+| 37 | 용사 특식 핫바 | Food E | 170 / 360 | 투력 +8, Supply 7 | Top-end Food combat/supply |
+| 38 | 초고속 에너지드링크 | Drink E | 160 / 340 | 기동 +18, Supply 2 | Top-end mobility |
+| 39 | 대현자 허브엘릭서 | Drink E | 160 / 340 | 정신 +20, Supply 2 | Top-end spirit |
+| 40 | 최상급 포션 | Potion E | 190 / 400 | 투력 +24 | Top-end raw Power |
 
-Active catalog count remains exactly 30.
+Active catalog count is exactly 40.
 Retired active identities:
 ```text
 붕대
@@ -290,6 +399,9 @@ Retired active identities:
 ```
 
 No active Item creates a separate poison Condition/cure subsystem in v2.7.
+
+The new Epic Items have no separate D20 Item eligibility gate.
+Their practical late-Run frequency is controlled by `ECONOMY_ORDER_v2.7.0.md` Day-band Rarity weights.
 
 ## CATEGORY AFFINITY BOUNDARY
 
@@ -319,4 +431,5 @@ Hazard/Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
 Trait multipliers -> `NPC_TRAIT_v2.7.0.md`
 Relic modifiers -> `RELIC_v2.7.0.md`
 Sale handling -> `SALE_v2.7.0.md`
+Order Rarity progression -> `ECONOMY_ORDER_v2.7.0.md`
 Final usefulness -> `FINAL_EXPEDITION_v2.7.0.md`
