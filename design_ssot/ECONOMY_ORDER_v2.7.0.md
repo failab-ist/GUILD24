@@ -1,7 +1,7 @@
 # ECONOMY_ORDER
 
 DOC=ECONOMY_ORDER
-OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast
+OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -12,7 +12,9 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged Wallet, Price Mode, Order confirm/start-sale separation, Reroll, Gold, offer, quantity, warehouse, same-day arrival, operating-cost, and other economy/order rules inherit `ECONOMY_ORDER_v2.6.1.md`.
 
-This patch changes only the next-day preparation forecast contract.
+This patch changes:
+- next-day preparation forecast contract
+- Day-band Item Rarity progression for ORDER offers
 
 ## NEXT-DAY FORECAST — EXACT v2.7
 
@@ -110,8 +112,49 @@ Exact visual layout is owned by `UI_UX_v2.7.0.md`.
 
 ORDER may repeat the forecast compactly as decision context.
 
+## ORDER RARITY PROGRESSION — EXACT v2.7
+
+The inherited fixed all-Run Rarity weight table is superseded.
+
+ORDER offer Rarity shifts by Day band so the catalog itself communicates progression without a separate D20 hard-unlock rule for the new Epic preparation Items.
+
+Exact normalized weights:
+
+| Day | Common | Uncommon | Rare | Epic | Legendary |
+|---|---:|---:|---:|---:|---:|
+| D1–3 | 68% | 24% | 7% | 1% | 0% |
+| D4–7 | 63% | 25% | 11% | 1% | 0% |
+| D8–12 | 58% | 27% | 12% | 2% | 1% |
+| D13–19 | 53% | 27% | 15% | 4% | 1% |
+| D20–24 | 46% | 26% | 17% | 10% | 1% |
+| D25–29 | 39% | 25% | 19% | 16% | 1% |
+| D30 | 34% | 24% | 21% | 20% | 1% |
+
+Rules:
+- every row sums to exactly 100%
+- new v2.7 Epic preparation Items use the ordinary Epic pool; they do **not** receive a separate D20 hard unlock
+- early Epic appearance is intentionally possible but rare
+- D20+ is where Epic becomes a normal late-Run preparation consideration because the shared Epic weight rises materially
+- Legendary remains exceptional and does not scale with late-Run danger beyond the exact 1% rows above
+- existing unlock/meta eligibility still applies before Rarity selection where another current owner explicitly requires it
+- Reroll uses the same current-Day Rarity band; it does not bypass Day progression
+- pity/guarantee systems, where inherited and still valid, must operate on top of this current Day-band truth rather than restoring the old fixed table
+
+Design intent:
+
+```text
+초반 = Common/Uncommon 중심
+중반 = Rare가 정상 선택지
+후반 = Rare/Epic 혼합
+Final = 고급 준비물이 자주 보이지만 Legendary는 여전히 예외
+```
+
+The purpose is not to make Epic mandatory.
+The purpose is to make late-Run high-slot-efficiency preparation actually appear often enough to become a decision.
+
 ## RELATED
 
 Gate-count / Tier generation -> `DUNGEON_HAZARD_v2.7.0.md`
 Morning / Order presentation -> `UI_UX_v2.7.0.md`
+Item catalog / Rarity identities -> `ITEM_v2.7.0.md`
 Economy/Order QA -> `ECONOMY_ORDER_QA_v2.7.0.md`
