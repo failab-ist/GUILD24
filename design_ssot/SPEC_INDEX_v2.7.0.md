@@ -5,11 +5,11 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
+FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE_WITH_OPEN_APPROVALS
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-17
-SSOT_AUDIT_STATUS=FINAL_CONFLICT_SWEEP_COMPLETE_WITH_LATEST_APPROVED_AMENDMENTS
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
+SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED_WITH_EXPLICIT_UNRESOLVED
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=FRANCHISE_ACHIEVEMENT_THRESHOLDS;FRANCHISE_GRADE_V7_TO_V8_MIGRATION;FINAL_TRANSFER_REVENUE_GREED_ACCOUNTING
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
 BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
 SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
@@ -74,6 +74,7 @@ Source implementation follows this dependency gate exactly:
 ```text
 finish and close the existing v2.6.1 Adoption Recovery acceptance
 -> User/Director confirms recovery close
+-> resolve current implementation-blocking v2.7 Design Unresolved items
 -> begin v2.7 source adoption
 ```
 
@@ -121,47 +122,74 @@ Current file set = 22 files:
 
 GAME/CORE -> `00_GAME_CORE_v2.5.0.md`
 RUN/PHASE/SAVE/FINAL-TIMELINE -> `CORE_RUN_v2.7.0.md`
-META/UNLOCK/JOB-MASTERY/CROSS-RUN -> `META_v2.7.0.md`
-PRICE/GOLD/WALLET/ORDER/REROLL/NEXT-DAY-GATE-FORECAST -> `ECONOMY_ORDER_v2.7.0.md`
+META/UNLOCK/JOB-MASTERY/FRANCHISE-GRADE/FRANCHISE-ACHIEVEMENT/CROSS-RUN -> `META_v2.7.0.md`
+PRICE/GOLD/WALLET/ORDER/REROLL/NEXT-DAY-GATE-FORECAST/FINAL-PRICE -> `ECONOMY_ORDER_v2.7.0.md`
 NPC/JOB/TRAIT/GROWTH/REVISIT/RECENT-SNAPSHOT -> `NPC_TRAIT_v2.7.0.md`
 DUNGEON/FAMILY/HAZARD/PREPARED-POWER/SUPPLY/FATIGUE/GATE-GENERATION -> `DUNGEON_HAZARD_v2.7.0.md`
 ITEM/CATALOG/CATEGORY/COUNTER/POTION/INSURANCE/MODIFIER-COMPOSITION -> `ITEM_v2.7.0.md`
 RELIC/STORE-BUILD/FRESH/SLOTH-WINDOW -> `RELIC_v2.7.0.md`
-SALE/CUSTOMER/PRICE/REFUSAL/PURCHASE-FLOW/DELTA-TRUTH/BAG-HANDLING -> `SALE_v2.7.0.md`
+SALE/CUSTOMER/PRICE/REFUSAL/PURCHASE-FLOW/DELTA-TRUTH/BAG-HANDLING/FINAL-HANDLING -> `SALE_v2.7.0.md`
 NIGHT/INJURY/RESULT/CAUSALITY/FATIGUE-RESULT/CLOSING -> `NIGHT_CLOSING_v2.7.0.md`
-UI/UX/MOBILE/TUTORIAL/TYPOGRAPHY/VISUAL -> `UI_UX_v2.7.0.md`
+UI/UX/MOBILE/TUTORIAL/TYPOGRAPHY/VISUAL/FINAL-PREPARATION-UI -> `UI_UX_v2.7.0.md`
 COPY/VOICE/TERMINOLOGY/TRUTH-CRITICAL-COPY -> `COPY_WORLD_VOICE_v2.7.0.md`
 EVENT -> `EVENT_v2.7.0.md`
-BOSS/SLOTH/BOSS-FINAL-MODIFIER -> `BOSS_v2.7.0.md`
-FINAL/D25-PREREVEAL/FINAL-PARTY/FINAL-SALE/FINAL-HAZARD/FINAL-POWER -> `FINAL_EXPEDITION_v2.7.0.md`
+BOSS/SLOTH/BOSS-FINAL-MODIFIER/GREED-SNAPSHOT/BOSS-CLEAR-SIGNAL -> `BOSS_v2.7.0.md`
+FINAL/D25-PREREVEAL/FINAL-PARTY/FINAL-PREPARATION/FINAL-HAZARD/FINAL-POWER -> `FINAL_EXPEDITION_v2.7.0.md`
 
 CORE RUN QA -> `CORE_RUN_QA_v2.7.0.md`
-ORDER/ECONOMY QA -> `ECONOMY_ORDER_QA_v2.7.0.md`
+ORDER/ECONOMY/FINAL-PRICE QA -> `ECONOMY_ORDER_QA_v2.7.0.md`
 NPC/TRAIT QA -> `NPC_TRAIT_QA_v2.7.0.md`
 DUNGEON/ITEM QA -> `DUNGEON_ITEM_QA_v2.7.0.md`
 RELIC QA -> `RELIC_QA_v2.7.0.md`
-UI/UX QA -> `UI_UX_QA_v2.7.0.md`
+UI/UX/FINAL-PREPARATION QA -> `UI_UX_QA_v2.7.0.md`
 
 ## v2.7 OWNER CHANGE MAP
 
 Changed owners only:
 
-- CORE_RUN: Save v8, fresh Run boundary, start stock, D0~D30 Final timeline, controlled D25 repair boundary, D30 `출전 NPC 선택 -> FINAL 판매 -> 결과` progression
-- META: preserve validated current v7 Account/Meta into v8 while discarding legacy Run state; no new fail-to-power Meta system
-- ECONOMY_ORDER: inherit v2.6.1 Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract and information boundary; replace fixed all-Run rarity weights with Day-band rarity progression so Epic preparation naturally becomes common in late Run without a separate D20 hard unlock
+- CORE_RUN: Save v8, fresh Run boundary, start stock, D0~D30 Final timeline, controlled D25 repair boundary, D30 `출전 NPC 선택 -> FINAL 준비 -> 결과` progression; Final preparation uses fixed 50%/매입가 cost, Wallet/stock commitment, no refusal RNG
+- META: preserve unchanged-semantics validated v7 Account/Meta into v8 while discarding legacy Run state; separate Franchise Grade from Job Mastery; define exactly 10 dedicated Franchise Achievements; 2/4/6/8/10 completion grade steps; 10/10 `전설의 편의점`; no generic fail-to-power Stat currency
+- ECONOMY_ORDER: inherit v2.6.1 ordinary Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract; Day-band Rarity progression; Final fixed price = ordinary 50%/매입가 amount with real Wallet deduction and no 100/150/refusal
 - NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot; ordinary Injury keeps existing Stat penalty but recovery now requires Success/Great Success, Retreat does not clear Injury, and injured re-expedition carries extra Severe/Death risk
 - DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract; higher ordinary expedition death-risk baseline plus explicit injured re-expedition risk
 - ITEM: categories, expanded 40-item active catalog, stronger flat native Core-Stat Item baseline, aligned Counter-specialist/premium pricing, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition, plus 10 Epic late-Run-value Items (5 Family hybrid Field Gear + 5 top-end Food/Drink/Potion)
 - RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
-- SALE: exactly 2 slots, sequential Counter Handling, preview boundary, truthful post-commit delta/source boundary, removal of non-decision flavor disclosure, revisit quick surface, same-item refusal price ceiling
+- SALE: exactly 2 slots, sequential ordinary Counter Handling, preview boundary, truthful post-commit delta/source boundary, removal of non-decision flavor disclosure, revisit quick surface, ordinary same-item refusal price ceiling; Final override uses fixed 50%/매입가, no 100/150, no refusal RNG
 - NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write, persistent-Injury continuity across Retreat
-- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, refusal-price disabled state, decision-only SALE detail, truthful post-commit delta display, material/typography pass, exact `현재 지점 포기` label
+- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, ordinary refusal-price disabled state, decision-only SALE detail, truthful post-commit delta display, Final fixed-price preparation UI, material/typography pass, exact `현재 지점 포기` label
 - COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, v2.7 terminology, Event 05 / GLUTTONY / Run-abandon exact copy
-- FINAL_EXPEDITION: D25 persisted Final state, D30 Final SALE preparation, `선택 -> 판매 -> 결과`, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
-- BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; GREED snapshot occurs after Final SALE at Final Lock; inherited Boss-QA overrides
+- FINAL_EXPEDITION: D25 persisted Final state, D30 `선택 -> FINAL 준비 -> 결과`, fixed 50%/매입가 affordability transfer with real stock/Wallet and no refusal RNG, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
+- BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; GREED snapshot timing remains Final Lock after Final preparation; fixed Final transfer Gross-Sales inclusion remains explicitly unresolved
 
 Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
+
+## IMPLEMENTATION-BLOCKING DESIGN UNRESOLVED — CURRENT EXACT LIST
+
+These are not permission for WORK to choose values.
+They must be resolved by User/Director before the affected v2.7 Source adoption step.
+
+### META thresholds
+- Achievement 1 `누적 판매 N회` exact N
+- Achievement 2 `150% 판매 누적 N회 성공` exact N
+- Achievement 3 `재방문 NPC에게 누적 N회 판매 성공` exact N
+- Achievement 9 `한 Run 목표 총매출 + Boss CLEAR` exact Gross Sales threshold
+
+### META migration
+- exact v7 -> v8 treatment of previously-earned old-semantics Franchise Grade / Start Contract availability after Franchise Grade source changes from Total Job Mastery to Franchise Achievement count
+
+### FINAL accounting
+For a committed fixed-price Final transfer, decide whether the fixed 50%/매입가 amount:
+- increases Player Gold
+- increases Gross Sales used by GREED
+
+Approved regardless of that unresolved:
+- fixed Final price = 50% / 매입가
+- 100% / 150% unavailable
+- no refusal RNG
+- Wallet affordability is real
+- committed transfer deducts NPC Wallet and consumes stock
+- GREED snapshot timing remains Final Lock after Final preparation
 
 ## PROMOTED-VISION / HISTORY STATUS
 
