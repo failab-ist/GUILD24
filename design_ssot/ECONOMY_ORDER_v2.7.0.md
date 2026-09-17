@@ -15,7 +15,7 @@ All unchanged Wallet, ordinary Price Mode, Order confirm/start-sale separation, 
 This patch changes:
 - next-day preparation forecast contract
 - Day-band Item Rarity progression for ORDER offers
-- D30 Final preparation price/Wallet handling
+- D30 Final preparation price/Wallet/Gold handling
 
 ## NEXT-DAY FORECAST — EXACT v2.7
 
@@ -153,7 +153,7 @@ Final = 고급 준비물이 자주 보이지만 Legendary는 여전히 예외
 The purpose is not to make Epic mandatory.
 The purpose is to make late-Run high-slot-efficiency preparation actually appear often enough to become a decision.
 
-## D30 FINAL PREPARATION PRICE / WALLET OVERRIDE — EXACT WHERE APPROVED
+## D30 FINAL PREPARATION PRICE / WALLET / GOLD OVERRIDE — EXACT
 
 Ordinary SALE keeps inherited 50% / 100% / 150% price modes and ordinary purchase/refusal behavior.
 D30 Final preparation is an explicit exception owned jointly with `FINAL_EXPEDITION_v2.7.0.md`.
@@ -172,26 +172,25 @@ Rules:
 - if `NPC Wallet < fixed Final transfer price`, that Item cannot be committed to that NPC
 - if affordable and committed, NPC Wallet decreases by exactly the fixed Final transfer price
 - actual inventory stock decreases by one for the committed Item
+- Player Gold increases by exactly the same fixed Final transfer price
+- Gross Sales increases by exactly the same fixed Final transfer price once
 - this is not free equipment
 - ordinary SALE pricing/refusal outside Final is unchanged
 
-The fixed Final amount is a deterministic preparation cost, not a negotiated customer-price decision.
+The fixed Final amount is a deterministic preparation transaction rather than a negotiated customer-price decision.
 
-### FINAL ACCOUNTING — IMPLEMENTATION-BLOCKING UNRESOLVED
+### FINAL ACCOUNTING — EXACT
 
-The User has approved the fixed 50%/매입가 Wallet deduction and no-refusal Final preparation behavior.
-The following accounting consequence has **not** yet been approved and must not be inferred:
+For each committed Final transfer:
 
 ```text
-Does a committed Final transfer also:
-- increase Player Gold?
-- increase Gross Sales used by GREED?
+NPC Wallet -= fixed Final transfer price
+Player Gold += fixed Final transfer price
+Gross Sales += fixed Final transfer price exactly once
 ```
 
-Until approved:
-- do not assume ordinary-sale revenue accounting merely because the 50% amount is reused
-- do not assume zero revenue merely because Final has no later shop spending
-- `FINAL_EXPEDITION_v2.7.0.md` and `BOSS_v2.7.0.md` must preserve this unresolved boundary
+GREED uses the resulting Gross Sales state at Final Lock after Final preparation.
+No separate exclusion or duplicate-count path exists.
 
 ## RELATED
 
