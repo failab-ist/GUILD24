@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged v2.6.1 SALE desktop/mobile hierarchy, Menu/Settings functional composition, Night controls, touch-target requirements, scroll/focus continuity, portrait preload, and Order phase flow inherit `UI_UX_v2.6.1.md`.
 
-This patch adds only v2.7 information-boundary, handling, Final-timeline, Final-preparation, and visual-language changes.
+This patch adds v2.7 information-boundary, handling, Final-timeline, Final-preparation, tutorial fresh-init, and visual-language changes.
 
 The Menu keeps the same Run-abandon action in the same functional location.
 Exact v2.7 label:
@@ -337,7 +337,7 @@ If that existing report framing is reused, it belongs to the D25 disclosure beat
 Boss reveal timing -> `BOSS_v2.7.0.md`.
 Final state -> `FINAL_EXPEDITION_v2.7.0.md`.
 
-## FINAL PREPARATION UI — EXACT WHERE APPROVED
+## FINAL PREPARATION UI — EXACT
 
 After Final participants are selected, reuse the familiar two-slot Item handling surface but remove ordinary end-of-Run haggling/refusal controls.
 
@@ -359,13 +359,15 @@ Required UI behavior:
 - stock remains visible/readable
 - if Wallet is insufficient, the transfer action is disabled/non-committable and the affordability reason is readable
 - after a valid commit, stock and NPC Wallet update immediately before the remaining-slot decision
+- Player Gold increases by the same fixed amount and may update through the existing Gold presentation
+- Gross Sales increases by the same fixed amount exactly once
 - participant remains limited to two slots
 - Player may leave a slot empty
 - no second free-equip screen after this surface
 - Final no-effect Items are blocked/clearly marked according to `FINAL_EXPEDITION_v2.7.0.md`
 - Boss-caused visible Item changes use the actual current Final truth
 
-Do not display Player Gold gained or GREED Gross Sales contribution from the fixed Final transfer as settled truth until the current accounting unresolved is approved in the owner specs.
+No extra GREED-specific counter panel is required solely for this transfer; use the existing Gross Sales truth and current Boss presentation.
 
 ## FINAL MODIFIER PREVIEW — v2.7 DELTA
 
@@ -396,6 +398,22 @@ Supply/Fatigue tutorial teaches:
 
 Do not teach the hidden Supply-deficit formula.
 Do not teach `독이면 X 아이템을 사세요` or equivalent solution scripts.
+
+## TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY — REQUIRED
+
+A true fresh current account must actually see the tutorial entry again.
+
+Follow `CORE_RUN_v2.7.0.md` for the exact fresh-init boundary.
+
+Required:
+- after Full Data Reset, tutorial completion/dismissal state is cleared
+- on the first applicable flow of the newly initialized current account, the tutorial appears / starts according to the existing tutorial sequence
+- stale v1~v7 tutorial flags must not suppress the tutorial after fresh v8 initialization
+- deleting/rejecting legacy internal-test state and creating fresh v8 must produce the same tutorial-eligible state as a clean first install
+- ordinary Run Abandon / new Run under the same current account does not need to replay the tutorial if the tutorial was already completed
+
+Implementation must first audit whether the existing tutorial sequence still functions end-to-end.
+If the tutorial already exists, reuse it and fix its trigger/persistence/reset path rather than creating a replacement tutorial system.
 
 ## VISUAL MATERIAL — ANTI-GENERIC UI PASS
 
@@ -518,10 +536,10 @@ Avoid:
 ## RELATED
 
 Sale interaction -> `SALE_v2.7.0.md`
-Economy/Order/Final Wallet -> `ECONOMY_ORDER_v2.7.0.md`
+Economy/Order/Final Wallet/Gold -> `ECONOMY_ORDER_v2.7.0.md`
 Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
 Night result -> `NIGHT_CLOSING_v2.7.0.md`
-Final timeline -> `CORE_RUN_v2.7.0.md`
+Final timeline / fresh init -> `CORE_RUN_v2.7.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
 Boss modifier truth -> `BOSS_v2.7.0.md`
 Copy -> `COPY_WORLD_VOICE_v2.7.0.md`
