@@ -17,52 +17,40 @@ Franchise Grade no longer derives from Total Job Mastery.
 
 This patch aligns Meta with v2.7 Save generation, separates Franchise Grade from Job Mastery, defines the dedicated Franchise Achievement track, and explicitly rejects adding a generic fail-to-power Meta currency merely to lower first-clear difficulty.
 
-## SAVE v8 ACCOUNT CONTRACT
+## PRE-RELEASE COMPATIBILITY POLICY — EXACT
 
-v2.7 current save generation is v8.
-Run-state compatibility is owned by `CORE_RUN_v2.7.0.md`.
-
-Exact:
-- v1~v7 **Run state** cannot continue as a v2.7 Run
-- old save bytes are not silently deleted merely because v8 cannot continue that Run
-- Full Data Reset remains the explicit user action that clears game-owned Account/Meta data
-- v2.7 does not silently reinterpret an old Account/Meta field when its design meaning changed
-
-### V7 -> V8 ACCOUNT PRESERVATION — EXACT WHERE SEMANTICS ARE UNCHANGED
-
-When no valid current v8 save exists and a valid current v7 save is available:
+All current v2.x builds are internal development / test builds.
+The current external-public-release target is:
 
 ```text
-validated v7 Account/Meta state with unchanged v2.7 meaning
--> carry forward into v8 Account/Meta
-
-v7 Run state
--> do not migrate
--> start a fresh v8 Run
+v3.0.0
 ```
 
-Preserve validated Account/Meta progression whose meaning remains unchanged, including current:
-- Job × Boss clear matrix / derived Job Mastery
-- distinct Boss clear progression
-- Monster Knowledge
-- approved unlock state whose semantic requirement is unchanged
-- other currently validated Account/Meta flags required by unchanged systems
+Therefore v2.7 does **not** spend implementation complexity preserving compatibility with older internal test Account/Meta saves whose schema or semantic meaning changed.
 
-Do **not** blindly preserve the old Franchise Grade value as the new v2.7 Franchise Grade, because its source changes from Total Job Mastery to dedicated Franchise Achievement completion count.
-The exact v7 -> v8 treatment for already-earned Franchise Grade / Start Contract availability is listed under `IMPLEMENTATION-BLOCKING UNRESOLVED` below and must be approved before v2.7 Source adoption.
+For v2.7 Save v8:
+
+```text
+v1~v7 Run state
+-> no migration
+
+v1~v7 Account/Meta state
+-> no migration into v8
+
+v8
+-> initialize fresh current Account/Meta + fresh current Run
+```
 
 Rules:
-- this is Account/Meta preservation only, not v7 Run continuation
-- retired v7 Run inventory/NPC/Bag/Final state is not copied into v8
-- do not partially coerce malformed v7 Account/Meta fields into valid progression
-- if the v7 Account/Meta payload does not pass its current validation, do not claim that progression was migrated
-- legacy v7 bytes are not silently deleted by the import
-- once a valid v8 save exists, normal loading uses v8 and does not repeatedly re-import v7
-- no automatic v1~v6 Account/Meta import is added by this v2.7 rule
+- do not preserve old Franchise Grade / Start Contract availability by compatibility shim
+- do not preserve old Job Mastery / Boss matrix / Monster Knowledge merely for internal-test continuity
+- do not add conversion logic for retired or changed-semantics Meta fields
+- legacy bytes may remain physically present until the existing reset/storage policy removes them, but they are not imported into current v8 progression
+- once v8 exists, current-version Save behavior follows current v8 owners
+- Full Data Reset still clears current game-owned Account/Meta data
 
-Ordinary same-version behavior remains:
-- Run Abandon preserves Account/Meta
-- Full Data Reset clears Account/Meta
+Purpose:
+keep the internal development line simple before the v3.0.0 external-release compatibility boundary is established.
 
 ## JOB MASTERY — CLEAR PROGRESSION REMAINS SEPARATE
 
@@ -198,30 +186,29 @@ If first-clear full-run evidence later shows the game is too hard, report a bala
 
 ## IMPLEMENTATION-BLOCKING UNRESOLVED
 
-The Franchise Achievement numeric thresholds are **not unresolved**; they are current `DIRECTOR DOCUMENT BASELINE` values and are intentionally QA-tunable through the approved balance-finding process above.
+```text
+NONE
+```
 
-The remaining Meta implementation-blocking unresolved is:
-
-1. v7 -> v8 handling of previously-earned old-semantics Franchise Grade / Start Contract availability after Franchise Grade source changes to Achievement count
-
-Until resolved, WORK must not guess that migration semantic.
+The numeric Franchise baselines remain QA-tunable only through the approved `BALANCE FINDING -> User/Director approval -> owner update -> separate fix cycle` process.
+They are not implementation-blocking unresolved items.
 
 ## v2.7 SAVE RELATIONSHIP
 
 `CORE_RUN_v2.7.0.md` owns:
 - v8 Run schema
-- old Run continuation boundary
+- legacy Save rejection / fresh v8 initialization
 - start stock
 - D25 persisted Final state
+- fresh-account tutorial reset boundary
 
 META owns:
-- Account/Meta truth
+- current v8 Account/Meta truth
 - Job Mastery / Job×Boss matrix
 - Franchise Achievement completion state
 - Franchise Grade derivation from achievement completion count
-- v7 -> v8 Account/Meta preservation policy
 
-Do not duplicate retired Item-ID migration or Final-state repair logic here.
+No v1~v7 Account/Meta migration path is required for this internal-development version.
 
 ## RELATED
 
