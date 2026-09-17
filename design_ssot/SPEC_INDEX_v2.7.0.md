@@ -9,7 +9,7 @@ FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE_WITH_OPEN_APPROVALS
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-17
 SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED_WITH_EXPLICIT_UNRESOLVED
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=FRANCHISE_ACHIEVEMENT_THRESHOLDS;FRANCHISE_GRADE_V7_TO_V8_MIGRATION;FINAL_TRANSFER_REVENUE_GREED_ACCOUNTING
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=FRANCHISE_GRADE_V7_TO_V8_MIGRATION;FINAL_TRANSFER_REVENUE_GREED_ACCOUNTING
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
 BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
 SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
@@ -148,7 +148,7 @@ UI/UX/FINAL-PREPARATION QA -> `UI_UX_QA_v2.7.0.md`
 Changed owners only:
 
 - CORE_RUN: Save v8, fresh Run boundary, start stock, D0~D30 Final timeline, controlled D25 repair boundary, D30 `출전 NPC 선택 -> FINAL 준비 -> 결과` progression; Final preparation uses fixed 50%/매입가 cost, Wallet/stock commitment, no refusal RNG
-- META: preserve unchanged-semantics validated v7 Account/Meta into v8 while discarding legacy Run state; separate Franchise Grade from Job Mastery; define exactly 10 dedicated Franchise Achievements; 2/4/6/8/10 completion grade steps; 10/10 `전설의 편의점`; no generic fail-to-power Stat currency
+- META: preserve unchanged-semantics validated v7 Account/Meta into v8 while discarding legacy Run state; separate Franchise Grade from Job Mastery; define exactly 10 dedicated Franchise Achievements; 2/4/6/8/10 completion grade steps; 10/10 `전설의 편의점`; numeric achievement thresholds are current `DIRECTOR DOCUMENT BASELINE` values pending full-run QA
 - ECONOMY_ORDER: inherit v2.6.1 ordinary Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract; Day-band Rarity progression; Final fixed price = ordinary 50%/매입가 amount with real Wallet deduction and no 100/150/refusal
 - NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot; ordinary Injury keeps existing Stat penalty but recovery now requires Success/Great Success, Retreat does not clear Injury, and injured re-expedition carries extra Severe/Death risk
 - DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract; higher ordinary expedition death-risk baseline plus explicit injured re-expedition risk
@@ -169,11 +169,10 @@ Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
 These are not permission for WORK to choose values.
 They must be resolved by User/Director before the affected v2.7 Source adoption step.
 
-### META thresholds
-- Achievement 1 `누적 판매 N회` exact N
-- Achievement 2 `150% 판매 누적 N회 성공` exact N
-- Achievement 3 `재방문 NPC에게 누적 N회 판매 성공` exact N
-- Achievement 9 `한 Run 목표 총매출 + Boss CLEAR` exact Gross Sales threshold
+### META numeric baselines — RESOLVED / QA-TUNABLE
+The Franchise Achievement numeric thresholds are current `DIRECTOR DOCUMENT BASELINE` values owned only by `META_v2.7.0.md`.
+They are not implementation-blocking unresolved items.
+They must be adopted as written for the initial v2.7 implementation, then may be changed only after frozen/full-run QA reports a `BALANCE FINDING` and User/Director approves a META owner update.
 
 ### META migration
 - exact v7 -> v8 treatment of previously-earned old-semantics Franchise Grade / Start Contract availability after Franchise Grade source changes from Total Job Mastery to Franchise Achievement count
