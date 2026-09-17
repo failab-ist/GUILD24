@@ -1,7 +1,7 @@
 # ECONOMY_ORDER_QA
 
 DOC=ECONOMY_ORDER_QA
-OWNER=qa,economy,order,reroll,wallet,gate_count_forecast,tier_forecast,rarity_progression
+OWNER=qa,economy,order,reroll,wallet,gate_count_forecast,tier_forecast,rarity_progression,final_price
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
@@ -124,9 +124,28 @@ BALANCE PASS direction:
 
 Do not auto-tune weights during frozen QA; report a balance finding if measured play contradicts the intended progression.
 
+## ORD-Q90 — FINAL FIXED 50% / WALLET OVERRIDE
+
+Controlled D30 Final preparation with a selected participant and known Item price.
+
+PASS:
+- Final transfer price equals the ordinary 50% price-mode amount / 매입가 기준 amount
+- 100% and 150% price modes are not available
+- no purchase/refusal probability roll occurs
+- if Wallet is below the fixed amount, transfer cannot commit
+- if Wallet is sufficient and transfer commits, NPC Wallet decreases by exactly the fixed amount
+- committed transfer consumes one real inventory stock
+- ordinary SALE outside Final still uses its normal 50/100/150 and refusal rules
+
+UNRESOLVED / DO NOT TEST AS PASS YET:
+- whether committed Final transfer increases Player Gold
+- whether committed Final transfer increases Gross Sales used by GREED
+
 ## RELATED
 
 Generation owner -> `DUNGEON_HAZARD_v2.7.0.md`
-Rarity progression owner -> `ECONOMY_ORDER_v2.7.0.md`
+Rarity progression / Final price owner -> `ECONOMY_ORDER_v2.7.0.md`
 Item catalog -> `ITEM_v2.7.0.md`
+Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
+Boss/GREED -> `BOSS_v2.7.0.md`
 Presentation QA -> `UI_UX_QA_v2.7.0.md`
