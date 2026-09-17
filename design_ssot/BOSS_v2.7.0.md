@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Boss pool/identity, seeded one-Boss-per-Run generation, save stability, D5 Identity reveal, D15 exact Trait reveal, ENVY targeting, LUST regular protection, meta-clear signal, and all unchanged Boss rules inherit `BOSS_v2.5.0.md`.
 
-This patch changes Final-information timing and the PRIDE/GREED/GLUTTONY/SLOTH v2.7 balance rules, preserves the already-approved player-facing `탐식` terminology, and aligns GREED snapshot timing with the current fixed-price Final preparation flow.
+This patch changes Final-information timing and the PRIDE/GREED/GLUTTONY/SLOTH v2.7 balance rules, preserves the already-approved player-facing `탐식` terminology, and aligns GREED snapshot timing/accounting with the current fixed-price Final preparation flow.
 
 Inherited base QA applies only where it does not conflict with this patch.
 In particular:
@@ -121,20 +121,23 @@ Do not snapshot before the selected Final participants have finished their prepa
 
 The current Final owner fixes those preparation transfers to 50% / 매입가, removes 100/150 price choice, and removes refusal RNG.
 
-### FINAL TRANSFER GROSS-SALES INCLUSION — IMPLEMENTATION-BLOCKING UNRESOLVED
+### FINAL TRANSFER GROSS-SALES INCLUSION — EXACT
 
-The User has not yet approved whether a committed fixed-price Final transfer contributes to:
-- Player Gold
-- Gross Sales used by GREED
+Each committed fixed-price Final transfer is real economy revenue for GREED accounting.
+
+For every committed Final transfer:
+
+```text
+Gross Sales += fixed Final transfer price exactly once
+```
 
 Therefore:
-- keep the GREED snapshot timing at Final Lock
-- do not assume Final transfers are included in Gross Sales
-- do not assume Final transfers are excluded from Gross Sales
-- do not double-count Final transfers under any later resolution
-- frozen QA must not choose an interpretation merely to obtain PASS
+- Final transfers are included in GREED's Gross Sales metric
+- the committed GREED snapshot at Final Lock includes all successful Final preparation transfers completed before that lock
+- do not exclude them merely because there is no ordinary Final SALE phase
+- do not count them a second time during Final resolution
 
-Exact Wallet/fixed-price preparation truth -> `ECONOMY_ORDER_v2.7.0.md` / `FINAL_EXPEDITION_v2.7.0.md`.
+Exact Wallet/Gold/fixed-price preparation truth -> `ECONOMY_ORDER_v2.7.0.md` / `FINAL_EXPEDITION_v2.7.0.md`.
 
 ## GLUTTONY — v2.7 EFFECT SCOPE
 
@@ -266,16 +269,15 @@ PASS:
 - other three Core Stats remain unchanged by PRIDE
 - preview and Final resolution use the same applied value
 
-### BOSS-Q72 — GREED CAP / SNAPSHOT TIMING
+### BOSS-Q72 — GREED CAP / SNAPSHOT / FINAL TRANSFER ACCOUNTING
 PASS:
 - existing revenue metric/target path is reused
 - applied shortfall strengthening caps at +12 Boss Power
 - target met returns to 200 baseline
 - maximum shortfall cannot exceed 212 through GREED alone
+- every committed Final transfer contributes its exact fixed 50% / 매입가 amount to Gross Sales exactly once
 - committed Gross Sales snapshot occurs at Final Lock after Final preparation completes
-
-UNRESOLVED / DO NOT FREEZE AS PASS YET:
-- whether fixed Final transfers contribute to Gross Sales
+- no committed Final transfer is excluded or double-counted
 
 ### BOSS-Q73 — GLUTTONY SCOPE
 PASS:
@@ -321,6 +323,6 @@ Final state/formula/Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
 Relic/Seal window -> `RELIC_v2.7.0.md`
 Meta -> `META_v2.7.0.md`
 Item/GLUTTONY contribution -> `ITEM_v2.7.0.md`
-Economy/Wallet -> `ECONOMY_ORDER_v2.7.0.md`
+Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.7.0.md`
 UI reveal -> `UI_UX_v2.7.0.md`
 Copy/terminology -> `COPY_WORLD_VOICE_v2.7.0.md`
