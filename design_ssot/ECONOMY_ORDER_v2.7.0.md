@@ -1,7 +1,7 @@
 # ECONOMY_ORDER
 
 DOC=ECONOMY_ORDER
-OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression
+OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -10,11 +10,12 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 ## INHERITANCE
 
-All unchanged Wallet, Price Mode, Order confirm/start-sale separation, Reroll, Gold, offer, quantity, warehouse, same-day arrival, operating-cost, and other economy/order rules inherit `ECONOMY_ORDER_v2.6.1.md`.
+All unchanged Wallet, ordinary Price Mode, Order confirm/start-sale separation, Reroll, Gold, offer, quantity, warehouse, same-day arrival, operating-cost, and other economy/order rules inherit `ECONOMY_ORDER_v2.6.1.md`.
 
 This patch changes:
 - next-day preparation forecast contract
 - Day-band Item Rarity progression for ORDER offers
+- D30 Final preparation price/Wallet handling
 
 ## NEXT-DAY FORECAST — EXACT v2.7
 
@@ -152,9 +153,52 @@ Final = 고급 준비물이 자주 보이지만 Legendary는 여전히 예외
 The purpose is not to make Epic mandatory.
 The purpose is to make late-Run high-slot-efficiency preparation actually appear often enough to become a decision.
 
+## D30 FINAL PREPARATION PRICE / WALLET OVERRIDE — EXACT WHERE APPROVED
+
+Ordinary SALE keeps inherited 50% / 100% / 150% price modes and ordinary purchase/refusal behavior.
+D30 Final preparation is an explicit exception owned jointly with `FINAL_EXPEDITION_v2.7.0.md`.
+
+For every Item transfer to a selected Final participant:
+
+```text
+Final transfer price = ordinary 50% price mode amount
+                     = the Item's 매입가 기준 amount
+```
+
+Rules:
+- 100% and 150% price modes are not available during Final preparation
+- no purchase/refusal probability roll is performed during Final preparation
+- NPC Wallet affordability remains real
+- if `NPC Wallet < fixed Final transfer price`, that Item cannot be committed to that NPC
+- if affordable and committed, NPC Wallet decreases by exactly the fixed Final transfer price
+- actual inventory stock decreases by one for the committed Item
+- this is not free equipment
+- ordinary SALE pricing/refusal outside Final is unchanged
+
+The fixed Final amount is a deterministic preparation cost, not a negotiated customer-price decision.
+
+### FINAL ACCOUNTING — IMPLEMENTATION-BLOCKING UNRESOLVED
+
+The User has approved the fixed 50%/매입가 Wallet deduction and no-refusal Final preparation behavior.
+The following accounting consequence has **not** yet been approved and must not be inferred:
+
+```text
+Does a committed Final transfer also:
+- increase Player Gold?
+- increase Gross Sales used by GREED?
+```
+
+Until approved:
+- do not assume ordinary-sale revenue accounting merely because the 50% amount is reused
+- do not assume zero revenue merely because Final has no later shop spending
+- `FINAL_EXPEDITION_v2.7.0.md` and `BOSS_v2.7.0.md` must preserve this unresolved boundary
+
 ## RELATED
 
 Gate-count / Tier generation -> `DUNGEON_HAZARD_v2.7.0.md`
 Morning / Order presentation -> `UI_UX_v2.7.0.md`
 Item catalog / Rarity identities -> `ITEM_v2.7.0.md`
+Ordinary Sale -> `SALE_v2.7.0.md`
+Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
+Boss/GREED accounting -> `BOSS_v2.7.0.md`
 Economy/Order QA -> `ECONOMY_ORDER_QA_v2.7.0.md`
