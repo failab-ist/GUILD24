@@ -115,16 +115,44 @@ Do not add duplicate lower/upper versions of the same task merely to inflate Fra
 
 | # | Franchise Achievement | Represents |
 |---:|---|---|
-| 1 | 누적 판매 N회 | 기본 영업 |
-| 2 | 150% 판매 누적 N회 성공 | 가격 판단 |
-| 3 | 재방문 NPC에게 누적 N회 판매 성공 | 단골 / 장기 관계 |
+| 1 | 누적 판매 **100회** | 기본 영업 |
+| 2 | 150% 판매 누적 **20회 성공** | 가격 판단 |
+| 3 | 재방문 NPC에게 누적 **30회 판매 성공** | 단골 / 장기 관계 |
 | 4 | 유물 누적 30개 구매 | 점포 성장 |
 | 5 | 5개 Dungeon Family 모두에서 보급 생환 달성 | 던전 대응 경험 |
 | 6 | 한 Run에서 만료 폐기 0개로 Final 도달 | 발주 / 재고 관리 |
 | 7 | 한 Run에서 사망자 0명으로 Final 도달 | 원정 운영 |
 | 8 | Final 출전 NPC 전원에게 실제 보급을 완료한 뒤 Boss CLEAR | Final 준비 |
-| 9 | 한 Run에서 목표 총매출 달성 + Boss CLEAR | 종합 경영 |
+| 9 | 한 Run에서 **Gross Sales 10,000G 이상** 달성 + Boss CLEAR | 종합 경영 |
 | 10 | 6 Job × 7 Boss = Job×Boss Matrix 42 / 42 CLEAR | 완전 정복 |
+
+### FRANCHISE ACHIEVEMENT NUMERIC BASELINES
+
+`DIRECTOR DOCUMENT BASELINE`
+
+The exact starting values for first v2.7 adoption are:
+
+```text
+Achievement 1 = cumulative successful sales 100
+Achievement 2 = cumulative successful 150% sales 20
+Achievement 3 = cumulative successful sales to returning NPCs 30
+Achievement 9 = one-Run Gross Sales 10,000G + Boss CLEAR
+```
+
+These values are intentionally **baseline tuning values**, not permanent untouchable canon.
+They must be implemented as written for the first v2.7 adoption / frozen QA pass.
+
+Full-run QA may report a `BALANCE FINDING` when evidence shows that a baseline is materially too trivial, too grindy, or clusters too many Franchise completions into the same narrow play window.
+After that finding:
+
+```text
+QA evidence
+-> Director/User review
+-> approved META owner update
+-> separate implementation/fix cycle
+```
+
+QA / WORK may not silently auto-tune these numbers merely to make the track feel better or to turn a FAIL into PASS.
 
 Interpretation boundaries:
 - cumulative achievements may span Runs because they represent account-level play history
@@ -170,15 +198,13 @@ If first-clear full-run evidence later shows the game is too hard, report a bala
 
 ## IMPLEMENTATION-BLOCKING UNRESOLVED
 
-The following values/semantics are intentionally **not invented** and require User approval before v2.7 Source adoption of this Meta change:
+The Franchise Achievement numeric thresholds are **not unresolved**; they are current `DIRECTOR DOCUMENT BASELINE` values and are intentionally QA-tunable through the approved balance-finding process above.
 
-1. Achievement 1 `누적 판매 N회` exact N
-2. Achievement 2 `150% 판매 누적 N회 성공` exact N
-3. Achievement 3 `재방문 NPC에게 누적 N회 판매 성공` exact N
-4. Achievement 9 `한 Run 목표 총매출` exact Gold threshold
-5. v7 -> v8 handling of previously-earned old-semantics Franchise Grade / Start Contract availability after Franchise Grade source changes to Achievement count
+The remaining Meta implementation-blocking unresolved is:
 
-Until resolved, WORK must not guess these values or migration semantics.
+1. v7 -> v8 handling of previously-earned old-semantics Franchise Grade / Start Contract availability after Franchise Grade source changes to Achievement count
+
+Until resolved, WORK must not guess that migration semantic.
 
 ## v2.7 SAVE RELATIONSHIP
 
