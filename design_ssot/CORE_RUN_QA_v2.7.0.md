@@ -23,6 +23,8 @@ The following inherited `CORE_RUN_QA_v2.5.0.md` expectations are stale and are e
   - superseded by `SALE_v2.7.0.md`: every ordinary SALE Bag has exactly 2 slots
 - `RUN-Q32` D30-first Final Family disclosure expectation
   - superseded by v2.7 D25 prereveal; D30 reuses the already-persisted state
+- any inherited/current pre-amendment Final QA that expects D30 50/100/150 price choice or refusal RNG
+  - superseded by current fixed 50% / 매입가 Final preparation
 
 All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
 
@@ -46,7 +48,8 @@ SETUP:
 EXPECT:
 - v7 Run state does not continue as v2.7
 - a fresh v8 Run is created
-- validated v7 Account/Meta progression is carried forward according to `META_v2.7.0.md`
+- unchanged-semantics validated v7 Account/Meta progression is carried forward according to `META_v2.7.0.md`
+- fields whose Meta meaning changed are not blindly copied as if semantics were unchanged
 - legacy v7 bytes are not silently deleted by the import
 - retired Run inventory/NPC/Bag/Final state is not copied
 - no Bandage-to-Herb-Tea conversion occurs
@@ -56,7 +59,10 @@ Also verify:
 - malformed v7 Account/Meta is not partially coerced into progression
 - v1~v6 Account/Meta is not automatically imported by this v2.7 rule
 
-PASS: account progression is preserved where valid, while legacy Run continuation remains impossible.
+PASS: account progression is preserved where current Meta explicitly approves it, while legacy Run continuation remains impossible.
+
+NOTE:
+old-semantics Franchise Grade / Start Contract migration remains implementation-blocking unresolved in `META_v2.7.0.md`; QA must not invent that migration rule.
 
 ## RUN-Q72 — START STOCK
 
@@ -131,7 +137,7 @@ PASS:
 - ordinary valid D25+ v8 Player Saves already contain the state
 - this repair path does not authorize v1~v7 Player Run continuation
 
-## RUN-Q78 — D30 SELECT -> FINAL SALE -> RESULT
+## RUN-Q78 — D30 SELECT -> FINAL PREP -> RESULT
 
 Controlled D30 with at least one eligible Final participant.
 
@@ -141,15 +147,26 @@ PASS exact progression:
 D30 known Final state
 -> D30 Relic/SLOTH decision when applicable
 -> Final participant selection
--> Final SALE preparation
+-> Final preparation
 -> Final Lock
 -> one Final result
 ```
 
 PASS:
-- Final SALE reuses the ordinary SALE handling layer rather than adding a separate combat-game phase
-- participant selection is committed before Final SALE starts
-- after committed Final SALE transactions begin, Save/Load cannot reopen participant selection or erase committed/refused sale state for fishing
-- no post-sale free-equip step exists
-- one Final Lock occurs after all selected participants finish Final SALE
+- Final preparation reuses the familiar two-slot Item handling layer rather than adding a separate combat-game phase
+- participant selection is committed before Final preparation starts
+- fixed Final price is the ordinary 50% / 매입가 amount
+- 100% / 150% price choices are not available
+- no purchase/refusal RNG occurs
+- NPC Wallet affordability remains real
+- valid commit consumes stock and reduces NPC Wallet by the exact fixed amount
+- after committed Final transfers begin, Save/Load cannot reopen participant selection or erase committed transfer state for fishing
+- no post-preparation free-equip step exists
+- one Final Lock occurs after all selected participants finish Final preparation
 - exactly one Final result resolves from that locked state
+
+DO NOT PASS/FAIL YET on:
+- Player Gold gain from Final transfer
+- Gross Sales / GREED inclusion of Final transfer
+
+Those accounting semantics remain explicitly unresolved in current owner specs.
