@@ -170,3 +170,35 @@ DO NOT PASS/FAIL YET on:
 - Gross Sales / GREED inclusion of Final transfer
 
 Those accounting semantics remain explicitly unresolved in current owner specs.
+
+## RUN-Q79 — FRANCHISE ACHIEVEMENT BASELINE PACING
+
+Use the current `DIRECTOR DOCUMENT BASELINE` thresholds from `META_v2.7.0.md` exactly for the first v2.7 full-run QA pass.
+
+Record at minimum:
+- Run index / Day when Achievement 1, 2, 3, 4, 5, 6, 7, 8, 9 first complete
+- how many Franchise Achievements are complete at first Boss CLEAR
+- how many are complete after representative early, mid, and mature account progression
+- whether multiple achievements cluster unintentionally from one narrow repeated behavior
+- whether any numeric baseline requires artificial farming rather than normal play
+
+Current numeric baselines under measurement:
+
+```text
+A1 = cumulative successful sales 100
+A2 = cumulative successful 150% sales 20
+A3 = cumulative successful returning-NPC sales 30
+A9 = one-Run Gross Sales 10,000G + Boss CLEAR
+```
+
+This is a **balance measurement**, not permission for frozen QA or WORK to rewrite thresholds in-place.
+If evidence shows a baseline is materially too trivial, too grindy, or produces unhealthy completion clustering:
+
+```text
+report BALANCE FINDING
+-> Director/User approves revised threshold
+-> update META owner Spec
+-> separate implementation/fix cycle
+```
+
+PASS/FAIL must not be manufactured by changing Source/Test/Harness during this QA pass.
