@@ -347,12 +347,52 @@ PASS:
 - Wallet / affordability / inventory state remain readable
 - unaffordable transfer is visibly non-committable with readable reason
 - committed transfer updates stock and NPC Wallet before the remaining-slot decision
+- Player Gold increases by the same fixed amount
+- Gross Sales increases by the same fixed amount exactly once
 - Final no-effect Items are blocked/clearly marked according to `FINAL_EXPEDITION_v2.7.0.md`
 - Boss-caused visible Item changes use the current Final truth
 - there is no separate attack/QTE/combat-control layer
 - there is no second free-equip screen after Final preparation
 - after all participant preparation interactions finish, the UI advances to the one Final result
 
-UNRESOLVED / DO NOT DISPLAY AS SETTLED TRUTH:
-- Player Gold gained by Final transfer
-- Gross Sales / GREED contribution of Final transfer
+## UI-Q105 — TUTORIAL CURRENT IMPLEMENTATION AUDIT
+
+Before treating tutorial work as complete, inspect the real current tutorial source and run the existing sequence end-to-end.
+
+PASS only if:
+- an actual tutorial sequence is still reachable in current Source
+- its first trigger is not dead/unreachable
+- each step can advance through its intended interaction
+- completion state persists after normal completion
+- no runtime exception or phase blocker interrupts the tutorial
+
+If Source contains tutorial data/UI but no reachable trigger, this is an implementation bug, not permission to delete the tutorial.
+
+## UI-Q106 — FRESH RESET MUST RE-SHOW TUTORIAL
+
+Test all current fresh-init paths owned by `CORE_RUN_v2.7.0.md`.
+
+Case A — Full Data Reset:
+1. complete or dismiss tutorial so its completion flag is set
+2. perform Full Data Reset
+3. start the newly initialized current account
+
+PASS:
+- old tutorial completion/dismissal state is gone
+- tutorial is eligible and actually appears/starts on the first applicable flow
+
+Case B — legacy-only internal state:
+1. leave only a v1~v7 internal-test state
+2. enter current v2.7/v8 build
+3. allow current policy to reject migration and create fresh v8
+
+PASS:
+- stale legacy tutorial state cannot suppress current tutorial
+- current fresh v8 behaves like a clean first install for tutorial eligibility
+
+Case C — ordinary Run Abandon/new Run under the same account:
+PASS:
+- tutorial completion remains preserved
+- tutorial is not forcibly replayed merely because a Run restarted
+
+FAIL if a true fresh account can enter ordinary gameplay without the tutorial because of a stale completion/reset flag.
