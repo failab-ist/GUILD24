@@ -1,7 +1,7 @@
 # UI_UX_QA
 
 DOC=UI_UX_QA
-OWNER=qa,ui,ux,mobile,sale_handling,tutorial,typography,visual_material
+OWNER=qa,ui,ux,mobile,sale_handling,tutorial,typography,visual_material,final_preparation_ui
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
@@ -24,6 +24,8 @@ The following inherited `UI_UX_QA_v2.5.0.md` / `UI_UX_QA_v2.6.1.md` expectations
   - identity follows `BOSS_v2.7.0.md`: `탐식의 마왕 글러트니`
 - older v2.5 Copy candidates using `현재 런 포기` wording are superseded
   - v2.7 exact top-level label remains `현재 지점 포기`
+- any inherited/current pre-amendment Final UI expectation that keeps 50/100/150 price choice or purchase/refusal RNG on D30
+  - current Final preparation shows only the fixed 50% / 매입가 amount and no refusal flow
 
 All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
 
@@ -119,7 +121,7 @@ PASS:
 
 ## UI-Q88 — SEQUENTIAL TRANSACTION
 
-Within one customer:
+Within one ordinary customer:
 - first slot transaction resolves purchase/refusal
 - state updates
 - remaining slot remains a new decision
@@ -219,7 +221,8 @@ Verify at minimum:
 PASS:
 - no ORDER/SALE/Settings wrap overflow
 - price/%/Stat digits readable
-- 50/100/150 quickly distinguishable
+- ordinary SALE 50/100/150 quickly distinguishable
+- Final preparation shows only its single fixed 50% / 매입가 price presentation and does not leak ordinary 100/150 controls
 - no missing Korean/player-facing glyph
 
 ## UI-Q99 — ANTI-GENERIC MATERIAL PASS
@@ -232,7 +235,7 @@ PASS direction:
 
 ## UI-Q100 — SALE REFUSAL PRICE CEILING
 
-Controlled same customer + same SKU visit.
+Controlled same ordinary customer + same SKU visit.
 
 Case A:
 - refuse at 50%
@@ -258,6 +261,7 @@ PASS:
 Isolation PASS:
 - unrelated SKU price controls remain unaffected
 - new customer visit does not inherit the previous visit lock unless another owner explicitly defines it
+- Final preparation does not show this refusal-price ceiling UI because Final has no refusal roll and no 100/150 modes
 
 ## UI-Q101 — MORNING NEXT-DAY GATE FORECAST
 
@@ -320,7 +324,7 @@ All cases:
 - a generic `보급 후 변화` block is allowed only if those source classes are immediately distinguishable
 - otherwise the synthetic block is removed and current-state values update in place with source treatment
 
-## UI-Q104 — FINAL SELECT -> SALE -> RESULT
+## UI-Q104 — FINAL SELECT -> FIXED-PRICE PREP -> RESULT
 
 Controlled D30 Final with eligible participants.
 
@@ -328,17 +332,27 @@ PASS order:
 
 ```text
 출전 NPC 선택
--> FINAL 판매
+-> FINAL 준비
 -> 결과
 ```
 
 PASS:
-- participant selection is confirmed before Final SALE begins
-- selected participants are handled one at a time using the familiar SALE interaction
+- participant selection is confirmed before Final preparation begins
+- selected participants are handled one at a time using the familiar two-slot Item interaction
 - each participant has exactly two visible Item slots
-- price / Wallet / affordability / refusal / inventory state remain readable
+- selected Item shows exactly one fixed Final price: ordinary 50% / 매입가 amount
+- 100% / 150% controls are absent
+- purchase/refusal chance and refusal-result UI are absent
+- same-SKU refusal-price lock UI is absent
+- Wallet / affordability / inventory state remain readable
+- unaffordable transfer is visibly non-committable with readable reason
+- committed transfer updates stock and NPC Wallet before the remaining-slot decision
 - Final no-effect Items are blocked/clearly marked according to `FINAL_EXPEDITION_v2.7.0.md`
 - Boss-caused visible Item changes use the current Final truth
 - there is no separate attack/QTE/combat-control layer
-- there is no second free-equip screen after Final SALE
-- after all participant sale interactions finish, the UI advances to the one Final result
+- there is no second free-equip screen after Final preparation
+- after all participant preparation interactions finish, the UI advances to the one Final result
+
+UNRESOLVED / DO NOT DISPLAY AS SETTLED TRUTH:
+- Player Gold gained by Final transfer
+- Gross Sales / GREED contribution of Final transfer
