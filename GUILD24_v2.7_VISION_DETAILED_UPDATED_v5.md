@@ -6,9 +6,10 @@
 > Current Design SSOT entry: `design_ssot/SPEC_INDEX_v2.7.0.md`  
 > Base Vision: `GUILD24_v2.7_VISION_DETAILED_UPDATED_v4.md`  
 > Source status: **v2.7 NOT YET ADOPTED**  
-> Source gate: **v2.6.1 Adoption Recovery close first**
+> Source gate: **v2.6.1 Adoption Recovery close first**  
+> Current external public release target: **v3.0.0**
 >
-> This v5 document inherits all unchanged Vision intent from v4 and records only the newest User-approved direction discussed after v4.
+> This v5 document inherits all unchanged Vision intent from v4 and records the newest User-approved direction discussed after v4.
 > Exact Rule / Numeric / UX / QA truth still belongs to the current routed Owner Specs and QA under `SPEC_INDEX_v2.7.0.md`.
 
 ---
@@ -33,6 +34,15 @@ This Vision is not a second detailed Design SSOT.
 Owner Specs remain the routed implementation truth after they are synchronized with approved decisions.
 
 No v2.7 Source change is authorized before the existing v2.6.1 Adoption Recovery gate closes.
+
+Current release context:
+
+```text
+v2.x = internal development / test line
+v3.0.0 = current target for first external public release
+```
+
+Therefore current v2.7 prefers clean current-state implementation over compatibility shims for older internal test saves.
 
 ---
 
@@ -89,31 +99,19 @@ The ten approved achievement directions are:
 
 | # | Franchise Achievement | Represents |
 |---:|---|---|
-| 1 | 누적 판매 N회 | 기본 영업 |
-| 2 | 150% 판매 누적 N회 성공 | 가격 판단 |
-| 3 | 재방문 NPC에게 누적 N회 판매 성공 | 단골 / 장기 관계 |
+| 1 | 누적 판매 100회 | 기본 영업 |
+| 2 | 150% 판매 누적 20회 성공 | 가격 판단 |
+| 3 | 재방문 NPC에게 누적 30회 판매 성공 | 단골 / 장기 관계 |
 | 4 | 유물 누적 30개 구매 | 점포 성장 |
 | 5 | 5개 Dungeon Family 모두에서 보급 생환 달성 | 던전 대응 경험 |
 | 6 | 한 Run에서 만료 폐기 0개로 Final 도달 | 발주 / 재고 관리 |
 | 7 | 한 Run에서 사망자 0명으로 Final 도달 | 원정 운영 |
 | 8 | Final 출전 NPC 전원에게 실제 보급을 완료한 뒤 Boss CLEAR | Final 준비 |
-| 9 | 한 Run에서 목표 총매출 달성 + Boss CLEAR | 종합 경영 |
+| 9 | 한 Run에서 Gross Sales 10,000G 이상 달성 + Boss CLEAR | 종합 경영 |
 | 10 | 6 Job × 7 Boss = Job×Boss Matrix 42 / 42 CLEAR | 완전 정복 |
 
-Achievement 1 / 2 / 3 / 9 now use current `DIRECTOR DOCUMENT BASELINE` thresholds owned only by `META_v2.7.0.md`.
-They are no longer design-unresolved.
-
-Those numeric thresholds are intentionally first-adoption tuning values:
-
-```text
-initial implementation uses the META baseline exactly
--> full-run QA measures pacing / grind / completion clustering
--> BALANCE FINDING if evidence contradicts intent
--> Director/User approves any threshold revision
--> owner Spec update + separate fix cycle
-```
-
-Frozen QA / WORK must not auto-tune them in-place merely to improve the result.
+Achievement 1 / 2 / 3 / 9 values are current `DIRECTOR DOCUMENT BASELINE` thresholds owned only by `META_v2.7.0.md`.
+They are implementation starting values and may be changed only after frozen/full-run QA produces a `BALANCE FINDING`, followed by User/Director approval and an owner-Spec tuning cycle.
 
 Achievement 10 is intentionally the hardest long-term condition.
 Because all 10 achievements are required for 10/10, `전설의 편의점` necessarily includes complete 42/42 Job×Boss conquest.
@@ -145,7 +143,30 @@ Not every Franchise Achievement needs to be cumulative.
 
 ---
 
-# 4. FINAL PREPARATION — KEEP THE TWO-SLOT CHOICE, REMOVE MEANINGLESS FINAL HAGGLING
+# 4. PRE-RELEASE SAVE / COMPATIBILITY DIRECTION
+
+Current v2.x versions are internal testing builds.
+The public release target is v3.0.0.
+
+Therefore v2.7 does not preserve old v1~v7 internal-test Run or Account/Meta progression through migration shims.
+
+Current direction:
+
+```text
+legacy v1~v7 internal save
+-> do not migrate Run
+-> do not migrate Account/Meta
+-> create fresh current v8 state
+```
+
+Purpose:
+- avoid carrying stale semantic assumptions into the new Franchise / Item / Final / Save design
+- keep pre-release implementation smaller and easier to validate
+- reserve external compatibility commitments for the v3.0.0 release boundary rather than internal test builds
+
+---
+
+# 5. FINAL PREPARATION — KEEP CURRENT STRUCTURE, REMOVE MEANINGLESS FINAL HAGGLING
 
 Final remains the culmination of the existing shop-preparation loop rather than becoming a separate combat game.
 
@@ -153,20 +174,22 @@ Player-facing order remains conceptually:
 
 ```text
 출전 NPC 선택
-→ Final 준비 / Item 지급
+→ current Final preparation / Item assignment
 → Final Lock
 → Boss 결과
 ```
 
+Do not add a separate ordinary-customer `FINAL SALE` phase.
+Reuse the current Final preparation / participant-assignment structure.
+
 The selected Final participants still use the familiar two Bag slots and real inventory.
 
-However, ordinary SALE price negotiation is not meaningful at the end of the Run.
-The newest approved Final preparation direction is therefore:
+Final preparation cost rule:
 
 ```text
 Final Item price = 50% price mode / 매입가 기준 고정
-100% / 150% price choice is not used in Final preparation
-no purchase-refusal roll in Final preparation
+100% / 150% price choice is not used
+no purchase-refusal roll
 ```
 
 For a selected Item:
@@ -176,9 +199,11 @@ if NPC Wallet can cover the fixed 50% Final price:
   Item can be handed to that NPC
   stock is consumed
   NPC Wallet is reduced by that fixed amount
+  Player Gold increases by that fixed amount
+  Gross Sales increases by that fixed amount exactly once
 
 if NPC Wallet cannot cover it:
-  that Item cannot be given through the Final preparation transaction
+  that Item cannot be committed
 ```
 
 Intent:
@@ -188,15 +213,49 @@ Intent:
 - keep the two-slot preparation decision meaningful
 - remove the strange fiction of a Boss-bound NPC refusing a needed Item because of purchase RNG
 - remove a price-choice layer whose economic consequence has little remaining Run value after Final
+- preserve ordinary transaction accounting without recreating a separate normal SALE phase
+
+GREED uses the resulting Gross Sales total at Final Lock after Final preparation.
+Final transfers are included exactly once.
 
 This is still not free equipment.
 The player must have the stock and the NPC must have enough Wallet for the fixed Final cost.
 
-The exact accounting relationship between this fixed Final transfer and Player Gold / GREED gross-sales snapshot remains owned by the routed Final/Boss/Economy specs; this Vision does not invent that still-unresolved accounting semantic.
+---
+
+# 6. TUTORIAL MUST SURVIVE REAL FRESH-START TESTING
+
+Current internal testing has observed a practical problem: resetting/fresh-initializing does not reliably make the tutorial appear.
+
+v2.7 must treat that as an implementation/QA item rather than assuming the tutorial works because tutorial content exists in Source.
+
+Required direction:
+
+```text
+true fresh current account
+-> tutorial completion/dismissal state cleared
+-> tutorial eligible
+-> tutorial actually starts on first applicable flow
+```
+
+Fresh includes:
+- Full Data Reset followed by current-state initialization
+- clean first-install-equivalent state
+- legacy v1~v7 internal save rejected and replaced by fresh v8
+
+Ordinary Run Abandon / new Run under the same current account does not need to replay a tutorial already completed.
+
+Before implementation is considered complete, Current Source must be audited to prove:
+- tutorial trigger still exists and is reachable
+- tutorial sequence can progress end-to-end
+- tutorial completion persists normally
+- Full Data Reset / fresh v8 clears the suppression state needed to make a genuine fresh account see it again
+
+If the current tutorial exists but its trigger/reset persistence is broken, reuse and repair it rather than adding a second tutorial framework.
 
 ---
 
-# 5. RELATION TO THE v4 FINAL VISION
+# 7. RELATION TO THE v4 FINAL VISION
 
 The v4 statement that ordinary Final SALE keeps normal price selection and refusal behavior is superseded by this v5 amendment.
 
@@ -212,11 +271,11 @@ What remains unchanged from v4:
 
 The new principle is:
 
-> **Final reuses the inventory / Wallet / two-slot preparation structure, but not ordinary end-of-Run haggling or refusal RNG.**
+> **Final reuses the current inventory / Wallet / two-slot preparation structure, but not an extra ordinary-customer Final SALE phase, end-of-Run haggling, or refusal RNG.**
 
 ---
 
-# 6. META / FINAL VALIDATION INTENT
+# 8. META / FINAL / TUTORIAL VALIDATION INTENT
 
 The next full-run validation should additionally prove:
 
@@ -226,22 +285,30 @@ The next full-run validation should additionally prove:
 4. The current Franchise numeric baselines do not feel materially trivial or grindy; if they do, QA reports a balance finding rather than silently retuning them.
 5. `전설의 편의점` reads as a genuine long-term completion badge because 42/42 is unavoidable.
 6. Final preparation still contains meaningful scarcity through Wallet + stock + two slots even without refusal RNG.
-7. Fixed 50% Final pricing removes pointless haggling without turning Final preparation into free equipping.
+7. Every committed Final transfer updates NPC Wallet, Player Gold, Gross Sales, and GREED accounting exactly once.
+8. A true fresh/reset current account actually sees the tutorial.
+9. The existing tutorial can run end-to-end without runtime/phase failure.
 
 ---
 
-# 7. IMPLEMENTATION / DOCUMENT BOUNDARY
+# 9. IMPLEMENTATION / DOCUMENT BOUNDARY
 
-The approved Franchise Achievement direction and numeric baselines are synchronized into `META_v2.7.0.md`.
-The QA pacing/tuning contract is synchronized into current QA / Index rules.
+Current Owner Specs / QA own the approved details:
 
-The remaining v2.7 implementation-blocking design questions are tracked by `SPEC_INDEX_v2.7.0.md` and must not be guessed by WORK.
+- Franchise Grade / Job Mastery / achievements / pre-release Meta compatibility -> `META_v2.7.0.md`
+- Save/fresh-init/tutorial reset boundary -> `CORE_RUN_v2.7.0.md`
+- Final fixed-price preparation / Wallet / stock / Gold / Gross Sales -> `FINAL_EXPEDITION_v2.7.0.md` / `ECONOMY_ORDER_v2.7.0.md`
+- GREED snapshot/accounting consequence -> `BOSS_v2.7.0.md`
+- tutorial and Final presentation -> `UI_UX_v2.7.0.md`
+- validation -> current routed QA
+
+There are no current implementation-blocking Design Unresolved items.
 
 Do not modify Source for these v2.7 decisions until the v2.6.1 Adoption Recovery close gate is explicitly cleared.
 
 ---
 
-# 8. CURRENT DIRECTOR INTENT ADDENDUM
+# 10. CURRENT DIRECTOR INTENT ADDENDUM
 
 Cross-run progression should now read as two complementary tracks:
 
@@ -262,8 +329,9 @@ The Final should read as:
 choose who goes
 → choose what scarce stock each NPC receives
 → pay the fixed Final preparation cost from that NPC's Wallet
+→ receive the same amount into Player Gold / Gross Sales
 → lock the prepared party
 → resolve the Boss once
 ```
 
-The game should reward broader experience without adding a generic grind currency, and the final Boss preparation should preserve the core item-allocation decision without pretending that ordinary retail haggling still matters after Day 30.
+The game should reward broader experience without adding a generic grind currency, the final Boss preparation should preserve the core item-allocation decision without pretending ordinary retail haggling still matters after Day 30, and true fresh/reset testing must never silently skip the tutorial.
