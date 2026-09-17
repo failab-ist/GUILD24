@@ -1,7 +1,7 @@
 # BOSS
 
 DOC=BOSS
-OWNER=boss,boss_identity,boss_trait,boss_reveal,sloth_seal,boss_meta_clear
+OWNER=boss,boss_identity,boss_trait,boss_reveal,sloth_seal,boss_meta_clear,greed_snapshot
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Boss pool/identity, seeded one-Boss-per-Run generation, save stability, D5 Identity reveal, D15 exact Trait reveal, ENVY targeting, LUST regular protection, meta-clear signal, and all unchanged Boss rules inherit `BOSS_v2.5.0.md`.
 
-This patch changes Final-information timing and the PRIDE/GREED/GLUTTONY/SLOTH v2.7 balance rules, and preserves the already-approved player-facing `탐식` terminology.
+This patch changes Final-information timing and the PRIDE/GREED/GLUTTONY/SLOTH v2.7 balance rules, preserves the already-approved player-facing `탐식` terminology, and aligns GREED snapshot timing with the current fixed-price Final preparation flow.
 
 Inherited base QA applies only where it does not conflict with this patch.
 In particular:
@@ -108,20 +108,33 @@ Thus with WRATH base 200:
 
 Displayed strengthening must still derive from the actual applied Greed bonus.
 
-### GREED snapshot timing under v2.7 Final SALE
+### GREED snapshot timing under current Final preparation
 
 D30 Final now resolves through:
 
 ```text
-출전 NPC 선택 -> FINAL 판매 -> Final Lock -> 결과
+출전 NPC 선택 -> FINAL 준비 -> Final Lock -> 결과
 ```
 
-The existing Gross-Sales metric remains authoritative.
-Successful Final SALE transactions are ordinary real sales and therefore contribute to the same gross-sales total exactly once.
+The committed GREED gross-sales snapshot is taken at **Final Lock after Final preparation has completed**.
+Do not snapshot before the selected Final participants have finished their preparation interactions.
 
-The committed GREED gross-sales snapshot is taken at **Final Lock after Final SALE has completed**.
-Do not snapshot before the selected Final participants have finished their sale interactions.
-Do not exclude or double-count D30 Final sales.
+The current Final owner fixes those preparation transfers to 50% / 매입가, removes 100/150 price choice, and removes refusal RNG.
+
+### FINAL TRANSFER GROSS-SALES INCLUSION — IMPLEMENTATION-BLOCKING UNRESOLVED
+
+The User has not yet approved whether a committed fixed-price Final transfer contributes to:
+- Player Gold
+- Gross Sales used by GREED
+
+Therefore:
+- keep the GREED snapshot timing at Final Lock
+- do not assume Final transfers are included in Gross Sales
+- do not assume Final transfers are excluded from Gross Sales
+- do not double-count Final transfers under any later resolution
+- frozen QA must not choose an interpretation merely to obtain PASS
+
+Exact Wallet/fixed-price preparation truth -> `ECONOMY_ORDER_v2.7.0.md` / `FINAL_EXPEDITION_v2.7.0.md`.
 
 ## GLUTTONY — v2.7 EFFECT SCOPE
 
@@ -224,6 +237,17 @@ GLUTTONY's Item-stat reduction occurs after Item-side positive Stat amplificatio
 
 Final formula -> `FINAL_EXPEDITION_v2.7.0.md`.
 
+## META CLEAR SIGNAL
+
+Boss CLEAR continues to emit the existing authoritative clear signal used by Meta.
+
+`META_v2.7.0.md` may use this same signal for:
+- Job×Boss matrix progression / Job Mastery
+- distinct Boss clear progression
+- Franchise Achievement conditions that explicitly require Boss CLEAR
+
+No second Boss-clear definition is created for the achievement system.
+
 ## v2.7 ACCEPTANCE OVERRIDES
 
 The inherited Boss acceptance suite remains valid except where replaced here.
@@ -242,14 +266,16 @@ PASS:
 - other three Core Stats remain unchanged by PRIDE
 - preview and Final resolution use the same applied value
 
-### BOSS-Q72 — GREED CAP
+### BOSS-Q72 — GREED CAP / SNAPSHOT TIMING
 PASS:
 - existing revenue metric/target path is reused
 - applied shortfall strengthening caps at +12 Boss Power
 - target met returns to 200 baseline
 - maximum shortfall cannot exceed 212 through GREED alone
-- D30 Final sales are included exactly once in the gross-sales snapshot
-- snapshot occurs at Final Lock after Final SALE completes
+- committed Gross Sales snapshot occurs at Final Lock after Final preparation completes
+
+UNRESOLVED / DO NOT FREEZE AS PASS YET:
+- whether fixed Final transfers contribute to Gross Sales
 
 ### BOSS-Q73 — GLUTTONY SCOPE
 PASS:
@@ -291,9 +317,10 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 
 ## RELATED
 
-Final state/formula/Final SALE -> `FINAL_EXPEDITION_v2.7.0.md`
+Final state/formula/Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
 Relic/Seal window -> `RELIC_v2.7.0.md`
 Meta -> `META_v2.7.0.md`
 Item/GLUTTONY contribution -> `ITEM_v2.7.0.md`
+Economy/Wallet -> `ECONOMY_ORDER_v2.7.0.md`
 UI reveal -> `UI_UX_v2.7.0.md`
 Copy/terminology -> `COPY_WORLD_VOICE_v2.7.0.md`
