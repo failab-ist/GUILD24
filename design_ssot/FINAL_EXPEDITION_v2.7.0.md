@@ -98,12 +98,14 @@ For each selected participant:
 -> commit transfer
 -> stock is consumed
 -> NPC Wallet is reduced by the fixed amount
+-> Player Gold increases by the fixed amount
+-> Gross Sales increases by the fixed amount exactly once
 -> current Final preparation state updates
 -> judge remaining slot
 ```
 
 Exact ordinary SALE handling -> `SALE_v2.7.0.md`.
-Exact fixed-price Wallet truth -> `ECONOMY_ORDER_v2.7.0.md`.
+Exact fixed-price Wallet/Gold truth -> `ECONOMY_ORDER_v2.7.0.md`.
 
 Final-specific override:
 - exactly 2 Item slots per participant
@@ -115,6 +117,8 @@ Final-specific override:
 - same-SKU refusal price ceiling does not apply because Final has no refusal roll
 - if NPC Wallet is below the fixed amount, that Item cannot be committed to that NPC
 - if committed, NPC Wallet decreases by exactly that fixed amount
+- if committed, Player Gold increases by exactly that fixed amount
+- if committed, Gross Sales increases by exactly that fixed amount once
 - sequential transaction state remains; do not convert the two slots into a bundle/cart checkout
 
 Final preparation is not free equipment.
@@ -123,22 +127,19 @@ The Player may finish a participant with an empty slot / no additional transfer.
 No normal future-customer queue is introduced inside Final preparation.
 Only the already selected Final participants are processed.
 
-### FINAL ACCOUNTING — IMPLEMENTATION-BLOCKING UNRESOLVED
+### FINAL ACCOUNTING — EXACT
 
-The approved Final rule fixes the NPC-side cost/affordability behavior, but the following accounting consequence is not yet approved:
+A committed fixed-price Final transfer is a real paid transaction for economy accounting even though it does not use the ordinary customer haggling/refusal flow.
 
 ```text
-Does a committed Final transfer also:
-- increase Player Gold?
-- increase Gross Sales used by GREED?
+NPC Wallet -= fixed Final transfer price
+Player Gold += fixed Final transfer price
+Gross Sales += fixed Final transfer price exactly once
 ```
 
-Do not infer either direction.
-Until User approval:
-- Wallet deduction and stock consumption are authoritative
-- Player Gold change is unresolved
-- Gross Sales contribution is unresolved
-- GREED snapshot timing remains Final Lock, but whether these Final transfers are included in that metric is unresolved under `BOSS_v2.7.0.md`
+GREED uses the resulting Gross Sales total at Final Lock after all selected Final participants finish preparation.
+Do not exclude these transfers from GREED.
+Do not double-count them in Final resolution.
 
 ### 3. Final-specific Item boundary
 
@@ -331,18 +332,16 @@ PASS:
 - no second free-equip screen exists
 - after all selected participants finish, one Final Lock and one result occur
 
-### FINAL-Q76 — FINAL ACCOUNTING BOUNDARY
+### FINAL-Q76 — FINAL ACCOUNTING EXACT
 
-Current approved PASS:
-- inventory stock is actually consumed
-- NPC Wallet is actually reduced by the fixed 50% / 매입가 amount
-- GREED snapshot timing remains Final Lock after Final preparation
-
-UNRESOLVED / DO NOT TEST AS PASS YET:
-- whether committed Final transfers grant Player Gold
-- whether committed Final transfers increase Gross Sales / GREED metric
-
-Frozen QA must not choose either accounting interpretation to make implementation pass.
+For each committed Final transfer, PASS only if:
+- inventory stock decreases by 1
+- NPC Wallet decreases by the fixed 50% / 매입가 amount
+- Player Gold increases by the same amount
+- Gross Sales increases by the same amount exactly once
+- GREED committed Gross Sales snapshot occurs at Final Lock after all Final preparation transfers
+- no Final transfer is excluded from GREED Gross Sales
+- no Final transfer is counted twice
 
 ## v2.7 BALANCE QA
 
@@ -367,5 +366,5 @@ Item/Insurance -> `ITEM_v2.7.0.md`
 Boss -> `BOSS_v2.7.0.md`
 Relic D30 window -> `RELIC_v2.7.0.md`
 Sale handling -> `SALE_v2.7.0.md`
-Economy/Wallet -> `ECONOMY_ORDER_v2.7.0.md`
+Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.7.0.md`
 UI -> `UI_UX_v2.7.0.md`
