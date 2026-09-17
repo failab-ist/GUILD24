@@ -1,7 +1,7 @@
 # UI_UX
 
 DOC=UI_UX
-OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material
+OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged v2.6.1 SALE desktop/mobile hierarchy, Menu/Settings functional composition, Night controls, touch-target requirements, scroll/focus continuity, portrait preload, and Order phase flow inherit `UI_UX_v2.6.1.md`.
 
-This patch adds only v2.7 information-boundary, handling, Final-timeline, and visual-language changes.
+This patch adds only v2.7 information-boundary, handling, Final-timeline, Final-preparation, and visual-language changes.
 
 The Menu keeps the same Run-abandon action in the same functional location.
 Exact v2.7 label:
@@ -240,7 +240,7 @@ If that distinction is not immediately readable, remove the synthetic block and 
 
 Follow `SALE_v2.7.0.md`.
 
-For the same customer + same SKU + current visit:
+For the same ordinary customer + same SKU + current visit:
 - after 50% refusal, 100% and 150% controls are disabled
 - after 100% refusal, 150% is disabled
 - after 150% refusal, lower-price controls may remain usable
@@ -250,8 +250,9 @@ Requirements:
 - Player can read why the option is blocked; exact short copy may be implementation/localization-owned unless separately frozen
 - do not disable unrelated SKUs
 - do not carry the same-SKU visit lock into a later visit unless another owner explicitly defines persistence
+- this refusal-price UI does not appear in Final preparation because Final has no refusal roll and no 100/150 price modes
 
-The UI must not invite a higher-price reroll after a lower-price refusal.
+The ordinary SALE UI must not invite a higher-price reroll after a lower-price refusal.
 
 ## SUPPLY / FATIGUE PREVIEW
 
@@ -335,6 +336,36 @@ If that existing report framing is reused, it belongs to the D25 disclosure beat
 
 Boss reveal timing -> `BOSS_v2.7.0.md`.
 Final state -> `FINAL_EXPEDITION_v2.7.0.md`.
+
+## FINAL PREPARATION UI — EXACT WHERE APPROVED
+
+After Final participants are selected, reuse the familiar two-slot Item handling surface but remove ordinary end-of-Run haggling/refusal controls.
+
+For each selected participant:
+
+```text
+2 Bag slots
+Item selection
+fixed price = 50% / 매입가
+Wallet affordability
+commit transfer
+```
+
+Required UI behavior:
+- show exactly one deterministic Final transfer price for the selected Item: the ordinary 50% / 매입가 amount
+- do not show 100% / 150% price controls in Final preparation
+- do not show purchase chance, refusal chance, refusal result, or same-SKU refusal-price lock UI
+- Wallet remains visible/readable
+- stock remains visible/readable
+- if Wallet is insufficient, the transfer action is disabled/non-committable and the affordability reason is readable
+- after a valid commit, stock and NPC Wallet update immediately before the remaining-slot decision
+- participant remains limited to two slots
+- Player may leave a slot empty
+- no second free-equip screen after this surface
+- Final no-effect Items are blocked/clearly marked according to `FINAL_EXPEDITION_v2.7.0.md`
+- Boss-caused visible Item changes use the actual current Final truth
+
+Do not display Player Gold gained or GREED Gross Sales contribution from the fixed Final transfer as settled truth until the current accounting unresolved is approved in the owner specs.
 
 ## FINAL MODIFIER PREVIEW — v2.7 DELTA
 
@@ -469,7 +500,8 @@ Must verify:
 - desktop 1024 and 1280+
 - no ORDER/SALE/Settings wrap overflow
 - price/%/Stat number legibility
-- 50/100/150 immediate scanability
+- ordinary SALE 50/100/150 immediate scanability
+- Final fixed-price presentation does not show ordinary 100/150 controls
 - no runtime network font request
 - no player-facing glyph loss
 - required font license notice retained
@@ -486,9 +518,10 @@ Avoid:
 ## RELATED
 
 Sale interaction -> `SALE_v2.7.0.md`
-Economy/Order forecast -> `ECONOMY_ORDER_v2.7.0.md`
+Economy/Order/Final Wallet -> `ECONOMY_ORDER_v2.7.0.md`
 Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
 Night result -> `NIGHT_CLOSING_v2.7.0.md`
 Final timeline -> `CORE_RUN_v2.7.0.md`
+Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
 Boss modifier truth -> `BOSS_v2.7.0.md`
 Copy -> `COPY_WORLD_VOICE_v2.7.0.md`
