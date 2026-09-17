@@ -124,7 +124,7 @@ BALANCE PASS direction:
 
 Do not auto-tune weights during frozen QA; report a balance finding if measured play contradicts the intended progression.
 
-## ORD-Q90 — FINAL FIXED 50% / WALLET OVERRIDE
+## ORD-Q90 — FINAL FIXED 50% / WALLET / GOLD ACCOUNTING
 
 Controlled D30 Final preparation with a selected participant and known Item price.
 
@@ -135,11 +135,10 @@ PASS:
 - if Wallet is below the fixed amount, transfer cannot commit
 - if Wallet is sufficient and transfer commits, NPC Wallet decreases by exactly the fixed amount
 - committed transfer consumes one real inventory stock
+- Player Gold increases by exactly the fixed amount
+- Gross Sales increases by exactly the fixed amount exactly once
+- GREED's Final-Lock snapshot reads that updated Gross Sales
 - ordinary SALE outside Final still uses its normal 50/100/150 and refusal rules
-
-UNRESOLVED / DO NOT TEST AS PASS YET:
-- whether committed Final transfer increases Player Gold
-- whether committed Final transfer increases Gross Sales used by GREED
 
 ## RELATED
 
