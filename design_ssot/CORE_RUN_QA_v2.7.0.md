@@ -1,7 +1,7 @@
 # CORE_RUN_QA
 
 DOC=CORE_RUN_QA
-OWNER=qa,run,phase,save,abandon,runtime_progression,final_timeline
+OWNER=qa,run,phase,save,abandon,runtime_progression,final_timeline,fresh_init,tutorial_reset
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
@@ -25,6 +25,8 @@ The following inherited `CORE_RUN_QA_v2.5.0.md` expectations are stale and are e
   - superseded by v2.7 D25 prereveal; D30 reuses the already-persisted state
 - any inherited/current pre-amendment Final QA that expects D30 50/100/150 price choice or refusal RNG
   - superseded by current fixed 50% / 매입가 Final preparation
+- any inherited v7->v8 Account/Meta preservation expectation
+  - superseded by current pre-release no-compatibility policy: v1~v7 internal-test Account/Meta and Run state are not migrated into v8
 
 All other inherited QA remains only where it does not conflict with a current v2.7 owner or QA rule.
 
@@ -39,30 +41,22 @@ EXPECT:
 
 PASS only if all are 8.
 
-## RUN-Q71 — V7 ACCOUNT PRESERVATION / RUN RESET
+## RUN-Q71 — LEGACY INTERNAL SAVE REJECTION / FRESH V8
 
 SETUP:
 - no valid current v8 save
-- valid current v7 save with known Account/Meta progression and an active legacy Run
+- valid current v7 internal-test save with known Account/Meta progression and active Run
 
 EXPECT:
-- v7 Run state does not continue as v2.7
-- a fresh v8 Run is created
-- unchanged-semantics validated v7 Account/Meta progression is carried forward according to `META_v2.7.0.md`
-- fields whose Meta meaning changed are not blindly copied as if semantics were unchanged
-- legacy v7 bytes are not silently deleted by the import
-- retired Run inventory/NPC/Bag/Final state is not copied
-- no Bandage-to-Herb-Tea conversion occurs
+- v7 Run state does not continue
+- v7 Account/Meta progression is not imported into v8
+- a fresh current v8 Account/Meta is created
+- a fresh current v8 Run is created
+- no old Franchise Grade / Start Contract / Job Mastery / Boss matrix / Monster Knowledge conversion shim runs
+- legacy bytes need not be destructively deleted merely to reject migration
 
-Also verify:
-- once a valid v8 save exists, later loads do not repeatedly re-import v7
-- malformed v7 Account/Meta is not partially coerced into progression
-- v1~v6 Account/Meta is not automatically imported by this v2.7 rule
-
-PASS: account progression is preserved where current Meta explicitly approves it, while legacy Run continuation remains impossible.
-
-NOTE:
-old-semantics Franchise Grade / Start Contract migration remains implementation-blocking unresolved in `META_v2.7.0.md`; QA must not invent that migration rule.
+PASS:
+current v8 starts clean without compatibility logic for older internal-test progression.
 
 ## RUN-Q72 — START STOCK
 
@@ -160,16 +154,12 @@ PASS:
 - no purchase/refusal RNG occurs
 - NPC Wallet affordability remains real
 - valid commit consumes stock and reduces NPC Wallet by the exact fixed amount
+- valid commit increases Player Gold by the exact fixed amount
+- valid commit increases Gross Sales by the exact fixed amount exactly once
 - after committed Final transfers begin, Save/Load cannot reopen participant selection or erase committed transfer state for fishing
 - no post-preparation free-equip step exists
 - one Final Lock occurs after all selected participants finish Final preparation
 - exactly one Final result resolves from that locked state
-
-DO NOT PASS/FAIL YET on:
-- Player Gold gain from Final transfer
-- Gross Sales / GREED inclusion of Final transfer
-
-Those accounting semantics remain explicitly unresolved in current owner specs.
 
 ## RUN-Q79 — FRANCHISE ACHIEVEMENT BASELINE PACING
 
@@ -202,3 +192,34 @@ report BALANCE FINDING
 ```
 
 PASS/FAIL must not be manufactured by changing Source/Test/Harness during this QA pass.
+
+## RUN-Q80 — FULL DATA RESET / FRESH TUTORIAL ELIGIBILITY
+
+SETUP A:
+- current account has completed or dismissed tutorial
+- perform Full Data Reset
+- allow game to initialize a new current v8 state
+
+PASS:
+- old tutorial-complete / dismissed state is gone
+- the new current account is tutorial-eligible
+- tutorial actually begins on the first applicable flow
+
+SETUP B:
+- only legacy v1~v7 internal-test save remains
+- launch current v2.7/v8 build
+
+PASS:
+- legacy state is not migrated
+- fresh v8 is created
+- stale legacy tutorial flags cannot suppress the current tutorial
+
+SETUP C:
+- tutorial is completed on a current v8 account
+- ordinary Run Abandon / new Run occurs without Full Data Reset
+
+PASS:
+- tutorial completion persists
+- tutorial is not forcibly replayed just because the Run restarted
+
+Any true fresh state that enters ordinary gameplay with tutorial suppressed by stale persistence is FAIL.
