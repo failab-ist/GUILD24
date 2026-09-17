@@ -165,7 +165,8 @@ Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
 
 ## PROMOTED-VISION / HISTORY STATUS
 
-`GUILD24_v2.7_VISION_DETAILED_UPDATED_v4.md`, `DECISIONS_v2.5.0.md`, and discussion/audit reports are planning/history/context references only after SSOT promotion.
+`GUILD24_v2.7_VISION_DETAILED_UPDATED_v5.md` is the current v2.7 Director Vision context and explicitly inherits unchanged Vision intent from `GUILD24_v2.7_VISION_DETAILED_UPDATED_v4.md`.
+Both Vision documents, `DECISIONS_v2.5.0.md`, and discussion/audit reports are planning/history/context references only after SSOT promotion.
 They are not parallel Design SSOT and must not override the owner files routed above.
 
 v2.8+ deferred concepts are not part of this SSOT and must not be implemented during v2.7 adoption unless the User explicitly promotes them.
