@@ -100,12 +100,20 @@ The ten approved achievement directions are:
 | 9 | 한 Run에서 목표 총매출 달성 + Boss CLEAR | 종합 경영 |
 | 10 | 6 Job × 7 Boss = Job×Boss Matrix 42 / 42 CLEAR | 완전 정복 |
 
-The exact numeric thresholds still not approved here are intentionally not invented:
+Achievement 1 / 2 / 3 / 9 now use current `DIRECTOR DOCUMENT BASELINE` thresholds owned only by `META_v2.7.0.md`.
+They are no longer design-unresolved.
 
-- Achievement 1 cumulative sale count `N`
-- Achievement 2 cumulative 150% successful-sale count `N`
-- Achievement 3 cumulative returning-NPC successful-sale count `N`
-- Achievement 9 one-Run target gross-sales value
+Those numeric thresholds are intentionally first-adoption tuning values:
+
+```text
+initial implementation uses the META baseline exactly
+-> full-run QA measures pacing / grind / completion clustering
+-> BALANCE FINDING if evidence contradicts intent
+-> Director/User approves any threshold revision
+-> owner Spec update + separate fix cycle
+```
+
+Frozen QA / WORK must not auto-tune them in-place merely to improve the result.
 
 Achievement 10 is intentionally the hardest long-term condition.
 Because all 10 achievements are required for 10/10, `전설의 편의점` necessarily includes complete 42/42 Job×Boss conquest.
@@ -184,7 +192,7 @@ Intent:
 This is still not free equipment.
 The player must have the stock and the NPC must have enough Wallet for the fixed Final cost.
 
-The exact accounting relationship between this fixed Final transfer and Player Gold / GREED gross-sales snapshot must be synchronized in the routed Final/Boss/Economy owner Specs; this Vision amendment does not invent an additional accounting rule beyond the confirmed Wallet deduction / fixed-cost preparation direction.
+The exact accounting relationship between this fixed Final transfer and Player Gold / GREED gross-sales snapshot remains owned by the routed Final/Boss/Economy specs; this Vision does not invent that still-unresolved accounting semantic.
 
 ---
 
@@ -215,23 +223,19 @@ The next full-run validation should additionally prove:
 1. Franchise Grade can progress before full Boss mastery without becoming intentional-failure farming.
 2. The 10 achievements feel like distinct recognitions of core play, not achievement chores.
 3. One exceptional Run does not automatically complete most of the Franchise track.
-4. `전설의 편의점` reads as a genuine long-term completion badge because 42/42 is unavoidable.
-5. Final preparation still contains meaningful scarcity through Wallet + stock + two slots even without refusal RNG.
-6. Fixed 50% Final pricing removes pointless haggling without turning Final preparation into free equipping.
+4. The current Franchise numeric baselines do not feel materially trivial or grindy; if they do, QA reports a balance finding rather than silently retuning them.
+5. `전설의 편의점` reads as a genuine long-term completion badge because 42/42 is unavoidable.
+6. Final preparation still contains meaningful scarcity through Wallet + stock + two slots even without refusal RNG.
+7. Fixed 50% Final pricing removes pointless haggling without turning Final preparation into free equipping.
 
 ---
 
 # 7. IMPLEMENTATION / DOCUMENT BOUNDARY
 
-This v5 update is a Vision/context amendment only.
+The approved Franchise Achievement direction and numeric baselines are synchronized into `META_v2.7.0.md`.
+The QA pacing/tuning contract is synchronized into current QA / Index rules.
 
-Before v2.7 implementation adoption, the approved direction must be synchronized into the appropriate current Owner Specs / QA:
-
-- Franchise Grade / Job Mastery / achievements -> `META_v2.7.0.md` and relevant QA
-- Final fixed-price preparation / Wallet behavior -> `FINAL_EXPEDITION_v2.7.0.md`
-- Final transaction semantics where shared -> `SALE_v2.7.0.md` / `ECONOMY_ORDER_v2.7.0.md` as needed
-- GREED snapshot/accounting consequence -> `BOSS_v2.7.0.md` if the owner rule changes
-- player-facing Final presentation -> `UI_UX_v2.7.0.md` if needed
+The remaining v2.7 implementation-blocking design questions are tracked by `SPEC_INDEX_v2.7.0.md` and must not be guessed by WORK.
 
 Do not modify Source for these v2.7 decisions until the v2.6.1 Adoption Recovery close gate is explicitly cleared.
 
