@@ -39,12 +39,13 @@ Rules:
 - v1~v7 **Run state** cannot continue as a v2.7 Run.
 - Do not migrate v1~v7 Run state into v8.
 - When valid v7 Account/Meta progression exists, preserve only that validated Account/Meta state under `META_v2.7.0.md`; this is not Run continuation.
+- When an Account/Meta field changes design meaning in v2.7, use the current Meta owner rather than blindly copying its old value.
 - Show clear fresh-Run guidance when only legacy Run data exists.
 - Do not automatically delete legacy bytes merely because their Run cannot continue.
 - Full Data Reset remains the explicit game-owned data deletion action.
 
 Reason:
-v2.7 changes active Item IDs, normal Bag capacity, Level milestone behavior, Final prereveal state, and persistent recent-expedition data. Partial in-place Run continuation is not an approved migration path.
+v2.7 changes active Item IDs, normal Bag capacity, Level milestone behavior, Final prereveal state, persistent recent-expedition data, and Franchise Grade derivation. Partial in-place Run continuation is not an approved migration path.
 
 ## START STOCK — v2.7
 
@@ -73,7 +74,7 @@ D10 : FINAL까지 20일 signal
 D15 : additional Boss information flow owned by BOSS
 D20 : FINAL까지 10일 signal + Recon dispatch beat
 D25 : FINAL까지 5일 signal + exact Final Family Pair / Hazard Pool generated, revealed, persisted
-D30 : reuse the persisted D25 Final state exactly; resolve Final as 출전 NPC 선택 -> FINAL 판매 -> 결과
+D30 : reuse the persisted D25 Final state exactly; resolve Final as 출전 NPC 선택 -> FINAL 준비 -> 결과
 ```
 
 D20 Recon creates no separate combat/minigame/resource system.
@@ -93,18 +94,22 @@ After the already-known D25 Final state and the D30 Relic/SLOTH decision are res
 
 ```text
 Final participant selection
--> Final SALE preparation
+-> Final preparation
 -> Final Lock
 -> one Final result
 ```
 
 Rules:
-- participant selection is confirmed before Final SALE begins
-- Final SALE reuses the ordinary SALE interaction layer; it is not a new top-level day-loop Phase and not a separate combat minigame
+- participant selection is confirmed before Final preparation begins
+- Final preparation reuses the familiar two-slot Item handling layer; it is not a new top-level day-loop Phase and not a separate combat minigame
+- Final preparation uses the current Final-owner fixed 50% / 매입가 amount, real NPC Wallet affordability, real stock consumption, and no refusal RNG
+- 100% / 150% price choices are not used in Final preparation
 - selected participants are processed according to `FINAL_EXPEDITION_v2.7.0.md` / `SALE_v2.7.0.md`
-- after committed Final sales begin, Save/Load must not reopen participant selection or erase committed/refused transactions for fishing
-- after all selected participants finish Final SALE, Final Lock snapshots the authoritative Final state and one result resolves
-- no second free-equip/preparation step exists after Final SALE
+- after committed Final Item transfers begin, Save/Load must not reopen participant selection or erase committed transfer state for fishing
+- after all selected participants finish Final preparation, Final Lock snapshots the authoritative Final state and one result resolves
+- no second free-equip/preparation step exists after Final preparation
+
+Player Gold / GREED Gross Sales accounting for the fixed Final transfers remains unresolved under the current owner specs and must not be guessed by CORE_RUN.
 
 ## D25 STATE SAFETY
 
@@ -136,8 +141,9 @@ Rules:
 NPC growth/level -> `NPC_TRAIT_v2.7.0.md`
 Item/start-stock identity -> `ITEM_v2.7.0.md`
 D25/D30 Final flow -> `FINAL_EXPEDITION_v2.7.0.md`
-Final sale interaction -> `SALE_v2.7.0.md`
-Boss reveal -> `BOSS_v2.7.0.md`
+Final Item handling -> `SALE_v2.7.0.md`
+Final fixed price/Wallet -> `ECONOMY_ORDER_v2.7.0.md`
+Boss reveal/GREED -> `BOSS_v2.7.0.md`
 Account/Meta preservation -> `META_v2.7.0.md`
 Presentation -> `UI_UX_v2.7.0.md`
 Player-facing abandon wording -> `COPY_WORLD_VOICE_v2.7.0.md`
