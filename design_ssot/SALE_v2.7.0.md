@@ -1,7 +1,7 @@
 # SALE
 
 DOC=SALE
-OWNER=sale,customer,price,refusal,purchase_flow,sale_decision_ux,bag_handling,revisit_surface
+OWNER=sale,customer,price,refusal,purchase_flow,sale_decision_ux,bag_handling,revisit_surface,final_sale_override
 DOC_VERSION=2.7.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -10,9 +10,9 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 ## INHERITANCE
 
-All unchanged one-customer-at-a-time flow, 50/100/150 pricing, Wallet/affordability, refusal/no-sale, inventory visibility, purchase atomicity, destination truth, desktop/mobile core layout, and runtime continuity inherit `SALE_v2.6.1.md`.
+All unchanged one-customer-at-a-time flow, ordinary 50/100/150 pricing, Wallet/affordability, refusal/no-sale, inventory visibility, purchase atomicity, destination truth, desktop/mobile core layout, and runtime continuity inherit `SALE_v2.6.1.md`.
 
-This patch replaces the inherited Lv10+ third-slot rule and adds the v2.7 Bag handling / preview / revisit interaction boundary.
+This patch replaces the inherited Lv10+ third-slot rule, adds the v2.7 Bag handling / preview / revisit interaction boundary, and defines the Final-specific override boundary owned by `FINAL_EXPEDITION_v2.7.0.md`.
 
 ## NORMAL CONSUMER BAG — EXACT
 
@@ -36,9 +36,9 @@ Special Final ownership may define its own party/preparation surface but must no
 
 ## COUNTER HANDLING / ACTION LAYER
 
-The SALE decision should feel like handling two items, not submitting a two-item form.
+The ordinary SALE decision should feel like handling two items, not submitting a two-item form.
 
-Canonical sequence per customer:
+Canonical sequence per ordinary customer:
 
 ```text
 choose/focus a Bag slot
@@ -164,7 +164,7 @@ reduce false information weight on the decision screen and keep SALE focused on 
 
 ## SAME-ITEM REFUSAL PRICE CEILING — EXACT
 
-For the same customer + same SKU + same visit, an actual refusal creates a price ceiling for the remainder of that visit.
+For the same ordinary customer + same SKU + same visit, an actual refusal creates a price ceiling for the remainder of that visit.
 
 Rule:
 
@@ -190,7 +190,7 @@ Exact cases:
 ```
 
 Rules:
-- this lock applies only to the same customer + same SKU + current visit
+- this lock applies only to the same customer + same SKU + current ordinary visit
 - it must not lock unrelated SKUs
 - a new customer visit begins from that visit's normal pricing state unless another owner explicitly defines persistence
 - higher-price controls blocked by this rule must be visibly disabled
@@ -200,7 +200,7 @@ Rules:
 Purpose:
 prevent retry/RNG fishing where a lower-price refusal can paradoxically be followed by a higher-price purchase of the same item.
 
-This is a coherence rule for the existing 50/100/150 pricing system, not a new Loyalty or negotiation subsystem.
+This is a coherence rule for the existing ordinary 50/100/150 pricing system, not a new Loyalty or negotiation subsystem.
 
 ## RETURNING NPC — LAST EXPEDITION QUICK SURFACE
 
@@ -231,6 +231,41 @@ v2.7 does not reveal new future-customer information such as:
 Existing currently-authorized queue-count information remains unchanged.
 The uncertainty of who comes next is part of inventory allocation judgment.
 
+## FINAL PREPARATION OVERRIDE — EXACT WHERE APPROVED
+
+Final preparation reuses the familiar two-slot Item handling and real inventory, but it does **not** reuse ordinary end-of-Run haggling/refusal behavior.
+
+For each selected Final participant:
+
+```text
+2 visible Bag slots
+-> choose/focus slot
+-> choose Item
+-> fixed 50% / 매입가 amount is shown
+-> affordability check
+-> commit transfer
+-> stock and NPC Wallet update
+-> judge remaining slot
+```
+
+Rules:
+- no 100% or 150% price selection in Final preparation
+- no purchase/refusal RNG in Final preparation
+- same-SKU refusal price ceiling does not apply because there is no Final refusal roll
+- exactly two Item slots remain
+- actual inventory stock is consumed on committed transfer
+- NPC Wallet must cover the fixed 50%/매입가 amount
+- committed transfer reduces NPC Wallet by that exact amount
+- if unaffordable, the Item cannot be committed to that NPC
+- Player may leave a slot empty
+- sequential slot handling remains; do not create a bundle/cart checkout
+- Save/Load must not erase committed Final transfers or reopen committed participant selection for fishing
+
+Ordinary SALE outside Final remains unchanged.
+
+Player Gold / Gross Sales accounting for the fixed Final transfer is intentionally unresolved and owned jointly by `ECONOMY_ORDER_v2.7.0.md`, `FINAL_EXPEDITION_v2.7.0.md`, and `BOSS_v2.7.0.md` until User approval.
+Do not infer ordinary revenue accounting or zero-revenue accounting here.
+
 ## FINAL ITEM USABILITY
 
 If `FINAL_EXPEDITION_v2.7.0.md` marks an Item as having no Final effect, the Final preparation surface must clearly expose that fact and should block placing it into a Final Bag when practical.
@@ -242,4 +277,6 @@ NPC growth/recent snapshot -> `NPC_TRAIT_v2.7.0.md`
 Hazard/Fatigue/Supply -> `DUNGEON_HAZARD_v2.7.0.md`
 Item effects -> `ITEM_v2.7.0.md`
 Night proof -> `NIGHT_CLOSING_v2.7.0.md`
+Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
+Economy/Wallet -> `ECONOMY_ORDER_v2.7.0.md`
 Presentation -> `UI_UX_v2.7.0.md`
