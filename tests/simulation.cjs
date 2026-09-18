@@ -153,6 +153,18 @@ test('CROSS-RUN META: one account really carries forward, and nothing is inserte
   assert.ok(t.byIndex[i].gradeAtStart>=t.byIndex[i-1].gradeAtStart,'grade never goes backwards');
   assert.ok(t.byIndex[i].masteryAtStart>=t.byIndex[i-1].masteryAtStart,'Job Mastery never goes backwards');
  }
+ /* A Run is counted once in each view, so the two views cannot say different things about it.
+    The reach bands are filled by the per-index cohort, and a grade bucket that never had them
+    filled reported every Run as having reached nothing at all. */
+ for(const [g,o] of Object.entries(t.byGrade)){
+  assert.equal(o.reach30,o.reachRate,'Grade '+g+' reads D30 the same through either field');
+  for(const [lo,hi] of [['reach30','reach25'],['reach25','reach20'],['reach20','reach10']])
+   assert.ok(o[lo]<=o[hi]+1e-9,'Grade '+g+' cannot reach '+lo+' more often than '+hi);
+  assert.ok(o.reach10<=1&&o.reach10>=0,'Grade '+g+' reach rates are rates');
+ }
+ const banded=Object.values(t.byGrade).reduce((n,o)=>n+o.reach10*o.runs,0);
+ const indexed=t.byIndex.reduce((n,b)=>n+b.reach10*b.runs,0);
+ assert.ok(Math.abs(banded-indexed)<1e-6,'and both views count the same Runs reaching D10');
  /* Every Grade is one the account's own progress actually produces - nothing was written in
     directly and nothing is cached that could disagree. Under META_v2.7 the Grade is derived
     from the Franchise Achievement COUNT rather than from Mastery, and Mastery keeps its own

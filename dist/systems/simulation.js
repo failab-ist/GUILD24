@@ -468,6 +468,10 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
       than replaying it: one Run, counted once in each view. */
    bucket.runs++;bucket.dayReached[g.run.day]=(bucket.dayReached[g.run.day]||0)+1;
    bucket.reached30+=Number(g.run.day===30);bucket.wins+=Number(!!g.run.win);
+   /* The reach bands are filled by playRun, which only ever sees the per-index cohort - so a
+      grade bucket's reach10/20/25/30 read 0 no matter how far its Runs got. Filled here from
+      the same Run, so the two views of one Run cannot disagree. */
+   for(const d of [10,20,25,30])if(g.run.day>=d)bucket.reachBy[d]++;
    bucket.metaMastery+=before.mastery;bucket.metaDistinct+=before.distinct;bucket.metaGrade+=grade;
    if(g.run.bossDebug){bucket.final.resolved++;bucket.final.power+=g.run.bossDebug.power;bucket.final.assault+=g.run.bossDebug.assault;bucket.final.margin+=g.run.bossDebug.assault-g.run.bossDebug.bossPower;bucket.final.cleared+=Number(!!g.run.win);}
    bucket.money+=g.run.money;bucket.deaths+=g.run.stats.deaths;
