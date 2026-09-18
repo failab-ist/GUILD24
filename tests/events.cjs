@@ -8,7 +8,7 @@ function fresh(seed='events'){const g=new Game();g.autosave=false;g.start(seed);
 function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
 const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
-const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','마석 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 지원','늙은 음유시인','본사 야간 근무 수칙'];
+const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 지원','늙은 음유시인','본사 야간 근무 수칙'];
 
 test('EVENT-003: catalog is exactly the canonical 22 with the two rare easter eggs at 0.35',()=>{
  assert.equal(DATA.events.length,22);

@@ -268,16 +268,20 @@ test('BOSS-Q09: GLUTTONY takes only high-end supply Stats, and leaves Counter/Su
  for(const n of team){g.selectFinal(n.id);n.pack=['highpotion','ice','rice','stone'];}
  const d=g.run.dungeons[0];
  const prep=Dungeon.prepare(team[0],d,g.run.facilities);
- const high=prep.itemStats.filter(c=>c.rarity>=2).reduce((a,c)=>a+(c.stats.survival||0),0);
+ const CORE=['combat','survival','mobility','spirit'];
+ const high=prep.itemStats.filter(c=>c.rarity>=2)
+  .reduce((a,c)=>a+CORE.reduce((t,k)=>t+(c.stats[k]||0),0),0);
  assert.ok(high>0,'the case actually contains a high-end supply');
  const cut=withTuning({gluttonyRarityThreshold:2,gluttonyStatFactor:.5},
   ()=>g.finalSnapshot(team[0],prep,d,null));
- assert.ok(Math.abs((prep.effects.survival-cut.survival)-high*.5)<1e-9,
-  'exactly half of the high-end raw-Stat contribution comes off');
+ /* The high-end contribution now lands on 투력 rather than 강인함, so the drop is read
+    across the four Core Stats instead of one of them. */
+ const drop=CORE.reduce((t,k)=>t+(prep.effects[k]-cut[k]),0);
+ assert.ok(Math.abs(drop-high*.5)<1e-9,'exactly half of the high-end raw-Stat contribution comes off');
  // the low-end supply and the non-Stat effects are not in the reckoning at all
  const lowOnly=withTuning({gluttonyRarityThreshold:9,gluttonyStatFactor:.5},
   ()=>g.finalSnapshot(team[0],prep,d,null));
- assert.equal(lowOnly.survival,prep.effects.survival,'nothing below the boundary is touched');
+ assert.equal(CORE.reduce((t,k)=>t+(prep.effects[k]-lowOnly[k]),0),0,'nothing below the boundary is touched');
  assert.equal(cut.fire,prep.effects.fire,'the 얼음컵 Counter is untouched');
  assert.equal(cut.escape,prep.effects.escape,'the 귀환석 Insurance is untouched');
  assert.equal(cut.supply,prep.effects.supply,'Supply is untouched');

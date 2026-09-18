@@ -6,36 +6,61 @@ const item=(id,name,rarity,buy,sell,category,days,icon,brand,description,effects
 G.DATA={brand:{name:'GUILD24',korean:'길드24',company:'길드리테일',slogan:'던전 가기 전, 길드24.',branches:['제7게이트점','독거미점','북부게이트점','왕도외곽점']},
 rarities:['일반','고급','희귀','영웅','전설'], npcRarities:['평범','유망','희귀','영웅','전설'],
 items:[
-item('rice','삼각김밥',0,35,70,'fresh',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:3,supply:5}),
-item('water','생수',0,25,55,'drink',5,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:2,supply:3}),
-item('ramen','컵라면',0,45,90,'food',4,'ramen','원정한끼','뜨거운 국물과 약간의 냉기 저항.',{survival:3,cold:8,supply:5}),
-item('bar','핫바',0,40,80,'fresh',2,'bar','용사픽','꼬치는 매장 앞 수거함에.',{combat:4,survival:5,supply:4}),
-item('choco','초코바',0,30,65,'food',5,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:6,supply:2}),
-item('coffee','캔커피',0,35,75,'drink',5,'coffee','MANA+','발걸음이 조금 가벼워진다.',{mobility:7,supply:2}),
-item('bandage','붕대',0,50,100,'medicine',7,'bandage','귀환안심','감는 법을 모르면 소용없다고, 늘 한마디 덧붙이게 된다.',{survival:3,injuryGuard:0.35}),
-item('potion','하급 포션',0,70,140,'medicine',7,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{survival:12,potion:1}),
-item('ice','얼음컵',0,25,60,'drink',4,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:17,supply:2}),
-item('battery','랜턴 건전지',0,40,85,'tool',0,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:17,spirit:3}),
-item('rope','경량 로프',0,50,105,'tool',0,'rope','귀환안심','매듭을 풀고 감았다. 다시 묶어야 한다.',{mobility:4,bind:12}),
-item('candy','집중 사탕',0,35,75,'food',5,'candy','용사픽','시험 전에도 잘 팔린다.',{spirit:7,fear:5,supply:1}),
-item('lava','불룡볶음면',1,65,135,'food',4,'ramen','원정한끼','용 그림은 장식이 아니다.',{combat:8,cold:12,supply:5}),
-item('energy','에너지드링크',1,70,150,'drink',5,'energy','MANA+','오늘 쓸 기운을 당겨왔다.',{mobility:13,supply:3}),
-item('wine','용사의 곡주',1,60,130,'drink',5,'wine','원정한끼','공포를 잊게 한다. 발걸음은 살짝 꼬인다.',{fear:24,mobility:-5,supply:3}),
-item('kit','구급키트',1,120,240,'medicine',7,'kit','귀환안심','열어 본 사람은 대개 그날을 오래 기억한다.',{survival:10,injuryGuard:0.65}),
-item('mask','방진마스크',1,90,180,'tool',0,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:20}),
-item('heat','핫팩',1,55,120,'tool',0,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:22}),
-item('cloak','방수망토',1,75,160,'tool',0,'cloak','귀환안심','부식과 진창에 두루 쓴다. 어느 쪽도 전문가만은 못하다.',{corrosion:14,mire:14}),
-item('coating','부식 방지 코팅제',1,70,150,'tool',0,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:22}),
-item('boots','원정용 장화',1,65,135,'tool',0,'boots','귀환안심','밑창에 진흙이 잘 붙지 않는다.',{mire:22,mobility:3}),
-item('snowgoggles','설원 고글',1,60,125,'tool',0,'goggles','귀환안심','눈보라 속에서도 앞이 남는다.',{whiteout:22}),
-item('highpotion','상급 포션',2,150,300,'medicine',7,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{survival:27,potion:1}),
-item('antidote','농축 해독제',2,220,450,'medicine',7,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:42,survival:5,curePoison:1}),
+/* ITEM_v2.7.0 ACTIVE CATALOG - exactly 40, in the owner's own order. Categories are the
+   six v2.7 identities: food / drink / potion / gear / insurance / special. `medical`,
+   `tool`, `magic` and the `fresh` alias are gone; 붕대 and 마석 보조배터리 are retired and
+   are NOT converted into anything on an older save. Shelf lives and flavour carry over
+   from the previous Item wherever the identity is unchanged. */
+item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:8,supply:5}),
+item('water','생수',0,25,55,'drink',5,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:6,supply:3}),
+item('ramen','컵라면',0,45,90,'food',4,'ramen','원정한끼','뜨거운 국물과 약간의 냉기 저항.',{cold:10,supply:5}),
+item('bar','핫바',0,40,80,'food',2,'bar','용사픽','꼬치는 매장 앞 수거함에.',{combat:6,supply:4}),
+item('choco','초코바',0,30,65,'food',5,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:8,supply:4}),
+item('coffee','캔커피',0,40,85,'drink',5,'coffee','MANA+','발걸음이 조금 가벼워진다.',{mobility:12,supply:2}),
+/* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
+item('herbtea','진정 허브티',0,40,85,'drink',5,'coffee','MANA+','',{spirit:15,supply:2}),
+item('potion','하급 포션',0,70,140,'potion',7,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
+item('ice','얼음컵',0,30,65,'drink',4,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
+item('battery','랜턴 건전지',0,45,95,'gear',0,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:16}),
+item('rope','경량 로프',0,50,105,'gear',0,'rope','귀환안심','매듭을 풀고 감았다. 다시 묶어야 한다.',{bind:16}),
+item('candy','집중 사탕',0,35,75,'food',5,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:10,supply:3}),
+item('lava','불룡볶음면',1,65,135,'food',4,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:8,cold:6,supply:4}),
+item('energy','에너지드링크',1,70,150,'drink',5,'energy','MANA+','오늘 쓸 기운을 당겨왔다.',{mobility:15,supply:2}),
+item('wine','용사의 곡주',1,60,130,'drink',5,'wine','원정한끼','공포를 잊게 한다. 발걸음은 살짝 꼬인다.',{fear:18,mobility:-4,supply:1}),
+/* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
+   only its identity (Insurance / Uncommon / 100-210). */
+item('kit','구급키트',1,100,210,'insurance',7,'kit','귀환안심','열어 본 사람은 대개 그날을 오래 기억한다.',{survival:10,injuryGuard:0.65}),
+item('mask','방진마스크',1,65,135,'gear',0,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:12}),
+item('heat','핫팩',1,60,130,'gear',0,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:18}),
+item('cloak','방수망토',1,75,160,'gear',0,'cloak','귀환안심','부식과 진창에 두루 쓴다. 어느 쪽도 전문가만은 못하다.',{corrosion:6,mire:6}),
+item('coating','부식 방지 코팅제',1,70,150,'gear',0,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:18}),
+item('boots','원정용 장화',1,65,135,'gear',0,'boots','귀환안심','밑창에 진흙이 잘 붙지 않는다.',{mire:16}),
+item('snowgoggles','설원 고글',1,60,125,'gear',0,'goggles','귀환안심','눈보라 속에서도 앞이 남는다.',{whiteout:16}),
+item('highpotion','상급 포션',2,150,300,'potion',7,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:16,potion:1}),
+/* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
+item('antidote','농축 해독제',2,80,170,'gear',7,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:18}),
 item('stone','귀환석',2,260,520,'insurance',0,'stone','귀환안심','사망·중상 위기에서도 같은 수치로 한 번 더 돌아올 기회가 생긴다.',{escape:0.5}),
-item('mana','마석 보조배터리',2,240,500,'magic',0,'mana','MANA+','잡념까지 충전하지는 않는다.',{combat:4,spirit:25}),
-item('premium','길드 프리미엄 도시락',2,280,560,'fresh',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:14,supply:7,loot:0.2}),
-item('ion','쿨링 이온음료',2,200,400,'drink',5,'ion','MANA+','얼음컵만큼 시원하진 않지만 오래 간다.',{fire:12,supply:4}),
+/* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
+   it keeps the ordinary Potion-family shelf life. */
+item('midpotion','중급 포션',1,110,230,'potion',7,'potion','귀환안심','',{combat:12,potion:1}),
+item('premium','길드 프리미엄 도시락',2,170,360,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:10,supply:7,loot:0.2}),
+item('ion','쿨링 이온음료',2,80,170,'drink',5,'ion','MANA+','얼음컵만큼 시원하진 않지만 오래 간다.',{fire:18,supply:1}),
 item('tree','세계수 생환부적',3,600,1200,'insurance',0,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
-item('coupon','황금 1+1 쿠폰',4,1000,2000,'magic',0,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1)
+item('coupon','황금 1+1 쿠폰',4,500,1000,'special',0,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
+/* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
+   specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
+   than inventing a second FIRE Hazard, and its 투력 +6 is an explicit catalogue exception. */
+item('spiderkit','거미줄 방호세트',3,150,320,'gear',0,'mask','귀환안심','',{poison:12,bind:12}),
+item('slimesuit','연금 방수슈트',3,150,320,'gear',0,'cloak','귀환안심','',{corrosion:12,mire:12}),
+item('cryptlantern','성화 랜턴',3,150,320,'gear',0,'battery','귀환안심','',{fear:12,dark:12}),
+item('snowvisor','백설 방한고글',3,150,320,'gear',0,'goggles','귀환안심','',{cold:12,whiteout:12}),
+item('magmagear','마그마 냉각장비',3,160,340,'gear',0,'heat','귀환안심','',{fire:14,combat:6}),
+/* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
+item('battlelunch','결전 특선 도시락',3,180,380,'food',2,'lunch','길드초이스','',{survival:12,supply:9}),
+item('herobar','용사 특식 핫바',3,170,360,'food',2,'bar','길드초이스','',{combat:8,supply:7}),
+item('hyperenergy','초고속 에너지드링크',3,160,340,'drink',5,'energy','MANA+','',{mobility:18,supply:2}),
+item('sageelixir','대현자 허브엘릭서',3,160,340,'drink',5,'wine','길드초이스','',{spirit:20,supply:2}),
+item('toppotion','최상급 포션',3,190,400,'potion',7,'potionHigh','길드초이스','',{combat:24,potion:1})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
    full-run rebaseline existed; this is that rebaseline. The shape of the change: a Job with a
@@ -125,7 +150,7 @@ events:[
 ['oneplus','본사 1+1 행사','본사에서 행사 공문이 내려왔다.','지정 상품 1종 · 발주 수량 2배',{double:1}],
 ['pilgrimage','게이트 순례주간','순례 행렬이 게이트 구역을 지나간다.','오늘 1~3명의 모험가가 예정된 목적지가 아닌 다른 열린 게이트로 향할 수 있습니다.',{pilgrimage:1}],
 ['overflow','몬스터 범람','게이트 밖까지 소리가 들린다.','오늘 게이트 요구 전력 +12% · 원정 보상 +30%',{danger:1.12,reward:1.3}],
-['manaPrice','마석 가격 폭등','마석 값이 또 올랐다.','오늘 특수 상품 매입가 +35%',{magicPrice:1.35}],
+['potionPrice','포션 가격 폭등','포션 값이 또 올랐다.','오늘 포션 매입가 +35%',{potionPrice:1.35}],
 ['coldwave','한파','북쪽 바람이 게이트 구역까지 내려왔다.','적용 가능한 게이트에 냉기 위험 추가',{cold:1}],
 ['shortage','포션 공급 중단','포션 상자가 오지 않았다.','오늘 포션 발주 등장 확률 크게 감소',{potionWeight:0.08}],
 ['rookie','신입 모험가 시즌','길드 게시판에 새 이름이 늘었다.','오늘 새로운 모험가 1명이 찾아옵니다.',{rookie:1}],
@@ -227,6 +252,6 @@ G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.1
    5-8 points of skilled D30 reach and raised rescue dependence by 7 - and took the 18 slots,
    which produce about one capacity decision per eight order Days at almost no survival cost. */
 G.DATA.balance.orderOffers=6;G.DATA.balance.warehouse=18;
-G.DATA.openingStock=[['rice',1],['water',1],['bandage',1],['potion',1]];
+G.DATA.openingStock=[['rice',1],['water',1],['herbtea',1],['potion',1]];
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);

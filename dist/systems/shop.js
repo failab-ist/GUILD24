@@ -14,7 +14,7 @@ class Game{
  save(){if(this.run)this.run.rngState=this.rng.state;if(this.autosave&&typeof localStorage!=='undefined')G.Save.write(this.account,this.run);}
  start(seed,contract='standard'){
  if(!D.contracts.some(c=>c.id===contract&&G.Meta.contractUnlocked(this.account,c)))throw Error('잠겨 있는 시작 계약입니다.');
- this.rng=new G.RNG(seed);this.run={version:7,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1000+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ this.rng=new G.RNG(seed);this.run={version:8,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1000+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
  for(const[id,num]of D.openingStock)this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
@@ -184,7 +184,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(s.pity.counter>=3||this.has('expeditionCert')){const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));if(matches.length){const item=this.rng.pick(matches);s.offers[s.offers.length-1]=this.offerFor(item);if(advancePity){for(const h of target)if(G.Relics.counter(item,[h]))s.pity.hazards[h]=0;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}}}
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(s.contract==='delivery'?1.05:1)*(it.category==='magic'?(ev.magicPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(s.contract==='delivery'?1.05:1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
  rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));const rates=[55,27,12+(s.pity.rare>=5?3:0),5,1];const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('showcase')&&v>=2?1.7:1)*(s.contract==='budget'&&v>=2?.8:1));pool=pool.filter(it=>it.rarity===rarity);
  const it=this.rng.weighted(pool,it=>{let w=1;if(it.effects.potion)w*=(ev.potionWeight||1);return w*G.Relics.offerWeight(this,it);});return this.offerFor(it,price);}
  order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?2:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
@@ -199,11 +199,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     charged or what has to be affordable - only how willingly the offer is taken. */
  const judged=Math.round(it.sell*(rule.intentMult??rule.mult));
  let fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0),need=.53+Math.min(.29,fit*.012);
- if(n.injury&&it.category==='medicine')need+=.25;if(n.pack.length)need-=.1;
+ /* The healing good an injured adventurer reaches for is Insurance now; `medical` is gone. */
+  if(n.injury&&it.category==='insurance')need+=.25;if(n.pack.length)need-=.1;
  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=.1;
- if(this.run.event?.effects.foodDemand&&['food','fresh','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
- if(this.run.event?.effects.medicalDemand&&it.category==='medicine')need+=this.run.event.effects.medicalDemand;
+ if(this.run.event?.effects.foodDemand&&['food','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
+ if(this.run.event?.effects.medicalDemand&&it.category==='insurance')need+=this.run.event.effects.medicalDemand;
  const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
     only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
@@ -232,8 +233,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
- validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,food=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','fresh','drink'].includes(D.itemBy[o.item].category))food+=q;}
- if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const existingFood=s.inventory.filter(x=>['food','fresh','drink'].includes(D.itemBy[x.item].category)).length;
+ validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,food=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','drink'].includes(D.itemBy[o.item].category))food+=q;}
+ if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const existingFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
  if(s.inventory.length+count>this.capacity())throw Error('창고가 가득 찼습니다.');return true;}
  setQuantity(i,q){const cart={...(this.run.cart||{}),[i]:q};this.validateCart(cart);this.run.cart=cart;this.save();}
  maxQuantity(i){let q=0;for(let n=1;n<=this.run.offers[i].quantity;n++){try{this.validateCart({...this.run.cart,[i]:n});q=n;}catch(e){break;}}return q;}

@@ -12,17 +12,23 @@ function avatar(n,size=96){if(!n)return '';const v=n.appearance,job=DATA.jobBy[n
 }
 function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=it.icon;let s='';const base='#e5e8dc',dark='#344642',pink='#d897a0',green='#66bda3';
  if(p==='rice')s=`<path d="M6 34L20 8L34 34V38H6Z" fill="${base}"/><path d="M14 29H26V38H14Z" fill="${dark}"/>`+rect(14,20,13,5,'#eaaa67')+rect(17,21,7,2,'#f6ecd1');
- if(['water','potion','antidote','wine'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:'#b094be';s=rect(16,3,10,5,p==='water'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
- if(['coffee','energy'].includes(p))s=rect(12,7,19,30,p==='coffee'?'#bc9971':'#9abb75')+rect(12,5,19,3,'#cbd9d0')+rect(12,35,19,3,'#9baea6')+rect(14,17,15,11,'#efe3c4')+`<path d="M23 17L17 24H22L18 31L27 22H22Z" fill="${dark}"/>`;
+ if(['water','potion','antidote','wine'].includes(p)){const c=id==='midpotion'?'#c98fb5':p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:'#b094be';s=rect(16,3,10,5,p==='water'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
+ if(['coffee','energy'].includes(p))s=rect(12,7,19,30,id==='herbtea'?'#8fae7c':p==='coffee'?'#bc9971':'#9abb75')+rect(12,5,19,3,'#cbd9d0')+rect(12,35,19,3,'#9baea6')+rect(14,17,15,11,'#efe3c4')+`<path d="M23 17L17 24H22L18 31L27 22H22Z" fill="${dark}"/>`;
  if(p==='ramen')s=`<path d="M7 14H35L31 37H11Z" fill="${id==='lava'?'#d96958':'#dfa05e'}"/>`+rect(5,11,32,5,'#ede6ce')+rect(10,21,23,9,'#f4e6c5')+rect(15,24,12,3,'#bc6650')+rect(14,5,2,4,'#dbe9d6')+rect(24,3,2,6,'#dbe9d6');
  if(p==='bar')s=rect(19,28,4,12,'#bd9964')+rect(12,7,18,24,id==='dragon'?'#dc6e54':'#c8935e')+rect(14,7,3,21,'#e9b875')+rect(14,13,12,2,'#a36c44')+rect(14,21,12,2,'#a36c44');
  if(p==='choco')s=rect(7,13,30,19,'#8e7267')+rect(10,16,24,13,'#d9af82')+rect(19,13,15,19,'#746158')+rect(23,17,7,11,'#aa8470');
  if(['bandage','kit','mask','heat'].includes(p)){const col=p==='kit'?'#d5dfcc':p==='heat'?'#d69776':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,p==='heat'?'#f5d7a5':'#bd7d6a')+rect(14,21,15,5,p==='heat'?'#f5d7a5':'#bd7d6a');}
  if(p==='ice')s=`<path d="M9 10H34L30 37H13Z" fill="#8dc6cd"/>`+rect(7,8,29,4,'#d5e8df')+rect(13,16,9,9,'#cce5df')+rect(23,22,7,8,'#b7dfdc');
- if(p==='battery'||p==='mana')s=rect(14,5,15,4,'#c6d0c5')+rect(10,9,23,28,p==='mana'?'#a49ad5':'#d0ad69')+rect(10,19,23,15,'#435956')+rect(18,14,7,2,'#f6e4b4')+rect(20,12,2,6,'#f6e4b4')+rect(17,26,9,3,p==='mana'?'#b5dfdf':'#e0c793');
+ if(p==='battery')s=rect(14,5,15,4,'#c6d0c5')+rect(10,9,23,28,'#d0ad69')+rect(10,19,23,15,'#435956')+rect(18,14,7,2,'#f6e4b4')+rect(20,12,2,6,'#f6e4b4')+rect(17,26,9,3,'#e0c793');
  if(p==='cloak')s=`<path d="M16 5H26L31 14L37 37H6L11 14Z" fill="#7da4a2"/><path d="M16 6L13 14H29L25 6Z" fill="#4b7474"/>`+rect(20,17,2,19,'#a1c2b3');
  if(p==='stone')s=`<path d="M20 4L34 15L29 34L20 40L9 31L6 16Z" fill="#8ebbc1"/><path d="M20 4L17 22L6 16Z" fill="#d0e6d9"/><path d="M17 22L20 40L34 15Z" fill="#6f939e"/>`;
  if(p==='lunch')s=rect(5,13,33,23,'#554f58')+rect(7,15,29,19,'#e9dfc2')+rect(9,17,12,15,'#f1eddb')+rect(24,17,10,6,'#a6b97b')+rect(24,25,10,7,'#d29167')+rect(18,21,3,3,'#9d705e');
+ /* ITEM_v2.7 adds ten Epic preparation Items that are premium versions of products already
+    on the shelf. Each keeps its base drawing and takes the brass corner the shop uses for
+    premium fixtures, so a 결전 특선 도시락 still reads as a 도시락 and is still never the
+    same picture as the ordinary one (D-27). 세계수 생환부적 already has its own. */
+ const EPIC_VARIANT=new Set(['spiderkit','slimesuit','cryptlantern','snowvisor','magmagear',
+  'battlelunch','herobar','hyperenergy','sageelixir','toppotion']);
  if(p==='coupon')s=rect(4,11,35,23,'#e8c567')+rect(7,14,29,17,'#846d3d')+`<text x="21" y="26" text-anchor="middle" fill="#f7db82" font-family="monospace" font-size="10" font-weight="bold">1+1</text>`;
  /* D-27. Seven products were drawn as something else: a rope, a pair of boots, goggles and a
     tube of coating all wore the lantern battery, the focus sweets wore the chocolate bar, the
@@ -50,6 +56,7 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='amulet')s=rect(14,5,16,2,'#8a7a5a')+rect(20,7,4,4,'#8a7a5a')
   +`<path d="M22 10C35 14 35 32 22 40C9 32 9 14 22 10Z" fill="#8fc79a"/>`
   +`<path d="M22 14C30 18 30 30 22 36Z" fill="#5f9d71"/>`+rect(21,15,2,21,'#dff0dd');
+ if(s&&EPIC_VARIANT.has(id))s+=rect(29,29,8,8,'#d8b465')+rect(31,31,4,4,'#8a6a2e');
  return `<svg class="item-art" width="${size}" height="${size}" viewBox="0 0 44 44" shape-rendering="crispEdges" role="img" aria-label="${esc(it.name)}">${s}</svg>`;
 }
 // Gate marks and UI glyphs. Pixel sprites on the same 4px grid as the rest of the art —

@@ -37,7 +37,7 @@ function prepare(n,d,facilities=[]){
  if(effectiveFatigue>=10&&effectiveFatigue<20){mobilityMod-=0.10;spiritMod-=0.10;why.push('피로 누적(10~19): 기동/정신 -10%');}
  else if(effectiveFatigue>=20){mobilityMod-=0.25;spiritMod-=0.25;why.push('극심한 피로(20): 기동/정신 -25%');}
  e.combat=baseE.combat*combatMod+itemE.combat;e.survival=baseE.survival*survivalMod+itemE.survival;e.mobility=baseE.mobility*mobilityMod+itemE.mobility;e.spirit=baseE.spirit*spiritMod+itemE.spirit;
- if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))why.push('대식가: 음식 고유 효과 +30% · 음식 1개당 보급 -1');
+ if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식 1개당 보급 -1');
  const actual=finalSupply,deficit=required>0?Math.max(0,required-actual):0,penalty=deficit>0?Math.min(.3,deficit*.06):0;
  if(penalty)for(const k of G.Adventurer.keys)e[k]*=1-penalty;
    const sources = {combat:[], survival:[], mobility:[], spirit:[]};
@@ -74,7 +74,7 @@ function prepare(n,d,facilities=[]){
    
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
- if(n.traits.includes('eater')&&n.pack.some(id=>['food','fresh'].includes(D.itemBy[id].category)))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
+ if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 30% 증가했다.'});
  e.effectiveFatigue=effectiveFatigue; e.fatigueRecovery=fatigueRecovery;
  return {effects:e,sources,hazard,hazards,itemStats,supply:{required,actual,deficit,penalty},why,events};

@@ -447,9 +447,12 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  // with, and UI-Q39 says they never reach a render path. The DATA stays - ordering weights and
  // Relic conditions read `category`, and delta.cjs asserts both tables.
  assert.ok(DATA.categories&&DATA.roles,'the tables are still there for the systems that read them');
- for(const label of [...Object.values(DATA.roles),...Object.values(DATA.categories)])
+ /* v2.7 moves the six categories into player-facing identities owned by COPY_WORLD_VOICE,
+    so 포션 and the rest may be shown; what UI-Q81 still forbids is the redundant ROLE chip
+    (`속박 전문` sitting above `속박 대응 +16`). The sweep narrows to roles accordingly. */
+ for(const label of Object.values(DATA.roles))
   assert.ok(!app.includes("'"+label+"'")&&!app.includes('>'+label+'<'),
-   'internal taxonomy is not rendered: '+label);
+   'internal role taxonomy is not rendered: '+label);
  assert.ok(!/D\.categories\[|D\.roles\[/.test(app),'and no render path looks it up');
 
  // D-10. Two ways to fail an expedition, said apart, in the vocabulary each already owns.
@@ -780,7 +783,7 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  assert.equal(fresh.settings.muted,true,'sound still starts off, as the copy says');
  for(const k of ['bgm','sfx'])assert.equal(fresh.settings[k],1,k+' starts at its design maximum');
  // presentation preference, so it is checked for shape when present the way tutorial is
- const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:7}));
+ const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:8}));
  const withSettings=v=>{const s=base();s.account.settings={muted:true,...v};return s;};
  assert.equal(Save.valid(withSettings({})),true,'a save with no levels at all is still a save');
  assert.equal(Save.valid(withSettings({bgm:.5,sfx:0})),true,'real levels are accepted');

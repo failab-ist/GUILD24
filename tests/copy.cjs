@@ -249,7 +249,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
 
  /* D-16: the description slot is flavour. Where it only restated the effect line it told the
     player nothing they could not read one line up. Rules that live ONLY there are kept. */
- for(const [id,banned] of [['ice','화염 대응'],['bandage','부상을 한 단계'],['kit','중상 위험을 줄여'],
+ for(const [id,banned] of [['ice','화염 대응'],['kit','중상 위험을 줄여'],
                            ['antidote','독 대응을 크게'],['mask','독과 가스 환경에 대응'],
                            ['battery','어둠 속 시야를 확보'],['tree','사망 판정을 한 번 중상으로'],
                            ['coupon','다음 소모품의 효과를 복제']]){

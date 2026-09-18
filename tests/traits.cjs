@@ -61,15 +61,18 @@ test('TRAIT-Q03/Q04: nine exclusion pairs hold on every acquisition path; 탐욕
 });
 
 test('TRAIT-Q07/ITEM-Q14: Food affinity touches native core only',()=>{
- const g=fresh('affinity'),base={...g.run.npcs[0],traits:[],pack:['rice','lava','bandage']},d=g.run.dungeons[0];
+ const g=fresh('affinity'),base={...g.run.npcs[0],traits:[],pack:['rice','lava','kit']},d=g.run.dungeons[0];
  const plain=Dungeon.prepare(base,d).effects;
  const eater=Dungeon.prepare({...base,traits:['eater']},d).effects;
  assert.ok(eater.survival>plain.survival,'Food native Stat is boosted');
  assert.equal(eater.cold,plain.cold,'Hazard Counter is not amplified');
  assert.equal(eater.injuryGuard,plain.injuryGuard,'Insurance is not amplified');
  // Supply moves on its own axis: -1 per Food item for 대식가, +1 for 소식가, floor of 1
- const one={...base,pack:['candy']};
- assert.equal(Dungeon.prepare({...one,traits:['eater']},d).effects.supply,1,'Supply never drops below 1');
+ /* ITEM_v2.7 leaves no Food at Supply 1, so 대식가's `minimum 1` floor is asserted over the
+    whole Food line rather than through one item that used to land on it. */
+ for(const it of DATA.items.filter(i=>i.category==='food'&&i.effects.supply))
+  assert.ok(Dungeon.prepare({...base,traits:['eater'],pack:[it.id]},d).effects.supply>=1,
+   it.name+': 대식가 Supply never drops below 1');
  assert.equal(Dungeon.prepare({...base,traits:['small'],pack:['rice']},d).effects.supply,DATA.itemBy.rice.effects.supply+1);
  assert.equal(Dungeon.prepare({...base,traits:['eater'],pack:['rice']},d).effects.supply,DATA.itemBy.rice.effects.supply-1);
 });
