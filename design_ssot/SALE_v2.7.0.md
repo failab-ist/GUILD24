@@ -79,8 +79,9 @@ Always readable ingredients remain:
 - current committed Bag / remaining slots
 - Expected Destination
 - known current environment/Hazard
-- current qualitative Combat Forecast
-- current qualitative Hazard Readiness
+- pre-supply qualitative Combat Forecast
+- pre-supply qualitative Hazard Readiness
+- exact pre-supply Death Risk %
 - exact Item Stat / Counter / Supply / explicit penalty
 
 When the Player focuses/selects an **uncommitted** Item, UI may additionally show:
@@ -88,26 +89,41 @@ When the Player focuses/selects an **uncommitted** Item, UI may additionally sho
 - selected price / affordability
 - deterministic Supply/Fatigue arithmetic owned by `DUNGEON_HAZARD_v2.7.0.md`
 
-Before actual purchase commitment, do **not** show a derived answer such as:
+Before actual purchase commitment, do **not** show a hypothetical post-Item derived answer such as:
 - `접전 -> 우세`
 - `불안 -> 충분`
+- Death Risk `% -> %` change
 - Great Success signal change
-- exact success/death chance
+- exact expedition success chance
 - system-recommended/best Item
+
+The exact Death Risk % shown here is the fixed **pre-supply** snapshot owned by `DUNGEON_HAZARD_v2.7.0.md`, not a hypothetical post-Item answer.
 
 This boundary prevents the UI from turning the decision into answer-following.
 
 ## POST-COMMIT CURRENT STATE
 
-Once an Item is actually purchased and committed into the NPC's Bag, it is no longer a hypothetical preview.
+Once an Item is actually purchased and committed into the NPC's Bag, it is no longer hypothetical.
 
-Before the Player judges the remaining slot, current decision information may update from the newly committed state, including:
-- current Core Stat values where applicable
-- current qualitative Combat Forecast
-- current qualitative Hazard Readiness
-- current Supply/Fatigue arithmetic
+However, the decision-surface expedition outlook remains the **SALE-entry / pre-supply snapshot** for the entire customer visit.
+
+After a purchase commits:
+- pre-supply Combat Forecast does **not** update
+- pre-supply Hazard Readiness does **not** update
+- pre-supply Death Risk % does **not** update
+- exact Item/direct-effect changes may be shown
+- exact proven derived changes from Supply/Fatigue/other owned systems may be shown with their source
+- current Supply/Fatigue arithmetic may update where it is deterministic public arithmetic
 
 A refusal does not grant the Item effect.
+
+Purpose:
+- the Player receives a clear baseline before deciding whether this NPC is worth supporting
+- the UI does not grade the Player's first Item choice before the remaining-slot decision
+- post-commit feedback explains **what actually changed and why**, without converting that change into a new Forecast/Readiness/Death answer
+
+The actual expedition Resolve still uses the final prepared state after all committed Items.
+Freezing the displayed outlook does not freeze the runtime preparation state.
 
 ## POST-COMMIT DELTA SOURCE TRUTH — EXACT
 
@@ -125,7 +141,8 @@ D. another explicitly owned Trait / Relic / Boss modifier
 Rules:
 - an Item directly changes only the exact channels stated by `ITEM_v2.7.0.md`
 - if a post-commit delta is shown, the changed value must be actual and its source must be provable
-- ordinary current-state UI should prefer updating the primary Stat/Forecast/Readiness values in place rather than emitting a long synthetic delta list
+- post-commit delta rows may show exact Core-Stat / Counter / Supply / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / Death Risk display
+- ordinary SALE must keep the pre-supply Forecast/Readiness/Death Risk snapshot frozen; post-commit feedback should instead show exact changed values/effects with readable source attribution rather than a new derived expedition answer
 - the inherited Supply Deficit system may change effective expedition preparation across all four Core Stats / Hazard readiness when Prepared Supply moves toward the Required Supply threshold; this is a **Supply Deficit effect**, not a hidden direct Item Stat
 - excess Supply that reduces current Fatigue may restore effective 기동/정신 when a canonical Fatigue penalty band changes; this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - exact hidden Supply-deficit formula remains hidden under `DUNGEON_HAZARD_v2.7.0.md`; source attribution does not expose that formula
@@ -140,7 +157,7 @@ Example boundary:
 - those indirect changes must be presented as `보급 부족 완화` / `피로 완화` or equivalent source-readable system effects, never as if 집중 사탕 itself granted those Stats
 
 A generic heading such as `보급 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
-If that distinction is not readable, prefer removing the synthetic delta block and updating the primary current-state values with source labels instead.
+If that distinction is not readable, remove the synthetic delta block rather than replacing the pre-supply outlook with post-commit Forecast/Readiness/Death answers.
 
 ## SALE DECISION-ONLY DETAIL — REMOVE NON-DECISION DISCLOSURES
 
@@ -263,8 +280,8 @@ Rules:
 
 Ordinary SALE outside Final remains unchanged.
 
-Player Gold / Gross Sales accounting for the fixed Final transfer is intentionally unresolved and owned jointly by `ECONOMY_ORDER_v2.7.0.md`, `FINAL_EXPEDITION_v2.7.0.md`, and `BOSS_v2.7.0.md` until User approval.
-Do not infer ordinary revenue accounting or zero-revenue accounting here.
+For each committed Final transfer, Player Gold and Gross Sales both increase by the exact fixed 50% / 매입가 amount once, matching `ECONOMY_ORDER_v2.7.0.md` / `FINAL_EXPEDITION_v2.7.0.md` / `BOSS_v2.7.0.md`.
+Do not double-count the transfer.
 
 ## FINAL ITEM USABILITY
 
