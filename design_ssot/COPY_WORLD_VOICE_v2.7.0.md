@@ -142,6 +142,29 @@ Do not restate it as recommendation prose such as:
 
 unless an owning tutorial explicitly requires instructional text.
 
+## PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY
+
+Ordinary SALE uses this exact heading:
+
+```text
+보급 전 원정 전망
+```
+
+Supporting copy:
+
+```text
+아이템을 지급하기 전 현재 상태를 기준으로 한 전망입니다.
+보급과 원정 중 변수에 따라 실제 결과는 달라질 수 있습니다.
+```
+
+This block covers:
+- qualitative Combat Forecast
+- qualitative Hazard Readiness
+- exact pre-supply Death Risk %
+
+After an Item purchase commits, the displayed outlook remains the original pre-supply snapshot for that customer visit.
+Do not rewrite the copy to imply the shown Forecast / Readiness / Death Risk is a post-supply recalculation.
+
 ## HAZARD / ITEM COPY BOUNDARY
 
 Gate copy communicates:
