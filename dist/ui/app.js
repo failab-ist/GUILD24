@@ -157,9 +157,16 @@ function render(){
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
 // Every named Hazard carries its canonical pressure inline — burned into the notice,
 // never behind a hover (UI-005, UI-Q35, DUN-Q21).
+/* Two different facts about one Hazard, never welded into a sentence like `강인함 압박에 취약`.
+   The pressure is fixed information about the Hazard itself - it is true of 독기 whoever is
+   standing at the counter. The readiness is this NPC's SALE-entry state against it. The player
+   has to be able to read `this danger looks at 강인함` and `this character is 취약 to it right
+   now` separately, so they are separate elements with the readiness explicitly labelled. */
 const hazardList=(keys,states)=>keys.length?'<ul class="hazards">'+Presentation.hazardRows(keys).map(h=>{
  const st=states&&states.find(x=>x.key===h.key);
- return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span>'+E(h.pressure)+'</span>'+(st?'<em class="'+(['취약','불안'].includes(st.label)?'lack':'')+'">'+st.label+'</em>':'')+'</li>';}).join('')+'</ul>':'';
+ return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span class="press">'+E(h.pressure)+'</span>'
+  +(st?'<span class="ready"><i>현재 대응</i><em class="'+(['취약','불안'].includes(st.label)?'lack':'')+'">'+st.label+'</em></span>':'')
+  +'</li>';}).join('')+'</ul>':'';
 // A Gate is a plank notice nailed to the wall: family colour burned along the top edge,
 // the gate mark branded into it, the supply requirement stamped underneath.
 // A Gate is a paper notice pinned to the board: family colour along the top, the hazard
@@ -283,15 +290,13 @@ function readout(n,extra=null,cls=''){
     canonical vocabulary: the fight is Dungeon.estimate (우세/접전/불리), the environment is the
     weakest Hazard state already computed for the rows below (충분/대응/불안/취약). No new label
     and no new calculation: the summary IS the worst of the rows the player can see. */
- const worst=o.worst;
+
  const help=(label,body)=>'<details class="tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
    +help('전투 전망','이 손님이 카운터에 섰을 때의 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
-  +'<span class="fore">환경 전망<b>'+(worst||'위험 없음')+'</b>'
-   +help('환경 전망','게이트의 위험 특성을 카운터에 섰을 때의 능력과 보급으로 어떻게 버틸지 본 예상이다. 가장 약한 대응을 기준으로 말하며, 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
   /* DUNGEON_HAZARD_v2.7 §Pre-supply player-facing failure Death risk: the exact conditional
      percentage, said as a conditional - never as the chance this expedition ends in death. */
   +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
@@ -299,12 +304,11 @@ function readout(n,extra=null,cls=''){
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
- /* A phone has no room to stand the hazard rows beside a portrait and the shelf both.
-    The verdict stays on the face of the block; the pressure that produced it is one tap
-    away rather than gone. */
- +(mob&&o.hazards.length
-   ?'<details class="env-press"><summary>환경 압박 '+o.hazards.length+'건</summary>'+hazardList(o.hazards.map(h=>h.key),o.hazards)+'</details>'
-   :hazardList(o.hazards.map(h=>h.key),o.hazards))
+ /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
+    against it live in one place - the 예상 목적지 plate below - so the player reads the danger
+    where the destination is named instead of meeting a second, differently-worded copy of it
+    inside the outlook. The outlook keeps only what is about the expedition as a whole:
+    the Combat Forecast and the conditional Death risk. */
  +(compact?'':'<p class="estimate">오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다. 게이트 안에서 어떻게 될지까지는 아무도 모른다.</p>')+'</div>';}
 /* Returning history is useful reference, not the current decision. It therefore starts folded
    to one line; opening it is local reading state and does not hide current Stats or Traits. */
@@ -545,7 +549,11 @@ function effectList(it,compact=false){const rows=Presentation.rows(it.effects);c
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}</span>${tr.note?`<small>${E(tr.note)}</small>`:''}</div>`;}).join('')}</div>`;}
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
- +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'+hazardList(Presentation.known(d,game))+'</div></div>';}
+ /* SALE_v2.7: the readiness shown beside each Hazard is the frozen SALE-entry snapshot, the
+    same one the outlook reads, so committing an Item does not move it. Outside SALE there is
+    no customer and no snapshot, and the plate shows the Hazards and their pressure alone. */
+ +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'
+ +hazardList(Presentation.known(d,game),n&&n.outlook&&n.outlook.hazards)+'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
    const prep = Dungeon.prepare({...n,traits:tList},game.claimedGateFor(n),game.run.facilities);

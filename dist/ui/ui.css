@@ -115,7 +115,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .hazards{display:grid;gap:2px}
 .hazards li{display:flex;gap:8px;align-items:baseline;font-size:var(--t-sm);line-height:1.45;flex-wrap:wrap}
 .hazards b{font-weight:800;white-space:nowrap;color:var(--fam,var(--gold))}
-.hazards span{color:var(--dim)}
+.hazards .press{color:var(--dim)}
+/* The readiness is labelled, so it cannot be read as more of the pressure sentence. */
+.hazards .ready{margin-left:auto;display:flex;align-items:baseline;gap:7px;white-space:nowrap}
+.hazards .ready i{font-style:normal;font-weight:600;font-size:11px;letter-spacing:.08em;color:#9c8d70}
 .hazards em{font-style:normal;font-weight:800;margin-left:auto;white-space:nowrap;font-family:var(--mono);color:var(--gold)}
 .hazards em.lack{color:var(--blood)}
 
@@ -501,6 +504,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .dest-plate .mark{background:#00000047;padding:2px}
 .dest-plate label{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#9c8d70;display:block;margin-bottom:4px}
 .dest-plate h3{font:400 17px/1.3 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:6px;color:#f6ecd3}
+/* One Hazard reads as one banded row. The block moved here from the outlook when the
+   environment stopped being shown twice, and it keeps the banding that made it countable. */
+.dest-plate .hazards{gap:0;margin-top:6px;box-shadow:inset 0 1px 0 #ffffff14}
+.dest-plate .hazards li{gap:10px;padding:7px 8px;background:#ffffff08;box-shadow:inset 0 -1px 0 #00000059}
+.dest-plate .hazards li:nth-child(even){background:#ffffff03}
+.dest-plate .hazards b{color:var(--warn);min-width:4.2em}
+.dest-plate .hazards .press{color:#a2947c}
+.dest-plate .hazards em{font-size:var(--t-sm)}
 .detail-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;margin:0 0 14px;padding:6px 12px 8px;
  background:#00000038;box-shadow:inset 2px 2px 0 #00000047,inset -2px -2px 0 #ffffff0f}
 .detail-stat{display:flex;align-items:baseline;gap:8px;padding:5px 0;box-shadow:inset 0 -1px 0 #ffffff14}
@@ -550,12 +561,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    the rows ran together and read as a paragraph. Each Hazard is now its own banded row with the
    verdict on the right, so the eye can take one at a time, and the block is set apart from the
    two forecasts above it rather than continuing out of them. */
-.readout .hazards{gap:0;margin-top:10px;box-shadow:inset 0 1px 0 #ffffff14}
-.readout .hazards li{gap:10px;padding:7px 8px;background:#ffffff08;box-shadow:inset 0 -1px 0 #00000059}
-.readout .hazards li:nth-child(even){background:#ffffff03}
-.readout .hazards b{color:var(--warn);min-width:4.2em}
-.readout .hazards span{color:#a2947c}
-.readout .hazards em{font-size:var(--t-sm)}
 .since{margin:0 0 14px;padding:10px 12px;background:#00000038;box-shadow:inset 3px 0 0 var(--gold);font:400 13px/1.5 var(--ui)}
 .since b{color:var(--gold);display:block;font-weight:600}
 .since p{color:#a2947c;margin-top:2px}
@@ -1172,7 +1177,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
   .dest-plate { padding: 8px; flex-direction: row; align-items: center; gap: 8px; }
   .dest-plate h3 { font-size: 14px; margin: 0; }
   .dest-plate label { display: none; } /* Hide '예상 목적지' label on mobile for compactness */
-  .dest-plate div { display: flex; flex-direction: row; align-items: center; gap: 8px; }
+  .dest-plate div { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
+ .dest-plate .hazards li{flex-wrap:wrap}
+ .dest-plate .hazards .ready{margin-left:auto}
   /* Ensure portrait is not cropped by setting max-height */
   .front { grid-template-rows: 1fr; align-items: stretch; }
   .standee { max-height: none; }
@@ -1196,13 +1203,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .kit .npc-wallet{color:#9c8d70}
 .kit .npc-wallet b{color:var(--gold);font:600 15px/1 var(--f-led);margin-left:5px}
 /* the environment pressure a phone folds away - a real control, at thumb size */
-.env-press{margin-top:8px}
-.env-press>summary{display:flex;align-items:center;gap:6px;min-height:44px;padding:0 2px;
- font:600 13px/1.4 var(--ui);color:#cbb98d;cursor:pointer;list-style:none}
-.env-press>summary::-webkit-details-marker{display:none}
-.env-press>summary:after{content:'\25be';font-size:11px;color:#9c8d70;transition:transform .12s}
-.env-press[open]>summary:after{transform:rotate(180deg)}
-.env-press>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 /* Phone: the top band is a face and a status line, not a stage. The band is shortened by
    shortening the whole card - --cardw drives the art box and the plate together, so the
@@ -1213,7 +1213,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .front-side .dest-plate{margin:0;padding:7px 9px;grid-template-columns:26px 1fr;gap:7px}
 .p-sale .front-side .dest-plate label{margin-bottom:2px;font-size:10px}
 .p-sale .front-side .dest-plate h3{margin-bottom:0;font-size:14px}
-.p-sale .front-side .dest-plate .hazards{display:none}
 
 @media(min-width:1024px){
  .front-side .readout.core-desk{display:block;margin:0}
@@ -1223,5 +1222,4 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  .p-sale .front-side .dest-plate{margin:0;padding:11px 12px;grid-template-columns:38px 1fr;gap:10px}
  .p-sale .front-side .dest-plate label{margin-bottom:4px;font-size:11px}
  .p-sale .front-side .dest-plate h3{margin-bottom:6px;font-size:17px}
- .p-sale .front-side .dest-plate .hazards{display:block}
 }

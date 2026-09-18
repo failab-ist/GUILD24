@@ -469,23 +469,41 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
    'internal role taxonomy is not rendered: '+label);
  assert.ok(!/D\.categories\[|D\.roles\[/.test(app),'and no render path looks it up');
 
- // D-10. Two ways to fail an expedition, said apart, in the vocabulary each already owns.
+ /* D-10. The outlook is about the expedition as a whole, and carries exactly two things:
+    the Combat Forecast and the conditional Death risk. The environment is not summarised a
+    second time here - it lives once, beside the destination, where each Hazard states its own
+    pressure and this NPC's readiness against it. */
  const readout=fn('readout');
- assert.ok(readout.includes('전투 전망')&&readout.includes('환경 전망'),'both forecasts are named');
- /* Both verdicts are still the engine's own canonical vocabulary; under SALE_v2.7 they are
+ assert.ok(readout.includes('전투 전망'),'the fight forecast is named');
+ assert.ok(!readout.includes('환경 전망'),'the outlook carries no second environment verdict');
+ assert.ok(!/환경 압박/.test(app),'and no collapsed environment duplicate survives anywhere');
+ assert.ok(!/env-press/.test(app)&&!/env-press/.test(css),'the phone-only duplicate is gone with it');
+ assert.ok(!/hazardList\(/.test(readout),'the outlook renders no Hazard rows of its own');
+ const plate=fn('destPlate');
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),n&&n\.outlook&&n\.outlook\.hazards\)/.test(plate),
+  'the destination plate is the one place Hazards and readiness appear, off the frozen snapshot');
+ assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
+  'and it is never hidden, since nothing else shows the environment now');
+ /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
     read off the frozen SALE-entry snapshot rather than recomputed as Items move, so the
-    calculation moved into the systems layer with them. */
+    calculation moved into the systems layer with it. */
  assert.ok(!/Dungeon\.estimate\(/.test(app),'the screen does not recompute the fight verdict');
  assert.ok(shop.includes('combat:G.Dungeon.estimate('),'the fight keeps its own canonical verdict');
- assert.ok(/\['취약','불안','대응','충분'\]/.test(shop),
-  'the environment summary is the worst of the Hazard states already on screen');
+ assert.ok(/\['취약','불안','대응','충분'\]/.test(shop),'the readiness ladder belongs to the engine');
  assert.ok(!/\['취약','불안','대응','충분'\]/.test(app),'and the screen does not keep a second copy of that ladder');
+ /* The Hazard's pressure and the NPC's readiness are two facts, never one sentence. */
+ const list=app.slice(app.indexOf('const hazardList='),app.indexOf('const hazardList=')+700);
+ assert.ok(/<span class="press">/.test(list)&&/<span class="ready">/.test(list),'pressure and readiness are separate elements');
+ assert.ok(/<i>현재 대응<\/i>/.test(list),'the readiness is explicitly labelled as the NPC state');
+ assert.ok(css.includes('.hazards .ready'),'and the readiness has its own style, not the pressure one');
+ const appCode=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ assert.ok(!/압박에 /.test(appCode),'no rendered line welds the pressure and the readiness into one sentence');
  for(const invented of ['안전','위험함','보통','양호'])
   assert.ok(!readout.includes("'"+invented+"'"),'no new forecast label was invented: '+invented);
 
  // D-11. Always-available help, keyboard-reachable because it is a native <details>.
  assert.ok(readout.includes("<details class=\"tip\""),'the ? is a details, so it needs no script');
- assert.equal((readout.match(/\+help\(/g)||[]).length,3,'one helper, used by both forecasts and the Death risk');
+ assert.equal((readout.match(/\+help\(/g)||[]).length,2,'one helper, used by the fight forecast and the Death risk');
  assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
 
@@ -739,8 +757,10 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!css.includes('.kit .slots{display:grid'),'without becoming a panel of their own');
 
  // D-12. One Hazard reads as one row, and the block is set apart from the forecasts above it.
- assert.ok(/\.readout \.hazards li\{[^}]*padding:7px 8px/.test(css),'each Hazard is its own banded row');
- assert.ok(/\.readout \.hazards\{gap:0/.test(css),'the rows are separated by the band, not by a gap');
+ // (the block moved to the destination plate when the environment stopped being shown twice)
+ assert.ok(/\.dest-plate \.hazards li\{[^}]*padding:7px 8px/.test(css),'each Hazard is its own banded row');
+ assert.ok(/\.dest-plate \.hazards\{gap:0/.test(css),'the rows are separated by the band, not by a gap');
+ assert.ok(!/\.readout \.hazards/.test(css),'and no style is left behind for rows the outlook no longer has');
 
  // D-21. Six outcomes in three volumes, and the routine one is not made small.
  for(const [outcome,rank] of [['성공','quiet'],['퇴각','routine'],['부상','routine'],

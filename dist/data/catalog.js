@@ -50,17 +50,17 @@ item('coupon','황금 1+1 쿠폰',4,500,1000,'special',0,'coupon','길드초이�
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
    than inventing a second FIRE Hazard, and its 투력 +6 is an explicit catalogue exception. */
-item('spiderkit','거미줄 방호세트',3,150,320,'gear',0,'spiderkit','귀환안심','',{poison:12,bind:12}),
-item('slimesuit','연금 방수슈트',3,150,320,'gear',0,'slimesuit','귀환안심','',{corrosion:12,mire:12}),
-item('cryptlantern','성화 랜턴',3,150,320,'gear',0,'cryptlantern','귀환안심','',{fear:12,dark:12}),
-item('snowvisor','백설 방한고글',3,150,320,'gear',0,'snowvisor','귀환안심','',{cold:12,whiteout:12}),
-item('magmagear','마그마 냉각장비',3,160,340,'gear',0,'magmagear','귀환안심','',{fire:14,combat:6}),
+item('spiderkit','거미줄 방호세트',3,150,320,'gear',0,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:12,bind:12}),
+item('slimesuit','연금 방수슈트',3,150,320,'gear',0,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:12,mire:12}),
+item('cryptlantern','성화 랜턴',3,150,320,'gear',0,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:12,dark:12}),
+item('snowvisor','백설 방한고글',3,150,320,'gear',0,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:12,whiteout:12}),
+item('magmagear','마그마 냉각장비',3,160,340,'gear',0,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:14,combat:6}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
-item('battlelunch','결전 특선 도시락',3,180,380,'food',2,'battlelunch','길드초이스','',{survival:12,supply:9}),
-item('herobar','용사 특식 핫바',3,170,360,'food',2,'herobar','길드초이스','',{combat:8,supply:7}),
-item('hyperenergy','초고속 에너지드링크',3,160,340,'drink',5,'hyperenergy','MANA+','',{mobility:18,supply:2}),
-item('sageelixir','대현자 허브엘릭서',3,160,340,'drink',5,'sageelixir','길드초이스','',{spirit:20,supply:2}),
-item('toppotion','최상급 포션',3,190,400,'potion',7,'toppotion','길드초이스','',{combat:24,potion:1})
+item('battlelunch','결전 특선 도시락',3,180,380,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:12,supply:9}),
+item('herobar','용사 특식 핫바',3,170,360,'food',2,'herobar','길드초이스','일반 핫바를 두 개 사는 것과는 기분이 다르다고 한다.',{combat:8,supply:7}),
+item('hyperenergy','초고속 에너지드링크',3,160,340,'drink',5,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:18,supply:2}),
+item('sageelixir','대현자 허브엘릭서',3,160,340,'drink',5,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:20,supply:2}),
+item('toppotion','최상급 포션',3,190,400,'potion',7,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:24,potion:1})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
    full-run rebaseline existed; this is that rebaseline. The shape of the change: a Job with a

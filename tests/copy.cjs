@@ -267,6 +267,36 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  const stone=DATA.items.find(x=>x.id==='stone');
  assert.ok(stone&&/한 번 더 돌아올 기회/.test(stone.description),
   'the return stone keeps the rule that is only written there');
+
+ /* The ten v2.7 Epics shipped with the flavour slot empty because Canonical gave names and no
+    prose. The approved copy is now in, and it is flavour: it may not name a channel, a number
+    or a Hazard, because the effect line one row up is where that truth lives. */
+ const EPIC_FLAVOUR={
+  spiderkit:'손목을 앞으로 내밀어도 아무것도 나오진 않는다.',
+  slimesuit:'방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',
+  cryptlantern:'성당 납품용이었는데 어쩌다 편의점까지 왔다.',
+  snowvisor:'김은 안 서린다. 눈썹은 얼 수 있다.',
+  magmagear:'설명서 첫 줄: 마그마에 직접 넣지 마시오.',
+  battlelunch:'동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',
+  herobar:'일반 핫바를 두 개 사는 것과는 기분이 다르다고 한다.',
+  hyperenergy:'마시고 나면 계산대보다 먼저 문을 나선다.',
+  sageelixir:'한 모금 마시면 괜히 턱을 쓰다듬게 된다.',
+  toppotion:'병은 작다. 값은 작지 않다.'};
+ for(const [id,text] of Object.entries(EPIC_FLAVOUR)){
+  const it=DATA.itemBy[id];
+  assert.ok(it,'the catalog still has '+id);
+  assert.equal(it.description,text,it.name+' carries the approved flavour verbatim');
+  assert.ok(!/[0-9]/.test(it.description),it.name+' flavour states no number');
+  for(const label of Object.values(Presentation.labels))
+   assert.ok(!it.description.includes(label),it.name+' flavour names no effect channel: '+label);
+  for(const hz of Object.values(DATA.hazards))
+   assert.ok(!it.description.includes(hz),it.name+' flavour names no Hazard: '+hz);
+ }
+ /* COPY GAP, reported not invented: 진정 허브티 and 중급 포션 are the two other v2.7 additions
+    and Canonical gives them names without prose, so their flavour slot is still empty. This
+    pins the gap to exactly those two - anything else losing its flavour is a regression. */
+ const empty=DATA.items.filter(it=>!it.description||!it.description.trim()).map(it=>it.id);
+ assert.deepEqual(empty.sort(),['herbtea','midpotion'],'only the two awaiting approved copy are blank');
 });
 
 console.log(count+' copy groups passed');
