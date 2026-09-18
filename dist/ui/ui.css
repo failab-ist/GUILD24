@@ -3,12 +3,12 @@
      document titles, world labels and diegetic readouts only. Bitmap faces are crisp just
      at their design size and integer multiples, so display type stays on 12/24/36/48
      (Galmuri11) or 15/30/45 (Galmuri14).
-   INFORMATION — Pretendard (SIL OFL-1.1, (c) Kil Hyung-jin). Every value, effect line,
+   INFORMATION — Wanted Sans (SIL OFL-1.1, (c) Wanted Lab). Every value, effect line,
      price, count and control label, at any size. The game feel comes from the material,
      the frame and the motion; the text stays easy to read.
    Both are subset and vendored locally by tools/vendor-assets.py - no runtime request. */
-@font-face{font-family:'Pretendard';src:url('fonts/Pretendard.woff2') format('woff2');font-weight:400;font-display:block}
-@font-face{font-family:'Pretendard';src:url('fonts/Pretendard-SemiBold.woff2') format('woff2');font-weight:600;font-display:block}
+@font-face{font-family:'WantedSans';src:url('fonts/WantedSans.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'WantedSans';src:url('fonts/WantedSans-SemiBold.woff2') format('woff2');font-weight:600;font-display:block}
 @font-face{font-family:'Galmuri';src:url('fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:block}
 @font-face{font-family:'GalmuriBody';src:url('fonts/Galmuri14.woff2') format('woff2');font-weight:400;font-display:block}
 @font-face{font-family:'GalmuriNum';src:url('fonts/GalmuriMono11.woff2') format('woff2');font-weight:400;font-display:block}
@@ -36,12 +36,12 @@
  --tone-benefit:#9fd07f;--tone-cost:#e39075;--tone-neutral:#b3ab96;
  --r0:#b4bba6;--r1:#98c79b;--r2:#8ec6dd;--r3:#c2a2d6;--r4:#f0cd72;
  /* information (default) */
- --ui:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+ --ui:'WantedSans','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
  --body:var(--ui);
- --mono:'Pretendard',system-ui,sans-serif;
+ --mono:'WantedSans',system-ui,sans-serif;
  /* atmosphere — opt in, never the default */
- --f-sign:'Galmuri','Pretendard',sans-serif;
- --f-plate:'GalmuriBody','Galmuri','Pretendard',sans-serif;
+ --f-sign:'Galmuri','WantedSans',sans-serif;
+ --f-plate:'GalmuriBody','Galmuri','WantedSans',sans-serif;
  --f-led:'GalmuriNum','Galmuri',ui-monospace,monospace;
  --t-xs:12px;--t-sm:13px;--t-md:15px;--t-lg:18px;--t-xl:22px;--t-2xl:28px;--t-3xl:40px;
  --gutter:16px;
@@ -70,7 +70,7 @@ b,strong{font-weight:750}
 small,.smalltext{font-size:var(--t-sm);line-height:1.5;color:var(--dim)}
 .muted{color:var(--dim)}.gold-text{color:var(--gold)}.danger-text{color:var(--blood)}
 .num,.mono{font-variant-numeric:tabular-nums}
-/* pixel faces must never be antialiased away; Pretendard must never be pixelated */
+/* pixel faces must never be antialiased away; the INFORMATION face must never be pixelated */
 .f-sign,.f-plate,.f-led{-webkit-font-smoothing:none;font-smooth:never}
 .row{display:flex;align-items:center;gap:12px}.wrap{flex-wrap:wrap}.between{justify-content:space-between}
 .stack{display:grid;gap:12px}

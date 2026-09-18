@@ -20,17 +20,36 @@ Regenerate the vendored copies with `npm run assets`.
   Galmuri14 15px (body) · Galmuri11 12px (labels) · Galmuri11 Bold 12/24px (display) ·
   GalmuriMono11 12px (numerals).
 
-### Pretendard 1.3.9 — information UI face
-- source: npm `pretendard` (https://github.com/orioncactus/pretendard), (c) Kil Hyung-jin
+### Wanted Sans 1.0.3 — information UI face
+- source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab
 - licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
-  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL-Pretendard.txt`).
-- why: type carries two jobs and they must not be mixed. Galmuri is the atmosphere face
-  (signage, document titles, diegetic readouts); Pretendard is the information face — every
-  value, effect line, price, count and control label, including both primary actions. A
-  system stack was rejected: Korean fallbacks differ per platform, so readability could not
-  be guaranteed and the QA screenshots would not represent what a player sees.
-- how: Regular + SemiBold subset to the same glyph set by `tools/vendor-assets.py`
-  (1.5 MB each -> 59 KB each). Five faces ship in total at 192 KB.
+  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL-WantedSans.txt`).
+- why: `UI_UX_v2.7.0.md` §TYPOGRAPHY names Wanted Sans as the INFORMATION face, replacing
+  Pretendard. Type carries two jobs and they must not be mixed: the atmosphere face takes
+  signage, document titles and diegetic readouts; the information face takes every value,
+  effect line, price, count and control label, including both primary actions. A system stack
+  was rejected: Korean fallbacks differ per platform, so readability could not be guaranteed
+  and the QA screenshots would not represent what a player sees.
+- how: Regular + SemiBold only - the package ships seven weights and the other five never
+  reach dist - subset to the same glyph set by `tools/vendor-assets.py`
+  (2.3 MB each -> ~62 KB each). Five faces ship in total.
+
+### ATMOSPHERE face — Mulmaru, NOT YET VENDORED
+`UI_UX_v2.7.0.md` §TYPOGRAPHY also replaces Galmuri with Mulmaru / 물마루 as the ATMOSPHERE
+face. Licence is settled and compatible: **SIL OFL-1.1**, (c) 2025 Mushsooni, Reserved Font
+Name "물마루"/"Mulmaru" (https://github.com/mushsooni/mulmaru), so it may be vendored on the
+same terms as the rest.
+
+It is BLOCKED on asset delivery in this build environment, not on licence. Mulmaru publishes
+no npm package, and its repository carries no binaries at any ref - `main` and `v1.0` hold
+only LICENCE, README, the character list and images. The font files exist solely as GitHub
+Release assets, and this environment's egress policy refuses github.com and codeload
+(HTTP 403); noonnu.cc and freekoreanfont.com do not resolve at all. Galmuri therefore remains
+the ATMOSPHERE face until the Mulmaru + Mulmaru Mono binaries are supplied.
+
+To finish: drop `Mulmaru.ttf` and `MulmaruMono.ttf` (v1.0 release) into the repo or a
+reachable package, then point `SRC`/`FACES` in `tools/vendor-assets.py` at them the same way
+the Wanted Sans swap did, and re-run `npm run assets`.
 
 ### anime.js 4.5.0 — animation runtime
 - source: npm `animejs` (https://animejs.com), (c) Julian Garnier

@@ -5,7 +5,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 """Vendor Chunk F presentation assets into dist/ so the game stays static and local.
 
   Galmuri (SIL OFL 1.1, (c) Lee Minseo) -> the ATMOSPHERE face: signage, document titles,
-    diegetic readouts. Pretendard (SIL OFL 1.1, (c) Kil Hyung-jin) -> the INFORMATION face:
+    diegetic readouts. Wanted Sans (SIL OFL 1.1, (c) Wanted Lab) -> the INFORMATION face:
     every value, effect line and control label. Both are subset to the glyphs this build can
     actually render; every player-visible string in GUILD24 is a literal in dist/**/*.js, so
     the union of those characters plus ASCII is a complete, safe subset.
@@ -18,7 +18,7 @@ from fontTools import subset
 
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC=os.path.join(ROOT,'node_modules','galmuri','dist')
-PRE=os.path.join(ROOT,'node_modules','pretendard','dist','public','static')
+PRE=os.path.join(ROOT,'node_modules','wanted-sans','fonts','ttf')
 OUT=os.path.join(ROOT,'dist','ui','fonts')
 VEN=os.path.join(ROOT,'dist','ui','vendor')
 FACES=['Galmuri14','Galmuri11-Bold','GalmuriMono11']
@@ -35,7 +35,9 @@ QUALITY=90
 # encoder effort: 6 costs 5.1s an image for 4% fewer bytes than 4, which costs 0.08s.
 # 64x the build time is not worth 4% on a 12MB set, so the whole drop encodes in seconds.
 METHOD=4
-UI_FACES=[('Pretendard-Regular','Pretendard'),('Pretendard-SemiBold','Pretendard-SemiBold')]
+# UI_UX_v2.7 §TYPOGRAPHY: the INFORMATION face is Wanted Sans. Only the two weights the UI
+# actually uses are vendored - the package ships seven, and the rest never reach dist.
+UI_FACES=[('WantedSans-Regular','WantedSans'),('WantedSans-SemiBold','WantedSans-SemiBold')]
 
 def glyphs():
     chars=set()
@@ -62,9 +64,9 @@ def main():
         subset.save_font(font,dst,opts); font.close()
         print(f'  {os.path.basename(dst)}  {os.path.getsize(src)//1024}K -> {os.path.getsize(dst)//1024}K')
     for src_name,out_name in UI_FACES:
-        cut(os.path.join(PRE,src_name+'.otf'),os.path.join(OUT,out_name+'.woff2'))
-    shutil.copyfile(os.path.join(ROOT,'node_modules','pretendard','dist','LICENSE.txt'),
-                    os.path.join(OUT,'OFL-Pretendard.txt'))
+        cut(os.path.join(PRE,src_name+'.ttf'),os.path.join(OUT,out_name+'.woff2'))
+    shutil.copyfile(os.path.join(ROOT,'node_modules','wanted-sans','fonts','OFL.txt'),
+                    os.path.join(OUT,'OFL-WantedSans.txt'))
     for face in FACES:
         src=os.path.join(SRC,face+'.woff2')
         dst=os.path.join(OUT,face+'.woff2')
