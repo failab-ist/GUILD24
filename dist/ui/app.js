@@ -673,7 +673,14 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  const changes=moved.direct;
  const actions=isFinal?btn('<strong>'+E(n.name)+'에게 보급</strong>','supply','stamp',full?'disabled':'')
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
-   const blocked=q.debit>n.money?'손님 소지금 부족':n.refused.includes(it.id+':'+mode)?'오늘 거절됨':full?'가방 가득':'';
+   /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
+      the ceiling was never itself refused - saying 오늘 거절됨 there would be untrue. A mode is
+      ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
+   const said=(n.refusalReasons||[]).filter(x=>x.item===it.id);
+   const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult);
+   const blocked=q.debit>n.money?'손님 소지금 부족'
+    :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
+    :full?'가방 가득':'';
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
  return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho"><span>'+E(n.name)+'에게 판매</span><b class="wallet" style="margin-left:auto">소지 '+fmt(n.money)+'G</b></p>')

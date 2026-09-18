@@ -787,4 +787,67 @@ test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for
  }
 });
 
+test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every higher price',()=>{
+ const mults=Object.fromEntries(Object.entries(DATA.pricing).map(([k,v])=>[k,v.mult]));
+ const order=['half','full','overcharge'].sort((a,b)=>mults[a]-mults[b]);
+ assert.deepEqual(order,['half','full','overcharge'],'the three ordinary modes, cheapest first');
+ /* Drive real visits until each of the three modes has been refused at least once, whatever
+    the reason was, and check the ceiling every time. The old rule only fired on a price
+    refusal, so a 거절 for need or for choice left the higher prices open. */
+ const seen=new Set();
+ let visits=0;
+ for(let seed=0;seed<60&&seen.size<3;seed++){
+  const g=fresh('ceiling-'+seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  for(let turn=0;turn<600&&g.run.phase!=='end';turn++){
+   const s=g.run;
+   if(s.phase!=='sell'){if(!step(g))break;continue;}
+   const n=g.current();
+   visits++;
+   for(const st of [...s.inventory]){
+    for(const mode of order){
+     const key=st.item+':'+mode;
+     if(n.refused.includes(key))continue;
+     if(n.pack.length>=Adventurer.slots(n))break;
+     let threw=false;
+     try{g.sell(st.id,mode);}catch(e){threw=true;}
+     if(threw)continue;
+     const said=(n.refusalReasons||[]).filter(x=>x.item===st.item);
+     const mine=said.find(x=>x.mode===mode);
+     if(!mine)break;  // accepted, this stock is gone
+     seen.add(mine.reason);
+     // every higher price for THIS SKU is now closed, whatever the reason was
+     for(const higher of order.filter(m=>mults[m]>mults[mode]))
+      assert.ok(n.refused.includes(st.item+':'+higher),
+       mine.reason+' refusal at '+mode+' must close '+higher);
+     // every lower price is still open
+     for(const lower of order.filter(m=>mults[m]<mults[mode]))
+      assert.ok(!n.refused.includes(st.item+':'+lower),
+       'a refusal at '+mode+' leaves '+lower+' open');
+     // and nothing is locked for a SKU this customer never actually refused
+     const refusedSkus=new Set((n.refusalReasons||[]).map(x=>x.item));
+     for(const key of n.refused)
+      assert.ok(refusedSkus.has(key.split(':')[0]),'an unrelated SKU is never locked: '+key);
+     break;
+    }
+   }
+   g.depart();
+  }
+ }
+ assert.ok(visits>0,'the sweep actually reached the counter');
+ assert.ok(seen.has('price')&&seen.size>=2,'the sweep saw a price refusal and at least one other reason: '+[...seen]);
+ // a new visit starts from a clean pricing state
+ const g=fresh('ceiling-reset');g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ for(let turn=0;turn<600&&g.run.phase!=='sell';turn++)if(!step(g))break;
+ const n=g.current();
+ if(n&&g.run.inventory.length){
+  const st=g.run.inventory[0];
+  try{g.sell(st.id,'half');}catch(e){}
+  if(n.refused.length){
+   g.depart();
+   for(let turn=0;turn<600&&g.run.day<2;turn++)if(!step(g))break;
+   assert.ok(g.run.npcs.every(x=>!x.refused.length),'a new day begins from a clean pricing state');
+  }
+ }
+});
+
 console.log(count+' integration groups passed');
