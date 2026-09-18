@@ -9,7 +9,7 @@ FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-19
 SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=WALLET_FINAL,STORE_CAPITAL_RATES,DECORATION_PRICES
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
 BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
 SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
@@ -212,8 +212,14 @@ Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
 ## IMPLEMENTATION-BLOCKING DESIGN UNRESOLVED
 
 ```text
-NONE
+NPC Wallet final choice            -> ECONOMY_ORDER owner
+Store Capital Day-band rates       -> META_v2.8.0.md
+Initial four Decoration prices     -> META_v2.8.0.md
 ```
+
+These three are the only open numerics in the current v2.7 + Decoration-package line. Everything
+else confirmed in this cycle - the late Gate Day slope, the four Decoration effects, and the
+`board` / `hub` visitor overrides - is settled in its own owner and is no longer a candidate.
 
 Current Franchise Achievement numeric thresholds are `DIRECTOR DOCUMENT BASELINE` values, not unresolved. They may change only through the frozen/full-run QA `BALANCE FINDING -> User/Director approval -> owner update -> separate fix cycle` process.
 
