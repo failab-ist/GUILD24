@@ -184,14 +184,14 @@ FAIL:
 PASS:
 - exactly one roll per Morning with three mutually exclusive outcomes: 30% +1, 5% +2, 65% none
 - the three outcomes never combine on one Morning
-- operating cost is `overheadBase + overheadBase × 0.20 + other flat extras`, then the existing
+- operating cost is `overheadBase + overheadBase × 0.10 + other flat extras`, then the existing
   rounding rule
-- the 20% is taken on `overheadBase` alone
+- the 10% is taken on `overheadBase` alone
 
 FAIL:
 - +1 and +2 both applying on the same Morning
-- the 20% applied to Event or Relic flat modifiers as well
-- the 20% compounding with another percentage overhead modifier
+- the 10% applied to Event or Relic flat modifiers as well
+- the 10% compounding with another percentage overhead modifier
 
 ### composition
 
