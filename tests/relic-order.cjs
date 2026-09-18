@@ -250,4 +250,51 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  }
 });
 
+test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows the Day band',()=>{
+ const rows=DATA.rarityBands;
+ assert.equal(rows.length,7,'seven Day bands');
+ assert.deepEqual(rows.map(r=>r.maxDay),[3,7,12,19,24,29,30],'the exact band edges');
+ for(const r of rows){
+  assert.equal(r.weights.reduce((a,b)=>a+b,0),100,'D<='+r.maxDay+' sums to exactly 100%');
+  assert.equal(r.weights[4],r.maxDay<=7?0:1,'Legendary is 0% early and exactly 1% after, never more');
+ }
+ // the shape the owner describes: Epic rises materially from D20, Common falls all the way
+ const epic=rows.map(r=>r.weights[3]),common=rows.map(r=>r.weights[0]);
+ for(let i=1;i<rows.length;i++){
+  assert.ok(epic[i]>=epic[i-1],'Epic never falls as the Run goes on');
+  assert.ok(common[i]<common[i-1],'Common falls every band');
+ }
+ assert.ok(epic[4]>=epic[3]*2,'D20-24 is where Epic becomes a normal consideration');
+ assert.ok(epic[0]>0,'and early Epic is possible, just rare');
+ // the generator really draws from the current Day's band, and a Reroll does not escape it
+ const g=fresh('rarity-band');
+ const measure=(day,rolls)=>{
+  g.run.day=day;g.run.pity.rare=0;
+  const seen=[0,0,0,0,0];
+  for(let i=0;i<rolls;i++){g.run.pity.rare=0;const o=g.rollOffer();seen[DATA.itemBy[o.item].rarity]++;}
+  return seen.map(x=>x/rolls*100);
+ };
+ for(const [day,band] of [[2,0],[10,2],[22,4],[27,5]]){
+  const want=DATA.rarityBands[band].weights,got=measure(day,4000);
+  for(const v of [0,1,2,3]){
+   if(want[v]===0){assert.equal(got[v],0,'D'+day+' rarity '+v+' is impossible');continue;}
+   assert.ok(Math.abs(got[v]-want[v])<4,
+    'D'+day+' rarity '+v+' drew '+got[v].toFixed(1)+'% against the band\'s '+want[v]+'%');
+  }
+ }
+ // Reroll rolls the same band rather than bypassing Day progression
+ const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/shop.js'),'utf8');
+ assert.ok(!/rates=\[55,27/.test(src),'the retired fixed all-Run table is gone');
+ assert.ok(/D\.rarityBands\.find\(b=>s\.day<=b\.maxDay\)/.test(src),'the band is chosen by the CURRENT Day');
+ assert.ok(/rollOffer\(/.test(src));
+ const before=g.run.day;g.run.day=2;
+ const rolled=[];for(let i=0;i<500;i++)rolled.push(DATA.itemBy[g.rollOffer().item].rarity);
+ assert.ok(!rolled.some(r=>r===4),'a D1-3 Reroll cannot reach Legendary, which its band forbids');
+ g.run.day=before;
+ // the new Epics ride the ordinary Epic pool - no separate D20 hard unlock
+ const epics=DATA.items.filter(i=>i.rarity===3);
+ assert.ok(epics.length>=10);
+ for(const it of epics)assert.equal(it.metaUnlock??null,it.id==='tree'?null:null,it.name+' needs no unlock of its own');
+});
+
 console.log(count+' relic/order groups passed');
