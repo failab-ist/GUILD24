@@ -70,7 +70,13 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
    This is the FINAL formula. The expedition's own combat check in dungeon.js keeps the
    coefficients it had: this adoption changes the Final, and moving D1-29 difficulty by the
    same edit would confound the two. See reports/STAGE10.md. */
-const individualPower=(e,hazard)=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20-hazard*.35;
+/* FINAL_EXPEDITION_v2.7 §FINAL HAZARD AGGREGATION. The ordinary expedition divides the summed
+   gap by sqrt(count), which punishes a Family pair merely for carrying more Hazard entries -
+   a two-Family Final can hold three or four. The Final uses the MEAN gap instead, so what is
+   measured is how badly each Hazard is answered rather than how many there are, and a specialist
+   Counter that closes a large matching gap is worth what it actually closes. */
+const finalMeanHazardGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
+const individualPower=(e,meanGap)=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20-meanGap*1.70;
 
 const STATS=['combat','survival','mobility','spirit'];
 
@@ -102,7 +108,7 @@ P.finalSnapshot=function(n,prep,d,context){
    makes it no longer the largest. Ties fall to the stable NPC id. */
 P.envyTarget=function(team,preparations){
  let best=null,bestPower=-Infinity;
- team.forEach((n,i)=>{const p=individualPower(preparations[i].effects,preparations[i].hazard);
+ team.forEach((n,i)=>{const p=individualPower(preparations[i].effects,finalMeanHazardGap(preparations[i]));
   if(p>bestPower||(p===bestPower&&best&&n.id<best))
    {bestPower=p;best=n.id;}});
  return best;
@@ -142,7 +148,7 @@ P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
  const context=s.bossId==='ENVY'?{envyTargetNpcId:this.envyTarget(team,preparations)}:null; // 4 target pass
  const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d,context));  // 4
- const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,preparations[i].hazard),0); // 5-6
+ const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,finalMeanHazardGap(preparations[i])),0); // 5-6
  const bossPower=this.effectiveBossPower(power,{revenue:s.stats.revenue,sealBreakCount:s.sealBreakCount}); // 7
  const roll=.88+this.rng.next()*.24,assault=power*roll,cleared=assault>=bossPower; // 8-9
  /* Final Lock: what the Final was actually decided from, frozen. Reload may not re-roll

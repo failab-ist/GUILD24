@@ -146,8 +146,12 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
   const team=g.finalEligible().slice(0,g.finalRequired());
   for(const n of team)g.selectFinal(n.id);
   const preps=s.team.map(id=>Dungeon.prepare(s.npcs.find(n=>n.id===id),d,s.facilities));
+  /* FINAL_EXPEDITION_v2.7 §FINAL HAZARD AGGREGATION: the Final divides the summed gap by the
+     Hazard COUNT, not by sqrt(count), so a Family pair is not penalised for holding more
+     entries. The v2.6 aggregate-gap path is superseded. */
+  const meanGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
   const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+p.effects.survival*.34
-   +p.effects.mobility*.27+p.effects.spirit*.20-p.hazard*.35,0);
+   +p.effects.mobility*.27+p.effects.spirit*.20-meanGap(p)*1.70,0);
   g.boss();
   /* Stage 10 switched the approved Boss Traits on, so only WRATH still faces the Final with its
      participants untouched - it is the one Run where the party sum can be checked against the
@@ -383,6 +387,41 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
  assert.ok(/s\.final\?'<div class="brief">/.test(app),'ORDER shows the known Final state');
  assert.ok(/s\.final\.familyNames/.test(app),'by name');
  assert.ok(/Presentation\.hazardRows\(s\.final\.hazards\)/.test(app),'with the Pool it carries');
+});
+
+test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 1.70, not the aggregate path',()=>{
+ const src=read('dist/systems/run.js');
+ assert.ok(!/hazard\*\.35/.test(src),'the retired aggregate-gap penalty is gone');
+ assert.ok(/meanGap\*1\.70/.test(src),'the Final penalty is the mean gap x 1.70');
+ assert.ok(/p\.hazards\.reduce\(\(v,h\)=>v\+h\.gap,0\)\/p\.hazards\.length/.test(src),
+  'and the mean divides by the Hazard COUNT, never by sqrt(count)');
+ assert.ok(!/scale.*4\.6/.test(src),'no standalone scale=4.6 path is used in Final resolution');
+ // the Core-Stat weights match the v2.7 Prepared Power baseline exactly
+ for(const w of ['combat\\*\\.50','survival\\*\\.34','mobility\\*\\.27','spirit\\*\\.20'])
+  assert.ok(new RegExp(w).test(src),'Final Core-Stat weight '+w+' matches Prepared Power');
+ /* The point of the mean: a Family pair with MORE Hazards is not penalised for the count. Two
+    parties equally unprepared per Hazard must take the same penalty whether the pair carries
+    three Hazards or four - under the old sqrt path the four-Hazard pair paid more. */
+ const gap=n=>({hazards:Array.from({length:n},()=>({gap:10}))});
+ const mean=p=>p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length;
+ assert.equal(mean(gap(3)),mean(gap(4)),'equal per-Hazard gaps cost the same at any Hazard count');
+ const aggregate=p=>p.hazards.reduce((v,h)=>v+h.gap,0)/Math.sqrt(p.hazards.length);
+ assert.ok(aggregate(gap(4))>aggregate(gap(3)),'which the retired aggregate path did not do');
+ // a real Final: closing a matching gap with a Counter is worth what it actually closes
+ const g=atFinal('meanpower',3),s=g.run,d=s.dungeons[0];
+ const n=s.npcs.find(x=>x.alive&&x.introduced);
+ const hz=d.hazards[0];
+ const counter=DATA.items.find(i=>(i.effects[hz]||0)>0);
+ if(counter){
+  const bare=Dungeon.prepare({...JSON.parse(JSON.stringify(n)),pack:[]},d,s.facilities);
+  const kit=Dungeon.prepare({...JSON.parse(JSON.stringify(n)),pack:[counter.id]},d,s.facilities);
+  assert.ok(mean(kit)<mean(bare),'a matching Counter lowers the mean gap it answers');
+ }
+ // Final Power stays internal
+ const app=read('dist/ui/app.js');
+ assert.ok(!/Final Power|파이널 파워|최종 전투력/.test(app),'Final Power is never surfaced as a Player Stat');
+ // the roll band is untouched
+ assert.ok(/roll=\.88\+this\.rng\.next\(\)\*\.24/.test(src),'the inherited Final roll band stands: .88 ~ 1.12');
 });
 
 console.log(count+' final groups passed');
