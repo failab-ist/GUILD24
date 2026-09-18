@@ -633,6 +633,14 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<div class="brief"><div class="when"><span class="k">오늘</span>'
    +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
    +'<div class="when"><span class="k">내일</span><p class="tier">'+E(gateLine())+'</p><p class="tier">'+tierLine()+'</p></div></div>'
+   /* FINAL_EXPEDITION_v2.7 §D25: from D25 the Final's Family Pair and Hazard Pool are known,
+      so they sit with the other planning signals on ORDER rather than arriving on D30. It is
+      the persisted state itself - D30 reads the same object, and a reload cannot reroll it. */
+   +(s.final?'<div class="brief"><div class="when"><span class="k">마왕성</span>'
+     +'<p><b>'+E(s.final.familyNames.join(' / '))+'</b></p>'
+     +'<ul class="hazards">'+Presentation.hazardRows(s.final.hazards).map(h=>
+       '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span class="press">'+E(h.pressure)+'</span></li>').join('')
+     +'</ul></div></div>':'')
    +stockBrief()
    +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
     const sl = it.days ? (it.days + Relics.shelf(game, it)) : null;

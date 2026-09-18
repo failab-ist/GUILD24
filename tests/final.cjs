@@ -4,6 +4,7 @@ const assert=require('node:assert/strict');
 for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const copy=x=>JSON.parse(JSON.stringify(x));
+const read=p=>require('node:fs').readFileSync(require('node:path').join(__dirname,'..',p),'utf8');
 const FAMILIES=['spider','slime','fire','crypt','snow'];
 
 function atFinal(seed='final',eligible=5){
@@ -346,6 +347,42 @@ test('RUN-Q15 on a controlled D30 setup: regulars and newcomers are read off the
  }
  const packed=Dungeon.prepare({...copy(alive[0]),pack:['potion']},d,s.facilities).effects;
  assert.notEqual(packed.combat,bare(alive[0]).combat,'and the bare reading really is without stock');
+});
+
+test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D25, and D30 reuses it',()=>{
+ const drive=(seed,to)=>{const g=new Game();g.autosave=false;g.start(seed);
+  g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.day=to;g.morning();return g;};
+ // nothing before D25
+ assert.equal(drive('d25-early',24).run.final,undefined,'D24 knows nothing about the Final');
+ const g=drive('d25-known',25);
+ const f=g.run.final;
+ assert.ok(f,'D25 generates it');
+ assert.equal(f.families.length,2);
+ assert.equal(new Set(f.families).size,2,'two DISTINCT Families');
+ // the Hazard Pool is the merge of each Family's own T2 keys - no new Family table
+ const expected=[...new Set(f.families.flatMap(id=>DATA.familyTiers[id][1]))];
+ assert.deepEqual([...f.hazards].sort(),expected.sort(),'the Pool is the union of the authoritative T2 keys');
+ // it is authoritative for D30: the same object, not a new roll
+ const snapshot=JSON.stringify(f);
+ g.run.day=30;g.morning();
+ assert.equal(JSON.stringify(g.run.final),snapshot,'D30 does not generate a new Pair');
+ assert.deepEqual(g.run.dungeons[0].families,f.families,'and the Final Gate IS that state');
+ // Save/Load may not reroll either field
+ const r=Save.import(Save.export(g.account,g.run));
+ assert.equal(JSON.stringify(r.run.final),snapshot,'a reload returns the same Pair and Pool');
+ // and it is fixed by the seed, so WHEN it is generated cannot change the answer
+ const late=drive('d25-known',30);
+ assert.deepEqual(late.run.final.families,f.families,'the same seed gives the same Pair at D30 as at D25');
+ assert.deepEqual([...late.run.final.hazards].sort(),[...f.hazards].sort(),'and the same Pool');
+ // D25 grants no Counter Items, no free stock and no special shop
+ const before=drive('d25-gift',24),after=drive('d25-gift',25);
+ assert.equal(after.run.inventory.length-before.run.inventory.length,0,'D25 grants no free stock');
+ assert.equal(after.run.offers.length,before.run.offers.length,'and no special Final shop');
+ // the screen actually tells the player, from D25 rather than on D30
+ const app=read('dist/ui/app.js');
+ assert.ok(/s\.final\?'<div class="brief">/.test(app),'ORDER shows the known Final state');
+ assert.ok(/s\.final\.familyNames/.test(app),'by name');
+ assert.ok(/Presentation\.hazardRows\(s\.final\.hazards\)/.test(app),'with the Pool it carries');
 });
 
 console.log(count+' final groups passed');
