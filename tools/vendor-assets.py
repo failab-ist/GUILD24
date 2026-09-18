@@ -4,8 +4,10 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 """Vendor Chunk F presentation assets into dist/ so the game stays static and local.
 
-  Galmuri (SIL OFL 1.1, (c) Lee Minseo) -> the ATMOSPHERE face: signage, document titles,
-    diegetic readouts. Wanted Sans (SIL OFL 1.1, (c) Wanted Lab) -> the INFORMATION face:
+  Mulmaru (SIL OFL 1.1, (c) 2025 Mushsooni) -> the ATMOSPHERE face: signage, document titles,
+    diegetic readouts. It publishes no npm package and its own repository carries no binaries,
+    so the upstream WOFF2 pair is vendored into vendor/mulmaru/ and subset from there. The CDN
+    that served them is an acquisition source only - nothing is fetched at runtime. Wanted Sans (SIL OFL 1.1, (c) Wanted Lab) -> the INFORMATION face:
     every value, effect line and control label. Both are subset to the glyphs this build can
     actually render; every player-visible string in GUILD24 is a literal in dist/**/*.js, so
     the union of those characters plus ASCII is a complete, safe subset.
@@ -17,11 +19,12 @@ import io,glob,os,shutil,sys
 from fontTools import subset
 
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC=os.path.join(ROOT,'node_modules','galmuri','dist')
+SRC=os.path.join(ROOT,'vendor','mulmaru')
 PRE=os.path.join(ROOT,'node_modules','wanted-sans','fonts','ttf')
 OUT=os.path.join(ROOT,'dist','ui','fonts')
 VEN=os.path.join(ROOT,'dist','ui','vendor')
-FACES=['Galmuri14','Galmuri11-Bold','GalmuriMono11']
+# only the two faces the CSS actually asks for; Mulmaru ships a single weight by design
+FACES=['Mulmaru','MulmaruMono']
 # NPC / Boss portraits. GUILD24_NPC_PRODUCTION is the source of truth and is never written
 # to; dist carries a derived copy only, exactly as the fonts do. WebP q90 with alpha, capped
 # at the largest size the UI can actually paint at 2x device pixels — measured in a real
@@ -52,7 +55,7 @@ def glyphs():
 
 def main():
     if not os.path.isdir(SRC):
-        sys.exit('galmuri is not installed. run: npm install')
+        sys.exit('vendor/mulmaru is missing. the ATMOSPHERE WOFF2 pair is vendored in-repo.')
     os.makedirs(OUT,exist_ok=True); os.makedirs(VEN,exist_ok=True)
     text=glyphs()
     print(f'subsetting to {len(text)} glyphs')
@@ -80,16 +83,16 @@ def main():
         font.close()
         print(f'  {face}.woff2  {os.path.getsize(src)//1024}K -> {os.path.getsize(dst)//1024}K')
     # record what the family genuinely does not carry, so tests/assets.cjs can tell a
-    # stale subset apart from a character Galmuri never had (data-only symbols, emoji).
+    # stale subset apart from a character the ATMOSPHERE family never had (data-only symbols, emoji).
     from fontTools.ttLib import TTFont
-    full=TTFont(os.path.join(SRC,'Galmuri14.woff2'))
+    full=TTFont(os.path.join(SRC,'Mulmaru.woff2'))
     have=set(full.getBestCmap());full.close()
     absent=sorted(c for c in text if ord(c) not in have)
     io.open(os.path.join(OUT,'coverage.json'),'w',encoding='utf-8').write(
         '{"requested":%d,"absentFromFamily":%s}\n'%(len(text),__import__('json').dumps(absent,ensure_ascii=False)))
     print('  absent from the family: '+(''.join(absent) or 'none'))
-    for name in ['ofl.md']:
-        shutil.copyfile(os.path.join(ROOT,'node_modules','galmuri',name),os.path.join(OUT,'OFL.md'))
+    # upstream Mulmaru OFL notice travels with the faces it licenses
+    shutil.copyfile(os.path.join(SRC,'OFL.txt'),os.path.join(OUT,'OFL.md'))
     anime=os.path.join(ROOT,'node_modules','animejs','dist','bundles','anime.umd.min.js')
     shutil.copyfile(anime,os.path.join(VEN,'anime.umd.min.js'))
     shutil.copyfile(os.path.join(ROOT,'node_modules','animejs','LICENSE.md'),os.path.join(VEN,'anime.LICENSE.md'))

@@ -1,17 +1,18 @@
 /* ---- type: two roles, never mixed up.
-   ATMOSPHERE — Galmuri, a bitmap pixel family (SIL OFL-1.1, (c) Lee Minseo). Signage,
-     document titles, world labels and diegetic readouts only. Bitmap faces are crisp just
-     at their design size and integer multiples, so display type stays on 12/24/36/48
-     (Galmuri11) or 15/30/45 (Galmuri14).
+   ATMOSPHERE — Mulmaru / 물마루, a pixel family (SIL OFL-1.1, (c) 2025 Mushsooni). Signage,
+     document titles, world labels and diegetic readouts only. Pixel faces are crisp just at
+     their design size and integer multiples, so display type stays on 12/24/36/48.
    INFORMATION — Wanted Sans (SIL OFL-1.1, (c) Wanted Lab). Every value, effect line,
      price, count and control label, at any size. The game feel comes from the material,
      the frame and the motion; the text stays easy to read.
    Both are subset and vendored locally by tools/vendor-assets.py - no runtime request. */
 @font-face{font-family:'WantedSans';src:url('fonts/WantedSans.woff2') format('woff2');font-weight:400;font-display:block}
 @font-face{font-family:'WantedSans';src:url('fonts/WantedSans-SemiBold.woff2') format('woff2');font-weight:600;font-display:block}
-@font-face{font-family:'Galmuri';src:url('fonts/Galmuri11-Bold.woff2') format('woff2');font-weight:700;font-display:block}
-@font-face{font-family:'GalmuriBody';src:url('fonts/Galmuri14.woff2') format('woff2');font-weight:400;font-display:block}
-@font-face{font-family:'GalmuriNum';src:url('fonts/GalmuriMono11.woff2') format('woff2');font-weight:400;font-display:block}
+/* Mulmaru is a single-weight pixel family by design. The face is declared across the whole
+   weight range so a rule asking for 700 is served the real face instead of a synthesised
+   bold - UI_UX_v2.7 asks for size/spacing/material hierarchy, never fake bold. */
+@font-face{font-family:'Mulmaru';src:url('fonts/Mulmaru.woff2') format('woff2');font-weight:100 900;font-display:block}
+@font-face{font-family:'MulmaruMono';src:url('fonts/MulmaruMono.woff2') format('woff2');font-weight:100 900;font-display:block}
 
 
 .desktop-only { display: none; }
@@ -40,9 +41,9 @@
  --body:var(--ui);
  --mono:'WantedSans',system-ui,sans-serif;
  /* atmosphere — opt in, never the default */
- --f-sign:'Galmuri','WantedSans',sans-serif;
- --f-plate:'GalmuriBody','Galmuri','WantedSans',sans-serif;
- --f-led:'GalmuriNum','Galmuri',ui-monospace,monospace;
+ --f-sign:'Mulmaru','WantedSans',sans-serif;
+ --f-plate:'Mulmaru','WantedSans',sans-serif;
+ --f-led:'MulmaruMono','Mulmaru',ui-monospace,monospace;
  --t-xs:12px;--t-sm:13px;--t-md:15px;--t-lg:18px;--t-xl:22px;--t-2xl:28px;--t-3xl:40px;
  --gutter:16px;
  --tex-tile:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2248%22%20height%3D%2236%22%20shape-rendering%3D%22crispEdges%22%3E%3Crect%20width%3D%2248%22%20height%3D%2236%22%20fill%3D%22%23c6bda8%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23cbc3ae%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2218%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23cbc3ae%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%220%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23c2b9a4%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%2218%22%20width%3D%2223%22%20height%3D%2217%22%20fill%3D%22%23c2b9a4%22%2F%3E%3C%2Fsvg%3E");
@@ -546,7 +547,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* The two forecasts are read apart, so they are laid out apart: each one owns its line on a
    phone and sits beside its neighbour when there is room. The ? is a native <details>, which
    is why it is reachable by keyboard without a line of script. */
-.readout .fore{display:flex;align-items:baseline;gap:2px;flex:1 1 46%}
+/* Korean-aware wrapping: a label may break at a space, never inside a word. The ATMOSPHERE
+   and INFORMATION faces are wider than the pair they replaced, and at 360 that split
+   `실패 시 사망 위험` across `...위` / `험`. */
+.readout .fore{display:flex;align-items:baseline;gap:2px;flex:1 1 46%;word-break:keep-all}
 .readout .tip,.dest-plate .tip{display:inline-block;margin-left:6px;position:static}
 .readout .tip>summary,.dest-plate .tip>summary{display:inline-flex;align-items:center;justify-content:center;
  min-width:24px;min-height:24px;padding:0 4px;list-style:none;cursor:pointer;

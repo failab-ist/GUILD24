@@ -57,7 +57,16 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  assert.ok(!/class="tag"/.test(app),'the old chip helper is gone; a price tag is a named object');
  assert.ok(css.includes('image-rendering:pixelated'),'art renders unsmoothed');
  assert.ok(css.includes('-webkit-font-smoothing:none'),'the bitmap face is not antialiased away');
- assert.ok(/@font-face\{font-family:'Galmuri'/.test(css),'the pixel family is the type system');
+ /* UI_UX_v2.7 §TYPOGRAPHY — EXACT PAIR: Mulmaru is the ATMOSPHERE face and Wanted Sans the
+    INFORMATION one, and no third family, icon font or theme-font system exists beside them. */
+ assert.ok(/@font-face\{font-family:'Mulmaru'/.test(css),'the pixel family is the type system');
+ assert.ok(!/Galmuri|Pretendard/.test(css),'neither retired face survives in the CSS');
+ const families=[...css.matchAll(/@font-face\{font-family:'([^']+)'/g)].map(m=>m[1]);
+ assert.deepEqual([...new Set(families)].sort(),['Mulmaru','MulmaruMono','WantedSans'],
+  'exactly the approved pair - Mulmaru with its Mono, and Wanted Sans');
+ /* A single-weight pixel family must not be synthesised into a fake bold. */
+ for(const m of css.matchAll(/@font-face\{font-family:'Mulmaru[^']*';[^}]*\}/g))
+  assert.ok(/font-weight:100 900/.test(m[0]),'the ATMOSPHERE face covers the whole weight range: '+m[0].slice(0,60));
  // green is the sign, the price tag and the approval stamp — never a ground
  for(const rule of ['body{','.stage{','.p-order{','.p-morning{'])
   assert.ok(!/#([0-9a-f]{0,2})(3f9d63|7ddc9f)/i.test(css.slice(css.indexOf(rule),css.indexOf(rule)+240)),'green is not a page ground in '+rule);

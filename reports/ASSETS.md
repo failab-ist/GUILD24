@@ -5,21 +5,6 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
-### Galmuri 2.40.3 — bitmap pixel font family
-- source: npm `galmuri` (https://github.com/quiple/galmuri), (c) Lee Minseo
-- licence: **SIL OFL-1.1** (SIL Open Font License 1.1) — commercial use YES, embedding YES, modification YES,
-  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL.md`), the font may not
-  be sold on its own.
-- why: the single highest-impact change available. A real Korean bitmap face designed for
-  12-15px turns the whole interface from "web page in a game palette" into game type.
-  Nothing else reachable covers Hangul at pixel sizes.
-- how: subset to the 702 glyphs this build can render and re-encoded to woff2 by
-  `tools/vendor-assets.py`. 4 faces, 1.7 MB -> 63 KB total. Vendored, not CDN: a local
-  subset is faster than any CDN here, has no FOUT, and keeps the game playable offline.
-- faces / design sizes (bitmap, so only integer multiples are crisp):
-  Galmuri14 15px (body) · Galmuri11 12px (labels) · Galmuri11 Bold 12/24px (display) ·
-  GalmuriMono11 12px (numerals).
-
 ### Wanted Sans 1.0.3 — information UI face
 - source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab
 - licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
@@ -34,22 +19,22 @@ Regenerate the vendored copies with `npm run assets`.
   reach dist - subset to the same glyph set by `tools/vendor-assets.py`
   (2.3 MB each -> ~62 KB each). Five faces ship in total.
 
-### ATMOSPHERE face — Mulmaru, NOT YET VENDORED
-`UI_UX_v2.7.0.md` §TYPOGRAPHY also replaces Galmuri with Mulmaru / 물마루 as the ATMOSPHERE
-face. Licence is settled and compatible: **SIL OFL-1.1**, (c) 2025 Mushsooni, Reserved Font
-Name "물마루"/"Mulmaru" (https://github.com/mushsooni/mulmaru), so it may be vendored on the
-same terms as the rest.
-
-It is BLOCKED on asset delivery in this build environment, not on licence. Mulmaru publishes
-no npm package, and its repository carries no binaries at any ref - `main` and `v1.0` hold
-only LICENCE, README, the character list and images. The font files exist solely as GitHub
-Release assets, and this environment's egress policy refuses github.com and codeload
-(HTTP 403); noonnu.cc and freekoreanfont.com do not resolve at all. Galmuri therefore remains
-the ATMOSPHERE face until the Mulmaru + Mulmaru Mono binaries are supplied.
-
-To finish: drop `Mulmaru.ttf` and `MulmaruMono.ttf` (v1.0 release) into the repo or a
-reachable package, then point `SRC`/`FACES` in `tools/vendor-assets.py` at them the same way
-the Wanted Sans swap did, and re-run `npm run assets`.
+### Mulmaru 1.1 — atmosphere face
+- source: upstream https://github.com/mushsooni/mulmaru, (c) 2025 Mushsooni, Reserved Font
+  Name "물마루" / "Mulmaru". Vendored in-repo at `vendor/mulmaru/` with the upstream OFL.
+- licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
+  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL.md`).
+- acquisition: Mulmaru publishes no npm package and its own repository carries no binaries at
+  any ref, so the WOFF2 pair was taken from the `projectnoonnu/2601-4` distribution that
+  jsDelivr serves as `@1.1`. That tag and `main` are the same commit (707cc84), and the files
+  were verified before use: real WOFF2, family `물마루` / `물마루 Mono`, OFL-1.1 in the name
+  table, 11,940 glyphs each. The CDN is an ACQUISITION SOURCE ONLY — the game fetches nothing
+  at runtime, which `tests/assets.cjs` asserts against the CSS.
+- faces: Mulmaru and Mulmaru Mono only, the two the CSS actually asks for. Mulmaru ships a
+  single weight by design, so the @font-face is declared `font-weight:100 900` and a rule
+  asking for 700 gets the real face instead of a synthesised bold.
+- how: subset to this build's glyph set by `tools/vendor-assets.py` (97 KB -> 11 KB and
+  95 KB -> 10 KB).
 
 ### anime.js 4.5.0 — animation runtime
 - source: npm `animejs` (https://animejs.com), (c) Julian Garnier

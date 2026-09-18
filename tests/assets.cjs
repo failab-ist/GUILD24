@@ -39,7 +39,7 @@ test('the pixel font subset covers every character this build can render',()=>{
   if(!/\.(js|html)$/.test(file)||file.includes('vendor/'))continue;
   for(const ch of read(file))chars.add(ch);
  }
- const face=path.join(root,'dist/ui/fonts/Galmuri14.woff2');
+ const face=path.join(root,'dist/ui/fonts/Mulmaru.woff2');
  const cmap=execFileSync('python3',['-c',
   "import sys\nfrom fontTools.ttLib import TTFont\nf=TTFont(sys.argv[1])\nsys.stdout.buffer.write(''.join(chr(c) for c in f.getBestCmap()).encode('utf-8'))",face],
   {encoding:'utf8',maxBuffer:1<<22});
