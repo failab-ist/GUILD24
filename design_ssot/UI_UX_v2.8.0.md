@@ -111,12 +111,15 @@ Manual Run Abandon must not imply that Store Capital will be earned.
 
 ## FIRST IMPLEMENTATION CONTENT
 
-Initial content:
+Initial content is the four Slots `sign` / `wall` / `counter` / `display`.
 
-- sign / 새벽배송 안내판 / ORDER candidates +1
-- wall / 길드 제휴 현판 / visitors +1
-- counter / 알뜰 금고 / starting Gold +250G
-- display / 프리미엄 쇼케이스 / existing premium rare-NPC weighting
+Their exact effects are owned by `META_v2.8.0.md` §INITIAL FOUR DECORATIONS and are not restated
+here. Repeating a number in two Specs is how the two drift.
+
+The UX requirement is that the screen states each Decoration's **current** effect exactly as the
+META owner defines it, including a chance-based effect stated as a chance rather than as a
+guarantee. A wording that reads as a guaranteed bonus when the owner defines a probability is a
+defect even when the number shown is right.
 
 Exact Store Capital prices are pending integrated balance approval.
 
