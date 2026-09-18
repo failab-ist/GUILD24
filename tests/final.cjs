@@ -320,4 +320,32 @@ test('BOSS-Q08: GREED reads the committed sales the shop already keeps, capped',
  assert.equal(withTuning({...tuned,greedShortfallCap:5},()=>g.effectiveBossPower(0,{revenue:0})),base+5,'and no further than the cap');
 });
 
+test('RUN-Q15 on a controlled D30 setup: regulars and newcomers are read off the Run own history',()=>{
+ /* The simulation harness classifies at D30 and a fresh-Account cohort may not get there, so
+    the classification is proven here on a constructed D30 state instead. The two groups are
+    read from visits and the canonical 단골 threshold - no new NPC-value system. */
+ const g=atFinal('q15-controlled',5),s=g.run,d=s.dungeons[0];
+ const alive=s.npcs.filter(n=>n.alive);
+ assert.ok(alive.length>=4,'the controlled setup has adventurers to classify');
+ alive[0].introduced=true;alive[0].visits=7;alive[0].loyalty=Adventurer.TRUSTED_REGULAR;
+ alive[1].introduced=true;alive[1].visits=7;alive[1].loyalty=Adventurer.TRUSTED_REGULAR-1;
+ alive[2].introduced=true;alive[2].visits=1;alive[2].loyalty=0;
+ alive[3].introduced=true;alive[3].visits=4;alive[3].loyalty=Adventurer.TRUSTED_REGULAR;
+ const invested=s.npcs.filter(n=>n.alive&&n.introduced&&n.visits>=5&&Adventurer.isTrustedRegular(n));
+ const newcomer=s.npcs.filter(n=>n.alive&&n.visits<=1);
+ assert.ok(invested.includes(alive[0]),'kept coming back AND reached the 단골 threshold');
+ assert.ok(!invested.includes(alive[1]),'visits alone is not an invested regular');
+ assert.ok(!invested.includes(alive[3]),'loyalty alone is not an invested regular either');
+ assert.ok(newcomer.includes(alive[2]),'one visit is a newcomer');
+ assert.ok(!newcomer.includes(alive[0]),'and a regular is never also a newcomer');
+ // the value that classifies them is the bare Final contribution, so it describes the adventurer
+ const bare=n=>Dungeon.prepare({...copy(n),pack:[]},d,s.facilities).effects;
+ for(const n of [...invested,...newcomer]){
+  const e=bare(n);
+  assert.ok(Object.values(e).every(v=>typeof v!=='number'||Number.isFinite(v)),'a classified adventurer has a finite bare state');
+ }
+ const packed=Dungeon.prepare({...copy(alive[0]),pack:['potion']},d,s.facilities).effects;
+ assert.notEqual(packed.combat,bare(alive[0]).combat,'and the bare reading really is without stock');
+});
+
 console.log(count+' final groups passed');

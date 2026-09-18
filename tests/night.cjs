@@ -43,7 +43,11 @@ function checkOne(r, n){
   assert.ok(!/돌아왔다|빠져나왔다|이겼/.test(happened),'no survival language on a death: '+happened);
   assert.ok(!LIVING.test(r.quote),'no living dialogue on a death: '+r.quote);
   assert.ok(!/다시는 가게 문을 열지 않는다/.test(happened),'the permanence line is not duplicated');
-  assert.equal(r.combatWon,false,'a death only follows a lost fight');
+  /* DUNGEON_HAZARD_v2.7 §Resolution order: the Death roll is conditioned on the FAILURE
+     PATH, not on a lost fight - a won fight the environment turned into an injury reaches
+     it too. What stays absolute is that a 성공/대성공 never reaches it at all. */
+  assert.notEqual(r.outcome,'성공','a death never coexists with a Success outcome');
+  if(r.combatWon)assert.ok(!/전투에서 밀린/.test(happened),'a won fight is not told as a lost one: '+happened);
  }else{
   assert.ok(!DEATH_WORDS.test(happened),'no death language on a survival: '+happened);
  }
@@ -418,6 +422,54 @@ test('ITEM_v2.7 §INSURANCE HIERARCHY: 구급키트 is Aftercare, never an Outco
   const r=n.records.at(-1);
   if(r.outcome==='사망'){assert.equal(r.aftercare,null,'no Aftercare on a death');assert.equal(n.alive,false);}
  }
+});
+
+test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the prepared state',()=>{
+ const d={...D.dungeonBy.slime,day:14,tier:2,hazards:['poison','mire'],scale:1,power:80,reward:40,requiredSupply:0};
+ const base=Adventurer.create(new RNG('death-model'),1,10,Meta.fresh());
+ const at=(over,injury)=>{
+  const n=JSON.parse(JSON.stringify(base));n.traits=[];n.fatigue=0;n.pack=[];n.injury=injury;
+  n.stats={combat:over,survival:over,mobility:over,spirit:over};n.equipment={power:0,name:'-'};
+  return {n,risk:Dungeon.failureDeathRisk(n,d)};
+ };
+ // the two deficits are the only inputs, and each one alone raises the chance
+ const weak=at(1,0).risk,strong=at(400,0).risk;
+ assert.ok(weak.chance>strong.chance,'weaker preparation is the more dangerous failure');
+ assert.equal(strong.chance,0,'complete preparation reduces the conditional risk to 0%');
+ assert.ok(weak.chance<=0.30+1e-9,'the healthy conditional cap is 30%');
+ for(const over of [1,20,60,140,400]){
+  const {risk}=at(over,0);
+  assert.ok(Math.abs(risk.chance-Math.max(0,Math.min(.30,risk.combatDeficit*.18+risk.environmentDeficit*.12)))<1e-12,
+   'the chance is exactly CombatDeficit x .18 + EnvironmentDeficit x .12, clamped');
+  const hurt=at(over,1).risk;
+  // the +10%p rides that snapshot's OWN healthy value - departing injured also lowers the Stats
+  assert.ok(Math.abs(hurt.chance-Math.max(0,Math.min(.40,hurt.healthy+.10)))<1e-12,'an injured departure is +10%p under a 40% cap');
+  assert.ok(hurt.chance>risk.chance,'sending a wounded adventurer back out is visibly more dangerous');
+  assert.ok(hurt.chance<=0.40+1e-9,'the injured conditional cap is 40%');
+ }
+ // a Gate with no canonical Hazard contributes no environment half
+ assert.equal(Dungeon.failureDeathRisk(at(400,0).n,{...d,hazards:[]}).environmentDeficit,0,'no Hazard means no EnvironmentDeficit');
+ // the roll fires on the failure path only, exactly once, and never on a Success
+ let successes=0,failures=0,deaths=0;
+ for(let i=0;i<1500;i++){
+  const n=Adventurer.create(new RNG('death-sweep-'+i),1,10,Meta.fresh());
+  n.traits=[];n.fatigue=0;n.injury=0;n.recovery=0;n.pack=[];
+  const r=Dungeon.resolve(n,{...d,power:6+i%160},new RNG('ds-'+i));
+  if(['성공','대성공'].includes(r.outcome)){
+   successes++;
+   assert.equal(r.debug.deathChance,0,'a Success never reaches the Death roll');
+  }else{
+   failures++;if(r.outcome==='사망')deaths++;
+   assert.ok(r.debug.deathChance>=0&&r.debug.deathChance<=0.40+1e-9,'the failure path rolls one chance inside the caps');
+   if(r.outcome==='사망')assert.ok(r.debug.deathRoll<r.debug.deathChance,'a death is that one roll hitting');
+  }
+ }
+ assert.ok(successes>0&&failures>0,'the sweep reached both paths');
+ assert.ok(deaths>0,'the sweep reached a death');
+ // the roll is not gated behind a failed escape any more: deaths appear on retreats too
+ const src=read('dist/systems/dungeon.js');
+ assert.ok(!/\.04\+deficit\*\.16/.test(src),'the retired post-noise Death formula is gone');
+ assert.ok(/outcome!=='성공'/.test(src),'the Death roll is conditioned on the failure path');
 });
 
 console.log(groups+' night groups passed');

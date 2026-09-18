@@ -39,7 +39,11 @@ function nightTone(r){return r.outcome==='사망'?'gone':r.outcome==='중상'?'s
 /* A rescue is never dressed up as an ordinary success, and never as a death. */
 function nightVerdict(r){return r.rescued&&r.outcome!=='death'?'위기에서 생환':r.outcome;}
 function nightHappened(r){
- if(r.outcome==='사망')return '전투에서 밀린 뒤 돌아오지 못했다.';
+ /* DUNGEON_HAZARD_v2.7 rolls Death on any failure path, not only behind a lost fight, so the
+    line may no longer name the fight as the cause on a won one - NIGHT_CLOSING forbids an
+    invented cause. The won-fight wording states only what the runtime actually proved. */
+ if(r.outcome==='사망')return r.combatWon?'원정에서 돌아오지 못했다.'
+                                        :'전투에서 밀린 뒤 돌아오지 못했다.';
  if(r.avoidedDeath)return '보급이 마지막 순간의 사망을 막았다.';
  if(r.outcome==='중상')return '큰 부상을 입었다. 회복할 시간이 필요하다.';
  /* 퇴각 and 부상 both reach here from a won fight as well as a lost one — the injury

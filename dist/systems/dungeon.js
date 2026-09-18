@@ -128,6 +128,25 @@ function greatSuccessSignal(n,d,facilities=[]){
  const margin=preparedPower(e)/d.power-1;
  return margin>=D.greatSuccess.signalMargin;
 }
+/* DUNGEON_HAZARD_v2.7 §DEATH RISK. One conditional number, read off a prepared snapshot:
+   how likely an ordinary FAILED expedition escalates to Death. It is not the chance that the
+   expedition ends in Death - a 성공/대성공 never reaches this roll at all. Both halves read
+   the same prepared truth the ordinary Forecast reads, so there is no Death-only combat score
+   and no Death-only Hazard table. Departing already injured adds a flat +10%p and lifts the
+   cap from 30% to 40%. Exported because SALE shows the pre-supply snapshot of this same
+   calculation and the two may not drift apart. */
+function failureDeathChanceFor(p,d,departedInjured){
+ const required=d.power||1;
+ const combatDeficit=clamp((required-preparedPower(p.effects))/required,0,1);
+ const environmentDeficit=p.hazards.length
+  ?p.hazards.reduce((v,h)=>v+clamp(h.gap/h.threat,0,1),0)/p.hazards.length:0;
+ const healthy=clamp(combatDeficit*.18+environmentDeficit*.12,0,.30);
+ return {combatDeficit,environmentDeficit,healthy,
+  chance:departedInjured?clamp(healthy+.10,0,.40):healthy};
+}
+function failureDeathRisk(n,d,facilities=[]){
+ return failureDeathChanceFor(prepare(n,d,facilities),d,n.injury===1);
+}
 function resolve(n,d,r,facilities=[],options={}){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
 
@@ -141,10 +160,20 @@ function resolve(n,d,r,facilities=[],options={}){
  let outcome=combatSuccess?'성공':(escapeRoll<escapeChance?'퇴각':'부상');
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  const injuryRoll=r.next(),deathRoll=r.next();let rescued=false,deathChance=0,avoidedDeath=false;
+ /* NPC_TRAIT_v2.7 §Injured re-expedition escalation: the +15%p rides the Severe-vs-ordinary
+    decision the branch already makes, never a second Severe roll, and only on a failure path. */
+ const departedInjured=n.injury===1,severeEscalation=departedInjured&&!combatSuccess?.15:0;
  if(!combatSuccess&&outcome==='부상'){
-  const deficit=clamp(1-score/d.power,0,1);deathChance=clamp(.04+deficit*.16-e.survival*.0007,.012,.22);
-  if(deathRoll<deathChance)outcome='사망';else if(injuryRoll<.42+e.injuryRisk-e.injuryGuard*.25)outcome='중상';
- }else if(affected||r.next()<e.injuryRisk){outcome=injuryRoll<.13-e.injuryGuard*.12?'중상':'부상';}
+  if(injuryRoll<clamp(.42+e.injuryRisk-e.injuryGuard*.25+severeEscalation,0,1))outcome='중상';
+ }else if(affected||r.next()<e.injuryRisk){outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';}
+ /* DUNGEON_HAZARD_v2.7 §Resolution order: exactly one Death roll, and only once the ordinary
+    path is known to have failed. The old model rolled Death solely behind a failed escape and
+    read a post-noise deficit, so a lucky variance roll decided how deadly the preparation had
+    been; now the chance is fixed by the prepared state and a 성공 never reaches the roll. */
+ if(outcome!=='성공'){
+  deathChance=failureDeathChanceFor(p,d,departedInjured).chance;
+  if(deathRoll<deathChance)outcome='사망';
+ }
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&r.next()<clamp(e.escape,.0,.96)){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
  if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
  /* 강골 alone reaches this branch now. ITEM_v2.7 §INSURANCE HIERARCHY moved 구급키트 off the
@@ -220,5 +249,5 @@ function resolve(n,d,r,facilities=[],options={}){
  report.quote=G.Copy.night(report,n);
  n.pack=[];return report;
 }
-G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower};
+G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk};
 })(globalThis);

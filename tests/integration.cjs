@@ -56,16 +56,29 @@ function drivenToDeepSale(){
  }
  throw Error('no Run reached the Sale phase of a Deep Day');
 }
-/* Drive a Run all the way to its Final. Under the Stage 10 economy a store can go under before
-   DAY 30, so which seed gets there is no longer a fixed fact - the helper keeps trying rather
-   than pinning one that happens to survive today. */
-function drivenToFinal(prefix){
- for(let i=0;i<80;i++){
-  const g=fresh(prefix+'-'+i);g.buyRelic(g.run.relicWindow.candidateIds[0]);
-  for(let n=0;n<4000&&g.run.day<30&&g.run.phase!=='end';n++)if(!step(g))break;
-  if(g.run.phase==='final')return g;
+/* CONTROLLED D30 SETUP. Whether a fresh Account survives 30 Days under its own power is a
+   balance question measured on a cross-run trajectory, not a precondition for testing what the
+   Final generates and persists - so this driver removes the two things that can end a Run early
+   rather than re-rolling seeds until one happens to survive. Every Day is played normally
+   (Order, arrivals, Closing) except that the till is held solvent and nobody is sent into a
+   Gate, so the D30 state is reached for certain. It proves nothing about survivability. */
+function controlledStep(g){
+ const s=g.run;
+ s.money=Math.max(s.money,5000);  // controlled: the economy is not the subject here
+ if(s.phase==='sell'){
+  // everyone still meets the player at the counter; nobody departs into a Gate
+  while(s.cursor<s.queue.length-1)g.depart();
+  s.queue=[];g.depart();
+  return true;
  }
- throw Error('no Run reached the Final');
+ return step(g);
+}
+function controlledPlay(g,limit=6000){let t=0;while(g.run.phase!=='end'&&t++<limit)if(!controlledStep(g))break;return g;}
+function controlledToFinal(prefix){
+ const g=fresh(prefix);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ for(let n=0;n<6000&&g.run.day<30&&g.run.phase!=='end';n++)if(!controlledStep(g))break;
+ if(g.run.phase!=='final')throw Error('the controlled D30 setup did not reach the Final: '+g.run.phase+' D'+g.run.day);
+ return g;
 }
 function reload(g){g.save();const s=Save.import(Save.export(g.account,g.run));const h=new Game(s.account,s.run);h.autosave=false;return h;}
 
@@ -100,7 +113,7 @@ test('CORE_RUN §SAVE/LOAD: every persisted v2.4 field survives, and a damaged o
 });
 
 test('CORE_RUN §SAVE/LOAD: the Final state a D30 run generated is part of the save',()=>{
- const g=drivenToFinal('save-final');
+ const g=controlledToFinal('save-final');
  assert.equal(g.run.phase,'final','the driver reached the Final');
  const round=Save.import(Save.export(g.account,g.run));
  assert.deepEqual(round.run.final,g.run.final,'the generated Final survives');
@@ -405,25 +418,27 @@ test('CORE_RUN §RUN RANDOMNESS: the same seed and the same inputs produce the s
 
 test('RUN-Q19 / RUN-Q20: save → load → continue equals an uninterrupted run, at every phase',()=>{
  const phases=['foundation','morning','order','sell','night','closing','final'];
- /* Reaching the Final means surviving to D30, which now also means not losing
-    D.balance.deathLimit adventurers on the way - the scripted policy here sells nothing, so
-    'resume-final' closes on day 19 with ten gone. The phase reached is what this test needs;
-    which seed gets there is not part of the contract. */
- const seeds={final:'resume-final-3'};
+ /* The Final phase only exists on a Run that is standing at D30, which a fresh Account under
+    this scripted policy does not reach under its own power - and whether it does is a balance
+    question, not part of the save contract. That one phase is therefore driven on the
+    controlled D30 setup, the same deterministic driver on both sides of the cut, so the
+    save/load claim is the thing being tested rather than a seed's luck. */
  for(const at of phases){
-  const seed=seeds[at]||'resume-'+at;
-  const straight=play(fresh(seed));
+  const controlled=at==='final';
+  const seed='resume-'+at;
+  const advance=controlled?controlledStep:step,finish=controlled?controlledPlay:play;
+  const straight=finish(fresh(seed));
   const g=fresh(seed);
   let turns=0,cut=false;
-  while(g.run.phase!=='end'&&turns++<4000){
+  while(g.run.phase!=='end'&&turns++<6000){
    if(!cut&&g.run.phase===at){cut=true;const h=reload(g);
     assert.deepEqual(h.run,g.run,at+': the reloaded run is the same run');
     assert.equal(h.rng.state,g.rng.state,at+': the RNG resumes where it stopped');
-    play(h);
+    finish(h);
     assert.deepEqual(h.run,straight.run,at+': continuing from the save lands on the same run');
     assert.deepEqual(h.account,straight.account,at+': and on the same account');
     break;}
-   if(!step(g))break;
+   if(!advance(g))break;
   }
   assert.ok(cut,at+': the phase was actually reached and cut at');
  }
