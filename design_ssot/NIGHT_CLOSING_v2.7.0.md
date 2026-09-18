@@ -88,8 +88,8 @@ actual Outcome 부상
 Do not display Retreat as natural Injury recovery.
 Do not clear ordinary Injury merely because the result was not a fresh `부상` token.
 
-If an already-injured NPC incurs Severe/Death escalation, report the actual final outcome/state only.
-Do not expose exact hidden death probability.
+If an already-injured NPC resolves to Severe Injury or Death, report the actual final outcome/state only.
+The exact pre-supply Death Risk may already have been shown during SALE, but Night must not invent or expose a separate post-supply/final probability after resolution.
 
 Player-facing result may truthfully state that the NPC departed already injured when that state materially affected the expedition, but must not fabricate an exact cause such as `부상 때문에 죽었다` unless the runtime proves that counterfactual claim.
 
