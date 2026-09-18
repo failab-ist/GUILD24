@@ -90,7 +90,7 @@ PASS:
 - Gate shows qualitative readiness
 - exact Gate Counter threshold stays hidden
 
-## UI-Q86 — UNCOMMITTED PREVIEW
+## UI-Q86 — UNCOMMITTED PREVIEW / FROZEN PRE-SUPPLY OUTLOOK
 
 Select/focus an uncommitted Item.
 
@@ -99,14 +99,21 @@ May show:
 - price/affordability
 - deterministic Supply/Fatigue arithmetic
 
-Must not show hypothetical:
+Must not show hypothetical post-Item answers:
 - `접전 -> 우세`
 - `불안 -> 충분`
+- Death Risk `% -> %` change
 - Great Success signal change
-- exact success/death probability
+- exact expedition Success probability
 
-After actual purchase commit:
-PASS: current Forecast/readiness may update before remaining-slot decision.
+The already-visible exact Death Risk % is allowed only as the fixed pre-supply snapshot.
+
+After actual purchase commit, PASS only if:
+- displayed Combat Forecast remains the original pre-supply snapshot
+- displayed Hazard Readiness remains the original pre-supply snapshot
+- displayed Death Risk % remains the original pre-supply snapshot
+- exact Item/direct-effect and proven source-attributed numeric changes may update
+- no post-commit derived expedition answer is substituted before the remaining-slot decision.
 
 ## UI-Q87 — TWO-SLOT HANDLING
 
@@ -306,8 +313,10 @@ PASS:
 ### Case B — its Supply reduces an active Supply Deficit
 
 PASS:
-- effective 투력/강인함/기동/정신 and readiness may rise if the canonical unified Supply Deficit system actually changes them
+- effective 투력/강인함/기동/정신 and underlying Hazard preparation may improve if the canonical unified Supply Deficit system actually changes them
 - any displayed Core-Stat delta is attributed to `보급 부족 완화` or equivalent system source
+- displayed pre-supply Hazard Readiness remains frozen rather than being replaced by a new readiness label
+- displayed pre-supply Death Risk remains frozen rather than being replaced by a new percentage
 - UI does not imply that 집중 사탕 directly grants those Stats
 - exact hidden deficit formula remains undisclosed
 
@@ -319,10 +328,11 @@ PASS:
 - direct Item effect remains separately readable
 
 All cases:
-- main current-state values match runtime preparation truth
+- exact post-commit Item/effect/delta rows match runtime preparation truth
 - direct Item effect and derived system effects are not conflated
+- the pre-supply Combat Forecast / Hazard Readiness / Death Risk snapshot remains clearly identified as pre-supply and is not replaced by post-commit derived answers
 - a generic `보급 후 변화` block is allowed only if those source classes are immediately distinguishable
-- otherwise the synthetic block is removed and current-state values update in place with source treatment
+- otherwise the synthetic block is removed rather than turning the outlook into a post-commit answer dashboard
 
 ## UI-Q104 — FINAL SELECT -> FIXED-PRICE PREP -> RESULT
 
@@ -396,3 +406,26 @@ PASS:
 - tutorial is not forcibly replayed merely because a Run restarted
 
 FAIL if a true fresh account can enter ordinary gameplay without the tutorial because of a stale completion/reset flag.
+
+## UI-Q107 — PRE-SUPPLY EXPEDITION OUTLOOK / DEATH RISK
+
+Controlled ordinary SALE customer before any Item transaction.
+
+PASS:
+- heading is exactly `보급 전 원정 전망`
+- supporting copy is exactly:
+
+```text
+아이템을 지급하기 전 현재 상태를 기준으로 한 전망입니다.
+보급과 원정 중 변수에 따라 실제 결과는 달라질 수 있습니다.
+```
+
+- qualitative Combat Forecast is shown from the SALE-entry state
+- qualitative Hazard Readiness is shown from the SALE-entry state
+- exact pre-supply Death Risk % is shown from the same state
+- exact expedition Success probability remains hidden
+- after first and second committed Item transactions, the three outlook values remain unchanged on screen
+- post-commit exact Item/effect/source deltas may still update
+- actual expedition Resolve uses the final prepared state, not the frozen display snapshot
+- a healthy fully prepared controlled state may show 0% Death Risk when the current formula produces 0
+- injured pre-supply Death Risk includes the canonical +10%p modifier and respects the 40% cap
