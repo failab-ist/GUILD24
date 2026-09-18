@@ -90,11 +90,14 @@ Item Aftercare may still remove/lower persistent Injury exactly as owned by `ITE
 When an NPC departs while already `injury=1`:
 - ordinary Injury Stat penalties above apply
 - the expedition's Severe Injury escalation receives an additional **+15%p** baseline
-- the expedition's Death chance receives an additional **+10%p** baseline
+- the expedition-level Death chance receives an additional **+10%p** baseline
+- the +10%p Death modifier is part of the single ordinary-expedition Death-risk calculation; it is not a second Death roll
+- the pre-supply Death Risk % shown at SALE entry includes this +10%p when the NPC begins the expedition injured
+- after Item transactions, the displayed pre-supply percentage remains frozen even though the actual expedition Death chance is recalculated internally from final preparation
 - these are outcome-risk modifiers, not hidden changes to the four Core Stats
 - they apply only while the NPC begins the expedition already injured
 
-Exact ordinary Death baseline/caps -> `DUNGEON_HAZARD_v2.7.0.md`.
+Exact ordinary Death formula/caps -> `DUNGEON_HAZARD_v2.7.0.md`.
 
 The intent is not to make an injured NPC unusable.
 It is to make repeat deployment a deliberate risk rather than a nearly free one-Day condition clear.
