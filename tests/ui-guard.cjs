@@ -735,7 +735,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'the panel does not restate what the codex header says directly above it');
  assert.ok(fn('gatedContent').includes('metaUnlock')&&fn('gatedContent').includes('c.grade'),
   'and what each threshold opens, from the catalog rather than a written-out list');
- /* META_v2.7 §FRANCHISE ACHIEVEMENTS: a cumulative record says how far along it is, so the
+ /* UI-Q108 / META_v2.7 §FRANCHISE PROGRESS READOUT: a cumulative record says how far along it is, so the
     player can see the distance rather than only that it is not there yet. The ones that are
     a result and not a tally carry no count and keep 달성/미달성. */
  assert.ok(/f\.want!==null\?f\.have\+' \/ '\+f\.want:f\.done\?'달성':'미달성'/.test(cx),

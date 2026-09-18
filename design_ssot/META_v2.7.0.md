@@ -203,6 +203,46 @@ Interpretation boundaries:
 - Achievement 8 requires every selected Final participant to receive at least one actual valid Final-preparation Item transfer before that Boss is cleared
 - Achievement 10 is intentionally the hardest long-term requirement and cannot be substituted by another achievement or point source
 
+## FRANCHISE PROGRESS READOUT — SINGLE SOURCE
+
+The five cumulative Achievements (1-5) each carry a running count alongside their target, so a
+readout can state how far an account has come rather than only that it has not arrived.
+
+```text
+Achievement 1  current / 80
+Achievement 2  current / 20
+Achievement 3  current / 20
+Achievement 4  current / 15
+Achievement 5  current / 5
+```
+
+Achievements 6-10 are a Run result rather than a tally. They carry no running count and report
+only the completion verdict.
+
+Rules:
+- the current value and the target MUST come from the same list that judges the Achievement.
+  No screen, harness or report may hold its own copy of a threshold.
+- a current value is capped at its own target: a completed Achievement reads `80 / 80`, never
+  a number past it. Repeating a completed Achievement still adds nothing.
+- Franchise Grade requirement has one truth, read from both ends - the count a Grade costs, and
+  the Grade a count buys:
+
+```text
+Grade 1 =  0 / 10
+Grade 2 =  2 / 10
+Grade 3 =  4 / 10
+Grade 4 =  6 / 10
+Grade 5 =  8 / 10
+Grade 6 = 10 / 10
+```
+
+  Any progress shown toward a Grade-gated unlock MUST count Franchise Achievements against this
+  table. Reading a different counter is a defect even when the displayed step happens to agree:
+  the pre-v2.7 source measured Start Contracts against Total Job Mastery, so the board could
+  report a Contract as still locked while the Contract was already open.
+
+Presentation placement, wording and the completion cue -> `UI_UX_v2.7.0.md`.
+
 ## FRANCHISE ACHIEVEMENT DESIGN FILTER
 
 Franchise Achievements must recognize normal visible core play rather than manufacture achievement-only behavior.

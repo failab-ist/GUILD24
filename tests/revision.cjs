@@ -171,7 +171,8 @@ test('META_v2.7 §FRANCHISE GRADE: distinct clears count Bosses, and the Grade i
  const once=Meta.franchiseCount(twice);
  twice.franchise.sales=100000;
  assert.equal(Meta.franchiseCount(twice),once,'repeating a completed achievement adds nothing');
- /* META_v2.7 §FRANCHISE GRADE: the unlock board counts what `contractUnlocked` judges. The
+ /* UI-Q108 / META_v2.7 §FRANCHISE PROGRESS READOUT: the unlock board counts what
+    `contractUnlocked` judges. The
     inherited source read Total Job Mastery against (grade-1)*7 - a different counter, so the
     board could call a Contract one step away while the Contract was already open. The two
     must agree at every count, which is what makes the screen and the lock one truth. */

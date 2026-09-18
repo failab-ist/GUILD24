@@ -600,6 +600,56 @@ Avoid:
 - desktop dashboard-card proliferation
 - new nested modal structures
 
+## FRANCHISE PROGRESS — EXISTING CODEX PLACEMENT
+
+Franchise Achievement state is read in the place it is already read: the 도감 본사 header and its
+진행도 tab. No Achievement screen, Achievement Tree or Notification/History subsystem is created
+for this.
+
+The Achievement list states, per row:
+
+- the condition
+- for the five cumulative ones, `current / target`
+- for the other five, the completion verdict
+
+```text
+누적 판매 80회                    41 / 80
+150% 판매 20회 성공                7 / 20
+재방문 손님에게 20회 판매           20 / 20
+점포지원 누적 15개 구매             15 / 15
+다섯 게이트 전부에서 보급 생환        2 / 5
+폐기 0개로 DAY 25 도달             미달성
+```
+
+A row that shows a running count does not also carry the caution styling the verdict rows use -
+the number already states where the account stands, and `주의` next to `41 / 80` contradicts it.
+
+The unlock board's 다음 해금 progress toward a Grade-gated Start Contract counts Franchise
+Achievements, the same count the lock itself judges. Both come from the single Grade requirement
+truth in `META_v2.7.0.md` §FRANCHISE PROGRESS READOUT.
+
+### COMPLETION CUE
+
+First completion of an Achievement is announced ONCE, through the existing Toast:
+
+```text
+가맹 실적 달성 · 점포지원 누적 15개 구매
+```
+
+If that same completion raised the Franchise Grade, the Grade step is readable in the same
+feedback rather than requiring the codex to be opened:
+
+```text
+가맹 실적 달성 · 점포지원 누적 15개 구매 · 가맹등급 1 → 2
+```
+
+Rules:
+- the cue is a before/after of the same state the codex shows, taken once where every crediting
+  site arrives - a sale, a Relic purchase, a supplied survival, the DAY 25 morning, the end of a
+  Run. Each site does not announce itself separately.
+- an Achievement already held never announces again
+- the standing view above is where it is read afterwards; the cue does not become a log
+
 ## RELATED
 
 Sale interaction -> `SALE_v2.7.0.md`
@@ -609,4 +659,5 @@ Night result -> `NIGHT_CLOSING_v2.7.0.md`
 Final timeline / fresh init -> `CORE_RUN_v2.7.0.md`
 Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
 Boss modifier truth -> `BOSS_v2.7.0.md`
+Franchise Achievement / Grade truth -> `META_v2.7.0.md`
 Copy -> `COPY_WORLD_VOICE_v2.7.0.md`

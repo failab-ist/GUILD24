@@ -431,3 +431,30 @@ PASS:
 - actual expedition Resolve uses the final prepared state, not the frozen display snapshot
 - a healthy fully prepared controlled state may show 0% 실패 시 사망 위험 when the current formula produces 0
 - injured pre-supply 실패 시 사망 위험 includes the canonical +10%p modifier and respects the 40% cap
+
+## UI-Q108 — FRANCHISE PROGRESS READOUT / COMPLETION CUE
+
+Controlled account at a known Franchise Achievement state, codex 본사 header and 진행도 tab.
+
+PASS:
+- the Achievement list is in the existing 도감 location; no Achievement screen, Tree or
+  Notification/History subsystem exists
+- each of Achievements 1-5 shows its condition and `current / target`
+- Achievements 6-10 show their condition and 달성 / 미달성, with no running count
+- a completed cumulative Achievement reads at its target and never past it
+- rows showing a running count do not carry the 주의 caution styling
+- the current and target values come from the same list that judges the Achievement; no screen
+  holds its own copy of a threshold
+- 다음 해금 progress toward a Grade-gated Start Contract counts Franchise Achievements against
+  the Grade requirement table, NOT Total Job Mastery
+- at every Achievement count 0-10, every Grade-gated Start Contract reads the same on the board
+  as it does at the actual lock judgment
+- first completion of an Achievement shows exactly one existing Toast naming it
+- when that completion also raised the Franchise Grade, the Grade step is readable in the same
+  feedback
+- an Achievement already held produces no further cue
+
+FAIL:
+- the board reports a Contract as locked or as steps away while the Contract is open
+- a threshold appears in the UI as its own literal instead of being read from the judgment source
+- the completion cue fires again for an Achievement already held, or fires per crediting site
