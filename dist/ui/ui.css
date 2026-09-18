@@ -588,6 +588,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .effects.derived li b{font-family:var(--ui);font-weight:400;font-size:var(--t-sm);color:#a2947c;text-align:right}
 .env-help{margin:6px 0 0}
 .detail-stat.moved strong{color:var(--gold)}
+.ingredients{margin:6px 0 0;font:400 12px/1.65 var(--ui);color:#a2947c}
 .readout .estimate{margin-top:8px;font:400 12px/1.5 var(--ui);color:#8d8067}
 /* D-12. `부식 → 강인함 압박 → 취약` is one sentence about one Hazard, but stacked at a 2px gap
    the rows ran together and read as a paragraph. Each Hazard is now its own banded row with the

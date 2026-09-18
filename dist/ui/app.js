@@ -317,6 +317,20 @@ function readout(n,extra=null,cls=''){
    +tip('실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험')+'</span>'
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
+ /* DUNGEON_HAZARD_v2.7 §PLAYER-FACING INFORMATION BOUNDARY. These are decision ingredients,
+    not a forecast: exact public arithmetic on the CURRENT committed Bag, so unlike the frozen
+    outlook above they do move as Items are sold. The conditional row is arithmetic for each
+    Outcome that can actually happen - it predicts nothing about which one will. The hidden
+    Supply-deficit formula stays hidden; only the deficit amount is named. */
+ +(()=>{const e=p.effects,dep=e.fatigueBeforeExpedition,buf=e.remainingSupplyBuffer;
+   const gain=b=>Math.max(0,b-buf),fin=b=>Math.max(0,Math.min(20,dep+gain(b)));
+   const rows=[];
+   if(e.beforeFatigue||e.preRecovery)
+    rows.push('피로 '+e.beforeFatigue+' → 출발 '+dep+(e.preRecovery?' · 보급 회복 -'+e.preRecovery:''));
+   if(p.supply.deficit)rows.push('보급 부족 '+p.supply.deficit+' · 준비 전체에 페널티');
+   else if(buf)rows.push('남은 보급 '+Math.round(buf)+' · 결과 피로를 그만큼 줄인다');
+   rows.push('밤 피로 · 성공 '+fin(3)+' · 퇴각 '+fin(5)+' · 부상 '+fin(6));
+   return '<p class="ingredients">'+rows.map(E).join('<br>')+'</p>';})()
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
     against it live in one place - the 예상 목적지 plate below - so the player reads the danger
@@ -534,7 +548,15 @@ const coachSteps={
     clears it and the next first occurrence teaches it again. No new persistence was added. */
  morning:[['visitors','#visitor-count','오늘 방문할 인원이다. 시설·계약·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트가 어떤 능력을 압박하는지 보고 준비할 상품을 생각해 보자.'],['deep','.slip.deep','오늘은 심층원정이 열렸다. 같은 게이트의 더 깊은 구역이라 요구 전투력만 올라간다. 손님 한 명을 추천해 보낼 수 있고, 후원금은 그 모험가의 희귀도와 레벨에 따라 달라진다. 성공하면 그 모험가의 성장과 소지금이 늘지만, 가게가 버는 돈은 대성공이어도 없다. 추천하지 않아도 된다.']],
  order:[['gold','#order-register','수량을 고르는 동안 보유 자금과 발주 후 자금이 여기 남는다.'],['quantity','.dial','수량을 고른다. 같은 상품을 여러 개 발주할 수 있다.'],['reroll','.rubber','발주 후보 전체를 교환한다. 같은 날 반복할수록 비용이 올라간다.'],['confirm','[data-action="confirm-order"]','발주를 확정하면 현재 재고로 영업을 시작한다.']],
- sell:[['npc','.who','손님을 눌러 특성과 원정 기록을 살펴보자.','npc'],['great','.great-signal','준비가 요구치를 크게 앞서면 대성공이 나올 수 있다. 일반 원정에서 대성공이 나오면 본사가 가게에 보상을 더 준다. 확정은 아니고, 더 좋은 보급을 하나 더 들려 보낼수록 확률이 오른다.'],['destination','.dest-plate','이 손님이 향할 게이트다. 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.'],['forecast','.readout','원정 전망은 오늘 이 사람의 몸 상태와 챙긴 보급을 보고 가늠한 것이다. 게이트가 그대로 따라 주지는 않는다.'],['inventory','.good','진열대 전체에서 고른다. 판매한 소비품은 오늘 원정에서 쓰인다.'],['pricing','.tills','50%는 손님에게 투자, 100%는 기본 거래, 150%는 지금의 수입을 늘리는 선택이다.']],
+ sell:[['npc','.who','손님을 눌러 특성과 원정 기록을 살펴보자.','npc'],['great','.great-signal','준비가 요구치를 크게 앞서면 대성공이 나올 수 있다. 일반 원정에서 대성공이 나오면 본사가 가게에 보상을 더 준다. 확정은 아니고, 더 좋은 보급을 하나 더 들려 보낼수록 확률이 오른다.'],['destination','.dest-plate','이 손님이 향할 게이트다. 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.'],
+ /* UI_UX_v2.7 §TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER. It teaches what the two
+    columns MEAN and where readiness comes from. It never names an Item for a Hazard: no
+    `독이면 X를 사세요`, because that is the decision the player is here to make. */
+ ['hazard','.dest-plate .hazards','위험마다 압박하는 능력이 정해져 있다. 압박은 위험 자체의 성질이라 누가 서 있든 같다. 현재 대응은 이 손님이 타고난 능력과 들려 보낼 대응 상품이 함께 만드는 것이고, 취약·불안·대응·충분 네 단계로 요약된다.'],
+ ['forecast','.readout','원정 전망과 실패 시 사망 위험은 이 손님이 카운터에 섰을 때의 상태로 계산한다. 상품을 팔아도 이 표시는 손님을 보낼 때까지 바뀌지 않는다. 확정된 결과가 아니라 가늠이다.'],
+ /* The Supply/Fatigue order, in the order it actually resolves. The hidden Supply-deficit
+    formula is not taught - only that a shortfall costs one penalty across the preparation. */
+ ['supply','.ingredients','보급은 요구량부터 채운다. 모자라면 원정 준비 전체에 페널티가 하나 걸린다. 요구량을 넘긴 보급은 지금의 피로를 먼저 줄이고, 그래도 남으면 이번 원정에서 쌓일 피로를 줄여 준다. 아래 밤 피로는 결과별로 계산만 해 둔 숫자이지, 어떤 결과가 나올지 점치는 것이 아니다.'],['inventory','.good','진열대 전체에서 고른다. 판매한 소비품은 오늘 원정에서 쓰인다.'],['pricing','.tills','50%는 손님에게 투자, 100%는 기본 거래, 150%는 지금의 수입을 늘리는 선택이다.']],
  night:[['result','.beat','한 명씩 결과와 원인, 변화를 확인한다. 전체 건너뛰기로 정산에 갈 수 있다.']],
  closing:[['receipt','.tape','판매 마진에서 운영비와 폐기를 뺀 영업 손익이다. 발주와 점포지원 투자는 아래에 따로 적힌다.']]
 };
@@ -546,8 +568,13 @@ function showCoach(){
     mark (a Deep notice, a Great Success signal) only exists on some Days, and stopping would
     hold back every mark behind it until that Day came. */
  const steps=coachSteps[game.run?.phase]||[];
- const step=steps.find(x=>!tutorial['coach-'+x[0]]&&$(x[1])?.getClientRects().length);if(!step)return;
- const target=$(step[1]);
+ /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
+    decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
+    display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
+    appeared there. */
+ const visible=sel=>[...document.querySelectorAll(sel)].find(e=>e.getClientRects().length);
+ const step=steps.find(x=>!tutorial['coach-'+x[0]]&&visible(x[1]));if(!step)return;
+ const target=visible(step[1]);
  const view=target.getBoundingClientRect();if(view.top<80||view.bottom>innerHeight-100){target.scrollIntoView({block:'center',behavior:'instant'});}
  const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8),height=Math.min(b.height+8,180),bottom=top+height;
  const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<innerHeight?bottom+12:Math.max(12,top-bh-12);
@@ -871,12 +898,13 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
                         :'회복 방법: 다음 원정에서 성공·대성공으로 귀환 또는 구급키트 애프터케어');
  }
  if(n.fatigue||n.fatigue===0){
+  // DUNGEON_HAZARD_v2.7 §FATIGUE STAT PENALTY: the bands are -15% and -40%.
   let f_pen='';
-  if(n.fatigue>=20)f_pen='(기동/정신 -25%)';
-  else if(n.fatigue>=10)f_pen='(기동/정신 -10%)';
+  if(n.fatigue>=20)f_pen='(기동/정신 -40%)';
+  else if(n.fatigue>=10)f_pen='(기동/정신 -15%)';
   else f_pen='(페널티 없음)';
   cond.push('현재 피로: '+n.fatigue+' '+f_pen);
-  cond.push('피로 회복: 요구량 초과 보급품(음식 등)으로 회복');
+  cond.push('피로 회복: 요구량을 채우고 남은 보급이 줄여 준다');
  }
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
  return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<p class="muted">${Adventurer.isTrustedRegular(n)?'성장 잠재력: '+(n.potential>=1.18?'빠른 성장':n.potential>=1.1?'꾸준한 성장':'착실한 성장'):'더 친해지면 성장 잠재력과 남은 특성을 알 수 있습니다.'}</p><h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}

@@ -1121,4 +1121,40 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  assert.ok(/\.delta-src\{/.test(css),'the heading has a style of its own');
 });
 
+test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer',()=>{
+ const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
+ /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
+ assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
+ assert.ok(/\['supply','\.ingredients'/.test(steps),'the Supply/Fatigue lesson is on the arithmetic it explains');
+ const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
+ for(const point of ['압박','현재 대응','취약·불안·대응·충분'])
+  assert.ok(hazard.includes(point),'the Hazard lesson covers '+point);
+ const supply=/\['supply',[^\]]*\]/.exec(steps)[0];
+ for(const point of ['요구량부터','페널티','피로'])
+  assert.ok(supply.includes(point),'the Supply lesson covers '+point);
+ assert.ok(/계산만 해 둔 숫자/.test(supply),'and says the conditional numbers are arithmetic, not a prediction');
+ /* It must not hand over an answer, and must not expose the hidden formula. */
+ const all=[...steps.matchAll(/'([^']{12,})'/g)].map(m=>m[1]).join(' ');
+ for(const item of DATA.items)
+  assert.ok(!all.includes(item.name),'no lesson names an Item to buy: '+item.name);
+ for(const hz of Object.values(DATA.hazards))
+  assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
+ assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
+ /* The frozen outlook is described as frozen, since that is what the screen now does. */
+ const forecast=/\['forecast',[^\]]*\]/.exec(steps)[0];
+ assert.ok(/카운터에 섰을 때/.test(forecast)&&/바뀌지 않는다/.test(forecast),
+  'the outlook lesson says the reading is fixed at SALE entry');
+ /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
+ assert.ok(/class="ingredients"/.test(app),'the exact Supply/Fatigue arithmetic is on the decision surface');
+ /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
+    a desktop copy and a phone copy with one always display:none, so taking the first DOM match
+    silently dropped those lessons on a phone. */
+ const coach=app.slice(app.indexOf('function showCoach('),app.indexOf('function showCoach(')+1400);
+ assert.ok(/const visible=sel=>\[\.\.\.document\.querySelectorAll\(sel\)\]\.find\(e=>e\.getClientRects\(\)\.length\)/.test(coach),
+  'the coach resolves its anchor to a visible element');
+ assert.ok(!/\$\(x\[1\]\)|const target=\$\(step\[1\]\)/.test(coach),'and never to the first DOM match');
+ assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(app),'no superseded v2.6 Fatigue band survives in the UI');
+ assert.ok(/기동\/정신 -40%/.test(app)&&/기동\/정신 -15%/.test(app),'the v2.7 bands are what the screen states');
+});
+
 console.log(count+' ui guard groups passed');
