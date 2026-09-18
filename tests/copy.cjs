@@ -292,11 +292,11 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
   for(const hz of Object.values(DATA.hazards))
    assert.ok(!it.description.includes(hz),it.name+' flavour names no Hazard: '+hz);
  }
- /* COPY GAP, reported not invented: 진정 허브티 and 중급 포션 are the two other v2.7 additions
-    and Canonical gives them names without prose, so their flavour slot is still empty. This
-    pins the gap to exactly those two - anything else losing its flavour is a regression. */
- const empty=DATA.items.filter(it=>!it.description||!it.description.trim()).map(it=>it.id);
- assert.deepEqual(empty.sort(),['herbtea','midpotion'],'only the two awaiting approved copy are blank');
+ /* The last two v2.7 additions received their approved copy too, so the flavour slot is now
+    filled for the whole active catalogue and a blank one is a regression. */
+ assert.equal(DATA.itemBy.herbtea.description,'마시기 전에 심호흡부터 하는 손님이 많다.');
+ assert.equal(DATA.itemBy.midpotion.description,'하급은 불안하고 상급은 비쌀 때.');
+ for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
 });
 
 console.log(count+' copy groups passed');

@@ -157,6 +157,9 @@ function render(){
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
 // Every named Hazard carries its canonical pressure inline — burned into the notice,
 // never behind a hover (UI-005, UI-Q35, DUN-Q21).
+/* Always-available help: a native <details>, so it is keyboard-reachable without a line of
+   script. Shared by the outlook and the destination plate rather than duplicated per surface. */
+const tip=(label,body)=>'<details class="tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
 /* Two different facts about one Hazard, never welded into a sentence like `강인함 압박에 취약`.
    The pressure is fixed information about the Hazard itself - it is true of 독기 whoever is
    standing at the counter. The readiness is this NPC's SALE-entry state against it. The player
@@ -291,16 +294,15 @@ function readout(n,extra=null,cls=''){
     weakest Hazard state already computed for the rows below (충분/대응/불안/취약). No new label
     and no new calculation: the summary IS the worst of the rows the player can see. */
 
- const help=(label,body)=>'<details class="tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
-   +help('전투 전망','이 손님이 카운터에 섰을 때의 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
+   +tip('전투 전망','이 손님이 카운터에 섰을 때의 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
   /* DUNGEON_HAZARD_v2.7 §Pre-supply player-facing failure Death risk: the exact conditional
      percentage, said as a conditional - never as the chance this expedition ends in death. */
   +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
-   +help('실패 시 사망 위험','이 원정이 성공·대성공으로 끝나지 못했을 때, 그 실패가 사망까지 이어질 위험이다. 이번 원정이 사망으로 끝날 확률이 아니다. 카운터에 섰을 때의 준비 상태로 계산하며, 상품을 팔아도 표시는 바뀌지 않는다.')+'</span>'
+   +tip('실패 시 사망 위험','이 원정이 성공·대성공으로 끝나지 못했을 때, 그 실패가 사망까지 이어질 위험이다. 이번 원정이 사망으로 끝날 확률이 아니다. 카운터에 섰을 때의 준비 상태로 계산하며, 상품을 팔아도 표시는 바뀌지 않는다.')+'</span>'
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
@@ -553,7 +555,12 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
     same one the outlook reads, so committing an Item does not move it. Outside SALE there is
     no customer and no snapshot, and the plate shows the Hazards and their pressure alone. */
  +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'
- +hazardList(Presentation.known(d,game),n&&n.outlook&&n.outlook.hazards)+'</div></div>';}
+ +hazardList(Presentation.known(d,game),n&&n.outlook&&n.outlook.hazards)
+ /* The help sits under the rows it explains rather than on the plate's caps label: opened, it
+    is a full-width paragraph, and inside the label it pushed the destination name out of the
+    grid. It is the only place the two Hazard facts are explained, so it is never dropped. */
+ +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','각 위험이 어떤 능력을 보는지(압박)와, 이 손님이 지금 거기에 얼마나 버틸 수 있는지(현재 대응)를 따로 적는다. 압박은 위험 자체의 성질이라 누가 서 있든 같다. 현재 대응은 이 손님이 카운터에 섰을 때의 상태로 취약·불안·대응·충분 네 단계이며, 상품을 팔아도 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</div>':'')
+ +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
    const prep = Dungeon.prepare({...n,traits:tList},game.claimedGateFor(n),game.run.facilities);
@@ -911,7 +918,7 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +row('sfx','SFX',Number.isFinite(st.sfx)?st.sfx:d.sfx)
   +`</div>`;}
 function settings(){return `<div class="stack"><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="row wrap">${btn('저장 내보내기','export','stamp')}${btn('저장 가져오기','import')}</div><div class="row wrap">${btn(game.account.settings.muted?'Sound On':'Sound Off','sound')}</div>${mixer()}<hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="muted">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p><div class="row wrap">${btn('Full Data Reset','reset','danger')}</div><small>버전 0.4 · 로컬 실행 지원 · 외부 연결 없음</small></div>`;}
-function help(){return `<div class="stack"><h3>점포지원</h3><p>DAY 0에는 무료로 하나를 선택합니다. DAY 5·10·15·20·25·30에는 자금을 써서 구매합니다. 사지 않은 후보는 다음 구매 기회 전날까지 보류할 수 있습니다. 판매 중에는 구매할 수 없습니다.</p><h3>발주</h3><p>기본 방문객은 3~6명. 시설·계약·이벤트와 활동 가능한 모험가 수에 따라 달라집니다. 아침에 표시된 인원은 오늘 실제 방문할 인원입니다. 게이트는 초반 1곳에서 후반 최대 3곳까지 열리고, 임시 게이트가 추가될 수 있습니다.</p><p>수량을 고른 뒤 발주를 확정합니다. 남은 재고와 유통기한, 운영비도 확인하세요.</p><h3>판매와 관계</h3><p>목적지·능력·특성을 보고 상품을 고릅니다. 바가지는 수입과 관계를 맞바꾸고, 반값은 이익을 포기해 손님에게 투자합니다. 정가는 기본 거래입니다. 같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다.</p><p>단골도는 구매 의사와 재방문에 영향을 줍니다. 능력을 직접 올리지는 않습니다. 손님의 특성은 처음부터 전부 표시되며, 표시된 특성이 원정에서 실제로 작용하는 특성입니다.</p><h3>원정과 마감</h3><p>판매한 소비품은 그날 원정에서 사용됩니다. 기본 2칸, Lv.10부터 최대 3칸입니다. 밤에는 귀환 결과를 보고, 마감에서 거래와 보급의 작용을 확인합니다.</p><p>사망은 이번 영업에서 영구적입니다. 중상은 며칠의 휴식이 필요합니다. 30일에는 마지막 발주와 점포지원을 결정하고, 최대 3명에게 보급해 마왕성으로 보냅니다.</p><p>영업이 끝나면 상품 해금·몬스터 지식·발견·가맹등급은 남습니다. 모험가·재고·돈·설비는 다음 영업에 이어지지 않습니다.</p><p>적자일 때는 재고 정리로 운영비를 충당할 수 있습니다. 시간을 재촉하는 제한은 없습니다.</p><h3>점포가 문을 닫을 때</h3><p>운영비를 감당하지 못하면 폐점합니다. 재고가 남아 있다면 재고를 정리해 그날의 운영비를 채우고 영업을 이어갈 수 있습니다.</p><p>돌아오지 못한 모험가가 ${D.balance.deathLimit}명에 이르면 소문이 퍼져 더 이상 손님이 오지 않습니다. 그 시점에 영업이 끝납니다. 현재 수는 모험가 수첩에서 확인할 수 있습니다.</p><p>30일에 마왕을 토벌하지 못해도 이 점포의 영업은 거기서 끝납니다.</p></div>`;}
+function help(){return `<div class="stack"><h3>점포지원</h3><p>DAY 0에는 무료로 하나를 선택합니다. DAY 5·10·15·20·25·30에는 자금을 써서 구매합니다. 사지 않은 후보는 다음 구매 기회 전날까지 보류할 수 있습니다. 판매 중에는 구매할 수 없습니다.</p><h3>발주</h3><p>기본 방문객은 3~6명. 시설·계약·이벤트와 활동 가능한 모험가 수에 따라 달라집니다. 아침에 표시된 인원은 오늘 실제 방문할 인원입니다. 게이트는 초반 1곳에서 후반 최대 3곳까지 열리고, 임시 게이트가 추가될 수 있습니다.</p><p>수량을 고른 뒤 발주를 확정합니다. 남은 재고와 유통기한, 운영비도 확인하세요.</p><h3>판매와 관계</h3><p>목적지·능력·특성을 보고 상품을 고릅니다. 바가지는 수입과 관계를 맞바꾸고, 반값은 이익을 포기해 손님에게 투자합니다. 정가는 기본 거래입니다. 같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다.</p><p>단골도는 구매 의사와 재방문에 영향을 줍니다. 능력을 직접 올리지는 않습니다. 손님의 특성은 처음부터 전부 표시되며, 표시된 특성이 원정에서 실제로 작용하는 특성입니다.</p><h3>원정과 마감</h3><p>판매한 소비품은 그날 원정에서 사용됩니다. 가방은 언제나 2칸입니다. 밤에는 귀환 결과를 보고, 마감에서 거래와 보급의 작용을 확인합니다.</p><p>사망은 이번 영업에서 영구적입니다. 중상은 며칠의 휴식이 필요합니다. 30일에는 마지막 발주와 점포지원을 결정하고, 최대 3명에게 보급해 마왕성으로 보냅니다.</p><p>영업이 끝나면 상품 해금·몬스터 지식·발견·가맹등급은 남습니다. 모험가·재고·돈·설비는 다음 영업에 이어지지 않습니다.</p><p>적자일 때는 재고 정리로 운영비를 충당할 수 있습니다. 시간을 재촉하는 제한은 없습니다.</p><h3>점포가 문을 닫을 때</h3><p>운영비를 감당하지 못하면 폐점합니다. 재고가 남아 있다면 재고를 정리해 그날의 운영비를 채우고 영업을 이어갈 수 있습니다.</p><p>돌아오지 못한 모험가가 ${D.balance.deathLimit}명에 이르면 소문이 퍼져 더 이상 손님이 오지 않습니다. 그 시점에 영업이 끝납니다. 현재 수는 모험가 수첩에서 확인할 수 있습니다.</p><p>30일에 마왕을 토벌하지 못해도 이 점포의 영업은 거기서 끝납니다.</p></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;

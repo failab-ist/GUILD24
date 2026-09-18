@@ -502,10 +502,22 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
   assert.ok(!readout.includes("'"+invented+"'"),'no new forecast label was invented: '+invented);
 
  // D-11. Always-available help, keyboard-reachable because it is a native <details>.
- assert.ok(readout.includes("<details class=\"tip\""),'the ? is a details, so it needs no script');
- assert.equal((readout.match(/\+help\(/g)||[]).length,2,'one helper, used by the fight forecast and the Death risk');
+ /* One shared helper at module scope, so the outlook and the destination plate cannot drift
+    into two different ? controls. It is a native <details>, so it needs no script. */
+ assert.ok(/const tip=\(label,body\)=>'<details class="tip"/.test(app),'the ? is a details, so it needs no script');
+ assert.equal((readout.match(/\+tip\(/g)||[]).length,2,'the outlook explains the fight forecast and the Death risk');
+ assert.ok(/tip\('환경 대응'/.test(fn('destPlate')),'and the environment keeps its own help, where the environment now lives');
  assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');
+ assert.ok(/확정된 결과가 아니다/.test(fn('destPlate')),'and so does the environment help');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
+ assert.ok(/\.dest-plate \.tip>summary:focus-visible/.test(css),'on the plate too');
+ // the help is its own row under the rows it explains, so nothing that hides the caps label
+ // on a phone can take it with them
+ /* a <details> cannot be a child of <p> - the parser would split them apart - so the row
+    that holds it is a <div> */
+ assert.ok(/<div class="env-help">/.test(fn('destPlate')),'the environment help is its own row');
+ assert.ok(!/<p class="env-help"/.test(app),'in an element that may actually contain a <details>');
+ assert.ok(!/\.env-help[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
 
  // D-14. Collapsed is the decision; expanded is only what collapsed could not say.
  const till=fn('till');

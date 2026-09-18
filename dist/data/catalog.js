@@ -18,7 +18,7 @@ item('bar','핫바',0,40,80,'food',2,'bar','용사픽','꼬치는 매장 앞 수
 item('choco','초코바',0,30,65,'food',5,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:8,supply:4}),
 item('coffee','캔커피',0,40,85,'drink',5,'coffee','MANA+','발걸음이 조금 가벼워진다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
-item('herbtea','진정 허브티',0,40,85,'drink',5,'herbtea','MANA+','',{spirit:15,supply:2}),
+item('herbtea','진정 허브티',0,40,85,'drink',5,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:15,supply:2}),
 item('potion','하급 포션',0,70,140,'potion',7,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
 item('ice','얼음컵',0,30,65,'drink',4,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
 item('battery','랜턴 건전지',0,45,95,'gear',0,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:16}),
@@ -42,7 +42,7 @@ item('antidote','농축 해독제',2,80,170,'gear',7,'antidote','귀환안심','
 item('stone','귀환석',2,260,520,'insurance',0,'stone','귀환안심','사망·중상 위기에서도 같은 수치로 한 번 더 돌아올 기회가 생긴다.',{escape:0.5}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
-item('midpotion','중급 포션',1,110,230,'potion',7,'potionMid','귀환안심','',{combat:12,potion:1}),
+item('midpotion','중급 포션',1,110,230,'potion',7,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:12,potion:1}),
 item('premium','길드 프리미엄 도시락',2,170,360,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:10,supply:7,loot:0.2}),
 item('ion','쿨링 이온음료',2,80,170,'drink',5,'ion','MANA+','얼음컵만큼 시원하진 않지만 오래 간다.',{fire:18,supply:1}),
 item('tree','세계수 생환부적',3,600,1200,'insurance',0,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
