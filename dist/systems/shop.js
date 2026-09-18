@@ -189,7 +189,26 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  const it=this.rng.weighted(pool,it=>{let w=1;if(it.effects.potion)w*=(ev.potionWeight||1);return w*G.Relics.offerWeight(this,it);});return this.offerFor(it,price);}
  order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?2:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
  open(){const s=this.run;if(s.phase!=='order')return;if(Object.values(s.cart||{}).some(q=>q>0))throw Error('선택한 발주를 먼저 확정해 주세요.');s.phase='sell';this.arrive();if(!s.queue.length)this.night();this.save();}
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.events?.length)};}
+ /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY. The expedition outlook the decision surface
+    shows is a SALE-ENTRY snapshot, taken before this visit's first transaction and frozen for
+    the whole visit: Combat Forecast, Hazard Readiness, the exact 실패 시 사망 위험 % and the
+    Great Success signal. Recomputing any of them as Items are focused or committed turns the
+    decision into answer-following, which the owner forbids in both directions. The runtime
+    preparation state is NOT frozen - Resolve still reads the final Bag. Nothing here draws
+    from the run RNG, so taking the snapshot does not move the seeded stream. */
+ outlookFor(n){
+  const d=this.claimedGateFor(n)||this.run.dungeons[0];
+  const v={...n};  // the snapshot is a systems-layer calculation; it does not reach for the UI module
+  const p=G.Dungeon.prepare(v,d,this.run.facilities);
+  const hazards=p.hazards.map(h=>({key:h.key,label:h.label}));
+  return {day:this.run.day,gate:d.id,
+   combat:G.Dungeon.estimate(v,d,this.run.facilities),
+   hazards,
+   worst:hazards.length?['취약','불안','대응','충분'].find(l=>hazards.some(h=>h.label===l)):null,
+   deathRisk:G.Dungeon.failureDeathRisk(v,d,this.run.facilities).chance,
+   greatSignal:G.Dungeon.greatSuccessSignal(v,d,this.run.facilities)};
+ }
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.events?.length)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');

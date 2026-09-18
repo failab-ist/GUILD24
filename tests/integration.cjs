@@ -745,4 +745,46 @@ test('SAVE V7 EXACT CONTRACT', () => {
  assert.equal(loaded.run.version, 8);
 });
 
+test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for the visit',()=>{
+ const g=fresh('outlook');g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ g.beginOrder();
+ for(let i=0;i<g.run.offers.length;i++){try{g.setQuantity(i,1);}catch(e){}}
+ g.finishOrder();
+ assert.equal(g.run.phase,'sell');
+ const n=g.current();
+ const entry=copy(n.outlook);
+ assert.ok(entry,'the snapshot is taken when the customer reaches the counter');
+ for(const k of ['combat','worst','deathRisk','greatSignal','hazards'])
+  assert.ok(k in entry,'the snapshot carries '+k);
+ assert.ok(entry.deathRisk>=0&&entry.deathRisk<=0.40,'the Death risk is the conditional one, inside its caps');
+ // it is the SALE-entry state: the same calculation on the untouched NPC
+ const fresh0=g.outlookFor({...n,pack:[]});
+ assert.deepEqual({...entry,gate:undefined,day:undefined},{...fresh0,gate:undefined,day:undefined},
+  'the snapshot is the pre-supply state, not a post-Item one');
+ // selling into the Bag must not move any of it
+ let sold=0;
+ for(const st of [...g.run.inventory]){
+  if(n.pack.length>=Adventurer.slots(n))break;
+  try{g.sell(st.id,'half');sold++;}catch(e){}
+ }
+ assert.ok(sold>0,'the test actually committed a purchase');
+ assert.deepEqual(n.outlook,entry,'a committed Item does not move the frozen outlook');
+ // ...but the runtime preparation is NOT frozen
+ const prepared=Dungeon.prepare({...n},g.claimedGateFor(n),g.run.facilities);
+ const bare=Dungeon.prepare({...n,pack:[]},g.claimedGateFor(n),g.run.facilities);
+ assert.notDeepEqual(prepared.effects,bare.effects,'the real preparation did change');
+ // and it survives a save/load
+ g.save();
+ const round=Save.import(Save.export(g.account,g.run));
+ assert.ok(Save.valid(JSON.parse(Save.export(g.account,g.run))),'a run carrying the snapshot still validates');
+ assert.deepEqual(round.run.npcs.find(x=>x.id===n.id).outlook,entry,'the frozen outlook survives a reload');
+ // the next customer gets their own snapshot
+ const before=n.id;g.depart();
+ const next=g.current();
+ if(next){
+  assert.notEqual(next.id,before);
+  assert.ok(next.outlook,'the next customer is snapshotted on arrival');
+ }
+});
+
 console.log(count+' integration groups passed');

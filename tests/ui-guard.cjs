@@ -6,7 +6,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const app=read('dist/ui/app.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
+const app=read('dist/ui/app.js'),shop=read('dist/systems/shop.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
 const fn=name=>{const a=app.indexOf('function '+name+'(');const b=app.indexOf('\nfunction ',a+1);return app.slice(a,b<0?app.length:b);};
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 
@@ -360,11 +360,25 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.equal(Copy.great.signal,'대성공을 노려볼 만합니다.','the exact signal is the locked string');
  assert.ok(app.includes('Copy.great.signal'),'the screen prints that string rather than its own');
  assert.ok(!/노려볼 만합니다/.test(app.replace('Copy.great.signal','')),'no second copy of the wording');
- assert.ok(app.includes('Dungeon.greatSuccessSignal('),'the signal is read from the engine, not recomputed in the UI');
+ /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY names a Great Success signal CHANGE as one of
+    the hypothetical answers the decision surface may not show, so the screen now reads the
+    signal off the frozen SALE-entry snapshot. It is still the engine's calculation - the
+    snapshot is built by Dungeon.greatSuccessSignal in the systems layer - and the screen
+    still does not derive one of its own. */
+ assert.ok(!/greatSuccessSignal/.test(app),'the screen does not recompute the signal as Items move');
+ assert.ok(/const signal=o\.greatSignal/.test(app),'it reads the frozen snapshot instead');
+ assert.ok(shop.includes('greatSignal:G.Dungeon.greatSuccessSignal('),'and that snapshot is the engine calculation');
  const readout=fn('readout'),readoutCode=readout.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
- assert.ok(readout.includes('greatSuccessSignal'),'it lives in the forecast, before departure');
- assert.ok(!/[0-9]+%/.test(readoutCode),'and never exposes a percentage');
- assert.ok(!/margin|readiness|chance/i.test(readoutCode),'nor a margin, a chance or a readiness score');
+ assert.ok(readout.includes('o.greatSignal'),'it lives in the forecast, before departure');
+ /* DUNGEON_HAZARD_v2.7 §PLAYER-FACING INFORMATION BOUNDARY: the ONE exact percentage the
+    decision surface may expose is the pre-supply 실패 시 사망 위험. The Great Success signal
+    still carries no percentage, no margin and no readiness score, and the exact expedition
+    success chance stays hidden. */
+ assert.ok(/실패 시 사망 위험<b>'\+Math\.round\(o\.deathRisk\*100\)\+'%/.test(readout),'the one exact percentage is the conditional Death risk');
+ const others=readoutCode.replace(/실패 시 사망 위험<b>'\+Math\.round\(o\.deathRisk\*100\)\+'%/,'');
+ assert.ok(!/[0-9]+%/.test(others),'and no other percentage is exposed');
+ assert.ok(!/margin|readiness/i.test(readoutCode),'nor a margin or a readiness score');
+ assert.ok(!/successChance|winChance|clearChance/i.test(readoutCode),'nor an expedition success chance');
 
  // 심층원정 is a locked term: no synonym may reach a player-facing string.
  assert.equal(Copy.deep.term,'심층원정');
@@ -458,15 +472,20 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  // D-10. Two ways to fail an expedition, said apart, in the vocabulary each already owns.
  const readout=fn('readout');
  assert.ok(readout.includes('전투 전망')&&readout.includes('환경 전망'),'both forecasts are named');
- assert.ok(readout.includes('Dungeon.estimate('),'the fight keeps its own canonical verdict');
- assert.ok(/\['취약','불안','대응','충분'\]/.test(readout),
+ /* Both verdicts are still the engine's own canonical vocabulary; under SALE_v2.7 they are
+    read off the frozen SALE-entry snapshot rather than recomputed as Items move, so the
+    calculation moved into the systems layer with them. */
+ assert.ok(!/Dungeon\.estimate\(/.test(app),'the screen does not recompute the fight verdict');
+ assert.ok(shop.includes('combat:G.Dungeon.estimate('),'the fight keeps its own canonical verdict');
+ assert.ok(/\['취약','불안','대응','충분'\]/.test(shop),
   'the environment summary is the worst of the Hazard states already on screen');
+ assert.ok(!/\['취약','불안','대응','충분'\]/.test(app),'and the screen does not keep a second copy of that ladder');
  for(const invented of ['안전','위험함','보통','양호'])
   assert.ok(!readout.includes("'"+invented+"'"),'no new forecast label was invented: '+invented);
 
  // D-11. Always-available help, keyboard-reachable because it is a native <details>.
  assert.ok(readout.includes("<details class=\"tip\""),'the ? is a details, so it needs no script');
- assert.equal((readout.match(/\+help\(/g)||[]).length,2,'one helper, used by both forecasts');
+ assert.equal((readout.match(/\+help\(/g)||[]).length,3,'one helper, used by both forecasts and the Death risk');
  assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
 

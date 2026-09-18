@@ -267,37 +267,44 @@ function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())r
 // The readiness readout. Qualitative only: 우세/접전/불리 and 취약/불안/대응/충분.
 function readout(n,extra=null,cls=''){
  const compact=!!extra,d=game.claimedGateFor(n);
- const v={...n,traits:Presentation.traits(n),pack:extra?[...n.pack,extra]:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
+ /* SALE_v2.7: the Bag read here is the COMMITTED one. A focused, unpurchased Item may show its
+    own exact effects and the deterministic Supply/Fatigue arithmetic, but never a moved
+    Forecast/Readiness/Death/signal - so `extra` no longer enters the preparation at all. */
+ const v={...n,traits:Presentation.traits(n),pack:n.pack},p=Dungeon.prepare(v,d,game.run.facilities);
+ /* ...and the outlook itself is the frozen SALE-entry snapshot, not this live preparation. */
+ const o=n.outlook||game.outlookFor(n);
  /* DUNGEON_HAZARD §GREAT SUCCESS signal. It sits in the forecast the player is already reading,
     before departure and while the preparation can still change, and it is recomputed from the
     same margin the roll uses - so it moves as items are added. It says the attempt is worth
     chasing and nothing more: no percentage, no margin, no readiness score. */
- const signal=Dungeon.greatSuccessSignal(v,d,game.run.facilities);
+ const signal=o.greatSignal;
  /* Two forecasts, said apart. An expedition can fail two different ways - beaten in the fight,
     or worn down by the environment - and one blended verdict hides which. Both read their own
     canonical vocabulary: the fight is Dungeon.estimate (우세/접전/불리), the environment is the
     weakest Hazard state already computed for the rows below (충분/대응/불안/취약). No new label
     and no new calculation: the summary IS the worst of the rows the player can see. */
- const worst=p.hazards.length
-  ?['취약','불안','대응','충분'].find(l=>p.hazards.some(h=>h.label===l))
-  :null;
+ const worst=o.worst;
  const help=(label,body)=>'<details class="tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
  const mob=cls==='core-mob';
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
-  +'<span class="fore">전투 전망<b>'+Dungeon.estimate(v,d,game.run.facilities)+'</b>'
-   +help('전투 전망','이 손님의 지금 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 확정된 결과가 아니다.')+'</span>'
+  +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
+   +help('전투 전망','이 손님이 카운터에 섰을 때의 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
   +'<span class="fore">환경 전망<b>'+(worst||'위험 없음')+'</b>'
-   +help('환경 전망','게이트의 위험 특성을 지금의 능력과 보급으로 어떻게 버틸지 본 예상이다. 가장 약한 대응을 기준으로 말한다. 확정된 결과가 아니다.')+'</span>'
+   +help('환경 전망','게이트의 위험 특성을 카운터에 섰을 때의 능력과 보급으로 어떻게 버틸지 본 예상이다. 가장 약한 대응을 기준으로 말하며, 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
+  /* DUNGEON_HAZARD_v2.7 §Pre-supply player-facing failure Death risk: the exact conditional
+     percentage, said as a conditional - never as the chance this expedition ends in death. */
+  +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
+   +help('실패 시 사망 위험','이 원정이 성공·대성공으로 끝나지 못했을 때, 그 실패가 사망까지 이어질 위험이다. 이번 원정이 사망으로 끝날 확률이 아니다. 카운터에 섰을 때의 준비 상태로 계산하며, 상품을 팔아도 표시는 바뀌지 않는다.')+'</span>'
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  /* A phone has no room to stand the hazard rows beside a portrait and the shelf both.
     The verdict stays on the face of the block; the pressure that produced it is one tap
     away rather than gone. */
- +(mob&&p.hazards.length
-   ?'<details class="env-press"><summary>환경 압박 '+p.hazards.length+'건</summary>'+hazardList(p.hazards.map(h=>h.key),p.hazards)+'</details>'
-   :hazardList(p.hazards.map(h=>h.key),p.hazards))
+ +(mob&&o.hazards.length
+   ?'<details class="env-press"><summary>환경 압박 '+o.hazards.length+'건</summary>'+hazardList(o.hazards.map(h=>h.key),o.hazards)+'</details>'
+   :hazardList(o.hazards.map(h=>h.key),o.hazards))
  +(compact?'':'<p class="estimate">오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다. 게이트 안에서 어떻게 될지까지는 아무도 모른다.</p>')+'</div>';}
 /* Returning history is useful reference, not the current decision. It therefore starts folded
    to one line; opening it is local reading state and does not hide current Stats or Traits. */
