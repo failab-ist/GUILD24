@@ -1,5 +1,10 @@
 (function(G){
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+/* DUNGEON_HAZARD_v2.7 §PREPARED POWER. Forecast, Resolve and the Great-Success margin have to
+   read the same prepared ability before hidden combat noise, and three copies of the weights
+   is how they drifted apart before - so there is one. 투력 remains the strongest single lever,
+   and no Player-facing aggregate Power Stat is created from it. */
+const preparedPower=e=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20;
 function prepare(n,d,facilities=[]){
  const statKeys=['combat','survival','mobility','spirit'],why=[],events=[],mult={foodMult:1,potionMult:1};
  const behaviour=new Set(['priceBias','buyBias','rareBias','commonBias','revisitMult','recoveryDelta','foodSupplyDelta','supplyPerItem','injuredCombatPercent','combatPercent','survivalPercent','visitGold','loyaltyBonus','overchargeBias']);
@@ -85,10 +90,12 @@ function tierWeights(day){
 }
 function hazardState(h,e,d){
  const rules={poison:['survival',.3],fire:['survival',.32],cold:['survival',.3],corrosion:['survival',.3],bind:['mobility',.4],mire:['mobility',.4],fear:['spirit',.4],dark:['spirit',.3,'mobility',.12],whiteout:['spirit',.3,'mobility',.12]};
- const rule=rules[h]||['survival',.2],threat=14+(d.scale||1)*2,defense=(e[h]||0)+e[rule[0]]*rule[1]+(rule[2]?e[rule[2]]*rule[3]:0),gap=Math.max(0,threat-defense),ratio=defense/threat;
+ /* DUNGEON_HAZARD_v2.7 §HAZARD THREAT: the curve reads the Day and the Tier directly, so a
+    Hazard means the same thing wherever it appears on that Day at that Tier. */
+ const rule=rules[h]||['survival',.2],threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,defense=(e[h]||0)+e[rule[0]]*rule[1]+(rule[2]?e[rule[2]]*rule[3]:0),gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
-function estimate(n,d,facilities){const e=prepare(n,d,facilities).effects,ratio=(e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16)/d.power;return ratio>1.2?'우세':ratio>=.8?'접전':'불리';}
+function estimate(n,d,facilities){const e=prepare(n,d,facilities).effects,ratio=preparedPower(e)/d.power;return ratio>1.2?'우세':ratio>=.8?'접전':'불리';}
 /* DUNGEON_HAZARD §GREAT SUCCESS. The chance rises with how far the PREPARED Combat ability ran
    ahead of what the Gate requires, and the cap keeps it short of certainty at every level of
    preparation - no amount of preparation guarantees 대성공.
@@ -105,13 +112,13 @@ function greatSuccessChance(margin){
    the number lives here so the signal and the roll are read off one calculation. */
 function greatSuccessSignal(n,d,facilities=[]){
  const e=prepare(n,d,facilities).effects;
- const margin=(e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16)/d.power-1;
+ const margin=preparedPower(e)/d.power-1;
  return margin>=D.greatSuccess.signalMargin;
 }
 function resolve(n,d,r,facilities=[],options={}){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
 
- const ability=e.combat*.58+e.survival*.32+e.mobility*.24+e.spirit*.16;
+ const ability=preparedPower(e);
  const noise=1+(r.next()-.5)*(D.balance.combatNoise*2+e.variance*2);
  const score=ability*noise;const combatSuccess=score>=d.power;
  const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);
@@ -168,5 +175,5 @@ function resolve(n,d,r,facilities=[],options={}){
  report.quote=G.Copy.night(report,n);
  n.pack=[];return report;
 }
-G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState};
+G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower};
 })(globalThis);

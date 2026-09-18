@@ -103,4 +103,23 @@ test('DUN-Q17: Supply Burden eligibility and the single shared deficit penalty',
  for(const k of Adventurer.keys)assert.equal(over.effects[k],none.effects[k],'excess Supply grants no extra bonus');
 });
 
+test('DUN-Q70/Q71: prepared Power weights and the Hazard Threat curve',()=>{
+ /* One source, read by Forecast, Resolve and the Great-Success margin alike. A stale
+    .58/.32/.24/.16 stat weighting anywhere is invalid in v2.7. */
+ assert.equal(Dungeon.preparedPower({combat:100,survival:100,mobility:100,spirit:100}),131);
+ assert.equal(Dungeon.preparedPower({combat:1,survival:0,mobility:0,spirit:0}),.50);
+ assert.equal(Dungeon.preparedPower({combat:0,survival:1,mobility:0,spirit:0}),.34);
+ assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:1,spirit:0}),.27);
+ assert.equal(Dungeon.preparedPower({combat:0,survival:0,mobility:0,spirit:1}),.20);
+ const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/dungeon.js'),'utf8');
+ assert.ok(!/(combat|survival|mobility|spirit)\s*\*\s*\.(58|32|24|16)\b/.test(src),'no stale ordinary-expedition stat weight survives');
+ /* Threat = 12 + Day*.35 + (Tier-1)*6, at the owner's own anchors. */
+ for(const [day,tier,want] of [[1,1,12.35],[12,1,16.20],[18,2,24.30],[24,2,26.40],[29,3,34.15],[30,2,28.50]])
+  assert.ok(Math.abs(Dungeon.hazardState('poison',{},{day,tier}).threat-want)<1e-9,
+   'D'+day+' T'+tier+' threat is '+want);
+ // the gate's own scale no longer moves a Hazard's threat
+ assert.equal(Dungeon.hazardState('poison',{},{day:30,tier:2,scale:4.6}).threat,
+              Dungeon.hazardState('poison',{},{day:30,tier:2}).threat);
+});
+
 console.log(count+' vocabulary groups passed');
