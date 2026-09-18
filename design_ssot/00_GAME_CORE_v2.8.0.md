@@ -21,7 +21,7 @@ All unchanged core fantasy, phase loop, information principle, NPC emotional cor
 
 This patch changes the top-level identity of cross-run progression only.
 
-## CROSS-RUN CORE — v2.8
+## CROSS-RUN CORE — DECORATION PACKAGE
 
 Cross-run progression has two primary active growth identities:
 
@@ -71,7 +71,7 @@ Cross-run Store Growth should make Final access progressively more realistic, no
 
 ## RETIRED ACTIVE LAYER
 
-v2.7 Franchise Grade / Franchise Achievement / Start Contract are retired from active v2.8 progression.
+The Decoration Package retires v2.7 Franchise Grade / Franchise Achievement / Start Contract from active progression.
 
 They are preserved as inactive historical Source/Design assets under the archive rule owned by `META_v2.8.0.md`.
 They must not remain hidden active progression.

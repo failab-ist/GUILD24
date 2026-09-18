@@ -23,7 +23,7 @@ This patch supersedes the active v2.7 Franchise Achievement / Grade / Start Cont
 
 ## RETIRED ACTIVE UI
 
-Remove from active v2.8 UI:
+Remove from the active v2.7 UI when the Decoration Package is adopted:
 - Franchise Grade header
 - Franchise Achievement list/progress
 - Franchise Achievement toast

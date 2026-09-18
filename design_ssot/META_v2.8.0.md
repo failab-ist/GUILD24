@@ -38,7 +38,7 @@ No third generic fail-to-power currency is added.
 
 ## RETIRED v2.7 FRANCHISE SYSTEM — INACTIVE ARCHIVE
 
-The following are no longer active v2.8 gameplay systems:
+The following are retired from active gameplay by the Decoration Package:
 
 - Franchise Grade
 - ten Franchise Achievements
@@ -48,7 +48,7 @@ The following are no longer active v2.8 gameplay systems:
 
 Do **not** delete their final v2.7 Source/Design implementation.
 
-During v2.8 Source adoption, preserve the retired implementation under:
+During the current v2.7 Decoration-package Source adoption, preserve the retired implementation under:
 
 ```text
 archive/inactive/v2_7_franchise/
@@ -113,7 +113,7 @@ Store Capital Gain = 0
 Boss CLEAR does not multiply Store Capital settlement.
 Boss success progression remains owned by Job Mastery.
 
-Exact Day-band conversion rates are **IMPLEMENTATION-BLOCKING BALANCE UNRESOLVED** pending the approved v2.8 integrated candidate measurement.
+Exact Day-band conversion rates are **IMPLEMENTATION-BLOCKING BALANCE UNRESOLVED** pending the approved integrated v2.7 balance candidate measurement.
 
 Required design target:
 - ordinary engaged play can buy the first Decoration within roughly 1–3 Runs
@@ -144,10 +144,10 @@ counter
 display
 ```
 
-Initial v2.8 content contains one Decoration in each Slot, but Account/Save/data/UI structures must not assume one Decoration forever.
+The initial Decoration-package content contains one Decoration in each Slot, but Account/Save/data/UI structures must not assume one Decoration forever.
 Future content may add multiple alternatives to the same Slot.
 
-No v2.8 system for:
+The current Decoration Package adds no system for:
 - Decoration levels
 - Decoration upgrades
 - Decoration rarity ladder
@@ -223,7 +223,7 @@ Decoration ownership cannot substitute for Boss CLEAR in the Job×Boss matrix.
 
 ## BALANCE GATE
 
-Before v2.8 Production adoption, the integrated candidate pass must jointly validate:
+Before Decoration-package Production adoption in v2.7, the integrated candidate pass must jointly validate:
 
 - Store Capital conversion rates
 - Decoration prices

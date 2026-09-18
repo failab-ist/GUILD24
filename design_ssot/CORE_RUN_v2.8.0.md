@@ -23,9 +23,9 @@ This patch changes pre-Run Meta selection and Run-end Meta settlement.
 
 ## PRE-RUN FLOW
 
-v2.7 Start Contract selection is retired.
+The current v2.7 Decoration-package adoption retires Start Contract selection.
 
-Active v2.8 pre-Run sequence:
+Decoration-package pre-Run sequence:
 
 ```text
 new Run
@@ -35,7 +35,7 @@ new Run
 -> ordinary Run
 ```
 
-There is no active Franchise Grade check and no Start Contract card selection.
+Under the Decoration Package there is no active Franchise Grade check and no Start Contract card selection.
 
 The initial Decoration-package content has only one Decoration per Slot, so a Slot with exactly one owned option may be auto-selected by UI.
 The underlying state still stores a Slot-based loadout so later same-Slot alternatives do not require a schema redesign.
@@ -72,7 +72,7 @@ Save/reload must not:
 
 Do not choose a new Save generation number merely from this document.
 
-The v2.8 implementation plan must inspect the actual v8 schema impact of:
+The current v2.7 Decoration-package implementation plan must inspect the actual v8 schema impact of:
 - persistent Store Capital
 - owned Decoration IDs
 - pre-Run/Run-frozen Decoration loadout
