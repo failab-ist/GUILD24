@@ -219,12 +219,15 @@ test('D-5 / EVENT §3-1: an Event says what it switched on, at the precision the
 });
 
 test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually moves',()=>{
- /* foodMult and potionMult multiply exactly one contribution - survival, from food and from
-    potions. They were labelled 음식/포션 고유 효과, which claims every effect the item has. */
+ /* Each multiplier names the channel it actually moves, never 음식/포션 고유 효과, which would
+    claim every effect the item has. Under ITEM_v2.7 foodMult joins the positive native
+    Core-Stat pool - all four Stats, not 강인함 alone - so the label widened with it.
+    potionMult still moves exactly one contribution. */
  const dungeon=read('dist/systems/dungeon.js');
- assert.ok(/k==='survival'&&isFood\)value\*=mult\.foodMult/.test(dungeon),'foodMult reaches survival only');
- assert.ok(/item\.effects\.potion&&k==='survival'\)value\*=mult\.potionMult/.test(dungeon),'and so does potionMult');
- assert.equal(Presentation.labels.foodMult,'음식의 강인함','so the label names that channel');
+ assert.ok(/nativePool=isFood\?mult\.foodMult-1:0/.test(dungeon),'foodMult enters the native Core-Stat pool');
+ assert.ok(/statKeys\.includes\(k\)&&isFD&&v>0/.test(dungeon),'and that pool is positive native Core Stat only');
+ assert.ok(/item\.effects\.potion&&k==='survival'\)value\*=mult\.potionMult/.test(dungeon),'potionMult still reaches survival only');
+ assert.equal(Presentation.labels.foodMult,'음식의 능력치','so the label names that channel');
  assert.equal(Presentation.labels.potionMult,'포션의 강인함','and so does the potion one');
  for(const id of ['eater','small'])
   assert.ok(!DATA.traitBy[id].note,'with the channel named, '+id+' no longer needs a note denying the others');
@@ -241,10 +244,14 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  assert.ok(!('guaranteeMinPrice' in DATA.balance),'it is not owned by D.balance');
  assert.ok(!read('dist/data/relics.js').includes('D.balance.guaranteeMinPrice'),'and nothing puts it there');
 
- /* 포만감 was a third named effect in two Relic descriptions. There is no such channel. */
+ /* 포만감 was a third named effect in two Relic descriptions. There is no such channel.
+    Under RELIC_v2.7 these two move the native Core Stat and leave Supply alone, so the
+    description has to say the channel it moves and the ones it does not. */
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
-  assert.ok(/보급·강인함/.test(DATA.relicBy[id].description),'and names the two it does move');
+  assert.ok(/능력치 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
+  assert.ok(/보급/.test(DATA.relicBy[id].description)&&!/보급·능력치|보급 효과 \+/.test(DATA.relicBy[id].description),
+   id+' does not claim the Supply it leaves unchanged');
  }
 
  /* D-16: the description slot is flavour. Where it only restated the effect line it told the

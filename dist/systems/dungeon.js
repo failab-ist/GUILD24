@@ -21,10 +21,23 @@ function prepare(n,d,facilities=[]){
   for(const[k,v]of Object.entries(item.effects)){
    if(k==='potion')continue;let value=v*power;const isFood=item.category==='food',isFD=isFood||item.category==='drink';
    if(k==='supply'&&isFood)value=Math.max(1,value+foodSupplyDelta);if(k==='supply'&&isFD)value+=supplyPerItem;
-   if(k==='survival'&&isFood)value*=mult.foodMult;
-   if(['supply','survival'].includes(k)&&isFD)value*=(facilities.includes('kitchen')?1.2:1)*(facilities.includes('fresh24')?1.25:1);
+   /* ITEM_v2.7 §FOOD / FRESH POSITIVE NATIVE-STAT COMPOSITION. Every approved modifier that
+      targets a Food/Drink's POSITIVE NATIVE Core Stat reads the Item table's own base and they
+      are summed once - Trait affinity and the Fresh Relics are one pool, never sequential
+      layers. The old code multiplied them (1.3 x 1.2 x 1.25) and only ever touched 강인함.
+      Supply, Hazard Counter, Insurance, Loot, Utility and RiskReward penalties are separate
+      channels and are deliberately outside this pool: the Fresh Relics say Supply unchanged. */
+   if(statKeys.includes(k)&&isFD&&v>0){
+    let nativePool=isFood?mult.foodMult-1:0;
+    if(facilities.includes('kitchen'))nativePool+=.40;
+    if(facilities.includes('fresh24'))nativePool+=.80;
+    if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)nativePool+=.25;
+    value*=1+nativePool;
+   }
    if(item.effects.potion&&k==='survival')value*=mult.potionMult;
-   if(facilities.includes('expeditionMeal')&&isFD&&v>0&&(d.hazards.includes(k)||k==='supply'&&d.requiredSupply>0))value*=1.25;
+   /* 원정 도시락 코너's other half: a Food/Drink's EXPLICIT Hazard Counter, and only when it
+      matches a Hazard the actual destination carries. No universal Hazard solution. */
+   if(facilities.includes('expeditionMeal')&&isFD&&v>0&&d.hazards.includes(k))value*=1.25;
    if(k==='supply')finalSupply+=value;else if(statKeys.includes(k)){itemE[k]+=value;from[k]=(from[k]||0)+value;}else e[k]=(e[k]||0)+value;
   }
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
