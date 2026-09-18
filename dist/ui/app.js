@@ -938,8 +938,12 @@ const isLocked=e=>(e.metaUnlock&&Meta.distinctBossClear(game.account)<e.metaUnlo
 function gatedContent(){return [...D.items,...D.jobs].filter(e=>e.metaUnlock)
  .map(e=>({name:e.name,need:'서로 다른 마왕 '+e.metaUnlock+'종 토벌',
    have:Meta.distinctBossClear(game.account),want:e.metaUnlock,rank:e.metaUnlock,kind:'boss'}))
+ /* META_v2.7 §FRANCHISE GRADE: a Start Contract opens on the Franchise Achievement count, so
+    the progress toward it counts the same thing `contractUnlocked` judges. The inherited
+    source read Total Job Mastery against (grade-1)*7, which is a different counter entirely -
+    the board could say a Contract was one step away while the Contract was already open. */
  .concat(D.contracts.filter(c=>c.grade).map(c=>({name:c.name,need:'가맹등급 '+c.grade,
-   have:Meta.totalJobMastery(game.account),want:(c.grade-1)*7,rank:c.grade+10,kind:'grade'})))
+   have:Meta.franchiseCount(game.account),want:Meta.gradeRequirement(c.grade),unit:'가맹 실적 ',rank:c.grade+10,kind:'grade'})))
  .sort((x,y)=>x.rank-y.rank);}
 /* The two thresholds run on different counters, so "next" is the nearest of each rather than
    the first two overall - otherwise the Boss-gated ones crowd the grade line off the list. */
@@ -963,7 +967,7 @@ function progressPanel(){const a=game.account;
  +unlockBoard()+'</div>';}
 function unlockBoard(){const {done,next}=unlockLists();
  // something already open does not need a counter saying it is open
- const line=(e,show)=>'<p><b>'+E(e.name)+'</b><span>'+E(e.need)+(show?' · '+e.have+' / '+e.want:'')+'</span></p>';
+ const line=(e,show)=>'<p><b>'+E(e.name)+'</b><span>'+E(e.need)+(show?' · '+E(e.unit||'')+e.have+' / '+e.want:'')+'</span></p>';
  return '<div class="unlocks">'
  +'<div><h4>해금 완료</h4>'+(done.length?done.map(e=>line(e,false)).join('')
    :'<p class="none">아직 본사에서 내려온 것이 없다.</p>')+'</div>'
@@ -975,7 +979,7 @@ function unlockBoard(){const {done,next}=unlockLists();
    notebook. Presentation owns turning an event into words; anything it cannot describe is
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
-function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:codexTab==='contracts'?D.contracts:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 ${GRADE_COPY[Meta.grade(a)].label}</h3><p class="smalltext">${GRADE_COPY[Meta.grade(a)].flavor}</p><p class="smalltext">가맹 실적 ${Meta.franchiseCount(a)} / 10 · 발주 매입가 ${Meta.orderDiscount(a)?'-'+Math.round(Meta.orderDiscount(a)*100)+'%':'할인 없음'}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p><ul class="effects">${Meta.franchiseState(a).map(f=>`<li class="${f.done?'':'effect-bad'}"><span>${E(f.name)}</span><b>${f.done?'달성':'미달성'}</b></li>`).join('')}</ul></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['contracts','시작 계약']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:codexTab==='contracts'?D.contracts:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 ${GRADE_COPY[Meta.grade(a)].label}</h3><p class="smalltext">${GRADE_COPY[Meta.grade(a)].flavor}</p><p class="smalltext">가맹 실적 ${Meta.franchiseCount(a)} / 10 · 발주 매입가 ${Meta.orderDiscount(a)?'-'+Math.round(Meta.orderDiscount(a)*100)+'%':'할인 없음'}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p><ul class="effects">${Meta.franchiseState(a).map(f=>`<li class="${f.done?'':'effect-bad'}"><span>${E(f.name)}</span><b>${f.want!==null?f.have+' / '+f.want:f.done?'달성':'미달성'}</b></li>`).join('')}</ul></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['contracts','시작 계약']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에만 할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 잔고가 0 이상이 되면 그 자리에서 끝납니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${st.expires===null?'유통기한 없음':(st.expires-s.day)+'일 남음'}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 function newRun(){return `<div class="eyebrow">길드리테일 가맹 계약</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">기본 자금 1,000G · 창고 18칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">계약서를 접어 카운터 아래 넣었다. 시작 재고는 창고에 있다.</div><h3 style="margin-bottom:10px">시작 계약</h3><div class="contract-grid">${D.contracts.map(c=>{const locked=!Meta.contractUnlocked(game.account,c);return `<button class="contract ${contract===c.id?'active':''}" data-action="contract" data-id="${c.id}" ${locked?'disabled':''}><strong>${c.name}${locked?' · 잠김':''}</strong><span class="muted">${c.description}</span>${locked?'<br><small>'+unlockProgress(c)+'</small>':''}</button>`;}).join('')}</div><details style="margin-top:15px"><summary class="smalltext">재현용 Seed 지정</summary><label class="smalltext" for="seed">비워 두면 새로운 Seed로 시작합니다.</label><input id="seed" class="seed-field" placeholder="예: guild24-first-shift" maxlength="80" value="${game.run?.phase==='foundation'?E(game.run.seed):''}"></details>${game.run?.phase==='foundation'?'<p class="smalltext" style="margin-top:10px">계약만 바꿉니다. 이 점포의 점포지원 후보와 첫 모험가는 그대로입니다.</p>':''}${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. 보상은 없습니다.</p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 가맹등급 · 해금은 지워지지 않습니다.</p>':''}`;}
 /* Two levels, one row each, with the number said out loud beside the control - the slider
@@ -1069,6 +1073,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* What the Run had opened before this click. Unlocks are credited by Meta.finish, which
     assigns a fresh array - so an identity change is exactly the moment one happened. */
  const wasOpen=game.run?.unlocked;
+ /* META_v2.7 §FRANCHISE ACHIEVEMENTS: what the account had earned before this click. They are
+    credited in four different places - a sale, a Relic purchase, a supplied survival, the
+    DAY 25 morning, the end of a Run - so the cue is taken here, where every one of them
+    arrives, instead of teaching each site to announce itself. */
+ const wasEarned=Meta.franchiseState(game.account).filter(f=>f.done).map(f=>f.id);
+ const wasGrade=Meta.grade(game.account);
  try{
  if(activeCoach&&activeCoach[3]===a)finishCoach();
  switch(a){
@@ -1173,6 +1183,14 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  if(opened.length&&opened!==wasOpen)sound('rare');
  if(opened.length&&game.run.phase!=='end'){toast('본사 해금 · '+opened.join(' · '));game.run.unlocked=[];}
  if(game.run?.toast){toast(game.run.toast);delete game.run.toast;game.save();}
+ /* One line for the click that earned it, whether one or several landed together, with the
+    Grade step read off the same event rather than waiting for the codex to be opened. Said
+    last, so the achievement is what stays on screen when a Run toast lands on the same click. */
+ const earned=Meta.franchiseState(game.account).filter(f=>f.done&&!wasEarned.includes(f.id));
+ if(earned.length){const now=Meta.grade(game.account);
+  toast('가맹 실적 달성 · '+earned.map(f=>f.name).join(' · ')
+   +(now>wasGrade?' · 가맹등급 '+wasGrade+' → '+now:''));
+  sound('rare');}
  }catch(err){toast(err.message);}
 }
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled){if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);}});

@@ -735,6 +735,21 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'the panel does not restate what the codex header says directly above it');
  assert.ok(fn('gatedContent').includes('metaUnlock')&&fn('gatedContent').includes('c.grade'),
   'and what each threshold opens, from the catalog rather than a written-out list');
+ /* META_v2.7 §FRANCHISE ACHIEVEMENTS: a cumulative record says how far along it is, so the
+    player can see the distance rather than only that it is not there yet. The ones that are
+    a result and not a tally carry no count and keep 달성/미달성. */
+ assert.ok(/f\.want!==null\?f\.have\+' \/ '\+f\.want:f\.done\?'달성':'미달성'/.test(cx),
+  'the codex shows the running count where there is one, and the verdict where there is not');
+ assert.ok(/have:f\.have\?Math\.min\(f\.have\(a\),f\.want\)/.test(read('dist/systems/meta.js')),
+  'and the count comes from the same list that judges the achievement, capped at its own target');
+ /* The cue is taken once, where every crediting site arrives, and reads the Grade step off
+    the same event. A second notification subsystem would be a second truth about the same
+    moment - and the standing view above is where it is read afterwards. */
+ assert.ok(/const wasEarned=Meta\.franchiseState\(game\.account\)\.filter\(f=>f\.done\)/.test(app),
+  'the achievement cue is a before/after of the same state the codex shows');
+ assert.ok(/toast\('가맹 실적 달성 · '/.test(app),'said through the existing toast');
+ assert.ok(/now>wasGrade\?' · 가맹등급 '\+wasGrade\+' → '\+now/.test(app),
+  'and a Grade step is read on that same event');
  /* standing progression is a list, not a notification: what is open and what is not yet open
     read at the same level, and the moment-of-unlock line belongs to the result screen only */
  const board=fn('unlockBoard');

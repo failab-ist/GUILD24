@@ -147,16 +147,19 @@ test('META_v2.7 §FRANCHISE GRADE: distinct clears count Bosses, and the Grade i
  assert.equal(Meta.grade(a),1,'three Mastery is not a Grade step by itself');
  const b=Meta.fresh();
  const ladder=[[0,1],[1,1],[2,2],[3,2],[4,3],[5,3],[6,4],[7,4],[8,5],[9,5],[10,6]];
- for(const [count,expected] of ladder){
-  const acc=Meta.fresh();
+ // the cumulative ones at their own thresholds, the one-Run ones marked, exactly as play leaves them
+ const seed=(acc,count)=>{
   acc.franchise.sales      = count>=1? 80:0;
   acc.franchise.overcharged= count>=2? 20:0;
   acc.franchise.returning  = count>=3? 20:0;
   acc.franchise.relics     = count>=4? 15:0;
   acc.franchise.families   = count>=5?['spider','slime','fire','crypt','snow']:[];
   for(const [at,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
-   if(count>=at)acc.franchise.done.push(id);
+   if(count>=at&&!acc.franchise.done.includes(id))acc.franchise.done.push(id);
   if(count>=10)for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())acc.matrix[job][boss]=true;
+  return acc;};
+ for(const [count,expected] of ladder){
+  const acc=seed(Meta.fresh(),count);
   assert.equal(Meta.franchiseCount(acc),count,count+' achievements are counted as '+count);
   assert.equal(Meta.grade(acc),expected,count+'/10 is Grade '+expected);
  }
@@ -168,6 +171,24 @@ test('META_v2.7 §FRANCHISE GRADE: distinct clears count Bosses, and the Grade i
  const once=Meta.franchiseCount(twice);
  twice.franchise.sales=100000;
  assert.equal(Meta.franchiseCount(twice),once,'repeating a completed achievement adds nothing');
+ /* META_v2.7 §FRANCHISE GRADE: the unlock board counts what `contractUnlocked` judges. The
+    inherited source read Total Job Mastery against (grade-1)*7 - a different counter, so the
+    board could call a Contract one step away while the Contract was already open. The two
+    must agree at every count, which is what makes the screen and the lock one truth. */
+ for(let count=0;count<=10;count++){
+  const acc=Meta.fresh();seed(acc,count);
+  assert.equal(Meta.franchiseCount(acc),count,'the seeded account really holds '+count);
+  for(const c of DATA.contracts.filter(c=>c.grade))
+   assert.equal(Meta.franchiseCount(acc)>=Meta.gradeRequirement(c.grade),Meta.contractUnlocked(acc,c),
+    c.name+' reads the same at '+count+'/10 on the board as it does at the lock');
+ }
+ for(const [g,need] of [[1,0],[2,2],[3,4],[4,6],[5,8],[6,10]])
+  assert.equal(Meta.gradeRequirement(g),need,'Grade '+g+' costs '+need+' achievements');
+ const app=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/ui/app.js'),'utf8');
+ const gated=app.slice(app.indexOf('function gatedContent('),app.indexOf('\nfunction unlockLists('));
+ assert.ok(/Meta\.franchiseCount\(game\.account\)/.test(gated)&&/Meta\.gradeRequirement\(c\.grade\)/.test(gated),
+  'and the board reads those two functions rather than a second copy of the ladder');
+ assert.ok(!/totalJobMastery/.test(gated),'the retired Job Mastery progress path is gone');
  // all functional progression is reachable by 8/10
  const byEight=ladder.find(([c])=>c===8)[1];
  assert.ok(DATA.contracts.every(c=>!c.grade||c.grade<=byEight),'every Start Contract is open by 8/10');
