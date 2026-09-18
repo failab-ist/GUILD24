@@ -8,6 +8,13 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 BASE_DOCUMENT=00_GAME_CORE_v2.5.0.md
 PATCH_TYPE=META_SIMPLIFICATION
 
+## CURRENT EXECUTION SCOPE
+
+This v2.8-named file is a **scoped Decoration Package design source for the current v2.7 cycle**, not a project-wide v2.8 adoption directive.
+
+Apply only the Decoration/Store-Capital replacement work explicitly owned here.
+All unrelated systems and balance owners remain on their current v2.7 routes through `SPEC_INDEX_v2.7.0.md`.
+
 ## INHERITANCE
 
 All unchanged core fantasy, phase loop, information principle, NPC emotional core, and Run-internal Store Build identity inherit `00_GAME_CORE_v2.5.0.md`.

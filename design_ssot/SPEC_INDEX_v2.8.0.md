@@ -5,13 +5,13 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_8_META_STRUCTURE_PROMOTED
+FREEZE_STATUS=SCOPED_DECORATION_PACKAGE_REFERENCE
 FREEZE_DATE=2026-09-19
 LAST_APPROVED_AMENDMENT=2026-09-19
-SSOT_AUDIT_STATUS=V2_8_STRUCTURE_SYNCED_BALANCE_PENDING
+SSOT_AUDIT_STATUS=DECORATION_PACKAGE_SYNCED_BALANCE_PENDING
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=STORE_CAPITAL_RATES,DECORATION_PRICES,INTEGRATED_CORE_BALANCE_BUNDLE
-SOURCE_ADOPTION_STATUS=V2_8_NOT_YET_ADOPTED
-V2_8_SOURCE_EDIT_GATE=INTEGRATED_BALANCE_BUNDLE_APPROVAL_REQUIRED
+SOURCE_ADOPTION_STATUS=NO_PROJECT_WIDE_V2_8_ADOPTION
+V2_8_SOURCE_EDIT_GATE=DECORATION_PACKAGE_ONLY
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
 ## AUTHORITY
@@ -26,9 +26,32 @@ EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 DESIGN TRUTH = Design SSOT  
 IMPLEMENTATION TRUTH = Source
 
-Current Source remains v2.7 implementation truth until the approved v2.8 Source Adoption cycle lands.
+Current Source remains v2.7 implementation truth. There is no project-wide v2.8 Source Adoption in the current cycle.
 
-## v2.8 PURPOSE
+## CURRENT EXECUTION SCOPE — IMPORTANT
+
+This file is **not the current project-wide execution index**.
+
+Current implementation/balance work remains on **v2.7** and resolves general owners through `SPEC_INDEX_v2.7.0.md`.
+
+For the current cycle, only the **Decoration Package** defined in the v2.8 files is approved for application to v2.7:
+
+- Store Capital
+- Decoration ownership / fixed Slots / pre-Run loadout
+- initial four Decoration effects
+- Franchise Grade / Franchise Achievement / Start Contract retirement only as part of that replacement
+- inactive archive preservation of the retired implementation
+- necessary Decoration-specific Run/UI/Save support
+
+The Gate / Wallet / Hazard-Counter rebalance is still v2.7 balance work and must be written back to the corresponding v2.7 owner after User/Director approval.
+
+Do not use this file to trigger:
+- project-wide v2.8 adoption
+- unrelated owner upgrades
+- unrelated Save/version migration
+- any feature outside the Decoration Package
+
+## STAGED v2.8 DECORATION PACKAGE PURPOSE
 
 v2.8 simplifies cross-run progression before the external v3.0 target.
 
@@ -45,7 +68,7 @@ The retired v2.7 Franchise implementation is preserved as an inactive archive an
 
 v2.8 also requires one integrated balance pass before Production adoption so Decoration effects are measured together with the already-observed late-run Gate / Wallet / Hazard-Counter findings.
 
-## CURRENT DESIGN SSOT FILE SET
+## STAGED v2.8 REFERENCE FILE SET
 
 Current file set = 22 files:
 
@@ -72,7 +95,7 @@ Current file set = 22 files:
 - `RELIC_QA_v2.7.0.md`
 - `UI_UX_QA_v2.8.0.md`
 
-## ROUTING
+## STAGED ROUTING — DECORATION PACKAGE REFERENCE ONLY
 
 GAME/CORE/CROSS-RUN IDENTITY -> `00_GAME_CORE_v2.8.0.md`  
 RUN/PHASE/SAVE/FRESH-INIT/FINAL-TIMELINE/PRE-RUN-LOADOUT/META-SETTLEMENT -> `CORE_RUN_v2.8.0.md`  
@@ -136,7 +159,8 @@ Required integrated proposal evaluates these together, including Decoration owne
 Until User/Director approves the integrated bundle:
 
 ```text
-NO v2.8 Production balance adoption
+NO Decoration-package Production adoption
+NO v2.7 balance numeric change
 ```
 
 ## SOURCE ARCHIVE REQUIREMENT

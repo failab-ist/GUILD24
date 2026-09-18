@@ -8,6 +8,13 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 BASE_DOCUMENT=CORE_RUN_v2.7.0.md
 PATCH_TYPE=META_SIMPLIFICATION
 
+## CURRENT EXECUTION SCOPE
+
+This v2.8-named file is a **scoped Decoration Package design source for the current v2.7 cycle**, not a project-wide v2.8 adoption directive.
+
+Apply only the Decoration/Store-Capital replacement work explicitly owned here.
+All unrelated systems and balance owners remain on their current v2.7 routes through `SPEC_INDEX_v2.7.0.md`.
+
 ## INHERITANCE
 
 Save v8 behavior, D0~D30 Final timeline, tutorial reset, start stock, D25 persisted Final state, D30 preparation flow, and all unchanged Run rules inherit `CORE_RUN_v2.7.0.md`.
@@ -30,7 +37,7 @@ new Run
 
 There is no active Franchise Grade check and no Start Contract card selection.
 
-The initial v2.8 content has only one Decoration per Slot, so a Slot with exactly one owned option may be auto-selected by UI.
+The initial Decoration-package content has only one Decoration per Slot, so a Slot with exactly one owned option may be auto-selected by UI.
 The underlying state still stores a Slot-based loadout so later same-Slot alternatives do not require a schema redesign.
 
 Once the Run begins, Decoration loadout is frozen for that Run.

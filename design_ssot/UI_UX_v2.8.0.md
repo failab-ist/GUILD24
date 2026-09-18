@@ -8,6 +8,13 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 BASE_DOCUMENT=UI_UX_v2.7.0.md
 PATCH_TYPE=META_SIMPLIFICATION
 
+## CURRENT EXECUTION SCOPE
+
+This v2.8-named file is a **scoped Decoration Package design source for the current v2.7 cycle**, not a project-wide v2.8 adoption directive.
+
+Apply only the Decoration/Store-Capital replacement work explicitly owned here.
+All unrelated systems and balance owners remain on their current v2.7 routes through `SPEC_INDEX_v2.7.0.md`.
+
 ## INHERITANCE
 
 All unchanged SALE, ORDER, NIGHT, Final, mobile, typography, tutorial, and visual rules inherit `UI_UX_v2.7.0.md`.
@@ -67,7 +74,7 @@ After Run start:
 - no paid respec
 - no free-placement mode
 
-For initial v2.8, each Slot has only one content item.
+For the initial Decoration-package implementation, each Slot has only one content item.
 UI must still be built around `Slot -> owned options -> selected option`, not around four hard-coded booleans.
 
 ## STORE VISUAL FEEDBACK

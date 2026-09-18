@@ -8,6 +8,13 @@ DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 BASE_DOCUMENT=META_v2.7.0.md
 PATCH_TYPE=META_SIMPLIFICATION
 
+## CURRENT EXECUTION SCOPE
+
+This v2.8-named file is a **scoped Decoration Package design source for the current v2.7 cycle**, not a project-wide v2.8 adoption directive.
+
+Apply only the Decoration/Store-Capital replacement work explicitly owned here.
+All unrelated systems and balance owners remain on their current v2.7 routes through `SPEC_INDEX_v2.7.0.md`.
+
 ## INHERITANCE
 
 Job Mastery, Job×Boss matrix, distinct-Boss Item/Job unlocks, Monster Knowledge, Full Reset, and other unchanged Meta behavior inherit `META_v2.7.0.md` and its base chain.

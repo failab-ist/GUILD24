@@ -7,7 +7,7 @@ DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
-LAST_APPROVED_AMENDMENT=2026-09-18
+LAST_APPROVED_AMENDMENT=2026-09-19
 SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
@@ -31,6 +31,38 @@ DESIGN TRUTH = Design SSOT
 IMPLEMENTATION TRUTH = Source
 
 If current Source still matches v2.6/v2.6.1 rather than this v2.7 SSOT, classify the difference as missing adoption / implementation difference. Do not reinterpret this SSOT to match Source.
+
+## CURRENT EXECUTION SCOPE — v2.7 + DECORATION BACKPORT
+
+The **current implementation / balance line remains v2.7**.
+
+The files created under the v2.8 name are **not a project-wide v2.8 promotion for the current cycle**.
+For the current v2.7 work, only the approved **Decoration Package** from those files is adopted as an overlay:
+
+- Store Capital and its Run-end settlement structure
+- permanent Decoration ownership
+- fixed Decoration Slots and pre-Run loadout
+- initial four Decoration effects
+- the active retirement of Franchise Grade / Franchise Achievement / Start Contract that is necessary for Decoration to replace that progression layer
+- inactive preservation of the retired v2.7 Franchise/Contract implementation
+- only the Run/UI/Save support required to make the Decoration Package work
+
+Everything else must continue to follow the current v2.7 routed owner Specs.
+
+In particular:
+- Gate / Wallet / Hazard-Counter tuning remains a **v2.7 balance change** against the current owners
+- do not infer a project-wide v2.8 Source Adoption
+- do not introduce unrelated v2.8 systems, migrations, or version-boundary work
+- the v2.8 files are scoped design sources for the Decoration Package only in this cycle
+
+Decoration scoped sources:
+- `00_GAME_CORE_v2.8.0.md`
+- `META_v2.8.0.md`
+- `CORE_RUN_v2.8.0.md`
+- `UI_UX_v2.8.0.md`
+- their Decoration-related QA clauses
+
+If those scoped files conflict with current v2.7 owners **outside the Decoration Package**, the v2.7 owner remains authoritative.
 
 ## v2.7 VERSION POLICY
 
