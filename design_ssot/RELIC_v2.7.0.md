@@ -162,6 +162,71 @@ Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a
 
 This high point is an allowed coherent-build reward.
 
+## VISITOR RELICS — v2.7 EXPLICIT OVERRIDE
+
+`DIRECTOR DOCUMENT BASELINE`
+
+These two Relics are redefined here. This section **supersedes** any earlier visitor effect for
+them in the base chain; where the inherited document still describes a flat visitor bonus, this
+override is the current truth.
+
+The two answer different questions and neither is a strict upgrade of the other.
+
+### board — 길드 전광판
+
+Role: raise the floor of a bad Morning.
+
+It applies to the **base visitor roll only**, before any other modifier:
+
+```text
+base 3 -> 4
+base 4 -> 4
+base 5 -> 5
+base 6 -> 6
+```
+
+Rules:
+- this is a floor of 4 on the base roll, not a floor of 4 on the final visitor count
+- no separate chance roll is made
+- other modifiers (Relic, Decoration, Event, Contract) apply afterward as they already do
+- the available-adventurer limit still caps the actual seating
+
+### hub — 지역 거점점 계약
+
+Role: pay overhead to widen the catchment.
+
+One roll each Morning, three mutually exclusive outcomes:
+
+```text
+30%  visitors +1
+ 5%  visitors +2
+65%  no addition
+```
+
+Operating cost:
+
+```text
+overheadBase + overheadBase × 0.20 + other flat extras
+```
+
+then the existing operating-cost rounding rule.
+
+The 20% applies to `overheadBase` only. It must not be applied again to other Event or Relic
+flat modifiers, and it does not compound with them.
+
+### COMPOSITION
+
+`board`, `hub` and the `wall` Decoration are independent and may all be held at once.
+
+```text
+board = base-roll floor
+hub   = probabilistic catchment, paid for in overhead
+wall  = 10% Morning proc (Decoration, not a Relic)
+```
+
+They share no ownership, no purchase candidacy and no slot. Holding more than one simply applies
+each in its own place: the board floor first on the base roll, then the probabilistic additions.
+
 ## EXPEDITION RELIC CATEGORY MIGRATION
 
 `긴급보급 선반` category filter becomes:
