@@ -708,13 +708,17 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(/jobs:jobs\.filter\(job=>jobMastery\(a,job\)>wasMastery\[job\]\)/.test(metaSrc),
   'a Job already credited for this Boss moved nothing and is not listed');
  /* A failure still records no Job/Boss gain. The Franchise block now sits between the two,
-    because META_v2.7 §FRANCHISE ACHIEVEMENTS 6 and 7 are about REACHING the Final and settle
-    whether or not the Boss fell - they are a separate track from the clear matrix. */
+    because META_v2.7 §FRANCHISE ACHIEVEMENT 7 is about REACHING the Final and settles whether
+    or not the Boss fell - a separate track from the clear matrix. */
  assert.ok(/if\(!win\)return \[\];/.test(metaSrc),'a failure records no Job x Boss gain at all');
  assert.ok(/run\.metaGain=null;/.test(metaSrc),'and no gain line for the result screen');
- const franchiseBlock=metaSrc.slice(metaSrc.indexOf('FRANCHISE ACHIEVEMENTS 6-9'),metaSrc.indexOf('if(!win)return [];'));
+ const franchiseBlock=metaSrc.slice(metaSrc.indexOf('FRANCHISE ACHIEVEMENTS 7-9'),metaSrc.indexOf('if(!win)return [];'));
  assert.ok(/if\(win&&st\)/.test(franchiseBlock),'the two clear-gated achievements still require the clear');
- assert.ok(/if\(st&&reachedFinal\)/.test(franchiseBlock),'and the two reach-gated ones require reaching the Final');
+ assert.ok(/if\(st&&reachedFinal&&!st\.deaths\)/.test(franchiseBlock),'and the reach-gated one requires reaching the Final');
+ /* META_v2.7 Balance Fix: 6 left this block for DAY 25, so the end of the Run must not judge
+    it at all - a Run that wastes stock after DAY 25 still keeps what it already earned. */
+ assert.ok(!/nowaste/.test(franchiseBlock),'6 is no longer settled at the end of the Run');
+ assert.ok(/s\.day>=25&&!s\.stats\.waste/.test(read('dist/systems/shop.js')),'it settles in the morning that reaches DAY 25');
 
  /* ...and the whole state is reachable at any time, in the codex the player already has. */
  const cx=fn('codex');

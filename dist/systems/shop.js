@@ -143,6 +143,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const pool=D.events.filter(e=>this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
  morning(){const s=this.run;s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
  const expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
+ /* META_v2.7 §FRANCHISE ACHIEVEMENT 6: settled the moment the Run reaches DAY 25 with no
+    expiry waste behind it, counting this morning's own sweep. It is marked here rather than
+    at the end of the Run because waste after DAY 25 must not take it back. */
+ if(s.day>=25&&!s.stats.waste){const fr=this.account.franchise??=G.Meta.freshFranchise();
+  if(!fr.done.includes('nowaste'))fr.done.push('nowaste');}
  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
  if([5,10,15,20,25,30].includes(s.day))this.relicWindow(s.day);
  /* FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and revealed on D25, BEFORE the

@@ -149,10 +149,10 @@ test('META_v2.7 §FRANCHISE GRADE: distinct clears count Bosses, and the Grade i
  const ladder=[[0,1],[1,1],[2,2],[3,2],[4,3],[5,3],[6,4],[7,4],[8,5],[9,5],[10,6]];
  for(const [count,expected] of ladder){
   const acc=Meta.fresh();
-  acc.franchise.sales      = count>=1?100:0;
+  acc.franchise.sales      = count>=1? 80:0;
   acc.franchise.overcharged= count>=2? 20:0;
-  acc.franchise.returning  = count>=3? 30:0;
-  acc.franchise.relics     = count>=4? 30:0;
+  acc.franchise.returning  = count>=3? 20:0;
+  acc.franchise.relics     = count>=4? 15:0;
   acc.franchise.families   = count>=5?['spider','slime','fire','crypt','snow']:[];
   for(const [at,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
    if(count>=at)acc.franchise.done.push(id);
@@ -164,7 +164,7 @@ test('META_v2.7 §FRANCHISE GRADE: distinct clears count Bosses, and the Grade i
  assert.equal(Meta.FRANCHISE.length,10,'exactly ten dedicated achievements');
  assert.equal(new Set(Meta.FRANCHISE.map(f=>f.id)).size,10,'each one distinct');
  // a completed achievement never credits twice
- const twice=Meta.fresh();twice.franchise.sales=100;
+ const twice=Meta.fresh();twice.franchise.sales=80;
  const once=Meta.franchiseCount(twice);
  twice.franchise.sales=100000;
  assert.equal(Meta.franchiseCount(twice),once,'repeating a completed achievement adds nothing');

@@ -94,10 +94,10 @@ const TIERS=[
    marked done, exactly as real play would leave them - no Grade is written directly. */
 function seedFranchise(a,n){
  const fr=a.franchise;
- if(n>=1)fr.sales=100;
+ if(n>=1)fr.sales=80;
  if(n>=2)fr.overcharged=20;
- if(n>=3)fr.returning=30;
- if(n>=4)fr.relics=30;
+ if(n>=3)fr.returning=20;
+ if(n>=4)fr.relics=15;
  if(n>=5)fr.families=['spider','slime','fire','crypt','snow'];
  for(const [at,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
   if(n>=at&&!fr.done.includes(id))fr.done.push(id);

@@ -886,14 +886,26 @@ test('META_v2.7 §FRANCHISE ACHIEVEMENTS: each one is credited by the play it na
  assert.equal(a.franchise.families.length,2,'a death is not a survival');
  Meta.observe(a,{...rep,dungeon:'fire',items:[]},null);
  assert.equal(a.franchise.families.length,2,'and an unsupplied survival is not one either');
- // 6/7/8/9 need a Run that actually kept a record
+ /* 6 settles in the morning that reaches DAY 25, not at the end of the Run. Drive the real
+    morning so the expiry sweep of that day is the one being judged. */
+ const atDay=(day,stock)=>{const h=fresh('franchise-waste');h.run.day=day;h.run.inventory=stock;h.run.stats.waste=0;
+  h.account.franchise=Meta.freshFranchise();h.morning();return h;};
+ assert.ok(atDay(25,[]).account.franchise.done.includes('nowaste'),'reaching DAY 25 with nothing discarded counts');
+ assert.ok(!atDay(24,[]).account.franchise.done.includes('nowaste'),'DAY 24 is not there yet');
+ const swept=atDay(25,[{id:'x',item:'rice',cost:10,expires:25}]);
+ assert.equal(swept.run.stats.waste,1,'the DAY 25 sweep itself discarded one');
+ assert.ok(!swept.account.franchise.done.includes('nowaste'),'and that one is counted against the Run');
+ // later waste never takes back an achievement already earned
+ const kept=atDay(25,[]);kept.run.day=26;kept.run.inventory=[{id:'y',item:'rice',cost:10,expires:26}];kept.morning();
+ assert.equal(kept.run.stats.waste,1,'DAY 26 discarded something');
+ assert.ok(kept.account.franchise.done.includes('nowaste'),'but the DAY 25 achievement stands');
+ // 7/8/9 need a Run that actually kept a record
  const one=(run,win)=>{const acc=Meta.fresh();Meta.finish(acc,run,win);return acc.franchise.done;};
  assert.deepEqual(one({rewarded:false,bossId:'WRATH'},true),[],'a Run with no record credits nothing');
  const base={rewarded:false,bossId:'WRATH',day:30,stats:{waste:0,deaths:0,revenue:0}};
- assert.ok(one({...base,finalReport:{members:[]}},false).includes('nowaste'),'reaching the Final with no waste counts');
- assert.ok(one({...base,finalReport:{members:[]}},false).includes('nodeath'),'and with nobody lost');
- assert.ok(!one({...base,stats:{waste:1,deaths:0,revenue:0},finalReport:{members:[]}},false).includes('nowaste'),'one discarded stock is not zero');
+ assert.ok(one({...base,finalReport:{members:[]}},false).includes('nodeath'),'reaching the Final with nobody lost counts');
  assert.ok(!one({...base,stats:{waste:0,deaths:1,revenue:0},finalReport:{members:[]}},false).includes('nodeath'),'one death is not zero');
+ assert.ok(!one({...base,finalReport:{members:[]}},false).includes('nowaste'),'and 6 is no longer settled at the end of the Run');
  const supplied={...base,finalReport:{members:[{job:'warrior',items:['rice']},{job:'mage',items:['potion']}]}};
  assert.ok(one(supplied,true).includes('allsupplied'),'every participant supplied, then a CLEAR');
  assert.ok(!one({...supplied,finalReport:{members:[{job:'warrior',items:['rice']},{job:'mage',items:[]}]}},true).includes('allsupplied'),

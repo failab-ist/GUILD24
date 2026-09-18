@@ -47,12 +47,12 @@ const distinctBossClear=a=>BOSSES().filter(boss=>JOBS().some(job=>a.matrix?.[job
    DOCUMENT BASELINE values: QA may report a BALANCE FINDING against them but may not tune
    them here. `run` is judged only for the one-Run achievements, which need a Run to look at. */
 const FRANCHISE=[
- {id:'sales',      name:'누적 판매 100회',            done:(a)=>(a.franchise?.sales||0)>=100},
+ {id:'sales',      name:'누적 판매 80회',             done:(a)=>(a.franchise?.sales||0)>=80},
  {id:'overcharge', name:'150% 판매 20회 성공',        done:(a)=>(a.franchise?.overcharged||0)>=20},
- {id:'returning',  name:'재방문 손님에게 30회 판매',   done:(a)=>(a.franchise?.returning||0)>=30},
- {id:'relics',     name:'점포지원 누적 30개 구매',     done:(a)=>(a.franchise?.relics||0)>=30},
+ {id:'returning',  name:'재방문 손님에게 20회 판매',   done:(a)=>(a.franchise?.returning||0)>=20},
+ {id:'relics',     name:'점포지원 누적 15개 구매',     done:(a)=>(a.franchise?.relics||0)>=15},
  {id:'families',   name:'다섯 게이트 전부에서 보급 생환',done:(a)=>(a.franchise?.families||[]).length>=5},
- {id:'nowaste',    name:'폐기 0개로 마왕성 도달',      done:(a)=>(a.franchise?.done||[]).includes('nowaste')},
+ {id:'nowaste',    name:'폐기 0개로 DAY 25 도달',      done:(a)=>(a.franchise?.done||[]).includes('nowaste')},
  {id:'nodeath',    name:'사망 0명으로 마왕성 도달',     done:(a)=>(a.franchise?.done||[]).includes('nodeath')},
  {id:'allsupplied',name:'출전 전원 보급 후 마왕 토벌',  done:(a)=>(a.franchise?.done||[]).includes('allsupplied')},
  {id:'grosssales', name:'매출 10,000G + 마왕 토벌',    done:(a)=>(a.franchise?.done||[]).includes('grosssales')},
@@ -108,19 +108,17 @@ function finish(a,run,win){
  run.rewarded=true;
  a.runs++;
  run.metaGain=null;
- /* META_v2.7 §FRANCHISE ACHIEVEMENTS 6-9. Judged inside this one Run exactly as written, and
-    marked once - a completed achievement never credits again. 6 and 7 are about REACHING the
-    Final, so they settle whether or not the Boss fell; 8 and 9 require the CLEAR. */
+ /* META_v2.7 §FRANCHISE ACHIEVEMENTS 7-9. Judged inside this one Run exactly as written, and
+    marked once - a completed achievement never credits again. 7 is about REACHING the Final,
+    so it settles whether or not the Boss fell; 8 and 9 require the CLEAR. 6 is not here at
+    all: it settles at DAY 25, in the morning that reaches it, long before a Run ends. */
  {const fr=a.franchise??=freshFranchise();
   const mark=id=>{if(!fr.done.includes(id))fr.done.push(id);};
   /* A missing record is not evidence of a clean Run. These four read what the Run actually
      kept, so a Run with no stats record credits nothing rather than everything. */
   const st=run.stats;
   const reachedFinal=!!run.finalReport||run.day>=30;
-  if(st&&reachedFinal){
-   if(!st.waste)mark('nowaste');
-   if(!st.deaths)mark('nodeath');
-  }
+  if(st&&reachedFinal&&!st.deaths)mark('nodeath');
   if(win&&st){
    const members=run.finalReport?.members||[];
    if(members.length&&members.every(m=>(m.items||[]).length))mark('allsupplied');
