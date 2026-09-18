@@ -127,36 +127,73 @@ PASS:
 - exact hidden deficit formula remains hidden from player UI
 - public required/prepared/deficit quantities are correct
 
-## DUN-Q77 — ORDINARY DEATH BASELINE
+## DUN-Q77 — ORDINARY EXPEDITION DEATH BASELINE
 
-Controlled failed-combat + failed-escape cases.
+Controlled prepared states with known Combat and Hazard deficits.
 
 EXPECT:
+
 ```text
-deficit = clamp(1 - combatScore / requiredCombatPower, 0, 1)
-healthyDeathChance = clamp(0.06 + deficit*0.22 - effectiveSurvival*0.0007, 0.02, 0.30)
+CombatDeficit
+= clamp((requiredCombatPower - effectivePreparedPower) / requiredCombatPower, 0, 1)
+
+CombatDeathContribution
+= CombatDeficit * 0.18
+
+HazardDeficit_i
+= clamp((HazardThreat_i - HazardDefense_i) / HazardThreat_i, 0, 1)
+
+EnvironmentDeficit
+= average(HazardDeficit_i)
+
+EnvironmentDeathContribution
+= EnvironmentDeficit * 0.12
+
+healthyDeathChance
+= clamp(
+    CombatDeathContribution + EnvironmentDeathContribution,
+    0.00,
+    0.30
+)
+```
+
+If no canonical Hazard is present:
+```text
+EnvironmentDeficit = 0
 ```
 
 PASS:
-- Death roll occurs only in the existing failed-combat / failed-escape branch
+- Combat contribution uses the same current prepared-combat truth as Forecast/Resolve before hidden combat variance
+- Environment contribution uses the same current Hazard Threat/Defense truth as readiness
+- healthy minimum may reach exactly 0%
 - healthy cap is exactly 30%
-- minimum is exactly 2%
-- no random instant-death path is added to successful combat
-- environment-only incidents do not create a second Death subsystem
+- exactly one ordinary-expedition Death roll occurs
+- Death is not gated behind a separate failed-combat + failed-escape Death branch
+- no second Death roll survives inside escape/injury result handling
+- a 0% Death chance does not imply guaranteed Success
 
-## DUN-Q78 — INJURED RE-EXPEDITION RISK
+## DUN-Q78 — INJURED RE-EXPEDITION RISK / PRE-SUPPLY DISCLOSURE
 
-Controlled identical NPC/Gate/RNG state except departure Injury state.
+Controlled identical NPC/Gate state except departure Injury state.
 
 EXPECT when departure `injury=1`:
 - ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
-- Death chance adds +10%p to the healthy formula and caps at 40%
+- Death chance adds +10%p to the healthy expedition-level formula and caps at 40%
 - Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
 - no extra independent Death/Severe roll is created
 
+Pre-supply SALE check:
+- exact Death Risk % includes the +10%p injured modifier
+- qualitative Combat Forecast / Hazard Readiness and exact Death Risk are captured before any new Item commit
+- after purchase commits, those displayed outlook values remain frozen
+- actual expedition Death chance is recalculated internally from the final prepared state
+- post-supply/final actual Death % is not exposed during the remaining-slot decision
+
 PASS:
 - injured departure is materially riskier than healthy departure
-- exact hidden probability is not exposed to Player UI
+- healthy cap remains 30%
+- injured cap remains 40%
+- exact pre-supply Death Risk is player-visible while the post-supply actual Death probability remains hidden
 
 ## DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY
 
@@ -451,5 +488,5 @@ Record at minimum:
 - Counter lower/upper/hybrid use
 - Epic offer/order/sale/use by Day band and category
 - healthy vs injured re-expedition outcome distribution
-- healthy vs injured death/severe rates after failed combat/escape
+- healthy vs injured expedition Death/Severe rates by CombatDeficit and EnvironmentDeficit band
 - Item dead-pick / universal-best rates
