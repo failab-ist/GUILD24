@@ -26,6 +26,18 @@ function restoreFocus(container,hold){if(!container||!hold)return;
  const t=container.querySelectorAll(hold.key)[hold.nth];
  (t&&!t.disabled?t:t?.parentElement?.querySelector('[data-action]:not(:disabled)'))?.focus({preventScroll:true});}
 
+/* Put an ORDER offer row back on the pixel it was on before the redraw. render() restores
+   a raw scrollTop, which is right only while everything above the row keeps its height -
+   and the dock gains or loses 발주 확정 as the cart stops or starts being empty, so the
+   scroller itself changes height around exactly the press that matters. Correcting once
+   synchronously means nothing flashes; correcting again on the next frame catches a late
+   reflow. A delta of 0 leaves scrollTop alone, so this costs nothing when nothing moved. */
+function anchorOffer(key,y0){
+ if(key==null||y0==null)return;
+ const fix=()=>{const sc=$('.stage-scroll'),back=$('[data-offer="'+CSS.escape(key)+'"]');
+  if(!sc||!back)return;const d=back.getBoundingClientRect().top-y0;if(d)sc.scrollTop+=d;};
+ fix();requestAnimationFrame(fix);}
+
 function setModal(value){if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';previousFocus=document.activeElement;modal=value;renderModal();if(value){document.body.style.overflow='hidden';setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}else{document.body.style.overflow='';previousFocus?.focus?.();}requestAnimationFrame(showCoach);}
 let lastPhase=null;
 // ---- stage primitives ----------------------------------------------------
@@ -590,7 +602,10 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +stockBrief()
    +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
     const sl = it.days ? (it.days + Relics.shelf(game, it)) : null;
-    return '<li class="line r'+it.rarity+(q?' on':'')+'">'
+    /* data-offer is the row's handle across a redraw: the qty controls inside it flip
+       between enabled and disabled as the quantity hits 0 or the cap, so the pressed
+       button is not a stable anchor but its row is. */
+    return '<li class="line r'+it.rarity+(q?' on':'')+'" data-offer="'+i+'">'
     +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
     +Scene.crate(Art.itemIcon(it.id,30),46)
     +'<span class="col">'
@@ -988,7 +1003,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
      feature; leaving it empty on an opened Run is still a brand new world. */
   const seed=typed||(s?.phase==='foundation'?s.seed:null)||'g24-'+Date.now().toString(36);
   game.start(seed,contract);selected=null;setModal(null);render();break;}
- case'qty':game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound('quantity');render();break;
+ case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
+  game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound('quantity');render();
+  anchorOffer(key,y0);break;}
  case'confirm-order':game.confirmOrder();sound('order');render();break;
  
  case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();const result=s.results[s.nightCursor];if(result)sound(result.outcome==='사망'?'death':result.outcome==='중상'?'severe':result.outcome==='부상'?'injury':result.outcome==='대성공'?'great':result.discoveries?.length?'discovery':result.changes?.length?'level':'return');break;

@@ -941,4 +941,26 @@ test('UI-Q105: the coach mark has a stylesheet, and every step points at a real 
  assert.ok(!/case'tip'/.test(app),'the dead tip handler is gone, not left writing stray tutorial keys');
 });
 
+/* UI_UX v2.6.1 §ORDER Runtime continuity. render() replaces #app wholesale and restores a
+   raw scrollTop, which only holds while everything above the row keeps its height - and the
+   dock gains or loses 발주 확정 exactly when the cart stops or starts being empty. SALE
+   already pins the tapped row through its own press; ORDER now does the same. The row, not
+   the pressed button, is the anchor: +/- and the quick-set buttons flip to disabled at 0
+   and at the cap, so the control the player touched may not survive the redraw. */
+test('ORDER quantity presses keep their row anchored',()=>{
+ assert.ok(/data-offer="'\+i\+'"/.test(app),'each offer row carries its index as a stable handle');
+ const qty=app.slice(app.indexOf("case'qty'"),app.indexOf("case'qty'")+400);
+ assert.ok(/closest\('\[data-offer\]'\)/.test(qty),'the press resolves to its own offer row');
+ assert.ok(/getBoundingClientRect\(\)\.top/.test(qty),'and measures it before the redraw');
+ assert.ok(/anchorOffer\(/.test(qty),'and hands that measurement to the correction');
+ const fixer=fn('anchorOffer');
+ assert.ok(/\.stage-scroll/.test(fixer)&&/scrollTop\+=/.test(fixer),
+  'the correction moves the scroller by the measured delta');
+ assert.ok(/requestAnimationFrame/.test(fixer),'and checks again after the frame settles');
+ assert.ok(/if\(d\)/.test(fixer),'a zero delta leaves scrollTop alone');
+ // SALE's own anchor predates this and must not be disturbed by it.
+ assert.ok(/data-action="select"\]\[data-id="'\+CSS\.escape\(id\)/.test(app),
+  'SALE still re-finds the tapped product after its redraw');
+});
+
 console.log(count+' ui guard groups passed');
