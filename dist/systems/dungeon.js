@@ -29,8 +29,10 @@ function prepare(n,d,facilities=[]){
  const required=d.requiredSupply||0,fatigueRecovery=Math.max(0,finalSupply-required),effectiveFatigue=Math.max(0,n.fatigue-fatigueRecovery);e.supply=finalSupply;
  let combatMod=1+traitSum('combatPercent'),survivalMod=1+traitSum('survivalPercent'),mobilityMod=1,spiritMod=1;
  if(n.injury===1){
-  const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상/중상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=0.15;why.push('부상/중상 페널티: 투력 -15%');}
-  survivalMod-=0.20;why.push('부상/중상 페널티: 강인함 -20%');
+  /* NPC_TRAIT §INJURY: this branch is injury===1 only. 중상 carries no Stat penalty - it
+     keeps the adventurer home instead - so the line may not claim one on its behalf. */
+  const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=0.15;why.push('부상 페널티: 투력 -15%');}
+  survivalMod-=0.20;why.push('부상 페널티: 강인함 -20%');
  }
  if(effectiveFatigue>=10&&effectiveFatigue<20){mobilityMod-=0.10;spiritMod-=0.10;why.push('피로 누적(10~19): 기동/정신 -10%');}
  else if(effectiveFatigue>=20){mobilityMod-=0.25;spiritMod-=0.25;why.push('극심한 피로(20): 기동/정신 -25%');}
