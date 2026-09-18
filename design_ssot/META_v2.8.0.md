@@ -158,6 +158,11 @@ The current Decoration Package adds no system for:
 
 These reuse existing Start Contract positive implementation channels.
 
+A Decoration is its own system and never shares identity with a 점포지원 Relic. Granting a
+Decoration effect must not inject a Relic id into the Run's facilities, mark a Relic as owned,
+remove a Relic from a purchase window, or consume one of the Run's Relic slots. A Decoration and
+a Relic that touch the same quantity simply both apply.
+
 ### sign — 새벽배송 안내판
 ```text
 ORDER offer candidates +1
@@ -165,12 +170,15 @@ ORDER offer candidates +1
 
 ### wall — 길드 제휴 현판
 ```text
-daily visitors +1
+each Morning, 10% chance of visitors +1
 ```
+
+The roll happens once per Morning, alongside the ordinary visitor generation, and is independent
+of every other visitor source. It is a chance, not a guarantee: most Days it adds nothing.
 
 ### counter — 알뜰 금고
 ```text
-Run starting Gold +250G
+Run starting Gold +300G
 ```
 
 ### display — 프리미엄 쇼케이스
