@@ -187,6 +187,14 @@ function gatePlate(d){const b=sigilOf(d);
  +(d.requiredSupply?'<span class="stamp-line load">보급 '+d.requiredSupply+' 필요</span>':'<span class="foot">보급 부담 없음</span>')
  +'</article>';}
 function tierLine(){const f=game.tierForecast();return f?'T1 '+f.percent[0]+'% · T2 '+f.percent[1]+'% · T3 '+f.percent[2]+'%':'마왕성 최종 원정';}
+/* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. How many Gates open tomorrow, before the player
+   commits an order: a confirmed count where the rule is deterministic, the exact distribution
+   where it is drawn. What is deliberately not said is WHICH - no Family, no Gate identity, no
+   Hazard set - so the player knows how much and how dangerous, never exactly what to pack. */
+function gateLine(){const f=game.gateForecast();if(!f)return '';
+ if(f.final)return '게이트 1곳 · 마왕성';
+ if(f.fixed!==null)return '게이트 '+f.fixed+'곳';
+ return f.counts.map(c=>c.count+'곳 '+c.percent+'%').join(' · ');}
 /* UI_UX §DEEP SALE UI. Offered only while a nomination is still legal, so it never appears as
    a disabled control the player has to reason about. Once taken it states what left the till
    and that the destination changed - the forecast above has already been recomputed against
@@ -624,7 +632,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    // two groups: what today needs, and the signal for tomorrow's order
    +'<div class="brief"><div class="when"><span class="k">오늘</span>'
    +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
-   +'<div class="when"><span class="k">내일</span><p class="tier">'+tierLine()+'</p></div></div>'
+   +'<div class="when"><span class="k">내일</span><p class="tier">'+E(gateLine())+'</p><p class="tier">'+tierLine()+'</p></div></div>'
    +stockBrief()
    +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
     const sl = it.days ? (it.days + Relics.shelf(game, it)) : null;

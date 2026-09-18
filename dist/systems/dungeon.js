@@ -110,6 +110,13 @@ function prepare(n,d,facilities=[]){
  e.preRecovery=preRecovery;e.fatigueBeforeExpedition=fatigueBeforeExpedition;e.remainingSupplyBuffer=remainingSupplyBuffer;
  return {effects:e,sources,hazard,hazards,itemStats,supply:{required,actual,deficit,penalty,prepared:preparedSupply,excess:excessSupply,preRecovery,remainingBuffer:remainingSupplyBuffer},why,events};
 }
+/* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. The inherited Gate-count progression, in one
+   place: the generator draws from it and the forecast reads it, so there is no forecast-only
+   RNG path and a reload cannot make the two disagree. A band with one count is deterministic
+   and is told as confirmed; a band with two is drawn uniformly, exactly as morning() draws it. */
+function gateCountRule(day){
+ return day<=3?[1]:day<=7?[1,2]:day<=18?[2]:[2,3];
+}
 function tierWeights(day){
  const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
@@ -262,5 +269,5 @@ function resolve(n,d,r,facilities=[],options={}){
  report.quote=G.Copy.night(report,n);
  n.pack=[];return report;
 }
-G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk};
+G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);

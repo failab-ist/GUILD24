@@ -37,4 +37,48 @@ for(const it of ladder){assert.equal(it.category,'potion');
 assert.ok(DATA.itemBy.heat.effects.cold>DATA.itemBy.lava.effects.cold);assert.equal(DATA.itemBy.tree.category,'insurance');assert.equal(DATA.itemBy.tree.rarity,3);assert.equal(DATA.itemBy.midpotion.effects.jobBonus,undefined);for(const it of DATA.items){assert.ok(DATA.categories[it.category]);assert.ok(it.roles.length);for(const key of Object.keys(it.effects))assert.ok(Presentation.rows(it.effects).some(r=>r.key===key));}});
 test('canonical full-offer reroll replaces every slot, preserves pity and legality',()=>{const g=fresh();g.beginOrder();g.run.facilities=['expeditionCert'];const before=g.run.offers.slice(),pity=copy(g.run.pity),gold=g.run.money;g.reroll();assert.equal(g.run.offers.length,before.length);assert.ok(g.run.offers.every(o=>!before.includes(o)));assert.deepEqual(g.run.pity,pity);assert.equal(gold-g.run.money,DATA.balance.rerollBase);assert.ok(g.run.offers.some(o=>Relics.counter(DATA.itemBy[o.item],Relics.known(g))));assert.ok(g.run.offers.every(o=>!DATA.itemBy[o.item].unlock||g.account.unlocked.includes(DATA.itemBy[o.item].unlock)));g.setQuantity(0,1);g.reroll();assert.equal(Object.keys(g.run.cart||{}).length,0);});
 test('returning summary uses actual recorded changes without modifying NPC',()=>{const g=fresh(),n=g.run.npcs[0];n.introduced=true;n.newToday=false;n.injury=0;n.recovery=0;n.records=[{day:2,outcome:'부상',injury:1,recovery:2,changes:['Lv.2 → Lv.3'],events:[{text:'핫팩이 냉기 대응에 도움이 됐다.'}]}];const before=copy(n),r=Presentation.returning(n);assert.equal(r.day,2);assert.ok(r.changes.includes('부상 회복'));assert.ok(r.changes.includes('휴식 종료'));assert.deepEqual(n,before);n.newToday=true;assert.equal(Presentation.returning(n),null);});
+test('DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST: how many, never which',()=>{
+ const g=fresh('gate-forecast');
+ /* The forecast and the generator read ONE rule, so there is no forecast-only RNG path. The
+    distribution is checked against what the generator actually produces, not against a second
+    copy of the bands written here. */
+ for(let day=1;day<=29;day++){
+  g.run.day=day-1;
+  const f=g.gateForecast();
+  assert.equal(f.day,day);
+  const rule=Dungeon.gateCountRule(day);
+  assert.deepEqual(f.counts.map(c=>c.count),rule,'D'+day+' forecasts exactly the rule\'s counts');
+  assert.equal(f.fixed,rule.length===1?rule[0]:null,'a single-count band is confirmed, a drawn one is not');
+  assert.ok(Math.abs(f.counts.reduce((a,c)=>a+c.percent,0)-100)<0.11,'the distribution sums to 100%');
+ }
+ g.run.day=29;assert.equal(g.gateForecast().final,true,'D30 is the Final, not a Gate count');
+ g.run.day=30;assert.equal(g.gateForecast(),null,'and there is no day after it');
+ // the generator really does land inside its own forecast, every Day, over many seeds
+ for(let seed=0;seed<25;seed++){
+  const h=fresh('gen-'+seed);
+  for(let day=1;day<=29;day++){
+   h.run.day=day-1;
+   const f=h.gateForecast();
+   h.run.day=day;h.morning();
+   const base=h.run.dungeons.filter(d=>!d.temporary).length;
+   assert.ok(f.counts.some(c=>c.count===base),
+    'D'+day+' generated '+base+' base Gates, which the forecast allowed');
+   if(f.fixed!==null)assert.equal(base,f.fixed,'a confirmed count is actually confirmed');
+  }
+ }
+ // it says how many and how dangerous, never what
+ g.run.day=5;
+ const line=JSON.stringify(g.gateForecast());
+ for(const fam of ['spider','slime','fire','crypt','snow'])
+  assert.ok(!line.includes(fam),'no Family is revealed');
+ for(const hz of Object.keys(DATA.hazards))assert.ok(!line.includes(hz),'no Hazard is revealed');
+ // and a reload does not reroll it independently of the actual next Day
+ const h=fresh('forecast-reload');
+ h.run.day=12;
+ const before=JSON.stringify(h.gateForecast());
+ h.save();const r=Save.import(Save.export(h.account,h.run));
+ const resumed=new Game(r.account,r.run);resumed.autosave=false;
+ assert.equal(JSON.stringify(resumed.gateForecast()),before,'the forecast survives a reload unchanged');
+});
+
 console.log(count+' DELTA groups passed');

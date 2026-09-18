@@ -20,6 +20,13 @@ P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;
   return this.end(false,'소문이 퍼지자 모험가들의 발길이 끊겼고, 더는 장사를 이어갈 수 없었다.');
  if(s.money<0){if(s.inventory.length&&this.canRescue()){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요. (회생 '+(s.rescueUsed||0)+' / '+this.rescueLimit()+')';this.save();return false;}this.end(false,'장사를 이어갈 자금이 바닥났다.');return;}
  this.nextDay();this.save();return true;};
+/* DUNGEON_HAZARD_v2.7 §Gate-count forecast: how MANY Gates open tomorrow, off the same rule
+   the generator uses. What is never told is which - no Family, no Gate identity, no Hazard. */
+P.gateForecast=function(){const day=this.run.day+1;if(day>30)return null;
+ if(day===30)return {day,final:true,counts:null,fixed:null};
+ const counts=G.Dungeon.gateCountRule(day),p=Math.round(1000/counts.length)/10;
+ return {day,final:false,fixed:counts.length===1?counts[0]:null,
+  counts:counts.map(c=>({count:c,percent:p}))};};
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){
   this.run.day++;
