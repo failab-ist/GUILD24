@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged v2.6.1 SALE desktop/mobile hierarchy, Menu/Settings functional composition, Night controls, touch-target requirements, scroll/focus continuity, portrait preload, and Order phase flow inherit `UI_UX_v2.6.1.md`.
 
-This patch adds v2.7 information-boundary, handling, Final-timeline, Final-preparation, tutorial fresh-init, and visual-language changes.
+This patch adds v2.7 information-boundary, handling, pre-supply expedition outlook, Final-timeline, Final-preparation, tutorial fresh-init, and visual-language changes.
 
 The Menu keeps the same Run-abandon action in the same functional location.
 Exact v2.7 label:
@@ -139,6 +139,65 @@ Do not show:
 
 Tutorial teaches how to read the system, not what to buy.
 
+## SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT
+
+The expedition outlook shown on the ordinary SALE decision surface is a **pre-supply snapshot**.
+
+Snapshot timing:
+
+```text
+customer SALE decision begins
+-> before any new Item is committed for this visit
+-> capture Combat Forecast / Hazard Readiness / Death Risk
+```
+
+Show:
+- qualitative Combat Forecast
+- qualitative Hazard Readiness for the known current Hazard state
+- exact Death Risk %
+- existing Injury/Condition state that is already part of that snapshot
+
+Do not show:
+- exact expedition Success probability
+- exact hidden Hazard threshold/formula
+- exact Great Success probability
+
+The displayed Death Risk % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.7.0.md`.
+
+After any Item purchase commits during the same customer visit:
+- displayed Combat Forecast remains the original pre-supply snapshot
+- displayed Hazard Readiness remains the original pre-supply snapshot
+- displayed Death Risk % remains the original pre-supply snapshot
+- do not replace them with post-commit `접전 -> 우세`, `불안 -> 충분`, or `12% -> 5%` answer feedback
+
+The underlying runtime preparation **does** change.
+Actual expedition Resolve uses the final committed Items / Supply / Fatigue / Condition state.
+
+Post-commit feedback should instead explain exact actual changes and their sources:
+- direct Item Stat / Counter / Supply
+- proven Supply Deficit relief
+- proven Fatigue recovery / penalty-band change
+- another explicitly owned Trait / Relic / Boss effect
+
+This keeps the UI informative without grading the Player's Item choice before the remaining-slot decision.
+
+### Exact player-facing copy
+
+Header:
+
+```text
+보급 전 원정 전망
+```
+
+Supporting copy:
+
+```text
+아이템을 지급하기 전 현재 상태를 기준으로 한 전망입니다.
+보급과 원정 중 변수에 따라 실제 결과는 달라질 수 있습니다.
+```
+
+Exact copy ownership -> `COPY_WORLD_VOICE_v2.7.0.md`.
+
 ## SALE — FOUR CORE STATS REMAIN PRIMARY INFORMATION
 
 Do not move 투력 / 강인함 / 기동 / 정신 behind a detail accordion merely to simplify the screen.
@@ -206,19 +265,20 @@ Do not show hypothetical derived answer changes such as:
 - `불안 -> 충분`
 - Great Success signal change
 
-After an actual purchase commits, current Forecast/readiness may update because the current state has actually changed.
+After an actual purchase commits, the displayed pre-supply Forecast / Hazard Readiness / Death Risk snapshot does not update. Exact proven value/effect changes may still be shown through the post-commit source-truth treatment below.
 
 ## SALE — POST-COMMIT DELTA SOURCE TRUTH
 
-Prefer updating current Stat/Forecast/Readiness values in place after a committed purchase.
+Do not update the pre-supply Combat Forecast / Hazard Readiness / Death Risk after a committed purchase.
+Instead, show exact actual changed values/effects with truthful source attribution where useful.
 Do not make a derived preparation change look like a hidden direct Item effect.
 
 If delta text is shown:
 - every changed line must be an actual runtime change
 - each changed line must expose a readable source class when the cause is not the Item's direct listed effect
 - an Item directly changes only the channels listed in `ITEM_v2.7.0.md`
-- reducing an active **Supply Deficit** may legitimately improve effective 투력/강인함/기동/정신 and Hazard readiness through the inherited unified Supply system
-- this must read as `보급 부족 완화` or equivalent system-source feedback, not as if the Item itself granted those four Stats
+- reducing an active **Supply Deficit** may legitimately improve effective 투력/강인함/기동/정신 and underlying Hazard preparation through the inherited unified Supply system
+- this must read as `보급 부족 완화` or equivalent system-source feedback, not as if the Item itself granted those four Stats or as a newly recalculated Hazard Readiness label
 - excess Supply that lowers current Fatigue may restore effective 기동/정신 when a Fatigue penalty band changes; this must read as `피로 완화` / Condition-derived feedback
 - do not expose the hidden Supply-deficit formula merely to explain the delta
 
@@ -234,7 +294,8 @@ Therefore:
 - if excess Supply also crosses a Fatigue penalty band, 기동/정신 may additionally recover as a **피로 완화** result
 
 A generic `보급 후 변화` block is acceptable only when direct Item effects and derived system effects are clearly separated.
-If that distinction is not immediately readable, remove the synthetic block and update the primary current-state values with source labels instead.
+If that distinction is not immediately readable, remove the synthetic block.
+Do not use post-commit value feedback to replace the frozen pre-supply Forecast / Hazard Readiness / Death Risk with a newly scored answer.
 
 ## SALE — REFUSAL PRICE CEILING UI
 
