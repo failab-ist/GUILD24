@@ -140,13 +140,13 @@ RUN/PHASE/SAVE/FRESH-INIT/TUTORIAL-RESET/FINAL-TIMELINE -> `CORE_RUN_v2.7.0.md`
 META/UNLOCK/JOB-MASTERY/FRANCHISE-GRADE/FRANCHISE-ACHIEVEMENT/CROSS-RUN -> `META_v2.7.0.md`
 PRICE/GOLD/WALLET/ORDER/REROLL/NEXT-DAY-GATE-FORECAST/FINAL-PRICE -> `ECONOMY_ORDER_v2.7.0.md`
 NPC/JOB/TRAIT/GROWTH/REVISIT/RECENT-SNAPSHOT -> `NPC_TRAIT_v2.7.0.md`
-DUNGEON/FAMILY/HAZARD/PREPARED-POWER/SUPPLY/FATIGUE/GATE-GENERATION -> `DUNGEON_HAZARD_v2.7.0.md`
+DUNGEON/FAMILY/HAZARD/PREPARED-POWER/SUPPLY/FATIGUE/DEATH-RISK/GATE-GENERATION -> `DUNGEON_HAZARD_v2.7.0.md`
 ITEM/CATALOG/CATEGORY/COUNTER/POTION/INSURANCE/MODIFIER-COMPOSITION -> `ITEM_v2.7.0.md`
 RELIC/STORE-BUILD/FRESH/SLOTH-WINDOW -> `RELIC_v2.7.0.md`
-SALE/CUSTOMER/PRICE/REFUSAL/PURCHASE-FLOW/DELTA-TRUTH/BAG-HANDLING/FINAL-HANDLING -> `SALE_v2.7.0.md`
+SALE/CUSTOMER/PRICE/REFUSAL/PURCHASE-FLOW/PRE-SUPPLY-OUTLOOK/DELTA-TRUTH/BAG-HANDLING/FINAL-HANDLING -> `SALE_v2.7.0.md`
 NIGHT/INJURY/RESULT/CAUSALITY/FATIGUE-RESULT/CLOSING -> `NIGHT_CLOSING_v2.7.0.md`
-UI/UX/MOBILE/TUTORIAL/TYPOGRAPHY/VISUAL/FINAL-PREPARATION-UI -> `UI_UX_v2.7.0.md`
-COPY/VOICE/TERMINOLOGY/TRUTH-CRITICAL-COPY -> `COPY_WORLD_VOICE_v2.7.0.md`
+UI/UX/MOBILE/TUTORIAL/PRE-SUPPLY-OUTLOOK/TYPOGRAPHY/VISUAL/FINAL-PREPARATION-UI -> `UI_UX_v2.7.0.md`
+COPY/VOICE/TERMINOLOGY/PRE-SUPPLY-OUTLOOK/TRUTH-CRITICAL-COPY -> `COPY_WORLD_VOICE_v2.7.0.md`
 EVENT -> `EVENT_v2.7.0.md`
 BOSS/SLOTH/BOSS-FINAL-MODIFIER/GREED-SNAPSHOT/BOSS-CLEAR-SIGNAL -> `BOSS_v2.7.0.md`
 FINAL/D25-PREREVEAL/FINAL-PARTY/FINAL-PREPARATION/FINAL-HAZARD/FINAL-POWER -> `FINAL_EXPEDITION_v2.7.0.md`
@@ -165,15 +165,15 @@ Changed owners only:
 - CORE_RUN: Save v8, no v1~v7 internal-save migration, fresh v8 initialization, start stock, tutorial fresh-reset eligibility, D0~D30 Final timeline, controlled D25 repair boundary, D30 `출전 NPC 선택 -> FINAL 준비 -> 결과` progression; Final preparation uses fixed 50%/매입가 cost, Wallet/stock/Gold/Gross-Sales commitment, no refusal RNG
 - META: no v1~v7 internal Account/Meta migration; separate Franchise Grade from Job Mastery; define exactly 10 dedicated Franchise Achievements; 2/4/6/8/10 completion grade steps; 10/10 `전설의 편의점`; numeric achievement thresholds are current `DIRECTOR DOCUMENT BASELINE` values pending full-run QA
 - ECONOMY_ORDER: inherit v2.6.1 ordinary Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract; Day-band Rarity progression; Final fixed price = ordinary 50%/매입가 amount with real Wallet deduction, Player Gold gain, Gross Sales gain, and no 100/150/refusal
-- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot; ordinary Injury keeps existing Stat penalty but recovery now requires Success/Great Success, Retreat does not clear Injury, and injured re-expedition carries extra Severe/Death risk
-- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract; higher ordinary expedition death-risk baseline plus explicit injured re-expedition risk
+- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot; ordinary Injury keeps existing Stat penalty but recovery now requires Success/Great Success, Retreat does not clear Injury, and injured re-expedition carries +15%p Severe risk plus +10%p expedition-level Death risk that is reflected in the pre-supply Death Risk snapshot
+- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract; ordinary Death risk becomes one expedition-level calculation from combat deficit + environment/Hazard deficit + departure Injury, with healthy 30% / injured 40% caps and exact pre-supply Death Risk disclosure
 - ITEM: categories, expanded 40-item active catalog, stronger flat native Core-Stat Item baseline, aligned Counter-specialist/premium pricing, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition, plus 10 Epic late-Run-value Items (5 Family hybrid Field Gear + 5 top-end Food/Drink/Potion)
 - RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
-- SALE: exactly 2 slots, sequential ordinary Counter Handling, preview boundary, truthful post-commit delta/source boundary, removal of non-decision flavor disclosure, revisit quick surface, ordinary same-item refusal price ceiling; Final override uses fixed 50%/매입가, no 100/150, no refusal RNG
+- SALE: exactly 2 slots, sequential ordinary Counter Handling, pre-supply Combat/Hazard/Death outlook snapshot, no post-commit refresh of those derived answers, truthful source-attributed post-commit value/effect changes, removal of non-decision flavor disclosure, revisit quick surface, ordinary same-item refusal price ceiling; Final override uses fixed 50%/매입가, no 100/150, no refusal RNG
 - NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write, persistent-Injury continuity across Retreat
-- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, ordinary refusal-price disabled state, decision-only SALE detail, truthful post-commit delta display, Final fixed-price preparation UI, fresh-init tutorial replay requirement, material/typography pass, exact `현재 지점 포기` label
-- COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, v2.7 terminology, Event 05 / GLUTTONY / Run-abandon exact copy
+- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, ordinary refusal-price disabled state, pre-supply qualitative Combat/Hazard + exact Death Risk outlook, frozen derived outlook after Item commit, truthful source-attributed post-commit delta display, Final fixed-price preparation UI, fresh-init tutorial replay requirement, material/typography pass, exact `현재 지점 포기` label
+- COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, v2.7 terminology, exact `보급 전 원정 전망` copy, Event 05 / GLUTTONY / Run-abandon exact copy
 - FINAL_EXPEDITION: D25 persisted Final state, D30 `선택 -> FINAL 준비 -> 결과`, fixed 50%/매입가 affordability transfer with real stock/Wallet/Player-Gold/Gross-Sales accounting and no refusal RNG, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
 - BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; GREED snapshot occurs at Final Lock after Final preparation and includes each committed Final transfer exactly once
 
