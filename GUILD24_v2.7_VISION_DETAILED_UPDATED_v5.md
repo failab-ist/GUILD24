@@ -288,6 +288,9 @@ The next full-run validation should additionally prove:
 7. Every committed Final transfer updates NPC Wallet, Player Gold, Gross Sales, and GREED accounting exactly once.
 8. A true fresh/reset current account actually sees the tutorial.
 9. The existing tutorial can run end-to-end without runtime/phase failure.
+10. Ordinary SALE shows Combat / Hazard / Death outlook only as a pre-supply baseline and does not grade committed Item choices by refreshing those derived answers.
+11. Death risk responds materially to both combat preparation and Hazard preparation, while healthy/injured caps remain bounded and an already-injured NPC remains visibly riskier.
+12. Full-run QA confirms there is no dominant fixed cutoff where most NPCs below one pre-supply outlook state are rationally discarded regardless of Item choice.
 
 ---
 
@@ -299,6 +302,10 @@ Current Owner Specs / QA own the approved details:
 - Save/fresh-init/tutorial reset boundary -> `CORE_RUN_v2.7.0.md`
 - Final fixed-price preparation / Wallet / stock / Gold / Gross Sales -> `FINAL_EXPEDITION_v2.7.0.md` / `ECONOMY_ORDER_v2.7.0.md`
 - GREED snapshot/accounting consequence -> `BOSS_v2.7.0.md`
+- ordinary expedition Death-risk model -> `DUNGEON_HAZARD_v2.7.0.md`
+- injured re-expedition Death/Severe modifier -> `NPC_TRAIT_v2.7.0.md`
+- SALE pre-supply outlook / post-commit information boundary -> `SALE_v2.7.0.md` / `UI_UX_v2.7.0.md`
+- exact pre-supply outlook copy -> `COPY_WORLD_VOICE_v2.7.0.md`
 - tutorial and Final presentation -> `UI_UX_v2.7.0.md`
 - validation -> current routed QA
 
@@ -335,3 +342,64 @@ choose who goes
 ```
 
 The game should reward broader experience without adding a generic grind currency, the final Boss preparation should preserve the core item-allocation decision without pretending ordinary retail haggling still matters after Day 30, and true fresh/reset testing must never silently skip the tutorial.
+
+---
+
+# 11. PRE-SUPPLY OUTLOOK / DEATH-RISK DIRECTION
+
+Ordinary SALE should tell the Player enough to decide **whether this NPC is worth supporting**, without turning each Item transaction into an answer-checking tool.
+
+The ordinary decision surface therefore uses one pre-supply expedition outlook captured before any new Item is committed for that customer:
+
+```text
+qualitative Combat Forecast
++ qualitative Hazard Readiness
++ exact Death Risk %
+```
+
+Combat and Hazard success probabilities remain hidden.
+The exact Death Risk percentage is intentionally the exception because Death is the most severe random consequence and should not feel like an unexplained hidden punishment.
+
+After the Player commits an Item:
+
+```text
+show what actually changed and why
+!=
+re-score the Player's choice
+```
+
+Therefore the displayed Combat Forecast, Hazard Readiness, and Death Risk remain the original **pre-supply** snapshot for the rest of that customer visit.
+Post-commit UI may still show exact direct Item effects and proven source-attributed changes such as Stat, Counter, Supply, Supply-deficit relief, or Fatigue recovery.
+The actual expedition nevertheless resolves from the final prepared state after all committed Items.
+
+Death itself changes from the previous failed-combat / failed-escape gated branch into one expedition-level risk calculation driven by:
+
+```text
+combat preparation deficit
++ environment / Hazard preparation deficit
++ departure Injury state
+```
+
+The purpose is to make Death feel like a consequence of the whole preparation decision rather than another opaque random branch stacked after other random branches.
+There is only one ordinary-expedition Death roll.
+
+Current Director baseline keeps the previous broad ceiling rather than increasing lethality merely because environment preparation now contributes:
+- healthy cap remains 30%
+- already-injured cap remains 40%
+- fully covered healthy preparation may reach 0% Death risk
+
+Exact coefficients and calculation order belong only to `DUNGEON_HAZARD_v2.7.0.md`.
+They are `DIRECTOR DOCUMENT BASELINE` values pending full-run validation.
+
+Player-facing copy should frame the block explicitly as a baseline, not a live post-Item score:
+
+> **보급 전 원정 전망**  
+> 아이템을 지급하기 전 현재 상태를 기준으로 한 전망입니다.  
+> 보급과 원정 중 변수에 따라 실제 결과는 달라질 수 있습니다.
+
+This direction reinforces the v2.7 UI principle:
+
+```text
+산수는 대신할 수 있다.
+판단은 대신하지 않는다.
+```
