@@ -96,6 +96,42 @@ All functional Franchise Grade / Start Contract progression must be available by
 - no new post-completion permanent combat multiplier
 - no requirement to create another functional Start Contract solely because 10/10 exists
 
+## FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE — EXACT
+
+`DIRECTOR DOCUMENT BASELINE`
+
+Franchise Grade carries one always-applied passive: a discount on the ORDER purchase price the
+Player actually pays.
+
+```text
+Grade 1 =   0%
+Grade 2 =  -2%
+Grade 3 =  -4%
+Grade 4 =  -6%
+Grade 5 =  -8%
+Grade 6 = -10%
+```
+
+Applies to:
+- the ORDER offer price the Player actually pays for stock
+- applied AFTER the existing Contract / Event / Offer price calculation
+- rounding REUSES the existing ORDER price rounding rule; no second rounding convention
+- promotional offers are included on the same terms
+
+Does not apply to:
+- Reroll
+- Relic / 점포지원 purchase
+- Deep Expedition sponsorship
+- Final NPC transfer price
+- any other non-ORDER cost
+
+Rules:
+- no new Passive Tree and no separate progression system is created for this
+- the existing Franchise Grade UI shows only the current ORDER discount rate; no new screen
+- this is an economy channel through the existing Franchise Grade, not a raw-Stat currency, so
+  it does not violate the `FIRST CLEAR / META POWER BOUNDARY` prohibition on a generic
+  account-wide combat multiplier
+
 ## FRANCHISE ACHIEVEMENTS — CURRENT APPROVED SET
 
 Use exactly the following ten achievement directions.
