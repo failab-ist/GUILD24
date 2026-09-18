@@ -96,7 +96,7 @@ function blank(runs,policy,pricing,build){
    missingCounterDays:0,rerolls:0,rerollSpend:0,thin:0},
   deepNominee:{count:0,cost:0,levelAtNomination:0,levelAtEnd:0,grew:0,alive:0,finalSeat:0,rarity:0,finalSeats:0},
   rescue:{events:0,gold:0,items:0,runs:0,used:[]},
-  reachBy:{10:0,20:0,30:0}};
+  reachBy:{10:0,20:0,25:0,30:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
 function pct(xs,q){if(!xs||!xs.length)return 0;const a=[...xs].sort((x,y)=>x-y);
@@ -112,7 +112,7 @@ function derive(out,count){
   prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,
   deathsP10:pct(out.deathsPerRun,.1),deathsMedian:pct(out.deathsPerRun,.5),deathsP90:pct(out.deathsPerRun,.9),
   deathFailRate:out.endedBy.deaths/count,deathFailDayMedian:pct(out.deathFailDay,.5),
-  reach10:out.reachBy[10]/count,reach20:out.reachBy[20]/count,reach30:out.reachBy[30]/count,
+  reach10:out.reachBy[10]/count,reach20:out.reachBy[20]/count,reach25:out.reachBy[25]/count,reach30:out.reachBy[30]/count,
   goldInTotal:Object.values(out.goldIn).reduce((a,b)=>a+b,0),
   goldOutTotal:Object.values(out.goldOut).reduce((a,b)=>a+b,0),
   saleOriginShare:(()=>{const t=Object.values(out.goldIn).reduce((a,b)=>a+b,0);return t?out.goldIn.sale/t:0;})(),
@@ -374,7 +374,8 @@ function playRun(g,out,ctx){
   if(d.operating){out.overhead.samples.push(d.operating);
    (out.overhead.byBand[d.day<=10?'D1-10':d.day<=20?'D11-20':'D21-30']??=[]).push(d.operating);}
  }
- for(const d of [10,20,30])if(s.day>=d)out.reachBy[d]++;
+ /* D25 is the Final reveal and the DAY 25 Franchise Achievement, so it is its own band. */
+ for(const d of [10,20,25,30])if(s.day>=d)out.reachBy[d]++;
  out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
  /* measurement only - how often a Rare Reference identity actually turns up, so the starting
     chance can be judged on evidence in Stage 9 rather than on the number itself. */

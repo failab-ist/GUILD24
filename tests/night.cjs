@@ -432,6 +432,11 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
   n.stats={combat:over,survival:over,mobility:over,spirit:over};n.equipment={power:0,name:'-'};
   return {n,risk:Dungeon.failureDeathRisk(n,d)};
  };
+ /* The coefficients are named so a harness can measure a candidate without editing the
+    formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
+    put it back would otherwise leave no trace at all. */
+ assert.deepEqual(Dungeon.DEATH,{combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40},
+  'the shipped coefficients are the canonical baseline');
  // the two deficits are the only inputs, and each one alone raises the chance
  const weak=at(1,0).risk,strong=at(400,0).risk;
  assert.ok(weak.chance>strong.chance,'weaker preparation is the more dangerous failure');

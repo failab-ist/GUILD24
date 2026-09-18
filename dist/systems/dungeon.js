@@ -155,14 +155,18 @@ function greatSuccessSignal(n,d,facilities=[]){
    and no Death-only Hazard table. Departing already injured adds a flat +10%p and lifts the
    cap from 30% to 40%. Exported because SALE shows the pre-supply snapshot of this same
    calculation and the two may not drift apart. */
+/* DUNGEON_HAZARD_v2.7 §DEATH RISK — DIRECTOR DOCUMENT BASELINE. Named rather than inlined so
+   a harness can measure a candidate against the shipped value without editing the formula.
+   These are the canonical numbers; nothing in the game writes to this table. */
+const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40};
 function failureDeathChanceFor(p,d,departedInjured){
  const required=d.power||1;
  const combatDeficit=clamp((required-preparedPower(p.effects))/required,0,1);
  const environmentDeficit=p.hazards.length
   ?p.hazards.reduce((v,h)=>v+clamp(h.gap/h.threat,0,1),0)/p.hazards.length:0;
- const healthy=clamp(combatDeficit*.18+environmentDeficit*.12,0,.30);
+ const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit*DEATH.environment,0,DEATH.cap);
  return {combatDeficit,environmentDeficit,healthy,
-  chance:departedInjured?clamp(healthy+.10,0,.40):healthy};
+  chance:departedInjured?clamp(healthy+DEATH.injured,0,DEATH.injuredCap):healthy};
 }
 function failureDeathRisk(n,d,facilities=[]){
  return failureDeathChanceFor(prepare(n,d,facilities),d,n.injury===1);
@@ -269,5 +273,5 @@ function resolve(n,d,r,facilities=[],options={}){
  report.quote=G.Copy.night(report,n);
  n.pack=[];return report;
 }
-G.Dungeon={greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);
