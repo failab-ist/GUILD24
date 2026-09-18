@@ -112,8 +112,12 @@ cross-run 12 Run 후 실제 도달치는 Grade 3 / Mastery 0 / distinct 0 — �
 - Franchise Grade 파이프라인은 정상 동작한다. controlled fixture에서 `franchise 0 → Grade 1 / ORDER -0%`
   … `franchise 8 → Grade 5 / ORDER -8%`가 확인되며, cross-run에서도 Grade가 1 → 2.98로 실제 누적된다.
 - Death 모델은 `DUNGEON_HAZARD_v2.7.0` §DEATH RISK Canonical 그대로다 (Director 확정사항 1).
-- D30 미도달은 단일 시스템의 오작동이 아니라 Death rate 11~12% × Run당 ~9 원정이 만드는
-  누적 생존 곡선의 결과다. 어느 값이 Canonical과 어긋났다는 근거가 없다.
+- D30 미도달은 단일 시스템의 오작동이 아니라 Death rate 11~12%가 Run당 수십 회의 원정에
+  걸쳐 누적되는 생존 곡선의 결과다 (후속 2,400 Run 측정에서 실측 Run당 74.5~79.2 원정,
+  `BALANCE_DEATH_CANDIDATES_v2_7.md` §8). 어느 값이 Canonical과 어긋났다는 근거가 없다.
+
+  정정: 이 줄은 최초 게시 시 "Run당 ~9 원정"이라고 적었다. 그것은 원정 횟수가 아니라 Run당
+  사망자 수에 가까운 값이었고, 원정 횟수와 혼동한 표현이었다. 측정값 자체는 영향이 없다.
 
 따라서 `IMPLEMENTATION BUG`가 아니라 `BALANCE FINDING`으로 기록한다.
 

@@ -8,7 +8,14 @@ OWNER: `DUNGEON_HAZARD_v2.7.0.md` §DEATH RISK, `FINAL_EXPEDITION_v2.7.0.md`
 
 ---
 
-## 0. 결론 먼저
+## 0. 이 문서의 수치가 무엇인지
+
+여기의 D10 / D20 / D25 / D30 도달률은 **현재 harness 자동 정책(`balanced`)이 플레이했을 때의
+measurement**다. 실제 인간 플레이어의 도달률이나 클리어율이 아니며, 그렇게 인용해서는 안 된다.
+자동 정책의 발주·보급 판단 품질이 결과를 얼마나 제한하는지는
+`reports/BALANCE_POLICY_SENSITIVITY_v2_7.md`에서 따로 측정한다.
+
+## 1. 결론 먼저
 
 1. **EnvironmentDeathContribution을 절반으로 낮춰도 D30 벽은 열리지 않는다.**
    0.12 → 0.06에서 D20은 18.0% → 27.9%, D25는 2.9% → 6.4%로 크게 움직이지만
@@ -20,7 +27,7 @@ OWNER: `DUNGEON_HAZARD_v2.7.0.md` §DEATH RISK, `FINAL_EXPEDITION_v2.7.0.md`
 4. Boss별 수치는 **INSUFFICIENT SAMPLE**이다. Boss 하나당 Final 도달이 1~8건이다.
    이 표본으로 Boss 수치를 조정해서는 안 된다.
 
-## 1. 측정 방법
+## 2. 측정 방법
 
 `EnvironmentDeathContribution` 하나만 바꾼 3개 arm:
 
@@ -40,7 +47,7 @@ Hazard Threat, Prepared Power, Boss, Meta — 전부 동일.
 옮겼고 값은 그대로다. harness가 런타임에 swap 후 복원하며, `tests/night.cjs`가 출하 테이블이
 Canonical baseline과 일치하는지 assert한다 — 실험이 실수로 출하될 수 없다.
 
-## 2. 전체 비교
+## 3. 전체 비교
 
 | | A = 0.12 | B = 0.08 | C = 0.06 |
 |---|---|---|---|
@@ -55,7 +62,7 @@ Canonical baseline과 일치하는지 assert한다 — 실험이 실수로 출�
 조건부 사망 확률의 두 항 중 환경 항이 전부가 아니기 때문이다 — 실패 경로 비중(79~81%)과
 전투 결손 항(0.18)이 남는다.
 
-## 3. Outcome 분포
+## 4. Outcome 분포
 
 | | 성공 | 퇴각 | 부상 | 중상 | 사망 | 실패계 |
 |---|---|---|---|---|---|---|
@@ -67,7 +74,7 @@ Canonical baseline과 일치하는지 assert한다 — 실험이 실수로 출�
 후반의 더 어려운 Gate를 더 많이 돌기 때문이다. 사망이 줄어든 만큼 부상·중상·퇴각으로 옮겨간다 —
 줄어든 사망이 성공으로 전환되지는 않는다.
 
-## 4. Run index별 (요약)
+## 5. Run index별 (요약)
 
 Run 1 → Run 12 구간에서:
 
@@ -84,7 +91,7 @@ A에서는 Run index가 올라가도 D25/D30이 사실상 평탄하다. B/C에�
 C 38.0% → 54.5%). Grade가 쌓일수록 파산 전에 더 오래 살아 원정을 더 보내므로, 종료 사유가
 파산에서 사망으로 옮겨가는 구성 변화다.
 
-## 5. 실제 Franchise Grade별 D30
+## 6. 실제 Franchise Grade별 D30
 
 | Grade | A runs / D30 | B runs / D30 | C runs / D30 |
 |---|---|---|---|
@@ -98,7 +105,7 @@ C에서 Grade 4의 D30이 1.8%로 가장 높지만, Grade 1도 1.1%다. **Grade 
 계수 차이(A→C에서 Grade 4 기준 0.9% → 1.8%)보다 작지 않다** — 두 레버 모두 D30에 대해
 약하다는 뜻이다. Grade 5는 세 arm 모두 표본 8~26건에 D30 0건으로 **INSUFFICIENT SAMPLE**이다.
 
-## 6. BOSS — D30 도달과 D30 이후를 분리한다
+## 7. BOSS — D30 도달과 D30 이후를 분리한다
 
 | | A = 0.12 | B = 0.08 | C = 0.06 |
 |---|---|---|---|
@@ -142,7 +149,7 @@ Boss 표본을 유의미하게 확보하려면 D30 도달률 자체가 올라가
 2,400 Run당 11~26건이므로, Boss당 30건을 모으려면 약 20,000~50,000 Run이 필요하다.
 Death 계수만으로는 그 지점에 닿지 못한다.
 
-## 7. 판정
+## 8. 판정
 
 | 질문 | 답 |
 |---|---|
@@ -159,11 +166,13 @@ D30 벽은 Death 계수 하나로 설명되지 않는다. 앞선 두 측정과 �
 - Achievement 임계값으로 넘을 수 없다 (`BALANCE_FIX1_v2_7_FRANCHISE.md`)
 - EnvironmentDeathContribution으로 넘을 수 없다 (이 문서)
 
-남는 후보는 D20~D30 구간의 **누적 생존 곡선 자체**다 — Run당 약 9 원정 × 실패 경로 79~81%가
-30일 동안 곱해진다. 성공률 자체가 19~21%인 것이 근인이며, 이는 Hazard Threat 곡선 / Gate Power /
-Prepared Power의 문제 영역이다. **이번 Cycle에서는 그 어느 것도 변경하지 않았다.**
+남는 후보는 D20~D30 구간의 **누적 생존 곡선 자체**다. 실제 기록된 원정 수는 Run당
+A 74.5회 / B 77.7회 / C 79.2회다 (178,826 · 186,479 · 190,019 원정 ÷ 2,400 Run).
+이 횟수에 실패 경로 79~81%가 Run 내내 곱해진다. 성공률 자체가 19~21%인 것이 근인이며,
+이는 Hazard Threat 곡선 / Gate Power / Prepared Power의 문제 영역이다.
+**이번 Cycle에서는 그 어느 것도 변경하지 않았다.**
 
-## 8. 하지 않은 것
+## 9. 하지 않은 것
 
 - Production Death / Hazard 수치를 변경하지 않았다. 측정 후에도 출하값은 0.12다.
 - Combat coefficient, 부상 +10%p, 두 cap, Hazard Threat, Prepared Power, Boss, Meta를
