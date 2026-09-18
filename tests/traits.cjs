@@ -205,4 +205,34 @@ test('NPC_TRAIT: a Trait is who somebody is, so none of them wears off during a 
  }
 });
 
+test('NPC_TRAIT_v2.7 §LEVEL-UP REWARD: a Level grants Stats and nothing else',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const src=fs.readFileSync(path.join(__dirname,'..','dist/systems/adventurer.js'),'utf8');
+ assert.ok(!/승급/.test(src),'no Rank promotion rides a Level');
+ assert.ok(!/새 특성/.test(src),'no milestone Trait is granted on a Level');
+ assert.ok(!/for\(let milestone/.test(src),'the 5-Level milestone loop is gone');
+ assert.equal(Adventurer.rank,undefined,'Level-milestone Title progression is not exported');
+ for(const j of DATA.jobs)assert.equal(j.ranks,undefined,j.name+' carries no Rank ladder');
+ for(let i=0;i<60;i++){
+  const r=new RNG('levelup-'+i);
+  const n=Adventurer.create(r,i,1,Meta.fresh());
+  const traitsBefore=[...n.traits],statsBefore={...n.stats},equipBefore={...n.equipment},levelBefore=n.level;
+  const notes=Adventurer.grow(n,100000,new RNG('grow-'+i));
+  assert.ok(n.level>=10,'the sweep actually crossed every old milestone');
+  assert.deepEqual(n.traits,traitsBefore,'no Trait was acquired by levelling');
+  assert.equal(n.rank,undefined,'no Rank state is written');
+  assert.deepEqual(n.equipment,equipBefore,'no Equipment was granted by a Level');
+  assert.equal(Adventurer.slots(n),2,'and no third Bag slot appeared');
+  assert.ok(Adventurer.keys.every(k=>n.stats[k]>statsBefore[k]),'every Core Stat grew');
+  assert.deepEqual(notes,['Lv.'+levelBefore+' → Lv.'+n.level],'the only thing reported is the Level itself');
+ }
+ // the Stat gain really is Job Growth x Potential, not a Level multiplier on top
+ const a=Adventurer.create(new RNG('growth-shape'),1,1,Meta.fresh());
+ const before={...a.stats},level0=a.level,gained=Adventurer.grow(a,100000,new RNG('g'));
+ const levels=a.level-level0,growth=DATA.jobBy[a.job].growth;
+ Adventurer.keys.forEach((k,i)=>assert.ok(Math.abs(a.stats[k]-before[k]-levels*growth[i]*a.potential)<1e-9,
+  k+' grew by exactly Job Growth x Potential per Level'));
+ assert.equal(gained.length,1);
+});
+
 console.log(count+' trait groups passed');
