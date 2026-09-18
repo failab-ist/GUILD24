@@ -74,12 +74,35 @@ function withCandidate(fn){
 /* The five tiers of §C. Each is built through the real matrix, so the Grade it implies, the
    Jobs it opens and the items it unlocks are the real ones - nothing is inserted by hand.
    `jobs x bosses` says how much of the matrix is filled, row-major. */
+/* META_v2.7 separated the two tracks: the Franchise Grade is the count of completed Franchise
+   Achievements, and Total Job Mastery no longer moves it. A tier built from the matrix alone
+   therefore reads as Grade 1 whatever its Mastery, which is why every tier showed 등급 1 and a
+   Grade comparison was not measurable. Each tier now also seeds a plausible Franchise state so
+   a CONTROLLED per-Grade comparison is possible.
+
+   This controlled fixture is NOT a substitute for the real thing: it says what a Run looks like
+   AT a Grade, never how long a player takes to reach one. Actual accumulation is measured in
+   the cross-run trajectory, where Achievements and Grade come from real results. */
 const TIERS=[
- {key:'fresh',   label:'Fresh First Run',   jobs:0, bosses:0},
- {key:'early',   label:'Early Meta',        jobs:2, bosses:2, trim:1},
- {key:'mid',     label:'Mid Meta',          jobs:4, bosses:3},
- {key:'late',    label:'Late Meta',         jobs:4, bosses:6},
- {key:'near',    label:'Near-complete Meta',jobs:5, bosses:7}];
+ {key:'fresh',   label:'Fresh First Run',   jobs:0, bosses:0, franchise:0},
+ {key:'early',   label:'Early Meta',        jobs:2, bosses:2, trim:1, franchise:2},
+ {key:'mid',     label:'Mid Meta',          jobs:4, bosses:3, franchise:4},
+ {key:'late',    label:'Late Meta',         jobs:4, bosses:6, franchise:6},
+ {key:'near',    label:'Near-complete Meta',jobs:5, bosses:7, franchise:8}];
+
+/* The cumulative Achievements are seeded at their own thresholds and the one-Run ones are
+   marked done, exactly as real play would leave them - no Grade is written directly. */
+function seedFranchise(a,n){
+ const fr=a.franchise;
+ if(n>=1)fr.sales=100;
+ if(n>=2)fr.overcharged=20;
+ if(n>=3)fr.returning=30;
+ if(n>=4)fr.relics=30;
+ if(n>=5)fr.families=['spider','slime','fire','crypt','snow'];
+ for(const [at,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
+  if(n>=at&&!fr.done.includes(id))fr.done.push(id);
+ return a;
+}
 
 function accountFor(t){
  const a=globalThis.Meta.fresh(),JOBS=globalThis.Meta.JOBS(),BOSSES=globalThis.Meta.BOSSES();
@@ -87,6 +110,7 @@ function accountFor(t){
  for(let j=0;j<t.jobs;j++)for(let b=0;b<t.bosses;b++){
   if(t.trim&&filled>=t.jobs*t.bosses-t.trim)break;
   a.matrix[JOBS[j]][BOSSES[b]]=true;filled++;}
+ seedFranchise(a,t.franchise||0);
  return a;
 }
 

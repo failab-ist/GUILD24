@@ -439,12 +439,15 @@ function masterySpawnPatch(){
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
 function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard'}={}){
- const byIndex=[],byGrade={},accountsEnd=[];
+ const byIndex=[],byGrade={},accountsEnd=[],firstClear=[];
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
+  /* When this account first beat a Boss, and what it actually held at that moment. Recorded
+     once per trajectory from real results - nothing is seeded. */
+  let clearedAt=null;
   for(let i=0;i<runs;i++){
-   const before={grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)};
+   const before={grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account),franchise:G.Meta.franchiseCount(account)};
    const g=new G.Game(account);g.autosave=false;
    /* Which start contract the trajectory uses is a strategy choice, not a Meta fact, so it is
       the caller's: 'standard' holds it constant and isolates what grade and unlocks alone do,
@@ -464,6 +467,13 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    bucket.metaMastery+=before.mastery;bucket.metaDistinct+=before.distinct;bucket.metaGrade+=grade;
    if(g.run.bossDebug){bucket.final.resolved++;bucket.final.power+=g.run.bossDebug.power;bucket.final.assault+=g.run.bossDebug.assault;bucket.final.margin+=g.run.bossDebug.assault-g.run.bossDebug.bossPower;bucket.final.cleared+=Number(!!g.run.win);}
    bucket.money+=g.run.money;bucket.deaths+=g.run.stats.deaths;
+   /* Expeditions actually run and adventurers actually lost, so a per-expedition Death rate can
+      be read per Grade rather than only per cohort. */
+   bucket.expeditions=(bucket.expeditions||0)+g.run.npcs.reduce((n,x)=>n+x.records.length,0);
+   bucket.expDeaths=(bucket.expDeaths||0)+g.run.stats.deaths;
+   bucket.endedBy[g.run.stats.deaths>=D.balance.deathLimit?'deaths':g.run.bossDebug?(g.run.win?'cleared':'finalFail'):'bankrupt']++;
+   if(g.run.win&&clearedAt===null)
+    clearedAt={runIndex:i,grade:before.grade,franchise:before.franchise,mastery:before.mastery};
    byIndex[i].contracts??={};byIndex[i].contracts[started]=(byIndex[i].contracts[started]||0)+1;
    byIndex[i].gradeAtStart??=0;byIndex[i].gradeAtStart+=grade;
    /* gradeAtStart is a MEAN across trajectories, so it cannot answer "was this contract legal
@@ -471,13 +481,23 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    byIndex[i].maxGradeAtStart=Math.max(byIndex[i].maxGradeAtStart||0,grade);
    byIndex[i].masteryAtStart??=0;byIndex[i].masteryAtStart+=before.mastery;
    byIndex[i].distinctAtStart??=0;byIndex[i].distinctAtStart+=before.distinct;
+   byIndex[i].franchiseAtStart??=0;byIndex[i].franchiseAtStart+=before.franchise;
    byIndex[i].contractsAvailable??=0;byIndex[i].contractsAvailable+=available;
   }
   accountsEnd.push({grade:G.Meta.grade(account),franchise:G.Meta.franchiseCount(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
+  firstClear.push(clearedAt);
  }
  return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
-  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
-  byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,derive(o,o.runs)])),
+  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,franchiseAtStart:(o.franchiseAtStart||0)/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
+  byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,
+   {...derive(o,o.runs),expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,
+    expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0}])),
+  /* First CLEAR, from real accumulation: which Run index it happened on and what the account
+     actually held then. `null` entries are trajectories that never cleared within `runs`. */
+  firstClear:{samples:firstClear.length,cleared:firstClear.filter(Boolean).length,
+   runIndex:firstClear.filter(Boolean).map(c=>c.runIndex),
+   grade:firstClear.filter(Boolean).map(c=>c.grade),
+   franchise:firstClear.filter(Boolean).map(c=>c.franchise)},
   accountsEnd};
 }
 
