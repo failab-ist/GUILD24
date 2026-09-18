@@ -504,7 +504,13 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  // D-11. Always-available help, keyboard-reachable because it is a native <details>.
  /* One shared helper at module scope, so the outlook and the destination plate cannot drift
     into two different ? controls. It is a native <details>, so it needs no script. */
- assert.ok(/const tip=\(label,body\)=>'<details class="tip"/.test(app),'the ? is a details, so it needs no script');
+ assert.ok(/const tip=\(label,body\)=>'<details class="tip" name="sale-tip"/.test(app),'the ? is a details, so it needs no script');
+ /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
+    not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
+ assert.ok(/\.readout \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook balloon drops');
+ assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
+ assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
  assert.equal((readout.match(/\+tip\(/g)||[]).length,2,'the outlook explains the fight forecast and the Death risk');
  assert.ok(/tip\('환경 대응'/.test(fn('destPlate')),'and the environment keeps its own help, where the environment now lives');
  assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');

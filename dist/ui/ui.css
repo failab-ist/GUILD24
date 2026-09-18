@@ -499,7 +499,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .pips i{width:9px;height:9px;background:#00000073;box-shadow:inset 1px 1px 0 #00000080;display:block}
 .pips i.on{background:var(--gold)}
 .pips i.now{background:var(--sign-lit)}
-.dest-plate{display:grid;grid-template-columns:38px 1fr;gap:10px;margin:0 0 12px;padding:11px 12px;
+.dest-plate{position:relative;display:grid;grid-template-columns:38px 1fr;gap:10px;margin:0 0 12px;padding:11px 12px;
  background:#00000047;box-shadow:inset 0 3px 0 var(--fam,var(--gold)),inset -2px -2px 0 #00000047}
 .dest-plate .mark{background:#00000047;padding:2px}
 .dest-plate label{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#9c8d70;display:block;margin-bottom:4px}
@@ -538,7 +538,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .kit .slots i.full{background:#3a2c1d;box-shadow:inset 2px 2px 0 #ffffff1f,inset 0 0 0 1px var(--gold)}
 .kit .slots i.free{box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff29}
 /* the readiness readout carries more weight than the rows above it: it is what the sale turns on */
-.readout{margin:0 0 4px;padding:11px 12px;background:#120d07;
+.readout{position:relative;margin:0 0 4px;padding:11px 12px;background:#120d07;
  box-shadow:inset 0 0 0 2px #6b502959,inset 2px 2px 0 #ffffff0f,3px 3px 0 #00000059}
 .readout .top{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px;font:400 13px/1.4 var(--ui)}
 .readout .top span{color:#9c8d70}
@@ -547,14 +547,24 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    phone and sits beside its neighbour when there is room. The ? is a native <details>, which
    is why it is reachable by keyboard without a line of script. */
 .readout .fore{display:flex;align-items:baseline;gap:2px;flex:1 1 46%}
-.readout .tip,.dest-plate .tip{display:inline-block;margin-left:6px}
+.readout .tip,.dest-plate .tip{display:inline-block;margin-left:6px;position:static}
 .readout .tip>summary,.dest-plate .tip>summary{display:inline-flex;align-items:center;justify-content:center;
  min-width:24px;min-height:24px;padding:0 4px;list-style:none;cursor:pointer;
  font:600 12px/1 var(--ui);color:#cbb98d;background:#00000059;box-shadow:inset 0 0 0 1px #ffffff1f}
 .readout .tip>summary::-webkit-details-marker,.dest-plate .tip>summary::-webkit-details-marker{display:none}
 .readout .tip>summary:focus-visible,.dest-plate .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.readout .tip>p,.dest-plate .tip>p{flex-basis:100%;margin:8px 0 0;font:400 12px/1.6 var(--ui);color:#a2947c}
-.readout .tip[open],.dest-plate .tip[open]{display:block;width:100%}
+/* The explanation is a balloon, not an accordion: it is taken out of flow and floated over the
+   block, so opening a ? never makes the panel itself taller and the rows below do not move.
+   It is positioned against the panel rather than the little ? so it can never run off either
+   edge, which is what a transform-centred bubble does to the rightmost control on a phone. */
+.readout .tip>p,.dest-plate .tip>p{position:absolute;left:10px;right:10px;
+ z-index:30;margin:0;padding:9px 11px;font:400 12px/1.6 var(--ui);color:#e8dcc0;
+ background:#191108f2;box-shadow:inset 0 0 0 1px #ffffff26,0 6px 0 #00000059}
+/* The outlook sits above the plate, so its balloon drops; the plate is the lowest block on the
+   counter and its container clips, so its balloon rises. Either way the panel keeps its height. */
+.readout .tip>p{top:calc(100% - 4px)}
+.dest-plate .tip>p{bottom:calc(100% - 4px)}
+.readout .tip[open],.dest-plate .tip[open]{display:inline-block;width:auto}
 /* the plate's label is a caps micro-line; the ? must not inherit its letter-spacing */
 .dest-plate .tip>summary{letter-spacing:0}
 .env-help{margin:6px 0 0}

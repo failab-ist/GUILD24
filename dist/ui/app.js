@@ -159,7 +159,10 @@ function render(){
 // never behind a hover (UI-005, UI-Q35, DUN-Q21).
 /* Always-available help: a native <details>, so it is keyboard-reachable without a line of
    script. Shared by the outlook and the destination plate rather than duplicated per surface. */
-const tip=(label,body)=>'<details class="tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
+/* One shared `name` makes the group exclusive, so opening one balloon closes the other rather
+   than stacking two of them on the same anchor. Where a browser does not support exclusive
+   <details> yet this degrades to the plain overlap, never to a broken control. */
+const tip=(label,body)=>'<details class="tip" name="sale-tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
 /* Two different facts about one Hazard, never welded into a sentence like `강인함 압박에 취약`.
    The pressure is fixed information about the Hazard itself - it is true of 독기 whoever is
    standing at the counter. The readiness is this NPC's SALE-entry state against it. The player
@@ -298,11 +301,11 @@ function readout(n,extra=null,cls=''){
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
-   +tip('전투 전망','이 손님이 카운터에 섰을 때의 능력과 보급으로 게이트의 전투 요구를 어떻게 감당할지 본 예상이다. 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
+   +tip('전투 전망','게이트의 전투 요구를 감당할지 본 예상. 카운터에 섰을 때 기준이라 팔아도 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
   /* DUNGEON_HAZARD_v2.7 §Pre-supply player-facing failure Death risk: the exact conditional
      percentage, said as a conditional - never as the chance this expedition ends in death. */
   +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
-   +tip('실패 시 사망 위험','이 원정이 성공·대성공으로 끝나지 못했을 때, 그 실패가 사망까지 이어질 위험이다. 이번 원정이 사망으로 끝날 확률이 아니다. 카운터에 섰을 때의 준비 상태로 계산하며, 상품을 팔아도 표시는 바뀌지 않는다.')+'</span>'
+   +tip('실패 시 사망 위험','실패했을 때 사망까지 이어질 위험. 사망할 확률이 아니다. 카운터에 섰을 때 기준이라 팔아도 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
@@ -559,7 +562,7 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
  /* The help sits under the rows it explains rather than on the plate's caps label: opened, it
     is a full-width paragraph, and inside the label it pushed the destination name out of the
     grid. It is the only place the two Hazard facts are explained, so it is never dropped. */
- +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','각 위험이 어떤 능력을 보는지(압박)와, 이 손님이 지금 거기에 얼마나 버틸 수 있는지(현재 대응)를 따로 적는다. 압박은 위험 자체의 성질이라 누가 서 있든 같다. 현재 대응은 이 손님이 카운터에 섰을 때의 상태로 취약·불안·대응·충분 네 단계이며, 상품을 팔아도 이번 손님을 보내기 전까지 바뀌지 않는다. 확정된 결과가 아니다.')+'</div>':'')
+ +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','압박은 위험이 보는 능력, 현재 대응은 이 손님의 대응 수준(취약·불안·대응·충분). 카운터에 섰을 때 기준이라 팔아도 바뀌지 않는다. 확정된 결과가 아니다.')+'</div>':'')
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
