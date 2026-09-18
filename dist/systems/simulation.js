@@ -478,6 +478,10 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    /* The Grade the account actually held entering this Run, kept as a distribution and not
       only as the mean, because a mean hides an account stuck a Grade behind the cohort. */
    byIndex[i].gradeDist??={};byIndex[i].gradeDist[grade]=(byIndex[i].gradeDist[grade]||0)+1;
+   /* The same expedition count the Grade bucket keeps, so a per-expedition Death rate reads
+      the same way per Run index and per Grade - one definition, two views. */
+   byIndex[i].expeditions=(byIndex[i].expeditions||0)+g.run.npcs.reduce((n,x)=>n+x.records.length,0);
+   byIndex[i].expDeaths=(byIndex[i].expDeaths||0)+g.run.stats.deaths;
    for(const f of G.Meta.franchiseState(account))
     if(f.done&&!earned.has(f.id)){earned.add(f.id);firstEarned[f.id].push(i);}
    if(g.run.win&&clearedAt===null)
@@ -496,7 +500,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
   firstClear.push(clearedAt);
  }
  return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
-  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,gradeDist:o.gradeDist||{},franchiseAtStart:(o.franchiseAtStart||0)/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
+  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,gradeDist:o.gradeDist||{},expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0,franchiseAtStart:(o.franchiseAtStart||0)/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
   byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,
    {...derive(o,o.runs),expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,
     expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0}])),
