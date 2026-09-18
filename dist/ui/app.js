@@ -669,16 +669,26 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  /* The same Gate the forecast below and the night itself use. Reading n.destination directly
     computed a Deep nominee's preview against their ordinary Gate while the forecast two lines
     down was already showing the Deep one. */
- const changes=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
+ const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
+ const changes=moved.direct;
  const actions=isFinal?btn('<strong>'+E(n.name)+'에게 보급</strong>','supply','stamp',full?'disabled':'')
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
    const blocked=q.debit>n.money?'손님 소지금 부족':n.refused.includes(it.id+':'+mode)?'오늘 거절됨':full?'가방 가득':'';
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
  return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho"><span>'+E(n.name)+'에게 판매</span><b class="wallet" style="margin-left:auto">소지 '+fmt(n.money)+'G</b></p>')
- +'<h4>보급 후 변화</h4><ul class="effects">'
- +(changes.length?changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join(''):'<li><span>이 손님의 준비는 달라지지 않는다</span><b></b></li>')
- +'</ul>'+readout(n,it.id)
+ /* SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: the rows are grouped by what actually produced
+    them. A Stat that rose because this Item's Supply relieved a Supply Deficit, or because it
+    crossed a Fatigue band, is said as 보급 부족 완화 / 피로 완화 - never as if the Item itself
+    granted that Stat. If a channel did not move, its group is simply absent. */
+ +'<h4>보급 후 변화</h4>'
+ +(changes.length||moved.derived.length?'':'<ul class="effects"><li><span>이 손님의 준비는 달라지지 않는다</span><b></b></li></ul>')
+ +(changes.length?'<p class="delta-src">이 상품이 직접</p><ul class="effects">'
+   +changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join('')
+   +'</ul>':'')
+ +(moved.derived.length?'<p class="delta-src">보급이 상태에 미치는 영향</p><ul class="effects derived">'
+   +moved.derived.map(r=>'<li><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')
+   +'</ul>':'')+readout(n,it.id)
  /* ITEM-Q03: collapsed is the decision - what changes for this customer, and the forecast.
     Expanded is what the collapsed view cannot say: effects that did not move this customer's
     preview (a Counter they do not need today, an insurance that only fires on a bad outcome)

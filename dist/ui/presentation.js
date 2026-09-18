@@ -26,8 +26,40 @@ function traitEffects(id){const t=D.traitBy[id];return rows(t.effects,t.tones);}
 function traits(n){return n.traits;}
 function traitText(id){const t=D.traitBy[id],parts=traitEffects(id).map(r=>r.label+' '+r.text);if(t.note)parts.push(t.note);return parts.join(' · ');}
 function known(d,g){return d.hazards;}
-function preview(n,d,fac,item){const visible={...n,traits:traits(n)},before=G.Dungeon.prepare(visible,d,fac).effects,after=G.Dungeon.prepare({...visible,pack:[...visible.pack,item]},d,fac).effects;
- return Object.keys(labels).filter(k=>!['priceBias','buyBias','variance'].includes(k)&&Math.abs((before[k]||0)-(after[k]||0))>.001).map(k=>({key:k,label:labels[k],before:before[k]||0,after:after[k]||0,bad:negative.has(k)?after[k]>before[k]:after[k]<before[k]}));}
+/* SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH. Preparation can move through four different
+   channels, and a single flat list of before -> after makes every one of them look like a
+   direct Item Stat. So the change is split by its PROVEN source rather than by its size:
+
+     direct   the Item's own contribution, read off the preparation's per-item breakdown
+     derived  a system that moved because the Item's Supply moved - the unified Supply
+              Deficit relief, or a canonical Fatigue penalty band being crossed
+
+   A Core Stat that moved without the Item contributing to it is never listed as the Item's:
+   it moved through a system, and that system says so in its own row. The hidden Supply-deficit
+   formula stays hidden - the row names the channel, never the arithmetic behind it. */
+const fatigueBand=f=>f>=20?2:f>=10?1:0;
+function preview(n,d,fac,item){
+ const visible={...n,traits:traits(n)};
+ const a=G.Dungeon.prepare(visible,d,fac),b=G.Dungeon.prepare({...visible,pack:[...visible.pack,item]},d,fac);
+ const before=a.effects,after=b.effects,stat=new Set(G.Adventurer.keys);
+ const own=b.itemStats.filter(x=>x.item===item)
+  .reduce((m,x)=>{for(const[k,v]of Object.entries(x.stats))m[k]=(m[k]||0)+v;return m;},{});
+ const direct=[],derived=[];
+ for(const k of Object.keys(labels)){
+  if(['priceBias','buyBias','variance'].includes(k))continue;
+  const x=before[k]||0,y=after[k]||0;
+  if(Math.abs(x-y)<=.001)continue;
+  if(stat.has(k)&&!own[k])continue;  // moved through a system, reported as that system below
+  direct.push({key:k,label:labels[k],before:x,after:y,bad:negative.has(k)?y>x:y<x});
+ }
+ if(b.supply.penalty<a.supply.penalty)
+  derived.push({key:'supplyDeficit',label:'보급 부족 완화',
+   text:'보급 '+Math.round(a.supply.actual)+' → '+Math.round(b.supply.actual)+' · 네 능력치에 걸린 보급 부족이 줄었다'});
+ if(fatigueBand(after.effectiveFatigue)<fatigueBand(before.effectiveFatigue))
+  derived.push({key:'fatigueBand',label:'피로 완화',
+   text:'피로 '+before.effectiveFatigue+' → '+after.effectiveFatigue+' · 기동·정신 페널티가 한 단계 풀렸다'});
+ return {direct,derived};
+}
 function returning(n){if(!n.introduced||n.newToday||!n.records.length)return null;const r=n.records.at(-1),changes=(r.changes||[]).filter(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));if(r.injury>n.injury)changes.push(n.injury?'부상 완화':'부상 회복');if(r.recovery>0&&!n.recovery)changes.push('휴식 종료');return {day:r.day,outcome:r.outcome,changes,impact:supplyLines(r)[0]?.text||null};}
 /* ---- NIGHT: one resolved state, told four ways --------------------------------
    Outcome label, WHAT_HAPPENED, WHY and WHAT_CHANGED all read off the same report, so

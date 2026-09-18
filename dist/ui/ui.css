@@ -569,6 +569,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .readout .tip[open],.dest-plate .tip[open]{display:inline-block;width:auto}
 /* the plate's label is a caps micro-line; the ? must not inherit its letter-spacing */
 .dest-plate .tip>summary{letter-spacing:0}
+/* the source of a change is a heading over its rows, so a derived one cannot read as the
+   Item's own contribution */
+.delta-src{margin:7px 0 3px;font:600 11px/1 var(--ui);letter-spacing:.1em;color:#9c8d70}
+.effects.derived li b{font-family:var(--ui);font-weight:400;font-size:var(--t-sm);color:#a2947c;text-align:right}
 .env-help{margin:6px 0 0}
 .detail-stat.moved strong{color:var(--gold)}
 .readout .estimate{margin-top:8px;font:400 12px/1.5 var(--ui);color:#8d8067}

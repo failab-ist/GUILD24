@@ -1049,4 +1049,42 @@ test('ORDER quantity presses keep their row anchored',()=>{
   'SALE still re-finds the tapped product after its redraw');
 });
 
+test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what produced it',()=>{
+ const base=Adventurer.create(new RNG('delta-src'),1,10,Meta.fresh());
+ const mk=o=>({...JSON.parse(JSON.stringify(base)),traits:[],pack:[],fatigue:0,injury:0,...o});
+ const gate=o=>({...DATA.dungeonBy.slime,day:12,tier:2,hazards:['fear'],scale:1,power:60,requiredSupply:0,...o});
+ const core=new Set(Adventurer.keys);
+ /* The owner's own worked boundary: 집중 사탕 is 공포 +10 / Supply 3 and has no direct
+    four-Core-Stat contribution, so selling it may never produce a Core-Stat row. */
+ const candy=DATA.itemBy.candy;
+ assert.ok(Adventurer.keys.every(k=>!candy.effects[k]),'집중 사탕 has no direct Core Stat');
+ for(const [n,d] of [[mk({}),gate({})],[mk({}),gate({requiredSupply:3})],
+                     [mk({fatigue:10}),gate({})],[mk({fatigue:10}),gate({requiredSupply:3})]]){
+  const r=Presentation.preview(n,d,[],'candy');
+  assert.ok(r.direct.every(x=>!core.has(x.key)),'집중 사탕 never grants a Core Stat directly');
+  assert.ok(r.direct.some(x=>x.key==='supply')&&r.direct.some(x=>x.key==='fear'),'its own two channels are its own');
+ }
+ // with neither system moving, there is nothing derived to report
+ assert.deepEqual(Presentation.preview(mk({}),gate({}),[],'candy').derived,[],'no system moved, no system row');
+ // relieving a Supply Deficit is reported as the Supply Deficit, not as the Item
+ const relief=Presentation.preview(mk({}),gate({requiredSupply:3}),[],'candy');
+ assert.deepEqual(relief.derived.map(x=>x.label),['보급 부족 완화'],'Supply Deficit relief names itself');
+ // crossing a Fatigue band is reported as Fatigue
+ const rested=Presentation.preview(mk({fatigue:10}),gate({}),[],'candy');
+ assert.deepEqual(rested.derived.map(x=>x.label),['피로 완화'],'a crossed Fatigue band names itself');
+ // an Item that really does grant a Stat still reports it as its own
+ const potion=DATA.itemBy.potion;
+ assert.ok(potion.effects.combat>0);
+ const own=Presentation.preview(mk({}),gate({}),[],'potion');
+ assert.ok(own.direct.some(x=>x.key==='combat'),'a real direct Stat is the Item\'s own');
+ assert.deepEqual(own.derived,[],'and brings no system row with it');
+ // the hidden Supply-deficit formula is never exposed by the attribution
+ for(const r of relief.derived)assert.ok(!/[0-9]+%|penalty|deficit/i.test(r.text),'the row names the channel, not the formula: '+r.text);
+ // the screen groups them, so a derived change cannot read as the Item's own contribution
+ const panel=fn('sellPanel')||app;
+ assert.ok(/이 상품이 직접/.test(app)&&/보급이 상태에 미치는 영향/.test(app),'each group is headed by its source');
+ assert.ok(/moved\.derived\.length\?'<p class="delta-src">/.test(app),'and a group with nothing in it is absent');
+ assert.ok(/\.delta-src\{/.test(css),'the heading has a style of its own');
+});
+
 console.log(count+' ui guard groups passed');
