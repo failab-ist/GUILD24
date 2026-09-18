@@ -440,12 +440,15 @@ function masterySpawnPatch(){
 }
 function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard'}={}){
  const byIndex=[],byGrade={},accountsEnd=[],firstClear=[];
+ /* META_v2.7 Balance Fix: which Run index each Franchise Achievement is first earned on.
+    Read from the account after every Run, so it is real accumulation, never a seeded state. */
+ const firstEarned={};for(const f of G.Meta.FRANCHISE)firstEarned[f.id]=[];
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
   /* When this account first beat a Boss, and what it actually held at that moment. Recorded
      once per trajectory from real results - nothing is seeded. */
-  let clearedAt=null;
+  let clearedAt=null;const earned=new Set();
   for(let i=0;i<runs;i++){
    const before={grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account),franchise:G.Meta.franchiseCount(account)};
    const g=new G.Game(account);g.autosave=false;
@@ -472,6 +475,11 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    bucket.expeditions=(bucket.expeditions||0)+g.run.npcs.reduce((n,x)=>n+x.records.length,0);
    bucket.expDeaths=(bucket.expDeaths||0)+g.run.stats.deaths;
    bucket.endedBy[g.run.stats.deaths>=D.balance.deathLimit?'deaths':g.run.bossDebug?(g.run.win?'cleared':'finalFail'):'bankrupt']++;
+   /* The Grade the account actually held entering this Run, kept as a distribution and not
+      only as the mean, because a mean hides an account stuck a Grade behind the cohort. */
+   byIndex[i].gradeDist??={};byIndex[i].gradeDist[grade]=(byIndex[i].gradeDist[grade]||0)+1;
+   for(const f of G.Meta.franchiseState(account))
+    if(f.done&&!earned.has(f.id)){earned.add(f.id);firstEarned[f.id].push(i);}
    if(g.run.win&&clearedAt===null)
     clearedAt={runIndex:i,grade:before.grade,franchise:before.franchise,mastery:before.mastery};
    byIndex[i].contracts??={};byIndex[i].contracts[started]=(byIndex[i].contracts[started]||0)+1;
@@ -488,7 +496,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
   firstClear.push(clearedAt);
  }
  return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
-  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,franchiseAtStart:(o.franchiseAtStart||0)/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
+  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,gradeDist:o.gradeDist||{},franchiseAtStart:(o.franchiseAtStart||0)/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
   byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,
    {...derive(o,o.runs),expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,
     expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0}])),
@@ -498,6 +506,10 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    runIndex:firstClear.filter(Boolean).map(c=>c.runIndex),
    grade:firstClear.filter(Boolean).map(c=>c.grade),
    franchise:firstClear.filter(Boolean).map(c=>c.franchise)},
+  /* Per Achievement: how many accounts ever earned it, and on which Run index each one did.
+     An Achievement absent from every account is the one this reports by an empty list. */
+  firstEarned:Object.fromEntries(G.Meta.FRANCHISE.map(f=>[f.id,
+   {name:f.name,earnedBy:firstEarned[f.id].length,runIndex:firstEarned[f.id]}])),
   accountsEnd};
 }
 
