@@ -18,7 +18,7 @@ item('bar','핫바',0,40,80,'food',2,'bar','용사픽','꼬치는 매장 앞 수
 item('choco','초코바',0,30,65,'food',5,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:8,supply:4}),
 item('coffee','캔커피',0,40,85,'drink',5,'coffee','MANA+','발걸음이 조금 가벼워진다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
-item('herbtea','진정 허브티',0,40,85,'drink',5,'coffee','MANA+','',{spirit:15,supply:2}),
+item('herbtea','진정 허브티',0,40,85,'drink',5,'herbtea','MANA+','',{spirit:15,supply:2}),
 item('potion','하급 포션',0,70,140,'potion',7,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
 item('ice','얼음컵',0,30,65,'drink',4,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
 item('battery','랜턴 건전지',0,45,95,'gear',0,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:16}),
@@ -42,7 +42,7 @@ item('antidote','농축 해독제',2,80,170,'gear',7,'antidote','귀환안심','
 item('stone','귀환석',2,260,520,'insurance',0,'stone','귀환안심','사망·중상 위기에서도 같은 수치로 한 번 더 돌아올 기회가 생긴다.',{escape:0.5}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
-item('midpotion','중급 포션',1,110,230,'potion',7,'potion','귀환안심','',{combat:12,potion:1}),
+item('midpotion','중급 포션',1,110,230,'potion',7,'potionMid','귀환안심','',{combat:12,potion:1}),
 item('premium','길드 프리미엄 도시락',2,170,360,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:10,supply:7,loot:0.2}),
 item('ion','쿨링 이온음료',2,80,170,'drink',5,'ion','MANA+','얼음컵만큼 시원하진 않지만 오래 간다.',{fire:18,supply:1}),
 item('tree','세계수 생환부적',3,600,1200,'insurance',0,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
@@ -50,17 +50,17 @@ item('coupon','황금 1+1 쿠폰',4,500,1000,'special',0,'coupon','길드초이�
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
    than inventing a second FIRE Hazard, and its 투력 +6 is an explicit catalogue exception. */
-item('spiderkit','거미줄 방호세트',3,150,320,'gear',0,'mask','귀환안심','',{poison:12,bind:12}),
-item('slimesuit','연금 방수슈트',3,150,320,'gear',0,'cloak','귀환안심','',{corrosion:12,mire:12}),
-item('cryptlantern','성화 랜턴',3,150,320,'gear',0,'battery','귀환안심','',{fear:12,dark:12}),
-item('snowvisor','백설 방한고글',3,150,320,'gear',0,'goggles','귀환안심','',{cold:12,whiteout:12}),
-item('magmagear','마그마 냉각장비',3,160,340,'gear',0,'heat','귀환안심','',{fire:14,combat:6}),
+item('spiderkit','거미줄 방호세트',3,150,320,'gear',0,'spiderkit','귀환안심','',{poison:12,bind:12}),
+item('slimesuit','연금 방수슈트',3,150,320,'gear',0,'slimesuit','귀환안심','',{corrosion:12,mire:12}),
+item('cryptlantern','성화 랜턴',3,150,320,'gear',0,'cryptlantern','귀환안심','',{fear:12,dark:12}),
+item('snowvisor','백설 방한고글',3,150,320,'gear',0,'snowvisor','귀환안심','',{cold:12,whiteout:12}),
+item('magmagear','마그마 냉각장비',3,160,340,'gear',0,'magmagear','귀환안심','',{fire:14,combat:6}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
-item('battlelunch','결전 특선 도시락',3,180,380,'food',2,'lunch','길드초이스','',{survival:12,supply:9}),
-item('herobar','용사 특식 핫바',3,170,360,'food',2,'bar','길드초이스','',{combat:8,supply:7}),
-item('hyperenergy','초고속 에너지드링크',3,160,340,'drink',5,'energy','MANA+','',{mobility:18,supply:2}),
-item('sageelixir','대현자 허브엘릭서',3,160,340,'drink',5,'wine','길드초이스','',{spirit:20,supply:2}),
-item('toppotion','최상급 포션',3,190,400,'potion',7,'potionHigh','길드초이스','',{combat:24,potion:1})
+item('battlelunch','결전 특선 도시락',3,180,380,'food',2,'battlelunch','길드초이스','',{survival:12,supply:9}),
+item('herobar','용사 특식 핫바',3,170,360,'food',2,'herobar','길드초이스','',{combat:8,supply:7}),
+item('hyperenergy','초고속 에너지드링크',3,160,340,'drink',5,'hyperenergy','MANA+','',{mobility:18,supply:2}),
+item('sageelixir','대현자 허브엘릭서',3,160,340,'drink',5,'sageelixir','길드초이스','',{spirit:20,supply:2}),
+item('toppotion','최상급 포션',3,190,400,'potion',7,'toppotion','길드초이스','',{combat:24,potion:1})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
    full-run rebaseline existed; this is that rebaseline. The shape of the change: a Job with a

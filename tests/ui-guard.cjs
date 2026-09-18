@@ -741,7 +741,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 // a player sees for one product is not the picture they see for another.
 test('D-27: the named items are drawn as themselves, and no two of them share a drawing',()=>{
  const Art=require('../dist/ui/art.js')&&globalThis.Art,D=globalThis.DATA;
- const named=['rope','candy','coating','boots','goggles','ion','tree','potionHigh','potion'];
+ /* The twelve products v2.7 added join the named set: each was briefly drawn as the cousin
+    it is a premium version of, so they are exactly the ones worth pinning. */
+ const named=['rope','candy','coating','boots','goggles','ion','tree','potionHigh','potion',
+  'herbtea','midpotion','spiderkit','slimesuit','cryptlantern','snowvisor','magmagear',
+  'battlelunch','herobar','hyperenergy','sageelixir','toppotion'];
  const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
  const drawn=new Map();
  for(const it of D.items){
