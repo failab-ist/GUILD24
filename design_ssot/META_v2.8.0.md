@@ -113,14 +113,40 @@ Store Capital Gain = 0
 Boss CLEAR does not multiply Store Capital settlement.
 Boss success progression remains owned by Job Mastery.
 
-Exact Day-band conversion rates are **IMPLEMENTATION-BLOCKING BALANCE UNRESOLVED** pending the approved integrated v2.7 balance candidate measurement.
+### Day-reach conversion rate — EXACT
 
-Required design target:
-- ordinary engaged play can buy the first Decoration within roughly 1–3 Runs
-- 2–3 functional Decorations are realistically owned around Runs 4–7
-- the initial four functional Decorations can realistically be completed around Runs 8–12
-- D30/Boss CLEAR is not required to buy them
-- early hoarding / inactivity / deliberate short-run farming must not outperform engaged play as a Store Capital strategy
+`DIRECTOR DOCUMENT BASELINE`
+
+```text
+D1-9    =  5%
+D10-19  = 15%
+D20-24  = 30%
+D25-29  = 45%
+D30     = 60%
+```
+
+The band is the Day the Run actually reached. Boss CLEAR does not multiply it.
+
+### Approved progression expectation
+
+Measured under the approved balance, across the ordinary purchase orders:
+
+```text
+1st Decoration : around Run 3-4
+2nd            : around Run 6
+3rd            : around Run 8-9
+4th            : around Run 10-11
+```
+
+This supersedes the earlier 1-3 / 4-7 / 8-12 target. Where an older QA clause or line still
+states that target, the expectation above is the current one.
+
+Requirements that remain:
+- D30 / Boss CLEAR is not required to buy any Decoration
+- no Decoration may be a forced first purchase - the growth rate must not collapse when a
+  different reasonable order is taken
+- early hoarding, inactivity and deliberate short-run farming must not outperform engaged play
+  as a Store Capital strategy
 
 ## DECORATION COLLECTION / LOADOUT
 
@@ -191,7 +217,19 @@ Do not carry the retired Start Contract negative sides into these Decorations:
 - no +20G / +25G operating-cost penalty
 - no rare-ORDER reduction penalty
 
-Exact Store Capital prices for these four Decorations are **IMPLEMENTATION-BLOCKING BALANCE UNRESOLVED** pending integrated measurement.
+### Prices — EXACT
+
+`DIRECTOR DOCUMENT BASELINE`
+
+```text
+sign    새벽배송 안내판     800 Store Capital
+wall    길드 제휴 현판      700 Store Capital
+counter 알뜰 금고          650 Store Capital
+display 프리미엄 쇼케이스   550 Store Capital
+```
+
+The spread is deliberately narrow. The four measured within 1.37x of each other in Run value, so
+a wider price spread would let price decide the pick instead of the effect.
 
 ## POWER / INFLATION BOUNDARY
 

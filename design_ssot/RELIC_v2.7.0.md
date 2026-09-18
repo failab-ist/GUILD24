@@ -206,12 +206,12 @@ One roll each Morning, three mutually exclusive outcomes:
 Operating cost:
 
 ```text
-overheadBase + overheadBase × 0.20 + other flat extras
+overheadBase + overheadBase × 0.10 + other flat extras
 ```
 
 then the existing operating-cost rounding rule.
 
-The 20% applies to `overheadBase` only. It must not be applied again to other Event or Relic
+The 10% applies to `overheadBase` only. It must not be applied again to other Event or Relic
 flat modifiers, and it does not compound with them.
 
 ### COMPOSITION
