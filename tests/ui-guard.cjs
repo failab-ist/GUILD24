@@ -512,11 +512,19 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  /* The counter tooltip states what the two columns ARE and stops. The readiness ladder, why
     the pressure is fixed and why the reading is frozen belong to the store guide. */
  const envTip=fn('destPlate');
- assert.ok(envTip.includes("'압박: 이 위험이 보는 능력치','현재 대응: 이 손님의 보급 전 상태','확정된 원정 결과는 아닙니다.'"),
-  'the destination ? carries only the approved lines');
- for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','팔아도 바뀌지 않는다'])
+ assert.ok(envTip.includes("'압박: 위험이 요구하는 능력치 · 현재 대응: 이 손님의 보급 전 대응 수준'"),
+  'the destination ? carries only the approved line');
+ for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','팔아도 바뀌지 않는다','확정된'])
   assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
- assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'and its two facts are two lines');
+ /* Each ? names its own reading and stops. Anything longer than one line is the store guide's
+    job, so the sweep holds every counter tooltip to a single short line. */
+ const lines=[...app.matchAll(/tip\('[^']+',((?:'[^']*',?)+)\)/g)].map(m=>m[1].split("','").length);
+ assert.ok(lines.length===3,'there are exactly three counter tooltips');
+ assert.ok(lines.every(n=>n===1),'and each one is a single line');
+ for(const [label,text] of [['전투 전망','게이트 전투 요구 대비 현재 전투 준비 수준'],
+                            ['실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험']])
+  assert.ok(app.includes("tip('"+label+"','"+text+"')"),label+' carries the approved line');
+ assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
  assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
@@ -525,8 +533,10 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
  assert.equal((readout.match(/\+tip\(/g)||[]).length,2,'the outlook explains the fight forecast and the Death risk');
  assert.ok(/tip\('환경 대응'/.test(fn('destPlate')),'and the environment keeps its own help, where the environment now lives');
- assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');
- assert.ok(/확정된 원정 결과는 아닙니다/.test(fn('destPlate')),'and so does the environment help');
+ /* The "not a result" caution is on the block itself, under the forecasts, rather than spent
+    inside a tooltip that has one line to name what it is showing. */
+ assert.ok(/게이트 안에서 어떻게 될지까지는 아무도 모른다/.test(readout),
+  'the outlook still says a forecast is not a result, on the block rather than in a tooltip');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
  assert.ok(/\.dest-plate \.tip>summary:focus-visible/.test(css),'on the plate too');
  // the help is its own row under the rows it explains, so nothing that hides the caps label

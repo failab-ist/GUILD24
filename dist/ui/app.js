@@ -302,11 +302,11 @@ function readout(n,extra=null,cls=''){
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
-   +tip('전투 전망','게이트의 전투 요구를 감당할지 본 예상. 카운터에 섰을 때 기준이라 팔아도 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
+   +tip('전투 전망','게이트 전투 요구 대비 현재 전투 준비 수준')+'</span>'
   /* DUNGEON_HAZARD_v2.7 §Pre-supply player-facing failure Death risk: the exact conditional
      percentage, said as a conditional - never as the chance this expedition ends in death. */
   +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
-   +tip('실패 시 사망 위험','실패했을 때 사망까지 이어질 위험. 사망할 확률이 아니다. 카운터에 섰을 때 기준이라 팔아도 바뀌지 않는다. 확정된 결과가 아니다.')+'</span>'
+   +tip('실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험')+'</span>'
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
@@ -563,7 +563,7 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
  /* The help sits under the rows it explains rather than on the plate's caps label: opened, it
     is a full-width paragraph, and inside the label it pushed the destination name out of the
     grid. It is the only place the two Hazard facts are explained, so it is never dropped. */
- +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','압박: 이 위험이 보는 능력치','현재 대응: 이 손님의 보급 전 상태','확정된 원정 결과는 아닙니다.')+'</div>':'')
+ +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','압박: 위험이 요구하는 능력치 · 현재 대응: 이 손님의 보급 전 대응 수준')+'</div>':'')
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
