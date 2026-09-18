@@ -139,12 +139,12 @@ Do not add duplicate lower/upper versions of the same task merely to inflate Fra
 
 | # | Franchise Achievement | Represents |
 |---:|---|---|
-| 1 | 누적 판매 **100회** | 기본 영업 |
+| 1 | 누적 판매 **80회** | 기본 영업 |
 | 2 | 150% 판매 누적 **20회 성공** | 가격 판단 |
-| 3 | 재방문 NPC에게 누적 **30회 판매 성공** | 단골 / 장기 관계 |
-| 4 | 유물 누적 30개 구매 | 점포 성장 |
+| 3 | 재방문 NPC에게 누적 **20회 판매 성공** | 단골 / 장기 관계 |
+| 4 | 유물 누적 **15개** 구매 | 점포 성장 |
 | 5 | 5개 Dungeon Family 모두에서 보급 생환 달성 | 던전 대응 경험 |
-| 6 | 한 Run에서 만료 폐기 0개로 Final 도달 | 발주 / 재고 관리 |
+| 6 | 한 Run에서 만료 폐기 0개로 **DAY 25 도달** | 발주 / 재고 관리 |
 | 7 | 한 Run에서 사망자 0명으로 Final 도달 | 원정 운영 |
 | 8 | Final 출전 NPC 전원에게 실제 보급을 완료한 뒤 Boss CLEAR | Final 준비 |
 | 9 | 한 Run에서 **Gross Sales 10,000G 이상** 달성 + Boss CLEAR | 종합 경영 |
@@ -154,14 +154,28 @@ Do not add duplicate lower/upper versions of the same task merely to inflate Fra
 
 `DIRECTOR DOCUMENT BASELINE`
 
-The exact starting values for first v2.7 adoption are:
+The exact values for the first v2.7 Balance Fix are:
 
 ```text
-Achievement 1 = cumulative successful sales 100
+Achievement 1 = cumulative successful sales 80
 Achievement 2 = cumulative successful 150% sales 20
-Achievement 3 = cumulative successful sales to returning NPCs 30
+Achievement 3 = cumulative successful sales to returning NPCs 20
+Achievement 4 = cumulative Relic purchases 15
+Achievement 6 = zero expiry waste through DAY 25
 Achievement 9 = one-Run Gross Sales 10,000G + Boss CLEAR
 ```
+
+Tuning intent for this baseline:
+
+- 1 / 3 / 4 are the cumulative-record layer, reachable within roughly 10 Runs of ordinary
+  repeated play
+- 6 is a stock-management result measured through DAY 25
+- 7 is the first achievement that requires surviving to the Final
+- 8 / 10 remain the upper Final / Boss / complete-conquest tier
+
+The superseded first-adoption values were 1 = 100, 3 = 30, 4 = 30, and 6 = zero expiry waste
+to the Final. They are recorded here only so an older save or report is legible; the values
+above are the ones to implement.
 
 These values are intentionally **baseline tuning values**, not permanent untouchable canon.
 They must be implemented as written for the first v2.7 adoption / frozen QA pass.
@@ -181,6 +195,10 @@ QA / WORK may not silently auto-tune these numbers merely to make the track feel
 Interpretation boundaries:
 - cumulative achievements may span Runs because they represent account-level play history
 - one-Run achievements must be satisfied within one Run exactly as written
+- Achievement 6 settles the moment the Run reaches DAY 25 with cumulative expiry waste of 0,
+  counting the DAY 25 expiry sweep itself. It is awarded immediately at that point, and later
+  waste in the same Run never revokes an achievement already earned - the binary,
+  account-persistent rule is unchanged
 - Achievement 5 recognizes actual supplied survival across all five Dungeon Families; it must not require a hidden Relic/build taxonomy
 - Achievement 8 requires every selected Final participant to receive at least one actual valid Final-preparation Item transfer before that Boss is cleared
 - Achievement 10 is intentionally the hardest long-term requirement and cannot be substituted by another achievement or point source
