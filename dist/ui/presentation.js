@@ -106,8 +106,12 @@ function nightChanges(r, npc){const out=[];
    }
   }
   if(r.finalFatigue!==undefined){
-   if(r.fatigueRecovery>0) out.push({kind:'up',label:'보급 휴식',value:'피로 -'+r.fatigueRecovery});
-   if(r.actualOutcomeFatigueGain>0) out.push({kind:'down',label:'탐험 피로',value:'+'+r.actualOutcomeFatigueGain});
+   /* NIGHT_CLOSING v2.7 §PLAYER-FACING FATIGUE RESULT: the two halves of leftover Supply
+      are different claims - one removed Fatigue before departure, the other absorbed the
+      result - so they are never merged, and a zero subrow is simply omitted. */
+   if(r.preRecovery>0) out.push({kind:'up',label:'보급 회복',value:'피로 -'+r.preRecovery});
+   if(r.outcomeBufferUsed>0) out.push({kind:'up',label:'보급 완화',value:'피로 -'+r.outcomeBufferUsed});
+   if(r.actualOutcomeFatigueGain>0) out.push({kind:'down',label:'원정 결과',value:'+'+r.actualOutcomeFatigueGain});
    out.push({kind:r.netFatigueDelta>0?'down':'up',label:'최종 피로',value:r.finalFatigue+''});
   }
  if(r.xp)out.push({kind:'',label:'경험치',value:'+'+r.xp});

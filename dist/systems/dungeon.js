@@ -31,7 +31,18 @@ function prepare(n,d,facilities=[]){
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
   if(item.effects.survival>=10)why.push(item.name+': 생존 능력 보강');
  }
- const required=d.requiredSupply||0,fatigueRecovery=Math.max(0,finalSupply-required),effectiveFatigue=Math.max(0,n.fatigue-fatigueRecovery);e.supply=finalSupply;
+ /* DUNGEON_HAZARD v2.7 §EXCESS SUPPLY: required Supply is paid first, what is left over
+    removes current Fatigue 1:1, and only what survives THAT becomes the buffer the outcome
+    gain is charged against once the Outcome actually exists. The old single fatigueRecovery
+    spent the same Supply twice over - it cut departure Fatigue and left nothing named for
+    the result - so the two halves are separate fields now. */
+ const required=d.requiredSupply||0,preparedSupply=finalSupply;
+ const excessSupply=Math.max(0,preparedSupply-required);
+ const currentFatigue=n.fatigue||0;
+ const preRecovery=Math.min(currentFatigue,excessSupply);
+ const fatigueBeforeExpedition=currentFatigue-preRecovery;
+ const remainingSupplyBuffer=excessSupply-preRecovery;
+ const effectiveFatigue=fatigueBeforeExpedition;e.supply=finalSupply;
  let combatMod=1+traitSum('combatPercent'),survivalMod=1+traitSum('survivalPercent'),mobilityMod=1,spiritMod=1;
  if(n.injury===1){
   /* NPC_TRAIT §INJURY: this branch is injury===1 only. 중상 carries no Stat penalty - it
@@ -39,8 +50,8 @@ function prepare(n,d,facilities=[]){
   const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=0.15;why.push('부상 페널티: 투력 -15%');}
   survivalMod-=0.20;why.push('부상 페널티: 강인함 -20%');
  }
- if(effectiveFatigue>=10&&effectiveFatigue<20){mobilityMod-=0.10;spiritMod-=0.10;why.push('피로 누적(10~19): 기동/정신 -10%');}
- else if(effectiveFatigue>=20){mobilityMod-=0.25;spiritMod-=0.25;why.push('극심한 피로(20): 기동/정신 -25%');}
+ if(effectiveFatigue>=10&&effectiveFatigue<20){mobilityMod-=0.15;spiritMod-=0.15;why.push('피로 누적(10~19): 기동/정신 -15%');}
+ else if(effectiveFatigue>=20){mobilityMod-=0.40;spiritMod-=0.40;why.push('극심한 피로(20): 기동/정신 -40%');}
  e.combat=baseE.combat*combatMod+itemE.combat;e.survival=baseE.survival*survivalMod+itemE.survival;e.mobility=baseE.mobility*mobilityMod+itemE.mobility;e.spirit=baseE.spirit*spiritMod+itemE.spirit;
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식 1개당 보급 -1');
  const actual=finalSupply,deficit=required>0?Math.max(0,required-actual):0,penalty=deficit>0?Math.min(.3,deficit*.06):0;
@@ -67,11 +78,11 @@ function prepare(n,d,facilities=[]){
      }
    }
    if(effectiveFatigue>=10 && effectiveFatigue<20){
-     sources.mobility.push({name: '피로 누적', v: -10, isPct: true});
-     sources.spirit.push({name: '피로 누적', v: -10, isPct: true});
+     sources.mobility.push({name: '피로 누적', v: -15, isPct: true});
+     sources.spirit.push({name: '피로 누적', v: -15, isPct: true});
    }else if(effectiveFatigue>=20){
-     sources.mobility.push({name: '극심한 피로', v: -25, isPct: true});
-     sources.spirit.push({name: '극심한 피로', v: -25, isPct: true});
+     sources.mobility.push({name: '극심한 피로', v: -40, isPct: true});
+     sources.spirit.push({name: '극심한 피로', v: -40, isPct: true});
    }
    if(penalty){
      for(const k of statKeys) sources[k].push({name: '보급 부족', v: -Math.round(penalty*100), isPct: true});
@@ -81,8 +92,10 @@ function prepare(n,d,facilities=[]){
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 30% 증가했다.'});
- e.effectiveFatigue=effectiveFatigue; e.fatigueRecovery=fatigueRecovery;
- return {effects:e,sources,hazard,hazards,itemStats,supply:{required,actual,deficit,penalty},why,events};
+ e.effectiveFatigue=effectiveFatigue;
+ e.beforeFatigue=currentFatigue;e.preparedSupply=preparedSupply;e.excessSupply=excessSupply;
+ e.preRecovery=preRecovery;e.fatigueBeforeExpedition=fatigueBeforeExpedition;e.remainingSupplyBuffer=remainingSupplyBuffer;
+ return {effects:e,sources,hazard,hazards,itemStats,supply:{required,actual,deficit,penalty,prepared:preparedSupply,excess:excessSupply,preRecovery,remainingBuffer:remainingSupplyBuffer},why,events};
 }
 function tierWeights(day){
  const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
@@ -152,9 +165,24 @@ function resolve(n,d,r,facilities=[],options={}){
  const storeBonus=outcome==='대성공'&&!d.deep
   ?(D.greatSuccess.storeGoldByBand.find(b=>d.day<=b.maxDay)?.gold||0):0;
  if(outcome==='사망')n.alive=false;
- n.injury=outcome==='중상'?2:outcome==='부상'?1:Math.max(0,n.injury-1);
+ /* NPC_TRAIT v2.7 §Natural recovery: an ordinary Injury is cleared only by actually coming
+    back safe. 퇴각 is not a safe return, so it keeps the Injury; the old blanket decrement
+    let a Retreat read as healing. 중상/사망 keep their own transitions. */
+ n.injury=outcome==='중상'?2:outcome==='부상'?1:outcome==='퇴각'?n.injury:Math.max(0,n.injury-1);
  n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
- let outcomeFatigue=0;if(outcome==='성공'||outcome==='대성공')outcomeFatigue=2;else if(outcome==='퇴각')outcomeFatigue=3;else if(outcome==='부상')outcomeFatigue=4;else if(outcome==='중상'||outcome==='사망')outcomeFatigue=0;const actualOutcomeFatigueGain=outcome==='사망'?0:Math.max(0,outcomeFatigue+(e.fatigue||0));const beforeFatigue=n.fatigue||0;const finalFatigue=clamp(e.effectiveFatigue+actualOutcomeFatigueGain,0,20);const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
+ /* DUNGEON_HAZARD v2.7 §FATIGUE OUTCOME BASELINE + §EXCESS SUPPLY step G. The buffer is
+    spent only now, once the actual Outcome exists, and 중상/사망 stay at 0 no matter what a
+    Trait would add. rawOutcomeFatigueGain and actualOutcomeFatigueGain are separate report
+    truths: the buffer only shows as a contribution when it actually absorbed something. */
+ const severeOrDead=outcome==='중상'||outcome==='사망';
+ const outcomeBaseline=severeOrDead?0:outcome==='퇴각'?5:outcome==='부상'?6:3;
+ const rawOutcomeFatigueGain=severeOrDead?0:Math.max(0,outcomeBaseline+(e.fatigue||0));
+ const remainingSupplyBuffer=e.remainingSupplyBuffer||0;
+ const actualOutcomeFatigueGain=Math.max(0,rawOutcomeFatigueGain-remainingSupplyBuffer);
+ const outcomeBufferUsed=rawOutcomeFatigueGain-actualOutcomeFatigueGain;
+ const beforeFatigue=e.beforeFatigue!==undefined?e.beforeFatigue:(n.fatigue||0);
+ const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,20);
+ const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?1.4:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);let loot=n.alive?Math.round((35+d.day*8)*(outcome==='퇴각'?.08:won?1:.18)*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
@@ -164,7 +192,7 @@ function resolve(n,d,r,facilities=[],options={}){
      The sentence is composed in the presentation layer so one wording serves Night,
      Closing and the returning-visitor line. */
   p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,fatigueRecovery:e.fatigueRecovery,beforeFatigue,effectiveFatigue:e.effectiveFatigue,actualOutcomeFatigueGain,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */

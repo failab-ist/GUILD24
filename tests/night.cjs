@@ -314,4 +314,63 @@ test('DUNGEON_HAZARD §GREAT SUCCESS: the starting curve rises with the margin a
  assert.equal(Dungeon.greatSuccessSignal(n,hard,[]),false,'a hopeless one is not');
 });
 
+test('NIGHT_CLOSING v2.7 §ORDINARY INJURY RESULT CONTINUITY: only a safe return heals',()=>{
+ const d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:40,reward:40,requiredSupply:0};
+ const seen=new Set();
+ for(let i=0;i<400;i++){
+  const n=Adventurer.create(new RNG('injury-continuity-'+i),1,10,Meta.fresh());
+  n.injury=1;n.recovery=0;n.status='부상';n.fatigue=0;n.traits=[];n.pack=[];
+  Dungeon.resolve(n,{...d,power:8+i%80},new RNG('cont-'+i));
+  const r=n.records[n.records.length-1];seen.add(r.outcome);
+  if(r.outcome==='성공'||r.outcome==='대성공')assert.equal(n.injury,0,'coming back safe clears the ordinary Injury');
+  if(r.outcome==='퇴각')assert.equal(n.injury,1,'퇴각 is not a natural recovery');
+  if(r.outcome==='부상')assert.equal(n.injury,1,'a fresh 부상 keeps the ordinary Injury');
+  if(r.outcome==='중상')assert.equal(n.injury,2,'중상 follows its own transition');
+ }
+ for(const o of ['성공','퇴각','부상'])assert.ok(seen.has(o),'the sweep actually reached '+o);
+});
+
+test('DUNGEON_HAZARD v2.7 §EXCESS SUPPLY: required first, then Fatigue, then the result buffer',()=>{
+ const d={...D.dungeonBy.slime,day:18,tier:2,hazards:['poison'],scale:1,power:60,reward:40,requiredSupply:3};
+ const base=Adventurer.create(new RNG('excess'),1,10,Meta.fresh());
+ const run=(fatigue,pack)=>{const n={...JSON.parse(JSON.stringify(base)),fatigue,traits:[],pack,records:[]};
+  Dungeon.resolve(n,d,new RNG('excess-run'));return n.records[n.records.length-1];};
+ const baselines={'성공':3,'대성공':3,'퇴각':5,'부상':6,'중상':0,'사망':0};
+ for(const fatigue of [0,4,9,14,20])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','premium']]){
+  const r=run(fatigue,pack);
+  assert.equal(r.excessSupply,Math.max(0,r.preparedSupply-r.requiredSupply),'excess is what survives the required Supply');
+  assert.equal(r.preRecovery,Math.min(fatigue,r.excessSupply),'leftover Supply removes current Fatigue 1:1');
+  assert.equal(r.fatigueBeforeExpedition,fatigue-r.preRecovery,'departure Fatigue is what preRecovery left');
+  assert.equal(r.remainingSupplyBuffer,r.excessSupply-r.preRecovery,'the same Supply is never spent twice');
+  assert.equal(r.rawOutcomeFatigueGain,baselines[r.outcome],'the raw gain is the v2.7 Outcome baseline');
+  assert.equal(r.actualOutcomeFatigueGain,Math.max(0,r.rawOutcomeFatigueGain-r.remainingSupplyBuffer),'the buffer absorbs the gain 1:1');
+  assert.equal(r.outcomeBufferUsed,r.rawOutcomeFatigueGain-r.actualOutcomeFatigueGain,'what the buffer used is what the gain lost');
+  assert.equal(r.finalFatigue,Math.max(0,Math.min(20,r.fatigueBeforeExpedition+r.actualOutcomeFatigueGain)),'final Fatigue is clamped departure + actual gain');
+  assert.equal(r.netFatigueDelta,r.finalFatigue-r.beforeFatigue,'the net delta is not the actual gain');
+  assert.equal(r.fatigueRecovery,undefined,'the ambiguous combined field is gone');
+  assert.equal(r.postOutcomeFatigueGain,undefined,'no second live name for the same value');
+ }
+ // 중상/사망 stay at zero result Fatigue even with a Trait that would add to it
+ const weary={...JSON.parse(JSON.stringify(base)),fatigue:5,traits:['weary'],pack:[],records:[]};
+ for(let i=0;i<300;i++){const n={...JSON.parse(JSON.stringify(weary)),records:[]};
+  Dungeon.resolve(n,{...d,power:900+i},new RNG('severe-'+i));
+  const r=n.records[n.records.length-1];
+  if(r.outcome==='중상'||r.outcome==='사망')assert.equal(r.rawOutcomeFatigueGain,0,'중상/사망 result Fatigue stays 0');}
+});
+
+test('DUNGEON_HAZARD v2.7 §FATIGUE STAT PENALTY: the two bands are -15% and -40%',()=>{
+ const d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:40,reward:40,requiredSupply:0};
+ const base=Adventurer.create(new RNG('bands'),1,10,Meta.fresh());
+ const at=f=>Dungeon.prepare({...JSON.parse(JSON.stringify(base)),fatigue:f,traits:[],pack:[]},d).effects;
+ const clear=at(9),mid=at(10),over=at(20);
+ assert.ok(Math.abs(mid.mobility/clear.mobility-0.85)<1e-9,'10~19 is 기동 -15%');
+ assert.ok(Math.abs(mid.spirit/clear.spirit-0.85)<1e-9,'10~19 is 정신 -15%');
+ assert.ok(Math.abs(over.mobility/clear.mobility-0.60)<1e-9,'20 is 기동 -40%');
+ assert.ok(Math.abs(over.spirit/clear.spirit-0.60)<1e-9,'20 is 정신 -40%');
+ assert.equal(mid.combat,clear.combat,'Fatigue does not touch 투력');
+ assert.equal(mid.survival,clear.survival,'Fatigue does not touch 강인함');
+ const src=read('dist/systems/dungeon.js');
+ assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(src),'no superseded v2.6 Fatigue band copy survives');
+});
+
 console.log(groups+' night groups passed');
