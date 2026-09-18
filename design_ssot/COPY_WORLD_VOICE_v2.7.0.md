@@ -150,6 +150,12 @@ Ordinary SALE uses this exact heading:
 보급 전 원정 전망
 ```
 
+Exact Death-risk label:
+
+```text
+실패 시 사망 위험
+```
+
 Supporting copy:
 
 ```text
@@ -160,10 +166,12 @@ Supporting copy:
 This block covers:
 - qualitative Combat Forecast
 - qualitative Hazard Readiness
-- exact pre-supply Death Risk %
+- exact pre-supply 실패 시 사망 위험 %
+
+The `실패 시 사망 위험` percentage means the conditional chance that an ordinary failed expedition escalates to Death. It is not the unconditional whole-expedition Death probability.
 
 After an Item purchase commits, the displayed outlook remains the original pre-supply snapshot for that customer visit.
-Do not rewrite the copy to imply the shown Forecast / Readiness / Death Risk is a post-supply recalculation.
+Do not rewrite the copy to imply the shown Forecast / Readiness / 실패 시 사망 위험 is a post-supply recalculation.
 
 ## HAZARD / ITEM COPY BOUNDARY
 

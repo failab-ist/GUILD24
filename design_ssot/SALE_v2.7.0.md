@@ -81,7 +81,7 @@ Always readable ingredients remain:
 - known current environment/Hazard
 - pre-supply qualitative Combat Forecast
 - pre-supply qualitative Hazard Readiness
-- exact pre-supply Death Risk %
+- exact pre-supply 실패 시 사망 위험 %
 - exact Item Stat / Counter / Supply / explicit penalty
 
 When the Player focuses/selects an **uncommitted** Item, UI may additionally show:
@@ -92,12 +92,12 @@ When the Player focuses/selects an **uncommitted** Item, UI may additionally sho
 Before actual purchase commitment, do **not** show a hypothetical post-Item derived answer such as:
 - `접전 -> 우세`
 - `불안 -> 충분`
-- Death Risk `% -> %` change
+- 실패 시 사망 위험 `% -> %` change
 - Great Success signal change
 - exact expedition success chance
 - system-recommended/best Item
 
-The exact Death Risk % shown here is the fixed **pre-supply** snapshot owned by `DUNGEON_HAZARD_v2.7.0.md`, not a hypothetical post-Item answer.
+The exact 실패 시 사망 위험 % shown here is the fixed **pre-supply** snapshot owned by `DUNGEON_HAZARD_v2.7.0.md`, not a hypothetical post-Item answer. It is conditional on the expedition entering a failure path and is not the unconditional whole-expedition Death probability.
 
 This boundary prevents the UI from turning the decision into answer-following.
 
@@ -110,7 +110,7 @@ However, the decision-surface expedition outlook remains the **SALE-entry / pre-
 After a purchase commits:
 - pre-supply Combat Forecast does **not** update
 - pre-supply Hazard Readiness does **not** update
-- pre-supply Death Risk % does **not** update
+- pre-supply 실패 시 사망 위험 % does **not** update
 - exact Item/direct-effect changes may be shown
 - exact proven derived changes from Supply/Fatigue/other owned systems may be shown with their source
 - current Supply/Fatigue arithmetic may update where it is deterministic public arithmetic
@@ -141,8 +141,8 @@ D. another explicitly owned Trait / Relic / Boss modifier
 Rules:
 - an Item directly changes only the exact channels stated by `ITEM_v2.7.0.md`
 - if a post-commit delta is shown, the changed value must be actual and its source must be provable
-- post-commit delta rows may show exact Core-Stat / Counter / Supply / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / Death Risk display
-- ordinary SALE must keep the pre-supply Forecast/Readiness/Death Risk snapshot frozen; post-commit feedback should instead show exact changed values/effects with readable source attribution rather than a new derived expedition answer
+- post-commit delta rows may show exact Core-Stat / Counter / Supply / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 display
+- ordinary SALE must keep the pre-supply Forecast/Readiness/실패 시 사망 위험 snapshot frozen; post-commit feedback should instead show exact changed values/effects with readable source attribution rather than a new derived expedition answer
 - the inherited Supply Deficit system may change effective expedition preparation across all four Core Stats / Hazard readiness when Prepared Supply moves toward the Required Supply threshold; this is a **Supply Deficit effect**, not a hidden direct Item Stat
 - excess Supply that reduces current Fatigue may restore effective 기동/정신 when a canonical Fatigue penalty band changes; this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - exact hidden Supply-deficit formula remains hidden under `DUNGEON_HAZARD_v2.7.0.md`; source attribution does not expose that formula

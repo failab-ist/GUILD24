@@ -13,7 +13,7 @@ IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
 BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
 SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
-V2_7_SOURCE_EDIT_GATE=BLOCKED_UNTIL_V2_6_1_ADOPTION_RECOVERY_CLOSE
+V2_7_SOURCE_EDIT_GATE=RECOVERY_CLOSE_CONFIRMED
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
 ## AUTHORITY
@@ -79,30 +79,28 @@ Do not edit historical base files merely to erase superseded text when an explic
 
 ## IMPLEMENTATION ENTRY GATE
 
-Design SSOT is promoted to v2.7 now.
+Design SSOT is promoted to v2.7.
 
-**Current phase is SSOT-only for v2.7. Do not edit v2.7 Source yet.**
+The v2.6.1 Adoption Recovery prerequisite is **CLOSED** by the User's latest approved decision on 2026-09-18.
 
-Source implementation follows this dependency gate exactly:
+Current sequence:
 
 ```text
-finish and close the existing v2.6.1 Adoption Recovery acceptance
--> User/Director confirms recovery close
--> begin v2.7 source adoption
+v2.6.1 Adoption Recovery close = confirmed
+-> v2.7 Source Adoption plan review
+-> Director-approved WORK handoff
+-> v2.7 Source Adoption implementation
 ```
 
 There are currently no implementation-blocking Design Unresolved items.
 
-Until recovery close:
-- v2.7 owner Specs/QA may be audited/amended
-- Current Source remains the v2.6.1 recovery implementation target
-- do not mix v2.7 runtime changes into unfinished v2.6.1 recovery work
-- do not use uncommitted/partial v2.6.1 work as a v2.7 adoption base
+Current Source remains implementation truth until each v2.7 adoption step lands.
+Do not reinterpret missing v2.7 Source adoption as missing Design.
 
 The prerequisite recovery execution document remains:
 `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
 
-That document is an execution prerequisite, not v2.7 Design Truth.
+That document is historical execution evidence for the completed prerequisite, not current v2.7 Design Truth and not a reason to reopen the closed recovery gate.
 
 ## CURRENT DESIGN SSOT FILE SET
 
@@ -165,14 +163,14 @@ Changed owners only:
 - CORE_RUN: Save v8, no v1~v7 internal-save migration, fresh v8 initialization, start stock, tutorial fresh-reset eligibility, D0~D30 Final timeline, controlled D25 repair boundary, D30 `출전 NPC 선택 -> FINAL 준비 -> 결과` progression; Final preparation uses fixed 50%/매입가 cost, Wallet/stock/Gold/Gross-Sales commitment, no refusal RNG
 - META: no v1~v7 internal Account/Meta migration; separate Franchise Grade from Job Mastery; define exactly 10 dedicated Franchise Achievements; 2/4/6/8/10 completion grade steps; 10/10 `전설의 편의점`; numeric achievement thresholds are current `DIRECTOR DOCUMENT BASELINE` values pending full-run QA
 - ECONOMY_ORDER: inherit v2.6.1 ordinary Wallet/Order/Reroll economy; add required MORNING next-day Gate-count + Tier forecast contract; Day-band Rarity progression; Final fixed price = ordinary 50%/매입가 amount with real Wallet deduction, Player Gold gain, Gross Sales gain, and no 100/150/refusal
-- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot; ordinary Injury keeps existing Stat penalty but recovery now requires Success/Great Success, Retreat does not clear Injury, and injured re-expedition carries +15%p Severe risk plus +10%p expedition-level Death risk that is reflected in the pre-supply Death Risk snapshot
-- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract; ordinary Death risk becomes one expedition-level calculation from combat deficit + environment/Hazard deficit + departure Injury, with healthy 30% / injured 40% caps and exact pre-supply Death Risk disclosure
+- NPC_TRAIT: Level-up simplification, Fatigue Trait outcome scope, Potionbody, Food-affinity scope, latest expedition snapshot; ordinary Injury keeps existing Stat penalty but recovery now requires Success/Great Success, Retreat does not clear Injury, and injured re-expedition carries +15%p Severe risk plus +10%p failure-conditioned Death risk that is reflected in the pre-supply `실패 시 사망 위험` snapshot
+- DUNGEON_HAZARD: prepared-Power weights, Hazard threat, Fatigue/Supply processing, shared result-field naming, next-day Gate-count/Tier forecast generation disclosure contract; ordinary Death risk becomes one failure-conditioned calculation from combat deficit + environment/Hazard deficit + departure Injury, with healthy 30% / injured 40% conditional caps; `성공/대성공` performs no Death roll, failure path performs exactly one Death roll, and SALE discloses exact pre-supply `실패 시 사망 위험`
 - ITEM: categories, expanded 40-item active catalog, stronger flat native Core-Stat Item baseline, aligned Counter-specialist/premium pricing, Potion line, Counter values, Insurance hierarchy, retired-ID replacement boundary, Food/Fresh positive-native-Stat modifier composition, plus 10 Epic late-Run-value Items (5 Family hybrid Field Gear + 5 top-end Food/Drink/Potion)
 - RELIC: build-value boundary, Fresh rebalance, category migration, current Economy Reroll inheritance, D30 known-Final ordering
 - EVENT: Potion category price-pressure migration
 - SALE: exactly 2 slots, sequential ordinary Counter Handling, pre-supply Combat/Hazard/Death outlook snapshot, no post-commit refresh of those derived answers, truthful source-attributed post-commit value/effect changes, removal of non-decision flavor disclosure, revisit quick surface, ordinary same-item refusal price ceiling; Final override uses fixed 50%/매입가, no 100/150, no refusal RNG
 - NIGHT_CLOSING: Supply/Fatigue result truth, First Aid Aftercare proof, snapshot write, persistent-Injury continuity across Retreat
-- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, ordinary refusal-price disabled state, pre-supply qualitative Combat/Hazard + exact Death Risk outlook, frozen derived outlook after Item commit, truthful source-attributed post-commit delta display, Final fixed-price preparation UI, fresh-init tutorial replay requirement, material/typography pass, exact `현재 지점 포기` label
+- UI_UX: information boundary, conditional arithmetic, D25 presentation, required MORNING next-day Gate-count + Tier forecast, ordinary refusal-price disabled state, pre-supply qualitative Combat/Hazard + exact conditional `실패 시 사망 위험` outlook, frozen derived outlook after Item commit, truthful source-attributed post-commit delta display, Final fixed-price preparation UI, fresh-init tutorial replay requirement, material/typography pass, exact `현재 지점 포기` label
 - COPY_WORLD_VOICE: truth-critical copy, stale inherited-copy overrides, v2.7 terminology, exact `보급 전 원정 전망` copy, Event 05 / GLUTTONY / Run-abandon exact copy
 - FINAL_EXPEDITION: D25 persisted Final state, D30 `선택 -> FINAL 준비 -> 결과`, fixed 50%/매입가 affordability transfer with real stock/Wallet/Player-Gold/Gross-Sales accounting and no refusal RNG, mean Hazard-gap penalty, Final Insurance no-op, inherited Final-formula override
 - BOSS: GLUTTONY terminology plus PRIDE/GREED/GLUTTONY/SLOTH rebalance; WRATH 200 retained; GREED snapshot occurs at Final Lock after Final preparation and includes each committed Final transfer exactly once

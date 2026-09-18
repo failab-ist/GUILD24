@@ -102,16 +102,16 @@ May show:
 Must not show hypothetical post-Item answers:
 - `접전 -> 우세`
 - `불안 -> 충분`
-- Death Risk `% -> %` change
+- 실패 시 사망 위험 `% -> %` change
 - Great Success signal change
 - exact expedition Success probability
 
-The already-visible exact Death Risk % is allowed only as the fixed pre-supply snapshot.
+The already-visible exact 실패 시 사망 위험 % is allowed only as the fixed pre-supply snapshot.
 
 After actual purchase commit, PASS only if:
 - displayed Combat Forecast remains the original pre-supply snapshot
 - displayed Hazard Readiness remains the original pre-supply snapshot
-- displayed Death Risk % remains the original pre-supply snapshot
+- displayed 실패 시 사망 위험 % remains the original pre-supply snapshot
 - exact Item/direct-effect and proven source-attributed numeric changes may update
 - no post-commit derived expedition answer is substituted before the remaining-slot decision.
 
@@ -316,7 +316,7 @@ PASS:
 - effective 투력/강인함/기동/정신 and underlying Hazard preparation may improve if the canonical unified Supply Deficit system actually changes them
 - any displayed Core-Stat delta is attributed to `보급 부족 완화` or equivalent system source
 - displayed pre-supply Hazard Readiness remains frozen rather than being replaced by a new readiness label
-- displayed pre-supply Death Risk remains frozen rather than being replaced by a new percentage
+- displayed pre-supply 실패 시 사망 위험 remains frozen rather than being replaced by a new percentage
 - UI does not imply that 집중 사탕 directly grants those Stats
 - exact hidden deficit formula remains undisclosed
 
@@ -330,7 +330,7 @@ PASS:
 All cases:
 - exact post-commit Item/effect/delta rows match runtime preparation truth
 - direct Item effect and derived system effects are not conflated
-- the pre-supply Combat Forecast / Hazard Readiness / Death Risk snapshot remains clearly identified as pre-supply and is not replaced by post-commit derived answers
+- the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 snapshot remains clearly identified as pre-supply and is not replaced by post-commit derived answers
 - a generic `보급 후 변화` block is allowed only if those source classes are immediately distinguishable
 - otherwise the synthetic block is removed rather than turning the outlook into a post-commit answer dashboard
 
@@ -422,10 +422,12 @@ PASS:
 
 - qualitative Combat Forecast is shown from the SALE-entry state
 - qualitative Hazard Readiness is shown from the SALE-entry state
-- exact pre-supply Death Risk % is shown from the same state
+- the exact risk label is `실패 시 사망 위험`
+- exact pre-supply 실패 시 사망 위험 % is shown from the same state
+- the percentage is clearly conditional on the expedition entering a failure path, not presented as unconditional whole-expedition Death probability
 - exact expedition Success probability remains hidden
 - after first and second committed Item transactions, the three outlook values remain unchanged on screen
 - post-commit exact Item/effect/source deltas may still update
 - actual expedition Resolve uses the final prepared state, not the frozen display snapshot
-- a healthy fully prepared controlled state may show 0% Death Risk when the current formula produces 0
-- injured pre-supply Death Risk includes the canonical +10%p modifier and respects the 40% cap
+- a healthy fully prepared controlled state may show 0% 실패 시 사망 위험 when the current formula produces 0
+- injured pre-supply 실패 시 사망 위험 includes the canonical +10%p modifier and respects the 40% cap

@@ -127,7 +127,7 @@ PASS:
 - exact hidden deficit formula remains hidden from player UI
 - public required/prepared/deficit quantities are correct
 
-## DUN-Q77 — ORDINARY EXPEDITION DEATH BASELINE
+## DUN-Q77 — ORDINARY FAILURE DEATH BASELINE
 
 Controlled prepared states with known Combat and Hazard deficits.
 
@@ -149,7 +149,7 @@ EnvironmentDeficit
 EnvironmentDeathContribution
 = EnvironmentDeficit * 0.12
 
-healthyDeathChance
+healthyFailureDeathChance
 = clamp(
     CombatDeathContribution + EnvironmentDeathContribution,
     0.00,
@@ -166,11 +166,13 @@ PASS:
 - Combat contribution uses the same current prepared-combat truth as Forecast/Resolve before hidden combat variance
 - Environment contribution uses the same current Hazard Threat/Defense truth as readiness
 - healthy minimum may reach exactly 0%
-- healthy cap is exactly 30%
-- exactly one ordinary-expedition Death roll occurs
-- Death is not gated behind a separate failed-combat + failed-escape Death branch
-- no second Death roll survives inside escape/injury result handling
-- a 0% Death chance does not imply guaranteed Success
+- healthy conditional cap is exactly 30%
+- an expedition that resolves as `성공 / 대성공` performs zero Death rolls
+- an expedition that enters the ordinary failure path performs exactly one Death roll
+- that failure Death roll is not additionally gated behind a separate failed-escape requirement
+- no second Death roll survives inside escape/injury/severe handling
+- a 0% `실패 시 사망 위험` does not imply guaranteed Success
+- the displayed percentage is not treated as unconditional whole-expedition Death probability
 
 ## DUN-Q78 — INJURED RE-EXPEDITION RISK / PRE-SUPPLY DISCLOSURE
 
@@ -178,22 +180,24 @@ Controlled identical NPC/Gate state except departure Injury state.
 
 EXPECT when departure `injury=1`:
 - ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
-- Death chance adds +10%p to the healthy expedition-level formula and caps at 40%
+- failure Death chance adds +10%p to the healthy conditional formula and caps at 40%
 - Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
 - no extra independent Death/Severe roll is created
+- `성공 / 대성공` still performs no Death roll
 
 Pre-supply SALE check:
-- exact Death Risk % includes the +10%p injured modifier
-- qualitative Combat Forecast / Hazard Readiness and exact Death Risk are captured before any new Item commit
+- exact `실패 시 사망 위험` % includes the +10%p injured modifier
+- qualitative Combat Forecast / Hazard Readiness and exact `실패 시 사망 위험` are captured before any new Item commit
 - after purchase commits, those displayed outlook values remain frozen
-- actual expedition Death chance is recalculated internally from the final prepared state
-- post-supply/final actual Death % is not exposed during the remaining-slot decision
+- actual `failureDeathChance` is recalculated internally from the final prepared state
+- post-supply/final actual failure Death % is not exposed during the remaining-slot decision
+- UI does not present the conditional percentage as unconditional whole-expedition Death probability
 
 PASS:
-- injured departure is materially riskier than healthy departure
-- healthy cap remains 30%
-- injured cap remains 40%
-- exact pre-supply Death Risk is player-visible while the post-supply actual Death probability remains hidden
+- injured departure is materially riskier than healthy departure when an expedition fails
+- healthy conditional cap remains 30%
+- injured conditional cap remains 40%
+- exact pre-supply `실패 시 사망 위험` is player-visible while the post-supply actual conditional probability remains hidden
 
 ## DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY
 

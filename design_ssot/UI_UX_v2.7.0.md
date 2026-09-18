@@ -148,13 +148,13 @@ Snapshot timing:
 ```text
 customer SALE decision begins
 -> before any new Item is committed for this visit
--> capture Combat Forecast / Hazard Readiness / Death Risk
+-> capture Combat Forecast / Hazard Readiness / 실패 시 사망 위험
 ```
 
 Show:
 - qualitative Combat Forecast
 - qualitative Hazard Readiness for the known current Hazard state
-- exact Death Risk %
+- exact 실패 시 사망 위험 %
 - existing Injury/Condition state that is already part of that snapshot
 
 Do not show:
@@ -162,12 +162,12 @@ Do not show:
 - exact hidden Hazard threshold/formula
 - exact Great Success probability
 
-The displayed Death Risk % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.7.0.md`.
+The displayed 실패 시 사망 위험 % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.7.0.md`. It means the chance that an ordinary failed expedition escalates to Death; it is not the unconditional probability of Death across all expedition attempts.
 
 After any Item purchase commits during the same customer visit:
 - displayed Combat Forecast remains the original pre-supply snapshot
 - displayed Hazard Readiness remains the original pre-supply snapshot
-- displayed Death Risk % remains the original pre-supply snapshot
+- displayed 실패 시 사망 위험 % remains the original pre-supply snapshot
 - do not replace them with post-commit `접전 -> 우세`, `불안 -> 충분`, or `12% -> 5%` answer feedback
 
 The underlying runtime preparation **does** change.
@@ -187,6 +187,12 @@ Header:
 
 ```text
 보급 전 원정 전망
+```
+
+Failure-risk label:
+
+```text
+실패 시 사망 위험
 ```
 
 Supporting copy:
@@ -265,11 +271,11 @@ Do not show hypothetical derived answer changes such as:
 - `불안 -> 충분`
 - Great Success signal change
 
-After an actual purchase commits, the displayed pre-supply Forecast / Hazard Readiness / Death Risk snapshot does not update. Exact proven value/effect changes may still be shown through the post-commit source-truth treatment below.
+After an actual purchase commits, the displayed pre-supply Forecast / Hazard Readiness / 실패 시 사망 위험 snapshot does not update. Exact proven value/effect changes may still be shown through the post-commit source-truth treatment below.
 
 ## SALE — POST-COMMIT DELTA SOURCE TRUTH
 
-Do not update the pre-supply Combat Forecast / Hazard Readiness / Death Risk after a committed purchase.
+Do not update the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 after a committed purchase.
 Instead, show exact actual changed values/effects with truthful source attribution where useful.
 Do not make a derived preparation change look like a hidden direct Item effect.
 
@@ -295,7 +301,7 @@ Therefore:
 
 A generic `보급 후 변화` block is acceptable only when direct Item effects and derived system effects are clearly separated.
 If that distinction is not immediately readable, remove the synthetic block.
-Do not use post-commit value feedback to replace the frozen pre-supply Forecast / Hazard Readiness / Death Risk with a newly scored answer.
+Do not use post-commit value feedback to replace the frozen pre-supply Forecast / Hazard Readiness / 실패 시 사망 위험 with a newly scored answer.
 
 ## SALE — REFUSAL PRICE CEILING UI
 

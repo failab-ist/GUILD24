@@ -146,9 +146,10 @@ PASS:
 SETUP: same NPC/Gate except departure Injury state.
 
 PASS:
-- `injury=1` departure activates the +10%p expedition-level Death-risk baseline and +15%p Severe-transition baseline owned by `DUNGEON_HAZARD_v2.7.0.md`
-- the +10%p modifier is part of the single Death-risk calculation and does not create a second Death roll
+- `injury=1` departure activates the +10%p failure-conditioned Death-risk baseline and +15%p Severe-transition baseline owned by `DUNGEON_HAZARD_v2.7.0.md`
+- the +10%p modifier is part of the single failure-conditioned Death-risk calculation and does not create a second Death roll
 - the modifier applies only because the NPC **began** that expedition injured
 - recovery during/after result cannot retroactively erase the risk state used for that expedition
-- the exact pre-supply Death Risk shown during SALE includes the +10%p injured modifier
-- after Item commitment, the displayed pre-supply percentage stays frozen while the actual expedition Death chance is recalculated internally from final preparation
+- the exact pre-supply 실패 시 사망 위험 shown during SALE includes the +10%p injured modifier
+- after Item commitment, the displayed pre-supply percentage stays frozen while the actual `failureDeathChance` is recalculated internally from final preparation
+- an injured expedition that resolves as `성공 / 대성공` performs no Death roll

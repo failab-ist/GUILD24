@@ -89,13 +89,23 @@ No canonical route may require a third normal Bag slot.
 The new Epic layer in `ITEM_v2.7.0.md` improves late-Run slot efficiency but is not a mandatory T3 key.
 A valid T3 route must still exist without drawing one exact Epic SKU.
 
-## ORDINARY EXPEDITION DEATH RISK — v2.7 BASELINE
+## ORDINARY EXPEDITION FAILURE DEATH RISK — v2.7 BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`
 
-v2.7 Death risk is an expedition-level risk produced by the Player's actual preparation state.
+v2.7 Death risk is a **failure-conditional escalation risk** produced by the Player's actual preparation state.
 
-It combines exactly three inputs:
+Player-facing meaning:
+
+```text
+실패 시 사망 위험
+= 이 원정이 성공 / 대성공으로 끝나지 못했을 때,
+  그 실패가 사망까지 이어질 조건부 위험
+```
+
+It is **not** the unconditional probability that the NPC dies across every expedition attempt.
+
+It combines exactly three preparation inputs:
 
 ```text
 Combat preparation deficit
@@ -103,7 +113,7 @@ Combat preparation deficit
 + departure ordinary-Injury risk
 ```
 
-Death is no longer gated behind:
+Death is no longer gated behind the stale specific chain:
 
 ```text
 combat failure
@@ -111,8 +121,9 @@ combat failure
 -> separate Death branch
 ```
 
-Do not roll Death once inside combat/escape and then again in a later result branch.
-There is exactly one ordinary-expedition Death roll.
+But Death is also **not** rolled before the game knows whether the expedition succeeded.
+
+There is exactly one ordinary-expedition Death roll, and it occurs only when the expedition enters the ordinary **failure path** instead of ending as `성공 / 대성공`.
 
 ### Combat contribution
 
@@ -163,12 +174,12 @@ If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
 Use the same current Hazard Threat / Hazard Defense truth as ordinary readiness.
 Do not create a second Death-only Hazard table or hidden environment score.
 
-### Healthy / injured Death chance
+### Healthy / injured failure Death chance
 
 Healthy departure:
 
 ```text
-healthyDeathChance
+healthyFailureDeathChance
 = clamp(
     CombatDeathContribution
   + EnvironmentDeathContribution,
@@ -180,9 +191,9 @@ healthyDeathChance
 If the NPC **began the expedition with ordinary Injury (`injury=1`)**:
 
 ```text
-deathChance
+failureDeathChance
 = clamp(
-    healthyDeathChance + 0.10,
+    healthyFailureDeathChance + 0.10,
     0.00,
     0.40
 )
@@ -191,49 +202,58 @@ deathChance
 Otherwise:
 
 ```text
-deathChance = healthyDeathChance
+failureDeathChance = healthyFailureDeathChance
 ```
 
 Meaning:
-- complete combat/environment preparation may reduce ordinary Death risk to 0%
-- 0% Death does not mean guaranteed expedition Success; combat/environment outcome variance still exists
-- weak combat preparation raises Death risk
-- weak Hazard preparation independently raises Death risk
+- complete combat/environment preparation may reduce `실패 시 사망 위험` to 0%
+- 0% does **not** mean guaranteed expedition Success; it means an ordinary failure does not escalate to Death through this roll
+- weak combat preparation raises the conditional failure Death risk
+- weak Hazard preparation independently raises the conditional failure Death risk
 - repeating expeditions with an already-injured NPC adds a visible material risk
-- healthy Death cap remains 30%
-- injured Death cap remains 40%
+- healthy conditional cap remains 30%
+- injured conditional cap remains 40%
+
+These caps are conditional failure-risk caps, not unconditional whole-expedition Death probabilities.
 
 ### Resolution order
 
 After the final preparation state for the expedition is fixed:
 
-1. calculate the final actual `deathChance`
-2. perform exactly one Death roll for that ordinary expedition
-3. if the Death roll hits, final ordinary Outcome is `사망`
-4. if it does not hit, resolve the remaining ordinary non-Death combat/environment/escape/injury/severe structure without another Death branch
+1. calculate the final actual `failureDeathChance` from that prepared state
+2. resolve the ordinary combat/environment path far enough to determine whether the expedition remains on a Success path or enters a failure path
+3. if the expedition ends as `성공 / 대성공`, perform **no Death roll**
+4. if the expedition enters the failure path, perform exactly **one** Death roll using `failureDeathChance`
+5. if that roll hits, the ordinary Outcome becomes `사망`
+6. if it misses, continue/retain the existing non-Death failure resolution into `퇴각 / 부상 / 중상` as applicable
+7. do not perform another Death roll inside escape/injury/severe handling
 
-This replaces the previous failed-combat + failed-escape gated Death roll.
-Do not add a second instant-Death subsystem on top of this calculation.
+The failure Death roll is **not** additionally gated behind a separate failed-escape requirement.
+A failed expedition can become fatal once; a successful expedition does not receive a separate fatality lottery.
 
-### Pre-supply player-facing Death Risk
+Existing Insurance conversion / Aftercare ordering remains owned by `ITEM_v2.7.0.md` and is not duplicated here.
 
-SALE exposes one exact **pre-supply Death Risk %** snapshot before any new Item transaction for that customer.
+### Pre-supply player-facing failure Death risk
+
+SALE exposes one exact pre-supply **`실패 시 사망 위험` %** snapshot before any new Item transaction for that customer.
 
 That displayed value:
 - uses the NPC/Gate/Condition state at SALE entry
 - includes existing departure Injury if present
 - uses no newly committed Item from the current customer visit
 - is shown together with the pre-supply qualitative Combat Forecast / Hazard Readiness
+- means the conditional chance that an ordinary failed expedition escalates to Death
+- is **not** presented as the unconditional chance that this expedition ends in Death
 - remains frozen after the Player commits Item purchases
 
-The actual expedition still recalculates `deathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
-Do not update the displayed Death Risk to reveal the post-supply answer.
+The actual expedition still recalculates `failureDeathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
+Do not update the displayed `실패 시 사망 위험` to reveal the post-supply answer.
 
 Exact presentation/copy -> `SALE_v2.7.0.md` / `UI_UX_v2.7.0.md` / `COPY_WORLD_VOICE_v2.7.0.md`.
 
 ## INJURED RE-EXPEDITION SEVERE ESCALATION
 
-When an NPC **began** the expedition at `injury=1`, the existing non-death branch after failed combat/escape receives:
+When an NPC **began** the expedition at `injury=1`, the existing non-Death Severe-vs-Injury branch, whenever that branch is reached on a surviving failure path, receives:
 
 ```text
 Severe Injury transition chance +15%p
@@ -366,8 +386,8 @@ Expose exact decision ingredients:
 - remaining Supply buffer
 - conditional final Fatigue for each relevant possible Outcome
 - existing Injury state and its visible Stat penalties
-- that sending an injured NPC again increases Severe/Death risk
-- exact pre-supply Death Risk % at SALE entry, owned by this Death-risk model
+- that sending an injured NPC again increases Severe / failure-Death risk
+- exact pre-supply `실패 시 사망 위험` % at SALE entry, owned by this failure-conditioned Death-risk model
 
 Do not expose:
 - hidden Supply-deficit formula
