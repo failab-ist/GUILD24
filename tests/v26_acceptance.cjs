@@ -236,22 +236,33 @@ test('WALLET: 2000 cap', () => {
 test('UNLOCK: D10 / D14 Activation and Gate', () => {
   const g = fresh();
   
-  const checkOffer = (targetItem) => {
-    const oldWeighted = g.rng.weighted;
-    let foundInPool = false;
-    g.rng.weighted = (pool, weightFn) => {
-      if (Array.isArray(pool) && pool.some(it => it.id === targetItem)) foundInPool = true;
-      return oldWeighted.call(g.rng, pool, weightFn);
-    };
-    g.generateOffers({advancePity: false});
-    g.rng.weighted = oldWeighted;
-    return foundInPool;
+  /* One generateOffers call reaches a given Rarity's pool only when one of its ~5 rolls lands
+     on that tier, so a single sample answers "was it eligible?" with a coin flip - it happened
+     to land true on the v2.6 catalogue and lands false on some seeds of the v2.7 one. The
+     question is whether the item CAN be offered, so eligibility is sampled until it is seen
+     and exclusion is asserted across every sample. */
+  const OFFER_SAMPLES = 120;
+  const sampleOffers = (targetItem) => {
+    let hits = 0;
+    for (let i = 0; i < OFFER_SAMPLES; i++) {
+      const oldWeighted = g.rng.weighted;
+      let foundInPool = false;
+      g.rng.weighted = (pool, weightFn) => {
+        if (Array.isArray(pool) && pool.some(it => it.id === targetItem)) foundInPool = true;
+        return oldWeighted.call(g.rng, pool, weightFn);
+      };
+      g.generateOffers({advancePity: false});
+      g.rng.weighted = oldWeighted;
+      if (foundInPool) hits++;
+    }
+    return hits;
   };
+  const checkOffer = (targetItem) => sampleOffers(targetItem) > 0;
 
   // D9 Premium check
   g.run.day = 9;
   assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['premium'], g.run.day), false, 'D9 premium blocked (Meta)');
-  assert.equal(checkOffer('premium'), false, 'D9 premium excluded from actual Offer generation path');
+  assert.equal(sampleOffers('premium'), 0, 'D9 premium excluded from actual Offer generation path');
   
   g.nextDay(); // Transitions to D10
   assert.equal(g.account.unlocks.premium, true, 'D10 premium activated');
@@ -262,7 +273,7 @@ test('UNLOCK: D10 / D14 Activation and Gate', () => {
   // D13 Tree check
   g.run.day = 13;
   assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['tree'], g.run.day), false, 'D13 tree blocked (Meta)');
-  assert.equal(checkOffer('tree'), false, 'D13 tree excluded from actual Offer generation path');
+  assert.equal(sampleOffers('tree'), 0, 'D13 tree excluded from actual Offer generation path');
   
   g.nextDay(); // Transitions to D14
   assert.equal(g.account.unlocks.tree, true, 'D14 tree activated');
