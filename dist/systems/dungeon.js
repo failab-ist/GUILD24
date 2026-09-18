@@ -159,6 +159,12 @@ function greatSuccessSignal(n,d,facilities=[]){
    a harness can measure a candidate against the shipped value without editing the formula.
    These are the canonical numbers; nothing in the game writes to this table. */
 const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40};
+/* DUNGEON_HAZARD_v2.7 §GATE POWER — LATE-DAY SLOPE. The Day term bends at D9: a party's
+   prepared ability stops growing long before Day 30 does, so a single slope left every late Gate
+   further out of reach than the one before it. Only this term changed; every other Gate Power
+   term is what it was, which is why D1-D9 is unchanged. */
+const GATE={knee:9,early:1.70,late:0.40};
+const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;
 function failureDeathChanceFor(p,d,departedInjured){
  const required=d.power||1;
  const combatDeficit=clamp((required-preparedPower(p.effects))/required,0,1);
@@ -273,5 +279,5 @@ function resolve(n,d,r,facilities=[],options={}){
  report.quote=G.Copy.night(report,n);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,GATE,gateDayTerm,greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);

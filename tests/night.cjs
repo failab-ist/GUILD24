@@ -432,6 +432,15 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
   n.stats={combat:over,survival:over,mobility:over,spirit:over};n.equipment={power:0,name:'-'};
   return {n,risk:Dungeon.failureDeathRisk(n,d)};
  };
+ /* DUNGEON_HAZARD_v2.7 §GATE POWER — LATE-DAY SLOPE. D1-D9 must be bit-for-bit what the single
+    1.70 slope produced, and only the Day term may bend - a post-hoc multiplier on the finished
+    Gate Power would move the Tier and Family terms with it. */
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.70,late:0.40},'the shipped slope is the canonical one');
+ for(const day of [1,2,5,8,9])
+  assert.equal(Dungeon.gateDayTerm(day),day*1.70,'D'+day+' is unchanged');
+ for(const [day,term] of [[10,15.70],[12,16.50],[24,21.30],[29,23.30],[30,23.70]])
+  assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
+ assert.ok(Dungeon.gateDayTerm(30)<30*1.70,'the late slope actually bends the curve down');
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
