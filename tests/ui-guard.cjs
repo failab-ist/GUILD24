@@ -504,7 +504,19 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  // D-11. Always-available help, keyboard-reachable because it is a native <details>.
  /* One shared helper at module scope, so the outlook and the destination plate cannot drift
     into two different ? controls. It is a native <details>, so it needs no script. */
- assert.ok(/const tip=\(label,body\)=>'<details class="tip" name="sale-tip"/.test(app),'the ? is a details, so it needs no script');
+ /* Still a native <details>, so the control itself works without script and is keyboard
+    reachable; the only script is the outside-tap dismissal a popover is expected to have. */
+ assert.ok(/const tip=\(label,\.\.\.lines\)=>'<details class="tip" name="sale-tip"/.test(app),'the ? is a details, so the control needs no script');
+ assert.ok(/pointerdown[^\n]*closeTips/.test(app),'tapping outside closes it');
+ assert.ok(/ev\.key==='Escape'\)closeTips/.test(app),'and so does Escape');
+ /* The counter tooltip states what the two columns ARE and stops. The readiness ladder, why
+    the pressure is fixed and why the reading is frozen belong to the store guide. */
+ const envTip=fn('destPlate');
+ assert.ok(envTip.includes("'압박: 이 위험이 보는 능력치','현재 대응: 이 손님의 보급 전 상태','확정된 원정 결과는 아닙니다.'"),
+  'the destination ? carries only the approved lines');
+ for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','팔아도 바뀌지 않는다'])
+  assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
+ assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'and its two facts are two lines');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
  assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
@@ -514,7 +526,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.equal((readout.match(/\+tip\(/g)||[]).length,2,'the outlook explains the fight forecast and the Death risk');
  assert.ok(/tip\('환경 대응'/.test(fn('destPlate')),'and the environment keeps its own help, where the environment now lives');
  assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');
- assert.ok(/확정된 결과가 아니다/.test(fn('destPlate')),'and so does the environment help');
+ assert.ok(/확정된 원정 결과는 아닙니다/.test(fn('destPlate')),'and so does the environment help');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
  assert.ok(/\.dest-plate \.tip>summary:focus-visible/.test(css),'on the plate too');
  // the help is its own row under the rows it explains, so nothing that hides the caps label

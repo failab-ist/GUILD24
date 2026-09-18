@@ -162,7 +162,8 @@ function render(){
 /* One shared `name` makes the group exclusive, so opening one balloon closes the other rather
    than stacking two of them on the same anchor. Where a browser does not support exclusive
    <details> yet this degrades to the plain overlap, never to a broken control. */
-const tip=(label,body)=>'<details class="tip" name="sale-tip"><summary aria-label="'+E(label)+' 설명">?</summary><p>'+E(body)+'</p></details>';
+const tip=(label,...lines)=>'<details class="tip" name="sale-tip"><summary aria-label="'+E(label)+' 설명">?</summary>'
+ +'<p>'+lines.map(l=>'<span>'+E(l)+'</span>').join('')+'</p></details>';
 /* Two different facts about one Hazard, never welded into a sentence like `강인함 압박에 취약`.
    The pressure is fixed information about the Hazard itself - it is true of 독기 whoever is
    standing at the counter. The readiness is this NPC's SALE-entry state against it. The player
@@ -562,7 +563,7 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
  /* The help sits under the rows it explains rather than on the plate's caps label: opened, it
     is a full-width paragraph, and inside the label it pushed the destination name out of the
     grid. It is the only place the two Hazard facts are explained, so it is never dropped. */
- +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','압박은 위험이 보는 능력, 현재 대응은 이 손님의 대응 수준(취약·불안·대응·충분). 카운터에 섰을 때 기준이라 팔아도 바뀌지 않는다. 확정된 결과가 아니다.')+'</div>':'')
+ +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','압박: 이 위험이 보는 능력치','현재 대응: 이 손님의 보급 전 상태','확정된 원정 결과는 아닙니다.')+'</div>':'')
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
@@ -1107,7 +1108,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  }catch(err){toast(err.message);}
 }
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled){if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);}});
-document.addEventListener('keydown',ev=>{if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new'))setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+/* A tooltip is dismissed by tapping outside it, the way every other popover on the phone is.
+   <details> closes on its own summary already, and the shared name closes a sibling, so this
+   only has to handle the outside tap and Escape. */
+const closeTips=except=>{for(const t of document.querySelectorAll('.tip[open]'))if(t!==except)t.open=false;};
+document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);},true);
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new'))setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a

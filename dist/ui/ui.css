@@ -560,6 +560,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .readout .tip>p,.dest-plate .tip>p{position:absolute;left:10px;right:10px;
  z-index:30;margin:0;padding:9px 11px;font:400 12px/1.6 var(--ui);color:#e8dcc0;
  background:#191108f2;box-shadow:inset 0 0 0 1px #ffffff26,0 6px 0 #00000059}
+/* each line of a tooltip is its own line: two labelled facts should not read as one sentence */
+.readout .tip>p>span,.dest-plate .tip>p>span{display:block}
 /* The outlook sits above the plate, so its balloon drops; the plate is the lowest block on the
    counter and its container clips, so its balloon rises. Either way the panel keeps its height. */
 .readout .tip>p{top:calc(100% - 4px)}
