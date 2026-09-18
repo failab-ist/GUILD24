@@ -494,3 +494,18 @@ Record at minimum:
 - healthy vs injured re-expedition outcome distribution
 - healthy vs injured expedition Death/Severe rates by CombatDeficit and EnvironmentDeficit band
 - Item dead-pick / universal-best rates
+## DUN-Q-v27-GATE-SLOPE — LATE-DAY GATE POWER
+
+Owner rule: `DUNGEON_HAZARD_v2.7.0.md` §GATE POWER — LATE-DAY SLOPE.
+
+PASS:
+- the Day term is `min(Day, 9) × 1.70 + max(0, Day - 9) × 0.40`
+- D1 through D9 Gate Power is identical to the pre-change value for the same Family, Tier and Day
+- the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
+- D12 T1 ordinary Family reads 16.50 on the Day term, D24 reads 21.30
+
+FAIL:
+- a single slope applied across all Days
+- an early-Day Gate Power that moved
+- the slope implemented as a post-hoc multiplier on the finished Gate Power rather than on the
+  Day term

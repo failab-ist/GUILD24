@@ -159,3 +159,44 @@ With `발주 교환권`:
 
 PASS:
 No stale `0 -> 60 -> 120` base-QA curve survives as v2.7 truth.
+
+## RELIC-Q-v27-VISITOR — BOARD / HUB EXPLICIT OVERRIDE
+
+Owner rule: `RELIC_v2.7.0.md` §VISITOR RELICS — v2.7 EXPLICIT OVERRIDE.
+
+### board
+
+PASS:
+- the effect applies to the base visitor roll only, before any other modifier
+- base 3 becomes 4; base 4, 5 and 6 are unchanged
+- no separate chance roll is made for board
+- with board held, a Day whose other modifiers would subtract or whose available adventurers
+  are fewer than 4 still seats fewer than 4 — the floor is on the base roll, not on the final
+  visitor count
+
+FAIL:
+- a final visitor count clamped to a minimum of 4
+- board raising a base roll of 5 or 6
+- board consuming a chance roll from the Run stream
+
+### hub
+
+PASS:
+- exactly one roll per Morning with three mutually exclusive outcomes: 30% +1, 5% +2, 65% none
+- the three outcomes never combine on one Morning
+- operating cost is `overheadBase + overheadBase × 0.20 + other flat extras`, then the existing
+  rounding rule
+- the 20% is taken on `overheadBase` alone
+
+FAIL:
+- +1 and +2 both applying on the same Morning
+- the 20% applied to Event or Relic flat modifiers as well
+- the 20% compounding with another percentage overhead modifier
+
+### composition
+
+PASS:
+- board, hub and the `wall` Decoration may all be held at once and each applies in its own place
+- holding the `wall` Decoration does not mark board owned, remove it from a purchase window,
+  or consume a Relic slot
+- the board floor resolves on the base roll before the probabilistic additions
