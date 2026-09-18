@@ -10,7 +10,9 @@ const negative=new Set(['fatigue','injuryRisk','variance']);
 // All 9 Hazards are explained the same way. Rendered inline, so there is no hover-only path.
 const hazardPressure={poison:'강인함 압박',bind:'기동 압박',corrosion:'강인함 압박',mire:'기동 압박',fire:'강인함 압박',fear:'정신 압박',dark:'정신 중심 + 기동 보조 압박',cold:'강인함 압박',whiteout:'정신 중심 + 기동 보조 압박'};
 function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
-const util={duplicate:'다음 소비품 효과 2회 적용 · 쿠폰도 1칸 사용 · 중첩 불가',revive:'사망 판정을 중상으로 변경',curePoison:'독 대응 상품',potion:'포션'};
+/* ITEM_v2.7 §INSURANCE HIERARCHY: Aftercare is a utility, not a magnitude. Rendering it as
+   `+1` would read as a hidden injury-risk percentage, which the owner says it does not have. */
+const util={aftercare:'결과는 그대로 · 원정 후 남는 부상만 1단계 완화',duplicate:'다음 소비품 효과 2회 적용 · 쿠폰도 1칸 사용 · 중첩 불가',revive:'사망 판정을 중상으로 변경',curePoison:'독 대응 상품',potion:'포션'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
 function rows(e,tones){const out=[];for(const[k,v]of Object.entries(e)){

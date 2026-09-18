@@ -797,7 +797,12 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
    cond.push('부상 효과: 생존 -20% · 투력 '+combat);
   }
   if(n.recovery)cond.push('남은 휴식: '+n.recovery+'일');
-  cond.push('회복 방법: '+n.recovery+'일 대기 또는 치료용품 보급');
+  /* NPC_TRAIT v2.7 §Natural recovery + ITEM_v2.7 §INSURANCE HIERARCHY. An ordinary Injury is
+     no longer cleared by resting a day - it clears by actually coming back from a 성공/대성공 -
+     and 구급키트 is Aftercare on the next expedition's result, not a cure sold to a resting
+     adventurer. Both readings state what actually clears the state. */
+  cond.push(n.injury===2?'회복 방법: '+n.recovery+'일 대기'
+                        :'회복 방법: 다음 원정에서 성공·대성공으로 귀환 또는 구급키트 애프터케어');
  }
  if(n.fatigue||n.fatigue===0){
   let f_pen='';

@@ -29,7 +29,7 @@ item('energy','에너지드링크',1,70,150,'drink',5,'energy','MANA+','오늘 �
 item('wine','용사의 곡주',1,60,130,'drink',5,'wine','원정한끼','공포를 잊게 한다. 발걸음은 살짝 꼬인다.',{fear:18,mobility:-4,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 100-210). */
-item('kit','구급키트',1,100,210,'insurance',7,'kit','귀환안심','열어 본 사람은 대개 그날을 오래 기억한다.',{survival:10,injuryGuard:0.65}),
+item('kit','구급키트',1,100,210,'insurance',7,'kit','귀환안심','열어 본 사람은 대개 그날을 오래 기억한다.',{survival:10,aftercare:1}),
 item('mask','방진마스크',1,65,135,'gear',0,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:12}),
 item('heat','핫팩',1,60,130,'gear',0,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:18}),
 item('cloak','방수망토',1,75,160,'gear',0,'cloak','귀환안심','부식과 진창에 두루 쓴다. 어느 쪽도 전문가만은 못하다.',{corrosion:6,mire:6}),

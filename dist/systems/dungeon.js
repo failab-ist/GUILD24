@@ -147,7 +147,11 @@ function resolve(n,d,r,facilities=[],options={}){
  }else if(affected||r.next()<e.injuryRisk){outcome=injuryRoll<.13-e.injuryGuard*.12?'중상':'부상';}
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&r.next()<clamp(e.escape,.0,.96)){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
  if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
- if(['부상','중상'].includes(outcome)&&r.next()<clamp(e.injuryGuard,0,.9)){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('치료용품·강골이 부상 단계를 완화');p.events.push({id:'injury-guard',items:n.pack.filter(id=>D.itemBy[id].effects.injuryGuard),text:'부상 방어 효과가 부상 단계를 낮췄다.'});}
+ /* 강골 alone reaches this branch now. ITEM_v2.7 §INSURANCE HIERARCHY moved 구급키트 off the
+    injuryGuard channel entirely - it may not change the resolved Outcome and carries no hidden
+    injury-risk percentage - so the line no longer credits 치료용품 for a downgrade it no longer
+    performs. The Trait's own `injuryGuard +23%p` identity is unchanged. */
+ if(['부상','중상'].includes(outcome)&&r.next()<clamp(e.injuryGuard,0,.9)){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'});}
  /* Only now, with the ordinary outcome settled, may a 성공 become 대성공. Assigning it right
     after combat let a later environmental injury overwrite it, and judging it on the post-noise
     score let a lucky hidden roll pass itself off as preparation - so it is judged on `ability`,
@@ -169,7 +173,20 @@ function resolve(n,d,r,facilities=[],options={}){
     back safe. 퇴각 is not a safe return, so it keeps the Injury; the old blanket decrement
     let a Retreat read as healing. 중상/사망 keep their own transitions. */
  n.injury=outcome==='중상'?2:outcome==='부상'?1:outcome==='퇴각'?n.injury:Math.max(0,n.injury-1);
- n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
+ n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;
+ /* ITEM_v2.7 §Insurance resolution order step 4: Aftercare is last, it runs on the settled
+    non-death state, and it changes ONLY persistent Injury - Outcome, XP, Loot and Fatigue keep
+    whatever the expedition actually produced. The whole chain is not re-run. The report carries
+    the would-be state so NIGHT_CLOSING can name a proven contribution instead of a carried Item. */
+ let aftercare=null;
+ if((e.aftercare||0)>0&&outcome!=='사망'&&n.injury>0){
+  const wouldBe={injury:n.injury,recovery:n.recovery};
+  n.injury=n.injury===2?1:0;n.recovery=0;
+  aftercare={from:wouldBe.injury,to:n.injury,recoveryFrom:wouldBe.recovery};
+  p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),
+   text:n.injury?'구급키트가 중상 후 상태를 부상까지 낮췄다.':'구급키트가 남을 부상을 없앴다.'});
+ }
+ n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
  /* DUNGEON_HAZARD v2.7 §FATIGUE OUTCOME BASELINE + §EXCESS SUPPLY step G. The buffer is
     spent only now, once the actual Outcome exists, and 중상/사망 stay at 0 no matter what a
     Trait would add. rawOutcomeFatigueGain and actualOutcomeFatigueGain are separate report
@@ -192,7 +209,7 @@ function resolve(n,d,r,facilities=[],options={}){
      The sentence is composed in the presentation layer so one wording serves Night,
      Closing and the returning-visitor line. */
   p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */

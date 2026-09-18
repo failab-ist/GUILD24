@@ -32,7 +32,8 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 40',()=>{
 });
 
 test('ITEM-Q02/Q03: every Item declares canonical roles and every effect is presentable',()=>{
- const util=new Set(['potion','curePoison','revive','duplicate']);
+ // ITEM_v2.7 §INSURANCE HIERARCHY: Aftercare reads as a utility line, not a magnitude.
+ const util=new Set(['potion','curePoison','revive','duplicate','aftercare']);
  for(const it of DATA.items){
   assert.ok(it.roles&&it.roles.length,it.id+' has no functional role');
   for(const r of it.roles)assert.ok(r in DATA.roles,it.id+' unknown role '+r);

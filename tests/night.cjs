@@ -90,7 +90,8 @@ function harvest(){
   // make the insurance branches reachable on purpose
   if(seed%5===0)pack.push(...D.items.filter(i=>i.effects.escape).map(i=>i.id).slice(0,1));
   if(seed%6===0)pack.push(...D.items.filter(i=>i.effects.revive).map(i=>i.id).slice(0,1));
-  if(seed%7===0)pack.push(...D.items.filter(i=>i.effects.injuryGuard).map(i=>i.id).slice(0,1));
+  // ITEM_v2.7: the kit moved off injuryGuard onto the Aftercare channel, so the sweep follows it
+  if(seed%7===0)pack.push(...D.items.filter(i=>i.effects.aftercare).map(i=>i.id).slice(0,1));
   n.pack=pack.filter(Boolean);
   const gate=D.dungeons.filter(x=>x.id!=='final')[seed%(D.dungeons.length-1)];
   const d={...gate,day:1+seed%28,power:20+ (seed%26)*6};
@@ -129,8 +130,16 @@ test('the next persistent NPC state matches the outcome that was told',()=>{
  for(const {n,r} of all){
   assert.equal(n.alive,r.outcome!=='사망','death is permanent for this run');
   assert.equal(n.status==='사망',r.outcome==='사망','status word matches the outcome');
-  if(r.outcome==='중상'){assert.equal(n.injury,2,'중상 leaves the heavier injury');assert.ok(n.recovery>0,'중상 needs rest');}
-  if(r.outcome==='부상')assert.equal(n.injury,1,'부상 leaves the lighter injury');
+  /* ITEM_v2.7 §Insurance resolution order step 4: 구급키트 Aftercare is the ONLY thing that
+     may move the persistent state away from what the Outcome itself wrote, and the report
+     has to carry the proof when it did. */
+  if(r.outcome==='중상'){
+   if(r.aftercare){assert.deepEqual([r.aftercare.from,r.aftercare.to],[2,1],'중상 Aftercare is 2 -> 1');assert.equal(n.injury,1);assert.equal(n.recovery,0,'Aftercare clears the rest days');}
+   else{assert.equal(n.injury,2,'중상 leaves the heavier injury');assert.ok(n.recovery>0,'중상 needs rest');}}
+  if(r.outcome==='부상'){
+   if(r.aftercare){assert.deepEqual([r.aftercare.from,r.aftercare.to],[1,0],'부상 Aftercare is 1 -> 0');assert.equal(n.injury,0);}
+   else assert.equal(n.injury,1,'부상 leaves the lighter injury');}
+  if(r.outcome==='사망')assert.equal(r.aftercare,null,'Aftercare never touches a death');
   assert.equal(r.injury,n.injury,'the report and the adventurer agree on injury');
   assert.equal(r.recovery,n.recovery,'the report and the adventurer agree on rest');
  }
@@ -371,6 +380,44 @@ test('DUNGEON_HAZARD v2.7 §FATIGUE STAT PENALTY: the two bands are -15% and -40
  assert.equal(mid.survival,clear.survival,'Fatigue does not touch 강인함');
  const src=read('dist/systems/dungeon.js');
  assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(src),'no superseded v2.6 Fatigue band copy survives');
+});
+
+test('ITEM_v2.7 §INSURANCE HIERARCHY: 구급키트 is Aftercare, never an Outcome change',()=>{
+ const src=read('dist/systems/dungeon.js');
+ assert.equal(D.itemBy.kit.effects.injuryGuard,undefined,'구급키트 carries no hidden injury-risk percentage');
+ assert.equal(D.itemBy.kit.effects.aftercare,1,'구급키트 carries the Aftercare channel instead');
+ assert.ok(!/why\.push\('치료용품|text:'치료용품/.test(src),'no result line still credits the kit for a downgrade it cannot perform');
+ assert.ok(!/치료용품/.test(read('dist/ui/app.js')),'no screen still offers the kit as a way to rest off an Injury');
+ assert.equal(D.traitBy.strong.effects.injuryGuard,0.23,'강골 keeps its own unchanged identity');
+ const d={...D.dungeonBy.slime,day:12,tier:1,hazards:['poison'],scale:1,power:40,reward:40,requiredSupply:0};
+ let withKit=0,seen=new Set();
+ for(let i=0;i<500;i++){
+  const seed='aftercare-'+i;
+  const bare=Adventurer.create(new RNG(seed),1,10,Meta.fresh());
+  bare.traits=[];bare.fatigue=0;bare.injury=0;bare.recovery=0;bare.pack=[];
+  const kitted=JSON.parse(JSON.stringify(bare));kitted.pack=['kit'];
+  Dungeon.resolve(bare,{...d,power:20+i%90},new RNG('roll-'+i));
+  Dungeon.resolve(kitted,{...d,power:20+i%90},new RNG('roll-'+i));
+  const rb=bare.records.at(-1),rk=kitted.records.at(-1);seen.add(rk.outcome);
+  if(!rk.aftercare)continue;
+  withKit++;
+  // Outcome, XP, Loot and the whole Fatigue chain are exactly what the expedition produced
+  assert.equal(rk.aftercare.to,rk.outcome==='중상'?1:0,'Aftercare moves exactly one step');
+  assert.equal(kitted.injury,rk.aftercare.to,'the adventurer carries the Aftercare state');
+  assert.equal(kitted.recovery,0,'Aftercare clears the rest days');
+  assert.equal(rk.finalFatigue,rk.fatigueBeforeExpedition+rk.actualOutcomeFatigueGain,'Aftercare does not touch Fatigue');
+  assert.ok(rk.events.some(e=>e.id==='aftercare'&&e.items.includes('kit')),'the proven contribution names the Item that carried it');
+ }
+ assert.ok(withKit>0,'the sweep actually exercised Aftercare');
+ assert.ok(seen.has('사망'),'the sweep reached a death, where Aftercare must not fire');
+ // and a death is untouched
+ for(let i=0;i<400;i++){
+  const n=Adventurer.create(new RNG('kit-death-'+i),1,10,Meta.fresh());
+  n.traits=[];n.fatigue=0;n.injury=0;n.recovery=0;n.pack=['kit'];
+  Dungeon.resolve(n,{...d,power:1200+i},new RNG('kd-'+i));
+  const r=n.records.at(-1);
+  if(r.outcome==='사망'){assert.equal(r.aftercare,null,'no Aftercare on a death');assert.equal(n.alive,false);}
+ }
 });
 
 console.log(groups+' night groups passed');

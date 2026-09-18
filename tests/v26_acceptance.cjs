@@ -25,7 +25,10 @@ test('FATIGUE: Outcome gains', () => {
   const r = new RNG(1);
   
   
-  const expectedGains = { '성공': 2, '대성공': 2, '퇴각': 3, '부상': 4, '중상': 0, '사망': 0, '도주': 3, '경상': 4 };
+  /* DUNGEON_HAZARD_v2.7 §FATIGUE OUTCOME BASELINE. NIGHT_CLOSING_v2.7 supersedes the v2.6.1
+     +2/+3/+4 table and forbids keeping it as an alternate live expectation, so this suite
+     tracks the current owner rather than pinning a retired one. */
+  const expectedGains = { '성공': 3, '대성공': 3, '퇴각': 5, '부상': 6, '중상': 0, '사망': 0, '도주': 5, '경상': 6 };
   const seen = new Set();
   
   for (let i = 0; i < 2000; i++) {
@@ -60,12 +63,13 @@ test('FATIGUE: 10 and 20 penalties', () => {
   n.equipment = {power:0}; n.traits = []; n.pack = [];
   n.fatigue = 10;
   let p = Dungeon.prepare(n, d, []);
-  assert.equal(p.effects.mobility, 90, 'Fatigue 10: mobility -10%');
-  assert.equal(p.effects.spirit, 90, 'Fatigue 10: spirit -10%');
+  // DUNGEON_HAZARD_v2.7 §FATIGUE STAT PENALTY: the bands are -15% and -40%.
+  assert.equal(p.effects.mobility, 85, 'Fatigue 10: mobility -15%');
+  assert.equal(p.effects.spirit, 85, 'Fatigue 10: spirit -15%');
   n.fatigue = 20;
   p = Dungeon.prepare(n, d, []);
-  assert.equal(p.effects.mobility, 75, 'Fatigue 20: mobility -25%');
-  assert.equal(p.effects.spirit, 75, 'Fatigue 20: spirit -25%');
+  assert.equal(p.effects.mobility, 60, 'Fatigue 20: mobility -40%');
+  assert.equal(p.effects.spirit, 60, 'Fatigue 20: spirit -40%');
 });
 
 test('INJURY: injury=1 and grit', () => {
