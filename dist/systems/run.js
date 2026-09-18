@@ -108,11 +108,14 @@ P.finalSnapshot=function(n,prep,d,context){
   for(const k of STATS)e[k]*=t.envyStatFactor;
  if(boss==='LUST'&&t.lustStatFactor!=null&&!G.Adventurer.isTrustedRegular(n))
   for(const k of STATS)e[k]*=t.lustStatFactor;
- if(boss==='GLUTTONY'&&t.gluttonyStatFactor!=null&&t.gluttonyRarityThreshold!=null)
-  for(const c of prep.itemStats||[]){
-   if(c.rarity<t.gluttonyRarityThreshold)continue;
-   for(const k of STATS)if(c.stats[k])e[k]-=c.stats[k]*(1-t.gluttonyStatFactor);
-  }
+ /* BOSS_v2.7 §GLUTTONY: every POSITIVE Core-Stat contribution that came from an Item is
+    halved, whatever the Item's Rarity - the Rare+ threshold is superseded. It reads the
+    per-item breakdown, which is already the amplified contribution, so Food/Drink/Potion
+    Trait and Relic amplification has happened before this. A harmful Item Stat is left alone,
+    and the NPC's own Stats, Counters, Supply, Insurance, Utility and Loot are untouched. */
+ if(boss==='GLUTTONY'&&t.gluttonyStatFactor!=null)
+  for(const c of prep.itemStats||[])
+   for(const k of STATS)if(c.stats[k]>0)e[k]-=c.stats[k]*(1-t.gluttonyStatFactor);
  return e;
 };
 

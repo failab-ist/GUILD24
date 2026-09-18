@@ -20,8 +20,8 @@ const has=k=>ARMARG===k||ARMARG==='all'||(ARMARG==='f1h1'&&(k==='f1'||k==='h1'))
    sponsorship - so C and D each isolate one knob against it and E shows the interaction. */
 const ABL={b:{},c:{warehouse:18},d:{offers:5},e:{warehouse:18,offers:5}};
 const ARM_ABL=ABL[ARMARG]||null;
-const USE={e1:has('e1'),f1:has('f1'),h1:has('h1'),eco:ARMARG==='eco',abl:!!ARM_ABL};
-const CANDIDATE=USE.e1||USE.f1||USE.h1||USE.eco||USE.abl;
+const USE={e1:has('e1'),h1:has('h1'),eco:ARMARG==='eco',abl:!!ARM_ABL};
+const CANDIDATE=USE.e1||USE.h1||USE.eco||USE.abl;
 /* The economy package, as one arm. Every value here is data the game already reads, so the arm
    assigns and restores it - no production edit, and no rule of the systems it touches changes:
    the counter ceiling, the Warehouse Relic, the rescue, Deep's reward and its rarity/level
@@ -54,8 +54,11 @@ function withCandidate(fn){
   D.deepTuning.sponsorBase=350;
   if(ARM_ABL.warehouse)b.warehouse=ARM_ABL.warehouse;
   if(ARM_ABL.offers)b.orderOffers=ARM_ABL.offers;}
- if(USE.f1){t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
-  t.greedShortfallCap=15;t.slothBossPower=[220,190,175,160];}
+ /* The F1 Boss-tuning candidate is retired: BOSS_v2.7 adopted its own DIRECTOR DOCUMENT
+    BASELINE (PRIDE 0.92, GREED cap 12, SLOTH [225,210,190,165], GLUTTONY 0.50 with no Rarity
+    threshold), and those values are now the live table. Keeping the old arm here would leave a
+    superseded set of numbers standing as an alternate expectation, so the arm is removed
+    rather than re-pointed; a future candidate gets its own arm against the current baseline. */
  if(USE.h1)b.fireCombat=0.90;
  if(USE.e1)proto.overheadBase=function(){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;

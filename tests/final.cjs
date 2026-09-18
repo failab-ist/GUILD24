@@ -267,29 +267,32 @@ test('BOSS-Q07: ENVY picks one ace before its own penalty, and does not re-pick 
   'and its own penalty would have made it no longer the largest, which does not move the target');
 });
 
-test('BOSS-Q09: GLUTTONY takes only high-end supply Stats, and leaves Counter/Supply/Insurance alone',()=>{
+test('BOSS_v2.7 §GLUTTONY: every Item Core Stat is halved, whatever its Rarity',()=>{
  const g=atFinal('glut');g.run.bossId='GLUTTONY';
  const team=g.finalEligible().slice(0,g.finalRequired());
  for(const n of team){g.selectFinal(n.id);n.pack=['highpotion','ice','rice','stone'];}
  const d=g.run.dungeons[0];
  const prep=Dungeon.prepare(team[0],d,g.run.facilities);
  const CORE=['combat','survival','mobility','spirit'];
- const high=prep.itemStats.filter(c=>c.rarity>=2)
-  .reduce((a,c)=>a+CORE.reduce((t,k)=>t+(c.stats[k]||0),0),0);
- assert.ok(high>0,'the case actually contains a high-end supply');
- const cut=withTuning({gluttonyRarityThreshold:2,gluttonyStatFactor:.5},
-  ()=>g.finalSnapshot(team[0],prep,d,null));
- /* The high-end contribution now lands on 투력 rather than 강인함, so the drop is read
-    across the four Core Stats instead of one of them. */
+ /* v2.7 supersedes the Rare+ threshold: the whole positive Item Core-Stat contribution is in
+    scope, so the case is measured across every Item in the Bag rather than the high-end ones. */
+ assert.equal(DATA.bossTuning.gluttonyRarityThreshold,undefined,'no Rarity threshold remains');
+ assert.equal(DATA.bossTuning.gluttonyStatFactor,0.50,'the approved v2.7 factor');
+ const all=prep.itemStats.reduce((a,c)=>a+CORE.reduce((t,k)=>t+Math.max(0,c.stats[k]||0),0),0);
+ const low=prep.itemStats.filter(c=>c.rarity<2).reduce((a,c)=>a+CORE.reduce((t,k)=>t+Math.max(0,c.stats[k]||0),0),0);
+ assert.ok(all>0&&low>0,'the case contains both a high-end and a low-end supply');
+ const cut=g.finalSnapshot(team[0],prep,d,null);
  const drop=CORE.reduce((t,k)=>t+(prep.effects[k]-cut[k]),0);
- assert.ok(Math.abs(drop-high*.5)<1e-9,'exactly half of the high-end raw-Stat contribution comes off');
- // the low-end supply and the non-Stat effects are not in the reckoning at all
- const lowOnly=withTuning({gluttonyRarityThreshold:9,gluttonyStatFactor:.5},
-  ()=>g.finalSnapshot(team[0],prep,d,null));
- assert.equal(CORE.reduce((t,k)=>t+(prep.effects[k]-lowOnly[k]),0),0,'nothing below the boundary is touched');
+ assert.ok(Math.abs(drop-all*.5)<1e-9,'exactly half of the WHOLE Item Core-Stat contribution comes off');
+ assert.ok(drop>low*.5,'which is strictly more than the retired Rare+ scope would have taken');
+ // and only that channel: nothing else an Item carries is in the reckoning
  assert.equal(cut.fire,prep.effects.fire,'the 얼음컵 Counter is untouched');
  assert.equal(cut.escape,prep.effects.escape,'the 귀환석 Insurance is untouched');
  assert.equal(cut.supply,prep.effects.supply,'Supply is untouched');
+ // the NPC's own Stats are not in scope either
+ const bare=Dungeon.prepare({...JSON.parse(JSON.stringify(team[0])),pack:[]},d,g.run.facilities);
+ const bareCut=g.finalSnapshot(team[0],bare,d,null);
+ for(const k of CORE)assert.equal(bareCut[k],bare.effects[k],'a Bag with no Items loses nothing to GLUTTONY');
 });
 
 test('BOSS-Q10: LUST reads the existing 단골 state and leaves regulars alone',()=>{
@@ -468,6 +471,31 @@ test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is r
  // the slots are still exactly two, and finishing with an empty one is allowed
  assert.equal(Adventurer.slots(n),2);
  assert.doesNotThrow(()=>g.boss(),'a participant may depart with a slot unused');
+});
+
+test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exactly',()=>{
+ const t=DATA.bossTuning;
+ /* BOSS_v2.7 supersedes the inherited BOSS-Q14 PASS3 tuning permission: these are fixed
+    implementation starting values during adoption. Frozen QA may report a BALANCE FINDING but
+    may not auto-tune them, so they are pinned here and a change has to come from an approved
+    owner-spec update rather than from a harness. */
+ assert.equal(DATA.balance.bossPower,200,'WRATH keeps the retained 200 baseline');
+ assert.equal(t.prideCombatFactor,0.92,'PRIDE is 0.92, superseding 0.90');
+ assert.equal(t.greedShortfallCap,12,'GREED shortfall caps at +12');
+ assert.equal(DATA.balance.bossPower+t.greedShortfallCap,212,'so GREED alone cannot pass 212');
+ assert.deepEqual(t.slothBossPower,[225,210,190,165],'SLOTH by committed break count');
+ assert.equal(t.gluttonyStatFactor,0.50,'GLUTTONY halves the Item Core-Stat contribution');
+ assert.equal(t.gluttonyRarityThreshold,undefined,'and keeps no Rarity threshold');
+ // ENVY and LUST take no v2.7 numeric change
+ assert.equal(t.envyStatFactor,0.92,'ENVY inherits its value');
+ assert.equal(t.lustStatFactor,0.95,'LUST inherits its value');
+ // the SLOTH ladder has the shape its design intent describes
+ const sl=t.slothBossPower;
+ assert.ok(sl[0]>DATA.balance.bossPower,'0 breaks is clearly harder than WRATH');
+ assert.ok(sl[1]>DATA.balance.bossPower,'1 break is meaningful relief but still above WRATH');
+ assert.ok(sl[2]<DATA.balance.bossPower,'2 breaks drops below WRATH');
+ assert.ok(sl[2]-sl[3]>sl[1]-sl[2],'3 breaks returns materially more stability than 2');
+ for(let i=1;i<sl.length;i++)assert.ok(sl[i]<sl[i-1],'every break lowers it');
 });
 
 console.log(count+' final groups passed');

@@ -212,17 +212,19 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
    median cumulative gross sales an engaged Run makes under the NEW economy, so it was measured
    after the rest of this adoption landed and filled in from that measurement. */
 G.DATA.bossTuning={
- prideCombatFactor:0.90,        // PRIDE: every participant's Final 투력 x this
+ prideCombatFactor:0.92,        // PRIDE: every participant's Final 투력 x this (v2.7, supersedes 0.90)
  envyStatFactor:0.92,           // ENVY: the single ace's four Stats x this
  greedRevenueTarget:18800,      // GREED: cumulative gross sales the Run is measured against
                                 //   = 90% of the median engaged Run's gross sales measured on
                                 //   the Stage 10 economy (median 20,909 across the engaged
                                 //   strategies, 200 seeds each), rounded to 100G.
- greedShortfallCap:15,          // GREED: the most that a total shortfall can add to Boss Power
- gluttonyRarityThreshold:2,     // GLUTTONY: supplies at or above this rarity are attenuated
- gluttonyStatFactor:0.80,       // GLUTTONY: their raw-Stat contribution x this
+ greedShortfallCap:12,          // GREED: the most that a total shortfall can add to Boss Power (v2.7)
+ /* GLUTTONY v2.7: the Rare+ threshold is superseded. EVERY positive Core-Stat contribution
+    that came from an Item is halved, whatever its Rarity, after the Item-side amplification
+    has produced that contribution. No Rarity threshold remains. */
+ gluttonyStatFactor:0.50,       // GLUTTONY: positive Item Core-Stat contribution x this
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
- slothBossPower:[220,190,175,160] // SLOTH: effective Boss Power by break count [0,1,2,3]
+ slothBossPower:[225,210,190,165] // SLOTH v2.7: effective Boss Power by break count [0,1,2,3]
 };
 /* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
    Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
