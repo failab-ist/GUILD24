@@ -8,11 +8,15 @@
    Both are subset and vendored locally by tools/vendor-assets.py - no runtime request. */
 @font-face{font-family:'WantedSans';src:url('fonts/WantedSans.woff2') format('woff2');font-weight:400;font-display:block}
 @font-face{font-family:'WantedSans';src:url('fonts/WantedSans-SemiBold.woff2') format('woff2');font-weight:600;font-display:block}
-/* Mulmaru is a single-weight pixel family by design. The face is declared across the whole
-   weight range so a rule asking for 700 is served the real face instead of a synthesised
-   bold - UI_UX_v2.7 asks for size/spacing/material hierarchy, never fake bold. */
-@font-face{font-family:'Mulmaru';src:url('fonts/Mulmaru.woff2') format('woff2');font-weight:100 900;font-display:block}
-@font-face{font-family:'MulmaruMono';src:url('fonts/MulmaruMono.woff2') format('woff2');font-weight:100 900;font-display:block}
+/* Mulmaru is a STATIC single-weight family - no fvar, no wght axis, OS/2 usWeightClass 500 -
+   so each face is declared at the weight it actually is. Declaring a range it does not have
+   would be a claim about the font that its tables do not support. Nothing asks these faces
+   for a weight they do not ship, and font-synthesis:none below makes that structural: a
+   missing weight renders as the real face, never as a smeared fake bold. UI_UX_v2.7 wants
+   emphasis from size, spacing and material, and information emphasis from Wanted Sans, which
+   carries a real SemiBold. */
+@font-face{font-family:'Mulmaru';src:url('fonts/Mulmaru.woff2') format('woff2');font-weight:500;font-display:block}
+@font-face{font-family:'MulmaruMono';src:url('fonts/MulmaruMono.woff2') format('woff2');font-weight:500;font-display:block}
 
 
 .desktop-only { display: none; }
@@ -67,10 +71,15 @@ body{overflow:hidden;background:var(--soil);color:var(--text);min-width:320px;-w
 h1,h2,h3,h4,p,figure,blockquote{margin:0}
 ul,ol{margin:0;padding:0;list-style:none}
 svg{display:block;image-rendering:pixelated}
-b,strong{font-weight:750}
+/* Emphasis is the INFORMATION face's real SemiBold. 750 was a weight neither family ships,
+   which only ever resolved to a synthesised bold. */
+b,strong{font-weight:600}
 small,.smalltext{font-size:var(--t-sm);line-height:1.5;color:var(--dim)}
 .muted{color:var(--dim)}.gold-text{color:var(--gold)}.danger-text{color:var(--blood)}
 .num,.mono{font-variant-numeric:tabular-nums}
+/* No weight or style is ever synthesised: both families ship only the weights the CSS asks
+   for, so a fake bold or oblique could only ever be a mistake. */
+body{font-synthesis:none}
 /* pixel faces must never be antialiased away; the INFORMATION face must never be pixelated */
 .f-sign,.f-plate,.f-led{-webkit-font-smoothing:none;font-smooth:never}
 .row{display:flex;align-items:center;gap:12px}.wrap{flex-wrap:wrap}.between{justify-content:space-between}
@@ -99,7 +108,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .mixer{display:grid;gap:10px;width:100%}
 .mix-row{display:grid;grid-template-columns:64px 1fr 48px;align-items:center;gap:12px;min-height:44px}
 .mix-row label{color:var(--dim);font-size:var(--t-sm)}
-.mix-row b{text-align:right;font:400 var(--t-sm)/1 var(--f-led)}
+.mix-row b{text-align:right;font:500 var(--t-sm)/1 var(--f-led)}
 .mix-row input[type=range]{width:100%;height:24px;margin:0;background:transparent;accent-color:var(--gold);cursor:pointer}
 .mix-row input[type=range]:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 
@@ -115,12 +124,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* ---- hazard pressure: burned into the notice, always inline, never hover-only ---- */
 .hazards{display:grid;gap:2px}
 .hazards li{display:flex;gap:8px;align-items:baseline;font-size:var(--t-sm);line-height:1.45;flex-wrap:wrap}
-.hazards b{font-weight:800;white-space:nowrap;color:var(--fam,var(--gold))}
+.hazards b{font-weight:600;white-space:nowrap;color:var(--fam,var(--gold))}
 .hazards .press{color:var(--dim)}
 /* The readiness is labelled, so it cannot be read as more of the pressure sentence. */
 .hazards .ready{margin-left:auto;display:flex;align-items:baseline;gap:7px;white-space:nowrap}
 .hazards .ready i{font-style:normal;font-weight:600;font-size:11px;letter-spacing:.08em;color:#9c8d70}
-.hazards em{font-style:normal;font-weight:800;margin-left:auto;white-space:nowrap;font-family:var(--mono);color:var(--gold)}
+.hazards em{font-style:normal;font-weight:600;margin-left:auto;white-space:nowrap;font-family:var(--mono);color:var(--gold)}
 .hazards em.lack{color:var(--blood)}
 
 .effects{font-size:var(--t-sm);line-height:1.45}
@@ -129,7 +138,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .effects .effect-bad b{color:var(--tone-cost)}
 .effect-bad span:before{content:'주의 · ';font-size:var(--t-xs);color:var(--tone-cost)}
 .tone-benefit{color:var(--tone-benefit)}.tone-cost{color:var(--tone-cost)}.tone-neutral{color:var(--tone-neutral)}
-.rare-badge{font-size:var(--t-xs);color:var(--rare,var(--r0));white-space:nowrap;font-weight:800;font-family:var(--mono);letter-spacing:.06em}
+.rare-badge{font-size:var(--t-xs);color:var(--rare,var(--r0));white-space:nowrap;font-weight:600;font-family:var(--mono);letter-spacing:.06em}
 .r0{--rare:var(--r0)}.r1{--rare:var(--r1)}.r2{--rare:var(--r2)}.r3{--rare:var(--r3)}.r4{--rare:var(--r4)}
 
 /* =====================================================================
@@ -171,9 +180,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:linear-gradient(180deg,#0a121ac4 0,#0a121a3d 42%,#00000000 70%,#140d0866 100%)}
 /* the shop sign hanging from the ceiling carries the day */
 .daysign{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;white-space:nowrap;color:#eafaf0}
-.daysign i{font:700 12px/1 var(--f-sign);font-style:normal;letter-spacing:.26em;color:#a9e8c4;-webkit-font-smoothing:none}
-.daysign b{font:400 24px/1 var(--f-led);color:#f4fff8;-webkit-font-smoothing:none}
-.branchplate{position:absolute;right:6px;bottom:5px;z-index:2;padding:2px 5px;font:400 12px/1 var(--f-plate);
+.daysign i{font:500 12px/1 var(--f-sign);font-style:normal;letter-spacing:.26em;color:#a9e8c4;-webkit-font-smoothing:none}
+.daysign b{font:500 24px/1 var(--f-led);color:#f4fff8;-webkit-font-smoothing:none}
+.branchplate{position:absolute;right:6px;bottom:5px;z-index:2;padding:2px 5px;font:500 12px/1 var(--f-plate);
  color:#5a5040;background:#c4b48c;opacity:.62;-webkit-font-smoothing:none}
 /* ---- notice board: the day's gates, pinned to cork ----
    A board hung on the wall, so it is as tall as what is pinned to it. It used to be a
@@ -188,7 +197,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the board's own header: the first thing read after the day */
 .board-rail{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
  margin:10px 10px 0;padding:9px 12px;background:#4a3018;color:#f0dcb2;
- font:700 15px/1.4 var(--f-sign);letter-spacing:.06em;-webkit-font-smoothing:none;
+ font:500 15px/1.4 var(--f-sign);letter-spacing:.06em;-webkit-font-smoothing:none;
  box-shadow:inset 0 2px 0 #ffffff1f,inset 0 -3px 0 #00000073,0 3px 0 #00000059}
 .board-rail b{margin-left:auto;font:400 13px/1 var(--ui);font-variant-numeric:tabular-nums;color:#fff0c9;letter-spacing:0}
 .board-rail b+b{margin-left:0}
@@ -204,7 +213,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .slip.gate{padding-left:52px;--edge:var(--fam)}
 .slip.gate:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--fam,#caa46a)}
 .slip .crest{position:absolute;left:12px;top:14px;width:32px;height:32px;display:grid;place-items:center;background:#00000014}
-.slip>b{display:block;font:400 15px/1.4 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:7px;color:#241d12}
+.slip>b{display:block;font:500 15px/1.4 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:7px;color:#241d12}
 /* the Gate name is the decision the morning is about, so it outranks everything else pinned up */
 .slip.gate>b{font-size:18px;margin-bottom:8px}
 .slip .hazards{display:grid;gap:3px}
@@ -229,8 +238,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .till-cap{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden;
  white-space:nowrap;font:600 11px/1 var(--ui);letter-spacing:.22em;color:#8e9aa3;text-shadow:0 1px 0 #10161a}
 .till{position:absolute;z-index:2;display:flex;align-items:baseline;justify-content:center;gap:2px;overflow:hidden;white-space:nowrap}
-.till i{font:400 15px/1 var(--f-led);font-style:normal;color:#5fd196;-webkit-font-smoothing:none;text-shadow:0 0 5px #3fe08c4d}
-.till b{font:400 28px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 7px #3fe08c73;-webkit-font-smoothing:none}
+.till i{font:500 15px/1 var(--f-led);font-style:normal;color:#5fd196;-webkit-font-smoothing:none;text-shadow:0 0 5px #3fe08c4d}
+.till b{font:500 28px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 7px #3fe08c73;-webkit-font-smoothing:none}
 /* ---- dock: the shutter pull ---- */
 .p-morning .dock{display:flex;gap:10px;align-items:stretch;background:#0b0806;box-shadow:inset 0 3px 0 #ffffff0f}
 .pull{flex:1;min-height:58px;padding:0;background:
@@ -259,7 +268,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .form:before{transform:scaleY(-1)}
 /* the document says what it is and nothing more */
 .form-head{padding:14px 76px 12px 16px;position:relative;box-shadow:inset 0 -3px 0 var(--ink)}
-.form-head h1{font:700 36px/1 var(--f-sign);letter-spacing:.1em;-webkit-font-smoothing:none}
+.form-head h1{font:500 36px/1 var(--f-sign);letter-spacing:.1em;-webkit-font-smoothing:none}
 .form-head .docno{display:block;margin-top:7px;font:400 12px/1 var(--ui);font-variant-numeric:tabular-nums;color:var(--ink-2)}
 .form-head .seal{position:absolute;right:16px;top:16px;opacity:.7;transform:rotate(-9deg)}
 /* ledger: one aligned money column, the result leading */
@@ -277,7 +286,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .brief{padding:10px 16px 12px;display:grid;gap:9px;box-shadow:inset 0 -2px 0 var(--paper-rule)}
 .brief .when{display:grid;grid-template-columns:38px minmax(0,1fr);gap:2px 10px;align-items:baseline}
 .brief .when>*:not(.k){grid-column:2}
-.brief .k{font:700 12px/1.6 var(--f-sign);-webkit-font-smoothing:none;color:#8a6a2c;letter-spacing:.1em}
+.brief .k{font:500 12px/1.6 var(--f-sign);-webkit-font-smoothing:none;color:#8a6a2c;letter-spacing:.1em}
 .brief p{font:400 13px/1.6 var(--ui);color:#4b4231}
 .brief p b{font-weight:600;color:var(--ink)}
 .brief .tier{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
@@ -429,7 +438,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .who .nameplate{position:relative;z-index:5;flex:0 0 auto;display:grid;align-content:center;gap:1px;
  margin-top:var(--gapb);min-height:var(--plateh);box-sizing:border-box;padding:7px 12px 8px 13px;background:var(--tex-wood),#4a3627;background-size:32px 12px;color:#f5ead0;
  box-shadow:inset 4px 0 0 var(--rare,#b4bba6),inset 0 2px 0 #ffffff21,inset 0 -3px 0 #00000080,3px 3px 0 #00000073}
-.who .nameplate b{font:400 16px/1.2 var(--f-plate);-webkit-font-smoothing:none;letter-spacing:.02em;
+.who .nameplate b{font:500 16px/1.2 var(--f-plate);-webkit-font-smoothing:none;letter-spacing:.02em;
  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .who .nameplate>span{font:400 12px/1.3 var(--ui);color:#c6b391}
 /* the waiting line: identical backs, nothing but the count is public */
@@ -477,7 +486,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  margin-left:calc(var(--cardw)*var(--deck)*-.58);
  margin-bottom:calc(var(--i) * 4px);filter:brightness(calc(1 - var(--i) * .14))}
 .line-up .wait .back-art{display:block;width:100%;height:100%;box-shadow:0 0 0 2px #2a2118,2px 3px 0 #000000a6}
-.line-up .left{font:400 11px/1 var(--f-led);letter-spacing:.06em;color:#c2ae8b}
+.line-up .left{font:500 11px/1 var(--f-led);letter-spacing:.06em;color:#c2ae8b}
 .line-up.last .left{color:#8d8067}
 /* the counter edge divides who is here from what is decided */
 .counter-edge{flex:0 0 auto;height:18px;
@@ -492,7 +501,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the store float, on the strip that is already pinned here - a value, not a panel */
 .p-sale .dock .on-hand{display:flex;align-items:baseline;gap:5px;
  font:400 12px/1 var(--ui);color:#a2947c;white-space:nowrap}
-.p-sale .dock .on-hand b{font:400 18px/1 var(--f-led);color:var(--gold);font-variant-numeric:tabular-nums}
+.p-sale .dock .on-hand b{font:500 18px/1 var(--f-led);color:var(--gold);font-variant-numeric:tabular-nums}
 .p-sale .dock .stamp{margin-left:auto;min-height:54px;min-width:158px;
  font:600 18px/1 var(--ui);letter-spacing:.04em;background:#2f7a4d;color:#f0fbf3;
  box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
@@ -504,7 +513,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:#00000047;box-shadow:inset 0 3px 0 var(--fam,var(--gold)),inset -2px -2px 0 #00000047}
 .dest-plate .mark{background:#00000047;padding:2px}
 .dest-plate label{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#9c8d70;display:block;margin-bottom:4px}
-.dest-plate h3{font:400 17px/1.3 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:6px;color:#f6ecd3}
+.dest-plate h3{font:500 17px/1.3 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:6px;color:#f6ecd3}
 /* One Hazard reads as one banded row. The block moved here from the outlook when the
    environment stopped being shown twice, and it keeps the banding that made it countable. */
 .dest-plate .hazards{gap:0;margin-top:6px;box-shadow:inset 0 1px 0 #ffffff14}
@@ -541,9 +550,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the readiness readout carries more weight than the rows above it: it is what the sale turns on */
 .readout{position:relative;margin:0 0 4px;padding:11px 12px;background:#120d07;
  box-shadow:inset 0 0 0 2px #6b502959,inset 2px 2px 0 #ffffff0f,3px 3px 0 #00000059}
-.readout .top{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px;font:400 13px/1.4 var(--ui)}
+.readout .top{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px;font:500 13px/1.4 var(--ui)}
 .readout .top span{color:#9c8d70}
-.readout .top b{font:600 19px/1 var(--f-led);color:var(--gold);margin-left:7px}
+.readout .top b{font:500 19px/1 var(--f-led);color:var(--gold);margin-left:7px}
 /* The two forecasts are read apart, so they are laid out apart: each one owns its line on a
    phone and sits beside its neighbour when there is room. The ? is a native <details>, which
    is why it is reachable by keyboard without a line of script. */
@@ -595,8 +604,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .shelf-head{display:flex;align-items:baseline;gap:8px;margin:0 -11px 6px;padding:8px 13px;
  background:linear-gradient(180deg,#8d6c3b 0,#5b421f 100%);
  box-shadow:inset 0 2px 0 #ffffff33,inset 0 -3px 0 #00000080}
-.shelf-head h2{font:400 15px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f8efd8}
-.shelf-head span{margin-left:auto;font:400 12px/1 var(--f-led);color:#e3ca94;font-variant-numeric:tabular-nums}
+.shelf-head h2{font:500 15px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f8efd8}
+.shelf-head span{margin-left:auto;font:500 12px/1 var(--f-led);color:#e3ca94;font-variant-numeric:tabular-nums}
 .goods{display:grid}
 .good{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:11px 0;background:transparent;
  box-shadow:inset 0 -2px 0 #6b502959;border-radius:0}
@@ -607,13 +616,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .good .what b{font:600 15px/1.3 var(--ui);color:#f2e7cd}
 .good .what span{font:400 12px/1.4 var(--ui);color:#a2947c}
 .good .price{text-align:right;white-space:nowrap;display:grid;gap:1px}
-.good .price b{font:600 16px/1 var(--f-led);color:var(--gold)}
+.good .price b{font:500 16px/1 var(--f-led);color:var(--gold)}
 .good .price span{font:400 12px/1 var(--ui);color:#8d8067}
 .good.open{background:#ffffff0f;box-shadow:inset 0 -2px 0 var(--gold),inset 3px 0 0 var(--gold)}
 /* the register drawer: it opens under the chosen good and the three keys are the decision */
 .tillpanel{position:relative;margin:0 -11px 8px;padding:13px 13px 10px;background:#0f0b06;
  box-shadow:inset 0 4px 0 #000000a6,inset 0 -3px 0 var(--gold)}
-.tillpanel .forwho{font:400 14px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f0e2c2;margin-bottom:9px;
+.tillpanel .forwho{font:500 14px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f0e2c2;margin-bottom:9px;
  padding-bottom:7px;box-shadow:inset 0 -2px 0 #6b502973}
 .tillpanel h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#8d8067;margin-bottom:8px}
 .tillpanel .effects{margin-bottom:12px}
@@ -624,8 +633,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  color:#efe3c8;box-shadow:inset 2px 2px 0 #ffffff26,inset -3px -3px 0 #00000080,3px 3px 0 #00000080}
 .tills button:active{transform:translate(2px,2px);box-shadow:inset 2px 2px 0 #ffffff1a,inset -3px -3px 0 #00000080,1px 1px 0 #00000080}
 .tills button[disabled]{background:#241a11;color:#7d7059;box-shadow:inset 2px 2px 0 #00000073}
-.tills em{font:400 14px/1 var(--f-led);font-style:normal;color:var(--key,#a2947c)}
-.tills strong{font:400 22px/1 var(--f-led);color:#f6ecd3}
+.tills em{font:500 14px/1 var(--f-led);font-style:normal;color:var(--key,#a2947c)}
+.tills strong{font:500 22px/1 var(--f-led);color:#f6ecd3}
 .tills small{font:400 12px/1.3 var(--ui);color:#a2947c}
 .tills button[disabled] strong,.tills button[disabled] small{color:inherit}
 .tills button:nth-child(1){--key:#8ec6dd}
@@ -661,7 +670,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .rail:before{content:'';position:absolute;left:0;right:0;top:1px;height:2px;background:#4a3a24}
 .rail .rtag{position:relative;display:block;width:15px;height:27px;flex:0 0 auto}
 .rail .rtag .tag-art{display:block;width:100%;height:100%}
-.rail .count{margin-left:auto;align-self:center;font:400 12px/1 var(--f-led);color:#7d8496}
+.rail .count{margin-left:auto;align-self:center;font:500 12px/1 var(--f-led);color:#7d8496}
 .event-note{margin:0 0 14px;padding:8px 11px;font:400 13px/1.5 var(--ui);color:#cbb98d;
  background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
 /* the beat */
@@ -673,7 +682,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 14px #ffd79a3d)}
 .beat.quiet .stand-in{gap:12px;margin-bottom:12px}
 .beat .who{flex:1 1 auto;min-width:0;padding-bottom:4px}
-.verdict{font:700 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
+.verdict{font:500 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
  color:var(--tone,#e8d9b0);text-shadow:2px 2px 0 #0000008c;margin-bottom:8px;
  padding-bottom:7px;box-shadow:inset 0 -4px 0 var(--tone,#e8d9b0)}
 .beat.quiet .verdict{font-size:26px;padding-bottom:5px;box-shadow:inset 0 -3px 0 var(--tone,#e8d9b0)}
@@ -704,7 +713,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .tok{display:inline-grid;gap:2px;padding:6px 10px 7px;background:var(--tex-metal),#39434b;background-size:8px 8px;
  box-shadow:inset 0 2px 0 #ffffff26,inset 0 -3px 0 #00000080,2px 2px 0 #00000073}
 .tok i{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.12em;color:#9aa6b2}
-.tok b{font:400 15px/1.1 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
+.tok b{font:500 15px/1.1 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
 .tok b em{font-style:normal;color:#9fd6a8}
 .tok.up b{color:#9fd6a8}
 .tok.gain b{color:var(--gold)}
@@ -741,15 +750,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .tear.bottom{-webkit-mask:var(--zig);mask:var(--zig);-webkit-mask-size:12px 9px;mask-size:12px 9px;transform:scaleY(-1)}
 .print{padding:16px 16px 15px;background:var(--tex-paper),#efe7d2;background-size:16px 16px;color:#2c2418}
 .print .head{text-align:center;padding-bottom:11px;margin-bottom:11px;box-shadow:inset 0 -2px 0 #2c241826}
-.print .head b{display:block;font:700 24px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.14em}
-.print .head span{display:block;margin-top:5px;font:400 12px/1.5 var(--f-led);color:#6b6350;letter-spacing:.04em}
+.print .head b{display:block;font:500 24px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.14em}
+.print .head span{display:block;margin-top:5px;font:500 12px/1.5 var(--f-led);color:#6b6350;letter-spacing:.04em}
 .print .block{padding:9px 0;box-shadow:inset 0 -1px 0 #2c241826}
 /* label, dotted leader, figure: the tape's own way of setting a line */
 .print .row{display:flex;align-items:baseline;gap:6px;padding:3px 0;font:400 13px/1.6 var(--ui)}
 .print .row span{color:#5f5847;white-space:nowrap}
 .print .row:after{content:'';order:1;flex:1 1 auto;min-width:14px;align-self:center;height:0;
  border-bottom:2px dotted #2c24184d}
-.print .row b{order:2;font:400 15px/1.4 var(--f-led);font-variant-numeric:tabular-nums;color:#2c2418}
+.print .row b{order:2;font:500 15px/1.4 var(--f-led);font-variant-numeric:tabular-nums;color:#2c2418}
 .print .row.sum{margin-top:5px;padding-top:7px;box-shadow:inset 0 2px 0 #2c241833}
 .print .row.sum span{color:#2c2418;font-weight:600}
 .print .row.sum b{font-size:17px}
@@ -763,7 +772,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .purse{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding:12px 13px;
  background:#2c2418;color:#f2e7cd}
 .purse span{font:600 12px/1 var(--ui);letter-spacing:.16em;color:#b3a68b}
-.purse b{margin-left:auto;font:400 28px/1 var(--f-led);font-variant-numeric:tabular-nums;color:var(--gold)}
+.purse b{margin-left:auto;font:500 28px/1 var(--f-led);font-variant-numeric:tabular-nums;color:var(--gold)}
 .purse b i{font-style:normal;font-size:15px;margin-left:3px;color:#b3a68b}
 .impact{margin-top:14px;padding-top:11px;box-shadow:inset 0 2px 0 #2c241826}
 .impact h4{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#6b6350;margin-bottom:7px}
@@ -786,7 +795,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .modal.narrow{max-width:460px}
 .modal-header{flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:14px var(--gutter) 12px;
  box-shadow:inset 0 -3px 0 #6b502959}
-.modal-header h2{flex:1 1 auto;min-width:0;font:400 19px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f6ecd3}
+.modal-header h2{flex:1 1 auto;min-width:0;font:500 19px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f6ecd3}
 .modal-header .bare{flex:0 0 auto;min-width:44px;min-height:44px;background:transparent;box-shadow:none;
  color:#a2947c;font:400 14px/1 var(--ui)}
 .modal-body{flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px var(--gutter) 18px;
@@ -818,7 +827,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  padding:12px 14px 14px;pointer-events:auto;
  background:var(--tex-wood),#241a10;background-size:32px 12px;color:#efe3c8;
  box-shadow:inset 0 3px 0 #ffffff21,inset 0 0 0 2px #00000073,3px 3px 0 #00000073}
-.coach-bubble small{font:400 12px/1 var(--f-plate);-webkit-font-smoothing:none;color:#c2a978}
+.coach-bubble small{font:500 12px/1 var(--f-plate);-webkit-font-smoothing:none;color:#c2a978}
 .coach-bubble p{margin:0;font:400 14px/1.6 var(--ui);color:#e4d6b7}
 .coach-bubble div{display:flex;gap:8px}
 .coach-bubble button{flex:1 1 auto;min-height:44px;padding:10px 12px;
@@ -841,9 +850,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:var(--tex-wood),#4a3627;background-size:32px 12px;text-align:center;
  box-shadow:inset 0 5px 0 #ffffff26,inset 0 -5px 0 #00000080,0 5px 0 #00000073}
 .relic-open .label{display:inline-block;margin-bottom:9px;padding:4px 10px;
- font:400 12px/1 var(--f-led);letter-spacing:.18em;color:#2a2118;background:#c8a35e;
+ font:500 12px/1 var(--f-led);letter-spacing:.18em;color:#2a2118;background:#c8a35e;
  box-shadow:2px 2px 0 #00000059}
-.relic-open h2{font:700 28px/1.15 var(--f-sign);-webkit-font-smoothing:none;color:#f8efd8;
+.relic-open h2{font:500 28px/1.15 var(--f-sign);-webkit-font-smoothing:none;color:#f8efd8;
  text-shadow:1px 2px 0 #00000066}
 .relic-open p{margin-top:8px;font:400 13px/1.6 var(--ui);color:#d3bf98}
 .discovery{margin:0 0 14px;padding:9px 12px;font:400 13px/1.5 var(--ui);color:#e8d9b0;
@@ -855,11 +864,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
             var(--bolt) left 7px bottom 7px/6px 6px no-repeat,var(--bolt) right 7px bottom 7px/6px 6px no-repeat,
             var(--tex-metal) 0 0/8px 8px,#4a4033;
  box-shadow:inset 0 0 0 2px #7d6a45,inset 0 3px 0 #ffffff26,inset 0 -4px 0 #00000080,4px 4px 0 #00000080}
-.relic-plate h3{font:400 18px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f8efd8;
+.relic-plate h3{font:500 18px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f8efd8;
  padding:0 14px;text-align:center}
 .relic-plate p{margin-top:8px;font:400 13px/1.65 var(--ui);color:#c9bda3}
 .relic-plate .cost{display:block;margin:12px 0 10px;padding:7px 0;text-align:center;
- font:400 20px/1 var(--f-led);color:var(--gold);background:#00000059;
+ font:500 20px/1 var(--f-led);color:var(--gold);background:#00000059;
  box-shadow:inset 2px 2px 0 #00000080,inset 0 -2px 0 #ffffff14}
 .relic-plate .stamp{width:100%;min-height:50px;font:600 16px/1 var(--ui);background:#2f7a4d;color:#f0fbf3;
  box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
@@ -900,9 +909,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  object-fit:contain;image-rendering:auto;filter:drop-shadow(0 6px 0 #00000073)}
 .gate-zero .boss-face.fallback{display:block}
 .gate-zero .mark{display:block;margin:0 auto 10px}
-.gate-zero .label{display:inline-block;padding:4px 10px;font:400 12px/1 var(--f-led);letter-spacing:.22em;
+.gate-zero .label{display:inline-block;padding:4px 10px;font:500 12px/1 var(--f-led);letter-spacing:.22em;
  color:#f6dfd9;background:#8a2f26;box-shadow:2px 2px 0 #00000073}
-.gate-zero h1{margin-top:10px;font:700 32px/1.1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.04em;
+.gate-zero h1{margin-top:10px;font:500 32px/1.1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.04em;
  color:#f8ece6;text-shadow:2px 2px 0 #00000080}
 /* the confirmed threat, carved above the mouth */
 .threat{margin:0 0 20px;padding:13px 14px;background:#00000047;
@@ -916,14 +925,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the muster */
 .party-head{display:flex;align-items:baseline;gap:10px;padding:7px 0;margin-bottom:11px;
  box-shadow:inset 0 -3px 0 #ffffff1a}
-.party-head h2{font:400 16px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f2e7cd}
-.party-head .count{margin-left:auto;font:400 15px/1 var(--f-led);color:var(--gold)}
+.party-head h2{font:500 16px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f2e7cd}
+.party-head .count{margin-left:auto;font:500 15px/1 var(--f-led);color:var(--gold)}
 .npc-grid,.unlock-grid,.contract-grid{display:grid;gap:9px;margin-bottom:18px}
 /* A codex entry is three different things and they were all one weight: the name, what it does,
    and the story about it. The name leads, the effects are the reference the player came for,
    and the tale sits under them in its own voice rather than reading as another rule. */
 .unlock{padding:12px 13px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14}
-.unlock h3{margin:0 0 8px;font:400 16px/1.35 var(--f-plate);-webkit-font-smoothing:none;color:#f2e4c6}
+.unlock h3{margin:0 0 8px;font:500 16px/1.35 var(--f-plate);-webkit-font-smoothing:none;color:#f2e4c6}
 .unlock .tale{margin:9px 0 0;padding-top:9px;box-shadow:inset 0 1px 0 #ffffff14;
  font:400 13px/1.65 var(--ui);font-style:italic;color:#a2947c}
 .unlock .gold-text{font:400 12px/1.4 var(--ui)}
@@ -963,7 +972,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  font:400 11px/1 var(--ui);color:#7d7059;background:#00000047;box-shadow:inset 2px 2px 0 #00000073}
 .final-member .slot.filled{background:#3a2c1d;color:transparent}
 .final-order{margin:0 0 16px;background:#00000038;box-shadow:inset 0 0 0 2px #ffffff0f}
-.final-order>summary{padding:13px 14px;font:400 14px/1.4 var(--f-plate);-webkit-font-smoothing:none;
+.final-order>summary{padding:13px 14px;font:500 14px/1.4 var(--f-plate);-webkit-font-smoothing:none;
  color:#e8d9b0;cursor:pointer;min-height:48px;display:flex;align-items:center}
 .final-order .form{margin:0}
 /* 2026-09-12 amendment surfaces. The Deep notice is the same pinned paper as an Event slip,
@@ -998,7 +1007,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .stock-brief summary{display:flex;align-items:baseline;gap:9px;padding:9px 11px;cursor:pointer;
  font:600 12px/1 var(--ui);letter-spacing:.1em;color:#6b6350;list-style:none}
 .stock-brief summary::-webkit-details-marker{display:none}
-.stock-brief summary b{margin-left:auto;font:400 15px/1 var(--f-led);font-variant-numeric:tabular-nums;color:#2c2418;letter-spacing:0}
+.stock-brief summary b{margin-left:auto;font:500 15px/1 var(--f-led);font-variant-numeric:tabular-nums;color:#2c2418;letter-spacing:0}
 .stock-brief summary i{font:400 12px/1 var(--ui);font-style:normal;color:#8a7d61;letter-spacing:0}
 .stock-brief ul{display:grid;gap:2px;padding:0 11px 10px}
 .stock-brief li{display:flex;align-items:center;gap:8px;font:400 13px/1.5 var(--ui);color:#5f5847}
@@ -1036,7 +1045,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the ending states what opened, in the same voice the toast uses in play */
 .end-tape .opened{margin-top:10px;padding:9px 11px;background:#2c241814}
 .end-tape .opened span{display:block;font:600 11px/1 var(--ui);letter-spacing:.14em;color:#8a7d61}
-.end-tape .opened b{display:block;margin-top:5px;font:400 14px/1.5 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
+.end-tape .opened b{display:block;margin-top:5px;font:500 14px/1.5 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
 /* THE END OF A STORE. The statement and the people it is about sit in the middle of the
    screen rather than pinned to the top of an empty one - auto margins, so a long ending
    scrolls normally instead of having its head clipped. */
@@ -1052,13 +1061,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .goer{display:flex;align-items:center;gap:12px;padding:9px 11px;background:#00000047;
  box-shadow:inset 0 0 0 2px #ffffff14}
 .goer .pfp{flex:0 0 auto;width:var(--pfp);height:var(--pfp);object-fit:contain}
-.goer b{display:block;font:400 16px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f2e4c6}
+.goer b{display:block;font:500 16px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f2e4c6}
 /* .line is the Order form's item row; this one is its own */
 .goer .who-line{display:block;margin-top:3px;font:400 13px/1.4 var(--ui);color:#a2947c}
 .goer .carried{display:block;margin-top:5px;font:400 13px/1.5 var(--ui);color:#cbb98d}
 /* its own class names: .verdict / .why belong to the Night beat and carry a display word
    with a rule under it, which is not what a printed statement is */
-.end-tape .closed{margin:12px 0 0;font:400 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
+.end-tape .closed{margin:12px 0 0;font:500 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
 .end-tape .reason{margin:7px 0 12px;font:400 14px/1.65 var(--ui);color:#5f5847}
 .end-tape .bare{width:100%;margin-top:12px;min-height:44px;padding:10px 14px;font:400 14px/1 var(--ui);
  color:#5f5847;background:#2c241814;box-shadow:inset 0 0 0 2px #2c241833}
@@ -1164,7 +1173,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    sits under them rather than pushing them off the screen (UI_UX RESPONSIVE RULE). */
 .boss-reveal{display:flex;flex-direction:column;gap:12px}
 .boss-reveal .lede{font:400 14px/1.5 var(--ui);color:#bda98c}
-.boss-reveal .boss-name{margin:0;font:400 21px/1.25 var(--f-plate);-webkit-font-smoothing:none;color:#f2c9a0}
+.boss-reveal .boss-name{margin:0;font:500 21px/1.25 var(--f-plate);-webkit-font-smoothing:none;color:#f2c9a0}
 .boss-reveal .trait-name{margin:0;font:600 16px/1.35 var(--ui);color:#f0dcc0}
 .boss-reveal .trait-body{display:flex;flex-direction:column;gap:5px}
 .boss-reveal .trait-body p{margin:0;font:400 15px/1.6 var(--ui);color:#e6d6ba}
@@ -1173,7 +1182,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .boss-art img{display:block;width:100%;max-width:320px;height:auto;object-fit:contain;image-rendering:auto}
 .boss-reveal.d30 .fams{display:grid;gap:9px}
 .boss-reveal .fam-card{padding:9px 11px;background:#00000047;box-shadow:inset 4px 0 0 var(--fam,#8a2f26)}
-.boss-reveal .fam-card b{display:block;margin-bottom:5px;font:400 15px/1.3 var(--f-plate);
+.boss-reveal .fam-card b{display:block;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
  -webkit-font-smoothing:none;color:#f2e7cd}
 .boss-reveal .fam-card .hazards{margin:0}
 @media (min-width:720px){
@@ -1184,7 +1193,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* The seal offer shares the window's one acquisition with the Relic candidates, so it
    reads as the alternative to them rather than as an extra thing to also take. */
 .seal-choice{margin-top:12px;padding:11px 13px;background:#00000047;box-shadow:inset 4px 0 0 #7a5fa8}
-.seal-choice b{display:block;font:400 15px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#dcc8f0}
+.seal-choice b{display:block;font:500 15px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#dcc8f0}
 .seal-choice p{margin:5px 0 9px;font:400 14px/1.55 var(--ui);color:#c3b4a0}
 .seal-choice.done p{margin-bottom:0}
 
@@ -1206,6 +1215,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
   /* Ensure portrait is not cropped by setting max-height */
   .front { grid-template-rows: 1fr; align-items: stretch; }
   .standee { max-height: none; }
+  /* The two forecast cells sit side by side on a phone, and the ? was part of the same flow:
+     when the longer label wrapped, its ? was pushed onto a third line and the whole panel grew.
+     The ? is now pinned to each cell's top-right and taken out of flow entirely, so only the
+     label and the value are laid out. The cells stretch to a common height, so the two read as
+     one row whichever of them wraps. Desktop is untouched - this is inside the phone query. */
+  .readout .top{align-items:stretch}
+  .readout .fore{position:relative;flex-wrap:wrap;padding-right:26px}
+  .readout .fore>.tip{position:absolute;top:0;right:0;margin-left:0}
+  .readout .fore>.tip>summary{white-space:nowrap}
 }
 @media(min-width:1024px){
   /* Desktop layout tweaks */
@@ -1224,7 +1242,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .front-side .readout.core-desk{display:none}
 .dossier .readout.core-mob{display:block;margin:0 0 14px}
 .kit .npc-wallet{color:#9c8d70}
-.kit .npc-wallet b{color:var(--gold);font:600 15px/1 var(--f-led);margin-left:5px}
+.kit .npc-wallet b{color:var(--gold);font:500 15px/1 var(--f-led);margin-left:5px}
 /* the environment pressure a phone folds away - a real control, at thumb size */
 
 /* Phone: the top band is a face and a status line, not a stage. The band is shortened by

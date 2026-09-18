@@ -64,9 +64,19 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  const families=[...css.matchAll(/@font-face\{font-family:'([^']+)'/g)].map(m=>m[1]);
  assert.deepEqual([...new Set(families)].sort(),['Mulmaru','MulmaruMono','WantedSans'],
   'exactly the approved pair - Mulmaru with its Mono, and Wanted Sans');
- /* A single-weight pixel family must not be synthesised into a fake bold. */
+ /* Mulmaru is a STATIC single-weight family: no fvar, no wght axis, OS/2 usWeightClass 500.
+    Each face is declared at the weight it actually is - a range it does not have would be a
+    claim the font's own tables do not support - and nothing may ask it for another one. */
  for(const m of css.matchAll(/@font-face\{font-family:'Mulmaru[^']*';[^}]*\}/g))
-  assert.ok(/font-weight:100 900/.test(m[0]),'the ATMOSPHERE face covers the whole weight range: '+m[0].slice(0,60));
+  assert.ok(/font-weight:500/.test(m[0]),'the ATMOSPHERE face is declared at its real weight: '+m[0].slice(0,60));
+ assert.ok(!/@font-face\{font-family:'Mulmaru[^']*';[^}]*font-weight:\d+ \d+/.test(css),
+  'no weight range is claimed for a static face');
+ assert.ok(/body\{font-synthesis:none\}/.test(css),'no weight or style is ever synthesised');
+ for(const m of css.matchAll(/font:(\d+)[^;]*var\(--f-(?:sign|plate|led)\)/g))
+  assert.equal(m[1],'500','an ATMOSPHERE rule asks only for the weight that ships: '+m[0]);
+ // and the INFORMATION face is only asked for the two weights it vendors
+ for(const m of css.matchAll(/font-weight:(\d{3})\b/g))
+  assert.ok(['400','500','600'].includes(m[1]),'no rule asks for a weight no face ships: '+m[0]);
  // green is the sign, the price tag and the approval stamp — never a ground
  for(const rule of ['body{','.stage{','.p-order{','.p-morning{'])
   assert.ok(!/#([0-9a-f]{0,2})(3f9d63|7ddc9f)/i.test(css.slice(css.indexOf(rule),css.indexOf(rule)+240)),'green is not a page ground in '+rule);
@@ -670,7 +680,8 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'the standing store-support list moved to the store menu rather than being lost');
  const posDisplay=globalThis.Scene.anchors.till,posCap=globalThis.Scene.anchors.tillLabel;
  assert.ok(posDisplay.width>38.9&&posCap.width>44.4,'the till took back the width the dressing was using');
- assert.ok(/\.till b\{font:400 2[5-9]px/.test(css),'and the float is set at the size that surface now allows');
+ // the weight moved to the one the ATMOSPHERE face actually ships; the SIZE is the claim here
+ assert.ok(/\.till b\{font:500 2[5-9]px/.test(css),'and the float is set at the size that surface now allows');
  // and no global type scale was pushed up to compensate
  assert.ok(!/@media\(min-width:900px\)\{[^}]*:root\{[^}]*font-size/.test(css),'no blanket font-size increase at desktop');
 
