@@ -547,12 +547,20 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/<p class="env-help"/.test(app),'in an element that may actually contain a <details>');
  assert.ok(!/\.env-help[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
 
- // D-14. Collapsed is the decision; expanded is only what collapsed could not say.
+ /* SALE_v2.7 §SALE DECISION-ONLY DETAIL: no disclosure control on the decision surface that
+    opens flavour prose. The real effects it used to hide are still shown - plainly, not folded
+    away - and the flavour lives in the Codex, which is where a non-decision context belongs. */
  const till=fn('till');
  assert.ok(till.includes('shown.has(r.key)')||till.includes('!shown.has'),
-  'the expander filters out what the change list already showed');
+  'what the change list already showed is not repeated');
+ assert.ok(!/<details>/.test(till),'SALE opens no disclosure control of its own');
+ assert.ok(!/<summary>이 손님에게 안 걸리는 효과/.test(app),'the retired control is gone');
+ assert.ok(!/it\.description/.test(till),'and flavour prose has left the decision surface');
+ assert.ok(/이 손님에게는 지금 걸리지 않는 효과/.test(till),'the effects it held are stated plainly instead');
+ assert.ok(/rest\.map\(r=>/.test(till),'every one of them, not a summary of them');
  assert.ok(!/effectList\(it\)/.test(till),'the full effect list is not repeated under the preview');
  assert.ok(fn('codex').includes('effectList(it)'),'it still lives in the Codex, where it is the point');
+ assert.ok(fn('codex').includes('it.description'),'and so does the flavour');
 
  // D-18. One display rule, in Presentation, used by both places that show a stat.
  assert.equal(Presentation.stat(19.43,false),'19','a plain value is a whole number');

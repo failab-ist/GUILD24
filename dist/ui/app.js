@@ -696,17 +696,18 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  +(moved.derived.length?'<p class="delta-src">보급이 상태에 미치는 영향</p><ul class="effects derived">'
    +moved.derived.map(r=>'<li><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')
    +'</ul>':'')+readout(n,it.id)
- /* ITEM-Q03: collapsed is the decision - what changes for this customer, and the forecast.
-    Expanded is what the collapsed view cannot say: effects that did not move this customer's
-    preview (a Counter they do not need today, an insurance that only fires on a bad outcome)
-    and the product's own description. Repeating the numbers already shown above just made the
-    panel longer without making the decision easier. */
+ /* SALE_v2.7 §SALE DECISION-ONLY DETAIL. The disclosure that held these was removed: a control
+    labelled 이 손님에게 안 걸리는 효과 · 상품 설명 looks strategically important and opened
+    mostly flavour prose, which is exactly the false information weight the owner is cutting.
+    The flavour itself leaves the decision surface - it still lives in the 도감 - but the real
+    effects do NOT get hidden with it: a Counter this customer does not need today and an
+    insurance that only fires on a bad outcome are still Item truth, so they are stated plainly
+    instead of being folded away. */
  +(()=>{const shown=new Set(changes.map(r=>r.key));
    const rest=Presentation.rows(it.effects).filter(r=>!shown.has(r.key));
-   if(!rest.length&&!it.description)return '';
-   return '<details><summary>이 손님에게 안 걸리는 효과 · 상품 설명</summary>'
-    +(rest.length?'<ul class="effects">'+rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>':'')
-    +(it.description?'<p class="smalltext">'+E(it.description)+'</p>':'')+'</details>';})()
+   if(!rest.length)return '';
+   return '<p class="delta-src">이 손님에게는 지금 걸리지 않는 효과</p><ul class="effects">'
+    +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
  +'<p class="smalltext">'+(st.expires===null?'유통기한 없음':'폐기까지 '+(st.expires-s.day)+'일')+' · 가장 먼저 폐기될 재고부터 나간다</p>'
  +'<div class="tills">'+actions+'</div></div>';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
