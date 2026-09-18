@@ -773,6 +773,34 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .modal-footer .danger{background:#5c2a24;color:#f6dfd9}
 
 /* =====================================================================
+   COACH MARK — 점주 안내. UI_UX §TUTORIAL: the screen the player is on stays
+   visible and the mark points at the real control, so the shop is being explained
+   rather than replaced by a lesson. Four dim blocks leave a hole instead of a
+   cut-out mask, because the hole has to stay tappable: the blocks take the taps,
+   the spotlight never does. Coordinates come from getBoundingClientRect and are
+   written inline by showCoach, so every piece is viewport-positioned. It sits
+   under the modal layer on purpose - showCoach already refuses to run while a
+   modal is open, and a system toast is still allowed to speak over it.
+   ===================================================================== */
+.coach-layer{position:fixed;inset:0;z-index:50}
+.coach-block{position:absolute;background:#05040399;pointer-events:auto}
+.coach-focus{position:absolute;pointer-events:none;
+ box-shadow:inset 0 0 0 2px #f0d9a3cc,inset 0 0 0 4px #00000073,0 0 0 2px #00000073}
+.coach-bubble{position:absolute;z-index:1;display:flex;flex-direction:column;gap:8px;
+ padding:12px 14px 14px;pointer-events:auto;
+ background:var(--tex-wood),#241a10;background-size:32px 12px;color:#efe3c8;
+ box-shadow:inset 0 3px 0 #ffffff21,inset 0 0 0 2px #00000073,3px 3px 0 #00000073}
+.coach-bubble small{font:400 12px/1 var(--f-plate);-webkit-font-smoothing:none;color:#c2a978}
+.coach-bubble p{margin:0;font:400 14px/1.6 var(--ui);color:#e4d6b7}
+.coach-bubble div{display:flex;gap:8px}
+.coach-bubble button{flex:1 1 auto;min-height:44px;padding:10px 12px;
+ font:400 14px/1 var(--ui);background:#3a2c1d;color:#efe3c8;
+ box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+.coach-bubble .coach-skip{flex:0 0 auto;min-width:44px;background:transparent;
+ box-shadow:none;color:#a2947c}
+.coach-bubble .stamp{background:#4a3a24;color:#f6ecd3}
+
+/* =====================================================================
    RELIC — 점포지원. Head office sent a crate, and what is bolted into the shop is
    chosen out of it. So the takeover is a delivery: a stencilled crate lid, then the
    fixtures themselves as heavy brass plates, bolted at the corners, with the price

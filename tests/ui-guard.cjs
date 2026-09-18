@@ -911,4 +911,34 @@ test('D-34: the store float is on the screen that spends it, and a closed window
  assert.ok(win.includes('구매할 수 있다 · 자금'),'and still says the open case when it is open');
 });
 
+/* UI_UX §TUTORIAL / UI-Q105. The coach mark shipped for a long time with markup and no
+   stylesheet at all: every class showCoach writes was unstyled, so the overlay laid out as
+   static blocks under a body that does not scroll, and the tutorial was invisible on a
+   genuinely fresh account. Presence of the code proved nothing, so this asserts the pairing
+   itself - every class the overlay emits has a rule, and every step points at a selector the
+   shipped screens actually render. Real visibility is still a viewport question and belongs
+   to the browser pass; this only stops the pairing from silently going missing again. */
+test('UI-Q105: the coach mark has a stylesheet, and every step points at a real target',()=>{
+ for(const cls of ['coach-layer','coach-block','coach-focus','coach-bubble']){
+  assert.ok(app.includes(cls),'showCoach still emits .'+cls);
+  assert.ok(css.includes('.'+cls),'.'+cls+' has a rule in ui.css');
+ }
+ assert.ok(/\.coach-layer\{[^}]*position:fixed/.test(css),
+  'the layer is viewport-positioned, so the inline rects showCoach writes mean something');
+ for(const c of ['coach-block','coach-focus','coach-bubble'])
+  assert.ok(new RegExp('\\.'+c+'\\{[^}]*position:absolute').test(css),
+   '.'+c+' is positioned, not static');
+ /* Each step is [key, selector, copy, action?]. A selector no screen renders is skipped
+    forever rather than failing loudly, which is how three of them rotted unnoticed. */
+ const steps=fn('showCoach')&&app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach'));
+ for(const [,sel] of [...steps.matchAll(/\['[a-z]+','([^']+)'/g)].map(m=>[0,m[1]])){
+  const cls=sel.match(/\.[a-z-]+/g)||[],attr=sel.match(/\[data-action="([^"]+)"\]/);
+  for(const c of cls)assert.ok(app.includes(c.slice(1))||scene.includes(c.slice(1)),
+   'coach target '+sel+' names a class the UI renders ('+c+')');
+  if(attr)assert.ok(app.includes("data-action=\""+attr[1])||app.includes("'"+attr[1]+"'"),
+   'coach target '+sel+' names an action the UI emits');
+ }
+ assert.ok(!/case'tip'/.test(app),'the dead tip handler is gone, not left writing stray tutorial keys');
+});
+
 console.log(count+' ui guard groups passed');
