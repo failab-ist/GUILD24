@@ -12,7 +12,7 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 Family identities, Hazard-to-Stat mappings, readiness labels, Day/Tier generation, combat variance, Deep Expedition structure, and unchanged Supply-Burden eligibility inherit `DUNGEON_HAZARD_v2.6.0.md`.
 
-This patch overrides v2.6 prepared-Power weights, Hazard threat scale, Fatigue values/penalties, excess-Supply processing, ordinary combat-failure Death risk, stale third-slot wording, and the next-day Gate forecast disclosure contract.
+This patch overrides v2.6 prepared-Power weights, Hazard threat scale, Fatigue values/penalties, excess-Supply processing, ordinary expedition Death risk, stale third-slot wording, and the next-day Gate forecast disclosure contract.
 
 ## PREPARED POWER — v2.7 BASELINE
 
@@ -89,32 +89,90 @@ No canonical route may require a third normal Bag slot.
 The new Epic layer in `ITEM_v2.7.0.md` improves late-Run slot efficiency but is not a mandatory T3 key.
 A valid T3 route must still exist without drawing one exact Epic SKU.
 
-## ORDINARY COMBAT-FAILURE DEATH RISK — v2.7 BASELINE
+## ORDINARY EXPEDITION DEATH RISK — v2.7 BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`
 
-v2.7 intentionally increases ordinary expedition lethality while preserving the existing resolution shape:
+v2.7 Death risk is an expedition-level risk produced by the Player's actual preparation state.
+
+It combines exactly three inputs:
+
+```text
+Combat preparation deficit
++ Environment / Hazard preparation deficit
++ departure ordinary-Injury risk
+```
+
+Death is no longer gated behind:
 
 ```text
 combat failure
--> escape check
--> only if escape fails, injury / severe / death branch
+-> escape failure
+-> separate Death branch
 ```
 
-Do not create a separate random instant-death roll on successful combat or a new environment-only death subsystem.
+Do not roll Death once inside combat/escape and then again in a later result branch.
+There is exactly one ordinary-expedition Death roll.
 
-For the existing post-combat-failure / failed-escape death branch:
+### Combat contribution
+
+Use the same current prepared-combat truth that drives ordinary Forecast/Resolve, before hidden combat variance:
 
 ```text
-deficit
-= clamp(1 - combatScore / requiredCombatPower, 0, 1)
+CombatDeficit
+= clamp(
+    (requiredCombatPower - effectivePreparedPower)
+    / requiredCombatPower,
+    0,
+    1
+)
 
+CombatDeathContribution
+= CombatDeficit × 0.18
+```
+
+`effectivePreparedPower` means the actual prepared state for the snapshot being calculated, including all already-applicable NPC-side modifiers and Item/Supply effects for that snapshot.
+Do not use a separate Death-only combat score.
+
+### Environment contribution
+
+For each current canonical Hazard:
+
+```text
+HazardDeficit_i
+= clamp(
+    (HazardThreat_i - HazardDefense_i)
+    / HazardThreat_i,
+    0,
+    1
+)
+```
+
+Then:
+
+```text
+EnvironmentDeficit
+= average(HazardDeficit_i)
+
+EnvironmentDeathContribution
+= EnvironmentDeficit × 0.12
+```
+
+If the expedition has no canonical Hazard entries, `EnvironmentDeficit = 0`.
+
+Use the same current Hazard Threat / Hazard Defense truth as ordinary readiness.
+Do not create a second Death-only Hazard table or hidden environment score.
+
+### Healthy / injured Death chance
+
+Healthy departure:
+
+```text
 healthyDeathChance
 = clamp(
-    0.06
-  + deficit × 0.22
-  - effectiveSurvival × 0.0007,
-  0.02,
+    CombatDeathContribution
+  + EnvironmentDeathContribution,
+  0.00,
   0.30
 )
 ```
@@ -123,21 +181,55 @@ If the NPC **began the expedition with ordinary Injury (`injury=1`)**:
 
 ```text
 deathChance
-= clamp(healthyDeathChance + 0.10, 0.02, 0.40)
+= clamp(
+    healthyDeathChance + 0.10,
+    0.00,
+    0.40
+)
 ```
 
 Otherwise:
+
 ```text
 deathChance = healthyDeathChance
 ```
 
 Meaning:
-- well-prepared / high-survival NPCs still rarely die
-- visibly poor combat preparation creates materially higher risk
-- repeating expeditions with an injured NPC is a deliberate danger
-- Death risk still depends on actual failed combat/escape state rather than being a flat every-trip tax
+- complete combat/environment preparation may reduce ordinary Death risk to 0%
+- 0% Death does not mean guaranteed expedition Success; combat/environment outcome variance still exists
+- weak combat preparation raises Death risk
+- weak Hazard preparation independently raises Death risk
+- repeating expeditions with an already-injured NPC adds a visible material risk
+- healthy Death cap remains 30%
+- injured Death cap remains 40%
 
-Exact Injury persistence and injured Severe escalation -> `NPC_TRAIT_v2.7.0.md`.
+### Resolution order
+
+After the final preparation state for the expedition is fixed:
+
+1. calculate the final actual `deathChance`
+2. perform exactly one Death roll for that ordinary expedition
+3. if the Death roll hits, final ordinary Outcome is `사망`
+4. if it does not hit, resolve the remaining ordinary non-Death combat/environment/escape/injury/severe structure without another Death branch
+
+This replaces the previous failed-combat + failed-escape gated Death roll.
+Do not add a second instant-Death subsystem on top of this calculation.
+
+### Pre-supply player-facing Death Risk
+
+SALE exposes one exact **pre-supply Death Risk %** snapshot before any new Item transaction for that customer.
+
+That displayed value:
+- uses the NPC/Gate/Condition state at SALE entry
+- includes existing departure Injury if present
+- uses no newly committed Item from the current customer visit
+- is shown together with the pre-supply qualitative Combat Forecast / Hazard Readiness
+- remains frozen after the Player commits Item purchases
+
+The actual expedition still recalculates `deathChance` internally from the final prepared state after committed Items/Supply/Fatigue effects.
+Do not update the displayed Death Risk to reveal the post-supply answer.
+
+Exact presentation/copy -> `SALE_v2.7.0.md` / `UI_UX_v2.7.0.md` / `COPY_WORLD_VOICE_v2.7.0.md`.
 
 ## INJURED RE-EXPEDITION SEVERE ESCALATION
 
@@ -274,11 +366,13 @@ Expose exact decision ingredients:
 - remaining Supply buffer
 - conditional final Fatigue for each relevant possible Outcome
 - existing Injury state and its visible Stat penalties
-- that sending an injured NPC again increases Severe/Death risk, without exposing the exact hidden probability
+- that sending an injured NPC again increases Severe/Death risk
+- exact pre-supply Death Risk % at SALE entry, owned by this Death-risk model
 
 Do not expose:
 - hidden Supply-deficit formula
-- exact expedition success/death probability
+- exact expedition success probability
+- post-supply/final actual Death probability during the SALE decision
 - exact hidden Hazard threshold/formula
 
 Conditional Fatigue rows are arithmetic, not Outcome prediction.
