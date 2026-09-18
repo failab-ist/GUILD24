@@ -85,6 +85,11 @@ function blank(runs,policy,pricing,build){
    bandBefore:{},bandAfter:{},bandImproved:0,bandWorse:0,ratioBare:[],ratioReady:[]},
   /* Where a run's expeditions lose the final outcome, banded by the Day the Director named. */
   phase:{},
+  /* META_v2.8 §RUN-END STORE CAPITAL SETTLEMENT, measurement only. The settlement inputs the
+     spec names - final Gold, remaining stock at the existing Closing liquidation basis, and the
+     Day band reached - recorded per Run so a conversion rate can be tried against them without
+     a rate being implemented anywhere. Nothing here grants or spends Store Capital. */
+  settlement:{runs:0,gold:0,stock:0,byBand:{}},
   refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
   /* Three different shortages that the old single `stockouts` counter ran together. It rose when
      the shelf happened to be empty after the last customer left, which is neither "the store had
@@ -455,6 +460,12 @@ function playRun(g,out,ctx){
  out.deepNominee.finalSeats+=(s.team||[]).length;
  out.rescue.used.push(s.rescueUsed||0);out.rescue.runs+=Number((s.rescueUsed||0)>0);
  out.deathsPerRun.push(s.stats.deaths);
+ /* The existing Closing rule values stock at half what that stock cost, so Meta settlement
+    reads the same number rather than inventing a second valuation. */
+ {const stock=s.inventory.reduce((a,x)=>a+Math.round((x.cost??D.itemBy[x.item].buy)*.5),0);
+  const band=s.day>=30?'D30':s.day>=25?'D25-29':s.day>=20?'D20-24':s.day>=10?'D10-19':'D1-9';
+  const t=out.settlement;t.runs++;t.gold+=s.money;t.stock+=stock;
+  const b=t.byBand[band]??={runs:0,gold:0,stock:0};b.runs++;b.gold+=s.money;b.stock+=stock;}
  const byDeaths=s.stats.deaths>=D.balance.deathLimit;
  out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
  /* Per-Boss conditional clear: only Runs whose Final actually resolved, so WRATH (no Trait) can
