@@ -687,7 +687,13 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     down was already showing the Deep one. */
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  const changes=moved.direct;
- const actions=isFinal?btn('<strong>'+E(n.name)+'에게 보급</strong>','supply','stamp',full?'disabled':'')
+ /* ECONOMY_ORDER_v2.7: the Final price is fixed to the ordinary 50% amount - no 100/150 choice
+    and no refusal roll - but the Wallet is real, so an adventurer who cannot afford it cannot
+    be given the Item, and the button says which of the two is stopping it. */
+ const finalPrice=isFinal?game.finalPrice(it.id):0;
+ const finalBlock=isFinal?(full?'가방 가득':n.money<finalPrice?'손님 소지금 부족':''):'';
+ const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>'+(finalBlock||'이익 '+(finalPrice-st.cost)+'G')+'</small>','supply','stamp',
+    'aria-label="'+E(n.name)+'에게 보급 '+finalPrice+'G'+(finalBlock?' · '+finalBlock:'')+'" '+(finalBlock?'disabled':''))
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
    /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
       the ceiling was never itself refused - saying 오늘 거절됨 there would be untrue. A mode is

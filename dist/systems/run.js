@@ -59,7 +59,21 @@ P.liquidate=function(stockId){const s=this.run;
 P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.save();};
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};
 P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};
-P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.team.includes(npcId))return;const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');n.pack.push(s.inventory[i].item);n.history.push({day:30,item:s.inventory[i].item,mode:'supply',paid:0});s.inventory.splice(i,1);this.save();};
+/* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION PRICE / WALLET / GOLD OVERRIDE. A Final transfer
+   is a real paid transaction, not free equipment: the price is fixed to the ordinary 50% mode
+   amount, there is no 100%/150% choice and no purchase/refusal roll, and the Wallet is real -
+   an adventurer who cannot afford the fixed amount cannot be given the Item. Committing moves
+   exactly that amount three ways, once: out of the Wallet, into Gold, and into Gross Sales,
+   which is the total GREED reads at Final Lock. */
+P.finalPrice=function(item){return Math.round(G.DATA.itemBy[item].sell*G.DATA.pricing.half.mult);};
+P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.team.includes(npcId))return;
+ const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');
+ const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');
+ const item=s.inventory[i].item,price=this.finalPrice(item);
+ if(n.money<price)throw Error('이 모험가의 소지금으로는 살 수 없습니다.');
+ n.money-=price;s.money+=price;s.daily.revenue+=price;s.stats.revenue+=price;
+ n.pack.push(item);n.history.push({day:30,item,mode:'half',paid:price});
+ s.inventory.splice(i,1);this.save();};
 /* FINAL_EXPEDITION: one participant's contribution. Internal only - Final Power is never
    surfaced as another Player Stat. */
 /* Stage 10, approved. 투력 was running away with the Final: at .58 it was worth nearly four

@@ -424,4 +424,50 @@ test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 1.70, no
  assert.ok(/roll=\.88\+this\.rng\.next\(\)\*\.24/.test(src),'the inherited Final roll band stands: .88 ~ 1.12');
 });
 
+test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is really paid',()=>{
+ const g=atFinal('final-pay',3),s=g.run;
+ const team=g.finalEligible().slice(0,g.finalRequired());
+ for(const n of team)g.selectFinal(n.id);
+ const n=s.npcs.find(x=>x.id===s.team[0]);
+ // stock the shelf so there is something to transfer
+ g.run.money=5000;g.stock('potion',2);g.stock('premium',1);
+ const st=s.inventory.find(x=>x.item==='potion');
+ const price=g.finalPrice('potion');
+ assert.equal(price,Math.round(DATA.itemBy.potion.sell*DATA.pricing.half.mult),'the fixed price IS the ordinary 50% amount');
+ assert.ok(DATA.pricing.half.mult===0.5);
+ n.money=Math.max(n.money,price);
+ const before={wallet:n.money,gold:s.money,gross:s.stats.revenue,stock:s.inventory.length,pack:n.pack.length};
+ g.supplyFinal(n.id,st.id);
+ assert.equal(n.money,before.wallet-price,'the Wallet pays exactly the fixed amount');
+ assert.equal(s.money,before.gold+price,'Player Gold rises by exactly the same amount');
+ assert.equal(s.stats.revenue,before.gross+price,'and Gross Sales by the same amount, once');
+ assert.equal(s.inventory.length,before.stock-1,'real stock is consumed');
+ assert.equal(n.pack.length,before.pack+1,'and the Item is in the Bag');
+ assert.equal(n.history.at(-1).paid,price,'the receipt records what was actually paid');
+ assert.notEqual(n.history.at(-1).paid,0,'this is not free equipment');
+ // affordability is real: below the fixed amount, the Item cannot be committed
+ const poor=s.npcs.find(x=>x.id===s.team[1]);
+ const st2=s.inventory.find(x=>x.item==='premium');
+ poor.money=g.finalPrice('premium')-1;
+ const goldBefore=s.money,stockBefore=s.inventory.length;
+ assert.throws(()=>g.supplyFinal(poor.id,st2.id),/소지금/,'an unaffordable transfer is refused');
+ assert.equal(s.money,goldBefore,'a refused transfer moves no Gold');
+ assert.equal(s.inventory.length,stockBefore,'and consumes no stock');
+ poor.money=g.finalPrice('premium');
+ g.supplyFinal(poor.id,st2.id);
+ assert.equal(poor.money,0,'exactly affordable is affordable');
+ // no 100/150 choice and no refusal roll in the Final
+ const app=read('dist/ui/app.js');
+ const start=app.indexOf('const finalPrice=isFinal');
+ const till=app.slice(start,app.indexOf(":['half','full','overcharge']",start));
+ assert.ok(/<em>50%<\/em>/.test(till),'the Final offers the 50% amount only');
+ assert.ok(!/overcharge|150%/.test(till),'no 바가지 in the Final');
+ const src=read('dist/systems/run.js');
+ const fn=src.slice(src.indexOf('P.supplyFinal='),src.indexOf('P.supplyFinal=')+900);
+ assert.ok(!/rng|refus|interest\(/i.test(fn),'no purchase/refusal roll happens in a Final transfer');
+ // the slots are still exactly two, and finishing with an empty one is allowed
+ assert.equal(Adventurer.slots(n),2);
+ assert.doesNotThrow(()=>g.boss(),'a participant may depart with a slot unused');
+});
+
 console.log(count+' final groups passed');
