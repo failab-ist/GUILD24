@@ -850,4 +850,67 @@ test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every high
  }
 });
 
+test('META_v2.7 §FRANCHISE ACHIEVEMENTS: each one is credited by the play it names',()=>{
+ // 1/2/3 are counted where a sale actually commits, and a refusal credits nothing
+ const g=fresh('franchise-sales');g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ assert.equal(g.account.franchise.relics,1,'a Relic purchase counts once');
+ for(let turn=0;turn<600&&g.run.phase!=='sell';turn++)if(!step(g))break;
+ const fr=g.account.franchise;
+ let sold=0,refused=0;
+ for(let turn=0;turn<900&&g.run.day<4;turn++){
+  if(g.run.phase!=='sell'){step(g);continue;}
+  const n=g.current(),before={...fr};
+  const st=g.run.inventory[0];
+  if(!st||n.pack.length>=Adventurer.slots(n)){g.depart();continue;}
+  let ok=false;
+  try{ok=g.sell(st.id,'full');}catch(e){g.depart();continue;}
+  if(ok){sold++;
+   assert.equal(fr.sales,before.sales+1,'a committed sale counts exactly one');
+   assert.equal(fr.overcharged,before.overcharged,'a 정가 sale is not a 150% one');
+   assert.equal(fr.returning,before.returning+(n.visits>1?1:0),'a returning customer counts only when returning');
+  }else{refused++;
+   assert.deepEqual({...fr},before,'a refusal credits nothing at all');
+  }
+ }
+ assert.ok(sold>0,'the sweep actually sold something');
+ // 5 is the same supplied survival knowledge already recognises, per Family
+ const a=Meta.fresh();
+ const rep={day:3,dungeon:'spider',items:['rice'],outcome:'성공',events:[]};
+ Meta.observe(a,rep,null);
+ assert.deepEqual(a.franchise.families,['spider'],'a supplied survival records its Family');
+ Meta.observe(a,{...rep},null);
+ assert.deepEqual(a.franchise.families,['spider'],'the same Family does not count twice');
+ Meta.observe(a,{...rep,dungeon:'snow'},null);
+ assert.equal(a.franchise.families.length,2,'a different Family does');
+ Meta.observe(a,{...rep,dungeon:'fire',outcome:'사망'},null);
+ assert.equal(a.franchise.families.length,2,'a death is not a survival');
+ Meta.observe(a,{...rep,dungeon:'fire',items:[]},null);
+ assert.equal(a.franchise.families.length,2,'and an unsupplied survival is not one either');
+ // 6/7/8/9 need a Run that actually kept a record
+ const one=(run,win)=>{const acc=Meta.fresh();Meta.finish(acc,run,win);return acc.franchise.done;};
+ assert.deepEqual(one({rewarded:false,bossId:'WRATH'},true),[],'a Run with no record credits nothing');
+ const base={rewarded:false,bossId:'WRATH',day:30,stats:{waste:0,deaths:0,revenue:0}};
+ assert.ok(one({...base,finalReport:{members:[]}},false).includes('nowaste'),'reaching the Final with no waste counts');
+ assert.ok(one({...base,finalReport:{members:[]}},false).includes('nodeath'),'and with nobody lost');
+ assert.ok(!one({...base,stats:{waste:1,deaths:0,revenue:0},finalReport:{members:[]}},false).includes('nowaste'),'one discarded stock is not zero');
+ assert.ok(!one({...base,stats:{waste:0,deaths:1,revenue:0},finalReport:{members:[]}},false).includes('nodeath'),'one death is not zero');
+ const supplied={...base,finalReport:{members:[{job:'warrior',items:['rice']},{job:'mage',items:['potion']}]}};
+ assert.ok(one(supplied,true).includes('allsupplied'),'every participant supplied, then a CLEAR');
+ assert.ok(!one({...supplied,finalReport:{members:[{job:'warrior',items:['rice']},{job:'mage',items:[]}]}},true).includes('allsupplied'),
+  'one empty Bag is not every participant');
+ assert.ok(!one(supplied,false).includes('allsupplied'),'and it needs the CLEAR');
+ assert.ok(one({...base,stats:{waste:0,deaths:0,revenue:10000},finalReport:{members:[{job:'warrior',items:['rice']}]}},true).includes('grosssales'),
+  'exactly 10,000G with a CLEAR counts');
+ assert.ok(!one({...base,stats:{waste:0,deaths:0,revenue:9999},finalReport:{members:[{job:'warrior',items:['rice']}]}},true).includes('grosssales'),
+  'a gold short does not');
+ // the whole account state survives a save, and an account without the block still reads
+ g.save();
+ const round=Save.import(Save.export(g.account,g.run));
+ assert.deepEqual(round.account.franchise,g.account.franchise,'the Franchise record survives a reload');
+ assert.ok(Save.valid(JSON.parse(Save.export(g.account,g.run))),'and the save still validates');
+ const legacy=Meta.fresh();delete legacy.franchise;
+ assert.equal(Meta.grade(legacy),1,'an account with no Franchise block reads as Grade 1');
+ assert.equal(Meta.orderDiscount(legacy),0,'with no discount');
+});
+
 console.log(count+' integration groups passed');

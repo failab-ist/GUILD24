@@ -21,7 +21,16 @@ function freshMatrix(){
 
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{premium:false,tree:false}};
+  runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{premium:false,tree:false},
+  franchise:freshFranchise()};
+}
+/* META_v2.7 §FRANCHISE ACHIEVEMENTS. Ten binary achievements, each contributing exactly one
+   completion; repeating a completed one adds nothing. The cumulative counters live on the
+   account because they represent account-level play history; the one-Run ones are judged
+   inside a single Run exactly as written. Nothing here is a second progression truth - the
+   Grade is derived from the completion count on demand. */
+function freshFranchise(){
+ return {sales:0,overcharged:0,returning:0,relics:0,families:[],done:[]};
 }
 
 /* How many distinct Bosses this Job has beaten, 0..7. */
@@ -34,9 +43,27 @@ const totalJobMastery=a=>JOBS().reduce((sum,job)=>sum+jobMastery(a,job),0);
    with a second Job adds Mastery but not another distinct clear. */
 const distinctBossClear=a=>BOSSES().filter(boss=>JOBS().some(job=>a.matrix?.[job]?.[boss])).length;
 
-/* Prestige and the gate on which Start Contracts may be selected - never a bonus of its
-   own. Seven Mastery per step, capped at six. */
-const grade=a=>Math.min(6,Math.floor(totalJobMastery(a)/7)+1);
+/* META_v2.7 §FRANCHISE ACHIEVEMENTS — CURRENT APPROVED SET. The baselines are DIRECTOR
+   DOCUMENT BASELINE values: QA may report a BALANCE FINDING against them but may not tune
+   them here. `run` is judged only for the one-Run achievements, which need a Run to look at. */
+const FRANCHISE=[
+ {id:'sales',      name:'누적 판매 100회',            done:(a)=>(a.franchise?.sales||0)>=100},
+ {id:'overcharge', name:'150% 판매 20회 성공',        done:(a)=>(a.franchise?.overcharged||0)>=20},
+ {id:'returning',  name:'재방문 손님에게 30회 판매',   done:(a)=>(a.franchise?.returning||0)>=30},
+ {id:'relics',     name:'점포지원 누적 30개 구매',     done:(a)=>(a.franchise?.relics||0)>=30},
+ {id:'families',   name:'다섯 게이트 전부에서 보급 생환',done:(a)=>(a.franchise?.families||[]).length>=5},
+ {id:'nowaste',    name:'폐기 0개로 마왕성 도달',      done:(a)=>(a.franchise?.done||[]).includes('nowaste')},
+ {id:'nodeath',    name:'사망 0명으로 마왕성 도달',     done:(a)=>(a.franchise?.done||[]).includes('nodeath')},
+ {id:'allsupplied',name:'출전 전원 보급 후 마왕 토벌',  done:(a)=>(a.franchise?.done||[]).includes('allsupplied')},
+ {id:'grosssales', name:'매출 10,000G + 마왕 토벌',    done:(a)=>(a.franchise?.done||[]).includes('grosssales')},
+ {id:'matrix',     name:'직업×마왕 42/42 토벌',       done:(a)=>totalJobMastery(a)>=42}];
+const franchiseState=a=>FRANCHISE.map(f=>({id:f.id,name:f.name,done:f.done(a)}));
+const franchiseCount=a=>FRANCHISE.reduce((n,f)=>n+(f.done(a)?1:0),0);
+/* META_v2.7 §FRANCHISE GRADE: the Grade is the completion count, not Total Job Mastery.
+   0/10 base, then a step at 2, 4, 6 and 8, and the honour grade at 10/10. */
+const grade=a=>{const n=franchiseCount(a);return n>=10?6:n>=8?5:n>=6?4:n>=4?3:n>=2?2:1;};
+/* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE. Always applied, ORDER only. */
+const orderDiscount=a=>(grade(a)-1)*0.02;
 
 /* What a given progression state has opened. The only three content unlocks are the
    approved distinct-Boss gates; Start Contracts are gated by Grade and listed in the
@@ -61,7 +88,11 @@ function observe(a,report,n){
  for(const e of report.events||[])
   if(!a.discoveries.some(x=>x.id===e.id)){a.discoveries.push({...e,day:report.day});report.discoveries.push(e);}
  const d=D.dungeonBy[report.dungeon]||D.dungeonBy.spider;
- if(report.items.length && report.outcome!=='사망')a.knowledge[d.id]=(a.knowledge[d.id]||0)+1;
+ if(report.items.length && report.outcome!=='사망'){a.knowledge[d.id]=(a.knowledge[d.id]||0)+1;
+  /* META_v2.7 §FRANCHISE ACHIEVEMENT 5: an actual supplied survival, per Dungeon Family. It
+     recognises the same event knowledge does - no hidden Relic or build taxonomy. */
+  const fr=a.franchise??=freshFranchise();
+  const fam=d.family||d.id;if(fam&&!fr.families.includes(fam))fr.families.push(fam);}
 }
 
 /* End of run. A run settles exactly once (the rewarded guard). A clear marks one cell for
@@ -77,6 +108,24 @@ function finish(a,run,win){
  run.rewarded=true;
  a.runs++;
  run.metaGain=null;
+ /* META_v2.7 §FRANCHISE ACHIEVEMENTS 6-9. Judged inside this one Run exactly as written, and
+    marked once - a completed achievement never credits again. 6 and 7 are about REACHING the
+    Final, so they settle whether or not the Boss fell; 8 and 9 require the CLEAR. */
+ {const fr=a.franchise??=freshFranchise();
+  const mark=id=>{if(!fr.done.includes(id))fr.done.push(id);};
+  /* A missing record is not evidence of a clean Run. These four read what the Run actually
+     kept, so a Run with no stats record credits nothing rather than everything. */
+  const st=run.stats;
+  const reachedFinal=!!run.finalReport||run.day>=30;
+  if(st&&reachedFinal){
+   if(!st.waste)mark('nowaste');
+   if(!st.deaths)mark('nodeath');
+  }
+  if(win&&st){
+   const members=run.finalReport?.members||[];
+   if(members.length&&members.every(m=>(m.items||[]).length))mark('allsupplied');
+   if((st.revenue||0)>=10000)mark('grosssales');
+  }}
  if(!win)return [];
  a.wins++;
  const before=opened(a),wasGrade=grade(a);
@@ -93,6 +142,6 @@ function finish(a,run,win){
   .map(id=>names.find(x=>x.id===id)?.name).filter(Boolean);
 }
 
-G.Meta={fresh,freshMatrix,observe,finish,jobMastery,totalJobMastery,distinctBossClear,grade,
+G.Meta={fresh,freshFranchise,FRANCHISE,franchiseState,franchiseCount,orderDiscount,observe,finish,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,grade,
  opened,itemUnlocked,jobUnlocked,contractUnlocked,JOBS,BOSSES};
 })(globalThis);

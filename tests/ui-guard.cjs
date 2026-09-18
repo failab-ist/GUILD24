@@ -687,8 +687,14 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  const metaSrc=read('dist/systems/meta.js');
  assert.ok(/jobs:jobs\.filter\(job=>jobMastery\(a,job\)>wasMastery\[job\]\)/.test(metaSrc),
   'a Job already credited for this Boss moved nothing and is not listed');
- assert.ok(/if\(!win\)\{?[\s\S]{0,40}return \[\]/.test(metaSrc)&&/run\.metaGain=null;\r?\n if\(!win\)/.test(metaSrc),
-  'a failure records no gain at all');
+ /* A failure still records no Job/Boss gain. The Franchise block now sits between the two,
+    because META_v2.7 §FRANCHISE ACHIEVEMENTS 6 and 7 are about REACHING the Final and settle
+    whether or not the Boss fell - they are a separate track from the clear matrix. */
+ assert.ok(/if\(!win\)return \[\];/.test(metaSrc),'a failure records no Job x Boss gain at all');
+ assert.ok(/run\.metaGain=null;/.test(metaSrc),'and no gain line for the result screen');
+ const franchiseBlock=metaSrc.slice(metaSrc.indexOf('FRANCHISE ACHIEVEMENTS 6-9'),metaSrc.indexOf('if(!win)return [];'));
+ assert.ok(/if\(win&&st\)/.test(franchiseBlock),'the two clear-gated achievements still require the clear');
+ assert.ok(/if\(st&&reachedFinal\)/.test(franchiseBlock),'and the two reach-gated ones require reaching the Final');
 
  /* ...and the whole state is reachable at any time, in the codex the player already has. */
  const cx=fn('codex');

@@ -194,7 +194,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(s.pity.counter>=3||this.has('expeditionCert')){const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));if(matches.length){const item=this.rng.pick(matches);s.offers[s.offers.length-1]=this.offerFor(item);if(advancePity){for(const h of target)if(G.Relics.counter(item,[h]))s.pity.hazards[h]=0;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}}}
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(s.contract==='delivery'?1.05:1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
+ /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE: applied AFTER the existing
+    Contract / Event / Offer calculation and inside the same single Math.round, so there is no
+    second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
+    Final transfer each read their own price and are untouched. */
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(s.contract==='delivery'?1.05:1)*(it.category==='potion'?(ev.potionPrice||1):1)*(1-G.Meta.orderDiscount(this.account))),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
  rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
@@ -261,6 +265,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      left the paradox open: refuse at 50% for a Counter they do not need, then sell at 150%.
      Lower prices stay open, and no other SKU is touched. */
   for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day)};this.save();return false;}
+ /* META_v2.7 §FRANCHISE ACHIEVEMENTS 1/2/3, counted where a sale actually commits so a
+    refusal never credits one. A returning customer is one who has been to the counter before
+    this visit - the same 재방문 the rest of the game means. */
+ {const fr=this.account.franchise??=G.Meta.freshFranchise();
+  fr.sales++;if(mode==='overcharge')fr.overcharged++;if(n.visits>1)fr.returning++;}
  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*1.5);

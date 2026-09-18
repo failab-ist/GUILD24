@@ -153,19 +153,25 @@ test('CROSS-RUN META: one account really carries forward, and nothing is inserte
   assert.ok(t.byIndex[i].gradeAtStart>=t.byIndex[i-1].gradeAtStart,'grade never goes backwards');
   assert.ok(t.byIndex[i].masteryAtStart>=t.byIndex[i-1].masteryAtStart,'Job Mastery never goes backwards');
  }
- // Every Grade is one the matrix actually produces - nothing was written into the account
- // directly, and nothing is cached that could disagree with it.
+ /* Every Grade is one the account's own progress actually produces - nothing was written in
+    directly and nothing is cached that could disagree. Under META_v2.7 the Grade is derived
+    from the Franchise Achievement COUNT rather than from Mastery, and Mastery keeps its own
+    separate range. */
  for(const a of t.accountsEnd){
   assert.ok(a.mastery>=0&&a.mastery<=42,'Total Job Mastery stays in range');
   assert.ok(a.distinct>=0&&a.distinct<=7,'Distinct Boss Clear stays in range');
-  assert.equal(a.grade,Math.min(6,Math.floor(a.mastery/7)+1),'the Grade is derived from the matrix, not stored');
+  assert.ok(a.franchise>=0&&a.franchise<=10,'the Franchise Achievement count stays in range');
+  const n=a.franchise;
+  assert.equal(a.grade,n>=10?6:n>=8?5:n>=6?4:n>=4?3:n>=2?2:1,'the Grade is derived from that count, not stored');
  }
  // The contract mode may only ever pick something the account has unlocked.
  const best=Debug.trajectory({trajectories:2,runs:3,contract:'best',prefix:'test-best'});
  for(const idx of best.byIndex)for(const id of Object.keys(idx.contracts)){
   const c=DATA.contracts.find(c=>c.id===id);
   assert.ok(c,'a real contract');
-  if(c.grade)assert.ok(idx.gradeAtStart>=c.grade,'a gated contract only appears once the Grade allows it');
+  // gradeAtStart is a mean across trajectories; the legality question is per trajectory, so it
+  // reads the highest Grade any of them actually held at this Run index.
+  if(c.grade)assert.ok(idx.maxGradeAtStart>=c.grade,'a gated contract only appears once the Grade allows it');
  }
 });
 

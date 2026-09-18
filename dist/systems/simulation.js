@@ -466,14 +466,17 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    bucket.money+=g.run.money;bucket.deaths+=g.run.stats.deaths;
    byIndex[i].contracts??={};byIndex[i].contracts[started]=(byIndex[i].contracts[started]||0)+1;
    byIndex[i].gradeAtStart??=0;byIndex[i].gradeAtStart+=grade;
+   /* gradeAtStart is a MEAN across trajectories, so it cannot answer "was this contract legal
+      when it was picked". The highest Grade any trajectory actually held at this Run index can. */
+   byIndex[i].maxGradeAtStart=Math.max(byIndex[i].maxGradeAtStart||0,grade);
    byIndex[i].masteryAtStart??=0;byIndex[i].masteryAtStart+=before.mastery;
    byIndex[i].distinctAtStart??=0;byIndex[i].distinctAtStart+=before.distinct;
    byIndex[i].contractsAvailable??=0;byIndex[i].contractsAvailable+=available;
   }
-  accountsEnd.push({grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
+  accountsEnd.push({grade:G.Meta.grade(account),franchise:G.Meta.franchiseCount(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
  }
  return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
-  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
+  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
   byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,derive(o,o.runs)])),
   accountsEnd};
 }

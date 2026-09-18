@@ -136,18 +136,74 @@ test('META-Q02/Q03/Q04/Q05: a clear credits each distinct Job that went, once, a
  assert.equal(Meta.jobMastery(a,'mage'),1,'the rewarded guard still holds');
 });
 
-test('META-Q06/Q11: distinct clears count Bosses, and the Grade is derived from Mastery alone',()=>{
+test('META_v2.7 §FRANCHISE GRADE: distinct clears count Bosses, and the Grade is the achievement count',()=>{
  const a=Meta.fresh();
  clear(a,'WRATH',['warrior']);clear(a,'WRATH',['archer']);clear(a,'WRATH',['mage']);
  assert.equal(Meta.distinctBossClear(a),1,'the same Boss with three Jobs is still one Boss');
  assert.equal(Meta.totalJobMastery(a),3,'but three Mastery');
- for(const [mastery,expected] of [[0,1],[6,1],[7,2],[13,2],[14,3],[21,4],[28,5],[34,5],[35,6],[42,6]]){
-  const b=Meta.fresh();let n=0;
-  outer:for(const job of Meta.JOBS())for(const boss of Meta.BOSSES()){if(n>=mastery)break outer;b.matrix[job][boss]=true;n++;}
-  assert.equal(Meta.totalJobMastery(b),mastery);
-  assert.equal(Meta.grade(b),expected,mastery+' Mastery is Grade '+expected);
+ /* META_v2.7 supersedes the inherited source: Franchise Grade no longer reads Total Job
+    Mastery. It is the count of completed Franchise Achievements - base, then a step at 2, 4,
+    6 and 8, and the honour grade at 10/10. Mastery keeps its own separate progression. */
+ assert.equal(Meta.grade(a),1,'three Mastery is not a Grade step by itself');
+ const b=Meta.fresh();
+ const ladder=[[0,1],[1,1],[2,2],[3,2],[4,3],[5,3],[6,4],[7,4],[8,5],[9,5],[10,6]];
+ for(const [count,expected] of ladder){
+  const acc=Meta.fresh();
+  acc.franchise.sales      = count>=1?100:0;
+  acc.franchise.overcharged= count>=2? 20:0;
+  acc.franchise.returning  = count>=3? 30:0;
+  acc.franchise.relics     = count>=4? 30:0;
+  acc.franchise.families   = count>=5?['spider','slime','fire','crypt','snow']:[];
+  for(const [at,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
+   if(count>=at)acc.franchise.done.push(id);
+  if(count>=10)for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())acc.matrix[job][boss]=true;
+  assert.equal(Meta.franchiseCount(acc),count,count+' achievements are counted as '+count);
+  assert.equal(Meta.grade(acc),expected,count+'/10 is Grade '+expected);
  }
  assert.equal(Meta.grade({matrix:Meta.freshMatrix()}),1,'a fresh account is Grade 1');
+ assert.equal(Meta.FRANCHISE.length,10,'exactly ten dedicated achievements');
+ assert.equal(new Set(Meta.FRANCHISE.map(f=>f.id)).size,10,'each one distinct');
+ // a completed achievement never credits twice
+ const twice=Meta.fresh();twice.franchise.sales=100;
+ const once=Meta.franchiseCount(twice);
+ twice.franchise.sales=100000;
+ assert.equal(Meta.franchiseCount(twice),once,'repeating a completed achievement adds nothing');
+ // all functional progression is reachable by 8/10
+ const byEight=ladder.find(([c])=>c===8)[1];
+ assert.ok(DATA.contracts.every(c=>!c.grade||c.grade<=byEight),'every Start Contract is open by 8/10');
+});
+
+test('META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE',()=>{
+ const acc=Meta.fresh();
+ const at=g=>{const a=Meta.fresh();
+  const counts=[0,0,2,4,6,8,10][g];
+  a.franchise.sales=counts>=1?100:0;a.franchise.overcharged=counts>=2?20:0;
+  a.franchise.returning=counts>=3?30:0;a.franchise.relics=counts>=4?30:0;
+  a.franchise.families=counts>=5?['spider','slime','fire','crypt','snow']:[];
+  for(const [n,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
+   if(counts>=n)a.franchise.done.push(id);
+  if(counts>=10)for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())a.matrix[job][boss]=true;
+  assert.equal(Meta.grade(a),g,'the fixture really is Grade '+g);
+  return a;};
+ for(const [g,pct] of [[1,0],[2,2],[3,4],[4,6],[5,8],[6,10]])
+  assert.ok(Math.abs(Meta.orderDiscount(at(g))-pct/100)<1e-12,'Grade '+g+' is -'+pct+'%');
+ // it reaches the ORDER price the player actually pays, after Contract/Event/Offer, once
+ const plain=new Game(Meta.fresh(),null);plain.autosave=false;plain.start('grade-plain');
+ const rich=new Game(at(6),null);rich.autosave=false;rich.start('grade-plain');
+ const it=DATA.itemBy.rice;
+ const p0=plain.offerFor(it).price,p1=rich.offerFor(it).price;
+ assert.equal(p0,Math.round(it.buy),'Grade 1 pays the ordinary price');
+ assert.equal(p1,Math.round(it.buy*0.90),'Grade 6 pays 10% less, in the same single rounding');
+ assert.ok(p1<p0);
+ // and nowhere else
+ assert.equal(rich.rerollPrice(),plain.rerollPrice(),'Reroll is untouched');
+ assert.deepEqual(rich.run.relicWindow.candidatePrices,plain.run.relicWindow.candidatePrices,'Relic prices are untouched');
+ const n=plain.run.npcs[0];
+ assert.equal(rich.deepCost(n),plain.deepCost(n),'Deep sponsorship is untouched');
+ assert.equal(rich.finalPrice('rice'),plain.finalPrice('rice'),'the Final transfer price is untouched');
+ // no new progression system was invented for it
+ const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/meta.js'),'utf8');
+ assert.ok(!/passiveTree|talent|skillTree/i.test(src),'no Passive Tree is created');
 });
 
 test('META-Q07/Q08/Q09/Q10 + NPC-Q09: the 1/3/6 gates open exactly what they say, and nothing before',()=>{
@@ -171,22 +227,34 @@ test('META-Q11/Q15/Q16: the Grade gates Start Contracts and grants nothing else'
  const a=Meta.fresh();
  assert.deepEqual(DATA.contracts.filter(c=>Meta.contractUnlocked(a,c)).map(c=>c.id),['standard'],
   'a fresh account may only take the default contract');
+ /* META_v2.7: the Grade that gates Start Contracts is now the Franchise Achievement count,
+    so the fixture completes achievements rather than filling the Mastery matrix. */
+ const atGrade=g=>{const b=Meta.fresh(),count=[0,0,2,4,6,8,10][g];
+  b.franchise.sales=count>=1?100:0;b.franchise.overcharged=count>=2?20:0;
+  b.franchise.returning=count>=3?30:0;b.franchise.relics=count>=4?30:0;
+  b.franchise.families=count>=5?['spider','slime','fire','crypt','snow']:[];
+  for(const [n,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
+   if(count>=n)b.franchise.done.push(id);
+  if(count>=10)for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())b.matrix[job][boss]=true;
+  return b;};
  for(const [grade,id] of [[2,'delivery'],[3,'guild'],[4,'budget'],[5,'premium']]){
-  const b={matrix:Meta.freshMatrix()};let n=0;
-  outer:for(const job of Meta.JOBS())for(const boss of Meta.BOSSES()){if(n>=(grade-1)*7)break outer;b.matrix[job][boss]=true;n++;}
+  const b=atGrade(grade);
   assert.equal(Meta.grade(b),grade);
   assert.ok(Meta.contractUnlocked(b,DATA.contracts.find(c=>c.id===id)),'Grade '+grade+' opens '+id);
  }
- // Grade 6 opens no further contract - it is prestige, not another unlock
- const six={matrix:Meta.freshMatrix()};for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())six.matrix[job][boss]=true;
+ // Grade 6 opens no further contract - it is the honour grade, not another unlock
+ const six=atGrade(6);
  assert.equal(Meta.grade(six),6);
  assert.deepEqual(Meta.opened(six).contracts,DATA.contracts.map(c=>c.id),'every contract is open by Grade 5 already');
- // the Grade is never a bonus: starting gold and capacity do not move with it
+ /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE is the ONE thing the Grade
+    carries. It reaches the ORDER price and nothing else: no starting funds, no capacity, no
+    free stock, and no raw-Stat currency anywhere. */
  const g1=new Game(Meta.fresh());g1.autosave=false;g1.start('grade-1');
- const g6=new Game(six.matrix?{...Meta.fresh(),matrix:six.matrix}:Meta.fresh());g6.autosave=false;g6.start('grade-1');
+ const g6=new Game(six);g6.autosave=false;g6.start('grade-1');
  assert.equal(g6.run.money,g1.run.money,'starting funds do not move with the Grade');
  assert.equal(g6.capacity(),g1.capacity(),'and neither does warehouse capacity');
  assert.equal(g6.run.inventory.length,g1.run.inventory.length,'and no extra stock is handed out');
+ for(const j of DATA.jobs)assert.deepEqual(j.stats,DATA.jobBy[j.id].stats,'and no Stat moves with it');
 });
 
 test('META-Q01/Q14 + RUN-Q30: the legacy XP ladder and its fourteen keys are gone, with nothing left accruing',()=>{
@@ -217,7 +285,9 @@ test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide 
  const plain=Meta.fresh(),masterly=Meta.fresh();
  for(const job of Meta.JOBS())for(const boss of Meta.BOSSES().slice(0,2))masterly.matrix[job][boss]=true;
  assert.equal(Meta.totalJobMastery(masterly),12,'real Mastery');
- assert.equal(Meta.grade(masterly),2,'and a real Grade');
+ /* META_v2.7 separated the two: Mastery no longer moves the Franchise Grade at all, which is
+    a stronger version of the same claim this test makes - Mastery leaks nothing. */
+ assert.equal(Meta.grade(masterly),1,'which is not a Grade of its own under v2.7');
  assert.equal(Meta.distinctBossClear(masterly),2,'but below every content gate');
  assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(masterly,j)).map(j=>j.id),
                   DATA.jobs.filter(j=>Meta.jobUnlocked(plain,j)).map(j=>j.id),'so the Job pool is unchanged');
