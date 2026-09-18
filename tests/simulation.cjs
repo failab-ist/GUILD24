@@ -80,6 +80,32 @@ test('DUN-Q20: preparation is measured per progression band, prepared against ba
  assert.ok(engaged.impact.preparedAbility>engaged.impact.characterAbility,'preparation adds ability over the character alone');
 });
 
+test('preparation and phase decomposition are measured, and each one nests inside the run',()=>{
+ const r=Debug.simulate(10,'balanced',null,'adaptive','hybrid');
+ const P=r.prep;
+ assert.ok(P.samples>0,'expeditions were observed at all');
+ assert.ok(P.packed<=P.slots,'no bag carries more than its slots');
+ assert.ok(P.fullBag+P.emptyBag<=P.samples,'full and empty bags are both subsets of departures');
+ assert.ok(P.counterMatched<=P.counterRelevant,'a Counter cannot be matched where none was relevant');
+ const sum=o=>Object.values(o).reduce((a,b)=>a+b,0);
+ assert.equal(sum(P.bandBefore),sum(P.bandAfter),'every expedition is banded on both sides');
+ assert.ok(sum(P.bandBefore)<=P.samples,'and only expeditions that face a Hazard are banded');
+ assert.ok(P.bandImproved+P.bandWorse<=sum(P.bandBefore),'a band can move at most once per expedition');
+ assert.equal(P.ratioBare.length,P.samples,'the bare Combat ratio is sampled per expedition');
+ assert.equal(P.ratioReady.length,P.samples,'and so is the prepared one');
+ /* The phase table follows one expedition from the combat roll to its outcome, so the outcomes
+    must account for exactly the expeditions counted - a stage that loses a success is only
+    readable if nothing falls out of the table on the way. */
+ for(const [band,p] of Object.entries(r.phase)){
+  assert.equal(p.success+p.retreat+p.injury+p.severe+p.death,p.expeditions,band+' accounts for every expedition');
+  assert.ok(p.combatWon<=p.expeditions,band+' cannot win more rolls than it made');
+  assert.ok(p.wonThenLost<=p.combatWon,band+' cannot lose a combat it never won');
+  assert.ok(p.deathRolls<=p.expeditions-p.success,band+' rolls death only on a failure path');
+  assert.equal(Object.values(p.tier).reduce((a,t)=>a+t.expeditions,0),p.expeditions,band+' tiers partition it');
+ }
+ const banded=Object.values(r.phase).reduce((a,p)=>a+p.expeditions,0);
+ assert.equal(banded,P.samples,'and every observed expedition lands in exactly one Day band');
+});
 test('the extended metric set the report cites is actually produced',()=>{
  const r=cached('balanced');
  for(const key of ['dayReached','metaMastery','metaDistinct','metaGrade','knowledge','revenue','spend','npc','bands','final'])

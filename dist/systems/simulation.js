@@ -78,6 +78,13 @@ function blank(runs,policy,pricing,build){
   goldIn:{sale:0,greatSuccess:0,subsidy:0,liquidation:0},
   goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0,reroll:0},
   overhead:{samples:[],byBand:{},coreLevel:[],coreRarity:[]},bossRuns:{},
+  /* POLICY SENSITIVITY, measurement only. What the automatic player actually did with the
+     preparation levers it has, read off the same prepared states the night already builds -
+     no second formula and no information the SALE screen does not disclose. */
+  prep:{samples:0,slots:0,packed:0,fullBag:0,emptyBag:0,counterRelevant:0,counterMatched:0,
+   bandBefore:{},bandAfter:{},bandImproved:0,bandWorse:0,ratioBare:[],ratioReady:[]},
+  /* Where a run's expeditions lose the final outcome, banded by the Day the Director named. */
+  phase:{},
   refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
   /* Three different shortages that the old single `stockouts` counter ran together. It rose when
      the shelf happened to be empty after the last customer left, which is neither "the store had
@@ -176,7 +183,31 @@ function playRun(g,out,ctx){
    g2[r==='price'?'price':r==='need'?'need':'roll']++;}
   return ok;};
  const originalNight=g.night.bind(g);g.night=()=>{const day=stat(s.day);day.slots+=s.queue.reduce((a,id)=>a+G.Adventurer.slots(s.npcs.find(n=>n.id===id)),0);day.consumed+=s.queue.reduce((a,id)=>a+s.npcs.find(n=>n.id===id).pack.length,0);
- for(const id of s.queue){const n=s.npcs.find(n=>n.id===id),d=s.dungeons[n.destination],a=G.Dungeon.prepare({...n,pack:[]},d,s.facilities),b=G.Dungeon.prepare(n,d,s.facilities);const ability=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16;out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
+ for(const id of s.queue){const n=s.npcs.find(n=>n.id===id),d=s.dungeons[n.destination],a=G.Dungeon.prepare({...n,pack:[]},d,s.facilities),b=G.Dungeon.prepare(n,d,s.facilities);
+  /* The bag as it actually departs, the Hazard readiness before and after what was given, and
+     how far the prepared Combat ability stands against what this Gate asks. The readiness band
+     is the weakest Hazard - the same one the SALE readout shows - so improving it means the
+     expedition's worst exposure actually moved. */
+  {const P=out.prep,slots=G.Adventurer.slots(n);
+   P.samples++;P.slots+=slots;P.packed+=n.pack.length;
+   P.fullBag+=Number(n.pack.length>=slots);P.emptyBag+=Number(n.pack.length===0);
+   const worst=e=>{const rank={'취약':0,'불안':1,'대응':2,'충분':3};
+    return d.hazards.map(h=>G.Dungeon.hazardState(h,e,d))
+     .reduce((w,x)=>w&&rank[w.label]<=rank[x.label]?w:x,null);};
+   const wb=worst(a.effects),wa=worst(b.effects);
+   if(wb&&wa){const rank={'취약':0,'불안':1,'대응':2,'충분':3};
+    P.bandBefore[wb.label]=(P.bandBefore[wb.label]||0)+1;
+    P.bandAfter[wa.label]=(P.bandAfter[wa.label]||0)+1;
+    P.bandImproved+=Number(rank[wa.label]>rank[wb.label]);
+    P.bandWorse+=Number(rank[wa.label]<rank[wb.label]);}
+   /* A Counter is "relevant" when this Gate has a Hazard at all and the shelf could have
+      answered it; "matched" when what actually departed answers one of them. */
+   if(d.hazards.length){
+    const shelf=s.inventory.map(x=>D.itemBy[x.item]);
+    if(shelf.some(it=>G.Relics.counter(it,d.hazards))||n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterRelevant++;
+    if(n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterMatched++;}
+   P.ratioBare.push(G.Dungeon.preparedPower(a.effects)/(d.power||1));
+   P.ratioReady.push(G.Dungeon.preparedPower(b.effects)/(d.power||1));}const ability=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16;out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
  originalNight();
  /* 2026-09-12 amendment measurement. Banding by prepared Combat margin is what lets Stage 9
     judge the Great Success curve on evidence instead of on the shipped number. */
@@ -187,6 +218,28 @@ function playRun(g,out,ctx){
    if(report.outcome==='대성공'){out.great.great++;bb.great++;}}
   out.great.storeGold+=report.storeBonus||0;
   if(report.deep)out.deepTaken++;
+ }
+ /* DUN §DAY BAND decomposition: one expedition followed from the combat roll through the
+    environment and injury steps to the outcome it ended on, so the stage that loses the
+    success can be named rather than inferred. Everything here is what resolve already
+    recorded on the report. */
+ for(const report of s.results){const g2=report.debug;if(!g2)continue;
+  const pb=s.day<=9?'D1-9':s.day<=19?'D10-19':s.day<=24?'D20-24':'D25-29';
+  const P=out.phase[pb]??={expeditions:0,combatWon:0,affected:0,wonThenLost:0,ratio:[],tier:{},
+   success:0,retreat:0,injury:0,severe:0,death:0,deathChance:0,deathRolls:0,combatDeficit:0,envDeficit:0,injuredStart:0};
+  P.expeditions++;P.combatWon+=Number(g2.combatSuccess);P.affected+=Number(g2.affected);
+  P.ratio.push(g2.ability/(g2.power||1));
+  P.wonThenLost+=Number(g2.combatSuccess&&!['성공','대성공'].includes(report.outcome));
+  P.success+=Number(['성공','대성공'].includes(report.outcome));
+  P.retreat+=Number(report.outcome==='퇴각');P.injury+=Number(report.outcome==='부상');
+  P.severe+=Number(report.outcome==='중상');P.death+=Number(report.outcome==='사망');
+  const dg=s.dungeons.find(x=>x.id===report.dungeon),tier=dg?.tier||1;
+  const T=P.tier[tier]??={expeditions:0,combatWon:0,affected:0};
+  T.expeditions++;T.combatWon+=Number(g2.combatSuccess);T.affected+=Number(g2.affected);
+  if(typeof g2.deathChance==='number'&&!['성공','대성공'].includes(report.outcome)){
+   P.deathRolls++;P.deathChance+=g2.deathChance;
+   const risk=G.Dungeon.failureDeathRisk({...s.npcs.find(n=>n.id===report.npcId),injury:report.injury},dg||{power:g2.power,hazards:[]},s.facilities);
+   P.combatDeficit+=risk.combatDeficit;P.envDeficit+=risk.environmentDeficit;}
  }
  for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)],[out.familyJob,(d?.family||report.dungeon)+':'+npc.job]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
