@@ -207,6 +207,67 @@ Forbidden solution script:
 
 Tutorial may point to the relevant UI value without selecting the answer for the Player.
 
+## TUTORIAL COACH COPY — PLAYTEST HOTFIX — EXACT
+
+Keep each coach step short: one system-reading job, usually one or two sentences.
+
+```text
+방문객
+오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.
+
+게이트
+열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.
+
+심층원정
+같은 게이트의 더 깊은 원정이다. 손님 1명을 후원할 수 있고, 성공하면 그 손님이 더 성장한다. 점포 매출에는 영향이 없다.
+
+보유 골드
+보유 골드와 현재 발주 후 잔액을 확인한다.
+
+수량
+발주할 수량을 고른다.
+
+후보 교환
+후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.
+
+발주 확정
+카트의 상품만 발주한다. 확정 후에도 추가 발주·후보 교환이 가능하고, 준비가 끝나면 ‘영업 시작’을 누른다.
+
+손님
+손님을 누르면 특성과 지난 원정 기록을 볼 수 있다.
+
+대성공
+준비가 충분하면 대성공 가능성이 생긴다. 보급을 더 챙기면 가능성이 커질 수 있다.
+
+목적지
+이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.
+
+환경 대응
+위험은 특정 능력을 압박한다. 현재 대응은 손님 능력과 보급을 함께 반영한다.
+
+전망
+상품을 팔아도 이 전망은 갱신되지 않는다. 성공/실패 결과는 미리 알 수 없고, 실제 결과는 원정 후 확인한다.
+
+보급
+필요 보급을 못 채우면 원정 준비에 공통 페널티가 걸려 투력·강인함·기동·정신이 낮아진다. 남는 보급은 현재 피로와 이번 원정에서 쌓일 피로를 줄인다.
+
+진열대
+고른 상품은 이 손님이 오늘 원정에서 한 번 사용한다. 모든 상품은 1회용이며 다음 원정으로 가져가지 않는다.
+
+가격
+50%는 투자, 100%는 기본, 150%는 수익 우선이다.
+
+NIGHT
+한 명씩 원정 결과와 변화를 확인한다. ‘전체 건너뛰기’로 바로 정산할 수 있다.
+
+CLOSING
+오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.
+```
+
+The `전망` step explains display behavior and uncertainty; it does not imply that purchased Items have no runtime effect. Actual Resolve still uses the final committed preparation.
+
+The `보급` step names the visible consequence but does not expose the hidden deficit formula.
+
 ## EVENT 05 — EXACT PLAYER COPY
 
 Mechanic ownership -> `EVENT_v2.7.0.md`.
