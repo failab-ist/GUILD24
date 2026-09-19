@@ -1018,7 +1018,7 @@ function newRun(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta
  const lines=D.decorationSlots.map(slot=>{const id=loadout[slot],d=id&&D.decorationBy[id];
   return '<li class="'+(d?'':'effect-bad')+'"><span>'+E(SLOT_COPY[slot]||slot)+'</span><b>'+(d?E(d.name):'비움')+'</b></li>';}).join('');
  const start=1000+(Object.values(loadout).includes('thriftSafe')?D.balance.decorationStartGold:0);
- return `<div class="eyebrow">길드리테일 가맹점</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">시작 자금 ${start.toLocaleString()}G · 창고 18칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">시작 재고는 창고에 있다. 이번 영업에 적용될 장식은 아래와 같다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'장식 구성은 <b>도감 · 점포 관리</b>에서 바꿉니다. 영업이 시작되면 이번 영업에는 고정됩니다.':'아직 보유한 장식이 없습니다. 영업을 마치면 점포 자본이 쌓입니다.'}</p><details style="margin-top:15px"><summary class="smalltext">재현용 Seed 지정</summary><label class="smalltext" for="seed">비워 두면 새로운 Seed로 시작합니다.</label><input id="seed" class="seed-field" placeholder="예: guild24-first-shift" maxlength="80" value="${game.run?.phase==='foundation'?E(game.run.seed):''}"></details>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
+ return `<div class="eyebrow">길드리테일 가맹점</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">시작 자금 ${start.toLocaleString()}G · 창고 18칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">시작 재고는 창고에 있다. 이번 영업에 적용될 장식은 아래와 같다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'아직 보유한 장식이 없습니다. 영업을 마치면 점포 자본이 쌓입니다.'}</p><p>${btn('점포 관리 · 자본 '+Meta.storeCapital(a).toLocaleString(),'store-manage','bare')}</p><details style="margin-top:15px"><summary class="smalltext">재현용 Seed 지정</summary><label class="smalltext" for="seed">비워 두면 새로운 Seed로 시작합니다.</label><input id="seed" class="seed-field" placeholder="예: guild24-first-shift" maxlength="80" value="${game.run?.phase==='foundation'?E(game.run.seed):''}"></details>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
 /* Two levels, one row each, with the number said out loud beside the control - the slider
    position alone is not a readable value. The master switch above them is the existing
    mute, so this adds controls and no fourth channel: there are no voices to balance. */
@@ -1127,6 +1127,10 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
  case'new':setModal('new');break;
+ /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW: buying and equipping are only legal outside a Run, and
+    outside a Run this screen is the only one there is - so the way into 점포 관리 has to be on
+    it. Without this the panel is unreachable exactly when it is the one usable. */
+ case'store-manage':codexTab='store';setModal('codex');break;
  /* CORE_RUN §CURRENT RUN ABANDON: starting a new Run while one is active abandons the
     current Run with no settlement. end() is deliberately NOT called - it is what settles the
     run through Meta.finish and Store Capital, so an abandon earns nothing at all. start() replaces run wholesale, so the run-scoped
