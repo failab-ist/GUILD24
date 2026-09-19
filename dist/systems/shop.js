@@ -153,60 +153,102 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
  rollEvent(){const s=this.run,fired=this.rng.next()<.35;if(!this.eventEligibleDay(s.day)||!fired)return null;
   const pool=D.events.filter(e=>this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
- morning(){const s=this.run;s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
- const expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
- s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
- if([5,10,15,20,25,30].includes(s.day))this.relicWindow(s.day);
- /* FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and revealed on D25, BEFORE the
-    ordinary D25 management decisions that can use it. D30 consumes this exact persisted state
-    and never generates a new Pair. D25 grants no Counter Items, no free stock and no shop. */
- if(s.day>=25&&!s.final)s.final=this.makeFinal();
- if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];this.generateOffers();this.save();return;}
- s.familyOrder??=this.rng.shuffle(['spider','slime','fire','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),count=counts.length===1?counts[0]:this.rng.int(counts[0],counts.at(-1));s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
- /* RELIC_v2.7 §VISITOR RELICS. board raises the floor of the BASE roll - not of the final
-    visitor count - and draws nothing. hub makes one roll with three mutually exclusive outcomes.
-    The Decoration that touches the same number is applied after, by run.js, and neither Relic
-    knows about it. */
- const rawVisitors=this.rng.int(3,6);
- const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;
- let hubExtra=0;
- if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;}
- /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
- const decoExtra=this.wears('guildPlaque')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
- s.expectedVisitors=baseVisitors+hubExtra+decoExtra;
- s.event=this.rollEvent();s.eventSeen=!s.event;s.pilgrimage=0;const ev=s.event?.effects||{};
- if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
- s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
-  if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
-  if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
- if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+ /* The Morning is an orchestration of six things that each belong to a different system, and
+    it had them all inline: the Day's state reset, the Gates, the Final state, how many people
+    are coming, the Event, and who actually arrives. Each is a method below now, in the order
+    the Day happens. Nothing here decides a rule - every rule, every number and every RNG draw
+    stayed exactly where it was, in the same sequence - so a Day is bit-for-bit what it was. */
+ morning(){const s=this.run;
+  this.morningReset();
+  const ids=this.morningGates();
+  /* D30 is the Final: it has one Gate, no Event, no visitor queue. morningGates() returns null
+     to say the Day is already what it is going to be. */
+  if(ids===null){this.generateOffers();this.save();return;}
+  const visitors=this.morningVisitors();
+  this.morningEvent(ids);
+  this.morningDeep();
+  this.morningQueue(visitors);
+  this.save();
+ }
+ /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
+    Day's flags, what spoiled overnight, and each adventurer's own per-Day state. */
+ morningReset(){const s=this.run;
+  s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
+  const expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
+  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
+ }
+ /* The milestone window, the Final state, and today's Gates. Returns the Family id pool the
+    Event's unknown Gate draws from, or null on the Final Day, which has no more Morning left. */
+ morningGates(){const s=this.run;
+  if([5,10,15,20,25,30].includes(s.day))this.relicWindow(s.day);
+  /* FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and revealed on D25, BEFORE the
+     ordinary D25 management decisions that can use it. D30 consumes this exact persisted state
+     and never generates a new Pair. D25 grants no Counter Items, no free stock and no shop. */
+  if(s.day>=25&&!s.final)s.final=this.makeFinal();
+  if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];return null;}
+  s.familyOrder??=this.rng.shuffle(['spider','slime','fire','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),count=counts.length===1?counts[0]:this.rng.int(counts[0],counts.at(-1));s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
+  return ids;
+ }
+ /* How many people are coming, composed in one place so the order of the four sources can be
+    read off a single function: the base roll, the board floor on that roll, the hub's own
+    exclusive roll, and the wall Decoration's own roll. The Event's own visitor modifier is not
+    here - it is not known yet - and is added where the queue is actually filled. */
+ morningVisitors(){const s=this.run;
+  /* RELIC_v2.7 §VISITOR RELICS. board raises the floor of the BASE roll - not of the final
+     visitor count - and draws nothing. hub makes one roll with three mutually exclusive
+     outcomes. The Decoration that touches the same number is applied after, and neither Relic
+     knows about it. */
+  const rawVisitors=this.rng.int(3,6);
+  const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;
+  let hubExtra=0;
+  if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;}
+  /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
+  const decoExtra=this.wears('guildPlaque')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
+  s.expectedVisitors=baseVisitors+hubExtra+decoExtra;
+  return {rawVisitors,baseVisitors,hubExtra,decoExtra};
+ }
+ /* Today's Event, and everything it does to a Day that is otherwise already decided. */
+ morningEvent(ids){const s=this.run;
+  s.event=this.rollEvent();s.eventSeen=!s.event;s.pilgrimage=0;const ev=s.event?.effects||{};
+  if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
+  s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
+   if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
+   if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
+  if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+ }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
     chosen once the Gates are final so the recorded Power is the real one. The tie is broken on
     a stream derived from the seed and the Day, which keeps the run stream's draw count on a
     Deep Day identical to any other Day. Family, Tier and Hazards are the base Gate's. */
- if(this.deepDay(s.day)){const top=Math.max(...s.dungeons.map(d=>d.tier));
+ morningDeep(){const s=this.run;
+  if(!this.deepDay(s.day))return;
+  const top=Math.max(...s.dungeons.map(d=>d.tier));
   const pool=s.dungeons.map((d,i)=>i).filter(i=>s.dungeons[i].tier===top);
-  s.deep.today={day:s.day,gateIndex:new G.RNG(String(s.seed)+':deep:'+s.day).pick(pool),nomineeId:null,paid:0};}
- /* EVENT 신입 모험가 시즌: the event used to create an NPC and stop there - which the third-day
-    intake does anyway - and pass a rookie flag that Adventurer.create never reads, so nothing
-    about the day actually changed. The arrival is held here and seated below, in one of the
-    day's own visit slots. No new Level band and no extra visitor: the Day-based level rule is
-    untouched and the headcount is the headcount. */
- const arrival=((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)?this.addNPC({royal:!!ev.royal}):null;
- if(s.pity.npc>=8){const fresh=s.npcs.filter(n=>!n.introduced);if(fresh.length&&this.rng.next()<.6){fresh[0].rarity=Math.max(1,fresh[0].rarity);fresh[0].potential+=.05;}}
- this.generateOffers();
- let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
- let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
- for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
- /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
-    than by adding a slot. The number of weighted draws is unchanged, so a Day without the
-    event is bit-for-bit what it was. */
- if(ev.rookie&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
- s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
- for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
- if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
-  for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
- s.special=null;if(s.day>=4&&!s.specialUsed&&this.rng.next()<.045){const kind=this.rng.pick(['route','remove','mentor']);s.special={kind,used:false,candidates:kind==='mentor'?this.rng.shuffle(D.traits.filter(t=>t.direction==='positive')).slice(0,3).map(t=>t.id):[]};}s.pity.npc=promising?0:s.pity.npc+1;this.save();
+  s.deep.today={day:s.day,gateIndex:new G.RNG(String(s.seed)+':deep:'+s.day).pick(pool),nomineeId:null,paid:0};
+ }
+ /* Who actually walks in: the day's intake, the shelf they will be sold from, the weighted
+    selection out of everyone available, and what each of them arrives wanting. */
+ morningQueue({rawVisitors,baseVisitors,hubExtra,decoExtra}){const s=this.run,ev=s.event?.effects||{};
+  /* EVENT 신입 모험가 시즌: the event used to create an NPC and stop there - which the third-day
+     intake does anyway - and pass a rookie flag that Adventurer.create never reads, so nothing
+     about the day actually changed. The arrival is held here and seated below, in one of the
+     day's own visit slots. No new Level band and no extra visitor: the Day-based level rule is
+     untouched and the headcount is the headcount. */
+  const arrival=((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)?this.addNPC({royal:!!ev.royal}):null;
+  if(s.pity.npc>=8){const fresh=s.npcs.filter(n=>!n.introduced);if(fresh.length&&this.rng.next()<.6){fresh[0].rarity=Math.max(1,fresh[0].rarity);fresh[0].potential+=.05;}}
+  this.generateOffers();
+  let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
+  let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
+  for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+  /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
+     than by adding a slot. The number of weighted draws is unchanged, so a Day without the
+     event is bit-for-bit what it was. */
+  if(ev.rookie&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
+  s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
+  for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
+  if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
+   for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
+  s.special=null;if(s.day>=4&&!s.specialUsed&&this.rng.next()<.045){const kind=this.rng.pick(['route','remove','mentor']);s.special={kind,used:false,candidates:kind==='mentor'?this.rng.shuffle(D.traits.filter(t=>t.direction==='positive')).slice(0,3).map(t=>t.id):[]};}s.pity.npc=promising?0:s.pity.npc+1;
  }
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?2:0)+(this.wears('dawnSign')?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
