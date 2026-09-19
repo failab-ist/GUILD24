@@ -8,9 +8,9 @@ DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=SCOPED_DECORATION_PACKAGE_REFERENCE
 FREEZE_DATE=2026-09-19
 LAST_APPROVED_AMENDMENT=2026-09-19
-SSOT_AUDIT_STATUS=DECORATION_PACKAGE_SYNCED_STORE_CAPITAL_AMENDMENT
+SSOT_AUDIT_STATUS=DECORATION_PACKAGE_SYNCED_BALANCE_APPROVED
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
-SOURCE_ADOPTION_STATUS=SCOPED_PACKAGE_BASE_ADOPTED_STORE_CAPITAL_AMENDMENT_PENDING
+SOURCE_ADOPTION_STATUS=SCOPED_DECORATION_PACKAGE_ADOPTED_NO_PROJECT_WIDE_V2_8_ADOPTION
 V2_8_SOURCE_EDIT_GATE=DECORATION_PACKAGE_ONLY
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -66,7 +66,7 @@ REMOVE active Franchise Grade / Franchise Achievement / Start Contract layer
 
 The retired v2.7 Franchise implementation is preserved as an inactive archive and is not deleted.
 
-The integrated Decoration / Gate / Wallet / Hazard-Counter pass is already adopted on the current v2.7 line. The newest pending validation is limited to the Store Capital conversion-basis amendment owned by `META_v2.8.0.md`.
+The integrated Decoration / Gate / Wallet / Hazard-Counter pass and the current Store Capital conversion basis are adopted on the current v2.7 line. This remains a scoped package only, not project-wide v2.8 adoption.
 
 ## STAGED v2.8 REFERENCE FILE SET
 
@@ -143,25 +143,18 @@ They are historical assets, not active Runtime.
 
 ## BALANCE APPROVAL GATE
 
-The Decoration Package structure is approved Design.
+The Decoration Package structure and current Store Capital basis are adopted on the v2.7 execution line.
 
-The current v2.7 execution line has already adopted the initial Decoration package and the
-approved Gate / Wallet / Hazard-Counter bundle. The only new pending scoped adoption is the
-Store Capital formula owned by `META_v2.8.0.md`.
+The exact Store Capital rate table and Decoration prices remain owned only by `META_v2.8.0.md`.
+The rate table remains labeled `DIRECTOR DOCUMENT BASELINE`, but its current implementation has
+completed the required integration / acquisition / anti-farm validation for this cycle.
 
-Current Store Capital Design Truth is:
-
-```text
-actual Gross Sales × reached-Day conversion rate
-```
-
-The exact rate table and Decoration prices live only in the META owner.
-
-The rate table is a `DIRECTOR DOCUMENT BASELINE`: WORK validates it against the approved
-acquisition expectation and anti-farm conditions, but does not auto-tune it. A material miss is
-reported as a Balance Finding for User/Director approval.
+The measured acquisition curve retains a small accepted timing variance from the expectation.
+Director judgment for the current cycle is **no further tuning**; this does not create an open
+implementation blocker.
 
 No project-wide v2.8 Source Adoption is implied.
+
 
 ## SOURCE ARCHIVE REQUIREMENT
 
