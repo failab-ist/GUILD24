@@ -222,11 +222,19 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  assert.ok(/wears\('dawnSign'\)\?1:0/.test(src),'sign adds exactly one ORDER candidate');
  assert.ok(/wears\('premiumCase'\)/.test(src),'display reuses the premium rare-NPC weighting');
- assert.ok(!/contract==='delivery'\?1\.05/.test(src)||true,'');
+ /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
+    save may still carry `contract`, so no Contract branch may survive in the active path -
+    otherwise a loaded `guild` or `premium` Run silently plays by retired rules. */
+ for(const branch of ["contract==='guild'","contract==='premium'","contract==='delivery'","contract==='budget'"])
+  assert.ok(!src.includes(branch),'no active Contract branch: '+branch);
  /* A Decoration is never a Relic: it is read from the Run's frozen loadout, and `has` - the
     Relic question - never answers for it. */
  assert.ok(/wears\(id\)\{return Object\.values\(this\.run\.loadout\|\|\{\}\)\.includes\(id\)/.test(src),
   'a Decoration is read from the loadout, not from facilities');
+ for(const f of ['dist/systems/run.js','dist/systems/relics.js','dist/systems/adventurer.js','dist/ui/app.js']){
+  const other=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'..',f),'utf8');
+  for(const branch of ["contract==='guild'","contract==='premium'","contract==='delivery'","contract==='budget'"])
+   assert.ok(!other.includes(branch),f+' carries no active Contract branch: '+branch);}
  const ids=new Set(DATA.relics.map(r=>r.id));
  for(const d of DATA.decorations)assert.ok(!ids.has(d.id),d.id+' does not collide with a Relic id');
 });

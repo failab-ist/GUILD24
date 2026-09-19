@@ -978,4 +978,55 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
  assert.deepEqual(Meta.storeLoadout(round.account),Meta.storeLoadout(live.account),'and its planned loadout');
 });
 
+test('META_v2.8 §RETIRED: a stale Contract or Franchise payload changes nothing at all',()=>{
+ /* Removing the picker is not the requirement. A v8 save can still carry `contract` and a
+    filled `franchise` block, and a Run loaded from it must play identically to the neutral
+    baseline - otherwise retired rules are still live for anyone with an old save. */
+ const seed='stale-payload';
+ const base=fresh(seed);
+ const shape=g=>({money:g.run.money,offers:g.run.offers.length,overhead:g.expectedOperatingCost(),
+  visitors:g.run.expectedVisitors,rarities:g.run.offers.map(o=>DATA.itemBy[o.item].rarity).join(','),
+  prices:g.run.offers.map(o=>o.price).join(',')});
+ for(const contract of ['guild','premium','delivery','budget','standard']){
+  const g=new Game(Meta.fresh());g.autosave=false;g.start(seed);
+  g.run.contract=contract;           // exactly what a stale v8 save would carry
+  g.run.dayFacilities=[...g.run.facilities];
+  g.generateOffers({advancePity:false});
+  const b2=new Game(Meta.fresh());b2.autosave=false;b2.start(seed);
+  b2.run.dayFacilities=[...b2.run.facilities];
+  b2.generateOffers({advancePity:false});
+  assert.deepEqual(shape(g),shape(b2),'a stale `'+contract+'` Run plays as the neutral baseline');
+ }
+ /* A filled retired Franchise block must not unlock, discount or gate anything. */
+ const filled=Meta.fresh();
+ filled.franchise={sales:9999,overcharged:9999,returning:9999,relics:9999,
+  families:['spider','slime','fire','crypt','snow'],done:['nowaste','nodeath','allsupplied','grosssales']};
+ const withPayload=new Game(filled);withPayload.autosave=false;withPayload.start(seed);
+ assert.deepEqual(shape(withPayload),shape(base),'a filled Franchise payload changes no Run value');
+ assert.deepEqual(Meta.opened(filled),Meta.opened(Meta.fresh()),'and unlocks nothing');
+});
+
+test('META_v2.8 §RETIRED: active play writes no retired Franchise progress',()=>{
+ const g=fresh('no-retired-writes');
+ const snap=()=>JSON.stringify(g.account.franchise);
+ const before=snap();
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);          // Relic purchase used to count
+ assert.equal(snap(),before,'a Relic purchase credits nothing');
+ while(g.run.phase!=='sell')step(g);
+ let sold=0;
+ for(let turn=0;turn<600&&g.run.day<4;turn++){
+  if(g.run.phase!=='sell'){step(g);continue;}
+  const n=g.current(),st=g.run.inventory[0];
+  if(!st||n.pack.length>=Adventurer.slots(n)){g.depart();continue;}
+  try{if(g.sell(st.id,'overcharge')||g.sell(st.id,'full'))sold++;}catch(e){g.depart();}
+ }
+ assert.ok(sold>0,'the sweep actually sold something');
+ assert.equal(snap(),before,'and no sale - at any price, to any customer - credits a counter');
+ /* Achievement 6 used to be marked on the DAY 25 morning. Drive past it with a clean record. */
+ const h=fresh('no-retired-d25');h.run.stats.waste=0;h.run.day=25;
+ const mark=JSON.stringify(h.account.franchise);
+ h.morning();
+ assert.equal(JSON.stringify(h.account.franchise),mark,'reaching DAY 25 clean marks nothing');
+});
+
 console.log(count+' integration groups passed');
