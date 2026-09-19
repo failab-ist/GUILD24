@@ -1,9 +1,9 @@
-# GUILD24 v2.8 COPY — DIRECTOR PASS 1
+# GUILD24 v2.8 COPY — DIRECTOR PASS 1 · REV 2
 
 - **상태**: DIRECTOR PROPOSAL / USER 미승인 / 비Canonical
 - **기반**: `V2_8_COPY_FULL_AUDIT.md` + Current Source
-- **검토 Source HEAD**: `63efa7053715046e1212c23fa324a6f1592a5d13`
-- **목적**: v2.8 카피 개선 전 1차 Director Audit. Truth / Freshness / 필요성 / UI 배치 / Voice를 함께 검토하고 실제 수정 후보까지 제안한다.
+- **검토 Source HEAD**: `87a00050f0bffd0fcc14227333395eac7f8d88a5` (P1 live-playtest hotfix merged source)
+- **목적**: v2.8 카피 개선 전 1차 Director Audit. Truth / Freshness / 필요성 / UI 배치 / Voice를 함께 검토하고, 실제 모바일 플레이 피드백까지 Source와 대조해 수정 후보를 제안한다.
 - **금지**: 이 문서만으로 Production Source 또는 Canonical을 변경하지 않는다. User 승인 후 Canonical → Source 순서로 반영한다.
 
 ---
@@ -992,3 +992,756 @@ Truth 오류 수정
 
 이 Pass는 제안본이다.
 User 승인 전 Canonical / Source에는 반영하지 않는다.
+
+
+# 19. LIVE PLAYTEST COPY FEEDBACK — SOURCE-VERIFIED REVISION
+
+이 절은 User의 실제 플레이 피드백을 Current Source와 다시 대조한 결과다.
+앞 절과 충돌하는 부분이 있으면 **이 절의 보완안이 우선**한다.
+
+---
+
+## 19-1. NPC CARD — `더 친해지면 성장 잠재력과 남은 특성을 알 수 있습니다.`
+
+### SOURCE CHECK
+
+현재 NPC 상세에는 아래가 남아 있다.
+
+> 더 친해지면 성장 잠재력과 남은 특성을 알 수 있습니다.
+
+단골도 60+이면:
+
+> 성장 잠재력: 빠른 성장 / 꾸준한 성장 / 착실한 성장
+
+을 노출한다.
+
+하지만 현재 Design Truth는:
+
+```text
+Player-facing growth identity
+= Job + Level + actual four Core Stats
+```
+
+이며 v2.7부터 **Level milestone Trait 획득은 제거**됐다.
+따라서 `남은 특성`이라는 미래 슬롯/해금 암시는 명백히 stale하다.
+
+또한 Potential은 실제 성장 계산에는 존재하지만
+단골도가 Potential을 높이는 기능은 없다.
+현재 Source는 단골도가 60을 넘으면 단지 UI에서 Potential 분류를 보여줄 뿐이다.
+
+### LOYALTY SOURCE TRUTH
+
+단골도는 “재방문만”의 수치도 아니다.
+
+현재 Source에서 실제로:
+- 구매 수락 확률에 반영
+- 재방문 선택 가중치에 반영
+- 일부 점포지원의 30 / 50 / 60 조건에 사용
+- Trusted Regular 판정에 사용
+- LUST Final logic이 Trusted Regular를 읽을 수 있음
+
+반대로:
+- Potential을 올리지 않음
+- Trait을 새로 열지 않음
+- 숨은 `남은 특성`을 해금하지 않음
+
+### DIRECTOR PROPOSAL
+
+NPC 상세의 아래 두 종류 문구를 **전부 제거**한다.
+
+- `더 친해지면 성장 잠재력과 남은 특성을 알 수 있습니다.`
+- `성장 잠재력: ...`
+
+단골도 숫자와 방문 횟수는 유지한다.
+
+이유:
+Potential은 현재 Player-facing growth identity가 아니며,
+`남은 특성`은 퇴역 Rule을 암시한다.
+
+ACTION: **P0 FIX / REMOVE**
+
+---
+
+# 20. FATIGUE — SALE COPY REBUILD
+
+User 실기 피드백:
+
+현재 예:
+
+```text
+피로 1 → 출발 0 · 보급 회복 -1
+남은 보급 5 · 결과 피로를 그만큼 줄인다
+밤 피로 · 성공 0 · 퇴각 0 · 부상 1
+```
+
+숫자는 맞지만 읽는 순서가 시스템 계산 로그에 가깝다.
+
+### SOURCE TRUTH
+
+실제 순서:
+
+```text
+현재 피로
+→ 필요 보급 지불
+→ 남는 보급으로 출발 전 피로 회복
+→ 더 남은 보급은 원정 결과 피로를 상쇄
+→ 귀환 후 최종 피로
+```
+
+### PROPOSED SALE COPY
+
+예시 값이 위와 같을 때:
+
+```text
+출발 피로 0  · 현재 1 / 보급 -1
+남는 보급 5  · 귀환 피로 최대 5 감소
+귀환 후 피로 · 성공 0 / 퇴각 0 / 부상 1
+```
+
+더 짧은 UI가 필요하면:
+
+```text
+출발 피로 0  (보급 -1)
+귀환 후 피로 · 성공 0 / 퇴각 0 / 부상 1
+```
+
+단, 남는 보급이 결과 피로를 실제로 상쇄하는 판단이 중요한 경우에만
+중간 한 줄을 노출한다.
+
+### LABEL RULE
+
+REMOVE:
+- `밤 피로`
+- `결과 피로를 그만큼 줄인다`
+
+USE:
+- `출발 피로`
+- `귀환 후 피로`
+- `남는 보급`
+
+ACTION: **P1 WASH**
+
+---
+
+# 21. FATIGUE — NIGHT RESULT REBUILD
+
+현재 Night는 같은 계산을 네 토큰으로 쪼갠다.
+
+- 보급 회복
+- 보급 완화
+- 원정 결과
+- 최종 피로
+
+각각 Source 내부 단계명에 가까워 Player가 인과를 다시 조립해야 한다.
+
+### PROPOSED
+
+한 묶음으로 합친다.
+
+예:
+
+```text
+피로 1 → 1
+출발 전 보급 -1 · 부상 +6 · 남는 보급 -5
+```
+
+또는 UI가 두 줄 토큰을 못 받으면:
+
+```text
+귀환 후 피로 1
+현재 1 · 출발 전 -1 · 부상 +6 · 보급 -5
+```
+
+### RULE
+
+- `보급 회복` → 내부 용어로만
+- `보급 완화` → 내부 용어로만
+- Player-facing에는 **언제 줄었는지**를 말한다.
+  - 출발 전
+  - 원정 결과
+  - 귀환 후
+
+ACTION: **P1 MERGE / WASH**
+
+---
+
+# 22. SALE — INTERNAL MARKER `포션` 노출
+
+User가 본:
+
+```text
+이 손님에게는 지금 걸리지 않는 효과
+포션
+```
+
+은 이해할 수 없는 것이 정상이다.
+
+### SOURCE CHECK
+
+`potion: 1`은:
+- 포션체질 Trait 적용 판별
+- 포션 공급/이벤트 분류
+
+등에 쓰는 **internal marker**다.
+
+그 자체가 Player에게 주는 효과 문장이 아니다.
+
+현재 `Presentation.rows()`가 이 marker를 utility row로 바꿔
+generic `그 밖의 효과` 영역에 노출한다.
+
+### DIRECTOR PROPOSAL
+
+- generic Item effect list에서 `potion` marker를 **완전히 숨긴다**
+- 포션체질이 실제로 작동하면 최종 Stat 변화나 Proven source에서만 결과를 보여준다
+- `포션`이라는 빈 effect row는 만들지 않는다
+
+ACTION: **P0 IMPLEMENTATION/COPY BUG**
+
+---
+
+# 23. SALE — `이 손님에게는 지금 걸리지 않는 효과` 자체도 교체
+
+기존 1차안의 `그 밖의 효과` 방향은 유지하되,
+모든 internal marker를 제거한 뒤 실제 조건부 효과만 남긴다.
+
+CURRENT:
+> 이 손님에게는 지금 걸리지 않는 효과
+
+PROPOSED:
+> 조건부 효과
+
+예:
+- 사망 판정을 중상으로 변경
+- 결과 후 남는 부상 완화
+- 현재 Gate에는 대응하지 않는 Hazard Counter
+
+현재 상황에서 정말 아무 의미가 없는 metadata는 표시하지 않는다.
+
+ACTION: **P1 WASH + FILTER**
+
+---
+
+# 24. SALE — 아이템 영향이 Forecast에 안 느껴지는 문제
+
+### DESIGN BOUNDARY
+
+현재 Forecast / 환경 대응 / 실패 시 사망 위험은
+**SALE 진입 시점 snapshot으로 고정**되는 것이 Design Truth다.
+
+따라서 Item 판매 후 Forecast 자체를 움직이는 방식은
+이번 Copy Pass에서 제안하지 않는다.
+
+하지만 지금은:
+
+- 위 전망은 그대로
+- 아래 Stat 숫자만 변함
+
+이라 Player가
+“이 Item이 원정에 얼마나 도움 됐는지” 연결하기 어렵다.
+
+### COPY-LEVEL SOLUTION
+
+Item 선택 시 delta 영역 맨 위:
+
+> **전망은 판매 전 기준 · 아래 변화는 실제 원정에 반영**
+
+Section title:
+
+> **판매 후 준비 변화**
+
+Direct Stat은 가능하면 변화량을 같이 읽힌다.
+
+예:
+
+```text
+투력 18 → 26  (+8)
+강인함 21 → 29  (+8)
+부식 대응 +18
+```
+
+현재 Source가 이미 계산한 before / after와 Item effect를 재표현하는 것이므로
+새 Forecast / 새 확률 / 새 hidden score를 만들지 않는다.
+
+### TUTORIAL 전망 문구도 이 방향으로 맞춤
+
+PROPOSED:
+
+> 전망은 판매 전 상태 기준이다. 판매 효과는 아래 변화에 반영되고, 실제 결과는 원정 후 확인한다.
+
+ACTION: **P1 CLARIFY**
+
+---
+
+# 25. SALE STATUS — `부상 · 부상 1 · 피로 2`
+
+### SOURCE CHECK
+
+현재:
+
+```js
+parts=[n.status]
+if(n.injury) parts.push('부상 '+n.injury)
+if(n.fatigue) parts.push('피로 '+n.fatigue)
+```
+
+이라 `n.status === '부상'`일 때:
+
+> 상태 부상 · 부상 1 · 피로 2
+
+가 된다.
+
+`injury=1`은 Player-facing 부상 횟수/단계가 아니다.
+ordinary Injury 상태의 internal code다.
+
+### PROPOSED
+
+> 상태 **부상** · 피로 2
+
+- numeric `부상 1` 제거
+- `중상`은 기존 status 이름으로 표현
+- recovery가 있는 경우에만 `휴식 N일` 유지
+
+ACTION: **P0 UI/COPY BUG**
+
+---
+
+# 26. INJURY TERMINOLOGY — `생존` OUTDATED
+
+현재 두 곳에 Player-facing old stat term이 남아 있다.
+
+NPC Detail:
+> 부상 효과: 생존 -20% · 투력 -15%
+
+NIGHT:
+> 남은 부상 · 생존 -20% · 투력 -15%
+
+Current Stat term은 **강인함**.
+
+Canonical injury order:
+
+```text
+투력 -15%
+강인함 -20%
+```
+
+### PROPOSED
+
+일반:
+
+> 부상 효과 · 투력 -15% · 강인함 -20%
+
+NIGHT:
+
+> 남은 부상 · 투력 -15% · 강인함 -20%
+
+악바리:
+
+> 부상 효과 · 투력 +20% · 강인함 -20%
+
+ACTION: **P0 OUTDATED TERMINOLOGY**
+
+---
+
+# 27. NIGHT RESULT — OUTCOME / CAUSE를 한 문장으로
+
+User가 본 사망 사례:
+
+> 적을 물리쳤다. 부식 때문에 원정 내내 고전했다.
+
+Source상 가능한 조합이다.
+전투에는 성공했지만 환경 사고 때문에 ordinary 성공이 깨지고,
+그 실패 경로가 Death까지 이어질 수 있다.
+
+즉 **mechanic contradiction은 아니다.**
+하지만 Result Copy가:
+- combat fact
+- environment fact
+- death outcome
+
+을 따로 말해 Player가 인과를 조립해야 한다.
+
+### DIRECTOR RULE
+
+Night의 최상위 문장은 항상:
+
+```text
+최종 Outcome
+→ 직접 원인
+→ 보조 원인
+```
+
+순서로 읽혀야 한다.
+
+### PROPOSED EXAMPLES
+
+사망 / 전투 성공 / 부식 사고:
+
+> 전투는 이겼지만, 부식 사고 뒤 돌아오지 못했다.
+
+사망 / 전투 실패:
+
+> 전투에서 밀린 뒤 돌아오지 못했다.
+
+사망 / 전투 실패 + 부식 사고:
+
+> 전투에서 밀린 데다 부식 사고까지 겹쳤다. 끝내 돌아오지 못했다.
+
+부상 / 전투 성공 + 부식 사고:
+
+> 전투는 이겼지만 돌아오는 길에 부식 피해를 입었다.
+
+### IMPLEMENTATION DIRECTION
+
+`nightHappened()`와 `nightWhy()`가 같은 Combat fact를 두 번 나누어 말하지 않게 한다.
+
+특히 사망/중상/부상에서는
+generic `적을 물리쳤다.` 한 줄을 별도 Why로 다시 붙이지 않는다.
+
+ACTION: **P1 CAUSAL COPY RECOMPOSITION**
+
+---
+
+# 28. NIGHT — PLAYER ITEM IMPACT를 결과 최상단으로
+
+현재 `supplyNote()`는 아래쪽 한 줄이라
+내가 판 Item이 결과에 어떤 영향을 줬는지 약하다.
+
+또 Hazard Item은:
+- 실제 사고를 막았을 때
+- 위험만 낮췄지만 사고는 났을 때
+
+를 더 명확히 구분해야 한다.
+
+### PROPOSED PLACEMENT
+
+Night Result에서:
+
+```text
+결과
+NPC
+[내 보급 영향]
+상황 설명
+변화
+대사
+```
+
+순서.
+
+`내 보급 영향`은 **실제 sold Item contribution이 있을 때만** 나온다.
+
+### PROPOSED COPY
+
+Hazard prevented:
+
+> 부식 방지 코팅제 → **부식 사고 방지**
+
+Hazard reduction only:
+
+> 부식 방지 코팅제 → **부식 위험 감소**
+
+같은 Hazard 사고가 실제 발생:
+
+> 부식 방지 코팅제 → **부식 위험은 낮췄지만 사고 발생**
+
+Escape:
+
+> 귀환석 → **사망 위기에서 생환**
+
+Revive:
+
+> 세계수 생환부적 → **사망을 중상으로 변경**
+
+Aftercare:
+
+> 구급키트 → **남은 부상 완화**
+
+### RULE
+
+`도움이 됐다`처럼 vague하게 칭찬하지 않는다.
+
+- 판정을 실제 바꿈 → **사고 방지 / 생환 / 결과 변경**
+- 확률/위험만 낮춤 → **위험 감소**
+- 낮췄지만 사고 발생 → 그 사실까지 함께 명시
+
+이렇게 해야 성공/부상 어느 결과에서도
+Player가 자기 선택의 실제 기여를 과장 없이 읽을 수 있다.
+
+ACTION: **P1 FEEDBACK PRIORITY**
+
+---
+
+# 29. NIGHT FLAVOR — 대사는 대사처럼 보여야 한다
+
+현재 Night의 NPC line은 `blockquote`로만 붙고,
+routine result에서는 `weighty` 조건 때문에 아예 숨겨질 수 있다.
+
+User 피드백상 NPC 대사는 플레이 감성을 크게 만든다.
+
+### DIRECTOR PROPOSAL
+
+#### 살아 돌아온 NPC
+
+- 성공 / 대성공 / 퇴각 / 부상 / 중상 / 생환 모두
+- `Copy.night()`의 한 줄을 **항상 1개 표시**
+- 캐릭터 쪽에 붙는 작은 말풍선 형태
+- SALE처럼 자동 소멸시킬 필요는 없음
+- `다음`을 누를 때까지 읽을 수 있게 유지
+
+즉 `weighty`는 설명 블록의 크기를 결정할 수는 있어도
+NPC Flavor 대사 자체를 숨기지 않는다.
+
+#### 사망
+
+사망 pool은 NPC가 말하는 대사가 아니라 narration이다.
+
+따라서 말풍선 금지.
+
+작은 상황 기록 / narration strip으로 표시:
+
+예:
+> 마지막 영수증만 카운터에 남았다.
+
+UI label을 굳이 붙인다면:
+> 기록
+
+정도만 사용.
+
+ACTION: **P1 COPY + PRESENTATION**
+
+---
+
+# 30. DIALOGUE VARIATION — POOL 확대 + 반복 방지
+
+현재 Pool 크기:
+
+- 방문 generic: 대부분 3~5
+- Sale full / half / 150%: 각 4
+- Refusal reason: 각 4
+- Night outcome: 대부분 3~4
+
+현재 `pick(pool,key)`는 hash modulo라
+다른 Day/key에서도 같은 index가 다시 나올 수 있다.
+
+따라서 “문구 수만 늘리기”만으로는 체감 반복을 완전히 막지 못한다.
+
+### DIRECTOR TARGET
+
+#### High-frequency
+
+- Sale full: 8
+- Sale half: 8
+- Sale 150%: 8
+- Refuse price / need / choice: 각 8
+- Visit back / regular: 각 6+
+- Night success / retreat / hurt / severe / rescued: 각 6+
+
+#### Medium-frequency
+
+- first / helped: 각 5+
+- Trait line: 각 4~5
+- death narration: 각 상태 4~5
+
+### NO-REPEAT RULE
+
+Gameplay RNG를 쓰지 않는다.
+
+기존 persisted count를 ordinal로 사용해 deterministic cycle을 만든다.
+
+예:
+- 방문: visits
+- 구매: purchase history count
+- 거절: refusal count
+- Night: records count
+
+한 NPC가 같은 Pool을 연속 사용할 때:
+- 바로 직전 문장 반복 금지
+- Pool을 한 바퀴 돌기 전 같은 문장 재사용 금지
+
+새 Copy-only RNG / Balance draw 금지.
+가능하면 별도 Save schema도 만들지 않는다.
+
+ACTION: **P1 COPY SYSTEM**
+
+---
+
+# 31. DIALOGUE EXPANSION — 1차 VOICE EXAMPLES
+
+최종 전체 Pool 작성 전 Voice anchor로 사용한다.
+
+## SALE 100%
+
+기존:
+> “이걸로 주세요.”
+
+추가 방향:
+> “이 정도면 괜찮네요.”
+>
+> “그걸로 하나 주세요.”
+>
+> “네. 이 가격이면 됐습니다.”
+>
+> “이건 챙겨 갈게요.”
+
+## SALE 50%
+
+> “이 가격이면 하나 더 생각나겠는데요.”
+>
+> “이렇게 받아도 되는 거예요?”
+>
+> “다음에도 이 가격이면 좋겠네요.”
+>
+> “오늘은 덕 좀 보네요.”
+
+## SALE 150%
+
+> “비싸긴 한데, 지금은 필요하네요.”
+>
+> “하… 이건 사야겠네요.”
+>
+> “오늘만 이 가격인 거죠?”
+>
+> “급한 사람이 지는 거죠, 뭐.”
+
+## REFUSE — NEED
+
+> “지금 가는 데엔 필요 없겠네요.”
+>
+> “오늘은 다른 걸 챙겨야 해서요.”
+>
+> “그건 이번 원정엔 안 쓸 것 같아요.”
+>
+> “가방 자리를 쓰긴 아깝네요.”
+
+## NIGHT — SUCCESS
+
+> “다녀왔습니다. 오늘은 괜찮았어요.”
+>
+> “준비한 만큼은 했네요.”
+>
+> “생각보다 수월했습니다.”
+>
+> “내일도 이 정도면 좋겠네요.”
+
+이 문장들은 Voice 방향 제안이다.
+전체 Pool은 User 승인 후 한 번에 정리한다.
+
+---
+
+# 32. CLOSING FOOTER — PLAYER FEEDBACK CONFIRM
+
+User가 직접:
+
+> 미판매 재고는 자산으로 남는다. 발주 지출과 판매 원가를 손익에서 두 번 빼지 않는다.
+
+를 불필요하게 느꼈다.
+
+기존 1차 Director 판정과 동일하다.
+
+### FINAL PROPOSAL
+
+전체 삭제.
+
+`미판매 재고는 다음 날로 이월`도
+현재 Closing에서 반드시 필요한 판단이 아니므로 **기본은 넣지 않는다.**
+
+재고가 남는다는 사실은:
+- 다음 ORDER 재고
+- 창고 화면
+
+에서 충분히 확인 가능하다.
+
+ACTION: **REMOVE**
+
+---
+
+# 33. REVISED CHANGE PRIORITY
+
+## A — 즉시 Truth / Outdated Fix
+
+1. NPC Potential / `남은 특성` 문구 제거
+2. `생존 -20%` → `강인함 -20%`, 투력 → 강인함 순서
+3. `상태 부상 · 부상 1` 중복 제거
+4. internal `포션` marker Player UI 노출 제거
+5. SLOTH `유물` → `점포지원`
+6. Stamp `무료 보급` stale wording 수정
+7. 점포 자본 `G` 제거
+8. Help refusal ceiling Truth 정정
+9. Full Data Reset destructive wording 수정
+10. Decoration Premium effect wording 정정 / duplicated name 검토
+
+## B — Player Understanding
+
+1. SALE Fatigue 3-line rebuild
+2. SALE Item impact framing: `전망은 판매 전 / 아래 변화는 실제 반영`
+3. NIGHT Fatigue 하나의 정산 묶음으로
+4. NIGHT Outcome + cause recomposition
+5. NIGHT sold-item contribution top priority
+
+## C — Copy Density / AI Voice
+
+1. Help 전체 교체
+2. SALE tooltip / delta labels
+3. Decoration Flavor decision surface에서 제거
+4. Closing accounting footer 삭제
+5. Stock/Rescue modal 압축
+6. Deep 중복 설명 제거
+7. Store Support description 문법 통일
+8. Settings dev footer 제거 / Seed 이동
+
+## D — Play Feel / Voice
+
+1. Living Night quote를 항상 말풍선으로 노출
+2. Death는 narration strip
+3. Sale / Visit / Night Pool 확대
+4. deterministic no-repeat cycle
+5. Trait misleading Dialogue 교정
+6. Event / Item Flavor 후속 polish
+
+---
+
+# 34. REV 2 DIRECTOR VERDICT
+
+이번 플레이 피드백으로 우선순위가 더 선명해졌다.
+
+가장 큰 문제는 단순히 “문장이 AI 같다”가 아니라 세 가지다.
+
+### 1. 오래된 Rule의 흔적
+
+- 남은 특성
+- 생존
+- 무료 보급
+- 유물
+
+처럼 이미 바뀐 Design이 Copy에 남아 있다.
+
+### 2. 내부 계산 과정을 Player에게 그대로 말함
+
+- 보급 회복
+- 보급 완화
+- 밤 피로
+- 조건부 marker `포션`
+
+이 대표적이다.
+
+Player에게 필요한 것은 계산 단계 이름이 아니라:
+
+> 지금 상태 → 내 선택이 만든 변화 → 최종 결과
+
+다.
+
+### 3. 내 선택과 결과의 연결이 약함
+
+Forecast를 숨기는 Design 자체보다,
+판매 후 실제 반영되는 변화와 Night의 Proven contribution을
+충분히 Player 언어로 번역하지 못한 문제가 더 크다.
+
+따라서 v2.8 Copy Pass의 핵심은:
+
+```text
+내부 계산 설명을 줄이고
+Player가 한 선택과 그 결과 사이의 문장을 강화한다.
+```
+
+이다.
+
+이 Rev 2 역시 User 승인 전 비Canonical Proposal이다.
