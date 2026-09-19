@@ -1045,6 +1045,28 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  // the music was mixed a quarter as quiet as the smallest click, which is what "BGM is too quiet" was
  const bgmVoice=Number(audio.match(/BGM_VOICE=([\d.]+)/)[1]),sfxVoice=Number(audio.match(/SFX_VOICE=([\d.]+)/)[1]);
  assert.ok(bgmVoice>=sfxVoice/3,'music is in the same range as the effects, not a quarter of the quietest one');
+ /* UI-Q114. The real-phone finding was that BGM at 100% still read as absent. The fix has to
+    come from raising the music, never from pulling the effects down to fake it, so the
+    effects voice is pinned and the music voices are held at the raised level. */
+ assert.equal(sfxVoice,.035,'the effects voice is not attenuated to make the music seem louder');
+ const bgmBass=Number(audio.match(/BGM_BASS=([\d.]+)/)[1]);
+ assert.ok(bgmVoice>=.032&&bgmBass>=.040,'the music voices carry the raised presence');
+ /* Every cue a screen asks for has to exist. play() falls back to the generic click for an
+    unknown name, so a typo would be inaudible as a bug and just sound like a button. */
+ const cues=new Set(Sound.cues);
+ const asked=[...app.matchAll(/sound\('([a-z]+)'\)/g)].map(m=>m[1]);
+ assert.ok(asked.length,'the screens do ask for cues by name');
+ for(const name of new Set(asked))
+  assert.ok(cues.has(name)||name==='rare',"every requested cue resolves to a real one: "+name);
+ /* §STORE SYSTEM. Fitting a Decoration into a Slot is not buying one, so it must not reuse
+    the purchase fanfare - and neither of them may be silent. */
+ assert.ok(/case'deco-confirm'[\s\S]*?sound\('rare'\)/.test(app),'buying a Decoration keeps the purchase cue');
+ const equip=app.slice(app.indexOf("else {Meta.equipDecoration"),app.indexOf("else {Meta.equipDecoration")+160);
+ assert.ok(/sound\('fixture'\)/.test(equip),'equipping and unequipping have a cue of their own');
+ assert.ok(!/sound\('rare'\)/.test(equip),'and it is not the purchase fanfare');
+ assert.ok(cues.has('ui')&&cues.has('fixture'),'the shared UI click and the fixture cue exist');
+ /* the shared click is quieter than an ordinary effect, so navigation does not shout */
+ assert.ok(/ui:\{gain:\.45/.test(audio),'the shared UI click is mixed under the other effects');
  assert.deepEqual(Sound.mix({bgm:.4,sfx:.9}),{bgm:.4,sfx:.9},'the levels are read off the settings object');
  assert.deepEqual(Sound.mix({bgm:9,sfx:-1}),{bgm:1,sfx:0},'and clamped, not trusted');
  assert.deepEqual(Sound.mix({}),Sound.defaults,'a save from before the mixer defaults at the audio layer');

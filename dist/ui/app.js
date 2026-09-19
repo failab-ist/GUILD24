@@ -1214,14 +1214,14 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'coach-skip':finishCoach(true);break;
  /* presentation only - the line stays in run.say, so nothing here is saved or re-rendered */
  case'say-hide':hideSpeech();break;
- case'coach-next':{const actionName=activeCoach?.[3];finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
- case'special':game.specialAction(id,el.dataset.value);render();break;
+ case'coach-next':{const actionName=activeCoach?.[3];sound('ui');finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
+ case'special':game.specialAction(id,el.dataset.value);sound('order');render();break;
  case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;
  case'boss-seen':{const st=bossRevealStage();
   if(st==='final')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
   game.save();setModal(null);render();break;}
  case'break-seal':game.breakSeal();sound('boss');render();break;
- case'menu':setModal('menu');break;
+ case'menu':sound('ui');setModal('menu');break;
  case'begin-order':game.beginOrder();sound('open');render();break;
  case'confirm-order':game.confirmOrder();sound('order');render();break;
  case'open-store':game.open();sound('open');render();break;
@@ -1231,8 +1231,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     outside a Run this screen is the only one there is - so the way into 점포 관리 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-manage':codexTab='store';decoFocus=el.dataset.id||null;setModal('codex');break;
- case'owned-relics':setModal('owned');break;
+ case'store-manage':codexTab='store';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
+ case'owned-relics':sound('ui');setModal('owned');break;
  /* CORE_RUN §CURRENT RUN ABANDON: starting a new Run while one is active abandons the
     current Run with no settlement. end() is deliberately NOT called - it is what settles the
     run through Meta.finish and Store Capital, so an abandon earns nothing at all. start() replaces run wholesale, so the run-scoped
@@ -1258,7 +1258,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
       Meta guard all leave the panel back on the plain buy button rather than on a live confirm. */
    decoPending=null;
    Meta.buyDecoration(game.account,id);toast(d.name+' 구매 · 점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음');sound('rare');}
-  else Meta.equipDecoration(game.account,d.slot,a==='deco-equip'?id:null);
+  /* fitting something already owned into a Slot, or taking it out. Deliberately not the
+     purchase fanfare above: it costs nothing and nothing was acquired. */
+  else {Meta.equipDecoration(game.account,d.slot,a==='deco-equip'?id:null);sound('fixture');}
   game.save();renderModal();render();break;}
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
   game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound('quantity');render();
@@ -1267,10 +1269,10 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  
  case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();const result=s.results[s.nightCursor];if(result)sound(result.outcome==='사망'?'death':result.outcome==='중상'?'severe':result.outcome==='부상'?'injury':result.outcome==='대성공'?'great':result.discoveries?.length?'discovery':result.changes?.length?'level':'return');break;
  case'event-seen':setModal(null);render();break;
- case'event-again':setModal('event');break;
- case'gates':setModal('gates');break;
+ case'event-again':sound('ui');setModal('event');break;
+ case'gates':sound('ui');setModal('gates');break;
  case'relics':setModal('relics');break;
- case'stat-detail':setModal('stat:'+id);break;
+ case'stat-detail':sound('ui');setModal('stat:'+id);break;
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('rare');break;
  case'closing':game.finishNight();game.save();render();break;
  case'open':game.open();selected=null;render();break;
@@ -1290,16 +1292,16 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'depart':game.depart();selected=null;render();sound(s.phase==='night'?'return':'depart');break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
  case'reroll':game.reroll();sound('spend');render();break;
- case'stock':setModal('stock');break;
+ case'stock':sound('ui');setModal('stock');break;
  case'liquidate':game.liquidate(id);sound('gold');render();break;
- case'roster':setModal('roster');break;
- case'npc':setModal('npc:'+id);break;
- case'codex':setModal('codex');break;
- case'codex-tab':codexTab=id;decoPending=null;renderModal();break;
- case'help':setModal('help');break;
- case'settings':setModal('settings');break;
+ case'roster':sound('ui');setModal('roster');break;
+ case'npc':sound('ui');setModal('npc:'+id);break;
+ case'codex':sound('ui');setModal('codex');break;
+ case'codex-tab':codexTab=id;decoPending=null;sound('ui');renderModal();break;
+ case'help':sound('ui');setModal('help');break;
+ case'settings':sound('ui');setModal('settings');break;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound();render();break;
- case'dismiss':if(s?.phase==='foundation')return;setModal(null);break;
+ case'dismiss':if(s?.phase==='foundation')return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
@@ -1312,7 +1314,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     when one is actually credited - this fired every Final, unlock or not, and twice with one */
  case'boss-go':sound('boss');game.boss();setModal(null);render();break;
  case'retire':setModal('retireConfirm');break;
- case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');setModal(null);render();break;
+ case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='guild24-save-day-'+(s?.day||0)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}
  case'import':setModal('importConfirm');break;
  case'reset':setModal('resetConfirm');break;
