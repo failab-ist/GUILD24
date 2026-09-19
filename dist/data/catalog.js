@@ -140,7 +140,9 @@ bosses:[
 ['PRIDE','오만','오만의 마왕 프라이드'],
 ['ENVY','질투','질투의 마왕 엔비'],
 ['GREED','탐욕','탐욕의 마왕 그리드'],
-['GLUTTONY','탐식','폭식의 마왕 글러트니'],
+/* BOSS_v2.7 §BOSS IDENTITY TERMINOLOGY OVERRIDE: the inherited v2.5 player-facing name is
+   superseded. The internal id is unchanged; only what the player reads moved. */
+['GLUTTONY','탐식','탐식의 마왕 글러트니'],
 ['LUST','색욕','색욕의 마왕 러스트'],
 ['SLOTH','나태','나태의 마왕 슬로스']
 ].map(([id,sin,name])=>({id,sin,name})),

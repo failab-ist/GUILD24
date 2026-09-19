@@ -329,8 +329,20 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  // D5 hints; it never states the Function. D15 states it.
  for(const [id,line] of Object.entries(c.d5.flavor))
   assert.ok(!/감소한다|증가한다|적용된다/.test(line),id+"'s D5 Flavor does not give the Function away");
- // the one value PASS3 still owns stays a slot, not prose
- assert.ok(c.d15.trait.GLUTTONY[1][0].includes('[등급]'),'the rarity boundary is a DATA slot until PASS3 approves it');
+ /* BOSS_v2.7 §BOSS IDENTITY TERMINOLOGY OVERRIDE and COPY_WORLD_VOICE_v2.7 §GLUTTONY. Both
+    are exact, and both replace inherited v2.5 wording. This assertion used to REQUIRE the
+    stale `[등급] 이상` sentence - v2.7 has no Rarity threshold for this Boss, so the line was
+    promising the player a boundary the mechanic does not have. */
+ const glut=DATA.bosses.find(b=>b.id==='GLUTTONY');
+ assert.equal(glut.sin,'탐식','the Sin is 탐식');
+ assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
+ assert.deepEqual(c.d15.trait.GLUTTONY,
+  ['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·보급·보험 효과는 유지']],
+  'the D15 Function is the exact Canonical copy');
+ // no retired wording survives anywhere a player can read
+ const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
+ for(const stale of ['폭식','[등급] 이상','등급 이상 보급품'])
+  assert.ok(!everything.includes(stale),'retired GLUTTONY wording is gone: '+stale);
  const prose=JSON.stringify(c);
  for(const term of ['Run','Final Snapshot','Final Power','Factor','Modifier','sealBreakCount','effectiveBossPower'])
   assert.ok(!prose.includes(term),'no internal design term reaches the player: '+term);
