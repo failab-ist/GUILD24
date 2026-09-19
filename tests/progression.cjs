@@ -71,18 +71,16 @@ function withCandidate(fn){
   D.deepTuning.sponsorRarityStep=saved.sponsorRarityStep;D.deepTuning.sponsorLevelStep=saved.sponsorLevelStep;}
 }
 
-/* The five tiers of §C. Each is built through the real matrix, so the Grade it implies, the
-   Jobs it opens and the items it unlocks are the real ones - nothing is inserted by hand.
-   `jobs x bosses` says how much of the matrix is filled, row-major. */
-/* META_v2.7 separated the two tracks: the Franchise Grade is the count of completed Franchise
-   Achievements, and Total Job Mastery no longer moves it. A tier built from the matrix alone
-   therefore reads as Grade 1 whatever its Mastery, which is why every tier showed 등급 1 and a
-   Grade comparison was not measurable. Each tier now also seeds a plausible Franchise state so
-   a CONTROLLED per-Grade comparison is possible.
+/* The five tiers of §C. Each is built through the real matrix, so the Jobs it opens and the
+   items it unlocks are the real ones - nothing is inserted by hand. `jobs x bosses` says how
+   much of the matrix is filled, row-major, and `decorations` how much of the Store it owns.
 
-   This controlled fixture is NOT a substitute for the real thing: it says what a Run looks like
-   AT a Grade, never how long a player takes to reach one. Actual accumulation is measured in
-   the cross-run trajectory, where Achievements and Grade come from real results. */
+   META_v2.8 retired the Franchise Grade, so the Store axis of a tier is simply how many
+   Decorations it holds, seeded through the real purchase path.
+
+   This controlled fixture is NOT a substitute for the real thing: it says what a Run looks
+   like AT a given Store state, never how long a player takes to reach one. Actual accumulation
+   is measured in the cross-run trajectory, where Capital and purchases come from real results. */
 const TIERS=[
  {key:'fresh',   label:'Fresh First Run',   jobs:0, bosses:0, decorations:0},
  {key:'early',   label:'Early Meta',        jobs:2, bosses:2, trim:1, decorations:1},
@@ -90,9 +88,8 @@ const TIERS=[
  {key:'late',    label:'Late Meta',         jobs:4, bosses:6, decorations:3},
  {key:'near',    label:'Near-complete Meta',jobs:5, bosses:7, decorations:4}];
 
-/* META_v2.8: the Franchise tier fixture is retired with the system it seeded. A tier's Store
-   progress is now simply how many Decorations it owns, seeded through the real purchase path so
-   the fixture cannot hold a state real play could not reach. */
+/* Seeded through the real purchase path, so the fixture cannot hold a Store state that real
+   play could not reach. */
 function seedStore(a,n){
  const ids=DATA.decorations.map(d=>d.id).slice(0,n);
  if(!ids.length)return a;
@@ -132,7 +129,7 @@ console.log('== arm:',ARM,'==');
    the first-run-like policy the Fresh D30 target is read from; `balanced` is skilled play, an
    analysis axis rather than a target. Both are heuristics, not people. */
 const POLICIES=[['beginner','배우는 중'],['balanced','숙련'],['spender','숙련+지출']];
-console.log('tier'.padEnd(20),'정책      등급 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
+console.log('tier'.padEnd(20),'정책      장식 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
 for(const [policy,policyLabel] of POLICIES)
 for(const t of TIERS){
  const account=accountFor(t);
@@ -157,7 +154,9 @@ for(const t of TIERS){
   deepByRarity:r.deepByRarity,deepByLevel:r.deepByLevel,deepDaysPerRun:r.deepDaysPerRun,
   rescue:r.rescue,revenuePerRun:r.goldIn.sale/seeds,shortage:r.shortage,rerollDepth:r.rerollDepth};
  out.tiers.push(row);
- console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(row.grade).padStart(2),String(row.mastery).padStart(4),
+ /* META_v2.8: the column was the retired Franchise Grade, which no longer exists and printed
+    `undefined`. The Store axis is the owned Decoration count the tier was actually seeded with. */
+ console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(t.decorations||0).padStart(2),String(row.mastery).padStart(4),
   String(row.distinct).padStart(6),pct(row.reach10).padStart(8),pct(row.reach20).padStart(7),
   pct(row.reach30).padStart(7),pct(row.finalGivenReach).padStart(10),pct(row.clear).padStart(10),
   row.deaths.toFixed(2).padStart(9));

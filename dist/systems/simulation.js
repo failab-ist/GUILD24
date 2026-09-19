@@ -436,7 +436,7 @@ function playRun(g,out,ctx){
   if(d.operating){out.overhead.samples.push(d.operating);
    (out.overhead.byBand[d.day<=10?'D1-10':d.day<=20?'D11-20':'D21-30']??=[]).push(d.operating);}
  }
- /* D25 is the Final reveal and the DAY 25 Franchise Achievement, so it is its own band. */
+ /* D25 is the Final Family/Hazard reveal, so it is its own band. */
  for(const d of [10,20,25,30])if(s.day>=d)out.reachBy[d]++;
  out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaStore+=(g.account.store?.owned||[]).length;out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
  /* measurement only - how often a Rare Reference identity actually turns up, so the starting
@@ -495,90 +495,122 @@ function simulate(count=100,policy='balanced',account=null,pricing='adaptive',bu
 }
 
 /* CROSS-RUN META PROGRESSION — the same account played through successive Runs, exactly as a
-   returning player accumulates it. No gameplay power is inserted: grade, unlocks and starting
-   contract all come from the real Meta system reacting to real results.
-   Returns one cohort per Run index, so FRESH ACCOUNT and PROGRESSED ACCOUNT Final viability
-   can be read apart, plus the same cohorts bucketed by the grade actually held. */
+   returning player accumulates it. No gameplay power is inserted: every unlock, every Mastery
+   point and every Gold of Store Capital comes from the real Meta system reacting to real results.
+
+   META_v2.8 retired Franchise Grade, the ten Achievements and the Start Contract, so what this
+   measures is the cross-run truth that actually exists:
+
+     Store Capital · owned Decoration count · the Decoration loadout ·
+     Job Mastery · distinct Boss clears
+
+   The Grade bucket that used to sit beside these is gone with the system. It was also vacuous:
+   the trajectory never bought a Decoration, so every account stayed at the fresh Grade and
+   every "grade" cohort was the same cohort under another name.
+
+   Store Capital is accumulated through the PRODUCTION settlement path - `Game.end()` settles
+   the Run the way the shipped game does - and Decorations are bought with the real
+   `Meta.buyDecoration`. Nothing here reimplements either.
+
+   `purchaseOrder` is measurement INPUT, not a strategy this harness invents: the caller names
+   the order, and the trajectory buys the next one whenever the Capital it actually earned
+   covers the price. Passing null buys nothing, which is the pure-Meta arm. */
 /* Job Mastery isolation, HARNESS ONLY. Mastery is a spawn-Level bonus on the owning Job's new
-   adventurers, and an account that has it also has unlocked Jobs, contracts and items - so a
-   tier-to-tier difference cannot say which of the two did the work. This neutralises the bonus
-   table while leaving every unlock in place, so the same account can be measured with and
-   without it. The roll is still drawn either way, so the seeded stream does not move. */
+   adventurers, and an account that has it also has unlocked Jobs and items - so a tier-to-tier
+   difference cannot say which of the two did the work. This neutralises the bonus table while
+   leaving every unlock in place, so the same account can be measured with and without it. The
+   roll is still drawn either way, so the seeded stream does not move. */
 function masterySpawnPatch(){
  const table=G.Adventurer.MASTERY_SPAWN,saved=table.map(row=>row.slice());
  for(let i=0;i<table.length;i++)table[i]=[];
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard'}={}){
- const byIndex=[],byGrade={},accountsEnd=[],firstClear=[];
+function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null}={}){
+ const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
+ const order=purchaseOrder?purchaseOrder.slice():[];
+ for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
   /* When this account first beat a Boss, and what it actually held at that moment. Recorded
      once per trajectory from real results - nothing is seeded. */
   let clearedAt=null;
+  const ledger=[];
   for(let i=0;i<runs;i++){
-   const before={grade:1,mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account),franchise:(account.store?.owned||[]).length};
+   const before={mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account),
+    decorations:(account.store?.owned||[]).length,capital:G.Meta.storeCapital(account),
+    loadout:{...G.Meta.storeLoadout(account)}};
    const g=new G.Game(account);g.autosave=false;
-   /* Which start contract the trajectory uses is a strategy choice, not a Meta fact, so it is
-      the caller's: 'standard' holds it constant and isolates what grade and unlocks alone do,
-      'best' takes the most advanced contract the account has actually earned. `start` rejects
-      a locked contract, so neither mode can grant something the account has not unlocked. */
-   const started='standard',available=1;
    g.start(prefix+'-'+t+'-'+i);
-   const grade=before.grade,decorations=before.franchise;
-   const bucket=byGrade[grade]??=blank(0,policy,pricing,build);
    playRun(g,byIndex[i],{policy,pricing,build,seed:t});
-   /* The grade bucket re-reads the same Run from the per-index cohort's last entry rather
-      than replaying it: one Run, counted once in each view. */
-   bucket.runs++;bucket.dayReached[g.run.day]=(bucket.dayReached[g.run.day]||0)+1;
-   bucket.reached30+=Number(g.run.day===30);bucket.wins+=Number(!!g.run.win);
-   /* The reach bands are filled by playRun, which only ever sees the per-index cohort - so a
-      grade bucket's reach10/20/25/30 read 0 no matter how far its Runs got. Filled here from
-      the same Run, so the two views of one Run cannot disagree. */
-   for(const d of [10,20,25,30])if(g.run.day>=d)bucket.reachBy[d]++;
-   bucket.metaMastery+=before.mastery;bucket.metaDistinct+=before.distinct;bucket.metaStore+=decorations;
-   if(g.run.bossDebug){bucket.final.resolved++;bucket.final.power+=g.run.bossDebug.power;bucket.final.assault+=g.run.bossDebug.assault;bucket.final.margin+=g.run.bossDebug.assault-g.run.bossDebug.bossPower;bucket.final.cleared+=Number(!!g.run.win);}
-   bucket.money+=g.run.money;bucket.deaths+=g.run.stats.deaths;
-   /* Expeditions actually run and adventurers actually lost, so a per-expedition Death rate can
-      be read per Grade rather than only per cohort. */
-   bucket.expeditions=(bucket.expeditions||0)+g.run.npcs.reduce((n,x)=>n+x.records.length,0);
-   bucket.expDeaths=(bucket.expDeaths||0)+g.run.stats.deaths;
-   bucket.endedBy[g.run.stats.deaths>=D.balance.deathLimit?'deaths':g.run.bossDebug?(g.run.win?'cleared':'finalFail'):'bankrupt']++;
-   /* The Grade the account actually held entering this Run, kept as a distribution and not
-      only as the mean, because a mean hides an account stuck a Grade behind the cohort. */
-   byIndex[i].gradeDist??={};byIndex[i].gradeDist[grade]=(byIndex[i].gradeDist[grade]||0)+1;
-   /* The same expedition count the Grade bucket keeps, so a per-expedition Death rate reads
-      the same way per Run index and per Grade - one definition, two views. */
+   /* The Run is settled through the shipped path. `end` is idempotent and `settleStoreCapital`
+      carries its own once-only guard, so a Run playRun already ended is not settled twice. */
+   g.end(!!g.run.win,g.run.endReason||'측정 종료');
+   const settlement=g.run.settlement||{value:0,gain:0,rate:0,day:g.run.day};
+   /* The purchase: the named order, the real Meta call, and only what the earned Capital
+      covers. No Capital is granted and no price is touched. */
+   const bought=[];
+   for(const id of order){
+    if(G.Meta.decorationOwned(account,id))continue;
+    if(G.Meta.storeCapital(account)<D.decorationBy[id].price)break;
+    G.Meta.buyDecoration(account,id);bought.push(id);
+   }
+   ledger.push({run:i,capitalStart:before.capital,settlementValue:settlement.value,
+    rate:settlement.rate,dayReached:g.run.day,gain:settlement.gain,
+    capitalAfterSettlement:before.capital+settlement.gain,
+    bought,capitalEnd:G.Meta.storeCapital(account),
+    ownedBefore:before.decorations,ownedAfter:(account.store?.owned||[]).length,
+    loadout:{...G.Meta.storeLoadout(account)}});
+
    byIndex[i].expeditions=(byIndex[i].expeditions||0)+g.run.npcs.reduce((n,x)=>n+x.records.length,0);
    byIndex[i].expDeaths=(byIndex[i].expDeaths||0)+g.run.stats.deaths;
    if(g.run.win&&clearedAt===null)
-    clearedAt={runIndex:i,grade:before.grade,franchise:before.franchise,mastery:before.mastery};
-   byIndex[i].contracts??={};byIndex[i].contracts[started]=(byIndex[i].contracts[started]||0)+1;
-   byIndex[i].gradeAtStart??=0;byIndex[i].gradeAtStart+=grade;
-   /* gradeAtStart is a MEAN across trajectories, so it cannot answer "was this contract legal
-      when it was picked". The highest Grade any trajectory actually held at this Run index can. */
-   byIndex[i].maxGradeAtStart=Math.max(byIndex[i].maxGradeAtStart||0,grade);
+    clearedAt={runIndex:i,decorations:before.decorations,capital:before.capital,mastery:before.mastery};
    byIndex[i].masteryAtStart??=0;byIndex[i].masteryAtStart+=before.mastery;
    byIndex[i].distinctAtStart??=0;byIndex[i].distinctAtStart+=before.distinct;
-   byIndex[i].franchiseAtStart??=0;byIndex[i].franchiseAtStart+=before.franchise;
-   byIndex[i].contractsAvailable??=0;byIndex[i].contractsAvailable+=available;
+   byIndex[i].decorationsAtStart??=0;byIndex[i].decorationsAtStart+=before.decorations;
+   byIndex[i].capitalAtStart??=0;byIndex[i].capitalAtStart+=before.capital;
+   byIndex[i].capitalGained??=0;byIndex[i].capitalGained+=settlement.gain;
+   /* Which Slots were actually filled entering this Run, as a distribution: a mean over
+      trajectories hides an account that bought nothing at all. */
+   byIndex[i].loadoutDist??={};
+   const key=G.DATA.decorationSlots.map(sl=>before.loadout[sl]||'-').join('/');
+   byIndex[i].loadoutDist[key]=(byIndex[i].loadoutDist[key]||0)+1;
   }
-  accountsEnd.push({grade:1,franchise:(account.store?.owned||[]).length,mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
+  accountsEnd.push({decorations:(account.store?.owned||[]).length,capital:G.Meta.storeCapital(account),
+   loadout:{...G.Meta.storeLoadout(account)},
+   mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
   firstClear.push(clearedAt);
+  ledgers.push(ledger);
  }
- return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
-  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,maxGradeAtStart:o.maxGradeAtStart||0,gradeDist:o.gradeDist||{},expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0,franchiseAtStart:(o.franchiseAtStart||0)/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
-  byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,
-   {...derive(o,o.runs),expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,
-    expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0}])),
+ /* The acquisition ladder, read off the ledgers rather than projected from a mean: for each
+    purchase position, the Run index on which that many Decorations were actually owned. */
+ const acquisition=order.map((id,k)=>{
+  const at=ledgers.map(l=>{const row=l.find(r=>r.ownedAfter>=k+1);return row?row.run+1:null;});
+  const got=at.filter(x=>x!==null);
+  return {position:k+1,id,price:D.decorationBy[id].price,
+   acquired:got.length,ofTrajectories:ledgers.length,
+   medianRun:got.length?[...got].sort((a,b)=>a-b)[Math.floor(got.length/2)]:null,
+   meanRun:got.length?got.reduce((a,b)=>a+b,0)/got.length:null,
+   runs:at};
+ });
+ return {mode:'trajectory',policy,pricing,build,trajectories,runsPerTrajectory:runs,
+  purchaseOrder:order,
+  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),
+   expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,
+   expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0,
+   masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,
+   decorationsAtStart:(o.decorationsAtStart||0)/trajectories,
+   capitalAtStart:(o.capitalAtStart||0)/trajectories,
+   capitalGained:(o.capitalGained||0)/trajectories,
+   loadoutDist:o.loadoutDist||{}})),
   /* First CLEAR, from real accumulation: which Run index it happened on and what the account
      actually held then. `null` entries are trajectories that never cleared within `runs`. */
   firstClear:{samples:firstClear.length,cleared:firstClear.filter(Boolean).length,
    runIndex:firstClear.filter(Boolean).map(c=>c.runIndex),
-   grade:firstClear.filter(Boolean).map(c=>c.grade),
-   franchise:firstClear.filter(Boolean).map(c=>c.franchise)},
-  accountsEnd};
+   decorations:firstClear.filter(Boolean).map(c=>c.decorations),
+   capital:firstClear.filter(Boolean).map(c=>c.capital)},
+  acquisition,ledgers,accountsEnd};
 }
 
 /* masterySpawnPatch is exported so a measurement script can hold an account FIXED and ask what

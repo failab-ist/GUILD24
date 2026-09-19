@@ -188,49 +188,101 @@ test('the fresh-account benchmark is labelled as one, and progression is measure
 test('CROSS-RUN META: one account really carries forward, and nothing is inserted into it',()=>{
  const t=Debug.trajectory({trajectories:4,runs:5,prefix:'test-meta'});
  assert.equal(t.byIndex.length,5,'one cohort per Run index');
- assert.equal(t.byIndex[0].gradeAtStart,1,'Run 0 starts at the fresh grade');
+ /* META_v2.8 retired the Grade, the Achievements and the Start Contract, so what a returning
+    player carries is Store Capital, the owned Decorations and their loadout, Job Mastery and
+    distinct Boss clears. Those are what is asserted; the Grade bucket that used to sit here
+    was also vacuous, because this trajectory never bought a Decoration and so every account
+    stayed at the fresh Grade. */
  assert.equal(t.byIndex[0].masteryAtStart,0,'Run 0 starts with no Job Mastery');
  assert.equal(t.byIndex[0].distinctAtStart,0,'and no Boss beaten');
- // Progression is now earned only by clearing a Final, so a cohort that never clears one
- // stays at the fresh state - which is the property, not a failure to progress.
+ assert.equal(t.byIndex[0].decorationsAtStart,0,'and no Decoration owned');
+ assert.equal(t.byIndex[0].capitalAtStart,0,'and no Store Capital');
+ for(const gone of ['gradeAtStart','maxGradeAtStart','gradeDist','franchiseAtStart','contractsAvailable','contracts'])
+  assert.equal(gone in t.byIndex[0],false,'no retired field survives on the cohort: '+gone);
+ for(const gone of ['byGrade','contractMode'])
+  assert.equal(gone in t,false,'nor on the result: '+gone);
+ // Progression is earned only by clearing a Final, so a cohort that never clears one stays at
+ // the fresh state - which is the property, not a failure to progress.
  const cleared=t.accountsEnd.some(a=>a.distinct>0);
  if(cleared)assert.ok(t.byIndex.at(-1).masteryAtStart>=t.byIndex[0].masteryAtStart,'Mastery never goes backwards');
  for(let i=1;i<t.byIndex.length;i++){
-  assert.ok(t.byIndex[i].gradeAtStart>=t.byIndex[i-1].gradeAtStart,'grade never goes backwards');
   assert.ok(t.byIndex[i].masteryAtStart>=t.byIndex[i-1].masteryAtStart,'Job Mastery never goes backwards');
+  assert.ok(t.byIndex[i].decorationsAtStart>=t.byIndex[i-1].decorationsAtStart,'owned Decorations never go backwards');
  }
- /* A Run is counted once in each view, so the two views cannot say different things about it.
-    The reach bands are filled by the per-index cohort, and a grade bucket that never had them
-    filled reported every Run as having reached nothing at all. */
- for(const [g,o] of Object.entries(t.byGrade)){
-  assert.equal(o.reach30,o.reachRate,'Grade '+g+' reads D30 the same through either field');
-  for(const [lo,hi] of [['reach30','reach25'],['reach25','reach20'],['reach20','reach10']])
-   assert.ok(o[lo]<=o[hi]+1e-9,'Grade '+g+' cannot reach '+lo+' more often than '+hi);
-  assert.ok(o.reach10<=1&&o.reach10>=0,'Grade '+g+' reach rates are rates');
- }
- const banded=Object.values(t.byGrade).reduce((n,o)=>n+o.reach10*o.runs,0);
- const indexed=t.byIndex.reduce((n,b)=>n+b.reach10*b.runs,0);
- assert.ok(Math.abs(banded-indexed)<1e-6,'and both views count the same Runs reaching D10');
- /* Every Grade is one the account's own progress actually produces - nothing was written in
-    directly and nothing is cached that could disagree. Under META_v2.7 the Grade is derived
-    from the Franchise Achievement COUNT rather than from Mastery, and Mastery keeps its own
-    separate range. */
  for(const a of t.accountsEnd){
   assert.ok(a.mastery>=0&&a.mastery<=42,'Total Job Mastery stays in range');
   assert.ok(a.distinct>=0&&a.distinct<=7,'Distinct Boss Clear stays in range');
-  assert.ok(a.franchise>=0&&a.franchise<=DATA.decorations.length,'the owned Decoration count stays in range');
-  const n=a.franchise;
-  assert.equal(a.grade,n>=10?6:n>=8?5:n>=6?4:n>=4?3:n>=2?2:1,'the Grade is derived from that count, not stored');
+  assert.ok(a.decorations>=0&&a.decorations<=DATA.decorations.length,'the owned Decoration count stays in range');
+  assert.ok(a.capital>=0,'Store Capital never goes negative');
+  for(const slot of DATA.decorationSlots){
+   const id=a.loadout[slot];
+   if(id===null)continue;
+   assert.equal(DATA.decorationBy[id].slot,slot,'an equipped Decoration is in its own Slot');
+  }
  }
- // The contract mode may only ever pick something the account has unlocked.
- const best=Debug.trajectory({trajectories:2,runs:3,contract:'best',prefix:'test-best'});
- for(const idx of best.byIndex)for(const id of Object.keys(idx.contracts)){
-  const c=DATA.contracts.find(c=>c.id===id);
-  assert.ok(c,'a real contract');
-  // gradeAtStart is a mean across trajectories; the legality question is per trajectory, so it
-  // reads the highest Grade any of them actually held at this Run index.
-  if(c.grade)assert.ok(idx.maxGradeAtStart>=c.grade,'a gated contract only appears once the Grade allows it');
+ // With no purchase order the trajectory buys nothing at all, and says so.
+ assert.deepEqual(t.purchaseOrder,[],'the pure-Meta arm names no purchase order');
+ assert.deepEqual(t.acquisition,[],'and acquires nothing');
+ for(const l of t.ledgers)for(const r of l)assert.deepEqual(r.bought,[],'no Decoration is bought without one');
+});
+
+/* META_v2.8 §STORE CAPITAL + §DECORATION COLLECTION, measured across Runs. The acquisition
+   timing reported to the Director has to be reproducible from a checked-in harness, so this
+   drives it: real settlement through Game.end(), real Meta.buyDecoration, and the purchase
+   order as an explicit input rather than a strategy the harness invents. */
+test('CROSS-RUN DECORATION: Capital is earned by the production path and spent by the real Meta call',()=>{
+ const order=['dawnSign','guildPlaque','thriftSafe','premiumCase'];
+ const t=Debug.trajectory({trajectories:4,runs:8,prefix:'test-deco',purchaseOrder:order});
+ assert.deepEqual(t.purchaseOrder,order,'the order is measurement input, echoed back');
+ assert.equal(t.acquisition.length,4,'one acquisition row per purchase position');
+ assert.equal(t.ledgers.length,4,'one ledger per trajectory');
+
+ for(const ledger of t.ledgers){
+  assert.equal(ledger.length,8,'one row per Run');
+  let owned=0,capital=0;
+  for(const r of ledger){
+   // the ledger is a ledger: what it starts with is what the previous Run left
+   assert.equal(r.capitalStart,capital,'Run '+r.run+' starts on the previous Run close');
+   assert.equal(r.ownedBefore,owned,'and on the Decorations it already had');
+   // the gain is the shipped rule, on the reached Day, from the Run's own settlement
+   assert.ok(r.settlementValue>=0,'a Settlement Value is never negative');
+   assert.equal(r.gain,Math.round(r.settlementValue*Meta.capitalRate(r.dayReached)),
+    'the gain is the Settlement Value at the reached-Day rate');
+   assert.equal(r.capitalAfterSettlement,r.capitalStart+r.gain,'and it is added once');
+   // what was bought was affordable, in the named order, and actually paid for
+   const spend=r.bought.reduce((a,id)=>a+DATA.decorationBy[id].price,0);
+   assert.equal(r.capitalEnd,r.capitalAfterSettlement-spend,'every purchase is paid out of that Capital');
+   assert.ok(r.capitalEnd>=0,'and nothing is bought that the Capital did not cover');
+   assert.equal(r.ownedAfter,r.ownedBefore+r.bought.length,'the owned count moves by what was bought');
+   for(let k=0;k<r.bought.length;k++)
+    assert.equal(r.bought[k],order[owned+k],'purchases follow the named order');
+   // buying fills its own Slot, and only its own
+   for(const id of r.bought)assert.equal(r.loadout[DATA.decorationBy[id].slot],id,id+' took its Slot');
+   owned=r.ownedAfter;capital=r.capitalEnd;
+  }
  }
+ // the acquisition rows are read off those ledgers, not projected from a mean
+ for(const row of t.acquisition){
+  assert.equal(row.runs.length,t.ledgers.length,'one entry per trajectory');
+  for(let i=0;i<row.runs.length;i++){
+   const at=row.runs[i];
+   if(at===null){assert.ok(t.ledgers[i].at(-1).ownedAfter<row.position,'null means it was never reached');continue;}
+   assert.ok(t.ledgers[i][at-1].ownedAfter>=row.position,'the recorded Run really holds that many');
+   if(at>1)assert.ok(t.ledgers[i][at-2].ownedAfter<row.position,'and it is the FIRST such Run');
+  }
+  assert.equal(row.acquired,row.runs.filter(x=>x!==null).length,'the count matches the entries');
+ }
+ // reproducible: the same input gives the same ledger, byte for byte
+ const again=Debug.trajectory({trajectories:4,runs:8,prefix:'test-deco',purchaseOrder:order});
+ assert.deepEqual(again.ledgers,t.ledgers,'the same seed and order reproduce the same ledger');
+ assert.deepEqual(again.acquisition,t.acquisition,'and the same acquisition timing');
+ // and the order is an input: a different one is followed
+ const reverse=Debug.trajectory({trajectories:2,runs:4,prefix:'test-deco',purchaseOrder:[...order].reverse()});
+ for(const l of reverse.ledgers)for(const r of l)
+  for(const id of r.bought)assert.ok(order.includes(id),'still a real Decoration');
+ assert.deepEqual(reverse.purchaseOrder,[...order].reverse(),'the reversed order is what it was given');
+ assert.throws(()=>Debug.trajectory({trajectories:1,runs:1,purchaseOrder:['nope']}),/없는 장식/,
+  'and an id that is not a Decoration is refused');
 });
 
 test('RUN-Q30: the adversarial meta-farm is measured per action, not only per Run',()=>{
