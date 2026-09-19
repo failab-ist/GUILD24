@@ -1,8 +1,9 @@
 // CROSS-RUN DECORATION ACQUISITION — the measurement behind the acquisition timing reported to
 // the Director, checked in so it is reproducible rather than quoted.
 //
-// Every Gold is earned by the production settlement path and every purchase is a real
-// Meta.buyDecoration, inside Debug.trajectory. The two purchase orders are measurement INPUT -
+// Every Gold is earned by the production settlement path - META_v2.8 Gross Sales x the
+// reached-Day rate, through Game.end() - and every purchase is a real Meta.buyDecoration,
+// inside Debug.trajectory. The two purchase orders are measurement INPUT -
 // the ones the Final Balance pass reported - not a strategy this file invents. No price and no
 // conversion rate is touched; nothing here writes a Canonical value.
 //
@@ -36,11 +37,27 @@ function run(order,label){
    +'  (p-값은 획득한 궤적만)');
  }
  // per-Run Capital, to show what the ladder is actually climbing
- const gains=t.ledgers.flat().map(r=>r.gain);
+ const rows=t.ledgers.flat(),gains=rows.map(r=>r.gain);
  const zero=gains.filter(g=>g===0).length;
  console.log('  Run당 자본 획득: 평균 '+Math.round(gains.reduce((a,b)=>a+b,0)/gains.length)
-  +' · 중앙값 '+pctile(gains,.5)+' · p75 '+pctile(gains,.75)+' · p90 '+pctile(gains,.9)
-  +' · 0G로 끝난 Run '+(100*zero/gains.length).toFixed(0)+'%');
+  +' · 중앙값 '+pctile(gains,.5)+' · p25 '+pctile(gains,.25)+' · p75 '+pctile(gains,.75)
+  +' · p90 '+pctile(gains,.9)+' · 0G로 끝난 Run '+(100*zero/gains.length).toFixed(0)+'%');
+ /* Where the Capital actually comes from: the Day band reached, and how the Run ended. Both
+    are views of the same Runs, so the two tables sum to the same total. */
+ const band=d=>d>=30?'D30':d>=25?'D25-29':d>=20?'D20-24':d>=10?'D10-19':'D1-9';
+ const group=(key,label)=>{
+  const by={};
+  for(const r of rows){const k=key(r);(by[k]??={runs:0,sales:0,gain:0});by[k].runs++;by[k].sales+=r.grossSales;by[k].gain+=r.gain;}
+  console.log('  '+label);
+  for(const k of Object.keys(by).sort()){const v=by[k];
+   console.log('    '+String(k).padEnd(26)+'Run '+String(v.runs).padStart(5)
+    +' · 평균 총매출 '+String(Math.round(v.sales/v.runs)).padStart(6)
+    +' · 평균 자본 '+String(Math.round(v.gain/v.runs)).padStart(5)
+    +' · 자본 점유 '+(100*v.gain/Math.max(1,gains.reduce((a,b)=>a+b,0))).toFixed(1)+'%');}
+  return by;
+ };
+ const byBand=group(r=>band(r.dayReached),'Day band별:');
+ const byEnd=group(r=>(r.endReason||'(미기록)').slice(0,24),'end reason별:');
  const end=t.accountsEnd;
  console.log('  Run '+R+' 시점 보유 장식: 평균 '+(end.reduce((a,x)=>a+x.decorations,0)/end.length).toFixed(2)
   +' · 4개 완성 '+(100*end.filter(x=>x.decorations===4).length/end.length).toFixed(0)+'%\n');
@@ -48,7 +65,8 @@ function run(order,label){
   acquired:a.acquired,ofTrajectories:a.ofTrajectories,medianRun:a.medianRun,
   p25:pctile(a.runs.filter(x=>x!==null),.25),p75:pctile(a.runs.filter(x=>x!==null),.75)})),
   gainPerRun:{mean:Math.round(gains.reduce((a,b)=>a+b,0)/gains.length),median:pctile(gains,.5),
-   p75:pctile(gains,.75),p90:pctile(gains,.9),zeroShare:zero/gains.length},
+   p25:pctile(gains,.25),p75:pctile(gains,.75),p90:pctile(gains,.9),zeroShare:zero/gains.length},
+  byBand,byEnd,
   endOwnedMean:end.reduce((a,x)=>a+x.decorations,0)/end.length,
   completed:end.filter(x=>x.decorations===4).length/end.length};
  return med;
