@@ -1279,8 +1279,11 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
  assert.ok(/\['supply','\.ingredients'/.test(steps),'the Supply/Fatigue lesson is on the arithmetic it explains');
  const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
- for(const point of ['압박','현재 대응','취약·불안·대응·충분'])
+ /* The readiness reading is labelled 환경 대응 and reads in the forecast now (UI-Q109), so the
+    lesson names it by the label the player actually sees. Both facts are still taught. */
+ for(const point of ['압박','환경 대응','취약·불안·대응·충분'])
   assert.ok(hazard.includes(point),'the Hazard lesson covers '+point);
+ assert.ok(!hazard.includes('현재 대응'),'and does not name a label the screen no longer shows');
  const supply=/\['supply',[^\]]*\]/.exec(steps)[0];
  for(const point of ['요구량부터','페널티','피로'])
   assert.ok(supply.includes(point),'the Supply lesson covers '+point);

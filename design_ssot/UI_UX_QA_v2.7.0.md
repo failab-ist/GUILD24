@@ -451,6 +451,36 @@ FAIL:
 - a short phone clips/overlaps the upper block
 - any desktop-only duplicate becomes the visible tutorial target on phone
 
+### CONFIRMED PLACEMENT — ENVIRONMENT READINESS
+
+Approved during the hotfix. The destination block stays in the counter band and keeps what is
+true of the place: the Gate, its Hazards, and the ability each Hazard presses on.
+
+This customer's readiness against it reads in the forecast instead, labelled `환경 대응`, beside
+`전투 전망` and `실패 시 사망 위험`. It is the same canonical ladder off the same frozen
+SALE-entry snapshot; the environment is still stated exactly once on the screen, and the help
+that explains pressure and readiness moves with it.
+
+PASS:
+- the destination block states Hazard pressure only
+- `환경 대응` is rendered in exactly one place, in the forecast
+- per-Hazard readiness no longer wraps the destination rows or pulls a row for its own help
+
+### MEASURED BASELINE — DOCUMENTAL
+
+Band = counter band + counter edge, as a share of viewport height minus the fixed dock.
+
+| width x 780 | band before | band after | sale surface after | shelf header at entry |
+|---|---|---|---|---|
+| 360 | 59.9% | 39.2% | 427px | visible |
+| 390 | 59.9% | 40.2% | 420px | visible |
+| 412 | 59.9% | 40.2% | 420px | visible |
+
+Before the hotfix the shelf header sat 341px below the fold at every phone width.
+
+Bag slot size is a documental baseline, not a fixed requirement: ~44px is the current shipped
+value and may move with the layout provided the slots stay a real touch target.
+
 ## UI-Q110 — TRANSIENT CUSTOMER SPEECH
 
 PASS:
