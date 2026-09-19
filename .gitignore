@@ -9,6 +9,7 @@ dungeon_diff.txt
 
 # Generated QA artifacts
 reports/ui/*.png
+reports/ui/qa-visual.json
 reports/balance-console.txt
 reports/test-output.txt
 reports/operating-experiment.json
