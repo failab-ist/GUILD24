@@ -66,7 +66,7 @@ REMOVE active Franchise Grade / Franchise Achievement / Start Contract layer
 
 The retired v2.7 Franchise implementation is preserved as an inactive archive and is not deleted.
 
-v2.8 also requires one integrated balance pass before Production adoption so Decoration effects are measured together with the already-observed late-run Gate / Wallet / Hazard-Counter findings.
+The integrated Decoration / Gate / Wallet / Hazard-Counter pass is already adopted on the current v2.7 line. The newest pending validation is limited to the Store Capital conversion-basis amendment owned by `META_v2.8.0.md`.
 
 ## STAGED v2.8 REFERENCE FILE SET
 
