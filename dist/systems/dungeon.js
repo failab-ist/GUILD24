@@ -5,63 +5,113 @@ const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
    is how they drifted apart before - so there is one. 투력 remains the strongest single lever,
    and no Player-facing aggregate Power Stat is created from it. */
 const preparedPower=e=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20;
-function prepare(n,d,facilities=[]){
- const statKeys=['combat','survival','mobility','spirit'],why=[],events=[],mult={foodMult:1,potionMult:1};
- const behaviour=new Set(['priceBias','buyBias','rareBias','commonBias','revisitMult','recoveryDelta','foodSupplyDelta','supplyPerItem','injuredCombatPercent','combatPercent','survivalPercent','visitGold','loyaltyBonus','overchargeBias']);
- let baseE={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit};
- let e={supply:0,escape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,variance:0};
- const traitSum=k=>n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects[k]||0),0);
- const foodSupplyDelta=traitSum('foodSupplyDelta'),supplyPerItem=traitSum('supplyPerItem');
- for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){if(k in mult)mult[k]*=v;else if(behaviour.has(k))continue;else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}
- const itemStats=[];let duplicate=0,finalSupply=0;let itemE={combat:0,survival:0,mobility:0,spirit:0};
+const STAT_KEYS=['combat','survival','mobility','spirit'];
+/* Trait keys that describe how somebody SHOPS, not how they perform on an expedition. They are
+   read by the store, never summed into a prepared effect. */
+const BEHAVIOUR_KEYS=new Set(['priceBias','buyBias','rareBias','commonBias','revisitMult','recoveryDelta','foodSupplyDelta','supplyPerItem','injuredCombatPercent','combatPercent','survivalPercent','visitGold','loyaltyBonus','overchargeBias']);
+
+/* ---- 1. Trait modifier aggregation ---------------------------------------------------
+   Everything the adventurer brings by being who they are: the flat effects, the two native
+   multipliers, and the two Supply deltas. Nothing about Items or the Gate is known here. */
+function traitModifiers(n){
+ const mult={foodMult:1,potionMult:1};
+ const e={supply:0,escape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,variance:0};
+ const sum=k=>n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects[k]||0),0);
+ for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){
+  if(k in mult)mult[k]*=v;else if(BEHAVIOUR_KEYS.has(k))continue;else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}
+ return {mult,e,sum,foodSupplyDelta:sum('foodSupplyDelta'),supplyPerItem:sum('supplyPerItem')};
+}
+
+/* ---- 2. Native Core-Stat composition --------------------------------------------------
+   ITEM_v2.7 §FOOD / FRESH POSITIVE NATIVE-STAT COMPOSITION and NPC_TRAIT_v2.7 §POTIONBODY in
+   ONE place. This is the whole answer to "what multiplies this Item's POSITIVE NATIVE Core
+   Stat", and it is the only place that answers it: Food-affinity, the Fresh Relics, the meal
+   corner's Supply half and Potionbody used to be four separate conditionals down the item
+   loop, which is how one of them ended up scoped to 강인함 alone for a whole version.
+
+   Food/Drink take ONE base-additive pool - every approved modifier reads the Item table's own
+   base and they are summed once, never multiplied as sequential layers. A Potion takes the
+   Potionbody factor. Nothing else takes anything.
+
+   Supply, Hazard Counter, Insurance, Loot, Utility and RiskReward penalties are separate
+   channels and are deliberately outside this, which is what `STAT_KEYS.includes(k) && v>0`
+   says: a positive native Core Stat, and only that. */
+function nativeStatFactor(item,k,v,mult,facilities,d){
+ if(!STAT_KEYS.includes(k)||v<=0)return 1;
+ const isFood=item.category==='food';
+ if(isFood||item.category==='drink'){
+  let pool=isFood?mult.foodMult-1:0;
+  if(facilities.includes('kitchen'))pool+=.40;
+  if(facilities.includes('fresh24'))pool+=.80;
+  if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)pool+=.25;
+  return 1+pool;
+ }
+ if(item.category==='potion')return mult.potionMult;
+ return 1;
+}
+/* 원정 도시락 코너's other half: a Food/Drink's EXPLICIT Hazard Counter, and only when it
+   matches a Hazard the actual destination carries. No universal Hazard solution. A separate
+   channel from the native pool above, and kept separate on purpose. */
+function hazardCounterFactor(item,k,v,facilities,d){
+ return facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)
+  &&v>0&&d.hazards.includes(k)?1.25:1;
+}
+/* Supply is its own channel too: the two Trait deltas, and a Food never drops below 1. */
+function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
+ if(item.category==='food')value=Math.max(1,value+foodSupplyDelta);
+ if(['food','drink'].includes(item.category))value+=supplyPerItem;
+ return value;
+}
+
+/* ---- 3. Item contribution -------------------------------------------------------------
+   Every Item in the bag, through the three channels above. Core Stats are accumulated apart
+   from the rest so the condition modifiers below can apply to the adventurer's own base
+   without touching what the bag added. */
+function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,why){
+ const itemStats=[],itemE={combat:0,survival:0,mobility:0,spirit:0};
+ let duplicate=0,finalSupply=0;
  for(const id of n.pack){
   const item=D.itemBy[id];if(item.effects.duplicate){duplicate=1;continue;}
   const copies=1+duplicate;duplicate=0;if(copies>1)why.push('황금 1+1: '+item.name+' 효과 '+copies+'회');
-  let power=copies;const from={};
+  const power=copies,from={};
   for(const[k,v]of Object.entries(item.effects)){
-   if(k==='potion')continue;let value=v*power;const isFood=item.category==='food',isFD=isFood||item.category==='drink';
-   if(k==='supply'&&isFood)value=Math.max(1,value+foodSupplyDelta);if(k==='supply'&&isFD)value+=supplyPerItem;
-   /* ITEM_v2.7 §FOOD / FRESH POSITIVE NATIVE-STAT COMPOSITION. Every approved modifier that
-      targets a Food/Drink's POSITIVE NATIVE Core Stat reads the Item table's own base and they
-      are summed once - Trait affinity and the Fresh Relics are one pool, never sequential
-      layers. The old code multiplied them (1.3 x 1.2 x 1.25) and only ever touched 강인함.
-      Supply, Hazard Counter, Insurance, Loot, Utility and RiskReward penalties are separate
-      channels and are deliberately outside this pool: the Fresh Relics say Supply unchanged. */
-   if(statKeys.includes(k)&&isFD&&v>0){
-    let nativePool=isFood?mult.foodMult-1:0;
-    if(facilities.includes('kitchen'))nativePool+=.40;
-    if(facilities.includes('fresh24'))nativePool+=.80;
-    if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)nativePool+=.25;
-    value*=1+nativePool;
-   }
-   /* NPC_TRAIT_v2.7 §POTIONBODY: a Potion's POSITIVE NATIVE Core Stat x1.15. It was written as
-      survival-only, and every Potion in the v2.7 catalog carries combat - so the Trait amplified
-      nothing at all. The scope is the same one the Food/Drink pool above uses: a positive native
-      Core Stat. Hazard Counter, Supply, Insurance and any other attached effect are separate
-      channels and stay outside it, which is why this reads statKeys and v>0 rather than the
-      whole effects table. */
-   if(item.category==='potion'&&statKeys.includes(k)&&v>0)value*=mult.potionMult;
-   /* 원정 도시락 코너's other half: a Food/Drink's EXPLICIT Hazard Counter, and only when it
-      matches a Hazard the actual destination carries. No universal Hazard solution. */
-   if(facilities.includes('expeditionMeal')&&isFD&&v>0&&d.hazards.includes(k))value*=1.25;
-   if(k==='supply')finalSupply+=value;else if(statKeys.includes(k)){itemE[k]+=value;from[k]=(from[k]||0)+value;}else e[k]=(e[k]||0)+value;
+   if(k==='potion')continue;
+   let value=v*power;
+   if(k==='supply')value=supplyContribution(item,value,foodSupplyDelta,supplyPerItem);
+   value*=nativeStatFactor(item,k,v,mult,facilities,d);
+   value*=hazardCounterFactor(item,k,v,facilities,d);
+   if(k==='supply')finalSupply+=value;else if(STAT_KEYS.includes(k)){itemE[k]+=value;from[k]=(from[k]||0)+value;}else e[k]=(e[k]||0)+value;
   }
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
   if(item.effects.survival>=10)why.push(item.name+': 생존 능력 보강');
  }
- /* DUNGEON_HAZARD v2.7 §EXCESS SUPPLY: required Supply is paid first, what is left over
-    removes current Fatigue 1:1, and only what survives THAT becomes the buffer the outcome
-    gain is charged against once the Outcome actually exists. The old single fatigueRecovery
-    spent the same Supply twice over - it cut departure Fatigue and left nothing named for
-    the result - so the two halves are separate fields now. */
+ return {itemStats,itemE,finalSupply};
+}
+
+/* ---- 4. Supply / Fatigue state --------------------------------------------------------
+   DUNGEON_HAZARD v2.7 §EXCESS SUPPLY: required Supply is paid first, what is left over
+   removes current Fatigue 1:1, and only what survives THAT becomes the buffer the outcome
+   gain is charged against once the Outcome actually exists. The old single fatigueRecovery
+   spent the same Supply twice over - it cut departure Fatigue and left nothing named for
+   the result - so the two halves are separate fields. */
+function supplyState(n,d,finalSupply){
  const required=d.requiredSupply||0,preparedSupply=finalSupply;
  const excessSupply=Math.max(0,preparedSupply-required);
  const currentFatigue=n.fatigue||0;
  const preRecovery=Math.min(currentFatigue,excessSupply);
  const fatigueBeforeExpedition=currentFatigue-preRecovery;
  const remainingSupplyBuffer=excessSupply-preRecovery;
- const effectiveFatigue=fatigueBeforeExpedition;e.supply=finalSupply;
+ const actual=finalSupply,deficit=required>0?Math.max(0,required-actual):0;
+ return {required,preparedSupply,excessSupply,currentFatigue,preRecovery,fatigueBeforeExpedition,
+  remainingSupplyBuffer,effectiveFatigue:fatigueBeforeExpedition,actual,deficit,
+  penalty:deficit>0?Math.min(.3,deficit*.06):0};
+}
+
+/* ---- 5. Condition modifiers -----------------------------------------------------------
+   What the adventurer's own condition does to their own base Stats - percentages on the
+   person, never on what the bag contributed. */
+function conditionModifiers(n,effectiveFatigue,traitSum,why){
  let combatMod=1+traitSum('combatPercent'),survivalMod=1+traitSum('survivalPercent'),mobilityMod=1,spiritMod=1;
  if(n.injury===1){
   /* NPC_TRAIT §INJURY: this branch is injury===1 only. 중상 carries no Stat penalty - it
@@ -71,50 +121,64 @@ function prepare(n,d,facilities=[]){
  }
  if(effectiveFatigue>=10&&effectiveFatigue<20){mobilityMod-=0.15;spiritMod-=0.15;why.push('피로 누적(10~19): 기동/정신 -15%');}
  else if(effectiveFatigue>=20){mobilityMod-=0.40;spiritMod-=0.40;why.push('극심한 피로(20): 기동/정신 -40%');}
- e.combat=baseE.combat*combatMod+itemE.combat;e.survival=baseE.survival*survivalMod+itemE.survival;e.mobility=baseE.mobility*mobilityMod+itemE.mobility;e.spirit=baseE.spirit*spiritMod+itemE.spirit;
+ return {combat:combatMod,survival:survivalMod,mobility:mobilityMod,spirit:spiritMod};
+}
+
+/* ---- 6. Presentation provenance -------------------------------------------------------
+   Where each Core Stat came from, for the screen. Reads the state the calculation already
+   produced and contributes nothing back to it. */
+function statSources(n,itemStats,effectiveFatigue,penalty,traitSum){
+ const sources={combat:[],survival:[],mobility:[],spirit:[]};
+ if(n.equipment&&n.equipment.power)sources.combat.push({name:'장비 ('+n.equipment.name+')',v:n.equipment.power});
+ for(const tid of n.traits){
+  const eff=D.traitBy[tid].effects;
+  for(const k of STAT_KEYS)if(eff[k])sources[k].push({name:D.traitBy[tid].name,v:eff[k]});
+  if(eff.combatPercent)sources.combat.push({name:D.traitBy[tid].name,v:eff.combatPercent*100,isPct:true});
+  if(eff.survivalPercent)sources.survival.push({name:D.traitBy[tid].name,v:eff.survivalPercent*100,isPct:true});
+  if(n.injury===1&&eff.injuredCombatPercent)sources.combat.push({name:D.traitBy[tid].name,v:eff.injuredCombatPercent*100,isPct:true});
+ }
+ if(n.injury===1){
+  if(!traitSum('injuredCombatPercent'))sources.combat.push({name:'부상',v:-15,isPct:true});
+  sources.survival.push({name:'부상',v:-20,isPct:true});
+ }
+ for(const st of itemStats)for(const k of STAT_KEYS)
+  if(st.stats[k])sources[k].push({name:D.itemBy[st.item].name,v:st.stats[k]});
+ if(effectiveFatigue>=10&&effectiveFatigue<20){
+  sources.mobility.push({name:'피로 누적',v:-15,isPct:true});
+  sources.spirit.push({name:'피로 누적',v:-15,isPct:true});
+ }else if(effectiveFatigue>=20){
+  sources.mobility.push({name:'극심한 피로',v:-40,isPct:true});
+  sources.spirit.push({name:'극심한 피로',v:-40,isPct:true});
+ }
+ if(penalty)for(const k of STAT_KEYS)sources[k].push({name:'보급 부족',v:-Math.round(penalty*100),isPct:true});
+ return sources;
+}
+
+/* The prepared reading of one adventurer against one Gate. It composes the six pieces above
+   in the order the Canonical composition rules run: who they are, what they carry, what that
+   leaves them for Supply and Fatigue, what their condition costs them, the prepared Stats,
+   and the Hazard reading off those Stats. No rule lives here. */
+function prepare(n,d,facilities=[]){
+ const why=[],events=[];
+ const {mult,e,sum:traitSum,foodSupplyDelta,supplyPerItem}=traitModifiers(n);
+ const baseE={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit};
+ const {itemStats,itemE,finalSupply}=itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,why);
+ const sup=supplyState(n,d,finalSupply);
+ const {effectiveFatigue,penalty}=sup;
+ e.supply=finalSupply;
+ const mod=conditionModifiers(n,effectiveFatigue,traitSum,why);
+ for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식 1개당 보급 -1');
- const actual=finalSupply,deficit=required>0?Math.max(0,required-actual):0,penalty=deficit>0?Math.min(.3,deficit*.06):0;
  if(penalty)for(const k of G.Adventurer.keys)e[k]*=1-penalty;
-   const sources = {combat:[], survival:[], mobility:[], spirit:[]};
-   if(n.equipment && n.equipment.power) sources.combat.push({name:'장비 ('+n.equipment.name+')', v:n.equipment.power});
-   for(const tid of n.traits){
-     const eff = D.traitBy[tid].effects;
-     for(const k of statKeys){
-       if(eff[k]) sources[k].push({name: D.traitBy[tid].name, v: eff[k]});
-     }
-     if(eff.combatPercent) sources.combat.push({name: D.traitBy[tid].name, v: eff.combatPercent*100, isPct: true});
-     if(eff.survivalPercent) sources.survival.push({name: D.traitBy[tid].name, v: eff.survivalPercent*100, isPct: true});
-     if(n.injury===1 && eff.injuredCombatPercent) sources.combat.push({name: D.traitBy[tid].name, v: eff.injuredCombatPercent*100, isPct: true});
-   }
-   if(n.injury===1){
-     const grit = traitSum('injuredCombatPercent');
-     if(!grit) sources.combat.push({name: '부상', v: -15, isPct: true});
-     sources.survival.push({name: '부상', v: -20, isPct: true});
-   }
-   for(const st of itemStats){
-     for(const k of statKeys){
-       if(st.stats[k]) sources[k].push({name: D.itemBy[st.item].name, v: st.stats[k]});
-     }
-   }
-   if(effectiveFatigue>=10 && effectiveFatigue<20){
-     sources.mobility.push({name: '피로 누적', v: -15, isPct: true});
-     sources.spirit.push({name: '피로 누적', v: -15, isPct: true});
-   }else if(effectiveFatigue>=20){
-     sources.mobility.push({name: '극심한 피로', v: -40, isPct: true});
-     sources.spirit.push({name: '극심한 피로', v: -40, isPct: true});
-   }
-   if(penalty){
-     for(const k of statKeys) sources[k].push({name: '보급 부족', v: -Math.round(penalty*100), isPct: true});
-   }
-   
+ const sources=statSources(n,itemStats,effectiveFatigue,penalty,traitSum);
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
- e.beforeFatigue=currentFatigue;e.preparedSupply=preparedSupply;e.excessSupply=excessSupply;
- e.preRecovery=preRecovery;e.fatigueBeforeExpedition=fatigueBeforeExpedition;e.remainingSupplyBuffer=remainingSupplyBuffer;
- return {effects:e,sources,hazard,hazards,itemStats,supply:{required,actual,deficit,penalty,prepared:preparedSupply,excess:excessSupply,preRecovery,remainingBuffer:remainingSupplyBuffer},why,events};
+ e.beforeFatigue=sup.currentFatigue;e.preparedSupply=sup.preparedSupply;e.excessSupply=sup.excessSupply;
+ e.preRecovery=sup.preRecovery;e.fatigueBeforeExpedition=sup.fatigueBeforeExpedition;e.remainingSupplyBuffer=sup.remainingSupplyBuffer;
+ return {effects:e,sources,hazard,hazards,itemStats,supply:{required:sup.required,actual:sup.actual,deficit:sup.deficit,penalty,prepared:sup.preparedSupply,excess:sup.excessSupply,preRecovery:sup.preRecovery,remainingBuffer:sup.remainingSupplyBuffer},why,events};
 }
 /* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. The inherited Gate-count progression, in one
    place: the generator draws from it and the forecast reads it, so there is no forecast-only

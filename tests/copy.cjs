@@ -227,9 +227,15 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     Trait moved nothing. Both assertions below described that stale implementation; they now
     describe the Canonical one, and the label widened for the same reason foodMult's did. */
  const dungeon=read('dist/systems/dungeon.js');
- assert.ok(/nativePool=isFood\?mult\.foodMult-1:0/.test(dungeon),'foodMult enters the native Core-Stat pool');
- assert.ok(/statKeys\.includes\(k\)&&isFD&&v>0/.test(dungeon),'and that pool is positive native Core Stat only');
- assert.ok(/item\.category==='potion'&&statKeys\.includes\(k\)&&v>0\)value\*=mult\.potionMult/.test(dungeon),'potionMult reaches a Potion positive native Core Stat');
+ /* Both multipliers live in one function now - `nativeStatFactor` is the whole answer to what
+    multiplies an Item's positive native Core Stat - so the channel each one names is read off
+    that function rather than off four scattered conditionals. */
+ const factor=dungeon.slice(dungeon.indexOf('function nativeStatFactor('),dungeon.indexOf('function hazardCounterFactor('));
+ assert.ok(/if\(!STAT_KEYS\.includes\(k\)\|\|v<=0\)return 1;/.test(factor),'the pool is positive native Core Stat only');
+ assert.ok(/pool=isFood\?mult\.foodMult-1:0/.test(factor),'foodMult enters the native Core-Stat pool');
+ assert.ok(/item\.category==='potion'\)return mult\.potionMult/.test(factor),'potionMult reaches a Potion positive native Core Stat');
+ assert.ok(!/mult\.(food|potion)Mult/.test(dungeon.replace(factor,'').replace(/foodMult:1,potionMult:1/g,'')),
+  'and neither multiplier is applied anywhere else');
  assert.equal(Presentation.labels.foodMult,'음식의 능력치','so the label names that channel');
  assert.equal(Presentation.labels.potionMult,'포션의 능력치','and so does the potion one');
  for(const id of ['eater','small'])
