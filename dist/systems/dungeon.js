@@ -196,9 +196,14 @@ function resolve(n,d,r,facilities=[],options={}){
  let outcome=combatSuccess?'성공':(escapeRoll<escapeChance?'퇴각':'부상');
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  const injuryRoll=r.next(),deathRoll=r.next();let rescued=false,deathChance=0,avoidedDeath=false;
- /* NPC_TRAIT_v2.7 §Injured re-expedition escalation: the +15%p rides the Severe-vs-ordinary
-    decision the branch already makes, never a second Severe roll, and only on a failure path. */
- const departedInjured=n.injury===1,severeEscalation=departedInjured&&!combatSuccess?.15:0;
+ /* DUNGEON_HAZARD_v2.7 §INJURED RE-EXPEDITION SEVERE ESCALATION: "the existing non-Death
+    Severe-vs-Injury branch, WHENEVER that branch is reached on a surviving failure path".
+    It was conditioned on !combatSuccess as well, which silently exempted the other way the
+    branch is reached - an environment incident that hurts someone whose combat went fine.
+    The condition is the departure state alone: wherever the Severe-vs-ordinary decision is
+    made, an adventurer who walked out already wounded carries the +15%p into it. Still one
+    decision point, still no second Severe roll, still applied before that branch's clamp. */
+ const departedInjured=n.injury===1,severeEscalation=departedInjured?.15:0;
  if(!combatSuccess&&outcome==='부상'){
   if(injuryRoll<clamp(.42+e.injuryRisk-e.injuryGuard*.25+severeEscalation,0,1))outcome='중상';
  }else if(affected||r.next()<e.injuryRisk){outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';}

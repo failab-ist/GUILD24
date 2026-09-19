@@ -486,4 +486,57 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  assert.ok(/outcome!=='성공'/.test(src),'the Death roll is conditioned on the failure path');
 });
 
+/* DUNGEON_HAZARD_v2.7 §INJURED RE-EXPEDITION SEVERE ESCALATION. The +15%p was conditioned on
+   !combatSuccess, which exempted the other way the Severe-vs-Injury branch is reached: an
+   environment incident hurting someone whose combat went fine. The resolver is driven here on
+   a scripted RNG so the decision point is reached deliberately and the ONLY difference between
+   the two runs is the departure injury - not a seed, not a Stat, not a pack. */
+test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, not combat only',()=>{
+ const g=new Game();g.autosave=false;g.start('severe-escalation');
+ const gate=g.makeDungeon('spider',1);
+ /* draw order inside resolve(): noise, envRoll, escapeRoll, injuryRoll, deathRoll. Anything
+    the tail draws afterwards gets 0.999, which declines every optional rescue. */
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],
+  weighted:a=>a[0],shuffle:a=>a.slice()};};
+ const who=injury=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:[],injury,fatigue:0,alive:true,recovery:0}));
+ const run=(injury,seq,d)=>Dungeon.resolve(who(injury),d,scripted(seq),[]);
+
+ /* Path A — environment incident on a WON fight. combat succeeds (noise 1.0 against power 1),
+    the environment roll lands inside the incident window, and injuryRoll 0.20 sits between the
+    ordinary threshold (.13) and the escalated one (.28). */
+ const easy={...gate,power:1};
+ const healthyA=run(0,[1.0,0.0001,0.9,0.20,0.999],easy);
+ const injuredA=run(1,[1.0,0.0001,0.9,0.20,0.999],easy);
+ assert.equal(healthyA.combatWon,true,'path A really is a won fight');
+ assert.equal(injuredA.combatWon,true,'for both of them');
+ assert.equal(healthyA.outcome,'부상','a healthy adventurer takes the ordinary Injury');
+ assert.equal(injuredA.outcome,'중상','one who departed injured takes the Severe one at the same roll');
+
+ /* Path B — the ordinary combat-failure path the rule already covered, so the fix did not
+    trade one branch for the other. The fight is lost, the escape fails, and injuryRoll 0.50
+    sits between .42 and .57. */
+ const hard={...gate,power:100000};
+ const healthyB=run(0,[1.0,0.999,0.999,0.50,0.999],hard);
+ const injuredB=run(1,[1.0,0.999,0.999,0.50,0.999],hard);
+ assert.equal(healthyB.combatWon,false,'path B really is a lost fight');
+ assert.equal(healthyB.outcome,'부상','still the ordinary Injury without the escalation');
+ assert.equal(injuredB.outcome,'중상','and the Severe one with it');
+
+ /* The escalation is 15 percentage points on ONE decision, not a second Severe roll: a roll
+    above the escalated threshold stays ordinary for both. */
+ for(const [seq,d,label] of [[[1.0,0.0001,0.9,0.40,0.999],easy,'environment'],[[1.0,0.999,0.999,0.80,0.999],hard,'combat']]){
+  assert.equal(run(1,seq,d).outcome,'부상',label+': past the escalated threshold it is still ordinary');
+ }
+ // and a roll under the ordinary threshold is Severe for both, so the shift is a shift, not a floor
+ assert.equal(run(0,[1.0,0.0001,0.9,0.01,0.999],easy).outcome,'중상','under .13 both are Severe');
+ assert.equal(run(1,[1.0,0.0001,0.9,0.01,0.999],easy).outcome,'중상','including the injured one');
+
+ /* It is an outcome-risk modifier, not a hidden Stat change: the prepared four are identical. */
+ const stats=injury=>{const e=Dungeon.prepare({...who(injury),injury:1},gate).effects;return [e.combat,e.survival,e.mobility,e.spirit];};
+ assert.deepEqual(stats(1),stats(1),'the prepared reading is a function of the injury alone');
+ const src=read('dist/systems/dungeon.js');
+ assert.ok(/severeEscalation=departedInjured\?\.15:0/.test(src),'the escalation reads the departure state alone');
+ assert.equal((src.match(/severeEscalation/g)||[]).length,3,'one definition, used at the two existing decision points');
+});
+
 console.log(groups+' night groups passed');
