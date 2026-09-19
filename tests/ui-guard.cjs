@@ -249,16 +249,27 @@ test('SALE: the customer line is a balloon on the character, not a system notifi
  // customer speaking. The balloon lives inside the scene next to the card, never as a
  // fixed banner or a bottom toast.
  assert.ok(/\+speech\(n\)\+standee\(n\)/.test(app),'the balloon sits in the scene with the customer');
- assert.ok(/\.say\{[^}]*grid-row:1/.test(css),'it takes the row above the customer, not an overlay');
+ /* UI-Q110 replaced the reserved row with an overlay: on a phone that row was part of what
+    pushed the shelf off the screen, and the balloon is presentation. It still belongs to the
+    customer and still hangs over them - what changed is that it costs the band no height. */
+ assert.ok(/\.say\{[^}]*position:absolute/.test(css),'it is an overlay over the customer, not a row in the band');
+ assert.ok(!/\.say\{[^}]*grid-row/.test(css),'it does not reserve a row in the counter band');
  assert.ok(!/\.say\{[^}]*position:fixed/.test(css),'it is not a fixed screen notification');
+ // The line itself stays run.say / Save truth; only whether this UI has shown it is local.
+ assert.ok(/let sayKey=null,sayHidden=false/.test(app),'the shown/hidden marker is UI-local state');
+ assert.ok(!/say(Hidden|Key|Armed)/.test(read('dist/systems/save.js')+read('dist/systems/run.js')),
+  'speech visibility never enters the Run or the Save schema');
  assert.ok(/\.say:after\{[^}]*border-top-color/.test(css),'it has a tail pointing down at the character');
  assert.ok(/\.say:after\{[^}]*var\(--cardw\)/.test(css),'the tail is aimed at the card, not at the room');
  // It must not eat the decision: no clipping, no ellipsis, no shrink-to-fit.
  assert.ok(!/\.say[^{]*\{[^}]*text-overflow/.test(css),'a sentence is never ellipsised');
  assert.ok(!/\.say[^{]*\{[^}]*white-space:nowrap/.test(css),'a long line is allowed to wrap');
  assert.ok(!/\.say>span\{[^}]*max-height/.test(css),'the text is not clamped to a height');
- // The menu pin owns the top-right corner; the balloon keeps clear of it.
- assert.ok(/\.say\{[^}]*max-width:min\(calc\(100% - 44px\)/.test(css),'the balloon stops short of the menu button');
+ /* The menu pin owns the top-right corner; the balloon keeps clear of it. As an overlay it
+    starts at the gutter rather than in a grid cell, so the room it leaves is that offset plus
+    the button - the runtime overlap itself is checked at phone widths by qa:visual. */
+ assert.ok(/\.say\{[^}]*max-width:min\(calc\(100% - var\(--gutter\) - 52px\)/.test(css),
+  'the balloon stops short of the menu button');
 });
 
 test('SALE: the toast is the system channel only, and it really hides',()=>{
