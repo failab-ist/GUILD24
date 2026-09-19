@@ -365,7 +365,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale{background:#191208}
 /* ---- layer 1 : who is here --------------------------------------------------- */
 .front{position:relative;flex:0 0 auto;display:grid;grid-template-columns:auto minmax(0,1fr);
- grid-template-rows:auto auto;align-items:end;gap:6px;padding:8px var(--gutter) 0;overflow:hidden;
+ grid-template-rows:auto;align-items:end;gap:6px;padding:8px var(--gutter) 0;overflow:hidden;
  background:linear-gradient(180deg,#0d0904 0,#241a10 58%,#3b2a19 100%);
  /* ONE deck geometry, declared once. The card's height is content — frame, the payload's
     visible height, the nameplate — so the plate can never reach the artwork. The waiting
@@ -380,6 +380,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
     transparent margin is under 2% and many are 0 on every side, so it was real painted artwork
     leaving the card on three sides. The art now lives inside the frame, and --frame is tightened
     so containing it costs the face as little scale as possible. */
+ /* one row: the balloon is an overlay now and the waiting line lives inside .front-side, so
+    the band is the card beside the decision column and nothing else. */
  --cardw:max(88px,min(56vw,232px,calc(90dvh - 300px)));--frame:7px;--plateh:62px;--gapb:9px;--deck:.185;
  --artw:calc(var(--cardw) - var(--frame)*2);
  --cardh:calc(var(--frame)*2 + var(--artw) + var(--gapb) + var(--plateh))}
@@ -403,7 +405,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 
    Layers, bottom to top: card base -> rarity light -> NPC payload -> contact shadow ->
    rarity bracket -> the nameplate. Nothing is baked into the artwork. */
-.who{grid-row:2;position:relative;z-index:2;display:block;width:var(--cardw);max-width:100%;min-width:0;
+.who{position:relative;z-index:2;display:block;width:var(--cardw);max-width:100%;min-width:0;
  padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;text-align:left}
 .who:hover{background:transparent}
 .who:active{transform:none}
@@ -449,11 +451,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    one row and a long one wraps to a second. Nothing is clipped, ellipsised or shrunk to
    force a row — a line that needs two rows gets two. Two rows is a rule about the writing,
    not about this box, and tests/copy.cjs holds the pools to it. */
-.say{grid-row:1;grid-column:1 / -1;position:relative;z-index:3;
- margin:0 0 16px;padding:9px 13px 10px;
+/* UI-Q110: the balloon is an overlay, so it is taken out of flow entirely and the counter
+   band is exactly as tall without it as with it. It hangs over the backwall above the
+   customer, where it used to sit, and leaves after a beat. */
+.say{position:absolute;z-index:6;left:var(--gutter);top:8px;
+ margin:0;padding:9px 13px 10px;cursor:pointer;
  /* the menu pin owns the top-right corner; the balloon stops short of it so a long line
     never runs underneath the button */
- max-width:min(calc(100% - 44px),560px);
+ max-width:min(calc(100% - var(--gutter) - 52px),560px);
  font:400 15px/1.5 var(--ui);color:var(--ink);
  background:var(--paper);
  box-shadow:inset 0 0 0 2px #00000026,3px 4px 0 #00000073;
@@ -480,7 +485,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  transition:transform .18s ease-out,opacity .18s ease-out,visibility 0s}
 @media (prefers-reduced-motion:reduce){#toast,#toast.show{transition:opacity .18s ease-out}}
 
-.line-up{grid-row:2;position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
+.line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
  margin-left:calc(var(--cardw)*var(--deck)*-.58);
@@ -560,6 +565,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    and INFORMATION faces are wider than the pair they replaced, and at 360 that split
    `실패 시 사망 위험` across `...위` / `험`. */
 .readout .fore{display:flex;align-items:baseline;gap:2px;flex:1 1 46%;word-break:keep-all}
+/* 환경 대응 carries a state word, not a figure, so it takes the readout's word scale and the
+   same red the Hazard rows use when the customer is not ready for what is waiting. */
+.readout .fore b.env-ok,.readout .fore b.env-lack{font-size:16px}
+.readout .fore b.env-lack{color:var(--blood)}
 .readout .tip,.dest-plate .tip{display:inline-block;margin-left:6px;position:static}
 .readout .tip>summary,.dest-plate .tip>summary{display:inline-flex;align-items:center;justify-content:center;
  min-width:24px;min-height:24px;padding:0 4px;list-style:none;cursor:pointer;
@@ -586,7 +595,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    Item's own contribution */
 .delta-src{margin:7px 0 3px;font:600 11px/1 var(--ui);letter-spacing:.1em;color:#9c8d70}
 .effects.derived li b{font-family:var(--ui);font-weight:400;font-size:var(--t-sm);color:#a2947c;text-align:right}
-.env-help{margin:6px 0 0}
 .detail-stat.moved strong{color:var(--gold)}
 .ingredients{margin:6px 0 0;font:400 12px/1.65 var(--ui);color:#a2947c}
 .readout .estimate{margin-top:8px;font:400 12px/1.5 var(--ui);color:#8d8067}
@@ -1177,9 +1185,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
     the top row to where a person actually talks from: beside the head, tail pointing back
     at them. Same element, same copy — only the placement is responsive. */
  .front{--cardw:max(88px,min(56vw,300px,calc(90dvh - 300px)))}
- .say{grid-row:2;grid-column:2;align-self:start;justify-self:start;
-  /* the bubble used to be pushed down past the payload's overhang; there is no overhang now */
-  margin:18px 0 0 14px;max-width:min(46ch,420px)}
+ /* Same placement as before - beside the head, tail pointing back at them - but reached by
+    offset now that the balloon is an overlay. The card is bottom-aligned in the band and is
+    --cardh tall, so its top edge is that far up from the band's floor. */
+ .say{left:calc(var(--gutter) + var(--cardw) + 14px);top:auto;
+  bottom:calc(var(--cardh) - 18px);max-width:min(46ch,420px)}
  .say:after{top:22px;left:-9px;
   border:9px solid transparent;border-right-color:var(--paper);border-left:0;border-bottom-width:9px}
 }
@@ -1245,8 +1255,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
   .dest-plate div { display: flex; flex-direction: column; align-items: stretch; gap: 4px; }
  .dest-plate .hazards li{flex-wrap:wrap}
  .dest-plate .hazards .ready{margin-left:auto}
-  /* Ensure portrait is not cropped by setting max-height */
-  .front { grid-template-rows: 1fr; align-items: stretch; }
+  /* The card kept its own height and the row was stretched around it, so a button taller than
+     its content centred the card and left bare wall above it - the single largest piece of
+     dead space in the band. The row is the card's own height now and it stands on the counter
+     line. Nothing is cropped: the portrait is still contained at its own aspect ratio. */
   .standee { max-height: none; }
   /* The two forecast cells sit side by side on a phone, and the ? was part of the same flow:
      when the longer label wrapped, its ? was pushed onto a third line and the whole panel grew.
@@ -1282,11 +1294,24 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    shortening the whole card - --cardw drives the art box and the plate together, so the
    customer stays uncropped while the rows below gain the height. --deck is left alone:
    the waiting backs scale from the same geometry and blow up with it. */
-.p-sale .front{--cardw:max(88px,min(42vw,162px,calc(90dvh - 300px)));--plateh:52px;padding-top:6px}
-.p-sale .front-side{gap:7px}
-.p-sale .front-side .dest-plate{margin:0;padding:7px 9px;grid-template-columns:26px 1fr;gap:7px}
+/* UI-Q109. The card took 42% of a 360 handset's width, which left the decision column too
+   narrow to set a Hazard row on one line - so the column wrapped and grew, and the band grew
+   with it. A narrower card costs the face a little scale and buys the column the width it
+   needs. The portrait is still contained at its own aspect ratio: nothing is cropped or
+   stretched, the whole sticker is on the card, and --plateh keeps the nameplate clear of it. */
+.p-sale .front{--cardw:max(88px,min(38vw,150px,calc(90dvh - 300px)));--plateh:52px;padding-top:4px}
+.p-sale .front-side{gap:6px}
+/* the divider is a rule between two halves of the screen, not a shelf of its own */
+.p-sale .counter-edge{height:12px;
+ background:linear-gradient(180deg,#d3ac71 0 2px,#b98d52 2px 7px,#7c5730 7px 10px,#4a331d 10px 12px)}
+.p-sale .front-side .dest-plate{margin:0;padding:6px 8px;grid-template-columns:24px 1fr;gap:6px}
 .p-sale .front-side .dest-plate label{margin-bottom:2px;font-size:10px}
 .p-sale .front-side .dest-plate h3{margin-bottom:0;font-size:14px}
+/* UI-Q109: the plate's height was mostly the space between its rows, not the rows. What it
+   carries stays - the destination, and each Hazard with the ability it presses on - the rows
+   are just no longer set a line apart from each other. */
+.p-sale .front-side .dest-plate .hazards{margin-top:4px}
+.p-sale .front-side .dest-plate .hazards li{padding:4px 6px;gap:6px}
 
 @media(min-width:1024px){
  .front-side .readout.core-desk{display:block;margin:0}

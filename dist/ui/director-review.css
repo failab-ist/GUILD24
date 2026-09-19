@@ -19,15 +19,38 @@
 /* SALE — the bag belongs beside the adventurer, in the space that was visually idle.
    Keeping it above the counter means the lower dossier no longer grows just to repeat
    slot information. The waiting deck shares that side column instead of owning it. */
-.front-side{grid-column:2;grid-row:2;position:relative;z-index:2;min-width:0;align-self:stretch;
- display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:0 0 14px 8px}
-.front-side .kit{display:grid;gap:5px;margin:0;padding:8px;background:#100b0799;
- box-shadow:inset 0 0 0 1px #ffffff14;font-size:12px;line-height:1.35}
-.front-side .kit>span:not(.slots){min-width:0;overflow-wrap:anywhere}
-.front-side .kit .slots{display:grid;grid-template-columns:repeat(3,34px);gap:5px;justify-content:start;
- margin-left:0;padding:5px;background:#0000004d}
-.front-side .kit .slot-label{grid-column:1 / -1;margin:0 0 1px;color:#d4c18f;font-size:12px}
-.front-side .line-up{grid-row:auto;justify-items:end;padding-bottom:0;margin-top:auto}
+/* UI-Q109. The side column used to be pinned to the band's SECOND row, because the speech
+   balloon owned the first. The balloon is an overlay now and reserves no row, so the column
+   sits on the one row the band has and reads beside the customer instead of under them. */
+.front-side{grid-column:2;grid-row:1;position:relative;z-index:2;min-width:0;align-self:stretch;
+ display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:0 0 6px 8px}
+/* The destination keeps the column's full width: narrowing it to share a row with the deck
+   wraps the Hazard rows and costs more height than the deck ever took. */
+.front-side .kit{display:flex;align-items:flex-start;gap:9px;margin:0;padding:7px;
+ background:#100b0799;box-shadow:inset 0 0 0 1px #ffffff14;font-size:12px;line-height:1.35}
+.front-side .vitals{display:grid;gap:3px;flex:1 1 auto;min-width:0}
+.front-side .vitals>span{min-width:0;overflow-wrap:anywhere}
+/* §6. Two slots, stacked, in the upper right of the panel - the space the status lines were
+   already leaving idle - and each one a real touch target rather than a 32px chip. The label
+   reads down the left of the pair so the bag costs the height of its slots and nothing more.
+   Capacity is untouched: it is the same two slots the bag has always had. */
+.front-side .kit .slots{flex:0 0 auto;display:grid;grid-template-columns:minmax(44px,auto);
+ gap:4px;justify-content:start;justify-items:start;margin-left:0;padding:4px;background:#0000004d}
+.front-side .kit .slots i{width:44px;height:44px}
+.front-side .kit .slot-label{grid-column:1;margin:0 0 1px;color:#d4c18f;font-size:11px;
+ line-height:1.2;white-space:nowrap}
+/* the waiting deck is a thumbnail of the queue, not a second deck: the dock already states
+   the count in figures, so here it only has to stay legible. */
+.front-side .line-up{--deck:.11;justify-items:end;padding-bottom:0;margin-top:0}
+.front-side .line-up .wait:first-child{margin-left:0}
+/* The menu pin is placed over the band's top-right 44px, and with the speech row gone
+   something in this column now sits under it. The deck takes that corner rather than the
+   status panel: it is the one block here that cannot wrap, so keeping it clear of the pin is
+   a fixed inset and costs the band no height, where insetting the status lines would have
+   wrapped them and made the band taller than it was before. */
+@media(max-width:1023px){
+ .front-side .line-up{order:-1;padding-right:calc(50px - var(--gutter))}
+}
 
 /* The price keys are part of the selected item's flow. Sticky keys could sit over the
    forecast while the register drawer was taller than the viewport, so they no longer float. */
@@ -69,21 +92,25 @@
 /* On wide SALE screens the speech bubble used to move into the same upper-right cell that
    now carries the bag. Keep the bubble across the top and reserve the right cell for bag /
    waiting information. */
+/* The bubble is an overlay everywhere now (UI-Q110), so the wide-screen placement is an
+   offset rather than a grid cell - same result on screen: across the top of the band, tail
+   pointing down at the customer, clear of the bag and the waiting deck. */
 @media(min-width:900px){
- .p-sale .say{grid-row:1;grid-column:1 / -1;align-self:auto;justify-self:start;margin:0 0 16px;
-  max-width:min(calc(100% - 44px),560px)}
- .p-sale .say:after{top:100%;left:min(calc(var(--cardw) * .5),60%);border:9px solid transparent;
+ .p-sale .say{left:var(--gutter);top:8px;bottom:auto;max-width:min(calc(100% - var(--gutter) - 52px),560px)}
+ .p-sale .say:after{top:100%;bottom:auto;left:min(calc(var(--cardw) * .5),60%);border:9px solid transparent;
   border-top-color:var(--paper);border-bottom:0}
  .front-side{padding-left:16px}
 }
 
 /* A very narrow phone still gets the same hierarchy, but the side column is kept useful by
    shrinking the slot tiles rather than collapsing the whole SALE composition into desktop. */
+/* The slot tiles used to be what gave way on a 360 handset, down to 30px - below anything a
+   thumb can aim at, on the device that needs the target most. The column gives up padding and
+   type size instead; the bag keeps its touch class (UI-Q109). */
 @media(max-width:370px){
- .front-side{padding-left:5px}
- .front-side .kit{padding:6px;font-size:11px}
- .front-side .kit .slots{grid-template-columns:repeat(3,30px);gap:3px}
- .front-side .kit .slots i{width:30px;height:30px}
+ .front-side{padding-left:5px;gap:6px 7px}
+ .front-side .kit{padding:6px;font-size:11px;gap:2px 7px}
+ .front-side .kit .slots{gap:3px;padding:3px}
  .stock-brief ul{gap:4px}
  .stock-brief li{padding:4px;font-size:12px}
 }
@@ -94,13 +121,13 @@
    takes the right of it at a size worth aiming a cursor at, and the panel gets shorter
    as well as fuller. Presentation only: capacity is unchanged. */
 @media(min-width:1024px){
- .front-side .kit{grid-template-columns:minmax(0,1fr) auto;align-items:center;
-  gap:4px 16px;padding:11px 13px;font-size:13px}
- .front-side .kit>span:not(.slots){grid-column:1}
- .front-side .kit .slots{grid-column:2;grid-row:1 / span 3;align-content:center;
-  grid-template-columns:repeat(3,52px);gap:8px;padding:8px}
+ /* the desk lays the band out side by side, so the pin is nowhere near this panel */
+ .front-side .kit{align-items:center;gap:16px;padding:11px 13px;font-size:13px}
+ .front-side .vitals{gap:4px}
+ .front-side .kit .slots{grid-template-columns:repeat(2,52px);align-content:center;
+  gap:8px;padding:8px}
  .front-side .kit .slots i{width:52px;height:52px}
- .front-side .kit .slot-label{font-size:14px}
+ .front-side .kit .slot-label{grid-column:1 / -1;grid-row:1;margin:0 0 1px;max-width:none;font-size:14px}
  /* What was left over after the decision blocks moved up here was bare back wall between
     the destination and the counter. The forecast is the densest block of the three, so it
     takes the slack instead of the wall: its rows breathe and its closing line sits on the
@@ -112,7 +139,8 @@
  .front-side{display:grid;grid-template-columns:minmax(0,1fr) auto;align-content:end;gap:8px 12px}
  .front-side .kit,.front-side .readout.core-desk{grid-column:1 / -1}
  .front-side .dest-plate{grid-column:1;align-self:end}
- .front-side .line-up{grid-column:2;align-self:end;margin-top:0}
+ /* the desk has the room, so the deck keeps its full size here */
+ .front-side .line-up{--deck:.185;grid-column:2;align-self:end;margin-top:0}
  /* The deck is a fan: every back is pulled left over the one before it, the first one
     included, so the whole fan hangs a card's worth outside its own box. That bled onto
     bare wall while the deck had a row to itself; sharing a row with the destination it

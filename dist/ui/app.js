@@ -155,7 +155,7 @@ function render(){
  else if(bossRevealDue())modal='boss';
  else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
- renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();
+ renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech();
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -319,6 +319,13 @@ function readout(n,extra=null,cls=''){
      percentage, said as a conditional - never as the chance this expedition ends in death. */
   +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
    +tip('실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험')+'</span>'
+  /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
+     weakest of the Hazard states the destination plate lists, in the same canonical
+     vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
+     here because it is judged against an Item, beside the other two readings a product is
+     bought to move. No new label and no new calculation. */
+  +(o.worst?'<span class="fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>'
+   +tip('환경 대응','압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준')+'</span>':'')
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  /* DUNGEON_HAZARD_v2.7 §PLAYER-FACING INFORMATION BOUNDARY. These are decision ingredients,
@@ -385,8 +392,17 @@ function saleScreen(){
  +'</section>'
  +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
-  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+traitRows(n)+deepOfferUI(n)+specialUI()+'</div>'
-  +shelf()+ownedRelicView()
+  /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
+     the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
+     were the block that pushed the first product row past the fold. They are the one thing
+     here that a product cannot move: the forecast and the four Core Stats are exactly what
+     보급 후 변화 compares against when a product is picked, so they lead, and the Traits read
+     as the standing description they are, under the goods. Nothing is dropped, no wording
+     changes, and the wide layout still sets both columns side by side. */
+  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+specialUI()+'</div>'
+  +shelf()
+  +'<div class="dossier traits">'+traitRows(n)+'</div>'
+  +ownedRelicView()
  +'</main>'
  /* D-34. Every price on this screen is a judgement against what the store has, and the
     store's gold was the one number not on it - Morning, Order and Closing all show it and
@@ -410,13 +426,42 @@ function waitingLine(waiting){
 /* The customer's line lives above their head with the tail pointing down at them, so it
    reads as this person speaking rather than as a system notice. One bubble serves the whole
    sale: the greeting on arrival, then the purchase or refusal reaction in the same place.
-   It is never dismissed on a timer — it is replaced by the next thing this customer says,
-   or by the next customer, so a reaction can still be read while the remaining slots are
-   being decided. Only lines attributed to the customer at the counter are shown. */
+   Only lines attributed to the customer at the counter are shown.
+
+   UI-Q110. On a phone the balloon was a permanent row in the counter band, and the band is
+   what pushed the shelf off the screen. It is presentation, so it is drawn as an overlay
+   that reserves no height at all, and it leaves on its own after a beat.
+
+   `run.say` stays the dialogue truth and keeps its place in the Save. What is held here is
+   only whether THIS UI has already shown a given line - a per-line marker no schema knows
+   about. A plain redraw in the same speech state must not bring a dismissed balloon back, so
+   the marker is keyed by speaker AND line, and only a genuinely new line clears it. */
+const SAY_MS=3000;
+let sayKey=null,sayHidden=false,sayTimer=null,sayArmed=null;
 function speech(n){
  const said=game.run.say;
  if(!said||said.npc!==n.id||!said.text)return '';
- return '<p class="say" role="status" aria-live="polite"><span>'+E(said.text)+'</span></p>';
+ const key=said.npc+'\u001f'+said.text;
+ if(key!==sayKey){sayKey=key;sayHidden=false;}
+ if(sayHidden)return '';
+ /* tapping the balloon dismisses it early. It is a convenience over the timer, never the
+    only way the line goes away, so the live region keeps its announcing role. */
+ return '<p class="say" role="status" aria-live="polite" data-action="say-hide"><span>'+E(said.text)+'</span></p>';
+}
+/* The timer is armed by the draw that first puts a line on screen and is left alone by every
+   redraw of that same line, so picking through the shelf under an open balloon cannot keep it
+   alive indefinitely. Hiding removes the node and sets the marker; no gameplay state moves. */
+function hideSpeech(){
+ if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}
+ sayArmed=null;sayHidden=true;
+ const el=$('.say');if(el)el.remove();
+}
+function armSpeech(){
+ if(!$('.say')){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;return;}
+ if(sayArmed===sayKey)return;
+ if(sayTimer)clearTimeout(sayTimer);
+ sayArmed=sayKey;
+ sayTimer=setTimeout(hideSpeech,SAY_MS);
 }
 function standee(n){
  const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
@@ -436,8 +481,11 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
     already picked a product - it reads here, before pricing, in the same block as the bag. */
- return '<div class="kit"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
- +'<span class="npc-wallet">소지 <b>'+fmt(n.money)+'G</b></span>'
+ /* UI-Q109 §6. The status lines and the bag are two things, not four stacked rows: grouping
+    the lines lets the bag stand beside them in the width they were already leaving idle,
+    instead of under them. Same information, same order, same wording. */
+ return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
+ +'<span class="npc-wallet">소지 <b>'+fmt(n.money)+'G</b></span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. */
  +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
@@ -556,7 +604,7 @@ const coachSteps={
  /* UI_UX_v2.7 §TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER. It teaches what the two
     columns MEAN and where readiness comes from. It never names an Item for a Hazard: no
     `독이면 X를 사세요`, because that is the decision the player is here to make. */
- ['hazard','.dest-plate .hazards','위험마다 압박하는 능력이 정해져 있다. 압박은 위험 자체의 성질이라 누가 서 있든 같다. 현재 대응은 이 손님이 타고난 능력과 들려 보낼 대응 상품이 함께 만드는 것이고, 취약·불안·대응·충분 네 단계로 요약된다.'],
+ ['hazard','.dest-plate .hazards','위험마다 압박하는 능력이 정해져 있다. 압박은 위험 자체의 성질이라 누가 서 있든 같다. 아래 전망의 환경 대응은 이 손님이 타고난 능력과 들려 보낼 대응 상품이 함께 만드는 것이고, 취약·불안·대응·충분 네 단계로 요약된다.'],
  ['forecast','.readout','원정 전망과 실패 시 사망 위험은 이 손님이 카운터에 섰을 때의 상태로 계산한다. 상품을 팔아도 이 표시는 손님을 보낼 때까지 바뀌지 않는다. 확정된 결과가 아니라 가늠이다.'],
  /* The Supply/Fatigue order, in the order it actually resolves. The hidden Supply-deficit
     formula is not taught - only that a shortfall costs one penalty across the preparation. */
@@ -594,15 +642,19 @@ function effectList(it,compact=false){const rows=Presentation.rows(it.effects);c
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}</span>${tr.note?`<small>${E(tr.note)}</small>`:''}</div>`;}).join('')}</div>`;}
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
- /* SALE_v2.7: the readiness shown beside each Hazard is the frozen SALE-entry snapshot, the
-    same one the outlook reads, so committing an Item does not move it. Outside SALE there is
-    no customer and no snapshot, and the plate shows the Hazards and their pressure alone. */
+ /* The plate says what is fixed about where this customer is going: the Gate, each Hazard it
+    carries, and the ability that Hazard presses on. That is true of the place whoever is at
+    the counter, so it stays in the band beside them.
+
+    THIS customer's readiness against it is the other kind of fact, and it now reads in the
+    forecast instead (UI-Q109). Two reasons, both measured on a phone: per-Hazard readiness
+    wrapped every row onto a second line and pulled a third for its own help control - it was
+    the tallest thing in the band for the least information - and the readiness is what the
+    player weighs an Item against, so it belongs with 전투 전망 and 실패 시 사망 위험 on the
+    decision surface rather than a screen above it. Nothing is lost: 환경 대응 states the same
+    canonical snapshot, in the same vocabulary, from the same outlook. */
  +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'
- +hazardList(Presentation.known(d,game),n&&n.outlook&&n.outlook.hazards)
- /* The help sits under the rows it explains rather than on the plate's caps label: opened, it
-    is a full-width paragraph, and inside the label it pushed the destination name out of the
-    grid. It is the only place the two Hazard facts are explained, so it is never dropped. */
- +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','압박: 위험이 요구하는 능력치 · 현재 대응: 이 손님의 보급 전 대응 수준')+'</div>':'')
+ +hazardList(Presentation.known(d,game),null)
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
@@ -1130,6 +1182,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  if(activeCoach&&activeCoach[3]===a)finishCoach();
  switch(a){
  case'coach-skip':finishCoach(true);break;
+ /* presentation only - the line stays in run.say, so nothing here is saved or re-rendered */
+ case'say-hide':hideSpeech();break;
  case'coach-next':{const actionName=activeCoach?.[3];finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
  case'special':game.specialAction(id,el.dataset.value);render();break;
  case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;

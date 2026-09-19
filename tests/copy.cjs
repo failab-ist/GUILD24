@@ -186,13 +186,26 @@ test('SALE: the customer speaks, the system does not speak through them',()=>{
  assert.ok(/s\.notice='발주 완료\.'/.test(shop),'system messages still use the system channel');
 });
 
-test('SALE: a reaction is replaced, never expired on a timer',()=>{
+test('SALE: a reaction leaves the screen without leaving the Run',()=>{
+ /* UI-Q110. The balloon used to stay until the engine replaced it, which on a phone meant a
+    permanent row in the counter band. It is transient now - three seconds, or a tap - but
+    that is a presentation timer only: what it may do is take the node off the screen. The
+    dialogue itself stays where it was, owned by the engine and written into the Save, so a
+    hidden balloon is never a cleared line. */
  const app=read('dist/ui/app.js');
- const speech=app.slice(app.indexOf('function speech('),app.indexOf('function standee('));
- assert.ok(!/setTimeout|setInterval/.test(speech),'the bubble runs on no timer of its own');
- // What replaces it is the engine writing the next line: the next thing this customer says,
- // or the next customer arriving. Nothing clears it in between, so a reaction stays readable
- // while the remaining supply slots are decided.
+ const hide=app.slice(app.indexOf('function hideSpeech('),app.indexOf('function armSpeech('));
+ const arm=app.slice(app.indexOf('function armSpeech('),app.indexOf('\n// NIGHT'));
+ assert.ok(/setTimeout\(hideSpeech,SAY_MS\)/.test(arm),'the balloon is dismissed on a timer');
+ assert.ok(/SAY_MS=3000/.test(app),'that timer is the canonical three seconds');
+ for(const src of [hide,arm]){
+  assert.ok(!/\.say\s*=/.test(src),'hiding the balloon never writes the dialogue');
+  assert.ok(!/game\.save\(\)|Save\./.test(src),'hiding the balloon never touches the Save');
+ }
+ // Only a genuinely new line clears the hidden marker, so a plain redraw cannot resurrect
+ // a balloon the player already dismissed.
+ assert.ok(/if\(key!==sayKey\)\{sayKey=key;sayHidden=false;\}/.test(app),
+  'only a new speaker/line pair re-shows the balloon');
+ // What writes a line is the engine: the next thing this customer says, or the next customer.
  const shop=read('dist/systems/shop.js');
  assert.ok(/arrive\(\)\{.*?\.say=/.test(shop.replace(/\n/g,'')),'a new customer sets their own line');
  assert.ok(/s\.say=null/.test(shop),'the line is cleared when the day turns over, not by a timer');
