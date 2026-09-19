@@ -1,9 +1,10 @@
 // Chunk E acceptance: D30 Final Expedition.
 // Covers FINAL_EXPEDITION sections 1-12 and RUN-Q14/Q15/Q16.
 const assert=require('node:assert/strict');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const copy=x=>JSON.parse(JSON.stringify(x));
+const read=p=>require('node:fs').readFileSync(require('node:path').join(__dirname,'..',p),'utf8');
 const FAMILIES=['spider','slime','fire','crypt','snow'];
 
 function atFinal(seed='final',eligible=5){
@@ -145,8 +146,12 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
   const team=g.finalEligible().slice(0,g.finalRequired());
   for(const n of team)g.selectFinal(n.id);
   const preps=s.team.map(id=>Dungeon.prepare(s.npcs.find(n=>n.id===id),d,s.facilities));
+  /* FINAL_EXPEDITION_v2.7 §FINAL HAZARD AGGREGATION: the Final divides the summed gap by the
+     Hazard COUNT, not by sqrt(count), so a Family pair is not penalised for holding more
+     entries. The v2.6 aggregate-gap path is superseded. */
+  const meanGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
   const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+p.effects.survival*.34
-   +p.effects.mobility*.27+p.effects.spirit*.20-p.hazard*.35,0);
+   +p.effects.mobility*.27+p.effects.spirit*.20-meanGap(p)*1.70,0);
   g.boss();
   /* Stage 10 switched the approved Boss Traits on, so only WRATH still faces the Final with its
      participants untouched - it is the one Run where the party sum can be checked against the
@@ -262,25 +267,32 @@ test('BOSS-Q07: ENVY picks one ace before its own penalty, and does not re-pick 
   'and its own penalty would have made it no longer the largest, which does not move the target');
 });
 
-test('BOSS-Q09: GLUTTONY takes only high-end supply Stats, and leaves Counter/Supply/Insurance alone',()=>{
+test('BOSS_v2.7 §GLUTTONY: every Item Core Stat is halved, whatever its Rarity',()=>{
  const g=atFinal('glut');g.run.bossId='GLUTTONY';
  const team=g.finalEligible().slice(0,g.finalRequired());
  for(const n of team){g.selectFinal(n.id);n.pack=['highpotion','ice','rice','stone'];}
  const d=g.run.dungeons[0];
  const prep=Dungeon.prepare(team[0],d,g.run.facilities);
- const high=prep.itemStats.filter(c=>c.rarity>=2).reduce((a,c)=>a+(c.stats.survival||0),0);
- assert.ok(high>0,'the case actually contains a high-end supply');
- const cut=withTuning({gluttonyRarityThreshold:2,gluttonyStatFactor:.5},
-  ()=>g.finalSnapshot(team[0],prep,d,null));
- assert.ok(Math.abs((prep.effects.survival-cut.survival)-high*.5)<1e-9,
-  'exactly half of the high-end raw-Stat contribution comes off');
- // the low-end supply and the non-Stat effects are not in the reckoning at all
- const lowOnly=withTuning({gluttonyRarityThreshold:9,gluttonyStatFactor:.5},
-  ()=>g.finalSnapshot(team[0],prep,d,null));
- assert.equal(lowOnly.survival,prep.effects.survival,'nothing below the boundary is touched');
+ const CORE=['combat','survival','mobility','spirit'];
+ /* v2.7 supersedes the Rare+ threshold: the whole positive Item Core-Stat contribution is in
+    scope, so the case is measured across every Item in the Bag rather than the high-end ones. */
+ assert.equal(DATA.bossTuning.gluttonyRarityThreshold,undefined,'no Rarity threshold remains');
+ assert.equal(DATA.bossTuning.gluttonyStatFactor,0.50,'the approved v2.7 factor');
+ const all=prep.itemStats.reduce((a,c)=>a+CORE.reduce((t,k)=>t+Math.max(0,c.stats[k]||0),0),0);
+ const low=prep.itemStats.filter(c=>c.rarity<2).reduce((a,c)=>a+CORE.reduce((t,k)=>t+Math.max(0,c.stats[k]||0),0),0);
+ assert.ok(all>0&&low>0,'the case contains both a high-end and a low-end supply');
+ const cut=g.finalSnapshot(team[0],prep,d,null);
+ const drop=CORE.reduce((t,k)=>t+(prep.effects[k]-cut[k]),0);
+ assert.ok(Math.abs(drop-all*.5)<1e-9,'exactly half of the WHOLE Item Core-Stat contribution comes off');
+ assert.ok(drop>low*.5,'which is strictly more than the retired Rare+ scope would have taken');
+ // and only that channel: nothing else an Item carries is in the reckoning
  assert.equal(cut.fire,prep.effects.fire,'the 얼음컵 Counter is untouched');
  assert.equal(cut.escape,prep.effects.escape,'the 귀환석 Insurance is untouched');
  assert.equal(cut.supply,prep.effects.supply,'Supply is untouched');
+ // the NPC's own Stats are not in scope either
+ const bare=Dungeon.prepare({...JSON.parse(JSON.stringify(team[0])),pack:[]},d,g.run.facilities);
+ const bareCut=g.finalSnapshot(team[0],bare,d,null);
+ for(const k of CORE)assert.equal(bareCut[k],bare.effects[k],'a Bag with no Items loses nothing to GLUTTONY');
 });
 
 test('BOSS-Q10: LUST reads the existing 단골 state and leaves regulars alone',()=>{
@@ -314,6 +326,196 @@ test('BOSS-Q08: GREED reads the committed sales the shop already keeps, capped',
  assert.equal(at(target),base,'meeting the target adds nothing');
  assert.equal(at(target+9999),base,'and exceeding it is not a bonus');
  assert.equal(withTuning({...tuned,greedShortfallCap:5},()=>g.effectiveBossPower(0,{revenue:0})),base+5,'and no further than the cap');
+});
+
+test('RUN-Q15 on a controlled D30 setup: regulars and newcomers are read off the Run own history',()=>{
+ /* The simulation harness classifies at D30 and a fresh-Account cohort may not get there, so
+    the classification is proven here on a constructed D30 state instead. The two groups are
+    read from visits and the canonical 단골 threshold - no new NPC-value system. */
+ const g=atFinal('q15-controlled',5),s=g.run,d=s.dungeons[0];
+ const alive=s.npcs.filter(n=>n.alive);
+ assert.ok(alive.length>=4,'the controlled setup has adventurers to classify');
+ alive[0].introduced=true;alive[0].visits=7;alive[0].loyalty=Adventurer.TRUSTED_REGULAR;
+ alive[1].introduced=true;alive[1].visits=7;alive[1].loyalty=Adventurer.TRUSTED_REGULAR-1;
+ alive[2].introduced=true;alive[2].visits=1;alive[2].loyalty=0;
+ alive[3].introduced=true;alive[3].visits=4;alive[3].loyalty=Adventurer.TRUSTED_REGULAR;
+ const invested=s.npcs.filter(n=>n.alive&&n.introduced&&n.visits>=5&&Adventurer.isTrustedRegular(n));
+ const newcomer=s.npcs.filter(n=>n.alive&&n.visits<=1);
+ assert.ok(invested.includes(alive[0]),'kept coming back AND reached the 단골 threshold');
+ assert.ok(!invested.includes(alive[1]),'visits alone is not an invested regular');
+ assert.ok(!invested.includes(alive[3]),'loyalty alone is not an invested regular either');
+ assert.ok(newcomer.includes(alive[2]),'one visit is a newcomer');
+ assert.ok(!newcomer.includes(alive[0]),'and a regular is never also a newcomer');
+ // the value that classifies them is the bare Final contribution, so it describes the adventurer
+ const bare=n=>Dungeon.prepare({...copy(n),pack:[]},d,s.facilities).effects;
+ for(const n of [...invested,...newcomer]){
+  const e=bare(n);
+  assert.ok(Object.values(e).every(v=>typeof v!=='number'||Number.isFinite(v)),'a classified adventurer has a finite bare state');
+ }
+ const packed=Dungeon.prepare({...copy(alive[0]),pack:['potion']},d,s.facilities).effects;
+ assert.notEqual(packed.combat,bare(alive[0]).combat,'and the bare reading really is without stock');
+});
+
+test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D25, and D30 reuses it',()=>{
+ const drive=(seed,to)=>{const g=new Game();g.autosave=false;g.start(seed);
+  g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.day=to;g.morning();return g;};
+ // nothing before D25
+ assert.equal(drive('d25-early',24).run.final,undefined,'D24 knows nothing about the Final');
+ const g=drive('d25-known',25);
+ const f=g.run.final;
+ assert.ok(f,'D25 generates it');
+ assert.equal(f.families.length,2);
+ assert.equal(new Set(f.families).size,2,'two DISTINCT Families');
+ // the Hazard Pool is the merge of each Family's own T2 keys - no new Family table
+ const expected=[...new Set(f.families.flatMap(id=>DATA.familyTiers[id][1]))];
+ assert.deepEqual([...f.hazards].sort(),expected.sort(),'the Pool is the union of the authoritative T2 keys');
+ // it is authoritative for D30: the same object, not a new roll
+ const snapshot=JSON.stringify(f);
+ g.run.day=30;g.morning();
+ assert.equal(JSON.stringify(g.run.final),snapshot,'D30 does not generate a new Pair');
+ assert.deepEqual(g.run.dungeons[0].families,f.families,'and the Final Gate IS that state');
+ // Save/Load may not reroll either field
+ const r=Save.import(Save.export(g.account,g.run));
+ assert.equal(JSON.stringify(r.run.final),snapshot,'a reload returns the same Pair and Pool');
+ // and it is fixed by the seed, so WHEN it is generated cannot change the answer
+ const late=drive('d25-known',30);
+ assert.deepEqual(late.run.final.families,f.families,'the same seed gives the same Pair at D30 as at D25');
+ assert.deepEqual([...late.run.final.hazards].sort(),[...f.hazards].sort(),'and the same Pool');
+ // D25 grants no Counter Items, no free stock and no special shop
+ const before=drive('d25-gift',24),after=drive('d25-gift',25);
+ assert.equal(after.run.inventory.length-before.run.inventory.length,0,'D25 grants no free stock');
+ assert.equal(after.run.offers.length,before.run.offers.length,'and no special Final shop');
+ // the screen actually tells the player, from D25 rather than on D30
+ const app=read('dist/ui/app.js');
+ assert.ok(/s\.final\?'<div class="brief">/.test(app),'ORDER shows the known Final state');
+ assert.ok(/s\.final\.familyNames/.test(app),'by name');
+ assert.ok(/Presentation\.hazardRows\(s\.final\.hazards\)/.test(app),'with the Pool it carries');
+ /* FINAL_EXPEDITION_v2.7 §D25: the disclosure comes BEFORE the ordinary D25 decisions that
+    could use it, which in practice means before the D25 Relic window. The stage is due from
+    the Day the state exists, and D30 reuses the same flag rather than staging a second reveal.
+    What a player can actually touch in what order is proved in a real browser by the
+    `D25 Final disclosure precedes the D25 decisions` probe in tools/qa-visual.cjs; these two
+    assertions pin the rule the probe exercises, so neither stands alone. */
+ assert.ok(/if\(s\.day>=25&&s\.final&&!s\.bossReveal\.familySeen\)return true;/.test(app),
+  'the Family disclosure is due from D25, not from D30');
+ const due=app.slice(app.indexOf('function bossRevealDue('),app.indexOf('function bossRevealStage('));
+ assert.ok(!/s\.day>=30/.test(due),'and no D30-only reveal path survives beside it');
+ const precedence=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
+ assert.ok(precedence.indexOf('bossRevealDue()')<precedence.indexOf("modal='relics'",precedence.indexOf('bossRevealDue()')),
+  'and it is resolved ahead of the Relic window it exists to inform');
+});
+
+test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 1.70, not the aggregate path',()=>{
+ const src=read('dist/systems/run.js');
+ assert.ok(!/hazard\*\.35/.test(src),'the retired aggregate-gap penalty is gone');
+ assert.ok(/meanGap\*1\.70/.test(src),'the Final penalty is the mean gap x 1.70');
+ assert.ok(/p\.hazards\.reduce\(\(v,h\)=>v\+h\.gap,0\)\/p\.hazards\.length/.test(src),
+  'and the mean divides by the Hazard COUNT, never by sqrt(count)');
+ assert.ok(!/scale.*4\.6/.test(src),'no standalone scale=4.6 path is used in Final resolution');
+ /* The Core-Stat weights match the v2.7 Prepared Power baseline exactly - because they are
+    that baseline. run.js used to write the four numbers out a third time, which is how the
+    balance harness drifted a whole Stage behind the game; it reads the one helper now, so the
+    check is that the Final contribution IS preparedPower minus the mean-gap penalty, measured,
+    rather than four literals matching by eye. */
+ assert.ok(/individualPower=\(e,meanGap\)=>G\.Dungeon\.preparedPower\(e\)-meanGap\*1\.70/.test(src),
+  'the Final contribution reads the Prepared Power helper');
+ const e={combat:100,survival:50,mobility:30,spirit:20};
+ assert.equal(Dungeon.preparedPower(e),100*.50+50*.34+30*.27+20*.20,
+  'and that helper carries the approved v2.7 coefficients');
+ /* The point of the mean: a Family pair with MORE Hazards is not penalised for the count. Two
+    parties equally unprepared per Hazard must take the same penalty whether the pair carries
+    three Hazards or four - under the old sqrt path the four-Hazard pair paid more. */
+ const gap=n=>({hazards:Array.from({length:n},()=>({gap:10}))});
+ const mean=p=>p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length;
+ assert.equal(mean(gap(3)),mean(gap(4)),'equal per-Hazard gaps cost the same at any Hazard count');
+ const aggregate=p=>p.hazards.reduce((v,h)=>v+h.gap,0)/Math.sqrt(p.hazards.length);
+ assert.ok(aggregate(gap(4))>aggregate(gap(3)),'which the retired aggregate path did not do');
+ // a real Final: closing a matching gap with a Counter is worth what it actually closes
+ const g=atFinal('meanpower',3),s=g.run,d=s.dungeons[0];
+ const n=s.npcs.find(x=>x.alive&&x.introduced);
+ const hz=d.hazards[0];
+ const counter=DATA.items.find(i=>(i.effects[hz]||0)>0);
+ if(counter){
+  const bare=Dungeon.prepare({...JSON.parse(JSON.stringify(n)),pack:[]},d,s.facilities);
+  const kit=Dungeon.prepare({...JSON.parse(JSON.stringify(n)),pack:[counter.id]},d,s.facilities);
+  assert.ok(mean(kit)<mean(bare),'a matching Counter lowers the mean gap it answers');
+ }
+ // Final Power stays internal
+ const app=read('dist/ui/app.js');
+ assert.ok(!/Final Power|파이널 파워|최종 전투력/.test(app),'Final Power is never surfaced as a Player Stat');
+ // the roll band is untouched
+ assert.ok(/roll=\.88\+this\.rng\.next\(\)\*\.24/.test(src),'the inherited Final roll band stands: .88 ~ 1.12');
+});
+
+test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is really paid',()=>{
+ const g=atFinal('final-pay',3),s=g.run;
+ const team=g.finalEligible().slice(0,g.finalRequired());
+ for(const n of team)g.selectFinal(n.id);
+ const n=s.npcs.find(x=>x.id===s.team[0]);
+ // stock the shelf so there is something to transfer
+ g.run.money=5000;g.stock('potion',2);g.stock('premium',1);
+ const st=s.inventory.find(x=>x.item==='potion');
+ const price=g.finalPrice('potion');
+ assert.equal(price,Math.round(DATA.itemBy.potion.sell*DATA.pricing.half.mult),'the fixed price IS the ordinary 50% amount');
+ assert.ok(DATA.pricing.half.mult===0.5);
+ n.money=Math.max(n.money,price);
+ const before={wallet:n.money,gold:s.money,gross:s.stats.revenue,stock:s.inventory.length,pack:n.pack.length};
+ g.supplyFinal(n.id,st.id);
+ assert.equal(n.money,before.wallet-price,'the Wallet pays exactly the fixed amount');
+ assert.equal(s.money,before.gold+price,'Player Gold rises by exactly the same amount');
+ assert.equal(s.stats.revenue,before.gross+price,'and Gross Sales by the same amount, once');
+ assert.equal(s.inventory.length,before.stock-1,'real stock is consumed');
+ assert.equal(n.pack.length,before.pack+1,'and the Item is in the Bag');
+ assert.equal(n.history.at(-1).paid,price,'the receipt records what was actually paid');
+ assert.notEqual(n.history.at(-1).paid,0,'this is not free equipment');
+ // affordability is real: below the fixed amount, the Item cannot be committed
+ const poor=s.npcs.find(x=>x.id===s.team[1]);
+ const st2=s.inventory.find(x=>x.item==='premium');
+ poor.money=g.finalPrice('premium')-1;
+ const goldBefore=s.money,stockBefore=s.inventory.length;
+ assert.throws(()=>g.supplyFinal(poor.id,st2.id),/소지금/,'an unaffordable transfer is refused');
+ assert.equal(s.money,goldBefore,'a refused transfer moves no Gold');
+ assert.equal(s.inventory.length,stockBefore,'and consumes no stock');
+ poor.money=g.finalPrice('premium');
+ g.supplyFinal(poor.id,st2.id);
+ assert.equal(poor.money,0,'exactly affordable is affordable');
+ // no 100/150 choice and no refusal roll in the Final
+ const app=read('dist/ui/app.js');
+ const start=app.indexOf('const finalPrice=isFinal');
+ const till=app.slice(start,app.indexOf(":['half','full','overcharge']",start));
+ assert.ok(/<em>50%<\/em>/.test(till),'the Final offers the 50% amount only');
+ assert.ok(!/overcharge|150%/.test(till),'no 바가지 in the Final');
+ const src=read('dist/systems/run.js');
+ const fn=src.slice(src.indexOf('P.supplyFinal='),src.indexOf('P.supplyFinal=')+900);
+ assert.ok(!/rng|refus|interest\(/i.test(fn),'no purchase/refusal roll happens in a Final transfer');
+ // the slots are still exactly two, and finishing with an empty one is allowed
+ assert.equal(Adventurer.slots(n),2);
+ assert.doesNotThrow(()=>g.boss(),'a participant may depart with a slot unused');
+});
+
+test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exactly',()=>{
+ const t=DATA.bossTuning;
+ /* BOSS_v2.7 supersedes the inherited BOSS-Q14 PASS3 tuning permission: these are fixed
+    implementation starting values during adoption. Frozen QA may report a BALANCE FINDING but
+    may not auto-tune them, so they are pinned here and a change has to come from an approved
+    owner-spec update rather than from a harness. */
+ assert.equal(DATA.balance.bossPower,200,'WRATH keeps the retained 200 baseline');
+ assert.equal(t.prideCombatFactor,0.92,'PRIDE is 0.92, superseding 0.90');
+ assert.equal(t.greedShortfallCap,12,'GREED shortfall caps at +12');
+ assert.equal(DATA.balance.bossPower+t.greedShortfallCap,212,'so GREED alone cannot pass 212');
+ assert.deepEqual(t.slothBossPower,[225,210,190,165],'SLOTH by committed break count');
+ assert.equal(t.gluttonyStatFactor,0.50,'GLUTTONY halves the Item Core-Stat contribution');
+ assert.equal(t.gluttonyRarityThreshold,undefined,'and keeps no Rarity threshold');
+ // ENVY and LUST take no v2.7 numeric change
+ assert.equal(t.envyStatFactor,0.92,'ENVY inherits its value');
+ assert.equal(t.lustStatFactor,0.95,'LUST inherits its value');
+ // the SLOTH ladder has the shape its design intent describes
+ const sl=t.slothBossPower;
+ assert.ok(sl[0]>DATA.balance.bossPower,'0 breaks is clearly harder than WRATH');
+ assert.ok(sl[1]>DATA.balance.bossPower,'1 break is meaningful relief but still above WRATH');
+ assert.ok(sl[2]<DATA.balance.bossPower,'2 breaks drops below WRATH');
+ assert.ok(sl[2]-sl[3]>sl[1]-sl[2],'3 breaks returns materially more stability than 2');
+ for(let i=1;i<sl.length;i++)assert.ok(sl[i]<sl[i-1],'every break lowers it');
 });
 
 console.log(count+' final groups passed');

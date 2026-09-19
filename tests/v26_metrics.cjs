@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-for (const f of ['data/catalog', 'data/relics', 'data/copy', 'systems/rng', 'systems/adventurer', 'systems/dungeon', 'systems/meta', 'systems/save', 'systems/shop', 'systems/relics', 'systems/run', 'systems/simulation']) {
+for (const f of ['data/catalog', 'data/relics','data/decorations', 'data/copy', 'systems/rng', 'systems/adventurer', 'systems/dungeon', 'systems/meta', 'systems/save', 'systems/shop', 'systems/relics', 'systems/run', 'systems/simulation']) {
   require('../dist/' + f + '.js');
 }
 
@@ -46,12 +46,12 @@ Dungeon.resolve = function(n, d, r, facilities, options) {
   if (n.fatigue >= 10) metrics.fatigue_ge_10++;
   if (n.fatigue === 20) metrics.fatigue_eq_20++;
   
-  if (rep.fatigueRecovery > 0) {
+  if (rep.preRecovery > 0) {
     metrics.fatigue_recovery_count++;
-    metrics.fatigue_recovery_amount += rep.fatigueRecovery;
+    metrics.fatigue_recovery_amount += rep.preRecovery;
   }
   
-  metrics.outcome_gain[rep.outcome] = (metrics.outcome_gain[rep.outcome] || 0) + (n.fatigue - preFatigue + (rep.fatigueRecovery || 0));
+  metrics.outcome_gain[rep.outcome] = (metrics.outcome_gain[rep.outcome] || 0) + (n.fatigue - preFatigue + (rep.preRecovery || 0));
   return ret;
 };
 

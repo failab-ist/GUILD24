@@ -37,14 +37,15 @@ const spending=policy=>SPEND[policy]||SPEND.default;
    chance of a given party is exact arithmetic. Sampling it would only add noise. */
 const ROLL_LO=.88,ROLL_HI=1.12;
 const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-bossPower/power)/(ROLL_HI-ROLL_LO)));
-/* The same contribution `run.js:boss()` sums, per adventurer. These four numbers are the Final
-   coefficients and must track run.js - they were left at the pre-Stage-10 .58/.32/.24/.16 when
-   the formula moved, so every Final contribution this harness reported was measured against a
-   formula the game no longer uses. */
-const contribution=p=>p.effects.combat*.50+p.effects.survival*.34+p.effects.mobility*.27+p.effects.spirit*.20-p.hazard*.35;
+/* The same contribution `run.js:boss()` sums, per adventurer. The four coefficients are not
+   restated here at all: they are `Dungeon.preparedPower`, the one helper Forecast, Resolve and
+   the Final all read. A copy of them is exactly how this harness came to report every Final
+   contribution against the pre-Stage-10 .58/.32/.24/.16 formula the game had already left. */
+const contribution=p=>G.Dungeon.preparedPower(p.effects)
+ -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*1.70;
 
 function blank(runs,policy,pricing,build){
- return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
+ return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaStore:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
   /* 2026-09-12 amendment, measurement only. greatByBand buckets Great Success by how far the
      prepared Combat ability ran ahead of the Gate, which is the thing Stage 9 has to judge the
      curve on; prepStartGold samples the D29 close, before any D30 preparation spend. */
@@ -77,6 +78,18 @@ function blank(runs,policy,pricing,build){
   goldIn:{sale:0,greatSuccess:0,subsidy:0,liquidation:0},
   goldOut:{order:0,operating:0,relic:0,deepSponsor:0,commission:0,waste:0,reroll:0},
   overhead:{samples:[],byBand:{},coreLevel:[],coreRarity:[]},bossRuns:{},
+  /* POLICY SENSITIVITY, measurement only. What the automatic player actually did with the
+     preparation levers it has, read off the same prepared states the night already builds -
+     no second formula and no information the SALE screen does not disclose. */
+  prep:{samples:0,slots:0,packed:0,fullBag:0,emptyBag:0,counterRelevant:0,counterMatched:0,
+   bandBefore:{},bandAfter:{},bandImproved:0,bandWorse:0,ratioBare:[],ratioReady:[]},
+  /* Where a run's expeditions lose the final outcome, banded by the Day the Director named. */
+  phase:{},
+  /* Measurement only: nothing here grants or spends Store Capital.
+     `sales` is each Run's Gross Sales and `gains` its Store Capital gain, by META_v2.8
+     §Run-end settlement structure exactly: round(Gross Sales x the reached-Day rate). The band
+     and end-reason totals beside them are views of the same Runs. */
+  settlement:{runs:0,gold:0,byBand:{},byEnd:{},sales:[],gains:[]},
   refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
   /* Three different shortages that the old single `stockouts` counter ran together. It rose when
      the shelf happened to be empty after the last customer left, which is neither "the store had
@@ -95,7 +108,7 @@ function blank(runs,policy,pricing,build){
    missingCounterDays:0,rerolls:0,rerollSpend:0,thin:0},
   deepNominee:{count:0,cost:0,levelAtNomination:0,levelAtEnd:0,grew:0,alive:0,finalSeat:0,rarity:0,finalSeats:0},
   rescue:{events:0,gold:0,items:0,runs:0,used:[]},
-  reachBy:{10:0,20:0,30:0}};
+  reachBy:{10:0,20:0,25:0,30:0}};
 }
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
 function pct(xs,q){if(!xs||!xs.length)return 0;const a=[...xs].sort((x,y)=>x-y);
@@ -111,7 +124,7 @@ function derive(out,count){
   prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,
   deathsP10:pct(out.deathsPerRun,.1),deathsMedian:pct(out.deathsPerRun,.5),deathsP90:pct(out.deathsPerRun,.9),
   deathFailRate:out.endedBy.deaths/count,deathFailDayMedian:pct(out.deathFailDay,.5),
-  reach10:out.reachBy[10]/count,reach20:out.reachBy[20]/count,reach30:out.reachBy[30]/count,
+  reach10:out.reachBy[10]/count,reach20:out.reachBy[20]/count,reach25:out.reachBy[25]/count,reach30:out.reachBy[30]/count,
   goldInTotal:Object.values(out.goldIn).reduce((a,b)=>a+b,0),
   goldOutTotal:Object.values(out.goldOut).reduce((a,b)=>a+b,0),
   saleOriginShare:(()=>{const t=Object.values(out.goldIn).reduce((a,b)=>a+b,0);return t?out.goldIn.sale/t:0;})(),
@@ -175,7 +188,31 @@ function playRun(g,out,ctx){
    g2[r==='price'?'price':r==='need'?'need':'roll']++;}
   return ok;};
  const originalNight=g.night.bind(g);g.night=()=>{const day=stat(s.day);day.slots+=s.queue.reduce((a,id)=>a+G.Adventurer.slots(s.npcs.find(n=>n.id===id)),0);day.consumed+=s.queue.reduce((a,id)=>a+s.npcs.find(n=>n.id===id).pack.length,0);
- for(const id of s.queue){const n=s.npcs.find(n=>n.id===id),d=s.dungeons[n.destination],a=G.Dungeon.prepare({...n,pack:[]},d,s.facilities),b=G.Dungeon.prepare(n,d,s.facilities);const ability=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16;out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
+ for(const id of s.queue){const n=s.npcs.find(n=>n.id===id),d=s.dungeons[n.destination],a=G.Dungeon.prepare({...n,pack:[]},d,s.facilities),b=G.Dungeon.prepare(n,d,s.facilities);
+  /* The bag as it actually departs, the Hazard readiness before and after what was given, and
+     how far the prepared Combat ability stands against what this Gate asks. The readiness band
+     is the weakest Hazard - the same one the SALE readout shows - so improving it means the
+     expedition's worst exposure actually moved. */
+  {const P=out.prep,slots=G.Adventurer.slots(n);
+   P.samples++;P.slots+=slots;P.packed+=n.pack.length;
+   P.fullBag+=Number(n.pack.length>=slots);P.emptyBag+=Number(n.pack.length===0);
+   const worst=e=>{const rank={'취약':0,'불안':1,'대응':2,'충분':3};
+    return d.hazards.map(h=>G.Dungeon.hazardState(h,e,d))
+     .reduce((w,x)=>w&&rank[w.label]<=rank[x.label]?w:x,null);};
+   const wb=worst(a.effects),wa=worst(b.effects);
+   if(wb&&wa){const rank={'취약':0,'불안':1,'대응':2,'충분':3};
+    P.bandBefore[wb.label]=(P.bandBefore[wb.label]||0)+1;
+    P.bandAfter[wa.label]=(P.bandAfter[wa.label]||0)+1;
+    P.bandImproved+=Number(rank[wa.label]>rank[wb.label]);
+    P.bandWorse+=Number(rank[wa.label]<rank[wb.label]);}
+   /* A Counter is "relevant" when this Gate has a Hazard at all and the shelf could have
+      answered it; "matched" when what actually departed answers one of them. */
+   if(d.hazards.length){
+    const shelf=s.inventory.map(x=>D.itemBy[x.item]);
+    if(shelf.some(it=>G.Relics.counter(it,d.hazards))||n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterRelevant++;
+    if(n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterMatched++;}
+   P.ratioBare.push(G.Dungeon.preparedPower(a.effects)/(d.power||1));
+   P.ratioReady.push(G.Dungeon.preparedPower(b.effects)/(d.power||1));}const ability=p=>G.Dungeon.preparedPower(p.effects);out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
  originalNight();
  /* 2026-09-12 amendment measurement. Banding by prepared Combat margin is what lets Stage 9
     judge the Great Success curve on evidence instead of on the shipped number. */
@@ -186,6 +223,28 @@ function playRun(g,out,ctx){
    if(report.outcome==='대성공'){out.great.great++;bb.great++;}}
   out.great.storeGold+=report.storeBonus||0;
   if(report.deep)out.deepTaken++;
+ }
+ /* DUN §DAY BAND decomposition: one expedition followed from the combat roll through the
+    environment and injury steps to the outcome it ended on, so the stage that loses the
+    success can be named rather than inferred. Everything here is what resolve already
+    recorded on the report. */
+ for(const report of s.results){const g2=report.debug;if(!g2)continue;
+  const pb=s.day<=9?'D1-9':s.day<=19?'D10-19':s.day<=24?'D20-24':'D25-29';
+  const P=out.phase[pb]??={expeditions:0,combatWon:0,affected:0,wonThenLost:0,ratio:[],tier:{},
+   success:0,retreat:0,injury:0,severe:0,death:0,deathChance:0,deathRolls:0,combatDeficit:0,envDeficit:0,injuredStart:0};
+  P.expeditions++;P.combatWon+=Number(g2.combatSuccess);P.affected+=Number(g2.affected);
+  P.ratio.push(g2.ability/(g2.power||1));
+  P.wonThenLost+=Number(g2.combatSuccess&&!['성공','대성공'].includes(report.outcome));
+  P.success+=Number(['성공','대성공'].includes(report.outcome));
+  P.retreat+=Number(report.outcome==='퇴각');P.injury+=Number(report.outcome==='부상');
+  P.severe+=Number(report.outcome==='중상');P.death+=Number(report.outcome==='사망');
+  const dg=s.dungeons.find(x=>x.id===report.dungeon),tier=dg?.tier||1;
+  const T=P.tier[tier]??={expeditions:0,combatWon:0,affected:0};
+  T.expeditions++;T.combatWon+=Number(g2.combatSuccess);T.affected+=Number(g2.affected);
+  if(typeof g2.deathChance==='number'&&!['성공','대성공'].includes(report.outcome)){
+   P.deathRolls++;P.deathChance+=g2.deathChance;
+   const risk=G.Dungeon.failureDeathRisk({...s.npcs.find(n=>n.id===report.npcId),injury:report.injury},dg||{power:g2.power,hazards:[]},s.facilities);
+   P.combatDeficit+=risk.combatDeficit;P.envDeficit+=risk.environmentDeficit;}
  }
  for(const report of s.results){const band=s.day<=3?'D1-3':s.day<=7?'D4-7':s.day<=12?'D8-12':s.day<=18?'D13-18':'D19-29';const bd=out.bands[band]??={expeditions:0,packed:0,items:0,success:0,retreat:0,injury:0,severe:0,death:0};bd.expeditions++;bd.items+=report.items.length;bd.packed+=Number(report.items.length>0);bd.success+=Number(['성공','대성공'].includes(report.outcome));bd.retreat+=Number(report.outcome==='퇴각');bd.injury+=Number(report.outcome==='부상');bd.severe+=Number(report.outcome==='중상');bd.death+=Number(report.outcome==='사망');const npc=s.npcs.find(n=>n.id===report.npcId),d=s.dungeons.find(d=>d.id===report.dungeon);for(const [table,key] of [[out.jobs,npc.job],[out.dungeons,(d?.family||report.dungeon)+':'+(d?.tier||1)],[out.familyJob,(d?.family||report.dungeon)+':'+npc.job]]){const bucket=table[key]??={expeditions:0,success:0,retreat:0,injury:0,severe:0,death:0,consumed:0};bucket.expeditions++;bucket.success+=Number(['성공','대성공'].includes(report.outcome));bucket.retreat+=Number(report.outcome==='퇴각');bucket.injury+=Number(report.outcome==='부상');bucket.severe+=Number(report.outcome==='중상');bucket.death+=Number(report.outcome==='사망');bucket.consumed+=report.items.length;}}day.actual+=s.results.length;day.death+=s.results.filter(r=>r.outcome==='사망').length;day.injury+=s.results.filter(r=>r.outcome==='중상').length;for(const k of ['waste','revenue','cogs','spent','operating'])day[k]+=s.daily[k]||0;
  };
@@ -336,7 +395,14 @@ function playRun(g,out,ctx){
   else if(s.phase==='final'){buySupport();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
    measureFinal();
    const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort((a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
-   for(const n of team){g.selectFinal(n.id);act();while(engagement.finalSupply&&n.pack.length<G.Adventurer.slots(n)&&s.inventory.length){const st=s.inventory.slice().sort((a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];g.supplyFinal(n.id,st.id);act();}}
+   for(const n of team){g.selectFinal(n.id);act();while(engagement.finalSupply&&n.pack.length<G.Adventurer.slots(n)&&s.inventory.length){
+    /* ECONOMY_ORDER_v2.7: a Final transfer is a real purchase at the fixed 50% amount, so the
+       harness can only hand over what the participant can actually afford - it measures the
+       rule rather than bypassing it. Nothing affordable left means the slot stays empty. */
+    const afford=s.inventory.filter(x=>n.money>=g.finalPrice(x.item));
+    if(!afford.length)break;
+    const st=afford.slice().sort((a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
+    g.supplyFinal(n.id,st.id);act();}}
    if(team.length){g.boss();act();}else g.end(false,'출전 가능한 모험가 없음');}
  }
  if(turns>=1000)throw Error('Simulation stalled at DAY '+s.day+' '+s.phase);
@@ -366,8 +432,9 @@ function playRun(g,out,ctx){
   if(d.operating){out.overhead.samples.push(d.operating);
    (out.overhead.byBand[d.day<=10?'D1-10':d.day<=20?'D11-20':'D21-30']??=[]).push(d.operating);}
  }
- for(const d of [10,20,30])if(s.day>=d)out.reachBy[d]++;
- out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
+ /* D25 is the Final Family/Hazard reveal, so it is its own band. */
+ for(const d of [10,20,25,30])if(s.day>=d)out.reachBy[d]++;
+ out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaStore+=(g.account.store?.owned||[]).length;out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
  /* measurement only - how often a Rare Reference identity actually turns up, so the starting
     chance can be judged on evidence in Stage 9 rather than on the number itself. */
  {const seen=s.npcs.filter(n=>G.Adventurer.EASTER.some(e=>e.name===n.name)).length;out.easter+=seen;out.easterRuns+=Number(seen>0);}
@@ -393,6 +460,19 @@ function playRun(g,out,ctx){
  out.deepNominee.finalSeats+=(s.team||[]).length;
  out.rescue.used.push(s.rescueUsed||0);out.rescue.runs+=Number((s.rescueUsed||0)>0);
  out.deathsPerRun.push(s.stats.deaths);
+ /* The existing Closing rule values stock at half what that stock cost, so Meta settlement
+    reads the same number rather than inventing a second valuation. */
+ {const band=s.day>=30?'D30':s.day>=25?'D25-29':s.day>=20?'D20-24':s.day>=10?'D10-19':'D1-9';
+  const t=out.settlement;t.runs++;t.gold+=s.money;
+  const b=t.byBand[band]??={runs:0,gold:0,sales:0};b.runs++;b.gold+=s.money;b.sales+=s.stats.revenue;
+  /* META_v2.8 §Run-end settlement structure: Gross Sales x the reached-Day rate, per Run. The
+     Ending Gold beside it is Run-result information, never a Store Capital input. */
+  t.sales.push(s.stats.revenue);t.gains.push(Math.round(s.stats.revenue*G.Meta.capitalRate(s.day)));
+  t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=D.balance.deathLimit?'deaths':'bankrupt')]
+   ??={runs:0,sales:0,gain:0};
+  const e=t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=D.balance.deathLimit?'deaths':'bankrupt')];
+  e.runs++;e.sales+=s.stats.revenue;e.gain+=Math.round(s.stats.revenue*G.Meta.capitalRate(s.day));
+  const bg=t.byBand[band];bg.gain=(bg.gain||0)+Math.round(s.stats.revenue*G.Meta.capitalRate(s.day));}
  const byDeaths=s.stats.deaths>=D.balance.deathLimit;
  out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
  /* Per-Boss conditional clear: only Runs whose Final actually resolved, so WRATH (no Trait) can
@@ -416,58 +496,131 @@ function simulate(count=100,policy='balanced',account=null,pricing='adaptive',bu
 }
 
 /* CROSS-RUN META PROGRESSION — the same account played through successive Runs, exactly as a
-   returning player accumulates it. No gameplay power is inserted: grade, unlocks and starting
-   contract all come from the real Meta system reacting to real results.
-   Returns one cohort per Run index, so FRESH ACCOUNT and PROGRESSED ACCOUNT Final viability
-   can be read apart, plus the same cohorts bucketed by the grade actually held. */
+   returning player accumulates it. No gameplay power is inserted: every unlock, every Mastery
+   point and every Gold of Store Capital comes from the real Meta system reacting to real results.
+
+   META_v2.8 retired Franchise Grade, the ten Achievements and the Start Contract, so what this
+   measures is the cross-run truth that actually exists:
+
+     Store Capital · owned Decoration count · the Decoration loadout ·
+     Job Mastery · distinct Boss clears
+
+   The Grade bucket that used to sit beside these is gone with the system. It was also vacuous:
+   the trajectory never bought a Decoration, so every account stayed at the fresh Grade and
+   every "grade" cohort was the same cohort under another name.
+
+   Store Capital is accumulated through the PRODUCTION settlement path - `Game.end()` settles
+   the Run the way the shipped game does - and Decorations are bought with the real
+   `Meta.buyDecoration`. Nothing here reimplements either.
+
+   `purchaseOrder` is measurement INPUT, not a strategy this harness invents: the caller names
+   the order, and the trajectory buys the next one whenever the Capital it actually earned
+   covers the price. Passing null buys nothing, which is the pure-Meta arm. */
 /* Job Mastery isolation, HARNESS ONLY. Mastery is a spawn-Level bonus on the owning Job's new
-   adventurers, and an account that has it also has unlocked Jobs, contracts and items - so a
-   tier-to-tier difference cannot say which of the two did the work. This neutralises the bonus
-   table while leaving every unlock in place, so the same account can be measured with and
-   without it. The roll is still drawn either way, so the seeded stream does not move. */
+   adventurers, and an account that has it also has unlocked Jobs and items - so a tier-to-tier
+   difference cannot say which of the two did the work. This neutralises the bonus table while
+   leaving every unlock in place, so the same account can be measured with and without it. The
+   roll is still drawn either way, so the seeded stream does not move. */
 function masterySpawnPatch(){
  const table=G.Adventurer.MASTERY_SPAWN,saved=table.map(row=>row.slice());
  for(let i=0;i<table.length;i++)table[i]=[];
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard'}={}){
- const byIndex=[],byGrade={},accountsEnd=[];
+function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null}={}){
+ const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
+ const order=purchaseOrder?purchaseOrder.slice():[];
+ for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
+  /* When this account first beat a Boss, and what it actually held at that moment. Recorded
+     once per trajectory from real results - nothing is seeded. */
+  let clearedAt=null;
+  const ledger=[];
   for(let i=0;i<runs;i++){
-   const before={grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)};
+   const before={mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account),
+    decorations:(account.store?.owned||[]).length,capital:G.Meta.storeCapital(account),
+    loadout:{...G.Meta.storeLoadout(account)}};
    const g=new G.Game(account);g.autosave=false;
-   /* Which start contract the trajectory uses is a strategy choice, not a Meta fact, so it is
-      the caller's: 'standard' holds it constant and isolates what grade and unlocks alone do,
-      'best' takes the most advanced contract the account has actually earned. `start` rejects
-      a locked contract, so neither mode can grant something the account has not unlocked. */
-   let started=contract;
-   if(contract==='best'){started='standard';for(const c of D.contracts)if(G.Meta.contractUnlocked(account,c))started=c.id;}
-   const available=D.contracts.filter(c=>G.Meta.contractUnlocked(account,c)).length;
-   g.start(prefix+'-'+t+'-'+i,started);
-   const grade=before.grade;
-   const bucket=byGrade[grade]??=blank(0,policy,pricing,build);
+   g.start(prefix+'-'+t+'-'+i);
    playRun(g,byIndex[i],{policy,pricing,build,seed:t});
-   /* The grade bucket re-reads the same Run from the per-index cohort's last entry rather
-      than replaying it: one Run, counted once in each view. */
-   bucket.runs++;bucket.dayReached[g.run.day]=(bucket.dayReached[g.run.day]||0)+1;
-   bucket.reached30+=Number(g.run.day===30);bucket.wins+=Number(!!g.run.win);
-   bucket.metaMastery+=before.mastery;bucket.metaDistinct+=before.distinct;bucket.metaGrade+=grade;
-   if(g.run.bossDebug){bucket.final.resolved++;bucket.final.power+=g.run.bossDebug.power;bucket.final.assault+=g.run.bossDebug.assault;bucket.final.margin+=g.run.bossDebug.assault-g.run.bossDebug.bossPower;bucket.final.cleared+=Number(!!g.run.win);}
-   bucket.money+=g.run.money;bucket.deaths+=g.run.stats.deaths;
-   byIndex[i].contracts??={};byIndex[i].contracts[started]=(byIndex[i].contracts[started]||0)+1;
-   byIndex[i].gradeAtStart??=0;byIndex[i].gradeAtStart+=grade;
+   /* The Run is settled through the shipped path. `end` is idempotent and `settleStoreCapital`
+      carries its own once-only guard, so a Run playRun already ended is not settled twice. */
+   g.end(!!g.run.win,g.run.endReason||'측정 종료');
+   const settlement=g.run.settlement||{sales:0,gain:0,rate:0,day:g.run.day};
+   /* The purchase: the named order, the real Meta call, and only what the earned Capital
+      covers. No Capital is granted and no price is touched. */
+   const bought=[];
+   for(const id of order){
+    if(G.Meta.decorationOwned(account,id))continue;
+    if(G.Meta.storeCapital(account)<D.decorationBy[id].price)break;
+    G.Meta.buyDecoration(account,id);bought.push(id);
+   }
+   ledger.push({run:i,capitalStart:before.capital,grossSales:settlement.sales,
+    rate:settlement.rate,dayReached:g.run.day,endReason:g.run.endReason||'',gain:settlement.gain,
+    capitalAfterSettlement:before.capital+settlement.gain,
+    bought,capitalEnd:G.Meta.storeCapital(account),
+    ownedBefore:before.decorations,ownedAfter:(account.store?.owned||[]).length,
+    loadout:{...G.Meta.storeLoadout(account)}});
+
+   byIndex[i].expeditions=(byIndex[i].expeditions||0)+g.run.npcs.reduce((n,x)=>n+x.records.length,0);
+   byIndex[i].expDeaths=(byIndex[i].expDeaths||0)+g.run.stats.deaths;
+   if(g.run.win&&clearedAt===null)
+    clearedAt={runIndex:i,decorations:before.decorations,capital:before.capital,mastery:before.mastery};
    byIndex[i].masteryAtStart??=0;byIndex[i].masteryAtStart+=before.mastery;
    byIndex[i].distinctAtStart??=0;byIndex[i].distinctAtStart+=before.distinct;
-   byIndex[i].contractsAvailable??=0;byIndex[i].contractsAvailable+=available;
+   byIndex[i].decorationsAtStart??=0;byIndex[i].decorationsAtStart+=before.decorations;
+   byIndex[i].capitalAtStart??=0;byIndex[i].capitalAtStart+=before.capital;
+   byIndex[i].capitalGained??=0;byIndex[i].capitalGained+=settlement.gain;
+   /* Which Slots were actually filled entering this Run, as a distribution: a mean over
+      trajectories hides an account that bought nothing at all. */
+   byIndex[i].loadoutDist??={};
+   const key=G.DATA.decorationSlots.map(sl=>before.loadout[sl]||'-').join('/');
+   byIndex[i].loadoutDist[key]=(byIndex[i].loadoutDist[key]||0)+1;
   }
-  accountsEnd.push({grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
+  accountsEnd.push({decorations:(account.store?.owned||[]).length,capital:G.Meta.storeCapital(account),
+   loadout:{...G.Meta.storeLoadout(account)},
+   mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
+  firstClear.push(clearedAt);
+  ledgers.push(ledger);
  }
- return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
-  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),gradeAtStart:o.gradeAtStart/trajectories,masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,contractsAvailable:o.contractsAvailable/trajectories,contracts:o.contracts})),
-  byGrade:Object.fromEntries(Object.entries(byGrade).map(([grade,o])=>[grade,derive(o,o.runs)])),
-  accountsEnd};
+ /* The acquisition ladder, read off the ledgers rather than projected from a mean: for each
+    purchase position, the Run index on which that many Decorations were actually owned. */
+ const acquisition=order.map((id,k)=>{
+  const at=ledgers.map(l=>{const row=l.find(r=>r.ownedAfter>=k+1);return row?row.run+1:null;});
+  const got=at.filter(x=>x!==null);
+  /* CENSORED. A trajectory that never got this far has no Run number, and dropping it would
+     make the median a median of the lucky - the shorter the measurement, the earlier the
+     answer. It is kept in the sample as "later than every Run measured", so the median is a
+     real Run only when MORE THAN HALF the trajectories actually acquired; otherwise it is
+     null, which reads as "not within `runs` Runs" rather than as a number. */
+  const ranked=[...at].sort((a,b)=>(a===null?Infinity:a)-(b===null?Infinity:b));
+  const mid=ranked[Math.floor(ranked.length/2)];
+  return {position:k+1,id,price:D.decorationBy[id].price,
+   acquired:got.length,ofTrajectories:ledgers.length,
+   medianRun:mid===null?null:mid,
+   /* The mean is over the acquirers only and cannot be censored the same way, so it is named
+      for what it is and never read as "when a player gets this". */
+   meanRunAmongAcquirers:got.length?got.reduce((a,b)=>a+b,0)/got.length:null,
+   runs:at};
+ });
+ return {mode:'trajectory',policy,pricing,build,trajectories,runsPerTrajectory:runs,
+  purchaseOrder:order,
+  byIndex:byIndex.map((o,i)=>({runIndex:i,...derive(o,trajectories),
+   expeditions:o.expeditions||0,expDeaths:o.expDeaths||0,
+   expeditionDeathRate:o.expeditions?o.expDeaths/o.expeditions:0,
+   masteryAtStart:o.masteryAtStart/trajectories,distinctAtStart:o.distinctAtStart/trajectories,
+   decorationsAtStart:(o.decorationsAtStart||0)/trajectories,
+   capitalAtStart:(o.capitalAtStart||0)/trajectories,
+   capitalGained:(o.capitalGained||0)/trajectories,
+   loadoutDist:o.loadoutDist||{}})),
+  /* First CLEAR, from real accumulation: which Run index it happened on and what the account
+     actually held then. `null` entries are trajectories that never cleared within `runs`. */
+  firstClear:{samples:firstClear.length,cleared:firstClear.filter(Boolean).length,
+   runIndex:firstClear.filter(Boolean).map(c=>c.runIndex),
+   decorations:firstClear.filter(Boolean).map(c=>c.decorations),
+   capital:firstClear.filter(Boolean).map(c=>c.capital)},
+  acquisition,ledgers,accountsEnd};
 }
 
 /* masterySpawnPatch is exported so a measurement script can hold an account FIXED and ask what

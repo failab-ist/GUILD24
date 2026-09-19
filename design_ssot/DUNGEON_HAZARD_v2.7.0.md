@@ -35,6 +35,37 @@ Rules:
 - Great Success margin/signal must read the same prepared ability truth before hidden combat noise.
 - A stale ordinary-expedition `.58/.32/.24/.16` path is invalid in v2.7.
 
+## GATE POWER — LATE-DAY SLOPE — v2.7 BASELINE
+
+`DIRECTOR DOCUMENT BASELINE`
+
+Gate required Power keeps its current generation inputs. Only the Day term changes, and only
+after D9:
+
+```text
+Day term
+= min(Day, 9) × 1.70 + max(0, Day - 9) × 0.40
+```
+
+Every other term is unchanged: the base constant, the Tier term, the Family adjustment and the
+Family Combat multiplier all keep their current values.
+
+D1 through D9 are therefore bit-for-bit what they were. The change applies from D10 onward.
+
+Reference anchors (Tier 1, ordinary Family):
+
+```text
+D9  = 15.30   (unchanged)
+D12 = 16.50
+D18 = 18.90
+D24 = 21.30
+D29 = 23.30
+```
+
+Reason this exists: measured preparedPower / requiredGatePower fell from a D1-9 median of 0.86
+to 0.50 by D25-29, so a party grew steadily weaker against the Gate it was sent to across one
+Run. At slope 0.40 the D20+ median returns to 0.87, matching the early band.
+
 ## HAZARD THREAT — v2.7 BASELINE
 
 `DIRECTOR DOCUMENT BASELINE`

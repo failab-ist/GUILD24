@@ -1,0 +1,144 @@
+{
+  "version": 5,
+  "seeds": 200,
+  "rates": [
+    {
+      "maxDay": 9,
+      "rate": 0.01
+    },
+    {
+      "maxDay": 19,
+      "rate": 0.02
+    },
+    {
+      "maxDay": 24,
+      "rate": 0.03
+    },
+    {
+      "maxDay": 29,
+      "rate": 0.04
+    },
+    {
+      "maxDay": 30,
+      "rate": 0.05
+    }
+  ],
+  "arms": [
+    {
+      "key": "balanced",
+      "label": "engaged / balanced",
+      "policy": "balanced",
+      "pricing": "adaptive",
+      "gain": 231.55,
+      "sales": 8384.255,
+      "perAction": 0.5654525696284448,
+      "perDay": 13.898559423769509,
+      "actions": 409.495,
+      "day": 16.66,
+      "zeroShare": 0,
+      "reach30": 0.03
+    },
+    {
+      "key": "spender",
+      "label": "engaged / spender",
+      "policy": "spender",
+      "pricing": "adaptive",
+      "gain": 280.295,
+      "sales": 9446.43,
+      "perAction": 0.6150461896298247,
+      "perDay": 15.567620105526245,
+      "actions": 455.73,
+      "day": 18.005,
+      "zeroShare": 0,
+      "reach30": 0.055
+    },
+    {
+      "key": "skilled",
+      "label": "engaged / skilled",
+      "policy": "skilled",
+      "pricing": "adaptive",
+      "gain": 332.455,
+      "sales": 10839.82,
+      "perAction": 0.6653824215192787,
+      "perDay": 16.790656565656565,
+      "actions": 499.645,
+      "day": 19.8,
+      "zeroShare": 0,
+      "reach30": 0.055
+    },
+    {
+      "key": "overcharge",
+      "label": "overcharge-heavy",
+      "policy": "balanced",
+      "pricing": "overcharge",
+      "gain": 165.4,
+      "sales": 6679.62,
+      "perAction": 0.48612029566929715,
+      "perDay": 9.798578199052134,
+      "actions": 340.245,
+      "day": 16.88,
+      "zeroShare": 0,
+      "reach30": 0.005
+    },
+    {
+      "key": "meta-farm",
+      "label": "meta-farm / 반복 단축",
+      "policy": "meta-farm",
+      "pricing": "adaptive",
+      "gain": 0,
+      "sales": 0,
+      "perAction": 0,
+      "perDay": 0,
+      "actions": 92.825,
+      "day": 9.96,
+      "zeroShare": 1,
+      "reach30": 0
+    },
+    {
+      "key": "zero-supply",
+      "label": "zero-sale / 무활동",
+      "policy": "zero-supply",
+      "pricing": "adaptive",
+      "gain": 0,
+      "sales": 0,
+      "perAction": 0,
+      "perDay": 0,
+      "actions": 90.345,
+      "day": 9.67,
+      "zeroShare": 1,
+      "reach30": 0
+    },
+    {
+      "key": "poverty",
+      "label": "minimum order",
+      "policy": "poverty",
+      "pricing": "adaptive",
+      "gain": 10.3,
+      "sales": 690.81,
+      "perAction": 0.09136875720748693,
+      "perDay": 1.0893707033315707,
+      "actions": 112.73,
+      "day": 9.455,
+      "zeroShare": 0,
+      "reach30": 0
+    }
+  ],
+  "verdicts": [
+    {
+      "pass": true,
+      "line": "zero-sale / 무활동: Run당 0 vs engaged 최저 232 (0G)"
+    },
+    {
+      "pass": true,
+      "line": "meta-farm 반복: Run당 0 (engaged 최저 232) · 자본/행동 0.000 (engaged 최고 0.665)"
+    },
+    {
+      "pass": true,
+      "line": "overcharge-heavy: Run당 165 vs engaged 최고 332 (50%)"
+    },
+    {
+      "pass": true,
+      "line": "minimum order: Run당 10 vs engaged 최저 232"
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "version": 5,
+  "trajectories": 120,
+  "runsPerTrajectory": 20,
+  "policy": "balanced",
+  "prices": {
+    "dawnSign": 800,
+    "guildPlaque": 700,
+    "thriftSafe": 650,
+    "premiumCase": 550
+  },
+  "rates": [
+    {
+      "maxDay": 9,
+      "rate": 0.01
+    },
+    {
+      "maxDay": 19,
+      "rate": 0.02
+    },
+    {
+      "maxDay": 24,
+      "rate": 0.03
+    },
+    {
+      "maxDay": 29,
+      "rate": 0.04
+    },
+    {
+      "maxDay": 30,
+      "rate": 0.05
+    }
+  ],
+  "strongFirst": [
+    5,
+    7,
+    10,
+    13
+  ],
+  "weakFirst": [
+    4,
+    7,
+    9,
+    13
+  ],
+  "detail": {
+    "강한 것부터": {
+      "order": [
+        "dawnSign",
+        "guildPlaque",
+        "thriftSafe",
+        "premiumCase"
+      ],
+      "acquisition": [
+        {
+          "position": 1,
+          "id": "dawnSign",
+          "price": 800,
+          "acquired": 120,
+          "ofTrajectories": 120,
+          "medianRun": 5,
+          "p25": 3,
+          "p75": 7
+        },
+        {
+          "position": 2,
+          "id": "guildPlaque",
+          "price": 700,
+          "acquired": 120,
+          "ofTrajectories": 120,
+          "medianRun": 7,
+          "p25": 5,
+          "p75": 10
+        },
+        {
+          "position": 3,
+          "id": "thriftSafe",
+          "price": 650,
+          "acquired": 119,
+          "ofTrajectories": 120,
+          "medianRun": 10,
+          "p25": 7,
+          "p75": 13
+        },
+        {
+          "position": 4,
+          "id": "premiumCase",
+          "price": 550,
+          "acquired": 115,
+          "ofTrajectories": 120,
+          "medianRun": 13,
+          "p25": 9,
+          "p75": 15
+        }
+      ],
+      "gainPerRun": {
+        "mean": 250,
+        "median": 132,
+        "p25": 90,
+        "p75": 282,
+        "p90": 636,
+        "zeroShare": 0
+      },
+      "byBand": {
+        "D25-29": {
+          "runs": 173,
+          "sales": 3282994,
+          "gain": 131324
+        },
+        "D20-24": {
+          "runs": 399,
+          "sales": 4919829,
+          "gain": 147595
+        },
+        "D1-9": {
+          "runs": 179,
+          "sales": 634373,
+          "gain": 6344
+        },
+        "D10-19": {
+          "runs": 1539,
+          "sales": 9171811,
+          "gain": 183451
+        },
+        "D30": {
+          "runs": 110,
+          "sales": 2630487,
+          "gain": 131528
+        }
+      },
+      "byEnd": {
+        "소문이 퍼지자 모험가들의 발길이 끊겼고, 더": {
+          "runs": 1085,
+          "sales": 11649022,
+          "gain": 337273
+        },
+        "장사를 이어갈 자금이 바닥났다.": {
+          "runs": 1205,
+          "sales": 6359985,
+          "gain": 131441
+        },
+        "이 점포에서 할 수 있는 일은 여기까지였다.": {
+          "runs": 48,
+          "sales": 1040406,
+          "gain": 52024
+        },
+        "우리 점포에서 떠난 원정대가 해냈다.": {
+          "runs": 62,
+          "sales": 1590081,
+          "gain": 79504
+        }
+      },
+      "endOwnedMean": 3.95,
+      "completed": 0.9583333333333334
+    },
+    "약한 것부터": {
+      "order": [
+        "premiumCase",
+        "thriftSafe",
+        "guildPlaque",
+        "dawnSign"
+      ],
+      "acquisition": [
+        {
+          "position": 1,
+          "id": "premiumCase",
+          "price": 550,
+          "acquired": 120,
+          "ofTrajectories": 120,
+          "medianRun": 4,
+          "p25": 2,
+          "p75": 5
+        },
+        {
+          "position": 2,
+          "id": "thriftSafe",
+          "price": 650,
+          "acquired": 120,
+          "ofTrajectories": 120,
+          "medianRun": 7,
+          "p25": 5,
+          "p75": 9
+        },
+        {
+          "position": 3,
+          "id": "guildPlaque",
+          "price": 700,
+          "acquired": 120,
+          "ofTrajectories": 120,
+          "medianRun": 9,
+          "p25": 7,
+          "p75": 12
+        },
+        {
+          "position": 4,
+          "id": "dawnSign",
+          "price": 800,
+          "acquired": 119,
+          "ofTrajectories": 120,
+          "medianRun": 13,
+          "p25": 10,
+          "p75": 16
+        }
+      ],
+      "gainPerRun": {
+        "mean": 251,
+        "median": 133,
+        "p25": 90,
+        "p75": 268,
+        "p90": 688,
+        "zeroShare": 0
+      },
+      "byBand": {
+        "D10-19": {
+          "runs": 1558,
+          "sales": 9406661,
+          "gain": 188139
+        },
+        "D30": {
+          "runs": 107,
+          "sales": 2580577,
+          "gain": 129026
+        },
+        "D25-29": {
+          "runs": 184,
+          "sales": 3623533,
+          "gain": 144936
+        },
+        "D20-24": {
+          "runs": 370,
+          "sales": 4453434,
+          "gain": 133608
+        },
+        "D1-9": {
+          "runs": 181,
+          "sales": 619572,
+          "gain": 6202
+        }
+      },
+      "byEnd": {
+        "장사를 이어갈 자금이 바닥났다.": {
+          "runs": 1207,
+          "sales": 6317022,
+          "gain": 128052
+        },
+        "소문이 퍼지자 모험가들의 발길이 끊겼고, 더": {
+          "runs": 1086,
+          "sales": 11786178,
+          "gain": 344833
+        },
+        "이 점포에서 할 수 있는 일은 여기까지였다.": {
+          "runs": 44,
+          "sales": 970612,
+          "gain": 48530
+        },
+        "우리 점포에서 떠난 원정대가 해냈다.": {
+          "runs": 63,
+          "sales": 1609965,
+          "gain": 80496
+        }
+      },
+      "endOwnedMean": 3.9916666666666667,
+      "completed": 0.9916666666666667
+    }
+  },
+  "approvedExpectation": "3~4 / 6 / 8~9 / 10~11"
+}

@@ -5,32 +5,36 @@ Regenerate the vendored copies with `npm run assets`.
 
 ## Adopted
 
-### Galmuri 2.40.3 — bitmap pixel font family
-- source: npm `galmuri` (https://github.com/quiple/galmuri), (c) Lee Minseo
-- licence: **SIL OFL-1.1** (SIL Open Font License 1.1) — commercial use YES, embedding YES, modification YES,
-  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL.md`), the font may not
-  be sold on its own.
-- why: the single highest-impact change available. A real Korean bitmap face designed for
-  12-15px turns the whole interface from "web page in a game palette" into game type.
-  Nothing else reachable covers Hangul at pixel sizes.
-- how: subset to the 702 glyphs this build can render and re-encoded to woff2 by
-  `tools/vendor-assets.py`. 4 faces, 1.7 MB -> 63 KB total. Vendored, not CDN: a local
-  subset is faster than any CDN here, has no FOUT, and keeps the game playable offline.
-- faces / design sizes (bitmap, so only integer multiples are crisp):
-  Galmuri14 15px (body) · Galmuri11 12px (labels) · Galmuri11 Bold 12/24px (display) ·
-  GalmuriMono11 12px (numerals).
-
-### Pretendard 1.3.9 — information UI face
-- source: npm `pretendard` (https://github.com/orioncactus/pretendard), (c) Kil Hyung-jin
+### Wanted Sans 1.0.3 — information UI face
+- source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab
 - licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
-  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL-Pretendard.txt`).
-- why: type carries two jobs and they must not be mixed. Galmuri is the atmosphere face
-  (signage, document titles, diegetic readouts); Pretendard is the information face — every
-  value, effect line, price, count and control label, including both primary actions. A
-  system stack was rejected: Korean fallbacks differ per platform, so readability could not
-  be guaranteed and the QA screenshots would not represent what a player sees.
-- how: Regular + SemiBold subset to the same glyph set by `tools/vendor-assets.py`
-  (1.5 MB each -> 59 KB each). Five faces ship in total at 192 KB.
+  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL-WantedSans.txt`).
+- why: `UI_UX_v2.7.0.md` §TYPOGRAPHY names Wanted Sans as the INFORMATION face, replacing
+  Pretendard. Type carries two jobs and they must not be mixed: the atmosphere face takes
+  signage, document titles and diegetic readouts; the information face takes every value,
+  effect line, price, count and control label, including both primary actions. A system stack
+  was rejected: Korean fallbacks differ per platform, so readability could not be guaranteed
+  and the QA screenshots would not represent what a player sees.
+- how: Regular + SemiBold only - the package ships seven weights and the other five never
+  reach dist - subset to the same glyph set by `tools/vendor-assets.py`
+  (2.3 MB each -> ~62 KB each). Five faces ship in total.
+
+### Mulmaru 1.1 — atmosphere face
+- source: upstream https://github.com/mushsooni/mulmaru, (c) 2025 Mushsooni, Reserved Font
+  Name "물마루" / "Mulmaru". Vendored in-repo at `vendor/mulmaru/` with the upstream OFL.
+- licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
+  attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL.md`).
+- acquisition: Mulmaru publishes no npm package and its own repository carries no binaries at
+  any ref, so the WOFF2 pair was taken from the `projectnoonnu/2601-4` distribution that
+  jsDelivr serves as `@1.1`. That tag and `main` are the same commit (707cc84), and the files
+  were verified before use: real WOFF2, family `물마루` / `물마루 Mono`, OFL-1.1 in the name
+  table, 11,940 glyphs each. The CDN is an ACQUISITION SOURCE ONLY — the game fetches nothing
+  at runtime, which `tests/assets.cjs` asserts against the CSS.
+- faces: Mulmaru and Mulmaru Mono only, the two the CSS actually asks for. Mulmaru ships a
+  single weight by design, so the @font-face is declared `font-weight:100 900` and a rule
+  asking for 700 gets the real face instead of a synthesised bold.
+- how: subset to this build's glyph set by `tools/vendor-assets.py` (97 KB -> 11 KB and
+  95 KB -> 10 KB).
 
 ### anime.js 4.5.0 — animation runtime
 - source: npm `animejs` (https://animejs.com), (c) Julian Garnier

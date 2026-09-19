@@ -19,7 +19,7 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='choco')s=rect(7,13,30,19,'#8e7267')+rect(10,16,24,13,'#d9af82')+rect(19,13,15,19,'#746158')+rect(23,17,7,11,'#aa8470');
  if(['bandage','kit','mask','heat'].includes(p)){const col=p==='kit'?'#d5dfcc':p==='heat'?'#d69776':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,p==='heat'?'#f5d7a5':'#bd7d6a')+rect(14,21,15,5,p==='heat'?'#f5d7a5':'#bd7d6a');}
  if(p==='ice')s=`<path d="M9 10H34L30 37H13Z" fill="#8dc6cd"/>`+rect(7,8,29,4,'#d5e8df')+rect(13,16,9,9,'#cce5df')+rect(23,22,7,8,'#b7dfdc');
- if(p==='battery'||p==='mana')s=rect(14,5,15,4,'#c6d0c5')+rect(10,9,23,28,p==='mana'?'#a49ad5':'#d0ad69')+rect(10,19,23,15,'#435956')+rect(18,14,7,2,'#f6e4b4')+rect(20,12,2,6,'#f6e4b4')+rect(17,26,9,3,p==='mana'?'#b5dfdf':'#e0c793');
+ if(p==='battery')s=rect(14,5,15,4,'#c6d0c5')+rect(10,9,23,28,'#d0ad69')+rect(10,19,23,15,'#435956')+rect(18,14,7,2,'#f6e4b4')+rect(20,12,2,6,'#f6e4b4')+rect(17,26,9,3,'#e0c793');
  if(p==='cloak')s=`<path d="M16 5H26L31 14L37 37H6L11 14Z" fill="#7da4a2"/><path d="M16 6L13 14H29L25 6Z" fill="#4b7474"/>`+rect(20,17,2,19,'#a1c2b3');
  if(p==='stone')s=`<path d="M20 4L34 15L29 34L20 40L9 31L6 16Z" fill="#8ebbc1"/><path d="M20 4L17 22L6 16Z" fill="#d0e6d9"/><path d="M17 22L20 40L34 15Z" fill="#6f939e"/>`;
  if(p==='lunch')s=rect(5,13,33,23,'#554f58')+rect(7,15,29,19,'#e9dfc2')+rect(9,17,12,15,'#f1eddb')+rect(24,17,10,6,'#a6b97b')+rect(24,25,10,7,'#d29167')+rect(18,21,3,3,'#9d705e');
@@ -50,6 +50,56 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='amulet')s=rect(14,5,16,2,'#8a7a5a')+rect(20,7,4,4,'#8a7a5a')
   +`<path d="M22 10C35 14 35 32 22 40C9 32 9 14 22 10Z" fill="#8fc79a"/>`
   +`<path d="M22 14C30 18 30 30 22 36Z" fill="#5f9d71"/>`+rect(21,15,2,21,'#dff0dd');
+ /* ITEM_v2.7 brings twelve products the shelf did not have. Each is drawn as itself rather
+    than as a recoloured cousin: the point of D-27 is the picture a player sees, and a
+    거미줄 방호세트 wearing the dust mask's face is the same failure as before, tinted. Every
+    one of these differs from its nearest sibling in SILHOUETTE, not only in colour. */
+ if(p==='herbtea')s=rect(15,8,14,3,'#cdd6c6')+rect(13,11,18,3,'#dfe3d6')
+  +`<path d="M14 14H30L27 38H17Z" fill="#eef1e6"/>`+rect(16,22,12,4,'#8fae7c')
+  +`<path d="M22 16C26 17 27 21 22 23C18 21 18 17 22 16Z" fill="#6f9a63"/>`
+  +rect(21,17,1,6,'#4f7248')+rect(17,3,2,4,'#cfe0d2')+rect(25,2,2,5,'#cfe0d2');
+ if(p==='potionMid')s=rect(19,4,6,4,'#a68464')+rect(18,8,8,4,base)
+  +`<path d="M17 12H27L33 24C33 33 28 38 22 38C16 38 11 33 11 24Z" fill="#d8a24f"/>`
+  +rect(15,20,3,9,'#f0d49a')+rect(16,28,12,5,base)+rect(18,30,8,1,'#8a5f2a');
+ if(p==='spiderkit')s=`<path d="M22 8L36 22L22 36L8 22Z" fill="#5e6b5c"/>`
+  +rect(21,12,2,20,'#e2e8d6')+rect(12,21,20,2,'#e2e8d6')
+  +`<path d="M22 15L29 22L22 29L15 22Z" fill="none" stroke="#e2e8d6" stroke-width="2"/>`
+  +rect(9,6,6,4,'#48533f')+rect(29,6,6,4,'#48533f');
+ if(p==='slimesuit')s=`<path d="M22 5C29 5 33 9 33 15L35 36H9L11 15C11 9 15 5 22 5Z" fill="#7fa06a"/>`
+  +rect(15,10,14,10,'#d7e6cf')+rect(17,12,4,4,'#f2f8ef')+rect(9,22,26,3,'#5b7a4c')
+  +rect(5,24,6,10,'#5b7a4c')+rect(33,24,6,10,'#5b7a4c')+rect(18,27,8,9,'#66895a');
+ if(p==='cryptlantern')s=rect(20,2,4,3,'#8a7a5a')+rect(14,5,16,3,'#b9a06a')+rect(12,8,20,4,'#8a7a5a')
+  +rect(13,12,18,21,'#3d4a46')+rect(16,15,12,15,'#f6dfa0')
+  +`<path d="M22 16C25 20 25 26 22 29C19 26 19 20 22 16Z" fill="#f3a85c"/>`
+  +rect(21,19,2,8,'#fff6df')+rect(12,33,20,4,'#b9a06a')+rect(14,37,16,3,'#8a7a5a');
+ if(p==='snowvisor')s=rect(1,20,42,4,'#5d6a72')+rect(4,12,36,19,'#e7eef2')
+  +rect(2,16,2,11,'#e7eef2')+rect(40,16,2,11,'#e7eef2')+rect(4,8,36,4,'#f9fdff')
+  +rect(7,16,30,11,'#3f5866')+rect(9,18,26,4,'#8fd0e8')+rect(6,29,32,3,'#c5d4dc');
+ if(p==='magmagear')s=rect(6,12,4,18,'#8b979c')+rect(34,12,4,18,'#8b979c')+rect(10,8,24,26,'#6f7b80')
+  +rect(12,10,20,8,'#39464b')+rect(13,11,18,2,'#96a5aa')+rect(13,15,18,2,'#96a5aa')
+  +rect(14,21,16,9,'#2e3a3e')+rect(17,23,10,5,'#f0894e')+rect(19,24,6,3,'#ffd9a3')
+  +rect(4,30,10,4,'#5b676c')+rect(30,30,10,4,'#5b676c');
+ if(p==='battlelunch')s=rect(6,10,32,11,'#5a3f36')+rect(8,12,28,7,'#efe3c5')
+  +rect(6,22,32,12,'#4a332c')+rect(8,24,28,8,'#e7d8b8')+rect(10,25,10,6,'#f3efdd')
+  +rect(22,25,12,3,'#a6b97b')+rect(22,29,12,3,'#d29167')
+  +rect(20,8,4,28,'#b8452f')+rect(16,18,12,4,'#b8452f')+rect(19,17,6,6,'#d96a4f');
+ if(p==='herobar')s=rect(20,30,4,13,'#bd9964')+rect(9,4,26,12,'#c8622f')+rect(11,6,22,8,'#e0844a')
+  +rect(9,18,26,12,'#c8622f')+rect(11,20,22,8,'#e0844a')+rect(9,16,26,2,'#8f4420')
+  +rect(13,8,18,2,'#a34c22')+rect(13,22,18,2,'#a34c22')
+  +`<path d="M24 2H38L34 6L38 10H24Z" fill="#c9a54a"/>`+rect(23,2,2,10,'#8e7049');
+ if(p==='hyperenergy')s=rect(16,2,12,3,'#cbd9d0')+rect(15,5,14,34,'#2f3f57')+rect(15,5,4,34,'#4a6486')
+  +`<path d="M18 13L24 18L18 23Z" fill="#7fe3d0"/><path d="M23 13L29 18L23 23Z" fill="#7fe3d0"/>`
+  +rect(15,27,14,5,'#e9f4f0')+rect(16,36,12,3,'#9baea6');
+ if(p==='sageelixir')s=rect(20,2,4,4,'#8a7a5a')+rect(18,6,8,3,'#b9a06a')+rect(19,9,6,6,'#cfd9cf')
+  +`<path d="M17 15H27L34 26C34 34 29 39 22 39C15 39 10 34 10 26Z" fill="#7f6bb0"/>`
+  +rect(14,22,3,10,'#b9a8dd')
+  +`<path d="M16 28C20 24 24 32 28 28" fill="none" stroke="#e2d7f5" stroke-width="2"/>`
+  +rect(15,32,14,4,'#e6dff5');
+ if(p==='toppotion')s=`<path d="M17 4L20 1L22 4L24 1L27 4Z" fill="#f0d78a"/>`
+  +rect(17,5,10,4,'#d8b465')+rect(19,9,6,4,'#cfd9cf')
+  +`<path d="M16 13H28L36 25L30 38H14L8 25Z" fill="#3f8fbf"/>`
+  +`<path d="M16 13L20 25L14 38Z" fill="#6fc0e4"/>`
+  +rect(18,22,8,8,'#e7f4fb')+rect(20,24,4,4,'#bfe6f7');
  return `<svg class="item-art" width="${size}" height="${size}" viewBox="0 0 44 44" shape-rendering="crispEdges" role="img" aria-label="${esc(it.name)}">${s}</svg>`;
 }
 // Gate marks and UI glyphs. Pixel sprites on the same 4px grid as the rest of the art —

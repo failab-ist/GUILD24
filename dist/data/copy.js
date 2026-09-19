@@ -102,8 +102,9 @@ const Copy={
 /* COPY_WORLD_VOICE 18.5 - BOSS REVEAL. Verbatim from the spec: D5 gives identity and a
    Flavor line that may hint at the Trait but never states it, D15 gives the exact
    Function, D30 gives the Family facts and nothing else. No strategy advice is appended
-   anywhere - the information itself is the decision material. GLUTTONY's rarity boundary
-   is a DATA slot, not prose, and stays empty until PASS3 approves it. */
+   anywhere - the information itself is the decision material. GLUTTONY has no rarity
+   boundary in v2.7: the effect reaches every Item contribution, which is what its D15 line
+   now says. */
 Copy.boss={
  d5:{header:'길드 토벌 공고',sub:'이번 토벌 대상',button:'토벌 대상 확인',
   flavor:{
@@ -120,10 +121,15 @@ Copy.boss={
    PRIDE:['오만의 갑주',['최종전에서 모든 출전자의 투력이 감소한다.','강인함·기동·정신은 그대로 적용된다.']],
    ENVY:['질투의 시선',['최종전에서 가장 크게 기여하는 모험가 한 명이 표적이 된다.','표적의 투력·강인함·기동·정신은 최종전 동안 감소한다.']],
    GREED:['탐욕의 장부',['최종전까지 누적 총매출이 목표에 미달하면, 부족한 만큼 그리드가 강해진다.','강화에는 한도가 있으며, 목표를 넘겨도 추가 이득은 없다.']],
-   GLUTTONY:['탐식의 권능',['최종전에서 [등급] 이상 보급품의 능력치 증가 효과가 감소한다.','대응·보급·보험·기타 특수 효과는 그대로 적용된다.']],
+   /* COPY_WORLD_VOICE_v2.7 §GLUTTONY: verbatim. v2.7 has no Rarity threshold for this Boss,
+      so the inherited sentence claimed a Rarity boundary the mechanic does not have - every
+      positive Core-Stat contribution from an Item is halved, whatever the Item cost. */
+   GLUTTONY:['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·보급·보험 효과는 유지']],
    LUST:['매혹의 권능',['단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.','단골은 영향을 받지 않는다.']],
    SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 유물을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 유물은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
- d30:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'최종 준비'}
+ /* The scouting report is the D25 disclosure now, so its button acknowledges the report
+    rather than announcing a preparation that is still five days away. */
+ final:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'확인'}
 };
 
 /* COPY_WORLD_VOICE §LOCKED PLAYER-FACING TERMS, 2026-09-12. Two of these are exact: the Great

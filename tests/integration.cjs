@@ -4,7 +4,7 @@
 // These drive the real engine: a round trip is asserted by continuing the run, never by
 // comparing serialised shape alone.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const copy=x=>JSON.parse(JSON.stringify(x));
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const source=p=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'..',p),'utf8');
@@ -56,16 +56,29 @@ function drivenToDeepSale(){
  }
  throw Error('no Run reached the Sale phase of a Deep Day');
 }
-/* Drive a Run all the way to its Final. Under the Stage 10 economy a store can go under before
-   DAY 30, so which seed gets there is no longer a fixed fact - the helper keeps trying rather
-   than pinning one that happens to survive today. */
-function drivenToFinal(prefix){
- for(let i=0;i<80;i++){
-  const g=fresh(prefix+'-'+i);g.buyRelic(g.run.relicWindow.candidateIds[0]);
-  for(let n=0;n<4000&&g.run.day<30&&g.run.phase!=='end';n++)if(!step(g))break;
-  if(g.run.phase==='final')return g;
+/* CONTROLLED D30 SETUP. Whether a fresh Account survives 30 Days under its own power is a
+   balance question measured on a cross-run trajectory, not a precondition for testing what the
+   Final generates and persists - so this driver removes the two things that can end a Run early
+   rather than re-rolling seeds until one happens to survive. Every Day is played normally
+   (Order, arrivals, Closing) except that the till is held solvent and nobody is sent into a
+   Gate, so the D30 state is reached for certain. It proves nothing about survivability. */
+function controlledStep(g){
+ const s=g.run;
+ s.money=Math.max(s.money,5000);  // controlled: the economy is not the subject here
+ if(s.phase==='sell'){
+  // everyone still meets the player at the counter; nobody departs into a Gate
+  while(s.cursor<s.queue.length-1)g.depart();
+  s.queue=[];g.depart();
+  return true;
  }
- throw Error('no Run reached the Final');
+ return step(g);
+}
+function controlledPlay(g,limit=6000){let t=0;while(g.run.phase!=='end'&&t++<limit)if(!controlledStep(g))break;return g;}
+function controlledToFinal(prefix){
+ const g=fresh(prefix);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ for(let n=0;n<6000&&g.run.day<30&&g.run.phase!=='end';n++)if(!controlledStep(g))break;
+ if(g.run.phase!=='final')throw Error('the controlled D30 setup did not reach the Final: '+g.run.phase+' D'+g.run.day);
+ return g;
 }
 function reload(g){g.save();const s=Save.import(Save.export(g.account,g.run));const h=new Game(s.account,s.run);h.autosave=false;return h;}
 
@@ -100,7 +113,7 @@ test('CORE_RUN §SAVE/LOAD: every persisted v2.4 field survives, and a damaged o
 });
 
 test('CORE_RUN §SAVE/LOAD: the Final state a D30 run generated is part of the save',()=>{
- const g=drivenToFinal('save-final');
+ const g=controlledToFinal('save-final');
  assert.equal(g.run.phase,'final','the driver reached the Final');
  const round=Save.import(Save.export(g.account,g.run));
  assert.deepEqual(round.run.final,g.run.final,'the generated Final survives');
@@ -134,7 +147,7 @@ test('CORE_RUN §SAVE/LOAD: a v2.4 save is never read as a v2.5 save',()=>{
    assert.equal(Save.read(),null,label+' written by v2.4 does not load');
    assert.ok(Save.error&&/새 점포/.test(Save.error),label+': the player is told, not shown an error code');
    assert.equal(store.get('guild24.save.v5'),payload,label+': the v5 bytes are left untouched');
-   assert.equal(store.get('guild24.save.v7'),undefined,label+': nothing is migrated into the v6 key');
+   assert.equal(store.get('guild24.save.v8'),undefined,label+': nothing is migrated into the v7 key');
   }
   // the same shape is refused by the validator itself, not only by the key it sits under
   assert.equal(Save.valid({version:5,account,run:null}),false,'a v5 payload is not a valid v6 save');
@@ -155,14 +168,14 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are left untouched');
   // A v6 write over an existing v6 save keeps the previous bytes under .backup.
   g.autosave=true;g.save();
-  const first=store.get('guild24.save.v7');
+  const first=store.get('guild24.save.v8');
   g.run.money+=1;g.save();
-  assert.equal(store.get('guild24.save.v7.backup'),first,'the previous save is preserved as a backup');
+  assert.equal(store.get('guild24.save.v8.backup'),first,'the previous save is preserved as a backup');
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are still there afterwards');
   // A corrupted head falls back to the backup rather than losing the run.
-  store.set('guild24.save.v7','{not json');
+  store.set('guild24.save.v8','{not json');
   const recovered=Save.read();
-  assert.ok(recovered&&recovered.version===7,'the backup is read when the head is unreadable');
+  assert.ok(recovered&&recovered.version===8,'the backup is read when the head is unreadable');
   assert.equal(recovered.run.money,g.run.money-1,'the recovered run is the previous save, not an invention');
  }finally{delete global.localStorage;}
 });
@@ -210,7 +223,7 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
   g.account.runs=3;g.autosave=true;g.save();
   for(const v of ['v1','v2','v3','v4','v5'])store.set('guild24.save.'+v,'{"version":'+v.slice(1)+'}');
   g.run.money+=1;g.save();   // so the .backup key exists too
-  assert.ok(store.get('guild24.save.v7')&&store.get('guild24.save.v7.backup'),'the precondition is a real save');
+  assert.ok(store.get('guild24.save.v8')&&store.get('guild24.save.v8.backup'),'the precondition is a real save');
 
   assert.equal(Save.reset(),true,'the reset reports success');
   assert.equal(store.size,0,'every key this game owns is gone - current, backup and legacy alike');
@@ -222,7 +235,8 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
   const after=Meta.fresh();
   assert.equal(Meta.totalJobMastery(after),0,'Job Mastery is back to zero');
   assert.equal(Meta.distinctBossClear(after),0,'so is Distinct Boss Clear');
-  assert.equal(Meta.grade(after),1,'and the Franchise Grade');
+  assert.equal(Meta.storeCapital(after),0,'Store Capital is back to zero');
+ assert.deepEqual(Meta.ownedDecorations(after),[],'and every Decoration is unowned again');
   assert.deepEqual(after.knowledge,{},'Monster Knowledge is gone');
   assert.deepEqual(after.tutorial,{},'and the guide is offered again, with no reset-only code to do it');
   assert.equal(after.runs,0,'the run count does not survive either');
@@ -405,25 +419,27 @@ test('CORE_RUN §RUN RANDOMNESS: the same seed and the same inputs produce the s
 
 test('RUN-Q19 / RUN-Q20: save → load → continue equals an uninterrupted run, at every phase',()=>{
  const phases=['foundation','morning','order','sell','night','closing','final'];
- /* Reaching the Final means surviving to D30, which now also means not losing
-    D.balance.deathLimit adventurers on the way - the scripted policy here sells nothing, so
-    'resume-final' closes on day 19 with ten gone. The phase reached is what this test needs;
-    which seed gets there is not part of the contract. */
- const seeds={final:'resume-final-3'};
+ /* The Final phase only exists on a Run that is standing at D30, which a fresh Account under
+    this scripted policy does not reach under its own power - and whether it does is a balance
+    question, not part of the save contract. That one phase is therefore driven on the
+    controlled D30 setup, the same deterministic driver on both sides of the cut, so the
+    save/load claim is the thing being tested rather than a seed's luck. */
  for(const at of phases){
-  const seed=seeds[at]||'resume-'+at;
-  const straight=play(fresh(seed));
+  const controlled=at==='final';
+  const seed='resume-'+at;
+  const advance=controlled?controlledStep:step,finish=controlled?controlledPlay:play;
+  const straight=finish(fresh(seed));
   const g=fresh(seed);
   let turns=0,cut=false;
-  while(g.run.phase!=='end'&&turns++<4000){
+  while(g.run.phase!=='end'&&turns++<6000){
    if(!cut&&g.run.phase===at){cut=true;const h=reload(g);
     assert.deepEqual(h.run,g.run,at+': the reloaded run is the same run');
     assert.equal(h.rng.state,g.rng.state,at+': the RNG resumes where it stopped');
-    play(h);
+    finish(h);
     assert.deepEqual(h.run,straight.run,at+': continuing from the save lands on the same run');
     assert.deepEqual(h.account,straight.account,at+': and on the same account');
     break;}
-   if(!step(g))break;
+   if(!advance(g))break;
   }
   assert.ok(cut,at+': the phase was actually reached and cut at');
  }
@@ -652,7 +668,7 @@ test('RESCUE: the count survives a save and a load, and a forged one is refused'
  const g=fresh('rescue-save'),s=g.run;
  g.stock('ramen',1);s.phase='closing';s.money=-10;g.liquidate(s.inventory[0].id);
  assert.equal(s.rescueUsed,1);
- const round=copy({version:7,account:g.account,run:s});
+ const round=copy({version:8,account:g.account,run:s});
  assert.ok(Save.valid(round),'a run carrying a rescue count is valid');
  assert.equal(round.run.rescueUsed,1,'and the count is what is written');
  for(const bad of [{rescueUsed:DATA.balance.rescueLimit+1},{rescueUsed:-1},{rescueUsed:1.5},{rescueUsed:undefined}]){
@@ -684,14 +700,14 @@ test('NPC-Q66 — MAJOR INJURY RECOVERY', () => {
 test('SAVE V7 EXACT CONTRACT', () => {
  const g = new Game();
  g.autosave = false;
- g.start('v7-contract');
+ g.start('v8-contract');
  
- // 1. new Run -> run.version === 7
- assert.equal(g.run.version, 7, 'a new run is created at version 7');
+ // 1. new Run -> run.version === 8
+ assert.equal(g.run.version, 8, 'a new run is created at version 8');
  
- // 2. Save.valid()가 run.version !== 7 reject
+ // 2. Save.valid()가 run.version !== 8 reject
  const raw = JSON.parse(Save.export(g.account, g.run));
- assert.ok(Save.valid(raw), 'the exported v7 shape is valid');
+ assert.ok(Save.valid(raw), 'the exported v8 shape is valid');
  raw.run.version = 6;
  assert.equal(Save.valid(raw), false, 'a run.version !== 7 is rejected');
  raw.run.version = 7;
@@ -714,7 +730,7 @@ test('SAVE V7 EXACT CONTRACT', () => {
  const fresh = Meta.fresh();
  assert.equal(fresh.unlocks.premium, false, 'fresh account premium is false boolean');
  assert.equal(fresh.unlocks.tree, false, 'fresh account tree is false boolean');
- assert.ok(Save.valid({version:7, account:fresh, run:null}), 'fresh account alone is a valid save payload');
+ assert.ok(Save.valid({version:8, account:fresh, run:null}), 'fresh account alone is a valid save payload');
  
  // 5.1 extra keys in unlocks do not invalidate
  const extraRaw = JSON.parse(Save.export(g.account, g.run));
@@ -727,7 +743,433 @@ test('SAVE V7 EXACT CONTRACT', () => {
  const payload = Save.export(h.account, h.run);
  const loaded = Save.import(payload);
  assert.equal(loaded.account.unlocks.premium, false);
- assert.equal(loaded.run.version, 7);
+ assert.equal(loaded.run.version, 8);
+});
+
+test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for the visit',()=>{
+ const g=fresh('outlook');g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ g.beginOrder();
+ for(let i=0;i<g.run.offers.length;i++){try{g.setQuantity(i,1);}catch(e){}}
+ g.finishOrder();
+ assert.equal(g.run.phase,'sell');
+ const n=g.current();
+ const entry=copy(n.outlook);
+ assert.ok(entry,'the snapshot is taken when the customer reaches the counter');
+ for(const k of ['combat','worst','deathRisk','greatSignal','hazards'])
+  assert.ok(k in entry,'the snapshot carries '+k);
+ assert.ok(entry.deathRisk>=0&&entry.deathRisk<=0.40,'the Death risk is the conditional one, inside its caps');
+ // it is the SALE-entry state: the same calculation on the untouched NPC
+ const fresh0=g.outlookFor({...n,pack:[]});
+ assert.deepEqual({...entry,gate:undefined,day:undefined},{...fresh0,gate:undefined,day:undefined},
+  'the snapshot is the pre-supply state, not a post-Item one');
+ // selling into the Bag must not move any of it
+ let sold=0;
+ for(const st of [...g.run.inventory]){
+  if(n.pack.length>=Adventurer.slots(n))break;
+  try{g.sell(st.id,'half');sold++;}catch(e){}
+ }
+ assert.ok(sold>0,'the test actually committed a purchase');
+ assert.deepEqual(n.outlook,entry,'a committed Item does not move the frozen outlook');
+ // ...but the runtime preparation is NOT frozen
+ const prepared=Dungeon.prepare({...n},g.claimedGateFor(n),g.run.facilities);
+ const bare=Dungeon.prepare({...n,pack:[]},g.claimedGateFor(n),g.run.facilities);
+ assert.notDeepEqual(prepared.effects,bare.effects,'the real preparation did change');
+ // and it survives a save/load
+ g.save();
+ const round=Save.import(Save.export(g.account,g.run));
+ assert.ok(Save.valid(JSON.parse(Save.export(g.account,g.run))),'a run carrying the snapshot still validates');
+ assert.deepEqual(round.run.npcs.find(x=>x.id===n.id).outlook,entry,'the frozen outlook survives a reload');
+ // the next customer gets their own snapshot
+ const before=n.id;g.depart();
+ const next=g.current();
+ if(next){
+  assert.notEqual(next.id,before);
+  assert.ok(next.outlook,'the next customer is snapshotted on arrival');
+ }
+});
+
+test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every higher price',()=>{
+ const mults=Object.fromEntries(Object.entries(DATA.pricing).map(([k,v])=>[k,v.mult]));
+ const order=['half','full','overcharge'].sort((a,b)=>mults[a]-mults[b]);
+ assert.deepEqual(order,['half','full','overcharge'],'the three ordinary modes, cheapest first');
+ /* Drive real visits until each of the three modes has been refused at least once, whatever
+    the reason was, and check the ceiling every time. The old rule only fired on a price
+    refusal, so a 거절 for need or for choice left the higher prices open. */
+ const seen=new Set();
+ let visits=0;
+ for(let seed=0;seed<60&&seen.size<3;seed++){
+  const g=fresh('ceiling-'+seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  for(let turn=0;turn<600&&g.run.phase!=='end';turn++){
+   const s=g.run;
+   if(s.phase!=='sell'){if(!step(g))break;continue;}
+   const n=g.current();
+   visits++;
+   for(const st of [...s.inventory]){
+    for(const mode of order){
+     const key=st.item+':'+mode;
+     if(n.refused.includes(key))continue;
+     if(n.pack.length>=Adventurer.slots(n))break;
+     let threw=false;
+     try{g.sell(st.id,mode);}catch(e){threw=true;}
+     if(threw)continue;
+     const said=(n.refusalReasons||[]).filter(x=>x.item===st.item);
+     const mine=said.find(x=>x.mode===mode);
+     if(!mine)break;  // accepted, this stock is gone
+     seen.add(mine.reason);
+     // every higher price for THIS SKU is now closed, whatever the reason was
+     for(const higher of order.filter(m=>mults[m]>mults[mode]))
+      assert.ok(n.refused.includes(st.item+':'+higher),
+       mine.reason+' refusal at '+mode+' must close '+higher);
+     // every lower price is still open
+     for(const lower of order.filter(m=>mults[m]<mults[mode]))
+      assert.ok(!n.refused.includes(st.item+':'+lower),
+       'a refusal at '+mode+' leaves '+lower+' open');
+     // and nothing is locked for a SKU this customer never actually refused
+     const refusedSkus=new Set((n.refusalReasons||[]).map(x=>x.item));
+     for(const key of n.refused)
+      assert.ok(refusedSkus.has(key.split(':')[0]),'an unrelated SKU is never locked: '+key);
+     break;
+    }
+   }
+   g.depart();
+  }
+ }
+ assert.ok(visits>0,'the sweep actually reached the counter');
+ assert.ok(seen.has('price')&&seen.size>=2,'the sweep saw a price refusal and at least one other reason: '+[...seen]);
+ // a new visit starts from a clean pricing state
+ const g=fresh('ceiling-reset');g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ for(let turn=0;turn<600&&g.run.phase!=='sell';turn++)if(!step(g))break;
+ const n=g.current();
+ if(n&&g.run.inventory.length){
+  const st=g.run.inventory[0];
+  try{g.sell(st.id,'half');}catch(e){}
+  if(n.refused.length){
+   g.depart();
+   for(let turn=0;turn<600&&g.run.day<2;turn++)if(!step(g))break;
+   assert.ok(g.run.npcs.every(x=>!x.refused.length),'a new day begins from a clean pricing state');
+  }
+ }
+});
+
+/* META_v2.8 §Run-end settlement structure:
+     Store Capital Gain = round(Gross Sales x Day-reach conversion rate)
+   Gross Sales is the Run's own sales accounting - `stats.revenue` - and Ending Gold and the
+   remaining Inventory are NOT inputs. These cases replace the retired net-asset ones, which
+   asserted the superseded `Ending Gold + liquidation` formula. */
+test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and never on abandon',()=>{
+ const at=(sales,day,money=1000)=>{const g=fresh('sc-'+sales+'-'+day+'-'+money);
+  g.run.day=day;g.run.stats.revenue=sales;g.run.money=money;return g;};
+
+ // A. no sales, no Store Capital - whatever Day it reached, whatever it is holding
+ for(const day of [5,15,22,27,30]){
+  const g=at(0,day,9999),before=Meta.storeCapital(g.account);
+  assert.equal(g.settleStoreCapital().gain,0,'D'+day+' with no sales earns nothing');
+  assert.equal(Meta.storeCapital(g.account),before,'and credits the Account nothing');
+ }
+
+ // B. each Day band converts at its exact Canonical rate
+ const BANDS=[[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]];
+ for(const [day,rate] of BANDS){
+  assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
+  const g=at(10000,day);
+  const st=g.settleStoreCapital();
+  assert.equal(st.rate,rate,'D'+day+' settles at that rate');
+  assert.equal(st.sales,10000,'on the Run own Gross Sales');
+  assert.equal(st.gain,Math.round(10000*rate),'D'+day+' gain');
+ }
+
+ // C. the same Gross Sales earns strictly more the deeper the band reached
+ const byBand=[9,19,24,29,30].map(day=>at(10000,day).settleStoreCapital().gain);
+ for(let i=1;i<byBand.length;i++)
+  assert.ok(byBand[i]>byBand[i-1],'a deeper band earns more on the same sales: '+byBand.join(' < '));
+
+ // J. Ending Gold and Inventory are not inputs: same sales, same Day, different end state
+ const poor=at(8000,22,-4000),rich=at(8000,22,9000);
+ rich.run.inventory=[];                          // and nothing on the shelf either
+ const a1=poor.settleStoreCapital(),a2=rich.settleStoreCapital();
+ assert.equal(a1.gain,a2.gain,'Ending Gold and Inventory change nothing: '+a1.gain+' vs '+a2.gain);
+ assert.equal(a1.gain,Math.round(8000*0.03),'and the gain is the sales at the band rate');
+ assert.equal('gold' in a1,false,'the recorded settlement states no Gold input');
+ assert.equal('stock' in a1,false,'and no stock input');
+ assert.equal('value' in a1,false,'and no net-asset Settlement Value');
+ assert.equal(typeof fresh('sc-helper').settlementValue,'undefined',
+  'the retired net-asset helper is gone from the prototype');
+
+ // G. Boss CLEAR is not a multiplier
+ const win=at(12000,30);win.run.win=true;
+ const lose=at(12000,30);
+ const w=win.settleStoreCapital(),l=lose.settleStoreCapital();
+ assert.equal(w.rate,l.rate,'a CLEAR uses the same rate');
+ assert.equal(w.gain,l.gain,'and the same gain - Boss CLEAR is not a multiplier');
+
+ // I. exactly once, and a reload of an ended Run reads it instead of earning it
+ const g=at(7000,22),before=Meta.storeCapital(g.account);
+ const first=g.settleStoreCapital();
+ assert.equal(Meta.storeCapital(g.account),before+first.gain,'it reaches the Account once');
+ assert.equal(g.settleStoreCapital().gain,first.gain,'settling again returns the recorded settlement');
+ assert.equal(Meta.storeCapital(g.account),before+first.gain,'and credits nothing further');
+ g.end(false,'테스트 종료');
+ assert.equal(Meta.storeCapital(g.account),before+first.gain,'end() does not settle a second time');
+ const round=reload(g);
+ assert.equal(Meta.storeCapital(round.account),before+first.gain,'a reload does not double-credit');
+ round.settleStoreCapital();
+ assert.equal(Meta.storeCapital(round.account),before+first.gain,'and the guard survives the round trip');
+ assert.equal(round.run.settled,true,'the guard itself is persisted');
+ assert.equal(round.run.settlement.sales,7000,'the recorded Gross Sales survives too');
+
+ // H. a manual abandon never reaches end(), which is what makes it worth nothing
+ const dropped=at(20000,26);
+ const capital=Meta.storeCapital(dropped.account);
+ dropped.start('sc-abandon-2');
+ assert.equal(Meta.storeCapital(dropped.account),capital,'abandoning a live Run settles nothing');
+});
+
+/* D / E / F. A failed Run is still a Run that did business. Bankruptcy, the Death limit and a
+   lost Final are ordinary endings: they lose the Gold, the stock and the adventurers, and they
+   keep the store-operation progress the sales already demonstrated. Each is driven through the
+   real `end()` rather than by writing a flag. */
+test('META_v2.8 §STORE CAPITAL: a failed Run still earns on what it actually sold',()=>{
+ const drive=(seed,day,sales,setup)=>{const g=fresh(seed);
+  g.run.day=day;g.run.stats.revenue=sales;setup&&setup(g);
+  const before=Meta.storeCapital(g.account);
+  g.end(false,'테스트 종료');
+  return {g,before,gain:g.run.settlement.gain,st:g.run.settlement};};
+
+ // D. bankrupt: no Gold, nothing on the shelf, but it sold 6,000G worth on the way down
+ const bank=drive('sc-bankrupt',22,6000,g=>{g.run.money=-500;g.run.inventory=[];});
+ assert.equal(bank.gain,Math.round(6000*0.03),'a bankrupt Run earns on its Gross Sales');
+ assert.ok(bank.gain>0,'which is not zero');
+ assert.equal(Meta.storeCapital(bank.g.account),bank.before+bank.gain,'and the Account receives it');
+
+ // E. the Death limit closed the store
+ const dead=drive('sc-deaths',15,4000,g=>{g.run.stats.deaths=DATA.balance.deathLimit;});
+ assert.equal(dead.gain,Math.round(4000*0.02),'a Death-limit closure uses the ordinary formula');
+
+ // F. reached D30 and lost the Final
+ const failed=drive('sc-finalfail',30,9000,g=>{g.run.win=false;});
+ assert.equal(failed.gain,Math.round(9000*0.05),'a lost Final uses the ordinary formula');
+ assert.equal(failed.st.rate,0.05,'at the D30 rate it actually reached');
+
+ // the failures are still failures: none of them kept anything Run-scoped
+ for(const r of [bank,dead,failed]){
+  assert.equal(r.g.run.phase,'end','the Run really ended');
+  assert.equal(r.g.run.settled,true,'and settled exactly once');
+ }
+});
+
+/* K. Gross Sales is the Run's own accounting, credited once per transaction by the two paths
+   that make a sale - an ordinary SALE and a Final fixed-price transfer - and never recounted
+   by Meta. Driven through the real sell()/supplyFinal() rather than by writing the counter. */
+test('META_v2.8 §STORE CAPITAL: Gross Sales counts each real sale exactly once',()=>{
+ const g=fresh('sc-gross');
+ while(g.run.phase!=='sell')step(g);
+ const start=g.run.stats.revenue;
+ let sold=0,paid=0;
+ for(let turn=0;turn<400&&sold<3;turn++){
+  if(g.run.phase!=='sell'){step(g);continue;}
+  const n=g.current(),st=g.run.inventory[0];
+  if(!n||!st||n.pack.length>=Adventurer.slots(n)){g.depart();continue;}
+  const before=g.run.stats.revenue,quote=g.interest(n,DATA.itemBy[st.item],'full');
+  let ok=false;try{ok=g.sell(st.id,'full');}catch(e){g.depart();continue;}
+  const delta=g.run.stats.revenue-before;
+  if(ok){assert.equal(delta,quote.price,'an accepted Sale credits its price exactly once');sold++;paid+=quote.price;}
+  else assert.equal(delta,0,'a refusal credits nothing');
+ }
+ assert.ok(sold>0,'the sweep actually sold something');
+ assert.equal(g.run.stats.revenue-start,paid,'Gross Sales is the sum of what was actually paid');
+
+ /* The Final transfer is the other path into the same counter. */
+ const f=fresh('sc-final');
+ f.run.day=30;f.morning();
+ const n=f.run.npcs.find(x=>x.alive&&x.introduced)||f.run.npcs[0];
+ n.alive=true;n.introduced=true;n.recovery=0;n.pack=[];n.money=99999;
+ f.run.team=[n.id];
+ const stock=f.run.inventory[0];
+ if(stock){
+  const before=f.run.stats.revenue,price=f.finalPrice(stock.item);
+  f.supplyFinal(n.id,stock.id);
+  assert.equal(f.run.stats.revenue-before,price,'a Final transfer credits its fixed price once');
+ }
+ /* And Meta reads that counter rather than adding to it. */
+ const capBefore=Meta.storeCapital(f.account),salesBefore=f.run.stats.revenue;
+ const st=f.settleStoreCapital();
+ assert.equal(f.run.stats.revenue,salesBefore,'settling does not touch Gross Sales');
+ assert.equal(st.sales,salesBefore,'it reads exactly what the Run accumulated');
+ assert.equal(Meta.storeCapital(f.account),capBefore+st.gain,'and credits the gain once');
+});
+
+test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run never re-reads it',()=>{
+ const a=Meta.fresh();
+ Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
+ Meta.buyDecoration(a,'thriftSafe');
+ const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
+ assert.equal(g.run.money,1000+DATA.balance.decorationStartGold,'counter is applied at start');
+ assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
+ assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
+ // changing the Account mid-Run must not reach the Run that already started
+ Meta.buyDecoration(a,'dawnSign');
+ assert.equal(g.wears('dawnSign'),false,'a Decoration bought mid-Run does not join this Run');
+ Meta.equipDecoration(a,'counter',null);
+ assert.equal(g.wears('thriftSafe'),true,'and unequipping mid-Run does not remove it either');
+ assert.deepEqual(reload(g).run.loadout,g.run.loadout,'the frozen loadout survives a reload');
+ // a Decoration is never a Relic
+ assert.ok(!g.run.facilities.includes('thriftSafe'),'no Decoration id is injected into facilities');
+ assert.equal(g.has('thriftSafe'),false,'and `has` - the Relic question - does not answer for it');
+ const next=new Game(a);next.autosave=false;next.start('loadout-freeze-2');
+ assert.deepEqual(next.run.loadout,{sign:'dawnSign'},'the next Run picks up the current Account loadout');
+ assert.equal(next.run.money,1000,'and the unequipped counter no longer pays out');
+});
+
+test('RELIC_v2.7 §VISITOR RELICS: board floors the base roll, hub rolls one exclusive outcome',()=>{
+ const src=source('dist/systems/shop.js');
+ /* board is a floor on the BASE roll, applied before every other modifier, and draws nothing. */
+ assert.ok(src.includes("const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;"),
+  'board raises the base roll to 4 and leaves 5 and 6 alone');
+ /* hub: one roll, three mutually exclusive outcomes. */
+ assert.ok(src.includes("const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;"),
+  'hub makes exactly one roll: 30% +1, 5% +2, otherwise none');
+ const seen=new Set();
+ for(let i=0;i<1000;i++){const r=i/1000;seen.add(r<.30?1:r<.35?2:0);}
+ assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
+ /* hub's cost is a share of overheadBase alone - never of the flat extras. */
+ assert.equal(DATA.balance.hubOverheadRate,.10,'the approved rate ships');
+ const g=fresh('visitor-relics');
+ const plain=g.expectedOperatingCost();
+ g.run.facilities.push('hub');g.run.dayFacilities=[...g.run.facilities];
+ const withHub=g.expectedOperatingCost();
+ assert.equal(withHub,Math.round((g.overheadBase()*(1+DATA.balance.hubOverheadRate))/10)*10,
+  'overhead is base + 10% of base, then the existing rounding');
+ assert.ok(withHub>plain,'and it really is a cost');
+ assert.ok(!src.includes("includes('hub')?35:0"),'the retired flat +35G is gone');
+ /* board, hub and the wall Decoration are independent: none marks another owned or shares a slot. */
+ assert.equal(g.wears('guildPlaque'),false,'holding the Relic does not equip the Decoration');
+ const deco=Meta.fresh();Meta.addCapital(deco,DATA.decorationBy.guildPlaque.price);
+ Meta.buyDecoration(deco,'guildPlaque');
+ const h=new Game(deco);h.autosave=false;h.start('deco-not-relic');
+ assert.ok(!h.run.facilities.includes('board'),'and equipping the Decoration does not grant the Relic');
+});
+
+test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with safe defaults',()=>{
+ /* The Decoration package adds Account state (capital, owned, loadout) and Run state (the
+    frozen loadout, the settlement guard). None of it is a schema blocker, so v8 stands and no
+    migration layer is invented for internal-development saves. */
+ const fresh0=Meta.fresh();
+ assert.equal(JSON.parse(Save.export(fresh0,null)).version,8,'the save generation is unchanged');
+ assert.ok(Save.valid(JSON.parse(Save.export(fresh0,null))),'an Account-only save validates');
+ /* An existing v8 Account written before any of this must load and behave, not crash. */
+ const legacy=Meta.fresh();delete legacy.store;
+ const raw={version:8,account:legacy,run:null};
+ assert.ok(Save.valid(raw),'a v8 Account with no store block is still valid');
+ const back=Save.import(JSON.stringify(raw));
+ assert.equal(Meta.storeCapital(back.account),0,'capital defaults to zero');
+ assert.deepEqual(Meta.ownedDecorations(back.account),[],'owned defaults to empty');
+ assert.deepEqual(Meta.plannedLoadout(back.account),{},'and the loadout to empty');
+ const g=new Game(back.account);g.autosave=false;g.start('legacy-v8-start');
+ assert.equal(g.run.money,1000,'a Run from it starts on the neutral baseline');
+ /* A Run saved before the loadout existed must not claim to wear anything. */
+ const older=copy(g.run);delete older.loadout;delete older.settled;
+ const h=new Game(back.account,older);h.autosave=false;
+ assert.equal(h.wears('thriftSafe'),false,'a Run with no frozen loadout wears nothing');
+ h.run.day=12;h.run.stats.revenue=3000;
+ const legacySettle=h.settleStoreCapital();
+ assert.equal(legacySettle.rate,0.02,'and it still settles on the Day it reached');
+ assert.equal(legacySettle.gain,Math.round(3000*0.02),'on its own Gross Sales');
+ /* A live Run round-trips with both new fields intact. */
+ const live=fresh('save-decoration');
+ Meta.addCapital(live.account,DATA.decorationBy.dawnSign.price);
+ Meta.buyDecoration(live.account,'dawnSign');
+ live.run.loadout={sign:'dawnSign'};
+ const round=reload(live);
+ assert.deepEqual(round.run.loadout,live.run.loadout,'the frozen loadout survives export/import');
+ assert.equal(Meta.storeCapital(round.account),0,'and the Account capital round-trips');
+ assert.deepEqual(Meta.ownedDecorations(round.account),['dawnSign'],'with what it owns');
+ assert.deepEqual(Meta.storeLoadout(round.account),Meta.storeLoadout(live.account),'and its planned loadout');
+});
+
+test('META_v2.8 §RETIRED: a stale Contract or Franchise payload changes nothing at all',()=>{
+ /* Removing the picker is not the requirement. A v8 save can still carry `contract` and a
+    filled `franchise` block, and a Run loaded from it must play identically to the neutral
+    baseline - otherwise retired rules are still live for anyone with an old save. */
+ const seed='stale-payload';
+ const base=fresh(seed);
+ const shape=g=>({money:g.run.money,offers:g.run.offers.length,overhead:g.expectedOperatingCost(),
+  visitors:g.run.expectedVisitors,rarities:g.run.offers.map(o=>DATA.itemBy[o.item].rarity).join(','),
+  prices:g.run.offers.map(o=>o.price).join(',')});
+ for(const contract of ['guild','premium','delivery','budget','standard']){
+  const g=new Game(Meta.fresh());g.autosave=false;g.start(seed);
+  g.run.contract=contract;           // exactly what a stale v8 save would carry
+  g.run.dayFacilities=[...g.run.facilities];
+  g.generateOffers({advancePity:false});
+  const b2=new Game(Meta.fresh());b2.autosave=false;b2.start(seed);
+  b2.run.dayFacilities=[...b2.run.facilities];
+  b2.generateOffers({advancePity:false});
+  assert.deepEqual(shape(g),shape(b2),'a stale `'+contract+'` Run plays as the neutral baseline');
+ }
+ /* A filled retired Franchise block must not unlock, discount or gate anything. */
+ const filled=Meta.fresh();
+ filled.franchise={sales:9999,overcharged:9999,returning:9999,relics:9999,
+  families:['spider','slime','fire','crypt','snow'],done:['nowaste','nodeath','allsupplied','grosssales']};
+ const withPayload=new Game(filled);withPayload.autosave=false;withPayload.start(seed);
+ assert.deepEqual(shape(withPayload),shape(base),'a filled Franchise payload changes no Run value');
+ assert.deepEqual(Meta.opened(filled),Meta.opened(Meta.fresh()),'and unlocks nothing');
+});
+
+test('META_v2.8 §RETIRED: active play writes no retired Franchise progress',()=>{
+ const g=fresh('no-retired-writes');
+ const snap=()=>JSON.stringify(g.account.franchise);
+ const before=snap();
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);          // Relic purchase used to count
+ assert.equal(snap(),before,'a Relic purchase credits nothing');
+ while(g.run.phase!=='sell')step(g);
+ let sold=0;
+ for(let turn=0;turn<600&&g.run.day<4;turn++){
+  if(g.run.phase!=='sell'){step(g);continue;}
+  const n=g.current(),st=g.run.inventory[0];
+  if(!st||n.pack.length>=Adventurer.slots(n)){g.depart();continue;}
+  try{if(g.sell(st.id,'overcharge')||g.sell(st.id,'full'))sold++;}catch(e){g.depart();}
+ }
+ assert.ok(sold>0,'the sweep actually sold something');
+ assert.equal(snap(),before,'and no sale - at any price, to any customer - credits a counter');
+ /* Achievement 6 used to be marked on the DAY 25 morning. Drive past it with a clean record. */
+ const h=fresh('no-retired-d25');h.run.stats.waste=0;h.run.day=25;
+ const mark=JSON.stringify(h.account.franchise);
+ h.morning();
+ assert.equal(JSON.stringify(h.account.franchise),mark,'reaching DAY 25 clean marks nothing');
+});
+
+/* UI-Q-v28-6. The confirmation itself is a UI step and ui-guard proves its shape; what belongs
+   here is the Account side it drives — that the spend happens once and only once, whatever the
+   caller does, and that a Decoration is never a Relic. */
+test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is permanent',()=>{
+ const a=Meta.fresh();
+ Meta.addCapital(a,900);
+ const d=DATA.decorationBy.thriftSafe;
+ assert.equal(Meta.decorationOwned(a,d.id),false,'nothing is owned to begin with');
+ Meta.buyDecoration(a,d.id);
+ assert.equal(Meta.storeCapital(a),900-d.price,'the price is deducted once');
+ assert.equal(Meta.decorationOwned(a,d.id),true,'and the Decoration is owned');
+ assert.equal(Meta.storeLoadout(a)[d.slot],d.id,'an empty Slot of that kind takes it');
+ /* A second confirmation - a double click, a stale button, a replayed action - is refused at
+    the Account layer, so the UI is not the only thing standing between it and a second spend. */
+ assert.throws(()=>Meta.buyDecoration(a,d.id),/이미 보유/,'a second purchase is refused');
+ assert.equal(Meta.storeCapital(a),900-d.price,'and deducts nothing');
+ /* Cancel is the absence of a call, so what it must leave alone is measured here as the state
+    a purchase never made: another Decoration is untouched by this one. */
+ const other=DATA.decorationBy.dawnSign;
+ assert.equal(Meta.decorationOwned(a,other.id),false,'an unconfirmed purchase owns nothing');
+ assert.equal(Meta.storeLoadout(a)[other.slot],null,'and equips nothing');
+ assert.throws(()=>Meta.buyDecoration(a,other.id),/자본이 부족/,'what cannot be afforded cannot be bought');
+ assert.equal(Meta.storeCapital(a),900-d.price,'a refused purchase deducts nothing');
+ /* Reload: a save round trip carries ownership and the loadout, and carries no pending state. */
+ const save={account:a,run:null,version:8};
+ assert.equal(Save.valid(JSON.parse(JSON.stringify(save))),true,'the Account with a Decoration is a valid save');
+ const back=JSON.parse(JSON.stringify(save)).account;
+ assert.equal(Meta.decorationOwned(back,d.id),true,'ownership survives the reload');
+ assert.equal(Meta.storeLoadout(back)[d.slot],d.id,'so does the Slot');
+ assert.equal(Meta.storeCapital(back),900-d.price,'and the Capital is not credited back');
+ assert.equal(JSON.stringify(back).includes('decoPending'),false,'no half-finished purchase is stored');
+ /* Decoration ≠ Relic: buying one touches no Relic state anywhere on the Account. */
+ assert.deepEqual(Meta.opened(a),Meta.opened(Meta.fresh()),'a Decoration unlocks nothing');
 });
 
 console.log(count+' integration groups passed');

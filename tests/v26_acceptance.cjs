@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-for (const f of ['data/catalog', 'data/relics', 'data/copy', 'systems/rng', 'systems/adventurer', 'systems/dungeon', 'systems/meta', 'systems/save', 'systems/shop', 'systems/relics', 'systems/run']) {
+for (const f of ['data/catalog', 'data/relics','data/decorations', 'data/copy', 'systems/rng', 'systems/adventurer', 'systems/dungeon', 'systems/meta', 'systems/save', 'systems/shop', 'systems/relics', 'systems/run']) {
   require('../dist/' + f + '.js');
 }
 
@@ -25,7 +25,10 @@ test('FATIGUE: Outcome gains', () => {
   const r = new RNG(1);
   
   
-  const expectedGains = { '성공': 2, '대성공': 2, '퇴각': 3, '부상': 4, '중상': 0, '사망': 0, '도주': 3, '경상': 4 };
+  /* DUNGEON_HAZARD_v2.7 §FATIGUE OUTCOME BASELINE. NIGHT_CLOSING_v2.7 supersedes the v2.6.1
+     +2/+3/+4 table and forbids keeping it as an alternate live expectation, so this suite
+     tracks the current owner rather than pinning a retired one. */
+  const expectedGains = { '성공': 3, '대성공': 3, '퇴각': 5, '부상': 6, '중상': 0, '사망': 0, '도주': 5, '경상': 6 };
   const seen = new Set();
   
   for (let i = 0; i < 2000; i++) {
@@ -60,12 +63,13 @@ test('FATIGUE: 10 and 20 penalties', () => {
   n.equipment = {power:0}; n.traits = []; n.pack = [];
   n.fatigue = 10;
   let p = Dungeon.prepare(n, d, []);
-  assert.equal(p.effects.mobility, 90, 'Fatigue 10: mobility -10%');
-  assert.equal(p.effects.spirit, 90, 'Fatigue 10: spirit -10%');
+  // DUNGEON_HAZARD_v2.7 §FATIGUE STAT PENALTY: the bands are -15% and -40%.
+  assert.equal(p.effects.mobility, 85, 'Fatigue 10: mobility -15%');
+  assert.equal(p.effects.spirit, 85, 'Fatigue 10: spirit -15%');
   n.fatigue = 20;
   p = Dungeon.prepare(n, d, []);
-  assert.equal(p.effects.mobility, 75, 'Fatigue 20: mobility -25%');
-  assert.equal(p.effects.spirit, 75, 'Fatigue 20: spirit -25%');
+  assert.equal(p.effects.mobility, 60, 'Fatigue 20: mobility -40%');
+  assert.equal(p.effects.spirit, 60, 'Fatigue 20: spirit -40%');
 });
 
 test('INJURY: injury=1 and grit', () => {
@@ -232,22 +236,33 @@ test('WALLET: 2000 cap', () => {
 test('UNLOCK: D10 / D14 Activation and Gate', () => {
   const g = fresh();
   
-  const checkOffer = (targetItem) => {
-    const oldWeighted = g.rng.weighted;
-    let foundInPool = false;
-    g.rng.weighted = (pool, weightFn) => {
-      if (Array.isArray(pool) && pool.some(it => it.id === targetItem)) foundInPool = true;
-      return oldWeighted.call(g.rng, pool, weightFn);
-    };
-    g.generateOffers({advancePity: false});
-    g.rng.weighted = oldWeighted;
-    return foundInPool;
+  /* One generateOffers call reaches a given Rarity's pool only when one of its ~5 rolls lands
+     on that tier, so a single sample answers "was it eligible?" with a coin flip - it happened
+     to land true on the v2.6 catalogue and lands false on some seeds of the v2.7 one. The
+     question is whether the item CAN be offered, so eligibility is sampled until it is seen
+     and exclusion is asserted across every sample. */
+  const OFFER_SAMPLES = 120;
+  const sampleOffers = (targetItem) => {
+    let hits = 0;
+    for (let i = 0; i < OFFER_SAMPLES; i++) {
+      const oldWeighted = g.rng.weighted;
+      let foundInPool = false;
+      g.rng.weighted = (pool, weightFn) => {
+        if (Array.isArray(pool) && pool.some(it => it.id === targetItem)) foundInPool = true;
+        return oldWeighted.call(g.rng, pool, weightFn);
+      };
+      g.generateOffers({advancePity: false});
+      g.rng.weighted = oldWeighted;
+      if (foundInPool) hits++;
+    }
+    return hits;
   };
+  const checkOffer = (targetItem) => sampleOffers(targetItem) > 0;
 
   // D9 Premium check
   g.run.day = 9;
   assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['premium'], g.run.day), false, 'D9 premium blocked (Meta)');
-  assert.equal(checkOffer('premium'), false, 'D9 premium excluded from actual Offer generation path');
+  assert.equal(sampleOffers('premium'), 0, 'D9 premium excluded from actual Offer generation path');
   
   g.nextDay(); // Transitions to D10
   assert.equal(g.account.unlocks.premium, true, 'D10 premium activated');
@@ -258,7 +273,7 @@ test('UNLOCK: D10 / D14 Activation and Gate', () => {
   // D13 Tree check
   g.run.day = 13;
   assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['tree'], g.run.day), false, 'D13 tree blocked (Meta)');
-  assert.equal(checkOffer('tree'), false, 'D13 tree excluded from actual Offer generation path');
+  assert.equal(sampleOffers('tree'), 0, 'D13 tree excluded from actual Offer generation path');
   
   g.nextDay(); // Transitions to D14
   assert.equal(g.account.unlocks.tree, true, 'D14 tree activated');

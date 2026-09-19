@@ -69,14 +69,23 @@ function create(r,index,day,account,opts={}){
  const level=spawnLevel+masterySpawnBonus(r,account,job.id);
  let n=name(r,rarity),traits=[],target=r.int(1,rarity>1?3:2);for(const t of r.shuffle(D.traits)){if(traits.length>=target)break;if(!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>traits.includes(id))))traits.push(t.id);}
  let potential=1+rarity*.06+r.next()*.10,stats={};keys.forEach((k,i)=>stats[k]=Math.round(job.stats[i]+(level-1)*job.growth[i]*potential));
- return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,traitSlots:rarity>=2?4:3,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],rank:Math.floor(level/5),introduced:false};
+ return {id:'npc-'+index,name:n,appearance:r.int(1,2147483647),job:job.id,rarity,level,xp:0,potential,stats,traits,traitSlots:rarity>=2?4:3,status:'건강',injury:0,recovery:0,fatigue:0,equipment:{name:'길드 지급 '+({warrior:'검',archer:'활',mage:'지팡이',priest:'성서',rogue:'단검',berserker:'도끼'}[job.id]),power:0,tier:0},loyalty:0,money:0,destination:null,claimedDestination:null,destinationFinal:true,history:[],records:[],visits:0,alive:true,pack:[],refused:[],introduced:false};
 }
 function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-=18+n.level*7;n.level++;keys.forEach((k,i)=>n.stats[k]+=D.jobBy[n.job].growth[i]*n.potential);}
- const notes=[];if(n.level>old){notes.push('Lv.'+old+' → Lv.'+n.level);for(let milestone=Math.floor(old/5)+1;milestone<=Math.floor(n.level/5);milestone++){if(n.traits.length<Math.min(4,n.traitSlots)&&r.next()<.65){let t=r.pick(D.traits.filter(t=>!n.traits.includes(t.id)&&!D.traitExclusions.some(pair=>pair.includes(t.id)&&pair.some(id=>n.traits.includes(id)))));n.traits.push(t.id);notes.push('새 특성 「'+t.name+'」');}n.rank=Math.min(3,Math.floor(n.level/5));if(milestone<=3)notes.push(D.jobBy[n.job].ranks[Math.min(3,milestone)]+' 승급');}}return notes;}
+ /* NPC_TRAIT_v2.7 §LEVEL-UP REWARD: a Level grants Job Growth x Potential through the four
+    Core Stats and nothing else. The 5-Level milestone Trait roll and the Rank promotion that
+    used to ride along are removed outright, not hidden - growth identity is Job + Level + the
+    four Stats the player can actually see. `r` is still taken so every caller reads the same
+    signature, and is deliberately no longer drawn from here. */
+ const notes=[];if(n.level>old)notes.push('Lv.'+old+' → Lv.'+n.level);return notes;}
 /* Trusted Regular / 단골. NPC_TRAIT owns this state, so the judgement lives here and
    nothing else re-states the threshold - a Boss that reads it (LUST) consumes the result
    rather than keeping a number of its own. */
 const TRUSTED_REGULAR=51;
 const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
-G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,EASTER,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,rank:n=>D.jobBy[n.job].ranks[Math.min(3,Math.floor(n.level/5))],slots:n=>n.level>=10?3:2};
+G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,EASTER,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,
+ /* SALE_v2.7 §NORMAL CONSUMER BAG and FINAL_EXPEDITION_v2.7: exactly two slots, for every NPC
+    regardless of Level, Job, Rarity or Trait, and the Final uses the same two-slot handling.
+    The Lv10+ third slot is gone - not disabled, not ghosted, not hidden. */
+ slots:()=>2};
 })(globalThis);

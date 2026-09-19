@@ -12,9 +12,13 @@ const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 class Game{
  constructor(account=G.Meta.fresh(),run=null){this.account=account;this.run=run;this.rng=run?new G.RNG(run.seed,run.rngState):null;this.autosave=true;}
  save(){if(this.run)this.run.rngState=this.rng.state;if(this.autosave&&typeof localStorage!=='undefined')G.Save.write(this.account,this.run);}
- start(seed,contract='standard'){
- if(!D.contracts.some(c=>c.id===contract&&G.Meta.contractUnlocked(this.account,c)))throw Error('잠겨 있는 시작 계약입니다.');
- this.rng=new G.RNG(seed);this.run={version:7,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:1000+(contract==='budget'?250:0),contract,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired; the Run always runs on the
+    neutral baseline and the Account's Decoration loadout is frozen into the Run here. Changing
+    the Account loadout afterwards cannot reach a Run that has already started. */
+ start(seed){
+ const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
+ const startGold=1000+(Object.values(loadout).includes('thriftSafe')?D.balance.decorationStartGold:0);
+ this.rng=new G.RNG(seed);this.run={version:8,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
  for(const[id,num]of D.openingStock)this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
@@ -47,9 +51,17 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const dayBase=90+2*(this.run.day-1);
   return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
-  const extras=(s.contract==='guild'?20:0)+(s.contract==='premium'?25:0)+(s.dayFacilities?.includes('showcase')?10:0)+(s.dayFacilities?.includes('hub')?35:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
-  return ev.overheadFree?0:Math.round((this.overheadBase()+extras)/10)*10;}
+  /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
+     carry a `contract` value, and it must change nothing at all. */
+  const extras=(s.dayFacilities?.includes('showcase')?10:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
+     never on the flat extras, and never compounded with another percentage modifier. */
+  const base=this.overheadBase(),hub=s.dayFacilities?.includes('hub')?base*D.balance.hubOverheadRate:0;
+  return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
  has(id){return this.run.facilities.includes(id);}
+ /* A Decoration is read from the Run's frozen loadout, never from facilities. `has` stays the
+    Relic question and the two never answer for each other. */
+ wears(id){return Object.values(this.run.loadout||{}).includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
  stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:it.days?this.run.day+it.days+G.Relics.shelf(this,it):null,cost:cost??it.buy});}
  /* COPY_WORLD_VOICE 9: rarely the visitor is a Rare Reference identity instead of an ordinary
@@ -106,20 +118,25 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   s.deep.today.nomineeId=n.id;s.deep.today.paid=cost;
   n.destination=offer.gateIndex;n.claimedDestination=offer.gateIndex;n.destinationFinal=true;
   s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
- addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:s.contract==='premium',...opts});
+ addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:this.wears('premiumCase'),...opts});
   const spare=G.Adventurer.EASTER.filter(e=>!s.npcs.some(x=>x.name===e.name));
   if(this.rng.next()<D.balance.easterChance&&spare.length)n.name=this.rng.pick(spare).name;
   else for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
   s.npcs.push(n);return n;}
  burden(tier){const roll=this.rng.next();return tier===2&&roll<.35?3:tier===3&&roll<.55?5:0;}
  finalEligible(){return this.run.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery);}
+ /* FINAL_EXPEDITION_v2.7 §D25 FINAL STATE GENERATION. The Pair is drawn on a stream derived
+    from the run seed, the way the Deep Days and the Boss already are, rather than from the run
+    stream. That is what makes it the same answer whether it is generated on D25 or read back
+    after a reload - a Save/Load can never reroll it - and it costs the run stream no draw, so
+    generating it five Days earlier does not move any other seeded result. */
  makeFinal(){const s=this.run,base=D.dungeonBy.final;
-  const families=this.rng.shuffle(['spider','slime','fire','crypt','snow']).slice(0,2);
+  const families=new G.RNG(String(s.seed)+':final').shuffle(['spider','slime','fire','crypt','snow']).slice(0,2);
   const hazards=[...new Set(families.flatMap(id=>D.familyTiers[id][1]))];
   return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,requiredSupply:0,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,requiredSupply:this.burden(tier),power:(21+s.day*1.7+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?D.balance.fireCombat:1),reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,requiredSupply:this.burden(tier),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?D.balance.fireCombat:1),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
@@ -136,47 +153,104 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
  rollEvent(){const s=this.run,fired=this.rng.next()<.35;if(!this.eventEligibleDay(s.day)||!fired)return null;
   const pool=D.events.filter(e=>this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
- morning(){const s=this.run;s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
- const expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
- s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
- if([5,10,15,20,25,30].includes(s.day))this.relicWindow(s.day);if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];this.generateOffers();this.save();return;}
- s.familyOrder??=this.rng.shuffle(['spider','slime','fire','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const count=s.day<=3?1:s.day<=7?this.rng.int(1,2):s.day<=18?2:this.rng.int(2,3);s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
- const baseVisitors=this.rng.int(3,6);s.expectedVisitors=baseVisitors+(s.dayFacilities.includes('board')?1:0)+(s.dayFacilities.includes('hub')?2:0)+(s.contract==='guild'?1:0);
- s.event=this.rollEvent();s.eventSeen=!s.event;s.pilgrimage=0;const ev=s.event?.effects||{};
- if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
- s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
-  if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
-  if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
- if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+ /* The Morning is an orchestration of six things that each belong to a different system, and
+    it had them all inline: the Day's state reset, the Gates, the Final state, how many people
+    are coming, the Event, and who actually arrives. Each is a method below now, in the order
+    the Day happens. Nothing here decides a rule - every rule, every number and every RNG draw
+    stayed exactly where it was, in the same sequence - so a Day is bit-for-bit what it was. */
+ morning(){const s=this.run;
+  this.morningReset();
+  const ids=this.morningGates();
+  /* D30 is the Final: it has one Gate, no Event, no visitor queue. morningGates() returns null
+     to say the Day is already what it is going to be. */
+  if(ids===null){this.generateOffers();this.save();return;}
+  const visitors=this.morningVisitors();
+  this.morningEvent(ids);
+  this.morningDeep();
+  this.morningQueue(visitors);
+  this.save();
+ }
+ /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
+    Day's flags, what spoiled overnight, and each adventurer's own per-Day state. */
+ morningReset(){const s=this.run;
+  s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.tastingUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
+  const expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
+  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
+ }
+ /* The milestone window, the Final state, and today's Gates. Returns the Family id pool the
+    Event's unknown Gate draws from, or null on the Final Day, which has no more Morning left. */
+ morningGates(){const s=this.run;
+  if([5,10,15,20,25,30].includes(s.day))this.relicWindow(s.day);
+  /* FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and revealed on D25, BEFORE the
+     ordinary D25 management decisions that can use it. D30 consumes this exact persisted state
+     and never generates a new Pair. D25 grants no Counter Items, no free stock and no shop. */
+  if(s.day>=25&&!s.final)s.final=this.makeFinal();
+  if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];return null;}
+  s.familyOrder??=this.rng.shuffle(['spider','slime','fire','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),count=counts.length===1?counts[0]:this.rng.int(counts[0],counts.at(-1));s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
+  return ids;
+ }
+ /* How many people are coming, composed in one place so the order of the four sources can be
+    read off a single function: the base roll, the board floor on that roll, the hub's own
+    exclusive roll, and the wall Decoration's own roll. The Event's own visitor modifier is not
+    here - it is not known yet - and is added where the queue is actually filled. */
+ morningVisitors(){const s=this.run;
+  /* RELIC_v2.7 §VISITOR RELICS. board raises the floor of the BASE roll - not of the final
+     visitor count - and draws nothing. hub makes one roll with three mutually exclusive
+     outcomes. The Decoration that touches the same number is applied after, and neither Relic
+     knows about it. */
+  const rawVisitors=this.rng.int(3,6);
+  const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;
+  let hubExtra=0;
+  if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;}
+  /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
+  const decoExtra=this.wears('guildPlaque')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
+  s.expectedVisitors=baseVisitors+hubExtra+decoExtra;
+  return {rawVisitors,baseVisitors,hubExtra,decoExtra};
+ }
+ /* Today's Event, and everything it does to a Day that is otherwise already decided. */
+ morningEvent(ids){const s=this.run;
+  s.event=this.rollEvent();s.eventSeen=!s.event;s.pilgrimage=0;const ev=s.event?.effects||{};
+  if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
+  s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
+   if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
+   if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
+  if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+ }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
     chosen once the Gates are final so the recorded Power is the real one. The tie is broken on
     a stream derived from the seed and the Day, which keeps the run stream's draw count on a
     Deep Day identical to any other Day. Family, Tier and Hazards are the base Gate's. */
- if(this.deepDay(s.day)){const top=Math.max(...s.dungeons.map(d=>d.tier));
+ morningDeep(){const s=this.run;
+  if(!this.deepDay(s.day))return;
+  const top=Math.max(...s.dungeons.map(d=>d.tier));
   const pool=s.dungeons.map((d,i)=>i).filter(i=>s.dungeons[i].tier===top);
-  s.deep.today={day:s.day,gateIndex:new G.RNG(String(s.seed)+':deep:'+s.day).pick(pool),nomineeId:null,paid:0};}
- /* EVENT 신입 모험가 시즌: the event used to create an NPC and stop there - which the third-day
-    intake does anyway - and pass a rookie flag that Adventurer.create never reads, so nothing
-    about the day actually changed. The arrival is held here and seated below, in one of the
-    day's own visit slots. No new Level band and no extra visitor: the Day-based level rule is
-    untouched and the headcount is the headcount. */
- const arrival=((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)?this.addNPC({royal:!!ev.royal}):null;
- if(s.pity.npc>=8){const fresh=s.npcs.filter(n=>!n.introduced);if(fresh.length&&this.rng.next()<.6){fresh[0].rarity=Math.max(1,fresh[0].rarity);fresh[0].potential+=.05;}}
- this.generateOffers();
- let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
- let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
- for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
- /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
-    than by adding a slot. The number of weighted draws is unchanged, so a Day without the
-    event is bit-for-bit what it was. */
- if(ev.rookie&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
- s.visitorBreakdown={base:baseVisitors,board:(s.dayFacilities.includes('board')?1:0)+(s.dayFacilities.includes('hub')?2:0),contract:s.contract==='guild'?1:0,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
- for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
- if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
-  for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
- s.special=null;if(s.day>=4&&!s.specialUsed&&this.rng.next()<.045){const kind=this.rng.pick(['route','remove','mentor']);s.special={kind,used:false,candidates:kind==='mentor'?this.rng.shuffle(D.traits.filter(t=>t.direction==='positive')).slice(0,3).map(t=>t.id):[]};}s.pity.npc=promising?0:s.pity.npc+1;this.save();
+  s.deep.today={day:s.day,gateIndex:new G.RNG(String(s.seed)+':deep:'+s.day).pick(pool),nomineeId:null,paid:0};
  }
- generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?2:0)+(s.contract==='delivery'?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
+ /* Who actually walks in: the day's intake, the shelf they will be sold from, the weighted
+    selection out of everyone available, and what each of them arrives wanting. */
+ morningQueue({rawVisitors,baseVisitors,hubExtra,decoExtra}){const s=this.run,ev=s.event?.effects||{};
+  /* EVENT 신입 모험가 시즌: the event used to create an NPC and stop there - which the third-day
+     intake does anyway - and pass a rookie flag that Adventurer.create never reads, so nothing
+     about the day actually changed. The arrival is held here and seated below, in one of the
+     day's own visit slots. No new Level band and no extra visitor: the Day-based level rule is
+     untouched and the headcount is the headcount. */
+  const arrival=((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)?this.addNPC({royal:!!ev.royal}):null;
+  if(s.pity.npc>=8){const fresh=s.npcs.filter(n=>!n.introduced);if(fresh.length&&this.rng.next()<.6){fresh[0].rarity=Math.max(1,fresh[0].rarity);fresh[0].potential+=.05;}}
+  this.generateOffers();
+  let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
+  let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
+  for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+  /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
+     than by adding a slot. The number of weighted draws is unchanged, so a Day without the
+     event is bit-for-bit what it was. */
+  if(ev.rookie&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
+  s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
+  for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
+  if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
+   for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
+  s.special=null;if(s.day>=4&&!s.specialUsed&&this.rng.next()<.045){const kind=this.rng.pick(['route','remove','mentor']);s.special={kind,used:false,candidates:kind==='mentor'?this.rng.shuffle(D.traits.filter(t=>t.direction==='positive')).slice(0,3).map(t=>t.id):[]};}s.pity.npc=promising?0:s.pity.npc+1;
+ }
+ generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?2:0)+(this.wears('dawnSign')?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  if(ev.blackmarket)s.offers.push(this.rollOffer(2,1.35));
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
@@ -184,12 +258,39 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(s.pity.counter>=3||this.has('expeditionCert')){const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));if(matches.length){const item=this.rng.pick(matches);s.offers[s.offers.length-1]=this.offerFor(item);if(advancePity){for(const h of target)if(G.Relics.counter(item,[h]))s.pity.hazards[h]=0;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}}}
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(s.contract==='delivery'?1.05:1)*(it.category==='magic'?(ev.magicPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
- rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));const rates=[55,27,12+(s.pity.rare>=5?3:0),5,1];const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('showcase')&&v>=2?1.7:1)*(s.contract==='budget'&&v>=2?.8:1));pool=pool.filter(it=>it.rarity===rarity);
+ /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE: applied AFTER the existing
+    Contract / Event / Offer calculation and inside the same single Math.round, so there is no
+    second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
+    Final transfer each read their own price and are untouched. */
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
+ rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
+    cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
+    top of that band rather than restoring the retired fixed table. */
+  const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);
+  const rates=band.weights.map((w,v)=>v===2?w+(s.pity.rare>=5?3:0):w);const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('showcase')&&v>=2?1.7:1));pool=pool.filter(it=>it.rarity===rarity);
  const it=this.rng.weighted(pool,it=>{let w=1;if(it.effects.potion)w*=(ev.potionWeight||1);return w*G.Relics.offerWeight(this,it);});return this.offerFor(it,price);}
  order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?2:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
  open(){const s=this.run;if(s.phase!=='order')return;if(Object.values(s.cart||{}).some(q=>q>0))throw Error('선택한 발주를 먼저 확정해 주세요.');s.phase='sell';this.arrive();if(!s.queue.length)this.night();this.save();}
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.events?.length)};}
+ /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY. The expedition outlook the decision surface
+    shows is a SALE-ENTRY snapshot, taken before this visit's first transaction and frozen for
+    the whole visit: Combat Forecast, Hazard Readiness, the exact 실패 시 사망 위험 % and the
+    Great Success signal. Recomputing any of them as Items are focused or committed turns the
+    decision into answer-following, which the owner forbids in both directions. The runtime
+    preparation state is NOT frozen - Resolve still reads the final Bag. Nothing here draws
+    from the run RNG, so taking the snapshot does not move the seeded stream. */
+ outlookFor(n){
+  const d=this.claimedGateFor(n)||this.run.dungeons[0];
+  const v={...n};  // the snapshot is a systems-layer calculation; it does not reach for the UI module
+  const p=G.Dungeon.prepare(v,d,this.run.facilities);
+  const hazards=p.hazards.map(h=>({key:h.key,label:h.label}));
+  return {day:this.run.day,gate:d.id,
+   combat:G.Dungeon.estimate(v,d,this.run.facilities),
+   hazards,
+   worst:hazards.length?['취약','불안','대응','충분'].find(l=>hazards.some(h=>h.label===l)):null,
+   deathRisk:G.Dungeon.failureDeathRisk(v,d,this.run.facilities).chance,
+   greatSignal:G.Dungeon.greatSuccessSignal(v,d,this.run.facilities)};
+ }
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.events?.length)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
@@ -199,11 +300,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     charged or what has to be affordable - only how willingly the offer is taken. */
  const judged=Math.round(it.sell*(rule.intentMult??rule.mult));
  let fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0),need=.53+Math.min(.29,fit*.012);
- if(n.injury&&it.category==='medicine')need+=.25;if(n.pack.length)need-=.1;
+ /* The healing good an injured adventurer reaches for is Insurance now; `medical` is gone. */
+  if(n.injury&&it.category==='insurance')need+=.25;if(n.pack.length)need-=.1;
  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=.1;
- if(this.run.event?.effects.foodDemand&&['food','fresh','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
- if(this.run.event?.effects.medicalDemand&&it.category==='medicine')need+=this.run.event.effects.medicalDemand;
+ if(this.run.event?.effects.foodDemand&&['food','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
+ if(this.run.event?.effects.medicalDemand&&it.category==='insurance')need+=this.run.event.effects.medicalDemand;
  const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
     only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
@@ -220,7 +322,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(n.refused.includes(key))throw Error('이미 거절한 조건입니다. 다른 가격이나 상품을 골라 주세요.');
  const intent=this.interest(n,it,mode);if(n.money+(n.eventBudget||0)<intent.debit)throw Error('손님의 소지금이 부족합니다.');
  const accepted=this.rng.next()<intent.chance;
- if(!accepted){n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});if(reason==='price')for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day)};this.save();return false;}
+ if(!accepted){n.refused.push(key);const reason=intent.burden==='높음'||mode==='overcharge'?'price':intent.need==='낮음'?'need':'choice';n.refusalReasons??=[];n.refusalReasons.push({item:it.id,mode,reason});
+  /* SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: ANY actual refusal of a SKU closes every
+     higher price for that SKU for the rest of the visit - the rule is about retry fishing, so
+     it cannot depend on WHY they said no. Source only applied it to a price refusal, which
+     left the paradox open: refuse at 50% for a Counter they do not need, then sell at 150%.
+     Lower prices stay open, and no other SKU is touched. */
+  for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day)};this.save();return false;}
  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*1.5);
@@ -232,8 +340,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
- validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,food=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','fresh','drink'].includes(D.itemBy[o.item].category))food+=q;}
- if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const existingFood=s.inventory.filter(x=>['food','fresh','drink'].includes(D.itemBy[x.item].category)).length;
+ validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,food=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','drink'].includes(D.itemBy[o.item].category))food+=q;}
+ if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const existingFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
  if(s.inventory.length+count>this.capacity())throw Error('창고가 가득 찼습니다.');return true;}
  setQuantity(i,q){const cart={...(this.run.cart||{}),[i]:q};this.validateCart(cart);this.run.cart=cart;this.save();}
  maxQuantity(i){let q=0;for(let n=1;n<=this.run.offers[i].quantity;n++){try{this.validateCart({...this.run.cart,[i]:n});q=n;}catch(e){break;}}return q;}

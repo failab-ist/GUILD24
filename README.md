@@ -14,33 +14,10 @@ Design SSOT entry point:
 
 - `design_ssot/SPEC_INDEX_v2.7.0.md`
 
-Use the owner Spec / QA routed by that index.
-Only changed owners were versioned to v2.7; unchanged owners are intentionally referenced at their latest earlier version.
-Older versions are historical/inherited only when the current owner explicitly declares them as `BASE_DOCUMENT`.
+Use only the current owner Spec / QA routed by that index.
+Older planning / Vision amendments are history unless the current index or owner explicitly references them.
 
-The previous planning file:
-
-- `GUILD24_v2.7_PLUS_VISION.md`
-
-is now planning/history reference only. It is not parallel Design Truth after v2.7 owner-Spec promotion.
-
-## Current Implementation Gate
-
-Current Source has not adopted v2.7 yet.
-Before v2.7 implementation, the existing v2.6.1 Adoption Recovery must close against its frozen recovery acceptance.
-
-Prerequisite execution document:
-
-- `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
-
-Exact task routing / gate status:
-
-- `WORK_STATE.md`
-
-Copy extraction baseline:
-
-- `V2_6_COPY_FULL_AUDIT.md`
-  - reference/extraction only; not Design Truth
+Detailed Rule / Numeric / UX / QA truth is intentionally not duplicated in this README.
 
 ## Runtime Source
 
@@ -50,25 +27,18 @@ Copy extraction baseline:
 
 ## Development
 
-Use the scripts defined in `package.json`.
-
-Primary commands:
+Use the scripts currently defined in `package.json`:
 
 - `npm test`
-- `npm run test:revision`
-- `npm run test:coverage`
-- `npm run test:regression`
-- `npm run test:relic`
-- `npm run test:night`
-- `npm run test:refusal`
-- `npm run measure`
-- `npm run longitudinal`
-- `npm run mastery`
+- `npm run balance`
+- `npm run audit`
+- `npm run qa:visual`
+- `npm run assets`
 - `npm run report`
-- `npm run traits`
-- `npm run autoplay`
-- `npm run preview`
-- `npm run ui:test`
+- `npm run longitudinal`
+- `npm run hooks`
+- `npm run mastery`
+- `npm run dev`
 
 ## Assets
 

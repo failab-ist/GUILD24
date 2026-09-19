@@ -7,7 +7,7 @@
 // anything about 도적 / 광전사, because a fresh account never unlocks them. This file measures
 // the thing the targets are actually written against: ACCOUNT PROGRESSION.
 const fs=require('node:fs');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const D=globalThis.DATA,seeds=Number(process.argv[2])||300;
 /* --arm e1 | f1 | h1 | all  (default: baseline). The three are also run one at a time, because a
    combined arm cannot say which of them moved a number - and the first combined run produced
@@ -20,8 +20,8 @@ const has=k=>ARMARG===k||ARMARG==='all'||(ARMARG==='f1h1'&&(k==='f1'||k==='h1'))
    sponsorship - so C and D each isolate one knob against it and E shows the interaction. */
 const ABL={b:{},c:{warehouse:18},d:{offers:5},e:{warehouse:18,offers:5}};
 const ARM_ABL=ABL[ARMARG]||null;
-const USE={e1:has('e1'),f1:has('f1'),h1:has('h1'),eco:ARMARG==='eco',abl:!!ARM_ABL};
-const CANDIDATE=USE.e1||USE.f1||USE.h1||USE.eco||USE.abl;
+const USE={e1:has('e1'),h1:has('h1'),eco:ARMARG==='eco',abl:!!ARM_ABL};
+const CANDIDATE=USE.e1||USE.h1||USE.eco||USE.abl;
 /* The economy package, as one arm. Every value here is data the game already reads, so the arm
    assigns and restores it - no production edit, and no rule of the systems it touches changes:
    the counter ceiling, the Warehouse Relic, the rescue, Deep's reward and its rarity/level
@@ -54,8 +54,11 @@ function withCandidate(fn){
   D.deepTuning.sponsorBase=350;
   if(ARM_ABL.warehouse)b.warehouse=ARM_ABL.warehouse;
   if(ARM_ABL.offers)b.orderOffers=ARM_ABL.offers;}
- if(USE.f1){t.prideCombatFactor=0.90;t.envyStatFactor=0.92;t.gluttonyStatFactor=0.80;t.lustStatFactor=0.95;
-  t.greedShortfallCap=15;t.slothBossPower=[220,190,175,160];}
+ /* The F1 Boss-tuning candidate is retired: BOSS_v2.7 adopted its own DIRECTOR DOCUMENT
+    BASELINE (PRIDE 0.92, GREED cap 12, SLOTH [225,210,190,165], GLUTTONY 0.50 with no Rarity
+    threshold), and those values are now the live table. Keeping the old arm here would leave a
+    superseded set of numbers standing as an alternate expectation, so the arm is removed
+    rather than re-pointed; a future candidate gets its own arm against the current baseline. */
  if(USE.h1)b.fireCombat=0.90;
  if(USE.e1)proto.overheadBase=function(){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
@@ -68,15 +71,32 @@ function withCandidate(fn){
   D.deepTuning.sponsorRarityStep=saved.sponsorRarityStep;D.deepTuning.sponsorLevelStep=saved.sponsorLevelStep;}
 }
 
-/* The five tiers of §C. Each is built through the real matrix, so the Grade it implies, the
-   Jobs it opens and the items it unlocks are the real ones - nothing is inserted by hand.
-   `jobs x bosses` says how much of the matrix is filled, row-major. */
+/* The five tiers of §C. Each is built through the real matrix, so the Jobs it opens and the
+   items it unlocks are the real ones - nothing is inserted by hand. `jobs x bosses` says how
+   much of the matrix is filled, row-major, and `decorations` how much of the Store it owns.
+
+   META_v2.8 retired the Franchise Grade, so the Store axis of a tier is simply how many
+   Decorations it holds, seeded through the real purchase path.
+
+   This controlled fixture is NOT a substitute for the real thing: it says what a Run looks
+   like AT a given Store state, never how long a player takes to reach one. Actual accumulation
+   is measured in the cross-run trajectory, where Capital and purchases come from real results. */
 const TIERS=[
- {key:'fresh',   label:'Fresh First Run',   jobs:0, bosses:0},
- {key:'early',   label:'Early Meta',        jobs:2, bosses:2, trim:1},
- {key:'mid',     label:'Mid Meta',          jobs:4, bosses:3},
- {key:'late',    label:'Late Meta',         jobs:4, bosses:6},
- {key:'near',    label:'Near-complete Meta',jobs:5, bosses:7}];
+ {key:'fresh',   label:'Fresh First Run',   jobs:0, bosses:0, decorations:0},
+ {key:'early',   label:'Early Meta',        jobs:2, bosses:2, trim:1, decorations:1},
+ {key:'mid',     label:'Mid Meta',          jobs:4, bosses:3, decorations:2},
+ {key:'late',    label:'Late Meta',         jobs:4, bosses:6, decorations:3},
+ {key:'near',    label:'Near-complete Meta',jobs:5, bosses:7, decorations:4}];
+
+/* Seeded through the real purchase path, so the fixture cannot hold a Store state that real
+   play could not reach. */
+function seedStore(a,n){
+ const ids=DATA.decorations.map(d=>d.id).slice(0,n);
+ if(!ids.length)return a;
+ globalThis.Meta.addCapital(a,ids.reduce((t,id)=>t+DATA.decorationBy[id].price,0));
+ for(const id of ids)globalThis.Meta.buyDecoration(a,id);
+ return a;
+}
 
 function accountFor(t){
  const a=globalThis.Meta.fresh(),JOBS=globalThis.Meta.JOBS(),BOSSES=globalThis.Meta.BOSSES();
@@ -84,6 +104,7 @@ function accountFor(t){
  for(let j=0;j<t.jobs;j++)for(let b=0;b<t.bosses;b++){
   if(t.trim&&filled>=t.jobs*t.bosses-t.trim)break;
   a.matrix[JOBS[j]][BOSSES[b]]=true;filled++;}
+ seedStore(a,t.decorations||0);
  return a;
 }
 
@@ -108,12 +129,12 @@ console.log('== arm:',ARM,'==');
    the first-run-like policy the Fresh D30 target is read from; `balanced` is skilled play, an
    analysis axis rather than a target. Both are heuristics, not people. */
 const POLICIES=[['beginner','배우는 중'],['balanced','숙련'],['spender','숙련+지출']];
-console.log('tier'.padEnd(20),'정책      등급 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
+console.log('tier'.padEnd(20),'정책      장식 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
 for(const [policy,policyLabel] of POLICIES)
 for(const t of TIERS){
  const account=accountFor(t);
  const r=withCandidate(()=>globalThis.Debug.simulate(seeds,policy,account,'adaptive','hybrid'));
- const row={...t,policy,grade:globalThis.Meta.grade(account),mastery:globalThis.Meta.totalJobMastery(account),
+ const row={...t,policy,decorations:globalThis.Meta.ownedDecorations(account).length,mastery:globalThis.Meta.totalJobMastery(account),
   distinct:globalThis.Meta.distinctBossClear(account),
   reach10:r.reach10,reach20:r.reach20,reach30:r.reach30,
   finalGivenReach:r.bossWinGivenReach,clear:r.overallClearRate,deaths:r.averageDeaths,
@@ -133,7 +154,9 @@ for(const t of TIERS){
   deepByRarity:r.deepByRarity,deepByLevel:r.deepByLevel,deepDaysPerRun:r.deepDaysPerRun,
   rescue:r.rescue,revenuePerRun:r.goldIn.sale/seeds,shortage:r.shortage,rerollDepth:r.rerollDepth};
  out.tiers.push(row);
- console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(row.grade).padStart(2),String(row.mastery).padStart(4),
+ /* META_v2.8: the column was the retired Franchise Grade, which no longer exists and printed
+    `undefined`. The Store axis is the owned Decoration count the tier was actually seeded with. */
+ console.log(t.label.padEnd(20),policyLabel.padEnd(9),String(t.decorations||0).padStart(2),String(row.mastery).padStart(4),
   String(row.distinct).padStart(6),pct(row.reach10).padStart(8),pct(row.reach20).padStart(7),
   pct(row.reach30).padStart(7),pct(row.finalGivenReach).padStart(10),pct(row.clear).padStart(10),
   row.deaths.toFixed(2).padStart(9));

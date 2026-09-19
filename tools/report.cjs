@@ -124,13 +124,16 @@ if(fs.existsSync('tests/longitudinal-results-v5.json')){
  if(L.canonicalSet===data.canonicalSet){
   md+='\n## 5.3 계정 성장에 따른 Final 성립성 — 교차 Run 측정\n\n'
   +'하나의 계정을 '+L.runsPerTrajectory+'회 연속 Run에 그대로 이어 사용했다. 궤적 '+L.trajectories+'개 × Run '+L.runsPerTrajectory+'회 = 궤적당 '+(L.trajectories*L.runsPerTrajectory).toLocaleString('en-US')+' Run. '
-  +'**등급·해금·시작 계약은 전부 실제 Meta 시스템이 준 것이다** — 게임 내 능력치를 직접 주입하지 않았다. Run index 0이 §1~§5의 신규 계정 벤치마크와 같은 조건이다.\n\n';
+  +'**점포 자본·보유 장식·해금은 전부 실제 Meta 시스템이 준 것이다** — 게임 내 능력치를 직접 주입하지 않았다. 자본은 실제 정산 경로로 쌓이고 장식은 실제 구매 호출로 산다. Run index 0이 §1~§5의 신규 계정 벤치마크와 같은 조건이다.\n\n';
   for(const co of L.cohorts){
-   md+='### '+co.label+'\n\n'+table(['Run #','시작 등급','시작 누적 숙련','시작 서로 다른 마왕','선택 가능 계약','DAY30 도달','도달 후 승률','전체 클리어','평균 파티 전력','Boss 여유','직업 숙련 / Run','행동 수 / Run','숙련 / 행동']);
-   for(const r of co.byIndex)md+=row([r.runIndex,num(r.gradeAtStart),num(r.masteryAtStart),num(r.distinctAtStart),num(r.contractsAvailable),pct(r.reachRate),r.reached30?pct(r.bossWinGivenReach):'분모 0',pct(r.overallClearRate),r.final.resolved?num(r.final.power/r.final.resolved):'—',r.final.resolved?num(r.final.margin/r.final.resolved):'—',num3(mastPerRun(r)),num(r.actionsPerRun),num3(mastPerAction(r))]);
-   const g=Object.entries(co.byGrade).sort((a,b)=>Number(a[0])-Number(b[0]));
-   if(g.length>1){md+='\n실제 보유 등급 기준으로 다시 묶은 같은 Run들:\n\n'+table(['시작 등급','Run 수','DAY30 도달','도달 후 승률','전체 클리어','평균 파티 전력','Boss 여유']);
-    for(const [grade,r] of g)md+=row([grade,r.runs,pct(r.reachRate),r.reached30?pct(r.bossWinGivenReach):'분모 0',pct(r.overallClearRate),r.final.resolved?num(r.final.power/r.final.resolved):'—',r.final.resolved?num(r.final.margin/r.final.resolved):'—']);}
+   md+='### '+co.label+'\n\n'+table(['Run #','시작 자본','시작 보유 장식','시작 누적 숙련','시작 서로 다른 마왕','Run당 자본 획득','DAY30 도달','도달 후 승률','전체 클리어','평균 파티 전력','Boss 여유','직업 숙련 / Run','행동 수 / Run','숙련 / 행동']);
+   for(const r of co.byIndex)md+=row([r.runIndex,num(r.capitalAtStart),num(r.decorationsAtStart),num(r.masteryAtStart),num(r.distinctAtStart),num(r.capitalGained),pct(r.reachRate),r.reached30?pct(r.bossWinGivenReach):'분모 0',pct(r.overallClearRate),r.final.resolved?num(r.final.power/r.final.resolved):'—',r.final.resolved?num(r.final.margin/r.final.resolved):'—',num3(mastPerRun(r)),num(r.actionsPerRun),num3(mastPerAction(r))]);
+   /* The acquisition ladder this cohort actually produced, read off its own ledgers. A cohort
+      given no purchase order has none, and says so by being absent. */
+   if(co.acquisition&&co.acquisition.length){
+    md+='\n장식 획득 시점 (구매 순서는 측정 입력):\n\n'+table(['순서','장식','가격','획득한 궤적','획득 Run 중앙값']);
+    for(const a of co.acquisition)md+=row([a.position,a.id,a.price,a.acquired+' / '+a.ofTrajectories,a.medianRun??'미획득']);
+   }
    md+='\n';
   }
   /* Run 0 against every later Run pooled: one grade-1 sample per trajectory, and everything

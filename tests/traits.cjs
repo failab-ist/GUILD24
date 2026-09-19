@@ -2,7 +2,7 @@
 // Covers TRAIT-Q01/Q03/Q04/Q07/Q13/Q14/Q15/Q16/Q17, UI-Q32/Q34/Q39, COPY-001/COPY-002.
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 function fresh(seed='traits'){const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g;}
 const CATALOG=['용감함','겁쟁이','대식가','소식가','신중함','무모함','탐욕','구두쇠','충동구매','허세','천재','강골','허약함','포션체질','화염공포증','행운아','불운아','수집가','실속파','사교적인','낯가림','회복체질','지구력','쉽게 지침','눈썰미','해독가','수족냉증','준비성','악바리','냉담한'];
@@ -61,15 +61,18 @@ test('TRAIT-Q03/Q04: nine exclusion pairs hold on every acquisition path; 탐욕
 });
 
 test('TRAIT-Q07/ITEM-Q14: Food affinity touches native core only',()=>{
- const g=fresh('affinity'),base={...g.run.npcs[0],traits:[],pack:['rice','lava','bandage']},d=g.run.dungeons[0];
+ const g=fresh('affinity'),base={...g.run.npcs[0],traits:[],pack:['rice','lava','kit']},d=g.run.dungeons[0];
  const plain=Dungeon.prepare(base,d).effects;
  const eater=Dungeon.prepare({...base,traits:['eater']},d).effects;
  assert.ok(eater.survival>plain.survival,'Food native Stat is boosted');
  assert.equal(eater.cold,plain.cold,'Hazard Counter is not amplified');
  assert.equal(eater.injuryGuard,plain.injuryGuard,'Insurance is not amplified');
  // Supply moves on its own axis: -1 per Food item for 대식가, +1 for 소식가, floor of 1
- const one={...base,pack:['candy']};
- assert.equal(Dungeon.prepare({...one,traits:['eater']},d).effects.supply,1,'Supply never drops below 1');
+ /* ITEM_v2.7 leaves no Food at Supply 1, so 대식가's `minimum 1` floor is asserted over the
+    whole Food line rather than through one item that used to land on it. */
+ for(const it of DATA.items.filter(i=>i.category==='food'&&i.effects.supply))
+  assert.ok(Dungeon.prepare({...base,traits:['eater'],pack:[it.id]},d).effects.supply>=1,
+   it.name+': 대식가 Supply never drops below 1');
  assert.equal(Dungeon.prepare({...base,traits:['small'],pack:['rice']},d).effects.supply,DATA.itemBy.rice.effects.supply+1);
  assert.equal(Dungeon.prepare({...base,traits:['eater'],pack:['rice']},d).effects.supply,DATA.itemBy.rice.effects.supply-1);
 });
@@ -200,6 +203,79 @@ test('NPC_TRAIT: a Trait is who somebody is, so none of them wears off during a 
   for(const expiry of ['사라집니다','없어집니다','이후에는'])
    assert.ok(!text.includes(expiry),t.name+' promises to stop applying: '+t.note);
  }
+});
+
+test('NPC_TRAIT_v2.7 §LEVEL-UP REWARD: a Level grants Stats and nothing else',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const src=fs.readFileSync(path.join(__dirname,'..','dist/systems/adventurer.js'),'utf8');
+ assert.ok(!/승급/.test(src),'no Rank promotion rides a Level');
+ assert.ok(!/새 특성/.test(src),'no milestone Trait is granted on a Level');
+ assert.ok(!/for\(let milestone/.test(src),'the 5-Level milestone loop is gone');
+ assert.equal(Adventurer.rank,undefined,'Level-milestone Title progression is not exported');
+ for(const j of DATA.jobs)assert.equal(j.ranks,undefined,j.name+' carries no Rank ladder');
+ for(let i=0;i<60;i++){
+  const r=new RNG('levelup-'+i);
+  const n=Adventurer.create(r,i,1,Meta.fresh());
+  const traitsBefore=[...n.traits],statsBefore={...n.stats},equipBefore={...n.equipment},levelBefore=n.level;
+  const notes=Adventurer.grow(n,100000,new RNG('grow-'+i));
+  assert.ok(n.level>=10,'the sweep actually crossed every old milestone');
+  assert.deepEqual(n.traits,traitsBefore,'no Trait was acquired by levelling');
+  assert.equal(n.rank,undefined,'no Rank state is written');
+  assert.deepEqual(n.equipment,equipBefore,'no Equipment was granted by a Level');
+  assert.equal(Adventurer.slots(n),2,'and no third Bag slot appeared');
+  assert.ok(Adventurer.keys.every(k=>n.stats[k]>statsBefore[k]),'every Core Stat grew');
+  assert.deepEqual(notes,['Lv.'+levelBefore+' → Lv.'+n.level],'the only thing reported is the Level itself');
+ }
+ // the Stat gain really is Job Growth x Potential, not a Level multiplier on top
+ const a=Adventurer.create(new RNG('growth-shape'),1,1,Meta.fresh());
+ const before={...a.stats},level0=a.level,gained=Adventurer.grow(a,100000,new RNG('g'));
+ const levels=a.level-level0,growth=DATA.jobBy[a.job].growth;
+ Adventurer.keys.forEach((k,i)=>assert.ok(Math.abs(a.stats[k]-before[k]-levels*growth[i]*a.potential)<1e-9,
+  k+' grew by exactly Job Growth x Potential per Level'));
+ assert.equal(gained.length,1);
+});
+
+// NPC-Q73. The rule is "Potion POSITIVE NATIVE Core-Stat x1.15". It was implemented as
+// survival-only at x1.30, and every Potion in the v2.7 catalog carries combat - so the Trait
+// amplified nothing at all while claiming 30% on screen. Every tier is checked, on the exact
+// factor, and every other channel is checked for not moving.
+test('NPC-Q73 POTIONBODY SCOPE: every Potion tier, positive native Core Stat only, x1.15',()=>{
+ const g=fresh('potionbody');
+ const d=g.makeDungeon('spider',1);
+ const base=id=>({...g.run.npcs[0],traits:[],pack:[id],injury:0,fatigue:0});
+ const stats=['combat','survival','mobility','spirit'];
+ assert.equal(DATA.traitBy.potionbody.effects.potionMult,1.15,'the catalog carries the Canonical factor');
+ const tiers=DATA.items.filter(it=>it.category==='potion');
+ assert.equal(tiers.length,4,'all four v2.7 Potion tiers are covered');
+ for(const it of tiers){
+  const plain=Dungeon.prepare(base(it.id),d).effects;
+  const body=Dungeon.prepare({...base(it.id),traits:['potionbody']},d).effects;
+  let amplified=0;
+  for(const k of stats){
+   const native=it.effects[k]||0;
+   if(native>0){amplified++;
+    assert.ok(Math.abs((body[k]-plain[k])-native*0.15)<1e-9,
+     it.id+' '+k+': x1.15 on the native '+native+', got +'+(body[k]-plain[k]).toFixed(4));
+   }else assert.equal(body[k],plain[k],it.id+' does not gain '+k+' it never had');
+  }
+  assert.ok(amplified>0,it.id+' really does have a positive native Core Stat to amplify');
+  // every other channel the Item carries is untouched
+  for(const k of ['supply','escape','injuryGuard','injuryRisk','loot','xpMult','variance'])
+   assert.equal(body[k],plain[k],it.id+' does not amplify '+k);
+ }
+ // a Hazard Counter, an Insurance effect and a Food Item are all outside the Trait
+ for(const [id,keys] of [['antidote',['poison','supply']],['stone',['escape']],['rice',['survival','supply']],['boots',['mobility']]]){
+  const plain=Dungeon.prepare(base(id),d).effects;
+  const body=Dungeon.prepare({...base(id),traits:['potionbody']},d).effects;
+  for(const k of [...keys,...stats])assert.equal(body[k],plain[k],id+' '+k+' is not a Potion effect');
+ }
+ // and the screen says what the rule is
+ const note=Dungeon.prepare({...base('potion'),traits:['potionbody']},d).events.find(e=>e.id==='potionbody');
+ assert.ok(note,'the Trait reports itself when a Potion is carried');
+ assert.ok(/15%/.test(note.text)&&!/30%/.test(note.text),'and states 15%, not the retired 30%: '+note.text);
+ assert.equal(Presentation.labels.potionMult,'포션의 능력치','the label is no longer survival-only');
+ assert.equal(Dungeon.prepare({...base('rice'),traits:['potionbody']},d).events.some(e=>e.id==='potionbody'),false,
+  'and says nothing when no Potion is carried');
 });
 
 console.log(count+' trait groups passed');

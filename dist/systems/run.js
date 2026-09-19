@@ -20,6 +20,13 @@ P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;
   return this.end(false,'소문이 퍼지자 모험가들의 발길이 끊겼고, 더는 장사를 이어갈 수 없었다.');
  if(s.money<0){if(s.inventory.length&&this.canRescue()){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요. (회생 '+(s.rescueUsed||0)+' / '+this.rescueLimit()+')';this.save();return false;}this.end(false,'장사를 이어갈 자금이 바닥났다.');return;}
  this.nextDay();this.save();return true;};
+/* DUNGEON_HAZARD_v2.7 §Gate-count forecast: how MANY Gates open tomorrow, off the same rule
+   the generator uses. What is never told is which - no Family, no Gate identity, no Hazard. */
+P.gateForecast=function(){const day=this.run.day+1;if(day>30)return null;
+ if(day===30)return {day,final:true,counts:null,fixed:null};
+ const counts=G.Dungeon.gateCountRule(day),p=Math.round(1000/counts.length)/10;
+ return {day,final:false,fixed:counts.length===1?counts[0]:null,
+  counts:counts.map(c=>({count:c,percent:p}))};};
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){
   this.run.day++;
@@ -49,10 +56,45 @@ P.liquidate=function(stockId){const s=this.run;
  s.notice=D.itemBy[st.item].name+' 재고 정리 · '+price+'G 회수'
   +(s.money>=0?' · 회생 완료':'')+' (회생 '+s.rescueUsed+' / '+this.rescueLimit()+')';
  this.save();return true;};
-P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.save();};
+/* META_v2.8 §Run-end settlement structure:
+     Store Capital Gain = round(Gross Sales x Day-reach conversion rate)
+   Gross Sales is `stats.revenue`, the sales accounting the Run already keeps - credited once by
+   an ordinary Sale and once by a Final fixed-price transfer, and never recounted here. No
+   second Meta-only sales counter exists.
+
+   Ending Gold and remaining Inventory are NOT inputs. They still decide liquidity, rescue and
+   bankruptcy inside the Run; Meta simply does not reward that same end-state wealth again. The
+   two terms are what Store Growth rewards: how much business the store did, and how long that
+   business survived.
+
+   Settled exactly once. The guard lives on the Run, so a reload of an ended Run reads the
+   recorded settlement instead of earning it again. A manual abandon never reaches end(), which
+   is what makes abandon worth nothing. */
+P.settleStoreCapital=function(){const s=this.run;
+ if(s.settled)return s.settlement;
+ const sales=s.stats.revenue,rate=G.Meta.capitalRate(s.day);
+ const gain=Math.round(sales*rate);
+ s.settled=true;
+ s.settlement={day:s.day,sales,rate,gain,capitalAfter:G.Meta.addCapital(this.account,gain)};
+ return s.settlement;};
+P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.settleStoreCapital();this.save();};
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};
 P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};
-P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.team.includes(npcId))return;const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');n.pack.push(s.inventory[i].item);n.history.push({day:30,item:s.inventory[i].item,mode:'supply',paid:0});s.inventory.splice(i,1);this.save();};
+/* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION PRICE / WALLET / GOLD OVERRIDE. A Final transfer
+   is a real paid transaction, not free equipment: the price is fixed to the ordinary 50% mode
+   amount, there is no 100%/150% choice and no purchase/refusal roll, and the Wallet is real -
+   an adventurer who cannot afford the fixed amount cannot be given the Item. Committing moves
+   exactly that amount three ways, once: out of the Wallet, into Gold, and into Gross Sales,
+   which is the total GREED reads at Final Lock. */
+P.finalPrice=function(item){return Math.round(G.DATA.itemBy[item].sell*G.DATA.pricing.half.mult);};
+P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.team.includes(npcId))return;
+ const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');
+ const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');
+ const item=s.inventory[i].item,price=this.finalPrice(item);
+ if(n.money<price)throw Error('이 모험가의 소지금으로는 살 수 없습니다.');
+ n.money-=price;s.money+=price;s.daily.revenue+=price;s.stats.revenue+=price;
+ n.pack.push(item);n.history.push({day:30,item,mode:'half',paid:price});
+ s.inventory.splice(i,1);this.save();};
 /* FINAL_EXPEDITION: one participant's contribution. Internal only - Final Power is never
    surfaced as another Player Stat. */
 /* Stage 10, approved. 투력 was running away with the Final: at .58 it was worth nearly four
@@ -63,7 +105,16 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
    This is the FINAL formula. The expedition's own combat check in dungeon.js keeps the
    coefficients it had: this adoption changes the Final, and moving D1-29 difficulty by the
    same edit would confound the two. See reports/STAGE10.md. */
-const individualPower=(e,hazard)=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20-hazard*.35;
+/* FINAL_EXPEDITION_v2.7 §FINAL HAZARD AGGREGATION. The ordinary expedition divides the summed
+   gap by sqrt(count), which punishes a Family pair merely for carrying more Hazard entries -
+   a two-Family Final can hold three or four. The Final uses the MEAN gap instead, so what is
+   measured is how badly each Hazard is answered rather than how many there are, and a specialist
+   Counter that closes a large matching gap is worth what it actually closes. */
+const finalMeanHazardGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
+/* The same four coefficients Forecast and Resolve read, so they are read from the one helper
+   rather than written out a third time - a copy of them is what let the balance harness drift
+   a whole Stage behind the game. */
+const individualPower=(e,meanGap)=>G.Dungeon.preparedPower(e)-meanGap*1.70;
 
 const STATS=['combat','survival','mobility','spirit'];
 
@@ -81,11 +132,14 @@ P.finalSnapshot=function(n,prep,d,context){
   for(const k of STATS)e[k]*=t.envyStatFactor;
  if(boss==='LUST'&&t.lustStatFactor!=null&&!G.Adventurer.isTrustedRegular(n))
   for(const k of STATS)e[k]*=t.lustStatFactor;
- if(boss==='GLUTTONY'&&t.gluttonyStatFactor!=null&&t.gluttonyRarityThreshold!=null)
-  for(const c of prep.itemStats||[]){
-   if(c.rarity<t.gluttonyRarityThreshold)continue;
-   for(const k of STATS)if(c.stats[k])e[k]-=c.stats[k]*(1-t.gluttonyStatFactor);
-  }
+ /* BOSS_v2.7 §GLUTTONY: every POSITIVE Core-Stat contribution that came from an Item is
+    halved, whatever the Item's Rarity - the Rare+ threshold is superseded. It reads the
+    per-item breakdown, which is already the amplified contribution, so Food/Drink/Potion
+    Trait and Relic amplification has happened before this. A harmful Item Stat is left alone,
+    and the NPC's own Stats, Counters, Supply, Insurance, Utility and Loot are untouched. */
+ if(boss==='GLUTTONY'&&t.gluttonyStatFactor!=null)
+  for(const c of prep.itemStats||[])
+   for(const k of STATS)if(c.stats[k]>0)e[k]-=c.stats[k]*(1-t.gluttonyStatFactor);
  return e;
 };
 
@@ -95,7 +149,7 @@ P.finalSnapshot=function(n,prep,d,context){
    makes it no longer the largest. Ties fall to the stable NPC id. */
 P.envyTarget=function(team,preparations){
  let best=null,bestPower=-Infinity;
- team.forEach((n,i)=>{const p=individualPower(preparations[i].effects,preparations[i].hazard);
+ team.forEach((n,i)=>{const p=individualPower(preparations[i].effects,finalMeanHazardGap(preparations[i]));
   if(p>bestPower||(p===bestPower&&best&&n.id<best))
    {bestPower=p;best=n.id;}});
  return best;
@@ -135,7 +189,7 @@ P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
  const context=s.bossId==='ENVY'?{envyTargetNpcId:this.envyTarget(team,preparations)}:null; // 4 target pass
  const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d,context));  // 4
- const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,preparations[i].hazard),0); // 5-6
+ const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,finalMeanHazardGap(preparations[i])),0); // 5-6
  const bossPower=this.effectiveBossPower(power,{revenue:s.stats.revenue,sealBreakCount:s.sealBreakCount}); // 7
  const roll=.88+this.rng.next()*.24,assault=power*roll,cleared=assault>=bossPower; // 8-9
  /* Final Lock: what the Final was actually decided from, frozen. Reload may not re-roll

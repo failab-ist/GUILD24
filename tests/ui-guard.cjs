@@ -3,10 +3,10 @@
 // V2_4_EXECUTION_PLAN §8.1 Playwright boundary contract.
 // Everything that needs a real viewport lives in `npm run qa:visual` (UI-Q38), never here.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const app=read('dist/ui/app.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
+const app=read('dist/ui/app.js'),shop=read('dist/systems/shop.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
 const fn=name=>{const a=app.indexOf('function '+name+'(');const b=app.indexOf('\nfunction ',a+1);return app.slice(a,b<0?app.length:b);};
 const walk=dir=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
 
@@ -57,7 +57,26 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  assert.ok(!/class="tag"/.test(app),'the old chip helper is gone; a price tag is a named object');
  assert.ok(css.includes('image-rendering:pixelated'),'art renders unsmoothed');
  assert.ok(css.includes('-webkit-font-smoothing:none'),'the bitmap face is not antialiased away');
- assert.ok(/@font-face\{font-family:'Galmuri'/.test(css),'the pixel family is the type system');
+ /* UI_UX_v2.7 §TYPOGRAPHY — EXACT PAIR: Mulmaru is the ATMOSPHERE face and Wanted Sans the
+    INFORMATION one, and no third family, icon font or theme-font system exists beside them. */
+ assert.ok(/@font-face\{font-family:'Mulmaru'/.test(css),'the pixel family is the type system');
+ assert.ok(!/Galmuri|Pretendard/.test(css),'neither retired face survives in the CSS');
+ const families=[...css.matchAll(/@font-face\{font-family:'([^']+)'/g)].map(m=>m[1]);
+ assert.deepEqual([...new Set(families)].sort(),['Mulmaru','MulmaruMono','WantedSans'],
+  'exactly the approved pair - Mulmaru with its Mono, and Wanted Sans');
+ /* Mulmaru is a STATIC single-weight family: no fvar, no wght axis, OS/2 usWeightClass 500.
+    Each face is declared at the weight it actually is - a range it does not have would be a
+    claim the font's own tables do not support - and nothing may ask it for another one. */
+ for(const m of css.matchAll(/@font-face\{font-family:'Mulmaru[^']*';[^}]*\}/g))
+  assert.ok(/font-weight:500/.test(m[0]),'the ATMOSPHERE face is declared at its real weight: '+m[0].slice(0,60));
+ assert.ok(!/@font-face\{font-family:'Mulmaru[^']*';[^}]*font-weight:\d+ \d+/.test(css),
+  'no weight range is claimed for a static face');
+ assert.ok(/body\{font-synthesis:none\}/.test(css),'no weight or style is ever synthesised');
+ for(const m of css.matchAll(/font:(\d+)[^;]*var\(--f-(?:sign|plate|led)\)/g))
+  assert.equal(m[1],'500','an ATMOSPHERE rule asks only for the weight that ships: '+m[0]);
+ // and the INFORMATION face is only asked for the two weights it vendors
+ for(const m of css.matchAll(/font-weight:(\d{3})\b/g))
+  assert.ok(['400','500','600'].includes(m[1]),'no rule asks for a weight no face ships: '+m[0]);
  // green is the sign, the price tag and the approval stamp — never a ground
  for(const rule of ['body{','.stage{','.p-order{','.p-morning{'])
   assert.ok(!/#([0-9a-f]{0,2})(3f9d63|7ddc9f)/i.test(css.slice(css.indexOf(rule),css.indexOf(rule)+240)),'green is not a page ground in '+rule);
@@ -302,7 +321,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  const c=Copy.boss;
  assert.equal(c.d5.header,'길드 토벌 공고');
  assert.equal(c.d15.intro,'길드 정보원이 추가 정보를 확보했다.');
- assert.equal(c.d30.header,'최종 정찰 보고');
+ assert.equal(c.final.header,'최종 정찰 보고');
  for(const b of DATA.bosses){
   assert.ok(c.d5.flavor[b.id],b.id+' has its D5 Flavor');
   assert.ok(c.d15.trait[b.id],b.id+' has its D15 Trait');
@@ -310,12 +329,54 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  // D5 hints; it never states the Function. D15 states it.
  for(const [id,line] of Object.entries(c.d5.flavor))
   assert.ok(!/감소한다|증가한다|적용된다/.test(line),id+"'s D5 Flavor does not give the Function away");
- // the one value PASS3 still owns stays a slot, not prose
- assert.ok(c.d15.trait.GLUTTONY[1][0].includes('[등급]'),'the rarity boundary is a DATA slot until PASS3 approves it');
+ /* BOSS_v2.7 §BOSS IDENTITY TERMINOLOGY OVERRIDE and COPY_WORLD_VOICE_v2.7 §GLUTTONY. Both
+    are exact, and both replace inherited v2.5 wording. This assertion used to REQUIRE the
+    stale `[등급] 이상` sentence - v2.7 has no Rarity threshold for this Boss, so the line was
+    promising the player a boundary the mechanic does not have. */
+ const glut=DATA.bosses.find(b=>b.id==='GLUTTONY');
+ assert.equal(glut.sin,'탐식','the Sin is 탐식');
+ assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
+ assert.deepEqual(c.d15.trait.GLUTTONY,
+  ['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·보급·보험 효과는 유지']],
+  'the D15 Function is the exact Canonical copy');
+ // no retired wording survives anywhere a player can read
+ const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
+ for(const stale of ['폭식','[등급] 이상','등급 이상 보급품'])
+  assert.ok(!everything.includes(stale),'retired GLUTTONY wording is gone: '+stale);
  const prose=JSON.stringify(c);
  for(const term of ['Run','Final Snapshot','Final Power','Factor','Modifier','sealBreakCount','effectiveBossPower'])
   assert.ok(!prose.includes(term),'no internal design term reaches the player: '+term);
 });
+
+/* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM. The systems are gone from the code, but the Help
+   and the coach marks still described them to the player as current rules: visitors varying by
+   `계약`, and `가맹등급` listed among the things a Run leaves behind. What is named now is what
+   the Account actually carries, in the terminology the screens already use. */
+test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a current rule',()=>{
+ /* Everything a player can read: the Help, the coach marks, the copy table and the screens. */
+ const surfaces=fn('help')+fn('coach')+read('dist/data/copy.js')+app.slice(app.indexOf('const COACH'),app.indexOf('function coach'))
+  +JSON.stringify(DATA.relics.map(r=>[r.name,r.description]))+JSON.stringify(DATA.decorations);
+ for(const retired of ['가맹등급','시작 계약','계약 선택','가맹 실적','등급 할인'])
+  assert.ok(!surfaces.includes(retired),'retired system term is not shown to the player: '+retired);
+ // the visitor sources named to the player are the ones morning() actually composes
+ const morning=read('dist/systems/shop.js');
+ const composes=morning.slice(morning.indexOf('morningVisitors(){'),morning.indexOf('morningEvent(ids){'));
+ assert.ok(/board/.test(composes)&&/hub/.test(composes)&&/guildPlaque/.test(composes),
+  'the visitor count is composed from Relics and the wall Decoration');
+ assert.ok(!/contract/i.test(composes),'and from no Contract');
+ const helpText=fn('help');
+ assert.ok(helpText.includes('점포지원·장식·사건'),'the Help names those three sources');
+ // and what the Help says survives a Run is what Meta actually keeps
+ const fresh=Meta.fresh(),carried=['상품','직업','몬스터 지식','발견','직업 숙련','점포 자본','보유 장식'];
+ for(const t of carried)assert.ok(helpText.includes(t),'the Help names the persistent '+t);
+ assert.ok(Object.keys(Meta.opened(fresh)).join()==='items,jobs','unlocks are Items and Jobs');
+ assert.equal(typeof Meta.storeCapital(fresh),'number','Store Capital is a persistent Account resource');
+ assert.ok(Array.isArray(Meta.ownedDecorations(fresh)),'so is the owned Decoration collection');
+ assert.equal(typeof Meta.totalJobMastery(fresh),'number','so is Job Mastery');
+ // the things it says do NOT carry really do not
+ assert.ok(helpText.includes('모험가·재고·돈·점포지원은 다음 영업에 이어지지 않습니다'),
+  'and it names the per-Run things by their current term');
+}); 
 
 test('COPY §Run abandon: the abandon says it costs everything, and promises nothing',()=>{
  // The action that reaches this is app.js case'start'. What the engine does is asserted in
@@ -360,11 +421,25 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  assert.equal(Copy.great.signal,'대성공을 노려볼 만합니다.','the exact signal is the locked string');
  assert.ok(app.includes('Copy.great.signal'),'the screen prints that string rather than its own');
  assert.ok(!/노려볼 만합니다/.test(app.replace('Copy.great.signal','')),'no second copy of the wording');
- assert.ok(app.includes('Dungeon.greatSuccessSignal('),'the signal is read from the engine, not recomputed in the UI');
+ /* SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY names a Great Success signal CHANGE as one of
+    the hypothetical answers the decision surface may not show, so the screen now reads the
+    signal off the frozen SALE-entry snapshot. It is still the engine's calculation - the
+    snapshot is built by Dungeon.greatSuccessSignal in the systems layer - and the screen
+    still does not derive one of its own. */
+ assert.ok(!/greatSuccessSignal/.test(app),'the screen does not recompute the signal as Items move');
+ assert.ok(/const signal=o\.greatSignal/.test(app),'it reads the frozen snapshot instead');
+ assert.ok(shop.includes('greatSignal:G.Dungeon.greatSuccessSignal('),'and that snapshot is the engine calculation');
  const readout=fn('readout'),readoutCode=readout.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
- assert.ok(readout.includes('greatSuccessSignal'),'it lives in the forecast, before departure');
- assert.ok(!/[0-9]+%/.test(readoutCode),'and never exposes a percentage');
- assert.ok(!/margin|readiness|chance/i.test(readoutCode),'nor a margin, a chance or a readiness score');
+ assert.ok(readout.includes('o.greatSignal'),'it lives in the forecast, before departure');
+ /* DUNGEON_HAZARD_v2.7 §PLAYER-FACING INFORMATION BOUNDARY: the ONE exact percentage the
+    decision surface may expose is the pre-supply 실패 시 사망 위험. The Great Success signal
+    still carries no percentage, no margin and no readiness score, and the exact expedition
+    success chance stays hidden. */
+ assert.ok(/실패 시 사망 위험<b>'\+Math\.round\(o\.deathRisk\*100\)\+'%/.test(readout),'the one exact percentage is the conditional Death risk');
+ const others=readoutCode.replace(/실패 시 사망 위험<b>'\+Math\.round\(o\.deathRisk\*100\)\+'%/,'');
+ assert.ok(!/[0-9]+%/.test(others),'and no other percentage is exposed');
+ assert.ok(!/margin|readiness/i.test(readoutCode),'nor a margin or a readiness score');
+ assert.ok(!/successChance|winChance|clearChance/i.test(readoutCode),'nor an expedition success chance');
 
  // 심층원정 is a locked term: no synonym may reach a player-facing string.
  assert.equal(Copy.deep.term,'심층원정');
@@ -409,19 +484,19 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
 });
 
 test('UI_UX: the first store support is not a one-way door, and the menu names both resets',()=>{
- // D-29. Committing the contract used to be irreversible: the foundation takeover owns the
- // screen, so the only way back to the contract screen was to spend the Run. Nothing has been
- // played at that point, so the contract screen may win over the takeover.
+ // D-29. The pre-Run screen is not a one-way door: the foundation takeover owns the screen, so
+ // without a way back the only exit was to spend the Run. Nothing has been played at that
+ // point, so the pre-Run screen may win over the takeover. CORE_RUN_v2.8 retired the Start
+ // Contract, so what that screen now confirms is the Decoration loadout.
  assert.ok(app.includes("if(phase==='foundation'&&modal!=='new')modal='relics'"),
-  'the contract screen can be reopened during the foundation takeover');
- assert.ok(fn('relicTakeover').includes("'recontract'"),'and the way back is offered there');
- assert.ok(app.includes("case'recontract'"),'the action exists');
- const recontract=app.slice(app.indexOf("case'recontract'"),app.indexOf("case'recontract'")+220);
- assert.ok(!/game\.end\(|runs\+\+/.test(recontract),'going back never spends the Run');
+  'the pre-Run screen can be reopened during the foundation takeover');
+ assert.ok(fn('relicTakeover').includes("'new'"),'and the way back is offered there');
+ const back=app.slice(app.indexOf("case'new':"),app.indexOf("case'new':")+220);
+ assert.ok(!/game\.end\(|runs\+\+/.test(back),'going back never spends the Run');
  // ...and it must not become a free re-roll either. The DAY 0 store support has already been
- // shown by then, so returning keeps this store's seed: changing the contract changes the
- // contract. Only an explicitly typed seed, or abandoning a store that has opened, makes a
- // new world. (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
+ // shown by then, so returning keeps this store's seed. Only an explicitly typed seed, or
+ // abandoning a store that has opened, makes a new world.
+ // (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
  const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+700);
  assert.ok(start.includes("s?.phase==='foundation'?s.seed"),
   'returning from an unopened store reuses its seed instead of minting a new one');
@@ -447,32 +522,106 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  // with, and UI-Q39 says they never reach a render path. The DATA stays - ordering weights and
  // Relic conditions read `category`, and delta.cjs asserts both tables.
  assert.ok(DATA.categories&&DATA.roles,'the tables are still there for the systems that read them');
- for(const label of [...Object.values(DATA.roles),...Object.values(DATA.categories)])
+ /* v2.7 moves the six categories into player-facing identities owned by COPY_WORLD_VOICE,
+    so 포션 and the rest may be shown; what UI-Q81 still forbids is the redundant ROLE chip
+    (`속박 전문` sitting above `속박 대응 +16`). The sweep narrows to roles accordingly. */
+ for(const label of Object.values(DATA.roles))
   assert.ok(!app.includes("'"+label+"'")&&!app.includes('>'+label+'<'),
-   'internal taxonomy is not rendered: '+label);
+   'internal role taxonomy is not rendered: '+label);
  assert.ok(!/D\.categories\[|D\.roles\[/.test(app),'and no render path looks it up');
 
- // D-10. Two ways to fail an expedition, said apart, in the vocabulary each already owns.
+ /* D-10. The outlook is about the expedition as a whole, and carries exactly two things:
+    the Combat Forecast and the conditional Death risk. The environment is not summarised a
+    second time here - it lives once, beside the destination, where each Hazard states its own
+    pressure and this NPC's readiness against it. */
  const readout=fn('readout');
- assert.ok(readout.includes('전투 전망')&&readout.includes('환경 전망'),'both forecasts are named');
- assert.ok(readout.includes('Dungeon.estimate('),'the fight keeps its own canonical verdict');
- assert.ok(/\['취약','불안','대응','충분'\]/.test(readout),
-  'the environment summary is the worst of the Hazard states already on screen');
+ assert.ok(readout.includes('전투 전망'),'the fight forecast is named');
+ assert.ok(!readout.includes('환경 전망'),'the outlook carries no second environment verdict');
+ assert.ok(!/환경 압박/.test(app),'and no collapsed environment duplicate survives anywhere');
+ assert.ok(!/env-press/.test(app)&&!/env-press/.test(css),'the phone-only duplicate is gone with it');
+ assert.ok(!/hazardList\(/.test(readout),'the outlook renders no Hazard rows of its own');
+ const plate=fn('destPlate');
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),n&&n\.outlook&&n\.outlook\.hazards\)/.test(plate),
+  'the destination plate is the one place Hazards and readiness appear, off the frozen snapshot');
+ assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
+  'and it is never hidden, since nothing else shows the environment now');
+ /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
+    read off the frozen SALE-entry snapshot rather than recomputed as Items move, so the
+    calculation moved into the systems layer with it. */
+ assert.ok(!/Dungeon\.estimate\(/.test(app),'the screen does not recompute the fight verdict');
+ assert.ok(shop.includes('combat:G.Dungeon.estimate('),'the fight keeps its own canonical verdict');
+ assert.ok(/\['취약','불안','대응','충분'\]/.test(shop),'the readiness ladder belongs to the engine');
+ assert.ok(!/\['취약','불안','대응','충분'\]/.test(app),'and the screen does not keep a second copy of that ladder');
+ /* The Hazard's pressure and the NPC's readiness are two facts, never one sentence. */
+ const list=app.slice(app.indexOf('const hazardList='),app.indexOf('const hazardList=')+700);
+ assert.ok(/<span class="press">/.test(list)&&/<span class="ready">/.test(list),'pressure and readiness are separate elements');
+ assert.ok(/<i>현재 대응<\/i>/.test(list),'the readiness is explicitly labelled as the NPC state');
+ assert.ok(css.includes('.hazards .ready'),'and the readiness has its own style, not the pressure one');
+ const appCode=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ assert.ok(!/압박에 /.test(appCode),'no rendered line welds the pressure and the readiness into one sentence');
  for(const invented of ['안전','위험함','보통','양호'])
   assert.ok(!readout.includes("'"+invented+"'"),'no new forecast label was invented: '+invented);
 
  // D-11. Always-available help, keyboard-reachable because it is a native <details>.
- assert.ok(readout.includes("<details class=\"tip\""),'the ? is a details, so it needs no script');
- assert.equal((readout.match(/\+help\(/g)||[]).length,2,'one helper, used by both forecasts');
- assert.ok(/확정된 결과가 아니다/.test(readout),'it says a forecast is not a result');
+ /* One shared helper at module scope, so the outlook and the destination plate cannot drift
+    into two different ? controls. It is a native <details>, so it needs no script. */
+ /* Still a native <details>, so the control itself works without script and is keyboard
+    reachable; the only script is the outside-tap dismissal a popover is expected to have. */
+ assert.ok(/const tip=\(label,\.\.\.lines\)=>'<details class="tip" name="sale-tip"/.test(app),'the ? is a details, so the control needs no script');
+ assert.ok(/pointerdown[^\n]*closeTips/.test(app),'tapping outside closes it');
+ assert.ok(/ev\.key==='Escape'\)closeTips/.test(app),'and so does Escape');
+ /* The counter tooltip states what the two columns ARE and stops. The readiness ladder, why
+    the pressure is fixed and why the reading is frozen belong to the store guide. */
+ const envTip=fn('destPlate');
+ assert.ok(envTip.includes("'압박: 위험이 요구하는 능력치 · 현재 대응: 이 손님의 보급 전 대응 수준'"),
+  'the destination ? carries only the approved line');
+ for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','팔아도 바뀌지 않는다','확정된'])
+  assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
+ /* Each ? names its own reading and stops. Anything longer than one line is the store guide's
+    job, so the sweep holds every counter tooltip to a single short line. */
+ const lines=[...app.matchAll(/tip\('[^']+',((?:'[^']*',?)+)\)/g)].map(m=>m[1].split("','").length);
+ assert.ok(lines.length===3,'there are exactly three counter tooltips');
+ assert.ok(lines.every(n=>n===1),'and each one is a single line');
+ for(const [label,text] of [['전투 전망','게이트 전투 요구 대비 현재 전투 준비 수준'],
+                            ['실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험']])
+  assert.ok(app.includes("tip('"+label+"','"+text+"')"),label+' carries the approved line');
+ assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
+ /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
+    not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
+ assert.ok(/\.readout \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook balloon drops');
+ assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
+ assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
+ assert.equal((readout.match(/\+tip\(/g)||[]).length,2,'the outlook explains the fight forecast and the Death risk');
+ assert.ok(/tip\('환경 대응'/.test(fn('destPlate')),'and the environment keeps its own help, where the environment now lives');
+ /* The "not a result" caution is on the block itself, under the forecasts, rather than spent
+    inside a tooltip that has one line to name what it is showing. */
+ assert.ok(/게이트 안에서 어떻게 될지까지는 아무도 모른다/.test(readout),
+  'the outlook still says a forecast is not a result, on the block rather than in a tooltip');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
+ assert.ok(/\.dest-plate \.tip>summary:focus-visible/.test(css),'on the plate too');
+ // the help is its own row under the rows it explains, so nothing that hides the caps label
+ // on a phone can take it with them
+ /* a <details> cannot be a child of <p> - the parser would split them apart - so the row
+    that holds it is a <div> */
+ assert.ok(/<div class="env-help">/.test(fn('destPlate')),'the environment help is its own row');
+ assert.ok(!/<p class="env-help"/.test(app),'in an element that may actually contain a <details>');
+ assert.ok(!/\.env-help[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
 
- // D-14. Collapsed is the decision; expanded is only what collapsed could not say.
+ /* SALE_v2.7 §SALE DECISION-ONLY DETAIL: no disclosure control on the decision surface that
+    opens flavour prose. The real effects it used to hide are still shown - plainly, not folded
+    away - and the flavour lives in the Codex, which is where a non-decision context belongs. */
  const till=fn('till');
  assert.ok(till.includes('shown.has(r.key)')||till.includes('!shown.has'),
-  'the expander filters out what the change list already showed');
+  'what the change list already showed is not repeated');
+ assert.ok(!/<details>/.test(till),'SALE opens no disclosure control of its own');
+ assert.ok(!/<summary>이 손님에게 안 걸리는 효과/.test(app),'the retired control is gone');
+ assert.ok(!/it\.description/.test(till),'and flavour prose has left the decision surface');
+ assert.ok(/이 손님에게는 지금 걸리지 않는 효과/.test(till),'the effects it held are stated plainly instead');
+ assert.ok(/rest\.map\(r=>/.test(till),'every one of them, not a summary of them');
  assert.ok(!/effectList\(it\)/.test(till),'the full effect list is not repeated under the preview');
  assert.ok(fn('codex').includes('effectList(it)'),'it still lives in the Codex, where it is the point');
+ assert.ok(fn('codex').includes('it.description'),'and so does the flavour');
 
  // D-18. One display rule, in Presentation, used by both places that show a stat.
  assert.equal(Presentation.stat(19.43,false),'19','a plain value is a whole number');
@@ -573,7 +722,8 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'the standing store-support list moved to the store menu rather than being lost');
  const posDisplay=globalThis.Scene.anchors.till,posCap=globalThis.Scene.anchors.tillLabel;
  assert.ok(posDisplay.width>38.9&&posCap.width>44.4,'the till took back the width the dressing was using');
- assert.ok(/\.till b\{font:400 2[5-9]px/.test(css),'and the float is set at the size that surface now allows');
+ // the weight moved to the one the ATMOSPHERE face actually ships; the SIZE is the claim here
+ assert.ok(/\.till b\{font:500 2[5-9]px/.test(css),'and the float is set at the size that surface now allows');
  // and no global type scale was pushed up to compensate
  assert.ok(!/@media\(min-width:900px\)\{[^}]*:root\{[^}]*font-size/.test(css),'no blanket font-size increase at desktop');
 
@@ -593,30 +743,58 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!/Meta\.grade\(a\)|Meta\.totalJobMastery\(a\)/.test(bannerFn+led),
   'the ending never prints a standing total that this Run did not move');
  assert.ok(led.includes('s.metaGain')&&/gain\?\.jobs/.test(led),'it reports the recorded before/after instead');
- assert.ok(/g\.from\+' → '\+g\.to/.test(led)&&/gain\.grade\.from\+' → '\+gain\.grade\.to/.test(led),
-  'as the move each one made');
- assert.ok(/gain\?\.grade\?/.test(led),'and the grade line only when the grade actually rose');
+ assert.ok(/g\.from\+' → '\+g\.to/.test(led),'as the move each one made');
  const metaSrc=read('dist/systems/meta.js');
  assert.ok(/jobs:jobs\.filter\(job=>jobMastery\(a,job\)>wasMastery\[job\]\)/.test(metaSrc),
   'a Job already credited for this Boss moved nothing and is not listed');
- assert.ok(/if\(!win\)\{?[\s\S]{0,40}return \[\]/.test(metaSrc)&&/run\.metaGain=null;\r?\n if\(!win\)/.test(metaSrc),
-  'a failure records no gain at all');
+ assert.ok(/if\(!win\)return \[\];/.test(metaSrc),'a failure records no Job x Boss gain at all');
+ assert.ok(/run\.metaGain=null;/.test(metaSrc),'and no gain line for the result screen');
+ /* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: the Run end credits no Achievement at all, and
+    nothing in the active runtime reaches for the retired counters. */
+ for(const marker of ['nowaste','nodeath','allsupplied','grosssales'])
+  assert.ok(!metaSrc.includes("mark('"+marker+"')"),'the Run end no longer credits '+marker);
+ assert.ok(!/franchiseCount|orderDiscount|const grade=/.test(metaSrc),'no Grade is derived anywhere');
 
  /* ...and the whole state is reachable at any time, in the codex the player already has. */
  const cx=fn('codex');
  assert.ok(cx.includes("['progress','진행도']"),'progression is a tab on the existing codex, not a new screen');
  assert.ok(cx.includes('progressPanel()'),'and it renders in the same grid as every other tab');
  const panel=fn('progressPanel'),screen=cx+panel;
- for(const [what,re] of [['the current grade',/GRADE_COPY\[Meta\.grade\(a\)\]/],
+ for(const [what,re] of [['the Store Capital',/Meta\.storeCapital\(a\)/],
                          ['each Job mastery',/Meta\.jobMastery\(a,j\.id\)/],
                          ['the Job x Boss grid',/a\.matrix\?\.\[j\.id\]\?\.\[b\.id\]/],
                          ['distinct Boss clears',/Meta\.distinctBossClear\(a\)/]])
   assert.ok(re.test(screen),'the codex shows '+what);
  // ...and the three the header already states are not repeated inside the panel
- assert.ok(!/Meta\.totalJobMastery|Meta\.distinctBossClear|GRADE_COPY/.test(panel),
+ assert.ok(!/Meta\.totalJobMastery|Meta\.distinctBossClear|Meta\.storeCapital/.test(panel),
   'the panel does not restate what the codex header says directly above it');
- assert.ok(fn('gatedContent').includes('metaUnlock')&&fn('gatedContent').includes('c.grade'),
+ assert.ok(fn('gatedContent').includes('metaUnlock'),
   'and what each threshold opens, from the catalog rather than a written-out list');
+ /* UI_UX_v2.8 §DECORATION UI: the retired Start Contract area becomes 점포 관리 inside the same
+    codex, and every number it shows is read from the Decoration data rather than written out
+    here a second time. */
+ const store=fn('storePanel');
+ assert.ok(cx.includes("['store','점포 관리']")&&cx.includes('storePanel()'),
+  '점포 관리 is a tab on the existing codex, not a new screen');
+ assert.ok(!cx.includes("['contracts','시작 계약']"),'and the retired Start Contract tab is gone');
+ assert.ok(/D\.decorationSlots\.map\(slot=>/.test(store),
+  'the panel is Slot -> owned options -> selected, not four hard-coded booleans');
+ assert.ok(/D\.decorations\.filter\(d=>d\.slot===slot\)/.test(store),
+  'so a Slot that later holds alternatives renders without a change here');
+ for(const [what,re] of [['the Store Capital',/Meta\.storeCapital\(a\)/],
+                         ['owned state',/Meta\.decorationOwned\(a,d\.id\)/],
+                         ['the price',/d\.price/],['the current effect',/E\(d\.effect\)/],
+                         ['what is equipped',/active===d\.id/]])
+  assert.ok(re.test(store),'the panel shows '+what);
+ assert.ok(!/800|700|650|550|10%|300G/.test(store),'and hardcodes none of the numeric truth');
+ /* Purchase and equip are Account actions: both refuse during a Run, and the Capital is
+    deducted inside Meta so it cannot be spent twice by a second screen. */
+ const deco=app.slice(app.indexOf("case'deco-buy'"),app.indexOf("case'deco-buy'")+700);
+ assert.ok(/if\(game\.run&&game\.run\.phase!=='end'\)throw/.test(deco),'both refuse during a Run');
+ assert.ok(/Meta\.buyDecoration\(game\.account,id\)/.test(deco)&&!/capital-=|capital =/.test(deco),
+  'the purchase goes through Meta rather than adjusting Capital in the UI');
+ /* META_v2.8 §RETIRED: no Achievement cue survives anywhere in the UI. */
+ assert.ok(!/가맹 실적|franchiseState|Meta\.grade\(/.test(app),'no retired Franchise UI remains');
  /* standing progression is a list, not a notification: what is open and what is not yet open
     read at the same level, and the moment-of-unlock line belongs to the result screen only */
  const board=fn('unlockBoard');
@@ -717,8 +895,10 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!css.includes('.kit .slots{display:grid'),'without becoming a panel of their own');
 
  // D-12. One Hazard reads as one row, and the block is set apart from the forecasts above it.
- assert.ok(/\.readout \.hazards li\{[^}]*padding:7px 8px/.test(css),'each Hazard is its own banded row');
- assert.ok(/\.readout \.hazards\{gap:0/.test(css),'the rows are separated by the band, not by a gap');
+ // (the block moved to the destination plate when the environment stopped being shown twice)
+ assert.ok(/\.dest-plate \.hazards li\{[^}]*padding:7px 8px/.test(css),'each Hazard is its own banded row');
+ assert.ok(/\.dest-plate \.hazards\{gap:0/.test(css),'the rows are separated by the band, not by a gap');
+ assert.ok(!/\.readout \.hazards/.test(css),'and no style is left behind for rows the outlook no longer has');
 
  // D-21. Six outcomes in three volumes, and the routine one is not made small.
  for(const [outcome,rank] of [['성공','quiet'],['퇴각','routine'],['부상','routine'],
@@ -738,7 +918,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 // a player sees for one product is not the picture they see for another.
 test('D-27: the named items are drawn as themselves, and no two of them share a drawing',()=>{
  const Art=require('../dist/ui/art.js')&&globalThis.Art,D=globalThis.DATA;
- const named=['rope','candy','coating','boots','goggles','ion','tree','potionHigh','potion'];
+ /* The twelve products v2.7 added join the named set: each was briefly drawn as the cousin
+    it is a premium version of, so they are exactly the ones worth pinning. */
+ const named=['rope','candy','coating','boots','goggles','ion','tree','potionHigh','potion',
+  'herbtea','midpotion','spiderkit','slimesuit','cryptlantern','snowvisor','magmagear',
+  'battlelunch','herobar','hyperenergy','sageelixir','toppotion'];
  const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
  const drawn=new Map();
  for(const it of D.items){
@@ -758,6 +942,56 @@ test('D-27: the named items are drawn as themselves, and no two of them share a 
  // key, but the branch colours 불룡볶음면 by its own id, so the pictures differ.
  const shared=[...drawn.values()].filter(g=>g.length>1);
  assert.deepEqual(shared,[],'no two products are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
+});
+
+// UI_UX_v2.8 §LIVE STORE. The four Decorations shipped as a text plate carrying their name,
+// which said which one was equipped without ever drawing it. This is the same contract D-27
+// holds the shelf to: each Decoration is a picture, its own picture, at its own place.
+test('UI_UX_v2.8 §LIVE STORE: every Decoration is drawn, each as itself, at its own Slot',()=>{
+ const Scene=globalThis.Scene,D=globalThis.DATA;
+ const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
+ const drawn=new Map();
+ for(const d of D.decorations){
+  const art=Scene.decoration(d.id);
+  assert.ok(art&&art.includes('<svg'),d.name+' resolves to a drawing');
+  const shapes=body(art);
+  assert.ok(shapes.length>0,d.name+' is drawn, not an empty frame');
+  // the store scene is pixel art on its own grid; a drawing that scaled smoothly would not be
+  assert.ok(art.includes('shape-rendering="crispEdges"'),d.name+' is drawn on the pixel grid');
+  // a <text> glyph here would bind the store scene to the font subset
+  assert.ok(!/<text/.test(art),d.name+' is a drawing, not a caption');
+  (drawn.get(shapes)||drawn.set(shapes,[]).get(shapes)).push(d);
+ }
+ const shared=[...drawn.values()].filter(g=>g.length>1);
+ assert.deepEqual(shared,[],'no two Decorations are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
+ assert.equal(Scene.decoration('nosuch'),'','an id with no drawing resolves to nothing, never a broken frame');
+ // the name may still be read by a screen reader, but it is no longer the picture
+ const plate=fn('decoPlate');
+ assert.ok(plate.includes('Scene.decoration('),'the store scene renders the drawing');
+ assert.ok(plate.includes('game.run?.loadout'),'and renders only what this Run equipped, from the Run');
+ assert.ok(!/>'\+E\(d\.name\)\+'</.test(plate),'the name is not the visual any more');
+ // each Slot has a place of its own on the band it belongs to, sized against that band
+ for(const slot of D.decorationSlots){
+  const rule=(css.match(new RegExp('\\.decoplate\\.'+slot+'\\{([^}]*)\\}'))||[])[1];
+  assert.ok(rule,slot+' has a placement rule');
+  assert.ok(/width:\d+%/.test(rule),slot+' is sized against its band, not in fixed pixels');
+ }
+ assert.ok(/\.decoplate .deco-art\{[^}]*image-rendering:pixelated/.test(css),'the drawing is not smoothed');
+});
+
+// UI_UX_v2.8 §PURCHASE CONFIRMATION. Spending permanent Capital is a two-step action, and the
+// step that spends is one place in Source, so a repeated click cannot reach Meta twice.
+test('UI_UX_v2.8 §PURCHASE CONFIRMATION: the buy button asks, and only the confirmation spends',()=>{
+ assert.ok(/case'deco-buy':decoPending=id/.test(app),'the buy button only records what is being asked about');
+ assert.equal((app.match(/Meta\.buyDecoration\(/g)||[]).length,1,'exactly one call site spends Capital');
+ const confirm=app.slice(app.indexOf("case'deco-confirm'"),app.indexOf("case'qty'"));
+ assert.ok(confirm.indexOf('decoPending=null')<confirm.indexOf('Meta.buyDecoration('),
+  'the pending purchase is cleared before the Capital is spent, so a second click has nothing to confirm');
+ assert.ok(/case'deco-cancel':decoPending=null/.test(app),'cancel clears it and spends nothing');
+ // a reload must not resume a half-finished purchase, so it is never written to the save
+ assert.ok(!/decoPending/.test(read('dist/systems/save.js'))&&!/decoPending/.test(read('dist/systems/meta.js')),
+  'the pending state never reaches the Account or the save');
+ assert.ok(/function setModal\(value\)\{decoPending=null/.test(app),'closing or reopening the window cancels it');
 });
 
 // D-22 / D-23. There are no audio files here: every sound is synthesised, so a volume control
@@ -780,7 +1014,7 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  assert.equal(fresh.settings.muted,true,'sound still starts off, as the copy says');
  for(const k of ['bgm','sfx'])assert.equal(fresh.settings[k],1,k+' starts at its design maximum');
  // presentation preference, so it is checked for shape when present the way tutorial is
- const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:7}));
+ const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:8}));
  const withSettings=v=>{const s=base();s.account.settings={muted:true,...v};return s;};
  assert.equal(Save.valid(withSettings({})),true,'a save with no levels at all is still a save');
  assert.equal(Save.valid(withSettings({bgm:.5,sfx:0})),true,'real levels are accepted');
@@ -909,6 +1143,132 @@ test('D-34: the store float is on the screen that spends it, and a closed window
  assert.ok(win.includes("game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다."),
   'a full store says so where it used to say the window is open until DAY N');
  assert.ok(win.includes('구매할 수 있다 · 자금'),'and still says the open case when it is open');
+});
+
+/* UI_UX §TUTORIAL / UI-Q105. The coach mark shipped for a long time with markup and no
+   stylesheet at all: every class showCoach writes was unstyled, so the overlay laid out as
+   static blocks under a body that does not scroll, and the tutorial was invisible on a
+   genuinely fresh account. Presence of the code proved nothing, so this asserts the pairing
+   itself - every class the overlay emits has a rule, and every step points at a selector the
+   shipped screens actually render. Real visibility is still a viewport question and belongs
+   to the browser pass; this only stops the pairing from silently going missing again. */
+test('UI-Q105: the coach mark has a stylesheet, and every step points at a real target',()=>{
+ for(const cls of ['coach-layer','coach-block','coach-focus','coach-bubble']){
+  assert.ok(app.includes(cls),'showCoach still emits .'+cls);
+  assert.ok(css.includes('.'+cls),'.'+cls+' has a rule in ui.css');
+ }
+ assert.ok(/\.coach-layer\{[^}]*position:fixed/.test(css),
+  'the layer is viewport-positioned, so the inline rects showCoach writes mean something');
+ for(const c of ['coach-block','coach-focus','coach-bubble'])
+  assert.ok(new RegExp('\\.'+c+'\\{[^}]*position:absolute').test(css),
+   '.'+c+' is positioned, not static');
+ /* Each step is [key, selector, copy, action?]. A selector no screen renders is skipped
+    forever rather than failing loudly, which is how three of them rotted unnoticed. */
+ const steps=fn('showCoach')&&app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach'));
+ for(const [,sel] of [...steps.matchAll(/\['[a-z]+','([^']+)'/g)].map(m=>[0,m[1]])){
+  const cls=sel.match(/\.[a-z-]+/g)||[],attr=sel.match(/\[data-action="([^"]+)"\]/);
+  for(const c of cls)assert.ok(app.includes(c.slice(1))||scene.includes(c.slice(1)),
+   'coach target '+sel+' names a class the UI renders ('+c+')');
+  if(attr)assert.ok(app.includes("data-action=\""+attr[1])||app.includes("'"+attr[1]+"'"),
+   'coach target '+sel+' names an action the UI emits');
+ }
+ assert.ok(!/case'tip'/.test(app),'the dead tip handler is gone, not left writing stray tutorial keys');
+});
+
+/* UI_UX v2.6.1 §ORDER Runtime continuity. render() replaces #app wholesale and restores a
+   raw scrollTop, which only holds while everything above the row keeps its height - and the
+   dock gains or loses 발주 확정 exactly when the cart stops or starts being empty. SALE
+   already pins the tapped row through its own press; ORDER now does the same. The row, not
+   the pressed button, is the anchor: +/- and the quick-set buttons flip to disabled at 0
+   and at the cap, so the control the player touched may not survive the redraw. */
+test('ORDER quantity presses keep their row anchored',()=>{
+ assert.ok(/data-offer="'\+i\+'"/.test(app),'each offer row carries its index as a stable handle');
+ const qty=app.slice(app.indexOf("case'qty'"),app.indexOf("case'qty'")+400);
+ assert.ok(/closest\('\[data-offer\]'\)/.test(qty),'the press resolves to its own offer row');
+ assert.ok(/getBoundingClientRect\(\)\.top/.test(qty),'and measures it before the redraw');
+ assert.ok(/anchorOffer\(/.test(qty),'and hands that measurement to the correction');
+ const fixer=fn('anchorOffer');
+ assert.ok(/\.stage-scroll/.test(fixer)&&/scrollTop\+=/.test(fixer),
+  'the correction moves the scroller by the measured delta');
+ assert.ok(/requestAnimationFrame/.test(fixer),'and checks again after the frame settles');
+ assert.ok(/if\(d\)/.test(fixer),'a zero delta leaves scrollTop alone');
+ // SALE's own anchor predates this and must not be disturbed by it.
+ assert.ok(/data-action="select"\]\[data-id="'\+CSS\.escape\(id\)/.test(app),
+  'SALE still re-finds the tapped product after its redraw');
+});
+
+test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what produced it',()=>{
+ const base=Adventurer.create(new RNG('delta-src'),1,10,Meta.fresh());
+ const mk=o=>({...JSON.parse(JSON.stringify(base)),traits:[],pack:[],fatigue:0,injury:0,...o});
+ const gate=o=>({...DATA.dungeonBy.slime,day:12,tier:2,hazards:['fear'],scale:1,power:60,requiredSupply:0,...o});
+ const core=new Set(Adventurer.keys);
+ /* The owner's own worked boundary: 집중 사탕 is 공포 +10 / Supply 3 and has no direct
+    four-Core-Stat contribution, so selling it may never produce a Core-Stat row. */
+ const candy=DATA.itemBy.candy;
+ assert.ok(Adventurer.keys.every(k=>!candy.effects[k]),'집중 사탕 has no direct Core Stat');
+ for(const [n,d] of [[mk({}),gate({})],[mk({}),gate({requiredSupply:3})],
+                     [mk({fatigue:10}),gate({})],[mk({fatigue:10}),gate({requiredSupply:3})]]){
+  const r=Presentation.preview(n,d,[],'candy');
+  assert.ok(r.direct.every(x=>!core.has(x.key)),'집중 사탕 never grants a Core Stat directly');
+  assert.ok(r.direct.some(x=>x.key==='supply')&&r.direct.some(x=>x.key==='fear'),'its own two channels are its own');
+ }
+ // with neither system moving, there is nothing derived to report
+ assert.deepEqual(Presentation.preview(mk({}),gate({}),[],'candy').derived,[],'no system moved, no system row');
+ // relieving a Supply Deficit is reported as the Supply Deficit, not as the Item
+ const relief=Presentation.preview(mk({}),gate({requiredSupply:3}),[],'candy');
+ assert.deepEqual(relief.derived.map(x=>x.label),['보급 부족 완화'],'Supply Deficit relief names itself');
+ // crossing a Fatigue band is reported as Fatigue
+ const rested=Presentation.preview(mk({fatigue:10}),gate({}),[],'candy');
+ assert.deepEqual(rested.derived.map(x=>x.label),['피로 완화'],'a crossed Fatigue band names itself');
+ // an Item that really does grant a Stat still reports it as its own
+ const potion=DATA.itemBy.potion;
+ assert.ok(potion.effects.combat>0);
+ const own=Presentation.preview(mk({}),gate({}),[],'potion');
+ assert.ok(own.direct.some(x=>x.key==='combat'),'a real direct Stat is the Item\'s own');
+ assert.deepEqual(own.derived,[],'and brings no system row with it');
+ // the hidden Supply-deficit formula is never exposed by the attribution
+ for(const r of relief.derived)assert.ok(!/[0-9]+%|penalty|deficit/i.test(r.text),'the row names the channel, not the formula: '+r.text);
+ // the screen groups them, so a derived change cannot read as the Item's own contribution
+ const panel=fn('sellPanel')||app;
+ assert.ok(/이 상품이 직접/.test(app)&&/보급이 상태에 미치는 영향/.test(app),'each group is headed by its source');
+ assert.ok(/moved\.derived\.length\?'<p class="delta-src">/.test(app),'and a group with nothing in it is absent');
+ assert.ok(/\.delta-src\{/.test(css),'the heading has a style of its own');
+});
+
+test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer',()=>{
+ const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
+ /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
+ assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
+ assert.ok(/\['supply','\.ingredients'/.test(steps),'the Supply/Fatigue lesson is on the arithmetic it explains');
+ const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
+ for(const point of ['압박','현재 대응','취약·불안·대응·충분'])
+  assert.ok(hazard.includes(point),'the Hazard lesson covers '+point);
+ const supply=/\['supply',[^\]]*\]/.exec(steps)[0];
+ for(const point of ['요구량부터','페널티','피로'])
+  assert.ok(supply.includes(point),'the Supply lesson covers '+point);
+ assert.ok(/계산만 해 둔 숫자/.test(supply),'and says the conditional numbers are arithmetic, not a prediction');
+ /* It must not hand over an answer, and must not expose the hidden formula. */
+ const all=[...steps.matchAll(/'([^']{12,})'/g)].map(m=>m[1]).join(' ');
+ for(const item of DATA.items)
+  assert.ok(!all.includes(item.name),'no lesson names an Item to buy: '+item.name);
+ for(const hz of Object.values(DATA.hazards))
+  assert.ok(!new RegExp(hz+'[^.]{0,12}(사|구매|고르)').test(all),'no lesson scripts a Hazard solution: '+hz);
+ assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
+ /* The frozen outlook is described as frozen, since that is what the screen now does. */
+ const forecast=/\['forecast',[^\]]*\]/.exec(steps)[0];
+ assert.ok(/카운터에 섰을 때/.test(forecast)&&/바뀌지 않는다/.test(forecast),
+  'the outlook lesson says the reading is fixed at SALE entry');
+ /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
+ assert.ok(/class="ingredients"/.test(app),'the exact Supply/Fatigue arithmetic is on the decision surface');
+ /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
+    a desktop copy and a phone copy with one always display:none, so taking the first DOM match
+    silently dropped those lessons on a phone. */
+ const coach=app.slice(app.indexOf('function showCoach('),app.indexOf('function showCoach(')+1400);
+ assert.ok(/const visible=sel=>\[\.\.\.document\.querySelectorAll\(sel\)\]\.find\(e=>e\.getClientRects\(\)\.length\)/.test(coach),
+  'the coach resolves its anchor to a visible element');
+ assert.ok(!/\$\(x\[1\]\)|const target=\$\(step\[1\]\)/.test(coach),'and never to the first DOM match');
+ assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(app),'no superseded v2.6 Fatigue band survives in the UI');
+ assert.ok(/기동\/정신 -40%/.test(app)&&/기동\/정신 -15%/.test(app),'the v2.7 bands are what the screen states');
 });
 
 console.log(count+' ui guard groups passed');

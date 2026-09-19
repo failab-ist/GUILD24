@@ -1,5 +1,10 @@
+// Relic effect acceptance. This file sat outside `npm test` while its expectations aged out
+// from under it - the Fresh Relics were checked against a v2.5 `effects.food` channel that no
+// longer exists, and hub's overhead was pinned at a flat +35 the approved bundle replaced with
+// a proportion of the base. Both now read current Canonical, and the file is in the suite, so
+// a stale expectation here fails loudly instead of sitting unrun.
 const assert=require('node:assert/strict');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run'])require('../dist/'+f+'.js');
 function fresh(seed='relic-effects'){const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;}
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 test('bulk engines require quantity/traffic/previous-day sales, and affect actual cost',()=>{
@@ -18,8 +23,15 @@ test('offer weights and quantities match relevant product roles',()=>{
  s.facilities=[];g.generateOffers();const n=s.offers.length;s.facilities=['terminal'];g.generateOffers();assert.equal(s.offers.length,n+2);
 });
 test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
+ /* ITEM_v2.7 §FOOD / FRESH POSITIVE NATIVE-STAT COMPOSITION: the Fresh Relics raise a Food's
+    POSITIVE NATIVE Core Stat and nothing else. There is no `effects.food` channel any more -
+    that was the v2.5 shape this assertion was written against - so what is measured is the
+    Core Stat the Item actually carries, with the Hazard Counter and the Supply held fixed. */
  const g=fresh(),n={...g.run.npcs[0],traits:[],pack:['lava']},d=g.makeDungeon('snow',2),base=Dungeon.prepare(n,d).effects;
- for(const id of ['kitchen','fresh24']){const e=Dungeon.prepare(n,d,[id]).effects;assert.ok(e.food>base.food);assert.equal(e.cold,base.cold);assert.equal(e.thirst,base.thirst);}
+ for(const id of ['kitchen','fresh24']){const e=Dungeon.prepare(n,d,[id]).effects;
+  assert.ok(e.survival>base.survival,id+' raises the Food native Core Stat');
+  assert.equal(e.cold,base.cold,id+' does not touch the Hazard Counter');
+  assert.equal(e.supply,base.supply,id+' does not touch Supply');}
  const it=DATA.itemBy.premium;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.ok(Relics.shelf(g,it)>f);assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
 });
 test('premium guarantee obeys wallet, daily limit and never guarantees acceptance',()=>{
@@ -34,9 +46,21 @@ test('return points excludes first visit, no-sale and free transfer',()=>{
 });
 test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
  const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,25);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
- for(const [id,delta]of [['showcase',10],['hub',35],['efficiency',-15]])assert.equal(nightWith([id]).g.run.daily.operating-base.g.run.daily.operating,delta);
+ /* Two things this line used to get wrong. hub's cost is a PROPORTION of the overhead base
+    under the approved bundle, not the flat +35 it was written against; and the operating cost
+    is rounded to the nearest 10G, so what the store is actually charged is not the raw
+    modifier - a 15G saving lands as 20G off this base. The expected figure is therefore
+    derived from the rule AND its rounding, and the raw modifier each Relic contributes is
+    asserted separately, so neither half can drift unnoticed. */
+ const raw={showcase:10,hub:base.g.overheadBase()*DATA.balance.hubOverheadRate,efficiency:-15};
+ const charged=x=>Math.round((base.g.overheadBase()+x)/10)*10;
+ for(const [id,modifier] of Object.entries(raw)){
+  assert.equal(nightWith([id]).g.run.daily.operating-base.g.run.daily.operating,
+   charged(modifier)-charged(0),id+' day overhead');
+ }
+ assert.equal(raw.hub,base.g.overheadBase()*0.10,'hub is 10% of the overhead base, the approved rate');
 });
 test('D30 excludes throughput Relics whose condition cannot be met anymore',()=>{
  for(let i=0;i<100;i++){const g=fresh('final-offer-'+i);g.run.previousSales=0;g.relicWindow(30);assert.ok(g.run.relicWindow.candidateIds.every(id=>!['rotation','logisticsHQ'].includes(id)));}
 });
-console.log(count+' Relic effect groups passed; expeditionMeal semantics / delivery approval / balance remain pending');
+console.log(count+' Relic effect groups passed');

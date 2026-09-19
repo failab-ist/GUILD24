@@ -7,12 +7,12 @@ DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
-LAST_APPROVED_AMENDMENT=2026-09-18
+LAST_APPROVED_AMENDMENT=2026-09-19
 SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
-BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
-SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
+BALANCE_STATUS=APPROVED_BUNDLE_IN_SOURCE
+SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE
 V2_7_SOURCE_EDIT_GATE=RECOVERY_CLOSE_CONFIRMED
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -31,6 +31,38 @@ DESIGN TRUTH = Design SSOT
 IMPLEMENTATION TRUTH = Source
 
 If current Source still matches v2.6/v2.6.1 rather than this v2.7 SSOT, classify the difference as missing adoption / implementation difference. Do not reinterpret this SSOT to match Source.
+
+## CURRENT EXECUTION SCOPE — v2.7 + DECORATION BACKPORT
+
+The **current implementation / balance line remains v2.7**.
+
+The files created under the v2.8 name are **not a project-wide v2.8 promotion for the current cycle**.
+For the current v2.7 work, only the approved **Decoration Package** from those files is adopted as an overlay:
+
+- Store Capital and its Run-end settlement structure
+- permanent Decoration ownership
+- fixed Decoration Slots and pre-Run loadout
+- initial four Decoration effects
+- the active retirement of Franchise Grade / Franchise Achievement / Start Contract that is necessary for Decoration to replace that progression layer
+- inactive preservation of the retired v2.7 Franchise/Contract implementation
+- only the Run/UI/Save support required to make the Decoration Package work
+
+Everything else must continue to follow the current v2.7 routed owner Specs.
+
+In particular:
+- Gate / Wallet / Hazard-Counter tuning remains a **v2.7 balance change** against the current owners
+- do not infer a project-wide v2.8 Source Adoption
+- do not introduce unrelated v2.8 systems, migrations, or version-boundary work
+- the v2.8 files are scoped design sources for the Decoration Package only in this cycle
+
+Decoration scoped sources:
+- `00_GAME_CORE_v2.8.0.md`
+- `META_v2.8.0.md`
+- `CORE_RUN_v2.8.0.md`
+- `UI_UX_v2.8.0.md`
+- their Decoration-related QA clauses
+
+If those scoped files conflict with current v2.7 owners **outside the Decoration Package**, the v2.7 owner remains authoritative.
 
 ## v2.7 VERSION POLICY
 
@@ -90,12 +122,20 @@ v2.6.1 Adoption Recovery close = confirmed
 -> v2.7 Source Adoption plan review
 -> Director-approved WORK handoff
 -> v2.7 Source Adoption implementation
+-> scoped Decoration Package adoption
+-> ADOPTED
 ```
 
 There are currently no implementation-blocking Design Unresolved items.
 
-Current Source remains implementation truth until each v2.7 adoption step lands.
-Do not reinterpret missing v2.7 Source adoption as missing Design.
+`SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE`: the current line is
+**v2.7 + scoped Decoration Package**, and Source carries it, including the current Store Capital
+basis. Final integration regression and anti-farm validation passed. The small acquisition-timing
+variance remains an accepted current-cycle balance finding and does not reopen tuning.
+
+This is not a project-wide v2.8 adoption and does not promote any owner outside the Package.
+Source is implementation truth for this adopted line; future differences from an owner are
+findings to classify, not unfinished adoption by default.
 
 The prerequisite recovery execution document remains:
 `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
@@ -183,7 +223,16 @@ Unchanged global core identity stays in `00_GAME_CORE_v2.5.0.md`.
 NONE
 ```
 
-Current Franchise Achievement numeric thresholds are `DIRECTOR DOCUMENT BASELINE` values, not unresolved. They may change only through the frozen/full-run QA `BALANCE FINDING -> User/Director approval -> owner update -> separate fix cycle` process.
+The Wallet choice (current values retained), the Store Capital Day-band rates and the four
+Decoration prices were all approved and are now `DIRECTOR DOCUMENT BASELINE` values in their
+owners. Together with the late Gate Day slope, the Decoration effects and the `board` / `hub`
+visitor overrides, the current v2.7 + Decoration-package line carries no open Design numeric.
+
+The Franchise Achievement thresholds are no longer live values of any kind: Franchise Grade,
+Franchise Achievement and the Start Contract are retired by the Decoration Package, and their
+implementation is preserved only at `archive/inactive/v2_7_franchise/`. The
+`BALANCE FINDING -> User/Director approval -> owner update -> separate fix cycle` process still
+governs every remaining `DIRECTOR DOCUMENT BASELINE` value.
 
 ## PROMOTED-VISION / HISTORY STATUS
 

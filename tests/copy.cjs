@@ -4,7 +4,7 @@
 // the approved Rare Reference names, and the §18 QA questions a Node process can answer.
 // Copy owns sentences only — every assertion here is about strings, never about a rule.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const V=Copy.pools.visit,S=Copy.pools.sale,N=Copy.pools.night;
@@ -219,13 +219,25 @@ test('D-5 / EVENT §3-1: an Event says what it switched on, at the precision the
 });
 
 test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually moves',()=>{
- /* foodMult and potionMult multiply exactly one contribution - survival, from food and from
-    potions. They were labelled 음식/포션 고유 효과, which claims every effect the item has. */
+ /* Each multiplier names the channel it actually moves, never 음식/포션 고유 효과, which would
+    claim every effect the item has. Under ITEM_v2.7 foodMult joins the positive native
+    Core-Stat pool - all four Stats, not 강인함 alone - so the label widened with it.
+    potionMult was written as survival-only at x1.30 while NPC_TRAIT_v2.7 §POTIONBODY says a
+    Potion's POSITIVE NATIVE Core Stat x1.15 - and every v2.7 Potion carries combat, so the
+    Trait moved nothing. Both assertions below described that stale implementation; they now
+    describe the Canonical one, and the label widened for the same reason foodMult's did. */
  const dungeon=read('dist/systems/dungeon.js');
- assert.ok(/k==='survival'&&isFood\)value\*=mult\.foodMult/.test(dungeon),'foodMult reaches survival only');
- assert.ok(/item\.effects\.potion&&k==='survival'\)value\*=mult\.potionMult/.test(dungeon),'and so does potionMult');
- assert.equal(Presentation.labels.foodMult,'음식의 강인함','so the label names that channel');
- assert.equal(Presentation.labels.potionMult,'포션의 강인함','and so does the potion one');
+ /* Both multipliers live in one function now - `nativeStatFactor` is the whole answer to what
+    multiplies an Item's positive native Core Stat - so the channel each one names is read off
+    that function rather than off four scattered conditionals. */
+ const factor=dungeon.slice(dungeon.indexOf('function nativeStatFactor('),dungeon.indexOf('function hazardCounterFactor('));
+ assert.ok(/if\(!STAT_KEYS\.includes\(k\)\|\|v<=0\)return 1;/.test(factor),'the pool is positive native Core Stat only');
+ assert.ok(/pool=isFood\?mult\.foodMult-1:0/.test(factor),'foodMult enters the native Core-Stat pool');
+ assert.ok(/item\.category==='potion'\)return mult\.potionMult/.test(factor),'potionMult reaches a Potion positive native Core Stat');
+ assert.ok(!/mult\.(food|potion)Mult/.test(dungeon.replace(factor,'').replace(/foodMult:1,potionMult:1/g,'')),
+  'and neither multiplier is applied anywhere else');
+ assert.equal(Presentation.labels.foodMult,'음식의 능력치','so the label names that channel');
+ assert.equal(Presentation.labels.potionMult,'포션의 능력치','and so does the potion one');
  for(const id of ['eater','small'])
   assert.ok(!DATA.traitBy[id].note,'with the channel named, '+id+' no longer needs a note denying the others');
 
@@ -241,15 +253,19 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  assert.ok(!('guaranteeMinPrice' in DATA.balance),'it is not owned by D.balance');
  assert.ok(!read('dist/data/relics.js').includes('D.balance.guaranteeMinPrice'),'and nothing puts it there');
 
- /* 포만감 was a third named effect in two Relic descriptions. There is no such channel. */
+ /* 포만감 was a third named effect in two Relic descriptions. There is no such channel.
+    Under RELIC_v2.7 these two move the native Core Stat and leave Supply alone, so the
+    description has to say the channel it moves and the ones it does not. */
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
-  assert.ok(/보급·강인함/.test(DATA.relicBy[id].description),'and names the two it does move');
+  assert.ok(/능력치 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
+  assert.ok(/보급/.test(DATA.relicBy[id].description)&&!/보급·능력치|보급 효과 \+/.test(DATA.relicBy[id].description),
+   id+' does not claim the Supply it leaves unchanged');
  }
 
  /* D-16: the description slot is flavour. Where it only restated the effect line it told the
     player nothing they could not read one line up. Rules that live ONLY there are kept. */
- for(const [id,banned] of [['ice','화염 대응'],['bandage','부상을 한 단계'],['kit','중상 위험을 줄여'],
+ for(const [id,banned] of [['ice','화염 대응'],['kit','중상 위험을 줄여'],
                            ['antidote','독 대응을 크게'],['mask','독과 가스 환경에 대응'],
                            ['battery','어둠 속 시야를 확보'],['tree','사망 판정을 한 번 중상으로'],
                            ['coupon','다음 소모품의 효과를 복제']]){
@@ -260,6 +276,36 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  const stone=DATA.items.find(x=>x.id==='stone');
  assert.ok(stone&&/한 번 더 돌아올 기회/.test(stone.description),
   'the return stone keeps the rule that is only written there');
+
+ /* The ten v2.7 Epics shipped with the flavour slot empty because Canonical gave names and no
+    prose. The approved copy is now in, and it is flavour: it may not name a channel, a number
+    or a Hazard, because the effect line one row up is where that truth lives. */
+ const EPIC_FLAVOUR={
+  spiderkit:'손목을 앞으로 내밀어도 아무것도 나오진 않는다.',
+  slimesuit:'방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',
+  cryptlantern:'성당 납품용이었는데 어쩌다 편의점까지 왔다.',
+  snowvisor:'김은 안 서린다. 눈썹은 얼 수 있다.',
+  magmagear:'설명서 첫 줄: 마그마에 직접 넣지 마시오.',
+  battlelunch:'동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',
+  herobar:'일반 핫바를 두 개 사는 것과는 기분이 다르다고 한다.',
+  hyperenergy:'마시고 나면 계산대보다 먼저 문을 나선다.',
+  sageelixir:'한 모금 마시면 괜히 턱을 쓰다듬게 된다.',
+  toppotion:'병은 작다. 값은 작지 않다.'};
+ for(const [id,text] of Object.entries(EPIC_FLAVOUR)){
+  const it=DATA.itemBy[id];
+  assert.ok(it,'the catalog still has '+id);
+  assert.equal(it.description,text,it.name+' carries the approved flavour verbatim');
+  assert.ok(!/[0-9]/.test(it.description),it.name+' flavour states no number');
+  for(const label of Object.values(Presentation.labels))
+   assert.ok(!it.description.includes(label),it.name+' flavour names no effect channel: '+label);
+  for(const hz of Object.values(DATA.hazards))
+   assert.ok(!it.description.includes(hz),it.name+' flavour names no Hazard: '+hz);
+ }
+ /* The last two v2.7 additions received their approved copy too, so the flavour slot is now
+    filled for the whole active catalogue and a blank one is a regression. */
+ assert.equal(DATA.itemBy.herbtea.description,'마시기 전에 심호흡부터 하는 손님이 많다.');
+ assert.equal(DATA.itemBy.midpotion.description,'하급은 불안하고 상급은 비쌀 때.');
+ for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
 });
 
 console.log(count+' copy groups passed');

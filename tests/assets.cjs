@@ -18,6 +18,17 @@ test('every vendored asset ships with the build and carries its licence',()=>{
   assert.ok(fs.existsSync(path.join(root,'dist','ui',url)),'shipped font exists: '+url);
  }
  assert.ok(fs.existsSync(path.join(root,'dist/ui/fonts/OFL.md')),'the font licence ships with the font');
+ /* UI_UX_v2.7 §FONT / VISUAL QA BOUNDARY: the required licence notice is retained, and every
+    face the CSS asks for is actually on disk - a missing one is silent glyph loss. */
+ assert.ok(fs.existsSync(path.join(root,'dist/ui/fonts/OFL-WantedSans.txt')),'the INFORMATION face ships its own OFL notice');
+ for(const m of css.matchAll(/url\('fonts\/([^']+)'\)/g))
+  assert.ok(fs.existsSync(path.join(root,'dist/ui/fonts',m[1])),'@font-face '+m[1]+' exists on disk');
+ assert.ok(!/Pretendard/.test(css),'the retired INFORMATION face is gone from the CSS');
+ assert.ok(!fs.existsSync(path.join(root,'dist/ui/fonts/Pretendard.woff2')),'and its files no longer ship');
+ assert.ok(/WantedSans/.test(css),'Wanted Sans is the INFORMATION face');
+ // no runtime network font request: every face is local
+ assert.ok(!/@import|https?:\/\//.test(css.split('\n').filter(l=>/@font-face|url\(/.test(l)).join('\n')),
+  'no font is fetched over the network at runtime');
  assert.ok(fs.existsSync(path.join(root,'dist/ui/vendor/anime.LICENSE.md')),'the animation licence ships with the library');
  assert.ok(read('reports/ASSETS.md').includes('OFL-1.1'),'the asset manifest records the licences');
 });
@@ -28,7 +39,7 @@ test('the pixel font subset covers every character this build can render',()=>{
   if(!/\.(js|html)$/.test(file)||file.includes('vendor/'))continue;
   for(const ch of read(file))chars.add(ch);
  }
- const face=path.join(root,'dist/ui/fonts/Galmuri14.woff2');
+ const face=path.join(root,'dist/ui/fonts/Mulmaru.woff2');
  const cmap=execFileSync('python3',['-c',
   "import sys\nfrom fontTools.ttLib import TTFont\nf=TTFont(sys.argv[1])\nsys.stdout.buffer.write(''.join(chr(c) for c in f.getBestCmap()).encode('utf-8'))",face],
   {encoding:'utf8',maxBuffer:1<<22});

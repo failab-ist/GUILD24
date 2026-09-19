@@ -9,7 +9,7 @@
 // Mastery also has unlocked Jobs and contracts - comparing two accounts would confuse the two.
 // Nothing here is read by the game and no canonical numeric is written.
 const fs=require('node:fs');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const seeds=Number(process.argv[2])||120,rolls=Number(process.argv[3])||60000;
 const D=globalThis.DATA,Meta=globalThis.Meta,Adventurer=globalThis.Adventurer;
 
@@ -64,7 +64,7 @@ for(const rank of [0,2,4,6]){
    finalPower:r.final.resolved?r.final.power/r.final.resolved:0,
    finalMargin:r.final.resolved?r.final.margin/r.final.resolved:0,
    avgLevel:r.npc.alive?r.npc.level/r.npc.alive:0,gold:r.averageMoney,
-   distinctAtStart:Meta.distinctBossClear(account),grade:Meta.grade(account)};
+   distinctAtStart:Meta.distinctBossClear(account),decorations:Meta.ownedDecorations(account).length};
   out.contribution.push(row);
   console.log(String(rank).padEnd(5),row.mastery.padEnd(8),row.reach.toFixed(3).padEnd(7),
    row.clear.toFixed(3).padEnd(7),row.deaths.toFixed(2).padEnd(7),
