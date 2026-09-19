@@ -2,7 +2,7 @@
 
 DATE: 2026-09-19
 CURRENT_LINE: v2.7 + scoped Decoration Package
-STATE: RELEASE_CANDIDATE_READY_MAIN_MERGE
+STATE: LIVE_DEPLOYED_PLAYTEST
 
 ## Truth
 
@@ -18,15 +18,26 @@ Resolve current owners and adopted balance through `SPEC_INDEX_v2.7.0.md`.
 
 The v2.7 line, scoped Decoration Package, and current Store Capital basis are adopted in Source.
 
-Final integration regression, acquisition reproduction, anti-farm validation, browser QA and
-Pages static-path QA are complete. The small known acquisition-timing variance is accepted for
-the current cycle without further tuning.
+Final integration regression, acquisition reproduction, anti-farm validation, browser QA, Pages
+static-path QA, main merge, and GitHub Pages deployment are complete.
 
-The Pages workflow is prepared with Production deployment restricted to `main`.
+The current Store Capital rate table remains the approved current-cycle
+`DIRECTOR DOCUMENT BASELINE`. Its small known acquisition-timing variance is accepted without
+further tuning in this cycle.
+
+Production Pages deployment is restricted to `main`.
 
 ## Next
 
-1. Merge the release-candidate branch to `main`.
-2. Ensure Repository Settings -> Pages -> Source is set to GitHub Actions.
-3. Confirm the main Pages workflow passes and the deployed site loads at the project Pages URL.
-4. Start any later balance/design work as a separate cycle.
+The next cycle is player-playtest validation, not another automatic balance pass.
+
+Prioritize:
+1. whether the core decision loop is understandable and genuinely difficult rather than obscure,
+2. whether ORDER / SALE choices avoid obvious dominant answers,
+3. whether NIGHT / CLOSING make the consequences of those choices legible,
+4. whether bankruptcy feels tense and fair rather than arbitrary,
+5. whether cross-run Store Growth feels earned and motivating without becoming mandatory grind,
+6. whether mobile pacing, readability, and repeated-run friction hold up in real play.
+
+Convert observed issues into separate Design Finding / Implementation Bug / UX Finding cycles.
+Do not tune production numerics directly from isolated anecdotal feedback.
