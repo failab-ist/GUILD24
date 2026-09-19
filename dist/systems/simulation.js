@@ -588,10 +588,19 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
  const acquisition=order.map((id,k)=>{
   const at=ledgers.map(l=>{const row=l.find(r=>r.ownedAfter>=k+1);return row?row.run+1:null;});
   const got=at.filter(x=>x!==null);
+  /* CENSORED. A trajectory that never got this far has no Run number, and dropping it would
+     make the median a median of the lucky - the shorter the measurement, the earlier the
+     answer. It is kept in the sample as "later than every Run measured", so the median is a
+     real Run only when MORE THAN HALF the trajectories actually acquired; otherwise it is
+     null, which reads as "not within `runs` Runs" rather than as a number. */
+  const ranked=[...at].sort((a,b)=>(a===null?Infinity:a)-(b===null?Infinity:b));
+  const mid=ranked[Math.floor(ranked.length/2)];
   return {position:k+1,id,price:D.decorationBy[id].price,
    acquired:got.length,ofTrajectories:ledgers.length,
-   medianRun:got.length?[...got].sort((a,b)=>a-b)[Math.floor(got.length/2)]:null,
-   meanRun:got.length?got.reduce((a,b)=>a+b,0)/got.length:null,
+   medianRun:mid===null?null:mid,
+   /* The mean is over the acquirers only and cannot be censored the same way, so it is named
+      for what it is and never read as "when a player gets this". */
+   meanRunAmongAcquirers:got.length?got.reduce((a,b)=>a+b,0)/got.length:null,
    runs:at};
  });
  return {mode:'trajectory',policy,pricing,build,trajectories,runsPerTrajectory:runs,

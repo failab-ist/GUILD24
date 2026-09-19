@@ -1,0 +1,47 @@
+{
+  "version": 5,
+  "trajectories": 120,
+  "runsPerTrajectory": 20,
+  "policy": "balanced",
+  "prices": {
+    "dawnSign": 800,
+    "guildPlaque": 700,
+    "thriftSafe": 650,
+    "premiumCase": 550
+  },
+  "rates": [
+    {
+      "maxDay": 9,
+      "rate": 0.05
+    },
+    {
+      "maxDay": 19,
+      "rate": 0.15
+    },
+    {
+      "maxDay": 24,
+      "rate": 0.3
+    },
+    {
+      "maxDay": 29,
+      "rate": 0.45
+    },
+    {
+      "maxDay": 30,
+      "rate": 0.6
+    }
+  ],
+  "strongFirst": [
+    7,
+    9,
+    12,
+    14
+  ],
+  "weakFirst": [
+    6,
+    10,
+    13,
+    17
+  ],
+  "approvedExpectation": "3~4 / 6 / 8~9 / 10~11"
+}
