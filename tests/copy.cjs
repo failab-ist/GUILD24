@@ -103,9 +103,14 @@ test('§18: the help panel describes the rules the build actually has',()=>{
  // v2.4 shows every current Trait; the loyalty-gated reveal it used to describe is gone.
  assert.ok(!app.includes('숨겨진 특성은 관계가 쌓이면 공개됩니다'),'the retired hidden-Trait rule is not still taught');
  assert.ok(/표시된 특성이 원정에서 실제로 작용하는 특성/.test(app),'the help panel states the rule that replaced it');
- // §13.2 — the destination lesson teaches the system rule, not one Trait name.
- assert.ok(app.includes('특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다'),
+ /* §13.2 — the destination lesson teaches the system rule, not one Trait name. The approved
+    hotfix copy says the same rule in one sentence; what the guard protects is that the rule
+    is stated at all and that no single Trait is named as the reason. */
+ assert.ok(app.includes('특성·당일 상황에 따라 바뀔 수 있다'),
   'the canonical destination wording is used verbatim');
+ for(const t of Object.values(DATA.traitBy||{}))
+  if(t&&t.name)assert.ok(!app.includes('특성·당일 상황에 따라 바뀔 수 있다'+t.name),
+   'and no single Trait is named as the reason: '+t.name);
  assert.ok(!/허세를 부리는 손님은[^<]*목적지/.test(app),'the lesson is not taught through one Trait name');
 });
 
