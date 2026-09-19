@@ -301,16 +301,28 @@ Decoration ownership cannot substitute for Boss CLEAR in the Job×Boss matrix.
 
 ## BALANCE GATE
 
-Before Decoration-package Production adoption in v2.7, the integrated candidate pass must jointly validate:
+The current Decoration package structure, initial Decoration identities/prices, and the v2.7
+Gate / Wallet / Hazard-Counter bundle are already approved.
 
-- Store Capital conversion rates
-- Decoration prices
-- Decoration progression curve
-- late Gate Power curve
-- NPC Wallet curve
-- Hazard Counter Item values / prices if required
+The newest Store Capital amendment changes only the cross-run conversion basis:
 
-Do not tune Decoration in isolation and then rebalance the whole game again.
+```text
+Gross Sales × reached-Day rate
+```
+
+Its exact rate table above is the current `DIRECTOR DOCUMENT BASELINE` and must be validated
+against the approved acquisition expectation and anti-farm conditions before the Source cycle is
+closed.
+
+Validation must confirm:
+- ordinary engaged play does not retain the old excessive zero-Gain pattern
+- both reasonable initial purchase orders remain near the approved acquisition expectation
+- no-sale / inactivity / deliberate short-run farming remains inefficient
+- overcharge-heavy play does not become the dominant Meta strategy merely by inflating Gross Sales
+- Run-internal bankruptcy / Death / Final balance does not change as a side effect
+
+If validation produces a Balance Finding, report it and stop. Do not auto-tune the rate table,
+Decoration prices, or unrelated Run balance.
 
 ## RELATED
 
