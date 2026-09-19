@@ -122,15 +122,17 @@ Do not attempt to display every owned Decoration simultaneously in the live shop
 Normal Run-end summary must make the Store Capital result legible:
 
 ```text
-Ending Gold
-+ remaining stock settlement value
--> Settlement Value
-× reached-Day conversion
+Gross Sales
+× reached-Day conversion rate
 -> Store Capital gained
 -> current Store Capital
 ```
 
-Exact conversion-rate copy is filled only after the balance values are approved.
+Ending Gold / remaining Inventory may still appear elsewhere as Run-result information, but they
+must not be presented as Store Capital calculation inputs.
+
+Do not expose internal formula noise beyond what is needed to understand why the Account gained
+that amount.
 
 Manual Run Abandon must not imply that Store Capital will be earned.
 
@@ -146,7 +148,7 @@ META owner defines it, including a chance-based effect stated as a chance rather
 guarantee. A wording that reads as a guaranteed bonus when the owner defines a probability is a
 defect even when the number shown is right.
 
-Exact Store Capital prices are pending integrated balance approval.
+Exact Store Capital prices are owned by `META_v2.8.0.md` and are not duplicated here.
 
 ## COMPLEXITY BOUNDARY
 
