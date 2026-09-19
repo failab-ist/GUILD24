@@ -2,7 +2,7 @@
 
 DATE: 2026-09-19
 CURRENT_LINE: v2.7 + scoped Decoration Package
-STATE: LIVE_DEPLOYED_PLAYTEST
+STATE: LIVE_PLAYTEST_HOTFIX_PENDING
 
 ## Truth
 
@@ -12,32 +12,21 @@ STATE: LIVE_DEPLOYED_PLAYTEST
 - Contributor workflow: `AGENTS.md`
 
 Do not duplicate detailed Rule / Numeric / UX / QA truth here.
-Resolve current owners and adopted balance through `SPEC_INDEX_v2.7.0.md`.
+Resolve exact hotfix behavior through the current owners routed by `SPEC_INDEX_v2.7.0.md`.
 
 ## Current State
 
-The v2.7 line, scoped Decoration Package, and current Store Capital basis are adopted in Source.
+The gameplay/balance baseline is adopted and live on GitHub Pages.
 
-Final integration regression, acquisition reproduction, anti-farm validation, browser QA, Pages
-static-path QA, main merge, and GitHub Pages deployment are complete.
+The first real-phone playtest exposed a playability blocker in ordinary mobile SALE plus smaller
+tutorial/reference/Decoration/audio issues. User/Director approved one focused hotfix cycle.
 
-The current Store Capital rate table remains the approved current-cycle
-`DIRECTOR DOCUMENT BASELINE`. Its small known acquisition-timing variance is accepted without
-further tuning in this cycle.
-
-Production Pages deployment is restricted to `main`.
+No gameplay/balance numeric is reopened by this cycle.
 
 ## Next
 
-The next cycle is player-playtest validation, not another automatic balance pass.
+Implement the routed hotfix with the smallest UI/audio patch.
+Validate real mobile widths first, then desktop regression, then deploy through the existing
+main-only Pages workflow.
 
-Prioritize:
-1. whether the core decision loop is understandable and genuinely difficult rather than obscure,
-2. whether ORDER / SALE choices avoid obvious dominant answers,
-3. whether NIGHT / CLOSING make the consequences of those choices legible,
-4. whether bankruptcy feels tense and fair rather than arbitrary,
-5. whether cross-run Store Growth feels earned and motivating without becoming mandatory grind,
-6. whether mobile pacing, readability, and repeated-run friction hold up in real play.
-
-Convert observed issues into separate Design Finding / Implementation Bug / UX Finding cycles.
-Do not tune production numerics directly from isolated anecdotal feedback.
+Do not mix unrelated playtest findings or new features into this hotfix.
