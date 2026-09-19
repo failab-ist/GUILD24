@@ -35,9 +35,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      # No dependency install: the suite runs on the Node standard library alone. Playwright is
-      # a devDependency used by the local visual harness, which is deliberately not part of
+      # No npm install: the suite runs on the Node standard library alone. Playwright is a
+      # devDependency used by the local visual harness, which is deliberately not part of
       # `npm test` and is not run here.
+      #
+      # fontTools is the one thing the suite needs beyond Node: tests/assets.cjs reads the
+      # shipped woff2's cmap to prove the pixel-font subset covers every character the build can
+      # render. Installing it keeps that gate at full strength — the alternative, letting the
+      # check skip itself when the module is missing, would turn a real guarantee into a silent
+      # pass exactly where it matters, on the runner that publishes the site.
+      #
+      # The [woff] extra pulls Brotli, which woff2 decoding needs; plain `fonttools` imports
+      # fine and then fails on the shipped font.
+      - name: Font tooling for the subset-coverage gate
+        run: python3 -m pip install --quiet --disable-pip-version-check "fonttools[woff]"
       - name: Test suite
         run: npm test
       - name: Source-derived audit
