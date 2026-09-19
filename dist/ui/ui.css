@@ -1036,15 +1036,17 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .matrix td.open{color:#6b6152}
 .matrix td.tally{font-variant-numeric:tabular-nums;color:#cbb98d;white-space:nowrap}
 .matrix tr.locked th,.matrix tr.locked td{opacity:.45}
-/* UI_UX_v2.8 §LIVE STORE: the equipped Decoration at its own fixed spot, in the same plate
-   language the branch name already uses. Placeholder until dedicated art exists. */
-.decoplate{position:absolute;z-index:3;padding:2px 7px;border:1px solid #4a4032;
- background:#1b1710e0;color:#cbb992;font:500 9px/1.4 var(--ui);letter-spacing:.06em;white-space:nowrap}
-.decoplate.sign{top:6px;left:10px}
-.decoplate.wall{top:8px;right:10px}
-.decoplate.display{bottom:8px;right:10px}
-.decoplate.counter{bottom:6px;left:10px}
-@media (max-width:480px){.decoplate{font-size:8px;padding:1px 5px}}
+/* UI_UX_v2.8 §LIVE STORE: the equipped Decoration, drawn at its own fixed spot on the band
+   it belongs to. Sized as a percentage of the band so 360 / 390 / desktop place it on the
+   same piece of room the art puts there, instead of a fixed box drifting as the room scales.
+   Each spot is chosen to miss what the interface reads: the DAY sign, the till, the dawn
+   window, the price board, the branch plate. */
+.decoplate{position:absolute;z-index:3;line-height:0;pointer-events:none}
+.decoplate .deco-art{display:block;width:100%;height:auto;image-rendering:pixelated}
+.decoplate.sign{left:3%;bottom:0;width:16%}
+.decoplate.wall{left:5%;top:19%;width:10%}
+.decoplate.display{left:40%;bottom:2%;width:15%}
+.decoplate.counter{left:2%;bottom:8%;width:11%}
 /* UI_UX_v2.8 §DECORATION UI. Reuses the unlock board's block rhythm and the .effects row
    shape rather than introducing a new card language for one panel. */
 .decoration-panel{display:grid;gap:14px}
@@ -1058,6 +1060,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .slot-option span.smalltext{display:block;color:#a2947c}
 .slot-option .tale{margin-top:3px}
 .slot-option button{flex:0 0 auto}
+/* UI_UX_v2.8 §PURCHASE CONFIRMATION: the confirmation takes the buy button's own place in the
+   row, so the button it replaces cannot be clicked again while it is up. */
+.deco-confirm{flex:0 0 auto;display:grid;gap:6px;justify-items:end;text-align:right}
+.deco-confirm p{color:#cbb992;margin:0}
+.deco-confirm button{display:inline-block}
+@media (max-width:480px){.slot-option{flex-wrap:wrap}.deco-confirm{justify-items:stretch;text-align:left;width:100%}}
 .decoration-panel .none{color:#7d7466}
 .settlement h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks{display:grid;gap:14px}

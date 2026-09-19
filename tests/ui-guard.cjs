@@ -902,6 +902,56 @@ test('D-27: the named items are drawn as themselves, and no two of them share a 
  assert.deepEqual(shared,[],'no two products are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
 });
 
+// UI_UX_v2.8 §LIVE STORE. The four Decorations shipped as a text plate carrying their name,
+// which said which one was equipped without ever drawing it. This is the same contract D-27
+// holds the shelf to: each Decoration is a picture, its own picture, at its own place.
+test('UI_UX_v2.8 §LIVE STORE: every Decoration is drawn, each as itself, at its own Slot',()=>{
+ const Scene=globalThis.Scene,D=globalThis.DATA;
+ const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
+ const drawn=new Map();
+ for(const d of D.decorations){
+  const art=Scene.decoration(d.id);
+  assert.ok(art&&art.includes('<svg'),d.name+' resolves to a drawing');
+  const shapes=body(art);
+  assert.ok(shapes.length>0,d.name+' is drawn, not an empty frame');
+  // the store scene is pixel art on its own grid; a drawing that scaled smoothly would not be
+  assert.ok(art.includes('shape-rendering="crispEdges"'),d.name+' is drawn on the pixel grid');
+  // a <text> glyph here would bind the store scene to the font subset
+  assert.ok(!/<text/.test(art),d.name+' is a drawing, not a caption');
+  (drawn.get(shapes)||drawn.set(shapes,[]).get(shapes)).push(d);
+ }
+ const shared=[...drawn.values()].filter(g=>g.length>1);
+ assert.deepEqual(shared,[],'no two Decorations are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
+ assert.equal(Scene.decoration('nosuch'),'','an id with no drawing resolves to nothing, never a broken frame');
+ // the name may still be read by a screen reader, but it is no longer the picture
+ const plate=fn('decoPlate');
+ assert.ok(plate.includes('Scene.decoration('),'the store scene renders the drawing');
+ assert.ok(plate.includes('game.run?.loadout'),'and renders only what this Run equipped, from the Run');
+ assert.ok(!/>'\+E\(d\.name\)\+'</.test(plate),'the name is not the visual any more');
+ // each Slot has a place of its own on the band it belongs to, sized against that band
+ for(const slot of D.decorationSlots){
+  const rule=(css.match(new RegExp('\\.decoplate\\.'+slot+'\\{([^}]*)\\}'))||[])[1];
+  assert.ok(rule,slot+' has a placement rule');
+  assert.ok(/width:\d+%/.test(rule),slot+' is sized against its band, not in fixed pixels');
+ }
+ assert.ok(/\.decoplate .deco-art\{[^}]*image-rendering:pixelated/.test(css),'the drawing is not smoothed');
+});
+
+// UI_UX_v2.8 §PURCHASE CONFIRMATION. Spending permanent Capital is a two-step action, and the
+// step that spends is one place in Source, so a repeated click cannot reach Meta twice.
+test('UI_UX_v2.8 §PURCHASE CONFIRMATION: the buy button asks, and only the confirmation spends',()=>{
+ assert.ok(/case'deco-buy':decoPending=id/.test(app),'the buy button only records what is being asked about');
+ assert.equal((app.match(/Meta\.buyDecoration\(/g)||[]).length,1,'exactly one call site spends Capital');
+ const confirm=app.slice(app.indexOf("case'deco-confirm'"),app.indexOf("case'qty'"));
+ assert.ok(confirm.indexOf('decoPending=null')<confirm.indexOf('Meta.buyDecoration('),
+  'the pending purchase is cleared before the Capital is spent, so a second click has nothing to confirm');
+ assert.ok(/case'deco-cancel':decoPending=null/.test(app),'cancel clears it and spends nothing');
+ // a reload must not resume a half-finished purchase, so it is never written to the save
+ assert.ok(!/decoPending/.test(read('dist/systems/save.js'))&&!/decoPending/.test(read('dist/systems/meta.js')),
+  'the pending state never reaches the Account or the save');
+ assert.ok(/function setModal\(value\)\{decoPending=null/.test(app),'closing or reopening the window cancels it');
+});
+
 // D-22 / D-23. There are no audio files here: every sound is synthesised, so a volume control
 // is a gain node. The contract is that the player owns two of them, that a level survives a
 // reload, and that no voice sneaks past a bus straight to the speakers.

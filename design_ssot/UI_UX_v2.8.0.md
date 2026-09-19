@@ -62,6 +62,17 @@ enough Store Capital
 -> Decoration becomes permanently owned
 ```
 
+The confirmation is a required step, not a courtesy. Precisely:
+
+- the purchase button **asks**; it never spends
+- the confirmation states the Decoration, its cost, and the Capital that will remain
+- only the explicit Confirm spends Capital, and it spends it exactly once
+- Cancel changes nothing: no Capital, no ownership, no loadout
+- a repeated press of the purchase button, closing and reopening the management window, or a
+  reload must never spend a second time. The pending confirmation is view state: it is never
+  written to the Account or the save, so a reload is a cancel
+- an unaffordable Decoration cannot reach the confirmation at all
+
 Equip:
 ```text
 choose one owned Decoration in a Slot
@@ -86,7 +97,21 @@ The active Run visually shows the currently equipped Decorations at fixed store 
 - counter -> counter area
 - display -> display / shelf area
 
-Only the equipped Decoration in each Slot needs to appear in the active store scene.
+Only the equipped Decoration in each Slot needs to appear in the active store scene, and it is
+read from the **Run's frozen loadout**, never from the Account — a Decoration bought mid-Run does
+not appear in the Run already running.
+
+Each Decoration appears as **drawn store art**, in the store scene's existing pixel-art language
+and palette, on the same grid as the room around it. A name plate, a label or any other caption
+standing in for the object is not a shipped visual: it says which Decoration is equipped without
+showing it. Requirements:
+
+- one distinct drawing per Decoration — no two share a picture
+- rendered unsmoothed, like the rest of the scene
+- sized against its band, so 360 / 390 / desktop place it on the same part of the room
+- it must not cover what the interface reads: the DAY sign, the till, the window, the price
+  board, the branch plate
+- no Scene redesign, and no new layout: the Decoration attaches to the room that already exists
 
 The Store management view may show the broader owned collection.
 

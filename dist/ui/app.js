@@ -2,6 +2,10 @@
 'use strict';
 const D=DATA,E=Art.esc,$=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('ko-KR');
 let stored=Save.read(),game=new Game(stored?.account||Meta.fresh(),stored?.run||null),selected=null,modal=null,codexTab='items',supplyNPC=null,toastTimer,previousFocus=null;
+/* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
+   Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
+   half-finished purchase and spend the Capital a second time. */
+let decoPending=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;x.cost=st.cost;}}return [...m.values()];};
@@ -38,7 +42,7 @@ function anchorOffer(key,y0){
   if(!sc||!back)return;const d=back.getBoundingClientRect().top-y0;if(d)sc.scrollTop+=d;};
  fix();requestAnimationFrame(fix);}
 
-function setModal(value){if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';previousFocus=document.activeElement;modal=value;renderModal();if(value){document.body.style.overflow='hidden';setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}else{document.body.style.overflow='';previousFocus?.focus?.();}requestAnimationFrame(showCoach);}
+function setModal(value){decoPending=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';previousFocus=document.activeElement;modal=value;renderModal();if(value){document.body.style.overflow='hidden';setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}else{document.body.style.overflow='';previousFocus?.focus?.();}requestAnimationFrame(showCoach);}
 let lastPhase=null;
 // ---- stage primitives ----------------------------------------------------
 // The only frame every Phase shares: a non-scrolling 100dvh box, one scroll surface,
@@ -951,15 +955,14 @@ function unlockLists(){const all=gatedContent(),open=all.filter(e=>e.have<e.want
    later holds alternatives renders without this changing. */
 const SLOT_COPY={sign:'간판',wall:'벽면',counter:'계산대',display:'진열대'};
 /* UI_UX_v2.8 §LIVE STORE. Only what this Run actually equipped is visible on the store screen,
-   each at its own fixed location. There is no dedicated pixel art for the four Decorations in
-   Source, and none is invented here: this reuses the existing plate language the branch name and
-   the DAY sign already use, so the equipped state is identifiable at its semantic spot.
-   Full artwork is an ASSET FOLLOW-UP, not a blocker. */
+   each drawn at its own Slot's location — the notice board by the entrance, the plaque on the
+   wall, the safe at the register, the showcase in front of the shelving. The loadout is read
+   from the Run, never from the Account, so what is on screen is what this Run started with. */
 function decoPlate(slot){const id=game.run?.loadout?.[slot];if(!id)return '';
- const d=D.decorationBy[id];if(!d)return '';
- /* No hover-only title: the effect is read in 점포 관리, and the plate says which Decoration
-    is on the wall. A tooltip would be the only place a touch player could not reach. */
- return '<span class="decoplate '+slot+'" aria-label="'+E(SLOT_COPY[slot]||slot)+' · '+E(d.name)+'">'+E(d.name)+'</span>';}
+ const d=D.decorationBy[id],art=Scene.decoration(id);if(!d||!art)return '';
+ /* No hover-only title: the effect is read in 점포 관리. A tooltip would be the only place a
+    touch player could not reach. The name lives in the label, for anyone not reading the art. */
+ return '<span class="decoplate '+slot+'" role="img" aria-label="'+E(SLOT_COPY[slot]||slot)+' · '+E(d.name)+'">'+art+'</span>';}
 function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='end');
  const loadout=Meta.storeLoadout(a);
  return '<div class="decoration-panel">'
@@ -976,7 +979,15 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
          ? (inRun?'<span class="muted">'+(on?'이번 영업에 적용 중':'미적용')+'</span>'
                  :btn(on?'해제':'적용',on?'deco-unequip':'deco-equip','small'+(on?'':' active'),'data-id="'+d.id+'"'))
          : (inRun?'<span class="muted">'+d.price.toLocaleString()+' 자본</span>'
-                 :btn(d.price.toLocaleString()+' 자본으로 구매','deco-buy','small','data-id="'+d.id+'"'
+                 :decoPending===d.id
+                  /* The confirmation replaces the buy button rather than opening a second modal:
+                     there is no way to click the original button again while it is up. */
+                  ?'<div class="deco-confirm"><p class="smalltext">'+E(d.name)+' · '
+                    +d.price.toLocaleString()+' 자본을 씁니다. 남는 자본 '
+                    +Math.max(0,Meta.storeCapital(a)-d.price).toLocaleString()+'.</p>'
+                    +btn('구매 확정','deco-confirm','small active','data-id="'+d.id+'"')
+                    +btn('취소','deco-cancel','small')+'</div>'
+                  :btn(d.price.toLocaleString()+' 자본으로 구매','deco-buy','small','data-id="'+d.id+'"'
                       +(Meta.storeCapital(a)<d.price?' disabled':''))))
        +'</div>';}).join('')
     +(active?'':'<p class="smalltext none">비워 둘 수 있습니다.</p>')+'</div>';}).join('')
@@ -1144,11 +1155,18 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   const seed=typed||(s?.phase==='foundation'?s.seed:null)||'g24-'+Date.now().toString(36);
   game.start(seed);selected=null;setModal(null);render();break;}
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
-    the Capital is deducted exactly once, inside Meta. */
- case'deco-buy':case'deco-equip':case'deco-unequip':{
+    the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
+    only asks, and `deco-confirm` is the single place that spends. */
+ case'deco-buy':decoPending=id;renderModal();break;
+ case'deco-cancel':decoPending=null;renderModal();break;
+ case'deco-confirm':case'deco-equip':case'deco-unequip':{
   if(game.run&&game.run.phase!=='end')throw Error('영업 중에는 장식을 바꿀 수 없습니다.');
   const d=D.decorationBy[id];
-  if(a==='deco-buy'){Meta.buyDecoration(game.account,id);toast(d.name+' 구매 · 점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음');sound('rare');}
+  if(a==='deco-confirm'){
+   /* Clear the pending id before spending, so a repeated click, a reopened modal or a thrown
+      Meta guard all leave the panel back on the plain buy button rather than on a live confirm. */
+   decoPending=null;
+   Meta.buyDecoration(game.account,id);toast(d.name+' 구매 · 점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음');sound('rare');}
   else Meta.equipDecoration(game.account,d.slot,a==='deco-equip'?id:null);
   game.save();renderModal();render();break;}
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
@@ -1186,7 +1204,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'roster':setModal('roster');break;
  case'npc':setModal('npc:'+id);break;
  case'codex':setModal('codex');break;
- case'codex-tab':codexTab=id;renderModal();break;
+ case'codex-tab':codexTab=id;decoPending=null;renderModal();break;
  case'help':setModal('help');break;
  case'settings':setModal('settings');break;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound();render();break;

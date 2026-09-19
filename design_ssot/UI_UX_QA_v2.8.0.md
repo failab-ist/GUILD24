@@ -52,3 +52,36 @@ FAIL if active v2.8 UI still exposes:
 - Franchise Achievement progress/toast
 - Grade ORDER discount
 - Grade-gated Start Contract progress
+
+## UI-Q-v28-6 — PURCHASE CONFIRMATION
+
+PASS:
+- the purchase button opens a confirmation and spends nothing
+- the confirmation states the Decoration, its cost and the Capital remaining after it
+- Confirm deducts the price exactly once, marks the Decoration permanently owned, and fills an
+  empty Slot of that kind
+- Cancel leaves Capital, ownership and loadout unchanged
+- pressing the purchase button again, closing and reopening the management window, and reloading
+  the page each end with the Capital deducted at most once in total
+- an unaffordable Decoration cannot reach the confirmation
+
+FAIL if:
+- the pending confirmation is written to the Account or the save
+- a second Confirm on the same Decoration deducts again
+
+## UI-Q-v28-7 — DECORATION ART
+
+PASS:
+- each of the four Decorations renders a drawing of itself in the live store, at its Slot's
+  location: sign at the entrance, wall on the wall, counter at the register, display at the shelving
+- the four drawings are all different from one another
+- only the Run's frozen loadout is drawn; an unequipped or mid-Run purchase is not
+- rendering is unsmoothed and stays on the store's palette and grid
+- at 360 / 390 / desktop nothing is cropped, overflows its band, or covers the DAY sign, the
+  till, the window, the price board or the branch plate
+- console errors = 0 on every phase that shows the store scene
+
+FAIL if:
+- a Decoration is represented by its name, a label or any other caption instead of a drawing
+- two Decorations share one drawing
+- an asset path is missing or broken

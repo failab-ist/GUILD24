@@ -1029,4 +1029,39 @@ test('META_v2.8 §RETIRED: active play writes no retired Franchise progress',()=
  assert.equal(JSON.stringify(h.account.franchise),mark,'reaching DAY 25 clean marks nothing');
 });
 
+/* UI-Q-v28-6. The confirmation itself is a UI step and ui-guard proves its shape; what belongs
+   here is the Account side it drives — that the spend happens once and only once, whatever the
+   caller does, and that a Decoration is never a Relic. */
+test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is permanent',()=>{
+ const a=Meta.fresh();
+ Meta.addCapital(a,900);
+ const d=DATA.decorationBy.thriftSafe;
+ assert.equal(Meta.decorationOwned(a,d.id),false,'nothing is owned to begin with');
+ Meta.buyDecoration(a,d.id);
+ assert.equal(Meta.storeCapital(a),900-d.price,'the price is deducted once');
+ assert.equal(Meta.decorationOwned(a,d.id),true,'and the Decoration is owned');
+ assert.equal(Meta.storeLoadout(a)[d.slot],d.id,'an empty Slot of that kind takes it');
+ /* A second confirmation - a double click, a stale button, a replayed action - is refused at
+    the Account layer, so the UI is not the only thing standing between it and a second spend. */
+ assert.throws(()=>Meta.buyDecoration(a,d.id),/이미 보유/,'a second purchase is refused');
+ assert.equal(Meta.storeCapital(a),900-d.price,'and deducts nothing');
+ /* Cancel is the absence of a call, so what it must leave alone is measured here as the state
+    a purchase never made: another Decoration is untouched by this one. */
+ const other=DATA.decorationBy.dawnSign;
+ assert.equal(Meta.decorationOwned(a,other.id),false,'an unconfirmed purchase owns nothing');
+ assert.equal(Meta.storeLoadout(a)[other.slot],null,'and equips nothing');
+ assert.throws(()=>Meta.buyDecoration(a,other.id),/자본이 부족/,'what cannot be afforded cannot be bought');
+ assert.equal(Meta.storeCapital(a),900-d.price,'a refused purchase deducts nothing');
+ /* Reload: a save round trip carries ownership and the loadout, and carries no pending state. */
+ const save={account:a,run:null,version:8};
+ assert.equal(Save.valid(JSON.parse(JSON.stringify(save))),true,'the Account with a Decoration is a valid save');
+ const back=JSON.parse(JSON.stringify(save)).account;
+ assert.equal(Meta.decorationOwned(back,d.id),true,'ownership survives the reload');
+ assert.equal(Meta.storeLoadout(back)[d.slot],d.id,'so does the Slot');
+ assert.equal(Meta.storeCapital(back),900-d.price,'and the Capital is not credited back');
+ assert.equal(JSON.stringify(back).includes('decoPending'),false,'no half-finished purchase is stored');
+ /* Decoration ≠ Relic: buying one touches no Relic state anywhere on the Account. */
+ assert.deepEqual(Meta.opened(a),Meta.opened(Meta.fresh()),'a Decoration unlocks nothing');
+});
+
 console.log(count+' integration groups passed');
