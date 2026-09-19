@@ -599,19 +599,19 @@ const coachSteps={
     first time a Deep Expedition actually occurs and never before the feature exists. Completion
     is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
     clears it and the next first occurrence teaches it again. No new persistence was added. */
- morning:[['visitors','#visitor-count','오늘 방문할 인원이다. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트가 어떤 능력을 압박하는지 보고 준비할 상품을 생각해 보자.'],['deep','.slip.deep','오늘은 심층원정이 열렸다. 같은 게이트의 더 깊은 구역이라 요구 전투력만 올라간다. 손님 한 명을 추천해 보낼 수 있고, 후원금은 그 모험가의 희귀도와 레벨에 따라 달라진다. 성공하면 그 모험가의 성장과 소지금이 늘지만, 가게가 버는 돈은 대성공이어도 없다. 추천하지 않아도 된다.']],
- order:[['gold','#order-register','수량을 고르는 동안 보유 자금과 발주 후 자금이 여기 남는다.'],['quantity','.dial','수량을 고른다. 같은 상품을 여러 개 발주할 수 있다.'],['reroll','.rubber','발주 후보 전체를 교환한다. 같은 날 반복할수록 비용이 올라간다.'],['confirm','[data-action="confirm-order"]','발주를 확정하면 현재 재고로 영업을 시작한다.']],
- sell:[['npc','.who','손님을 눌러 특성과 원정 기록을 살펴보자.','npc'],['great','.great-signal','준비가 요구치를 크게 앞서면 대성공이 나올 수 있다. 일반 원정에서 대성공이 나오면 본사가 가게에 보상을 더 준다. 확정은 아니고, 더 좋은 보급을 하나 더 들려 보낼수록 확률이 오른다.'],['destination','.dest-plate','이 손님이 향할 게이트다. 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.'],
+ morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정이다. 손님 1명을 후원할 수 있고, 성공하면 그 손님이 더 성장한다. 점포 매출에는 영향이 없다.']],
+ order:[['gold','#order-register','보유 골드와 현재 발주 후 잔액을 확인한다.'],['quantity','.dial','발주할 수량을 고른다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 후에도 추가 발주·후보 교환이 가능하고, 준비가 끝나면 영업 시작을 누른다.']],
+ sell:[['npc','.who','손님을 누르면 특성과 지난 원정 기록을 볼 수 있다.','npc'],['great','.great-signal','준비가 충분하면 대성공 가능성이 생긴다. 보급을 더 챙기면 가능성이 커질 수 있다.'],['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
  /* UI_UX_v2.7 §TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER. It teaches what the two
     columns MEAN and where readiness comes from. It never names an Item for a Hazard: no
     `독이면 X를 사세요`, because that is the decision the player is here to make. */
- ['hazard','.dest-plate .hazards','위험마다 압박하는 능력이 정해져 있다. 압박은 위험 자체의 성질이라 누가 서 있든 같다. 아래 전망의 환경 대응은 이 손님이 타고난 능력과 들려 보낼 대응 상품이 함께 만드는 것이고, 취약·불안·대응·충분 네 단계로 요약된다.'],
- ['forecast','.readout','원정 전망과 실패 시 사망 위험은 이 손님이 카운터에 섰을 때의 상태로 계산한다. 상품을 팔아도 이 표시는 손님을 보낼 때까지 바뀌지 않는다. 확정된 결과가 아니라 가늠이다.'],
+ ['hazard','.dest-plate .hazards','위험은 특정 능력을 압박한다. 환경 대응은 손님 능력과 보급을 함께 반영한다.'],
+ ['forecast','.readout','상품을 팔아도 이 전망은 갱신되지 않는다. 성공·실패 결과는 미리 알 수 없고, 실제 결과는 원정 후 확인한다.'],
  /* The Supply/Fatigue order, in the order it actually resolves. The hidden Supply-deficit
     formula is not taught - only that a shortfall costs one penalty across the preparation. */
- ['supply','.ingredients','보급은 요구량부터 채운다. 모자라면 원정 준비 전체에 페널티가 하나 걸린다. 요구량을 넘긴 보급은 지금의 피로를 먼저 줄이고, 그래도 남으면 이번 원정에서 쌓일 피로를 줄여 준다. 아래 밤 피로는 결과별로 계산만 해 둔 숫자이지, 어떤 결과가 나올지 점치는 것이 아니다.'],['inventory','.good','진열대 전체에서 고른다. 판매한 소비품은 오늘 원정에서 쓰인다.'],['pricing','.tills','50%는 손님에게 투자, 100%는 기본 거래, 150%는 지금의 수입을 늘리는 선택이다.']],
- night:[['result','.beat','한 명씩 결과와 원인, 변화를 확인한다. 전체 건너뛰기로 정산에 갈 수 있다.']],
- closing:[['receipt','.tape','판매 마진에서 운영비와 폐기를 뺀 영업 손익이다. 발주와 점포지원 투자는 아래에 따로 적힌다.']]
+ ['supply','.ingredients','필요 보급을 못 채우면 원정 준비에 공통 페널티가 걸려 투력·강인함·기동·정신이 낮아진다. 남는 보급은 현재 피로와 이번 원정에서 쌓일 피로를 줄인다.'],['inventory','.good','고른 상품은 이 손님이 오늘 원정에서 한 번 사용한다. 모든 상품은 1회용이며 다음 원정으로 가져가지 않는다.'],['pricing','.tills','50%는 투자, 100%는 기본, 150%는 수익 우선이다.']],
+ night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
+ closing:[['receipt','.tape','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']]
 };
 let activeCoach=null;
 function showCoach(){
@@ -629,7 +629,11 @@ function showCoach(){
  const step=steps.find(x=>!tutorial['coach-'+x[0]]&&visible(x[1]));if(!step)return;
  const target=visible(step[1]);
  const view=target.getBoundingClientRect();if(view.top<80||view.bottom>innerHeight-100){target.scrollIntoView({block:'center',behavior:'instant'});}
- const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8),height=Math.min(b.height+8,180),bottom=top+height;
+ const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8),/* UI-Q113 §10. The mark used to stop at a flat 180px, so the customer card - the tallest
+    thing any lesson points at - was highlighted from the chin up and the frame the player was
+    being shown ran out of the cutout. The cap is the viewport's own share now: it still cannot
+    swallow a short screen, and it does wrap the card at every phone width. */
+ height=Math.min(b.height+8,Math.round(innerHeight*.34)),bottom=top+height;
  const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<innerHeight?bottom+12:Math.max(12,top-bh-12);
  const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
  root.innerHTML='<div class="coach-layer">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';

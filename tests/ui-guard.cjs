@@ -1301,15 +1301,19 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
  assert.ok(/\['supply','\.ingredients'/.test(steps),'the Supply/Fatigue lesson is on the arithmetic it explains');
  const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
- /* The readiness reading is labelled 환경 대응 and reads in the forecast now (UI-Q109), so the
-    lesson names it by the label the player actually sees. Both facts are still taught. */
- for(const point of ['압박','환경 대응','취약·불안·대응·충분'])
+ /* Approved copy. Each step is one decision unit in one or two sentences, so the lesson
+    names the two facts and stops: the pressure, which belongs to the Hazard, and 환경 대응,
+    which is this customer plus what they are carrying. The four-step ladder is no longer
+    recited - the screen states the customer's own step in the forecast, where the label is. */
+ for(const point of ['압박','환경 대응'])
   assert.ok(hazard.includes(point),'the Hazard lesson covers '+point);
  assert.ok(!hazard.includes('현재 대응'),'and does not name a label the screen no longer shows');
  const supply=/\['supply',[^\]]*\]/.exec(steps)[0];
- for(const point of ['요구량부터','페널티','피로'])
+ for(const point of ['필요 보급','페널티','피로'])
   assert.ok(supply.includes(point),'the Supply lesson covers '+point);
- assert.ok(/계산만 해 둔 숫자/.test(supply),'and says the conditional numbers are arithmetic, not a prediction');
+ /* Every lesson is short now: one decision unit, one or two sentences. */
+ for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
+  assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
  /* It must not hand over an answer, and must not expose the hidden formula. */
  const all=[...steps.matchAll(/'([^']{12,})'/g)].map(m=>m[1]).join(' ');
  for(const item of DATA.items)
@@ -1319,8 +1323,11 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/0\.06|\*\s*\.06|6%p/.test(all),'the hidden Supply-deficit formula is not taught');
  /* The frozen outlook is described as frozen, since that is what the screen now does. */
  const forecast=/\['forecast',[^\]]*\]/.exec(steps)[0];
- assert.ok(/카운터에 섰을 때/.test(forecast)&&/바뀌지 않는다/.test(forecast),
-  'the outlook lesson says the reading is fixed at SALE entry');
+ /* It still has to say the reading does not move as products are sold, and it must not be
+    read as the Items not mattering: the run uses the final supply, so the lesson says the
+    real result is seen after the expedition rather than claiming nothing changed. */
+ assert.ok(/갱신되지 않는다/.test(forecast),'the outlook lesson says the reading does not move');
+ assert.ok(/원정 후 확인/.test(forecast),'and that the real result is read after the expedition');
  /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
  assert.ok(/class="ingredients"/.test(app),'the exact Supply/Fatigue arithmetic is on the decision surface');
  /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
