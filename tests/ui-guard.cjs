@@ -136,7 +136,11 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  /* The Director review moved the bag out of the dossier and up beside the adventurer, so the
     lower column no longer grows a row just to repeat slot information. It is read with the
     customer now rather than after their Traits; everything below it keeps its order. */
- const order=['Scene.shelfStrip()','standee(n)','kitLine(n)','waitingLine(','returningSummary(n)','statGrid(n)','traitRows(n)','shelf()'];
+ /* UI-Q109 §8 moved the Trait rows below the goods. Measured on a phone they were the block
+    that pushed the first selectable product past the fold, and they are the one thing here a
+    product cannot move - the forecast and the four Core Stats are what 보급 후 변화 compares
+    against, so they still lead. Everything else keeps the order it had. */
+ const order=['Scene.shelfStrip()','standee(n)','kitLine(n)','waitingLine(','returningSummary(n)','statGrid(n)','shelf()','traitRows(n)'];
  let at=-1;for(const part of order){const i=sale.indexOf(part);assert.ok(i>at,'Sale stacks '+part+' in canonical mobile order');at=i;}
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
  assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
@@ -541,21 +545,36 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
    'internal role taxonomy is not rendered: '+label);
  assert.ok(!/D\.categories\[|D\.roles\[/.test(app),'and no render path looks it up');
 
- /* D-10. The outlook is about the expedition as a whole, and carries exactly two things:
-    the Combat Forecast and the conditional Death risk. The environment is not summarised a
-    second time here - it lives once, beside the destination, where each Hazard states its own
-    pressure and this NPC's readiness against it. */
+ /* D-10, as amended by UI-Q109. The rule it was written to protect is that the environment is
+    stated ONCE - never a verdict beside the destination and a second summary in the outlook.
+    That still holds; what moved is which of the two facts lives where.
+
+    The destination carries what is true of the PLACE whoever is at the counter: each Hazard
+    and the ability it presses on. THIS customer's readiness against it is judged against an
+    Item, so it reads in the outlook beside the other two readings a product is bought to
+    move. On a phone the per-Hazard readiness wrapped every plate row and pulled a third for
+    its own help control, which is what put the goods below the fold.
+
+    So: readiness appears exactly once, in the outlook, off the same frozen snapshot; the
+    plate renders Hazards with no readiness argument at all; and neither grows a copy of the
+    other's half. */
  const readout=fn('readout');
  assert.ok(readout.includes('전투 전망'),'the fight forecast is named');
  assert.ok(!readout.includes('환경 전망'),'the outlook carries no second environment verdict');
  assert.ok(!/환경 압박/.test(app),'and no collapsed environment duplicate survives anywhere');
  assert.ok(!/env-press/.test(app)&&!/env-press/.test(css),'the phone-only duplicate is gone with it');
  assert.ok(!/hazardList\(/.test(readout),'the outlook renders no Hazard rows of its own');
+ assert.ok(/환경 대응<b class="env-/.test(readout),'the outlook states this customer readiness');
+ assert.ok(/o\.worst/.test(readout),'and it is the engine canonical worst state, not a screen calculation');
  const plate=fn('destPlate');
- assert.ok(/hazardList\(Presentation\.known\(d,game\),n&&n\.outlook&&n\.outlook\.hazards\)/.test(plate),
-  'the destination plate is the one place Hazards and readiness appear, off the frozen snapshot');
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),null\)/.test(plate),
+  'the destination plate states Hazard pressure only, off the known-Hazard truth');
+ assert.ok(!/n\.outlook|n&&n\.outlook/.test(plate.replace(/\/\*[\s\S]*?\*\//g,'')),
+  'the plate reads no readiness of its own');
+ const codeOnly=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ assert.equal((codeOnly.match(/환경 대응<b/g)||[]).length,1,'the readiness reading is rendered in exactly one place');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
-  'and it is never hidden, since nothing else shows the environment now');
+  'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
     read off the frozen SALE-entry snapshot rather than recomputed as Items move, so the
     calculation moved into the systems layer with it. */
@@ -583,9 +602,14 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/ev\.key==='Escape'\)closeTips/.test(app),'and so does Escape');
  /* The counter tooltip states what the two columns ARE and stops. The readiness ladder, why
     the pressure is fixed and why the reading is frozen belong to the store guide. */
- const envTip=fn('destPlate');
- assert.ok(envTip.includes("'압박: 위험이 요구하는 능력치 · 현재 대응: 이 손님의 보급 전 대응 수준'"),
-  'the destination ? carries only the approved line');
+ /* The help follows the reading it explains: it moved to the outlook with 환경 대응, keeping
+    the approved line's structure and both of its halves - only the term the row is now
+    labelled with changed with the label. The plate keeps no ? of its own, so there is still
+    exactly one control explaining the two facts. */
+ const envTip=fn('readout');
+ assert.ok(envTip.includes("'압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준'"),
+  'the environment ? carries only the approved line');
+ assert.ok(!/class="tip"|tip\(/.test(fn('destPlate')),'and the destination plate grows no second one');
  for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','팔아도 바뀌지 않는다','확정된'])
   assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
  /* Each ? names its own reading and stops. Anything longer than one line is the store guide's
@@ -594,7 +618,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(lines.length===3,'there are exactly three counter tooltips');
  assert.ok(lines.every(n=>n===1),'and each one is a single line');
  for(const [label,text] of [['전투 전망','게이트 전투 요구 대비 현재 전투 준비 수준'],
-                            ['실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험']])
+                            ['실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험'],
+                            ['환경 대응','압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준']])
   assert.ok(app.includes("tip('"+label+"','"+text+"')"),label+' carries the approved line');
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
@@ -603,21 +628,23 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\.readout \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook balloon drops');
  assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
  assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
- assert.equal((readout.match(/\+tip\(/g)||[]).length,2,'the outlook explains the fight forecast and the Death risk');
- assert.ok(/tip\('환경 대응'/.test(fn('destPlate')),'and the environment keeps its own help, where the environment now lives');
+ /* All three counter readings are read here now, so all three ? controls are here (UI-Q109). */
+ assert.equal((readout.match(/\+tip\(/g)||[]).length,3,'the outlook explains the fight, the Death risk and the environment');
+ assert.ok(/tip\('환경 대응'/.test(readout),'and the environment help sits with the reading it explains');
  /* The "not a result" caution is on the block itself, under the forecasts, rather than spent
     inside a tooltip that has one line to name what it is showing. */
  assert.ok(/게이트 안에서 어떻게 될지까지는 아무도 모른다/.test(readout),
   'the outlook still says a forecast is not a result, on the block rather than in a tooltip');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
  assert.ok(/\.dest-plate \.tip>summary:focus-visible/.test(css),'on the plate too');
- // the help is its own row under the rows it explains, so nothing that hides the caps label
- // on a phone can take it with them
- /* a <details> cannot be a child of <p> - the parser would split them apart - so the row
-    that holds it is a <div> */
- assert.ok(/<div class="env-help">/.test(fn('destPlate')),'the environment help is its own row');
- assert.ok(!/<p class="env-help"/.test(app),'in an element that may actually contain a <details>');
- assert.ok(!/\.env-help[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
+ /* The help used to be a row of its own under the plate, which on a phone was a third line
+    for one control. It rides the reading it explains now, in the same .fore cell the other
+    two counter tooltips already use, so there is no separate row left to hide or to lose
+    with a hidden caps label. */
+ assert.ok(!/env-help/.test(app)&&!/env-help/.test(css),'the separate help row is gone, not merely hidden');
+ const envCell=readout.slice(readout.indexOf('환경 대응<b'),readout.indexOf("</span>':''",readout.indexOf('환경 대응<b')));
+ assert.ok(envCell.includes("tip('환경 대응'"),'the environment help sits in the same cell as the reading');
+ assert.ok(!/\.readout \.fore>\.tip[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
 
  /* SALE_v2.7 §SALE DECISION-ONLY DETAIL: no disclosure control on the decision surface that
     opens flavour prose. The real effects it used to hide are still shown - plainly, not folded

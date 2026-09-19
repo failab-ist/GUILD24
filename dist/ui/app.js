@@ -319,6 +319,13 @@ function readout(n,extra=null,cls=''){
      percentage, said as a conditional - never as the chance this expedition ends in death. */
   +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
    +tip('실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험')+'</span>'
+  /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
+     weakest of the Hazard states the destination plate lists, in the same canonical
+     vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
+     here because it is judged against an Item, beside the other two readings a product is
+     bought to move. No new label and no new calculation. */
+  +(o.worst?'<span class="fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>'
+   +tip('환경 대응','압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준')+'</span>':'')
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  /* DUNGEON_HAZARD_v2.7 §PLAYER-FACING INFORMATION BOUNDARY. These are decision ingredients,
@@ -385,8 +392,17 @@ function saleScreen(){
  +'</section>'
  +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
-  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+traitRows(n)+deepOfferUI(n)+specialUI()+'</div>'
-  +shelf()+ownedRelicView()
+  /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
+     the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
+     were the block that pushed the first product row past the fold. They are the one thing
+     here that a product cannot move: the forecast and the four Core Stats are exactly what
+     보급 후 변화 compares against when a product is picked, so they lead, and the Traits read
+     as the standing description they are, under the goods. Nothing is dropped, no wording
+     changes, and the wide layout still sets both columns side by side. */
+  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+specialUI()+'</div>'
+  +shelf()
+  +'<div class="dossier traits">'+traitRows(n)+'</div>'
+  +ownedRelicView()
  +'</main>'
  /* D-34. Every price on this screen is a judgement against what the store has, and the
     store's gold was the one number not on it - Morning, Order and Closing all show it and
@@ -626,15 +642,19 @@ function effectList(it,compact=false){const rows=Presentation.rows(it.effects);c
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}</span>${tr.note?`<small>${E(tr.note)}</small>`:''}</div>`;}).join('')}</div>`;}
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
- /* SALE_v2.7: the readiness shown beside each Hazard is the frozen SALE-entry snapshot, the
-    same one the outlook reads, so committing an Item does not move it. Outside SALE there is
-    no customer and no snapshot, and the plate shows the Hazards and their pressure alone. */
+ /* The plate says what is fixed about where this customer is going: the Gate, each Hazard it
+    carries, and the ability that Hazard presses on. That is true of the place whoever is at
+    the counter, so it stays in the band beside them.
+
+    THIS customer's readiness against it is the other kind of fact, and it now reads in the
+    forecast instead (UI-Q109). Two reasons, both measured on a phone: per-Hazard readiness
+    wrapped every row onto a second line and pulled a third for its own help control - it was
+    the tallest thing in the band for the least information - and the readiness is what the
+    player weighs an Item against, so it belongs with 전투 전망 and 실패 시 사망 위험 on the
+    decision surface rather than a screen above it. Nothing is lost: 환경 대응 states the same
+    canonical snapshot, in the same vocabulary, from the same outlook. */
  +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'
- +hazardList(Presentation.known(d,game),n&&n.outlook&&n.outlook.hazards)
- /* The help sits under the rows it explains rather than on the plate's caps label: opened, it
-    is a full-width paragraph, and inside the label it pushed the destination name out of the
-    grid. It is the only place the two Hazard facts are explained, so it is never dropped. */
- +(n&&n.outlook?'<div class="env-help">'+tip('환경 대응','압박: 위험이 요구하는 능력치 · 현재 대응: 이 손님의 보급 전 대응 수준')+'</div>':'')
+ +hazardList(Presentation.known(d,game),null)
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
