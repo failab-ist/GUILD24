@@ -17,7 +17,7 @@ const tunes={day:[262,330,392,330,294,349,440,349],night:[220,262,294,262,196,24
    music voices are raised toward the effects voice rather than the effects being pulled down.
    Attenuating SFX would have made the mix quieter overall and faked loud music, which the
    owner names as a FAIL. The effects voice is unchanged. */
-const BGM_VOICE=.032,BGM_BASS=.040,SFX_VOICE=.035;
+const BGM_VOICE=.035,BGM_BASS=.044,SFX_VOICE=.035;
 /* UI-Q114 §SOFT UI / §STORE SYSTEM. `ui` is the one quiet shared click for reference and
    navigation - opening a panel, a tab, the next coach step - so those stop being silent
    without every press earning a sound of its own. `fixture` is a short double knock for
