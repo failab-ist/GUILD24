@@ -8,9 +8,9 @@ DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=SCOPED_DECORATION_PACKAGE_REFERENCE
 FREEZE_DATE=2026-09-19
 LAST_APPROVED_AMENDMENT=2026-09-19
-SSOT_AUDIT_STATUS=DECORATION_PACKAGE_SYNCED_BALANCE_APPROVED
+SSOT_AUDIT_STATUS=DECORATION_PACKAGE_SYNCED_STORE_CAPITAL_AMENDMENT
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
-SOURCE_ADOPTION_STATUS=SCOPED_DECORATION_PACKAGE_ADOPTED_NO_PROJECT_WIDE_V2_8_ADOPTION
+SOURCE_ADOPTION_STATUS=SCOPED_PACKAGE_BASE_ADOPTED_STORE_CAPITAL_AMENDMENT_PENDING
 V2_8_SOURCE_EDIT_GATE=DECORATION_PACKAGE_ONLY
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -143,25 +143,25 @@ They are historical assets, not active Runtime.
 
 ## BALANCE APPROVAL GATE
 
-The structure above is approved Design.
+The Decoration Package structure is approved Design.
 
-The following exact numerics are not yet approved for Production:
-- Store Capital Day-band conversion rates
-- initial Decoration prices
-- late Gate Power candidate
-- NPC Wallet candidate
-- Hazard Counter Item candidate / price alignment if needed
+The current v2.7 execution line has already adopted the initial Decoration package and the
+approved Gate / Wallet / Hazard-Counter bundle. The only new pending scoped adoption is the
+Store Capital formula owned by `META_v2.8.0.md`.
 
-WORK may measure and recommend candidates but may not choose Production truth.
-
-Required integrated proposal evaluates these together, including Decoration ownership states, rather than tuning the core first and rebalancing again after Meta is added.
-
-Until User/Director approves the integrated bundle:
+Current Store Capital Design Truth is:
 
 ```text
-NO Decoration-package Production adoption
-NO v2.7 balance numeric change
+actual Gross Sales × reached-Day conversion rate
 ```
+
+The exact rate table and Decoration prices live only in the META owner.
+
+The rate table is a `DIRECTOR DOCUMENT BASELINE`: WORK validates it against the approved
+acquisition expectation and anti-farm conditions, but does not auto-tune it. A material miss is
+reported as a Balance Finding for User/Director approval.
+
+No project-wide v2.8 Source Adoption is implied.
 
 ## SOURCE ARCHIVE REQUIREMENT
 
