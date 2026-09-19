@@ -45,7 +45,7 @@ const contribution=p=>p.effects.combat*.50+p.effects.survival*.34+p.effects.mobi
  -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*1.70;
 
 function blank(runs,policy,pricing,build){
- return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaGrade:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
+ return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaStore:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
   /* 2026-09-12 amendment, measurement only. greatByBand buckets Great Success by how far the
      prepared Combat ability ran ahead of the Gate, which is the thing Stage 9 has to judge the
      curve on; prepStartGold samples the D29 close, before any D30 preparation spend. */
@@ -434,7 +434,7 @@ function playRun(g,out,ctx){
  }
  /* D25 is the Final reveal and the DAY 25 Franchise Achievement, so it is its own band. */
  for(const d of [10,20,25,30])if(s.day>=d)out.reachBy[d]++;
- out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaGrade+=G.Meta.grade(g.account);out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
+ out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaStore+=(g.account.store?.owned||[]).length;out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
  /* measurement only - how often a Rare Reference identity actually turns up, so the starting
     chance can be judged on evidence in Stage 9 rather than on the number itself. */
  {const seen=s.npcs.filter(n=>G.Adventurer.EASTER.some(e=>e.name===n.name)).length;out.easter+=seen;out.easterRuns+=Number(seen>0);}
@@ -505,27 +505,22 @@ function masterySpawnPatch(){
 }
 function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',contract='standard'}={}){
  const byIndex=[],byGrade={},accountsEnd=[],firstClear=[];
- /* META_v2.7 Balance Fix: which Run index each Franchise Achievement is first earned on.
-    Read from the account after every Run, so it is real accumulation, never a seeded state. */
- const firstEarned={};for(const f of G.Meta.FRANCHISE)firstEarned[f.id]=[];
  for(let i=0;i<runs;i++)byIndex.push(blank(trajectories,policy,pricing,build));
  for(let t=0;t<trajectories;t++){
   const account=G.Meta.fresh();
   /* When this account first beat a Boss, and what it actually held at that moment. Recorded
      once per trajectory from real results - nothing is seeded. */
-  let clearedAt=null;const earned=new Set();
+  let clearedAt=null;
   for(let i=0;i<runs;i++){
-   const before={grade:G.Meta.grade(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account),franchise:G.Meta.franchiseCount(account)};
+   const before={grade:1,mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account),franchise:(account.store?.owned||[]).length};
    const g=new G.Game(account);g.autosave=false;
    /* Which start contract the trajectory uses is a strategy choice, not a Meta fact, so it is
       the caller's: 'standard' holds it constant and isolates what grade and unlocks alone do,
       'best' takes the most advanced contract the account has actually earned. `start` rejects
       a locked contract, so neither mode can grant something the account has not unlocked. */
-   let started=contract;
-   if(contract==='best'){started='standard';for(const c of D.contracts)if(G.Meta.contractUnlocked(account,c))started=c.id;}
-   const available=D.contracts.filter(c=>G.Meta.contractUnlocked(account,c)).length;
-   g.start(prefix+'-'+t+'-'+i,started);
-   const grade=before.grade;
+   const started='standard',available=1;
+   g.start(prefix+'-'+t+'-'+i);
+   const grade=before.grade,decorations=before.franchise;
    const bucket=byGrade[grade]??=blank(0,policy,pricing,build);
    playRun(g,byIndex[i],{policy,pricing,build,seed:t});
    /* The grade bucket re-reads the same Run from the per-index cohort's last entry rather
@@ -536,7 +531,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
       grade bucket's reach10/20/25/30 read 0 no matter how far its Runs got. Filled here from
       the same Run, so the two views of one Run cannot disagree. */
    for(const d of [10,20,25,30])if(g.run.day>=d)bucket.reachBy[d]++;
-   bucket.metaMastery+=before.mastery;bucket.metaDistinct+=before.distinct;bucket.metaGrade+=grade;
+   bucket.metaMastery+=before.mastery;bucket.metaDistinct+=before.distinct;bucket.metaStore+=decorations;
    if(g.run.bossDebug){bucket.final.resolved++;bucket.final.power+=g.run.bossDebug.power;bucket.final.assault+=g.run.bossDebug.assault;bucket.final.margin+=g.run.bossDebug.assault-g.run.bossDebug.bossPower;bucket.final.cleared+=Number(!!g.run.win);}
    bucket.money+=g.run.money;bucket.deaths+=g.run.stats.deaths;
    /* Expeditions actually run and adventurers actually lost, so a per-expedition Death rate can
@@ -551,8 +546,6 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
       the same way per Run index and per Grade - one definition, two views. */
    byIndex[i].expeditions=(byIndex[i].expeditions||0)+g.run.npcs.reduce((n,x)=>n+x.records.length,0);
    byIndex[i].expDeaths=(byIndex[i].expDeaths||0)+g.run.stats.deaths;
-   for(const f of G.Meta.franchiseState(account))
-    if(f.done&&!earned.has(f.id)){earned.add(f.id);firstEarned[f.id].push(i);}
    if(g.run.win&&clearedAt===null)
     clearedAt={runIndex:i,grade:before.grade,franchise:before.franchise,mastery:before.mastery};
    byIndex[i].contracts??={};byIndex[i].contracts[started]=(byIndex[i].contracts[started]||0)+1;
@@ -565,7 +558,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    byIndex[i].franchiseAtStart??=0;byIndex[i].franchiseAtStart+=before.franchise;
    byIndex[i].contractsAvailable??=0;byIndex[i].contractsAvailable+=available;
   }
-  accountsEnd.push({grade:G.Meta.grade(account),franchise:G.Meta.franchiseCount(account),mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
+  accountsEnd.push({grade:1,franchise:(account.store?.owned||[]).length,mastery:G.Meta.totalJobMastery(account),distinct:G.Meta.distinctBossClear(account)});
   firstClear.push(clearedAt);
  }
  return {mode:'trajectory',policy,pricing,build,contractMode:contract,trajectories,runsPerTrajectory:runs,
@@ -579,10 +572,6 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    runIndex:firstClear.filter(Boolean).map(c=>c.runIndex),
    grade:firstClear.filter(Boolean).map(c=>c.grade),
    franchise:firstClear.filter(Boolean).map(c=>c.franchise)},
-  /* Per Achievement: how many accounts ever earned it, and on which Run index each one did.
-     An Achievement absent from every account is the one this reports by an empty list. */
-  firstEarned:Object.fromEntries(G.Meta.FRANCHISE.map(f=>[f.id,
-   {name:f.name,earnedBy:firstEarned[f.id].length,runIndex:firstEarned[f.id]}])),
   accountsEnd};
 }
 

@@ -2,7 +2,7 @@
 // Covers TRAIT-Q01/Q03/Q04/Q07/Q13/Q14/Q15/Q16/Q17, UI-Q32/Q34/Q39, COPY-001/COPY-002.
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 function fresh(seed='traits'){const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g;}
 const CATALOG=['용감함','겁쟁이','대식가','소식가','신중함','무모함','탐욕','구두쇠','충동구매','허세','천재','강골','허약함','포션체질','화염공포증','행운아','불운아','수집가','실속파','사교적인','낯가림','회복체질','지구력','쉽게 지침','눈썰미','해독가','수족냉증','준비성','악바리','냉담한'];

@@ -19,11 +19,54 @@ function freshMatrix(){
  return m;
 }
 
+function freshStore(){
+ /* META_v2.8 §DECORATION COLLECTION / LOADOUT. Ownership and activation are separate, and the
+    loadout is keyed by Slot rather than by the four ids, so a Slot can hold alternatives later
+    without this shape changing. */
+ return {capital:0,owned:[],loadout:Object.fromEntries(D.decorationSlots.map(s=>[s,null]))};
+}
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
   runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{premium:false,tree:false},
+  store:freshStore(),
+  /* Retired v2.7 Franchise payload, kept dormant for data preservation only: no active effect,
+     no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
   franchise:freshFranchise()};
 }
+/* META_v2.8 §DECORATION COLLECTION / LOADOUT — the Account side. Nothing here reads or writes a
+   Relic: a Decoration never enters `run.facilities`, never marks a Relic owned and never consumes
+   a Relic slot. */
+const store=a=>(a.store??=freshStore());
+const decorationOwned=(a,id)=>store(a).owned.includes(id);
+function buyDecoration(a,id){
+ const d=D.decorationBy[id];if(!d)throw Error('없는 장식입니다.');
+ const st=store(a);
+ if(st.owned.includes(id))throw Error('이미 보유한 장식입니다.');
+ if(st.capital<d.price)throw Error('점포 자본이 부족합니다.');
+ st.capital-=d.price;st.owned.push(id);
+ /* Buying is not equipping. An empty Slot simply takes the first thing bought for it, which is
+    a convenience, not a rule - it can be unequipped again. */
+ if(!st.loadout[d.slot])st.loadout[d.slot]=id;
+ return d;
+}
+function equipDecoration(a,slot,id){
+ const st=store(a);
+ if(!D.decorationSlots.includes(slot))throw Error('없는 자리입니다.');
+ if(id!==null){const d=D.decorationBy[id];
+  if(!d||d.slot!==slot)throw Error('이 자리에 놓을 수 없는 장식입니다.');
+  if(!st.owned.includes(id))throw Error('아직 보유하지 않은 장식입니다.');}
+ st.loadout[slot]=id;
+ return st.loadout;
+}
+/* What a Run would start with: one owned Decoration per Slot, empty Slots dropped. A Run freezes
+   a copy of this at start and never re-reads the Account. */
+function plannedLoadout(a){const st=store(a);
+ return Object.fromEntries(D.decorationSlots
+  .map(s=>[s,st.loadout[s]&&st.owned.includes(st.loadout[s])?st.loadout[s]:null])
+  .filter(([,id])=>id));}
+/* META_v2.8 §STORE CAPITAL. The Day the Run reached picks the rate; nothing else does. */
+const capitalRate=day=>(D.capitalRates.find(b=>day<=b.maxDay)||D.capitalRates.at(-1)).rate;
+function addCapital(a,amount){const st=store(a);st.capital+=Math.max(0,Math.round(amount));return st.capital;}
 /* META_v2.7 §FRANCHISE ACHIEVEMENTS. Ten binary achievements, each contributing exactly one
    completion; repeating a completed one adds nothing. The cumulative counters live on the
    account because they represent account-level play history; the one-Run ones are judged
@@ -43,56 +86,23 @@ const totalJobMastery=a=>JOBS().reduce((sum,job)=>sum+jobMastery(a,job),0);
    with a second Job adds Mastery but not another distinct clear. */
 const distinctBossClear=a=>BOSSES().filter(boss=>JOBS().some(job=>a.matrix?.[job]?.[boss])).length;
 
-/* META_v2.7 §FRANCHISE ACHIEVEMENTS — CURRENT APPROVED SET. The baselines are DIRECTOR
-   DOCUMENT BASELINE values: QA may report a BALANCE FINDING against them but may not tune
-   them here. `run` is judged only for the one-Run achievements, which need a Run to look at. */
-const FRANCHISE=[
- {id:'sales',      name:'누적 판매 80회',             done:(a)=>(a.franchise?.sales||0)>=80,
-  have:(a)=>a.franchise?.sales||0,                want:80},
- {id:'overcharge', name:'150% 판매 20회 성공',        done:(a)=>(a.franchise?.overcharged||0)>=20,
-  have:(a)=>a.franchise?.overcharged||0,          want:20},
- {id:'returning',  name:'재방문 손님에게 20회 판매',   done:(a)=>(a.franchise?.returning||0)>=20,
-  have:(a)=>a.franchise?.returning||0,            want:20},
- {id:'relics',     name:'점포지원 누적 15개 구매',     done:(a)=>(a.franchise?.relics||0)>=15,
-  have:(a)=>a.franchise?.relics||0,               want:15},
- {id:'families',   name:'다섯 게이트 전부에서 보급 생환',done:(a)=>(a.franchise?.families||[]).length>=5,
-  have:(a)=>(a.franchise?.families||[]).length,   want:5},
- {id:'nowaste',    name:'폐기 0개로 DAY 25 도달',      done:(a)=>(a.franchise?.done||[]).includes('nowaste')},
- {id:'nodeath',    name:'사망 0명으로 마왕성 도달',     done:(a)=>(a.franchise?.done||[]).includes('nodeath')},
- {id:'allsupplied',name:'출전 전원 보급 후 마왕 토벌',  done:(a)=>(a.franchise?.done||[]).includes('allsupplied')},
- {id:'grosssales', name:'매출 10,000G + 마왕 토벌',    done:(a)=>(a.franchise?.done||[]).includes('grosssales')},
- {id:'matrix',     name:'직업×마왕 42/42 토벌',       done:(a)=>totalJobMastery(a)>=42}];
-/* The cumulative ones carry their own running count so a screen can say how far along the
-   account is without re-deriving the threshold from the name. The one-Run ones have no
-   running count to show - they are a result, not a tally - and report none. */
-const franchiseState=a=>FRANCHISE.map(f=>({id:f.id,name:f.name,done:f.done(a),
- have:f.have?Math.min(f.have(a),f.want):null,want:f.want??null}));
-const franchiseCount=a=>FRANCHISE.reduce((n,f)=>n+(f.done(a)?1:0),0);
-/* META_v2.7 §FRANCHISE GRADE: the Grade is the completion count, not Total Job Mastery.
-   0/10 base, then a step at 2, 4, 6 and 8, and the honour grade at 10/10. */
-const GRADE_STEPS=[0,2,4,6,8,10];
-/* How many completions a Grade costs, and the Grade a count buys - one ladder read from both
-   ends, so a screen that shows the progress toward a Grade cannot disagree with the judgment
-   that opens it. Grade 1 is the base and asks for nothing. */
-const gradeRequirement=g=>GRADE_STEPS[Math.max(0,Math.min(GRADE_STEPS.length-1,g-1))];
-const grade=a=>{const n=franchiseCount(a);
- let g=1;for(let i=1;i<GRADE_STEPS.length;i++)if(n>=GRADE_STEPS[i])g=i+1;return g;};
-/* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE. Always applied, ORDER only. */
-const orderDiscount=a=>(grade(a)-1)*0.02;
+/* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM. Franchise Grade, the ten Achievements, the Grade
+   ORDER discount and the Grade-gated Start Contract are retired from active gameplay. The final
+   v2.7 implementation is preserved under archive/inactive/v2_7_franchise/ and is never imported.
+   Active runtime derives no Grade, applies no discount, credits no Achievement and gates nothing
+   on retired state. The account's `franchise` block may persist dormant for data preservation. */
+const contractUnlocked=()=>true;
 
-/* What a given progression state has opened. The only three content unlocks are the
-   approved distinct-Boss gates; Start Contracts are gated by Grade and listed in the
-   catalogue, so both are derived here rather than stored as a list of keys. */
+/* What a given progression state has opened. Since the Grade-gated Start Contract is retired,
+   the only content unlocks left are the approved distinct-Boss gates. */
 function opened(a){
- const n=distinctBossClear(a),g=grade(a);
+ const n=distinctBossClear(a);
  return {items:D.items.filter(i=>i.metaUnlock&&n>=i.metaUnlock).map(i=>i.id),
-  jobs:D.jobs.filter(j=>j.metaUnlock&&n>=j.metaUnlock).map(j=>j.id),
-  contracts:D.contracts.filter(c=>!c.grade||g>=c.grade).map(c=>c.id)};
+  jobs:D.jobs.filter(j=>j.metaUnlock&&n>=j.metaUnlock).map(j=>j.id)};
 }
 
 const itemUnlocked=(a,it,day=1)=>{if(it.id==='premium')return !!a.unlocks?.premium&&day>=10;if(it.id==='tree')return !!a.unlocks?.tree&&day>=14;return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
 const jobUnlocked=(a,j)=>!j.metaUnlock||distinctBossClear(a)>=j.metaUnlock;
-const contractUnlocked=(a,c)=>!c.grade||grade(a)>=c.grade;
 
 /* What one expedition leaves on the account. Dungeon knowledge accrues only when a supplied
    adventurer comes home alive: there is no route that farms knowledge by sending people out
@@ -103,11 +113,7 @@ function observe(a,report,n){
  for(const e of report.events||[])
   if(!a.discoveries.some(x=>x.id===e.id)){a.discoveries.push({...e,day:report.day});report.discoveries.push(e);}
  const d=D.dungeonBy[report.dungeon]||D.dungeonBy.spider;
- if(report.items.length && report.outcome!=='사망'){a.knowledge[d.id]=(a.knowledge[d.id]||0)+1;
-  /* META_v2.7 §FRANCHISE ACHIEVEMENT 5: an actual supplied survival, per Dungeon Family. It
-     recognises the same event knowledge does - no hidden Relic or build taxonomy. */
-  const fr=a.franchise??=freshFranchise();
-  const fam=d.family||d.id;if(fam&&!fr.families.includes(fam))fr.families.push(fam);}
+ if(report.items.length && report.outcome!=='사망')a.knowledge[d.id]=(a.knowledge[d.id]||0)+1;
 }
 
 /* End of run. A run settles exactly once (the rewarded guard). A clear marks one cell for
@@ -123,38 +129,26 @@ function finish(a,run,win){
  run.rewarded=true;
  a.runs++;
  run.metaGain=null;
- /* META_v2.7 §FRANCHISE ACHIEVEMENTS 7-9. Judged inside this one Run exactly as written, and
-    marked once - a completed achievement never credits again. 7 is about REACHING the Final,
-    so it settles whether or not the Boss fell; 8 and 9 require the CLEAR. 6 is not here at
-    all: it settles at DAY 25, in the morning that reaches it, long before a Run ends. */
- {const fr=a.franchise??=freshFranchise();
-  const mark=id=>{if(!fr.done.includes(id))fr.done.push(id);};
-  /* A missing record is not evidence of a clean Run. These four read what the Run actually
-     kept, so a Run with no stats record credits nothing rather than everything. */
-  const st=run.stats;
-  const reachedFinal=!!run.finalReport||run.day>=30;
-  if(st&&reachedFinal&&!st.deaths)mark('nodeath');
-  if(win&&st){
-   const members=run.finalReport?.members||[];
-   if(members.length&&members.every(m=>(m.items||[]).length))mark('allsupplied');
-   if((st.revenue||0)>=10000)mark('grosssales');
-  }}
  if(!win)return [];
  a.wins++;
- const before=opened(a),wasGrade=grade(a);
+ const before=opened(a);
  const jobs=[...new Set((run.finalReport?.members||[]).map(m=>m.job))];
  const wasMastery=Object.fromEntries(jobs.map(job=>[job,jobMastery(a,job)]));
  for(const job of jobs)if(a.matrix[job]&&run.bossId in a.matrix[job])a.matrix[job][run.bossId]=true;
  run.metaGain={
   jobs:jobs.filter(job=>jobMastery(a,job)>wasMastery[job])
            .map(job=>({job,from:wasMastery[job],to:jobMastery(a,job)})),
-  grade:grade(a)>wasGrade?{from:wasGrade,to:grade(a)}:null};
+  grade:null};
  const after=opened(a);
- const names=[...D.items,...D.jobs,...D.contracts];
- return ['items','jobs','contracts'].flatMap(k=>after[k].filter(id=>!before[k].includes(id)))
+ const names=[...D.items,...D.jobs];
+ return ['items','jobs'].flatMap(k=>after[k].filter(id=>!before[k].includes(id)))
   .map(id=>names.find(x=>x.id===id)?.name).filter(Boolean);
 }
 
-G.Meta={fresh,freshFranchise,FRANCHISE,franchiseState,franchiseCount,orderDiscount,observe,finish,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,grade,
- opened,itemUnlocked,jobUnlocked,contractUnlocked,gradeRequirement,JOBS,BOSSES};
+const storeCapital=a=>store(a).capital;
+const ownedDecorations=a=>[...store(a).owned];
+const storeLoadout=a=>({...store(a).loadout});
+G.Meta={fresh,freshFranchise,observe,finish,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
+ opened,itemUnlocked,jobUnlocked,contractUnlocked,JOBS,BOSSES,
+ freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital};
 })(globalThis);

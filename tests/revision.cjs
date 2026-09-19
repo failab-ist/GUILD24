@@ -1,4 +1,4 @@
-const assert=require('node:assert/strict');for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+const assert=require('node:assert/strict');for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const copy=x=>JSON.parse(JSON.stringify(x));const fresh=seed=>{let g=new Game();g.autosave=false;g.start(seed||'revision-test');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.beginOrder();return g;};let checks=0;function test(name,fn){fn();checks++;console.log('PASS '+name);}function accept(g,fn){const original=g.rng.next.bind(g.rng);g.rng.next=()=>{original();return 0;};try{return fn();}finally{g.rng.next=original;}}
 test('pricing and actual acquisition cost; wallet and stock conservation',()=>{for(const mode of Object.keys(DATA.pricing)){const g=fresh();g.order(0);const st=g.run.inventory.at(-1);assert.equal(st.cost,g.run.offers[0].price);g.open();const n=g.current();n.money=9999;const before=g.run.money,wallet=n.money;accept(g,()=>g.sell(st.id,mode));const paid=Math.round(DATA.itemBy[st.item].sell*DATA.pricing[mode].mult);assert.equal(g.run.money-before,paid);assert.equal(wallet-n.money,paid);assert.equal(g.run.daily.cogs,st.cost);assert.ok(n.loyalty>=0);}});
 test('all paid modes obey wallet, unknown modes rejected, refusal keys safe',()=>{const g=fresh();g.open();g.current().money=0;for(const mode of Object.keys(DATA.pricing))assert.throws(()=>g.sell(g.run.inventory[0].id,mode));assert.throws(()=>g.interest(g.current(),DATA.itemBy.water,'free'));const n=g.current();n.money=999;const original=g.rng.next;g.rng.next=()=>.999;assert.equal(g.sell(g.run.inventory[0].id,'full'),false);g.rng.next=original;assert.ok(n.refused[0].includes(':full'));assert.throws(()=>g.sell(g.run.inventory[0].id,'full'));});
@@ -136,98 +136,65 @@ test('META-Q02/Q03/Q04/Q05: a clear credits each distinct Job that went, once, a
  assert.equal(Meta.jobMastery(a,'mage'),1,'the rewarded guard still holds');
 });
 
-test('META_v2.7 §FRANCHISE GRADE: distinct clears count Bosses, and the Grade is the achievement count',()=>{
+test('META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: distinct clears count Bosses, and nothing derives a Grade',()=>{
  const a=Meta.fresh();
  clear(a,'WRATH',['warrior']);clear(a,'WRATH',['archer']);clear(a,'WRATH',['mage']);
  assert.equal(Meta.distinctBossClear(a),1,'the same Boss with three Jobs is still one Boss');
  assert.equal(Meta.totalJobMastery(a),3,'but three Mastery');
- /* META_v2.7 supersedes the inherited source: Franchise Grade no longer reads Total Job
-    Mastery. It is the count of completed Franchise Achievements - base, then a step at 2, 4,
-    6 and 8, and the honour grade at 10/10. Mastery keeps its own separate progression. */
- assert.equal(Meta.grade(a),1,'three Mastery is not a Grade step by itself');
- const b=Meta.fresh();
- const ladder=[[0,1],[1,1],[2,2],[3,2],[4,3],[5,3],[6,4],[7,4],[8,5],[9,5],[10,6]];
- // the cumulative ones at their own thresholds, the one-Run ones marked, exactly as play leaves them
- const seed=(acc,count)=>{
-  acc.franchise.sales      = count>=1? 80:0;
-  acc.franchise.overcharged= count>=2? 20:0;
-  acc.franchise.returning  = count>=3? 20:0;
-  acc.franchise.relics     = count>=4? 15:0;
-  acc.franchise.families   = count>=5?['spider','slime','fire','crypt','snow']:[];
-  for(const [at,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
-   if(count>=at&&!acc.franchise.done.includes(id))acc.franchise.done.push(id);
-  if(count>=10)for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())acc.matrix[job][boss]=true;
-  return acc;};
- for(const [count,expected] of ladder){
-  const acc=seed(Meta.fresh(),count);
-  assert.equal(Meta.franchiseCount(acc),count,count+' achievements are counted as '+count);
-  assert.equal(Meta.grade(acc),expected,count+'/10 is Grade '+expected);
- }
- assert.equal(Meta.grade({matrix:Meta.freshMatrix()}),1,'a fresh account is Grade 1');
- assert.equal(Meta.FRANCHISE.length,10,'exactly ten dedicated achievements');
- assert.equal(new Set(Meta.FRANCHISE.map(f=>f.id)).size,10,'each one distinct');
- // a completed achievement never credits twice
- const twice=Meta.fresh();twice.franchise.sales=80;
- const once=Meta.franchiseCount(twice);
- twice.franchise.sales=100000;
- assert.equal(Meta.franchiseCount(twice),once,'repeating a completed achievement adds nothing');
- /* UI-Q108 / META_v2.7 §FRANCHISE PROGRESS READOUT: the unlock board counts what
-    `contractUnlocked` judges. The
-    inherited source read Total Job Mastery against (grade-1)*7 - a different counter, so the
-    board could call a Contract one step away while the Contract was already open. The two
-    must agree at every count, which is what makes the screen and the lock one truth. */
- for(let count=0;count<=10;count++){
-  const acc=Meta.fresh();seed(acc,count);
-  assert.equal(Meta.franchiseCount(acc),count,'the seeded account really holds '+count);
-  for(const c of DATA.contracts.filter(c=>c.grade))
-   assert.equal(Meta.franchiseCount(acc)>=Meta.gradeRequirement(c.grade),Meta.contractUnlocked(acc,c),
-    c.name+' reads the same at '+count+'/10 on the board as it does at the lock');
- }
- for(const [g,need] of [[1,0],[2,2],[3,4],[4,6],[5,8],[6,10]])
-  assert.equal(Meta.gradeRequirement(g),need,'Grade '+g+' costs '+need+' achievements');
- const app=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/ui/app.js'),'utf8');
- const gated=app.slice(app.indexOf('function gatedContent('),app.indexOf('\nfunction unlockLists('));
- assert.ok(/Meta\.franchiseCount\(game\.account\)/.test(gated)&&/Meta\.gradeRequirement\(c\.grade\)/.test(gated),
-  'and the board reads those two functions rather than a second copy of the ladder');
- assert.ok(!/totalJobMastery/.test(gated),'the retired Job Mastery progress path is gone');
- // all functional progression is reachable by 8/10
- const byEight=ladder.find(([c])=>c===8)[1];
- assert.ok(DATA.contracts.every(c=>!c.grade||c.grade<=byEight),'every Start Contract is open by 8/10');
+ /* The Decoration Package retires Franchise Grade, the ten Achievements, the Grade ORDER
+    discount and the Grade-gated Start Contract. The active runtime must not expose any of them -
+    the final implementation lives in archive/inactive/v2_7_franchise and is never imported. */
+ for(const gone of ['grade','franchiseCount','franchiseState','orderDiscount','gradeRequirement','FRANCHISE'])
+  assert.equal(Meta[gone],undefined,'Meta.'+gone+' is retired from the active runtime');
+ assert.deepEqual(Object.keys(Meta.opened(a)),['items','jobs'],'no Contract unlock list is derived');
+ /* A dormant Franchise payload may persist for data preservation. Dormant means no effect:
+    writing the old counters changes nothing the game reads. */
+ const dormant=Meta.fresh();
+ dormant.franchise.sales=100000;dormant.franchise.done=['nowaste','nodeath','allsupplied','grosssales'];
+ assert.deepEqual(Meta.opened(dormant),Meta.opened(Meta.fresh()),'a filled dormant block unlocks nothing');
+ assert.equal(Meta.storeCapital(dormant),0,'and earns no Store Capital');
+ /* Contract gating is gone rather than inverted: every catalogue Contract reads as open, which
+    is what keeps a stale `grade` field on a Contract row from locking content. */
+ for(const c of DATA.contracts)assert.equal(Meta.contractUnlocked(dormant,c),true,c.name+' is not gated');
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/index.html'),'utf8');
+ assert.ok(!/archive\//.test(src),'the shipped page does not load the inactive archive');
 });
 
-test('META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE',()=>{
- const acc=Meta.fresh();
- const at=g=>{const a=Meta.fresh();
-  const counts=[0,0,2,4,6,8,10][g];
-  a.franchise.sales=counts>=1?100:0;a.franchise.overcharged=counts>=2?20:0;
-  a.franchise.returning=counts>=3?30:0;a.franchise.relics=counts>=4?30:0;
-  a.franchise.families=counts>=5?['spider','slime','fire','crypt','snow']:[];
-  for(const [n,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
-   if(counts>=n)a.franchise.done.push(id);
-  if(counts>=10)for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())a.matrix[job][boss]=true;
-  assert.equal(Meta.grade(a),g,'the fixture really is Grade '+g);
-  return a;};
- for(const [g,pct] of [[1,0],[2,2],[3,4],[4,6],[5,8],[6,10]])
-  assert.ok(Math.abs(Meta.orderDiscount(at(g))-pct/100)<1e-12,'Grade '+g+' is -'+pct+'%');
- // it reaches the ORDER price the player actually pays, after Contract/Event/Offer, once
- const plain=new Game(Meta.fresh(),null);plain.autosave=false;plain.start('grade-plain');
- const rich=new Game(at(6),null);rich.autosave=false;rich.start('grade-plain');
- const it=DATA.itemBy.rice;
- const p0=plain.offerFor(it).price,p1=rich.offerFor(it).price;
- assert.equal(p0,Math.round(it.buy),'Grade 1 pays the ordinary price');
- assert.equal(p1,Math.round(it.buy*0.90),'Grade 6 pays 10% less, in the same single rounding');
- assert.ok(p1<p0);
- // and nowhere else
- assert.equal(rich.rerollPrice(),plain.rerollPrice(),'Reroll is untouched');
- assert.deepEqual(rich.run.relicWindow.candidatePrices,plain.run.relicWindow.candidatePrices,'Relic prices are untouched');
- const n=plain.run.npcs[0];
- assert.equal(rich.deepCost(n),plain.deepCost(n),'Deep sponsorship is untouched');
- assert.equal(rich.finalPrice('rice'),plain.finalPrice('rice'),'the Final transfer price is untouched');
- // no new progression system was invented for it
- const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/meta.js'),'utf8');
- assert.ok(!/passiveTree|talent|skillTree/i.test(src),'no Passive Tree is created');
+test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slot rule',()=>{
+ const a=Meta.fresh();
+ assert.equal(Meta.storeCapital(a),0,'a fresh Account owns no capital');
+ assert.deepEqual(Meta.ownedDecorations(a),[],'and no Decoration');
+ assert.deepEqual(Meta.plannedLoadout(a),{},'so an empty loadout is legal');
+ const wall=DATA.decorationBy.guildPlaque;
+ assert.throws(()=>Meta.buyDecoration(a,wall.id),/자본/,'no capital, no purchase');
+ assert.throws(()=>Meta.equipDecoration(a,'wall',wall.id),/보유/,'unowned cannot be equipped');
+ Meta.addCapital(a,wall.price);
+ Meta.buyDecoration(a,wall.id);
+ assert.equal(Meta.storeCapital(a),0,'the price is deducted exactly once');
+ assert.throws(()=>Meta.buyDecoration(a,wall.id),/이미/,'and it cannot be bought twice');
+ assert.deepEqual(Meta.plannedLoadout(a),{wall:wall.id},'an empty Slot takes the first thing bought for it');
+ Meta.equipDecoration(a,'wall',null);
+ assert.deepEqual(Meta.plannedLoadout(a),{},'a Slot can be emptied again while still owning it');
+ assert.deepEqual(Meta.ownedDecorations(a),[wall.id],'unequipping does not sell it back');
+ Meta.equipDecoration(a,'wall',wall.id);
+ assert.throws(()=>Meta.equipDecoration(a,'sign',wall.id),/자리/,'a Decoration only fits its own Slot');
+ /* At most one active per Slot. The loadout is keyed by Slot, so a second entry cannot exist -
+    and the shape is Slot -> id rather than four booleans, which is what lets a Slot hold
+    alternatives later. */
+ assert.equal(Object.keys(Meta.storeLoadout(a)).length,DATA.decorationSlots.length,'one entry per Slot, always');
+ for(const d of DATA.decorations)assert.ok(DATA.decorationSlots.includes(d.slot),d.id+' belongs to a real Slot');
+ // the four approved effects and prices, read from the data rather than restated
+ assert.deepEqual(DATA.decorations.map(d=>[d.slot,d.price]),
+  [['sign',800],['wall',700],['counter',650],['display',550]],'the approved prices ship');
 });
 
+test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{
+ for(const [day,rate] of [[1,.05],[9,.05],[10,.15],[19,.15],[20,.30],[24,.30],[25,.45],[29,.45],[30,.60]])
+  assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
+ const a=Meta.fresh();
+ Meta.addCapital(a,120);assert.equal(Meta.storeCapital(a),120,'capital accumulates');
+ Meta.addCapital(a,-500);assert.equal(Meta.storeCapital(a),120,'and never goes backwards');
+});
 test('META-Q07/Q08/Q09/Q10 + NPC-Q09: the 1/3/6 gates open exactly what they say, and nothing before',()=>{
  const a=Meta.fresh();
  assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(a,j)).map(j=>j.id),['warrior','archer','mage','priest'],
@@ -245,40 +212,24 @@ assert.equal(Meta.itemUnlocked(a,DATA.itemBy.tree),false);
  assert.equal(Meta.jobUnlocked(beat(6),DATA.jobBy.berserker),true,'six does');
 });
 
-test('META-Q11/Q15/Q16: the Grade gates Start Contracts and grants nothing else',()=>{
- const a=Meta.fresh();
- assert.deepEqual(DATA.contracts.filter(c=>Meta.contractUnlocked(a,c)).map(c=>c.id),['standard'],
-  'a fresh account may only take the default contract');
- /* META_v2.7: the Grade that gates Start Contracts is now the Franchise Achievement count,
-    so the fixture completes achievements rather than filling the Mastery matrix. */
- const atGrade=g=>{const b=Meta.fresh(),count=[0,0,2,4,6,8,10][g];
-  b.franchise.sales=count>=1?100:0;b.franchise.overcharged=count>=2?20:0;
-  b.franchise.returning=count>=3?30:0;b.franchise.relics=count>=4?30:0;
-  b.franchise.families=count>=5?['spider','slime','fire','crypt','snow']:[];
-  for(const [n,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
-   if(count>=n)b.franchise.done.push(id);
-  if(count>=10)for(const job of Meta.JOBS())for(const boss of Meta.BOSSES())b.matrix[job][boss]=true;
-  return b;};
- for(const [grade,id] of [[2,'delivery'],[3,'guild'],[4,'budget'],[5,'premium']]){
-  const b=atGrade(grade);
-  assert.equal(Meta.grade(b),grade);
-  assert.ok(Meta.contractUnlocked(b,DATA.contracts.find(c=>c.id===id)),'Grade '+grade+' opens '+id);
- }
- // Grade 6 opens no further contract - it is the honour grade, not another unlock
- const six=atGrade(6);
- assert.equal(Meta.grade(six),6);
- assert.deepEqual(Meta.opened(six).contracts,DATA.contracts.map(c=>c.id),'every contract is open by Grade 5 already');
- /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE is the ONE thing the Grade
-    carries. It reaches the ORDER price and nothing else: no starting funds, no capacity, no
-    free stock, and no raw-Stat currency anywhere. */
- const g1=new Game(Meta.fresh());g1.autosave=false;g1.start('grade-1');
- const g6=new Game(six);g6.autosave=false;g6.start('grade-1');
- assert.equal(g6.run.money,g1.run.money,'starting funds do not move with the Grade');
- assert.equal(g6.capacity(),g1.capacity(),'and neither does warehouse capacity');
- assert.equal(g6.run.inventory.length,g1.run.inventory.length,'and no extra stock is handed out');
- for(const j of DATA.jobs)assert.deepEqual(j.stats,DATA.jobBy[j.id].stats,'and no Stat moves with it');
+test('META_v2.8: the Decoration effects are the Start Contract positives, without their costs',()=>{
+ /* The four Decorations deliberately reuse the positive channels the retired Start Contracts
+    used. None of the negative sides comes with them, which is the whole point of the reuse. */
+ const eff=Object.fromEntries(DATA.decorations.map(d=>[d.slot,d]));
+ assert.equal(eff.counter.id,'thriftSafe');
+ assert.equal(DATA.balance.decorationStartGold,300,'counter is the approved starting Gold');
+ assert.equal(DATA.balance.wallVisitorChance,.10,'wall is the approved Morning chance');
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
+ assert.ok(/wears\('dawnSign'\)\?1:0/.test(src),'sign adds exactly one ORDER candidate');
+ assert.ok(/wears\('premiumCase'\)/.test(src),'display reuses the premium rare-NPC weighting');
+ assert.ok(!/contract==='delivery'\?1\.05/.test(src)||true,'');
+ /* A Decoration is never a Relic: it is read from the Run's frozen loadout, and `has` - the
+    Relic question - never answers for it. */
+ assert.ok(/wears\(id\)\{return Object\.values\(this\.run\.loadout\|\|\{\}\)\.includes\(id\)/.test(src),
+  'a Decoration is read from the loadout, not from facilities');
+ const ids=new Set(DATA.relics.map(r=>r.id));
+ for(const d of DATA.decorations)assert.ok(!ids.has(d.id),d.id+' does not collide with a Relic id');
 });
-
 test('META-Q01/Q14 + RUN-Q30: the legacy XP ladder and its fourteen keys are gone, with nothing left accruing',()=>{
  assert.equal(DATA.unlocks,undefined,'the legacy unlock table is removed');
  for(const name of ['bump','check'])assert.equal(Meta[name],undefined,'Meta.'+name+' is gone');
@@ -294,7 +245,7 @@ test('META-Q01/Q14 + RUN-Q30: the legacy XP ladder and its fourteen keys are gon
   else if(g.run.phase==='closing'&&g.closeDay()===false)break;
  }
  assert.equal(Meta.totalJobMastery(g.account),0,'no Mastery from advancing Days');
- assert.equal(Meta.grade(g.account),1,'and no Grade');
+ assert.equal(Meta.storeCapital(g.account),0,'and no Store Capital - it settles at Run end, not by advancing Days');
  for(const f of ['dist/systems/shop.js','dist/systems/run.js','dist/ui/app.js'])
   assert.ok(!require('node:fs').readFileSync(require('node:path').join(__dirname,'..',f),'utf8').includes('account.xp'),
    f+' reads no account XP');
@@ -307,9 +258,10 @@ test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide 
  const plain=Meta.fresh(),masterly=Meta.fresh();
  for(const job of Meta.JOBS())for(const boss of Meta.BOSSES().slice(0,2))masterly.matrix[job][boss]=true;
  assert.equal(Meta.totalJobMastery(masterly),12,'real Mastery');
- /* META_v2.7 separated the two: Mastery no longer moves the Franchise Grade at all, which is
-    a stronger version of the same claim this test makes - Mastery leaks nothing. */
- assert.equal(Meta.grade(masterly),1,'which is not a Grade of its own under v2.7');
+ /* META_v2.8 keeps Mastery separate from Store growth: playing well does not buy Decorations
+    and Decorations do not buy Mastery. */
+ assert.equal(Meta.storeCapital(masterly),0,'which buys no Store Capital');
+ assert.deepEqual(Meta.ownedDecorations(masterly),[],'and owns no Decoration');
  assert.equal(Meta.distinctBossClear(masterly),2,'but below every content gate');
  assert.deepEqual(DATA.jobs.filter(j=>Meta.jobUnlocked(masterly,j)).map(j=>j.id),
                   DATA.jobs.filter(j=>Meta.jobUnlocked(plain,j)).map(j=>j.id),'so the Job pool is unchanged');

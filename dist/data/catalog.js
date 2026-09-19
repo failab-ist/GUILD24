@@ -244,7 +244,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={operating:60,frugalThreshold:120,tastingSupport:50,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90};
+G.DATA.balance={hubOverheadRate:.10,wallVisitorChance:.10,decorationStartGold:300,operating:60,frugalThreshold:120,tastingSupport:50,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90};
 /* ECONOMY_ORDER §PURCHASE INTENT (Stage 10, approved).
    `mult` is what the customer is charged and is unchanged. `intentMult` is the price the
    customer JUDGES the offer at - the purchase-intent threshold. For 할인 and 바가지 the two are

@@ -3,7 +3,7 @@
 // V2_4_EXECUTION_PLAN §8.1 Playwright boundary contract.
 // Everything that needs a real viewport lives in `npm run qa:visual` (UI-Q38), never here.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const app=read('dist/ui/app.js'),shop=read('dist/systems/shop.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
@@ -442,19 +442,19 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
 });
 
 test('UI_UX: the first store support is not a one-way door, and the menu names both resets',()=>{
- // D-29. Committing the contract used to be irreversible: the foundation takeover owns the
- // screen, so the only way back to the contract screen was to spend the Run. Nothing has been
- // played at that point, so the contract screen may win over the takeover.
+ // D-29. The pre-Run screen is not a one-way door: the foundation takeover owns the screen, so
+ // without a way back the only exit was to spend the Run. Nothing has been played at that
+ // point, so the pre-Run screen may win over the takeover. CORE_RUN_v2.8 retired the Start
+ // Contract, so what that screen now confirms is the Decoration loadout.
  assert.ok(app.includes("if(phase==='foundation'&&modal!=='new')modal='relics'"),
-  'the contract screen can be reopened during the foundation takeover');
- assert.ok(fn('relicTakeover').includes("'recontract'"),'and the way back is offered there');
- assert.ok(app.includes("case'recontract'"),'the action exists');
- const recontract=app.slice(app.indexOf("case'recontract'"),app.indexOf("case'recontract'")+220);
- assert.ok(!/game\.end\(|runs\+\+/.test(recontract),'going back never spends the Run');
+  'the pre-Run screen can be reopened during the foundation takeover');
+ assert.ok(fn('relicTakeover').includes("'new'"),'and the way back is offered there');
+ const back=app.slice(app.indexOf("case'new':"),app.indexOf("case'new':")+220);
+ assert.ok(!/game\.end\(|runs\+\+/.test(back),'going back never spends the Run');
  // ...and it must not become a free re-roll either. The DAY 0 store support has already been
- // shown by then, so returning keeps this store's seed: changing the contract changes the
- // contract. Only an explicitly typed seed, or abandoning a store that has opened, makes a
- // new world. (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
+ // shown by then, so returning keeps this store's seed. Only an explicitly typed seed, or
+ // abandoning a store that has opened, makes a new world.
+ // (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
  const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+700);
  assert.ok(start.includes("s?.phase==='foundation'?s.seed"),
   'returning from an unopened store reuses its seed instead of minting a new one');
@@ -701,55 +701,58 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(!/Meta\.grade\(a\)|Meta\.totalJobMastery\(a\)/.test(bannerFn+led),
   'the ending never prints a standing total that this Run did not move');
  assert.ok(led.includes('s.metaGain')&&/gain\?\.jobs/.test(led),'it reports the recorded before/after instead');
- assert.ok(/g\.from\+' → '\+g\.to/.test(led)&&/gain\.grade\.from\+' → '\+gain\.grade\.to/.test(led),
-  'as the move each one made');
- assert.ok(/gain\?\.grade\?/.test(led),'and the grade line only when the grade actually rose');
+ assert.ok(/g\.from\+' → '\+g\.to/.test(led),'as the move each one made');
  const metaSrc=read('dist/systems/meta.js');
  assert.ok(/jobs:jobs\.filter\(job=>jobMastery\(a,job\)>wasMastery\[job\]\)/.test(metaSrc),
   'a Job already credited for this Boss moved nothing and is not listed');
- /* A failure still records no Job/Boss gain. The Franchise block now sits between the two,
-    because META_v2.7 §FRANCHISE ACHIEVEMENT 7 is about REACHING the Final and settles whether
-    or not the Boss fell - a separate track from the clear matrix. */
  assert.ok(/if\(!win\)return \[\];/.test(metaSrc),'a failure records no Job x Boss gain at all');
  assert.ok(/run\.metaGain=null;/.test(metaSrc),'and no gain line for the result screen');
- const franchiseBlock=metaSrc.slice(metaSrc.indexOf('FRANCHISE ACHIEVEMENTS 7-9'),metaSrc.indexOf('if(!win)return [];'));
- assert.ok(/if\(win&&st\)/.test(franchiseBlock),'the two clear-gated achievements still require the clear');
- assert.ok(/if\(st&&reachedFinal&&!st\.deaths\)/.test(franchiseBlock),'and the reach-gated one requires reaching the Final');
- /* META_v2.7 Balance Fix: 6 left this block for DAY 25, so the end of the Run must not judge
-    it at all - a Run that wastes stock after DAY 25 still keeps what it already earned. */
- assert.ok(!/nowaste/.test(franchiseBlock),'6 is no longer settled at the end of the Run');
- assert.ok(/s\.day>=25&&!s\.stats\.waste/.test(read('dist/systems/shop.js')),'it settles in the morning that reaches DAY 25');
+ /* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: the Run end credits no Achievement at all, and
+    nothing in the active runtime reaches for the retired counters. */
+ for(const marker of ['nowaste','nodeath','allsupplied','grosssales'])
+  assert.ok(!metaSrc.includes("mark('"+marker+"')"),'the Run end no longer credits '+marker);
+ assert.ok(!/franchiseCount|orderDiscount|const grade=/.test(metaSrc),'no Grade is derived anywhere');
 
  /* ...and the whole state is reachable at any time, in the codex the player already has. */
  const cx=fn('codex');
  assert.ok(cx.includes("['progress','진행도']"),'progression is a tab on the existing codex, not a new screen');
  assert.ok(cx.includes('progressPanel()'),'and it renders in the same grid as every other tab');
  const panel=fn('progressPanel'),screen=cx+panel;
- for(const [what,re] of [['the current grade',/GRADE_COPY\[Meta\.grade\(a\)\]/],
+ for(const [what,re] of [['the Store Capital',/Meta\.storeCapital\(a\)/],
                          ['each Job mastery',/Meta\.jobMastery\(a,j\.id\)/],
                          ['the Job x Boss grid',/a\.matrix\?\.\[j\.id\]\?\.\[b\.id\]/],
                          ['distinct Boss clears',/Meta\.distinctBossClear\(a\)/]])
   assert.ok(re.test(screen),'the codex shows '+what);
  // ...and the three the header already states are not repeated inside the panel
- assert.ok(!/Meta\.totalJobMastery|Meta\.distinctBossClear|GRADE_COPY/.test(panel),
+ assert.ok(!/Meta\.totalJobMastery|Meta\.distinctBossClear|Meta\.storeCapital/.test(panel),
   'the panel does not restate what the codex header says directly above it');
- assert.ok(fn('gatedContent').includes('metaUnlock')&&fn('gatedContent').includes('c.grade'),
+ assert.ok(fn('gatedContent').includes('metaUnlock'),
   'and what each threshold opens, from the catalog rather than a written-out list');
- /* UI-Q108 / META_v2.7 §FRANCHISE PROGRESS READOUT: a cumulative record says how far along it is, so the
-    player can see the distance rather than only that it is not there yet. The ones that are
-    a result and not a tally carry no count and keep 달성/미달성. */
- assert.ok(/f\.want!==null\?f\.have\+' \/ '\+f\.want:f\.done\?'달성':'미달성'/.test(cx),
-  'the codex shows the running count where there is one, and the verdict where there is not');
- assert.ok(/have:f\.have\?Math\.min\(f\.have\(a\),f\.want\)/.test(read('dist/systems/meta.js')),
-  'and the count comes from the same list that judges the achievement, capped at its own target');
- /* The cue is taken once, where every crediting site arrives, and reads the Grade step off
-    the same event. A second notification subsystem would be a second truth about the same
-    moment - and the standing view above is where it is read afterwards. */
- assert.ok(/const wasEarned=Meta\.franchiseState\(game\.account\)\.filter\(f=>f\.done\)/.test(app),
-  'the achievement cue is a before/after of the same state the codex shows');
- assert.ok(/toast\('가맹 실적 달성 · '/.test(app),'said through the existing toast');
- assert.ok(/now>wasGrade\?' · 가맹등급 '\+wasGrade\+' → '\+now/.test(app),
-  'and a Grade step is read on that same event');
+ /* UI_UX_v2.8 §DECORATION UI: the retired Start Contract area becomes 점포 관리 inside the same
+    codex, and every number it shows is read from the Decoration data rather than written out
+    here a second time. */
+ const store=fn('storePanel');
+ assert.ok(cx.includes("['store','점포 관리']")&&cx.includes('storePanel()'),
+  '점포 관리 is a tab on the existing codex, not a new screen');
+ assert.ok(!cx.includes("['contracts','시작 계약']"),'and the retired Start Contract tab is gone');
+ assert.ok(/D\.decorationSlots\.map\(slot=>/.test(store),
+  'the panel is Slot -> owned options -> selected, not four hard-coded booleans');
+ assert.ok(/D\.decorations\.filter\(d=>d\.slot===slot\)/.test(store),
+  'so a Slot that later holds alternatives renders without a change here');
+ for(const [what,re] of [['the Store Capital',/Meta\.storeCapital\(a\)/],
+                         ['owned state',/Meta\.decorationOwned\(a,d\.id\)/],
+                         ['the price',/d\.price/],['the current effect',/E\(d\.effect\)/],
+                         ['what is equipped',/active===d\.id/]])
+  assert.ok(re.test(store),'the panel shows '+what);
+ assert.ok(!/800|700|650|550|10%|300G/.test(store),'and hardcodes none of the numeric truth');
+ /* Purchase and equip are Account actions: both refuse during a Run, and the Capital is
+    deducted inside Meta so it cannot be spent twice by a second screen. */
+ const deco=app.slice(app.indexOf("case'deco-buy'"),app.indexOf("case'deco-buy'")+700);
+ assert.ok(/if\(game\.run&&game\.run\.phase!=='end'\)throw/.test(deco),'both refuse during a Run');
+ assert.ok(/Meta\.buyDecoration\(game\.account,id\)/.test(deco)&&!/capital-=|capital =/.test(deco),
+  'the purchase goes through Meta rather than adjusting Capital in the UI');
+ /* META_v2.8 §RETIRED: no Achievement cue survives anywhere in the UI. */
+ assert.ok(!/가맹 실적|franchiseState|Meta\.grade\(/.test(app),'no retired Franchise UI remains');
  /* standing progression is a list, not a notification: what is open and what is not yet open
     read at the same level, and the moment-of-unlock line belongs to the result screen only */
  const board=fn('unlockBoard');

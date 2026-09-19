@@ -56,7 +56,24 @@ P.liquidate=function(stockId){const s=this.run;
  s.notice=D.itemBy[st.item].name+' 재고 정리 · '+price+'G 회수'
   +(s.money>=0?' · 회생 완료':'')+' (회생 '+s.rescueUsed+' / '+this.rescueLimit()+')';
  this.save();return true;};
-P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.save();};
+/* META_v2.8 §RUN-END STORE CAPITAL SETTLEMENT. The remaining stock is valued by the SAME rule
+   Closing liquidation uses - half of what that stock actually cost - rather than a second
+   valuation invented for Meta. A Run that ends owing money contributes its stock only. */
+P.settlementValue=function(){const s=this.run;
+ const stock=s.inventory.reduce((a,x)=>a+Math.round((x.cost??D.itemBy[x.item].buy)*.5),0);
+ return {gold:Math.max(0,s.money),stock,total:Math.max(0,s.money)+stock};};
+/* Settled exactly once. The guard lives on the Run, so a reload of an ended Run reads the
+   recorded settlement instead of earning it again. A manual abandon never reaches end(), which
+   is what makes abandon worth nothing. */
+P.settleStoreCapital=function(){const s=this.run;
+ if(s.settled)return s.settlement;
+ const value=this.settlementValue(),rate=G.Meta.capitalRate(s.day);
+ const gain=Math.round(value.total*rate);
+ s.settled=true;
+ s.settlement={day:s.day,gold:value.gold,stock:value.stock,value:value.total,rate,gain,
+  capitalAfter:G.Meta.addCapital(this.account,gain)};
+ return s.settlement;};
+P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.settleStoreCapital();this.save();};
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};
 P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};
 /* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION PRICE / WALLET / GOLD OVERRIDE. A Final transfer

@@ -3,7 +3,7 @@
 // account that has actually played do", by carrying ONE account through successive Runs and
 // letting the real Meta system grant whatever it grants. No gameplay power is inserted.
 // Measurement only — no canonical numeric is read from a result here.
-const fs=require('node:fs');for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+const fs=require('node:fs');for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const trajectories=Number(process.argv[2])||60,runs=Number(process.argv[3])||12;
 const out={version:5,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',trajectories,runsPerTrajectory:runs,
  note:'One account per trajectory, carried across Runs. Run index 0 is the fresh-account case and is directly comparable to the balance cohorts. Seeds are deterministic and distinct per trajectory and Run index.',

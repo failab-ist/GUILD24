@@ -1,5 +1,5 @@
 const assert = require('node:assert/strict');
-for (const f of ['data/catalog', 'data/relics', 'data/copy', 'systems/rng', 'systems/adventurer', 'systems/dungeon', 'systems/meta', 'systems/save', 'systems/shop', 'systems/relics', 'systems/run']) {
+for (const f of ['data/catalog', 'data/relics','data/decorations', 'data/copy', 'systems/rng', 'systems/adventurer', 'systems/dungeon', 'systems/meta', 'systems/save', 'systems/shop', 'systems/relics', 'systems/run']) {
   require('../dist/' + f + '.js');
 }
 

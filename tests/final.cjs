@@ -1,7 +1,7 @@
 // Chunk E acceptance: D30 Final Expedition.
 // Covers FINAL_EXPEDITION sections 1-12 and RUN-Q14/Q15/Q16.
 const assert=require('node:assert/strict');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const copy=x=>JSON.parse(JSON.stringify(x));
 const read=p=>require('node:fs').readFileSync(require('node:path').join(__dirname,'..',p),'utf8');

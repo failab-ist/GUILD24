@@ -4,7 +4,7 @@
 // the report cites is actually produced. The multi-seed verdict lives in reports/BALANCE.md.
 // No canonical numeric is asserted here, and none is tuned by anything here.
 const assert=require('node:assert/strict');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const SEEDS=14;
 const run=policy=>Debug.simulate(SEEDS,policy,null,'adaptive','hybrid');
@@ -108,7 +108,7 @@ test('preparation and phase decomposition are measured, and each one nests insid
 });
 test('the extended metric set the report cites is actually produced',()=>{
  const r=cached('balanced');
- for(const key of ['dayReached','metaMastery','metaDistinct','metaGrade','knowledge','revenue','spend','npc','bands','final'])
+ for(const key of ['dayReached','metaMastery','metaDistinct','metaStore','knowledge','revenue','spend','npc','bands','final'])
   assert.ok(r[key]!==undefined,'metric present: '+key);
  for(const key of ['averageDay','masteryPerRun','distinctPerRun','clearsPerRun','knowledgePerRun'])
   assert.ok(Number.isFinite(r[key]),'derived metric is a number: '+key);
@@ -198,7 +198,7 @@ test('CROSS-RUN META: one account really carries forward, and nothing is inserte
  for(const a of t.accountsEnd){
   assert.ok(a.mastery>=0&&a.mastery<=42,'Total Job Mastery stays in range');
   assert.ok(a.distinct>=0&&a.distinct<=7,'Distinct Boss Clear stays in range');
-  assert.ok(a.franchise>=0&&a.franchise<=10,'the Franchise Achievement count stays in range');
+  assert.ok(a.franchise>=0&&a.franchise<=DATA.decorations.length,'the owned Decoration count stays in range');
   const n=a.franchise;
   assert.equal(a.grade,n>=10?6:n>=8?5:n>=6?4:n>=4?3:n>=2?2:1,'the Grade is derived from that count, not stored');
  }

@@ -4,7 +4,7 @@
 // These drive the real engine: a round trip is asserted by continuing the run, never by
 // comparing serialised shape alone.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const copy=x=>JSON.parse(JSON.stringify(x));
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const source=p=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'..',p),'utf8');
@@ -235,7 +235,8 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
   const after=Meta.fresh();
   assert.equal(Meta.totalJobMastery(after),0,'Job Mastery is back to zero');
   assert.equal(Meta.distinctBossClear(after),0,'so is Distinct Boss Clear');
-  assert.equal(Meta.grade(after),1,'and the Franchise Grade');
+  assert.equal(Meta.storeCapital(after),0,'Store Capital is back to zero');
+ assert.deepEqual(Meta.ownedDecorations(after),[],'and every Decoration is unowned again');
   assert.deepEqual(after.knowledge,{},'Monster Knowledge is gone');
   assert.deepEqual(after.tutorial,{},'and the guide is offered again, with no reset-only code to do it');
   assert.equal(after.runs,0,'the run count does not survive either');
@@ -850,79 +851,96 @@ test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every high
  }
 });
 
-test('META_v2.7 §FRANCHISE ACHIEVEMENTS: each one is credited by the play it names',()=>{
- // 1/2/3 are counted where a sale actually commits, and a refusal credits nothing
- const g=fresh('franchise-sales');g.buyRelic(g.run.relicWindow.candidateIds[0]);
- assert.equal(g.account.franchise.relics,1,'a Relic purchase counts once');
- for(let turn=0;turn<600&&g.run.phase!=='sell';turn++)if(!step(g))break;
- const fr=g.account.franchise;
- let sold=0,refused=0;
- for(let turn=0;turn<900&&g.run.day<4;turn++){
-  if(g.run.phase!=='sell'){step(g);continue;}
-  const n=g.current(),before={...fr};
-  const st=g.run.inventory[0];
-  if(!st||n.pack.length>=Adventurer.slots(n)){g.depart();continue;}
-  let ok=false;
-  try{ok=g.sell(st.id,'full');}catch(e){g.depart();continue;}
-  if(ok){sold++;
-   assert.equal(fr.sales,before.sales+1,'a committed sale counts exactly one');
-   assert.equal(fr.overcharged,before.overcharged,'a 정가 sale is not a 150% one');
-   assert.equal(fr.returning,before.returning+(n.visits>1?1:0),'a returning customer counts only when returning');
-  }else{refused++;
-   assert.deepEqual({...fr},before,'a refusal credits nothing at all');
-  }
- }
- assert.ok(sold>0,'the sweep actually sold something');
- // 5 is the same supplied survival knowledge already recognises, per Family
+test('META_v2.8 §RUN-END STORE CAPITAL SETTLEMENT: once, on the reached Day, never on abandon',()=>{
+ const g=fresh('settle-once');
+ g.run.day=22;g.run.money=1000;
+ const before=Meta.storeCapital(g.account);
+ const value=g.settlementValue();
+ /* The stock is valued by the SAME rule Closing liquidation uses - half of what that stock
+    actually cost - rather than a second valuation invented for Meta. */
+ const byHand=g.run.inventory.reduce((a,x)=>a+Math.round((x.cost??DATA.itemBy[x.item].buy)*.5),0);
+ assert.equal(value.stock,byHand,'remaining stock uses the Closing liquidation basis');
+ assert.equal(value.total,value.gold+value.stock,'Settlement Value is Ending Gold plus that stock');
+ const first=g.settleStoreCapital();
+ assert.equal(first.rate,0.30,'D22 converts at the D20-24 rate');
+ assert.equal(first.gain,Math.round(value.total*0.30),'the gain is the value times that rate');
+ assert.equal(Meta.storeCapital(g.account),before+first.gain,'and it reaches the Account once');
+ const again=g.settleStoreCapital();
+ assert.equal(again.gain,first.gain,'settling again returns the recorded settlement');
+ assert.equal(Meta.storeCapital(g.account),before+first.gain,'and credits nothing further');
+ /* A reload of an ended Run must read the settlement, not earn it again. end() is the real
+    path and settles on its way through, so an already-settled Run must add nothing there. */
+ const capitalBeforeEnd=Meta.storeCapital(g.account);
+ g.end(false,'테스트 종료');
+ assert.equal(Meta.storeCapital(g.account),capitalBeforeEnd,'end() does not settle a second time');
+ const round=reload(g);
+ assert.equal(Meta.storeCapital(round.account),capitalBeforeEnd,'a reload does not double-credit');
+ round.settleStoreCapital();
+ assert.equal(Meta.storeCapital(round.account),capitalBeforeEnd,'and the guard survives the round trip');
+ assert.equal(round.run.settled,true,'the guard itself is persisted');
+ // Boss CLEAR does not multiply the settlement.
+ const win=fresh('settle-win');win.run.day=30;win.run.money=1000;win.run.win=true;
+ const lose=fresh('settle-win');lose.run.day=30;lose.run.money=1000;
+ const a1=win.settleStoreCapital(),a2=lose.settleStoreCapital();
+ assert.equal(a1.rate,0.60,'D30 converts at the D30 rate');
+ assert.equal(a1.rate,a2.rate,'a CLEAR uses the same rate');
+ assert.equal(a1.gain,a2.gain,'and the same gain - Boss CLEAR is not a multiplier');
+ /* An abandon never reaches end(), which is what makes it worth nothing. */
+ const dropped=fresh('settle-abandon');dropped.run.day=26;dropped.run.money=4000;
+ const capital=Meta.storeCapital(dropped.account);
+ dropped.start('settle-abandon-2');
+ assert.equal(Meta.storeCapital(dropped.account),capital,'starting a new Run over a live one settles nothing');
+});
+
+test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run never re-reads it',()=>{
  const a=Meta.fresh();
- const rep={day:3,dungeon:'spider',items:['rice'],outcome:'성공',events:[]};
- Meta.observe(a,rep,null);
- assert.deepEqual(a.franchise.families,['spider'],'a supplied survival records its Family');
- Meta.observe(a,{...rep},null);
- assert.deepEqual(a.franchise.families,['spider'],'the same Family does not count twice');
- Meta.observe(a,{...rep,dungeon:'snow'},null);
- assert.equal(a.franchise.families.length,2,'a different Family does');
- Meta.observe(a,{...rep,dungeon:'fire',outcome:'사망'},null);
- assert.equal(a.franchise.families.length,2,'a death is not a survival');
- Meta.observe(a,{...rep,dungeon:'fire',items:[]},null);
- assert.equal(a.franchise.families.length,2,'and an unsupplied survival is not one either');
- /* 6 settles in the morning that reaches DAY 25, not at the end of the Run. Drive the real
-    morning so the expiry sweep of that day is the one being judged. */
- const atDay=(day,stock)=>{const h=fresh('franchise-waste');h.run.day=day;h.run.inventory=stock;h.run.stats.waste=0;
-  h.account.franchise=Meta.freshFranchise();h.morning();return h;};
- assert.ok(atDay(25,[]).account.franchise.done.includes('nowaste'),'reaching DAY 25 with nothing discarded counts');
- assert.ok(!atDay(24,[]).account.franchise.done.includes('nowaste'),'DAY 24 is not there yet');
- const swept=atDay(25,[{id:'x',item:'rice',cost:10,expires:25}]);
- assert.equal(swept.run.stats.waste,1,'the DAY 25 sweep itself discarded one');
- assert.ok(!swept.account.franchise.done.includes('nowaste'),'and that one is counted against the Run');
- // later waste never takes back an achievement already earned
- const kept=atDay(25,[]);kept.run.day=26;kept.run.inventory=[{id:'y',item:'rice',cost:10,expires:26}];kept.morning();
- assert.equal(kept.run.stats.waste,1,'DAY 26 discarded something');
- assert.ok(kept.account.franchise.done.includes('nowaste'),'but the DAY 25 achievement stands');
- // 7/8/9 need a Run that actually kept a record
- const one=(run,win)=>{const acc=Meta.fresh();Meta.finish(acc,run,win);return acc.franchise.done;};
- assert.deepEqual(one({rewarded:false,bossId:'WRATH'},true),[],'a Run with no record credits nothing');
- const base={rewarded:false,bossId:'WRATH',day:30,stats:{waste:0,deaths:0,revenue:0}};
- assert.ok(one({...base,finalReport:{members:[]}},false).includes('nodeath'),'reaching the Final with nobody lost counts');
- assert.ok(!one({...base,stats:{waste:0,deaths:1,revenue:0},finalReport:{members:[]}},false).includes('nodeath'),'one death is not zero');
- assert.ok(!one({...base,finalReport:{members:[]}},false).includes('nowaste'),'and 6 is no longer settled at the end of the Run');
- const supplied={...base,finalReport:{members:[{job:'warrior',items:['rice']},{job:'mage',items:['potion']}]}};
- assert.ok(one(supplied,true).includes('allsupplied'),'every participant supplied, then a CLEAR');
- assert.ok(!one({...supplied,finalReport:{members:[{job:'warrior',items:['rice']},{job:'mage',items:[]}]}},true).includes('allsupplied'),
-  'one empty Bag is not every participant');
- assert.ok(!one(supplied,false).includes('allsupplied'),'and it needs the CLEAR');
- assert.ok(one({...base,stats:{waste:0,deaths:0,revenue:10000},finalReport:{members:[{job:'warrior',items:['rice']}]}},true).includes('grosssales'),
-  'exactly 10,000G with a CLEAR counts');
- assert.ok(!one({...base,stats:{waste:0,deaths:0,revenue:9999},finalReport:{members:[{job:'warrior',items:['rice']}]}},true).includes('grosssales'),
-  'a gold short does not');
- // the whole account state survives a save, and an account without the block still reads
- g.save();
- const round=Save.import(Save.export(g.account,g.run));
- assert.deepEqual(round.account.franchise,g.account.franchise,'the Franchise record survives a reload');
- assert.ok(Save.valid(JSON.parse(Save.export(g.account,g.run))),'and the save still validates');
- const legacy=Meta.fresh();delete legacy.franchise;
- assert.equal(Meta.grade(legacy),1,'an account with no Franchise block reads as Grade 1');
- assert.equal(Meta.orderDiscount(legacy),0,'with no discount');
+ Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
+ Meta.buyDecoration(a,'thriftSafe');
+ const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
+ assert.equal(g.run.money,1000+DATA.balance.decorationStartGold,'counter is applied at start');
+ assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
+ assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
+ // changing the Account mid-Run must not reach the Run that already started
+ Meta.buyDecoration(a,'dawnSign');
+ assert.equal(g.wears('dawnSign'),false,'a Decoration bought mid-Run does not join this Run');
+ Meta.equipDecoration(a,'counter',null);
+ assert.equal(g.wears('thriftSafe'),true,'and unequipping mid-Run does not remove it either');
+ assert.deepEqual(reload(g).run.loadout,g.run.loadout,'the frozen loadout survives a reload');
+ // a Decoration is never a Relic
+ assert.ok(!g.run.facilities.includes('thriftSafe'),'no Decoration id is injected into facilities');
+ assert.equal(g.has('thriftSafe'),false,'and `has` - the Relic question - does not answer for it');
+ const next=new Game(a);next.autosave=false;next.start('loadout-freeze-2');
+ assert.deepEqual(next.run.loadout,{sign:'dawnSign'},'the next Run picks up the current Account loadout');
+ assert.equal(next.run.money,1000,'and the unequipped counter no longer pays out');
+});
+
+test('RELIC_v2.7 §VISITOR RELICS: board floors the base roll, hub rolls one exclusive outcome',()=>{
+ const src=source('dist/systems/shop.js');
+ /* board is a floor on the BASE roll, applied before every other modifier, and draws nothing. */
+ assert.ok(src.includes("const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;"),
+  'board raises the base roll to 4 and leaves 5 and 6 alone');
+ /* hub: one roll, three mutually exclusive outcomes. */
+ assert.ok(src.includes("const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;"),
+  'hub makes exactly one roll: 30% +1, 5% +2, otherwise none');
+ const seen=new Set();
+ for(let i=0;i<1000;i++){const r=i/1000;seen.add(r<.30?1:r<.35?2:0);}
+ assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
+ /* hub's cost is a share of overheadBase alone - never of the flat extras. */
+ assert.equal(DATA.balance.hubOverheadRate,.10,'the approved rate ships');
+ const g=fresh('visitor-relics');
+ const plain=g.expectedOperatingCost();
+ g.run.facilities.push('hub');g.run.dayFacilities=[...g.run.facilities];
+ const withHub=g.expectedOperatingCost();
+ assert.equal(withHub,Math.round((g.overheadBase()*(1+DATA.balance.hubOverheadRate))/10)*10,
+  'overhead is base + 10% of base, then the existing rounding');
+ assert.ok(withHub>plain,'and it really is a cost');
+ assert.ok(!src.includes("includes('hub')?35:0"),'the retired flat +35G is gone');
+ /* board, hub and the wall Decoration are independent: none marks another owned or shares a slot. */
+ assert.equal(g.wears('guildPlaque'),false,'holding the Relic does not equip the Decoration');
+ const deco=Meta.fresh();Meta.addCapital(deco,DATA.decorationBy.guildPlaque.price);
+ Meta.buyDecoration(deco,'guildPlaque');
+ const h=new Game(deco);h.autosave=false;h.start('deco-not-relic');
+ assert.ok(!h.run.facilities.includes('board'),'and equipping the Decoration does not grant the Relic');
 });
 
 console.log(count+' integration groups passed');

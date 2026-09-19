@@ -7,7 +7,7 @@
 // anything about 도적 / 광전사, because a fresh account never unlocks them. This file measures
 // the thing the targets are actually written against: ACCOUNT PROGRESSION.
 const fs=require('node:fs');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','systems/simulation'])require('../dist/'+f+'.js');
 const D=globalThis.DATA,seeds=Number(process.argv[2])||300;
 /* --arm e1 | f1 | h1 | all  (default: baseline). The three are also run one at a time, because a
    combined arm cannot say which of them moved a number - and the first combined run produced
@@ -84,23 +84,20 @@ function withCandidate(fn){
    AT a Grade, never how long a player takes to reach one. Actual accumulation is measured in
    the cross-run trajectory, where Achievements and Grade come from real results. */
 const TIERS=[
- {key:'fresh',   label:'Fresh First Run',   jobs:0, bosses:0, franchise:0},
- {key:'early',   label:'Early Meta',        jobs:2, bosses:2, trim:1, franchise:2},
- {key:'mid',     label:'Mid Meta',          jobs:4, bosses:3, franchise:4},
- {key:'late',    label:'Late Meta',         jobs:4, bosses:6, franchise:6},
- {key:'near',    label:'Near-complete Meta',jobs:5, bosses:7, franchise:8}];
+ {key:'fresh',   label:'Fresh First Run',   jobs:0, bosses:0, decorations:0},
+ {key:'early',   label:'Early Meta',        jobs:2, bosses:2, trim:1, decorations:1},
+ {key:'mid',     label:'Mid Meta',          jobs:4, bosses:3, decorations:2},
+ {key:'late',    label:'Late Meta',         jobs:4, bosses:6, decorations:3},
+ {key:'near',    label:'Near-complete Meta',jobs:5, bosses:7, decorations:4}];
 
-/* The cumulative Achievements are seeded at their own thresholds and the one-Run ones are
-   marked done, exactly as real play would leave them - no Grade is written directly. */
-function seedFranchise(a,n){
- const fr=a.franchise;
- if(n>=1)fr.sales=80;
- if(n>=2)fr.overcharged=20;
- if(n>=3)fr.returning=20;
- if(n>=4)fr.relics=15;
- if(n>=5)fr.families=['spider','slime','fire','crypt','snow'];
- for(const [at,id] of [[6,'nowaste'],[7,'nodeath'],[8,'allsupplied'],[9,'grosssales']])
-  if(n>=at&&!fr.done.includes(id))fr.done.push(id);
+/* META_v2.8: the Franchise tier fixture is retired with the system it seeded. A tier's Store
+   progress is now simply how many Decorations it owns, seeded through the real purchase path so
+   the fixture cannot hold a state real play could not reach. */
+function seedStore(a,n){
+ const ids=DATA.decorations.map(d=>d.id).slice(0,n);
+ if(!ids.length)return a;
+ globalThis.Meta.addCapital(a,ids.reduce((t,id)=>t+DATA.decorationBy[id].price,0));
+ for(const id of ids)globalThis.Meta.buyDecoration(a,id);
  return a;
 }
 
@@ -110,7 +107,7 @@ function accountFor(t){
  for(let j=0;j<t.jobs;j++)for(let b=0;b<t.bosses;b++){
   if(t.trim&&filled>=t.jobs*t.bosses-t.trim)break;
   a.matrix[JOBS[j]][BOSSES[b]]=true;filled++;}
- seedFranchise(a,t.franchise||0);
+ seedStore(a,t.decorations||0);
  return a;
 }
 
@@ -140,7 +137,7 @@ for(const [policy,policyLabel] of POLICIES)
 for(const t of TIERS){
  const account=accountFor(t);
  const r=withCandidate(()=>globalThis.Debug.simulate(seeds,policy,account,'adaptive','hybrid'));
- const row={...t,policy,grade:globalThis.Meta.grade(account),mastery:globalThis.Meta.totalJobMastery(account),
+ const row={...t,policy,decorations:globalThis.Meta.ownedDecorations(account).length,mastery:globalThis.Meta.totalJobMastery(account),
   distinct:globalThis.Meta.distinctBossClear(account),
   reach10:r.reach10,reach20:r.reach20,reach30:r.reach30,
   finalGivenReach:r.bossWinGivenReach,clear:r.overallClearRate,deaths:r.averageDeaths,

@@ -4,7 +4,7 @@
 // the approved Rare Reference names, and the §18 QA questions a Node process can answer.
 // Copy owns sentences only — every assertion here is about strings, never about a rule.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const V=Copy.pools.visit,S=Copy.pools.sale,N=Copy.pools.night;
