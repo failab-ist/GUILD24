@@ -136,6 +136,17 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .effects li{display:flex;justify-content:space-between;gap:12px;padding:1px 0}
 .effects li b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums}
 .effects .effect-bad b{color:var(--tone-cost)}
+/* The pre-Run loadout rows are controls, not readings: each Slot opens 점포 관리 on itself,
+   so a player changes the Slot they are looking at instead of hunting for it. An empty Slot
+   is neutral - no cost colour, no `주의 ·`, just the Slot and the word 비움. */
+.effects li.deco-line{padding:0}
+.deco-jump{display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:12px;
+ padding:9px 10px;min-height:44px;border:0;border-radius:0;text-align:left;
+ font:inherit;color:inherit;background:#ffffff08;box-shadow:inset 0 0 0 1px #ffffff0f;cursor:pointer}
+.deco-jump:hover{background:#ffffff14}
+.deco-jump b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums;color:#f2e7cd}
+.deco-line.empty .deco-jump b{color:#8d8067;font-weight:400}
+.decoration-panel .slot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .effect-bad span:before{content:'주의 · ';font-size:var(--t-xs);color:var(--tone-cost)}
 .tone-benefit{color:var(--tone-benefit)}.tone-cost{color:var(--tone-cost)}.tone-neutral{color:var(--tone-neutral)}
 .rare-badge{font-size:var(--t-xs);color:var(--rare,var(--r0));white-space:nowrap;font-weight:600;font-family:var(--mono);letter-spacing:.06em}
