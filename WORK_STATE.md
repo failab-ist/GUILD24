@@ -2,7 +2,7 @@
 
 DATE: 2026-09-19
 CURRENT_LINE: v2.7 + scoped Decoration Package
-STATE: STORE_CAPITAL_FORMULA_ADOPTION_PENDING_VALIDATION
+STATE: RELEASE_CANDIDATE_READY_MAIN_MERGE
 
 ## Truth
 
@@ -12,26 +12,21 @@ STATE: STORE_CAPITAL_FORMULA_ADOPTION_PENDING_VALIDATION
 - Contributor workflow: `AGENTS.md`
 
 Do not duplicate detailed Rule / Numeric / UX / QA truth here.
-Resolve current owners and current adoption status through `SPEC_INDEX_v2.7.0.md`.
+Resolve current owners and adopted balance through `SPEC_INDEX_v2.7.0.md`.
 
-## Current Work
+## Current State
 
-The existing v2.7 + scoped Decoration Package Source baseline is adopted.
+The v2.7 line, scoped Decoration Package, and current Store Capital basis are adopted in Source.
 
-The User's newest Store Capital amendment is newer than Current Source and is the only known
-pending adoption in the current scoped package:
+Final integration regression, acquisition reproduction, anti-farm validation, browser QA and
+Pages static-path QA are complete. The small known acquisition-timing variance is accepted for
+the current cycle without further tuning.
 
-```text
-Store Capital = actual Gross Sales × reached-Day rate
-```
-
-Exact formula, rate table, progression target and anti-farm requirements belong to
-`design_ssot/META_v2.8.0.md` and its routed QA. Do not copy them here.
+The Pages workflow is prepared with Production deployment restricted to `main`.
 
 ## Next
 
-1. Adopt the current Store Capital owner truth with the smallest Source patch.
-2. Run targeted QA and the committed cross-run / anti-farm measurements.
-3. If a material Balance Finding appears, stop without auto-tuning.
-4. If validation passes, prepare the approved GitHub Pages deployment workflow.
-5. Director/User reviews the result before production merge/status closure.
+1. Merge the release-candidate branch to `main`.
+2. Ensure Repository Settings -> Pages -> Source is set to GitHub Actions.
+3. Confirm the main Pages workflow passes and the deployed site loads at the project Pages URL.
+4. Start any later balance/design work as a separate cycle.
