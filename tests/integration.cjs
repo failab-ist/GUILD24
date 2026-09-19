@@ -943,4 +943,39 @@ test('RELIC_v2.7 §VISITOR RELICS: board floors the base roll, hub rolls one exc
  assert.ok(!h.run.facilities.includes('board'),'and equipping the Decoration does not grant the Relic');
 });
 
+test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with safe defaults',()=>{
+ /* The Decoration package adds Account state (capital, owned, loadout) and Run state (the
+    frozen loadout, the settlement guard). None of it is a schema blocker, so v8 stands and no
+    migration layer is invented for internal-development saves. */
+ const fresh0=Meta.fresh();
+ assert.equal(JSON.parse(Save.export(fresh0,null)).version,8,'the save generation is unchanged');
+ assert.ok(Save.valid(JSON.parse(Save.export(fresh0,null))),'an Account-only save validates');
+ /* An existing v8 Account written before any of this must load and behave, not crash. */
+ const legacy=Meta.fresh();delete legacy.store;
+ const raw={version:8,account:legacy,run:null};
+ assert.ok(Save.valid(raw),'a v8 Account with no store block is still valid');
+ const back=Save.import(JSON.stringify(raw));
+ assert.equal(Meta.storeCapital(back.account),0,'capital defaults to zero');
+ assert.deepEqual(Meta.ownedDecorations(back.account),[],'owned defaults to empty');
+ assert.deepEqual(Meta.plannedLoadout(back.account),{},'and the loadout to empty');
+ const g=new Game(back.account);g.autosave=false;g.start('legacy-v8-start');
+ assert.equal(g.run.money,1000,'a Run from it starts on the neutral baseline');
+ /* A Run saved before the loadout existed must not claim to wear anything. */
+ const older=copy(g.run);delete older.loadout;delete older.settled;
+ const h=new Game(back.account,older);h.autosave=false;
+ assert.equal(h.wears('thriftSafe'),false,'a Run with no frozen loadout wears nothing');
+ h.run.day=12;h.run.money=500;
+ assert.equal(h.settleStoreCapital().rate,0.15,'and it still settles on the Day it reached');
+ /* A live Run round-trips with both new fields intact. */
+ const live=fresh('save-decoration');
+ Meta.addCapital(live.account,DATA.decorationBy.dawnSign.price);
+ Meta.buyDecoration(live.account,'dawnSign');
+ live.run.loadout={sign:'dawnSign'};
+ const round=reload(live);
+ assert.deepEqual(round.run.loadout,live.run.loadout,'the frozen loadout survives export/import');
+ assert.equal(Meta.storeCapital(round.account),0,'and the Account capital round-trips');
+ assert.deepEqual(Meta.ownedDecorations(round.account),['dawnSign'],'with what it owns');
+ assert.deepEqual(Meta.storeLoadout(round.account),Meta.storeLoadout(live.account),'and its planned loadout');
+});
+
 console.log(count+' integration groups passed');
