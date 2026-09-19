@@ -40,8 +40,9 @@ PASS:
 
 ## UI-Q-v28-4 — SETTLEMENT
 
-After numeric rates are approved:
-- normal Run end shows settlement inputs, conversion, gained Store Capital, and new balance
+PASS:
+- normal Run end shows Gross Sales, reached-Day conversion rate, gained Store Capital, and new balance
+- Ending Gold / remaining Inventory are not shown as Store Capital calculation inputs
 - manual Run Abandon shows no Store Capital reward
 - mobile layout remains readable without horizontal scroll
 
