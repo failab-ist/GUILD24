@@ -8,11 +8,11 @@ DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-19
-SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED
+SSOT_AUDIT_STATUS=LATEST_STORE_CAPITAL_AMENDMENT_SYNCED
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
-BALANCE_STATUS=APPROVED_BUNDLE_IN_SOURCE
-SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE
+BALANCE_STATUS=STORE_CAPITAL_FORMULA_BASELINE_PENDING_VALIDATION
+SOURCE_ADOPTION_STATUS=ADOPTED_BASE_PENDING_STORE_CAPITAL_FORMULA_ADOPTION
 V2_7_SOURCE_EDIT_GATE=RECOVERY_CLOSE_CONFIRMED
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -128,13 +128,14 @@ v2.6.1 Adoption Recovery close = confirmed
 
 There are currently no implementation-blocking Design Unresolved items.
 
-`SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE`: the current line is
-**v2.7 + scoped Decoration Package**, and Source carries it. This is not a project-wide v2.8
-adoption and does not promote any owner outside the Package — the v2.8-named files stay staged
-reference for the Package alone, exactly as `SPEC_INDEX_v2.8.0.md` §CURRENT EXECUTION SCOPE says.
+`SOURCE_ADOPTION_STATUS=ADOPTED_BASE_PENDING_STORE_CAPITAL_FORMULA_ADOPTION`: the current
+line remains **v2.7 + scoped Decoration Package**. The previously adopted Package remains in
+Source, but the User's newest Store Capital amendment — Gross Sales × reached-Day rate — is newer
+than Current Source and is the only pending adoption in that Package.
 
-Source is now implementation truth for that adopted line. A difference from an owner is a
-finding to classify, not a missing adoption step.
+This is not a project-wide v2.8 adoption and does not promote any owner outside the Package.
+Until the Store Capital fix cycle closes, the difference between the current META/CORE_RUN owner
+and Source is a known pending adoption, not permission to reinterpret the owner around Source.
 
 The prerequisite recovery execution document remains:
 `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
