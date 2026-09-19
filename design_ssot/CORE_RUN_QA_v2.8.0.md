@@ -31,13 +31,36 @@ PASS:
 
 ## RUN-Q-v28-3 — STORE CAPITAL SETTLEMENT
 
-After exact conversion rates are approved, QA must verify:
-- eligible Run settles exactly once
-- final Gold and remaining stock use the authoritative settlement inputs
-- reload cannot double-credit
-- manual Run Abandon credits 0
+Owner rule: `META_v2.8.0.md` §STORE CAPITAL.
 
-Numeric rate assertions are intentionally pending the integrated balance approval and must not be invented by WORK.
+PASS:
+- an eligible Run settles exactly once
+- Store Capital Gain is the Run's actual Gross Sales multiplied by the reached-Day rate
+- every approved Day band uses the exact owner rate
+- Gross Sales 0 produces Store Capital 0
+- bankruptcy / Death-limit / Final failure may still earn Store Capital from actual Gross Sales
+- Boss CLEAR adds no extra Store Capital multiplier
+- reload cannot double-credit
+- manual Run Abandon / explicit retirement credits 0
+
+FAIL:
+- Ending Gold changes Store Capital when Gross Sales and reached Day are held equal
+- remaining Inventory changes Store Capital when Gross Sales and reached Day are held equal
+- Store Capital is derived from a second Meta-only sales counter
+- a failed Run is forced to 0 solely because it failed
+
+## RUN-Q-v28-4 — STORE CAPITAL INPUT SEPARATION
+
+PASS:
+- two Runs with equal Gross Sales and equal reached Day receive equal Store Capital even if their
+  Ending Gold / remaining Inventory differ
+- existing Closing liquidation, rescue and bankruptcy behavior remains unchanged inside the Run
+- ordinary and Final sales that already count toward Gross Sales enter the Meta calculation once
+
+FAIL:
+- the retired net-asset formula `max(0, Ending Gold + Inventory Liquidation Value)` remains an
+  active Store Capital input
+- Final sales are omitted from Gross Sales or counted twice
 
 ## RUN-Q-v28-4 — SETTLEMENT VALUE INCLUDES DEBT
 
