@@ -11,7 +11,8 @@ name: Pages
 on:
   push:
     branches: [main]
-  # Deploy on demand from any branch, so a release can be published without a merge first.
+  # Runnable on demand from any branch. That verifies a release candidate; it does not publish
+  # one - only main deploys, and the `deploy` job below is what enforces that.
   workflow_dispatch:
 
 # Read the repo, mint the Pages token. Nothing else.
@@ -47,7 +48,14 @@ jobs:
       - name: Audit output is current
         run: git diff --exit-code
 
+  # PRODUCTION DEPLOY AUTHORITY: main ONLY.
+  #
+  # `verify` runs wherever it is asked to, which is the point of workflow_dispatch on a WORK
+  # branch - a release candidate can be gated without touching the live site. Publishing is the
+  # part that is restricted, so the guard is on this job rather than on the trigger: a dispatch
+  # from any other ref runs the suite and then skips the deploy.
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: verify
     runs-on: ubuntu-latest
     environment:
