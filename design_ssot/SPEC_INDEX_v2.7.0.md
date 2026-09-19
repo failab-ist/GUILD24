@@ -8,11 +8,11 @@ DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_7_IMPLEMENTATION_BASELINE
 FREEZE_DATE=2026-09-15
 LAST_APPROVED_AMENDMENT=2026-09-19
-SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED
+SSOT_AUDIT_STATUS=LATEST_PLAYTEST_HOTFIX_SYNCED
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
 BALANCE_STATUS=APPROVED_BUNDLE_IN_SOURCE
-SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE
+SOURCE_ADOPTION_STATUS=ADOPTED_BASE_PENDING_PLAYTEST_UI_AUDIO_HOTFIX
 V2_7_SOURCE_EDIT_GATE=RECOVERY_CLOSE_CONFIRMED
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -128,14 +128,20 @@ v2.6.1 Adoption Recovery close = confirmed
 
 There are currently no implementation-blocking Design Unresolved items.
 
-`SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE`: the current line is
-**v2.7 + scoped Decoration Package**, and Source carries it, including the current Store Capital
-basis. Final integration regression and anti-farm validation passed. The small acquisition-timing
-variance remains an accepted current-cycle balance finding and does not reopen tuning.
+`SOURCE_ADOPTION_STATUS=ADOPTED_BASE_PENDING_PLAYTEST_UI_AUDIO_HOTFIX`: the gameplay /
+balance baseline remains **v2.7 + scoped Decoration Package** and stays adopted.
 
-This is not a project-wide v2.8 adoption and does not promote any owner outside the Package.
-Source is implementation truth for this adopted line; future differences from an owner are
-findings to classify, not unfinished adoption by default.
+The newest User-approved amendment is limited to:
+- mobile SALE playability / hierarchy
+- transient customer speech
+- tutorial coach copy / mobile targeting
+- ORDER / SALE current 점포지원 reference access
+- pre-Run Decoration empty-slot interaction
+- BGM audibility and semantic SFX coverage
+
+Those items are newer than Current Source and are the only known pending adoption in this hotfix.
+This is not a project-wide v2.8 adoption and does not reopen gameplay/balance numerics.
+Outside this explicit hotfix, Source remains implementation truth for the adopted line.
 
 The prerequisite recovery execution document remains:
 `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
