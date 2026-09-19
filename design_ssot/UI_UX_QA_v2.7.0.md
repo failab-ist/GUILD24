@@ -432,6 +432,82 @@ PASS:
 - a healthy fully prepared controlled state may show 0% 실패 시 사망 위험 when the current formula produces 0
 - injured pre-supply 실패 시 사망 위험 includes the canonical +10%p modifier and respects the 40% cap
 
+## UI-Q109 — MOBILE SALE HOTFIX
+
+Verify a real browser at 360 / 390 / 412 phone widths.
+
+PASS:
+- upper customer/decision summary occupies about half or less of usable SALE height
+- Item / price / transaction surface receives at least about half
+- shelf heading and at least one selectable Item row are visible at initial SALE entry without a scroll
+- character art is contained, not cropped or stretched
+- character and right-side information align without fixed-height overflow
+- Bag is exactly two slots, stacked vertically in the upper-right and each is ~44px touch class or larger
+- no required SALE decision information disappears to achieve the compact layout
+- fixed bottom dock remains reachable and does not cover the sale surface
+
+FAIL:
+- product selection remains pushed below an oversized character presentation
+- a short phone clips/overlaps the upper block
+- any desktop-only duplicate becomes the visible tutorial target on phone
+
+## UI-Q110 — TRANSIENT CUSTOMER SPEECH
+
+PASS:
+- speech is overlay/presentation and reserves no permanent layout height
+- new line appears
+- it auto-hides after 3 seconds
+- tapping it hides immediately
+- a new line restarts the 3-second display
+- same unchanged line does not reappear merely because SALE rerendered
+- no Save/account schema is added for speech visibility
+
+## UI-Q111 — ORDER/SALE STORE-SUPPORT REFERENCE
+
+PASS:
+- ORDER exposes compact access to currently owned 점포지원 before commitment
+- SALE exposes compact access to currently owned 점포지원 before commitment
+- both reuse the existing owned-Relic truth/detail surface
+- no duplicate Relic-effect store is introduced
+- controls do not crowd the primary phone decision surface
+
+## UI-Q112 — PRE-RUN DECORATION EMPTY SLOT
+
+PASS:
+- `비움` carries no `주의 ·` / error styling
+- before a Run, every Slot row including `비움` is actionable
+- tapping a Slot row enters existing 점포 관리 focused/scrolled to that Slot
+- active-Run loadout remains frozen/read-only
+
+## UI-Q113 — TUTORIAL COACH COPY / TARGETING
+
+PASS:
+- every current coach step uses the exact current COPY owner text
+- ORDER confirm explicitly says it commits only the current cart and ORDER remains available
+- SALE coach targets a visible mobile element, never the hidden desktop duplicate
+- fresh/reset tutorial reachability from UI-Q105/Q106 remains intact
+
+## UI-Q114 — AUDIO AUDIBILITY / COVERAGE
+
+Real-browser mobile audio check with Sound enabled.
+
+PASS:
+- at BGM 100% / SFX 100%, BGM remains clearly audible during ordinary play
+- SFX remain distinguishable above BGM; global SFX attenuation is not used merely to fake louder music
+- BGM/SFX sliders and master mute still work and persist
+- day / night / boss music states remain distinguishable
+- no runtime network request is required for audio playback
+- any external asset has repository-local source/license evidence and a redistribution-compatible license
+- current semantic SFX matrix is covered, including Decoration purchase/equip/unequip and other identified silent state-changing actions
+- every UI-requested cue resolves to an actual cue; no typo silently falls back to generic click
+- page hide / backgrounding stops or suspends audio without duplicate playback after resume
+
+FAIL:
+- 100% BGM is still perceived as nearly absent on the real phone test
+- important state-changing actions remain silent without deliberate rationale
+- every click is given an intrusive unique sound
+- external audio is hotlinked or has unclear/NC licensing
+
 ## UI-Q108 — FRANCHISE PROGRESS READOUT / COMPLETION CUE
 
 Controlled account at a known Franchise Achievement state, codex 본사 header and 진행도 tab.
