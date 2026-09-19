@@ -89,7 +89,11 @@ function blank(runs,policy,pricing,build){
      spec names - final Gold, remaining stock at the existing Closing liquidation basis, and the
      Day band reached - recorded per Run so a conversion rate can be tried against them without
      a rate being implemented anywhere. Nothing here grants or spends Store Capital. */
-  settlement:{runs:0,gold:0,stock:0,byBand:{}},
+  /* `values` is the per-Run Settlement Value and `gains` the per-Run Store Capital gain, by
+     META_v2.8 §STORE CAPITAL exactly: the clamp is on the SUM and the rate is the reached Day's.
+     The band totals beside them cannot substitute - summing a band and clamping once credits a
+     bankrupt Run's debt against a solvent Run's shelf, which the rule never does. */
+  settlement:{runs:0,gold:0,stock:0,byBand:{},values:[],gains:[]},
   refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
   /* Three different shortages that the old single `stockouts` counter ran together. It rose when
      the shelf happened to be empty after the last customer left, which is neither "the store had
@@ -465,7 +469,9 @@ function playRun(g,out,ctx){
  {const stock=s.inventory.reduce((a,x)=>a+Math.round((x.cost??D.itemBy[x.item].buy)*.5),0);
   const band=s.day>=30?'D30':s.day>=25?'D25-29':s.day>=20?'D20-24':s.day>=10?'D10-19':'D1-9';
   const t=out.settlement;t.runs++;t.gold+=s.money;t.stock+=stock;
-  const b=t.byBand[band]??={runs:0,gold:0,stock:0};b.runs++;b.gold+=s.money;b.stock+=stock;}
+  const b=t.byBand[band]??={runs:0,gold:0,stock:0};b.runs++;b.gold+=s.money;b.stock+=stock;
+  const value=Math.max(0,s.money+stock);
+  t.values.push(value);t.gains.push(Math.round(value*G.Meta.capitalRate(s.day)));}
  const byDeaths=s.stats.deaths>=D.balance.deathLimit;
  out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
  /* Per-Boss conditional clear: only Runs whose Final actually resolved, so WRATH (no Trait) can
