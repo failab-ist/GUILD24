@@ -60,7 +60,16 @@ async function drive(page,target,seed){
  // UI-Q19/Q20 get their own capture below.
  if(target!=='coach')await page.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
  const until=async pred=>{for(let i=0;i<800;i++){if(await page.evaluate(pred))return true;await page.evaluate(`${STEP}()`);}return false;};
- const reached=await until(GOAL[target]);
+ /* D30 is a ~3% outcome under the approved balance, and this drive plays a cruder policy than
+    the measured one: its Run ends legitimately around D15, by RUN FAIL, whatever seed it is
+    handed. So the three Final captures are taken on a CONTROLLED D30 SETUP - the same device
+    the canonical suite uses for its D30 window ladder - instead of searching seeds until one
+    survives, which would make the capture a property of the seed rather than of the screen.
+    Everything before the setup is the real path, the Day is moved once, and morning() opens
+    the real FINAL phase; nothing about the screen captured is fabricated. */
+ const d30=target==='final'||target==='end'||target==='endfail';
+ let reached=await until(d30?`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=6`:GOAL[target]);
+ if(reached&&d30)reached=await page.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.morning();Guild24.render();return g.run.phase==='final';})()`);
  if(!reached)throw Error('could not drive the run to '+target);
  // A milestone Relic window, an Event day and each Boss reveal own one focused reveal.
  // Skipping days without rendering means marking as seen what a player would already
