@@ -1036,6 +1036,30 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .matrix td.open{color:#6b6152}
 .matrix td.tally{font-variant-numeric:tabular-nums;color:#cbb98d;white-space:nowrap}
 .matrix tr.locked th,.matrix tr.locked td{opacity:.45}
+/* UI_UX_v2.8 §LIVE STORE: the equipped Decoration at its own fixed spot, in the same plate
+   language the branch name already uses. Placeholder until dedicated art exists. */
+.decoplate{position:absolute;z-index:3;padding:2px 7px;border:1px solid #4a4032;
+ background:#1b1710e0;color:#cbb992;font:500 9px/1.4 var(--ui);letter-spacing:.06em;white-space:nowrap}
+.decoplate.sign{top:6px;left:10px}
+.decoplate.wall{top:8px;right:10px}
+.decoplate.display{bottom:8px;right:10px}
+.decoplate.counter{bottom:6px;left:10px}
+@media (max-width:480px){.decoplate{font-size:8px;padding:1px 5px}}
+/* UI_UX_v2.8 §DECORATION UI. Reuses the unlock board's block rhythm and the .effects row
+   shape rather than introducing a new card language for one panel. */
+.decoration-panel{display:grid;gap:14px}
+.decoration-panel .slot h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
+.slot-option{display:flex;justify-content:space-between;align-items:center;gap:12px;
+ padding:9px 11px;border:1px solid #2f2a22;background:#17140f}
+.slot-option+.slot-option{margin-top:6px}
+.slot-option.on{border-color:var(--gold);background:#1d1810}
+.slot-option.locked{opacity:.72}
+.slot-option b{display:block}
+.slot-option span.smalltext{display:block;color:#a2947c}
+.slot-option .tale{margin-top:3px}
+.slot-option button{flex:0 0 auto}
+.decoration-panel .none{color:#7d7466}
+.settlement h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks{display:grid;gap:14px}
 .unlocks h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks p{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 5px;

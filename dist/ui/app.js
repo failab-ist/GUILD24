@@ -239,15 +239,15 @@ function morningScreen(){
  return '<div class="stage p-morning">'+menuFab()
  +'<div class="store">'
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
-   +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
+   +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span>'+decoPlate('sign')+'</span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
    +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
-  +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span></div>'
+  +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span>'+decoPlate('wall')+decoPlate('display')+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
    +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유 골드</span>'
    +'<span class="till" style="'+Scene.anchorStyle('till')+'" aria-label="보유 자금 '+fmt(s.money)+'G"><b class="coin">'+fmt(s.money)+'</b><i>G</i></span>'
-   +'</span></div>'
+   +decoPlate('counter')+'</span></div>'
  +'</div>'
  +'<div class="dock">'+relicWindowLink()+'<button class="pull" data-action="begin-order"><span>문 열기</span></button></div></div>';
 }
@@ -822,12 +822,23 @@ function endHeadline(){const s=game.run;
    reachable from the store menu at any time. */
 function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
  const row=(label,value)=>'<div class="row"><span>'+label+'</span><b>'+value+'</b></div>';
- const moved=(gain?.jobs||[]).map(g=>row(E(D.jobBy[g.job]?.name||g.job)+' 숙련',g.from+' → '+g.to)).join('')
-  +(gain?.grade?row('가맹등급',gain.grade.from+' → '+gain.grade.to):'');
+ const moved=(gain?.jobs||[]).map(g=>row(E(D.jobBy[g.job]?.name||g.job)+' 숙련',g.from+' → '+g.to)).join('');
  const opened=(s.unlocked||[]).length
   ?'<div class="opened"><span>본사 해금</span><b>'+E(s.unlocked.join(' · '))+'</b></div>':'';
- return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+opened
-  +(moved||opened?btn('도감에서 보기','codex','bare'):'');}
+ /* UI_UX_v2.8 §RUN-END. The settlement is read in the order it is computed, so the player can
+    follow Ending Gold + 재고 -> 정산액 -> (도달일 비율) -> 점포 자본. It is printed from the
+    settlement the Run recorded, not recomputed here, so a reload shows the same figures and
+    cannot appear to earn again. */
+ const st=s.settlement;
+ const settle=st?'<div class="block settlement"><h4>점포 자본 정산</h4>'
+  +row('마감 잔고',st.gold.toLocaleString()+'G')
+  +row('남은 재고 정리 가치',st.stock.toLocaleString()+'G')
+  +row('정산액',st.value.toLocaleString()+'G')
+  +row('DAY '+st.day+' 도달 비율','×'+Math.round(st.rate*100)+'%')
+  +row('얻은 점포 자본','+'+st.gain.toLocaleString())
+  +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
+ return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+settle+opened
+  +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'');}
 function npcCard(n,action='npc'){const s=game.run;return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${action==='team'&&(!n.alive||n.recovery)?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${action==='team'?(s.team.includes(n.id)?'선택됨':'원정대 선택'):'기록 보기'}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
@@ -939,9 +950,19 @@ function unlockLists(){const all=gatedContent(),open=all.filter(e=>e.have<e.want
    The markup is Slot -> owned options -> selected, not four hard-coded booleans, so a Slot that
    later holds alternatives renders without this changing. */
 const SLOT_COPY={sign:'간판',wall:'벽면',counter:'계산대',display:'진열대'};
+/* UI_UX_v2.8 §LIVE STORE. Only what this Run actually equipped is visible on the store screen,
+   each at its own fixed location. There is no dedicated pixel art for the four Decorations in
+   Source, and none is invented here: this reuses the existing plate language the branch name and
+   the DAY sign already use, so the equipped state is identifiable at its semantic spot.
+   Full artwork is an ASSET FOLLOW-UP, not a blocker. */
+function decoPlate(slot){const id=game.run?.loadout?.[slot];if(!id)return '';
+ const d=D.decorationBy[id];if(!d)return '';
+ /* No hover-only title: the effect is read in 점포 관리, and the plate says which Decoration
+    is on the wall. A tooltip would be the only place a touch player could not reach. */
+ return '<span class="decoplate '+slot+'" aria-label="'+E(SLOT_COPY[slot]||slot)+' · '+E(d.name)+'">'+E(d.name)+'</span>';}
 function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='end');
  const loadout=Meta.storeLoadout(a);
- return '<div class="store-panel">'
+ return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+Meta.storeCapital(a).toLocaleString()+'</b>'
  +' · 장식은 영업 밖에서만 사고 바꿀 수 있습니다.'+(inRun?' 지금은 영업 중이라 확인만 됩니다.':'')+'</p>'
  +D.decorationSlots.map(slot=>{
