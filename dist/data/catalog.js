@@ -171,11 +171,9 @@ events:[
 ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2',{visitors:2},.35],
 ['nightshift','본사 야간 근무 수칙','1. 마감 전 창고를 확인한다.\n2. 폐기 상품은 따로 둔다.\n3. 뒷문은 잠근다.\n5. 새벽 두 시 이후에는 창밖을 보지 않는다.\n4번 규정은 없습니다.','오늘 점포 유지비 0G',{overheadFree:1},.35]
 ].map(([id,name,reveal,description,effects,weight=1])=>({id,name,reveal,description,effects,weight})),
-contracts:[{id:'standard',name:'표준 가맹점',description:'기본 조건으로 시작',grade:null},
-{id:'delivery',name:'새벽배송 가맹점',description:'발주 +1 · 매입가 +5%',grade:2},
-{id:'guild',name:'길드 제휴점',description:'방문객 +1 · 운영비 +20G',grade:3},
-{id:'budget',name:'알뜰 가맹점',description:'초기자금 +250G · 희귀 발주 확률 소폭 감소',grade:4},
-{id:'premium',name:'프리미엄 상권',description:'희귀 모험가 확률 증가 · 운영비 +25G',grade:5}]
+/* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: the Start Contract table is retired and lives at
+   archive/inactive/v2_7_franchise/contracts.js. Nothing active read it any more. A stale v8
+   save may still carry a `run.contract` string; it is dormant payload and changes nothing. */
 };
 /* Boss Trait tuning. Every one of these is PASS3 and none is approved yet, so they are
    null on purpose: a Trait with no value applies nothing, and the Final stays exactly the

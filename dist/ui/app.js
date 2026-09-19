@@ -146,11 +146,11 @@ function render(){
  /* The Boss reveal joins the beat that already exists rather than becoming a Phase of its
     own (UI_UX: `Boss reveal is not a new permanent Phase`). It goes ahead of the Relic
     window on the same Day, because the Relic decision is the one it is meant to inform
-    (REL-Q41, UI-Q40): D5 identity, D15 the exact Trait, D30 the two Families. */
+    (REL-Q41, UI-Q40): D5 identity, D15 the exact Trait, D25 the two Families. */
  /* The foundation takeover owns the screen so the first store support gets decided, but it
-    used to be a one-way door: the contract was already committed and the only way back was to
-    spend the Run. The contract screen may therefore win over it - nothing has been played yet,
-    so going back costs nothing and creates no second Run. */
+    used to be a one-way door: the Run was already committed and the only way back was to
+    spend it. The pre-Run screen may therefore win over it - nothing has been played yet, so
+    going back costs nothing and creates no second Run. */
  if(phase==='foundation'&&modal!=='new')modal='relics';
  else if(bossRevealDue())modal='boss';
  else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';

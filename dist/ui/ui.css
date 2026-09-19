@@ -1200,7 +1200,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 }
 
 /* ---- Boss reveal -------------------------------------------------------------
-   D5 identity, D15 the exact Trait, D30 the two Families. The Boss is a game object,
+   D5 identity, D15 the exact Trait, D25 the two Families. The Boss is a game object,
    not an icon beside a card, so the art gets real room - but the decision the reveal
    leads into has to stay reachable, so on a phone the facts come first and the art
    sits under them rather than pushing them off the screen (UI_UX RESPONSIVE RULE). */

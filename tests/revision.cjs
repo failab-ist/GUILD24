@@ -153,9 +153,19 @@ test('META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: distinct clears count Bosses, a
  dormant.franchise.sales=100000;dormant.franchise.done=['nowaste','nodeath','allsupplied','grosssales'];
  assert.deepEqual(Meta.opened(dormant),Meta.opened(Meta.fresh()),'a filled dormant block unlocks nothing');
  assert.equal(Meta.storeCapital(dormant),0,'and earns no Store Capital');
- /* Contract gating is gone rather than inverted: every catalogue Contract reads as open, which
-    is what keeps a stale `grade` field on a Contract row from locking content. */
- for(const c of DATA.contracts)assert.equal(Meta.contractUnlocked(dormant,c),true,c.name+' is not gated');
+ /* The Contract table and its unlock gate are gone from active Source rather than neutralised:
+    nothing read either once the Start Contract was retired, and the final implementation lives
+    at archive/inactive/v2_7_franchise/contracts.js. A neutralised gate is still a gate to keep
+    correct; an absent one cannot be got wrong. */
+ assert.equal(DATA.contracts,undefined,'no Contract table is active');
+ assert.equal(Meta.contractUnlocked,undefined,'and no Contract unlock gate is exported');
+ const archived=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../archive/inactive/v2_7_franchise/contracts.js'),'utf8');
+ for(const id of ['standard','delivery','guild','budget','premium'])
+  assert.ok(archived.includes('"'+id+'"'),'the archive still holds '+id+' for the historical record');
+ /* A stale v8 save may still carry run.contract. That is dormant payload, which the
+    behavioural regression in integration.cjs proves changes nothing measurable. */
+ assert.ok(/contract='standard'/.test(require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8')),
+  'a new Run writes the dormant field and nothing reads it');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/index.html'),'utf8');
  assert.ok(!/archive\//.test(src),'the shipped page does not load the inactive archive');
 });

@@ -91,8 +91,6 @@ const distinctBossClear=a=>BOSSES().filter(boss=>JOBS().some(job=>a.matrix?.[job
    v2.7 implementation is preserved under archive/inactive/v2_7_franchise/ and is never imported.
    Active runtime derives no Grade, applies no discount, credits no Achievement and gates nothing
    on retired state. The account's `franchise` block may persist dormant for data preservation. */
-const contractUnlocked=()=>true;
-
 /* What a given progression state has opened. Since the Grade-gated Start Contract is retired,
    the only content unlocks left are the approved distinct-Boss gates. */
 function opened(a){
@@ -149,6 +147,6 @@ const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>({...store(a).loadout});
 G.Meta={fresh,freshFranchise,observe,finish,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
- opened,itemUnlocked,jobUnlocked,contractUnlocked,JOBS,BOSSES,
+ opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital};
 })(globalThis);
