@@ -43,5 +43,125 @@
     13,
     17
   ],
+  "detail": {
+    "강한 것부터": {
+      "order": [
+        "dawnSign",
+        "guildPlaque",
+        "thriftSafe",
+        "premiumCase"
+      ],
+      "acquisition": [
+        {
+          "position": 1,
+          "id": "dawnSign",
+          "price": 800,
+          "acquired": 112,
+          "ofTrajectories": 120,
+          "medianRun": 7,
+          "p25": 3,
+          "p75": 10
+        },
+        {
+          "position": 2,
+          "id": "guildPlaque",
+          "price": 700,
+          "acquired": 101,
+          "ofTrajectories": 120,
+          "medianRun": 9,
+          "p25": 4,
+          "p75": 12
+        },
+        {
+          "position": 3,
+          "id": "thriftSafe",
+          "price": 650,
+          "acquired": 95,
+          "ofTrajectories": 120,
+          "medianRun": 12,
+          "p25": 6,
+          "p75": 13
+        },
+        {
+          "position": 4,
+          "id": "premiumCase",
+          "price": 550,
+          "acquired": 91,
+          "ofTrajectories": 120,
+          "medianRun": 14,
+          "p25": 8,
+          "p75": 15
+        }
+      ],
+      "gainPerRun": {
+        "mean": 241,
+        "median": 0,
+        "p75": 128,
+        "p90": 736,
+        "zeroShare": 0.55
+      },
+      "endOwnedMean": 3.325,
+      "completed": 0.7583333333333333
+    },
+    "약한 것부터": {
+      "order": [
+        "premiumCase",
+        "thriftSafe",
+        "guildPlaque",
+        "dawnSign"
+      ],
+      "acquisition": [
+        {
+          "position": 1,
+          "id": "premiumCase",
+          "price": 550,
+          "acquired": 119,
+          "ofTrajectories": 120,
+          "medianRun": 6,
+          "p25": 2,
+          "p75": 10
+        },
+        {
+          "position": 2,
+          "id": "thriftSafe",
+          "price": 650,
+          "acquired": 111,
+          "ofTrajectories": 120,
+          "medianRun": 10,
+          "p25": 5,
+          "p75": 14
+        },
+        {
+          "position": 3,
+          "id": "guildPlaque",
+          "price": 700,
+          "acquired": 102,
+          "ofTrajectories": 120,
+          "medianRun": 13,
+          "p25": 7,
+          "p75": 16
+        },
+        {
+          "position": 4,
+          "id": "dawnSign",
+          "price": 800,
+          "acquired": 81,
+          "ofTrajectories": 120,
+          "medianRun": 17,
+          "p25": 9,
+          "p75": 17
+        }
+      ],
+      "gainPerRun": {
+        "mean": 233,
+        "median": 0,
+        "p75": 119,
+        "p90": 707,
+        "zeroShare": 0.5454166666666667
+      },
+      "endOwnedMean": 3.441666666666667,
+      "completed": 0.675
+    }
+  },
   "approvedExpectation": "3~4 / 6 / 8~9 / 10~11"
 }

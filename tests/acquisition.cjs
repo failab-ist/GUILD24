@@ -61,5 +61,5 @@ console.log('승인된 기대      3~4 / 6 / 8~9 / 10~11');
 fs.writeFileSync(require('node:path').resolve(__dirname,'acquisition-results-v5.json'),
  JSON.stringify({version:5,trajectories:T,runsPerTrajectory:R,policy:'balanced',
   prices:Object.fromEntries(STRONG.map(id=>[id,D.decorationBy[id].price])),
-  rates:D.capitalRates,strongFirst:s,weakFirst:w,
+  rates:D.capitalRates,strongFirst:s,weakFirst:w,detail,
   approvedExpectation:'3~4 / 6 / 8~9 / 10~11'},null,2));
