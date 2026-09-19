@@ -375,12 +375,17 @@ async function focusProbe(page){
  else{
   // the densest repeat control in the game: every button here shares one data-action and
   // carries no data-id, so a first-match restore lands on the wrong product's minus key.
-  // Pick the LAST row the store can actually afford to raise: a disabled button cannot take
-  // focus at all, so probing a fixed index turns an ordinary poor-run into a false failure.
-  const last=await page.evaluate(`(()=>{const rows=[...document.querySelectorAll('#app [data-action="qty"]')]
-   .filter(x=>x.textContent.trim()==='+'&&!x.disabled).map(x=>Number(x.dataset.index));
+  // Pick the LAST row the store can afford to raise TWICE. Raising a row to its own cap
+  // disables the + that was just pressed, and a disabled button cannot hold focus - the
+  // fall to its live neighbour is the designed behaviour, and the next case below is what
+  // tests it. Probing a row whose offer stocks one unit turns that into a false failure.
+  const last=await page.evaluate(`(()=>{const all=[...document.querySelectorAll('#app [data-action="qty"]')];
+   const rows=all.filter(x=>x.textContent.trim()==='+'&&!x.disabled).map(x=>Number(x.dataset.index))
+    .filter(i=>{const plus=all.filter(x=>x.dataset.index===String(i)&&x.textContent.trim()==='+')[0];
+     const cap=all.filter(x=>x.dataset.index===String(i)&&x.textContent.trim()==='최대')[0];
+     return plus&&cap&&Number(cap.dataset.q)>=Number(plus.dataset.q)+1;});
    return rows.length?Math.max(...rows):-1;})()`);
-  if(last<0)fails.push('no affordable quantity control on the order screen; the probe needs one');
+  if(last<0)warn.push('no quantity row on this order screen can be raised twice; the same-view restore was not probed');
   else{
   await page.evaluate(`(()=>{const b=[...document.querySelectorAll('#app [data-action="qty"]')]
    .filter(x=>x.dataset.index==='${last}'&&x.textContent.trim()==='+')[0];b.focus();})()`);
