@@ -449,6 +449,128 @@ Use the current `BOSS_v2.7.0.md` truth:
 Player-facing identity uses `탐식의 마왕 글러트니`.
 Exact changed Trait title/prose is owned by `COPY_WORLD_VOICE_v2.7.0.md`.
 
+## PLAYTEST HOTFIX — MOBILE SALE PLAYABILITY
+
+This amendment is phone-first. Desktop SALE is regression-protected but is not redesigned in this cycle.
+
+At 360 / 390 / 412-class phone widths, ordinary SALE must prioritize the transaction surface over customer presentation.
+
+### Vertical hierarchy
+
+Within the usable SALE viewport above the fixed bottom dock:
+- customer / expedition summary occupies about half or less
+- Item selection / price / sale interaction receives at least about half
+- this is a responsive proportion target, not a fixed-pixel split
+- do not crop character art or force equal fixed heights that break on shorter phones
+- at first entry, the sale surface must already show the shelf heading and at least one selectable Item row without requiring a scroll
+
+Compact the upper area by reducing presentation footprint, not by hiding required decision information.
+
+### Customer speech
+
+Customer speech is a transient overlay and must not reserve permanent layout height.
+
+Exact behavior:
+- a new customer/reaction line overlays the upper customer area
+- it auto-hides after 3 seconds
+- tapping the bubble hides it immediately
+- a newly emitted line starts a fresh 3-second display
+- hiding speech is presentation-only; do not add Save/account persistence
+- rerendering the same unchanged line must not resurrect an already auto-hidden bubble
+
+### Character / status / destination
+
+On phone:
+- move the character block upward into the space no longer reserved by speech
+- reduce its footprint enough to return meaningful height to the sale surface
+- align it softly with the adjacent status / destination area
+- use responsive flow/flex/grid, not forced equal fixed height
+- preserve full portrait containment; no crop/stretch
+- smaller phones may relax exact alignment rather than overflow
+
+### Bag
+
+The two Bag slots remain exactly two.
+
+On phone:
+- place them in the available upper-right area
+- arrange them 1 column × 2 rows
+- each slot remains at least ~44px touch class and should be visibly larger than the current tiny pair
+- keep "가방 used / 2" readable without a tall horizontal strip
+
+### Store-support reference during ORDER / SALE
+
+ORDER and SALE each provide a compact, immediately reachable reference to currently owned 점포지원.
+
+Requirements:
+- REUSE the existing owned-Relic data and existing Relic detail/modal content
+- do not add a second Relic information system
+- the control is available before the player commits the relevant ORDER / SALE decision
+- keep the control compact enough that it does not compete with the primary decision surface
+- on mobile, avoid retaining a second redundant owned-Relic block lower in SALE if the compact control already exposes the same information
+
+### Pre-Run Decoration empty-slot interaction
+
+A Decoration Slot with no equipped Decoration is a neutral state, not a warning.
+
+Required:
+- remove the inherited "주의 ·" treatment from "비움"
+- each Slot row, including "비움", is actionable before a Run
+- tapping a Slot row opens 점포 관리 focused/scrolled to that exact Slot
+- REUSE the existing store-management panel; do not create a second Decoration selector
+- during an active Run, keep the existing read-only/frozen-loadout rule
+
+## PLAYTEST HOTFIX — AUDIO FEEDBACK
+
+The current build already has separate BGM/SFX buses and semantic cues, but the playtest still reports BGM as materially too quiet and the feedback layer remains incomplete.
+
+### BGM audibility
+
+At BGM 100% / SFX 100% on a real phone speaker:
+- BGM must be continuously and clearly audible during normal play
+- routine SFX should still read above it
+- do not solve this by globally lowering all SFX
+- keep the existing player-owned BGM/SFX sliders and master mute
+
+First REUSE the current audio system and raise/calibrate the BGM source/bus as the smallest fix.
+If the synthesized loop remains too thin even at a correct level, replacing the BGM content with local free audio assets is allowed.
+
+External audio, if used:
+- development-time download is allowed
+- Runtime must not depend on CDN/network playback
+- vendor the files into the repository
+- prefer CC0/public-domain; otherwise use a license that explicitly permits modification and redistribution in a game
+- no NC / unclear-license material
+- retain source/license attribution in the repository
+- keep file size and mobile load cost reasonable
+- preserve day / night / boss mood separation rather than one generic loop
+
+### SFX coverage
+
+Do not add a unique sound to every click.
+
+Required semantic coverage:
+- soft UI navigation/select feedback for visible interactive controls where silence currently makes the screen feel dead
+- quantity change
+- ORDER confirm
+- store/open transition
+- Item select
+- ordinary 50% / 100% / 150% sale distinctions
+- refusal
+- Gold gain vs spend distinction
+- Relic purchase
+- Decoration purchase and equip/unequip
+- special Guild action
+- reroll
+- liquidation/rescue
+- depart / return / day close
+- Night outcome severity
+- Boss reveal / seal / Final departure
+- unlock/discovery reward
+
+REUSE existing cues where their semantic identity already fits.
+Only add new cue assets/types where reuse would make two meaningfully different actions sound misleadingly identical.
+
 ## TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
 
 Hazard tutorial teaches:
