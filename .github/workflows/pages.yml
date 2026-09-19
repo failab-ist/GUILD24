@@ -1,0 +1,64 @@
+# GitHub Pages deployment for GUILD24.
+#
+# The game is a static build with no compile step: dist/ is the shipped artifact exactly as it
+# sits in the repository, every path inside it is relative, and nothing is fetched from an
+# external origin at runtime. So the deploy is an upload, not a build.
+#
+# The gate before that upload is the repository's own suite. A push that would ship a broken
+# game fails here instead of on the player's screen.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  # Deploy on demand from any branch, so a release can be published without a merge first.
+  workflow_dispatch:
+
+# Read the repo, mint the Pages token. Nothing else.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time. A run already in flight finishes rather than being cancelled, so a
+# half-uploaded artifact never becomes the live site.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # No dependency install: the suite runs on the Node standard library alone. Playwright is
+      # a devDependency used by the local visual harness, which is deliberately not part of
+      # `npm test` and is not run here.
+      - name: Test suite
+        run: npm test
+      - name: Source-derived audit
+        run: npm run audit
+      # The audit regenerates files it derives from Source. If that changes anything, the
+      # committed derivation is stale and the deploy is refused rather than shipping a build
+      # whose documentation disagrees with its code.
+      - name: Audit output is current
+        run: git diff --exit-code
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      # dist/ is the site root, so the game is served at the Pages root rather than under /dist.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
