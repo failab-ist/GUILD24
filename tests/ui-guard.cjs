@@ -348,6 +348,36 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
   assert.ok(!prose.includes(term),'no internal design term reaches the player: '+term);
 });
 
+/* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM. The systems are gone from the code, but the Help
+   and the coach marks still described them to the player as current rules: visitors varying by
+   `계약`, and `가맹등급` listed among the things a Run leaves behind. What is named now is what
+   the Account actually carries, in the terminology the screens already use. */
+test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a current rule',()=>{
+ /* Everything a player can read: the Help, the coach marks, the copy table and the screens. */
+ const surfaces=fn('help')+fn('coach')+read('dist/data/copy.js')+app.slice(app.indexOf('const COACH'),app.indexOf('function coach'))
+  +JSON.stringify(DATA.relics.map(r=>[r.name,r.description]))+JSON.stringify(DATA.decorations);
+ for(const retired of ['가맹등급','시작 계약','계약 선택','가맹 실적','등급 할인'])
+  assert.ok(!surfaces.includes(retired),'retired system term is not shown to the player: '+retired);
+ // the visitor sources named to the player are the ones morning() actually composes
+ const morning=read('dist/systems/shop.js');
+ const composes=morning.slice(morning.indexOf('morningVisitors(){'),morning.indexOf('morningEvent(ids){'));
+ assert.ok(/board/.test(composes)&&/hub/.test(composes)&&/guildPlaque/.test(composes),
+  'the visitor count is composed from Relics and the wall Decoration');
+ assert.ok(!/contract/i.test(composes),'and from no Contract');
+ const helpText=fn('help');
+ assert.ok(helpText.includes('점포지원·장식·사건'),'the Help names those three sources');
+ // and what the Help says survives a Run is what Meta actually keeps
+ const fresh=Meta.fresh(),carried=['상품','직업','몬스터 지식','발견','직업 숙련','점포 자본','보유 장식'];
+ for(const t of carried)assert.ok(helpText.includes(t),'the Help names the persistent '+t);
+ assert.ok(Object.keys(Meta.opened(fresh)).join()==='items,jobs','unlocks are Items and Jobs');
+ assert.equal(typeof Meta.storeCapital(fresh),'number','Store Capital is a persistent Account resource');
+ assert.ok(Array.isArray(Meta.ownedDecorations(fresh)),'so is the owned Decoration collection');
+ assert.equal(typeof Meta.totalJobMastery(fresh),'number','so is Job Mastery');
+ // the things it says do NOT carry really do not
+ assert.ok(helpText.includes('모험가·재고·돈·점포지원은 다음 영업에 이어지지 않습니다'),
+  'and it names the per-Run things by their current term');
+}); 
+
 test('COPY §Run abandon: the abandon says it costs everything, and promises nothing',()=>{
  // The action that reaches this is app.js case'start'. What the engine does is asserted in
  // integration.cjs; what the player is told is asserted here, because the old copy promised
