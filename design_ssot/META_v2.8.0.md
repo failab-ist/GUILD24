@@ -94,15 +94,32 @@ It may not pay for:
 For an eligible completed Run:
 
 ```text
+Inventory Liquidation Value
+= the existing Closing liquidation basis
+
 Settlement Value
-= Ending Gold
-+ remaining Inventory liquidation value
+= max(0, Ending Gold + Inventory Liquidation Value)
 
 Store Capital Gain
 = Settlement Value × Day-reach conversion rate
 ```
 
 Remaining Inventory uses the **same value basis as the existing Closing liquidation rule**. Do not invent a second inventory valuation system for Meta settlement.
+
+**The clamp is on the sum, and debt is part of it.** A Run that ends owing money still holds stock, and that stock pays the debt down before anything is banked:
+
+```text
+Ending Gold = -500G, Inventory Liquidation Value = 800G  ->  Settlement Value = 300G
+Ending Gold = -2000G, Inventory Liquidation Value = 800G ->  Settlement Value = 0
+```
+
+Clamping the Gold first:
+
+```text
+max(0, Ending Gold) + Inventory Liquidation Value      <- FORBIDDEN
+```
+
+is not the rule. It would hand a bankrupt store the whole shelf value and make ending in the red cost nothing.
 
 Manual Run Abandon / explicit early retirement grants:
 

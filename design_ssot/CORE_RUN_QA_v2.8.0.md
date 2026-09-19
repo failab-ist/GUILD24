@@ -38,3 +38,17 @@ After exact conversion rates are approved, QA must verify:
 - manual Run Abandon credits 0
 
 Numeric rate assertions are intentionally pending the integrated balance approval and must not be invented by WORK.
+
+## RUN-Q-v28-4 — SETTLEMENT VALUE INCLUDES DEBT
+
+Owner rule: `META_v2.8.0.md` §STORE CAPITAL.
+
+PASS:
+- `Settlement Value = max(0, Ending Gold + Inventory Liquidation Value)`
+- a Run ending at -500G holding 800G of stock settles at 300G
+- a Run whose debt exceeds its stock settles at 0, never negative
+- Inventory is valued by the existing Closing liquidation basis, not a second rule
+
+FAIL:
+- `max(0, Ending Gold) + Inventory Liquidation Value` — the Gold clamped before the sum
+- any Run in debt settling at its full stock value

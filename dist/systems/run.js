@@ -61,7 +61,11 @@ P.liquidate=function(stockId){const s=this.run;
    valuation invented for Meta. A Run that ends owing money contributes its stock only. */
 P.settlementValue=function(){const s=this.run;
  const stock=s.inventory.reduce((a,x)=>a+Math.round((x.cost??D.itemBy[x.item].buy)*.5),0);
- return {gold:Math.max(0,s.money),stock,total:Math.max(0,s.money)+stock};};
+ /* The clamp is on the SUM, not on the Gold. A store that ends owing money still holds stock,
+    and that stock pays the debt down before anything is banked: -500G of till against 800G of
+    shelf settles at 300G, not at 800G. Clamping Gold first would hand a bankrupt store the full
+    shelf value and make going into the red free. */
+ return {gold:s.money,stock,total:Math.max(0,s.money+stock)};};
 /* Settled exactly once. The guard lives on the Run, so a reload of an ended Run reads the
    recorded settlement instead of earning it again. A manual abandon never reaches end(), which
    is what makes abandon worth nothing. */
