@@ -892,6 +892,31 @@ test('META_v2.8 §RUN-END STORE CAPITAL SETTLEMENT: once, on the reached Day, ne
  assert.equal(Meta.storeCapital(dropped.account),capital,'starting a new Run over a live one settles nothing');
 });
 
+/* RUN-Q-v28-4. The clamp is on the SUM, not on the Gold. A store that ends owing money still
+   holds stock, and that stock pays the debt down before anything is banked. Clamping the Gold
+   first would hand a bankrupt store the full shelf value and make going into the red free. */
+test('META_v2.8 §STORE CAPITAL: Settlement Value includes the debt, and never goes below zero',()=>{
+ const at=(money,day)=>{const g=fresh('settle-debt-'+money+'-'+day);g.run.day=day;g.run.money=money;return g;};
+ const stock=at(0,22).settlementValue().stock;
+ assert.ok(stock>0,'the fixture really is holding stock worth something');
+ // positive gold: the plain case, gold and stock both count
+ const up=at(1000,22).settlementValue();
+ assert.equal(up.total,1000+stock,'a solvent store settles on gold plus stock');
+ // negative gold: the debt is paid out of the stock, not ignored
+ const debt=at(-stock+300,22).settlementValue();
+ assert.equal(debt.gold,-stock+300,'the Ending Gold is reported as it is, still negative');
+ assert.equal(debt.total,300,'and the Settlement Value is what is left after the debt');
+ // debt larger than the stock: nothing is banked, and nothing is owed to the Account either
+ const under=at(-stock-2000,22).settlementValue();
+ assert.equal(under.total,0,'a debt past the shelf settles at zero, not at the shelf value');
+ const g=at(-stock-2000,22),before=Meta.storeCapital(g.account);
+ assert.equal(g.settleStoreCapital().gain,0,'so the Run banks nothing');
+ assert.equal(Meta.storeCapital(g.account),before,'and the Account is unchanged');
+ // the forbidden form - clamping the Gold first - would have banked the whole shelf
+ assert.equal(Math.max(0,under.gold)+stock,stock,'the forbidden form would bank the whole shelf');
+ assert.notEqual(under.total,Math.max(0,under.gold)+stock,'Gold is not clamped before the sum');
+});
+
 test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run never re-reads it',()=>{
  const a=Meta.fresh();
  Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
