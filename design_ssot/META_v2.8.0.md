@@ -94,32 +94,32 @@ It may not pay for:
 For an eligible completed Run:
 
 ```text
-Inventory Liquidation Value
-= the existing Closing liquidation basis
-
-Settlement Value
-= max(0, Ending Gold + Inventory Liquidation Value)
+Gross Sales
+= the Run's accumulated actual sales revenue
 
 Store Capital Gain
-= Settlement Value × Day-reach conversion rate
+= round(Gross Sales × Day-reach conversion rate)
 ```
 
-Remaining Inventory uses the **same value basis as the existing Closing liquidation rule**. Do not invent a second inventory valuation system for Meta settlement.
+Gross Sales is the existing sales-accounting truth already used by the Run. It includes actual
+ordinary sales and any Final fixed-price transfers that count toward Gross Sales, exactly once.
+Do not create a second Meta-only sales counter.
 
-**The clamp is on the sum, and debt is part of it.** A Run that ends owing money still holds stock, and that stock pays the debt down before anything is banked:
+The two terms deliberately represent the two things Store Growth rewards:
 
 ```text
-Ending Gold = -500G, Inventory Liquidation Value = 800G  ->  Settlement Value = 300G
-Ending Gold = -2000G, Inventory Liquidation Value = 800G ->  Settlement Value = 0
+Gross Sales = how much business the store actually did
+Reached Day = how long that business survived
 ```
 
-Clamping the Gold first:
+A normal Run may therefore earn Store Capital even when it ends in bankruptcy, Death-limit
+closure, or Final failure. Those remain real Run failures: Run Gold, Inventory, adventurers and
+Run-scoped Store Build are still lost. They simply do not erase the store-operation progress
+already demonstrated by actual sales and survival depth.
 
-```text
-max(0, Ending Gold) + Inventory Liquidation Value      <- FORBIDDEN
-```
-
-is not the rule. It would hand a bankrupt store the whole shelf value and make ending in the red cost nothing.
+Ending Gold and remaining Inventory liquidation value are **not Store Capital inputs**.
+They remain important inside the Run because they determine liquidity, rescue and bankruptcy,
+but Meta does not reward the same end-state wealth a second time.
 
 Manual Run Abandon / explicit early retirement grants:
 
@@ -130,16 +130,31 @@ Store Capital Gain = 0
 Boss CLEAR does not multiply Store Capital settlement.
 Boss success progression remains owned by Job Mastery.
 
+A Run with:
+
+```text
+Gross Sales = 0
+```
+
+earns:
+
+```text
+Store Capital Gain = 0
+```
+
+regardless of reached Day. This keeps inactivity / no-sale farming from becoming a progression
+answer.
+
 ### Day-reach conversion rate — EXACT
 
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-D1-9    =  5%
-D10-19  = 15%
-D20-24  = 30%
-D25-29  = 45%
-D30     = 60%
+D1-9    = 1%
+D10-19  = 2%
+D20-24  = 3%
+D25-29  = 4%
+D30     = 5%
 ```
 
 The band is the Day the Run actually reached. Boss CLEAR does not multiply it.
