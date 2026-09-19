@@ -390,6 +390,19 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
  assert.ok(/s\.final\?'<div class="brief">/.test(app),'ORDER shows the known Final state');
  assert.ok(/s\.final\.familyNames/.test(app),'by name');
  assert.ok(/Presentation\.hazardRows\(s\.final\.hazards\)/.test(app),'with the Pool it carries');
+ /* FINAL_EXPEDITION_v2.7 §D25: the disclosure comes BEFORE the ordinary D25 decisions that
+    could use it, which in practice means before the D25 Relic window. The stage is due from
+    the Day the state exists, and D30 reuses the same flag rather than staging a second reveal.
+    What a player can actually touch in what order is proved in a real browser by the
+    `D25 Final disclosure precedes the D25 decisions` probe in tools/qa-visual.cjs; these two
+    assertions pin the rule the probe exercises, so neither stands alone. */
+ assert.ok(/if\(s\.day>=25&&s\.final&&!s\.bossReveal\.familySeen\)return true;/.test(app),
+  'the Family disclosure is due from D25, not from D30');
+ const due=app.slice(app.indexOf('function bossRevealDue('),app.indexOf('function bossRevealStage('));
+ assert.ok(!/s\.day>=30/.test(due),'and no D30-only reveal path survives beside it');
+ const precedence=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
+ assert.ok(precedence.indexOf('bossRevealDue()')<precedence.indexOf("modal='relics'",precedence.indexOf('bossRevealDue()')),
+  'and it is resolved ahead of the Relic window it exists to inform');
 });
 
 test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 1.70, not the aggregate path',()=>{

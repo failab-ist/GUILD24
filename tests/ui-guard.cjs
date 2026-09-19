@@ -321,7 +321,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  const c=Copy.boss;
  assert.equal(c.d5.header,'길드 토벌 공고');
  assert.equal(c.d15.intro,'길드 정보원이 추가 정보를 확보했다.');
- assert.equal(c.d30.header,'최종 정찰 보고');
+ assert.equal(c.final.header,'최종 정찰 보고');
  for(const b of DATA.bosses){
   assert.ok(c.d5.flavor[b.id],b.id+' has its D5 Flavor');
   assert.ok(c.d15.trait[b.id],b.id+' has its D15 Trait');

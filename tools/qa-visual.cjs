@@ -293,6 +293,76 @@ async function audit(page,width,screen,desktop){
 // document.activeElement, so it lives here, where a real browser is already running, and
 // not in the DOM-less node suite. #app is replaced wholesale on every redraw, so focus has
 // to be put back by hand — and the handle has to name one control, not a class of them.
+/* FINAL-Q70 / REL-Q78 interaction ordering. Not "the string is in app.js": the Run is driven to
+   a real D25 Morning in a real browser, and what the player can actually touch is read off the
+   DOM. The Final disclosure has to own the screen BEFORE the D25 Relic window, because that
+   window is the decision the disclosure exists to inform. D30 then reuses the state and must not
+   reveal a Family again. */
+async function d25OrderProbe(page){
+ const fails=[];
+ /* Its own page, deliberately: drive() installs an init script that clears localStorage on
+    every navigation, and this probe has to reload INTO a saved Run to prove the disclosure is
+    not replayed. */
+ await page.evaluate(`(()=>{try{localStorage.clear();}catch(e){}})()`);
+ await page.reload({waitUntil:'load'});
+ await page.waitForTimeout(200);
+ await page.click('#modal-root details summary');
+ await page.fill('#seed','qa-d25-order');
+ await page.click('[data-action="start"]');
+ await page.click('#modal-root [data-action="buy-relic"]');
+ await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;
+  /* every earlier reveal already seen, so what is on screen at D25 is the D25 beat alone */
+  g.run.bossReveal.identitySeen=true;g.run.bossReveal.traitSeen=true;
+  g.run.day=25;g.morning();g.save();Guild24.render();})()`);
+ await page.waitForTimeout(150);
+
+ const seen=async()=>page.evaluate(`(()=>{const m=document.querySelector('#modal-root');
+  return {title:(m.querySelector('h2,h3')?.textContent||'').trim(),
+   family:!!m.querySelector('.boss-reveal.final .fam-card'),
+   relicTakeover:!!m.querySelector('.relic-takeover,[data-action="buy-relic"]'),
+   buyable:[...m.querySelectorAll('[data-action="buy-relic"]')].filter(b=>!b.disabled).length,
+   ack:!!m.querySelector('[data-action="boss-seen"]')};})()`);
+
+ const atD25=await seen();
+ if(!atD25.family)fails.push('D25 did not disclose the Final Family Pair (modal title: "'+atD25.title+'")');
+ if(!atD25.ack)fails.push('the D25 disclosure has no acknowledgement the player can press');
+ if(atD25.buyable)fails.push(`a D25 store support could be bought before the Final disclosure (${atD25.buyable} live buttons)`);
+
+ const families=await page.evaluate(`JSON.stringify(Guild24.game.run.final.families)`);
+ const pool=await page.evaluate(`JSON.stringify([...Guild24.game.run.final.hazards].sort())`);
+
+ // acknowledging it is what hands the Day over to the Relic window. If there is nothing to
+ // acknowledge the disclosure never happened, which the fails above already say - report them
+ // rather than timing out on a button that is not there.
+ if(!atD25.ack)return {fails};
+ await page.click('#modal-root [data-action="boss-seen"]');
+ await page.waitForTimeout(150);
+ const after=await seen();
+ if(after.family)fails.push('the disclosure repeated itself after being acknowledged');
+ if(!after.relicTakeover)fails.push('acknowledging the disclosure did not hand the Day to the D25 Relic window');
+
+ // a reload cannot replay the disclosure, and cannot reroll what it disclosed
+ await page.evaluate(`Guild24.game.save()`);
+ await page.reload({waitUntil:'load'});
+ await page.waitForTimeout(200);
+ if(!await page.evaluate(`!!Guild24.game.run`)){fails.push('the Run did not survive a reload at all');return {fails};}
+ const reloaded=await seen();
+ if(reloaded.family)fails.push('a reload replayed the D25 disclosure');
+ if(await page.evaluate(`JSON.stringify(Guild24.game.run.final.families)`)!==families)
+  fails.push('a reload rerolled the Family Pair');
+ if(await page.evaluate(`JSON.stringify([...Guild24.game.run.final.hazards].sort())`)!==pool)
+  fails.push('a reload rerolled the Final Hazard Pool');
+
+ // D30 consumes the same state and stages no second Family reveal
+ await page.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.morning();Guild24.render();})()`);
+ await page.waitForTimeout(200);
+ const d30=await seen();
+ if(d30.family)fails.push('D30 revealed the Families a second time');
+ if(await page.evaluate(`JSON.stringify(Guild24.game.run.dungeons[0].families)`)!==families)
+  fails.push('the D30 Final Gate is not the state disclosed on D25');
+ return {fails};
+}
+
 async function focusProbe(page){
  const fails=[],warn=[];
  const where=()=>page.evaluate(`(()=>{const el=document.activeElement;if(!el)return {tag:'none'};
@@ -386,6 +456,14 @@ async function focusProbe(page){
   const focus=await focusProbe(kb);
   failed+=focus.fails.length;
   console.log(`${focus.fails.length?'FAIL':'PASS'} keyboard focus across a redraw${focus.fails.length?'\n  - '+focus.fails.join('\n  - '):''}${focus.warn.length?'\n  ? '+focus.warn.join('\n  ? '):''}`);
+  const d25ctx=await browser.newContext({viewport:{width:390,height:HEIGHT},deviceScaleFactor:1,isMobile:true,hasTouch:true,locale:'ko-KR'});
+  const d25page=await d25ctx.newPage();
+  d25page.on('pageerror',e=>{console.error('  page error @d25: '+e.message);failed++;});
+  await d25page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+  const d25=await d25OrderProbe(d25page);
+  await d25ctx.close();
+  failed+=d25.fails.length;
+  console.log(`${d25.fails.length?'FAIL':'PASS'} D25 Final disclosure precedes the D25 decisions${d25.fails.length?'\n  - '+d25.fails.join('\n  - '):''}`);
   await ctx.close();
  }finally{
   await browser.close();server.kill();

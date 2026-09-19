@@ -123,7 +123,9 @@ Copy.boss={
    GLUTTONY:['탐식의 권능',['최종전에서 [등급] 이상 보급품의 능력치 증가 효과가 감소한다.','대응·보급·보험·기타 특수 효과는 그대로 적용된다.']],
    LUST:['매혹의 권능',['단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.','단골은 영향을 받지 않는다.']],
    SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 유물을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 유물은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
- d30:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'최종 준비'}
+ /* The scouting report is the D25 disclosure now, so its button acknowledges the report
+    rather than announcing a preparation that is still five days away. */
+ final:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'확인'}
 };
 
 /* COPY_WORLD_VOICE §LOCKED PLAYER-FACING TERMS, 2026-09-12. Two of these are exact: the Great

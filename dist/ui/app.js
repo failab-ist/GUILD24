@@ -1046,13 +1046,19 @@ function help(){return `<div class="stack"><h3>점포지원</h3><p>DAY 0에는 �
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
- if(s.day>=30&&s.phase==='final')return !s.bossReveal.familySeen;
- if(!['morning','order'].includes(s.phase))return false;
+ if(!['morning','order','final'].includes(s.phase))return false;
+ /* FINAL_EXPEDITION_v2.7 §D25 FINAL STATE GENERATION: the exact Family Pair and Hazard Pool are
+    revealed on D25, BEFORE the ordinary D25 decisions that could use the information. The reveal
+    used to wait for D30, which put the D25 Relic window - the decision it exists to inform -
+    ahead of it. The seen flag is persisted and the state is the same object either Day, so D30
+    reuses it and never reveals a Family a second time; a save made before D25 disclosure existed
+    still gets it on the D30 Final, which is why the guard is the flag and not the Day. */
+ if(s.day>=25&&s.final&&!s.bossReveal.familySeen)return true;
  if(s.day>=15&&!s.bossReveal.traitSeen)return true;
  return s.day>=5&&!s.bossReveal.identitySeen;}
 
 function bossRevealStage(){const s=game.run;
- if(s.day>=30&&s.phase==='final')return 'd30';
+ if(s.day>=25&&s.final&&!s.bossReveal.familySeen)return 'final';
  return s.day>=15&&!s.bossReveal.traitSeen?'d15':'d5';}
 
 /* Boss art is a game object here, not an icon beside a card (UI_UX). The decision the
@@ -1060,8 +1066,8 @@ function bossRevealStage(){const s=game.run;
 function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bossRevealStage();
  const art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
  const plate=art?'<figure class="boss-art"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'';
- if(stage==='d30'){const d=s.dungeons[0];
-  return '<div class="boss-reveal d30"><p class="lede">'+E(c.d30.intro)+'</p>'
+ if(stage==='final'){const d=s.final||s.dungeons[0];
+  return '<div class="boss-reveal final"><p class="lede">'+E(c.final.intro)+'</p>'
    +'<div class="fams">'+(d.families||[]).map(id=>{const f=D.dungeonBy[id];
      return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+E(f.name)+'</b>'
       +hazardList(D.familyTiers[id][1])+'</article>';}).join('')
@@ -1081,10 +1087,10 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
  let title='',body='',footer='',narrow=false;const s=game.run;
  if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
-  title=stage==='d30'?c.d30.header:stage==='d15'?'길드 정보 보고':c.d5.header;
+  title=stage==='final'?c.final.header:stage==='d15'?'길드 정보 보고':c.d5.header;
   body=bossReveal();
-  footer=btn(stage==='d30'?c.d30.button:stage==='d15'?c.d15.button:c.d5.button,'boss-seen','stamp');
-  narrow=stage!=='d30';}
+  footer=btn(stage==='final'?c.final.button:stage==='d15'?c.d15.button:c.d5.button,'boss-seen','stamp');
+  narrow=stage!=='final';}
  else if(modal.startsWith('stat:')){
   const k=modal.split(':')[1], n=game.current();
   if(n){
@@ -1129,7 +1135,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'special':game.specialAction(id,el.dataset.value);render();break;
  case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;
  case'boss-seen':{const st=bossRevealStage();
-  if(st==='d30')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
+  if(st==='final')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
   game.save();setModal(null);render();break;}
  case'break-seal':game.breakSeal();sound('boss');render();break;
  case'menu':setModal('menu');break;
