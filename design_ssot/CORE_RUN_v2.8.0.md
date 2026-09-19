@@ -55,13 +55,19 @@ Do not keep the retired `contract` choice as a hidden second source of the same 
 A normal Run end computes Store Capital settlement exactly once.
 
 Inputs:
-- final current Gold
-- remaining Inventory valued by the existing liquidation value basis
+- the Run's accumulated actual Gross Sales
 - reached Day band
+
+Exact formula and rates are owned by `META_v2.8.0.md`.
+
+Bankruptcy, Death-limit closure, Final failure and Boss CLEAR are all normal Run endings for this
+purpose. Their Run result remains different, but Store Capital reads only the actual business
+already done and the Day reached.
 
 Manual Run Abandon / explicit retirement yields 0 Store Capital.
 
-Exact conversion rates remain unresolved until the integrated v2.8 balance proposal is approved.
+Ending Gold and remaining Inventory liquidation value are not Store Capital inputs. Their existing
+Run-internal Closing / rescue / bankruptcy rules remain unchanged.
 
 Save/reload must not:
 - double-credit Store Capital
