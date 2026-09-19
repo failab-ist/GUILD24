@@ -93,7 +93,7 @@ traits:[
 ['genius','천재','positive',{xpMult:1.25},{xpMult:'benefit'}],
 ['strong','강골','positive',{injuryGuard:0.23},{injuryGuard:'benefit'}],
 ['frail','허약함','negative',{survivalPercent:-0.10,recoveryDelta:1},{survivalPercent:'cost',recoveryDelta:'cost'}],
-['potionbody','포션체질','positive',{potionMult:1.3},{potionMult:'benefit'}],
+['potionbody','포션체질','positive',{potionMult:1.15},{potionMult:'benefit'}],
 ['pyrophobia','화염공포증','negative',{fire:-6},{fire:'cost'}],
 ['collector','수집가','mixed',{rareBias:0.12,commonBias:-0.05},{rareBias:'benefit',commonBias:'cost'}],
 ['thrifty','실속파','mixed',{commonBias:0.10,rareBias:-0.10},{commonBias:'benefit',rareBias:'cost'}],

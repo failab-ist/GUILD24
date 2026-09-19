@@ -34,7 +34,13 @@ function prepare(n,d,facilities=[]){
     if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)nativePool+=.25;
     value*=1+nativePool;
    }
-   if(item.effects.potion&&k==='survival')value*=mult.potionMult;
+   /* NPC_TRAIT_v2.7 §POTIONBODY: a Potion's POSITIVE NATIVE Core Stat x1.15. It was written as
+      survival-only, and every Potion in the v2.7 catalog carries combat - so the Trait amplified
+      nothing at all. The scope is the same one the Food/Drink pool above uses: a positive native
+      Core Stat. Hazard Counter, Supply, Insurance and any other attached effect are separate
+      channels and stay outside it, which is why this reads statKeys and v>0 rather than the
+      whole effects table. */
+   if(item.category==='potion'&&statKeys.includes(k)&&v>0)value*=mult.potionMult;
    /* 원정 도시락 코너's other half: a Food/Drink's EXPLICIT Hazard Counter, and only when it
       matches a Hazard the actual destination carries. No universal Hazard solution. */
    if(facilities.includes('expeditionMeal')&&isFD&&v>0&&d.hazards.includes(k))value*=1.25;
@@ -104,7 +110,7 @@ function prepare(n,d,facilities=[]){
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
- if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션 효과가 30% 증가했다.'});
+ if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
  e.beforeFatigue=currentFatigue;e.preparedSupply=preparedSupply;e.excessSupply=excessSupply;
  e.preRecovery=preRecovery;e.fatigueBeforeExpedition=fatigueBeforeExpedition;e.remainingSupplyBuffer=remainingSupplyBuffer;

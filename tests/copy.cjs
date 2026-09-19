@@ -222,13 +222,16 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  /* Each multiplier names the channel it actually moves, never 음식/포션 고유 효과, which would
     claim every effect the item has. Under ITEM_v2.7 foodMult joins the positive native
     Core-Stat pool - all four Stats, not 강인함 alone - so the label widened with it.
-    potionMult still moves exactly one contribution. */
+    potionMult was written as survival-only at x1.30 while NPC_TRAIT_v2.7 §POTIONBODY says a
+    Potion's POSITIVE NATIVE Core Stat x1.15 - and every v2.7 Potion carries combat, so the
+    Trait moved nothing. Both assertions below described that stale implementation; they now
+    describe the Canonical one, and the label widened for the same reason foodMult's did. */
  const dungeon=read('dist/systems/dungeon.js');
  assert.ok(/nativePool=isFood\?mult\.foodMult-1:0/.test(dungeon),'foodMult enters the native Core-Stat pool');
  assert.ok(/statKeys\.includes\(k\)&&isFD&&v>0/.test(dungeon),'and that pool is positive native Core Stat only');
- assert.ok(/item\.effects\.potion&&k==='survival'\)value\*=mult\.potionMult/.test(dungeon),'potionMult still reaches survival only');
+ assert.ok(/item\.category==='potion'&&statKeys\.includes\(k\)&&v>0\)value\*=mult\.potionMult/.test(dungeon),'potionMult reaches a Potion positive native Core Stat');
  assert.equal(Presentation.labels.foodMult,'음식의 능력치','so the label names that channel');
- assert.equal(Presentation.labels.potionMult,'포션의 강인함','and so does the potion one');
+ assert.equal(Presentation.labels.potionMult,'포션의 능력치','and so does the potion one');
  for(const id of ['eater','small'])
   assert.ok(!DATA.traitBy[id].note,'with the channel named, '+id+' no longer needs a note denying the others');
 

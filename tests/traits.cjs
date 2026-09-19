@@ -235,4 +235,47 @@ test('NPC_TRAIT_v2.7 §LEVEL-UP REWARD: a Level grants Stats and nothing else',(
  assert.equal(gained.length,1);
 });
 
+// NPC-Q73. The rule is "Potion POSITIVE NATIVE Core-Stat x1.15". It was implemented as
+// survival-only at x1.30, and every Potion in the v2.7 catalog carries combat - so the Trait
+// amplified nothing at all while claiming 30% on screen. Every tier is checked, on the exact
+// factor, and every other channel is checked for not moving.
+test('NPC-Q73 POTIONBODY SCOPE: every Potion tier, positive native Core Stat only, x1.15',()=>{
+ const g=fresh('potionbody');
+ const d=g.makeDungeon('spider',1);
+ const base=id=>({...g.run.npcs[0],traits:[],pack:[id],injury:0,fatigue:0});
+ const stats=['combat','survival','mobility','spirit'];
+ assert.equal(DATA.traitBy.potionbody.effects.potionMult,1.15,'the catalog carries the Canonical factor');
+ const tiers=DATA.items.filter(it=>it.category==='potion');
+ assert.equal(tiers.length,4,'all four v2.7 Potion tiers are covered');
+ for(const it of tiers){
+  const plain=Dungeon.prepare(base(it.id),d).effects;
+  const body=Dungeon.prepare({...base(it.id),traits:['potionbody']},d).effects;
+  let amplified=0;
+  for(const k of stats){
+   const native=it.effects[k]||0;
+   if(native>0){amplified++;
+    assert.ok(Math.abs((body[k]-plain[k])-native*0.15)<1e-9,
+     it.id+' '+k+': x1.15 on the native '+native+', got +'+(body[k]-plain[k]).toFixed(4));
+   }else assert.equal(body[k],plain[k],it.id+' does not gain '+k+' it never had');
+  }
+  assert.ok(amplified>0,it.id+' really does have a positive native Core Stat to amplify');
+  // every other channel the Item carries is untouched
+  for(const k of ['supply','escape','injuryGuard','injuryRisk','loot','xpMult','variance'])
+   assert.equal(body[k],plain[k],it.id+' does not amplify '+k);
+ }
+ // a Hazard Counter, an Insurance effect and a Food Item are all outside the Trait
+ for(const [id,keys] of [['antidote',['poison','supply']],['stone',['escape']],['rice',['survival','supply']],['boots',['mobility']]]){
+  const plain=Dungeon.prepare(base(id),d).effects;
+  const body=Dungeon.prepare({...base(id),traits:['potionbody']},d).effects;
+  for(const k of [...keys,...stats])assert.equal(body[k],plain[k],id+' '+k+' is not a Potion effect');
+ }
+ // and the screen says what the rule is
+ const note=Dungeon.prepare({...base('potion'),traits:['potionbody']},d).events.find(e=>e.id==='potionbody');
+ assert.ok(note,'the Trait reports itself when a Potion is carried');
+ assert.ok(/15%/.test(note.text)&&!/30%/.test(note.text),'and states 15%, not the retired 30%: '+note.text);
+ assert.equal(Presentation.labels.potionMult,'포션의 능력치','the label is no longer survival-only');
+ assert.equal(Dungeon.prepare({...base('rice'),traits:['potionbody']},d).events.some(e=>e.id==='potionbody'),false,
+  'and says nothing when no Potion is carried');
+});
+
 console.log(count+' trait groups passed');
