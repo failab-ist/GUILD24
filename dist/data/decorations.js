@@ -17,5 +17,8 @@ G.DATA.decorations=[
   text:'유리 너머로 좋은 물건이 보이면, 좋은 손님이 온다.'}];
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §STORE CAPITAL. The band is the Day the Run actually reached. */
-G.DATA.capitalRates=[{maxDay:9,rate:.05},{maxDay:19,rate:.15},{maxDay:24,rate:.30},{maxDay:29,rate:.45},{maxDay:30,rate:.60}];
+/* META_v2.8 §Day-reach conversion rate — DIRECTOR DOCUMENT BASELINE. The band is the Day the
+   Run actually reached, and it multiplies Gross Sales, not an end-state net worth - which is
+   why these are a fraction of the rates the retired net-asset formula used. */
+G.DATA.capitalRates=[{maxDay:9,rate:.01},{maxDay:19,rate:.02},{maxDay:24,rate:.03},{maxDay:29,rate:.04},{maxDay:30,rate:.05}];
 })(globalThis);

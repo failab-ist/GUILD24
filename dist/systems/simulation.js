@@ -85,15 +85,11 @@ function blank(runs,policy,pricing,build){
    bandBefore:{},bandAfter:{},bandImproved:0,bandWorse:0,ratioBare:[],ratioReady:[]},
   /* Where a run's expeditions lose the final outcome, banded by the Day the Director named. */
   phase:{},
-  /* META_v2.8 §RUN-END STORE CAPITAL SETTLEMENT, measurement only. The settlement inputs the
-     spec names - final Gold, remaining stock at the existing Closing liquidation basis, and the
-     Day band reached - recorded per Run so a conversion rate can be tried against them without
-     a rate being implemented anywhere. Nothing here grants or spends Store Capital. */
-  /* `values` is the per-Run Settlement Value and `gains` the per-Run Store Capital gain, by
-     META_v2.8 §STORE CAPITAL exactly: the clamp is on the SUM and the rate is the reached Day's.
-     The band totals beside them cannot substitute - summing a band and clamping once credits a
-     bankrupt Run's debt against a solvent Run's shelf, which the rule never does. */
-  settlement:{runs:0,gold:0,stock:0,byBand:{},values:[],gains:[]},
+  /* Measurement only: nothing here grants or spends Store Capital.
+     `sales` is each Run's Gross Sales and `gains` its Store Capital gain, by META_v2.8
+     §Run-end settlement structure exactly: round(Gross Sales x the reached-Day rate). The band
+     and end-reason totals beside them are views of the same Runs. */
+  settlement:{runs:0,gold:0,byBand:{},byEnd:{},sales:[],gains:[]},
   refusal:{},saleGap:{filled:0,noStock:0,wallet:0,refusedAll:0,other:0},
   /* Three different shortages that the old single `stockouts` counter ran together. It rose when
      the shelf happened to be empty after the last customer left, which is neither "the store had
@@ -466,12 +462,17 @@ function playRun(g,out,ctx){
  out.deathsPerRun.push(s.stats.deaths);
  /* The existing Closing rule values stock at half what that stock cost, so Meta settlement
     reads the same number rather than inventing a second valuation. */
- {const stock=s.inventory.reduce((a,x)=>a+Math.round((x.cost??D.itemBy[x.item].buy)*.5),0);
-  const band=s.day>=30?'D30':s.day>=25?'D25-29':s.day>=20?'D20-24':s.day>=10?'D10-19':'D1-9';
-  const t=out.settlement;t.runs++;t.gold+=s.money;t.stock+=stock;
-  const b=t.byBand[band]??={runs:0,gold:0,stock:0};b.runs++;b.gold+=s.money;b.stock+=stock;
-  const value=Math.max(0,s.money+stock);
-  t.values.push(value);t.gains.push(Math.round(value*G.Meta.capitalRate(s.day)));}
+ {const band=s.day>=30?'D30':s.day>=25?'D25-29':s.day>=20?'D20-24':s.day>=10?'D10-19':'D1-9';
+  const t=out.settlement;t.runs++;t.gold+=s.money;
+  const b=t.byBand[band]??={runs:0,gold:0,sales:0};b.runs++;b.gold+=s.money;b.sales+=s.stats.revenue;
+  /* META_v2.8 §Run-end settlement structure: Gross Sales x the reached-Day rate, per Run. The
+     Ending Gold beside it is Run-result information, never a Store Capital input. */
+  t.sales.push(s.stats.revenue);t.gains.push(Math.round(s.stats.revenue*G.Meta.capitalRate(s.day)));
+  t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=D.balance.deathLimit?'deaths':'bankrupt')]
+   ??={runs:0,sales:0,gain:0};
+  const e=t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=D.balance.deathLimit?'deaths':'bankrupt')];
+  e.runs++;e.sales+=s.stats.revenue;e.gain+=Math.round(s.stats.revenue*G.Meta.capitalRate(s.day));
+  const bg=t.byBand[band];bg.gain=(bg.gain||0)+Math.round(s.stats.revenue*G.Meta.capitalRate(s.day));}
  const byDeaths=s.stats.deaths>=D.balance.deathLimit;
  out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
  /* Per-Boss conditional clear: only Runs whose Final actually resolved, so WRATH (no Trait) can
@@ -546,7 +547,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
    /* The Run is settled through the shipped path. `end` is idempotent and `settleStoreCapital`
       carries its own once-only guard, so a Run playRun already ended is not settled twice. */
    g.end(!!g.run.win,g.run.endReason||'측정 종료');
-   const settlement=g.run.settlement||{value:0,gain:0,rate:0,day:g.run.day};
+   const settlement=g.run.settlement||{sales:0,gain:0,rate:0,day:g.run.day};
    /* The purchase: the named order, the real Meta call, and only what the earned Capital
       covers. No Capital is granted and no price is touched. */
    const bought=[];
@@ -555,8 +556,8 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
     if(G.Meta.storeCapital(account)<D.decorationBy[id].price)break;
     G.Meta.buyDecoration(account,id);bought.push(id);
    }
-   ledger.push({run:i,capitalStart:before.capital,settlementValue:settlement.value,
-    rate:settlement.rate,dayReached:g.run.day,gain:settlement.gain,
+   ledger.push({run:i,capitalStart:before.capital,grossSales:settlement.sales,
+    rate:settlement.rate,dayReached:g.run.day,endReason:g.run.endReason||'',gain:settlement.gain,
     capitalAfterSettlement:before.capital+settlement.gain,
     bought,capitalEnd:G.Meta.storeCapital(account),
     ownedBefore:before.decorations,ownedAfter:(account.store?.owned||[]).length,

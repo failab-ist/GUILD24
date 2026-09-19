@@ -245,9 +245,10 @@ test('CROSS-RUN DECORATION: Capital is earned by the production path and spent b
    assert.equal(r.capitalStart,capital,'Run '+r.run+' starts on the previous Run close');
    assert.equal(r.ownedBefore,owned,'and on the Decorations it already had');
    // the gain is the shipped rule, on the reached Day, from the Run's own settlement
-   assert.ok(r.settlementValue>=0,'a Settlement Value is never negative');
-   assert.equal(r.gain,Math.round(r.settlementValue*Meta.capitalRate(r.dayReached)),
-    'the gain is the Settlement Value at the reached-Day rate');
+   assert.ok(r.grossSales>=0,'Gross Sales is never negative');
+   assert.equal(r.gain,Math.round(r.grossSales*Meta.capitalRate(r.dayReached)),
+    'the gain is Gross Sales at the reached-Day rate');
+   assert.ok(r.grossSales>0||r.gain===0,'a Run that sold nothing earns nothing');
    assert.equal(r.capitalAfterSettlement,r.capitalStart+r.gain,'and it is added once');
    // what was bought was affordable, in the named order, and actually paid for
    const spend=r.bought.reduce((a,id)=>a+DATA.decorationBy[id].price,0);

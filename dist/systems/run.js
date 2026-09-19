@@ -56,26 +56,26 @@ P.liquidate=function(stockId){const s=this.run;
  s.notice=D.itemBy[st.item].name+' 재고 정리 · '+price+'G 회수'
   +(s.money>=0?' · 회생 완료':'')+' (회생 '+s.rescueUsed+' / '+this.rescueLimit()+')';
  this.save();return true;};
-/* META_v2.8 §RUN-END STORE CAPITAL SETTLEMENT. The remaining stock is valued by the SAME rule
-   Closing liquidation uses - half of what that stock actually cost - rather than a second
-   valuation invented for Meta. A Run that ends owing money contributes its stock only. */
-P.settlementValue=function(){const s=this.run;
- const stock=s.inventory.reduce((a,x)=>a+Math.round((x.cost??D.itemBy[x.item].buy)*.5),0);
- /* The clamp is on the SUM, not on the Gold. A store that ends owing money still holds stock,
-    and that stock pays the debt down before anything is banked: -500G of till against 800G of
-    shelf settles at 300G, not at 800G. Clamping Gold first would hand a bankrupt store the full
-    shelf value and make going into the red free. */
- return {gold:s.money,stock,total:Math.max(0,s.money+stock)};};
-/* Settled exactly once. The guard lives on the Run, so a reload of an ended Run reads the
+/* META_v2.8 §Run-end settlement structure:
+     Store Capital Gain = round(Gross Sales x Day-reach conversion rate)
+   Gross Sales is `stats.revenue`, the sales accounting the Run already keeps - credited once by
+   an ordinary Sale and once by a Final fixed-price transfer, and never recounted here. No
+   second Meta-only sales counter exists.
+
+   Ending Gold and remaining Inventory are NOT inputs. They still decide liquidity, rescue and
+   bankruptcy inside the Run; Meta simply does not reward that same end-state wealth again. The
+   two terms are what Store Growth rewards: how much business the store did, and how long that
+   business survived.
+
+   Settled exactly once. The guard lives on the Run, so a reload of an ended Run reads the
    recorded settlement instead of earning it again. A manual abandon never reaches end(), which
    is what makes abandon worth nothing. */
 P.settleStoreCapital=function(){const s=this.run;
  if(s.settled)return s.settlement;
- const value=this.settlementValue(),rate=G.Meta.capitalRate(s.day);
- const gain=Math.round(value.total*rate);
+ const sales=s.stats.revenue,rate=G.Meta.capitalRate(s.day);
+ const gain=Math.round(sales*rate);
  s.settled=true;
- s.settlement={day:s.day,gold:value.gold,stock:value.stock,value:value.total,rate,gain,
-  capitalAfter:G.Meta.addCapital(this.account,gain)};
+ s.settlement={day:s.day,sales,rate,gain,capitalAfter:G.Meta.addCapital(this.account,gain)};
  return s.settlement;};
 P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.settleStoreCapital();this.save();};
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};

@@ -829,15 +829,14 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
  const moved=(gain?.jobs||[]).map(g=>row(E(D.jobBy[g.job]?.name||g.job)+' 숙련',g.from+' → '+g.to)).join('');
  const opened=(s.unlocked||[]).length
   ?'<div class="opened"><span>본사 해금</span><b>'+E(s.unlocked.join(' · '))+'</b></div>':'';
- /* UI_UX_v2.8 §RUN-END. The settlement is read in the order it is computed, so the player can
-    follow Ending Gold + 재고 -> 정산액 -> (도달일 비율) -> 점포 자본. It is printed from the
-    settlement the Run recorded, not recomputed here, so a reload shows the same figures and
-    cannot appear to earn again. */
+ /* UI_UX_v2.8 §RUN-END SETTLEMENT FEEDBACK. Read in the order it is computed:
+    총매출 -> (도달일 비율) -> 얻은 점포 자본 -> 현재 점포 자본. Ending Gold and the
+    remaining stock may appear elsewhere as Run results, but never as inputs to this - they are
+    not inputs. Printed from the settlement the Run recorded, not recomputed here, so a reload
+    shows the same figures and cannot appear to earn again. */
  const st=s.settlement;
  const settle=st?'<div class="block settlement"><h4>점포 자본 정산</h4>'
-  +row('마감 잔고',st.gold.toLocaleString()+'G')
-  +row('남은 재고 정리 가치',st.stock.toLocaleString()+'G')
-  +row('정산액',st.value.toLocaleString()+'G')
+  +row('총매출',st.sales.toLocaleString()+'G')
   +row('DAY '+st.day+' 도달 비율','×'+Math.round(st.rate*100)+'%')
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';

@@ -851,70 +851,151 @@ test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every high
  }
 });
 
-test('META_v2.8 §RUN-END STORE CAPITAL SETTLEMENT: once, on the reached Day, never on abandon',()=>{
- const g=fresh('settle-once');
- g.run.day=22;g.run.money=1000;
- const before=Meta.storeCapital(g.account);
- const value=g.settlementValue();
- /* The stock is valued by the SAME rule Closing liquidation uses - half of what that stock
-    actually cost - rather than a second valuation invented for Meta. */
- const byHand=g.run.inventory.reduce((a,x)=>a+Math.round((x.cost??DATA.itemBy[x.item].buy)*.5),0);
- assert.equal(value.stock,byHand,'remaining stock uses the Closing liquidation basis');
- assert.equal(value.total,value.gold+value.stock,'Settlement Value is Ending Gold plus that stock');
+/* META_v2.8 §Run-end settlement structure:
+     Store Capital Gain = round(Gross Sales x Day-reach conversion rate)
+   Gross Sales is the Run's own sales accounting - `stats.revenue` - and Ending Gold and the
+   remaining Inventory are NOT inputs. These cases replace the retired net-asset ones, which
+   asserted the superseded `Ending Gold + liquidation` formula. */
+test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and never on abandon',()=>{
+ const at=(sales,day,money=1000)=>{const g=fresh('sc-'+sales+'-'+day+'-'+money);
+  g.run.day=day;g.run.stats.revenue=sales;g.run.money=money;return g;};
+
+ // A. no sales, no Store Capital - whatever Day it reached, whatever it is holding
+ for(const day of [5,15,22,27,30]){
+  const g=at(0,day,9999),before=Meta.storeCapital(g.account);
+  assert.equal(g.settleStoreCapital().gain,0,'D'+day+' with no sales earns nothing');
+  assert.equal(Meta.storeCapital(g.account),before,'and credits the Account nothing');
+ }
+
+ // B. each Day band converts at its exact Canonical rate
+ const BANDS=[[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]];
+ for(const [day,rate] of BANDS){
+  assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
+  const g=at(10000,day);
+  const st=g.settleStoreCapital();
+  assert.equal(st.rate,rate,'D'+day+' settles at that rate');
+  assert.equal(st.sales,10000,'on the Run own Gross Sales');
+  assert.equal(st.gain,Math.round(10000*rate),'D'+day+' gain');
+ }
+
+ // C. the same Gross Sales earns strictly more the deeper the band reached
+ const byBand=[9,19,24,29,30].map(day=>at(10000,day).settleStoreCapital().gain);
+ for(let i=1;i<byBand.length;i++)
+  assert.ok(byBand[i]>byBand[i-1],'a deeper band earns more on the same sales: '+byBand.join(' < '));
+
+ // J. Ending Gold and Inventory are not inputs: same sales, same Day, different end state
+ const poor=at(8000,22,-4000),rich=at(8000,22,9000);
+ rich.run.inventory=[];                          // and nothing on the shelf either
+ const a1=poor.settleStoreCapital(),a2=rich.settleStoreCapital();
+ assert.equal(a1.gain,a2.gain,'Ending Gold and Inventory change nothing: '+a1.gain+' vs '+a2.gain);
+ assert.equal(a1.gain,Math.round(8000*0.03),'and the gain is the sales at the band rate');
+ assert.equal('gold' in a1,false,'the recorded settlement states no Gold input');
+ assert.equal('stock' in a1,false,'and no stock input');
+ assert.equal('value' in a1,false,'and no net-asset Settlement Value');
+ assert.equal(typeof fresh('sc-helper').settlementValue,'undefined',
+  'the retired net-asset helper is gone from the prototype');
+
+ // G. Boss CLEAR is not a multiplier
+ const win=at(12000,30);win.run.win=true;
+ const lose=at(12000,30);
+ const w=win.settleStoreCapital(),l=lose.settleStoreCapital();
+ assert.equal(w.rate,l.rate,'a CLEAR uses the same rate');
+ assert.equal(w.gain,l.gain,'and the same gain - Boss CLEAR is not a multiplier');
+
+ // I. exactly once, and a reload of an ended Run reads it instead of earning it
+ const g=at(7000,22),before=Meta.storeCapital(g.account);
  const first=g.settleStoreCapital();
- assert.equal(first.rate,0.30,'D22 converts at the D20-24 rate');
- assert.equal(first.gain,Math.round(value.total*0.30),'the gain is the value times that rate');
- assert.equal(Meta.storeCapital(g.account),before+first.gain,'and it reaches the Account once');
- const again=g.settleStoreCapital();
- assert.equal(again.gain,first.gain,'settling again returns the recorded settlement');
+ assert.equal(Meta.storeCapital(g.account),before+first.gain,'it reaches the Account once');
+ assert.equal(g.settleStoreCapital().gain,first.gain,'settling again returns the recorded settlement');
  assert.equal(Meta.storeCapital(g.account),before+first.gain,'and credits nothing further');
- /* A reload of an ended Run must read the settlement, not earn it again. end() is the real
-    path and settles on its way through, so an already-settled Run must add nothing there. */
- const capitalBeforeEnd=Meta.storeCapital(g.account);
  g.end(false,'테스트 종료');
- assert.equal(Meta.storeCapital(g.account),capitalBeforeEnd,'end() does not settle a second time');
+ assert.equal(Meta.storeCapital(g.account),before+first.gain,'end() does not settle a second time');
  const round=reload(g);
- assert.equal(Meta.storeCapital(round.account),capitalBeforeEnd,'a reload does not double-credit');
+ assert.equal(Meta.storeCapital(round.account),before+first.gain,'a reload does not double-credit');
  round.settleStoreCapital();
- assert.equal(Meta.storeCapital(round.account),capitalBeforeEnd,'and the guard survives the round trip');
+ assert.equal(Meta.storeCapital(round.account),before+first.gain,'and the guard survives the round trip');
  assert.equal(round.run.settled,true,'the guard itself is persisted');
- // Boss CLEAR does not multiply the settlement.
- const win=fresh('settle-win');win.run.day=30;win.run.money=1000;win.run.win=true;
- const lose=fresh('settle-win');lose.run.day=30;lose.run.money=1000;
- const a1=win.settleStoreCapital(),a2=lose.settleStoreCapital();
- assert.equal(a1.rate,0.60,'D30 converts at the D30 rate');
- assert.equal(a1.rate,a2.rate,'a CLEAR uses the same rate');
- assert.equal(a1.gain,a2.gain,'and the same gain - Boss CLEAR is not a multiplier');
- /* An abandon never reaches end(), which is what makes it worth nothing. */
- const dropped=fresh('settle-abandon');dropped.run.day=26;dropped.run.money=4000;
+ assert.equal(round.run.settlement.sales,7000,'the recorded Gross Sales survives too');
+
+ // H. a manual abandon never reaches end(), which is what makes it worth nothing
+ const dropped=at(20000,26);
  const capital=Meta.storeCapital(dropped.account);
- dropped.start('settle-abandon-2');
- assert.equal(Meta.storeCapital(dropped.account),capital,'starting a new Run over a live one settles nothing');
+ dropped.start('sc-abandon-2');
+ assert.equal(Meta.storeCapital(dropped.account),capital,'abandoning a live Run settles nothing');
 });
 
-/* RUN-Q-v28-4. The clamp is on the SUM, not on the Gold. A store that ends owing money still
-   holds stock, and that stock pays the debt down before anything is banked. Clamping the Gold
-   first would hand a bankrupt store the full shelf value and make going into the red free. */
-test('META_v2.8 §STORE CAPITAL: Settlement Value includes the debt, and never goes below zero',()=>{
- const at=(money,day)=>{const g=fresh('settle-debt-'+money+'-'+day);g.run.day=day;g.run.money=money;return g;};
- const stock=at(0,22).settlementValue().stock;
- assert.ok(stock>0,'the fixture really is holding stock worth something');
- // positive gold: the plain case, gold and stock both count
- const up=at(1000,22).settlementValue();
- assert.equal(up.total,1000+stock,'a solvent store settles on gold plus stock');
- // negative gold: the debt is paid out of the stock, not ignored
- const debt=at(-stock+300,22).settlementValue();
- assert.equal(debt.gold,-stock+300,'the Ending Gold is reported as it is, still negative');
- assert.equal(debt.total,300,'and the Settlement Value is what is left after the debt');
- // debt larger than the stock: nothing is banked, and nothing is owed to the Account either
- const under=at(-stock-2000,22).settlementValue();
- assert.equal(under.total,0,'a debt past the shelf settles at zero, not at the shelf value');
- const g=at(-stock-2000,22),before=Meta.storeCapital(g.account);
- assert.equal(g.settleStoreCapital().gain,0,'so the Run banks nothing');
- assert.equal(Meta.storeCapital(g.account),before,'and the Account is unchanged');
- // the forbidden form - clamping the Gold first - would have banked the whole shelf
- assert.equal(Math.max(0,under.gold)+stock,stock,'the forbidden form would bank the whole shelf');
- assert.notEqual(under.total,Math.max(0,under.gold)+stock,'Gold is not clamped before the sum');
+/* D / E / F. A failed Run is still a Run that did business. Bankruptcy, the Death limit and a
+   lost Final are ordinary endings: they lose the Gold, the stock and the adventurers, and they
+   keep the store-operation progress the sales already demonstrated. Each is driven through the
+   real `end()` rather than by writing a flag. */
+test('META_v2.8 §STORE CAPITAL: a failed Run still earns on what it actually sold',()=>{
+ const drive=(seed,day,sales,setup)=>{const g=fresh(seed);
+  g.run.day=day;g.run.stats.revenue=sales;setup&&setup(g);
+  const before=Meta.storeCapital(g.account);
+  g.end(false,'테스트 종료');
+  return {g,before,gain:g.run.settlement.gain,st:g.run.settlement};};
+
+ // D. bankrupt: no Gold, nothing on the shelf, but it sold 6,000G worth on the way down
+ const bank=drive('sc-bankrupt',22,6000,g=>{g.run.money=-500;g.run.inventory=[];});
+ assert.equal(bank.gain,Math.round(6000*0.03),'a bankrupt Run earns on its Gross Sales');
+ assert.ok(bank.gain>0,'which is not zero');
+ assert.equal(Meta.storeCapital(bank.g.account),bank.before+bank.gain,'and the Account receives it');
+
+ // E. the Death limit closed the store
+ const dead=drive('sc-deaths',15,4000,g=>{g.run.stats.deaths=DATA.balance.deathLimit;});
+ assert.equal(dead.gain,Math.round(4000*0.02),'a Death-limit closure uses the ordinary formula');
+
+ // F. reached D30 and lost the Final
+ const failed=drive('sc-finalfail',30,9000,g=>{g.run.win=false;});
+ assert.equal(failed.gain,Math.round(9000*0.05),'a lost Final uses the ordinary formula');
+ assert.equal(failed.st.rate,0.05,'at the D30 rate it actually reached');
+
+ // the failures are still failures: none of them kept anything Run-scoped
+ for(const r of [bank,dead,failed]){
+  assert.equal(r.g.run.phase,'end','the Run really ended');
+  assert.equal(r.g.run.settled,true,'and settled exactly once');
+ }
+});
+
+/* K. Gross Sales is the Run's own accounting, credited once per transaction by the two paths
+   that make a sale - an ordinary SALE and a Final fixed-price transfer - and never recounted
+   by Meta. Driven through the real sell()/supplyFinal() rather than by writing the counter. */
+test('META_v2.8 §STORE CAPITAL: Gross Sales counts each real sale exactly once',()=>{
+ const g=fresh('sc-gross');
+ while(g.run.phase!=='sell')step(g);
+ const start=g.run.stats.revenue;
+ let sold=0,paid=0;
+ for(let turn=0;turn<400&&sold<3;turn++){
+  if(g.run.phase!=='sell'){step(g);continue;}
+  const n=g.current(),st=g.run.inventory[0];
+  if(!n||!st||n.pack.length>=Adventurer.slots(n)){g.depart();continue;}
+  const before=g.run.stats.revenue,quote=g.interest(n,DATA.itemBy[st.item],'full');
+  let ok=false;try{ok=g.sell(st.id,'full');}catch(e){g.depart();continue;}
+  const delta=g.run.stats.revenue-before;
+  if(ok){assert.equal(delta,quote.price,'an accepted Sale credits its price exactly once');sold++;paid+=quote.price;}
+  else assert.equal(delta,0,'a refusal credits nothing');
+ }
+ assert.ok(sold>0,'the sweep actually sold something');
+ assert.equal(g.run.stats.revenue-start,paid,'Gross Sales is the sum of what was actually paid');
+
+ /* The Final transfer is the other path into the same counter. */
+ const f=fresh('sc-final');
+ f.run.day=30;f.morning();
+ const n=f.run.npcs.find(x=>x.alive&&x.introduced)||f.run.npcs[0];
+ n.alive=true;n.introduced=true;n.recovery=0;n.pack=[];n.money=99999;
+ f.run.team=[n.id];
+ const stock=f.run.inventory[0];
+ if(stock){
+  const before=f.run.stats.revenue,price=f.finalPrice(stock.item);
+  f.supplyFinal(n.id,stock.id);
+  assert.equal(f.run.stats.revenue-before,price,'a Final transfer credits its fixed price once');
+ }
+ /* And Meta reads that counter rather than adding to it. */
+ const capBefore=Meta.storeCapital(f.account),salesBefore=f.run.stats.revenue;
+ const st=f.settleStoreCapital();
+ assert.equal(f.run.stats.revenue,salesBefore,'settling does not touch Gross Sales');
+ assert.equal(st.sales,salesBefore,'it reads exactly what the Run accumulated');
+ assert.equal(Meta.storeCapital(f.account),capBefore+st.gain,'and credits the gain once');
 });
 
 test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run never re-reads it',()=>{
@@ -989,8 +1070,10 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
  const older=copy(g.run);delete older.loadout;delete older.settled;
  const h=new Game(back.account,older);h.autosave=false;
  assert.equal(h.wears('thriftSafe'),false,'a Run with no frozen loadout wears nothing');
- h.run.day=12;h.run.money=500;
- assert.equal(h.settleStoreCapital().rate,0.15,'and it still settles on the Day it reached');
+ h.run.day=12;h.run.stats.revenue=3000;
+ const legacySettle=h.settleStoreCapital();
+ assert.equal(legacySettle.rate,0.02,'and it still settles on the Day it reached');
+ assert.equal(legacySettle.gain,Math.round(3000*0.02),'on its own Gross Sales');
  /* A live Run round-trips with both new fields intact. */
  const live=fresh('save-decoration');
  Meta.addCapital(live.account,DATA.decorationBy.dawnSign.price);
