@@ -1,5 +1,13 @@
 (function(G){
-const D=G.DATA,P=G.Game.prototype,food=it=>['food','fresh','drink'].includes(it.category),field=it=>['medicine','tool'].includes(it.category)||it.effects.escape||it.effects.revive;
+/* RELIC_v2.7 §EXPEDITION RELIC CATEGORY MIGRATION. `긴급보급 선반` targets Potion / Field Gear /
+   Insurance. The filter still named the v2.5 `medicine` / `tool` categories, which the v2.7
+   catalog does not have, so the category clause matched nothing at all and the Relic reached only
+   the two Items whose effects happen to carry escape/revive - not one Potion, not one Field Gear,
+   and not the third Insurance Item. The categories are named directly now; the effects clause is
+   gone with them, because Insurance is a category here rather than a shape.
+   `food` named the retired `fresh` category the same way (REL-Q76: no stale legacy `fresh`
+   dependency); Food and Drink are the whole of it. */
+const D=G.DATA,P=G.Game.prototype,food=it=>['food','drink'].includes(it.category),field=it=>['potion','gear','insurance'].includes(it.category);
 function known(g){return [...new Set(g.run.dungeons.flatMap(d=>d.hazards))];}
 function counter(it,hazards){return hazards.some(h=>(it.effects[h]||0)>0||(h==='bind'||h==='mire')&&(it.effects.mobility||0)>0);}
 P.relicWindow=function(day){const s=this.run;if(s.relicWindow?.milestoneDay===day)return;const previous=s.relicWindow?.candidateIds||[];s.relicHistory??=[];if(s.relicWindow)s.relicHistory.push({...s.relicWindow});let pool=D.relics.filter(r=>!s.facilities.includes(r.id)&&(day!==0||r.kind==='foundation')&&(r.kind!=='keystone'||day>=10)&&(day!==30||r.finalUseful&&(r.id!=='rotation'||s.previousSales>=6)&&(r.id!=='logisticsHQ'||s.previousSales>=8)));const cool=pool.filter(r=>!previous.includes(r.id));if(cool.length>=3)pool=cool;const owned=s.facilities.flatMap(id=>D.relicBy[id]?.tags||[]),chosen=[];for(let i=0;i<3&&pool.length;i++){const tags=chosen.flatMap(r=>r.tags);let eligible=pool;if((i===1||day===0&&i===2)&&pool.some(r=>r.tags.some(t=>!tags.includes(t))))eligible=pool.filter(r=>r.tags.some(t=>!tags.includes(t)));const pick=this.rng.weighted(eligible,r=>1+r.tags.filter(t=>owned.includes(t)).length*.18);chosen.push(pick);pool=pool.filter(r=>r.id!==pick.id);}

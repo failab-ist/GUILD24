@@ -83,6 +83,36 @@ test('REL-Q33: 냉장 쇼케이스 targets Uncommon+ Food/Drink, not a one-SKU R
  assert.ok(Relics.shelf(g,DATA.itemBy.lava)>0,'shelf-life relief reaches Uncommon Food');
 });
 
+// REL-Q77. The filter named the v2.5 `medicine` / `tool` categories, which v2.7 does not have,
+// so the category clause matched nothing and the Relic reached only the two Items whose effects
+// happen to carry escape/revive. Both halves of the Relic - the offer weighting and the +1 supply
+// quantity - are checked against the exact Canonical target set.
+test('REL-Q77: 긴급보급 선반 targets exactly Potion / Field Gear / Insurance',()=>{
+ const g=fresh('expedition-shelf');
+ const target=DATA.items.filter(it=>['potion','gear','insurance'].includes(it.category));
+ const outside=DATA.items.filter(it=>!['potion','gear','insurance'].includes(it.category));
+ assert.ok(target.length>=15&&outside.length>=15,'both sides of the filter are real pools');
+ for(const cat of ['potion','gear','insurance'])
+  assert.ok(target.some(it=>it.category===cat),'the target pool includes '+cat);
+ for(const it of target)assert.equal(Relics.field(it),true,it.id+' ('+it.category+') is a shelf target');
+ for(const it of outside)assert.equal(Relics.field(it),false,it.id+' ('+it.category+') is not');
+ // no stale category name survives anywhere in the filter's source
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/relics.js'),'utf8');
+ for(const stale of ['medicine\',\'tool','\'fresh\''])assert.ok(!src.includes(stale),'no stale category '+stale);
+ // half one: the offer weighting favours every target and nothing else
+ g.run.facilities=[];
+ const base=Object.fromEntries(DATA.items.map(it=>[it.id,Relics.offerWeight(g,it)]));
+ g.run.facilities=['medicine'];
+ for(const it of target)assert.ok(Relics.offerWeight(g,it)>base[it.id],it.id+' is weighted up');
+ for(const it of outside)assert.equal(Relics.offerWeight(g,it),base[it.id],it.id+' is not');
+ // half two: supply quantity +1, on the same RNG draw, for a target and not for an outsider
+ for(const [it,delta] of [[DATA.itemBy.potion,1],[DATA.itemBy.boots,1],[DATA.itemBy.stone,1],[DATA.itemBy.rice,0]]){
+  g.run.facilities=[];const state=g.rng.state,plain=g.offerFor(it).quantity;
+  g.run.facilities=['medicine'];g.rng=new RNG(g.run.seed,state);
+  assert.equal(g.offerFor(it).quantity,plain+delta,it.id+' supply quantity');
+ }
+});
+
 test('RELIC 17: 원정 도시락 코너 boosts only a matching need',()=>{
  const g=fresh('meal'),n={...g.run.npcs[0],traits:[],pack:['lava']};
  const cold={...g.makeDungeon('snow',2),requiredSupply:0},spider={...g.makeDungeon('spider',2),requiredSupply:0};
