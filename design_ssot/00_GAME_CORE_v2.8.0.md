@@ -27,15 +27,19 @@ Cross-run progression has two primary active growth identities:
 
 ### STORE GROWTH
 ```text
-Run economy
+actual Gross Sales × survival depth
 -> Store Capital
 -> permanent Decoration ownership
 -> pre-Run Decoration loadout
 -> changed store-operation options in the next Run
 ```
 
+Store Growth rewards **doing business and keeping that business alive**, not merely ending a Run
+with positive cash. A Run failure may still leave Store Growth progress when meaningful sales were
+made; the failure itself remains fully meaningful inside the Run.
+
 Store Growth must remain a **store-operation** progression channel.
-It must not become an account-wide raw combat-stat ladder.
+It must not become an account-wide raw combat-stat ladder or a reward for inactive short-run farming.
 
 ### JOB MASTERY
 ```text
