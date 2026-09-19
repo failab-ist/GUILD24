@@ -713,6 +713,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<div><span>보유 골드</span><b>'+fmt(s.money)+'</b></div>'
    +'<div class="pick"><span>발주 금액</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
    +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
+   +'<div class="ref-row">'+relicRef()+'</div>'
    // two groups: what today needs, and the signal for tomorrow's order
    +'<div class="brief"><div class="when"><span class="k">오늘</span>'
    +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
@@ -757,7 +758,8 @@ const itemKind=it=>it.effects?.potion?'포션':'';
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    return '<section class="shelf">'
-   +'<div class="shelf-head"><h2>'+(isFinal?'대원에게 보급':'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span></div><div class="goods">'
+   +'<div class="shelf-head"><h2>'+(isFinal?'대원에게 보급':'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
+   +(isFinal?'':relicRef())+'</div><div class="goods">'
  +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it);
   return '<button class="good r'+it.rarity+(open?' open':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
   +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+Presentation.rows(it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · ')+'</span></span>'
@@ -818,6 +820,15 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  +'<div class="tills">'+actions+'</div></div>';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>'<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p></div>').join('')+'</details>';}
+/* UI-Q111. Both screens that take a commitment - the order and the sale - need what the
+   store is already running to be checkable in one tap before committing, and neither had it:
+   ORDER showed nothing, SALE only a disclosure at the very bottom of the scroll. This is one
+   compact control, shaped like the 위험 보기 reference already on the order form, reading the
+   same game.ownedRelics() truth and opening the detail surface that already existed. No
+   second Relic store, and no per-screen copy of the effects. */
+const relicRef=extra=>{const owned=game.ownedRelics();
+ return '<button class="relic-ref" data-action="owned-relics"'+(extra?' '+extra:'')
+  +' aria-label="보유 점포지원 '+owned.length+' / 7 · 효과 보기">점포지원 <b>'+owned.length+' / 7</b></button>';};
 function relicsModal(){
    const owned=game.ownedRelics();
    if(!owned.length) return '<div class="owned-relics"><p class="muted" style="padding:16px;text-align:center">보유한 점포지원이 없다.</p></div>';
@@ -1171,6 +1182,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  }
  else if(modal==='new'){title='새 점포 준비';body=(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')+newRun();footer=btn('첫 점포지원 고르기','start','stamp');narrow=true;}
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
+ else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
  else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(gatePlate).join('')+'</div>';}
    else if(modal==='menu'){title='점포 메뉴';body='<div class="menu-list">'+btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics'):'')+btn('점주 가이드','help')+btn('설정','settings')
       +(game.run?btn('현재 지점 포기','new','danger'):'')+'</div>';narrow=true;}
@@ -1220,6 +1232,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
  case'store-manage':codexTab='store';decoFocus=el.dataset.id||null;setModal('codex');break;
+ case'owned-relics':setModal('owned');break;
  /* CORE_RUN §CURRENT RUN ABANDON: starting a new Run while one is active abandons the
     current Run with no settlement. end() is deliberately NOT called - it is what settles the
     run through Meta.finish and Store Capital, so an abandon earns nothing at all. start() replaces run wholesale, so the run-scoped

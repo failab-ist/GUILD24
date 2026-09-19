@@ -147,6 +147,28 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .deco-jump b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .deco-line.empty .deco-jump b{color:#8d8067;font-weight:400}
 .decoration-panel .slot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* UI-Q111. The one-tap reference to what the store is already running. It reads as a quiet
+   reference control, not a decision key, so it never competes with the screen's primary
+   action - and it sits in the decision information, never above the sticky CTA. */
+.ref-row{display:flex;justify-content:flex-end;margin:0 0 10px}
+/* On SALE it rides the shelf's own header rather than taking a row: a row of its own pushed
+   the first selectable product back under the fold, which is the thing UI-Q109 §8 exists to
+   stop. Same control, same target, no height. */
+.shelf-head .relic-ref{margin-left:0;align-self:center;min-height:30px;padding:5px 9px;
+ background:#00000059;box-shadow:inset 0 0 0 1px #ffffff2e;color:#f0dfb4}
+.shelf-head .relic-ref b{color:#ffe9b0}
+.shelf-head span{margin-left:auto}
+.relic-ref{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:7px 11px;
+ border:0;border-radius:0;cursor:pointer;
+ font:400 12px/1 var(--ui);color:#cbb98d;background:#00000047;
+ box-shadow:inset 0 0 0 1px #ffffff1f}
+.relic-ref b{font:500 13px/1 var(--f-led);color:var(--gold);font-variant-numeric:tabular-nums}
+.relic-ref:hover{background:#0000006b;color:#f2e7cd}
+/* Authored phone-first, like the rest of this sheet: on a phone the bottom disclosure would
+   be a second copy of the same reading, at the end of the scroll where it is no use before a
+   decision, so the compact control replaces it. The desk has room for both and keeps the
+   disclosure it already had - the min-width block below hands it back. */
+.p-sale .owned-relics{display:none}
 .effect-bad span:before{content:'주의 · ';font-size:var(--t-xs);color:var(--tone-cost)}
 .tone-benefit{color:var(--tone-benefit)}.tone-cost{color:var(--tone-cost)}.tone-neutral{color:var(--tone-neutral)}
 .rare-badge{font-size:var(--t-xs);color:var(--rare,var(--r0));white-space:nowrap;font-weight:600;font-family:var(--mono);letter-spacing:.06em}
@@ -1217,7 +1239,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
   gap:24px;align-content:start}
  .p-sale .dossier{grid-column:1;margin:0}
  .p-sale .shelf{grid-column:2;grid-row:1/span 2;margin:0}
- .p-sale .owned-relics{grid-column:1;align-self:start}
+ .p-sale .owned-relics{display:block;grid-column:1;align-self:start}
 }
 
 /* ---- Boss reveal -------------------------------------------------------------
