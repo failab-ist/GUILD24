@@ -127,6 +127,26 @@ test('the extended metric set the report cites is actually produced',()=>{
  if(r.final.reached>0)assert.ok(r.final.party/r.final.reached>0,'a party size is recorded for every Final');
 });
 
+/* The harness reported every Final contribution against the pre-Stage-10 .58/.32/.24/.16
+   formula for as long as it kept its own copy of the coefficients. A copy is the defect, so
+   this asserts there is none - not that the copy currently happens to be right. */
+test('the harness measures Prepared Power with the game helper, never its own copy',()=>{
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/simulation.js'),'utf8');
+ const code=src.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ for(const stale of ['.58','.32','.24','.16'])
+  assert.ok(!code.includes('combat*'+stale)&&!code.includes('survival*'+stale)
+   &&!code.includes('mobility*'+stale)&&!code.includes('spirit*'+stale),
+   'no Core-Stat coefficient '+stale+' is written out in the harness');
+ for(const live of ['.50','.34','.27','.20'])
+  assert.ok(!code.includes('combat*'+live)&&!code.includes('survival*'+live),
+   'not even the CURRENT coefficient '+live+' is copied - the helper is read');
+ assert.equal((code.match(/G\.Dungeon\.preparedPower\(/g)||[]).length>=3,true,
+  'the helper is what the harness reads');
+ // and the helper it reads is the approved one
+ assert.equal(Dungeon.preparedPower({combat:100,survival:50,mobility:30,spirit:20}),
+  100*.50+50*.34+30*.27+20*.20,'with the approved v2.7 coefficients');
+});
+
 test('the simulation observes the run and never rewrites it',()=>{
  // Two identical cohorts must agree exactly: the harness adds measurement, not behaviour.
  const a=Debug.simulate(4,'balanced',null,'adaptive','hybrid');

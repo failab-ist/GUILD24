@@ -111,7 +111,10 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
    measured is how badly each Hazard is answered rather than how many there are, and a specialist
    Counter that closes a large matching gap is worth what it actually closes. */
 const finalMeanHazardGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
-const individualPower=(e,meanGap)=>e.combat*.50+e.survival*.34+e.mobility*.27+e.spirit*.20-meanGap*1.70;
+/* The same four coefficients Forecast and Resolve read, so they are read from the one helper
+   rather than written out a third time - a copy of them is what let the balance harness drift
+   a whole Stage behind the game. */
+const individualPower=(e,meanGap)=>G.Dungeon.preparedPower(e)-meanGap*1.70;
 
 const STATS=['combat','survival','mobility','spirit'];
 

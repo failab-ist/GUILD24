@@ -37,11 +37,11 @@ const spending=policy=>SPEND[policy]||SPEND.default;
    chance of a given party is exact arithmetic. Sampling it would only add noise. */
 const ROLL_LO=.88,ROLL_HI=1.12;
 const clearChance=(power,bossPower)=>power<=0?0:Math.max(0,Math.min(1,(ROLL_HI-bossPower/power)/(ROLL_HI-ROLL_LO)));
-/* The same contribution `run.js:boss()` sums, per adventurer. These four numbers are the Final
-   coefficients and must track run.js - they were left at the pre-Stage-10 .58/.32/.24/.16 when
-   the formula moved, so every Final contribution this harness reported was measured against a
-   formula the game no longer uses. */
-const contribution=p=>p.effects.combat*.50+p.effects.survival*.34+p.effects.mobility*.27+p.effects.spirit*.20
+/* The same contribution `run.js:boss()` sums, per adventurer. The four coefficients are not
+   restated here at all: they are `Dungeon.preparedPower`, the one helper Forecast, Resolve and
+   the Final all read. A copy of them is exactly how this harness came to report every Final
+   contribution against the pre-Stage-10 .58/.32/.24/.16 formula the game had already left. */
+const contribution=p=>G.Dungeon.preparedPower(p.effects)
  -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*1.70;
 
 function blank(runs,policy,pricing,build){
@@ -212,7 +212,7 @@ function playRun(g,out,ctx){
     if(shelf.some(it=>G.Relics.counter(it,d.hazards))||n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterRelevant++;
     if(n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterMatched++;}
    P.ratioBare.push(G.Dungeon.preparedPower(a.effects)/(d.power||1));
-   P.ratioReady.push(G.Dungeon.preparedPower(b.effects)/(d.power||1));}const ability=p=>p.effects.combat*.58+p.effects.survival*.32+p.effects.mobility*.24+p.effects.spirit*.16;out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
+   P.ratioReady.push(G.Dungeon.preparedPower(b.effects)/(d.power||1));}const ability=p=>G.Dungeon.preparedPower(p.effects);out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
  originalNight();
  /* 2026-09-12 amendment measurement. Banding by prepared Combat margin is what lets Stage 9
     judge the Great Success curve on evidence instead of on the shipped number. */

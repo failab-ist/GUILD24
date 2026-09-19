@@ -412,9 +412,16 @@ test('FINAL_EXPEDITION_v2.7 §INDIVIDUAL FINAL POWER: mean Hazard gap x 1.70, no
  assert.ok(/p\.hazards\.reduce\(\(v,h\)=>v\+h\.gap,0\)\/p\.hazards\.length/.test(src),
   'and the mean divides by the Hazard COUNT, never by sqrt(count)');
  assert.ok(!/scale.*4\.6/.test(src),'no standalone scale=4.6 path is used in Final resolution');
- // the Core-Stat weights match the v2.7 Prepared Power baseline exactly
- for(const w of ['combat\\*\\.50','survival\\*\\.34','mobility\\*\\.27','spirit\\*\\.20'])
-  assert.ok(new RegExp(w).test(src),'Final Core-Stat weight '+w+' matches Prepared Power');
+ /* The Core-Stat weights match the v2.7 Prepared Power baseline exactly - because they are
+    that baseline. run.js used to write the four numbers out a third time, which is how the
+    balance harness drifted a whole Stage behind the game; it reads the one helper now, so the
+    check is that the Final contribution IS preparedPower minus the mean-gap penalty, measured,
+    rather than four literals matching by eye. */
+ assert.ok(/individualPower=\(e,meanGap\)=>G\.Dungeon\.preparedPower\(e\)-meanGap\*1\.70/.test(src),
+  'the Final contribution reads the Prepared Power helper');
+ const e={combat:100,survival:50,mobility:30,spirit:20};
+ assert.equal(Dungeon.preparedPower(e),100*.50+50*.34+30*.27+20*.20,
+  'and that helper carries the approved v2.7 coefficients');
  /* The point of the mean: a Family pair with MORE Hazards is not penalised for the count. Two
     parties equally unprepared per Hazard must take the same penalty whether the pair carries
     three Hazards or four - under the old sqrt path the four-Hazard pair paid more. */
