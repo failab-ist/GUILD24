@@ -11,8 +11,8 @@ LAST_APPROVED_AMENDMENT=2026-09-19
 SSOT_AUDIT_STATUS=LATEST_APPROVED_AMENDMENTS_SYNCED
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NON_BLOCKING_PLAYER_COPY_UNRESOLVED=NONE
-BALANCE_STATUS=DIRECTOR_BASELINES_PENDING_FULL_RUN_VALIDATION
-SOURCE_ADOPTION_STATUS=NOT_YET_ADOPTED
+BALANCE_STATUS=APPROVED_BUNDLE_IN_SOURCE
+SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE
 V2_7_SOURCE_EDIT_GATE=RECOVERY_CLOSE_CONFIRMED
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -122,12 +122,19 @@ v2.6.1 Adoption Recovery close = confirmed
 -> v2.7 Source Adoption plan review
 -> Director-approved WORK handoff
 -> v2.7 Source Adoption implementation
+-> scoped Decoration Package adoption
+-> ADOPTED
 ```
 
 There are currently no implementation-blocking Design Unresolved items.
 
-Current Source remains implementation truth until each v2.7 adoption step lands.
-Do not reinterpret missing v2.7 Source adoption as missing Design.
+`SOURCE_ADOPTION_STATUS=ADOPTED_V2_7_PLUS_SCOPED_DECORATION_PACKAGE`: the current line is
+**v2.7 + scoped Decoration Package**, and Source carries it. This is not a project-wide v2.8
+adoption and does not promote any owner outside the Package — the v2.8-named files stay staged
+reference for the Package alone, exactly as `SPEC_INDEX_v2.8.0.md` §CURRENT EXECUTION SCOPE says.
+
+Source is now implementation truth for that adopted line. A difference from an owner is a
+finding to classify, not a missing adoption step.
 
 The prerequisite recovery execution document remains:
 `GUILD24_v2.6.1_ADOPTION_RECOVERY_FINAL_IMPLEMENTATION_PLAN.md`
@@ -220,7 +227,11 @@ Decoration prices were all approved and are now `DIRECTOR DOCUMENT BASELINE` val
 owners. Together with the late Gate Day slope, the Decoration effects and the `board` / `hub`
 visitor overrides, the current v2.7 + Decoration-package line carries no open Design numeric.
 
-Current Franchise Achievement numeric thresholds are `DIRECTOR DOCUMENT BASELINE` values, not unresolved. They may change only through the frozen/full-run QA `BALANCE FINDING -> User/Director approval -> owner update -> separate fix cycle` process.
+The Franchise Achievement thresholds are no longer live values of any kind: Franchise Grade,
+Franchise Achievement and the Start Contract are retired by the Decoration Package, and their
+implementation is preserved only at `archive/inactive/v2_7_franchise/`. The
+`BALANCE FINDING -> User/Director approval -> owner update -> separate fix cycle` process still
+governs every remaining `DIRECTOR DOCUMENT BASELINE` value.
 
 ## PROMOTED-VISION / HISTORY STATUS
 
