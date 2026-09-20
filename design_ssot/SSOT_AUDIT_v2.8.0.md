@@ -208,7 +208,7 @@ Result:
     COMPLETE
 
 The v2.8 additions were re-read as one interacting system rather than as isolated amendments.
-This COMPLETE status does not close older inherited PASS3 / Source-only rules identified by the later full-chain re-audit.
+The later full-chain re-audit also closed the older inherited PASS3 / Source-only rules through the approved owner amendments recorded above.
 
 Approved current outcomes:
 - Great Success probability remains signal 0.26 / slope 0.80 / cap 0.30
