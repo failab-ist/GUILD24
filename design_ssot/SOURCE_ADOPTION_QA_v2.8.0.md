@@ -844,3 +844,29 @@ No current routed Design owner defines this pity modifier.
 Required:
 - deactivate/remove the hidden modifier during adoption
 - do not convert it into Canonical without User/Director approval
+
+## SA-Q45 — ROYAL EVENT MUST GUARANTEE THE NEWCOMER VISIT
+
+Classification: DESIGN ADOPTION MISMATCH
+
+Current Source:
+- `morningQueue()` generates a royal-profile newcomer when `ev.royal` is active
+- only `ev.rookie` is forcibly seated into the existing visitor queue
+- therefore 왕립 기사단 방문 can fire without the royal newcomer actually visiting that Day
+
+Canonical:
+EVENT_v2.8.0 now requires:
+- exactly one royal-profile newcomer
+- ordinary Day-based spawn Level +3
+- Rarity weights 40 / 36 / 17 / 6 / 1
+- guaranteed placement into one existing visitor slot
+- no visitor-count increase
+- no Living NPC Cap bypass
+
+Required:
+apply the same existing-slot deterministic seating guarantee to the royal Event without changing
+the Day's total visitor count.
+
+Acceptance:
+for a controlled eligible royal Event seed, the generated royal newcomer is always present in
+today's queue exactly once.
