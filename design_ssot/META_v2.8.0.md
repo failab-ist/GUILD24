@@ -329,3 +329,56 @@ Decoration UX -> `UI_UX_v2.8.0.md`
 Economy / Wallet -> current ECONOMY_ORDER owner  
 Gate / Hazard -> current DUNGEON_HAZARD owner  
 Item Counter -> current ITEM owner
+
+## JOB MASTERY — EXACT SPAWN-LEVEL MODEL
+
+USER_APPROVAL_DATE=2026-09-20
+
+The inherited rule that Job Mastery should strengthen Job Base Stats / Growth is superseded.
+
+Job Mastery does **not**:
+- multiply Job Base Stats
+- multiply Job Growth
+- create a hidden account-wide combat bonus
+- change an already-created NPC
+
+Instead, it improves the chance that a newly generated NPC of that same Job arrives at a higher
+starting Level.
+
+Mastery rank remains the number of distinct Bosses cleared with that Job, from 0 through 7.
+
+For each newly generated NPC:
+1. resolve the ordinary spawn Level
+2. read Mastery for that NPC's Job
+3. make one mutually exclusive Mastery bonus roll
+4. add at most one of +1 / +2 / +3 Levels
+
+Exact probabilities:
+
+| Mastery | +1 Lv | +2 Lv | +3 Lv |
+|---:|---:|---:|---:|
+| 0 | 0% | 0% | 0% |
+| 1 | 5% | 0% | 0% |
+| 2 | 10% | 0% | 0% |
+| 3 | 15% | 5% | 0% |
+| 4 | 20% | 10% | 0% |
+| 5 | 25% | 15% | 0% |
+| 6 | 30% | 20% | 5% |
+| 7 | 35% | 25% | 10% |
+
+The three columns are mutually exclusive outcomes, not stacking rolls.
+
+The Mastery roll belongs only to the NPC's own Job.
+A Job's Mastery cannot affect another Job.
+
+For deterministic seeded comparison, the spawn path consumes the same single Mastery roll even at
+Mastery 0; the probability row at 0 simply yields no bonus.
+
+After the bonus Level is resolved, the NPC is an ordinary NPC of that final Level and uses the
+normal Job/Growth rules owned by NPC_TRAIT.
+
+Player-facing meaning:
+    해당 직업 숙련도가 높을수록 그 직업의 모험가가 더 높은 레벨로 등장할 수 있다.
+
+Do not expose the exact probability table unless a later approved Meta information rule explicitly
+does so.
