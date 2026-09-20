@@ -1317,7 +1317,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(hazard.includes(point),'the Hazard lesson covers '+point);
  assert.ok(!hazard.includes('현재 대응'),'and does not name a label the screen no longer shows');
  const supply=/\['supply',[^\]]*\]/.exec(steps)[0];
- for(const point of ['필요 보급','페널티','피로'])
+ /* COPY_AUDIT §3-5 is the exact owner: the lesson names the shortfall's effect on the four
+    Stats and what surplus Supply does, without the 페널티 design word. */
+ for(const point of ['보급이 부족하면','투력·강인함·기동·정신','피로'])
   assert.ok(supply.includes(point),'the Supply lesson covers '+point);
  /* Every lesson is short now: one decision unit, one or two sentences. */
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
@@ -1334,8 +1336,10 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  /* It still has to say the reading does not move as products are sold, and it must not be
     read as the Items not mattering: the run uses the final supply, so the lesson says the
     real result is seen after the expedition rather than claiming nothing changed. */
- assert.ok(/갱신되지 않는다/.test(forecast),'the outlook lesson says the reading does not move');
- assert.ok(/원정 후 확인/.test(forecast),'and that the real result is read after the expedition');
+ /* COPY_AUDIT §3-4: the lesson now says WHEN the reading was taken, which is the same fact
+    stated from the other side and is what makes it obviously frozen. */
+ assert.ok(/처음 계산대에 왔을 때의 전망/.test(forecast),'the outlook lesson says when the reading was taken');
+ assert.ok(/판매 후에도 바뀌지 않는다/.test(forecast),'and that selling does not move it');
  /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
  assert.ok(/class="ingredients"/.test(app),'the exact Supply/Fatigue arithmetic is on the decision surface');
  /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
@@ -1705,6 +1709,28 @@ test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is
  // mechanics untouched: the same two destructive actions, through the same handlers
  assert.ok(/case'retire-go'/.test(app)&&/case'reset-go'/.test(app),'both destructive actions keep their handlers');
  assert.ok(/Save\.reset\(\)/.test(app),'and the reset still goes through Save.reset');
+});
+
+/* COPY_AUDIT §3-1..§3-6, §4-8, §4-10 — coach marks and two SALE lines, exact approved text. */
+test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the approved text',()=>{
+ const steps=fn('coachSteps')||app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach'));
+ for(const line of [
+  '같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
+  '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '구매 후 준비 상태에 따라 대성공 신호가 뜰 수 있다. 신호가 떠도 대성공이 확정되는 건 아니다.',
+  '손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.',
+  '보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요 보급을 초과한 보급은 피로를 줄인다.',
+  '판매한 상품은 오늘 원정에서 쓰고 사라진다.'])
+  assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
+ for(const gone of ['점포 매출에는 영향이 없다','준비가 끝나면 영업 시작을 누른다','보급을 더 챙기면 가능성이 커질 수 있다',
+                    '성공·실패 결과는 미리 알 수 없고','원정 준비에 공통 페널티','모든 상품은 1회용이며'])
+  assert.ok(!app.includes(gone),'the superseded coach wording is gone: '+gone.slice(0,14));
+ // §4-8
+ assert.ok(app.includes('<span>현재 준비 변화 없음</span>'),'§4-8 the no-change line');
+ assert.ok(!app.includes('이 손님의 준비는 달라지지 않는다'),'and its old sentence is gone');
+ // §4-10: the shelf-life state only, with the FIFO explanation retired
+ assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
+ assert.ok(app.includes("'유통기한 없음'")&&app.includes("'폐기까지 '"),'and the actual shelf-life state stays');
 });
 
 console.log(count+' ui guard groups passed');
