@@ -7,6 +7,20 @@ DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 BASE_DOCUMENT=COPY_WORLD_VOICE_v2.7.0.md
 PATCH_TYPE=INFORMATION_TRUST_AUDIT
+APPROVED_COPY_AMENDMENT=COPY_AUDIT_APPROVED_v2.8.0.md
+
+## USER-APPROVED v2.8 COPY AMENDMENT
+
+Exact Player-facing copy changes approved by User are owned by:
+
+    COPY_AUDIT_APPROVED_v2.8.0.md
+
+For exact text, replacement, deletion, Event Flavor, Store Support description, NPC dialogue pool,
+Boss/Deep copy, Settings/Help copy, and death narration, that approved amendment supersedes any
+conflicting earlier exact-copy example in this document or inherited v2.7 copy.
+
+This owner continues to hold terminology, truth boundaries, exposure/cooldown rules, and other
+non-duplicated copy-system rules. Do not re-copy the approved amendment into this file.
 
 ## INHERITANCE
 
