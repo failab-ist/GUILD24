@@ -240,4 +240,96 @@ test('EVENT 신입 모험가 시즌: the arrival follows the Day-based Level rul
    'a late arrival never starts below an early one');
 });
 
+/* SA-Q45 / EVENT_v2.8 §왕립 기사단 방문. The Event generated the royal-profile newcomer and only
+   신입 모험가 시즌 was seated, so 왕립 기사단 방문 could fire without the knight ever visiting that
+   Day. It is now seated by the same deterministic existing-slot rule, which is what keeps the
+   headcount out of it. */
+test('EVENT 왕립 기사단 방문: the royal newcomer is in today queue exactly once',()=>{
+ let days=0,seated=0,sizes=[],levels=[],rarities=[];
+ const capBreaches=[];
+ for(let i=0;i<120;i++){
+  const g=fresh('royal-'+i);force(g,'royal');
+  for(let d=0;d<30&&g.run.phase!=='end';d++){
+   const s=g.run;s.money=5000;
+   if(s.phase==='morning'&&s.event&&s.event.id==='royal'){
+    days++;
+    const newest=s.npcs[s.npcs.length-1];
+    const seatedTimes=s.queue.filter(id=>id===newest.id).length;
+    assert.ok(seatedTimes<=1,'the royal newcomer is never seated twice');
+    if(seatedTimes===1)seated++;
+    sizes.push(s.queue.length);
+    levels.push({day:s.day,level:newest.level});
+    rarities.push(newest.rarity);
+    // "exactly one newcomer" is proven directly in the paired-snapshot test below, where the
+    // Event is the only difference between the two runs.
+    // Living NPC Cap is not bypassed: the Event is only eligible with room, and it takes it
+    if(s.npcs.filter(n=>n.alive).length>22)capBreaches.push(s.day);
+    // the queue never exceeds who was actually available to come
+    assert.ok(s.queue.length<=s.visitorBreakdown.available,'the available cap still holds');
+   }
+   advance(g);
+  }
+ }
+ assert.ok(days>=20,'the event fired often enough to mean anything: '+days);
+ assert.equal(seated,days,'the royal newcomer is in the Day queue every time it fires');
+ assert.deepEqual(capBreaches,[],'the Living NPC Cap was never exceeded');
+ assert.ok(Math.max(...sizes)<=8,'no visitor was added to make room: max queue '+Math.max(...sizes));
+
+ /* the royal profile itself: Day-based spawn Level +3, and the 40/36/17/6/1 Rarity weights */
+ const band=day=>[Math.max(1,1+Math.floor((day-1)*.25))+3,3+Math.floor((day-1)*.25)+3];
+ for(const {day,level} of levels){
+  const [lo,hi]=band(day);
+  assert.ok(level>=lo&&level<=hi,'day '+day+' royal arrival is Lv.'+level+', outside +3 band '+lo+'-'+hi);
+ }
+ const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
+ assert.ok(/opts\.royal\?\[40,36,17,6,1\]/.test(src),'the royal Rarity weights are 40/36/17/6/1');
+ assert.ok(/\(opts\.royal\?3:0\)/.test(src),'and the royal spawn Level is the ordinary one +3');
+ assert.ok(rarities.some(r=>r>=1),'the weights really produced something above Common across '+rarities.length+' arrivals');
+
+ /* one seating rule serves rookie, royal and the Rookie Board - there is no second writer */
+ const shop=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
+ const seat=shop.match(/if\(\(ev\.rookie\|\|ev\.royal\|\|s\.dayFacilities\.includes\('rookieBoard'\)\)[^\n]*/g)||[];
+ assert.equal(seat.length,1,'exactly one deterministic seating rule');
+ assert.ok(/selected\[selected\.length-1\]=arrival/.test(seat[0]),'and it replaces a slot rather than adding one');
+});
+
+test('EVENT 왕립 기사단 방문 / 신입 모험가 시즌: neither Event raises the visitor count',()=>{
+ /* Both variants are resolved from ONE exported snapshot, so the Event is the only difference
+    between them and the headcount can be compared directly. */
+ for(const id of ['royal','rookie']){
+  let compared=0;
+  for(let i=0;i<40&&compared<8;i++){
+   const g=fresh('headcount-'+id+'-'+i);
+   for(let d=0;d<6&&g.run.phase!=='end';d++){g.run.money=5000;advance(g);}
+   if(g.run.phase==='end')continue;
+   const snap=Save.export(g.account,g.run);
+   const run=withEvent=>{
+    const r=Save.import(snap);const h=new Game(r.account,r.run);h.autosave=false;
+    if(withEvent)force(h,id);else h.rollEvent=()=>null;
+    h.run.day++;h.morning();
+    return h.run;
+   };
+   const plain=run(false),evt=run(true);
+   if(evt.event?.id!==id)continue;
+   compared++;
+   /* the Day's intake is what the Event may not raise, and it is the number the seating rule
+      could actually move: the newcomer replaces a drawn slot rather than adding one. */
+   assert.equal(evt.expectedVisitors,plain.expectedVisitors,id+': the intake did not change');
+   assert.ok(evt.queue.includes(evt.npcs[evt.npcs.length-1].id),id+': the newcomer took a slot');
+   assert.equal(evt.queue.filter(x=>x===evt.npcs[evt.npcs.length-1].id).length,1,id+': exactly once');
+   assert.equal(evt.npcs.length,plain.npcs.length+1,id+': exactly one newcomer was generated');
+   assert.ok(evt.queue.length<=evt.visitorBreakdown.available,id+': the available cap still holds');
+   /* On a Day the roster could already fill, the headcount is identical. On an
+      availability-limited Day the queue can reach one further slot the Day already wanted and
+      had nobody for - that is the ordinary available-cap rule reacting to a larger roster, and
+      it happens for every newcomer generation, seated or not. It is never MORE than one. */
+   const limited=plain.queue.length<plain.expectedVisitors;
+   if(!limited)assert.equal(evt.queue.length,plain.queue.length,id+': the visitor count did not change');
+   else assert.ok(evt.queue.length-plain.queue.length<=1,
+    id+': an availability-limited Day gains at most the one body that was added');
+  }
+  assert.ok(compared>0,id+': no comparable Day was reached');
+ }
+});
+
 console.log(count+' event groups passed');

@@ -243,8 +243,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      event is bit-for-bit what it was. */
   /* RELIC_v2.8 §ROOKIE BOARD: 신입 모집 게시판 seats the same way. A new adventurer generated
      today takes one of today's own slots - the support adds no visitor, draws nothing and
-     claims no probability. On a Day that generates nobody it does nothing at all. */
-  if((ev.rookie||s.dayFacilities.includes('rookieBoard'))&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
+     claims no probability. On a Day that generates nobody it does nothing at all.
+     SA-Q45 / EVENT_v2.8 §왕립 기사단 방문: so does the royal Event. It already generates exactly
+     one royal-profile newcomer above, and its eligibility already refuses to fire without Living
+     NPC Cap room, so the only thing it was missing was the seat - 왕립 기사단 방문 could fire
+     without the knight ever visiting. One seating rule now serves all three. */
+  if((ev.rookie||ev.royal||s.dayFacilities.includes('rookieBoard'))&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
   for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
   if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
