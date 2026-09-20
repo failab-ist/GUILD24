@@ -397,31 +397,19 @@ test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the 
  }finally{DATA.greatSuccess.storeGoldScale=scale;}
 });
 
-test('SALE §DEEP EXPEDITION NOMINATION: Deep and an explicit destination reassignment exclude each other',()=>{
- const g=drivenToDeepSale(),n=g.current();
- // the route support is the only explicit Player destination reassignment in the Source, and
- // it happens in the same window as a nomination: the current visitor, before they trade.
- g.run.special={kind:'route',used:false,candidates:[]};
- if(g.run.dungeons.length>1){
-  const other=g.run.dungeons.map((d,i)=>i).find(i=>i!==n.destination);
-  g.specialAction(n.id,other);
-  assert.equal(g.run.special.npcId,n.id,'the reassignment records who it was spent on');
-  assert.equal(g.canNominateDeep(n),false,'a reassigned NPC can no longer be nominated');
-  assert.throws(()=>g.nominateDeep(n.id),/배치를 조정/,'and asking anyway is refused by name');
- }
- // the other direction: a confirmed Deep destination is final, so a later reassignment is
- // refused rather than quietly ignored
+/* SA-Q43 retired the route support, which was the only explicit Player destination
+   reassignment in Source. What survives of this case is the half that is Canonical: a
+   confirmed Deep destination is final, and it is final because nothing else can write
+   n.destination after the nomination. */
+test('SALE §DEEP EXPEDITION NOMINATION: a confirmed Deep destination is final, and nothing can reassign it',()=>{
  const h=drivenToDeepSale(),m=h.current();
- h.run.special={kind:'route',used:false,candidates:[]};
  h.nominateDeep(m.id);
- if(h.run.dungeons.length>1){
-  const other=h.run.dungeons.map((d,i)=>i).find(i=>i!==m.destination);
-  assert.throws(()=>h.specialAction(m.id,other),/심층원정/,'the Deep destination cannot be reassigned');
-  assert.equal(h.gateFor(m).deep,true,'and the nominee still walks into the Deep Gate');
- }
- // the rule is enforced by the two existing actions refusing each other, not by a third one
- assert.equal(h.run.special.kind,'route','the existing guild support is still the only reassignment');
- assert.equal(h.run.deep.today.nomineeId,m.id,'and the nomination is still the only Deep state');
+ assert.equal(h.run.deep.today.nomineeId,m.id,'the nomination is the only Deep state');
+ assert.equal(h.gateFor(m).deep,true,'the nominee walks into the Deep Gate');
+ assert.equal(h.canNominateDeep(m),false,'and cannot be nominated twice');
+ const src=source('dist/systems/shop.js')+source('dist/systems/run.js')+source('dist/ui/app.js');
+ assert.ok(!/specialAction/.test(src),'the retired reassignment action is gone');
+ assert.ok(!/special\?\.kind==='route'/.test(src),'and no Deep guard still reads it');
 });
 
 // --- DETERMINISM -------------------------------------------------------------------

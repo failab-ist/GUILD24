@@ -212,7 +212,7 @@ function deepOfferUI(n){
    +'<p>'+E(c.paid)+' '+fmt(t.paid)+'G · '+E(s.dungeons[t.gateIndex].name)+'</p>'
    +'<p class="smalltext">'+E(c.sink)+'</p></div>';
  if(t.nomineeId)return '';
- const cost=game.deepCost(n),routed=s.special?.kind==='route'&&s.special.used&&s.special.npcId===n.id;
+ const cost=game.deepCost(n);
  if(game.canNominateDeep(n))
   return '<details class="special-event deep-offer"><summary>'+E(c.term)+' · '+E(c.action)+'</summary>'
    +'<p>'+E(c.gate)+' '+E(s.dungeons[t.gateIndex].name)+' — '+E(c.note)+'</p>'
@@ -220,12 +220,9 @@ function deepOfferUI(n){
    +btn(E(c.action)+' · '+E(c.sponsor)+' '+fmt(cost)+'G','deep-nominate','danger','data-id="'+n.id+'"')
    +'</details>';
  // not offered: say why in one line rather than showing a dead control
- if(routed||s.money<cost)
-  return '<p class="smalltext deep-blocked">'+E(c.term)+' — '+E(routed?c.blocked:c.poor)+'</p>';
+ if(s.money<cost)
+  return '<p class="smalltext deep-blocked">'+E(c.term)+' — '+E(c.poor)+'</p>';
  return '';}
-function specialUI(){const s=game.run,e=s.special;if(!e||e.used)return '';if(e.kind==='route'){const n=game.current();if(s.phase!=='sell'||!n||n.pack.length||n.history.some(h=>h.day===s.day)||s.dungeons.length<2)return '';
-  /* a confirmed Deep destination is final for that NPC, so the reassignment is not offered */
-  if(s.deep?.today?.nomineeId===n.id)return '';return '<details class="special-event"><summary>길드 원정 배치조정 · 오늘 한 번</summary><p>아직 거래하지 않은 '+E(n.name)+'의 목적지를 바꿀 수 있습니다.</p>'+s.dungeons.map((d,i)=>btn(E(d.name),'special','','data-id="'+n.id+'" data-value="'+i+'"')).join('')+'</details>';}if(!['morning','order'].includes(s.phase))return '';const candidates=s.npcs.filter(n=>n.alive&&n.introduced);return '<details class="special-event"><summary>'+(e.kind==='remove'?'길드 상담 · 특성 하나 정리':'길드 특별 훈련 · 새 특성 배우기')+'</summary>'+candidates.map(n=>{const choices=e.kind==='remove'?n.traits.filter(t=>D.traitBy[t].direction==='negative'):e.candidates.filter(t=>!n.traits.includes(t)&&n.traits.length<Math.min(4,n.traitSlots)&&!D.traitExclusions.some(pair=>pair.includes(t)&&pair.some(id=>n.traits.includes(id))));return choices.length?'<div><b>'+E(n.name)+'</b>'+choices.map(t=>btn(D.traitBy[t].name+' · '+Presentation.traitText(t),'special','','data-id="'+n.id+'" data-value="'+t+'"')).join('')+'</div>':'';}).join('')+'<p>원하지 않으면 선택하지 않아도 됩니다. 오늘 영업 준비가 끝나면 기회가 지나갑니다.</p></details>';}
 // MORNING — situation / open. The day as a plate, Gates as objects, a HUD readout,
 // the store as a horizon strip behind it all.
 // MORNING — a place, seen from the doorway before the shutter goes up.
@@ -247,7 +244,7 @@ function morningScreen(){
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span>'+decoPlate('sign')+'</span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
    +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
-   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+specialUI()+'</div></div>'
+   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span>'+decoPlate('wall')+decoPlate('display')+'</div>'
   +'<div class="band counter"><span class="mount">'+Scene.counter()
    +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유 골드</span>'
@@ -400,7 +397,7 @@ function saleScreen(){
      보급 후 변화 compares against when a product is picked, so they lead, and the Traits read
      as the standing description they are, under the goods. Nothing is dropped, no wording
      changes, and the wide layout still sets both columns side by side. */
-  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+specialUI()+'</div>'
+  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+'</div>'
   +shelf()
   +'<div class="dossier traits">'+traitRows(n)+'</div>'
   +ownedRelicView()
@@ -1219,7 +1216,6 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* presentation only - the line stays in run.say, so nothing here is saved or re-rendered */
  case'say-hide':hideSpeech();break;
  case'coach-next':{const actionName=activeCoach?.[3];sound('ui');finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
- case'special':game.specialAction(id,el.dataset.value);sound('order');render();break;
  case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;
  case'boss-seen':{const st=bossRevealStage();
   if(st==='final')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;

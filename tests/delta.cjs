@@ -25,8 +25,44 @@ test('fatigue persists as an NPC condition; no active Item alters it',()=>{const
 test('family identity, distinct stat routes and exact shared next-day weights',()=>{const g=fresh();assert.equal(DATA.items.length,40);assert.equal(DATA.relics.length,30);assert.ok(DATA.familyTiers.snow[1].includes('whiteout'));assert.deepEqual(DATA.familyTiers.fire[2],['fire']);assert.deepEqual(DATA.familyTiers.slime[2],['corrosion','mire']);assert.ok(DATA.dungeonBy.crypt.tags.includes('undead'));for(let day=1;day<30;day++){const w=Dungeon.tierWeights(day);assert.ok(Math.abs(w.reduce((a,b)=>a+b,0)-1)<1e-8);assert.ok(w.every(x=>x>=0));g.run.day=day;for(const id of ['spider','slime','fire','crypt','snow']){const d=g.makeDungeon(id);assert.ok(w[d.tier-1]>0);assert.ok(d.tier===1?d.requiredSupply===0:d.requiredSupply===0||d.requiredSupply===(d.tier===2?3:5),'Supply Burden: T1 never, T2 req 3, T3 req 5');assert.ok(!d.hazards.some(h=>['fatigue','long','undead','wet','armor','slow','thirst','supply'].includes(h)));}}assert.notDeepEqual(Dungeon.tierWeights(13),Dungeon.tierWeights(18));assert.deepEqual(Dungeon.tierWeights(30),[0,0,0]);const state=g.rng.state;Dungeon.tierWeights(20);assert.equal(g.rng.state,state);});
 test('reroll escalating cost, first free relic, stable pity and reload',()=>{const g=fresh();g.beginOrder();g.run.facilities=[];const pity=copy(g.run.pity);for(const price of [DATA.balance.rerollBase,DATA.balance.rerollBase*2,DATA.balance.rerollBase*4]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll(0);assert.equal(before-g.run.money,price);assert.deepEqual(g.run.pity,pity);}g.save();let r=Save.import(Save.export(g.account,g.run)),restored=new Game(r.account,r.run);assert.equal(restored.rerollPrice(),DATA.balance.rerollBase*8);g.run.day++;g.morning();g.beginOrder();g.run.facilities=['delivery'];assert.equal(g.rerollPrice(),0);g.reroll();assert.equal(g.rerollPrice(),DATA.balance.rerollBase*2,'free use consumes the first step');});
 test('trait direction and conflicts, greed+frugal permitted, max four traits',()=>{assert.equal(DATA.traitBy.frugal.name,'구두쇠');assert.ok(DATA.traitExclusions.some(p=>p.includes('frugal')&&p.includes('impulse')));assert.ok(!DATA.traitExclusions.some(p=>p.includes('greed')&&p.includes('frugal')));for(let i=0;i<100;i++){const g=fresh('traits-'+i);for(const n of g.run.npcs){Adventurer.grow(n,10000,g.rng);assert.ok(n.traits.length<=4);for(const pair of DATA.traitExclusions)assert.ok(!pair.every(t=>n.traits.includes(t)));}}for(const t of DATA.traits)assert.ok(['positive','mixed','negative'].includes(t.direction),t.id+' internal direction');assert.equal(DATA.traitDirections,undefined,'player-facing trait quality labels are gone');});
-test('rare player destination intervention is once, manual and before trade',()=>{const g=fresh();g.beginOrder();g.run.dungeons=[g.makeDungeon('spider'),g.makeDungeon('snow')];g.open();const n=g.current();n.destination=0;n.claimedDestination=0;g.run.special={kind:'route',used:false};g.specialAction(n.id,1);assert.equal(n.destination,1);assert.equal(n.claimedDestination,1);assert.throws(()=>g.specialAction(n.id,0));g.run.special={kind:'route',used:false};n.pack=['water'];assert.throws(()=>g.specialAction(n.id,0));});
-test('rare trait events use explicit eligible choices and persist',()=>{const g=fresh(),n=g.run.npcs[0];n.introduced=true;n.traits=['frugal'];g.run.special={kind:'remove',used:false};g.specialAction(n.id,'frugal');assert.deepEqual(n.traits,[]);g.run.special={kind:'mentor',used:false,candidates:['genius']};assert.throws(()=>g.specialAction(n.id,'strong'));g.specialAction(n.id,'genius');assert.deepEqual(n.traits,['genius']);g.save();assert.ok(Save.valid(JSON.parse(Save.export(g.account,g.run))));});
+/* SA-Q43 — NON-CANONICAL RANDOM SPECIAL SYSTEM, retired. The D4+ random 길드 지원 path
+   (destination reassignment / Trait removal / Trait tutoring) had no routed v2.8 Design owner,
+   so adoption deactivates it. This is a NEGATIVE regression: it proves the path cannot be
+   generated, cannot be invoked, and cannot reach gameplay from a stale save either. */
+test('SA-Q43: the non-Canonical random 길드 지원 path cannot activate or affect gameplay',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const read=f=>fs.readFileSync(path.resolve(__dirname,'../dist/'+f),'utf8');
+ // 1. the action is gone from the public API, so nothing can drive it
+ const g=fresh('special-retired');
+ assert.equal(typeof g.specialAction,'undefined','Game.specialAction no longer exists');
+ assert.ok(!/specialAction/.test(read('systems/run.js')),'and it is not defined in Source');
+ assert.ok(!/specialAction|case'special'/.test(read('ui/app.js')),'no UI action can reach it');
+ assert.ok(!/specialUI/.test(read('ui/app.js')),'and the opportunity has no UI at all');
+ // 2. no Morning generates one, at any Day past the old D4 gate, on any seed
+ for(let i=0;i<40;i++){
+  const h=fresh('special-gen-'+i);
+  for(const day of [4,7,11,18,26]){
+   h.run.day=day;h.run.specialUsed=false;h.morning();
+   assert.equal(h.run.special,null,'D'+day+' generated a 길드 지원 opportunity');
+  }
+ }
+ assert.ok(!/s\.special=\{/.test(read('systems/shop.js')),'nothing in Source constructs one');
+ // 3. a stale v8 save that carries one is cleared by the next Morning and never read
+ const k=fresh('special-stale');
+ k.run.day=6;k.run.special={kind:'mentor',used:false,candidates:['genius']};
+ const back=Save.import(Save.export(k.account,k.run));
+ const m=new Game(back.account,back.run);m.autosave=false;
+ m.morning();
+ assert.equal(m.run.special,null,'the stale opportunity is cleared rather than honoured');
+ // 4. and nothing reads it any more, so it cannot gate the Deep nomination either
+ for(const f of ['systems/shop.js','systems/run.js','ui/app.js'])
+  assert.ok(!/special\?\.kind|special\.used|special\.npcId/.test(read(f)),
+   f+' still reads the retired opportunity');
+ // 5. no Trait was added or removed by any of it
+ const before=fresh('special-traits').run.npcs.map(n=>[...n.traits].sort().join(','));
+ const after=fresh('special-traits').run.npcs.map(n=>[...n.traits].sort().join(','));
+ assert.deepEqual(after,before,'Trait composition is untouched by the retirement');
+});
 test('insurance/potion hierarchy and all effects have honest presentation',()=>{/* ITEM_v2.7 §POTION LINE: the ladder is 투력, not the old 강인함, and it is four tiers deep.
    Each tier is raw Power only - no Supply, no Counter, no Insurance. */
 const ladder=['potion','midpotion','highpotion','toppotion'].map(id=>DATA.itemBy[id]);

@@ -104,14 +104,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     transaction today, and only if the Store can pay. No Job / Level / rarity gate is added. */
  canNominateDeep(n){const s=this.run,offer=this.deepOffer();
   return !!offer&&s.phase==='sell'&&!!n&&this.current()?.id===n.id
-   &&!n.pack.length&&!n.history.some(h=>h.day===s.day)&&s.money>=this.deepCost(n)
-   /* the other half of the same rule: an NPC whose destination was already reassigned by an
-      explicit Player action today cannot then be sent on the Deep Expedition. */
-   &&!(s.special?.kind==='route'&&s.special.used&&s.special.npcId===n.id);}
+   &&!n.pack.length&&!n.history.some(h=>h.day===s.day)&&s.money>=this.deepCost(n);}
  nominateDeep(npcId){const s=this.run,n=s.npcs.find(x=>x.id===npcId),offer=this.deepOffer();
   if(!offer)throw Error('오늘은 추천할 심층원정이 없습니다.');
-  if(s.special?.kind==='route'&&s.special.used&&s.special.npcId===npcId)
-   throw Error('이미 배치를 조정한 손님은 심층원정에 추천할 수 없습니다.');
   if(!this.canNominateDeep(n))throw Error('아직 거래하지 않은 현재 손님만 추천할 수 있습니다.');
   const cost=this.deepCost(n);
   s.money-=cost;s.daily.deepSponsor+=cost;s.stats.spent+=cost;
@@ -251,7 +246,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
   if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
    for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
-  s.special=null;if(s.day>=4&&!s.specialUsed&&this.rng.next()<.045){const kind=this.rng.pick(['route','remove','mentor']);s.special={kind,used:false,candidates:kind==='mentor'?this.rng.shuffle(D.traits.filter(t=>t.direction==='positive')).slice(0,3).map(t=>t.id):[]};}s.pity.npc=promising?0:s.pity.npc+1;
+  /* SA-Q43: the non-Canonical random 길드 지원 opportunity is not generated. The field is still
+     cleared every Morning so a stale v8 save cannot carry one back in. */
+  s.special=null;s.pity.npc=promising?0:s.pity.npc+1;
  }
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?2:0)+(this.wears('dawnSign')?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
