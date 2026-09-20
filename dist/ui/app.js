@@ -886,6 +886,10 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  if(!w.focusedRevealSeen){w.focusedRevealSeen=true;game.save();}
  const first=w.milestoneDay===0,until=w.expiryDay===31?'마왕성 출발 전까지':'DAY '+(w.expiryDay-1)+'까지';
  return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll">'
+ /* COPY_AUDIT §14-1 / BOSS_v2.8 §D0: the Run's objective is established at the start, in the
+    information flow the Run start already has. It is an objective beat only - no Boss identity,
+    no new screen and no navigation layer of its own. */
+ +(first?'<p class="boss-objective"><b>'+E(Copy.boss.d0.label)+'</b>'+E(Copy.boss.d0.line)+'</p>':'')
  +'<div class="relic-open"><span class="label">'+(first?'DAY 0':'DAY '+w.milestoneDay)+'</span><h2>'+(first?'첫 점포지원을 고른다':'점포지원이 도착했다')+'</h2>'
  /* D-34. With all seven slots filled every 구매 greys out, and this line went on saying the
     window was open until DAY N. A disabled action says why it is disabled, on the line that
@@ -917,7 +921,7 @@ function sealChoice(){const s=game.run,w=s.relicWindow;
    the first line, and the standing totals sit in the ledger where standing totals live. */
 function endBanner(){const s=game.run,a=game.account;
  return '<div class="tape end-tape"><div class="tear top"></div><div class="print">'
- +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제 0 게이트 폐쇄':'영업 종료')+' · '+E(s.branch)+'</span></div>'
+ +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제0게이트 폐쇄':'영업 종료')+' · '+E(s.branch)+'</span></div>'
  +'<p class="closed">'+E(endHeadline())+'</p>'
  +'<p class="reason">'+E(s.endReason)+'</p>'
  +ledger()+'</div><div class="tear bottom"></div></div>';}
@@ -970,7 +974,7 @@ function finalScreen(){
  const body='<div class="gate-zero">'
  +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
       :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
- +'<div class="who"><span class="label">제 0 게이트 · 마왕성</span><h1>'+E(b.name)+'</h1></div></div>'
+ +'<div class="who"><span class="label">제0게이트 · 마왕성</span><h1>'+E(b.name)+'</h1></div></div>'
  +'<section class="threat"><h2>확인된 위협</h2><div class="fams">'
  +(d.families||[]).map(id=>{const b=D.dungeonBy[id];return '<span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>';}).join('')
  +'</div>'+hazardList(d.hazards)+'</section>'
@@ -990,7 +994,7 @@ function finalScreen(){
    spent thirty days raising, and the last thing the store handed them, were computed into
    finalReport and never shown. They close the screen now, with the faces the player knows. */
 function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)return '';
- return '<section class="sent-off"><h3>'+(rep.cleared?'제 0 게이트를 닫고 온 사람들':'마왕성으로 보낸 사람들')+'</h3>'
+ return '<section class="sent-off"><h3>'+(rep.cleared?'제0게이트를 닫고 온 사람들':'마왕성으로 보낸 사람들')+'</h3>'
  +'<div class="went">'+rep.members.map(m=>{const n=s.npcs.find(x=>x.id===m.npcId);
    const carried=(m.items||[]).map(id=>D.itemBy[id]?.name).filter(Boolean);
    return '<article class="goer">'+portrait(n,88)
@@ -1178,13 +1182,20 @@ function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return
     ahead of it. The seen flag is persisted and the state is the same object either Day, so D30
     reuses it and never reveals a Family a second time; a save made before D25 disclosure existed
     still gets it on the D30 Final, which is why the guard is the flag and not the Day. */
- if(s.day>=25&&s.final&&!s.bossReveal.familySeen)return true;
- if(s.day>=15&&!s.bossReveal.traitSeen)return true;
- return s.day>=5&&!s.bossReveal.identitySeen;}
+ return !!bossRevealStage();}
 
-function bossRevealStage(){const s=game.run;
- if(s.day>=25&&s.final&&!s.bossReveal.familySeen)return 'final';
- return s.day>=15&&!s.bossReveal.traitSeen?'d15':'d5';}
+/* BOSS_v2.8 §INFORMATION CADENCE: D5 identity, D10 the combat question, D15 the Trait, D20 the
+   route question, D25 the Final state. D30 adds nothing - it reuses what D25 already persisted.
+   The EARLIEST unseen beat wins, so a player who arrives late still reads them in order, and
+   every stage has its own persisted marker so a reload cannot replay one. */
+const BOSS_BEATS=[[5,'d5','identitySeen'],[10,'d10','combatSeen'],[15,'d15','traitSeen'],
+                  [20,'d20','routeSeen'],[25,'final','familySeen']];
+function bossRevealStage(){const s=game.run;if(!s?.bossReveal)return null;
+ for(const [day,stage,flag] of BOSS_BEATS){
+  if(s.day<day||s.bossReveal[flag])continue;
+  if(stage==='final'&&!s.final)continue;
+  return stage;}
+ return null;}
 
 /* Boss art is a game object here, not an icon beside a card (UI_UX). The decision the
    reveal leads into stays above the fold on a phone, so the art sits under the facts. */
@@ -1203,6 +1214,14 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    +'<p class="trait-name">특성 — '+E(name)+'</p>'
    +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>'
    +plate+'</div>';}
+ /* D10 / D20 are one-tap information beats: they open the question the next report answers and
+    disclose nothing new about the Boss, so they carry the small identity portrait rather than
+    the full art. Neither draws anything from the run stream. */
+ if(stage==='d10'||stage==='d20'){const t=stage==='d10'?c.d10:c.d20;
+  return '<div class="boss-reveal '+stage+'">'
+   +(art?'<figure class="boss-id"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'')
+   +'<p class="lede">'+E(t.line.replace('{보스명}',b.name))+'</p>'
+   +'<p class="next-report">'+E(t.next)+'</p></div>';}
  return '<div class="boss-reveal d5"><p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
@@ -1212,9 +1231,9 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
  let title='',body='',footer='',narrow=false;const s=game.run;
  if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
-  title=stage==='final'?c.final.header:stage==='d15'?'길드 정보 보고':c.d5.header;
+  title=c[stage==='final'?'final':stage].header;
   body=bossReveal();
-  footer=btn(stage==='final'?c.final.button:stage==='d15'?c.d15.button:c.d5.button,'boss-seen','stamp');
+  footer=btn(c[stage==='final'?'final':stage].button,'boss-seen','stamp');
   narrow=stage!=='final';}
  else if(modal.startsWith('stat:')){
   const k=modal.split(':')[1], n=game.current();
@@ -1267,7 +1286,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'coach-next':{const actionName=activeCoach?.[3];sound('ui');finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
  case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;
  case'boss-seen':{const st=bossRevealStage();
-  if(st==='final')s.bossReveal.familySeen=true;else if(st==='d15')s.bossReveal.traitSeen=true;else s.bossReveal.identitySeen=true;
+  const beat=BOSS_BEATS.find(x=>x[1]===st);if(beat)s.bossReveal[beat[2]]=true;
   game.save();setModal(null);render();break;}
  case'break-seal':game.breakSeal();sound('boss');render();break;
  case'menu':sound('ui');setModal('menu');break;

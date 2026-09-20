@@ -108,7 +108,10 @@ const Copy={
    boundary in v2.7: the effect reaches every Item contribution, which is what its D15 line
    now says. */
 Copy.boss={
- d5:{header:'길드 토벌 공고',sub:'이번 토벌 대상',button:'토벌 대상 확인',
+ /* COPY_AUDIT_APPROVED_v2.8.0 §14. The Boss information cadence is D0 / D5 / D10 / D15 / D20 /
+    D25, and D30 adds nothing new. D0, D10 and D20 had no active Copy at all. */
+ d0:{label:'DAY 30 · 제0게이트 토벌 예정',line:'길드 정보원이 토벌 대상을 추적하고 있다.'},
+ d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
   flavor:{
    WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',
    PRIDE:'검은 갑주에는 아직 흠집 하나 남지 않았다.',
@@ -117,7 +120,10 @@ Copy.boss={
    GLUTTONY:'최정예 토벌대의 보급품만 유난히 처참한 꼴로 발견됐다.',
    LUST:'오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.',
    SLOTH:'놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.'}},
- d15:{intro:'길드 정보원이 추가 정보를 확보했다.',button:'정보 확인',
+ /* one-tap information beats: they open a question the next report answers. */
+ d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다.',next:'다음 보고 · DAY 15',button:'확인'},
+ d20:{header:'최종 정찰 시작',line:'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.',next:'최종 보고 · DAY 25',button:'확인'},
+ d15:{header:'2차 조사 보고',intro:'전투 기록에서 변칙이 확인됐다.',button:'확인',
   trait:{
    WRATH:['특수 효과 없음',['별도의 변칙은 확인되지 않았다.','래스는 순수한 전력으로 맞선다.']],
    PRIDE:['오만의 갑주',['최종전에서 모든 출전자의 투력이 감소한다.','강인함·기동·정신은 그대로 적용된다.']],
@@ -128,10 +134,10 @@ Copy.boss={
       positive Core-Stat contribution from an Item is halved, whatever the Item cost. */
    GLUTTONY:['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·보급·보험 효과는 유지']],
    LUST:['매혹의 권능',['단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.','단골은 영향을 받지 않는다.']],
-   SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 유물을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 유물은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
+   SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 점포지원을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 점포지원은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
  /* The scouting report is the D25 disclosure now, so its button acknowledges the report
     rather than announcing a preparation that is still five days away. */
- final:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'확인'}
+ final:{header:'최종 정찰 보고',intro:'마왕성으로 향하는 최종 원정 환경이 확인됐다.',button:'확인'}
 };
 
 /* COPY_WORLD_VOICE §LOCKED PLAYER-FACING TERMS, 2026-09-12. Two of these are exact: the Great

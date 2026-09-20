@@ -327,15 +327,17 @@ test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is me
  assert.ok(boss<event&&boss<relic,'the Boss reveal is offered ahead of the Event and the Relic window');
  assert.ok(!/phase==='boss'/.test(app),'the reveal is a beat in the existing chain, not a new Phase');
  // seen state is persisted per stage, so a reload cannot replay or reorder a reveal
- for(const flag of ['identitySeen','traitSeen','familySeen'])
+ for(const flag of ['identitySeen','combatSeen','traitSeen','routeSeen','familySeen'])
   assert.ok(app.includes(flag),'the '+flag+' reveal is consumed exactly once');
  assert.ok(/case'boss-seen'/.test(app)&&/game\.save\(\)/.test(app),'consuming a reveal is written to the save');
 });
 
 test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',()=>{
  const c=Copy.boss;
- assert.equal(c.d5.header,'길드 토벌 공고');
- assert.equal(c.d15.intro,'길드 정보원이 추가 정보를 확보했다.');
+ /* COPY_AUDIT_APPROVED §14 is the exact owner of the cadence copy; these three headers and the
+    D15 intro were the pre-cadence wording it supersedes. */
+ assert.equal(c.d5.header,'1차 조사 보고');
+ assert.equal(c.d15.intro,'전투 기록에서 변칙이 확인됐다.');
  assert.equal(c.final.header,'최종 정찰 보고');
  for(const b of DATA.bosses){
   assert.ok(c.d5.flavor[b.id],b.id+' has its D5 Flavor');
@@ -744,7 +746,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(fin.includes('D.bossBy[s.bossId]')&&/<h1>'\+E\(b\.name\)/.test(fin),
   'and names the Boss it is about');
  assert.ok(!/<h1>마왕성<\/h1>/.test(fin),'the generic castle plate is not the headline any more');
- assert.ok(fin.includes('제 0 게이트 · 마왕성'),'the castle stays as the place, under the name');
+ assert.ok(fin.includes('제0게이트 · 마왕성'),'the castle stays as the place, under the name');
  assert.ok(/class="boss-face"/.test(fin),'the art is a figure, not an icon beside a card');
  assert.ok(/\.gate-zero \.boss-face img\{[^}]*object-fit:contain/.test(css),
   'a silhouette is never cropped to fit');
@@ -1583,6 +1585,99 @@ test('SA-Q36: the Decoration comparison shows only what the decision is made on'
  // nothing was redesigned or added
  assert.ok(!/collection|컬렉션/i.test(panel),'no Collection screen was added');
  assert.equal((app.match(/function storePanel\(/g)||[]).length,1,'one Decoration surface, unchanged in shape');
+});
+
+/* BOSS_v2.8 §INFORMATION CADENCE + COPY_AUDIT §14. Source carried D5 / D15 / D25 only; D0, D10
+   and D20 are confirmed missing adoption. The two new beats are one-tap information reports
+   that open the question the next report answers. */
+test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=>{
+ const c=Copy.boss;
+ // exact §14 copy, verbatim
+ assert.equal(c.d0.label,'DAY 30 · 제0게이트 토벌 예정');
+ assert.equal(c.d0.line,'길드 정보원이 토벌 대상을 추적하고 있다.');
+ assert.equal(c.d5.header,'1차 조사 보고');
+ assert.equal(c.d5.sub,'토벌 대상 확인');
+ assert.equal(c.d5.button,'확인');
+ assert.equal(c.d10.header,'2차 조사 시작');
+ assert.equal(c.d10.line,'{보스명}의 전투 기록을 추적한다.');
+ assert.equal(c.d10.next,'다음 보고 · DAY 15');
+ assert.equal(c.d15.header,'2차 조사 보고');
+ assert.equal(c.d15.intro,'전투 기록에서 변칙이 확인됐다.');
+ assert.equal(c.d15.button,'확인');
+ assert.equal(c.d20.header,'최종 정찰 시작');
+ assert.equal(c.d20.line,'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.');
+ assert.equal(c.d20.next,'최종 보고 · DAY 25');
+ assert.equal(c.final.header,'최종 정찰 보고');
+ assert.equal(c.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다.');
+ // §14-5 / SA-Q22: the SLOTH lines say 점포지원, never 유물
+ const sloth=c.d15.trait.SLOTH[1].join(' ');
+ assert.ok(sloth.includes('점포지원을 받는 대신')&&sloth.includes('그때의 점포지원은 받을 수 없으며'),'SLOTH uses 점포지원');
+ assert.ok(!/유물/.test(JSON.stringify(c)),'no active Boss copy says 유물');
+ // §14-8 spacing
+ assert.ok(!/제 0 게이트/.test(app+read('dist/data/copy.js')),'제0게이트 is written without spaces');
+ assert.ok(app.includes('제0게이트 · 마왕성'),'and the castle still names the gate');
+ // D0 is part of the Run-start flow, not a new screen
+ assert.ok(/Copy\.boss\.d0\.label/.test(fn('relicTakeover')),'the D0 objective beat is in the Run-start flow');
+ assert.ok(!/phase==='boss'|modal==='d0'/.test(app),'no new Phase or navigation layer was added for it');
+ // the cadence table, and D30 reusing D25
+ assert.ok(/\[5,'d5','identitySeen'\],\[10,'d10','combatSeen'\],\[15,'d15','traitSeen'\],\s*\[20,'d20','routeSeen'\],\[25,'final','familySeen'\]/.test(app),
+  'every beat has its Day and its own persisted marker');
+ assert.ok(!/BOSS_BEATS[\s\S]{0,200}30,/.test(app),'D30 has no beat of its own');
+ assert.ok(/if\(stage==='final'&&!s\.final\)continue;/.test(app),'the D25 beat waits for the persisted Final state');
+ // the reports reuse the existing shell
+ assert.ok(/if\(stage==='d10'\|\|stage==='d20'\)/.test(fn('bossReveal')),'the two beats render through the existing reveal');
+ assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and are consumed by the existing one');
+ // D10/D20 identity portrait at the 64px baseline, C2 limits intact
+ assert.ok(/\.boss-id img\{[^}]*max-width:64px;max-height:64px/.test(css),'the D10 / D20 identity portrait is 64px');
+ assert.ok(/\.boss-art img\{max-height:120px\}/.test(css)&&/\.boss-reveal\.final \.boss-art img\{max-height:96px\}/.test(css),
+  'the C2 mobile limits are untouched');
+ assert.ok(!/class="boss-art"/.test(fn('bossReveal').split("stage==='d10'")[1].split('return')[1]||''),
+  'the one-tap beats do not carry the full art');
+});
+
+test('BOSS cadence: each beat is seen once, precedes the Store Support decision, and draws nothing',()=>{
+ const g=new Game();g.autosave=false;g.start('boss-cadence');
+ const flags=['identitySeen','combatSeen','traitSeen','routeSeen'];
+ for(const f of flags)assert.equal(g.run.bossReveal[f],false,f+' starts unseen');
+ // the beat wins over the same-Day Store Support decision in the render chain
+ const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
+ assert.ok(chain.indexOf('bossRevealDue()')<chain.indexOf("relicWindow&&!s.relicWindow.focusedRevealSeen"),
+  'the Boss beat is chosen before the Store Support window on the same Day');
+ // showing and dismissing a report costs no gameplay RNG, and the marker persists
+ const stage=(day,reveal,final)=>{
+  const r={day,bossId:'WRATH',bossReveal:reveal,final:final?{}:null};
+  for(const [d,st,flag] of [[5,'d5','identitySeen'],[10,'d10','combatSeen'],[15,'d15','traitSeen'],
+                            [20,'d20','routeSeen'],[25,'final','familySeen']]){
+   if(r.day<d||r.bossReveal[flag])continue;
+   if(st==='final'&&!r.final)continue;
+   return st;}
+  return null;};
+ const seen={identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false,familySeen:false};
+ assert.equal(stage(5,seen,false),'d5');seen.identitySeen=true;
+ assert.equal(stage(10,seen,false),'d10');seen.combatSeen=true;
+ assert.equal(stage(12,seen,false),null,'no beat between reports');
+ assert.equal(stage(15,seen,false),'d15');seen.traitSeen=true;
+ assert.equal(stage(20,seen,false),'d20');seen.routeSeen=true;
+ assert.equal(stage(25,seen,true),'final');seen.familySeen=true;
+ assert.equal(stage(30,seen,true),null,'D30 adds no new reveal');
+
+ // the real thing: walk a Run and prove each beat is consumed once, survives a reload, and
+ // that showing/dismissing it moves no gameplay RNG
+ const h=new Game();h.autosave=false;h.start('boss-walk');
+ for(const [day,flag] of [[5,'identitySeen'],[10,'combatSeen'],[15,'traitSeen'],[20,'routeSeen']]){
+  h.run.day=day;
+  const before=h.rng.state;
+  h.run.bossReveal[flag]=true;           // dismissal writes the marker and nothing else
+  assert.equal(h.rng.state,before,'consuming the D'+day+' beat drew no gameplay RNG');
+  const back=Save.import(Save.export(h.account,h.run));
+  assert.equal(back.run.bossReveal[flag],true,'the D'+day+' marker survives a reload');
+  assert.equal(stage(day,back.run.bossReveal,!!back.run.final),
+   day>=25?'final':null,'and the D'+day+' report is not replayed');
+ }
+ // a save written before the cadence existed still validates and simply has not seen them
+ const legacy=JSON.parse(Save.export(h.account,h.run));
+ delete legacy.run.bossReveal.combatSeen;delete legacy.run.bossReveal.routeSeen;
+ assert.ok(Save.valid(legacy),'a pre-cadence save still loads');
 });
 
 console.log(count+' ui guard groups passed');

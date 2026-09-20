@@ -51,7 +51,7 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
  for(let i=0;i<80;i++){const g=fresh('boss-'+i);
   assert.ok(DATA.bossBy[g.run.bossId],'the Run carries a real Boss id');
   ids.add(g.run.bossId);
-  assert.deepEqual(g.run.bossReveal,{identitySeen:false,traitSeen:false},'nothing is revealed yet');
+  assert.deepEqual(g.run.bossReveal,{identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false},'nothing is revealed yet');
   const again=fresh('boss-'+i);
   assert.equal(again.run.bossId,g.run.bossId,'the same seed deals the same Boss');
  }
