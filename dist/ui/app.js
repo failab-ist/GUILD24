@@ -508,7 +508,9 @@ function loyaltyTip(n){const s=game.run,lines=[
  if(s?.bossId==='LUST'&&s.bossReveal?.traitSeen)lines.push(Copy.boss.d15.trait.LUST[1][1]);
  return tip('단골도',...lines);}
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
- if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
+ /* SA-Q04: n.status is already the Injury state in words (건강 / 부상 / 중상), so a second
+    numeric 부상 N beside it said the same thing twice. */
+ if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  parts.push('단골도 '+n.loyalty+(Adventurer.isTrustedRegular(n)?' · 단골':''));
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
     already picked a product - it reads here, before pricing, in the same block as the bag. */
@@ -1016,7 +1018,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  if(n.injury){
   if(n.injury===1){
    let combat=n.traits.includes('grit')?'+20%':'-15%';
-   cond.push('부상 효과: 생존 -20% · 투력 '+combat);
+   cond.push('부상 효과: 투력 '+combat+' · 강인함 -20%');
   }
   if(n.recovery)cond.push('남은 휴식: '+n.recovery+'일');
   /* NPC_TRAIT v2.7 §Natural recovery + ITEM_v2.7 §INSURANCE HIERARCHY. An ordinary Injury is
@@ -1036,7 +1038,7 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
   cond.push('피로 회복: 요구량을 채우고 남은 보급이 줄여 준다');
  }
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
- return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<p class="muted">${Adventurer.isTrustedRegular(n)?'성장 잠재력: '+(n.potential>=1.18?'빠른 성장':n.potential>=1.1?'꾸준한 성장':'착실한 성장'):'더 친해지면 성장 잠재력과 남은 특성을 알 수 있습니다.'}</p><h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
+ return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
    this reads the same truth the gate itself reads. */
 function unlockProgress(entry){const a=game.account;

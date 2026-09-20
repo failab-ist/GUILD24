@@ -1484,7 +1484,10 @@ test('SA-Q13: 단골 has one owner at 51, and Loyalty reads in the compact state
 
  // the compact state: Injury, Fatigue, Loyalty - and no progress bar
  const kit=fn('kitLine');
- assert.ok(/parts\.push\('부상 '\+n\.injury\)/.test(kit),'Injury is in the compact state');
+ /* SA-Q04: the Injury state is n.status in words (건강 / 부상 / 중상); a second numeric 부상 N
+    beside it was the duplication the finding names. */
+ assert.ok(/const slots=Adventurer\.slots\(n\),parts=\[n\.status\]/.test(kit),'the Injury state is in the compact state');
+ assert.ok(!/부상 '\+n\.injury/.test(kit),'and it is not also stated as a number');
  assert.ok(/parts\.push\('피로 '\+n\.fatigue\)/.test(kit),'so is Fatigue');
  assert.ok(/parts\.push\('단골도 '\+n\.loyalty/.test(kit),'and so is Loyalty');
  assert.ok(!/<meter|<progress|loyalty-bar|progress-bar/.test(kit),'there is no Loyalty progress bar');
@@ -1731,6 +1734,39 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  // §4-10: the shelf-life state only, with the FIFO explanation retired
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
  assert.ok(app.includes("'유통기한 없음'")&&app.includes("'폐기까지 '"),'and the actual shelf-life state stays');
+});
+
+/* SA-Q02 / Q03 / Q04 / Q20 / Q32 — NPC detail, Injury and Trait information truth. */
+test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()=>{
+ // SA-Q02: no hidden-Potential disclosure and no promise that Loyalty reveals Traits
+ for(const gone of ['성장 잠재력','빠른 성장','꾸준한 성장','착실한 성장','남은 특성','더 친해지면'])
+  assert.ok(!app.includes(gone),'no hidden-growth disclosure survives: '+gone);
+ assert.ok(!/n\.potential/.test(fn('npcDetail')),'the detail reads no hidden Potential at all');
+ // what remains IS the identity: Job, Level and the four Core Stats
+ const detail=fn('npcDetail');
+ assert.ok(/D\.jobBy\[n\.job\]\.name/.test(detail)&&/Lv\.\$\{n\.level\}/.test(detail),'Job and Level stay');
+ assert.ok(/statGrid\(n\)/.test(detail),'and the four actual Core Stats stay');
+ // SA-Q03: 강인함 is the Player-facing name, 생존 never is, and the pair reads 투력 -> 강인함
+ const surfaces=app+read('dist/ui/presentation.js');
+ assert.ok(!/생존 -20%|생존 \+|'생존'/.test(surfaces),'no Player-facing surface says 생존');
+ assert.equal(Presentation.labels.survival,'강인함','the Stat is named 강인함');
+ assert.ok(app.includes("'부상 효과: 투력 '+combat+' · 강인함 -20%'"),'Injury detail reads 투력 -> 강인함');
+ assert.ok(read('dist/ui/presentation.js').includes("value:'투력 '+combat+' · 강인함 -20%'"),'and so does the NIGHT row');
+ // SA-Q04: one human-readable Injury state, never duplicated as a number
+ const kit=fn('kitLine');
+ assert.ok(!/부상 '\+n\.injury/.test(kit),'the compact state does not repeat Injury as a number');
+ assert.ok(/parts=\[n\.status\]/.test(kit),'it carries the state word itself');
+ // SA-Q20: the exact First Aid primary function
+ assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.'"),
+  'the First Aid primary function is the approved sentence');
+ assert.ok(!surfaces.includes('결과는 그대로'),'the redundant lead is gone');
+ // SA-Q32: the exact Trait effect labels, with the generic ones retired
+ assert.equal(Presentation.traitText('rich'),'방문 시 소지금 +50G');
+ assert.ok(Presentation.traitText('honest').startsWith('정가·50% 구매 시 단골도 +1'),'정직한 names its own condition');
+ for(const gone of ['방문 골드','단골 보너스'])
+  assert.ok(!surfaces.includes(gone),'the generic label is gone: '+gone);
+ // weighting mechanics keep their correct 가중치 wording
+ assert.ok(/가중치/.test(JSON.stringify(DATA.relics.map(r=>r.description))),'real weighting still says 가중치');
 });
 
 console.log(count+' ui guard groups passed');
