@@ -77,7 +77,7 @@ Current authority comes only from SPEC_INDEX_v2.8.0.md.
 
 ## RELEASE VISION
 
-GUILD24_v2.8_DIRECTOR_PLAN.md is retained as the v2.8 non-Canonical release Vision.
+GUILD24_v2.8_RELEASE_VISION.md is retained as the v2.8 non-Canonical release Vision.
 
 It is orientation only:
 - why v2.8 exists
@@ -183,7 +183,7 @@ SOURCE_ADOPTION_QA_v2.8.0.md.
 
 ## VISION DOCUMENT BOUNDARY
 
-GUILD24_v2.8_DIRECTOR_PLAN.md is no longer a detailed plan or a historical rule carrier.
+GUILD24_v2.8_RELEASE_VISION.md is no longer a detailed plan or a historical rule carrier.
 
 Its permitted role is:
 - explain why v2.8 exists
