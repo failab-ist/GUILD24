@@ -8,13 +8,13 @@ DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=PROJECT_WIDE_V2_8_CANONICAL
 FREEZE_DATE=2026-09-20
 LAST_APPROVED_AMENDMENT=2026-09-20
-SSOT_AUDIT_STATUS=FULL_CHAIN_USER_DECISION_REQUIRED
+SSOT_AUDIT_STATUS=PROJECT_WIDE_AUDIT_COMPLETE
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
 V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
-FULL_LEGACY_CHAIN_REAUDIT_STATUS=USER_DECISION_REQUIRED
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=USER_DECISION_REQUIRED
+FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_BALANCE_AUDIT_IN_PROGRESS
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -176,12 +176,17 @@ A single-run perception is not enough to tune it.
 
 ## CURRENT DESIGN CLOSURE GATE
 
-The full inheritance-chain re-audit found Source-only / inherited-PASS3 gameplay truth that requires
-User/Director closure before final Source adoption can be declared complete.
+The full inheritance-chain re-audit is closed by User approval on 2026-09-20.
 
-Exact unresolved categories and audit evidence -> SSOT_AUDIT_v2.8.0.md.
+The former Source-only / inherited-PASS3 gaps are now owned by:
+- SALE purchase acceptance / operating cost / ORDER pity -> ECONOMY_ORDER_v2.8.0.md
+- Gate-count / Tier generation / Forecast boundaries / ordinary resolve & rewards -> DUNGEON_HAZARD_v2.8.0.md
+- Job Base/Growth / Loyalty / revisit -> NPC_TRAIT_v2.8.0.md
+- Job Mastery -> META_v2.8.0.md
+- targeted Event exact mechanics -> EVENT_v2.8.0.md
 
-WORK must not promote Source values into Design on its own.
+Related exact acceptance is in the current routed QA or Event acceptance section.
+WORK must implement current Canonical and must not resurrect superseded PASS3 placeholders.
 
 ## SOURCE ACCESS
 
