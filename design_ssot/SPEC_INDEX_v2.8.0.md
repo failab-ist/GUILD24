@@ -13,7 +13,8 @@ VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
 NUMERIC_COHERENCE_REAUDIT_STATUS=COMPLETE
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
+FULL_LEGACY_CHAIN_REAUDIT_STATUS=USER_DECISION_REQUIRED
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=USER_DECISION_REQUIRED
 SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_BALANCE_AUDIT_IN_PROGRESS
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -113,11 +114,10 @@ FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.
 
 ## HISTORICAL / SUPERSEDED FILE POLICY
 
-Versioned files not listed in CURRENT CANONICAL FILE SET are historical/base references only.
-They remain in design_ssot when a current owner inherits from them. They must not be opened as a
+Versioned owner files not listed in CURRENT CANONICAL FILE SET are historical/base references only.
+They remain in design_ssot only when a current owner inherits from them. Unreferenced historical
+navigation/decision snapshots may be removed. Historical/base owner files must not be opened as a
 second current truth.
-
-Older SPEC_INDEX files are historical navigation snapshots, not current routing.
 
 The v2.8 Director Plan is a non-Canonical release-vision/orientation document only.
 It must contain no implementation rule, numeric baseline, exact UX contract or QA requirement.
@@ -173,6 +173,15 @@ The following are not implementation blockers:
 
 Fire-family occurrence currently has no approved special frequency reduction.
 A single-run perception is not enough to tune it.
+
+## CURRENT DESIGN CLOSURE GATE
+
+The full inheritance-chain re-audit found Source-only / inherited-PASS3 gameplay truth that requires
+User/Director closure before final Source adoption can be declared complete.
+
+Exact unresolved categories and audit evidence -> SSOT_AUDIT_v2.8.0.md.
+
+WORK must not promote Source values into Design on its own.
 
 ## SOURCE ACCESS
 
