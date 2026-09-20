@@ -65,8 +65,60 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
  }
  assert.equal(raw.hub,base.g.overheadBase()*0.10,'hub is 10% of the overhead base, the approved rate');
 });
-test('D30 excludes throughput Relics whose condition cannot be met anymore',()=>{
- for(let i=0;i<100;i++){const g=fresh('final-offer-'+i);g.run.previousSales=0;g.relicWindow(30);assert.ok(g.run.relicWindow.candidateIds.every(id=>!['rotation','logisticsHQ'].includes(id)));}
+/* REL-Q-v28-18. The D30 pool is the ordinary eligible pool MINUS an explicit no-effect set, so
+   this asserts the whole membership directly rather than sampling windows and hoping: sampling
+   can show that something DID appear, never that everything else still CAN. */
+test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
+ const EXCLUDED=['stamp','member','guarantee','fridge','board','rookieBoard','groupFlyer',
+                 'memberBundle','premiumMember','returnPoints','supplyCert','lifetime',
+                 'royalCert','hub','efficiency'];
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the approved 15');
+ /* the model itself: no positive allowlist survives anywhere in the Store Support source */
+ const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
+ for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
+  const src=read(f);
+  assert.ok(!/finalUseful/.test(src),'no finalUseful allowlist in '+f);
+  assert.ok(!/futureRelevant/.test(src),'no futureRelevant allowlist in '+f);
+ }
+ assert.ok(!/previousSales>=8/.test(read('systems/relics.js')),'and no inherited 8-sale gate');
+ assert.ok(DATA.relics.every(r=>!('finalUseful' in r)),'the property is off the rows too');
+
+ /* eligibility, one support at a time and with the RNG taken out of it: a Run that owns
+    everything else has exactly one candidate left, so its presence or absence is the answer. */
+ const eligibleAtD30=(id,previousSales)=>{
+  const g=fresh('d30-'+id);const s=g.run;
+  s.facilities=DATA.relics.map(r=>r.id).filter(x=>x!==id).slice(0,29);
+  s.previousSales=previousSales;s.day=30;s.relicWindow=null;
+  g.relicWindow(30);
+  return s.relicWindow.candidateIds.includes(id);
+ };
+ for(const r of DATA.relics){
+  const want=!EXCLUDED.includes(r.id);
+  assert.equal(eligibleAtD30(r.id,9),want,r.id+(want?' is D30-eligible':' is excluded from D30'));
+ }
+ /* REL-Q-v28-14/15 are conditions on when the support PAYS, never on whether D30 may offer it. */
+ for(const sales of [0,5,6,7,8])for(const id of ['rotation','logisticsHQ'])
+  assert.equal(eligibleAtD30(id,sales),true,id+' is not gated by '+sales+' previous sales at D30');
+ /* a support that needs a legal D30 ORDER / Reroll action to pay is still eligible */
+ for(const id of ['delivery','terminal','bulk','dawnBulk','medicine','showcase','hazardBoard','expeditionCert'])
+  assert.equal(eligibleAtD30(id,0),true,id+' realises its value through a legal D30 action');
+
+ /* a future Store Support is included by DEFAULT, and leaves only by being named */
+ const future={id:'futureSupport',name:'미래 점포지원',kind:'utility',tags:[],price:300,description:'테스트 전용.'};
+ DATA.relics.push(future);DATA.relicBy[future.id]=future;
+ try{
+  assert.equal(eligibleAtD30(future.id,0),true,'a newly added support enters D30 without being listed');
+  DATA.relicD30NoEffect.push(future.id);
+  assert.equal(eligibleAtD30(future.id,0),false,'and is removed only by the explicit no-effect set');
+ }finally{
+  DATA.relics.pop();delete DATA.relicBy[future.id];
+  DATA.relicD30NoEffect.splice(DATA.relicD30NoEffect.indexOf(future.id),1);
+ }
+
+ /* and a real D30 window only ever draws from that pool */
+ for(let i=0;i<100;i++){const g=fresh('final-offer-'+i);g.run.previousSales=0;g.relicWindow(30);
+  for(const id of g.run.relicWindow.candidateIds)
+   assert.ok(!EXCLUDED.includes(id),id+' must not reach a D30 window');}
 });
 
 /* RELIC_v2.8 §ROTATION DISPLAY — SUPPLY ENGINE. The support stopped being a discount and became

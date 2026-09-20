@@ -29,7 +29,7 @@ Game.prototype.morning=function(){
  if(s.day===30){
   assert.deepEqual(days,Array.from({length:30},(_,i)=>i+1),'natural daily progression');
   assert.deepEqual([...windows.keys()],[0,5,10,15,20,25,30]);
-  assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].finalUseful));
+  assert.ok(w.candidateIds.every(id=>!DATA.relicD30NoEffect.includes(id)),'REL-Q-v28-18: D30 draws the ordinary pool minus the no-effect set');
  }
 };
 Game.prototype.buyRelic=function(id){
@@ -80,7 +80,7 @@ try{
  const w=g.run.relicWindow;
  assert.equal(w.milestoneDay,30,'D30 opens its own window');
  assert.equal(w.candidateIds.length,3);
- assert.ok(w.candidateIds.every(id=>DATA.relicBy[id].finalUseful),'the D30 window offers only Final-useful Relics');
+ assert.ok(w.candidateIds.every(id=>!DATA.relicD30NoEffect.includes(id)),'the D30 window offers the ordinary pool minus the explicit no-effect set');
  const saved=Save.import(Save.export(g.account,g.run));
  assert.deepEqual(saved.run.relicWindow,w,'the D30 window survives save/load');
  console.log('PASS REL-Q13 / FINAL: the D30 window ladder and its Final-useful candidates, on a controlled D30 setup');

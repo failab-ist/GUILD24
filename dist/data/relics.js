@@ -38,8 +38,17 @@ const rows=[
 ['efficiency','운영 효율 매뉴얼','utility',[],260,'다음 날부터 기본 운영비 -30G.']
 ];
 D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,
- ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{}),finalUseful:['bulk','rotation','logisticsHQ','kitchen','expeditionMeal','dawnBulk','fresh24','delivery','warehouse'].includes(id)}));
+ ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})}));
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
+/* RELIC_v2.8 §D30 CANDIDATE ELIGIBILITY — DEFAULT INCLUDE / EXPLICIT EXCLUDE. The inherited
+   positive final-useful allowlist is superseded, and it is gone rather than kept beside this:
+   an allowlist silently drops every support nobody remembered to add, including every future
+   one, which is the defect REL-Q-v28-18 names. D30 is now the ordinary eligible pool MINUS this
+   set, so a support belongs here only when there is NO legal action or state between a D30
+   acquisition and the Final Lock through which it could change anything - not merely when it
+   looks weak that late. A future support joins D30 by existing; it leaves only by being added
+   here after its own D30-to-Final review. */
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','rookieBoard','groupFlyer','memberBundle','premiumMember','returnPoints','supplyCert','lifetime','royalCert','hub','efficiency'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 /* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
    purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not
