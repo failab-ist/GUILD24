@@ -9,7 +9,7 @@ AUDIT_DATE=2026-09-20
 FINAL_REAUDIT_DATE=2026-09-20
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
-NUMERIC_COHERENCE_REAUDIT_STATUS=COMPLETE
+V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=USER_DECISION_REQUIRED
 
@@ -199,12 +199,13 @@ It must not restate:
 If the Vision and SSOT ever differ, the SSOT wins.
 
 
-## FINAL NUMERIC COHERENCE RE-AUDIT — 2026-09-20
+## FINAL v2.8 AMENDMENT NUMERIC COHERENCE RE-AUDIT — 2026-09-20
 
 Result:
     COMPLETE
 
 The v2.8 additions were re-read as one interacting system rather than as isolated amendments.
+This COMPLETE status does not close older inherited PASS3 / Source-only rules identified by the later full-chain re-audit.
 
 Approved current outcomes:
 - Great Success probability remains signal 0.26 / slope 0.80 / cap 0.30
