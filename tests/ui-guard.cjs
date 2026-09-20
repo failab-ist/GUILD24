@@ -406,9 +406,14 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  /* Director 2026-09-12: 런 is engine vocabulary, and "포기 · 새 점포 준비" said the same
     thing twice. One phrase now, in the store's own voice, and the confirmation still states
     the cost. The behaviour it describes is unchanged - see integration.cjs. */
- assert.ok(app.includes('이번 영업을 마감할까요?'),'the destructive action is named once, in the world voice');
- assert.ok(app.includes('이 지점의 자금과 모험가는 다음 점포로 이어지지 않습니다.'),
-  'and the confirmation says what it costs');
+ /* COPY_AUDIT §1-3 is the exact owner now: the confirmation is named after the menu action it
+    answers, and it states what is lost AND what survives. */
+ assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
+ assert.ok(app.includes('이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.'),
+  'and the confirmation says what it costs and what it does not');
+ assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
+ assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
+ assert.ok(!/btn\('폐점','retire-go'/.test(app),'and 폐점 is no longer the confirm');
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
@@ -1680,6 +1685,26 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
  const legacy=JSON.parse(Save.export(h.account,h.run));
  delete legacy.run.bossReveal.combatSeen;delete legacy.run.bossReveal.routeSeen;
  assert.ok(Save.valid(legacy),'a pre-cadence save still loads');
+});
+
+/* COPY_AUDIT §1-1 / §1-5 / §1-6 / §9-1 / §9-2 — pre-Run, reset and store-management microcopy.
+   Exact approved text; no mechanic is touched. */
+test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is the approved text',()=>{
+ assert.ok(app.includes("'보유 장식 없음'"),'§1-1 the empty Decoration state');
+ assert.ok(!app.includes('아직 보유한 장식이 없습니다'),'and its old explanation is gone');
+ assert.ok(app.includes("title='전체 데이터를 초기화할까요?'"),'§1-5 title');
+ assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.'),'§1-5 body');
+ assert.ok(app.includes("btn('전부 지우기','reset-go','danger')"),'§1-5 confirm');
+ assert.ok(app.includes("btn('저장 내보내기','export')")&&app.includes("btn('취소','dismiss')"),'§1-5 keeps export and cancel');
+ assert.ok(!app.includes('폐업 결재'),'the 폐업 결재 wording is gone');
+ assert.ok(app.includes("'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.'"),'§1-6 completion');
+ assert.ok(app.includes("'이번 영업의 장식은 고정됨.'"),'§9-1 active-Run line');
+ assert.ok(app.includes("'장식은 영업 시작 전에 변경할 수 있습니다.'"),'§9-1 pre-Run line');
+ assert.ok(!app.includes('장식은 영업 밖에서만')&&!app.includes('지금은 영업 중이라 확인만 됩니다'),'and the old pair is gone');
+ assert.ok(!app.includes('비워 둘 수 있습니다'),'§9-2 the empty Slot explains itself');
+ // mechanics untouched: the same two destructive actions, through the same handlers
+ assert.ok(/case'retire-go'/.test(app)&&/case'reset-go'/.test(app),'both destructive actions keep their handlers');
+ assert.ok(/Save\.reset\(\)/.test(app),'and the reset still goes through Save.reset');
 });
 
 console.log(count+' ui guard groups passed');

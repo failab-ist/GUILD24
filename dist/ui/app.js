@@ -1081,7 +1081,7 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
  const loadout=Meta.storeLoadout(a);
  return '<div class="decoration-panel">'
  +'<p class="smalltext">점포 자본 <b class="gold-text">'+Meta.storeCapital(a).toLocaleString()+'</b>'
- +' · 장식은 영업 밖에서만 사고 바꿀 수 있습니다.'+(inRun?' 지금은 영업 중이라 확인만 됩니다.':'')+'</p>'
+ +' · '+(inRun?'이번 영업의 장식은 고정됨.':'장식은 영업 시작 전에 변경할 수 있습니다.')+'</p>'
  +D.decorationSlots.map(slot=>{
    const options=D.decorations.filter(d=>d.slot===slot),active=loadout[slot];
    /* a stable handle so a Slot row elsewhere can open this panel already on that Slot */
@@ -1108,7 +1108,7 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
                   :btn(d.price.toLocaleString()+' 자본으로 구매','deco-buy','small','data-id="'+d.id+'"'
                       +(Meta.storeCapital(a)<d.price?' disabled':''))))
        +'</div>';}).join('')
-    +(active?'':'<p class="smalltext none">비워 둘 수 있습니다.</p>')+'</div>';}).join('')
+    +'</div>';}).join('')
  +'</div>';}
 function progressPanel(){const a=game.account;
  /* the grade, the total and the distinct count are already stated in the codex header
@@ -1158,7 +1158,7 @@ function newRun(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta
    +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+' · 점포 관리에서 보기">'
    +'<span>'+E(SLOT_COPY[slot]||slot)+'</span><b>'+(d?E(d.name):'비움')+'</b></button></li>';}).join('');
  const start=1000+(Object.values(loadout).includes('thriftSafe')?D.balance.decorationStartGold:0);
- return `<div class="eyebrow">길드리테일 가맹점</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">시작 자금 ${start.toLocaleString()}G · 창고 18칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">시작 재고는 창고에 있다. 이번 영업에 적용될 장식은 아래와 같다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'아직 보유한 장식이 없습니다. 영업을 마치면 점포 자본이 쌓입니다.'}</p><p>${btn('점포 관리 · 자본 '+Meta.storeCapital(a).toLocaleString(),'store-manage','bare')}</p>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
+ return `<div class="eyebrow">길드리테일 가맹점</div><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">시작 자금 ${start.toLocaleString()}G · 창고 18칸 · 마왕성 개방까지 30일.</p><div class="welcome-band">시작 재고는 창고에 있다. 이번 영업에 적용될 장식은 아래와 같다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음'}</p><p>${btn('점포 관리 · 자본 '+Meta.storeCapital(a).toLocaleString(),'store-manage','bare')}</p>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
 /* Two levels, one row each, with the number said out loud beside the control - the slider
    position alone is not a readable value. The master switch above them is the existing
    mute, so this adds controls and no fourth channel: there are no voices to balance. */
@@ -1262,8 +1262,8 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
  else if(modal==='settings'){title='영업 설정';body=settings();narrow=true;}
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다. 남은 슬롯과 보급을 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
- else if(modal==='retireConfirm'){title='이번 영업을 마감할까요?';body='<p>이 지점의 자금과 모험가는 다음 점포로 이어지지 않습니다.</p>';footer=btn('계속 영업','dismiss')+btn('폐점','retire-go','danger');narrow=true;}
- else if(modal==='resetConfirm'){title='폐업 결재';body='현재의 모든 진행 상황을 포기하고 새로운 상회로 다시 시작합니다. 동의하십니까?';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('폐업 결재','reset-go','danger');narrow=true;}
+ else if(modal==='retireConfirm'){title='현재 지점을 포기할까요?';body='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.</p>';footer=btn('계속 영업','dismiss')+btn('지점 포기','retire-go','danger');narrow=true;}
+ else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
  root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
@@ -1395,7 +1395,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'reset':setModal('resetConfirm');break;
  /* Nothing is touched until this point. Erasing every key and starting from Meta.fresh()
     is exactly the first-launch path, so no separate reset state exists to go stale. */
- case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;setModal(null);render();toast(ok?'폐업 결재가 수리되어 새 상회로 시작합니다.':Save.error);break;}
+ case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;setModal(null);render();toast(ok?'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.':Save.error);break;}
  case'import-go':$('#save-file').click();break;
 
  }
