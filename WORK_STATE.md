@@ -10,6 +10,7 @@ STATE: V2_8_SOURCE_ADOPTION_READY
 - Known current Source mismatch/root-cause map: `design_ssot/SOURCE_ADOPTION_QA_v2.8.0.md`
 - Implementation truth: `dist/`
 - Product direction: `GAME_VISION.md`
+- v2.8 release orientation only: `GUILD24_v2.8_DIRECTOR_PLAN.md`
 - Contributor workflow: `AGENTS.md`
 
 Do not duplicate detailed Rule / Numeric / UX / QA truth here.
@@ -17,7 +18,9 @@ Resolve exact behavior through the current owners routed by `SPEC_INDEX_v2.8.0.m
 
 ## Current State
 
-v2.8 Design has completed project-wide Canonical promotion and SSOT audit.
+v2.8 Design has completed project-wide Canonical promotion, final SSOT coverage audit and Copy re-audit.
+
+The v2.8 Director Plan is now orientation-only. It is not a detailed work/spec source.
 
 The Source is not yet project-wide v2.8 adopted.
 Current implementation still contains the v2.7 Core baseline plus the already-adopted Decoration

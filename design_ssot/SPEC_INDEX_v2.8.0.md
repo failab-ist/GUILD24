@@ -9,6 +9,8 @@ FREEZE_STATUS=PROJECT_WIDE_V2_8_CANONICAL
 FREEZE_DATE=2026-09-20
 LAST_APPROVED_AMENDMENT=2026-09-20
 SSOT_AUDIT_STATUS=PROJECT_WIDE_AUDIT_COMPLETE
+VISION_DETAIL_PROMOTION_STATUS=COMPLETE
+COPY_REAUDIT_STATUS=COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_READY_ADOPTION_PENDING
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -113,8 +115,11 @@ second current truth.
 
 Older SPEC_INDEX files are historical navigation snapshots, not current routing.
 
-Planning documents outside design_ssot, including the v2.8 Director Plan and Copy Audit drafts,
-are non-Canonical after this freeze. Current owner Specs above supersede them.
+The v2.8 Director Plan is a non-Canonical release-vision/orientation document only.
+It must contain no implementation rule, numeric baseline, exact UX contract or QA requirement.
+
+Copy Audit drafts remain non-Canonical history.
+All approved detailed v2.8 decisions have been promoted into the routed owner Specs / QA above.
 
 Do not delete an older owner file if a current owner explicitly inherits it.
 Cleanup means removing it from current routing and overriding stale live clauses, not destroying
@@ -169,3 +174,22 @@ SOURCE_ADOPTION_QA_v2.8.0.md records known current-source mismatch locations/roo
 adoption. WORK should start there instead of rediscovering known defects.
 
 If a routed source cannot be accessed after explicit lookup, report PROJECT SOURCE ACCESS/INDEX ISSUE.
+
+
+## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL
+
+v2.8 is ready to close when all of the following are true:
+
+- known current correctness/runtime UX findings are fixed
+- active player information is current, truthful and non-contradictory
+- the Player can read choice -> actual change -> resolved result more clearly
+- sold-Item impact is surfaced only where causality is proven
+- Fatigue, Loyalty and Store Build effects are visible at meaningful decision/result moments
+- mobile core-flow density no longer duplicates or crowds essential information
+- the Run's Boss objective remains present through the approved information cadence
+- approved Item / Store Support baselines are adopted
+- measurement-gated balance questions are either supported by evidence or explicitly carried forward
+- no v2.9+ structural expansion is pulled into v2.8
+
+Exact mechanics, numbers, copy, UX and pass/fail criteria are not repeated here.
+Use the routed owner Specs / QA.
