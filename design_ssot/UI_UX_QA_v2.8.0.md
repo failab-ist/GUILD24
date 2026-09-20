@@ -181,6 +181,33 @@ Ordinary Player surface:
 
 No new Debug menu is required for PASS.
 
+## UI-Q-v28-19B — DEBUG / SEED REPRODUCTION PATH
+
+Ordinary Player verification:
+- pre-Run has no reproducibility Seed field
+- Settings has no visible Debug entry
+- ordinary Player flow contains no QA/runtime footer copy
+
+Manual deterministic reproduction:
+1. Full Data Reset or import a fixed QA Save.
+2. Open browser Developer Tools -> Console.
+3. Run:
+   `Guild24.game.start('qa-v28-fixed-seed'); Guild24.render();`
+4. Confirm:
+   `Guild24.game.run.seed === 'qa-v28-fixed-seed'`
+5. During the active Run run:
+   `Guild24.showDebug()`
+6. Confirm the Debug view exposes the existing seed/RNG/offers/NPC/Dungeon/Result/Boss diagnostic payload.
+7. Close and repeat from the same controlled Account state with the same seed; deterministic Run state must reproduce according to the existing seeded contracts.
+
+Shortcut coverage:
+- `Ctrl+Shift+D` opens the same development Debug view during an active Run.
+
+FAIL:
+- deterministic seed reproduction requires restoring a Player-facing Seed field
+- Debug becomes ordinary Player navigation
+- removal of Player-facing QA copy also removes the development reproduction capability
+
 ## UI-Q-v28-20 — DECORATION DECISION SURFACE
 
 Store management shows name/effect/price-or-ownership/equipped state.

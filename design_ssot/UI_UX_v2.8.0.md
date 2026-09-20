@@ -237,6 +237,39 @@ Boss D5 is an exception:
 its Boss-specific Flavor is primary reveal content and must not be mechanically demoted by the
 ordinary decision-surface Flavor rule.
 
+## QA / DEBUG REPRODUCTION ACCESS — EXACT
+
+Ordinary Player UI does not expose reproducibility Seed input or a visible Debug menu.
+
+Removing those Player-facing controls must not remove deterministic QA access.
+
+Supported manual QA path:
+
+1. Start from a controlled Account state:
+   - Full Data Reset, or
+   - import the exact Save fixture required by the test.
+2. Open browser Developer Tools -> Console.
+3. Start a deterministic Run with:
+   `Guild24.game.start('<seed>'); Guild24.render();`
+4. During an active Run, inspect the persisted gameplay state through either:
+   - `Guild24.showDebug()`, or
+   - keyboard shortcut `Ctrl+Shift+D`.
+5. The Debug surface exposes the existing debug payload including:
+   - seed
+   - RNG state / last RNG
+   - ORDER offers
+   - current NPC
+   - current Dungeons
+   - resolved Results with debug evidence
+   - Boss debug state
+
+The Console / Debug path is development and QA access only.
+It must never be promoted into ordinary Player navigation merely to preserve reproducibility.
+
+When a Player-facing QA/debug control is removed, QA must verify both:
+- the control/copy is absent from the ordinary Player surface
+- the equivalent deterministic QA capability remains reachable through the development path above
+
 ## HELP
 
 Per-value/context explanations use anchored popovers, not a modal/accordion that pushes gameplay.
