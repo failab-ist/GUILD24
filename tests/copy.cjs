@@ -230,7 +230,9 @@ test('D-5 / EVENT §3-1: an Event says what it switched on, at the precision the
  assert.equal(by('festival').effects.foodDemand,.2);
  assert.ok(/구매 의사 \+20%p/.test(by('clinic').description),'치유소 휴무 too');
  assert.equal(by('clinic').effects.medicalDemand,.2);
- assert.ok(/6건부터 1건당 5G[^·]*· 최대 100G/.test(by('audit').description),'본사 재고 감사 states the trigger and the cap');
+ /* COPY_AUDIT §13-11 states the same rule as a total rather than per-item: the charge is
+    min(100G, waste x 5G) once cumulative waste reaches 6. */
+ assert.ok(/6건 이상이면 총 폐기 수 ×5G[^·]*· 최대 100G/.test(by('audit').description),'본사 재고 감사 states the trigger and the cap');
  assert.ok(/waste>=6\?Math\.min\(100,s\.stats\.waste\*5\)/.test(read('dist/systems/shop.js')),'which is the rule it applies');
  assert.ok(/특별 발주 1건 · 매입가 \+35%/.test(by('blackmarket').description),'암시장 상인 states the markup');
  assert.ok(/rollOffer\(2,1\.35\)/.test(read('dist/systems/shop.js')),'which is the offer it rolls');
@@ -412,6 +414,64 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
   'no Favorite-SKU state was created');
  // no line names an Item, which is what made the old ones read as a request
  for(const it of DATA.items)assert.ok(!lines.includes(it.name),'no arrival line names an Item: '+it.name);
+});
+
+/* SA-Q37 — EVENT 22/22. COPY_AUDIT_APPROVED §13 is the exact owner of every Event's Flavor and
+   Function. This is a 1:1 equality table: a paraphrase, a missed row or a stale example is a
+   FAIL here rather than something a pattern absorbs. Mechanics are out of scope and untouched -
+   the effects objects are asserted to be exactly what they were. */
+test('SA-Q37 / COPY_AUDIT §13: all 22 Events carry the approved Flavor and Function',()=>{
+ const APPROVED=[
+  ['logistics','물류대란','북문 운송로가 막혔다. 오늘 들어온 상자마다 우회 운임 딱지가 붙어 있다.','오늘 모든 발주 매입가 +15%'],
+  ['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','지정 발주 상품 1종 · 1개 발주 시 2개 입고'],
+  ['pilgrimage','게이트 순례주간','성지 순례 깃발이 게이트 거리를 메웠다. 행렬을 따라 길을 바꾸는 모험가도 있다.','오늘 방문객 중 1~3명의 목적지가 다른 열린 게이트로 바뀔 수 있음'],
+  ['overflow','몬스터 범람','경비병들이 게이트 앞 울타리를 한 겹 더 둘렀다. 안쪽 울음소리가 오늘따라 가깝다.','오늘 게이트 요구 전력 +12% · 원정 보상 +30%'],
+  ['potionPrice','포션 가격 폭등','연금술사 조합의 새 가격표가 붙었다. 어제 붙인 종이 위에.','오늘 포션 매입가 +35%'],
+  ['coldwave','한파','아침부터 진열대 유리가 서렸다. 게이트 쪽 바닥에는 얇은 얼음이 잡혔다.','적용 가능한 게이트에 냉기 위험 추가'],
+  ['shortage','포션 공급 중단','배송 마차에서 포션 칸만 비어 있었다.','오늘 포션 발주 등장률 대폭 감소'],
+  ['rookie','신입 모험가 시즌','길드 등록대 앞에 새 장비 냄새가 난다. 이름표가 아직 빳빳한 모험가들이 줄을 섰다.','오늘 신규 모험가 1명 방문'],
+  ['royal','왕립 기사단 방문','왕립 문장이 박힌 마차가 길드 앞에 섰다. 주변 모험가들이 슬쩍 길을 비킨다.','오늘 신규 모험가 1명 방문 · 레벨·희귀도 상향'],
+  ['blackmarket','암시장 상인','개점 전, 뒷문 앞에 주인 없는 상자가 놓여 있었다. 가격표만은 또박또박 붙어 있다.','오늘 희귀 이상 특별 발주 1건 · 매입가 +35%'],
+  ['audit','본사 재고 감사','본사 감사관은 인사보다 장부를 먼저 찾았다.','누적 폐기 6건 이상이면 총 폐기 수 ×5G 운영비 추가 · 최대 100G'],
+  ['festival','왕도 축제','왕도 쪽 음악이 게이트 앞까지 넘어온다. 원정 나서는 사람들 손에도 먹을 것이 들렸다.','오늘 음식·음료 구매 의사 +20%p'],
+  ['strike','길드 파업','길드 정문에 현수막이 걸리고 접수창구가 닫혔다.','오늘 방문객 -1'],
+  ['unknown','미확인 게이트','새벽 순찰대가 지도에 없는 게이트를 발견했다. 아직 이름도 없다.','오늘 고위험·고보상 임시 게이트 +1'],
+  ['tasting','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G'],
+  ['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','적용 가능한 게이트에 독 위험 추가'],
+  ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보 +2'],
+  ['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능'],
+  ['clinic','치유소 휴무','치유소 문에 휴무 팻말이 걸렸다. 보험 창구 앞줄이 금세 길어졌다.','오늘 보험 상품 구매 의사 +20%p'],
+  ['wastecover','본사 폐기 지원','본사가 오늘 폐기비를 대신 낸다. 점주는 공문 날짜를 두 번 확인했다.','오늘 폐기 비용 0G'],
+  ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2'],
+  ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G'],
+ ];
+ assert.equal(APPROVED.length,22,'§13 audits all 22 Events');
+ assert.deepEqual(DATA.events.map(e=>e.id),APPROVED.map(r=>r[0]),'the catalogue is exactly those 22, in order');
+ for(const [id,name,reveal,description] of APPROVED){
+  const e=DATA.events.find(x=>x.id===id);
+  assert.ok(e,'the catalogue still has '+id);
+  assert.equal(e.name,name,id+' name');
+  assert.equal(e.reveal,reveal,id+' Flavor is the approved §13 text, verbatim');
+  assert.equal(e.description,description,id+' Function is the approved §13 text, verbatim');
+ }
+ // the two stale examples the amendment calls out by name
+ const all=DATA.events.map(e=>e.reveal+'|'+e.description).join('\n');
+ assert.ok(!all.includes('오늘 첫 50% 판매 · 본사 지원 +50G'),'the 50% 할인 correction is in');
+ assert.ok(!all.includes('오늘 의료 상품 구매 의사 +20%p'),'and the 보험 correction is in');
+ assert.ok(!/의료 상품/.test(all),'no Event still says 의료 상품');
+ // §13-22 keeps the 1 -> 2 -> 3 -> 5 gap on screen, which is the whole joke
+ const night=DATA.events.find(e=>e.id==='nightshift').reveal;
+ assert.ok(/1\)[\s\S]*2\)[\s\S]*3\)[\s\S]*5\)/.test(night)&&!/\n4\)/.test(night),'the missing rule 4 survives');
+ // mechanics are untouched: every Event keeps the exact effects and weight it had
+ const EFFECTS={logistics:{price:1.15},oneplus:{double:1},pilgrimage:{pilgrimage:1},
+  overflow:{danger:1.12,reward:1.3},potionPrice:{potionPrice:1.35},coldwave:{cold:1},
+  shortage:{potionWeight:0.08},rookie:{rookie:1},royal:{royal:1},blackmarket:{blackmarket:1},
+  audit:{audit:1},festival:{foodDemand:0.2},strike:{visitors:-1},unknown:{unknown:1},
+  tasting:{tasting:1},poisonfog:{poison:1},caravan:{offers:2},payday:{wallet:1.2},
+  clinic:{medicalDemand:0.2},wastecover:{wasteFree:1},bard:{visitors:2},nightshift:{overheadFree:1}};
+ for(const e of DATA.events)assert.deepEqual(e.effects,EFFECTS[e.id],e.id+' mechanics are unchanged');
+ assert.deepEqual(DATA.events.filter(e=>e.weight!==1).map(e=>e.id).sort(),['bard','nightshift'],
+  'and so are the two rare weights');
 });
 
 console.log(count+' copy groups passed');
