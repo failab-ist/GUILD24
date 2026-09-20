@@ -1420,4 +1420,36 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
  assert.equal((app.match(/store-return/g)||[]).length,2,'one control, one handler, nothing else');
 });
 
+/* SA-Q10 + SA-Q12 — MOBILE DENSITY. One patch: the Boss art was capped on width alone, and the
+   SALE surface stated the queue twice on a phone. Both are presentation constraints at phone
+   width; neither report nor queue is redesigned. */
+test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is stated once',()=>{
+ const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
+ assert.ok(block.length,'there is a phone-width density block');
+ // SA-Q10: the exact v2.8 mobile baselines
+ assert.ok(/\.boss-art img\{max-height:120px\}/.test(block),'D5 / D15 Boss art is capped at 120px on phone');
+ assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:96px\}/.test(block),'the D25 reveal is capped at 96px');
+ // the width-only constraint that caused it is no longer the only one
+ assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
+ assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
+ // the caps are real ceilings, not overridden later at the same width
+ assert.equal((css.match(/\.boss-art img\{max-height/g)||[]).length,2,'exactly the two baseline height caps, and no third');
+ // the reports themselves are untouched: art is still a figure beside the information
+ assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
+ assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
+
+ // SA-Q12: the decorative waiting line is suppressed on phone...
+ assert.ok(/\.line-up\{display:none\}/.test(block),'the waiting fan / 대기 N is suppressed at phone width');
+ assert.ok(!/\.line-up\{display:none\}/.test(css.replace(block,'')),'and only at phone width');
+ // ...while the Dock keeps the real queue progress and count
+ const dock=app.slice(app.indexOf("'<div class=\"dock\"><div class=\"queue\">"));
+ assert.ok(/손님 '\+\(s\.cursor\+1\)\+' \/ '\+s\.queue\.length/.test(dock),'the Dock still states the queue count');
+ assert.ok(/pips\(s\.queue\.length,s\.cursor\)/.test(dock),'and its progress');
+ assert.ok(!/\.p-sale \.dock \.queue\{[^}]*display:none/.test(css),'nothing hides the Dock queue on any width');
+ // desktop keeps the richer presentation, and no second mobile queue component was created
+ assert.ok(app.includes('function waitingLine('),'the one queue renderer is unchanged');
+ assert.equal((app.match(/function waitingLine\(/g)||[]).length,1,'there is no second, mobile-only queue component');
+ assert.ok(!/mobileQueue|queueMobile|isMobile/.test(app),'and no width branch was added in script');
+});
+
 console.log(count+' ui guard groups passed');
