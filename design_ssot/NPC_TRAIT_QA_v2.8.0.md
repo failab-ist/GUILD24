@@ -95,3 +95,54 @@ PASS:
 - no automatic Level +1
 - no Day/Tier multiplier
 - no Deep-only stored Wallet/currency
+
+## NPC-Q-v28-7 — JOB BASE / GROWTH TABLE EXACT
+
+Expect exactly the six Job rows in NPC_TRAIT_v2.8.0.md.
+
+For a controlled NPC:
+- Lv1 Stats equal the Job row
+- each Level uses Job Growth × that NPC's existing internal Potential
+- no hidden Job passive changes the result
+- Job Mastery does not mutate Job Base/Growth
+
+FAIL:
+- inherited PASS3 placeholder table is treated as optional
+- Mastery directly multiplies this table
+
+## NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
+
+PASS:
+- finalized ordinary visit -> Loyalty +1
+- living expedition result -> Loyalty +2
+- Death -> no survival +2
+- purchase Loyalty remains separate
+- final Loyalty remains clamped 0–100
+- ordinary purchase formula receives +0.002 per Loyalty point
+- returning-NPC revisit weight includes ×(1 + Loyalty×0.025)
+- other explicit Trait/Store Support revisit modifiers compose once
+- Loyalty never guarantees a revisit
+
+## NPC-Q-v28-9 — JOB MASTERY SPAWN MODEL
+
+For Mastery ranks 0–7, expect mutually exclusive +1/+2/+3 Level probabilities:
+
+| Mastery | +1 | +2 | +3 |
+|---:|---:|---:|---:|
+| 0 | 0% | 0% | 0% |
+| 1 | 5% | 0% | 0% |
+| 2 | 10% | 0% | 0% |
+| 3 | 15% | 5% | 0% |
+| 4 | 20% | 10% | 0% |
+| 5 | 25% | 15% | 0% |
+| 6 | 30% | 20% | 5% |
+| 7 | 35% | 25% | 10% |
+
+PASS:
+- ordinary spawn Level resolves before Mastery bonus
+- only the generated NPC's own Job Mastery applies
+- exactly one Mastery roll is consumed per spawn, including rank 0
+- outcomes never stack
+- an already-created NPC is never retroactively changed
+- no account-wide combat multiplier exists
+- Player-facing meaning does not expose the exact table unless separately approved
