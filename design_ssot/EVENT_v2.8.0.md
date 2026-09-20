@@ -71,3 +71,104 @@ Probability/weight Events do not claim that a particular random result happened 
 unless the runtime has deterministic proof.
 
 Deterministic count/budget/special-slot changes may expose their source.
+
+## FULL-CHAIN EVENT NUMERIC CLOSURE
+
+USER_APPROVAL_DATE=2026-09-20
+
+The following inherited probability-only / PASS3 event mechanics are now exact v2.8 Design Truth.
+
+### 몬스터 범람
+
+For every ordinary Gate active that Day:
+
+    Gate required Power ×1.12
+    expedition reward multiplier ×1.30
+
+This is the Event's actual risk/reward change.
+It does not add a new Hazard.
+
+### 포션 공급 중단
+
+For Potion Items during today's ordinary ORDER Item selection:
+
+    Potion offer selection weight ×0.08
+
+This is a weight reduction, not a fixed displayed appearance probability.
+Other Item categories are unchanged.
+
+### 신입 모험가 시즌
+
+If Living NPC Cap has room:
+- generate exactly one new ordinary adventurer for the Day
+- that newcomer is guaranteed to occupy one of today's already-existing visitor slots
+- total visitor count does not increase because of this Event
+- the Event does not create a special Level/Rarity band
+- if no legal newcomer can be generated because the Living NPC Cap is full, the Event is not eligible
+
+The guaranteed newcomer replaces one ordinary selected visitor when necessary.
+
+### 왕립 기사단 방문
+
+If Living NPC Cap has room:
+- generate exactly one new royal-profile adventurer
+- that newcomer is guaranteed to occupy one of today's already-existing visitor slots
+- total visitor count does not increase because of this Event
+
+Royal-profile generation:
+
+    ordinary Day-based spawn Level +3
+
+Rarity distribution:
+
+| Rarity | Weight |
+|---|---:|
+| Common | 40 |
+| Uncommon | 36 |
+| Rare | 17 |
+| Epic | 6 |
+| Legendary | 1 |
+
+Use the ordinary unlocked-Job pool, Traits, Potential and all other normal NPC-generation rules
+unless this section explicitly overrides them.
+
+If no legal newcomer can be generated because the Living NPC Cap is full, the Event is not eligible.
+
+### 본사 재고 감사
+
+Eligibility:
+
+    cumulative Run waste count >= 6
+
+On an eligible Event Day:
+
+    auditCost
+    = min(100G, cumulative Run waste count × 5G)
+
+The audit cost is added to that Day's operating-cost charge.
+It is not a separate persistent debt or second settlement.
+
+### 왕도 축제
+
+For Food / Drink Items during today's ordinary SALE purchase decision:
+
+    purchase intent +20%p
+
+No other Item category receives this Event modifier.
+
+### 미확인 게이트
+
+Add exactly one temporary ordinary Gate for the Day.
+
+Family selection:
+- use the currently eligible ordinary Family pool
+- prefer a currently unused eligible Family when one exists
+- otherwise select from the eligible pool
+
+The temporary Gate uses the normal generated Gate as its base, then:
+
+    required Power ×1.16
+    expedition reward ×1.50
+
+It does not create a new permanent Family/Tier/Hazard system.
+The temporary Gate disappears with the Day.
