@@ -1084,8 +1084,11 @@ function storePanel(){const a=game.account,inRun=!!(game.run&&game.run.phase!=='
    return '<div class="slot" data-slot="'+E(slot)+'" tabindex="-1"><h4>'+E(SLOT_COPY[slot]||slot)+'</h4>'
     +options.map(d=>{const owned=Meta.decorationOwned(a,d.id),on=active===d.id;
       return '<div class="slot-option'+(on?' on':'')+(owned?'':' locked')+'">'
-       +'<div><b>'+E(d.name)+'</b><span class="smalltext">'+E(d.effect)+'</span>'
-       +'<p class="tale">'+E(d.text)+'</p></div>'
+       /* SA-Q36: this is a decision surface, so it carries only what the decision is made on -
+          name, exact effect, price / ownership and equipped state. The Flavor prose is not
+          deleted anywhere: d.text stays in the Decoration data for Codex / lore use, it simply
+          does not compete with the effect line while the player is comparing options. */
+       +'<div><b>'+E(d.name)+'</b><span class="smalltext">'+E(d.effect)+'</span></div>'
        +(owned
          ? (inRun?'<span class="muted">'+(on?'이번 영업에 적용 중':'미적용')+'</span>'
                  :btn(on?'해제':'적용',on?'deco-unequip':'deco-equip','small'+(on?'':' active'),'data-id="'+d.id+'"'))

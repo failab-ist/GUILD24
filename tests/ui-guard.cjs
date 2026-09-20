@@ -1563,4 +1563,26 @@ test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>
  assert.ok(start.includes("s?.phase==='foundation'?s.seed"),'and still reuses an unopened store seed');
 });
 
+/* SA-Q36 — DECORATION DECISION SURFACE. The comparison carried Flavor prose beside the effect
+   line, so the row the player decides on was half argument and half story. */
+test('SA-Q36: the Decoration comparison shows only what the decision is made on',()=>{
+ const panel=fn('storePanel').replace(/\/\*[\s\S]*?\*\//g,'');
+ // what stays: name, exact effect, price / ownership, equipped state
+ assert.ok(/<b>'\+E\(d\.name\)\+'<\/b>/.test(panel),'the name stays');
+ assert.ok(/<span class="smalltext">'\+E\(d\.effect\)\+'<\/span>/.test(panel),'the exact effect stays');
+ assert.ok(/d\.price\.toLocaleString\(\)/.test(panel),'the price stays');
+ assert.ok(/Meta\.decorationOwned\(a,d\.id\)/.test(panel),'ownership state stays');
+ assert.ok(/on\?'해제':'적용'/.test(panel)&&/on\?'이번 영업에 적용 중':'미적용'/.test(panel),'equipped state stays');
+ // what goes: the Flavor prose, from THIS surface only
+ assert.ok(!/d\.text/.test(panel),'the Flavor prose is not on the decision surface');
+ assert.ok(!/class="tale"/.test(panel),'and neither is its slot');
+ // the data itself is untouched and still available to lore-ready surfaces
+ assert.ok(DATA.decorations.every(d=>d.text&&d.text.trim()),'every Decoration still carries its Flavor');
+ assert.ok(read('dist/data/decorations.js').includes('text'),'the Flavor data was not deleted');
+ assert.ok(/class="tale"/.test(app),'the Flavor slot still exists on the surfaces that are for it');
+ // nothing was redesigned or added
+ assert.ok(!/collection|컬렉션/i.test(panel),'no Collection screen was added');
+ assert.equal((app.match(/function storePanel\(/g)||[]).length,1,'one Decoration surface, unchanged in shape');
+});
+
 console.log(count+' ui guard groups passed');
