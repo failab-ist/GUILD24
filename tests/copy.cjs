@@ -386,4 +386,29 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
  assert.ok(app.includes("mine?'보유 중'")&&!app.includes("mine?'설치됨'"),'an owned row reads 보유 중');
 });
 
+/* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not
+   have: an Item the customer is asking for, a price rule, or a remembered favourite SKU. They
+   are replaced one for one. This is not the dialogue expansion pass - no pool grew. */
+test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=>{
+ const lines=allLines.join('\n');
+ for(const gone of ['귀환석 있습니까','많이 든 걸로 주세요','먹을 게 제일 급해요',
+                    '비싼 게 좋은 거 아닌가요','이왕이면 좋은 걸로 봅시다','늘 먹던 걸로 주세요'])
+  assert.ok(!lines.includes(gone),'the false implication is gone: '+gone);
+ for(const [pool,line] of [
+  [V.trait.coward,'“오늘은 무사히 다녀오는 게 목표입니다.”'],
+  [V.trait.eater,'“원정 끝나면 밥부터 먹어야겠어요.”'],
+  [V.trait.eater,'“배고픈 채로 돌아오는 건 딱 질색입니다.”'],
+  [V.trait.greed,'“오늘은 빈손으로 돌아올 생각 없습니다.”'],
+  [V.trait.greed,'“이번엔 전리품 좀 제대로 챙겨와야죠.”'],
+  [V.regular,'“이 정도면 단골 맞죠?”']])
+  assert.ok(pool.includes(line),'the approved replacement is in its own pool: '+line);
+ // one for one: no pool grew, and no Favorite-SKU state was invented
+ assert.equal(V.trait.coward.length,4);assert.equal(V.trait.eater.length,3);
+ assert.equal(V.trait.greed.length,3);assert.equal(V.regular.length,5);
+ assert.ok(!/favorite|favouriteItem|lastItem|usualItem/i.test(read('dist/systems/adventurer.js')+read('dist/data/copy.js')),
+  'no Favorite-SKU state was created');
+ // no line names an Item, which is what made the old ones read as a request
+ for(const it of DATA.items)assert.ok(!lines.includes(it.name),'no arrival line names an Item: '+it.name);
+});
+
 console.log(count+' copy groups passed');
