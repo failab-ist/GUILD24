@@ -125,7 +125,7 @@ test('RELIC 17: 원정 도시락 코너 boosts only a matching need',()=>{
     boosted Supply, is superseded. */
  const stat=(gate,fac)=>Dungeon.prepare(n,gate,fac).itemStats.find(x=>x.item==='lava').stats.survival;
  const noBurden=stat(spider,['expeditionMeal']),burden=stat({...spider,requiredSupply:3},['expeditionMeal']);
- assert.ok(Math.abs(burden/noBurden-1.25)<1e-9,'an active Supply Burden adds +25% to the native Stat pool');
+ assert.ok(Math.abs(burden/noBurden-1.20)<1e-9,'an active Supply Burden adds +20% to the native Stat pool');
  assert.equal(stat(spider,[]),noBurden,'and without the Burden the Relic adds nothing here');
  assert.equal(Dungeon.prepare(n,{...spider,requiredSupply:3},['expeditionMeal']).effects.supply,
               Dungeon.prepare(n,{...spider,requiredSupply:3},[]).effects.supply,'Supply itself is unchanged');
@@ -247,18 +247,18 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  const base=id=>DATA.itemBy[id].effects.survival;
  // the owner's own worked examples, to the digit
  const cases=[
-  [food.id,[],['kitchen','fresh24'],2.20],
-  [food.id,['eater'],['kitchen','fresh24'],2.50],
-  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.75],
-  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],2.25],
-  [drink.id,[],['kitchen','fresh24','expeditionMeal'],2.45],
-  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.45],
+  [food.id,[],['kitchen','fresh24'],1.80],
+  [food.id,['eater'],['kitchen','fresh24'],2.10],
+  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.30],
+  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.80],
+  [drink.id,[],['kitchen','fresh24','expeditionMeal'],2.00],
+  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.00],
  ];
  for(const [id,traits,fac,want] of cases)
   assert.ok(Math.abs(contribution(id,traits,fac).survival/base(id)-want)<1e-9,
    id+' '+JSON.stringify(traits)+' '+JSON.stringify(fac)+' is base x'+want);
- // sequential multiplication would give 1.3 x 1.4 x 1.8 = 3.276, which is what this rules out
- assert.ok(Math.abs(contribution(food.id,['eater'],['kitchen','fresh24']).survival/base(food.id)-1.3*1.4*1.8)>1e-6,
+ // sequential multiplication would give 1.3 x 1.3 x 1.5 = 2.535, which is what this rules out
+ assert.ok(Math.abs(contribution(food.id,['eater'],['kitchen','fresh24']).survival/base(food.id)-1.3*1.3*1.5)>1e-6,
   'the layers are summed, never multiplied one after another');
  // and the pool is the POSITIVE NATIVE Core Stat only
  assert.equal(Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,['kitchen','fresh24','expeditionMeal']).effects.supply,
