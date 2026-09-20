@@ -369,6 +369,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  let commission=0;if(this.has('royalCert')&&mode==='overcharge'&&it.rarity>=2)commission+=Math.round(it.sell*.20);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive))commission+=Math.round(it.sell*.12);s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;
  n.history.push({day:s.day,item:it.id,mode,paid:intent.price,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,commission,loyalty:n.loyalty-before});
+ /* SA-Q11. A committed purchase is the one thing the Player did, so the Great Success signal
+    - and ONLY that signal - is recomputed against the Bag they just changed. The rest of the
+    SALE-ENTRY snapshot stays frozen: Combat Forecast, Hazard Readiness and the 실패 시 사망
+    위험 % are arrival information, and refreshing them as Items are committed is the
+    answer-following SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY forbids. A refused or failed
+    sale returns above this line, so it cannot reach the recompute at all. */
+ if(n.outlook)n.outlook.greatSignal=G.Dungeon.greatSuccessSignal({...n},this.claimedGateFor(n)||s.dungeons[0],s.facilities);
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}

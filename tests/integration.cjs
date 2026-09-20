@@ -777,7 +777,13 @@ test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for
   try{g.sell(st.id,'half');sold++;}catch(e){}
  }
  assert.ok(sold>0,'the test actually committed a purchase');
- assert.deepEqual(n.outlook,entry,'a committed Item does not move the frozen outlook');
+ /* SA-Q11: a committed purchase refreshes the Great Success signal and NOTHING else, so the
+    frozen half is compared with that one field held out. */
+ assert.deepEqual({...n.outlook,greatSignal:null},{...entry,greatSignal:null},
+  'a committed Item does not move the frozen half of the outlook');
+ assert.equal(n.outlook.greatSignal,
+  Dungeon.greatSuccessSignal({...n},g.claimedGateFor(n),g.run.facilities),
+  'and the Great Success signal is the engine calculation on the Bag as it now stands');
  // ...but the runtime preparation is NOT frozen
  const prepared=Dungeon.prepare({...n},g.claimedGateFor(n),g.run.facilities);
  const bare=Dungeon.prepare({...n,pack:[]},g.claimedGateFor(n),g.run.facilities);
@@ -794,6 +800,83 @@ test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for
   assert.notEqual(next.id,before);
   assert.ok(next.outlook,'the next customer is snapshotted on arrival');
  }
+});
+
+/* SA-Q11 — GREAT SUCCESS SIGNAL FROZEN AFTER PURCHASE. The signal shared one frozen snapshot
+   object with the rest of the arrival information, so buying the very Item that would make a
+   大成功 reachable could not say so. Only that one field moves, and only on a committed sale. */
+test('SA-Q11: a successful purchase refreshes the Great Success signal and nothing else',()=>{
+ const drive=seed=>{
+  const g=fresh(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  g.beginOrder();
+  for(let i=0;i<g.run.offers.length;i++){try{g.setQuantity(i,1);}catch(e){}}
+  g.finishOrder();
+  return g;
+ };
+ const FROZEN=['day','gate','combat','hazards','worst','deathRisk'];
+ const frozenOf=o=>JSON.stringify(FROZEN.map(k=>o[k]));
+
+ // 1. a committed sale: the frozen fields hold, greatSignal is recomputed against the new Bag
+ const g=drive('greatsignal');
+ const n=g.current();
+ const entry=copy(n.outlook);
+ let sold=0;
+ for(const st of [...g.run.inventory]){
+  if(n.pack.length>=Adventurer.slots(n))break;
+  try{if(g.sell(st.id,'half'))sold++;}catch(e){}
+ }
+ assert.ok(sold>0,'a purchase was actually committed');
+ assert.equal(frozenOf(n.outlook),frozenOf(entry),'Combat / Hazard / Death / gate / day are untouched');
+ assert.equal(n.outlook.greatSignal,
+  Dungeon.greatSuccessSignal({...n},g.claimedGateFor(n),g.run.facilities),
+  'the signal is recomputed on the committed Bag');
+ assert.equal(typeof n.outlook.greatSignal,'boolean','and it is still the plain signal, not a score');
+
+ // 2. the recompute really can change the answer - a strong enough Bag flips a false signal true
+ const h=drive('greatsignal-flip');
+ const m=h.current();
+ m.outlook.greatSignal=false;
+ const wouldBe=Dungeon.greatSuccessSignal({...m,pack:['toppotion','toppotion']},h.claimedGateFor(m),h.run.facilities);
+ h.stock('toppotion',2);m.money=999999;m.refused=[];
+ let flipped=0;
+ for(const st of h.run.inventory.filter(x=>x.item==='toppotion')){
+  if(m.pack.length>=Adventurer.slots(m))break;
+  try{if(h.sell(st.id,'half'))flipped++;}catch(e){}
+ }
+ if(flipped){
+  assert.equal(m.outlook.greatSignal,
+   Dungeon.greatSuccessSignal({...m},h.claimedGateFor(m),h.run.facilities),
+   'the refreshed signal tracks the Bag that was actually committed');
+  if(wouldBe)assert.equal(m.outlook.greatSignal,true,'a Bag that reaches the margin says so');
+ }
+
+ // 3. a REFUSED sale refreshes nothing at all
+ const r=drive('greatsignal-refuse');
+ const p=r.current();
+ const beforeRefusal=copy(p.outlook);
+ const target=r.run.inventory[0];
+ assert.ok(target,'there is stock to offer');
+ p.money=0;                                   // cannot afford it: the sale is refused outright
+ let threw=false;
+ try{assert.equal(r.sell(target.id,'overcharge'),false,'the sale did not go through');}
+ catch(e){threw=true;}
+ assert.deepEqual(p.outlook,beforeRefusal,
+  'a refused'+(threw?'/rejected':'')+' sale leaves the whole snapshot frozen');
+
+ // 4. and so does simply arriving and departing without buying anything
+ const q=drive('greatsignal-nopurchase');
+ const v=q.current();
+ const untouched=copy(v.outlook);
+ assert.deepEqual(v.outlook,untouched,'no purchase, no refresh');
+ q.depart();
+ const next=q.current();
+ if(next)assert.ok(next.outlook,'the next arrival gets its own full snapshot');
+
+ // 5. the recompute is on the committed-sale path only, and touches one field
+ const src=source('dist/systems/shop.js');
+ const sell=src.slice(src.indexOf(' sell(stockId,'),src.indexOf(' night(){'));
+ const hits=sell.match(/n\.outlook\.[a-zA-Z]+=/g)||[];
+ assert.deepEqual(hits,['n.outlook.greatSignal='],'sell() writes exactly one outlook field');
 });
 
 test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every higher price',()=>{
