@@ -164,3 +164,225 @@ No Hazard magnitude/count inflation is added.
 
 Sponsorship cost remains owned by the Economy owner.
 NPC bonus reward remains owned by NPC_TRAIT_v2.8.0.md.
+
+## FULL-CHAIN NUMERIC CLOSURE — GATE / FORECAST / ORDINARY RESOLVE
+
+USER_APPROVAL_DATE=2026-09-20
+
+This section closes inherited PASS3 / Source-only values without changing the current play model.
+These values are the required v2.8 baseline. Later tuning requires measured evidence and a new
+approved owner amendment.
+
+### Gate-count generation — exact
+
+For ordinary Days:
+
+| Day | Gate count |
+|---|---|
+| D1–3 | exactly 1 |
+| D4–7 | 1 or 2, exactly 50% / 50% |
+| D8–18 | exactly 2 |
+| D19–29 | 2 or 3, exactly 50% / 50% |
+| D30 | ordinary Gate-count generation does not run; Final owner applies |
+
+The next-Day Gate-count forecast must read this same rule. It may not maintain a second probability
+table.
+
+### Tier generation — exact
+
+Use the following exact anchor rows for ordinary Days:
+
+| Day anchor | T1 | T2 | T3 |
+|---|---:|---:|---:|
+| D1 | 100% | 0% | 0% |
+| D5 | 100% | 0% | 0% |
+| D7 | 85% | 15% | 0% |
+| D8 | 70% | 30% | 0% |
+| D12 | 65% | 35% | 0% |
+| D13 | 55% | 42% | 3% |
+| D18 | 30% | 60% | 10% |
+| D19 | 26% | 60% | 14% |
+| D24 | 10% | 60% | 30% |
+| D25 | 5% | 50% | 45% |
+| D29 | 0% | 45% | 55% |
+
+For Days between two anchors, linearly interpolate each Tier weight between the surrounding rows.
+D30 does not use ordinary Tier generation.
+
+The next-Day T1/T2/T3 forecast uses this exact same function. Save/Load must not create a separate
+forecast roll or a second approximation table.
+
+### Combat Forecast label boundary — exact, hidden formula
+
+Let:
+
+    combatRatio = Prepared Power / Gate required Power
+
+Player label:
+
+    combatRatio > 1.20  -> 우세
+    combatRatio >= 0.80 -> 접전
+    otherwise           -> 불리
+
+The exact ratio/formula remains non-player-facing unless another current information rule explicitly
+exposes an ingredient.
+
+### Hazard Defense / Readiness — exact, hidden formula
+
+For each Hazard:
+
+    Hazard Defense
+    = explicit Item/Trait Counter contribution
+      + mapped Core-Stat contribution
+
+Mapped Core-Stat coefficients:
+
+| Hazard | Core-Stat contribution |
+|---|---|
+| 독 | 강인함 ×0.30 |
+| 화염 | 강인함 ×0.32 |
+| 냉기 | 강인함 ×0.30 |
+| 부식 | 강인함 ×0.30 |
+| 속박 | 기동 ×0.40 |
+| 진창 | 기동 ×0.40 |
+| 공포 | 정신 ×0.40 |
+| 어둠 | 정신 ×0.30 + 기동 ×0.12 |
+| 화이트아웃 | 정신 ×0.30 + 기동 ×0.12 |
+
+Let:
+
+    readinessRatio = Hazard Defense / Hazard Threat
+
+Player label:
+
+    readinessRatio >= 1.00 -> 충분
+    readinessRatio >= 0.75 -> 대응
+    readinessRatio >= 0.40 -> 불안
+    otherwise              -> 취약
+
+These thresholds are Design Truth but remain hidden calculation detail.
+
+### Supply-deficit penalty — exact
+
+If Required Supply is not met:
+
+    deficit = max(0, requiredSupply - preparedSupply)
+    sharedPenalty = min(0.30, deficit × 0.06)
+
+Apply the same percentage reduction to the prepared four Core Stats before ordinary combat/Hazard
+resolution. This remains one shared Supply system, not four independent penalties.
+
+### Ordinary non-Death resolution — exact baseline
+
+After preparation:
+
+    combatNoise
+    = uniform multiplier within ±17.5%
+      plus any explicit Trait variance modifier
+
+    combatSuccess
+    = Prepared Power × combatNoise >= Gate required Power
+
+Environment incident probability:
+
+    hazardAggregate
+    = sum(Hazard gap) / max(1, sqrt(number of Hazards))
+
+    environmentIncidentChance
+    = clamp(
+        0.06
+        + hazardAggregate × 0.012
+        - prepared 강인함 × 0.001,
+        0.02,
+        0.48
+      )
+
+When combat fails:
+
+    escapeChance
+    = clamp(
+        0.48
+        + prepared 기동 × 0.005
+        + explicit escape modifier
+        - Gate scale × 0.024,
+        0.15,
+        0.94
+      )
+
+    escape succeeds -> 퇴각
+    escape fails    -> 부상 branch
+
+On the failed-combat Injury branch:
+
+    Severe chance
+    = clamp(
+        0.42
+        + injuryRisk
+        - injuryGuard × 0.25
+        + injured-departure escalation,
+        0,
+        1
+      )
+
+On an environment/other Injury branch:
+
+    Severe chance
+    = clamp(
+        0.13
+        - injuryGuard × 0.12
+        + injured-departure escalation,
+        0,
+        1
+      )
+
+The injured-departure escalation remains +15%p under the current v2.7 rule.
+The single failure-conditioned Death rule, Insurance conversions, Aftercare and Great Success keep
+their current owner ordering and are not redefined here.
+
+### Ordinary EXP / expedition-Wallet / equipment reward — exact baseline
+
+For a living adventurer:
+
+    baseEXP = 22 + Day × 4.6
+
+Outcome multiplier:
+
+    대성공 = 1.40
+    퇴각   = 0.38
+    combat-success path = 1.00
+    other surviving non-retreat path = 0.50
+
+Then:
+
+    EXP
+    = round(baseEXP × outcomeMultiplier × explicit XP modifiers)
+
+Ordinary expedition Wallet reward:
+
+    baseWalletReward = 35 + Day × 8
+
+Outcome multiplier:
+
+    퇴각 = 0.08
+    combat-success path = 1.00
+    other surviving path = 0.18
+
+Then:
+
+    expeditionWalletReward
+    = round(
+        baseWalletReward
+        × outcomeMultiplier
+        × (1 + explicit loot modifiers)
+        × Gate reward multiplier
+      )
+
+This is the ordinary NPC expedition-Wallet channel consumed by current Item/Trait/Deep rules.
+
+Equipment gain:
+- only a living combat-success path is eligible
+- base chance = 20% plus explicit rare-loot modifier
+- on hit, Equipment tier +1
+- Equipment 투력 gain = seeded integer 2–5 inclusive
+
+These values are the v2.8 Source-adoption baseline, not player-facing exact probability disclosure.
