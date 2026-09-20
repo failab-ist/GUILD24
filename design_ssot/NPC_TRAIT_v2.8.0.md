@@ -46,6 +46,19 @@ Do not create a second UI-only threshold such as 60 for the word 단골.
 Other Store Supports may still own additional thresholds such as 30 / 50 / 60 for their own
 effects; those do not redefine Trusted Regular.
 
+## ORDINARY PAID-PURCHASE LOYALTY DELTAS
+
+Base Loyalty change on a successful ordinary paid purchase:
+
+    50% sale  -> +6
+    100% sale -> +1
+    150% sale -> -3
+
+These are the base transaction deltas before any explicitly owned Trait / Store Support modifier.
+
+Refusal grants no purchase Loyalty change.
+Other visit/survival Loyalty changes remain separate and unchanged.
+
 ## LOYALTY PLAYER MEANING
 
 The Player must be able to learn that Loyalty:
