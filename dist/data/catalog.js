@@ -201,7 +201,7 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
     Level and nothing else - not the Gate Tier, not the Day, not the Deep Power, not any item
     price, and not a hidden worth score. Stage 9 measurement baseline. */
  sponsorBase:350,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
- successExp:40,greatExp:90,successWallet:60,greatWallet:150};
+ successExp:40,greatExp:80,successWallet:60,greatWallet:120};
 
 /* v2.5 final (F1). The Stage 10 factors ease once more, as the five-arm ablation measured them:
    PRIDE .85->.90, ENVY .88->.92, GLUTTONY .70->.80, LUST .90->.95, GREED shortfall cap 20->15,
