@@ -352,7 +352,6 @@ Required:
 
 ## OUT OF v2.8 / DO NOT PULL FORWARD
 
-- broad Dialogue pool expansion / recent-line cooldown
 - broad BGM/SFX/presentation expansion
 - Expedition Purpose structural feature
 - other v2.9+ deferred work
@@ -543,7 +542,7 @@ popovers and exact per-value Help.
 Required:
 - primary heading = \`판매 후 변화\`
 - direct/derived rows have no separate analytical group heading
-- intrinsic non-delta truth may use neutral \`상품 효과\`
+- conditional non-delta Item truth uses \`특수 효과\`
 - permanent forecast paragraph removed
 - tooltip/popover copy replaced with COPY_WORLD_VOICE_v2.8 exact text
 - internal potion marker remains hidden per SA-Q05
@@ -697,7 +696,7 @@ Root cause:
 mechanics were aligned in Source, but active Event function strings were not promoted to the v2.8
 terminology.
 
-Required exact active lines from COPY_WORLD_VOICE_v2.8:
+Required exact active lines from COPY_AUDIT_APPROVED_v2.8.0.md:
 - \`오늘 첫 50% 할인 판매 · 본사 지원 +50G\`
 - \`오늘 보험 상품 구매 의사 +20%p\`
 - other targeted v2.8 Event lines must match their current owner exactly.
@@ -813,3 +812,35 @@ Acceptance:
 - Deep occurrence is exactly 2 or 3 with 50/50 weighting
 - Great Success Deep bonus is exactly 2× Success bonus
 - Deep Store Gold remains 0
+
+
+## SA-Q43 — NON-CANONICAL RANDOM SPECIAL SYSTEM
+
+Classification: NON-CANONICAL SOURCE FEATURE
+
+Current Source:
+- from D4+, a hidden random path can create route / remove-Trait / mentor-Trait opportunities
+- UI exposes destination reassignment, negative-Trait removal or positive-Trait learning
+
+Canonical finding:
+No current routed Design owner defines this random special system.
+
+Required:
+- do not preserve it as gameplay merely because it exists in Source
+- deactivate/remove the active path during adoption
+- if the feature is desired later, return it as a separate Design proposal
+
+## SA-Q44 — NON-CANONICAL NPC PITY MODIFIER
+
+Classification: NON-CANONICAL HIDDEN SOURCE BEHAVIOR
+
+Current Source:
+after a hidden NPC pity counter reaches its threshold, a fresh NPC may receive a hidden
+rarity/potential bump.
+
+Canonical finding:
+No current routed Design owner defines this pity modifier.
+
+Required:
+- deactivate/remove the hidden modifier during adoption
+- do not convert it into Canonical without User/Director approval
