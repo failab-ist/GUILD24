@@ -305,7 +305,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
   snowvisor:'김은 안 서린다. 눈썹은 얼 수 있다.',
   magmagear:'설명서 첫 줄: 마그마에 직접 넣지 마시오.',
   battlelunch:'동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',
-  herobar:'일반 핫바를 두 개 사는 것과는 기분이 다르다고 한다.',
+  herobar:'왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',
   hyperenergy:'마시고 나면 계산대보다 먼저 문을 나선다.',
   sageelixir:'한 모금 마시면 괜히 턱을 쓰다듬게 된다.',
   toppotion:'병은 작다. 값은 작지 않다.'};

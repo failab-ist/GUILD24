@@ -11,10 +11,10 @@ items:[
    `tool`, `magic` and the `fresh` alias are gone; 붕대 and 마석 보조배터리 are retired and
    are NOT converted into anything on an older save. Shelf lives and flavour carry over
    from the previous Item wherever the identity is unchanged. */
-item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:8,supply:5}),
-item('water','생수',0,25,55,'drink',5,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:6,supply:3}),
+item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:6,supply:5}),
+item('water','생수',0,40,85,'drink',5,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:10,supply:2}),
 item('ramen','컵라면',0,45,90,'food',4,'ramen','원정한끼','뜨거운 국물과 약간의 냉기 저항.',{cold:10,supply:5}),
-item('bar','핫바',0,40,80,'food',2,'bar','용사픽','꼬치는 매장 앞 수거함에.',{combat:6,supply:4}),
+item('bar','간단 도시락',1,85,180,'food',2,'bar','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:10,supply:6,loot:0.2}),
 item('choco','초코바',0,30,65,'food',5,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:8,supply:4}),
 item('coffee','캔커피',0,40,85,'drink',5,'coffee','MANA+','발걸음이 조금 가벼워진다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
@@ -43,7 +43,7 @@ item('stone','귀환석',2,260,520,'insurance',0,'stone','귀환안심','사망�
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,110,230,'potion',7,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:12,potion:1}),
-item('premium','길드 프리미엄 도시락',2,170,360,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:10,supply:7,loot:0.2}),
+item('premium','길드 특제 도시락',2,160,340,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:14,supply:7,loot:0.4}),
 item('ion','쿨링 이온음료',2,80,170,'drink',5,'ion','MANA+','얼음컵만큼 시원하진 않지만 오래 간다.',{fire:18,supply:1}),
 item('tree','세계수 생환부적',3,600,1200,'insurance',0,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,500,1000,'special',0,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
@@ -56,8 +56,8 @@ item('cryptlantern','성화 랜턴',3,150,320,'gear',0,'cryptlantern','귀환안
 item('snowvisor','백설 방한고글',3,150,320,'gear',0,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:12,whiteout:12}),
 item('magmagear','마그마 냉각장비',3,160,340,'gear',0,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:14,combat:6}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
-item('battlelunch','결전 특선 도시락',3,180,380,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:12,supply:9}),
-item('herobar','용사 특식 핫바',3,170,360,'food',2,'herobar','길드초이스','일반 핫바를 두 개 사는 것과는 기분이 다르다고 한다.',{combat:8,supply:7}),
+item('battlelunch','영웅 결전 도시락',3,210,440,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
+item('herobar','왕도 천연암반수',3,185,390,'drink',5,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:20,supply:2}),
 item('hyperenergy','초고속 에너지드링크',3,160,340,'drink',5,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:18,supply:2}),
 item('sageelixir','대현자 허브엘릭서',3,160,340,'drink',5,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:20,supply:2}),
 item('toppotion','최상급 포션',3,190,400,'potion',7,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:24,potion:1})

@@ -266,7 +266,7 @@ test('UNLOCK: D10 / D14 Activation and Gate', () => {
   
   g.nextDay(); // Transitions to D10
   assert.equal(g.account.unlocks.premium, true, 'D10 premium activated');
-  assert.equal(g.run.toast, '새 상품 해금 · 길드 프리미엄 도시락', 'D10 toast');
+  assert.equal(g.run.toast, '새 상품 해금 · 길드 특제 도시락', 'D10 toast');
   assert.equal(globalThis.Meta.itemUnlocked(g.account, DATA.itemBy['premium'], g.run.day), true, 'D10 premium candidate eligible (Meta)');
   assert.equal(checkOffer('premium'), true, 'D10 premium eligible in actual Offer generation path');
   
