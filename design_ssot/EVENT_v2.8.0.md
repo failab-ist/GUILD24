@@ -172,3 +172,19 @@ The temporary Gate uses the normal generated Gate as its base, then:
 
 It does not create a new permanent Family/Tier/Hazard system.
 The temporary Gate disappears with the Day.
+
+## FULL-CHAIN EVENT ACCEPTANCE
+
+Controlled seeded Event cases PASS only if:
+- 몬스터 범람 applies required Power ×1.12 and reward ×1.30 to the Day's ordinary Gates
+- 포션 공급 중단 applies Potion ORDER selection weight ×0.08
+- 신입 모험가 시즌 seats exactly one generated ordinary newcomer in an existing visitor slot
+- 왕립 기사단 방문 seats exactly one generated royal-profile newcomer in an existing visitor slot
+- neither newcomer Event increases total visitor count or bypasses Living NPC Cap
+- royal profile uses ordinary spawn Level +3 and Rarity weights 40/36/17/6/1
+- 본사 재고 감사 is eligible at cumulative waste >=6 and charges min(100G, waste×5G)
+- 왕도 축제 applies Food/Drink purchase intent +20%p only
+- 미확인 게이트 adds exactly one temporary eligible-Family Gate with required Power ×1.16 and reward ×1.50
+- Save/Load does not duplicate an Event effect or create a second Event roll
+
+QA must not tune these values while validating them.
