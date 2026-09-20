@@ -138,3 +138,52 @@ The redundant internal-accounting footnote is absent from the primary receipt.
 
 All previous v2.8 Decoration-art, Store Capital settlement and retired-Franchise checks remain
 active as defined by META_v2.8.0.md and CORE_RUN_v2.8.0.md.
+
+
+## UI-Q-v28-15 — SALE COPY DENSITY
+
+Selected Item:
+- one heading \`판매 후 변화\`
+- no \`이 상품이 직접\`
+- no \`보급이 상태에 미치는 영향\`
+- no \`이 손님에게는 지금 걸리지 않는 효과\`
+- intrinsic non-delta truth may appear under \`상품 효과\`
+- no permanent forecast explanation paragraph
+
+Exact forecast help is available through anchored popover.
+
+## UI-Q-v28-16 — DEEP REPEAT COPY
+
+After first tutorial:
+- Morning uses the exact two-line repeat copy
+- SALE nomination uses the exact two-line cost/reward copy
+- no duplicate long tutorial paragraph appears in both places
+
+## UI-Q-v28-17 — CLOSING ECONOMICS ONLY
+
+Primary Closing receipt has no \`오늘의 보급 영향\` block and no internal-accounting footer.
+
+NIGHT remains the result/causality owner.
+
+## UI-Q-v28-18 — STORE CAPITAL CURRENCY
+
+No active Store Capital display appends G.
+
+Gold still uses G.
+
+## UI-Q-v28-19 — SETTINGS / DEBUG BOUNDARY
+
+Ordinary Player surface:
+- \`소리 켜기 / 소리 끄기\`
+- \`전체 데이터 초기화\`
+- no reproducibility Seed control
+- no \`로컬 실행 지원 · 외부 연결 없음\` footer
+
+No new Debug menu is required for PASS.
+
+## UI-Q-v28-20 — DECORATION DECISION SURFACE
+
+Store management shows name/effect/price-or-ownership/equipped state.
+
+Decoration Flavor prose is absent from this management decision surface.
+No extra Collection UI is required.

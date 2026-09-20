@@ -86,3 +86,13 @@ No category-priority shortcut is allowed.
 
 When 황금 1+1 actually changes a provable resolved result, it participates in attribution.
 Its Special category does not exclude it from proof.
+
+
+## DI-Q-v28-9 — REPLACEMENT FLAVOR
+
+Expected:
+- 간단 도시락 -> \`반찬은 단출하지만 빈칸은 없다.\`
+- 왕도 천연암반수 -> \`왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.\`
+
+FAIL:
+- skewer/Hotbar Flavor survives on either replacement ID

@@ -340,3 +340,361 @@ Required:
 
 - perceived Fire frequency: no special occurrence weighting currently proven; do not tune from one Run
 - global economy / Great Success probability: measure after adoption
+
+
+## COPY RE-AUDIT ADDENDUM — KNOWN SOURCE MISMATCHES
+
+### SA-Q23 — TRAIT DIALOGUE FALSE PURCHASE PREFERENCES
+
+Classification: COPY TRUTH BUG
+
+Current Source:
+\`dist/data/copy.js\` -> \`visit.trait\`
+
+Observed:
+- 겁쟁이 can say \`귀환석 있습니까?\`
+- 대식가 can say \`많이 든 걸로 주세요.\` / \`먹을 게 제일 급해요.\`
+- 탐욕 can say \`비싼 게 좋은 거 아닌가요?\` / \`이왕이면 좋은 걸로 봅시다.\`
+
+Root cause:
+Flavor was authored as if Trait mechanics created Item-category / price preference.
+They do not:
+- 겁쟁이 owns escape/loot behavior, not Return Stone purchase bias
+- 대식가 modifies Food result values, not Food purchase intent
+- 탐욕 modifies expedition loot/escape, not high-price/Rare purchase preference
+
+Required exact replacements -> \`COPY_WORLD_VOICE_v2.8.0.md / NPC DIALOGUE TRUTH\`.
+
+Acceptance:
+none of the removed lines can be selected by an active v2.8 Run.
+
+### SA-Q24 — REGULAR DIALOGUE INVENTS A FAVORITE PRODUCT
+
+Classification: COPY TRUTH BUG
+
+Current Source:
+\`dist/data/copy.js\` -> \`visit.regular\`
+
+Observed:
+    늘 먹던 걸로 주세요.
+
+Root cause:
+regular Flavor implies remembered favorite-product behavior that does not exist.
+
+Required:
+replace exactly with:
+    이 정도면 단골 맞죠?
+
+Do not add a favorite-SKU state.
+
+### SA-Q25 — HELPED CALLBACK FALSE ATTRIBUTION
+
+Classification: CAUSALITY / COPY TRIGGER BUG
+
+Current Source:
+\`dist/systems/shop.js::arrive()\`
+
+Current gate:
+    !n.newToday && n.visits % 6 === 0 && !!last?.events?.length
+
+It then selects \`Copy.arrive(..., hasCallback=true)\`, whose pool says the previously sold
+preparation helped.
+
+Root cause:
+\`last.events.length\` is broader than sold-Item causality. Trait-only events and non-Item events
+can satisfy it.
+
+Required:
+the callback may trigger only from persisted previous-result v2.8 sold-Item proof.
+Trait-only \`injury-guard\` and generic events are insufficient.
+
+Acceptance:
+construct a previous expedition with only a Trait event -> no helped callback.
+Construct one with proven sold-Item contribution -> helped callback eligible.
+
+### SA-Q26 — STAMP COPY REFERENCES RETIRED FREE SALE
+
+Classification: STALE COPY
+
+Current Source:
+\`dist/data/relics.js\` -> \`stamp\`
+
+Observed:
+    유료 구매의 단골도 증가량 +50%. 무료 보급과 생환에는 적용하지 않는다.
+
+Root cause:
+copy survived the retired free-sale price mode.
+
+Required:
+    유료 구매의 단골도 증가량 +50%. 생환으로 얻는 단골도에는 적용되지 않는다.
+
+Do not change the mechanic merely to preserve old wording.
+
+### SA-Q27 — HELP REFUSAL RULE UNDERSTATES THE LOCK
+
+Classification: INFORMATION TRUST BUG
+
+Current Source:
+\`dist/ui/app.js::help()\`
+
+Observed:
+    같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다.
+
+Actual Source behavior:
+\`dist/systems/shop.js::sell()\` also locks every more-expensive mode for that same Item after a
+refusal at a lower mode.
+
+Root cause:
+help describes only the refused key, not the existing refusal ceiling.
+
+Required:
+    한 가격을 거절하면 같은 상품은 그 가격과 더 비싼 가격으로 그날 다시 제안할 수 없다.
+
+Acceptance:
+Help agrees with 50% refusal -> 50/100/150 unavailable for same Item, while cheaper modes remain
+eligible when they exist.
+
+### SA-Q28 — STORE CAPITAL SHOWN AS GOLD
+
+Classification: TERMINOLOGY / CURRENCY BUG
+
+Current Source:
+\`dist/ui/app.js::codex()\`
+
+Observed:
+    점포 자본 {N}G
+
+Other Store Capital surfaces already use capital without G.
+
+Root cause:
+Codex header reused Gold suffix styling despite Store Capital being a separate Meta currency.
+
+Required:
+    점포 자본 {N}
+
+No Player-facing Store Capital value uses G.
+
+### SA-Q29 — REUSED ITEM IDS RETAIN RETIRED HOTBAR FLAVOR
+
+Classification: STALE COPY AFTER ID REUSE
+
+Current Source:
+\`dist/data/catalog.js\`
+
+Current ID Flavor:
+- \`bar\`: \`꼬치는 매장 앞 수거함에.\`
+- \`herobar\`: \`일반 핫바를 두 개 사는 것과는 기분이 다르다고 한다.\`
+
+v2.8 identities:
+- bar -> 간단 도시락
+- herobar -> 왕도 천연암반수
+
+Root cause:
+save-safe ID reuse does not automatically replace Flavor.
+
+Required exact Flavor:
+- 간단 도시락: \`반찬은 단출하지만 빈칸은 없다.\`
+- 왕도 천연암반수: \`왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.\`
+
+### SA-Q30 — SALE ANALYTICAL LABEL STACK / OLD HELP TEXT
+
+Classification: COPY DENSITY / SOURCE ADOPTION BUG
+
+Current Source:
+\`dist/ui/app.js::till()\`, \`readout()\`
+
+Observed headings:
+- 보급 후 변화
+- 이 상품이 직접
+- 보급이 상태에 미치는 영향
+- 이 손님에게는 지금 걸리지 않는 효과
+
+Observed permanent forecast prose:
+    오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다.
+    게이트 안에서 어떻게 될지까지는 아무도 모른다.
+
+Observed short tooltips still use the pre-v2.8 wording instead of the exact anchored Help Copy.
+
+Root cause:
+the v2.7 source-group explanation remains visually promoted even after v2.8 adds shared source
+popovers and exact per-value Help.
+
+Required:
+- primary heading = \`판매 후 변화\`
+- direct/derived rows have no separate analytical group heading
+- intrinsic non-delta truth may use neutral \`상품 효과\`
+- permanent forecast paragraph removed
+- tooltip/popover copy replaced with COPY_WORLD_VOICE_v2.8 exact text
+- internal potion marker remains hidden per SA-Q05
+
+### SA-Q31 — DEEP COPY REPEATED ON MORNING AND SALE
+
+Classification: COPY DENSITY BUG
+
+Current Source:
+- \`dist/ui/app.js::deepSlip()\`
+- \`dist/ui/app.js::deepOfferUI()\`
+
+Observed:
+Morning repeats intro + hazards + note + cost/gain/sink/optional information, then SALE repeats the
+gate/note/gain/sink information again.
+
+Root cause:
+first-time tutorial content became permanent operational copy.
+
+Required after first tutorial:
+Morning:
+    심층원정 · {게이트명}
+    같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.
+
+SALE nomination:
+    {게이트명} · 후원금 {N}G
+    성공 시 추가 성장 · 점포 수익 없음
+
+Hazards remain available through the ordinary Gate information; do not duplicate a second tutorial
+paragraph here.
+
+### SA-Q32 — TRAIT EFFECT LABELS NAME THE WRONG CHANNEL
+
+Classification: INFORMATION TRUST BUG
+
+Current Source:
+\`dist/ui/presentation.js::labels\`
+
+Observed:
+- \`visitGold\` -> \`방문 골드\`
+- \`loyaltyBonus\` -> \`단골 보너스\`
+
+Root cause:
+generic labels hide whether the changed currency/state belongs to Store or NPC and when it applies.
+
+Required:
+- 금수저 -> \`방문 시 소지금 +50G\`
+- 정직한 -> \`정가·50% 구매 시 단골도 +1\`
+
+Keep mathematically correct \`가중치\` wording for weighting mechanics.
+
+### SA-Q33 — NIGHT OUTCOME SENTENCE DUPLICATES ITEM CAUSE
+
+Classification: COPY HIERARCHY BUG
+
+Current Source:
+\`dist/ui/presentation.js::nightHappened()\`
+
+Observed on avoided death:
+    보급이 마지막 순간의 사망을 막았다.
+
+v2.8 NIGHT now separately owns a proven Hero Item line.
+
+Root cause:
+the old WHAT_HAPPENED sentence also performs the new WHY/PLAYER_CAUSE role.
+
+Required:
+Outcome sentence:
+    사망 위기를 넘기고 살아 돌아왔다.
+
+Then, when proof exists:
+    {Item} 덕분에 살아 돌아왔다.
+
+No generic causality sentence competes with the proven Item line.
+
+### SA-Q34 — CLOSING REPEATS NIGHT ITEM IMPACT
+
+Classification: PLACEMENT / DUPLICATION BUG
+
+Current Source:
+\`dist/ui/app.js\` Closing ledger path:
+- computes \`Presentation.supplyImpact(r)\`
+- renders block heading \`오늘의 보급 영향\`
+
+Root cause:
+expedition causality is repeated in Closing after NIGHT already owns that information.
+
+Required:
+remove the entire \`오늘의 보급 영향\` block from the primary Closing receipt.
+Keep economics-only rows and remove the already-recorded explanatory footer per SA-Q21.
+
+### SA-Q35 — SETTINGS / PRE-RUN DEVELOPMENT COPY
+
+Classification: PLAYER-FACING COPY / DEBUG-BOUNDARY BUG
+
+Current Source:
+\`dist/ui/app.js::newRun()\`
+- \`재현용 Seed 지정\`
+- seed input on ordinary pre-Run screen
+
+\`dist/ui/app.js::settings()\`
+- Sound On / Sound Off
+- Full Data Reset
+- \`버전 0.4 · 로컬 실행 지원 · 외부 연결 없음\`
+
+Root cause:
+development/repro/runtime language is exposed on ordinary Player surfaces.
+
+Required:
+- ordinary Player buttons: \`소리 켜기 / 소리 끄기\`, \`전체 데이터 초기화\`
+- remove Seed control from ordinary pre-Run surface
+- remove technical runtime footer
+- no new Debug menu required
+
+### SA-Q36 — DECORATION FLAVOR COMPETES WITH PURCHASE EFFECT
+
+Classification: DECISION-SURFACE DENSITY BUG
+
+Current Source:
+\`dist/ui/app.js::storePanel()\`
+
+Each Decoration option always renders:
+- name
+- effect
+- Flavor \`<p class="tale">\`
+- ownership/purchase state
+
+Root cause:
+Flavor has equal persistent screen presence on a four-way management decision despite v2.8
+prioritizing exact Function comparison.
+
+Required on Store-management decision surface:
+- name
+- exact effect
+- price/ownership
+- equipped state
+
+Do not render Decoration Flavor there.
+No new Collection screen is added in this task.
+
+### SA-Q37 — EVENT EXACT COPY STILL OLD IN DATA
+
+Classification: STALE COPY
+
+Current Source:
+\`dist/data/catalog.js\` Event data still contains older strings including:
+- 본사 반값 행사: \`오늘 첫 50% 판매 · 본사 지원 +50G\`
+- 치유소 휴무: \`오늘 의료 상품 구매 의사 +20%p\`
+
+Root cause:
+mechanics were aligned in Source, but active Event function strings were not promoted to the v2.8
+terminology.
+
+Required exact active lines from COPY_WORLD_VOICE_v2.8:
+- \`오늘 첫 50% 할인 판매 · 본사 지원 +50G\`
+- \`오늘 보험 상품 구매 의사 +20%p\`
+- other targeted v2.8 Event lines must match their current owner exactly.
+
+### SA-Q38 — GLOBAL HELP REMAINS LONG-FORM MANUAL
+
+Classification: COPY DENSITY / DUPLICATION BUG
+
+Current Source:
+\`dist/ui/app.js::help()\`
+
+Observed:
+multiple paragraphs re-explain visitor ranges, Gate progression, Trait visibility, Closing,
+bankruptcy and persistence already taught elsewhere.
+
+Root cause:
+old global manual remained after v2.8 moved contextual explanation into anchored help.
+
+Required:
+replace the whole body with the exact compact Help copy in COPY_WORLD_VOICE_v2.8.
+Do not preserve the old manual as an additional second section.

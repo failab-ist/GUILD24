@@ -100,3 +100,13 @@ Probability/weight-only effects:
 - do not receive a new rarity-origin UI
 
 Frozen QA reports aggregate-value weakness as BALANCE FINDING; it does not retune.
+
+
+## REL-Q-v28-12 — STAMP COPY
+
+Expected:
+    유료 구매의 단골도 증가량 +50%. 생환으로 얻는 단골도에는 적용되지 않는다.
+
+FAIL:
+- active copy mentions 무료 보급
+- mechanic is changed merely to preserve the stale phrase

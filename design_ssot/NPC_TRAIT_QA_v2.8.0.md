@@ -44,3 +44,22 @@ And only when currently applicable/revealed:
 - revealed LUST condition
 
 No Boss leak before reveal.
+
+
+## NPC-Q-v28-4 — DIALOGUE DOES NOT INVENT PURCHASE PREFERENCE
+
+Active v2.8 pools must not contain:
+- 겁쟁이 -> 귀환석 purchase request
+- 대식가 -> Food purchase-intent request
+- 탐욕 -> expensive/Rare purchase preference
+- 단골 -> favorite-product request
+
+PASS uses the exact replacements in COPY_WORLD_VOICE_v2.8.
+
+## NPC-Q-v28-5 — HELPED CALLBACK REQUIRES ITEM PROOF
+
+Trait-only or generic previous-result events do not unlock a \`지난 보급이 도움 됐다\` callback.
+
+A previous result with proven sold-Item contribution may unlock it.
+
+No new Gameplay RNG draw is introduced.
