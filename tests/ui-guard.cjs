@@ -1386,4 +1386,38 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  assert.equal(plain,'소지 <b>100G</b>','with no Event budget the chip is unchanged');
 });
 
+/* SA-Q01 — PRE-RUN STORE-MANAGEMENT RETURN. The panel is opened from the new-Run preparation
+   modal and replaces it. During `foundation` the generic Close is suppressed and `dismiss` is a
+   no-op, which is right for the store-support takeover and left this one panel with an entry and
+   no exit. */
+test('SA-Q01: pre-Run Store Management has an explicit return to new-Run preparation',()=>{
+ const act=app.slice(app.indexOf('async function action(el)'));
+ // where it was opened from is remembered, and only when it was opened from preparation
+ assert.ok(/case'store-manage':preRunReturn=modal==='new';/.test(act),
+  'entering from the preparation panel is what arms the return');
+ // an explicit, visible control back to preparation
+ assert.ok(/if\(preRunReturn\)footer=btn\('새 점포 준비로 돌아가기','store-return','stamp'\)/.test(app),
+  'the panel carries a visible Back control');
+ assert.ok(/case'store-return':preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;/.test(act),
+  'and it returns to the existing new-Run preparation modal');
+ // returning spends nothing, re-rolls nothing, reseeds nothing and starts nothing
+ const ret=act.slice(act.indexOf("case'store-return'"),act.indexOf("break;",act.indexOf("case'store-return'")));
+ for(const forbidden of ['game.start','Meta.buyDecoration','Meta.equipDecoration','decoPending=','game.save()','Save.write'])
+  assert.ok(!ret.includes(forbidden),'returning must not '+forbidden);
+ // the ordinary Close resolves to preparation too, instead of being the foundation no-op
+ assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;\}/.test(act),
+  'Close from this panel lands on preparation rather than doing nothing');
+ // ...and the Close button is actually rendered there, which `foundation` used to suppress
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)\?btn\('닫기','dismiss'/.test(app),
+  'the header Close is available on this panel during foundation');
+ // no blank stage: with no Run the preparation modal is reopened by render itself
+ assert.ok(/if\(!modal\)setModal\('new'\)/.test(app),'a runless app always re-opens preparation');
+ // starting the Run leaves preparation for good
+ assert.ok(/preRunReturn=false;game\.start\(seed\)/.test(act),'starting clears the return state');
+ // no second navigation layer was introduced for this
+ assert.ok(!/pushState|replaceState|addEventListener\('popstate'/.test(app),
+  'the fix adds no history/navigation layer');
+ assert.equal((app.match(/store-return/g)||[]).length,2,'one control, one handler, nothing else');
+});
+
 console.log(count+' ui guard groups passed');

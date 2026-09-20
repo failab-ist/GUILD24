@@ -2,6 +2,12 @@
 'use strict';
 const D=DATA,E=Art.esc,$=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('ko-KR');
 let stored=Save.read(),game=new Game(stored?.account||Meta.fresh(),stored?.run||null),selected=null,modal=null,codexTab='items',supplyNPC=null,toastTimer,previousFocus=null;
+/* SA-Q01. Pre-Run Store Management is opened from the new-Run preparation panel and replaces
+   it, so it needs a way back to it. During `foundation` the generic Close is deliberately
+   suppressed and `dismiss` is a no-op - correct for the store-support takeover, but it left
+   this one panel with an entry and no exit. Remembering where it was opened FROM is the whole
+   fix: no new navigation layer, no second panel, and the return is the existing `new` modal. */
+let preRunReturn=false;
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
@@ -1203,7 +1209,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
       +(game.run?btn('현재 지점 포기','new','danger'):'')+'</div>';narrow=true;}
  else if(modal==='roster'){title='모험가 수첩';body=rosterList();}
  else if(modal.startsWith('npc:')){title='우리 점포의 모험가';body=npcDetail(modal.slice(4));footer=btn('수첩으로','roster');}
- else if(modal==='codex'){title='도감';body=codex();}
+ else if(modal==='codex'){title='도감';body=codex();if(preRunReturn)footer=btn('새 점포 준비로 돌아가기','store-return','stamp');}
  else if(modal==='stock'){title='창고 재고';body=stockModal();}
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
  else if(modal==='settings'){title='영업 설정';body=settings();narrow=true;}
@@ -1212,7 +1218,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='resetConfirm'){title='폐업 결재';body='현재의 모든 진행 상황을 포기하고 새로운 상회로 다시 시작합니다. 동의하십니까?';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('폐업 결재','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${game.run?.phase!=='foundation'&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
+ root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
     request is consumed here: a later redraw of the same panel must not keep yanking the
     player back to it while they read something else. */
@@ -1245,7 +1251,10 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     outside a Run this screen is the only one there is - so the way into 점포 관리 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-manage':codexTab='store';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
+ case'store-manage':preRunReturn=modal==='new';codexTab='store';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
+ /* Back to preparation. It only changes which panel is open: nothing is spent, no Decoration
+    state is re-rolled, the Run is neither reseeded nor started. */
+ case'store-return':preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;
  case'owned-relics':sound('ui');setModal('owned');break;
  /* CORE_RUN §CURRENT RUN ABANDON: starting a new Run while one is active abandons the
     current Run with no settlement. end() is deliberately NOT called - it is what settles the
@@ -1258,7 +1267,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
      Typing a seed is still the explicit reproducibility feature; leaving it empty on an opened
      Run is still a brand new world. */
   const seed=typed||(s?.phase==='foundation'?s.seed:null)||'g24-'+Date.now().toString(36);
-  game.start(seed);selected=null;setModal(null);render();break;}
+  preRunReturn=false;game.start(seed);selected=null;setModal(null);render();break;}
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
@@ -1315,7 +1324,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'help':sound('ui');setModal('help');break;
  case'settings':sound('ui');setModal('settings');break;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound();render();break;
- case'dismiss':if(s?.phase==='foundation')return;sound('ui');setModal(null);break;
+ case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation')return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
