@@ -41,9 +41,9 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
  const isFood=item.category==='food';
  if(isFood||item.category==='drink'){
   let pool=isFood?mult.foodMult-1:0;
-  if(facilities.includes('kitchen'))pool+=.40;
-  if(facilities.includes('fresh24'))pool+=.80;
-  if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)pool+=.25;
+  if(facilities.includes('kitchen'))pool+=.30;
+  if(facilities.includes('fresh24'))pool+=.50;
+  if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)pool+=.20;
   return 1+pool;
  }
  if(item.category==='potion')return mult.potionMult;

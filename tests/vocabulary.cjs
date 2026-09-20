@@ -6,7 +6,7 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 
 const CANON_HAZARDS=['poison','bind','corrosion','mire','fire','fear','dark','cold','whiteout'];
 const LEGACY=['thirst','caffeine','alcohol','long','wet','armor','undead','slow','food'];
-const CATALOG=['삼각김밥','생수','컵라면','핫바','초코바','캔커피','진정 허브티','하급 포션','얼음컵','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','핫팩','방수망토','부식 방지 코팅제','원정용 장화','설원 고글','상급 포션','농축 해독제','귀환석','중급 포션','길드 프리미엄 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰','거미줄 방호세트','연금 방수슈트','성화 랜턴','백설 방한고글','마그마 냉각장비','결전 특선 도시락','용사 특식 핫바','초고속 에너지드링크','대현자 허브엘릭서','최상급 포션'];
+const CATALOG=['삼각김밥','생수','컵라면','간단 도시락','초코바','캔커피','진정 허브티','하급 포션','얼음컵','랜턴 건전지','경량 로프','집중 사탕','불룡볶음면','에너지드링크','용사의 곡주','구급키트','방진마스크','핫팩','방수망토','부식 방지 코팅제','원정용 장화','설원 고글','상급 포션','농축 해독제','귀환석','중급 포션','길드 특제 도시락','쿨링 이온음료','세계수 생환부적','황금 1+1 쿠폰','거미줄 방호세트','연금 방수슈트','성화 랜턴','백설 방한고글','마그마 냉각장비','영웅 결전 도시락','왕도 천연암반수','초고속 에너지드링크','대현자 허브엘릭서','최상급 포션'];
 
 test('DUN-Q04/Q19: exactly the 9 canonical Hazards, mire present, slow absent',()=>{
  assert.deepEqual(Object.keys(DATA.hazards).sort(),[...CANON_HAZARDS].sort());
@@ -25,6 +25,23 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 40',()=>{
  assert.ok(!DATA.itemBy.bandage&&!DATA.itemBy.mana,'붕대 and 마석 보조배터리 are retired, not renamed');
  assert.deepEqual(DATA.items.map(i=>i.name),CATALOG);
  assert.equal(new Set(DATA.items.map(i=>i.id)).size,40);
+ /* ITEM_v2.8 §ACTIVE RARITY DISTRIBUTION - EXACT. The `bar` repurpose is Uncommon, so the
+    active 40 are C11 / U12 / R5 / E11 / L1 and no other Item moves to restore the old counts. */
+ assert.deepEqual([0,1,2,3,4].map(v=>DATA.items.filter(i=>i.rarity===v).length),[11,12,5,11,1],
+  'active Rarity distribution is the approved C11/U12/R5/E11/L1');
+ /* ITEM_v2.8 §DIRECTOR DOCUMENT BASELINE - the six rebaselined active identities, to the digit. */
+ for(const [id,name,rarity,buy,sell,category,days,fx] of [
+  ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:5}],
+  ['water','생수',0,40,85,'drink',5,{survival:10,supply:2}],
+  ['bar','간단 도시락',1,85,180,'food',2,{survival:10,supply:6,loot:0.2}],
+  ['premium','길드 특제 도시락',2,160,340,'food',2,{survival:14,supply:7,loot:0.4}],
+  ['battlelunch','영웅 결전 도시락',3,210,440,'food',2,{survival:18,supply:9}],
+  ['herobar','왕도 천연암반수',3,185,390,'drink',5,{survival:20,supply:2}]]){
+  const it=DATA.itemBy[id];
+  assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
+  assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');
+ }
+ assert.ok(!DATA.items.some(i=>i.fresh!==undefined),'no active Item carries the retired fresh property');
  /* ITEM_v2.7 §PLAYER-FACING CATEGORY: exactly these six. `medical`, `tool`, `magic` and the
     `fresh` alias are gone. */
  assert.deepEqual([...new Set(DATA.items.map(i=>i.category))].sort(),['drink','food','gear','insurance','potion','special']);

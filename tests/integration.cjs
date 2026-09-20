@@ -247,6 +247,15 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
 });
 
 test('DUNGEON_HAZARD / CORE_RUN §DEEP EXPEDITION: the schedule and the Gate are decided once',()=>{
+ /* SA-Q42 acceptance: the occurrence count is exactly 2 or 3, weighted 50/50. The odds live
+    in DATA.deepTuning.threeOccurrenceChance and the schedule is drawn on its own ':deep' RNG,
+    so a wide seed sweep is the honest way to read the weighting back out. */
+ assert.equal(DATA.deepTuning.threeOccurrenceChance,.5,'Deep occurrence is weighted 50/50');
+ {let three=0;const N=400;
+  for(let i=0;i<N;i++){const d=fresh('deep-odds-'+i).run.deep.days;
+   assert.ok(d.length===2||d.length===3,'Deep occurrence is exactly 2 or 3');
+   if(d.length===3)three++;}
+  assert.ok(Math.abs(three/N-.5)<.08,'the three-occurrence share sits on the 50/50 weighting, saw '+three+'/'+N);}
  for(let i=0;i<40;i++){
   const g=fresh('deep-'+i),d=g.run.deep.days;
   assert.ok(d.length===2||d.length===3,'exactly two or three occurrences');
@@ -343,8 +352,19 @@ test('SALE §DEEP EXPEDITION NOMINATION: the current visitor only, and only befo
 });
 
 test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the Store gets nothing',()=>{
- const t=DATA.deepTuning,keep={...t};
- Object.assign(t,{successExp:40,greatExp:90,successWallet:60,greatWallet:150});
+ /* SA-Q42 acceptance. This used to overwrite DATA.deepTuning with a harness-local
+    40/90/60/150 before asserting it back, so the production baseline was never checked.
+    The approved v2.8 baseline is read from the owner data instead, and the Canonical
+    relation - a Great Success Deep bonus is exactly 2x the Success bonus - is asserted
+    on top of it. The other approved Deep tuning must stay where the owner put it. */
+ const t=DATA.deepTuning;
+ assert.deepEqual([t.successExp,t.greatExp,t.successWallet,t.greatWallet],[40,80,60,120],
+  'the approved v2.8 Deep reward baseline');
+ assert.equal(t.greatExp,t.successExp*2,'Great Success Deep EXP is exactly 2x Success');
+ assert.equal(t.greatWallet,t.successWallet*2,'Great Success Deep Wallet is exactly 2x Success');
+ assert.deepEqual([t.powerFactor,t.threeOccurrenceChance,t.sponsorBase,t.sponsorRarityStep,
+                   t.sponsorLevelStep,t.sponsorRounding],[1.5,.5,350,.20,.05,10],
+  'the other approved Deep tuning is unchanged');
  const scale=DATA.greatSuccess.storeGoldScale;DATA.greatSuccess.storeGoldScale=.5;
  try{
   let checked=0;
@@ -362,8 +382,8 @@ test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the 
    assert.equal(rep.storeBonus,0,'a Deep Expedition returns the Store no Gold, 대성공 included');
    if(['성공','대성공'].includes(rep.outcome)){
     const great=rep.outcome==='대성공';
-    assert.equal(rep.deep.bonusXp,great?90:40,'the EXP bonus has two bands and no Day/Tier multiplier');
-    assert.equal(rep.deep.bonusWallet,great?150:60,'and so does the Wallet bonus');
+    assert.equal(rep.deep.bonusXp,great?t.greatExp:t.successExp,'the EXP bonus has two bands and no Day/Tier multiplier');
+    assert.equal(rep.deep.bonusWallet,great?t.greatWallet:t.successWallet,'and so does the Wallet bonus');
     assert.ok(n.money>=before.wallet+rep.deep.bonusWallet-rep.loot||n.money>before.wallet,
      'the Wallet bonus lands in the ordinary persisted money channel');
    }else{
@@ -374,7 +394,7 @@ test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the 
    assert.ok(!('deepWallet' in n),'no second Wallet pool was created');
   }
   assert.ok(checked>0,'at least one Deep Expedition actually resolved');
- }finally{Object.assign(DATA.deepTuning,keep);DATA.greatSuccess.storeGoldScale=scale;}
+ }finally{DATA.greatSuccess.storeGoldScale=scale;}
 });
 
 test('SALE §DEEP EXPEDITION NOMINATION: Deep and an explicit destination reassignment exclude each other',()=>{
