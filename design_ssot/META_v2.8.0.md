@@ -10,10 +10,8 @@ PATCH_TYPE=META_SIMPLIFICATION
 
 ## CURRENT EXECUTION SCOPE
 
-This v2.8-named file is a **scoped Decoration Package design source for the current v2.7 cycle**, not a project-wide v2.8 adoption directive.
-
-Apply only the Decoration/Store-Capital replacement work explicitly owned here.
-All unrelated systems and balance owners remain on their current v2.7 routes through `SPEC_INDEX_v2.7.0.md`.
+META_v2.8.0 is the current project-wide Meta owner.
+The former scoped Decoration-package-only execution meaning is superseded.
 
 ## INHERITANCE
 
@@ -48,7 +46,7 @@ The following are retired from active gameplay by the Decoration Package:
 
 Do **not** delete their final v2.7 Source/Design implementation.
 
-During the current v2.7 Decoration-package Source adoption, preserve the retired implementation under:
+During v2.8 Source adoption, preserve the retired implementation under:
 
 ```text
 archive/inactive/v2_7_franchise/
@@ -205,7 +203,7 @@ display
 The initial Decoration-package content contains one Decoration in each Slot, but Account/Save/data/UI structures must not assume one Decoration forever.
 Future content may add multiple alternatives to the same Slot.
 
-The current Decoration Package adds no system for:
+The active v2.8 Decoration system adds no system for:
 - Decoration levels
 - Decoration upgrades
 - Decoration rarity ladder
@@ -301,8 +299,7 @@ Decoration ownership cannot substitute for Boss CLEAR in the Job×Boss matrix.
 
 ## BALANCE GATE
 
-The current Decoration package structure, initial Decoration identities/prices, and the v2.7
-Gate / Wallet / Hazard-Counter bundle are already approved.
+The Decoration structure and initial Decoration identities/prices remain approved. Current non-Meta owners are routed by SPEC_INDEX_v2.8.0.md.
 
 The newest Store Capital amendment changes only the cross-run conversion basis:
 

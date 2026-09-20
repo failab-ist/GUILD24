@@ -5,191 +5,167 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=SCOPED_DECORATION_PACKAGE_REFERENCE
-FREEZE_DATE=2026-09-19
-LAST_APPROVED_AMENDMENT=2026-09-19
-SSOT_AUDIT_STATUS=DECORATION_PACKAGE_SYNCED_BALANCE_APPROVED
+FREEZE_STATUS=PROJECT_WIDE_V2_8_CANONICAL
+FREEZE_DATE=2026-09-20
+LAST_APPROVED_AMENDMENT=2026-09-20
+SSOT_AUDIT_STATUS=PROJECT_WIDE_AUDIT_COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
-SOURCE_ADOPTION_STATUS=SCOPED_DECORATION_PACKAGE_ADOPTED_NO_PROJECT_WIDE_V2_8_ADOPTION
-V2_8_SOURCE_EDIT_GATE=DECORATION_PACKAGE_ONLY
+SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_READY_ADOPTION_PENDING
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
 ## AUTHORITY
 
-```text
 1. User's newest approved decision
-2. current GUILD24 Design SSOT
+2. current GUILD24 Design SSOT routed by this index
 3. current Source
 4. older chat / proposal / report / historical spec
-```
 
-DESIGN TRUTH = Design SSOT  
-IMPLEMENTATION TRUTH = Source
+DESIGN TRUTH = current routed Design SSOT.
+IMPLEMENTATION TRUTH = current Source.
 
-Current Source remains v2.7 implementation truth. There is no project-wide v2.8 Source Adoption in the current cycle.
+v2.8 is now the project-wide current Design SSOT. The previous scoped-decoration-only meaning of
+SPEC_INDEX_v2.8.0 is superseded.
 
-## CURRENT EXECUTION SCOPE — IMPORTANT
+## CURRENT v2.8 PURPOSE
 
-This file is **not the current project-wide execution index**.
+v2.8 is a focused Core Readability / Playtest Response release.
 
-Current implementation/balance work remains on **v2.7** and resolves general owners through `SPEC_INDEX_v2.7.0.md`.
+It does not broaden the game with P2 structural features. It improves the current loop:
 
-For the current cycle, only the **Decoration Package** defined in the v2.8 files is approved for application to v2.7:
+    observe
+    -> infer
+    -> choose
+    -> see the actual change
+    -> see the resolved result
+    -> remember it for the next decision
 
-- Store Capital
-- Decoration ownership / fixed Slots / pre-Run loadout
-- initial four Decoration effects
-- Franchise Grade / Franchise Achievement / Start Contract retirement only as part of that replacement
-- inactive archive preservation of the retired implementation
-- necessary Decoration-specific Run/UI/Save support
+Priority:
+- current correctness and runtime UX
+- Copy / Information Trust
+- SALE -> NIGHT causal readability
+- Fatigue salience
+- Store Support salience and truth
+- Item role clarity
+- Boss five-Day presence
+- mobile density
+- evidence-gated balance follow-up
 
-The Gate / Wallet / Hazard-Counter rebalance is still v2.7 balance work and must be written back to the corresponding v2.7 owner after User/Director approval.
+P2+ expansion remains routed to GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md and is not v2.8 Design Truth.
 
-Do not use this file to trigger:
-- project-wide v2.8 adoption
-- unrelated owner upgrades
-- unrelated Save/version migration
-- any feature outside the Decoration Package
+## CURRENT CANONICAL FILE SET
 
-## STAGED v2.8 DECORATION PACKAGE PURPOSE
+Core / Run / Meta:
+- 00_GAME_CORE_v2.8.0.md
+- CORE_RUN_v2.8.0.md
+- META_v2.8.0.md
 
-v2.8 simplifies cross-run progression before the external v3.0 target.
+Economy / NPC / Dungeon / Item / Store Build:
+- ECONOMY_ORDER_v2.7.0.md
+- NPC_TRAIT_v2.8.0.md
+- DUNGEON_HAZARD_v2.8.0.md
+- ITEM_v2.8.0.md
+- RELIC_v2.8.0.md
 
-Active change:
+Flow / Result / UI / Copy:
+- SALE_v2.8.0.md
+- NIGHT_CLOSING_v2.8.0.md
+- UI_UX_v2.8.0.md
+- COPY_WORLD_VOICE_v2.8.0.md
+- EVENT_v2.8.0.md
+- BOSS_v2.8.0.md
+- FINAL_EXPEDITION_v2.7.0.md
 
-```text
-REMOVE active Franchise Grade / Franchise Achievement / Start Contract layer
--> REUSE its proven positive operating channels
--> MERGE cross-run economy into Store Capital + Decoration collection/loadout
--> keep Job Mastery as the separate Boss-clear growth axis
-```
+QA:
+- CORE_RUN_QA_v2.8.0.md
+- ECONOMY_ORDER_QA_v2.7.0.md
+- NPC_TRAIT_QA_v2.8.0.md
+- DUNGEON_ITEM_QA_v2.8.0.md
+- RELIC_QA_v2.8.0.md
+- UI_UX_QA_v2.8.0.md
+- SOURCE_ADOPTION_QA_v2.8.0.md
 
-The retired v2.7 Franchise implementation is preserved as an inactive archive and is not deleted.
+Audit:
+- SSOT_AUDIT_v2.8.0.md
 
-The integrated Decoration / Gate / Wallet / Hazard-Counter pass and the current Store Capital conversion basis are adopted on the current v2.7 line. This remains a scoped package only, not project-wide v2.8 adoption.
+## ROUTING
 
-## STAGED v2.8 REFERENCE FILE SET
+GAME CORE / CROSS-RUN IDENTITY -> 00_GAME_CORE_v2.8.0.md
+RUN / PHASE / SAVE / PRE-RUN / META SETTLEMENT / BOSS BRIEFING ORDER -> CORE_RUN_v2.8.0.md
+META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.8.0.md
+PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.7.0.md
+NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.8.0.md
+DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.8.0.md
+ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
+STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.8.0.md
+SALE -> SALE_v2.8.0.md
+NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
+UI / UX / MOBILE / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.8.0.md
+COPY / PLAYER-FACING TERMS / BOSS REPORT COPY -> COPY_WORLD_VOICE_v2.8.0.md
+EVENT -> EVENT_v2.8.0.md
+BOSS -> BOSS_v2.8.0.md
+FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.7.0.md
 
-Current file set = 22 files:
+## HISTORICAL / SUPERSEDED FILE POLICY
 
-- `SPEC_INDEX_v2.8.0.md`
-- `00_GAME_CORE_v2.8.0.md`
-- `CORE_RUN_v2.8.0.md`
-- `META_v2.8.0.md`
-- `ECONOMY_ORDER_v2.7.0.md`
-- `NPC_TRAIT_v2.7.0.md`
-- `DUNGEON_HAZARD_v2.7.0.md`
-- `ITEM_v2.7.0.md`
-- `RELIC_v2.7.0.md`
-- `SALE_v2.7.0.md`
-- `NIGHT_CLOSING_v2.7.0.md`
-- `UI_UX_v2.8.0.md`
-- `COPY_WORLD_VOICE_v2.7.0.md`
-- `EVENT_v2.7.0.md`
-- `BOSS_v2.7.0.md`
-- `FINAL_EXPEDITION_v2.7.0.md`
-- `CORE_RUN_QA_v2.8.0.md`
-- `ECONOMY_ORDER_QA_v2.7.0.md`
-- `NPC_TRAIT_QA_v2.7.0.md`
-- `DUNGEON_ITEM_QA_v2.7.0.md`
-- `RELIC_QA_v2.7.0.md`
-- `UI_UX_QA_v2.8.0.md`
+Versioned files not listed in CURRENT CANONICAL FILE SET are historical/base references only.
+They remain in design_ssot when a current owner inherits from them. They must not be opened as a
+second current truth.
 
-## STAGED ROUTING — DECORATION PACKAGE REFERENCE ONLY
+Older SPEC_INDEX files are historical navigation snapshots, not current routing.
 
-GAME/CORE/CROSS-RUN IDENTITY -> `00_GAME_CORE_v2.8.0.md`  
-RUN/PHASE/SAVE/FRESH-INIT/FINAL-TIMELINE/PRE-RUN-LOADOUT/META-SETTLEMENT -> `CORE_RUN_v2.8.0.md`  
-META/JOB-MASTERY/BOSS-MATRIX/STORE-CAPITAL/DECORATION/INACTIVE-FRANCHISE-ARCHIVE -> `META_v2.8.0.md`  
-PRICE/GOLD/WALLET/ORDER/REROLL/RARITY/FINAL-PRICE -> `ECONOMY_ORDER_v2.7.0.md`  
-NPC/JOB/TRAIT/GROWTH/REVISIT -> `NPC_TRAIT_v2.7.0.md`  
-DUNGEON/FAMILY/HAZARD/PREPARED-POWER/SUPPLY/FATIGUE/DEATH/GATE-GENERATION -> `DUNGEON_HAZARD_v2.7.0.md`  
-ITEM/CATALOG/COUNTER/POTION/INSURANCE -> `ITEM_v2.7.0.md`  
-RELIC/RUN-STORE-BUILD -> `RELIC_v2.7.0.md`  
-SALE -> `SALE_v2.7.0.md`  
-NIGHT/CLOSING -> `NIGHT_CLOSING_v2.7.0.md`  
-UI/UX/MOBILE/DECORATION-UI/STORE-GROWTH-UI -> `UI_UX_v2.8.0.md`  
-COPY -> `COPY_WORLD_VOICE_v2.7.0.md`  
-EVENT -> `EVENT_v2.7.0.md`  
-BOSS -> `BOSS_v2.7.0.md`  
-FINAL -> `FINAL_EXPEDITION_v2.7.0.md`
+Planning documents outside design_ssot, including the v2.8 Director Plan and Copy Audit drafts,
+are non-Canonical after this freeze. Current owner Specs above supersede them.
 
-CORE RUN QA -> `CORE_RUN_QA_v2.8.0.md`  
-ORDER/ECONOMY QA -> `ECONOMY_ORDER_QA_v2.7.0.md`  
-NPC/TRAIT QA -> `NPC_TRAIT_QA_v2.7.0.md`  
-DUNGEON/ITEM QA -> `DUNGEON_ITEM_QA_v2.7.0.md`  
-RELIC QA -> `RELIC_QA_v2.7.0.md`  
-UI/UX QA -> `UI_UX_QA_v2.8.0.md`
+Do not delete an older owner file if a current owner explicitly inherits it.
+Cleanup means removing it from current routing and overriding stale live clauses, not destroying
+the inheritance trail.
 
-## v2.8 PROMOTED STRUCTURE
+## RETIRED ACTIVE SYSTEMS
 
-### Active
-- Store Capital = persistent store-growth currency
-- permanent Decoration ownership
-- four fixed active Slots: sign / wall / counter / display
-- max one active Decoration per Slot
-- pre-Run loadout, frozen during Run
-- initial four Decoration effects reuse former Contract positive channels
-- Job Mastery remains unchanged and separate
-
-### Retired from active gameplay
+The following remain historical only:
 - Franchise Grade
 - Franchise Achievement track
 - Grade ORDER discount
-- Start Contract selection / Grade gating
+- Start Contract selection / gating
 
-### Must be preserved
-Final v2.7 Franchise/Contract Source and Design are retained under the inactive-archive policy in `META_v2.8.0.md`.
-They are historical assets, not active Runtime.
+Their inactive archive policy remains owned by META_v2.8.0.md.
 
-## BALANCE APPROVAL GATE
+## DOCUMENT BASELINE POLICY
 
-The Decoration Package structure and current Store Capital basis are adopted on the v2.7 execution line.
+Numbers marked DIRECTOR DOCUMENT BASELINE are the approved v2.8 Source-adoption starting values.
 
-The exact Store Capital rate table and Decoration prices remain owned only by `META_v2.8.0.md`.
-The rate table remains labeled `DIRECTOR DOCUMENT BASELINE`, but its current implementation has
-completed the required integration / acquisition / anti-farm validation for this cycle.
+They are Design Truth for implementation.
+They remain eligible for later balance adjustment only through:
 
-The measured acquisition curve retains a small accepted timing variance from the expectation.
-Director judgment for the current cycle is **no further tuning**; this does not create an open
-implementation blocker.
+    measurement
+    -> BALANCE FINDING
+    -> User/Director approval
+    -> owner-spec amendment
+    -> separate Source change
 
-No project-wide v2.8 Source Adoption is implied.
+A baseline is not permission for WORK or QA to tune the number.
 
+## MEASUREMENT-GATED, NOT DESIGN-UNRESOLVED
 
-## SOURCE ARCHIVE REQUIREMENT
+The following are not implementation blockers:
+- global economy pressure
+- Great Success occurrence / probability tuning
+- Store Support aggregate value after the v2.8 baselines are adopted
+- Food / Water value efficiency after the v2.8 baseline is adopted
+- Gate / Family / Hazard frequency and perceived difficulty
 
-During v2.8 Source adoption, before removing active Franchise paths:
-
-1. capture the final v2.7 Franchise/Contract implementation
-2. place it under `archive/inactive/v2_7_franchise/`
-3. add an archive README with inactive/runtime-forbidden/historical status
-4. verify active runtime imports none of it
-5. only then remove retired active call paths
-
-Do not delete the archived implementation merely because current gameplay no longer uses it.
+Fire-family occurrence currently has no approved special frequency reduction.
+A single-run perception is not enough to tune it.
 
 ## SOURCE ACCESS
 
-```text
-SPEC_INDEX_v2.8.0
--> exact routed owner
--> only needed base document
--> related current QA
--> Current Source
-```
+    SPEC_INDEX_v2.8.0
+    -> exact routed owner
+    -> only required inherited base section when needed
+    -> related current QA
+    -> Current Source
 
-If the routed source cannot be accessed after explicit lookup, report `PROJECT SOURCE ACCESS/INDEX ISSUE`.
+SOURCE_ADOPTION_QA_v2.8.0.md records known current-source mismatch locations/root causes for this
+adoption. WORK should start there instead of rediscovering known defects.
 
-## QA / BALANCE RULE
-
-Frozen QA detects mismatch; it does not tune Production.
-
-```text
-BALANCE FINDING
--> candidate measurement
--> User/Director approval
--> owner numeric update
--> separate Source Adoption / Fix cycle
-```
-
-No candidate measurement may silently become Production truth.
+If a routed source cannot be accessed after explicit lookup, report PROJECT SOURCE ACCESS/INDEX ISSUE.
