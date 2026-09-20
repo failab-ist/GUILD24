@@ -3,7 +3,7 @@
 > Project: 《던전 앞 편의점 / GUILD24》
 > Document role: **v2.9+ DEFERRED DESIGN ROUTER / FUTURE CANDIDATE CONTEXT**
 > Status: **NOT CURRENT DESIGN SSOT**
-> Current v2.8 planning scope: `GUILD24_v2.8_DIRECTOR_PLAN.md`
+> Current Design Truth entry: `design_ssot/SPEC_INDEX_v2.8.0.md`
 >
 > User decision:
 > work classified as P2 or later is not part of v2.8.
@@ -18,9 +18,8 @@ Priority:
 1. User's newest confirmed decision
 2. Current Design SSOT
 3. Current Source
-4. v2.8 Director Plan when discussing v2.8 scope
-5. This deferred router
-6. Older proposals / chat
+4. This deferred router
+5. Older proposals / chat
 
 This file does not authorize implementation.
 
@@ -35,6 +34,23 @@ current-play evidence
 → QA
 → implementation
 ```
+
+---
+
+## ROUTER BOUNDARY
+
+This file contains only still-deferred future candidates.
+Anything already promoted into v2.8 is removed from this router rather than kept as historical status.
+
+It does not own:
+- current mechanics
+- current numbers
+- current copy
+- current UX
+- current QA
+- current Source-adoption work
+
+For all current truth, use `design_ssot/SPEC_INDEX_v2.8.0.md`.
 
 ---
 
@@ -115,18 +131,7 @@ Only revisit with strong evidence that persistent product specialization creates
 
 ---
 
-# 5. DIALOGUE POOL / EXPRESSION EXPANSION
-
-Status: PROMOTED TO v2.8
-
-The v2.8 dialogue pool sizing and recent-repeat rule are now owned by:
-- design_ssot/COPY_WORLD_VOICE_v2.8.0.md
-
-This deferred document does not duplicate the active rule.
-
----
-
-# 6. AUDIO / BGM / PRESENTATION EXPANSION
+# 5. AUDIO / BGM / PRESENTATION EXPANSION
 
 Importance: MEDIUM for game feel
 Status: v2.9+ DEFER
@@ -144,7 +149,7 @@ Prefer reusing the current audio/presentation system before adding a larger asse
 
 ---
 
-# 7. ADVANCED DRAG / PHYSICS
+# 5. ADVANCED DRAG / PHYSICS
 
 Importance: LOW
 Status: OPTIONAL DEFER
@@ -160,7 +165,7 @@ Do not require:
 
 ---
 
-# 8. NEW SHOP MINIGAMES
+# 5. NEW SHOP MINIGAMES
 
 Status: DO NOT ADD WITHOUT EVIDENCE
 
@@ -176,7 +181,7 @@ The existing game is already the preparation / stocking / selling / pricing deci
 
 ---
 
-# 9. LARGE DESKTOP REDESIGN
+# 5. LARGE DESKTOP REDESIGN
 
 Importance: LOW~MEDIUM
 Status: DEFER
@@ -187,7 +192,7 @@ Do not create a separate PC-only mental model or control architecture.
 
 ---
 
-# 10. ADDITIONAL FONT / ICON / THEME SYSTEM
+# 5. ADDITIONAL FONT / ICON / THEME SYSTEM
 
 Status: DEFAULT REJECT
 
@@ -197,7 +202,7 @@ Use meaning, hierarchy, material consistency, and restraint first.
 
 ---
 
-# 11. LARGE NEW ITEM WAVE
+# 5. LARGE NEW ITEM WAVE
 
 Importance: CONDITIONAL
 Status: DEFER
@@ -214,7 +219,7 @@ Prefer rebalance / repurpose / merge over catalog growth.
 
 ---
 
-# 12. FINAL SPECTACLE / CUTSCENE EXPANSION
+# 5. FINAL SPECTACLE / CUTSCENE EXPANSION
 
 Importance: MEDIUM presentation / LOW core
 Cost: HIGH
@@ -230,7 +235,7 @@ Do not use spectacle to cover a weak decision structure.
 
 ---
 
-# 13. BROAD WORLD / FLAVOR EXPANSION
+# 5. BROAD WORLD / FLAVOR EXPANSION
 
 Importance: MEDIUM eventually
 Status: DEFER
@@ -251,7 +256,7 @@ Guardrails:
 
 ---
 
-# 14. NEW META POWER PROGRESSION
+# 5. NEW META POWER PROGRESSION
 
 Status: DO NOT ADD BY DEFAULT
 
@@ -265,7 +270,7 @@ Verify implementation, balance, information quality, and existing Meta first.
 
 ---
 
-# 15. NEW CONDITION SUBSYSTEMS
+# 5. NEW CONDITION SUBSYSTEMS
 
 Status: DO NOT ADD BY DEFAULT
 
@@ -281,7 +286,7 @@ Existing Supply / Fatigue / native Stat / Hazard / RiskReward channels must be e
 
 ---
 
-# 16. EXPANDED STORE-BUILD AXES
+# 5. EXPANDED STORE-BUILD AXES
 
 Status: CONDITIONAL DEFER
 
@@ -301,7 +306,7 @@ Target remains:
 
 ---
 
-# 17. DEEPER REGULAR-CUSTOMER RELATIONSHIP SYSTEM
+# 5. DEEPER REGULAR-CUSTOMER RELATIONSHIP SYSTEM
 
 Status: CONDITIONAL DEFER
 
@@ -317,7 +322,7 @@ Any future relationship system should strengthen understanding of a recurring NP
 
 ---
 
-# 18. FINAL / BOSS CONTENT EXPANSION
+# 5. FINAL / BOSS CONTENT EXPANSION
 
 Status: FUTURE CONTENT
 
@@ -332,7 +337,7 @@ A new Boss must change preparation decisions, not merely Power.
 
 ---
 
-# 19. ART / STORE WORLD EXPANSION
+# 5. ART / STORE WORLD EXPANSION
 
 Status: FUTURE
 
@@ -347,7 +352,7 @@ Asset count is not a substitute for game depth.
 
 ---
 
-# 20. v2.9+ ENTRY GATE
+# 5. v2.9+ ENTRY GATE
 
 Do not enter structural expansion merely because v2.8 is numerically complete.
 
