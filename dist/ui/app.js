@@ -475,6 +475,16 @@ function standee(n){
   +'<span class="nameplate">'+(rank?'<i class="rank">'+E(rank)+'</i>':'')
    +'<b>'+E(n.name)+'</b><span>Lv.'+n.level+' '+job+'</span></span>'
  +'</span></button>';}
+/* SA-Q18 / UI_UX_v2.8 §EVENT TEMPORARY BUDGET. A 급여일 Wallet is two numbers: the persistent
+   소지금 and a budget that exists only for today's visit. interest() and sell() spend both, so a
+   screen that prints 소지금 alone states an affordability the Player cannot check. The two are
+   printed side by side and never summed into one figure - the temporary half is never relabelled
+   소지금. The wording is the approved Event Function's own (오늘 방문 모험가 · 현재 소지금의 20%만큼
+   추가 구매 가능), so nothing new is invented here. */
+function walletChip(n){const b=n.eventBudget||0;
+ return '소지 <b>'+fmt(n.money)+'G</b>'+(b>0?' · 추가 구매 <b>+'+fmt(b)+'G</b>':'');}
+/* what the customer can actually pay with right now: the same sum interest() and sell() use. */
+function spendable(n){return n.money+(n.eventBudget||0);}
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
@@ -483,7 +493,7 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
     the lines lets the bag stand beside them in the width they were already leaving idle,
     instead of under them. Same information, same order, same wording. */
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
- +'<span class="npc-wallet">소지 <b>'+fmt(n.money)+'G</b></span></div>'
+ +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. */
  +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
@@ -787,12 +797,12 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
       ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
    const said=(n.refusalReasons||[]).filter(x=>x.item===it.id);
    const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult);
-   const blocked=q.debit>n.money?'손님 소지금 부족'
+   const blocked=q.debit>spendable(n)?'손님 소지금 부족'
     :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
     :full?'가방 가득':'';
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
- return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho"><span>'+E(n.name)+'에게 판매</span><b class="wallet" style="margin-left:auto">소지 '+fmt(n.money)+'G</b></p>')
+ return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho"><span>'+E(n.name)+'에게 판매</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>')
  /* SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: the rows are grouped by what actually produced
     them. A Stat that rose because this Item's Supply relieved a Supply Deficit, or because it
     crossed a Fatigue band, is said as 보급 부족 완화 / 피로 완화 - never as if the Item itself

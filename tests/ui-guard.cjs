@@ -1341,4 +1341,49 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(/기동\/정신 -40%/.test(app)&&/기동\/정신 -15%/.test(app),'the v2.7 bands are what the screen states');
 });
 
+/* SA-Q18 / UI_UX_v2.8 §EVENT TEMPORARY BUDGET. On a 급여일 the customer can spend
+   n.money + n.eventBudget, but the SALE screen printed n.money alone and gated its own price
+   buttons on n.money alone - so the displayed Wallet and the affordability the engine enforces
+   were two different numbers, in both directions. */
+test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget separately',()=>{
+ const walletChip=fn('walletChip');
+ assert.ok(walletChip.length,'the SALE Wallet is rendered through one shared chip');
+ // both Wallet surfaces read that chip; neither prints a bare n.money any more
+ assert.ok(/class="npc-wallet">'\+walletChip\(n\)/.test(app),'the NPC vitals row uses it');
+ assert.ok(/class="wallet" style="margin-left:auto">'\+walletChip\(n\)/.test(app),'the till panel uses it');
+ assert.ok(!/소지 '\+fmt\(n\.money\)\+'G/.test(app),'no surface prints the persistent half on its own');
+ // the two figures are printed side by side and never summed into one
+ assert.ok(/소지 <b>'\+fmt\(n\.money\)\+'G<\/b>/.test(walletChip),'the persistent half is the real n.money');
+ assert.ok(/fmt\(b\)/.test(walletChip)&&/b=n\.eventBudget/.test(walletChip),'the temporary half is the real eventBudget');
+ assert.ok(!/n\.money\+\(n\.eventBudget\|\|0\)/.test(walletChip)&&!/n\.money\+b/.test(walletChip),
+  'the chip never renders one merged Wallet figure');
+ // and the temporary half is not relabelled 소지금
+ const budgetLabel=walletChip.slice(walletChip.indexOf('b>0?'));
+ assert.ok(!/소지금/.test(budgetLabel),'the temporary budget is not called 소지금');
+ assert.ok(/추가 구매/.test(budgetLabel),'it uses the approved Event Function wording 추가 구매');
+ // affordability: the screen gates on the same sum interest()/sell() spend
+ assert.ok(/function spendable\(n\)\{return n\.money\+\(n\.eventBudget\|\|0\);\}/.test(app),
+  'the screen has one affordability figure');
+ assert.ok(/q\.debit>spendable\(n\)\?'손님 소지금 부족'/.test(app),'and the price buttons gate on it');
+ assert.ok(!/q\.debit>n\.money\?/.test(app),'not on the persistent half alone');
+ assert.ok(shop.includes('n.money+(n.eventBudget||0)<intent.debit'),'which is exactly what sell() enforces');
+ assert.ok(/const wallet=n\.money\+\(n\.eventBudget\|\|0\)/.test(shop),'and what interest() weighs the offer against');
+
+ /* the behavioural half: a payday customer whose persistent Wallet alone cannot cover an Item
+    must be shown BOTH numbers, and the screen must not disable a price the engine accepts. */
+ const g=new Game();g.autosave=false;g.start('sa-q18');
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ const n=g.run.npcs[0];
+ n.money=100;n.eventBudget=50;
+ // rendered through the real shipped function, with a plain formatter standing in for fmt
+ const render=new Function('fmt','n','"use strict";'+walletChip+'return walletChip(n);');
+ const out=render(x=>String(x),n);
+ assert.ok(out.includes('소지 <b>100G</b>'),'the persistent Wallet is shown as itself: '+out);
+ assert.ok(out.includes('추가 구매 <b>+50G</b>'),'the temporary budget is shown beside it: '+out);
+ assert.ok(!out.includes('150'),'and the two are never merged into one figure: '+out);
+ n.eventBudget=0;
+ const plain=render(x=>String(x),n);
+ assert.equal(plain,'소지 <b>100G</b>','with no Event budget the chip is unchanged');
+});
+
 console.log(count+' ui guard groups passed');
