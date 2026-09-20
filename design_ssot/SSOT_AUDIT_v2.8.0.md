@@ -67,14 +67,24 @@ Examples:
 
 Current authority comes only from SPEC_INDEX_v2.8.0.md.
 
-## PLANNING DOCUMENTS
+## RELEASE VISION
 
-The following remain useful as discussion history but are not Canonical:
-- GUILD24_v2.8_DIRECTOR_PLAN.md
+GUILD24_v2.8_DIRECTOR_PLAN.md is retained as the v2.8 non-Canonical release Vision.
+
+It is orientation only:
+- why v2.8 exists
+- large product goals
+- desired end-state
+
+It carries no detailed Design Truth.
+
+## HISTORICAL PLANNING / AUDIT DOCUMENTS
+
+The following remain discussion history only:
 - V2_8_COPY_DIRECTOR_FULL_AUDIT_REV4.md
 - V2_8_COPY_FULL_AUDIT.md
 
-Their approved conclusions are promoted into current owner specs.
+Their approved conclusions are promoted into current owner Specs / QA.
 Rejected candidates and discussion history must not be used by WORK.
 
 ## DEFERRED, NOT STALE
