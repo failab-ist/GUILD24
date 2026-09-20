@@ -1484,8 +1484,10 @@ test('SA-Q13: 단골 has one owner at 51, and Loyalty reads in the compact state
  // the exact approved base popover, in order
  const t=fn('loyaltyTip');
  assert.ok(/'단골도 '\+n\.loyalty,/.test(t),'line 1 is the current value');
- assert.ok(t.includes("'높을수록 상품 구매 의사와 재방문 가능성이 오른다.'"),'line 2 is the approved sentence');
- assert.ok(t.includes("'51부터 단골로 인정된다.'"),'line 3 is the approved threshold sentence');
+ /* COPY_AUDIT_APPROVED §8-4 is the exact owner of this popover; the longer COPY_WORLD
+    sentences it used to carry are superseded. */
+ assert.ok(t.includes("'높을수록 구매 의사·재방문 가능성 증가'"),'line 2 is the approved line');
+ assert.ok(t.includes("'51부터 단골'"),'line 3 is the approved threshold line');
  assert.ok(!/능력치|Core Stat/.test(t),'the tip never claims Loyalty raises Core Stats');
  // appended lines are gated on being currently applicable / revealed
  assert.ok(/if\(game\.has\(id\)\)lines\.push/.test(t),'a Store Support line needs the support owned');

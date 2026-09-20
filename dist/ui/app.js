@@ -499,8 +499,8 @@ function spendable(n){return n.money+(n.eventBudget||0);}
    readout and the destination plate already use. */
 function loyaltyTip(n){const s=game.run,lines=[
   '단골도 '+n.loyalty,
-  '높을수록 상품 구매 의사와 재방문 가능성이 오른다.',
-  '51부터 단골로 인정된다.'];
+  '높을수록 구매 의사·재방문 가능성 증가',
+  '51부터 단골'];
  /* only conditions that actually apply to THIS store right now, so the tip never teaches a
     Store Support the player does not own or a Boss power they have not been shown. */
  for(const [id,at] of [['returnPoints',30],['premiumMember',50],['lifetime',60]])
