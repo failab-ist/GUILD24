@@ -289,7 +289,7 @@ test('ECONOMY_ORDER §NORMAL GREAT SUCCESS STORE GOLD: paid on 대성공 only, n
             power:r.int(20,90),reward:1,deep};
    rows.push(Dungeon.resolve(n,d,r,[]));}
   return rows;};
- for(const [day,gold] of [[5,100],[12,200],[27,300]]){
+ for(const [day,gold] of [[5,50],[12,100],[27,200]]){
   const rows=sample(false,day);
   const great=rows.filter(x=>x.outcome==='대성공');
   assert.ok(great.length,'DAY '+day+' produced a 대성공 to price');

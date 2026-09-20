@@ -190,9 +190,11 @@ events:[
 /* Stage 10, approved. The curve is gentler than the Stage 9 baseline (slope 1.2 / cap .45)
    and the Store reward stops scaling with the Gate's own value: a Great Success now pays a
    flat amount for the Day band it happened in, so the reward is legible before it is earned.
-   Deep Expeditions still pay 0. 100/200/300 are provisional and re-measured. */
+   Deep Expeditions still pay 0. ECONOMY_ORDER / SA-Q41 sets the v2.8 baseline at 50/100/200:
+   the well-grown-NPC Great Success loop is kept, the second-order Store snowball is reduced.
+   signalMargin .26, chanceSlope .80 and chanceCap .30 are explicitly unchanged. */
 G.DATA.greatSuccess={signalMargin:.26,chanceSlope:.8,chanceCap:.30,
- storeGoldByBand:[{maxDay:10,gold:100},{maxDay:20,gold:200},{maxDay:30,gold:300}]};
+ storeGoldByBand:[{maxDay:10,gold:50},{maxDay:20,gold:100},{maxDay:30,gold:200}]};
 G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
  /* 원정 후원금 = sponsorBase x (1 + rarityStep x rarity) x (1 + levelStep x (Level - 1)),
     rounded to 10G. Who you send is the decision, so the price is the NPC's rarity and current
