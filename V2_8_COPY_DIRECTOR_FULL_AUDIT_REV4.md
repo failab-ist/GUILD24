@@ -1,3 +1,7 @@
+> **SUPERSEDED / NON-CANONICAL (2026-09-20)**
+> Approved v2.8 decisions are now owned by design_ssot/SPEC_INDEX_v2.8.0.md and its routed owner Specs.
+> Keep this file only as planning/audit history. WORK must not use it as current Design Truth.
+
 # GUILD24 v2.8 COPY — DIRECTOR FULL AUDIT REV 4
 
 - **상태**: DIRECTOR PROPOSAL / USER 미승인 / 비Canonical
