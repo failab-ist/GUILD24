@@ -149,7 +149,7 @@ Prefer reusing the current audio/presentation system before adding a larger asse
 
 ---
 
-# 5. ADVANCED DRAG / PHYSICS
+# 6. ADVANCED DRAG / PHYSICS
 
 Importance: LOW
 Status: OPTIONAL DEFER
@@ -165,7 +165,7 @@ Do not require:
 
 ---
 
-# 5. NEW SHOP MINIGAMES
+# 7. NEW SHOP MINIGAMES
 
 Status: DO NOT ADD WITHOUT EVIDENCE
 
@@ -181,7 +181,7 @@ The existing game is already the preparation / stocking / selling / pricing deci
 
 ---
 
-# 5. LARGE DESKTOP REDESIGN
+# 8. LARGE DESKTOP REDESIGN
 
 Importance: LOW~MEDIUM
 Status: DEFER
@@ -192,7 +192,7 @@ Do not create a separate PC-only mental model or control architecture.
 
 ---
 
-# 5. ADDITIONAL FONT / ICON / THEME SYSTEM
+# 9. ADDITIONAL FONT / ICON / THEME SYSTEM
 
 Status: DEFAULT REJECT
 
@@ -202,7 +202,7 @@ Use meaning, hierarchy, material consistency, and restraint first.
 
 ---
 
-# 5. LARGE NEW ITEM WAVE
+# 10. LARGE NEW ITEM WAVE
 
 Importance: CONDITIONAL
 Status: DEFER
@@ -219,7 +219,7 @@ Prefer rebalance / repurpose / merge over catalog growth.
 
 ---
 
-# 5. FINAL SPECTACLE / CUTSCENE EXPANSION
+# 11. FINAL SPECTACLE / CUTSCENE EXPANSION
 
 Importance: MEDIUM presentation / LOW core
 Cost: HIGH
@@ -235,7 +235,7 @@ Do not use spectacle to cover a weak decision structure.
 
 ---
 
-# 5. BROAD WORLD / FLAVOR EXPANSION
+# 12. BROAD WORLD / FLAVOR EXPANSION
 
 Importance: MEDIUM eventually
 Status: DEFER
@@ -256,7 +256,7 @@ Guardrails:
 
 ---
 
-# 5. NEW META POWER PROGRESSION
+# 13. NEW META POWER PROGRESSION
 
 Status: DO NOT ADD BY DEFAULT
 
@@ -270,7 +270,7 @@ Verify implementation, balance, information quality, and existing Meta first.
 
 ---
 
-# 5. NEW CONDITION SUBSYSTEMS
+# 14. NEW CONDITION SUBSYSTEMS
 
 Status: DO NOT ADD BY DEFAULT
 
@@ -286,7 +286,7 @@ Existing Supply / Fatigue / native Stat / Hazard / RiskReward channels must be e
 
 ---
 
-# 5. EXPANDED STORE-BUILD AXES
+# 15. EXPANDED STORE-BUILD AXES
 
 Status: CONDITIONAL DEFER
 
@@ -306,7 +306,7 @@ Target remains:
 
 ---
 
-# 5. DEEPER REGULAR-CUSTOMER RELATIONSHIP SYSTEM
+# 16. DEEPER REGULAR-CUSTOMER RELATIONSHIP SYSTEM
 
 Status: CONDITIONAL DEFER
 
@@ -322,7 +322,7 @@ Any future relationship system should strengthen understanding of a recurring NP
 
 ---
 
-# 5. FINAL / BOSS CONTENT EXPANSION
+# 17. FINAL / BOSS CONTENT EXPANSION
 
 Status: FUTURE CONTENT
 
@@ -337,7 +337,7 @@ A new Boss must change preparation decisions, not merely Power.
 
 ---
 
-# 5. ART / STORE WORLD EXPANSION
+# 18. ART / STORE WORLD EXPANSION
 
 Status: FUTURE
 
@@ -352,7 +352,7 @@ Asset count is not a substitute for game depth.
 
 ---
 
-# 5. v2.9+ ENTRY GATE
+# 19. v2.9+ ENTRY GATE
 
 Do not enter structural expansion merely because v2.8 is numerically complete.
 
