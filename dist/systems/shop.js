@@ -237,7 +237,16 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.generateOffers();
   let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
   let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
-  for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+  /* SA-Q45. A force-seated newcomer takes an EXISTING slot, so they must not create one. They
+     are a body in `available`, and on a Day whose roster is smaller than the intake the slot
+     count is that roster - so counting them would let the Day fill one more slot than it could
+     have filled without the Event, which is the visitor increase Canonical forbids. The seats
+     are therefore counted on the roster as it stood before the arrival. The draw pool itself is
+     untouched: on any Day the roster could already fill, capacity===available.length and both
+     the slot count and every weighted draw are bit-for-bit what they were. */
+  const seats=!!arrival&&(ev.rookie||ev.royal||s.dayFacilities.includes('rookieBoard'));
+  const capacity=seats?available.filter(n=>n!==arrival).length:available.length;
+  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
   /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
      than by adding a slot. The number of weighted draws is unchanged, so a Day without the
      event is bit-for-bit what it was. */

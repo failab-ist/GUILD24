@@ -319,16 +319,93 @@ test('EVENT 왕립 기사단 방문 / 신입 모험가 시즌: neither Event rai
    assert.equal(evt.queue.filter(x=>x===evt.npcs[evt.npcs.length-1].id).length,1,id+': exactly once');
    assert.equal(evt.npcs.length,plain.npcs.length+1,id+': exactly one newcomer was generated');
    assert.ok(evt.queue.length<=evt.visitorBreakdown.available,id+': the available cap still holds');
-   /* On a Day the roster could already fill, the headcount is identical. On an
-      availability-limited Day the queue can reach one further slot the Day already wanted and
-      had nobody for - that is the ordinary available-cap rule reacting to a larger roster, and
-      it happens for every newcomer generation, seated or not. It is never MORE than one. */
-   const limited=plain.queue.length<plain.expectedVisitors;
-   if(!limited)assert.equal(evt.queue.length,plain.queue.length,id+': the visitor count did not change');
-   else assert.ok(evt.queue.length-plain.queue.length<=1,
-    id+': an availability-limited Day gains at most the one body that was added');
+   assert.equal(evt.queue.length,plain.queue.length,id+': the visitor count did not change');
   }
   assert.ok(compared>0,id+': no comparable Day was reached');
+ }
+});
+
+/* SA-Q45, the roster-limited case. Creating the royal newcomer puts a body in `available`, so
+   on a Day whose roster is smaller than the intake that body could fill a slot the Day could not
+   otherwise have filled - a visitor increase caused by the Event, which EVENT_v2.8 forbids. The
+   comparison is made on ONE controlled pre-Morning state, deliberately starved of adventurers,
+   with the Event OFF and then ON. */
+test('EVENT 왕립 기사단 방문: on a roster-limited Day the Event adds no visitor',()=>{
+ const LIMIT=2;                 // only this many existing adventurers can come today
+ const build=seed=>{
+  const g=fresh(seed);
+  for(let d=0;d<5&&g.run.phase!=='end';d++){g.run.money=5000;advance(g);}
+  if(g.run.phase==='end')return null;
+  // starve the roster: everyone but LIMIT of them is recovering, so the Day cannot fill its intake
+  const alive=g.run.npcs.filter(n=>n.alive);
+  alive.forEach((n,i)=>{n.recovery=i<LIMIT?0:3;});
+  g.run.day=8;                  // not a periodic-intake Day, so the Event is the only newcomer
+  return Save.export(g.account,g.run);
+ };
+ const run=(snap,withEvent)=>{
+  const r=Save.import(snap);const h=new Game(r.account,r.run);h.autosave=false;
+  if(withEvent)force(h,'royal');else h.rollEvent=()=>null;
+  h.morning();
+  return {run:h.run,game:h};
+ };
+ let checked=0;
+ for(let i=0;i<40&&checked<6;i++){
+  const snap=build('royal-limited-'+i);
+  if(!snap)continue;
+  const off=run(snap,false),on=run(snap,true);
+  if(on.run.event?.id!=='royal')continue;          // the Event must actually have fired
+  if(off.queue)throw Error('unreachable');
+  const plain=off.run,evt=on.run;
+  // the Day really is roster-limited: it wanted more visitors than it had bodies for
+  if(plain.queue.length>=plain.expectedVisitors)continue;
+  checked++;
+
+  const newcomer=evt.npcs[evt.npcs.length-1];
+  // exactly one royal-profile newcomer was generated
+  assert.equal(evt.npcs.length,plain.npcs.length+1,'exactly one newcomer was generated');
+  assert.ok(!newcomer.introduced||evt.queue.includes(newcomer.id),'the newcomer is the new body');
+  // queue length does NOT increase because of the Event
+  assert.equal(evt.queue.length,plain.queue.length,
+   'a roster-limited Day gains no visitor from the Event: '+evt.queue.length+' vs '+plain.queue.length);
+  // the newcomer is in the queue exactly once...
+  assert.equal(evt.queue.filter(x=>x===newcomer.id).length,1,'the newcomer visits exactly once');
+  // ...by REPLACING an existing selected visitor, not by joining them
+  const displaced=plain.queue.filter(x=>!evt.queue.includes(x));
+  assert.equal(displaced.length,1,'exactly one already-selected visitor gave up their slot');
+  assert.deepEqual(evt.queue.filter(x=>x!==newcomer.id),plain.queue.filter(x=>x!==displaced[0]),
+   'and every other slot is the one the Day had already drawn');
+  // the intended intake is untouched, and the available cap still holds
+  assert.equal(evt.expectedVisitors,plain.expectedVisitors,'the intake did not change');
+  assert.ok(evt.queue.length<=evt.visitorBreakdown.available,'the available cap holds');
+  // Living NPC Cap is respected - the Event is only eligible with room and takes exactly one
+  assert.ok(evt.npcs.filter(n=>n.alive).length<=22,'the Living NPC Cap was not bypassed');
+ }
+ assert.ok(checked>0,'no roster-limited Day with the royal Event was reached');
+});
+
+test('EVENT: the ordinary periodic newcomer is unchanged by the SA-Q45 seat accounting',()=>{
+ /* A Day with no Event and no Rookie Board still generates its every-third-Day newcomer, and
+    that newcomer takes their chances in the ordinary weighted draw - they are not force-seated,
+    so they still count towards the Day's own slot capacity exactly as before. */
+ for(let i=0;i<30;i++){
+  const g=fresh('periodic-'+i);
+  g.rollEvent=()=>null;
+  g.run.facilities=[];g.run.dayFacilities=[];   // no Store Support is seating in this case
+  let sawPeriodic=false;
+  for(let d=0;d<12&&g.run.phase!=='end';d++){
+   const s=g.run;s.money=5000;
+   if(s.phase==='morning'&&s.day>1&&s.day%3===0){
+    sawPeriodic=true;
+    assert.ok(!s.dayFacilities.includes('rookieBoard'),'no support is seating here');
+    assert.equal(s.event,null,'and no Event is seating here either');
+    // the queue is the ordinary min(intake, everyone who could come) - the newcomer included
+    const able=s.npcs.filter(n=>n.alive&&!n.recovery).length;
+    assert.equal(s.queue.length,Math.min(Math.max(1,s.expectedVisitors),able),
+     'D'+s.day+': the ordinary slot count still counts the whole available roster');
+   }
+   advance(g);
+  }
+  assert.ok(sawPeriodic||g.run.phase==='end','a periodic intake Day was reached');
  }
 });
 
