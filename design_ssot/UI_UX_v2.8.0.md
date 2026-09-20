@@ -182,7 +182,7 @@ D10/D20 use the same shell as a compact one-tap report:
 - 1-2 short report lines
 - no new decision panel
 
-Document Baseline:
+DIRECTOR DOCUMENT BASELINE — EXACT:
 - D10/D20 portrait: 64px
 - mobile D5/D15 Boss art max-height: 120px
 - mobile D25 Boss art max-height: 96px

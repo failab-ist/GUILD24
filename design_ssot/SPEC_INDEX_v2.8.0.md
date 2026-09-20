@@ -139,7 +139,14 @@ Their inactive archive policy remains owned by META_v2.8.0.md.
 
 Numbers marked DIRECTOR DOCUMENT BASELINE are the approved v2.8 Source-adoption starting values.
 
-They are Design Truth for implementation.
+For the v2.8 adoption cycle they are MANDATORY exact Design Truth, not recommendations, test candidates,
+soft targets or values that WORK/QA may choose to ignore.
+
+Source must adopt them as written before the related v2.8 adoption item can PASS.
+
+"Baseline" means the required current value from which later measured balance changes may begin.
+It does not mean optional or provisional.
+
 They remain eligible for later balance adjustment only through:
 
     measurement
@@ -148,7 +155,7 @@ They remain eligible for later balance adjustment only through:
     -> owner-spec amendment
     -> separate Source change
 
-A baseline is not permission for WORK or QA to tune the number.
+A baseline is not permission for WORK or QA to tune, substitute, skip or approximate the number.
 
 ## MEASUREMENT-GATED, NOT DESIGN-UNRESOLVED
 
