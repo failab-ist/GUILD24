@@ -9,7 +9,8 @@ AUDIT_DATE=2026-09-20
 FINAL_REAUDIT_DATE=2026-09-20
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
-NUMERIC_COHERENCE_REAUDIT_STATUS=COMPLETE
+NUMERIC_COHERENCE_REAUDIT_STATUS=PARTIAL_COMPLETE
+STORE_SUPPORT_FULL_AUDIT_STATUS=IN_PROGRESS
 
 ## PURPOSE
 
@@ -21,7 +22,7 @@ Unchanged rules remain inherited; changed/stale clauses receive a v2.8 owner pat
 
 ## AUDIT RESULT
 
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = STORE_SUPPORT_FULL_AUDIT.
 
 Current v2.8 Canonical resolves:
 - Decoration / Store Capital replacement
@@ -207,4 +208,5 @@ Approved current outcomes:
 - Deep sponsorship base remains 350G with 0.20 rarity and 0.05 level steps, rounded to 10G
 - active Item rarity distribution is intentionally C11 / U12 / R5 / E11 / L1
 
-No additional numeric Design question remains blocking v2.8 Source adoption.
+The cross-system numeric pass above is approved, but the planned full 30-Store-Support audit is not yet complete.
+Do not treat Store Support balance as fully closed until that audit is finished and any approved amendments are promoted.
