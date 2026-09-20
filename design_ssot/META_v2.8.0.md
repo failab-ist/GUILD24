@@ -15,7 +15,8 @@ The former scoped Decoration-package-only execution meaning is superseded.
 
 ## INHERITANCE
 
-Job Mastery, Job×Boss matrix, distinct-Boss Item/Job unlocks, Monster Knowledge, Full Reset, and other unchanged Meta behavior inherit `META_v2.7.0.md` and its base chain.
+Job×Boss matrix, distinct-Boss Item/Job unlocks, Monster Knowledge, Full Reset, and other unchanged Meta behavior inherit `META_v2.7.0.md` and its base chain.
+Job Mastery progression identity/count still inherits, but its active reward model is overridden by the exact spawn-Level model in this v2.8 owner.
 
 This patch supersedes v2.7 Franchise Grade / Franchise Achievement / Grade-based Start Contract progression.
 
@@ -292,7 +293,8 @@ Fresh Store remains capable of first clear.
 
 ## JOB MASTERY
 
-Job Mastery is unchanged by this patch.
+Job Mastery clear-count identity / Job×Boss ownership remains unchanged.
+Its active reward effect is superseded by the exact v2.8 spawn-Level model below.
 
 Store Capital cannot buy Mastery.
 Decoration ownership cannot substitute for Boss CLEAR in the Job×Boss matrix.
