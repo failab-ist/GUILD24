@@ -192,6 +192,51 @@ viewport solely by Boss art.
 
 Information is primary; art is supporting.
 
+## FUNCTION / FLAVOR VISUAL HIERARCHY — EXACT
+
+On Player decision surfaces, Function must read before Flavor.
+
+Function / Effect:
+- 14–15px class
+- weight 600
+- normal/high contrast
+- numeric conditions and exact rule effects belong here
+
+Secondary factual:
+- 13px class
+- weight 400
+- dimmer than Function
+
+Flavor on a decision surface:
+- 12–13px class
+- weight 400
+- lower contrast than Function
+- 1–2 lines recommended
+- no numeric condition/rule payload
+
+Event Reveal:
+- Flavor: 13px / 400 / dim
+- Effect: 15px / 600 / primary
+
+Morning Event slip:
+- Flavor: 12px class
+- Effect: 13px / 600
+
+Codex/Lore Flavor may remain 13px / 400 / dim and may use italic presentation.
+
+NPC Dialogue:
+- 14–15px class
+- normal speech-bubble treatment
+
+Death Narration:
+- 13–14px class
+- dim/report treatment
+- no quotation marks or speech bubble
+
+Boss D5 is an exception:
+its Boss-specific Flavor is primary reveal content and must not be mechanically demoted by the
+ordinary decision-surface Flavor rule.
+
 ## HELP
 
 Per-value/context explanations use anchored popovers, not a modal/accordion that pushes gameplay.

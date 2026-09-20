@@ -117,21 +117,12 @@ Only revisit with strong evidence that persistent product specialization creates
 
 # 5. DIALOGUE POOL / EXPRESSION EXPANSION
 
-Importance: MEDIUM
-Cost: MEDIUM~HIGH
-Status: v2.9+ DEFER
+Status: PROMOTED TO v2.8
 
-The earlier broad Dialogue Pool expansion is not part of v2.8.
+The v2.8 dialogue pool sizing and recent-repeat rule are now owned by:
+- design_ssot/COPY_WORLD_VOICE_v2.8.0.md
 
-If revisited:
-- calculate actual per-Run exposure first
-- size arrival / purchase / refusal / NIGHT pools from that exposure
-- suppress immediate/recent repeats deterministically
-- do not consume Gameplay RNG
-- expand character-specific expression only where it strengthens recurring-NPC attachment
-
-v2.8 may still fix false, stale, duplicated, or badly placed dialogue/copy.
-It does not perform the broad content expansion.
+This deferred document does not duplicate the active rule.
 
 ---
 

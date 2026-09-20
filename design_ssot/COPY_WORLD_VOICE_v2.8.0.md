@@ -213,9 +213,8 @@ It supersedes conflicting inherited v2.7 copy and non-Canonical Copy Audit draft
 
 ### NPC DIALOGUE TRUTH — v2.8 ONLY
 
-Broad pool expansion and recent-line cooldown remain v2.9+.
-
-v2.8 changes only dialogue that falsely implies a mechanic.
+v2.8 expands the high-frequency dialogue pools and applies the recent-line repeat rule defined below.
+False mechanic implications are still corrected independently of pool size.
 
 Exact replacements:
 
@@ -240,6 +239,56 @@ Exact replacements:
   - USE: \`이 정도면 단골 맞죠?\`
 
 Do not add a purchase-preference implication that the owning Trait does not actually implement.
+
+## DIALOGUE EXPOSURE / RECENT REPEAT — EXACT
+
+The v2.8 dialogue production target is sized for repeated Run exposure.
+
+Target minimum pool sizes:
+
+### ARRIVAL
+- first: 8
+- back: 16
+- hurt: 10
+- regular: 12
+- helped callback: 8
+- each active Trait-arrival pool: 6
+
+### SALE
+- 100% accept: 20
+- 50% accept: 20
+- 150% accept: 20
+- refusal / price: 12
+- refusal / need: 12
+- refusal / choice: 12
+
+### NIGHT
+- ordinary success: 16
+- great success: 10
+- retreat: 12
+- hurt: 12
+- severe: 8
+- avoided death / life-saving: 8
+- rescued return: 8
+- success + growth: 10
+
+### DEATH NARRATION
+- traded: 6
+- known: 6
+- stranger: 6
+
+Recent-repeat rule:
+
+- ARRIVAL / SALE / NIGHT track recent visible dialogue separately.
+- The same exact line is not eligible if it appeared within the previous 3 visible dialogue beats
+  on that same Surface.
+- The same NPC may not immediately repeat its previous line from the same Pool.
+- Reuse later in the same Run is allowed.
+- Selection remains deterministic for the same saved state.
+- Dialogue selection must not consume Gameplay RNG.
+- Save/Load must not change an already-determined visible line.
+
+This is a v2.8 readability/content-density rule, not a new relationship or personality mechanic.
 
 ### RETURN-VISIT HELPED CALLBACK — EXACT
 

@@ -86,7 +86,7 @@ Death:
 - no speech bubble
 - narration/report treatment only
 
-Broad Dialogue-pool expansion/cooldown is not part of v2.8.
+Dialogue pool size and recent-repeat handling follow COPY_WORLD_VOICE_v2.8.0.md.
 
 ## CLOSING
 
