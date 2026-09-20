@@ -99,3 +99,69 @@ Rules:
 - no direct Loyalty, revisit guarantee, permanent Deep Stat, Deep currency or Deep Mastery
 
 The Great-Success Deep bonus is exactly 2× the Success bonus on both channels.
+
+## FULL-CHAIN NUMERIC CLOSURE — JOB / LOYALTY / REVISIT
+
+USER_APPROVAL_DATE=2026-09-20
+
+### Job Lv1 Stats / Growth — exact
+
+Stat order:
+
+    투력 / 강인함 / 기동 / 정신
+
+| Job | Lv1 Stats | per-Level Growth |
+|---|---|---|
+| 전사 | 17 / 18 / 9 / 10 | 2.8 / 2.6 / 1.5 / 1.6 |
+| 궁수 | 14 / 11 / 19 / 10 | 2.6 / 2.0 / 3.0 / 1.6 |
+| 마법사 | 18 / 9 / 10 / 17 | 3.3 / 1.6 / 1.8 / 2.7 |
+| 사제 | 10 / 16 / 9 / 20 | 2.2 / 2.7 / 1.6 / 3.0 |
+| 도적 | 15 / 11 / 21 / 9 | 2.8 / 2.0 / 3.4 / 1.5 |
+| 광전사 | 21 / 14 / 12 / 7 | 3.6 / 2.4 / 1.9 / 1.3 |
+
+Actual Level growth remains:
+
+    Core Stat gain per Level
+    = Job Growth × that NPC's internal Potential
+
+Potential remains an internal growth input and is not exposed as a relationship reward.
+
+These values supersede the inherited `Exact base/growth numbers=PASS3` marker.
+
+Job Mastery does not alter this table.
+Current Job Mastery effect -> META_v2.8.0.md.
+
+### Non-purchase Loyalty — exact
+
+Ordinary customer visit:
+- when the current customer's visit is finalized/departs -> Loyalty +1
+
+Ordinary expedition:
+- if the NPC remains alive after the expedition -> Loyalty +2
+- this includes living Retreat / Injury / Severe Injury outcomes
+- Death grants no survival Loyalty
+
+These are separate from paid-purchase Loyalty deltas.
+Explicit Trait / Store Support modifiers apply only through their own owner rules.
+
+Loyalty remains clamped to the existing 0–100 range.
+
+### Loyalty effect on purchase intent — exact
+
+The ordinary hidden purchase-acceptance formula receives:
+
+    +0.002 purchase chance per current Loyalty point
+
+Full purchase formula -> ECONOMY_ORDER_v2.8.0.md.
+
+### Loyalty effect on revisit weighting — exact
+
+Within the ordinary returning-NPC selection branch, Loyalty multiplies that NPC's revisit weight by:
+
+    1 + Loyalty × 0.025
+
+This combines with explicit current Trait / Store Support revisit modifiers.
+It does not guarantee a visit.
+
+The existing introduced-vs-newcomer mixture remains otherwise unchanged by this closure.
+Trusted Regular remains exactly Loyalty >= 51.
