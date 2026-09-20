@@ -438,4 +438,60 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
  });
 }
 
+/* SA-Q19 / EVENT_v2.8 §암시장 상인. The mechanic added the row and threw its origin away, so the
+   Player-facing row could not say where it came from. Provenance is deterministic state on the
+   one Event-origin offer - not a source label derived for ordinary offers. */
+test('SA-Q19: the Black Market row carries 암시장 provenance, and only that row does',()=>{
+ const fsx=require('node:fs'),pathx=require('node:path');
+ const app=fsx.readFileSync(pathx.resolve(__dirname,'../dist/ui/app.js'),'utf8');
+ const shop=fsx.readFileSync(pathx.resolve(__dirname,'../dist/systems/shop.js'),'utf8');
+ const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?1:0)
+  +((g.run.event?.effects||{}).offers||0);
+
+ for(const facilities of [[],['expeditionCert'],['terminal','expeditionCert']]){
+  for(let i=0;i<25;i++){
+   const g=fresh('provenance-'+facilities.join('')+i);
+   g.run.facilities=[...facilities];
+   g.run.event={id:'blackmarket',effects:{blackmarket:true}};
+   g.generateOffers();
+   const n=ordinaryCount(g),offers=g.run.offers;
+   // Task A mechanics are preserved, with the guarantee running alongside
+   assert.equal(offers.length,n+1,'exactly one extra Event-origin slot');
+   const special=offers[n],it=DATA.itemBy[special.item];
+   assert.ok(it.rarity>=2,'the special offer is Rare+');
+   assert.equal(special.price,Math.round(it.buy*1.35),'and carries the +35% buy price');
+   // provenance is on that row and on no other
+   assert.equal(special.origin,'blackmarket','the Event-origin row is labelled');
+   assert.deepEqual(offers.slice(0,n).map(o=>o.origin),Array(n).fill(undefined),
+    'no ordinary offer carries an origin');
+   assert.equal(offers.filter(o=>o.origin).length,1,'exactly one row has provenance');
+   // expeditionCert still cannot overwrite it
+   if(facilities.includes('expeditionCert'))
+    assert.equal(g.run.offers[n].origin,'blackmarket','the guarantee did not consume the Event row');
+  }
+ }
+ // a Day with no Black Market has no provenance anywhere
+ for(let i=0;i<20;i++){
+  const g=fresh('no-blackmarket-'+i);g.run.facilities=['expeditionCert'];g.run.event=null;g.generateOffers();
+  assert.equal(g.run.offers.filter(o=>o.origin).length,0,'no Event, no source label');
+ }
+ // it survives the save round trip, so the row still reads 암시장 after a reload
+ const k=fresh('provenance-save');
+ k.run.event={id:'blackmarket',effects:{blackmarket:true}};k.generateOffers();
+ const raw=Save.export(k.account,k.run);
+ assert.ok(Save.valid(JSON.parse(raw)),'a run carrying provenance still validates');
+ const back=Save.import(raw);
+ assert.equal(back.run.offers.at(-1).origin,'blackmarket','provenance survives a reload');
+
+ // the screen names the source from that state, and only for a row that has it
+ assert.ok(/o\.origin==='blackmarket'\?'<i class="origin">암시장<\/i>':''/.test(app),
+  'the row prints 암시장 from the offer provenance');
+ const appCode=app.replace(/\/\*[\s\S]*?\*\//g,'');
+ assert.equal((appCode.match(/암시장/g)||[]).length,1,'and there is no second source label in the screen');
+ assert.ok(!/origin==='ordinary'|rarityOrigin|sourceLabel/.test(appCode),
+  'nothing generalises this into attribution for ordinary offers');
+ assert.ok(/origin:'blackmarket'/.test(shop),'the provenance is set where the Event row is created');
+ assert.equal((shop.match(/origin:/g)||[]).length,1,'and nowhere else');
+});
+
 console.log(count+' relic/order groups passed');

@@ -747,7 +747,11 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
     +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
     +Scene.crate(Art.itemIcon(it.id,30),46)
     +'<span class="col">'
-     +'<span class="nm"><b>'+E(it.name)+'</b>'+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
+     /* SA-Q19 / EVENT_v2.8 §암시장 상인: the Event-origin row says where it came from, beside
+        the name where the Player reads it. Only a row carrying that provenance is marked - an
+        ordinary offer has no origin and no source label, so this stays special-offer
+        presentation rather than a generic rarity-attribution UI. */
+     +'<span class="nm"><b>'+E(it.name)+'</b>'+(o.origin==='blackmarket'?'<i class="origin">암시장</i>':'')+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
      /* UI-Q39: `야외채집 · 마력 보강 / 주문 제작` is the internal taxonomy the catalogue is
         organised by, not something a player decides with - and it never reaches a render path.
         The data stays: ordering weights and Relic conditions read `category`. What the row

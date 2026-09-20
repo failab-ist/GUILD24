@@ -257,8 +257,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
-    which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired. */
- if(ev.blackmarket)s.offers.push(this.rollOffer(2,1.35));
+    which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired.
+    SA-Q19: the row carries `origin` so the screen can name where it came from. It is set here,
+    on the one Event-origin row, and on nothing else - an ordinary offer has no origin and gets
+    no source label, because this is special-offer presentation and not a generic rarity
+    attribution. */
+ if(ev.blackmarket)s.offers.push({...this.rollOffer(2,1.35),origin:'blackmarket'});
  const ordinary=num;
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
  const hazards=G.Relics.known(this);s.pity.hazards??={};if(advancePity){for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}

@@ -343,6 +343,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* 1 identity + price on one baseline, the tag inside the paper */
 .line .nm{display:flex;align-items:center;gap:10px;min-width:0}
 .line .nm b{font:600 17px/1.35 var(--ui);letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
+.line .nm .origin{flex:none;padding:1px 6px;border:1px solid #9c8f72;font:600 11px/1.6 var(--ui);font-style:normal;color:#6b5f48;white-space:nowrap}
 .line .kind{display:block;margin-top:1px;font:400 12px/1.5 var(--ui);color:#9c8f72}
 /* 3 the effect that decides the purchase */
 .line .fx{display:block;margin-top:6px;font:400 14px/1.55 var(--ui);color:#3c3527}
