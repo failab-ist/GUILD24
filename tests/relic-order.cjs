@@ -327,4 +327,115 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
  for(const it of epics)assert.equal(it.metaUnlock??null,it.id==='tree'?null:null,it.name+' needs no unlock of its own');
 });
 
+/* RELIC_v2.8 §EXPEDITION KEYSTONE — COUNTER COVERAGE / REL-Q-v28-16.
+   길드24 원정전문점 인증 guarantees a minimum BREADTH of response, not merely the presence of one
+   Counter, and it may only ever spend ordinary ORDER slots doing it. */
+{
+ const HAZARDS=Object.keys(DATA.hazards);
+ const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?1:0)+((g.run.event?.effects||{}).offers||0);
+ const counters=(g,i,h)=>Relics.counter(DATA.itemBy[g.run.offers[i].item],[h]);
+ // two DISTINCT ordinary slots, one answering each key: a matching, not a pair of lookups
+ const coveredDistinctly=(g,a,b)=>{
+  const n=ordinaryCount(g),idx=[...Array(n).keys()];
+  return idx.some(i=>counters(g,i,a)&&idx.some(j=>j!==i&&counters(g,j,b)));
+ };
+ const cert=(seed,hazards,facilities=['expeditionCert'])=>{
+  const g=fresh(seed);g.run.facilities=[...facilities];
+  g.run.dungeons=[{id:'fixture',hazards:[...hazards]}];
+  g.run.pity={rare:0,npc:0,counter:0,hazards:{}};
+  return g;
+ };
+
+ test('REL-Q-v28-16: one known Hazard guarantees at least one ordinary Counter slot',()=>{
+  for(let i=0;i<60;i++){
+   const g=cert('cert-one-'+i,['poison']);g.generateOffers();
+   const n=ordinaryCount(g);
+   assert.equal(g.run.offers.length,n,'the ordinary offer count is preserved');
+   assert.ok([...Array(n).keys()].some(k=>counters(g,k,'poison')),'a Counter for the known Hazard is on the board');
+   for(const o of g.run.offers){const it=DATA.itemBy[o.item];
+    assert.ok(Meta.itemUnlocked(g.account,it,g.run.day),it.id+' is a currently legal candidate');}
+  }
+ });
+
+ test('REL-Q-v28-16: two known Hazards guarantee two distinct slots, and a multi-Counter cannot fill both',()=>{
+  /* corrosion / mire is the sharpest pair in the catalogue: 방수 망토 Counters both, and mire is
+     additionally answered by any mobility Item, so a one-slot reading would pass constantly. */
+  for(const [a,b] of [['corrosion','mire'],['poison','cold'],['fear','dark']])
+   for(let i=0;i<40;i++){
+    const g=cert('cert-two-'+a+b+i,[a,b]);g.generateOffers();
+    assert.equal(g.run.offers.length,ordinaryCount(g),'still no slot was added');
+    assert.ok(coveredDistinctly(g,a,b),a+' and '+b+' are answered by two different slots');
+   }
+  // three or more known Hazards: exactly two keys are guaranteed, and the count still holds
+  for(let i=0;i<40;i++){
+   const g=cert('cert-three-'+i,['poison','cold','fire']);g.generateOffers();
+   assert.equal(g.run.offers.length,ordinaryCount(g));
+   const n=ordinaryCount(g),idx=[...Array(n).keys()];
+   const pairs=[['poison','cold'],['poison','fire'],['cold','fire']];
+   assert.ok(pairs.some(([x,y])=>idx.some(k=>counters(g,k,x)&&idx.some(m=>m!==k&&counters(g,m,y)))),
+    'two of the known Hazards are covered by two distinct slots');
+  }
+ });
+
+ test('REL-Q-v28-16: a full Reroll preserves the guarantee',()=>{
+  for(let i=0;i<40;i++){
+   const g=cert('cert-reroll-'+i,['corrosion','mire']);
+   g.beginOrder();g.run.money=100000;
+   for(let r=0;r<3;r++){
+    g.reroll();
+    assert.equal(g.run.offers.length,ordinaryCount(g),'a Reroll adds no slot');
+    assert.ok(coveredDistinctly(g,'corrosion','mire'),'reroll '+r+' keeps both guarantees');
+   }
+  }
+ });
+
+ test('REL-Q-v28-16: the guarantee never reaches a Hazard the Run has not revealed',()=>{
+  /* a known Hazard is covered every single time; an unrevealed one keeps whatever rate the
+     ordinary draw gives it, which is what "does not reveal unknown Hazards" has to mean. */
+  const runs=200;let known=0,unknown=0;
+  for(let i=0;i<runs;i++){
+   const g=cert('cert-unknown-'+i,['poison']);g.generateOffers();
+   const n=ordinaryCount(g),idx=[...Array(n).keys()];
+   if(idx.some(k=>counters(g,k,'poison')))known++;
+   if(idx.some(k=>counters(g,k,'whiteout')))unknown++;
+  }
+  assert.equal(known,runs,'the known Hazard is guaranteed on every generation');
+  assert.ok(unknown<runs,'the unrevealed Hazard is not, and is never named by the guarantee');
+  // and the keys it can choose from are the known set, in source as well as in behaviour
+  const src=fs.readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
+  const block=src.slice(src.indexOf('generateOffers({'),src.indexOf(' offerFor(it,price=1)'));
+  assert.ok(/const hazards=G\.Relics\.known\(this\)/.test(block)&&/order=this\.rng\.shuffle\(\[\.\.\.hazards\]\)/.test(block),
+   'the guarantee draws its keys from the KNOWN Hazard set only');
+  void HAZARDS;
+ });
+
+ /* SA-Q19 / EVENT 암시장 coexistence. The guarantee used to write to offers[length-1], which on a
+    Black Market Day IS the Event-origin special offer - so the Event's one Rare+ row was silently
+    replaced by a Counter Item at ordinary price. */
+ test('REL-Q-v28-16 / 암시장: expeditionCert never overwrites the Black Market special offer',()=>{
+  for(let i=0;i<60;i++){
+   const g=cert('cert-blackmarket-'+i,['corrosion','mire']);
+   g.run.event={id:'blackmarket',effects:{blackmarket:true}};
+   g.generateOffers();
+   const n=ordinaryCount(g);
+   assert.equal(g.run.offers.length,n+1,'the Event slot is extra, and there is exactly one');
+   const special=g.run.offers[n],it=DATA.itemBy[special.item];
+   assert.ok(it.rarity>=2,'the special offer is Rare or better');
+   assert.equal(special.price,Math.round(it.buy*1.35),'and carries the +35% Event buy price');
+   assert.ok(coveredDistinctly(g,'corrosion','mire'),'both guarantees are met inside the ordinary slots');
+  }
+  // the same holds when the pity Counter guarantee - not the keystone - is the one firing
+  for(let i=0;i<40;i++){
+   const g=cert('pity-blackmarket-'+i,['poison'],[]);
+   g.run.event={id:'blackmarket',effects:{blackmarket:true}};
+   g.run.pity={rare:0,npc:0,counter:5,hazards:{poison:5}};
+   g.generateOffers();
+   const n=ordinaryCount(g),special=g.run.offers[n],it=DATA.itemBy[special.item];
+   assert.equal(g.run.offers.length,n+1);
+   assert.ok(it.rarity>=2,'pity relief does not consume the Event row either');
+   assert.equal(special.price,Math.round(it.buy*1.35));
+  }
+ });
+}
+
 console.log(count+' relic/order groups passed');

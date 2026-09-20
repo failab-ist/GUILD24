@@ -255,10 +255,39 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?2:0)+(this.wears('dawnSign')?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
+ /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
+    works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
+    which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired. */
  if(ev.blackmarket)s.offers.push(this.rollOffer(2,1.35));
+ const ordinary=num;
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
  const hazards=G.Relics.known(this);s.pity.hazards??={};if(advancePity){for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
- if(s.pity.counter>=3||this.has('expeditionCert')){const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));if(matches.length){const item=this.rng.pick(matches);s.offers[s.offers.length-1]=this.offerFor(item);if(advancePity){for(const h of target)if(G.Relics.counter(item,[h]))s.pity.hazards[h]=0;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}}}
+ /* RELIC_v2.8 §EXPEDITION KEYSTONE — COUNTER COVERAGE (REL-Q-v28-16). The keystone is not
+    "is there a Counter at all": with two or more known Hazards it guarantees a minimum BREADTH
+    of response. Two distinct keys, two distinct slots, and for guarantee accounting a slot
+    answers for one key only - an Item that Counters both fills one of the two, never both.
+    A slot that already Counters the key is claimed as it stands; only an unclaimed slot is ever
+    overwritten, so the ordinary offer count is preserved and no unknown Hazard is named. */
+ const claimed=new Set(),slots=[...Array(ordinary).keys()];
+ const guarantee=keys=>{for(const key of keys){
+   const standing=slots.find(i=>!claimed.has(i)&&G.Relics.counter(D.itemBy[s.offers[i].item],[key]));
+   if(standing!==undefined){claimed.add(standing);continue;}
+   const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,[key]));
+   const slot=[...slots].reverse().find(i=>!claimed.has(i));
+   if(!matches.length||slot===undefined)continue;
+   s.offers[slot]=this.offerFor(this.rng.pick(matches));claimed.add(slot);}};
+ if(this.has('expeditionCert')&&hazards.length){
+  /* the keys the Run has gone longest without an answer to are chosen first; the draw itself
+     is still shuffled, so which two are picked is not a fixed reading of the Hazard list. */
+  const order=this.rng.shuffle([...hazards]).sort((a,b)=>((s.pity.hazards[b]||0)>=3)-((s.pity.hazards[a]||0)>=3));
+  guarantee(order.slice(0,hazards.length>=2?2:1));
+ }else if(s.pity.counter>=3&&hazards.length){
+  const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
+  const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));
+  if(matches.length)s.offers[ordinary-1]=this.offerFor(this.rng.pick(matches));
+ }
+ if(advancePity&&hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
+  s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }
  /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE: applied AFTER the existing
