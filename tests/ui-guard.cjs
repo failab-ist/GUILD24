@@ -382,16 +382,17 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
   'the visitor count is composed from Relics and the wall Decoration');
  assert.ok(!/contract/i.test(composes),'and from no Contract');
  const helpText=fn('help');
- assert.ok(helpText.includes('점포지원·장식·사건'),'the Help names those three sources');
- // and what the Help says survives a Run is what Meta actually keeps
- const fresh=Meta.fresh(),carried=['상품','직업','몬스터 지식','발견','직업 숙련','점포 자본','보유 장식'];
+ /* COPY_AUDIT §8 replaced the long-form guide with the compact one; the visitor-source list it
+    used to recite belongs to the Morning surface, which states it in context. What the guide
+    still owes the player is what a Run leaves behind, and it says so in §8-7's own terms. */
+ const fresh=Meta.fresh(),carried=['본사 기록','해금','직업 숙련','점포 자본','보유 장식'];
  for(const t of carried)assert.ok(helpText.includes(t),'the Help names the persistent '+t);
  assert.ok(Object.keys(Meta.opened(fresh)).join()==='items,jobs','unlocks are Items and Jobs');
  assert.equal(typeof Meta.storeCapital(fresh),'number','Store Capital is a persistent Account resource');
  assert.ok(Array.isArray(Meta.ownedDecorations(fresh)),'so is the owned Decoration collection');
  assert.equal(typeof Meta.totalJobMastery(fresh),'number','so is Job Mastery');
  // the things it says do NOT carry really do not
- assert.ok(helpText.includes('모험가·재고·돈·점포지원은 다음 영업에 이어지지 않습니다'),
+ assert.ok(helpText.includes('모험가·재고·골드·점포지원은 새로 시작한다'),
   'and it names the per-Run things by their current term');
 }); 
 
@@ -879,9 +880,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 
  /* The failure line is not a hidden threshold: it is stated before it matters and the count
     is visible while it climbs, in the book that already lists the dead. */
- assert.ok(fn('help').includes('D.balance.deathLimit')&&fn('help').includes('점포가 문을 닫을 때'),
-  'the guide names every way a store ends, from the constant rather than a written-out number');
- for(const rule of ['운영비를 감당하지 못하면','재고를 정리해','마왕을 토벌하지 못해도'])
+ /* COPY_AUDIT §8-6 states the same three endings in one compact line. The count is still built
+    from the constant rather than written out, so the sentence cannot drift from the rule. */
+ assert.ok(fn('help').includes('D.balance.deathLimit'),
+  'the guide names the death line from the constant rather than a written-out number');
+ for(const rule of ['적자 마감은 재고 정리로 회생할 수 있다','명이 되면 폐점한다','DAY 30 최종 원정이 끝나면'])
   assert.ok(fn('help').includes(rule),'the guide covers: '+rule);
  const roster=fn('rosterList');
  assert.ok(roster.includes('돌아오지 못한 사람')&&roster.includes('D.balance.deathLimit'),
@@ -1767,6 +1770,36 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
   assert.ok(!surfaces.includes(gone),'the generic label is gone: '+gone);
  // weighting mechanics keep their correct 가중치 wording
  assert.ok(/가중치/.test(JSON.stringify(DATA.relics.map(r=>r.description))),'real weighting still says 가중치');
+});
+
+/* SA-Q27 / Q38 — the global guide is COPY_AUDIT_APPROVED §8, whole. */
+test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
+ const h=fn('help');
+ for(const line of [
+  'DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
+  '오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +6·+1·-3.',
+  '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
+  '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
+  '판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.',
+  '적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회.',
+  '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.',
+  '실시간 제한 없음.'])
+  assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
+ // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
+ assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
+ assert.ok(!h.includes('같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다'),'the weaker rule is gone');
+ // and it matches what the engine actually enforces
+ assert.ok(shop.includes("rule.mult>D.pricing[mode].mult"),'the ceiling is the rule sell() applies');
+ // SA-Q38: the long-form manual is not appended below it
+ for(const gone of ['기본 방문객은 3~6명','바가지는 수입과 관계를 맞바꾸고','가방은 언제나 2칸입니다',
+                    '시간을 재촉하는 제한은 없습니다','사망은 이번 영업에서 영구적입니다'])
+  assert.ok(!app.includes(gone),'the superseded manual paragraph is gone: '+gone.slice(0,12));
+ // it does not duplicate what the anchored popovers / coach marks own in context
+ assert.ok(!h.includes('압박')&&!h.includes('환경 대응'),'the Hazard reading stays with its own popover');
+ assert.ok(!/필요 보급/.test(h),'and the Supply arithmetic stays with its coach mark');
+ // the section set is exactly §8-1..§8-8
+ assert.equal((h.match(/<h3>/g)||[]).length,8,'eight sections, one per §8 entry');
 });
 
 console.log(count+' ui guard groups passed');

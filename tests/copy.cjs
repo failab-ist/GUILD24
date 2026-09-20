@@ -102,7 +102,10 @@ test('§18: the help panel describes the rules the build actually has',()=>{
  const app=read('dist/ui/app.js');
  // v2.4 shows every current Trait; the loyalty-gated reveal it used to describe is gone.
  assert.ok(!app.includes('숨겨진 특성은 관계가 쌓이면 공개됩니다'),'the retired hidden-Trait rule is not still taught');
- assert.ok(/표시된 특성이 원정에서 실제로 작용하는 특성/.test(app),'the help panel states the rule that replaced it');
+ /* COPY_AUDIT §8-4 replaced that guide paragraph, and SA-Q02 removed the promise it answered.
+    With no surface claiming Traits are hidden, the guide has nothing left to deny. */
+ for(const promise of ['숨겨진 특성','남은 특성','더 친해지면'])
+  assert.ok(!app.includes(promise),'no surface promises a hidden-Trait reveal: '+promise);
  /* §13.2 — the destination lesson teaches the system rule, not one Trait name. The approved
     hotfix copy says the same rule in one sentence; what the guard protects is that the rule
     is stated at all and that no single Trait is named as the reason. */
