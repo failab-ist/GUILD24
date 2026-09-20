@@ -206,19 +206,12 @@ with:
 
 and use 점포지원 consistently in all active Player-facing SLOTH lines.
 
-## EVENT FUNCTION COPY
+## EVENT COPY ROUTING
 
-Use EVENT_v2.8.0.md truth.
+Event mechanic truth -> EVENT_v2.8.0.md
+Exact approved Event Function / Flavor text -> COPY_AUDIT_APPROVED_v2.8.0.md
 
-Targeted exact lines:
-- 본사 반값 행사: 오늘 첫 50% 할인 판매 · 본사 지원 +50G
-- 치유소 휴무: 오늘 보험 상품 구매 의사 +20%p
-- 암시장 상인: 오늘 희귀 이상 특별 발주 1건 · 매입가 +35%
-- 보급 상단 도착: 오늘 발주 후보 +2
-- 길드 급여일: 오늘 방문 모험가 구매 예산 +20%
-
-Flavor must be visually subordinate to Function.
-
+Do not maintain a second exact Event-copy list here.
 
 ## COPY RE-AUDIT — EXACT ACTIVE OVERRIDES
 
@@ -338,9 +331,9 @@ Do not use:
 Direct and derived changed rows stay visible under the single heading.
 Their source is explained by the shared anchored source popover.
 
-Unchanged intrinsic Item truth that still needs to be readable may use the neutral heading:
+Conditional intrinsic Item truth that still needs to be readable uses:
 
-    상품 효과
+    특수 효과
 
 Never label an internal marker such as \`potion\` as a Player effect.
 
@@ -365,55 +358,12 @@ On-demand explanation:
 
 Do not expose the hidden deficit formula.
 
-### HELP / 점주 가이드 — EXACT COMPACT COPY
+### HELP / 점주 가이드 — EXACT COPY ROUTING
 
-#### 점포지원
+Exact approved Help / 점주 가이드 text is owned only by:
+    COPY_AUDIT_APPROVED_v2.8.0.md
 
-    DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다.
-    보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.
-
-#### 발주
-
-    오늘 손님과 게이트를 보고 수량을 정한다.
-    발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.
-
-#### 판매
-
-    목적지·능력·특성을 보고 상품과 가격을 정한다.
-    50%는 관계 투자, 100%는 기본, 150%는 수익 우선.
-    한 가격을 거절하면 같은 상품은 그 가격과 더 비싼 가격으로 그날 다시 제안할 수 없다.
-
-#### 단골
-
-    단골도는 구매 의사와 재방문에 영향을 준다. 능력치는 올리지 않는다.
-    51부터 단골로 인정된다.
-
-#### 원정
-
-    판매한 상품은 그날 원정에서 한 번 쓰고 사라진다. 가방은 2칸.
-    결과는 NIGHT에서 확인한다.
-
-#### 점포 종료
-
-    적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회.
-    돌아오지 못한 모험가가 10명이 되면 폐점한다.
-    DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.
-
-#### 다음 점포
-
-    남음: 도감·해금·직업 숙련·점포 자본·보유 장식
-    초기화: 모험가·재고·골드·점포지원
-
-#### 시간
-
-    실시간 제한 없음.
-
-Remove from global Help:
-- 기본 방문객 3~6 재설명
-- Gate 수 증가 장문
-- 모든 Trait 공개 규칙 재설명
-- 마감에서 거래와 보급의 작용을 확인한다
-- 별도의 Bankruptcy 중복 문단
+Do not duplicate the Help strings here.
 
 ### DEEP EXPEDITION REPEAT SURFACES — EXACT
 
