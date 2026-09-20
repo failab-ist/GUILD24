@@ -147,7 +147,7 @@ Selected Item:
 - no \`이 상품이 직접\`
 - no \`보급이 상태에 미치는 영향\`
 - no \`이 손님에게는 지금 걸리지 않는 효과\`
-- intrinsic non-delta truth may appear under \`상품 효과\`
+- conditional non-delta Item truth may appear under \`특수 효과\`
 - no permanent forecast explanation paragraph
 
 Exact forecast help is available through anchored popover.
