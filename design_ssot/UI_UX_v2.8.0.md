@@ -317,8 +317,8 @@ Do not stack analytical subgroup headings that increase height.
 
 Source/cause belongs in the existing anchored source popover.
 
-Intrinsic Item effects that are not part of the current delta remain readable as ordinary
-\`상품 효과\`; do not call them \`이 손님에게는 지금 걸리지 않는 효과\`.
+Conditional intrinsic Item functions that do not appear as an immediate numeric delta remain readable under
+\`특수 효과\`; do not call them \`이 손님에게는 지금 걸리지 않는 효과\`.
 
 Internal marker rows are never displayed.
 
