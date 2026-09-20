@@ -224,3 +224,54 @@ The figures themselves remain.
 
 Store Capital / Decoration management and run-end settlement requirements from the previous v2.8
 Decoration package remain active exactly as owned by META_v2.8.0.md and CORE_RUN_v2.8.0.md.
+
+
+## COPY-SURFACE RE-AUDIT — EXACT
+
+### SALE SELECTED-ITEM INFORMATION
+
+The selected-Item panel uses one primary heading:
+
+    판매 후 변화
+
+Direct Item changes and deterministic derived changes are rows under that heading.
+Do not stack analytical subgroup headings that increase height.
+
+Source/cause belongs in the existing anchored source popover.
+
+Intrinsic Item effects that are not part of the current delta remain readable as ordinary
+\`상품 효과\`; do not call them \`이 손님에게는 지금 걸리지 않는 효과\`.
+
+Internal marker rows are never displayed.
+
+### SALE PERMANENT EXPLANATION
+
+The forecast/readiness/death explanation is on demand through the shared anchored popover.
+Do not keep a permanent explanatory paragraph under the readout.
+
+### DECORATION DECISION SURFACE
+
+Store-management purchase/equip comparison shows:
+- name
+- exact effect
+- price / ownership
+- equipped state
+
+Decoration Flavor prose is not shown on this decision surface.
+
+No new Collection screen is added in v2.8 solely to preserve that Flavor.
+Existing Flavor data may remain in data/Codex-ready form.
+
+### GLOBAL HELP
+
+The global 점주 가이드 uses the exact compact Copy owner text.
+Do not retain the old long-form rules manual in parallel.
+
+### SETTINGS / DEBUG BOUNDARY
+
+Ordinary Player settings are localized and gameplay-facing.
+
+Developer reproducibility Seed controls do not appear on the ordinary pre-Run screen.
+Technical runtime footer copy is removed from ordinary settings.
+
+This does not require adding a new Debug menu.

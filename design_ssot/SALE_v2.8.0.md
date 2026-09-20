@@ -91,3 +91,19 @@ The UI may state, for example:
     소지 100G · 급여일 예산 +20G
 
 Unused temporary Event budget is not persistent NPC Wallet.
+
+
+## REFUSAL RETRY TRUTH — EXACT
+
+If a customer refuses a given Item at price mode P during the current visit:
+
+- that same Item at P becomes unavailable
+- every more expensive price mode for that same Item also becomes unavailable
+- cheaper price modes remain eligible unless separately refused/blocked
+- other Item IDs are unaffected
+
+Player help copy:
+
+    한 가격을 거절하면 같은 상품은 그 가격과 더 비싼 가격으로 그날 다시 제안할 수 없다.
+
+Do not describe the rule as only \`같은 상품·같은 가격\`.

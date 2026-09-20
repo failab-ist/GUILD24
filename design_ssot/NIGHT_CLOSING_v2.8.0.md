@@ -99,3 +99,47 @@ In particular the current:
 does not belong on the primary Closing receipt.
 
 Closing remains economics-only.
+
+
+## OUTCOME SENTENCE VS PLAYER CAUSE — EXACT
+
+The Outcome sentence states what happened.
+The Hero Item line states why the Player's sold Item mattered.
+
+Do not make the Outcome sentence consume the Item-causality role.
+
+For an avoided-death return:
+
+Outcome sentence:
+    사망 위기를 넘기고 살아 돌아왔다.
+
+Then, only when proven:
+    {Item} 덕분에 살아 돌아왔다.
+
+Do not use the generic Outcome sentence:
+    보급이 마지막 순간의 사망을 막았다.
+
+when a separate proven Item line follows.
+
+## CLOSING ECONOMICS-ONLY — EXACT
+
+The primary Closing receipt does not repeat NIGHT expedition-impact content.
+
+Remove the current block headed:
+
+    오늘의 보급 영향
+
+Closing keeps only economic/accounting results such as:
+- 매출
+- 판매 원가 / 마진
+- 운영비
+- 폐기
+- 발주 교환
+- 본사 지원·수당
+- 영업 손익
+- 발주 지출
+- 점포지원 투자
+- 재고 정리
+- 보유 자금
+
+The NIGHT result is the owner surface for expedition causality and adventurer-state change.

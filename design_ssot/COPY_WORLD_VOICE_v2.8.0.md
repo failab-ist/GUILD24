@@ -204,3 +204,216 @@ Targeted exact lines:
 - 길드 급여일: 오늘 방문 모험가 구매 예산 +20%
 
 Flavor must be visually subordinate to Function.
+
+
+## COPY RE-AUDIT — EXACT ACTIVE OVERRIDES
+
+This section is a 2026-09-20 re-audit against the current v2.8 SSOT and Current Source.
+It supersedes conflicting inherited v2.7 copy and non-Canonical Copy Audit drafts.
+
+### NPC DIALOGUE TRUTH — v2.8 ONLY
+
+Broad pool expansion and recent-line cooldown remain v2.9+.
+
+v2.8 changes only dialogue that falsely implies a mechanic.
+
+Exact replacements:
+
+- 겁쟁이:
+  - REMOVE: \`귀환석 있습니까?\`
+  - USE: \`오늘은 무사히 다녀오는 게 목표입니다.\`
+
+- 대식가:
+  - REMOVE: \`많이 든 걸로 주세요.\`
+  - USE: \`원정 끝나면 밥부터 먹어야겠어요.\`
+  - REMOVE: \`먹을 게 제일 급해요.\`
+  - USE: \`배고픈 채로 돌아오는 건 딱 질색입니다.\`
+
+- 탐욕:
+  - REMOVE: \`비싼 게 좋은 거 아닌가요?\`
+  - USE: \`오늘은 빈손으로 돌아올 생각 없습니다.\`
+  - REMOVE: \`이왕이면 좋은 걸로 봅시다.\`
+  - USE: \`이번엔 전리품 좀 제대로 챙겨와야죠.\`
+
+- 단골:
+  - REMOVE: \`늘 먹던 걸로 주세요.\`
+  - USE: \`이 정도면 단골 맞죠?\`
+
+Do not add a purchase-preference implication that the owning Trait does not actually implement.
+
+### RETURN-VISIT HELPED CALLBACK — EXACT
+
+A line such as:
+
+    지난번에 챙긴 거, 도움이 됐어요.
+
+may be selected only when the immediately previous expedition has a proven sold-Item contribution
+under the v2.8 result-proof boundary.
+
+Do not use:
+- \`events.length > 0\`
+- Trait-only \`injury-guard\`
+- a generic Hazard/Result event with no sold-Item proof
+
+as sufficient evidence.
+
+The callback consumes no Gameplay RNG and does not create a new proof system; it reads the
+persisted previous-result proof already needed for NIGHT.
+
+### SALE CHANGE LABELS — EXACT
+
+Primary selected-Item change heading:
+
+    판매 후 변화
+
+Do not use:
+- 보급 후 변화
+- 이 상품이 직접
+- 보급이 상태에 미치는 영향
+- 이 손님에게는 지금 걸리지 않는 효과
+
+Direct and derived changed rows stay visible under the single heading.
+Their source is explained by the shared anchored source popover.
+
+Unchanged intrinsic Item truth that still needs to be readable may use the neutral heading:
+
+    상품 효과
+
+Never label an internal marker such as \`potion\` as a Player effect.
+
+### SALE FORECAST PERMANENT FOOTNOTE
+
+Remove the always-visible prose:
+
+    오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다.
+    게이트 안에서 어떻게 될지까지는 아무도 모른다.
+
+The exact forecast/readiness/death explanation lives in the anchored help copy already owned above.
+
+### SUPPLY SHORTFALL
+
+Main compact line:
+
+    보급 부족 {N} · 능력치 감소
+
+On-demand explanation:
+
+    투력·강인함·기동·정신이 함께 감소한다.
+
+Do not expose the hidden deficit formula.
+
+### HELP / 점주 가이드 — EXACT COMPACT COPY
+
+#### 점포지원
+
+    DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다.
+    보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.
+
+#### 발주
+
+    오늘 손님과 게이트를 보고 수량을 정한다.
+    발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.
+
+#### 판매
+
+    목적지·능력·특성을 보고 상품과 가격을 정한다.
+    50%는 관계 투자, 100%는 기본, 150%는 수익 우선.
+    한 가격을 거절하면 같은 상품은 그 가격과 더 비싼 가격으로 그날 다시 제안할 수 없다.
+
+#### 단골
+
+    단골도는 구매 의사와 재방문에 영향을 준다. 능력치는 올리지 않는다.
+    51부터 단골로 인정된다.
+
+#### 원정
+
+    판매한 상품은 그날 원정에서 한 번 쓰고 사라진다. 가방은 2칸.
+    결과는 NIGHT에서 확인한다.
+
+#### 점포 종료
+
+    적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회.
+    돌아오지 못한 모험가가 10명이 되면 폐점한다.
+    DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.
+
+#### 다음 점포
+
+    남음: 도감·해금·직업 숙련·점포 자본·보유 장식
+    초기화: 모험가·재고·골드·점포지원
+
+#### 시간
+
+    실시간 제한 없음.
+
+Remove from global Help:
+- 기본 방문객 3~6 재설명
+- Gate 수 증가 장문
+- 모든 Trait 공개 규칙 재설명
+- 마감에서 거래와 보급의 작용을 확인한다
+- 별도의 Bankruptcy 중복 문단
+
+### DEEP EXPEDITION REPEAT SURFACES — EXACT
+
+After the first contextual tutorial:
+
+Morning repeat surface:
+
+    심층원정 · {게이트명}
+    같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.
+
+SALE nomination detail:
+
+    {게이트명} · 후원금 {N}G
+    성공 시 추가 성장 · 점포 수익 없음
+
+Do not repeat the full Hazard/cost/growth/store-income tutorial paragraph on every Morning and again
+inside SALE.
+
+### TRAIT EFFECT LABEL TRUTH — EXACT
+
+금수저:
+    방문 시 소지금 +50G
+
+정직한:
+    정가·50% 구매 시 단골도 +1
+
+Do not use:
+- 방문 골드
+- 단골 보너스
+
+when the actual channel can be named.
+
+Keep mathematically truthful weighting terms such as 재방문 가중치 where replacing them with 확률
+would be false.
+
+### STORE CAPITAL CURRENCY COPY
+
+Store Capital is not Gold.
+
+Use:
+    점포 자본 {N}
+    {N} 자본
+
+Do not append \`G\` to Store Capital in Codex, management, purchase or settlement copy.
+
+### SETTINGS / PLAYER-FACING LOCALIZATION
+
+Use:
+    소리 켜기
+    소리 끄기
+    전체 데이터 초기화
+
+Do not use active Player-facing:
+- Sound On
+- Sound Off
+- Full Data Reset
+
+The reproducibility Seed control is developer/debug functionality and does not appear in the ordinary
+Player pre-Run surface.
+
+Remove the ordinary Player footer:
+
+    버전 0.4 · 로컬 실행 지원 · 외부 연결 없음
+
+Build/version information may live in a dedicated technical/about surface later; do not keep the
+development-runtime sentence in the gameplay settings panel.

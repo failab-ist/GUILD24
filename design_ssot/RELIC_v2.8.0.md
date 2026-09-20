@@ -169,6 +169,11 @@ Do not use a retired fresh boolean/property.
 
 ## COPY TRUTH CLEANUP
 
+단골 스탬프 기계 Player copy:
+    유료 구매의 단골도 증가량 +50%. 생환으로 얻는 단골도에는 적용되지 않는다.
+
+Do not mention 무료 보급; the active price system has no free-sale mode.
+
 긴급보급 선반 Player copy uses:
     포션 · 야외장비 · 보험
 

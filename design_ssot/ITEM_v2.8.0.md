@@ -121,3 +121,19 @@ The table above is the approved v2.8 DIRECTOR DOCUMENT BASELINE.
 
 After Source adoption, price/efficiency may be measured.
 Any later change requires a new approved ITEM amendment; QA does not auto-tune it.
+
+
+## REPLACEMENT ITEM FLAVOR — EXACT
+
+ID reuse must not carry the retired Hotbar Flavor into the new identities.
+
+\`bar\` / 간단 도시락:
+    반찬은 단출하지만 빈칸은 없다.
+
+\`herobar\` / 왕도 천연암반수:
+    왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.
+
+The existing compatible Flavor for 삼각김밥 / 생수 / 길드 특제 도시락 / 영웅 결전 도시락
+may remain unless a later approved Copy pass changes it.
+
+Do not preserve Hotbar/skewer wording on the replacement IDs.
