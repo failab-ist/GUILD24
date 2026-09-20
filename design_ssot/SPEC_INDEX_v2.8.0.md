@@ -10,7 +10,7 @@ FREEZE_DATE=2026-09-20
 LAST_APPROVED_AMENDMENT=2026-09-20
 SSOT_AUDIT_STATUS=PROJECT_WIDE_AUDIT_COMPLETE
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
-COPY_REAUDIT_STATUS=USER_REVIEW_PENDING
+COPY_REAUDIT_STATUS=COMPLETE
 NUMERIC_COHERENCE_REAUDIT_STATUS=COMPLETE
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
@@ -75,6 +75,7 @@ Flow / Result / UI / Copy:
 - NIGHT_CLOSING_v2.8.0.md
 - UI_UX_v2.8.0.md
 - COPY_WORLD_VOICE_v2.8.0.md
+- COPY_AUDIT_APPROVED_v2.8.0.md
 - EVENT_v2.8.0.md
 - BOSS_v2.8.0.md
 - FINAL_EXPEDITION_v2.7.0.md
@@ -105,6 +106,7 @@ SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
 UI / UX / MOBILE / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.8.0.md
 COPY / PLAYER-FACING TERMS / BOSS REPORT COPY -> COPY_WORLD_VOICE_v2.8.0.md
+COPY EXACT PLAYER TEXT AMENDMENT -> COPY_AUDIT_APPROVED_v2.8.0.md
 EVENT -> EVENT_v2.8.0.md
 BOSS -> BOSS_v2.8.0.md
 FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.7.0.md
@@ -120,8 +122,8 @@ Older SPEC_INDEX files are historical navigation snapshots, not current routing.
 The v2.8 Director Plan is a non-Canonical release-vision/orientation document only.
 It must contain no implementation rule, numeric baseline, exact UX contract or QA requirement.
 
-Copy Audit drafts remain non-Canonical history.
-All approved detailed v2.8 decisions have been promoted into the routed owner Specs / QA above.
+Unapproved Copy Audit drafts remain non-Canonical history.
+COPY_AUDIT_APPROVED_v2.8.0.md is the User-approved exact Player-facing copy amendment routed above.
 
 Do not delete an older owner file if a current owner explicitly inherits it.
 Cleanup means removing it from current routing and overriding stale live clauses, not destroying
