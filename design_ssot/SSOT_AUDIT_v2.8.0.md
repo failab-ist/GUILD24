@@ -11,6 +11,7 @@ VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
 NUMERIC_COHERENCE_REAUDIT_STATUS=COMPLETE
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
+FULL_LEGACY_CHAIN_REAUDIT_STATUS=USER_DECISION_REQUIRED
 
 ## PURPOSE
 
@@ -22,7 +23,7 @@ Unchanged rules remain inherited; changed/stale clauses receive a v2.8 owner pat
 
 ## AUDIT RESULT
 
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = USER_DECISION_REQUIRED.
 
 Current v2.8 Canonical resolves:
 - Decoration / Store Capital replacement
@@ -71,7 +72,6 @@ Examples:
 - v2.5 base documents
 - v2.6 / v2.6.1 corrective patches
 - v2.7 owner documents superseded by v2.8 patches
-- old SPEC_INDEX snapshots
 
 Current authority comes only from SPEC_INDEX_v2.8.0.md.
 
@@ -86,19 +86,9 @@ It is orientation only:
 
 It carries no detailed Design Truth.
 
-## HISTORICAL PLANNING / AUDIT DOCUMENTS
-
-The following remain discussion history only:
-- V2_8_COPY_DIRECTOR_FULL_AUDIT_REV4.md
-- V2_8_COPY_FULL_AUDIT.md
-
-Their approved conclusions are promoted into current owner Specs / QA.
-Rejected candidates and discussion history must not be used by WORK.
-
 ## DEFERRED, NOT STALE
 
 The following are intentionally v2.9+:
-- broad Dialogue-pool expansion / cooldown system
 - phase-specific BGM / broad SFX/presentation expansion
 - Expedition Purpose structural system
 - large presentation/world-content expansion
@@ -107,6 +97,26 @@ The following are intentionally v2.9+:
 - expanded relationship/meta-power systems
 
 Do not pull these into v2.8 Source adoption.
+
+## FULL LEGACY-CHAIN RE-AUDIT — DESIGN GAPS
+
+The project-wide inheritance chain was re-audited beyond the v2.8 amendment layer.
+
+The following current gameplay areas still depend on Source-only or inherited PASS3 numeric/rule
+truth and therefore require User/Director closure before they can be treated as fully canonical:
+
+- ordinary SALE purchase-acceptance exact formula
+- base operating-cost exact formula
+- ORDER pity exact thresholds/effect
+- Gate-count / Tier generation exact distribution and forecast/readiness numeric boundaries
+- ordinary non-Death expedition resolution / reward exact formulas
+- Job Base/Growth exact table
+- Job Mastery reward model
+- non-purchase Loyalty / revisit exact deltas and coefficients
+- targeted Event exact mechanics still left PASS3 or probability-only in the inherited Event owner
+
+These are not permission for WORK to copy Current Source into Canonical.
+Until resolved, Source values are implementation truth only.
 
 ## SOURCE MISMATCH RECORD
 
