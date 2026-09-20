@@ -276,7 +276,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     description has to say the channel it moves and the ones it does not. */
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
-  assert.ok(/능력치 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
+  assert.ok(/능력치 증가 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
   assert.ok(/보급/.test(DATA.relicBy[id].description)&&!/보급·능력치|보급 효과 \+/.test(DATA.relicBy[id].description),
    id+' does not claim the Supply it leaves unchanged');
  }
@@ -324,6 +324,66 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  assert.equal(DATA.itemBy.herbtea.description,'마시기 전에 심호흡부터 하는 손님이 많다.');
  assert.equal(DATA.itemBy.midpotion.description,'하급은 불안하고 상급은 비쌀 때.');
  for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
+});
+
+/* COPY_AUDIT_APPROVED_v2.8.0 §11 — STORE SUPPORT 30/30. The approved amendment is exact Player
+   text, so this is equality, not a pattern: a paraphrase, a dropped middot or a stale number is
+   a FAIL here rather than something a looser assertion can absorb. Price and name are pinned in
+   the same table because §11 renames two rows and RELIC_v2.8 re-prices two more, and a row that
+   reads right at the wrong price is still the wrong row. */
+test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are the approved text',()=>{
+ const SUPPORTS=[
+  ['bulk','묶음발주 계약',260,'같은 상품 3개 이상 발주 시 3번째부터 매입가 -15%.'],
+  ['rotation','회전 진열대',240,'전날 6건 이상 판매하면 다음 날 일반·고급 상품의 공급 수량 +1.'],
+  ['stamp','단골 스탬프 기계',260,'유료 구매로 오르는 단골도 +50% · 생환으로 오르는 단골도 제외.'],
+  ['member','회원 관리대장',260,'다음 날부터 이미 만난 손님의 재방문 가중치 +40%.'],
+  ['showcase','희귀상품 입고 계약',280,'희귀 이상 상품 발주 가중치 +70% · 다음 날부터 운영비 +10G.'],
+  ['guarantee','길드 보증 진열대',280,'하루 1회 · 정가 200G 이상 상품 첫 판매 시 본사가 정가의 20%를 손님 대신 부담. 점주는 선택한 판매가 전액 수령.'],
+  ['hazardBoard','원정 위험 게시판',260,'현재 알려진 위험에 대응하는 상품이 발주 후보에 나올 가중치 +80%.'],
+  ['medicine','긴급보급 선반',260,'포션·야외장비·보험 발주 가중치 +60% · 해당 상품 공급 수량 +1.'],
+  ['fridge','대형 냉장고',200,'음식·음료 유통기한 +1일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.'],
+  ['kitchen','즉석식품 코너',280,'음식·음료가 원래 가진 능력치 증가 효과 +30% · 보급·위험 대응·부작용 제외.'],
+  ['board','길드 전광판',260,'기본 방문객이 3명인 날 4명으로 올린다.'],
+  ['rookieBoard','신입 모집 게시판',240,'신규 모험가가 생긴 날, 그 모험가가 오늘 방문객 중 1명으로 반드시 등장 · 총 방문객 수는 늘지 않음.'],
+  ['groupFlyer','공동구매 전단',400,'오늘 방문객 6명 이상이면 같은 상품 3개 이상 발주 시 매입가 -10%.'],
+  ['memberBundle','단골 묶음혜택',380,'재방문 손님의 오늘 두 번째 유료 구매에 단골도 +2.'],
+  ['premiumMember','프리미엄 멤버십',420,'단골도 50 이상 손님의 희귀 이상 상품 구매 의사 +10%p.'],
+  ['returnPoints','귀환 적립제',400,'오늘 유료 구매한 재방문 손님이 단골도 30 이상으로 생환하면 단골도 +2 · 소지금 +30G.'],
+  ['expeditionMeal','원정 도시락 코너',400,'실제 목적지와 맞는 음식·음료의 위험 대응 +25% · 보급이 필요한 날, 보급을 주는 음식·음료의 원래 능력치 증가 효과 +20%.'],
+  ['coldcase','냉장 유통 계약',420,'고급 이상 음식·음료 발주 가중치 +80% · 유통기한 +1일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.'],
+  ['supplyCert','길드 납품 인증',440,'현재 알려진 위험에 맞는 희귀 이상 상품 또는 희귀 이상 보험 판매 시 정가의 12% 본사 수당.'],
+  ['dawnBulk','새벽 공동배송',380,'같은 음식·음료 3개 이상 발주 시 매입가 -15%.'],
+  ['logisticsHQ','물류 본부계약',720,'전날 7건 이상 판매하면 다음 날 첫 묶음발주 매입가 -25%.'],
+  ['lifetime','평생 단골제',740,'단골도 60 이상 손님이 생환하면 하루 1회 소지금 +50G · 다음 방문 가중치 +50%.'],
+  ['royalCert','왕도 프리미엄 인증',760,'희귀 이상 상품을 150%에 판매하면 정가의 20% 본사 수당.'],
+  ['expeditionCert','길드24 원정전문점 인증',700,'알려진 위험 1종이면 대응 상품 후보 1칸 보장 · 2종 이상이면 서로 다른 위험 2종의 대응 상품을 2칸 보장 · 후보를 교환해도 유지.'],
+  ['fresh24','24시간 신선체계',740,'음식·음료 유통기한 +2일 · 원래 가진 능력치 증가 효과 +50% · 보급·위험 대응·부작용 제외.'],
+  ['hub','지역 거점점 계약',700,'다음 날부터 방문객 +1명 45% · +2명 15% · 증가 없음 40% · 기본 운영비 +10%.'],
+  ['warehouse','후방 창고 증설',360,'창고 용량 +10칸.'],
+  ['terminal','본사 추가발주권',380,'다음 발주 후보 생성부터 발주 후보 +2개.'],
+  ['delivery','발주 교환권',340,'매일 첫 후보 전체 교환 무료 · 이후 100G → 200G → 400G… 순으로 증가.'],
+  ['efficiency','운영 효율 매뉴얼',260,'다음 날부터 기본 운영비 -30G.']];
+ assert.equal(SUPPORTS.length,30,'§11 audits all 30 Store Supports');
+ assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 30, in order');
+ for(const [id,name,price,description] of SUPPORTS){
+  const r=DATA.relicBy[id];
+  assert.ok(r,'the catalogue still has '+id);
+  assert.equal(r.name,name,id+' name is the approved §11 text');
+  assert.equal(r.price,price,id+' price is the approved baseline');
+  assert.equal(r.description,description,id+' description is the approved §11 text, verbatim');
+ }
+ /* REL-Q-v28-1: the two renamed rows really dropped 쇼케이스, and the Decoration that owns the
+    word keeps it. */
+ for(const id of ['showcase','coldcase'])assert.ok(!DATA.relicBy[id].name.includes('쇼케이스'),id+' no longer reuses 쇼케이스');
+ assert.ok(DATA.decorations.some(d=>d.name==='프리미엄 쇼케이스'),'the Decoration of that name is untouched');
+ /* REL-Q-v28-10 / SA-Q26: the exact stale phrases the amendment retires, gone from every row. */
+ const all=DATA.relics.map(r=>r.description).join('\n');
+ for(const stale of ['무료 보급','치료·야외장비','50G부터','최소 4명','8건 이상','+12G','+25G','8%를','바가지','15G 절감','신선식품 발주'])
+  assert.ok(!all.includes(stale),'no Store Support row still says "'+stale+'"');
+ /* §11-31: the acquired state reads as 확보/보유, not 설치 - 계약·인증·매뉴얼 are not installed. */
+ const app=read('dist/ui/app.js');
+ assert.ok(app.includes('확보 완료 · ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
+ assert.ok(app.includes("mine?'보유 중'")&&!app.includes("mine?'설치됨'"),'an owned row reads 보유 중');
 });
 
 console.log(count+' copy groups passed');

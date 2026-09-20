@@ -851,11 +851,11 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  +'<p>'+(first?'하나는 무료다. 고르면 영업이 시작된다.'
    :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
    :until+' 구매할 수 있다 · 자금 '+fmt(s.money)+'G')+'</p></div>'
- +(w.purchased?'<p class="discovery">설치 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
+ +(w.purchased?'<p class="discovery">확보 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
  +'<div class="relic-choices">'+w.candidateIds.map((id,i)=>{const r=D.relicBy[id],price=w.candidatePrices[i],mine=w.purchased===id;
   return '<article class="relic-plate'+(mine?' owned':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
-  +btn(mine?'설치됨':'구매','buy-relic','stamp','data-id="'+id+'" '+(!game.canBuyRelic()||s.money<price?'disabled':''))+'</article>';}).join('')+'</div></div>'
+  +btn(mine?'보유 중':'구매','buy-relic','stamp','data-id="'+id+'" '+(!game.canBuyRelic()||s.money<price?'disabled':''))+'</article>';}).join('')+'</div></div>'
  +sealChoice() +'<div class="close">'+(first?'<p>하나를 골라야 영업이 시작된다.</p>'+btn('장식 구성 다시 보기','new','bare'):'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* Sloth's seal is not a second choice path: it is the other thing this window's one

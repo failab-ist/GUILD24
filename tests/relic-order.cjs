@@ -74,7 +74,7 @@ test('REL-Q40: owned Relic quick view is read-only name/effect data',()=>{
  g.run.phase='night';assert.equal(g.canBuyRelic(),false,'no Relic purchase during Night');
 });
 
-test('REL-Q33: 냉장 쇼케이스 targets Uncommon+ Food/Drink, not a one-SKU Rare pool',()=>{
+test('REL-Q33: 냉장 유통 계약 targets Uncommon+ Food/Drink, not a one-SKU Rare pool',()=>{
  const g=fresh('coldcase');g.run.facilities=['coldcase'];
  const eligible=DATA.items.filter(it=>['food','drink'].includes(it.category)&&it.rarity>=1);
  assert.ok(eligible.length>=4,'multi-SKU pool, got '+eligible.length);
