@@ -56,10 +56,10 @@ No alternate legacy Hotbar identity remains active.
 |---|---|---|---:|---|---:|
 | rice | 삼각김밥 | Food C | 35 / 70 | 강인함 +6, Supply 5 | 2d |
 | water | 생수 | Drink C | 40 / 85 | 강인함 +10, Supply 2 | 5d |
-| bar | 간단 도시락 | Food U | 85 / 180 | 강인함 +10, Supply 6, 원정 소지금 획득 +50% | 2d |
-| premium | 길드 특제 도시락 | Food R | 160 / 340 | 강인함 +14, Supply 7, 원정 소지금 획득 +100% | 2d |
+| bar | 간단 도시락 | Food U | 85 / 180 | 강인함 +10, Supply 6, 원정 소지금 획득 +20% | 2d |
+| premium | 길드 특제 도시락 | Food R | 160 / 340 | 강인함 +14, Supply 7, 원정 소지금 획득 +40% | 2d |
 | battlelunch | 영웅 결전 도시락 | Food E | 210 / 440 | 강인함 +18, Supply 9 | 2d |
-| herobar | 왕도 천연암반수 | Drink E | 175 / 370 | 강인함 +22, Supply 2 | 5d |
+| herobar | 왕도 천연암반수 | Drink E | 185 / 390 | 강인함 +20, Supply 2 | 5d |
 
 The meal Stat ladder is intentionally readable:
 
@@ -68,13 +68,27 @@ The meal Stat ladder is intentionally readable:
 The water route is intentionally more Stat-concentrated than the meal at the same broad stage,
 while keeping much lower Supply.
 
+## ACTIVE RARITY DISTRIBUTION — EXACT
+
+The approved `bar` repurpose is Uncommon.
+
+The active 40-Item distribution is therefore:
+
+    Common 11
+    Uncommon 12
+    Rare 5
+    Epic 11
+    Legendary 1
+
+Do not move another Item merely to restore the old Common/Uncommon counts.
+
 ## NPC WALLET GAIN — EXACT SCOPE
 
 간단 도시락:
-    existing expedition loot modifier +0.50
+    existing expedition loot modifier +0.20
 
 길드 특제 도시락:
-    existing expedition loot modifier +1.00
+    existing expedition loot modifier +0.40
 
 Composition:
 - additive with other modifiers that already use the ordinary expedition loot channel
@@ -91,10 +105,10 @@ Does not multiply:
 - any other non-expedition-loot Wallet source
 
 Player-facing term:
-    원정 소지금 획득 +50%
-    원정 소지금 획득 +100%
+    원정 소지금 획득 +20%
+    원정 소지금 획득 +40%
 
-Do not say current 소지금 +50% / +100%.
+Do not say current 소지금 +20% / +40%.
 
 ## FRESH / FOOD AFFINITY
 

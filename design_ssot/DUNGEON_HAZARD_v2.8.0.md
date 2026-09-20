@@ -10,8 +10,10 @@ PATCH_TYPE=RESULT_PROOF_AND_READABILITY
 
 ## INHERITANCE
 
-All unchanged v2.7 Gate Power, Hazard threat, Prepared Power, death-risk, Supply, Fatigue, Great
-Success probability and actual expedition resolution rules inherit DUNGEON_HAZARD_v2.7.0.md.
+All unchanged v2.7 Gate Power, Hazard threat, Prepared Power, death-risk, Supply, Fatigue and
+actual expedition resolution rules inherit DUNGEON_HAZARD_v2.7.0.md.
+
+This patch closes the previously measurement-gated Great Success and Deep exact numeric baselines.
 
 v2.8 does not change Fire-family occurrence weighting.
 
@@ -112,9 +114,53 @@ If proven changes differ in severity:
 
 No automatic Field Gear > Food priority exists.
 
-## GREAT SUCCESS SIGNAL
+## GREAT SUCCESS — DIRECTOR DOCUMENT BASELINE
 
-Great Success probability formula and signal threshold remain unchanged here.
+Keep the existing margin formula:
+
+    marginRatio
+    = (prepared Combat ability - Gate required Power)
+      / Gate required Power
+
+Exact v2.8 values:
+
+    signalMargin = 0.26
+    chanceSlope  = 0.80
+    chanceCap    = 0.30
+
+Thus:
+
+    Great Success chance
+    = min(0.30, max(0, marginRatio × 0.80))
+
+The signal threshold does not gate the roll.
+It only controls when the Player sees the qualitative signal.
+
+The intended positive loop remains:
+    stronger prepared NPC
+    -> larger positive margin
+    -> higher Great Success chance
+    -> faster NPC growth
+
+Do not lower this probability merely because a skilled Run produces repeated Great Success.
+Economic reinforcement is controlled separately by ECONOMY_ORDER_v2.8.0.md.
 
 SALE owns when the signal is recomputed.
 The signal remains qualitative; exact probability stays hidden.
+
+## DEEP EXPEDITION — DIRECTOR DOCUMENT BASELINE
+
+Keep the inherited occurrence windows:
+    D7 / D14 / D21 / D28
+
+Each Run still has exactly 2 or 3 Deep occurrences, with:
+    probability of 3 occurrences = 50%
+    probability of 2 occurrences = 50%
+
+Difficulty:
+    deepRequiredPower = baseGateRequiredPower × 1.50
+
+No Hazard magnitude/count inflation is added.
+
+Sponsorship cost remains owned by the Economy owner.
+NPC bonus reward remains owned by NPC_TRAIT_v2.8.0.md.

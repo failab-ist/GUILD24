@@ -35,23 +35,23 @@ Retain function/value:
 - 원정 위험 게시판
 - 긴급보급 선반
 - 대형 냉장고 function
-- 즉석식품 코너
 - 길드 전광판 function
 - 공동구매 전단
 - 단골 묶음혜택
 - 프리미엄 멤버십
-- 원정 도시락 코너
 - 냉장 유통 계약 function (renamed only)
 - 새벽 공동배송
 - 물류 본부계약
 - 길드24 원정전문점 인증
-- 24시간 신선체계
 - 지역 거점점 계약
 - 후방 창고 증설
 - 본사 추가발주권
 - 발주 교환권 function
 
 v2.8 numeric/functional adjustment:
+- 즉석식품 코너
+- 원정 도시락 코너
+- 24시간 신선체계
 - 신입 모집 게시판
 - 귀환 적립제
 - 길드 납품 인증
@@ -73,6 +73,39 @@ ID coldcase:
 
 The Decoration named 프리미엄 쇼케이스 remains unchanged.
 Thus 쇼케이스 is no longer reused by these active Store Supports.
+
+## FRESH NATIVE-STAT REBASELINE — DIRECTOR DOCUMENT BASELINE
+
+The v2.7 Fresh native-Stat multipliers are superseded for v2.8.
+
+`즉석식품 코너`:
+    Food/Drink positive native Core-Stat contribution +30%
+
+`24시간 신선체계`:
+    Food/Drink positive native Core-Stat contribution +50%
+    shelf-life +2 days remains unchanged
+
+`원정 도시락 코너`:
+    when active Supply Burden exists and the Food/Drink supplies >0:
+        positive native Core-Stat contribution +20%
+    matching explicit Hazard Counter bonus remains +25%
+
+All three continue to use the existing base-additive positive-native-Stat composition rule.
+
+Therefore:
+    즉석식품 코너 + 24시간 신선체계
+    => base positive native Stat ×1.80
+
+With the active-Supply native-Stat condition:
+    +30% +50% +20%
+    => base positive native Stat ×2.00
+
+Unchanged:
+- Supply itself
+- matching-Counter +25% rule
+- Insurance
+- harmful RiskReward penalties
+- Food-affinity Trait composition rule
 
 ## LARGE FRIDGE — SOURCE ALIGNMENT
 

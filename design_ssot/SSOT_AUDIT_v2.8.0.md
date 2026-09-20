@@ -9,6 +9,7 @@ AUDIT_DATE=2026-09-20
 FINAL_REAUDIT_DATE=2026-09-20
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
+NUMERIC_COHERENCE_REAUDIT_STATUS=COMPLETE
 
 ## PURPOSE
 
@@ -24,8 +25,10 @@ IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
 
 Current v2.8 Canonical resolves:
 - Decoration / Store Capital replacement
-- active Item role hierarchy and exact first balance baseline
-- Store Support naming/value/feel pass
+- active Item role hierarchy and final v2.8 numeric baseline
+- Store Support naming/value/feel pass including Fresh amplification rebaseline
+- Great Success probability baseline and reduced Store-Gold snowball
+- Deep occurrence/difficulty/reward exact values
 - Loyalty information
 - Fatigue decision/result presentation
 - Great Success signal timing
@@ -44,6 +47,10 @@ The following clauses existed in the formerly routed current chain and are no lo
 - DUNGEON_HAZARD_v2.7: hypothetical final-Fatigue rows for each possible Outcome
 - NIGHT_CLOSING_v2.7: player labels 보급 회복 / 보급 완화 / 원정 결과 / 밤 피로
 - ITEM_v2.7: 핫바 / 용사 특식 핫바 identities and old meal/water values
+- ITEM_v2.8 earlier draft: 도시락 Wallet +50/+100 and 왕도 천연암반수 175/370 · 강인함22
+- RELIC_v2.7: Fresh native-Stat +40/+80/+25 values
+- ECONOMY_ORDER inherited: Great Success Store Gold 100/200/300
+- NPC_TRAIT inherited PASS3 gap: Deep Great reward 90/150 Source candidate
 - RELIC_v2.7: 프리미엄 쇼케이스 / 냉장 쇼케이스 Player-facing Store Support names
 - RELIC_v2.7: old return-points / supply-cert / lifetime / royal-cert values
 - RELIC inherited: 신입 모집 게시판 as a probability-only +70% visitor weight
@@ -179,3 +186,25 @@ It must not restate:
 - implementation instructions
 
 If the Vision and SSOT ever differ, the SSOT wins.
+
+
+## FINAL NUMERIC COHERENCE RE-AUDIT — 2026-09-20
+
+Result:
+    COMPLETE
+
+The v2.8 additions were re-read as one interacting system rather than as isolated amendments.
+
+Approved current outcomes:
+- Great Success probability remains signal 0.26 / slope 0.80 / cap 0.30
+- Great Success direct Store Gold is reduced to 50 / 100 / 200G by Day band
+- repeated Great Success from well-grown NPCs remains an intended positive growth loop
+- Item Wallet bonuses are 20% / 40%, not 50% / 100%
+- 왕도 천연암반수 is 185/390, 강인함20, Supply2
+- Fresh native-Stat amplification is +30 / +50 / conditional +20, with matching Counter +25 unchanged
+- Deep occurrence is 2 or 3 at 50/50, required Power ×1.50
+- Deep Success = EXP40 / Wallet60; Deep Great Success = EXP80 / Wallet120
+- Deep sponsorship base remains 350G with 0.20 rarity and 0.05 level steps, rounded to 10G
+- active Item rarity distribution is intentionally C11 / U12 / R5 / E11 / L1
+
+No additional numeric Design question remains blocking v2.8 Source adoption.

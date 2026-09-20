@@ -11,6 +11,7 @@ LAST_APPROVED_AMENDMENT=2026-09-20
 SSOT_AUDIT_STATUS=PROJECT_WIDE_AUDIT_COMPLETE
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
+NUMERIC_COHERENCE_REAUDIT_STATUS=COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_READY_ADOPTION_PENDING
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -62,7 +63,7 @@ Core / Run / Meta:
 - META_v2.8.0.md
 
 Economy / NPC / Dungeon / Item / Store Build:
-- ECONOMY_ORDER_v2.7.0.md
+- ECONOMY_ORDER_v2.8.0.md
 - NPC_TRAIT_v2.8.0.md
 - DUNGEON_HAZARD_v2.8.0.md
 - ITEM_v2.8.0.md
@@ -79,7 +80,7 @@ Flow / Result / UI / Copy:
 
 QA:
 - CORE_RUN_QA_v2.8.0.md
-- ECONOMY_ORDER_QA_v2.7.0.md
+- ECONOMY_ORDER_QA_v2.8.0.md
 - NPC_TRAIT_QA_v2.8.0.md
 - DUNGEON_ITEM_QA_v2.8.0.md
 - RELIC_QA_v2.8.0.md
@@ -94,7 +95,7 @@ Audit:
 GAME CORE / CROSS-RUN IDENTITY -> 00_GAME_CORE_v2.8.0.md
 RUN / PHASE / SAVE / PRE-RUN / META SETTLEMENT / BOSS BRIEFING ORDER -> CORE_RUN_v2.8.0.md
 META / JOB MASTERY / STORE CAPITAL / DECORATION -> META_v2.8.0.md
-PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.7.0.md
+PRICE / GOLD / WALLET / ORDER / REROLL / RARITY -> ECONOMY_ORDER_v2.8.0.md
 NPC / JOB / TRAIT / LOYALTY / TRUSTED REGULAR / REVISIT -> NPC_TRAIT_v2.8.0.md
 DUNGEON / HAZARD / PREPARED POWER / SUPPLY / FATIGUE / RESULT PROOF -> DUNGEON_HAZARD_v2.8.0.md
 ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
@@ -161,9 +162,10 @@ A baseline is not permission for WORK or QA to tune, substitute, skip or approxi
 
 The following are not implementation blockers:
 - global economy pressure
-- Great Success occurrence / probability tuning
+- Great Success occurrence / probability tuning after the approved .26 / .80 / .30 baseline
+- Great Success economic snowball after the reduced 50 / 100 / 200G Store-Gold baseline
 - Store Support aggregate value after the v2.8 baselines are adopted
-- Food / Water value efficiency after the v2.8 baseline is adopted
+- Food / Water / Fresh-build value efficiency after the v2.8 baseline is adopted
 - Gate / Family / Hazard frequency and perceived difficulty
 
 Fire-family occurrence currently has no approved special frequency reduction.

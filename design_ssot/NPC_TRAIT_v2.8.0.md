@@ -61,3 +61,28 @@ Boss-specific information must not leak before its reveal.
 
 Exact compact UI/popover -> UI_UX_v2.8.0.md.
 Exact player copy -> COPY_WORLD_VOICE_v2.8.0.md.
+
+
+## DEEP EXPEDITION NPC REWARD — DIRECTOR DOCUMENT BASELINE
+
+The inherited Deep reward structure is now numerically closed for v2.8.
+
+Deep Success:
+    additional EXP +40
+    additional NPC Wallet +60G
+
+Deep Great Success:
+    additional EXP +80
+    additional NPC Wallet +120G
+
+Rules:
+- these bonuses are added on top of the ordinary resolved expedition rewards/consequences
+- only Success / Great Success receive the special Deep bonus
+- Retreat / Injury / Severe Injury / Death receive no special Deep EXP/Wallet bonus
+- no automatic Level +1
+- EXP uses the ordinary Growth system
+- Wallet uses the ordinary persistent NPC Wallet channel
+- no extra Day/Tier multiplier
+- no direct Loyalty, revisit guarantee, permanent Deep Stat, Deep currency or Deep Mastery
+
+The Great-Success Deep bonus is exactly 2× the Success bonus on both channels.
