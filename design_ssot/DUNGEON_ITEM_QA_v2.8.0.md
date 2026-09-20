@@ -122,3 +122,65 @@ Expected:
 - P(2 occurrences) = 50%
 - Deep required Combat Power = selected base Gate Power ×1.50
 - no Deep Hazard inflation is added
+
+## DI-Q-v28-12 — GATE COUNT / TIER DISTRIBUTION EXACT
+
+Gate count PASS:
+- D1–3 exactly 1
+- D4–7 1/2 at 50% / 50%
+- D8–18 exactly 2
+- D19–29 2/3 at 50% / 50%
+- D30 does not run ordinary Gate-count generation
+
+Tier PASS:
+- exact anchor rows equal DUNGEON_HAZARD_v2.8.0.md
+- all in-between Days use linear interpolation between surrounding anchors
+- D30 does not run ordinary Tier generation
+- next-Day forecast reads the same function as generation
+
+FAIL:
+- a forecast-only probability table
+- a different Save/Load forecast roll
+- old approximate band percentages acting as exact truth
+
+## DI-Q-v28-13 — FORECAST / HAZARD LABEL BOUNDARIES
+
+Combat ratio:
+- >1.20 -> 우세
+- >=0.80 -> 접전
+- otherwise -> 불리
+
+Hazard readiness ratio:
+- >=1.00 -> 충분
+- >=0.75 -> 대응
+- >=0.40 -> 불안
+- otherwise -> 취약
+
+PASS:
+- Hazard Defense uses the exact Core-Stat coefficients in DUNGEON_HAZARD_v2.8.0.md
+- displayed label and actual underlying preparation state read the same calculation
+- exact hidden formula is not exposed merely because QA knows it
+
+## DI-Q-v28-14 — ORDINARY RESOLVE / REWARD BASELINE
+
+Controlled seeded cases must verify:
+- Supply deficit = 6% per missing Supply, cap 30%
+- environment incident chance uses the exact v2.8 closure formula and 2%–48% clamp
+- escape chance uses the exact v2.8 closure formula and 15%–94% clamp
+- failed-combat Severe branch uses 42% base before current modifiers
+- environment/other Severe branch uses 13% base before current modifiers
+- injured departure adds the existing +15%p Severe escalation exactly once
+- failure-conditioned Death still follows the separate current Death owner formula exactly once
+
+Reward PASS:
+- EXP base = 22 + Day×4.6
+- EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
+- Wallet base = 35 + Day×8
+- Wallet outcome multipliers are Retreat 0.08 / combat-success 1.00 / other living 0.18
+- explicit XP/Loot/Gate reward modifiers compose once
+- living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
+- equipment gain on hit is seeded integer +2 through +5
+
+FAIL:
+- a second alternative ordinary-resolve formula survives
+- QA retunes any value to improve pass rate
