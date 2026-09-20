@@ -32,6 +32,19 @@ PASS:
 
 Other support-specific thresholds remain their own conditions and do not redefine 단골.
 
+## NPC-Q-v28-2B — ORDINARY PURCHASE LOYALTY
+
+For one successful ordinary paid purchase before explicit modifier effects:
+
+    50% sale  -> Loyalty +6
+    100% sale -> Loyalty +1
+    150% sale -> Loyalty -3
+
+PASS:
+- refusal does not apply the purchase Loyalty delta
+- explicit Trait / Store Support modifiers apply only through their owned rules
+- UI / Help exact copy matches COPY_AUDIT_APPROVED_v2.8.0.md
+
 ## NPC-Q-v28-3 — LOYALTY MEANING
 
 The on-demand Loyalty explanation states:
