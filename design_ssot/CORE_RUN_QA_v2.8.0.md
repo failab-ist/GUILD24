@@ -4,61 +4,62 @@ DOC=CORE_RUN_QA
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 BASE_DOCUMENT=CORE_RUN_QA_v2.7.0.md
-PATCH_TYPE=META_SIMPLIFICATION_QA
+PATCH_TYPE=PROJECT_WIDE_V2_8_QA
 
 ## INHERITANCE
 
-All v2.7 Core Run QA remains active except where this patch explicitly overrides Start Contract / Franchise behavior.
+All non-conflicting v2.7 Core Run QA remains active.
 
-## RUN-Q-v28-1 — NO ACTIVE START CONTRACT
+## RUN-Q-v28-1 — NO ACTIVE START CONTRACT / FRANCHISE
 
 PASS:
-- new Run does not require a Start Contract selection
-- no retired Franchise Grade can lock Run start
-- Run uses the confirmed/frozen Decoration loadout
-
-FAIL:
-- retired contract selection remains an active prerequisite
-- hidden contract state still changes active effects
+- new Run does not require Start Contract selection
+- no Franchise Grade locks Run start
+- Run uses frozen Decoration loadout
 
 ## RUN-Q-v28-2 — LOADOUT FREEZE
 
 PASS:
-- only owned Decorations can be selected
-- at most one active Decoration per Slot
-- loadout is fixed after Run start
-- reload preserves the same Run loadout
+- only owned Decorations selectable
+- max one active Decoration per Slot
+- loadout fixed after Run start
+- reload preserves same Run loadout
 
 ## RUN-Q-v28-3 — STORE CAPITAL SETTLEMENT
 
-Owner rule: `META_v2.8.0.md` §STORE CAPITAL.
-
 PASS:
-- an eligible Run settles exactly once
-- Store Capital Gain is the Run's actual Gross Sales multiplied by the reached-Day rate
-- every approved Day band uses the exact owner rate
-- Gross Sales 0 produces Store Capital 0
-- bankruptcy / Death-limit / Final failure may still earn Store Capital from actual Gross Sales
-- Boss CLEAR adds no extra Store Capital multiplier
+- eligible Run settles exactly once
+- actual Gross Sales x reached-Day rate
+- Gross Sales 0 -> Capital 0
+- bankruptcy / Death-limit / Final failure may still earn from actual business
+- Boss CLEAR adds no multiplier
+- manual abandon -> 0
 - reload cannot double-credit
-- manual Run Abandon / explicit retirement credits 0
-
-FAIL:
-- Ending Gold changes Store Capital when Gross Sales and reached Day are held equal
-- remaining Inventory changes Store Capital when Gross Sales and reached Day are held equal
-- Store Capital is derived from a second Meta-only sales counter
-- a failed Run is forced to 0 solely because it failed
 
 ## RUN-Q-v28-4 — STORE CAPITAL INPUT SEPARATION
 
 PASS:
-- two Runs with equal Gross Sales and equal reached Day receive equal Store Capital even if their
-  Ending Gold / remaining Inventory differ
-- existing Closing liquidation, rescue and bankruptcy behavior remains unchanged inside the Run
-- ordinary and Final sales that already count toward Gross Sales enter the Meta calculation once
+- equal Gross Sales + reached Day -> equal Capital despite Ending Gold/Inventory difference
+- Final transfers already counted in Gross Sales enter once
+- retired net-asset formula is inactive
 
-FAIL:
-- the retired net-asset formula `max(0, Ending Gold + Inventory Liquidation Value)` remains an
-  active Store Capital input
-- Final sales are omitted from Gross Sales or counted twice
+## RUN-Q-v28-5 — BOSS INFORMATION ORDER
 
+For D5/D10/D15/D20/D25 milestone Days:
+- due Boss information is shown before same-Day Store Support decision
+- D10/D20 dismiss state persists
+- reload does not replay a consumed report
+- showing a report consumes no gameplay RNG
+
+D30:
+- no new Boss reveal
+- uses persisted D25 Final state
+
+## RUN-Q-v28-6 — ITEM ID REUSE / SAVE
+
+v2.8 meal/water replacement reuses existing Item IDs.
+
+PASS:
+- current internal v8 save loads without requiring a new schema solely for those identity changes
+- active references resolve to current v2.8 Item identities
+- no second legacy Hotbar Item is created

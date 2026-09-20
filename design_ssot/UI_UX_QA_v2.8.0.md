@@ -4,85 +4,137 @@ DOC=UI_UX_QA
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 BASE_DOCUMENT=UI_UX_QA_v2.7.0.md
-PATCH_TYPE=META_SIMPLIFICATION_QA
+PATCH_TYPE=PROJECT_WIDE_CORE_READABILITY_QA
 
 ## INHERITANCE
 
 All unchanged v2.7 UI/UX QA remains active.
-
-The v2.7 Franchise progress / Grade / Start Contract QA is historical for v2.8 and must not force those retired systems back into active UI.
+Retired Franchise / Start Contract expectations are historical only.
 
 ## UI-Q-v28-1 — STORE MANAGEMENT
 
 PASS:
-- current Store Capital is visible
-- four fixed Slots are visible
-- owned/unowned and active state are distinguishable
-- effect text is readable
-- an unowned Decoration cannot be equipped
-- one Slot cannot activate two Decorations
+- Store Capital visible
+- four fixed Slots visible
+- owned/unowned/equipped distinguishable
+- purchase confirmation spends exactly once
+- loadout read-only during active Run
 
-Initial content having only one Decoration per Slot does not permit hard-coding the UI to one permanent boolean per Slot.
+## UI-Q-v28-2 — PRE-RUN RETURN PATH
 
-## UI-Q-v28-2 — PRE-RUN LOADOUT
-
-PASS:
-- player can understand the planned active Decoration in each Slot before starting
-- active loadout becomes read-only after Run start
-- no Start Contract selector remains in the active flow
-
-## UI-Q-v28-3 — LIVE STORE VISUAL
+From the pre-Run/foundation Decoration management screen:
 
 PASS:
-- equipped Decorations appear at their fixed store location
-- inactive alternatives do not visually stack into the same Slot
-- adding owned alternatives later does not require more live passive Slots
+- explicit Back/Return reaches new-Run preparation
+- repeated management -> return cycles do not produce blank UI
+- no Seed/Decoration reroll caused merely by returning
+- mobile browser/system back does not strand the Player in an empty stage
 
-## UI-Q-v28-4 — SETTLEMENT
+Run on a real mobile browser or equivalent mobile runtime, not Source inspection only.
 
-PASS:
-- normal Run end shows Gross Sales, reached-Day conversion rate, gained Store Capital, and new balance
-- Ending Gold / remaining Inventory are not shown as Store Capital calculation inputs
-- manual Run Abandon shows no Store Capital reward
-- mobile layout remains readable without horizontal scroll
+## UI-Q-v28-3 — MOBILE SALE QUEUE
 
-## UI-Q-v28-5 — RETIRED FRANCHISE
+At mobile width:
+- decorative waiting-line/fan/next-customer card is absent
+- bottom Dock retains one queue progress/count
+- desktop may still show richer queue presentation
+- no duplicate queue count consumes vertical space
 
-FAIL if active v2.8 UI still exposes:
-- Franchise Grade
-- Franchise Achievement progress/toast
-- Grade ORDER discount
-- Grade-gated Start Contract progress
+## UI-Q-v28-4 — CURRENT CUSTOMER STATE
 
-## UI-Q-v28-6 — PURCHASE CONFIRMATION
+Mobile SALE exposes compact:
+- Injury without duplicate numeric 부상 1
+- Fatigue
+- Loyalty
 
-PASS:
-- the purchase button opens a confirmation and spends nothing
-- the confirmation states the Decoration, its cost and the Capital remaining after it
-- Confirm deducts the price exactly once, marks the Decoration permanently owned, and fills an
-  empty Slot of that kind
-- Cancel leaves Capital, ownership and loadout unchanged
-- pressing the purchase button again, closing and reopening the management window, and reloading
-  the page each end with the Capital deducted at most once in total
-- an unaffordable Decoration cannot reach the confirmation
+Trusted Regular state appears at 51.
 
-FAIL if:
-- the pending confirmation is written to the Account or the save
-- a second Confirm on the same Decoration deducts again
+## UI-Q-v28-5 — SEMANTIC DELTA
 
-## UI-Q-v28-7 — DECORATION ART
+For changed Stats/Fatigue/economy values:
+- benefit = green
+- harm = red
+- unchanged = default
+- generic yellow moved-only treatment is not used as meaning
 
-PASS:
-- each of the four Decorations renders a drawing of itself in the live store, at its Slot's
-  location: sign at the entrance, wall on the wall, counter at the register, display at the shelving
-- the four drawings are all different from one another
-- only the Run's frozen loadout is drawn; an unequipped or mid-Run purchase is not
-- rendering is unsmoothed and stays on the store's palette and grid
-- at 360 / 390 / desktop nothing is cropped, overflows its band, or covers the DAY sign, the
-  till, the window, the price board or the branch plate
-- console errors = 0 on every phase that shows the store scene
+Color is not the only source cue.
 
-FAIL if:
-- a Decoration is represented by its name, a label or any other caption instead of a drawing
-- two Decorations share one drawing
-- an asset path is missing or broken
+## UI-Q-v28-6 — SHARED POPOVER
+
+Desktop:
+- hover/focus works
+- click remains usable
+
+Mobile:
+- tap toggles
+
+All:
+- no layout-height jump
+- one open at a time
+- outside/Escape closes
+- no gameplay pause/background lock
+- viewport placement remains readable
+
+## UI-Q-v28-7 — GREAT SUCCESS SIGNAL
+
+During one customer visit:
+- focusing an Item does not change signal
+- successful committed purchase recomputes signal
+- signal may appear or disappear
+- Combat/Hazard/Death readouts remain frozen
+- exact probability is not exposed
+
+## UI-Q-v28-8 — FATIGUE
+
+SALE:
+- no hypothetical Outcome fatigue matrix
+- current/departure Fatigue and compact Supply arithmetic readable
+
+NIGHT:
+- main label is 귀환 후 피로
+- detailed path available on demand
+- old 보급 회복 / 보급 완화 / 밤 피로 primary labels absent
+
+## UI-Q-v28-9 — NIGHT REACTION
+
+Living result:
+- temporary character speech bubble appears
+- auto-dismisses around 3 seconds
+- tap dismiss works
+- result information remains
+- does not cover Outcome
+
+Death:
+- no living speech bubble
+
+## UI-Q-v28-10 — BOSS MOBILE DENSITY
+
+At 360x800:
+- D5/D15 art max-height baseline 120px
+- D25 art max-height baseline 96px
+- D10/D20 compact identity portrait baseline 64px
+- core information and acknowledgement are not pushed off first viewport solely by art
+
+## UI-Q-v28-11 — LOYALTY HELP
+
+Tap/focus Loyalty:
+- explains purchase intent + revisit
+- says 51 = 단골
+- shows only current applicable Store Support conditions
+- LUST appears only after reveal
+
+## UI-Q-v28-12 — EVENT TEMP BUDGET
+
+On 길드 급여일:
+- persistent Wallet and temporary purchase budget are distinguishable
+- affordability uses both
+- UI does not imply temporary budget persists
+
+## UI-Q-v28-13 — CLOSING FOOTER
+
+The redundant internal-accounting footnote is absent from the primary receipt.
+
+## UI-Q-v28-14 — DECORATION ART / SETTLEMENT
+
+All previous v2.8 Decoration-art, Store Capital settlement and retired-Franchise checks remain
+active as defined by META_v2.8.0.md and CORE_RUN_v2.8.0.md.
