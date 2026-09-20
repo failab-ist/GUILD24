@@ -110,3 +110,23 @@ Expected:
 FAIL:
 - active copy mentions 무료 보급
 - mechanic is changed merely to preserve the stale phrase
+
+
+## REL-Q-v28-13 — FRESH NATIVE-STAT REBASELINE
+
+Expected:
+- 즉석식품 코너 native Core-Stat +30%
+- 24시간 신선체계 native Core-Stat +50%
+- 원정 도시락 코너 active-Supply native Core-Stat +20%
+- 원정 도시락 코너 matching explicit Hazard Counter remains +25%
+
+Composition remains base-additive.
+
+Therefore:
+- kitchen + fresh24 => ×1.80 native positive Stat
+- kitchen + fresh24 + active-Supply expeditionMeal => ×2.00
+
+FAIL:
+- inherited +40 / +80 / +25 native-Stat values remain active
+- matching Hazard Counter is accidentally reduced from +25%
+- Supply itself is multiplied by these native-Stat percentages

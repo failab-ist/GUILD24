@@ -63,3 +63,22 @@ Trait-only or generic previous-result events do not unlock a \`지난 보급이 
 A previous result with proven sold-Item contribution may unlock it.
 
 No new Gameplay RNG draw is introduced.
+
+
+## NPC-Q-v28-6 — DEEP NPC REWARD BASELINE
+
+Deep Success:
+    EXP +40
+    NPC Wallet +60G
+
+Deep Great Success:
+    EXP +80
+    NPC Wallet +120G
+
+PASS:
+- Great Success bonus is 2× Success on both channels
+- ordinary resolved reward/consequence still applies
+- failed Deep outcomes receive no special Deep bonus
+- no automatic Level +1
+- no Day/Tier multiplier
+- no Deep-only stored Wallet/currency

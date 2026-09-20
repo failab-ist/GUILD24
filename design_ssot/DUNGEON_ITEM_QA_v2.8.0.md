@@ -18,13 +18,15 @@ Expect exactly:
 |---|---|---:|---:|---:|---|
 | 삼각김밥 | C | 35/70 | +6 | 5 | — |
 | 생수 | C | 40/85 | +10 | 2 | — |
-| 간단 도시락 | U | 85/180 | +10 | 6 | expedition Wallet +50% |
-| 길드 특제 도시락 | R | 160/340 | +14 | 7 | expedition Wallet +100% |
+| 간단 도시락 | U | 85/180 | +10 | 6 | expedition Wallet +20% |
+| 길드 특제 도시락 | R | 160/340 | +14 | 7 | expedition Wallet +40% |
 | 영웅 결전 도시락 | E | 210/440 | +18 | 9 | — |
-| 왕도 천연암반수 | E | 175/370 | +22 | 2 | — |
+| 왕도 천연암반수 | E | 185/390 | +20 | 2 | — |
 
 PASS:
 - active catalog count remains 40
+- active Rarity distribution is C11 / U12 / R5 / E11 / L1
+- no unrelated Item Rarity is moved merely to restore the old C/U counts
 - old Hotbar names are not active player Items
 - meal shelf life 2, water shelf life 5
 - no replacement creates direct Fatigue reduction
@@ -32,8 +34,8 @@ PASS:
 ## DI-Q-v28-2 — WALLET GAIN SCOPE
 
 PASS:
-- U meal adds +0.50 to ordinary expedition loot modifier
-- R meal adds +1.00
+- U meal adds +0.20 to ordinary expedition loot modifier
+- R meal adds +0.40
 - modifiers add with existing ordinary loot modifiers
 - Deep bonusWallet is not multiplied
 - Store Support/Event/direct Wallet grants are not multiplied
@@ -96,3 +98,27 @@ Expected:
 
 FAIL:
 - skewer/Hotbar Flavor survives on either replacement ID
+
+
+## DI-Q-v28-10 — GREAT SUCCESS NUMERIC BASELINE
+
+Expected:
+    signal margin 0.26
+    chance slope 0.80
+    chance cap 0.30
+
+PASS:
+- small positive margin may produce Great Success even below the signal threshold
+- signal threshold only controls presentation
+- probability never exceeds 30%
+- repeated Great Success by a well-grown NPC is not itself a failure
+
+## DI-Q-v28-11 — DEEP OCCURRENCE / DIFFICULTY BASELINE
+
+Expected:
+- occurrence windows remain D7 / D14 / D21 / D28
+- each Run has exactly 2 or 3 occurrences
+- P(3 occurrences) = 50%
+- P(2 occurrences) = 50%
+- Deep required Combat Power = selected base Gate Power ×1.50
+- no Deep Hazard inflation is added

@@ -698,3 +698,97 @@ old global manual remained after v2.8 moved contextual explanation into anchored
 Required:
 replace the whole body with the exact compact Help copy in COPY_WORLD_VOICE_v2.8.
 Do not preserve the old manual as an additional second section.
+
+
+## NUMERIC COHERENCE RE-AUDIT ADDENDUM — 2026-09-20
+
+### SA-Q39 — v2.8 ITEM NUMERIC REBASELINE
+
+Classification: MISSING ADOPTION
+
+Current Source:
+`dist/data/catalog.js`
+
+Required active replacements:
+- 삼각김밥 C 35/70 · 강인함6 · Supply5
+- 생수 C 40/85 · 강인함10 · Supply2
+- 간단 도시락 U 85/180 · 강인함10 · Supply6 · expedition Wallet +20%
+- 길드 특제 도시락 R 160/340 · 강인함14 · Supply7 · expedition Wallet +40%
+- 영웅 결전 도시락 E 210/440 · 강인함18 · Supply9
+- 왕도 천연암반수 E 185/390 · 강인함20 · Supply2
+
+Active Rarity distribution after adoption:
+    C11 / U12 / R5 / E11 / L1
+
+Do not rebalance another Item's Rarity to restore the old C/U count.
+
+### SA-Q40 — FRESH NATIVE-STAT AMPLIFICATION TOO HIGH FOR v2.8 ITEM BASES
+
+Classification: MISSING ADOPTION / BALANCE BASELINE
+
+Current Source:
+`dist/systems/dungeon.js::nativeStatFactor()`
+
+Observed:
+- kitchen +40%
+- fresh24 +80%
+- active-Supply expeditionMeal +25%
+
+Required:
+- kitchen +30%
+- fresh24 +50%
+- active-Supply expeditionMeal native Stat +20%
+- matching Hazard Counter multiplier remains +25%
+
+Root cause:
+the inherited Fresh amplification was calibrated before the v2.8 Food/Water native-Stat rebaseline.
+
+### SA-Q41 — GREAT SUCCESS DIRECT STORE-GOLD SNOWBALL
+
+Classification: MISSING ADOPTION / ECONOMY REBALANCE
+
+Current Source:
+`dist/data/catalog.js::G.DATA.greatSuccess.storeGoldByBand`
+
+Observed:
+    100 / 200 / 300G
+
+Required:
+    D1-10 50G
+    D11-20 100G
+    D21-30 200G
+
+Do not change:
+- signalMargin 0.26
+- chanceSlope 0.80
+- chanceCap 0.30
+
+Purpose:
+retain the intended well-grown-NPC -> repeated-Great-Success loop while reducing the second-order
+Store-economy snowball in already-strong Runs.
+
+### SA-Q42 — DEEP EXACT VALUES / GREAT REWARD
+
+Classification: CANONICAL CLOSURE + MISSING ADOPTION
+
+Current Source:
+`dist/data/catalog.js::G.DATA.deepTuning`
+
+Keep:
+- powerFactor 1.50
+- threeOccurrenceChance 0.50
+- sponsorBase 350
+- rarityStep 0.20
+- levelStep 0.05
+- rounding 10
+- success EXP +40
+- success Wallet +60
+
+Change:
+- Great Success EXP 90 -> 80
+- Great Success Wallet 150 -> 120
+
+Acceptance:
+- Deep occurrence is exactly 2 or 3 with 50/50 weighting
+- Great Success Deep bonus is exactly 2× Success bonus
+- Deep Store Gold remains 0
