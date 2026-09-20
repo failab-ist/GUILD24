@@ -23,44 +23,146 @@ SLOTH window lifecycle and Store Support effects inherit RELIC_v2.7.0.md.
 This patch is a full v2.8 feel/truth audit.
 Unlisted effects keep their current v2.7 function/value.
 
-## FULL 30-SUPPORT AUDIT DISPOSITION
+## FULL 30-SUPPORT AUDIT — CLOSED
 
-Retain function/value:
-- 묶음발주 계약
+All 30 active Store Supports were re-audited against:
+- purchase price and remaining-Run payoff
+- max-owned/run=7 opportunity cost
+- same-Build marginal value
+- cross-Build competitiveness
+- acquisition timing
+- strong/weak Run state
+- dead-pick / automatic-pick risk
+
+A Store Support is not required to remain equally valuable at every acquisition Day.
+Late-Run decline is valid when an early acquisition has enough remaining Run time to create a
+meaningful snowball and the Player can rationally choose to skip it later.
+
+The audit is CLOSED by User approval.
+
+Relative to the already-approved v2.8 owner baseline, this closing audit changes only:
 - 회전 진열대
-- 단골 스탬프 기계
-- 회원 관리대장
-- 희귀상품 입고 계약 (renamed only)
-- 길드 보증 진열대
-- 원정 위험 게시판
-- 긴급보급 선반
-- 대형 냉장고 function
-- 길드 전광판 function
-- 공동구매 전단
-- 단골 묶음혜택
-- 프리미엄 멤버십
-- 냉장 유통 계약 function (renamed only)
-- 새벽 공동배송
 - 물류 본부계약
 - 길드24 원정전문점 인증
 - 지역 거점점 계약
-- 후방 창고 증설
-- 본사 추가발주권
-- 발주 교환권 function
+- D30 candidate eligibility policy
 
-v2.8 numeric/functional adjustment:
-- 즉석식품 코너
-- 원정 도시락 코너
-- 24시간 신선체계
-- 신입 모집 게시판
-- 귀환 적립제
-- 길드 납품 인증
-- 평생 단골제
-- 왕도 프리미엄 인증
-- 운영 효율 매뉴얼
+Every other Store Support keeps the current value/function defined by this v2.8 owner or its
+non-conflicting inherited base.
 
-The two renamed supports are counted in the retained list; only their Player-facing names change.
+No new Store Support is added by this audit.
 
+## ROTATION DISPLAY — SUPPLY ENGINE
+
+회전 진열대:
+    Price = 240G unchanged
+    trigger = previous Day sales >= 6
+    effect = next generated ORDER offers for Common / Uncommon Items get supply quantity +1
+
+This supersedes the inherited "next Day first bulk order -10%" effect.
+
+Purpose:
+    high sales -> more available units -> bulk-order threshold becomes reachable more often
+    -> Rotation discounts can actually be exercised -> more stock can support the next sales cycle
+
+Boundaries:
+- Rare+ offer quantity is unchanged by this support
+- it does not add ORDER offer slots
+- it does not lower Item price by itself
+- the existing 묶음발주 계약 / 공동구매 전단 / 새벽 공동배송 discounts remain separate
+- if previous Day sales < 6, this support adds no quantity
+
+## ROTATION KEYSTONE — LOGISTICS HQ
+
+물류 본부계약:
+    Price = 720G unchanged
+    trigger = previous Day sales >= 7
+    effect = next Day first bulk order purchase price -25%
+
+This supersedes the inherited 8-sale trigger only.
+The first-bulk-order scope and -25% value remain unchanged.
+
+## EXPEDITION KEYSTONE — COUNTER COVERAGE
+
+길드24 원정전문점 인증:
+    Price = 700G unchanged
+
+When current known Hazards contain exactly 1 distinct Hazard:
+    ensure at least 1 ORDER offer that Counters that Hazard.
+
+When current known Hazards contain 2 or more distinct Hazards:
+    choose 2 distinct known Hazard keys
+    and ensure 2 distinct ORDER offer slots,
+    one guaranteed against each selected Hazard key.
+
+For guarantee accounting, one offer slot satisfies only one selected Hazard key even if that Item
+can Counter multiple Hazards.
+
+The guarantee:
+- preserves the ordinary total ORDER offer count; it replaces ordinary slots rather than adding slots
+- remains active after a full Reroll
+- uses only currently legal/unlocked Item candidates
+- does not reveal unknown Hazards
+
+Purpose:
+원정 전문 Build의 Keystone은 "Counter가 하나라도 있나"가 아니라
+여러 알려진 위험에 대한 최소 대응 폭을 보장한다.
+
+## CUSTOMER KEYSTONE — REGION HUB
+
+지역 거점점 계약:
+    Price = 700G unchanged
+    operating cost = overheadBase +10% unchanged
+
+Each applicable Morning, exactly one mutually exclusive visitor result:
+    +1 visitor = 45%
+    +2 visitors = 15%
+    no visitor increase = 40%
+
+Expected visitor delta = +0.75 / applicable Day before ordinary availability caps.
+
+The visitor increase remains subject to the ordinary active/available adventurer cap.
+The operating-cost modifier continues to apply to overheadBase only.
+
+## D30 CANDIDATE ELIGIBILITY — DEFAULT INCLUDE / EXPLICIT EXCLUDE
+
+The inherited positive futureRelevantOnly / finalUseful allowlist model is superseded.
+
+D30 rule:
+    every otherwise-eligible Store Support is included by default.
+
+A Store Support is excluded from D30 only when, after acquisition on D30 and before Final Lock,
+there is no legal action/state through which that support can change:
+- D30 ORDER / Reroll / inventory preparation
+- Final participant preparation
+- Final participant power / Hazard readiness
+- Final result-relevant state
+
+Implementation must therefore use an explicit D30 no-effect exclusion set, not a positive
+final-useful inclusion list.
+
+Current explicit D30 no-effect exclusions:
+- 단골 스탬프 기계 (stamp)
+- 회원 관리대장 (member)
+- 길드 보증 진열대 (guarantee)
+- 대형 냉장고 (fridge)
+- 길드 전광판 (board)
+- 신입 모집 게시판 (rookieBoard)
+- 공동구매 전단 (groupFlyer)
+- 단골 묶음혜택 (memberBundle)
+- 프리미엄 멤버십 (premiumMember)
+- 귀환 적립제 (returnPoints)
+- 길드 납품 인증 (supplyCert)
+- 평생 단골제 (lifetime)
+- 왕도 프리미엄 인증 (royalCert)
+- 지역 거점점 계약 (hub)
+- 운영 효율 매뉴얼 (efficiency)
+
+All other current supports are D30-eligible when they satisfy ordinary acquisition eligibility.
+
+Future Store Supports are also D30-eligible by default.
+A future support is removed from D30 only by adding it to the explicit no-effect exclusion set after
+its actual D30-to-Final usefulness is reviewed.
 ## NAME CLEANUP — EXACT
 
 ID showcase:
@@ -183,8 +285,9 @@ Supersedes 12%.
 
 This is the actual v2.8 Source-adoption baseline, not a harness-only candidate.
 
-If later measurement shows late acquisition is still a dead choice, report BALANCE FINDING.
-Do not auto-increase the discount.
+Late acquisition may rationally be skipped. That alone is not a Balance Finding.
+Evaluate this support by whether earlier acquisition can repay its price and create meaningful
+remaining-Run economy value.
 
 ## COLD DISTRIBUTION CONTRACT — EXACT ELIGIBILITY
 

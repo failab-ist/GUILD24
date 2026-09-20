@@ -241,6 +241,27 @@ Current Source dist/data/relics.js currently contains:
 Required:
 adopt RELIC_v2.8.0.md exact values/names.
 
+## SA-Q15B — STORE SUPPORT FINAL-AUDIT ADOPTION
+
+Classification: MISSING ADOPTION
+
+Current Source still reflects pre-close Store Support rules in:
+- dist/data/relics.js
+- dist/systems/relics.js
+- dist/systems/shop.js
+
+Known mismatches include:
+- 회전 진열대 still uses the inherited bulk-discount behavior
+- 물류 본부계약 still uses the old sales trigger
+- 길드24 원정전문점 인증 still guarantees only the inherited single Counter slot
+- 지역 거점점 계약 still uses the old visitor distribution
+- D30 generation still uses a positive finalUseful allowlist
+
+Required:
+adopt the exact final-audit rules in RELIC_v2.8.0.md and REL-Q-v28-14 through REL-Q-v28-19.
+
+The D30 implementation must be exclusion-based so future supports are included by default unless
+they are explicitly classified as D30 no-effect.
 ## SA-Q16 — COLDCASE EXISTING-STOCK EXTENSION BUG
 
 Classification: IMPLEMENTATION BUG

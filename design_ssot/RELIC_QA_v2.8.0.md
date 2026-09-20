@@ -130,3 +130,101 @@ FAIL:
 - inherited +40 / +80 / +25 native-Stat values remain active
 - matching Hazard Counter is accidentally reduced from +25%
 - Supply itself is multiplied by these native-Stat percentages
+
+
+## REL-Q-v28-14 — ROTATION DISPLAY SUPPLY ENGINE
+
+Given 회전 진열대 is owned:
+
+If previous Day sales >= 6:
+- each newly generated Common / Uncommon ORDER offer gets quantity +1
+- Rare+ quantity is unchanged
+- total offer-slot count is unchanged
+
+If previous Day sales < 6:
+- quantity is unchanged.
+
+FAIL:
+- the inherited first-bulk -10% effect remains active
+- the support directly discounts Item price
+- Rare+ quantity receives the +1
+
+## REL-Q-v28-15 — LOGISTICS HQ TRIGGER
+
+Expected:
+    previous Day sales >= 7
+    -> next Day first bulk order -25%
+
+Price remains 720G.
+
+FAIL:
+- trigger still requires 8 sales
+- discount applies more than once that Day
+
+## REL-Q-v28-16 — EXPEDITION CERT COVERAGE
+
+With exactly 1 distinct known Hazard:
+- at least 1 generated ORDER offer Counters it.
+
+With 2+ distinct known Hazards:
+- exactly 2 distinct known Hazard keys are selected for the guarantee
+- 2 distinct offer slots are guaranteed, one against each selected key
+- one multi-Counter Item slot cannot satisfy both guarantee slots
+- ordinary total offer count is preserved
+- full Reroll preserves the guarantee
+- no unknown Hazard is revealed
+
+## REL-Q-v28-17 — REGION HUB
+
+On each applicable Morning exactly one outcome occurs:
+- +1 visitor: 45%
+- +2 visitors: 15%
+- +0 visitors: 40%
+
+Expected mean before ordinary availability caps:
+    +0.75 visitor / applicable Day
+
+Also:
+- Price remains 700G
+- operating modifier remains overheadBase +10%
+- outcomes are mutually exclusive
+
+## REL-Q-v28-18 — D30 DEFAULT INCLUDE
+
+D30 candidate generation must be:
+    ordinary eligible pool
+    minus explicit D30 no-effect exclusions
+
+It must NOT be implemented as a positive finalUseful/futureRelevant allowlist.
+
+Current explicit exclusions:
+    stamp
+    member
+    guarantee
+    fridge
+    board
+    rookieBoard
+    groupFlyer
+    memberBundle
+    premiumMember
+    returnPoints
+    supplyCert
+    lifetime
+    royalCert
+    hub
+    efficiency
+
+PASS:
+- every other current support can enter D30 under ordinary eligibility
+- a newly added future Store Support enters D30 by default
+- a future support is excluded only after being explicitly added to the no-effect set
+- a support that requires a legal D30 Reroll/ORDER action to realize value is still eligible
+
+## REL-Q-v28-19 — TIMING VALUE PRINCIPLE
+
+Do not FAIL a support merely because late acquisition is rationally skipped.
+
+Balance review should instead verify:
+- early acquisition can create meaningful remaining-Run value/snowball
+- the support is not an automatic pick at every timing/state
+- the support is not a dead pick across all reasonable timing/state combinations
