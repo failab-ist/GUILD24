@@ -1,6 +1,6 @@
 # WORK_STATE
 
-DATE: 2026-09-20
+DATE: 2026-09-21
 CURRENT_LINE: v2.8 project-wide Canonical / Source adoption pending
 STATE: V2_8_SOURCE_ADOPTION_READY
 
@@ -10,7 +10,7 @@ STATE: V2_8_SOURCE_ADOPTION_READY
 - Known current Source mismatch/root-cause map: `design_ssot/SOURCE_ADOPTION_QA_v2.8.0.md`
 - Implementation truth: `dist/`
 - Product direction: `GAME_VISION.md`
-- v2.8 release orientation only: `GUILD24_v2.8_DIRECTOR_PLAN.md`
+- v2.8 release orientation only: `GUILD24_v2.8_RELEASE_VISION.md`
 - Contributor workflow: `AGENTS.md`
 
 Do not duplicate detailed Rule / Numeric / UX / QA truth here.

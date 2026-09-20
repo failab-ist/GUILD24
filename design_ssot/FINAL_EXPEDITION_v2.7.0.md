@@ -24,7 +24,7 @@ The following inherited v2.5 text is explicitly stale and does not remain live v
 - any inherited Final-preparation presentation that jumps directly from party selection/preparation into resolution without the current v2.7 Final preparation step
 - any prior v2.7 wording that keeps ordinary 50/100/150 Final price choice or Final refusal RNG
 
-v2.7 uses the rules below plus current routed owners from `SPEC_INDEX_v2.7.0.md`.
+When this v2.7 owner is inherited by the current project SSOT, use the rules below only together with current routed overrides from `SPEC_INDEX_v2.8.0.md`.
 Inherited cross-spec references to older versioned filenames are not routing authority.
 
 ## D25 FINAL STATE GENERATION — EXACT
