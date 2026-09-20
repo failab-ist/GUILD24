@@ -11,7 +11,7 @@ VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
 V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
-FULL_LEGACY_CHAIN_REAUDIT_STATUS=USER_DECISION_REQUIRED
+FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 
 ## PURPOSE
 
@@ -23,7 +23,7 @@ Unchanged rules remain inherited; changed/stale clauses receive a v2.8 owner pat
 
 ## AUDIT RESULT
 
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = USER_DECISION_REQUIRED.
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
 
 Current v2.8 Canonical resolves:
 - Decoration / Store Capital replacement
@@ -98,25 +98,28 @@ The following are intentionally v2.9+:
 
 Do not pull these into v2.8 Source adoption.
 
-## FULL LEGACY-CHAIN RE-AUDIT — DESIGN GAPS
+## FULL LEGACY-CHAIN RE-AUDIT — CLOSED
 
-The project-wide inheritance chain was re-audited beyond the v2.8 amendment layer.
+The project-wide inheritance chain was re-audited beyond the v2.8 amendment layer and the remaining
+Source-only / inherited-PASS3 gameplay truth was closed by User approval on 2026-09-20.
 
-The following current gameplay areas still depend on Source-only or inherited PASS3 numeric/rule
-truth and therefore require User/Director closure before they can be treated as fully canonical:
+Promoted owner truth:
+- ordinary SALE purchase acceptance -> ECONOMY_ORDER_v2.8.0.md
+- base operating cost -> ECONOMY_ORDER_v2.8.0.md
+- ORDER Rare+/known-Hazard pity -> ECONOMY_ORDER_v2.8.0.md
+- Gate-count / Tier exact generation and forecast -> DUNGEON_HAZARD_v2.8.0.md
+- Combat/Hazard qualitative-label numeric boundaries -> DUNGEON_HAZARD_v2.8.0.md
+- ordinary non-Death expedition resolve/reward baseline -> DUNGEON_HAZARD_v2.8.0.md
+- Job Base/Growth exact table -> NPC_TRAIT_v2.8.0.md
+- Job Mastery spawn-Level model -> META_v2.8.0.md
+- non-purchase Loyalty / purchase coefficient / revisit coefficient -> NPC_TRAIT_v2.8.0.md
+- targeted Event exact mechanics -> EVENT_v2.8.0.md
 
-- ordinary SALE purchase-acceptance exact formula
-- base operating-cost exact formula
-- ORDER pity exact thresholds/effect
-- Gate-count / Tier generation exact distribution and forecast/readiness numeric boundaries
-- ordinary non-Death expedition resolution / reward exact formulas
-- Job Base/Growth exact table
-- Job Mastery reward model
-- non-purchase Loyalty / revisit exact deltas and coefficients
-- targeted Event exact mechanics still left PASS3 or probability-only in the inherited Event owner
+Current Source was used only as the approved baseline where the User explicitly confirmed retaining
+that existing play behavior. It is no longer the authority for these rules; the promoted owner Specs are.
 
-These are not permission for WORK to copy Current Source into Canonical.
-Until resolved, Source values are implementation truth only.
+No implementation-blocking Design unresolved item remains from this audit.
+Measurement-gated future rebalance remains a separate evidence -> finding -> approval cycle.
 
 ## SOURCE MISMATCH RECORD
 
