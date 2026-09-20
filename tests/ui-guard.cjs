@@ -624,8 +624,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
- assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
- assert.ok(/\.readout \.tip>p,\.kit \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook and compact-state balloons drop');
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stat \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
+ assert.ok(/\.readout \.tip>p,\.kit \.tip>p,\.detail-stat \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook, compact-state and Stat balloons drop');
  assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
  assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
  /* All three counter readings are read here now, so all three ? controls are here (UI-Q109). */
@@ -1495,6 +1495,40 @@ test('SA-Q13: 단골 has one owner at 51, and Loyalty reads in the compact state
  assert.ok(/closeTips/.test(app),'outside tap and Escape close it through the shared handler');
  assert.ok(/\.kit \.tip>p\{position:absolute/.test(css)||/\.kit \.tip>p/.test(css),'the balloon is out of flow here too');
  assert.ok(!/backdrop|overflow:hidden/.test(fn('loyaltyTip')),'and it locks no background');
+});
+
+/* SA-Q14 — GENERIC YELLOW STAT CHANGE. A moved Stat was gold: it said something changed and
+   left the player to work out whether that was good news. */
+test('SA-Q14: a moved Stat reads as beneficial or harmful, never as generic movement',()=>{
+ const grid=fn('statGrid');
+ // classification is by MEANING: for a Core Stat, more is better
+ assert.ok(/const delta = values\[k\]-n\.stats\[k\], moved = delta!==0;/.test(grid),'the change is measured');
+ assert.ok(/sense = !moved \? '' : delta>0 \? 'up' : 'down'/.test(grid),'a rise is beneficial, a fall harmful');
+ assert.ok(/'<div class="detail-stat'\+\(sense\?' '\+sense:''\)/.test(grid),'and the row carries that meaning');
+ assert.ok(!/ moved'/.test(grid),'the generic `moved` class is gone from the row');
+ // unchanged = default, beneficial = green, harmful = red
+ assert.ok(!/\.detail-stat\.moved strong\{color:var\(--gold\)\}/.test(css),'the generic gold styling is retired');
+ assert.ok(/\.detail-stat\.up strong,\.detail-stat\.up \.dir\{color:#9fd6a8\}/.test(css),'beneficial is green');
+ assert.ok(/\.detail-stat\.down strong,\.detail-stat\.down \.dir\{color:#e8927f\}/.test(css),'harmful is red');
+ assert.ok(!/\.detail-stat(?!\.(up|down))[^{]*\{[^}]*color:#9fd6a8/.test(css),'an unchanged row keeps the default');
+ // they are the colours the NIGHT change tokens already use, so one movement reads one way
+ assert.ok(css.includes('.tok.up b{color:#9fd6a8}')&&css.includes('.tok.down b{color:#e8927f}'),
+  'the semantic pair is shared with the existing change tokens');
+ // colour is NOT the only cue
+ assert.ok(/<i class="dir">'\+\(sense==='up'\?'유리':'불리'\)/.test(grid),'the row says which it is in words');
+ assert.ok(/aria-label="'\+E\(named\)/.test(grid)&&/'유리한 변화':'불리한 변화'/.test(grid),
+  'and repeats it in the accessible name');
+ // a provable source is exposed through the SHARED anchored tip, not a new mechanism
+ assert.ok(/why = list\.length[\s\S]*?tip\(Presentation\.labels\[k\]\+' 변화 원인'/.test(grid),
+  'an existing source is exposed through the shared tip');
+ assert.ok(/prep\.effects\.sources\?\.\[k\]/.test(grid),'reusing the source data already prepared');
+ assert.ok(!/<details class="detail-stat/.test(app),'the height-changing accordion is gone');
+ assert.equal((app.match(/const tip=\(label/g)||[]).length,1,'still exactly one popover implementation');
+ // Player-facing Stat detail vocabulary, with no Base/Equip English mixture
+ for(const w of ['기본','장비','현재 적용값','변화 원인'])
+  assert.ok(app.includes('<span>'+w+'</span>')||app.includes(w+'<br>'),'the detail says '+w);
+ for(const bad of ['(Base)','(Equip)','최종 산출','적용 내역'])
+  assert.ok(!app.includes(bad),'no stale Stat-detail wording: '+bad);
 });
 
 console.log(count+' ui guard groups passed');

@@ -700,18 +700,27 @@ function statGrid(n){
       this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
       The adventurer's own stat is the baseline: whatever a Trait, a Relic or a supplied item has
       added on top is what the decimal is there to show. */
+   /* SA-Q14. A moved Stat used to be generic gold: it said SOMETHING changed and left the
+      player to work out whether that was good news. For a Core Stat the meaning is settled -
+      more is better - so a rise is beneficial and a fall is harmful, and the classification is
+      by meaning rather than by the sign of a number. Colour is never the only cue: each moved
+      row also carries a direction glyph and says which it is in its accessible name. Where the
+      change has a provable source already in the prepared snapshot, that source is exposed
+      through the SAME shared anchored tip the compact state and the readout use - not an
+      accordion, which changed the panel's height as the player opened it. */
    return '<div class="detail-stats">'+Adventurer.keys.map(k=>{
-    const moved = values[k]!==n.stats[k];
-    let sources = '';
-          if(moved){
-        const list = prep.effects.sources?.[k] || [];
-        if(list.length > 0) {
-          sources = '<div class="stat-sources">' + list.map(x => '<span class="source '+(x.v>0?'helpful':'harmful')+'">'+E(x.name)+' <b>'+(x.v>0?'+':'')+(x.isPct ? Math.round(x.v)+'%' : Presentation.stat(x.v, true))+'</b></span>').join('') + '</div>';
-        }
-      }
-    const inner = '<label>'+Presentation.labels[k]+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
-    if(sources) return '<details class="detail-stat'+(moved?' moved':'')+'"><summary>'+inner+'</summary>'+sources+'</details>';
-    return '<div class="detail-stat'+(moved?' moved':'')+'">'+inner+'</div>';
+    const delta = values[k]-n.stats[k], moved = delta!==0;
+    const sense = !moved ? '' : delta>0 ? 'up' : 'down';
+    const list = moved ? (prep.effects.sources?.[k] || []) : [];
+    const cue = moved ? '<i class="dir">'+(sense==='up'?'유리':'불리')+'</i>' : '';
+    const named = Presentation.labels[k]+(moved?' · '+(sense==='up'?'유리한 변화':'불리한 변화'):'');
+    const why = list.length
+     ? tip(Presentation.labels[k]+' 변화 원인',
+        ...list.map(x=>x.name+' '+(x.v>0?'+':'')+(x.isPct?Math.round(x.v)+'%':Presentation.stat(x.v,true))))
+     : '';
+    return '<div class="detail-stat'+(sense?' '+sense:'')+'" aria-label="'+E(named)+'">'
+     +'<label>'+Presentation.labels[k]+'</label>'+cue
+     +'<strong>'+Presentation.stat(values[k],moved)+'</strong>'+why+'</div>';
    }).join('')+'</div>';
 }
 // ORDER — a paper, filled. The back room: dark wood and shelving. One order form
@@ -1210,11 +1219,11 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
    title=Presentation.labels[k]+' 출처 상세';
    const p=Dungeon.prepare({...n,traits:Presentation.traits(n)},game.claimedGateFor(n),game.run.facilities);
    let itemV=0;for(const st of p.itemStats)if(st.stats[k])itemV+=st.stats[k];
-   body='<div class="stack"><div class="row wrap" style="justify-content:space-between"><span>기본 (Base)</span><strong>'+n.stats[k]+'</strong></div>';
-   if(k==='combat'&&n.equipment.power)body+='<div class="row wrap" style="justify-content:space-between"><span>장비 (Equip)</span><strong>+'+n.equipment.power+'</strong></div>';
+   body='<div class="stack"><div class="row wrap" style="justify-content:space-between"><span>기본</span><strong>'+n.stats[k]+'</strong></div>';
+   if(k==='combat'&&n.equipment.power)body+='<div class="row wrap" style="justify-content:space-between"><span>장비</span><strong>+'+n.equipment.power+'</strong></div>';
    if(itemV)body+='<div class="row wrap" style="justify-content:space-between"><span>아이템 보강</span><strong>'+(itemV>0?'+':'')+Presentation.stat(itemV,true)+'</strong></div>';
-   body+='<hr style="border:0;border-top:1px solid var(--line);margin:4px 0"><div class="row wrap" style="justify-content:space-between"><span>최종 산출 (특성/상태 반영)</span><strong>'+Presentation.stat(p.effects[k],true)+'</strong></div>';
-   if(p.why.length)body+='<div class="muted" style="margin-top:12px;font-size:13px;line-height:1.4">적용 내역:<br>'+p.why.map(w=>'- '+E(w)).join('<br>')+'</div>';
+   body+='<hr style="border:0;border-top:1px solid var(--line);margin:4px 0"><div class="row wrap" style="justify-content:space-between"><span>현재 적용값</span><strong>'+Presentation.stat(p.effects[k],true)+'</strong></div>';
+   if(p.why.length)body+='<div class="muted" style="margin-top:12px;font-size:13px;line-height:1.4">변화 원인<br>'+p.why.map(w=>'- '+E(w)).join('<br>')+'</div>';
    body+='</div>';footer=btn('확인','shop','stamp');narrow=true;
   }
  }
