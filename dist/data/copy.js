@@ -73,7 +73,9 @@ const Copy={
    if(pool&&fnv(key(n,'traitgate',day))%3===0)return pick(pool,key(n,'trait'+id,day));}
   if(n.newToday)return pick(visit.first,key(n,'first',day));
   if(n.injury)return pick(visit.hurt,key(n,'hurt',day));
-  if(n.loyalty>=60)return pick(visit.regular,key(n,'regular',day));
+  /* SA-Q13: 단골 Flavor is the same judgement the badge uses - Adventurer owns the threshold
+     and nothing here keeps a second one. */
+  if(G.Adventurer.isTrustedRegular(n))return pick(visit.regular,key(n,'regular',day));
   return pick(visit.back,key(n,'back',day));
  },
  buy(n,itemId,mode,day){return pick(sale[mode]||sale.full,key(n,'buy'+itemId+mode,day));},

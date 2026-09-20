@@ -624,8 +624,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
- assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
- assert.ok(/\.readout \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook balloon drops');
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
+ assert.ok(/\.readout \.tip>p,\.kit \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook and compact-state balloons drop');
  assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
  assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
  /* All three counter readings are read here now, so all three ? controls are here (UI-Q109). */
@@ -1450,6 +1450,51 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  assert.ok(app.includes('function waitingLine('),'the one queue renderer is unchanged');
  assert.equal((app.match(/function waitingLine\(/g)||[]).length,1,'there is no second, mobile-only queue component');
  assert.ok(!/mobileQueue|queueMobile|isMobile/.test(app),'and no width branch was added in script');
+});
+
+/* SA-Q13 — LOYALTY MEANING / THRESHOLD DRIFT. 단골 had two thresholds: the owner's 51 and a
+   second 60 living in the Flavor classifier. One owner now answers everywhere, the compact SALE
+   state carries Loyalty beside Injury and Fatigue, and the number is explained through the tip
+   mechanism the readout and the destination plate already use. */
+test('SA-Q13: 단골 has one owner at 51, and Loyalty reads in the compact state',()=>{
+ // one owner, one number, stated once in Source
+ assert.equal(Adventurer.TRUSTED_REGULAR,51,'the owner threshold is 51');
+ const copySrc=read('dist/data/copy.js');
+ assert.ok(/G\.Adventurer\.isTrustedRegular\(n\)\)return pick\(visit\.regular/.test(copySrc),
+  'the regular Flavor classification asks the owner');
+ assert.ok(!/loyalty>=60/.test(copySrc),'and keeps no second 60 threshold of its own');
+ assert.ok(!/loyalty>=60|loyalty >= 60/.test(app),'no UI surface carries a second 단골 threshold');
+ assert.ok(/Adventurer\.isTrustedRegular\(n\)\?' · 단골'/.test(app),'the 단골 state asks the owner too');
+ // the Store Support thresholds are their own mechanics and did not move
+ for(const [id,at] of [['returnPoints',30],['premiumMember',50],['lifetime',60]])
+  assert.ok(shop.includes('loyalty>='+at)||DATA.relicBy[id].description.includes('단골도 '+at),
+   id+' keeps its own condition at '+at);
+
+ // the compact state: Injury, Fatigue, Loyalty - and no progress bar
+ const kit=fn('kitLine');
+ assert.ok(/parts\.push\('부상 '\+n\.injury\)/.test(kit),'Injury is in the compact state');
+ assert.ok(/parts\.push\('피로 '\+n\.fatigue\)/.test(kit),'so is Fatigue');
+ assert.ok(/parts\.push\('단골도 '\+n\.loyalty/.test(kit),'and so is Loyalty');
+ assert.ok(!/<meter|<progress|loyalty-bar|progress-bar/.test(kit),'there is no Loyalty progress bar');
+ assert.ok(/loyaltyTip\(n\)/.test(kit),'the number carries the shared explanation');
+
+ // the exact approved base popover, in order
+ const t=fn('loyaltyTip');
+ assert.ok(/'단골도 '\+n\.loyalty,/.test(t),'line 1 is the current value');
+ assert.ok(t.includes("'높을수록 상품 구매 의사와 재방문 가능성이 오른다.'"),'line 2 is the approved sentence');
+ assert.ok(t.includes("'51부터 단골로 인정된다.'"),'line 3 is the approved threshold sentence');
+ assert.ok(!/능력치|Core Stat/.test(t),'the tip never claims Loyalty raises Core Stats');
+ // appended lines are gated on being currently applicable / revealed
+ assert.ok(/if\(game\.has\(id\)\)lines\.push/.test(t),'a Store Support line needs the support owned');
+ assert.ok(/bossId==='LUST'&&s\.bossReveal\?\.traitSeen/.test(t),'and LUST is gated behind its own reveal');
+ assert.ok(!/lustStatFactor/.test(app),'nothing leaks the LUST mechanic early');
+ // it reuses the shared anchored tip - no second popover implementation
+ assert.ok(/return tip\('단골도',\.\.\.lines\)/.test(t),'it is built with the shared tip helper');
+ assert.equal((app.match(/const tip=\(label/g)||[]).length,1,'there is still exactly one tip implementation');
+ assert.ok(/<details class="tip" name="sale-tip">/.test(app),'one open at a time, via the shared exclusive name');
+ assert.ok(/closeTips/.test(app),'outside tap and Escape close it through the shared handler');
+ assert.ok(/\.kit \.tip>p\{position:absolute/.test(css)||/\.kit \.tip>p/.test(css),'the balloon is out of flow here too');
+ assert.ok(!/backdrop|overflow:hidden/.test(fn('loyaltyTip')),'and it locks no background');
 });
 
 console.log(count+' ui guard groups passed');

@@ -491,14 +491,31 @@ function walletChip(n){const b=n.eventBudget||0;
  return '소지 <b>'+fmt(n.money)+'G</b>'+(b>0?' · 추가 구매 <b>+'+fmt(b)+'G</b>':'');}
 /* what the customer can actually pay with right now: the same sum interest() and sell() use. */
 function spendable(n){return n.money+(n.eventBudget||0);}
+/* SA-Q13. 단골 has ONE owner: Adventurer.isTrustedRegular, which is Loyalty >= 51. Nothing here
+   re-states the number and nothing carries a second UI threshold - the Store Support conditions
+   at 30 / 50 / 60 are their own mechanics and do not redefine 단골. The compact SALE state
+   therefore carries Injury, Fatigue and Loyalty, with 단골 shown as a state rather than as a
+   progress bar, and the number itself explained through the SAME shared anchored tip the
+   readout and the destination plate already use. */
+function loyaltyTip(n){const s=game.run,lines=[
+  '단골도 '+n.loyalty,
+  '높을수록 상품 구매 의사와 재방문 가능성이 오른다.',
+  '51부터 단골로 인정된다.'];
+ /* only conditions that actually apply to THIS store right now, so the tip never teaches a
+    Store Support the player does not own or a Boss power they have not been shown. */
+ for(const [id,at] of [['returnPoints',30],['premiumMember',50],['lifetime',60]])
+  if(game.has(id))lines.push(D.relicBy[id].name+' · 단골도 '+at);
+ if(s?.bossId==='LUST'&&s.bossReveal?.traitSeen)lines.push(Copy.boss.d15.trait.LUST[1][1]);
+ return tip('단골도',...lines);}
 function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  if(n.injury)parts.push('부상 '+n.injury);if(n.fatigue)parts.push('피로 '+n.fatigue);if(n.recovery)parts.push('휴식 '+n.recovery+'일');
+ parts.push('단골도 '+n.loyalty+(Adventurer.isTrustedRegular(n)?' · 단골':''));
  /* SALE_v2.6.1 Task 14: the wallet is decision information, not a consequence of having
     already picked a product - it reads here, before pricing, in the same block as the bag. */
  /* UI-Q109 §6. The status lines and the bag are two things, not four stacked rows: grouping
     the lines lets the bag stand beside them in the width they were already leaving idle,
     instead of under them. Same information, same order, same wording. */
- return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span><span>'+E(n.equipment.name)+'</span>'
+ return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b>'+loyaltyTip(n)+'</span><span>'+E(n.equipment.name)+'</span>'
  +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. */

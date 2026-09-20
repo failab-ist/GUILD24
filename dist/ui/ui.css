@@ -572,7 +572,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .trait-row span{display:flex;flex-wrap:wrap;gap:2px 12px;font:400 13px/1.5 var(--ui)}
 .trait-row em{font-style:normal}
 .trait-row small{font:400 12px/1.4 var(--ui);color:#8d8067}
-.kit{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:9px 0;
+/* SA-Q13: the compact state anchors the SAME shared tip the readout and the plate use, so the
+   balloon needs the same containing block. No second popover system is introduced. */
+.kit{position:relative;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:9px 0;
  box-shadow:inset 0 1px 0 #ffffff14,inset 0 -1px 0 #ffffff14;font:400 13px/1.4 var(--ui);color:#a2947c}
 .kit b{color:#f2e7cd;font-weight:600}
 /* D-9. How many supply slots this customer has, and how many are already spent, is a decision
@@ -603,26 +605,26 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    same red the Hazard rows use when the customer is not ready for what is waiting. */
 .readout .fore b.env-ok,.readout .fore b.env-lack{font-size:16px}
 .readout .fore b.env-lack{color:var(--blood)}
-.readout .tip,.dest-plate .tip{display:inline-block;margin-left:6px;position:static}
-.readout .tip>summary,.dest-plate .tip>summary{display:inline-flex;align-items:center;justify-content:center;
+.readout .tip,.dest-plate .tip,.kit .tip{display:inline-block;margin-left:6px;position:static}
+.readout .tip>summary,.dest-plate .tip>summary,.kit .tip>summary{display:inline-flex;align-items:center;justify-content:center;
  min-width:24px;min-height:24px;padding:0 4px;list-style:none;cursor:pointer;
  font:600 12px/1 var(--ui);color:#cbb98d;background:#00000059;box-shadow:inset 0 0 0 1px #ffffff1f}
-.readout .tip>summary::-webkit-details-marker,.dest-plate .tip>summary::-webkit-details-marker{display:none}
-.readout .tip>summary:focus-visible,.dest-plate .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.readout .tip>summary::-webkit-details-marker,.dest-plate .tip>summary::-webkit-details-marker,.kit .tip>summary::-webkit-details-marker{display:none}
+.readout .tip>summary:focus-visible,.dest-plate .tip>summary:focus-visible,.kit .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 /* The explanation is a balloon, not an accordion: it is taken out of flow and floated over the
    block, so opening a ? never makes the panel itself taller and the rows below do not move.
    It is positioned against the panel rather than the little ? so it can never run off either
    edge, which is what a transform-centred bubble does to the rightmost control on a phone. */
-.readout .tip>p,.dest-plate .tip>p{position:absolute;left:10px;right:10px;
+.readout .tip>p,.dest-plate .tip>p,.kit .tip>p{position:absolute;left:10px;right:10px;
  z-index:30;margin:0;padding:9px 11px;font:400 12px/1.6 var(--ui);color:#e8dcc0;
  background:#191108f2;box-shadow:inset 0 0 0 1px #ffffff26,0 6px 0 #00000059}
 /* each line of a tooltip is its own line: two labelled facts should not read as one sentence */
-.readout .tip>p>span,.dest-plate .tip>p>span{display:block}
+.readout .tip>p>span,.dest-plate .tip>p>span,.kit .tip>p>span{display:block}
 /* The outlook sits above the plate, so its balloon drops; the plate is the lowest block on the
    counter and its container clips, so its balloon rises. Either way the panel keeps its height. */
-.readout .tip>p{top:calc(100% - 4px)}
+.readout .tip>p,.kit .tip>p{top:calc(100% - 4px)}
 .dest-plate .tip>p{bottom:calc(100% - 4px)}
-.readout .tip[open],.dest-plate .tip[open]{display:inline-block;width:auto}
+.readout .tip[open],.dest-plate .tip[open],.kit .tip[open]{display:inline-block;width:auto}
 /* the plate's label is a caps micro-line; the ? must not inherit its letter-spacing */
 .dest-plate .tip>summary{letter-spacing:0}
 /* the source of a change is a heading over its rows, so a derived one cannot read as the
