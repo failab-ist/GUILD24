@@ -63,6 +63,41 @@ test('SA-Q43: the non-Canonical random 길드 지원 path cannot activate or aff
  const after=fresh('special-traits').run.npcs.map(n=>[...n.traits].sort().join(','));
  assert.deepEqual(after,before,'Trait composition is untouched by the retirement');
 });
+/* SA-Q44 — NON-CANONICAL HIDDEN NPC PITY MODIFIER, retired. After 8 Days without a promising
+   newcomer, Source used to reach into an un-met adventurer and raise their Rarity floor to 1 and
+   their potential by .05 on a 60% roll - invisible to the Player and owned by no routed Design.
+   NEGATIVE regression: a spawned adventurer's Rarity and potential are now only ever what
+   Adventurer.create rolled, and no counter is kept to fire on. */
+test('SA-Q44: the hidden NPC pity modifier cannot change a spawned Rarity or potential',()=>{
+ const fs=require('node:fs'),path=require('node:path');
+ const read=f=>fs.readFileSync(path.resolve(__dirname,'../dist/'+f),'utf8');
+ const src=read('systems/shop.js');
+ assert.ok(!/pity\.npc/.test(src),'no hidden NPC pity counter is kept');
+ assert.ok(!/rarity=Math\.max\(1,/.test(src),'nothing raises a spawned Rarity floor');
+ assert.ok(!/potential\+=/.test(src),'nothing tops up a spawned potential');
+ // a fresh Run carries no npc pity field at all, and a stale save's value is never read
+ const g=fresh('npc-pity');
+ assert.equal(g.run.pity.npc,undefined,'the retired counter is not part of Run state');
+ // the substantive half: hold the roster un-met and walk well past the old 8-Day threshold.
+ // Every un-met adventurer must still carry exactly the Rarity and potential they spawned with.
+ const h=fresh('npc-pity-walk');
+ const snap=()=>h.run.npcs.filter(n=>!n.introduced).map(n=>n.id+':'+n.rarity+':'+n.potential.toFixed(4));
+ const before=new Map(h.run.npcs.map(n=>[n.id,[n.rarity,n.potential]]));
+ for(let day=1;day<=20;day++){
+  h.run.day=day;
+  for(const n of h.run.npcs)n.introduced=false;   // nobody is ever met: the old counter would climb
+  h.run.pity.npc=99;                              // and a stale save's value is planted on top
+  h.morning();
+  for(const n of h.run.npcs){
+   const was=before.get(n.id);
+   if(!was){before.set(n.id,[n.rarity,n.potential]);continue;}
+   assert.equal(n.rarity,was[0],'D'+day+': '+n.id+' Rarity was raised behind the Player');
+   assert.ok(Math.abs(n.potential-was[1])<1e-12,'D'+day+': '+n.id+' potential was topped up');
+  }
+ }
+ assert.ok(snap().length,'the walk really held un-met adventurers to check');
+});
+
 test('insurance/potion hierarchy and all effects have honest presentation',()=>{/* ITEM_v2.7 §POTION LINE: the ladder is 투력, not the old 강인함, and it is four tiers deep.
    Each tier is raw Power only - no Supply, no Counter, no Insurance. */
 const ladder=['potion','midpotion','highpotion','toppotion'].map(id=>DATA.itemBy[id]);
