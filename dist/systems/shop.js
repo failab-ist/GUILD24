@@ -53,7 +53,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */
-  const extras=(s.dayFacilities?.includes('showcase')?10:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  const extras=(s.dayFacilities?.includes('showcase')?10:0)-(s.dayFacilities?.includes('efficiency')?30:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
   const base=this.overheadBase(),hub=s.dayFacilities?.includes('hub')?base*D.balance.hubOverheadRate:0;
@@ -201,7 +201,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const rawVisitors=this.rng.int(3,6);
   const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;
   let hubExtra=0;
-  if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;}
+  if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.45?1:r<.60?2:0;}
   /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
   const decoExtra=this.wears('guildPlaque')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
   s.expectedVisitors=baseVisitors+hubExtra+decoExtra;
@@ -239,11 +239,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.generateOffers();
   let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
   let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
-  for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+  for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
   /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
      than by adding a slot. The number of weighted draws is unchanged, so a Day without the
      event is bit-for-bit what it was. */
-  if(ev.rookie&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
+  if((ev.rookie||ev.royal||(s.dayFacilities.includes('rookieBoard')&&arrival))&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
   for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
   if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
@@ -255,14 +255,14 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  if(ev.blackmarket)s.offers.push(this.rollOffer(2,1.35));
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
  const hazards=G.Relics.known(this);s.pity.hazards??={};if(advancePity){for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
- if(s.pity.counter>=3||this.has('expeditionCert')){const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));if(matches.length){const item=this.rng.pick(matches);s.offers[s.offers.length-1]=this.offerFor(item);if(advancePity){for(const h of target)if(G.Relics.counter(item,[h]))s.pity.hazards[h]=0;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}}}
+ if(this.has('expeditionCert')&&hazards.length>0){  const selectedHazards = hazards.length===1 ? hazards : this.rng.shuffle([...hazards]).slice(0, 2);  for(let i=0; i<selectedHazards.length; i++){    const h = selectedHazards[i];    const matches = D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,[h]));    if(matches.length){      const item = this.rng.pick(matches);      s.offers[s.offers.length - 1 - i] = this.offerFor(item);      if(advancePity){        if(G.Relics.counter(item,[h])) s.pity.hazards[h]=0;        s.pity.counter = Math.max(0, ...hazards.map(k=>s.pity.hazards[k]));      }    }  } }else if(s.pity.counter>=3){  const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;  const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));  if(matches.length){    const item=this.rng.pick(matches);    s.offers[s.offers.length-1]=this.offerFor(item);    if(advancePity){      for(const h of target)if(G.Relics.counter(item,[h]))s.pity.hazards[h]=0;      s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));    }  } }
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }
  /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE: applied AFTER the existing
     Contract / Event / Offer calculation and inside the same single Math.round, so there is no
     second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
     Final transfer each read their own price and are untouched. */
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)+(this.has('rotation')&&it.rarity<2&&s.previousSales>=6?1:0)};}
  rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
@@ -334,7 +334,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*1.5);
  if(s.event?.effects.tasting&&mode==='half'&&!s.tastingUsed){s.money+=D.balance.tastingSupport;s.daily.subsidy+=D.balance.tastingSupport;s.tastingUsed=true;}
  if(this.has('memberBundle')&&n.visits>1&&n.history.filter(h=>h.day===s.day&&h.paid>0).length===1)loyalty+=2;
- let commission=0;if(this.has('royalCert')&&mode==='overcharge'&&it.rarity>=2)commission+=Math.round(it.sell*.12);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive))commission+=Math.round(it.sell*.08);s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
+ let commission=0;if(this.has('royalCert')&&mode==='overcharge'&&it.rarity>=2)commission+=Math.round(it.sell*.20);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive))commission+=Math.round(it.sell*.12);s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;
  n.history.push({day:s.day,item:it.id,mode,paid:intent.price,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,commission,loyalty:n.loyalty-before});
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day)};this.save();return true;
@@ -361,7 +361,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
-  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=12;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=25;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=30;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=50;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  s.daily.operating=this.expectedOperatingCost();
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }
