@@ -1662,10 +1662,33 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
  const g=new Game();g.autosave=false;g.start('boss-cadence');
  const flags=['identitySeen','combatSeen','traitSeen','routeSeen'];
  for(const f of flags)assert.equal(g.run.bossReveal[f],false,f+' starts unseen');
- // the beat wins over the same-Day Store Support decision in the render chain
+ /* RUN-Q-v28-5 / BOSS_v2.8 §SAME-DAY ORDERING: on every milestone Day the due Boss beat is
+    shown BEFORE the same-Day Store Support decision. The chain is asserted in source and then
+    resolved for each of the five Days with a Store Support window genuinely pending, because
+    D10 and D20 are themselves acquisition Days and that is where the order actually matters. */
  const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
  assert.ok(chain.indexOf('bossRevealDue()')<chain.indexOf("relicWindow&&!s.relicWindow.focusedRevealSeen"),
   'the Boss beat is chosen before the Store Support window on the same Day');
+ const resolve=(day,seen,final,windowPending)=>{
+  // the shipped chain, evaluated on a Morning with both a beat and a window outstanding
+  const due=[[5,'identitySeen'],[10,'combatSeen'],[15,'traitSeen'],[20,'routeSeen'],[25,'familySeen']]
+   .some(([d,f])=>day>=d&&!seen[f]&&(f!=='familySeen'||final));
+  if(due)return 'boss';
+  return windowPending?'relics':null;};
+ for(const day of [5,10,15,20,25]){
+  const seen={identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false,familySeen:false};
+  for(const [d,f] of [[5,'identitySeen'],[10,'combatSeen'],[15,'traitSeen'],[20,'routeSeen'],[25,'familySeen']])
+   if(d<day)seen[f]=true;                       // every earlier beat already read
+  assert.equal(resolve(day,seen,true,true),'boss','D'+day+': the Boss beat comes before the Store Support window');
+  // ...and once it is dismissed, the same Day hands the window over
+  const after={...seen};
+  after[{5:'identitySeen',10:'combatSeen',15:'traitSeen',20:'routeSeen',25:'familySeen'}[day]]=true;
+  assert.equal(resolve(day,after,true,true),'relics','D'+day+': dismissing it releases the Store Support window');
+ }
+ /* RUN-Q-v28-5: merely SHOWING a report consumes no gameplay RNG - the three functions that
+    decide and build it never reach the run stream. */
+ for(const f of ['bossRevealDue','bossRevealStage','bossReveal'])
+  assert.ok(!/game\.rng|this\.rng|RNG\(/.test(fn(f)),f+'() draws no gameplay RNG');
  // showing and dismissing a report costs no gameplay RNG, and the marker persists
  const stage=(day,reveal,final)=>{
   const r={day,bossId:'WRATH',bossReveal:reveal,final:final?{}:null};
