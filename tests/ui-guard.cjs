@@ -482,8 +482,14 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  const slip=fn('deepSlip');
  assert.ok(slip.includes('class="slip deep"'),'the Deep Day beat is a pinned slip');
  assert.ok(!/setModal|takeover/.test(slip),'it never takes the screen over');
- for(const part of ['c.note','c.cost','c.gain','c.sink','c.optional'])
-  assert.ok(slip.includes(part),'before Order the player is told: '+part);
+ /* COPY_AUDIT §15-1: the Morning notice repeats every applicable Day, so it carries the name
+    and one line. The full explanation belongs to the first-occurrence coach mark, and the cost
+    belongs to the SALE nomination, where it is actually paid. */
+ assert.ok(slip.includes('c.brief'),'before Order the player is told what a Deep Expedition is');
+ for(const gone of ['c.cost','c.optional','c.intro','hazardRows'])
+  assert.ok(!slip.includes(gone),'and the repeated tutorial is not restated here: '+gone);
+ assert.ok(slip.includes('c.confirmed')&&slip.includes('c.sponsor'),'once taken it states the confirmation and what was paid');
+ assert.ok(!slip.includes('c.sink'),'and does not repeat the warning after payment');
 
  // the Sale affordance appears only while the nomination is legal
  const offer=fn('deepOfferUI');
@@ -1800,6 +1806,31 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  assert.ok(!/필요 보급/.test(h),'and the Supply arithmetic stays with its coach mark');
  // the section set is exactly §8-1..§8-8
  assert.equal((h.match(/<h3>/g)||[]).length,8,'eight sections, one per §8 entry');
+});
+
+/* SA-Q28 / SA-Q31 + COPY_AUDIT §15, §6-2, §6-8 — Store Capital is not Gold, and the two Deep
+   operational surfaces say only what their own decision needs. */
+test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not tutorials',()=>{
+ // SA-Q28: Capital carries no G; Run Gold still does
+ assert.ok(!/점포 자본 \$\{Meta\.storeCapital\(a\)\.toLocaleString\(\)\}G/.test(app),'Store Capital is not printed as Gold');
+ assert.ok(!/자본[^<'`]{0,24}G\b/.test(fn('codex')+fn('storePanel')),'no Capital figure carries a G suffix');
+ assert.ok(/시작 자금 \$\{start\.toLocaleString\(\)\}G/.test(app),'actual Run Gold still uses G');
+ // §15-1 / §15-2 / §15-3
+ assert.equal(Copy.deep.brief,'같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.');
+ assert.equal(Copy.deep.terms,'성공 시 추가 성장 · 점포 수익 없음');
+ assert.equal(Copy.deep.confirmed,'심층원정 확정');
+ const offer=fn('deepOfferUI');
+ assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the Gate and the sponsorship');
+ assert.ok(offer.includes('c.terms'),'and the reward terms in one line');
+ for(const gone of ['c.note','c.gain','c.sink','c.gate'])
+  assert.ok(!offer.includes(gone),'the nomination does not restate the tutorial: '+gone);
+ assert.ok(/E\(c\.confirmed\)\+' · '/.test(offer),'after nomination it confirms the Gate');
+ // §6-2 / §6-8
+ const pres=read('dist/ui/presentation.js');
+ assert.ok(pres.includes("'예상보다 큰 성과를 내고 돌아왔다.'"),'§6-2 the Great Success outcome');
+ assert.ok(!pres.includes('예상보다 일찍 게이트에서 나왔다'),'and the time-saving reading is gone');
+ assert.ok(pres.includes("label:'원정 소지금 획득'"),'§6-8 the Wallet reward label');
+ assert.ok(!pres.includes('NPC 소지금 획득'),'and the internal NPC wording is gone');
 });
 
 console.log(count+' ui guard groups passed');

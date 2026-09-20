@@ -71,9 +71,9 @@ function checkOne(r, n){
  for(const c of ch){assert.ok(c.label&&c.value,'every change token has a label and a value');
   assert.ok(!/undefined|NaN/.test(c.label+c.value),'no placeholder in a change token');}
  assert.equal(ch.some(c=>c.label==='경험치'),!!r.xp,'경험치 appears exactly when some was gained');
- assert.equal(ch.some(c=>c.label==='NPC 소지금 획득'),!!r.loot,'NPC 소지금 획득 appears exactly when some was gained');
+ assert.equal(ch.some(c=>c.label==='원정 소지금 획득'),!!r.loot,'NPC 소지금 획득 appears exactly when some was gained');
  if(r.outcome==='사망'){
-  assert.ok(!ch.some(c=>c.label==='경험치'||c.label==='NPC 소지금 획득'),'a death reports no gain');
+  assert.ok(!ch.some(c=>c.label==='경험치'||c.label==='원정 소지금 획득'),'a death reports no gain');
   assert.ok(!ch.some(c=>c.kind==='up'&&c.label==='레벨'),'a death reports no growth');
  }
  assert.equal(ch.some(c=>c.label==='휴식'),!!r.recovery,'휴식 appears exactly when rest was set');

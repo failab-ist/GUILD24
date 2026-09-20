@@ -214,15 +214,14 @@ function deepOfferUI(n){
  const s=game.run,t=s.deep?.today;if(!t||!n)return '';
  const c=Copy.deep;
  if(t.nomineeId===n.id)
-  return '<div class="deep-taken"><b>'+E(c.term)+'</b>'
-   +'<p>'+E(c.paid)+' '+fmt(t.paid)+'G · '+E(s.dungeons[t.gateIndex].name)+'</p>'
-   +'<p class="smalltext">'+E(c.sink)+'</p></div>';
+  return '<div class="deep-taken"><b>'+E(c.confirmed)+' · '+E(s.dungeons[t.gateIndex].name)+'</b>'
+   +'<p>'+E(c.sponsor)+' '+fmt(t.paid)+'G 지급</p></div>';
  if(t.nomineeId)return '';
  const cost=game.deepCost(n);
  if(game.canNominateDeep(n))
   return '<details class="special-event deep-offer"><summary>'+E(c.term)+' · '+E(c.action)+'</summary>'
-   +'<p>'+E(c.gate)+' '+E(s.dungeons[t.gateIndex].name)+' — '+E(c.note)+'</p>'
-   +'<p>'+E(c.gain)+' '+E(c.sink)+'</p>'
+   +'<p>'+E(s.dungeons[t.gateIndex].name)+' · '+E(c.sponsor)+' '+fmt(cost)+'G</p>'
+   +'<p class="smalltext">'+E(c.terms)+'</p>'
    +btn(E(c.action)+' · '+E(c.sponsor)+' '+fmt(cost)+'G','deep-nominate','danger','data-id="'+n.id+'"')
    +'</details>';
  // not offered: say why in one line rather than showing a dead control
@@ -272,12 +271,10 @@ function deepSlip(){
  return '<div class="slip deep"><span class="pin"></span>'
  +'<span class="stamp-line">'+E(c.header)+'</span>'
  +'<b>'+E(c.term)+' · '+E(base.name)+'</b>'
- +'<span class="body">'+E(taken?E(who?.name||'')+' 님이 '+c.done+'.':c.intro)+'</span>'
- +'<ul class="hazards">'+Presentation.hazardRows(Presentation.known(base,game)).map(h=>
-   '<li><b>'+E(h.name)+'</b><span>'+E(h.pressure)+'</span></li>').join('')+'</ul>'
- +'<span class="body">'+E(c.note)+'</span>'
- +(taken?'<span class="body">'+E(c.paid)+' '+fmt(t.paid)+'G · '+E(c.sink)+'</span>'
-        :'<span class="body">'+E(c.cost)+' '+E(c.gain)+'</span><span class="body">'+E(c.sink)+' '+E(c.optional)+'</span>')
+ +(taken
+   ? '<span class="body">'+E(c.confirmed)+' · '+E(base.name)+'</span>'
+     +'<span class="body">'+E(c.sponsor)+' '+fmt(t.paid)+'G 지급</span>'
+   : '<span class="body">'+E(c.brief)+'</span>')
  +'</div>';}
 /* EVENT §3-1. Three things have to arrive at once: that something happened today, what
    happened, and what is switched on because of it. The catalog already keeps those last two
@@ -1141,7 +1138,7 @@ function unlockBoard(){const {done,next}=unlockLists();
    notebook. Presentation owns turning an event into words; anything it cannot describe is
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
-function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()}G · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['store','점포 관리']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
+function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['monsters','몬스터 지식'],['store','점포 관리']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():codexTab==='monsters'?D.dungeons.filter(d=>d.id!=='final').map(d=>{const seen=a.knowledge[d.id]||0;return `<div class="unlock ${seen?'':'locked'}"><h3>${seen?d.monster:'???'}</h3><p>${d.name} · 보급 생환 ${seen}회</p><p>${seen?d.hazards.slice(0,seen>=3?3:1).map(h=>D.hazards[h]).join(' · '):'위험 특성 ???'}</p><p>${seen>=5?'약점: '+d.weakness:'약점 ???'}</p></div>`;}).join(''):list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에만 할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 잔고가 0 이상이 되면 그 자리에서 끝납니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${st.expires===null?'유통기한 없음':(st.expires-s.day)+'일 남음'}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired. What the player confirms
    before a Run is the Decoration loadout, read from the Account and frozen at start. */

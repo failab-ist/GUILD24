@@ -161,6 +161,11 @@ Copy.deep={
  paid:'원정 후원금 지급',
  blocked:'이미 배치를 조정한 손님은 추천할 수 없다.',
  poor:'후원금이 모자란다.',
+ /* COPY_AUDIT §15: the two operational surfaces repeat every applicable Day, so each says only
+    what its own decision needs. The full explanation is the first-occurrence coach mark. */
+ brief:'같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
+ terms:'성공 시 추가 성장 · 점포 수익 없음',
+ confirmed:'심층원정 확정',
  result:'심층원정',
  reward:'심층원정 보상'
 };
