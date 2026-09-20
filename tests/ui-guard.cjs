@@ -512,13 +512,14 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  // shown by then, so returning keeps this store's seed. Only an explicitly typed seed, or
  // abandoning a store that has opened, makes a new world.
  // (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
- const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+700);
+ const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+1100);
  assert.ok(start.includes("s?.phase==='foundation'?s.seed"),
   'returning from an unopened store reuses its seed instead of minting a new one');
  assert.ok(start.indexOf('typed||')<start.indexOf("'g24-'+Date.now()"),
   'a typed seed still wins, and a fresh seed is the last resort');
- assert.ok(fn('newRun').includes("game.run?.phase==='foundation'?E(game.run.seed)"),
-  'the carried seed is shown rather than applied behind the player');
+ /* SA-Q35 retired the Player-facing Seed control, so the carried seed is no longer SHOWN on
+    the preparation screen - it is still the seed `case'start'` reuses, asserted just above. */
+ assert.ok(!/id="seed"/.test(fn('newRun')),'the preparation screen exposes no Seed control');
  // an unopened store is not something the player is abandoning, so it is not described as one
  for(const f of [fn('newRun'),fn('renderModal')])
   if(f.includes('현재 지점 포기')||f.includes('모두 포기하고'))
@@ -1086,7 +1087,7 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  assert.ok(ui.includes("row('bgm','BGM'")&&ui.includes("row('sfx','SFX'"),'both channels are named as spec requires');
  assert.ok(ui.includes('mix-${key}-val'),'each slider says its own value');
  assert.ok(!/voice/i.test(ui),'no voice channel is invented: there are no voices');
- assert.ok(fn('settings').includes('Sound On')&&fn('settings').includes('mixer()'),'the master mute stays, with the two levels under it');
+ assert.ok(fn('settings').includes("'소리 켜기':'소리 끄기'")&&fn('settings').includes('mixer()'),'the master mute stays, with the two levels under it');
  assert.ok(/\.mix-row input\[type=range\]\{[^}]*height:24px/.test(css),'the slider is thumb-sized');
  assert.ok(/\.mix-row\{[^}]*min-height:44px/.test(css),'and its row keeps the touch target');
 });
@@ -1529,6 +1530,37 @@ test('SA-Q14: a moved Stat reads as beneficial or harmful, never as generic move
   assert.ok(app.includes('<span>'+w+'</span>')||app.includes(w+'<br>'),'the detail says '+w);
  for(const bad of ['(Base)','(Equip)','최종 산출','적용 내역'])
   assert.ok(!app.includes(bad),'no stale Stat-detail wording: '+bad);
+});
+
+/* SA-Q35 — SETTINGS / DEBUG BOUNDARY. Ordinary Settings spoke English and carried a development
+   footer, and the reproducibility Seed - a QA affordance - sat on the Player's preparation
+   screen. Removing them must not cost the development routes anything. */
+test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>{
+ const set=fn('settings');
+ // the exact ordinary labels
+ assert.ok(set.includes("'소리 켜기':'소리 끄기'"),'the sound toggle is 소리 켜기 / 소리 끄기');
+ assert.ok(set.includes("btn('전체 데이터 초기화','reset','danger')"),'the reset is 전체 데이터 초기화');
+ // and none of the retired Player-facing strings, anywhere a Player can read
+ for(const gone of ['Sound On','Sound Off','Full Data Reset','버전 0.4 · 로컬 실행 지원 · 외부 연결 없음','재현용 Seed'])
+  assert.ok(!app.includes(gone),'no Player-facing '+gone);
+ assert.ok(!/버전 0\.4|외부 연결 없음/.test(css+html),'and no development footer survives elsewhere');
+ // the Seed control is gone from the preparation screen entirely
+ assert.ok(!/id="seed"/.test(app),'there is no Seed input');
+ assert.ok(!/seed-field/.test(app),'nor its field');
+ // no visible Debug menu was added in its place
+ assert.ok(!/btn\('[^']*[Dd]ebug/.test(app),'no Debug control is offered to the Player');
+ assert.ok(!/data-action="debug"/.test(app),'and none is reachable by clicking');
+
+ // CRITICAL: the development routes are intact
+ assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,/.test(app),
+  "Guild24.game and Guild24.render remain, so Guild24.game.start('<seed>'); Guild24.render(); still works");
+ assert.ok(/showDebug:\(\)=>setModal\('debug'\)/.test(app),'Guild24.showDebug() remains');
+ assert.ok(/ev\.ctrlKey&&ev\.shiftKey&&ev\.code==='KeyD'&&game\.run/.test(app),'Ctrl+Shift+D remains');
+ assert.ok(/modal==='debug'/.test(app),'and the debug panel it opens is still built');
+ // the seed a dev passes still reaches the Run, and a carried foundation seed is still reused
+ const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+1100);
+ assert.ok(/game\.start\(seed\)/.test(start),'the start path still takes a seed');
+ assert.ok(start.includes("s?.phase==='foundation'?s.seed"),'and still reuses an unopened store seed');
 });
 
 console.log(count+' ui guard groups passed');
