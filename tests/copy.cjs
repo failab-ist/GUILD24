@@ -142,6 +142,30 @@ test('the line is chosen from saved state, so it costs no randomness and survive
  assert.equal(Copy.arrive(b.run.npcs[0],b.run.day,false),line,'a reload keeps the same line');
 });
 
+test('COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT: tracked picks avoid the last 3 Surface beats and an NPC\'s own last line',()=>{
+ // Omitting `run` (every call above) must stay exactly the old pure pick - the guard the
+ // determinism test above already locks in. Only an explicit `run` turns tracking on.
+ const run={},n={id:'recent-1',traits:[],injury:0,newToday:false};
+ const seen=[];
+ for(let day=1;day<=8;day++){
+  const line=Copy.arrive(n,day,false,run);
+  assert.ok(!seen.slice(-3).includes(line),'day '+day+': not one of the last 3 shown on ARRIVAL: '+line);
+  seen.push(line);
+ }
+ assert.ok(run.recentLines.arrival.length<=3,'the tracked Surface buffer never grows past 3');
+ // A second NPC reads the SAME Run-level Surface buffer - the exclusion is cross-NPC.
+ const m={id:'recent-2',traits:[],injury:0,newToday:false};
+ const justShown=run.recentLines.arrival.slice();
+ const otherLine=Copy.arrive(m,9,false,run);
+ assert.ok(!justShown.includes(otherLine),'a different NPC on the same Surface avoids the same recent lines too');
+ // Omitting `run` never mutates anything the tracked calls above rely on, and the plain
+ // pick is still exactly the deterministic hash function it always was.
+ const untouched={id:'recent-3',traits:[],injury:0,newToday:false};
+ const bare1=Copy.arrive(untouched,3,false),bare2=Copy.arrive(untouched,3,false);
+ assert.equal(bare1,bare2,'an untracked call stays a pure function of its own arguments');
+ assert.equal(untouched.lastLine,undefined,'an untracked call writes no state onto the NPC');
+});
+
 test('COPY-002 / §9: the approved Rare Reference names are reserved, with no dedicated meme',()=>{
  const src=read('dist/systems/adventurer.js');
  // §9 keeps these three as Rare Reference identities and makes their special copy eligible

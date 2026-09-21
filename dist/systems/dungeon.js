@@ -374,7 +374,10 @@ function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutco
  const state=stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare);
  return outcome||state?{outcome,state}:null;
 }
-function resolve(n,d,r,facilities=[],options={}){
+/* `run`, when given, threads COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE recent-repeat tracking
+   into the Night line below - see data/copy.js. Omitting it (every direct call in this repo's
+   own tests) keeps the plain deterministic pick this function always returned. */
+function resolve(n,d,r,facilities=[],run){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
  /* RESULT-PROOF DEPARTURE SNAPSHOT. This is the ONLY state prepare() actually reads off `n`
     (stats/equipment/traits/fatigue/injury), captured before this resolution touches any of
@@ -541,7 +544,7 @@ function resolve(n,d,r,facilities=[],options={}){
  /* A death line that implies a shopkeeping history is only used when that history exists;
    otherwise a history-independent variant. Chosen from state, never from a roll, so no
    RNG draw is consumed and every downstream result stays identical. */
- report.quote=G.Copy.night(report,n);
+ report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
 G.Dungeon={DEATH,GATE,gateDayTerm,greatSuccessSignal,prepare,estimate,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};

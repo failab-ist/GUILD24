@@ -1537,7 +1537,7 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
  // one owner, one number, stated once in Source
  assert.equal(Adventurer.TRUSTED_REGULAR,51,'the owner threshold is 51');
  const copySrc=read('dist/data/copy.js');
- assert.ok(/G\.Adventurer\.isTrustedRegular\(n\)\)return pick\(visit\.regular/.test(copySrc),
+ assert.ok(/G\.Adventurer\.isTrustedRegular\(n\)\)return emit\(pick\(visit\.regular/.test(copySrc),
   'the regular Flavor classification asks the owner');
  assert.ok(!/loyalty>=60/.test(copySrc),'and keeps no second 60 threshold of its own');
  assert.ok(!/loyalty>=60|loyalty >= 60/.test(app),'no UI surface carries a second 단골 threshold');

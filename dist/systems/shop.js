@@ -345,7 +345,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
     reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof)};}
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
@@ -403,7 +403,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
      it cannot depend on WHY they said no. Source only applied it to a price refusal, which
      left the paradox open: refuse at 50% for a Counter they do not need, then sell at 150%.
      Lower prices stay open, and no other SKU is touched. */
-  for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day)};this.save();return false;}
+  for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day,s)};this.save();return false;}
  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*1.5);
@@ -419,7 +419,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     answer-following SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY forbids. A refused or failed
     sale returns above this line, so it cannot reach the recompute at all. */
  if(n.outlook)n.outlook.greatSignal=G.Dungeon.greatSuccessSignal({...n},this.claimedGateFor(n)||s.dungeons[0],s.facilities);
- s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day)};this.save();return true;
+ s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day,s)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
  validateCart(cart){const s=this.run;if(!['order','final'].includes(s.phase))throw Error('발주 시간이 아닙니다.');let count=0,food=0;for(const [i,q]of Object.entries(cart)){const o=s.offers[i];if(!o||!Number.isInteger(q)||q<0||q>o.quantity)throw Error('발주 수량을 확인해 주세요.');count+=q*(o.promo?2:1);if(['food','drink'].includes(D.itemBy[o.item].category))food+=q;}
@@ -430,7 +430,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;const units=q*(o.promo?2:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
  loyal(n,amount){const was=G.Adventurer.isTrustedRegular(n);n.loyalty=clamp(n.loyalty+amount,0,100);if(!was&&G.Adventurer.isTrustedRegular(n))this.run.stats.regulars++;}
  depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n)this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
- night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=(n.pilgrim?'순례 행렬을 따라 '+n.name+'은 예상 목적지 ':'허세를 부린 '+n.name+'은 말했던 ')+s.dungeons[n.claimedDestination].name+' 대신 '+d.name+'으로 향했다.';n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
+ night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=(n.pilgrim?'순례 행렬을 따라 '+n.name+'은 예상 목적지 ':'허세를 부린 '+n.name+'은 말했던 ')+s.dungeons[n.claimedDestination].name+' 대신 '+d.name+'으로 향했다.';n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
      Two bands only - Success and Great Success - with no extra Day/Tier multiplier, because the
      ordinary reward already carries that. EXP goes through the ordinary growth curve (no
      automatic Level +1) and the Wallet bonus uses the ordinary persisted money channel, so a

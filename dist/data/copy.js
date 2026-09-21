@@ -11,7 +11,43 @@
    게임의 RNG를 한 번도 소모하지 않는다. Balance와 재현성 계약이 그대로 유지된다. */
 
 const fnv=s=>{let h=2166136261;for(const c of String(s))h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0;};
-const pick=(pool,key)=>pool&&pool.length?pool[fnv(key)%pool.length]:'';
+/* `exclude`, when given, is a Set of line TEXTS this pick must avoid where possible - falling
+   back to the unfiltered pool only when every candidate is excluded, so a small pool never
+   throws. Still a pure function of its inputs: no RNG, no hidden state. */
+const pick=(pool,key,exclude)=>{
+ if(!pool||!pool.length)return '';
+ if(exclude&&exclude.size){
+  const eligible=pool.filter(l=>!exclude.has(l));
+  if(eligible.length)return eligible[fnv(key)%eligible.length];
+ }
+ return pool[fnv(key)%pool.length];
+};
+/* COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT. Two trackers, both plain saved
+   state on `run`/`n` - never Gameplay RNG:
+   - `run.recentLines[surface]` holds the last (up to 3) lines actually shown on that Surface,
+     across every NPC, so the same exact line does not repeat within 3 visible beats there.
+   - `n.lastLine[surface]` holds this NPC's own immediately previous line on that Surface.
+     Every line is unique across every Pool (§11.1/§11.2), so "the same NPC may not repeat its
+     previous line from the same Pool" reduces to "may not repeat that exact text".
+   Both are read-only inputs here; `run` is an OPTIONAL trailing argument on every exported
+   picker below. Omitting it (every direct pool/unit-test call in this repo) skips tracking
+   entirely and falls back to the plain deterministic hash pick this file always had - so nothing
+   here can move a line an existing caller already depends on being pure/stateless. Only the
+   real Run call sites (systems/shop.js, systems/dungeon.js) pass `run`, and each of those
+   fires exactly once per real visible beat, so the write below never doubles up. */
+const exclusionFor=(run,n,surface)=>{
+ if(!run)return null;
+ const ex=new Set(run.recentLines?.[surface]||[]);
+ if(n?.lastLine?.[surface])ex.add(n.lastLine[surface]);
+ return ex;
+};
+const remember=(run,n,surface,line)=>{
+ if(!run||!line)return;
+ run.recentLines??={arrival:[],sale:[],night:[]};
+ const recent=run.recentLines[surface]??=[];
+ recent.push(line);if(recent.length>3)recent.shift();
+ (n.lastLine??={})[surface]=line;
+};
 
 /* §11.1 일반 방문. 관찰·상황·반응이 서로 다른 문장만 넣는다. 동의어 교체는 Variant가 아니다. */
 const visit={
@@ -67,34 +103,37 @@ const key=(n,tag,day)=>n.id+':'+tag+':'+day;
 const Copy={
  pick,pools:{visit,sale,night},
  /* 카운터에 도착한 손님의 한마디. Callback > Trait > 상태 > 일반 순으로 고른다. */
- arrive(n,day,hasCallback){
-  if(hasCallback)return pick(visit.helped,key(n,'callback',day));
+ arrive(n,day,hasCallback,run){
+  const ex=exclusionFor(run,n,'arrival'),emit=line=>{remember(run,n,'arrival',line);return line;};
+  if(hasCallback)return emit(pick(visit.helped,key(n,'callback',day),ex));
   for(const id of n.traits||[]){const pool=visit.trait[id];
-   if(pool&&fnv(key(n,'traitgate',day))%3===0)return pick(pool,key(n,'trait'+id,day));}
-  if(n.newToday)return pick(visit.first,key(n,'first',day));
-  if(n.injury)return pick(visit.hurt,key(n,'hurt',day));
+   if(pool&&fnv(key(n,'traitgate',day))%3===0)return emit(pick(pool,key(n,'trait'+id,day),ex));}
+  if(n.newToday)return emit(pick(visit.first,key(n,'first',day),ex));
+  if(n.injury)return emit(pick(visit.hurt,key(n,'hurt',day),ex));
   /* SA-Q13: 단골 Flavor is the same judgement the badge uses - Adventurer owns the threshold
      and nothing here keeps a second one. */
-  if(G.Adventurer.isTrustedRegular(n))return pick(visit.regular,key(n,'regular',day));
-  return pick(visit.back,key(n,'back',day));
+  if(G.Adventurer.isTrustedRegular(n))return emit(pick(visit.regular,key(n,'regular',day),ex));
+  return emit(pick(visit.back,key(n,'back',day),ex));
  },
- buy(n,itemId,mode,day){return pick(sale[mode]||sale.full,key(n,'buy'+itemId+mode,day));},
- refuse(n,itemId,reason,day){return pick(sale.refuse[reason]||sale.refuse.choice,key(n,'no'+itemId+reason,day));},
+ buy(n,itemId,mode,day,run){const ex=exclusionFor(run,n,'sale');
+  const line=pick(sale[mode]||sale.full,key(n,'buy'+itemId+mode,day),ex);remember(run,n,'sale',line);return line;},
+ refuse(n,itemId,reason,day,run){const ex=exclusionFor(run,n,'sale');
+  const line=pick(sale.refuse[reason]||sale.refuse.choice,key(n,'no'+itemId+reason,day),ex);remember(run,n,'sale',line);return line;},
  /* SA-Q09: 밤의 한 줄. Bag이 있었다는 사실 하나만으로는 어떤 말도 고르지 않는다 - 예전 순서는
     report.items.length(가방에 뭐가 있었는지)를 성장보다도, 퇴각보다도 먼저 물었는데, 그건 그
     보급이 실제로 무언가를 했는지와 무관한 존재 여부일 뿐이었다. v2.8 우선순위는 실제로 일어난
     결과만 묻는다: 생환/구조 -> 중상 -> 부상 -> 퇴각 -> 성장 -> 평범한 귀환. */
- night(report,n){
-  const k=key(n,'night',report.day);
+ night(report,n,run){
+  const k=key(n,'night',report.day),ex=exclusionFor(run,n,'night'),emit=line=>{remember(run,n,'night',line);return line;};
   if(report.outcome==='사망')
-   return pick(n.history.length?night.deathTraded:n.records.length>1?night.deathKnown:night.deathStranger,k);
-  if(report.avoidedDeath)return pick(night.avoided,k);
-  if(report.rescued)return pick(night.rescued,k);
-  if(report.outcome==='중상')return pick(night.severe,k);
-  if(report.outcome==='부상')return pick(night.hurt,k);
-  if(report.outcome==='퇴각')return pick(night.retreat,k);
-  if((report.changes||[]).length)return pick(night.grew,k);
-  return pick(night.plain,k);
+   return emit(pick(n.history.length?night.deathTraded:n.records.length>1?night.deathKnown:night.deathStranger,k,ex));
+  if(report.avoidedDeath)return emit(pick(night.avoided,k,ex));
+  if(report.rescued)return emit(pick(night.rescued,k,ex));
+  if(report.outcome==='중상')return emit(pick(night.severe,k,ex));
+  if(report.outcome==='부상')return emit(pick(night.hurt,k,ex));
+  if(report.outcome==='퇴각')return emit(pick(night.retreat,k,ex));
+  if((report.changes||[]).length)return emit(pick(night.grew,k,ex));
+  return emit(pick(night.plain,k,ex));
  },
  /* 사망 Pool과 생존 Pool은 절대 겹치지 않는다. 테스트가 이 경계를 고정한다. */
  deathPool(){return [...night.deathTraded,...night.deathKnown,...night.deathStranger];},

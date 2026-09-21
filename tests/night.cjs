@@ -742,7 +742,7 @@ test('RESULT-PROOF: the counterfactual proof functions carry no RNG draw / resee
     introduced - this reads dist/systems/dungeon.js as text and asserts on it. */
  const src=read('dist/systems/dungeon.js');
  const start=src.indexOf('function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){');
- const end=src.indexOf('function resolve(n,d,r,facilities=[],options={}){');
+ const end=src.indexOf('function resolve(n,d,r,facilities=[],run){');
  assert.ok(start>=0&&end>start,
   'sanity: both region boundaries (shadowOutcome start, resolve start) are found in Source, in order');
  const region=src.slice(start,end);
