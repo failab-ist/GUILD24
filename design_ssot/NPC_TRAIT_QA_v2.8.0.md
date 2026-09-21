@@ -10,6 +10,16 @@ PATCH_TYPE=INFORMATION_TRUST_QA
 
 All non-conflicting v2.7 NPC/Trait QA remains active.
 
+Explicitly superseded historical base-QA expectations:
+- NPC_TRAIT_QA_v2.5.0.md `TRAIT-Q09` Trait-modification rarity
+- `TRAIT-Q10` Rare negative-Trait removal event
+- `TRAIT-Q11` Epic positive-Trait add event
+- `DEST-Q02` limited player destination-reassignment event
+
+These cases belong to the retired random NPC special system and must not be used to restore it.
+The general `TRAIT-Q12` protection against forced random permanent negative punishment remains
+non-conflicting and is not retired by this override.
+
 ## NPC-Q-v28-1 — NO POTENTIAL / HIDDEN TRAIT PROMISE
 
 FAIL if active player UI exposes:
