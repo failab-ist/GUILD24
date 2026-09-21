@@ -12,6 +12,10 @@ PATCH_TYPE=CORE_PLAY_REVISION
 
 All unchanged Final party size, survivor fallback, no class synergy, Final Roll, Boss-state input, one-resolution structure, and stock/lock boundaries inherit `FINAL_EXPEDITION_v2.5.0.md`.
 
+Although this owner remains versioned v2.7, SPEC_INDEX_v2.8.0.md routes it as the current Final owner.
+Any cross-system ownership reference below resolves to the current routed v2.8 owner unless this file
+explicitly freezes a Final-specific v2.7 rule.
+
 This patch moves Family/Hazard disclosure to D25, replaces Final Hazard aggregation/power penalty, and makes D30 preparation reuse the familiar two-slot shop handling while overriding ordinary end-of-Run price negotiation/refusal.
 
 The following inherited v2.5 text is explicitly stale and does not remain live v2.7 truth:
@@ -32,7 +36,7 @@ Inherited cross-spec references to older versioned filenames are not routing aut
 On D25, before ordinary D25 management decisions that can use the information:
 
 1. select exactly two distinct authoritative Dungeon Families using the existing seeded/fixed Final selection principle
-2. read each selected Family's authoritative T2 Hazard keys from `DUNGEON_HAZARD_v2.7.0.md`
+2. read each selected Family's authoritative T2 Hazard keys from `DUNGEON_HAZARD_v2.8.0.md`
 3. merge those Hazard keys into the Final Hazard Pool without inventing a new Family table
 4. persist the exact Family Pair and Final Hazard Pool
 5. reveal that exact Pair/Hazard information to the Player
@@ -104,8 +108,8 @@ For each selected participant:
 -> judge remaining slot
 ```
 
-Exact ordinary SALE handling -> `SALE_v2.7.0.md`.
-Exact fixed-price Wallet/Gold truth -> `ECONOMY_ORDER_v2.7.0.md`.
+Exact ordinary SALE handling -> `SALE_v2.8.0.md`.
+Exact fixed-price Wallet/Gold truth -> `ECONOMY_ORDER_v2.8.0.md`.
 
 Final-specific override:
 - exactly 2 Item slots per participant
@@ -179,14 +183,14 @@ who was selected
 
 ## FINAL HAZARD THREAT
 
-Each Final Hazard uses the same v2.7 Hazard Threat / defense / gap truth as ordinary expeditions with:
+Each Final Hazard uses the current Hazard Threat / defense / gap truth as ordinary expeditions with:
 
 ```text
 Day = 30
 Tier = T2
 ```
 
-Exact threat ownership -> `DUNGEON_HAZARD_v2.7.0.md`.
+Exact threat ownership -> `DUNGEON_HAZARD_v2.8.0.md`.
 No separate Final-only Hazard defense table.
 No standalone inherited `scale=4.6` path is used in v2.7 Final resolution.
 
@@ -227,7 +231,7 @@ Individual Final Power
 
 Final Power remains internal; do not expose it as a new Player Stat.
 
-Participant-side Boss modifiers still apply in the ordering owned by `BOSS_v2.7.0.md` before this participant's final contribution is summed where that Boss rule requires a changed Snapshot/Item contribution.
+Participant-side Boss modifiers still apply in the ordering owned by `BOSS_v2.8.0.md` before this participant's final contribution is summed where that Boss rule requires a changed Snapshot/Item contribution.
 
 ## FINAL ROLL — UNCHANGED
 
@@ -280,7 +284,7 @@ PASS:
 
 ### FINAL-Q71 — HAZARD THREAT SOURCE
 PASS:
-- each Final Hazard uses current D30/T2 threat and defense/gap truth from `DUNGEON_HAZARD_v2.7.0.md`
+- each Final Hazard uses current D30/T2 threat and defense/gap truth from `DUNGEON_HAZARD_v2.8.0.md`
 - no standalone old `scale=4.6` Final path survives
 
 ### FINAL-Q72 — MEAN GAP PENALTY
@@ -360,11 +364,11 @@ Report `BALANCE FINDING` and run a separate approved tuning cycle.
 
 ## RELATED
 
-Timeline/save -> `CORE_RUN_v2.7.0.md`
-Hazard truth -> `DUNGEON_HAZARD_v2.7.0.md`
-Item/Insurance -> `ITEM_v2.7.0.md`
-Boss -> `BOSS_v2.7.0.md`
-Relic D30 window -> `RELIC_v2.7.0.md`
-Sale handling -> `SALE_v2.7.0.md`
-Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.7.0.md`
-UI -> `UI_UX_v2.7.0.md`
+Timeline/save -> `CORE_RUN_v2.8.0.md`
+Hazard truth -> `DUNGEON_HAZARD_v2.8.0.md`
+Item/Insurance -> `ITEM_v2.8.0.md`
+Boss -> `BOSS_v2.8.0.md`
+Relic D30 window -> `RELIC_v2.8.0.md`
+Sale handling -> `SALE_v2.8.0.md`
+Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.8.0.md`
+UI -> `UI_UX_v2.8.0.md`
