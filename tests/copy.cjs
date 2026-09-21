@@ -12,13 +12,24 @@ const every=o=>Object.entries(o).flatMap(([k,v])=>Array.isArray(v)?[[k,v]]:Objec
 const allPools=[...every(V),...every(S),...every(N)];
 const allLines=allPools.flatMap(([,p])=>p);
 
-test('§11.1/§11.2: every repeated situation has a real Variant Pool, not one recorded line',()=>{
- // Canonical asks for roughly 3-5 good variants on the high-frequency situations, and
- // allows 1-3 for a rare callback. Nothing may be a single fixed line any more.
- const rare=['visit.helped'];
+/* COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT replaces the old rough 3-5 band
+   with exact named minimums per Pool, sized for the recent-repeat rule to actually have room
+   to work with across a repeated Run. */
+const POOL_MIN={
+ 'visit.first':8,'visit.back':16,'visit.hurt':10,'visit.regular':12,'visit.helped':8,
+ 'visit.trait.frugal':6,'visit.trait.thrifty':6,'visit.trait.coward':6,'visit.trait.liar':6,
+ 'visit.trait.eater':6,'visit.trait.greed':6,'visit.trait.shy':6,'visit.trait.social':6,
+ 'visit.trait.collector':6,'visit.trait.aloof':6,
+ 'sale.full':20,'sale.half':20,'sale.overcharge':20,
+ 'sale.refuse.price':12,'sale.refuse.need':12,'sale.refuse.choice':12,
+ 'night.plain':16,'night.great':10,'night.retreat':12,'night.hurt':12,'night.severe':8,
+ 'night.avoided':8,'night.rescued':8,'night.grew':10,
+ 'night.deathTraded':6,'night.deathKnown':6,'night.deathStranger':6};
+test('§11.1/§11.2: every repeated situation has a real Variant Pool at its v2.8 minimum size',()=>{
  for(const [name,pool] of allPools){
   assert.ok(Array.isArray(pool)&&pool.length>=3,name+' has at least three variants (has '+pool.length+')');
-  if(!rare.includes(name))assert.ok(pool.length>=3&&pool.length<=5,name+' stays in the 3-5 band: '+pool.length);
+  const min=POOL_MIN[name];
+  if(min!==undefined)assert.ok(pool.length>=min,name+' reaches its v2.8 minimum of '+min+' (has '+pool.length+')');
   assert.equal(new Set(pool).size,pool.length,name+' repeats no line');
  }
  assert.equal(new Set(allLines).size,allLines.length,'no line is reused across pools');
@@ -477,7 +488,10 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
 
 /* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not
    have: an Item the customer is asking for, a price rule, or a remembered favourite SKU. They
-   are replaced one for one. This is not the dialogue expansion pass - no pool grew. */
+   were replaced one for one (a since-superseded pool-size snapshot used to pin that here); the
+   COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE pass has since grown every one of these Pools to its
+   own approved minimum, checked in §11.1/§11.2 above - the approved replacement lines just need
+   to still be present in their own Pool. */
 test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=>{
  const lines=allLines.join('\n');
  for(const gone of ['귀환석 있습니까','많이 든 걸로 주세요','먹을 게 제일 급해요',
@@ -491,9 +505,7 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
   [V.trait.greed,'“이번엔 전리품 좀 제대로 챙겨와야죠.”'],
   [V.regular,'“이 정도면 단골 맞죠?”']])
   assert.ok(pool.includes(line),'the approved replacement is in its own pool: '+line);
- // one for one: no pool grew, and no Favorite-SKU state was invented
- assert.equal(V.trait.coward.length,4);assert.equal(V.trait.eater.length,3);
- assert.equal(V.trait.greed.length,3);assert.equal(V.regular.length,5);
+ // no Favorite-SKU state was invented by the replacement, then or since
  assert.ok(!/favorite|favouriteItem|lastItem|usualItem/i.test(read('dist/systems/adventurer.js')+read('dist/data/copy.js')),
   'no Favorite-SKU state was created');
  // no line names an Item, which is what made the old ones read as a request
