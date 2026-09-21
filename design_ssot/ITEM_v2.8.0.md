@@ -50,6 +50,19 @@ No new catalog slot is added.
 For current internal saves, these IDs resolve to the new v2.8 identities.
 No alternate legacy Hotbar identity remains active.
 
+## CURRENT ITEM ART IDENTITY — EXACT
+
+Save-safe internal ID reuse must not preserve a retired Item's visible identity.
+
+Required icons:
+- `bar` / 간단 도시락 -> simple meal/lunchbox icon in the existing Item-art language
+- `herobar` / 왕도 천연암반수 -> bottled/mineral-water icon in the existing Item-art language
+
+Do not retain the old Hotbar / skewered-stick silhouette for either ID.
+
+This is a visual identity correction only.
+Category, Rarity, price, effect, shelf life and save ID do not change.
+
 ## DIRECTOR DOCUMENT BASELINE — EXACT
 
 | ID | Item | Category/Rarity | Buy / Sell | Effect | Shelf |

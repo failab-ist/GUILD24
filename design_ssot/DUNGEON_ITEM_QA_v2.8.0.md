@@ -51,6 +51,14 @@ PASS direction:
 
 This is a design-shape check, not permission to auto-tune numbers.
 
+## DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
+
+PASS:
+- `bar` reads visually as 간단 도시락 / meal-lunchbox
+- `herobar` reads visually as 왕도 천연암반수 / bottled water
+- neither retains the retired Hotbar/skewered-stick silhouette
+- icon change does not alter ID, Category, Rarity, price, effect or save compatibility
+
 ## DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
 
 SALE must not display separate 성공/퇴각/부상 future Fatigue rows.
