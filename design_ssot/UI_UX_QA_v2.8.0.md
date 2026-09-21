@@ -233,3 +233,93 @@ Store management shows name/effect/price-or-ownership/equipped state.
 
 Decoration Flavor prose is absent from this management decision surface.
 No extra Collection UI is required.
+
+
+## UI-Q-v28-21 — STORE-GROWTH VISUAL TRACES
+
+Using controlled states, verify every implemented live-store growth trace is derived from state that
+already exists and is already Player-knowable.
+
+At minimum cover the promoted trace families that implementation adopts:
+- equipped Decoration
+- owned Store Support / facility
+- Trusted Regular presence
+- D25+ revealed Final-preparation state
+
+PASS:
+- adding/removing the owning state adds/removes its trace
+- Save/Load reproduces the same trace from the same state
+- trace is presentation-only and not an interactive gameplay control
+- no hidden Boss / Hazard / NPC information appears early
+- multiple traces remain readable without changing gameplay ownership
+
+FAIL:
+- a trace exists without its owning state
+- visual state requires a second gameplay/progression field
+- a decorative prop changes a mechanic
+
+## UI-Q-v28-22 — DECISION / PHASE AUDIO
+
+Verify the current audio architecture, not a parallel audio system.
+
+Material action feedback must be semantically distinguishable for:
+- ORDER confirmation
+- successful SALE
+- SALE refusal
+- Store Support acquisition
+
+Phase presentation may strengthen MORNING / ORDER / SALE / NIGHT / FINAL identity through the current
+BGM/ambience/cue system.
+
+PASS:
+- mute disables presentation audio
+- BGM and SFX settings continue to control their existing channels
+- audio playback changes no gameplay state and consumes no Gameplay RNG
+- repeated render alone does not replay one-shot decision cues
+- mobile and desktop run without audio-related console/runtime errors
+
+A unique full music track per phase is not required.
+
+## UI-Q-v28-23 — NIGHT RESULT PRESENTATION
+
+With controlled NIGHT result fixtures, verify materially different states are visibly/audibly
+distinguishable at minimum for:
+- ordinary return / success
+- Great Success
+- retreat
+- injury
+- severe injury
+- Death
+
+Where rescue / avoided-death proof exists, a distinct accent may appear only from that proven state.
+
+PASS:
+- presentation reads the already-resolved Outcome
+- no presentation branch mutates Outcome, reward, Fatigue, proof, Wallet or Store Gold
+- Death still has no living NPC speech bubble
+- primary result information remains readable on mobile
+
+## UI-Q-v28-24 — BOSS / FINAL PRESENTATION PAYOFF
+
+Verify the promoted presentation around D0 / D5 / D10 / D15 / D20 / D25 / D30.
+
+PASS:
+- each cue/art treatment reveals no information earlier than its owning beat
+- D25 presentation may reflect the exact Final state only after that state is revealed
+- D30 may intensify FINAL entry but adds no new Boss-information beat or fact
+- Boss/Final presentation does not consume Gameplay RNG
+- existing seen-state / Save-Load behavior remains unchanged
+- at mobile width, information and acknowledgement remain usable
+
+## UI-Q-v28-25 — TARGETED GRAPHIC POLISH
+
+For each art/icon/crop/scale asset changed under the v2.8 polish pass:
+
+PASS:
+- the object still reads as its current canonical identity
+- two distinct gameplay objects are not made visually identical
+- no crop hides decision-relevant information
+- no decorative layer creates a false mechanic/state implication
+- mobile and desktop render without overflow or obscuring the primary action
+
+This QA does not authorize a new Item wave, portrait wave, environment set or theme system.
