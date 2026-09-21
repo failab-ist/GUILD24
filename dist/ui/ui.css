@@ -631,16 +631,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    block, so opening a ? never makes the panel itself taller and the rows below do not move.
    It is positioned against the panel rather than the little ? so it can never run off either
    edge, which is what a transform-centred bubble does to the rightmost control on a phone. */
-.readout .tip>p,.dest-plate .tip>p,.kit .tip>p,.detail-stats .tip>p{position:absolute;left:10px;right:10px;
+.readout .tip>p,.dest-plate .tip>p,.kit .tip>p,.detail-stats .tip>p,.changed .tip>p{position:absolute;left:10px;right:10px;
  z-index:30;margin:0;padding:9px 11px;font:400 12px/1.6 var(--ui);color:#e8dcc0;
  background:#191108f2;box-shadow:inset 0 0 0 1px #ffffff26,0 6px 0 #00000059}
 /* each line of a tooltip is its own line: two labelled facts should not read as one sentence */
-.readout .tip>p>span,.dest-plate .tip>p>span,.kit .tip>p>span,.detail-stats .tip>p>span{display:block}
+.readout .tip>p>span,.dest-plate .tip>p>span,.kit .tip>p>span,.detail-stats .tip>p>span,.changed .tip>p>span{display:block}
 /* The outlook sits above the plate, so its balloon drops; the plate is the lowest block on the
    counter and its container clips, so its balloon rises. Either way the panel keeps its height. */
 .readout .tip>p,.kit .tip>p{top:calc(100% - 4px)}
 /* the Stat balloon rises from the bottom of the grid, so it never pushes the panel taller. */
 .detail-stats .tip>p{top:calc(100% - 4px)}
+/* the fatigue balloon drops from the token row, for the same reason. */
+.changed .tip>p{top:calc(100% - 4px)}
 .dest-plate .tip>p{bottom:calc(100% - 4px)}
 .readout .tip[open],.dest-plate .tip[open],.kit .tip[open]{display:inline-block;width:auto}
 /* the plate's label is a caps micro-line; the ? must not inherit its letter-spacing */
@@ -741,6 +743,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
 /* the beat */
 .beat{position:relative}
+/* SA-Q09: the beat reuses the shared .say bubble unmodified, but its portrait is not the
+   SALE card that --cardw/--cardh size the bubble against, and the beat never moves beside
+   the portrait the way SALE does at 900px+ - it always stays above the head. Scoped here so
+   it overrides the bare .say rule (and its 900px+ variant) at every width, rather than
+   becoming a second bubble implementation. */
+.beat .say{left:14px;top:8px;bottom:auto;max-width:calc(100% - 28px)}
+.beat .say:after{top:100%;bottom:auto;left:min(22vw,95px);
+ border:9px solid transparent;border-top-color:var(--paper);border-right:0;border-bottom:0}
 .stand-in{display:flex;align-items:flex-end;gap:14px;margin-bottom:16px}
 /* One NPC size for every outcome. Importance changes how much copy a beat spends, the
    quote, the change tokens and the tone — never how big the adventurer is. */
@@ -774,8 +784,25 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:400 14px/1.55 var(--ui);color:#b9bccb;background:#0f131e;
  box-shadow:inset 2px 2px 0 #00000073,inset -2px -2px 0 #ffffff0f}
 .beat .why i{flex:0 0 auto;width:4px;align-self:stretch;background:var(--tone,#e8d9b0);opacity:.7}
+/* SA-Q08/SA-Q33: the ONE proven Hero Item claim, set apart from the neutral WHY slate so a
+   provable "your product did this" reads as its own kind of fact, not as incident narration. */
+.beat .hero{margin-bottom:16px;padding:10px 12px;font:500 14px/1.5 var(--ui);color:var(--gold);
+ background:#1e1706;box-shadow:inset 0 0 0 1px #cbb98d3d,2px 2px 0 #00000059}
 /* WHAT CHANGED — stamped tokens, only for what actually moved */
-.changed{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+/* NIGHT_CLOSING §FATIGUE RESULT. The 귀환 후 피로 token is the only tok that opens a balloon -
+   the resolved 출발 -> 원정 -> 귀환 arithmetic - through the SAME shared anchored tip everything
+   else on screen uses, so `.changed` is the positioning context the balloon anchors against. */
+.changed{position:relative;display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.changed .tip{display:block}
+.changed .tip>summary{display:inline-grid;gap:2px;padding:6px 10px 7px;background:var(--tex-metal),#39434b;background-size:8px 8px;
+ box-shadow:inset 0 2px 0 #ffffff26,inset 0 -3px 0 #00000080,2px 2px 0 #00000073;list-style:none;cursor:pointer}
+.changed .tip>summary::-webkit-details-marker{display:none}
+.changed .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.changed .tip>summary i{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.12em;color:#9aa6b2}
+.changed .tip>summary b{font:500 15px/1.1 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
+.changed .tip.up>summary b{color:#9fd6a8}
+.changed .tip.down{background:var(--tex-metal),#4a2f2c;background-size:8px 8px}
+.changed .tip.down>summary b{color:#e8927f}
 .tok{display:inline-grid;gap:2px;padding:6px 10px 7px;background:var(--tex-metal),#39434b;background-size:8px 8px;
  box-shadow:inset 0 2px 0 #ffffff26,inset 0 -3px 0 #00000080,2px 2px 0 #00000073}
 .tok i{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.12em;color:#9aa6b2}
@@ -840,14 +867,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .purse span{font:600 12px/1 var(--ui);letter-spacing:.16em;color:#b3a68b}
 .purse b{margin-left:auto;font:500 28px/1 var(--f-led);font-variant-numeric:tabular-nums;color:var(--gold)}
 .purse b i{font-style:normal;font-size:15px;margin-left:3px;color:#b3a68b}
-.impact{margin-top:14px;padding-top:11px;box-shadow:inset 0 2px 0 #2c241826}
-.impact h4{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#6b6350;margin-bottom:7px}
-.impact p{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
- font:400 13px/1.6 var(--ui);color:#4a4335;padding:3px 0}
-.impact p b{color:#2c2418;font-weight:600}
-.impact p b:after{content:' →';color:#8a8270;font-weight:400}
-.impact p span{color:#4a4335}
-.print .foot{margin-top:12px;font:400 11px/1.6 var(--ui);color:#8a8270}
+/* SA-Q21 / SA-Q34: Closing no longer prints the 오늘의 보급 영향 block or its footer - the
+   .impact rules and the .print-scoped .foot rule they alone used are retired with them. */
 /* =====================================================================
    MODAL LAYER — the utility drawer. Not a phase, so it stays quiet: a panel that
    slides over whatever screen is behind it, with the same bevel language as everything

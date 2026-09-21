@@ -14,7 +14,11 @@ const hazardPressure={poison:'강인함 압박',bind:'기동 압박',corrosion:'
 function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
 /* ITEM_v2.7 §INSURANCE HIERARCHY: Aftercare is a utility, not a magnitude. Rendering it as
    `+1` would read as a hidden injury-risk percentage, which the owner says it does not have. */
-const util={aftercare:'원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.',duplicate:'다음 소비품 효과 2회 적용 · 쿠폰도 1칸 사용 · 중첩 불가',revive:'사망 판정을 중상으로 변경',curePoison:'독 대응 상품',potion:'포션'};
+/* SA-Q05: `potion` is an internal marker (potionbody's own trigger test reads it directly off
+   Item data) — it was never meant to author a row here, and a labelless 포션 row is exactly
+   that leak. The player-visible '포션' identity is drawn elsewhere, off the same marker, as
+   the item-kind badge, not as an effect row. */
+const util={aftercare:'원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.',duplicate:'다음 소비품 효과 2회 적용 · 쿠폰도 1칸 사용 · 중첩 불가',revive:'사망 판정을 중상으로 변경',curePoison:'독 대응 상품'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
 function rows(e,tones){const out=[];for(const[k,v]of Object.entries(e)){
@@ -78,7 +82,10 @@ function nightHappened(r){
     invented cause. The won-fight wording states only what the runtime actually proved. */
  if(r.outcome==='사망')return r.combatWon?'원정에서 돌아오지 못했다.'
                                         :'전투에서 밀린 뒤 돌아오지 못했다.';
- if(r.avoidedDeath)return '보급이 마지막 순간의 사망을 막았다.';
+ /* SA-Q33: this sentence states WHAT happened, never WHY. `보급이 마지막 순간의 사망을 막았다`
+    used to perform both roles - the new proven Hero Item line (heroLine, below) is WHY, when
+    proof exists, and never competes with a generic causality claim here. */
+ if(r.avoidedDeath)return '사망 위기를 넘기고 살아 돌아왔다.';
  if(r.outcome==='중상')return '큰 부상을 입었다. 회복할 시간이 필요하다.';
  /* 퇴각 and 부상 both reach here from a won fight as well as a lost one — the injury
     guard can turn a won-fight injury into a retreat — so the line has to say which. */
@@ -119,11 +126,26 @@ function nightWhy(r){const bits=[];
   :'원정 중 예상치 못한 사고가 있었다.');
  if(r.events){
   for(const ev of r.events){
-   if(ev.text)bits.push(ev.text);
-   else if(ev.id==='hazard'&&ev.prevented)bits.push((ev.hazards.map(h=>D.hazards[h]).join(', '))+' 환경을 철저한 준비로 극복했다.');
+   /* SA-Q08: a Hazard mitigation used to speak for itself here with a vague `환경을 철저한
+      준비로 극복했다` - a mitigation is not proof the Outcome would have been worse, only that
+      pressure was lower. The provable claim (if any) is heroLine(r), off DUNGEON_HAZARD's
+      RESULT-PROOF counterfactual, not this line. */
+   if(ev.text&&ev.id!=='hazard')bits.push(ev.text);
   }
  }
  return bits.join(' ');}
+/* HERO ITEM FEEDBACK (NIGHT_CLOSING §HERO ITEM FEEDBACK, DUNGEON_HAZARD §RESULT-PROOF).
+   r.heroProof is null unless the actual resolution proved - using only the random evidence it
+   actually drew, never a new roll - that removing a specific sold Item (or, when no single
+   Item is individually provable, the whole committed Bag) would have settled a WORSE Outcome.
+   This is WHY the Player's own sale mattered; the Outcome sentence above never carries it. */
+function heroLine(r){
+ const hp=r.heroProof;if(!hp)return null;
+ const said=hp.worse==='사망'?'살아 돌아왔다':hp.worse==='중상'?'중상을 피했다':
+  hp.worse==='부상'?'부상을 피했다':hp.worse==='퇴각'?'원정을 성공했다':'대성공했다';
+ const who=!hp.items?'챙긴 보급':hp.items.map(id=>D.itemBy[id].name).join('·');
+ return who+' 덕분에 '+said+'.';
+}
 /* WHAT CHANGED — only what actually moved. A change the resolution wrote as a sentence
    is split into its own label and value; anything that resolved to zero is left out. */
 function nightChange(text){
@@ -146,13 +168,18 @@ function nightChanges(r, npc){const out=[];
    }
   }
   if(r.finalFatigue!==undefined){
-   /* NIGHT_CLOSING v2.7 §PLAYER-FACING FATIGUE RESULT: the two halves of leftover Supply
-      are different claims - one removed Fatigue before departure, the other absorbed the
-      result - so they are never merged, and a zero subrow is simply omitted. */
-   if(r.preRecovery>0) out.push({kind:'up',label:'보급 회복',value:'피로 -'+r.preRecovery});
-   if(r.outcomeBufferUsed>0) out.push({kind:'up',label:'보급 완화',value:'피로 -'+r.outcomeBufferUsed});
-   if(r.actualOutcomeFatigueGain>0) out.push({kind:'down',label:'원정 결과',value:'+'+r.actualOutcomeFatigueGain});
-   out.push({kind:r.netFatigueDelta>0?'down':'up',label:'최종 피로',value:r.finalFatigue+''});
+   /* NIGHT_CLOSING §FATIGUE RESULT — SUPERSEDES v2.7 PLAYER LABELS. The runtime's own
+      accounting fields (보급 회복 / 보급 완화 / 원정 결과 / 최종 피로) are not a settled Player
+      result - they are four competing names for one number. The Player reads one settled
+      value, 귀환 후 피로, and the resolved arithmetic behind it is on-demand detail through the
+      same shared anchored tip every other ? on this screen already uses - never a second name
+      for the primary figure and never a permanent second row. */
+   const steps=['출발 '+r.fatigueBeforeExpedition];
+   if(r.rawOutcomeFatigueGain>0)steps.push('원정에서 +'+r.rawOutcomeFatigueGain);
+   if(r.outcomeBufferUsed>0)steps.push('남은 보급으로 -'+r.outcomeBufferUsed);
+   steps.push('귀환 후 '+r.finalFatigue);
+   out.push({kind:r.netFatigueDelta>0?'down':'up',label:'귀환 후 피로',value:r.finalFatigue+'',
+    detail:steps.join(' → ')});
   }
  if(r.xp)out.push({kind:'',label:'경험치',value:'+'+r.xp});
  if(r.loot)out.push({kind:'gain',label:'원정 소지금 획득',value:r.loot+'G'});
@@ -170,8 +197,14 @@ const itemName=id=>D.itemBy[id]?.name||null;
    event with nothing to say is left out rather than printed as a blank. */
 function eventLine(ev,r){if(!ev)return null;return ev.text||supplyEffect(ev,r||{})||null;}
 function supplyEffect(ev,r){
+ /* SA-Q08: a Hazard mitigation is only worth a claim about the Outcome when
+    DUNGEON_HAZARD's RESULT-PROOF counterfactual actually proved one - the old `ev.prevented`
+    heuristic (and the generic 위험 감소 it fell back to otherwise) claimed an effect that was
+    never checked against the resolved Outcome. Unproven is now simply left unsaid. */
  if(ev.id==='hazard'){const names=(ev.hazards||[]).map(h=>D.hazards[h]).filter(Boolean).join('·');
-  if(!names)return null;return names+(ev.prevented?' 피해 방지':' 위험 감소');}
+  if(!names)return null;
+  const proven=r.heroProof?.items?.some(id=>(ev.items||[]).includes(id));
+  return proven?names+' 피해 방지':null;}
  if(ev.id==='escape')return r.avoidedDeath?'사망 위기에서 생환':'퇴각에 기여';
  if(ev.id==='revive')return '사망을 중상으로';
  if(ev.id==='injury-guard')return '부상 완화';
@@ -204,5 +237,5 @@ function amount(key,value,moved=true){
  return stat(value,moved);
 }
 G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
- eventLine,nightTone,nightVerdict,nightHappened,nightWhy,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
+ eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

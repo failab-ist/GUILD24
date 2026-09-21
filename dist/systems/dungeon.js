@@ -247,11 +247,80 @@ function failureDeathChanceFor(p,d,departedInjured){
 function failureDeathRisk(n,d,facilities=[]){
  return failureDeathChanceFor(prepare(n,d,facilities),d,n.injury===1);
 }
+/* RESULT-PROOF COUNTERFACTUAL (DUNGEON_HAZARD §RESULT-PROOF). The real expedition resolves
+   exactly once, above, under ordinary rules - this never runs before it and never changes what
+   it produced. It only asks, after the fact and using ONLY the raw numbers that resolution
+   actually drew (`ev`): with one fewer Item in the Bag, would the SAME recorded rolls have
+   settled a worse Outcome? `prepare()` is pure, so recomputing it for a shadow pack costs
+   nothing extra and draws nothing. A branch that needs a roll the real run never drew (because
+   its own branch never reached that check) returns UNPROVEN rather than inventing one -
+   under-reporting is preferred to false causality. */
+const OUTCOME_ORDER=['대성공','성공','퇴각','부상','중상','사망'];
+const UNPROVEN=Symbol('unproven');
+function shadowOutcome(n,d,facilities,pack,ev,severeEscalation){
+ const sp=prepare({...n,pack},d,facilities),se=sp.effects;
+ const sAbility=preparedPower(se);
+ const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
+ const sCombatSuccess=sAbility*sNoise>=d.power;
+ const sEnvironment=clamp(.06+sp.hazard*.012-se.survival*.001,.02,.48),sAffected=ev.envRoll<sEnvironment;
+ const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-(d.scale||1)*.024,.15,.94);
+ let sOutcome=sCombatSuccess?'성공':(ev.escapeRoll<sEscapeChance?'퇴각':'부상');
+ if(!sCombatSuccess&&sOutcome==='부상'){
+  if(ev.injuryRoll<clamp(.42+se.injuryRisk-se.injuryGuard*.25+severeEscalation,0,1))sOutcome='중상';
+ }else{
+  let takesTier=sAffected;
+  if(!takesTier){
+   if(ev.injuryRiskRoll===undefined)return UNPROVEN;
+   takesTier=ev.injuryRiskRoll<se.injuryRisk;
+  }
+  if(takesTier)sOutcome=ev.injuryRoll<clamp(.13-se.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
+ }
+ if(sOutcome!=='성공'){
+  const sDeathChance=failureDeathChanceFor(sp,d,severeEscalation>0).chance;
+  if(ev.deathRoll<sDeathChance)sOutcome='사망';
+ }
+ if(['사망','중상'].includes(sOutcome)&&pack.some(id=>D.itemBy[id].effects.escape)){
+  if(ev.escapeItemRoll===undefined)return UNPROVEN;
+  if(ev.escapeItemRoll<clamp(se.escape,.0,.96))sOutcome='퇴각';
+ }
+ if(sOutcome==='사망'&&se.revive>=1)sOutcome='중상';
+ if(['부상','중상'].includes(sOutcome)&&se.injuryGuard>0){
+  if(ev.injuryGuardRoll===undefined)return UNPROVEN;
+  if(ev.injuryGuardRoll<clamp(se.injuryGuard,0,.9))sOutcome=sOutcome==='중상'?'부상':'퇴각';
+ }
+ if(sOutcome==='성공'&&ev.greatRoll<greatSuccessChance(sAbility/d.power-1))sOutcome='대성공';
+ return sOutcome;
+}
+/* One Item at a time (by Bag slot, not by id, so two copies of the same Item are still two
+   separate removals), then the whole Bag if no single Item is individually provable. Ties on
+   the SAME resulting worse tier are credited together; a worse tier beats a milder one rather
+   than stacking several heroic claims. */
+function resultProof(n,d,facilities,ev,severeEscalation,actualOutcome){
+ const pack=n.pack,idx=OUTCOME_ORDER.indexOf(actualOutcome);
+ if(!pack.length)return null;
+ const per=pack.map((id,i)=>({id,tier:shadowOutcome(n,d,facilities,pack.filter((_,j)=>j!==i),ev,severeEscalation)}));
+ const proven=per.filter(x=>x.tier!==UNPROVEN&&OUTCOME_ORDER.indexOf(x.tier)>idx);
+ if(proven.length){
+  const worstIdx=Math.max(...proven.map(x=>OUTCOME_ORDER.indexOf(x.tier)));
+  const items=[...new Set(proven.filter(x=>OUTCOME_ORDER.indexOf(x.tier)===worstIdx).map(x=>x.id))];
+  return {items,worse:OUTCOME_ORDER[worstIdx]};
+ }
+ const bareTier=shadowOutcome(n,d,facilities,[],ev,severeEscalation);
+ if(bareTier!==UNPROVEN&&OUTCOME_ORDER.indexOf(bareTier)>idx)return {items:null,worse:bareTier};
+ return null;
+}
 function resolve(n,d,r,facilities=[],options={}){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
 
  const ability=preparedPower(e);
- const noise=1+(r.next()-.5)*(D.balance.combatNoise*2+e.variance*2);
+ /* RESULT-PROOF: this expedition's real random draws are named as they are drawn, in the
+    exact order/count the live path already used - nothing here adds, removes or reorders a
+    draw. A conditionally-drawn value (the ones behind && / short-circuit ||) is captured
+    through a small check() closure so it is STILL drawn only when the real branch reaches
+    it, never eagerly. shadowTier() below reuses these same recorded numbers - never a new
+    roll - to prove or fail to prove what a sold Item actually changed. */
+ const noiseRoll=r.next();
+ const noise=1+(noiseRoll-.5)*(D.balance.combatNoise*2+e.variance*2);
  const score=ability*noise;const combatSuccess=score>=d.power;
  const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);
  const affected=envRoll<environment;
@@ -260,6 +329,10 @@ function resolve(n,d,r,facilities=[],options={}){
  let outcome=combatSuccess?'성공':(escapeRoll<escapeChance?'퇴각':'부상');
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  const injuryRoll=r.next(),deathRoll=r.next();let rescued=false,deathChance=0,avoidedDeath=false;
+ let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
+ const injuryRiskCheck=()=>{injuryRiskRoll=r.next();return injuryRiskRoll<e.injuryRisk;};
+ const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<clamp(e.escape,.0,.96);};
+ const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
  /* DUNGEON_HAZARD_v2.7 §INJURED RE-EXPEDITION SEVERE ESCALATION: "the existing non-Death
     Severe-vs-Injury branch, WHENEVER that branch is reached on a surviving failure path".
     It was conditioned on !combatSuccess as well, which silently exempted the other way the
@@ -270,7 +343,7 @@ function resolve(n,d,r,facilities=[],options={}){
  const departedInjured=n.injury===1,severeEscalation=departedInjured?.15:0;
  if(!combatSuccess&&outcome==='부상'){
   if(injuryRoll<clamp(.42+e.injuryRisk-e.injuryGuard*.25+severeEscalation,0,1))outcome='중상';
- }else if(affected||r.next()<e.injuryRisk){outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';}
+ }else if(affected||injuryRiskCheck()){outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';}
  /* DUNGEON_HAZARD_v2.7 §Resolution order: exactly one Death roll, and only once the ordinary
     path is known to have failed. The old model rolled Death solely behind a failed escape and
     read a post-noise deficit, so a lucky variance roll decided how deadly the preparation had
@@ -279,13 +352,13 @@ function resolve(n,d,r,facilities=[],options={}){
   deathChance=failureDeathChanceFor(p,d,departedInjured).chance;
   if(deathRoll<deathChance)outcome='사망';
  }
- if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&r.next()<clamp(e.escape,.0,.96)){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
+ if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
  if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
  /* 강골 alone reaches this branch now. ITEM_v2.7 §INSURANCE HIERARCHY moved 구급키트 off the
     injuryGuard channel entirely - it may not change the resolved Outcome and carries no hidden
     injury-risk percentage - so the line no longer credits 치료용품 for a downgrade it no longer
     performs. The Trait's own `injuryGuard +23%p` identity is unchanged. */
- if(['부상','중상'].includes(outcome)&&r.next()<clamp(e.injuryGuard,0,.9)){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'});}
+ if(['부상','중상'].includes(outcome)&&injuryGuardCheck()){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'});}
  /* Only now, with the ordinary outcome settled, may a 성공 become 대성공. Assigning it right
     after combat let a later environmental injury overwrite it, and judging it on the post-noise
     score let a lucky hidden roll pass itself off as preparation - so it is judged on `ability`,
@@ -343,7 +416,11 @@ function resolve(n,d,r,facilities=[],options={}){
      The sentence is composed in the presentation layer so one wording serves Night,
      Closing and the returning-visitor line. */
   p.events.push({id:'hazard',hazards:mitigated,items:n.pack.filter(id=>mitigated.some(h=>(D.itemBy[id].effects[h]||0)>0)),prevented});}}
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
+ /* The real outcome is fully settled above; this only asks, from here, whether a specific
+    sold Item is what kept it from being worse - using the same rolls already drawn, never a
+    new one. `pack` above was `n.pack` unmutated through the whole resolution. */
+ const heroProof=resultProof(n,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll},severeEscalation,outcome);
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */

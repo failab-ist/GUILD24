@@ -339,7 +339,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    deathRisk:G.Dungeon.failureDeathRisk(v,d,this.run.facilities).chance,
    greatSignal:G.Dungeon.greatSuccessSignal(v,d,this.run.facilities)};
  }
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.events?.length)};}
+ /* SA-Q25: `last.events.length` was broader than sold-Item causality - a Trait-only event
+    (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
+    reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
+    proves a Hero Item line from - never a Trait-only or merely-carried Item. */
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');

@@ -30,7 +30,11 @@ test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh()
  g.supplyFinal(n.id,g.run.inventory[0].id);
  assert.equal(n.history.at(-1).mode,'half');assert.equal(n.history.at(-1).paid,finalPrice);
  assert.equal(n.money,0);assert.equal(g.run.money,goldBefore+finalPrice);g.boss();const xp=g.account.xp;g.boss();assert.equal(g.account.xp,xp);const h=fresh();h.run.phase='closing';h.run.money=-1;h.run.inventory=[];h.closeDay();assert.equal(h.run.phase,'end');});
-test('all effect keys presented and names readable',()=>{for(const it of DATA.items){const rows=Presentation.rows(it.effects);assert.ok(rows.length);for(const key of Object.keys(it.effects))assert.ok(rows.some(r=>r.key===key)||key==='jobBonus');}const r=new RNG('names');for(let i=0;i<500;i++)assert.ok(!/\s/.test(Adventurer.name(r,0)));});
+/* SA-Q05: `potion` is an internal marker read directly off Item data (potionbody's own trigger
+   test), never a player-facing effect. It is now the one key `rows()` deliberately authors no
+   row for - a labelless 포션 row was exactly the leak SA-Q05 closes - so it is exempted here
+   the same way the derived `jobBonus` key already was. */
+test('all effect keys presented and names readable',()=>{for(const it of DATA.items){const rows=Presentation.rows(it.effects);assert.ok(rows.length);for(const key of Object.keys(it.effects))assert.ok(rows.some(r=>r.key===key)||key==='jobBonus'||key==='potion');}const r=new RNG('names');for(let i=0;i<500;i++)assert.ok(!/\s/.test(Adventurer.name(r,0)));});
 test('headless 30-day smoke',()=>{const a=Debug.simulate(3,'balanced');assert.equal(a.runs,3);assert.ok(a.reached30>=0);assert.ok(Number.isFinite(a.averageMoney));});
 
 

@@ -537,7 +537,13 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
  assert.deepEqual(stats(1),stats(1),'the prepared reading is a function of the injury alone');
  const src=read('dist/systems/dungeon.js');
  assert.ok(/severeEscalation=departedInjured\?\.15:0/.test(src),'the escalation reads the departure state alone');
- assert.equal((src.match(/severeEscalation/g)||[]).length,3,'one definition, used at the two existing decision points');
+ /* RESULT-PROOF: shadowOutcome/resultProof replay the SAME two decision points against a
+    shadow Bag, so they legitimately take severeEscalation as a parameter and reuse it at the
+    same two checks - one real definition, its two real uses, and that same shape mirrored
+    through the counterfactual engine (a parameter declaration, two decision-point uses, two
+    call sites passing it through, and the one place it is computed and handed in). */
+ assert.equal((src.match(/severeEscalation/g)||[]).length,11,
+  'one definition, its two decision points, and the proof engine that replays them - nothing else');
 });
 
 console.log(groups+' night groups passed');
