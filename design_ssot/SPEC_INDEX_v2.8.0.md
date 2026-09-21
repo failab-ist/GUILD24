@@ -16,7 +16,7 @@ PLAYTEST_RESPONSE_AMENDMENT_STATUS=CANONICAL_PROMOTED_2026_09_22
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
-NONBLOCKING_CANONICAL_DETAIL_GAPS=2
+NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_SOURCE_ADOPTION_IN_PROGRESS
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -204,16 +204,12 @@ Exact owners:
 These are current approved baselines, not measurement-gated suggestions.
 After Source adoption, re-measure aggregate economy/survival impact before any further tuning.
 
-## CURRENT NONBLOCKING CANONICAL DETAIL GAPS
+## CURRENT CANONICAL DETAIL GAPS
 
-Two exact numeric details remain intentionally unresolved rather than guessed:
-- Premium Decoration rare-NPC weighting
-- exact base prices for 20 inherited Store Supports whose older owner left price at PASS3
+None from the 2026-09-22 full-chain re-audit.
 
-Details and Source-only observations -> SSOT_AUDIT_v2.8.0.md §2026-09-22 CROSS-SSOT / LEGACY-CHAIN RE-AUDIT ADDENDUM.
-
-These do not authorize WORK to copy Source values into Design Truth and do not block the currently
-approved SA-Q46–51 adoption task unless that task directly requires one of these exact numbers.
+The former Premium Decoration rarity-weighting gap and 20 inherited Store Support base-price gaps
+were closed by User approval and promoted into META_v2.8.0.md / RELIC_v2.8.0.md with matching QA.
 
 ## SOURCE ACCESS
 
