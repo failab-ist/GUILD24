@@ -48,6 +48,11 @@ PASS:
 Controlled states reproduce ECONOMY_ORDER_v2.8.0 exactly.
 
 PASS:
+- mode charged / intent multipliers remain:
+  - 50% = 0.50 / 0.50
+  - 100% = 1.00 / 0.65
+  - 150% = 1.50 / 1.50
+- judgedPrice uses the mode intent multiplier and never changes the actual charged amount
 - 50% / 100% base need = 0.80
 - 150% keeps its pre-amendment need calculation
 - flat mode intent remains +0.18 / 0 / -0.16
