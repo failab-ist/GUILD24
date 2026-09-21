@@ -3,7 +3,7 @@
 /* `metaUnlock` is how many distinct Bosses must have been beaten before this may appear.
    ITEM declares exactly one meta-locked Item, so every other entry leaves it unset. */
 const item=(id,name,rarity,buy,sell,category,days,icon,brand,description,effects,metaUnlock=null)=>({id,name,rarity,buy,sell,category,days,icon,brand,description,effects,metaUnlock});
-G.DATA={brand:{name:'GUILD24',korean:'길드24',company:'길드리테일',slogan:'던전 가기 전, 길드24.',branches:['제7게이트점','독거미점','북부게이트점','왕도외곽점']},
+G.DATA={brand:{name:'GUILD24',korean:'길드24',company:'길드리테일',slogan:'던전 가기 전, 길드24.',branches:['제7게이트점','독거미굴입구점','북부게이트점','왕도외곽점','왕도역앞점','서문역앞점','동문시장점','남문사거리점','북문광장점','중앙시장점','마탑거리점','마탑사거리점','용병길드앞점','모험가길드앞점','대장간골목점','상단거리점','성당앞점','왕궁서문점','성벽길점','여관거리점','제3게이트앞점','서부게이트점','슬라임하수도점','지하묘지입구점','골렘광산입구점','설원전초점','왕도남부점','오래된광장점','붉은다리점','은빛나루점']},
 rarities:['일반','고급','희귀','영웅','전설'], npcRarities:['평범','유망','희귀','영웅','전설'],
 items:[
 /* ITEM_v2.7.0 ACTIVE CATALOG - exactly 40, in the owner's own order. Categories are the
