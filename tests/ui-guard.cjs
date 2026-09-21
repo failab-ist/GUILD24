@@ -1587,6 +1587,39 @@ test('SA-Q14: a moved Stat reads as beneficial or harmful, never as generic move
   assert.ok(!app.includes(bad),'no stale Stat-detail wording: '+bad);
 });
 
+/* UI-Q-v28-6 — SHARED POPOVER, DESKTOP HALF. The shared anchored tip - the Stat cell included -
+   only ever opened on a tap. On a pointer device Canonical requires hover, and for a keyboard it
+   requires focus, with the click toggle and the mobile tap unchanged. */
+test('UI-Q-v28-6: the shared popover opens on hover and on keyboard focus, and still toggles',()=>{
+ // ONE mechanism: the same <details class="tip" name="sale-tip"> a tap toggles
+ assert.equal((app.match(/const tip=\(label/g)||[]).length,1,'there is still exactly one popover implementation');
+ assert.ok(!/showPopover\(|popover="|\.showModal\(/.test(app),'and no second popover framework was introduced');
+ // hover is taken from a real mouse on a device that actually hovers, so a tap gets no phantom open
+ assert.ok(/matchMedia\('\(hover:hover\) and \(pointer:fine\)'\)\.matches/.test(app),
+  'hover is gated on a device that really hovers with a fine pointer');
+ assert.ok(/document\.addEventListener\('pointerover',ev=>\{\n if\(ev\.pointerType!=='mouse'\|\|!hovers\(\)\)return;/.test(app),
+  'a mouse entering the control opens it');
+ assert.ok(/document\.addEventListener\('pointerout',ev=>\{\n if\(ev\.pointerType!=='mouse'\|\|!hovers\(\)\)return;/.test(app),
+  'and leaving it closes it');
+ assert.ok(/t===tipOf\(ev\.relatedTarget\)/.test(app),'moving within the same tip is not an open/close cycle');
+ assert.ok(/t\.contains\(document\.activeElement\)/.test(app),'and the pointer leaving never closes what a keyboard is reading');
+ // focus opens for a KEYBOARD only: a click focuses the summary too, and opening there would
+ // race the native toggle and swallow the tap
+ assert.ok(/document\.addEventListener\('focusin',ev=>\{[\s\S]{0,160}:focus-visible/.test(app),
+  'keyboard focus opens it, and a pointer focus does not');
+ assert.ok(/document\.addEventListener\('focusout',ev=>\{[\s\S]{0,200}t\.matches\(':hover'\)/.test(app),
+  'blur closes it unless the pointer is still on it');
+ // exclusivity, outside tap and Escape stay the existing shared handlers
+ assert.ok(/closeTips\(t\);t\.open=true;/.test(app),'both routes close the other tips through the shared closer');
+ assert.equal((app.match(/const closeTips=/g)||[]).length,1,'there is still one closer');
+ assert.ok(/name="sale-tip"/.test(app),'and one exclusive group');
+ // nothing here may reveal a balloon through CSS, which a tap would then fight
+ assert.ok(!/\.tip:hover>p|\.tip:focus-within>p/.test(css),'no CSS :hover reveal races the toggle');
+ // and the balloon is still out of flow, so a pointer can never change a panel height
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stats \.tip>p\{position:absolute/.test(css),
+  'the balloon stays out of flow on every surface that has one');
+});
+
 /* SA-Q35 — SETTINGS / DEBUG BOUNDARY. Ordinary Settings spoke English and carried a development
    footer, and the reproducibility Seed - a QA affordance - sat on the Player's preparation
    screen. Removing them must not cost the development routes anything. */

@@ -1433,6 +1433,31 @@ document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]
    only has to handle the outside tap and Escape. */
 const closeTips=except=>{for(const t of document.querySelectorAll('.tip[open]'))if(t!==except)t.open=false;};
 document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);},true);
+/* UI_UX_QA §UI-Q-v28-6. A popover a mouse has to click is a phone control wearing a desktop
+   coat: on a pointer device the explanation opens on hover, and for a keyboard it opens on
+   focus. Both drive the SAME <details> the tap toggles - no second popover mechanism, no CSS
+   :hover reveal that a tap would then fight, and the balloon is still out of flow, so nothing
+   the pointer does can change a panel's height.
+   Hover is taken only from a real mouse on a device that actually hovers, so a touch never
+   gets a phantom open and the tap toggle keeps behaving exactly as it did.
+   Focus opens only for :focus-visible - a keyboard focus. A click focuses the summary too, and
+   opening there would race the native toggle and swallow the tap. */
+const hovers=()=>typeof matchMedia==='function'&&matchMedia('(hover:hover) and (pointer:fine)').matches;
+const tipOf=t=>t&&t.closest?t.closest('.tip'):null;
+document.addEventListener('pointerover',ev=>{
+ if(ev.pointerType!=='mouse'||!hovers())return;
+ const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget))return;
+ closeTips(t);t.open=true;});
+document.addEventListener('pointerout',ev=>{
+ if(ev.pointerType!=='mouse'||!hovers())return;
+ const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.contains(document.activeElement))return;
+ t.open=false;});
+document.addEventListener('focusin',ev=>{
+ const t=tipOf(ev.target);if(!t||!ev.target.matches?.(':focus-visible'))return;
+ closeTips(t);t.open=true;});
+document.addEventListener('focusout',ev=>{
+ const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
+ t.open=false;});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new'))setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);});
