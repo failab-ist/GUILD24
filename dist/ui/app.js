@@ -419,10 +419,12 @@ function saleScreen(){
      보급 후 변화 compares against when a product is picked, so they lead, and the Traits read
      as the standing description they are, under the goods. Nothing is dropped, no wording
      changes, and the wide layout still sets both columns side by side. */
-  +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+'</div>'
+  +'<div class="dossier-col">'
+   +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+'</div>'
+   +'<div class="dossier traits">'+traitRows(n)+'</div>'
+   +ownedRelicView()
+  +'</div>'
   +shelf()
-  +'<div class="dossier traits">'+traitRows(n)+'</div>'
-  +ownedRelicView()
  +'</main>'
  /* D-34. Every price on this screen is a judgement against what the store has, and the
     store's gold was the one number not on it - Morning, Order and Closing all show it and

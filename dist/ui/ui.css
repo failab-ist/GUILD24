@@ -541,7 +541,19 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:linear-gradient(180deg,#d3ac71 0 3px,#b98d52 3px 10px,#7c5730 10px 14px,#4a331d 14px 18px);
  box-shadow:0 5px 0 #00000073}
 /* ---- layer 2 : what is known -------------------------------------------------- */
-.p-sale .stage-scroll{padding:16px var(--gutter) 22px;background:var(--tex-wood),#2b2013}
+/* The stat/forecast dossier, the shelf and the Trait rows read stat -> goods -> Traits
+   (UI-Q109 §8 / UI-Q10..Q14): the shelf is the one block a product decision cannot move
+   past, so it always reads before the Traits regardless of how the desktop grid below
+   regroups these same elements into columns. `.dossier-col` is a plain wrapper here -
+   `display:contents` removes its own box so its children take part in this flex order
+   directly, exactly as if it were not there. */
+.p-sale .stage-scroll{padding:16px var(--gutter) 22px;background:var(--tex-wood),#2b2013;
+ display:flex;flex-direction:column}
+.p-sale .dossier-col{display:contents}
+.p-sale .dossier:not(.traits){order:1}
+.p-sale .shelf{order:2}
+.p-sale .dossier.traits{order:3}
+.p-sale .owned-relics{order:4}
 .dossier{margin:0 0 18px}
 .p-sale .dock{display:flex;align-items:center;gap:12px;background:#170f0a;box-shadow:inset 0 3px 0 #ffffff14}
 .p-sale .dock .queue{display:grid;gap:5px}
@@ -1280,11 +1292,19 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    1048px of width spent on a single column. The two halves sit side by side here, so the
    shelf is in view while the forecast it answers is still on screen. */
 @media(min-width:1024px){
+ /* The stat/forecast column and the shelf column are independent content, so each stays
+    exactly as tall as its own content instead of being stretched to match the other - a
+    stat grid + Trait rows column no wider (taller) than it needs, and no forced gap
+    between the stat grid and the Trait rows to make the two columns line up. */
  .p-sale .stage-scroll{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
-  gap:24px;align-content:start}
- .p-sale .dossier{grid-column:1;margin:0}
- .p-sale .shelf{grid-column:2;grid-row:1/span 2;margin:0}
- .p-sale .owned-relics{display:block;grid-column:1;align-self:start}
+  gap:24px;align-content:start;align-items:start}
+ /* Reverts the mobile `display:contents` unwrap: on the desktop grid this column is one
+    real box (one grid cell) holding the stat/forecast dossier and the Trait rows stacked
+    in their own normal document order, which is what keeps them exactly as tall as their
+    own content - the `order` values above are flex-only and do nothing here. */
+ .p-sale .dossier-col{display:block;grid-column:1;margin:0}
+ .p-sale .shelf{grid-column:2;margin:0}
+ .p-sale .owned-relics{display:block}
 }
 
 /* ---- Boss reveal -------------------------------------------------------------

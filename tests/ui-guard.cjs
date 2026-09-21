@@ -140,8 +140,24 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
     that pushed the first selectable product past the fold, and they are the one thing here a
     product cannot move - the forecast and the four Core Stats are what 보급 후 변화 compares
     against, so they still lead. Everything else keeps the order it had. */
- const order=['Scene.shelfStrip()','standee(n)','kitLine(n)','waitingLine(','returningSummary(n)','statGrid(n)','shelf()','traitRows(n)'];
+ const order=['Scene.shelfStrip()','standee(n)','kitLine(n)','waitingLine(','returningSummary(n)','statGrid(n)'];
  let at=-1;for(const part of order){const i=sale.indexOf(part);assert.ok(i>at,'Sale stacks '+part+' in canonical mobile order');at=i;}
+ /* The desktop grid needs the stat/forecast dossier and the Trait rows in one shared column,
+    which only a real DOM wrapper can give it without a mid-column gap where the shelf's own
+    (taller) column forced their two rows apart. Grouping them in source puts Trait rows ahead
+    of the shelf in the markup, so the phone order above (goods before Traits) is restored by
+    CSS flex `order` rather than by source position - the wrapper disappears there via
+    `display:contents`, so its children read in the SAME order a phone always used. */
+ assert.ok(sale.indexOf('dossier-col')<sale.indexOf('statGrid(n)'),'the stat dossier and Trait rows share one desktop column wrapper');
+ assert.ok(sale.indexOf('traitRows(n)')<sale.indexOf('shelf()'),'grouped ahead of the shelf in source, for that one wrapper');
+ assert.ok(/\.p-sale \.stage-scroll\{padding:16px var\(--gutter\) 22px;background:var\(--tex-wood\),#2b2013;\s*display:flex;flex-direction:column\}/.test(css),
+  'below the desktop width, Sale is a flex column so `order` actually applies');
+ assert.ok(/\.p-sale \.dossier-col\{display:contents\}/.test(css),'the wrapper is invisible to that flex order until the desktop grid needs it as one box');
+ assert.ok(/\.p-sale \.dossier:not\(\.traits\)\{order:1\}/.test(css)&&/\.p-sale \.shelf\{order:2\}/.test(css)
+  &&/\.p-sale \.dossier\.traits\{order:3\}/.test(css)&&/\.p-sale \.owned-relics\{order:4\}/.test(css),
+  'the restored mobile order is stat dossier, then shelf, then Trait rows, then owned Relics');
+ assert.ok(/\.p-sale \.dossier-col\{display:block;grid-column:1;margin:0\}/.test(css),
+  'the desktop grid reverts the wrapper to one real box - a single column, exactly as tall as its own content');
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
  assert.ok(/\.figure\{[^}]*object-fit:contain/.test(css),'the NPC payload is contained, never cropped');
  assert.ok(!/\.figure\{[^}]*object-fit:cover/.test(css),'the NPC payload is never cover-cropped');
@@ -1218,7 +1234,7 @@ test('D-1 / UI-Q38: a desk is not a wide phone, and the decision gets the width'
         && /\.p-sale \.stage-scroll\{[^}]*grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,1fr\)/.test(desk),
   'the Sale decision surface is two columns there');
  assert.ok(/\.p-sale \.shelf\{grid-column:2/.test(desk),'the shelf takes the second column');
- assert.ok(/\.p-sale \.dossier\{grid-column:1/.test(desk),'and who this is stays beside it, not above it');
+ assert.ok(/\.p-sale \.dossier-col\{display:block;grid-column:1/.test(desk),'and who this is stays beside it, not above it');
  // the tier is additive: nothing here may reach a phone
  assert.ok(!/@media/.test(desk.slice(desk.indexOf('{')+1,desk.indexOf('/* ---- Boss reveal'))),
   'the desktop tier is one block and does not nest another query');
