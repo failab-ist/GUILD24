@@ -177,6 +177,91 @@ test('COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT: tracked picks a
  assert.equal(untouched.lastLine,undefined,'an untracked call writes no state onto the NPC');
 });
 
+test('COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT — SALE and NIGHT Surfaces, independent buffers, same-NPC immediate repeat blocked',()=>{
+ const nn=id=>({id,traits:[],injury:0,newToday:false});
+ // SALE: buy() and refuse() share one 'sale' Surface bucket.
+ const run={},shopper=nn('sale-1');
+ const seenSale=[];
+ for(let day=1;day<=8;day++){
+  const line=Copy.buy(shopper,'rice','full',day,run);
+  assert.ok(!seenSale.slice(-3).includes(line),'SALE day '+day+': not one of the last 3 shown: '+line);
+  seenSale.push(line);
+ }
+ const justShown=run.recentLines.sale.slice();
+ const refuseLine=Copy.refuse(shopper,'rice','price',9,run);
+ assert.ok(!justShown.includes(refuseLine),'refuse() reads the SAME SALE Surface buffer buy() already filled');
+ // cross-NPC exclusion on SALE
+ const other=nn('sale-2'),beforeOther=run.recentLines.sale.slice();
+ const otherLine=Copy.buy(other,'rice','full',10,run);
+ assert.ok(!beforeOther.includes(otherLine),'a different NPC on SALE avoids the same recent lines too');
+
+ // NIGHT, tracked on the SAME shared `run` used for SALE above, to prove the two Surface
+ // buffers are independent rather than one shared bucket.
+ const traveler=nn('night-1'),seenNight=[];
+ for(let day=1;day<=8;day++){
+  const line=Copy.night({outcome:'퇴각',day,items:[],changes:[]},traveler,run);
+  assert.ok(!seenNight.slice(-3).includes(line),'NIGHT day '+day+': not one of the last 3 shown: '+line);
+  seenNight.push(line);
+ }
+ assert.ok(run.recentLines.night.every(l=>N.retreat.includes(l)),'the NIGHT buffer holds only NIGHT lines');
+ assert.ok(run.recentLines.sale.every(l=>!N.retreat.includes(l)),'NIGHT tracking never touched the SALE buffer');
+ assert.equal((run.recentLines.arrival||[]).length,0,'ARRIVAL stayed untouched - nothing here ever called arrive()');
+
+ // Same-NPC immediate repeat, proven on all three tracked Surfaces: calling the identical
+ // situation (same NPC, same day) twice in a row means the deterministic hash key is IDENTICAL
+ // both times, so an untracked pick would trivially repeat - only the recent-repeat rule can
+ // be the reason the second call differs.
+ const arriveTwice=(()=>{const r={},p=nn('repeat-arrival');
+  const first=Copy.arrive(p,5,false,r);return [first,Copy.arrive(p,5,false,r)];})();
+ assert.notEqual(arriveTwice[0],arriveTwice[1],'ARRIVAL: the same NPC does not immediately repeat its own last line');
+ const saleTwice=(()=>{const r={},p=nn('repeat-sale');
+  const first=Copy.buy(p,'rice','full',5,r);return [first,Copy.buy(p,'rice','full',5,r)];})();
+ assert.notEqual(saleTwice[0],saleTwice[1],'SALE: the same NPC does not immediately repeat its own last line');
+ const nightTwice=(()=>{const r={},p=nn('repeat-night'),rep={outcome:'중상',day:5,items:[],changes:[]};
+  const first=Copy.night(rep,p,r);return [first,Copy.night(rep,p,r)];})();
+ assert.notEqual(nightTwice[0],nightTwice[1],'NIGHT: the same NPC does not immediately repeat its own last line');
+
+ // No Gameplay RNG is read or written by any tracked SALE/NIGHT pick either.
+ const g=new Game();g.autosave=false;g.start('recent-rng-sale-night');
+ const before=g.rng.state,buyer=g.run.npcs[0],rr={};
+ for(let d=1;d<=5;d++)Copy.buy(buyer,'rice','full',d,rr);
+ for(let d=1;d<=5;d++)Copy.night({outcome:'퇴각',day:d,items:[],changes:[]},buyer,rr);
+ assert.equal(g.rng.state,before,'tracked SALE and NIGHT picks consume no Gameplay RNG');
+});
+
+test('COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT — Save/Load regression, and an older save with no tracking fields still loads',()=>{
+ const a=new Game();a.autosave=false;a.start('recent-save');a.buyRelic(a.run.relicWindow.candidateIds[0]);
+ a.beginOrder();a.open();
+ // Drive several real tracked ARRIVAL beats through the actual Run flow, then land back on
+ // the NPC currently at the counter so its own `lastLine` is guaranteed to be set.
+ for(let i=0;i<3&&a.run.phase==='sell'&&a.run.cursor<a.run.queue.length-1;i++)a.depart();
+ const n=a.current();
+ const preLine=a.run.say.text;
+ assert.ok(a.run.recentLines&&a.run.recentLines.arrival.length>0,'a real arrival populates the tracked Surface buffer');
+ assert.equal(n.lastLine.arrival,preLine,'the NPC\'s own last ARRIVAL line is recorded');
+ a.save();
+ const loaded=Save.import(Save.export(a.account,a.run));
+ assert.deepEqual(loaded.run.recentLines,a.run.recentLines,'run.recentLines survives a Save export/import round trip');
+ const reloadedNpc=loaded.run.npcs.find(x=>x.id===n.id);
+ assert.deepEqual(reloadedNpc.lastLine,n.lastLine,'the NPC\'s lastLine survives the round trip');
+ const b=new Game(loaded.account,loaded.run);b.autosave=false;
+ assert.equal(b.run.say.text,preLine,'a reload does not reword the line the Player already read');
+ // The next tracked pick after reload still obeys the SAME exclusion state - re-asking for the
+ // identical situation (same NPC, same Day) must not trivially repeat the just-reloaded line.
+ const nextLine=Copy.arrive(b.run.npcs.find(x=>x.id===n.id),b.run.day,false,b.run);
+ assert.notEqual(nextLine,preLine,'the next tracked pick after reload still honors the reloaded exclusion state');
+
+ // An older valid v8 save with no recentLines/lastLine at all (pre-adoption) must still load -
+ // no new save version or migration layer was added for this amendment.
+ const legacy=JSON.parse(Save.export(a.account,a.run));
+ delete legacy.run.recentLines;
+ for(const np of legacy.run.npcs)delete np.lastLine;
+ assert.ok(Save.valid(legacy),'a pre-adoption v8 save with no tracking fields at all is still a valid save');
+ const restored=Save.import(JSON.stringify(legacy));
+ const c=new Game(restored.account,restored.run);c.autosave=false;
+ assert.doesNotThrow(()=>c.arrive(),'a reload from a pre-adoption save can still take a tracked ARRIVAL beat');
+});
+
 test('COPY-002 / §9: the approved Rare Reference names are reserved, with no dedicated meme',()=>{
  const src=read('dist/systems/adventurer.js');
  // §9 keeps these three as Rare Reference identities and makes their special copy eligible
