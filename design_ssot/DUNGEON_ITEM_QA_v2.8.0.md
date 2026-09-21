@@ -98,6 +98,16 @@ When 황금 1+1 actually changes a provable resolved result, it participates in 
 Its Special category does not exclude it from proof.
 
 
+## DI-Q-v28-8B — HERO ATTRIBUTION BOUNDARY
+
+PASS:
+- Fatigue-only differences do not produce Hero Item feedback
+- Wallet-only differences do not produce Hero Item feedback
+- a hidden risk reduction without a proven resolved Outcome/state difference does not produce Hero feedback
+- avoided-death WHAT_HAPPENED uses the non-causal outcome sentence
+- a named Item WHY line appears only when sold-Item proof exists
+- proof ordering never creates more than the strongest allowed Hero line
+
 ## DI-Q-v28-9 — REPLACEMENT FLAVOR
 
 Expected:
