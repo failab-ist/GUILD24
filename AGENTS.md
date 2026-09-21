@@ -588,64 +588,95 @@ response still stays compact unless DIRECTOR asks for the exact command list or 
 
 # 17. USER-APPROVED HANDOFF HYGIENE
 
-Handoffs are execution pointers, not duplicate specifications.
+Handoffs are execution pointers, not portable copies of the project.
 
-The receiving role must recover detailed truth from the repository:
+This rule applies to both:
+- WORK handoffs
+- DIRECTOR handoffs
+
+## 17.1 Minimum necessary content only
+
+Include only what the receiving role needs to start the next task:
+
+- current role
+- current repository / branch / HEAD only when operationally relevant
+- current active task / review target
+- exact Canonical / QA / Source routing needed to find the truth
+- any newly approved User decision that is not yet available in the routed documents
+- explicit stop / merge boundary only when it differs from the standing workflow
+
+Everything else should be omitted.
+
+## 17.2 Document-first, no duplication
+
+If information can be resolved from current repository documents, reference the document instead of
+copying its contents into the handoff.
+
+Prefer:
 
 ```text
-AGENTS.md
-→ SPEC_INDEX
-→ WORK_STATE
-→ routed Canonical / QA
-→ directly relevant Source
+Read SPEC_INDEX -> owner spec -> routed QA -> affected Source.
+Implement/review SA-Qxx-yy.
 ```
 
-Do not copy detailed Rule / Numeric / UX / QA truth into a handoff when the current repository
-already contains it.
+Do not paste or paraphrase long Canonical rules, numeric tables, acceptance criteria, workflow rules,
+or project history that the receiving role can read from the repository.
 
-A handoff should contain only what is NOT efficiently recoverable from those sources:
-
-- receiving role
-- repository / branch / exact baseline HEAD when it matters
-- current task or review scope
-- explicit stop / merge boundary when it differs from normal workflow
-- newly confirmed User decision not yet promoted to Canonical
-- known blocker or special caution that the current docs do not already state
-
-For a normal task, prefer references such as:
+Do not repeat AGENTS.md rules inside a handoff.
+The handoff may say only:
 
 ```text
-Implement SA-Q46–51 from current routed owners.
-Review against current Canonical + QA.
+Read AGENTS.md first and follow it.
 ```
 
-over re-listing the rules owned by those documents.
+Exception:
+repeat an exact rule only when the User has just approved it and it has not yet been promoted into
+the current routed Canonical / QA, or when a precise execution clarification is required to prevent
+a known ambiguity. Once promoted, remove the duplicate from later handoffs.
 
-For DIRECTOR handoff, do not restate the implementation plan.
-State the review target and let DIRECTOR inspect Source / Diff / Canonical directly.
+## 17.3 Role-specific only
 
-For WORK handoff, do not restate already-promoted Design.
-State the exact execution scope and owner/QA references only.
+A WORK handoff contains only what WORK needs to implement / test the current task.
+
+A DIRECTOR handoff contains only what DIRECTOR needs to inspect / judge the current implementation.
+
+Do not give either role:
+- the other role's unnecessary operating detail
+- unrelated future tasks
+- project-wide recap
+- completed-task history unless needed to prevent rework
+- discussion history
+
+## 17.4 Never carry rejected or stale context
 
 Do not include:
-
 - rejected candidates
 - superseded values
 - speculative alternatives
 - internal reasoning
-- discussion history
-- completed work that WORK_STATE / Git history already records
-- unrelated future work
-- generic workflow already defined by AGENTS.md
-- Canonical text copied merely for convenience
+- abandoned implementation ideas
+- obsolete branch / commit history
+- already-completed task detail that the active task does not depend on
 
-Exception:
-repeat an exact rule only when omission would create a real execution ambiguity that cannot be
-resolved reliably from the current repository, or when the User has just approved a decision that
-has not yet been promoted to Canonical.
+This prevents accidental anchoring and resurrection of rejected Design.
 
-This prevents duplicate truth, stale handoffs, unnecessary tokens, accidental anchoring and
-resurrection of rejected Design.
+## 17.5 Default handoff shape
+
+Use the smallest shape that works:
+
+```text
+ROLE:
+BASE: <only if needed>
+ACTIVE TASK:
+READ:
+- <exact current documents / sections / SA-Q ids>
+DO:
+- <current execution or review target only>
+STOP:
+- <boundary only if needed>
+```
+
+If a field adds no execution value, omit it.
 
 ---
 
