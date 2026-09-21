@@ -65,6 +65,31 @@ test('§12: a Callback only speaks about history the run actually has',()=>{
   'a customer death may mention the counter');
 });
 
+test('SA-Q25: the helped-return callback needs proven sold-Item contribution, not just an event',()=>{
+ /* `n.events.length` used to gate this - a Trait-only event (강골's injury-guard downgrade,
+    for one) satisfied it with nothing the Player sold. It now reads n.records.at(-1).heroProof,
+    the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself proves a Hero Item line
+    from. Every 6th visit is the only Day this gate is even checked (§11.2), so both cases are
+    built on visit 6. */
+ const setup=()=>{const g=new Game();g.autosave=false;g.start('copy-helped');g.morning();
+  const n=g.run.npcs.find(x=>x.id===g.run.queue[0]);n.introduced=true;n.newToday=false;n.injury=0;n.loyalty=0;n.traits=[];n.visits=5;
+  g.run.queue=[n.id];g.run.cursor=0;return {g,n};};
+ // a previous result with only a Trait contribution (heroProof null) is not proof of a sale
+ {const {g,n}=setup();
+  n.records=[{outcome:'퇴각',items:[],events:[{id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'}],heroProof:null}];
+  g.arrive();
+  assert.ok(!V.helped.includes(g.run.say.text),'a Trait-only previous result draws no helped callback');
+  assert.ok(V.back.includes(g.run.say.text),'and falls through to the ordinary return pool');
+ }
+ // a previous result with a proven sold-Item contribution IS eligible
+ {const {g,n}=setup();
+  n.records=[{outcome:'퇴각',items:['bandage'],events:[{id:'hazard',hazards:['poison'],items:['bandage'],prevented:true}],
+   heroProof:{items:['bandage'],worse:'부상'}}];
+  g.arrive();
+  assert.ok(V.helped.includes(g.run.say.text),'a proven sold-Item contribution makes the callback eligible');
+ }
+});
+
 test('the line is chosen from saved state, so it costs no randomness and survives a reload',()=>{
  const a=new Game();a.autosave=false;a.start('copy-determinism');
  const before=a.rng.state;
