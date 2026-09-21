@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-22
-CURRENT_LINE: v2.8 Source adoption in progress; remaining Result UX adoption active, approved playtest patch queued next
+CURRENT_LINE: v2.8 Source adoption in progress; Task D Result UX closed, approved playtest-response adoption active
 STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Truth
@@ -28,9 +28,9 @@ The v2.8 Director Plan is now orientation-only. It is not a detailed work/spec s
 
 The Source has completed the first major v2.8 adoption cycles plus several playtest-found UX fixes.
 The remaining adoption work is now concentrated in:
-- SALE / NIGHT / CLOSING Result presentation and proven causality
-- one approved playtest-response patch
+- approved playtest-response adoption
 - remaining dialogue-pool / recent-repeat adoption
+- targeted re-measure / regression after the behavior changes
 - final integrated adoption + functional + runtime QA before v2.8 freeze
 
 `SOURCE_ADOPTION_QA_v2.8.0.md` is a known-defect RECORD, not a live tracker. It is not edited to
@@ -106,32 +106,18 @@ Follow-up UX patch (`bd4371e`):
 WORK_STATE refresh (`7ba2688`):
 - completed v2.8 adoption cycles and the current main-line state recorded here
 
-## Active Task — remaining Result UX adoption
+Task D — remaining Result UX adoption CLOSED (main through `ce8fad1`):
+- SA-Q05 / 06 / 07 / 08 / 09 / 21 / 25 / 30 / 33 / 34 adopted
+- Result-Proof corrected to departure-state, semantic-evidence, canonical conditional-Death ordering
+- persistent Aftercare + whole-Bag state proof and helped-return proof gate completed
+- targeted deterministic/RNG QA + browser run-loop smoke passed
 
-This is the remaining pre-playtest-feedback adoption batch. Do not re-run already completed Task D
-copy work above.
+## Active Task — Playtest response batch
 
-Scope:
-- SA-Q05 internal potion marker must not leak into Player Item-effect rows
-- SA-Q06 remove SALE hypothetical outcome/fatigue matrix
-- SA-Q07 replace NIGHT internal fatigue-accounting labels with settled return fatigue + secondary
-  resolved arithmetic only
-- SA-Q09 living-result speech uses the temporary character speech path and the approved selector
-  priority; death is narration
-- SA-Q30 simplify SALE selected-Item analytical label stack to the approved v2.8 hierarchy
-- SA-Q21 / SA-Q34 keep Closing economics-only; remove duplicated expedition/item impact and the old
-  explanatory footer
-- Result-Proof foundation for SA-Q08 / SA-Q33: Hero Item causality only from actual resolved,
-  replay-safe proof; no reroll/reseed/state mutation and no vague unproven Hero attribution
-- SA-Q25 helped-return callback only from persisted proven sold-Item contribution
+USER APPROVED / CANONICAL PROMOTED.
 
-After completion, record its commit(s) in `## Completed` and remove this section.
-
-## Approved Queue
-
-### 1. Playtest response batch — USER APPROVED / CANONICAL PROMOTED
-
-Exact rules are now in current routed owners; do not use WORK_STATE as a second spec.
+Implement the current routed owner truth for SA-Q46–51 only.
+Use `SPEC_INDEX_v2.8.0.md` and the owning Canonical + QA; do not duplicate detailed rules here.
 
 Scope references:
 - SALE compact top / horizontal two-slot Bag -> SALE_v2.8.0 + UI_UX_v2.8.0
@@ -141,9 +127,11 @@ Scope references:
 - 간단 도시락 / 왕도 천연암반수 icon identity -> ITEM_v2.8.0
 - mismatch/acceptance map -> SOURCE_ADOPTION_QA_v2.8.0 + routed QA
 
-Implement only after the current Active Task closes.
+After completion, record its commit(s) in `## Completed`, remove this section, and advance to dialogue exposure / repeat adoption.
 
-### 2. Dialogue exposure / repeat adoption
+## Approved Queue
+
+### 1. Dialogue exposure / repeat adoption
 
 After the playtest-response patch:
 - complete the remaining approved dialogue-pool expansion
@@ -151,14 +139,14 @@ After the playtest-response patch:
 - do not invent new personality mechanics or purchase preferences
 - keep selection deterministic and gameplay-RNG neutral
 
-### 3. Re-measure / regression pass
+### 2. Re-measure / regression pass
 
 Because the approved playtest batch changes purchase acceptance, NPC Wallet and Deep access:
 - run targeted economy / sale / survival-loop regression measurements
 - report observed distribution changes separately
 - do not auto-retune measurement-gated values
 
-### 4. Final v2.8 integration / freeze audit
+### 3. Final v2.8 integration / freeze audit
 
 After all approved adoption and playtest-response work:
 - current Canonical -> Source adoption audit
