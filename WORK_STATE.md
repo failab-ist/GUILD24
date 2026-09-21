@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-22
-CURRENT_LINE: v2.8 Source adoption in progress; Task D Result UX closed, playtest-response batch closed, dialogue exposure / repeat adoption active
+CURRENT_LINE: v2.8 Source adoption in progress; playtest-response batch and dialogue exposure / repeat adoption closed, re-measure / regression pass active
 STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Truth
@@ -127,36 +127,36 @@ DIRECTOR review pending merge):
 - SA-Q51 `bar`/`herobar` icons replaced (retired Hotbar silhouette -> lunchbox / bottled-water)
 - targeted deterministic QA + real-click browser run-loop smoke passed at mobile + desktop widths
 
-## Active Task — Dialogue exposure / repeat adoption
+Dialogue exposure / repeat adoption CLOSED (branch `claude/active-task-implementation-gpe6zh`
+through `5ed0ce4`, DIRECTOR review pending merge):
+- COPY_WORLD_VOICE_v2.8 recent-repeat rule adopted: ARRIVAL/SALE/NIGHT track the last 3 visible
+  lines per Surface (cross-NPC) plus each NPC's own immediately previous line, both excluded
+  from that Surface's next pick; `Copy.arrive/buy/refuse/night` and `Dungeon.resolve` take `run`
+  as a new optional trailing argument, omitting it (every pre-existing direct call) keeps the
+  exact old pure hash pick - still no Gameplay RNG read or written
+- every ARRIVAL/SALE/NIGHT Pool grown to its named v2.8 minimum size (e.g. visit.back 4->16,
+  sale.full/half/overcharge 4->20, night.retreat 4->12; trait-arrival pools to 6 each)
+- 대성공 gets its own `night.great` Pool (10 lines) and dispatch branch, first ever - Source used
+  to send every non-injury success through `grew`/`plain` with no line naming a Great Success;
+  the dead, never-selected `night.supplied`/`night.shaken` Pools are retired into `night.plain`
+- targeted deterministic QA (incl. a forced-대성공 resolve check) + real-click browser run-loop
+  smoke passed with 0 console errors
+
+## Active Task — Re-measure / regression pass
 
 USER APPROVED / CANONICAL PROMOTED.
-
-Implement the current routed owner truth only. Use `SPEC_INDEX_v2.8.0.md` and the owning
-Canonical + QA; do not duplicate detailed rules here.
-
-Scope:
-- complete the remaining approved dialogue-pool expansion
-- adopt the current COPY_WORLD_VOICE recent-repeat rule / cooldown
-- do not invent new personality mechanics or purchase preferences
-- keep selection deterministic and gameplay-RNG neutral
-
-Route: COPY_WORLD_VOICE_v2.8.0 (+ COPY_AUDIT_APPROVED_v2.8.0 for exact text) is the owner;
-check SOURCE_ADOPTION_QA_v2.8.0 first for known mismatch/root-cause entries before rediscovering
-them.
-
-After completion, record its commit(s) in `## Completed`, remove this section, and advance to
-the re-measure / regression pass.
-
-## Approved Queue
-
-### 1. Re-measure / regression pass
 
 Because the approved playtest batch changes purchase acceptance, NPC Wallet and Deep access:
 - run targeted economy / sale / survival-loop regression measurements
 - report observed distribution changes separately
 - do not auto-retune measurement-gated values
 
-### 2. Final v2.8 integration / freeze audit
+After completion, record its commit(s)/findings in `## Completed`, remove this section, and
+advance to the final v2.8 integration / freeze audit.
+
+## Approved Queue
+
+### 1. Final v2.8 integration / freeze audit
 
 After all approved adoption and playtest-response work:
 - current Canonical -> Source adoption audit
