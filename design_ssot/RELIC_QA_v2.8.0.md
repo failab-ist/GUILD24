@@ -260,3 +260,32 @@ Verify the exact inherited-support functions closed in RELIC_v2.8.0.md:
 - 본사 추가발주권 -> next ORDER-offer generation candidate count +2
 
 FAIL if Source restores only the older qualitative blueprint or uses a different numeric value.
+
+
+## REL-Q-v28-22 — INHERITED SUPPORT BASE PRICES
+
+Expect exactly these approved v2.8 base prices for the inherited rows:
+
+    bulk 260
+    stamp 260
+    member 260
+    showcase 280
+    guarantee 280
+    hazardBoard 260
+    medicine 260
+    kitchen 280
+    board 260
+    rookieBoard 240
+    groupFlyer 400
+    memberBundle 380
+    premiumMember 420
+    expeditionMeal 400
+    coldcase 420
+    dawnBulk 380
+    fresh24 740
+    warehouse 360
+    terminal 380
+    delivery 340
+
+FAIL if implementation restores a PASS3/Source-only price or changes one of these values without a
+new approved owner amendment.
