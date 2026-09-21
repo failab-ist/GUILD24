@@ -102,7 +102,10 @@ test('§18: the help panel describes the rules the build actually has',()=>{
  const app=read('dist/ui/app.js');
  // v2.4 shows every current Trait; the loyalty-gated reveal it used to describe is gone.
  assert.ok(!app.includes('숨겨진 특성은 관계가 쌓이면 공개됩니다'),'the retired hidden-Trait rule is not still taught');
- assert.ok(/표시된 특성이 원정에서 실제로 작용하는 특성/.test(app),'the help panel states the rule that replaced it');
+ /* COPY_AUDIT §8-4 replaced that guide paragraph, and SA-Q02 removed the promise it answered.
+    With no surface claiming Traits are hidden, the guide has nothing left to deny. */
+ for(const promise of ['숨겨진 특성','남은 특성','더 친해지면'])
+  assert.ok(!app.includes(promise),'no surface promises a hidden-Trait reveal: '+promise);
  /* §13.2 — the destination lesson teaches the system rule, not one Trait name. The approved
     hotfix copy says the same rule in one sentence; what the guard protects is that the rule
     is stated at all and that no single Trait is named as the reason. */
@@ -227,7 +230,9 @@ test('D-5 / EVENT §3-1: an Event says what it switched on, at the precision the
  assert.equal(by('festival').effects.foodDemand,.2);
  assert.ok(/구매 의사 \+20%p/.test(by('clinic').description),'치유소 휴무 too');
  assert.equal(by('clinic').effects.medicalDemand,.2);
- assert.ok(/6건부터 1건당 5G[^·]*· 최대 100G/.test(by('audit').description),'본사 재고 감사 states the trigger and the cap');
+ /* COPY_AUDIT §13-11 states the same rule as a total rather than per-item: the charge is
+    min(100G, waste x 5G) once cumulative waste reaches 6. */
+ assert.ok(/6건 이상이면 총 폐기 수 ×5G[^·]*· 최대 100G/.test(by('audit').description),'본사 재고 감사 states the trigger and the cap');
  assert.ok(/waste>=6\?Math\.min\(100,s\.stats\.waste\*5\)/.test(read('dist/systems/shop.js')),'which is the rule it applies');
  assert.ok(/특별 발주 1건 · 매입가 \+35%/.test(by('blackmarket').description),'암시장 상인 states the markup');
  assert.ok(/rollOffer\(2,1\.35\)/.test(read('dist/systems/shop.js')),'which is the offer it rolls');
@@ -276,7 +281,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     description has to say the channel it moves and the ones it does not. */
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
-  assert.ok(/능력치 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
+  assert.ok(/능력치 증가 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
   assert.ok(/보급/.test(DATA.relicBy[id].description)&&!/보급·능력치|보급 효과 \+/.test(DATA.relicBy[id].description),
    id+' does not claim the Supply it leaves unchanged');
  }
@@ -324,6 +329,149 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  assert.equal(DATA.itemBy.herbtea.description,'마시기 전에 심호흡부터 하는 손님이 많다.');
  assert.equal(DATA.itemBy.midpotion.description,'하급은 불안하고 상급은 비쌀 때.');
  for(const it of DATA.items)assert.ok(it.description&&it.description.trim(),it.name+' has flavour');
+});
+
+/* COPY_AUDIT_APPROVED_v2.8.0 §11 — STORE SUPPORT 30/30. The approved amendment is exact Player
+   text, so this is equality, not a pattern: a paraphrase, a dropped middot or a stale number is
+   a FAIL here rather than something a looser assertion can absorb. Price and name are pinned in
+   the same table because §11 renames two rows and RELIC_v2.8 re-prices two more, and a row that
+   reads right at the wrong price is still the wrong row. */
+test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are the approved text',()=>{
+ const SUPPORTS=[
+  ['bulk','묶음발주 계약',260,'같은 상품 3개 이상 발주 시 3번째부터 매입가 -15%.'],
+  ['rotation','회전 진열대',240,'전날 6건 이상 판매하면 다음 날 일반·고급 상품의 공급 수량 +1.'],
+  ['stamp','단골 스탬프 기계',260,'유료 구매로 오르는 단골도 +50% · 생환으로 오르는 단골도 제외.'],
+  ['member','회원 관리대장',260,'다음 날부터 이미 만난 손님의 재방문 가중치 +40%.'],
+  ['showcase','희귀상품 입고 계약',280,'희귀 이상 상품 발주 가중치 +70% · 다음 날부터 운영비 +10G.'],
+  ['guarantee','길드 보증 진열대',280,'하루 1회 · 정가 200G 이상 상품 첫 판매 시 본사가 정가의 20%를 손님 대신 부담. 점주는 선택한 판매가 전액 수령.'],
+  ['hazardBoard','원정 위험 게시판',260,'현재 알려진 위험에 대응하는 상품이 발주 후보에 나올 가중치 +80%.'],
+  ['medicine','긴급보급 선반',260,'포션·야외장비·보험 발주 가중치 +60% · 해당 상품 공급 수량 +1.'],
+  ['fridge','대형 냉장고',200,'음식·음료 유통기한 +1일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.'],
+  ['kitchen','즉석식품 코너',280,'음식·음료가 원래 가진 능력치 증가 효과 +30% · 보급·위험 대응·부작용 제외.'],
+  ['board','길드 전광판',260,'기본 방문객이 3명인 날 4명으로 올린다.'],
+  ['rookieBoard','신입 모집 게시판',240,'신규 모험가가 생긴 날, 그 모험가가 오늘 방문객 중 1명으로 반드시 등장 · 총 방문객 수는 늘지 않음.'],
+  ['groupFlyer','공동구매 전단',400,'오늘 방문객 6명 이상이면 같은 상품 3개 이상 발주 시 매입가 -10%.'],
+  ['memberBundle','단골 묶음혜택',380,'재방문 손님의 오늘 두 번째 유료 구매에 단골도 +2.'],
+  ['premiumMember','프리미엄 멤버십',420,'단골도 50 이상 손님의 희귀 이상 상품 구매 의사 +10%p.'],
+  ['returnPoints','귀환 적립제',400,'오늘 유료 구매한 재방문 손님이 단골도 30 이상으로 생환하면 단골도 +2 · 소지금 +30G.'],
+  ['expeditionMeal','원정 도시락 코너',400,'실제 목적지와 맞는 음식·음료의 위험 대응 +25% · 보급이 필요한 날, 보급을 주는 음식·음료의 원래 능력치 증가 효과 +20%.'],
+  ['coldcase','냉장 유통 계약',420,'고급 이상 음식·음료 발주 가중치 +80% · 유통기한 +1일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.'],
+  ['supplyCert','길드 납품 인증',440,'현재 알려진 위험에 맞는 희귀 이상 상품 또는 희귀 이상 보험 판매 시 정가의 12% 본사 수당.'],
+  ['dawnBulk','새벽 공동배송',380,'같은 음식·음료 3개 이상 발주 시 매입가 -15%.'],
+  ['logisticsHQ','물류 본부계약',720,'전날 7건 이상 판매하면 다음 날 첫 묶음발주 매입가 -25%.'],
+  ['lifetime','평생 단골제',740,'단골도 60 이상 손님이 생환하면 하루 1회 소지금 +50G · 다음 방문 가중치 +50%.'],
+  ['royalCert','왕도 프리미엄 인증',760,'희귀 이상 상품을 150%에 판매하면 정가의 20% 본사 수당.'],
+  ['expeditionCert','길드24 원정전문점 인증',700,'알려진 위험 1종이면 대응 상품 후보 1칸 보장 · 2종 이상이면 서로 다른 위험 2종의 대응 상품을 2칸 보장 · 후보를 교환해도 유지.'],
+  ['fresh24','24시간 신선체계',740,'음식·음료 유통기한 +2일 · 원래 가진 능력치 증가 효과 +50% · 보급·위험 대응·부작용 제외.'],
+  ['hub','지역 거점점 계약',700,'다음 날부터 방문객 +1명 45% · +2명 15% · 증가 없음 40% · 기본 운영비 +10%.'],
+  ['warehouse','후방 창고 증설',360,'창고 용량 +10칸.'],
+  ['terminal','본사 추가발주권',380,'다음 발주 후보 생성부터 발주 후보 +2개.'],
+  ['delivery','발주 교환권',340,'매일 첫 후보 전체 교환 무료 · 이후 100G → 200G → 400G… 순으로 증가.'],
+  ['efficiency','운영 효율 매뉴얼',260,'다음 날부터 기본 운영비 -30G.']];
+ assert.equal(SUPPORTS.length,30,'§11 audits all 30 Store Supports');
+ assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 30, in order');
+ for(const [id,name,price,description] of SUPPORTS){
+  const r=DATA.relicBy[id];
+  assert.ok(r,'the catalogue still has '+id);
+  assert.equal(r.name,name,id+' name is the approved §11 text');
+  assert.equal(r.price,price,id+' price is the approved baseline');
+  assert.equal(r.description,description,id+' description is the approved §11 text, verbatim');
+ }
+ /* REL-Q-v28-1: the two renamed rows really dropped 쇼케이스, and the Decoration that owns the
+    word keeps it. */
+ for(const id of ['showcase','coldcase'])assert.ok(!DATA.relicBy[id].name.includes('쇼케이스'),id+' no longer reuses 쇼케이스');
+ assert.ok(DATA.decorations.some(d=>d.name==='프리미엄 쇼케이스'),'the Decoration of that name is untouched');
+ /* REL-Q-v28-10 / SA-Q26: the exact stale phrases the amendment retires, gone from every row. */
+ const all=DATA.relics.map(r=>r.description).join('\n');
+ for(const stale of ['무료 보급','치료·야외장비','50G부터','최소 4명','8건 이상','+12G','+25G','8%를','바가지','15G 절감','신선식품 발주'])
+  assert.ok(!all.includes(stale),'no Store Support row still says "'+stale+'"');
+ /* §11-31: the acquired state reads as 확보/보유, not 설치 - 계약·인증·매뉴얼 are not installed. */
+ const app=read('dist/ui/app.js');
+ assert.ok(app.includes('확보 완료 · ')&&!app.includes('설치 완료 · '),'the purchased banner says 확보 완료');
+ assert.ok(app.includes("mine?'보유 중'")&&!app.includes("mine?'설치됨'"),'an owned row reads 보유 중');
+});
+
+/* SA-Q23 / Q24 — FALSE DIALOGUE IMPLICATIONS. Six lines implied a mechanic the game does not
+   have: an Item the customer is asking for, a price rule, or a remembered favourite SKU. They
+   are replaced one for one. This is not the dialogue expansion pass - no pool grew. */
+test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=>{
+ const lines=allLines.join('\n');
+ for(const gone of ['귀환석 있습니까','많이 든 걸로 주세요','먹을 게 제일 급해요',
+                    '비싼 게 좋은 거 아닌가요','이왕이면 좋은 걸로 봅시다','늘 먹던 걸로 주세요'])
+  assert.ok(!lines.includes(gone),'the false implication is gone: '+gone);
+ for(const [pool,line] of [
+  [V.trait.coward,'“오늘은 무사히 다녀오는 게 목표입니다.”'],
+  [V.trait.eater,'“원정 끝나면 밥부터 먹어야겠어요.”'],
+  [V.trait.eater,'“배고픈 채로 돌아오는 건 딱 질색입니다.”'],
+  [V.trait.greed,'“오늘은 빈손으로 돌아올 생각 없습니다.”'],
+  [V.trait.greed,'“이번엔 전리품 좀 제대로 챙겨와야죠.”'],
+  [V.regular,'“이 정도면 단골 맞죠?”']])
+  assert.ok(pool.includes(line),'the approved replacement is in its own pool: '+line);
+ // one for one: no pool grew, and no Favorite-SKU state was invented
+ assert.equal(V.trait.coward.length,4);assert.equal(V.trait.eater.length,3);
+ assert.equal(V.trait.greed.length,3);assert.equal(V.regular.length,5);
+ assert.ok(!/favorite|favouriteItem|lastItem|usualItem/i.test(read('dist/systems/adventurer.js')+read('dist/data/copy.js')),
+  'no Favorite-SKU state was created');
+ // no line names an Item, which is what made the old ones read as a request
+ for(const it of DATA.items)assert.ok(!lines.includes(it.name),'no arrival line names an Item: '+it.name);
+});
+
+/* SA-Q37 — EVENT 22/22. COPY_AUDIT_APPROVED §13 is the exact owner of every Event's Flavor and
+   Function. This is a 1:1 equality table: a paraphrase, a missed row or a stale example is a
+   FAIL here rather than something a pattern absorbs. Mechanics are out of scope and untouched -
+   the effects objects are asserted to be exactly what they were. */
+test('SA-Q37 / COPY_AUDIT §13: all 22 Events carry the approved Flavor and Function',()=>{
+ const APPROVED=[
+  ['logistics','물류대란','북문 운송로가 막혔다. 오늘 들어온 상자마다 우회 운임 딱지가 붙어 있다.','오늘 모든 발주 매입가 +15%'],
+  ['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','지정 발주 상품 1종 · 1개 발주 시 2개 입고'],
+  ['pilgrimage','게이트 순례주간','성지 순례 깃발이 게이트 거리를 메웠다. 행렬을 따라 길을 바꾸는 모험가도 있다.','오늘 방문객 중 1~3명의 목적지가 다른 열린 게이트로 바뀔 수 있음'],
+  ['overflow','몬스터 범람','경비병들이 게이트 앞 울타리를 한 겹 더 둘렀다. 안쪽 울음소리가 오늘따라 가깝다.','오늘 게이트 요구 전력 +12% · 원정 보상 +30%'],
+  ['potionPrice','포션 가격 폭등','연금술사 조합의 새 가격표가 붙었다. 어제 붙인 종이 위에.','오늘 포션 매입가 +35%'],
+  ['coldwave','한파','아침부터 진열대 유리가 서렸다. 게이트 쪽 바닥에는 얇은 얼음이 잡혔다.','적용 가능한 게이트에 냉기 위험 추가'],
+  ['shortage','포션 공급 중단','배송 마차에서 포션 칸만 비어 있었다.','오늘 포션 발주 등장률 대폭 감소'],
+  ['rookie','신입 모험가 시즌','길드 등록대 앞에 새 장비 냄새가 난다. 이름표가 아직 빳빳한 모험가들이 줄을 섰다.','오늘 신규 모험가 1명 방문'],
+  ['royal','왕립 기사단 방문','왕립 문장이 박힌 마차가 길드 앞에 섰다. 주변 모험가들이 슬쩍 길을 비킨다.','오늘 신규 모험가 1명 방문 · 레벨·희귀도 상향'],
+  ['blackmarket','암시장 상인','개점 전, 뒷문 앞에 주인 없는 상자가 놓여 있었다. 가격표만은 또박또박 붙어 있다.','오늘 희귀 이상 특별 발주 1건 · 매입가 +35%'],
+  ['audit','본사 재고 감사','본사 감사관은 인사보다 장부를 먼저 찾았다.','누적 폐기 6건 이상이면 총 폐기 수 ×5G 운영비 추가 · 최대 100G'],
+  ['festival','왕도 축제','왕도 쪽 음악이 게이트 앞까지 넘어온다. 원정 나서는 사람들 손에도 먹을 것이 들렸다.','오늘 음식·음료 구매 의사 +20%p'],
+  ['strike','길드 파업','길드 정문에 현수막이 걸리고 접수창구가 닫혔다.','오늘 방문객 -1'],
+  ['unknown','미확인 게이트','새벽 순찰대가 지도에 없는 게이트를 발견했다. 아직 이름도 없다.','오늘 고위험·고보상 임시 게이트 +1'],
+  ['tasting','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G'],
+  ['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','적용 가능한 게이트에 독 위험 추가'],
+  ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보 +2'],
+  ['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능'],
+  ['clinic','치유소 휴무','치유소 문에 휴무 팻말이 걸렸다. 보험 창구 앞줄이 금세 길어졌다.','오늘 보험 상품 구매 의사 +20%p'],
+  ['wastecover','본사 폐기 지원','본사가 오늘 폐기비를 대신 낸다. 점주는 공문 날짜를 두 번 확인했다.','오늘 폐기 비용 0G'],
+  ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2'],
+  ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G'],
+ ];
+ assert.equal(APPROVED.length,22,'§13 audits all 22 Events');
+ assert.deepEqual(DATA.events.map(e=>e.id),APPROVED.map(r=>r[0]),'the catalogue is exactly those 22, in order');
+ for(const [id,name,reveal,description] of APPROVED){
+  const e=DATA.events.find(x=>x.id===id);
+  assert.ok(e,'the catalogue still has '+id);
+  assert.equal(e.name,name,id+' name');
+  assert.equal(e.reveal,reveal,id+' Flavor is the approved §13 text, verbatim');
+  assert.equal(e.description,description,id+' Function is the approved §13 text, verbatim');
+ }
+ // the two stale examples the amendment calls out by name
+ const all=DATA.events.map(e=>e.reveal+'|'+e.description).join('\n');
+ assert.ok(!all.includes('오늘 첫 50% 판매 · 본사 지원 +50G'),'the 50% 할인 correction is in');
+ assert.ok(!all.includes('오늘 의료 상품 구매 의사 +20%p'),'and the 보험 correction is in');
+ assert.ok(!/의료 상품/.test(all),'no Event still says 의료 상품');
+ // §13-22 keeps the 1 -> 2 -> 3 -> 5 gap on screen, which is the whole joke
+ const night=DATA.events.find(e=>e.id==='nightshift').reveal;
+ assert.ok(/1\)[\s\S]*2\)[\s\S]*3\)[\s\S]*5\)/.test(night)&&!/\n4\)/.test(night),'the missing rule 4 survives');
+ // mechanics are untouched: every Event keeps the exact effects and weight it had
+ const EFFECTS={logistics:{price:1.15},oneplus:{double:1},pilgrimage:{pilgrimage:1},
+  overflow:{danger:1.12,reward:1.3},potionPrice:{potionPrice:1.35},coldwave:{cold:1},
+  shortage:{potionWeight:0.08},rookie:{rookie:1},royal:{royal:1},blackmarket:{blackmarket:1},
+  audit:{audit:1},festival:{foodDemand:0.2},strike:{visitors:-1},unknown:{unknown:1},
+  tasting:{tasting:1},poisonfog:{poison:1},caravan:{offers:2},payday:{wallet:1.2},
+  clinic:{medicalDemand:0.2},wastecover:{wasteFree:1},bard:{visitors:2},nightshift:{overheadFree:1}};
+ for(const e of DATA.events)assert.deepEqual(e.effects,EFFECTS[e.id],e.id+' mechanics are unchanged');
+ assert.deepEqual(DATA.events.filter(e=>e.weight!==1).map(e=>e.id).sort(),['bard','nightshift'],
+  'and so are the two rare weights');
 });
 
 console.log(count+' copy groups passed');

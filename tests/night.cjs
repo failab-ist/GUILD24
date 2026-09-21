@@ -71,9 +71,9 @@ function checkOne(r, n){
  for(const c of ch){assert.ok(c.label&&c.value,'every change token has a label and a value');
   assert.ok(!/undefined|NaN/.test(c.label+c.value),'no placeholder in a change token');}
  assert.equal(ch.some(c=>c.label==='경험치'),!!r.xp,'경험치 appears exactly when some was gained');
- assert.equal(ch.some(c=>c.label==='NPC 소지금 획득'),!!r.loot,'NPC 소지금 획득 appears exactly when some was gained');
+ assert.equal(ch.some(c=>c.label==='원정 소지금 획득'),!!r.loot,'NPC 소지금 획득 appears exactly when some was gained');
  if(r.outcome==='사망'){
-  assert.ok(!ch.some(c=>c.label==='경험치'||c.label==='NPC 소지금 획득'),'a death reports no gain');
+  assert.ok(!ch.some(c=>c.label==='경험치'||c.label==='원정 소지금 획득'),'a death reports no gain');
   assert.ok(!ch.some(c=>c.kind==='up'&&c.label==='레벨'),'a death reports no growth');
  }
  assert.equal(ch.some(c=>c.label==='휴식'),!!r.recovery,'휴식 appears exactly when rest was set');
@@ -220,9 +220,10 @@ test('the contradictions found in visual QA stay fixed',()=>{
  // injury penalty text matches the specific trait logic
  const injuredBase = {...base, outcome:'부상', combatWon:false, injury:1};
  const p1 = P.nightChanges(injuredBase, {traits:[]}).find(c=>c.label==='남은 부상')?.value;
- assert.equal(p1, '생존 -20% · 투력 -15%', 'base injury penalty');
+ /* SA-Q03: the Player-facing Stat is 강인함, never 생존, and the pair reads 투력 -> 강인함. */
+ assert.equal(p1, '투력 -15% · 강인함 -20%', 'base injury penalty');
  const p2 = P.nightChanges(injuredBase, {traits:['grit']}).find(c=>c.label==='남은 부상')?.value;
- assert.equal(p2, '생존 -20% · 투력 +20%', 'grit replaces combat penalty');
+ assert.equal(p2, '투력 +20% · 강인함 -20%', 'grit replaces combat penalty');
  // a hazard event with no carried item is not attributed to anything
  const bare={...base,outcome:'성공',combatWon:true,xp:20,loot:30,
   events:[{id:'hazard',hazards:['poison'],items:[],prevented:true}]};

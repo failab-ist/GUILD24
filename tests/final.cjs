@@ -396,10 +396,12 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
     What a player can actually touch in what order is proved in a real browser by the
     `D25 Final disclosure precedes the D25 decisions` probe in tools/qa-visual.cjs; these two
     assertions pin the rule the probe exercises, so neither stands alone. */
- assert.ok(/if\(s\.day>=25&&s\.final&&!s\.bossReveal\.familySeen\)return true;/.test(app),
-  'the Family disclosure is due from D25, not from D30');
- const due=app.slice(app.indexOf('function bossRevealDue('),app.indexOf('function bossRevealStage('));
- assert.ok(!/s\.day>=30/.test(due),'and no D30-only reveal path survives beside it');
+ /* the cadence table now owns which beat is due; the Family disclosure is its D25 row and the
+    `final` stage additionally requires the state to exist. */
+ assert.ok(/\[25,'final','familySeen'\]/.test(app),'the Family disclosure is due from D25, not from D30');
+ assert.ok(/if\(stage==='final'&&!s\.final\)continue;/.test(app),'and only once the Final state exists');
+ const stageFn=app.slice(app.indexOf('function bossRevealStage('),app.indexOf('function bossReveal('));
+ assert.ok(!/s\.day>=30|day===30/.test(stageFn),'and no D30-only reveal path survives beside it');
  const precedence=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
  assert.ok(precedence.indexOf('bossRevealDue()')<precedence.indexOf("modal='relics'",precedence.indexOf('bossRevealDue()')),
   'and it is resolved ahead of the Relic window it exists to inform');

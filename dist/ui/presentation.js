@@ -1,9 +1,11 @@
 (function(G){
 const D=G.DATA;
-const labels={supply:'보급',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식 1개당 보급',supplyPerItem:'음식·음료 1개당 보급',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'NPC 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'단골 보너스',overchargeBias:'바가지 구매 의사',visitGold:'방문 골드',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
+const labels={supply:'보급',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식 1개당 보급',supplyPerItem:'음식·음료 1개당 보급',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'원정 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'정가·50% 구매 시 단골도',overchargeBias:'바가지 구매 의사',visitGold:'방문 시 소지금',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
 const percent=new Set(['escape','injuryGuard','injuryRisk','loot','variance','rareLoot','priceBias','buyBias','rareBias','commonBias','combatPercent','survivalPercent','injuredCombatPercent','overchargeBias']);
 const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','injuryRisk','escape','rareLoot','rareBias','commonBias']);
 const days=new Set(['recoveryDelta']);
+/* SA-Q32: a Gold amount is stated in G, the way every other Gold figure on screen is. */
+const gold=new Set(['visitGold']);
 const mult=new Set(['xpMult','foodMult','potionMult','revisitMult']);
 const negative=new Set(['fatigue','injuryRisk','variance']);
 // Canonical player-facing Hazard pressure (DUNGEON_HAZARD 'HAZARD PLAYER-FACING PRESSURE').
@@ -12,13 +14,13 @@ const hazardPressure={poison:'강인함 압박',bind:'기동 압박',corrosion:'
 function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
 /* ITEM_v2.7 §INSURANCE HIERARCHY: Aftercare is a utility, not a magnitude. Rendering it as
    `+1` would read as a hidden injury-risk percentage, which the owner says it does not have. */
-const util={aftercare:'결과는 그대로 · 원정 후 남는 부상만 1단계 완화',duplicate:'다음 소비품 효과 2회 적용 · 쿠폰도 1칸 사용 · 중첩 불가',revive:'사망 판정을 중상으로 변경',curePoison:'독 대응 상품',potion:'포션'};
+const util={aftercare:'원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.',duplicate:'다음 소비품 효과 2회 적용 · 쿠폰도 1칸 사용 · 중첩 불가',revive:'사망 판정을 중상으로 변경',curePoison:'독 대응 상품',potion:'포션'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
 function rows(e,tones){const out=[];for(const[k,v]of Object.entries(e)){
  if(util[k]){out.push({key:k,label:util[k],text:'',tone:'neutral',bad:false,utility:true});continue;}
  if(!labels[k]||!v)continue;const value=mult.has(k)?(v-1)*100:percent.has(k)?v*100:v;const rounded=Math.round(value*10)/10;
- const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':'';
+ const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));
  out.push({key:k,label:labels[k],text:(rounded>0?'+':'')+rounded+suffix,tone,bad:tone==='cost'});}
  return out;}
@@ -84,7 +86,7 @@ function nightHappened(r){
                                         :'원정은 끝내지 못했지만 무사히 빠져나왔다.';
  if(r.outcome==='부상')return r.combatWon?'전투를 이겼지만 돌아오는 길은 험했다.'
                                         :'원정을 끝내지 못하고 다친 채 돌아왔다.';
- return r.outcome==='대성공'?'예상보다 일찍 게이트에서 나왔다.':'원정을 마치고 돌아왔다.';}
+ return r.outcome==='대성공'?'예상보다 큰 성과를 내고 돌아왔다.':'원정을 마치고 돌아왔다.';}
 /* Importance decides presentation weight. Compactness is about how much COPY a routine
    result spends, never about shrinking the adventurer: a quiet beat drops the quote and
    the extra blocks and keeps the character. Anything the resolution actually recorded as
@@ -140,7 +142,7 @@ function nightChanges(r, npc){const out=[];
    const n=npc;
    if(n){
     const combat=n.traits.includes('grit')?'+20%':'-15%';
-    out.push({kind:'down',label:'남은 부상',value:'생존 -20% · 투력 '+combat});
+    out.push({kind:'down',label:'남은 부상',value:'투력 '+combat+' · 강인함 -20%'});
    }
   }
   if(r.finalFatigue!==undefined){
@@ -153,7 +155,7 @@ function nightChanges(r, npc){const out=[];
    out.push({kind:r.netFatigueDelta>0?'down':'up',label:'최종 피로',value:r.finalFatigue+''});
   }
  if(r.xp)out.push({kind:'',label:'경험치',value:'+'+r.xp});
- if(r.loot)out.push({kind:'gain',label:'NPC 소지금 획득',value:r.loot+'G'});
+ if(r.loot)out.push({kind:'gain',label:'원정 소지금 획득',value:r.loot+'G'});
  return out;}
 
 /* ---- SUPPLY IMPACT -------------------------------------------------------------

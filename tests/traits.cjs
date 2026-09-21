@@ -53,11 +53,11 @@ test('TRAIT-Q03/Q04: nine exclusion pairs hold on every acquisition path; 탐욕
    for(const pair of DATA.traitExclusions)assert.ok(!pair.every(t=>n.traits.includes(t)),'grow: '+pair);
   }
  }
- // rare mentor Event path
- const g=fresh('mentor'),n=g.run.npcs[0];
- n.traits=['social'];n.introduced=true;g.run.phase='morning';
- g.run.special={kind:'mentor',used:false,candidates:['shy']};
- assert.throws(()=>g.specialAction(n.id,'shy'),'mentor cannot break an exclusion pair');
+ /* SA-Q43: the mentor path that used to add a Trait outside growth is retired, so the
+    exclusion rule is asserted where Traits are actually composed - there is no second
+    writer left to break a pair. */
+ const g=fresh('mentor');
+ assert.equal(typeof g.specialAction,'undefined','no retired path can add a Trait');
 });
 
 test('TRAIT-Q07/ITEM-Q14: Food affinity touches native core only',()=>{

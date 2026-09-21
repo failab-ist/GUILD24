@@ -18,7 +18,7 @@ class Game{
  start(seed){
  const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
  const startGold=1000+(Object.values(loadout).includes('thriftSafe')?D.balance.decorationStartGold:0);
- this.rng=new G.RNG(seed);this.run={version:8,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,npc:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ this.rng=new G.RNG(seed);this.run={version:8,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
  for(const[id,num]of D.openingStock)this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
@@ -31,7 +31,7 @@ class Game{
   const days=[early,late],odds=D.deepTuning.threeOccurrenceChance;
   if(odds!==null&&third<odds)days.push(deep.pick([7,14,21,28].filter(d=>d!==early&&d!==late)));
   this.run.deep={days:days.sort((a,b)=>a-b),today:null};}
- const boss=new G.RNG(String(seed)+':boss');this.run.bossId=boss.pick(D.bosses).id;this.run.bossReveal={identitySeen:false,traitSeen:false};
+ const boss=new G.RNG(String(seed)+':boss');this.run.bossId=boss.pick(D.bosses).id;this.run.bossReveal={identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false};
  if(this.run.bossId==='SLOTH'){this.run.slothDays=boss.shuffle([15,20,25]).slice(0,2).sort((a,b)=>a-b);this.run.sealBreakCount=0;}
 this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
@@ -53,7 +53,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */
-  const extras=(s.dayFacilities?.includes('showcase')?10:0)-(s.dayFacilities?.includes('efficiency')?15:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  const extras=(s.dayFacilities?.includes('showcase')?10:0)-(s.dayFacilities?.includes('efficiency')?30:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
   const base=this.overheadBase(),hub=s.dayFacilities?.includes('hub')?base*D.balance.hubOverheadRate:0;
@@ -104,14 +104,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     transaction today, and only if the Store can pay. No Job / Level / rarity gate is added. */
  canNominateDeep(n){const s=this.run,offer=this.deepOffer();
   return !!offer&&s.phase==='sell'&&!!n&&this.current()?.id===n.id
-   &&!n.pack.length&&!n.history.some(h=>h.day===s.day)&&s.money>=this.deepCost(n)
-   /* the other half of the same rule: an NPC whose destination was already reassigned by an
-      explicit Player action today cannot then be sent on the Deep Expedition. */
-   &&!(s.special?.kind==='route'&&s.special.used&&s.special.npcId===n.id);}
+   &&!n.pack.length&&!n.history.some(h=>h.day===s.day)&&s.money>=this.deepCost(n);}
  nominateDeep(npcId){const s=this.run,n=s.npcs.find(x=>x.id===npcId),offer=this.deepOffer();
   if(!offer)throw Error('오늘은 추천할 심층원정이 없습니다.');
-  if(s.special?.kind==='route'&&s.special.used&&s.special.npcId===npcId)
-   throw Error('이미 배치를 조정한 손님은 심층원정에 추천할 수 없습니다.');
   if(!this.canNominateDeep(n))throw Error('아직 거래하지 않은 현재 손님만 추천할 수 있습니다.');
   const cost=this.deepCost(n);
   s.money-=cost;s.daily.deepSponsor+=cost;s.stats.spent+=cost;
@@ -201,7 +196,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const rawVisitors=this.rng.int(3,6);
   const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;
   let hubExtra=0;
-  if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;}
+  if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.45?1:r<.60?2:0;}
   /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
   const decoExtra=this.wears('guildPlaque')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
   s.expectedVisitors=baseVisitors+hubExtra+decoExtra;
@@ -235,34 +230,88 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      day's own visit slots. No new Level band and no extra visitor: the Day-based level rule is
      untouched and the headcount is the headcount. */
   const arrival=((s.day>1&&s.day%3===0)||ev.rookie||ev.royal)?this.addNPC({royal:!!ev.royal}):null;
-  if(s.pity.npc>=8){const fresh=s.npcs.filter(n=>!n.introduced);if(fresh.length&&this.rng.next()<.6){fresh[0].rarity=Math.max(1,fresh[0].rarity);fresh[0].potential+=.05;}}
+  /* SA-Q44: the hidden NPC pity bump is retired. After 8 quiet Days it used to reach into an
+     un-met adventurer and raise their Rarity floor and potential on a 60% roll, invisibly and
+     with no routed Design owner. Nothing compensates for it: Rarity and potential are now only
+     ever what Adventurer.create rolled. */
   this.generateOffers();
   let visitors=Math.max(1,s.expectedVisitors+(ev.visitors||0));
   let available=s.npcs.filter(n=>n.alive&&!n.recovery),selected=[];
-  for(let i=0;i<Math.min(visitors,available.length);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(!n.introduced&&s.dayFacilities.includes('rookieBoard')?1.7:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+  /* SA-Q45. A force-seated newcomer takes an EXISTING slot, so they must not create one. They
+     are a body in `available`, and on a Day whose roster is smaller than the intake the slot
+     count is that roster - so counting them would let the Day fill one more slot than it could
+     have filled without the Event, which is the visitor increase Canonical forbids. The seats
+     are therefore counted on the roster as it stood before the arrival. The draw pool itself is
+     untouched: on any Day the roster could already fill, capacity===available.length and both
+     the slot count and every weighted draw are bit-for-bit what they were. */
+  const seats=!!arrival&&(ev.rookie||ev.royal||s.dayFacilities.includes('rookieBoard'));
+  const capacity=seats?available.filter(n=>n!==arrival).length:available.length;
+  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
   /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
      than by adding a slot. The number of weighted draws is unchanged, so a Day without the
      event is bit-for-bit what it was. */
-  if(ev.rookie&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
-  s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;let promising=false;
-  for(const n of selected){if(!n.introduced&&n.rarity>=1)promising=true;n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
+  /* RELIC_v2.8 §ROOKIE BOARD: 신입 모집 게시판 seats the same way. A new adventurer generated
+     today takes one of today's own slots - the support adds no visitor, draws nothing and
+     claims no probability. On a Day that generates nobody it does nothing at all.
+     SA-Q45 / EVENT_v2.8 §왕립 기사단 방문: so does the royal Event. It already generates exactly
+     one royal-profile newcomer above, and its eligibility already refuses to fire without Living
+     NPC Cap room, so the only thing it was missing was the seat - 왕립 기사단 방문 could fire
+     without the knight ever visiting. One seating rule now serves all three. */
+  if((ev.rookie||ev.royal||s.dayFacilities.includes('rookieBoard'))&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
+  s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
+  for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}n.money=Math.min(2000,Math.round((n.introduced?n.money:150)+n.level*8+this.rng.int(0,60)));n.newToday=!n.introduced;}
   if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
    for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
-  s.special=null;if(s.day>=4&&!s.specialUsed&&this.rng.next()<.045){const kind=this.rng.pick(['route','remove','mentor']);s.special={kind,used:false,candidates:kind==='mentor'?this.rng.shuffle(D.traits.filter(t=>t.direction==='positive')).slice(0,3).map(t=>t.id):[]};}s.pity.npc=promising?0:s.pity.npc+1;
+  /* SA-Q43: the non-Canonical random 길드 지원 opportunity is not generated. The field is still
+     cleared every Morning so a stale v8 save cannot carry one back in. */
+  s.special=null;
  }
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?2:0)+(this.wears('dawnSign')?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
- if(ev.blackmarket)s.offers.push(this.rollOffer(2,1.35));
+ /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
+    works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
+    which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired.
+    SA-Q19: the row carries `origin` so the screen can name where it came from. It is set here,
+    on the one Event-origin row, and on nothing else - an ordinary offer has no origin and gets
+    no source label, because this is special-offer presentation and not a generic rarity
+    attribution. */
+ if(ev.blackmarket)s.offers.push({...this.rollOffer(2,1.35),origin:'blackmarket'});
+ const ordinary=num;
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
  const hazards=G.Relics.known(this);s.pity.hazards??={};if(advancePity){for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
- if(s.pity.counter>=3||this.has('expeditionCert')){const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));if(matches.length){const item=this.rng.pick(matches);s.offers[s.offers.length-1]=this.offerFor(item);if(advancePity){for(const h of target)if(G.Relics.counter(item,[h]))s.pity.hazards[h]=0;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}}}
+ /* RELIC_v2.8 §EXPEDITION KEYSTONE — COUNTER COVERAGE (REL-Q-v28-16). The keystone is not
+    "is there a Counter at all": with two or more known Hazards it guarantees a minimum BREADTH
+    of response. Two distinct keys, two distinct slots, and for guarantee accounting a slot
+    answers for one key only - an Item that Counters both fills one of the two, never both.
+    A slot that already Counters the key is claimed as it stands; only an unclaimed slot is ever
+    overwritten, so the ordinary offer count is preserved and no unknown Hazard is named. */
+ const claimed=new Set(),slots=[...Array(ordinary).keys()];
+ const guarantee=keys=>{for(const key of keys){
+   const standing=slots.find(i=>!claimed.has(i)&&G.Relics.counter(D.itemBy[s.offers[i].item],[key]));
+   if(standing!==undefined){claimed.add(standing);continue;}
+   const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,[key]));
+   const slot=[...slots].reverse().find(i=>!claimed.has(i));
+   if(!matches.length||slot===undefined)continue;
+   s.offers[slot]=this.offerFor(this.rng.pick(matches));claimed.add(slot);}};
+ if(this.has('expeditionCert')&&hazards.length){
+  /* the keys the Run has gone longest without an answer to are chosen first; the draw itself
+     is still shuffled, so which two are picked is not a fixed reading of the Hazard list. */
+  const order=this.rng.shuffle([...hazards]).sort((a,b)=>((s.pity.hazards[b]||0)>=3)-((s.pity.hazards[a]||0)>=3));
+  guarantee(order.slice(0,hazards.length>=2?2:1));
+ }else if(s.pity.counter>=3&&hazards.length){
+  const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
+  const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));
+  if(matches.length)s.offers[ordinary-1]=this.offerFor(this.rng.pick(matches));
+ }
+ if(advancePity&&hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
+  s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }
  /* META_v2.7 §FRANCHISE GRADE — ORDER PURCHASE-PRICE PASSIVE: applied AFTER the existing
     Contract / Event / Offer calculation and inside the same single Math.round, so there is no
     second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
     Final transfer each read their own price and are untouched. */
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)};}
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)+(it.rarity<=1&&s.previousSales>=6&&this.has('rotation')?1:0)};}
  rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
@@ -334,9 +383,16 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*1.5);
  if(s.event?.effects.tasting&&mode==='half'&&!s.tastingUsed){s.money+=D.balance.tastingSupport;s.daily.subsidy+=D.balance.tastingSupport;s.tastingUsed=true;}
  if(this.has('memberBundle')&&n.visits>1&&n.history.filter(h=>h.day===s.day&&h.paid>0).length===1)loyalty+=2;
- let commission=0;if(this.has('royalCert')&&mode==='overcharge'&&it.rarity>=2)commission+=Math.round(it.sell*.12);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive))commission+=Math.round(it.sell*.08);s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
+ let commission=0;if(this.has('royalCert')&&mode==='overcharge'&&it.rarity>=2)commission+=Math.round(it.sell*.20);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive))commission+=Math.round(it.sell*.12);s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;
  n.history.push({day:s.day,item:it.id,mode,paid:intent.price,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,commission,loyalty:n.loyalty-before});
+ /* SA-Q11. A committed purchase is the one thing the Player did, so the Great Success signal
+    - and ONLY that signal - is recomputed against the Bag they just changed. The rest of the
+    SALE-ENTRY snapshot stays frozen: Combat Forecast, Hazard Readiness and the 실패 시 사망
+    위험 % are arrival information, and refreshing them as Items are committed is the
+    answer-following SALE_v2.7 §PRE-COMMIT INFORMATION BOUNDARY forbids. A refused or failed
+    sale returns above this line, so it cannot reach the recompute at all. */
+ if(n.outlook)n.outlook.greatSignal=G.Dungeon.greatSuccessSignal({...n},this.claimedGateFor(n)||s.dungeons[0],s.facilities);
  s.say={npc:n.id,text:G.Copy.buy(n,it.id,mode,s.day)};this.save();return true;
  }
  cartTotal(cart=this.run.cart||{}){return Object.entries(cart).reduce((v,[i,q])=>v+this.relicQuote(Number(i),q,cart),0);}
@@ -361,7 +417,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
-  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=12;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=25;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=30;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=50;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  s.daily.operating=this.expectedOperatingCost();
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }

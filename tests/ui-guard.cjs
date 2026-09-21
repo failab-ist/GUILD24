@@ -327,15 +327,17 @@ test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is me
  assert.ok(boss<event&&boss<relic,'the Boss reveal is offered ahead of the Event and the Relic window');
  assert.ok(!/phase==='boss'/.test(app),'the reveal is a beat in the existing chain, not a new Phase');
  // seen state is persisted per stage, so a reload cannot replay or reorder a reveal
- for(const flag of ['identitySeen','traitSeen','familySeen'])
+ for(const flag of ['identitySeen','combatSeen','traitSeen','routeSeen','familySeen'])
   assert.ok(app.includes(flag),'the '+flag+' reveal is consumed exactly once');
  assert.ok(/case'boss-seen'/.test(app)&&/game\.save\(\)/.test(app),'consuming a reveal is written to the save');
 });
 
 test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',()=>{
  const c=Copy.boss;
- assert.equal(c.d5.header,'길드 토벌 공고');
- assert.equal(c.d15.intro,'길드 정보원이 추가 정보를 확보했다.');
+ /* COPY_AUDIT_APPROVED §14 is the exact owner of the cadence copy; these three headers and the
+    D15 intro were the pre-cadence wording it supersedes. */
+ assert.equal(c.d5.header,'1차 조사 보고');
+ assert.equal(c.d15.intro,'전투 기록에서 변칙이 확인됐다.');
  assert.equal(c.final.header,'최종 정찰 보고');
  for(const b of DATA.bosses){
   assert.ok(c.d5.flavor[b.id],b.id+' has its D5 Flavor');
@@ -380,16 +382,17 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
   'the visitor count is composed from Relics and the wall Decoration');
  assert.ok(!/contract/i.test(composes),'and from no Contract');
  const helpText=fn('help');
- assert.ok(helpText.includes('점포지원·장식·사건'),'the Help names those three sources');
- // and what the Help says survives a Run is what Meta actually keeps
- const fresh=Meta.fresh(),carried=['상품','직업','몬스터 지식','발견','직업 숙련','점포 자본','보유 장식'];
+ /* COPY_AUDIT §8 replaced the long-form guide with the compact one; the visitor-source list it
+    used to recite belongs to the Morning surface, which states it in context. What the guide
+    still owes the player is what a Run leaves behind, and it says so in §8-7's own terms. */
+ const fresh=Meta.fresh(),carried=['본사 기록','해금','직업 숙련','점포 자본','보유 장식'];
  for(const t of carried)assert.ok(helpText.includes(t),'the Help names the persistent '+t);
  assert.ok(Object.keys(Meta.opened(fresh)).join()==='items,jobs','unlocks are Items and Jobs');
  assert.equal(typeof Meta.storeCapital(fresh),'number','Store Capital is a persistent Account resource');
  assert.ok(Array.isArray(Meta.ownedDecorations(fresh)),'so is the owned Decoration collection');
  assert.equal(typeof Meta.totalJobMastery(fresh),'number','so is Job Mastery');
  // the things it says do NOT carry really do not
- assert.ok(helpText.includes('모험가·재고·돈·점포지원은 다음 영업에 이어지지 않습니다'),
+ assert.ok(helpText.includes('모험가·재고·골드·점포지원은 새로 시작한다'),
   'and it names the per-Run things by their current term');
 }); 
 
@@ -404,9 +407,14 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  /* Director 2026-09-12: 런 is engine vocabulary, and "포기 · 새 점포 준비" said the same
     thing twice. One phrase now, in the store's own voice, and the confirmation still states
     the cost. The behaviour it describes is unchanged - see integration.cjs. */
- assert.ok(app.includes('이번 영업을 마감할까요?'),'the destructive action is named once, in the world voice');
- assert.ok(app.includes('이 지점의 자금과 모험가는 다음 점포로 이어지지 않습니다.'),
-  'and the confirmation says what it costs');
+ /* COPY_AUDIT §1-3 is the exact owner now: the confirmation is named after the menu action it
+    answers, and it states what is lost AND what survives. */
+ assert.ok(app.includes('현재 지점을 포기할까요?'),'the destructive action is named once, in the world voice');
+ assert.ok(app.includes('이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.'),
+  'and the confirmation says what it costs and what it does not');
+ assert.ok(app.includes("btn('지점 포기','retire-go','danger')"),'the confirm is 지점 포기, not 폐점');
+ assert.ok(!app.includes('이번 영업을 마감할까요?'),'the 마감 title is gone');
+ assert.ok(!/btn\('폐점','retire-go'/.test(app),'and 폐점 is no longer the confirm');
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
@@ -474,8 +482,14 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
  const slip=fn('deepSlip');
  assert.ok(slip.includes('class="slip deep"'),'the Deep Day beat is a pinned slip');
  assert.ok(!/setModal|takeover/.test(slip),'it never takes the screen over');
- for(const part of ['c.note','c.cost','c.gain','c.sink','c.optional'])
-  assert.ok(slip.includes(part),'before Order the player is told: '+part);
+ /* COPY_AUDIT §15-1: the Morning notice repeats every applicable Day, so it carries the name
+    and one line. The full explanation belongs to the first-occurrence coach mark, and the cost
+    belongs to the SALE nomination, where it is actually paid. */
+ assert.ok(slip.includes('c.brief'),'before Order the player is told what a Deep Expedition is');
+ for(const gone of ['c.cost','c.optional','c.intro','hazardRows'])
+  assert.ok(!slip.includes(gone),'and the repeated tutorial is not restated here: '+gone);
+ assert.ok(slip.includes('c.confirmed')&&slip.includes('c.sponsor'),'once taken it states the confirmation and what was paid');
+ assert.ok(!slip.includes('c.sink'),'and does not repeat the warning after payment');
 
  // the Sale affordance appears only while the nomination is legal
  const offer=fn('deepOfferUI');
@@ -512,13 +526,14 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  // shown by then, so returning keeps this store's seed. Only an explicitly typed seed, or
  // abandoning a store that has opened, makes a new world.
  // (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
- const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+700);
+ const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+1100);
  assert.ok(start.includes("s?.phase==='foundation'?s.seed"),
   'returning from an unopened store reuses its seed instead of minting a new one');
  assert.ok(start.indexOf('typed||')<start.indexOf("'g24-'+Date.now()"),
   'a typed seed still wins, and a fresh seed is the last resort');
- assert.ok(fn('newRun').includes("game.run?.phase==='foundation'?E(game.run.seed)"),
-  'the carried seed is shown rather than applied behind the player');
+ /* SA-Q35 retired the Player-facing Seed control, so the carried seed is no longer SHOWN on
+    the preparation screen - it is still the seed `case'start'` reuses, asserted just above. */
+ assert.ok(!/id="seed"/.test(fn('newRun')),'the preparation screen exposes no Seed control');
  // an unopened store is not something the player is abandoning, so it is not described as one
  for(const f of [fn('newRun'),fn('renderModal')])
   if(f.includes('현재 지점 포기')||f.includes('모두 포기하고'))
@@ -624,8 +639,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
- assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
- assert.ok(/\.readout \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook balloon drops');
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stat \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
+ assert.ok(/\.readout \.tip>p,\.kit \.tip>p,\.detail-stat \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook, compact-state and Stat balloons drop');
  assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
  assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
  /* All three counter readings are read here now, so all three ? controls are here (UI-Q109). */
@@ -743,7 +758,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(fin.includes('D.bossBy[s.bossId]')&&/<h1>'\+E\(b\.name\)/.test(fin),
   'and names the Boss it is about');
  assert.ok(!/<h1>마왕성<\/h1>/.test(fin),'the generic castle plate is not the headline any more');
- assert.ok(fin.includes('제 0 게이트 · 마왕성'),'the castle stays as the place, under the name');
+ assert.ok(fin.includes('제0게이트 · 마왕성'),'the castle stays as the place, under the name');
  assert.ok(/class="boss-face"/.test(fin),'the art is a figure, not an icon beside a card');
  assert.ok(/\.gate-zero \.boss-face img\{[^}]*object-fit:contain/.test(css),
   'a silhouette is never cropped to fit');
@@ -871,9 +886,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 
  /* The failure line is not a hidden threshold: it is stated before it matters and the count
     is visible while it climbs, in the book that already lists the dead. */
- assert.ok(fn('help').includes('D.balance.deathLimit')&&fn('help').includes('점포가 문을 닫을 때'),
-  'the guide names every way a store ends, from the constant rather than a written-out number');
- for(const rule of ['운영비를 감당하지 못하면','재고를 정리해','마왕을 토벌하지 못해도'])
+ /* COPY_AUDIT §8-6 states the same three endings in one compact line. The count is still built
+    from the constant rather than written out, so the sentence cannot drift from the rule. */
+ assert.ok(fn('help').includes('D.balance.deathLimit'),
+  'the guide names the death line from the constant rather than a written-out number');
+ for(const rule of ['적자 마감은 재고 정리로 회생할 수 있다','명이 되면 폐점한다','DAY 30 최종 원정이 끝나면'])
   assert.ok(fn('help').includes(rule),'the guide covers: '+rule);
  const roster=fn('rosterList');
  assert.ok(roster.includes('돌아오지 못한 사람')&&roster.includes('D.balance.deathLimit'),
@@ -1086,7 +1103,7 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  assert.ok(ui.includes("row('bgm','BGM'")&&ui.includes("row('sfx','SFX'"),'both channels are named as spec requires');
  assert.ok(ui.includes('mix-${key}-val'),'each slider says its own value');
  assert.ok(!/voice/i.test(ui),'no voice channel is invented: there are no voices');
- assert.ok(fn('settings').includes('Sound On')&&fn('settings').includes('mixer()'),'the master mute stays, with the two levels under it');
+ assert.ok(fn('settings').includes("'소리 켜기':'소리 끄기'")&&fn('settings').includes('mixer()'),'the master mute stays, with the two levels under it');
  assert.ok(/\.mix-row input\[type=range\]\{[^}]*height:24px/.test(css),'the slider is thumb-sized');
  assert.ok(/\.mix-row\{[^}]*min-height:44px/.test(css),'and its row keeps the touch target');
 });
@@ -1309,7 +1326,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(hazard.includes(point),'the Hazard lesson covers '+point);
  assert.ok(!hazard.includes('현재 대응'),'and does not name a label the screen no longer shows');
  const supply=/\['supply',[^\]]*\]/.exec(steps)[0];
- for(const point of ['필요 보급','페널티','피로'])
+ /* COPY_AUDIT §3-5 is the exact owner: the lesson names the shortfall's effect on the four
+    Stats and what surplus Supply does, without the 페널티 design word. */
+ for(const point of ['보급이 부족하면','투력·강인함·기동·정신','피로'])
   assert.ok(supply.includes(point),'the Supply lesson covers '+point);
  /* Every lesson is short now: one decision unit, one or two sentences. */
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
@@ -1326,8 +1345,10 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  /* It still has to say the reading does not move as products are sold, and it must not be
     read as the Items not mattering: the run uses the final supply, so the lesson says the
     real result is seen after the expedition rather than claiming nothing changed. */
- assert.ok(/갱신되지 않는다/.test(forecast),'the outlook lesson says the reading does not move');
- assert.ok(/원정 후 확인/.test(forecast),'and that the real result is read after the expedition');
+ /* COPY_AUDIT §3-4: the lesson now says WHEN the reading was taken, which is the same fact
+    stated from the other side and is what makes it obviously frozen. */
+ assert.ok(/처음 계산대에 왔을 때의 전망/.test(forecast),'the outlook lesson says when the reading was taken');
+ assert.ok(/판매 후에도 바뀌지 않는다/.test(forecast),'and that selling does not move it');
  /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
  assert.ok(/class="ingredients"/.test(app),'the exact Supply/Fatigue arithmetic is on the decision surface');
  /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
@@ -1339,6 +1360,500 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!/\$\(x\[1\]\)|const target=\$\(step\[1\]\)/.test(coach),'and never to the first DOM match');
  assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(app),'no superseded v2.6 Fatigue band survives in the UI');
  assert.ok(/기동\/정신 -40%/.test(app)&&/기동\/정신 -15%/.test(app),'the v2.7 bands are what the screen states');
+});
+
+/* SA-Q18 / UI_UX_v2.8 §EVENT TEMPORARY BUDGET. On a 급여일 the customer can spend
+   n.money + n.eventBudget, but the SALE screen printed n.money alone and gated its own price
+   buttons on n.money alone - so the displayed Wallet and the affordability the engine enforces
+   were two different numbers, in both directions. */
+test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget separately',()=>{
+ const walletChip=fn('walletChip');
+ assert.ok(walletChip.length,'the SALE Wallet is rendered through one shared chip');
+ // both Wallet surfaces read that chip; neither prints a bare n.money any more
+ assert.ok(/class="npc-wallet">'\+walletChip\(n\)/.test(app),'the NPC vitals row uses it');
+ assert.ok(/class="wallet" style="margin-left:auto">'\+walletChip\(n\)/.test(app),'the till panel uses it');
+ assert.ok(!/소지 '\+fmt\(n\.money\)\+'G/.test(app),'no surface prints the persistent half on its own');
+ // the two figures are printed side by side and never summed into one
+ assert.ok(/소지 <b>'\+fmt\(n\.money\)\+'G<\/b>/.test(walletChip),'the persistent half is the real n.money');
+ assert.ok(/fmt\(b\)/.test(walletChip)&&/b=n\.eventBudget/.test(walletChip),'the temporary half is the real eventBudget');
+ assert.ok(!/n\.money\+\(n\.eventBudget\|\|0\)/.test(walletChip)&&!/n\.money\+b/.test(walletChip),
+  'the chip never renders one merged Wallet figure');
+ // and the temporary half is not relabelled 소지금
+ const budgetLabel=walletChip.slice(walletChip.indexOf('b>0?'));
+ assert.ok(!/소지금/.test(budgetLabel),'the temporary budget is not called 소지금');
+ assert.ok(/추가 구매/.test(budgetLabel),'it uses the approved Event Function wording 추가 구매');
+ // affordability: the screen gates on the same sum interest()/sell() spend
+ assert.ok(/function spendable\(n\)\{return n\.money\+\(n\.eventBudget\|\|0\);\}/.test(app),
+  'the screen has one affordability figure');
+ assert.ok(/q\.debit>spendable\(n\)\?'손님 소지금 부족'/.test(app),'and the price buttons gate on it');
+ assert.ok(!/q\.debit>n\.money\?/.test(app),'not on the persistent half alone');
+ assert.ok(shop.includes('n.money+(n.eventBudget||0)<intent.debit'),'which is exactly what sell() enforces');
+ assert.ok(/const wallet=n\.money\+\(n\.eventBudget\|\|0\)/.test(shop),'and what interest() weighs the offer against');
+
+ /* the behavioural half: a payday customer whose persistent Wallet alone cannot cover an Item
+    must be shown BOTH numbers, and the screen must not disable a price the engine accepts. */
+ const g=new Game();g.autosave=false;g.start('sa-q18');
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);
+ const n=g.run.npcs[0];
+ n.money=100;n.eventBudget=50;
+ // rendered through the real shipped function, with a plain formatter standing in for fmt
+ const render=new Function('fmt','n','"use strict";'+walletChip+'return walletChip(n);');
+ const out=render(x=>String(x),n);
+ assert.ok(out.includes('소지 <b>100G</b>'),'the persistent Wallet is shown as itself: '+out);
+ assert.ok(out.includes('추가 구매 <b>+50G</b>'),'the temporary budget is shown beside it: '+out);
+ assert.ok(!out.includes('150'),'and the two are never merged into one figure: '+out);
+ n.eventBudget=0;
+ const plain=render(x=>String(x),n);
+ assert.equal(plain,'소지 <b>100G</b>','with no Event budget the chip is unchanged');
+});
+
+/* SA-Q01 — PRE-RUN STORE-MANAGEMENT RETURN. The panel is opened from the new-Run preparation
+   modal and replaces it. During `foundation` the generic Close is suppressed and `dismiss` is a
+   no-op, which is right for the store-support takeover and left this one panel with an entry and
+   no exit. */
+test('SA-Q01: pre-Run Store Management has an explicit return to new-Run preparation',()=>{
+ const act=app.slice(app.indexOf('async function action(el)'));
+ // where it was opened from is remembered, and only when it was opened from preparation
+ assert.ok(/case'store-manage':preRunReturn=modal==='new';/.test(act),
+  'entering from the preparation panel is what arms the return');
+ // an explicit, visible control back to preparation
+ assert.ok(/if\(preRunReturn\)footer=btn\('새 점포 준비로 돌아가기','store-return','stamp'\)/.test(app),
+  'the panel carries a visible Back control');
+ assert.ok(/case'store-return':preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;/.test(act),
+  'and it returns to the existing new-Run preparation modal');
+ // returning spends nothing, re-rolls nothing, reseeds nothing and starts nothing
+ const ret=act.slice(act.indexOf("case'store-return'"),act.indexOf("break;",act.indexOf("case'store-return'")));
+ for(const forbidden of ['game.start','Meta.buyDecoration','Meta.equipDecoration','decoPending=','game.save()','Save.write'])
+  assert.ok(!ret.includes(forbidden),'returning must not '+forbidden);
+ // the ordinary Close resolves to preparation too, instead of being the foundation no-op
+ assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;\}/.test(act),
+  'Close from this panel lands on preparation rather than doing nothing');
+ // ...and the Close button is actually rendered there, which `foundation` used to suppress
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)\?btn\('닫기','dismiss'/.test(app),
+  'the header Close is available on this panel during foundation');
+ // no blank stage: with no Run the preparation modal is reopened by render itself
+ assert.ok(/if\(!modal\)setModal\('new'\)/.test(app),'a runless app always re-opens preparation');
+ // starting the Run leaves preparation for good
+ assert.ok(/preRunReturn=false;game\.start\(seed\)/.test(act),'starting clears the return state');
+ // no second navigation layer was introduced for this
+ assert.ok(!/pushState|replaceState|addEventListener\('popstate'/.test(app),
+  'the fix adds no history/navigation layer');
+ assert.equal((app.match(/store-return/g)||[]).length,2,'one control, one handler, nothing else');
+});
+
+/* SA-Q10 + SA-Q12 — MOBILE DENSITY. One patch: the Boss art was capped on width alone, and the
+   SALE surface stated the queue twice on a phone. Both are presentation constraints at phone
+   width; neither report nor queue is redesigned. */
+test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is stated once',()=>{
+ const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
+ assert.ok(block.length,'there is a phone-width density block');
+ // SA-Q10: the exact v2.8 mobile baselines
+ assert.ok(/\.boss-art img\{max-height:120px\}/.test(block),'D5 / D15 Boss art is capped at 120px on phone');
+ assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:96px\}/.test(block),'the D25 reveal is capped at 96px');
+ // the width-only constraint that caused it is no longer the only one
+ assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
+ assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
+ // the caps are real ceilings, not overridden later at the same width
+ assert.equal((css.match(/\.boss-art img\{max-height/g)||[]).length,2,'exactly the two baseline height caps, and no third');
+ // the reports themselves are untouched: art is still a figure beside the information
+ assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
+ assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
+
+ // SA-Q12: the decorative waiting line is suppressed on phone...
+ assert.ok(/\.line-up\{display:none\}/.test(block),'the waiting fan / 대기 N is suppressed at phone width');
+ assert.ok(!/\.line-up\{display:none\}/.test(css.replace(block,'')),'and only at phone width');
+ // ...while the Dock keeps the real queue progress and count
+ const dock=app.slice(app.indexOf("'<div class=\"dock\"><div class=\"queue\">"));
+ assert.ok(/손님 '\+\(s\.cursor\+1\)\+' \/ '\+s\.queue\.length/.test(dock),'the Dock still states the queue count');
+ assert.ok(/pips\(s\.queue\.length,s\.cursor\)/.test(dock),'and its progress');
+ assert.ok(!/\.p-sale \.dock \.queue\{[^}]*display:none/.test(css),'nothing hides the Dock queue on any width');
+ // desktop keeps the richer presentation, and no second mobile queue component was created
+ assert.ok(app.includes('function waitingLine('),'the one queue renderer is unchanged');
+ assert.equal((app.match(/function waitingLine\(/g)||[]).length,1,'there is no second, mobile-only queue component');
+ assert.ok(!/mobileQueue|queueMobile|isMobile/.test(app),'and no width branch was added in script');
+});
+
+/* SA-Q13 — LOYALTY MEANING / THRESHOLD DRIFT. 단골 had two thresholds: the owner's 51 and a
+   second 60 living in the Flavor classifier. One owner now answers everywhere, the compact SALE
+   state carries Loyalty beside Injury and Fatigue, and the number is explained through the tip
+   mechanism the readout and the destination plate already use. */
+test('SA-Q13: 단골 has one owner at 51, and Loyalty reads in the compact state',()=>{
+ // one owner, one number, stated once in Source
+ assert.equal(Adventurer.TRUSTED_REGULAR,51,'the owner threshold is 51');
+ const copySrc=read('dist/data/copy.js');
+ assert.ok(/G\.Adventurer\.isTrustedRegular\(n\)\)return pick\(visit\.regular/.test(copySrc),
+  'the regular Flavor classification asks the owner');
+ assert.ok(!/loyalty>=60/.test(copySrc),'and keeps no second 60 threshold of its own');
+ assert.ok(!/loyalty>=60|loyalty >= 60/.test(app),'no UI surface carries a second 단골 threshold');
+ assert.ok(/Adventurer\.isTrustedRegular\(n\)\?' · 단골'/.test(app),'the 단골 state asks the owner too');
+ // the Store Support thresholds are their own mechanics and did not move
+ for(const [id,at] of [['returnPoints',30],['premiumMember',50],['lifetime',60]])
+  assert.ok(shop.includes('loyalty>='+at)||DATA.relicBy[id].description.includes('단골도 '+at),
+   id+' keeps its own condition at '+at);
+
+ // the compact state: Injury, Fatigue, Loyalty - and no progress bar
+ const kit=fn('kitLine');
+ /* SA-Q04: the Injury state is n.status in words (건강 / 부상 / 중상); a second numeric 부상 N
+    beside it was the duplication the finding names. */
+ assert.ok(/const slots=Adventurer\.slots\(n\),parts=\[n\.status\]/.test(kit),'the Injury state is in the compact state');
+ assert.ok(!/부상 '\+n\.injury/.test(kit),'and it is not also stated as a number');
+ assert.ok(/parts\.push\('피로 '\+n\.fatigue\)/.test(kit),'so is Fatigue');
+ assert.ok(/parts\.push\('단골도 '\+n\.loyalty/.test(kit),'and so is Loyalty');
+ assert.ok(!/<meter|<progress|loyalty-bar|progress-bar/.test(kit),'there is no Loyalty progress bar');
+ assert.ok(/loyaltyTip\(n\)/.test(kit),'the number carries the shared explanation');
+
+ // the exact approved base popover, in order
+ const t=fn('loyaltyTip');
+ assert.ok(/'단골도 '\+n\.loyalty,/.test(t),'line 1 is the current value');
+ /* COPY_AUDIT_APPROVED §8-4 is the exact owner of this popover; the longer COPY_WORLD
+    sentences it used to carry are superseded. */
+ assert.ok(t.includes("'높을수록 구매 의사·재방문 가능성 증가'"),'line 2 is the approved line');
+ assert.ok(t.includes("'51부터 단골'"),'line 3 is the approved threshold line');
+ assert.ok(!/능력치|Core Stat/.test(t),'the tip never claims Loyalty raises Core Stats');
+ // appended lines are gated on being currently applicable / revealed
+ assert.ok(/if\(game\.has\(id\)\)lines\.push/.test(t),'a Store Support line needs the support owned');
+ assert.ok(/bossId==='LUST'&&s\.bossReveal\?\.traitSeen/.test(t),'and LUST is gated behind its own reveal');
+ assert.ok(!/lustStatFactor/.test(app),'nothing leaks the LUST mechanic early');
+ // it reuses the shared anchored tip - no second popover implementation
+ assert.ok(/return tip\('단골도',\.\.\.lines\)/.test(t),'it is built with the shared tip helper');
+ assert.equal((app.match(/const tip=\(label/g)||[]).length,1,'there is still exactly one tip implementation');
+ assert.ok(/<details class="tip" name="sale-tip">/.test(app),'one open at a time, via the shared exclusive name');
+ assert.ok(/closeTips/.test(app),'outside tap and Escape close it through the shared handler');
+ assert.ok(/\.kit \.tip>p\{position:absolute/.test(css)||/\.kit \.tip>p/.test(css),'the balloon is out of flow here too');
+ assert.ok(!/backdrop|overflow:hidden/.test(fn('loyaltyTip')),'and it locks no background');
+});
+
+/* SA-Q14 — GENERIC YELLOW STAT CHANGE. A moved Stat was gold: it said something changed and
+   left the player to work out whether that was good news. */
+test('SA-Q14: a moved Stat reads as beneficial or harmful, never as generic movement',()=>{
+ const grid=fn('statGrid');
+ // classification is by MEANING: for a Core Stat, more is better
+ assert.ok(/const delta = values\[k\]-n\.stats\[k\], moved = delta!==0;/.test(grid),'the change is measured');
+ assert.ok(/sense = !moved \? '' : delta>0 \? 'up' : 'down'/.test(grid),'a rise is beneficial, a fall harmful');
+ assert.ok(/'<div class="detail-stat'\+\(sense\?' '\+sense:''\)/.test(grid),'and the row carries that meaning');
+ assert.ok(!/ moved'/.test(grid),'the generic `moved` class is gone from the row');
+ // unchanged = default, beneficial = green, harmful = red
+ assert.ok(!/\.detail-stat\.moved strong\{color:var\(--gold\)\}/.test(css),'the generic gold styling is retired');
+ assert.ok(/\.detail-stat\.up strong,\.detail-stat\.up \.dir\{color:#9fd6a8\}/.test(css),'beneficial is green');
+ assert.ok(/\.detail-stat\.down strong,\.detail-stat\.down \.dir\{color:#e8927f\}/.test(css),'harmful is red');
+ assert.ok(!/\.detail-stat(?!\.(up|down))[^{]*\{[^}]*color:#9fd6a8/.test(css),'an unchanged row keeps the default');
+ // they are the colours the NIGHT change tokens already use, so one movement reads one way
+ assert.ok(css.includes('.tok.up b{color:#9fd6a8}')&&css.includes('.tok.down b{color:#e8927f}'),
+  'the semantic pair is shared with the existing change tokens');
+ // colour is NOT the only cue
+ assert.ok(/<i class="dir">'\+\(sense==='up'\?'유리':'불리'\)/.test(grid),'the row says which it is in words');
+ assert.ok(/aria-label="'\+E\(named\)/.test(grid)&&/'유리한 변화':'불리한 변화'/.test(grid),
+  'and repeats it in the accessible name');
+ // a provable source is exposed through the SHARED anchored tip, not a new mechanism
+ assert.ok(/why = list\.length[\s\S]*?tip\(Presentation\.labels\[k\]\+' 변화 원인'/.test(grid),
+  'an existing source is exposed through the shared tip');
+ assert.ok(/prep\.effects\.sources\?\.\[k\]/.test(grid),'reusing the source data already prepared');
+ assert.ok(!/<details class="detail-stat/.test(app),'the height-changing accordion is gone');
+ assert.equal((app.match(/const tip=\(label/g)||[]).length,1,'still exactly one popover implementation');
+ // Player-facing Stat detail vocabulary, with no Base/Equip English mixture
+ for(const w of ['기본','장비','현재 적용값','변화 원인'])
+  assert.ok(app.includes('<span>'+w+'</span>')||app.includes(w+'<br>'),'the detail says '+w);
+ for(const bad of ['(Base)','(Equip)','최종 산출','적용 내역'])
+  assert.ok(!app.includes(bad),'no stale Stat-detail wording: '+bad);
+});
+
+/* SA-Q35 — SETTINGS / DEBUG BOUNDARY. Ordinary Settings spoke English and carried a development
+   footer, and the reproducibility Seed - a QA affordance - sat on the Player's preparation
+   screen. Removing them must not cost the development routes anything. */
+test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>{
+ const set=fn('settings');
+ // the exact ordinary labels
+ assert.ok(set.includes("'소리 켜기':'소리 끄기'"),'the sound toggle is 소리 켜기 / 소리 끄기');
+ assert.ok(set.includes("btn('전체 데이터 초기화','reset','danger')"),'the reset is 전체 데이터 초기화');
+ // and none of the retired Player-facing strings, anywhere a Player can read
+ for(const gone of ['Sound On','Sound Off','Full Data Reset','버전 0.4 · 로컬 실행 지원 · 외부 연결 없음','재현용 Seed'])
+  assert.ok(!app.includes(gone),'no Player-facing '+gone);
+ assert.ok(!/버전 0\.4|외부 연결 없음/.test(css+html),'and no development footer survives elsewhere');
+ // the Seed control is gone from the preparation screen entirely
+ assert.ok(!/id="seed"/.test(app),'there is no Seed input');
+ assert.ok(!/seed-field/.test(app),'nor its field');
+ // no visible Debug menu was added in its place
+ assert.ok(!/btn\('[^']*[Dd]ebug/.test(app),'no Debug control is offered to the Player');
+ assert.ok(!/data-action="debug"/.test(app),'and none is reachable by clicking');
+
+ // CRITICAL: the development routes are intact
+ assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,/.test(app),
+  "Guild24.game and Guild24.render remain, so Guild24.game.start('<seed>'); Guild24.render(); still works");
+ assert.ok(/showDebug:\(\)=>setModal\('debug'\)/.test(app),'Guild24.showDebug() remains');
+ assert.ok(/ev\.ctrlKey&&ev\.shiftKey&&ev\.code==='KeyD'&&game\.run/.test(app),'Ctrl+Shift+D remains');
+ assert.ok(/modal==='debug'/.test(app),'and the debug panel it opens is still built');
+ // the seed a dev passes still reaches the Run, and a carried foundation seed is still reused
+ const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+1100);
+ assert.ok(/game\.start\(seed\)/.test(start),'the start path still takes a seed');
+ assert.ok(start.includes("s?.phase==='foundation'?s.seed"),'and still reuses an unopened store seed');
+});
+
+/* SA-Q36 — DECORATION DECISION SURFACE. The comparison carried Flavor prose beside the effect
+   line, so the row the player decides on was half argument and half story. */
+test('SA-Q36: the Decoration comparison shows only what the decision is made on',()=>{
+ const panel=fn('storePanel').replace(/\/\*[\s\S]*?\*\//g,'');
+ // what stays: name, exact effect, price / ownership, equipped state
+ assert.ok(/<b>'\+E\(d\.name\)\+'<\/b>/.test(panel),'the name stays');
+ assert.ok(/<span class="smalltext">'\+E\(d\.effect\)\+'<\/span>/.test(panel),'the exact effect stays');
+ assert.ok(/d\.price\.toLocaleString\(\)/.test(panel),'the price stays');
+ assert.ok(/Meta\.decorationOwned\(a,d\.id\)/.test(panel),'ownership state stays');
+ assert.ok(/on\?'해제':'적용'/.test(panel)&&/on\?'이번 영업에 적용 중':'미적용'/.test(panel),'equipped state stays');
+ // what goes: the Flavor prose, from THIS surface only
+ assert.ok(!/d\.text/.test(panel),'the Flavor prose is not on the decision surface');
+ assert.ok(!/class="tale"/.test(panel),'and neither is its slot');
+ // the data itself is untouched and still available to lore-ready surfaces
+ assert.ok(DATA.decorations.every(d=>d.text&&d.text.trim()),'every Decoration still carries its Flavor');
+ assert.ok(read('dist/data/decorations.js').includes('text'),'the Flavor data was not deleted');
+ assert.ok(/class="tale"/.test(app),'the Flavor slot still exists on the surfaces that are for it');
+ // nothing was redesigned or added
+ assert.ok(!/collection|컬렉션/i.test(panel),'no Collection screen was added');
+ assert.equal((app.match(/function storePanel\(/g)||[]).length,1,'one Decoration surface, unchanged in shape');
+});
+
+/* BOSS_v2.8 §INFORMATION CADENCE + COPY_AUDIT §14. Source carried D5 / D15 / D25 only; D0, D10
+   and D20 are confirmed missing adoption. The two new beats are one-tap information reports
+   that open the question the next report answers. */
+test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=>{
+ const c=Copy.boss;
+ // exact §14 copy, verbatim
+ assert.equal(c.d0.label,'DAY 30 · 제0게이트 토벌 예정');
+ assert.equal(c.d0.line,'길드 정보원이 토벌 대상을 추적하고 있다.');
+ assert.equal(c.d5.header,'1차 조사 보고');
+ assert.equal(c.d5.sub,'토벌 대상 확인');
+ assert.equal(c.d5.button,'확인');
+ assert.equal(c.d10.header,'2차 조사 시작');
+ assert.equal(c.d10.line,'{보스명}의 전투 기록을 추적한다.');
+ assert.equal(c.d10.next,'다음 보고 · DAY 15');
+ assert.equal(c.d15.header,'2차 조사 보고');
+ assert.equal(c.d15.intro,'전투 기록에서 변칙이 확인됐다.');
+ assert.equal(c.d15.button,'확인');
+ assert.equal(c.d20.header,'최종 정찰 시작');
+ assert.equal(c.d20.line,'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.');
+ assert.equal(c.d20.next,'최종 보고 · DAY 25');
+ assert.equal(c.final.header,'최종 정찰 보고');
+ assert.equal(c.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다.');
+ // §14-5 / SA-Q22: the SLOTH lines say 점포지원, never 유물
+ const sloth=c.d15.trait.SLOTH[1].join(' ');
+ assert.ok(sloth.includes('점포지원을 받는 대신')&&sloth.includes('그때의 점포지원은 받을 수 없으며'),'SLOTH uses 점포지원');
+ assert.ok(!/유물/.test(JSON.stringify(c)),'no active Boss copy says 유물');
+ // §14-8 spacing
+ assert.ok(!/제 0 게이트/.test(app+read('dist/data/copy.js')),'제0게이트 is written without spaces');
+ assert.ok(app.includes('제0게이트 · 마왕성'),'and the castle still names the gate');
+ // D0 is part of the Run-start flow, not a new screen
+ assert.ok(/Copy\.boss\.d0\.label/.test(fn('relicTakeover')),'the D0 objective beat is in the Run-start flow');
+ assert.ok(!/phase==='boss'|modal==='d0'/.test(app),'no new Phase or navigation layer was added for it');
+ // the cadence table, and D30 reusing D25
+ assert.ok(/\[5,'d5','identitySeen'\],\[10,'d10','combatSeen'\],\[15,'d15','traitSeen'\],\s*\[20,'d20','routeSeen'\],\[25,'final','familySeen'\]/.test(app),
+  'every beat has its Day and its own persisted marker');
+ assert.ok(!/BOSS_BEATS[\s\S]{0,200}30,/.test(app),'D30 has no beat of its own');
+ assert.ok(/if\(stage==='final'&&!s\.final\)continue;/.test(app),'the D25 beat waits for the persisted Final state');
+ // the reports reuse the existing shell
+ assert.ok(/if\(stage==='d10'\|\|stage==='d20'\)/.test(fn('bossReveal')),'the two beats render through the existing reveal');
+ assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and are consumed by the existing one');
+ // D10/D20 identity portrait at the 64px baseline, C2 limits intact
+ assert.ok(/\.boss-id img\{[^}]*max-width:64px;max-height:64px/.test(css),'the D10 / D20 identity portrait is 64px');
+ assert.ok(/\.boss-art img\{max-height:120px\}/.test(css)&&/\.boss-reveal\.final \.boss-art img\{max-height:96px\}/.test(css),
+  'the C2 mobile limits are untouched');
+ assert.ok(!/class="boss-art"/.test(fn('bossReveal').split("stage==='d10'")[1].split('return')[1]||''),
+  'the one-tap beats do not carry the full art');
+});
+
+test('BOSS cadence: each beat is seen once, precedes the Store Support decision, and draws nothing',()=>{
+ const g=new Game();g.autosave=false;g.start('boss-cadence');
+ const flags=['identitySeen','combatSeen','traitSeen','routeSeen'];
+ for(const f of flags)assert.equal(g.run.bossReveal[f],false,f+' starts unseen');
+ /* RUN-Q-v28-5 / BOSS_v2.8 §SAME-DAY ORDERING: on every milestone Day the due Boss beat is
+    shown BEFORE the same-Day Store Support decision. The chain is asserted in source and then
+    resolved for each of the five Days with a Store Support window genuinely pending, because
+    D10 and D20 are themselves acquisition Days and that is where the order actually matters. */
+ const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
+ assert.ok(chain.indexOf('bossRevealDue()')<chain.indexOf("relicWindow&&!s.relicWindow.focusedRevealSeen"),
+  'the Boss beat is chosen before the Store Support window on the same Day');
+ const resolve=(day,seen,final,windowPending)=>{
+  // the shipped chain, evaluated on a Morning with both a beat and a window outstanding
+  const due=[[5,'identitySeen'],[10,'combatSeen'],[15,'traitSeen'],[20,'routeSeen'],[25,'familySeen']]
+   .some(([d,f])=>day>=d&&!seen[f]&&(f!=='familySeen'||final));
+  if(due)return 'boss';
+  return windowPending?'relics':null;};
+ for(const day of [5,10,15,20,25]){
+  const seen={identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false,familySeen:false};
+  for(const [d,f] of [[5,'identitySeen'],[10,'combatSeen'],[15,'traitSeen'],[20,'routeSeen'],[25,'familySeen']])
+   if(d<day)seen[f]=true;                       // every earlier beat already read
+  assert.equal(resolve(day,seen,true,true),'boss','D'+day+': the Boss beat comes before the Store Support window');
+  // ...and once it is dismissed, the same Day hands the window over
+  const after={...seen};
+  after[{5:'identitySeen',10:'combatSeen',15:'traitSeen',20:'routeSeen',25:'familySeen'}[day]]=true;
+  assert.equal(resolve(day,after,true,true),'relics','D'+day+': dismissing it releases the Store Support window');
+ }
+ /* RUN-Q-v28-5: merely SHOWING a report consumes no gameplay RNG - the three functions that
+    decide and build it never reach the run stream. */
+ for(const f of ['bossRevealDue','bossRevealStage','bossReveal'])
+  assert.ok(!/game\.rng|this\.rng|RNG\(/.test(fn(f)),f+'() draws no gameplay RNG');
+ // showing and dismissing a report costs no gameplay RNG, and the marker persists
+ const stage=(day,reveal,final)=>{
+  const r={day,bossId:'WRATH',bossReveal:reveal,final:final?{}:null};
+  for(const [d,st,flag] of [[5,'d5','identitySeen'],[10,'d10','combatSeen'],[15,'d15','traitSeen'],
+                            [20,'d20','routeSeen'],[25,'final','familySeen']]){
+   if(r.day<d||r.bossReveal[flag])continue;
+   if(st==='final'&&!r.final)continue;
+   return st;}
+  return null;};
+ const seen={identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false,familySeen:false};
+ assert.equal(stage(5,seen,false),'d5');seen.identitySeen=true;
+ assert.equal(stage(10,seen,false),'d10');seen.combatSeen=true;
+ assert.equal(stage(12,seen,false),null,'no beat between reports');
+ assert.equal(stage(15,seen,false),'d15');seen.traitSeen=true;
+ assert.equal(stage(20,seen,false),'d20');seen.routeSeen=true;
+ assert.equal(stage(25,seen,true),'final');seen.familySeen=true;
+ assert.equal(stage(30,seen,true),null,'D30 adds no new reveal');
+
+ // the real thing: walk a Run and prove each beat is consumed once, survives a reload, and
+ // that showing/dismissing it moves no gameplay RNG
+ const h=new Game();h.autosave=false;h.start('boss-walk');
+ for(const [day,flag] of [[5,'identitySeen'],[10,'combatSeen'],[15,'traitSeen'],[20,'routeSeen']]){
+  h.run.day=day;
+  const before=h.rng.state;
+  h.run.bossReveal[flag]=true;           // dismissal writes the marker and nothing else
+  assert.equal(h.rng.state,before,'consuming the D'+day+' beat drew no gameplay RNG');
+  const back=Save.import(Save.export(h.account,h.run));
+  assert.equal(back.run.bossReveal[flag],true,'the D'+day+' marker survives a reload');
+  assert.equal(stage(day,back.run.bossReveal,!!back.run.final),
+   day>=25?'final':null,'and the D'+day+' report is not replayed');
+ }
+ // a save written before the cadence existed still validates and simply has not seen them
+ const legacy=JSON.parse(Save.export(h.account,h.run));
+ delete legacy.run.bossReveal.combatSeen;delete legacy.run.bossReveal.routeSeen;
+ assert.ok(Save.valid(legacy),'a pre-cadence save still loads');
+});
+
+/* COPY_AUDIT §1-1 / §1-5 / §1-6 / §9-1 / §9-2 — pre-Run, reset and store-management microcopy.
+   Exact approved text; no mechanic is touched. */
+test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is the approved text',()=>{
+ assert.ok(app.includes("'보유 장식 없음'"),'§1-1 the empty Decoration state');
+ assert.ok(!app.includes('아직 보유한 장식이 없습니다'),'and its old explanation is gone');
+ assert.ok(app.includes("title='전체 데이터를 초기화할까요?'"),'§1-5 title');
+ assert.ok(app.includes('현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.'),'§1-5 body');
+ assert.ok(app.includes("btn('전부 지우기','reset-go','danger')"),'§1-5 confirm');
+ assert.ok(app.includes("btn('저장 내보내기','export')")&&app.includes("btn('취소','dismiss')"),'§1-5 keeps export and cancel');
+ assert.ok(!app.includes('폐업 결재'),'the 폐업 결재 wording is gone');
+ assert.ok(app.includes("'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.'"),'§1-6 completion');
+ assert.ok(app.includes("'이번 영업의 장식은 고정됨.'"),'§9-1 active-Run line');
+ assert.ok(app.includes("'장식은 영업 시작 전에 변경할 수 있습니다.'"),'§9-1 pre-Run line');
+ assert.ok(!app.includes('장식은 영업 밖에서만')&&!app.includes('지금은 영업 중이라 확인만 됩니다'),'and the old pair is gone');
+ assert.ok(!app.includes('비워 둘 수 있습니다'),'§9-2 the empty Slot explains itself');
+ // mechanics untouched: the same two destructive actions, through the same handlers
+ assert.ok(/case'retire-go'/.test(app)&&/case'reset-go'/.test(app),'both destructive actions keep their handlers');
+ assert.ok(/Save\.reset\(\)/.test(app),'and the reset still goes through Save.reset');
+});
+
+/* COPY_AUDIT §3-1..§3-6, §4-8, §4-10 — coach marks and two SALE lines, exact approved text. */
+test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the approved text',()=>{
+ const steps=fn('coachSteps')||app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach'));
+ for(const line of [
+  '같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
+  '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '구매 후 준비 상태에 따라 대성공 신호가 뜰 수 있다. 신호가 떠도 대성공이 확정되는 건 아니다.',
+  '손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.',
+  '보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요 보급을 초과한 보급은 피로를 줄인다.',
+  '판매한 상품은 오늘 원정에서 쓰고 사라진다.'])
+  assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
+ for(const gone of ['점포 매출에는 영향이 없다','준비가 끝나면 영업 시작을 누른다','보급을 더 챙기면 가능성이 커질 수 있다',
+                    '성공·실패 결과는 미리 알 수 없고','원정 준비에 공통 페널티','모든 상품은 1회용이며'])
+  assert.ok(!app.includes(gone),'the superseded coach wording is gone: '+gone.slice(0,14));
+ // §4-8
+ assert.ok(app.includes('<span>현재 준비 변화 없음</span>'),'§4-8 the no-change line');
+ assert.ok(!app.includes('이 손님의 준비는 달라지지 않는다'),'and its old sentence is gone');
+ // §4-10: the shelf-life state only, with the FIFO explanation retired
+ assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
+ assert.ok(app.includes("'유통기한 없음'")&&app.includes("'폐기까지 '"),'and the actual shelf-life state stays');
+});
+
+/* SA-Q02 / Q03 / Q04 / Q20 / Q32 — NPC detail, Injury and Trait information truth. */
+test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()=>{
+ // SA-Q02: no hidden-Potential disclosure and no promise that Loyalty reveals Traits
+ for(const gone of ['성장 잠재력','빠른 성장','꾸준한 성장','착실한 성장','남은 특성','더 친해지면'])
+  assert.ok(!app.includes(gone),'no hidden-growth disclosure survives: '+gone);
+ assert.ok(!/n\.potential/.test(fn('npcDetail')),'the detail reads no hidden Potential at all');
+ // what remains IS the identity: Job, Level and the four Core Stats
+ const detail=fn('npcDetail');
+ assert.ok(/D\.jobBy\[n\.job\]\.name/.test(detail)&&/Lv\.\$\{n\.level\}/.test(detail),'Job and Level stay');
+ assert.ok(/statGrid\(n\)/.test(detail),'and the four actual Core Stats stay');
+ // SA-Q03: 강인함 is the Player-facing name, 생존 never is, and the pair reads 투력 -> 강인함
+ const surfaces=app+read('dist/ui/presentation.js');
+ assert.ok(!/생존 -20%|생존 \+|'생존'/.test(surfaces),'no Player-facing surface says 생존');
+ assert.equal(Presentation.labels.survival,'강인함','the Stat is named 강인함');
+ assert.ok(app.includes("'부상 효과: 투력 '+combat+' · 강인함 -20%'"),'Injury detail reads 투력 -> 강인함');
+ assert.ok(read('dist/ui/presentation.js').includes("value:'투력 '+combat+' · 강인함 -20%'"),'and so does the NIGHT row');
+ // SA-Q04: one human-readable Injury state, never duplicated as a number
+ const kit=fn('kitLine');
+ assert.ok(!/부상 '\+n\.injury/.test(kit),'the compact state does not repeat Injury as a number');
+ assert.ok(/parts=\[n\.status\]/.test(kit),'it carries the state word itself');
+ // SA-Q20: the exact First Aid primary function
+ assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.'"),
+  'the First Aid primary function is the approved sentence');
+ assert.ok(!surfaces.includes('결과는 그대로'),'the redundant lead is gone');
+ // SA-Q32: the exact Trait effect labels, with the generic ones retired
+ assert.equal(Presentation.traitText('rich'),'방문 시 소지금 +50G');
+ assert.ok(Presentation.traitText('honest').startsWith('정가·50% 구매 시 단골도 +1'),'정직한 names its own condition');
+ for(const gone of ['방문 골드','단골 보너스'])
+  assert.ok(!surfaces.includes(gone),'the generic label is gone: '+gone);
+ // weighting mechanics keep their correct 가중치 wording
+ assert.ok(/가중치/.test(JSON.stringify(DATA.relics.map(r=>r.description))),'real weighting still says 가중치');
+});
+
+/* SA-Q27 / Q38 — the global guide is COPY_AUDIT_APPROVED §8, whole. */
+test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
+ const h=fn('help');
+ for(const line of [
+  'DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.',
+  '오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
+  '상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +6·+1·-3.',
+  '손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.',
+  '단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다.',
+  '판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.',
+  '적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회.',
+  '다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.',
+  '실시간 제한 없음.'])
+  assert.ok(h.includes(line),'§8 line is verbatim: '+line.slice(0,20));
+ // SA-Q27: the refusal rule states the CEILING, not the same-price-only rule it replaced
+ assert.ok(h.includes('그보다 비싼 가격은'),'the refusal rule includes every higher price');
+ assert.ok(!h.includes('같은 상품·같은 가격으로 거절당한 제안은 그날 반복할 수 없습니다'),'the weaker rule is gone');
+ // and it matches what the engine actually enforces
+ assert.ok(shop.includes("rule.mult>D.pricing[mode].mult"),'the ceiling is the rule sell() applies');
+ // SA-Q38: the long-form manual is not appended below it
+ for(const gone of ['기본 방문객은 3~6명','바가지는 수입과 관계를 맞바꾸고','가방은 언제나 2칸입니다',
+                    '시간을 재촉하는 제한은 없습니다','사망은 이번 영업에서 영구적입니다'])
+  assert.ok(!app.includes(gone),'the superseded manual paragraph is gone: '+gone.slice(0,12));
+ // it does not duplicate what the anchored popovers / coach marks own in context
+ assert.ok(!h.includes('압박')&&!h.includes('환경 대응'),'the Hazard reading stays with its own popover');
+ assert.ok(!/필요 보급/.test(h),'and the Supply arithmetic stays with its coach mark');
+ // the section set is exactly §8-1..§8-8
+ assert.equal((h.match(/<h3>/g)||[]).length,8,'eight sections, one per §8 entry');
+});
+
+/* SA-Q28 / SA-Q31 + COPY_AUDIT §15, §6-2, §6-8 — Store Capital is not Gold, and the two Deep
+   operational surfaces say only what their own decision needs. */
+test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not tutorials',()=>{
+ // SA-Q28: Capital carries no G; Run Gold still does
+ assert.ok(!/점포 자본 \$\{Meta\.storeCapital\(a\)\.toLocaleString\(\)\}G/.test(app),'Store Capital is not printed as Gold');
+ assert.ok(!/자본[^<'`]{0,24}G\b/.test(fn('codex')+fn('storePanel')),'no Capital figure carries a G suffix');
+ assert.ok(/시작 자금 \$\{start\.toLocaleString\(\)\}G/.test(app),'actual Run Gold still uses G');
+ // §15-1 / §15-2 / §15-3
+ assert.equal(Copy.deep.brief,'같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.');
+ assert.equal(Copy.deep.terms,'성공 시 추가 성장 · 점포 수익 없음');
+ assert.equal(Copy.deep.confirmed,'심층원정 확정');
+ const offer=fn('deepOfferUI');
+ assert.ok(/E\(c\.sponsor\)\+' '\+fmt\(cost\)\+'G'/.test(offer),'the nomination states the Gate and the sponsorship');
+ assert.ok(offer.includes('c.terms'),'and the reward terms in one line');
+ for(const gone of ['c.note','c.gain','c.sink','c.gate'])
+  assert.ok(!offer.includes(gone),'the nomination does not restate the tutorial: '+gone);
+ assert.ok(/E\(c\.confirmed\)\+' · '/.test(offer),'after nomination it confirms the Gate');
+ // §6-2 / §6-8
+ const pres=read('dist/ui/presentation.js');
+ assert.ok(pres.includes("'예상보다 큰 성과를 내고 돌아왔다.'"),'§6-2 the Great Success outcome');
+ assert.ok(!pres.includes('예상보다 일찍 게이트에서 나왔다'),'and the time-saving reading is gone');
+ assert.ok(pres.includes("label:'원정 소지금 획득'"),'§6-8 the Wallet reward label');
+ assert.ok(!pres.includes('NPC 소지금 획득'),'and the internal NPC wording is gone');
 });
 
 console.log(count+' ui guard groups passed');

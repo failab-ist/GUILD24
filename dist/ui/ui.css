@@ -343,6 +343,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* 1 identity + price on one baseline, the tag inside the paper */
 .line .nm{display:flex;align-items:center;gap:10px;min-width:0}
 .line .nm b{font:600 17px/1.35 var(--ui);letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
+.line .nm .origin{flex:none;padding:1px 6px;border:1px solid #9c8f72;font:600 11px/1.6 var(--ui);font-style:normal;color:#6b5f48;white-space:nowrap}
 .line .kind{display:block;margin-top:1px;font:400 12px/1.5 var(--ui);color:#9c8f72}
 /* 3 the effect that decides the purchase */
 .line .fx{display:block;margin-top:6px;font:400 14px/1.55 var(--ui);color:#3c3527}
@@ -562,7 +563,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .dest-plate .hazards em{font-size:var(--t-sm)}
 .detail-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;margin:0 0 14px;padding:6px 12px 8px;
  background:#00000038;box-shadow:inset 2px 2px 0 #00000047,inset -2px -2px 0 #ffffff0f}
-.detail-stat{display:flex;align-items:baseline;gap:8px;padding:5px 0;box-shadow:inset 0 -1px 0 #ffffff14}
+.detail-stat{position:relative;display:flex;align-items:baseline;gap:8px;padding:5px 0;box-shadow:inset 0 -1px 0 #ffffff14}
+/* SA-Q14: the direction glyph is the non-colour cue, so the reading does not depend on hue. */
+.detail-stat .dir{margin-left:auto;font-style:normal;font:600 11px/1 var(--ui)}
+.detail-stat .dir+strong{margin-left:4px}
 .detail-stat label{font:400 13px/1 var(--ui);color:#a2947c;min-width:3.6em}
 .detail-stat strong{margin-left:auto;font:600 20px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .trait-list{margin:0 0 12px;display:grid}
@@ -571,7 +575,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .trait-row span{display:flex;flex-wrap:wrap;gap:2px 12px;font:400 13px/1.5 var(--ui)}
 .trait-row em{font-style:normal}
 .trait-row small{font:400 12px/1.4 var(--ui);color:#8d8067}
-.kit{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:9px 0;
+/* SA-Q13: the compact state anchors the SAME shared tip the readout and the plate use, so the
+   balloon needs the same containing block. No second popover system is introduced. */
+.kit{position:relative;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:9px 0;
  box-shadow:inset 0 1px 0 #ffffff14,inset 0 -1px 0 #ffffff14;font:400 13px/1.4 var(--ui);color:#a2947c}
 .kit b{color:#f2e7cd;font-weight:600}
 /* D-9. How many supply slots this customer has, and how many are already spent, is a decision
@@ -602,33 +608,36 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    same red the Hazard rows use when the customer is not ready for what is waiting. */
 .readout .fore b.env-ok,.readout .fore b.env-lack{font-size:16px}
 .readout .fore b.env-lack{color:var(--blood)}
-.readout .tip,.dest-plate .tip{display:inline-block;margin-left:6px;position:static}
-.readout .tip>summary,.dest-plate .tip>summary{display:inline-flex;align-items:center;justify-content:center;
+.readout .tip,.dest-plate .tip,.kit .tip,.detail-stat .tip{display:inline-block;margin-left:6px;position:static}
+.readout .tip>summary,.dest-plate .tip>summary,.kit .tip>summary,.detail-stat .tip>summary{display:inline-flex;align-items:center;justify-content:center;
  min-width:24px;min-height:24px;padding:0 4px;list-style:none;cursor:pointer;
  font:600 12px/1 var(--ui);color:#cbb98d;background:#00000059;box-shadow:inset 0 0 0 1px #ffffff1f}
-.readout .tip>summary::-webkit-details-marker,.dest-plate .tip>summary::-webkit-details-marker{display:none}
-.readout .tip>summary:focus-visible,.dest-plate .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.readout .tip>summary::-webkit-details-marker,.dest-plate .tip>summary::-webkit-details-marker,.kit .tip>summary::-webkit-details-marker{display:none}
+.readout .tip>summary:focus-visible,.dest-plate .tip>summary:focus-visible,.kit .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 /* The explanation is a balloon, not an accordion: it is taken out of flow and floated over the
    block, so opening a ? never makes the panel itself taller and the rows below do not move.
    It is positioned against the panel rather than the little ? so it can never run off either
    edge, which is what a transform-centred bubble does to the rightmost control on a phone. */
-.readout .tip>p,.dest-plate .tip>p{position:absolute;left:10px;right:10px;
+.readout .tip>p,.dest-plate .tip>p,.kit .tip>p,.detail-stat .tip>p{position:absolute;left:10px;right:10px;
  z-index:30;margin:0;padding:9px 11px;font:400 12px/1.6 var(--ui);color:#e8dcc0;
  background:#191108f2;box-shadow:inset 0 0 0 1px #ffffff26,0 6px 0 #00000059}
 /* each line of a tooltip is its own line: two labelled facts should not read as one sentence */
-.readout .tip>p>span,.dest-plate .tip>p>span{display:block}
+.readout .tip>p>span,.dest-plate .tip>p>span,.kit .tip>p>span,.detail-stat .tip>p>span{display:block}
 /* The outlook sits above the plate, so its balloon drops; the plate is the lowest block on the
    counter and its container clips, so its balloon rises. Either way the panel keeps its height. */
-.readout .tip>p{top:calc(100% - 4px)}
+.readout .tip>p,.kit .tip>p,.detail-stat .tip>p{top:calc(100% - 4px)}
 .dest-plate .tip>p{bottom:calc(100% - 4px)}
-.readout .tip[open],.dest-plate .tip[open]{display:inline-block;width:auto}
+.readout .tip[open],.dest-plate .tip[open],.kit .tip[open],.detail-stat .tip[open]{display:inline-block;width:auto}
 /* the plate's label is a caps micro-line; the ? must not inherit its letter-spacing */
 .dest-plate .tip>summary{letter-spacing:0}
 /* the source of a change is a heading over its rows, so a derived one cannot read as the
    Item's own contribution */
 .delta-src{margin:7px 0 3px;font:600 11px/1 var(--ui);letter-spacing:.1em;color:#9c8d70}
 .effects.derived li b{font-family:var(--ui);font-weight:400;font-size:var(--t-sm);color:#a2947c;text-align:right}
-.detail-stat.moved strong{color:var(--gold)}
+/* beneficial green / harmful red / unchanged default - the same two colours the NIGHT change
+   tokens already use, so one movement does not read two ways across the screens. */
+.detail-stat.up strong,.detail-stat.up .dir{color:#9fd6a8}
+.detail-stat.down strong,.detail-stat.down .dir{color:#e8927f}
 .ingredients{margin:6px 0 0;font:400 12px/1.65 var(--ui);color:#a2947c}
 .readout .estimate{margin-top:8px;font:400 12px/1.5 var(--ui);color:#8d8067}
 /* D-12. `부식 → 강인함 압박 → 취약` is one sentence about one Hazard, but stacked at a 2px gap
@@ -1254,6 +1263,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .boss-reveal .trait-body{display:flex;flex-direction:column;gap:5px}
 .boss-reveal .trait-body p{margin:0;font:400 15px/1.6 var(--ui);color:#e6d6ba}
 .boss-reveal .flavor{margin:0;font:400 15px/1.65 var(--ui);color:#cbbba0;font-style:italic}
+/* BOSS_v2.8 §D0: the objective beat sits above the D0 acquisition, as one line of information. */
+.boss-objective{margin:0 0 12px;padding:9px 11px;background:#00000047;font:400 13px/1.6 var(--ui);color:#cbbba0}
+.boss-objective b{display:block;font:600 13px/1.5 var(--ui);letter-spacing:.04em;color:#e6d6ba}
+/* D10 / D20 disclose nothing new, so they carry the identity portrait at the v2.8 64px baseline
+   rather than the full art - the question they open is the primary information. */
+.boss-id{margin:0 0 10px;display:flex;justify-content:center}
+.boss-id img{display:block;width:auto;max-width:64px;max-height:64px;object-fit:contain;image-rendering:auto}
+.boss-reveal .next-report{margin:10px 0 0;font:600 12px/1.5 var(--ui);letter-spacing:.06em;color:#9c8d70}
 .boss-art{margin:0;display:flex;justify-content:center;background:#00000038;padding:8px}
 .boss-art img{display:block;width:100%;max-width:320px;height:auto;object-fit:contain;image-rendering:auto}
 .boss-reveal.final .fams{display:grid;gap:9px}
@@ -1261,6 +1278,20 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .boss-reveal .fam-card b{display:block;margin-bottom:5px;font:500 15px/1.3 var(--f-plate);
  -webkit-font-smoothing:none;color:#f2e7cd}
 .boss-reveal .fam-card .hazards{margin:0}
+/* SA-Q10 — BOSS MOBILE ART CROWDING. The art was constrained on width alone, so near-square
+   pieces ate the whole first viewport and pushed the report and its acknowledgement control off
+   the bottom at 360x800. The v2.8 baselines cap the height on phone instead: D5/D15 120px, the
+   D25 family reveal 96px - it carries the most information of the three. Information stays
+   primary and the art stays supporting; nothing about the reports themselves changes. */
+@media (max-width:719px){
+ .boss-art img{max-height:120px}
+ .boss-reveal.final .boss-art img{max-height:96px}
+ /* SA-Q12 — MOBILE QUEUE DUPLICATION. The waiting fan and its 대기 N say on the sale surface
+    what the Dock already says underneath it, and on a phone the two cost a band of height each
+    to state one number twice. The decorative line is suppressed at phone width only; the Dock
+    keeps the real queue progress and count, and desktop keeps the richer presentation. */
+ .line-up{display:none}
+}
 @media (min-width:720px){
  .boss-art img{max-width:420px}
  .boss-reveal.final .fams{grid-template-columns:1fr 1fr}

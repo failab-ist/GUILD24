@@ -397,31 +397,19 @@ test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the 
  }finally{DATA.greatSuccess.storeGoldScale=scale;}
 });
 
-test('SALE §DEEP EXPEDITION NOMINATION: Deep and an explicit destination reassignment exclude each other',()=>{
- const g=drivenToDeepSale(),n=g.current();
- // the route support is the only explicit Player destination reassignment in the Source, and
- // it happens in the same window as a nomination: the current visitor, before they trade.
- g.run.special={kind:'route',used:false,candidates:[]};
- if(g.run.dungeons.length>1){
-  const other=g.run.dungeons.map((d,i)=>i).find(i=>i!==n.destination);
-  g.specialAction(n.id,other);
-  assert.equal(g.run.special.npcId,n.id,'the reassignment records who it was spent on');
-  assert.equal(g.canNominateDeep(n),false,'a reassigned NPC can no longer be nominated');
-  assert.throws(()=>g.nominateDeep(n.id),/배치를 조정/,'and asking anyway is refused by name');
- }
- // the other direction: a confirmed Deep destination is final, so a later reassignment is
- // refused rather than quietly ignored
+/* SA-Q43 retired the route support, which was the only explicit Player destination
+   reassignment in Source. What survives of this case is the half that is Canonical: a
+   confirmed Deep destination is final, and it is final because nothing else can write
+   n.destination after the nomination. */
+test('SALE §DEEP EXPEDITION NOMINATION: a confirmed Deep destination is final, and nothing can reassign it',()=>{
  const h=drivenToDeepSale(),m=h.current();
- h.run.special={kind:'route',used:false,candidates:[]};
  h.nominateDeep(m.id);
- if(h.run.dungeons.length>1){
-  const other=h.run.dungeons.map((d,i)=>i).find(i=>i!==m.destination);
-  assert.throws(()=>h.specialAction(m.id,other),/심층원정/,'the Deep destination cannot be reassigned');
-  assert.equal(h.gateFor(m).deep,true,'and the nominee still walks into the Deep Gate');
- }
- // the rule is enforced by the two existing actions refusing each other, not by a third one
- assert.equal(h.run.special.kind,'route','the existing guild support is still the only reassignment');
- assert.equal(h.run.deep.today.nomineeId,m.id,'and the nomination is still the only Deep state');
+ assert.equal(h.run.deep.today.nomineeId,m.id,'the nomination is the only Deep state');
+ assert.equal(h.gateFor(m).deep,true,'the nominee walks into the Deep Gate');
+ assert.equal(h.canNominateDeep(m),false,'and cannot be nominated twice');
+ const src=source('dist/systems/shop.js')+source('dist/systems/run.js')+source('dist/ui/app.js');
+ assert.ok(!/specialAction/.test(src),'the retired reassignment action is gone');
+ assert.ok(!/special\?\.kind==='route'/.test(src),'and no Deep guard still reads it');
 });
 
 // --- DETERMINISM -------------------------------------------------------------------
@@ -789,7 +777,13 @@ test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for
   try{g.sell(st.id,'half');sold++;}catch(e){}
  }
  assert.ok(sold>0,'the test actually committed a purchase');
- assert.deepEqual(n.outlook,entry,'a committed Item does not move the frozen outlook');
+ /* SA-Q11: a committed purchase refreshes the Great Success signal and NOTHING else, so the
+    frozen half is compared with that one field held out. */
+ assert.deepEqual({...n.outlook,greatSignal:null},{...entry,greatSignal:null},
+  'a committed Item does not move the frozen half of the outlook');
+ assert.equal(n.outlook.greatSignal,
+  Dungeon.greatSuccessSignal({...n},g.claimedGateFor(n),g.run.facilities),
+  'and the Great Success signal is the engine calculation on the Bag as it now stands');
  // ...but the runtime preparation is NOT frozen
  const prepared=Dungeon.prepare({...n},g.claimedGateFor(n),g.run.facilities);
  const bare=Dungeon.prepare({...n,pack:[]},g.claimedGateFor(n),g.run.facilities);
@@ -806,6 +800,83 @@ test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for
   assert.notEqual(next.id,before);
   assert.ok(next.outlook,'the next customer is snapshotted on arrival');
  }
+});
+
+/* SA-Q11 — GREAT SUCCESS SIGNAL FROZEN AFTER PURCHASE. The signal shared one frozen snapshot
+   object with the rest of the arrival information, so buying the very Item that would make a
+   大成功 reachable could not say so. Only that one field moves, and only on a committed sale. */
+test('SA-Q11: a successful purchase refreshes the Great Success signal and nothing else',()=>{
+ const drive=seed=>{
+  const g=fresh(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  g.beginOrder();
+  for(let i=0;i<g.run.offers.length;i++){try{g.setQuantity(i,1);}catch(e){}}
+  g.finishOrder();
+  return g;
+ };
+ const FROZEN=['day','gate','combat','hazards','worst','deathRisk'];
+ const frozenOf=o=>JSON.stringify(FROZEN.map(k=>o[k]));
+
+ // 1. a committed sale: the frozen fields hold, greatSignal is recomputed against the new Bag
+ const g=drive('greatsignal');
+ const n=g.current();
+ const entry=copy(n.outlook);
+ let sold=0;
+ for(const st of [...g.run.inventory]){
+  if(n.pack.length>=Adventurer.slots(n))break;
+  try{if(g.sell(st.id,'half'))sold++;}catch(e){}
+ }
+ assert.ok(sold>0,'a purchase was actually committed');
+ assert.equal(frozenOf(n.outlook),frozenOf(entry),'Combat / Hazard / Death / gate / day are untouched');
+ assert.equal(n.outlook.greatSignal,
+  Dungeon.greatSuccessSignal({...n},g.claimedGateFor(n),g.run.facilities),
+  'the signal is recomputed on the committed Bag');
+ assert.equal(typeof n.outlook.greatSignal,'boolean','and it is still the plain signal, not a score');
+
+ // 2. the recompute really can change the answer - a strong enough Bag flips a false signal true
+ const h=drive('greatsignal-flip');
+ const m=h.current();
+ m.outlook.greatSignal=false;
+ const wouldBe=Dungeon.greatSuccessSignal({...m,pack:['toppotion','toppotion']},h.claimedGateFor(m),h.run.facilities);
+ h.stock('toppotion',2);m.money=999999;m.refused=[];
+ let flipped=0;
+ for(const st of h.run.inventory.filter(x=>x.item==='toppotion')){
+  if(m.pack.length>=Adventurer.slots(m))break;
+  try{if(h.sell(st.id,'half'))flipped++;}catch(e){}
+ }
+ if(flipped){
+  assert.equal(m.outlook.greatSignal,
+   Dungeon.greatSuccessSignal({...m},h.claimedGateFor(m),h.run.facilities),
+   'the refreshed signal tracks the Bag that was actually committed');
+  if(wouldBe)assert.equal(m.outlook.greatSignal,true,'a Bag that reaches the margin says so');
+ }
+
+ // 3. a REFUSED sale refreshes nothing at all
+ const r=drive('greatsignal-refuse');
+ const p=r.current();
+ const beforeRefusal=copy(p.outlook);
+ const target=r.run.inventory[0];
+ assert.ok(target,'there is stock to offer');
+ p.money=0;                                   // cannot afford it: the sale is refused outright
+ let threw=false;
+ try{assert.equal(r.sell(target.id,'overcharge'),false,'the sale did not go through');}
+ catch(e){threw=true;}
+ assert.deepEqual(p.outlook,beforeRefusal,
+  'a refused'+(threw?'/rejected':'')+' sale leaves the whole snapshot frozen');
+
+ // 4. and so does simply arriving and departing without buying anything
+ const q=drive('greatsignal-nopurchase');
+ const v=q.current();
+ const untouched=copy(v.outlook);
+ assert.deepEqual(v.outlook,untouched,'no purchase, no refresh');
+ q.depart();
+ const next=q.current();
+ if(next)assert.ok(next.outlook,'the next arrival gets its own full snapshot');
+
+ // 5. the recompute is on the committed-sale path only, and touches one field
+ const src=source('dist/systems/shop.js');
+ const sell=src.slice(src.indexOf(' sell(stockId,'),src.indexOf(' night(){'));
+ const hits=sell.match(/n\.outlook\.[a-zA-Z]+=/g)||[];
+ assert.deepEqual(hits,['n.outlook.greatSignal='],'sell() writes exactly one outlook field');
 });
 
 test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every higher price',()=>{
@@ -1040,16 +1111,17 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  assert.equal(next.run.money,1000,'and the unequipped counter no longer pays out');
 });
 
-test('RELIC_v2.7 §VISITOR RELICS: board floors the base roll, hub rolls one exclusive outcome',()=>{
+test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exclusive outcome',()=>{
  const src=source('dist/systems/shop.js');
  /* board is a floor on the BASE roll, applied before every other modifier, and draws nothing. */
  assert.ok(src.includes("const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;"),
   'board raises the base roll to 4 and leaves 5 and 6 alone');
  /* hub: one roll, three mutually exclusive outcomes. */
- assert.ok(src.includes("const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;"),
-  'hub makes exactly one roll: 30% +1, 5% +2, otherwise none');
+ assert.ok(src.includes("const r=this.rng.next();hubExtra=r<.45?1:r<.60?2:0;"),
+  'hub makes exactly one roll: REL-Q-v28-17 45% +1, 15% +2, otherwise none');
  const seen=new Set();
- for(let i=0;i<1000;i++){const r=i/1000;seen.add(r<.30?1:r<.35?2:0);}
+ const rate=[0,0,0];for(let i=0;i<1000;i++){const r=i/1000,x=r<.45?1:r<.60?2:0;seen.add(x);rate[x]++;}
+ assert.deepEqual(rate,[400,450,150],'the approved 45 / 15 / 40 split, and it sums to one roll');
  assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
  /* hub's cost is a share of overheadBase alone - never of the flat extras. */
  assert.equal(DATA.balance.hubOverheadRate,.10,'the approved rate ships');

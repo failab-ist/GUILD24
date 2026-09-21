@@ -18,17 +18,17 @@ const visit={
  first:['“여기가 길드24인가요?”','“문 연 지 얼마 안 됐다면서요.”','“게이트 앞에 가게가 있다길래.”','“들어와도 되죠? 잠깐 볼게요.”'],
  back:['“다시 왔어요.”','“오늘도 열었네요.”','“오는 길에 불 켜진 게 여기뿐이더라고요.”','“빈손으로 가긴 좀 그래서요.”'],
  hurt:['“아직 조금 욱신거리네요.”','“괜찮아요. 걷는 데는 지장 없어요.”','“이 정도면 나간 편이죠.”','“오늘은 무리 안 할 거예요.”'],
- regular:['“늘 보던 얼굴이네요.”','“말 안 해도 아시죠?”','“자리 그대로네요, 다행이다.”','“오늘도 부탁 좀 할게요.”','“늘 먹던 걸로 주세요.”'],
+ regular:['“늘 보던 얼굴이네요.”','“말 안 해도 아시죠?”','“자리 그대로네요, 다행이다.”','“오늘도 부탁 좀 할게요.”','“이 정도면 단골 맞죠?”'],
  /* §12 Callback — 실제로 남아 있는 History만 쓴다. 없는 과거를 만들지 않는다. */
  helped:['“지난번에 챙긴 거, 도움이 됐어요.”','“저번 거 쓰고 나서 생각이 좀 바뀌었어요.”','“그때 산 거, 값은 했습니다.”'],
  /* Trait 기반. Canonical의 절약 성향 / 겁 많은 성향 예시를 따른다. */
  trait:{
   frugal:['“더 싼 건 없어요?”','“이거 행사 안 해요?”','“지난번엔 이것보다 쌌는데.”','“오늘은 싼 걸로 주세요.”'],
   thrifty:['“그램당으로 치면 이게 낫죠?”','“싼 거 말고, 값하는 걸로요.”','“이거 하나면 오늘은 되겠네요.”'],
-  coward:['“귀환석 있습니까?”','“이쪽, 위험한 데 맞죠?”','“살아서 오면 또 들를게요.”','“가까운 게이트는 없어요?”'],
+  coward:['“오늘은 무사히 다녀오는 게 목표입니다.”','“이쪽, 위험한 데 맞죠?”','“살아서 오면 또 들를게요.”','“가까운 게이트는 없어요?”'],
   liar:['“오늘은 좀 깊게 들어가 볼까 해서요.”','“제가 그쪽은 좀 압니다.”','“어려운 데로 간다고 다들 말리던데요.”'],
-  eater:['“많이 든 걸로 주세요.”','“이거 하나로 하루 되나요?”','“먹을 게 제일 급해요.”'],
-  greed:['“비싼 게 좋은 거 아닌가요?”','“이왕이면 좋은 걸로 봅시다.”','“돈은 나중에 벌면 되죠.”'],
+  eater:['“원정 끝나면 밥부터 먹어야겠어요.”','“이거 하나로 하루 되나요?”','“배고픈 채로 돌아오는 건 딱 질색입니다.”'],
+  greed:['“오늘은 빈손으로 돌아올 생각 없습니다.”','“이번엔 전리품 좀 제대로 챙겨와야죠.”','“돈은 나중에 벌면 되죠.”'],
   shy:['“…저, 이거 얼마예요?”','“구경만 해도 되나요?”','“아, 아니에요. 천천히 볼게요.”'],
   social:['“사장님, 요즘 어떠세요?”','“앞에서 다들 여기 얘기하던데요.”','“오늘 누구 왔다 갔어요?”'],
   collector:['“새로 들어온 거 있어요?”','“이런 건 잘 안 보이던데요.”','“종류별로 하나씩은 있어야 하는데.”'],
@@ -73,7 +73,9 @@ const Copy={
    if(pool&&fnv(key(n,'traitgate',day))%3===0)return pick(pool,key(n,'trait'+id,day));}
   if(n.newToday)return pick(visit.first,key(n,'first',day));
   if(n.injury)return pick(visit.hurt,key(n,'hurt',day));
-  if(n.loyalty>=60)return pick(visit.regular,key(n,'regular',day));
+  /* SA-Q13: 단골 Flavor is the same judgement the badge uses - Adventurer owns the threshold
+     and nothing here keeps a second one. */
+  if(G.Adventurer.isTrustedRegular(n))return pick(visit.regular,key(n,'regular',day));
   return pick(visit.back,key(n,'back',day));
  },
  buy(n,itemId,mode,day){return pick(sale[mode]||sale.full,key(n,'buy'+itemId+mode,day));},
@@ -106,7 +108,10 @@ const Copy={
    boundary in v2.7: the effect reaches every Item contribution, which is what its D15 line
    now says. */
 Copy.boss={
- d5:{header:'길드 토벌 공고',sub:'이번 토벌 대상',button:'토벌 대상 확인',
+ /* COPY_AUDIT_APPROVED_v2.8.0 §14. The Boss information cadence is D0 / D5 / D10 / D15 / D20 /
+    D25, and D30 adds nothing new. D0, D10 and D20 had no active Copy at all. */
+ d0:{label:'DAY 30 · 제0게이트 토벌 예정',line:'길드 정보원이 토벌 대상을 추적하고 있다.'},
+ d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
   flavor:{
    WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',
    PRIDE:'검은 갑주에는 아직 흠집 하나 남지 않았다.',
@@ -115,7 +120,10 @@ Copy.boss={
    GLUTTONY:'최정예 토벌대의 보급품만 유난히 처참한 꼴로 발견됐다.',
    LUST:'오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.',
    SLOTH:'놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.'}},
- d15:{intro:'길드 정보원이 추가 정보를 확보했다.',button:'정보 확인',
+ /* one-tap information beats: they open a question the next report answers. */
+ d10:{header:'2차 조사 시작',line:'{보스명}의 전투 기록을 추적한다.',next:'다음 보고 · DAY 15',button:'확인'},
+ d20:{header:'최종 정찰 시작',line:'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.',next:'최종 보고 · DAY 25',button:'확인'},
+ d15:{header:'2차 조사 보고',intro:'전투 기록에서 변칙이 확인됐다.',button:'확인',
   trait:{
    WRATH:['특수 효과 없음',['별도의 변칙은 확인되지 않았다.','래스는 순수한 전력으로 맞선다.']],
    PRIDE:['오만의 갑주',['최종전에서 모든 출전자의 투력이 감소한다.','강인함·기동·정신은 그대로 적용된다.']],
@@ -126,10 +134,10 @@ Copy.boss={
       positive Core-Stat contribution from an Item is halved, whatever the Item cost. */
    GLUTTONY:['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·보급·보험 효과는 유지']],
    LUST:['매혹의 권능',['단골이 아닌 출전자는 최종전에서 투력·강인함·기동·정신이 모두 감소한다.','단골은 영향을 받지 않는다.']],
-   SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 유물을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 유물은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
+   SLOTH:['나태의 봉인',['슬로스에게는 세 개의 봉인이 남아 있다.','15일·20일·25일 중 두 차례와 30일에, 점포지원을 받는 대신 봉인 하나를 풀 수 있다.','봉인을 풀면 그때의 점포지원은 받을 수 없으며, 풀린 봉인이 많을수록 슬로스가 약해진다.']]}},
  /* The scouting report is the D25 disclosure now, so its button acknowledges the report
     rather than announcing a preparation that is still five days away. */
- final:{header:'최종 정찰 보고',intro:'마왕군의 최종 전장이 확인됐다.',button:'확인'}
+ final:{header:'최종 정찰 보고',intro:'마왕성으로 향하는 최종 원정 환경이 확인됐다.',button:'확인'}
 };
 
 /* COPY_WORLD_VOICE §LOCKED PLAYER-FACING TERMS, 2026-09-12. Two of these are exact: the Great
@@ -153,6 +161,11 @@ Copy.deep={
  paid:'원정 후원금 지급',
  blocked:'이미 배치를 조정한 손님은 추천할 수 없다.',
  poor:'후원금이 모자란다.',
+ /* COPY_AUDIT §15: the two operational surfaces repeat every applicable Day, so each says only
+    what its own decision needs. The full explanation is the first-occurrence coach mark. */
+ brief:'같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
+ terms:'성공 시 추가 성장 · 점포 수익 없음',
+ confirmed:'심층원정 확정',
  result:'심층원정',
  reward:'심층원정 보상'
 };

@@ -3,12 +3,11 @@ const D=G.DATA,P=G.Game.prototype;
 P.beginOrder=function(){if(this.run.phase!=='morning')return;this.run.phase='order';this.save();};
 P.finishOrder=function(){if(this.run.phase!=='order')return;this.confirmOrder();this.open();};
 P.finishNight=function(){if(this.run.phase!=='night')return;this.run.phase='closing';this.save();};
-P.specialAction=function(npcId,value){const s=this.run,e=s.special,n=s.npcs.find(n=>n.id===npcId);if(!e||e.used||!n?.alive||!n.introduced)throw Error('선택 가능한 모험가가 아닙니다.');if(e.kind==='route'){if(s.phase!=='sell'||this.current()?.id!==npcId||n.pack.length||n.history.some(h=>h.day===s.day))throw Error('아직 거래하지 않은 현재 손님만 배치 조정할 수 있습니다.');
-  /* SALE §DEEP EXPEDITION NOMINATION: a Deep nomination and any other explicit destination
-     reassignment are mutually exclusive for the same NPC on the same Day. A confirmed Deep
-     destination is final, so the reassignment is refused rather than silently ignored. */
-  if(s.deep?.today?.nomineeId===npcId)throw Error('심층원정에 나서기로 한 손님의 배치는 바꿀 수 없습니다.');
-  const index=Number(value);if(!Number.isInteger(index)||!s.dungeons[index]||index===n.destination)throw Error('다른 게이트를 선택해 주세요.');n.destination=index;n.claimedDestination=index;e.npcId=npcId;}else{if(!['morning','order'].includes(s.phase))throw Error('영업 준비 중에 선택할 수 있습니다.');if(e.kind==='remove'){if(!n.traits.includes(value)||D.traitBy[value]?.direction!=='negative')throw Error('제거할 약점을 선택해 주세요.');n.traits=n.traits.filter(t=>t!==value);}else{if(!e.candidates.includes(value)||n.traits.includes(value)||n.traits.length>=Math.min(4,n.traitSlots)||D.traitExclusions.some(pair=>pair.includes(value)&&pair.some(t=>n.traits.includes(t))))throw Error('이 특성을 배울 수 없습니다.');n.traits.push(value);}}e.used=true;s.specialUsed=true;s.notice='길드 지원을 받았습니다.';this.save();};
+/* SA-Q43. The D4+ random 길드 지원 path - destination reassignment, Trait removal and Trait
+   tutoring - had no routed Design owner in v2.8. Adoption deactivates it rather than keeping it
+   as gameplay because it happens to be in Source; if it is wanted it comes back as its own
+   Design proposal. The action, its generator and its UI are all gone, so there is nothing left
+   for a stale save to re-enter through. */
 /* A store can also end because too many of the people it sent stopped coming back. The count
    is the one night() has always kept - s.stats.deaths rises only where the report leaves the
    adventurer dead, so injuries and recovery were never in it. Checked here rather than in
