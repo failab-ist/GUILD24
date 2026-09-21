@@ -107,24 +107,6 @@ Only revisit with strong evidence that persistent product specialization creates
 
 ---
 
-# 5. AUDIO / BGM / PRESENTATION EXPANSION
-
-Importance: MEDIUM for game feel
-Status: v2.9+ DEFER
-
-Potential work:
-- stronger phase-specific BGM identity
-- additional audio cues
-- targeted graphics / presentation assets
-
-Do not add assets merely to increase production volume.
-
-First verify v2.8 core readability and interaction flow.
-
-Prefer reusing the current audio/presentation system before adding a larger asset framework.
-
----
-
 # 6. ADVANCED DRAG / PHYSICS
 
 Importance: LOW
