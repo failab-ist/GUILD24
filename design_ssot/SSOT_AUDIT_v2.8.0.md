@@ -119,15 +119,18 @@ It carries no detailed Design Truth.
 
 ## DEFERRED, NOT STALE
 
-The following are intentionally v2.9+:
-- phase-specific BGM / broad SFX/presentation expansion
+The following remain intentionally v2.9+:
 - Expedition Purpose structural system
-- large presentation/world-content expansion
+- large Final cutscene/cinematic expansion
+- large art/world-content expansion
 - drag/minigames/desktop redesign/theme systems
 - large Item-content wave
 - expanded relationship/meta-power systems
 
-Do not pull these into v2.8 Source adoption.
+The focused state-driven visual/audio Presentation Polish is no longer deferred; it is current v2.8
+Canonical under the promotion addendum below.
+
+Do not pull the remaining structural/content expansions into v2.8 Source adoption.
 
 ## FULL LEGACY-CHAIN RE-AUDIT — CLOSED
 
