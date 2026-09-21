@@ -14,7 +14,7 @@ STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 PLAYTEST_RESPONSE_REAUDIT_DATE=2026-09-22
 PLAYTEST_RESPONSE_CANONICAL_STATUS=COMPLETE
-NONBLOCKING_CANONICAL_DETAIL_GAPS=2
+NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 
 ## PURPOSE
 
@@ -262,7 +262,7 @@ Future balance follow-up remains measurement-gated and does not constitute a Des
 Result:
     AUDIT COMPLETE
     IMPLEMENTATION-BLOCKING DESIGN UNRESOLVED = NONE
-    NONBLOCKING CANONICAL DETAIL GAPS = 2
+    NONBLOCKING CANONICAL DETAIL GAPS = NONE
 
 Resolved documentation defects in this pass:
 - 00_GAME_CORE inherited information principle now distinguishes hidden unconditional whole-expedition
@@ -280,45 +280,13 @@ Resolved documentation defects in this pass:
 - COPY_AUDIT_APPROVED now explicitly marks `기존` / `이유` as audit history and only
   `수정안` + later amendments as active Copy truth.
 
-### NONBLOCKING GAP A — PREMIUM DISPLAY EXACT RARITY WEIGHTING
+### 2026-09-22 GAP CLOSURE — USER APPROVED
 
-META_v2.8.0.md says `프리미엄 쇼케이스` reuses the retired Premium Start Contract
-rare-NPC spawn-weighting channel, but neither current META nor the inactive Franchise archive owns an
-exact numeric weighting.
+The two nonblocking numeric gaps found by this re-audit are closed:
 
-Current Source observation only, NOT Design Truth:
-- ordinary rarity weights: [60, 27, 10, 2.5, 0.5]
-- premium-display path: [51, 30, 14, 4, 1]
+- `프리미엄 쇼케이스` exact NPC rarity weights are owned by META_v2.8.0.md as
+  `[51, 30, 14, 4, 1]` for Common / Uncommon / Rare / Epic / Legendary.
+- the 20 inherited Store Support base prices formerly left at PASS3 are owned exactly by
+  RELIC_v2.8.0.md §INHERITED SUPPORT BASE-PRICE CLOSURE.
 
-Do not promote or retune this numeric table without User approval.
-
-### NONBLOCKING GAP B — 20 INHERITED STORE-SUPPORT BASE PRICES
-
-RELIC_v2.5.0.md left exact base prices at `PASS3` and retained Source as the temporary baseline.
-Later owners explicitly closed 10 support prices, but 20 unchanged support prices still have no exact
-current Canonical price owner.
-
-Affected supports:
-- 묶음발주 계약
-- 단골 스탬프 기계
-- 회원 관리대장
-- 희귀상품 입고 계약
-- 길드 보증 진열대
-- 원정 위험 게시판
-- 긴급보급 선반
-- 즉석식품 코너
-- 길드 전광판
-- 신입 모집 게시판
-- 공동구매 전단
-- 단골 묶음혜택
-- 프리미엄 멤버십
-- 원정 도시락 코너
-- 냉장 유통 계약
-- 새벽 공동배송
-- 24시간 신선체계
-- 후방 창고 증설
-- 본사 추가발주권
-- 발주 교환권
-
-Their current Source prices are implementation truth only until the User approves an exact Canonical
-table. Do not infer approval from Source or from the fact that the 30-support feel audit was closed.
+No Canonical detail gap remains from this audit.
