@@ -28,9 +28,10 @@ The v2.8 Director Plan is now orientation-only. It is not a detailed work/spec s
 
 The Source has completed the first major v2.8 adoption cycles plus several playtest-found UX fixes.
 The remaining adoption work is now concentrated in:
-- approved playtest-response adoption
-- remaining dialogue-pool / recent-repeat adoption
+- completed playtest-response adoption awaiting final integration merge
+- completed dialogue-pool / recent-repeat adoption awaiting final integration merge
 - targeted re-measure / regression after the behavior changes
+- approved v2.8 Functional + Presentation Polish adoption
 - final integrated adoption + functional + runtime QA before v2.8 freeze
 
 `SOURCE_ADOPTION_QA_v2.8.0.md` is a known-defect RECORD, not a live tracker. It is not edited to
@@ -128,7 +129,7 @@ DIRECTOR review pending merge):
 - targeted deterministic QA + real-click browser run-loop smoke passed at mobile + desktop widths
 
 Dialogue exposure / repeat adoption CLOSED (branch `claude/active-task-implementation-gpe6zh`
-through `5ed0ce4`, DIRECTOR review pending merge):
+through `ca120f2`, DIRECTOR review PASS; final integration merge deferred until v2.8 close):
 - COPY_WORLD_VOICE_v2.8 recent-repeat rule adopted: ARRIVAL/SALE/NIGHT track the last 3 visible
   lines per Surface (cross-NPC) plus each NPC's own immediately previous line, both excluded
   from that Surface's next pick; `Copy.arrive/buy/refuse/night` and `Dungeon.resolve` take `run`
@@ -152,19 +153,39 @@ Because the approved playtest batch changes purchase acceptance, NPC Wallet and 
 - do not auto-retune measurement-gated values
 
 After completion, record its commit(s)/findings in `## Completed`, remove this section, and
-advance to the final v2.8 integration / freeze audit.
+advance to Functional + Presentation Polish adoption.
 
 ## Approved Queue
 
-### 1. Final v2.8 integration / freeze audit
+### 1. Functional + Presentation Polish adoption
 
-After all approved adoption and playtest-response work:
+USER APPROVED / CANONICAL PROMOTED.
+
+After re-measure closes without a blocking Design change:
+- adopt the current v2.8 Functional + Presentation Polish owned by UI_UX_v2.8.0.md
+- first audit the complete active Player flow for information priority, action hierarchy,
+  tutorial target/copy alignment, responsive order, dead space, duplication and avoidable overflow
+- include controlled D0/D5/D10/D15/D20/D25/D30 Boss/milestone presentation review
+- fix functional presentation defects with REMOVE / REUSE / MERGE before adding UI
+- use only existing gameplay state / current audio-animation-scene architecture
+- cover truthful Store-growth traces, NIGHT result differentiation, Boss/D25-D30 payoff,
+  ORDER/SALE/Store-Support decision audio and targeted current-art polish
+- add no gameplay rule, balance change, required Save state, Gameplay RNG or hidden-information leak
+- if a fix requires changing an exact Canonical layout measurement/copy contract, report evidence
+  and patch the owning Canonical before Source; WORK must not silently redefine it
+- use UI_UX_QA_v2.8.0.md UI-Q-v28-21 through UI-Q-v28-29 for acceptance
+
+Do not pull the remaining large cinematic / large art-world content from the v2.9+ router.
+
+### 2. Final v2.8 integration / freeze audit
+
+After all approved adoption, re-measure and Functional + Presentation Polish work:
 - current Canonical -> Source adoption audit
 - functional QA
 - targeted regression QA for all touched systems
 - real mobile + desktop runtime UX smoke
 - verify save/load + deterministic/RNG invariants on touched paths
 - report remaining Balance Findings separately
-- keep v2.9+ deferred features out of v2.8
+- keep remaining unapproved v2.9+ structural/content expansion out of v2.8
 
 Then v2.8 can be frozen/closed if no blocking mismatch remains.

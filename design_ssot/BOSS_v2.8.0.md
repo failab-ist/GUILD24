@@ -53,6 +53,25 @@ decision so the information can matter to the Player.
 
 D30 reuses all already-known information.
 
+## PRESENTATION PAYOFF — v2.8
+
+Boss-information truth and reveal cadence remain unchanged.
+
+UI_UX_v2.8.0.md may strengthen the visual/audio acknowledgement of:
+- D0 investigation start
+- D5 identity
+- D10 combat-question investigation
+- D15 exact Trait
+- D20 route/environment investigation
+- D25 exact Final Family + Hazard state
+- D30 Final entry
+
+D30 presentation is not a new information beat.
+It may only heighten the transition into FINAL using information already known by D25.
+
+No presentation cue may leak Boss identity, Trait, Final Family/Hazard state or other information
+before the owning reveal beat.
+
 ## PERSISTENCE
 
 D5/D15/D25 keep their existing persisted seen-state behavior.

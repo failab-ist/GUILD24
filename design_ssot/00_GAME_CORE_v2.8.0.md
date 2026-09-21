@@ -37,6 +37,21 @@ Therefore v2.8:
 
 P2+ structural expansion remains v2.9+.
 
+## INFORMATION PRINCIPLE — v2.8 OVERRIDE
+
+The inherited information principle is updated only at the Death-risk boundary.
+
+Keep hidden:
+- exact expedition success probability
+- unconditional whole-expedition Death probability
+- internal coefficients / thresholds unless a current owner explicitly exposes them
+
+Current SALE may expose the exact **failure-conditioned Death risk** owned by
+DUNGEON_HAZARD_v2.8.0.md. This is the chance of Death after the expedition has entered its failure
+path; it is not the unconditional whole-expedition Death probability.
+
+All other unchanged information-principle rules inherit the base document.
+
 ## CROSS-RUN CORE
 
 Cross-run progression has two active growth identities.

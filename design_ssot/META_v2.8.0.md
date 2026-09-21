@@ -240,8 +240,14 @@ Run starting Gold +300G
 
 ### display — 프리미엄 쇼케이스
 ```text
-use the existing Premium Start Contract rare-NPC spawn weighting
+rare-NPC rarity weights = [51, 30, 14, 4, 1]
+rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
+
+This is the exact v2.8 baseline for the existing Premium Start Contract positive spawn-weighting
+channel reused by this Decoration. It changes only the rarity weights used by the ordinary NPC spawn
+rarity draw when the Decoration is active. It adds no extra spawn, no extra rarity roll and no new
+Gameplay RNG draw.
 
 Do not carry the retired Start Contract negative sides into these Decorations:
 - no +5% ORDER purchase penalty
@@ -261,6 +267,21 @@ display 프리미엄 쇼케이스   550 Store Capital
 
 The spread is deliberately narrow. The four measured within 1.37x of each other in Run value, so
 a wider price spread would let price decide the pick instead of the effect.
+
+## STORE-GROWTH VISUAL PROJECTION — PRESENTATION ONLY
+
+Store-growth presentation may project already-owned/current state into the live store through
+UI_UX_v2.8.0.md.
+
+This includes equipped Decorations and may coexist with run-state traces owned by other current
+Specs, such as Store Support, Trusted Regular and revealed Final-preparation state.
+
+The projection:
+- creates no new Meta resource or unlock
+- grants no passive effect beyond the actual owned mechanic
+- requires no new persistent progression field
+- does not change Decoration Slot count or loadout rules
+- must remain truthful after Save/Load because it is derived from existing state
 
 ## POWER / INFLATION BOUNDARY
 

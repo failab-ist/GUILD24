@@ -13,9 +13,12 @@ VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
 V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
 PLAYTEST_RESPONSE_AMENDMENT_STATUS=CANONICAL_PROMOTED_2026_09_22
+PRESENTATION_POLISH_PROMOTION_STATUS=CANONICAL_PROMOTED_2026_09_22
+FUNCTIONAL_DESIGN_POLISH_STATUS=CANONICAL_PROMOTED_2026_09_22
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
+NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_SOURCE_ADOPTION_IN_PROGRESS
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -54,9 +57,13 @@ Priority:
 - Item role clarity
 - Boss five-Day presence
 - mobile density
+- audiovisual consequence / Run-identity polish using existing state
+- full-surface functional-design polish: information priority, tutorial target truth, layout economy, control/feedback continuity
 - evidence-gated balance follow-up
 
-P2+ expansion remains routed to GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md and is not v2.8 Design Truth.
+Structural P2+ expansion remains routed to GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md.
+The User-approved v2.8 Presentation Polish promotion below is an explicit exception: it strengthens
+existing state/feedback without adding a new gameplay system.
 
 ## CURRENT CANONICAL FILE SET
 
@@ -106,7 +113,7 @@ ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
 STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.8.0.md
 SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
-UI / UX / MOBILE / POPOVER / SEMANTIC DELTA / DECORATION -> UI_UX_v2.8.0.md
+UI / UX / MOBILE / TUTORIAL / FUNCTIONAL DESIGN / POPOVER / SEMANTIC DELTA / DECORATION / PRESENTATION / AUDIO -> UI_UX_v2.8.0.md
 COPY / PLAYER-FACING TERMS / BOSS REPORT COPY -> COPY_WORLD_VOICE_v2.8.0.md
 COPY EXACT PLAYER TEXT AMENDMENT -> COPY_AUDIT_APPROVED_v2.8.0.md
 EVENT -> EVENT_v2.8.0.md
@@ -203,6 +210,53 @@ Exact owners:
 These are current approved baselines, not measurement-gated suggestions.
 After Source adoption, re-measure aggregate economy/survival impact before any further tuning.
 
+## v2.8 PRESENTATION POLISH PROMOTION — 2026-09-22
+
+User-approved v2.9-deferred presentation work is promoted into v2.8.
+
+Purpose:
+- make existing choices/results feel stronger without changing their mechanics
+- make a late Run visibly/audibly feel like the same store after weeks of operation
+- strengthen NIGHT consequence, Boss/Final presence and decision feedback
+- re-audit the complete functional layout so the right information, emphasis and action appear
+  together without redundant UI, dead space or avoidable overflow
+
+Exact ownership:
+- state/event truth -> existing META / NIGHT_CLOSING / BOSS / SALE / ECONOMY_ORDER owners
+- visual/audio presentation contract -> UI_UX_v2.8.0.md
+- acceptance -> UI_UX_QA_v2.8.0.md
+
+Promoted scope:
+- full-surface functional-design audit across the active Player flow
+- tutorial/coach text <-> highlighted-target truth and responsive fit
+- decision information/action hierarchy, density, dead-space/overflow and responsive-order cleanup
+- Boss D0/D5/D10/D15/D20/D25/D30 functional sizing/hierarchy review
+- small state-driven Store-growth visual traces
+- stronger NIGHT result differentiation
+- Boss-information / D25 Final-preparation / D30 Final-entry presentation payoff
+- clearer ORDER / SALE / Store-Support decision SFX
+- stronger phase audio/BGM identity using the current audio architecture
+- targeted art/icon/crop/scale polish where existing identity/readability is weak
+
+Hard boundary:
+- no new gameplay rule, reward, probability, decision axis or permanent progression
+- no new required Save state
+- no new Gameplay RNG
+- no hidden/unrevealed information may be exposed by art or sound
+- no full background-skin/combinatorial theme system
+- no mandatory precision interaction
+- no large Final cutscene/cinematic system
+
+This promotion supersedes the matching candidates removed from
+GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md.
+
+## CURRENT CANONICAL DETAIL GAPS
+
+None from the 2026-09-22 full-chain re-audit.
+
+The former Premium Decoration rarity-weighting gap and 20 inherited Store Support base-price gaps
+were closed by User approval and promoted into META_v2.8.0.md / RELIC_v2.8.0.md with matching QA.
+
 ## SOURCE ACCESS
 
     SPEC_INDEX_v2.8.0
@@ -211,8 +265,10 @@ After Source adoption, re-measure aggregate economy/survival impact before any f
     -> related current QA
     -> Current Source
 
-SOURCE_ADOPTION_QA_v2.8.0.md records known current-source mismatch locations/root causes for this
-adoption. WORK should start there instead of rediscovering known defects.
+SOURCE_ADOPTION_QA_v2.8.0.md is an audit-HEAD defect record. Its `Current Source` descriptions
+refer to that file's recorded `AUDIT_SOURCE_HEAD`; resolved findings are intentionally not rewritten
+as a live tracker. WORK may use it to avoid rediscovering root causes, but current resolution status
+comes from WORK_STATE + current Source + reviewed commits.
 
 If a routed source cannot be accessed after explicit lookup, report PROJECT SOURCE ACCESS/INDEX ISSUE.
 
@@ -230,7 +286,7 @@ v2.8 is ready to close when all of the following are true:
 - the Run's Boss objective remains present through the approved information cadence
 - approved Item / Store Support baselines are adopted
 - measurement-gated balance questions are either supported by evidence or explicitly carried forward
-- no v2.9+ structural expansion is pulled into v2.8
+- no unapproved v2.9+ structural expansion is pulled into v2.8; the approved Functional + Presentation Polish promotion above is part of v2.8
 
 Exact mechanics, numbers, copy, UX and pass/fail criteria are not repeated here.
 Use the routed owner Specs / QA.

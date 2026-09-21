@@ -13,6 +13,22 @@ PATCH_TYPE=INFORMATION_TRUST
 All unchanged v2.7 NPC, Job, Trait, Injury, Fatigue-trait, Food-affinity, Potionbody and recent
 expedition rules inherit NPC_TRAIT_v2.7.0.md.
 
+## RETIRED INHERITED SPECIAL SYSTEM — EXACT
+
+The older base-chain clauses that allowed a random Rare/Special NPC opportunity to:
+- reassign one not-yet-finalized NPC to another Gate
+- remove a permanent NEGATIVE Trait
+- add one of several permanent POSITIVE Traits
+
+are retired in v2.8 and are not active Design Truth.
+
+No hidden/random route / Trait-removal / Trait-mentor system exists in the current Run.
+Current destination changes come only from explicitly active Trait / Event / Deep rules owned by
+their current routed specs.
+
+Reintroducing any permanent Trait-edit or player destination-reassignment opportunity requires a
+new approved Design change; it must not be recovered from the inherited base chain.
+
 ## PLAYER-FACING GROWTH TRUTH
 
 Player-facing NPC growth identity remains:

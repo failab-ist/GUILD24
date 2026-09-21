@@ -76,30 +76,6 @@ Exact mechanics remain undefined.
 
 ---
 
-# 2. STORE GROWTH VISUAL OVERLAY
-
-Importance: MEDIUM
-Cost: MEDIUM~HIGH + ART
-Status: DEFER
-
-Potential goal:
-
-> a late-Run store visibly feels like the same shop after weeks of operation.
-
-Potential traces:
-- Store Support props
-- Guild notices
-- regular-customer traces
-- Final-preparation signage
-- small shelf / fixture changes
-
-Guardrails:
-- tie visible changes to real state
-- prefer small overlays over whole-background replacement
-- avoid combinatorial skin systems
-
----
-
 # 3. PRODUCT RUN HISTORY / ITEM MEMORY
 
 Importance: LOW~MEDIUM
@@ -128,24 +104,6 @@ Examples:
 - mastery tree
 
 Only revisit with strong evidence that persistent product specialization creates meaningful Store Build decisions rather than grind.
-
----
-
-# 5. AUDIO / BGM / PRESENTATION EXPANSION
-
-Importance: MEDIUM for game feel
-Status: v2.9+ DEFER
-
-Potential work:
-- stronger phase-specific BGM identity
-- additional audio cues
-- targeted graphics / presentation assets
-
-Do not add assets merely to increase production volume.
-
-First verify v2.8 core readability and interaction flow.
-
-Prefer reusing the current audio/presentation system before adding a larger asset framework.
 
 ---
 
@@ -219,19 +177,22 @@ Prefer rebalance / repurpose / merge over catalog growth.
 
 ---
 
-# 11. FINAL SPECTACLE / CUTSCENE EXPANSION
+# 11. LARGE FINAL CUTSCENE / CINEMATIC EXPANSION
 
 Importance: MEDIUM presentation / LOW core
 Cost: HIGH
 Status: DEFER
 
-Only after Final information and preparation decisions are proven should the project consider:
-- cinematic sequence
-- Final-only scenes
-- larger Demon King presentation
-- unique ending staging
+Potential future scope:
+- bespoke cinematic sequence
+- large Final-only scene set
+- large Demon King presentation asset package
+- alternate / unique ending staging that needs new scene infrastructure
 
-Do not use spectacle to cover a weak decision structure.
+Keep this deferred unless the existing v2.8 Final presentation is already carrying its decision and
+result meaning clearly.
+
+Do not use large spectacle to cover a weak decision structure.
 
 ---
 
@@ -337,15 +298,15 @@ A new Boss must change preparation decisions, not merely Power.
 
 ---
 
-# 18. ART / STORE WORLD EXPANSION
+# 18. LARGE ART / WORLD CONTENT EXPANSION
 
 Status: FUTURE
 
 Potential:
-- more portraits
-- more shop props
-- seasonal presentation
+- more portrait waves
+- seasonal presentation sets
 - additional Demon King sheets
+- larger shop-environment replacements
 - more dungeon/world environmental art
 
 Asset count is not a substitute for game depth.

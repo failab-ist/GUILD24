@@ -1,4 +1,4 @@
-# GUILD24 — Chunk F presentation assets
+# GUILD24 — Presentation Assets
 
 Every third-party asset in the build, with its licence and why it was chosen.
 Regenerate the vendored copies with `npm run assets`.
@@ -9,7 +9,7 @@ Regenerate the vendored copies with `npm run assets`.
 - source: npm `wanted-sans` (https://github.com/wanteddev/wanted-sans), (c) Wanted Lab
 - licence: **SIL OFL-1.1** — commercial use YES, embedding YES, modification YES,
   attribution: keep the OFL notice (shipped at `dist/ui/fonts/OFL-WantedSans.txt`).
-- why: `UI_UX_v2.7.0.md` §TYPOGRAPHY names Wanted Sans as the INFORMATION face, replacing
+- why: `design_ssot/UI_UX_v2.8.0.md` routes the current UI/UX truth and inherits the typography baseline that names Wanted Sans as the INFORMATION face, replacing
   Pretendard. Type carries two jobs and they must not be mixed: the atmosphere face takes
   signage, document titles and diegetic readouts; the information face takes every value,
   effect line, price, count and control label, including both primary actions. A system stack

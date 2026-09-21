@@ -102,6 +102,32 @@ It is to make the systems already present produce clearer choices and a stronger
 
 > this Run became this kind of store because of what I chose.
 
+### 7. FUNCTIONAL + PRESENTATION PAYOFF
+
+v2.8 also carries a focused functional-design and audiovisual polish pass.
+
+The current interface should first make the right information and action obvious, then make the
+existing state produce stronger visible/audible consequence.
+
+Functional polish includes:
+- tutorial emphasis that matches the exact fact/action being taught
+- decision information and the action that uses it staying spatially coherent
+- removing duplicated UI, dead space and avoidable overflow before compressing required information
+- responsive layouts that preserve the intended reading/action order
+- Boss/milestone notices that are strong enough to register without oversized empty presentation
+
+Presentation polish includes:
+- NIGHT outcomes should not all feel equally weighted
+- Boss information and Final preparation should gain presence as the Run approaches DAY 30
+- Store choices should leave small truthful traces in the shop
+- ORDER / SALE / Store-Support decisions should sound materially different from generic UI taps
+- phase identity may be strengthened through the current audio/BGM system
+
+This remains refinement, not structural expansion.
+
+Presentation must not invent state, expose hidden information, add a new decision, or require a new
+progression system merely to justify an effect.
+
 ---
 
 ## HOW v2.8 APPROACHES CHANGE

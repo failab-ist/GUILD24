@@ -67,6 +67,62 @@ non-conflicting inherited base.
 
 No new Store Support is added by this audit.
 
+## INHERITED SUPPORT EXACT FUNCTION CLOSURE
+
+The following inherited supports had only qualitative/abstract function wording in the older owner
+chain. Their already-approved v2.8 Function is exact here so Source/QA never has to recover numbers
+from player Copy or historical implementation:
+
+- 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -15%
+- 단골 스탬프 기계: paid-purchase Loyalty gain +50%; survival Loyalty is excluded
+- 회원 관리대장: from next Day, returning-adventurer revisit weight +40%
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; from next Day operating cost +10G
+- 길드 보증 진열대: once per Day, first sale of a list-price >=200G Item -> HQ covers 20% of list
+  price for the customer while the Player receives the full chosen sale price
+- 원정 위험 게시판: known active-Hazard matching Item offer weight +80%; this is not a guarantee
+- 긴급보급 선반: Potion / Field Gear / Insurance offer weight +60% and matching offer quantity +1
+- 공동구매 전단: if today's visitor count >=6, same SKU 3+ bulk order purchase price -10%
+- 단골 묶음혜택: returning customer's second paid purchase that Day -> Loyalty +2
+- 프리미엄 멤버십: Loyalty >=50 customer's Rare+ Item purchase intent +10%p
+- 새벽 공동배송: same Food/Drink SKU 3+ bulk order purchase price -15%
+- 후방 창고 증설: inventory capacity +10
+- 본사 추가발주권: from the next ORDER-offer generation, offer candidate count +2
+
+These are mechanic truths, not new tuning. Exact Player-facing wording remains owned by
+COPY_AUDIT_APPROVED_v2.8.0.md.
+
+## INHERITED SUPPORT BASE-PRICE CLOSURE — EXACT
+
+The following 20 inherited Store Support base prices are the approved v2.8 baseline. They were
+already adopted together with the User-approved §11 Store Support rows; this section closes the
+older PASS3 owner gap and is not a new rebalance.
+
+| ID | Store Support | Base Price |
+|---|---|---:|
+| bulk | 묶음발주 계약 | 260G |
+| stamp | 단골 스탬프 기계 | 260G |
+| member | 회원 관리대장 | 260G |
+| showcase | 희귀상품 입고 계약 | 280G |
+| guarantee | 길드 보증 진열대 | 280G |
+| hazardBoard | 원정 위험 게시판 | 260G |
+| medicine | 긴급보급 선반 | 260G |
+| kitchen | 즉석식품 코너 | 280G |
+| board | 길드 전광판 | 260G |
+| rookieBoard | 신입 모집 게시판 | 240G |
+| groupFlyer | 공동구매 전단 | 400G |
+| memberBundle | 단골 묶음혜택 | 380G |
+| premiumMember | 프리미엄 멤버십 | 420G |
+| expeditionMeal | 원정 도시락 코너 | 400G |
+| coldcase | 냉장 유통 계약 | 420G |
+| dawnBulk | 새벽 공동배송 | 380G |
+| fresh24 | 24시간 신선체계 | 740G |
+| warehouse | 후방 창고 증설 | 360G |
+| terminal | 본사 추가발주권 | 380G |
+| delivery | 발주 교환권 | 340G |
+
+The other 10 active support prices are already exact in their current v2.8 owner sections and remain
+unchanged.
+
 ## ROTATION DISPLAY — SUPPLY ENGINE
 
 회전 진열대:

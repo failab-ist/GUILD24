@@ -1,7 +1,7 @@
 # UI_UX
 
 DOC=UI_UX
-OWNER=ui,ux,mobile,tutorial,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
+OWNER=ui,ux,mobile,tutorial,functional_design,visual,audio,presentation_polish,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -210,6 +210,253 @@ At 360x800, core information and acknowledgement control must not be pushed belo
 viewport solely by Boss art.
 
 Information is primary; art is supporting.
+
+## v2.8 PRESENTATION POLISH — EXACT BOUNDARY
+
+This is a focused presentation pass over existing gameplay state.
+
+It may strengthen:
+- visual hierarchy / motion / scene dressing
+- SFX feedback
+- phase BGM / ambience identity
+- existing art scale / crop / icon readability
+
+It must not add:
+- a gameplay rule, reward, probability or decision
+- a new required Save field
+- a new Gameplay RNG draw
+- a hidden-information leak
+- a second result system
+- a large cutscene/cinematic framework
+
+Prefer the current Sound / animation / scene systems before adding a new presentation framework.
+
+### FUNCTIONAL DESIGN AUDIT — FULL SURFACE
+
+The v2.8 polish pass is also a functional-design audit of the current game, not only an art/audio
+pass.
+
+Audit every current Player surface:
+- opening / pre-Run / Store Management
+- MORNING
+- ORDER
+- SALE
+- NIGHT
+- CLOSING
+- Boss-information beats
+- Final preparation / FINAL / ending
+- tutorial / coach marks
+- Help / Settings / Event / Store Support / other modals and overlays
+
+For every surface, judge the complete interaction rather than isolated CSS values.
+
+Required questions:
+1. **What is the Player deciding / learning now?**
+2. **Is that information visually primary enough to notice without hunting?**
+3. **Does the highlighted / enlarged / animated region actually match the fact or action being
+   explained?**
+4. **Is the next meaningful action visible and spatially associated with the information it uses?**
+5. **Is any duplicate, decorative, empty or stale region consuming space needed by the decision?**
+6. **Does the same concept use consistent placement, wording and visual language across phases?**
+7. **After the action, is the changed state visible without forcing the Player to reconstruct it?**
+
+REMOVE / REUSE / MERGE before adding another box, panel, label or modal.
+
+Functional polish may:
+- remove redundant wrappers / duplicated labels / dead spacing
+- resize or regroup current content
+- change responsive stacking/order
+- reduce permanent space reserved for transient content
+- merge presentation that teaches the same fact twice
+- improve action hierarchy, affordance and state feedback
+- tune art/copy container size when the current composition under- or over-emphasizes the owned
+  information
+
+It may not change the gameplay rule or hide required decision information merely to make a screen
+cleaner.
+
+#### TUTORIAL / COACH TARGET TRUTH
+
+Every tutorial/coach step must be checked as a pair:
+
+    spoken tutorial fact
+    <-> exact visible UI region highlighted by that step
+
+PASS only when:
+- the highlighted region is the smallest useful region that actually contains the explained fact
+  or action
+- the copy does not describe information outside that highlight unless the relationship itself is
+  what the step is teaching
+- a step about one control does not spotlight an entire unrelated card/column
+- a step about a relationship may highlight the smallest shared region that makes that
+  relationship legible, or split into sequential steps
+- the target selected at runtime is the visible target for the current responsive layout, not a
+  hidden desktop/mobile duplicate
+- scroll-to-target leaves the highlighted subject and the tutorial copy readable together
+- the coach bubble / mask does not cover the target, the next control or essential comparison data
+- spotlight bounds include the whole meaningful target and do not clip the exact content being
+  described
+- optional/contextual targets are skipped without blocking later tutorial steps
+- the tutorial teaches how to read a decision and never points to a system-authored answer
+
+If the copy is correct but the target is wrong, fix the target/layout.
+If the target is correct but the copy describes more/less than it, fix the copy through the current
+Copy owner.
+Do not enlarge the spotlight merely to hide a target/copy mismatch.
+
+#### INFORMATION / ACTION FIT
+
+A screen must allocate space according to decision importance, not component age.
+
+At primary mobile widths (360 / 390 / 412 class) and representative desktop widths:
+- no horizontal overflow
+- fixed docks/headers do not cover current information or actions
+- the primary decision and its immediate input information should be reachable without unnecessary
+  scroll
+- long content may scroll, but the scroll order follows information -> comparison -> action
+- transient speech/toasts/coach marks do not reserve permanent empty height
+- desktop grid/flex tracks do not create artificial dead gaps because a neighboring column is taller
+- a short message must not be presented in an oversized empty modal solely because the shell is
+  shared
+- a dense message must not be shrunk into unreadable type merely to avoid scrolling
+- repeated headings, duplicated counts and decorative blocks are removed before required
+  information is compressed
+
+#### BOSS / MILESTONE FUNCTIONAL HIERARCHY
+
+Boss-information presentation is audited by function, not only by the existing pixel caps.
+
+The information cadence remains owned by BOSS_v2.8.0.md.
+
+Presentation intent:
+- D0: objective / investigation start is unmistakable but compact
+- D5: identity reveal has clear visual presence
+- D10: combat-question beat is compact but reads as a meaningful new investigation
+- D15: exact Trait reveal is visually stronger than a routine notice
+- D20: route/environment question is compact but clearly new
+- D25: Final Family/Hazard disclosure is a major preparation beat and must be easy to read before
+  same-Day decisions
+- D30: FINAL entry may be dramatic but adds no new information
+
+Existing D10/D20 64px and D5/D15/D25 mobile art baselines remain the current starting values for
+implementation review, not a reason to accept a functionally weak composition.
+
+During the polish audit, FAIL if:
+- Boss identity/art is too small or visually weak to establish the intended beat
+- art/title/decorative frame consumes enough height to push the owned information or acknowledgement
+  into unnecessary scrolling
+- a compact D10/D20 beat uses a large empty reveal shell with little actual content
+- D25 information is technically present but visually buried
+- D30 repeats the full information payload instead of using known information for Final-entry
+  emphasis
+- any Boss modal overflows horizontally or produces avoidable empty/dead space on mobile/desktop
+
+If runtime evidence shows an existing exact presentation measurement itself causes one of these
+failures, treat that as a v2.8 Functional Design finding and patch the UI_UX owner before Source
+implementation. Do not let WORK silently redefine the measurement.
+
+#### CONTROL / FEEDBACK HYGIENE
+
+Across current screens:
+- primary / secondary / destructive actions must read with the correct relative emphasis
+- disabled / selected / completed state must be distinguishable without relying only on color
+- tap/click targets remain comfortably usable at phone width
+- focus order follows visual/action order
+- modal open/close returns focus to a meaningful origin
+- actions that redraw the surface preserve useful scroll/focus context where the decision continues
+- success/refusal/error feedback appears near the action it explains and does not masquerade as a
+  new mechanic
+
+### STORE-GROWTH VISUAL TRACES
+
+The live store may show small deterministic traces of state the Player already owns or has already
+been shown.
+
+Eligible sources include:
+- equipped Decorations
+- owned Store Supports / existing store facilities
+- already-established Trusted Regular presence
+- D25 Final-preparation state after its reveal
+
+Allowed presentation:
+- small props / fixture changes
+- pinned Guild notices
+- regular-customer traces
+- Final-preparation signage
+- subtle shelf / counter dressing
+
+Rules:
+- every visible trace must map to real current state
+- a trace grants no mechanic and is not a control
+- no whole-background replacement is required
+- no combinatorial skin/theme system
+- no unrevealed Boss / Hazard / NPC information may be inferred from the trace
+- when several traces compete for space, deterministic presentation may show a readable subset;
+  gameplay ownership is never reduced
+
+### DECISION / PHASE AUDIO
+
+The current audio architecture is reused.
+
+Material decisions should not all sound like the same generic UI click.
+
+Distinct feedback classes are required for:
+- ORDER confirmation
+- successful SALE
+- SALE refusal
+- Store Support acquisition
+
+Phase identity may be strengthened for:
+- MORNING
+- ORDER
+- SALE
+- NIGHT
+- FINAL
+
+This may use current BGM/ambience transition, layering or targeted cues.
+A unique new full track per phase is not required.
+
+Muted state and existing BGM/SFX settings remain authoritative.
+
+### NIGHT RESULT PRESENTATION
+
+Existing NIGHT outcome truth drives presentation.
+
+Presentation must make materially different results feel different, including at minimum:
+- ordinary return / success
+- Great Success
+- retreat
+- injury
+- severe injury
+- Death
+
+Rescue / avoided-death evidence may receive a distinct recovery/life-saving accent where already
+proven by the result state.
+
+Visual/audio emphasis never changes Outcome, rewards, proof or dialogue priority.
+
+### BOSS / FINAL PRESENTATION PAYOFF
+
+Existing Boss-information beats may receive stronger visual/audio acknowledgement.
+
+D0 / D5 / D10 / D15 / D20 / D25 may each use presentation appropriate to the information already
+owned by that beat.
+
+D25 may strengthen Final-preparation presentation after the exact Final state is revealed.
+
+D30 may strengthen FINAL-entry tension using only information already revealed by D25.
+D30 still adds no new Boss-information beat.
+
+Presentation must not push the owned information/acknowledgement control out of the usable mobile
+viewport.
+
+### TARGETED GRAPHIC POLISH
+
+Existing Item / NPC / Boss / UI art may be corrected where silhouette, crop, scale or icon identity
+makes two different current objects read as the same thing or weakens the current decision.
+
+This is polish of current content, not permission for a large new Item wave, portrait wave,
+environment set or theme system.
 
 ## FUNCTION / FLAVOR VISUAL HIERARCHY — EXACT
 

@@ -827,8 +827,12 @@ Current Source:
 - from D4+, a hidden random path can create route / remove-Trait / mentor-Trait opportunities
 - UI exposes destination reassignment, negative-Trait removal or positive-Trait learning
 
-Canonical finding:
-No current routed Design owner defines this random special system.
+Canonical finding at AUDIT_SOURCE_HEAD:
+No routed owner at that audit point explicitly closed the inherited random special-system clauses.
+
+2026-09-22 SSOT re-audit closure:
+NPC_TRAIT_v2.8.0.md now explicitly retires the inherited route / Trait-remove / Trait-add system.
+The required gameplay correction below is unchanged.
 
 Required:
 - do not preserve it as gameplay merely because it exists in Source

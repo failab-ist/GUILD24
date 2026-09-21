@@ -88,6 +88,25 @@ Death:
 
 Dialogue pool size and recent-repeat handling follow COPY_WORLD_VOICE_v2.8.0.md.
 
+## RESULT PRESENTATION ROUTING — v2.8 POLISH
+
+NIGHT_CLOSING owns the resolved result category and causal truth.
+UI_UX_v2.8.0.md owns the visual/audio presentation of that already-resolved state.
+
+Presentation may distinguish:
+- ordinary return / success
+- Great Success
+- retreat
+- injury
+- severe injury
+- Death
+- proven rescue / avoided-death accents
+
+It must not create a new outcome category, change rewards, reorder proof, or imply an Item cause that
+the existing result proof does not establish.
+
+Death remains narration/report treatment rather than living NPC speech.
+
 ## CLOSING
 
 Remove explanatory footer prose that teaches internal accounting when the receipt itself already

@@ -6,7 +6,7 @@ DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=CANONICAL_AUDIT_RECORD
 AUDIT_DATE=2026-09-20
-FINAL_REAUDIT_DATE=2026-09-20
+FINAL_REAUDIT_DATE=2026-09-22
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
 V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
@@ -14,6 +14,9 @@ STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 PLAYTEST_RESPONSE_REAUDIT_DATE=2026-09-22
 PLAYTEST_RESPONSE_CANONICAL_STATUS=COMPLETE
+PRESENTATION_POLISH_PROMOTION_STATUS=COMPLETE
+FUNCTIONAL_DESIGN_POLISH_STATUS=COMPLETE
+NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 
 ## PURPOSE
 
@@ -117,15 +120,18 @@ It carries no detailed Design Truth.
 
 ## DEFERRED, NOT STALE
 
-The following are intentionally v2.9+:
-- phase-specific BGM / broad SFX/presentation expansion
+The following remain intentionally v2.9+:
 - Expedition Purpose structural system
-- large presentation/world-content expansion
+- large Final cutscene/cinematic expansion
+- large art/world-content expansion
 - drag/minigames/desktop redesign/theme systems
 - large Item-content wave
 - expanded relationship/meta-power systems
 
-Do not pull these into v2.8 Source adoption.
+The focused state-driven visual/audio Presentation Polish is no longer deferred; it is current v2.8
+Canonical under the promotion addendum below.
+
+Do not pull the remaining structural/content expansions into v2.8 Source adoption.
 
 ## FULL LEGACY-CHAIN RE-AUDIT — CLOSED
 
@@ -248,9 +254,101 @@ Approved current outcomes:
 - Fresh native-Stat amplification is +30 / +50 / conditional +20, with matching Counter +25 unchanged
 - Deep occurrence is 2 or 3 at 50/50, required Power ×1.50
 - Deep Success = EXP40 / Wallet60; Deep Great Success = EXP80 / Wallet120
-- Deep sponsorship base remains 350G with 0.20 rarity and 0.05 level steps, rounded to 10G
+- Deep sponsorship base is 200G with 0.20 rarity and 0.05 level steps, rounded to 10G
 - active Item rarity distribution is intentionally C11 / U12 / R5 / E11 / L1
 
 The cross-system numeric pass above is approved, and the full 30-Store-Support audit is also complete.
 All approved Store Support amendments are promoted into RELIC_v2.8.0.md and RELIC_QA_v2.8.0.md.
 Future balance follow-up remains measurement-gated and does not constitute a Design unresolved item.
+
+
+## 2026-09-22 CROSS-SSOT / LEGACY-CHAIN RE-AUDIT ADDENDUM
+
+Result:
+    AUDIT COMPLETE
+    IMPLEMENTATION-BLOCKING DESIGN UNRESOLVED = NONE
+    NONBLOCKING CANONICAL DETAIL GAPS = NONE
+
+Resolved documentation defects in this pass:
+- 00_GAME_CORE inherited information principle now distinguishes hidden unconditional whole-expedition
+  Death probability from the approved exact failure-conditioned Death-risk disclosure.
+- NPC_TRAIT explicitly retires the inherited random route / Trait-remove / Trait-add special system;
+  its historical QA cases are explicitly superseded.
+- CORE_RUN_QA explicitly retires Franchise Achievement pacing and the old D10 FINAL20 / D20 FINAL10
+  presentation wording while preserving current D25 persistence / D30 reuse.
+- FINAL_EXPEDITION remains the current v2.7-named Final owner, but cross-system references now route
+  to current v2.8 owners instead of freezing adjacent systems at v2.7.
+- this audit's stale Deep sponsorship line is corrected from 350G to the current approved 200G base.
+- SPEC_INDEX now states that SOURCE_ADOPTION_QA is an audit-HEAD defect record, not a live tracker.
+- RELIC closes 13 inherited Store Support Function values that were exact in User-approved Copy but
+  only qualitative in the older rule owner chain.
+- COPY_AUDIT_APPROVED now explicitly marks `기존` / `이유` as audit history and only
+  `수정안` + later amendments as active Copy truth.
+
+### 2026-09-22 GAP CLOSURE — USER APPROVED
+
+The two nonblocking numeric gaps found by this re-audit are closed:
+
+- `프리미엄 쇼케이스` exact NPC rarity weights are owned by META_v2.8.0.md as
+  `[51, 30, 14, 4, 1]` for Common / Uncommon / Rare / Epic / Legendary.
+- the 20 inherited Store Support base prices formerly left at PASS3 are owned exactly by
+  RELIC_v2.8.0.md §INHERITED SUPPORT BASE-PRICE CLOSURE.
+
+No Canonical detail gap remains from this audit.
+
+
+## 2026-09-22 PRESENTATION POLISH PROMOTION ADDENDUM
+
+User approval promotes the previously deferred small/medium presentation work into v2.8.
+
+Canonical ownership after promotion:
+- presentation/audio contract -> UI_UX_v2.8.0.md
+- result truth -> NIGHT_CLOSING_v2.8.0.md
+- Boss reveal/final-entry truth -> BOSS_v2.8.0.md
+- Store-growth/Decoration projection boundary -> META_v2.8.0.md
+- acceptance -> UI_UX_QA_v2.8.0.md
+
+The promotion adds no gameplay number, probability, reward, progression resource, decision axis,
+required Save state or Gameplay RNG.
+
+The matching Store Growth Visual Overlay and Audio/BGM/Presentation candidates were removed from
+GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md. Large Final cinematic/cutscene work and large art/world
+content expansion remain deferred.
+
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
+NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.
+
+
+## 2026-09-22 FUNCTIONAL DESIGN POLISH EXPANSION
+
+User approval expands the v2.8 Presentation Polish into a full functional-design audit of the
+current Player flow.
+
+Current owner:
+- functional UI / tutorial targeting / layout economy / responsive fit / presentation -> UI_UX_v2.8.0.md
+- acceptance -> UI_UX_QA_v2.8.0.md UI-Q-v28-26 through UI-Q-v28-29
+- underlying gameplay/copy truth remains with the existing routed owner for each fact
+
+The audit is not limited to the named examples.
+It covers opening/pre-Run, Store Management, MORNING, ORDER, SALE, NIGHT, CLOSING, Boss beats,
+Final preparation/FINAL/ending and active overlays/modals.
+
+Explicit examples included by User approval:
+- tutorial copy and its highlighted UI region must actually describe the same thing
+- D0/D5/D10/D15/D20/D25/D30 Boss/milestone presentation must be large/strong enough to communicate
+  its information role while avoiding unnecessary overflow, dead modal space or decorative excess
+
+The same functional standard applies project-wide:
+- information priority
+- decision/action proximity
+- responsive reading order
+- dead-space / duplication removal
+- overflow / viewport fit
+- control state / focus / feedback continuity
+
+This expansion changes no gameplay rule, numeric balance, required Save state or Gameplay RNG.
+Exact current owner constraints remain authoritative until runtime evidence is promoted into the
+owner as a v2.8 Functional Design correction.
+
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
+NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.

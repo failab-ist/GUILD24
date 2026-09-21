@@ -233,3 +233,209 @@ Store management shows name/effect/price-or-ownership/equipped state.
 
 Decoration Flavor prose is absent from this management decision surface.
 No extra Collection UI is required.
+
+
+## UI-Q-v28-21 — STORE-GROWTH VISUAL TRACES
+
+Using controlled states, verify every implemented live-store growth trace is derived from state that
+already exists and is already Player-knowable.
+
+At minimum cover the promoted trace families that implementation adopts:
+- equipped Decoration
+- owned Store Support / facility
+- Trusted Regular presence
+- D25+ revealed Final-preparation state
+
+PASS:
+- adding/removing the owning state adds/removes its trace
+- Save/Load reproduces the same trace from the same state
+- trace is presentation-only and not an interactive gameplay control
+- no hidden Boss / Hazard / NPC information appears early
+- multiple traces remain readable without changing gameplay ownership
+
+FAIL:
+- a trace exists without its owning state
+- visual state requires a second gameplay/progression field
+- a decorative prop changes a mechanic
+
+## UI-Q-v28-22 — DECISION / PHASE AUDIO
+
+Verify the current audio architecture, not a parallel audio system.
+
+Material action feedback must be semantically distinguishable for:
+- ORDER confirmation
+- successful SALE
+- SALE refusal
+- Store Support acquisition
+
+Phase presentation may strengthen MORNING / ORDER / SALE / NIGHT / FINAL identity through the current
+BGM/ambience/cue system.
+
+PASS:
+- mute disables presentation audio
+- BGM and SFX settings continue to control their existing channels
+- audio playback changes no gameplay state and consumes no Gameplay RNG
+- repeated render alone does not replay one-shot decision cues
+- mobile and desktop run without audio-related console/runtime errors
+
+A unique full music track per phase is not required.
+
+## UI-Q-v28-23 — NIGHT RESULT PRESENTATION
+
+With controlled NIGHT result fixtures, verify materially different states are visibly/audibly
+distinguishable at minimum for:
+- ordinary return / success
+- Great Success
+- retreat
+- injury
+- severe injury
+- Death
+
+Where rescue / avoided-death proof exists, a distinct accent may appear only from that proven state.
+
+PASS:
+- presentation reads the already-resolved Outcome
+- no presentation branch mutates Outcome, reward, Fatigue, proof, Wallet or Store Gold
+- Death still has no living NPC speech bubble
+- primary result information remains readable on mobile
+
+## UI-Q-v28-24 — BOSS / FINAL PRESENTATION PAYOFF
+
+Verify the promoted presentation around D0 / D5 / D10 / D15 / D20 / D25 / D30.
+
+PASS:
+- each cue/art treatment reveals no information earlier than its owning beat
+- D25 presentation may reflect the exact Final state only after that state is revealed
+- D30 may intensify FINAL entry but adds no new Boss-information beat or fact
+- Boss/Final presentation does not consume Gameplay RNG
+- existing seen-state / Save-Load behavior remains unchanged
+- at mobile width, information and acknowledgement remain usable
+
+## UI-Q-v28-25 — TARGETED GRAPHIC POLISH
+
+For each art/icon/crop/scale asset changed under the v2.8 polish pass:
+
+PASS:
+- the object still reads as its current canonical identity
+- two distinct gameplay objects are not made visually identical
+- no crop hides decision-relevant information
+- no decorative layer creates a false mechanic/state implication
+- mobile and desktop render without overflow or obscuring the primary action
+
+This QA does not authorize a new Item wave, portrait wave, environment set or theme system.
+
+
+## UI-Q-v28-26 — FULL FUNCTIONAL DESIGN AUDIT
+
+This is runtime UX QA, not Source/CSS inspection alone.
+
+Review the current Player flow on real/equivalent browser viewports at minimum:
+- phone: 360, 390 and 412 class widths
+- desktop: the 1024 breakpoint and a representative 1280-class width
+
+Traverse:
+- opening / pre-Run / Store Management
+- MORNING
+- ORDER
+- SALE
+- NIGHT
+- CLOSING
+- Boss-information beats
+- Final preparation / FINAL / ending
+- Help / Settings / Event / Store Support and other active modal/overlay surfaces
+
+For every reviewed surface, record PASS/FAIL for:
+- current information priority is visually obvious
+- required comparison information appears before the decision that uses it
+- primary action is visible/reachable without unrelated content dominating the path
+- no horizontal overflow
+- no fixed header/dock/modal covers decision information
+- no avoidable blank/dead region caused by grid/flex track stretching or oversized wrappers
+- no duplicated label/count/explanation competes with the same fact elsewhere on the surface
+- transient content does not reserve permanent empty height after it disappears
+- responsive reordering preserves the intended information -> comparison -> action sequence
+- desktop does not become a stretched phone layout with excessive empty width/height
+- compact mobile presentation does not hide required information merely to fit
+
+A visual defect that materially weakens the current decision is a FAIL even when every DOM node is
+technically present.
+
+Do not fix a FAIL by deleting information owned as required by another current Spec.
+Escalate any required-rule conflict to the owning Design document.
+
+## UI-Q-v28-27 — TUTORIAL / COACH TARGET-TRUTH AUDIT
+
+Audit every current coach step, including optional/contextual steps, on the responsive layout where
+it can appear.
+
+For each step capture:
+- tutorial text
+- runtime target selector / actual visible matched element
+- spotlight bounds
+- coach-copy placement
+- next actionable control
+
+PASS:
+- highlighted UI is exactly the fact/action the text teaches
+- target is visible, not the hidden duplicate for another breakpoint
+- spotlight includes the complete meaningful target without swallowing unrelated neighboring UI
+- copy and spotlight remain readable together after any automatic scroll
+- coach UI does not cover the target or next required control
+- a relationship lesson highlights the smallest useful shared region or uses sequential steps
+- contextual missing targets skip cleanly and do not block later lessons
+- the lesson explains how to read the system, not which gameplay answer to choose
+- the same step remains semantically correct at phone and desktop layouts
+
+FAIL examples:
+- text explains Hazard readiness while only an unrelated destination heading is highlighted
+- one button is discussed while the entire card/column is spotlighted without need
+- only part of a tall meaningful target is cut out
+- automatic scroll places the target behind a dock/header
+- coach text describes data that is not inside or meaningfully related to its highlight
+- spotlight is enlarged merely to mask a target/copy mismatch
+
+If the runtime target is wrong, fix targeting/layout.
+If the Copy is wrong, route the Copy correction through the current Copy owner.
+
+## UI-Q-v28-28 — BOSS / MILESTONE FUNCTIONAL PRESENTATION
+
+Run controlled D0 / D5 / D10 / D15 / D20 / D25 / D30 states on phone and desktop.
+
+For each beat verify both information impact and layout economy.
+
+PASS:
+- D0 objective/investigation start is unmistakable without becoming an oversized empty reveal
+- D5 identity has enough visual presence to register as the Boss reveal
+- D10 combat-question beat is clearly a new investigation but remains compact
+- D15 exact Trait is visually stronger than a routine notice and remains readable
+- D20 route/environment beat is clearly new but remains compact
+- D25 Final Family/Hazard disclosure is prominent and readable before the same-Day decision flow
+- D30 creates Final-entry emphasis without presenting a new information payload
+- acknowledgement/action control remains visible/reachable
+- no horizontal overflow
+- no avoidable vertical overflow created by art/decorative framing
+- no large unused modal area around short content
+- no required information is reduced to unreadable scale merely to avoid scrolling
+
+The current 64px / 120px / 96px presentation measurements remain exact until the UI_UX owner is
+amended. If runtime evidence shows one of those exact values itself causes a functional failure,
+report the evidence as a Functional Design finding and patch Canonical first; do not silently tune
+Source.
+
+## UI-Q-v28-29 — CONTROL / FEEDBACK / LAYOUT CONTINUITY
+
+Across ORDER / SALE / NIGHT / CLOSING / Store Management / FINAL and active modals:
+
+PASS:
+- primary, secondary and destructive actions have correct relative emphasis
+- selected / disabled / completed states are distinguishable without color alone
+- touch targets remain usable on phone
+- keyboard focus order follows the visible interaction order
+- modal close returns focus to a meaningful origin
+- redraw after quantity/selection/price/detail interaction preserves useful scroll/focus context
+- action feedback appears near the action/result it explains
+- the same concept uses consistent visual semantics across phases
+- no new panel/modal is introduced when an existing surface can express the same information
+
+This QA is specifically allowed to catch functional layout defects discovered during the
+Presentation Polish pass even when they were not listed in an earlier SA-Q item.

@@ -3,6 +3,9 @@
 - 상태: **USER APPROVED / v2.8 CANONICAL COPY AMENDMENT**
 - 범위: **Player-facing Copy 수정안만**
 - 표기: `기존 → 수정안 → 이유`
+- **ACTIVE COPY TRUTH = 각 항목의 `수정안` + 더 아래에 있는 최신 amendment.**
+- `기존`과 `이유`은 감사 이력일 뿐 Active Copy/Rule이 아니며 구현·복구 근거로 사용하지 않는다.
+- 같은 Surface의 앞선 `수정안`과 뒤의 amendment가 충돌하면 뒤 amendment가 우선한다.
 - 이 문서에 없는 현행 문구는 이번 1차안에서 수정 제안 없음.
 - Rule / Numeric / UX 설명은 이 문서에 중복 기재하지 않음.
 
