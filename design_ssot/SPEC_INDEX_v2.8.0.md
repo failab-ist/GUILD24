@@ -211,8 +211,10 @@ After Source adoption, re-measure aggregate economy/survival impact before any f
     -> related current QA
     -> Current Source
 
-SOURCE_ADOPTION_QA_v2.8.0.md records known current-source mismatch locations/root causes for this
-adoption. WORK should start there instead of rediscovering known defects.
+SOURCE_ADOPTION_QA_v2.8.0.md is an audit-HEAD defect record. Its `Current Source` descriptions
+refer to that file's recorded `AUDIT_SOURCE_HEAD`; resolved findings are intentionally not rewritten
+as a live tracker. WORK may use it to avoid rediscovering root causes, but current resolution status
+comes from WORK_STATE + current Source + reviewed commits.
 
 If a routed source cannot be accessed after explicit lookup, report PROJECT SOURCE ACCESS/INDEX ISSUE.
 
