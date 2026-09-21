@@ -40,6 +40,14 @@ Do not repeat generic 조사 중 copy without a new question.
 
 ## SAME-DAY ORDERING
 
+D0 is the deliberate exception to later milestone ordering:
+
+    first Store Support choice
+    -> separate D0 Boss objective/investigation beat
+    -> ordinary DAY 1 flow
+
+The D0 objective is not printed inside the first Store Support decision surface.
+
 On D5/D10/D15/D20/D25, the Boss information beat occurs before the same-Day Store Support
 decision so the information can matter to the Player.
 

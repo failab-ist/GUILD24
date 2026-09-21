@@ -20,12 +20,16 @@ Start Contract remains retired.
     new Run preparation
     -> inspect/equip owned Decoration loadout
     -> confirm Run start
-    -> DAY 0 first 점포지원 flow
-    -> ordinary Run
+    -> DAY 0 first 점포지원 choice
+    -> separate DAY 0 Boss-information beat
+    -> ordinary DAY 1 flow
 
 Decoration loadout is frozen after Run start.
-
 The pre-Run management screen must have a valid return path to new-Run preparation.
+
+The DAY 0 Boss objective is not embedded above/inside the first Store Support decision.
+The first Store Support decision completes first; then the existing Boss-information shell owns the
+D0 objective beat before ordinary DAY 1 play.
 
 ## RUN START EFFECT APPLICATION
 
@@ -49,7 +53,7 @@ Ending Gold / remaining Inventory are not Store Capital inputs.
 
 Run presentation order includes:
 
-    D0  objective / investigation starts
+    D0  first 점포지원 choice -> objective / investigation starts
     D5  identity report
     D10 second investigation start
     D15 exact Trait report
@@ -57,10 +61,16 @@ Run presentation order includes:
     D25 exact Final Family/Hazard report
     D30 no new report
 
+D0:
+- first Store Support choice resolves first
+- then the D0 Boss objective/investigation appears as its own information beat
+- only after acknowledgement does ordinary DAY 1 flow continue
+
 On D5/D10/D15/D20/D25:
 Boss information occurs before the same-Day Store Support decision.
 
 D10/D20 each persist a consumed/seen state so reload cannot replay them.
+D0 likewise must not replay after consumption.
 
 Exact content -> BOSS_v2.8.0.md / COPY_WORLD_VOICE_v2.8.0.md.
 

@@ -45,7 +45,15 @@ PASS:
 
 ## RUN-Q-v28-5 — BOSS INFORMATION ORDER
 
-For D5/D10/D15/D20/D25 milestone Days:
+D0:
+- first Store Support choice is shown and committed before D0 Boss information
+- D0 Boss objective is not embedded in the Store Support takeover
+- after the support choice, D0 opens as a separate information beat
+- acknowledging D0 proceeds to ordinary DAY 1
+- reload does not duplicate a consumed D0 beat
+- presentation consumes no extra gameplay RNG
+
+For D5/D10/D15/D20/D25:
 - due Boss information is shown before same-Day Store Support decision
 - D10/D20 dismiss state persists
 - reload does not replay a consumed report
