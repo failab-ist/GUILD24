@@ -179,3 +179,19 @@ PASS:
 - an already-created NPC is never retroactively changed
 - no account-wide combat multiplier exists
 - Player-facing meaning does not expose the exact table unless separately approved
+
+
+## NPC-Q-v28-10 — PREMIUM DISPLAY RARITY WEIGHTING
+
+With the `프리미엄 쇼케이스` Decoration active, the ordinary NPC rarity draw uses exactly:
+
+    [51, 30, 14, 4, 1]
+
+for Common / Uncommon / Rare / Epic / Legendary.
+
+PASS:
+- the ordinary NPC spawn path is reused
+- only the rarity weights change
+- no extra NPC is spawned
+- no second rarity draw is introduced
+- no additional Gameplay RNG draw is consumed
