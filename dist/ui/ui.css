@@ -1299,9 +1299,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .trait-body{display:flex;flex-direction:column;gap:5px}
 .boss-reveal .trait-body p{margin:0;font:400 15px/1.6 var(--ui);color:#e6d6ba}
 .boss-reveal .flavor{margin:0;font:400 15px/1.65 var(--ui);color:#cbbba0;font-style:italic}
-/* BOSS_v2.8 §D0: the objective beat sits above the D0 acquisition, as one line of information. */
-.boss-objective{margin:0 0 12px;padding:9px 11px;background:#00000047;font:400 13px/1.6 var(--ui);color:#cbbba0}
-.boss-objective b{display:block;font:600 13px/1.5 var(--ui);letter-spacing:.04em;color:#e6d6ba}
 /* D10 / D20 disclose nothing new, so they carry the identity portrait at the v2.8 64px baseline
    rather than the full art - the question they open is the primary information. */
 .boss-id{margin:0 0 10px;display:flex;justify-content:center}

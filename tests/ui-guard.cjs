@@ -1517,7 +1517,7 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
    second 60 living in the Flavor classifier. One owner now answers everywhere, the compact SALE
    state carries Loyalty beside Injury and Fatigue, and the number is explained through the tip
    mechanism the readout and the destination plate already use. */
-test('SA-Q13: 단골 has one owner at 51, and Loyalty reads in the compact state',()=>{
+test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compact state without a popover',()=>{
  // one owner, one number, stated once in Source
  assert.equal(Adventurer.TRUSTED_REGULAR,51,'the owner threshold is 51');
  const copySrc=read('dist/data/copy.js');
@@ -1540,27 +1540,23 @@ test('SA-Q13: 단골 has one owner at 51, and Loyalty reads in the compact state
  assert.ok(/parts\.push\('피로 '\+n\.fatigue\)/.test(kit),'so is Fatigue');
  assert.ok(/parts\.push\('단골도 '\+n\.loyalty/.test(kit),'and so is Loyalty');
  assert.ok(!/<meter|<progress|loyalty-bar|progress-bar/.test(kit),'there is no Loyalty progress bar');
- assert.ok(/loyaltyTip\(n\)/.test(kit),'the number carries the shared explanation');
-
- // the exact approved base popover, in order
- const t=fn('loyaltyTip');
- assert.ok(/'단골도 '\+n\.loyalty,/.test(t),'line 1 is the current value');
- /* COPY_AUDIT_APPROVED §8-4 is the exact owner of this popover; the longer COPY_WORLD
-    sentences it used to carry are superseded. */
- assert.ok(t.includes("'높을수록 구매 의사·재방문 가능성 증가'"),'line 2 is the approved line');
- assert.ok(t.includes("'51부터 단골'"),'line 3 is the approved threshold line');
- assert.ok(!/능력치|Core Stat/.test(t),'the tip never claims Loyalty raises Core Stats');
- // appended lines are gated on being currently applicable / revealed
- assert.ok(/if\(game\.has\(id\)\)lines\.push/.test(t),'a Store Support line needs the support owned');
- assert.ok(/bossId==='LUST'&&s\.bossReveal\?\.traitSeen/.test(t),'and LUST is gated behind its own reveal');
+ /* SA-Q46 — PLAYTEST SALE TOP DENSITY. Normal SALE shows the Loyalty value/state without a
+    separate `?` / Loyalty popover trigger competing with the Bag for the same row; its meaning
+    is taught by the tutorial/coach and stays available in the compact Help under its own
+    owner. COPY_AUDIT_APPROVED §8-4's 2026-09-22 amendment retires the on-demand popover this
+    test used to require. */
+ assert.ok(!/loyaltyTip/.test(kit),'no popover call remains on the compact state');
+ assert.ok(!/<details class="tip"/.test(kit),'and no tip balloon markup is emitted from it');
+ assert.ok(!/function loyaltyTip/.test(app),'the retired popover builder is gone, not merely unused');
  assert.ok(!/lustStatFactor/.test(app),'nothing leaks the LUST mechanic early');
- // it reuses the shared anchored tip - no second popover implementation
- assert.ok(/return tip\('단골도',\.\.\.lines\)/.test(t),'it is built with the shared tip helper');
+ // SA-Q46: Equipment is proven Core-Stat source information, not compact-top decision state
+ assert.ok(!/E\(n\.equipment\.name\)/.test(kit),'Equipment text is omitted from the compact top');
+ assert.ok(/E\(n\.equipment\.name\)/.test(app),'and stays readable in NPC detail elsewhere');
+ // the shared anchored tip used by the readout/destination plate is untouched
  assert.equal((app.match(/const tip=\(label/g)||[]).length,1,'there is still exactly one tip implementation');
  assert.ok(/<details class="tip" name="sale-tip">/.test(app),'one open at a time, via the shared exclusive name');
  assert.ok(/closeTips/.test(app),'outside tap and Escape close it through the shared handler');
  assert.ok(/\.kit \.tip>p\{position:absolute/.test(css)||/\.kit \.tip>p/.test(css),'the balloon is out of flow here too');
- assert.ok(!/backdrop|overflow:hidden/.test(fn('loyaltyTip')),'and it locks no background');
 });
 
 /* SA-Q14 — GENERIC YELLOW STAT CHANGE. A moved Stat was gold: it said something changed and
@@ -1715,8 +1711,9 @@ test('SA-Q36: the Decoration comparison shows only what the decision is made on'
 test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=>{
  const c=Copy.boss;
  // exact §14 copy, verbatim
- assert.equal(c.d0.label,'DAY 30 · 제0게이트 토벌 예정');
+ assert.equal(c.d0.header,'DAY 30 · 제0게이트 토벌 예정');
  assert.equal(c.d0.line,'길드 정보원이 토벌 대상을 추적하고 있다.');
+ assert.equal(c.d0.button,'확인');
  assert.equal(c.d5.header,'1차 조사 보고');
  assert.equal(c.d5.sub,'토벌 대상 확인');
  assert.equal(c.d5.button,'확인');

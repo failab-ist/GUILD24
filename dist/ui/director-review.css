@@ -26,18 +26,19 @@
  display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:0 0 6px 8px}
 /* The destination keeps the column's full width: narrowing it to share a row with the deck
    wraps the Hazard rows and costs more height than the deck ever took. */
-.front-side .kit{display:flex;align-items:flex-start;gap:9px;margin:0;padding:7px;
+.front-side .kit{display:flex;flex-wrap:wrap;align-items:flex-start;gap:9px;margin:0;padding:7px;
  background:#100b0799;box-shadow:inset 0 0 0 1px #ffffff14;font-size:12px;line-height:1.35}
 .front-side .vitals{display:grid;gap:3px;flex:1 1 auto;min-width:0}
 .front-side .vitals>span{min-width:0;overflow-wrap:anywhere}
-/* §6. Two slots, stacked, in the upper right of the panel - the space the status lines were
-   already leaving idle - and each one a real touch target rather than a 32px chip. The label
-   reads down the left of the pair so the bag costs the height of its slots and nothing more.
-   Capacity is untouched: it is the same two slots the bag has always had. */
-.front-side .kit .slots{flex:0 0 auto;display:grid;grid-template-columns:minmax(44px,auto);
+/* SA-Q46 / UI_UX §SALE BAG COMPACT LAYOUT. The two slot boxes are always horizontal and never
+   stack vertically; when the row beside the customer-state elements runs out of room, the
+   whole Bag block (label + both boxes) wraps to its own row instead - `.kit` above wraps as a
+   unit, this grid never breaks its two columns. Capacity is untouched: it is the same two
+   slots the bag has always had. */
+.front-side .kit .slots{flex:0 0 auto;display:grid;grid-template-columns:repeat(2,44px);
  gap:4px;justify-content:start;justify-items:start;margin-left:0;padding:4px;background:#0000004d}
 .front-side .kit .slots i{width:44px;height:44px}
-.front-side .kit .slot-label{grid-column:1;margin:0 0 1px;color:#d4c18f;font-size:11px;
+.front-side .kit .slot-label{grid-column:1 / -1;margin:0 0 1px;color:#d4c18f;font-size:11px;
  line-height:1.2;white-space:nowrap}
 /* the waiting deck is a thumbnail of the queue, not a second deck: the dock already states
    the count in figures, so here it only has to stay legible. */
