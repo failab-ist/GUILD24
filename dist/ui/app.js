@@ -154,7 +154,7 @@ function render(){
     control's place among its namesakes: the quantity dial alone puts 30 buttons under
     data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
  const focusHold=holdFocus($('#app'));
- $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">하나를 고르면 영업이 시작된다.</p></div>','');
+ $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  /* The control that answered the last press is often disabled by it (a quantity driven to
@@ -916,16 +916,15 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
  if(!w.focusedRevealSeen){w.focusedRevealSeen=true;game.save();}
  const first=w.milestoneDay===0,until=w.expiryDay===31?'마왕성 출발 전까지':'DAY '+(w.expiryDay-1)+'까지';
  return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll">'
- /* COPY_AUDIT §14-1 / BOSS_v2.8 §D0: the Run's objective is established at the start, in the
-    information flow the Run start already has. It is an objective beat only - no Boss identity,
-    no new screen and no navigation layer of its own. */
- +(first?'<p class="boss-objective"><b>'+E(Copy.boss.d0.label)+'</b>'+E(Copy.boss.d0.line)+'</p>':'')
- +'<div class="relic-open"><span class="label">'+(first?'DAY 0':'DAY '+w.milestoneDay)+'</span><h2>'+(first?'첫 점포지원을 고른다':'점포지원이 도착했다')+'</h2>'
+ /* SA-Q47 / BOSS_v2.8 §SAME-DAY ORDERING: the D0 Boss objective is not printed on this Store
+    Support decision surface. It is a separate Boss-information beat that follows the first
+    choice - see bossRevealStage()/bossReveal() for D0. */
+ +'<div class="relic-open"><span class="label">'+(first?'DAY 0':'DAY '+w.milestoneDay)+'</span><h2>'+(first?'첫 점포지원':'점포지원이 도착했다')+'</h2>'
  /* D-34. With all seven slots filled every 구매 greys out, and this line went on saying the
     window was open until DAY N. A disabled action says why it is disabled, on the line that
     would otherwise contradict it. The seven is the same literal ownedRelicView prints - it
     is the rule's own number, not a balance parameter to be promoted. */
- +'<p>'+(first?'하나는 무료다. 고르면 영업이 시작된다.'
+ +'<p>'+(first?'이번 영업에 쓸 지원 하나를 고르세요.'
    :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
    :until+' 구매할 수 있다 · 자금 '+fmt(s.money)+'G')+'</p></div>'
  +(w.purchased?'<p class="discovery">확보 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
@@ -933,7 +932,7 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
   return '<article class="relic-plate'+(mine?' owned':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
   +btn(mine?'보유 중':'구매','buy-relic','stamp','data-id="'+id+'" '+(!game.canBuyRelic()||s.money<price?'disabled':''))+'</article>';}).join('')+'</div></div>'
- +sealChoice() +'<div class="close">'+(first?'<p>하나를 골라야 영업이 시작된다.</p>'+btn('장식 구성 다시 보기','new','bare'):'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+ +sealChoice() +'<div class="close">'+(first?btn('장식 구성 다시 보기','new','bare'):'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* Sloth's seal is not a second choice path: it is the other thing this window's one
    acquisition can be spent on, so it sits beside the candidates and says as much.
@@ -1223,6 +1222,12 @@ function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return
 const BOSS_BEATS=[[5,'d5','identitySeen'],[10,'d10','combatSeen'],[15,'d15','traitSeen'],
                   [20,'d20','routeSeen'],[25,'final','familySeen']];
 function bossRevealStage(){const s=game.run;if(!s?.bossReveal)return null;
+ /* SA-Q47 / BOSS_v2.8 §SAME-DAY ORDERING: D0 is the deliberate exception to the D5-D25
+    milestone-day cadence below - it fires exactly once, on the DAY 1 morning that follows the
+    first Store Support choice, never by a `>=` day threshold. Gating on `s.day===1` (rather
+    than folding it into BOSS_BEATS) keeps an existing mid-Run save from replaying it: such a
+    save is never on Day 1 again, so an unset d0Seen there cannot resurface the beat. */
+ if(s.day===1&&!s.bossReveal.d0Seen)return 'd0';
  for(const [day,stage,flag] of BOSS_BEATS){
   if(s.day<day||s.bossReveal[flag])continue;
   if(stage==='final'&&!s.final)continue;
@@ -1254,6 +1259,8 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    +(art?'<figure class="boss-id"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'')
    +'<p class="lede">'+E(t.line.replace('{보스명}',b.name))+'</p>'
    +'<p class="next-report">'+E(t.next)+'</p></div>';}
+ /* SA-Q47 / BOSS_v2.8 §D0: investigation only - no Boss identity, no art. That is D5's beat. */
+ if(stage==='d0')return '<div class="boss-reveal d0"><p class="lede">'+E(c.d0.line)+'</p></div>';
  return '<div class="boss-reveal d5"><p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
@@ -1318,7 +1325,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'coach-next':{const actionName=activeCoach?.[3];sound('ui');finishCoach();if(actionName==='npc')setModal('npc:'+game.current().id);break;}
  case'deep-nominate':game.nominateDeep(id);sound('spend');render();break;
  case'boss-seen':{const st=bossRevealStage();
-  const beat=BOSS_BEATS.find(x=>x[1]===st);if(beat)s.bossReveal[beat[2]]=true;
+  if(st==='d0')s.bossReveal.d0Seen=true;
+  else{const beat=BOSS_BEATS.find(x=>x[1]===st);if(beat)s.bossReveal[beat[2]]=true;}
   game.save();setModal(null);render();break;}
  case'break-seal':game.breakSeal();sound('boss');render();break;
  case'menu':sound('ui');setModal('menu');break;

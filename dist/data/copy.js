@@ -111,7 +111,7 @@ const Copy={
 Copy.boss={
  /* COPY_AUDIT_APPROVED_v2.8.0 §14. The Boss information cadence is D0 / D5 / D10 / D15 / D20 /
     D25, and D30 adds nothing new. D0, D10 and D20 had no active Copy at all. */
- d0:{label:'DAY 30 · 제0게이트 토벌 예정',line:'길드 정보원이 토벌 대상을 추적하고 있다.'},
+ d0:{header:'DAY 30 · 제0게이트 토벌 예정',line:'길드 정보원이 토벌 대상을 추적하고 있다.',button:'확인'},
  d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
   flavor:{
    WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',

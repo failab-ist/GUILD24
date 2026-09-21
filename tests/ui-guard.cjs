@@ -1735,17 +1735,27 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  // §14-8 spacing
  assert.ok(!/제 0 게이트/.test(app+read('dist/data/copy.js')),'제0게이트 is written without spaces');
  assert.ok(app.includes('제0게이트 · 마왕성'),'and the castle still names the gate');
- // D0 is part of the Run-start flow, not a new screen
- assert.ok(/Copy\.boss\.d0\.label/.test(fn('relicTakeover')),'the D0 objective beat is in the Run-start flow');
+ /* SA-Q47 / BOSS_v2.8 §SAME-DAY ORDERING: D0 is the deliberate exception to the D5-D25
+    milestone cadence below - first Store Support choice, THEN a separate D0 Boss-information
+    beat, THEN ordinary DAY 1. It is not printed inside the first Store Support decision
+    surface, and it is not a new Phase or navigation layer of its own - it reuses the existing
+    Boss-reveal modal shell, gated by Day rather than folded into BOSS_BEATS so an existing
+    mid-Run save (never on Day 1 again) cannot replay it. */
+ assert.ok(!/Copy\.boss\.d0/.test(fn('relicTakeover')),'the D0 objective is not embedded on the first Store Support surface');
  assert.ok(!/phase==='boss'|modal==='d0'/.test(app),'no new Phase or navigation layer was added for it');
+ assert.ok(/s\.day===1&&!s\.bossReveal\.d0Seen\)return 'd0'/.test(fn('bossRevealStage')),
+  'D0 fires exactly once, on DAY 1');
+ assert.ok(/if\(stage==='d0'\)return/.test(fn('bossReveal')),'D0 renders through the existing reveal shell');
+ assert.ok(/st==='d0'\)s\.bossReveal\.d0Seen=true/.test(app),'dismissing D0 persists its own marker, not a BOSS_BEATS entry');
  // the cadence table, and D30 reusing D25
  assert.ok(/\[5,'d5','identitySeen'\],\[10,'d10','combatSeen'\],\[15,'d15','traitSeen'\],\s*\[20,'d20','routeSeen'\],\[25,'final','familySeen'\]/.test(app),
-  'every beat has its Day and its own persisted marker');
+  'every D5-D25 beat has its Day and its own persisted marker');
  assert.ok(!/BOSS_BEATS[\s\S]{0,200}30,/.test(app),'D30 has no beat of its own');
+ assert.ok(!/BOSS_BEATS=\[\[1,/.test(app),'D0 is not folded into the >= day-threshold BOSS_BEATS table');
  assert.ok(/if\(stage==='final'&&!s\.final\)continue;/.test(app),'the D25 beat waits for the persisted Final state');
  // the reports reuse the existing shell
  assert.ok(/if\(stage==='d10'\|\|stage==='d20'\)/.test(fn('bossReveal')),'the two beats render through the existing reveal');
- assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and are consumed by the existing one');
+ assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and D5/D10/D15/D20/D25 are consumed by the existing one');
  // D10/D20 identity portrait at the 64px baseline, C2 limits intact
  assert.ok(/\.boss-id img\{[^}]*max-width:64px;max-height:64px/.test(css),'the D10 / D20 identity portrait is 64px');
  assert.ok(/\.boss-art img\{max-height:120px\}/.test(css)&&/\.boss-reveal\.final \.boss-art img\{max-height:96px\}/.test(css),

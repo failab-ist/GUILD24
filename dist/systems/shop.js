@@ -31,7 +31,7 @@ class Game{
   const days=[early,late],odds=D.deepTuning.threeOccurrenceChance;
   if(odds!==null&&third<odds)days.push(deep.pick([7,14,21,28].filter(d=>d!==early&&d!==late)));
   this.run.deep={days:days.sort((a,b)=>a-b),today:null};}
- const boss=new G.RNG(String(seed)+':boss');this.run.bossId=boss.pick(D.bosses).id;this.run.bossReveal={identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false};
+ const boss=new G.RNG(String(seed)+':boss');this.run.bossId=boss.pick(D.bosses).id;this.run.bossReveal={d0Seen:false,identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false};
  if(this.run.bossId==='SLOTH'){this.run.slothDays=boss.shuffle([15,20,25]).slice(0,2).sort((a,b)=>a-b);this.run.sealBreakCount=0;}
 this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
