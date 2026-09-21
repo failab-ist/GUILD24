@@ -91,6 +91,38 @@ from player Copy or historical implementation:
 These are mechanic truths, not new tuning. Exact Player-facing wording remains owned by
 COPY_AUDIT_APPROVED_v2.8.0.md.
 
+## INHERITED SUPPORT BASE-PRICE CLOSURE — EXACT
+
+The following 20 inherited Store Support base prices are the approved v2.8 baseline. They were
+already adopted together with the User-approved §11 Store Support rows; this section closes the
+older PASS3 owner gap and is not a new rebalance.
+
+| ID | Store Support | Base Price |
+|---|---|---:|
+| bulk | 묶음발주 계약 | 260G |
+| stamp | 단골 스탬프 기계 | 260G |
+| member | 회원 관리대장 | 260G |
+| showcase | 희귀상품 입고 계약 | 280G |
+| guarantee | 길드 보증 진열대 | 280G |
+| hazardBoard | 원정 위험 게시판 | 260G |
+| medicine | 긴급보급 선반 | 260G |
+| kitchen | 즉석식품 코너 | 280G |
+| board | 길드 전광판 | 260G |
+| rookieBoard | 신입 모집 게시판 | 240G |
+| groupFlyer | 공동구매 전단 | 400G |
+| memberBundle | 단골 묶음혜택 | 380G |
+| premiumMember | 프리미엄 멤버십 | 420G |
+| expeditionMeal | 원정 도시락 코너 | 400G |
+| coldcase | 냉장 유통 계약 | 420G |
+| dawnBulk | 새벽 공동배송 | 380G |
+| fresh24 | 24시간 신선체계 | 740G |
+| warehouse | 후방 창고 증설 | 360G |
+| terminal | 본사 추가발주권 | 380G |
+| delivery | 발주 교환권 | 340G |
+
+The other 10 active support prices are already exact in their current v2.8 owner sections and remain
+unchanged.
+
 ## ROTATION DISPLAY — SUPPLY ENGINE
 
 회전 진열대:
