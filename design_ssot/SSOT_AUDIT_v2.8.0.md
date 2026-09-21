@@ -14,6 +14,7 @@ STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 PLAYTEST_RESPONSE_REAUDIT_DATE=2026-09-22
 PLAYTEST_RESPONSE_CANONICAL_STATUS=COMPLETE
+PRESENTATION_POLISH_PROMOTION_STATUS=COMPLETE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 
 ## PURPOSE
@@ -290,3 +291,25 @@ The two nonblocking numeric gaps found by this re-audit are closed:
   RELIC_v2.8.0.md §INHERITED SUPPORT BASE-PRICE CLOSURE.
 
 No Canonical detail gap remains from this audit.
+
+
+## 2026-09-22 PRESENTATION POLISH PROMOTION ADDENDUM
+
+User approval promotes the previously deferred small/medium presentation work into v2.8.
+
+Canonical ownership after promotion:
+- presentation/audio contract -> UI_UX_v2.8.0.md
+- result truth -> NIGHT_CLOSING_v2.8.0.md
+- Boss reveal/final-entry truth -> BOSS_v2.8.0.md
+- Store-growth/Decoration projection boundary -> META_v2.8.0.md
+- acceptance -> UI_UX_QA_v2.8.0.md
+
+The promotion adds no gameplay number, probability, reward, progression resource, decision axis,
+required Save state or Gameplay RNG.
+
+The matching Store Growth Visual Overlay and Audio/BGM/Presentation candidates were removed from
+GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md. Large Final cinematic/cutscene work and large art/world
+content expansion remain deferred.
+
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
+NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.
