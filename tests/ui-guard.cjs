@@ -1837,7 +1837,9 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  // SA-Q28: Capital carries no G; Run Gold still does
  assert.ok(!/점포 자본 \$\{Meta\.storeCapital\(a\)\.toLocaleString\(\)\}G/.test(app),'Store Capital is not printed as Gold');
  assert.ok(!/자본[^<'`]{0,24}G\b/.test(fn('codex')+fn('storePanel')),'no Capital figure carries a G suffix');
- assert.ok(/시작 자금 \$\{start\.toLocaleString\(\)\}G/.test(app),'actual Run Gold still uses G');
+ /* the pre-Run screen no longer prints a starting-Gold sentence, so Run Gold is witnessed
+    where it is still shown to the player. */
+ assert.ok(/보유 골드/.test(app)&&/fmt\(s\.money\)\+'G'/.test(app),'actual Run Gold still uses G');
  // §15-1 / §15-2 / §15-3
  assert.equal(Copy.deep.brief,'같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.');
  assert.equal(Copy.deep.terms,'성공 시 추가 성장 · 점포 수익 없음');
@@ -1854,6 +1856,43 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  assert.ok(!pres.includes('예상보다 일찍 게이트에서 나왔다'),'and the time-saving reading is gone');
  assert.ok(pres.includes("label:'원정 소지금 획득'"),'§6-8 the Wallet reward label');
  assert.ok(!pres.includes('NPC 소지금 획득'),'and the internal NPC wording is gone');
+});
+
+/* USER-APPROVED opening copy. The pre-Run screen must state the three axes of the game in its
+   first three lines: a 30-day store, adventurer growth, and the final expedition. */
+test('OPENING: the pre-Run screen states the 30 days, the growth and the final expedition',()=>{
+ const intro=fn('newRun');
+ for(const line of ['30일 동안 던전 앞 편의점을 운영한다.',
+                    '찾아오는 모험가를 보급하고, 성장시킨다.',
+                    '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
+  assert.ok(intro.includes(line),'the approved opening line is present: '+line);
+ // each lands in the existing slot of the existing hierarchy, so the screen is not redesigned
+ assert.ok(/class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\./.test(intro),'line 1 is the welcome title');
+ assert.ok(/class="muted">찾아오는 모험가를 보급하고, 성장시킨다\./.test(intro),'line 2 is the supporting text');
+ assert.ok(/class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\./.test(intro),'line 3 is the welcome band');
+ // the superseded block is gone, from Source and from the Canonical kept-list alike
+ const canon=read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md');
+ for(const gone of ['오늘도 문을 연다.','마왕성 개방까지 30일.','시작 재고는 창고에 있다.']){
+  assert.ok(!intro.includes(gone),'the superseded opening line is gone from the screen: '+gone);
+  assert.ok(!canon.includes(gone),'and Canonical no longer keeps it: '+gone);
+ }
+ /* The two lines that existed only here are gone from the build entirely. The old title also
+    appears once more, on the runless backdrop stage behind this modal, with its own different
+    supporting text - that string was not part of this approved change, so it is left alone and
+    pinned here rather than drifting unnoticed. */
+ for(const gone of ['마왕성 개방까지 30일.','시작 재고는 창고에 있다.'])
+  assert.ok(!app.includes(gone),'gone from the whole build: '+gone);
+ assert.equal((app.match(/오늘도 문을 연다\./g)||[]).length,1,
+  'the old title survives only on the runless backdrop stage, which this change did not cover');
+ // everything the change was scoped to keep
+ assert.ok(intro.includes('길드리테일 가맹점'),'the eyebrow stays');
+ assert.ok(intro.includes('이번 영업의 장식'),'the Decoration heading stays');
+ assert.ok(/data-action="store-manage"/.test(intro),'the Store Management entry stays');
+ assert.ok(/D\.decorationSlots\.map/.test(intro),'and the Decoration rows stay');
+ // the removed local was display-only: the real starting Gold rule is untouched
+ assert.ok(!/const start=1000\+/.test(app),'the dead display-only local is gone');
+ assert.ok(shop.includes("const startGold=1000+(Object.values(loadout).includes('thriftSafe')?D.balance.decorationStartGold:0);"),
+  'and Game.start() still computes the actual starting Gold');
 });
 
 console.log(count+' ui guard groups passed');
