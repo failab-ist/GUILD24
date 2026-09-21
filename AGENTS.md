@@ -588,21 +588,64 @@ response still stays compact unless DIRECTOR asks for the exact command list or 
 
 # 17. USER-APPROVED HANDOFF HYGIENE
 
-Do not pass discarded alternatives or internal discussion into WORK instructions.
+Handoffs are execution pointers, not duplicate specifications.
 
-Handoff contains only:
-- User's final confirmed decision
-- current Canonical requirement
-- what the receiving role needs to execute now
+The receiving role must recover detailed truth from the repository:
+
+```text
+AGENTS.md
+→ SPEC_INDEX
+→ WORK_STATE
+→ routed Canonical / QA
+→ directly relevant Source
+```
+
+Do not copy detailed Rule / Numeric / UX / QA truth into a handoff when the current repository
+already contains it.
+
+A handoff should contain only what is NOT efficiently recoverable from those sources:
+
+- receiving role
+- repository / branch / exact baseline HEAD when it matters
+- current task or review scope
+- explicit stop / merge boundary when it differs from normal workflow
+- newly confirmed User decision not yet promoted to Canonical
+- known blocker or special caution that the current docs do not already state
+
+For a normal task, prefer references such as:
+
+```text
+Implement SA-Q46–51 from current routed owners.
+Review against current Canonical + QA.
+```
+
+over re-listing the rules owned by those documents.
+
+For DIRECTOR handoff, do not restate the implementation plan.
+State the review target and let DIRECTOR inspect Source / Diff / Canonical directly.
+
+For WORK handoff, do not restate already-promoted Design.
+State the exact execution scope and owner/QA references only.
 
 Do not include:
+
 - rejected candidates
 - superseded values
 - speculative alternatives
 - internal reasoning
+- discussion history
+- completed work that WORK_STATE / Git history already records
 - unrelated future work
+- generic workflow already defined by AGENTS.md
+- Canonical text copied merely for convenience
 
-This prevents accidental anchoring and resurrection of rejected Design.
+Exception:
+repeat an exact rule only when omission would create a real execution ambiguity that cannot be
+resolved reliably from the current repository, or when the User has just approved a decision that
+has not yet been promoted to Canonical.
+
+This prevents duplicate truth, stale handoffs, unnecessary tokens, accidental anchoring and
+resurrection of rejected Design.
 
 ---
 
