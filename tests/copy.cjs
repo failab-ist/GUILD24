@@ -114,6 +114,15 @@ test('SA-Q25: the helped-return callback needs COMPLETE proven sold-Item contrib
   h.arrive();
   assert.ok(V.helped.includes(h.run.say.text),'E: the reloaded run still finds the same proof and the same eligibility');
  }
+ // F — Task D final correction §8B/§9: a GENERIC whole-Bag persistent-state proof
+ // (state:{items:null}, no single Item named) is eligible too - the callback does not require
+ // a named Item, only a proven state contribution.
+ {const {g,n}=setup();
+  n.records=[{outcome:'중상',items:['kit','kit'],events:[{id:'aftercare',items:['kit'],text:'구급키트가 중상 후 상태를 부상까지 낮췄다.'}],
+   heroProof:{outcome:null,state:{items:null}}}];
+  g.arrive();
+  assert.ok(V.helped.includes(g.run.say.text),'F: a proven but generic (whole-Bag) state contribution is still eligible, with no named Item required');
+ }
 });
 
 test('the line is chosen from saved state, so it costs no randomness and survives a reload',()=>{

@@ -264,24 +264,48 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
  const sCombatSuccess=sAbility*sNoise>=d.power;
  const sEnvironment=clamp(.06+sp.hazard*.012-se.survival*.001,.02,.48),sAffected=ev.envRoll<sEnvironment;
  const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-(d.scale||1)*.024,.15,.94);
- let sOutcome=sCombatSuccess?'성공':(ev.escapeRoll<sEscapeChance?'퇴각':'부상');
- if(!sCombatSuccess&&sOutcome==='부상'){
-  if(ev.injuryRoll<clamp(.42+se.injuryRisk-se.injuryGuard*.25+severeEscalation,0,1))sOutcome='중상';
+ /* mirrors resolve()'s real order exactly: SUCCESS-vs-FAILURE first (never escape/injury
+    evidence to decide THAT), then one Death roll immediately on entering failure, and only a
+    Death miss goes on to settle which non-Death tier. Any evidence the actual expedition
+    never drew because its own branch never reached it is UNPROVEN here too. */
+ let sFailurePath;
+ if(!sCombatSuccess){
+  sFailurePath=true;
+ }else if(sAffected){
+  sFailurePath=true;
  }else{
-  let takesTier=sAffected;
-  if(!takesTier){
-   if(ev.injuryRiskRoll===undefined)return UNPROVEN;
-   takesTier=ev.injuryRiskRoll<se.injuryRisk;
-  }
-  if(takesTier)sOutcome=ev.injuryRoll<clamp(.13-se.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
+  if(ev.injuryRiskRoll===undefined)return UNPROVEN;
+  sFailurePath=ev.injuryRiskRoll<se.injuryRisk;
  }
- if(sOutcome!=='성공'){
-  /* the actual expedition draws a Death roll only on its own failure path (Fix 2) - if it
-     stayed on 성공, ev.deathRoll is undefined, and a shadow that fails here would need a
-     roll that was never drawn. UNPROVEN, never a borrowed or invented value. */
+ let sOutcome;
+ if(!sFailurePath){
+  sOutcome='성공';
+ }else{
   if(ev.deathRoll===undefined)return UNPROVEN;
   const sDeathChance=failureDeathChanceFor(sp,d,severeEscalation>0).chance;
-  if(ev.deathRoll<sDeathChance)sOutcome='사망';
+  if(ev.deathRoll<sDeathChance){
+   sOutcome='사망';
+  }else if(!sCombatSuccess){
+   if(ev.escapeRoll===undefined)return UNPROVEN;
+   sOutcome=ev.escapeRoll<sEscapeChance?'퇴각':'부상';
+   if(sOutcome==='부상'){
+    if(ev.injuryRoll===undefined)return UNPROVEN;
+    if(ev.injuryRoll<clamp(.42+se.injuryRisk-se.injuryGuard*.25+severeEscalation,0,1))sOutcome='중상';
+   }else{
+    let takesTier=sAffected;
+    if(!takesTier){
+     if(ev.injuryRiskRoll===undefined)return UNPROVEN;
+     takesTier=ev.injuryRiskRoll<se.injuryRisk;
+    }
+    if(takesTier){
+     if(ev.injuryRoll===undefined)return UNPROVEN;
+     sOutcome=ev.injuryRoll<clamp(.13-se.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
+    }
+   }
+  }else{
+   if(ev.injuryRoll===undefined)return UNPROVEN;
+   sOutcome=ev.injuryRoll<clamp(.13-se.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
+  }
  }
  if(['사망','중상'].includes(sOutcome)&&pack.some(id=>D.itemBy[id].effects.escape)){
   if(ev.escapeItemRoll===undefined)return UNPROVEN;
@@ -334,7 +358,16 @@ function stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcom
   const shadowFinal=((sp.effects.aftercare||0)>0&&before>0)?(before===2?1:0):before;
   return shadowFinal>actualAftercare.to?id:null;
  }).filter(Boolean))];
- return items.length?{items}:null;
+ if(items.length)return {items};
+ /* Whole-Bag fallback: no single Item alone proves it, but removing the whole Bag might -
+    same pattern as outcomeProof's bare-tier fallback. Never invented as one Item's credit. */
+ const bareTier=shadowOutcome(departure,d,facilities,[],ev,severeEscalation);
+ if(bareTier===UNPROVEN||OUTCOME_ORDER.indexOf(bareTier)!==idx)return null;
+ const bareSp=prepare({...departure,pack:[]},d,facilities);
+ const bareBefore=shadowInjuryBeforeAftercare(bareTier,departure.injury);
+ const bareFinal=((bareSp.effects.aftercare||0)>0&&bareBefore>0)?(bareBefore===2?1:0):bareBefore;
+ if(bareFinal>actualAftercare.to)return {items:null};
+ return null;
 }
 function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
  const outcome=outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome);
@@ -365,34 +398,63 @@ function resolve(n,d,r,facilities=[],options={}){
  const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);
  const affected=envRoll<environment;
  const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))})),{key:'supply',weight:p.supply.deficit*.02/Math.max(1,Math.sqrt(d.hazards.length))}];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
- const escapeRoll=r.next(),escapeChance=clamp(.48+e.mobility*.005+e.escape-(d.scale||1)*.024,.15,.94);
- let outcome=combatSuccess?'성공':(escapeRoll<escapeChance?'퇴각':'부상');
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
- const injuryRoll=r.next();let deathRoll,rescued=false,deathChance=0,avoidedDeath=false;
+ let escapeRoll,escapeChance,injuryRoll,deathRoll,rescued=false,deathChance=0,avoidedDeath=false;
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
- const injuryRiskCheck=()=>{injuryRiskRoll=r.next();return injuryRiskRoll<e.injuryRisk;};
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<clamp(e.escape,.0,.96);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
- /* DUNGEON_HAZARD_v2.7 §INJURED RE-EXPEDITION SEVERE ESCALATION: "the existing non-Death
-    Severe-vs-Injury branch, WHENEVER that branch is reached on a surviving failure path".
-    It was conditioned on !combatSuccess as well, which silently exempted the other way the
-    branch is reached - an environment incident that hurts someone whose combat went fine.
-    The condition is the departure state alone: wherever the Severe-vs-ordinary decision is
-    made, an adventurer who walked out already wounded carries the +15%p into it. Still one
-    decision point, still no second Severe roll, still applied before that branch's clamp. */
+ /* DUNGEON_HAZARD_v2.7 §INJURED RE-EXPEDITION SEVERE ESCALATION: applies wherever the
+    Severe-vs-ordinary decision is made, on the departure state alone - still one decision
+    point, still no second Severe roll, still applied before that branch's clamp. */
  const departedInjured=n.injury===1,severeEscalation=departedInjured?.15:0;
- if(!combatSuccess&&outcome==='부상'){
-  if(injuryRoll<clamp(.42+e.injuryRisk-e.injuryGuard*.25+severeEscalation,0,1))outcome='중상';
- }else if(affected||injuryRiskCheck()){outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';}
- /* DUNGEON_HAZARD_v2.7 §Resolution order: exactly one Death roll, drawn ONLY once the ordinary
-    path is confirmed to have failed - a 성공 draws zero Death rolls, not one drawn-but-unused.
-    The old model rolled Death solely behind a failed escape and read a post-noise deficit, so
-    a lucky variance roll decided how deadly the preparation had been; now the chance is fixed
-    by the prepared state, and the draw itself, not just its use, waits for the failure path. */
- if(outcome!=='성공'){
+ /* DUNGEON_HAZARD_v2.7 §Resolution order, complete: the game decides SUCCESS-PATH vs
+    FAILURE-PATH using only noise/envRoll (and, only when genuinely needed to make that one
+    decision, injuryRiskRoll) - never escape/injury evidence, which settles WHICH failure this
+    is and is never needed to decide THAT it is one. Death is drawn exactly once, immediately
+    on entering the failure path, before any escape/injury evidence - a Death hit ends the
+    expedition there, consuming nothing else; only a Death miss goes on to settle the ordinary
+    non-Death tier. A 성공 draws zero Death rolls and no escape/injury evidence at all. */
+ let outcome,failurePath;
+ if(!combatSuccess){
+  failurePath=true;
+ }else if(affected){
+  failurePath=true;
+ }else{
+  injuryRiskRoll=r.next();
+  failurePath=injuryRiskRoll<e.injuryRisk;
+ }
+ if(!failurePath){
+  outcome='성공';
+ }else{
   deathChance=failureDeathChanceFor(p,d,departedInjured).chance;
   deathRoll=r.next();
-  if(deathRoll<deathChance)outcome='사망';
+  if(deathRoll<deathChance){
+   outcome='사망';
+  }else if(!combatSuccess){
+   escapeRoll=r.next();escapeChance=clamp(.48+e.mobility*.005+e.escape-(d.scale||1)*.024,.15,.94);
+   outcome=escapeRoll<escapeChance?'퇴각':'부상';
+   if(outcome==='부상'){
+    injuryRoll=r.next();
+    if(injuryRoll<clamp(.42+e.injuryRisk-e.injuryGuard*.25+severeEscalation,0,1))outcome='중상';
+   }else{
+    /* the escaped-but-still-failed case: the SAME environment/injuryRisk evidence that would
+       have decided a won fight's fate can still turn this surviving Retreat into an Injury -
+       drawn only now, never to decide failurePath itself, which combatSuccess===false already
+       settled above. */
+    let takesTier=affected;
+    if(!takesTier){
+     injuryRiskRoll=r.next();
+     takesTier=injuryRiskRoll<e.injuryRisk;
+    }
+    if(takesTier){
+     injuryRoll=r.next();
+     outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
+    }
+   }
+  }else{
+   injuryRoll=r.next();
+   outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
+  }
  }
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
  if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
@@ -465,7 +527,13 @@ function resolve(n,d,r,facilities=[],options={}){
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
-   debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll:deathRoll===undefined?null:deathRoll,deathChance,effects:e}};
+   /* escapeChance/escapeRoll/injuryRoll are now conditional too (only the combat-failure and
+      environment/injuryRisk failure branches ever need them) - normalized to null the same
+      way deathRoll already is, so a save/reload JSON round-trip cannot disagree with the live
+      pre-reload object over a key JSON simply drops. */
+   debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,
+    escapeChance:escapeChance===undefined?null:escapeChance,escapeRoll:escapeRoll===undefined?null:escapeRoll,
+    injuryRoll:injuryRoll===undefined?null:injuryRoll,deathRoll:deathRoll===undefined?null:deathRoll,deathChance,effects:e}};
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */
