@@ -65,28 +65,54 @@ test('§12: a Callback only speaks about history the run actually has',()=>{
   'a customer death may mention the counter');
 });
 
-test('SA-Q25: the helped-return callback needs proven sold-Item contribution, not just an event',()=>{
+test('SA-Q25: the helped-return callback needs COMPLETE proven sold-Item contribution',()=>{
  /* `n.events.length` used to gate this - a Trait-only event (강골's injury-guard downgrade,
     for one) satisfied it with nothing the Player sold. It now reads n.records.at(-1).heroProof,
     the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself proves a Hero Item line
-    from. Every 6th visit is the only Day this gate is even checked (§11.2), so both cases are
-    built on visit 6. */
+    from - {outcome, state}, either half possibly null - never events.length, Bag presence or
+    generic Item history. Every 6th visit is the only Day this gate is even checked (§11.2), so
+    every case here is built on visit 6. */
  const setup=()=>{const g=new Game();g.autosave=false;g.start('copy-helped');g.morning();
   const n=g.run.npcs.find(x=>x.id===g.run.queue[0]);n.introduced=true;n.newToday=false;n.injury=0;n.loyalty=0;n.traits=[];n.visits=5;
   g.run.queue=[n.id];g.run.cursor=0;return {g,n};};
- // a previous result with only a Trait contribution (heroProof null) is not proof of a sale
+ // A — a previous result with only a Trait contribution (heroProof null) is not proof of a sale
  {const {g,n}=setup();
   n.records=[{outcome:'퇴각',items:[],events:[{id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'}],heroProof:null}];
   g.arrive();
-  assert.ok(!V.helped.includes(g.run.say.text),'a Trait-only previous result draws no helped callback');
+  assert.ok(!V.helped.includes(g.run.say.text),'A: a Trait-only previous result draws no helped callback');
   assert.ok(V.back.includes(g.run.say.text),'and falls through to the ordinary return pool');
  }
- // a previous result with a proven sold-Item contribution IS eligible
+ // B — an Item was carried but produced no proven contribution (heroProof null either way)
+ {const {g,n}=setup();
+  n.records=[{outcome:'성공',items:['rice'],events:[],heroProof:null}];
+  g.arrive();
+  assert.ok(!V.helped.includes(g.run.say.text),'B: a carried, unproven Item draws no helped callback');
+ }
+ // C — a proven Outcome contribution from a sold Item IS eligible
  {const {g,n}=setup();
   n.records=[{outcome:'퇴각',items:['bandage'],events:[{id:'hazard',hazards:['poison'],items:['bandage'],prevented:true}],
-   heroProof:{items:['bandage'],worse:'부상'}}];
+   heroProof:{outcome:{items:['bandage'],worse:'부상'},state:null}}];
   g.arrive();
-  assert.ok(V.helped.includes(g.run.say.text),'a proven sold-Item contribution makes the callback eligible');
+  assert.ok(V.helped.includes(g.run.say.text),'C: a proven Outcome contribution makes the callback eligible');
+ }
+ // D — a proven persistent-state (구급키트 Aftercare) contribution IS eligible, even though the
+ // text Outcome is unchanged (outcome:null)
+ {const {g,n}=setup();
+  n.records=[{outcome:'중상',items:['kit'],events:[{id:'aftercare',items:['kit'],text:'구급키트가 중상 후 상태를 부상까지 낮췄다.'}],
+   heroProof:{outcome:null,state:{items:['kit']}}}];
+  g.arrive();
+  assert.ok(V.helped.includes(g.run.say.text),'D: a proven Aftercare state contribution makes the callback eligible too');
+ }
+ // E — Save -> Load preserves eligibility: the same persisted proof produces the same callback
+ // decision after a full JSON round-trip, not just in the live in-memory object.
+ {const {g,n}=setup();
+  n.records=[{outcome:'퇴각',items:['bandage'],events:[{id:'hazard',hazards:['poison'],items:['bandage'],prevented:true}],
+   heroProof:{outcome:{items:['bandage'],worse:'부상'},state:null}}];
+  g.save();
+  const reloaded=Save.import(Save.export(g.account,g.run));
+  const h=new Game(reloaded.account,reloaded.run);h.autosave=false;
+  h.arrive();
+  assert.ok(V.helped.includes(h.run.say.text),'E: the reloaded run still finds the same proof and the same eligibility');
  }
 });
 

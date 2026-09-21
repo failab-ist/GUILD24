@@ -257,8 +257,8 @@ function failureDeathRisk(n,d,facilities=[]){
    under-reporting is preferred to false causality. */
 const OUTCOME_ORDER=['대성공','성공','퇴각','부상','중상','사망'];
 const UNPROVEN=Symbol('unproven');
-function shadowOutcome(n,d,facilities,pack,ev,severeEscalation){
- const sp=prepare({...n,pack},d,facilities),se=sp.effects;
+function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
+ const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
  const sAbility=preparedPower(se);
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
  const sCombatSuccess=sAbility*sNoise>=d.power;
@@ -276,6 +276,10 @@ function shadowOutcome(n,d,facilities,pack,ev,severeEscalation){
   if(takesTier)sOutcome=ev.injuryRoll<clamp(.13-se.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
  }
  if(sOutcome!=='성공'){
+  /* the actual expedition draws a Death roll only on its own failure path (Fix 2) - if it
+     stayed on 성공, ev.deathRoll is undefined, and a shadow that fails here would need a
+     roll that was never drawn. UNPROVEN, never a borrowed or invented value. */
+  if(ev.deathRoll===undefined)return UNPROVEN;
   const sDeathChance=failureDeathChanceFor(sp,d,severeEscalation>0).chance;
   if(ev.deathRoll<sDeathChance)sOutcome='사망';
  }
@@ -295,22 +299,58 @@ function shadowOutcome(n,d,facilities,pack,ev,severeEscalation){
    separate removals), then the whole Bag if no single Item is individually provable. Ties on
    the SAME resulting worse tier are credited together; a worse tier beats a milder one rather
    than stacking several heroic claims. */
-function resultProof(n,d,facilities,ev,severeEscalation,actualOutcome){
- const pack=n.pack,idx=OUTCOME_ORDER.indexOf(actualOutcome);
+function outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome){
+ const idx=OUTCOME_ORDER.indexOf(actualOutcome);
  if(!pack.length)return null;
- const per=pack.map((id,i)=>({id,tier:shadowOutcome(n,d,facilities,pack.filter((_,j)=>j!==i),ev,severeEscalation)}));
+ const per=pack.map((id,i)=>({id,tier:shadowOutcome(departure,d,facilities,pack.filter((_,j)=>j!==i),ev,severeEscalation)}));
  const proven=per.filter(x=>x.tier!==UNPROVEN&&OUTCOME_ORDER.indexOf(x.tier)>idx);
  if(proven.length){
   const worstIdx=Math.max(...proven.map(x=>OUTCOME_ORDER.indexOf(x.tier)));
   const items=[...new Set(proven.filter(x=>OUTCOME_ORDER.indexOf(x.tier)===worstIdx).map(x=>x.id))];
   return {items,worse:OUTCOME_ORDER[worstIdx]};
  }
- const bareTier=shadowOutcome(n,d,facilities,[],ev,severeEscalation);
+ const bareTier=shadowOutcome(departure,d,facilities,[],ev,severeEscalation);
  if(bareTier!==UNPROVEN&&OUTCOME_ORDER.indexOf(bareTier)>idx)return {items:null,worse:bareTier};
  return null;
 }
+/* PERSISTENT-STATE PROOF (구급키트 Aftercare). Canonical: a sold Item may make a proven
+   persistent-state difference even when the text Outcome is unchanged. Only relevant when
+   Aftercare actually fired on the real resolution - the question per Item is then: with THIS
+   item gone, does the shadow settle on the SAME Outcome tier (a different tier is already the
+   outcome proof's claim, not this one) but WITHOUT the aftercare gate that only that item
+   supplies, leaving a worse persistent Injury than the real, aftercare-relieved one? */
+function shadowInjuryBeforeAftercare(tier,departureInjury){
+ return tier==='중상'?2:tier==='부상'?1:tier==='퇴각'?departureInjury:0;
+}
+function stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
+ if(!actualAftercare||!pack.length)return null;
+ const idx=OUTCOME_ORDER.indexOf(actualOutcome);
+ const items=[...new Set(pack.map((id,i)=>{
+  const shadowPack=pack.filter((_,j)=>j!==i);
+  const tier=shadowOutcome(departure,d,facilities,shadowPack,ev,severeEscalation);
+  if(tier===UNPROVEN||OUTCOME_ORDER.indexOf(tier)!==idx)return null; // a differing tier is outcomeProof's claim, not this one
+  const sp=prepare({...departure,pack:shadowPack},d,facilities);
+  const before=shadowInjuryBeforeAftercare(tier,departure.injury);
+  const shadowFinal=((sp.effects.aftercare||0)>0&&before>0)?(before===2?1:0):before;
+  return shadowFinal>actualAftercare.to?id:null;
+ }).filter(Boolean))];
+ return items.length?{items}:null;
+}
+function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
+ const outcome=outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome);
+ const state=stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare);
+ return outcome||state?{outcome,state}:null;
+}
 function resolve(n,d,r,facilities=[],options={}){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
+ /* RESULT-PROOF DEPARTURE SNAPSHOT. This is the ONLY state prepare() actually reads off `n`
+    (stats/equipment/traits/fatigue/injury), captured before this resolution touches any of
+    it. Every Result-Proof shadow below prepares against THIS, never against the live `n` -
+    which by the time resultProof() runs has already been mutated by this same resolution
+    (growth, injury/aftercare, fatigue, equipment). Only Bag composition may differ between
+    the actual and shadow preparation states. */
+ const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury};
+ const departurePack=[...n.pack];
 
  const ability=preparedPower(e);
  /* RESULT-PROOF: this expedition's real random draws are named as they are drawn, in the
@@ -328,7 +368,7 @@ function resolve(n,d,r,facilities=[],options={}){
  const escapeRoll=r.next(),escapeChance=clamp(.48+e.mobility*.005+e.escape-(d.scale||1)*.024,.15,.94);
  let outcome=combatSuccess?'성공':(escapeRoll<escapeChance?'퇴각':'부상');
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
- const injuryRoll=r.next(),deathRoll=r.next();let rescued=false,deathChance=0,avoidedDeath=false;
+ const injuryRoll=r.next();let deathRoll,rescued=false,deathChance=0,avoidedDeath=false;
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
  const injuryRiskCheck=()=>{injuryRiskRoll=r.next();return injuryRiskRoll<e.injuryRisk;};
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<clamp(e.escape,.0,.96);};
@@ -344,12 +384,14 @@ function resolve(n,d,r,facilities=[],options={}){
  if(!combatSuccess&&outcome==='부상'){
   if(injuryRoll<clamp(.42+e.injuryRisk-e.injuryGuard*.25+severeEscalation,0,1))outcome='중상';
  }else if(affected||injuryRiskCheck()){outcome=injuryRoll<clamp(.13-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';}
- /* DUNGEON_HAZARD_v2.7 §Resolution order: exactly one Death roll, and only once the ordinary
-    path is known to have failed. The old model rolled Death solely behind a failed escape and
-    read a post-noise deficit, so a lucky variance roll decided how deadly the preparation had
-    been; now the chance is fixed by the prepared state and a 성공 never reaches the roll. */
+ /* DUNGEON_HAZARD_v2.7 §Resolution order: exactly one Death roll, drawn ONLY once the ordinary
+    path is confirmed to have failed - a 성공 draws zero Death rolls, not one drawn-but-unused.
+    The old model rolled Death solely behind a failed escape and read a post-noise deficit, so
+    a lucky variance roll decided how deadly the preparation had been; now the chance is fixed
+    by the prepared state, and the draw itself, not just its use, waits for the failure path. */
  if(outcome!=='성공'){
   deathChance=failureDeathChanceFor(p,d,departedInjured).chance;
+  deathRoll=r.next();
   if(deathRoll<deathChance)outcome='사망';
  }
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
@@ -419,8 +461,11 @@ function resolve(n,d,r,facilities=[],options={}){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(n,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll},severeEscalation,outcome);
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll,deathChance,effects:e}};
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll},severeEscalation,outcome,aftercare);
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
+    here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
+    with the live pre-reload object (JSON has no `undefined`). */
+   debug:{ability,score,power:d.power,noise,hazard:p.hazard,combatSuccess,environment,envRoll,affected,escapeChance,escapeRoll,injuryRoll,deathRoll:deathRoll===undefined?null:deathRoll,deathChance,effects:e}};
  /* The persisted record is the report without its development payload. The key is
    removed, not set to undefined: an own property that JSON drops would make a reloaded
    run structurally different from the run it was saved from (CORE_RUN SAVE/LOAD). */

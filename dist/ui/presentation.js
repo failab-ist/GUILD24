@@ -135,12 +135,16 @@ function nightWhy(r){const bits=[];
  }
  return bits.join(' ');}
 /* HERO ITEM FEEDBACK (NIGHT_CLOSING §HERO ITEM FEEDBACK, DUNGEON_HAZARD §RESULT-PROOF).
-   r.heroProof is null unless the actual resolution proved - using only the random evidence it
-   actually drew, never a new roll - that removing a specific sold Item (or, when no single
-   Item is individually provable, the whole committed Bag) would have settled a WORSE Outcome.
-   This is WHY the Player's own sale mattered; the Outcome sentence above never carries it. */
+   r.heroProof.outcome is null unless the actual resolution proved - using only the random
+   evidence it actually drew, never a new roll, against the NPC's own departure state - that
+   removing a specific sold Item (or, when no single Item is individually provable, the whole
+   committed Bag) would have settled a WORSE Outcome. This is WHY the Player's own sale
+   mattered; the Outcome sentence above never carries it. r.heroProof.state (a proven
+   persistent-state contribution, e.g. 구급키트 Aftercare, with the text Outcome unchanged) is
+   not rendered here - the existing result copy that states that change directly already
+   covers it; state proof exists only to make SA-Q25's helped-callback correct. */
 function heroLine(r){
- const hp=r.heroProof;if(!hp)return null;
+ const hp=r.heroProof?.outcome;if(!hp)return null;
  const said=hp.worse==='사망'?'살아 돌아왔다':hp.worse==='중상'?'중상을 피했다':
   hp.worse==='부상'?'부상을 피했다':hp.worse==='퇴각'?'원정을 성공했다':'대성공했다';
  const who=!hp.items?'챙긴 보급':hp.items.map(id=>D.itemBy[id].name).join('·');
@@ -203,7 +207,7 @@ function supplyEffect(ev,r){
     never checked against the resolved Outcome. Unproven is now simply left unsaid. */
  if(ev.id==='hazard'){const names=(ev.hazards||[]).map(h=>D.hazards[h]).filter(Boolean).join('·');
   if(!names)return null;
-  const proven=r.heroProof?.items?.some(id=>(ev.items||[]).includes(id));
+  const proven=r.heroProof?.outcome?.items?.some(id=>(ev.items||[]).includes(id));
   return proven?names+' 피해 방지':null;}
  if(ev.id==='escape')return r.avoidedDeath?'사망 위기에서 생환':'퇴각에 기여';
  if(ev.id==='revive')return '사망을 중상으로';

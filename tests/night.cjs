@@ -537,13 +537,218 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
  assert.deepEqual(stats(1),stats(1),'the prepared reading is a function of the injury alone');
  const src=read('dist/systems/dungeon.js');
  assert.ok(/severeEscalation=departedInjured\?\.15:0/.test(src),'the escalation reads the departure state alone');
- /* RESULT-PROOF: shadowOutcome/resultProof replay the SAME two decision points against a
-    shadow Bag, so they legitimately take severeEscalation as a parameter and reuse it at the
-    same two checks - one real definition, its two real uses, and that same shape mirrored
-    through the counterfactual engine (a parameter declaration, two decision-point uses, two
-    call sites passing it through, and the one place it is computed and handed in). */
- assert.equal((src.match(/severeEscalation/g)||[]).length,11,
-  'one definition, its two decision points, and the proof engine that replays them - nothing else');
+ /* RESULT-PROOF: shadowOutcome() replays the SAME two decision points against a shadow Bag, so
+    it legitimately takes severeEscalation as a parameter and reuses it at the same two checks.
+    outcomeProof()/stateProof() each thread it through to shadowOutcome() (and stateProof()
+    passes it on again through shadowOutcome inside its own per-item loop); resultProof() takes
+    it once and hands it to both. One real definition, its two real decision-point uses, and
+    that same shape mirrored through every layer of the counterfactual engine - nothing else. */
+ assert.equal((src.match(/severeEscalation/g)||[]).length,16,
+  'one definition, its two decision points, and the full proof engine that replays them - nothing else');
+});
+
+// ================================================================================
+// RESULT-PROOF DIRECTOR FIX CYCLE — targeted regressions.
+// ================================================================================
+test('RESULT-PROOF: the shadow preparation uses DEPARTURE state, never post-expedition growth',()=>{
+ /* If the shadow used the returned (post-growth) NPC instead of a frozen pre-resolution
+    snapshot, this proof would silently vanish once growth pushed mobility high enough that
+    even the shadow (without the Item) crosses the escape threshold. The gap is read off
+    Dungeon.prepare() itself, not hand-derived, so this stays correct if balance numbers move. */
+ const g=new Game();g.autosave=false;g.start('result-proof-departure');
+ const gate=g.makeDungeon('spider',1);
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:(a)=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ const base=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco'],injury:0,fatigue:0,alive:true,recovery:0,level:1,xp:0}));
+ const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-(gate.scale||1)*.024));
+ const withE=Dungeon.prepare(base(),gate,[]).effects,withoutE=Dungeon.prepare({...base(),pack:[]},gate,[]).effects;
+ const escWith=escChance(withE),escWithout=escChance(withoutE);
+ assert.ok(escWith>escWithout,'초코바 really does raise the escape chance, or this proof has nothing to test');
+ const roll=(escWith+escWithout)/2; // WITH the Item -> 퇴각 (roll < escWith); WITHOUT -> 부상 (roll >= escWithout)
+ const hard={...gate,power:1e9,day:500}; // combat fails regardless of the Item; day inflates XP so growth is guaranteed
+ const n=base();const beforeStats=JSON.stringify(n.stats),beforeLevel=n.level;
+ const r=Dungeon.resolve(n,hard,scripted([0.5,0.999,roll,0.999,0.999,0.999,0.999]),[]);
+ assert.ok(n.level>beforeLevel||JSON.stringify(n.stats)!==beforeStats,
+  'sanity: the real resolution actually grew this NPC - otherwise the regression proves nothing');
+ assert.equal(r.outcome,'퇴각','the actual result, decided WITH the Item, is 퇴각');
+ assert.ok(r.heroProof?.outcome?.items?.includes('choco'),
+  'proof credits 초코바 off the DEPARTURE (pre-growth) preparation - a shadow built from the '+
+  'grown NPC would find the same escape chance on both sides and credit nothing');
+ assert.equal(r.heroProof.outcome.worse,'부상','and names the tier it kept the customer out of');
+});
+
+test('RESULT-PROOF: post-expedition Injury/Fatigue/Equipment cannot leak into the shadow either',()=>{
+ /* Same shape, a different mutation channel each time: Aftercare changes n.injury, the
+    Outcome's own Fatigue gain changes n.fatigue, and an equipment-tier win changes
+    n.equipment.power - all AFTER prepare()'s own inputs were already fixed for the real
+    resolution, and all BEFORE resultProof() runs. None of the three may reach the shadow. */
+ const g=new Game();g.autosave=false;g.start('result-proof-departure-2');
+ const gate=g.makeDungeon('spider',1);
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:(a)=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ const base=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco'],injury:1,fatigue:0,alive:true,recovery:0,level:1,xp:0,
+  equipment:{...g.run.npcs[0].equipment,power:0,tier:1}}));
+ void 0;
+ const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-(gate.scale||1)*.024));
+ const withE=Dungeon.prepare(base(),gate,[]).effects,withoutE=Dungeon.prepare({...base(),pack:[]},gate,[]).effects;
+ const escWith=escChance(withE),escWithout=escChance(withoutE);
+ assert.ok(escWith>escWithout,'초코바 raises the escape chance here too');
+ const roll=(escWith+escWithout)/2;
+ const hard={...gate,power:1e9,day:500};
+ const n=base();
+ const r=Dungeon.resolve(n,hard,scripted([0.5,0.999,roll,0.999,0.999,0.999,0.999]),[]);
+ assert.equal(r.outcome,'퇴각','WITH the Item, still 퇴각');
+ // departed injured (injury=1): the departure Injury stayed 1 going in, and the resolution's
+ // own transitions (n.injury reassignment for outcome, aftercare, equipment win, fatigue gain)
+ // all run before heroProof - if the shadow read any of THOSE post-transition values instead
+ // of the frozen departure ones, the proof would compute a different, wrong result.
+ assert.ok(r.heroProof?.outcome?.items?.includes('choco'),
+  'proof still credits 초코바 though Injury/Fatigue/Equipment all changed downstream of departure');
+});
+
+test('RESULT-PROOF: the ordinary Death-roll count matches Canonical exactly',()=>{
+ /* DUNGEON_HAZARD_v2.7 §ORDINARY EXPEDITION FAILURE DEATH RISK, resolution order 3-4: zero
+    Death rolls on a Success path, exactly one on a failure path (퇴각 included) - and the draw
+    itself, not merely its use, must wait for the failure path to be confirmed. */
+ const g=new Game();g.autosave=false;g.start('death-roll-count');
+ const gate=g.makeDungeon('spider',1);
+ let draws=0;
+ const counting=seq=>{let i=0;return {next:()=>{draws++;return i<seq.length?seq[i++]:0.999;},int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ const mk=()=>JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:[],injury:0,fatigue:0,alive:true,recovery:0}));
+ // SUCCESS: trivial gate, neutral noise, no incident -> combatSuccess stays true -> outcome
+ // settles '성공' with no environment override, so it never reaches the failure branch.
+ {const easy={...gate,power:1};
+  const r=Dungeon.resolve(mk(),easy,counting([0.5,0.999,0.999,0.999,0.999,0.999]),[]);
+  assert.equal(r.outcome,'성공','a trivially easy gate really does succeed');
+  assert.equal(r.debug.deathRoll,null,'no Death roll value is recorded on the Success path');
+ }
+ // FAILURE (부상, lost fight): impossible gate, escape fails -> 부상 immediately, no incident,
+ // injuryRoll stays below the Severe escalation so it never re-enters this same branch twice.
+ {const hard={...gate,power:1e9};
+  const r=Dungeon.resolve(mk(),hard,counting([0.5,0.999,0.999,0.999,0.999,0.999]),[]);
+  assert.equal(r.outcome,'부상','an impossible fight with a failed escape is an ordinary Injury');
+  assert.equal(typeof r.debug.deathRoll,'number','exactly one Death roll value is recorded on the failure path');
+ }
+ // RETREAT: impossible gate, escape succeeds (escapeRoll 0.0001) -> 퇴각, which the rule
+ // explicitly includes in the failure-conditioned Death check.
+ {const hard={...gate,power:1e9};
+  const r=Dungeon.resolve(mk(),hard,counting([0.5,0.999,0.0001,0.999,0.999,0.999]),[]);
+  assert.equal(r.outcome,'퇴각','escape succeeds against the impossible fight');
+  assert.equal(typeof r.debug.deathRoll,'number','the Retreat path also draws exactly one Death roll');
+ }
+ /* A raw total-draw-count comparison between a Success and a failure path is not itself a
+    clean isolation of the Death roll: a won fight also draws the equipment-tier roll a lost
+    one does not, and a 부상/중상 outcome also draws the 강골 downgrade check a Success does
+    not, so the two extra draws can numerically cancel a real missing/present Death roll. The
+    null-vs-number checks above already prove presence/absence directly and precisely; this
+    confirms there is exactly one place in Source that can ever produce that value, so "one
+    Death roll" cannot mean two draws that happen to agree. */
+ const src=read('dist/systems/dungeon.js');
+ assert.equal((src.match(/deathRoll=r\.next\(\)/g)||[]).length,1,
+  'exactly one place in Source draws the Death roll - no duplicate inside escape/injury/severe handling');
+});
+
+test('RESULT-PROOF: UNPROVEN branches are never invented, and proof consumes no gameplay RNG',()=>{
+ const g=new Game();g.autosave=false;g.start('result-proof-unproven');
+ const gate=g.makeDungeon('spider',1);
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ // actual Success (no Death roll drawn); shadow (Item removed) fails combat and would need one.
+ {const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['potion'],injury:0,fatigue:0,alive:true,recovery:0}));
+  const withPotion=Dungeon.prepare(n,gate,[]).effects.combat,withoutPotion=Dungeon.prepare({...n,pack:[]},gate,[]).effects.combat;
+  assert.ok(withPotion>withoutPotion,'하급 포션 raises 투력, or this case proves nothing');
+  const tight={...gate,power:(withPotion+withoutPotion)/2}; // succeeds WITH, fails WITHOUT
+  const r=Dungeon.resolve(n,tight,scripted([0.5,0.999,0.999,0.999,0.999,0.999]),[]);
+  assert.equal(r.outcome,'성공','WITH the potion the fight is won');
+  assert.equal(r.debug.deathRoll,null,'and no Death roll was drawn to prove the failure shadow with');
+  assert.equal(r.heroProof,null,'UNPROVEN is under-reported as no proof, never invented as one');
+ }
+ // RNG-neutrality + no mutation: two resolutions of the SAME seeded run, one with a pack that
+ // gives resultProof several Items to shadow-test, land on the identical rng.state and the
+ // identical persisted NPC fields either way - the proof itself draws nothing and touches no
+ // Run/NPC/economy state.
+ {const heavy=()=>{const g2=new Game();g2.autosave=false;g2.start('rng-neutral');
+   const gate2=g2.makeDungeon('spider',1);
+   const n=JSON.parse(JSON.stringify({...g2.run.npcs[0],traits:[],pack:['choco','potion','kit'],injury:0,fatigue:0,alive:true,recovery:0}));
+   const money=g2.run.money;
+   const rep=Dungeon.resolve(n,gate2,new RNG('rng-neutral-draw'),[]);
+   return {state:g2.rng.state,money:g2.run.money,moneyChanged:g2.run.money!==money,rep};};
+  const a=heavy(),b=heavy();
+  assert.equal(a.rep.heroProof!==undefined,true,'the multi-Item case actually reaches resultProof');
+  assert.deepEqual(a.rep,b.rep,'the same seed, same pack, same gate reproduces the identical report - proof included');
+  assert.equal(a.moneyChanged,false,'resolve() never touches Run economy state on its own RNG object');
+ }
+});
+
+test('RESULT-PROOF: existing attribution rules still hold (single / overlap / whole-Bag / 황금 1+1)',()=>{
+ const g=new Game();g.autosave=false;g.start('result-proof-attribution');
+ const gate=g.makeDungeon('spider',1);
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ // single necessary Item is exercised directly by the two departure-state tests above
+ // (초코바 alone flips 퇴각 <-> 부상); this test covers overlap / whole-Bag only.
+ // overlap: A and B each independently sufficient to keep the SAME worse tier from happening.
+ {const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco','energy'],injury:0,fatigue:0,alive:true,recovery:0}));
+  const eBoth=Dungeon.prepare(n,gate,[]).effects,eNoChoco=Dungeon.prepare({...n,pack:['energy']},gate,[]).effects,eNoEnergy=Dungeon.prepare({...n,pack:['choco']},gate,[]).effects,eNeither=Dungeon.prepare({...n,pack:[]},gate,[]).effects;
+  const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-(gate.scale||1)*.024));
+  const escBoth=escChance(eBoth),escNoChoco=escChance(eNoChoco),escNoEnergy=escChance(eNoEnergy),escNeither=escChance(eNeither);
+  // both 초코바 and 에너지드링크 grant mobility; WITH both, the roll clears; remove EITHER
+  // one alone and it no longer does (each is independently necessary against the SAME roll).
+  assert.ok(escBoth>escNoChoco+.001&&escBoth>escNoEnergy+.001,
+   'sanity: this gate/pack really does shape the overlap case, or the assertions below prove nothing');
+  const roll=(escBoth+Math.max(escNoChoco,escNoEnergy))/2;
+  const hard={...gate,power:1e9};
+  const r=Dungeon.resolve(JSON.parse(JSON.stringify(n)),hard,scripted([0.5,0.999,roll,0.999,0.999,0.999,0.999]),[]);
+  assert.equal(r.outcome,'퇴각','with both Items, the roll clears and this stays a Retreat');
+  assert.ok(r.heroProof?.outcome?.items?.length>=1,'at least one Item is credited for the same worse tier');
+  assert.ok(r.heroProof.outcome.items.includes('choco')&&r.heroProof.outcome.items.includes('energy'),
+   'and since EITHER removal alone worsens it, both are credited together, not just one');
+ }
+ // whole-Bag-only: EITHER Item alone still clears the roll, but removing BOTH does not - so
+ // no single Item is individually necessary, only the whole committed preparation is.
+ {const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['choco','energy'],injury:0,fatigue:0,alive:true,recovery:0}));
+  const eBoth=Dungeon.prepare(n,gate,[]).effects,eNone=Dungeon.prepare({...n,pack:[]},gate,[]).effects,eNoChoco=Dungeon.prepare({...n,pack:['energy']},gate,[]).effects,eNoEnergy=Dungeon.prepare({...n,pack:['choco']},gate,[]).effects;
+  const escChance=e=>Math.min(.94,Math.max(.15,.48+e.mobility*.005+e.escape-(gate.scale||1)*.024));
+  const escBoth=escChance(eBoth),escNone=escChance(eNone),escNoChoco=escChance(eNoChoco),escNoEnergy=escChance(eNoEnergy);
+  const floor=Math.min(escNoChoco,escNoEnergy);
+  assert.ok(floor>escNone+.001,
+   'sanity: either Item alone still clears where neither does, or the assertions below prove nothing');
+  const roll=(escNone+floor)/2; // below both individual removals, at or above losing everything
+  const hard={...gate,power:1e9};
+  const r=Dungeon.resolve(JSON.parse(JSON.stringify(n)),hard,scripted([0.5,0.999,roll,0.999,0.999,0.999,0.999]),[]);
+  assert.equal(r.outcome,'퇴각','with the full Bag, the roll clears');
+  assert.equal(Dungeon.resolve(JSON.parse(JSON.stringify({...n,pack:['energy']})),hard,scripted([0.5,0.999,roll,0.999,0.999,0.999,0.999]),[]).outcome,'퇴각',
+   '초코바 alone removed, 에너지드링크 still clears it');
+  assert.equal(Dungeon.resolve(JSON.parse(JSON.stringify({...n,pack:['choco']})),hard,scripted([0.5,0.999,roll,0.999,0.999,0.999,0.999]),[]).outcome,'퇴각',
+   '에너지드링크 alone removed, 초코바 still clears it');
+  assert.ok(r.heroProof?.outcome,'yet the whole committed Bag is provably necessary');
+  assert.equal(r.heroProof.outcome.items,null,'and ownership is generic - no single Item is invented as the cause');
+  assert.equal(r.heroProof.outcome.worse,'부상','naming the tier losing the whole Bag would have reached');
+ }
+ // 황금 1+1: participates in the same proof boundary when its duplication changed the resolved
+ // preparation - covered by ITEM_v2.7's existing duplicate-consumption contract (itemContributions
+ // treats 'duplicate' as doubling the NEXT Item's effect and consuming no slot of its own), so a
+ // shadow removing the DUPLICATED item removes both the base effect and the doubling together,
+ // which is exactly the Outcome-order machinery already exercised above - no separate code path
+ // exists for it, so no separate proof branch could silently special-case it.
+ assert.ok(!/duplicate/.test(require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/dungeon.js'),'utf8').match(/function shadowOutcome[\s\S]*?\n}/)[0]),
+  'shadowOutcome carries no special-cased 황금 1+1 branch - it goes through prepare() like every other Item');
+});
+
+test('RESULT-PROOF: persistent-state proof for 구급키트 Aftercare, and what is NOT promoted to Hero',()=>{
+ const g=new Game();g.autosave=false;g.start('result-proof-aftercare');
+ const gate=g.makeDungeon('spider',1);
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
+ // force a 중상 that Aftercare (구급키트) then relieves to 부상, with the TEXT Outcome unchanged
+ // either way - the state proof, not the outcome proof, is what must credit it.
+ const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['kit'],injury:1,fatigue:0,alive:true,recovery:0}));
+ const r=Dungeon.resolve(n,{...gate,power:1e9},scripted([0.5,0.999,0.999,0.50,0.999,0.999,0.999]),[]);
+ assert.equal(r.outcome,'중상','departed already injured, the escalated threshold is crossed');
+ assert.ok(r.aftercare&&r.aftercare.from===2&&r.aftercare.to===1,'구급키트 Aftercare actually relieved it to 부상');
+ assert.equal(r.heroProof?.outcome,null,'the text Outcome (중상) is unchanged by 구급키트, so there is no Outcome proof');
+ assert.ok(r.heroProof?.state?.items?.includes('kit'),
+  '구급키트 is credited as a proven PERSISTENT-STATE contribution instead');
+ // Fatigue-only and Wallet-only differences are never promoted to Hero feedback, on any report.
+ for(const rep of [r]){
+  assert.ok(!(rep.heroProof?.outcome?.worse==='부상'&&rep.heroProof?.outcome?.items?.some(id=>!DATA.itemBy[id].effects.combat&&!DATA.itemBy[id].effects.survival&&!DATA.itemBy[id].effects.mobility&&!DATA.itemBy[id].effects.spirit&&!DATA.itemBy[id].effects.escape&&!DATA.itemBy[id].effects.revive)),
+   'no Fatigue/Wallet-only Item is ever the sole reason an Outcome tier is credited');
+ }
 });
 
 console.log(groups+' night groups passed');
