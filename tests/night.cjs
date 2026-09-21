@@ -731,6 +731,30 @@ test('RESULT-PROOF: the ordinary Death-roll count matches Canonical exactly',()=
   'exactly one place in Source draws the Death roll - no duplicate inside escape/injury/severe handling');
 });
 
+test('RESULT-PROOF: the counterfactual proof functions carry no RNG draw / reseed path in Source',()=>{
+ /* Task D final QA closeout §1: the deterministic (same-seed-twice) test above/below proves
+    the REPORT is reproducible, which is necessary but not sufficient - it would pass even if
+    a proof function drew its OWN extra roll, as long as that roll were itself deterministic
+    (e.g. reading from a fixed internal seed). The direct guard is structural: the four
+    counterfactual proof functions receive only semantic evidence (`ev`, already-recorded
+    numbers) and prepared state, never an RNG object, so their own Source region must contain
+    no way to draw one. No production `skipProof` flag and no test-only gameplay behavior are
+    introduced - this reads dist/systems/dungeon.js as text and asserts on it. */
+ const src=read('dist/systems/dungeon.js');
+ const start=src.indexOf('function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){');
+ const end=src.indexOf('function resolve(n,d,r,facilities=[],options={}){');
+ assert.ok(start>=0&&end>start,
+  'sanity: both region boundaries (shadowOutcome start, resolve start) are found in Source, in order');
+ const region=src.slice(start,end);
+ // the region really does span all four proof functions, not just the first one
+ for(const fn of ['function shadowOutcome','function outcomeProof','function stateProof','function resultProof'])
+  assert.ok(region.includes(fn),'sanity: '+fn+' is inside the guarded region');
+ for(const forbidden of ['.next(','new RNG','Math.random'])
+  assert.ok(!region.includes(forbidden),
+   'the counterfactual proof functions (shadowOutcome/outcomeProof/stateProof/resultProof) contain no "'+forbidden+'" - '+
+   'they consume only already-recorded evidence, never a gameplay RNG draw or reseed');
+});
+
 test('RESULT-PROOF: UNPROVEN branches are never invented, and proof consumes no gameplay RNG',()=>{
  const g=new Game();g.autosave=false;g.start('result-proof-unproven');
  const gate=g.makeDungeon('spider',1);
@@ -869,12 +893,12 @@ test('RESULT-PROOF: persistent-state proof for 구급키트 Aftercare, and what 
 
 test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, no invented Item',()=>{
  /* Task D final correction §8B: stateProof() was missing the whole-Bag fallback outcomeProof()
-    already had - two 구급키트 in the Bag (only the FIRST slot actually carries `aftercare`
-    weight once itemContributions() applies its own stacking/diminishing rule, per catalog),
-    so removing either COPY alone still leaves enough Aftercare to relieve the same 중상 the
-    same one step; only removing the WHOLE Bag (both copies) loses Aftercare entirely and
-    proves a worse persistent Injury - credited generically ({items:null}), never pinned to
-    one arbitrarily-chosen copy. */
+    already had - with two 구급키트 in the Bag, one kit is already sufficient to enable
+    Aftercare, so removing either COPY alone still leaves the other one, and Aftercare still
+    relieves the same 중상 the same one step; only removing the WHOLE Bag (both copies) loses
+    Aftercare entirely and proves a worse persistent Injury - since individual removal proves
+    nothing, this is credited generically ({items:null}), never pinned to one arbitrarily-
+    chosen copy. */
  const g=new Game();g.autosave=false;g.start('result-proof-state-wholebag');
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
