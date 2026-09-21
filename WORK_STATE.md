@@ -31,6 +31,7 @@ The remaining adoption work is now concentrated in:
 - approved playtest-response adoption
 - remaining dialogue-pool / recent-repeat adoption
 - targeted re-measure / regression after the behavior changes
+- approved v2.8 Presentation Polish adoption
 - final integrated adoption + functional + runtime QA before v2.8 freeze
 
 `SOURCE_ADOPTION_QA_v2.8.0.md` is a known-defect RECORD, not a live tracker. It is not edited to
@@ -146,15 +147,29 @@ Because the approved playtest batch changes purchase acceptance, NPC Wallet and 
 - report observed distribution changes separately
 - do not auto-retune measurement-gated values
 
-### 3. Final v2.8 integration / freeze audit
+### 3. Presentation Polish adoption
 
-After all approved adoption and playtest-response work:
+USER APPROVED / CANONICAL PROMOTED.
+
+After re-measure closes without a blocking Design change:
+- adopt the current v2.8 Presentation Polish owned by UI_UX_v2.8.0.md
+- use only existing gameplay state / current audio-animation-scene architecture
+- cover truthful Store-growth traces, NIGHT result differentiation, Boss/D25-D30 payoff,
+  ORDER/SALE/Store-Support decision audio and targeted current-art polish
+- add no gameplay rule, balance change, required Save state, Gameplay RNG or hidden-information leak
+- use UI_UX_QA_v2.8.0.md for acceptance
+
+Do not pull the remaining large cinematic / large art-world content from the v2.9+ router.
+
+### 4. Final v2.8 integration / freeze audit
+
+After all approved adoption, re-measure and Presentation Polish work:
 - current Canonical -> Source adoption audit
 - functional QA
 - targeted regression QA for all touched systems
 - real mobile + desktop runtime UX smoke
 - verify save/load + deterministic/RNG invariants on touched paths
 - report remaining Balance Findings separately
-- keep v2.9+ deferred features out of v2.8
+- keep remaining unapproved v2.9+ structural/content expansion out of v2.8
 
 Then v2.8 can be frozen/closed if no blocking mismatch remains.
