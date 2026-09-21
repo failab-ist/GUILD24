@@ -105,7 +105,12 @@ test('TRAIT-Q16 / SALE: purchase and revisit Traits use the existing systems',()
  const g=fresh('sale'),s=g.run;
  g.beginOrder();g.open();const n=g.current();
  const rare=DATA.itemBy.highpotion,common=DATA.itemBy.rice;
- const need=(traits,it)=>{n.traits=traits;n.money=9999;return g.interest(n,it,'full').chance;};
+ /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: a Wallet far above price (the old
+    9999) drives 정가 burden to ~0, and the flat 0.80 accessible-mode base plus that bonus now
+    saturates every case at the 0.97 cap - hiding the Trait bias this test exists to compare.
+    Affording only the pricier (rare) item at its exact price keeps both comparisons below the
+    cap so the Trait deltas stay visible. */
+ const need=(traits,it)=>{n.traits=traits;n.money=rare.sell;return g.interest(n,it,'full').chance;};
  assert.ok(need(['collector'],rare)>need([],rare),'수집가 wants Rare+ more');
  assert.ok(need(['collector'],common)<need([],common),'수집가 wants Common less');
  assert.ok(need(['thrifty'],common)>need([],common),'실속파 wants Common more');

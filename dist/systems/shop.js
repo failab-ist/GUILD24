@@ -352,9 +352,18 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     정가 it is the lower judged price the approved threshold sets. It never changes what is
     charged or what has to be affordable - only how willingly the offer is taken. */
  const judged=Math.round(it.sell*(rule.intentMult??rule.mult));
- let fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0),need=.53+Math.min(.29,fit*.012);
- /* The healing good an injured adventurer reaches for is Insurance now; `medical` is gone. */
-  if(n.injury&&it.category==='insurance')need+=.25;if(n.pack.length)need-=.1;
+ /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: 50% 할인 and 정가 are the
+    accessible modes and share one flat base need. 바가지 alone keeps the pre-amendment
+    Hazard-fit formula - this patch does not touch overcharge acceptance. */
+ let need;
+ if(mode==='overcharge'){
+  const fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0);
+  need=.53+Math.min(.29,fit*.012);
+ }else need=D.balance.accessibleNeed;
+ /* The healing good an injured adventurer reaches for is Insurance now; `medical` is gone.
+    SA-Q48: the former one-Bag-slot-filled -0.10 modifier is retired - the two-slot Bag is the
+    capacity decision by itself. */
+  if(n.injury&&it.category==='insurance')need+=.25;
  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
  if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=.1;
  if(this.run.event?.effects.foodDemand&&['food','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
@@ -373,7 +382,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     debit is already refused above by the wallet<debit gate, which is where affordability is
     decided - it is not this term's job to punish an offer the customer can actually pay for. */
  const burdenIntentBonus=weight*Math.max(0,(rule.intentPivot||0)-burden);
- const chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent+burdenIntentBonus,.08,.97);
+ /* SA-Q48: for an affordable accessible-mode offer (50% 할인 / 정가) that validly Counters at
+    least one Hazard of this customer's actual Gate under the canonical Counter predicate, the
+    acceptance is floored/capped at 0.97 - even when a negative purchase Trait would otherwise
+    lower rawChance. No new Counter floor is added to 바가지. */
+ const counters=mode!=='overcharge'&&G.Relics.counter(it,d.hazards);
+ const chance=wallet<debit?0:counters?.97:clamp(need+n.loyalty*.002+rule.intent+burdenIntentBonus,.08,.97);
  return {price,debit,guarantee,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){

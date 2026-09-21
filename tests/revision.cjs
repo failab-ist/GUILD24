@@ -6,7 +6,13 @@ test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.e
 /* Stage 10: the price a Trait's 구매의사 reacts to is the JUDGED price (pricing.intentMult), not
    what is charged. 하급 포션 at 140G used to cross frugalThreshold at 정가 and no longer does -
    it is judged at 91 - so the aversion is shown on an item that still crosses it at 195. */
-test('trait source of truth; frugal changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=9999;n.traits=[];
+/* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: the flat 0.80 accessible-mode base
+   need plus a near-zero-burden 정가 bonus saturates at the 0.97 cap when the Wallet is far
+   above price (the old 9999 fixture) - clamp saturation, not a trait-additivity break. Setting
+   the Wallet to the exact price keeps the purchase affordable while pushing burden above the
+   0.36 pivot, so the bonus is zero and the frugal priceBias reads as the clean additive shift
+   the test asserts. */
+test('trait source of truth; frugal changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=it.sell;n.traits=[];
  assert.ok(Math.round(it.sell*DATA.pricing.full.intentMult)>DATA.balance.frugalThreshold,'the item is judged above the frugal threshold at 정가');
  assert.ok(Math.round(DATA.itemBy.potion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
  const a=g.interest(n,it).chance;n.traits=['frugal'];assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias)<1e-9);});
@@ -55,7 +61,7 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
  for(let i=0;i<80;i++){const g=fresh('boss-'+i);
   assert.ok(DATA.bossBy[g.run.bossId],'the Run carries a real Boss id');
   ids.add(g.run.bossId);
-  assert.deepEqual(g.run.bossReveal,{identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false},'nothing is revealed yet');
+  assert.deepEqual(g.run.bossReveal,{d0Seen:false,identitySeen:false,combatSeen:false,traitSeen:false,routeSeen:false},'nothing is revealed yet');
   const again=fresh('boss-'+i);
   assert.equal(again.run.bossId,g.run.bossId,'the same seed deals the same Boss');
  }
