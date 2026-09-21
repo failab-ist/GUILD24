@@ -14,6 +14,7 @@ COPY_REAUDIT_STATUS=COMPLETE
 V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
 PLAYTEST_RESPONSE_AMENDMENT_STATUS=CANONICAL_PROMOTED_2026_09_22
 PRESENTATION_POLISH_PROMOTION_STATUS=CANONICAL_PROMOTED_2026_09_22
+FUNCTIONAL_DESIGN_POLISH_STATUS=CANONICAL_PROMOTED_2026_09_22
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
@@ -57,6 +58,7 @@ Priority:
 - Boss five-Day presence
 - mobile density
 - audiovisual consequence / Run-identity polish using existing state
+- full-surface functional-design polish: information priority, tutorial target truth, layout economy, control/feedback continuity
 - evidence-gated balance follow-up
 
 Structural P2+ expansion remains routed to GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md.
@@ -111,7 +113,7 @@ ITEM / CATALOG / FOOD / DRINK / POTION / INSURANCE -> ITEM_v2.8.0.md
 STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.8.0.md
 SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
-UI / UX / MOBILE / POPOVER / SEMANTIC DELTA / DECORATION / PRESENTATION / AUDIO -> UI_UX_v2.8.0.md
+UI / UX / MOBILE / TUTORIAL / FUNCTIONAL DESIGN / POPOVER / SEMANTIC DELTA / DECORATION / PRESENTATION / AUDIO -> UI_UX_v2.8.0.md
 COPY / PLAYER-FACING TERMS / BOSS REPORT COPY -> COPY_WORLD_VOICE_v2.8.0.md
 COPY EXACT PLAYER TEXT AMENDMENT -> COPY_AUDIT_APPROVED_v2.8.0.md
 EVENT -> EVENT_v2.8.0.md
@@ -216,6 +218,8 @@ Purpose:
 - make existing choices/results feel stronger without changing their mechanics
 - make a late Run visibly/audibly feel like the same store after weeks of operation
 - strengthen NIGHT consequence, Boss/Final presence and decision feedback
+- re-audit the complete functional layout so the right information, emphasis and action appear
+  together without redundant UI, dead space or avoidable overflow
 
 Exact ownership:
 - state/event truth -> existing META / NIGHT_CLOSING / BOSS / SALE / ECONOMY_ORDER owners
@@ -223,6 +227,10 @@ Exact ownership:
 - acceptance -> UI_UX_QA_v2.8.0.md
 
 Promoted scope:
+- full-surface functional-design audit across the active Player flow
+- tutorial/coach text <-> highlighted-target truth and responsive fit
+- decision information/action hierarchy, density, dead-space/overflow and responsive-order cleanup
+- Boss D0/D5/D10/D15/D20/D25/D30 functional sizing/hierarchy review
 - small state-driven Store-growth visual traces
 - stronger NIGHT result differentiation
 - Boss-information / D25 Final-preparation / D30 Final-entry presentation payoff
@@ -278,7 +286,7 @@ v2.8 is ready to close when all of the following are true:
 - the Run's Boss objective remains present through the approved information cadence
 - approved Item / Store Support baselines are adopted
 - measurement-gated balance questions are either supported by evidence or explicitly carried forward
-- no unapproved v2.9+ structural expansion is pulled into v2.8; the approved Presentation Polish promotion above is part of v2.8
+- no unapproved v2.9+ structural expansion is pulled into v2.8; the approved Functional + Presentation Polish promotion above is part of v2.8
 
 Exact mechanics, numbers, copy, UX and pass/fail criteria are not repeated here.
 Use the routed owner Specs / QA.
