@@ -323,3 +323,119 @@ PASS:
 - mobile and desktop render without overflow or obscuring the primary action
 
 This QA does not authorize a new Item wave, portrait wave, environment set or theme system.
+
+
+## UI-Q-v28-26 — FULL FUNCTIONAL DESIGN AUDIT
+
+This is runtime UX QA, not Source/CSS inspection alone.
+
+Review the current Player flow on real/equivalent browser viewports at minimum:
+- phone: 360, 390 and 412 class widths
+- desktop: the 1024 breakpoint and a representative 1280-class width
+
+Traverse:
+- opening / pre-Run / Store Management
+- MORNING
+- ORDER
+- SALE
+- NIGHT
+- CLOSING
+- Boss-information beats
+- Final preparation / FINAL / ending
+- Help / Settings / Event / Store Support and other active modal/overlay surfaces
+
+For every reviewed surface, record PASS/FAIL for:
+- current information priority is visually obvious
+- required comparison information appears before the decision that uses it
+- primary action is visible/reachable without unrelated content dominating the path
+- no horizontal overflow
+- no fixed header/dock/modal covers decision information
+- no avoidable blank/dead region caused by grid/flex track stretching or oversized wrappers
+- no duplicated label/count/explanation competes with the same fact elsewhere on the surface
+- transient content does not reserve permanent empty height after it disappears
+- responsive reordering preserves the intended information -> comparison -> action sequence
+- desktop does not become a stretched phone layout with excessive empty width/height
+- compact mobile presentation does not hide required information merely to fit
+
+A visual defect that materially weakens the current decision is a FAIL even when every DOM node is
+technically present.
+
+Do not fix a FAIL by deleting information owned as required by another current Spec.
+Escalate any required-rule conflict to the owning Design document.
+
+## UI-Q-v28-27 — TUTORIAL / COACH TARGET-TRUTH AUDIT
+
+Audit every current coach step, including optional/contextual steps, on the responsive layout where
+it can appear.
+
+For each step capture:
+- tutorial text
+- runtime target selector / actual visible matched element
+- spotlight bounds
+- coach-copy placement
+- next actionable control
+
+PASS:
+- highlighted UI is exactly the fact/action the text teaches
+- target is visible, not the hidden duplicate for another breakpoint
+- spotlight includes the complete meaningful target without swallowing unrelated neighboring UI
+- copy and spotlight remain readable together after any automatic scroll
+- coach UI does not cover the target or next required control
+- a relationship lesson highlights the smallest useful shared region or uses sequential steps
+- contextual missing targets skip cleanly and do not block later lessons
+- the lesson explains how to read the system, not which gameplay answer to choose
+- the same step remains semantically correct at phone and desktop layouts
+
+FAIL examples:
+- text explains Hazard readiness while only an unrelated destination heading is highlighted
+- one button is discussed while the entire card/column is spotlighted without need
+- only part of a tall meaningful target is cut out
+- automatic scroll places the target behind a dock/header
+- coach text describes data that is not inside or meaningfully related to its highlight
+- spotlight is enlarged merely to mask a target/copy mismatch
+
+If the runtime target is wrong, fix targeting/layout.
+If the Copy is wrong, route the Copy correction through the current Copy owner.
+
+## UI-Q-v28-28 — BOSS / MILESTONE FUNCTIONAL PRESENTATION
+
+Run controlled D0 / D5 / D10 / D15 / D20 / D25 / D30 states on phone and desktop.
+
+For each beat verify both information impact and layout economy.
+
+PASS:
+- D0 objective/investigation start is unmistakable without becoming an oversized empty reveal
+- D5 identity has enough visual presence to register as the Boss reveal
+- D10 combat-question beat is clearly a new investigation but remains compact
+- D15 exact Trait is visually stronger than a routine notice and remains readable
+- D20 route/environment beat is clearly new but remains compact
+- D25 Final Family/Hazard disclosure is prominent and readable before the same-Day decision flow
+- D30 creates Final-entry emphasis without presenting a new information payload
+- acknowledgement/action control remains visible/reachable
+- no horizontal overflow
+- no avoidable vertical overflow created by art/decorative framing
+- no large unused modal area around short content
+- no required information is reduced to unreadable scale merely to avoid scrolling
+
+The current 64px / 120px / 96px presentation measurements remain exact until the UI_UX owner is
+amended. If runtime evidence shows one of those exact values itself causes a functional failure,
+report the evidence as a Functional Design finding and patch Canonical first; do not silently tune
+Source.
+
+## UI-Q-v28-29 — CONTROL / FEEDBACK / LAYOUT CONTINUITY
+
+Across ORDER / SALE / NIGHT / CLOSING / Store Management / FINAL and active modals:
+
+PASS:
+- primary, secondary and destructive actions have correct relative emphasis
+- selected / disabled / completed states are distinguishable without color alone
+- touch targets remain usable on phone
+- keyboard focus order follows the visible interaction order
+- modal close returns focus to a meaningful origin
+- redraw after quantity/selection/price/detail interaction preserves useful scroll/focus context
+- action feedback appears near the action/result it explains
+- the same concept uses consistent visual semantics across phases
+- no new panel/modal is introduced when an existing surface can express the same information
+
+This QA is specifically allowed to catch functional layout defects discovered during the
+Presentation Polish pass even when they were not listed in an earlier SA-Q item.
