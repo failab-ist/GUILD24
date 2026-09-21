@@ -76,30 +76,6 @@ Exact mechanics remain undefined.
 
 ---
 
-# 2. STORE GROWTH VISUAL OVERLAY
-
-Importance: MEDIUM
-Cost: MEDIUM~HIGH + ART
-Status: DEFER
-
-Potential goal:
-
-> a late-Run store visibly feels like the same shop after weeks of operation.
-
-Potential traces:
-- Store Support props
-- Guild notices
-- regular-customer traces
-- Final-preparation signage
-- small shelf / fixture changes
-
-Guardrails:
-- tie visible changes to real state
-- prefer small overlays over whole-background replacement
-- avoid combinatorial skin systems
-
----
-
 # 3. PRODUCT RUN HISTORY / ITEM MEMORY
 
 Importance: LOW~MEDIUM
