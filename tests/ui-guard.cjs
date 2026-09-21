@@ -213,7 +213,15 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
   'one NPC size rule for Night');
  assert.equal((css.match(/\.pfp\.returner[^{]*\{[^}]*width:/g)||[]).length,1,
   'no second rule resizes the NPC for any outcome');
- assert.ok(b.includes("heavy?'<blockquote>'"),'only a weighted beat spends a quote');
+ /* SA-Q09: the permanent result-card blockquote is gone. Every living result speaks through
+    the SAME temporary SALE-style balloon (speech(n)), not a second, permanent mechanism, and
+    not only the "weighted" beats. */
+ assert.ok(!b.includes('<blockquote>')&&!/heavy\s*\?[^)]*blockquote/.test(b),
+  'the permanent result-card blockquote is gone');
+ assert.ok(/speech\(n\)\+portrait\(n,150,'returner'\)/.test(b),
+  "the character's own line is the shared temporary balloon, every living result");
+ assert.equal((app.match(/function speech\(n\)/g)||[]).length,1,
+  'still exactly one speech-balloon implementation, reused rather than duplicated');
  assert.ok(!app.includes('다시는 가게 문을 열지 않는다'),'the permanence line is not duplicated under the death flavour');
  assert.ok(!css.includes('.gone-note'),'the removed death line leaves no dead rule behind');
  assert.ok(fn('beat').includes('weighty(r)')&&app.includes('Presentation.nightWeight(r)'),
@@ -222,8 +230,16 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
   assert.ok(!app.includes(dead),'the duplicated screen-local copy helper is gone: '+dead);
 });
 
-test('CLOSING supply impact names the actual product and the actual adventurer',()=>{
- assert.ok(fn('closingScreen').includes('Presentation.supplyImpact(r)'),'Closing reads the attribution helper');
+test('SA-Q21 / SA-Q34: Closing is economics-only, and supply-impact attribution stays correct where it is actually read',()=>{
+ /* Closing no longer repeats what NIGHT already owns: no 오늘의 보급 영향 block, and no
+    explanatory footer teaching accounting the receipt above it already shows in real figures.
+    The attribution helper itself (Presentation.supplyImpact/supplyLines) stays correct - it is
+    still a unit other Presentation callers (and tests/night.cjs) may use - Closing simply does
+    not call it any more. */
+ const closingEmitted=fn('closingScreen').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
+ assert.ok(!closingEmitted.includes('supplyImpact')&&!closingEmitted.includes('오늘의 보급 영향'),
+  'Closing reads no attribution helper and prints no impact block');
+ assert.ok(!closingEmitted.includes('미판매 재고는 자산으로 남는다'),'and no explanatory footer');
  const build=read('dist/ui/app.js')+read('dist/ui/presentation.js')+read('dist/systems/dungeon.js');
  for(const rejected of ['환경 부담을 줄였다','대응 보급이','환경 피해를 막았다'])
   assert.ok(!build.includes(rejected),'the rejected generic supply wording is gone: '+rejected);
@@ -642,7 +658,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
- assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stats \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stats \.tip>p,\.changed \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
  assert.ok(/\.readout \.tip>p,\.kit \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook and compact-state balloons drop');
  assert.ok(/\.detail-stats \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'and so does the Stat balloon, anchored on the grid itself');
  assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
@@ -650,10 +666,11 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  /* All three counter readings are read here now, so all three ? controls are here (UI-Q109). */
  assert.equal((readout.match(/\+tip\(/g)||[]).length,3,'the outlook explains the fight, the Death risk and the environment');
  assert.ok(/tip\('환경 대응'/.test(readout),'and the environment help sits with the reading it explains');
- /* The "not a result" caution is on the block itself, under the forecasts, rather than spent
-    inside a tooltip that has one line to name what it is showing. */
- assert.ok(/게이트 안에서 어떻게 될지까지는 아무도 모른다/.test(readout),
-  'the outlook still says a forecast is not a result, on the block rather than in a tooltip');
+ /* SA-Q30: the permanent forecast-disclaimer paragraph this used to close on is gone - the
+    existing anchored ?s already say what each figure is, and nothing replaces it with a
+    second explanation layer. */
+ assert.ok(!/게이트 안에서 어떻게 될지까지는 아무도 모른다/.test(readout)&&!readout.includes('class="estimate"'),
+  'the permanent forecast disclaimer paragraph is gone, and nothing new replaces it');
  assert.ok(css.includes('.readout .tip>summary:focus-visible'),'and it shows where the keyboard is');
  assert.ok(/\.dest-plate \.tip>summary:focus-visible/.test(css),'on the plate too');
  /* The help used to be a row of its own under the plate, which on a phone was a third line
@@ -674,7 +691,10 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/<details>/.test(till),'SALE opens no disclosure control of its own');
  assert.ok(!/<summary>이 손님에게 안 걸리는 효과/.test(app),'the retired control is gone');
  assert.ok(!/it\.description/.test(till),'and flavour prose has left the decision surface');
- assert.ok(/이 손님에게는 지금 걸리지 않는 효과/.test(till),'the effects it held are stated plainly instead');
+ /* SA-Q30: the same disclosure heading now reads 특수 효과 - conditional non-delta Item truth,
+    not a claim about this particular customer. */
+ assert.ok(/특수 효과/.test(till),'the effects it held are stated plainly instead');
+ assert.ok(!/이 손님에게는 지금 걸리지 않는 효과/.test(till),'the old customer-scoped heading is gone');
  assert.ok(/rest\.map\(r=>/.test(till),'every one of them, not a summary of them');
  assert.ok(!/effectList\(it\)/.test(till),'the full effect list is not repeated under the preview');
  assert.ok(fn('codex').includes('effectList(it)'),'it still lives in the Codex, where it is the point');
@@ -934,8 +954,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  /* D-13 / D-26: the forecast reads as the shopkeeper sizing someone up, and the boots are
     named for what they are for rather than for one Hazard they happen to answer. */
  assert.ok(!app.includes('지금의 능력과 준비로 본 예상'),'the spec-sheet disclaimer is gone');
- assert.ok(/estimate">[^<]*게이트 안에서 어떻게 될지까지는 아무도 모른다/.test(app),
-  'the forecast still says it is a forecast, in the shop own voice');
+ /* SA-Q30: that shopkeeper-voice line was itself the permanent forecast disclaimer v2.8
+    removes - the existing anchored ?s on 전투 전망/사망 위험/환경 대응 already say what each
+    figure is, so nothing replaces the paragraph it used to close on. */
+ assert.ok(!app.includes('class="estimate"')&&!app.includes('게이트 안에서 어떻게 될지까지는 아무도 모른다'),
+  'the permanent forecast disclaimer paragraph is gone');
  assert.ok(!read('dist/data/catalog.js').includes('진창용 원정 장화'),'the boots are renamed');
  assert.ok(read('dist/data/catalog.js').includes("item('boots','원정용 장화'"),'and keep their id');
 
@@ -1167,10 +1190,15 @@ test('D-30 / D-35: the notebook says what happened, or says nothing, and the win
  const P=globalThis.Presentation;
  assert.equal(P.eventLine({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'}),
   '대식가가 음식의 고유 효과를 30% 더 얻었다.','an event that wrote its own line keeps it');
- // the one that printed undefined: a Hazard mitigation carries the Hazards, not a sentence
- assert.equal(P.eventLine({id:'hazard',hazards:['poison','corrosion'],prevented:true}),'독·부식 피해 방지',
-  'and one that did not is described from what it holds');
- assert.equal(P.eventLine({id:'hazard',hazards:['fire']}),'화염 위험 감소','down to whether the damage landed');
+ /* SA-Q08: a Hazard mitigation is described from what it holds ONLY when RESULT-PROOF actually
+    proved it changed the Outcome (r.heroProof names the same Item) - the old ev.prevented
+    heuristic, and the 위험 감소 it fell back to otherwise, are both gone as unproven claims. */
+ assert.equal(P.eventLine({id:'hazard',hazards:['poison','corrosion'],items:['bandage']},{heroProof:{items:['bandage']}}),
+  '독·부식 피해 방지','proven, it is described from what it holds');
+ assert.equal(P.eventLine({id:'hazard',hazards:['fire'],items:['torch']},{}),null,
+  'unproven, it says nothing rather than guessing 위험 감소');
+ assert.equal(P.eventLine({id:'hazard',hazards:['fire'],items:['torch']},{heroProof:{items:['bandage']}}),null,
+  'a proof for a DIFFERENT Item does not borrow this one\'s claim');
  for(const nothing of [{id:'hazard',hazards:[]},{id:'unknown-thing'},{},null])
   assert.equal(P.eventLine(nothing),null,'an event with nothing to say is left out: '+JSON.stringify(nothing));
  assert.ok(fn('codex').includes('discoveryLines(a)')&&!fn('codex').includes('E(e.text)'),
@@ -1309,11 +1337,18 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  assert.deepEqual(own.derived,[],'and brings no system row with it');
  // the hidden Supply-deficit formula is never exposed by the attribution
  for(const r of relief.derived)assert.ok(!/[0-9]+%|penalty|deficit/i.test(r.text),'the row names the channel, not the formula: '+r.text);
- // the screen groups them, so a derived change cannot read as the Item's own contribution
+ /* SA-Q30: the two analytical group names that used to sit over the direct/derived rows
+    (이 상품이 직접 / 보급이 상태에 미치는 영향) were the label-density bug v2.8 closes - one
+    heading (판매 후 변화) now covers the whole list, and only the `effects`/`effects derived`
+    class still tells a derived row apart, for styling, never for a second heading. */
  const panel=fn('sellPanel')||app;
- assert.ok(/이 상품이 직접/.test(app)&&/보급이 상태에 미치는 영향/.test(app),'each group is headed by its source');
- assert.ok(/moved\.derived\.length\?'<p class="delta-src">/.test(app),'and a group with nothing in it is absent');
- assert.ok(/\.delta-src\{/.test(css),'the heading has a style of its own');
+ const tillEmitted=fn('till').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
+ assert.ok(!/이 상품이 직접/.test(tillEmitted)&&!/보급이 상태에 미치는 영향/.test(tillEmitted),
+  'the old per-group analytical headings are gone');
+ assert.ok(tillEmitted.includes('<h4>판매 후 변화</h4>'),'one heading covers the whole list');
+ assert.ok(/changes\.length\?'<ul class="effects">/.test(tillEmitted)&&/moved\.derived\.length\?'<ul class="effects derived">/.test(tillEmitted),
+  'and a group with nothing in it is still absent');
+ assert.ok(/\.delta-src\{/.test(css),'the remaining 특수 효과 heading keeps its own style');
 });
 
 test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer',()=>{
@@ -1616,7 +1651,7 @@ test('UI-Q-v28-6: the shared popover opens on hover and on keyboard focus, and s
  // nothing here may reveal a balloon through CSS, which a tap would then fight
  assert.ok(!/\.tip:hover>p|\.tip:focus-within>p/.test(css),'no CSS :hover reveal races the toggle');
  // and the balloon is still out of flow, so a pointer can never change a panel height
- assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stats \.tip>p\{position:absolute/.test(css),
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stats \.tip>p,\.changed \.tip>p\{position:absolute/.test(css),
   'the balloon stays out of flow on every surface that has one');
 });
 

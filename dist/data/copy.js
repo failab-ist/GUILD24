@@ -80,7 +80,10 @@ const Copy={
  },
  buy(n,itemId,mode,day){return pick(sale[mode]||sale.full,key(n,'buy'+itemId+mode,day));},
  refuse(n,itemId,reason,day){return pick(sale.refuse[reason]||sale.refuse.choice,key(n,'no'+itemId+reason,day));},
- /* 밤의 한 줄. 상태 선택 순서는 기존 결과 판정과 같고, 문장만 Pool에서 고른다. */
+ /* SA-Q09: 밤의 한 줄. Bag이 있었다는 사실 하나만으로는 어떤 말도 고르지 않는다 - 예전 순서는
+    report.items.length(가방에 뭐가 있었는지)를 성장보다도, 퇴각보다도 먼저 물었는데, 그건 그
+    보급이 실제로 무언가를 했는지와 무관한 존재 여부일 뿐이었다. v2.8 우선순위는 실제로 일어난
+    결과만 묻는다: 생환/구조 -> 중상 -> 부상 -> 퇴각 -> 성장 -> 평범한 귀환. */
  night(report,n){
   const k=key(n,'night',report.day);
   if(report.outcome==='사망')
@@ -89,10 +92,8 @@ const Copy={
   if(report.rescued)return pick(night.rescued,k);
   if(report.outcome==='중상')return pick(night.severe,k);
   if(report.outcome==='부상')return pick(night.hurt,k);
-  if((report.changes||[]).length)return pick(night.grew,k);
-  if((report.items||[]).length)return pick(night.supplied,k);
-  if(report.environmentHurt)return pick(night.shaken,k);
   if(report.outcome==='퇴각')return pick(night.retreat,k);
+  if((report.changes||[]).length)return pick(night.grew,k);
   return pick(night.plain,k);
  },
  /* 사망 Pool과 생존 Pool은 절대 겹치지 않는다. 테스트가 이 경계를 고정한다. */

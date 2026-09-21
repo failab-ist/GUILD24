@@ -141,6 +141,13 @@ function render(){
  const s=game.run;Sound.sync(game.account.settings.muted,s?.phase,game.account.settings);
  if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),btn('첫 영업 준비','new','stamp'));if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
+ /* SA-Q09: every LIVING Night result speaks through the same temporary balloon the SALE
+    counter uses - no permanent blockquote, no second speech mechanism. `speech()` already
+    ignores a redraw of the line it is already showing (its own sayKey/sayHidden guard), so
+    setting this on every render of the same beat does not restart the bubble or its timer.
+    Death is narration only, per NIGHT_CLOSING, so it never sets a line here. */
+ if(phase==='night'){const r=s.results[s.nightCursor||0];
+  s.say=(r&&r.outcome!=='사망'&&r.quote)?{npc:r.npcId,text:r.quote}:null;}
  /* Replacing #app wholesale drops focus. On a redraw of the same view it goes back on the
     same control, or a keyboard user is thrown to the top of the screen on every pick.
     The handle is the data-action/data-id the click delegation already uses, plus the
@@ -304,7 +311,7 @@ function relicWindowLink(){const w=game.run.relicWindow;if(!game.canBuyRelic())r
  return '<button class="brass" data-action="relics">점포지원<br>'+(w.milestoneDay===0?'무료':'D'+(w.expiryDay-1)+'까지')+'</button>';}
 // The readiness readout. Qualitative only: 우세/접전/불리 and 취약/불안/대응/충분.
 function readout(n,extra=null,cls=''){
- const compact=!!extra,d=game.claimedGateFor(n);
+ const d=game.claimedGateFor(n);
  /* SALE_v2.7: the Bag read here is the COMMITTED one. A focused, unpurchased Item may show its
     own exact effects and the deterministic Supply/Fatigue arithmetic, but never a moved
     Forecast/Readiness/Death/signal - so `extra` no longer enters the preparation at all. */
@@ -340,27 +347,28 @@ function readout(n,extra=null,cls=''){
    +tip('환경 대응','압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준')+'</span>':'')
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
- /* DUNGEON_HAZARD_v2.7 §PLAYER-FACING INFORMATION BOUNDARY. These are decision ingredients,
-    not a forecast: exact public arithmetic on the CURRENT committed Bag, so unlike the frozen
-    outlook above they do move as Items are sold. The conditional row is arithmetic for each
-    Outcome that can actually happen - it predicts nothing about which one will. The hidden
+ /* DUNGEON_HAZARD §FATIGUE INFORMATION BOUNDARY. These are decision ingredients, not a
+    forecast: exact public arithmetic on the CURRENT committed Bag, so unlike the frozen
+    outlook above they do move as Items are sold. SA-Q06: the hypothetical branch table this
+    used to end on - one projected Fatigue per Outcome that has not happened yet - is gone;
+    only current/departure Fatigue and the compact Supply truth remain. The hidden
     Supply-deficit formula stays hidden; only the deficit amount is named. */
  +(()=>{const e=p.effects,dep=e.fatigueBeforeExpedition,buf=e.remainingSupplyBuffer;
-   const gain=b=>Math.max(0,b-buf),fin=b=>Math.max(0,Math.min(20,dep+gain(b)));
    const rows=[];
    if(e.beforeFatigue||e.preRecovery)
     rows.push('피로 '+e.beforeFatigue+' → 출발 '+dep+(e.preRecovery?' · 보급 회복 -'+e.preRecovery:''));
    if(p.supply.deficit)rows.push('보급 부족 '+p.supply.deficit+' · 준비 전체에 페널티');
    else if(buf)rows.push('남은 보급 '+Math.round(buf)+' · 결과 피로를 그만큼 줄인다');
-   rows.push('밤 피로 · 성공 '+fin(3)+' · 퇴각 '+fin(5)+' · 부상 '+fin(6));
-   return '<p class="ingredients">'+rows.map(E).join('<br>')+'</p>';})()
+   return rows.length?'<p class="ingredients">'+rows.map(E).join('<br>')+'</p>':'';})()
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
     against it live in one place - the 예상 목적지 plate below - so the player reads the danger
     where the destination is named instead of meeting a second, differently-worded copy of it
     inside the outlook. The outlook keeps only what is about the expedition as a whole:
-    the Combat Forecast and the conditional Death risk. */
- +(compact?'':'<p class="estimate">오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다. 게이트 안에서 어떻게 될지까지는 아무도 모른다.</p>')+'</div>';}
+    the Combat Forecast and the conditional Death risk. SA-Q30: the permanent forecast
+    disclaimer that used to close this panel is gone; existing anchored ?s already cover
+    what each figure means, so nothing replaces it. */
+ +'</div>';}
 /* Returning history is useful reference, not the current decision. It therefore starts folded
    to one line; opening it is local reading state and does not hide current Stats or Traits. */
 function returningSummary(n){const r=Presentation.returning(n);if(!r)return '';
@@ -560,20 +568,26 @@ function beat(r){
  const n=game.run.npcs.find(x=>x.id===r.npcId),tone=Presentation.nightTone(r),heavy=weighty(r);
  /* NIGHT_CLOSING §RESULT OUTCOMES: six outcomes in three volumes, not two. */
  const rank=Presentation.nightRank(r);
- const verdict=Presentation.nightVerdict(r),why=Presentation.nightWhy(r);
+ const verdict=Presentation.nightVerdict(r),why=Presentation.nightWhy(r),hero=Presentation.heroLine(r);
+ /* SA-Q09: the character's own line is the temporary SALE-style balloon (speech(n)), never a
+    permanent blockquote - a routine return and a rescue both get to speak, not only the
+    "heavy" ones, and the line goes away on its own instead of sitting on the card forever. */
  return '<article class="beat '+rank+' t-'+tone+(heavy?'':' quiet')+'">'
  +'<div class="stand-in">'
-  +portrait(n,150,'returner')
+  +speech(n)+portrait(n,150,'returner')
   +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
    +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
    +(r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
  +'</div>'
  +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
+ /* SA-Q33: the Outcome sentence above states WHAT happened; this states WHY the Player's own
+    sold Item mattered, ONLY when DUNGEON_HAZARD's RESULT-PROOF actually proved it - never a
+    second name for the Outcome sentence, and never competing with it. */
+ +(hero?'<p class="hero">'+E(hero)+'</p>':'')
  +(why?'<p class="why"><i aria-hidden="true"></i>'+E(why)+'</p>':'')
  +'<div class="changed">'+changedRows(r)+'</div>'
- +supplyNote(r)
- +(heavy?'<blockquote>'+E(r.quote)+'</blockquote>':'')+'</article>';}
+ +supplyNote(r)+'</article>';}
 // Importance decides how much copy a beat spends, never how big the adventurer is
 // (UI-Q31). Presentation owns the rule so screen and tests share it.
 const weighty=r=>Presentation.nightWeight(r);
@@ -592,7 +606,15 @@ function changedRows(r){
   if(r.deep.bonusWallet)extra.push({kind:'gold',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
  }
  const n = game.run.npcs.find(x=>x.id===r.npcId);
- return [...Presentation.nightChanges(r, n),...extra].map(c=>'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
+ /* NIGHT_CLOSING §FATIGUE RESULT. The settled 귀환 후 피로 token is the only one carrying a
+    `detail` - the resolved 출발 -> ... -> 귀환 후 arithmetic - so it alone joins the one shared
+    anchored tip (same exclusive group, same out-of-flow balloon, same hover/focus/tap and
+    outside-tap/Escape behavior everywhere else on screen already uses). Every other token
+    stays the plain stamped chip it always was. */
+ return [...Presentation.nightChanges(r, n),...extra].map(c=>c.detail
+  ?'<details class="tip '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
+   +'<p><span>'+E(c.detail)+'</span></p></details>'
+  :'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
   +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>').join('');}
 // CLOSING — `오늘 장사는 어땠을까?`. Economics only; the expedition story belongs to Night.
 // The object is the till roll the register printed when the shutter came down: a narrow
@@ -604,9 +626,11 @@ function closingScreen(){
  const s=game.run,d=s.daily,margin=d.revenue-d.cogs;
  const profit=margin+(d.subsidy||0)+(d.commission||0)+(d.greatSuccess||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
  const line=(label,value,cls='')=>'<div class="row '+cls+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
- /* only what an actual sold item actually did, named product first. A sale with no
-    meaningful expedition contribution simply does not appear. */
- const impact=s.results.flatMap(r=>Presentation.supplyImpact(r)).slice(0,4);
+ /* SA-Q21 / SA-Q34: Closing is economics-only. What an actual sold Item did for an actual
+    expedition is NIGHT's own causality, already told there through the Outcome sentence and
+    the proven Hero Item line - repeating it here under 오늘의 보급 영향 duplicated it, in a
+    place with no adventurer on screen to attribute it to. The explanatory footer taught
+    internal accounting the receipt above it already shows in real figures. Neither returns. */
  const body='<div class="tape">'
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
@@ -620,9 +644,6 @@ function closingScreen(){
   +'<div class="block">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)
    +(d.deepSponsor?line(Copy.deep.sponsor,-d.deepSponsor):'')+line('재고 정리',d.liquidation)+'</div>'
   +'<div class="purse"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b></div>'
-  +(impact.length?'<div class="impact"><h4>오늘의 보급 영향</h4>'
-    +impact.map(l=>'<p><b>'+E(l.items.join(' · '))+'</b><span>'+E(l.who)+'의 '+E(l.effect)+'</span></p>').join('')+'</div>':'')
-  +'<p class="foot">미판매 재고는 자산으로 남는다. 발주 지출과 판매 원가를 손익에서 두 번 빼지 않는다.</p>'
  +'</div>'
  +'<div class="tear bottom" aria-hidden="true"></div></div>';
  const rescue=game.canRescue(),spent=(s.rescueUsed||0),cap=game.rescueLimit();
@@ -856,29 +877,27 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
  return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho"><span>'+E(n.name)+'에게 판매</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>')
- /* SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: the rows are grouped by what actually produced
-    them. A Stat that rose because this Item's Supply relieved a Supply Deficit, or because it
-    crossed a Fatigue band, is said as 보급 부족 완화 / 피로 완화 - never as if the Item itself
-    granted that Stat. If a channel did not move, its group is simply absent. */
- +'<h4>보급 후 변화</h4>'
+ /* SA-Q30: the rows are still grouped by what actually produced them internally - a Stat that
+    rose because this Item's Supply relieved a Supply Deficit, or crossed a Fatigue band, is
+    still never presented as if the Item itself granted that Stat - but the two group names
+    that used to sit over them (이 상품이 직접 / 보급이 상태에 미치는 영향) were the analytical
+    label stack v2.8 removes: one heading now covers the whole list, and only the underlying
+    `effects`/`effects derived` class still tells them apart for styling. */
+ +'<h4>판매 후 변화</h4>'
  +(changes.length||moved.derived.length?'':'<ul class="effects"><li><span>현재 준비 변화 없음</span><b></b></li></ul>')
- +(changes.length?'<p class="delta-src">이 상품이 직접</p><ul class="effects">'
+ +(changes.length?'<ul class="effects">'
    +changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join('')
    +'</ul>':'')
- +(moved.derived.length?'<p class="delta-src">보급이 상태에 미치는 영향</p><ul class="effects derived">'
+ +(moved.derived.length?'<ul class="effects derived">'
    +moved.derived.map(r=>'<li><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')
    +'</ul>':'')+readout(n,it.id)
- /* SALE_v2.7 §SALE DECISION-ONLY DETAIL. The disclosure that held these was removed: a control
-    labelled 이 손님에게 안 걸리는 효과 · 상품 설명 looks strategically important and opened
-    mostly flavour prose, which is exactly the false information weight the owner is cutting.
-    The flavour itself leaves the decision surface - it still lives in the 도감 - but the real
-    effects do NOT get hidden with it: a Counter this customer does not need today and an
-    insurance that only fires on a bad outcome are still Item truth, so they are stated plainly
-    instead of being folded away. */
+ /* SA-Q30: conditional non-delta Item truth - a Counter this customer does not need today, an
+    Insurance that only fires on a bad outcome - is still stated plainly rather than folded
+    away, under its approved v2.8 heading. */
  +(()=>{const shown=new Set(changes.map(r=>r.key));
    const rest=Presentation.rows(it.effects).filter(r=>!shown.has(r.key));
    if(!rest.length)return '';
-   return '<p class="delta-src">이 손님에게는 지금 걸리지 않는 효과</p><ul class="effects">'
+   return '<p class="delta-src">특수 효과</p><ul class="effects">'
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
  +'<p class="smalltext">'+(st.expires===null?'유통기한 없음':'폐기까지 '+(st.expires-s.day)+'일')+'</p>'
  +'<div class="tills">'+actions+'</div></div>';}
