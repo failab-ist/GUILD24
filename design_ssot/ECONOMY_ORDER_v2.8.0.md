@@ -39,16 +39,18 @@ Those remain owned by DUNGEON_HAZARD_v2.8.0.md and the inherited growth rules.
 
 ## DEEP SPONSORSHIP — EXACT RETAINED BASELINE
 
-The inherited sponsorship formula remains current:
+The approved playtest-response formula is:
 
     sponsorship
-    = 350G
+    = 200G
       × (1 + 0.20 × NPC rarity index)
       × (1 + 0.05 × (Level - 1))
 
-Round to the nearest 10G under the existing rule.
+Round to nearest 10G under the existing rule.
 
-No v2.8 sponsorship-cost increase is introduced.
+Only the base changes 350G -> 200G.
+Rarity step, Level step and rounding remain unchanged.
+No compensating Deep reward/difficulty rebalance is introduced.
 
 Deep difficulty/occurrence -> DUNGEON_HAZARD_v2.8.0.md.
 Deep NPC reward -> NPC_TRAIT_v2.8.0.md.
@@ -64,18 +66,13 @@ The exact purchase probability remains hidden from the Player.
 
 For an offered Item:
 
-    judgedPrice
-    = round(Item list sell price × mode intent multiplier)
+Accessible modes:
+    50% 할인 / 정가
 
-Mode intent values:
+Accessible-mode base need:
+    need = 0.80
 
-| Mode | charged multiplier | intent multiplier | flat intent |
-|---|---:|---:|---:|
-| 50% 할인 | 0.50 | 0.50 | +0.18 |
-| 정가 | 1.00 | 0.65 | 0 |
-| 바가지 | 1.50 | 1.50 | -0.16 |
-
-Base need:
+For 바가지, preserve the existing pre-amendment need calculation:
 
     fit
     = sum of positive Item Counter values for this customer's actual Gate Hazards
@@ -83,15 +80,28 @@ Base need:
     need
     = 0.53 + min(0.29, fit × 0.012)
 
-Then apply only current owned modifiers:
+Mode values remain:
+
+| Mode | charged multiplier | intent multiplier | flat intent |
+|---|---:|---:|---:|
+| 50% 할인 | 0.50 | 0.50 | +0.18 |
+| 정가 | 1.00 | 0.65 | 0 |
+| 바가지 | 1.50 | 1.50 | -0.16 |
+
+Apply current owned modifiers:
 - injured customer + Insurance: +0.25
-- one Bag slot already filled: -0.10
 - Trait buyBias
 - Trait priceBias when judgedPrice > 120G
 - Trait Rare/Common bias by Item Rarity
 - Trait overcharge bias on 150%
 - applicable Store Support modifier
 - applicable Event demand modifier
+
+The former one-Bag-slot-filled -0.10 purchase modifier is retired.
+The two-slot Bag is the capacity decision by itself.
+
+Loyalty remains:
+    +0.002 purchase chance per current Loyalty point
 
 Affordability:
 
@@ -101,46 +111,72 @@ Affordability:
     actualDebit
     = max(0, chargedPrice - applicable owned guarantee support)
 
-    burden
-    = max(0, judgedPrice - applicable owned guarantee support)
-      / max(1, effectiveWallet)
-
 If effectiveWallet < actualDebit:
-
     purchaseChance = 0
 
 Otherwise:
 
-    purchaseChance
-    = clamp(
-        need
-        + Loyalty × 0.002
-        + mode flat intent
-        + burdenIntentBonus,
-        0.08,
-        0.97
-      )
+For 정가 only:
 
-Where:
+    judgedPrice = round(Item list sell price × 0.65)
+
+    burden
+    = max(0, judgedPrice - applicable owned guarantee support)
+      / max(1, effectiveWallet)
 
     burdenIntentBonus
-    = modeIntentWeight × max(0, modeIntentPivot - burden)
+    = 0.50 × max(0, 0.36 - burden)
 
-The term is a bonus only. A burden at or above the pivot contributes 0; it never subtracts.
-Affordability is already decided by the effectiveWallet < actualDebit gate above.
+For 50% 할인 and 바가지:
+    burdenIntentBonus = 0
 
-Only 정가 has the burden term:
+    rawChance
+    = need
+      + Loyalty × 0.002
+      + mode flat intent
+      + burdenIntentBonus
+      + applicable current modifiers
 
-    modeIntentPivot = 0.36
-    modeIntentWeight = 0.50
+For affordable 50% 할인 / 정가, if the Item validly Counters at least one Hazard of this customer's
+actual Gate under the game's canonical Counter semantics:
 
-50% 할인 and 바가지는:
+    purchaseChance = 0.97
 
-    modeIntentWeight = 0
+This final Counter floor/cap applies even when a negative purchase Trait would otherwise lower
+rawChance.
 
-This probability is internal Design Truth.
-Player-facing information remains governed by SALE/UI information-boundary rules and must not show
-the exact acceptance chance.
+For non-Counter 50% 할인 / 정가:
+    purchaseChance = clamp(rawChance, 0.08, 0.97)
+
+For 바가지:
+    purchaseChance = clamp(rawChance, 0.08, 0.97)
+
+No new Counter floor is added to 바가지.
+
+Reuse canonical Counter truth; do not maintain a second narrower purchase-only definition.
+Existing mobility-based answers for bind/mire remain valid wherever the canonical Counter predicate
+recognizes them.
+
+Exact acceptance probability remains hidden from the Player.
+
+### Ordinary NPC Wallet on visit — exact
+
+When a selected NPC arrives for an ordinary visit:
+
+Fresh NPC:
+    Wallet = min(2000, round(180 + Level × 8 + randomInt(0, 100)))
+
+Returning NPC:
+    Wallet = min(2000, round(existing Wallet + Level × 8 + randomInt(0, 100)))
+
+Rules:
+- random range is inclusive 0..100 under the existing integer RNG convention
+- Level ×8 remains
+- persistent Wallet carries between visits
+- 2000 cap remains
+- explicit Trait / Event / Store Support Wallet effects remain separate under their owners
+- failed-expedition Loot is unchanged by this amendment
+- re-measure the failure -> low Wallet -> under-supplied -> failure loop before further reward tuning
 
 ### Base operating cost — exact
 

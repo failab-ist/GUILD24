@@ -33,42 +33,56 @@ FAIL:
 
 Expected:
 
-    base 350G
+    base 200G
     rarity step 0.20
     level step 0.05
     rounding 10G
 
-No v2.8 cost increase is applied implicitly.
+PASS:
+- only base changed from previous 350G
+- rarity/Level scaling and rounding unchanged
+- no compensating Deep reward/difficulty rebalance
 
 ## ECO-Q-v28-3 — ORDINARY PURCHASE ACCEPTANCE BASELINE
 
-Controlled customer/Item states must reproduce the exact hidden formula in ECONOMY_ORDER_v2.8.0.md.
+Controlled states reproduce ECONOMY_ORDER_v2.8.0 exactly.
 
-PASS exact:
-- mode charged/intention multipliers:
-  - 50% = 0.50 / 0.50
-  - 100% = 1.00 / 0.65
-  - 150% = 1.50 / 1.50
-- flat mode intent = +0.18 / 0 / -0.16
-- base need = 0.53 + min(0.29, positive matching Counter sum ×0.012)
-- injured + Insurance = +0.25
-- one occupied Bag slot = -0.10
-- Loyalty contribution = +0.002 per point
-- only 100% uses the pivot 0.36 / weight 0.50 burden term, and it is a BONUS only:
-  - burden < 0.36 -> positive contribution
-  - burden = 0.36 -> exactly 0
-  - burden > 0.36 -> exactly 0, never negative
-- effective Wallet includes current temporary Event purchase budget
-- unaffordable actual debit -> chance 0
-- otherwise final chance clamp = 0.08–0.97
-
-Trait / Store Support / Event modifiers must enter only through their current owner rules.
+PASS:
+- 50% / 100% base need = 0.80
+- 150% keeps its pre-amendment need calculation
+- flat mode intent remains +0.18 / 0 / -0.16
+- one occupied Bag slot applies no purchase penalty
+- Loyalty remains +0.002 per point
+- current Trait / Store Support / Event modifiers remain active
+- only 100% keeps pivot 0.36 / weight 0.50 burden bonus, never a penalty
+- effective Wallet includes temporary Event purchase budget
+- unaffordable debit -> chance 0
+- affordable 50% / 100% canonical Counter -> final chance 0.97
+- canonical Counter semantics are reused, including mobility answers for bind/mire
+- non-Counter 50% / 100% and all 150% use normal 0.08–0.97 clamp
+- 150% receives no new Counter floor
 
 FAIL:
-- the burden term subtracts from 정가 acceptance at any burden
-- exact purchase probability appears in Player UI
-- price mode charged amount is changed to match its hidden judged amount
-- a second acceptance formula is used by another surface
+- Bag occupancy subtracts from purchase intent
+- a purchase-only Counter test disagrees with canonical Counter truth
+- accessibility rebalance silently boosts 150%
+- exact probability appears in Player UI
+- another surface uses a second acceptance formula
+
+## ECO-Q-v28-3B — ORDINARY NPC WALLET ON VISIT
+
+Fresh:
+    min(2000, 180 + Level ×8 + randomInt(0,100))
+
+Returning:
+    min(2000, existing Wallet + Level ×8 + randomInt(0,100))
+
+PASS:
+- 0 and 100 endpoints are reachable under existing integer RNG convention
+- returning NPC keeps persistent Wallet before visit income is added
+- cap 2000 remains
+- failed-expedition Loot is unchanged
+- no extra RNG draw beyond replacing the existing visit-income range draw
 
 ## ECO-Q-v28-4 — BASE OPERATING COST EXACT
 
