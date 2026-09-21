@@ -2654,3 +2654,38 @@ SOURCE COPY IMPLEMENTATION = REQUIRED
 ```
 
 이 문서의 수정안은 v2.8 Canonical Copy amendment다. Current Source는 이 승인본을 채택해야 한다.
+
+## 2026-09-22 PLAYTEST COPY AMENDMENT
+
+This amendment supersedes conflicting earlier copy-placement clauses in this document.
+
+### 단골도 — normal SALE
+
+Do not show the previous normal-SALE Loyalty Popover / `?`.
+
+Normal SALE:
+    단골도 {N}
+
+Tutorial/coach:
+    단골도 {N}
+    높을수록 구매 의사·재방문 가능성 증가
+    51부터 단골
+
+The compact global 점주 가이드 remains a separate reference surface.
+
+### DAY 0 첫 점포지원
+
+Label:
+    DAY 0
+
+Heading:
+    첫 점포지원
+
+Body:
+    이번 영업에 쓸 지원 하나를 고르세요.
+
+Delete from this decision surface:
+    하나는 무료다. 고르면 영업이 시작된다.
+    하나를 골라야 영업이 시작된다.
+
+The D0 Boss objective appears after the first support choice as a separate Boss-information beat.

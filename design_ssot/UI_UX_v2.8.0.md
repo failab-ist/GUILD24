@@ -121,7 +121,6 @@ affordance.
 Use one lightweight anchored popover language for:
 - Stat source
 - Fatigue arithmetic
-- Loyalty meaning
 - deterministic Store Support/Event source
 - short help for forecast/readiness/death risk
 

@@ -86,19 +86,21 @@ Do not say Supply always increases Great Success.
 
 ## LOYALTY POPOVER
 
-Base copy:
+Superseded as a normal SALE popover by the 2026-09-22 playtest amendment.
+
+Normal SALE shows only the compact Loyalty value/state.
+No separate Loyalty `?` is shown there.
+
+Tutorial/coach copy:
 
     단골도 {N}
-    높을수록 상품 구매 의사와 재방문 가능성이 오른다.
-    51부터 단골로 인정된다.
+    높을수록 구매 의사·재방문 가능성 증가
+    51부터 단골
 
-Append only current/revealed conditions that actually exist for this Run:
-- 귀환 적립제
-- 프리미엄 멤버십
-- 평생 단골제
-- revealed LUST rule
+Do not append Store Support/Boss condition detail to the normal SALE state.
+Boss-specific information must still obey its reveal boundary.
 
-Do not leak LUST before reveal.
+Global compact Help retains its separately owned reference wording.
 
 ## DEEP EXPEDITION REPEAT COPY
 
