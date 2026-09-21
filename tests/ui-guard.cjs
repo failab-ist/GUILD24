@@ -1191,14 +1191,14 @@ test('D-30 / D-35: the notebook says what happened, or says nothing, and the win
  assert.equal(P.eventLine({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'}),
   '대식가가 음식의 고유 효과를 30% 더 얻었다.','an event that wrote its own line keeps it');
  /* SA-Q08: a Hazard mitigation is described from what it holds ONLY when RESULT-PROOF actually
-    proved it changed the Outcome (r.heroProof names the same Item) - the old
+    proved it changed the Outcome (r.heroProof.outcome names the same Item) - the old
     ev.prevented heuristic, and the 위험 감소 it fell back to otherwise, are both gone as
     unproven claims. */
- assert.equal(P.eventLine({id:'hazard',hazards:['poison','corrosion'],items:['bandage']},{heroProof:{items:['bandage']}}),
+ assert.equal(P.eventLine({id:'hazard',hazards:['poison','corrosion'],items:['bandage']},{heroProof:{outcome:{items:['bandage']}}}),
   '독·부식 피해 방지','proven, it is described from what it holds');
  assert.equal(P.eventLine({id:'hazard',hazards:['fire'],items:['torch']},{}),null,
   'unproven, it says nothing rather than guessing 위험 감소');
- assert.equal(P.eventLine({id:'hazard',hazards:['fire'],items:['torch']},{heroProof:{items:['bandage']}}),null,
+ assert.equal(P.eventLine({id:'hazard',hazards:['fire'],items:['torch']},{heroProof:{outcome:{items:['bandage']}}}),null,
   'a proof for a DIFFERENT Item does not borrow this one\'s claim');
  for(const nothing of [{id:'hazard',hazards:[]},{id:'unknown-thing'},{},null])
   assert.equal(P.eventLine(nothing),null,'an event with nothing to say is left out: '+JSON.stringify(nothing));

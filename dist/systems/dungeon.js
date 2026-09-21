@@ -299,7 +299,7 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
    separate removals), then the whole Bag if no single Item is individually provable. Ties on
    the SAME resulting worse tier are credited together; a worse tier beats a milder one rather
    than stacking several heroic claims. */
-function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome){
+function outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome){
  const idx=OUTCOME_ORDER.indexOf(actualOutcome);
  if(!pack.length)return null;
  const per=pack.map((id,i)=>({id,tier:shadowOutcome(departure,d,facilities,pack.filter((_,j)=>j!==i),ev,severeEscalation)}));
@@ -312,6 +312,34 @@ function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutco
  const bareTier=shadowOutcome(departure,d,facilities,[],ev,severeEscalation);
  if(bareTier!==UNPROVEN&&OUTCOME_ORDER.indexOf(bareTier)>idx)return {items:null,worse:bareTier};
  return null;
+}
+/* PERSISTENT-STATE PROOF (구급키트 Aftercare). Canonical: a sold Item may make a proven
+   persistent-state difference even when the text Outcome is unchanged. Only relevant when
+   Aftercare actually fired on the real resolution - the question per Item is then: with THIS
+   item gone, does the shadow settle on the SAME Outcome tier (a different tier is already the
+   outcome proof's claim, not this one) but WITHOUT the aftercare gate that only that item
+   supplies, leaving a worse persistent Injury than the real, aftercare-relieved one? */
+function shadowInjuryBeforeAftercare(tier,departureInjury){
+ return tier==='중상'?2:tier==='부상'?1:tier==='퇴각'?departureInjury:0;
+}
+function stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
+ if(!actualAftercare||!pack.length)return null;
+ const idx=OUTCOME_ORDER.indexOf(actualOutcome);
+ const items=[...new Set(pack.map((id,i)=>{
+  const shadowPack=pack.filter((_,j)=>j!==i);
+  const tier=shadowOutcome(departure,d,facilities,shadowPack,ev,severeEscalation);
+  if(tier===UNPROVEN||OUTCOME_ORDER.indexOf(tier)!==idx)return null; // a differing tier is outcomeProof's claim, not this one
+  const sp=prepare({...departure,pack:shadowPack},d,facilities);
+  const before=shadowInjuryBeforeAftercare(tier,departure.injury);
+  const shadowFinal=((sp.effects.aftercare||0)>0&&before>0)?(before===2?1:0):before;
+  return shadowFinal>actualAftercare.to?id:null;
+ }).filter(Boolean))];
+ return items.length?{items}:null;
+}
+function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
+ const outcome=outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome);
+ const state=stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare);
+ return outcome||state?{outcome,state}:null;
 }
 function resolve(n,d,r,facilities=[],options={}){
  const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
@@ -433,7 +461,7 @@ function resolve(n,d,r,facilities=[],options={}){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll},severeEscalation,outcome);
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll},severeEscalation,outcome,aftercare);
  const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&((e.poison||0)>10||(e.curePoison||0)>0),/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
