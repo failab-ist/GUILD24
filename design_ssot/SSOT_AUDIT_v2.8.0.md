@@ -12,6 +12,8 @@ COPY_REAUDIT_STATUS=COMPLETE
 V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
+PLAYTEST_RESPONSE_REAUDIT_DATE=2026-09-22
+PLAYTEST_RESPONSE_CANONICAL_STATUS=COMPLETE
 
 ## PURPOSE
 
@@ -41,6 +43,33 @@ Current v2.8 Canonical resolves:
 - semantic change attribution
 - current Copy / terminology cleanup
 - current known Source-adoption defects
+
+## 2026-09-22 PLAYTEST RESPONSE DELTA AUDIT
+
+User-approved playtest findings were re-routed into the current owners without creating a second
+Design truth.
+
+Canonical changes now covered:
+- normal SALE keeps compact Loyalty but removes the dedicated Loyalty `?` / popover
+- Equipment leaves the compact SALE top strip; proven Stat attribution remains
+- the two Bag slots stay horizontal; only the whole Bag block may wrap
+- DAY 0 order is first Store Support choice -> separate D0 Boss-information beat -> DAY 1
+- first Store Support decision copy is reduced to the approved compact three-line form
+- 50% / 100% ordinary purchase acceptance uses the approved 0.80 base need
+- Loyalty remains +0.002 purchase chance per point
+- one-filled-Bag purchase penalty is retired
+- affordable valid Counter offers at 50% / 100% resolve at the existing 0.97 ceiling
+- overcharge keeps its existing acceptance behavior
+- ordinary NPC visit Wallet uses fresh base 180 and random visit income 0..100
+- Deep sponsorship base is 200G with rarity/Level scaling and 10G rounding unchanged
+- reused `bar` / `herobar` IDs must use current meal / mineral-water visual identity
+
+QA coverage was added/updated in the routed current QA owners.
+The remaining Result-Proof / SALE-NIGHT-CLOSING adoption and dialogue recent-repeat work already had
+current Canonical owner truth; only missing dialogue-repeat QA acceptance was added during this
+re-audit.
+
+No new implementation-blocking Design unresolved item was found.
 
 ## STALE CURRENT-CHAIN CLAUSES SUPERSEDED
 
