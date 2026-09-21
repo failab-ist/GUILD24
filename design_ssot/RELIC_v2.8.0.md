@@ -15,6 +15,21 @@ Player-facing active system name:
 
 Internal source IDs/files may retain relic where changing them adds unnecessary migration/refactor risk.
 
+## DAY 0 FIRST SUPPORT FLOW — EXACT
+
+At Run start, the first Store Support choice is the first DAY 0 decision.
+
+The Store Support takeover contains only the support decision and its own compact copy.
+It does not carry the D0 Boss objective above the candidate cards.
+
+After one first support is chosen:
+- the support commits under existing foundation rules
+- the separate D0 Boss-information beat is shown
+- ordinary DAY 1 begins only after acknowledgement
+
+Exact first-support copy -> COPY_WORLD_VOICE_v2.8.0.md.
+Exact flow/order -> CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md.
+
 ## INHERITANCE
 
 All unchanged v2.7 acquisition windows, candidate generation, build axes, Fresh composition,

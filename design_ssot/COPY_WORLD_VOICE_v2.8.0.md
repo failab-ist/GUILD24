@@ -138,6 +138,28 @@ Environment flavor may be used only where it does not override the actual Outcom
 
 Death uses narration, not quoted living dialogue.
 
+## FIRST STORE SUPPORT COPY — EXACT
+
+DAY 0 first-support surface:
+
+Label:
+    DAY 0
+
+Heading:
+    첫 점포지원
+
+Body:
+    이번 영업에 쓸 지원 하나를 고르세요.
+
+Do not keep:
+- 하나는 무료다. 고르면 영업이 시작된다.
+- 하나를 골라야 영업이 시작된다.
+
+Candidate price/state already communicates the free first choice, and the flow itself requires a selection.
+
+The D0 Boss objective belongs to the separate Boss-information beat after the first support choice.
+It is not embedded on this Store Support surface.
+
 ## BOSS INFORMATION COPY — EXACT
 
 ### D0

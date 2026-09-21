@@ -228,3 +228,13 @@ Balance review should instead verify:
 - early acquisition can create meaningful remaining-Run value/snowball
 - the support is not an automatic pick at every timing/state
 - the support is not a dead pick across all reasonable timing/state combinations
+
+## REL-Q-v28-20 — DAY 0 FIRST SUPPORT SURFACE
+
+PASS:
+- DAY 0 first Store Support choice appears before the D0 Boss-information beat
+- candidate surface does not contain the D0 Boss objective
+- first-support screen uses current exact Copy-owner text
+- choosing one support commits exactly once
+- separate D0 Boss-information beat follows
+- normal DAY 1 does not begin before D0 acknowledgement
