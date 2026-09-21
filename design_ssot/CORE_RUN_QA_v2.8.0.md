@@ -10,6 +10,12 @@ PATCH_TYPE=PROJECT_WIDE_V2_8_QA
 
 All non-conflicting v2.7 Core Run QA remains active.
 
+Explicit v2.8 supersession:
+- CORE_RUN_QA_v2.7.0.md `RUN-Q73` legacy D10 `FINAL20` / D20 `FINAL10` presentation
+  wording is superseded by the current D10/D20 Boss-information cadence in `RUN-Q-v28-5`.
+  Its non-conflicting D25 persistence / D30 reuse intent remains covered by current QA.
+- `RUN-Q79` Franchise Achievement pacing is retired in full with the Franchise system.
+
 ## RUN-Q-v28-1 — NO ACTIVE START CONTRACT / FRANCHISE
 
 PASS:
