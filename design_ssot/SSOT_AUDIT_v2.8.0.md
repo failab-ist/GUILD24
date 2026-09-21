@@ -248,7 +248,7 @@ Approved current outcomes:
 - Fresh native-Stat amplification is +30 / +50 / conditional +20, with matching Counter +25 unchanged
 - Deep occurrence is 2 or 3 at 50/50, required Power ×1.50
 - Deep Success = EXP40 / Wallet60; Deep Great Success = EXP80 / Wallet120
-- Deep sponsorship base remains 350G with 0.20 rarity and 0.05 level steps, rounded to 10G
+- Deep sponsorship base is 200G with 0.20 rarity and 0.05 level steps, rounded to 10G
 - active Item rarity distribution is intentionally C11 / U12 / R5 / E11 / L1
 
 The cross-system numeric pass above is approved, and the full 30-Store-Support audit is also complete.
