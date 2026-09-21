@@ -84,9 +84,9 @@ Do not say Supply always increases Great Success.
     필요량을 채우고 남은 보급은 출발 전 현재 피로를 먼저 줄입니다.
     그래도 남으면 귀환 후 쌓이는 피로를 줄입니다.
 
-## LOYALTY POPOVER
+## LOYALTY TUTORIAL / COACH — EXACT
 
-Superseded as a normal SALE popover by the 2026-09-22 playtest amendment.
+The former normal SALE popover is superseded by the 2026-09-22 playtest amendment.
 
 Normal SALE shows only the compact Loyalty value/state.
 No separate Loyalty `?` is shown there.

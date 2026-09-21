@@ -870,3 +870,76 @@ the Day's total visitor count.
 Acceptance:
 for a controlled eligible royal Event seed, the generated royal newcomer is always present in
 today's queue exactly once.
+
+## PLAYTEST RESPONSE ADDENDUM — 2026-09-22
+
+### SA-Q46 — PLAYTEST SALE TOP DENSITY
+Classification: RUNTIME UX / DESIGN ADOPTION
+
+Required:
+- no normal-SALE Loyalty `?`
+- Equipment absent from compact top
+- Bag remains two horizontal slots; wrap whole Bag block if needed
+
+Owners: SALE_v2.8.0.md / UI_UX_v2.8.0.md
+
+### SA-Q47 — D0 OBJECTIVE COMPETES WITH FIRST STORE SUPPORT
+Classification: FLOW / COPY ADOPTION
+
+Required:
+    first Store Support choice
+    -> separate D0 Boss-information beat
+    -> ordinary DAY 1
+
+First-support surface uses only exact compact Copy-owner text.
+
+Owners: CORE_RUN_v2.8.0.md / BOSS_v2.8.0.md / RELIC_v2.8.0.md / COPY_WORLD_VOICE_v2.8.0.md
+
+### SA-Q48 — PURCHASE ACCEPTANCE TOO REFUSAL-HEAVY
+Classification: APPROVED PLAYTEST REBALANCE
+
+Required:
+- 50% / 100% base need 0.80
+- Loyalty +0.002 per point remains
+- Bag -0.10 retired
+- current modifiers remain
+- affordable canonical Counter at 50% / 100% -> final 0.97
+- canonical Counter predicate reused
+- 150% keeps existing behavior / no new floor
+
+Owner: ECONOMY_ORDER_v2.8.0.md
+
+### SA-Q49 — NPC WALLET FAILURE-LOOP PRESSURE
+Classification: APPROVED PLAYTEST REBALANCE
+
+Required:
+- fresh base 180
+- Level ×8 unchanged
+- visit-income random 0..100
+- returning NPC adds same income to persistent Wallet
+- cap 2000 unchanged
+- failed-expedition Loot unchanged in this patch
+
+Owner: ECONOMY_ORDER_v2.8.0.md
+
+### SA-Q50 — DEEP SPONSORSHIP ACCESSIBILITY
+Classification: APPROVED PLAYTEST REBALANCE
+
+Required:
+- sponsor base 200G
+- rarity step 0.20 unchanged
+- Level step 0.05 unchanged
+- 10G rounding unchanged
+- no compensating reward/difficulty change
+
+Owner: ECONOMY_ORDER_v2.8.0.md
+
+### SA-Q51 — REUSED ITEM IDS RETAIN RETIRED ICON SHAPE
+Classification: VISUAL IDENTITY ADOPTION
+
+Required:
+- `bar` -> meal/lunchbox identity
+- `herobar` -> bottled/mineral-water identity
+- mechanics/save IDs unchanged
+
+Owner: ITEM_v2.8.0.md

@@ -129,64 +129,19 @@ After completion, record its commit(s) in `## Completed` and remove this section
 
 ## Approved Queue
 
-### 1. Playtest response batch — USER APPROVED, pending Canonical promotion
+### 1. Playtest response batch — USER APPROVED / CANONICAL PROMOTED
 
-Promote each decision into its routed Canonical owner + QA as part of implementation; once promoted,
-replace these details here with owner/task references.
+Exact rules are now in current routed owners; do not use WORK_STATE as a second spec.
 
-SALE compact top:
-- normal SALE removes the Loyalty `?`; Loyalty meaning is taught by tutorial/coach instead
-- remove Equipment text from the SALE top strip; Equipment remains in NPC detail and proven Stat
-  source attribution
-- Bag remains exactly 2 slots and its two slots stay horizontal; if width is short, wrap the whole
-  Bag block to the next row, never stack the slots vertically
+Scope references:
+- SALE compact top / horizontal two-slot Bag -> SALE_v2.8.0 + UI_UX_v2.8.0
+- D0 first-support -> separate Boss beat -> CORE_RUN_v2.8.0 + BOSS_v2.8.0 + RELIC_v2.8.0
+- first-support exact text -> COPY_WORLD_VOICE_v2.8.0 + COPY_AUDIT_APPROVED_v2.8.0
+- purchase acceptance / NPC Wallet / Deep sponsorship -> ECONOMY_ORDER_v2.8.0
+- 간단 도시락 / 왕도 천연암반수 icon identity -> ITEM_v2.8.0
+- mismatch/acceptance map -> SOURCE_ADOPTION_QA_v2.8.0 + routed QA
 
-D0 / first Store Support flow:
-- first Store Support choice happens first
-- then D0 Boss-information is shown as its own separate beat
-- then ordinary DAY 1 flow
-- remove D0 Boss objective from inside the Store Support takeover
-- first Store Support copy becomes:
-  - `DAY 0`
-  - `첫 점포지원`
-  - `이번 영업에 쓸 지원 하나를 고르세요.`
-- remove redundant system-like “free / choose to start business” explanatory copy where the UI
-  already communicates the requirement
-
-Purchase acceptance:
-- ordinary 100% / 50% sale baseline purchase chance starts at 0.80
-- retain Loyalty contribution at +0.002 per Loyalty point
-- retain current explicit Trait / Store Support / Event purchase modifiers
-- remove the current one-Bag-slot-filled -0.10 purchase penalty
-- retain 50% sale flat +0.18, so ordinary affordable half-price offers normally reach the existing
-  upper clamp
-- if the offered Item validly Counters at least one Hazard of this customer's actual Gate, the
-  final affordable purchase chance has a 0.97 floor, even when a negative purchase Trait applies
-- Counter truth must reuse the game's actual Counter semantics; do not create a second narrower
-  fit test that disagrees on cases such as mobility answering bind/mire
-- affordability still gates purchase at 0 when the NPC cannot pay
-- overcharge remains on its existing behavior; do not include it in this accessibility rebalance
-- exact acceptance probability remains hidden from the Player
-
-NPC Wallet:
-- fresh-visitor base Wallet 150 -> 180
-- ordinary visit income random range 0..60 -> 0..100
-- keep the existing Level ×8 term and persistent-wallet behavior
-- apply the same 0..100 visit-income range to returning NPCs
-- do not separately buff failed-expedition Loot in this patch; first test whether the Wallet change
-  breaks the failure -> low money -> under-supplied -> failure loop
-
-Deep Expedition:
-- sponsorship base 350G -> 200G
-- keep rarity +20% per index, Level +5% per level after 1, and 10G rounding unchanged
-- no compensating Deep reward/difficulty rebalance in this patch
-
-Item art identity:
-- `bar` is now 간단 도시락: replace the retained hotbar-shaped icon with an identity-correct
-  simple meal/lunchbox icon in the existing item-art language
-- `herobar` is now 왕도 천연암반수: replace the retained hotbar-shaped icon with an
-  identity-correct bottled/mineral-water icon
-- no Item mechanic/stat change from the icon fix
+Implement only after the current Active Task closes.
 
 ### 2. Dialogue exposure / repeat adoption
 

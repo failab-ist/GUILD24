@@ -7,11 +7,12 @@ DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=PROJECT_WIDE_V2_8_CANONICAL
 FREEZE_DATE=2026-09-20
-LAST_APPROVED_AMENDMENT=2026-09-20
+LAST_APPROVED_AMENDMENT=2026-09-22
 SSOT_AUDIT_STATUS=PROJECT_WIDE_AUDIT_COMPLETE
 VISION_DETAIL_PROMOTION_STATUS=COMPLETE
 COPY_REAUDIT_STATUS=COMPLETE
 V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
+PLAYTEST_RESPONSE_AMENDMENT_STATUS=CANONICAL_PROMOTED_2026_09_22
 STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
 FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
@@ -187,6 +188,20 @@ The former Source-only / inherited-PASS3 gaps are now owned by:
 
 Related exact acceptance is in the current routed QA or Event acceptance section.
 WORK must implement current Canonical and must not resurrect superseded PASS3 placeholders.
+
+## PLAYTEST RESPONSE AMENDMENT — 2026-09-22
+
+The User-approved playtest response is promoted into the routed current owners.
+
+Exact owners:
+- SALE top density / Bag presentation -> SALE_v2.8.0.md + UI_UX_v2.8.0.md
+- D0 first-support -> Boss-information order -> CORE_RUN_v2.8.0.md + BOSS_v2.8.0.md + RELIC_v2.8.0.md
+- first-support exact copy -> COPY_WORLD_VOICE_v2.8.0.md + COPY_AUDIT_APPROVED_v2.8.0.md
+- purchase acceptance / NPC Wallet / Deep sponsorship -> ECONOMY_ORDER_v2.8.0.md
+- Item visual identity after save-safe ID reuse -> ITEM_v2.8.0.md
+
+These are current approved baselines, not measurement-gated suggestions.
+After Source adoption, re-measure aggregate economy/survival impact before any further tuning.
 
 ## SOURCE ACCESS
 
