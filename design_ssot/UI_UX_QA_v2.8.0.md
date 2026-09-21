@@ -49,6 +49,16 @@ Mobile SALE exposes compact:
 
 Trusted Regular state appears at 51.
 
+PASS:
+- no separate Loyalty `?` / popover trigger in normal SALE
+- Loyalty contextual meaning is taught by tutorial/coach
+- Equipment text is absent from the compact SALE top state
+- Equipment remains reachable through NPC detail / proven Stat source where applicable
+- Bag remains exactly 2 slots
+- both Bag slots remain horizontal at mobile width
+- the whole Bag block may wrap down; the slots themselves do not stack vertically
+- no horizontal overflow
+
 ## UI-Q-v28-5 — SEMANTIC DELTA
 
 For changed Stats/Fatigue/economy values:
@@ -117,11 +127,16 @@ At 360x800:
 
 ## UI-Q-v28-11 — LOYALTY HELP
 
-Tap/focus Loyalty:
-- explains purchase intent + revisit
+Normal SALE:
+- shows compact Loyalty value/state
+- does not show a dedicated Loyalty `?` / anchored popover trigger
+
+Tutorial/coach:
+- explains purchase-intent and revisit meaning
 - says 51 = 단골
-- shows only current applicable Store Support conditions
-- LUST appears only after reveal
+- does not leak unrevealed Boss-specific information
+
+Global compact Help remains under its existing copy owner; it is not a second contextual SALE tooltip.
 
 ## UI-Q-v28-12 — EVENT TEMP BUDGET
 

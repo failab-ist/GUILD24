@@ -73,7 +73,27 @@ Trusted Regular:
 - show 단골 when owner threshold is reached
 - no large Loyalty progress bar is required
 
-Loyalty meaning opens through the shared anchored popover.
+Normal SALE shows the Loyalty value/state without a separate `?` or Loyalty popover trigger.
+Its contextual explanation is taught by the tutorial/coach.
+The global compact Help remains a separate reference surface under its current owner.
+
+Equipment text is omitted from this compact SALE header/state region.
+Equipment remains available in NPC detail and as proven Stat-source attribution.
+
+## SALE BAG COMPACT LAYOUT — EXACT
+
+The normal customer Bag remains exactly two slots.
+
+On compact/mobile SALE:
+- the two slot boxes are always horizontal
+- if room is insufficient beside other customer-state elements, the whole Bag block wraps to the next row
+- the two slot boxes themselves never stack vertically
+- wrapping must not create horizontal overflow
+
+Reference shape:
+    가방 0 / 2   □ □
+
+Presentation only; Bag capacity/mechanics do not change.
 
 ## SHARED SEMANTIC CHANGE LANGUAGE
 

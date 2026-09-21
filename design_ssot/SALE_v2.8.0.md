@@ -78,7 +78,15 @@ Example:
 
 If Loyalty >= 51, show the existing 단골 state/badge.
 
-Exact meaning is available on demand without creating a large progress bar.
+Normal SALE does not place a separate Loyalty `?` / popover trigger beside this value.
+The contextual meaning of Loyalty is taught by the tutorial/coach.
+The global compact Help may retain its separately owned reference text.
+
+Equipment text is not part of the compact SALE top strip.
+Equipment remains readable in NPC detail and may appear as a proven Core-Stat source.
+
+Bag remains exactly two slots under the inherited rule.
+Exact compact/mobile layout -> UI_UX_v2.8.0.md.
 
 ## EVENT PURCHASE BUDGET
 
@@ -107,3 +115,12 @@ Player help copy:
     한 가격을 거절하면 같은 상품은 그 가격과 더 비싼 가격으로 그날 다시 제안할 수 없다.
 
 Do not describe the rule as only \`같은 상품·같은 가격\`.
+
+## PURCHASE-ACCESSIBILITY ROUTING — PLAYTEST RESPONSE
+
+Exact hidden purchase acceptance, NPC Wallet income and Deep sponsorship are owned by
+`ECONOMY_ORDER_v2.8.0.md`.
+
+SALE does not duplicate those numbers and does not expose exact purchase probability.
+
+The two-slot Bag is a capacity decision, not an additional hidden acceptance penalty.
