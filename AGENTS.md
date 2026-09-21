@@ -495,7 +495,7 @@ Only changed owner documents receive a new version; unchanged owners are referen
 
 # 16. HANDOFF / REPORTING
 
-Reports must distinguish:
+Reports must distinguish real status when relevant:
 
 ```text
 PASS
@@ -509,28 +509,80 @@ BLOCKED
 ROOT CAUSE UNRESOLVED
 ```
 
-Do not summarize all of these as "PASS with notes".
+Do not summarize failures as "PASS with notes".
 
-For every fix report, include only:
+## 16.1 WORK final output is a DIRECTOR review packet
+
+WORK's final response is not a User-facing work diary.
+
+Its default purpose is to give DIRECTOR only the minimum evidence needed to inspect Source / Diff / QA.
+
+DIRECTOR is expected to inspect the implementation directly.
+Therefore do not re-explain Task text, Canonical rules, or implementation history in the final response.
+
+Default final format:
 
 ```text
-- what changed
-- files changed
-- commit SHA
-- targeted verification result
-- remaining finding/blocker
+DIRECTOR REVIEW
+
+Branch / HEAD:
+
+Commits:
+- <sha> — <logical task>
+
+Changed:
+- material implementation changes only, 3–6 concise lines
+
+Verification:
+- targeted QA: PASS / FAIL
+- relevant regression / deterministic tests: PASS / FAIL / N/A
+- npm test: PASS / FAIL
+- runtime smoke: PASS / FAIL / N/A
+
+Review points:
+- only risks / decisions DIRECTOR should inspect directly
+- NONE if there are none
+
+Blocker / unresolved:
+- NONE
+- or the exact blocker / unresolved item
 ```
 
-For final QA, additionally include:
+## 16.2 Do not output by default
+
+Do not include these in the final response unless needed to explain a FAIL / blocker:
+
+- documents or files read
+- step-by-step implementation process
+- work diary / chronological narration
+- Task instructions repeated back
+- Canonical rules copied back
+- full test list
+- raw PASS logs
+- long rationale for ordinary implementation choices
+- already-known project background
+- CI / Pages detail when it is not blocking the task
+
+If evidence is needed for a failure, include only the smallest relevant excerpt.
+
+## 16.3 Review boundary
+
+WORK's own PASS is not final Design or implementation approval.
+
+After completing the assigned scope:
 
 ```text
-- frozen HEAD
-- git status
-- exact commands run
-- exact PASS/FAIL result
+implement
+→ verify
+→ commit
+→ report minimum evidence
+→ wait for DIRECTOR review
 ```
 
-Do not claim a command was rerun if the log does not show it.
+If no next Task was explicitly authorized, do not continue into later work.
+
+For frozen release / final QA, keep the required evidence in the repository / logs, but the final chat
+response still stays compact unless DIRECTOR asks for the exact command list or raw evidence.
 
 ---
 
