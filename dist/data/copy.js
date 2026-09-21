@@ -210,12 +210,11 @@ const Copy={
   ...night.retreat,...night.grew,...night.great,...night.plain];}
 };
 
-/* COPY_WORLD_VOICE 18.5 - BOSS REVEAL. Verbatim from the spec: D5 gives identity and a
-   Flavor line that may hint at the Trait but never states it, D15 gives the exact
-   Function, D30 gives the Family facts and nothing else. No strategy advice is appended
-   anywhere - the information itself is the decision material. GLUTTONY has no rarity
-   boundary in v2.7: the effect reaches every Item contribution, which is what its D15 line
-   now says. */
+/* COPY_WORLD_VOICE 18.5 - BOSS REVEAL. D5 gives identity and a Flavor line that may
+   hint at the Trait but never states it, D15 gives the exact Function, and D25 gives the exact
+   Final Family/Hazard facts. D30 adds no new Boss information. No strategy advice is appended
+   anywhere - the information itself is the decision material. GLUTTONY has no rarity boundary:
+   the effect reaches every Item contribution, which is what its D15 line says. */
 Copy.boss={
  /* COPY_AUDIT_APPROVED_v2.8.0 §14. The Boss information cadence is D0 / D5 / D10 / D15 / D20 /
     D25, and D30 adds nothing new. D0, D10 and D20 had no active Copy at all. */
