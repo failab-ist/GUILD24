@@ -31,7 +31,7 @@ The remaining adoption work is now concentrated in:
 - approved playtest-response adoption
 - remaining dialogue-pool / recent-repeat adoption
 - targeted re-measure / regression after the behavior changes
-- approved v2.8 Presentation Polish adoption
+- approved v2.8 Functional + Presentation Polish adoption
 - final integrated adoption + functional + runtime QA before v2.8 freeze
 
 `SOURCE_ADOPTION_QA_v2.8.0.md` is a known-defect RECORD, not a live tracker. It is not edited to
@@ -147,23 +147,29 @@ Because the approved playtest batch changes purchase acceptance, NPC Wallet and 
 - report observed distribution changes separately
 - do not auto-retune measurement-gated values
 
-### 3. Presentation Polish adoption
+### 3. Functional + Presentation Polish adoption
 
 USER APPROVED / CANONICAL PROMOTED.
 
 After re-measure closes without a blocking Design change:
-- adopt the current v2.8 Presentation Polish owned by UI_UX_v2.8.0.md
+- adopt the current v2.8 Functional + Presentation Polish owned by UI_UX_v2.8.0.md
+- first audit the complete active Player flow for information priority, action hierarchy,
+  tutorial target/copy alignment, responsive order, dead space, duplication and avoidable overflow
+- include controlled D0/D5/D10/D15/D20/D25/D30 Boss/milestone presentation review
+- fix functional presentation defects with REMOVE / REUSE / MERGE before adding UI
 - use only existing gameplay state / current audio-animation-scene architecture
 - cover truthful Store-growth traces, NIGHT result differentiation, Boss/D25-D30 payoff,
   ORDER/SALE/Store-Support decision audio and targeted current-art polish
 - add no gameplay rule, balance change, required Save state, Gameplay RNG or hidden-information leak
-- use UI_UX_QA_v2.8.0.md for acceptance
+- if a fix requires changing an exact Canonical layout measurement/copy contract, report evidence
+  and patch the owning Canonical before Source; WORK must not silently redefine it
+- use UI_UX_QA_v2.8.0.md UI-Q-v28-21 through UI-Q-v28-29 for acceptance
 
 Do not pull the remaining large cinematic / large art-world content from the v2.9+ router.
 
 ### 4. Final v2.8 integration / freeze audit
 
-After all approved adoption, re-measure and Presentation Polish work:
+After all approved adoption, re-measure and Functional + Presentation Polish work:
 - current Canonical -> Source adoption audit
 - functional QA
 - targeted regression QA for all touched systems
