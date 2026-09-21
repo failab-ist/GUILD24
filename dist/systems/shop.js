@@ -359,8 +359,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
     only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
     at all: chance read the flat per-mode sentiment and nothing about what the offer costs
-    against this customer's purse. The term is centred on the measured median 정가 burden, so it
-    redistributes rather than taxes - a light offer gains, a heavy one loses. 할인 and 바가지
+    against this customer's purse. The term is pivoted on the measured median 정가 burden, and it
+    only ever adds: a light offer may gain a bonus, and at or above the pivot the burden term
+    contributes 0 and never subtracts. 할인 and 바가지
     declare no weight, so their term is zero and they are decided exactly as they always were. */
  const weight=rule.intentWeight||0;
  /* The term is a BONUS for a light offer, never a penalty for a heavy one: max(0, ...) floors it
