@@ -240,8 +240,14 @@ Run starting Gold +300G
 
 ### display — 프리미엄 쇼케이스
 ```text
-use the existing Premium Start Contract rare-NPC spawn weighting
+rare-NPC rarity weights = [51, 30, 14, 4, 1]
+rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
+
+This is the exact v2.8 baseline for the existing Premium Start Contract positive spawn-weighting
+channel reused by this Decoration. It changes only the rarity weights used by the ordinary NPC spawn
+rarity draw when the Decoration is active. It adds no extra spawn, no extra rarity roll and no new
+Gameplay RNG draw.
 
 Do not carry the retired Start Contract negative sides into these Decorations:
 - no +5% ORDER purchase penalty
