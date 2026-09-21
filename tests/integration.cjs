@@ -362,9 +362,11 @@ test('NPC_TRAIT §DEEP EXPEDITION NPC REWARD: the return is the NPC\'s, and the 
   'the approved v2.8 Deep reward baseline');
  assert.equal(t.greatExp,t.successExp*2,'Great Success Deep EXP is exactly 2x Success');
  assert.equal(t.greatWallet,t.successWallet*2,'Great Success Deep Wallet is exactly 2x Success');
+ /* ECONOMY_ORDER_v2.8 §DEEP SPONSORSHIP / SA-Q50: sponsorBase 350 -> 200 for accessibility.
+    Rarity step, Level step and rounding are unchanged. */
  assert.deepEqual([t.powerFactor,t.threeOccurrenceChance,t.sponsorBase,t.sponsorRarityStep,
-                   t.sponsorLevelStep,t.sponsorRounding],[1.5,.5,350,.20,.05,10],
-  'the other approved Deep tuning is unchanged');
+                   t.sponsorLevelStep,t.sponsorRounding],[1.5,.5,200,.20,.05,10],
+  'the other approved Deep tuning is unchanged except the approved SA-Q50 sponsorBase');
  const scale=DATA.greatSuccess.storeGoldScale;DATA.greatSuccess.storeGoldScale=.5;
  try{
   let checked=0;

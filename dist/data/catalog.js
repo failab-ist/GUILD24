@@ -199,8 +199,10 @@ G.DATA.deepTuning={powerFactor:1.5,threeOccurrenceChance:.5,
  /* 원정 후원금 = sponsorBase x (1 + rarityStep x rarity) x (1 + levelStep x (Level - 1)),
     rounded to 10G. Who you send is the decision, so the price is the NPC's rarity and current
     Level and nothing else - not the Gate Tier, not the Day, not the Deep Power, not any item
-    price, and not a hidden worth score. Stage 9 measurement baseline. */
- sponsorBase:350,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
+    price, and not a hidden worth score.
+    ECONOMY_ORDER_v2.8 §DEEP SPONSORSHIP / SA-Q50: base reduced 350 -> 200 for accessibility.
+    Rarity step, Level step and rounding are unchanged; no compensating reward/difficulty change. */
+ sponsorBase:200,sponsorRarityStep:.20,sponsorLevelStep:.05,sponsorRounding:10,
  successExp:40,greatExp:80,successWallet:60,greatWallet:120};
 
 /* v2.5 final (F1). The Stage 10 factors ease once more, as the five-arm ablation measured them:
