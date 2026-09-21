@@ -69,24 +69,30 @@ test('SA-Q25: the helped-return callback needs proven sold-Item contribution, no
  /* `n.events.length` used to gate this - a Trait-only event (강골's injury-guard downgrade,
     for one) satisfied it with nothing the Player sold. It now reads n.records.at(-1).heroProof,
     the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself proves a Hero Item line
-    from. Every 6th visit is the only Day this gate is even checked (§11.2), so both cases are
-    built on visit 6. */
+    from. Every 6th visit is the only Day this gate is even checked (§11.2), so every case here
+    is built on visit 6. */
  const setup=()=>{const g=new Game();g.autosave=false;g.start('copy-helped');g.morning();
   const n=g.run.npcs.find(x=>x.id===g.run.queue[0]);n.introduced=true;n.newToday=false;n.injury=0;n.loyalty=0;n.traits=[];n.visits=5;
   g.run.queue=[n.id];g.run.cursor=0;return {g,n};};
- // a previous result with only a Trait contribution (heroProof null) is not proof of a sale
+ // A — a previous result with only a Trait contribution (heroProof null) is not proof of a sale
  {const {g,n}=setup();
   n.records=[{outcome:'퇴각',items:[],events:[{id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'}],heroProof:null}];
   g.arrive();
-  assert.ok(!V.helped.includes(g.run.say.text),'a Trait-only previous result draws no helped callback');
+  assert.ok(!V.helped.includes(g.run.say.text),'A: a Trait-only previous result draws no helped callback');
   assert.ok(V.back.includes(g.run.say.text),'and falls through to the ordinary return pool');
  }
- // a previous result with a proven sold-Item contribution IS eligible
+ // B — an Item was carried but produced no proven contribution (heroProof null either way)
+ {const {g,n}=setup();
+  n.records=[{outcome:'성공',items:['rice'],events:[],heroProof:null}];
+  g.arrive();
+  assert.ok(!V.helped.includes(g.run.say.text),'B: a carried, unproven Item draws no helped callback');
+ }
+ // C — a proven Outcome contribution from a sold Item IS eligible
  {const {g,n}=setup();
   n.records=[{outcome:'퇴각',items:['bandage'],events:[{id:'hazard',hazards:['poison'],items:['bandage'],prevented:true}],
    heroProof:{items:['bandage'],worse:'부상'}}];
   g.arrive();
-  assert.ok(V.helped.includes(g.run.say.text),'a proven sold-Item contribution makes the callback eligible');
+  assert.ok(V.helped.includes(g.run.say.text),'C: a proven Outcome contribution makes the callback eligible');
  }
 });
 

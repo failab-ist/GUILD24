@@ -136,9 +136,10 @@ function nightWhy(r){const bits=[];
  return bits.join(' ');}
 /* HERO ITEM FEEDBACK (NIGHT_CLOSING §HERO ITEM FEEDBACK, DUNGEON_HAZARD §RESULT-PROOF).
    r.heroProof is null unless the actual resolution proved - using only the random evidence it
-   actually drew, never a new roll - that removing a specific sold Item (or, when no single
-   Item is individually provable, the whole committed Bag) would have settled a WORSE Outcome.
-   This is WHY the Player's own sale mattered; the Outcome sentence above never carries it. */
+   actually drew, never a new roll, against the NPC's own departure state - that removing a
+   specific sold Item (or, when no single Item is individually provable, the whole committed
+   Bag) would have settled a WORSE Outcome. This is WHY the Player's own sale mattered; the
+   Outcome sentence above never carries it. */
 function heroLine(r){
  const hp=r.heroProof;if(!hp)return null;
  const said=hp.worse==='사망'?'살아 돌아왔다':hp.worse==='중상'?'중상을 피했다':
