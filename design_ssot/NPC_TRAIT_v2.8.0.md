@@ -72,7 +72,7 @@ Loyalty does not directly increase the four Core Stats.
 
 Boss-specific information must not leak before its reveal.
 
-Exact compact UI/popover -> UI_UX_v2.8.0.md.
+Exact compact UI/tutorial placement -> UI_UX_v2.8.0.md.
 Exact player copy -> COPY_WORLD_VOICE_v2.8.0.md.
 
 

@@ -794,24 +794,27 @@ Classification: CANONICAL CLOSURE + MISSING ADOPTION
 Current Source:
 `dist/data/catalog.js::G.DATA.deepTuning`
 
-Keep:
+Current retained values:
 - powerFactor 1.50
 - threeOccurrenceChance 0.50
-- sponsorBase 350
 - rarityStep 0.20
 - levelStep 0.05
 - rounding 10
 - success EXP +40
 - success Wallet +60
+- Great Success EXP +80
+- Great Success Wallet +120
 
-Change:
-- Great Success EXP 90 -> 80
-- Great Success Wallet 150 -> 120
+Sponsorship note:
+- the original SA-Q42 adoption baseline was sponsorBase 350
+- User-approved playtest amendment SA-Q50 supersedes that value
+- current required sponsorBase = 200
 
 Acceptance:
 - Deep occurrence is exactly 2 or 3 with 50/50 weighting
 - Great Success Deep bonus is exactly 2× Success bonus
 - Deep Store Gold remains 0
+- current sponsorship base follows SA-Q50 / ECONOMY_ORDER_v2.8.0.md
 
 
 ## SA-Q43 — NON-CANONICAL RANDOM SPECIAL SYSTEM

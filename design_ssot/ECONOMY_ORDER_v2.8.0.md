@@ -130,6 +130,8 @@ For 정가 only:
 For 50% 할인 and 바가지:
     burdenIntentBonus = 0
 
+For every affordable mode:
+
     rawChance
     = need
       + Loyalty × 0.002

@@ -47,17 +47,22 @@ PASS:
 
 ## NPC-Q-v28-3 — LOYALTY MEANING
 
-The on-demand Loyalty explanation states:
-- purchase intent
-- revisit
-- threshold 51
+Normal SALE:
+- compact Loyalty value/state remains visible
+- no dedicated Loyalty `?` / on-demand popover is present
 
-And only when currently applicable/revealed:
-- owned Store Support condition
-- revealed LUST condition
+Tutorial/coach states:
+- higher Loyalty increases purchase intent
+- higher Loyalty increases revisit weighting
+- threshold 51 = 단골
 
-No Boss leak before reveal.
+Boss-specific meaning still obeys reveal timing.
+Global compact Help may retain its separately owned reference wording.
 
+FAIL:
+- normal SALE restores a separate Loyalty `?` / popover trigger
+- tutorial claims Loyalty directly increases Core Stats
+- unrevealed Boss-specific information leaks
 
 ## NPC-Q-v28-4 — DIALOGUE DOES NOT INVENT PURCHASE PREFERENCE
 
