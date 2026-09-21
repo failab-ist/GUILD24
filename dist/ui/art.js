@@ -12,10 +12,15 @@ function avatar(n,size=96){if(!n)return '';const v=n.appearance,job=DATA.jobBy[n
 }
 function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=it.icon;let s='';const base='#e5e8dc',dark='#344642',pink='#d897a0',green='#66bda3';
  if(p==='rice')s=`<path d="M6 34L20 8L34 34V38H6Z" fill="${base}"/><path d="M14 29H26V38H14Z" fill="${dark}"/>`+rect(14,20,13,5,'#eaaa67')+rect(17,21,7,2,'#f6ecd1');
- if(['water','potion','antidote','wine'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:'#b094be';s=rect(16,3,10,5,p==='water'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
+ /* SA-Q51: 왕도 천연암반수 shares the bottled-water silhouette this language already has for
+    every bottle-shaped drink, distinguished by its own colour rather than a recoloured cousin. */
+ if(['water','potion','antidote','wine','herobar'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:p==='herobar'?'#4f86b0':'#b094be';s=rect(16,3,10,5,p==='water'||p==='herobar'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
  if(['coffee','energy'].includes(p))s=rect(12,7,19,30,p==='coffee'?'#bc9971':'#9abb75')+rect(12,5,19,3,'#cbd9d0')+rect(12,35,19,3,'#9baea6')+rect(14,17,15,11,'#efe3c4')+`<path d="M23 17L17 24H22L18 31L27 22H22Z" fill="${dark}"/>`;
  if(p==='ramen')s=`<path d="M7 14H35L31 37H11Z" fill="${id==='lava'?'#d96958':'#dfa05e'}"/>`+rect(5,11,32,5,'#ede6ce')+rect(10,21,23,9,'#f4e6c5')+rect(15,24,12,3,'#bc6650')+rect(14,5,2,4,'#dbe9d6')+rect(24,3,2,6,'#dbe9d6');
- if(p==='bar')s=rect(19,28,4,12,'#bd9964')+rect(12,7,18,24,id==='dragon'?'#dc6e54':'#c8935e')+rect(14,7,3,21,'#e9b875')+rect(14,13,12,2,'#a36c44')+rect(14,21,12,2,'#a36c44');
+ /* SA-Q51: 간단 도시락 is a simple single-tier meal box - its own silhouette, distinct from the
+    다칸 길드 특제 도시락 ('lunch') and the stacked 영웅 결전 도시락 ('battlelunch') - replacing
+    the retired Hotbar/skewered-stick shape this ID used to carry. */
+ if(p==='bar')s=rect(7,14,30,22,'#4f5847')+rect(9,16,26,18,'#e9dfc2')+rect(9,25,26,2,'#cbb98a')+rect(11,18,11,6,'#f4eedb')+rect(24,18,9,6,'#a6b97b');
  if(p==='choco')s=rect(7,13,30,19,'#8e7267')+rect(10,16,24,13,'#d9af82')+rect(19,13,15,19,'#746158')+rect(23,17,7,11,'#aa8470');
  if(['bandage','kit','mask','heat'].includes(p)){const col=p==='kit'?'#d5dfcc':p==='heat'?'#d69776':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,p==='heat'?'#f5d7a5':'#bd7d6a')+rect(14,21,15,5,p==='heat'?'#f5d7a5':'#bd7d6a');}
  if(p==='ice')s=`<path d="M9 10H34L30 37H13Z" fill="#8dc6cd"/>`+rect(7,8,29,4,'#d5e8df')+rect(13,16,9,9,'#cce5df')+rect(23,22,7,8,'#b7dfdc');
@@ -83,10 +88,6 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
   +rect(6,22,32,12,'#4a332c')+rect(8,24,28,8,'#e7d8b8')+rect(10,25,10,6,'#f3efdd')
   +rect(22,25,12,3,'#a6b97b')+rect(22,29,12,3,'#d29167')
   +rect(20,8,4,28,'#b8452f')+rect(16,18,12,4,'#b8452f')+rect(19,17,6,6,'#d96a4f');
- if(p==='herobar')s=rect(20,30,4,13,'#bd9964')+rect(9,4,26,12,'#c8622f')+rect(11,6,22,8,'#e0844a')
-  +rect(9,18,26,12,'#c8622f')+rect(11,20,22,8,'#e0844a')+rect(9,16,26,2,'#8f4420')
-  +rect(13,8,18,2,'#a34c22')+rect(13,22,18,2,'#a34c22')
-  +`<path d="M24 2H38L34 6L38 10H24Z" fill="#c9a54a"/>`+rect(23,2,2,10,'#8e7049');
  if(p==='hyperenergy')s=rect(16,2,12,3,'#cbd9d0')+rect(15,5,14,34,'#2f3f57')+rect(15,5,4,34,'#4a6486')
   +`<path d="M18 13L24 18L18 23Z" fill="#7fe3d0"/><path d="M23 13L29 18L23 23Z" fill="#7fe3d0"/>`
   +rect(15,27,14,5,'#e9f4f0')+rect(16,36,12,3,'#9baea6');
