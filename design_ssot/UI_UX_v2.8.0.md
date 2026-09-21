@@ -1,7 +1,7 @@
 # UI_UX
 
 DOC=UI_UX
-OWNER=ui,ux,mobile,tutorial,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
+OWNER=ui,ux,mobile,tutorial,visual,audio,presentation_polish,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
@@ -210,6 +210,117 @@ At 360x800, core information and acknowledgement control must not be pushed belo
 viewport solely by Boss art.
 
 Information is primary; art is supporting.
+
+## v2.8 PRESENTATION POLISH — EXACT BOUNDARY
+
+This is a focused presentation pass over existing gameplay state.
+
+It may strengthen:
+- visual hierarchy / motion / scene dressing
+- SFX feedback
+- phase BGM / ambience identity
+- existing art scale / crop / icon readability
+
+It must not add:
+- a gameplay rule, reward, probability or decision
+- a new required Save field
+- a new Gameplay RNG draw
+- a hidden-information leak
+- a second result system
+- a large cutscene/cinematic framework
+
+Prefer the current Sound / animation / scene systems before adding a new presentation framework.
+
+### STORE-GROWTH VISUAL TRACES
+
+The live store may show small deterministic traces of state the Player already owns or has already
+been shown.
+
+Eligible sources include:
+- equipped Decorations
+- owned Store Supports / existing store facilities
+- already-established Trusted Regular presence
+- D25 Final-preparation state after its reveal
+
+Allowed presentation:
+- small props / fixture changes
+- pinned Guild notices
+- regular-customer traces
+- Final-preparation signage
+- subtle shelf / counter dressing
+
+Rules:
+- every visible trace must map to real current state
+- a trace grants no mechanic and is not a control
+- no whole-background replacement is required
+- no combinatorial skin/theme system
+- no unrevealed Boss / Hazard / NPC information may be inferred from the trace
+- when several traces compete for space, deterministic presentation may show a readable subset;
+  gameplay ownership is never reduced
+
+### DECISION / PHASE AUDIO
+
+The current audio architecture is reused.
+
+Material decisions should not all sound like the same generic UI click.
+
+Distinct feedback classes are required for:
+- ORDER confirmation
+- successful SALE
+- SALE refusal
+- Store Support acquisition
+
+Phase identity may be strengthened for:
+- MORNING
+- ORDER
+- SALE
+- NIGHT
+- FINAL
+
+This may use current BGM/ambience transition, layering or targeted cues.
+A unique new full track per phase is not required.
+
+Muted state and existing BGM/SFX settings remain authoritative.
+
+### NIGHT RESULT PRESENTATION
+
+Existing NIGHT outcome truth drives presentation.
+
+Presentation must make materially different results feel different, including at minimum:
+- ordinary return / success
+- Great Success
+- retreat
+- injury
+- severe injury
+- Death
+
+Rescue / avoided-death evidence may receive a distinct recovery/life-saving accent where already
+proven by the result state.
+
+Visual/audio emphasis never changes Outcome, rewards, proof or dialogue priority.
+
+### BOSS / FINAL PRESENTATION PAYOFF
+
+Existing Boss-information beats may receive stronger visual/audio acknowledgement.
+
+D0 / D5 / D10 / D15 / D20 / D25 may each use presentation appropriate to the information already
+owned by that beat.
+
+D25 may strengthen Final-preparation presentation after the exact Final state is revealed.
+
+D30 may strengthen FINAL-entry tension using only information already revealed by D25.
+D30 still adds no new Boss-information beat.
+
+Presentation must not push the owned information/acknowledgement control out of the usable mobile
+viewport.
+
+### TARGETED GRAPHIC POLISH
+
+Existing Item / NPC / Boss / UI art may be corrected where silhouette, crop, scale or icon identity
+makes two different current objects read as the same thing or weakens the current decision.
+
+This is polish of current content, not permission for a large new Item wave, portrait wave,
+environment set or theme system.
 
 ## FUNCTION / FLAVOR VISUAL HIERARCHY — EXACT
 
