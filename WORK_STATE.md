@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-22
-CURRENT_LINE: v2.8 Source adoption in progress; Task D Result UX closed, approved playtest-response adoption active
+CURRENT_LINE: v2.8 Source adoption in progress; Task D Result UX closed, playtest-response batch closed, dialogue exposure / repeat adoption active
 STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Truth
@@ -112,41 +112,51 @@ Task D — remaining Result UX adoption CLOSED (main through `ce8fad1`):
 - persistent Aftercare + whole-Bag state proof and helped-return proof gate completed
 - targeted deterministic/RNG QA + browser run-loop smoke passed
 
-## Active Task — Playtest response batch
+Playtest response batch CLOSED (branch `claude/active-task-implementation-gpe6zh` through `330eec6`,
+DIRECTOR review pending merge):
+- SA-Q46 SALE compact top: Loyalty `?` popover and Equipment removed from compact top; Bag's two
+  slots always horizontal, whole block wraps as a unit
+- SA-Q47 D0 Boss-information beat separated from the first Store Support choice; approved
+  first-support exact copy adopted
+- runtime UX fix (found in review, not a numbered SA-Q): desktop SALE dead-space gap between the
+  stat dossier and Trait rows closed; UI-Q109 mobile reading order preserved via CSS flex `order`
+- SA-Q48 accessible-mode (50%/정가) purchase need raised to a flat 0.80, Bag penalty retired,
+  Counter floor 0.97 added; 바가지 untouched
+- SA-Q49 ordinary NPC Wallet on visit raised (fresh base 180, visit income 0..100)
+- SA-Q50 Deep sponsorship base lowered to 200G, no compensating reward/difficulty change
+- SA-Q51 `bar`/`herobar` icons replaced (retired Hotbar silhouette -> lunchbox / bottled-water)
+- targeted deterministic QA + real-click browser run-loop smoke passed at mobile + desktop widths
+
+## Active Task — Dialogue exposure / repeat adoption
 
 USER APPROVED / CANONICAL PROMOTED.
 
-Implement the current routed owner truth for SA-Q46–51 only.
-Use `SPEC_INDEX_v2.8.0.md` and the owning Canonical + QA; do not duplicate detailed rules here.
+Implement the current routed owner truth only. Use `SPEC_INDEX_v2.8.0.md` and the owning
+Canonical + QA; do not duplicate detailed rules here.
 
-Scope references:
-- SALE compact top / horizontal two-slot Bag -> SALE_v2.8.0 + UI_UX_v2.8.0
-- D0 first-support -> separate Boss beat -> CORE_RUN_v2.8.0 + BOSS_v2.8.0 + RELIC_v2.8.0
-- first-support exact text -> COPY_WORLD_VOICE_v2.8.0 + COPY_AUDIT_APPROVED_v2.8.0
-- purchase acceptance / NPC Wallet / Deep sponsorship -> ECONOMY_ORDER_v2.8.0
-- 간단 도시락 / 왕도 천연암반수 icon identity -> ITEM_v2.8.0
-- mismatch/acceptance map -> SOURCE_ADOPTION_QA_v2.8.0 + routed QA
-
-After completion, record its commit(s) in `## Completed`, remove this section, and advance to dialogue exposure / repeat adoption.
-
-## Approved Queue
-
-### 1. Dialogue exposure / repeat adoption
-
-After the playtest-response patch:
+Scope:
 - complete the remaining approved dialogue-pool expansion
 - adopt the current COPY_WORLD_VOICE recent-repeat rule / cooldown
 - do not invent new personality mechanics or purchase preferences
 - keep selection deterministic and gameplay-RNG neutral
 
-### 2. Re-measure / regression pass
+Route: COPY_WORLD_VOICE_v2.8.0 (+ COPY_AUDIT_APPROVED_v2.8.0 for exact text) is the owner;
+check SOURCE_ADOPTION_QA_v2.8.0 first for known mismatch/root-cause entries before rediscovering
+them.
+
+After completion, record its commit(s) in `## Completed`, remove this section, and advance to
+the re-measure / regression pass.
+
+## Approved Queue
+
+### 1. Re-measure / regression pass
 
 Because the approved playtest batch changes purchase acceptance, NPC Wallet and Deep access:
 - run targeted economy / sale / survival-loop regression measurements
 - report observed distribution changes separately
 - do not auto-retune measurement-gated values
 
-### 3. Final v2.8 integration / freeze audit
+### 2. Final v2.8 integration / freeze audit
 
 After all approved adoption and playtest-response work:
 - current Canonical -> Source adoption audit
