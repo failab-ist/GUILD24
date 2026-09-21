@@ -642,8 +642,9 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
- assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stat \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
- assert.ok(/\.readout \.tip>p,\.kit \.tip>p,\.detail-stat \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook, compact-state and Stat balloons drop');
+ assert.ok(/\.readout \.tip>p,\.dest-plate \.tip>p,\.kit \.tip>p,\.detail-stats \.tip>p\{position:absolute/.test(css),'the balloon is out of flow');
+ assert.ok(/\.readout \.tip>p,\.kit \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the outlook and compact-state balloons drop');
+ assert.ok(/\.detail-stats \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'and so does the Stat balloon, anchored on the grid itself');
  assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
  assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
  /* All three counter readings are read here now, so all three ? controls are here (UI-Q109). */
@@ -1533,26 +1534,52 @@ test('SA-Q14: a moved Stat reads as beneficial or harmful, never as generic move
  // classification is by MEANING: for a Core Stat, more is better
  assert.ok(/const delta = values\[k\]-n\.stats\[k\], moved = delta!==0;/.test(grid),'the change is measured');
  assert.ok(/sense = !moved \? '' : delta>0 \? 'up' : 'down'/.test(grid),'a rise is beneficial, a fall harmful');
- assert.ok(/'<div class="detail-stat'\+\(sense\?' '\+sense:''\)/.test(grid),'and the row carries that meaning');
+ assert.ok(/const cls = 'detail-stat'\+\(sense\?' '\+sense:''\);/.test(grid),'and the cell carries that meaning');
  assert.ok(!/ moved'/.test(grid),'the generic `moved` class is gone from the row');
  // unchanged = default, beneficial = green, harmful = red
  assert.ok(!/\.detail-stat\.moved strong\{color:var\(--gold\)\}/.test(css),'the generic gold styling is retired');
- assert.ok(/\.detail-stat\.up strong,\.detail-stat\.up \.dir\{color:#9fd6a8\}/.test(css),'beneficial is green');
- assert.ok(/\.detail-stat\.down strong,\.detail-stat\.down \.dir\{color:#e8927f\}/.test(css),'harmful is red');
+ assert.ok(/\.detail-stat\.up strong\{color:#9fd6a8\}/.test(css),'beneficial is green');
+ assert.ok(/\.detail-stat\.down strong\{color:#e8927f\}/.test(css),'harmful is red');
  assert.ok(!/\.detail-stat(?!\.(up|down))[^{]*\{[^}]*color:#9fd6a8/.test(css),'an unchanged row keeps the default');
  // they are the colours the NIGHT change tokens already use, so one movement reads one way
  assert.ok(css.includes('.tok.up b{color:#9fd6a8}')&&css.includes('.tok.down b{color:#e8927f}'),
   'the semantic pair is shared with the existing change tokens');
- // colour is NOT the only cue
- assert.ok(/<i class="dir">'\+\(sense==='up'\?'유리':'불리'\)/.test(grid),'the row says which it is in words');
- assert.ok(/aria-label="'\+E\(named\)/.test(grid)&&/'유리한 변화':'불리한 변화'/.test(grid),
-  'and repeats it in the accessible name');
+ /* The approved Stat-source UX. The 유리 / 불리 chip and the separate `?` are gone: the cell
+    itself is the control, so colour is carried by the accessible name instead of by chrome. */
+ const emitted=grid.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
+ assert.ok(!/유리|불리/.test(emitted),'the row prints no 유리 / 불리 chip');
+ assert.ok(!/class="dir"/.test(app)&&!/\.dir\{/.test(css),'and the chip element and its styling are both gone');
+ assert.ok(!/>\?</.test(emitted)&&!/tip\(/.test(emitted),'and no separate `?` control sits in a Stat row');
+ assert.ok(/said = label\+' '\+\(sense==='up'\?'증가':'감소'\)\+' · 변화 원인 보기'/.test(grid),
+  'the accessible name says which way it moved and that the reason opens here');
+ assert.ok(/<summary aria-label="'\+E\(said\)\+'">'\+face/.test(grid),'and the whole cell face IS that control');
  // a provable source is exposed through the SHARED anchored tip, not a new mechanism
- assert.ok(/why = list\.length[\s\S]*?tip\(Presentation\.labels\[k\]\+' 변화 원인'/.test(grid),
-  'an existing source is exposed through the shared tip');
- assert.ok(/prep\.effects\.sources\?\.\[k\]/.test(grid),'reusing the source data already prepared');
- assert.ok(!/<details class="detail-stat/.test(app),'the height-changing accordion is gone');
+ /* Dungeon.prepare returns its provenance as `sources`, beside `effects` - not inside it. The
+    retired `?` read prep.effects.sources, which is undefined, so it could never have shown a
+    real source. The cell reads the real one, and still computes no provenance of its own. */
+ assert.ok(!/prep\.effects\.sources/.test(emitted),'the path that never existed is not read');
+ assert.ok(/const list = moved \? \(prep\.sources\?\.\[k\] \|\| \[\]\) : \[\];/.test(grid),
+  'only a Stat that actually moved looks up its already-prepared sources');
+ assert.ok(/return \{effects:e,sources,/.test(read('dist/systems/dungeon.js')),
+  'and that is the shape Dungeon.prepare actually returns');
+ assert.ok(/if\(!list\.length\)return '<div class="'\+cls\+'">'\+face\+'<\/div>';/.test(grid),
+  'an unchanged Stat, or one with no provable source, stays a plain non-interactive cell');
+ assert.ok(/<details class="'\+cls\+' tip" name="sale-tip">/.test(grid),
+  'the trigger joins the one exclusive tip group, so the same Stat closes and another switches');
+ assert.ok(/closeTips/.test(app),'outside tap and Escape close it through the existing shared handler');
+ assert.ok(/E\(label\+' 변화 원인'\)/.test(grid),'the balloon is headed with the Stat and 변화 원인');
+ assert.ok(/list\.map\(x=>'<span>'\+E\(x\.name\+' '\+\(x\.v>0\?'\+':''\)/.test(grid),
+  'and lists the real prepared sources, name and signed amount, with nothing recomputed');
  assert.equal((app.match(/const tip=\(label/g)||[]).length,1,'still exactly one popover implementation');
+ /* it must stay a balloon: the two-column grid may not grow taller when a Stat is opened, and
+    the cell may not become an inline ? control. */
+ assert.ok(/\.detail-stats\{position:relative/.test(css),'the grid is the containing block the balloon hangs from');
+ assert.ok(/\.detail-stats \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'the balloon drops out of flow');
+ assert.ok(!/\.detail-stats \.tip\{display:inline-block/.test(css),'the cell is not restyled as an inline ?');
+ assert.ok(/details\.detail-stat>summary\{display:flex;align-items:baseline;gap:8px;padding:5px 0/.test(css),
+  'and the open control keeps the exact shape of a plain row, so the 2-column layout does not shift');
+ assert.ok(/details\.detail-stat>summary::-webkit-details-marker\{display:none\}/.test(css),'with no twisty added');
+ assert.ok(/details\.detail-stat>summary:focus-visible\{outline:/.test(css),'and it is reachable and visible by keyboard');
  // Player-facing Stat detail vocabulary, with no Base/Equip English mixture
  for(const w of ['기본','장비','현재 적용값','변화 원인'])
   assert.ok(app.includes('<span>'+w+'</span>')||app.includes(w+'<br>'),'the detail says '+w);

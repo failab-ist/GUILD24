@@ -570,12 +570,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .dest-plate .hazards b{color:var(--warn);min-width:4.2em}
 .dest-plate .hazards .press{color:#a2947c}
 .dest-plate .hazards em{font-size:var(--t-sm)}
-.detail-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;margin:0 0 14px;padding:6px 12px 8px;
+.detail-stats{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;margin:0 0 14px;padding:6px 12px 8px;
  background:#00000038;box-shadow:inset 2px 2px 0 #00000047,inset -2px -2px 0 #ffffff0f}
-.detail-stat{position:relative;display:flex;align-items:baseline;gap:8px;padding:5px 0;box-shadow:inset 0 -1px 0 #ffffff14}
-/* SA-Q14: the direction glyph is the non-colour cue, so the reading does not depend on hue. */
-.detail-stat .dir{margin-left:auto;font-style:normal;font:600 11px/1 var(--ui)}
-.detail-stat .dir+strong{margin-left:4px}
+.detail-stat{display:flex;align-items:baseline;gap:8px;padding:5px 0;box-shadow:inset 0 -1px 0 #ffffff14}
+/* A Stat whose change has a provable source is the control itself: the whole cell opens the
+   reason. The row keeps its exact shape so the two-column grid does not move, and the marker
+   is suppressed because the affordance is the row, not a twisty. */
+details.detail-stat{display:block;padding:0}
+details.detail-stat>summary{display:flex;align-items:baseline;gap:8px;padding:5px 0;list-style:none;cursor:pointer}
+details.detail-stat>summary::-webkit-details-marker{display:none}
+details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .detail-stat label{font:400 13px/1 var(--ui);color:#a2947c;min-width:3.6em}
 .detail-stat strong{margin-left:auto;font:600 20px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .trait-list{margin:0 0 12px;display:grid}
@@ -617,8 +621,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    same red the Hazard rows use when the customer is not ready for what is waiting. */
 .readout .fore b.env-ok,.readout .fore b.env-lack{font-size:16px}
 .readout .fore b.env-lack{color:var(--blood)}
-.readout .tip,.dest-plate .tip,.kit .tip,.detail-stat .tip{display:inline-block;margin-left:6px;position:static}
-.readout .tip>summary,.dest-plate .tip>summary,.kit .tip>summary,.detail-stat .tip>summary{display:inline-flex;align-items:center;justify-content:center;
+.readout .tip,.dest-plate .tip,.kit .tip{display:inline-block;margin-left:6px;position:static}
+.readout .tip>summary,.dest-plate .tip>summary,.kit .tip>summary{display:inline-flex;align-items:center;justify-content:center;
  min-width:24px;min-height:24px;padding:0 4px;list-style:none;cursor:pointer;
  font:600 12px/1 var(--ui);color:#cbb98d;background:#00000059;box-shadow:inset 0 0 0 1px #ffffff1f}
 .readout .tip>summary::-webkit-details-marker,.dest-plate .tip>summary::-webkit-details-marker,.kit .tip>summary::-webkit-details-marker{display:none}
@@ -627,16 +631,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    block, so opening a ? never makes the panel itself taller and the rows below do not move.
    It is positioned against the panel rather than the little ? so it can never run off either
    edge, which is what a transform-centred bubble does to the rightmost control on a phone. */
-.readout .tip>p,.dest-plate .tip>p,.kit .tip>p,.detail-stat .tip>p{position:absolute;left:10px;right:10px;
+.readout .tip>p,.dest-plate .tip>p,.kit .tip>p,.detail-stats .tip>p{position:absolute;left:10px;right:10px;
  z-index:30;margin:0;padding:9px 11px;font:400 12px/1.6 var(--ui);color:#e8dcc0;
  background:#191108f2;box-shadow:inset 0 0 0 1px #ffffff26,0 6px 0 #00000059}
 /* each line of a tooltip is its own line: two labelled facts should not read as one sentence */
-.readout .tip>p>span,.dest-plate .tip>p>span,.kit .tip>p>span,.detail-stat .tip>p>span{display:block}
+.readout .tip>p>span,.dest-plate .tip>p>span,.kit .tip>p>span,.detail-stats .tip>p>span{display:block}
 /* The outlook sits above the plate, so its balloon drops; the plate is the lowest block on the
    counter and its container clips, so its balloon rises. Either way the panel keeps its height. */
-.readout .tip>p,.kit .tip>p,.detail-stat .tip>p{top:calc(100% - 4px)}
+.readout .tip>p,.kit .tip>p{top:calc(100% - 4px)}
+/* the Stat balloon rises from the bottom of the grid, so it never pushes the panel taller. */
+.detail-stats .tip>p{top:calc(100% - 4px)}
 .dest-plate .tip>p{bottom:calc(100% - 4px)}
-.readout .tip[open],.dest-plate .tip[open],.kit .tip[open],.detail-stat .tip[open]{display:inline-block;width:auto}
+.readout .tip[open],.dest-plate .tip[open],.kit .tip[open]{display:inline-block;width:auto}
 /* the plate's label is a caps micro-line; the ? must not inherit its letter-spacing */
 .dest-plate .tip>summary{letter-spacing:0}
 /* the source of a change is a heading over its rows, so a derived one cannot read as the
@@ -645,8 +651,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .effects.derived li b{font-family:var(--ui);font-weight:400;font-size:var(--t-sm);color:#a2947c;text-align:right}
 /* beneficial green / harmful red / unchanged default - the same two colours the NIGHT change
    tokens already use, so one movement does not read two ways across the screens. */
-.detail-stat.up strong,.detail-stat.up .dir{color:#9fd6a8}
-.detail-stat.down strong,.detail-stat.down .dir{color:#e8927f}
+.detail-stat.up strong{color:#9fd6a8}
+.detail-stat.down strong{color:#e8927f}
 .ingredients{margin:6px 0 0;font:400 12px/1.65 var(--ui);color:#a2947c}
 .readout .estimate{margin-top:8px;font:400 12px/1.5 var(--ui);color:#8d8067}
 /* D-12. `부식 → 강인함 압박 → 취약` is one sentence about one Hazard, but stacked at a 2px gap

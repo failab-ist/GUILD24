@@ -710,27 +710,34 @@ function statGrid(n){
       this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
       The adventurer's own stat is the baseline: whatever a Trait, a Relic or a supplied item has
       added on top is what the decimal is there to show. */
-   /* SA-Q14. A moved Stat used to be generic gold: it said SOMETHING changed and left the
-      player to work out whether that was good news. For a Core Stat the meaning is settled -
-      more is better - so a rise is beneficial and a fall is harmful, and the classification is
-      by meaning rather than by the sign of a number. Colour is never the only cue: each moved
-      row also carries a direction glyph and says which it is in its accessible name. Where the
-      change has a provable source already in the prepared snapshot, that source is exposed
-      through the SAME shared anchored tip the compact state and the readout use - not an
-      accordion, which changed the panel's height as the player opened it. */
+   /* SA-Q14 + the approved Stat-source UX. A moved Stat reads as beneficial or harmful by
+      MEANING - for a Core Stat more is better - and keeps its green/red value. The separate 유리
+      / 불리 chip and the separate `?` are gone: where the prepared snapshot already knows what
+      moved the Stat, the whole cell IS the control, and tapping it opens those real sources.
+      It is the same shared anchored tip the compact state and the readout use - one exclusive
+      `sale-tip` group, so tapping the same Stat closes it and another Stat switches it, and the
+      existing outside-tap / Escape handlers close it - so nothing new is invented and the
+      balloon is out of flow, leaving the two-column grid exactly as tall as it was.
+      A Stat that did not move, or moved with no provable source, stays a plain non-interactive
+      cell: colour but no affordance, and never an empty popup. */
    return '<div class="detail-stats">'+Adventurer.keys.map(k=>{
     const delta = values[k]-n.stats[k], moved = delta!==0;
     const sense = !moved ? '' : delta>0 ? 'up' : 'down';
-    const list = moved ? (prep.effects.sources?.[k] || []) : [];
-    const cue = moved ? '<i class="dir">'+(sense==='up'?'유리':'불리')+'</i>' : '';
-    const named = Presentation.labels[k]+(moved?' · '+(sense==='up'?'유리한 변화':'불리한 변화'):'');
-    const why = list.length
-     ? tip(Presentation.labels[k]+' 변화 원인',
-        ...list.map(x=>x.name+' '+(x.v>0?'+':'')+(x.isPct?Math.round(x.v)+'%':Presentation.stat(x.v,true))))
-     : '';
-    return '<div class="detail-stat'+(sense?' '+sense:'')+'" aria-label="'+E(named)+'">'
-     +'<label>'+Presentation.labels[k]+'</label>'+cue
-     +'<strong>'+Presentation.stat(values[k],moved)+'</strong>'+why+'</div>';
+    /* the prepared snapshot returns its provenance as prep.sources - `prep.effects.sources`
+       never existed, which is why the old `?` opened on nothing. Nothing is recomputed here. */
+    const list = moved ? (prep.sources?.[k] || []) : [];
+    const label = Presentation.labels[k];
+    const face = '<label>'+label+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
+    const cls = 'detail-stat'+(sense?' '+sense:'');
+    if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
+    /* the accessible name carries what colour alone cannot: which way it moved, and that the
+       reason can be opened here. */
+    const said = label+' '+(sense==='up'?'증가':'감소')+' · 변화 원인 보기';
+    return '<details class="'+cls+' tip" name="sale-tip">'
+     +'<summary aria-label="'+E(said)+'">'+face+'</summary>'
+     +'<p><span>'+E(label+' 변화 원인')+'</span>'
+     +list.map(x=>'<span>'+E(x.name+' '+(x.v>0?'+':'')+(x.isPct?Math.round(x.v)+'%':Presentation.stat(x.v,true)))+'</span>').join('')
+     +'</p></details>';
    }).join('')+'</div>';
 }
 // ORDER — a paper, filled. The back room: dark wood and shelving. One order form
