@@ -56,6 +56,56 @@ test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const
 test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','delivery'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
 test('empty provisioning cannot grind knowledge',()=>{const g=fresh();g.open();while(g.run.phase==='sell')g.depart();assert.deepEqual(g.account.knowledge,{});});
 test('same SKU bulk across separate offers; board does not change rookie level',()=>{const g=fresh();g.run.facilities=['bulk'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:2},{item:'water',price:25,quantity:2}];g.setQuantity(0,2);g.setQuantity(1,1);assert.equal(g.cartTotal(),71);g.confirmOrder();assert.equal(g.run.inventory.reduce((a,x)=>a+x.cost,0),71);const a=fresh('board-level'),b=fresh('board-level');a.run.facilities=[];b.run.facilities=['board'];assert.equal(a.addNPC().level,b.addNPC().level);});
+/* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49. Reducing the candidate pool to the
+   one NPC under test makes a weighted draw of one deterministic - it is the only thing that can
+   be selected - without needing to fight the real selection weights for a guaranteed pick. */
+test('ECO-Q-v28-3B / SA-Q49: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints, cap, and failed-expedition Loot untouched',()=>{
+ const g=fresh('eco-q49');
+ const n=g.run.npcs[0];
+ g.run.npcs=[n];
+ g.addNPC=()=>null; // an unrelated Morning Event may otherwise seat a second candidate
+ const originalInt=g.rng.int.bind(g.rng);
+ let rolls=0;
+ const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===0&&b===100){rolls++;return v;}return originalInt(a,b);};};
+
+ // A - a never-introduced NPC: Wallet = 180 + Level*8 + roll, roll forced to its 0 endpoint
+ n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(0);
+ g.run.day=2;g.morning();
+ assert.ok(g.run.queue.includes(n.id),'the lone NPC is the only candidate available that Day');
+ assert.equal(n.money,180+3*8+0,'fresh Wallet = 180 + Level*8 + roll, roll forced to its 0 endpoint');
+ assert.equal(n.newToday,true,'a never-introduced NPC is a fresh visit');
+ assert.equal(rolls,1,'exactly one visit-income roll for the one visited NPC - no new draw was added');
+
+ // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 100 endpoint
+ n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(100);
+ g.run.day=3;g.morning();
+ assert.ok(g.run.queue.includes(n.id));
+ assert.equal(n.money,500+3*8+100,'returning Wallet = existing Wallet + Level*8 + roll, roll forced to its 100 endpoint');
+ assert.equal(n.newToday,false,'an already-introduced NPC is a returning visit');
+ assert.equal(rolls,1);
+
+ // C - the 2000 cap still applies at the raised base/range
+ n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(100);
+ g.run.day=4;g.morning();
+ assert.equal(n.money,2000,'the 2000 cap is unchanged by the raised base/range');
+ g.rng.int=originalInt;
+
+ // D - failed-expedition Loot is Dungeon.resolve's own computation (outcome/Day/reward only) -
+ // a wholly separate function this amendment never touched, so a 퇴각 Loot still follows its
+ // pre-existing formula rather than reading the moved Wallet base/range.
+ let sampled=0;
+ for(let i=0;i<600&&sampled<5;i++){
+  const r=new RNG('eco-q49-loot-'+i);
+  const npc=Adventurer.create(r,i,r.int(1,29),Meta.fresh());
+  const d={...DATA.dungeonBy.spider,day:r.int(1,29),tier:2,hazards:['poison'],scale:1.6,power:r.int(60,140),reward:1};
+  const rep=Dungeon.resolve(npc,d,r,[]);
+  if(rep.outcome==='퇴각'){
+   assert.equal(rep.loot,Math.round((35+d.day*8)*.08*(d.reward||1)),'a 퇴각 Loot follows its own untouched formula');
+   sampled++;
+  }
+ }
+ assert.ok(sampled>0,'sanity: at least one 퇴각 sample was observed to check');
+});
 test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other seeded result',()=>{
  const ids=new Set();
  for(let i=0;i<80;i++){const g=fresh('boss-'+i);
