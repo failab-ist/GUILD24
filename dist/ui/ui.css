@@ -519,6 +519,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  transition:transform .18s ease-out,opacity .18s ease-out,visibility 0s}
 @media (prefers-reduced-motion:reduce){#toast,#toast.show{transition:opacity .18s ease-out}}
 
+/* USER-APPROVED OPENING. The runless backdrop is the game's title card: the name on one line,
+   the store about to open directly under it and visibly secondary. Mulmaru is the shipped
+   signage face the rest of the world's plates use, so the title needs no new font. The size is
+   fluid and clamped, and the line never wraps - at the 320px floor the clamp bottoms out at
+   30px, which the six glyphs and two spaces clear with room to spare. */
+.opening{display:grid;justify-items:center;gap:10px;padding:34px 16px 6px;text-align:center}
+.opening-title{margin:0;white-space:nowrap;color:#f2e7cd;
+ font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none}
+.opening-branch{margin:0;font:500 clamp(14px,4.2vw,18px)/1.4 var(--ui);letter-spacing:.02em;color:#a2947c}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));

@@ -2,6 +2,17 @@
 'use strict';
 const D=DATA,E=Art.esc,$=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('ko-KR');
 let stored=Save.read(),game=new Game(stored?.account||Meta.fresh(),stored?.run||null),selected=null,modal=null,codexTab='items',supplyNPC=null,toastTimer,previousFocus=null;
+/* USER-APPROVED OPENING. The backdrop names the store that is about to open, so the branch it
+   shows must be the branch the Run actually receives. Game.start(seed) takes that name as the
+   FIRST draw of a fresh RNG(seed), so the same seed through a throwaway RNG reproduces it
+   exactly without touching gameplay state - no second catalogue, no second selection rule and
+   no extra draw on the run stream. The seed is memoized so reopening this screen, or a trip
+   through Store Management, cannot reroll the store the player was just shown. */
+let pendingSeed=null;
+const plannedSeed=()=>{const s=game.run;
+ if(s&&s.phase==='foundation')return s.seed;   // an unopened store keeps its own seed
+ return pendingSeed??=('g24-'+Date.now().toString(36));};
+const plannedBranch=()=>new RNG(plannedSeed()).pick(D.brand.branches);
 /* SA-Q01. Pre-Run Store Management is opened from the new-Run preparation panel and replaces
    it, so it needs a way back to it. During `foundation` the generic Close is deliberately
    suppressed and `dismiss` is a no-op - correct for the store-support takeover, but it left
@@ -128,7 +139,7 @@ function stampPress(el){
 }
 function render(){
  const s=game.run;Sound.sync(game.account.settings.muted,s?.phase,game.account.settings);
- if(!s){$('#app').innerHTML=stage('start','새 점포','','<p class="eyebrow">GUILD24</p><h2 class="welcome-title">오늘도 문을 연다.</h2><p class="muted">초기 자금 1,000G · 창고 18칸 · 30일 영업</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),btn('첫 영업 준비','new','stamp'));if(!modal)setModal('new');return;}
+ if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),btn('첫 영업 준비','new','stamp'));if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
  /* Replacing #app wholesale drops focus. On a redraw of the same view it goes back on the
     same control, or a keyboard user is thrown to the top of the screen on every pick.
@@ -1156,7 +1167,7 @@ function newRun(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta
    +'<button class="deco-jump" data-action="store-manage" data-id="'+E(slot)+'"'
    +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+' · 점포 관리에서 보기">'
    +'<span>'+E(SLOT_COPY[slot]||slot)+'</span><b>'+(d?E(d.name):'비움')+'</b></button></li>';}).join('');
- return `<div class="eyebrow">길드리테일 가맹점</div><h2 class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</h2><p class="muted">찾아오는 모험가를 보급하고, 성장시킨다.</p><div class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음'}</p><p>${btn('점포 관리 · 자본 '+Meta.storeCapital(a).toLocaleString(),'store-manage','bare')}</p>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
+ return `<h2 class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</h2><p class="muted">찾아오는 모험가를 보급하고, 성장시킨다.</p><div class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음'}</p><p>${btn('점포 관리 · 자본 '+Meta.storeCapital(a).toLocaleString(),'store-manage','bare')}</p>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
 /* Two levels, one row each, with the number said out loud beside the control - the slider
    position alone is not a readable value. The master switch above them is the existing
    mute, so this adds controls and no fourth channel: there are no voices to balance. */
@@ -1311,15 +1322,13 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     state is discarded by the ordinary fresh-Run path and the account is left untouched.
     Running out of money is a different thing and still ends the run normally (retire). */
  case'start':{
-  /* SA-Q35. The reproducibility Seed is a QA/dev affordance, not an ordinary Player control, so
-     it has no input on the preparation screen any more. The development route is unchanged and
-     is the supported one: Guild24.game.start('<seed>'); Guild24.render(). */
-  const typed=$('#seed')?.value.trim();
-  /* Returning from a store that has not opened keeps that store's seed, so reopening this
-     screen is not a free re-roll of the DAY 0 store support the player has already been shown.
-     Typing a seed is still the explicit reproducibility feature; leaving it empty on an opened
-     Run is still a brand new world. */
-  const seed=typed||(s?.phase==='foundation'?s.seed:null)||'g24-'+Date.now().toString(36);
+  /* SA-Q35: the reproducibility Seed is a QA/dev affordance and has no Player control here; the
+     supported route is Guild24.game.start('<seed>'); Guild24.render().
+     The Run opens on exactly the seed the backdrop already planned, so the store the player was
+     shown is the store they get. Returning from an unopened store still reuses that store's own
+     seed rather than re-rolling the DAY 0 support they have already seen. */
+  const seed=plannedSeed();
+  pendingSeed=null;                    // spent: a later new Run plans its own
   preRunReturn=false;game.start(seed);selected=null;setModal(null);render();break;}
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button

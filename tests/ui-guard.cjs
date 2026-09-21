@@ -526,11 +526,14 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  // shown by then, so returning keeps this store's seed. Only an explicitly typed seed, or
  // abandoning a store that has opened, makes a new world.
  // (RUN-Q10/Q11/Q12 forbid the same thing for a reload.)
- const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+1100);
- assert.ok(start.includes("s?.phase==='foundation'?s.seed"),
+ /* The seed the Run opens on is now planned once, before the Run exists, so the backdrop can
+    name the store truthfully; `case'start'` spends that plan rather than minting at the press. */
+ const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+900);
+ assert.ok(/const seed=plannedSeed\(\);/.test(start),'Start opens on the planned seed');
+ assert.ok(/s\.phase==='foundation'\)return s\.seed/.test(app),
   'returning from an unopened store reuses its seed instead of minting a new one');
- assert.ok(start.indexOf('typed||')<start.indexOf("'g24-'+Date.now()"),
-  'a typed seed still wins, and a fresh seed is the last resort');
+ assert.ok(app.indexOf("pendingSeed??=('g24-'+Date.now()")>0,'and a fresh seed is the last resort');
+ assert.ok(/pendingSeed=null;/.test(start),'the plan is spent once the Run starts');
  /* SA-Q35 retired the Player-facing Seed control, so the carried seed is no longer SHOWN on
     the preparation screen - it is still the seed `case'start'` reuses, asserted just above. */
  assert.ok(!/id="seed"/.test(fn('newRun')),'the preparation screen exposes no Seed control');
@@ -1585,7 +1588,7 @@ test('SA-Q35: ordinary Settings is Korean and carries no repro/dev surface',()=>
  // the seed a dev passes still reaches the Run, and a carried foundation seed is still reused
  const start=app.slice(app.indexOf("case'start':{"),app.indexOf("case'start':{")+1100);
  assert.ok(/game\.start\(seed\)/.test(start),'the start path still takes a seed');
- assert.ok(start.includes("s?.phase==='foundation'?s.seed"),'and still reuses an unopened store seed');
+ assert.ok(/s\.phase==='foundation'\)return s\.seed/.test(app),'and still reuses an unopened store seed');
 });
 
 /* SA-Q36 — DECORATION DECISION SURFACE. The comparison carried Flavor prose beside the effect
@@ -1858,41 +1861,66 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
  assert.ok(!pres.includes('NPC 소지금 획득'),'and the internal NPC wording is gone');
 });
 
-/* USER-APPROVED opening copy. The pre-Run screen must state the three axes of the game in its
-   first three lines: a 30-day store, adventurer growth, and the final expedition. */
-test('OPENING: the pre-Run screen states the 30 days, the growth and the final expedition',()=>{
+/* USER-APPROVED opening. The runless backdrop is the title card - the game's name on one line
+   and, under it, the store this Run is about to open. The preparation modal then states the
+   three axes of the game. */
+test('OPENING: the backdrop is the title card and names the store this Run will open',()=>{
+ const back=app.slice(app.indexOf('if(!s){$(\'#app\').innerHTML=stage(\'start\''),app.indexOf('const phase=s.phase'));
+ // 1 / 2: the title, one deliberate line
+ assert.ok(back.includes('<h1 class="opening-title">던전 앞 편의점</h1>'),'the backdrop carries the title');
+ assert.ok(/\.opening-title\{[^}]*white-space:nowrap/.test(css),'the title is one line by rule, not by luck');
+ assert.ok(/\.opening-title\{[^}]*var\(--f-plate\)/.test(css),'set in the shipped ATMOSPHERE face');
+ assert.ok(/\.opening-title\{[^}]*clamp\(30px,[^)]*\)/.test(css),'fluid and clamped for mobile-first sizing');
+ assert.ok(/\.opening-branch\{[^}]*clamp\(14px/.test(css),'and the branch under it is visibly secondary');
+ // 3: the branch comes from the existing catalogue, through the existing pick
+ assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');
+ assert.ok(/const plannedBranch=\(\)=>new RNG\(plannedSeed\(\)\)\.pick\(D\.brand\.branches\)/.test(app),
+  'derived from DATA.brand.branches with the same first-pick behaviour Game.start uses');
+ assert.equal((app.match(/brand\.branches/g)||[]).length,1,'there is no second branch catalogue or selection rule');
+ // 6: the preview cannot touch gameplay RNG - it is its own throwaway instance
+ assert.ok(!/game\.rng/.test(app.slice(app.indexOf('let pendingSeed'),app.indexOf('function render()'))),
+  'the preview never reaches the run stream');
+ // 5: only two places touch the plan - the memoise, and spending it at Start
+ const writes=app.match(/pendingSeed(\?\?)?=/g)||[];
+ assert.deepEqual(writes,['pendingSeed=','pendingSeed??=','pendingSeed='],
+  'the plan has exactly three sites: declared, memoised once, cleared once');
+ assert.ok(/let pendingSeed=null;/.test(app),'declared empty');
+ const ret=app.slice(app.indexOf("case'store-return'"),app.indexOf("break;",app.indexOf("case'store-return'")));
+ assert.ok(!/pendingSeed|plannedSeed/.test(ret),'a Store Management round trip does not touch the plan');
+ assert.ok(!/pendingSeed|plannedSeed/.test(fn('storePanel')+fn('newRun')),'and neither panel re-plans it');
+ // 4: the planned branch IS the branch the Run receives - the rule, run against the engine
+ for(const seed of ['g24-abc','g24-zzz','opening-1','opening-2','opening-3']){
+  const preview=new RNG(seed).pick(DATA.brand.branches);
+  const g=new Game();g.autosave=false;g.start(seed);
+  assert.equal(g.run.branch,preview,'seed '+seed+': the previewed store is the store that opens');
+  assert.ok(DATA.brand.branches.includes(g.run.branch),'and it comes from the shipped catalogue');
+ }
+ // 7: gameplay still renders that same actual branch
+ assert.ok(/class="branchplate">'\+E\(s\.branch\)/.test(app),'the Morning store plate reads run.branch');
+ // 9: the superseded backdrop copy is gone
+ for(const gone of ['오늘도 문을 연다.','초기 자금 1,000G','30일 영업','<p class="eyebrow">GUILD24</p>'])
+  assert.ok(!app.includes(gone),'the superseded backdrop copy is gone: '+gone);
+ assert.ok(!/class="eyebrow"/.test(back),'and the backdrop carries no eyebrow');
+});
+
+test('OPENING: the preparation modal starts on the three axes, with no franchise eyebrow',()=>{
  const intro=fn('newRun');
+ // 8: the eyebrow is gone from the modal
+ assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation modal carries no 길드리테일 가맹점 eyebrow');
+ assert.ok(!app.includes('길드리테일 가맹점'),'and it is gone from the build');
+ assert.ok(/return `<h2 class="welcome-title">30일 동안/.test(intro),'the modal begins on the approved first line');
  for(const line of ['30일 동안 던전 앞 편의점을 운영한다.',
                     '찾아오는 모험가를 보급하고, 성장시킨다.',
                     '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
-  assert.ok(intro.includes(line),'the approved opening line is present: '+line);
- // each lands in the existing slot of the existing hierarchy, so the screen is not redesigned
+  assert.ok(intro.includes(line),'the approved line is present: '+line);
  assert.ok(/class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\./.test(intro),'line 1 is the welcome title');
  assert.ok(/class="muted">찾아오는 모험가를 보급하고, 성장시킨다\./.test(intro),'line 2 is the supporting text');
  assert.ok(/class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\./.test(intro),'line 3 is the welcome band');
- // the superseded block is gone, from Source and from the Canonical kept-list alike
- const canon=read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md');
- for(const gone of ['오늘도 문을 연다.','마왕성 개방까지 30일.','시작 재고는 창고에 있다.']){
-  assert.ok(!intro.includes(gone),'the superseded opening line is gone from the screen: '+gone);
-  assert.ok(!canon.includes(gone),'and Canonical no longer keeps it: '+gone);
- }
- /* The two lines that existed only here are gone from the build entirely. The old title also
-    appears once more, on the runless backdrop stage behind this modal, with its own different
-    supporting text - that string was not part of this approved change, so it is left alone and
-    pinned here rather than drifting unnoticed. */
- for(const gone of ['마왕성 개방까지 30일.','시작 재고는 창고에 있다.'])
-  assert.ok(!app.includes(gone),'gone from the whole build: '+gone);
- assert.equal((app.match(/오늘도 문을 연다\./g)||[]).length,1,
-  'the old title survives only on the runless backdrop stage, which this change did not cover');
  // everything the change was scoped to keep
- assert.ok(intro.includes('길드리테일 가맹점'),'the eyebrow stays');
  assert.ok(intro.includes('이번 영업의 장식'),'the Decoration heading stays');
  assert.ok(/data-action="store-manage"/.test(intro),'the Store Management entry stays');
- assert.ok(/D\.decorationSlots\.map/.test(intro),'and the Decoration rows stay');
- // the removed local was display-only: the real starting Gold rule is untouched
- assert.ok(!/const start=1000\+/.test(app),'the dead display-only local is gone');
- assert.ok(shop.includes("const startGold=1000+(Object.values(loadout).includes('thriftSafe')?D.balance.decorationStartGold:0);"),
-  'and Game.start() still computes the actual starting Gold');
+ assert.ok(/D\.decorationSlots\.map/.test(intro),'the Decoration rows stay');
+ assert.ok(/Meta\.storeCapital\(a\)/.test(intro),'and the Capital display stays');
 });
 
 console.log(count+' ui guard groups passed');
