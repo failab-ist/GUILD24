@@ -276,7 +276,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     description has to say the channel it moves and the ones it does not. */
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
-  assert.ok(/능력치 (증가 )?효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
+  assert.ok(/능력치 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
   assert.ok(/보급/.test(DATA.relicBy[id].description)&&!/보급·능력치|보급 효과 \+/.test(DATA.relicBy[id].description),
    id+' does not claim the Supply it leaves unchanged');
  }

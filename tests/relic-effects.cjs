@@ -9,12 +9,11 @@ function fresh(seed='relic-effects'){const g=new Game();g.autosave=false;g.start
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 test('bulk engines require quantity/traffic/previous-day sales, and affect actual cost',()=>{
  const g=fresh(),s=g.run;g.beginOrder();s.offers=[{item:'rice',price:100,quantity:8}];s.cart={0:3};
-  const base=g.cartTotal();s.facilities=['bulk'];assert.ok(g.cartTotal()<base);s.cart={0:2};assert.equal(g.cartTotal(),200);
-  s.cart={0:3};s.facilities=['rotation'];s.previousSales=6;assert.equal(g.cartTotal(),base,'rotation does not discount cart total');
-  for(const [id,threshold]of [['logisticsHQ',7]]){s.facilities=[id];s.cart={0:3};s.previousSales=threshold-1;assert.equal(g.cartTotal(),base);s.previousSales=threshold;assert.ok(g.cartTotal()<base);s.bulkUsed=true;assert.equal(g.cartTotal(),base);s.bulkUsed=false;}
-  s.facilities=['groupFlyer'];s.queue=Array(5).fill('fixture');assert.equal(g.cartTotal(),base);s.queue.push('fixture');assert.ok(g.cartTotal()<base);
-  s.facilities=['dawnBulk'];assert.ok(g.cartTotal()<base);s.offers[0].item='potion';assert.equal(g.cartTotal(),base);
-  s.offers[0].item='rice';const quote=g.cartTotal(),before=s.money;g.confirmOrder();assert.equal(before-s.money,quote);assert.equal(s.inventory.slice(-3).reduce((v,x)=>v+x.cost,0),quote);
+ const base=g.cartTotal();s.facilities=['bulk'];assert.ok(g.cartTotal()<base);s.cart={0:2};assert.equal(g.cartTotal(),200);
+ for(const [id,threshold]of [['rotation',6],['logisticsHQ',8]]){s.facilities=[id];s.cart={0:3};s.previousSales=threshold-1;assert.equal(g.cartTotal(),base);s.previousSales=threshold;assert.ok(g.cartTotal()<base);s.bulkUsed=true;assert.equal(g.cartTotal(),base);s.bulkUsed=false;}
+ s.facilities=['groupFlyer'];s.queue=Array(5).fill('fixture');assert.equal(g.cartTotal(),base);s.queue.push('fixture');assert.ok(g.cartTotal()<base);
+ s.facilities=['dawnBulk'];assert.ok(g.cartTotal()<base);s.offers[0].item='potion';assert.equal(g.cartTotal(),base);
+ s.offers[0].item='rice';const quote=g.cartTotal(),before=s.money;g.confirmOrder();assert.equal(before-s.money,quote);assert.equal(s.inventory.slice(-3).reduce((v,x)=>v+x.cost,0),quote);
 });
 test('offer weights and quantities match relevant product roles',()=>{
  const g=fresh(),s=g.run,potion=DATA.itemBy.potion,premium=DATA.itemBy.premium;
@@ -43,11 +42,17 @@ test('premium guarantee obeys wallet, daily limit and never guarantees acceptanc
 });
 function nightWith(facilities,visits=2,paid=true){const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=visits;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=60;n.money=100;n.destination=0;n.claimedDestination=0;n.history=paid?[{day:s.day,item:'rice',paid:35,mode:'half'}]:[];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return {g,n};}
 test('return points excludes first visit, no-sale and free transfer',()=>{
- for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?30:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?2:0);}
+ for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?12:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?2:0);}
 });
 test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
- const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,50);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
- const raw={showcase:10,hub:base.g.overheadBase()*DATA.balance.hubOverheadRate,efficiency:-30};
+ const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,25);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
+ /* Two things this line used to get wrong. hub's cost is a PROPORTION of the overhead base
+    under the approved bundle, not the flat +35 it was written against; and the operating cost
+    is rounded to the nearest 10G, so what the store is actually charged is not the raw
+    modifier - a 15G saving lands as 20G off this base. The expected figure is therefore
+    derived from the rule AND its rounding, and the raw modifier each Relic contributes is
+    asserted separately, so neither half can drift unnoticed. */
+ const raw={showcase:10,hub:base.g.overheadBase()*DATA.balance.hubOverheadRate,efficiency:-15};
  const charged=x=>Math.round((base.g.overheadBase()+x)/10)*10;
  for(const [id,modifier] of Object.entries(raw)){
   assert.equal(nightWith([id]).g.run.daily.operating-base.g.run.daily.operating,
@@ -56,6 +61,6 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
  assert.equal(raw.hub,base.g.overheadBase()*0.10,'hub is 10% of the overhead base, the approved rate');
 });
 test('D30 excludes throughput Relics whose condition cannot be met anymore',()=>{
- for(let i=0;i<100;i++){const g=fresh('final-offer-'+i);g.run.previousSales=0;g.relicWindow(30);assert.ok(g.run.relicWindow.candidateIds.every(id=>!['stamp','member','guarantee','fridge','board','rookieBoard','groupFlyer','memberBundle','premiumMember','returnPoints','supplyCert','lifetime','royalCert','hub','efficiency'].includes(id)));}
+ for(let i=0;i<100;i++){const g=fresh('final-offer-'+i);g.run.previousSales=0;g.relicWindow(30);assert.ok(g.run.relicWindow.candidateIds.every(id=>!['rotation','logisticsHQ'].includes(id)));}
 });
 console.log(count+' Relic effect groups passed');

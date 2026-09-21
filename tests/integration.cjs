@@ -1045,12 +1045,12 @@ test('RELIC_v2.7 §VISITOR RELICS: board floors the base roll, hub rolls one exc
  /* board is a floor on the BASE roll, applied before every other modifier, and draws nothing. */
  assert.ok(src.includes("const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;"),
   'board raises the base roll to 4 and leaves 5 and 6 alone');
-  /* hub: one roll, three mutually exclusive outcomes. */
-  assert.ok(src.includes("const r=this.rng.next();hubExtra=r<.45?1:r<.60?2:0;"),
-   'hub makes exactly one roll: 45% +1, 15% +2, otherwise none');
-  const seen=new Set();
-  for(let i=0;i<1000;i++){const r=i/1000;seen.add(r<.45?1:r<.60?2:0);}
-  assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
+ /* hub: one roll, three mutually exclusive outcomes. */
+ assert.ok(src.includes("const r=this.rng.next();hubExtra=r<.30?1:r<.35?2:0;"),
+  'hub makes exactly one roll: 30% +1, 5% +2, otherwise none');
+ const seen=new Set();
+ for(let i=0;i<1000;i++){const r=i/1000;seen.add(r<.30?1:r<.35?2:0);}
+ assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
  /* hub's cost is a share of overheadBase alone - never of the flat extras. */
  assert.equal(DATA.balance.hubOverheadRate,.10,'the approved rate ships');
  const g=fresh('visitor-relics');
