@@ -74,6 +74,24 @@ Active v2.8 pools must not contain:
 
 PASS uses the exact replacements in COPY_WORLD_VOICE_v2.8.
 
+## NPC-Q-v28-4B — DIALOGUE EXPOSURE / RECENT REPEAT
+
+For the active ARRIVAL / SALE / NIGHT / DEATH pools, verify the current minimum pool sizes and
+recent-repeat rule in COPY_WORLD_VOICE_v2.8.0.md.
+
+PASS:
+- each required Pool meets or exceeds its current minimum size
+- ARRIVAL / SALE / NIGHT track recent visible lines separately
+- an exact line used within the previous 3 visible beats on that Surface is ineligible
+- the same NPC does not immediately repeat its previous line from the same Pool
+- later same-Run reuse remains possible after the exclusion window
+- selection is deterministic for the same saved state
+- dialogue selection consumes no Gameplay RNG
+- Save/Load does not change an already-determined visible line
+- no pool expansion invents a purchase preference or mechanic absent from the owning Trait/System
+
+DEATH narration pool-size checks apply, but Death does not use the living speech-bubble rule.
+
 ## NPC-Q-v28-5 — HELPED CALLBACK REQUIRES ITEM PROOF
 
 Trait-only or generic previous-result events do not unlock a \`지난 보급이 도움 됐다\` callback.
