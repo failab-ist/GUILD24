@@ -268,6 +268,21 @@ display 프리미엄 쇼케이스   550 Store Capital
 The spread is deliberately narrow. The four measured within 1.37x of each other in Run value, so
 a wider price spread would let price decide the pick instead of the effect.
 
+## STORE-GROWTH VISUAL PROJECTION — PRESENTATION ONLY
+
+Store-growth presentation may project already-owned/current state into the live store through
+UI_UX_v2.8.0.md.
+
+This includes equipped Decorations and may coexist with run-state traces owned by other current
+Specs, such as Store Support, Trusted Regular and revealed Final-preparation state.
+
+The projection:
+- creates no new Meta resource or unlock
+- grants no passive effect beyond the actual owned mechanic
+- requires no new persistent progression field
+- does not change Decoration Slot count or loadout rules
+- must remain truthful after Save/Load because it is derived from existing state
+
 ## POWER / INFLATION BOUNDARY
 
 Decoration effects operate through store/economy/access channels.
