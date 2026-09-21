@@ -88,6 +88,14 @@ Mode values remain:
 | 정가 | 1.00 | 0.65 | 0 |
 | 바가지 | 1.50 | 1.50 | -0.16 |
 
+For every mode:
+
+    judgedPrice
+    = round(Item list sell price × mode intent multiplier)
+
+This judgedPrice is the same existing hidden comparison value used by the owned price-sensitive
+Trait logic. It does not change the charged amount.
+
 Apply current owned modifiers:
 - injured customer + Insurance: +0.25
 - Trait buyBias
@@ -117,8 +125,6 @@ If effectiveWallet < actualDebit:
 Otherwise:
 
 For 정가 only:
-
-    judgedPrice = round(Item list sell price × 0.65)
 
     burden
     = max(0, judgedPrice - applicable owned guarantee support)
