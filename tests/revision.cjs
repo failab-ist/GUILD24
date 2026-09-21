@@ -383,11 +383,89 @@ test('정가 threshold reaches the decision, and 할인/바가지 are untouched 
  }
  assert.ok(fullMoved>DATA.items.length/2,'and 정가 actually moves - '+fullMoved+' of '+DATA.items.length);
 
- /* And what moves it is the threshold: judged at 1.00 the same offer is weighed more heavily. */
- const it=DATA.itemBy.highpotion,at65=g.interest(n,it,'full').chance;
- const m=rule.intentMult;rule.intentMult=1;
- const at100=g.interest(n,it,'full').chance;rule.intentMult=m;
+ /* And what moves it is the threshold: judged at 1.00 the same offer is weighed more heavily.
+    The burden term is a bonus floored at zero, so it only separates the two judgements where it
+    is live - at a purse where BOTH burdens sit under the pivot. Above the pivot both contribute
+    nothing, which is the rule, not a missing effect. */
+ const it=DATA.itemBy.highpotion;n.money=1200;
+ const judgedAt=j=>{const m=rule.intentMult;rule.intentMult=j;
+  try{return g.interest(n,it,'full').chance;}finally{rule.intentMult=m;}};
+ const at65=judgedAt(.65),at100=judgedAt(1);
+ assert.ok(Math.round(it.sell)/n.money<rule.intentPivot,'the control sits where the term is live');
  assert.ok(at65>at100,'.65 is worth something to the customer: '+at65.toFixed(3)+' vs '+at100.toFixed(3));
+ n.money=400;
+});
+
+/* ECONOMY_ORDER §PURCHASE INTENT. The burden term is a BONUS only: a light offer is helped, a
+   heavy one is simply not helped. It may never subtract, because affordability is already
+   decided by the wallet gate and an offer the customer CAN pay for should not also be taxed. */
+test('the 정가 burden term is a bonus only, and never a penalty',()=>{
+ const g=fresh();g.open();const n=g.current();n.traits=[];n.loyalty=0;
+ const rule=DATA.pricing.full,it=DATA.itemBy.highpotion;
+ assert.equal(rule.intentPivot,.36);assert.equal(rule.intentWeight,.5);
+ assert.equal(rule.mult,1,'full price charged is unchanged');
+ assert.equal(rule.intentMult,.65,'and the judged multiplier is unchanged');
+ // the bonus, measured against the same offer with the term switched off
+ const bonusAt=money=>{n.money=money;
+  const on=g.interest(n,it,'full').chance;
+  const w=rule.intentWeight;rule.intentWeight=0;
+  const off=g.interest(n,it,'full').chance;rule.intentWeight=w;
+  return {burden:Math.round(it.sell*rule.intentMult)/Math.max(1,money),delta:on-off,on,off};};
+ // burden < pivot -> positive
+ const light=bonusAt(4000);
+ assert.ok(light.burden<.36,'the light case really is under the pivot: '+light.burden.toFixed(3));
+ assert.ok(light.delta>0,'a light offer gains: +'+light.delta.toFixed(4));
+ assert.ok(Math.abs(light.delta-.5*(.36-light.burden))<1e-9,'and gains exactly weight x (pivot - burden)');
+ // burden = pivot -> exactly 0
+ const atPivot=Math.round(it.sell*rule.intentMult)/.36;
+ const even=bonusAt(atPivot);
+ assert.ok(Math.abs(even.burden-.36)<1e-9,'the control sits exactly on the pivot');
+ assert.equal(even.delta,0,'at the pivot the term contributes exactly nothing');
+ // burden > pivot -> exactly 0, never negative
+ for(const money of [Math.round(atPivot*.9),600,400,300,200]){
+  const heavy=bonusAt(money);
+  if(heavy.burden<=.36)continue;
+  assert.equal(heavy.delta,0,'burden '+heavy.burden.toFixed(3)+' must contribute exactly 0, got '+heavy.delta);
+  assert.ok(heavy.delta>=0,'and can never be negative');
+ }
+ // across the whole catalogue and a spread of purses, the term is never a penalty
+ for(const money of [50,120,300,700,1500,9000])
+  for(const x of DATA.items){
+   n.money=money;
+   const on=g.interest(n,x,'full').chance;
+   const w=rule.intentWeight;rule.intentWeight=0;
+   const off=g.interest(n,x,'full').chance;rule.intentWeight=w;
+   assert.ok(on>=off,x.id+' at '+money+'G: the burden term lowered acceptance ('+on+' < '+off+')');
+  }
+ // the source says so too, so the floor cannot be dropped silently
+ const src=require('node:fs').readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
+ assert.ok(/const burdenIntentBonus=weight\*Math\.max\(0,\(rule\.intentPivot\|\|0\)-burden\);/.test(src),
+  'the bonus is floored at zero in Source');
+});
+
+test('the 정가 burden bonus changes nothing else about acceptance',()=>{
+ const g=fresh();g.open();const n=g.current();n.traits=[];
+ const it=DATA.itemBy.highpotion;
+ // unaffordable -> 0, whatever the burden would have said
+ n.money=1;
+ for(const mode of ['half','full','overcharge'])
+  assert.equal(g.interest(n,it,mode).chance,0,mode+': an unaffordable debit is still refused outright');
+ // 할인 and 바가지 are decided exactly as before: they declare no weight, so no term exists
+ n.money=4000;
+ const rule=DATA.pricing.full;
+ for(const mode of ['half','overcharge']){
+  assert.ok(!DATA.pricing[mode].intentWeight,mode+' declares no weight');
+  const before=g.interest(n,it,mode);
+  const p=DATA.pricing[mode].intentPivot;DATA.pricing[mode].intentPivot=.9;
+  const after=g.interest(n,it,mode);DATA.pricing[mode].intentPivot=p;
+  assert.deepEqual(after,before,mode+' is untouched by the burden term');
+ }
+ // the clamp still bounds the result even with the bonus at its largest
+ n.money=1000000;n.loyalty=100;
+ const c=g.interest(n,it,'full').chance;
+ assert.ok(c<=.97&&c>=.08,'the clamp still holds: '+c);
+ assert.ok(Math.round(it.sell*DATA.pricing.full.mult)===it.sell,'full price charged is still list');
+ void rule;
 });
 
 console.log(checks+' revision groups passed');

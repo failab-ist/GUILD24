@@ -363,7 +363,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     redistributes rather than taxes - a light offer gains, a heavy one loses. 할인 and 바가지
     declare no weight, so their term is zero and they are decided exactly as they always were. */
  const weight=rule.intentWeight||0;
- const chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent+weight*((rule.intentPivot||0)-burden),.08,.97);
+ /* The term is a BONUS for a light offer, never a penalty for a heavy one: max(0, ...) floors it
+    at zero, so price burden can only ever help 정가 acceptance. A purse that cannot cover the
+    debit is already refused above by the wallet<debit gate, which is where affordability is
+    decided - it is not this term's job to punish an offer the customer can actually pay for. */
+ const burdenIntentBonus=weight*Math.max(0,(rule.intentPivot||0)-burden);
+ const chance=wallet<debit?0:clamp(need+n.loyalty*.002+rule.intent+burdenIntentBonus,.08,.97);
  return {price,debit,guarantee,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){

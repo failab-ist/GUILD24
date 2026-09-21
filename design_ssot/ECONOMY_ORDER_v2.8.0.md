@@ -116,12 +116,20 @@ Otherwise:
         need
         + Loyalty × 0.002
         + mode flat intent
-        + modeIntentWeight × (modeIntentPivot - burden),
+        + burdenIntentBonus,
         0.08,
         0.97
       )
 
-Only 정가 has the burden-redistribution term:
+Where:
+
+    burdenIntentBonus
+    = modeIntentWeight × max(0, modeIntentPivot - burden)
+
+The term is a bonus only. A burden at or above the pivot contributes 0; it never subtracts.
+Affordability is already decided by the effectiveWallet < actualDebit gate above.
+
+Only 정가 has the burden term:
 
     modeIntentPivot = 0.36
     modeIntentWeight = 0.50

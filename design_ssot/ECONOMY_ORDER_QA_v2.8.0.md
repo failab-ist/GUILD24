@@ -54,7 +54,10 @@ PASS exact:
 - injured + Insurance = +0.25
 - one occupied Bag slot = -0.10
 - Loyalty contribution = +0.002 per point
-- only 100% uses pivot 0.36 / weight 0.50 burden redistribution
+- only 100% uses the pivot 0.36 / weight 0.50 burden term, and it is a BONUS only:
+  - burden < 0.36 -> positive contribution
+  - burden = 0.36 -> exactly 0
+  - burden > 0.36 -> exactly 0, never negative
 - effective Wallet includes current temporary Event purchase budget
 - unaffordable actual debit -> chance 0
 - otherwise final chance clamp = 0.08–0.97
@@ -62,6 +65,7 @@ PASS exact:
 Trait / Store Support / Event modifiers must enter only through their current owner rules.
 
 FAIL:
+- the burden term subtracts from 정가 acceptance at any burden
 - exact purchase probability appears in Player UI
 - price mode charged amount is changed to match its hidden judged amount
 - a second acceptance formula is used by another surface
