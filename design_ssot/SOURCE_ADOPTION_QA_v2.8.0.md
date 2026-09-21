@@ -199,17 +199,19 @@ mobile suppress waitingLine/fan; keep Dock progress.
 
 Classification: INFORMATION TRUST BUG
 
-Current Source:
-- kitLine omits Loyalty
-- npcDetail shows raw Loyalty without immediate meaning
+Original finding:
+- kitLine omitted Loyalty
+- npcDetail showed raw Loyalty without immediate meaning
 - Adventurer.isTrustedRegular threshold = 51
-- Copy.arrive uses n.loyalty>=60 for regular Flavor
+- Copy.arrive used a separate n.loyalty>=60 regular-Flavor check
 
-Root cause:
-relationship value, meaning and Flavor classification use separate checks.
-
-Required:
-compact Loyalty + popover; use Trusted Regular owner state for 단골/regular Flavor.
+Current required truth after the 2026-09-22 playtest amendment:
+- compact Loyalty remains visible in normal SALE
+- no dedicated normal-SALE Loyalty `?` / popover
+- Loyalty meaning is taught by tutorial/coach
+- Trusted Regular owner state at 51 controls 단골 / regular Flavor
+- global compact Help remains a separate reference surface
+- unrevealed Boss-specific meaning must not leak
 
 ## SA-Q14 — GENERIC YELLOW STAT CHANGE
 
