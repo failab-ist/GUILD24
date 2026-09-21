@@ -1,7 +1,7 @@
 # WORK_STATE
 
-DATE: 2026-09-21
-CURRENT_LINE: v2.8 Source adoption in progress, first ordered cycles merged to main
+DATE: 2026-09-22
+CURRENT_LINE: v2.8 Source adoption in progress; remaining Result UX adoption active, approved playtest patch queued next
 STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Truth
@@ -13,8 +13,12 @@ STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 - v2.8 release orientation only: `GUILD24_v2.8_RELEASE_VISION.md`
 - Contributor workflow: `AGENTS.md`
 
-Do not duplicate detailed Rule / Numeric / UX / QA truth here.
-Resolve exact behavior through the current owners routed by `SPEC_INDEX_v2.8.0.md`.
+Do not duplicate settled detailed Rule / Numeric / UX / QA truth here.
+Resolve settled behavior through the current owners routed by `SPEC_INDEX_v2.8.0.md`.
+
+A newly approved User decision may be held briefly in `## Approved Queue` only until WORK promotes it
+into the owning Canonical + QA during that task. After promotion, collapse it here to an owner/task
+reference rather than maintaining a second spec.
 
 ## Current State
 
@@ -22,16 +26,18 @@ v2.8 Design has completed project-wide Canonical promotion, final SSOT coverage 
 
 The v2.8 Director Plan is now orientation-only. It is not a detailed work/spec source.
 
-The Source has begun v2.8 project-wide adoption. Several ordered task cycles (see `## Completed`)
-are merged to `main`, each with targeted verify, `npm test` PASS and a real-browser runtime smoke
-where the change touched the main run loop or a player-facing surface.
+The Source has completed the first major v2.8 adoption cycles plus several playtest-found UX fixes.
+The remaining adoption work is now concentrated in:
+- SALE / NIGHT / CLOSING Result presentation and proven causality
+- one approved playtest-response patch
+- remaining dialogue-pool / recent-repeat adoption
+- final integrated adoption + functional + runtime QA before v2.8 freeze
 
-`SOURCE_ADOPTION_QA_v2.8.0.md` is a known-defect RECORD, not a live tracker - it is not edited to
-mark an item resolved as WORK closes it. The list below is the only current record of which items
-have an adoption commit; every SA-Q id in that file not listed below has NOT been verified against
-current Source in this line of work and must not be assumed either fixed or still open.
+`SOURCE_ADOPTION_QA_v2.8.0.md` is a known-defect RECORD, not a live tracker. It is not edited to
+mark an item resolved as WORK closes it. `## Completed` below is the current commit-level adoption
+record; unlisted SA-Q ids must be checked against routed Canonical + current Source before judgement.
 
-Implementation-blocking Design unresolved = NONE.
+Implementation-blocking Design unresolved = NONE for the currently approved queue.
 
 Balance items explicitly marked measurement-gated are not permission for WORK or QA to tune them.
 
@@ -76,11 +82,10 @@ Task D — Boss cadence + copy adoption (8 commits):
 - approved Flavor + Function adopted for all 22 Events
 - font subsets regenerated for the new copy glyphs
 
-Merge to main (`main` fast-forwarded from `8faa994`'s ancestor through the adoption branch):
-- Antigravity commit `01d654c` reverted on a local branch, reverted tree verified equal to
-  baseline `bdeb06c`, adoption branch merged, no rejected behavior survives
-- Pages unblocked (regenerated the three source-derived reports only)
-- final integrated browser smoke (mobile 390x800 + desktop 1280x880), 0 console errors
+Merge to main (adoption branch through `8faa994`):
+- Antigravity commit `01d654c` reverted before merge; no rejected behavior survives
+- source-derived reports regenerated only to unblock Pages
+- integrated browser smoke passed on mobile + desktop with 0 console errors
 
 Opening screen:
 - opening copy replaced with the three approved axes
@@ -88,38 +93,125 @@ Opening screen:
   `길드리테일 가맹점` eyebrow removed, branch name pool expanded to 30
 
 SALE quick patch + Core Stat source UX (`4b5f184`):
-- 정가 price-burden term made a bonus-only term:
-  `burdenIntentBonus = intentWeight * max(0, intentPivot - burden)` (ECONOMY_ORDER_v2.8.0 +
-  ECONOMY_ORDER_QA_v2.8.0 updated to match)
-- Core Stat rows: removed the separate 유리/불리 chip and the separate `?`; a changed Stat with a
-  provable source is now the trigger itself, opening the existing shared anchored tip
+- 정가 price-burden term made bonus-only:
+  `burdenIntentBonus = intentWeight * max(0, intentPivot - burden)`
+- owning ECONOMY_ORDER Canonical + QA updated
+- Core Stat rows: visible 유리/불리 and separate `?` removed
+- changed Stat cell itself opens its existing proven source list
 
 Follow-up UX patch (`bd4371e`):
-- the shared anchored tip (Stat cell included) now opens on desktop hover and on keyboard focus,
-  not only on tap/click (UI-Q-v28-6)
-- corrected a stale Source comment on the 정가 burden term (comment only, no logic change)
+- shared anchored tip now opens on desktop hover and keyboard focus as required by UI-Q-v28-6
+- stale Source comment on the 정가 burden term corrected; no logic change
 
-## Next
+WORK_STATE refresh (`7ba2688`):
+- completed v2.8 adoption cycles and the current main-line state recorded here
 
-No further task is currently approved/queued.
+## Active Task — remaining Result UX adoption
 
-`SOURCE_ADOPTION_QA_v2.8.0.md` still records SA-Q ids with no adoption commit above them
-(among others: SA-Q02-09, SA-Q15/15B-17, SA-Q20-34 except those listed done, SA-Q37-38). Their
-current Source status is UNVERIFIED in this line of work - do not treat them as either fixed or
-still open without re-reading the routed owner and the current Source.
+This is the remaining pre-playtest-feedback adoption batch. Do not re-run already completed Task D
+copy work above.
 
-When further v2.8 adoption is approved, continue the same cycle:
-- read the routed owner + relevant QA + named Source path
-- make the smallest patch
-- targeted verify
-- commit
-- append the completed item to `## Completed` above
-- continue to the next task
+Scope:
+- SA-Q05 internal potion marker must not leak into Player Item-effect rows
+- SA-Q06 remove SALE hypothetical outcome/fatigue matrix
+- SA-Q07 replace NIGHT internal fatigue-accounting labels with settled return fatigue + secondary
+  resolved arithmetic only
+- SA-Q09 living-result speech uses the temporary character speech path and the approved selector
+  priority; death is narration
+- SA-Q30 simplify SALE selected-Item analytical label stack to the approved v2.8 hierarchy
+- SA-Q21 / SA-Q34 keep Closing economics-only; remove duplicated expedition/item impact and the old
+  explanatory footer
+- Result-Proof foundation for SA-Q08 / SA-Q33: Hero Item causality only from actual resolved,
+  replay-safe proof; no reroll/reseed/state mutation and no vague unproven Hero attribution
+- SA-Q25 helped-return callback only from persisted proven sold-Item contribution
 
-After a future implementation freeze:
-- run current Canonical adoption audit
-- run functional QA
-- run real mobile + desktop runtime UX smoke
+After completion, record its commit(s) in `## Completed` and remove this section.
+
+## Approved Queue
+
+### 1. Playtest response batch — USER APPROVED, pending Canonical promotion
+
+Promote each decision into its routed Canonical owner + QA as part of implementation; once promoted,
+replace these details here with owner/task references.
+
+SALE compact top:
+- normal SALE removes the Loyalty `?`; Loyalty meaning is taught by tutorial/coach instead
+- remove Equipment text from the SALE top strip; Equipment remains in NPC detail and proven Stat
+  source attribution
+- Bag remains exactly 2 slots and its two slots stay horizontal; if width is short, wrap the whole
+  Bag block to the next row, never stack the slots vertically
+
+D0 / first Store Support flow:
+- first Store Support choice happens first
+- then D0 Boss-information is shown as its own separate beat
+- then ordinary DAY 1 flow
+- remove D0 Boss objective from inside the Store Support takeover
+- first Store Support copy becomes:
+  - `DAY 0`
+  - `첫 점포지원`
+  - `이번 영업에 쓸 지원 하나를 고르세요.`
+- remove redundant system-like “free / choose to start business” explanatory copy where the UI
+  already communicates the requirement
+
+Purchase acceptance:
+- ordinary 100% / 50% sale baseline purchase chance starts at 0.80
+- retain Loyalty contribution at +0.002 per Loyalty point
+- retain current explicit Trait / Store Support / Event purchase modifiers
+- remove the current one-Bag-slot-filled -0.10 purchase penalty
+- retain 50% sale flat +0.18, so ordinary affordable half-price offers normally reach the existing
+  upper clamp
+- if the offered Item validly Counters at least one Hazard of this customer's actual Gate, the
+  final affordable purchase chance has a 0.97 floor, even when a negative purchase Trait applies
+- Counter truth must reuse the game's actual Counter semantics; do not create a second narrower
+  fit test that disagrees on cases such as mobility answering bind/mire
+- affordability still gates purchase at 0 when the NPC cannot pay
+- overcharge remains on its existing behavior; do not include it in this accessibility rebalance
+- exact acceptance probability remains hidden from the Player
+
+NPC Wallet:
+- fresh-visitor base Wallet 150 -> 180
+- ordinary visit income random range 0..60 -> 0..100
+- keep the existing Level ×8 term and persistent-wallet behavior
+- apply the same 0..100 visit-income range to returning NPCs
+- do not separately buff failed-expedition Loot in this patch; first test whether the Wallet change
+  breaks the failure -> low money -> under-supplied -> failure loop
+
+Deep Expedition:
+- sponsorship base 350G -> 200G
+- keep rarity +20% per index, Level +5% per level after 1, and 10G rounding unchanged
+- no compensating Deep reward/difficulty rebalance in this patch
+
+Item art identity:
+- `bar` is now 간단 도시락: replace the retained hotbar-shaped icon with an identity-correct
+  simple meal/lunchbox icon in the existing item-art language
+- `herobar` is now 왕도 천연암반수: replace the retained hotbar-shaped icon with an
+  identity-correct bottled/mineral-water icon
+- no Item mechanic/stat change from the icon fix
+
+### 2. Dialogue exposure / repeat adoption
+
+After the playtest-response patch:
+- complete the remaining approved dialogue-pool expansion
+- adopt the current COPY_WORLD_VOICE recent-repeat rule / cooldown
+- do not invent new personality mechanics or purchase preferences
+- keep selection deterministic and gameplay-RNG neutral
+
+### 3. Re-measure / regression pass
+
+Because the approved playtest batch changes purchase acceptance, NPC Wallet and Deep access:
+- run targeted economy / sale / survival-loop regression measurements
+- report observed distribution changes separately
+- do not auto-retune measurement-gated values
+
+### 4. Final v2.8 integration / freeze audit
+
+After all approved adoption and playtest-response work:
+- current Canonical -> Source adoption audit
+- functional QA
+- targeted regression QA for all touched systems
+- real mobile + desktop runtime UX smoke
+- verify save/load + deterministic/RNG invariants on touched paths
 - report remaining Balance Findings separately
+- keep v2.9+ deferred features out of v2.8
 
-Do not pull v2.9+ deferred features into v2.8 adoption.
+Then v2.8 can be frozen/closed if no blocking mismatch remains.
