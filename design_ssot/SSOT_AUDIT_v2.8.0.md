@@ -15,6 +15,7 @@ FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
 PLAYTEST_RESPONSE_REAUDIT_DATE=2026-09-22
 PLAYTEST_RESPONSE_CANONICAL_STATUS=COMPLETE
 PRESENTATION_POLISH_PROMOTION_STATUS=COMPLETE
+FUNCTIONAL_DESIGN_POLISH_STATUS=COMPLETE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 
 ## PURPOSE
@@ -313,6 +314,41 @@ required Save state or Gameplay RNG.
 The matching Store Growth Visual Overlay and Audio/BGM/Presentation candidates were removed from
 GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md. Large Final cinematic/cutscene work and large art/world
 content expansion remain deferred.
+
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
+NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.
+
+
+## 2026-09-22 FUNCTIONAL DESIGN POLISH EXPANSION
+
+User approval expands the v2.8 Presentation Polish into a full functional-design audit of the
+current Player flow.
+
+Current owner:
+- functional UI / tutorial targeting / layout economy / responsive fit / presentation -> UI_UX_v2.8.0.md
+- acceptance -> UI_UX_QA_v2.8.0.md UI-Q-v28-26 through UI-Q-v28-29
+- underlying gameplay/copy truth remains with the existing routed owner for each fact
+
+The audit is not limited to the named examples.
+It covers opening/pre-Run, Store Management, MORNING, ORDER, SALE, NIGHT, CLOSING, Boss beats,
+Final preparation/FINAL/ending and active overlays/modals.
+
+Explicit examples included by User approval:
+- tutorial copy and its highlighted UI region must actually describe the same thing
+- D0/D5/D10/D15/D20/D25/D30 Boss/milestone presentation must be large/strong enough to communicate
+  its information role while avoiding unnecessary overflow, dead modal space or decorative excess
+
+The same functional standard applies project-wide:
+- information priority
+- decision/action proximity
+- responsive reading order
+- dead-space / duplication removal
+- overflow / viewport fit
+- control state / focus / feedback continuity
+
+This expansion changes no gameplay rule, numeric balance, required Save state or Gameplay RNG.
+Exact current owner constraints remain authoritative until runtime evidence is promoted into the
+owner as a v2.8 Functional Design correction.
 
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
 NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.
