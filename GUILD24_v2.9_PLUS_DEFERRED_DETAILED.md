@@ -177,19 +177,22 @@ Prefer rebalance / repurpose / merge over catalog growth.
 
 ---
 
-# 11. FINAL SPECTACLE / CUTSCENE EXPANSION
+# 11. LARGE FINAL CUTSCENE / CINEMATIC EXPANSION
 
 Importance: MEDIUM presentation / LOW core
 Cost: HIGH
 Status: DEFER
 
-Only after Final information and preparation decisions are proven should the project consider:
-- cinematic sequence
-- Final-only scenes
-- larger Demon King presentation
-- unique ending staging
+Potential future scope:
+- bespoke cinematic sequence
+- large Final-only scene set
+- large Demon King presentation asset package
+- alternate / unique ending staging that needs new scene infrastructure
 
-Do not use spectacle to cover a weak decision structure.
+Keep this deferred unless the existing v2.8 Final presentation is already carrying its decision and
+result meaning clearly.
+
+Do not use large spectacle to cover a weak decision structure.
 
 ---
 
@@ -295,15 +298,15 @@ A new Boss must change preparation decisions, not merely Power.
 
 ---
 
-# 18. ART / STORE WORLD EXPANSION
+# 18. LARGE ART / WORLD CONTENT EXPANSION
 
 Status: FUTURE
 
 Potential:
-- more portraits
-- more shop props
-- seasonal presentation
+- more portrait waves
+- seasonal presentation sets
 - additional Demon King sheets
+- larger shop-environment replacements
 - more dungeon/world environmental art
 
 Asset count is not a substitute for game depth.
