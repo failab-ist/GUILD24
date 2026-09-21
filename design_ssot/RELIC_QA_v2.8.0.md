@@ -238,3 +238,25 @@ PASS:
 - choosing one support commits exactly once
 - separate D0 Boss-information beat follows
 - normal DAY 1 does not begin before D0 acknowledgement
+
+
+## REL-Q-v28-21 — INHERITED SUPPORT EXACT FUNCTION CLOSURE
+
+Verify the exact inherited-support functions closed in RELIC_v2.8.0.md:
+
+- 묶음발주 계약 -> same SKU 3+, 3rd+ units -15%
+- 단골 스탬프 기계 -> paid-purchase Loyalty gain +50%; survival Loyalty excluded
+- 회원 관리대장 -> returning revisit weight +40% from next Day
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; operating cost +10G from next Day
+- 길드 보증 진열대 -> once/Day first list-price >=200G sale, HQ customer subsidy = 20% of list price,
+  Player still receives the full chosen sale price
+- 원정 위험 게시판 -> known-Hazard matching offer weight +80%, never a guarantee
+- 긴급보급 선반 -> Potion / Field Gear / Insurance offer weight +60% and quantity +1
+- 공동구매 전단 -> visitor count >=6 and same SKU 3+ -> bulk purchase price -10%
+- 단골 묶음혜택 -> returning customer's second paid purchase that Day -> Loyalty +2
+- 프리미엄 멤버십 -> Loyalty >=50 + Rare+ Item -> purchase intent +10%p
+- 새벽 공동배송 -> same Food/Drink SKU 3+ -> bulk purchase price -15%
+- 후방 창고 증설 -> inventory capacity +10
+- 본사 추가발주권 -> next ORDER-offer generation candidate count +2
+
+FAIL if Source restores only the older qualitative blueprint or uses a different numeric value.
