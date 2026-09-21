@@ -102,6 +102,22 @@ It is to make the systems already present produce clearer choices and a stronger
 
 > this Run became this kind of store because of what I chose.
 
+### 7. PRESENTATION PAYOFF
+
+v2.8 also carries a focused audiovisual polish pass.
+
+Existing state should produce stronger visible/audible consequence:
+- NIGHT outcomes should not all feel equally weighted
+- Boss information and Final preparation should gain presence as the Run approaches DAY 30
+- Store choices should leave small truthful traces in the shop
+- ORDER / SALE / Store-Support decisions should sound materially different from generic UI taps
+- phase identity may be strengthened through the current audio/BGM system
+
+This remains refinement, not structural expansion.
+
+Presentation must not invent state, expose hidden information, add a new decision, or require a new
+progression system merely to justify an effect.
+
 ---
 
 ## HOW v2.8 APPROACHES CHANGE
