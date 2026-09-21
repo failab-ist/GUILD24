@@ -113,9 +113,13 @@ Living result:
 - tap dismiss works
 - result information remains
 - does not cover Outcome
+- reaction selection priority is:
+  avoided death / rescue -> severe injury -> injury -> retreat -> growth -> ordinary return
+- Bag / supplied-Item presence alone never selects the reaction category
 
 Death:
 - no living speech bubble
+- narration/report treatment only
 
 ## UI-Q-v28-10 — BOSS MOBILE DENSITY
 
