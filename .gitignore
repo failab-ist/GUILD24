@@ -8,6 +8,7 @@ tests_diff.txt
 dungeon_diff.txt
 
 # Generated QA artifacts
+reports/ui/presentation-*/
 reports/ui/*.png
 reports/ui/qa-visual.json
 reports/balance-console.txt
