@@ -34,14 +34,15 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 
 Current User decisions for this correction are approved; no Design re-decision is required before Canonical promotion.
 
-After Canonical cleanup:
-1. inspect only affected current Source
-2. list remaining mismatches against the latest User Presentation direction
-3. separate directly implementable items from items requiring additional User judgement
-4. stop for User approval before preparing the WORK implementation handoff
+Canonical cleanup and the affected current-Source audit are complete.
 
-Known Source adoption item to carry into that later WORK handoff:
-- SALE Help exact copy §4-1 through §4-3 from `COPY_AUDIT_APPROVED_v2.8.0.md`
+Current Director finding:
+- remaining issues are implementation/adoption mismatches, not unresolved Design
+- no additional Design choice is required for the identified correction set
+- stop for User approval before preparing the WORK implementation handoff
+
+The later WORK handoff should route the approved correction through the current UI_UX / UI_UX_QA /
+COPY_AUDIT owners rather than duplicating their exact rules here.
 
 ## Next Queue
 
@@ -51,4 +52,5 @@ After User approval of the mismatch report:
 
 ## Blocker
 
-NONE at this Director documentation/audit stage.
+USER APPROVAL — approve the Director's current Presentation-correction implementation set before
+the WORK handoff is written.
