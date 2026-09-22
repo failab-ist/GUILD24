@@ -1169,15 +1169,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal-footer [data-action="start"],
 .modal-footer [data-action="store-return"]{margin:0 auto;width:min(100%,420px);min-width:0;
  min-height:62px;font:600 19px/1 var(--ui)}
-/* BOSS CONFIRM. Two controls that must NOT differ by colour alone, and whose labels must never
-   break to a second line. The commit takes a row of its own at full measure and the heaviest
-   type on the sheet; the way back is a small chip centred under it. Size, width, placement and
-   order carry the hierarchy - BRICK and BROWN only confirm what the shapes already say. */
-.modal-footer [data-action="boss-go"]{order:-1;flex:1 1 100%;width:100%;margin:0;
- min-height:68px;font:600 20px/1 var(--ui);letter-spacing:.06em}
-.modal-footer:has([data-action="boss-go"]) [data-action="dismiss"]{flex:0 0 auto;margin:0 auto;
- min-height:42px;padding:9px 18px;font:400 14px/1 var(--ui);white-space:nowrap;
- box-shadow:inset 0 0 0 2px var(--brown-lit),2px 2px 0 var(--brown-deep)}
+/* BOSS CONFIRM. USER 2026-09-22: the two controls are the SAME design object - the same notch,
+   the same hard outline, the same lit/deep bevel, the same zero-radius offset and the same
+   press. What differs is the family each belongs to and the weight that follows from it. That
+   is why Source gives the way back `.stamp` HERE and nowhere else: on this sheet it is not a
+   plain utility, it is the other half of one decision. Each takes a full row, so neither label
+   can break to a second line and the footer cannot overflow at any width. */
+.modal-footer:has([data-action="boss-go"]) .stamp{flex:1 1 100%;width:100%;min-width:0;margin:0;
+ letter-spacing:.06em}
+.modal-footer [data-action="boss-go"]{order:-1;min-height:68px;font:600 20px/1 var(--ui)}
+/* BROWN, restated as a role rather than as the flat chip the generic footer rule paints: the
+   way back wears the control's geometry now, so its family has to arrive through `--act` for
+   the bevel and the press to be its own colour. */
+.modal-footer:has([data-action="boss-go"]) [data-action="dismiss"]{--act:var(--brown);
+ --act-lit:var(--brown-lit);--act-deep:var(--brown-deep);--act-line:var(--brown-line);
+ --act-ink:var(--brown-ink);min-height:56px;font:500 17px/1 var(--ui)}
 /* The footer's other controls. Size only: #3A2C1D was the dead muddy brown this pass retired,
    and it was standing in for two different things anyway - a way back and a plain utility.
    With no face of its own they fall to the base control's neutral, which is what a utility is.

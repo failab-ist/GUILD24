@@ -196,17 +196,20 @@ test('UI-Q-v28-26: the accepted Action composition holds',()=>{
  assert.ok(/width:min\(100%,\d+px\)/.test(solo),'and takes width without becoming a full-bleed bar');
  assert.ok(/\.modal-footer \[data-action="start"\],\n\.modal-footer \[data-action="store-return"\]\{/.test(css),
   'and the Run\'s opening Action is set the same way');
- /* D. BOSS CONFIRM: the two controls may not differ by colour alone, and neither label may wrap. */
+ /* D. BOSS CONFIRM: the two controls are the same design object - USER 2026-09-22 - so they carry
+    the same geometry and differ by family and weight, and neither label may wrap. */
+ assert.ok(/footer=btn\('보급으로 돌아가기','dismiss','stamp'\)\+btn\('최종 원정 시작','boss-go','stamp'\)/.test(app),
+  'both halves of the Final decision are the same control in Source');
  const lastRule=sel=>{const i=css.lastIndexOf(sel);assert.ok(i>0,sel+' is a real rule');
   return css.slice(i,css.indexOf('}',i)+1);};
+ const pairRule=ruleFor('.modal-footer:has([data-action="boss-go"]) .stamp{');
+ assert.ok(/flex:1 1 100%/.test(pairRule),'each takes a full row, so no label can wrap and the footer cannot overflow');
  const go=lastRule('.modal-footer [data-action="boss-go"]{');
- assert.ok(/flex:1 1 100%/.test(go)&&/order:-1/.test(go),'the commit takes a row of its own, ahead of the way back');
- assert.ok(/min-height:6\dpx/.test(go),'at a weight the way back does not have');
+ assert.ok(/order:-1/.test(go)&&/min-height:6\dpx/.test(go),'the commit reads first and heaviest');
  const back=ruleFor('.modal-footer:has([data-action="boss-go"]) [data-action="dismiss"]{');
- assert.ok(/min-height:4\dpx/.test(back)&&/flex:0 0 auto/.test(back),
-  'and the way back is a small chip, so the hierarchy is not carried by colour alone');
- assert.ok(/white-space:nowrap/.test(back)&&/white-space:nowrap/.test(ruleFor('.modal-footer .stamp{')),
-  'neither label breaks to a second line');
+ assert.ok(/--act:var\(--brown\)/.test(back),'the way back carries BROWN through the role, so its bevel and press are its own');
+ assert.ok(/min-height:5\dpx/.test(back),'a step below the commit, not a different kind of object');
+ assert.ok(/white-space:nowrap/.test(ruleFor('.modal-footer .stamp{')),'neither label breaks to a second line');
 });
 
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
