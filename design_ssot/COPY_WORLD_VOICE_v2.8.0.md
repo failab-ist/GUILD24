@@ -82,7 +82,6 @@ Do not restate or independently revise those exact strings in this Voice owner.
 
 ## LOYALTY TUTORIAL / COACH — EXACT
 
-The former normal SALE popover is superseded by the 2026-09-22 playtest amendment.
 
 Normal SALE shows only the compact Loyalty value/state.
 No separate Loyalty `?` is shown there.
