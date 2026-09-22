@@ -142,8 +142,6 @@ Actual Level growth remains:
 
 Potential remains an internal growth input and is not exposed as a relationship reward.
 
-These values supersede the inherited `Exact base/growth numbers=PASS3` marker.
-
 Job Mastery does not alter this table.
 Current Job Mastery effect -> META_v2.8.0.md.
 
