@@ -169,7 +169,6 @@ NPC bonus reward remains owned by NPC_TRAIT_v2.8.0.md.
 
 USER_APPROVAL_DATE=2026-09-20
 
-This section closes inherited PASS3 / Source-only values without changing the current play model.
 These values are the required v2.8 baseline. Later tuning requires measured evidence and a new
 approved owner amendment.
 
