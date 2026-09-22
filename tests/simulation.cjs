@@ -332,4 +332,40 @@ test('RUN-Q15: invested regulars and late newcomers are classified from the run 
  if(r.q15.runs>0)assert.ok(r.q15.chosenInvested+r.q15.chosenNewcomer>0,'the strongest legal party was classified too');
 });
 
+/* v2.8 Re-measure pass. Proves the instrument added for the SA-Q48/49/50 aggregate measurement,
+   the same way the rest of this file proves the harness rather than a balance number:
+   the new counters are well-formed and partition the same attempts `modes`/`wallets` already
+   count, so the re-measure report is reading a real subdivision and not a second, drifting tally. */
+test('RE-MEASURE: SALE mode acceptance by Day band and by Loyalty band partitions `modes`',()=>{
+ const r=cached('balanced');
+ for(const mode of Object.keys(r.modes)){
+  const byBand=Object.values(r.modesByBand).reduce((a,b)=>a+(b[mode]?.attempts||0),0);
+  assert.equal(byBand,r.modes[mode].attempts,mode+': every attempt lands in exactly one Day band');
+  const byLoyalty=Object.values(r.modesByLoyalty).reduce((a,b)=>a+(b[mode]?.attempts||0),0);
+  assert.equal(byLoyalty,r.modes[mode].attempts,mode+': every attempt lands in exactly one Loyalty band');
+ }
+ for(const table of [r.modesByBand,r.modesByLoyalty])
+  for(const band of Object.values(table))for(const m of Object.values(band))
+   assert.ok(m.accepted<=m.attempts,'a band never accepts more than it attempted');
+});
+
+test('RE-MEASURE: visit-time Wallet is split fresh/returning and the 2000 cap is observed, not guessed',()=>{
+ const r=cached('balanced');
+ const totalWallets=Object.values(r.wallets).reduce((a,w)=>a+w.count,0);
+ assert.equal(r.walletFreshStats.count+r.walletReturningStats.count,totalWallets,
+  'fresh + returning accounts for every sampled visit-time Wallet');
+ assert.ok(r.walletCapRate>=0&&r.walletCapRate<=1,'cap-reached rate is a rate');
+ /* Fresh vs returning is reported as a genuine split, not asserted in a direction: a returning
+    Wallet compounds forward from last visit's balance (bought down by any sale) instead of
+    resetting to the 180 base, so which one reads higher is exactly the open balance question
+    the re-measure report answers - not something this instrument test should presume. */
+ assert.ok(r.walletFreshStats.mean>0&&r.walletReturningStats.mean>0,'both splits report a real mean');
+});
+
+test('RE-MEASURE: a Deep-collapse sample never exceeds the sponsorships it watches',()=>{
+ const r=cached('balanced');
+ assert.ok(r.deepCollapse.collapsed<=r.deepCollapse.samples,'collapse count cannot exceed samples watched');
+ assert.ok(r.deepCollapseRate>=0&&r.deepCollapseRate<=1,'and the derived rate stays a rate');
+});
+
 console.log(count+' simulation groups passed');

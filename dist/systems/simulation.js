@@ -46,6 +46,17 @@ const contribution=p=>G.Dungeon.preparedPower(p.effects)
 
 function blank(runs,policy,pricing,build){
  return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaStore:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
+  /* v2.8 Re-measure pass (SA-Q48/49/50 aggregate impact), measurement only. modesByBand and
+     modesByLoyalty are the same acceptance/attempt counters `modes` already keeps, split by the
+     Day band the attempt fell in and by the buyer's Loyalty at the moment of the attempt, so the
+     150%/overcharge trade-off and the flat-0.80 need change can be read across the Run instead of
+     only in aggregate. walletFresh/walletReturning/walletCap split the existing visit-time wallet
+     sample by ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT's own fresh/returning branch and
+     flag the 2000 cap it is clamped to. deepCollapse counts a rescue (till went negative and stock
+     was liquidated) landing within 3 Days of a Deep sponsorship - an approximation, not a causal
+     claim, and stated as such in the report. */
+  modesByBand:{},modesByLoyalty:{},walletFresh:[],walletReturning:[],walletCapSamples:0,walletCapHits:0,
+  deepCollapse:{samples:0,collapsed:0},
   /* 2026-09-12 amendment, measurement only. greatByBand buckets Great Success by how far the
      prepared Combat ability ran ahead of the Gate, which is the thing Stage 9 has to judge the
      curve on; prepStartGold samples the D29 close, before any D30 preparation spend. */
@@ -113,6 +124,10 @@ function blank(runs,policy,pricing,build){
 /* Percentile of a measured sample. Measurement only: nothing in the game reads it. */
 function pct(xs,q){if(!xs||!xs.length)return 0;const a=[...xs].sort((x,y)=>x-y);
  return a[Math.min(a.length-1,Math.max(0,Math.round(q*(a.length-1))))];}
+/* Sample size, mean and the percentile spread for one measured distribution - the exact shape
+   AGENTS.md §7/§16 requires every reported number to carry, not just a single-run mean. */
+function sampleStats(xs){if(!xs||!xs.length)return {count:0,mean:0,median:0,p10:0,p90:0};
+ return {count:xs.length,mean:xs.reduce((a,b)=>a+b,0)/xs.length,median:pct(xs,.5),p10:pct(xs,.1),p90:pct(xs,.9)};}
 function derive(out,count){
  for(const [day,values]of Object.entries(out.wallets)){if(!Array.isArray(values))continue;values.sort((a,b)=>a-b);out.wallets[day]={count:values.length,mean:values.reduce((a,b)=>a+b,0)/values.length,p10:values[Math.floor(values.length*.1)],median:values[Math.floor(values.length*.5)],p90:values[Math.floor(values.length*.9)]};}
  const days=Object.entries(out.dayReached).reduce((a,[d,n])=>a+Number(d)*n,0);
@@ -137,7 +152,10 @@ function derive(out,count){
   nearMissWithin10:out.nearMiss.losses?out.nearMiss.within10/out.nearMiss.losses:0,
   nearMissWithin25:out.nearMiss.losses?out.nearMiss.within25/out.nearMiss.losses:0,
   lossMarginMedian:pct(out.nearMiss.margins,.5),lossMarginP90:pct(out.nearMiss.margins,.9),
-  endedBy:out.endedBy,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count};
+  endedBy:out.endedBy,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count,
+  walletCapRate:out.walletCapSamples?out.walletCapHits/out.walletCapSamples:0,
+  walletFreshStats:sampleStats(out.walletFresh),walletReturningStats:sampleStats(out.walletReturning),
+  deepCollapseRate:out.deepCollapse.samples?out.deepCollapse.collapsed/out.deepCollapse.samples:0};
 }
 
 /* One Run, played by `ctx.policy` on the account the caller owns. The account is NOT copied
@@ -145,7 +163,7 @@ function derive(out,count){
    time so real Meta progression carries forward. */
 function playRun(g,out,ctx){
  const {policy,pricing,build,seed}=ctx,engagement=levers(policy),spend=spending(policy),s=g.run;
- let turns=0;const seenWindows=new Set();let previousCandidates=[];
+ let turns=0;const seenWindows=new Set();let previousCandidates=[];let deepWatches=[];
  /* Interaction-cost proxy: one tick per action a player would actually have to perform. */
  const act=(n=1)=>{out.actions+=n;};
  const stat=d=>out.days[d]??={samples:0,cash:0,wallet:0,level:0,inventory:0,peak:0,visitors:0,actual:0,consumed:0,slots:0,waste:0,revenue:0,cogs:0,spent:0,operating:0,loyalty:0,injury:0,death:0,overAffordable:0,fullAffordable:0,halfOnly:0,offers:0};
@@ -180,7 +198,12 @@ function playRun(g,out,ctx){
  const originalOffers=g.generateOffers.bind(g);g.generateOffers=(opts)=>{
   const armed=(s.pity.counter||0)>=3||g.has('expeditionCert');
   const r=originalOffers(opts);if(armed)out.offerShape.pityFired++;return r;};
- const originalSell=g.sell.bind(g);g.sell=(id,mode)=>{const m=out.modes[mode]??={attempts:0,accepted:0,revenue:0,profit:0,loyalty:0};m.attempts++;act();const n=g.current(),st=s.inventory.find(x=>x.id===id),old=n.loyalty;const ok=originalSell(id,mode);if(ok){m.accepted++;m.revenue+=n.history.at(-1).paid;m.profit+=n.history.at(-1).paid-(st.cost||0);m.loyalty+=n.loyalty-old;(out.items[st.item]??={ordered:0,sold:0}).sold++;}
+ const saleBand=d=>d<=9?'D1-9':d<=19?'D10-19':d<=24?'D20-24':'D25-29';
+ const loyaltyBand=v=>v<20?'<20':v<=50?'20-50':'51+';
+ const originalSell=g.sell.bind(g);g.sell=(id,mode)=>{const m=out.modes[mode]??={attempts:0,accepted:0,revenue:0,profit:0,loyalty:0};m.attempts++;act();const n=g.current(),st=s.inventory.find(x=>x.id===id),old=n.loyalty;
+  const mb=(out.modesByBand[saleBand(s.day)]??={})[mode]??=(out.modesByBand[saleBand(s.day)][mode]={attempts:0,accepted:0});mb.attempts++;
+  const ml=(out.modesByLoyalty[loyaltyBand(old)]??={})[mode]??=(out.modesByLoyalty[loyaltyBand(old)][mode]={attempts:0,accepted:0});ml.attempts++;
+  const ok=originalSell(id,mode);if(ok){m.accepted++;mb.accepted++;ml.accepted++;m.revenue+=n.history.at(-1).paid;m.profit+=n.history.at(-1).paid-(st.cost||0);m.loyalty+=n.loyalty-old;(out.items[st.item]??={ordered:0,sold:0}).sold++;}
   /* Why an offer did not close, measurement only. The purchase-intent threshold moved for 정가
      and the acceptance rate did not, so the refusal has to be decomposed before anyone moves a
      second number: the reason the shop already records is price burden / low need / the roll. */
@@ -318,6 +341,7 @@ function playRun(g,out,ctx){
      act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}
     out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
+   for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
    const offers=sortedOffers();
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
@@ -345,7 +369,7 @@ function playRun(g,out,ctx){
     const byL=out.deepByLevel[band]??={takes:0,gold:0};byL.takes++;byL.gold+=cost;
     /* Who was sponsored, and what became of them. A sponsorship is an investment in one
        adventurer, so the sink can only be judged next to the growth and the Final seat it buys. */
-    (nominees[n.id]??={levelAtNomination:n.level,rarity:n.rarity,cost:0}).cost+=cost;}
+    (nominees[n.id]??={levelAtNomination:n.level,rarity:n.rarity,cost:0}).cost+=cost;out.deepCollapse.samples++;deepWatches.push(s.day);}
    const d=g.claimedGateFor(n);let attempts=0;
    while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0)});}
    options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
@@ -381,7 +405,9 @@ function playRun(g,out,ctx){
       refuses, and the refusal is what ends a Run that has spent its three rescues. */
    const rescueBefore=s.rescueUsed||0,liquidBefore=s.daily.liquidation||0;
    while(s.money<0&&s.inventory.length&&g.liquidate(s.inventory[0].id)){act();out.rescue.items++;}
-   if((s.rescueUsed||0)>rescueBefore){out.rescue.events++;
+   const rescuedToday=(s.rescueUsed||0)>rescueBefore;
+   deepWatches=deepWatches.filter(day=>{if(s.day-day>3)return false;if(rescuedToday){out.deepCollapse.collapsed++;return false;}return true;});
+   if(rescuedToday){out.rescue.events++;
     /* The rescue happens AFTER closeDay has already written the day into reportHistory, so the
        gold it raised is not in that row - it is counted here or it is counted nowhere. */
     const raised=(s.daily.liquidation||0)-liquidBefore;
