@@ -139,7 +139,13 @@ function stampPress(el){
 }
 function render(){
  const s=game.run;Sound.sync(game.account.settings.muted,s?.phase,game.account.settings);
- if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),btn('첫 영업 준비','new','stamp'));if(!modal)setModal('new');return;}
+ /* The runless screen is the title card behind the preparation modal, and it carries no dock.
+    It used to end on a `첫 영업 준비` stamp that no Player can ever press: with no Run the modal
+    prints no 닫기 (`(game.run||modal!=='new')` is false) and Escape is gated by the same test,
+    so the preparation modal cannot be dismissed, and the line below re-opens it on every draw
+    of this state anyway. The button was only ever an orphan control sitting behind the shade -
+    on a desk, in the bottom-left corner of the title card. */
+ if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
  /* SA-Q09: every LIVING Night result speaks through the same temporary balloon the SALE
     counter uses - no permanent blockquote, no second speech mechanism. `speech()` already

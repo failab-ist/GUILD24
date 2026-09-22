@@ -532,6 +532,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .opening-title{margin:0;white-space:nowrap;color:#f2e7cd;
  font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none}
 .opening-branch{margin:0;font:500 clamp(14px,4.2vw,18px)/1.4 var(--ui);letter-spacing:.02em;color:#a2947c}
+/* USER-APPROVED OPENING, line 3 of the three axes: what the 30 days are for. It is the one of
+   the three the modal was authored as a band, and the sheet had no rule for it at all, so it
+   rendered as ordinary body copy wedged between the supporting line and the 이번 영업의 장식
+   heading - the three axes read as one paragraph and the Run's endpoint had no rank of its own.
+   Presentation only; the approved text is untouched. */
+.welcome-band{margin:12px 0 18px;padding:11px 13px;font:600 14px/1.5 var(--ui);color:#f2e7cd;
+ background:#00000038;box-shadow:inset 3px 0 0 var(--gold),inset 0 0 0 1px #ffffff12}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
