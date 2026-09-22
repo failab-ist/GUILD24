@@ -320,15 +320,17 @@ major reveal / preparation beats.
 
 ## PRESENTATION POLISH ROUTING
 
-The v2.8 Presentation Polish contract has been split into:
+Presentation construction / asset / ornament / visual-review system:
+- PRESENTATION_SYSTEM_v2.8.0.md
 
+Active Presentation Batch 1:
+- PRESENTATION_POLISH_BATCH1_v2.8.0.md
+
+Detailed later-phase / audio Presentation contracts:
 - PRESENTATION_POLISH_v2.8.0.md
 
-That document now owns the former `## v2.8 PRESENTATION POLISH — EXACT BOUNDARY` section and all of its presentation-specific
-subsections, without duplication here.
-
-UI_UX_v2.8.0.md remains authoritative for the surrounding UI / UX / mobile / tutorial / semantic
-delta / popover / Store Management / NIGHT layout rules that remain in this file.
+UI_UX_v2.8.0.md remains authoritative for surrounding UI / UX / mobile / tutorial / semantic delta /
+popover / Store Management / NIGHT layout rules that remain in this file.
 
 ## FUNCTION / FLAVOR VISUAL HIERARCHY — EXACT
 
