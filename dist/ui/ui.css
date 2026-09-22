@@ -832,18 +832,20 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
 .p-night .dock .bare[disabled]{color:#4c5062}
-/* UI_UX §PER-PHASE (NIGHT) — CLOSING HANDOVER CONTROL (USER AMENDMENT 2026-09-22, amended).
-   The violet plate read as a mobile-RPG CTA; the dark plane that replaced it read as a disabled
-   grey button. This is the lamp-lit handover to the day's close: a muted warm plane - the amber
-   the till and the receipt already own - carrying dark ink, so it reads ACTIVE at a glance
-   against the blue night and far above the dim `전체 건너뛰기` beside it. Separation is the
-   plane itself: no border, no inset outline, no bevel, no gloss. Exactly ONE bottom/right hard
-   depth, which the press collapses as the control moves. */
+/* UI_UX §PER-PHASE (NIGHT) — CLOSING HANDOVER CONTROL / NIGHT PRIMARY COLOUR (USER AMENDMENT
+   2026-09-22, amended again). Three readings are retired: the violet mobile-RPG CTA, the dark
+   plane that read as a disabled grey button, and the amber that read as mustard.
+   This is moonlit cold blue - a muted cobalt plane, far brighter and more saturated than the
+   dock's #080a11 and the night's #0a0d16, hue unmistakably blue and nowhere near cyan / teal,
+   under an ivory label. It is the only lit plane in the dock, so it reads ACTIVE at a glance
+   against the dim `전체 건너뛰기` beside it. Separation is the plane itself: no border, no inset
+   outline, no bevel, no gloss. Exactly ONE bottom/right hard depth, which the press collapses as
+   the control moves. */
 .p-night .dock .stamp{margin-left:auto;min-height:52px;min-width:132px;font:600 17px/1 var(--ui);
- background:#c08b3c;color:#1d1405;
+ background:#3f6fbe;color:#f4f7ff;
  box-shadow:4px 4px 0 #000000a6}
-.p-night .dock .stamp:hover{background:#d09a47}
-.p-night .dock .stamp:active{transform:translate(3px,3px);background:#a87730;
+.p-night .dock .stamp:hover{background:#4e80d2}
+.p-night .dock .stamp:active{transform:translate(3px,3px);background:#345c9e;
  box-shadow:1px 1px 0 #000000a6}
 /* the rail of return tags: the night's progress as objects, one per adventurer out today */
 /* a short beat sits in the middle of the room rather than clinging to the top of it;
@@ -873,13 +875,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .beat .say{left:14px;top:8px;bottom:auto;max-width:calc(100% - 28px)}
 .beat .say:after{top:100%;bottom:auto;left:min(22vw,95px);
  border:9px solid transparent;border-top-color:var(--paper);border-right:0;border-bottom:0}
-/* UI_UX §NIGHT LAYOUT — DEATH MESSAGE (USER AMENDMENT 2026-09-22). Same position and the same
-   visual weight as a living adventurer's line, but a neutral STATUS LABEL, not an utterance.
-   Bare text read too weakly to register, so it takes a small container: it hugs its text, on a
-   dark translucent flat plate with modest padding. A container is not a bubble - what makes an
-   utterance is the tail, the paper ground and the quotation, and none of those are here. No
-   accent bar, no border, no icon, no glow, no blur. */
-.beat .say.status{display:inline-block;width:auto;background:#0d111ad9;color:#cfd3dd;
+/* UI_UX §NIGHT LAYOUT — DEATH MESSAGE (USER AMENDMENT 2026-09-22, amended). Same position and
+   the same visual weight as a living adventurer's line, but a neutral STATUS LABEL, not an
+   utterance. It hugs its text in a small container - a container is not a bubble: what makes an
+   utterance is the tail, the paper ground and the quotation, and none of those are here, nor an
+   accent bar, border, outline, icon, glow or blur.
+   The plate is OPAQUE cool slate, a clear step up from the night's #0a0d16 ground (and the
+   colder #080a10 a death dims it to), so its plane registers at once - including over the
+   character art. The previous translucent black veil sat within a couple of values of the
+   background and read as bare text again; a veil takes whatever is behind it, a surface does
+   not. The value is set by the WORST boundary, not the background: the death portrait is
+   greyscaled, so the plate overlaps neutral grey around #252525 and its edge has to hold there
+   too - measured on the screenshot, #2c3646 gave only 1.26 against it. No paper / parchment
+   treatment, and it stays below the dock's cobalt commit so the record never outranks the
+   action. */
+.beat .say.status{display:inline-block;width:auto;background:#3d4a63;color:#e8ecf4;
  cursor:default;box-shadow:none;padding:7px 11px 8px;font:400 15px/1.45 var(--ui);
  text-shadow:none}
 .beat .say.status:after{display:none}
