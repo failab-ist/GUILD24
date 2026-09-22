@@ -24,12 +24,9 @@ PASS:
 - Deep Great Success adds 0 Store Gold
 - the bonus does not mutate NPC Wallet
 - the bonus is not counted as sale revenue
+- the same Great Success cannot pay twice
 
-FAIL:
-- inherited 100 / 200 / 300G remains active
-- the same Great Success pays twice
-
-## ECO-Q-v28-2 — DEEP SPONSORSHIP RETAINED
+## ECO-Q-v28-2 — DEEP SPONSORSHIP
 
 Expected:
 
@@ -39,8 +36,7 @@ Expected:
     rounding 10G
 
 PASS:
-- only base changed from previous 350G
-- rarity/Level scaling and rounding unchanged
+- rarity/Level scaling and rounding use the exact values above
 - no compensating Deep reward/difficulty rebalance
 
 ## ECO-Q-v28-3 — ORDINARY PURCHASE ACCEPTANCE BASELINE
@@ -54,7 +50,7 @@ PASS:
   - 150% = 1.50 / 1.50
 - judgedPrice uses the mode intent multiplier and never changes the actual charged amount
 - 50% / 100% base need = 0.80
-- 150% keeps its pre-amendment need calculation
+- 150% uses the owner-defined fit-based need calculation
 - flat mode intent remains +0.18 / 0 / -0.16
 - one occupied Bag slot applies no purchase penalty
 - Loyalty remains +0.002 per point
@@ -87,7 +83,7 @@ PASS:
 - returning NPC keeps persistent Wallet before visit income is added
 - cap 2000 remains
 - failed-expedition Loot is unchanged
-- no extra RNG draw beyond replacing the existing visit-income range draw
+- no extra RNG draw beyond the existing visit-income draw
 
 ## ECO-Q-v28-4 — BASE OPERATING COST EXACT
 
@@ -106,7 +102,6 @@ Then apply only current owned modifiers and round final daily operating cost to 
 the current rounding convention.
 
 PASS:
-- stale fixed 60G value does not act as an alternate base
 - explicit zero-operating-cost Event produces 0G
 - Store Support modifiers do not silently redefine the base formula
 
@@ -115,7 +110,7 @@ PASS:
 Rare+:
 - after 5 consecutive qualifying offer sets without Rare+, next qualifying generation receives Rare weight +3
 - Rare+ hit resets the counter
-- current Day-band Rarity table remains the underlying table
+- the modifier layers over the current Day-band Rarity table
 
 Known-Hazard Counter:
 - track each known Hazard independently
