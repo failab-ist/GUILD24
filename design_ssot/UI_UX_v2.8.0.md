@@ -14,7 +14,6 @@ All unchanged v2.7 ORDER/SALE/NIGHT/Final/mobile/typography/tutorial/visual rule
 UI_UX_v2.7.0.md.
 
 The Decoration/Store-Capital rules previously frozen in this file remain active.
-The old scoped-decoration-only execution meaning is superseded.
 
 ## RETIRED ACTIVE UI
 
@@ -187,7 +186,7 @@ Living Flavor:
 - never cover Outcome / primary result
 - result remains after bubble disappears
 
-USER AMENDMENT, 2026-09-22 — OUTCOME PLACEMENT. The Outcome belongs to the returning
+The Outcome belongs to the returning
 adventurer's identity block, not to a title bar over the screen:
 
     [character art]   [Outcome]
@@ -199,14 +198,14 @@ adventurer's identity block, not to a title bar over the screen:
 - no long underline / rule spanning the record
 - it is important, but it is not the page's headline
 
-USER AMENDMENT, 2026-09-22 — DEATH MESSAGE. Death has no speech bubble, but it is not moved out
+Death has no speech bubble, but it is not moved out
 of the message position either: the death line uses the same place beside the character and the
 same visual weight as a living adventurer's line, presented as a neutral status / system message.
 
 - no quotation marks, no speech tail, no bubble ground, no utterance styling
 - no left accent bar / status stripe, no decorative border, no added icon or badge
 - no glow and no blur
-- USER AMENDMENT, 2026-09-22: bare text read too weakly to register. It carries a small status
+- It carries a small status
   container - text-hugging width, modest padding - and nothing else from the bans above. A
   container is not a bubble: what makes it an utterance is the tail, the paper ground and the
   quotation, and none of those return.
@@ -226,12 +225,12 @@ same visual weight as a living adventurer's line, presented as a neutral status 
 
 Same position and same information hierarchy; never the appearance of a dead NPC speaking.
 
-USER AMENDMENT, 2026-09-22 — VERTICAL COMPOSITION. The record begins under the return rail and
+The record begins under the return rail and
 runs downward. It is not vertically centred in the remaining viewport: a short result - a death,
 a quiet return - must not float in the middle of the screen. No spacer is added in exchange, and
 no excess dead space is created above the record.
 
-USER AMENDMENT, 2026-09-22 — OUTCOME TYPE, EXACT. Every Outcome label is the same size:
+Every Outcome label is the same size:
 
     36px var(--f-sign)
 
@@ -239,12 +238,12 @@ USER AMENDMENT, 2026-09-22 — OUTCOME TYPE, EXACT. Every Outcome label is the s
 overrides are removed, and the NPC name and the Outcome summary keep one size regardless of
 which Outcome was resolved. Outcomes differ by copy and tone/colour only.
 
-USER AMENDMENT, 2026-09-22 — DEATH PAYLOAD. A death is a closed result, so the player-facing
+A death is a closed result, so the player-facing
 record shows only:
 
     death status message, character art, `사망`, NPC name, Dungeon · Lv, Outcome summary
 
-Everything else is absent, per the USER AMENDMENT of 2026-09-22: no route change, no Deep tag,
+Everything else is absent: no route change, no Deep tag,
 no Item / supply cause line, no incident / fact line, no Level / Stat / equipment change, no
 injury / rest, no Fatigue, no EXP, no Wallet, no reward or other numeric change row, and no
 divider or reserved spacing where any of those regions would be.
@@ -252,18 +251,18 @@ divider or reserved spacing where any of those regions would be.
 A death ends on its summary. The resolution data itself is unchanged; only the NIGHT render
 hides it.
 
-USER AMENDMENT, 2026-09-22 — EQUIPMENT / POWER TERM. The player-facing Stat name is `투력`, so an
+The player-facing Stat name is `투력`, so an
 equipment Stat bonus reads `투력 +N`, never `전투 +N`. Ordinary prose such as `전투에서 …` is not
 affected. Equipment identity and its Stat effect are visually separated - a middle dot or spacing -
 and never merged into one run of words. Internal fields and stored strings are not renamed; only
 the player-facing output is unified.
 
-USER AMENDMENT, 2026-09-22 — COMBAT FACT. The player-facing NIGHT record does not print the
+The player-facing NIGHT record does not print the
 fight verdict line (`적을 물리쳤다.` / `적을 물리치지 못했다.`). It duplicates the Outcome and its
 summary. Keeping it at a lower hierarchy is equally disallowed. The resolution data it was
 rendered from is unchanged and stays available to the resolver, Closing and QA.
 
-USER AMENDMENT, 2026-09-22 — RESULT DATA TYPOGRAPHY. Level / Stat / Injury / Fatigue / EXP /
+Level / Stat / Injury / Fatigue / EXP /
 Wallet and the other aftermath figures are an information region, not display. They use the
 ordinary UI type family; the pixel / LED display face is reserved for true display roles such as
 the Outcome label. Reading groups, in the owned information order:
@@ -301,7 +300,7 @@ DIRECTOR DOCUMENT BASELINE — EXACT:
 - desktop D5/D15 Boss art max-height: 300px
 - desktop D25 Boss art max-height: 260px
 
-USER AMENDMENT, 2026-09-22, superseding the old "art must stay small" reading: the report was
+the report was
 reviewed on a real handset and read too weak. The Boss beat is a takeover with the screen dimmed
 behind it, so the sheet may claim most of the viewport and the major-beat art may grow until it
 would cause overflow. The constraint below is what bounds the values.
@@ -385,9 +384,8 @@ cleaner.
 
 #### ORNAMENT RESTRAINT
 
-USER AMENDMENT, 2026-09-22. `GAME-LIKE INTERACTION LANGUAGE` is a materiality and affordance
-requirement, not permission to add ornament. It is not satisfied by decoration and it is failed by
-decoration.
+`GAME-LIKE INTERACTION LANGUAGE` is a materiality and affordance requirement, not permission to add
+ornament. It is not satisfied by decoration and it is failed by decoration.
 
 Audit the complete Player-facing UI, not only decision controls.
 
@@ -416,7 +414,7 @@ planes and the decision state.
 
 Presence comes from size, weight, contrast, placement and the press, not from added marks.
 
-USER AMENDMENT, 2026-09-22 — STRIPE SWEEP. The MORNING shutter pull's repeating-stripe gradient
+The MORNING shutter pull's repeating-stripe gradient
 is the same "stripe pattern is not material" defect already corrected on the FINAL gate bar, and
 it is removed: the control keeps its structure, size, action and hard press/depth on a flat solid
 plane, with no border, bevel, stripe or ornament added in exchange.
@@ -427,8 +425,7 @@ either as the ornament ban's glossy gradient, and do not strip gradient strings 
 
 #### PIXEL / 2D GAME UI LANGUAGE — DARK PIXEL + CONTROLLED POP
 
-USER AMENDMENT, 2026-09-22. This is the standing Player-facing presentation grammar for the v2.8
-Polish pass. Store Support is the first explicit application, but the rule is global: each later
+This is the standing Player-facing presentation grammar for the v2.8 Polish pass. Store Support is the first explicit application, but the rule is global: each later
 surface touched by Presentation Polish is judged against it.
 
 The target is:
@@ -577,11 +574,11 @@ ORDER
 - `- / quantity / + / 1 / 3 / MAX` is one control cluster; the numeric readout is the one
   recessed/read-only part
 - quantity keys may use flat planes plus hard depth; they do not require a border on every key
-- USER AMENDMENT, 2026-09-22 — QUANTITY WEIGHT. The cluster reviewed as too heavy. Its hierarchy
+- The cluster reviewed as too heavy. Its hierarchy
   is: item information > quantity readout / stepper > `1 / 3 / MAX`.
   `1 / 3 / MAX` returns to the light v2.7-class quick set: a secondary shortcut with no box of
   its own, no pixel key plane and no hard shadow, and always weaker than `- / quantity / +`.
-  USER AMENDMENT, 2026-09-22 — QUICK SET AFFORDANCE. It carries the v2.7 subtle dotted
+  It carries the v2.7 subtle dotted
   underline: available = dotted underline, hover / focus = the underline and ink sharpen,
   disabled = dim ink and non-interactive. No whole-element opacity fade. Its functional
   behaviour is the current v2.7-equivalent Source and does not change: `-` disabled at q=0,
@@ -604,7 +601,7 @@ SALE
 
 NIGHT
 - the Outcome is the record's primary reading, not a generic result card title; per the
-  §NIGHT LAYOUT USER AMENDMENT of 2026-09-22 it earns that by placement and weight inside the
+  §NIGHT LAYOUT rule earns that by placement and weight inside the
   character identity block, never as a full-width headline row over the screen
 - success / great success / retreat / injury / severe injury / death must not feel like identical
   cards with one word swapped
@@ -612,7 +609,7 @@ NIGHT
   result system; do not add a new cinematic framework
 - the sold-Item effect is a sub line of the Outcome summary, never a second result card
 - the aftermath region follows §NIGHT LAYOUT RESULT DATA TYPOGRAPHY
-- USER AMENDMENT, 2026-09-22 — CLOSING HANDOVER CONTROL / NIGHT PRIMARY COLOUR.
+- CLOSING HANDOVER CONTROL / NIGHT PRIMARY COLOUR.
   The control that ends the NIGHT record is the screen's ACTIVE Primary Action and must read
   immediately above `전체 건너뛰기`.
 
@@ -652,7 +649,7 @@ BOSS REPORT
 FINAL
 - reads as one final decision surface combining Gate / Boss / team / sortie state, not as a page
   ending in a coloured button
-- USER AMENDMENT, 2026-09-22 — DISABLED COMMIT CAUSE. The fixed dock states why the sortie cannot
+- DISABLED COMMIT CAUSE. The fixed dock states why the sortie cannot
   start, on the control itself: available reads `마왕성으로 출발`, unavailable reads
   `원정대 {current} / {required}`. No separate explanation box is added, and the muster's own
   count stays where it is. This repetition is the disabled Action's immediate cause feedback, not
@@ -664,8 +661,7 @@ FINAL
 
 #### STORE SUPPORT — FINAL VISUAL SPEC
 
-USER APPROVED, 2026-09-22. Store Support is an application of DARK PIXEL + CONTROLLED POP, not a
-separate palette system.
+Store Support is an application of DARK PIXEL + CONTROLLED POP, not a separate palette system.
 
 No literal colour value is Canonical for this screen.
 The exact hue / saturation / brightness may be tuned in implementation as long as the following
@@ -882,7 +878,7 @@ Semantic colour is authoritative over decorative phase colour.
 
 ### GAME-LIKE INTERACTION LANGUAGE
 
-USER APPROVED, 2026-09-22. Phase accent alone does not close the Presentation Polish.
+Phase accent alone does not close the Presentation Polish.
 
 Current defect: parts of the game read as a web app rather than as the shop it is -
 information inside a plain rectangular card, an ordinary rectangular CTA along the bottom, and
@@ -959,8 +955,6 @@ cover required information.
 
 ### DECISION / PHASE AUDIO
 
-USER AMENDMENT, 2026-09-22 — AUDIO POLISH + AUDIO ASSET PRODUCTION.
-
 The current audio ARCHITECTURE is reused where it already solves playback, routing, settings and
 phase ownership. This does NOT require reuse of the current audio assets. Existing synthesized
 cues / loops may be replaced when they are weaker than the target presentation.
@@ -971,8 +965,9 @@ New audio may come from:
 - external free assets whose license permits the shipped use
 
 External assets must have their source / author / license / modification status recorded outside
-Canonical. Do not use an asset with unclear rights or a license that forbids the intended shipped
-use.
+Canonical. Third-party files may be vendored locally in the repository and remain fully compatible
+with offline runtime; runtime hotlinking to a network source is forbidden. Do not use an asset with
+unclear rights or a license that forbids the intended shipped use.
 
 #### AUDIO VOICE
 
