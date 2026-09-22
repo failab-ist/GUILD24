@@ -91,8 +91,16 @@ test('UI-Q01: Morning and Order are different screens, not one template',()=>{
  assert.ok(morning.includes('class="board"')&&morning.includes('class="pinned"'),'Gates are notices pinned to the board');
  assert.ok(!/Scene\.(ceiling|wall|counter)|Art\.scene/.test(order),'ORDER carries no store scene');
  assert.ok(order.includes('class="form"')&&order.includes('발주서'),'Order is a paper order form');
- assert.ok(order.includes('Scene.priceTag(')&&order.includes('Scene.crate(')&&order.includes('Scene.seal('),
-  'offers carry a real price tag, stock crate and corporate seal');
+ /* The corporate seal was dropped from this clause by UI_UX §ORNAMENT RESTRAINT, which audits the
+    whole Player-facing UI for logo / seal / stamp marks that carry no function or state: the
+    letterhead's G24 filled the head's right margin and nothing else, so the mark, its rule and
+    the now-unused Scene.seal helper are gone. What this clause protects is unchanged - an offer
+    row is built from real objects, not from generic chips - so the price tag and the stock crate
+    are still required, and the seal must NOT come back as decoration. */
+ assert.ok(order.includes('Scene.priceTag(')&&order.includes('Scene.crate('),
+  'offers carry a real price tag and stock crate');
+ assert.ok(!/Scene\.seal|seal-art/.test(app+css)&&!/function seal\(/.test(read('dist/ui/scene.js')),
+  'and no corporate seal mark is drawn anywhere on the Player surface');
  for(const shared of ['class="board"','class="daysign"','class="pinned"','class="till"'])
   assert.ok(!order.includes(shared),'Order does not reuse the Morning composition: '+shared);
 });
@@ -195,7 +203,15 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  assert.ok(app.includes("Math.round(D.pricing[mode].mult*100)")&&app.includes("<em>'+pct+'%</em>"),'price modes read as 50/100/150%');
  for(const reason of ['소지금 부족','오늘 거절됨','가방 가득'])assert.ok(app.includes(reason),'a blocked price says why: '+reason);
  assert.ok(app.includes('Adventurer.slots(n)'),'remaining consumer slots are readable');
- for(const bad of ['성공 확률','사망 확률','안전 점수'])assert.ok(!app.includes(bad),'no exact probability or master safety score');
+ /* COPY_AUDIT_APPROVED §4-3 is the exact owner of the death-risk Help, and its approved wording
+    NEGATES a master probability - `원정 전체 사망 확률은 아니다.` - so a bare substring ban now
+    fails on the approved copy itself. The intent is unchanged and is asserted more tightly: the
+    game must never PRESENT one, so the phrase is pinned to that single approved sentence and
+    forbidden anywhere else. */
+ const DEATH_HELP='실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.';
+ assert.ok(app.includes(DEATH_HELP),'the approved §4-3 death-risk Help is adopted verbatim');
+ assert.equal((app.match(/사망 확률/g)||[]).length,1,'사망 확률 appears only inside that negation');
+ for(const bad of ['성공 확률','안전 점수'])assert.ok(!app.includes(bad),'no exact probability or master safety score');
 });
 
 test('NPC PRODUCTION ART: one resolver for every player-facing portrait',()=>{
@@ -656,21 +672,26 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     the approved line's structure and both of its halves - only the term the row is now
     labelled with changed with the label. The plate keeps no ? of its own, so there is still
     exactly one control explaining the two facts. */
+ /* The three counter tooltips are now owned exactly by COPY_AUDIT_APPROVED §4-1 / §4-2 / §4-3,
+    and COPY_WORLD_VOICE §ANCHORED HELP ROUTING routes to that owner rather than restating them.
+    The approved lines state WHEN each reading was taken instead of re-describing the label, so
+    the pre-amendment strings asserted here are superseded. What the clause protects is unchanged
+    and still asserted below: one control per reading, one line each, and no ladder / system
+    lecture in the tooltip. */
  const envTip=fn('readout');
- assert.ok(envTip.includes("'압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준'"),
-  'the environment ? carries only the approved line');
- assert.ok(!/class="tip"|tip\(/.test(fn('destPlate')),'and the destination plate grows no second one');
- for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','팔아도 바뀌지 않는다','확정된'])
+ assert.ok(!/class="tip"|tip\(/.test(fn('destPlate')),'the destination plate grows no second ?');
+ for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','확정된'])
   assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
  /* Each ? names its own reading and stops. Anything longer than one line is the store guide's
     job, so the sweep holds every counter tooltip to a single short line. */
  const lines=[...app.matchAll(/tip\('[^']+',((?:'[^']*',?)+)\)/g)].map(m=>m[1].split("','").length);
  assert.ok(lines.length===3,'there are exactly three counter tooltips');
  assert.ok(lines.every(n=>n===1),'and each one is a single line');
- for(const [label,text] of [['전투 전망','게이트 전투 요구 대비 현재 전투 준비 수준'],
-                            ['실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험'],
-                            ['환경 대응','압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준']])
-  assert.ok(app.includes("tip('"+label+"','"+text+"')"),label+' carries the approved line');
+ // COPY_AUDIT_APPROVED §4-1 / §4-2 / §4-3, verbatim
+ for(const [label,text] of [['전투 전망','손님이 처음 계산대에 왔을 때의 전투 전망. 판매 후에도 바뀌지 않는다.'],
+                            ['실패 시 사망 위험','실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.'],
+                            ['환경 대응','손님이 처음 계산대에 왔을 때의 환경 대응. 판매 후에도 바뀌지 않는다.']])
+  assert.ok(app.includes("tip('"+label+"','"+text+"')"),label+' carries the approved §4 line');
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
@@ -1373,22 +1394,25 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
  assert.ok(/\['supply','\.ingredients'/.test(steps),'the Supply/Fatigue lesson is on the arithmetic it explains');
+ /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
+    verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
+    reflects 보급 - it does not, `Game.arrive()` snapshots it with an empty pack (see
+    dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
+    so the approved line keeps the step on the pressure the Hazard rows actually show. */
+ for(const [id,text] of [
+   ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
+   ['hazard','위험마다 압박하는 능력이 다르다. 어떤 능력이 필요한지 여기서 확인한다.'],
+   ['supply','보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요량을 채우고 남은 보급은 먼저 출발 전 피로를 줄이고, 더 남으면 귀환 후 피로를 줄인다.'],
+   ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
+  assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
- /* Approved copy. Each step is one decision unit in one or two sentences, so the lesson
-    names the two facts and stops: the pressure, which belongs to the Hazard, and 환경 대응,
-    which is this customer plus what they are carrying. The four-step ladder is no longer
-    recited - the screen states the customer's own step in the forecast, where the label is. */
- for(const point of ['압박','환경 대응'])
-  assert.ok(hazard.includes(point),'the Hazard lesson covers '+point);
- assert.ok(!hazard.includes('현재 대응'),'and does not name a label the screen no longer shows');
- const supply=/\['supply',[^\]]*\]/.exec(steps)[0];
- /* COPY_AUDIT §3-5 is the exact owner: the lesson names the shortfall's effect on the four
-    Stats and what surplus Supply does, without the 페널티 design word. */
- for(const point of ['보급이 부족하면','투력·강인함·기동·정신','피로'])
-  assert.ok(supply.includes(point),'the Supply lesson covers '+point);
- /* Every lesson is short now: one decision unit, one or two sentences. */
+ assert.ok(!hazard.includes('현재 대응'),'and the Hazard lesson names no label the screen no longer shows');
+ /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
+    to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
+ const EXACT=['pricing','hazard','supply','quantity'];
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
-  assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
+  if(!EXACT.includes(id))
+   assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
  /* It must not hand over an answer, and must not expose the hidden formula. */
  const all=[...steps.matchAll(/'([^']{12,})'/g)].map(m=>m[1]).join(' ');
  for(const item of DATA.items)
@@ -1884,7 +1908,8 @@ test('COPY_AUDIT §1 / §9: the pre-Run, reset and store-management microcopy is
  assert.ok(/Save\.reset\(\)/.test(app),'and the reset still goes through Save.reset');
 });
 
-/* COPY_AUDIT §3-1..§3-6, §4-8, §4-10 — coach marks and two SALE lines, exact approved text. */
+/* COPY_AUDIT §3-1..§3-7, §4-8, §4-10 — coach marks and two SALE lines, exact approved text.
+   §3-7 supersedes the older Supply wording asserted here; the rest of §3 is unchanged. */
 test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the approved text',()=>{
  const steps=fn('coachSteps')||app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach'));
  for(const line of [
@@ -1892,11 +1917,18 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
   '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
   '구매 후 준비 상태에 따라 대성공 신호가 뜰 수 있다. 신호가 떠도 대성공이 확정되는 건 아니다.',
   '손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.',
-  '보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요 보급을 초과한 보급은 피로를 줄인다.',
+  // §3-7: the surplus now says WHICH fatigue it reduces first, which the screen states too
+  '보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요량을 채우고 남은 보급은 먼저 출발 전 피로를 줄이고, 더 남으면 귀환 후 피로를 줄인다.',
   '판매한 상품은 오늘 원정에서 쓰고 사라진다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
  for(const gone of ['점포 매출에는 영향이 없다','준비가 끝나면 영업 시작을 누른다','보급을 더 챙기면 가능성이 커질 수 있다',
-                    '성공·실패 결과는 미리 알 수 없고','원정 준비에 공통 페널티','모든 상품은 1회용이며'])
+                    '성공·실패 결과는 미리 알 수 없고','원정 준비에 공통 페널티','모든 상품은 1회용이며',
+                    // superseded by §3-7
+                    '필요 보급을 초과한 보급은 피로를 줄인다','50%는 투자, 100%는 기본','환경 대응은 손님 능력과 보급을 함께 반영한다',
+                    '발주할 수량을 고른다.',
+                    // superseded by §4-1..§4-3
+                    '게이트 전투 요구 대비 현재 전투 준비 수준','원정 실패 이후 사망으로 이어질 조건부 위험',
+                    '이 손님의 보급 전 대응 수준'])
   assert.ok(!app.includes(gone),'the superseded coach wording is gone: '+gone.slice(0,14));
  // §4-8
  assert.ok(app.includes('<span>현재 준비 변화 없음</span>'),'§4-8 the no-change line');

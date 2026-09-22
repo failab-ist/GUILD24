@@ -339,18 +339,18 @@ function readout(n,extra=null,cls=''){
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
-   +tip('전투 전망','게이트 전투 요구 대비 현재 전투 준비 수준')+'</span>'
+   +tip('전투 전망','손님이 처음 계산대에 왔을 때의 전투 전망. 판매 후에도 바뀌지 않는다.')+'</span>'
   /* DUNGEON_HAZARD_v2.7 §Pre-supply player-facing failure Death risk: the exact conditional
      percentage, said as a conditional - never as the chance this expedition ends in death. */
   +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
-   +tip('실패 시 사망 위험','원정 실패 이후 사망으로 이어질 조건부 위험')+'</span>'
+   +tip('실패 시 사망 위험','실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.')+'</span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
      here because it is judged against an Item, beside the other two readings a product is
      bought to move. No new label and no new calculation. */
   +(o.worst?'<span class="fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>'
-   +tip('환경 대응','압박: 위험이 요구하는 능력치 · 환경 대응: 이 손님의 보급 전 대응 수준')+'</span>':'')
+   +tip('환경 대응','손님이 처음 계산대에 왔을 때의 환경 대응. 판매 후에도 바뀌지 않는다.')+'</span>':'')
   +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
  +'</div>'
  /* DUNGEON_HAZARD §FATIGUE INFORMATION BOUNDARY. These are decision ingredients, not a
@@ -663,12 +663,12 @@ const coachSteps={
     is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
     clears it and the next first occurrence teaches it again. No new persistence was added. */
  morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.']],
- order:[['gold','#order-register','보유 골드와 현재 발주 후 잔액을 확인한다.'],['quantity','.dial','발주할 수량을 고른다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
+ order:[['gold','#order-register','보유 골드와 현재 발주 후 잔액을 확인한다.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
  sell:[['npc','.who','손님을 누르면 특성과 지난 원정 기록을 볼 수 있다.','npc'],['great','.great-signal','구매 후 준비 상태에 따라 대성공 신호가 뜰 수 있다. 신호가 떠도 대성공이 확정되는 건 아니다.'],['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
  /* UI_UX_v2.7 §TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER. It teaches what the two
     columns MEAN and where readiness comes from. It never names an Item for a Hazard: no
     `독이면 X를 사세요`, because that is the decision the player is here to make. */
- ['hazard','.dest-plate .hazards','위험은 특정 능력을 압박한다. 환경 대응은 손님 능력과 보급을 함께 반영한다.'],
+ ['hazard','.dest-plate .hazards','위험마다 압박하는 능력이 다르다. 어떤 능력이 필요한지 여기서 확인한다.'],
  /* UI-Q-v28-27. The lesson's whole point is that this reading does not move, and `.readout`
     is the panel - it also holds `.ingredients`, whose Fatigue/Supply arithmetic is computed
     from the CURRENT committed Bag, and `.great-signal`, which is recomputed after every
@@ -678,7 +678,7 @@ const coachSteps={
  ['forecast','.readout .top','손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.'],
  /* The Supply/Fatigue order, in the order it actually resolves. The hidden Supply-deficit
     formula is not taught - only that a shortfall costs one penalty across the preparation. */
- ['supply','.ingredients','보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요 보급을 초과한 보급은 피로를 줄인다.'],['inventory','.good','판매한 상품은 오늘 원정에서 쓰고 사라진다.'],['pricing','.tills','50%는 투자, 100%는 기본, 150%는 수익 우선이다.']],
+ ['supply','.ingredients','보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요량을 채우고 남은 보급은 먼저 출발 전 피로를 줄이고, 더 남으면 귀환 후 피로를 줄인다.'],['inventory','.good','판매한 상품은 오늘 원정에서 쓰고 사라진다.'],['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.']],
  night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
@@ -858,8 +858,10 @@ function orderScreen(){
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  return '<div class="clip"></div><div class="form">'
- +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span>'
- +'<span class="seal">'+Scene.seal(48,'#2f7a4d')+'</span></div>'
+ /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24
+    seal carried no function or state - it filled the head's right margin and nothing else. The
+    document is identified by 발주서 and its DAY / branch line. */
+ +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span></div>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
    +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'
@@ -1323,21 +1325,27 @@ function bossFiled(){return '<p class="filed"><span>길드 조사부</span><b>DA
 function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bossRevealStage();
  const art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
  const plate=art?'<figure class="boss-art"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'';
+ /* UI_UX §BOSS INFORMATION PRESENTATION, amended: on a major reveal / preparation beat the Boss
+    is the centred visual anchor and registers BEFORE the owned information, which then reads
+    directly below it. The art used to close these two reports, so the Player finished the
+    payload and only then met the subject. The information itself is unchanged and in the same
+    order; only where the visual sits moved. */
  if(stage==='final'){const d=s.final||s.dungeons[0];
   return '<div class="boss-reveal final">'+bossFiled()+'<p class="lede">'+E(c.final.intro)+'</p>'
+   +plate
    +'<div class="fams">'+(d.families||[]).map(id=>{const f=D.dungeonBy[id];
      return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+E(f.name)+'</b>'
       +hazardList(D.familyTiers[id][1])+'</article>';}).join('')
-   +'</div>'+plate+'</div>';}
+   +'</div></div>';}
  if(stage==='d15'){const [name,lines]=c.d15.trait[s.bossId];
   return '<div class="boss-reveal d15">'+bossFiled()+'<p class="lede">'+E(c.d15.intro)+'</p>'
    +'<h3 class="boss-name">'+E(b.name)+'</h3>'
+   +plate
    +'<p class="trait-name">특성 — '+E(name)+'</p>'
-   +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>'
-   +plate+'</div>';}
+   +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div></div>';}
  /* D10 / D20 are one-tap information beats: they open the question the next report answers and
-    disclose nothing new about the Boss, so they carry the small identity portrait rather than
-    the full art. Neither draws anything from the run stream. */
+    disclose nothing new about the Boss, so they carry the compact identity portrait rather than
+    the major-beat art, and stay compact. Neither draws anything from the run stream. */
  if(stage==='d10'||stage==='d20'){const t=stage==='d10'?c.d10:c.d20;
   return '<div class="boss-reveal '+stage+'">'+bossFiled()
    +(art?'<figure class="boss-id"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'')

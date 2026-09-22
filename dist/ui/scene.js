@@ -123,14 +123,6 @@ const decoArt={dawnSign:decoSign,guildPlaque:decoPlaque,thriftSafe:decoSafe,prem
 /* Resolves through slot() like every other scene asset, so a production PNG replaces one by
    registering manifest['deco.<id>'] and no screen changes. */
 function decoration(id){const draw=decoArt[id];return draw?slot('deco.'+id,draw,'deco-art'):'';}
-/* ---- GUILD24 corporate seal, used on the order form and the approval stamp ---- */
-function seal(size=56,ink='#2f7a4d'){
- let s='';
- for(let i=0;i<4;i++)s+=r([6,44,6,6][i],[6,6,6,44][i],[44,6,6,44][i],[6,44,44,6][i],ink);
- s+=r(12,12,32,4,ink)+r(12,40,32,4,ink)+r(12,12,4,32,ink)+r(40,12,4,32,ink)
-  +`<text x="28" y="33" text-anchor="middle" fill="${ink}" font-family="ui-monospace,monospace" font-size="13" font-weight="bold">G24</text>`;
- return `<svg class="seal-art" width="${size}" height="${size}" viewBox="0 0 56 56" shape-rendering="crispEdges" aria-hidden="true">${s}</svg>`;
-}
 /* ---- a cardboard stock box that holds an item pictogram ---- */
 function crate(inner,size=48){
  return `<span class="crate-art" style="--sz:${size}px"><svg viewBox="0 0 48 48" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">`
@@ -281,6 +273,6 @@ const anchors={
 };
 const anchorStyle=name=>{const a=anchors[name];return 'left:'+a.left+'%;top:'+a.top+'%;width:'+a.width+'%;height:'+a.height+'%';};
 G.Scene={ceiling:()=>slot('store.ceiling',ceiling),wall:()=>slot('store.wall',wall),counter:()=>slot('store.counter',counter),
- seal,crate,priceTag,hazardIcon,manifest,slot,anchors,anchorStyle,decoration,decoArt,
+ crate,priceTag,hazardIcon,manifest,slot,anchors,anchorStyle,decoration,decoArt,
  npcArt,npcPool,bossArt,cardBack,shelfStrip,nightRoom,returnTag};
 })(globalThis);
