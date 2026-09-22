@@ -203,11 +203,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    screen's Primary and must never read as four buttons competing with it. */
 .effects li.deco-line{padding:0}
 .deco-line+.deco-line{margin-top:4px}
-.deco-jump{display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:12px;
- padding:11px 12px;min-height:46px;border:0;border-radius:0;text-align:left;
+/* USER 2026-09-23: the four rows shared an inset and still read as a web list. They are slots
+   cut into one mounting track now: the same recess, the same brass mounting tab at the head of
+   each, the same label and value seating. One family, four instances - and still ranked under
+   the Primary, with one pixel of travel and no cast depth. */
+.deco-jump{position:relative;display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:12px;
+ padding:11px 12px 11px 24px;min-height:46px;border:0;border-radius:0;text-align:left;
  font:inherit;color:var(--dim);background:#00000038;
- box-shadow:inset 0 0 0 2px #00000059,inset 0 2px 0 #ffffff0f;cursor:pointer;
- transition:background .08s steps(2)}
+ box-shadow:inset 0 0 0 2px #00000059,inset 0 2px 0 #ffffff0f,inset 0 -2px 0 #b08a4226;
+ cursor:pointer;transition:background .08s steps(2)}
+.deco-jump:before{content:'';position:absolute;left:8px;top:50%;margin-top:-8px;width:5px;height:16px;
+ background:linear-gradient(180deg,#e6c176 0,#b08a42 42%,#6b5029 100%);
+ box-shadow:1px 0 0 #12100a,0 1px 0 #12100a}
 .deco-jump:hover{background:#0000002b;color:#cdbfa4}
 .deco-jump:active{transform:translateY(1px);background:#00000047;
  box-shadow:inset 0 0 0 2px #00000073,inset 0 2px 0 #ffffff08}
@@ -741,18 +748,52 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background-position:0 0,0 0,0 0,50% 50%;
  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
  background-origin:content-box}
+/* USER 2026-09-23: the menu pin was the last browser-like control left on this stage - a dark
+   rounded-looking chip with a generic bevel. On the OPENING it is a small iron fixture in the
+   same family as everything else: cut corners, an iron face over brass, a lit top edge and a
+   hard cast. It stays deliberately low in the hierarchy - smaller, darker and quieter than the
+   Primary, which it must never compete with. Only the Opening's is restyled; every other phase
+   keeps the shared control. */
+.p-start .menu-pin{background:linear-gradient(180deg,#39434c 0,#2a323a 46%,#1d232a 100%);
+ color:#cdbfa4;
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #6b5029,inset 0 3px 0 #5b6a7280;
+ clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
+  100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
+  6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
+ filter:drop-shadow(3px 3px 0 #00000099)}
+.p-start .menu-pin:hover{background:linear-gradient(180deg,#44505a 0,#333d46 46%,#232a31 100%)}
+.p-start .menu-pin:active{transform:translate(2px,2px);filter:drop-shadow(1px 1px 0 #00000099);
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #4a3418,inset 0 -3px 0 #5b6a7280}
 .opening{position:relative;display:grid;justify-items:center;gap:8px;padding:34px 16px 14px;text-align:center}
 /* The identity sits on the plane instead of floating over it: one hard pixel drop, the value
    the signage faces elsewhere already use. No blur - §EDGE / MATERIAL RULES. */
-.opening-title{margin:0;white-space:nowrap;color:#f7eeda;
+/* USER 2026-09-23: a shop's name is a made object. Text with a drop shadow was the plateau -
+   this is a fitted sign: a wood plate with its corners cut, a brass inner seam, a lit top edge
+   and two iron mounts holding it to whatever it hangs from. It is sized to the letters plus
+   its own reveal, never wider - a plate, not a banner, and never the giant card the Batch
+   forbids. The face, its measure and its one line are untouched. */
+.opening-title{position:relative;margin:0;white-space:nowrap;color:#f7eeda;
  font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none;
- text-shadow:0 4px 0 #0a0705,0 6px 0 #00000073}
+ text-shadow:0 3px 0 #120c06;padding:9px 26px 11px;
+ background:linear-gradient(180deg,#4d3724 0,#3b2918 56%,#2a1c10 100%);
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 4px #b08a42,inset 0 6px 0 #8a653859,
+  inset 0 -6px 0 #16100999;
+ clip-path:polygon(0 9px,9px 9px,9px 0,calc(100% - 9px) 0,calc(100% - 9px) 9px,100% 9px,
+  100% calc(100% - 9px),calc(100% - 9px) calc(100% - 9px),calc(100% - 9px) 100%,
+  9px 100%,9px calc(100% - 9px),0 calc(100% - 9px));
+ filter:drop-shadow(0 6px 0 #00000080)}
+.opening-title:before,.opening-title:after{content:'';position:absolute;top:50%;margin-top:-4px;
+ width:7px;height:7px;background:linear-gradient(180deg,#e6c176 0,#b08a42 45%,#6b5029 100%);
+ box-shadow:inset -1px -1px 0 #4a3418,0 1px 0 #12100a}
+.opening-title:before{left:9px}
+.opening-title:after{right:9px}
 /* The branch is short object identity, which §TYPOGRAPHY / SPACING routes to the plate face,
    and a plate is what it becomes: a small stamped tag under the sign rather than grey body
    copy. Mulmaru is crisp only at its design sizes, so this one is fixed at 12px, not fluid. */
-.opening-branch{margin:2px 0 0;padding:5px 12px 4px;color:#d2ba90;
+.opening-branch{margin:3px 0 0;padding:5px 13px 4px;color:#e0c89c;
  font:500 12px/1 var(--f-plate);letter-spacing:.2em;-webkit-font-smoothing:none;
- background:#00000059;box-shadow:inset 0 0 0 2px #5d4527}
+ background:linear-gradient(180deg,#3b2918 0,#2a1c10 100%);
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #b08a42,0 3px 0 #00000080}
 /* One supporting rule closes the title block and gives the sheet below something to hang from:
    a single seam with a raised centre notch, the same 2px seam weight the sheet's frame uses.
    §TITLE / PLATE allows exactly one - this is it, and nothing else on this screen is framed. */
@@ -1328,45 +1369,89 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    those are LOW-budget utility overlays that must not inherit a MEDIUM surface's frame.
    `:has(.welcome-band)` is the pre-Run sheet and nothing else, so no markup changed.
 
-   The sheet was header / body / footer stacked on one wood plane with a lit bar across the
-   top: three regions that never resolved into one object. It is built as one now -
-   a 3px outer object edge, a 2px warm inner seam, and every internal division drawn in that
-   SAME seam value, so the object has one edge grammar instead of four opinions. The footer
-   separates by material and value, not by another frame around itself.
+   The sheet was header / body / footer stacked on one wood plane. A 3px line and a 2px seam
+   made that tidy; they did not make it an object. Three CSS passes plateaued there, so the
+   perimeter is BUILT now, as the system's escalation says to do when CSS leaves the object
+   generic: a bespoke 56x56 pixel frame, sliced 18, carried by border-image.
+   It is drawn so the slicing cannot hurt it. The top and bottom planks run the full width and
+   the side stiles run the full height between them, and every band inside them is constant
+   along its own run - so `stretch` has nothing to distort, at any sheet height the day asks
+   for. The corners are fixed: a brass bracket set into each joint, with one rivet. The centre
+   is transparent and the sheet's own wood shows through it, clipped to the padding box, so no
+   frame sits inside another frame.
+   Live text and controls stay HTML. Nothing is baked into the graphic.
    ===================================================================== */
 .modal.narrow:has(.welcome-band){
- box-shadow:inset 0 0 0 3px #0a0705,inset 0 0 0 5px #6b5029,0 -6px 0 #0000008c}
-.modal.narrow:has(.welcome-band) .modal-header{padding:16px var(--gutter) 13px;
- box-shadow:inset 0 -2px 0 #6b5029}
-.modal.narrow:has(.welcome-band) .modal-header h2{font-size:21px;letter-spacing:.02em}
-.modal.narrow:has(.welcome-band) .modal-body{padding:18px var(--gutter) 20px}
-/* the footer is the sheet's own material, one step down in value, held by the same seam */
-.modal.narrow:has(.welcome-band) .modal-footer{background:#150e08;
- box-shadow:inset 0 2px 0 #6b5029}
+ border-style:solid;border-width:18px;
+ border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='56' height='56' shape-rendering='crispEdges'><g fill='%23120c06'><rect x='0' y='0' width='56' height='2'/><rect x='8' y='8' width='1' height='1'/><rect x='47' y='8' width='1' height='1'/><rect x='0' y='18' width='2' height='20'/><rect x='54' y='18' width='2' height='20'/><rect x='8' y='47' width='1' height='1'/><rect x='47' y='47' width='1' height='1'/><rect x='0' y='54' width='56' height='2'/></g><g fill='%238a6538'><rect x='0' y='2' width='56' height='1'/><rect x='2' y='18' width='1' height='20'/><rect x='53' y='18' width='1' height='20'/><rect x='0' y='53' width='56' height='1'/></g><g fill='%2363462a'><rect x='0' y='3' width='3' height='1'/><rect x='13' y='3' width='30' height='1'/><rect x='53' y='3' width='3' height='1'/><rect x='3' y='18' width='1' height='20'/><rect x='52' y='18' width='1' height='20'/><rect x='0' y='52' width='3' height='1'/><rect x='13' y='52' width='30' height='1'/><rect x='53' y='52' width='3' height='1'/></g><g fill='%23e6c176'><rect x='3' y='3' width='10' height='1'/><rect x='43' y='3' width='10' height='1'/><rect x='3' y='4' width='1' height='9'/><rect x='52' y='4' width='1' height='9'/><rect x='9' y='8' width='1' height='2'/><rect x='46' y='8' width='1' height='2'/><rect x='8' y='9' width='1' height='1'/><rect x='47' y='9' width='1' height='1'/><rect x='0' y='16' width='56' height='1'/><rect x='16' y='18' width='1' height='20'/><rect x='39' y='18' width='1' height='20'/><rect x='0' y='39' width='56' height='1'/><rect x='3' y='43' width='1' height='10'/><rect x='52' y='43' width='1' height='10'/><rect x='8' y='46' width='2' height='1'/><rect x='46' y='46' width='2' height='1'/><rect x='9' y='47' width='1' height='1'/><rect x='46' y='47' width='1' height='1'/><rect x='4' y='52' width='9' height='1'/><rect x='43' y='52' width='9' height='1'/></g><g fill='%2345311f'><rect x='0' y='4' width='3' height='3'/><rect x='13' y='4' width='30' height='3'/><rect x='53' y='4' width='3' height='3'/><rect x='6' y='6' width='7' height='1'/><rect x='43' y='6' width='7' height='1'/><rect x='0' y='8' width='3' height='2'/><rect x='6' y='8' width='2' height='2'/><rect x='10' y='8' width='36' height='2'/><rect x='48' y='8' width='2' height='2'/><rect x='53' y='8' width='3' height='2'/><rect x='0' y='11' width='3' height='1'/><rect x='6' y='11' width='44' height='1'/><rect x='53' y='11' width='3' height='1'/><rect x='4' y='18' width='3' height='20'/><rect x='8' y='18' width='2' height='20'/><rect x='11' y='18' width='1' height='20'/><rect x='44' y='18' width='1' height='20'/><rect x='46' y='18' width='2' height='20'/><rect x='49' y='18' width='3' height='20'/><rect x='0' y='44' width='3' height='1'/><rect x='6' y='44' width='44' height='1'/><rect x='53' y='44' width='3' height='1'/><rect x='0' y='46' width='3' height='2'/><rect x='6' y='46' width='2' height='2'/><rect x='10' y='46' width='36' height='2'/><rect x='48' y='46' width='2' height='2'/><rect x='53' y='46' width='3' height='2'/><rect x='0' y='49' width='3' height='3'/><rect x='6' y='49' width='44' height='1'/><rect x='53' y='49' width='3' height='3'/><rect x='13' y='50' width='30' height='2'/></g><g fill='%23b08a42'><rect x='4' y='4' width='9' height='1'/><rect x='43' y='4' width='9' height='1'/><rect x='4' y='5' width='1' height='8'/><rect x='51' y='5' width='1' height='8'/><rect x='0' y='15' width='56' height='1'/><rect x='15' y='18' width='1' height='20'/><rect x='40' y='18' width='1' height='20'/><rect x='0' y='40' width='56' height='1'/><rect x='4' y='43' width='1' height='9'/><rect x='51' y='43' width='1' height='9'/><rect x='5' y='51' width='8' height='1'/><rect x='43' y='51' width='8' height='1'/></g><g fill='%236b5029'><rect x='5' y='5' width='8' height='1'/><rect x='43' y='5' width='8' height='1'/><rect x='5' y='6' width='1' height='7'/><rect x='50' y='6' width='1' height='7'/><rect x='0' y='14' width='56' height='1'/><rect x='14' y='18' width='1' height='20'/><rect x='41' y='18' width='1' height='20'/><rect x='0' y='41' width='56' height='1'/><rect x='5' y='43' width='1' height='8'/><rect x='50' y='43' width='1' height='8'/><rect x='6' y='50' width='7' height='1'/><rect x='43' y='50' width='7' height='1'/></g><g fill='%232f2113'><rect x='0' y='7' width='3' height='1'/><rect x='6' y='7' width='44' height='1'/><rect x='53' y='7' width='3' height='1'/><rect x='7' y='18' width='1' height='20'/><rect x='48' y='18' width='1' height='20'/><rect x='0' y='48' width='3' height='1'/><rect x='6' y='48' width='44' height='1'/><rect x='53' y='48' width='3' height='1'/></g><g fill='%235c4029'><rect x='0' y='10' width='3' height='1'/><rect x='6' y='10' width='44' height='1'/><rect x='53' y='10' width='3' height='1'/><rect x='10' y='18' width='1' height='20'/><rect x='45' y='18' width='1' height='20'/><rect x='0' y='45' width='3' height='1'/><rect x='6' y='45' width='44' height='1'/><rect x='53' y='45' width='3' height='1'/></g><g fill='%23241809'><rect x='0' y='12' width='3' height='2'/><rect x='6' y='12' width='44' height='2'/><rect x='53' y='12' width='3' height='2'/><rect x='3' y='13' width='3' height='1'/><rect x='50' y='13' width='3' height='1'/><rect x='12' y='18' width='2' height='20'/><rect x='42' y='18' width='2' height='20'/><rect x='0' y='42' width='56' height='1'/><rect x='0' y='43' width='3' height='1'/><rect x='6' y='43' width='44' height='1'/><rect x='53' y='43' width='3' height='1'/></g><g fill='%2314100a'><rect x='0' y='17' width='56' height='1'/><rect x='17' y='18' width='1' height='21'/><rect x='38' y='18' width='1' height='21'/><rect x='0' y='38' width='17' height='1'/><rect x='18' y='38' width='20' height='1'/><rect x='39' y='38' width='17' height='1'/></g></svg>") 18 stretch;
+ background-clip:padding-box;box-shadow:0 -6px 0 #0000008c}
+/* the header is a plank of the same object, not a caption above it: darker wood, a brass
+   under-rail, and the title seated on it */
+.modal.narrow:has(.welcome-band) .modal-header{padding:13px 14px 12px;
+ background:linear-gradient(180deg,#3f2c1d 0,#33241796 62%,#2a1d1300 100%);
+ box-shadow:inset 0 -3px 0 #6b5029,inset 0 -4px 0 #d2ab6259}
+.modal.narrow:has(.welcome-band) .modal-header h2{font-size:21px;letter-spacing:.02em;
+ text-shadow:0 2px 0 #1b1109}
+.modal.narrow:has(.welcome-band) .modal-body{padding:16px 13px 16px}
+/* The built frame takes 36px of width that the old flat rectangle did not, and at the 360
+   floor that pushed the two longest approved lines onto a second row. They are fluid now
+   rather than fixed, so they shrink by a step at the narrowest width and are unchanged from
+   376px up. Copy, order and emphasis are untouched - only the measure gives way. */
+.modal.narrow:has(.welcome-band) .welcome-title{font-size:clamp(18px,5.4vw,21px);line-height:1.35}
+.modal.narrow:has(.welcome-band) .welcome-band{font-size:clamp(12.5px,3.6vw,14px)}
+/* the section heading is a rail, not a bare line of bold text: a brass tab at its head and a
+   seam running out to the sheet's inner edge - the same two-part language the frame's own
+   rails and the Slot rows use, so the object has one divider grammar instead of three. */
+.modal.narrow:has(.welcome-band) .modal-body h3{display:flex;align-items:center;gap:10px;
+ font:600 15px/1 var(--ui);letter-spacing:.02em}
+.modal.narrow:has(.welcome-band) .modal-body h3:before{content:'';flex:0 0 auto;width:4px;height:15px;
+ background:linear-gradient(180deg,#e6c176 0,#b08a42 42%,#6b5029 100%);box-shadow:1px 0 0 #12100a}
+.modal.narrow:has(.welcome-band) .modal-body h3:after{content:'';flex:1 1 auto;height:3px;
+ background:linear-gradient(180deg,#b08a4247 0,#b08a4200 60%),#12100a80;
+ box-shadow:0 1px 0 #b08a4233}
+/* the footer is the same plank at the other end of the object - the black web-modal bar is
+   gone, and the brass rail that closes the body is the same rail that opens the header */
+.modal.narrow:has(.welcome-band) .modal-footer{padding:13px 14px 14px;
+ background:linear-gradient(0deg,#3f2c1d 0,#33241796 62%,#2a1d1300 100%);
+ box-shadow:inset 0 3px 0 #6b5029,inset 0 4px 0 #d2ab6259}
 /* §PRIMARY DECISION CONTROL: measure and seating only. The control's geometry - notch, hard
    outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
    Action construction and is not this Batch's to re-cut. What it lacked here was room of its
    own: it sat tight against the sheet's last line of copy with no breathing plane under it. */
-/* §PRIMARY DECISION CONTROL. The earlier attempt re-cut the FACE - a tighter bevel behind a
-   2px seam - and the capture came back flatter, because the wide bevel is where the volume
-   lives. That is not restored here and the face is left alone.
-   What changes is the SILHOUETTE, which is the one axis nobody had touched. The shared Action
-   geometry notches its corners by 6px: correct for a footer confirm, but this is the Run's
-   single opening Action on a sheet it shares with nothing, and at 6px on a 64px face the notch
-   is nearly invisible - the control reads as a rectangle. The notch is cut to 10px here, the
-   face is taller, the hard offset goes to 6px, and the label is seated on the plane with one
-   hard pixel shadow. Same family, same colour, same press: a bigger key, cut deeper.
-   The press still travels 4px and still trades its lit and deep edges - the depth system is
-   the shared one, so only the offset it collapses from is restated. */
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{min-height:70px;
- font:600 21px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;
- clip-path:polygon(0 10px,10px 10px,10px 0,calc(100% - 10px) 0,calc(100% - 10px) 10px,100% 10px,
-  100% calc(100% - 10px),calc(100% - 10px) calc(100% - 10px),calc(100% - 10px) 100%,
-  10px 100%,10px calc(100% - 10px),0 calc(100% - 10px));
+/* §PRIMARY DECISION CONTROL - BUILT, NOT STYLED. Two earlier passes stayed inside CSS: a
+   re-cut bevel (reverted, it read flatter) and a deeper corner notch (kept, and still a
+   rectangle at screenshot scale). That is the plateau the system says to escalate out of.
+   The control is assembled now. Its silhouette is cut twice on each corner, so the plate
+   reads as a plate with its corners taken off rather than a rounded web button. Its ends
+   carry authored brass caps - a drawn 10x24 piece, lit on one edge, dark on the other, with a
+   rivet - which is what makes it furniture rather than a coloured box. The wide bevel that
+   holds the volume is untouched, because that experiment already told us what happens when it
+   is not, and the press still travels 4px and trades its lit and deep edges.
+   BRICK semantics, family and guard are unchanged: this is the same Action, built. */
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{position:relative;
+ min-height:72px;font:600 21px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;
+ padding:0 42px;
+ clip-path:polygon(0 14px,7px 14px,7px 7px,14px 7px,14px 0,calc(100% - 14px) 0,
+  calc(100% - 14px) 7px,calc(100% - 7px) 7px,calc(100% - 7px) 14px,100% 14px,
+  100% calc(100% - 14px),calc(100% - 7px) calc(100% - 14px),calc(100% - 7px) calc(100% - 7px),
+  calc(100% - 14px) calc(100% - 7px),calc(100% - 14px) 100%,14px 100%,
+  14px calc(100% - 7px),7px calc(100% - 7px),7px calc(100% - 14px),0 calc(100% - 14px));
+ box-shadow:inset 0 0 0 3px var(--brick-line),
+  inset 0 5px 0 #e4876d,inset 5px 0 0 #d4705a,
+  inset 0 -7px 0 #5f2921,inset -5px 0 0 #7d3a2d;
  filter:drop-shadow(6px 6px 0 #000000b3)}
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:before,
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:after{content:'';
+ position:absolute;top:50%;width:10px;height:24px;margin-top:-12px;
+ background:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='10' height='24' shape-rendering='crispEdges'><g fill='%237a5c2b'><rect x='0' y='0' width='10' height='1'/><rect x='0' y='1' width='1' height='23'/><rect x='9' y='1' width='1' height='23'/><rect x='1' y='23' width='8' height='1'/></g><g fill='%23e6c176'><rect x='1' y='1' width='8' height='1'/><rect x='1' y='2' width='1' height='20'/><rect x='4' y='10' width='3' height='1'/><rect x='4' y='11' width='1' height='2'/><rect x='6' y='11' width='1' height='2'/><rect x='5' y='12' width='1' height='1'/></g><g fill='%23b08a42'><rect x='2' y='2' width='6' height='8'/><rect x='2' y='10' width='2' height='12'/><rect x='7' y='10' width='1' height='12'/><rect x='4' y='13' width='3' height='9'/></g><g fill='%235e4520'><rect x='8' y='2' width='1' height='21'/><rect x='1' y='22' width='7' height='1'/></g><g fill='%234a3418'><rect x='5' y='11' width='1' height='1'/></g></svg>") center/10px 24px no-repeat}
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:before{left:16px}
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:after{right:16px}
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:hover{
  filter:drop-shadow(6px 6px 0 #000000b3) brightness(1.1)}
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:active{
+ box-shadow:inset 0 0 0 3px var(--brick-line),
+  inset 0 5px 0 #5f2921,inset 5px 0 0 #7d3a2d,
+  inset 0 -7px 0 #e4876d,inset -5px 0 0 #d4705a;
  filter:drop-shadow(2px 2px 0 #000000b3) brightness(.94)}
 @media(min-width:1024px){
  /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
@@ -1389,9 +1474,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   background-size:auto,auto,cover;
   background-position:0 0,0 0,50% 50%;
   background-repeat:no-repeat,no-repeat,no-repeat}
- .modal.narrow:has(.welcome-band) .modal-body{padding:22px 22px 24px}
- .modal.narrow:has(.welcome-band) .modal-header{padding:18px 22px 14px}
- .modal.narrow:has(.welcome-band) .modal-footer{padding:16px 22px 18px}
+ .modal.narrow:has(.welcome-band) .modal-body{padding:20px 20px 22px}
+ .modal.narrow:has(.welcome-band) .modal-header{padding:15px 20px 13px}
+ .modal.narrow:has(.welcome-band) .modal-footer{padding:15px 20px 16px}
 }
 
 /* =====================================================================
