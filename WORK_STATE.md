@@ -46,17 +46,25 @@ Completed audit batches:
 - UI-Q-v28-27 — Source implementation PASS for current coach targeting/visible-target selection/settling/spotlight placement behavior
 - UI-Q-v28-27 — TEST GAP: current-build runtime evidence does not fully cover the contextual Deep and Great Success coach steps on both phone and desktop layouts
 
+### UI-Q-v28-28 / 29
+- UI-Q-v28-28 — Source implementation PASS: D0 / D5 / D10 / D15 / D20 / D25 cadence, D10/D20 64px identity portraits, D5/D15 240px phone art, D25 200px phone art, centered major-beat anchor, persisted seen state and D30 no-new-reveal reuse are present
+- UI-Q-v28-28 — RUNTIME QA GAP: current-build controlled acceptance does not yet exercise every D0 / D5 / D10 / D15 / D20 / D25 / D30 state on both phone and desktop
+- UI-Q-v28-29 — FAIL / RUNTIME UX BUG: modal close does not reliably return focus to the control that opened it; `setModal(null)` overwrites the saved opener with the currently focused modal control before the modal DOM is removed
+- UI-Q-v28-29 — TEST GAP: existing guards cover same-surface redraw focus, modal-internal redraw focus, ORDER row anchoring and state styling, but no runtime acceptance currently proves modal-close origin restoration
+
 No Design change is required from these batches.
 
-Open QA fix cycles:
+Open QA / fix cycles:
 - UI-Q-v28-26 full current-build runtime surface/viewport acceptance
 - UI-Q-v28-27 contextual Deep / Great Success coach runtime acceptance
+- UI-Q-v28-28 controlled Boss/milestone phone + desktop runtime acceptance
+- UI-Q-v28-29 modal-close focus-origin fix + runtime regression acceptance
 
 Next DIRECTOR audit:
-- UI-Q-v28-28 / 29
-
-Later review target:
 - FINAL supply action audio cue ownership (`case 'supply'`)
+
+Do not change Design during the audit.
+Any implementation finding enters its own fix cycle.
 
 Do not change Design during the audit.
 Any implementation finding enters its own fix cycle.
