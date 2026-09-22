@@ -1653,15 +1653,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    seal mark on a tilted button either: the gate's ink pressed into the record, square to the
    layout, with the ruled impression `.stamp-line` already uses on the paper slips. Its presence
    is size, weight and the press - nothing is added to carry it. Scoped to the foot it sits in,
-   because `.modal-footer button` would otherwise fill it with the drawer's own brown. */
+   because `.modal-footer button` would otherwise fill it with the drawer's own brown.
+   §EDGE / BORDER DISCIPLINE: it carried THREE concentric rules, which made the acknowledgement
+   the loudest edge on a record whose subject is the Boss. One ruled impression - ink, paper
+   gap - is the whole frame, and the press drives that ink in. */
 .modal-footer .approve{display:inline-flex;align-items:center;justify-content:center;
  min-height:58px;min-width:172px;padding:9px 26px;
  background:#8a2f2612;color:#8a2f26;font:600 17px/1 var(--ui);letter-spacing:.08em;
- box-shadow:inset 0 0 0 3px #8a2f26,inset 0 0 0 5px #e9dfc4,inset 0 0 0 7px #8a2f2645}
+ box-shadow:inset 0 0 0 2px #8a2f26,inset 0 0 0 4px #e9dfc4}
 .modal-footer .approve:hover{background:#8a2f261f;color:#7a281f}
-/* the press drives the ink in: the frame darkens, the box does not move */
-.modal-footer .approve:active{transform:none;background:#8a2f2626;
- box-shadow:inset 0 0 0 3px #8a2f26,inset 0 0 0 5px #e9dfc4,inset 0 0 0 7px #8a2f26b3}
+/* the press drives the ink in: the impression darkens and thickens, the box does not move */
+.modal-footer .approve:active{transform:none;background:#8a2f2633;color:#6d211a;
+ box-shadow:inset 0 0 0 3px #8a2f26,inset 0 0 0 4px #e9dfc4}
 .modal-footer .approve:focus-visible{outline:3px solid #8a2f26;outline-offset:3px}
 
 /* The seal offer shares the window's one acquisition with the Relic candidates, so it
