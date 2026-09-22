@@ -36,8 +36,8 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 Completed audit batches:
 
 ### UI-Q-v28-21 / 25
-- UI-Q-v28-21 — Source implementation PASS for the implemented live-store trace family (equipped Decoration)
-- UI-Q-v28-21 — TEST GAP: no controlled render acceptance directly verifies trace add/remove plus Save/Load reproduction
+- UI-Q-v28-21 — CLOSED / PASS: the implemented live-store trace family is equipped Decoration; controlled acceptance now verifies owning-state add/remove, Save/Load reproduction, presentation-only behavior and frozen Run-loadout ownership
+- UI-Q-v28-21 closeout commit: `04c591cecd3220f1adf270f5b7d1254d7d8f5435`
 - UI-Q-v28-25 — PASS: targeted Item / NPC / Decoration / Boss graphic identity, crop and scale protections are adopted and guarded; reviewed browser/visual evidence exists for the changed surfaces
 
 ### UI-Q-v28-26 / 27
@@ -49,7 +49,6 @@ Completed audit batches:
 No Design change is required from these batches.
 
 Open QA fix cycles:
-- UI-Q-v28-21 controlled trace add/remove + Save/Load render acceptance
 - UI-Q-v28-26 full current-build runtime surface/viewport acceptance
 - UI-Q-v28-27 contextual Deep / Great Success coach runtime acceptance
 
