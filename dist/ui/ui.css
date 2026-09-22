@@ -1435,7 +1435,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .decoplate.counter{left:2%;bottom:8%;width:11%}
 /* UI_UX_v2.8 §DECORATION UI. Reuses the unlock board's block rhythm and the .effects row
    shape rather than introducing a new card language for one panel. */
-.decoration-panel{display:grid;gap:14px}
+/* The panel is rendered as a child of the codex's `.unlock-grid`, which becomes two and then
+   three columns on wider screens - sized for item cards, not for a full-width decision panel.
+   At 1024 and 1280 that put the whole of Store Management into one third of the modal and
+   collapsed every card until its Korean broke to one character per line. It is one panel, so
+   it takes the whole row wherever that grid has more than one. */
+.decoration-panel{display:grid;gap:14px;grid-column:1/-1}
 .decoration-panel .slot h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 /* UI_UX_v2.8 §DECORATION DECISION SURFACE. The row used to be `flex` + `justify-content:
    space-between` with a `flex-wrap` rule under 480px, so WHERE the control sat was decided by
