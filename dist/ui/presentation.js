@@ -158,23 +158,28 @@ function heroLine(r){
 }
 /* WHAT CHANGED — only what actually moved. A change the resolution wrote as a sentence
    is split into its own label and value; anything that resolved to zero is left out. */
+/* `group` is the READING GROUP a token belongs to, not a new category: the emission order below
+   is NIGHT_CLOSING §RESULT INFORMATION HIERARCHY exactly as it always was (Level/Stat -> Fatigue
+   -> EXP/Wallet/other), and the group only says where the screen may draw the one divider
+   between what the adventurer GREW and what the day LEFT on them. Nothing is reordered across
+   the boundary and no item is added or dropped. */
 function nightChange(text){
- if(/^Lv\./.test(text))                          return {kind:'up',label:'레벨',value:text};
+ if(/^Lv\./.test(text))                          return {kind:'up',group:'grew',label:'레벨',value:text};
  let m=null;
- m=/^새 특성\s*[「'"]?(.+?)[」'"]?$/.exec(text);   if(m)return {kind:'up',label:'새 특성',value:m[1]};
- m=/^(.*?)\s*승급$/.exec(text);                  if(m)return {kind:'up',label:'승급',value:m[1]};
- m=/^(.+?)\s*·\s*(전투\s*\+\d+)$/.exec(text);   if(m)return {kind:'up',label:'장비',value:m[1],extra:m[2]};
- return {kind:'up',label:'변화',value:text};}
+ m=/^새 특성\s*[「'"]?(.+?)[」'"]?$/.exec(text);   if(m)return {kind:'up',group:'grew',label:'새 특성',value:m[1]};
+ m=/^(.*?)\s*승급$/.exec(text);                  if(m)return {kind:'up',group:'grew',label:'승급',value:m[1]};
+ m=/^(.+?)\s*·\s*(전투\s*\+\d+)$/.exec(text);   if(m)return {kind:'up',group:'grew',label:'장비',value:m[1],extra:m[2]};
+ return {kind:'up',group:'grew',label:'변화',value:text};}
 function nightChanges(r, npc){const out=[];
  for(const c of (r.changes||[]).slice(0,3))out.push(nightChange(c));
  for(const x of (r.statChanges||[]).slice(0,4)){const label=labels[x.key];
-  if(label)out.push({kind:'up',label,value:Math.round(x.before)+' → '+Math.round(x.after)});}
- if(r.recovery)out.push({kind:'down',label:'휴식',value:r.recovery+'일'});
+  if(label)out.push({kind:'up',group:'grew',label,value:Math.round(x.before)+' → '+Math.round(x.after)});}
+ if(r.recovery)out.push({kind:'down',group:'after',label:'휴식',value:r.recovery+'일'});
   else if(r.injury===1){
    const n=npc;
    if(n){
     const combat=n.traits.includes('grit')?'+20%':'-15%';
-    out.push({kind:'down',label:'남은 부상',value:'투력 '+combat+' · 강인함 -20%'});
+    out.push({kind:'down',group:'after',label:'남은 부상',value:'투력 '+combat+' · 강인함 -20%'});
    }
   }
   if(r.finalFatigue!==undefined){
@@ -188,11 +193,11 @@ function nightChanges(r, npc){const out=[];
    if(r.rawOutcomeFatigueGain>0)steps.push('원정에서 +'+r.rawOutcomeFatigueGain);
    if(r.outcomeBufferUsed>0)steps.push('남은 보급으로 -'+r.outcomeBufferUsed);
    steps.push('귀환 후 '+r.finalFatigue);
-   out.push({kind:r.netFatigueDelta>0?'down':'up',label:'귀환 후 피로',value:r.finalFatigue+'',
+   out.push({kind:r.netFatigueDelta>0?'down':'up',group:'after',label:'귀환 후 피로',value:r.finalFatigue+'',
     detail:steps.join(' → ')});
   }
- if(r.xp)out.push({kind:'',label:'경험치',value:'+'+r.xp});
- if(r.loot)out.push({kind:'gain',label:'원정 소지금 획득',value:r.loot+'G'});
+ if(r.xp)out.push({kind:'',group:'after',label:'경험치',value:'+'+r.xp});
+ if(r.loot)out.push({kind:'gain',group:'after',label:'원정 소지금 획득',value:r.loot+'G'});
  return out;}
 
 /* ---- SUPPLY IMPACT -------------------------------------------------------------

@@ -892,42 +892,54 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .t-severe{--tone:#d1584b}
 .t-gone{--tone:#cfd3dd}
 .t-saved{--tone:#6fc7c0}
-/* WHAT HAPPENED, then WHY chalked on the slate */
-.beat .what{font:400 17px/1.55 var(--ui);color:#eee3c6;margin-bottom:12px}
+/* WHAT HAPPENED, and under it WHY - one group, three tiers. The Outcome sentence is the tier the
+   Player reads; the Player's own goods hang off it as sub lines; the expedition fact closes it at
+   the lowest tier. It used to be three independent blocks - a gold-grounded Hero card, a dim
+   supply line and a bevelled slate - which read as three separate results (UI_UX §PER-PHASE
+   APPLICATION RULES / NIGHT_CLOSING §OUTCOME SENTENCE VS PLAYER CAUSE). No ground, no frame:
+   the indent and the type carry the hierarchy. */
+.told{margin-bottom:16px}
+.beat .what{font:400 17px/1.55 var(--ui);color:#eee3c6}
 .beat.quiet .what{font-size:15px}
-.beat .why{display:flex;gap:10px;align-items:flex-start;margin-bottom:16px;padding:10px 12px;
- font:400 14px/1.55 var(--ui);color:#b9bccb;background:#0f131e;
- box-shadow:inset 2px 2px 0 #00000073,inset -2px -2px 0 #ffffff0f}
-.beat .why i{flex:0 0 auto;width:4px;align-self:stretch;background:var(--tone,#e8d9b0);opacity:.7}
-/* SA-Q08/SA-Q33: the ONE proven Hero Item claim, set apart from the neutral WHY slate so a
-   provable "your product did this" reads as its own kind of fact, not as incident narration. */
-.beat .hero{margin-bottom:16px;padding:10px 12px;font:500 14px/1.5 var(--ui);color:var(--gold);
- background:#1e1706;box-shadow:inset 0 0 0 1px #cbb98d3d,2px 2px 0 #00000059}
-/* WHAT CHANGED — stamped tokens, only for what actually moved */
+/* the sub lines: the sold goods as the CAUSE of the sentence above, never a second result */
+.beat .cause{margin:7px 0 0;padding:0 0 0 13px;list-style:none;
+ box-shadow:inset 2px 0 0 var(--tone,#e8d9b0)}
+.beat .cause li{font:500 14px/1.5 var(--ui);color:#d9c9a0}
+.beat .cause li+li{margin-top:3px;color:#b9b193;font-weight:400}
+/* the expedition fact, lowest tier of the group: on most Outcomes it restates the Outcome */
+.beat .why{margin:11px 0 0;font:400 13px/1.55 var(--ui);color:#8f94a6}
+/* WHAT CHANGED — the read-only record of what moved. This is an information region, not a row of
+   headline cards: the tokens are set on one line each, label beside figure, at ordinary reading
+   type, and the stacked bevel + hard drop they carried is gone (§EDGE / BORDER DISCIPLINE - they
+   are not pressable, so plane and type are the whole construction). The tiles halve in height,
+   which is where the beat's vertical length comes back. */
 /* NIGHT_CLOSING §FATIGUE RESULT. The 귀환 후 피로 token is the only tok that opens a balloon -
    the resolved 출발 -> 원정 -> 귀환 arithmetic - through the SAME shared anchored tip everything
    else on screen uses, so `.changed` is the positioning context the balloon anchors against. */
-.changed{position:relative;display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.changed{position:relative;margin-bottom:14px}
+/* the two reading groups, in the owned order, told apart by one rule and nothing else */
+.changed .grew,.changed .after{display:flex;flex-wrap:wrap;gap:5px}
+.changed .after{margin-top:9px;padding-top:9px;box-shadow:inset 0 2px 0 #ffffff14}
+/* a death grew nothing, so the aftermath is the only group and there is nothing to divide */
+.changed .after:first-child{margin-top:0;padding-top:0;box-shadow:none}
 .changed .tip{display:block}
-.changed .tip>summary{display:inline-grid;gap:2px;padding:6px 10px 7px;background:var(--tex-metal),#39434b;background-size:8px 8px;
- box-shadow:inset 0 2px 0 #ffffff26,inset 0 -3px 0 #00000080,2px 2px 0 #00000073;list-style:none;cursor:pointer}
+.changed .tip>summary{display:inline-flex;align-items:baseline;gap:7px;padding:5px 9px;background:var(--tex-metal),#39434b;background-size:8px 8px;
+ list-style:none;cursor:pointer}
 .changed .tip>summary::-webkit-details-marker{display:none}
 .changed .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.changed .tip>summary i{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.12em;color:#9aa6b2}
-.changed .tip>summary b{font:500 15px/1.1 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
+.changed .tip>summary i{font:400 11px/1.3 var(--ui);font-style:normal;letter-spacing:.04em;color:#9aa6b2}
+.changed .tip>summary b{font:500 14px/1.3 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
 .changed .tip.up>summary b{color:#9fd6a8}
 .changed .tip.down{background:var(--tex-metal),#4a2f2c;background-size:8px 8px}
 .changed .tip.down>summary b{color:#e8927f}
-.tok{display:inline-grid;gap:2px;padding:6px 10px 7px;background:var(--tex-metal),#39434b;background-size:8px 8px;
- box-shadow:inset 0 2px 0 #ffffff26,inset 0 -3px 0 #00000080,2px 2px 0 #00000073}
-.tok i{font:600 10px/1 var(--ui);font-style:normal;letter-spacing:.12em;color:#9aa6b2}
-.tok b{font:500 15px/1.1 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
+.tok{display:inline-flex;align-items:baseline;gap:7px;padding:5px 9px;background:var(--tex-metal),#39434b;background-size:8px 8px}
+.tok i{font:400 11px/1.3 var(--ui);font-style:normal;letter-spacing:.04em;color:#9aa6b2}
+.tok b{font:500 14px/1.3 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
 .tok b em{font-style:normal;color:#9fd6a8}
 .tok.up b{color:#9fd6a8}
 .tok.gain b{color:var(--gold)}
 .tok.down{background:var(--tex-metal),#4a2f2c;background-size:8px 8px}
 .tok.down b{color:#e8927f}
-.beat .influence{font:400 13px/1.55 var(--ui);color:#cbb98d;margin-bottom:12px}
 .beat blockquote{font:400 15px/1.7 var(--ui);color:#b9bccb;padding:2px 0 2px 14px;
  box-shadow:inset 3px 0 0 #3a4152}
 /* a death cools the room: the lamp light drains out of the scene and the figure with it */

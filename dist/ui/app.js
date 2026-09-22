@@ -578,6 +578,12 @@ function beat(r){
     leads the record at its full width instead of sitting in the narrow column beside the
     portrait, where the art and the balloon outranked it. The balloon anchors to `.stand-in`
     now, so it still may overlap the character and can no longer reach the Outcome. */
+ /* NIGHT_CLOSING §RESULT INFORMATION HIERARCHY, read as three tiers rather than five boxes:
+    the Outcome, then the one sentence that tells it plus what the Player's own goods did to it
+    as its SUB lines, then the fact line, then what the adventurer grew and what the day left
+    on them. The proven Hero claim and the supply line used to be two independent blocks with
+    their own grounds - a second and third result competing with the first - and the fact line
+    was a third block. They are one `.told` group now; nothing was added or removed. */
  return '<article class="beat '+rank+' t-'+tone+(heavy?'':' quiet')+'">'
  +'<p class="verdict">'+E(verdict)+'</p>'
  +'<div class="stand-in">'
@@ -587,34 +593,40 @@ function beat(r){
    +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
    +(r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
  +'</div>'
- +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
- /* SA-Q33: the Outcome sentence above states WHAT happened; this states WHY the Player's own
-    sold Item mattered, ONLY when DUNGEON_HAZARD's RESULT-PROOF actually proved it - never a
-    second name for the Outcome sentence, and never competing with it. */
- +(hero?'<p class="hero">'+E(hero)+'</p>':'')
- /* UI_UX §NIGHT LAYOUT information order: Outcome -> proven sold-Item impact -> Level/Stat ->
-    Fatigue -> EXP/Wallet. What the Player's own product did was printed AFTER the change
-    tokens, so the cause of the result read after the numeric log it explains. */
- +supplyNote(r)
- +(why?'<p class="why"><i aria-hidden="true"></i>'+E(why)+'</p>':'')
+ +'<div class="told">'
+  +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
+  +causeLines(r)
+  /* the expedition fact. It is not part of the owned result hierarchy and on most Outcomes it
+     restates the Outcome, so it reads at the lowest tier of the group rather than as a slate
+     of its own. Nothing it says is dropped. */
+  +(why?'<p class="why">'+E(why)+'</p>':'')
+ +'</div>'
  +'<div class="changed">'+changedRows(r)+'</div>'
  +'</article>';}
 // Importance decides how much copy a beat spends, never how big the adventurer is
 // (UI-Q31). Presentation owns the rule so screen and tests share it.
 const weighty=r=>Presentation.nightWeight(r);
-// The one line that says what the player's own product did for this adventurer.
-function supplyNote(r){const lines=Presentation.supplyLines(r);
- return lines.length?'<p class="influence">'+E(lines[0].text)+'</p>':'';}
+/* WHY THE OUTCOME WAS THIS ONE — the Player's own goods, as sub lines of the Outcome sentence.
+   SA-Q33 / NIGHT_CLOSING §HERO ITEM FEEDBACK: the proven claim is the strongest thing that can
+   be said about a sold Item, so when the supply line credits exactly the Items that claim
+   already names it is the same fact twice and is left out. A supply line for other Items - a
+   proven Hazard mitigation, say - still reads, under the claim. */
+function causeLines(r){
+ const hero=Presentation.heroLine(r),proven=r.heroProof?.outcome?.items||null;
+ const supply=Presentation.supplyLines(r).filter(l=>!(hero&&proven
+  &&l.items.every(name=>proven.some(id=>D.itemBy[id]?.name===name))));
+ const lines=(hero?[hero]:[]).concat(supply.slice(0,1).map(l=>l.text));
+ return lines.length?'<ul class="cause">'+lines.map(t=>'<li>'+E(t)+'</li>').join('')+'</ul>':'';}
 // WHAT CHANGED — Presentation decides what actually moved; this only stamps it.
 function changedRows(r){
  /* NIGHT_CLOSING 2026-09-12: a normal 대성공 also pays the Store, and a 심층원정 pays it
     nothing at all - what it returns is the adventurer's growth and money, reported as their
     change and never as Store income. Both are stated once, beside the ordinary changes. */
  const extra=[];
- if(r.storeBonus)extra.push({kind:'gold',label:'대성공 본사 보상',value:'+'+fmt(r.storeBonus)+'G'});
+ if(r.storeBonus)extra.push({kind:'gold',group:'after',label:'대성공 본사 보상',value:'+'+fmt(r.storeBonus)+'G'});
  if(r.deep&&(r.deep.bonusXp||r.deep.bonusWallet)){
-  if(r.deep.bonusXp)extra.push({kind:'level',label:Copy.deep.reward,value:'경험치 +'+r.deep.bonusXp});
-  if(r.deep.bonusWallet)extra.push({kind:'gold',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
+  if(r.deep.bonusXp)extra.push({kind:'level',group:'after',label:Copy.deep.reward,value:'경험치 +'+r.deep.bonusXp});
+  if(r.deep.bonusWallet)extra.push({kind:'gold',group:'after',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
  }
  const n = game.run.npcs.find(x=>x.id===r.npcId);
  /* NIGHT_CLOSING §FATIGUE RESULT. The settled 귀환 후 피로 token is the only one carrying a
@@ -622,11 +634,20 @@ function changedRows(r){
     anchored tip (same exclusive group, same out-of-flow balloon, same hover/focus/tap and
     outside-tap/Escape behavior everywhere else on screen already uses). Every other token
     stays the plain stamped chip it always was. */
- return [...Presentation.nightChanges(r, n),...extra].map(c=>c.detail
+ const stamp=c=>c.detail
   ?'<details class="tip '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
    +'<p><span>'+E(c.detail)+'</span></p></details>'
   :'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
-  +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>').join('');}
+  +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>';
+ /* The tokens were one flat run, so a Level sat in the same layer as 귀환 후 피로 and the
+    aftermath read as more growth. They are the same tokens in the same owned order - Level /
+    Stat, then Fatigue, then EXP / Wallet / other - split into the two groups
+    `Presentation.nightChanges` marks: what the adventurer GREW, and what the day LEFT on them.
+    One divider between them, no heading, no reordering across the boundary. */
+ const all=[...Presentation.nightChanges(r, n),...extra];
+ const band=(key,cls)=>{const rows=all.filter(c=>(c.group||'grew')===key);
+  return rows.length?'<div class="'+cls+'">'+rows.map(stamp).join('')+'</div>':'';};
+ return band('grew','grew')+band('after','after');}
 // CLOSING — `오늘 장사는 어땠을까?`. Economics only; the expedition story belongs to Night.
 // The object is the till roll the register printed when the shutter came down: a narrow
 // strip torn at both ends, lying on the dark counter under the same lamp. Not the order
