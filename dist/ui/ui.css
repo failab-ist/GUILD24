@@ -135,7 +135,13 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
  box-shadow:inset 0 0 0 3px var(--act-line,#0f0d0c),
   inset 0 9px 0 var(--act-lit,#ffffff2e),inset 9px 0 0 var(--act-lit,#ffffff2e),
   inset 0 -10px 0 var(--act-deep,#00000059),inset -9px 0 0 var(--act-deep,#00000059)}
-.stamp:hover{filter:drop-shadow(5px 5px 0 #000000a6) brightness(1.1)}
+/* The face has to survive the pointer. The base control's `button:hover` repaints the plane
+   steel and it outranks `.stamp`'s own background, so every BRICK Action turned a neutral grey
+   slab the moment it was pointed at - the one moment its role has to be legible. The role is
+   restated here; the lift stays a brightness, not a tint. BROWN / YELLOW / the SALE keys each
+   declare their own hovered face at higher specificity and are untouched. */
+.stamp:hover{background:var(--act,var(--steel));
+ filter:drop-shadow(5px 5px 0 #000000a6) brightness(1.1)}
 /* the press is a depth change, not a tint: the plane travels into its own shadow and the lit
    and deep edges trade places, so the control reads as actually going down */
 .stamp:active{transform:translate(4px,4px);
@@ -1059,14 +1065,24 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    every figure monospace and right-aligned on a dotted leader, subtotals ruled off, and
    the money actually in the drawer stamped last.
    ===================================================================== */
-.p-closing{background:#140f08}
-.p-closing .stage-scroll{padding:18px var(--gutter) 26px;background:var(--tex-wood),#241a10;background-size:32px 12px}
-.p-closing .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0f0b06;box-shadow:inset 0 3px 0 #ffffff12}
+/* USER 2026-09-22, UI-Q-v28-26 acceptance: the receipt and the day's last Action are ONE
+   composition, at every width. The paper used to sit at the top of its own scroller while the
+   Action was a small chip pinned to the floor of the viewport, with a field of empty counter
+   between them - a web footer CTA, not the end of a shift. The stage now centres the PAIR: the
+   scroll takes only the height its content needs (and still scrolls when the tape is longer
+   than the screen), the dock follows immediately under it on the paper's own axis, and both
+   lose their separate grounds so nothing but a seam sits between them. The receipt keeps its
+   344px object width; the Action takes that same measure so the two read as one column. */
+.p-closing{background:var(--tex-wood),#241a10;background-size:32px 12px;justify-content:center}
+.p-closing .stage-scroll{flex:0 1 auto;padding:18px var(--gutter) 10px;background:none}
+.p-closing .dock{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;
+ padding-top:0;background:none;box-shadow:none}
 /* BRICK. The day's last control is this screen's one flow Action, so it carries that family -
    the paper is the receipt's job, not the button's. Only its measure is set here. */
+.p-closing .dock .stamp,.p-end .dock .stamp{margin:0 auto;width:min(100%,344px);min-width:0;
+ min-height:64px;font:600 19px/1 var(--ui);white-space:nowrap}
 .p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
- --act-line:var(--brick-line);--act-ink:var(--brick-ink);
- margin-left:auto;min-height:54px;min-width:148px;font:600 17px/1 var(--ui)}
+ --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 /* The ending's one way on. A modal footer is NOT a role: `.stamp` is worn there by the Run's
    opening Action and by a stat sheet's 확인 alike, so painting the whole footer BRICK repeats
    the very mistake this system was built to stop. BRICK is named per Action, off the
@@ -1145,7 +1161,23 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    to. `flex:1 1 auto` used to stretch it across the whole footer, which is the long SaaS bar
    this pass is here to remove, so it takes the room it needs and sits at the footer's end. */
 .modal-footer .stamp{flex:0 1 auto;min-width:min(280px,100%);min-height:56px;padding:0 22px;
- font:600 17px/1 var(--ui);margin-left:auto}
+ font:600 17px/1 var(--ui);margin-left:auto;white-space:nowrap}
+/* USER 2026-09-22, UI-Q-v28-26 acceptance: where the footer holds ONE control and that control
+   is the phase's main Action, sitting it at the footer's end reads as a small button parked in
+   a web footer. It is centred on the sheet instead and takes the width it can without becoming
+   a full-bleed bar, so it reads as the thing to do on this screen. */
+.modal-footer [data-action="start"],
+.modal-footer [data-action="store-return"]{margin:0 auto;width:min(100%,420px);min-width:0;
+ min-height:62px;font:600 19px/1 var(--ui)}
+/* BOSS CONFIRM. Two controls that must NOT differ by colour alone, and whose labels must never
+   break to a second line. The commit takes a row of its own at full measure and the heaviest
+   type on the sheet; the way back is a small chip centred under it. Size, width, placement and
+   order carry the hierarchy - BRICK and BROWN only confirm what the shapes already say. */
+.modal-footer [data-action="boss-go"]{order:-1;flex:1 1 100%;width:100%;margin:0;
+ min-height:68px;font:600 20px/1 var(--ui);letter-spacing:.06em}
+.modal-footer:has([data-action="boss-go"]) [data-action="dismiss"]{flex:0 0 auto;margin:0 auto;
+ min-height:42px;padding:9px 18px;font:400 14px/1 var(--ui);white-space:nowrap;
+ box-shadow:inset 0 0 0 2px var(--brown-lit),2px 2px 0 var(--brown-deep)}
 /* The footer's other controls. Size only: #3A2C1D was the dead muddy brown this pass retired,
    and it was standing in for two different things anyway - a way back and a plain utility.
    With no face of its own they fall to the base control's neutral, which is what a utility is.
@@ -1631,9 +1663,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* THE END OF A STORE. The statement and the people it is about sit in the middle of the
    screen rather than pinned to the top of an empty one - auto margins, so a long ending
    scrolls normally instead of having its head clipped. */
-.p-end .stage-scroll{display:flex;flex-direction:column;padding:20px var(--gutter) 26px}
-.p-end .stage-scroll>:first-child{margin-top:auto}
-.p-end .stage-scroll>:last-child{margin-bottom:auto}
+.p-end{justify-content:center}
+.p-end .stage-scroll{flex:0 1 auto;display:flex;flex-direction:column;padding:20px var(--gutter) 10px}
+.p-end .dock{display:flex;justify-content:center;padding-top:0}
 /* the last statement for a store, printed on the tape the night closing already uses */
 .end-tape{margin-bottom:20px}
 /* who went, and what the store put in their hands before they did */
@@ -1784,22 +1816,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     content needs, the dock follows immediately under it, and the pair centres as ONE
     composition. Both lose their own ground - the counter moves up to the whole screen - so the
     receipt and its Action sit on one surface with nothing between them but a seam. */
- .p-closing{background:var(--tex-wood),#241a10;background-size:32px 12px;justify-content:center}
- .p-closing .stage-scroll{flex:0 1 auto;background:none;padding:0 var(--gutter)}
- .p-end{justify-content:center}
- .p-end .stage-scroll{flex:0 1 auto;padding:0 var(--gutter)}
- .p-end .stage-scroll>:first-child{margin-top:0}
- .p-end .stage-scroll>:last-child{margin-bottom:0}
- /* the Action is the receipt's own footer: the same column, directly under the paper, and
-    bigger than it is on a phone because there is room for it to be. Not the full 344px slab -
-    it sits inside the paper's measure, which is what keeps it a game control and not a bar. */
- .p-closing .dock,.p-end .dock{display:flex;justify-content:center;
-  background:none;box-shadow:none;padding:10px var(--gutter) 0}
- /* on a desk there is room, so the Action takes it: it is the one thing left to do on this
-    screen and at 288x62 it still read as a chip under a 344px object. The receipt itself is
-    NOT widened - the paper is the size the paper is. */
- .p-closing .dock .stamp,.p-end .dock .stamp{margin-left:0;flex:0 0 auto;
-  width:324px;min-width:0;min-height:78px;font:600 22px/1 var(--ui);letter-spacing:.06em}
+ .p-closing .stage-scroll,.p-end .stage-scroll{padding:0 var(--gutter)}
+ .p-closing .dock,.p-end .dock{padding:8px var(--gutter) 0}
+ /* On a desk there is room, so the Action takes it: it is the one thing left to do on this
+    screen and a chip under a 344px object read as an afterthought. It takes the paper's own
+    measure exactly, so the receipt and its Action are one column with a seam between them.
+    The receipt itself is NOT widened - the paper is the size the paper is. */
+ .p-closing .dock .stamp,.p-end .dock .stamp{flex:0 0 auto;
+  width:344px;min-height:86px;font:600 23px/1 var(--ui);letter-spacing:.06em}
  /* a short till still names its own way out, under the same paper */
  .p-closing .dock{flex-wrap:wrap}
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}

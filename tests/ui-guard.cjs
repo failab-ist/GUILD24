@@ -166,6 +166,49 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  assert.ok(/\.tills \.stamp\{/.test(css),'and the one that wears .stamp is levelled back to its peers');
 });
 
+/* UI-Q-v28-26 FINAL VISUAL ACCEPTANCE, USER 2026-09-22. Four findings from the acceptance pass
+   on the real screens, each of which the sheet alone can regress silently. */
+test('UI-Q-v28-26: the accepted Action composition holds',()=>{
+ const ruleFor=sel=>{const i=css.indexOf(sel);assert.ok(i>0,sel+' is a real rule');
+  return css.slice(i,css.indexOf('}',i)+1);};
+ /* A. The face has to survive the pointer. `button:hover` repaints the plane steel and outranks
+    `.stamp`'s own background, so BRICK read as a neutral grey slab exactly when it was pointed
+    at. The role is restated on hover; the lift stays a brightness. */
+ const over=ruleFor('.stamp:hover{');
+ assert.ok(/background:var\(--act,/.test(over),'a pointed-at Action keeps the face its role named');
+ assert.ok(/brightness\(1\.1\)/.test(over),'and the pointer still only lifts it, never tints it');
+ /* B. The receipt and the day's last Action are one composition: the stage centres the pair, the
+    dock carries no ground of its own, and the Action takes the paper's 344px measure. */
+ assert.ok(/\.p-closing\{[^}]*justify-content:center/.test(css)&&/\.p-end\{[^}]*justify-content:center/.test(css),
+  'the stage centres the receipt and its Action as one pair');
+ for(const sel of ['.p-closing .stage-scroll{','.p-end .stage-scroll{'])
+  assert.ok(/flex:0 1 auto/.test(ruleFor(sel)),'the scroll takes only its own height: '+sel);
+ assert.ok(/background:none/.test(ruleFor('.p-closing .dock{')),'and the dock stops being a separate floor');
+ const pair=ruleFor('.p-closing .dock .stamp,.p-end .dock .stamp{');
+ assert.ok(/width:min\(100%,344px\)/.test(pair),'the Action is set to the receipt\'s own measure');
+ assert.ok(/white-space:nowrap/.test(pair),'and its label never breaks to a second line');
+ assert.ok(/width:344px/.test(css.slice(css.indexOf('@media(min-width:1024px)'))),
+  'on a desk it takes that measure exactly rather than sitting inside it as a chip');
+ /* C. A footer holding ONE control that is the phase's main Action centres it instead of parking
+    it at the footer's end, where it read as a small button in a web footer. */
+ const solo=ruleFor('.modal-footer [data-action="store-return"]{');
+ assert.ok(/margin:0 auto/.test(solo),'the phase\'s main Action is centred on the sheet');
+ assert.ok(/width:min\(100%,\d+px\)/.test(solo),'and takes width without becoming a full-bleed bar');
+ assert.ok(/\.modal-footer \[data-action="start"\],\n\.modal-footer \[data-action="store-return"\]\{/.test(css),
+  'and the Run\'s opening Action is set the same way');
+ /* D. BOSS CONFIRM: the two controls may not differ by colour alone, and neither label may wrap. */
+ const lastRule=sel=>{const i=css.lastIndexOf(sel);assert.ok(i>0,sel+' is a real rule');
+  return css.slice(i,css.indexOf('}',i)+1);};
+ const go=lastRule('.modal-footer [data-action="boss-go"]{');
+ assert.ok(/flex:1 1 100%/.test(go)&&/order:-1/.test(go),'the commit takes a row of its own, ahead of the way back');
+ assert.ok(/min-height:6\dpx/.test(go),'at a weight the way back does not have');
+ const back=ruleFor('.modal-footer:has([data-action="boss-go"]) [data-action="dismiss"]{');
+ assert.ok(/min-height:4\dpx/.test(back)&&/flex:0 0 auto/.test(back),
+  'and the way back is a small chip, so the hierarchy is not carried by colour alone');
+ assert.ok(/white-space:nowrap/.test(back)&&/white-space:nowrap/.test(ruleFor('.modal-footer .stamp{')),
+  'neither label breaks to a second line');
+});
+
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
  const morning=fn('morningScreen'),order=fn('orderForm')+fn('orderScreen');
  for(const part of ['Scene.ceiling()','Scene.wall(','Scene.counter()'])
