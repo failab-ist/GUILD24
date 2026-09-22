@@ -52,5 +52,4 @@ After User approval of the mismatch report:
 
 ## Blocker
 
-USER APPROVAL — approve the Director's current Presentation-correction implementation set before
-the WORK handoff is written.
+NONE for the approved WORK correction scope.
