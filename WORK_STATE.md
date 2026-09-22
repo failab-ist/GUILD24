@@ -5,49 +5,46 @@ STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Current Active Task
 
-DIRECTOR REVIEW — v2.8 Presentation Polish Correction implementation.
+DIRECTOR — current Canonical hygiene audit.
 
-Review target:
-- WORK commit `b7eaea1845b165b4d394352875a2870308415784`
-- Store Support / ornament / phase primary actions / Boss major-beat composition
-- exact Tutorial §3-7 and SALE Help §4-1..§4-3 adoption
-- affected tests / asset completeness
+Scope:
+- remove superseded / dead discussion from current routed documents
+- preserve current approved Design truth
+- do not change gameplay / numeric / UX decisions
+- do not rewrite historical/base files unless current routing still depends on a stale live clause
 
-Task 1 remains DIRECTOR PASS.
-Task 3 remains unopened.
+Audio implementation is being handled in a separate WORK session and is not part of this documentation cleanup pass.
 
 ## Branch / Basis
 
 - repository: `failab-ist/GUILD24`
 - branch: `claude/guild24-v28-functional-polish-r3vjt9`
-- review HEAD: `b7eaea1845b165b4d394352875a2870308415784`
-- implementation truth: current `dist/`
+- documentation HEAD: current branch HEAD
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md`
 
 Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 
-## Current Approval / Execution Need
+## Current Execution Need
 
-DIRECTOR review found the intended presentation/copy adoption substantially correct, but the correction is not closed.
+Proceed in small document batches.
 
-WORK correction required now:
-- remove the duplicate legacy `.relic-plate .stamp[disabled]` rule so one current Store Support state rule remains
+Current batch:
+- current routed owner documents only
+- remove superseded comparison text / dead amendment narration
+- keep exact current rules and acceptance unchanged
 
-Deferred to final v2.8 adoption integration / freeze:
-- regenerate the committed font subset after all Player-facing copy adoption is complete
-- then run the full `npm test`, including `tests/assets.cjs`
-
-Stale explanatory Source comments are not a runtime blocker and do not justify expanding this closeout patch; clean them only when their touched code is next edited or during final integration hygiene.
-
-No new Design decision is required.
+Do not perform Source implementation, Final Integration, asset regeneration, or release freeze in this task.
 
 ## Next Queue
 
-- WORK performs only the duplicate Store Support state-rule correction
-- DIRECTOR re-reviews that narrow diff / targeted verification
-- if PASS, close this Presentation correction
-- regenerate assets + run full npm test once after remaining v2.8 adoption is complete, during final integration / freeze
+After each small batch:
+- inspect diff
+- commit
+- report only changed files + findings
+- stop before starting the next batch
+
+Remaining batches will be opened separately.
 
 ## Blocker
 
-WORK CORRECTION REQUIRED — one duplicate Store Support state rule remains. Asset regeneration is intentionally deferred to final integration / freeze.
+NONE.
