@@ -519,5 +519,29 @@ FAIL when:
 Boss report sizing: at phone width the sheet claims most of the viewport and the art is at the
 amended baselines, with no beat scrolling its own body at any audited width.
 
+PIXEL / 2D GAME UI LANGUAGE (UI_UX §PIXEL / 2D GAME UI LANGUAGE). Judge the adopted selection /
+commit surfaces at runtime, at the audited phone and desktop widths.
+
+PASS:
+- the selection / commit control reads as a pixel-2D game's own selection control
+- surfaces are flat colour planes with crisp edges and pixel-like border / shadow / inset
+- accent colour appears in small units, not as a flooded plane
+- SELECTED sits on the base slate / charcoal surface and is carried by a small green accent, a
+  state label and an emphasised edge
+- AVAILABLE is the most legible neutral / slate surface with an amber-family action, and reads
+  immediately as the open choice
+- UNAVAILABLE is darker and flatter, visibly receded, and its text is still fully legible
+- the register stays GUILD24's restrained colour and material
+
+FAIL:
+- glossy gradient, fake metal, or exaggerated bevel / emboss
+- a large rectangular SaaS-style CTA on a selection surface
+- SELECTED expressed by painting the whole card generic green
+- whole-element opacity fade used for UNAVAILABLE or for a disabled action
+- a disabled action that sinks into the card it sits on, or reads as pressable
+- pop / candy palette or an arcade-toy register copied from a pixel reference
+- the grammar applied indiscriminately, including to Utility Controls, so the screen got busier
+- decoration or the pixel treatment cost information hierarchy, legibility or phone operability
+
 Surfaces are adopted by the Polish Task that owns them; a Task closes only the surfaces it
 touched, and the remainder is carried forward explicitly.

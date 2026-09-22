@@ -330,6 +330,63 @@ planes and the decision state.
 
 Presence comes from size, weight, contrast, placement and the press, not from added marks.
 
+#### PIXEL / 2D GAME UI LANGUAGE
+
+USER AMENDMENT, 2026-09-22. A standing presentation direction, not a one-surface fix. It applies to
+Store Support and its selection UI first, and to every later Presentation Polish surface as that
+surface is adopted. It is applied where it earns its place - a blanket restyle of every control is
+itself a FAIL.
+
+Current defect: selection UI still reads as a generic state card with a SaaS CTA on it. Selection
+state is expressed by filling a whole plane with generic green, and material presence is reached for
+with gloss or bevel.
+
+Principle:
+
+    a selection / commit control reads as a 2D pixel game's own selection control,
+    not as a web submit button
+
+1. VISUAL LANGUAGE
+- flatter 2D surfaces
+- crisp edges
+- pixel-like border / shadow / inset
+- clear separation between colour planes
+- accent colour in small units
+- state is carried by edge / strip / label / plane difference, not by flooding the whole surface
+
+2. AVOID
+- glossy gradient
+- fake metal
+- exaggerated bevel / emboss of the AI-generated-UI kind
+- a large rectangular SaaS-style CTA
+- expressing SELECTED by painting the whole surface generic green
+- repeated decorative G24 seal / stamp marks
+
+3. REFERENCE INTERPRETATION
+A pixel-UI reference is a reference to the grammar, not to its palette. Do not copy pop tones or an
+arcade-toy register. The result is more game-like and more pixel-2D, in GUILD24's own restrained
+colour and material.
+
+4. STATE HIERARCHY, selection UI
+- SELECTED: the base slate / charcoal surface, carrying a small green accent, a state label and an
+  emphasised edge. The card does not become a green plane.
+- AVAILABLE: the most legible neutral / slate surface with an amber-family action. That this is the
+  choice currently open must read immediately.
+- UNAVAILABLE: darker and flatter, visibly receded, with its text still fully legible. Whole-element
+  opacity fade is forbidden.
+
+5. PRIMARY DECISION CONTROL
+The selection control reads as a pixel-2D game's selection / confirm control rather than a web
+submit button, without candy colour, without converting Utility Controls into game controls, and
+without costing information hierarchy or legibility.
+
+Target: a restrained pixel-2D game selection UI, not a pop mobile-game UI.
+
+This is a presentation contract. It changes no gameplay rule, balance, Save field, Gameplay RNG or
+decision structure, and it exposes no hidden information.
+
+Acceptance: UI_UX_QA_v2.8.0.md UI-Q-v28-31.
+
 #### TUTORIAL / COACH TARGET TRUTH
 
 Every tutorial/coach step must be checked as a pair:
