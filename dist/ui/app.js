@@ -1087,7 +1087,13 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
  return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+settle+opened
   +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'');}
-function npcCard(n,action='npc'){const s=game.run;return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${action==='team'&&(!n.alive||n.recovery)?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${action==='team'?(s.team.includes(n.id)?'선택됨':'원정대 선택'):'기록 보기'}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
+/* UI_UX §CONTROL / FEEDBACK HYGIENE: a muster row that cannot be sent used to keep offering
+   원정대 선택 - a dead promise on an unavailable control, the same defect the approved Store
+   Support state fixed by not leaving a dead 구매. The row already states the cause on the line
+   above (중상 · N일 휴식), so the affordance label is simply dropped rather than restated. */
+function npcCard(n,action='npc'){const s=game.run,blocked=action==='team'&&(!n.alive||n.recovery);
+ const call=action!=='team'?'기록 보기':blocked?'':(s.team.includes(n.id)?'선택됨':'원정대 선택');
+ return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
 function finalScreen(){
