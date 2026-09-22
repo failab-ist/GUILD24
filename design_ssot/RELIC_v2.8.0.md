@@ -55,23 +55,13 @@ meaningful snowball and the Player can rationally choose to skip it later.
 
 The audit is CLOSED by User approval.
 
-Relative to the already-approved v2.8 owner baseline, this closing audit changes only:
-- 회전 진열대
-- 물류 본부계약
-- 길드24 원정전문점 인증
-- 지역 거점점 계약
-- D30 candidate eligibility policy
-
-Every other Store Support keeps the current value/function defined by this v2.8 owner or its
-non-conflicting inherited base.
+Current Store Support values/functions are defined by this owner plus its non-conflicting inherited base.
 
 No new Store Support is added by this audit.
 
 ## INHERITED SUPPORT EXACT FUNCTION CLOSURE
 
-The following inherited supports had only qualitative/abstract function wording in the older owner
-chain. Their already-approved v2.8 Function is exact here so Source/QA never has to recover numbers
-from player Copy or historical implementation:
+The following Store Support Functions are exact:
 
 - 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -15%
 - 단골 스탬프 기계: paid-purchase Loyalty gain +50%; survival Loyalty is excluded
@@ -93,9 +83,7 @@ COPY_AUDIT_APPROVED_v2.8.0.md.
 
 ## INHERITED SUPPORT BASE-PRICE CLOSURE — EXACT
 
-The following 20 inherited Store Support base prices are the approved v2.8 baseline. They were
-already adopted together with the User-approved §11 Store Support rows; this section closes the
-older PASS3 owner gap and is not a new rebalance.
+The following 20 Store Support base prices are the approved v2.8 baseline.
 
 | ID | Store Support | Base Price |
 |---|---|---:|
@@ -197,8 +185,6 @@ The operating-cost modifier continues to apply to overheadBase only.
 
 ## D30 CANDIDATE ELIGIBILITY — DEFAULT INCLUDE / EXPLICIT EXCLUDE
 
-The inherited positive futureRelevantOnly / finalUseful allowlist model is superseded.
-
 D30 rule:
     every otherwise-eligible Store Support is included by default.
 
@@ -249,8 +235,6 @@ Thus 쇼케이스 is no longer reused by these active Store Supports.
 
 ## FRESH NATIVE-STAT REBASELINE — DIRECTOR DOCUMENT BASELINE
 
-The v2.7 Fresh native-Stat multipliers are superseded for v2.8.
-
 `즉석식품 코너`:
     Food/Drink positive native Core-Stat contribution +30%
 
@@ -286,14 +270,11 @@ Unchanged:
     base Price = 200G
     Food/Drink shelf life +1 day
 
-This is existing v2.7 Canonical truth.
-A Source value of 260G is an Implementation Bug, not a new design baseline.
+This is the current Canonical baseline.
 
 ## ROOKIE BOARD — FUNCTIONAL FEEL CHANGE
 
-신입 모집 게시판 no longer uses only a +70% new-customer selection weight.
-
-v2.8 exact rule:
+신입 모집 게시판 exact rule:
 - when a new adventurer is generated on a Day, that new adventurer occupies one of today's
   existing visitor slots
 - total visitor count does not increase because of this rule
@@ -312,16 +293,12 @@ make the support's identity observable without false probability attribution or 
     Loyalty +2 unchanged
     NPC Wallet +30G
 
-Supersedes +12G.
-
 ## SUPPLY CERTIFICATE — DIRECTOR DOCUMENT BASELINE
 
 길드 납품 인증:
     Price = 440G unchanged
     eligible Rare+ sale condition unchanged
     HQ commission = 12% of Item list price
-
-Supersedes 8%.
 
 Player copy should say:
     현재 알려진 위험에 맞는 희귀 이상 상품 또는 희귀 이상 보험 판매 시
@@ -335,8 +312,6 @@ Player copy should say:
     NPC Wallet +50G
     next-visit weight +50% unchanged
 
-Supersedes +25G.
-
 This threshold does not redefine Trusted Regular; NPC_TRAIT still owns 단골 at 51.
 
 ## ROYAL PREMIUM CERTIFICATE — DIRECTOR DOCUMENT BASELINE
@@ -346,15 +321,11 @@ This threshold does not redefine Trusted Regular; NPC_TRAIT still owns 단골 at
     Rare+ overcharge condition unchanged
     HQ commission = 20% of Item list price
 
-Supersedes 12%.
-
 ## OPERATING EFFICIENCY MANUAL — DIRECTOR DOCUMENT BASELINE
 
 운영 효율 매뉴얼:
     Price = 260G
     from next Day, basic operating cost -30G
-
-This is the actual v2.8 Source-adoption baseline, not a harness-only candidate.
 
 Late acquisition may rationally be skipped. That alone is not a Balance Finding.
 Evaluate this support by whether earlier acquisition can repay its price and create meaningful
