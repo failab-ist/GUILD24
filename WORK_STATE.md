@@ -145,8 +145,8 @@ through `ca120f2`, DIRECTOR review PASS; final integration merge deferred until 
 - targeted deterministic QA (incl. a forced-대성공 resolve check) + real-click browser run-loop
   smoke passed with 0 console errors
 
-Wallet re-measure amendment CLOSED (branch `claude/active-task-implementation-gpe6zh`,
-DIRECTOR review pending merge):
+Wallet re-measure amendment CLOSED (branch `claude/active-task-implementation-gpe6zh`
+through `17b049c`, DIRECTOR review PASS; final integration merge deferred until v2.8 close):
 - ordinary NPC visit income narrowed `randomInt(0,100)` -> `randomInt(0,80)`; fresh base 180,
   Level×8, returning persistent Wallet carry, 2000 cap, failed-expedition Loot, SA-Q48 purchase
   acceptance and SA-Q50 Deep sponsorship all left untouched
