@@ -34,8 +34,11 @@ function checkOne(r, n){
  for(const s of all)assert.equal(typeof s,'string','every player-facing value is a string');
  // A — the label is a supported outcome, or the rescue reading
  const v=P.nightVerdict(r);
- assert.ok(OUTCOMES.includes(v)||v==='위기에서 생환','outcome label is supported: '+v);
- assert.ok(!(r.outcome==='사망'&&v==='위기에서 생환'),'a death is never labelled a rescue');
+ /* USER AMENDMENT 2026-09-22 (NIGHT_CLOSING §OUTCOME LABEL): the rescue label is exactly
+    `생환`. The old expectation `위기에서 생환` is stale against that decision, not weakened -
+    the label is still pinned to one exact string, and a death still may never carry it. */
+ assert.ok(OUTCOMES.includes(v)||v==='생환','outcome label is supported: '+v);
+ assert.ok(!(r.outcome==='사망'&&v==='생환'),'a death is never labelled a rescue');
  // B/C — WHAT_HAPPENED and WHY must agree with the resolved combat and survival state
  const happened=P.nightHappened(r),why=P.nightWhy(r);
  if(r.outcome==='사망'){
@@ -201,15 +204,22 @@ test('the contradictions found in visual QA stay fixed',()=>{
  assert.ok(!LIVING.test(dead.quote));
  assert.equal(P.nightVerdict(dead),'사망');
  assert.deepEqual(P.nightChanges(dead),[],'a death reports no gain at all');
- // 대성공 must never claim the enemy was not defeated
+ /* 대성공 must never claim the enemy was not defeated. USER AMENDMENT 2026-09-22 (UI_UX
+    §NIGHT LAYOUT — COMBAT FACT): the fight verdict sentence is no longer player-facing at any
+    hierarchy, so the old expectation `적을 물리쳤다.` is stale. The rule it protected is
+    asserted more tightly instead: neither verdict may reach the screen, from either side of the
+    fight, while the resolved `combatWon` state itself is untouched and still shapes the Outcome
+    summary's own wording (checked by the won-retreat fixture below). */
  const great={...base,outcome:'대성공',combatWon:true,xp:58,loot:142};
- assert.ok(!/물리치지 못했다/.test(P.nightWhy(great)));
- assert.equal(P.nightWhy(great),'적을 물리쳤다.');
+ assert.ok(!/물리치지 못했다|물리쳤다/.test(P.nightWhy(great)),'no fight verdict on a won fight');
+ assert.equal(P.nightWhy(great),'','and nothing invented to replace it');
+ const lost={...base,outcome:'부상',combatWon:false,injury:1};
+ assert.ok(!/물리치지 못했다|물리쳤다/.test(P.nightWhy(lost)),'no fight verdict on a lost fight either');
  // a won fight turned into a retreat by the injury guard reads as a won fight
  const wonRetreat={...base,outcome:'퇴각',combatWon:true,xp:9,loot:4,
   events:[{id:'injury-guard',items:['bandage']}]};
  assert.ok(/전투는 이겼지만/.test(P.nightHappened(wonRetreat)),'a won fight is not told as a plain retreat');
- assert.equal(P.nightWhy(wonRetreat),'적을 물리쳤다.');
+ assert.equal(P.nightWhy(wonRetreat),'','the retired fight verdict is not printed here either');
  // an unknown stat key never reaches the screen as undefined
  const junk={...base,outcome:'성공',combatWon:true,xp:20,loot:30,
   statChanges:[{key:'might',before:1,after:2},{key:'combat',before:18,after:21}]};

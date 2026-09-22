@@ -152,8 +152,13 @@ function render(){
     ignores a redraw of the line it is already showing (its own sayKey/sayHidden guard), so
     setting this on every render of the same beat does not restart the bubble or its timer.
     Death is narration only, per NIGHT_CLOSING, so it never sets a line here. */
+ /* USER AMENDMENT 2026-09-22 (UI_UX §NIGHT LAYOUT — DEATH MESSAGE): narration treatment is
+    about VOICE, not position. A death used to set no line at all, so the one message channel
+    beside the character went empty and the record's only death words were the Outcome summary
+    in the body. The existing Death narration copy now takes the living line's place and weight,
+    flagged `status` so it is presented as a neutral status message rather than an utterance. */
  if(phase==='night'){const r=s.results[s.nightCursor||0];
-  s.say=(r&&r.outcome!=='사망'&&r.quote)?{npc:r.npcId,text:r.quote}:null;}
+  s.say=(r&&r.quote)?{npc:r.npcId,text:r.quote,status:r.outcome==='사망'}:null;}
  /* Replacing #app wholesale drops focus. On a redraw of the same view it goes back on the
     same control, or a keyboard user is thrown to the top of the screen on every pick.
     The handle is the data-action/data-id the click delegation already uses, plus the
@@ -472,6 +477,9 @@ function speech(n){
  const key=said.npc+'\u001f'+said.text;
  if(key!==sayKey){sayKey=key;sayHidden=false;}
  if(sayHidden)return '';
+ /* A status message is not dialogue: same position, same weight, but no bubble ground, no
+    tail, no quotation marks in its copy, and it does not expire or invite a dismiss tap. */
+ if(said.status)return '<p class="say status" role="status" aria-live="polite"><span>'+E(said.text)+'</span></p>';
  /* tapping the balloon dismisses it early. It is a convenience over the timer, never the
     only way the line goes away, so the live region keeps its announcing role. */
  return '<p class="say" role="status" aria-live="polite" data-action="say-hide"><span>'+E(said.text)+'</span></p>';
@@ -485,7 +493,7 @@ function hideSpeech(){
  const el=$('.say');if(el)el.remove();
 }
 function armSpeech(){
- if(!$('.say')){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;return;}
+ if(!$('.say:not(.status)')){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;return;}
  if(sayArmed===sayKey)return;
  if(sayTimer)clearTimeout(sayTimer);
  sayArmed=sayKey;
@@ -553,7 +561,8 @@ function nightScreen(){
   +s.results.slice(0,12).map((_,k)=>'<span class="rtag">'+Scene.returnTag(k===at?'now':k<at?'done':'wait')+'</span>').join('')
   +'<span class="count">'+Math.min(at+1,s.results.length)+' / '+s.results.length+'</span></div>':'';
  const dock=btn('전체 건너뛰기','closing','bare')
- +btn(last?'정산으로':'다음','night-next','stamp');
+ /* USER CONFIRMED 2026-09-22: the last result hands over to the day's close, so it names it. */
+ +btn(last?'마감으로':'다음','night-next','stamp');
  return '<div class="stage p-night'+(r&&r.outcome==='사망'?' cold':'')+'">'+menuFab()
  +'<div class="nightband" aria-hidden="true">'+Scene.nightRoom()+'</div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
@@ -574,10 +583,10 @@ function beat(r){
  /* SA-Q09: the character's own line is the temporary SALE-style balloon (speech(n)), never a
     permanent blockquote - a routine return and a rescue both get to speak, not only the
     "heavy" ones, and the line goes away on its own instead of sitting on the card forever. */
- /* UI_UX §PER-PHASE APPLICATION RULES (NIGHT): the Outcome is the beat's visual anchor, so it
-    leads the record at its full width instead of sitting in the narrow column beside the
-    portrait, where the art and the balloon outranked it. The balloon anchors to `.stand-in`
-    now, so it still may overlap the character and can no longer reach the Outcome. */
+ /* UI_UX §NIGHT LAYOUT — OUTCOME PLACEMENT (USER AMENDMENT 2026-09-22): the Outcome belongs to
+    the returning adventurer's identity block, directly above the name and one step stronger than
+    it. It is the record's primary reading by weight and placement, not by becoming a full-width
+    headline row with a rule across the record - that took vertical space of its own for a word. */
  /* NIGHT_CLOSING §RESULT INFORMATION HIERARCHY, read as three tiers rather than five boxes:
     the Outcome, then the one sentence that tells it plus what the Player's own goods did to it
     as its SUB lines, then the fact line, then what the adventurer grew and what the day left
@@ -585,10 +594,10 @@ function beat(r){
     their own grounds - a second and third result competing with the first - and the fact line
     was a third block. They are one `.told` group now; nothing was added or removed. */
  return '<article class="beat '+rank+' t-'+tone+(heavy?'':' quiet')+'">'
- +'<p class="verdict">'+E(verdict)+'</p>'
  +'<div class="stand-in">'
   +speech(n)+portrait(n,150,'returner')
   +'<div class="who">'
+   +'<p class="verdict">'+E(verdict)+'</p>'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
    +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
    +(r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
@@ -596,9 +605,9 @@ function beat(r){
  +'<div class="told">'
   +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
   +causeLines(r)
-  /* the expedition fact. It is not part of the owned result hierarchy and on most Outcomes it
-     restates the Outcome, so it reads at the lowest tier of the group rather than as a slate
-     of its own. Nothing it says is dropped. */
+  /* what the Outcome and its summary do NOT already say: an attributed incident, or an event
+     that speaks for itself. The fight verdict sentence is no longer among them - UI_UX §NIGHT
+     LAYOUT — COMBAT FACT retires it from the player-facing record at every hierarchy. */
   +(why?'<p class="why">'+E(why)+'</p>':'')
  +'</div>'
  +'<div class="changed">'+changedRows(r)+'</div>'
@@ -623,10 +632,10 @@ function changedRows(r){
     nothing at all - what it returns is the adventurer's growth and money, reported as their
     change and never as Store income. Both are stated once, beside the ordinary changes. */
  const extra=[];
- if(r.storeBonus)extra.push({kind:'gold',group:'after',label:'대성공 본사 보상',value:'+'+fmt(r.storeBonus)+'G'});
+ if(r.storeBonus)extra.push({kind:'gold',group:'reward',label:'대성공 본사 보상',value:'+'+fmt(r.storeBonus)+'G'});
  if(r.deep&&(r.deep.bonusXp||r.deep.bonusWallet)){
-  if(r.deep.bonusXp)extra.push({kind:'level',group:'after',label:Copy.deep.reward,value:'경험치 +'+r.deep.bonusXp});
-  if(r.deep.bonusWallet)extra.push({kind:'gold',group:'after',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
+  if(r.deep.bonusXp)extra.push({kind:'level',group:'reward',label:Copy.deep.reward,value:'경험치 +'+r.deep.bonusXp});
+  if(r.deep.bonusWallet)extra.push({kind:'gold',group:'reward',label:Copy.deep.reward,value:'손님 소지금 +'+fmt(r.deep.bonusWallet)+'G'});
  }
  const n = game.run.npcs.find(x=>x.id===r.npcId);
  /* NIGHT_CLOSING §FATIGUE RESULT. The settled 귀환 후 피로 token is the only one carrying a
@@ -641,13 +650,13 @@ function changedRows(r){
   +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>';
  /* The tokens were one flat run, so a Level sat in the same layer as 귀환 후 피로 and the
     aftermath read as more growth. They are the same tokens in the same owned order - Level /
-    Stat, then Fatigue, then EXP / Wallet / other - split into the two groups
-    `Presentation.nightChanges` marks: what the adventurer GREW, and what the day LEFT on them.
-    One divider between them, no heading, no reordering across the boundary. */
+    Stat, then Fatigue, then EXP / Wallet / other - split into the three groups
+    `Presentation.nightChanges` marks: GROWTH, AFTERMATH, REWARD. Spacing and one minimal rule
+    tell them apart - no heading, so no new copy, and no reordering across a boundary. */
  const all=[...Presentation.nightChanges(r, n),...extra];
- const band=(key,cls)=>{const rows=all.filter(c=>(c.group||'grew')===key);
-  return rows.length?'<div class="'+cls+'">'+rows.map(stamp).join('')+'</div>':'';};
- return band('grew','grew')+band('after','after');}
+ const band=key=>{const rows=all.filter(c=>(c.group||'grew')===key);
+  return rows.length?'<div class="'+key+'">'+rows.map(stamp).join('')+'</div>':'';};
+ return band('grew')+band('after')+band('reward');}
 // CLOSING — `오늘 장사는 어땠을까?`. Economics only; the expedition story belongs to Night.
 // The object is the till roll the register printed when the shutter came down: a narrow
 // strip torn at both ends, lying on the dark counter under the same lamp. Not the order

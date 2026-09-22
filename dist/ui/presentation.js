@@ -76,12 +76,14 @@ function returning(n){if(!n.introduced||n.newToday||!n.records.length)return nul
    one word swapped, so each one owns its tone. 퇴각 and 부상 shared `hurt` and were therefore
    the same beat twice - a withdrawal that cost nothing was coloured like an injury. 퇴각 is its
    own `pull` (came out, unhurt, unfinished) and 부상 keeps the ember. A proven rescue keeps the
-   recovery accent §NIGHT RESULT PRESENTATION allows, since the label already reads 위기에서 생환. */
+   recovery accent §NIGHT RESULT PRESENTATION allows, since the label already reads 생환. */
 function nightTone(r){return r.outcome==='사망'?'gone':
  r.rescued?'saved':r.outcome==='중상'?'severe':
  r.outcome==='부상'?'hurt':r.outcome==='퇴각'?'pull':r.outcome==='대성공'?'great':'safe';}
-/* A rescue is never dressed up as an ordinary success, and never as a death. */
-function nightVerdict(r){return r.rescued&&r.outcome!=='death'?'위기에서 생환':r.outcome;}
+/* A rescue is never dressed up as an ordinary success, and never as a death. USER AMENDMENT
+   2026-09-22 (NIGHT_CLOSING §OUTCOME LABEL): the label is exactly `생환`; the approved summary
+   `사망 위기를 넘기고 살아 돌아왔다.` carries the rest. */
+function nightVerdict(r){return r.rescued&&r.outcome!=='death'?'생환':r.outcome;}
 function nightHappened(r){
  /* DUNGEON_HAZARD_v2.7 rolls Death on any failure path, not only behind a lost fight, so the
     line may no longer name the fight as the cause on a won one - NIGHT_CLOSING forbids an
@@ -124,9 +126,12 @@ function nightRank(r){
 
 /* WHY names only what actually acted. A Hazard that was fully covered has no incident
    weight, so it can never be drawn as the cause — no false attribution is possible. */
+/* USER AMENDMENT 2026-09-22 (UI_UX §NIGHT LAYOUT — COMBAT FACT): the fight verdict sentence
+   (`적을 물리쳤다.` / `적을 물리치지 못했다.`) is not shown on the player-facing record at any
+   hierarchy - it duplicated the Outcome and its summary. `r.combatWon` itself is untouched and
+   still drives the resolution and the Outcome summary's own wording. What is left here is what
+   the Outcome does NOT already say: an attributed incident, and an event that speaks for itself. */
 function nightWhy(r){const bits=[];
- if(r.combatWon===false)bits.push('적을 물리치지 못했다.');
- else if(r.combatWon===true)bits.push('적을 물리쳤다.');
  if(r.environmentHurt)bits.push(r.cause&&r.cause!=='accident'
   ?(D.hazards[r.cause]||'보급 부담')+' 때문에 원정 내내 고전했다.'
   :'원정 중 예상치 못한 사고가 있었다.');
@@ -161,8 +166,9 @@ function heroLine(r){
 /* `group` is the READING GROUP a token belongs to, not a new category: the emission order below
    is NIGHT_CLOSING §RESULT INFORMATION HIERARCHY exactly as it always was (Level/Stat -> Fatigue
    -> EXP/Wallet/other), and the group only says where the screen may draw the one divider
-   between what the adventurer GREW and what the day LEFT on them. Nothing is reordered across
-   the boundary and no item is added or dropped. */
+   between GROWTH (Level / Stat), AFTERMATH (injury / rest / Fatigue) and REWARD (EXP / Wallet /
+   other settled results), per UI_UX §NIGHT LAYOUT — RESULT DATA TYPOGRAPHY. Nothing is reordered
+   across a boundary and no item is added or dropped. */
 function nightChange(text){
  if(/^Lv\./.test(text))                          return {kind:'up',group:'grew',label:'레벨',value:text};
  let m=null;
@@ -196,8 +202,8 @@ function nightChanges(r, npc){const out=[];
    out.push({kind:r.netFatigueDelta>0?'down':'up',group:'after',label:'귀환 후 피로',value:r.finalFatigue+'',
     detail:steps.join(' → ')});
   }
- if(r.xp)out.push({kind:'',group:'after',label:'경험치',value:'+'+r.xp});
- if(r.loot)out.push({kind:'gain',group:'after',label:'원정 소지금 획득',value:r.loot+'G'});
+ if(r.xp)out.push({kind:'',group:'reward',label:'경험치',value:'+'+r.xp});
+ if(r.loot)out.push({kind:'gain',group:'reward',label:'원정 소지금 획득',value:r.loot+'G'});
  return out;}
 
 /* ---- SUPPLY IMPACT -------------------------------------------------------------

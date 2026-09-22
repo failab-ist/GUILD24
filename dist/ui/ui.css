@@ -853,8 +853,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .beat .say{left:14px;top:8px;bottom:auto;max-width:calc(100% - 28px)}
 .beat .say:after{top:100%;bottom:auto;left:min(22vw,95px);
  border:9px solid transparent;border-top-color:var(--paper);border-right:0;border-bottom:0}
-/* the balloon anchors to the figure's own row, so it may overlap the character (UI_UX §NIGHT
-   LAYOUT) and can never reach the Outcome line that now leads the beat */
+/* UI_UX §NIGHT LAYOUT — DEATH MESSAGE (USER AMENDMENT 2026-09-22). Same position and the same
+   visual weight as a living adventurer's line, but it is a neutral status message, not an
+   utterance: the paper bubble and its tail are gone, the ground is the night's own dark plate
+   with the tone rule on its edge, and the copy it reuses carries no quotation marks. */
+.beat .say.status{background:#141821e6;color:#cfd3dd;cursor:default;
+ box-shadow:inset 3px 0 0 var(--tone,#cfd3dd)}
+.beat .say.status:after{display:none}
+/* the balloon anchors to the figure's own row, so the line may overlap the character
+   (UI_UX §NIGHT LAYOUT) rather than reserving height above the record */
 .stand-in{position:relative;display:flex;align-items:flex-end;gap:14px;margin-bottom:16px}
 /* One NPC size for every outcome. Importance changes how much copy a beat spends, the
    quote, the change tokens and the tone — never how big the adventurer is. */
@@ -862,20 +869,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 14px #ffd79a3d)}
 .beat.quiet .stand-in{gap:12px;margin-bottom:12px}
 .beat .who{flex:1 1 auto;min-width:0;padding-bottom:4px}
-/* THE OUTCOME. It is the beat's primary visual anchor, so it leads the record across its full
-   width with the tone rule under it - the record's own headline, not a label in the column
-   beside the portrait. Each outcome carries its own tone (see .t-* below), so two different
-   results can never read as one card with the word swapped. */
-.verdict{display:block;font:500 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
- color:var(--tone,#e8d9b0);text-shadow:2px 2px 0 #0000008c;margin-bottom:14px;
- padding-bottom:9px;box-shadow:inset 0 -4px 0 var(--tone,#e8d9b0)}
-.beat.quiet .verdict{font-size:26px;padding-bottom:5px;box-shadow:inset 0 -3px 0 var(--tone,#e8d9b0)}
+/* THE OUTCOME — UI_UX §NIGHT LAYOUT — OUTCOME PLACEMENT (USER AMENDMENT 2026-09-22). It sits in
+   the returning adventurer's identity block, directly above the name and one step stronger than
+   it. It is the record's primary reading by placement and weight, NOT a full-width headline row:
+   it claims no vertical band of its own and carries no rule across the record. Each outcome
+   still owns its tone (see .t-* below), so two results never read as one word swapped. */
+.verdict{display:block;font:500 32px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
+ color:var(--tone,#e8d9b0);text-shadow:2px 2px 0 #0000008c;margin:0 0 2px;
+ padding:0;box-shadow:none;overflow-wrap:anywhere}
+.beat.quiet .verdict{font-size:24px}
 /* D-21. Six outcomes were told in two volumes, so 부상 shouted as loudly as 사망. The everyday
    returns - 성공 / 퇴각 / 부상 - share one voice; 대성공 / 중상 / 사망 and a rescue are raised,
    because those are the ones that change what the player does on the following mornings. This
    is emphasis only: a routine beat keeps all of its copy at full size. */
 .beat.routine .verdict{font-size:30px}
-.beat.major .verdict{font-size:44px;box-shadow:inset 0 -5px 0 var(--tone,#e8d9b0)}
+.beat.major .verdict{font-size:44px}
 .beat.major .who h3{font-size:21px}
 .beat .who h3{font:600 19px/1.25 var(--ui);color:#f2e7cd}
 .beat .place{font:400 13px/1.4 var(--ui);color:#8f94a6}
@@ -905,37 +913,45 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .beat .cause li+li{margin-top:3px;color:#b9b193;font-weight:400}
 /* the expedition fact, lowest tier of the group: on most Outcomes it restates the Outcome */
 .beat .why{margin:11px 0 0;font:400 13px/1.55 var(--ui);color:#8f94a6}
-/* WHAT CHANGED — the read-only record of what moved. This is an information region, not a row of
-   headline cards: the tokens are set on one line each, label beside figure, at ordinary reading
-   type, and the stacked bevel + hard drop they carried is gone (§EDGE / BORDER DISCIPLINE - they
-   are not pressable, so plane and type are the whole construction). The tiles halve in height,
-   which is where the beat's vertical length comes back. */
+/* WHAT CHANGED — UI_UX §NIGHT LAYOUT — RESULT DATA TYPOGRAPHY (USER AMENDMENT 2026-09-22).
+   This is an information region, not a row of headline cards and not a badge collection. So:
+   the ordinary UI type family throughout - the pixel / LED display face is reserved for a real
+   display role like the Outcome label - one line per label and value, and the metal plate kept
+   only where a compact cell actually helps comparison: GROWTH, where Level and the Stats are
+   read against each other. AFTERMATH and REWARD are plain information rows on the record's own
+   ground, so nothing read-only is dressed as something pressable. */
 /* NIGHT_CLOSING §FATIGUE RESULT. The 귀환 후 피로 token is the only tok that opens a balloon -
    the resolved 출발 -> 원정 -> 귀환 arithmetic - through the SAME shared anchored tip everything
    else on screen uses, so `.changed` is the positioning context the balloon anchors against. */
 .changed{position:relative;margin-bottom:14px}
-/* the two reading groups, in the owned order, told apart by one rule and nothing else */
-.changed .grew,.changed .after{display:flex;flex-wrap:wrap;gap:5px}
-.changed .after{margin-top:9px;padding-top:9px;box-shadow:inset 0 2px 0 #ffffff14}
-/* a death grew nothing, so the aftermath is the only group and there is nothing to divide */
-.changed .after:first-child{margin-top:0;padding-top:0;box-shadow:none}
+/* the three reading groups, in the owned order, told apart by spacing and one minimal rule */
+.changed>div{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.changed .grew{gap:4px}
+.changed .after{margin-top:10px;padding-top:9px;box-shadow:inset 0 2px 0 #ffffff12}
+.changed .reward{margin-top:7px}
+/* a death grew nothing, so the aftermath is the first group and there is nothing to divide */
+.changed>div:first-child{margin-top:0;padding-top:0;box-shadow:none}
+/* GROWTH — the one compact cell, because Level and the Stats are compared with each other */
+.changed .grew .tok{padding:4px 8px;background:#2b333b}
+.changed .grew .tok i{color:#93a0ab}
+/* AFTERMATH / REWARD — plain rows: no plate, no edge, label then figure, one line */
+.changed .after .tok,.changed .reward .tok,
+.changed .after .tip>summary,.changed .reward .tip>summary{padding:0;background:none}
 .changed .tip{display:block}
-.changed .tip>summary{display:inline-flex;align-items:baseline;gap:7px;padding:5px 9px;background:var(--tex-metal),#39434b;background-size:8px 8px;
+.changed .tip>summary{display:inline-flex;align-items:baseline;gap:6px;
  list-style:none;cursor:pointer}
 .changed .tip>summary::-webkit-details-marker{display:none}
 .changed .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.changed .tip>summary i{font:400 11px/1.3 var(--ui);font-style:normal;letter-spacing:.04em;color:#9aa6b2}
-.changed .tip>summary b{font:500 14px/1.3 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
+.changed .tip>summary i,.tok i{font:400 12px/1.4 var(--ui);font-style:normal;color:#9aa6b2}
+.changed .tip>summary b,.tok b{font:600 14px/1.4 var(--ui);color:#eef3f7;font-variant-numeric:tabular-nums}
+/* the resolved-fatigue arithmetic is still on demand, so its label keeps a readable affordance */
+.changed .tip>summary i{box-shadow:inset 0 -1px 0 #9aa6b259}
 .changed .tip.up>summary b{color:#9fd6a8}
-.changed .tip.down{background:var(--tex-metal),#4a2f2c;background-size:8px 8px}
 .changed .tip.down>summary b{color:#e8927f}
-.tok{display:inline-flex;align-items:baseline;gap:7px;padding:5px 9px;background:var(--tex-metal),#39434b;background-size:8px 8px}
-.tok i{font:400 11px/1.3 var(--ui);font-style:normal;letter-spacing:.04em;color:#9aa6b2}
-.tok b{font:500 14px/1.3 var(--f-led);color:#eef3f7;font-variant-numeric:tabular-nums}
+.tok{display:inline-flex;align-items:baseline;gap:6px}
 .tok b em{font-style:normal;color:#9fd6a8}
 .tok.up b{color:#9fd6a8}
 .tok.gain b{color:var(--gold)}
-.tok.down{background:var(--tex-metal),#4a2f2c;background-size:8px 8px}
 .tok.down b{color:#e8927f}
 .beat blockquote{font:400 15px/1.7 var(--ui);color:#b9bccb;padding:2px 0 2px 14px;
  box-shadow:inset 3px 0 0 #3a4152}
