@@ -60,8 +60,14 @@ Open QA / fix cycles:
 - UI-Q-v28-28 controlled Boss/milestone phone + desktop runtime acceptance
 - UI-Q-v28-29 modal-close focus-origin fix + runtime regression acceptance
 
-Next DIRECTOR audit:
-- FINAL supply action audio cue ownership (`case 'supply'`)
+### FINAL supply action audio cue ownership
+- PASS: `case 'supply'` currently resolves through the SALE register family via the existing default `sound()`
+- this is semantically valid because the current Final owner defines committed Final Item transfer as familiar SALE handling at the fixed ordinary 50% / 매입가 amount and as a real paid transaction
+- Final transfer reduces NPC Wallet, increases Player Gold and increases Gross Sales exactly once
+- current Audio owner requires the heavy distinct FINAL cue at the Final commit, not at each Final Item transfer
+- no new cue, asset or Source change is required
+
+Remaining Adoption Audit has no further DIRECTOR review target after the open QA / fix cycles above.
 
 Do not change Design during the audit.
 Any implementation finding enters its own fix cycle.
