@@ -5,26 +5,22 @@ STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Current Active Task
 
-DIRECTOR — Presentation Polish Correction / Canonical cleanup / current-Source mismatch audit.
+DIRECTOR REVIEW — v2.8 Presentation Polish Correction implementation.
 
-Scope:
-- promote the User's latest Presentation direction into the routed UI/UX Canonical + QA
-- promote the four User-approved Tutorial copy lines into the exact Copy owner
-- remove duplicated SALE Help exact-copy truth from COPY_WORLD_VOICE when COPY_AUDIT_APPROVED owns it
-- inspect only the affected current Source after Canonical cleanup
-- report only remaining presentation conflicts, split into implementable vs User-decision-needed
+Review target:
+- WORK commit `b7eaea1845b165b4d394352875a2870308415784`
+- Store Support / ornament / phase primary actions / Boss major-beat composition
+- exact Tutorial §3-7 and SALE Help §4-1..§4-3 adoption
+- affected tests / asset completeness
 
-Do not implement Task 3 Source changes in this Director task.
-Task 1 is DIRECTOR PASS and is not reopened.
-Task 2 functional Tutorial/Boss work is DIRECTOR PASS; only the newer User-approved Presentation direction supersedes its presentation treatment where applicable.
+Task 1 remains DIRECTOR PASS.
+Task 3 remains unopened.
 
 ## Branch / Basis
 
 - repository: `failab-ist/GUILD24`
 - branch: `claude/guild24-v28-functional-polish-r3vjt9`
-- User-provided pushed baseline: `f8a787d534bcb68d8bdced628f3cf977cf922600`
-- remote HEAD found at task start: `cf6479578eaf766ca8c7b6d6e8ec36885fbfa129`
-- the branch was already 6 commits ahead of the User-provided baseline; those commits are preserved
+- review HEAD: `b7eaea1845b165b4d394352875a2870308415784`
 - implementation truth: current `dist/`
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md`
 
@@ -32,24 +28,21 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 
 ## Current Approval / Execution Need
 
-Current User decisions for this correction are approved; no Design re-decision is required before Canonical promotion.
+DIRECTOR review found the intended presentation/copy adoption substantially correct, but the correction is not closed.
 
-Canonical cleanup and the affected current-Source audit are complete.
+WORK correction required:
+- remove the duplicate legacy `.relic-plate .stamp[disabled]` rule so one current Store Support state rule remains
+- update stale Source comments that still describe the retired bolted-brass / art-after-facts presentation
+- regenerate the committed font subset after the new exact copy and rerun the real full `npm test`; `tests/assets.cjs` is part of `npm test` and cannot be reported as PASS while it fails
 
-Current Director finding:
-- remaining issues are implementation/adoption mismatches, not unresolved Design
-- no additional Design choice is required for the identified correction set
-- stop for User approval before preparing the WORK implementation handoff
-
-The later WORK handoff should route the approved correction through the current UI_UX / UI_UX_QA /
-COPY_AUDIT owners rather than duplicating their exact rules here.
+No new Design decision is required.
 
 ## Next Queue
 
-After User approval of the mismatch report:
-- write the minimal WORK handoff for the approved Presentation correction only
-- then continue to final v2.8 integration / freeze audit when this polish scope is closed
+- WORK performs only the small correction above
+- DIRECTOR re-reviews the resulting diff / full test result
+- if PASS, close this Presentation correction and continue to final v2.8 integration / freeze audit
 
 ## Blocker
 
-NONE for the approved WORK correction scope.
+WORK CORRECTION REQUIRED — current build has an asset-test failure and stale/duplicate Source residue.
