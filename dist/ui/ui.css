@@ -1395,6 +1395,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 }
 @media (min-width:720px){
  .boss-art img{max-width:420px}
+ /* UI-Q-v28-28 / UI_UX §BOSS INFORMATION PRESENTATION: information is primary, art supporting.
+    Past 720px the art was capped on WIDTH only, so a near-square piece grew to its own aspect:
+    measured at 1280x880 it took 408px of D5's 532px report and 461px of D25's, which pushed
+    both bodies past the modal's own scroll (D15 628/626, D25 660/626) and put the D25 Final
+    Family / Hazard disclosure - the information that has to be read before the same-Day
+    decisions - above a portrait taller than the screen could hold. The desktop gets height
+    caps in the same 120:96 proportion the approved mobile baselines use, at twice their scale;
+    the exact mobile baselines above are untouched. */
+ .boss-art img{max-height:240px}
+ .boss-reveal.final .boss-art img{max-height:200px}
  .boss-reveal.final .fams{grid-template-columns:1fr 1fr}
 }
 

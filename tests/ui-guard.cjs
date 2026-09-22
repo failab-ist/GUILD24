@@ -1509,8 +1509,16 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  // the width-only constraint that caused it is no longer the only one
  assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
  assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
- // the caps are real ceilings, not overridden later at the same width
- assert.equal((css.match(/\.boss-art img\{max-height/g)||[]).length,2,'exactly the two baseline height caps, and no third');
+ // the caps are real ceilings, not overridden later at the same width. The count used to be
+ // the check, which also forbade a cap at a DIFFERENT width - and UI-Q-v28-28 needs one: past
+ // 720px the art was capped on width only, so it grew to its own aspect (408px in D5, 461px in
+ // D25 at 1280x880) and overflowed the modal body. The phone block is what these baselines own,
+ // so the ceiling is asserted there, and the desktop pair is asserted on its own below.
+ assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,2,
+  'exactly the two baseline height caps at phone width, and no third');
+ const wide=css.slice(css.indexOf('@media (min-width:720px){'));
+ assert.ok(/\.boss-art img\{max-height:240px\}/.test(wide),'the desk caps D5 / D15 art height too');
+ assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:200px\}/.test(wide),'and the D25 reveal lower, as on phone');
  // the reports themselves are untouched: art is still a figure beside the information
  assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
  assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
