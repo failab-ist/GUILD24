@@ -44,6 +44,12 @@ const pick = (r) => ({
   final: r.final, settlement: r.settlement,
   rescue: r.rescue,
   shortage: r.shortage, saleGap: r.saleGap, capacityBlocked: r.capacityBlocked, stockouts: r.stockouts,
+  // exact clearChance(power,bossPower) arithmetic for the legal best 3-person D30 party -
+  // the primary Final-quality comparison DIRECTOR asked for in place of the small binary
+  // bossWinGivenReach sample.
+  partySize3: r.partySize?.[3] ?? null,
+  goldCheckpointStats: r.goldCheckpointStats ?? null,
+  endedBy: r.endedBy,
 });
 
 const out = {};
