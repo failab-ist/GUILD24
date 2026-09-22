@@ -359,20 +359,32 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .tag-art b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1px;padding-left:10px;
  white-space:nowrap;font:600 17px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2fbf4}
 .tag-art b i{font-style:normal;font-size:12px;opacity:.85;font-weight:400}
-/* 5 quantity: the dial leads, the quick set stays quiet */
-.dial{grid-column:1/-1;display:flex;align-items:center;gap:4px;margin-top:11px;flex-wrap:wrap}
-.dial button{min-width:46px;padding:0 6px;background:#a89264;color:#1f1809;font:600 20px/1 var(--ui);
- box-shadow:inset 2px 2px 0 #d8c69a,inset -2px -2px 0 #6f5c33,3px 3px 0 #00000033}
-.dial button:hover{background:#b8a173}
-.dial button:disabled{opacity:.3}
+/* 5 quantity. UI_UX §GLOBAL PRESENTATION §14: `- / 수량 / + / 1 / 3 / 최대` must read as ONE game
+   control cluster. They did not: the steppers carried a four-sided bevel (§11), the quick set was
+   transparent text with a dotted underline - a web link, not a key - and its press turned a
+   generic success green on a screen that has no success here. Now every key in the row is the
+   same flat pixel plate with a crisp edge and hard depth, the readout is the one recessed part,
+   and the two halves sit as one run. Nothing is added; the parts are made to agree. */
+.dial{grid-column:1/-1;display:flex;align-items:center;gap:3px;margin-top:11px;flex-wrap:wrap}
+.dial button{min-width:46px;min-height:44px;padding:0 6px;background:#b09a6c;color:#1f1809;
+ font:600 20px/1 var(--ui);box-shadow:inset 0 0 0 2px #d8c69a,3px 3px 0 #2a231759}
+.dial button:hover{background:#bda87b}
+/* the press travels into the form and the depth closes - the key is pushed, not tinted */
+.dial button:active{transform:translate(2px,2px);background:#9c8858;
+ box-shadow:inset 0 0 0 2px #c4b184,1px 1px 0 #2a231759}
+/* an unusable key is a dead plate: flat, no depth, still legible, never a whole-element fade */
+.dial button:disabled{opacity:1;transform:none;background:#cdc3a6;color:#8b8169;
+ box-shadow:inset 0 0 0 2px #bcb193}
+/* the one recessed part of the cluster: the number is read, not pressed */
 .dial output{min-width:50px;text-align:center;font:600 20px/44px var(--ui);font-variant-numeric:tabular-nums;
- background:#fbf6e6;color:#1f1809;box-shadow:inset 2px 2px 0 #00000033,inset -2px -2px 0 #ffffff8c}
-.dial .set{display:flex;gap:2px;margin-left:auto;align-items:center}
-.dial .set button{flex:0 0 auto}
-.dial .set button{min-width:44px;min-height:44px;padding:0 4px;background:transparent;color:#9c8f72;font:400 13px/44px var(--ui);
- box-shadow:none;border-bottom:1px dotted #00000038;border-radius:0}
-.dial .set button:hover{background:transparent;color:#4b4231;border-bottom-color:#4b4231}
-.dial .set button:active{transform:none;color:#2f7a4d;border-bottom-color:#2f7a4d}
+ background:#fbf6e6;color:#1f1809;box-shadow:inset 0 0 0 2px #9c8f72,inset 2px 2px 0 #00000026}
+.dial .set{display:flex;gap:3px;margin-left:auto;align-items:center}
+.dial .set button{flex:0 0 auto;min-width:44px;min-height:44px;padding:0 4px;
+ font:600 13px/1 var(--ui);background:#cdbf9a;color:#3b3323;
+ box-shadow:inset 0 0 0 2px #e4dabd,3px 3px 0 #2a23173d}
+.dial .set button:hover{background:#d8cbaa}
+.dial .set button:active{transform:translate(2px,2px);background:#bdae88;
+ box-shadow:inset 0 0 0 2px #d2c5a2,1px 1px 0 #2a23173d}
 .rubber{display:block;width:calc(100% - 32px);margin:12px 16px 6px;background:transparent;color:#7a5a2a;
  font:600 14px/1 var(--ui);letter-spacing:.02em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.8}
 .rubber:hover{background:#00000008;opacity:1}
@@ -387,32 +399,33 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    `.row wrap` box that used to swallow this `flex` is gone). The label is fluid so 발주 N G · 확정
    still sets on one line in half a 360px dock, and the basis lets the pair wrap to its own row
    rather than squeeze, instead of being clipped. */
-/* UI_UX §GAME-LIKE INTERACTION LANGUAGE + §PHASE VISUAL LANGUAGE (ORDER reads paper / steel /
-   cool frost). This dock is the desk edge and it is already paper - a filled green rectangle
-   sitting on it was the plainest SaaS tell in the game. Committing the order is the approval
-   stamp being pressed on the 발주서: a ruled impression in the form's steel ink, carrying the
-   form's own steel ink, and driven INTO the paper on press rather than
-   nudged down-right. Nothing is added to the screen - the control is the one that was there. */
+/* UI_UX §GLOBAL PRESENTATION §2 / §5 / §14. The lightness ladder was inverted here: the dock is
+   pale paper, and the order commit - "ORDER's strongest physical commit" - sat on it as a nearly
+   transparent ruled box (#39434c14), dimmer than the background it stood on, while the leave
+   action carried a four-sided riveted bevel and outranked it. The two are never enabled at the
+   same time, so neither has to compete; each just has to be a pressed object.
+
+   ORDER keeps its own paper / steel / frost language rather than a recoloured accent: the commit
+   is the form's steel ink driven onto the paper, with a cool frost edge and real depth. */
 .p-order .dock .stamp{flex:1 1 140px;min-height:54px;font:600 clamp(15px,4.4vw,20px)/1.2 var(--ui);letter-spacing:.04em;
  display:inline-flex;align-items:center;justify-content:center;
- background:#39434c14;color:#2c3a45;
- box-shadow:inset 0 0 0 3px #39434c,inset 0 0 0 5px #e6ddc6,inset 0 0 0 7px #39434c40}
-.p-order .dock .stamp:hover{background:#39434c26;color:#1c2831}
-/* the press drives the ink in: the frame darkens, the box stays square and in place */
-.p-order .dock .stamp:active{transform:none;background:#39434c33;
- box-shadow:inset 0 0 0 3px #39434c,inset 0 0 0 5px #e6ddc6,inset 0 0 0 7px #39434cb3}
+ background:#2f3a44;color:#eef6fa;
+ box-shadow:inset 0 0 0 2px #7fb0c4,4px 4px 0 #2a2317a6}
+.p-order .dock .stamp:hover{background:#384652}
+/* the press travels and the depth closes: the stamp is driven into the form */
+.p-order .dock .stamp:active{transform:translate(3px,3px);background:#27303a;
+ box-shadow:inset 0 0 0 2px #5f8899,1px 1px 0 #2a2317a6}
 .p-order .dock .stamp:focus-visible{outline:3px solid #39434c;outline-offset:3px}
-/* the second dock action leaves the desk rather than marking the document, so it is the steel
-   half of the same family: a riveted plate, not a second stamp competing with the first. */
+/* leaving the desk is the other act, and the only enabled control once the order is committed:
+   the same steel, flat, on a neutral edge and a shorter drop, so it never outranks the commit. */
 .p-order .dock .stamp.leave{background:#39434c;color:#e8eef2;
- box-shadow:inset 0 3px 0 #6a7783,inset 0 -4px 0 #171d22,
-  inset 3px 0 0 #4a5560,inset -3px 0 0 #232a31,4px 4px 0 #2a231766}
+ box-shadow:inset 0 0 0 2px #6a7783,3px 3px 0 #2a231766}
 .p-order .dock .stamp.leave:hover{background:#44505a;color:#f4f8fa}
 .p-order .dock .stamp.leave:active{transform:translate(2px,2px);background:#313a42;
- box-shadow:inset 0 3px 0 #171d22,inset 0 -2px 0 #6a7783,
-  inset 3px 0 0 #232a31,inset -3px 0 0 #4a5560,1px 1px 0 #2a231766}
-.p-order .dock .stamp.leave[disabled]{background:#2c241814;color:#9c8f72;transform:none;
- box-shadow:inset 0 0 0 2px #2c241833,2px 2px 0 #2a23172e}
+ box-shadow:inset 0 0 0 2px #56636e,1px 1px 0 #2a231766}
+/* and while a cart is held it is a dead plate on the paper: no depth, nothing to press */
+.p-order .dock .stamp.leave[disabled]{background:#cdc3a6;color:#8b8169;opacity:1;transform:none;
+ box-shadow:inset 0 0 0 2px #bcb193}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
