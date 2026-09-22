@@ -1,9 +1,10 @@
 (function(G){
-/* There are no audio files in this build - every sound is synthesised here, so a volume
-   control is a gain node and nothing more. Three stages sit between an oscillator and the
-   speakers: the voice's own envelope, the bus it belongs to (music or effects), and one
-   master. The player owns the two buses; the master stays at unity and exists so a later
-   ducking or fade has somewhere to live. Levels are presentation preferences, so they are
+/* Two sources reach one mixer. The material cues play a short recorded object from this
+   build's own dist/ui/assets/audio; everything else is synthesised here. Either way a volume
+   control is a gain node and nothing more: three stages sit between a voice and the speakers -
+   the voice's own envelope, the bus it belongs to (music or effects), and one master. The
+   player owns the two buses; the master stays at unity and exists so a later ducking or fade
+   has somewhere to live. Levels are presentation preferences, so they are
    read from account.settings and default at the audio layer when a save predates them.
 
    UI_UX_v2.8 §DECISION / PHASE AUDIO is served by widening this same engine, not by adding a

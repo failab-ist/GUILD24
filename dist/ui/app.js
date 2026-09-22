@@ -28,6 +28,16 @@ const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;x.cost=st.cost;}}return [...m.values()];};
 function toast(msg){$('#toast').textContent=msg;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
 function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind);}
+/* UI_UX_v2.8 §NIGHT OUTCOME AUDIO. The Outcome is what the cue says, always. There are two ways
+   a result becomes the visible one - the final departure lands on result 0, and 다음 advances to
+   the next - and both go through here, so neither can drift into a generic return cue. */
+const nightCue=r=>r.outcome==='사망'?'death':r.outcome==='중상'?'severe':r.outcome==='부상'?'injury'
+ :r.outcome==='퇴각'?'retreat':r.outcome==='대성공'?'great':'return';
+/* The life-saving accent lands BEHIND its own Outcome cue, never instead of it, so a rescued
+   퇴각 still reads as a 퇴각. It appears only where the result itself carries the proof, so
+   nothing that was not already resolved can be inferred from it. */
+function nightSound(result){if(!result)return;sound(nightCue(result));
+ if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
@@ -1568,16 +1578,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   anchorOffer(key,y0);break;}
  case'confirm-order':game.confirmOrder();sound('order');render();break;
  
- case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();const result=s.results[s.nightCursor];
-  /* UI_UX_v2.8 §NIGHT OUTCOME AUDIO. The Outcome is what the cue says, always. A success that
-     happened to find something or to move a Stat used to be answered by a discovery / level cue
-     INSTEAD of its Outcome, which let a 퇴각 and a plain return sound alike while a find spoke
-     over both. Those two cues are gone: the result panel already names what was found. */
-  if(result){sound(result.outcome==='사망'?'death':result.outcome==='중상'?'severe':result.outcome==='부상'?'injury':result.outcome==='퇴각'?'retreat':result.outcome==='대성공'?'great':'return');
-  /* The life-saving accent lands BEHIND its own Outcome cue, never instead of it, so a rescued
-     퇴각 still reads as a 퇴각. It appears only where the result carries the proof, so nothing
-     that was not already resolved can be inferred from it. */
-   if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);}break;
+ case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();
+  nightSound(s.results[s.nightCursor]);break;
  case'event-seen':setModal(null);render();break;
  case'event-again':sound('ui');setModal('event');break;
  case'gates':sound('ui');setModal('gates');break;
@@ -1601,7 +1603,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
   break;}
  case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}render();break;}
- case'depart':game.depart();selected=null;render();sound(s.phase==='night'?'return':'depart');break;
+ /* The last departure of the day IS the entry to NIGHT, and it lands on result 0 already
+    displayed - so it owes that result its own Outcome cue. It used to play the generic return
+    cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
+    return until the player pressed 다음. */
+ case'depart':game.depart();selected=null;render();
+  if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
  case'reroll':game.reroll();sound('spend');render();break;
  case'stock':sound('ui');setModal('stock');break;
@@ -1612,7 +1619,11 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'codex-tab':codexTab=id;decoPending=null;sound('ui');renderModal();break;
  case'help':sound('ui');setModal('help');break;
  case'settings':sound('ui');setModal('settings');break;
- case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound();render();break;
+ /* §AUDIO HIERARCHY: Settings is Utility. Unmuting used to answer with the default cue, which
+    is the SALE register - the loudest thing in the build, for a control that sold nothing. The
+    quiet utility click confirms the switch instead; muting stays silent on its own, because
+    sync() has already disabled playback by the time the cue is asked for. */
+ case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();break;
  case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation')return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
