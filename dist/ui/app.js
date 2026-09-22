@@ -849,9 +849,14 @@ function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.leng
    is the flex row it was duplicating. */
 function orderScreen(){
  const cart = game.cartTotal();
+ /* UI_UX §GAME-LIKE INTERACTION LANGUAGE: committing the order is the form's own approval
+    stamp, so the control carries the same GUILD24 seal the 발주서 head carries; leaving the
+    desk is the other kind of action and takes the steel `.leave` plate instead. */
  return stage('order','발주','',orderForm(),
-  (cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
-  +'<button class="stamp" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
+  (cart?'<button class="stamp" data-action="confirm-order" aria-label="발주 '+fmt(cart)+'G 확정">'
+    +'<i class="wax" aria-hidden="true">'+Scene.seal(26,'#39434c')+'</i>'
+    +'<span>발주 '+fmt(cart)+'G · 확정</span></button>':'')
+  +'<button class="stamp leave" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  return '<div class="clip"></div><div class="form">'
@@ -1311,17 +1316,23 @@ function bossRevealStage(){const s=game.run;if(!s?.bossReveal)return null;
 
 /* Boss art is a game object here, not an icon beside a card (UI_UX). The decision the
    reveal leads into stays above the fold on a phone, so the art sits under the facts. */
+/* UI_UX §GAME-LIKE INTERACTION LANGUAGE: the record's own filing line, so the report reads as
+   a filed document rather than a card. It is built only from the Day and the fixed department
+   name - never the Boss, the Trait or the Final state - so a beat cannot leak what its own
+   reveal has not disclosed yet. */
+function bossFiled(){return '<p class="filed"><span>길드 조사부</span><b>DAY '
+ +String(game.run.day).padStart(2,'0')+'</b></p>';}
 function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bossRevealStage();
  const art=Scene.bossArt(s.bossId,s.day,s.sealBreakCount);
  const plate=art?'<figure class="boss-art"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'';
  if(stage==='final'){const d=s.final||s.dungeons[0];
-  return '<div class="boss-reveal final"><p class="lede">'+E(c.final.intro)+'</p>'
+  return '<div class="boss-reveal final">'+bossFiled()+'<p class="lede">'+E(c.final.intro)+'</p>'
    +'<div class="fams">'+(d.families||[]).map(id=>{const f=D.dungeonBy[id];
      return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+E(f.name)+'</b>'
       +hazardList(D.familyTiers[id][1])+'</article>';}).join('')
    +'</div>'+plate+'</div>';}
  if(stage==='d15'){const [name,lines]=c.d15.trait[s.bossId];
-  return '<div class="boss-reveal d15"><p class="lede">'+E(c.d15.intro)+'</p>'
+  return '<div class="boss-reveal d15">'+bossFiled()+'<p class="lede">'+E(c.d15.intro)+'</p>'
    +'<h3 class="boss-name">'+E(b.name)+'</h3>'
    +'<p class="trait-name">특성 — '+E(name)+'</p>'
    +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>'
@@ -1330,26 +1341,33 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
     disclose nothing new about the Boss, so they carry the small identity portrait rather than
     the full art. Neither draws anything from the run stream. */
  if(stage==='d10'||stage==='d20'){const t=stage==='d10'?c.d10:c.d20;
-  return '<div class="boss-reveal '+stage+'">'
+  return '<div class="boss-reveal '+stage+'">'+bossFiled()
    +(art?'<figure class="boss-id"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'')
    +'<p class="lede">'+E(t.line.replace('{보스명}',b.name))+'</p>'
    +'<p class="next-report">'+E(t.next)+'</p></div>';}
  /* SA-Q47 / BOSS_v2.8 §D0: investigation only - no Boss identity, no art. That is D5's beat. */
- if(stage==='d0')return '<div class="boss-reveal d0"><p class="lede">'+E(c.d0.line)+'</p></div>';
- return '<div class="boss-reveal d5"><p class="lede">'+E(c.d5.sub)+'</p>'
+ if(stage==='d0')return '<div class="boss-reveal d0">'+bossFiled()+'<p class="lede">'+E(c.d0.line)+'</p></div>';
+ return '<div class="boss-reveal d5">'+bossFiled()+'<p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
 
 function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';document.body.style.overflow='';return;}
  const hold=holdFocus(root);
  if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
- let title='',body='',footer='',narrow=false;const s=game.run;
+ let title='',body='',footer='',narrow=false,doc='';const s=game.run;
+ /* UI_UX §GAME-LIKE INTERACTION LANGUAGE. A Boss beat is not the utility drawer the modal
+    shell was written to be - it is a guild investigation record, so the shell takes its one
+    document variant here and the report becomes the screen rather than a card stack inside a
+    panel. The acknowledgement is the approval seal pressed on that record (`.approve`, the
+    existing Scene.seal in the gate's ink), not a filled bar across the bottom. 닫기 stays the
+    plain utility control the same section says it may stay. */
  if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
-  title=c[stage==='final'?'final':stage].header;
+  const k=stage==='final'?'final':stage;
+  title=c[k].header;
   body=bossReveal();
-  /* the gate's own accent, not the universal green primary (UI_UX §PHASE VISUAL LANGUAGE) */
-  footer=btn(c[stage==='final'?'final':stage].button,'boss-seen','stamp gate');
-  narrow=stage!=='final';}
+  footer=btn('<i class="wax" aria-hidden="true">'+Scene.seal(34,'#8a2f26')+'</i><span>'+E(c[k].button)+'</span>',
+   'boss-seen','approve','aria-label="'+E(c[k].button)+'"');
+  narrow=stage!=='final';doc='dossier';}
  else if(modal.startsWith('stat:')){
   const k=modal.split(':')[1], n=game.current();
   if(n){
@@ -1381,7 +1399,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
+ root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
     request is consumed here: a later redraw of the same panel must not keep yanking the
     player back to it while they read something else. */
