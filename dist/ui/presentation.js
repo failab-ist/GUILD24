@@ -72,8 +72,14 @@ function returning(n){if(!n.introduced||n.newToday||!n.records.length)return nul
    they cannot contradict each other. Nothing here decides anything: the resolution has
    already happened and this only describes it. Kept in the presentation module rather
    than in the screen so the whole outcome matrix is testable without a browser. */
-function nightTone(r){return r.outcome==='사망'?'gone':r.outcome==='중상'?'severe':
- ['부상','퇴각'].includes(r.outcome)?'hurt':r.outcome==='대성공'?'great':'safe';}
+/* UI_UX §PER-PHASE APPLICATION RULES (NIGHT): the six outcomes may not read as one card with
+   one word swapped, so each one owns its tone. 퇴각 and 부상 shared `hurt` and were therefore
+   the same beat twice - a withdrawal that cost nothing was coloured like an injury. 퇴각 is its
+   own `pull` (came out, unhurt, unfinished) and 부상 keeps the ember. A proven rescue keeps the
+   recovery accent §NIGHT RESULT PRESENTATION allows, since the label already reads 위기에서 생환. */
+function nightTone(r){return r.outcome==='사망'?'gone':
+ r.rescued?'saved':r.outcome==='중상'?'severe':
+ r.outcome==='부상'?'hurt':r.outcome==='퇴각'?'pull':r.outcome==='대성공'?'great':'safe';}
 /* A rescue is never dressed up as an ordinary success, and never as a death. */
 function nightVerdict(r){return r.rescued&&r.outcome!=='death'?'위기에서 생환':r.outcome;}
 function nightHappened(r){

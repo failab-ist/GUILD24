@@ -574,10 +574,15 @@ function beat(r){
  /* SA-Q09: the character's own line is the temporary SALE-style balloon (speech(n)), never a
     permanent blockquote - a routine return and a rescue both get to speak, not only the
     "heavy" ones, and the line goes away on its own instead of sitting on the card forever. */
+ /* UI_UX §PER-PHASE APPLICATION RULES (NIGHT): the Outcome is the beat's visual anchor, so it
+    leads the record at its full width instead of sitting in the narrow column beside the
+    portrait, where the art and the balloon outranked it. The balloon anchors to `.stand-in`
+    now, so it still may overlap the character and can no longer reach the Outcome. */
  return '<article class="beat '+rank+' t-'+tone+(heavy?'':' quiet')+'">'
+ +'<p class="verdict">'+E(verdict)+'</p>'
  +'<div class="stand-in">'
   +speech(n)+portrait(n,150,'returner')
-  +'<div class="who"><p class="verdict">'+E(verdict)+'</p>'
+  +'<div class="who">'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
    +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
    +(r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
@@ -587,9 +592,13 @@ function beat(r){
     sold Item mattered, ONLY when DUNGEON_HAZARD's RESULT-PROOF actually proved it - never a
     second name for the Outcome sentence, and never competing with it. */
  +(hero?'<p class="hero">'+E(hero)+'</p>':'')
+ /* UI_UX §NIGHT LAYOUT information order: Outcome -> proven sold-Item impact -> Level/Stat ->
+    Fatigue -> EXP/Wallet. What the Player's own product did was printed AFTER the change
+    tokens, so the cause of the result read after the numeric log it explains. */
+ +supplyNote(r)
  +(why?'<p class="why"><i aria-hidden="true"></i>'+E(why)+'</p>':'')
  +'<div class="changed">'+changedRows(r)+'</div>'
- +supplyNote(r)+'</article>';}
+ +'</article>';}
 // Importance decides how much copy a beat spends, never how big the adventurer is
 // (UI-Q31). Presentation owns the rule so screen and tests share it.
 const weighty=r=>Presentation.nightWeight(r);

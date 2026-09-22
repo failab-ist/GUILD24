@@ -856,16 +856,22 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .beat .say{left:14px;top:8px;bottom:auto;max-width:calc(100% - 28px)}
 .beat .say:after{top:100%;bottom:auto;left:min(22vw,95px);
  border:9px solid transparent;border-top-color:var(--paper);border-right:0;border-bottom:0}
-.stand-in{display:flex;align-items:flex-end;gap:14px;margin-bottom:16px}
+/* the balloon anchors to the figure's own row, so it may overlap the character (UI_UX §NIGHT
+   LAYOUT) and can never reach the Outcome line that now leads the beat */
+.stand-in{position:relative;display:flex;align-items:flex-end;gap:14px;margin-bottom:16px}
 /* One NPC size for every outcome. Importance changes how much copy a beat spends, the
    quote, the change tokens and the tone — never how big the adventurer is. */
 .pfp.returner{width:min(44vw,190px);height:min(44vw,190px);
  filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 14px #ffd79a3d)}
 .beat.quiet .stand-in{gap:12px;margin-bottom:12px}
 .beat .who{flex:1 1 auto;min-width:0;padding-bottom:4px}
-.verdict{font:500 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
- color:var(--tone,#e8d9b0);text-shadow:2px 2px 0 #0000008c;margin-bottom:8px;
- padding-bottom:7px;box-shadow:inset 0 -4px 0 var(--tone,#e8d9b0)}
+/* THE OUTCOME. It is the beat's primary visual anchor, so it leads the record across its full
+   width with the tone rule under it - the record's own headline, not a label in the column
+   beside the portrait. Each outcome carries its own tone (see .t-* below), so two different
+   results can never read as one card with the word swapped. */
+.verdict{display:block;font:500 40px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
+ color:var(--tone,#e8d9b0);text-shadow:2px 2px 0 #0000008c;margin-bottom:14px;
+ padding-bottom:9px;box-shadow:inset 0 -4px 0 var(--tone,#e8d9b0)}
 .beat.quiet .verdict{font-size:26px;padding-bottom:5px;box-shadow:inset 0 -3px 0 var(--tone,#e8d9b0)}
 /* D-21. Six outcomes were told in two volumes, so 부상 shouted as loudly as 사망. The everyday
    returns - 성공 / 퇴각 / 부상 - share one voice; 대성공 / 중상 / 사망 and a rescue are raised,
@@ -877,11 +883,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .beat .who h3{font:600 19px/1.25 var(--ui);color:#f2e7cd}
 .beat .place{font:400 13px/1.4 var(--ui);color:#8f94a6}
 .beat .route{margin-top:4px;font:400 13px/1.4 var(--ui);color:var(--gold)}
+/* one tone per outcome, read as a run: great -> safe -> pull -> hurt -> severe -> gone, with the
+   proven rescue on its own recovery accent. 퇴각 used to share the injury ember. */
 .t-great{--tone:#f0cd72}
 .t-safe{--tone:#9fd6a8}
+.t-pull{--tone:#7f9aa8}
 .t-hurt{--tone:#e0925a}
 .t-severe{--tone:#d1584b}
 .t-gone{--tone:#cfd3dd}
+.t-saved{--tone:#6fc7c0}
 /* WHAT HAPPENED, then WHY chalked on the slate */
 .beat .what{font:400 17px/1.55 var(--ui);color:#eee3c6;margin-bottom:12px}
 .beat.quiet .what{font-size:15px}
