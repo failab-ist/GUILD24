@@ -76,7 +76,7 @@ Deterministic count/budget/special-slot changes may expose their source.
 
 USER_APPROVAL_DATE=2026-09-20
 
-The following inherited probability-only / PASS3 event mechanics are now exact v2.8 Design Truth.
+The following Event mechanics are exact v2.8 Design Truth.
 
 ### 몬스터 범람
 
