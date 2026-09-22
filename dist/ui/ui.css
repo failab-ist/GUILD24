@@ -718,20 +718,29 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    so the store's own title stood in a void and the sheet read as a web panel dropped on black
    - the single loudest gap against the v2.8 quality pair, where the same composition sits on an
    owned plane.
-   NARROW FIX: that plane was still only a falloff over a weave - the screen read as an empty
-   dark background with a brown sheet on it. The store the player is about to open is now
-   shipped art in this repository, so the Opening stands in that store, shut and unlit, hours
-   before the day starts. Reusing owned art beats stacking more CSS layers (§ASSET / SVG
-   QUALITY GATE escalation: existing repository art before bespoke work). The veil over it is
-   what makes it a closed store rather than a second Morning: cold, low, and dark enough that
-   the preparation sheet is still the only lit object on the screen. */
-.p-start{background-color:#0f0b08;
- background-image:linear-gradient(180deg,#0b0907d1 0,#0f0b08b8 24%,#0b0907e3 56%,#080605 100%),
-  radial-gradient(148% 92% at 50% 2%,#3d2c1c47 0,#00000000 58%),
-  url('assets/presentation/morning/store-bg-wide.png'),var(--tex-deck);
- background-size:auto,auto,auto 26%,12px 12px;
- background-position:0 0,0 0,50% 0,0 0;
- background-repeat:no-repeat,no-repeat,no-repeat,repeat}
+   NARROW FIX: that plane was still only a falloff over a weave. The first asset pass then put
+   the store behind the sheet, but framed into a 26%-tall band at the top of the screen - which
+   is the same mistake MORNING was failed for, one room cropped down to a strip, and it read as
+   a picture pinned above a panel rather than as a place.
+   USER 2026-09-23: the Opening gets what MORNING got. The same store, the same two authored
+   framings, owned by the stage and covering it - and the player stands in the shop they are
+   about to open, hours before the day starts, with the lights still off.
+   What keeps it the OPENING and not a second MORNING is the light, not the crop. A cold veil
+   drops the whole room a long way down, and one warm pool is let back in at the window, which
+   is the only thing lit in a closed store at dawn. The preparation sheet stays the brightest
+   object on the screen by a distance.
+   At every shipped width the stage is narrower than the file it carries, so the crop is
+   horizontal only: the authored ceiling, wall, counter and floor are all in the read, and
+   nothing is stretched. */
+.p-start{background-color:#070605;
+ background-image:radial-gradient(38% 9% at 50% 11%,#ffe6b83d 0,#ffe6b814 52%,#00000000 78%),
+  radial-gradient(74% 34% at 52% 41%,#ffd6a02e 0,#ffd6a00f 46%,#00000000 72%),
+  linear-gradient(180deg,#0706058c 0,#09070699 24%,#0a0806b3 58%,#060504cc 100%),
+  url('assets/presentation/morning/store-bg-phone.png');
+ background-size:auto,auto,auto,cover;
+ background-position:0 0,0 0,0 0,50% 50%;
+ background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
+ background-origin:content-box}
 .opening{position:relative;display:grid;justify-items:center;gap:8px;padding:34px 16px 14px;text-align:center}
 /* The identity sits on the plane instead of floating over it: one hard pixel drop, the value
    the signage faces elsewhere already use. No blur - §EDGE / MATERIAL RULES. */
@@ -1372,15 +1381,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-start .opening-title{font-size:48px}
  .p-start .opening-branch{padding:6px 16px 5px;letter-spacing:.24em}
  .p-start .opening:after{width:min(360px,60%)}
- /* the plane gets a floor so the sheet stands on something instead of floating in the dark */
- .p-start{background-image:linear-gradient(0deg,#0a0705 0 14%,#00000000 14%),
-  linear-gradient(0deg,#6b502959 0 calc(14% + 2px),#00000000 calc(14% + 2px)),
-  linear-gradient(180deg,#0b0907f2 0,#0f0b08cc 36%,#0b0907e3 72%,#080605 100%),
-  radial-gradient(148% 92% at 50% 2%,#3d2c1c47 0,#00000000 58%),
-  url('assets/presentation/morning/store-bg-wide.png'),var(--tex-deck);
-  background-size:auto,auto,auto,auto,cover,12px 12px;
-  background-position:0 0,0 0,0 0,0 0,50% 40%,0 0;
-  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,repeat}
+ /* the wide framing of the same shut store, and its window sits lower in frame than the
+    portrait one's, so the pool that is let back in moves with it */
+ .p-start{background-image:radial-gradient(62% 40% at 50% 49%,#ffd6a02e 0,#ffd6a00f 46%,#00000000 72%),
+  linear-gradient(180deg,#070605cc 0,#09070694 26%,#0a0806a8 58%,#060504c4 100%),
+  url('assets/presentation/morning/store-bg-wide.png');
+  background-size:auto,auto,cover;
+  background-position:0 0,0 0,50% 50%;
+  background-repeat:no-repeat,no-repeat,no-repeat}
  .modal.narrow:has(.welcome-band) .modal-body{padding:22px 22px 24px}
  .modal.narrow:has(.welcome-band) .modal-header{padding:18px 22px 14px}
  .modal.narrow:has(.welcome-band) .modal-footer{padding:16px 22px 18px}
