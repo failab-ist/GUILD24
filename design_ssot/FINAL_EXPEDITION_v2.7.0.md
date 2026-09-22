@@ -18,15 +18,12 @@ explicitly freezes a Final-specific v2.7 rule.
 
 This patch moves Family/Hazard disclosure to D25, replaces Final Hazard aggregation/power penalty, and makes D30 preparation reuse the familiar two-slot shop handling while overriding ordinary end-of-Run price negotiation/refusal.
 
-The following inherited v2.5 text is explicitly stale and does not remain live v2.7 truth:
-- D30 generation / first disclosure of the Final Family Pair
-- `Final Hazard Scale = 4.6` as a standalone Final formula
-- Individual Final Power using `환경피해 × 0.35`
-- Playtest text that evaluates the old `환경피해 × 0.35` path
-- Implementation guardrail wording that says to reuse the old Final Power formula unchanged
-- any inherited QA/ownership wording that assumes Family information first appears on D30
-- any inherited Final-preparation presentation that jumps directly from party selection/preparation into resolution without the current v2.7 Final preparation step
-- any prior v2.7 wording that keeps ordinary 50/100/150 Final price choice or Final refusal RNG
+Current Final exclusions from the inherited base chain:
+- no D30 generation / first disclosure of the Final Family Pair
+- no standalone `Final Hazard Scale = 4.6` formula
+- no Individual Final Power path using `환경피해 × 0.35`
+- no Final-preparation flow that skips the current preparation step
+- no ordinary 50/100/150 Final price choice or Final refusal RNG
 
 When this v2.7 owner is inherited by the current project SSOT, use the rules below only together with current routed overrides from `SPEC_INDEX_v2.8.0.md`.
 Inherited cross-spec references to older versioned filenames are not routing authority.
@@ -62,7 +59,7 @@ Ordering:
 - Final Lock occurs
 - one Final resolution occurs
 
-Any stale D30 generation path that can produce a different Pair/Pool is invalid.
+No D30 generation path may produce a different Pair/Pool.
 
 ## D30 PLAYER FLOW — EXACT
 
@@ -192,7 +189,7 @@ Tier = T2
 
 Exact threat ownership -> `DUNGEON_HAZARD_v2.8.0.md`.
 No separate Final-only Hazard defense table.
-No standalone inherited `scale=4.6` path is used in v2.7 Final resolution.
+No standalone `scale=4.6` path is used in Final resolution.
 
 ## FINAL HAZARD AGGREGATION — v2.7 BASELINE
 
@@ -208,7 +205,7 @@ Final Hazard Penalty
 = FinalMeanHazardGap × 1.70
 ```
 
-This replaces the prior aggregate-gap penalty path for Final only.
+Final uses this mean-gap penalty path.
 
 Reasoning boundary:
 - two-Family combinations may contain different Hazard counts
@@ -271,9 +268,7 @@ Full-run/Final simulation must record:
 FIRE's ordinary `higher Combat Power` second axis is not automatically inserted as a new Hazard.
 If Final Family Pair itself becomes a larger RNG difficulty source than intended Boss differentiation, treat it as a `BALANCE FINDING` in FINAL_EXPEDITION and make the smallest owner-level adjustment after approval.
 
-## v2.7 ACCEPTANCE OVERRIDES
-
-Where inherited Final QA/playtest language conflicts, use these checks.
+## CURRENT FINAL ACCEPTANCE
 
 ### FINAL-Q70 — D25 DISCLOSURE / D30 REUSE
 PASS:
@@ -285,7 +280,7 @@ PASS:
 ### FINAL-Q71 — HAZARD THREAT SOURCE
 PASS:
 - each Final Hazard uses current D30/T2 threat and defense/gap truth from `DUNGEON_HAZARD_v2.8.0.md`
-- no standalone old `scale=4.6` Final path survives
+- no standalone `scale=4.6` Final path exists
 
 ### FINAL-Q72 — MEAN GAP PENALTY
 For each participant:
@@ -295,7 +290,7 @@ FinalMeanHazardGap = sum(gaps) / hazardCount
 FinalHazardPenalty = FinalMeanHazardGap × 1.70
 ```
 
-No inherited `환경피해 ×0.35` path contributes in parallel.
+No `환경피해 ×0.35` path contributes in parallel.
 
 ### FINAL-Q73 — INDIVIDUAL FINAL POWER
 PASS exact:
