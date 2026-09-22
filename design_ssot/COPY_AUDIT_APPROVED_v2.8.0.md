@@ -1359,17 +1359,11 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ---
 
-# 18. NPC DIALOGUE — SALE 전체 재수정안
+# 18. NPC DIALOGUE — SALE
 
 ## 18-1. 100% / 정가 수락
 
-**기존**
-> “이걸로 주세요.”  
-> “네, 담아 주세요.”  
-> “이 정도면 적당하네요.”  
-> “그럼 하나만.”
-
-**수정안**
+**현재**
 > “이걸로 주세요.”  
 > “네, 하나 주세요.”  
 > “이 정도면 괜찮네요.”  
@@ -1395,13 +1389,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 18-2. 50% 수락
 
-**기존**
-> “다녀와서 또 들를게요.”  
-> “이 가격이면 안 살 이유가 없죠.”  
-> “사장님 손해 아니에요?”  
-> “오늘은 운이 좋네요.”
-
-**수정안**
+**현재**
 > “이 가격이면 안 살 이유가 없죠.”  
 > “오늘은 덕 좀 보네요.”  
 > “이렇게 받아도 되는 거예요?”  
@@ -1427,13 +1415,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 18-3. 150% / 바가지 수락
 
-**기존**
-> “가격이 좀 올랐네요.”  
-> “…뭐, 급하니까요.”  
-> “이번만입니다.”  
-> “원래 이 값이었나요?”
-
-**수정안**
+**현재**
 > “비싸긴 한데, 지금은 필요하네요.”  
 > “하… 급하니까 살게요.”  
 > “이번만입니다.”  
@@ -1459,13 +1441,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 18-4. 가격 거절
 
-**기존**
-> “그 가격에는 못 사겠어요.”  
-> “그건 좀 부담스럽네요.”  
-> “다음에 여유 있을 때 살게요.”  
-> “조금만 더 싸면 좋을 텐데.”
-
-**수정안**
+**현재**
 > “그 가격에는 못 사겠어요.”  
 > “너무 비싸네요.”  
 > “그건 좀 부담스럽습니다.”  
@@ -1484,13 +1460,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 18-5. 필요도 거절
 
-**기존**
-> “그건 오늘 필요 없어요.”  
-> “오늘 가는 데선 쓸 일이 없어서요.”  
-> “그건 딱히 안 급해요.”  
-> “그건 다음에 볼게요.”
-
-**수정안**
+**현재**
 > “그건 오늘 필요 없어요.”  
 > “이번 원정엔 안 쓸 것 같아요.”  
 > “그건 딱히 안 급합니다.”  
@@ -1509,13 +1479,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 18-6. 일반 선택 거절
 
-**기존**
-> “이번엔 안 살게요.”  
-> “조금 더 생각해 볼게요.”  
-> “오늘은 여기까지 할게요.”  
-> “음… 아니요, 괜찮아요.”
-
-**수정안**
+**현재**
 > “이번엔 안 살게요.”  
 > “조금 더 생각해 볼게요.”  
 > “오늘은 여기까지 할게요.”  
@@ -1531,17 +1495,11 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ---
 
-# 19. NPC DIALOGUE — NIGHT 전체 재수정안
+# 19. NPC DIALOGUE — NIGHT
 
 ## 19-1. 일반 성공
 
-**기존**
-> “오늘도 무사히요.”  
-> “내일도 열죠?”  
-> “별일 없었습니다.”  
-> + 일부 `supplied / shaken` 문장이 결과보다 먼저 선택됨
-
-**수정안**
+**현재**
 > “다녀왔습니다. 오늘은 괜찮았어요.”  
 > “생각보다 수월했습니다.”  
 > “무사히 끝냈습니다.”  
@@ -1563,10 +1521,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 19-2. 대성공
 
-**기존**
-> 별도 전용 Pool 없음
-
-**수정안**
+**현재**
 > “오늘은 제대로 해냈습니다.”  
 > “생각보다 훨씬 잘 풀렸어요.”  
 > “오늘 성과는 꽤 컸습니다.”  
@@ -1582,13 +1537,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 19-3. 퇴각
 
-**기존**
-> “일단 살고 봐야죠. 내일 다시 올게요.”  
-> “오늘은 아니다 싶어서 돌아섰어요.”  
-> “무리했으면 큰일 날 뻔했어요.”  
-> “길만 보고 왔습니다.”
-
-**수정안**
+**현재**
 > “오늘은 아니다 싶어서 돌아섰어요.”  
 > “무리했으면 큰일 날 뻔했네요.”  
 > “일단 살아서 돌아왔습니다.”  
@@ -1607,13 +1556,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 19-4. 부상
 
-**기존**
-> “좀 다쳤지만, 살아 돌아왔어요.”  
-> “이 정도는 다친 축에도 안 들어요.”  
-> “내일은 좀 쉬엄쉬엄 갈게요.”  
-> “생각보다 안쪽이 사납더라고요.”
-
-**수정안**
+**현재**
 > “좀 다쳤지만, 돌아오긴 했습니다.”  
 > “생각보다 안쪽이 사납더군요.”  
 > “오늘은 좀 아프네요.”  
@@ -1632,12 +1575,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 19-5. 중상
 
-**기존**
-> “며칠만 쉬고 올게요. 제 자리 남겨 둬요.”  
-> “당분간은 못 나갈 것 같아요.”  
-> “다음에 올 때는 멀쩡한 얼굴로 올게요.”
-
-**수정안**
+**현재**
 > “당분간은 못 나갈 것 같습니다.”  
 > “이번엔 제대로 쉬어야겠네요.”  
 > “며칠은 누워 있어야 할 것 같아요.”  
@@ -1652,12 +1590,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 19-6. 사망 위기 회피
 
-**기존**
-> “사장님, 이거 없었으면 못 돌아왔어요.”  
-> “오늘은 진짜 아슬아슬했어요.”  
-> “그거 사길 잘했다는 생각만 했어요.”
-
-**수정안**
+**현재**
 > “사장님이 챙겨준 거 없었으면 못 돌아왔어요.”  
 > “오늘은 진짜 그 보급이 살렸습니다.”  
 > “마지막 순간에 챙겨 간 게 버텨줬어요.”  
@@ -1671,12 +1604,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 19-7. 귀환/구조 효과
 
-**기존**
-> “챙겨 간 보급이 귀환을 도왔어요.”  
-> “가방에 있던 게 마지막에 일했어요.”  
-> “돌아오는 길은 사장님이 열어 준 셈이에요.”
-
-**수정안**
+**현재**
 > “사장님이 챙겨준 게 마지막에 저를 돌려보냈어요.”  
 > “정말 끝인 줄 알았는데, 그 물건이 귀환시켰습니다.”  
 > “가방에 넣어 간 게 마지막에 제대로 작동했어요.”  
@@ -1690,12 +1618,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 19-8. 성공 + 성장
 
-**기존**
-> “조금은 익숙해진 것 같아요.”  
-> “지난번보다 손에 붙네요.”  
-> “이제 어디를 봐야 할지 알겠어요.”
-
-**수정안**
+**현재**
 > “조금은 익숙해진 것 같아요.”  
 > “지난번보다 손에 붙네요.”  
 > “이제 어디를 봐야 할지 알겠어요.”  
@@ -1709,16 +1632,11 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ---
 
-# 20. DEATH NARRATION — 사망이 분명하게 느껴지는 안
+# 20. DEATH NARRATION
 
 ## 20-1. 거래 이력 있음
 
-**기존**
-> 마지막 영수증만 카운터에 남았다.  
-> 여기서 산 것들은 끝내 다 쓰이지 못했다.  
-> 거래는 이미 다 끝나 있었다.
-
-**수정안**
+**현재**
 > 마지막 영수증만 남았다. 그는 원정에서 돌아오지 못했다.  
 > 오늘의 거래가 그의 마지막 거래가 됐다.  
 > 계산대를 나선 뒤 다시 돌아오지 않았다.  
@@ -1730,12 +1648,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 20-2. 이전 방문 이력 있음
 
-**기존**
-> 수첩에 남은 건 지난 원정 기록뿐이다.  
-> 다음 줄은 비어 있다.  
-> 이름 옆에 아무것도 적히지 않았다.
-
-**수정안**
+**현재**
 > 여러 번 돌아오던 사람이, 이번 원정에서는 돌아오지 못했다.  
 > 수첩의 지난 원정 기록이 마지막 기록이 됐다.  
 > 익숙한 이름 옆에 사망 기록이 남았다.  
@@ -1747,12 +1660,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 20-3. 첫 방문 / 낯선 손님
 
-**기존**
-> 문을 열고 들어온 그날이 마지막이었다.  
-> 오늘은 돌아오지 않았다.  
-> 한 번 왔다 간 손님으로 남았다.
-
-**수정안**
+**현재**
 > 처음 들른 날이 마지막 방문이 됐다. 원정에서 돌아오지 못했다.  
 > 이름을 적은 날, 사망 기록까지 함께 남았다.  
 > 한 번 들렀고, 그날 게이트에서 목숨을 잃었다.  
@@ -1762,46 +1670,27 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ---
 
-# 21. DIALOGUE에서 삭제할 기존 Pool / 문구
+# 21. DIALOGUE REMOVED POOLS
 
 ## 21-1. supplied Primary Pool
 
-**기존**
-> “다녀왔습니다.”  
-> “오늘은 별일 없었어요.”  
-> “챙겨 간 건 잘 썼습니다.”
-
-**수정안**
+**현재**
 > **Primary Result Pool에서 삭제**
-
-**이유**
-> Item 보유 여부가 Outcome 대사를 덮지 않도록 함.
 
 ---
 
 ## 21-2. shaken Primary Pool
 
-**기존**
-> “예상하지 못한 일이 있었어요. 잠깐 쉬어야겠어요.”  
-> “오늘은 운이 안 따랐네요.”  
-> “가는 길이 생각보다 사나웠어요.”
-
-**수정안**
+**현재**
 > **Primary Result Pool에서 삭제**
-
-**이유**
-> 실제 Outcome 대사보다 먼저 선택되지 않게 함.
 
 ---
 
-# 22. STORE SUPPORT / BOSS / META 외 용어 통일
+# 22. PLAYER-FACING TERMINOLOGY
 
 ## 22-1. 유물
 
-**기존**
-> 유물
-
-**수정안**
+**현재**
 > 점포지원
 
 **적용**
@@ -1811,10 +1700,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 22-2. 생존 Stat
 
-**기존**
-> 생존
-
-**수정안**
+**현재**
 > 강인함
 
 **적용**
@@ -1824,10 +1710,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 22-3. Store Capital
 
-**기존**
-> 점포 자본 {N}G
-
-**수정안**
+**현재**
 > 점포 자본 {N}
 
 ---
