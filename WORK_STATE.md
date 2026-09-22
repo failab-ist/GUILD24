@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-22
-CURRENT_LINE: v2.8 Source adoption in progress; playtest-response batch and dialogue exposure / repeat adoption closed, re-measure / regression pass active
+CURRENT_LINE: v2.8 Source adoption in progress; playtest-response batch, dialogue exposure / repeat adoption and the Wallet re-measure amendment closed; Functional + Presentation Polish adoption active
 STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Truth
@@ -30,8 +30,8 @@ The Source has completed the first major v2.8 adoption cycles plus several playt
 The remaining adoption work is now concentrated in:
 - completed playtest-response adoption awaiting final integration merge
 - completed dialogue-pool / recent-repeat adoption awaiting final integration merge
-- targeted re-measure / regression after the behavior changes
-- approved v2.8 Functional + Presentation Polish adoption
+- completed Wallet re-measure amendment awaiting final integration merge
+- approved v2.8 Functional + Presentation Polish adoption (active)
 - final integrated adoption + functional + runtime QA before v2.8 freeze
 
 `SOURCE_ADOPTION_QA_v2.8.0.md` is a known-defect RECORD, not a live tracker. It is not edited to
@@ -145,36 +145,19 @@ through `ca120f2`, DIRECTOR review PASS; final integration merge deferred until 
 - targeted deterministic QA (incl. a forced-대성공 resolve check) + real-click browser run-loop
   smoke passed with 0 console errors
 
-## Active Task — Wallet re-measure amendment implementation
+Wallet re-measure amendment CLOSED (branch `claude/active-task-implementation-gpe6zh`,
+DIRECTOR review pending merge):
+- ordinary NPC visit income narrowed `randomInt(0,100)` -> `randomInt(0,80)`; fresh base 180,
+  Level×8, returning persistent Wallet carry, 2000 cap, failed-expedition Loot, SA-Q48 purchase
+  acceptance and SA-Q50 Deep sponsorship all left untouched
+- ECO-Q-v28-3B Wallet endpoint QA updated 0/100 -> 0/80 and re-proved (fresh/returning formula,
+  both RNG endpoints, cap, unchanged RNG draw count, failed-expedition Loot independence)
+- targeted regression suite passed; no further balance retune performed
+
+## Active Task — Functional + Presentation Polish adoption
 
 USER APPROVED / CANONICAL PROMOTED.
 
-Implement only the re-measure decision now owned by ECONOMY_ORDER_v2.8.0.md:
-
-    ordinary NPC visit income randomInt(0,100) -> randomInt(0,80)
-
-Keep unchanged:
-- Fresh base 180
-- Level ×8
-- returning persistent Wallet carry
-- 2000 cap
-- failed-expedition Loot
-- SA-Q48 purchase acceptance
-- SA-Q50 Deep sponsorship
-
-Update the exact Wallet QA endpoints from 0/100 to 0/80.
-Run the narrow deterministic Wallet QA + relevant regression suite.
-
-Do not perform another balance retune unless implementation exposes an actual mismatch.
-After DIRECTOR review, advance to Functional + Presentation Polish adoption.
-
-## Approved Queue
-
-### 1. Functional + Presentation Polish adoption
-
-USER APPROVED / CANONICAL PROMOTED.
-
-After re-measure closes without a blocking Design change:
 - adopt the current v2.8 Functional + Presentation Polish owned by UI_UX_v2.8.0.md
 - first audit the complete active Player flow for information priority, action hierarchy,
   tutorial target/copy alignment, responsive order, dead space, duplication and avoidable overflow
@@ -190,7 +173,9 @@ After re-measure closes without a blocking Design change:
 
 Do not pull the remaining large cinematic / large art-world content from the v2.9+ router.
 
-### 2. Final v2.8 integration / freeze audit
+## Approved Queue
+
+### 1. Final v2.8 integration / freeze audit
 
 After all approved adoption, re-measure and Functional + Presentation Polish work:
 - current Canonical -> Source adoption audit

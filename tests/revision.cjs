@@ -56,17 +56,18 @@ test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const
 test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','delivery'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
 test('empty provisioning cannot grind knowledge',()=>{const g=fresh();g.open();while(g.run.phase==='sell')g.depart();assert.deepEqual(g.account.knowledge,{});});
 test('same SKU bulk across separate offers; board does not change rookie level',()=>{const g=fresh();g.run.facilities=['bulk'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:2},{item:'water',price:25,quantity:2}];g.setQuantity(0,2);g.setQuantity(1,1);assert.equal(g.cartTotal(),71);g.confirmOrder();assert.equal(g.run.inventory.reduce((a,x)=>a+x.cost,0),71);const a=fresh('board-level'),b=fresh('board-level');a.run.facilities=[];b.run.facilities=['board'];assert.equal(a.addNPC().level,b.addNPC().level);});
-/* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49. Reducing the candidate pool to the
-   one NPC under test makes a weighted draw of one deterministic - it is the only thing that can
-   be selected - without needing to fight the real selection weights for a guaranteed pick. */
-test('ECO-Q-v28-3B / SA-Q49: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints, cap, and failed-expedition Loot untouched',()=>{
+/* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49, narrowed by the re-measure
+   amendment to randomInt(0,80). Reducing the candidate pool to the one NPC under test makes a
+   weighted draw of one deterministic - it is the only thing that can be selected - without
+   needing to fight the real selection weights for a guaranteed pick. */
+test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit - fresh base, returning carries existing Wallet, both RNG endpoints (0/80), cap, and failed-expedition Loot untouched',()=>{
  const g=fresh('eco-q49');
  const n=g.run.npcs[0];
  g.run.npcs=[n];
  g.addNPC=()=>null; // an unrelated Morning Event may otherwise seat a second candidate
  const originalInt=g.rng.int.bind(g.rng);
  let rolls=0;
- const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===0&&b===100){rolls++;return v;}return originalInt(a,b);};};
+ const forceRoll=v=>{g.rng.int=(a,b)=>{if(a===0&&b===80){rolls++;return v;}return originalInt(a,b);};};
 
  // A - a never-introduced NPC: Wallet = 180 + Level*8 + roll, roll forced to its 0 endpoint
  n.introduced=false;n.money=0;n.level=3;rolls=0;forceRoll(0);
@@ -76,18 +77,18 @@ test('ECO-Q-v28-3B / SA-Q49: ordinary NPC Wallet on visit - fresh base, returnin
  assert.equal(n.newToday,true,'a never-introduced NPC is a fresh visit');
  assert.equal(rolls,1,'exactly one visit-income roll for the one visited NPC - no new draw was added');
 
- // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 100 endpoint
- n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(100);
+ // B - a returning NPC carries its EXISTING Wallet forward, roll forced to its 80 endpoint
+ n.introduced=true;n.money=500;n.level=3;rolls=0;forceRoll(80);
  g.run.day=3;g.morning();
  assert.ok(g.run.queue.includes(n.id));
- assert.equal(n.money,500+3*8+100,'returning Wallet = existing Wallet + Level*8 + roll, roll forced to its 100 endpoint');
+ assert.equal(n.money,500+3*8+80,'returning Wallet = existing Wallet + Level*8 + roll, roll forced to its 80 endpoint');
  assert.equal(n.newToday,false,'an already-introduced NPC is a returning visit');
  assert.equal(rolls,1);
 
- // C - the 2000 cap still applies at the raised base/range
- n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(100);
+ // C - the 2000 cap still applies at the narrowed range
+ n.introduced=true;n.money=1990;n.level=10;rolls=0;forceRoll(80);
  g.run.day=4;g.morning();
- assert.equal(n.money,2000,'the 2000 cap is unchanged by the raised base/range');
+ assert.equal(n.money,2000,'the 2000 cap is unchanged by the narrowed range');
  g.rng.int=originalInt;
 
  // D - failed-expedition Loot is Dungeon.resolve's own computation (outcome/Day/reward only) -
