@@ -439,3 +439,41 @@ PASS:
 
 This QA is specifically allowed to catch functional layout defects discovered during the
 Presentation Polish pass even when they were not listed in an earlier SA-Q item.
+
+
+## UI-Q-v28-30 — PHASE VISUAL LANGUAGE / TRANSIENT SPEECH
+
+Run representative MORNING / ORDER / SALE / NIGHT / CLOSING / FINAL screens and Store Support on
+phone and desktop.
+
+PASS:
+- generic green is not the default primary-action treatment across phases
+- green remains readable as beneficial semantic color and may remain as store-sign/environment
+  material without becoming the universal CTA
+- MORNING reads warm store / wood / gold
+- ORDER reads paper / steel / cool frost-blue
+- SALE reads register / gold-amber while existing price-mode colors keep their own meaning
+- NIGHT reads dark / dusk
+- CLOSING reads receipt / paper / ink with restrained neutral/gold emphasis
+- FINAL keeps the existing blood / ember-red gate language
+- phase differences remain accents inside one GUILD24 component language, not separate skins
+- phase-bound overlays remain visually contextual; global management/help/settings remain neutral
+- Store Support choice/acquisition does not fall back to generic green CTA as its identity
+- semantic benefit/harm colors are unchanged
+- action hierarchy remains understandable without color alone
+
+Phone SALE speech:
+- still auto-dismisses around 3 seconds and is tap-dismissible
+- reserves no permanent height
+- does not cover the primary action
+- where it overlaps the compact customer-state strip, speech text stays fully opaque while only the
+  bubble background is approximately 88% opaque
+- underlying customer state remains visually recognizable
+- whole-element opacity is not used to make the dialogue itself faint
+
+FAIL:
+- every phase still reads as the same green-button UI
+- a new theme/skin framework is introduced for this polish
+- phase accent changes semantic benefit/harm meaning
+- transient speech is made faint by lowering the whole element opacity
+- speech becomes a persistent blocker for required SALE information
