@@ -102,7 +102,7 @@ SALE:
 NIGHT:
 - main label is 귀환 후 피로
 - detailed path available on demand
-- old 보급 회복 / 보급 완화 / 밤 피로 primary labels absent
+- 보급 회복 / 보급 완화 / 밤 피로 are absent as primary labels
 
 ## UI-Q-v28-9 — NIGHT REACTION
 
@@ -156,8 +156,8 @@ The redundant internal-accounting footnote is absent from the primary receipt.
 
 ## UI-Q-v28-14 — DECORATION ART / SETTLEMENT
 
-All previous v2.8 Decoration-art, Store Capital settlement and retired-Franchise checks remain
-active as defined by META_v2.8.0.md and CORE_RUN_v2.8.0.md.
+Decoration-art, Store Capital settlement and Franchise-retirement checks remain active as defined
+by META_v2.8.0.md and CORE_RUN_v2.8.0.md.
 
 
 ## UI-Q-v28-15 — SALE COPY DENSITY
@@ -241,7 +241,7 @@ No extra Collection UI is required.
 Using controlled states, verify every implemented live-store growth trace is derived from state that
 already exists and is already Player-knowable.
 
-At minimum cover the promoted trace families that implementation adopts:
+At minimum cover each listed trace family that is present in the implementation:
 - equipped Decoration
 - owned Store Support / facility
 - Trusted Regular presence
@@ -261,8 +261,8 @@ FAIL:
 
 ## UI-Q-v28-22 — DECISION / PHASE AUDIO
 
-Verify Audio Polish with the current audio architecture as the baseline. Reusing architecture does
-not mean retaining weak current synthesized assets.
+Verify the current audio presentation contract while reusing the owned audio architecture.
+Acceptance does not depend on a particular asset implementation.
 
 Listen on a real phone/browser to at least:
 - repeated ORDER quantity changes
@@ -333,7 +333,7 @@ PASS:
 
 ## UI-Q-v28-24 — BOSS / FINAL PRESENTATION PAYOFF
 
-Verify the promoted presentation around D0 / D5 / D10 / D15 / D20 / D25 / D30.
+Verify the current presentation around D0 / D5 / D10 / D15 / D20 / D25 / D30.
 
 PASS:
 - each cue/art treatment reveals no information earlier than its owning beat
@@ -470,8 +470,7 @@ PASS:
 - the same concept uses consistent visual semantics across phases
 - no new panel/modal is introduced when an existing surface can express the same information
 
-This QA is specifically allowed to catch functional layout defects discovered during the
-Presentation Polish pass even when they were not listed in an earlier SA-Q item.
+This QA may catch functional layout defects even when they are not covered by another current QA item.
 
 
 ## UI-Q-v28-30 — PHASE VISUAL LANGUAGE / TRANSIENT SPEECH
@@ -648,5 +647,3 @@ STORE SUPPORT FAIL:
   a game decision
 - exact implementation colour values are promoted back into Canonical without a new User decision
 
-Surfaces are adopted by the Polish Task that owns them. A Task closes only the surfaces it touched;
-the remainder is carried forward explicitly.
