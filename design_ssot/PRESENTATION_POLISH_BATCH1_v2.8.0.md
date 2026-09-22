@@ -43,6 +43,14 @@ After all three:
 If the strongest change is only colour, darker shadow, more border, one outline or tighter padding,
 the Batch is not finished.
 
+Surface order is OPENING / PRE-RUN -> STORE MANAGEMENT -> MORNING, sequential.
+EXECUTION MODEL, EVIDENCE RULES and NON-PRESENTATION REGRESSION PROOF in PRESENTATION_SYSTEM apply
+to this Batch and are not restated here.
+
+The User-provided current-vs-target pair for this Batch is
+reports/reference/quality-pair-current.jpg and reports/reference/quality-pair-target.png.
+Batch 1 surfaces are MEDIUM budget and take that pair's construction method only, never its motifs.
+
 ## OPENING / PRE-RUN
 
 Keep:
@@ -218,5 +226,11 @@ PASS requires:
 - 360 / 390 / 412 usable
 - 1024 / 1280 not tiny-phone-in-empty-space
 - no gameplay / copy / RNG / Save change
+
+PASS evidence required with the report:
+- BEFORE / AFTER pairs delivered, viewed, at one PHONE and one DESKTOP width per surface
+- npm test result
+- git diff --stat for the Batch commits
+- surfaces implemented sequentially
 
 After PASS, STOP. Do not proceed to Batch 2 without User approval.

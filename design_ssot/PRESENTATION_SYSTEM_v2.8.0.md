@@ -55,6 +55,43 @@ Rule:
     GENERIC ORNAMENT = REJECT
     REPEATED ORNAMENT WITHOUT FUNCTION = REJECT
 
+### CURRENT-VS-TARGET PAIR (User-provided, v2.8)
+
+The pair is stored as a permanent review input:
+
+```text
+reports/reference/quality-pair-current.jpg    CURRENT runtime
+reports/reference/quality-pair-target.png     TARGET quality
+```
+
+Review input only. Not a shipped asset, not a skin, not a motif library.
+
+What changes between CURRENT and TARGET while composition stays identical:
+
+```text
+FRAME       browser-default box          -> outer edge + inner seam, aligned corner detail
+MATERIAL    flat single fill             -> tiled surface texture with local light
+CONTROL     rounded gradient web button  -> angular face, hard depth, inner bevel, symmetric accent
+TITLE       centred text                 -> seated plate / banner with one supporting rule
+ROWS        plain text lines             -> exact repeated inset, label / value baseline
+STAGE       empty black                  -> owned background plane
+COHERENCE   ad hoc per-element edges     -> one shared edge grammar across every object
+```
+
+What does not change:
+
+```text
+block order, information items, Primary / Secondary relationship, modal ownership,
+single vertical read on PHONE
+```
+
+The pair is a HIGH-budget surface. Other surfaces inherit its CONSTRUCTION METHOD
+- frame build, edge grammar, control solidity, material finish -
+and never its motif set.
+
+Demon / rose / candle / gothic ornament applied to a MEDIUM or LOW surface is generic ornament and
+is rejected regardless of execution quality.
+
 ## COMPOSITION LOCK
 
 Presentation Upgrade does not mean re-layout by default.
@@ -325,6 +362,42 @@ Minimal wrapper/class changes are allowed only where CSS cannot reliably target 
 No new UI framework, theme engine, JS presentation framework, large asset wave, or decorative markup
 layers that pseudo-elements already solve.
 
+## EXECUTION MODEL
+
+Batch surfaces share Source files.
+
+Required:
+- implement one surface at a time, sequentially, in the order the active Batch lists
+- do not parallelise surface implementation across concurrent workers
+
+Parallel surface implementation is rejected for two reasons:
+- concurrent edits to the same Source file
+- divergent frame / seam / depth grammar per surface, which is the exact defect this system exists
+  to remove
+
+Parallelism is allowed for read-only evaluation only.
+
+Before editing a surface, extract that surface's numeric construction clauses
+- outer edge, inner seam, cast depth, press travel, inset rhythm, and stated prohibitions such as
+  no blur or no second frame -
+into an explicit checklist, then verify the final diff against it.
+
+The checklist is a floor, not an acceptance condition.
+Meeting every number while the runtime screenshot still reads as web UI is still a FAIL.
+
+## NON-PRESENTATION REGRESSION PROOF
+
+"Presentation only" is an evidence claim, not a declaration.
+
+Every Presentation Batch report carries:
+- npm test result
+- npm run qa:visual result when the Batch touches shared Source
+- git diff --stat for the Batch commits
+- explicit confirmation that no Gameplay / Rule / Balance / Copy / Save / RNG behaviour changed
+
+If a listed check was not run, report it as not run.
+Never report an unrun check as passing.
+
 ## VISUAL HARNESS CONTRACT
 
 Presentation is not accepted from Source inspection or the implementer's self-report.
@@ -370,3 +443,20 @@ Evaluator asks:
 - desktop gains presence rather than empty space?
 
 No "looks better" self-verdict from WORK closes a Batch.
+
+### EVIDENCE RULES
+
+Capturing a screenshot is not evaluation.
+
+Required before the implementer calls a surface done:
+- open and actually view the AFTER capture, not only its file path
+- compare it against the BEFORE capture at the same width
+- answer the evaluator questions against what is visible, not against the intended change
+
+Required of the Batch report:
+- deliver the BEFORE / AFTER pairs to the DIRECTOR in the review channel
+- a repository path alone is not delivery
+- at minimum one PHONE pair and one DESKTOP pair per surface
+
+A Batch whose captures were generated but neither viewed nor delivered is not reviewable.
+Report it as BLOCKED, never as PASS.
