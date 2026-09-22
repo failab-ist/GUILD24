@@ -849,13 +849,11 @@ function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.leng
    is the flex row it was duplicating. */
 function orderScreen(){
  const cart = game.cartTotal();
- /* UI_UX §GAME-LIKE INTERACTION LANGUAGE: committing the order is the form's own approval
-    stamp, so the control carries the same GUILD24 seal the 발주서 head carries; leaving the
-    desk is the other kind of action and takes the steel `.leave` plate instead. */
+ /* UI_UX §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT: committing the order is an
+    inked impression on the 발주서 - the material and the press, with no repeated seal mark and
+    no tilt. Leaving the desk is a different kind of act, so it takes the steel `.leave` plate. */
  return stage('order','발주','',orderForm(),
-  (cart?'<button class="stamp" data-action="confirm-order" aria-label="발주 '+fmt(cart)+'G 확정">'
-    +'<i class="wax" aria-hidden="true">'+Scene.seal(22,'#39434c')+'</i>'
-    +'<span>발주 '+fmt(cart)+'G · 확정</span></button>':'')
+  (cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
   +'<button class="stamp leave" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
@@ -1358,8 +1356,8 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  /* UI_UX §GAME-LIKE INTERACTION LANGUAGE. A Boss beat is not the utility drawer the modal
     shell was written to be - it is a guild investigation record, so the shell takes its one
     document variant here and the report becomes the screen rather than a card stack inside a
-    panel. The acknowledgement is the approval seal pressed on that record (`.approve`, the
-    existing Scene.seal in the gate's ink), not a filled bar across the bottom. 닫기 stays the
+    panel. The acknowledgement is an inked impression on that record (`.approve`), not a filled
+    bar across the bottom and, per §ORNAMENT RESTRAINT, not a seal mark either. 닫기 stays the
     plain utility control the same section says it may stay. */
  if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
   /* No beat left to report - it was acknowledged, or the run moved past it between the draw
@@ -1371,8 +1369,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
   const k=stage==='final'?'final':stage;
   title=c[k].header;
   body=bossReveal();
-  footer=btn('<i class="wax" aria-hidden="true">'+Scene.seal(34,'#8a2f26')+'</i><span>'+E(c[k].button)+'</span>',
-   'boss-seen','approve','aria-label="'+E(c[k].button)+'"');
+  footer=btn(E(c[k].button),'boss-seen','approve');
   narrow=stage!=='final';doc='dossier';}
  else if(modal.startsWith('stat:')){
   const k=modal.split(':')[1], n=game.current();

@@ -393,33 +393,26 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    stamp being pressed on the 발주서: a ruled impression in the form's steel ink, carrying the
    same Scene.seal the form's own head carries, and driven INTO the paper on press rather than
    nudged down-right. Nothing is added to the screen - the control is the one that was there. */
-/* the seal costs the label ~30px, so the type steps down a little at the narrow end: without
-   it 발주 NG · 확정 wrapped to two lines in half a 360/390 dock and the dock grew with it. */
-.p-order .dock .stamp{flex:1 1 140px;min-height:54px;font:600 clamp(14px,3.7vw,19px)/1.2 var(--ui);letter-spacing:.02em;
- display:inline-flex;align-items:center;justify-content:center;gap:7px;
- background:#232a3108;color:#2c3a45;
- box-shadow:inset 0 0 0 2px #39434c,inset 0 0 0 4px #e6ddc6,inset 0 0 0 6px #39434c4d;
- transform:rotate(-.8deg)}
-.p-order .dock .stamp .wax{display:flex;flex:0 0 auto;opacity:.8}
-.p-order .dock .stamp:hover{background:#39434c17;color:#1c2831}
-.p-order .dock .stamp:active{transform:rotate(-.8deg) scale(.975);
- box-shadow:inset 0 0 0 2px #39434c,inset 0 0 0 4px #e6ddc6,inset 0 0 0 6px #39434ca6}
+.p-order .dock .stamp{flex:1 1 140px;min-height:54px;font:600 clamp(15px,4.4vw,20px)/1.2 var(--ui);letter-spacing:.04em;
+ display:inline-flex;align-items:center;justify-content:center;
+ background:#39434c14;color:#2c3a45;
+ box-shadow:inset 0 0 0 3px #39434c,inset 0 0 0 5px #e6ddc6,inset 0 0 0 7px #39434c40}
+.p-order .dock .stamp:hover{background:#39434c26;color:#1c2831}
+/* the press drives the ink in: the frame darkens, the box stays square and in place */
+.p-order .dock .stamp:active{transform:none;background:#39434c33;
+ box-shadow:inset 0 0 0 3px #39434c,inset 0 0 0 5px #e6ddc6,inset 0 0 0 7px #39434cb3}
 .p-order .dock .stamp:focus-visible{outline:3px solid #39434c;outline-offset:3px}
 /* the second dock action leaves the desk rather than marking the document, so it is the steel
    half of the same family: a riveted plate, not a second stamp competing with the first. */
-.p-order .dock .stamp.leave{background:var(--tex-metal),#39434c;background-size:8px 8px;color:#e8eef2;
- transform:none;
- box-shadow:inset 0 3px 0 #ffffff2e,inset 0 -4px 0 #171d22,inset 3px 0 0 #232a31,inset -3px 0 0 #232a31,
-  4px 4px 0 #2a231766}
-.p-order .dock .stamp.leave:hover{background:var(--tex-metal),#44505a;background-size:8px 8px;color:#f4f8fa}
-.p-order .dock .stamp.leave:active{transform:translate(2px,2px);
- box-shadow:inset 0 3px 0 #ffffff17,inset 0 -2px 0 #171d22,inset 3px 0 0 #232a31,inset -3px 0 0 #232a31,
-  1px 1px 0 #2a231766}
+.p-order .dock .stamp.leave{background:#39434c;color:#e8eef2;
+ box-shadow:inset 0 3px 0 #6a7783,inset 0 -4px 0 #171d22,
+  inset 3px 0 0 #4a5560,inset -3px 0 0 #232a31,4px 4px 0 #2a231766}
+.p-order .dock .stamp.leave:hover{background:#44505a;color:#f4f8fa}
+.p-order .dock .stamp.leave:active{transform:translate(2px,2px);background:#313a42;
+ box-shadow:inset 0 3px 0 #171d22,inset 0 -2px 0 #6a7783,
+  inset 3px 0 0 #232a31,inset -3px 0 0 #4a5560,1px 1px 0 #2a231766}
 .p-order .dock .stamp.leave[disabled]{background:#2c241814;color:#9c8f72;transform:none;
  box-shadow:inset 0 0 0 2px #2c241833,2px 2px 0 #2a23172e}
-@media(prefers-reduced-motion:reduce){
- .p-order .dock .stamp,.p-order .dock .stamp:active{transform:none}
-}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
@@ -1028,20 +1021,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    scroll. */
 .relic-plate .cost{display:block;margin:12px 0 10px;padding:9px 0 0;text-align:center;
  font:500 20px/1 var(--f-led);color:var(--gold);box-shadow:inset 0 1px 0 #7d6a4566}
-/* UI_UX §PHASE VISUAL LANGUAGE + §GAME-LIKE INTERACTION LANGUAGE. The plate is a bolted brass
-   fixture and the key that opens this window from MORNING is the brass `.brass`, so taking a
-   Store Support is that brass key being turned - not the green CTA every other primary action
-   used, and not a flat rectangle either: the same raised brass the key already is, pressed in
-   on `:active` rather than nudged down-right. UI-Q-v28-30 names this surface explicitly. */
+/* UI_UX §PHASE VISUAL LANGUAGE + §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT. The
+   plate is a bolted brass fixture and the key that opens this window from MORNING is the brass
+   `.brass`, so taking a Store Support is that brass key being turned. It is the SAME flat brass
+   with the SAME hard bevel `.brass` already ships - a gradient reads as a rendered web button,
+   not as the sheet's pixel material, so there is none. The press inverts the bevel: the key
+   goes in, it does not slide down-right. */
 .relic-plate .stamp{width:100%;min-height:54px;font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:linear-gradient(180deg,#a2853f 0,#8a7038 46%,#755e2c 100%);color:#2a2110;
- box-shadow:inset 3px 3px 0 #e6c882,inset -3px -3px 0 #4f3d17,4px 4px 0 #00000073}
-.relic-plate .stamp:hover{background:linear-gradient(180deg,#b3934a 0,#9a7e40 46%,#846a33 100%)}
-.relic-plate .stamp:active{transform:translate(2px,2px);
- box-shadow:inset 3px 3px 0 #4f3d17,inset -3px -3px 0 #c8a75f,1px 1px 0 #00000073}
-/* an owned support is a turned key, not a greyed button */
-.relic-plate .stamp[disabled]{background:var(--tex-metal),#3f3830;color:#8a7d64;
- box-shadow:inset 2px 2px 0 #ffffff14,inset -2px -2px 0 #00000073,2px 2px 0 #00000059}
+ background:#8a7038;color:#2a2110;
+ box-shadow:inset 3px 3px 0 #e0c07a,inset -3px -3px 0 #4f3d17,4px 4px 0 #00000080}
+.relic-plate .stamp:hover{background:#9a7e40}
+.relic-plate .stamp:active{transform:none;background:#7a6330;
+ box-shadow:inset 3px 3px 0 #4f3d17,inset -3px -3px 0 #c8a75f,0 0 0 #00000080}
+/* an owned support is a dead key, not a faded button: the bevel goes flat and cold */
+.relic-plate .stamp[disabled]{background:#3f3830;color:#8a7d64;
+ box-shadow:inset 2px 2px 0 #5c5347,inset -2px -2px 0 #23201a,2px 2px 0 #00000059}
 /* the certificate's own price line: struck on the plate, above the key */
 .relic-plate .cost{letter-spacing:.06em}
 .relic-plate .stamp[disabled]{background:#33291c;color:#8a7d64;box-shadow:inset 0 0 0 2px #ffffff14,3px 3px 0 #00000059}
@@ -1063,33 +1057,28 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-final{background:#0d0a0c}
 .p-final .stage-scroll{padding:0 var(--gutter) 26px;background:linear-gradient(180deg,#1a1114 0,#120d10 44%,#0d0a0c 100%)}
 .p-final .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0a0709;box-shadow:inset 0 3px 0 #ffffff12}
-/* THE GATE BAR (UI_UX §GAME-LIKE INTERACTION LANGUAGE). The last action of a Run was a red
-   rectangle with a label in it. It is the bar across 제0게이트 now: banded iron on ember,
-   the same slat construction MORNING's shutter `.pull` is built from and the same gate ink
-   `.gate-zero` already carries, with the ember burning through from under it. It is heavier
-   than any other dock control because it is the turning point, and it is still one control
-   with one label - nothing is added to the screen. */
+/* THE GATE BAR (UI_UX §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT). The last action
+   of a Run was a red rectangle with a label in it, and its first pass replaced that with a
+   striped one - a stripe pattern is not material. It is the bar across 제0게이트: the gate's own
+   flat ink from `.gate-zero`, given a heavy hard bevel and the signage face, 64px tall because
+   it is the turning point of the Run. It is thrown downward on press. One control, one label,
+   nothing added. */
 .p-final .dock .stamp{flex:1 1 auto;min-height:64px;font:500 21px/1 var(--f-sign);letter-spacing:.14em;
  -webkit-font-smoothing:none;
- background:
-  linear-gradient(180deg,#00000000 0,#00000047 100%),
-  repeating-linear-gradient(180deg,#a3372c 0 7px,#8a2f26 7px 14px),
-  radial-gradient(120% 150% at 50% 130%,#e4703a 0,#8a2f26 58%,#5e1f16 100%);
- color:#ffeee9;text-shadow:0 2px 0 #00000080;
- box-shadow:inset 0 3px 0 #ffb9a359,inset 0 -5px 0 #3d130f,
-  inset 5px 0 0 #5e1f16,inset -5px 0 0 #5e1f16,4px 4px 0 #00000080}
-.p-final .dock .stamp:hover{background:
-  linear-gradient(180deg,#00000000 0,#00000038 100%),
-  repeating-linear-gradient(180deg,#b23e31 0 7px,#98342a 7px 14px),
-  radial-gradient(120% 150% at 50% 130%,#f5824a 0,#98342a 58%,#6b241a 100%)}
-/* the bar is thrown, not nudged: it drops into its frame */
-.p-final .dock .stamp:active{transform:translateY(3px);
- box-shadow:inset 0 3px 0 #ffb9a333,inset 0 -2px 0 #3d130f,
-  inset 5px 0 0 #5e1f16,inset -5px 0 0 #5e1f16,1px 1px 0 #00000080}
+ background:#8a2f26;color:#ffeee9;text-shadow:0 2px 0 #00000080;
+ box-shadow:inset 0 4px 0 #d4695b,inset 0 -6px 0 #45150f,
+  inset 6px 0 0 #a3372c,inset -6px 0 0 #5e1f16,5px 5px 0 #00000080}
+.p-final .dock .stamp:hover{background:#98342a;
+ box-shadow:inset 0 4px 0 #e07a6b,inset 0 -6px 0 #4f1912,
+  inset 6px 0 0 #b23e31,inset -6px 0 0 #6b241a,5px 5px 0 #00000080}
+/* the bar is thrown: it drops into its frame and the bevel inverts */
+.p-final .dock .stamp:active{transform:translateY(4px);background:#7a281f;
+ box-shadow:inset 0 4px 0 #45150f,inset 0 -3px 0 #d4695b,
+  inset 6px 0 0 #5e1f16,inset -6px 0 0 #a3372c,1px 1px 0 #00000080}
 /* a gate that cannot be opened yet is cold iron, not a faded red button */
-.p-final .dock .stamp[disabled]{background:repeating-linear-gradient(180deg,#3a2a26 0 7px,#31231f 7px 14px);
- color:#8d7168;text-shadow:none;
- box-shadow:inset 0 3px 0 #ffffff14,inset 0 -5px 0 #1d1412,inset 5px 0 0 #241a17,inset -5px 0 0 #241a17,3px 3px 0 #00000059}
+.p-final .dock .stamp[disabled]{background:#33261f;color:#8d7168;text-shadow:none;
+ box-shadow:inset 0 4px 0 #56463c,inset 0 -6px 0 #1a120e,
+  inset 6px 0 0 #3f3128,inset -6px 0 0 #221812,3px 3px 0 #00000059}
 .p-final .dock .danger{min-height:52px;padding:12px 16px;background:#5c2a24;color:#f6dfd9;
  box-shadow:inset 2px 2px 0 #ffffff1a,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 /* the gate mouth, with whoever is standing in it. On a phone the art is sized against the
@@ -1452,20 +1441,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:400 15px/1.65 var(--ui);color:#5f5440;font-style:italic}
 /* D10 / D20 disclose nothing new, so they carry the identity portrait at the v2.8 64px baseline
    rather than the full art - the question they open is the primary information. */
-/* the identity thumbnail the compact D10 / D20 beats carry, mounted like a filed photo */
-.boss-id{margin:0;display:flex;justify-content:center;align-self:flex-start;padding:5px;
- background:#2c24180d;box-shadow:inset 0 0 0 1px #2c241833}
+/* the identity thumbnail the compact D10 / D20 beats carry. §ORNAMENT RESTRAINT: no mount box
+   around a 64px thumbnail - it sits on the record. */
+.boss-id{margin:0;display:flex;justify-content:center;align-self:flex-start}
 .boss-id img{display:block;width:auto;max-width:64px;max-height:64px;object-fit:contain;image-rendering:auto}
 /* what the next report answers: a filing note, not a heading */
 .boss-reveal .next-report{margin:6px 0 0;padding-top:9px;box-shadow:inset 0 2px 0 #2c241826;
  font:600 12px/1.5 var(--ui);letter-spacing:.06em;color:#8a7c60}
-/* the plate: the record's attached photograph, held at the corners */
-.boss-art{position:relative;margin:2px 0 0;align-self:center;display:flex;justify-content:center;
- max-width:100%;background:#2c24180d;padding:10px;box-shadow:inset 0 0 0 1px #2c241833}
-.boss-art:before,.boss-art:after{content:'';position:absolute;width:13px;height:13px;
- border:2px solid #8a7c60;pointer-events:none}
-.boss-art:before{left:3px;top:3px;border-right:0;border-bottom:0}
-.boss-art:after{right:3px;bottom:3px;border-left:0;border-top:0}
+/* the record's attached photograph. §ORNAMENT RESTRAINT: the corner brackets are gone - the
+   art is separated from the paper by its own ground and one hairline, and by nothing else. */
+.boss-art{margin:2px 0 0;align-self:center;display:flex;justify-content:center;
+ max-width:100%;background:#2c241810;padding:8px;box-shadow:inset 0 0 0 1px #2c24182e}
 /* the plate hugs the photograph. `width:100%` made the mat as wide as its column while the
    height cap shrank the image inside it, so a 568px mat carried a 215px portrait and the rest
    was bare mount - the dead region UI-Q-v28-26 names. The image sizes from its own caps now
@@ -1487,8 +1473,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    D25 family reveal 96px - it carries the most information of the three. Information stays
    primary and the art stays supporting; nothing about the reports themselves changes. */
 @media (max-width:719px){
- .boss-art img{max-height:120px}
- .boss-reveal.final .boss-art img{max-height:96px}
+ /* USER AMENDMENT 2026-09-22, UI_UX §BOSS INFORMATION PRESENTATION: the 120 / 96 caps were
+    reviewed on a real handset and read too small. The beat is a takeover with the screen dimmed
+    behind it, so the art grows to the amended 240 / 200 - still bounded by the same rule, that
+    art may not push the information or the acknowledgement past the first viewport. */
+ .boss-art img{max-height:240px}
+ .boss-reveal.final .boss-art img{max-height:200px}
  /* SA-Q12 — MOBILE QUEUE DUPLICATION. The waiting fan and its 대기 N say on the sale surface
     what the Dock already says underneath it, and on a phone the two cost a band of height each
     to state one number twice. The decorative line is suppressed at phone width only; the Dock
@@ -1505,8 +1495,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     decisions - above a portrait taller than the screen could hold. The desktop gets height
     caps in the same 120:96 proportion the approved mobile baselines use, at twice their scale;
     the exact mobile baselines above are untouched. */
- .boss-art img{max-height:240px}
- .boss-reveal.final .boss-art img{max-height:200px}
+ .boss-art img{max-height:300px}
+ .boss-reveal.final .boss-art img{max-height:260px}
  .boss-reveal.final .fams{grid-template-columns:1fr 1fr}
 }
 /* =====================================================================
@@ -1518,7 +1508,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    pressed on it rather than a filled bar across the foot. No new material and no new
    component - --tex-paper, --zig, Scene.seal and the .slip / .print ink are all already here.
    ===================================================================== */
+/* UI_UX §BOSS INFORMATION PRESENTATION: the record is a takeover, not a drawer peeking from the
+   bottom of the screen - measured on a handset, it read as a small notice under the store. The
+   height comes from the amended art baselines, NOT from a forced minimum: a floor applied to
+   every beat gave D0 / D10 / D20 a 512px sheet for 21-55px of content, which is the oversized
+   empty shell UI-Q-v28-28 fails for exactly those compact beats. The ceiling is raised so the
+   taller beats can use the room the bigger art needs. */
 .modal.doc{background:var(--tex-paper),#e9dfc4;background-size:16px 16px;color:var(--ink);
+ max-height:96dvh;
  box-shadow:inset 0 0 0 2px #2c241833,0 -6px 0 #00000073}
 .modal.doc:before{content:'';position:absolute;left:0;right:0;top:0;height:9px;
  background:var(--tex-paper),#e9dfc4;background-size:16px 16px;
@@ -1538,43 +1535,39 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .filed{display:flex;align-items:baseline;gap:10px;margin:0;padding:9px 0 0;
  font:600 11px/1 var(--ui);letter-spacing:.18em;color:#8a7c60}
 .boss-reveal .filed b{margin-left:auto;font:500 13px/1 var(--f-led);letter-spacing:.06em;color:#5f5440}
-/* THE PRESS. Not a rectangle that happens to be red: the guild's seal, inked on the record at
-   a stamp's angle, with the ruled impression `.stamp-line` already uses on the paper slips. It
-   keeps a full touch target and its own accessible name, and it is quiet until pressed -
-   presence without outranking the report above it (UI-Q-v28-31). */
-/* scoped to the foot it sits in, because `.modal-footer button` would otherwise fill it with
-   the drawer's own brown and the impression would read as an ordinary filled button again */
-.modal-footer .approve{display:inline-flex;align-items:center;justify-content:center;gap:10px;
- min-height:56px;min-width:150px;padding:9px 20px 9px 14px;
- background:#00000008;color:#8a2f26;font:600 16px/1 var(--ui);letter-spacing:.06em;
- box-shadow:inset 0 0 0 2px #8a2f26,inset 0 0 0 4px #e9dfc4,inset 0 0 0 6px #8a2f2659;
- transform:rotate(-1.6deg)}
-.modal-footer .approve .wax{display:flex;flex:0 0 auto;opacity:.85}
-.modal-footer .approve:hover{background:#8a2f2614;color:#7a281f}
-/* pressing it drives the seal in rather than nudging the box down-right */
-.modal-footer .approve:active{transform:rotate(-1.6deg) scale(.97);
- box-shadow:inset 0 0 0 2px #8a2f26,inset 0 0 0 4px #e9dfc4,inset 0 0 0 6px #8a2f26a6}
+/* THE IMPRESSION. Not a rectangle that happens to be red, and per §ORNAMENT RESTRAINT not a
+   seal mark on a tilted button either: the gate's ink pressed into the record, square to the
+   layout, with the ruled impression `.stamp-line` already uses on the paper slips. Its presence
+   is size, weight and the press - nothing is added to carry it. Scoped to the foot it sits in,
+   because `.modal-footer button` would otherwise fill it with the drawer's own brown. */
+.modal-footer .approve{display:inline-flex;align-items:center;justify-content:center;
+ min-height:58px;min-width:172px;padding:9px 26px;
+ background:#8a2f2612;color:#8a2f26;font:600 17px/1 var(--ui);letter-spacing:.08em;
+ box-shadow:inset 0 0 0 3px #8a2f26,inset 0 0 0 5px #e9dfc4,inset 0 0 0 7px #8a2f2645}
+.modal-footer .approve:hover{background:#8a2f261f;color:#7a281f}
+/* the press drives the ink in: the frame darkens, the box does not move */
+.modal-footer .approve:active{transform:none;background:#8a2f2626;
+ box-shadow:inset 0 0 0 3px #8a2f26,inset 0 0 0 5px #e9dfc4,inset 0 0 0 7px #8a2f26b3}
 .modal-footer .approve:focus-visible{outline:3px solid #8a2f26;outline-offset:3px}
-@media(prefers-reduced-motion:reduce){.modal-footer .approve,.modal-footer .approve:active{transform:none}}
 
 /* The seal offer shares the window's one acquisition with the Relic candidates, so it
    reads as the alternative to them rather than as an extra thing to also take. */
 .seal-choice{margin-top:12px;padding:11px 13px;background:#00000047;box-shadow:inset 4px 0 0 #7a5fa8}
-/* 봉인 해제 is the other turning point on the gate chain, so it is the seal itself being
-   broken rather than a filled button: the sigil's own violet, cracked open on press. */
+/* 봉인 해제 is the other turning point on the gate chain, so it takes the same construction in
+   the sigil's own flat violet - the block's `inset 4px 0 0 #7a5fa8` rule above is where that
+   colour already lives. Flat fill, hard bevel, thrown on press. */
 .seal-choice .stamp{min-height:56px;font:500 18px/1 var(--f-sign);letter-spacing:.12em;
  -webkit-font-smoothing:none;
- background:radial-gradient(120% 140% at 50% 120%,#a98ad6 0,#7a5fa8 55%,#4a3570 100%);
- color:#f4ecff;text-shadow:0 2px 0 #00000073;
- box-shadow:inset 0 3px 0 #e0d0ff4d,inset 0 -5px 0 #2f214a,
-  inset 4px 0 0 #4a3570,inset -4px 0 0 #4a3570,4px 4px 0 #00000080}
-.seal-choice .stamp:hover{background:radial-gradient(120% 140% at 50% 120%,#bb9ee6 0,#8a6cbb 55%,#553c80 100%)}
-.seal-choice .stamp:active{transform:translateY(3px);
- box-shadow:inset 0 3px 0 #e0d0ff29,inset 0 -2px 0 #2f214a,
-  inset 4px 0 0 #4a3570,inset -4px 0 0 #4a3570,1px 1px 0 #00000080}
-.seal-choice .stamp[disabled]{background:repeating-linear-gradient(180deg,#332c44 0 7px,#2b2439 7px 14px);
- color:#8a82a0;text-shadow:none;
- box-shadow:inset 0 3px 0 #ffffff14,inset 0 -5px 0 #1a1626,inset 4px 0 0 #221d30,inset -4px 0 0 #221d30,3px 3px 0 #00000059}
+ background:#7a5fa8;color:#f4ecff;text-shadow:0 2px 0 #00000073;
+ box-shadow:inset 0 4px 0 #b49ae0,inset 0 -6px 0 #37275a,
+  inset 5px 0 0 #8f74bd,inset -5px 0 0 #4a3570,4px 4px 0 #00000080}
+.seal-choice .stamp:hover{background:#8a6cbb}
+.seal-choice .stamp:active{transform:translateY(4px);background:#6b5296;
+ box-shadow:inset 0 4px 0 #37275a,inset 0 -3px 0 #b49ae0,
+  inset 5px 0 0 #4a3570,inset -5px 0 0 #8f74bd,1px 1px 0 #00000080}
+.seal-choice .stamp[disabled]{background:#2f2a3d;color:#8a82a0;text-shadow:none;
+ box-shadow:inset 0 4px 0 #4b4560,inset 0 -6px 0 #17131f,
+  inset 5px 0 0 #3a3450,inset -5px 0 0 #201c2b,3px 3px 0 #00000059}
 .seal-choice b{display:block;font:500 15px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#dcc8f0}
 .seal-choice p{margin:5px 0 9px;font:400 14px/1.55 var(--ui);color:#c3b4a0}
 .seal-choice.done p{margin-bottom:0}

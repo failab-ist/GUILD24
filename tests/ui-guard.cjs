@@ -1503,9 +1503,14 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
 test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is stated once',()=>{
  const block=css.slice(css.indexOf('@media (max-width:719px){'),css.indexOf('@media (min-width:720px){',css.indexOf('@media (max-width:719px){')));
  assert.ok(block.length,'there is a phone-width density block');
- // SA-Q10: the exact v2.8 mobile baselines
- assert.ok(/\.boss-art img\{max-height:120px\}/.test(block),'D5 / D15 Boss art is capped at 120px on phone');
- assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:96px\}/.test(block),'the D25 reveal is capped at 96px');
+ /* SA-Q10's original 120 / 96 phone caps were reviewed on a handset and superseded by the USER
+    amendment of 2026-09-22 (UI_UX §BOSS INFORMATION PRESENTATION): the beat is a takeover with
+    the screen dimmed behind it, so the art grows to 240 / 200 on a phone and 300 / 260 on the
+    desk. What SA-Q10 exists to protect is unchanged and is asserted below - the caps are real
+    ceilings, and art may not push the information or the acknowledgement off the first
+    viewport, which the runtime Boss QA measures. */
+ assert.ok(/\.boss-art img\{max-height:240px\}/.test(block),'D5 / D15 Boss art is capped at the amended 240px on phone');
+ assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:200px\}/.test(block),'the D25 reveal is capped at 200px');
  // the width-only constraint that caused it is no longer the only one
  assert.ok(/\.boss-art img\{[^}]*max-width:320px/.test(css),'the desktop width cap is unchanged');
  assert.ok(/@media \(min-width:720px\)\{\s*\.boss-art img\{max-width:420px\}/.test(css),'and so is the wide one');
@@ -1517,8 +1522,8 @@ test('SA-Q10 / SA-Q12: Boss art is height-capped on phone and the queue is state
  assert.equal((block.match(/\.boss-art img\{max-height/g)||[]).length,2,
   'exactly the two baseline height caps at phone width, and no third');
  const wide=css.slice(css.indexOf('@media (min-width:720px){'));
- assert.ok(/\.boss-art img\{max-height:240px\}/.test(wide),'the desk caps D5 / D15 art height too');
- assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:200px\}/.test(wide),'and the D25 reveal lower, as on phone');
+ assert.ok(/\.boss-art img\{max-height:300px\}/.test(wide),'the desk caps D5 / D15 art height too, higher than the phone');
+ assert.ok(/\.boss-reveal\.final \.boss-art img\{max-height:260px\}/.test(wide),'and the D25 reveal lower, as on phone');
  // the reports themselves are untouched: art is still a figure beside the information
  assert.ok(app.includes('<figure class="boss-art">'),'the Boss art is still the same supporting figure');
  assert.ok(fn('bossReveal').includes('c.d5.intro')||app.includes('boss-reveal'),'the reports are not redesigned');
@@ -1780,10 +1785,13 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  // the reports reuse the existing shell
  assert.ok(/if\(stage==='d10'\|\|stage==='d20'\)/.test(fn('bossReveal')),'the two beats render through the existing reveal');
  assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and D5/D10/D15/D20/D25 are consumed by the existing one');
- // D10/D20 identity portrait at the 64px baseline, C2 limits intact
+ // D10/D20 identity portrait at the 64px baseline, which the USER amendment did not move
  assert.ok(/\.boss-id img\{[^}]*max-width:64px;max-height:64px/.test(css),'the D10 / D20 identity portrait is 64px');
- assert.ok(/\.boss-art img\{max-height:120px\}/.test(css)&&/\.boss-reveal\.final \.boss-art img\{max-height:96px\}/.test(css),
-  'the C2 mobile limits are untouched');
+ /* The phone art caps are the amended 240 / 200 (see the SA-Q10 group above for why). This
+    clause is about the D10 / D20 beats not growing art of their own, so it asserts the pair
+    still exists at the current baseline rather than at the superseded numbers. */
+ assert.ok(/\.boss-art img\{max-height:240px\}/.test(css)&&/\.boss-reveal\.final \.boss-art img\{max-height:200px\}/.test(css),
+  'the phone art limits are the amended pair, and D10 / D20 still carry only the 64px portrait');
  assert.ok(!/class="boss-art"/.test(fn('bossReveal').split("stage==='d10'")[1].split('return')[1]||''),
   'the one-tap beats do not carry the full art');
 });
