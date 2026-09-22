@@ -614,29 +614,27 @@ NIGHT
   result system; do not add a new cinematic framework
 - the sold-Item effect is a sub line of the Outcome summary, never a second result card
 - the aftermath region follows §NIGHT LAYOUT RESULT DATA TYPOGRAPHY
-- USER AMENDMENT, 2026-09-22 — CLOSING HANDOVER CONTROL. The control that ends the night record
-  is a compact pixel-game commit, not a coloured CTA rectangle: a dark NIGHT-compatible flat
-  plane, bright neutral / warm label, separated by the plane itself with no border and no inset
-  outline, exactly one bottom/right hard depth, and a press that moves the control and collapses
-  that depth. No violet / lavender / purple filled treatment, and green is not the substitute.
-  Nothing decorative beyond hover and press. No literal hex is Canonical here.
+- USER AMENDMENT, 2026-09-22 — CLOSING HANDOVER CONTROL / NIGHT PRIMARY COLOUR.
+  The control that ends the NIGHT record is the screen's ACTIVE Primary Action and must read
+  immediately above `전체 건너뛰기`.
+
+  Presentation:
+  - MOONLIT COLD BLUE / MUTED COBALT active plane
+  - clearly brighter and more saturated than the NIGHT dock/background
+  - hue reads unmistakably BLUE; not cyan/teal, not neon
+  - ivory / near-white label
+  - exactly one bottom/right hard depth
+  - press moves the control and collapses that depth
+  - no border, inset outline, bevel or gloss
+  - no literal hex is Canonical
+
+  FAIL:
+  - grey disabled-like plane
+  - amber / gold / mustard / brown
+  - purple / lavender
+  - green
+
   `전체 건너뛰기` stays the current Secondary bare treatment.
-  AMENDED 2026-09-22: the first pass read as a disabled grey button. It must read immediately as
-  the screen's ACTIVE Primary Action - visibly above `전체 건너뛰기` and clearly separated from
-  the surrounding NIGHT surface - using a muted accent that belongs to this phase. A flat grey
-  dead-button impression is a FAIL, as are purple / lavender, green, a heavy outline, an inset
-  frame, and any glossy or bevelled treatment.
-  AMENDED AGAIN 2026-09-22 — NIGHT PRIMARY COLOUR. The amber / gold reading is retired with the
-  rest. The plane is a MOONLIT COLD BLUE / MUTED COBALT active surface:
-  - clearly brighter and more saturated than the NIGHT dock and background
-  - the hue reads unmistakably BLUE; it does not drift far enough toward cyan / teal to read
-    green, and it is not neon
-  - the label is ivory / near-white
-  - one hard bottom/right depth, which the press collapses as the control moves
-  - no border and no inset outline
-  FAIL if the colour reads as inactive grey, as mustard / gold, or as mobile-RPG purple.
-  Banned for this control: amber, gold, mustard, brown, purple / lavender, green, and a grey
-  disabled-like plane. No literal hex is Canonical.
 
 CLOSING
 - reads as receipt / end-of-day record, not a KPI dashboard
