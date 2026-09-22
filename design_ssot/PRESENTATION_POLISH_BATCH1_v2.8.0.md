@@ -234,6 +234,50 @@ restrained fixture detail already belonging to the object.
 Not default: gothic frame, demon crest, jewels, generic fantasy corners, extra signs/bolts/brackets.
 If a board-frame SVG is attempted, keep it only if it clearly beats the CSS-only frame.
 
+## MORNING ASSET INTEGRATION CORRECTION — DIRECTOR REVIEW
+
+Current runtime review after HEAD a4a86de:
+
+- the store environment asset is an authored room, but the current integration crops it into the WALL band;
+- the asset's authored ceiling is therefore discarded while the older procedural ceiling remains above it;
+- the result reads as old ceiling + pasted new middle wall, so the asset's architectural value is not being used;
+- the board-frame adoption creates more visible empty interior around the live notice and is less complete than BEFORE.
+
+Therefore:
+
+### Store environment
+The MORNING environment asset must be re-evaluated as a room/stage asset, not as a wall texture.
+
+Required:
+- preserve the asset's authored ceiling in the runtime composition;
+- choose an owner high enough in the existing MORNING structure to show the room coherently;
+- keep DAY / board content / till / shutter as live HTML overlays;
+- suppress duplicated procedural room art only where the production asset now owns the same physical architecture;
+- do not alter information order or gameplay structure.
+
+The exact CSS owner may be `.store` or another existing common parent if runtime geometry proves it fits better.
+The design requirement is the coherent full-room read, not a prescribed selector.
+
+### Board
+The current `board-frame-plank.png` runtime adoption is rejected.
+
+Restore the tighter pre-asset board construction first.
+Do not retain the 9-slice merely because it is technically correct.
+
+A board asset may only be retried if:
+- it hugs the live notice content,
+- adds no purposeless empty cavity,
+- and AFTER is visibly more complete than the restored BEFORE construction.
+
+Do not try the alternate board frame merely to force an asset into use.
+Evaluate it only if there is a concrete fit hypothesis.
+
+### Surface PASS
+MORNING remains FAIL until:
+- the environment reads as one authored store rather than mixed old/new architectural bands;
+- the board is at least as complete and tight as BEFORE;
+- the result is visibly stronger at PHONE and DESKTOP widths.
+
 ## DIRECTOR ACCEPTANCE
 
 PASS requires:

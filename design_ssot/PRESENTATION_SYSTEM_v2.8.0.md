@@ -372,6 +372,65 @@ Do not ship names such as `final-v7-good2.png`.
 Every adopted non-code graphic records provenance / licence / modification status in `reports/ASSETS.md`.
 User-authored or project-generated art records that provenance instead of inventing a third-party licence.
 
+## ASSET INTEGRATION FIT GATE
+
+Using an asset is not itself a MACRO / MESO improvement.
+
+An adopted asset must preserve the authored value that justified making or selecting it.
+
+Before integration, identify the asset's meaningful authored zones:
+- environment architecture / ceiling / wall / floor or counter
+- focal lighting / window / fixture
+- frame corners / rails / material joins
+- intentional negative space
+
+Then choose the Source owner that can display those zones coherently.
+
+Do NOT:
+- crop away a meaningful authored zone merely to avoid changing which existing CSS band owns the art;
+- keep an older procedural layer on top when it duplicates the same physical architecture and makes the new art read as a pasted middle strip;
+- count a background file as a MACRO improvement when the visible crop removes the part that gives the environment its identity;
+- keep an asset because it is new when the BEFORE screenshot is more coherent.
+
+When a production environment asset spans multiple existing bands, first prefer:
+1. moving visual ownership to their common parent while keeping live HTML controls on top;
+2. making duplicated procedural art transparent / inactive only on that Surface;
+3. preserving the live semantic overlays (DAY, counts, till, Actions) separately.
+
+Crop is allowed for responsive framing, but must preserve the asset's intended architectural read.
+A crop that turns one authored room into an ambiguous texture strip is FAIL.
+
+### Dynamic frame fit
+
+A frame around dynamic live content must hug the content.
+
+PASS:
+- frame edge / corners improve object identity;
+- interior height remains driven by live content plus intentional padding;
+- negative space has a clear physical purpose.
+
+FAIL:
+- frame introduces a visibly empty cavity below / around the live content;
+- the live content looks undersized inside a large decorative shell;
+- the frame's fixed source proportions dictate empty space that the gameplay content does not need;
+- the BEFORE object looks more complete or tighter.
+
+If a frame candidate fails this fit test:
+- reject its runtime adoption;
+- restore the previous better construction;
+- keep or remove the candidate asset according to repository hygiene, but do not ship an unreferenced production asset by default.
+
+### Evaluation wording
+
+WORK may not label a change MACRO or MESO from implementation technique alone.
+
+"background image added", "9-slice used", or "new SVG added" are implementation facts.
+
+MACRO / MESO are earned only when the AFTER screenshot:
+- improves first impression / object identity,
+- preserves the authored asset's strongest zones,
+- and is more coherent than BEFORE.
+
 ## RESPONSIVE DETAILING
 
 PHONE:
