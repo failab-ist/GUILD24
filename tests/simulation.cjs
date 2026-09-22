@@ -368,4 +368,15 @@ test('RE-MEASURE: a Deep-collapse sample never exceeds the sponsorships it watch
  assert.ok(r.deepCollapseRate>=0&&r.deepCollapseRate<=1,'and the derived rate stays a rate');
 });
 
+test('RE-MEASURE follow-up: Store Gold checkpoints carry sample size, mean and spread, matched by Day',()=>{
+ const r=cached('balanced');
+ for(const d of [5,10,15,20,25,29]){
+  const c=r.goldCheckpointStats[d];
+  assert.ok(c&&Number.isFinite(c.count)&&c.count>=0,'Day '+d+' checkpoint is reported');
+  assert.equal(c.count,r.dayReached[d]!==undefined?Object.keys(r.dayReached).filter(k=>Number(k)>=d).reduce((a,k)=>a+r.dayReached[k],0):c.count,
+   'Day '+d+' is sampled by every Run that reached at least that far') ;
+  if(c.count)assert.ok(c.p10<=c.median&&c.median<=c.p90,'Day '+d+': percentiles are ordered');
+ }
+});
+
 console.log(count+' simulation groups passed');

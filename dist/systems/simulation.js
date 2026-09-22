@@ -57,6 +57,11 @@ function blank(runs,policy,pricing,build){
      claim, and stated as such in the report. */
   modesByBand:{},modesByLoyalty:{},walletFresh:[],walletReturning:[],walletCapSamples:0,walletCapHits:0,
   deepCollapse:{samples:0,collapsed:0},
+  /* v2.8 Re-measure follow-up. Store Gold at a few fixed Day checkpoints, sampled at the same
+     start-of-ORDER point `days[d].cash` already reads, kept as raw per-Run samples (not just a
+     mean) so an arm-to-arm comparison can carry sample size, median and spread instead of only
+     an ending-Gold mean that mixes Runs which ended on different Days. */
+  goldCheckpoints:{5:[],10:[],15:[],20:[],25:[],29:[]},
   /* 2026-09-12 amendment, measurement only. greatByBand buckets Great Success by how far the
      prepared Combat ability ran ahead of the Gate, which is the thing Stage 9 has to judge the
      curve on; prepStartGold samples the D29 close, before any D30 preparation spend. */
@@ -155,7 +160,8 @@ function derive(out,count){
   endedBy:out.endedBy,clearsPerRun:out.wins/count,actionsPerRun:out.actions/count,actionsPerDay:out.actions/Math.max(1,days),knowledgePerRun:out.knowledge/count,reachRate:out.reached30/count,bossWinGivenReach:out.reached30?out.wins/out.reached30:0,overallClearRate:out.wins/count,averageDeaths:out.deaths/count,averageMoney:out.money/count,
   walletCapRate:out.walletCapSamples?out.walletCapHits/out.walletCapSamples:0,
   walletFreshStats:sampleStats(out.walletFresh),walletReturningStats:sampleStats(out.walletReturning),
-  deepCollapseRate:out.deepCollapse.samples?out.deepCollapse.collapsed/out.deepCollapse.samples:0};
+  deepCollapseRate:out.deepCollapse.samples?out.deepCollapse.collapsed/out.deepCollapse.samples:0,
+  goldCheckpointStats:Object.fromEntries(Object.entries(out.goldCheckpoints).map(([d,xs])=>[d,sampleStats(xs)]))};
 }
 
 /* One Run, played by `ctx.policy` on the account the caller owns. The account is NOT copied
@@ -340,7 +346,7 @@ function playRun(g,out,ctx){
      try{g.reroll();}catch(e){break;}
      act();used++;out.offerShape.rerolls++;out.offerShape.rerollSpend+=cost;}
     out.rerollDepth[Math.min(4,used)]=(out.rerollDepth[Math.min(4,used)]||0)+1;}
-   const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
+   const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
    const offers=sortedOffers();
