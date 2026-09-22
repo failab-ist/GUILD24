@@ -9,7 +9,6 @@ PATCH_TYPE=PROJECT_WIDE_CORE_READABILITY_QA
 ## INHERITANCE
 
 All unchanged v2.7 UI/UX QA remains active.
-Retired Franchise / Start Contract expectations are historical only.
 
 ## UI-Q-v28-1 — STORE MANAGEMENT
 
@@ -301,6 +300,7 @@ PASS:
 External/new asset PASS:
 - every shipped third-party audio asset has a recorded source, author, license and modification
   status
+- third-party audio is vendored locally; runtime hotlinking is absent and offline runtime still works
 - no shipped asset has unclear rights or a license incompatible with the intended distribution
 
 FAIL:
