@@ -27,7 +27,7 @@ const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;x.cost=st.cost;}}return [...m.values()];};
 function toast(msg){$('#toast').textContent=msg;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
-function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind==='rare'?'relic':kind);}
+function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind);}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
@@ -1375,6 +1375,8 @@ function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return
    every stage has its own persisted marker so a reload cannot replay one. */
 const BOSS_BEATS=[[5,'d5','identitySeen'],[10,'d10','combatSeen'],[15,'d15','traitSeen'],
                   [20,'d20','routeSeen'],[25,'final','familySeen']];
+/* The beats Canonical allows the stronger acknowledgement. D25 is the 'final' stage id. */
+const BOSS_MAJOR=new Set(['d5','d15','final']);
 function bossRevealStage(){const s=game.run;if(!s?.bossReveal)return null;
  /* SA-Q47 / BOSS_v2.8 §SAME-DAY ORDERING: D0 is the deliberate exception to the D5-D25
     milestone-day cadence below - it fires exactly once, on the DAY 1 morning that follows the
@@ -1506,6 +1508,10 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'boss-seen':{const st=bossRevealStage();
   if(st==='d0')s.bossReveal.d0Seen=true;
   else{const beat=BOSS_BEATS.find(x=>x[1]===st);if(beat)s.bossReveal[beat[2]]=true;}
+  /* UI_UX_v2.8 §BOSS / FINAL AUDIO: one motif, two strengths. D5 / D15 / D25 carry the major
+     acknowledgement; D0 / D10 / D20 stay compact. The strength is read off the BEAT, never off
+     the Boss behind it, so no cue names anything the plate has not already shown. */
+  sound(BOSS_MAJOR.has(st)?'bossmajor':'bosscompact');
   game.save();setModal(null);render();break;}
  case'break-seal':game.breakSeal();sound('boss');render();break;
  case'menu':sound('ui');setModal('menu');break;
@@ -1549,23 +1555,37 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
    /* Clear the pending id before spending, so a repeated click, a reopened modal or a thrown
       Meta guard all leave the panel back on the plain buy button rather than on a live confirm. */
    decoPending=null;
-   Meta.buyDecoration(game.account,id);toast(d.name+' 구매 · 점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음');sound('rare');}
+   /* §STORE SUPPORT: a Decoration is the ORDINARY purchase of the three. */
+   Meta.buyDecoration(game.account,id);toast(d.name+' 구매 · 점포 자본 '+Meta.storeCapital(game.account).toLocaleString()+' 남음');sound('purchase');}
   /* fitting something already owned into a Slot, or taking it out. Deliberately not the
      purchase fanfare above: it costs nothing and nothing was acquired. */
   else {Meta.equipDecoration(game.account,d.slot,a==='deco-equip'?id:null);sound('fixture');}
   game.save();renderModal();render();break;}
+ /* UI_UX_v2.8 §ORDER: `.set` holds the 1 / 3 / 최대 shortcuts, so they take the stepper's own
+    tick one step quieter and never outrank it; audio.js holds both to a minimum retrigger gap. */
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
-  game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound('quantity');render();
+  game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound(el.closest('.set')?'quantset':'quantity');render();
   anchorOffer(key,y0);break;}
  case'confirm-order':game.confirmOrder();sound('order');render();break;
  
- case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();const result=s.results[s.nightCursor];if(result)sound(result.outcome==='사망'?'death':result.outcome==='중상'?'severe':result.outcome==='부상'?'injury':result.outcome==='대성공'?'great':result.discoveries?.length?'discovery':result.changes?.length?'level':'return');break;
+ case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();const result=s.results[s.nightCursor];
+  /* UI_UX_v2.8 §NIGHT OUTCOME AUDIO. The Outcome is what the cue says, always. A success that
+     happened to find something or to move a Stat used to be answered by a discovery / level cue
+     INSTEAD of its Outcome, which let a 퇴각 and a plain return sound alike while a find spoke
+     over both. Those two cues are gone: the result panel already names what was found. */
+  if(result){sound(result.outcome==='사망'?'death':result.outcome==='중상'?'severe':result.outcome==='부상'?'injury':result.outcome==='퇴각'?'retreat':result.outcome==='대성공'?'great':'return');
+  /* The life-saving accent lands BEHIND its own Outcome cue, never instead of it, so a rescued
+     퇴각 still reads as a 퇴각. It appears only where the result carries the proof, so nothing
+     that was not already resolved can be inferred from it. */
+   if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);}break;
  case'event-seen':setModal(null);render();break;
  case'event-again':sound('ui');setModal('event');break;
  case'gates':sound('ui');setModal('gates');break;
  case'relics':setModal('relics');break;
  case'stat-detail':sound('ui');setModal('stat:'+id);break;
- case'buy-relic':game.buyRelic(id);setModal(null);render();sound('rare');break;
+ /* §STORE SUPPORT: acquisition is heavier than an ordinary purchase and reads as securing a
+    fixture into the store. Deliberately not the Decoration cue and not the unlock cue. */
+ case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
  case'closing':game.finishNight();game.save();render();break;
  case'open':game.open();selected=null;render();break;
  /* SALE scroll continuity. Opening one good closes another, and when the one that closes
@@ -1604,7 +1624,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   setModal('bossConfirm');break;
  /* the unlock cue belongs to the unlock, which the shared handler below sounds exactly once
     when one is actually credited - this fired every Final, unlock or not, and twice with one */
- case'boss-go':sound('boss');game.boss();setModal(null);render();break;
+ /* §BOSS / FINAL AUDIO: the Final commit is the run's heaviest short action cue - a gate
+    closing - and it adds no new-information signal; everything it stands on was revealed at D25. */
+ case'boss-go':sound('final');game.boss();setModal(null);render();break;
  case'retire':setModal('retireConfirm');break;
  case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='guild24-save-day-'+(s?.day||0)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}
@@ -1622,7 +1644,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     The ending keeps the list on screen, so the list alone cannot gate the cue: opening the
     codex or moving a tab would sound it again. The cue belongs to the click that created it. */
  const opened=game.run?.unlocked||[];
- if(opened.length&&opened!==wasOpen)sound('rare');
+ if(opened.length&&opened!==wasOpen)sound('unlock');
  if(opened.length&&game.run.phase!=='end'){toast('본사 해금 · '+opened.join(' · '));game.run.unlocked=[];}
  if(game.run?.toast){toast(game.run.toast);delete game.run.toast;game.save();}
  }catch(err){toast(err.message);}
