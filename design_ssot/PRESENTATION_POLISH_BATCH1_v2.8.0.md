@@ -373,6 +373,20 @@ PASS only if:
 4. 점포지원 / 문 열기 remain readable and clickable;
 5. no gameplay structure or information order changes.
 
+## MORNING BRANCHPLATE POSITION — USER APPROVED
+
+The store branch name is approved as a small physical nameplate attached to the COUNTER FACE.
+
+Approved implementation direction:
+- anchor the live `.branchplate` to the counter coordinate system, not viewport-relative negative offsets;
+- PHONE keeps the current counter-face placement and current size;
+- DESKTOP keeps the same counter-face placement;
+- DESKTOP may increase branchplate type / padding one restrained step for readability, as implemented at the reviewed state;
+- do not move the branch name back to the wall;
+- do not promote it into a major badge or competing focal object.
+
+The visual role is a quiet store fixture label. It remains subordinate to Board, Gold/POS and the primary Action.
+
 ## DIRECTOR ACCEPTANCE
 
 PASS requires:
