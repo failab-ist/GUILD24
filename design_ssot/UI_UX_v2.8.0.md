@@ -418,33 +418,40 @@ icons.
 
 EXACT STATE HIERARCHY.
 
+The palette is desaturated amber / gold on slate and charcoal. It must not read as olive, brown or
+military dashboard. AMENDED 2026-09-22: these values supersede the first palette entirely, which is
+not kept anywhere alongside them.
+
 AVAILABLE
-- surface around `#273033` neutral slate
-- border around `#58666A`
-- title bright ivory / grey; body one step below the title
-- price muted gold
-- the action is the single strongest button plane on the screen:
-  background `#9A7835`–`#A9843D`, border `#C7A653`, dark brown/black text
-- shape: hard edge plus a 2–3px hard bottom/right shadow
+- card surface `#20272B`; card border `#465158`
+- title `#F1ECE2`; Function / body `#B8C0C2`; price / important gold text `#D2A347`
+- the action is the single strongest control on the screen:
+  background `#C4973E`, border / high edge `#D8B45F`, text `#241C10`,
+  hard bottom/right shadow `#765821`
+- shape: the compact control at about 138 x 48, hard pixel-like depth only - no gradient, no blur,
+  no bevel
 - label: `구매`
 - only the AVAILABLE card carries the feel of being pressable now
 
 SELECTED / OWNED
-- the card is not painted another colour; it keeps the AVAILABLE slate family
-- the difference is a slightly brighter warm border, a 2px muted-gold outline, and a slightly raised
-  title contrast — nothing more
-- forbidden: green fill, green tint, a left accent bar
-- the completed state is expressed by border and text state, not by the card's surface colour
-- the action area does not stay a large disabled button; it becomes a compact state label `보유 중`
-  on a dark slate background with a 1–2px muted-gold border and muted-gold / ivory text, and must
-  not read as a large CTA
+- card surface `#20272B`, identical to AVAILABLE; the card is never painted another colour, tinted,
+  or given a left accent bar, and green is forbidden
+- selected outline `#B98B3E`; title `#F6F0E5`; Function stays in the AVAILABLE family
+- the completed state is expressed by the gold outline, the slightly stronger title and the state
+  control together
+- the state control keeps the AVAILABLE control's footprint exactly - same width and height - with a
+  dark charcoal fill, a muted-gold border and muted-gold / ivory text, no hard press shadow and no
+  hover / active affordance. Same size, but visibly not pressable.
+- shrinking `보유 중` while the card's height is unchanged is forbidden: it leaves a hole beside the
+  card and reads as a web status chip. Only a Layout change that actually reduces the card's height
+  may make the label compact as well.
 
 UNAVAILABLE
-- surface around `#191F21` dark charcoal; border around `#343F42`
-- title at `#B6C0C1`; body at `#899597`
-- whole-card opacity is forbidden; the card recedes on its own lightness
-- the action must not look pressable: background `#242B2D`, border `#394549`, text `#707D80`, and no
-  hard shadow (1px at most)
+- card surface `#171C1F`; border `#303A3E`
+- title `#AEB8BA`; Function `#828E91`
+- the action must not look pressable: surface `#23292C`, border `#394347`, text `#697579`
+- opacity stays 1; whole-card and whole-button opacity fade is forbidden, and the card recedes on
+  its own lightness
 
 DISABLED COPY. The disabled action names its own cause; it never stays `구매`. Exact strings are owned
 by COPY_AUDIT_APPROVED_v2.8.0.md §11-31 / §11-31b.

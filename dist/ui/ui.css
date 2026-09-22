@@ -1023,79 +1023,82 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:#00000047;box-shadow:inset 3px 0 0 var(--gold)}
 .relic-choices{display:grid;gap:12px}
 /* ---- STORE SUPPORT — FINAL VISUAL SPEC ------------------------------------
-   UI_UX §STORE SUPPORT — FINAL VISUAL SPEC. Every value below is the Canonical one.
+   UI_UX §STORE SUPPORT — FINAL VISUAL SPEC. Every value below is the Canonical one, at the
+   amended palette. The superseded palette is not kept anywhere alongside it.
 
-   The screen is a restrained 2D pixel game selection panel. The game feel is made by hard
-   edges, a hard offset shadow, flat colour planes, button press depth and immediate state
-   differentiation - and by nothing else. No gradient, no blur, no inset sheen, no bevel, no
-   badge, no seal, no vertical accent bar, and no whole-element opacity.
+   The screen is a restrained 2D pixel game selection panel. The game feel is made by flat
+   colour planes, hard edges, a hard offset shadow, a clear state hierarchy and a compact game
+   control - and by nothing else. No gradient, no blur, no inset sheen, no bevel, no soft glow,
+   no badge, no seal, no vertical accent bar, and no whole-element opacity.
 
-   GREEN IS BANNED ON THIS SCREEN as a state, selection or action colour, `--sign` /
-   `--sign-lit` included. The palette is slate / charcoal / muted gold / warm ivory. This is a
-   Store Support Presentation decision only; the game's semantic benefit green is untouched.
+   GREEN IS BANNED ON THIS SCREEN as a state, selection, border, button or status colour,
+   `--sign` / `--sign-lit` included. The palette is slate / charcoal / muted gold / warm ivory.
+   This is a Store Support Presentation decision only; the game's semantic benefit green is
+   untouched.
 
-     AVAILABLE    #273033 slate, #58666A edge     the one real button: muted-gold plane, depth
-     SELECTED     same slate, muted-gold edge     compact state label, no depth, no CTA
-     UNAVAILABLE  #191F21 charcoal, #343F42 edge  dead plane, no depth
+     AVAILABLE    #20272B slate, #465158 edge     the one real control: #C4973E gold, depth
+     SELECTED     same slate, #B98B3E outline     same footprint, charcoal fill, no depth
+     UNAVAILABLE  #171C1F charcoal, #303A3E edge  dead plane, no depth
 
-   SELECTED is never a filled card, a tint or a left strip; it is the edge, the raised title
-   contrast and the label together - never the edge alone.
+   SELECTED is never a filled card, a tint or a left strip; it is the gold outline, the raised
+   title contrast and the state control together - never the outline alone.
    ---------------------------------------------------------------------------- */
-.relic-plate{position:relative;padding:14px 15px 13px;background:#273033;
- box-shadow:inset 0 0 0 2px #58666a,3px 3px 0 #0e1315}
+.relic-plate{position:relative;padding:14px 15px 13px;background:#20272b;
+ box-shadow:inset 0 0 0 2px #465158,3px 3px 0 #10161a}
 /* the certificate's subject, left-aligned like every other record in the game */
-.relic-plate h3{font:500 18px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#ece8dc;
+.relic-plate h3{font:500 18px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f1ece2;
  padding:0}
 /* UI_UX §FUNCTION / FLAVOR VISUAL HIERARCHY - EXACT, and §CARD CONTENT: the exact Function is
    the comparison this choice is made on, so it stays one step under the title, never dim. */
-.relic-plate p{margin-top:7px;font:600 14px/1.6 var(--ui);color:#bdc6c6}
+.relic-plate p{margin-top:7px;font:600 14px/1.6 var(--ui);color:#b8c0c2}
 /* the price, struck on the panel as a ruled line rather than a box inside a box */
 .relic-plate .cost{display:block;margin:11px 0 10px;padding:9px 0 0;letter-spacing:.06em;
- font:500 20px/1 var(--f-led);color:#c2a15c;box-shadow:inset 0 1px 0 #58666a99}
+ font:500 20px/1 var(--f-led);color:#d2a347;box-shadow:inset 0 1px 0 #46515899}
 
-/* AVAILABLE - the only control on the screen that looks pressable. A compact plane, not a
-   full-width bar: the bar is the SaaS CTA silhouette this spec rules out. 138 x 48 stays well
-   above the phone touch minimum. Hard edge plus a hard bottom-right offset, nothing else. */
+/* AVAILABLE - the only control on the screen that looks pressable, and a desaturated amber
+   game control rather than a brown or olive one. A compact plane, not a full-width bar: the
+   bar is the SaaS CTA silhouette this spec rules out. 138 x 48 stays well above the phone
+   touch minimum. Hard edge plus a hard bottom-right offset, nothing else. */
 .relic-plate .stamp{width:auto;min-width:138px;min-height:48px;padding:0 18px;
  font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:#a9843d;color:#1b1408;transform:none;
- box-shadow:inset 0 0 0 2px #c7a653,3px 3px 0 #0e1315}
-.relic-plate .stamp:hover{background:#b58f44}
+ background:#c4973e;color:#241c10;transform:none;
+ box-shadow:inset 0 0 0 2px #d8b45f,3px 3px 0 #765821}
+/* affordance belongs only to the control that can actually be pressed - :hover and :active
+   still match a disabled button, so both are scoped away from one */
+.relic-plate .stamp:not([disabled]):hover{background:#cfa249}
 /* the press is the depth collapsing: the plane travels onto the panel and the offset closes */
-.relic-plate .stamp:active{transform:translate(2px,2px);background:#96742f;
- box-shadow:inset 0 0 0 2px #b5984c,1px 1px 0 #0e1315}
+.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#b08631;
+ box-shadow:inset 0 0 0 2px #c5a055,1px 1px 0 #765821}
 
-/* SELECTED / OWNED. The panel keeps the AVAILABLE slate surface - no fill, no tint, no strip.
-   The state is the muted-gold edge, a slightly raised title contrast, and the action becoming
-   a label instead of a button. */
-.relic-plate.owned{background:#273033;
- box-shadow:inset 0 0 0 2px #b08f45,3px 3px 0 #0e1315}
-.relic-plate.owned h3{color:#faf6e9}
-.relic-plate.owned p{color:#c9d1d0}
-.relic-plate.owned .cost{color:#c2a15c;box-shadow:inset 0 1px 0 #b08f4566}
-/* a compact state label, not a large disabled button: dark slate plane, muted-gold edge,
-   muted-gold ink, no depth and no press, so nothing about it reads as a CTA to press again.
-   `opacity:.4` from the base sheet is off - the state is carried by the plane and the ink. */
-.relic-plate.owned .stamp[disabled]{min-width:0;min-height:32px;padding:0 13px;
- font:600 13px/1 var(--ui);letter-spacing:.14em;
- background:#1f272a;color:#d9c489;opacity:1;transform:none;
- box-shadow:inset 0 0 0 2px #a9843d}
+/* SELECTED / OWNED. The panel keeps the AVAILABLE surface - no fill, no tint, no strip. The
+   state is the muted-gold outline, a slightly raised title contrast, and the control losing
+   every pressable cue while keeping its shape. */
+.relic-plate.owned{background:#20272b;
+ box-shadow:inset 0 0 0 2px #b98b3e,3px 3px 0 #10161a}
+.relic-plate.owned h3{color:#f6f0e5}
+.relic-plate.owned .cost{color:#d2a347;box-shadow:inset 0 1px 0 #b98b3e66}
+/* the committed control keeps the AVAILABLE footprint exactly. Shrinking it left a hole beside
+   a card of unchanged height and read as a web status chip; the state is carried by the
+   charcoal fill, the muted-gold edge and ink, and the absence of any depth or press - not by
+   becoming smaller. `opacity:.4` from the base sheet is off. */
+.relic-plate.owned .stamp[disabled]{background:#171c1f;color:#d2a347;opacity:1;transform:none;
+ box-shadow:inset 0 0 0 2px #b98b3e}
 
 /* UNAVAILABLE. The panel recedes on its own lightness, not on opacity, and the title and the
    Function stay fully legible at the Canonical values. */
-.relic-plate.unavailable{background:#191f21;
- box-shadow:inset 0 0 0 2px #343f42,1px 1px 0 #0e1315}
-.relic-plate.unavailable h3{color:#b6c0c1}
-.relic-plate.unavailable p{color:#899597}
+.relic-plate.unavailable{background:#171c1f;
+ box-shadow:inset 0 0 0 2px #303a3e,1px 1px 0 #10161a}
+.relic-plate.unavailable h3{color:#aeb8ba}
+.relic-plate.unavailable p{color:#828e91}
 /* the price steps back with the panel - it is not actionable here - but stays muted gold,
    because gold is what a price is in this game */
-.relic-plate.unavailable .cost{color:#8f7539;box-shadow:inset 0 1px 0 #343f42}
+.relic-plate.unavailable .cost{color:#b98b3e;box-shadow:inset 0 1px 0 #303a3e}
 
 /* DISABLED ACTION, general. A dead plane at the Canonical values: no depth, no lit edge, no
    press. It names its own cause (선택 종료 / 골드 부족) rather than staying 구매, and it is never
    faded by whole-element opacity. */
-.relic-plate .stamp[disabled]{background:#242b2d;color:#707d80;opacity:1;transform:none;
- box-shadow:inset 0 0 0 1px #394549}
+.relic-plate .stamp[disabled]{background:#23292c;color:#697579;opacity:1;transform:none;
+ box-shadow:inset 0 0 0 2px #394347}
 
 .relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;
  padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));background:#0c0805;
