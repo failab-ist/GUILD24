@@ -154,41 +154,57 @@
  .since>summary:after{transition:none}
 }
 
-/* MORNING — ONE AUTHORED ROOM (PRESENTATION BATCH 1 NARROW FIX).
-   Everything this block used to do was compensation for a fitted room whose art stopped
-   before the edges of the screen: a lit middle, a heavy side falloff over the bare wall tile
-   either side of it, a counter gradient and a drawn skirting. The room is a production
-   painting now (assets/presentation/morning/store-bg-wide.png, 1672x941), and its authored zones
-   were measured before it was integrated:
-       0-19%    ceiling - soffit, three hanging fixtures, vent
-       19-78%   wall    - fridge and shelving, the window and its morning light, door
-       79-86%   counter - the lit wooden top
-       87-100%  counter face and foreground
-   So the compensation goes, and the art owns the architecture edge to edge. It is owned here,
-   on the bands' common parent, because it is ONE room: cropping it into the wall band threw
-   its ceiling away and left the old procedural ceiling sitting above a pasted middle strip.
-   `cover` crops horizontally only at these widths, so no authored zone is lost at 360 or at
-   1280 - the ceiling is in the read at every width.
-   The live layer is untouched and still on top, in the same order: DAY sign, board and every
-   notice, branch and Decoration plates, till, shutter Action. Only the procedural drawing of
+/* MORNING — ONE AUTHORED ROOM, TWO AUTHORED FRAMINGS (PRESENTATION BATCH 1 NARROW FIX).
+   Everything this block used to do was compensation for a fitted room whose art stopped before
+   the edges of the screen. The room is production art now, and the User authored it twice -
+   once wide, once portrait - so each viewport gets a framing that was composed for it instead
+   of an aggressive crop of the other one. Measured zones, as a share of each file's own height:
+       wide  (1672x941)   ceiling 0-19     wall 19-78     counter top 82.7-85.2   face 85.2-100
+       phone (941x1672)   ceiling 0-18.6   wall 18.6-74   counter top 74.2-76.0   face 76-90.7
+                          floor 90.7-100
+   Both are `cover`, and at every shipped width the stage is narrower than the file it carries,
+   so the crop is horizontal only: the full authored height is on screen, ceiling to floor, and
+   asset height maps 1:1 to stage height. That mapping is what lets the live till be seated on
+   the counter top the painting actually draws, per breakpoint, rather than at a pixel value
+   that only holds at one width.
+   The room is owned by the STAGE, not by .store, so it runs behind the Action dock as well -
+   the dock stops being an opaque bar cutting the room off above the controls and becomes what
+   it is, a seating plane for live controls over the room.
+   The live layer is unchanged and still on top, in the same order: DAY sign, board and every
+   notice, branch and Decoration plates, till, 점포지원, 문 열기. Only the procedural drawing of
    the same physical room is suppressed, and only on this Surface. */
-.p-morning .store{isolation:isolate;background-color:#0f0b08;
- background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 80%,#0a070547 100%),
-  url('assets/presentation/morning/store-bg-wide.png');
+.p-morning{isolation:isolate;background-color:#0f0b08;
+ background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
+  url('assets/presentation/morning/store-bg-phone.png');
  background-size:auto,cover;background-position:0 0,50% 50%;background-repeat:no-repeat,no-repeat}
-.p-morning .band.ceiling,.p-morning .band.wall,.p-morning .band.counter{background:none;overflow:hidden}
+.p-morning .store{background:none}
+.p-morning .band.ceiling,.p-morning .band.wall,.p-morning .band.counter{background:none}
+.p-morning .band.ceiling,.p-morning .band.wall{overflow:hidden}
 .p-morning .band.ceiling .band-art,.p-morning .band.wall .band-art,
 .p-morning .band.counter .band-art{visibility:hidden}
 .p-morning .band.wall:after{display:none}
-/* the bands keep their boxes and become the positioning frames the live layer is anchored in,
-   sized to the zones they now sit on: the DAY sign hangs from the art's ceiling and the till
-   stands on the art's counter, instead of both floating over wall. */
-.p-morning .band.ceiling{flex:0 0 19%}
-.p-morning .band.counter{flex:0 0 22%}
+/* The dock keeps 점포지원 and 문 열기 - it is still their owner - and gives up its plane. Both
+   controls carry their own solid face, so the room needs no panel behind them to keep them
+   readable. Taking it out of flow is also what makes the store box the whole stage, so a
+   band's percentage is the same percentage of the painting behind it. */
+.p-morning .dock{position:absolute;left:0;right:0;bottom:0;z-index:4;
+ background:none;box-shadow:none}
+/* the bands are the positioning frames the live layer is anchored in, sized to the zones of
+   the file this breakpoint is carrying: the DAY sign hangs from the art's ceiling, and the
+   counter band starts where the art's counter top starts */
+.p-morning .band.ceiling{flex:0 0 21%}
+.p-morning .band.counter{flex:0 0 38%}
 .p-morning .band.ceiling .mount,.p-morning .band.counter .mount{height:100%}
 .p-morning .store>.band{position:relative;z-index:0}
-/* the falloff that hid bare tile at the edges would now crush a room that reaches them. What
-   is left is a corner seat, enough to hold the lit subjects forward. */
+/* THE TILL IS SEATED, NOT ANCHORED BY HABIT. Scene's published anchor put it in the middle of
+   its band, which was right for the procedural counter art and is wrong for a painted one: the
+   housing has to stand ON the counter top the painting draws. The counter band is opened
+   upwards to 62% of the stage so the housing is contained by the band it belongs to - the
+   visual harness checks that, and it is right to - and inside it the feet land at 35.5% of the
+   band, which is 75.5% of the stage: the phone file's counter top plane, measured, not guessed.
+   The inline anchor is a style attribute, so overriding it takes this much force and no less. */
+.p-morning .till{left:24%!important;width:52%!important;top:22.3%!important;height:14.5%!important}
+.p-morning .till-cap{left:28%!important;width:44%!important;top:15.5%!important;height:6.8%!important}
 .p-morning .store:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
  background:radial-gradient(150% 108% at 50% 44%,#0000 58%,#12100b38 82%,#0e0a0685 100%)}
 /* The DAY sign's plate and the till's display housing were DRAWN INTO the procedural ceiling
@@ -211,3 +227,17 @@
 /* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
 .p-morning .store>.board{position:relative;z-index:2}
 .p-morning .daysign,.p-morning .till,.p-morning .till-cap,.p-morning .branchplate{z-index:2}
+
+/* DESKTOP / wide viewport takes the wide framing of the same store. The switch is the sheet's
+   existing 1024 breakpoint, and everything that moves with it is geometry the other file
+   measures differently: its ceiling ends a little lower, and its counter top sits at 82.7-85.2%
+   instead of 74.2-76.0%, so the band that seats the till starts there and the housing's feet
+   land at 85% of the stage. Same live layer, same order, same store - the other framing of it. */
+@media(min-width:1024px){
+ .p-morning{background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
+   url('assets/presentation/morning/store-bg-wide.png')}
+ .p-morning .band.ceiling{flex:0 0 19%}
+ .p-morning .band.counter{flex:0 0 30%}
+ .p-morning .till{left:32%!important;width:36%!important;top:23.3%!important;height:26.7%!important}
+ .p-morning .till-cap{left:35%!important;width:30%!important;top:12.6%!important;height:10.7%!important}
+}
