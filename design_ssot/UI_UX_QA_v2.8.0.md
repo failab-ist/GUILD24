@@ -576,8 +576,6 @@ PER-PHASE APPLICATION PASS:
   disabled-like plane all FAIL
 - an equipment Stat bonus reads `투력 +N`, never `전투 +N`, with the equipment identity visually
   separated from the Stat effect
-- the NIGHT closing-handover control is a dark flat plane with one hard depth and a press that
-  collapses it - no violet / purple / green filled CTA, no border, no inset outline
 - the MORNING shutter pull carries no repeating-stripe gradient, while the register readout glow
   and the SALE sticky scrim remain as functional layers
 - FINAL's fixed dock names the disabled cause on the control: `원정대 {current} / {required}`
