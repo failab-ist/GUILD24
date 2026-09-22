@@ -11,14 +11,12 @@ PATCH_TYPE=META_SIMPLIFICATION
 ## CURRENT EXECUTION SCOPE
 
 META_v2.8.0 is the current project-wide Meta owner.
-The former scoped Decoration-package-only execution meaning is superseded.
 
 ## INHERITANCE
 
 Job×Boss matrix, distinct-Boss Item/Job unlocks, Monster Knowledge, Full Reset, and other unchanged Meta behavior inherit `META_v2.7.0.md` and its base chain.
 Job Mastery progression identity/count still inherits, but its active reward model is overridden by the exact spawn-Level model in this v2.8 owner.
 
-This patch supersedes v2.7 Franchise Grade / Franchise Achievement / Grade-based Start Contract progression.
 
 ## ACTIVE META — EXACT STRUCTURE
 
@@ -169,9 +167,6 @@ Measured under the approved balance, across the ordinary purchase orders:
 4th            : around Run 10-11
 ```
 
-This supersedes the earlier 1-3 / 4-7 / 8-12 target. Where an older QA clause or line still
-states that target, the expectation above is the current one.
-
 Requirements that remain:
 - D30 / Boss CLEAR is not required to buy any Decoration
 - no Decoration may be a forced first purchase - the growth rate must not collapse when a
@@ -315,7 +310,7 @@ Fresh Store remains capable of first clear.
 ## JOB MASTERY
 
 Job Mastery clear-count identity / Job×Boss ownership remains unchanged.
-Its active reward effect is superseded by the exact v2.8 spawn-Level model below.
+Its active reward effect is the exact v2.8 spawn-Level model below.
 
 Store Capital cannot buy Mastery.
 Decoration ownership cannot substitute for Boss CLEAR in the Job×Boss matrix.
@@ -335,7 +330,7 @@ against the approved acquisition expectation and anti-farm conditions before the
 closed.
 
 Validation must confirm:
-- ordinary engaged play does not retain the old excessive zero-Gain pattern
+- ordinary engaged play produces meaningful Store Capital at the approved cadence
 - both reasonable initial purchase orders remain near the approved acquisition expectation
 - no-sale / inactivity / deliberate short-run farming remains inefficient
 - overcharge-heavy play does not become the dominant Meta strategy merely by inflating Gross Sales
@@ -356,8 +351,6 @@ Item Counter -> current ITEM owner
 ## JOB MASTERY — EXACT SPAWN-LEVEL MODEL
 
 USER_APPROVAL_DATE=2026-09-20
-
-The inherited rule that Job Mastery should strengthen Job Base Stats / Growth is superseded.
 
 Job Mastery does **not**:
 - multiply Job Base Stats
