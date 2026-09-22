@@ -669,12 +669,22 @@ const coachSteps={
     columns MEAN and where readiness comes from. It never names an Item for a Hazard: no
     `독이면 X를 사세요`, because that is the decision the player is here to make. */
  ['hazard','.dest-plate .hazards','위험은 특정 능력을 압박한다. 환경 대응은 손님 능력과 보급을 함께 반영한다.'],
- ['forecast','.readout','손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.'],
+ /* UI-Q-v28-27. The lesson's whole point is that this reading does not move, and `.readout`
+    is the panel - it also holds `.ingredients`, whose Fatigue/Supply arithmetic is computed
+    from the CURRENT committed Bag, and `.great-signal`, which is recomputed after every
+    committed sale. Pointing at the panel put two things that do move inside a cutout whose
+    copy says nothing here moves. `.top` is the frozen SALE-entry snapshot itself - the two
+    forecasts and the conditional Death risk - and `.ingredients` keeps its own lesson below. */
+ ['forecast','.readout .top','손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.'],
  /* The Supply/Fatigue order, in the order it actually resolves. The hidden Supply-deficit
     formula is not taught - only that a shortfall costs one penalty across the preparation. */
  ['supply','.ingredients','보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요 보급을 초과한 보급은 피로를 줄인다.'],['inventory','.good','판매한 상품은 오늘 원정에서 쓰고 사라진다.'],['pricing','.tills','50%는 투자, 100%는 기본, 150%는 수익 우선이다.']],
  night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
- closing:[['receipt','.tape','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']]
+ /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
+    with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
+    which is not what this lesson is about. The copy names 영업 손익, so it points at that row;
+    the 발주 지출 / 점포지원 투자 block it says is listed apart is the next row group under it. */
+ closing:[['receipt','.tape .row.profit','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']]
 };
 let activeCoach=null;
 let coachSettle=0,coachPainted=null;
@@ -687,16 +697,23 @@ const coachKey=el=>{const r=el.getBoundingClientRect();
    settleCoach. Picking the step, and the one scroll, stay in showCoach: this only paints. */
 function paintCoach(step,target){
  const root=$('#coach-root');if(!root)return null;
- const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8),/* UI-Q113 §10. The mark used to stop at a flat 180px, so the customer card - the tallest
-    thing any lesson points at - was highlighted from the chin up and the frame the player was
-    being shown ran out of the cutout. The cap is the viewport's own share now: it still cannot
-    swallow a short screen, and it does wrap the card at every phone width. */
- height=Math.min(b.height+8,Math.round(innerHeight*.34)),bottom=top+height;
+ const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8);
  /* UI-Q-v28-27: the bubble may not cover the next required control, and on every phase that
     control is the dock. The usable floor is therefore the dock's top edge, not the viewport's -
     the 진열대 lesson used to be placed just below its product row and ran 29px over 손님 보내기. */
  const dockEl=document.querySelector('.stage .dock');
  const floor=dockEl?Math.min(innerHeight,Math.round(dockEl.getBoundingClientRect().top)):innerHeight;
+ /* UI-Q113 §10 raised the cutout from a flat 180px to a share of the viewport so the SALE card
+    would fit. 34% of a 780px phone is 265px, which the card (241px) clears - but the NIGHT beat
+    is 352px and the CLOSING tape 653px, so those two lessons cut out the top of their subject
+    and left the rest under the mask: 86px and 388px of the exact content being described.
+    The share was never the requirement - the requirement is that the bubble still has a masked
+    band to sit in, above or below. So the cap is that room, and the old share stays as the
+    floor under it, which is what keeps a short screen from being swallowed.
+    RESERVE is the tallest real bubble (143px) plus its two 12px gaps, rounded up. */
+ const RESERVE=172;
+ const room=top>=RESERVE?floor-top:floor-top-RESERVE;
+ const height=Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
  const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
  const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
  root.innerHTML='<div class="coach-layer">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';

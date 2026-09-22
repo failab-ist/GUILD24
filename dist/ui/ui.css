@@ -1256,6 +1256,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     phone the quick set stays next to the dial and the row's slack is left as the form's own
     margin. */
  .dial .set{margin-left:20px}
+ /* With the quick set no longer pushed to the far edge, the `.dial` box itself was still the
+    full `1fr auto` span - 726px at 1024/1280 for a ~230px control - so the ORDER 수량 coach
+    mark cut out 500px of bare paper beside the dial it points at (UI-Q-v28-27), and the row
+    carried that much dead box. The box hugs its own content past phone width, where the phone's
+    `margin-left:auto` no longer needs the full width to push against. */
+ .dial{width:max-content;max-width:100%}
  .npc-grid,.unlock-grid,.contract-grid,.final-team,.relic-choices{grid-template-columns:1fr 1fr}
  .threat .fams{grid-template-columns:1fr 1fr}
  /* FINAL at tablet width and up: the Boss stands beside what is known about it rather than
