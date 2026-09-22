@@ -1354,6 +1354,71 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal-footer .danger{background:#5c2a24;color:#f6dfd9}
 
 /* =====================================================================
+   STORE MANAGEMENT / CODEX SHEET. USER 2026-09-23: brought to the Opening's level.
+   Same object language, same weights, nothing new invented - the sheet the player reaches
+   Store Management through is the same kind of built thing as the sheet they came from.
+   Scoped by `.tabs`, which is the Codex and nothing else, so the utility overlays are
+   untouched.
+   ===================================================================== */
+.modal:has(.tabs){background:var(--tex-wood),#33241a;background-size:32px 12px;
+ border-style:solid;border-width:10px;
+ border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='32' height='32' shape-rendering='crispEdges'><g fill='%230f0a05'><rect x='0' y='0' width='32' height='2'/><rect x='0' y='10' width='2' height='12'/><rect x='30' y='10' width='2' height='12'/><rect x='0' y='30' width='32' height='2'/></g><g fill='%235a4028'><rect x='0' y='2' width='2' height='1'/><rect x='7' y='2' width='18' height='1'/><rect x='30' y='2' width='2' height='1'/><rect x='2' y='10' width='1' height='12'/><rect x='29' y='10' width='1' height='12'/><rect x='0' y='29' width='2' height='1'/><rect x='7' y='29' width='18' height='1'/><rect x='30' y='29' width='2' height='1'/></g><g fill='%23e0bc70'><rect x='2' y='2' width='5' height='1'/><rect x='25' y='2' width='5' height='1'/><rect x='2' y='3' width='1' height='4'/><rect x='29' y='3' width='1' height='4'/><rect x='5' y='5' width='1' height='1'/><rect x='26' y='5' width='1' height='1'/><rect x='2' y='25' width='1' height='5'/><rect x='29' y='25' width='1' height='5'/><rect x='5' y='26' width='1' height='1'/><rect x='26' y='26' width='1' height='1'/><rect x='3' y='29' width='4' height='1'/><rect x='25' y='29' width='4' height='1'/></g><g fill='%2346301d'><rect x='0' y='3' width='2' height='2'/><rect x='7' y='3' width='18' height='2'/><rect x='30' y='3' width='2' height='2'/><rect x='4' y='4' width='3' height='1'/><rect x='25' y='4' width='3' height='1'/><rect x='3' y='10' width='2' height='12'/><rect x='27' y='10' width='2' height='12'/><rect x='0' y='27' width='2' height='2'/><rect x='4' y='27' width='24' height='1'/><rect x='30' y='27' width='2' height='2'/><rect x='7' y='28' width='18' height='1'/></g><g fill='%236b5029'><rect x='3' y='3' width='4' height='1'/><rect x='25' y='3' width='4' height='1'/><rect x='3' y='4' width='1' height='3'/><rect x='28' y='4' width='1' height='3'/><rect x='0' y='8' width='32' height='1'/><rect x='8' y='10' width='1' height='12'/><rect x='23' y='10' width='1' height='12'/><rect x='0' y='23' width='32' height='1'/><rect x='3' y='25' width='1' height='4'/><rect x='28' y='25' width='1' height='4'/><rect x='4' y='28' width='3' height='1'/><rect x='25' y='28' width='3' height='1'/></g><g fill='%233a2717'><rect x='0' y='5' width='2' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='6' y='5' width='20' height='1'/><rect x='27' y='5' width='1' height='1'/><rect x='30' y='5' width='2' height='1'/><rect x='5' y='10' width='1' height='12'/><rect x='26' y='10' width='1' height='12'/><rect x='0' y='26' width='2' height='1'/><rect x='4' y='26' width='1' height='1'/><rect x='6' y='26' width='20' height='1'/><rect x='27' y='26' width='1' height='1'/><rect x='30' y='26' width='2' height='1'/></g><g fill='%232a1a0f'><rect x='0' y='6' width='2' height='1'/><rect x='4' y='6' width='24' height='1'/><rect x='30' y='6' width='2' height='1'/><rect x='6' y='10' width='1' height='12'/><rect x='25' y='10' width='1' height='12'/><rect x='0' y='25' width='2' height='1'/><rect x='4' y='25' width='24' height='1'/><rect x='30' y='25' width='2' height='1'/></g><g fill='%23b08a42'><rect x='0' y='7' width='32' height='1'/><rect x='7' y='10' width='1' height='12'/><rect x='24' y='10' width='1' height='12'/><rect x='0' y='24' width='32' height='1'/></g><g fill='%23120c06'><rect x='0' y='9' width='32' height='1'/><rect x='9' y='10' width='1' height='13'/><rect x='22' y='10' width='1' height='13'/><rect x='0' y='22' width='9' height='1'/><rect x='10' y='22' width='12' height='1'/><rect x='23' y='22' width='9' height='1'/></g></svg>") 10 stretch;
+ background-clip:padding-box;box-shadow:0 -6px 0 #0000008c}
+.modal:has(.tabs) .modal-header{margin:0;padding:11px 13px 12px;
+ background:linear-gradient(180deg,#43301e 0,#2c1e12 100%);
+ box-shadow:inset 3px 0 0 #00000047,inset -3px 0 0 #00000047,
+  inset 0 -2px 0 #a8823e,inset 0 -4px 0 #12100a}
+.modal:has(.tabs) .modal-header h2{font-size:21px;letter-spacing:.02em;text-shadow:0 2px 0 #1b1109}
+.modal:has(.tabs) .modal-body{padding:15px 12px 14px}
+.modal:has(.tabs) .modal-footer{padding:12px 12px 13px;background:none;
+ box-shadow:inset 0 1px 0 #a8823e59}
+/* the tab row was the last browser-like control on this sheet: chips with a generic bevel.
+   They are small iron fixtures now, in the same family as the Opening's menu pin - cut
+   corners, one hard cast, and the open tab named by a brass edge rather than by a brighter
+   fill. Deliberately quiet: a tab is navigation, never the sheet's decision. */
+.modal:has(.tabs) .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.modal:has(.tabs) .tabs .small{min-height:38px;padding:8px 12px;font:600 13px/1 var(--ui);
+ background:linear-gradient(180deg,#39434c 0,#2a323a 46%,#1d232a 100%);color:#c6b89d;
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 2px 0 #5b6a7259;
+ clip-path:polygon(0 5px,5px 5px,5px 0,calc(100% - 5px) 0,calc(100% - 5px) 5px,100% 5px,
+  100% calc(100% - 5px),calc(100% - 5px) calc(100% - 5px),calc(100% - 5px) 100%,
+  5px 100%,5px calc(100% - 5px),0 calc(100% - 5px));
+ filter:drop-shadow(0 3px 0 #1d0805)}
+.modal:has(.tabs) .tabs .small:hover{background:linear-gradient(180deg,#44505a 0,#333d46 46%,#232a31 100%);color:#e0d2b7}
+.modal:has(.tabs) .tabs .small:active{transform:translateY(2px);filter:drop-shadow(0 1px 0 #1d0805)}
+.modal:has(.tabs) .tabs .small.active{background:linear-gradient(180deg,#4a3820 0,#38291597 46%,#2a1d12 100%);
+ color:#f2e2bd;box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #a8823e,inset 0 3px 0 #d2ab6240}
+/* the option cards take the Opening's row language: the outline steps back, the inside is
+   cut, and the card sits lighter than the sheet rather than as a black slab. The two-track
+   geometry, the seam between reading and Action, the buy/equip flow and the inline
+   confirmation are all unchanged - only the values and the edge are brought into line. */
+.modal:has(.tabs) .slot-option{background:#00000026;
+ box-shadow:inset 0 0 0 1px #00000047,inset 0 3px 0 #00000059,inset 0 -2px 0 #ffffff17}
+.modal:has(.tabs) .slot-option.locked{opacity:1;background:#0000001f;
+ box-shadow:inset 0 0 0 1px #0000003d,inset 0 3px 0 #0000004d,inset 0 -2px 0 #ffffff12}
+.modal:has(.tabs) .slot-option.on{background:#1d18104d;
+ box-shadow:inset 0 0 0 1px #00000059,inset 0 0 0 2px var(--gold),inset 0 3px 0 #00000047}
+.modal:has(.tabs) .slot-option>div:first-child{box-shadow:inset 0 2px 0 #ffffff12}
+/* the key is the card's own control, built like the sheet's Action at a smaller measure:
+   a dark rim, one lit edge, a hard bottom, and a press that collapses it */
+.modal:has(.tabs) .slot-option>button{background:#3f382c;color:#efe3c8;
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 3px 0 #6a6152,inset 0 -5px 0 #221d18,
+  inset 3px 0 0 #12100a}
+.modal:has(.tabs) .slot-option>button:hover{background:#4d4536}
+.modal:has(.tabs) .slot-option>button:active{transform:none;background:#332e27;
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 3px 0 #221d18,inset 0 -5px 0 #6a6152,
+  inset 3px 0 0 #12100a}
+.modal:has(.tabs) .slot-option>button[data-action="deco-buy"]{background:var(--yellow);color:var(--yellow-ink);
+ box-shadow:inset 0 0 0 2px var(--yellow-line),inset 0 3px 0 var(--yellow-lit),
+  inset 0 -5px 0 var(--yellow-deep),inset 3px 0 0 var(--yellow-line)}
+/* UNAVAILABLE recedes, it does not shout: the key loses its depth and becomes a quiet sunken
+   plane one step under the card, not a black slab louder than the reading beside it. The price
+   stays legible, because the price is the reason it cannot be pressed. */
+.modal:has(.tabs) .slot-option>button:disabled{background:#00000038;color:#b3a68b;
+ box-shadow:inset 0 0 0 1px #00000047,inset 0 3px 0 #0000005c,inset 0 -2px 0 #ffffff0f,
+  inset 2px 0 0 #00000047}
+
+/* =====================================================================
    PRESENTATION BATCH 1 / PREPARATION SHEET. Scoped by what the sheet actually contains,
    not by `.narrow` - `.narrow` is worn by 도움말, 영업 설정 and every confirm alike, and
    those are LOW-budget utility overlays that must not inherit a MEDIUM surface's frame.
@@ -1432,7 +1497,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    3px version of the same rivet shipped invisible; measured against the runtime, 9px is the
    size at which a fixing reads as a fixing and still never arrives before the label.
    The press travels 4px and trades its lit and deep edges. BRICK family and guard unchanged. */
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{min-height:64px;
+.modal-footer [data-action="start"],
+.modal-footer [data-action="store-return"]{min-height:64px;
  font:600 20px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;padding:0 26px;
  background-color:var(--brick);
  background-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>");
@@ -1444,9 +1510,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
   6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
  filter:drop-shadow(0 6px 0 #00000099)}
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:hover{
+.modal-footer [data-action="start"]:hover,
+.modal-footer [data-action="store-return"]:hover{
  filter:drop-shadow(0 6px 0 #00000099) brightness(1.08)}
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:active{transform:translateY(4px);
+.modal-footer [data-action="start"]:active,
+.modal-footer [data-action="store-return"]:active{transform:translateY(4px);
  box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
   inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
  filter:drop-shadow(0 2px 0 #1d0805) brightness(.96)}
