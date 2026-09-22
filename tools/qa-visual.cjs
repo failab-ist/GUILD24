@@ -11,13 +11,14 @@ const list=(v,d)=>v?String(v).split(',').map(x=>x.trim()).filter(Boolean):d;
    does not stand in for 1024. */
 const WIDTHS=list(process.env.QA_WIDTHS,[360,390,412,430,1024,1280]).map(Number);
 const HEIGHT=Number(process.env.QA_HEIGHT||780),PORT=Number(process.env.QA_PORT||5199);
+const CAPTURE_ONLY=process.env.QA_CAPTURE_ONLY==='1';
 // D-35. The gate used to be phones only, so the width the game is most often played at was
 // never audited. A desktop width is a different device, not a wide phone: no touch, a
 // pointer, and a taller viewport. Anything at or past this is driven as a desktop.
 const DESKTOP=Number(process.env.QA_DESKTOP_FROM||1024);
 const isDesktop=w=>w>=DESKTOP;
 const heightFor=w=>process.env.QA_HEIGHT?HEIGHT:(isDesktop(w)?880:HEIGHT);
-const OUT=path.resolve(__dirname,'../reports/ui');
+const OUT=path.resolve(__dirname,'..',process.env.QA_OUT||'reports/ui');
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 // The seven phase screens, plus the five surfaces D-35 names that the gate never opened:
 // the Event notice, the two endings, the codex and the store menu. Modal targets are driven
@@ -792,6 +793,7 @@ async function focusProbe(page){
    }
    await context.close();
   }
+  if(!CAPTURE_ONLY){
   const ctx=await browser.newContext({viewport:{width:390,height:HEIGHT},deviceScaleFactor:1,isMobile:true,hasTouch:true,locale:'ko-KR'});
   const kb=await ctx.newPage();
   kb.on('pageerror',e=>{console.error('  page error @focus: '+e.message);failed++;});
@@ -833,6 +835,7 @@ async function focusProbe(page){
   failed+=d25.fails.length;
   console.log(`${d25.fails.length?'FAIL':'PASS'} D25 Final disclosure precedes the D25 decisions${d25.fails.length?'\n  - '+d25.fails.join('\n  - '):''}`);
   await ctx.close();
+  }
  }finally{
   await browser.close();server.kill();
  }
