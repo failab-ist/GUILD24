@@ -69,8 +69,17 @@ function anchorOffer(key,y0){
   if(!sc||!back)return;const d=back.getBoundingClientRect().top-y0;if(d)sc.scrollTop+=d;};
  fix();requestAnimationFrame(fix);}
 
-function setModal(value){decoPending=null;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
- if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}else{document.body.style.overflow='';previousFocus?.focus?.();}requestAnimationFrame(showCoach);}
+/* UI-Q-v28-29 CONTROL / FEEDBACK / LAYOUT CONTINUITY: a sheet hands focus back to the control
+   that opened it. `previousFocus` used to be re-read on EVERY call, closing included - and at
+   that moment the active element is a control INSIDE the sheet that renderModal() is about to
+   remove, so the restore ran on a detached node and focus fell to <body>. It is captured only
+   when a sheet opens over the screen, so one sheet opening another (메뉴 -> 영업 설정, 도감 ->
+   새 점포 준비) still returns to the single origin the player came from. If that origin is gone
+   by the time the sheet closes, the Phase's own content region takes focus rather than nothing. */
+function setModal(value){decoPending=null;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+ if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
+ else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
+ requestAnimationFrame(showCoach);}
 let lastPhase=null;
 // ---- stage primitives ----------------------------------------------------
 // The only frame every Phase shares: a non-scrolling 100dvh box, one scroll surface,

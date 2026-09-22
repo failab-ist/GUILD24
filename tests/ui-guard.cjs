@@ -212,6 +212,26 @@ test('UI-Q-v28-26: the accepted Action composition holds',()=>{
  assert.ok(/white-space:nowrap/.test(ruleFor('.modal-footer .stamp{')),'neither label breaks to a second line');
 });
 
+/* UI-Q-v28-29 CONTROL / FEEDBACK / LAYOUT CONTINUITY — "modal close returns focus to a
+   meaningful origin". Runtime evidence at this fix: before it, closing any sheet left
+   document.activeElement on <body> at 390 and 1280; after it, focus is back on the control
+   that opened the sheet. */
+test('UI-Q-v28-29: a sheet hands focus back to the control that opened it',()=>{
+ const set=fn('setModal');
+ assert.ok(/if\(value&&!modal\)previousFocus=document\.activeElement/.test(set),
+  'the opener is captured only when a sheet opens over the screen');
+ assert.ok(!/(^|[^)])previousFocus=document\.activeElement;modal=value/.test(set),
+  'and never re-read on the closing call, where the active element is the sheet\'s own control');
+ assert.ok(/back\?\.isConnected\?back:/.test(set),
+  'a restore target that the redraw removed is not focused as a detached node');
+ assert.ok(/\$\('#phase-content'\)\)\?\.focus/.test(set),
+  'and focus falls to the Phase content region rather than to <body>');
+ /* the same-view redraw path keeps its own contract: the pressed control comes back and the
+    ORDER row it belongs to goes back on its pixel. Guarded so neither is quietly dropped. */
+ assert.ok(/preventScroll:true/.test(fn('restoreFocus')),'restoring focus does not scroll the screen');
+ assert.ok(/anchorOffer\(key,y0\)/.test(app),'and a quantity press re-anchors its own offer row');
+});
+
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
  const morning=fn('morningScreen'),order=fn('orderForm')+fn('orderScreen');
  for(const part of ['Scene.ceiling()','Scene.wall(','Scene.counter()'])
