@@ -6,21 +6,9 @@ DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=PROJECT_WIDE_V2_8_CANONICAL
-FREEZE_DATE=2026-09-20
-LAST_APPROVED_AMENDMENT=2026-09-22
-SSOT_AUDIT_STATUS=PROJECT_WIDE_AUDIT_COMPLETE
-VISION_DETAIL_PROMOTION_STATUS=COMPLETE
-COPY_REAUDIT_STATUS=COMPLETE
-V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
-PLAYTEST_RESPONSE_AMENDMENT_STATUS=CANONICAL_PROMOTED_2026_09_22
-PRESENTATION_POLISH_PROMOTION_STATUS=CANONICAL_PROMOTED_2026_09_22
-FUNCTIONAL_DESIGN_POLISH_STATUS=CANONICAL_PROMOTED_2026_09_22
-REMEASURE_BALANCE_DECISION_STATUS=CANONICAL_PROMOTED_2026_09_22
-STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
-FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
+SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_SOURCE_ADOPTION_IN_PROGRESS
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
-SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_SOURCE_ADOPTION_IN_PROGRESS
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
 ## AUTHORITY
@@ -33,14 +21,12 @@ EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 DESIGN TRUTH = current routed Design SSOT.
 IMPLEMENTATION TRUTH = current Source.
 
-v2.8 is now the project-wide current Design SSOT. The previous scoped-decoration-only meaning of
-SPEC_INDEX_v2.8.0 is superseded.
-
 ## CURRENT v2.8 PURPOSE
 
-v2.8 is a focused Core Readability / Playtest Response release.
+v2.8 is the project-wide current Design SSOT for the focused Core Readability / Playtest Response
+release.
 
-It does not broaden the game with P2 structural features. It improves the current loop:
+It improves the current loop:
 
     observe
     -> infer
@@ -56,15 +42,13 @@ Priority:
 - Fatigue salience
 - Store Support salience and truth
 - Item role clarity
-- Boss five-Day presence
+- Boss information cadence
 - mobile density
 - audiovisual consequence / Run-identity polish using existing state
-- full-surface functional-design polish: information priority, tutorial target truth, layout economy, control/feedback continuity
+- full-surface functional-design polish
 - evidence-gated balance follow-up
 
 Structural P2+ expansion remains routed to GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md.
-The User-approved v2.8 Presentation Polish promotion below is an explicit exception: it strengthens
-existing state/feedback without adding a new gameplay system.
 
 ## CURRENT CANONICAL FILE SET
 
@@ -115,8 +99,8 @@ STORE SUPPORT / RUN BUILD / SLOTH WINDOW -> RELIC_v2.8.0.md
 SALE -> SALE_v2.8.0.md
 NIGHT / CLOSING / RESULT CAUSALITY -> NIGHT_CLOSING_v2.8.0.md
 UI / UX / MOBILE / TUTORIAL / FUNCTIONAL DESIGN / POPOVER / SEMANTIC DELTA / DECORATION / PRESENTATION / AUDIO -> UI_UX_v2.8.0.md
-COPY / PLAYER-FACING TERMS / BOSS REPORT COPY -> COPY_WORLD_VOICE_v2.8.0.md
-COPY EXACT PLAYER TEXT AMENDMENT -> COPY_AUDIT_APPROVED_v2.8.0.md
+COPY / PLAYER-FACING TERMS / COPY-SYSTEM RULES -> COPY_WORLD_VOICE_v2.8.0.md
+EXACT PLAYER-FACING COPY -> COPY_AUDIT_APPROVED_v2.8.0.md
 EVENT -> EVENT_v2.8.0.md
 BOSS -> BOSS_v2.8.0.md
 FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.7.0.md
@@ -124,19 +108,15 @@ FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.
 ## HISTORICAL / SUPERSEDED FILE POLICY
 
 Versioned owner files not listed in CURRENT CANONICAL FILE SET are historical/base references only.
-They remain in design_ssot only when a current owner inherits from them. Unreferenced historical
-navigation/decision snapshots may be removed. Historical/base owner files must not be opened as a
-second current truth.
+Retain an older owner file when a current owner explicitly inherits from it.
 
-The v2.8 Director Plan is a non-Canonical release-vision/orientation document only.
-It must contain no implementation rule, numeric baseline, exact UX contract or QA requirement.
+Unreferenced historical navigation/decision snapshots may be removed.
+Historical/base files must not be opened as a second current truth.
 
-Unapproved Copy Audit drafts remain non-Canonical history.
-COPY_AUDIT_APPROVED_v2.8.0.md is the User-approved exact Player-facing copy amendment routed above.
+GUILD24_v2.8_RELEASE_VISION.md is non-Canonical orientation only and carries no detailed mechanics,
+numbers, exact UX contract or QA requirement.
 
-Do not delete an older owner file if a current owner explicitly inherits it.
-Cleanup means removing it from current routing and overriding stale live clauses, not destroying
-the inheritance trail.
+Do not delete inheritance evidence merely because it is old.
 
 ## RETIRED ACTIVE SYSTEMS
 
@@ -146,21 +126,14 @@ The following remain historical only:
 - Grade ORDER discount
 - Start Contract selection / gating
 
-Their inactive archive policy remains owned by META_v2.8.0.md.
+Their inactive archive policy is owned by META_v2.8.0.md.
 
 ## DOCUMENT BASELINE POLICY
 
-Numbers marked DIRECTOR DOCUMENT BASELINE are the approved v2.8 Source-adoption starting values.
+An approved baseline in a current owner is mandatory Design Truth for Source adoption, not a
+recommendation or a value WORK/QA may tune.
 
-For the v2.8 adoption cycle they are MANDATORY exact Design Truth, not recommendations, test candidates,
-soft targets or values that WORK/QA may choose to ignore.
-
-Source must adopt them as written before the related v2.8 adoption item can PASS.
-
-"Baseline" means the required current value from which later measured balance changes may begin.
-It does not mean optional or provisional.
-
-They remain eligible for later balance adjustment only through:
+Later adjustment requires:
 
     measurement
     -> BALANCE FINDING
@@ -168,95 +141,19 @@ They remain eligible for later balance adjustment only through:
     -> owner-spec amendment
     -> separate Source change
 
-A baseline is not permission for WORK or QA to tune, substitute, skip or approximate the number.
-
 ## MEASUREMENT-GATED, NOT DESIGN-UNRESOLVED
 
-The following are not implementation blockers:
+The following remain measurement-gated rather than implementation blockers:
 - global economy pressure
-- Great Success occurrence / probability tuning after the approved .26 / .80 / .30 baseline
-- Great Success economic snowball after the reduced 50 / 100 / 200G Store-Gold baseline
-- Store Support aggregate value after the v2.8 baselines are adopted
-- Food / Water / Fresh-build value efficiency after the v2.8 baseline is adopted
+- Great Success occurrence / probability
+- Great Success economic snowball
+- Store Support aggregate value
+- Food / Water / Fresh-build value efficiency
 - Gate / Family / Hazard frequency and perceived difficulty
 
-Fire-family occurrence currently has no approved special frequency reduction.
-A single-run perception is not enough to tune it.
+Current exact baselines live only in their routed owners.
 
-## CURRENT DESIGN CLOSURE GATE
-
-The full inheritance-chain re-audit is closed by User approval on 2026-09-20.
-
-The former Source-only / inherited-PASS3 gaps are now owned by:
-- SALE purchase acceptance / operating cost / ORDER pity -> ECONOMY_ORDER_v2.8.0.md
-- Gate-count / Tier generation / Forecast boundaries / ordinary resolve & rewards -> DUNGEON_HAZARD_v2.8.0.md
-- Job Base/Growth / Loyalty / revisit -> NPC_TRAIT_v2.8.0.md
-- Job Mastery -> META_v2.8.0.md
-- targeted Event exact mechanics -> EVENT_v2.8.0.md
-
-Related exact acceptance is in the current routed QA or Event acceptance section.
-WORK must implement current Canonical and must not resurrect superseded PASS3 placeholders.
-
-## PLAYTEST RESPONSE AMENDMENT — 2026-09-22
-
-The User-approved playtest response is promoted into the routed current owners.
-
-Exact owners:
-- SALE top density / Bag presentation -> SALE_v2.8.0.md + UI_UX_v2.8.0.md
-- D0 first-support -> Boss-information order -> CORE_RUN_v2.8.0.md + BOSS_v2.8.0.md + RELIC_v2.8.0.md
-- first-support exact copy -> COPY_WORLD_VOICE_v2.8.0.md + COPY_AUDIT_APPROVED_v2.8.0.md
-- purchase acceptance / NPC Wallet / Deep sponsorship -> ECONOMY_ORDER_v2.8.0.md
-- Item visual identity after save-safe ID reuse -> ITEM_v2.8.0.md
-
-These are current approved baselines, not measurement-gated suggestions.
-After Source adoption, re-measure aggregate economy/survival impact before any further tuning.
-
-## v2.8 PRESENTATION POLISH PROMOTION — 2026-09-22
-
-User-approved v2.9-deferred presentation work is promoted into v2.8.
-
-Purpose:
-- make existing choices/results feel stronger without changing their mechanics
-- make a late Run visibly/audibly feel like the same store after weeks of operation
-- strengthen NIGHT consequence, Boss/Final presence and decision feedback
-- re-audit the complete functional layout so the right information, emphasis and action appear
-  together without redundant UI, dead space or avoidable overflow
-
-Exact ownership:
-- state/event truth -> existing META / NIGHT_CLOSING / BOSS / SALE / ECONOMY_ORDER owners
-- visual/audio presentation contract -> UI_UX_v2.8.0.md
-- acceptance -> UI_UX_QA_v2.8.0.md
-
-Promoted scope:
-- full-surface functional-design audit across the active Player flow
-- tutorial/coach text <-> highlighted-target truth and responsive fit
-- decision information/action hierarchy, density, dead-space/overflow and responsive-order cleanup
-- Boss D0/D5/D10/D15/D20/D25/D30 functional sizing/hierarchy review
-- small state-driven Store-growth visual traces
-- stronger NIGHT result differentiation
-- Boss-information / D25 Final-preparation / D30 Final-entry presentation payoff
-- clearer ORDER / SALE / Store-Support decision SFX
-- stronger phase audio/BGM identity using the current audio architecture
-- targeted art/icon/crop/scale polish where existing identity/readability is weak
-
-Hard boundary:
-- no new gameplay rule, reward, probability, decision axis or permanent progression
-- no new required Save state
-- no new Gameplay RNG
-- no hidden/unrevealed information may be exposed by art or sound
-- no full background-skin/combinatorial theme system
-- no mandatory precision interaction
-- no large Final cutscene/cinematic system
-
-This promotion supersedes the matching candidates removed from
-GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md.
-
-## CURRENT CANONICAL DETAIL GAPS
-
-None from the 2026-09-22 full-chain re-audit.
-
-The former Premium Decoration rarity-weighting gap and 20 inherited Store Support base-price gaps
-were closed by User approval and promoted into META_v2.8.0.md / RELIC_v2.8.0.md with matching QA.
+A single-run perception is not enough to change an approved baseline.
 
 ## SOURCE ACCESS
 
@@ -266,28 +163,25 @@ were closed by User approval and promoted into META_v2.8.0.md / RELIC_v2.8.0.md 
     -> related current QA
     -> Current Source
 
-SOURCE_ADOPTION_QA_v2.8.0.md is an audit-HEAD defect record. Its `Current Source` descriptions
-refer to that file's recorded `AUDIT_SOURCE_HEAD`; resolved findings are intentionally not rewritten
-as a live tracker. WORK may use it to avoid rediscovering root causes, but current resolution status
-comes from WORK_STATE + current Source + reviewed commits.
+SOURCE_ADOPTION_QA_v2.8.0.md is an audit-HEAD defect record. Its `Current Source` descriptions refer
+to that file's recorded `AUDIT_SOURCE_HEAD`; resolved findings are not rewritten as a live tracker.
+
+Current resolution status comes from WORK_STATE + current Source + reviewed commits.
 
 If a routed source cannot be accessed after explicit lookup, report PROJECT SOURCE ACCESS/INDEX ISSUE.
 
-
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL
 
-v2.8 is ready to close when all of the following are true:
-
+v2.8 is ready to close when:
 - known current correctness/runtime UX findings are fixed
-- active player information is current, truthful and non-contradictory
-- the Player can read choice -> actual change -> resolved result more clearly
+- active Player information is current, truthful and non-contradictory
+- choice -> actual change -> resolved result is readable
 - sold-Item impact is surfaced only where causality is proven
-- Fatigue, Loyalty and Store Build effects are visible at meaningful decision/result moments
-- mobile core-flow density no longer duplicates or crowds essential information
-- the Run's Boss objective remains present through the approved information cadence
-- approved Item / Store Support baselines are adopted
-- measurement-gated balance questions are either supported by evidence or explicitly carried forward
-- no unapproved v2.9+ structural expansion is pulled into v2.8; the approved Functional + Presentation Polish promotion above is part of v2.8
+- Fatigue, Loyalty and Store Build effects appear at meaningful decision/result moments
+- mobile core-flow density does not duplicate or crowd essential information
+- Boss objective/information remains present through the owned cadence
+- approved current owner baselines are adopted
+- measurement-gated findings are either evidence-supported or explicitly carried forward
+- no unapproved v2.9+ structural expansion is pulled into v2.8
 
-Exact mechanics, numbers, copy, UX and pass/fail criteria are not repeated here.
-Use the routed owner Specs / QA.
+Exact mechanics, numbers, copy, UX and pass/fail criteria live in the routed owner Specs / QA.
