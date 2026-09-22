@@ -450,6 +450,79 @@ or hidden-information boundary.
 
 Acceptance: UI_UX_QA_v2.8.0.md UI-Q-v28-31.
 
+#### EDGE / BORDER DISCIPLINE
+
+A crisp pixel edge does NOT mean every button receives a visible outline.
+
+Default:
+- if a flat plane plus hard offset depth already separates a pressable control from its surface, do
+  not add another border
+- use an explicit outline only when it carries real information: selected state, insufficient
+  contrast against the surrounding surface, focus/accessibility, or a component whose object
+  identity genuinely depends on a frame
+- do not solve "game-like" by drawing the same 1–2px inset rectangle around every key / button
+- peer controls in one cluster should share construction, but that construction may be borderless
+
+FAIL:
+- blanket outlines added to every button because "pixel UI needs borders"
+- a semantic accent colour moved onto a border merely to decorate the control
+- multiple edge systems stacked at once: border + inset frame + bevel + hard drop
+
+The preferred order is:
+    flat plane
+    -> hard depth / press
+    -> explicit border only if still needed
+
+#### PER-PHASE APPLICATION RULES
+
+These clauses make DARK PIXEL + CONTROLLED POP concrete without fixing literal colours.
+
+ORDER
+- must read as manipulating an order form, not a web-shop list
+- `- / quantity / + / 1 / 3 / MAX` is one control cluster; the numeric readout is the one
+  recessed/read-only part
+- quantity keys may use flat planes plus hard depth; they do not require a border on every key
+- order commit is the strongest physical action on the form and must read as a deliberate commit
+- do not add decorative stamps, seals or extra marks to create the feeling of approval
+
+SALE
+- the customer remains the visual anchor; the transaction controls are the interaction anchor
+- 50 / 100 / 150 price choices are peer controls in one register-key cluster
+- no price key outranks another merely through a lighter fill or stronger frame
+- the mode's semantic distinction may live in its label/text or another owned signal; do not add
+  outlines to every key just to carry mode colour
+- refused / unavailable price keys lose depth and stay fully readable
+- `send customer` is Secondary to the price decision and must not carry the screen's strongest pop
+
+NIGHT
+- the Outcome is the primary visual anchor, not a generic result card title
+- success / great success / retreat / injury / severe injury / death must not feel like identical
+  cards with one word swapped
+- differentiate through result emphasis, contrast, tag/silhouette and transition using the current
+  result system; do not add a new cinematic framework
+
+CLOSING
+- reads as receipt / end-of-day record, not a KPI dashboard
+- keep settlement figures integrated into the receipt/tape language
+- do not split figures into a grid of independent metric cards
+- only the next meaningful action receives Controlled Pop
+
+BOSS REPORT
+- information order is: report identity -> Boss visual -> newly revealed information ->
+  acknowledgement
+- D5 / D15 / D25 Boss art is a central visual anchor with meaningful presence; do not shrink it
+  into a small figure floating in dead space
+- D10 / D20 remain compact information beats
+- acknowledgement must not become a generic web Confirm CTA and must never outrank the Boss/reveal
+- reduce nested card-inside-modal composition before adding any decoration
+
+FINAL
+- reads as one final decision surface combining Gate / Boss / team / sortie state, not as a page
+  ending in a coloured button
+- the final commit may carry the heaviest press treatment in the run, but not a giant ornamental
+  prop
+- use contrast, placement and hard depth; do not add a new interaction or cinematic system
+
 #### STORE SUPPORT — FINAL VISUAL SPEC
 
 USER APPROVED, 2026-09-22. Store Support is an application of DARK PIXEL + CONTROLLED POP, not a
