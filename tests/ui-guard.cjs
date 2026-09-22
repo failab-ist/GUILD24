@@ -2090,4 +2090,54 @@ test('OPENING: the preparation modal starts on the three axes, with no franchise
  assert.ok(/Meta\.storeCapital\(a\)/.test(intro),'and the Capital display stays');
 });
 
+/* UI_UX §STORE SUPPORT — FINAL VISUAL SPEC. Two things this screen kept regressing to are
+   asserted directly rather than described: green as the selected/state colour, and a disabled
+   action that still reads 구매. The Canonical surface / border / text / action values are
+   checked at their exact strings, because the spec states them as exact. */
+test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact planes and the caused labels',()=>{
+ const from=css.indexOf('/* ---- STORE SUPPORT — FINAL VISUAL SPEC'),
+       to=css.indexOf('.relic-takeover .close{');
+ assert.ok(from>0&&to>from,'the Store Support block is where the spec says it is');
+ // declarations only: the block's own prose names the banned treatments in order to ban them
+ const block=css.slice(from,to).replace(/\/\*[\s\S]*?\*\//g,'');
+ // GREEN BAN. No green token and no green literal carries state, selection or action here.
+ assert.ok(!/--sign(-lit)?\)/.test(block),'no --sign / --sign-lit treatment survives on this screen');
+ for(const banned of ['#27382f','#2c5c40','#7ddc9f','#9ce4b6','#4f9e6d','#3d8b5b','#d8f5e3','#e9fbef'])
+  assert.ok(!block.includes(banned),'the banned green '+banned+' is gone');
+ // ORNAMENT BAN. The left accent bar, the sheen and the blur are all expressible in one sheet,
+ // so each is checked as a shape rather than trusted to a comment.
+ assert.ok(!/inset \d+px 0 0 /.test(block),'no vertical accent / left status strip');
+ assert.ok(!/gradient|blur|drop-shadow/.test(block),'no gradient, blur or soft glow');
+ assert.ok(!/inset 0 \d+px 0 #f|inset -?\dpx -?\dpx 0 #f/i.test(block),'no inset sheen band');
+ assert.ok(!/opacity:\.[0-9]/.test(block),'no whole-element opacity fade');
+ assert.ok(/opacity:1/.test(block),'the base sheet\'s disabled fade is switched off explicitly');
+ // EXACT STATE HIERARCHY, at the Canonical values.
+ assert.ok(/\.relic-plate\{[^}]*background:#273033/.test(block),'AVAILABLE surface #273033');
+ assert.ok(/\.relic-plate\{[^}]*inset 0 0 0 2px #58666a/.test(block),'AVAILABLE border #58666A');
+ assert.ok(/\.relic-plate \.stamp\{[^}]*background:#a9843d/.test(block),'the one button plane is muted gold');
+ assert.ok(/\.relic-plate \.stamp\{[^}]*inset 0 0 0 2px #c7a653/.test(block),'with the #C7A653 border');
+ assert.ok(/\.relic-plate \.stamp\{[^}]*3px 3px 0 /.test(block),'and a hard 3px offset shadow');
+ assert.ok(/\.relic-plate\.owned\{[^}]*background:#273033/.test(block),
+  'SELECTED keeps the AVAILABLE surface - it is never a filled card');
+ assert.ok(/\.relic-plate\.owned\{[^}]*inset 0 0 0 2px #b08f45/.test(block),'and carries the muted-gold outline');
+ assert.ok(/\.relic-plate\.owned h3\{color:#faf6e9/.test(block),
+  'with the raised title contrast, so the state is not the border alone');
+ assert.ok(/\.relic-plate\.owned \.stamp\[disabled\]\{[^}]*min-height:32px/.test(block),
+  'the committed action is a compact label, not a large disabled button');
+ assert.ok(/\.relic-plate\.unavailable\{[^}]*background:#191f21/.test(block),'UNAVAILABLE surface #191F21');
+ assert.ok(/\.relic-plate\.unavailable h3\{color:#b6c0c1/.test(block),'title #B6C0C1, still legible');
+ assert.ok(/\.relic-plate\.unavailable p\{color:#899597/.test(block),'body #899597, still legible');
+ assert.ok(/\.relic-plate \.stamp\[disabled\]\{background:#242b2d;color:#707d80/.test(block),
+  'and the dead plane at #242B2D / #707D80');
+ assert.ok(!/\.relic-plate \.stamp\[disabled\]\{[^}]*\dpx \dpx 0 /.test(block),
+  'which carries no hard offset, so it cannot read as pressable');
+ // DISABLED COPY, COPY_AUDIT §11-31 / §11-31b: the cause is named, never left as 구매.
+ const win=app.slice(app.indexOf('relic-choices'),app.indexOf('function sealChoice'));
+ assert.ok(/spent=!game\.canBuyRelic\(\),poor=s\.money<price/.test(win),
+  'the two disabled causes are separated from the one blocked flag');
+ assert.ok(win.includes("mine?'\ubcf4\uc720 \uc911':spent?'\uc120\ud0dd \uc885\ub8cc':poor?'\uace8\ub4dc \ubd80\uc871':'\uad6c\ub9e4'"),
+  'and the four approved labels are adopted verbatim, in that order');
+ assert.ok(!/mine\?'\ubcf4\uc720 \uc911':'\uad6c\ub9e4'/.test(win),'the old two-way label is gone');
+});
+
 console.log(count+' ui guard groups passed');

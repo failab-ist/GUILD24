@@ -1014,10 +1014,14 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
     state the window already holds - no new field, no new rule, and the blocked condition is the
     same expression the button's own `disabled` uses. */
  +'<div class="relic-choices">'+w.candidateIds.map((id,i)=>{const r=D.relicBy[id],price=w.candidatePrices[i],mine=w.purchased===id;
-  const blocked=!game.canBuyRelic()||s.money<price;
+  const spent=!game.canBuyRelic(),poor=s.money<price,blocked=spent||poor;
+  /* COPY_AUDIT §11-31: a disabled action names its own cause. Leaving 구매 on a control that
+     cannot be pressed says nothing - the window being over and the wallet being short are
+     different facts, and the Player needs to know which one applies. */
+  const label=mine?'보유 중':spent?'선택 종료':poor?'골드 부족':'구매';
   return '<article class="relic-plate'+(mine?' owned':blocked?' unavailable':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
-  +btn(mine?'보유 중':'구매','buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'
+  +btn(label,'buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'
  +sealChoice() +'<div class="close">'+(first?btn('장식 구성 다시 보기','new','bare'):'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* Sloth's seal is not a second choice path: it is the other thing this window's one

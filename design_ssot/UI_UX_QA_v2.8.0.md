@@ -526,9 +526,9 @@ PASS:
 - the selection / commit control reads as a pixel-2D game's own selection control
 - surfaces are flat colour planes with crisp edges and pixel-like border / shadow / inset
 - accent colour appears in small units, not as a flooded plane
-- SELECTED sits on the base slate / charcoal surface and is carried by a small green accent, a
-  state label and an emphasised edge
-- AVAILABLE is the most legible neutral / slate surface with an amber-family action, and reads
+- SELECTED sits on the base slate / charcoal surface and is carried by an emphasised edge, a
+  raised title contrast and a compact state label together
+- AVAILABLE is the most legible neutral / slate surface with a muted-gold action, and reads
   immediately as the open choice
 - UNAVAILABLE is darker and flatter, visibly receded, and its text is still fully legible
 - the register stays GUILD24's restrained colour and material
@@ -542,6 +542,28 @@ FAIL:
 - pop / candy palette or an arcade-toy register copied from a pixel reference
 - the grammar applied indiscriminately, including to Utility Controls, so the screen got busier
 - decoration or the pixel treatment cost information hierarchy, legibility or phone operability
+
+STORE SUPPORT — FINAL VISUAL SPEC (UI_UX §STORE SUPPORT — FINAL VISUAL SPEC). Drive the Store
+Support window at the audited phone and desktop widths, in all three states and on both disabled
+causes.
+
+PASS:
+- AVAILABLE / SELECTED / UNAVAILABLE are told apart at a glance
+- what was chosen is unambiguous with no green anywhere on the screen
+- only the AVAILABLE card carries an action that looks like a real button
+- SELECTED reads as a completed game state, not as a CTA to press again
+- UNAVAILABLE stays readable while clearly withdrawing from the choice
+- the screen reads as a 2D pixel game selection screen, not a web dashboard
+- the surface, border, text and action values are the Canonical ones
+
+FAIL:
+- a green selected card, a coloured vertical bar, a left status strip, or any generic success green
+- a SaaS-style filled state card
+- shiny metal, gradient, bevel, blurred shadow or soft glow
+- a decorative G24 stamp, bolt or badge
+- state separation resting on the border alone
+- a disabled action still reading `구매`
+- whole-card or whole-element opacity used to recede a state
 
 Surfaces are adopted by the Polish Task that owns them; a Task closes only the surfaces it
 touched, and the remainder is carried forward explicitly.

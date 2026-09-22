@@ -368,12 +368,15 @@ arcade-toy register. The result is more game-like and more pixel-2D, in GUILD24'
 colour and material.
 
 4. STATE HIERARCHY, selection UI
-- SELECTED: the base slate / charcoal surface, carrying a small green accent, a state label and an
-  emphasised edge. The card does not become a green plane.
-- AVAILABLE: the most legible neutral / slate surface with an amber-family action. That this is the
+- SELECTED: the base slate / charcoal surface, carrying an emphasised edge, a raised title contrast
+  and a compact state label. The card does not become a filled plane, and the state never rests on
+  the edge alone.
+- AVAILABLE: the most legible neutral / slate surface with a muted-gold action. That this is the
   choice currently open must read immediately.
 - UNAVAILABLE: darker and flatter, visibly receded, with its text still fully legible. Whole-element
   opacity fade is forbidden.
+
+Store Support's exact values are owned by §STORE SUPPORT — FINAL VISUAL SPEC below.
 
 5. PRIMARY DECISION CONTROL
 The selection control reads as a pixel-2D game's selection / confirm control rather than a web
@@ -384,6 +387,79 @@ Target: a restrained pixel-2D game selection UI, not a pop mobile-game UI.
 
 This is a presentation contract. It changes no gameplay rule, balance, Save field, Gameplay RNG or
 decision structure, and it exposes no hidden information.
+
+Acceptance: UI_UX_QA_v2.8.0.md UI-Q-v28-31.
+
+#### STORE SUPPORT — FINAL VISUAL SPEC
+
+USER APPROVED, 2026-09-22. The confirmed Presentation Rule for the Store Support selection screen.
+These are EXACT values. WORK does not interpret or add a separate art direction here, and changing
+any value requires a Canonical amendment first.
+
+Target: a restrained 2D pixel game selection screen. Not SaaS card UI, not AI-generated dashboard
+UI, not glossy fantasy UI, not an over-decorated mobile-RPG button. The game feel comes from hard
+pixel edges, unambiguous state separation, simple colour planes, physical button depth and a compact
+hierarchy — never from added ornament.
+
+GREEN BAN — STORE SUPPORT ONLY. Green is not used on this screen as a state, selection or action
+colour. Forbidden: a selected green card, a green border, a green left strip, a green button, a
+green success highlight, and any `--sign` / `--sign-lit` based selected treatment. The screen's
+palette is SLATE / CHARCOAL / MUTED GOLD / WARM IVORY only. The game's semantic benefit green
+elsewhere is not affected by this decision.
+
+ORNAMENT BAN. Not added: a card-left vertical accent bar, any vertical state bar, a G24 stamp, a
+guild seal, a decorative bolt, a corner screw, a meaningless badge, a frame inside a frame, a glossy
+gradient, metal shine, bevel, blurred shadow, soft glow. Specifically, SELECTED is NOT built as
+"left colour bar + colour border"; that pattern is forbidden on this screen.
+
+SHAPE LANGUAGE. `border-radius` 0–2px; a hard 1–2px border; a hard 2–3px offset shadow is allowed;
+no gradient; no blur; no inset sheen. Pixel feel is made by edge and shadow, not by adding pixel
+icons.
+
+EXACT STATE HIERARCHY.
+
+AVAILABLE
+- surface around `#273033` neutral slate
+- border around `#58666A`
+- title bright ivory / grey; body one step below the title
+- price muted gold
+- the action is the single strongest button plane on the screen:
+  background `#9A7835`–`#A9843D`, border `#C7A653`, dark brown/black text
+- shape: hard edge plus a 2–3px hard bottom/right shadow
+- label: `구매`
+- only the AVAILABLE card carries the feel of being pressable now
+
+SELECTED / OWNED
+- the card is not painted another colour; it keeps the AVAILABLE slate family
+- the difference is a slightly brighter warm border, a 2px muted-gold outline, and a slightly raised
+  title contrast — nothing more
+- forbidden: green fill, green tint, a left accent bar
+- the completed state is expressed by border and text state, not by the card's surface colour
+- the action area does not stay a large disabled button; it becomes a compact state label `보유 중`
+  on a dark slate background with a 1–2px muted-gold border and muted-gold / ivory text, and must
+  not read as a large CTA
+
+UNAVAILABLE
+- surface around `#191F21` dark charcoal; border around `#343F42`
+- title at `#B6C0C1`; body at `#899597`
+- whole-card opacity is forbidden; the card recedes on its own lightness
+- the action must not look pressable: background `#242B2D`, border `#394549`, text `#707D80`, and no
+  hard shadow (1px at most)
+
+DISABLED COPY. The disabled action names its own cause; it never stays `구매`. Exact strings are owned
+by COPY_AUDIT_APPROVED_v2.8.0.md §11-31 / §11-31b.
+
+TOP STATUS. `확보 완료 · {점포지원명}` may stay, as a plain text notification with the existing small
+gold indicator. No separate green success panel, green bar, decorative check icon or added seal.
+
+CARD CONTENT. Each card keeps only: the Store Support name, its exact Function, the price, and the
+Action / State. Nothing decorative is added. The Function is the comparison this choice is made on,
+so its contrast stays easy to read.
+
+PIXEL GAME FEEL. Taken from the pixel-UI reference: hard outline, hard shadow, flat colour plane,
+button press depth, immediate state differentiation. Not taken: a primary-RGB palette, candy colour,
+oversized icons, an arcade-toy register, star / heart / bomb decoration grammar. GUILD24 keeps its
+dark convenience-store / guild-document register.
 
 Acceptance: UI_UX_QA_v2.8.0.md UI-Q-v28-31.
 
