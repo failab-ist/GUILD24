@@ -1,12 +1,12 @@
 # GUILD24 v2.8 COPY AUDIT — USER APPROVED
 
 - 상태: **USER APPROVED / v2.8 CANONICAL COPY AMENDMENT**
-- 범위: **Player-facing Copy 수정안만**
+- 범위: **Player-facing exact Copy amendment**
 - 표기: `기존 → 수정안 → 이유`
-- **ACTIVE COPY TRUTH = 각 항목의 `수정안` + 더 아래에 있는 최신 amendment.**
+- **ACTIVE COPY TRUTH = 각 항목의 `수정안` + 아래의 current amendment.**
 - `기존`과 `이유`은 감사 이력일 뿐 Active Copy/Rule이 아니며 구현·복구 근거로 사용하지 않는다.
 - 같은 Surface의 앞선 `수정안`과 뒤의 amendment가 충돌하면 뒤 amendment가 우선한다.
-- 이 문서에 없는 현행 문구는 이번 1차안에서 수정 제안 없음.
+- 이 문서에 없는 현행 문구는 이 amendment의 변경 대상이 아니다.
 - Rule / Numeric / UX 설명은 이 문서에 중복 기재하지 않음.
 
 ---
@@ -2661,9 +2661,9 @@ USER APPROVED, 2026-09-22.
 
 ---
 
-# 23. 이번 1차안에서 유지하는 항목
+# 23. 현행 유지 항목
 
-아래는 전수 확인했지만 이번 1차 Copy 수정안에는 넣지 않음.
+아래 항목은 이 Copy amendment에서 변경하지 않는다.
 
 - ORDER 장부 Label:
   - 운영비(예상)
@@ -2692,7 +2692,7 @@ USER APPROVED, 2026-09-22.
 
 # 24. APPROVAL STATUS
 
-이 문서는 **User 승인된 v2.8 Copy 수정안 전체본**이다.
+이 문서는 **현재 User-approved v2.8 Canonical Copy amendment**다.
 
 ```text
 USER APPROVAL = APPROVED
@@ -2700,15 +2700,15 @@ CANONICAL COPY PROMOTION = APPROVED
 SOURCE COPY IMPLEMENTATION = REQUIRED
 ```
 
-이 문서의 수정안은 v2.8 Canonical Copy amendment다. Current Source는 이 승인본을 채택해야 한다.
+Current Source는 이 문서의 Active Copy Truth를 채택해야 한다.
 
-## 2026-09-22 PLAYTEST COPY AMENDMENT
+## CURRENT PLAYTEST COPY AMENDMENT
 
-This amendment supersedes conflicting earlier copy-placement clauses in this document.
+The following clauses are the current copy-placement truth for these surfaces.
 
 ### 단골도 — normal SALE
 
-Do not show the previous normal-SALE Loyalty Popover / `?`.
+Normal SALE does not show a Loyalty Popover / `?`.
 
 Normal SALE:
     단골도 {N}
@@ -2731,7 +2731,7 @@ Heading:
 Body:
     이번 영업에 쓸 지원 하나를 고르세요.
 
-Delete from this decision surface:
+Absent from this decision surface:
     하나는 무료다. 고르면 영업이 시작된다.
     하나를 골라야 영업이 시작된다.
 
