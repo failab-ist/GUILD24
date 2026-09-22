@@ -32,8 +32,6 @@ Rules:
 - the bonus does not require a same-Day sale
 - it is granted exactly once for the resolved expedition
 
-This supersedes the inherited 100 / 200 / 300G band.
-
 Great Success probability and NPC growth reward are not reduced by this economic adjustment.
 Those remain owned by DUNGEON_HAZARD_v2.8.0.md and the inherited growth rules.
 
@@ -48,8 +46,8 @@ The approved playtest-response formula is:
 
 Round to nearest 10G under the existing rule.
 
-Only the base changes 350G -> 200G.
-Rarity step, Level step and rounding remain unchanged.
+Base = 200G.
+Rarity step, Level step and rounding remain as specified above.
 No compensating Deep reward/difficulty rebalance is introduced.
 
 Deep difficulty/occurrence -> DUNGEON_HAZARD_v2.8.0.md.
@@ -59,7 +57,7 @@ Deep NPC reward -> NPC_TRAIT_v2.8.0.md.
 
 USER_APPROVAL_DATE=2026-09-20
 
-These rules close inherited PASS3 / Source-only economy behavior as the required v2.8 baseline.
+These rules are the required v2.8 economy baseline.
 The exact purchase probability remains hidden from the Player.
 
 ### Ordinary SALE purchase acceptance — exact hidden calculation
