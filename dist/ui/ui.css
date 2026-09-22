@@ -795,11 +795,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    rendered as ordinary body copy wedged between the supporting line and the 이번 영업의 장식
    heading - the three axes read as one paragraph and the Run's endpoint had no rank of its own.
    Presentation only; the approved text is untouched. */
-/* BATCH 1: it is a read-only in-world strip, so it carries ONE accent and no second edge - the
-   1px ring around it was a frame inside a frame, and a strip that is not pressable has no
-   business owning two. Flat plane, gold seam, nothing else. */
-.welcome-band{margin:12px 0 18px;padding:12px 14px;font:600 14px/1.5 var(--ui);color:#f6ecd3;
- background:#00000047;box-shadow:inset 4px 0 0 var(--gold)}
+/* USER 2026-09-23: lines 2 and 3 explain the same thing at the same level - one supplies the
+   adventurers, the other says where they end up - so the third stops being a callout. The dark
+   plane, the gold bar and the container treatment are gone; it is the same paragraph as the
+   line above it in face, size, colour, alignment and leading. The only emphasis language left
+   on this sheet starts at the Decoration section, where it means something. */
+.welcome-band{margin:4px 0 16px;padding:0;background:none;box-shadow:none;
+ font:400 var(--exp) var(--ui);color:var(--dim);text-align:left}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
@@ -1381,13 +1383,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #a8823e,0 2px 0 #00000073}
 .modal.narrow:has(.welcome-band) .modal-header h2{font-size:21px;letter-spacing:.02em;
  text-shadow:0 2px 0 #1b1109}
-.modal.narrow:has(.welcome-band) .modal-body{padding:15px 12px 14px}
+.modal.narrow:has(.welcome-band) .modal-body{padding:15px 10px 14px;--exp:clamp(13.4px,3.85vw,15px)/1.5}
+.modal.narrow:has(.welcome-band) .modal-body>.muted{font:400 var(--exp) var(--ui);color:var(--dim)}
 /* The built frame takes 36px of width that the old flat rectangle did not, and at the 360
    floor that pushed the two longest approved lines onto a second row. They are fluid now
    rather than fixed, so they shrink by a step at the narrowest width and are unchanged from
    376px up. Copy, order and emphasis are untouched - only the measure gives way. */
-.modal.narrow:has(.welcome-band) .welcome-title{font-size:clamp(18px,5.4vw,21px);line-height:1.35}
-.modal.narrow:has(.welcome-band) .welcome-band{font-size:clamp(12.5px,3.6vw,14px)}
+.modal.narrow:has(.welcome-band) .welcome-title{font-size:clamp(18.5px,5.5vw,22px);line-height:1.35;margin-bottom:2px}
+
 /* the section heading is a rail, not a bare line of bold text: a brass tab at its head and a
    seam running out to the sheet's inner edge - the same two-part language the frame's own
    rails and the Slot rows use, so the object has one divider grammar instead of three. */
@@ -1411,13 +1414,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    reference actually carries is proportion and one structural line - a dark outline, a single
    thin gold edge inside it, a lit face and a hard bottom.
    So the caps are gone. The corners are cut once, lightly, and the face keeps the brick with a
-   real 7px top light and a 9px deep bottom over one gold line. Corner rivets were built and
-   removed: at the size this control can carry them they did not read at all, and the review
-   asked for less accessory, not more. The press travels 4px and trades its lit and deep edges.
-   BRICK family, semantics and guard unchanged. */
+   real 7px top light and a 9px deep bottom over one gold line. The four fixings are one drawn
+   9px rivet - dark rim, brass body, hard highlight up-left, hard shade down-right - placed four
+   times by CSS, not four CSS circles and not a fixed image of the whole button. An earlier
+   3px version of the same rivet shipped invisible; measured against the runtime, 9px is the
+   size at which a fixing reads as a fixing and still never arrives before the label.
+   The press travels 4px and trades its lit and deep edges. BRICK family and guard unchanged. */
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{min-height:64px;
  font:600 20px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;padding:0 26px;
  background-color:var(--brick);
+ background-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>");
+ background-size:9px 9px;background-repeat:no-repeat;
+ background-position:left 11px top 11px,right 11px top 11px,left 11px bottom 11px,right 11px bottom 11px;
  box-shadow:inset 0 0 0 2px #190d09,inset 0 0 0 3px #d9ab55,
   inset 0 7px 0 #e1836b,inset 0 -9px 0 #56241c;
  clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
@@ -1938,6 +1946,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .slot-option>.deco-confirm{grid-column:1/-1;padding:11px 13px;justify-items:stretch;text-align:left;
  box-shadow:inset 0 2px 0 #2f2a22}
 .slot-option>.deco-confirm p{text-align:left}
+/* USER 2026-09-23: this line is store state, not an Action. It no longer carries the 점포 관리
+   identity - the Decoration rows above it ARE that entry - so it reads as what it is, with one
+   drawn coin stack as a semantic anchor. No control affordance, and the anchor never arrives
+   before the figure it labels. */
+.store-capital{display:flex;align-items:center;gap:8px;margin-top:2px;
+ font:400 var(--t-sm)/1.5 var(--ui);color:var(--dim)}
+.store-capital .coin-mark{flex:0 0 auto;width:14px;height:14px;
+ background:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='14' height='14' shape-rendering='crispEdges'><g fill='%235c4520'><rect x='3' y='1' width='8' height='1'/><rect x='1' y='2' width='1' height='2'/><rect x='12' y='2' width='1' height='2'/><rect x='3' y='5' width='8' height='1'/><rect x='1' y='6' width='1' height='2'/><rect x='12' y='6' width='1' height='2'/><rect x='1' y='9' width='1' height='2'/><rect x='3' y='9' width='8' height='1'/><rect x='12' y='9' width='1' height='2'/><rect x='3' y='12' width='8' height='1'/></g><g fill='%23e6c176'><rect x='2' y='2' width='10' height='1'/></g><g fill='%23b08a42'><rect x='2' y='3' width='2' height='1'/><rect x='7' y='3' width='5' height='1'/><rect x='2' y='6' width='10' height='2'/><rect x='2' y='9' width='1' height='2'/><rect x='11' y='9' width='1' height='2'/><rect x='3' y='10' width='8' height='1'/></g><g fill='%23f6e3ab'><rect x='4' y='3' width='3' height='1'/></g><g fill='%237d5f2c'><rect x='2' y='4' width='10' height='1'/><rect x='2' y='8' width='10' height='1'/><rect x='2' y='11' width='10' height='1'/></g></svg>") center/14px 14px no-repeat}
 .decoration-panel .none{color:#7d7466}
 .settlement h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks{display:grid;gap:14px}
