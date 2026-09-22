@@ -240,6 +240,25 @@
 
 ---
 
+## 3-7. TUTORIAL / COACH — USER APPROVED EXACT COPY
+
+The following four lines are current exact Player-facing copy and supersede older wording for the
+same tutorial steps.
+
+### PRICING
+> 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.
+
+### HAZARD
+> 위험마다 압박하는 능력이 다르다. 어떤 능력이 필요한지 여기서 확인한다.
+
+### SUPPLY
+> 보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요량을 채우고 남은 보급은 먼저 출발 전 피로를 줄이고, 더 남으면 귀환 후 피로를 줄인다.
+
+### QUANTITY
+> 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.
+
+---
+
 # 4. SALE — HELP / LABEL
 
 ## 4-1. 전투 전망 Help

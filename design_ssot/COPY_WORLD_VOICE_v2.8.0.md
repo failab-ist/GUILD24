@@ -66,19 +66,15 @@ Help:
 
 Do not say Supply always increases Great Success.
 
-## ANCHORED HELP COPY
+## ANCHORED HELP ROUTING
 
-### 전투 전망
-    계산대에 왔을 때의 능력과 게이트 전투 요구를 비교한 전망입니다.
-    판매 후에도 이 전망은 갱신되지 않습니다.
+Exact Player-facing SALE Help copy for:
+- 전투 전망
+- 환경 대응
+- 실패 시 사망 위험
 
-### 환경 대응
-    계산대에 왔을 때의 능력과 보급을 기준으로 한 위험 대응 수준입니다.
-    판매 후에도 이 전망은 갱신되지 않습니다.
-
-### 실패 시 사망 위험
-    원정에 실패했을 때 사망까지 이어질 위험입니다.
-    원정 전체의 사망 확률은 아닙니다.
+is owned only by `COPY_AUDIT_APPROVED_v2.8.0.md` §4-1 through §4-3.
+Do not restate or independently revise those exact strings in this Voice owner.
 
 ### 보급 / 피로
     필요량을 채우고 남은 보급은 출발 전 현재 피로를 먼저 줄입니다.

@@ -124,9 +124,11 @@ Death:
 ## UI-Q-v28-10 — BOSS MOBILE DENSITY
 
 At 360x800:
-- D5/D15 art max-height baseline 120px
-- D25 art max-height baseline 96px
+- D5/D15 art max-height baseline 240px
+- D25 art max-height baseline 200px
 - D10/D20 compact identity portrait baseline 64px
+- D5/D15/D25 major-beat Boss art is a clear centered visual anchor
+- no small-Boss + wide-empty-space composition on the major beats
 - core information and acknowledgement are not pushed off first viewport solely by art
 
 ## UI-Q-v28-11 — LOYALTY HELP
@@ -417,10 +419,11 @@ PASS:
 - no large unused modal area around short content
 - no required information is reduced to unreadable scale merely to avoid scrolling
 
-The current 64px / 120px / 96px presentation measurements remain exact until the UI_UX owner is
-amended. If runtime evidence shows one of those exact values itself causes a functional failure,
-report the evidence as a Functional Design finding and patch Canonical first; do not silently tune
-Source.
+The current 64px / 240px / 200px phone presentation measurements remain exact until the UI_UX
+owner is amended. For D5/D15/D25, PASS also requires the Boss to read as a centered visual anchor,
+with the owned information directly below/around it rather than a small character floating beside
+unused space. If runtime evidence shows an exact value itself causes a functional failure, report
+the evidence as a Functional Design finding and patch Canonical first; do not silently tune Source.
 
 ## UI-Q-v28-29 — CONTROL / FEEDBACK / LAYOUT CONTINUITY
 
@@ -498,17 +501,20 @@ PASS:
 
 FAIL:
 - only the colour changed and the structure is still the same SaaS CTA
+- ornament was added instead of making the Phase action clearer
 - everything became an exaggerated game control and the screen got busier
 - a separate skin / theme system was introduced per Phase
 - decoration cost information legibility or phone operability
 - a touch target fell below the phone minimum, or a decorative control lost its accessible name
 
-ORNAMENT RESTRAINT (UI_UX §ORNAMENT RESTRAINT). Additionally FAIL when:
-- a corporate logo / seal mark is repeated on controls
-- bolt, rivet, corner-bracket or frame motifs are repeated around content
+ORNAMENT RESTRAINT (UI_UX §ORNAMENT RESTRAINT). Audit the complete Player-facing UI. Additionally
+FAIL when:
+- G24 / 길드24 logo, seal or stamp marks repeat without functional/state meaning
+- bolt, rivet, corner-bracket, badge or frame motifs repeat around content without need
 - a control used to commit a decision is tilted or skewed
-- a gradient or a repeating stripe stands in for material instead of a flat fill with a hard bevel
-- the object treatment was achieved by adding marks rather than by material, size and press
+- glossy / brass / fake-metal gradient or a repeating stripe stands in for material
+- Store Support uses shiny-metal / heavy-bevel ornament as its game-like identity
+- the object treatment was achieved by added marks instead of flat material, hierarchy and press
 
 Boss report sizing: at phone width the sheet claims most of the viewport and the art is at the
 amended baselines, with no beat scrolling its own body at any audited width.

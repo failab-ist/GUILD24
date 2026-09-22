@@ -195,9 +195,16 @@ Outcome type size may be reduced modestly on mobile where needed to prevent coll
 
 D5/D15/D25 use the existing Boss report/reveal shell.
 
+For these major reveal / preparation beats:
+- Boss art is the clear centered visual anchor, not a small side thumbnail beside unused space
+- Boss identity must register immediately before the Player reads the owned report information
+- owned information sits directly below or around the Boss visual in the same report composition
+- art scale may be strong, but it must not push required information or acknowledgement into
+  avoidable scrolling
+
 D10/D20 use the same shell as a compact one-tap report:
 - Boss name
-- small identity art
+- compact identity art
 - 1-2 short report lines
 - no new decision panel
 
@@ -208,10 +215,10 @@ DIRECTOR DOCUMENT BASELINE — EXACT:
 - desktop D5/D15 Boss art max-height: 300px
 - desktop D25 Boss art max-height: 260px
 
-USER AMENDMENT, 2026-09-22, superseding the mobile 120 / 96 baselines: the report was reviewed on
-a real handset and read too small. The Boss beat is a takeover with the screen dimmed behind it, so
-the sheet may claim most of the viewport and the art may grow until it would cause overflow. The
-constraint below is unchanged and is what bounds the new values.
+USER AMENDMENT, 2026-09-22, superseding the old "art must stay small" reading: the report was
+reviewed on a real handset and read too weak. The Boss beat is a takeover with the screen dimmed
+behind it, so the sheet may claim most of the viewport and the major-beat art may grow until it
+would cause overflow. The constraint below is what bounds the values.
 
 At 360x800, core information and acknowledgement control must not be pushed below the first
 viewport solely by Boss art.
@@ -219,7 +226,12 @@ viewport solely by Boss art.
 The Boss report sheet is a takeover, not a drawer peeking from the bottom: at phone width it
 claims most of the viewport rather than hugging its content.
 
-Information is primary; art is supporting.
+Avoid both failure modes:
+- tiny Boss art floating inside a wide / empty report
+- oversized art that buries the report information or creates unnecessary scroll
+
+Information truth remains primary; Boss presence is a co-equal presentation requirement at the
+major reveal / preparation beats.
 
 ## v2.8 PRESENTATION POLISH — EXACT BOUNDARY
 
@@ -291,21 +303,32 @@ USER AMENDMENT, 2026-09-22. `GAME-LIKE INTERACTION LANGUAGE` is a materiality an
 requirement, not permission to add ornament. It is not satisfied by decoration and it is failed by
 decoration.
 
+Audit the complete Player-facing UI, not only decision controls.
+
 Do not read it as an instruction to add:
-- a repeated corporate logo / seal mark on controls
-- repeated bolt, rivet, corner-bracket or frame motifs around content
+- repeated G24 / 길드24 logo, seal or stamp marks used only to fill space
+- repeated bolt, rivet, corner-bracket, badge or frame motifs around content
 - a tilt or hand-stamped skew on a control the Player uses to commit a decision
-- a gradient or stripe pattern standing in for material
+- glossy / brass / fake-metal gradients or stripe patterns standing in for material
+- another decorative layer on top of a material that is already visually established
 
-REMOVE before adding. What a control needs is its material, its state and its press - nothing else.
+REMOVE before adding.
 
-Material rules, consistent with the existing pixel-art contract:
-- flat fills with a hard bevel, never a gradient or a repeating stripe used as texture
-- depth is a hard offset, never a blur
+Material rules, consistent with the existing 2D / pixel-dot contract:
+- flatter 2D surfaces and clear solid color planes
+- crisp pixel-like edges and hard-offset / pixel-like shadow; never blurred depth
+- bevel may be restrained where an existing component already uses it, but must not become a
+  glossy or fake-metal treatment
+- no gradient or repeating stripe used as texture
 - a control the Player commits a decision with is square to the layout, never skewed
-- the existing art / texture tokens are the material; a new decorative mark is not
+- existing art / texture tokens may support material identity; a new decorative mark is not a
+  substitute for hierarchy or affordance
 
-Presence comes from size, weight, contrast and the press, not from added marks.
+Store Support specifically must not use shiny metal / brass-gradient / heavy-bevel treatment as its
+game-like identity. Its hierarchy should come from flat 2D material, crisp edge/shadow, clear color
+planes and the decision state.
+
+Presence comes from size, weight, contrast, placement and the press, not from added marks.
 
 #### TUTORIAL / COACH TARGET TRUTH
 
@@ -475,21 +498,27 @@ a generic 확인 / 구매 / 진행 button.
 
 Principle:
 
-    a Primary Decision Control must read as the THING OR ACT that Phase actually handles,
-    not as a web button.
+    a Primary Decision Control must read as the Phase's own action,
+    not as a generic web CTA.
 
 Reuse the current components / CSS / art / tokens. Do not build a new UI framework or a theme
 or skin system.
 
+The solution is not color-only and not ornament. Use the smallest phase-native combination of
+surface, silhouette/placement, state and press feedback that makes the action legible inside the
+existing 2D / pixel game language.
+
 Phase direction:
-- ORDER: the order form, its stamp and its clip - the feel of stamping a document
-- SALE: the register keys, the price tag, the receipt - the feel of a transaction
-- Store Support: a contract / a support certificate / an approval seal
-- Boss Report: not a set of cards inside an ordinary modal - the guild investigation report
-  or the record itself is the screen
+- ORDER: the order form / paper-steel surface and a firm commit press; no decorative stamp icon is
+  required
+- SALE: register / price-tag / receipt language and the feel of a transaction
+- Store Support: contract / support-certificate structure expressed with flat 2D material and clear
+  selection/commit state; no added seal/logo is required
+- Boss Report: not a set of cards inside an ordinary modal - the guild investigation report or the
+  record itself is the screen
 - NIGHT: the return record, the result tag, the trace a report leaves
-- FINAL: not an ordinary CTA - the physical feel of a last action: an order to march, a seal
-  broken, a gate opened
+- FINAL: not an ordinary CTA - the physical feel of the final commitment / gate opening without
+  turning the control into an ornamental prop
 
 Not every button becomes an object. These Utility Controls may stay plain UI:
 - close
