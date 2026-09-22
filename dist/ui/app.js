@@ -677,8 +677,58 @@ const coachSteps={
  closing:[['receipt','.tape','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']]
 };
 let activeCoach=null;
+let coachSettle=0,coachPainted=null;
+/* The target's own position, rounded - the one thing the whole overlay is measured from, so it
+   is also what tells us whether a repaint is needed. */
+const coachKey=el=>{const r=el.getBoundingClientRect();
+ return [Math.round(r.top),Math.round(r.left),Math.round(r.width),Math.round(r.height)].join(':');};
+/* UI-Q-v28-27: the cutout has to hold the exact content the copy describes. Split out of
+   showCoach so the same geometry can be re-struck once the target has stopped moving - see
+   settleCoach. Picking the step, and the one scroll, stay in showCoach: this only paints. */
+function paintCoach(step,target){
+ const root=$('#coach-root');if(!root)return null;
+ const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8),/* UI-Q113 §10. The mark used to stop at a flat 180px, so the customer card - the tallest
+    thing any lesson points at - was highlighted from the chin up and the frame the player was
+    being shown ran out of the cutout. The cap is the viewport's own share now: it still cannot
+    swallow a short screen, and it does wrap the card at every phone width. */
+ height=Math.min(b.height+8,Math.round(innerHeight*.34)),bottom=top+height;
+ /* UI-Q-v28-27: the bubble may not cover the next required control, and on every phase that
+    control is the dock. The usable floor is therefore the dock's top edge, not the viewport's -
+    the 진열대 lesson used to be placed just below its product row and ran 29px over 손님 보내기. */
+ const dockEl=document.querySelector('.stage .dock');
+ const floor=dockEl?Math.min(innerHeight,Math.round(dockEl.getBoundingClientRect().top)):innerHeight;
+ const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
+ const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
+ root.innerHTML='<div class="coach-layer">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
+ /* `bh` above is only the estimate that keeps the first paint from flashing. A real bubble is
+    120-143px, not 210, so a mark placed ABOVE its target sat up to 106px clear of the cutout
+    and the copy stopped reading as belonging to the thing it points at. Re-seat it on its own
+    measured height, which is why this is a style write and not a second paint. */
+ const bub=root.querySelector('.coach-bubble');
+ if(bub){const real=bub.getBoundingClientRect().height;
+  bub.style.top=(bottom+real+12<floor?bottom+12:Math.max(12,top-real-12))+'px';}
+ return coachKey(target);
+}
+/* The coach is drawn one frame after render() and render() starts the phase-entry animation on
+   the same tick, so it used to measure a target that was still moving: ORDER animates `.form`
+   translateY 16 -> 0 over 280ms, and the ledger lesson struck its cutout 15px low and stayed
+   there, masking the 운영비(예상) row it was pointing at. Wait for the target to hold the same
+   rect for two frames, then re-strike once if it has moved. Bounded, and it fixes any cause -
+   entry animation, late font, image load - without the coach knowing any duration. */
+function settleCoach(step,target){
+ let last=null,still=0,frames=0;
+ const tick=()=>{
+  if(activeCoach!==step)return;
+  const key=coachKey(target);
+  if(key===last)still++;else{last=key;still=0;}
+  if(still>=2){if(key!==coachPainted)coachPainted=paintCoach(step,target);return;}
+  if(++frames<48)coachSettle=requestAnimationFrame(tick);
+ };
+ coachSettle=requestAnimationFrame(tick);
+}
 function showCoach(){
  const root=$('#coach-root');if(!root)return;root.innerHTML='';activeCoach=null;
+ cancelAnimationFrame(coachSettle);
  const tutorial=game.account.tutorial||{};if(tutorial.skipped||modal)return;
  /* Skip a step whose target is not on this screen rather than stopping at it: a contextual
     mark (a Deep notice, a Great Success signal) only exists on some Days, and stopping would
@@ -692,15 +742,9 @@ function showCoach(){
  const step=steps.find(x=>!tutorial['coach-'+x[0]]&&visible(x[1]));if(!step)return;
  const target=visible(step[1]);
  const view=target.getBoundingClientRect();if(view.top<80||view.bottom>innerHeight-100){target.scrollIntoView({block:'center',behavior:'instant'});}
- const b=target.getBoundingClientRect(),left=Math.max(4,b.left-4),top=Math.max(4,b.top-4),width=Math.min(innerWidth-left-4,b.width+8),/* UI-Q113 §10. The mark used to stop at a flat 180px, so the customer card - the tallest
-    thing any lesson points at - was highlighted from the chin up and the frame the player was
-    being shown ran out of the cutout. The cap is the viewport's own share now: it still cannot
-    swallow a short screen, and it does wrap the card at every phone width. */
- height=Math.min(b.height+8,Math.round(innerHeight*.34)),bottom=top+height;
- const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<innerHeight?bottom+12:Math.max(12,top-bh-12);
- const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
- root.innerHTML='<div class="coach-layer">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
+ coachPainted=paintCoach(step,target);
  activeCoach=step;
+ settleCoach(step,target);
 }
 function finishCoach(skip=false){
  if(!activeCoach&&!skip)return;game.account.tutorial??={};if(skip)game.account.tutorial.skipped=true;else game.account.tutorial['coach-'+activeCoach[0]]=true;game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
