@@ -1664,7 +1664,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    collapsed every card until its Korean broke to one character per line. It is one panel, so
    it takes the whole row wherever that grid has more than one. */
 .decoration-panel{display:grid;gap:14px;grid-column:1/-1}
-.decoration-panel .slot h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
+/* PRESENTATION BATCH 1 / STORE MANAGEMENT. The Slot heading was an 11px letterspaced grey
+   label - the web subsection header the Batch names. It is a workbench location now: a tick
+   at the mounting point, the Slot said in the signage face, and one rule running out to the
+   panel edge that ties the heading to the cards under it. One plate treatment, one seam, and
+   no badge - four of these read down the panel, so anything heavier would compete with the
+   cards they are labelling. */
+.decoration-panel .slot h4{display:flex;align-items:center;gap:9px;margin-bottom:9px;
+ font:500 12px/1 var(--f-plate);letter-spacing:.18em;color:#d8c39a;-webkit-font-smoothing:none}
+.decoration-panel .slot h4:before{content:'';flex:0 0 auto;width:3px;height:13px;
+ background:#a07c3c;box-shadow:2px 2px 0 #00000073}
+.decoration-panel .slot h4:after{content:'';flex:1 1 auto;height:2px;background:#3a3228;
+ box-shadow:0 2px 0 #00000059}
 /* UI_UX_v2.8 §DECORATION DECISION SURFACE. The row used to be `flex` + `justify-content:
    space-between` with a `flex-wrap` rule under 480px, so WHERE the control sat was decided by
    how long that Decoration's effect line happened to be: a short one kept the button beside the
@@ -1679,12 +1690,30 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the label wraps inside the face: an `auto` track let it take 70% of the card and squeezed the
    effect line into what was left, orphaning its last syllable. The sheet is mobile-first, so
    the 600px block below is what hands the control its natural width back. */
+/* BATCH 1: the card's outer separation was a single 2px edge two values off its own fill, so
+   at screenshot scale four cards read as one soft column rather than four built objects. It
+   takes the same two-part edge the Batch uses everywhere else - a hard outer line and one
+   lit seam inside it - over a 4px hard cast. Nothing about the two-track geometry moves. */
 .slot-option{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,38%);align-items:stretch;
- background:#17140f;box-shadow:inset 0 0 0 2px #2f2a22,3px 3px 0 #0000005c}
-.slot-option>div:first-child{min-width:0;padding:11px 13px;align-self:center}
+ background:#17140f;
+ box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 0 3px #453c2e,4px 4px 0 #00000073}
+/* BATCH 1: the reading face takes one lit top seam of its own. Without it the reading and the
+   key were the same unlit dark and the seam between them - the thing that makes the control
+   read as the card's face rather than a second box - did no work at screenshot scale. */
+.slot-option>div:first-child{min-width:0;padding:11px 13px;align-self:center;
+ box-shadow:inset 0 2px 0 #ffffff0d}
 .slot-option+.slot-option{margin-top:8px}
-.slot-option.on{background:#1d1810;box-shadow:inset 0 0 0 2px var(--gold),3px 3px 0 #0000005c}
-.slot-option.locked{opacity:.72}
+/* equipped: the same construction, with the seam in gold - the state arrives on the edge the
+   card already has rather than on a new one. The label (해제) and the contrast carry the rest. */
+.slot-option.on{background:#1d1810;
+ box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 0 4px var(--gold),4px 4px 0 #00000073}
+/* NOT YET OWNED. Whole-card opacity took the effect line down with the card - and that line is
+   exactly what the player is deciding on. The card recedes by plane, value and depth instead:
+   darker fill, a seam one step quieter, a shorter cast. Every word on it stays legible. */
+.slot-option.locked{opacity:1;background:#191510;
+ box-shadow:inset 0 0 0 2px #0b0907,inset 0 0 0 3px #322b22,2px 2px 0 #0000005c}
+.slot-option.locked>div:first-child b{color:#cdbfa4}
+.slot-option.locked span.smalltext{color:#b7a98d}
 .slot-option b{display:block}
 /* the control is the card's right-hand face: full height, flush to the edge, its own ruled
    seam instead of a gap. A press moves the plane, never the card. */
@@ -1721,8 +1750,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* UNAVAILABLE is not the same plane with the colour drained: the key loses its depth entirely
    - no lit edge, no deep edge, nothing to press out - drops to the card's own charcoal, and
    keeps its price legible, because the price IS the reason it cannot be pressed. */
-.slot-option>button:disabled{opacity:1;background:#171310;color:#8d8067;
- box-shadow:inset 3px 0 0 #0d0b09,inset 0 0 0 2px #2f2a22}
+.slot-option>button:disabled{opacity:1;background:#100d0a;color:#a2947c;
+ box-shadow:inset 3px 0 0 #0b0907,inset 0 3px 0 #00000080,inset 0 -2px 0 #ffffff08}
 /* `.active` here marks the EQUIP action, not the equipped state - so it stays a live key. The
    owned/equipped reading is carried by the label (적용 / 해제 instead of a price) and by the
    card's own gold frame, which `.slot-option.on` sets: label, outline and contrast, not one
