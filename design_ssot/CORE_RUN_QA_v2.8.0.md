@@ -10,11 +10,10 @@ PATCH_TYPE=PROJECT_WIDE_V2_8_QA
 
 All non-conflicting v2.7 Core Run QA remains active.
 
-Explicit v2.8 supersession:
-- CORE_RUN_QA_v2.7.0.md `RUN-Q73` legacy D10 `FINAL20` / D20 `FINAL10` presentation
-  wording is superseded by the current D10/D20 Boss-information cadence in `RUN-Q-v28-5`.
-  Its non-conflicting D25 persistence / D30 reuse intent remains covered by current QA.
-- `RUN-Q79` Franchise Achievement pacing is retired in full with the Franchise system.
+Current inheritance exclusions:
+- inherited D10/D20 Boss-information timing clauses that conflict with the current cadence are inactive;
+  `RUN-Q-v28-5` owns the current D0/D5/D10/D15/D20/D25/D30 information order
+- Franchise Achievement QA is inactive with the retired Franchise system
 
 ## RUN-Q-v28-1 — NO ACTIVE START CONTRACT / FRANCHISE
 
@@ -71,7 +70,7 @@ D30:
 
 ## RUN-Q-v28-6 — ITEM ID REUSE / SAVE
 
-v2.8 meal/water replacement reuses existing Item IDs.
+Current meal/water identities reuse existing Item IDs.
 
 PASS:
 - current internal v8 save loads without requiring a new schema solely for those identity changes
