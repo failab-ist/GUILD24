@@ -2375,10 +2375,35 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
  assert.ok(/\.relic-plate h3\{[^}]*color:#f1ece2/.test(block),'title #F1ECE2');
  assert.ok(/\.relic-plate p\{[^}]*color:#b8c0c2/.test(block),'Function #B8C0C2');
  assert.ok(/\.relic-plate \.cost\{[^}]*color:#d2a347/.test(block),'price #D2A347');
- assert.ok(/\.relic-plate \.stamp\{[^}]*background:#c4973e/.test(block),
-  'the one control is desaturated amber #C4973E, not olive or brown');
- assert.ok(/\.relic-plate \.stamp\{[^}]*inset 0 0 0 2px #d8b45f,3px 3px 0 #765821/.test(block),
-  'with the #D8B45F high edge and the #765821 hard offset');
+ /* The control's HUE is the one thing on this screen Canonical hands to implementation -
+    "No literal colour value is Canonical for this screen. The exact hue / saturation /
+    brightness may be tuned" - so this asserts the grammar Canonical does own, and the exact
+    values only as the current tune. USER DIRECTION 2026-09-22 retired #C4973E over a #765821
+    brown offset, which still read as a brown box on a phone; the plane is a clean gold and the
+    depth is the card's own slate. */
+ const ctrl=(block.match(/\.relic-plate \.stamp\{[^}]*\}/)||[''])[0];
+ assert.ok(/background:#e3b341/.test(ctrl),'the one control is a clean gold plane');
+ assert.ok(/inset 0 0 0 2px #f6d878,3px 3px 0 #10161a/.test(ctrl),
+  'with a bright pixel edge and a hard offset taken in the card\'s own slate');
+ /* the grammar, independent of the tune: it is the strongest pop on the screen, it has real
+    pixel depth, and no part of it is brown or olive - the tone this screen is required to be
+    free of, and the one the previous values kept reading as */
+ assert.ok(/inset 0 0 0 2px #[0-9a-f]{6},\dpx \dpx 0 #[0-9a-f]{6}/.test(ctrl),
+  'the AVAILABLE control keeps a hard edge plus a hard offset - its depth is the affordance');
+ const brownish=hex=>{const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);
+  // a muddy brown/olive: the blue channel starved AND the plane dark enough to read as dirt
+  return b<r*0.45&&Math.max(r,g,b)<0.62*255;};
+ // the PLANES only - the ink on a gold control is a warm near-black on purpose, and reading it
+ // as a brown box would be reading the letters instead of the button
+ const planes=[...ctrl.replace(/color:#[0-9a-f]{6}/g,'').matchAll(/#([0-9a-f]{6})/g)].map(m=>m[1]);
+ assert.ok(planes.length>=3,'the control names its plane, its edge and its offset');
+ for(const hex of planes)
+  assert.ok(!brownish(hex),'no brown/olive value survives in the one control: #'+hex);
+ assert.ok(!/#c4973e|#765821/.test(block),'and the retired brown pair is gone from the screen');
+ /* the defer control shares the takeover, so it answers to the same slate palette */
+ const defer=(css.match(/\.relic-takeover \.close \.stamp\{[^}]*\}/)||[''])[0];
+ assert.ok(defer&&!/#3a2c1d|#6b5335/.test(defer),'the defer control is no longer a brown box');
+ assert.ok(!/background:#[ce]/.test(defer),'and never competes with the one real control');
  // affordance only on the control that can be pressed - :hover/:active still match a disabled one
  assert.ok(/\.relic-plate \.stamp:not\(\[disabled\]\):hover/.test(block)
   &&/\.relic-plate \.stamp:not\(\[disabled\]\):active/.test(block),

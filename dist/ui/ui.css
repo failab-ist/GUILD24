@@ -1147,7 +1147,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    This is a Store Support Presentation decision only; the game's semantic benefit green is
    untouched.
 
-     AVAILABLE    #20272B slate, #465158 edge     the one real control: #C4973E gold, depth
+     AVAILABLE    #20272B slate, #465158 edge     the one real control: #E3B341 gold, depth
      SELECTED     same slate, #B98B3E outline     same footprint, charcoal fill, no depth
      UNAVAILABLE  #171C1F charcoal, #303A3E edge  dead plane, no depth
 
@@ -1166,20 +1166,24 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-plate .cost{display:block;margin:11px 0 10px;padding:9px 0 0;letter-spacing:.06em;
  font:500 20px/1 var(--f-led);color:#d2a347;box-shadow:inset 0 1px 0 #46515899}
 
-/* AVAILABLE - the only control on the screen that looks pressable, and a desaturated amber
-   game control rather than a brown or olive one. A compact plane, not a full-width bar: the
-   bar is the SaaS CTA silhouette this spec rules out. 138 x 48 stays well above the phone
-   touch minimum. Hard edge plus a hard bottom-right offset, nothing else. */
+/* AVAILABLE - the only control on the screen that looks pressable. USER DIRECTION 2026-09-22:
+   the previous #C4973E plane over a #765821 offset still read as a brown/olive box on a phone,
+   which is the tone that was to be gone. Canonical owns the state grammar here and says in so
+   many words that no literal colour value is Canonical for this screen, so the hue is tuned and
+   the grammar is untouched: one clean gold plane (#E3B341) with a bright pixel edge, and the
+   depth taken in the CARD'S OWN slate shadow (#10161A) instead of a brown one - the brown was
+   most of what made it muddy. Still a compact plane, not a full-width bar: the bar is the SaaS
+   CTA silhouette this spec rules out. 138 x 48 stays well above the phone touch minimum. */
 .relic-plate .stamp{width:auto;min-width:138px;min-height:48px;padding:0 18px;
  font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:#c4973e;color:#241c10;transform:none;
- box-shadow:inset 0 0 0 2px #d8b45f,3px 3px 0 #765821}
+ background:#e3b341;color:#20180a;transform:none;
+ box-shadow:inset 0 0 0 2px #f6d878,3px 3px 0 #10161a}
 /* affordance belongs only to the control that can actually be pressed - :hover and :active
    still match a disabled button, so both are scoped away from one */
-.relic-plate .stamp:not([disabled]):hover{background:#cfa249}
+.relic-plate .stamp:not([disabled]):hover{background:#eebf52}
 /* the press is the depth collapsing: the plane travels onto the panel and the offset closes */
-.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#b08631;
- box-shadow:inset 0 0 0 2px #c5a055,1px 1px 0 #765821}
+.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#cf9f2f;
+ box-shadow:inset 0 0 0 2px #e0c169,1px 1px 0 #10161a}
 
 /* SELECTED / OWNED. The panel keeps the AVAILABLE surface - no fill, no tint, no strip. The
    state is the muted-gold outline, a slightly raised title contrast, and the control losing
@@ -1215,9 +1219,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));background:#0c0805;
  box-shadow:inset 0 3px 0 #ffffff12}
 .relic-takeover .close p{flex:1 1 auto;font:400 13px/1.5 var(--ui);color:#a2947c}
+/* the defer control sits on the same takeover, so it answers to the same palette: slate, not
+   brown. It stays plainly secondary - no gold, no depth competition with the one real control. */
 .relic-takeover .close .stamp{flex:0 0 auto;min-height:50px;min-width:150px;font:600 16px/1 var(--ui);
- background:#3a2c1d;color:#efe3c8;
- box-shadow:inset 0 0 0 2px #6b5335,3px 3px 0 #0e1315}
+ background:#2b3338;color:#d7dee0;
+ box-shadow:inset 0 0 0 2px #4b565c,3px 3px 0 #0e1315}
+.relic-takeover .close .stamp:hover{background:#354049}
+.relic-takeover .close .stamp:active{transform:translate(2px,2px);background:#232a2e;
+ box-shadow:inset 0 0 0 2px #3f484d,1px 1px 0 #0e1315}
 
 /* =====================================================================
    FINAL — 제0게이트. Not a shop screen: the mouth of the gate itself, cold stone and
@@ -1428,24 +1437,55 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    shape rather than introducing a new card language for one panel. */
 .decoration-panel{display:grid;gap:14px}
 .decoration-panel .slot h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
-.slot-option{display:flex;justify-content:space-between;align-items:center;gap:12px;
- padding:9px 11px;border:1px solid #2f2a22;background:#17140f}
-.slot-option+.slot-option{margin-top:6px}
-.slot-option.on{border-color:var(--gold);background:#1d1810}
+/* UI_UX_v2.8 §DECORATION DECISION SURFACE. The row used to be `flex` + `justify-content:
+   space-between` with a `flex-wrap` rule under 480px, so WHERE the control sat was decided by
+   how long that Decoration's effect line happened to be: a short one kept the button beside the
+   text, a long one wrapped it onto its own line hard against the left edge. Four cards, two
+   different silhouettes, and the eye reads that as the layout slipping rather than as one set
+   of choices.
+   It is a two-track grid now: the reading takes the first track and wraps inside it, the
+   control holds the second track whatever the text does. Stretching the control to the row's
+   full height and seating it flush against the card's own edge is what makes it read as the
+   card's face rather than a button dropped on top of a web list row. */
+/* `800 자본으로 구매` is a long label for a phone, so the control's track is capped here and
+   the label wraps inside the face: an `auto` track let it take 70% of the card and squeezed the
+   effect line into what was left, orphaning its last syllable. The sheet is mobile-first, so
+   the 600px block below is what hands the control its natural width back. */
+.slot-option{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,38%);align-items:stretch;
+ background:#17140f;box-shadow:inset 0 0 0 2px #2f2a22,3px 3px 0 #0000005c}
+.slot-option>div:first-child{min-width:0;padding:11px 13px;align-self:center}
+.slot-option+.slot-option{margin-top:8px}
+.slot-option.on{background:#1d1810;box-shadow:inset 0 0 0 2px var(--gold),3px 3px 0 #0000005c}
 .slot-option.locked{opacity:.72}
 .slot-option b{display:block}
+/* the control is the card's right-hand face: full height, flush to the edge, its own ruled
+   seam instead of a gap. A press moves the plane, never the card. */
+.slot-option>button{align-self:stretch;min-height:0;margin:0;padding:10px 12px;
+ white-space:normal;font-size:13px;line-height:1.35;text-align:center;
+ box-shadow:inset 2px 0 0 #00000059,inset -2px -2px 0 #00000059,inset 0 2px 0 #ffffff17}
+.slot-option>button:active{transform:none;
+ box-shadow:inset 2px 0 0 #00000073,inset -2px -2px 0 #00000073,inset 0 2px 0 #ffffff0d}
+/* a state word where a control would be keeps the control's place, so the row does not reflow
+   between an in-Run store and a pre-Run one */
+.slot-option>.muted{align-self:center;padding:11px 13px 11px 0;text-align:right;white-space:nowrap}
+
 /* UI_UX §DECORATION DECISION SURFACE + §FUNCTION / FLAVOR VISUAL HIERARCHY - EXACT. The
    purchase/equip comparison is decided on this exact effect line, so it is Function: 14-15px,
    600, normal contrast - not the 13px / 400 / dim `.smalltext` it inherited from the wrapper. */
 .slot-option span.smalltext{display:block;font:600 14px/1.45 var(--ui);color:#d8c9a6}
 .slot-option .tale{margin-top:3px}
-.slot-option button{flex:0 0 auto}
+
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION: the confirmation takes the buy button's own place in the
    row, so the button it replaces cannot be clicked again while it is up. */
-.deco-confirm{flex:0 0 auto;display:grid;gap:6px;justify-items:end;text-align:right}
+.deco-confirm{display:grid;gap:6px;justify-items:end;text-align:right}
 .deco-confirm p{color:#cbb992;margin:0}
 .deco-confirm button{display:inline-block}
-@media (max-width:480px){.slot-option{flex-wrap:wrap}.deco-confirm{justify-items:stretch;text-align:left;width:100%}}
+/* the confirmation replaces the control, and it carries a sentence, so it takes the whole card
+   instead of being squeezed into the control's track. Every card does this the same way, at
+   every width - that is the point of the change above. */
+.slot-option>.deco-confirm{grid-column:1/-1;padding:11px 13px;justify-items:stretch;text-align:left;
+ box-shadow:inset 0 2px 0 #2f2a22}
+.slot-option>.deco-confirm p{text-align:left}
 .decoration-panel .none{color:#7d7466}
 .settlement h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks{display:grid;gap:14px}
@@ -1559,6 +1599,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .room{max-height:50dvh}
  .notices{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
  .form{max-width:860px;margin:0 auto}
+ /* past the phone the label fits on one line again, so the control takes only what it needs */
+ .slot-option{grid-template-columns:minmax(0,1fr) auto}
+ .slot-option>button{padding:10px 16px;white-space:nowrap;font-size:14px}
  /* MORNING on a wide screen: the extra width goes to the notices, and the decision keeps a
     size that reads across a desk. A wide window is not a reason to set the whole game
     smaller so that more of the shop fits in it. */
@@ -1602,6 +1645,35 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     real box (one grid cell) holding the stat/forecast dossier and the Trait rows stacked
     in their own normal document order, which is what keeps them exactly as tall as their
     own content - the `order` values above are flex-only and do nothing here. */
+ /* CLOSING / the two endings on a desk. The result here IS an object - a receipt, 344px of
+    paper on a counter - and the dock is the full width of the stage. At a phone width those
+    two are nearly the same measure, so the day's last control reads as the receipt's own next
+    step. At 1024 and 1280 they stop agreeing: the paper sits in the middle and the control is
+    pushed to the far edge of a bar three times its width, with the empty counter between them,
+    which is a web modal's footer CTA and not the end of a shift.
+    So the dock's CONTENTS are brought back onto the receipt's own column - the bar stays full
+    width, because it is the counter's edge - and the control centres under the paper it
+    belongs to. It is not stretched to the column: a 344px slab would trade one wrong silhouette
+    for another, and the compact pressed plane is the shape this game's controls have. */
+ .p-closing .dock,.p-end .dock{display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:center;gap:10px;
+  padding-left:max(var(--gutter),calc((100% - 344px)/2));
+  padding-right:max(var(--gutter),calc((100% - 344px)/2))}
+ /* the control stops being pinned to the far edge */
+ .p-closing .dock .stamp{margin-left:0}
+ /* and the counter runs continuously from under the receipt to under the control, so the two
+    are one surface with a seam rather than a paper object and a separate black bar */
+ .p-closing .dock{background:var(--tex-wood),#1d150d;background-size:32px 12px;
+  box-shadow:inset 0 2px 0 #00000080,inset 0 3px 0 #ffffff0a}
+ /* the gap between the two was the other half of it: the receipt ended 26px up and the bar
+    opened 12px down, on a screen with room to spare. They close on each other here. */
+ .p-closing .stage-scroll{padding-bottom:14px;
+  display:flex;flex-direction:column;justify-content:center}
+ .p-closing .dock,.p-end .dock{padding-top:14px}
+ /* the ending keeps its statement centred in the column - dropping the auto margin pinned it
+    to the floor and opened 315px of dead counter above it, which the gate caught. What changes
+    here is only where the way on sits: directly under the statement, not in the far corner. */
+ .p-end .stage-scroll{padding-bottom:14px}
  .p-sale .dossier-col{display:block;grid-column:1;margin:0}
  .p-sale .shelf{grid-column:2;margin:0}
  .p-sale .owned-relics{display:block}
