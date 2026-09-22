@@ -1,10 +1,10 @@
 # AGENTS.md — GUILD24 Engineering / QA Operating Rules
 
-> This file defines **how an implementation agent must work** in the GUILD24 repository.
-> It is a permanent process guardrail, not a Design SSOT.
+> Permanent process guardrails for implementation / QA work.
+> This file is not a Design SSOT.
 >
-> Do **not** copy game rules, balance numbers, UX specifications, or Canonical design text into this file.
-> For Design Truth, always follow the current Canonical Project Sources.
+> Do not copy game rules, balance numbers, UX specifications, or Canonical design text here.
+> Resolve Design Truth from the current Canonical Project Sources.
 
 ---
 
@@ -19,24 +19,16 @@ Priority:
 4. Past chat / old instructions / old specs
 ```
 
-Definitions:
-
 ```text
 DESIGN TRUTH         = Current Canonical Project Sources
 IMPLEMENTATION TRUTH = Current Source
 ```
 
 If Canonical and Source differ:
-
 - do not reinterpret Canonical to match Source
 - do not silently change Design
-- classify the difference as:
-  - Implementation Bug
-  - Missing Adoption
-  - Runtime UX Bug
-  - Test Gap
-  - Design Issue
-  - Unresolved, if evidence is insufficient
+- classify the difference as Implementation Bug, Missing Adoption, Runtime UX Bug, Test Gap,
+  Design Issue, or Unresolved when evidence is insufficient
 
 Never change approved Design without User approval.
 
@@ -44,13 +36,13 @@ Never change approved Design without User approval.
 
 # 2. PROJECT SOURCE ACCESS
 
-Do not decide that a Canonical file is missing just because it is not visible in initial context.
+Do not treat a Canonical file as missing because it is absent from initial context.
 
 Required order:
 
 ```text
 SPEC_INDEX
-→ identify exact latest filename
+→ identify exact current filename
 → explicitly Search/Open that Project Source
 → read only the relevant Spec / QA / Source
 ```
@@ -61,13 +53,7 @@ Only after that fails may you report:
 PROJECT SOURCE ACCESS/INDEX ISSUE
 ```
 
-Never substitute:
-- memory
-- an older spec
-- a chat summary
-- current Source
-
-for inaccessible Canonical.
+Never substitute memory, an older spec, a chat summary, or Current Source for inaccessible Canonical.
 
 Default reading strategy:
 
@@ -77,11 +63,11 @@ SEARCH
 → EXPAND ONLY IF NEEDED
 ```
 
-Do not perform broad repository/spec reading without a concrete reason.
+Do not broadly read the repository or all specs without a concrete task reason.
 
 ---
 
-# 3. SCOPE DISCIPLINE
+# 3. SCOPE / CHANGE DISCIPLINE
 
 Before implementation:
 
@@ -94,168 +80,69 @@ REUSE SOURCE
 
 Do not:
 - add speculative features
-- refactor unrelated code
-- clean unrelated files
+- refactor or clean unrelated code/files
 - create unnecessary abstractions
 - implement future-version ideas early
-- modify Design while doing implementation work
+- make Design decisions while doing WORK
 
-A task must solve the current confirmed problem with the smallest safe change.
-
-Safety, data preservation, required testing, and maintainability must not be sacrificed.
+Solve the confirmed problem with the smallest safe change.
+Do not sacrifice safety, data preservation, required testing, or maintainability.
 
 ---
 
-# 4. COMMIT DISCIPLINE — MANDATORY
+# 4. COMMIT / WORKING-TREE DISCIPLINE
 
-## 4.1 One logical task = one commit
-
-Work in small, reviewable units.
-
-Examples:
-
-```text
-fix: restore v2.6.1 order confirm flow
-fix: correct major injury recovery 2 to 0
-fix: remove stale top-level settings controls
-fix: repair night result runtime reference
-test: add order confirm regression coverage
-docs: update v2.6.1 current manifest
-```
-
-Do not combine unrelated fixes into one large commit.
-
+One logical task = one reviewable commit.
 A code change and the test that verifies that same change may be committed together.
 
-## 4.2 Commit before changing task
-
-Before moving to another subsystem or issue:
+Before changing task or subsystem:
 
 ```text
-1. run targeted verification
-2. inspect git diff
-3. commit the completed logical unit
-4. confirm working tree state
-5. only then start the next task
+targeted verify
+→ inspect diff
+→ commit logical unit
+→ confirm working-tree state
+→ only then continue
 ```
 
-Do not leave multiple unrelated uncommitted changes in the working tree.
+Uncommitted work is not a checkpoint.
+Create a clean commit before risky recovery, branch switching, bulk edits, or reconstruction work.
 
-## 4.3 Never rely on uncommitted recovery state
+During normal work, do not rewrite shared history or restore an old tree wholesale.
+Use old commits only as evidence and re-apply the minimum necessary change to Current Source.
 
-Uncommitted work is not a safe checkpoint.
-
-Before:
-- large QA
-- recovery work
-- branch switching
-- bulk script edits
-- risky search/replace
-- source reconstruction
-
-create a clean commit first.
-
-## 4.4 No history rewriting during normal work
-
-Forbidden unless the User explicitly requests it:
-
-```text
-force push
-rebase that rewrites shared history
-reset --hard to an older implementation
-history squashing that hides intermediate fixes
-mass checkout of an old commit over current work
-```
-
-When recovering a regression, inspect history and re-apply only the necessary change to current Source.
-
-Do not restore an old tree wholesale.
+Before editing / freezing, know the current HEAD and working-tree state.
+Do not call a state FROZEN unless intended work is committed and the tree is clean.
 
 ---
 
-# 5. CHANGE SAFETY
-
-Before editing:
-
-```text
-git status
-git rev-parse HEAD
-```
-
-After editing:
-
-```text
-git diff
-targeted test
-```
-
-Before a milestone / QA freeze:
-
-```text
-git status
-git diff
-git rev-parse HEAD
-```
-
-The expected frozen state is:
-
-```text
-working tree clean
-known HEAD
-all intended work committed
-```
-
-If the tree is not clean, do not describe the state as FROZEN.
-
----
-
-# 6. SOURCE VS TEST
+# 5. SOURCE / TEST / QA TRUTH
 
 Tests are not Design Truth.
+A passing test does not prove Canonical adoption.
 
-A passing test does not prove the implementation matches Canonical.
+When Source, test, and Canonical disagree:
+- identify which one is stale or wrong before editing
+- update a test only when the Canonical expectation is known
+- never derive Expected values from Runtime merely to obtain PASS
 
-If Source and Canonical disagree but a test passes:
+QA exists to find mismatch, regression, runtime failure, stale tests, and incomplete adoption.
+FAIL is a valid result.
 
-```text
-the test may be stale
-```
-
-If a test fails after a confirmed Design change:
-
-- first determine whether Source is wrong or the test expectation is stale
-- update the stale test only when the Canonical expectation is known
-- do not weaken the assertion merely to make it pass
-
-Never derive Expected values from current Runtime output just to satisfy a test.
-
----
-
-# 7. QA PURPOSE — CRITICAL
-
-## QA is for finding errors, not producing PASS.
-
-The goal is:
-
-```text
-detect mismatch
-detect regression
-detect runtime failure
-detect stale test
-detect incomplete adoption
-```
-
-PASS is only a result when the implementation is actually correct.
-
-A FAIL is a valid and useful QA result.
-
-Never modify code merely because QA must "end green".
+Never obtain PASS by:
+- deleting/skipping a failing case
+- weakening an assertion or tolerance without Design basis
+- copying Runtime values into Expected
+- changing RNG/seed to prefer an outcome
+- silently excluding an edge case or strategy
+- changing Production Balance merely to satisfy a measurement
+- claiming full PASS after only a subset was rerun
 
 ---
 
-# 8. QA PHASE SEPARATION
+# 6. QA / FIX PHASE SEPARATION
 
-Use this cycle:
+Default cycle:
 
 ```text
 IMPLEMENT
@@ -265,237 +152,114 @@ IMPLEMENT
 → QA
 ```
 
-During a frozen QA run:
-
-```text
-DO NOT MODIFY:
-- Production Source
-- Tests
-- Measurement Harness
-- Fixtures
-- Expected values
-```
+During a frozen QA run, do not modify Production Source, Tests, Harness, Fixtures, or Expected values.
 
 If QA finds a bug:
 
 ```text
-1. stop the frozen QA
-2. report the finding
-3. leave the failed evidence intact
-4. begin a separate FIX cycle
-5. make the smallest fix
-6. add/update the correct regression test if needed
-7. commit
-8. freeze again
-9. rerun QA from the new clean HEAD
+STOP frozen QA
+→ report finding
+→ begin separate FIX cycle
+→ make smallest correct fix
+→ add/update regression coverage when needed
+→ commit
+→ freeze again
+→ rerun relevant QA
 ```
 
-Do not edit Source/Test in the middle of a QA run and continue calling it the same frozen run.
+Do not edit mid-run and continue calling it the same frozen QA.
 
 ---
 
-# 9. FORBIDDEN QA BEHAVIOR
+# 7. RUNTIME VERIFICATION
 
-Never do any of the following to obtain PASS:
+Source-level presence is not enough for interaction-sensitive UX.
 
-```text
-- delete a failing test
-- weaken an assertion
-- broaden tolerance without Design approval
-- skip a failing case
-- convert an exact requirement into a loose smoke test
-- copy Runtime values into Expected
-- change RNG/seed until a preferred result appears
-- remove an edge case from the harness
-- silently exclude a failing strategy
-- modify Production Balance because a measurement looks inconvenient
-- claim "PASS" when only a subset was rerun
-```
+When relevant, verify the actual affected browser flow on the appropriate viewport/device class,
+including the interactions and persistence boundaries changed by the task.
 
-When a test is wrong, explain why it is wrong relative to Canonical before changing it.
+Check runtime errors for affected flows.
+Unit tests do not replace required runtime verification.
 
----
-
-# 10. FUNCTIONAL QA VS RUNTIME UX QA
-
-Code presence is not enough for UX.
-
-Examples:
-
-```text
-scroll restoration function exists
-≠
-mobile scroll is actually stable
-```
-
-For interaction-sensitive UI, verify actual runtime behavior.
-
-Required when relevant:
-
-```text
-Desktop browser
-Mobile viewport / mobile browser
-real click/tap sequence
-phase transition
-scroll position
-focus behavior
-modal open/close
-save/reload
-console errors
-```
-
-A Source-level implementation may still be classified as:
+A Source implementation may still be a:
 
 ```text
 RUNTIME UX BUG
 ```
 
-if the player experience fails.
+when the player-facing behavior fails.
 
 ---
 
-# 11. CRITICAL RUNTIME SMOKE TEST
+# 8. RECOVERY / BULK EDIT SAFETY
 
-After changes affecting the main run loop, perform an actual browser progression.
+For regressions, compare Current Canonical, Current Source, and relevant Git history.
+Distinguish what evidence supports: never implemented, lost implementation, later regression,
+runtime-only failure, stale test/copy, or unresolved root cause.
 
-Minimum when applicable:
-
-```text
-START
-→ MORNING
-→ ORDER
-→ SALE
-→ NIGHT
-→ CLOSING
-→ NEXT DAY
-```
-
-Also exercise:
-- at least one successful sale
-- at least one refusal path if affected
-- at least one injury result if result UI is affected
-- next / skip-all result flow
-- save/reload when persistence code changed
-
-Required outcome:
-
-```text
-Console Runtime Error = 0
-No phase-blocking ReferenceError / TypeError
-```
-
-Unit tests do not replace this smoke test.
-
----
-
-# 12. REGRESSION / RECOVERY RULES
-
-When the User reports that previously working UX or logic disappeared:
-
-1. compare Current Canonical to Current Source
-2. inspect relevant Git history
-3. identify the last verifiable good behavior when possible
-4. distinguish:
-   - never implemented
-   - implementation lost
-   - later regression
-   - runtime-only failure
-   - stale test/copy
-5. if evidence is insufficient, report:
+If evidence is insufficient:
 
 ```text
 ROOT CAUSE UNRESOLVED
 ```
 
-Do not invent a rollback story.
+Do not invent rollback history or reconstruct undocumented old states from memory.
 
-Do not reconstruct undocumented past states from memory.
+For bulk/scripted edits:
+- start from a committed baseline
+- restrict paths / matches explicitly
+- inspect the diff immediately
+- stop or revert if scope is broader than intended
 
-Do not restore an old commit wholesale.
-
-Use old commits only as evidence/reference and apply a minimal current patch.
-
----
-
-# 13. BULK / SCRIPTED EDITS
-
-Bulk replacement scripts are high risk.
-
-Before running one:
-
-```text
-1. commit current clean baseline
-2. limit paths explicitly
-3. inspect exact intended matches
-```
-
-After running one:
-
-```text
-1. inspect git diff immediately
-2. verify only intended files changed
-3. revert the script result if scope is broader than intended
-```
-
-Do not use broad string replacement across Production + Test + Docs unless each target is intentionally reviewed.
+Do not use broad replacement across Production + Tests + Docs without intentional review of every target.
 
 ---
 
-# 14. DESIGN CHANGE CONTROL
+# 9. DESIGN CHANGE CONTROL
 
-Implementation work must not decide unresolved Design.
+WORK must not decide unresolved Design.
 
-If a required behavior is not defined:
+If required behavior is undefined:
 
 ```text
 UNRESOLVED
 ```
 
-and ask/report rather than inventing a rule.
+Report/ask rather than inventing a rule.
 
-When a balance measurement violates a target:
+If measurement violates a balance target:
 
 ```text
-report BALANCE FINDING
+BALANCE FINDING
 ```
 
 Do not auto-tune Production values.
 
-When Design is intentionally changed by User approval:
+After User-approved Design change:
 - update the proper Canonical owner
-- update only tests that represent that changed rule
-- do not preserve superseded numbers as alternate live expectations
+- update only tests that represent the changed rule
+- do not preserve superseded values as alternate live expectations
 
 ---
 
-# 15. DOCUMENT / VERSION HYGIENE
+# 10. DOCUMENT / VERSION HYGIENE
 
-Do not duplicate detailed Canonical rules across multiple files.
-
-Canonical numeric / UX / QA truth belongs in its owner sources.
-
+Detailed Canonical truth belongs only in its routed owner sources.
 `AGENTS.md` contains process only.
 
-For patch releases:
+Do not:
+- duplicate current rules across multiple live documents
+- keep superseded discussion as another live expectation
+- mass-copy old specs into a new version
 
-```text
-2.6.0 → initial feature release
-2.6.1 → corrective patch / recovery of approved 2.6 behavior
-2.7.0 → new Core Play / Design revision
-```
-
-A corrective implementation recovery does not become a new minor version merely because many bugs were found.
-
-Create a new patch-version manifest when the current shipped/implemented patch state changes.
-
-Do not mass-copy every old spec into the new version.
-Only changed owner documents receive a new version; unchanged owners are referenced.
+Follow the current `SPEC_INDEX` routing and inheritance structure.
+Versioning / manifest changes must reflect the current project routing rather than historical examples in this file.
 
 ---
 
-# 16. HANDOFF / REPORTING
+# 11. REPORTING / HANDOFF
 
-Reports must distinguish real status when relevant:
+Use accurate status labels when relevant:
 
 ```text
 PASS
@@ -509,232 +273,80 @@ BLOCKED
 ROOT CAUSE UNRESOLVED
 ```
 
-Do not summarize failures as "PASS with notes".
+Never summarize a real failure as "PASS with notes".
 
-## 16.1 WORK final output is a DIRECTOR review packet
+WORK final reports are DIRECTOR review packets, not work diaries.
+Default to:
+- Branch / HEAD
+- logical commit(s)
+- material changes only
+- targeted / regression / full-test / runtime status as applicable
+- exact review risk or blocker, otherwise NONE
 
-WORK's final response is not a User-facing work diary.
-
-Its default purpose is to give DIRECTOR only the minimum evidence needed to inspect Source / Diff / QA.
-
-DIRECTOR is expected to inspect the implementation directly.
-Therefore do not re-explain Task text, Canonical rules, or implementation history in the final response.
-
-Default final format:
-
-```text
-DIRECTOR REVIEW
-
-Branch / HEAD:
-
-Commits:
-- <sha> — <logical task>
-
-Changed:
-- material implementation changes only, 3–6 concise lines
-
-Verification:
-- targeted QA: PASS / FAIL
-- relevant regression / deterministic tests: PASS / FAIL / N/A
-- npm test: PASS / FAIL
-- runtime smoke: PASS / FAIL / N/A
-
-Review points:
-- only risks / decisions DIRECTOR should inspect directly
-- NONE if there are none
-
-Blocker / unresolved:
-- NONE
-- or the exact blocker / unresolved item
-```
-
-## 16.2 Do not output by default
-
-Do not include these in the final response unless needed to explain a FAIL / blocker:
-
-- documents or files read
-- step-by-step implementation process
-- work diary / chronological narration
-- Task instructions repeated back
-- Canonical rules copied back
-- full test list
+Do not repeat:
+- documents read
+- chronological work narration
+- Task text
+- Canonical text already available in the repository
 - raw PASS logs
-- long rationale for ordinary implementation choices
-- already-known project background
-- CI / Pages detail when it is not blocking the task
+- unrelated project history
 
-If evidence is needed for a failure, include only the smallest relevant excerpt.
+Handoffs are execution pointers, not portable project copies.
 
-## 16.3 Review boundary
+Include only what the receiving role needs now:
+- role / base when operationally necessary
+- active task
+- exact routed documents / QA / Source entry points
+- newly approved User decision not yet promoted to those documents
+- stop boundary when it differs from normal workflow
 
-WORK's own PASS is not final Design or implementation approval.
+Do not carry rejected, superseded, speculative, obsolete, or already-completed context into a handoff.
+Do not repeat AGENTS rules inside the handoff beyond "Read AGENTS.md first and follow it."
 
-After completing the assigned scope:
-
-```text
-implement
-→ verify
-→ commit
-→ report minimum evidence
-→ wait for DIRECTOR review
-```
-
-If no next Task was explicitly authorized, do not continue into later work.
-
-For frozen release / final QA, keep the required evidence in the repository / logs, but the final chat
-response still stays compact unless DIRECTOR asks for the exact command list or raw evidence.
+WORK's own PASS is not final DIRECTOR approval.
+If no next task was explicitly authorized, stop after the assigned scope.
 
 ---
 
-# 17. USER-APPROVED HANDOFF HYGIENE
-
-Handoffs are execution pointers, not portable copies of the project.
-
-This rule applies to both:
-- WORK handoffs
-- DIRECTOR handoffs
-
-## 17.1 Minimum necessary content only
-
-Include only what the receiving role needs to start the next task:
-
-- current role
-- current repository / branch / HEAD only when operationally relevant
-- current active task / review target
-- exact Canonical / QA / Source routing needed to find the truth
-- any newly approved User decision that is not yet available in the routed documents
-- explicit stop / merge boundary only when it differs from the standing workflow
-
-Everything else should be omitted.
-
-## 17.2 Document-first, no duplication
-
-If information can be resolved from current repository documents, reference the document instead of
-copying its contents into the handoff.
-
-Prefer:
-
-```text
-Read SPEC_INDEX -> owner spec -> routed QA -> affected Source.
-Implement/review SA-Qxx-yy.
-```
-
-Do not paste or paraphrase long Canonical rules, numeric tables, acceptance criteria, workflow rules,
-or project history that the receiving role can read from the repository.
-
-Do not repeat AGENTS.md rules inside a handoff.
-The handoff may say only:
-
-```text
-Read AGENTS.md first and follow it.
-```
-
-Exception:
-repeat an exact rule only when the User has just approved it and it has not yet been promoted into
-the current routed Canonical / QA, or when a precise execution clarification is required to prevent
-a known ambiguity. Once promoted, remove the duplicate from later handoffs.
-
-## 17.3 Role-specific only
-
-A WORK handoff contains only what WORK needs to implement / test the current task.
-
-A DIRECTOR handoff contains only what DIRECTOR needs to inspect / judge the current implementation.
-
-Do not give either role:
-- the other role's unnecessary operating detail
-- unrelated future tasks
-- project-wide recap
-- completed-task history unless needed to prevent rework
-- discussion history
-
-## 17.4 Never carry rejected or stale context
-
-Do not include:
-- rejected candidates
-- superseded values
-- speculative alternatives
-- internal reasoning
-- abandoned implementation ideas
-- obsolete branch / commit history
-- already-completed task detail that the active task does not depend on
-
-This prevents accidental anchoring and resurrection of rejected Design.
-
-## 17.5 Default handoff shape
-
-Use the smallest shape that works:
-
-```text
-ROLE:
-BASE: <only if needed>
-ACTIVE TASK:
-READ:
-- <exact current documents / sections / SA-Q ids>
-DO:
-- <current execution or review target only>
-STOP:
-- <boundary only if needed>
-```
-
-If a field adds no execution value, omit it.
-
----
-
-# 18. STOP CONDITIONS
+# 12. STOP CONDITIONS
 
 Stop and report instead of continuing when:
-
-```text
 - Canonical cannot be accessed after SPEC_INDEX lookup
 - Design is unresolved
 - Current Source contains an unexpected broad regression
-- a scripted edit changed unrelated files
+- a scripted/bulk edit changes unrelated scope
 - QA finds a critical runtime blocker
-- the working tree state cannot be explained
-- a requested action would overwrite uncommitted work
-- a recovery action would require guessing the old intended state
-```
+- the working-tree state cannot be explained
+- the requested action would overwrite uncommitted work
+- recovery would require guessing the intended old state
 
 Do not "finish anyway".
 
 ---
 
-# 19. DEFINITION OF DONE
+# 13. DEFINITION OF DONE
 
 A task is done only when all applicable conditions hold:
+- correct Canonical owner / requirement identified
+- scope stayed limited
+- minimal implementation or document change completed
+- relevant behavior verified
+- regression coverage updated when needed
+- no unrelated files changed
+- logical unit committed
+- working-tree / HEAD state understood
+- no blocker or unresolved issue hidden
 
-```text
-[ ] Canonical requirement identified
-[ ] Scope limited
-[ ] Minimal implementation completed
-[ ] Relevant runtime/source behavior verified
-[ ] Regression test added/updated when needed
-[ ] No unrelated files changed
-[ ] Logical unit committed
-[ ] Working tree state understood
-[ ] No unresolved blocker hidden
-```
-
-A release / patch QA is done only when:
-
-```text
-[ ] Final intended changes are committed
-[ ] git status is clean
-[ ] frozen HEAD is recorded
-[ ] QA runs without modifying Source/Test/Harness
-[ ] failures are reported as failures
-[ ] browser smoke test covers affected main-loop paths
-[ ] console runtime errors = 0
-[ ] Canonical adoption audit is complete
-```
+Release/freeze work additionally requires a clean recorded HEAD and the routed final QA / adoption checks.
 
 ---
 
-# 19.1 SESSION / TASK CHUNKING — MANDATORY
+# 14. SESSION / TASK CHUNKING — MANDATORY
 
 Large audits, document cleanups, and cross-file adoption work must be split into small execution batches.
 
 Default:
+
 ```text
 one narrow batch
 → inspect diff
@@ -745,31 +357,30 @@ one narrow batch
 ```
 
 Do not:
-- read or edit the entire project in one pass when the work can be divided safely
-- chain multiple unrelated document groups in one execution turn
+- read or edit the entire project in one pass when it can be divided safely
+- chain unrelated document groups in one execution turn
 - continue automatically into the next batch after a completed commit
-- keep expanding scope because related stale material is discovered
+- expand scope because adjacent stale material is discovered
 
-For broad audits, divide by owner / document class / subsystem and finish one batch before opening the next.
+Divide broad work by owner, document class, or subsystem.
 
 If the session, tool, or network becomes unstable:
+
 ```text
 STOP ALL
 → make no further edits
 → report exact last completed commit
-→ report the exact interrupted batch
+→ report interrupted batch
 → report remaining unopened batches
 ```
 
-Do not reconstruct or continue the interrupted batch from memory. Resume only from the committed repository state and the current routed documents.
-
-This is a process guardrail only. It does not change Design Truth or implementation scope.
+Resume only from committed repository state and current routed documents, not from memory.
 
 ---
 
-# 20. CORE PRINCIPLE
+# 15. CORE PRINCIPLE
 
-The repository must remain recoverable and explainable.
+Keep the repository recoverable and explainable.
 
 Prefer:
 
@@ -781,14 +392,6 @@ honest failure
 reproducible QA
 ```
 
-over:
+over mixed changes, hidden state, history reconstruction, PASS-at-any-cost, or silent Design drift.
 
-```text
-large hidden working tree
-mixed changes
-green tests at any cost
-history reconstruction
-silent Design drift
-```
-
-**Never optimize for PASS. Optimize for correctness and traceability.**
+**Optimize for correctness and traceability, not for PASS.**

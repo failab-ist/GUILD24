@@ -16,7 +16,8 @@ time rediscovering location/root cause.
 It is not permission to refactor unrelated Source.
 If Current Source has moved, resolve the equivalent code path rather than matching old line numbers.
 
-Each finding states observed/source behavior, root cause, Canonical correction and acceptance.
+Each finding states audit-head observed/source behavior, root cause, Canonical correction and acceptance.
+"Current Source" sections below are audit evidence at AUDIT_SOURCE_HEAD, not live resolution status.
 
 ## SA-Q01 — PRE-RUN DECORATION RETURN / MOBILE BLANK
 
@@ -199,7 +200,7 @@ mobile suppress waitingLine/fan; keep Dock progress.
 
 Classification: INFORMATION TRUST BUG
 
-Original finding:
+Audit-head finding:
 - kitLine omitted Loyalty
 - npcDetail showed raw Loyalty without immediate meaning
 - Adventurer.isTrustedRegular threshold = 51
@@ -352,11 +353,10 @@ Current Source Copy.boss SLOTH Trait still says 유물.
 Required:
 점포지원 terminology.
 
-## OUT OF v2.8 / DO NOT PULL FORWARD
+## CURRENT OUT-OF-SCOPE BOUNDARY
 
-- broad BGM/SFX/presentation expansion
 - Expedition Purpose structural feature
-- other v2.9+ deferred work
+- v2.9+ deferred work not explicitly promoted into current v2.8 Canonical
 
 ## MEASUREMENT FINDINGS, NOT SOURCE BUGS
 
@@ -742,7 +742,7 @@ Required active replacements:
 Active Rarity distribution after adoption:
     C11 / U12 / R5 / E11 / L1
 
-Do not rebalance another Item's Rarity to restore the old C/U count.
+Do not move another Item from the approved active Rarity distribution.
 
 ### SA-Q40 — FRESH NATIVE-STAT AMPLIFICATION TOO HIGH FOR v2.8 ITEM BASES
 
@@ -807,9 +807,7 @@ Current retained values:
 - Great Success EXP +80
 - Great Success Wallet +120
 
-Sponsorship note:
-- the original SA-Q42 adoption baseline was sponsorBase 350
-- User-approved playtest amendment SA-Q50 supersedes that value
+Sponsorship:
 - current required sponsorBase = 200
 
 Acceptance:
@@ -827,12 +825,8 @@ Current Source:
 - from D4+, a hidden random path can create route / remove-Trait / mentor-Trait opportunities
 - UI exposes destination reassignment, negative-Trait removal or positive-Trait learning
 
-Canonical finding at AUDIT_SOURCE_HEAD:
-No routed owner at that audit point explicitly closed the inherited random special-system clauses.
-
-2026-09-22 SSOT re-audit closure:
-NPC_TRAIT_v2.8.0.md now explicitly retires the inherited route / Trait-remove / Trait-add system.
-The required gameplay correction below is unchanged.
+Current Canonical:
+NPC_TRAIT_v2.8.0.md explicitly retires the inherited route / Trait-remove / Trait-add system.
 
 Required:
 - do not preserve it as gameplay merely because it exists in Source
@@ -924,7 +918,7 @@ Classification: APPROVED PLAYTEST REBALANCE
 Required:
 - fresh base 180
 - Level ×8 unchanged
-- visit-income random 0..100
+- visit-income random 0..80
 - returning NPC adds same income to persistent Wallet
 - cap 2000 unchanged
 - failed-expedition Loot unchanged in this patch

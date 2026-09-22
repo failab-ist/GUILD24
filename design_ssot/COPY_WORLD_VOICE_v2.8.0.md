@@ -9,24 +9,21 @@ BASE_DOCUMENT=COPY_WORLD_VOICE_v2.7.0.md
 PATCH_TYPE=INFORMATION_TRUST_AUDIT
 APPROVED_COPY_AMENDMENT=COPY_AUDIT_APPROVED_v2.8.0.md
 
-## USER-APPROVED v2.8 COPY AMENDMENT
+## EXACT COPY ROUTING
 
-Exact Player-facing copy changes approved by User are owned by:
+Exact approved Player-facing replacements, deletions, Event Flavor, Store Support descriptions,
+NPC dialogue pools, Boss/Deep text, Settings/Help text and death narration are owned by:
 
     COPY_AUDIT_APPROVED_v2.8.0.md
 
-For exact text, replacement, deletion, Event Flavor, Store Support description, NPC dialogue pool,
-Boss/Deep copy, Settings/Help copy, and death narration, that approved amendment supersedes any
-conflicting earlier exact-copy example in this document or inherited v2.7 copy.
-
-This owner continues to hold terminology, truth boundaries, exposure/cooldown rules, and other
-non-duplicated copy-system rules. Do not re-copy the approved amendment into this file.
+This owner holds terminology, truth boundaries, exposure/cooldown rules and non-duplicated
+copy-system rules. Do not maintain a second exact-copy list here.
 
 ## INHERITANCE
 
-All unchanged world voice and approved v2.7 copy inherit COPY_WORLD_VOICE_v2.7.0.md.
+All unchanged world voice and non-conflicting v2.7 copy inherit COPY_WORLD_VOICE_v2.7.0.md.
 
-v2.8 priority:
+Priority:
     TRUTH -> FRESHNESS -> DECISION VALUE -> PLACEMENT -> SCAN -> VOICE
 
 Do not make explanations longer merely to sound friendly.
@@ -68,52 +65,35 @@ Do not say Supply always increases Great Success.
 
 ## ANCHORED HELP ROUTING
 
-Exact Player-facing SALE Help copy for:
-- 전투 전망
-- 환경 대응
-- 실패 시 사망 위험
+Exact Player-facing SALE Help for 전투 전망 / 환경 대응 / 실패 시 사망 위험 is owned by
+COPY_AUDIT_APPROVED_v2.8.0.md.
 
-is owned only by `COPY_AUDIT_APPROVED_v2.8.0.md` §4-1 through §4-3.
-Do not restate or independently revise those exact strings in this Voice owner.
-
-### 보급 / 피로
+보급 / 피로 explanation:
     필요량을 채우고 남은 보급은 출발 전 현재 피로를 먼저 줄입니다.
     그래도 남으면 귀환 후 쌓이는 피로를 줄입니다.
 
-## LOYALTY TUTORIAL / COACH — EXACT
+## LOYALTY COPY BOUNDARY
 
+Normal SALE shows only the compact Loyalty value/state and no separate Loyalty `?`.
 
-Normal SALE shows only the compact Loyalty value/state.
-No separate Loyalty `?` is shown there.
-
-Tutorial/coach copy:
-
-    단골도 {N}
-    높을수록 구매 의사·재방문 가능성 증가
-    51부터 단골
+Exact normal-SALE, tutorial/coach and compact global Help wording is owned by
+COPY_AUDIT_APPROVED_v2.8.0.md.
 
 Do not append Store Support/Boss condition detail to the normal SALE state.
-Boss-specific information must still obey its reveal boundary.
+Boss-specific information must obey its reveal boundary.
 
-Global compact Help retains its separately owned reference wording.
-
-## DEEP EXPEDITION REPEAT COPY
+## DEEP EXPEDITION COPY BOUNDARY
 
 The first contextual tutorial may explain the system.
+Repeat surfaces use the compact exact copy owned by COPY_AUDIT_APPROVED_v2.8.0.md.
 
-After that, repeat surface uses one compact line:
-
-    같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.
-
-Detailed cost/reward remains available where the Player makes the nomination.
+Do not repeat the full Hazard/cost/growth/store-income tutorial paragraph on every Morning and again
+inside SALE.
 
 ## NIGHT HERO FEEDBACK
 
-Use the short proven-result grammar owned by NIGHT_CLOSING_v2.8.0.md.
-
-Examples:
-    부식 방지 코팅제 덕분에 부상을 피했다.
-    간단 도시락 덕분에 살아 돌아왔다.
+Use the short proven-result grammar owned by NIGHT_CLOSING_v2.8.0.md and the exact active copy in
+COPY_AUDIT_APPROVED_v2.8.0.md.
 
 Do not use generic 위험 감소 as Hero feedback.
 
@@ -132,98 +112,26 @@ Item presence alone is not a selector.
 Remove supplied as a Primary selector.
 
 Environment flavor may be used only where it does not override the actual Outcome priority.
-
 Death uses narration, not quoted living dialogue.
 
-## FIRST STORE SUPPORT COPY — EXACT
+## FIRST STORE SUPPORT COPY BOUNDARY
 
-DAY 0 first-support surface:
+Exact DAY 0 first-support copy is owned by COPY_AUDIT_APPROVED_v2.8.0.md.
 
-Label:
-    DAY 0
+The candidate price/state communicates the free first choice, and the flow itself requires a
+selection. The D0 Boss objective belongs to the separate Boss-information beat after the first
+support choice; it is not embedded on the Store Support surface.
 
-Heading:
-    첫 점포지원
+## BOSS INFORMATION COPY ROUTING
 
-Body:
-    이번 영업에 쓸 지원 하나를 고르세요.
+Exact D0 / D5 / D10 / D15 / D20 / D25 Player-facing Boss information copy is owned by
+COPY_AUDIT_APPROVED_v2.8.0.md.
 
-Do not keep:
-- 하나는 무료다. 고르면 영업이 시작된다.
-- 하나를 골라야 영업이 시작된다.
+Reveal timing and information ownership remain governed by BOSS_v2.8.0.md.
 
-Candidate price/state already communicates the free first choice, and the flow itself requires a selection.
+## SLOTH TERMINOLOGY
 
-The D0 Boss objective belongs to the separate Boss-information beat after the first support choice.
-It is not embedded on this Store Support surface.
-
-## BOSS INFORMATION COPY — EXACT
-
-### D0
-Heading:
-    DAY 30 · 제0게이트 토벌 예정
-
-Line:
-    길드 정보원이 토벌 대상을 추적하고 있다.
-
-### D5
-Header:
-    1차 조사 보고
-
-Label:
-    토벌 대상 확인
-
-Show Boss name + the existing Boss-specific D5 Flavor.
-Button:
-    확인
-
-### D10
-Header:
-    2차 조사 시작
-
-Line:
-    {보스명}의 전투 기록을 추적한다.
-
-Footer:
-    다음 보고 · DAY 15
-
-### D15
-Header:
-    2차 조사 보고
-
-Intro:
-    전투 기록에서 변칙이 확인됐다.
-
-Then show exact Boss Trait name + Function.
-
-### D20
-Header:
-    최종 정찰 시작
-
-Line:
-    마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.
-
-Footer:
-    최종 보고 · DAY 25
-
-### D25
-Header:
-    최종 정찰 보고
-
-Intro:
-    마왕성으로 향하는 최종 원정 환경이 확인됐다.
-
-Then show exact Final Family + Hazard information.
-
-## SLOTH COPY
-
-Replace:
-    유물을 받는 대신
-
-with:
-    점포지원을 받는 대신
-
-and use 점포지원 consistently in all active Player-facing SLOTH lines.
+Use 점포지원 consistently in all active Player-facing SLOTH lines.
 
 ## EVENT COPY ROUTING
 
@@ -232,43 +140,16 @@ Exact approved Event Function / Flavor text -> COPY_AUDIT_APPROVED_v2.8.0.md
 
 Do not maintain a second exact Event-copy list here.
 
-## COPY RE-AUDIT — EXACT ACTIVE OVERRIDES
+## NPC DIALOGUE TRUTH
 
-This section is a 2026-09-20 re-audit against the current v2.8 SSOT and Current Source.
-It supersedes conflicting inherited v2.7 copy and non-Canonical Copy Audit drafts.
+Dialogue must not imply a purchase preference that the owning Trait does not implement.
 
-### NPC DIALOGUE TRUTH — v2.8 ONLY
-
-v2.8 expands the high-frequency dialogue pools and applies the recent-line repeat rule defined below.
-False mechanic implications are still corrected independently of pool size.
-
-Exact replacements:
-
-- 겁쟁이:
-  - REMOVE: \`귀환석 있습니까?\`
-  - USE: \`오늘은 무사히 다녀오는 게 목표입니다.\`
-
-- 대식가:
-  - REMOVE: \`많이 든 걸로 주세요.\`
-  - USE: \`원정 끝나면 밥부터 먹어야겠어요.\`
-  - REMOVE: \`먹을 게 제일 급해요.\`
-  - USE: \`배고픈 채로 돌아오는 건 딱 질색입니다.\`
-
-- 탐욕:
-  - REMOVE: \`비싼 게 좋은 거 아닌가요?\`
-  - USE: \`오늘은 빈손으로 돌아올 생각 없습니다.\`
-  - REMOVE: \`이왕이면 좋은 걸로 봅시다.\`
-  - USE: \`이번엔 전리품 좀 제대로 챙겨와야죠.\`
-
-- 단골:
-  - REMOVE: \`늘 먹던 걸로 주세요.\`
-  - USE: \`이 정도면 단골 맞죠?\`
-
-Do not add a purchase-preference implication that the owning Trait does not actually implement.
+Exact active ARRIVAL / TRAIT / SALE / NIGHT / DEATH pools are owned by
+COPY_AUDIT_APPROVED_v2.8.0.md.
 
 ## DIALOGUE EXPOSURE / RECENT REPEAT — EXACT
 
-The v2.8 dialogue production target is sized for repeated Run exposure.
+Dialogue production target is sized for repeated Run exposure.
 
 Target minimum pool sizes:
 
@@ -304,7 +185,6 @@ Target minimum pool sizes:
 - stranger: 6
 
 Recent-repeat rule:
-
 - ARRIVAL / SALE / NIGHT track recent visible dialogue separately.
 - The same exact line is not eligible if it appeared within the previous 3 visible dialogue beats
   on that same Surface.
@@ -314,58 +194,32 @@ Recent-repeat rule:
 - Dialogue selection must not consume Gameplay RNG.
 - Save/Load must not change an already-determined visible line.
 
-This is a v2.8 readability/content-density rule, not a new relationship or personality mechanic.
+This is a readability/content-density rule, not a relationship or personality mechanic.
 
-### RETURN-VISIT HELPED CALLBACK — EXACT
+## RETURN-VISIT HELPED CALLBACK
 
-A line such as:
-
-    지난번에 챙긴 거, 도움이 됐어요.
-
-may be selected only when the immediately previous expedition has a proven sold-Item contribution
-under the v2.8 result-proof boundary.
+The helped callback may be selected only when the immediately previous expedition has a proven
+sold-Item contribution under the current result-proof boundary.
 
 Do not use:
-- \`events.length > 0\`
-- Trait-only \`injury-guard\`
+- `events.length > 0`
+- Trait-only `injury-guard`
 - a generic Hazard/Result event with no sold-Item proof
 
 as sufficient evidence.
 
-The callback consumes no Gameplay RNG and does not create a new proof system; it reads the
-persisted previous-result proof already needed for NIGHT.
+The callback consumes no Gameplay RNG and creates no new proof system; it reads the persisted
+previous-result proof already needed for NIGHT.
 
-### SALE CHANGE LABELS — EXACT
+## SALE COPY BOUNDARY
 
-Primary selected-Item change heading:
+Exact selected-Item headings, conditional-effect labels, forecast Help and global Help text are owned
+by COPY_AUDIT_APPROVED_v2.8.0.md.
 
-    판매 후 변화
+Direct and derived changed rows remain readable under the current single-heading structure.
+Internal markers such as `potion` are never Player effects.
 
-Do not use:
-- 보급 후 변화
-- 이 상품이 직접
-- 보급이 상태에 미치는 영향
-- 이 손님에게는 지금 걸리지 않는 효과
-
-Direct and derived changed rows stay visible under the single heading.
-Their source is explained by the shared anchored source popover.
-
-Conditional intrinsic Item truth that still needs to be readable uses:
-
-    특수 효과
-
-Never label an internal marker such as \`potion\` as a Player effect.
-
-### SALE FORECAST PERMANENT FOOTNOTE
-
-Remove the always-visible prose:
-
-    오늘 이 사람의 몸 상태와 지금 챙긴 보급으로 가늠한 것이다.
-    게이트 안에서 어떻게 될지까지는 아무도 모른다.
-
-The exact forecast/readiness/death explanation lives in the anchored help copy already owned above.
-
-### SUPPLY SHORTFALL
+## SUPPLY SHORTFALL
 
 Main compact line:
 
@@ -377,75 +231,13 @@ On-demand explanation:
 
 Do not expose the hidden deficit formula.
 
-### HELP / 점주 가이드 — EXACT COPY ROUTING
+## TRAIT / CURRENCY / SETTINGS COPY ROUTING
 
-Exact approved Help / 점주 가이드 text is owned only by:
-    COPY_AUDIT_APPROVED_v2.8.0.md
+Exact active Trait-effect labels, Store Capital display text and Settings localization are owned by
+COPY_AUDIT_APPROVED_v2.8.0.md.
 
-Do not duplicate the Help strings here.
-
-### DEEP EXPEDITION REPEAT SURFACES — EXACT
-
-After the first contextual tutorial:
-
-Morning repeat surface:
-
-    심층원정 · {게이트명}
-    같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.
-
-SALE nomination detail:
-
-    {게이트명} · 후원금 {N}G
-    성공 시 추가 성장 · 점포 수익 없음
-
-Do not repeat the full Hazard/cost/growth/store-income tutorial paragraph on every Morning and again
-inside SALE.
-
-### TRAIT EFFECT LABEL TRUTH — EXACT
-
-금수저:
-    방문 시 소지금 +50G
-
-정직한:
-    정가·50% 구매 시 단골도 +1
-
-Do not use:
-- 방문 골드
-- 단골 보너스
-
-when the actual channel can be named.
-
-Keep mathematically truthful weighting terms such as 재방문 가중치 where replacing them with 확률
+Use mathematically truthful weighting terms such as 재방문 가중치 where replacing them with 확률
 would be false.
 
-### STORE CAPITAL CURRENCY COPY
-
-Store Capital is not Gold.
-
-Use:
-    점포 자본 {N}
-    {N} 자본
-
-Do not append \`G\` to Store Capital in Codex, management, purchase or settlement copy.
-
-### SETTINGS / PLAYER-FACING LOCALIZATION
-
-Use:
-    소리 켜기
-    소리 끄기
-    전체 데이터 초기화
-
-Do not use active Player-facing:
-- Sound On
-- Sound Off
-- Full Data Reset
-
-The reproducibility Seed control is developer/debug functionality and does not appear in the ordinary
-Player pre-Run surface.
-
-Remove the ordinary Player footer:
-
-    버전 0.4 · 로컬 실행 지원 · 외부 연결 없음
-
-Build/version information may live in a dedicated technical/about surface later; do not keep the
-development-runtime sentence in the gameplay settings panel.
+The reproducibility Seed control remains developer/debug functionality and does not appear in the
+ordinary Player pre-Run surface.

@@ -26,14 +26,14 @@ No active Store Support uses 쇼케이스 in these two names.
 Expected:
     대형 냉장고 = 200G
 
-A 260G Source row is FAIL / Implementation Bug.
+PASS only when the active implementation uses 200G.
 
 ## REL-Q-v28-3 — ROOKIE BOARD
 
 When a new adventurer is generated on a Day and the support is owned:
 - that new adventurer occupies one existing visitor slot
 - total visitor count is not increased by this rule
-- no separate +70% probability-only selection rule remains active
+- visitor selection uses only the current owner rule above
 
 When no new adventurer is generated:
 - no visitor is added
@@ -127,7 +127,7 @@ Therefore:
 - kitchen + fresh24 + active-Supply expeditionMeal => ×2.00
 
 FAIL:
-- inherited +40 / +80 / +25 native-Stat values remain active
+- any alternate native-Stat percentages are active
 - matching Hazard Counter is accidentally reduced from +25%
 - Supply itself is multiplied by these native-Stat percentages
 
@@ -145,7 +145,7 @@ If previous Day sales < 6:
 - quantity is unchanged.
 
 FAIL:
-- the inherited first-bulk -10% effect remains active
+- any first-bulk discount effect is active on 회전 진열대
 - the support directly discounts Item price
 - Rare+ quantity receives the +1
 
@@ -158,7 +158,7 @@ Expected:
 Price remains 720G.
 
 FAIL:
-- trigger still requires 8 sales
+- trigger differs from previous Day sales >= 7
 - discount applies more than once that Day
 
 ## REL-Q-v28-16 — EXPEDITION CERT COVERAGE
@@ -259,7 +259,7 @@ Verify the exact inherited-support functions closed in RELIC_v2.8.0.md:
 - 후방 창고 증설 -> inventory capacity +10
 - 본사 추가발주권 -> next ORDER-offer generation candidate count +2
 
-FAIL if Source restores only the older qualitative blueprint or uses a different numeric value.
+FAIL if Source omits one of these exact functions or uses a different numeric value.
 
 
 ## REL-Q-v28-22 — INHERITED SUPPORT BASE PRICES
@@ -287,5 +287,4 @@ Expect exactly these approved v2.8 base prices for the inherited rows:
     terminal 380
     delivery 340
 
-FAIL if implementation restores a PASS3/Source-only price or changes one of these values without a
-new approved owner amendment.
+FAIL if implementation uses a different base price without a new approved owner amendment.
