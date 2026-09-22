@@ -378,12 +378,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .rubber:hover{background:#00000008;opacity:1}
 .rubber:disabled{opacity:.28}
 .form .note{padding:0 16px 10px;font:400 12px/1.6 var(--ui);color:var(--ink-2)}
-.p-order .dock{position:relative;display:flex;gap:10px;padding-top:16px;
+.p-order .dock{position:relative;display:flex;flex-wrap:wrap;gap:10px;padding-top:16px;
  background:var(--tex-paper),#e6ddc6;box-shadow:0 -5px 0 #00000059}
 .p-order .dock:before{content:'';position:absolute;left:0;right:0;top:0;height:8px;
  background:linear-gradient(-45deg,#e6ddc6 25%,#00000000 25%) 0 0/12px 8px repeat-x,
             linear-gradient(45deg,#e6ddc6 25%,#00000000 25%) 0 0/12px 8px repeat-x;transform:scaleY(-1);transform-origin:top}
-.p-order .dock .stamp{flex:1;min-height:54px;font:600 20px/1 var(--ui);letter-spacing:.04em;
+/* UI-Q-v28-29. Both dock actions share the dock's width evenly (see orderScreen: the extra
+   `.row wrap` box that used to swallow this `flex` is gone). The label is fluid so 발주 N G · 확정
+   still sets on one line in half a 360px dock, and the basis lets the pair wrap to its own row
+   rather than squeeze, instead of being clipped. */
+.p-order .dock .stamp{flex:1 1 140px;min-height:54px;font:600 clamp(15px,4.4vw,20px)/1.2 var(--ui);letter-spacing:.04em;
  background:#2f7a4d;color:#f0fbf3;
  box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #2a231766}
 /* =====================================================================
@@ -1231,7 +1235,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .modal-shade{align-items:center;padding:24px}
  .modal{max-height:88dvh;box-shadow:inset 0 0 0 3px #ffffff1a}
  .p-morning .dock .pull{flex:0 0 auto;min-width:280px;margin-left:auto}
- .p-order .dock .stamp{flex:0 0 auto;min-width:300px;margin-left:auto}
+ /* The desk right-aligns the phase's action, as MORNING's pull above it does. With both
+    ORDER actions now in the dock itself rather than inside a wrapper box, `margin-left:auto`
+    has to belong to the leading button only - on every stamp each one pushes itself right and
+    the pair straddles the dock. */
+ .p-order .dock .stamp{flex:0 0 auto;min-width:300px}
+ .p-order .dock .stamp:first-of-type{margin-left:auto}
  /* MORNING at tablet width and up. The room's furniture is art sized to the column, so left
     alone the ceiling and the counter grow with the window and the decision gets whatever is
     left - at 1280 they took 422px of 860 between them. The art box is capped so that cannot

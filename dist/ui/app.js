@@ -773,12 +773,18 @@ function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.leng
    return '<li>'+Art.itemIcon(it.id,20)+'<b>'+E(it.name)+'</b><span>'+st.count+'개</span>'
     +(left===null?'<em class="keeps">기한 없음</em>':'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em>')+'</li>';}).join('')+'</ul>'
   :'<p class="none">창고가 비어 있다.</p>')+'</details>';}
+/* UI-Q-v28-26 / UI-Q-v28-29. The dock is the phase's primary action, and every other phase
+   gives it the dock's full width - MORNING's 문 열기, SALE's 손님 보내기, NIGHT's 다음. ORDER wrapped
+   its two buttons in an extra `.row wrap` box, and that box, not the buttons, became the dock's
+   flex item: `.p-order .dock .stamp{flex:1}` had nothing to stretch, so the action that ends the
+   phase rendered 106px wide in the bottom-left corner of a 360px dock and 300px wide under a
+   centred 860px form on a desk. The wrapper is removed rather than restyled - the dock already
+   is the flex row it was duplicating. */
 function orderScreen(){
  const cart = game.cartTotal();
- return stage('order','발주','',orderForm(),'<div class="row wrap" style="justify-content:center;gap:8px">'
-  +(cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
-  +'<button class="stamp" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>'
-  +'</div>');
+ return stage('order','발주','',orderForm(),
+  (cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
+  +'<button class="stamp" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
 }
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  return '<div class="clip"></div><div class="form">'
