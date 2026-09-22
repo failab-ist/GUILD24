@@ -3,7 +3,7 @@
 // V2_4_EXECUTION_PLAN §8.1 Playwright boundary contract.
 // Everything that needs a real viewport lives in `npm run qa:visual` (UI-Q38), never here.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene'])require('../dist/'+f+'.js');
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation','ui/scene','ui/art'])require('../dist/'+f+'.js');
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const app=read('dist/ui/app.js'),shop=read('dist/systems/shop.js'),css=read('dist/ui/ui.css'),scene=read('dist/ui/scene.js'),html=read('dist/index.html'),pkg=JSON.parse(read('package.json'));
@@ -1106,6 +1106,103 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is drawn, each as itself, at its
   assert.ok(/width:\d+%/.test(rule),slot+' is sized against its band, not in fixed pixels');
  }
  assert.ok(/\.decoplate .deco-art\{[^}]*image-rendering:pixelated/.test(css),'the drawing is not smoothed');
+});
+
+/* UI-Q-v28-21 — STORE-GROWTH VISUAL TRACES, controlled-state acceptance.
+   The implemented live-store trace family is the equipped Decoration, and the group above proves
+   the drawings. What was missing is the state contract: that a trace appears only with its owning
+   state, disappears with it, survives a Save/Load of that same state, and owns nothing.
+
+   These drive the SHIPPED decoPlate rather than a copy of it - its source is lifted out of
+   app.js and handed the same collaborators the page hands it - and the states are built by the
+   real engine, so `run.loadout` is whatever Game.start actually froze. */
+const liveStore=(()=>{
+ const src=app.slice(app.indexOf('const SLOT_COPY='),app.indexOf('function storePanel('));
+ assert.ok(/function decoPlate\(/.test(src),'decoPlate is where this expects it');
+ const make=new Function('DATA','Scene','Art','game',
+  'const D=DATA,E=Art.esc;'+src+';return decoPlate;');
+ return game=>make(globalThis.DATA,globalThis.Scene,globalThis.Art,game);})();
+// an Account that owns and has equipped exactly the named Decorations, then a Run started from it
+const runWith=(...ids)=>{
+ const Meta=globalThis.Meta,a=Meta.fresh();
+ for(const id of ids){
+  const d=globalThis.DATA.decorationBy[id];
+  Meta.addCapital(a,d.price);
+  Meta.buyDecoration(a,id);
+  Meta.equipDecoration(a,d.slot,id);}
+ const g=new globalThis.Game(a);g.autosave=false;g.start('ui-q-v28-21');return g;};
+
+test('UI-Q-v28-21: a live-store Decoration trace exists exactly while its Slot is equipped',()=>{
+ const D=globalThis.DATA;
+ // 1. no Decoration owned or equipped -> no trace, on any Slot
+ const bare=runWith();
+ for(const slot of D.decorationSlots)
+  assert.equal(liveStore(bare)(slot),'',slot+' draws nothing when the Run equipped nothing');
+ assert.deepEqual(Object.values(bare.run.loadout).filter(Boolean),[],'and the Run froze an empty loadout');
+
+ // 2. each Slot equipped -> exactly that Slot's trace, naming that Decoration, and no other
+ for(const d of D.decorations){
+  const g=runWith(d.id),plate=liveStore(g);
+  const out=plate(d.slot);
+  assert.ok(out,d.name+' draws a trace at its own Slot');
+  assert.ok(out.includes(globalThis.Scene.decoration(d.id)),'and it is that Decoration\'s own drawing');
+  assert.ok(out.includes(d.name),'and names it for a screen reader');
+  assert.ok(out.includes('class="decoplate '+d.slot+'"'),'at its own Slot');
+  for(const other of D.decorationSlots)
+   if(other!==d.slot)assert.equal(plate(other),'','equipping '+d.slot+' draws nothing at '+other);}
+
+ // 3. removing the owning state removes the trace, and nothing else moves with it
+ const all=runWith(...D.decorations.map(d=>d.id));
+ for(const slot of D.decorationSlots)assert.ok(liveStore(all)(slot),slot+' is drawn while equipped');
+ for(const slot of D.decorationSlots){
+  const before=JSON.stringify(all.run.loadout);
+  all.run.loadout[slot]=null;
+  assert.equal(liveStore(all)(slot),'',slot+' stops being drawn the moment its state is gone');
+  assert.notEqual(JSON.stringify(all.run.loadout),before,'because that state, and only that state, changed');}
+ for(const slot of D.decorationSlots)assert.equal(liveStore(all)(slot),'','with nothing equipped, nothing is drawn');
+
+ // 4. Save -> Load of the same state reproduces the same traces
+ const Save=globalThis.Save,saved=runWith(...D.decorations.map(d=>d.id));
+ const before=D.decorationSlots.map(s=>liveStore(saved)(s));
+ const round=Save.import(Save.export(saved.account,saved.run));
+ const loaded=new globalThis.Game(round.account,round.run);loaded.autosave=false;
+ assert.deepEqual(loaded.run.loadout,saved.run.loadout,'the owning state survives the round trip');
+ assert.deepEqual(D.decorationSlots.map(s=>liveStore(loaded)(s)),before,'and reproduces the same traces');
+ // a Run saved before Decorations existed still loads, and simply draws nothing
+ const legacy=Save.import(Save.export(saved.account,saved.run));
+ delete legacy.run.loadout;
+ const old=new globalThis.Game(legacy.account,legacy.run);old.autosave=false;
+ for(const slot of D.decorationSlots)
+  assert.equal(liveStore(old)(slot),'',slot+' draws nothing rather than throwing on a save with no loadout');
+});
+
+test('UI-Q-v28-21: the trace is presentation only and owns no state of its own',()=>{
+ const D=globalThis.DATA,g=runWith(...D.decorations.map(d=>d.id)),plate=liveStore(g);
+ // not an interactive gameplay control
+ for(const slot of D.decorationSlots){
+  const out=plate(slot);
+  assert.ok(!/data-action|<button|<a |onclick|tabindex/.test(out),slot+' is not a control');
+  assert.ok(/role="img"/.test(out),'it is announced as an image');}
+ // drawing it changes nothing: same Run, same Account, before and after
+ const runBefore=JSON.stringify(g.run),acctBefore=JSON.stringify(g.account);
+ for(let i=0;i<3;i++)for(const slot of D.decorationSlots)plate(slot);
+ assert.equal(JSON.stringify(g.run),runBefore,'drawing the store mutates no Run state');
+ assert.equal(JSON.stringify(g.account),acctBefore,'and no Account state');
+ // no second progression/visual field: the trace is derived from run.loadout and nothing else
+ const src=fn('decoPlate');
+ const reads=[...src.matchAll(/game\.run\??\.(\w+)/g)].map(m=>m[1]);
+ assert.deepEqual([...new Set(reads)],['loadout'],'decoPlate reads exactly one Run field: '+reads.join(','));
+ assert.ok(!/account|Meta\./.test(src),'and never reaches past the Run into the Account');
+ /* CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start, so the trace cannot be changed
+    mid-Run from the Account. That is the same rule that keeps it from being a second progression
+    field, and it is asserted here because the trace is what would show a leak. */
+ const Meta=globalThis.Meta,drawn=D.decorationSlots.map(s=>plate(s));
+ for(const slot of D.decorationSlots)Meta.equipDecoration(g.account,slot,null);
+ assert.deepEqual(D.decorationSlots.map(s=>plate(s)),drawn,'an Account unequip cannot reach a Run already started');
+ // and the store bands ask for every Slot, so no equipped Decoration is unreachable on screen
+ const morning=fn('morningScreen');
+ for(const slot of D.decorationSlots)
+  assert.ok(morning.includes("decoPlate('"+slot+"')"),slot+' has a place on the store screen');
 });
 
 // UI_UX_v2.8 §PURCHASE CONFIRMATION. Spending permanent Capital is a two-step action, and the
