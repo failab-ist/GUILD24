@@ -79,15 +79,10 @@ Decoration = permanent cross-run collection selected before the Run.
 
 Do not merge the two systems.
 
-## RETIRED ACTIVE LAYER
+## INACTIVE LEGACY BOUNDARY
 
-Retired:
-- Franchise Grade
-- Franchise Achievement
-- Grade ORDER discount
-- Start Contract
-
-They remain historical/inactive only under META archive policy.
+No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
+in the current game. Archive ownership is routed to META_v2.8.0.md.
 
 ## FIRST-CLEAR BOUNDARY
 
