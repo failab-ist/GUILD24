@@ -41,10 +41,11 @@ Completed audit batches:
 - UI-Q-v28-25 — PASS: targeted Item / NPC / Decoration / Boss graphic identity, crop and scale protections are adopted and guarded; reviewed browser/visual evidence exists for the changed surfaces
 
 ### UI-Q-v28-26 / 27
-- UI-Q-v28-26 — TEST / RUNTIME QA GAP: current Source contains substantial functional-polish adoption, but there is no current-build full-surface acceptance record covering all required 360 / 390 / 412 / 1024 / 1280 widths and every owned surface
-- UI-Q-v28-26 — no Runtime UX Bug is classified from this audit batch; acceptance remains unclosed because required runtime evidence is incomplete
-- UI-Q-v28-27 — Source implementation PASS for current coach targeting/visible-target selection/settling/spotlight placement behavior
-- UI-Q-v28-27 — TEST GAP: current-build runtime evidence does not fully cover the contextual Deep and Great Success coach steps on both phone and desktop layouts
+- UI-Q-v28-26 — RUNTIME MATRIX / HARNESS GAP CLOSED by `ea3c87e9787f614d3751e9e9e20af0682714413e`: current qa:visual now covers 360 / 390 / 412 / 430 / 1024 / 1280 and the active Player-facing surface matrix
+- UI-Q-v28-26 — DIRECTOR VISUAL REVIEW PENDING: three Canonical acceptance rows remain manual/visual judgments (information priority, comparison-before-decision, compact-mobile required-information retention); the generated captures are gitignored and were not available to DIRECTOR in this review session
+- UI-Q-v28-26 — no Source Runtime UX Bug is classified from the automated/runtime measurements reported by WORK
+- UI-Q-v28-27 — CLOSED / PASS: contextual Deep / Great Success coach acceptance now verifies shipped copy/selector truth, visible breakpoint target, spotlight bounds, bubble/dock/action non-overlap, automatic-scroll readability, missing-target skip and phone/desktop semantic equivalence
+- UI-Q-v28-27 closeout commit: `ea3c87e9787f614d3751e9e9e20af0682714413e`
 
 ### UI-Q-v28-28 / 29
 - UI-Q-v28-28 — Source implementation PASS: D0 / D5 / D10 / D15 / D20 / D25 cadence, D10/D20 64px identity portraits, D5/D15 240px phone art, D25 200px phone art, centered major-beat anchor, persisted seen state and D30 no-new-reveal reuse are present
@@ -55,8 +56,7 @@ Completed audit batches:
 No Design change is required from these batches.
 
 Open QA / fix cycles:
-- UI-Q-v28-26 full current-build runtime surface/viewport acceptance
-- UI-Q-v28-27 contextual Deep / Great Success coach runtime acceptance
+- UI-Q-v28-26 Director visual closeout for the three non-mechanical acceptance rows
 - UI-Q-v28-28 controlled Boss/milestone phone + desktop runtime acceptance
 - UI-Q-v28-29 modal-close focus-origin fix + runtime regression acceptance
 
