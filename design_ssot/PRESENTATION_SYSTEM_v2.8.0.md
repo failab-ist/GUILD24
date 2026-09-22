@@ -497,6 +497,73 @@ Minimal wrapper/class changes are allowed only where CSS cannot reliably target 
 No new UI framework, theme engine, JS presentation framework, large asset wave, or decorative markup
 layers that pseudo-elements already solve.
 
+## GAME-UI COMPONENT ART GATE
+
+A strong stage/background does NOT by itself complete a Presentation surface.
+
+If the quality reference achieves its finish through authored UI objects, the active surface must also
+upgrade its LIVE UI objects at screenshot scale.
+
+Background / environment art = MACRO stage improvement.
+Frame / plate / row / control / utility construction = MESO component improvement.
+
+For a surface whose current defect is "web panel over a game background":
+- adding or improving the background alone is insufficient;
+- at least one major information container AND the Primary Action must visibly stop reading as generic
+  CSS rectangles;
+- the result must show authored object construction in multiple non-background component families.
+
+### Escalation rule
+
+CSS-FIRST is not a preference for CSS when CSS has plateaued.
+
+If the current implementation still reads as:
+- rectangle + border;
+- rectangle + inset line;
+- rectangle + box-shadow;
+- plain text over a flat strip;
+
+after one focused CSS construction pass, escalate.
+
+Allowed escalation:
+1. existing repository graphic;
+2. bespoke SVG / pixel graphic;
+3. border-image / 9-slice construction for scalable object frames;
+4. separate corner / rail / cap assets;
+5. licensed external asset, adapted and vendored locally.
+
+Do not keep adding more border/shadow layers merely to avoid using an asset.
+
+### Scalable component assets
+
+For dynamic frames / controls:
+- prefer a transparent centre with authored corners / rails;
+- preserve fixed corner geometry;
+- stretch or tile only designated rail / centre regions;
+- the frame must hug live content;
+- text and gameplay state remain live HTML.
+
+For a bespoke SVG:
+- use integer-aligned major geometry where practical;
+- use robust pixel-scale silhouettes;
+- avoid thin decorative filigree that disappears at runtime size;
+- avoid browser-default icon language;
+- evaluate the rendered screenshot, not the SVG source.
+
+### Visual acceptance
+
+Technique is not quality.
+
+"used SVG", "used border-image", "used asset", "added backdrop" are implementation facts only.
+
+PASS requires that BEFORE / AFTER, viewed without explanation, show:
+- stronger object identity;
+- stronger tactile control construction;
+- more coherent material language;
+- a clearly more game-authored screen.
+
+If the viewer's first summary is "the background changed", the UI detailing target has NOT been met.
+
 ## VISUAL DELTA GATE
 
 Presentation acceptance is based on visible delta, not CSS activity.

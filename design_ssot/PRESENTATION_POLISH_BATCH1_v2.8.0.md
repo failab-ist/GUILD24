@@ -131,6 +131,135 @@ One integrated graphic accent is allowed only if screenshot-proven.
 PHONE keeps one vertical read.
 DESKTOP keeps composition and gains presence through width, scale, material and stage treatment, not new columns.
 
+### OPENING QUALITY-REFERENCE TRANSFER — USER 2026-09-23
+
+The current-vs-target quality pair is not asking for a different information architecture.
+It is asking for the SAME composition to receive authored game-UI construction.
+
+The target reference's transferable craft is:
+
+- a title that is a physical sign / plate, not only text with shadow;
+- a major sheet / panel whose perimeter is a designed object, not a plain rectangle;
+- section separators that are designed rails / seams rather than browser-like rules;
+- repeated rows that share one object language;
+- a Primary Action with a deliberate silhouette / caps / hard depth;
+- small utility controls that look like game controls rather than browser buttons;
+- optional phase-appropriate graphic accents where they materially improve the result.
+
+Do NOT copy the target's red / demon / jewel skin by default.
+OPENING keeps its own material family: closed convenience-store interior, dark wood, paper / ledger,
+restrained warm brass / gold, dark iron where useful.
+
+#### Required non-background delta
+
+The current OPENING implementation already has a MACRO stage/background improvement.
+That alone is explicitly insufficient.
+
+For the next OPENING pass:
+
+MANDATORY:
+1. PREPARATION SHEET / main information object must receive a screenshot-visible MESO construction
+   upgrade beyond border + seam + shadow.
+2. PRIMARY START ACTION must receive a screenshot-visible MESO construction upgrade beyond its current
+   rectangular BRICK face.
+
+PLUS:
+- at least TWO of the following must also receive a visible authored construction upgrade:
+  - title / branch sign;
+  - section header / divider treatment;
+  - Decoration Slot row family;
+  - menu / utility control on the stage.
+
+This is NOT an ornament quota.
+It is a safeguard against "background changed, UI stayed web-like".
+
+#### Preparation sheet
+
+Keep:
+- modal ownership;
+- current content order;
+- current width relationship;
+- header / body / footer semantics.
+
+Upgrade the OBJECT.
+
+Preferred direction:
+- bespoke scalable frame using SVG / PNG / border-image / 9-slice if CSS-only remains generic;
+- authored corners and edge joins;
+- one material seam;
+- a header rail / plate that belongs to the same object;
+- footer integrated into the sheet rather than reading as a web modal footer.
+
+The live text and controls stay HTML.
+
+Do not:
+- add a second giant outer box around the sheet;
+- create empty decorative cavities;
+- force fixed image proportions that no longer hug content.
+
+#### Primary start Action
+
+Keep:
+- BRICK semantic family;
+- label;
+- action position;
+- press behaviour / accessibility.
+
+But its visible object must improve.
+
+Allowed:
+- bespoke SVG / mask / cap pieces;
+- stepped or cut pixel silhouette;
+- small integrated brass / rivet / diamond accents if phase-appropriate;
+- stronger face-to-depth construction.
+
+Do not merely add another outline or shadow.
+
+#### Title / branch sign
+
+A text shadow plus tiny dark rectangle is not the final target.
+
+If selected for the required additional upgrades, build it as a real store sign object:
+- authored silhouette;
+- local edge / backing;
+- restrained mounting detail;
+- same Opening material family.
+
+#### Decoration Slot rows
+
+If selected:
+- rows must read as one repeated installation / ledger component family;
+- label/value alignment stays live;
+- each row does not become an ornate card;
+- use shared rails / mounts / recesses / small fixture detail rather than four independent boxes.
+
+#### Utility control
+
+If selected:
+- keep low hierarchy;
+- make it a compact physical pixel control belonging to the same screen;
+- do not compete with the Primary Action.
+
+#### Asset requirement
+
+WORK must actively consider bespoke SVG / local graphic / external licensed asset where the CSS version
+still reads as a generic rectangle.
+
+"CSS can technically draw it" is NOT a reason to reject an asset.
+
+If no suitable external asset exists, bespoke SVG is preferred over stacking more mediocre CSS borders.
+
+#### Acceptance
+
+OPENING does not PASS if:
+- the main visible improvement is the room background;
+- the preparation sheet still reads as a plain web modal;
+- the CTA still reads as a rectangular web button;
+- the target-reference difference is only visible after reading the implementation report.
+
+At 390 and 1280, the AFTER must visibly read as:
+"the same preparation screen, now authored as a game UI object."
+
 ## STORE MANAGEMENT
 
 Keep Codex/management ownership, four Slot sections, option order, two-track option row,
