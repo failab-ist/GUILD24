@@ -330,143 +330,187 @@ planes and the decision state.
 
 Presence comes from size, weight, contrast, placement and the press, not from added marks.
 
-#### PIXEL / 2D GAME UI LANGUAGE
+#### PIXEL / 2D GAME UI LANGUAGE — DARK PIXEL + CONTROLLED POP
 
-USER AMENDMENT, 2026-09-22. A standing presentation direction, not a one-surface fix. It applies to
-Store Support and its selection UI first, and to every later Presentation Polish surface as that
-surface is adopted. It is applied where it earns its place - a blanket restyle of every control is
-itself a FAIL.
+USER AMENDMENT, 2026-09-22. This is the standing Player-facing presentation grammar for the v2.8
+Polish pass. Store Support is the first explicit application, but the rule is global: each later
+surface touched by Presentation Polish is judged against it.
 
-Current defect: selection UI still reads as a generic state card with a SaaS CTA on it. Selection
-state is expressed by filling a whole plane with generic green, and material presence is reached for
-with gloss or bevel.
+The target is:
 
-Principle:
+    DARK PIXEL + CONTROLLED POP
 
-    a selection / commit control reads as a 2D pixel game's own selection control,
-    not as a web submit button
+The world / store / document layer stays dark, grounded and restrained.
+The interaction layer is allowed to become clearer, brighter and more saturated where the Player
+must act, confirm, notice a state change or read a major reveal.
 
-1. VISUAL LANGUAGE
-- flatter 2D surfaces
-- crisp edges
-- pixel-like border / shadow / inset
-- clear separation between colour planes
-- accent colour in small units
-- state is carried by edge / strip / label / plane difference, not by flooding the whole surface
+"Controlled Pop" does NOT mean turning the whole game into a candy-colour arcade UI.
+It means contrast and saturation are spent deliberately on the few things that need immediate
+attention.
 
-2. AVOID
+No exact hex palette, phase hue table or saturation value is Canonical in this section.
+Colour is judged relationally at runtime. Literal palette values may be tuned without a Canonical
+amendment when the grammar, semantic roles and QA below remain intact.
+
+1. DARK BASE
+- background / environmental surfaces stay visually quieter than the decision placed on them
+- information panels do not compete with the Primary Action merely by being equally bright
+- dark does not mean muddy: neighbouring planes still separate cleanly
+- a uniformly desaturated grey / brown / military-dashboard look is a FAIL when it weakens the
+  game feel or action hierarchy
+
+2. CONTROLLED POP
+Use stronger colour contrast primarily for:
+- the currently AVAILABLE / actionable choice
+- the Primary Decision Control
+- a newly changed state the Player must notice
+- important reveal / result emphasis
+
+Keep the rest quieter.
+One screen should normally have only the accent energy it needs; do not make every label, border and
+card equally loud.
+
+3. PIXEL / 2D CONSTRUCTION
+Prefer:
+- flat colour planes
+- crisp hard edges
+- stepped light / dark separation
+- hard-offset, pixel-like depth for controls that are actually pressable
+- a clear press state produced by collapsing that depth
+- compact, deliberate silhouettes rather than browser-default button shapes
+
+Avoid:
+- blurred shadow
+- soft glow
 - glossy gradient
 - fake metal
-- exaggerated bevel / emboss of the AI-generated-UI kind
-- a large rectangular SaaS-style CTA
-- expressing SELECTED by painting the whole surface generic green
-- repeated decorative G24 seal / stamp marks
+- exaggerated bevel / emboss
+- ornamental texture standing in for hierarchy
+- repeated decorative G24 seal / stamp / bolt / badge motifs
+- the common web-dashboard selected pattern of a coloured left vertical bar / status stripe
 
-3. REFERENCE INTERPRETATION
-A pixel-UI reference is a reference to the grammar, not to its palette. Do not copy pop tones or an
-arcade-toy register. The result is more game-like and more pixel-2D, in GUILD24's own restrained
-colour and material.
+4. ACTION HIERARCHY
+A Primary Decision Control must look more actionable than the surface around it.
 
-4. STATE HIERARCHY, selection UI
-- SELECTED: the base slate / charcoal surface, carrying an emphasised edge, a raised title contrast
-  and a compact state label. The card does not become a filled plane, and the state never rests on
-  the edge alone.
-- AVAILABLE: the most legible neutral / slate surface with a muted-gold action. That this is the
-  choice currently open must read immediately.
-- UNAVAILABLE: darker and flatter, visibly receded, with its text still fully legible. Whole-element
-  opacity fade is forbidden.
+Do not solve this with colour alone. Use a combination of:
+- placement
+- silhouette / footprint
+- contrast
+- hard depth
+- press feedback
+- state-specific treatment
 
-Store Support's exact values are owned by §STORE SUPPORT — FINAL VISUAL SPEC below.
+A large full-width rectangle is not automatically wrong, but using the same large rectangular CTA
+everywhere without a Phase-native reason is a FAIL.
 
-5. PRIMARY DECISION CONTROL
-The selection control reads as a pixel-2D game's selection / confirm control rather than a web
-submit button, without candy colour, without converting Utility Controls into game controls, and
-without costing information hierarchy or legibility.
+Utility Controls may stay plain:
+- close
+- back
+- settings
+- help
+- ordinary navigation
 
-Target: a restrained pixel-2D game selection UI, not a pop mobile-game UI.
+5. STATE GRAMMAR
+AVAILABLE
+- is the strongest pressable plane in its local decision set
+- receives the clearest controlled-pop accent
+- carries real press depth / feedback
 
-This is a presentation contract. It changes no gameplay rule, balance, Save field, Gameplay RNG or
-decision structure, and it exposes no hidden information.
+SELECTED / OWNED
+- stays in the same base material family rather than becoming a generic success-colour filled card
+- must be distinguishable by more than one channel, such as frame / title emphasis / state control
+- its state control may keep the AVAILABLE control's footprint when the card height stays the same,
+  but it loses press depth and hover / active affordance
+- do not shrink it into a web-style status chip merely because the choice is complete
+
+UNAVAILABLE
+- recedes through surface / contrast / depth rather than whole-element opacity
+- keeps required information fully legible
+- its action plane must not look pressable
+
+6. REFERENCE INTERPRETATION
+Pixel-game references are references to:
+- contrast discipline
+- hard outlines / hard depth
+- clear colour blocks
+- instant state recognition
+- compact game-control silhouettes
+
+They are NOT instructions to copy:
+- a primary-RGB palette
+- candy colours everywhere
+- arcade-toy decoration
+- stars / hearts / bombs / generic game icons
+
+The final result must still sound and look like GUILD24: a dark convenience-store / guild world
+whose decisions are unusually clear and tactile.
+
+This is a presentation contract only. It changes no gameplay rule, balance, Save field, Gameplay RNG
+or hidden-information boundary.
 
 Acceptance: UI_UX_QA_v2.8.0.md UI-Q-v28-31.
 
 #### STORE SUPPORT — FINAL VISUAL SPEC
 
-USER APPROVED, 2026-09-22. The confirmed Presentation Rule for the Store Support selection screen.
-These are EXACT values. WORK does not interpret or add a separate art direction here, and changing
-any value requires a Canonical amendment first.
+USER APPROVED, 2026-09-22. Store Support is an application of DARK PIXEL + CONTROLLED POP, not a
+separate palette system.
 
-Target: a restrained 2D pixel game selection screen. Not SaaS card UI, not AI-generated dashboard
-UI, not glossy fantasy UI, not an over-decorated mobile-RPG button. The game feel comes from hard
-pixel edges, unambiguous state separation, simple colour planes, physical button depth and a compact
-hierarchy — never from added ornament.
+No literal colour value is Canonical for this screen.
+The exact hue / saturation / brightness may be tuned in implementation as long as the following
+state grammar and runtime acceptance remain true.
 
-GREEN BAN — STORE SUPPORT ONLY. Green is not used on this screen as a state, selection or action
-colour. Forbidden: a selected green card, a green border, a green left strip, a green button, a
-green success highlight, and any `--sign` / `--sign-lit` based selected treatment. The screen's
-palette is SLATE / CHARCOAL / MUTED GOLD / WARM IVORY only. The game's semantic benefit green
-elsewhere is not affected by this decision.
+GREEN BAN — STORE SUPPORT UI STATE.
+Do not use green as the Store Support selection / ownership / action / success accent. In
+particular, no selected green card, green state border, green left strip, green action button or
+generic success-green highlight. This is screen-specific and does not retire semantic benefit green
+from the rest of the game.
 
-ORNAMENT BAN. Not added: a card-left vertical accent bar, any vertical state bar, a G24 stamp, a
-guild seal, a decorative bolt, a corner screw, a meaningless badge, a frame inside a frame, a glossy
-gradient, metal shine, bevel, blurred shadow, soft glow. Specifically, SELECTED is NOT built as
-"left colour bar + colour border"; that pattern is forbidden on this screen.
+ORNAMENT BAN.
+Do not add:
+- a card-left vertical accent bar / status stripe
+- G24 / Guild decorative seal or stamp
+- decorative bolt / screw / badge
+- frame inside frame
+- glossy gradient / metal shine
+- soft glow / blurred shadow
+- heavy bevel used as the screen's game-like identity
 
-SHAPE LANGUAGE. `border-radius` 0–2px; a hard 1–2px border; a hard 2–3px offset shadow is allowed;
-no gradient; no blur; no inset sheen. Pixel feel is made by edge and shadow, not by adding pixel
-icons.
-
-EXACT STATE HIERARCHY.
-
-The palette is desaturated amber / gold on slate and charcoal. It must not read as olive, brown or
-military dashboard. AMENDED 2026-09-22: these values supersede the first palette entirely, which is
-not kept anywhere alongside them.
+STATE HIERARCHY.
 
 AVAILABLE
-- card surface `#20272B`; card border `#465158`
-- title `#F1ECE2`; Function / body `#B8C0C2`; price / important gold text `#D2A347`
-- the action is the single strongest control on the screen:
-  background `#C4973E`, border / high edge `#D8B45F`, text `#241C10`,
-  hard bottom/right shadow `#765821`
-- shape: the compact control at about 138 x 48, hard pixel-like depth only - no gradient, no blur,
-  no bevel
+- uses the clearest / most legible card state
+- the Action is the strongest controlled-pop plane on the screen
+- the Action has hard pixel-like depth and real press feedback
+- it must look immediately actionable without needing a green success convention
 - label: `구매`
-- only the AVAILABLE card carries the feel of being pressable now
 
 SELECTED / OWNED
-- card surface `#20272B`, identical to AVAILABLE; the card is never painted another colour, tinted,
-  or given a left accent bar, and green is forbidden
-- selected outline `#B98B3E`; title `#F6F0E5`; Function stays in the AVAILABLE family
-- the completed state is expressed by the gold outline, the slightly stronger title and the state
-  control together
-- the state control keeps the AVAILABLE control's footprint exactly - same width and height - with a
-  dark charcoal fill, a muted-gold border and muted-gold / ivory text, no hard press shadow and no
-  hover / active affordance. Same size, but visibly not pressable.
-- shrinking `보유 중` while the card's height is unchanged is forbidden: it leaves a hole beside the
-  card and reads as a web status chip. Only a Layout change that actually reduces the card's height
-  may make the label compact as well.
+- stays in the same base surface family as AVAILABLE; do not flood the card with a separate
+  success colour
+- distinguish it through multiple channels: selected frame / stronger title / completed state
+  control
+- the completed state control keeps the AVAILABLE control's footprint when the card itself keeps
+  the same height
+- the completed state control has no press depth and no hover / active affordance
+- label: `보유 중`
 
 UNAVAILABLE
-- card surface `#171C1F`; border `#303A3E`
-- title `#AEB8BA`; Function `#828E91`
-- the action must not look pressable: surface `#23292C`, border `#394347`, text `#697579`
-- opacity stays 1; whole-card and whole-button opacity fade is forbidden, and the card recedes on
-  its own lightness
+- is visibly quieter / darker / flatter than AVAILABLE
+- required text remains fully legible
+- whole-card and whole-button opacity fade are forbidden
+- the dead action plane has no press depth and cannot read as an available button
+- exact disabled cause is named by the current Copy owner rather than remaining `구매`
 
-DISABLED COPY. The disabled action names its own cause; it never stays `구매`. Exact strings are owned
-by COPY_AUDIT_APPROVED_v2.8.0.md §11-31 / §11-31b.
+TOP STATUS.
+`확보 완료 · {점포지원명}` may remain as a plain notification. Do not turn it into another
+success-colour panel, badge or decorative seal.
 
-TOP STATUS. `확보 완료 · {점포지원명}` may stay, as a plain text notification with the existing small
-gold indicator. No separate green success panel, green bar, decorative check icon or added seal.
+CARD CONTENT.
+Keep only the Store Support name, exact Function, price and Action / State unless another owned rule
+requires more. Function is the comparison the choice is made on and must remain easy to read.
 
-CARD CONTENT. Each card keeps only: the Store Support name, its exact Function, the price, and the
-Action / State. Nothing decorative is added. The Function is the comparison this choice is made on,
-so its contrast stays easy to read.
-
-PIXEL GAME FEEL. Taken from the pixel-UI reference: hard outline, hard shadow, flat colour plane,
-button press depth, immediate state differentiation. Not taken: a primary-RGB palette, candy colour,
-oversized icons, an arcade-toy register, star / heart / bomb decoration grammar. GUILD24 keeps its
-dark convenience-store / guild-document register.
+The screen should feel more game-like because the action and states are clear and tactile, not
+because another ornament was added.
 
 Acceptance: UI_UX_QA_v2.8.0.md UI-Q-v28-31.
 
@@ -591,42 +635,38 @@ Rules:
 
 ### PHASE VISUAL LANGUAGE / PRIMARY ACTION ACCENT
 
-The current game must not use the same generic green treatment as the default answer for every
-primary action.
+The current game must not use one generic success/primary colour treatment as the default answer for
+every main action.
 
-Green has an existing semantic job:
-- beneficial state / delta
-- current store-sign material where it is part of the environment
+Phase identity is not a fixed hue chart. Exact accent colours are NOT Canonical here.
 
-A button must not become green merely because it is the primary action.
+A Phase reads differently through the smallest useful combination of:
+- material / surface language
+- information hierarchy and contrast
+- placement and silhouette of the Primary Decision Control
+- press / release feedback
+- a local accent where it strengthens recognition
 
-Keep one GUILD24 visual language and reuse the current material / token vocabulary. Do not create a
-new theme or skin framework.
+The phase accent is supporting identity, not the identity by itself. Do not solve MORNING / ORDER /
+SALE / NIGHT / CLOSING / FINAL by recolouring the same web-style button six times.
 
-Phase presentation uses restrained existing accents:
+Keep one GUILD24 visual language. Typography, spacing, interaction semantics and the global
+DARK PIXEL + CONTROLLED POP grammar remain shared. Do not create a theme / skin framework.
 
-- MORNING: warm store / wood / gold emphasis; environmental sign-green may remain as scenery, not as
-  the universal CTA language
-- ORDER: paper / steel with the existing cool frost-blue family for action emphasis
-- SALE: register / commerce gold-amber family; price-mode colors keep their existing distinct meaning
-- NIGHT: dark room with the existing dusk family for continuation / phase emphasis
-- CLOSING: receipt / paper / ink first, with restrained gold-neutral emphasis rather than generic
-  green
-- FINAL: existing blood / ember-red gate language remains authoritative
-
-Phase identity is an accent and hierarchy difference, not a complete reskin. Typography, component
-construction, spacing language and interaction semantics remain shared.
+Exact hue, saturation and brightness may be tuned during Presentation Polish without a new Design
+decision when all of the following stay true:
+- the Phase remains immediately distinguishable by more than colour alone
+- semantic benefit / harm colours keep their owned meaning
+- the Primary / secondary / destructive hierarchy remains readable without colour alone
+- the colour does not become a generic universal success/selected treatment
+- runtime contrast and accessibility remain acceptable
 
 Overlays:
-- a phase-bound overlay may inherit the surrounding phase accent where that strengthens context
-- global Help / Settings / management surfaces remain neutral
-- Store Support acquisition/choice uses the existing slate/steel/gold family rather than the
-  universal green CTA treatment
+- a Phase-bound overlay may inherit its surrounding material / accent language where useful
+- global Help / Settings / management surfaces may stay visually neutral
+- Store Support follows its dedicated application rule below
 
-Primary / secondary / destructive states remain distinguishable by structure and contrast, not color
-alone.
-
-Semantic beneficial/harmful green/red remains authoritative and must not be weakened by phase color.
+Semantic colour is authoritative over decorative phase colour.
 
 ### GAME-LIKE INTERACTION LANGUAGE
 
