@@ -49,7 +49,26 @@ to this Batch and are not restated here.
 
 The User-provided current-vs-target pair for this Batch is
 reports/reference/quality-pair-current.jpg and reports/reference/quality-pair-target.png.
-Batch 1 surfaces are MEDIUM budget and take that pair's construction method only, never its motifs.
+Batch 1 surfaces are MEDIUM budget. They take the pair's construction method first.
+A motif from the pair is neither required nor automatically banned: it is accepted only when it belongs to the
+specific Phase/object and produces a clear runtime upgrade under PRESENTATION_SYSTEM's Asset / SVG and Visual Delta gates.
+
+## BATCH 1 VISUAL DELTA REQUIREMENT
+
+This Batch must not close on micro-polish alone.
+
+OPENING / PRE-RUN:
+- at least one MESO improvement must be obvious in the title/preparation object or Primary Action
+- if the stage still reads as "empty dark background + web sheet", use a stronger owned stage treatment or production asset
+  without changing composition
+
+STORE MANAGEMENT:
+- at least one MESO improvement must make the Slot / option object read as a workbench/ledger object rather than a web row
+
+MORNING:
+- micro changes to board shadow, rail baseline, slip inset, till alignment or shutter label do not close the surface by themselves
+- if a production MORNING environment or board asset is available, it must be runtime-evaluated before the surface can PASS
+- the existing room composition remains locked; the asset is integrated behind/around the current live HTML content
 
 ## OPENING / PRE-RUN
 

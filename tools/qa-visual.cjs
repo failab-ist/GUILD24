@@ -12,6 +12,7 @@ const list=(v,d)=>v?String(v).split(',').map(x=>x.trim()).filter(Boolean):d;
 const WIDTHS=list(process.env.QA_WIDTHS,[360,390,412,430,1024,1280]).map(Number);
 const HEIGHT=Number(process.env.QA_HEIGHT||780),PORT=Number(process.env.QA_PORT||5199);
 const CAPTURE_ONLY=process.env.QA_CAPTURE_ONLY==='1';
+const FIXED_NOW=Number(process.env.QA_FIXED_NOW||1790112000000);
 // D-35. The gate used to be phones only, so the width the game is most often played at was
 // never audited. A desktop width is a different device, not a wide phone: no touch, a
 // pointer, and a taller viewport. Anything at or past this is driven as a desktop.
@@ -64,7 +65,10 @@ function serve(){
 }
 
 async function drive(page,target,seed){
- await page.addInitScript(()=>{try{localStorage.clear();}catch(e){}});
+ /* Presentation BEFORE / AFTER must render the same content state. Opening plannedSeed() uses
+    Date.now() when no Run exists, so freeze the capture clock before app.js loads. This is
+    harness-only and never changes Production Source or gameplay RNG. */
+ await page.addInitScript(fixedNow=>{try{localStorage.clear();}catch(e){};Date.now=()=>fixedNow;},FIXED_NOW);
  await page.reload({waitUntil:'load'});
  /* The pre-Run panel used to carry a <details> holding a Seed field, and this drove it. SA-Q35
     retired that control as a dev surface, so both waits hung and the whole gate timed out before

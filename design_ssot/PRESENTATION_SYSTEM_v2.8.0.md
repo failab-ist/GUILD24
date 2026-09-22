@@ -329,6 +329,49 @@ Required:
 
 "Free" is not sufficient. The asset must improve the runtime result.
 
+## SHIPPED PRESENTATION ASSET PATH
+
+Production Presentation graphics ship under:
+
+```text
+dist/ui/assets/presentation/<surface>/
+```
+
+Recommended surface folders:
+- `morning/`
+- `opening/`
+- `store/`
+- `order/`
+- `sale/`
+- `night/`
+- `closing/`
+- `boss/`
+- `final/`
+
+Do not place shipped art under `reports/reference/`; that directory is review evidence only.
+
+Format:
+- opaque environment / backdrop -> WEBP preferred
+- transparency / irregular frame / overlay -> PNG preferred
+- SVG only when the graphic is genuinely vector-constructed, crisp at runtime scale, and passes the SVG Quality Gate
+
+CSS references from `dist/ui/ui.css` use paths relative to that file, for example:
+
+```css
+background-image:url('assets/presentation/morning/store-bg.webp');
+```
+
+Naming should describe role, not iteration:
+- `store-bg.webp`
+- `board-frame.png`
+- `title-sign.png`
+- `boss-backdrop.webp`
+
+Do not ship names such as `final-v7-good2.png`.
+
+Every adopted non-code graphic records provenance / licence / modification status in `reports/ASSETS.md`.
+User-authored or project-generated art records that provenance instead of inventing a third-party licence.
+
 ## RESPONSIVE DETAILING
 
 PHONE:
@@ -361,6 +404,47 @@ Minimal wrapper/class changes are allowed only where CSS cannot reliably target 
 
 No new UI framework, theme engine, JS presentation framework, large asset wave, or decorative markup
 layers that pseudo-elements already solve.
+
+## VISUAL DELTA GATE
+
+Presentation acceptance is based on visible delta, not CSS activity.
+
+Classify changes:
+
+MICRO
+- baseline / optical centring
+- 1-3px spacing correction
+- shadow opacity / one seam weight
+- minor colour-value correction
+- small hover / press tuning
+
+MESO
+- major component silhouette
+- object frame construction
+- control face / depth construction
+- material treatment that changes how the object reads
+- a real plate / sign / board / ledger object replacing a generic box
+- a production asset that changes one owned object's identity
+
+MACRO
+- owned stage / environment art
+- large backdrop or room treatment
+- major visual anchor art
+- a composition-preserving background/object asset that changes the screen's first impression
+
+Rules:
+- MICRO work is necessary craft, but MICRO-only never closes a Presentation surface.
+- Every Batch surface must contain at least one screenshot-visible MESO improvement.
+- When the current defect is "empty / generic stage" or "CSS planes cannot create the intended place",
+  use a MACRO lever or obtain a DIRECTOR-approved reason not to.
+- A surface may keep its composition while still changing strongly at MESO / MACRO level.
+- If BEFORE / AFTER need a written explanation to notice the upgrade, the visual delta is insufficient.
+- Do not compensate for insufficient delta by adding more borders, badges, ornaments or shadows.
+
+For an available production asset:
+- evaluate it in runtime before deciding CSS-only is sufficient;
+- asset use is not mandatory if it makes the screen worse;
+- rejecting an asset requires screenshot evidence, not preference for fewer files.
 
 ## EXECUTION MODEL
 

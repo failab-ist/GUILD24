@@ -129,8 +129,9 @@ are never requested at runtime, and no pixel of them is reused in the UI.
 - why: `PRESENTATION_SYSTEM_v2.8.0.md` §VISUAL HARNESS CONTRACT lists the User-provided
   current-vs-target pair as a review input and forbids reconstructing it from memory once it
   is out of context. It is stored so later Batches review against the same pair.
-- how used: as a construction-method reference only - frame build, edge grammar, control
-  solidity, material finish. Its motifs are not carried onto MEDIUM or LOW surfaces.
+- how used: construction method first - frame build, edge grammar, control solidity, material
+  finish. Motifs are not copied by default; any motif reuse is judged by Phase/object fit and
+  runtime visual improvement under the Presentation Asset / Visual Delta gates.
 
 ## Batch 1 presentation graphics
 
