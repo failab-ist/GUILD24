@@ -770,15 +770,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    and two iron mounts holding it to whatever it hangs from. It is sized to the letters plus
    its own reveal, never wider - a plate, not a banner, and never the giant card the Batch
    forbids. The face, its measure and its one line are untouched. */
-.opening-title{position:relative;margin:0;white-space:nowrap;color:#f7eeda;
+/* USER 2026-09-23: the plate is gone. With the sheet, its header and four Slot rows all
+   framed below it, one more box at the top made the screen read as a stack of boxes. The name
+   sits on the stage itself now - seated by one hard pixel drop, in the signage face, at the
+   same measure and the same one line. Its sub-plate below it stays, because a branch tag IS a
+   small plate and it is the only one up here now. */
+.opening-title{margin:0;white-space:nowrap;color:#f7eeda;
  font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none;
- text-shadow:0 3px 0 #120c06;padding:5px 18px 7px;
- background:linear-gradient(180deg,#43301e 0,#2e2013 100%);
- box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #a8823e,inset 0 4px 0 #8a653840;
- clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
-  100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
-  6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
- filter:drop-shadow(0 4px 0 #00000073)}
+ text-shadow:0 4px 0 #0a0705,0 6px 0 #00000080}
 .opening-branch{margin:3px 0 0;padding:5px 13px 4px;color:#e0c89c;
  font:500 12px/1 var(--f-plate);letter-spacing:.2em;-webkit-font-smoothing:none;
  background:linear-gradient(180deg,#3b2918 0,#2a1c10 100%);
@@ -1414,7 +1413,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    reference actually carries is proportion and one structural line - a dark outline, a single
    thin gold edge inside it, a lit face and a hard bottom.
    So the caps are gone. The corners are cut once, lightly, and the face keeps the brick with a
-   real 7px top light and a 9px deep bottom over one gold line. The four fixings are one drawn
+   raised edge rather than an outline: a dark rim, a lit band standing proud of the face, one
+   dark step down into it, then the face lit along the top and shaded along the bottom -
+   embossed, the way the reference's control is built. The gold line is gone; gold on this
+   screen belongs to the sheet and the section now, not to the Action. Pressing it inverts
+   every one of those bands, so the plate sinks. The four fixings are one drawn
    9px rivet - dark rim, brass body, hard highlight up-left, hard shade down-right - placed four
    times by CSS, not four CSS circles and not a fixed image of the whole button. An earlier
    3px version of the same rivet shipped invisible; measured against the runtime, 9px is the
@@ -1426,8 +1429,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>");
  background-size:9px 9px;background-repeat:no-repeat;
  background-position:left 11px top 11px,right 11px top 11px,left 11px bottom 11px,right 11px bottom 11px;
- box-shadow:inset 0 0 0 2px #190d09,inset 0 0 0 3px #d9ab55,
-  inset 0 7px 0 #e1836b,inset 0 -9px 0 #56241c;
+ box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
+  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,
+  inset 0 13px 0 #c85f49,inset 0 -14px 0 #6f2a1e;
  clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
   100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
   6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
@@ -1435,8 +1439,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:hover{
  filter:drop-shadow(0 6px 0 #00000099) brightness(1.08)}
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:active{transform:translateY(4px);
- box-shadow:inset 0 0 0 2px #1a0e0a,inset 0 0 0 3px #9d7736,
-  inset 0 7px 0 #56241c,inset 0 -9px 0 #e1836b;
+ box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #8a3527,inset 0 -3px 0 #f5b7a2,
+  inset 0 0 0 6px #a8563f,inset 0 0 0 8px #7e3124,
+  inset 0 13px 0 #6f2a1e,inset 0 -14px 0 #c85f49;
  filter:drop-shadow(0 2px 0 #00000099) brightness(.95)}
 @media(min-width:1024px){
  /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
@@ -1952,8 +1957,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    before the figure it labels. */
 .store-capital{display:flex;align-items:center;gap:8px;margin-top:2px;
  font:400 var(--t-sm)/1.5 var(--ui);color:var(--dim)}
-.store-capital .coin-mark{flex:0 0 auto;width:14px;height:14px;
- background:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='14' height='14' shape-rendering='crispEdges'><g fill='%235c4520'><rect x='3' y='1' width='8' height='1'/><rect x='1' y='2' width='1' height='2'/><rect x='12' y='2' width='1' height='2'/><rect x='3' y='5' width='8' height='1'/><rect x='1' y='6' width='1' height='2'/><rect x='12' y='6' width='1' height='2'/><rect x='1' y='9' width='1' height='2'/><rect x='3' y='9' width='8' height='1'/><rect x='12' y='9' width='1' height='2'/><rect x='3' y='12' width='8' height='1'/></g><g fill='%23e6c176'><rect x='2' y='2' width='10' height='1'/></g><g fill='%23b08a42'><rect x='2' y='3' width='2' height='1'/><rect x='7' y='3' width='5' height='1'/><rect x='2' y='6' width='10' height='2'/><rect x='2' y='9' width='1' height='2'/><rect x='11' y='9' width='1' height='2'/><rect x='3' y='10' width='8' height='1'/></g><g fill='%23f6e3ab'><rect x='4' y='3' width='3' height='1'/></g><g fill='%237d5f2c'><rect x='2' y='4' width='10' height='1'/><rect x='2' y='8' width='10' height='1'/><rect x='2' y='11' width='10' height='1'/></g></svg>") center/14px 14px no-repeat}
+.store-capital .coin-mark{flex:0 0 auto;width:16px;height:13px;
+ background:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='16' height='13' shape-rendering='crispEdges'><g fill='%234a3410'><rect x='4' y='0' width='8' height='1'/><rect x='1' y='1' width='1' height='1'/><rect x='14' y='1' width='1' height='1'/><rect x='0' y='2' width='1' height='1'/><rect x='15' y='2' width='1' height='1'/><rect x='1' y='3' width='1' height='1'/><rect x='14' y='3' width='1' height='1'/><rect x='4' y='4' width='8' height='1'/><rect x='1' y='5' width='1' height='1'/><rect x='14' y='5' width='1' height='1'/><rect x='0' y='6' width='1' height='1'/><rect x='15' y='6' width='1' height='1'/><rect x='1' y='7' width='1' height='1'/><rect x='14' y='7' width='1' height='1'/><rect x='4' y='8' width='8' height='1'/><rect x='1' y='9' width='1' height='1'/><rect x='14' y='9' width='1' height='1'/><rect x='0' y='10' width='1' height='1'/><rect x='15' y='10' width='1' height='1'/><rect x='1' y='11' width='1' height='1'/><rect x='14' y='11' width='1' height='1'/><rect x='4' y='12' width='8' height='1'/></g><g fill='%23f2cf6b'><rect x='2' y='1' width='12' height='1'/></g><g fill='%23ffe79a'><rect x='1' y='2' width='3' height='1'/><rect x='8' y='2' width='7' height='1'/></g><g fill='%23fff6cf'><rect x='4' y='2' width='4' height='1'/></g><g fill='%23d0a134'><rect x='2' y='3' width='12' height='1'/><rect x='2' y='5' width='12' height='2'/><rect x='1' y='6' width='1' height='1'/><rect x='14' y='6' width='1' height='1'/><rect x='2' y='9' width='12' height='2'/><rect x='1' y='10' width='1' height='1'/><rect x='14' y='10' width='1' height='1'/></g><g fill='%2395681c'><rect x='2' y='7' width='12' height='1'/><rect x='2' y='11' width='12' height='1'/></g></svg>") center/16px 13px no-repeat}
 .decoration-panel .none{color:#7d7466}
 .settlement h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#a2947c;margin-bottom:7px}
 .unlocks{display:grid;gap:14px}
