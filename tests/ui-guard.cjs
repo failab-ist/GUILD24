@@ -2441,7 +2441,16 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(/\.opening-title\{[^}]*white-space:nowrap/.test(css),'the title is one line by rule, not by luck');
  assert.ok(/\.opening-title\{[^}]*var\(--f-plate\)/.test(css),'set in the shipped ATMOSPHERE face');
  assert.ok(/\.opening-title\{[^}]*clamp\(30px,[^)]*\)/.test(css),'fluid and clamped for mobile-first sizing');
- assert.ok(/\.opening-branch\{[^}]*clamp\(14px/.test(css),'and the branch under it is visibly secondary');
+ /* PRESENTATION_SYSTEM §TYPOGRAPHY / SPACING routes short object identity to the plate face,
+    and PRESENTATION_POLISH_BATCH1 asks the Opening for a restrained sign/plate relationship.
+    The branch is that identity, so it is a stamped plate now rather than fluid body copy -
+    Mulmaru is crisp only at its design sizes, which is why this one is fixed rather than
+    clamped. What the old clamp assertion was really protecting is unchanged and asserted
+    here directly: the branch stays far under the title it sits below. */
+ assert.ok(/\.opening-branch\{[^}]*var\(--f-plate\)/.test(css),'the branch is set in the plate face');
+ assert.ok(/\.opening-branch\{[^}]*font:500 12px/.test(css),'at a crisp Mulmaru design size');
+ assert.ok(/\.opening-title\{[^}]*clamp\(30px,9\.2vw,46px\)/.test(css),
+  'and the branch under it is visibly secondary: the title never drops under 30px');
  // 3: the branch comes from the existing catalogue, through the existing pick
  assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');
  assert.ok(/const plannedBranch=\(\)=>new RNG\(plannedSeed\(\)\)\.pick\(D\.brand\.branches\)/.test(app),
