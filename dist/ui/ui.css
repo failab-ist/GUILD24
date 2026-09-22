@@ -785,20 +785,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    tick of mode colour, built out of a four-sided bevel (§11), and a refused price differed from
    an open one by little more than the base sheet's `opacity:.4` - exactly the FAIL §15 names.
 
-   Now: one flat plate per key, lifted to the ACTIVE DECISION step above the till, with the mode's
-   own semantic colour carried on the key's edge rather than on a tick, hard depth, and a press
-   that travels. The mode colours are Semantic (할인 / 정가 / 바가지) and keep their meaning; no key is
-   promoted above its peers. */
+   Now: one flat plate per key, lifted to the ACTIVE DECISION step above the till, hard depth, and
+   a press that collapses it. The key's plane and its drop do the work - USER, 2026-09-22: the
+   keys take no border, so none is added, and the mode's Semantic colour (할인 / 정가 / 바가지)
+   stays on the key face where it already read. No key is promoted above its peers. */
 .tills button{display:grid;gap:4px;justify-items:center;padding:10px 2px;min-height:76px;
- background:#463521;color:#f4e9d0;
- box-shadow:inset 0 0 0 2px var(--key,#a2947c),4px 4px 0 #00000080}
+ background:#463521;color:#f4e9d0;box-shadow:4px 4px 0 #00000080}
 .tills button:not([disabled]):hover{background:#52412a}
-.tills button:not([disabled]):active{transform:translate(3px,3px);
- box-shadow:inset 0 0 0 2px var(--key,#a2947c),1px 1px 0 #00000080}
+.tills button:not([disabled]):active{transform:translate(3px,3px);box-shadow:1px 1px 0 #00000080}
 /* a refused or unaffordable price is a dead key: it sits below the till surface, carries no
    depth and nothing to press, and its own `small` already says why. No whole-element fade. */
-.tills button[disabled]{background:#1c150e;color:#8a7d66;opacity:1;transform:none;
- box-shadow:inset 0 0 0 2px #332a1c}
+.tills button[disabled]{background:#1c150e;color:#8a7d66;opacity:1;transform:none;box-shadow:none}
 .tills em{font:500 14px/1 var(--f-led);font-style:normal;color:var(--key,#a2947c)}
 .tills strong{font:500 22px/1 var(--f-led);color:#f6ecd3}
 .tills small{font:400 12px/1.3 var(--ui);color:#b3a688}
