@@ -226,8 +226,6 @@ same visual weight as a living adventurer's line, presented as a neutral status 
 
 Same position and same information hierarchy; never the appearance of a dead NPC speaking.
 
-Outcome type size may be reduced modestly on mobile where needed to prevent collision.
-
 USER AMENDMENT, 2026-09-22 — VERTICAL COMPOSITION. The record begins under the return rail and
 runs downward. It is not vertically centred in the remaining viewport: a short result - a death,
 a quiet return - must not float in the middle of the screen. No spacer is added in exchange, and
