@@ -5,228 +5,97 @@ OWNER=ssot_audit,legacy_cleanup,canonical_coherence
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=CANONICAL_AUDIT_RECORD
-AUDIT_DATE=2026-09-20
-FINAL_REAUDIT_DATE=2026-09-22
-VISION_DETAIL_PROMOTION_STATUS=COMPLETE
-COPY_REAUDIT_STATUS=COMPLETE
-V2_8_AMENDMENT_NUMERIC_REAUDIT_STATUS=COMPLETE
-STORE_SUPPORT_FULL_AUDIT_STATUS=COMPLETE
-FULL_LEGACY_CHAIN_REAUDIT_STATUS=COMPLETE
-PLAYTEST_RESPONSE_REAUDIT_DATE=2026-09-22
-PLAYTEST_RESPONSE_CANONICAL_STATUS=COMPLETE
-PRESENTATION_POLISH_PROMOTION_STATUS=COMPLETE
-FUNCTIONAL_DESIGN_POLISH_STATUS=COMPLETE
+AUDIT_STATUS=COMPLETE
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 
 ## PURPOSE
 
-This audit converts the previous scoped v2.8 Decoration reference plus v2.7 Core Play chain into
-one project-wide v2.8 Canonical routing set.
+This file records the completed project-wide v2.8 Canonical audit.
 
-It does not copy every old rule into a new file.
-Unchanged rules remain inherited; changed/stale clauses receive a v2.8 owner patch.
+It is audit evidence, not a second Design owner.
+Current mechanics, numbers, exact copy, UX contracts and QA acceptance live only in the routed
+owners listed by SPEC_INDEX_v2.8.0.md.
 
-## AUDIT RESULT
+## FINAL AUDIT RESULT
 
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
+The project-wide inheritance chain was reviewed and the v2.8 Canonical routing was closed with:
+- no implementation-blocking Design unresolved item
+- no remaining Canonical detail gap identified by the audit
+- current Source-adoption defects routed to SOURCE_ADOPTION_QA_v2.8.0.md
+- current exact truth routed to the owning Spec / QA rather than duplicated here
 
-Current v2.8 Canonical resolves:
-- Decoration / Store Capital replacement
-- active Item role hierarchy and final v2.8 numeric baseline
-- Store Support naming/value/feel pass including Fresh amplification rebaseline
-- Great Success probability baseline and reduced Store-Gold snowball
-- Deep occurrence/difficulty/reward exact values
-- Loyalty information
-- Fatigue decision/result presentation
-- Great Success signal timing
-- proven Item causality
-- NIGHT result hierarchy / living speech
-- Boss five-Day information cadence
-- mobile SALE density
-- semantic change attribution
-- current Copy / terminology cleanup
-- current known Source-adoption defects
+The audit covered:
+- Core / Run / Meta
+- Economy / NPC / Dungeon / Item / Store Support
+- SALE / NIGHT / CLOSING
+- Boss / Final ownership boundaries
+- UI / mobile / tutorial / functional presentation / audio
+- Copy / terminology / exact Player-facing text
+- Event truth
+- Source-adoption defect routing
+- inherited legacy clauses and historical/base-file boundaries
 
-## 2026-09-22 PLAYTEST RESPONSE DELTA AUDIT
+## CLOSED LEGACY / ROUTING FINDINGS
 
-User-approved playtest findings were re-routed into the current owners without creating a second
-Design truth.
+The audit confirmed that stale inherited/current-chain clauses must not be used as live truth where a
+current owner overrides them.
 
-Canonical changes now covered:
-- normal SALE keeps compact Loyalty but removes the dedicated Loyalty `?` / popover
-- Equipment leaves the compact SALE top strip; proven Stat attribution remains
-- the two Bag slots stay horizontal; only the whole Bag block may wrap
-- DAY 0 order is first Store Support choice -> separate D0 Boss-information beat -> DAY 1
-- first Store Support decision copy is reduced to the approved compact three-line form
-- 50% / 100% ordinary purchase acceptance uses the approved 0.80 base need
-- Loyalty remains +0.002 purchase chance per point
-- one-filled-Bag purchase penalty is retired
-- affordable valid Counter offers at 50% / 100% resolve at the existing 0.97 ceiling
-- overcharge keeps its existing acceptance behavior
-- ordinary NPC visit Wallet uses fresh base 180 and random visit income 0..80
-- Deep sponsorship base is 200G with rarity/Level scaling and 10G rounding unchanged
-- reused `bar` / `herobar` IDs must use current meal / mineral-water visual identity
+Closed areas included:
+- retired Franchise / Start Contract systems
+- retired random route / Trait-add / Trait-remove path
+- obsolete Item identities and copy after save-safe ID reuse
+- obsolete Store Support names/functions/values
+- obsolete NIGHT/Fatigue presentation labels
+- obsolete supplied-Item speech selection
+- obsolete Boss-presence/consumer assumptions
+- former Source-only / inherited-PASS3 gaps now owned by current v2.8 Specs
+- historical scoped-decoration meaning of the early v2.8 routing/index
 
-QA coverage was added/updated in the routed current QA owners.
-The remaining Result-Proof / SALE-NIGHT-CLOSING adoption and dialogue recent-repeat work already had
-current Canonical owner truth; only missing dialogue-repeat QA acceptance was added during this
-re-audit.
+Exact replacement truth is intentionally not restated here.
 
-No new implementation-blocking Design unresolved item was found.
+## CURRENT OWNER COVERAGE
 
-## STALE CURRENT-CHAIN CLAUSES SUPERSEDED
+Current routed owners cover the audited design areas:
 
-The following clauses existed in the formerly routed current chain and are no longer live truth:
+- Core identity / information boundaries -> 00_GAME_CORE_v2.8.0.md
+- Run / phase / save / pre-Run / settlement order -> CORE_RUN_v2.8.0.md
+- Meta / Job Mastery / Store Capital / Decoration -> META_v2.8.0.md
+- Economy / Wallet / purchase acceptance / ORDER -> ECONOMY_ORDER_v2.8.0.md
+- NPC / Trait / Loyalty / revisit -> NPC_TRAIT_v2.8.0.md
+- Dungeon / Hazard / Supply / Fatigue / result proof -> DUNGEON_HAZARD_v2.8.0.md
+- Item catalog / roles / identities -> ITEM_v2.8.0.md
+- Store Support -> RELIC_v2.8.0.md
+- SALE -> SALE_v2.8.0.md
+- NIGHT / CLOSING / result causality -> NIGHT_CLOSING_v2.8.0.md
+- UI / UX / responsive / tutorial / presentation / audio -> UI_UX_v2.8.0.md
+- Copy-system rules / terminology -> COPY_WORLD_VOICE_v2.8.0.md
+- exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md
+- Event -> EVENT_v2.8.0.md
+- Boss -> BOSS_v2.8.0.md
+- Final formula / party / transfer / D25 Final state -> FINAL_EXPEDITION_v2.7.0.md
 
-- DUNGEON_HAZARD_v2.7: hypothetical final-Fatigue rows for each possible Outcome
-- NIGHT_CLOSING_v2.7: player labels 보급 회복 / 보급 완화 / 원정 결과 / 밤 피로
-- ITEM_v2.7: 핫바 / 용사 특식 핫바 identities and old meal/water values
-- ITEM_v2.8 earlier draft: 도시락 Wallet +50/+100 and 왕도 천연암반수 175/370 · 강인함22
-- RELIC_v2.7: Fresh native-Stat +40/+80/+25 values
-- ECONOMY_ORDER inherited: Great Success Store Gold 100/200/300
-- NPC_TRAIT inherited PASS3 gap: Deep Great reward 90/150 Source candidate
-- RELIC_v2.7: 프리미엄 쇼케이스 / 냉장 쇼케이스 Player-facing Store Support names
-- RELIC_v2.7: old return-points / supply-cert / lifetime / royal-cert values
-- RELIC inherited: 신입 모집 게시판 as a probability-only +70% visitor weight
-- BOSS_v2.7: D5/D15/D25-only presence cadence
-- BOSS_v2.7: Franchise Achievement as an active Boss-clear consumer
-- COPY_WORLD_VOICE_v2.7: supplied Item presence as a NIGHT speech selector concept
-- COPY_WORLD_VOICE_v2.7: SLOTH Player copy using 유물
-- UI_UX_v2.8 old header: scoped Decoration-only execution meaning
-- SPEC_INDEX_v2.8 old header: scoped Decoration-only routing meaning
+Current QA owners are routed by SPEC_INDEX_v2.8.0.md.
 
 ## HISTORICAL FILES
 
-Historical versioned files are retained where inherited by current owners.
-This is deliberate, not stale current authority.
+Historical versioned files are retained only where needed as inherited/base evidence.
+They are not parallel current authority.
 
-Examples:
-- v2.5 base documents
-- v2.6 / v2.6.1 corrective patches
-- v2.7 owner documents superseded by v2.8 patches
+Examples include v2.5, v2.6 / v2.6.1 and v2.7 owner documents inherited by current v2.8 patches.
 
-Current authority comes only from SPEC_INDEX_v2.8.0.md.
+Current authority comes only from SPEC_INDEX_v2.8.0.md and its routed owners.
 
-## RELEASE VISION
+## RELEASE VISION BOUNDARY
 
-GUILD24_v2.8_RELEASE_VISION.md is retained as the v2.8 non-Canonical release Vision.
+GUILD24_v2.8_RELEASE_VISION.md is retained as non-Canonical orientation only.
 
-It is orientation only:
+It may explain:
 - why v2.8 exists
 - large product goals
 - desired end-state
 
-It carries no detailed Design Truth.
-
-## DEFERRED, NOT STALE
-
-The following remain intentionally v2.9+:
-- Expedition Purpose structural system
-- large Final cutscene/cinematic expansion
-- large art/world-content expansion
-- drag/minigames/desktop redesign/theme systems
-- large Item-content wave
-- expanded relationship/meta-power systems
-
-The focused state-driven visual/audio Presentation Polish is no longer deferred; it is current v2.8
-Canonical under the promotion addendum below.
-
-Do not pull the remaining structural/content expansions into v2.8 Source adoption.
-
-## FULL LEGACY-CHAIN RE-AUDIT — CLOSED
-
-The project-wide inheritance chain was re-audited beyond the v2.8 amendment layer and the remaining
-Source-only / inherited-PASS3 gameplay truth was closed by User approval on 2026-09-20.
-
-Promoted owner truth:
-- ordinary SALE purchase acceptance -> ECONOMY_ORDER_v2.8.0.md
-- base operating cost -> ECONOMY_ORDER_v2.8.0.md
-- ORDER Rare+/known-Hazard pity -> ECONOMY_ORDER_v2.8.0.md
-- Gate-count / Tier exact generation and forecast -> DUNGEON_HAZARD_v2.8.0.md
-- Combat/Hazard qualitative-label numeric boundaries -> DUNGEON_HAZARD_v2.8.0.md
-- ordinary non-Death expedition resolve/reward baseline -> DUNGEON_HAZARD_v2.8.0.md
-- Job Base/Growth exact table -> NPC_TRAIT_v2.8.0.md
-- Job Mastery spawn-Level model -> META_v2.8.0.md
-- non-purchase Loyalty / purchase coefficient / revisit coefficient -> NPC_TRAIT_v2.8.0.md
-- targeted Event exact mechanics -> EVENT_v2.8.0.md
-
-Current Source was used only as the approved baseline where the User explicitly confirmed retaining
-that existing play behavior. It is no longer the authority for these rules; the promoted owner Specs are.
-
-No implementation-blocking Design unresolved item remains from this audit.
-Measurement-gated future rebalance remains a separate evidence -> finding -> approval cycle.
-
-## SOURCE MISMATCH RECORD
-
-Known current-source mismatches are not restated here.
-Use SOURCE_ADOPTION_QA_v2.8.0.md as the implementation-targeted defect record.
-
-
-## FINAL v2.8 DETAIL-PROMOTION CHECK
-
-The former detailed v2.8 Director Plan was compared against the current routed SSOT after the
-2026-09-20 Copy re-audit.
-
-Result:
-    COMPLETE
-
-No implementation rule, numeric baseline, exact UX contract, exact copy contract, QA condition or
-Source-adoption defect is required to remain in the non-Canonical Vision document.
-
-Coverage:
-
-| Former detailed planning area | Current owner / record |
-|---|---|
-| v2.8 purpose / current-loop focus / no P2 expansion | SPEC_INDEX_v2.8.0, 00_GAME_CORE_v2.8.0 |
-| runtime correctness / known current defects | SOURCE_ADOPTION_QA_v2.8.0 |
-| Copy / Information Trust audit | COPY_WORLD_VOICE_v2.8.0, UI_UX_v2.8.0, SOURCE_ADOPTION_QA_v2.8.0 |
-| SALE frozen information boundary / Great Success exception | SALE_v2.8.0 |
-| proven Item causality / proof shadow contract | DUNGEON_HAZARD_v2.8.0, DUNGEON_ITEM_QA_v2.8.0 |
-| NIGHT result hierarchy / Hero feedback / living reaction | NIGHT_CLOSING_v2.8.0, COPY_WORLD_VOICE_v2.8.0 |
-| Fatigue display / resolved breakdown | DUNGEON_HAZARD_v2.8.0, SALE_v2.8.0, NIGHT_CLOSING_v2.8.0, UI_UX_v2.8.0 |
-| semantic benefit/harm language / source popover | UI_UX_v2.8.0 |
-| Store Support naming / feel / balance / attribution | RELIC_v2.8.0, RELIC_QA_v2.8.0 |
-| Boss five-Day information loop / exact report copy / mobile presentation | BOSS_v2.8.0, CORE_RUN_v2.8.0, COPY_WORLD_VOICE_v2.8.0, UI_UX_v2.8.0 |
-| mobile SALE density / compact Loyalty | UI_UX_v2.8.0, SALE_v2.8.0, NPC_TRAIT_v2.8.0 |
-| meal/water hierarchy / exact baseline / Wallet scope / replacement Flavor | ITEM_v2.8.0, DUNGEON_ITEM_QA_v2.8.0 |
-| Event Function truth / temporary budget / special-offer origin | EVENT_v2.8.0, COPY_WORLD_VOICE_v2.8.0, UI_UX_v2.8.0 |
-| Deep repeat copy / Help copy / settings-debug boundary | COPY_WORLD_VOICE_v2.8.0, UI_UX_v2.8.0 |
-| Copy re-audit additions: dialogue truth, refusal rule, capital currency, Closing duplication, Trait labels | COPY_WORLD_VOICE_v2.8.0, SALE_v2.8.0, NIGHT_CLOSING_v2.8.0, related QA |
-| measurement-gated balance follow-up | SPEC_INDEX_v2.8.0 |
-| v2.8 high-level exit condition | SPEC_INDEX_v2.8.0 |
-
-## FINAL COPY RE-AUDIT RESULT
-
-The post-promotion Copy re-audit added the missing current-truth clauses for:
-- Trait / regular dialogue that falsely implied non-existent mechanics
-- previous-result helped callback evidence
-- retired free-sale wording
-- refusal ceiling explanation
-- Store Capital currency suffix
-- replacement Item Flavor after ID reuse
-- SALE analytical label density and old always-visible help
-- Deep repeated tutorial copy
-- Trait effect channel labels
-- NIGHT Outcome-vs-cause separation
-- Closing expedition-impact duplication
-- settings/developer copy boundary
-- Decoration decision-surface Flavor
-- current Event exact Function terminology
-
-The matching Source locations/root causes and acceptance tests are recorded in
-SOURCE_ADOPTION_QA_v2.8.0.md.
-
-## VISION DOCUMENT BOUNDARY
-
-GUILD24_v2.8_RELEASE_VISION.md is no longer a detailed plan or a historical rule carrier.
-
-Its permitted role is:
-- explain why v2.8 exists
-- state the large product goals
-- state what successful v2.8 should feel like
-- route detailed questions to SPEC_INDEX_v2.8.0.md
-
-It must not restate:
+It must not carry:
 - exact mechanics
 - numbers
 - exact copy
@@ -234,147 +103,38 @@ It must not restate:
 - QA cases
 - implementation instructions
 
-If the Vision and SSOT ever differ, the SSOT wins.
+If Vision and SSOT differ, the routed SSOT wins.
 
+## DEFERRED, NOT STALE
 
-## FINAL v2.8 AMENDMENT NUMERIC COHERENCE RE-AUDIT — 2026-09-20
+Structural/content expansion that remains outside current v2.8 is routed to the v2.9+ deferred
+document.
 
-Result:
-    COMPLETE
+Examples:
+- Expedition Purpose structural system
+- large Final cutscene/cinematic expansion
+- large art/world-content expansion
+- drag/minigames/desktop redesign/theme systems
+- large Item-content wave
+- expanded relationship/meta-power systems
 
-The v2.8 additions were re-read as one interacting system rather than as isolated amendments.
-The later full-chain re-audit also closed the older inherited PASS3 / Source-only rules through the approved owner amendments recorded above.
+Presentation/audio/functional-design work explicitly present in current v2.8 owners is not deferred.
 
-Approved current outcomes:
-- Great Success probability remains signal 0.26 / slope 0.80 / cap 0.30
-- Great Success direct Store Gold is reduced to 50 / 100 / 200G by Day band
-- repeated Great Success from well-grown NPCs remains an intended positive growth loop
-- Item Wallet bonuses are 20% / 40%, not 50% / 100%
-- 왕도 천연암반수 is 185/390, 강인함20, Supply2
-- Fresh native-Stat amplification is +30 / +50 / conditional +20, with matching Counter +25 unchanged
-- Deep occurrence is 2 or 3 at 50/50, required Power ×1.50
-- Deep Success = EXP40 / Wallet60; Deep Great Success = EXP80 / Wallet120
-- Deep sponsorship base is 200G with 0.20 rarity and 0.05 level steps, rounded to 10G
-- active Item rarity distribution is intentionally C11 / U12 / R5 / E11 / L1
+## SOURCE MISMATCH RECORD
 
-The cross-system numeric pass above is approved, and the full 30-Store-Support audit is also complete.
-All approved Store Support amendments are promoted into RELIC_v2.8.0.md and RELIC_QA_v2.8.0.md.
-Future balance follow-up remains measurement-gated and does not constitute a Design unresolved item.
+Known Source mismatches are not restated here.
 
+Use SOURCE_ADOPTION_QA_v2.8.0.md for the audit-head defect record.
+Use WORK_STATE + current Source + reviewed commits for current resolution status.
 
-## 2026-09-22 CROSS-SSOT / LEGACY-CHAIN RE-AUDIT ADDENDUM
+## AUDIT CLOSURE
 
-Result:
-    AUDIT COMPLETE
-    IMPLEMENTATION-BLOCKING DESIGN UNRESOLVED = NONE
-    NONBLOCKING CANONICAL DETAIL GAPS = NONE
+The completed audit established that:
+- inherited rules needed by v2.8 have a current owner
+- retired clauses are not current authority
+- exact copy has a single routed owner
+- presentation/audio/functional-design ownership is routed
+- measurement-gated balance questions remain findings, not unresolved Design
+- no Canonical detail gap remains from this audit
 
-Resolved documentation defects in this pass:
-- 00_GAME_CORE inherited information principle now distinguishes hidden unconditional whole-expedition
-  Death probability from the approved exact failure-conditioned Death-risk disclosure.
-- NPC_TRAIT explicitly retires the inherited random route / Trait-remove / Trait-add special system;
-  its historical QA cases are explicitly superseded.
-- CORE_RUN_QA explicitly retires Franchise Achievement pacing and the old D10 FINAL20 / D20 FINAL10
-  presentation wording while preserving current D25 persistence / D30 reuse.
-- FINAL_EXPEDITION remains the current v2.7-named Final owner, but cross-system references now route
-  to current v2.8 owners instead of freezing adjacent systems at v2.7.
-- this audit's stale Deep sponsorship line is corrected from 350G to the current approved 200G base.
-- SPEC_INDEX now states that SOURCE_ADOPTION_QA is an audit-HEAD defect record, not a live tracker.
-- RELIC closes 13 inherited Store Support Function values that were exact in User-approved Copy but
-  only qualitative in the older rule owner chain.
-- COPY_AUDIT_APPROVED now explicitly marks `기존` / `이유` as audit history and only
-  `수정안` + later amendments as active Copy truth.
-
-### 2026-09-22 GAP CLOSURE — USER APPROVED
-
-The two nonblocking numeric gaps found by this re-audit are closed:
-
-- `프리미엄 쇼케이스` exact NPC rarity weights are owned by META_v2.8.0.md as
-  `[51, 30, 14, 4, 1]` for Common / Uncommon / Rare / Epic / Legendary.
-- the 20 inherited Store Support base prices formerly left at PASS3 are owned exactly by
-  RELIC_v2.8.0.md §INHERITED SUPPORT BASE-PRICE CLOSURE.
-
-No Canonical detail gap remains from this audit.
-
-
-## 2026-09-22 PRESENTATION POLISH PROMOTION ADDENDUM
-
-User approval promotes the previously deferred small/medium presentation work into v2.8.
-
-Canonical ownership after promotion:
-- presentation/audio contract -> UI_UX_v2.8.0.md
-- result truth -> NIGHT_CLOSING_v2.8.0.md
-- Boss reveal/final-entry truth -> BOSS_v2.8.0.md
-- Store-growth/Decoration projection boundary -> META_v2.8.0.md
-- acceptance -> UI_UX_QA_v2.8.0.md
-
-The promotion adds no gameplay number, probability, reward, progression resource, decision axis,
-required Save state or Gameplay RNG.
-
-The matching Store Growth Visual Overlay and Audio/BGM/Presentation candidates were removed from
-GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md. Large Final cinematic/cutscene work and large art/world
-content expansion remain deferred.
-
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
-NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.
-
-
-## 2026-09-22 FUNCTIONAL DESIGN POLISH EXPANSION
-
-User approval expands the v2.8 Presentation Polish into a full functional-design audit of the
-current Player flow.
-
-Current owner:
-- functional UI / tutorial targeting / layout economy / responsive fit / presentation -> UI_UX_v2.8.0.md
-- acceptance -> UI_UX_QA_v2.8.0.md UI-Q-v28-26 through UI-Q-v28-29
-- underlying gameplay/copy truth remains with the existing routed owner for each fact
-
-The audit is not limited to the named examples.
-It covers opening/pre-Run, Store Management, MORNING, ORDER, SALE, NIGHT, CLOSING, Boss beats,
-Final preparation/FINAL/ending and active overlays/modals.
-
-Explicit examples included by User approval:
-- tutorial copy and its highlighted UI region must actually describe the same thing
-- D0/D5/D10/D15/D20/D25/D30 Boss/milestone presentation must be large/strong enough to communicate
-  its information role while avoiding unnecessary overflow, dead modal space or decorative excess
-
-The same functional standard applies project-wide:
-- information priority
-- decision/action proximity
-- responsive reading order
-- dead-space / duplication removal
-- overflow / viewport fit
-- control state / focus / feedback continuity
-
-This expansion changes no gameplay rule, numeric balance, required Save state or Gameplay RNG.
-Exact current owner constraints remain authoritative until runtime evidence is promoted into the
-owner as a v2.8 Functional Design correction.
-
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
-NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.
-
-
-## 2026-09-22 RE-MEASURE BALANCE DECISION
-
-Four-arm measurement separated the marginal effects of SA-Q48 / SA-Q49 / SA-Q50.
-
-Approved result:
-- SA-Q48 accessible-mode purchase acceptance remains unchanged
-- SA-Q50 Deep sponsorship remains unchanged
-- no death-limit rebalance is promoted from this evidence
-- no Final/Boss numeric rebalance is promoted from this evidence
-- SA-Q49 Wallet is narrowed only by changing visit-income randomInt(0,100) -> randomInt(0,80)
-
-Retained Wallet truth:
-- Fresh base = 180
-- Level contribution = Level ×8
-- Returning NPC carries persistent Wallet
-- cap = 2000
-- failed-expedition Loot remains separate
-
-Reason:
-the re-measure isolated SA-Q49 as the dominant source of excess purchasing-capacity / Store-Gold
-expansion. The narrower visit-income range preserves the intended low-Wallet recovery while reducing
-the size of the compounding economy uplift.
-
-No other v2.8 balance number changes from this re-measure.
+Any later Design change must amend the appropriate routed owner rather than this audit record.
