@@ -26,8 +26,8 @@ Expect exactly:
 PASS:
 - active catalog count remains 40
 - active Rarity distribution is C11 / U12 / R5 / E11 / L1
-- no unrelated Item Rarity is moved merely to restore the old C/U counts
-- old Hotbar names are not active player Items
+- no unrelated Item Rarity is moved from the approved active distribution
+- Hotbar names are not active player Items
 - meal shelf life 2, water shelf life 5
 - no replacement creates direct Fatigue reduction
 
@@ -63,7 +63,7 @@ PASS:
 
 SALE must not display separate 성공/퇴각/부상 future Fatigue rows.
 
-Exact Supply/Fatigue runtime arithmetic remains unchanged.
+Supply/Fatigue runtime arithmetic follows the current owner truth.
 
 ## DI-Q-v28-5 — COUNTERFACTUAL DOES NOT ALTER RESOLVE
 
@@ -159,7 +159,7 @@ Tier PASS:
 FAIL:
 - a forecast-only probability table
 - a different Save/Load forecast roll
-- old approximate band percentages acting as exact truth
+- any alternate approximate band percentages acting as exact truth
 
 ## DI-Q-v28-13 — FORECAST / HAZARD LABEL BOUNDARIES
 
