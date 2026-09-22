@@ -926,9 +926,12 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     opening the codex or moving a tab would sound it again. It belongs to the click that
     created it, which is the one where Meta.finish assigned a fresh array. */
  assert.ok(/const wasOpen=game\.run\?\.unlocked;/.test(app),'the click captures what was open before it');
- assert.ok(/opened\.length&&opened!==wasOpen\)sound\('rare'\)/.test(app),
+ /* UI_UX_v2.8 §STORE SUPPORT (2026-09-22 amendment) retired the one shared `rare` cue: a
+    Store Support acquisition, an ordinary Decoration purchase and a 본사 해금 are three
+    different events and each now has its own. This is the unlock one. */
+ assert.ok(/opened\.length&&opened!==wasOpen\)sound\('unlock'\)/.test(app),
   'and the unlock cue sounds only on the click that opened something');
- assert.ok(!/game\.boss\(\);setModal\(null\);render\(\);sound\('rare'\)/.test(app),
+ assert.ok(!/game\.boss\(\);setModal\(null\);render\(\);sound\('unlock'\)/.test(app),
   'the Final no longer sounds it unconditionally, unlock or not');
  assert.ok(!/account\.progress|a\.progressCache|persist/.test(panel),'nothing about it is stored');
 
@@ -1145,13 +1148,21 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  const asked=[...app.matchAll(/sound\('([a-z]+)'\)/g)].map(m=>m[1]);
  assert.ok(asked.length,'the screens do ask for cues by name');
  for(const name of new Set(asked))
-  assert.ok(cues.has(name)||name==='rare',"every requested cue resolves to a real one: "+name);
+  assert.ok(cues.has(name),"every requested cue resolves to a real one: "+name);
  /* §STORE SYSTEM. Fitting a Decoration into a Slot is not buying one, so it must not reuse
     the purchase fanfare - and neither of them may be silent. */
- assert.ok(/case'deco-confirm'[\s\S]*?sound\('rare'\)/.test(app),'buying a Decoration keeps the purchase cue');
+ assert.ok(/case'deco-confirm'[\s\S]*?sound\('purchase'\)/.test(app),'buying a Decoration keeps the ordinary purchase cue');
+ /* §STORE SUPPORT: "acquisition ... is not the same cue as Relic acquisition" - the three
+    acquisitions are told apart by cue, not only by the toast above them. */
+ const acq=['support','purchase','unlock'];
+ assert.equal(new Set(acq).size,3,'three acquisitions, three cue names');
+ for(const c of acq)assert.ok(Sound.cues.includes(c),c+' is a real cue');
+ assert.ok(/case'buy-relic':[\s\S]{0,120}?sound\('support'\)/.test(app),'Store Support has its own');
+ assert.ok(!/sound\('rare'\)/.test(app),'and the shared rare cue is gone from the UI');
+ assert.ok(!/kind==='rare'/.test(read('dist/ui/audio.js'))&&!/kind==='rare'/.test(app),'with no alias left behind');
  const equip=app.slice(app.indexOf("else {Meta.equipDecoration"),app.indexOf("else {Meta.equipDecoration")+160);
  assert.ok(/sound\('fixture'\)/.test(equip),'equipping and unequipping have a cue of their own');
- assert.ok(!/sound\('rare'\)/.test(equip),'and it is not the purchase fanfare');
+ assert.ok(!/sound\('purchase'\)/.test(equip),'and it is not the purchase cue');
  assert.ok(cues.has('ui')&&cues.has('fixture'),'the shared UI click and the fixture cue exist');
  /* the shared click is quieter than an ordinary effect, so navigation does not shout */
  assert.ok(/ui:\{gain:\.45/.test(audio),'the shared UI click is mixed under the other effects');
@@ -1180,11 +1191,13 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
 });
 
 test('D-23: every cue the UI asks for exists, and every step of an ordinary day has one',()=>{
- const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound,audioSrc=read('dist/ui/audio.js');
+ // the per-cue shape table only: the BGM bed table above it reuses some of the same names
+ const shp=audioSrc.slice(audioSrc.indexOf('const shape={'),audioSrc.indexOf('function play('));
  const asked=[...app.matchAll(/sound\('([a-z]+)'\)/g)].map(m=>m[1]);
  assert.ok(asked.length>0,'the UI does ask for sound');
  for(const kind of asked)
-  assert.ok(kind==='rare'||Sound.cues.includes(kind),kind+' is a real cue, not a typo that falls back to a click');
+  assert.ok(Sound.cues.includes(kind),kind+' is a real cue, not a typo that falls back to a click');
  // the priority list: an order confirmed, a sale, gold moving either way, a product picked,
  // a store support taken, a result that matters, and the confirmations that end a phase
  const cueFor=action=>{const i=app.indexOf("case'"+action+"'");assert.ok(i>0,action+' is a real action');
@@ -1196,14 +1209,124 @@ test('D-23: every cue the UI asks for exists, and every step of an ordinary day 
  assert.equal(cueFor('reroll'),"'spend'",'a reroll is gold going out');
  assert.equal(cueFor('deep-nominate'),"'spend'",'sponsorship is a payment, not the store-support fanfare');
  assert.equal(cueFor('break-seal'),"'boss'",'breaking a seal is a Boss decision and is heard as one');
+ /* §BOSS / FINAL AUDIO: one motif, two strengths. D5 / D15 / D25 major, D0 / D10 / D20 compact. */
+ assert.ok(/const BOSS_MAJOR=new Set\(\['d5','d15','final'\]\)/.test(app),'the major beats are named as Canonical names them');
+ assert.ok(/sound\(BOSS_MAJOR\.has\(st\)\?'bossmajor':'bosscompact'\)/.test(app),'every beat is acknowledged at its own strength');
+ const bshape=m=>{const i=shp.indexOf('\n '+m+':{');assert.ok(i>0,m+' names a shape');return shp.slice(i,shp.indexOf('},',i));};
+ const maj=bshape('bossmajor'),cmp=bshape('bosscompact');
+ assert.ok(Number(maj.match(/gain:([\d.]+)/)[1])>Number(cmp.match(/gain:([\d.]+)/)[1]),'the compact beat is smaller than the major one');
+ assert.ok(Number(maj.match(/dur:([\d.]+)/)[1])>Number(cmp.match(/dur:([\d.]+)/)[1]),'and shorter');
+ assert.ok(/layer:/.test(maj)&&!/layer:/.test(cmp),'only the major one carries the low layer');
+ assert.deepEqual(Sound.cues.includes('bossmajor')&&Sound.cues.includes('bosscompact'),true,'both exist');
+ /* D0 keeps its own persistence and is a compact acknowledgement, not a new beat */
+ assert.ok(/if\(st==='d0'\)s\.bossReveal\.d0Seen=true;/.test(app),'D0 still writes its own seen flag');
+ /* D30 adds no new-information signal: it is the Final commit only */
+ assert.ok(/case'boss-go':sound\('final'\)/.test(app),'the Final commit is the Final cue');
  assert.ok(cueFor('select'),'picking a product off the shelf answers');
  assert.ok(cueFor('buy-relic'),'taking a store support answers');
+ /* §MATERIAL DECISION CUES / SALE: the price modes stay named in the cue, but Canonical now
+    requires them to be peers - "no price mode is made to sound like the correct answer" - so
+    they resolve to one shared SALE body at one level, not to an ascending fanfare for 바가지. */
  assert.ok(cueFor('sell')&&cueFor('sell').includes('overcharge'),'a sale is priced in the cue it makes');
+ const modeShape=m=>{const i=shp.indexOf('\n '+m+':{');assert.ok(i>0,m+' names a shape');return shp.slice(i+m.length+3,shp.indexOf('},',i));};
+ const modes=['sale','overcharge','half'].map(modeShape);
+ assert.equal(new Set(modes).size,1,'the three price modes are one SALE family at one level');
+ const samples=Sound.samples;assert.equal(new Set(['sale','overcharge','half'].map(m=>samples[m])).size,1,
+  'and they commit on the same recorded register body');
  assert.ok(/sound\('refusal'\)/.test(app),'and a refusal sounds different from a sale');
+ /* §NIGHT OUTCOME AUDIO: the Outcome is primary. A success that found something used to be
+    answered by a `discovery` / `level` cue INSTEAD of its Outcome, so a 퇴각 and a plain return
+    could sound alike. Both of those cues are retired. */
  assert.ok(/result\.outcome==='사망'\?'death'/.test(app),'the night result is heard by what it was');
+ // the prose beside the branch names the retired cues, so the guard reads the code alone
+ const night=app.slice(app.indexOf("case'night-next'"),app.indexOf("\n case'",app.indexOf("case'night-next'")+1))
+  .replace(/\/\*[\s\S]*?\*\//g,'');
+ for(const [o,c] of [['사망','death'],['중상','severe'],['부상','injury'],['퇴각','retreat'],['대성공','great']])
+  assert.ok(night.includes("result.outcome==='"+o+"'?'"+c+"'"),o+' is heard as '+c);
+ assert.ok(/:'return'\)/.test(night),'and an ordinary return keeps its own');
+ assert.ok(!/discovery|'level'/.test(night),'no find or Stat move speaks over the Outcome');
+ assert.ok(!Sound.cues.includes('discovery')&&!Sound.cues.includes('level'),'and the two retired cues are gone');
  // gold in and gold out are mirror cues, so one is never mistaken for the other
  const gold=[659,784];assert.ok(Sound.cues.includes('gold')&&Sound.cues.includes('spend'),'both directions exist');
- assert.ok(/spend:\[784,659\]/.test(read('dist/ui/audio.js')),'spend falls where gold rises: '+gold.join());
+ assert.ok(/spend:\[784,659\]/.test(audioSrc),'spend falls where gold rises: '+gold.join());
+});
+
+/* UI-Q-v28-22. The Audio Polish pass widened the existing engine and gave the material cues a
+   recorded body; the guard is that it stayed ONE engine, that the hierarchy is real and not just
+   described, and that a rapid-repeat control cannot stack into a harsh tone. */
+test('UI-Q-v28-22: one engine, a real hierarchy, and no cue that stacks on a fast tap',()=>{
+ const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ // the prose explains what the engine refuses to do, so the bans are read off the code alone
+ const code=audio.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ assert.ok(!/Math\.random/.test(code),'no cue draws a random number');
+ assert.ok(!/XMLHttpRequest|new Audio\(|<audio/i.test(code),'no second playback path was introduced');
+ // one fetch, of this build's own vendored files, and never of a remote host
+ assert.equal((code.match(/fetch\(/g)||[]).length,1,'there is exactly one loader');
+ assert.ok(/SAMPLE_DIR='ui\/assets\/audio\/'/.test(code)&&!/https?:\/\//.test(code),'and it only reads this build');
+ assert.ok(/if\(loaded\|\|!ctx/.test(code),'it runs once, and never before there is a context');
+ const shp=audio.slice(audio.indexOf('const shape={'),audio.indexOf('function play('));
+ const spec=name=>{const i=shp.indexOf('\n '+name+':{');assert.ok(i>0,name+' names its own shape');
+  return shp.slice(i,shp.indexOf('},',i));};
+ const gain=n=>Number(spec(n).match(/gain:([\d.]+)/)[1]);
+ // §AUDIO HIERARCHY: utility under ordinary action, ordinary action under a material decision
+ for(const util of ['ui','quantset'])for(const decision of ['order','support','refusal','final'])
+  assert.ok(gain(util)<gain(decision),util+' sits under '+decision);
+ assert.ok(gain('quantset')<gain('quantity'),'a quick-set never outranks the stepper it stands in for');
+ assert.equal(Sound.samples.quantset,Sound.samples.quantity,'and it is the same material, one step down');
+ // §MIX / RUNTIME: a held or hammered control must not build into harsh overlapping sound
+ for(const tick of ['quantity','quantset','ui'])assert.ok(/repeat:\.\d+/.test(spec(tick)),tick+' names a minimum retrigger gap');
+ assert.ok(/if\(sh\.repeat\)\{if\(t0-\(lastAt\.get\(kind\)\|\|-1\)<sh\.repeat\)return;/.test(code),
+  'and the engine actually drops the retrigger inside it');
+ // the material cues carry a recorded object; the tonal families stay synthesised and in tune
+ for(const m of ['order','sale','refusal','support','open','close','final','quantity'])
+  assert.ok(Sound.samples[m],m+' plays a recorded body');
+ for(const t of ['great','retreat','injury','severe','death','rescue','bossmajor','bosscompact'])
+  assert.ok(!Sound.samples[t],t+' stays synthesised, so its family stays in tune');
+ // and no sampled cue can go silent when its file is missing
+ assert.ok(/if\(!body\|\|sh\.accent\)notes\.forEach/.test(code),'the synthesised shape is still the fallback');
+ // MORNING / ORDER / SALE / NIGHT / FINAL each have a bed, told apart by arrangement
+ for(const t of ['morning','order','sale','night','boss'])assert.ok(Sound.tracks.includes(t),t+' has a bed');
+ assert.ok(new Set([...audio.matchAll(/ms:(\d+)/g)].map(m=>m[1])).size>=4,'the beds differ by more than volume');
+ // mute and the two saved levels stay the only authority
+ assert.ok(/function play\([^)]*\)\{if\(!enabled\|\|!ctx\)return;/.test(code),'mute silences every cue');
+ assert.ok(/appliedBgm!==level\.bgm/.test(code),'a redraw does not cancel a duck by rewriting the bus level');
+ assert.ok(/linearRampToValueAtTime\(full,when\+/.test(code),'ducking restores the player level, not 1');
+});
+
+test('UI-Q-v28-22: every vendored cue ships, with its licence and its record',()=>{
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ const dir='dist/ui/assets/audio';
+ for(const file of new Set(Object.values(Sound.samples)))
+  assert.ok(fs.existsSync(path.join(root,dir,file+'.mp3')),'the cue file ships: '+file+'.mp3');
+ assert.ok(fs.existsSync(path.join(root,dir,'LICENSE-CC0.txt')),'the dedication ships with the files it releases');
+ const manifest=read('reports/ASSETS.md');
+ for(const term of ['CC0-1.0','uisfx','dist/ui/assets/audio'])
+  assert.ok(manifest.includes(term),'the asset manifest records '+term);
+ // nothing is fetched from a host at runtime, the way the fonts are not
+ assert.ok(!/https?:\/\//.test(read('dist/ui/audio.js').replace(/\/\*[\s\S]*?\*\//g,'')),'no remote audio URL is in the build');
+ // the vendoring step is reproducible and owns only what it copies
+ const vendor=read('tools/vendor-assets.py');
+ assert.ok(/node_modules','uisfx'/.test(vendor)&&/LICENSE-AUDIO/.test(vendor),'`npm run assets` regenerates them with their licence');
+ assert.ok(JSON.parse(read('package.json')).devDependencies.uisfx,'the source is a devDependency, never a runtime one');
+});
+
+test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they already are',()=>{
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ // the prose beside these branches names the Outcomes and the Boss facts, so they read the code
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const i=app.indexOf("case'night-next'"),seg=bare(app.slice(i,app.indexOf("\n case'",i+1)));
+ // the recovery accent is layered behind the Outcome cue and gated on the proof the result carries
+ assert.ok(/if\(result\.rescued\|\|result\.avoidedDeath\)Sound\.play\('rescue',\.\d+\)/.test(seg),
+  'the rescue accent is delayed behind the outcome cue and read off proven state');
+ assert.ok(seg.indexOf("sound(result.outcome")<seg.indexOf("Sound.play('rescue'"),'it never replaces the Outcome cue');
+ // presentation only: the cue branch assigns nothing and calls no game method
+ assert.ok(!/game\.|s\.\w+=/.test(seg.slice(seg.indexOf('if(result){'))),'no cue branch touches the result, the Run or the Wallet');
+ // Boss: the strength is read off the beat, never off the Boss behind it
+ const bs=app.indexOf("case'boss-seen'"),bseg=bare(app.slice(bs,app.indexOf("\n case'",bs+1)));
+ assert.ok(!/bossId|b\.name|trait|family/i.test(bseg),'the cue is not chosen from anything the beat has not shown');
+ assert.ok(/s\.bossReveal\.d0Seen=true/.test(bseg)&&/BOSS_BEATS\.find/.test(bseg),'D0 and D5-D25 keep their own persistence');
+ // a redraw replays nothing: one-shot cues live in the click handler, never in render()
+ assert.ok(!/sound\('|Sound\.play\(/.test(fn('render')),'render() plays no one-shot cue');
 });
 
 test('D-24: the feel layer is optional, and it never animates a redraw of the same view',()=>{

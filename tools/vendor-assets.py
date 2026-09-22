@@ -12,6 +12,10 @@ sys.stdout.reconfigure(encoding='utf-8')
     actually render; every player-visible string in GUILD24 is a literal in dist/**/*.js, so
     the union of those characters plus ASCII is a complete, safe subset.
   anime.js (MIT, (c) Julian Garnier) -> dist/ui/vendor/anime.umd.min.js
+  uisfx `mechanical` (audio CC0-1.0) -> dist/ui/assets/audio/: the material half of the
+    Decision SFX. UI_UX_v2.8 asks for mechanical / paper / register / fixture material, which a
+    filtered oscillator can imply but cannot be, so those cues play a recorded object. Only the
+    twelve files the engine names are copied; the package ships 1872.
 
 Run: npm run assets. The output is committed; the game never fetches anything at runtime.
 """
@@ -41,6 +45,25 @@ METHOD=4
 # UI_UX_v2.7 §TYPOGRAPHY: the INFORMATION face is Wanted Sans. Only the two weights the UI
 # actually uses are vendored - the package ships seven, and the rest never reach dist.
 UI_FACES=[('WantedSans-Regular','WantedSans'),('WantedSans-SemiBold','WantedSans-SemiBold')]
+
+# UI_UX_v2.8 §AUDIO VOICE / §MATERIAL DECISION CUES. Source theme is `mechanical`: short, dry,
+# readable transients, no sci-fi beeps and no arcade chiptune. The shipped name says the ROLE, not
+# the vendor's UI vocabulary, so a later asset swap is a one-line change here and nothing in
+# dist/ui/audio.js moves. mp3 only: it is the one container every current mobile browser decodes.
+SFX=os.path.join(ROOT,'node_modules','uisfx')
+AUD=os.path.join(ROOT,'dist','ui','assets','audio')
+AUDIO=[('typing','tick'),        # ORDER quantity: the shortest thing in the set, repeat-safe
+       ('press','stamp'),        # ORDER confirmation: a low knock under the paper layer
+       ('purchase','register'),  # SALE commit, shared by every price mode so none sounds correct
+       ('cancel','refuse'),      # SALE refusal: restrained, not a failure buzzer
+       ('lock','secure'),        # Store Support: securing a fixture, heavier than a purchase
+       ('add-to-cart','cart'),   # ordinary Decoration purchase
+       ('unlock','unlock'),      # 본사 해금
+       ('open','shutter'),       # MORNING opening
+       ('close','settle'),       # CLOSING: the drawer/ledger settling the day
+       ('blocked','gate'),       # FINAL commit: the heaviest mechanical close in the set
+       ('hover','soft'),         # utility navigation, deliberately the quietest file here
+       ('select','key')]         # ordinary pick
 
 def glyphs():
     chars=set()
@@ -97,7 +120,26 @@ def main():
     shutil.copyfile(anime,os.path.join(VEN,'anime.umd.min.js'))
     shutil.copyfile(os.path.join(ROOT,'node_modules','animejs','LICENSE.md'),os.path.join(VEN,'anime.LICENSE.md'))
     print(f'  anime.umd.min.js  {os.path.getsize(anime)//1024}K')
+    audio()
     portraits()
+
+def audio():
+    """Copy the named cue files out of the uisfx package. They are already short and dry, so
+    nothing is re-encoded: the shipped bytes are the CC0 bytes, which keeps the licence record
+    simple (`modification: none, renamed only`)."""
+    if not os.path.isdir(SFX):
+        print('  audio: node_modules/uisfx is absent, skipped'); return
+    os.makedirs(AUD,exist_ok=True)
+    total=0
+    for src_name,role in AUDIO:
+        src=os.path.join(SFX,'sounds','mechanical',src_name+'.mp3')
+        if not os.path.exists(src):
+            sys.exit('uisfx is missing sounds/mechanical/%s.mp3'%src_name)
+        dst=os.path.join(AUD,role+'.mp3')
+        shutil.copyfile(src,dst); total+=os.path.getsize(dst)
+    # the CC0 dedication travels with the files it releases, exactly as the OFL does
+    shutil.copyfile(os.path.join(SFX,'LICENSE-AUDIO'),os.path.join(AUD,'LICENSE-CC0.txt'))
+    print(f'  audio  {len(AUDIO)} cues  {total//1024}K')
 
 def portraits():
     """Derive the shipped portrait set. Source filenames are the binding, so the output
