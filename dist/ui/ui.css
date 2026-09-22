@@ -976,18 +976,27 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print .row.sum{margin-top:5px;padding-top:7px;box-shadow:inset 0 2px 0 #2c241833}
 .print .row.sum span{color:#2c2418;font-weight:600}
 .print .row.sum b{font-size:17px}
-.print .profit{margin:10px 0;padding:10px 12px;background:#2c24180d;
- box-shadow:inset 0 0 0 2px #2c241826,inset 0 -3px 0 #2f7a4d}
+/* UI_UX §PER-PHASE APPLICATION RULES (CLOSING): the day's result is what has to be read first,
+   and it was the third-heaviest figure on the tape - under the drawer stamp and barely over the
+   판매 마진 subtotal. It is the tape's total line now: double-ruled off the way a register rules
+   a total, at the largest figure on the receipt. §EDGE / BORDER DISCIPLINE: the old full 2px
+   outline plus a coloured under-rule was a framed box inside the receipt frame - the semantic
+   benefit / harm colour stays where it belongs, on the figure itself. */
+.print .profit{margin:11px 0 2px;padding:11px 0 12px;background:none;
+ box-shadow:inset 0 3px 0 #2c2418,inset 0 -3px 0 #2c2418}
 .print .profit span{font-weight:600;color:#2c2418}
-.print .profit b{font-size:21px;color:#256b41}
-.print .profit.loss{box-shadow:inset 0 0 0 2px #2c241826,inset 0 -3px 0 #a1372c}
+.print .profit b{font:500 30px/1 var(--f-led);color:#1f6b3f}
 .print .profit.loss b{color:#a1372c}
-/* the drawer: what is actually in it, stamped at the foot of the tape */
-.purse{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding:12px 13px;
+/* detail accounting reads last, and a figure that did not move is not a result: a zero stays
+   printed, because a receipt prints it, but it is not competing for the eye */
+.print .row.nil span,.print .row.nil b{color:#8e8674}
+/* the drawer: what is actually in it, stamped at the foot of the tape. It is the state tomorrow
+   starts from, so it stays the tape's last stamp - one register below the day's result. */
+.purse{display:flex;align-items:baseline;gap:10px;margin-top:12px;padding:11px 13px;
  background:#2c2418;color:#f2e7cd}
 .purse span{font:600 12px/1 var(--ui);letter-spacing:.16em;color:#b3a68b}
-.purse b{margin-left:auto;font:500 28px/1 var(--f-led);font-variant-numeric:tabular-nums;color:var(--gold)}
-.purse b i{font-style:normal;font-size:15px;margin-left:3px;color:#b3a68b}
+.purse b{margin-left:auto;font:500 22px/1 var(--f-led);font-variant-numeric:tabular-nums;color:var(--gold)}
+.purse b i{font-style:normal;font-size:13px;margin-left:3px;color:#b3a68b}
 /* SA-Q21 / SA-Q34: Closing no longer prints the 오늘의 보급 영향 block or its footer - the
    .impact rules and the .print-scoped .foot rule they alone used are retired with them. */
 /* =====================================================================

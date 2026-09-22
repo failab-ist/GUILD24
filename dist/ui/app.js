@@ -636,7 +636,9 @@ function changedRows(r){
 function closingScreen(){
  const s=game.run,d=s.daily,margin=d.revenue-d.cogs;
  const profit=margin+(d.subsidy||0)+(d.commission||0)+(d.greatSuccess||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
- const line=(label,value,cls='')=>'<div class="row '+cls+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
+ /* a printed zero is still printed - the receipt states every figure - but it is marked so the
+    detail rows that did not move stay quiet under the day's result (UI_UX §CLOSING). */
+ const line=(label,value,cls='')=>'<div class="row '+cls+(value?'':' nil')+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
  /* SA-Q21 / SA-Q34: Closing is economics-only. What an actual sold Item did for an actual
     expedition is NIGHT's own causality, already told there through the Outcome sentence and
     the proven Hero Item line - repeating it here under 오늘의 보급 영향 duplicated it, in a
