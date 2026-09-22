@@ -30,19 +30,24 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 
 DIRECTOR review found the intended presentation/copy adoption substantially correct, but the correction is not closed.
 
-WORK correction required:
+WORK correction required now:
 - remove the duplicate legacy `.relic-plate .stamp[disabled]` rule so one current Store Support state rule remains
-- update stale Source comments that still describe the retired bolted-brass / art-after-facts presentation
-- regenerate the committed font subset after the new exact copy and rerun the real full `npm test`; `tests/assets.cjs` is part of `npm test` and cannot be reported as PASS while it fails
+
+Deferred to final v2.8 adoption integration / freeze:
+- regenerate the committed font subset after all Player-facing copy adoption is complete
+- then run the full `npm test`, including `tests/assets.cjs`
+
+Stale explanatory Source comments are not a runtime blocker and do not justify expanding this closeout patch; clean them only when their touched code is next edited or during final integration hygiene.
 
 No new Design decision is required.
 
 ## Next Queue
 
-- WORK performs only the small correction above
-- DIRECTOR re-reviews the resulting diff / full test result
-- if PASS, close this Presentation correction and continue to final v2.8 integration / freeze audit
+- WORK performs only the duplicate Store Support state-rule correction
+- DIRECTOR re-reviews that narrow diff / targeted verification
+- if PASS, close this Presentation correction
+- regenerate assets + run full npm test once after remaining v2.8 adoption is complete, during final integration / freeze
 
 ## Blocker
 
-WORK CORRECTION REQUIRED — current build has an asset-test failure and stale/duplicate Source residue.
+WORK CORRECTION REQUIRED — one duplicate Store Support state rule remains. Asset regeneration is intentionally deferred to final integration / freeze.
