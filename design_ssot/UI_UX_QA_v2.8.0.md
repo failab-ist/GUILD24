@@ -482,88 +482,73 @@ FAIL:
 - speech becomes a persistent blocker for required SALE information
 
 
-## UI-Q-v28-31 — GAME-LIKE INTERACTION LANGUAGE
+## UI-Q-v28-31 — DARK PIXEL + CONTROLLED POP / GAME-LIKE INTERACTION
 
-Runtime UX QA, not Source/CSS inspection. Drive the Primary Decision Control of every reviewed
-Phase on phone (360 / 390 / 412) and desktop (1024 / 1280-class).
+Runtime UX QA, not literal palette inspection.
 
-PASS:
-- committing a main choice feels like handling that Phase's own object
-- each Phase's handling feels different while still reading as one GUILD24 UI DNA
-- Utility UI (close / back / settings / help / navigation) and gameplay decision UI are
-  distinguishable in rank
-- the repeated generic green rectangular CTA is gone
-- Boss / FINAL no longer read as `image + information card + green confirm button`
-- nested panel / card hierarchy on those surfaces is reduced, with the information folded into
-  the report / record / gate itself
+Audit every Player-facing surface touched by Presentation Polish on phone (360 / 390 / 412) and
+desktop (1024 / 1280-class). Store Support must additionally be driven through AVAILABLE /
+SELECTED / UNAVAILABLE and both disabled causes.
+
+GLOBAL PASS:
+- the screen reads as one GUILD24 2D / pixel game surface, not a web dashboard with a game skin
+- the environmental / information base is visually quieter than the current decision
+- the few things that need immediate action or attention receive stronger controlled-pop contrast
+- action / state hierarchy remains understandable without colour alone
+- crisp hard edges / hard depth / flat planes carry the pixel-2D construction
+- a pressable Primary Decision Control has clear physical depth / press feedback
+- Utility Controls remain subordinate and need not become game objects
+- Phase identity comes from material, hierarchy, placement and handling as well as any accent
+- gameplay, Save, RNG, information boundary and decision structure are unchanged
+
+GLOBAL FAIL:
+- the whole UI is uniformly muted / muddy / military-dashboard-like and the decision no longer pops
+- the whole UI becomes candy-colour / arcade-toy loud
+- only the hue changed while the underlying interaction is still the same SaaS CTA
+- every Phase is the same rectangular CTA with a different colour
+- blurred shadow, soft glow, glossy gradient, fake metal or exaggerated bevel is used as the main
+  source of game feel
+- ornament was added instead of making the action / state clearer
+- G24 / 길드24 seal, bolt, badge, frame or decorative mark repeats without functional meaning
+- a coloured left vertical bar / status stripe is used as the selected-state shortcut
+- whole-element opacity is used to communicate unavailable state
+- a new theme / skin framework is introduced
+- touch target, legibility or accessible naming regresses
+
+COLOUR QA:
+- there are no literal Canonical hex values to match
+- exact hue / saturation may change without a Design amendment when semantic roles, state hierarchy,
+  contrast and this QA remain true
+- do not enforce a palette by source guards that merely compare hard-coded colour literals
+- semantic benefit / harm colour remains authoritative over decorative accent
+
+PRIMARY DECISION / PHASE HANDLING PASS:
+- committing a main choice feels like the Phase's own action rather than a generic web submit
 - the Primary Action has presence without outranking the information it acts on
-- gameplay, Save, RNG and decision structure are unchanged
+- Boss / FINAL do not collapse back to `image + information card + generic confirm button`
+- nested panel hierarchy is reduced where the report / record / gate itself can own the information
 
-FAIL:
-- only the colour changed and the structure is still the same SaaS CTA
-- ornament was added instead of making the Phase action clearer
-- everything became an exaggerated game control and the screen got busier
-- a separate skin / theme system was introduced per Phase
-- decoration cost information legibility or phone operability
-- a touch target fell below the phone minimum, or a decorative control lost its accessible name
+STORE SUPPORT PASS:
+- AVAILABLE / SELECTED / UNAVAILABLE are distinguishable at a glance by more than colour alone
+- no green UI accent is used for Store Support selection / ownership / action / success state
+- AVAILABLE owns the strongest controlled-pop action and is the only state that looks pressable
+- SELECTED stays in the same base material family, with multiple completion cues and no generic
+  success-colour flood
+- when card height is unchanged, `보유 중` keeps the AVAILABLE control's footprint but loses
+  press depth and hover / active affordance
+- UNAVAILABLE recedes while all required copy remains readable
+- `선택 종료` / `골드 부족` or the current approved equivalent names the disabled cause rather
+  than leaving a dead `구매`
+- no vertical selected strip, decorative seal, shiny metal, gradient, blurred glow or heavy bevel
 
-ORNAMENT RESTRAINT (UI_UX §ORNAMENT RESTRAINT). Audit the complete Player-facing UI. Additionally
-FAIL when:
-- G24 / 길드24 logo, seal or stamp marks repeat without functional/state meaning
-- bolt, rivet, corner-bracket, badge or frame motifs repeat around content without need
-- a control used to commit a decision is tilted or skewed
-- glossy / brass / fake-metal gradient or a repeating stripe stands in for material
-- Store Support uses shiny-metal / heavy-bevel ornament as its game-like identity
-- the object treatment was achieved by added marks instead of flat material, hierarchy and press
+STORE SUPPORT FAIL:
+- selected / owned is represented by green
+- state distinction rests on one border alone
+- `보유 중` shrinks into a web-style status chip while the card itself keeps its full height
+- unavailable action still looks pressable
+- the card/action palette is so uniformly dull that the screen reads as an admin tool rather than
+  a game decision
+- exact implementation colour values are promoted back into Canonical without a new User decision
 
-Boss report sizing: at phone width the sheet claims most of the viewport and the art is at the
-amended baselines, with no beat scrolling its own body at any audited width.
-
-PIXEL / 2D GAME UI LANGUAGE (UI_UX §PIXEL / 2D GAME UI LANGUAGE). Judge the adopted selection /
-commit surfaces at runtime, at the audited phone and desktop widths.
-
-PASS:
-- the selection / commit control reads as a pixel-2D game's own selection control
-- surfaces are flat colour planes with crisp edges and pixel-like border / shadow / inset
-- accent colour appears in small units, not as a flooded plane
-- SELECTED sits on the base slate / charcoal surface and is carried by an emphasised edge, a
-  raised title contrast and a compact state label together
-- AVAILABLE is the most legible neutral / slate surface with a muted-gold action, and reads
-  immediately as the open choice
-- UNAVAILABLE is darker and flatter, visibly receded, and its text is still fully legible
-- the register stays GUILD24's restrained colour and material
-
-FAIL:
-- glossy gradient, fake metal, or exaggerated bevel / emboss
-- a large rectangular SaaS-style CTA on a selection surface
-- SELECTED expressed by painting the whole card generic green
-- whole-element opacity fade used for UNAVAILABLE or for a disabled action
-- a disabled action that sinks into the card it sits on, or reads as pressable
-- pop / candy palette or an arcade-toy register copied from a pixel reference
-- the grammar applied indiscriminately, including to Utility Controls, so the screen got busier
-- decoration or the pixel treatment cost information hierarchy, legibility or phone operability
-
-STORE SUPPORT — FINAL VISUAL SPEC (UI_UX §STORE SUPPORT — FINAL VISUAL SPEC). Drive the Store
-Support window at the audited phone and desktop widths, in all three states and on both disabled
-causes.
-
-PASS:
-- AVAILABLE / SELECTED / UNAVAILABLE are told apart at a glance
-- what was chosen is unambiguous with no green anywhere on the screen
-- only the AVAILABLE card carries an action that looks like a real button
-- SELECTED reads as a completed game state, not as a CTA to press again
-- UNAVAILABLE stays readable while clearly withdrawing from the choice
-- the screen reads as a 2D pixel game selection screen, not a web dashboard
-- the surface, border, text and action values are the Canonical ones
-
-FAIL:
-- a green selected card, a coloured vertical bar, a left status strip, or any generic success green
-- a SaaS-style filled state card
-- shiny metal, gradient, bevel, blurred shadow or soft glow
-- a decorative G24 stamp, bolt or badge
-- state separation resting on the border alone
-- a disabled action still reading `구매`
-- whole-card or whole-element opacity used to recede a state
-
-Surfaces are adopted by the Polish Task that owns them; a Task closes only the surfaces it
-touched, and the remainder is carried forward explicitly.
+Surfaces are adopted by the Polish Task that owns them. A Task closes only the surfaces it touched;
+the remainder is carried forward explicitly.
