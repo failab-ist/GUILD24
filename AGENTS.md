@@ -730,6 +730,43 @@ A release / patch QA is done only when:
 
 ---
 
+# 19.1 SESSION / TASK CHUNKING — MANDATORY
+
+Large audits, document cleanups, and cross-file adoption work must be split into small execution batches.
+
+Default:
+```text
+one narrow batch
+→ inspect diff
+→ verify
+→ commit
+→ report
+→ STOP
+```
+
+Do not:
+- read or edit the entire project in one pass when the work can be divided safely
+- chain multiple unrelated document groups in one execution turn
+- continue automatically into the next batch after a completed commit
+- keep expanding scope because related stale material is discovered
+
+For broad audits, divide by owner / document class / subsystem and finish one batch before opening the next.
+
+If the session, tool, or network becomes unstable:
+```text
+STOP ALL
+→ make no further edits
+→ report exact last completed commit
+→ report the exact interrupted batch
+→ report remaining unopened batches
+```
+
+Do not reconstruct or continue the interrupted batch from memory. Resume only from the committed repository state and the current routed documents.
+
+This is a process guardrail only. It does not change Design Truth or implementation scope.
+
+---
+
 # 20. CORE PRINCIPLE
 
 The repository must remain recoverable and explainable.
