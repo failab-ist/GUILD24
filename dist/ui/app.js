@@ -1362,6 +1362,12 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
     existing Scene.seal in the gate's ink), not a filled bar across the bottom. 닫기 stays the
     plain utility control the same section says it may stay. */
  if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
+  /* No beat left to report - it was acknowledged, or the run moved past it between the draw
+     that opened this and this one. `c[null].header` threw a TypeError and blanked the screen;
+     the same early-return the top of this function already uses for `!modal` closes it
+     instead. Reproduced only by mutating the run while the report is open, which no Player
+     control does, but the guard is one line and the failure was total. */
+  if(!stage){modal=null;root.innerHTML='';document.body.style.overflow='';return;}
   const k=stage==='final'?'final':stage;
   title=c[k].header;
   body=bossReveal();
