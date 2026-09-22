@@ -277,8 +277,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    never the other way round. The art is authored to slice, so it covers whatever height it
    ends up with - anchored to the bottom it showed only a washed sliver of floor. */
 .band.wall .band-art{position:absolute;inset:0;width:100%;height:100%}
+/* BATCH 1, §Room separation - value before ornament. The wall's mid height sat at almost the
+   same value as the pinned paper, so the room and the decision competed and the store read
+   flat between the board and the counter. The falloff keeps its top exactly as authored and
+   carries further down: the paper stays the brightest plane in the room, and the floor the
+   register stands on reads as floor. Nothing is drawn on the wall that was not there. */
 .band.wall:after{content:'';position:absolute;inset:0;
- background:linear-gradient(180deg,#0a121ac4 0,#0a121a3d 42%,#00000000 70%,#140d0866 100%)}
+ background:linear-gradient(180deg,#0a121ac4 0,#0a121a47 40%,#0a121a1a 62%,#140d087a 84%,#140d08ab 100%)}
 /* the shop sign hanging from the ceiling carries the day */
 .daysign{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;gap:7px;overflow:hidden;white-space:nowrap;color:#eafaf0}
 .daysign i{font:500 12px/1 var(--f-sign);font-style:normal;letter-spacing:.26em;color:#a9e8c4;-webkit-font-smoothing:none}
@@ -290,30 +295,44 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    full-bleed strip that either got squeezed to 14px or, as a column, stood 778px tall
    holding 121px of notices - 84% bare cork. It now hugs its content and only scrolls on a
    day that genuinely overflows. */
+/* BATCH 1: the board is the object, so it keeps its 6px dark-wood band and its 4px lighter
+   inner seam - and loses the two soft layers that were standing in for depth. An 18px inner
+   and a 22px outer soft cast contribute nothing at screenshot scale except haze on a pixel
+   surface (§EDGE / MATERIAL RULES). The cork is inset by a hard 2px line against the frame
+   instead, and the board casts one hard 6px drop. */
 .board{position:relative;z-index:2;flex:0 1 auto;min-height:0;max-height:62%;width:min(680px,94%);
  margin:0 auto -6px;overflow-y:auto;overscroll-behavior:contain;outline:none;
  background:var(--tex-cork),#a97f4a;
- box-shadow:inset 0 0 0 6px #4a3018,inset 0 0 0 10px #6b4526,inset 0 8px 18px #00000073,
-  0 6px 0 #00000059,0 10px 22px #00000073}
+ box-shadow:inset 0 0 0 6px #4a3018,inset 0 0 0 10px #6b4526,inset 0 0 0 12px #00000080,
+  0 6px 0 #00000073}
 /* the board's own header: the first thing read after the day */
 .board-rail{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
  margin:10px 10px 0;padding:9px 12px;background:#4a3018;color:#f0dcb2;
  font:500 15px/1.4 var(--f-sign);letter-spacing:.06em;-webkit-font-smoothing:none;
- box-shadow:inset 0 2px 0 #ffffff1f,inset 0 -3px 0 #00000073,0 3px 0 #00000059}
-.board-rail b{margin-left:auto;font:400 13px/1 var(--ui);font-variant-numeric:tabular-nums;color:#fff0c9;letter-spacing:0}
+ box-shadow:inset 0 2px 0 #ffffff21,0 3px 0 #00000073}
+/* BATCH 1: the rail is fixed to the board, not floating on it - it takes the pinned column's
+   own 10px inset so its ends line up with the slips below, and it carries ONE seam (the lit
+   top edge of its own plank) over one hard drop. The inner dark rule it also had made it a
+   framed bar sitting on cork, which is the web toolbar the Batch names. The counts sit on the
+   heading's baseline instead of being centred against it, and they stay plain figures - no
+   badge, no pill. */
+.board-rail b{margin-left:auto;align-self:baseline;font:400 13px/1.4 var(--ui);
+ font-variant-numeric:tabular-nums;color:#fff0c9;letter-spacing:0}
 .board-rail b+b{margin-left:0}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;
  background:var(--tex-paper),#efe7d2;color:#2c2418;border:0;border-radius:0;
- box-shadow:0 4px 0 #00000073,0 0 0 1px #00000038}
+ box-shadow:0 4px 0 #00000080,0 0 0 1px #0000005c}
 .slip:hover{background:var(--tex-paper),#f5eeda}
 .slip:active{transform:none;box-shadow:0 3px 0 #00000073}
 .slip .pin{position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:14px;height:14px;
  background:#c4453c;box-shadow:inset -3px -3px 0 #8b2b25,inset 3px 3px 0 #e3776c,0 3px 0 #00000059}
 .slip.gate{padding-left:52px;--edge:var(--fam)}
 .slip.gate:before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--fam,#caa46a)}
-.slip .crest{position:absolute;left:12px;top:14px;width:32px;height:32px;display:grid;place-items:center;background:#00000014}
+/* BATCH 1: the crest is the notice's insignia, so it centres on the title it belongs to
+   rather than starting at the same top edge - at 32px against a 21px line it read 5px low. */
+.slip .crest{position:absolute;left:12px;top:9px;width:32px;height:32px;display:grid;place-items:center;background:#0000001a}
 .slip>b{display:block;font:500 15px/1.4 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:7px;color:#241d12}
 /* the Gate name is the decision the morning is about, so it outranks everything else pinned up */
 .slip.gate>b{font-size:18px;margin-bottom:8px}
@@ -336,8 +355,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .event-reveal .effect{margin:14px 0 0;padding-top:12px;border-top:1px dashed #ffffff26;
  font:600 14px/1.6 var(--ui);color:var(--gold)}
 /* ---- counter band: the till and the store support tray ---- */
+/* BATCH 1: the cap is the display's printed label and was two values off the housing it sits
+   on - legible in the editor, not at phone scale. It keeps its size and spacing and gains the
+   contrast a printed label on steel actually has. */
 .till-cap{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;overflow:hidden;
- white-space:nowrap;font:600 11px/1 var(--ui);letter-spacing:.22em;color:#8e9aa3;text-shadow:0 1px 0 #10161a}
+ white-space:nowrap;font:600 11px/1 var(--ui);letter-spacing:.22em;color:#aab7c0;text-shadow:0 1px 0 #10161a}
 .till{position:absolute;z-index:2;display:flex;align-items:baseline;justify-content:center;gap:2px;overflow:hidden;white-space:nowrap}
 .till i{font:500 15px/1 var(--f-led);font-style:normal;color:#5fd196;-webkit-font-smoothing:none;text-shadow:0 0 5px #3fe08c4d}
 .till b{font:500 28px/1 var(--f-led);color:#8df0b4;text-shadow:0 0 7px #3fe08c73;-webkit-font-smoothing:none}
@@ -350,8 +372,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    no border, no bevel, no ornament, just the stepped light/dark edge this control already had. */
 .pull{flex:1;min-height:58px;padding:0;background:#745535;color:#fdf6e3;
  box-shadow:inset 0 3px 0 #a37c4f,inset 0 -5px 0 #3f2c1a,4px 4px 0 #00000080}
-.pull span{display:block;font:600 20px/58px var(--ui);letter-spacing:.06em}
+/* BATCH 1: the label was centred in the box, not on the plane - the 3px lit edge and the 5px
+   deep edge are not symmetrical, so a 58px line box sat the label two pixels above the face's
+   optical centre. It is measured against the face now.
+   And the press: `.pull` never declared one, so it fell to the base control's :active, which
+   repaints a steel bevel over the shutter's own wood. Pressing it now collapses the shutter -
+   the cast halves, the lit and deep edges trade - which is what opening a shutter looks like. */
+.pull span{display:block;font:600 20px/20px var(--ui);letter-spacing:.06em;padding:18px 0 20px}
 .pull:hover{background:#83603c}
+.pull:active{transform:translate(2px,2px);background:#66492d;
+ box-shadow:inset 0 3px 0 #3f2c1a,inset 0 -5px 0 #a37c4f,2px 2px 0 #00000080}
 .brass{min-height:58px;padding:8px 12px;background:#8a7038;color:#2a2110;font:600 12px/1.45 var(--ui);
  box-shadow:inset 2px 2px 0 #e0c07a,inset -2px -2px 0 #4f3d17,4px 4px 0 #00000080}
 .brass:hover{background:#9a7e40}
