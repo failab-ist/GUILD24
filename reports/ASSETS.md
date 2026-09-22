@@ -135,7 +135,28 @@ are never requested at runtime, and no pixel of them is reused in the UI.
 
 ## Batch 1 presentation graphics
 
-No external asset was adopted for Presentation Batch 1. The one new graphic is a bespoke
-13x9 pixel pip drawn inline in `dist/ui/ui.css` as a data URI, on the Opening's supporting
-rule. One further attempt - a re-cut bevel on the Opening's Primary - was made and removed:
-the runtime capture was flatter than the shared Action geometry it replaced.
+No third-party asset is used. The inline graphic is a bespoke 13x9 pixel pip drawn in
+`dist/ui/ui.css` as a data URI, on the Opening's supporting rule. One further attempt - a
+re-cut bevel on the Opening's Primary - was made and removed: the runtime capture was
+flatter than the shared Action geometry it replaced.
+
+### MORNING production art — user-provided, project-generated
+- files:
+  - `dist/ui/assets/presentation/morning/store-bg.png` — 1672x941, PNG RGB, no alpha, 1.28 MB
+  - `dist/ui/assets/presentation/morning/board-frame-panel.png` — 1774x887, PNG RGBA, 419 KB
+  - `dist/ui/assets/presentation/morning/board-frame-plank.png` — 1774x887, PNG RGBA, 470 KB
+- source: provided by the User on 2026-09-22, generated with GPT image generation for this
+  project. Not a third-party work: no external licence is claimed and none applies.
+- modification: none. Stored byte-identical to the files as received (md5 verified against
+  the originals). Any later derivative is recorded separately when it is made.
+- role: `store-bg.png` is the MORNING store environment backdrop - stage only, no baked text,
+  controls, board content or day information. The two `board-frame-*.png` are candidate
+  notice-board frames: the frame is drawn and the content region is fully transparent, so the
+  live rail, slips and counts stay HTML.
+- selection: the two board frames are alternates for the same role. Adoption of either, and of
+  the backdrop, is decided on runtime BEFORE/AFTER capture under the Visual Delta and Asset
+  gates, not on the file alone.
+- note for review: measured, these read as high-resolution painted art in a pixel idiom rather
+  than true pixel art - 159k unique colours in the backdrop, 10-18k in the frames, and 1px
+  run lengths where GUILD24's own art uses flat blocks. That is a runtime-crispness and
+  house-consistency question, answered by capture, not by the numbers.
