@@ -187,9 +187,46 @@ Living Flavor:
 - never cover Outcome / primary result
 - result remains after bubble disappears
 
-Death has no speech bubble.
+USER AMENDMENT, 2026-09-22 — OUTCOME PLACEMENT. The Outcome belongs to the returning
+adventurer's identity block, not to a title bar over the screen:
+
+    [character art]   [Outcome]
+                      [NPC name]
+                      [dungeon · Lv]
+
+- the Outcome sits directly above the NPC name and reads one step stronger than it
+- it does not become a separate full-width row and takes no vertical space of its own
+- no long underline / rule spanning the record
+- it is important, but it is not the page's headline
+
+USER AMENDMENT, 2026-09-22 — DEATH MESSAGE. Death has no speech bubble, but it is not moved out
+of the message position either: the death line uses the same place beside the character and the
+same visual weight as a living adventurer's line, presented as a neutral status / system message.
+
+- no quotation marks, no speech tail, no bubble ground, no utterance styling
+- the existing Death narration copy is reused; no new Death copy is authored
+- it is never dropped into a separate narration line under the report body
 
 Outcome type size may be reduced modestly on mobile where needed to prevent collision.
+
+USER AMENDMENT, 2026-09-22 — COMBAT FACT. The player-facing NIGHT record does not print the
+fight verdict line (`적을 물리쳤다.` / `적을 물리치지 못했다.`). It duplicates the Outcome and its
+summary. Keeping it at a lower hierarchy is equally disallowed. The resolution data it was
+rendered from is unchanged and stays available to the resolver, Closing and QA.
+
+USER AMENDMENT, 2026-09-22 — RESULT DATA TYPOGRAPHY. Level / Stat / Injury / Fatigue / EXP /
+Wallet and the other aftermath figures are an information region, not display. They use the
+ordinary UI type family; the pixel / LED display face is reserved for true display roles such as
+the Outcome label. Reading groups, in the owned information order:
+
+    GROWTH     Level, Stat changes
+    AFTERMATH  Injury / remaining injury / rest, Fatigue
+    REWARD     EXP, NPC Wallet, other settled results
+
+Groups are told apart by spacing and at most one minimal divider. A compact cell is allowed for
+Level / Stat, but the region as a whole must not read as a collection of metal badges, and a
+read-only figure must never be presented as if it were pressable. A label and its value on one
+line is the default; wrapping happens only where the real phone width requires it.
 
 ## BOSS INFORMATION PRESENTATION
 
@@ -482,6 +519,13 @@ ORDER
 - `- / quantity / + / 1 / 3 / MAX` is one control cluster; the numeric readout is the one
   recessed/read-only part
 - quantity keys may use flat planes plus hard depth; they do not require a border on every key
+- USER AMENDMENT, 2026-09-22 — QUANTITY WEIGHT. The cluster reviewed as too heavy. Its hierarchy
+  is: item information > quantity readout / stepper > `1 / 3 / MAX`.
+  `1 / 3 / MAX` returns to the light v2.7-class quick set: a secondary shortcut with no box of
+  its own, no pixel key plane and no hard shadow, and always weaker than `- / quantity / +`.
+  `- / +` keep a smaller visible face than a full square game button; the touch target stays at
+  the mobile minimum. The readout stays the centred, read-only recessed part.
+  Being a pixel UI is not a reason to put a box around every control.
 - order commit is the strongest physical action on the form and must read as a deliberate commit
 - do not add decorative stamps, seals or extra marks to create the feeling of approval
 
@@ -495,11 +539,15 @@ SALE
 - `send customer` is Secondary to the price decision and must not carry the screen's strongest pop
 
 NIGHT
-- the Outcome is the primary visual anchor, not a generic result card title
+- the Outcome is the record's primary reading, not a generic result card title; per the
+  §NIGHT LAYOUT USER AMENDMENT of 2026-09-22 it earns that by placement and weight inside the
+  character identity block, never as a full-width headline row over the screen
 - success / great success / retreat / injury / severe injury / death must not feel like identical
   cards with one word swapped
 - differentiate through result emphasis, contrast, tag/silhouette and transition using the current
   result system; do not add a new cinematic framework
+- the sold-Item effect is a sub line of the Outcome summary, never a second result card
+- the aftermath region follows §NIGHT LAYOUT RESULT DATA TYPOGRAPHY
 
 CLOSING
 - reads as receipt / end-of-day record, not a KPI dashboard

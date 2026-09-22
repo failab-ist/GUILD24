@@ -107,6 +107,22 @@ the existing result proof does not establish.
 
 Death remains narration/report treatment rather than living NPC speech.
 
+USER AMENDMENT, 2026-09-22. Narration treatment is about VOICE, not about position: the Death
+line occupies the same place and the same visual weight as a living adventurer's line and reads
+as a neutral status message there - never as an utterance, and never relegated to a separate
+narration line beneath the report body. Exact placement/styling -> UI_UX_v2.8.0.md §NIGHT LAYOUT.
+
+USER AMENDMENT, 2026-09-22 — OUTCOME LABEL. The proven rescue reads exactly:
+
+    생환
+
+with the existing approved Outcome summary `사망 위기를 넘기고 살아 돌아왔다.` beneath it.
+`위기에서 생환` is retired. WORK does not author a new Outcome name.
+
+USER AMENDMENT, 2026-09-22 — COMBAT FACT. The fight verdict sentence is not shown on the
+player-facing NIGHT record; see UI_UX_v2.8.0.md §NIGHT LAYOUT. The resolved combat state itself
+is unchanged.
+
 ## CLOSING
 
 Remove explanatory footer prose that teaches internal accounting when the receipt itself already

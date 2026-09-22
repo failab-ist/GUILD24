@@ -533,6 +533,20 @@ PRIMARY DECISION / PHASE HANDLING PASS:
 PER-PHASE APPLICATION PASS:
 - ORDER quantity controls read as one cluster with one recessed numeric readout; peer keys do not
   need decorative outlines, and the commit is the form's strongest physical action
+- ORDER quantity hierarchy is item information > readout / stepper > `1 / 3 / 최대`; the quick set
+  carries no box, pixel key plane or hard shadow, `- / +` show a face smaller than a full square
+  game button, and both keep the mobile minimum touch target
+- NIGHT prints the Outcome above the NPC name inside the identity block, one step stronger than
+  the name, with no full-width headline row, no record-spanning underline and no vertical space
+  of its own
+- NIGHT prints the proven rescue Outcome as exactly `생환`
+- NIGHT prints no fight verdict line at any hierarchy
+- NIGHT shows the Death line in the living-line position at the same visual weight, as a neutral
+  status message: no quotation marks, no speech tail, no bubble ground
+- NIGHT aftermath figures use the ordinary UI type family, not the pixel / LED display face, read
+  as GROWTH -> AFTERMATH -> REWARD separated by spacing or one minimal divider, keep label and
+  value on one line except where phone width forces a wrap, and never look pressable
+- NIGHT's last result advances with `마감으로`; intermediate results with `다음`
 - SALE price modes read as peer register keys; no key is promoted by a stronger frame, refused keys
   lose depth, and the send-customer action stays Secondary
 - NIGHT Outcome is the visual anchor and different outcomes do not read as one identical card with
