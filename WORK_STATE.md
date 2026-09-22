@@ -33,19 +33,30 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 
 ## Remaining Adoption Audit — In Progress
 
-Completed audit batch:
+Completed audit batches:
+
+### UI-Q-v28-21 / 25
 - UI-Q-v28-21 — Source implementation PASS for the implemented live-store trace family (equipped Decoration)
 - UI-Q-v28-21 — TEST GAP: no controlled render acceptance directly verifies trace add/remove plus Save/Load reproduction
 - UI-Q-v28-25 — PASS: targeted Item / NPC / Decoration / Boss graphic identity, crop and scale protections are adopted and guarded; reviewed browser/visual evidence exists for the changed surfaces
 
-No Design change is required from this batch.
+### UI-Q-v28-26 / 27
+- UI-Q-v28-26 — TEST / RUNTIME QA GAP: current Source contains substantial functional-polish adoption, but there is no current-build full-surface acceptance record covering all required 360 / 390 / 412 / 1024 / 1280 widths and every owned surface
+- UI-Q-v28-26 — no Runtime UX Bug is classified from this audit batch; acceptance remains unclosed because required runtime evidence is incomplete
+- UI-Q-v28-27 — Source implementation PASS for current coach targeting/visible-target selection/settling/spotlight placement behavior
+- UI-Q-v28-27 — TEST GAP: current-build runtime evidence does not fully cover the contextual Deep and Great Success coach steps on both phone and desktop layouts
 
-Next:
-- close the UI-Q-v28-21 Test Gap in its own narrow WORK fix cycle
-- then continue Remaining Adoption Audit with UI-Q-v28-26 / 27
+No Design change is required from these batches.
 
-Later review targets:
+Open QA fix cycles:
+- UI-Q-v28-21 controlled trace add/remove + Save/Load render acceptance
+- UI-Q-v28-26 full current-build runtime surface/viewport acceptance
+- UI-Q-v28-27 contextual Deep / Great Success coach runtime acceptance
+
+Next DIRECTOR audit:
 - UI-Q-v28-28 / 29
+
+Later review target:
 - FINAL supply action audio cue ownership (`case 'supply'`)
 
 Do not change Design during the audit.
