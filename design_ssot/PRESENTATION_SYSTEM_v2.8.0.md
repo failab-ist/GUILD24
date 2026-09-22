@@ -431,6 +431,39 @@ MACRO / MESO are earned only when the AFTER screenshot:
 - preserves the authored asset's strongest zones,
 - and is more coherent than BEFORE.
 
+## RESPONSIVE PRODUCTION ASSET VARIANTS
+
+A single production background is not required to serve every aspect ratio.
+
+When both wide/desktop and phone/portrait variants are provided:
+- treat them as two authored crops / compositions of the SAME environment;
+- do not force the wide asset through extreme crop/scale on phone merely to reduce file count;
+- do not stretch either asset;
+- choose the variant by responsive breakpoint / aspect need while preserving the same live semantic layer;
+- both variants must preserve the same environmental identity, major architecture and material language.
+
+Preferred naming:
+
+```text
+<role>-wide.png|webp
+<role>-phone.png|webp
+```
+
+Example:
+
+```text
+dist/ui/assets/presentation/morning/store-bg-wide.png
+dist/ui/assets/presentation/morning/store-bg-phone.png
+```
+
+A phone variant is not a different layout. It is an authored responsive framing of the same stage.
+
+When responsive variants exist, runtime review must confirm:
+- no visible seam / jump in environmental identity between breakpoints;
+- focal architecture remains legible at the intended viewport;
+- live controls stay aligned to the environment they sit on;
+- no breakpoint uses a worse crop simply because it was the original file.
+
 ## RESPONSIVE DETAILING
 
 PHONE:

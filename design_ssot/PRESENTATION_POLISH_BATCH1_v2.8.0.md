@@ -287,6 +287,32 @@ Runtime review of the full-room asset integration found one remaining compositio
 
 This is now an exact Batch 1 requirement.
 
+### Responsive MORNING environment variants
+
+If the User provides a dedicated phone/portrait resize of the MORNING store background, use it as an
+authored responsive asset rather than forcing the wide source through an aggressive phone crop.
+
+Expected production roles:
+
+```text
+dist/ui/assets/presentation/morning/store-bg-wide.png
+dist/ui/assets/presentation/morning/store-bg-phone.png
+```
+
+If the current wide file is still named `store-bg.png`, preserve the original bytes first, then rename/move only
+as part of the asset-integration commit so the two roles are unambiguous.
+
+Rules:
+- PHONE uses the phone/portrait variant at the breakpoint where it produces the stronger coherent room;
+- DESKTOP / wide viewport uses the wide variant;
+- do not distort either image;
+- do not use the phone image merely as a zoomed crop of the wide one if the User supplied it as a separately authored resize;
+- DAY / board / till / Actions remain the same live HTML layer over both variants;
+- counter-top alignment for the till must be tuned against EACH chosen variant's rendered counter-top position;
+- the lower environment continuation requirement applies to both variants.
+
+The variants must still read as the same store, not as two different locations.
+
 ### Environment continuation
 
 The MORNING production environment must remain visually continuous from its authored ceiling through
