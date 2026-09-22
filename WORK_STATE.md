@@ -123,7 +123,9 @@ DIRECTOR review pending merge):
   stat dossier and Trait rows closed; UI-Q109 mobile reading order preserved via CSS flex `order`
 - SA-Q48 accessible-mode (50%/정가) purchase need raised to a flat 0.80, Bag penalty retired,
   Counter floor 0.97 added; 바가지 untouched
-- SA-Q49 ordinary NPC Wallet on visit raised (fresh base 180, visit income 0..100)
+- SA-Q49 ordinary NPC Wallet on visit raised (fresh base 180, visit income 0..100), then re-measure
+  isolated excess purchasing-capacity / Store-Gold expansion; User-approved follow-up narrows visit
+  income to 0..80 while keeping fresh base 180 / Level×8 / persistent Wallet / 2000 cap
 - SA-Q50 Deep sponsorship base lowered to 200G, no compensating reward/difficulty change
 - SA-Q51 `bar`/`herobar` icons replaced (retired Hotbar silhouette -> lunchbox / bottled-water)
 - targeted deterministic QA + real-click browser run-loop smoke passed at mobile + desktop widths
@@ -143,17 +145,28 @@ through `ca120f2`, DIRECTOR review PASS; final integration merge deferred until 
 - targeted deterministic QA (incl. a forced-대성공 resolve check) + real-click browser run-loop
   smoke passed with 0 console errors
 
-## Active Task — Re-measure / regression pass
+## Active Task — Wallet re-measure amendment implementation
 
 USER APPROVED / CANONICAL PROMOTED.
 
-Because the approved playtest batch changes purchase acceptance, NPC Wallet and Deep access:
-- run targeted economy / sale / survival-loop regression measurements
-- report observed distribution changes separately
-- do not auto-retune measurement-gated values
+Implement only the re-measure decision now owned by ECONOMY_ORDER_v2.8.0.md:
 
-After completion, record its commit(s)/findings in `## Completed`, remove this section, and
-advance to Functional + Presentation Polish adoption.
+    ordinary NPC visit income randomInt(0,100) -> randomInt(0,80)
+
+Keep unchanged:
+- Fresh base 180
+- Level ×8
+- returning persistent Wallet carry
+- 2000 cap
+- failed-expedition Loot
+- SA-Q48 purchase acceptance
+- SA-Q50 Deep sponsorship
+
+Update the exact Wallet QA endpoints from 0/100 to 0/80.
+Run the narrow deterministic Wallet QA + relevant regression suite.
+
+Do not perform another balance retune unless implementation exposes an actual mismatch.
+After DIRECTOR review, advance to Functional + Presentation Polish adoption.
 
 ## Approved Queue
 

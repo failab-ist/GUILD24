@@ -63,7 +63,7 @@ Canonical changes now covered:
 - one-filled-Bag purchase penalty is retired
 - affordable valid Counter offers at 50% / 100% resolve at the existing 0.97 ceiling
 - overcharge keeps its existing acceptance behavior
-- ordinary NPC visit Wallet uses fresh base 180 and random visit income 0..100
+- ordinary NPC visit Wallet uses fresh base 180 and random visit income 0..80
 - Deep sponsorship base is 200G with rarity/Level scaling and 10G rounding unchanged
 - reused `bar` / `herobar` IDs must use current meal / mineral-water visual identity
 
@@ -352,3 +352,29 @@ owner as a v2.8 Functional Design correction.
 
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED = NONE.
 NONBLOCKING_CANONICAL_DETAIL_GAPS = NONE.
+
+
+## 2026-09-22 RE-MEASURE BALANCE DECISION
+
+Four-arm measurement separated the marginal effects of SA-Q48 / SA-Q49 / SA-Q50.
+
+Approved result:
+- SA-Q48 accessible-mode purchase acceptance remains unchanged
+- SA-Q50 Deep sponsorship remains unchanged
+- no death-limit rebalance is promoted from this evidence
+- no Final/Boss numeric rebalance is promoted from this evidence
+- SA-Q49 Wallet is narrowed only by changing visit-income randomInt(0,100) -> randomInt(0,80)
+
+Retained Wallet truth:
+- Fresh base = 180
+- Level contribution = Level ×8
+- Returning NPC carries persistent Wallet
+- cap = 2000
+- failed-expedition Loot remains separate
+
+Reason:
+the re-measure isolated SA-Q49 as the dominant source of excess purchasing-capacity / Store-Gold
+expansion. The narrower visit-income range preserves the intended low-Wallet recovery while reducing
+the size of the compounding economy uplift.
+
+No other v2.8 balance number changes from this re-measure.

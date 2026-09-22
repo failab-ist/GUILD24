@@ -172,19 +172,37 @@ Exact acceptance probability remains hidden from the Player.
 When a selected NPC arrives for an ordinary visit:
 
 Fresh NPC:
-    Wallet = min(2000, round(180 + Level × 8 + randomInt(0, 100)))
+    Wallet = min(2000, round(180 + Level × 8 + randomInt(0, 80)))
 
 Returning NPC:
-    Wallet = min(2000, round(existing Wallet + Level × 8 + randomInt(0, 100)))
+    Wallet = min(2000, round(existing Wallet + Level × 8 + randomInt(0, 80)))
 
 Rules:
-- random range is inclusive 0..100 under the existing integer RNG convention
+- random range is inclusive 0..80 under the existing integer RNG convention
 - Level ×8 remains
 - persistent Wallet carries between visits
 - 2000 cap remains
 - explicit Trait / Event / Store Support Wallet effects remain separate under their owners
 - failed-expedition Loot is unchanged by this amendment
 - re-measure the failure -> low Wallet -> under-supplied -> failure loop before further reward tuning
+
+### Ordinary NPC Wallet re-measure amendment — 2026-09-22
+
+After the four-arm SA-Q48 / SA-Q49 / SA-Q50 re-measure:
+
+- accessible-mode acceptance remains unchanged
+- Deep sponsorship remains unchanged
+- Fresh Wallet base remains 180
+- Level ×8 remains
+- visit-income random range is reduced from 0..100 to 0..80
+- returning NPC persistent Wallet carry remains unchanged
+- 2000 cap remains
+
+Purpose:
+preserve the intended recovery from the failure -> low Wallet -> under-supplied loop while reducing
+the excessive purchasing-capacity / Store-Gold expansion isolated to the SA-Q49 Wallet step.
+
+This is the only balance amendment promoted from that re-measure.
 
 ### Base operating cost — exact
 
