@@ -46,6 +46,45 @@ Regenerate the vendored copies with `npm run assets`.
   `dist/systems/` or `dist/data/` references it, and the UI checks `typeof anime` so the
   game runs correctly if it is absent. Asserted by `tests/assets.cjs`.
 
+### uisfx 0.4.0 `mechanical` theme — material Decision SFX
+- source: npm `uisfx` (https://www.npmjs.com/package/uisfx), (c) 2026 Yuki Capital.
+  The package code is MIT; **the audio under `sounds/` is separately dedicated to the public
+  domain**, which the package states in its own `LICENSE-AUDIO`.
+- licence: **CC0-1.0** (SPDX: CC0-1.0) — commercial use YES, modification YES, redistribution
+  YES, attribution appreciated but **not required**. The upstream dedication ships beside the
+  files it releases at `dist/ui/assets/audio/LICENSE-CC0.txt`.
+- modification status: **none**. The shipped bytes are the upstream bytes; only the filename
+  changes, from the vendor's UI vocabulary to the cue's role in this game. No re-encode, no
+  trim, no level change — gain and layering happen live in `dist/ui/audio.js`.
+- why: `design_ssot/UI_UX_v2.8.0.md` §AUDIO VOICE asks the material cues for mechanical /
+  paper / register / fixture sound, with short, dry, readable transients and no sci-fi or
+  arcade character. An oscillator can imply that material; it cannot be it. The `mechanical`
+  theme is the one in the package that matches the voice: measured in a browser, every adopted
+  file is 87–298 ms long and falls 20 dB within 10–70 ms of its peak.
+- scope: the **tonal** families stay synthesised — NIGHT outcomes, the Boss motif and the phase
+  beds have to stay in tune with each other, and a sample set cannot be transposed into a
+  family. Only the twelve object-sounds below ship; the package carries 1872 files and the rest
+  never reach `dist`.
+- how: `tools/vendor-assets.py` copies them into `dist/ui/assets/audio/` (32 KB total, mp3 —
+  the one container every current mobile browser decodes). Regenerate with `npm run assets`.
+  Nothing is fetched from a host at runtime; the loader reads this build's own files, and every
+  sampled cue keeps a synthesised fallback so a failed load is thinner, never silent.
+
+| shipped | upstream | cue |
+| --- | --- | --- |
+| `tick.mp3` | `mechanical/typing` | ORDER quantity stepper, and its quick-set one step quieter |
+| `stamp.mp3` | `mechanical/press` | ORDER confirmation, under the synthesised paper layer |
+| `register.mp3` | `mechanical/purchase` | SALE commit — shared by every price mode |
+| `refuse.mp3` | `mechanical/cancel` | SALE refusal |
+| `secure.mp3` | `mechanical/lock` | Store Support acquisition |
+| `cart.mp3` | `mechanical/add-to-cart` | ordinary Decoration purchase |
+| `unlock.mp3` | `mechanical/unlock` | 본사 해금 |
+| `shutter.mp3` | `mechanical/open` | MORNING opening |
+| `settle.mp3` | `mechanical/close` | CLOSING |
+| `gate.mp3` | `mechanical/blocked` | FINAL commit |
+| `soft.mp3` | `mechanical/hover` | utility navigation |
+| `key.mp3` | `mechanical/select` | ordinary pick |
+
 ## Evaluated and rejected
 
 | Candidate | Verdict |
