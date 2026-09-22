@@ -616,16 +616,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  font:400 12px/1 var(--ui);color:#a2947c;white-space:nowrap}
 .p-sale .dock .on-hand b{font:500 18px/1 var(--f-led);color:var(--gold);font-variant-numeric:tabular-nums}
 /* UI_UX §PHASE VISUAL LANGUAGE (SALE reads register / commerce gold-amber) + §GAME-LIKE
-   INTERACTION LANGUAGE + §ORNAMENT RESTRAINT. Sending the customer off is the register key at the
-   end of the transaction, so it is built the way the price keys beside it are: one solid amber
-   plane, a crisp edge, a hard pixel shadow, and a press that travels. No mark is added and the
-   price-mode colours keep their own meaning. */
+   INTERACTION LANGUAGE + §GLOBAL PRESENTATION §1 / §3 / §7 / §15. Sending the customer off is the
+   register key at the end of the transaction - but it is not the decision SALE is asking for.
+   It held the screen's only strong amber pop while the price keys, where the choice is actually
+   made, sat muddy below it: the energy rank inverted. It is Secondary now - the same register
+   key, in a quiet plane on a crisp edge with a shorter drop - and the pop went back to the
+   prices. It still presses; it just no longer outranks them. */
 .p-sale .dock .stamp{margin-left:auto;min-height:54px;min-width:158px;
- font:600 18px/1 var(--ui);letter-spacing:.04em;background:#c8a35e;color:#221a0e;
- box-shadow:inset 0 0 0 2px #e8d09a,4px 4px 0 #00000080}
-.p-sale .dock .stamp:hover{background:#d9b46c}
-.p-sale .dock .stamp:active{transform:translate(3px,3px);background:#b8934e;
- box-shadow:inset 0 0 0 2px #d4bb84,1px 1px 0 #00000080}
+ font:600 18px/1 var(--ui);letter-spacing:.04em;background:#3c3122;color:#e7d9b8;
+ box-shadow:inset 0 0 0 2px #6a5934,3px 3px 0 #00000080}
+.p-sale .dock .stamp:hover{background:#473a29;color:#f2e6c9}
+.p-sale .dock .stamp:active{transform:translate(2px,2px);background:#342a1d;
+ box-shadow:inset 0 0 0 2px #59492b,1px 1px 0 #00000080}
 .pips{display:flex;gap:3px;align-items:center}
 .pips i{width:9px;height:9px;background:#00000073;box-shadow:inset 1px 1px 0 #00000080;display:block}
 .pips i.on{background:var(--gold)}
@@ -774,17 +776,36 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .tillpanel .effects{margin-bottom:12px}
 .tills{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:sticky;bottom:0;padding:12px 0 8px;
  background:linear-gradient(0deg,#0f0b06 72%,#0f0b0600)}
-/* three register keys, one per price mode: same size, told apart by the key face */
-.tills button{display:grid;gap:4px;justify-items:center;padding:10px 2px;min-height:76px;background:#3a2c1d;
- color:#efe3c8;box-shadow:inset 2px 2px 0 #ffffff26,inset -3px -3px 0 #00000080,3px 3px 0 #00000080}
-.tills button:active{transform:translate(2px,2px);box-shadow:inset 2px 2px 0 #ffffff1a,inset -3px -3px 0 #00000080,1px 1px 0 #00000080}
-.tills button[disabled]{background:#241a11;color:#7d7059;box-shadow:inset 2px 2px 0 #00000073}
+/* Three register keys, one per price mode. UI_UX §GLOBAL PRESENTATION §15: this is where the
+   SALE decision is actually made, so it is where the pop belongs, and the three must read as one
+   game control cluster of peer choices - §1's stated exception, equal strength across options
+   being compared directly.
+
+   They did not. All three were the same muddy brown at one lightness, separated only by a 14px
+   tick of mode colour, built out of a four-sided bevel (§11), and a refused price differed from
+   an open one by little more than the base sheet's `opacity:.4` - exactly the FAIL §15 names.
+
+   Now: one flat plate per key, lifted to the ACTIVE DECISION step above the till, with the mode's
+   own semantic colour carried on the key's edge rather than on a tick, hard depth, and a press
+   that travels. The mode colours are Semantic (할인 / 정가 / 바가지) and keep their meaning; no key is
+   promoted above its peers. */
+.tills button{display:grid;gap:4px;justify-items:center;padding:10px 2px;min-height:76px;
+ background:#463521;color:#f4e9d0;
+ box-shadow:inset 0 0 0 2px var(--key,#a2947c),4px 4px 0 #00000080}
+.tills button:not([disabled]):hover{background:#52412a}
+.tills button:not([disabled]):active{transform:translate(3px,3px);
+ box-shadow:inset 0 0 0 2px var(--key,#a2947c),1px 1px 0 #00000080}
+/* a refused or unaffordable price is a dead key: it sits below the till surface, carries no
+   depth and nothing to press, and its own `small` already says why. No whole-element fade. */
+.tills button[disabled]{background:#1c150e;color:#8a7d66;opacity:1;transform:none;
+ box-shadow:inset 0 0 0 2px #332a1c}
 .tills em{font:500 14px/1 var(--f-led);font-style:normal;color:var(--key,#a2947c)}
 .tills strong{font:500 22px/1 var(--f-led);color:#f6ecd3}
-.tills small{font:400 12px/1.3 var(--ui);color:#a2947c}
+.tills small{font:400 12px/1.3 var(--ui);color:#b3a688}
+.tills button[disabled] em{color:#6d6250}
 .tills button[disabled] strong,.tills button[disabled] small{color:inherit}
 .tills button:nth-child(1){--key:#8ec6dd}
-.tills button:nth-child(2){--key:var(--gold);background:#4a3620;box-shadow:inset 2px 2px 0 #ffffff33,inset -3px -3px 0 #00000080,3px 3px 0 #00000080}
+.tills button:nth-child(2){--key:var(--gold)}
 .tills button:nth-child(3){--key:#d98a5a}
 /* =====================================================================
    NIGHT — the shop after closing, one lamp on, and whoever came back.
