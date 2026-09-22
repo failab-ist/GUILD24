@@ -511,6 +511,8 @@ GLOBAL FAIL:
 - ornament was added instead of making the action / state clearer
 - G24 / 길드24 seal, bolt, badge, frame or decorative mark repeats without functional meaning
 - a coloured left vertical bar / status stripe is used as the selected-state shortcut
+- visible outlines are added to every button/key by default even when plane + hard depth already separates the control
+- border / inset frame / bevel / hard drop are stacked together on ordinary controls without a functional reason
 - whole-element opacity is used to communicate unavailable state
 - a new theme / skin framework is introduced
 - touch target, legibility or accessible naming regresses
@@ -527,6 +529,26 @@ PRIMARY DECISION / PHASE HANDLING PASS:
 - the Primary Action has presence without outranking the information it acts on
 - Boss / FINAL do not collapse back to `image + information card + generic confirm button`
 - nested panel hierarchy is reduced where the report / record / gate itself can own the information
+
+PER-PHASE APPLICATION PASS:
+- ORDER quantity controls read as one cluster with one recessed numeric readout; peer keys do not
+  need decorative outlines, and the commit is the form's strongest physical action
+- SALE price modes read as peer register keys; no key is promoted by a stronger frame, refused keys
+  lose depth, and the send-customer action stays Secondary
+- NIGHT Outcome is the visual anchor and different outcomes do not read as one identical card with
+  only the label changed
+- CLOSING remains a receipt / settlement record rather than a grid of KPI cards
+- D5 / D15 / D25 Boss art has central presence without displacing required information; D10 / D20
+  stay compact
+- FINAL reads as one final decision surface; its commit is heavy but not an ornamental giant button
+
+PER-PHASE APPLICATION FAIL:
+- ORDER / SALE game feel is created by outlining every key
+- SALE semantic mode colour is moved onto three decorative borders when the key labels already carry
+  the distinction
+- NIGHT / CLOSING are still generic cards with only copy changed
+- Boss presence is solved by either tiny art in dead space or oversized art that hides the reveal
+- FINAL is still an ordinary page with a differently coloured submit button
 
 STORE SUPPORT PASS:
 - AVAILABLE / SELECTED / UNAVAILABLE are distinguishable at a glance by more than colour alone
