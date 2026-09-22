@@ -854,7 +854,7 @@ function orderScreen(){
     desk is the other kind of action and takes the steel `.leave` plate instead. */
  return stage('order','발주','',orderForm(),
   (cart?'<button class="stamp" data-action="confirm-order" aria-label="발주 '+fmt(cart)+'G 확정">'
-    +'<i class="wax" aria-hidden="true">'+Scene.seal(26,'#39434c')+'</i>'
+    +'<i class="wax" aria-hidden="true">'+Scene.seal(22,'#39434c')+'</i>'
     +'<span>발주 '+fmt(cart)+'G · 확정</span></button>':'')
   +'<button class="stamp leave" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
 }
