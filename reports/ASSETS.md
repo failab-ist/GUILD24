@@ -141,8 +141,9 @@ re-cut bevel on the Opening's Primary - was made and removed: the runtime captur
 flatter than the shared Action geometry it replaced.
 
 ### MORNING production art — user-provided, project-generated
-- shipped file:
-  - `dist/ui/assets/presentation/morning/store-bg.png` — 1672x941, PNG RGB, no alpha, 1.28 MB
+- shipped files:
+  - `dist/ui/assets/presentation/morning/store-bg-wide.png` — 1672x941, PNG RGB, no alpha, 1.28 MB
+  - `dist/ui/assets/presentation/morning/store-bg-phone.png` — 941x1672, PNG RGB, no alpha, 1.18 MB
 - evaluated and removed from the build:
   - `board-frame-panel.png` — 1774x887, PNG RGBA, 419 KB
   - `board-frame-plank.png` — 1774x887, PNG RGBA, 470 KB
@@ -150,14 +151,26 @@ flatter than the shared Action geometry it replaced.
   project. Not a third-party work: no external licence is claimed and none applies.
 - modification: none. Stored byte-identical to the files as received (md5 verified against
   the originals). Any later derivative is recorded separately when it is made.
-- role: `store-bg.png` is the MORNING store environment - stage only, no baked text, controls,
-  board content or day information. The two `board-frame-*.png` were candidate notice-board
-  frames, drawn frame with a fully transparent content region.
-- adopted: `store-bg.png`, as the MORNING room. It is owned by `.store`, the bands' common
-  parent, in `dist/ui/director-review.css`, so the whole authored room - ceiling included -
-  reads as one place; `cover` crops horizontally only at the shipped widths, so no authored
-  zone is lost. It is reused by OPENING as the closed, unlit store the preparation sheet
-  stands in. The file is not altered in either use.
+- role: the two `store-bg-*` files are the MORNING store environment - stage only, no baked
+  text, controls, board content or day information. They are not two places: they are the same
+  store, authored twice, once framed for a wide viewport and once for a portrait one. The
+  phone file was supplied as its own resize, not as a crop of the wide one, and is used as
+  such. The two `board-frame-*.png` were candidate notice-board frames, drawn frame with a
+  fully transparent content region.
+- measured authored zones, as a share of each file's own height:
+  - wide: ceiling 0-19%, wall / shelves / window 19-78%, counter top 82.7-85.2%,
+    counter face 85.2-100%
+  - phone: ceiling 0-18.6%, wall / shelves / window 18.6-74%, counter top 74.2-76.0%,
+    counter face 76-90.7%, floor 90.7-100%
+  These are what the live layer is seated against, per breakpoint.
+- adopted: both `store-bg-*` files, as the MORNING room, in `dist/ui/director-review.css`.
+  PHONE takes the portrait file and DESKTOP the wide one at the sheet's existing 1024
+  breakpoint. The room is owned by the MORNING stage, so it runs behind the Action dock as
+  well, and `cover` crops horizontally only at every shipped width - no authored zone is lost
+  vertically, which is also what makes the asset's own counter top a reliable seating plane
+  for the live till. `store-bg-wide.png` is reused by OPENING as the closed, unlit store the
+  preparation sheet stands in. Neither file is altered in any use; the wide file was renamed
+  from `store-bg.png`, bytes untouched.
   An earlier integration cropped it into the wall band to preserve the procedural ceiling.
   That was rejected on runtime review: discarding the art's own ceiling left old ceiling plus
   a pasted middle strip, which is not one room.

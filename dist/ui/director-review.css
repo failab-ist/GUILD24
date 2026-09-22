@@ -158,7 +158,7 @@
    Everything this block used to do was compensation for a fitted room whose art stopped
    before the edges of the screen: a lit middle, a heavy side falloff over the bare wall tile
    either side of it, a counter gradient and a drawn skirting. The room is a production
-   painting now (assets/presentation/morning/store-bg.png, 1672x941), and its authored zones
+   painting now (assets/presentation/morning/store-bg-wide.png, 1672x941), and its authored zones
    were measured before it was integrated:
        0-19%    ceiling - soffit, three hanging fixtures, vent
        19-78%   wall    - fridge and shelving, the window and its morning light, door
@@ -174,7 +174,7 @@
    the same physical room is suppressed, and only on this Surface. */
 .p-morning .store{isolation:isolate;background-color:#0f0b08;
  background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 80%,#0a070547 100%),
-  url('assets/presentation/morning/store-bg.png');
+  url('assets/presentation/morning/store-bg-wide.png');
  background-size:auto,cover;background-position:0 0,50% 50%;background-repeat:no-repeat,no-repeat}
 .p-morning .band.ceiling,.p-morning .band.wall,.p-morning .band.counter{background:none;overflow:hidden}
 .p-morning .band.ceiling .band-art,.p-morning .band.wall .band-art,
