@@ -1418,10 +1418,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    thin gold edge inside it, a lit face and a hard bottom.
    So the caps are gone. The corners are cut once, lightly, and the face keeps the brick with a
    raised edge rather than an outline: a dark rim, a lit band standing proud of the face, one
-   dark step down into it, then the face lit along the top and shaded along the bottom -
-   embossed, the way the reference's control is built. The gold line is gone; gold on this
-   screen belongs to the sheet and the section now, not to the Action. Pressing it inverts
-   every one of those bands, so the plate sinks. The four fixings are one drawn
+   dark step down into it, and then the FACE IS ONE PLANE. An earlier pass read the request
+   for more value separation as two big tonal bands inside the face; they split the plate and
+   buried the lower rivets, so they are gone. All that is left inside is a 2px lit edge where
+   the rim hands over to the face. The separation lives where it belongs: outside and under
+   the plate, as a hard zero-radius depth that follows the cut silhouette, clearly darker than
+   the face and never over it. That depth is what collapses on press - 6px to 2px, with the
+   plate travelling into it - instead of the face inverting its own shading.
+   The gold line is gone; gold on this screen belongs to the sheet and the section, not to the
+   Action. The four fixings are one drawn
    9px rivet - dark rim, brass body, hard highlight up-left, hard shade down-right - placed four
    times by CSS, not four CSS circles and not a fixed image of the whole button. An earlier
    3px version of the same rivet shipped invisible; measured against the runtime, 9px is the
@@ -1434,8 +1439,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background-size:9px 9px;background-repeat:no-repeat;
  background-position:left 11px top 11px,right 11px top 11px,left 11px bottom 11px,right 11px bottom 11px;
  box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
-  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,
-  inset 0 13px 0 #cf6a52,inset 0 -16px 0 #50201a;
+  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
  clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
   100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
   6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
@@ -1443,10 +1447,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:hover{
  filter:drop-shadow(0 6px 0 #00000099) brightness(1.08)}
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:active{transform:translateY(4px);
- box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #8a3527,inset 0 -3px 0 #f5b7a2,
-  inset 0 0 0 6px #a8563f,inset 0 0 0 8px #7e3124,
-  inset 0 13px 0 #50201a,inset 0 -16px 0 #cf6a52;
- filter:drop-shadow(0 2px 0 #00000099) brightness(.95)}
+ box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
+  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
+ filter:drop-shadow(0 2px 0 #1d0805) brightness(.96)}
 @media(min-width:1024px){
  /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
     actually lit - §RESPONSIVE DETAILING. The stage's own falloff carries the width; the
