@@ -48,17 +48,17 @@ Keep active catalog count = 40 and reuse existing IDs:
 No new catalog slot is added.
 
 For current internal saves, these IDs resolve to the new v2.8 identities.
-No alternate legacy Hotbar identity remains active.
+Only the current v2.8 identities are active for these IDs.
 
 ## CURRENT ITEM ART IDENTITY — EXACT
 
-Save-safe internal ID reuse must not preserve a retired Item's visible identity.
+Save-safe internal ID reuse must preserve the current Item's visible identity.
 
 Required icons:
 - `bar` / 간단 도시락 -> simple meal/lunchbox icon in the existing Item-art language
 - `herobar` / 왕도 천연암반수 -> bottled/mineral-water icon in the existing Item-art language
 
-Do not retain the old Hotbar / skewered-stick silhouette for either ID.
+Do not use a Hotbar / skewered-stick silhouette for either ID.
 
 This is a visual identity correction only.
 Category, Rarity, price, effect, shelf life and save ID do not change.
@@ -93,7 +93,7 @@ The active 40-Item distribution is therefore:
     Epic 11
     Legendary 1
 
-Do not move another Item merely to restore the old Common/Uncommon counts.
+Do not move another Item solely to alter these approved Common/Uncommon counts.
 
 ## NPC WALLET GAIN — EXACT SCOPE
 
@@ -133,14 +133,12 @@ No new exception is created:
 - Supply remains its own channel
 - Wallet-gain effect remains its own loot/economy channel
 
-## HOTBAR RETIREMENT
+## REPLACEMENT ID BOUNDARY
 
-The active identities 핫바 and 용사 특식 핫바 are retired.
-
-Do not:
-- recreate direct Fatigue reduction on a replacement
-- retain a hidden Hotbar role
-- keep the old names as current Item aliases in player-facing UI
+For `bar` / `herobar`:
+- no direct Fatigue-reduction role is active
+- no hidden Hotbar role is active
+- no Hotbar name is a Player-facing alias
 
 ## BALANCE STATUS
 
@@ -152,7 +150,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 
 ## REPLACEMENT ITEM FLAVOR — EXACT
 
-ID reuse must not carry the retired Hotbar Flavor into the new identities.
+ID reuse uses the current replacement Flavor below.
 
 \`bar\` / 간단 도시락:
     반찬은 단출하지만 빈칸은 없다.
