@@ -433,6 +433,56 @@ alone.
 
 Semantic beneficial/harmful green/red remains authoritative and must not be weakened by phase color.
 
+### GAME-LIKE INTERACTION LANGUAGE
+
+USER APPROVED, 2026-09-22. Phase accent alone does not close the Presentation Polish.
+
+Current defect: parts of the game read as a web app rather than as the shop it is -
+information inside a plain rectangular card, an ordinary rectangular CTA along the bottom, and
+a generic 확인 / 구매 / 진행 button.
+
+Principle:
+
+    a Primary Decision Control must read as the THING OR ACT that Phase actually handles,
+    not as a web button.
+
+Reuse the current components / CSS / art / tokens. Do not build a new UI framework or a theme
+or skin system.
+
+Phase direction:
+- ORDER: the order form, its stamp and its clip - the feel of stamping a document
+- SALE: the register keys, the price tag, the receipt - the feel of a transaction
+- Store Support: a contract / a support certificate / an approval seal
+- Boss Report: not a set of cards inside an ordinary modal - the guild investigation report
+  or the record itself is the screen
+- NIGHT: the return record, the result tag, the trace a report leaves
+- FINAL: not an ordinary CTA - the physical feel of a last action: an order to march, a seal
+  broken, a gate opened
+
+Not every button becomes an object. These Utility Controls may stay plain UI:
+- close
+- back
+- settings
+- help
+- ordinary navigation
+
+Priority for the object treatment:
+- the Primary Action by which the Player commits a choice
+- an important Reveal acknowledgement
+- an action that is a turning point of the Run
+
+Boss / FINAL specifically:
+- avoid the `image + information card + green confirm button` shape
+- reduce nested SaaS-style panel / card hierarchy
+- fold the existing information into the report / record / gate UI itself rather than placing
+  it in a panel on top of one
+- the Primary Action may gain presence, but never more presence than the information it acts on
+
+This is a presentation contract. It changes no gameplay rule, balance, Save field, Gameplay RNG
+or decision structure, and it exposes no hidden information.
+
+Acceptance: UI_UX_QA_v2.8.0.md UI-Q-v28-31.
+
 #### TRANSIENT SALE SPEECH OVERLAP
 
 SALE dialogue remains a transient overlay:

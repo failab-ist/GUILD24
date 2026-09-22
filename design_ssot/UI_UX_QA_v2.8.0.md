@@ -477,3 +477,31 @@ FAIL:
 - phase accent changes semantic benefit/harm meaning
 - transient speech is made faint by lowering the whole element opacity
 - speech becomes a persistent blocker for required SALE information
+
+
+## UI-Q-v28-31 — GAME-LIKE INTERACTION LANGUAGE
+
+Runtime UX QA, not Source/CSS inspection. Drive the Primary Decision Control of every reviewed
+Phase on phone (360 / 390 / 412) and desktop (1024 / 1280-class).
+
+PASS:
+- committing a main choice feels like handling that Phase's own object
+- each Phase's handling feels different while still reading as one GUILD24 UI DNA
+- Utility UI (close / back / settings / help / navigation) and gameplay decision UI are
+  distinguishable in rank
+- the repeated generic green rectangular CTA is gone
+- Boss / FINAL no longer read as `image + information card + green confirm button`
+- nested panel / card hierarchy on those surfaces is reduced, with the information folded into
+  the report / record / gate itself
+- the Primary Action has presence without outranking the information it acts on
+- gameplay, Save, RNG and decision structure are unchanged
+
+FAIL:
+- only the colour changed and the structure is still the same SaaS CTA
+- everything became an exaggerated game control and the screen got busier
+- a separate skin / theme system was introduced per Phase
+- decoration cost information legibility or phone operability
+- a touch target fell below the phone minimum, or a decorative control lost its accessible name
+
+Surfaces are adopted by the Polish Task that owns them; a Task closes only the surfaces it
+touched, and the remainder is carried forward explicitly.
