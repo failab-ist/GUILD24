@@ -10,15 +10,12 @@ PATCH_TYPE=INFORMATION_TRUST_QA
 
 All non-conflicting v2.7 NPC/Trait QA remains active.
 
-Explicitly superseded historical base-QA expectations:
-- NPC_TRAIT_QA_v2.5.0.md `TRAIT-Q09` Trait-modification rarity
-- `TRAIT-Q10` Rare negative-Trait removal event
-- `TRAIT-Q11` Epic positive-Trait add event
-- `DEST-Q02` limited player destination-reassignment event
+Current inheritance exclusions:
+- random permanent Trait removal/addition opportunities are inactive
+- random player destination-reassignment opportunities are inactive
+- no inherited QA may be used to restore that retired random NPC special system
 
-These cases belong to the retired random NPC special system and must not be used to restore it.
-The general `TRAIT-Q12` protection against forced random permanent negative punishment remains
-non-conflicting and is not retired by this override.
+The general protection against forced random permanent negative punishment remains active.
 
 ## NPC-Q-v28-1 — NO POTENTIAL / HIDDEN TRAIT PROMISE
 
@@ -104,12 +101,11 @@ DEATH narration pool-size checks apply, but Death does not use the living speech
 
 ## NPC-Q-v28-5 — HELPED CALLBACK REQUIRES ITEM PROOF
 
-Trait-only or generic previous-result events do not unlock a \`지난 보급이 도움 됐다\` callback.
+Trait-only or generic previous-result events do not unlock a `지난 보급이 도움 됐다` callback.
 
 A previous result with proven sold-Item contribution may unlock it.
 
 No new Gameplay RNG draw is introduced.
-
 
 ## NPC-Q-v28-6 — DEEP NPC REWARD BASELINE
 
@@ -140,7 +136,6 @@ For a controlled NPC:
 - Job Mastery does not mutate Job Base/Growth
 
 FAIL:
-- inherited PASS3 placeholder table is treated as optional
 - Mastery directly multiplies this table
 
 ## NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
@@ -179,7 +174,6 @@ PASS:
 - an already-created NPC is never retroactively changed
 - no account-wide combat multiplier exists
 - Player-facing meaning does not expose the exact table unless separately approved
-
 
 ## NPC-Q-v28-10 — PREMIUM DISPLAY RARITY WEIGHTING
 
