@@ -557,8 +557,11 @@ PER-PHASE APPLICATION PASS:
   region would be, and no route change, Deep tag, Item / supply cause or incident line either -
   it ends on its Outcome summary
 - the NIGHT Death message sits in the living line's position in a small text-hugging status
-  container on a dark / translucent flat plate: no quotation marks, no tail, no left accent bar /
-  status stripe, no decorative border, no icon, no glow or blur
+  container whose COOL SLATE / BLUE-BLACK plane is clearly one step brighter than the NIGHT
+  background and separable from it in the runtime screenshot at 360 / 390 / 412, including over
+  the character art: no quotation marks, no tail, no left accent bar / status stripe, no
+  decorative border or outline, no icon, no glow or blur, no paper / parchment treatment. A
+  background value present in the DOM is not a PASS on its own.
 - a NIGHT record starts under the return rail and is not vertically centred: a short result does
   not float in the middle of the viewport, and no spacer or excess dead space replaces the
   centring
@@ -566,6 +569,11 @@ PER-PHASE APPLICATION PASS:
   above `전체 건너뛰기` and clearly separated from the NIGHT surface; a flat grey dead-button
   impression FAILS, as do purple / lavender, green, a heavy outline, an inset frame and any
   glossy or bevelled treatment
+- that control's plane is a moonlit cold blue / muted cobalt, brighter and more saturated than
+  the NIGHT dock and background, with an unmistakably blue hue that has not drifted to
+  cyan / teal or gone neon, an ivory / near-white label, and exactly one hard bottom/right depth
+  the press collapses. Amber, gold, mustard, brown, purple / lavender, green and a grey
+  disabled-like plane all FAIL
 - an equipment Stat bonus reads `투력 +N`, never `전투 +N`, with the equipment identity visually
   separated from the Stat effect
 - the NIGHT closing-handover control is a dark flat plane with one hard depth and a press that

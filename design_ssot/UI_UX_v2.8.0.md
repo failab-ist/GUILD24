@@ -207,9 +207,17 @@ same visual weight as a living adventurer's line, presented as a neutral status 
 - no left accent bar / status stripe, no decorative border, no added icon or badge
 - no glow and no blur
 - USER AMENDMENT, 2026-09-22: bare text read too weakly to register. It carries a small status
-  container - text-hugging width, a dark / translucent flat plate, modest padding - and nothing
-  else from the bans above. A container is not a bubble: what makes it an utterance is the tail,
-  the paper ground and the quotation, and none of those return.
+  container - text-hugging width, modest padding - and nothing else from the bans above. A
+  container is not a bubble: what makes it an utterance is the tail, the paper ground and the
+  quotation, and none of those return.
+- AMENDED, 2026-09-22: the translucent dark plate sat so close to the NIGHT background that it
+  read as bare text again. The plate is a COOL SLATE / BLUE-BLACK surface clearly one step
+  brighter than the NIGHT background, and it carries its own surface colour as a flat plane
+  rather than a black veil laid over whatever is behind it. Its edge must register at once, over
+  the character art as well. The text stays a neutral light colour, and no paper / parchment
+  speech treatment is used.
+  Acceptance is the runtime screenshot: if the plate's plane is not clearly separable from the
+  background at 360 / 390 / 412, it FAILS. A background value present in the DOM is not a PASS.
 - the existing Death narration copy is reused; no new Death copy is authored
 - it is never dropped into a separate narration line under the report body
 
@@ -618,6 +626,17 @@ NIGHT
   the surrounding NIGHT surface - using a muted accent that belongs to this phase. A flat grey
   dead-button impression is a FAIL, as are purple / lavender, green, a heavy outline, an inset
   frame, and any glossy or bevelled treatment.
+  AMENDED AGAIN 2026-09-22 — NIGHT PRIMARY COLOUR. The amber / gold reading is retired with the
+  rest. The plane is a MOONLIT COLD BLUE / MUTED COBALT active surface:
+  - clearly brighter and more saturated than the NIGHT dock and background
+  - the hue reads unmistakably BLUE; it does not drift far enough toward cyan / teal to read
+    green, and it is not neon
+  - the label is ivory / near-white
+  - one hard bottom/right depth, which the press collapses as the control moves
+  - no border and no inset outline
+  FAIL if the colour reads as inactive grey, as mustard / gold, or as mobile-RPG purple.
+  Banned for this control: amber, gold, mustard, brown, purple / lavender, green, and a grey
+  disabled-like plane. No literal hex is Canonical.
 
 CLOSING
 - reads as receipt / end-of-day record, not a KPI dashboard
