@@ -7,10 +7,18 @@
    read from account.settings and default at the audio layer when a save predates them.
 
    UI_UX_v2.8 §DECISION / PHASE AUDIO is served by widening this same engine, not by adding a
-   second one: one more voice (filtered noise), two optional fields on the existing tone, and
-   a per-cue shape table that was already here. No loader, no asset fetch, no new framework -
-   the build still plays with no network, which the page promises in its <noscript>. */
-let ctx,timer=null,track='',beat=0,enabled=false,master=null,bgmBus=null,sfxBus=null,noiseBuf=null;
+   second one: one more oscillator-side voice (filtered noise), two optional fields on the
+   existing tone, a per-cue shape table that was already here, and one sample voice.
+
+   AUDIO VOICE asks the material cues for mechanical / paper / register / fixture sound. An
+   oscillator can imply that material; it cannot be it, so those cues play a recorded object
+   from dist/ui/assets/audio (CC0-1.0, vendored by tools/vendor-assets.py, recorded in
+   reports/ASSETS.md). They ship with the build the way the fonts do, so the game still needs
+   no network, which the page promises in its <noscript>. Every sampled cue keeps a synthesised
+   shape behind it, so a cold first press, a blocked load or a decode failure is thinner, never
+   silent. The tonal families - NIGHT outcomes, the Boss motif, the phase beds - stay
+   synthesised, because those have to stay in tune with each other. */
+let ctx,timer=null,track='',beat=0,enabled=false,master=null,bgmBus=null,sfxBus=null,noiseBuf=null,loaded=false;
 let appliedBgm=null,appliedSfx=null;
 const DEFAULT={bgm:1,sfx:1},level={bgm:DEFAULT.bgm,sfx:DEFAULT.sfx};
 const clamp=v=>Number.isFinite(v)?Math.min(1,Math.max(0,v)):null;
@@ -41,23 +49,43 @@ const BGM_VOICE=.035,BGM_BASS=.044,SFX_VOICE=.035;
    without every press earning a sound of its own. `fixture` is a short double knock for
    putting a Decoration in a Slot or taking it out: deliberately not the purchase fanfare,
    because fitting something you already own is not buying it. */
-const sfx={button:[440],ui:[520],fixture:[196,147],quantity:[330],
- /* UI-Q-v28-22 decision classes. The four material decisions are separated by contour AND by
-    timbre, because four triangle arpeggios at different pitches still read as one UI click:
-    ORDER falls onto a low knock, SALE rises and rings, refusal falls and stays dull, and a
-    Store Support acquisition is the only one that keeps a tail. */
- order:[110,164.81],sale:[523,659,784],refusal:[233,175],relic:[392,523,659,784],
- gold:[659,784],spend:[784,659],overcharge:[523,784,988],half:[392,523],
- level:[523,659,784],discovery:[440,659,880],open:[330,392,523],close:[392,330,262],
- depart:[392,330],return:[330,392],
- /* UI-Q-v28-23 NIGHT results. Presentation only - each name is chosen from an Outcome the
-    result object already carries. `rescue` is the proven-state accent and never plays on its
-    own; it lands after the outcome cue the result actually resolved to. */
+/* Utility family: one quiet, short click for navigation and reference. AUDIO HIERARCHY puts it
+   under every Decision cue, which is a gain, not a different idea. */
+const sfx={button:[440],ui:[520],fixture:[196,147],
+ /* MATERIAL DECISION CUES. Each of these carries a recorded object; the notes here are the
+    accent that sits with it, and the fallback that stands in when the sample is not loaded. */
+ quantity:[880],quantset:[784],order:[110,164.81],sale:[523,659],refusal:[233,175],
+ overcharge:[523,659],half:[523,659],support:[196,262,392],purchase:[392,523],unlock:[523,659,784],
+ open:[330,392,523],close:[392,330,262],
+ gold:[659,784],spend:[784,659],depart:[392,330],return:[330,392],
+ /* UI-Q-v28-23 / NIGHT OUTCOME AUDIO: one family, materially different members. Every name is
+    chosen from an Outcome the result object already resolved to. `rescue` is the proven-state
+    accent and never plays on its own; it lands behind the Outcome cue. */
  great:[523,659,784,1047],retreat:[440,392,330,262],injury:[262,220],severe:[196,165],
  death:[147,131],rescue:[659,988],
- /* UI-Q-v28-24. One acknowledgement for every Boss-information beat, so the cue itself tells
-    the player nothing the beat has not already shown; `final` is the D30 entry. */
- reveal:[294,392],boss:[165,196,147],final:[98,123.47,146.83]};
+ /* UI-Q-v28-24 / BOSS / FINAL AUDIO: one motif, two strengths. `bossmajor` and `bosscompact`
+    are the same intervals - the major one fuller and longer, the compact one the short read.
+    Strength belongs to the beat, never to the Boss behind it, so neither cue can name anything
+    the plate has not already shown. `boss` is the seal-break decision, which is not an
+    information beat, and `final` is the D30 commit. */
+ bossmajor:[165,196,147],bosscompact:[165,196],boss:[165,196,147],final:[98,123.47,146.83]};
+/* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
+   file's logic. A cue with no entry here is synthesised exactly as it always was. */
+const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
+const sample={quantity:'tick',quantset:'tick',order:'stamp',sale:'register',overcharge:'register',
+ half:'register',refusal:'refuse',support:'secure',purchase:'cart',unlock:'unlock',
+ open:'shutter',close:'settle',final:'gate',ui:'soft',button:'key'};
+const buffers=new Map(),lastAt=new Map();
+/* Fetched once, on the first unmuted sync, so a muted player downloads nothing. A failure is
+   swallowed on purpose: the synthesised shape is already this cue's fallback. */
+function preload(){if(loaded||!ctx||typeof fetch!=='function')return;loaded=true;
+ for(const file of new Set(Object.values(sample)))
+  fetch(SAMPLE_DIR+file+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status))
+   .then(b=>ctx.decodeAudioData(b)).then(buf=>buffers.set(file,buf)).catch(()=>{});}
+function sampleVoice(file,when,volume){const buf=buffers.get(file);if(!buf)return false;
+ const src=ctx.createBufferSource();src.buffer=buf;
+ const g=ctx.createGain();g.gain.value=volume;src.connect(g);g.connect(sfxBus||ctx.destination);
+ src.start(when);return true;}
 function buses(force){if(!ctx)return;
  if(!master){master=ctx.createGain();master.gain.value=1;master.connect(ctx.destination);
   bgmBus=ctx.createGain();sfxBus=ctx.createGain();bgmBus.connect(master);sfxBus.connect(master);force=true;}
@@ -100,34 +128,83 @@ function mix(settings){if(settings){const b=clamp(settings.bgm),s=clamp(settings
    its own shape: `type` is its timbre, `glide` bends each note by a ratio, `layer` adds the
    ringing octave a payoff needs, `noise` is the physical half of the sound, and `duck` says
    how far the phase bed steps back while it plays. */
-const shape={ui:{gain:.45,dur:.06,type:'square'},fixture:{gain:.8,dur:.09,type:'square',step:.05},
- order:{gain:1.3,dur:.14,type:'square',step:.09,attack:.003,glide:.97,noise:{at:.005,dur:.12,gain:1,hz:2600,q:.6,filter:'highpass'},duck:.5},
- sale:{gain:1,dur:.2,type:'sine',step:.055,layer:{ratio:2,at:.1,dur:.55,gain:.34},noise:{at:.15,dur:.05,gain:.45,hz:5400,q:2.5},duck:.35},
- refusal:{gain:1.15,dur:.36,type:'sawtooth',step:.14,attack:.035,glide:.93,duck:.45},
- relic:{gain:1,dur:.24,type:'triangle',step:.1,layer:{ratio:2,at:.16,dur:1,gain:.3},noise:{at:.3,dur:.5,gain:.2,hz:6800,q:1.2,filter:'highpass'},duck:.55},
- overcharge:{gain:1.05,dur:.15,type:'square',step:.07,duck:.3},
- half:{gain:.95,dur:.22,type:'sine',step:.08,duck:.25},
+/* Every cue's shape. `sampleGain` scales the recorded body, and the notes beside it are the
+   synthesised accent (when `accent` is set) or the fallback the engine falls back to when the
+   sample is not there. AUDIO HIERARCHY is carried by these gains alone: utility under ordinary
+   action, ordinary action under a material decision.
+   `repeat` is the minimum gap a cue will retrigger at, so a held or hammered control cannot
+   stack itself into a harsh overlapping tone. */
+const shape={
+ /* utility: the quietest things in the build */
+ ui:{gain:.45,dur:.06,type:'square',sampleGain:.55,repeat:.04},
+ button:{gain:.7,dur:.12,type:'triangle',sampleGain:.7},
+ fixture:{gain:.8,dur:.09,type:'square',step:.05},
+ /* ORDER quantity. The recorded tick is the shortest file in the set; the accent is off, so a
+    rapid tap is one dry tick and nothing else. Quick-set is the SAME material one step down,
+    so a shortcut can never outrank the stepper it stands in for. */
+ quantity:{gain:.5,dur:.035,type:'square',attack:.002,sampleGain:.8,repeat:.045},
+ quantset:{gain:.42,dur:.035,type:'square',attack:.002,sampleGain:.62,repeat:.045},
+ /* ORDER confirmation: a low knock on paper. The recorded stamp is the body; the synthesised
+    paper brush and the fifth under it are the accent that makes it a commit rather than a tap. */
+ order:{gain:1.1,dur:.14,type:'square',step:.09,attack:.003,glide:.97,sampleGain:1,accent:true,
+  noise:{at:.02,dur:.11,gain:.8,hz:2600,q:.6,filter:'highpass'},duck:.5},
+ /* SALE. Every price mode commits on the same register body at the same level, so no mode is
+    made to sound like the correct answer; the accent is the same two notes for all three. */
+ sale:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35},
+ overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35},
+ half:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35},
+ /* refusal: clearly not a sale, and deliberately not a failure buzzer - a short dry cancel */
+ refusal:{gain:.85,dur:.3,type:'sawtooth',step:.13,attack:.035,glide:.93,sampleGain:1,duck:.45},
+ /* STORE SUPPORT: securing a fixture into the store. Heavier than the ordinary purchase below,
+    and not the same sound as either it or the unlock. */
+ support:{gain:1,dur:.3,type:'triangle',step:.12,sampleGain:1.1,accent:true,
+  layer:{ratio:2,at:.2,dur:.9,gain:.26},duck:.55},
+ purchase:{gain:.8,dur:.18,type:'triangle',step:.09,sampleGain:.85,accent:true,duck:.35},
+ unlock:{gain:.85,dur:.2,type:'sine',step:.09,sampleGain:.9,accent:true,
+  layer:{ratio:2,at:.16,dur:.7,gain:.24},duck:.4},
+ /* MORNING: a latch and a shutter. CLOSING: the drawer and the page settling, which is a
+    closure and not a reward - the accent falls, and nothing rings on after it. */
+ open:{gain:.7,dur:.22,type:'sine',step:.08,sampleGain:.95,accent:true,duck:.35},
+ close:{gain:.7,dur:.2,type:'triangle',step:.085,sampleGain:.95,accent:true,
+  noise:{at:.06,dur:.16,gain:.3,hz:3200,q:.8,filter:'highpass'},duck:.35},
+ gold:{gain:.9,dur:.16,type:'triangle',step:.07},
+ spend:{gain:.9,dur:.16,type:'triangle',step:.07},
+ depart:{gain:.9,dur:.2,type:'sine',step:.1},
  return:{gain:.95,dur:.22,type:'sine',step:.1},
+ /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost. */
  great:{gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
  retreat:{gain:1,dur:.11,type:'square',step:.065,attack:.005,noise:{at:0,dur:.34,gain:.4,hz:900,q:.5,filter:'bandpass'},duck:.4},
  injury:{gain:1,dur:.24,type:'triangle',step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
  severe:{gain:1.1,dur:.4,type:'sawtooth',step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.55,hz:280,q:.7,filter:'lowpass'},duck:.5},
- death:{gain:1.15,dur:1.5,type:'sine',step:.55,attack:.06,layer:{ratio:.5,at:0,dur:2.2,gain:.5},noise:{at:0,dur:1.2,gain:.25,hz:180,q:.6,filter:'lowpass'},duck:.75},
+ /* restrained low drop: no boom, no fanfare, and the only cue allowed to be this long */
+ death:{gain:1.1,dur:1.4,type:'sine',step:.5,attack:.06,layer:{ratio:.5,at:0,dur:2,gain:.45},noise:{at:0,dur:1,gain:.2,hz:180,q:.6,filter:'lowpass'},duck:.75},
  rescue:{gain:.9,dur:.3,type:'sine',step:.09,layer:{ratio:2,at:.12,dur:.7,gain:.28},duck:.3},
- reveal:{gain:.9,dur:.3,type:'triangle',step:.12,layer:{ratio:2,at:.14,dur:.6,gain:.22},duck:.35},
+ /* Boss motif, two strengths: the major one adds the low layer and the rumble, the compact one
+    is the same interval read short. D10 / D20 must stay smaller than D5 / D15 / D25. */
+ bossmajor:{gain:1.1,dur:.34,type:'sawtooth',step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1,gain:.4},noise:{at:0,dur:.45,gain:.3,hz:230,q:.6,filter:'lowpass'},duck:.55},
+ bosscompact:{gain:.75,dur:.16,type:'sawtooth',step:.1,attack:.02,duck:.3},
  boss:{gain:1.15,dur:.36,type:'sawtooth',step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1.1,gain:.45},noise:{at:0,dur:.5,gain:.35,hz:220,q:.6,filter:'lowpass'},duck:.6},
- final:{gain:1.2,dur:1.1,type:'sawtooth',step:.3,attack:.08,glide:.98,layer:{ratio:.5,at:0,dur:2.4,gain:.5},noise:{at:0,dur:1.6,gain:.3,hz:160,q:.5,filter:'lowpass'},duck:.8}};
+ /* FINAL commit: the heaviest mechanical close in the build, with the tension under it. It adds
+    no information - D25 already revealed everything it stands on. */
+ final:{gain:1.1,dur:1,type:'sawtooth',step:.3,attack:.08,glide:.98,sampleGain:1.2,accent:true,
+  layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also
    carries proven rescue evidence plays its own Outcome first and the accent behind it. */
 function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch(()=>{});
  const notes=sfx[kind]||sfx.button,sh=shape[kind]||{},t0=ctx.currentTime+(Number(delay)||0);
- notes.forEach((hz,i)=>{const at=t0+i*(sh.step??.07);
+ /* MIX / RUNTIME: a rapid-repeat control must not build into harsh overlapping sound */
+ if(sh.repeat){if(t0-(lastAt.get(kind)||-1)<sh.repeat)return;lastAt.set(kind,t0);}
+ const file=sample[kind];
+ const body=file?sampleVoice(file,t0,SAMPLE_VOICE*(sh.sampleGain??1)):false;
+ /* The notes are the accent when a recorded body carried the cue, and the whole cue when it
+    did not - so a cue is never silent because a file has not arrived yet. */
+ if(!body||sh.accent)notes.forEach((hz,i)=>{const at=t0+i*(sh.step??.07);
   tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1),sh.type||'triangle',sfxBus,sh);
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',sfxBus);});
  if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise);
  if(sh.duck)duck(t0,sh.duck);}
 function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;if(!enabled||document.hidden){if(timer)clearInterval(timer);timer=null;track='';return;}if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
- buses();
+ buses();preload();
  const next=trackFor(phase);if(track===next&&timer)return;if(timer)clearInterval(timer);track=next;beat=0;
  const tune=tunes[track];
  timer=setInterval(()=>{if(!enabled||document.hidden||ctx.state!=='running')return;const melody=tune.notes,hz=melody[beat%melody.length];
@@ -135,5 +212,5 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;if(
   if(beat%tune.bass===0)tone(hz/2,ctx.currentTime,tune.ms/1000*1.35,BGM_BASS,tune.bassWave,bgmBus);
   if(tune.drone&&beat%4===0)tone(tune.drone,ctx.currentTime,tune.ms/1000*4.2,BGM_BASS*.7,'sine',bgmBus);
   beat++;},tune.ms);}
-G.Sound={play,sync,mix,cues:Object.keys(sfx),tracks:Object.keys(tunes),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+G.Sound={play,sync,mix,cues:Object.keys(sfx),tracks:Object.keys(tunes),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);
