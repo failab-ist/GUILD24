@@ -77,13 +77,13 @@ FAIL:
 ## ECO-Q-v28-3B — ORDINARY NPC WALLET ON VISIT
 
 Fresh:
-    min(2000, 180 + Level ×8 + randomInt(0,100))
+    min(2000, 180 + Level ×8 + randomInt(0,80))
 
 Returning:
-    min(2000, existing Wallet + Level ×8 + randomInt(0,100))
+    min(2000, existing Wallet + Level ×8 + randomInt(0,80))
 
 PASS:
-- 0 and 100 endpoints are reachable under existing integer RNG convention
+- 0 and 80 endpoints are reachable under existing integer RNG convention
 - returning NPC keeps persistent Wallet before visit income is added
 - cap 2000 remains
 - failed-expedition Loot is unchanged
