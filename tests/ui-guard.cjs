@@ -1027,9 +1027,16 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'a rescue is a major beat: it was nearly a death');
  assert.equal(Presentation.nightRank({outcome:'성공',changes:['Lv.2 → Lv.3'],events:[],statChanges:[]}),'routine',
   'a success that actually grew someone is not silent');
- assert.ok(/\.beat\.major \.verdict\{font-size:44px/.test(css)&&/\.beat\.routine \.verdict\{font-size:30px/.test(css),
-  'the raised beats are raised, and the routine ones keep a real voice');
- assert.ok(!/\.beat\.routine[^{]*\{[^}]*font-size:1[0-3]px/.test(css),'no routine beat is shrunk into small print');
+ /* USER AMENDMENT 2026-09-22 (UI_UX §NIGHT LAYOUT — OUTCOME TYPE, EXACT): the rank no longer
+    sets type size. The old 44 / 30 expectation is stale against that decision; what replaces it
+    is stricter, because it pins the single exact size and forbids ANY per-rank override of the
+    Outcome, the NPC name or the summary - which is what let 부상 and 사망 read as different
+    kinds of word. The three volumes survive as a weight rule (copy spent, tone, transition). */
+ assert.ok(/^\.verdict\{[^}]*font:500 36px\/1 var\(--f-sign\)/m.test(css),
+  'every Outcome label is the one exact 36px display size');
+ for(const rank of ['quiet','routine','major'])
+  assert.ok(!new RegExp('\\.beat\\.'+rank+'[^{]*\\{[^}]*font-size').test(css),
+   'no '+rank+' override changes type size anywhere in the beat');
 });
 
 // D-27. Seven products were named in the feedback because they were drawn as something else.

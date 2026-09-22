@@ -174,7 +174,10 @@ function nightChange(text){
  let m=null;
  m=/^새 특성\s*[「'"]?(.+?)[」'"]?$/.exec(text);   if(m)return {kind:'up',group:'grew',label:'새 특성',value:m[1]};
  m=/^(.*?)\s*승급$/.exec(text);                  if(m)return {kind:'up',group:'grew',label:'승급',value:m[1]};
- m=/^(.+?)\s*·\s*(전투\s*\+\d+)$/.exec(text);   if(m)return {kind:'up',group:'grew',label:'장비',value:m[1],extra:m[2]};
+ /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM (USER AMENDMENT 2026-09-22): the Player-facing
+    Stat name is 투력, so the equipment bonus reads `투력 +N`. The resolver's stored change string
+    keeps its own legacy `전투 +N` wording - nothing is renamed in the Save or the resolution. */
+ m=/^(.+?)\s*·\s*전투\s*(\+\d+)$/.exec(text);   if(m)return {kind:'up',group:'grew',label:'장비',value:m[1],extra:'투력 '+m[2]};
  return {kind:'up',group:'grew',label:'변화',value:text};}
 function nightChanges(r, npc){const out=[];
  for(const c of (r.changes||[]).slice(0,3))out.push(nightChange(c));

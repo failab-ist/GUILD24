@@ -610,7 +610,11 @@ function beat(r){
      LAYOUT — COMBAT FACT retires it from the player-facing record at every hierarchy. */
   +(why?'<p class="why">'+E(why)+'</p>':'')
  +'</div>'
- +'<div class="changed">'+changedRows(r)+'</div>'
+ /* UI_UX §NIGHT LAYOUT — DEATH PAYLOAD / NIGHT_CLOSING §DEATH IS A CLOSED RESULT (USER
+    AMENDMENT 2026-09-22): a death is finished, so the record does not go on to list follow-up
+    growth and settlement figures. The whole region is absent - not an empty box, not a divider -
+    so the death ends on its summary. The resolution still recorded whatever it recorded. */
+ +(r.outcome==='사망'?'':'<div class="changed">'+changedRows(r)+'</div>')
  +'</article>';}
 // Importance decides how much copy a beat spends, never how big the adventurer is
 // (UI-Q31). Presentation owns the rule so screen and tests share it.
@@ -646,8 +650,11 @@ function changedRows(r){
  const stamp=c=>c.detail
   ?'<details class="tip '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
    +'<p><span>'+E(c.detail)+'</span></p></details>'
-  :'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'
-  +E(c.value)+(c.extra?' <em>'+E(c.extra)+'</em>':'')+'</b></span>';
+  /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM: the identity and the Stat effect were one run
+     of words (`장비 보강된 전사 장비 전투 +5`). The effect is its own element after a middle dot
+     now, so the two facts read apart without a second card or badge. */
+  :'<span class="tok '+c.kind+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b>'
+  +(c.extra?'<em>'+E(c.extra)+'</em>':'')+'</span>';
  /* The tokens were one flat run, so a Level sat in the same layer as 귀환 후 피로 and the
     aftermath read as more growth. They are the same tokens in the same owned order - Level /
     Stat, then Fatigue, then EXP / Wallet / other - split into the three groups
@@ -1152,7 +1159,14 @@ function finalScreen(){
  +shelf(true)
  +'<details class="final-order"><summary>마지막 발주 · 상품과 점포지원 사이의 선택</summary>'+orderForm()+'</details>'
  +ownedRelicView();
- const dock=relicWindowLink()+(need?btn('마왕성으로 출발','boss','stamp',s.team.length===need?'':'disabled'):btn('출전 불가 · 런 종료','boss','danger'));
+ /* UI_UX §PER-PHASE (FINAL) — DISABLED COMMIT CAUSE (USER AMENDMENT 2026-09-22): the fixed dock
+    states why the sortie cannot start, on the control itself, rather than leaving a dead
+    `마왕성으로 출발` whose reason is a screen-length away in the muster head. The muster's own
+    count stays where it is; this is the disabled Action's immediate cause feedback. */
+ const ready=s.team.length===need;
+ const dock=relicWindowLink()+(need
+  ?btn(ready?'마왕성으로 출발':'원정대 '+s.team.length+' / '+need,'boss','stamp',ready?'':'disabled')
+  :btn('출전 불가 · 런 종료','boss','danger'));
  return stage('final','최종 원정','',body,dock);
 }
 /* Whoever went to the castle is the ending. run.js clears s.results when the Final resolves,
