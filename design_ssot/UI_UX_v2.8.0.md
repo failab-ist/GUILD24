@@ -203,11 +203,21 @@ D10/D20 use the same shell as a compact one-tap report:
 
 DIRECTOR DOCUMENT BASELINE — EXACT:
 - D10/D20 portrait: 64px
-- mobile D5/D15 Boss art max-height: 120px
-- mobile D25 Boss art max-height: 96px
+- mobile D5/D15 Boss art max-height: 240px
+- mobile D25 Boss art max-height: 200px
+- desktop D5/D15 Boss art max-height: 300px
+- desktop D25 Boss art max-height: 260px
+
+USER AMENDMENT, 2026-09-22, superseding the mobile 120 / 96 baselines: the report was reviewed on
+a real handset and read too small. The Boss beat is a takeover with the screen dimmed behind it, so
+the sheet may claim most of the viewport and the art may grow until it would cause overflow. The
+constraint below is unchanged and is what bounds the new values.
 
 At 360x800, core information and acknowledgement control must not be pushed below the first
 viewport solely by Boss art.
+
+The Boss report sheet is a takeover, not a drawer peeking from the bottom: at phone width it
+claims most of the viewport rather than hugging its content.
 
 Information is primary; art is supporting.
 
@@ -274,6 +284,28 @@ Functional polish may:
 
 It may not change the gameplay rule or hide required decision information merely to make a screen
 cleaner.
+
+#### ORNAMENT RESTRAINT
+
+USER AMENDMENT, 2026-09-22. `GAME-LIKE INTERACTION LANGUAGE` is a materiality and affordance
+requirement, not permission to add ornament. It is not satisfied by decoration and it is failed by
+decoration.
+
+Do not read it as an instruction to add:
+- a repeated corporate logo / seal mark on controls
+- repeated bolt, rivet, corner-bracket or frame motifs around content
+- a tilt or hand-stamped skew on a control the Player uses to commit a decision
+- a gradient or stripe pattern standing in for material
+
+REMOVE before adding. What a control needs is its material, its state and its press - nothing else.
+
+Material rules, consistent with the existing pixel-art contract:
+- flat fills with a hard bevel, never a gradient or a repeating stripe used as texture
+- depth is a hard offset, never a blur
+- a control the Player commits a decision with is square to the layout, never skewed
+- the existing art / texture tokens are the material; a new decorative mark is not
+
+Presence comes from size, weight, contrast and the press, not from added marks.
 
 #### TUTORIAL / COACH TARGET TRUTH
 

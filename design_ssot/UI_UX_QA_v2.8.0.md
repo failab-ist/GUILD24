@@ -503,5 +503,15 @@ FAIL:
 - decoration cost information legibility or phone operability
 - a touch target fell below the phone minimum, or a decorative control lost its accessible name
 
+ORNAMENT RESTRAINT (UI_UX §ORNAMENT RESTRAINT). Additionally FAIL when:
+- a corporate logo / seal mark is repeated on controls
+- bolt, rivet, corner-bracket or frame motifs are repeated around content
+- a control used to commit a decision is tilted or skewed
+- a gradient or a repeating stripe stands in for material instead of a flat fill with a hard bevel
+- the object treatment was achieved by adding marks rather than by material, size and press
+
+Boss report sizing: at phone width the sheet claims most of the viewport and the art is at the
+amended baselines, with no beat scrolling its own body at any audited width.
+
 Surfaces are adopted by the Polish Task that owns them; a Task closes only the surfaces it
 touched, and the remainder is carried forward explicitly.
