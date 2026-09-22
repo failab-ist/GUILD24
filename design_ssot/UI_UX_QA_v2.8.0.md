@@ -554,9 +554,18 @@ PER-PHASE APPLICATION PASS:
 - every NIGHT Outcome label measures 36px `var(--f-sign)`, and the NPC name and Outcome summary
   measure the same whichever Outcome resolved
 - a NIGHT Death renders zero result-data rows and leaves no divider or reserved space where that
-  region would be
-- the NIGHT Death message is a neutral floating message in the living line's position: no
-  quotation marks, no tail, no left accent bar / status stripe, no decorative border, no icon
+  region would be, and no route change, Deep tag, Item / supply cause or incident line either -
+  it ends on its Outcome summary
+- the NIGHT Death message sits in the living line's position in a small text-hugging status
+  container on a dark / translucent flat plate: no quotation marks, no tail, no left accent bar /
+  status stripe, no decorative border, no icon, no glow or blur
+- a NIGHT record starts under the return rail and is not vertically centred: a short result does
+  not float in the middle of the viewport, and no spacer or excess dead space replaces the
+  centring
+- the NIGHT closing-handover control reads immediately as the ACTIVE Primary Action, visibly
+  above `전체 건너뛰기` and clearly separated from the NIGHT surface; a flat grey dead-button
+  impression FAILS, as do purple / lavender, green, a heavy outline, an inset frame and any
+  glossy or bevelled treatment
 - an equipment Stat bonus reads `투력 +N`, never `전투 +N`, with the equipment identity visually
   separated from the Stat effect
 - the NIGHT closing-handover control is a dark flat plane with one hard depth and a press that

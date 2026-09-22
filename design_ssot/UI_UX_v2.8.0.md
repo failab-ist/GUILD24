@@ -205,7 +205,11 @@ same visual weight as a living adventurer's line, presented as a neutral status 
 
 - no quotation marks, no speech tail, no bubble ground, no utterance styling
 - no left accent bar / status stripe, no decorative border, no added icon or badge
-- a neutral floating message, not a plate marked by a coloured edge
+- no glow and no blur
+- USER AMENDMENT, 2026-09-22: bare text read too weakly to register. It carries a small status
+  container - text-hugging width, a dark / translucent flat plate, modest padding - and nothing
+  else from the bans above. A container is not a bubble: what makes it an utterance is the tail,
+  the paper ground and the quotation, and none of those return.
 - the existing Death narration copy is reused; no new Death copy is authored
 - it is never dropped into a separate narration line under the report body
 
@@ -215,6 +219,11 @@ same visual weight as a living adventurer's line, presented as a neutral status 
 Same position and same information hierarchy; never the appearance of a dead NPC speaking.
 
 Outcome type size may be reduced modestly on mobile where needed to prevent collision.
+
+USER AMENDMENT, 2026-09-22 — VERTICAL COMPOSITION. The record begins under the return rail and
+runs downward. It is not vertically centred in the remaining viewport: a short result - a death,
+a quiet return - must not float in the middle of the screen. No spacer is added in exchange, and
+no excess dead space is created above the record.
 
 USER AMENDMENT, 2026-09-22 — OUTCOME TYPE, EXACT. Every Outcome label is the same size:
 
@@ -229,9 +238,13 @@ record shows only:
 
     death status message, character art, `사망`, NPC name, Dungeon · Lv, Outcome summary
 
-No Level / Stat / equipment change, no injury / rest, no Fatigue, no EXP, no Wallet, no reward
-or other numeric change row, and no divider or reserved spacing where that region would be.
-The resolution data itself is unchanged; only the NIGHT render hides it.
+Everything else is absent, per the USER AMENDMENT of 2026-09-22: no route change, no Deep tag,
+no Item / supply cause line, no incident / fact line, no Level / Stat / equipment change, no
+injury / rest, no Fatigue, no EXP, no Wallet, no reward or other numeric change row, and no
+divider or reserved spacing where any of those regions would be.
+
+A death ends on its summary. The resolution data itself is unchanged; only the NIGHT render
+hides it.
 
 USER AMENDMENT, 2026-09-22 — EQUIPMENT / POWER TERM. The player-facing Stat name is `투력`, so an
 equipment Stat bonus reads `투력 +N`, never `전투 +N`. Ordinary prose such as `전투에서 …` is not
@@ -600,6 +613,11 @@ NIGHT
   that depth. No violet / lavender / purple filled treatment, and green is not the substitute.
   Nothing decorative beyond hover and press. No literal hex is Canonical here.
   `전체 건너뛰기` stays the current Secondary bare treatment.
+  AMENDED 2026-09-22: the first pass read as a disabled grey button. It must read immediately as
+  the screen's ACTIVE Primary Action - visibly above `전체 건너뛰기` and clearly separated from
+  the surrounding NIGHT surface - using a muted accent that belongs to this phase. A flat grey
+  dead-button impression is a FAIL, as are purple / lavender, green, a heavy outline, an inset
+  frame, and any glossy or bevelled treatment.
 
 CLOSING
 - reads as receipt / end-of-day record, not a KPI dashboard
