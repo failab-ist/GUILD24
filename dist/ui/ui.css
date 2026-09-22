@@ -1249,6 +1249,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .line{grid-template-columns:30px 52px 1fr auto}
  .line .crate{width:52px;height:52px}
  .dial{grid-column:3/-1;margin-top:8px}
+ /* UI-Q-v28-29. `-` / qty / `+` and the 1 · 3 · 최대 quick set are two halves of one quantity
+    control. On a phone the row is ~296px wide and `margin-left:auto` reads as the quiet right
+    end of that control; on the 860px form it threw the quick set 440px away from the dial it
+    belongs to, across bare paper, and the two stopped reading as the same control. Past the
+    phone the quick set stays next to the dial and the row's slack is left as the form's own
+    margin. */
+ .dial .set{margin-left:20px}
  .npc-grid,.unlock-grid,.contract-grid,.final-team,.relic-choices{grid-template-columns:1fr 1fr}
  .threat .fams{grid-template-columns:1fr 1fr}
  /* FINAL at tablet width and up: the Boss stands beside what is known about it rather than
