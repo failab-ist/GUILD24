@@ -203,21 +203,19 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    screen's Primary and must never read as four buttons competing with it. */
 .effects li.deco-line{padding:0}
 .deco-line+.deco-line{margin-top:4px}
-/* USER 2026-09-23: the four rows shared an inset and still read as a web list. They are slots
-   cut into one mounting track now: the same recess, the same brass mounting tab at the head of
-   each, the same label and value seating. One family, four instances - and still ranked under
-   the Primary, with one pixel of travel and no cast depth. */
+/* The four rows are slots cut in one track. The review found the previous attempt darker and
+   more cramped than what it replaced - a brass tab on every row was ornament, and the heavier
+   recess ate the reading. They are lighter than the sheet now, not darker: one hairline edge
+   in the sheet's own gold, one lit top, a clear label/value baseline, and the same geometry
+   four times. Still ranked under the Primary: one pixel of travel, no cast depth. */
 .deco-jump{position:relative;display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:12px;
- padding:11px 12px 11px 24px;min-height:46px;border:0;border-radius:0;text-align:left;
- font:inherit;color:var(--dim);background:#00000038;
- box-shadow:inset 0 0 0 2px #00000059,inset 0 2px 0 #ffffff0f,inset 0 -2px 0 #b08a4226;
+ padding:10px 13px;min-height:44px;border:0;border-radius:0;text-align:left;
+ font:inherit;color:#bdae95;background:#ffffff0a;
+ box-shadow:inset 0 0 0 1px #00000073,inset 0 0 0 2px #a8823e33,inset 0 1px 0 #ffffff14,0 1px 0 #00000059;
  cursor:pointer;transition:background .08s steps(2)}
-.deco-jump:before{content:'';position:absolute;left:8px;top:50%;margin-top:-8px;width:5px;height:16px;
- background:linear-gradient(180deg,#e6c176 0,#b08a42 42%,#6b5029 100%);
- box-shadow:1px 0 0 #12100a,0 1px 0 #12100a}
-.deco-jump:hover{background:#0000002b;color:#cdbfa4}
-.deco-jump:active{transform:translateY(1px);background:#00000047;
- box-shadow:inset 0 0 0 2px #00000073,inset 0 2px 0 #ffffff08}
+.deco-jump:hover{background:#ffffff17;color:#e0d2b7}
+.deco-jump:active{transform:translateY(1px);background:#00000026;
+ box-shadow:inset 0 0 0 1px #00000080,inset 0 0 0 2px #a8823e26,inset 0 1px 0 #ffffff08}
 .deco-jump>span{font:400 var(--t-sm)/1.4 var(--ui)}
 .deco-jump b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .deco-line.empty .deco-jump b{color:#8d8067;font-weight:400}
@@ -774,22 +772,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    forbids. The face, its measure and its one line are untouched. */
 .opening-title{position:relative;margin:0;white-space:nowrap;color:#f7eeda;
  font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none;
- text-shadow:0 3px 0 #120c06;padding:9px 26px 11px;
- background:linear-gradient(180deg,#4d3724 0,#3b2918 56%,#2a1c10 100%);
- box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 4px #b08a42,inset 0 6px 0 #8a653859,
-  inset 0 -6px 0 #16100999;
- clip-path:polygon(0 9px,9px 9px,9px 0,calc(100% - 9px) 0,calc(100% - 9px) 9px,100% 9px,
-  100% calc(100% - 9px),calc(100% - 9px) calc(100% - 9px),calc(100% - 9px) 100%,
-  9px 100%,9px calc(100% - 9px),0 calc(100% - 9px));
- filter:drop-shadow(0 6px 0 #00000080)}
-.opening-title:before,.opening-title:after{content:'';position:absolute;top:50%;margin-top:-4px;
- width:7px;height:7px;background:linear-gradient(180deg,#e6c176 0,#b08a42 45%,#6b5029 100%);
- box-shadow:inset -1px -1px 0 #4a3418,0 1px 0 #12100a}
-.opening-title:before{left:9px}
-.opening-title:after{right:9px}
-/* The branch is short object identity, which §TYPOGRAPHY / SPACING routes to the plate face,
-   and a plate is what it becomes: a small stamped tag under the sign rather than grey body
-   copy. Mulmaru is crisp only at its design sizes, so this one is fixed at 12px, not fluid. */
+ text-shadow:0 3px 0 #120c06;padding:5px 18px 7px;
+ background:linear-gradient(180deg,#43301e 0,#2e2013 100%);
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #a8823e,inset 0 4px 0 #8a653840;
+ clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
+  100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
+  6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
+ filter:drop-shadow(0 4px 0 #00000073)}
 .opening-branch{margin:3px 0 0;padding:5px 13px 4px;color:#e0c89c;
  font:500 12px/1 var(--f-plate);letter-spacing:.2em;-webkit-font-smoothing:none;
  background:linear-gradient(180deg,#3b2918 0,#2a1c10 100%);
@@ -1381,18 +1370,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    frame sits inside another frame.
    Live text and controls stay HTML. Nothing is baked into the graphic.
    ===================================================================== */
-.modal.narrow:has(.welcome-band){
- border-style:solid;border-width:18px;
- border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='56' height='56' shape-rendering='crispEdges'><g fill='%23120c06'><rect x='0' y='0' width='56' height='2'/><rect x='8' y='8' width='1' height='1'/><rect x='47' y='8' width='1' height='1'/><rect x='0' y='18' width='2' height='20'/><rect x='54' y='18' width='2' height='20'/><rect x='8' y='47' width='1' height='1'/><rect x='47' y='47' width='1' height='1'/><rect x='0' y='54' width='56' height='2'/></g><g fill='%238a6538'><rect x='0' y='2' width='56' height='1'/><rect x='2' y='18' width='1' height='20'/><rect x='53' y='18' width='1' height='20'/><rect x='0' y='53' width='56' height='1'/></g><g fill='%2363462a'><rect x='0' y='3' width='3' height='1'/><rect x='13' y='3' width='30' height='1'/><rect x='53' y='3' width='3' height='1'/><rect x='3' y='18' width='1' height='20'/><rect x='52' y='18' width='1' height='20'/><rect x='0' y='52' width='3' height='1'/><rect x='13' y='52' width='30' height='1'/><rect x='53' y='52' width='3' height='1'/></g><g fill='%23e6c176'><rect x='3' y='3' width='10' height='1'/><rect x='43' y='3' width='10' height='1'/><rect x='3' y='4' width='1' height='9'/><rect x='52' y='4' width='1' height='9'/><rect x='9' y='8' width='1' height='2'/><rect x='46' y='8' width='1' height='2'/><rect x='8' y='9' width='1' height='1'/><rect x='47' y='9' width='1' height='1'/><rect x='0' y='16' width='56' height='1'/><rect x='16' y='18' width='1' height='20'/><rect x='39' y='18' width='1' height='20'/><rect x='0' y='39' width='56' height='1'/><rect x='3' y='43' width='1' height='10'/><rect x='52' y='43' width='1' height='10'/><rect x='8' y='46' width='2' height='1'/><rect x='46' y='46' width='2' height='1'/><rect x='9' y='47' width='1' height='1'/><rect x='46' y='47' width='1' height='1'/><rect x='4' y='52' width='9' height='1'/><rect x='43' y='52' width='9' height='1'/></g><g fill='%2345311f'><rect x='0' y='4' width='3' height='3'/><rect x='13' y='4' width='30' height='3'/><rect x='53' y='4' width='3' height='3'/><rect x='6' y='6' width='7' height='1'/><rect x='43' y='6' width='7' height='1'/><rect x='0' y='8' width='3' height='2'/><rect x='6' y='8' width='2' height='2'/><rect x='10' y='8' width='36' height='2'/><rect x='48' y='8' width='2' height='2'/><rect x='53' y='8' width='3' height='2'/><rect x='0' y='11' width='3' height='1'/><rect x='6' y='11' width='44' height='1'/><rect x='53' y='11' width='3' height='1'/><rect x='4' y='18' width='3' height='20'/><rect x='8' y='18' width='2' height='20'/><rect x='11' y='18' width='1' height='20'/><rect x='44' y='18' width='1' height='20'/><rect x='46' y='18' width='2' height='20'/><rect x='49' y='18' width='3' height='20'/><rect x='0' y='44' width='3' height='1'/><rect x='6' y='44' width='44' height='1'/><rect x='53' y='44' width='3' height='1'/><rect x='0' y='46' width='3' height='2'/><rect x='6' y='46' width='2' height='2'/><rect x='10' y='46' width='36' height='2'/><rect x='48' y='46' width='2' height='2'/><rect x='53' y='46' width='3' height='2'/><rect x='0' y='49' width='3' height='3'/><rect x='6' y='49' width='44' height='1'/><rect x='53' y='49' width='3' height='3'/><rect x='13' y='50' width='30' height='2'/></g><g fill='%23b08a42'><rect x='4' y='4' width='9' height='1'/><rect x='43' y='4' width='9' height='1'/><rect x='4' y='5' width='1' height='8'/><rect x='51' y='5' width='1' height='8'/><rect x='0' y='15' width='56' height='1'/><rect x='15' y='18' width='1' height='20'/><rect x='40' y='18' width='1' height='20'/><rect x='0' y='40' width='56' height='1'/><rect x='4' y='43' width='1' height='9'/><rect x='51' y='43' width='1' height='9'/><rect x='5' y='51' width='8' height='1'/><rect x='43' y='51' width='8' height='1'/></g><g fill='%236b5029'><rect x='5' y='5' width='8' height='1'/><rect x='43' y='5' width='8' height='1'/><rect x='5' y='6' width='1' height='7'/><rect x='50' y='6' width='1' height='7'/><rect x='0' y='14' width='56' height='1'/><rect x='14' y='18' width='1' height='20'/><rect x='41' y='18' width='1' height='20'/><rect x='0' y='41' width='56' height='1'/><rect x='5' y='43' width='1' height='8'/><rect x='50' y='43' width='1' height='8'/><rect x='6' y='50' width='7' height='1'/><rect x='43' y='50' width='7' height='1'/></g><g fill='%232f2113'><rect x='0' y='7' width='3' height='1'/><rect x='6' y='7' width='44' height='1'/><rect x='53' y='7' width='3' height='1'/><rect x='7' y='18' width='1' height='20'/><rect x='48' y='18' width='1' height='20'/><rect x='0' y='48' width='3' height='1'/><rect x='6' y='48' width='44' height='1'/><rect x='53' y='48' width='3' height='1'/></g><g fill='%235c4029'><rect x='0' y='10' width='3' height='1'/><rect x='6' y='10' width='44' height='1'/><rect x='53' y='10' width='3' height='1'/><rect x='10' y='18' width='1' height='20'/><rect x='45' y='18' width='1' height='20'/><rect x='0' y='45' width='3' height='1'/><rect x='6' y='45' width='44' height='1'/><rect x='53' y='45' width='3' height='1'/></g><g fill='%23241809'><rect x='0' y='12' width='3' height='2'/><rect x='6' y='12' width='44' height='2'/><rect x='53' y='12' width='3' height='2'/><rect x='3' y='13' width='3' height='1'/><rect x='50' y='13' width='3' height='1'/><rect x='12' y='18' width='2' height='20'/><rect x='42' y='18' width='2' height='20'/><rect x='0' y='42' width='56' height='1'/><rect x='0' y='43' width='3' height='1'/><rect x='6' y='43' width='44' height='1'/><rect x='53' y='43' width='3' height='1'/></g><g fill='%2314100a'><rect x='0' y='17' width='56' height='1'/><rect x='17' y='18' width='1' height='21'/><rect x='38' y='18' width='1' height='21'/><rect x='0' y='38' width='17' height='1'/><rect x='18' y='38' width='20' height='1'/><rect x='39' y='38' width='17' height='1'/></g></svg>") 18 stretch;
+.modal.narrow:has(.welcome-band){background:var(--tex-wood),#33241a;background-size:32px 12px;
+ border-style:solid;border-width:10px;
+ border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='32' height='32' shape-rendering='crispEdges'><g fill='%230f0a05'><rect x='0' y='0' width='32' height='2'/><rect x='0' y='10' width='2' height='12'/><rect x='30' y='10' width='2' height='12'/><rect x='0' y='30' width='32' height='2'/></g><g fill='%235a4028'><rect x='0' y='2' width='2' height='1'/><rect x='7' y='2' width='18' height='1'/><rect x='30' y='2' width='2' height='1'/><rect x='2' y='10' width='1' height='12'/><rect x='29' y='10' width='1' height='12'/><rect x='0' y='29' width='2' height='1'/><rect x='7' y='29' width='18' height='1'/><rect x='30' y='29' width='2' height='1'/></g><g fill='%23e0bc70'><rect x='2' y='2' width='5' height='1'/><rect x='25' y='2' width='5' height='1'/><rect x='2' y='3' width='1' height='4'/><rect x='29' y='3' width='1' height='4'/><rect x='5' y='5' width='1' height='1'/><rect x='26' y='5' width='1' height='1'/><rect x='2' y='25' width='1' height='5'/><rect x='29' y='25' width='1' height='5'/><rect x='5' y='26' width='1' height='1'/><rect x='26' y='26' width='1' height='1'/><rect x='3' y='29' width='4' height='1'/><rect x='25' y='29' width='4' height='1'/></g><g fill='%2346301d'><rect x='0' y='3' width='2' height='2'/><rect x='7' y='3' width='18' height='2'/><rect x='30' y='3' width='2' height='2'/><rect x='4' y='4' width='3' height='1'/><rect x='25' y='4' width='3' height='1'/><rect x='3' y='10' width='2' height='12'/><rect x='27' y='10' width='2' height='12'/><rect x='0' y='27' width='2' height='2'/><rect x='4' y='27' width='24' height='1'/><rect x='30' y='27' width='2' height='2'/><rect x='7' y='28' width='18' height='1'/></g><g fill='%236b5029'><rect x='3' y='3' width='4' height='1'/><rect x='25' y='3' width='4' height='1'/><rect x='3' y='4' width='1' height='3'/><rect x='28' y='4' width='1' height='3'/><rect x='0' y='8' width='32' height='1'/><rect x='8' y='10' width='1' height='12'/><rect x='23' y='10' width='1' height='12'/><rect x='0' y='23' width='32' height='1'/><rect x='3' y='25' width='1' height='4'/><rect x='28' y='25' width='1' height='4'/><rect x='4' y='28' width='3' height='1'/><rect x='25' y='28' width='3' height='1'/></g><g fill='%233a2717'><rect x='0' y='5' width='2' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='6' y='5' width='20' height='1'/><rect x='27' y='5' width='1' height='1'/><rect x='30' y='5' width='2' height='1'/><rect x='5' y='10' width='1' height='12'/><rect x='26' y='10' width='1' height='12'/><rect x='0' y='26' width='2' height='1'/><rect x='4' y='26' width='1' height='1'/><rect x='6' y='26' width='20' height='1'/><rect x='27' y='26' width='1' height='1'/><rect x='30' y='26' width='2' height='1'/></g><g fill='%232a1a0f'><rect x='0' y='6' width='2' height='1'/><rect x='4' y='6' width='24' height='1'/><rect x='30' y='6' width='2' height='1'/><rect x='6' y='10' width='1' height='12'/><rect x='25' y='10' width='1' height='12'/><rect x='0' y='25' width='2' height='1'/><rect x='4' y='25' width='24' height='1'/><rect x='30' y='25' width='2' height='1'/></g><g fill='%23b08a42'><rect x='0' y='7' width='32' height='1'/><rect x='7' y='10' width='1' height='12'/><rect x='24' y='10' width='1' height='12'/><rect x='0' y='24' width='32' height='1'/></g><g fill='%23120c06'><rect x='0' y='9' width='32' height='1'/><rect x='9' y='10' width='1' height='13'/><rect x='22' y='10' width='1' height='13'/><rect x='0' y='22' width='9' height='1'/><rect x='10' y='22' width='12' height='1'/><rect x='23' y='22' width='9' height='1'/></g></svg>") 10 stretch;
  background-clip:padding-box;box-shadow:0 -6px 0 #0000008c}
 /* the header is a plank of the same object, not a caption above it: darker wood, a brass
    under-rail, and the title seated on it */
-.modal.narrow:has(.welcome-band) .modal-header{padding:13px 14px 12px;
- background:linear-gradient(180deg,#3f2c1d 0,#33241796 62%,#2a1d1300 100%);
- box-shadow:inset 0 -3px 0 #6b5029,inset 0 -4px 0 #d2ab6259}
+.modal.narrow:has(.welcome-band) .modal-header{margin:9px 9px 0;padding:10px 13px 11px;
+ background:linear-gradient(180deg,#402d1c 0,#2f2113 100%);
+ box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #a8823e,0 2px 0 #00000073}
 .modal.narrow:has(.welcome-band) .modal-header h2{font-size:21px;letter-spacing:.02em;
  text-shadow:0 2px 0 #1b1109}
-.modal.narrow:has(.welcome-band) .modal-body{padding:16px 13px 16px}
+.modal.narrow:has(.welcome-band) .modal-body{padding:15px 12px 14px}
 /* The built frame takes 36px of width that the old flat rectangle did not, and at the 360
    floor that pushed the two longest approved lines onto a second row. They are fluid now
    rather than fixed, so they shrink by a step at the narrowest width and are unchanged from
@@ -1411,48 +1400,36 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:0 1px 0 #b08a4233}
 /* the footer is the same plank at the other end of the object - the black web-modal bar is
    gone, and the brass rail that closes the body is the same rail that opens the header */
-.modal.narrow:has(.welcome-band) .modal-footer{padding:13px 14px 14px;
- background:linear-gradient(0deg,#3f2c1d 0,#33241796 62%,#2a1d1300 100%);
- box-shadow:inset 0 3px 0 #6b5029,inset 0 4px 0 #d2ab6259}
+.modal.narrow:has(.welcome-band) .modal-footer{padding:12px 12px 13px;background:none;
+ box-shadow:inset 0 1px 0 #a8823e59}
 /* §PRIMARY DECISION CONTROL: measure and seating only. The control's geometry - notch, hard
    outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
    Action construction and is not this Batch's to re-cut. What it lacked here was room of its
    own: it sat tight against the sheet's last line of copy with no breathing plane under it. */
-/* §PRIMARY DECISION CONTROL - BUILT, NOT STYLED. Two earlier passes stayed inside CSS: a
-   re-cut bevel (reverted, it read flatter) and a deeper corner notch (kept, and still a
-   rectangle at screenshot scale). That is the plateau the system says to escalate out of.
-   The control is assembled now. Its silhouette is cut twice on each corner, so the plate
-   reads as a plate with its corners taken off rather than a rounded web button. Its ends
-   carry authored brass caps - a drawn 10x24 piece, lit on one edge, dark on the other, with a
-   rivet - which is what makes it furniture rather than a coloured box. The wide bevel that
-   holds the volume is untouched, because that experiment already told us what happens when it
-   is not, and the press still travels 4px and trades its lit and deep edges.
-   BRICK semantics, family and guard are unchanged: this is the same Action, built. */
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{position:relative;
- min-height:72px;font:600 21px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;
- padding:0 42px;
- clip-path:polygon(0 14px,7px 14px,7px 7px,14px 7px,14px 0,calc(100% - 14px) 0,
-  calc(100% - 14px) 7px,calc(100% - 7px) 7px,calc(100% - 7px) 14px,100% 14px,
-  100% calc(100% - 14px),calc(100% - 7px) calc(100% - 14px),calc(100% - 7px) calc(100% - 7px),
-  calc(100% - 14px) calc(100% - 7px),calc(100% - 14px) 100%,14px 100%,
-  14px calc(100% - 7px),7px calc(100% - 7px),7px calc(100% - 14px),0 calc(100% - 14px));
- box-shadow:inset 0 0 0 3px var(--brick-line),
-  inset 0 5px 0 #e4876d,inset 5px 0 0 #d4705a,
-  inset 0 -7px 0 #5f2921,inset -5px 0 0 #7d3a2d;
- filter:drop-shadow(6px 6px 0 #000000b3)}
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:before,
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:after{content:'';
- position:absolute;top:50%;width:10px;height:24px;margin-top:-12px;
- background:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='10' height='24' shape-rendering='crispEdges'><g fill='%237a5c2b'><rect x='0' y='0' width='10' height='1'/><rect x='0' y='1' width='1' height='23'/><rect x='9' y='1' width='1' height='23'/><rect x='1' y='23' width='8' height='1'/></g><g fill='%23e6c176'><rect x='1' y='1' width='8' height='1'/><rect x='1' y='2' width='1' height='20'/><rect x='4' y='10' width='3' height='1'/><rect x='4' y='11' width='1' height='2'/><rect x='6' y='11' width='1' height='2'/><rect x='5' y='12' width='1' height='1'/></g><g fill='%23b08a42'><rect x='2' y='2' width='6' height='8'/><rect x='2' y='10' width='2' height='12'/><rect x='7' y='10' width='1' height='12'/><rect x='4' y='13' width='3' height='9'/></g><g fill='%235e4520'><rect x='8' y='2' width='1' height='21'/><rect x='1' y='22' width='7' height='1'/></g><g fill='%234a3418'><rect x='5' y='11' width='1' height='1'/></g></svg>") center/10px 24px no-repeat}
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:before{left:16px}
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:after{right:16px}
+/* §PRIMARY DECISION CONTROL. Third pass. The second one hung brass plaques on the ends and
+   the review was right: that is ornament stuck to a button, not a built control. What the
+   reference actually carries is proportion and one structural line - a dark outline, a single
+   thin gold edge inside it, a lit face and a hard bottom.
+   So the caps are gone. The corners are cut once, lightly, and the face keeps the brick with a
+   real 7px top light and a 9px deep bottom over one gold line. Corner rivets were built and
+   removed: at the size this control can carry them they did not read at all, and the review
+   asked for less accessory, not more. The press travels 4px and trades its lit and deep edges.
+   BRICK family, semantics and guard unchanged. */
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{min-height:64px;
+ font:600 20px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;padding:0 26px;
+ background-color:var(--brick);
+ box-shadow:inset 0 0 0 2px #190d09,inset 0 0 0 3px #d9ab55,
+  inset 0 7px 0 #e1836b,inset 0 -9px 0 #56241c;
+ clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
+  100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
+  6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
+ filter:drop-shadow(0 6px 0 #00000099)}
 .modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:hover{
- filter:drop-shadow(6px 6px 0 #000000b3) brightness(1.1)}
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:active{
- box-shadow:inset 0 0 0 3px var(--brick-line),
-  inset 0 5px 0 #5f2921,inset 5px 0 0 #7d3a2d,
-  inset 0 -7px 0 #e4876d,inset -5px 0 0 #d4705a;
- filter:drop-shadow(2px 2px 0 #000000b3) brightness(.94)}
+ filter:drop-shadow(0 6px 0 #00000099) brightness(1.08)}
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:active{transform:translateY(4px);
+ box-shadow:inset 0 0 0 2px #1a0e0a,inset 0 0 0 3px #9d7736,
+  inset 0 7px 0 #56241c,inset 0 -9px 0 #e1836b;
+ filter:drop-shadow(0 2px 0 #00000099) brightness(.95)}
 @media(min-width:1024px){
  /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
     actually lit - §RESPONSIVE DETAILING. The stage's own falloff carries the width; the
