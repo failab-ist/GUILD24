@@ -31,23 +31,22 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 - font-subset glyph issue fixed
 - audio regression/runtime verification reported PASS by WORK
 
-## Next Task — Remaining Adoption Audit
+## Remaining Adoption Audit — In Progress
 
-Audit the remaining non-audio Functional + Presentation adoption in small QA/Source batches.
+Completed audit batch:
+- UI-Q-v28-21 — Source implementation PASS for the implemented live-store trace family (equipped Decoration)
+- UI-Q-v28-21 — TEST GAP: no controlled render acceptance directly verifies trace add/remove plus Save/Load reproduction
+- UI-Q-v28-25 — PASS: targeted Item / NPC / Decoration / Boss graphic identity, crop and scale protections are adopted and guarded; reviewed browser/visual evidence exists for the changed surfaces
 
-Known review targets:
-- UI-Q-v28-21 / 25
-- UI-Q-v28-26 / 27
+No Design change is required from this batch.
+
+Next:
+- close the UI-Q-v28-21 Test Gap in its own narrow WORK fix cycle
+- then continue Remaining Adoption Audit with UI-Q-v28-26 / 27
+
+Later review targets:
 - UI-Q-v28-28 / 29
 - FINAL supply action audio cue ownership (`case 'supply'`)
-
-Classify each finding as:
-- Implementation Bug
-- Missing Adoption
-- Runtime UX Bug
-- Test Gap
-- Design Issue
-- Unresolved
 
 Do not change Design during the audit.
 Any implementation finding enters its own fix cycle.
