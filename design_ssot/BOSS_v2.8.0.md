@@ -87,8 +87,6 @@ Boss CLEAR continues to feed:
 - Job x Boss matrix / Job Mastery
 - distinct-Boss unlock progression
 
-Franchise Achievement is retired in v2.8 and is no longer an active Boss-clear consumer.
-
 ## SLOTH TERMINOLOGY
 
 Player-facing SLOTH text uses:
