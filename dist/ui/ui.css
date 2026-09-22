@@ -196,11 +196,22 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* The pre-Run loadout rows are controls, not readings: each Slot opens 점포 관리 on itself,
    so a player changes the Slot they are looking at instead of hunting for it. An empty Slot
    is neutral - no cost colour, no `주의 ·`, just the Slot and the word 비움. */
+/* BATCH 1: four identical installation readouts, not a SaaS list. Each row is the same recess
+   cut into the sheet's wood - one dark surface edge, one lit top seam, exact repeated inset -
+   and the rhythm between them is the 4px class the rest of the sheet uses. The click
+   affordance is deliberately one pixel of travel with no cast depth: these rank under the
+   screen's Primary and must never read as four buttons competing with it. */
 .effects li.deco-line{padding:0}
+.deco-line+.deco-line{margin-top:4px}
 .deco-jump{display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:12px;
- padding:9px 10px;min-height:44px;border:0;border-radius:0;text-align:left;
- font:inherit;color:inherit;background:#ffffff08;box-shadow:inset 0 0 0 1px #ffffff0f;cursor:pointer}
-.deco-jump:hover{background:#ffffff14}
+ padding:11px 12px;min-height:46px;border:0;border-radius:0;text-align:left;
+ font:inherit;color:var(--dim);background:#00000038;
+ box-shadow:inset 0 0 0 2px #00000059,inset 0 2px 0 #ffffff0f;cursor:pointer;
+ transition:background .08s steps(2)}
+.deco-jump:hover{background:#0000002b;color:#cdbfa4}
+.deco-jump:active{transform:translateY(1px);background:#00000047;
+ box-shadow:inset 0 0 0 2px #00000073,inset 0 2px 0 #ffffff08}
+.deco-jump>span{font:400 var(--t-sm)/1.4 var(--ui)}
 .deco-jump b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .deco-line.empty .deco-jump b{color:#8d8067;font-weight:400}
 .decoration-panel .slot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
@@ -637,17 +648,44 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    signage face the rest of the world's plates use, so the title needs no new font. The size is
    fluid and clamped, and the line never wraps - at the 320px floor the clamp bottoms out at
    30px, which the six glyphs and two spaces clear with room to spare. */
-.opening{display:grid;justify-items:center;gap:10px;padding:34px 16px 6px;text-align:center}
-.opening-title{margin:0;white-space:nowrap;color:#f2e7cd;
- font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none}
-.opening-branch{margin:0;font:500 clamp(14px,4.2vw,18px)/1.4 var(--ui);letter-spacing:.02em;color:#a2947c}
+/* PRESENTATION BATCH 1 / OPENING. The screen behind the preparation sheet was flat --soil,
+   so the store's own title stood in a void and the sheet read as a web panel dropped on black
+   - the single loudest gap against the v2.8 quality pair, where the same composition sits on an
+   owned plane. The plane is built from material the sheet already ships: the deck weave under a
+   warm falloff from the sign's height down to the floor, with the counter's value step closing
+   the bottom. No new art, no motif, nothing the phase does not already own. */
+.p-start{background-color:#0f0b08;
+ background-image:radial-gradient(152% 96% at 50% 3%,#3d2c1c5c 0,#160f0abf 52%,#0f0b08 100%),var(--tex-deck);
+ background-size:auto,12px 12px}
+.opening{position:relative;display:grid;justify-items:center;gap:8px;padding:34px 16px 14px;text-align:center}
+/* The identity sits on the plane instead of floating over it: one hard pixel drop, the value
+   the signage faces elsewhere already use. No blur - §EDGE / MATERIAL RULES. */
+.opening-title{margin:0;white-space:nowrap;color:#f7eeda;
+ font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none;
+ text-shadow:0 4px 0 #0a0705,0 6px 0 #00000073}
+/* The branch is short object identity, which §TYPOGRAPHY / SPACING routes to the plate face,
+   and a plate is what it becomes: a small stamped tag under the sign rather than grey body
+   copy. Mulmaru is crisp only at its design sizes, so this one is fixed at 12px, not fluid. */
+.opening-branch{margin:2px 0 0;padding:5px 12px 4px;color:#d2ba90;
+ font:500 12px/1 var(--f-plate);letter-spacing:.2em;-webkit-font-smoothing:none;
+ background:#00000059;box-shadow:inset 0 0 0 2px #5d4527}
+/* One supporting rule closes the title block and gives the sheet below something to hang from:
+   a single seam with a raised centre notch, the same 2px seam weight the sheet's frame uses.
+   §TITLE / PLATE allows exactly one - this is it, and nothing else on this screen is framed. */
+.opening:after{content:'';width:min(300px,78%);height:9px;margin-top:8px;
+ background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2213%22%20height%3D%229%22%20shape-rendering%3D%22crispEdges%22%3E%3Cpath%20d%3D%22M6%200h1v1h2v1h2v1h1v3h-1v1H9v1H7v1H6v-1H4v-1H2v-1H1V3h1V2h2V1h2z%22%20fill%3D%22%23a07c3c%22%2F%3E%3Cpath%20d%3D%22M6%201h1v1h2v1h1v1H3V3h1V2h2z%22%20fill%3D%22%23c9a45c%22%2F%3E%3C%2Fsvg%3E"),
+  linear-gradient(90deg,#00000000 0,#8a6a33 16%,#8a6a33 84%,#00000000 100%);
+ background-size:13px 9px,100% 2px;background-position:50% 0,50% 4px;background-repeat:no-repeat}
 /* USER-APPROVED OPENING, line 3 of the three axes: what the 30 days are for. It is the one of
    the three the modal was authored as a band, and the sheet had no rule for it at all, so it
    rendered as ordinary body copy wedged between the supporting line and the 이번 영업의 장식
    heading - the three axes read as one paragraph and the Run's endpoint had no rank of its own.
    Presentation only; the approved text is untouched. */
-.welcome-band{margin:12px 0 18px;padding:11px 13px;font:600 14px/1.5 var(--ui);color:#f2e7cd;
- background:#00000038;box-shadow:inset 3px 0 0 var(--gold),inset 0 0 0 1px #ffffff12}
+/* BATCH 1: it is a read-only in-world strip, so it carries ONE accent and no second edge - the
+   1px ring around it was a frame inside a frame, and a strip that is not pressable has no
+   business owning two. Flat plane, gold seam, nothing else. */
+.welcome-band{margin:12px 0 18px;padding:12px 14px;font:600 14px/1.5 var(--ui);color:#f6ecd3;
+ background:#00000047;box-shadow:inset 4px 0 0 var(--gold)}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
@@ -1199,6 +1237,63 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal-footer button:not(.stamp)[data-action="dismiss"]:active{transform:translate(2px,2px);
  background:#653a24;box-shadow:inset 0 0 0 2px var(--brown-deep),1px 1px 0 var(--brown-deep)}
 .modal-footer .danger{background:#5c2a24;color:#f6dfd9}
+
+/* =====================================================================
+   PRESENTATION BATCH 1 / PREPARATION SHEET. Scoped by what the sheet actually contains,
+   not by `.narrow` - `.narrow` is worn by 도움말, 영업 설정 and every confirm alike, and
+   those are LOW-budget utility overlays that must not inherit a MEDIUM surface's frame.
+   `:has(.welcome-band)` is the pre-Run sheet and nothing else, so no markup changed.
+
+   The sheet was header / body / footer stacked on one wood plane with a lit bar across the
+   top: three regions that never resolved into one object. It is built as one now -
+   a 3px outer object edge, a 2px warm inner seam, and every internal division drawn in that
+   SAME seam value, so the object has one edge grammar instead of four opinions. The footer
+   separates by material and value, not by another frame around itself.
+   ===================================================================== */
+.modal.narrow:has(.welcome-band){
+ box-shadow:inset 0 0 0 3px #0a0705,inset 0 0 0 5px #6b5029,0 -6px 0 #0000008c}
+.modal.narrow:has(.welcome-band) .modal-header{padding:16px var(--gutter) 13px;
+ box-shadow:inset 0 -2px 0 #6b5029}
+.modal.narrow:has(.welcome-band) .modal-header h2{font-size:21px;letter-spacing:.02em}
+.modal.narrow:has(.welcome-band) .modal-body{padding:18px var(--gutter) 20px}
+/* the footer is the sheet's own material, one step down in value, held by the same seam */
+.modal.narrow:has(.welcome-band) .modal-footer{background:#150e08;
+ box-shadow:inset 0 2px 0 #6b5029}
+/* §PRIMARY DECISION CONTROL: measure and seating only. The control's geometry - notch, hard
+   outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
+   Action construction and is not this Batch's to re-cut. What it lacked here was room of its
+   own: it sat tight against the sheet's last line of copy with no breathing plane under it. */
+/* §PRIMARY DECISION CONTROL: measure and seating only. The control's construction - notch, 3px
+   hard outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
+   Action geometry and already sits inside every range this system asks for, so this Batch does
+   not re-cut it. It was tried: a tighter bevel behind a 2px lit seam, matching the sheet's own
+   edge. The runtime capture was flatter than what it replaced - the wide bevel IS the volume -
+   so it was removed rather than kept for consistency's sake. What the Action actually lacked
+   here was measure and room, which is what remains. */
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{min-height:64px;
+ font:600 20px/1 var(--ui);letter-spacing:.06em}
+@media(min-width:1024px){
+ /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
+    actually lit - §RESPONSIVE DETAILING. The stage's own falloff carries the width; the
+    composition, the order and the single vertical read are untouched. */
+ .modal.narrow:has(.welcome-band){max-width:580px}
+ /* the shade is a dimmer, not a lid: at 60% it flattened the plane this Batch just built back
+    into the black it replaced. It steps back far enough for the storefront to read behind the
+    sheet, and the sheet still holds the screen - it is the only lit object on it. */
+ .modal-shade:has(.welcome-band){background:#05040373}
+ /* the sign takes the width it now has, at Mulmaru's own design size so it stays crisp */
+ .p-start .opening-title{font-size:48px}
+ .p-start .opening-branch{padding:6px 16px 5px;letter-spacing:.24em}
+ .p-start .opening:after{width:min(360px,60%)}
+ /* the plane gets a floor so the sheet stands on something instead of floating in the dark */
+ .p-start{background-image:linear-gradient(0deg,#0a0705 0 16%,#00000000 16%),
+  linear-gradient(0deg,#6b502959 0 calc(16% + 2px),#00000000 calc(16% + 2px)),
+  radial-gradient(152% 96% at 50% 3%,#3d2c1c5c 0,#160f0abf 52%,#0f0b08 100%),var(--tex-deck);
+  background-size:auto,auto,auto,12px 12px}
+ .modal.narrow:has(.welcome-band) .modal-body{padding:22px 22px 24px}
+ .modal.narrow:has(.welcome-band) .modal-header{padding:18px 22px 14px}
+ .modal.narrow:has(.welcome-band) .modal-footer{padding:16px 22px 18px}
+}
 
 /* =====================================================================
    COACH MARK — 점주 안내. UI_UX §TUTORIAL: the screen the player is on stays
