@@ -153,9 +153,16 @@ flatter than the shared Action geometry it replaced.
   controls, board content or day information. The two `board-frame-*.png` are candidate
   notice-board frames: the frame is drawn and the content region is fully transparent, so the
   live rail, slips and counts stay HTML.
-- selection: the two board frames are alternates for the same role. Adoption of either, and of
-  the backdrop, is decided on runtime BEFORE/AFTER capture under the Visual Delta and Asset
-  gates, not on the file alone.
+- adopted, Batch 1 Narrow Fix:
+  - `store-bg.png` - MORNING wall band, and reused by OPENING as the closed, unlit store the
+    preparation sheet stands in. Referenced from `dist/ui/ui.css` by CSS background, cropped by
+    `background-size` / `background-position` at its own aspect ratio. The file is not altered.
+  - `board-frame-plank.png` - MORNING notice board, through `border-image`, so the corner
+    brackets keep their own aspect and the rails repeat. The file is not altered.
+  - `board-frame-panel.png` - integrated and captured first, then not adopted: against the
+    store's own wooden fixtures it read flatter and more generic than the plank. The file is
+    kept as the alternate the User supplied; nothing references it. Whether an unreferenced
+    candidate stays in the shipped build is a DIRECTOR call, not this Batch's.
 - note for review: measured, these read as high-resolution painted art in a pixel idiom rather
   than true pixel art - 159k unique colours in the backdrop, 10-18k in the frames, and 1px
   run lengths where GUILD24's own art uses flat blocks. That is a runtime-crispness and

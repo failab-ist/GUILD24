@@ -716,12 +716,21 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* PRESENTATION BATCH 1 / OPENING. The screen behind the preparation sheet was flat --soil,
    so the store's own title stood in a void and the sheet read as a web panel dropped on black
    - the single loudest gap against the v2.8 quality pair, where the same composition sits on an
-   owned plane. The plane is built from material the sheet already ships: the deck weave under a
-   warm falloff from the sign's height down to the floor, with the counter's value step closing
-   the bottom. No new art, no motif, nothing the phase does not already own. */
+   owned plane.
+   NARROW FIX: that plane was still only a falloff over a weave - the screen read as an empty
+   dark background with a brown sheet on it. The store the player is about to open is now
+   shipped art in this repository, so the Opening stands in that store, shut and unlit, hours
+   before the day starts. Reusing owned art beats stacking more CSS layers (§ASSET / SVG
+   QUALITY GATE escalation: existing repository art before bespoke work). The veil over it is
+   what makes it a closed store rather than a second Morning: cold, low, and dark enough that
+   the preparation sheet is still the only lit object on the screen. */
 .p-start{background-color:#0f0b08;
- background-image:radial-gradient(152% 96% at 50% 3%,#3d2c1c5c 0,#160f0abf 52%,#0f0b08 100%),var(--tex-deck);
- background-size:auto,12px 12px}
+ background-image:linear-gradient(180deg,#0b0907d1 0,#0f0b08b8 24%,#0b0907e3 56%,#080605 100%),
+  radial-gradient(148% 92% at 50% 2%,#3d2c1c47 0,#00000000 58%),
+  url('assets/presentation/morning/store-bg.png'),var(--tex-deck);
+ background-size:auto,auto,auto 26%,12px 12px;
+ background-position:0 0,0 0,50% 0,0 0;
+ background-repeat:no-repeat,no-repeat,no-repeat,repeat}
 .opening{position:relative;display:grid;justify-items:center;gap:8px;padding:34px 16px 14px;text-align:center}
 /* The identity sits on the plane instead of floating over it: one hard pixel drop, the value
    the signage faces elsewhere already use. No blur - §EDGE / MATERIAL RULES. */
@@ -1328,15 +1337,27 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
    Action construction and is not this Batch's to re-cut. What it lacked here was room of its
    own: it sat tight against the sheet's last line of copy with no breathing plane under it. */
-/* §PRIMARY DECISION CONTROL: measure and seating only. The control's construction - notch, 3px
-   hard outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
-   Action geometry and already sits inside every range this system asks for, so this Batch does
-   not re-cut it. It was tried: a tighter bevel behind a 2px lit seam, matching the sheet's own
-   edge. The runtime capture was flatter than what it replaced - the wide bevel IS the volume -
-   so it was removed rather than kept for consistency's sake. What the Action actually lacked
-   here was measure and room, which is what remains. */
-.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{min-height:64px;
- font:600 20px/1 var(--ui);letter-spacing:.06em}
+/* §PRIMARY DECISION CONTROL. The earlier attempt re-cut the FACE - a tighter bevel behind a
+   2px seam - and the capture came back flatter, because the wide bevel is where the volume
+   lives. That is not restored here and the face is left alone.
+   What changes is the SILHOUETTE, which is the one axis nobody had touched. The shared Action
+   geometry notches its corners by 6px: correct for a footer confirm, but this is the Run's
+   single opening Action on a sheet it shares with nothing, and at 6px on a 64px face the notch
+   is nearly invisible - the control reads as a rectangle. The notch is cut to 10px here, the
+   face is taller, the hard offset goes to 6px, and the label is seated on the plane with one
+   hard pixel shadow. Same family, same colour, same press: a bigger key, cut deeper.
+   The press still travels 4px and still trades its lit and deep edges - the depth system is
+   the shared one, so only the offset it collapses from is restated. */
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]{min-height:70px;
+ font:600 21px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;
+ clip-path:polygon(0 10px,10px 10px,10px 0,calc(100% - 10px) 0,calc(100% - 10px) 10px,100% 10px,
+  100% calc(100% - 10px),calc(100% - 10px) calc(100% - 10px),calc(100% - 10px) 100%,
+  10px 100%,10px calc(100% - 10px),0 calc(100% - 10px));
+ filter:drop-shadow(6px 6px 0 #000000b3)}
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:hover{
+ filter:drop-shadow(6px 6px 0 #000000b3) brightness(1.1)}
+.modal.narrow:has(.welcome-band) .modal-footer [data-action="start"]:active{
+ filter:drop-shadow(2px 2px 0 #000000b3) brightness(.94)}
 @media(min-width:1024px){
  /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
     actually lit - §RESPONSIVE DETAILING. The stage's own falloff carries the width; the
@@ -1351,10 +1372,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-start .opening-branch{padding:6px 16px 5px;letter-spacing:.24em}
  .p-start .opening:after{width:min(360px,60%)}
  /* the plane gets a floor so the sheet stands on something instead of floating in the dark */
- .p-start{background-image:linear-gradient(0deg,#0a0705 0 16%,#00000000 16%),
-  linear-gradient(0deg,#6b502959 0 calc(16% + 2px),#00000000 calc(16% + 2px)),
-  radial-gradient(152% 96% at 50% 3%,#3d2c1c5c 0,#160f0abf 52%,#0f0b08 100%),var(--tex-deck);
-  background-size:auto,auto,auto,12px 12px}
+ .p-start{background-image:linear-gradient(0deg,#0a0705 0 14%,#00000000 14%),
+  linear-gradient(0deg,#6b502959 0 calc(14% + 2px),#00000000 calc(14% + 2px)),
+  linear-gradient(180deg,#0b0907f2 0,#0f0b08cc 36%,#0b0907e3 72%,#080605 100%),
+  radial-gradient(148% 92% at 50% 2%,#3d2c1c47 0,#00000000 58%),
+  url('assets/presentation/morning/store-bg.png'),var(--tex-deck);
+  background-size:auto,auto,auto,auto,cover,12px 12px;
+  background-position:0 0,0 0,0 0,0 0,50% 40%,0 0;
+  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,repeat}
  .modal.narrow:has(.welcome-band) .modal-body{padding:22px 22px 24px}
  .modal.narrow:has(.welcome-band) .modal-header{padding:18px 22px 14px}
  .modal.narrow:has(.welcome-band) .modal-footer{padding:16px 22px 18px}
