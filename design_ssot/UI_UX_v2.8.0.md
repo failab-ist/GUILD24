@@ -959,27 +959,133 @@ cover required information.
 
 ### DECISION / PHASE AUDIO
 
-The current audio architecture is reused.
+USER AMENDMENT, 2026-09-22 — AUDIO POLISH + AUDIO ASSET PRODUCTION.
 
-Material decisions should not all sound like the same generic UI click.
+The current audio ARCHITECTURE is reused where it already solves playback, routing, settings and
+phase ownership. This does NOT require reuse of the current audio assets. Existing synthesized
+cues / loops may be replaced when they are weaker than the target presentation.
 
-Distinct feedback classes are required for:
-- ORDER confirmation
-- successful SALE
-- SALE refusal
-- Store Support acquisition
+New audio may come from:
+- newly authored / synthesized / edited sound
+- layered or transformed current sound
+- external free assets whose license permits the shipped use
 
-Phase identity may be strengthened for:
-- MORNING
-- ORDER
-- SALE
-- NIGHT
-- FINAL
+External assets must have their source / author / license / modification status recorded outside
+Canonical. Do not use an asset with unclear rights or a license that forbids the intended shipped
+use.
 
-This may use current BGM/ambience transition, layering or targeted cues.
-A unique new full track per phase is not required.
+#### AUDIO VOICE
 
-Muted state and existing BGM/SFX settings remain authoritative.
+GUILD24 audio is:
+
+    late-night convenience-store tactility
+    + restrained guild / fantasy signals
+
+Prefer:
+- short, dry, readable transients
+- mechanical / paper / register / fixture material
+- modest retro / 2D-game character
+- restrained tonal fantasy accents
+
+Avoid:
+- one generic synth beep for every action
+- sci-fi UI beeps
+- corporate-app clicks
+- chiptune / arcade effects everywhere
+- mobile-RPG fanfare
+- cinematic whoosh / boom as the default
+- long reverb tails
+- overly cute / pop cartoon SFX
+
+#### AUDIO HIERARCHY
+
+Three presentation layers:
+1. Ambience / BGM — phase / space identity
+2. Decision SFX — meaningful commit / result
+3. Utility SFX — navigation / light manipulation
+
+Decision SFX outrank Utility SFX.
+BGM / ambience must sit below information and decision cues.
+
+Utility controls such as menu / help / settings / tabs / coach navigation use a quiet, short,
+low-importance family.
+
+#### MATERIAL DECISION CUES
+
+ORDER
+- quantity changes use a tiny repeat-safe tactile tick
+- quick-set shortcuts do not outrank the main stepper
+- order confirmation sounds like committing an order: paper / stamp / short mechanical register
+  language, not a generic click
+
+SALE
+- price choices are peer register/till keys; no price mode is made to sound like the correct answer
+- successful sale gets a short register / scan / till / coin confirmation
+- refusal is clearly different but restrained, not a loud failure buzzer
+- price-mode variants, if any, stay within one SALE family
+
+STORE SUPPORT
+- acquisition is heavier than an ordinary purchase and reads as installing / securing store support
+- it is not the same cue as Relic acquisition
+
+MORNING
+- store opening may use shutter / latch / door / restrained opening-chime material
+- avoid bright commercial-jingle treatment
+
+CLOSING
+- closure uses a short receipt / cash-drawer / ledger / page-settle family
+- it reads as settling the day, not earning a reward fanfare
+
+#### NIGHT OUTCOME AUDIO
+
+NIGHT outcomes share one family but must not collapse to one cue with only a pitch change.
+
+- success: resolved / returned
+- Great Success: one step brighter / more complete than success
+- retreat: resolved but depleted
+- injury: short low / worn return
+- severe injury: heavier and lower than injury, without horror exaggeration
+- Death: restrained low drop / cut / sting; no fanfare or melodramatic boom
+- rescue / avoided death: recovery / life-saving accent distinct from normal success
+
+Audio emphasis must never change or overstate the resolved Outcome or proof.
+
+#### BOSS / FINAL AUDIO
+
+Boss-information beats use a shared Boss motif / report family rather than unrelated fanfares.
+
+- D5 / D15 / D25 may carry stronger acknowledgement
+- D10 / D20 stay compact
+- D30 adds no new-information cue; it may transition into Final tension only from already revealed
+  information
+
+FINAL ambience / BGM is more tense than NIGHT and may connect to the Boss motif.
+The Final commit may use one of the run's heaviest short action cues: gate / lock / departure /
+heavy mechanical close. Do not add a cinematic audio framework.
+
+#### BGM / AMBIENCE
+
+A unique full track for every phase is not required.
+
+Preferred identity:
+- DAY bed: MORNING / ORDER / SALE may share a foundation; local actions carry phase identity
+- NIGHT bed: quieter / colder store atmosphere, leaving space for results
+- BOSS / FINAL bed: restrained low tension, optionally tied to the Boss motif
+
+A more suitable new loop / ambience asset may replace the current synthesized bed.
+
+#### MIX / RUNTIME
+
+Existing mute / BGM / SFX ownership remains authoritative.
+
+Required:
+- critical decision / result cues > ordinary action cues > utility cues
+- BGM / ambience below those cues
+- rapid-repeat controls must not build into harsh overlapping sound
+- background / visibility transitions must not leak or duplicate playback
+- audio changes do not mutate gameplay state and consume no Gameplay RNG
+
+Presentation-only variation, if used, is isolated from Gameplay RNG.
 
 ### NIGHT RESULT PRESENTATION
 
