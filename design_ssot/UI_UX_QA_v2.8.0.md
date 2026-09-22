@@ -262,25 +262,55 @@ FAIL:
 
 ## UI-Q-v28-22 — DECISION / PHASE AUDIO
 
-Verify the current audio architecture, not a parallel audio system.
+Verify Audio Polish with the current audio architecture as the baseline. Reusing architecture does
+not mean retaining weak current synthesized assets.
 
-Material action feedback must be semantically distinguishable for:
+Listen on a real phone/browser to at least:
+- repeated ORDER quantity changes
 - ORDER confirmation
-- successful SALE
-- SALE refusal
+- SALE price selection / success / refusal
 - Store Support acquisition
-
-Phase presentation may strengthen MORNING / ORDER / SALE / NIGHT / FINAL identity through the current
-BGM/ambience/cue system.
+- MORNING opening
+- NIGHT success / Great Success / retreat / injury / severe injury / Death / rescue
+- CLOSING
+- Boss D5 / D10 / D15 / D20 / D25
+- FINAL commit
 
 PASS:
+- meaningful decisions are semantically distinguishable by sound
+- Utility cues stay below Decision cues
+- repeated quantity input remains short and non-fatiguing without harsh stacking
+- ORDER confirmation reads as an order commit, not a generic click
+- SALE success / refusal are clearly different without making one price mode sound correct
+- Store Support acquisition is distinct from ordinary purchase and Relic acquisition
+- NIGHT outcomes share a family but materially different results do not collapse to one pitch-shift
+  cue
+- Death is restrained rather than celebratory / cinematic; rescue reads as recovery, not normal
+  success
+- Boss-information cues follow one motif/family; D10 / D20 remain smaller than D5 / D15 / D25
+- D30 adds no new-information audio signal
+- Final commit is heavy and clear without a cinematic framework
+- DAY / NIGHT / BOSS-FINAL ambience identities are distinguishable enough to support phase mood
+- BGM / ambience stays below decision/result cues
 - mute disables presentation audio
-- BGM and SFX settings continue to control their existing channels
+- BGM and SFX settings keep control of their owned channels
+- background / foreground transitions do not leak, duplicate or restart one-shot cues incorrectly
 - audio playback changes no gameplay state and consumes no Gameplay RNG
-- repeated render alone does not replay one-shot decision cues
 - mobile and desktop run without audio-related console/runtime errors
 
-A unique full music track per phase is not required.
+External/new asset PASS:
+- every shipped third-party audio asset has a recorded source, author, license and modification
+  status
+- no shipped asset has unclear rights or a license incompatible with the intended distribution
+
+FAIL:
+- most actions still read as the same generic synth beep
+- utility navigation is as loud or important as material decisions
+- repeated input creates harsh overlapping sound
+- BGM masks copy / decisions / result cues
+- one full new music track is treated as mandatory for every phase
+- a parallel audio framework is introduced without need
+- audio presentation changes gameplay truth or uses Gameplay RNG
 
 ## UI-Q-v28-23 — NIGHT RESULT PRESENTATION
 
