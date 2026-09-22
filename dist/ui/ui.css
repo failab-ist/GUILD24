@@ -498,10 +498,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
     never runs underneath the button */
  max-width:min(calc(100% - var(--gutter) - 52px),560px);
  font:400 15px/1.5 var(--ui);color:var(--ink);
- background:var(--paper);
+ /* UI_UX §TRANSIENT SALE SPEECH OVERLAP. At phone width the balloon briefly overlaps the
+    compact customer-state strip - measured 360/390/412, balloon 8-50px against `.kit` top
+    31-33px - and clearing it would cost permanent empty height or compression of required
+    decision information. The approved compromise is a ~88% opaque BACKGROUND with the text
+    left fully opaque; never a lower opacity on the whole element, which would make the
+    dialogue itself faint. `.say>span` re-asserts the text's own opacity for the same reason. */
+ background:color-mix(in srgb,var(--paper) 88%,transparent);
  box-shadow:inset 0 0 0 2px #00000026,3px 4px 0 #00000073;
  overflow-wrap:anywhere}
-.say>span{display:block}
+.say>span{display:block;opacity:1}
 /* the tail: a solid wedge under the balloon, aimed at the card's centre */
 .say:after{content:'';position:absolute;top:100%;left:min(calc(var(--cardw) * .5), 60%);
  width:0;height:0;border:9px solid transparent;border-top-color:var(--paper);border-bottom:0}
@@ -987,8 +993,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-plate .cost{display:block;margin:12px 0 10px;padding:7px 0;text-align:center;
  font:500 20px/1 var(--f-led);color:var(--gold);background:#00000059;
  box-shadow:inset 2px 2px 0 #00000080,inset 0 -2px 0 #ffffff14}
-.relic-plate .stamp{width:100%;min-height:50px;font:600 16px/1 var(--ui);background:#2f7a4d;color:#f0fbf3;
- box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
+/* UI_UX §PHASE VISUAL LANGUAGE / UI-Q-v28-30: "Store Support acquisition/choice uses the
+   existing slate/steel/gold family rather than the universal green CTA treatment." The plate it
+   sits on is already steel and brass (--tex-metal, a #7d6a45 ring, four --bolt heads), and the
+   control that opens this window from MORNING is the brass `.brass` key - so the acquisition
+   takes that same brass rather than the green every other primary action uses. Same colours as
+   `.brass`, no new token. */
+.relic-plate .stamp{width:100%;min-height:50px;font:600 16px/1 var(--ui);background:#8a7038;color:#2a2110;
+ box-shadow:inset 2px 2px 0 #e0c07a,inset -2px -2px 0 #4f3d17,3px 3px 0 #00000073}
+.relic-plate .stamp:hover{background:#9a7e40}
 .relic-plate .stamp[disabled]{background:#33291c;color:#8a7d64;box-shadow:inset 0 0 0 2px #ffffff14,3px 3px 0 #00000059}
 .relic-plate.owned{box-shadow:inset 0 0 0 2px var(--sign-lit),inset 0 3px 0 #ffffff26,inset 0 -4px 0 #00000080,4px 4px 0 #00000080}
 .relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;
@@ -1407,6 +1420,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .boss-reveal.final .boss-art img{max-height:200px}
  .boss-reveal.final .fams{grid-template-columns:1fr 1fr}
 }
+/* UI_UX §PHASE VISUAL LANGUAGE: FINAL keeps the existing blood / ember-red gate language, and
+   the Boss information chain is that gate's own reveal. Its acknowledgement was the same
+   generic green `.modal-footer .stamp` every other primary action uses, which is exactly what
+   UI-Q-v28-30 fails. It takes `.p-final .dock .stamp`'s colours verbatim - no new token, no
+   new component - so the beats that lead to 제0게이트 and the gate itself read as one thing. */
+.modal-footer .stamp.gate{background:#8a2f26;color:#ffeee9;
+ box-shadow:inset 0 0 0 2px #ffeee94d,inset 0 0 0 4px #8a2f26,inset 0 0 0 6px #ffeee926,3px 3px 0 #00000080}
 
 /* The seal offer shares the window's one acquisition with the Relic candidates, so it
    reads as the alternative to them rather than as an extra thing to also take. */

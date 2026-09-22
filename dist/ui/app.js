@@ -1347,7 +1347,8 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  if(modal==='boss'){const c=Copy.boss,stage=bossRevealStage();
   title=c[stage==='final'?'final':stage].header;
   body=bossReveal();
-  footer=btn(c[stage==='final'?'final':stage].button,'boss-seen','stamp');
+  /* the gate's own accent, not the universal green primary (UI_UX §PHASE VISUAL LANGUAGE) */
+  footer=btn(c[stage==='final'?'final':stage].button,'boss-seen','stamp gate');
   narrow=stage!=='final';}
  else if(modal.startsWith('stat:')){
   const k=modal.split(':')[1], n=game.current();
