@@ -832,21 +832,29 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night .dock{display:flex;align-items:center;gap:10px;background:#080a11;box-shadow:inset 0 3px 0 #ffffff12}
 .p-night .dock .bare{background:transparent;color:#8f94a6;font:400 14px/1 var(--ui);padding:14px 10px;min-height:46px;box-shadow:none}
 .p-night .dock .bare[disabled]{color:#4c5062}
-/* UI_UX §PER-PHASE (NIGHT) — CLOSING HANDOVER CONTROL (USER AMENDMENT 2026-09-22). The violet
-   plate with its light inset outline read as a mobile-RPG CTA, not as this phase. It is a compact
-   pixel-game commit now: the night's own dark plane, a warm neutral label, separated by the plane
-   alone - no border, no inset outline - with exactly ONE bottom/right hard depth. The press moves
-   the control and collapses that depth. Nothing else. */
+/* UI_UX §PER-PHASE (NIGHT) — CLOSING HANDOVER CONTROL (USER AMENDMENT 2026-09-22, amended).
+   The violet plate read as a mobile-RPG CTA; the dark plane that replaced it read as a disabled
+   grey button. This is the lamp-lit handover to the day's close: a muted warm plane - the amber
+   the till and the receipt already own - carrying dark ink, so it reads ACTIVE at a glance
+   against the blue night and far above the dim `전체 건너뛰기` beside it. Separation is the
+   plane itself: no border, no inset outline, no bevel, no gloss. Exactly ONE bottom/right hard
+   depth, which the press collapses as the control moves. */
 .p-night .dock .stamp{margin-left:auto;min-height:52px;min-width:132px;font:600 17px/1 var(--ui);
- background:#2a2c3a;color:#f0e7d4;
+ background:#c08b3c;color:#1d1405;
  box-shadow:4px 4px 0 #000000a6}
-.p-night .dock .stamp:hover{background:#353849}
-.p-night .dock .stamp:active{transform:translate(3px,3px);background:#23252f;
+.p-night .dock .stamp:hover{background:#d09a47}
+.p-night .dock .stamp:active{transform:translate(3px,3px);background:#a87730;
  box-shadow:1px 1px 0 #000000a6}
 /* the rail of return tags: the night's progress as objects, one per adventurer out today */
 /* a short beat sits in the middle of the room rather than clinging to the top of it;
    a long one falls back to normal flow so nothing scrolls out of reach */
-.beat-room{flex:1 1 auto;display:flex;flex-direction:column;justify-content:safe center;min-height:0}
+/* UI_UX §NIGHT LAYOUT — VERTICAL COMPOSITION (USER AMENDMENT 2026-09-22). The record begins
+   under the return rail and runs downward. It used to be centred in the remaining viewport, so a
+   short result - a death, a quiet return - floated in the middle of the screen with a band of
+   dead space above it. No spacer replaces the centring. */
+.beat-room{flex:1 1 auto;display:flex;flex-direction:column;justify-content:flex-start;min-height:0}
+/* a death ends on its summary, so the group leaves no trailing space behind it */
+.gone-beat .told{margin-bottom:0}
 .rail{position:relative;flex:0 0 auto;display:flex;align-items:flex-start;gap:6px;
  margin-top:calc(var(--sky) + 10px);padding-bottom:18px}
 .rail:before{content:'';position:absolute;left:0;right:0;top:1px;height:2px;background:#4a3a24}
@@ -866,11 +874,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .beat .say:after{top:100%;bottom:auto;left:min(22vw,95px);
  border:9px solid transparent;border-top-color:var(--paper);border-right:0;border-bottom:0}
 /* UI_UX §NIGHT LAYOUT — DEATH MESSAGE (USER AMENDMENT 2026-09-22). Same position and the same
-   visual weight as a living adventurer's line, but it is a neutral FLOATING message, not an
-   utterance and not a plate marked by a coloured edge: no paper bubble, no tail, no left accent
-   bar, no border, no icon. The copy it reuses carries no quotation marks. */
-.beat .say.status{background:none;color:#cfd3dd;cursor:default;box-shadow:none;
- padding:6px 2px 7px;font:400 15px/1.5 var(--ui);text-shadow:0 2px 0 #060810,0 0 10px #060810}
+   visual weight as a living adventurer's line, but a neutral STATUS LABEL, not an utterance.
+   Bare text read too weakly to register, so it takes a small container: it hugs its text, on a
+   dark translucent flat plate with modest padding. A container is not a bubble - what makes an
+   utterance is the tail, the paper ground and the quotation, and none of those are here. No
+   accent bar, no border, no icon, no glow, no blur. */
+.beat .say.status{display:inline-block;width:auto;background:#0d111ad9;color:#cfd3dd;
+ cursor:default;box-shadow:none;padding:7px 11px 8px;font:400 15px/1.45 var(--ui);
+ text-shadow:none}
 .beat .say.status:after{display:none}
 /* the balloon anchors to the figure's own row, so the line may overlap the character
    (UI_UX §NIGHT LAYOUT) rather than reserving height above the record */

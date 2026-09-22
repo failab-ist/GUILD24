@@ -593,28 +593,31 @@ function beat(r){
     on them. The proven Hero claim and the supply line used to be two independent blocks with
     their own grounds - a second and third result competing with the first - and the fact line
     was a third block. They are one `.told` group now; nothing was added or removed. */
- return '<article class="beat '+rank+' t-'+tone+(heavy?'':' quiet')+'">'
+ /* UI_UX §NIGHT LAYOUT — DEATH PAYLOAD / NIGHT_CLOSING §DEATH IS A CLOSED RESULT (USER
+    AMENDMENT 2026-09-22): a death is a finished result, so the record carries the status
+    message, the character, `사망`, the name, the Dungeon · Lv and the Outcome summary - and
+    stops. No route change, Deep tag, Item cause, incident line, growth or settlement figure,
+    and no divider or reserved space where any of those would be. The resolution still recorded
+    whatever it recorded; this is a render rule. */
+ const gone=r.outcome==='사망';
+ return '<article class="beat '+rank+' t-'+tone+(heavy?'':' quiet')+(gone?' gone-beat':'')+'">'
  +'<div class="stand-in">'
   +speech(n)+portrait(n,150,'returner')
   +'<div class="who">'
    +'<p class="verdict">'+E(verdict)+'</p>'
    +'<h3>'+E(r.name)+'</h3><p class="place">'+E(r.dungeonName)+' · Lv.'+r.level+'</p>'
-   +(r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
-   +(r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
+   +(!gone&&r.routeChange?'<p class="route">'+E(r.routeChange)+'</p>':'')
+   +(!gone&&r.deep?'<p class="deep-tag">'+E(Copy.deep.result)+'</p>':'')+'</div>'
  +'</div>'
  +'<div class="told">'
   +'<p class="what">'+E(Presentation.nightHappened(r))+'</p>'
-  +causeLines(r)
+  +(gone?'':causeLines(r))
   /* what the Outcome and its summary do NOT already say: an attributed incident, or an event
      that speaks for itself. The fight verdict sentence is no longer among them - UI_UX §NIGHT
      LAYOUT — COMBAT FACT retires it from the player-facing record at every hierarchy. */
-  +(why?'<p class="why">'+E(why)+'</p>':'')
+  +(!gone&&why?'<p class="why">'+E(why)+'</p>':'')
  +'</div>'
- /* UI_UX §NIGHT LAYOUT — DEATH PAYLOAD / NIGHT_CLOSING §DEATH IS A CLOSED RESULT (USER
-    AMENDMENT 2026-09-22): a death is finished, so the record does not go on to list follow-up
-    growth and settlement figures. The whole region is absent - not an empty box, not a divider -
-    so the death ends on its summary. The resolution still recorded whatever it recorded. */
- +(r.outcome==='사망'?'':'<div class="changed">'+changedRows(r)+'</div>')
+ +(gone?'':'<div class="changed">'+changedRows(r)+'</div>')
  +'</article>';}
 // Importance decides how much copy a beat spends, never how big the adventurer is
 // (UI-Q31). Presentation owns the rule so screen and tests share it.
