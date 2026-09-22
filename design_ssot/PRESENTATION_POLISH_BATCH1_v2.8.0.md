@@ -278,6 +278,75 @@ MORNING remains FAIL until:
 - the board is at least as complete and tight as BEFORE;
 - the result is visibly stronger at PHONE and DESKTOP widths.
 
+## MORNING LOWER STAGE / TILL ALIGNMENT — USER APPROVED
+
+Runtime review of the full-room asset integration found one remaining composition-fit issue:
+
+- the authored store image stops visually before the lower Morning Action area, so the room no longer reads as one continuous environment at the bottom;
+- the live till / POS housing is not seated exactly on the production asset's counter-top plane.
+
+This is now an exact Batch 1 requirement.
+
+### Environment continuation
+
+The MORNING production environment must remain visually continuous from its authored ceiling through
+its wall / shelves / window / counter top and counter face to the LOWER EDGE of the Morning stage.
+
+The dock may remain the semantic owner of:
+- 점포지원
+- 문 열기
+
+but it must not create an opaque black bar that visually cuts the production room off above those
+controls.
+
+Preferred direction:
+- let the production room art continue behind the lower Action zone;
+- make the Morning dock a live control overlay / seating plane over that environment;
+- use only the minimum local contrast needed to keep controls readable.
+
+Do not:
+- stretch the asset;
+- invent a second floor / counter below it;
+- add another opaque panel simply to seat the controls;
+- crop away the authored counter face at the bottom.
+
+The authored lower room / counter face must remain visible enough that the screen reads as ONE store
+from ceiling to bottom.
+
+### Till / POS seating
+
+The live till must sit on the production asset's actual counter TOP, not on the counter face and not
+floating below / above it.
+
+The asset measurement identifies the counter-top zone approximately at:
+- 79–86% of the source image height
+
+This range is a locating aid, not a fixed CSS percentage.
+
+Runtime alignment owns the final placement:
+- the bottom / feet of the POS housing visually contact the counter top;
+- the display remains readable;
+- the POS must look physically supported by the counter;
+- responsive crop / scale may change the mapped screen coordinate, so do not hard-code a viewport
+  pixel value that only works at 390.
+
+If the legacy `.band.counter` / Scene anchor places the till incorrectly after the production room
+takes visual ownership, the live till may be positioned from the existing Morning room / store
+coordinate system instead. This is Presentation-only and must not change the information or Action.
+
+### Acceptance evidence
+
+At minimum inspect:
+- PHONE 390
+- DESKTOP 1280
+
+PASS only if:
+1. the production room visibly reaches the bottom Action zone without an opaque cut-off band;
+2. counter top and counter face remain legible as parts of the same authored image;
+3. the till is seated directly on the counter top;
+4. 점포지원 / 문 열기 remain readable and clickable;
+5. no gameplay structure or information order changes.
+
 ## DIRECTOR ACCEPTANCE
 
 PASS requires:
