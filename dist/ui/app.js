@@ -298,8 +298,12 @@ function morningScreen(){
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
    +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+'</div></div>'
-  +'<div class="band wall">'+Scene.wall(s.day)+'<span class="branchplate">'+E(s.branch)+'</span>'+decoPlate('wall')+decoPlate('display')+'</div>'
+  +'<div class="band wall">'+Scene.wall(s.day)+decoPlate('wall')+decoPlate('display')+'</div>'
+  /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
+     counter-band element and is placed in the counter's own coordinates. Presentation only -
+     same text, same source, same order on screen. */
   +'<div class="band counter"><span class="mount">'+Scene.counter()
+   +'<span class="branchplate">'+E(s.branch)+'</span>'
    +'<span class="till-cap" style="'+Scene.anchorStyle('tillLabel')+'">보유 골드</span>'
    +'<span class="till" style="'+Scene.anchorStyle('till')+'" aria-label="보유 자금 '+fmt(s.money)+'G"><b class="coin">'+fmt(s.money)+'</b><i>G</i></span>'
    +decoPlate('counter')+'</span></div>'

@@ -176,7 +176,8 @@
 .p-morning{isolation:isolate;background-color:#0f0b08;
  background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
   url('assets/presentation/morning/store-bg-phone.png');
- background-size:auto,cover;background-position:0 0,50% 50%;background-repeat:no-repeat,no-repeat}
+ background-size:auto,cover;background-position:0 0,50% 50%;background-repeat:no-repeat,no-repeat;
+ background-origin:content-box}
 .p-morning .store{background:none}
 .p-morning .band.ceiling,.p-morning .band.wall,.p-morning .band.counter{background:none}
 .p-morning .band.ceiling,.p-morning .band.wall{overflow:hidden}
@@ -238,12 +239,17 @@
 /* THE BRANCH NAME BELONGS TO THE STORE, NOT TO THE WALL. It was an isolated caption floating
    at the bottom-right of the wall band, which is why it never joined the room. It is a small
    plate screwed to the counter face now - the same place a shop puts its name where customers
-   stand. It hangs below the wall band by exactly the counter band's own height, which is a
-   fixed share of the stage, so it lands on the counter face at any board height. Quiet on
-   purpose: it is a mark on the furniture, not a badge, and it never outranks the board, the
+   stand.
+   It is seated in the COUNTER's own coordinates: the plate is a counter-band element, and its
+   position is a percentage inside that band. It used to hang under the WALL band by a viewport
+   offset, which held its place only while the stage was exactly one viewport tall - a safe-area
+   inset, or any chrome that moves the stage's content box without moving the viewport, would
+   have slid it off the face. The counter band is a fixed share of the store at each breakpoint,
+   so this is the same physical spot on the painted counter at every width and at any board
+   height.
+   Quiet on purpose: a mark on the furniture, not a badge, and it never outranks the board, the
    float or the Action. */
-.p-morning .band.wall{overflow:visible}
-.p-morning .branchplate{right:7%;left:auto;bottom:-20dvh;padding:3px 9px;opacity:1;
+.p-morning .branchplate{right:7%;left:auto;top:52%;bottom:auto;padding:3px 9px;opacity:1;
  font:500 12px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;
  box-shadow:inset 0 0 0 1px #6b5029,inset 0 1px 0 #00000073,0 2px 0 #00000080}
 /* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
@@ -260,7 +266,9 @@
    url('assets/presentation/morning/store-bg-wide.png')}
  .p-morning .band.ceiling{flex:0 0 19%}
  .p-morning .band.counter{flex:0 0 30%}
- .p-morning .branchplate{bottom:-18dvh}
+ /* the wide file's counter face starts lower inside its own band, and the plate has a wider
+    surface to sit on here, so it takes one step up in size - a plate, still not a sign */
+ .p-morning .branchplate{top:56%;padding:5px 13px;font-size:15px;letter-spacing:.02em}
  .p-morning .till{left:32%!important;width:36%!important;top:23.3%!important;height:26.7%!important}
  .p-morning .till-cap{left:32%!important;width:36%!important;top:12.6%!important;height:10.7%!important}
 }
