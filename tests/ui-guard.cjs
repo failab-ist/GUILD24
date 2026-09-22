@@ -1123,8 +1123,8 @@ test('UI_UX_v2.8 §PURCHASE CONFIRMATION: the buy button asks, and only the conf
  assert.ok(/function setModal\(value\)\{decoPending=null/.test(app),'closing or reopening the window cancels it');
 });
 
-// D-22 / D-23. There are no audio files here: every sound is synthesised, so a volume control
-// is a gain node. The contract is that the player owns two of them, that a level survives a
+// D-22 / D-23. Recorded cues and synthesised ones reach the same mixer, so a volume control is
+// still a gain node. The contract is that the player owns two of them, that a level survives a
 // reload, and that no voice sneaks past a bus straight to the speakers.
 test('D-22 / §B-16: two player-owned buses under one master, and a level that is saved',()=>{
  const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
@@ -1237,15 +1237,38 @@ test('D-23: every cue the UI asks for exists, and every step of an ordinary day 
  /* §NIGHT OUTCOME AUDIO: the Outcome is primary. A success that found something used to be
     answered by a `discovery` / `level` cue INSTEAD of its Outcome, so a 퇴각 and a plain return
     could sound alike. Both of those cues are retired. */
- assert.ok(/result\.outcome==='사망'\?'death'/.test(app),'the night result is heard by what it was');
- // the prose beside the branch names the retired cues, so the guard reads the code alone
- const night=app.slice(app.indexOf("case'night-next'"),app.indexOf("\n case'",app.indexOf("case'night-next'")+1))
-  .replace(/\/\*[\s\S]*?\*\//g,'');
+ /* One owner, so neither entry point can drift: `nightCue` maps the Outcome and `nightSound`
+    plays it before the proven accent. The prose beside them names the retired cues, so these
+    read the code alone. */
+ const bareOf=t=>t.replace(/\/\*[\s\S]*?\*\//g,'');
+ const cueMap=bareOf(fn('nightSound'))+bareOf(app.slice(app.indexOf('const nightCue='),app.indexOf('const nightCue=')+400));
  for(const [o,c] of [['사망','death'],['중상','severe'],['부상','injury'],['퇴각','retreat'],['대성공','great']])
-  assert.ok(night.includes("result.outcome==='"+o+"'?'"+c+"'"),o+' is heard as '+c);
- assert.ok(/:'return'\)/.test(night),'and an ordinary return keeps its own');
- assert.ok(!/discovery|'level'/.test(night),'no find or Stat move speaks over the Outcome');
+  assert.ok(cueMap.includes("outcome==='"+o+"'?'"+c+"'"),o+' is heard as '+c);
+ assert.ok(/:'return';/.test(cueMap),'and an ordinary return keeps its own');
+ assert.ok(!/discovery|'level'/.test(cueMap),'no find or Stat move speaks over the Outcome');
  assert.ok(!Sound.cues.includes('discovery')&&!Sound.cues.includes('level'),'and the two retired cues are gone');
+ /* BOTH ways a result becomes the visible one route through that owner. The final departure of
+    the day IS the entry to NIGHT and lands on result 0 already on screen, so it owes that
+    result its own Outcome cue; it used to play the generic return cue, which made a 사망 or a
+    퇴각 at the head of the queue sound like an ordinary return until 다음 was pressed. */
+ const nextSeg=bareOf(app.slice(app.indexOf("case'night-next'"),app.indexOf("\n case'",app.indexOf("case'night-next'")+1)));
+ assert.ok(/nightSound\(s\.results\[s\.nightCursor\]\)/.test(nextSeg),'다음 asks the owner for the cue');
+ assert.ok(!/sound\(/.test(nextSeg),'and asks for nothing else');
+ const dep=bareOf(app.slice(app.indexOf("case'depart'"),app.indexOf("\n case'",app.indexOf("case'depart'")+1)));
+ assert.ok(/if\(s\.phase==='night'\)nightSound\(s\.results\[s\.nightCursor\|\|0\]\)/.test(dep),
+  'entering NIGHT plays the first displayed result, not a generic return');
+ assert.ok(!/\?'return':/.test(dep),'the old generic-return branch is gone');
+ assert.ok(/else sound\('depart'\)/.test(dep),'a departure that is not the entry to NIGHT still departs');
+ // the accent still lands behind the Outcome cue, and only on proven state
+ const owner=bareOf(fn('nightSound'));
+ assert.ok(owner.indexOf('sound(nightCue(result))')<owner.indexOf("Sound.play('rescue'"),'the accent never replaces the Outcome cue');
+ assert.ok(/if\(result\.rescued\|\|result\.avoidedDeath\)Sound\.play\('rescue',\.\d+\)/.test(owner),'and is read off proven state');
+ assert.ok(!/game\.|render\(\)|\.nightCursor=/.test(owner),'the owner is presentation only');
+ /* §AUDIO HIERARCHY: Settings is Utility. Unmuting used to answer with the default cue, which
+    is the SALE register - the loudest thing in the build, for a control that sold nothing. */
+ const toggle=bareOf(app.slice(app.indexOf("case'sound'"),app.indexOf("\n case'",app.indexOf("case'sound'")+1)));
+ assert.ok(/sound\('ui'\)/.test(toggle),'the mute switch confirms with the quiet utility click');
+ assert.ok(!/sound\(\)/.test(toggle),'never with the default SALE cue');
  // gold in and gold out are mirror cues, so one is never mistaken for the other
  const gold=[659,784];assert.ok(Sound.cues.includes('gold')&&Sound.cues.includes('spend'),'both directions exist');
  assert.ok(/spend:\[784,659\]/.test(audioSrc),'spend falls where gold rises: '+gold.join());
@@ -1314,13 +1337,17 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  // the prose beside these branches names the Outcomes and the Boss facts, so they read the code
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
- const i=app.indexOf("case'night-next'"),seg=bare(app.slice(i,app.indexOf("\n case'",i+1)));
+ // both ways into a visible result go through one owner, so the rules are asserted on it
+ const seg=bare(fn('nightSound'));
  // the recovery accent is layered behind the Outcome cue and gated on the proof the result carries
  assert.ok(/if\(result\.rescued\|\|result\.avoidedDeath\)Sound\.play\('rescue',\.\d+\)/.test(seg),
   'the rescue accent is delayed behind the outcome cue and read off proven state');
- assert.ok(seg.indexOf("sound(result.outcome")<seg.indexOf("Sound.play('rescue'"),'it never replaces the Outcome cue');
- // presentation only: the cue branch assigns nothing and calls no game method
- assert.ok(!/game\.|s\.\w+=/.test(seg.slice(seg.indexOf('if(result){'))),'no cue branch touches the result, the Run or the Wallet');
+ assert.ok(seg.indexOf('sound(nightCue(result))')<seg.indexOf("Sound.play('rescue'"),'it never replaces the Outcome cue');
+ // presentation only: the owner assigns nothing and calls no game method
+ assert.ok(!/game\.|s\.\w+=/.test(seg),'no cue branch touches the result, the Run or the Wallet');
+ for(const entry of ["case'night-next'","case'depart'"]){
+  const e=app.indexOf(entry),body=bare(app.slice(e,app.indexOf("\n case'",e+1)));
+  assert.ok(/nightSound\(/.test(body),entry+' asks that owner for the NIGHT cue');}
  // Boss: the strength is read off the beat, never off the Boss behind it
  const bs=app.indexOf("case'boss-seen'"),bseg=bare(app.slice(bs,app.indexOf("\n case'",bs+1)));
  assert.ok(!/bossId|b\.name|trait|family/i.test(bseg),'the cue is not chosen from anything the beat has not shown');
