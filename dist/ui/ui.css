@@ -49,14 +49,14 @@
     So colour follows the ACTION'S ROLE, never the class name. Three families, one geometry.
 
     BRICK   the single large Action that moves the Run / Day / Store on.
-    WALNUT  back, defer, cancel - a step under the Action it sits beside.
-    COIN    a purchase: a small controlled pop inside a card, never a screen's Action.
+    BROWN   back, defer, cancel - a step under the Action it sits beside.
+    YELLOW  a purchase: a small controlled pop inside a card, never a screen's Action.
 
     None of them is greyed toward olive, mustard or a dead yellow-brown, and none of them is
     danger: `--blood` keeps that on its own. */
  --brick:#b84f3d;--brick-lit:#e4876d;--brick-deep:#703127;--brick-line:#171312;--brick-ink:#fff2e6;
- --walnut:#75452c;--walnut-lit:#b06b43;--walnut-deep:#3e271c;--walnut-line:#15110f;--walnut-ink:#f4e6d3;
- --coin:#f0c94b;--coin-lit:#ffe89a;--coin-deep:#a86e16;--coin-line:#17130d;--coin-ink:#211b0e;
+ --brown:#75452c;--brown-lit:#b06b43;--brown-deep:#3e271c;--brown-line:#15110f;--brown-ink:#f4e6d3;
+ --yellow:#f0c94b;--yellow-lit:#ffe89a;--yellow-deep:#a86e16;--yellow-line:#17130d;--yellow-ink:#211b0e;
  /* information (default) */
  --ui:'WantedSans','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
  --body:var(--ui);
@@ -149,10 +149,10 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
    by class name, and no rule here reaches a control whose role it does not know. ---- */
 .act-brick{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
  --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
-.act-walnut{--act:var(--walnut);--act-lit:var(--walnut-lit);--act-deep:var(--walnut-deep);
- --act-line:var(--walnut-line);--act-ink:var(--walnut-ink)}
-.act-coin{--act:var(--coin);--act-lit:var(--coin-lit);--act-deep:var(--coin-deep);
- --act-line:var(--coin-line);--act-ink:var(--coin-ink)}
+.act-brown{--act:var(--brown);--act-lit:var(--brown-lit);--act-deep:var(--brown-deep);
+ --act-line:var(--brown-line);--act-ink:var(--brown-ink)}
+.act-yellow{--act:var(--yellow);--act-lit:var(--yellow-lit);--act-deep:var(--yellow-deep);
+ --act-line:var(--yellow-line);--act-ink:var(--yellow-ink)}
 summary{min-height:44px;padding:10px 0;cursor:pointer;color:var(--dim);font-size:var(--t-sm)}
 input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2px 0 #00000080;padding:12px;width:100%;color:var(--text)}
 /* Volume: a labelled slider on a sunken rail, sized so a thumb can hold it on a phone. */
@@ -1067,8 +1067,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
  --act-line:var(--brick-line);--act-ink:var(--brick-ink);
  margin-left:auto;min-height:54px;min-width:148px;font:600 17px/1 var(--ui)}
-/* the ending's one way on, and the pre-Run / Store Management footers' - same role, same family */
-.p-end .dock .stamp,.modal-footer .stamp{--act:var(--brick);--act-lit:var(--brick-lit);
+/* The ending's one way on. A modal footer is NOT a role: `.stamp` is worn there by the Run's
+   opening Action and by a stat sheet's 확인 alike, so painting the whole footer BRICK repeats
+   the very mistake this system was built to stop. BRICK is named per Action, off the
+   `data-action` Source already carries - no markup changes to say what a control means. */
+.p-end .dock .stamp,
+.modal-footer [data-action="start"],
+.modal-footer [data-action="store-return"],
+.modal-footer [data-action="event-seen"],
+.modal-footer [data-action="boss-go"]{--act:var(--brick);--act-lit:var(--brick-lit);
  --act-deep:var(--brick-deep);--act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 .p-closing .dock .danger-text{flex:1 1 100%;font:400 13px/1.4 var(--ui)}
 .tape{position:relative;width:100%;max-width:344px;margin:0 auto;filter:drop-shadow(5px 7px 0 #00000073)}
@@ -1139,11 +1146,20 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    this pass is here to remove, so it takes the room it needs and sits at the footer's end. */
 .modal-footer .stamp{flex:0 1 auto;min-width:min(280px,100%);min-height:56px;padding:0 22px;
  font:600 17px/1 var(--ui);margin-left:auto}
-/* the footer's SECONDARY controls. `:not(.stamp)` because this rule sits after the primary
-   Action's and was repainting it brown - the footer's own plane is for the way back, never for
-   the thing the screen is for. */
-.modal-footer button:not(.stamp){min-height:48px;padding:12px 16px;background:#3a2c1d;color:#efe3c8;
- box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+/* The footer's other controls. Size only: #3A2C1D was the dead muddy brown this pass retired,
+   and it was standing in for two different things anyway - a way back and a plain utility.
+   With no face of its own they fall to the base control's neutral, which is what a utility is.
+   `:not(.stamp)` because this rule sits after the Action's and was repainting it. */
+.modal-footer button:not(.stamp){min-height:48px;padding:12px 16px}
+/* BROWN, and only where the control really is a way back: 보급으로 돌아가기, 계속 영업, 취소.
+   `dismiss` without `.stamp` is exactly that set in Source; a `dismiss` that DOES wear `.stamp`
+   is a plain 확인 and is left neutral by this selector. Export, 수첩으로 and the rest are
+   utilities, not retreats, so nothing here reaches them. */
+.modal-footer button:not(.stamp)[data-action="dismiss"]{background:var(--brown);color:var(--brown-ink);
+ box-shadow:inset 0 0 0 2px var(--brown-lit),3px 3px 0 var(--brown-deep)}
+.modal-footer button:not(.stamp)[data-action="dismiss"]:hover{background:#87502f}
+.modal-footer button:not(.stamp)[data-action="dismiss"]:active{transform:translate(2px,2px);
+ background:#653a24;box-shadow:inset 0 0 0 2px var(--brown-deep),1px 1px 0 var(--brown-deep)}
 .modal-footer .danger{background:#5c2a24;color:#f6dfd9}
 
 /* =====================================================================
@@ -1209,7 +1225,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    This is a Store Support Presentation decision only; the game's semantic benefit green is
    untouched.
 
-     AVAILABLE    #20272B slate, #465158 edge     the one real control: the COIN family, depth
+     AVAILABLE    #20272B slate, #465158 edge     the one real control: the YELLOW family, depth
      SELECTED     same slate, #B98B3E outline     same footprint, charcoal fill, no depth
      UNAVAILABLE  #171C1F charcoal, #303A3E edge  dead plane, no depth
 
@@ -1238,14 +1254,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    CTA silhouette this spec rules out. 138 x 48 stays well above the phone touch minimum. */
 .relic-plate .stamp{width:auto;min-width:138px;min-height:48px;padding:0 18px;
  font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:var(--coin);color:var(--coin-ink);transform:none;clip-path:none;filter:none;
- box-shadow:inset 0 0 0 2px var(--coin-lit),3px 3px 0 var(--coin-deep)}
+ background:var(--yellow);color:var(--yellow-ink);transform:none;clip-path:none;filter:none;
+ box-shadow:inset 0 0 0 2px var(--yellow-lit),3px 3px 0 var(--yellow-deep)}
 /* affordance belongs only to the control that can actually be pressed - :hover and :active
    still match a disabled button, so both are scoped away from one */
 .relic-plate .stamp:not([disabled]):hover{background:#f7d669}
 /* the press is the depth collapsing: the plane travels onto the panel and the offset closes */
 .relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#dcb53c;
- box-shadow:inset 0 0 0 2px var(--coin-deep),1px 1px 0 var(--coin-deep)}
+ box-shadow:inset 0 0 0 2px var(--yellow-deep),1px 1px 0 var(--yellow-deep)}
 
 /* SELECTED / OWNED. The panel keeps the AVAILABLE surface - no fill, no tint, no strip. The
    state is the muted-gold outline, a slightly raised title contrast, and the control losing
@@ -1283,16 +1299,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-takeover .close p{flex:1 1 auto;font:400 13px/1.5 var(--ui);color:#a2947c}
 /* the defer control sits on the same takeover, so it answers to the same palette: slate, not
    brown. It stays plainly secondary - no gold, no depth competition with the one real control. */
-/* WALNUT. Deferring is a step under the purchase it sits beside, so it takes the back/defer
+/* BROWN. Deferring is a step under the purchase it sits beside, so it takes the back/defer
    family - a rich chestnut that belongs to the wood, not the dead #3A2C1D it used to be and
    not a second bid for the eye. It keeps this screen's flat grammar like the control above it. */
 .relic-takeover .close .stamp{flex:0 0 auto;min-height:50px;min-width:150px;font:600 16px/1 var(--ui);
  clip-path:none;filter:none;
- background:var(--walnut);color:var(--walnut-ink);
- box-shadow:inset 0 0 0 2px var(--walnut-lit),3px 3px 0 var(--walnut-deep)}
+ background:var(--brown);color:var(--brown-ink);
+ box-shadow:inset 0 0 0 2px var(--brown-lit),3px 3px 0 var(--brown-deep)}
 .relic-takeover .close .stamp:hover{background:#87502f}
 .relic-takeover .close .stamp:active{transform:translate(2px,2px);background:#653a24;
- box-shadow:inset 0 0 0 2px var(--walnut-deep),1px 1px 0 var(--walnut-deep)}
+ box-shadow:inset 0 0 0 2px var(--brown-deep),1px 1px 0 var(--brown-deep)}
 
 /* =====================================================================
    FINAL — 제0게이트. Not a shop screen: the mouth of the gate itself, cold stone and
@@ -1546,7 +1562,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    card's edge.
    The DEFAULT face is neutral, because two different things live in it: buying a Decoration,
    and moving one you already own in or out of its Slot. Only the first is a purchase, so only
-   the first takes the COIN family below. */
+   the first takes the YELLOW family below. */
 .slot-option>button{align-self:stretch;min-height:0;margin:0;padding:10px 12px;
  white-space:normal;font-size:13px;line-height:1.35;text-align:center;
  clip-path:none;filter:none;
@@ -1558,17 +1574,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .slot-option>button:active{transform:none;background:#332e27;
  box-shadow:inset 3px 0 0 #100d0b,inset 0 5px 0 #211d18,
   inset 0 -6px 0 #6a6152,inset -5px 0 0 #211d18}
-/* COIN. Acquiring the Decoration is the purchase on this card, so it is the one face that
+/* YELLOW. Acquiring the Decoration is the purchase on this card, so it is the one face that
    pops - and it pops inside the card, never across the screen. Equipping something already
    owned is a state change, not an acquisition, so it keeps the neutral key above. */
 .slot-option>button[data-action="deco-buy"],.deco-confirm [data-action="deco-confirm"]{
- background:var(--coin);color:var(--coin-ink);
- box-shadow:inset 3px 0 0 var(--coin-line),inset 0 5px 0 var(--coin-lit),
-  inset 0 -6px 0 var(--coin-deep),inset -5px 0 0 var(--coin-deep)}
+ background:var(--yellow);color:var(--yellow-ink);
+ box-shadow:inset 3px 0 0 var(--yellow-line),inset 0 5px 0 var(--yellow-lit),
+  inset 0 -6px 0 var(--yellow-deep),inset -5px 0 0 var(--yellow-deep)}
 .slot-option>button[data-action="deco-buy"]:hover{background:#f7d669}
 .slot-option>button[data-action="deco-buy"]:active{background:#dcb53c;
- box-shadow:inset 3px 0 0 var(--coin-line),inset 0 5px 0 var(--coin-deep),
-  inset 0 -6px 0 var(--coin-lit),inset -5px 0 0 var(--coin-deep)}
+ box-shadow:inset 3px 0 0 var(--yellow-line),inset 0 5px 0 var(--yellow-deep),
+  inset 0 -6px 0 var(--yellow-lit),inset -5px 0 0 var(--yellow-deep)}
 /* UNAVAILABLE is not the same plane with the colour drained: the key loses its depth entirely
    - no lit edge, no deep edge, nothing to press out - drops to the card's own charcoal, and
    keeps its price legible, because the price IS the reason it cannot be pressed. */
