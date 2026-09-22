@@ -547,6 +547,23 @@ PER-PHASE APPLICATION PASS:
   as GROWTH -> AFTERMATH -> REWARD separated by spacing or one minimal divider, keep label and
   value on one line except where phone width forces a wrap, and never look pressable
 - NIGHT's last result advances with `마감으로`; intermediate results with `다음`
+- ORDER's `1 / 3 / 최대` carries the subtle dotted underline when available, sharpens its
+  underline / ink on hover and focus, and goes dim and non-interactive when disabled, with no
+  whole-element opacity fade; `- / +` keep a 44px touch target and maxQuantity behaviour is
+  unchanged (`-` at q=0, `+` at q>=max, `1 / 3` above max, `최대` a q=max shortcut)
+- every NIGHT Outcome label measures 36px `var(--f-sign)`, and the NPC name and Outcome summary
+  measure the same whichever Outcome resolved
+- a NIGHT Death renders zero result-data rows and leaves no divider or reserved space where that
+  region would be
+- the NIGHT Death message is a neutral floating message in the living line's position: no
+  quotation marks, no tail, no left accent bar / status stripe, no decorative border, no icon
+- an equipment Stat bonus reads `투력 +N`, never `전투 +N`, with the equipment identity visually
+  separated from the Stat effect
+- the NIGHT closing-handover control is a dark flat plane with one hard depth and a press that
+  collapses it - no violet / purple / green filled CTA, no border, no inset outline
+- the MORNING shutter pull carries no repeating-stripe gradient, while the register readout glow
+  and the SALE sticky scrim remain as functional layers
+- FINAL's fixed dock names the disabled cause on the control: `원정대 {current} / {required}`
 - SALE price modes read as peer register keys; no key is promoted by a stronger frame, refused keys
   lose depth, and the send-customer action stays Secondary
 - NIGHT Outcome is the visual anchor and different outcomes do not read as one identical card with

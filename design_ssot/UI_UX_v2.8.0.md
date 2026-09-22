@@ -204,10 +204,40 @@ of the message position either: the death line uses the same place beside the ch
 same visual weight as a living adventurer's line, presented as a neutral status / system message.
 
 - no quotation marks, no speech tail, no bubble ground, no utterance styling
+- no left accent bar / status stripe, no decorative border, no added icon or badge
+- a neutral floating message, not a plate marked by a coloured edge
 - the existing Death narration copy is reused; no new Death copy is authored
 - it is never dropped into a separate narration line under the report body
 
+    LIVING = speech bubble
+    DEATH  = neutral floating message
+
+Same position and same information hierarchy; never the appearance of a dead NPC speaking.
+
 Outcome type size may be reduced modestly on mobile where needed to prevent collision.
+
+USER AMENDMENT, 2026-09-22 — OUTCOME TYPE, EXACT. Every Outcome label is the same size:
+
+    36px var(--f-sign)
+
+성공 / 대성공 / 퇴각 / 부상 / 중상 / 사망 / 생환 share it. Per-outcome and per-rank size
+overrides are removed, and the NPC name and the Outcome summary keep one size regardless of
+which Outcome was resolved. Outcomes differ by copy and tone/colour only.
+
+USER AMENDMENT, 2026-09-22 — DEATH PAYLOAD. A death is a closed result, so the player-facing
+record shows only:
+
+    death status message, character art, `사망`, NPC name, Dungeon · Lv, Outcome summary
+
+No Level / Stat / equipment change, no injury / rest, no Fatigue, no EXP, no Wallet, no reward
+or other numeric change row, and no divider or reserved spacing where that region would be.
+The resolution data itself is unchanged; only the NIGHT render hides it.
+
+USER AMENDMENT, 2026-09-22 — EQUIPMENT / POWER TERM. The player-facing Stat name is `투력`, so an
+equipment Stat bonus reads `투력 +N`, never `전투 +N`. Ordinary prose such as `전투에서 …` is not
+affected. Equipment identity and its Stat effect are visually separated - a middle dot or spacing -
+and never merged into one run of words. Internal fields and stored strings are not renamed; only
+the player-facing output is unified.
 
 USER AMENDMENT, 2026-09-22 — COMBAT FACT. The player-facing NIGHT record does not print the
 fight verdict line (`적을 물리쳤다.` / `적을 물리치지 못했다.`). It duplicates the Outcome and its
@@ -367,6 +397,15 @@ planes and the decision state.
 
 Presence comes from size, weight, contrast, placement and the press, not from added marks.
 
+USER AMENDMENT, 2026-09-22 — STRIPE SWEEP. The MORNING shutter pull's repeating-stripe gradient
+is the same "stripe pattern is not material" defect already corrected on the FINAL gate bar, and
+it is removed: the control keeps its structure, size, action and hard press/depth on a flat solid
+plane, with no border, bevel, stripe or ornament added in exchange.
+
+Two gradients are FUNCTIONAL layers and are explicitly kept: the register readout's lit-display
+glow, and the SALE sticky scrim that keeps content readable under a sticky control. Do not treat
+either as the ornament ban's glossy gradient, and do not strip gradient strings mechanically.
+
 #### PIXEL / 2D GAME UI LANGUAGE — DARK PIXEL + CONTROLLED POP
 
 USER AMENDMENT, 2026-09-22. This is the standing Player-facing presentation grammar for the v2.8
@@ -523,6 +562,12 @@ ORDER
   is: item information > quantity readout / stepper > `1 / 3 / MAX`.
   `1 / 3 / MAX` returns to the light v2.7-class quick set: a secondary shortcut with no box of
   its own, no pixel key plane and no hard shadow, and always weaker than `- / quantity / +`.
+  USER AMENDMENT, 2026-09-22 — QUICK SET AFFORDANCE. It carries the v2.7 subtle dotted
+  underline: available = dotted underline, hover / focus = the underline and ink sharpen,
+  disabled = dim ink and non-interactive. No whole-element opacity fade. Its functional
+  behaviour is the current v2.7-equivalent Source and does not change: `-` disabled at q=0,
+  `+` at q>=max, `1 / 3` when that value exceeds max, `MAX` a q=max shortcut, and the
+  stock / funds / supply conditions behind maxQuantity are untouched.
   `- / +` keep a smaller visible face than a full square game button; the touch target stays at
   the mobile minimum. The readout stays the centred, read-only recessed part.
   Being a pixel UI is not a reason to put a box around every control.
@@ -548,6 +593,13 @@ NIGHT
   result system; do not add a new cinematic framework
 - the sold-Item effect is a sub line of the Outcome summary, never a second result card
 - the aftermath region follows §NIGHT LAYOUT RESULT DATA TYPOGRAPHY
+- USER AMENDMENT, 2026-09-22 — CLOSING HANDOVER CONTROL. The control that ends the night record
+  is a compact pixel-game commit, not a coloured CTA rectangle: a dark NIGHT-compatible flat
+  plane, bright neutral / warm label, separated by the plane itself with no border and no inset
+  outline, exactly one bottom/right hard depth, and a press that moves the control and collapses
+  that depth. No violet / lavender / purple filled treatment, and green is not the substitute.
+  Nothing decorative beyond hover and press. No literal hex is Canonical here.
+  `전체 건너뛰기` stays the current Secondary bare treatment.
 
 CLOSING
 - reads as receipt / end-of-day record, not a KPI dashboard
@@ -567,6 +619,12 @@ BOSS REPORT
 FINAL
 - reads as one final decision surface combining Gate / Boss / team / sortie state, not as a page
   ending in a coloured button
+- USER AMENDMENT, 2026-09-22 — DISABLED COMMIT CAUSE. The fixed dock states why the sortie cannot
+  start, on the control itself: available reads `마왕성으로 출발`, unavailable reads
+  `원정대 {current} / {required}`. No separate explanation box is added, and the muster's own
+  count stays where it is. This repetition is the disabled Action's immediate cause feedback, not
+  a decorative duplicate, and it is the named exception to §INFORMATION / ACTION FIT's
+  duplicated-count rule.
 - the final commit may carry the heaviest press treatment in the run, but not a giant ornamental
   prop
 - use contrast, placement and hard depth; do not add a new interaction or cinematic system

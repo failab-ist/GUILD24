@@ -123,6 +123,19 @@ USER AMENDMENT, 2026-09-22 — COMBAT FACT. The fight verdict sentence is not sh
 player-facing NIGHT record; see UI_UX_v2.8.0.md §NIGHT LAYOUT. The resolved combat state itself
 is unchanged.
 
+USER AMENDMENT, 2026-09-22 — DEATH IS A CLOSED RESULT. The Death record carries no follow-up
+growth or settlement figures. Its player-facing payload is the death status message, the
+character, `사망`, the NPC name, the Dungeon · Lv and the Outcome summary - nothing else.
+Level / Stat / equipment / injury / rest / Fatigue / EXP / Wallet / reward rows are not rendered
+for a Death, and the region leaves no divider or reserved space behind. The resolution still
+records whatever it recorded; this is a render rule. Exact treatment -> UI_UX_v2.8.0.md
+§NIGHT LAYOUT — DEATH PAYLOAD.
+
+USER AMENDMENT, 2026-09-22 — OUTCOME TYPE. Every Outcome label is one size; Outcomes differ by
+copy and tone only. The three-volume rank remains a presentation weight rule, but it no longer
+changes the Outcome, NPC name or summary type size. Exact size -> UI_UX_v2.8.0.md §NIGHT LAYOUT
+— OUTCOME TYPE, EXACT.
+
 ## CLOSING
 
 Remove explanatory footer prose that teaches internal accounting when the receipt itself already
