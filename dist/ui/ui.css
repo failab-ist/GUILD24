@@ -251,10 +251,27 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    notice board on the wall under it, the room itself, the counter with the float, the
    shutter. The wall is the only band that grows, so the scenery takes what is left after
    the decision rather than before it. */
+/* PRESENTATION BATCH 1 NARROW FIX - MORNING is one authored room.
+   The production art (assets/presentation/morning/store-bg.png, 1672x941) is a whole store,
+   and its authored zones were measured before integration:
+       0-19%    ceiling - soffit, three hanging fixtures, vent
+       19-78%   wall    - fridge and shelving, the window and its morning light, door
+       79-86%   counter - the lit wooden top
+       87-100%  counter face and foreground
+   The first integration cropped it into the WALL band to leave the procedural ceiling in
+   place, which threw the asset's ceiling away and left old ceiling + new middle strip + old
+   lower architecture reading as three different rooms. The architecture belongs to the art
+   now, so the art is owned by the bands' common parent and covers the whole store at its own
+   aspect ratio - nothing of the room is cropped away vertically at any width.
+   The bands stay exactly where they are as POSITIONING frames for the live layer: DAY sign,
+   board and every notice, branch and Decoration plates, till and the shutter Action are
+   untouched HTML on top, in the same order. Their own procedural architecture is suppressed
+   on this Surface only, because the production art now draws the same physical room. */
 .store{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
  background:linear-gradient(180deg,#0a121a8c 0,#0a121a3d 45%,#140d0866 100%),var(--tex-tile),#c6bda8;
  background-size:auto,48px 36px}
 .band{position:relative;flex-shrink:0;width:100%}
+
 /* anchors are percentages of the ART, so the mount is exactly the art's box. Capping the
    mount stops the ceiling and the counter from growing with the column - left uncapped they
    took 422px of an 860px viewport at 1280 and the decision got the remainder. The cap is
@@ -271,27 +288,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .band.counter{background:linear-gradient(180deg,#00000000 0,#0000000f 46%,#00000026 100%),
   var(--tex-tile),#c6bda8;
  background-size:auto,48px 36px}
-/* PRESENTATION BATCH 1 NARROW FIX - MORNING stage.
-   The room's defect was the stage itself, so the wall band carries the production backdrop
-   (dist/ui/assets/presentation/morning/store-bg.png, 1672x941). It is stage only: no text, no
-   control, no day information is baked into it, and the board, slips, till and shutter above
-   it stay live HTML.
-   It is a background rather than the Scene manifest's <img> for one reason: the art draws a
-   whole store, its own ceiling soffit and back counter included, while this band is the WALL
-   between the screen's own ceiling and counter. Shown whole it puts a second ceiling under the
-   real one, and cropping to the wall zone needs a DOWNSCALE crop - which object-fit cannot
-   express, and which an oversized layer would only fake by hanging past the viewport.
-   `auto 185%` scales the art so about the middle 54% of its height fills the band, at its own
-   aspect ratio, with no axis stretched. Desktop is wide enough that `cover` already crops
-   vertically, so it uses that. */
-.band.wall{flex:1 1 auto;min-height:0;overflow:hidden;
- background-color:#c6bda8;
- background-image:url('assets/presentation/morning/store-bg.png'),var(--tex-tile);
- background-size:auto 135%,48px 36px;
- background-position:38% 42%,0 0;
- background-repeat:no-repeat,repeat}
-/* the procedural wall is superseded on this surface by the production art behind it */
-.p-morning .band.wall .band-art{display:none}
+.band.wall{flex:1 1 auto;min-height:0;overflow:hidden;background:var(--tex-tile),#c6bda8;background-size:48px 36px}
 /* The wall takes what is left and no more: on a quiet day that is most of the room, on a day
    with an event and three gates it is nothing at all. Background fits around the decision,
    never the other way round. The art is authored to slice, so it covers whatever height it
@@ -305,10 +302,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    of its height - by scaling about that zone's centre. A uniform scale, so no axis is
    stretched. */
 .band.wall .band-art{position:absolute;inset:0;width:100%;height:100%}
-/* §Room separation. With the production backdrop carrying the room's own light, this layer is
-   no longer building the value hierarchy on its own - it seats the art between the board above
-   and the counter below, and gets out of the way in the middle. Held any heavier it just
-   muddies the art it sits on. */
+/* §Room separation. The room's own light comes from the production art, and the one veil that
+   seats it is on the store itself - a second one here would only be a band-shaped stain across
+   the middle of a room that no longer stops at this band. */
 .band.wall:after{content:'';position:absolute;inset:0;
  background:linear-gradient(180deg,#0a121a8c 0,#0a121a2b 34%,#00000000 58%,#140d0859 86%,#140d0894 100%)}
 /* the shop sign hanging from the ceiling carries the day */
@@ -329,17 +325,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    instead, and the board casts one hard 6px drop. */
 .board{position:relative;z-index:2;flex:0 1 auto;min-height:0;max-height:62%;width:min(680px,94%);
  margin:0 auto -6px;overflow-y:auto;overscroll-behavior:contain;outline:none;
- background:var(--tex-cork),#a97f4a;background-clip:padding-box;
- border-style:solid;border-width:26px 20px;
- border-image:url('assets/presentation/morning/board-frame-plank.png') 250 190 repeat;
- box-shadow:0 6px 0 #00000073}
-/* BATCH 1 NARROW FIX - the board is a built object, so it stops drawing its own frame out of
-   three inset rings and wears the production one. border-image is the reason this can use the
-   art unmodified: the corner brackets are placed at their own aspect and never stretched, the
-   rails repeat between them, and the board stays as tall as the day needs it. The cork is
-   clipped to the padding box so it sits INSIDE the frame rather than under it, and the one
-   hard 6px drop the board already cast is kept. Rail, slips, counts and gate information are
-   untouched HTML inside it. */
+ background:var(--tex-cork),#a97f4a;
+ box-shadow:inset 0 0 0 6px #4a3018,inset 0 0 0 10px #6b4526,inset 0 0 0 12px #00000080,
+  0 6px 0 #00000073}
+/* The production frame was integrated here and rejected on runtime review: a 9-slice frame
+   sized to carry its corner brackets opens an interior the live notice does not fill, so a
+   quiet day read as a small notice inside a large decorative shell - less complete than the
+   construction it replaced. The board draws its own frame again, tight to its content. The
+   board's micro corrections from the first pass - no soft haze, the attached rail, the crisped
+   slip edge, the centred crest - are kept; only the asset adoption is gone. */
 /* the board's own header: the first thing read after the day */
 .board-rail{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
  margin:10px 10px 0;padding:9px 12px;background:#4a3018;color:#f0dcb2;
@@ -1939,10 +1933,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .threat .fams{grid-template-columns:1fr 1fr}
  /* FINAL at tablet width and up: the Boss stands beside what is known about it rather than
     stacking on top of it, so the roster the player has to choose from stays in view. */
- /* the frame keeps its proportion to the board rather than thinning out across the width */
- .board{border-width:34px 26px}
- /* desktop is wider than the art's own aspect, so cover already crops it vertically */
- .band.wall{background-size:cover,48px 36px;background-position:50% 44%,0 0}
  .p-final .gate-zero{display:flex;align-items:center;gap:26px;text-align:left}
  .p-final .gate-zero .boss-face{margin:0;flex:0 0 auto}
  .p-final .gate-zero .boss-face img{height:min(42vh,360px);max-height:none}

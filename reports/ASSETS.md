@@ -141,28 +141,37 @@ re-cut bevel on the Opening's Primary - was made and removed: the runtime captur
 flatter than the shared Action geometry it replaced.
 
 ### MORNING production art — user-provided, project-generated
-- files:
+- shipped file:
   - `dist/ui/assets/presentation/morning/store-bg.png` — 1672x941, PNG RGB, no alpha, 1.28 MB
-  - `dist/ui/assets/presentation/morning/board-frame-panel.png` — 1774x887, PNG RGBA, 419 KB
-  - `dist/ui/assets/presentation/morning/board-frame-plank.png` — 1774x887, PNG RGBA, 470 KB
+- evaluated and removed from the build:
+  - `board-frame-panel.png` — 1774x887, PNG RGBA, 419 KB
+  - `board-frame-plank.png` — 1774x887, PNG RGBA, 470 KB
 - source: provided by the User on 2026-09-22, generated with GPT image generation for this
   project. Not a third-party work: no external licence is claimed and none applies.
 - modification: none. Stored byte-identical to the files as received (md5 verified against
   the originals). Any later derivative is recorded separately when it is made.
-- role: `store-bg.png` is the MORNING store environment backdrop - stage only, no baked text,
-  controls, board content or day information. The two `board-frame-*.png` are candidate
-  notice-board frames: the frame is drawn and the content region is fully transparent, so the
-  live rail, slips and counts stay HTML.
-- adopted, Batch 1 Narrow Fix:
-  - `store-bg.png` - MORNING wall band, and reused by OPENING as the closed, unlit store the
-    preparation sheet stands in. Referenced from `dist/ui/ui.css` by CSS background, cropped by
-    `background-size` / `background-position` at its own aspect ratio. The file is not altered.
-  - `board-frame-plank.png` - MORNING notice board, through `border-image`, so the corner
-    brackets keep their own aspect and the rails repeat. The file is not altered.
-  - `board-frame-panel.png` - integrated and captured first, then not adopted: against the
-    store's own wooden fixtures it read flatter and more generic than the plank. The file is
-    kept as the alternate the User supplied; nothing references it. Whether an unreferenced
-    candidate stays in the shipped build is a DIRECTOR call, not this Batch's.
+- role: `store-bg.png` is the MORNING store environment - stage only, no baked text, controls,
+  board content or day information. The two `board-frame-*.png` were candidate notice-board
+  frames, drawn frame with a fully transparent content region.
+- adopted: `store-bg.png`, as the MORNING room. It is owned by `.store`, the bands' common
+  parent, in `dist/ui/director-review.css`, so the whole authored room - ceiling included -
+  reads as one place; `cover` crops horizontally only at the shipped widths, so no authored
+  zone is lost. It is reused by OPENING as the closed, unlit store the preparation sheet
+  stands in. The file is not altered in either use.
+  An earlier integration cropped it into the wall band to preserve the procedural ceiling.
+  That was rejected on runtime review: discarding the art's own ceiling left old ceiling plus
+  a pasted middle strip, which is not one room.
+- evaluated and REJECTED, both frames, on runtime capture:
+  - `board-frame-plank.png` was integrated with `border-image` 9-slice. Technically correct -
+    corners unstretched, rails repeating - and still a downgrade: a frame sized to carry its
+    corner brackets opens an interior the live notice does not fill, so a quiet day read as a
+    small notice inside a large decorative shell. The board's own CSS construction is tighter.
+  - `board-frame-panel.png` was captured in the same role first and read flatter and more
+    generic against the store's wooden fixtures.
+  - reason, both: dynamic content fit - excess interior dead space around live notice content.
+  - Neither is referenced, so neither ships: the files are removed from `dist/` rather than
+    left in the build as dead weight. They remain recoverable from this repository's history
+    (commit `8f5af05`) if a concrete content-fit hypothesis is ever proposed.
 - note for review: measured, these read as high-resolution painted art in a pixel idiom rather
   than true pixel art - 159k unique colours in the backdrop, 10-18k in the frames, and 1px
   run lengths where GUILD24's own art uses flat blocks. That is a runtime-crispness and
