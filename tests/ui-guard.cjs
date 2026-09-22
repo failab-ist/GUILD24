@@ -80,46 +80,68 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  // green is the sign, the price tag and the approval stamp — never a ground
  for(const rule of ['body{','.stage{','.p-order{','.p-morning{'])
   assert.ok(!/#([0-9a-f]{0,2})(3f9d63|7ddc9f)/i.test(css.slice(css.indexOf(rule),css.indexOf(rule)+240)),'green is not a page ground in '+rule);
- /* USER DIRECTION 2026-09-22 retired the green approval stamp as the game's PRIMARY control:
-    it read as the success green every AI tool ships. The cyan that first replaced it was
-    retired in the same breath as the amendment - over wood, ivory and charcoal it sat on the
-    screen as separate UI. The Action is a warm arcade coral. Green stays a semantic colour -
-    the sign, the price tag, a benefit - but it is no longer what an Action looks like, so this
-    asserts the replacement and the ban, not the retired rule. */
- assert.ok(css.includes('.stamp{background:var(--cta)'),'the primary Action is the one control');
- assert.ok(/--cta:#f2644b;--cta-lit:#ffaa8f;--cta-deep:#a7352c;--cta-line:#171312;--cta-ink:#fff4e8/.test(css),
-  'at the direction\'s exact face, edge, depth, outline and ink');
- // the retired families may not come back as the primary Action
- assert.ok(!/--cta:#(21c7f3|[0-9a-f]*?(8b|9)[0-9a-f]{2}5[0-9a-f])/.test(css),'not the retired cyan');
+ /* USER DIRECTION 2026-09-22, final. Three single-colour attempts were retired in turn: the
+    green approval stamp (the success green every AI tool ships), the cyan that replaced it
+    (separate UI over wood, ivory and charcoal) and the coral that replaced that - because
+    `.stamp` is not one thing. The SALE price keys, a defer control and the day's last Action
+    all wear it, and one colour across them says they matter the same.
+    Colour follows the ACTION'S ROLE now, so this asserts the role split, the three families'
+    exact values, the bans, and the geometry they share - never "the stamp is colour X". */
+ const token=n=>(css.match(new RegExp('--'+n+':(#[0-9a-f]{6})'))||[])[1];
+ const FAMILY={brick:['#b84f3d','#e4876d','#703127','#171312','#fff2e6'],
+               walnut:['#75452c','#b06b43','#3e271c','#15110f','#f4e6d3'],
+               coin:['#f0c94b','#ffe89a','#a86e16','#17130d','#211b0e']};
+ for(const [name,vals] of Object.entries(FAMILY))
+  for(const [i,part] of ['','-lit','-deep','-line','-ink'].entries())
+   assert.equal(token(name+part),vals[i],'the '+name+' family carries its approved '+(part||'face')+' value');
+ // the retired single-colour systems may not come back as an Action family
+ for(const dead of ['#3d8b5b','#2f7a4d','#21c7f3','#f2644b','#c4973e','#e3b341','#3a2c1d'])
+  assert.ok(!new RegExp('--(brick|walnut|coin)[a-z-]*:'+dead).test(css),
+   'no Action family regresses to a retired value: '+dead);
+ /* the base control is GEOMETRY, not a colour: it falls back to the neutral steel when a
+    surface has not named the role its Action plays, so nothing is painted by class name */
  const stampRule=(css.match(/\n\.stamp\{[\s\S]*?\}/)||[''])[0];
- assert.ok(!/var\(--sign\)|#2f7a4d|#3d8b5b|#469a67|#21c7f3/.test(stampRule),'and carries neither the green nor the cyan');
- for(const sel of ['.modal-footer .stamp{','.p-closing .dock .stamp{'])
-  assert.ok(!/#2f7a4d|var\(--sign\)/.test(css.slice(css.indexOf(sel),css.indexOf(sel)+280)),
-   'no surface puts a green primary Action back: '+sel);
- /* the silhouette the direction names, so "cyan" alone cannot satisfy it by becoming a flat
-    web-tool blue rectangle: notched corners, a black outline, a lit edge against a deep one,
-    a hard zero-radius offset, and a press that is a depth change rather than a tint */
+ assert.ok(/background:var\(--act,var\(--steel\)\)/.test(stampRule),
+  'the base control defaults to neutral - a role, not a class, decides the colour');
+ assert.ok(!/#[0-9a-f]{6}(?![0-9a-f])/.test(stampRule.replace(/var\([^)]*\)/g,'').replace(/#[0-9a-f]{8}/g,'')),
+  'and names no face value of its own');
+ /* the geometry the direction keeps: notch, black outline, opposed lit/deep edges, a hard
+    zero-radius offset, and a press that swaps the edges rather than tinting the face */
  assert.ok(/clip-path:polygon/.test(stampRule),'its corners are notched - never rounded, never a pill');
- assert.ok(/inset 0 0 0 3px var\(--cta-line\)/.test(stampRule),'it carries a black pixel outline');
- assert.ok(/var\(--cta-lit\)/.test(stampRule)&&/var\(--cta-deep\)/.test(stampRule),
+ assert.ok(/inset 0 0 0 3px var\(--act-line/.test(stampRule),'it carries a hard dark outline');
+ assert.ok(/inset 0 9px 0 var\(--act-lit/.test(stampRule)&&/inset 0 -10px 0 var\(--act-deep/.test(stampRule),
   'lit along the top-left and deep along the bottom-right');
  assert.ok(/drop-shadow\(\dpx \dpx 0 /.test(stampRule),'over a hard offset that follows that shape');
  const press=(css.match(/\.stamp:active\{[\s\S]*?\}/)||[''])[0];
  assert.ok(/transform:translate/.test(press),'the press moves the plane into its own shadow');
- // the edges trade places: the top band is deep while pressed, where it is lit at rest
- assert.ok(/inset 0 9px 0 var\(--cta-deep\)/.test(press)&&/inset 0 -10px 0 var\(--cta-lit\)/.test(press),
+ assert.ok(/inset 0 9px 0 var\(--act-deep/.test(press)&&/inset 0 -10px 0 var\(--act-lit/.test(press),
   'and the lit and deep edges swap, so it is depth and not colour alone');
- assert.ok(/inset 0 9px 0 var\(--cta-lit\)/.test(stampRule)&&/inset 0 -10px 0 var\(--cta-deep\)/.test(stampRule),
-  'which is the reverse of how it sits at rest');
- /* a card's own purchase key shares the grammar and NOT the colour: one screen, one Action. */
+ /* ROLE MAPPING. BRICK is the screen's single large flow Action and nothing else. */
+ const ruleFor=sel=>{const i=css.indexOf(sel);assert.ok(i>0,sel+' is a real rule');
+  return css.slice(i,css.indexOf('}',i)+1);};
+ for(const sel of ['.p-closing .dock .stamp{','.p-end .dock .stamp,.modal-footer .stamp{'])
+  assert.ok(/--act:var\(--brick\)/.test(ruleFor(sel)),'the flow Action is BRICK: '+sel);
+ // WALNUT is the step under it
+ assert.ok(/background:var\(--walnut\)/.test(ruleFor('.relic-takeover .close .stamp{')),
+  'defer is WALNUT, a step under the Action beside it');
+ // COIN is a purchase, inside a card, never a screen's Action
+ assert.ok(/background:var\(--coin\)/.test(ruleFor('.relic-plate .stamp{')),'a Store Support purchase is COIN');
+ assert.ok(/background:var\(--coin\)/.test(ruleFor('.slot-option>button[data-action="deco-buy"]')),
+  'and so is a Decoration purchase');
+ /* ...but only the purchase. The card's default face is neutral, because equipping something
+    already owned is a state change, not an acquisition. */
  const keyRule=(css.match(/\.slot-option>button\{[\s\S]*?\}/)||[''])[0];
- assert.ok(/background:var\(--key\)/.test(keyRule),'a Decoration card key is its own colour');
- assert.ok(!/var\(--cta\)/.test(keyRule),'and is never painted with the primary Action');
- assert.ok(/inset 3px 0 0 var\(--cta-line\)/.test(keyRule)&&/var\(--key-lit\)/.test(keyRule)
-  &&/var\(--key-deep\)/.test(keyRule),'while keeping the outline, the lit edge and the depth');
+ assert.ok(!/var\(--coin\)|var\(--brick\)/.test(keyRule),
+  'the card key is not painted with a purchase or a flow Action by default');
  const keyOff=(css.match(/\.slot-option>button:disabled\{[\s\S]*?\}/)||[''])[0];
- assert.ok(!/--key-lit|--key-deep/.test(keyOff)&&!/opacity:\.[0-9]/.test(keyOff),
+ assert.ok(!/opacity:\.[0-9]/.test(keyOff)&&!/inset 0 5px 0|inset 0 -6px 0/.test(keyOff),
   'and UNAVAILABLE loses the depth outright rather than being the same key faded');
+ /* SALE's three price keys are peers being compared, so none of them may wear a flow Action.
+    The 정가 key carries class="stamp" in Source, which is exactly how one of them could. */
+ const tills=ruleFor('.tills button{');
+ assert.ok(!/--act:|var\(--brick\)/.test(tills)&&!/--act:var/.test(css.slice(css.indexOf('.tills'),css.indexOf('.tills')+1400)),
+  'no SALE price key is promoted to the flow Action colour');
+ assert.ok(/\.tills \.stamp\{/.test(css),'and the one that wears .stamp is levelled back to its peers');
 });
 
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
@@ -2421,13 +2443,15 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
     brown offset, which still read as a brown box on a phone; the plane is a clean gold and the
     depth is the card's own slate. */
  const ctrl=(block.match(/\.relic-plate \.stamp\{[^}]*\}/)||[''])[0];
- /* USER DIRECTION 2026-09-22 again: the gold plane still read as mustard against this slate,
-    so the one control here is the game's PRIMARY Action - the same cyan every other primary
-    Action uses. What stays screen-specific is the GRAMMAR Canonical owns: a flat plane with a
-    hard offset and nothing else, so this control keeps neither the notch nor the drop shadow
-    the base primary carries, which §ORNAMENT BAN rules out on this screen. */
- assert.ok(/background:var\(--cta\)/.test(ctrl),'the one control is the primary Action');
- assert.ok(/inset 0 0 0 2px var\(--cta-lit\),3px 3px 0 var\(--cta-deep\)/.test(ctrl),
+ /* USER DIRECTION 2026-09-22, final: acquiring a Store Support is a PURCHASE, so the one
+    control here takes the COIN family - a clean gold-yellow, not the mustard the retired gold
+    read as and not the flow Action, which belongs to whole screens rather than to a card.
+    What stays screen-specific is the GRAMMAR Canonical owns: a flat plane with a hard offset
+    and nothing else, so this control keeps neither the notch nor the drop shadow the base
+    control carries, which §ORNAMENT BAN rules out here. */
+ assert.ok(/background:var\(--coin\)/.test(ctrl),'the one control is the purchase family');
+ assert.ok(!/var\(--brick\)/.test(ctrl),'never the flow Action, which is not what this is');
+ assert.ok(/inset 0 0 0 2px var\(--coin-lit\),3px 3px 0 var\(--coin-deep\)/.test(ctrl),
   'with a lit pixel edge over a hard offset in its own deep tone');
  assert.ok(/clip-path:none/.test(ctrl)&&/filter:none/.test(ctrl),
   'and it drops the base control\'s notch and drop shadow, which this screen bans');
@@ -2441,18 +2465,19 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
   return b<r*0.45&&Math.max(r,g,b)<0.62*255;};
  // the PLANES only - the ink on a gold control is a warm near-black on purpose, and reading it
  // as a brown box would be reading the letters instead of the button
- const token=n=>(css.match(new RegExp('--'+n+':(#[0-9a-f]{6})'))||[])[1];
+ const tok=n=>(css.match(new RegExp('--'+n+':(#[0-9a-f]{6})'))||[])[1];
  const planes=[...ctrl.replace(/color:[^;]*/g,'').matchAll(/#([0-9a-f]{6})/g)].map(m=>m[1])
-  .concat(['cta','cta-lit','cta-deep'].filter(n=>ctrl.includes('var(--'+n+')')).map(n=>token(n).slice(1)));
+  .concat(['coin','coin-lit','coin-deep'].filter(n=>ctrl.includes('var(--'+n+')')).map(n=>tok(n).slice(1)));
  assert.ok(planes.length>=3,'the control names its plane, its edge and its offset');
  for(const hex of planes)
   assert.ok(!brownish(hex),'no brown/olive value survives in the one control: #'+hex);
- assert.ok(!/#c4973e|#765821|#e3b341|#f6d878|#21c7f3/.test(block),
-  'and the retired brown, gold and cyan planes are gone from the screen');
+ assert.ok(!/#c4973e|#765821|#e3b341|#f6d878|#21c7f3|#f2644b/.test(block),
+  'and every retired plane - brown, muddy gold, cyan, coral - is gone from the screen');
  /* the defer control shares the takeover, so it answers to the same slate palette */
  const defer=(css.match(/\.relic-takeover \.close \.stamp\{[^}]*\}/)||[''])[0];
- assert.ok(defer&&!/#3a2c1d|#6b5335/.test(defer),'the defer control is no longer a brown box');
- assert.ok(!/background:#[ce]/.test(defer),'and never competes with the one real control');
+ assert.ok(defer&&!/#3a2c1d|#6b5335/.test(defer),'the defer control is no longer the dead brown box');
+ assert.ok(/background:var\(--walnut\)/.test(defer),'it is the back/defer family');
+ assert.ok(!/var\(--coin\)|var\(--brick\)/.test(defer),'and never competes with the purchase beside it');
  // affordance only on the control that can be pressed - :hover/:active still match a disabled one
  assert.ok(/\.relic-plate \.stamp:not\(\[disabled\]\):hover/.test(block)
   &&/\.relic-plate \.stamp:not\(\[disabled\]\):active/.test(block),

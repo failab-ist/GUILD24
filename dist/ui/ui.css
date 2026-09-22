@@ -40,18 +40,23 @@
  --text:#efe7d5;--dim:#a89c85;--faint:#7a705f;
  --tone-benefit:#9fd07f;--tone-cost:#e39075;--tone-neutral:#b3ab96;
  --r0:#b4bba6;--r1:#98c79b;--r2:#8ec6dd;--r3:#c2a2d6;--r4:#f0cd72;
- /* PRIMARY ACTION — USER DIRECTION 2026-09-22, amended. The green approval stamp is retired:
-    it read as the success green every AI tool ships. The cyan that first replaced it is retired
-    too, and for the opposite reason - over dark wood, ivory paper, charcoal and muted gold, a
-    vivid cyan sat on the screen as a separate piece of UI rather than as this game's control.
-    The Action is a warm arcade coral now: high chroma, never greyed down, at home on wood and
-    paper, and a long way from mustard, brown, gold, green or a SaaS blue. It reads as PROCEED,
-    not as danger - `--blood` stays the danger family and is untouched. */
- --cta:#f2644b;--cta-lit:#ffaa8f;--cta-deep:#a7352c;--cta-line:#171312;--cta-ink:#fff4e8;
- /* the purchase key inside a Decoration card. Same pixel grammar as the Action, deliberately
-    NOT the same colour: one screen has one primary Action, and a card's own key is a paper
-    key - the brightest thing on a charcoal card without pretending to be that Action. */
- --key:#efe3c8;--key-lit:#fff9ec;--key-deep:#9c8c6a;--key-ink:#241d12;
+ /* ACTION FAMILIES — USER DIRECTION 2026-09-22, final. Three retired attempts stand behind
+    this: the green approval stamp (the success green every AI tool ships), the cyan that
+    replaced it (separate UI on wood, ivory and charcoal) and the single coral that replaced
+    that (one colour for every `.stamp`, which is not one thing - `.stamp` is worn by the SALE
+    price keys, by a defer control and by the day's last Action alike, and painting them
+    together says they matter the same).
+    So colour follows the ACTION'S ROLE, never the class name. Three families, one geometry.
+
+    BRICK   the single large Action that moves the Run / Day / Store on.
+    WALNUT  back, defer, cancel - a step under the Action it sits beside.
+    COIN    a purchase: a small controlled pop inside a card, never a screen's Action.
+
+    None of them is greyed toward olive, mustard or a dead yellow-brown, and none of them is
+    danger: `--blood` keeps that on its own. */
+ --brick:#b84f3d;--brick-lit:#e4876d;--brick-deep:#703127;--brick-line:#171312;--brick-ink:#fff2e6;
+ --walnut:#75452c;--walnut-lit:#b06b43;--walnut-deep:#3e271c;--walnut-line:#15110f;--walnut-ink:#f4e6d3;
+ --coin:#f0c94b;--coin-lit:#ffe89a;--coin-deep:#a86e16;--coin-line:#17130d;--coin-ink:#211b0e;
  /* information (default) */
  --ui:'WantedSans','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
  --body:var(--ui);
@@ -110,32 +115,44 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 .bare{background:transparent;box-shadow:none;color:var(--dim);padding:8px 6px}
 .bare:hover{background:transparent;color:var(--text)}
 .bare:active{transform:none;box-shadow:none}
-/* THE PRIMARY ACTION. One control language for the thing this screen is for: a cyan plane
-   inside a black pixel outline, lit along the top-left, deep along the bottom-right, its
-   corners notched off so the silhouette is a game button and not a web rectangle. The hard
-   offset is a filter rather than a box-shadow so it follows the notch instead of squaring it
-   off behind it, and its radius is zero: a pixel shadow, never a soft one.
-   Pressing it is a depth change, not a colour change - the plane travels into its own shadow
-   and the lit and deep edges swap - which is what the colour-only :hover on the old stamp
-   never gave. */
-.stamp{background:var(--cta);color:var(--cta-ink);font-weight:600;letter-spacing:.04em;
+/* THE CONTROL'S GEOMETRY. Shape only - every Action in the game is built here and NONE of
+   them is coloured here, because `.stamp` is worn by things that do not mean the same: the
+   SALE price keys, a defer control, the day's last Action. The face comes from the role the
+   surface names (`--act*`, the three families above); with no role named it falls back to the
+   neutral steel rather than claiming to be an Action.
+   The shape: a plane inside a hard dark outline, lit along the top-left, deep along the
+   bottom-right, corners notched off so the silhouette is a game button and not a web
+   rectangle. The hard offset is a filter rather than a box-shadow so it follows the notch
+   instead of squaring off behind it, and its radius is zero - a pixel shadow, never a soft
+   one. Pressing it is a depth change, not a tint: the plane travels into its own shadow and
+   the lit and deep edges trade places, which is what the colour-only :hover never gave. */
+.stamp{background:var(--act,var(--steel));color:var(--act-ink,var(--text));
+ font-weight:600;letter-spacing:.04em;
  clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
   100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
   6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
  filter:drop-shadow(5px 5px 0 #000000a6);
- box-shadow:inset 0 0 0 3px var(--cta-line),
-  inset 0 9px 0 var(--cta-lit),inset 9px 0 0 var(--cta-lit),
-  inset 0 -10px 0 var(--cta-deep),inset -9px 0 0 var(--cta-deep)}
-.stamp:hover{background:#ff7a60}
+ box-shadow:inset 0 0 0 3px var(--act-line,#0f0d0c),
+  inset 0 9px 0 var(--act-lit,#ffffff2e),inset 9px 0 0 var(--act-lit,#ffffff2e),
+  inset 0 -10px 0 var(--act-deep,#00000059),inset -9px 0 0 var(--act-deep,#00000059)}
+.stamp:hover{filter:drop-shadow(5px 5px 0 #000000a6) brightness(1.1)}
 /* the press is a depth change, not a tint: the plane travels into its own shadow and the lit
    and deep edges trade places, so the control reads as actually going down */
-.stamp:active{transform:translate(4px,4px);background:#d9543e;
- filter:drop-shadow(1px 1px 0 #000000a6);
- box-shadow:inset 0 0 0 3px var(--cta-line),
-  inset 0 9px 0 var(--cta-deep),inset 9px 0 0 var(--cta-deep),
-  inset 0 -10px 0 var(--cta-lit),inset -9px 0 0 var(--cta-lit)}
+.stamp:active{transform:translate(4px,4px);
+ filter:drop-shadow(1px 1px 0 #000000a6) brightness(.94);
+ box-shadow:inset 0 0 0 3px var(--act-line,#0f0d0c),
+  inset 0 9px 0 var(--act-deep,#00000059),inset 9px 0 0 var(--act-deep,#00000059),
+  inset 0 -10px 0 var(--act-lit,#ffffff2e),inset -9px 0 0 var(--act-lit,#ffffff2e)}
 .stamp:disabled{background:#2b2420;color:#8b8079;filter:none;transform:none;clip-path:none;
  box-shadow:inset 0 0 0 3px #120f0e,inset 0 0 0 5px #3a322c}
+/* ---- the three roles. A surface names the family its Action belongs to; nothing is painted
+   by class name, and no rule here reaches a control whose role it does not know. ---- */
+.act-brick{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
+ --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
+.act-walnut{--act:var(--walnut);--act-lit:var(--walnut-lit);--act-deep:var(--walnut-deep);
+ --act-line:var(--walnut-line);--act-ink:var(--walnut-ink)}
+.act-coin{--act:var(--coin);--act-lit:var(--coin-lit);--act-deep:var(--coin-deep);
+ --act-line:var(--coin-line);--act-ink:var(--coin-ink)}
 summary{min-height:44px;padding:10px 0;cursor:pointer;color:var(--dim);font-size:var(--t-sm)}
 input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2px 0 #00000080;padding:12px;width:100%;color:var(--text)}
 /* Volume: a labelled slider on a sunken rail, sized so a thumb can hold it on a phone. */
@@ -835,6 +852,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    stays on the key face where it already read. No key is promoted above its peers. */
 .tills button{display:grid;gap:4px;justify-items:center;padding:10px 2px;min-height:76px;
  background:#463521;color:#f4e9d0;box-shadow:4px 4px 0 #00000080}
+/* UI_UX §15 peer choices. Source gives the 정가 key `class="stamp"`, so it inherits the flow
+   control's notch and hard offset while 할인 and 바가지 do not - one of three keys being
+   compared side by side, quietly promoted by a silhouette. The colour never reaches it (this
+   rule wins on specificity) but the shape did, so the shape is taken back here. */
+.tills .stamp{clip-path:none;filter:none;color:#f4e9d0;letter-spacing:normal;font-weight:400}
 .tills button:not([disabled]):hover{background:#52412a}
 .tills button:not([disabled]):active{transform:translate(3px,3px);box-shadow:1px 1px 0 #00000080}
 /* a refused or unaffordable price is a dead key: it sits below the till surface, carries no
@@ -1040,10 +1062,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-closing{background:#140f08}
 .p-closing .stage-scroll{padding:18px var(--gutter) 26px;background:var(--tex-wood),#241a10;background-size:32px 12px}
 .p-closing .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0f0b06;box-shadow:inset 0 3px 0 #ffffff12}
-/* The day's last control is the game's primary Action, so it speaks the primary Action's
-   language rather than a second ink plane of its own - the paper is the receipt's job. Only
-   its measure is set here. */
-.p-closing .dock .stamp{margin-left:auto;min-height:54px;min-width:148px;font:600 17px/1 var(--ui)}
+/* BRICK. The day's last control is this screen's one flow Action, so it carries that family -
+   the paper is the receipt's job, not the button's. Only its measure is set here. */
+.p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
+ --act-line:var(--brick-line);--act-ink:var(--brick-ink);
+ margin-left:auto;min-height:54px;min-width:148px;font:600 17px/1 var(--ui)}
+/* the ending's one way on, and the pre-Run / Store Management footers' - same role, same family */
+.p-end .dock .stamp,.modal-footer .stamp{--act:var(--brick);--act-lit:var(--brick-lit);
+ --act-deep:var(--brick-deep);--act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 .p-closing .dock .danger-text{flex:1 1 100%;font:400 13px/1.4 var(--ui)}
 .tape{position:relative;width:100%;max-width:344px;margin:0 auto;filter:drop-shadow(5px 7px 0 #00000073)}
 .tear{height:9px;background:var(--tex-paper),#efe7d2;background-size:16px 16px}
@@ -1183,7 +1209,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    This is a Store Support Presentation decision only; the game's semantic benefit green is
    untouched.
 
-     AVAILABLE    #20272B slate, #465158 edge     the one real control: the primary cyan, depth
+     AVAILABLE    #20272B slate, #465158 edge     the one real control: the COIN family, depth
      SELECTED     same slate, #B98B3E outline     same footprint, charcoal fill, no depth
      UNAVAILABLE  #171C1F charcoal, #303A3E edge  dead plane, no depth
 
@@ -1212,14 +1238,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    CTA silhouette this spec rules out. 138 x 48 stays well above the phone touch minimum. */
 .relic-plate .stamp{width:auto;min-width:138px;min-height:48px;padding:0 18px;
  font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:var(--cta);color:var(--cta-ink);transform:none;clip-path:none;filter:none;
- box-shadow:inset 0 0 0 2px var(--cta-lit),3px 3px 0 var(--cta-deep)}
+ background:var(--coin);color:var(--coin-ink);transform:none;clip-path:none;filter:none;
+ box-shadow:inset 0 0 0 2px var(--coin-lit),3px 3px 0 var(--coin-deep)}
 /* affordance belongs only to the control that can actually be pressed - :hover and :active
    still match a disabled button, so both are scoped away from one */
-.relic-plate .stamp:not([disabled]):hover{background:#ff7a60}
+.relic-plate .stamp:not([disabled]):hover{background:#f7d669}
 /* the press is the depth collapsing: the plane travels onto the panel and the offset closes */
-.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#d9543e;
- box-shadow:inset 0 0 0 2px var(--cta-deep),1px 1px 0 var(--cta-deep)}
+.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#dcb53c;
+ box-shadow:inset 0 0 0 2px var(--coin-deep),1px 1px 0 var(--coin-deep)}
 
 /* SELECTED / OWNED. The panel keeps the AVAILABLE surface - no fill, no tint, no strip. The
    state is the muted-gold outline, a slightly raised title contrast, and the control losing
@@ -1257,12 +1283,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-takeover .close p{flex:1 1 auto;font:400 13px/1.5 var(--ui);color:#a2947c}
 /* the defer control sits on the same takeover, so it answers to the same palette: slate, not
    brown. It stays plainly secondary - no gold, no depth competition with the one real control. */
+/* WALNUT. Deferring is a step under the purchase it sits beside, so it takes the back/defer
+   family - a rich chestnut that belongs to the wood, not the dead #3A2C1D it used to be and
+   not a second bid for the eye. It keeps this screen's flat grammar like the control above it. */
 .relic-takeover .close .stamp{flex:0 0 auto;min-height:50px;min-width:150px;font:600 16px/1 var(--ui);
- background:#2b3338;color:#d7dee0;
- box-shadow:inset 0 0 0 2px #4b565c,3px 3px 0 #0e1315}
-.relic-takeover .close .stamp:hover{background:#354049}
-.relic-takeover .close .stamp:active{transform:translate(2px,2px);background:#232a2e;
- box-shadow:inset 0 0 0 2px #3f484d,1px 1px 0 #0e1315}
+ clip-path:none;filter:none;
+ background:var(--walnut);color:var(--walnut-ink);
+ box-shadow:inset 0 0 0 2px var(--walnut-lit),3px 3px 0 var(--walnut-deep)}
+.relic-takeover .close .stamp:hover{background:#87502f}
+.relic-takeover .close .stamp:active{transform:translate(2px,2px);background:#653a24;
+ box-shadow:inset 0 0 0 2px var(--walnut-deep),1px 1px 0 var(--walnut-deep)}
 
 /* =====================================================================
    FINAL — 제0게이트. Not a shop screen: the mouth of the gate itself, cold stone and
@@ -1509,23 +1539,36 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .slot-option b{display:block}
 /* the control is the card's right-hand face: full height, flush to the edge, its own ruled
    seam instead of a gap. A press moves the plane, never the card. */
-/* The control is the card's right-hand face, and when it is pressable it is a real pixel key:
-   black seam against the reading, lit along the top, deep along the bottom, and the press is
-   that depth going out. It uses the KEY colour, not the Action's - one screen has one primary
-   Action, and a card full of them would be four. It keeps the card's silhouette rather than
-   the Action's notch, because a notched chip floating inside a card is the separate-button
-   look this pass removes: the face IS the card's edge. */
+/* The control is the card's right-hand face: a real pixel key with a black seam against the
+   reading, lit along the top, deep along the bottom, and a press that is that depth going out.
+   It keeps the card's silhouette rather than the flow Action's notch, because a notched chip
+   floating inside a card is the separate-button look this pass removes - the face IS the
+   card's edge.
+   The DEFAULT face is neutral, because two different things live in it: buying a Decoration,
+   and moving one you already own in or out of its Slot. Only the first is a purchase, so only
+   the first takes the COIN family below. */
 .slot-option>button{align-self:stretch;min-height:0;margin:0;padding:10px 12px;
  white-space:normal;font-size:13px;line-height:1.35;text-align:center;
  clip-path:none;filter:none;
- background:var(--key);color:var(--key-ink);font-weight:600;
- box-shadow:inset 3px 0 0 var(--cta-line),inset 0 5px 0 var(--key-lit),
-  inset 0 -6px 0 var(--key-deep),inset -5px 0 0 var(--key-deep)}
-.slot-option>button:hover{background:#fbf1da}
+ background:#3c362d;color:#efe3c8;font-weight:600;
+ box-shadow:inset 3px 0 0 #100d0b,inset 0 5px 0 #6a6152,
+  inset 0 -6px 0 #211d18,inset -5px 0 0 #211d18}
+.slot-option>button:hover{background:#4a4338}
 /* the press is depth: the lit and deep edges swap and the reading holds still */
-.slot-option>button:active{transform:none;background:#ded1b3;
- box-shadow:inset 3px 0 0 var(--cta-line),inset 0 5px 0 var(--key-deep),
-  inset 0 -6px 0 var(--key-lit),inset -5px 0 0 var(--key-deep)}
+.slot-option>button:active{transform:none;background:#332e27;
+ box-shadow:inset 3px 0 0 #100d0b,inset 0 5px 0 #211d18,
+  inset 0 -6px 0 #6a6152,inset -5px 0 0 #211d18}
+/* COIN. Acquiring the Decoration is the purchase on this card, so it is the one face that
+   pops - and it pops inside the card, never across the screen. Equipping something already
+   owned is a state change, not an acquisition, so it keeps the neutral key above. */
+.slot-option>button[data-action="deco-buy"],.deco-confirm [data-action="deco-confirm"]{
+ background:var(--coin);color:var(--coin-ink);
+ box-shadow:inset 3px 0 0 var(--coin-line),inset 0 5px 0 var(--coin-lit),
+  inset 0 -6px 0 var(--coin-deep),inset -5px 0 0 var(--coin-deep)}
+.slot-option>button[data-action="deco-buy"]:hover{background:#f7d669}
+.slot-option>button[data-action="deco-buy"]:active{background:#dcb53c;
+ box-shadow:inset 3px 0 0 var(--coin-line),inset 0 5px 0 var(--coin-deep),
+  inset 0 -6px 0 var(--coin-lit),inset -5px 0 0 var(--coin-deep)}
 /* UNAVAILABLE is not the same plane with the colour drained: the key loses its depth entirely
    - no lit edge, no deep edge, nothing to press out - drops to the card's own charcoal, and
    keeps its price legible, because the price IS the reason it cannot be pressed. */
