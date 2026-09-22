@@ -1119,6 +1119,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .menu-list{display:grid;gap:9px}
 .menu-list button{width:100%;min-height:52px;padding:14px 16px;text-align:left;font:400 15px/1 var(--ui);
  background:#3a2c1d;color:#efe3c8;box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+/* UI-Q-v28-29. 현재 지점 포기 is the one destructive action in this list and it is marked
+   `.danger` in Source, but the only `.danger` rules in the sheet are scoped to `.modal-footer`
+   and the FINAL dock - in the modal BODY it matched nothing, so abandoning the store rendered
+   as the sixth identical navigation row. It takes the destructive palette the other two
+   `.danger` sites already use, and it is set off from the five navigation rows by more than
+   twice their gap, so the grouping reads without relying on colour alone. */
+.menu-list button.danger{margin-top:13px;background:#5c2a24;color:#f6dfd9;
+ box-shadow:inset 2px 2px 0 #ffffff1f,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
+.menu-list button.danger:hover{background:#6b322b}
 /* what is already on the shelf, on the form that decides what to add to it */
 .stock-brief{margin:0 0 14px;background:#2c241814;box-shadow:inset 0 0 0 2px #2c241826}
 .stock-brief summary{display:flex;align-items:baseline;gap:9px;padding:9px 11px;cursor:pointer;
