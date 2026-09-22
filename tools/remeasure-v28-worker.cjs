@@ -34,7 +34,12 @@ const pick = (r) => ({
   deepCollapseRate: r.deepCollapseRate ?? null,
   goldIn: r.goldIn, goldOut: r.goldOut, goldInTotal: r.goldInTotal, goldOutTotal: r.goldOutTotal,
   saleOriginShare: r.saleOriginShare,
-  npc: r.npc, days: r.days, bands: r.bands, phase: r.phase,
+  npc: r.npc, days: r.days, bands: r.bands,
+  // `phase` carries a raw per-expedition ratio[] (DUN-Q20 concern, not this report's); only its
+  // small aggregate counts are relevant here.
+  phase: Object.fromEntries(Object.entries(r.phase).map(([b, p]) => {
+    const { ratio, ...rest } = p; return [b, rest];
+  })),
   prepStartGoldMedian: r.prepStartGoldMedian,
   final: r.final, settlement: r.settlement,
   rescue: r.rescue,
