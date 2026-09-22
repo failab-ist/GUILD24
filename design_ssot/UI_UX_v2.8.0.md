@@ -394,6 +394,66 @@ Rules:
 - when several traces compete for space, deterministic presentation may show a readable subset;
   gameplay ownership is never reduced
 
+### PHASE VISUAL LANGUAGE / PRIMARY ACTION ACCENT
+
+The current game must not use the same generic green treatment as the default answer for every
+primary action.
+
+Green has an existing semantic job:
+- beneficial state / delta
+- current store-sign material where it is part of the environment
+
+A button must not become green merely because it is the primary action.
+
+Keep one GUILD24 visual language and reuse the current material / token vocabulary. Do not create a
+new theme or skin framework.
+
+Phase presentation uses restrained existing accents:
+
+- MORNING: warm store / wood / gold emphasis; environmental sign-green may remain as scenery, not as
+  the universal CTA language
+- ORDER: paper / steel with the existing cool frost-blue family for action emphasis
+- SALE: register / commerce gold-amber family; price-mode colors keep their existing distinct meaning
+- NIGHT: dark room with the existing dusk family for continuation / phase emphasis
+- CLOSING: receipt / paper / ink first, with restrained gold-neutral emphasis rather than generic
+  green
+- FINAL: existing blood / ember-red gate language remains authoritative
+
+Phase identity is an accent and hierarchy difference, not a complete reskin. Typography, component
+construction, spacing language and interaction semantics remain shared.
+
+Overlays:
+- a phase-bound overlay may inherit the surrounding phase accent where that strengthens context
+- global Help / Settings / management surfaces remain neutral
+- Store Support acquisition/choice uses the existing slate/steel/gold family rather than the
+  universal green CTA treatment
+
+Primary / secondary / destructive states remain distinguishable by structure and contrast, not color
+alone.
+
+Semantic beneficial/harmful green/red remains authoritative and must not be weakened by phase color.
+
+#### TRANSIENT SALE SPEECH OVERLAP
+
+SALE dialogue remains a transient overlay:
+- around 3 seconds
+- tap-dismissible
+- reserves no permanent layout height
+- never covers the primary SALE action
+
+At phone width it may briefly overlap the compact customer-state strip when avoiding that overlap
+would require permanent empty height or compression of required decision information.
+
+For that case:
+- the speech text itself remains fully opaque
+- the speech-bubble background uses approximately 88% opacity
+- do not lower opacity on the whole speech element
+- the underlying state must remain visually recognizable enough that the overlap does not read as a
+  permanent loss of information
+
+This is a presentation compromise for transient dialogue, not permission for persistent overlays to
+cover required information.
+
 ### DECISION / PHASE AUDIO
 
 The current audio architecture is reused.
