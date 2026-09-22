@@ -1054,11 +1054,51 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .relic-plate .stamp:hover{background:#d9b46c}
 .relic-plate .stamp:active{transform:translate(3px,3px);background:#b8934e;
  box-shadow:inset 0 0 0 2px #d4bb84,1px 1px 0 #0d1214}
-/* an owned support is spent, not faded: the plane goes to the plate's own slate */
-.relic-plate .stamp[disabled]{background:#3a4649;color:#8b9a9c;
- box-shadow:inset 0 0 0 2px #4d5c60,2px 2px 0 #0d1214}
-/* the taken candidate: the plate itself carries the state, not a badge added to it */
-.relic-plate.owned{box-shadow:inset 0 0 0 2px var(--sign-lit),4px 4px 0 #0d1214}
+/* ---- STORE SUPPORT STATE HIERARCHY ------------------------------------------
+   SELECTED / AVAILABLE / UNAVAILABLE had converged on one slate: the taken card differed only
+   by its edge colour, an unavailable card was identical to an open one, and the disabled key
+   (#3a4649) sat on a #2f3a3e card, so it sank into it. The choice's result was not readable.
+
+   Two channels now agree, and neither is ornament: the card SURFACE and how the action SITS.
+
+     AVAILABLE    neutral slate card          amber plane, raised on a hard offset
+     SELECTED     green-tinted card           green plane, flush - already committed
+     UNAVAILABLE  darker, flatter card        slate plane, sunken - nothing to press
+
+   Flat 2D throughout: solid colour planes, crisp 2px edges, hard-offset shadow, no gradient,
+   no bevel, no badge, and no whole-element opacity anywhere.
+   ---------------------------------------------------------------------------- */
+/* SELECTED. The surface carries it as well as the edge, so the state does not depend on a
+   border alone, and the 보유 중 action reads as an active, committed state rather than a dead
+   control: the store-sign green this game already uses for a good standing state. */
+.relic-plate.owned{background:#27382f;
+ box-shadow:inset 0 0 0 2px var(--sign-lit),4px 4px 0 #0d1214}
+.relic-plate.owned h3{color:#e9fbef}
+.relic-plate.owned p{color:#cde5d5}
+.relic-plate.owned .cost{color:#9ce4b6;box-shadow:inset 0 1px 0 #7ddc9f4d}
+/* the base sheet fades every disabled control with `opacity:.4`, which washed this one out to a
+   grey-green smear - and a committed state that reads as faded is the opposite of active. The
+   state is fully carried by the plane, the ink and the flush sit, so the fade is switched off
+   here rather than relied on. */
+.relic-plate.owned .stamp[disabled]{background:#2c5c40;color:#d8f5e3;opacity:1;
+ box-shadow:inset 0 0 0 2px #7ddc9f;transform:none}
+/* UNAVAILABLE. The card itself retreats - darker, and flatter by half its offset - while the
+   description stays fully legible; nothing here is faded with opacity. */
+.relic-plate.unavailable{background:#1f2628;
+ box-shadow:inset 0 0 0 2px #36423f,2px 2px 0 #0d1214}
+.relic-plate.unavailable h3{color:#c2cdcd}
+.relic-plate.unavailable p{color:#a7b4b4}
+/* the price steps back with the rest of the card - it is not actionable here - but stays in the
+   gold family, because gold is what a price is in this game */
+.relic-plate.unavailable .cost{color:#b08a3c;box-shadow:inset 0 1px 0 #36423f}
+/* DISABLED ACTION. Lighter than the card it sits on, so it cannot sink into it, and sunken
+   rather than raised - the plane is below the surface, so there is visibly nothing to press.
+   Contrast, not decoration, does the work. */
+/* `opacity:.4` is off here too: a 40% control on a dark card is exactly the sink this fixes,
+   and the direction is that nothing is faded by whole-element opacity. Unpressability is the
+   sunken plane and the ink, both of which stay legible. */
+.relic-plate .stamp[disabled]{background:#3f4d50;color:#9fadaf;opacity:1;transform:none;
+ box-shadow:inset 2px 2px 0 #26302f,inset -2px -2px 0 #55666a}
 /* the certificate's own price line: struck on the plate, above the key */
 .relic-plate .cost{letter-spacing:.06em}
 

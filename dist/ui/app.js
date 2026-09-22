@@ -1008,10 +1008,16 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
    :game.ownedRelics().length>=7?'점포지원 7개를 모두 들였다. 더 들일 자리가 없다.'
    :until+' 구매할 수 있다 · 자금 '+fmt(s.money)+'G')+'</p></div>'
  +(w.purchased?'<p class="discovery">확보 완료 · '+E(D.relicBy[w.purchased].name)+'</p>':'')
+ /* Three states, and the card has to say which one it is before the Player reads the label:
+    the one taken (`owned`), one still open, and one that cannot be taken right now because the
+    window is spent or the Store cannot pay (`unavailable`). Both classes are derived from the
+    state the window already holds - no new field, no new rule, and the blocked condition is the
+    same expression the button's own `disabled` uses. */
  +'<div class="relic-choices">'+w.candidateIds.map((id,i)=>{const r=D.relicBy[id],price=w.candidatePrices[i],mine=w.purchased===id;
-  return '<article class="relic-plate'+(mine?' owned':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
+  const blocked=!game.canBuyRelic()||s.money<price;
+  return '<article class="relic-plate'+(mine?' owned':blocked?' unavailable':'')+'"><h3>'+E(r.name)+'</h3><p>'+E(r.description)+'</p>'
   +'<span class="cost">'+(price?fmt(price)+'G':'무료')+'</span>'
-  +btn(mine?'보유 중':'구매','buy-relic','stamp','data-id="'+id+'" '+(!game.canBuyRelic()||s.money<price?'disabled':''))+'</article>';}).join('')+'</div></div>'
+  +btn(mine?'보유 중':'구매','buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'
  +sealChoice() +'<div class="close">'+(first?btn('장식 구성 다시 보기','new','bare'):'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* Sloth's seal is not a second choice path: it is the other thing this window's one
