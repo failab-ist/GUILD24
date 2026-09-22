@@ -15,7 +15,7 @@ D30 preparation flow and unchanged Run rules inherit CORE_RUN_v2.7.0.md.
 
 ## PRE-RUN FLOW
 
-Start Contract remains retired.
+There is no Start Contract selection in the current pre-Run flow.
 
     new Run preparation
     -> inspect/equip owned Decoration loadout
@@ -34,7 +34,7 @@ D0 objective beat before ordinary DAY 1 play.
 ## RUN START EFFECT APPLICATION
 
 Active Decoration effects read from the Run's frozen loadout.
-Do not keep retired contract state as a second hidden source.
+Run-start effects come only from the frozen active Decoration loadout; no contract state contributes in parallel.
 
 ## RUN-END STORE CAPITAL SETTLEMENT
 
