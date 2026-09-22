@@ -117,3 +117,24 @@ The Sale screen treats them as an immutable payload:
 
 Production art replaces these by editing `Scene.npcPool`, or per NPC by registering
 `Scene.manifest['npc.<npcId>']`. No screen, layout or per-NPC rule changes.
+
+## Not shipped — review references
+
+These files are review inputs for Presentation work. They are not part of the build,
+are never requested at runtime, and no pixel of them is reused in the UI.
+
+### v2.8 current-vs-target quality pair
+- files: `reports/reference/quality-pair-current.jpg`, `reports/reference/quality-pair-target.png`
+- source: provided by the User on 2026-09-22 for the v2.8 Presentation Upgrade
+- why: `PRESENTATION_SYSTEM_v2.8.0.md` §VISUAL HARNESS CONTRACT lists the User-provided
+  current-vs-target pair as a review input and forbids reconstructing it from memory once it
+  is out of context. It is stored so later Batches review against the same pair.
+- how used: as a construction-method reference only - frame build, edge grammar, control
+  solidity, material finish. Its motifs are not carried onto MEDIUM or LOW surfaces.
+
+## Batch 1 presentation graphics
+
+No external asset was adopted for Presentation Batch 1. The one new graphic is a bespoke
+13x9 pixel pip drawn inline in `dist/ui/ui.css` as a data URI, on the Opening's supporting
+rule. One further attempt - a re-cut bevel on the Opening's Primary - was made and removed:
+the runtime capture was flatter than the shared Action geometry it replaced.
