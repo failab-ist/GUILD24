@@ -80,7 +80,46 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
  // green is the sign, the price tag and the approval stamp — never a ground
  for(const rule of ['body{','.stage{','.p-order{','.p-morning{'])
   assert.ok(!/#([0-9a-f]{0,2})(3f9d63|7ddc9f)/i.test(css.slice(css.indexOf(rule),css.indexOf(rule)+240)),'green is not a page ground in '+rule);
- assert.ok(css.includes('.stamp{background:var(--sign)'),'green is reserved for the approval stamp');
+ /* USER DIRECTION 2026-09-22 retired the green approval stamp as the game's PRIMARY control:
+    it read as the success green every AI tool ships. The cyan that first replaced it was
+    retired in the same breath as the amendment - over wood, ivory and charcoal it sat on the
+    screen as separate UI. The Action is a warm arcade coral. Green stays a semantic colour -
+    the sign, the price tag, a benefit - but it is no longer what an Action looks like, so this
+    asserts the replacement and the ban, not the retired rule. */
+ assert.ok(css.includes('.stamp{background:var(--cta)'),'the primary Action is the one control');
+ assert.ok(/--cta:#f2644b;--cta-lit:#ffaa8f;--cta-deep:#a7352c;--cta-line:#171312;--cta-ink:#fff4e8/.test(css),
+  'at the direction\'s exact face, edge, depth, outline and ink');
+ // the retired families may not come back as the primary Action
+ assert.ok(!/--cta:#(21c7f3|[0-9a-f]*?(8b|9)[0-9a-f]{2}5[0-9a-f])/.test(css),'not the retired cyan');
+ const stampRule=(css.match(/\n\.stamp\{[\s\S]*?\}/)||[''])[0];
+ assert.ok(!/var\(--sign\)|#2f7a4d|#3d8b5b|#469a67|#21c7f3/.test(stampRule),'and carries neither the green nor the cyan');
+ for(const sel of ['.modal-footer .stamp{','.p-closing .dock .stamp{'])
+  assert.ok(!/#2f7a4d|var\(--sign\)/.test(css.slice(css.indexOf(sel),css.indexOf(sel)+280)),
+   'no surface puts a green primary Action back: '+sel);
+ /* the silhouette the direction names, so "cyan" alone cannot satisfy it by becoming a flat
+    web-tool blue rectangle: notched corners, a black outline, a lit edge against a deep one,
+    a hard zero-radius offset, and a press that is a depth change rather than a tint */
+ assert.ok(/clip-path:polygon/.test(stampRule),'its corners are notched - never rounded, never a pill');
+ assert.ok(/inset 0 0 0 3px var\(--cta-line\)/.test(stampRule),'it carries a black pixel outline');
+ assert.ok(/var\(--cta-lit\)/.test(stampRule)&&/var\(--cta-deep\)/.test(stampRule),
+  'lit along the top-left and deep along the bottom-right');
+ assert.ok(/drop-shadow\(\dpx \dpx 0 /.test(stampRule),'over a hard offset that follows that shape');
+ const press=(css.match(/\.stamp:active\{[\s\S]*?\}/)||[''])[0];
+ assert.ok(/transform:translate/.test(press),'the press moves the plane into its own shadow');
+ // the edges trade places: the top band is deep while pressed, where it is lit at rest
+ assert.ok(/inset 0 9px 0 var\(--cta-deep\)/.test(press)&&/inset 0 -10px 0 var\(--cta-lit\)/.test(press),
+  'and the lit and deep edges swap, so it is depth and not colour alone');
+ assert.ok(/inset 0 9px 0 var\(--cta-lit\)/.test(stampRule)&&/inset 0 -10px 0 var\(--cta-deep\)/.test(stampRule),
+  'which is the reverse of how it sits at rest');
+ /* a card's own purchase key shares the grammar and NOT the colour: one screen, one Action. */
+ const keyRule=(css.match(/\.slot-option>button\{[\s\S]*?\}/)||[''])[0];
+ assert.ok(/background:var\(--key\)/.test(keyRule),'a Decoration card key is its own colour');
+ assert.ok(!/var\(--cta\)/.test(keyRule),'and is never painted with the primary Action');
+ assert.ok(/inset 3px 0 0 var\(--cta-line\)/.test(keyRule)&&/var\(--key-lit\)/.test(keyRule)
+  &&/var\(--key-deep\)/.test(keyRule),'while keeping the outline, the lit edge and the depth');
+ const keyOff=(css.match(/\.slot-option>button:disabled\{[\s\S]*?\}/)||[''])[0];
+ assert.ok(!/--key-lit|--key-deep/.test(keyOff)&&!/opacity:\.[0-9]/.test(keyOff),
+  'and UNAVAILABLE loses the depth outright rather than being the same key faded');
 });
 
 test('UI-Q01: Morning and Order are different screens, not one template',()=>{
@@ -2382,24 +2421,34 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
     brown offset, which still read as a brown box on a phone; the plane is a clean gold and the
     depth is the card's own slate. */
  const ctrl=(block.match(/\.relic-plate \.stamp\{[^}]*\}/)||[''])[0];
- assert.ok(/background:#e3b341/.test(ctrl),'the one control is a clean gold plane');
- assert.ok(/inset 0 0 0 2px #f6d878,3px 3px 0 #10161a/.test(ctrl),
-  'with a bright pixel edge and a hard offset taken in the card\'s own slate');
+ /* USER DIRECTION 2026-09-22 again: the gold plane still read as mustard against this slate,
+    so the one control here is the game's PRIMARY Action - the same cyan every other primary
+    Action uses. What stays screen-specific is the GRAMMAR Canonical owns: a flat plane with a
+    hard offset and nothing else, so this control keeps neither the notch nor the drop shadow
+    the base primary carries, which §ORNAMENT BAN rules out on this screen. */
+ assert.ok(/background:var\(--cta\)/.test(ctrl),'the one control is the primary Action');
+ assert.ok(/inset 0 0 0 2px var\(--cta-lit\),3px 3px 0 var\(--cta-deep\)/.test(ctrl),
+  'with a lit pixel edge over a hard offset in its own deep tone');
+ assert.ok(/clip-path:none/.test(ctrl)&&/filter:none/.test(ctrl),
+  'and it drops the base control\'s notch and drop shadow, which this screen bans');
  /* the grammar, independent of the tune: it is the strongest pop on the screen, it has real
     pixel depth, and no part of it is brown or olive - the tone this screen is required to be
     free of, and the one the previous values kept reading as */
- assert.ok(/inset 0 0 0 2px #[0-9a-f]{6},\dpx \dpx 0 #[0-9a-f]{6}/.test(ctrl),
+ assert.ok(/inset 0 0 0 2px (#[0-9a-f]{6}|var\(--[a-z-]+\)),\dpx \dpx 0 (#[0-9a-f]{6}|var\(--[a-z-]+\))/.test(ctrl),
   'the AVAILABLE control keeps a hard edge plus a hard offset - its depth is the affordance');
  const brownish=hex=>{const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);
   // a muddy brown/olive: the blue channel starved AND the plane dark enough to read as dirt
   return b<r*0.45&&Math.max(r,g,b)<0.62*255;};
  // the PLANES only - the ink on a gold control is a warm near-black on purpose, and reading it
  // as a brown box would be reading the letters instead of the button
- const planes=[...ctrl.replace(/color:#[0-9a-f]{6}/g,'').matchAll(/#([0-9a-f]{6})/g)].map(m=>m[1]);
+ const token=n=>(css.match(new RegExp('--'+n+':(#[0-9a-f]{6})'))||[])[1];
+ const planes=[...ctrl.replace(/color:[^;]*/g,'').matchAll(/#([0-9a-f]{6})/g)].map(m=>m[1])
+  .concat(['cta','cta-lit','cta-deep'].filter(n=>ctrl.includes('var(--'+n+')')).map(n=>token(n).slice(1)));
  assert.ok(planes.length>=3,'the control names its plane, its edge and its offset');
  for(const hex of planes)
   assert.ok(!brownish(hex),'no brown/olive value survives in the one control: #'+hex);
- assert.ok(!/#c4973e|#765821/.test(block),'and the retired brown pair is gone from the screen');
+ assert.ok(!/#c4973e|#765821|#e3b341|#f6d878|#21c7f3/.test(block),
+  'and the retired brown, gold and cyan planes are gone from the screen');
  /* the defer control shares the takeover, so it answers to the same slate palette */
  const defer=(css.match(/\.relic-takeover \.close \.stamp\{[^}]*\}/)||[''])[0];
  assert.ok(defer&&!/#3a2c1d|#6b5335/.test(defer),'the defer control is no longer a brown box');

@@ -40,6 +40,18 @@
  --text:#efe7d5;--dim:#a89c85;--faint:#7a705f;
  --tone-benefit:#9fd07f;--tone-cost:#e39075;--tone-neutral:#b3ab96;
  --r0:#b4bba6;--r1:#98c79b;--r2:#8ec6dd;--r3:#c2a2d6;--r4:#f0cd72;
+ /* PRIMARY ACTION — USER DIRECTION 2026-09-22, amended. The green approval stamp is retired:
+    it read as the success green every AI tool ships. The cyan that first replaced it is retired
+    too, and for the opposite reason - over dark wood, ivory paper, charcoal and muted gold, a
+    vivid cyan sat on the screen as a separate piece of UI rather than as this game's control.
+    The Action is a warm arcade coral now: high chroma, never greyed down, at home on wood and
+    paper, and a long way from mustard, brown, gold, green or a SaaS blue. It reads as PROCEED,
+    not as danger - `--blood` stays the danger family and is untouched. */
+ --cta:#f2644b;--cta-lit:#ffaa8f;--cta-deep:#a7352c;--cta-line:#171312;--cta-ink:#fff4e8;
+ /* the purchase key inside a Decoration card. Same pixel grammar as the Action, deliberately
+    NOT the same colour: one screen has one primary Action, and a card's own key is a paper
+    key - the brightest thing on a charcoal card without pretending to be that Action. */
+ --key:#efe3c8;--key-lit:#fff9ec;--key-deep:#9c8c6a;--key-ink:#241d12;
  /* information (default) */
  --ui:'WantedSans','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
  --body:var(--ui);
@@ -98,10 +110,32 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
 .bare{background:transparent;box-shadow:none;color:var(--dim);padding:8px 6px}
 .bare:hover{background:transparent;color:var(--text)}
 .bare:active{transform:none;box-shadow:none}
-/* the approval stamp — the one green control in the game */
-.stamp{background:var(--sign);color:#eafaf0;font-weight:600;letter-spacing:.04em;
- box-shadow:inset 0 0 0 2px #ffffff40,inset 0 0 0 5px var(--sign),inset 2px 2px 0 #ffffff26,4px 4px 0 #00000080}
-.stamp:hover{background:#469a67}
+/* THE PRIMARY ACTION. One control language for the thing this screen is for: a cyan plane
+   inside a black pixel outline, lit along the top-left, deep along the bottom-right, its
+   corners notched off so the silhouette is a game button and not a web rectangle. The hard
+   offset is a filter rather than a box-shadow so it follows the notch instead of squaring it
+   off behind it, and its radius is zero: a pixel shadow, never a soft one.
+   Pressing it is a depth change, not a colour change - the plane travels into its own shadow
+   and the lit and deep edges swap - which is what the colour-only :hover on the old stamp
+   never gave. */
+.stamp{background:var(--cta);color:var(--cta-ink);font-weight:600;letter-spacing:.04em;
+ clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
+  100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
+  6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
+ filter:drop-shadow(5px 5px 0 #000000a6);
+ box-shadow:inset 0 0 0 3px var(--cta-line),
+  inset 0 9px 0 var(--cta-lit),inset 9px 0 0 var(--cta-lit),
+  inset 0 -10px 0 var(--cta-deep),inset -9px 0 0 var(--cta-deep)}
+.stamp:hover{background:#ff7a60}
+/* the press is a depth change, not a tint: the plane travels into its own shadow and the lit
+   and deep edges trade places, so the control reads as actually going down */
+.stamp:active{transform:translate(4px,4px);background:#d9543e;
+ filter:drop-shadow(1px 1px 0 #000000a6);
+ box-shadow:inset 0 0 0 3px var(--cta-line),
+  inset 0 9px 0 var(--cta-deep),inset 9px 0 0 var(--cta-deep),
+  inset 0 -10px 0 var(--cta-lit),inset -9px 0 0 var(--cta-lit)}
+.stamp:disabled{background:#2b2420;color:#8b8079;filter:none;transform:none;clip-path:none;
+ box-shadow:inset 0 0 0 3px #120f0e,inset 0 0 0 5px #3a322c}
 summary{min-height:44px;padding:10px 0;cursor:pointer;color:var(--dim);font-size:var(--t-sm)}
 input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2px 0 #00000080;padding:12px;width:100%;color:var(--text)}
 /* Volume: a labelled slider on a sunken rail, sized so a thumb can hold it on a phone. */
@@ -1006,15 +1040,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-closing{background:#140f08}
 .p-closing .stage-scroll{padding:18px var(--gutter) 26px;background:var(--tex-wood),#241a10;background-size:32px 12px}
 .p-closing .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0f0b06;box-shadow:inset 0 3px 0 #ffffff12}
-/* UI_UX §PHASE VISUAL LANGUAGE (CLOSING reads receipt / paper / ink with restrained
-   gold-neutral emphasis) + §ORNAMENT RESTRAINT. Closing the day is signing off the receipt, so
-   the control is the tape's own ink plane with a paper-light edge - flat, crisp, pressed. */
-.p-closing .dock .stamp{margin-left:auto;min-height:52px;min-width:140px;font:600 17px/1 var(--ui);
- background:#2c2418;color:#f2e7cd;
- box-shadow:inset 0 0 0 2px #b3a68b,4px 4px 0 #00000080}
-.p-closing .dock .stamp:hover{background:#3a301f}
-.p-closing .dock .stamp:active{transform:translate(3px,3px);background:#231c12;
- box-shadow:inset 0 0 0 2px #8a7f68,1px 1px 0 #00000080}
+/* The day's last control is the game's primary Action, so it speaks the primary Action's
+   language rather than a second ink plane of its own - the paper is the receipt's job. Only
+   its measure is set here. */
+.p-closing .dock .stamp{margin-left:auto;min-height:54px;min-width:148px;font:600 17px/1 var(--ui)}
 .p-closing .dock .danger-text{flex:1 1 100%;font:400 13px/1.4 var(--ui)}
 .tape{position:relative;width:100%;max-width:344px;margin:0 auto;filter:drop-shadow(5px 7px 0 #00000073)}
 .tear{height:9px;background:var(--tex-paper),#efe7d2;background-size:16px 16px}
@@ -1078,9 +1107,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .modal-body h3{color:#f2e7cd}
 .modal-footer{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:10px;padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));
  background:#1a120a;box-shadow:inset 0 3px 0 #ffffff12}
-.modal-footer .stamp{flex:1 1 auto;min-height:52px;font:600 17px/1 var(--ui);background:#2f7a4d;color:#f0fbf3;
- box-shadow:inset 0 0 0 2px #f0fbf34d,inset 0 0 0 4px #2f7a4d,inset 0 0 0 6px #f0fbf326,3px 3px 0 #00000073}
-.modal-footer button{min-height:48px;padding:12px 16px;background:#3a2c1d;color:#efe3c8;
+/* the footer's primary Action is the primary Action: it keeps the size it needs and nothing
+   else - the green plane and its three concentric rings are gone with the stamp they belonged
+   to. `flex:1 1 auto` used to stretch it across the whole footer, which is the long SaaS bar
+   this pass is here to remove, so it takes the room it needs and sits at the footer's end. */
+.modal-footer .stamp{flex:0 1 auto;min-width:min(280px,100%);min-height:56px;padding:0 22px;
+ font:600 17px/1 var(--ui);margin-left:auto}
+/* the footer's SECONDARY controls. `:not(.stamp)` because this rule sits after the primary
+   Action's and was repainting it brown - the footer's own plane is for the way back, never for
+   the thing the screen is for. */
+.modal-footer button:not(.stamp){min-height:48px;padding:12px 16px;background:#3a2c1d;color:#efe3c8;
  box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 .modal-footer .danger{background:#5c2a24;color:#f6dfd9}
 
@@ -1147,7 +1183,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    This is a Store Support Presentation decision only; the game's semantic benefit green is
    untouched.
 
-     AVAILABLE    #20272B slate, #465158 edge     the one real control: #E3B341 gold, depth
+     AVAILABLE    #20272B slate, #465158 edge     the one real control: the primary cyan, depth
      SELECTED     same slate, #B98B3E outline     same footprint, charcoal fill, no depth
      UNAVAILABLE  #171C1F charcoal, #303A3E edge  dead plane, no depth
 
@@ -1176,14 +1212,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    CTA silhouette this spec rules out. 138 x 48 stays well above the phone touch minimum. */
 .relic-plate .stamp{width:auto;min-width:138px;min-height:48px;padding:0 18px;
  font:600 16px/1 var(--ui);letter-spacing:.06em;
- background:#e3b341;color:#20180a;transform:none;
- box-shadow:inset 0 0 0 2px #f6d878,3px 3px 0 #10161a}
+ background:var(--cta);color:var(--cta-ink);transform:none;clip-path:none;filter:none;
+ box-shadow:inset 0 0 0 2px var(--cta-lit),3px 3px 0 var(--cta-deep)}
 /* affordance belongs only to the control that can actually be pressed - :hover and :active
    still match a disabled button, so both are scoped away from one */
-.relic-plate .stamp:not([disabled]):hover{background:#eebf52}
+.relic-plate .stamp:not([disabled]):hover{background:#ff7a60}
 /* the press is the depth collapsing: the plane travels onto the panel and the offset closes */
-.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#cf9f2f;
- box-shadow:inset 0 0 0 2px #e0c169,1px 1px 0 #10161a}
+.relic-plate .stamp:not([disabled]):active{transform:translate(2px,2px);background:#d9543e;
+ box-shadow:inset 0 0 0 2px var(--cta-deep),1px 1px 0 var(--cta-deep)}
 
 /* SELECTED / OWNED. The panel keeps the AVAILABLE surface - no fill, no tint, no strip. The
    state is the muted-gold outline, a slightly raised title contrast, and the control losing
@@ -1197,7 +1233,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    charcoal fill, the muted-gold edge and ink, and the absence of any depth or press - not by
    becoming smaller. `opacity:.4` from the base sheet is off. */
 .relic-plate.owned .stamp[disabled]{background:#171c1f;color:#d2a347;opacity:1;transform:none;
- box-shadow:inset 0 0 0 2px #b98b3e}
+ clip-path:none;filter:none;box-shadow:inset 0 0 0 2px #b98b3e}
 
 /* UNAVAILABLE. The panel recedes on its own lightness, not on opacity, and the title and the
    Function stay fully legible at the Canonical values. */
@@ -1213,7 +1249,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    press. It names its own cause (선택 종료 / 골드 부족) rather than staying 구매, and it is never
    faded by whole-element opacity. */
 .relic-plate .stamp[disabled]{background:#23292c;color:#697579;opacity:1;transform:none;
- box-shadow:inset 0 0 0 2px #394347}
+ clip-path:none;filter:none;box-shadow:inset 0 0 0 2px #394347}
 
 .relic-takeover .close{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:10px;
  padding:12px var(--gutter) max(14px,env(safe-area-inset-bottom));background:#0c0805;
@@ -1305,16 +1341,24 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:400 13px/1.65 var(--ui);font-style:italic;color:#a2947c}
 .unlock .gold-text{font:400 12px/1.4 var(--ui)}
 .unlock.locked{opacity:.72}
-/* one adventurer on the muster list — a tag, not a profile card */
+/* one adventurer on the muster list — a tag, not a profile card.
+   USER DIRECTION 2026-09-22: rarity used to be a coloured strip down the card's left edge, the
+   same grammar the Hazard rows use, and the card already states its rarity in the badge above
+   the name - one fact, two channels, and the left strip is the arrangement that reads as
+   generated. The strip is gone; rarity is the card's own FRAME now, which is a property of the
+   whole object rather than a marker stuck to its side, and the badge keeps naming it.
+   Hazard rows keep their left accent: there it separates different dangers at a glance, which
+   is what that grammar is for. */
 .npc-card{display:block;width:100%;text-align:left;padding:11px 12px;background:#1c1512;border-radius:0;
- box-shadow:inset 3px 0 0 var(--rare,var(--r0)),inset 0 -2px 0 #ffffff12}
+ box-shadow:inset 0 0 0 2px var(--rare,var(--r0)),inset 0 -2px 0 #ffffff12}
 .npc-card:hover{background:#241a16}
 .npc-card:active{transform:none}
 .npc-card .row{display:flex;align-items:flex-start;gap:11px}
 .npc-card .row>div{flex:1 1 auto;min-width:0}
 .npc-card h3{font:600 16px/1.25 var(--ui);color:#f2e7cd}
 .npc-card p{font:400 12px/1.5 var(--ui);color:#a2947c}
-.npc-card.chosen{background:#2a2116;box-shadow:inset 3px 0 0 var(--gold),inset 0 0 0 2px #c8a35e59,inset 0 -2px 0 #ffffff12}
+/* chosen is the frame again, at full gold, so selection and rarity never compete on two axes */
+.npc-card.chosen{background:#2a2116;box-shadow:inset 0 0 0 3px var(--gold),inset 0 -2px 0 #ffffff12}
 .npc-card.dead{opacity:.45}
 .npc-card[disabled]{opacity:.4}
 /* FINAL muster, §PIXEL / 2D §STATE GRAMMAR: an adventurer who cannot be sent was faded out
@@ -1322,7 +1366,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    states WHY they cannot go. The row recedes into the surface instead, at full opacity, and the
    reason stays readable. */
 .p-final .npc-card[disabled]{opacity:1;background:#120e0c;color:#8b7f6d;
- box-shadow:inset 3px 0 0 #3a3129,inset 2px 2px 0 #00000080}
+ box-shadow:inset 0 0 0 2px #3a3129,inset 2px 2px 0 #00000080}
 .p-final .npc-card[disabled] h3{color:#a2947c}
 .p-final .npc-card[disabled] p{color:#8b7f6d}
 .p-final .npc-card[disabled]:hover{background:#120e0c}
@@ -1465,11 +1509,32 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .slot-option b{display:block}
 /* the control is the card's right-hand face: full height, flush to the edge, its own ruled
    seam instead of a gap. A press moves the plane, never the card. */
+/* The control is the card's right-hand face, and when it is pressable it is a real pixel key:
+   black seam against the reading, lit along the top, deep along the bottom, and the press is
+   that depth going out. It uses the KEY colour, not the Action's - one screen has one primary
+   Action, and a card full of them would be four. It keeps the card's silhouette rather than
+   the Action's notch, because a notched chip floating inside a card is the separate-button
+   look this pass removes: the face IS the card's edge. */
 .slot-option>button{align-self:stretch;min-height:0;margin:0;padding:10px 12px;
  white-space:normal;font-size:13px;line-height:1.35;text-align:center;
- box-shadow:inset 2px 0 0 #00000059,inset -2px -2px 0 #00000059,inset 0 2px 0 #ffffff17}
-.slot-option>button:active{transform:none;
- box-shadow:inset 2px 0 0 #00000073,inset -2px -2px 0 #00000073,inset 0 2px 0 #ffffff0d}
+ clip-path:none;filter:none;
+ background:var(--key);color:var(--key-ink);font-weight:600;
+ box-shadow:inset 3px 0 0 var(--cta-line),inset 0 5px 0 var(--key-lit),
+  inset 0 -6px 0 var(--key-deep),inset -5px 0 0 var(--key-deep)}
+.slot-option>button:hover{background:#fbf1da}
+/* the press is depth: the lit and deep edges swap and the reading holds still */
+.slot-option>button:active{transform:none;background:#ded1b3;
+ box-shadow:inset 3px 0 0 var(--cta-line),inset 0 5px 0 var(--key-deep),
+  inset 0 -6px 0 var(--key-lit),inset -5px 0 0 var(--key-deep)}
+/* UNAVAILABLE is not the same plane with the colour drained: the key loses its depth entirely
+   - no lit edge, no deep edge, nothing to press out - drops to the card's own charcoal, and
+   keeps its price legible, because the price IS the reason it cannot be pressed. */
+.slot-option>button:disabled{opacity:1;background:#171310;color:#8d8067;
+ box-shadow:inset 3px 0 0 #0d0b09,inset 0 0 0 2px #2f2a22}
+/* `.active` here marks the EQUIP action, not the equipped state - so it stays a live key. The
+   owned/equipped reading is carried by the label (적용 / 해제 instead of a price) and by the
+   card's own gold frame, which `.slot-option.on` sets: label, outline and contrast, not one
+   more colour on the key. */
 /* a state word where a control would be keeps the control's place, so the row does not reflow
    between an in-Run store and a pre-Run one */
 .slot-option>.muted{align-self:center;padding:11px 13px 11px 0;text-align:right;white-space:nowrap}
@@ -1651,34 +1716,34 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     in their own normal document order, which is what keeps them exactly as tall as their
     own content - the `order` values above are flex-only and do nothing here. */
  /* CLOSING / the two endings on a desk. The result here IS an object - a receipt, 344px of
-    paper on a counter - and the dock is the full width of the stage. At a phone width those
-    two are nearly the same measure, so the day's last control reads as the receipt's own next
-    step. At 1024 and 1280 they stop agreeing: the paper sits in the middle and the control is
-    pushed to the far edge of a bar three times its width, with the empty counter between them,
-    which is a web modal's footer CTA and not the end of a shift.
-    So the dock's CONTENTS are brought back onto the receipt's own column - the bar stays full
-    width, because it is the counter's edge - and the control centres under the paper it
-    belongs to. It is not stretched to the column: a 344px slab would trade one wrong silhouette
-    for another, and the compact pressed plane is the shape this game's controls have. */
- .p-closing .dock,.p-end .dock{display:flex;flex-wrap:wrap;align-items:center;
-  justify-content:center;gap:10px;
-  padding-left:max(var(--gutter),calc((100% - 344px)/2));
-  padding-right:max(var(--gutter),calc((100% - 344px)/2))}
- /* the control stops being pinned to the far edge */
- .p-closing .dock .stamp{margin-left:0}
- /* and the counter runs continuously from under the receipt to under the control, so the two
-    are one surface with a seam rather than a paper object and a separate black bar */
- .p-closing .dock{background:var(--tex-wood),#1d150d;background-size:32px 12px;
-  box-shadow:inset 0 2px 0 #00000080,inset 0 3px 0 #ffffff0a}
- /* the gap between the two was the other half of it: the receipt ended 26px up and the bar
-    opened 12px down, on a screen with room to spare. They close on each other here. */
- .p-closing .stage-scroll{padding-bottom:14px;
-  display:flex;flex-direction:column;justify-content:center}
- .p-closing .dock,.p-end .dock{padding-top:14px}
- /* the ending keeps its statement centred in the column - dropping the auto margin pinned it
-    to the floor and opened 315px of dead counter above it, which the gate caught. What changes
-    here is only where the way on sits: directly under the statement, not in the far corner. */
- .p-end .stage-scroll{padding-bottom:14px}
+    paper - and the dock is a bar pinned to the floor of a 880px stage. At a phone width those
+    two measures nearly agree, so the day's last control reads as the receipt's own next step.
+    At 1024 and 1280 they stop agreeing: the paper sits in the middle and the control is a
+    separate slab at the bottom of the screen with a field of empty counter between them, which
+    is a web modal's footer CTA and not the end of a shift.
+    So on a desk the stage stops holding them apart. The scroll takes only the height its own
+    content needs, the dock follows immediately under it, and the pair centres as ONE
+    composition. Both lose their own ground - the counter moves up to the whole screen - so the
+    receipt and its Action sit on one surface with nothing between them but a seam. */
+ .p-closing{background:var(--tex-wood),#241a10;background-size:32px 12px;justify-content:center}
+ .p-closing .stage-scroll{flex:0 1 auto;background:none;padding:0 var(--gutter)}
+ .p-end{justify-content:center}
+ .p-end .stage-scroll{flex:0 1 auto;padding:0 var(--gutter)}
+ .p-end .stage-scroll>:first-child{margin-top:0}
+ .p-end .stage-scroll>:last-child{margin-bottom:0}
+ /* the Action is the receipt's own footer: the same column, directly under the paper, and
+    bigger than it is on a phone because there is room for it to be. Not the full 344px slab -
+    it sits inside the paper's measure, which is what keeps it a game control and not a bar. */
+ .p-closing .dock,.p-end .dock{display:flex;justify-content:center;
+  background:none;box-shadow:none;padding:10px var(--gutter) 0}
+ /* on a desk there is room, so the Action takes it: it is the one thing left to do on this
+    screen and at 288x62 it still read as a chip under a 344px object. The receipt itself is
+    NOT widened - the paper is the size the paper is. */
+ .p-closing .dock .stamp,.p-end .dock .stamp{margin-left:0;flex:0 0 auto;
+  width:324px;min-width:0;min-height:78px;font:600 22px/1 var(--ui);letter-spacing:.06em}
+ /* a short till still names its own way out, under the same paper */
+ .p-closing .dock{flex-wrap:wrap}
+ .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
  .p-sale .dossier-col{display:block;grid-column:1;margin:0}
  .p-sale .shelf{grid-column:2;margin:0}
  .p-sale .owned-relics{display:block}
