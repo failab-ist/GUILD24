@@ -1744,21 +1744,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ---
 
-# 24. APPROVAL STATUS
-
-이 문서는 **현재 User-approved v2.8 Canonical Copy amendment**다.
-
-```text
-USER APPROVAL = APPROVED
-CANONICAL COPY PROMOTION = APPROVED
-SOURCE COPY IMPLEMENTATION = REQUIRED
-```
-
-Current Source는 이 문서의 Active Copy Truth를 채택해야 한다.
-
-## CURRENT PLAYTEST COPY AMENDMENT
-
-The following clauses are the current copy-placement truth for these surfaces.
+# 24. CURRENT COPY PLACEMENT
 
 ### 단골도 — normal SALE
 
