@@ -204,7 +204,7 @@
    band, which is 75.5% of the stage: the phone file's counter top plane, measured, not guessed.
    The inline anchor is a style attribute, so overriding it takes this much force and no less. */
 .p-morning .till{left:24%!important;width:52%!important;top:22.3%!important;height:14.5%!important}
-.p-morning .till-cap{left:28%!important;width:44%!important;top:15.5%!important;height:6.8%!important}
+.p-morning .till-cap{left:24%!important;width:52%!important;top:15.5%!important;height:6.8%!important}
 .p-morning .store:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
  background:radial-gradient(150% 108% at 50% 44%,#0000 58%,#12100b38 82%,#0e0a0685 100%)}
 /* The DAY sign's plate and the till's display housing were DRAWN INTO the procedural ceiling
@@ -220,10 +220,32 @@
  width:4px;height:10px;background:#5b6a72;box-shadow:1px 0 0 #2a333a}
 .p-morning .daysign:before{left:22%}
 .p-morning .daysign:after{right:22%}
+/* THE FLOAT SITS IN THE APERTURE, NOT ON ITS RIM. `.till` is a baseline flex line, and a
+   baseline line in a flex box is placed at cross-start - so the figure hung at the top of the
+   display, against the housing's own 3px bezel and its 4px inner shadow, and read as pressed
+   up rather than seated. Grid keeps the figure and its unit on one shared baseline, which is
+   what they need from each other, and centres that baseline group in the aperture, which is
+   what the aperture needs from them. Optical inset either side keeps the glyph glow off the
+   bezel. Nothing about the housing changes.
+   The label is the housing's own plate: same width as the aperture below it, seated directly
+   on it, so the two read as one register rather than a strip parked above a box. */
 .p-morning .till-cap{background:#2a323a;
- box-shadow:inset 0 2px 0 #4b565f,inset 0 -2px 0 #171d22,0 2px 0 #00000080}
-.p-morning .till{background:#08170f;
+ box-shadow:inset 0 2px 0 #4b565f,0 1px 0 #171d22}
+.p-morning .till{background:#08170f;padding:0 12px;
+ display:grid;grid-auto-flow:column;grid-auto-columns:max-content;
+ align-items:baseline;align-content:center;justify-content:center;column-gap:3px;
  box-shadow:inset 0 0 0 3px #39434c,inset 0 4px 0 #00000099,0 3px 0 #00000080}
+/* THE BRANCH NAME BELONGS TO THE STORE, NOT TO THE WALL. It was an isolated caption floating
+   at the bottom-right of the wall band, which is why it never joined the room. It is a small
+   plate screwed to the counter face now - the same place a shop puts its name where customers
+   stand. It hangs below the wall band by exactly the counter band's own height, which is a
+   fixed share of the stage, so it lands on the counter face at any board height. Quiet on
+   purpose: it is a mark on the furniture, not a badge, and it never outranks the board, the
+   float or the Action. */
+.p-morning .band.wall{overflow:visible}
+.p-morning .branchplate{right:7%;left:auto;bottom:-20dvh;padding:3px 9px;opacity:1;
+ font:500 12px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;
+ box-shadow:inset 0 0 0 1px #6b5029,inset 0 1px 0 #00000073,0 2px 0 #00000080}
 /* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
 .p-morning .store>.board{position:relative;z-index:2}
 .p-morning .daysign,.p-morning .till,.p-morning .till-cap,.p-morning .branchplate{z-index:2}
@@ -238,6 +260,7 @@
    url('assets/presentation/morning/store-bg-wide.png')}
  .p-morning .band.ceiling{flex:0 0 19%}
  .p-morning .band.counter{flex:0 0 30%}
+ .p-morning .branchplate{bottom:-18dvh}
  .p-morning .till{left:32%!important;width:36%!important;top:23.3%!important;height:26.7%!important}
- .p-morning .till-cap{left:35%!important;width:30%!important;top:12.6%!important;height:10.7%!important}
+ .p-morning .till-cap{left:32%!important;width:36%!important;top:12.6%!important;height:10.7%!important}
 }
