@@ -4,6 +4,7 @@ DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,franchise_grade,unlock,monster_knowledge,cross_run
 
 DOC_VERSION=2.6.0
+CURRENT_ROLE=HISTORICAL_BASE  # not current authority; current owners are routed only by SPEC_INDEX_v2.8.0.md
 CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 FREEZE_STATUS=FROZEN
 NUMERIC_STATUS=PASS3_WHERE_MARKED

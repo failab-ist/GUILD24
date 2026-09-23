@@ -3,6 +3,7 @@
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,fatigue,supply,injury,death_risk
 DOC_VERSION=2.7.0
+CURRENT_ROLE=HISTORICAL_BASE  # not current authority; current owners are routed only by SPEC_INDEX_v2.8.0.md
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.7.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
 BASE_DOCUMENT=DUNGEON_ITEM_QA_v2.5.0.md

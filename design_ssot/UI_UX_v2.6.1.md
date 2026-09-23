@@ -3,6 +3,7 @@
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings
 DOC_VERSION=2.6.1
+CURRENT_ROLE=HISTORICAL_BASE  # not current authority; current owners are routed only by SPEC_INDEX_v2.8.0.md
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.6.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 BASE_DOCUMENT=UI_UX_v2.6.0.md

@@ -3,6 +3,7 @@
 DOC=SALE
 OWNER=sale,customer,price,refusal,purchase_flow,sale_decision_ux
 DOC_VERSION=2.6.1
+CURRENT_ROLE=HISTORICAL_BASE  # not current authority; current owners are routed only by SPEC_INDEX_v2.8.0.md
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.6.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 BASE_DOCUMENT=SALE_v2.5.0.md

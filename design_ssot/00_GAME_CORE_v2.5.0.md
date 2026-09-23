@@ -4,6 +4,7 @@ DOC=00_GAME_CORE
 OWNER=game_core,core_fantasy,core_loop,system_ownership
 
 DOC_VERSION=2.5.0
+CURRENT_ROLE=HISTORICAL_BASE  # not current authority; current owners are routed only by SPEC_INDEX_v2.8.0.md
 CANONICAL_SET=GUILD24_CANONICAL_v2.5.0
 
 
