@@ -1197,10 +1197,23 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the control moves. */
 .p-night .dock .stamp{margin-left:auto;min-height:52px;min-width:132px;font:600 17px/1 var(--ui);
  background:#3f6fbe;color:#f4f7ff;
- box-shadow:4px 4px 0 #000000a6}
-.p-night .dock .stamp:hover{background:#4e80d2}
-.p-night .dock .stamp:active{transform:translate(3px,3px);background:#345c9e;
- box-shadow:1px 1px 0 #000000a6}
+ box-shadow:none;filter:drop-shadow(4px 4px 0 #1f3564);
+ /* the base notch clips everything outside the face, the drop shadow included - which is why no
+    depth ever showed here. This outline is the notched face UNION the same notch 4px down-right,
+    so the depth is kept by the clip instead of cut by it. */
+ clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 4px,calc(100% - 2px) 4px,
+  calc(100% - 2px) 6px,100% 6px,100% 10px,calc(100% + 4px) 10px,calc(100% + 4px) calc(100% - 2px),
+  calc(100% - 2px) calc(100% - 2px),calc(100% - 2px) calc(100% + 4px),10px calc(100% + 4px),10px 100%,
+  6px 100%,6px calc(100% - 2px),4px calc(100% - 2px),4px calc(100% - 6px),0 calc(100% - 6px))}
+/* BATCH 3 NIGHT: the depth used to be black on the near-black dock, and the base `.stamp` drop
+   shadow stacked a second one under it - so the one hard edge the control owns could not be
+   seen at all. It is now the plane's own deep cobalt, the ONLY depth (the base filter is
+   replaced, the box-shadow is gone), and the press moves the plane into it until it is spent. */
+/* a pointer lift only: on a phone the tap that pressed 다음 leaves :hover stuck on the control
+   that replaces it under the finger, and 마감으로 then looked like a different, paler button */
+@media (hover:hover){.p-night .dock .stamp:hover{background:#4a7bcb;filter:drop-shadow(4px 4px 0 #1f3564)}}
+.p-night .dock .stamp:active{transform:translate(4px,4px);background:#3a67b2;filter:none;clip-path:var(--stamp-cut)}
+.p-night .dock .stamp:focus-visible{outline:3px solid #c9d8f5;outline-offset:3px}
 /* the rail of return tags: the night's progress as objects, one per adventurer out today */
 /* a short beat sits in the middle of the room rather than clinging to the top of it;
    a long one falls back to normal flow so nothing scrolls out of reach */
@@ -1267,6 +1280,51 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .verdict{display:block;font:500 36px/1 var(--f-sign);-webkit-font-smoothing:none;letter-spacing:.02em;
  color:var(--tone,#e8d9b0);text-shadow:2px 2px 0 #0000008c;margin:0 0 2px;
  padding:0;box-shadow:none;overflow-wrap:anywhere}
+/* BATCH 3 NIGHT — THE RESULT TAG. Every Outcome used to be the same bare word in another colour:
+   one card, one word swapped. The Outcome now sits on the return tag the rail above already
+   hangs - the object a returner hands back - and the tag's own STATE is the difference: its
+   plane, its lit edge and its silhouette come from the resolved Outcome. The word stays 36px
+   for every Outcome (UI_UX §NIGHT LAYOUT — OUTCOME TYPE), the tag hugs it (no full-width row, no
+   rule across the record) and it is read-only: a flat plane, no cast depth, nothing pressable.
+     성공   clean tag                    대성공 the same tag, lit gold along its top edge
+     퇴각   corner folded down, dimmed    부상   one corner torn off
+     중상   both right corners torn, stained along the bottom
+     생환   clean tag, lit with the recovery accent
+     사망   no tag comes back - the bare word on the cold room */
+.p-night .beat .verdict{display:block;width:max-content;max-width:100%;margin:0 0 7px;
+ padding:6px 12px 5px 25px;background:var(--rt-face,#2a2a24);color:var(--rt-ink,var(--tone));
+ box-shadow:var(--rt-lit,none);
+ clip-path:var(--rt-cut,polygon(0 4px,4px 4px,4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,
+  100% calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,
+  4px calc(100% - 4px),0 calc(100% - 4px)));position:relative}
+/* the tag's string hole, punched through to the floor it lies on */
+.p-night .beat .verdict:before{content:'';position:absolute;left:9px;top:calc(50% - 3px);width:6px;height:6px;
+ background:#0f0b07;box-shadow:inset 1px 1px 0 #00000099}
+.t-safe{--rt-face:#243a2b;--rt-ink:#addfb4}
+.t-great{--rt-face:#5b4413;--rt-ink:#fde39c;--rt-lit:inset 0 4px 0 #f0cd72}
+.t-pull{--rt-face:#252e36;--rt-ink:#a3b4c0;
+ --rt-cut:polygon(0 4px,4px 4px,4px 0,calc(100% - 13px) 0,100% 13px,100% calc(100% - 4px),
+  calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px))}
+.t-hurt{--rt-face:#4c2818;--rt-ink:#efa36d;
+ --rt-cut:polygon(0 4px,4px 4px,4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,
+  100% calc(100% - 18px),calc(100% - 8px) calc(100% - 18px),calc(100% - 8px) calc(100% - 9px),
+  calc(100% - 17px) calc(100% - 9px),calc(100% - 17px) 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px))}
+.t-severe{--rt-face:#521813;--rt-ink:#f27a6b;--rt-lit:inset 0 -5px 0 #2c0b09;
+ --rt-cut:polygon(0 4px,4px 4px,4px 0,calc(100% - 16px) 0,calc(100% - 16px) 6px,calc(100% - 8px) 6px,
+  calc(100% - 8px) 12px,100% 12px,100% calc(100% - 16px),calc(100% - 7px) calc(100% - 16px),
+  calc(100% - 7px) calc(100% - 8px),calc(100% - 15px) calc(100% - 8px),calc(100% - 15px) 100%,
+  4px 100%,4px calc(100% - 4px),0 calc(100% - 4px))}
+.t-saved{--rt-face:#173c39;--rt-ink:#93e2d8;--rt-lit:inset 0 4px 0 #6fc7c0}
+.p-night .t-gone .verdict{padding-left:0;padding-right:0;background:none;clip-path:none}
+.p-night .t-gone .verdict:before{display:none}
+/* the lamp on the figure is the other half of the tag's state: the one warm light in the shop
+   falls fully on a Great Success, cools on a withdrawal, and thins out as the damage grows. A
+   death keeps its existing cold treatment below. Tone only - one size for every Outcome. */
+.p-night .t-great .returner{filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 18px #ffd79a70)}
+.p-night .t-pull .returner{filter:saturate(.8) drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 12px #9fb8d02e)}
+.p-night .t-hurt .returner{filter:saturate(.78) brightness(.93) drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 12px #e0925a2e)}
+.p-night .t-severe .returner{filter:saturate(.55) brightness(.8) drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 12px #d1584b33)}
+.p-night .t-saved .returner{filter:drop-shadow(0 3px 0 #00000073) drop-shadow(0 -2px 16px #6fc7c055)}
 /* D-21's three volumes remain a presentation WEIGHT rule (copy spent, tone, transition); they no
    longer touch type size here, and the NPC name and summary are one size whichever Outcome
    resolved - no rank override on the identity block. */
@@ -1308,15 +1366,25 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the resolved 출발 -> 원정 -> 귀환 arithmetic - through the SAME shared anchored tip everything
    else on screen uses, so `.changed` is the positioning context the balloon anchors against. */
 .changed{position:relative;margin-bottom:14px}
+/* BATCH 3 NIGHT — ONE EXPEDITION RECORD. The figures were a row of metal chips, then a loose
+   Fatigue line, then a reward line floating 25px lower (the Fatigue <summary> kept its 44px
+   tap height IN the flow). They are one recessed strip now: the record the day left, read top
+   to bottom in the owned order - growth, then the aftermath with 귀환 후 피로 as its settled
+   figure, then EXP / Wallet - with one minimal rule and nothing that looks pressable. */
+.p-night .beat .changed{padding:10px 12px 11px;background:#0c0906;box-shadow:inset 0 2px 0 #00000080}
 /* the three reading groups, in the owned order, told apart by spacing and one minimal rule */
 .changed>div{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
 .changed .grew{gap:4px}
 .changed .after{margin-top:10px;padding-top:9px;box-shadow:inset 0 2px 0 #ffffff12}
 .changed .reward{margin-top:7px}
+.p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17}
+.p-night .changed .reward{margin-top:6px}
+.p-night .changed .grew{gap:4px 14px}
 /* a death grew nothing, so the aftermath is the first group and there is nothing to divide */
 .changed>div:first-child{margin-top:0;padding-top:0;box-shadow:none}
 /* GROWTH — the one compact cell, because Level and the Stats are compared with each other */
 .changed .grew .tok{padding:4px 8px;background:#2b333b}
+.p-night .changed .grew .tok{padding:0;background:none}
 .changed .grew .tok i{color:#93a0ab}
 /* AFTERMATH / REWARD — plain rows: no plate, no edge, label then figure, one line */
 .changed .after .tok,.changed .reward .tok,
@@ -1324,6 +1392,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .changed .tip{display:block}
 .changed .tip>summary{display:inline-flex;align-items:baseline;gap:6px;
  list-style:none;cursor:pointer}
+/* the arithmetic stays one tap away with its full 44px target, which now overhangs the line
+   instead of pushing the reward line down */
+.p-night .changed .after .tip>summary{padding:12px 0;margin:-12px 0}
+/* 귀환 후 피로 is the aftermath's settled reading, so it is the largest figure in the strip */
+.p-night .changed .after .tip>summary b{font-size:18px}
 .changed .tip>summary::-webkit-details-marker{display:none}
 .changed .tip>summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .changed .tip>summary i,.tok i{font:400 12px/1.4 var(--ui);font-style:normal;color:#9aa6b2}
@@ -2308,6 +2381,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .npc-grid,.unlock-grid{grid-template-columns:repeat(3,1fr)}
  .relic-choices{grid-template-columns:repeat(3,1fr)}
  .beat .what{font-size:var(--t-xl)}
+ /* BATCH 3 NIGHT: a wide window gave the record nothing - a phone-sized figure and 12px figures
+    in the top-left corner of 1120px. Same composition, one column, scaled to be read across a
+    desk; the Outcome word itself stays 36px (UI_UX §NIGHT LAYOUT — OUTCOME TYPE). */
+ .p-night .rail,.p-night .beat-room{width:min(100%,760px);margin-left:auto;margin-right:auto}
+ .p-night .beat .who h3{font-size:23px}
+ .p-night .beat .place{font-size:15px}
+ .p-night .beat .cause li{font-size:16px}
+ .p-night .beat .why{font-size:15px}
+ .p-night .beat .changed{padding:14px 16px 15px}
+ .p-night .changed .tip>summary i,.p-night .changed .tok i{font-size:14px}
+ .p-night .changed .tip>summary b,.p-night .changed .tok b,.p-night .changed .tok>em{font-size:16px}
+ .p-night .changed .after .tip>summary b{font-size:20px}
  /* The counter has room here, so the customer gets a bigger card and the balloon moves off
     the top row to where a person actually talks from: beside the head, tail pointing back
     at them. Same element, same copy — only the placement is responsive. */

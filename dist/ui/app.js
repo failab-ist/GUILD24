@@ -118,9 +118,21 @@ function playPhase(phase){
   const form=$('.form');
   if(form)A(form,{translateY:[16,0],opacity:[0,1],duration:280,ease:'outQuad'});
  }
+ /* BATCH 3 NIGHT: one entry used to carry every Outcome the same way. The record and its tag now
+    arrive the way that return actually happened - resolved from the tag tone the Outcome already
+    set, never from anything the result does not state. Same family, short, no cinematic layer. */
  if(phase==='night'){
-  const beat=$('.beat');
-  if(beat)A(beat,{scale:[.96,1],opacity:[0,1],duration:300,ease:'outQuad'});
+  const beat=$('.beat'),tag=$('.beat .verdict');
+  const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1];
+  const IN={great:{translateY:[10,0],opacity:[0,1],duration:340},safe:{translateY:[6,0],opacity:[0,1],duration:280},
+   pull:{translateX:[-16,0],opacity:[0,1],duration:420},hurt:{translateY:[-8,0],opacity:[0,1],duration:380},
+   severe:{translateY:[-14,0],opacity:[0,1],duration:560},gone:{opacity:[0,1],duration:760},
+   saved:{scale:[.97,1],opacity:[0,1],duration:420}};
+  if(beat)A(beat,{...(IN[tone]||IN.safe),ease:'outQuad'});
+  /* the tag is handed over a beat after the figure: a clean return lands it, damage lets it drop */
+  if(tag&&tone!=='gone')A(tag,tone==='great'||tone==='saved'
+   ?{scale:[1.12,1],opacity:[0,1],duration:260,delay:160,ease:'outQuad'}
+   :{translateY:[-6,0],opacity:[0,1],duration:tone==='severe'||tone==='hurt'?380:240,delay:160,ease:'outQuad'});
  }
  // SALE reveal: the next back walks up to the counter and turns face up. It only ever
  // moves layers that are already laid out, so nothing shifts and no reflow is queued.
