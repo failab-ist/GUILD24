@@ -476,17 +476,18 @@ Boss-information presentation is audited by function, not only by the existing p
 The information cadence remains owned by BOSS_v2.8.0.md.
 
 Presentation intent:
-- D0: objective / investigation start is unmistakable but compact
+- D0: first-Morning objective / investigation briefing is unmistakable, basic information with no Boss art
 - D5: identity reveal has clear visual presence
-- D10: combat-question beat is compact but reads as a meaningful new investigation
+- D10: combat-question beat is concise but keeps the established Boss visual presence
 - D15: exact Trait reveal is visually stronger than a routine notice
-- D20: route/environment question is compact but clearly new
+- D20: route/environment question is concise but keeps the established Boss visual presence
 - D25: Final Family/Hazard disclosure is a major preparation beat and must be easy to read before
   same-Day decisions
 - D30: FINAL entry may be dramatic but adds no new information
 
-Existing D10/D20 64px and D5/D15/D25 mobile art baselines remain the current starting values for
-implementation review, not a reason to accept a functionally weak composition.
+D10/D20 no longer use a reduced 64px portrait baseline. They reuse the D5/D15 Boss-art family and
+stay lower-impact through information density / typography / report length. Current exact art limits
+remain owned by UI_UX_v2.8.0.md.
 
 During the polish audit, FAIL if:
 - Boss identity/art is too small or visually weak to establish the intended beat

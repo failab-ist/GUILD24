@@ -123,11 +123,13 @@ Death:
 ## UI-Q-v28-10 — BOSS MOBILE DENSITY
 
 At 360x800:
-- D5/D15 art max-height baseline 240px
-- D25 art max-height baseline 200px
-- D10/D20 compact identity portrait baseline 64px
-- D5/D15/D25 major-beat Boss art is a clear centered visual anchor
-- no small-Boss + wide-empty-space composition on the major beats
+- D0 has no Boss art and presents the objective/cadence as basic dossier information
+- D5/D10/D15/D20 Boss art max-height baseline 240px
+- D25 Boss art max-height baseline 200px
+- D5/D10/D15/D20 reuse the same centered Boss-art family
+- D10/D20 are compact because their report payload is shorter, not because the Boss becomes a
+  64px icon
+- no small-Boss + wide-empty-space composition
 - core information and acknowledgement are not pushed off first viewport solely by art
 
 ## UI-Q-v28-11 — LOYALTY HELP
@@ -337,6 +339,11 @@ Verify the current presentation around D0 / D5 / D10 / D15 / D20 / D25 / D30.
 
 PASS:
 - each cue/art treatment reveals no information earlier than its owning beat
+- after the first DAY 0 Store Support choice, D0 is the first presentation step of DAY 1 MORNING
+- D0 blocks ordinary Morning progression until acknowledged but consumes no time / RNG / resource
+- D0 has no Boss identity, art, silhouette, Trait, Final state or FINAL domain backdrop
+- a pre-acknowledgement save still owes D0 after reload; a post-acknowledgement save does not replay it
+- a save already beyond DAY 1 does not receive D0 retroactively
 - D25 presentation may reflect the exact Final state only after that state is revealed
 - D30 may intensify FINAL entry but adds no new Boss-information beat or fact
 - Boss/Final presentation does not consume Gameplay RNG
@@ -436,11 +443,11 @@ Run controlled D0 / D5 / D10 / D15 / D20 / D25 / D30 states on phone and desktop
 For each beat verify both information impact and layout economy.
 
 PASS:
-- D0 objective/investigation start is unmistakable without becoming an oversized empty reveal
+- D0 first-Morning objective / investigation start is unmistakable without Boss art or an oversized empty reveal
 - D5 identity has enough visual presence to register as the Boss reveal
-- D10 combat-question beat is clearly a new investigation but remains compact
+- D10 combat-question beat is clearly a new investigation and remains concise while retaining the full Boss-art family
 - D15 exact Trait is visually stronger than a routine notice and remains readable
-- D20 route/environment beat is clearly new but remains compact
+- D20 route/environment beat is clearly new and remains concise while retaining the full Boss-art family
 - D25 Final Family/Hazard disclosure is prominent and readable before the same-Day decision flow
 - D30 creates Final-entry emphasis without presenting a new information payload
 - acknowledgement/action control remains visible/reachable
@@ -449,8 +456,15 @@ PASS:
 - no large unused modal area around short content
 - no required information is reduced to unreadable scale merely to avoid scrolling
 
-The current 64px / 240px / 200px phone presentation measurements remain exact until the UI_UX
-owner is amended. For D5/D15/D25, PASS also requires the Boss to read as a centered visual anchor,
+
+Boss report detail PASS:
+- no artificial floor/divider line remains under D5/D15/D25 Boss art
+- D5 Flavor has no non-semantic left accent bar
+- D15 Trait uses typography/spacing only: no left accent bar and no replacement text box
+- D25 keeps semantic Family colour rules but has no extra black top rule above the Family section
+
+The current 240px / 200px phone presentation measurements remain exact until the UI_UX
+owner is amended. For D5/D10/D15/D20/D25, PASS also requires the Boss to read as a centered visual anchor,
 with the owned information directly below/around it rather than a small character floating beside
 unused space. If runtime evidence shows an exact value itself causes a functional failure, report
 the evidence as a Functional Design finding and patch Canonical first; do not silently tune Source.

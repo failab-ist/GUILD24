@@ -22,7 +22,7 @@ normal shop play must not make the Player forget that the Run is building toward
 
 Cadence:
 
-    D0  investigation begins / D30 Boss objective established
+    D0  first-Morning briefing / investigation begins / D30 objective established
     D5  Boss identity revealed
     D10 second investigation begins: combat anomaly
     D15 exact Boss Trait revealed
@@ -43,15 +43,44 @@ Do not repeat generic 조사 중 copy without a new question.
 D0 is the deliberate exception to later milestone ordering:
 
     first Store Support choice
-    -> separate D0 Boss objective/investigation beat
-    -> ordinary DAY 1 flow
+    -> enter DAY 1 MORNING
+    -> D0 first-Morning Boss briefing
+    -> ordinary DAY 1 MORNING flow
 
 The D0 objective is not printed inside the first Store Support decision surface.
+It is the first presentation step of DAY 1 MORNING and must resolve before the ordinary Morning
+Event / Gate / ORDER sequence continues.
+
+Exact trigger, acknowledgement and Save/Load contract -> CORE_RUN_v2.8.0.md
+§D0 FIRST-MORNING BOSS BRIEFING — EXACT.
 
 On D5/D10/D15/D20/D25, the Boss information beat occurs before the same-Day Store Support
 decision so the information can matter to the Player.
 
 D30 reuses all already-known information.
+
+
+## D0 INFORMATION BOUNDARY — EXACT
+
+D0 teaches the Run objective and investigation cadence only.
+
+It may state:
+- the Guild investigation has begun;
+- the target will be identified on DAY 5;
+- investigation information continues at five-Day intervals;
+- on DAY 30 the Player sends 3 grown adventurers to the Demon Castle for the Final subjugation;
+- the Player must use the investigation information to prepare that party while keeping the Store
+  operating through DAY 30.
+
+D0 must not reveal or depict:
+- Boss identity / name;
+- Boss character art or silhouette;
+- Boss Trait;
+- Final Family / Hazard state;
+- the per-Boss FINAL domain backdrop.
+
+Exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+D5 remains the first Boss identity / art reveal.
 
 ## PRESENTATION PAYOFF — v2.8
 
@@ -74,12 +103,34 @@ before the owning reveal beat.
 
 ## PERSISTENCE
 
-D5/D15/D25 keep their existing persisted seen-state behavior.
+D0/D5/D15/D25 keep their persisted seen-state behavior.
 
 D10 and D20 each require a persisted one-time seen marker.
 After the Player dismisses that report, save/reload must not replay it.
 
 No new RNG is consumed by merely showing a report.
+
+## GLUTTONY ITEM-STAT SCOPE — EXACT
+
+GLUTTONY reduces only positive Item-sourced Core-Stat increases in the Final.
+
+Affected:
+- 투력
+- 강인함
+- 기동
+- 정신
+
+Each positive Item contribution to those Stats is applied at 50%.
+
+Not reduced by GLUTTONY:
+- 환경 대응
+- 보급
+- 보험
+- other non-Stat Item effects
+
+Item rarity / price is not a boundary for this Boss effect.
+D5 may hint at the abnormal result but does not reveal the exact 50% value.
+D15 owns the exact Function disclosure.
 
 ## META CLEAR SIGNAL CLEANUP
 

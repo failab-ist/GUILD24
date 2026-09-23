@@ -21,15 +21,65 @@ There is no Start Contract selection in the current pre-Run flow.
     -> inspect/equip owned Decoration loadout
     -> confirm Run start
     -> DAY 0 first 점포지원 choice
-    -> separate DAY 0 Boss-information beat
-    -> ordinary DAY 1 flow
+    -> enter DAY 1 MORNING
+    -> D0 first-Morning Boss briefing
+    -> ordinary DAY 1 MORNING flow
 
 Decoration loadout is frozen after Run start.
 The pre-Run management screen must have a valid return path to new-Run preparation.
 
-The DAY 0 Boss objective is not embedded above/inside the first Store Support decision.
-The first Store Support decision completes first; then the existing Boss-information shell owns the
-D0 objective beat before ordinary DAY 1 play.
+The D0 Boss objective is not embedded above/inside the first Store Support decision.
+The first Store Support decision resolves first. The Run then enters DAY 1 MORNING, and the D0
+briefing is the first presentation step of that Morning before ordinary Morning information or
+decisions.
+
+"D0" remains the Boss-information cadence name. It does not mean the briefing is displayed on a
+separate playable DAY 0 phase.
+
+
+## D0 FIRST-MORNING BOSS BRIEFING — EXACT
+
+Purpose:
+bridge the opening / first-support setup into the actual 30-Day Run objective before the Player
+makes the first ordinary Morning decision.
+
+Trigger:
+- only after the first DAY 0 점포지원 choice has resolved;
+- only when the Run has entered DAY 1 MORNING;
+- before the ordinary DAY 1 Morning Event, Gate detail, ORDER entry or any other ordinary Morning
+  information / decision surface.
+
+This is an information beat, not a new gameplay Phase.
+
+Opening the D0 briefing:
+- advances no time;
+- consumes no Gameplay RNG;
+- spends no Gold / Store Capital;
+- changes no Inventory, NPC, Gate, Event, Store Support or Boss state;
+- does not itself generate the Boss identity, Trait or Final state.
+
+The briefing owns no Boss reveal beyond the Run objective / investigation cadence.
+Exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+Boss information boundary -> BOSS_v2.8.0.md.
+Presentation -> UI_UX_v2.8.0.md.
+
+Acknowledgement:
+- one `확인` action completes the beat;
+- ordinary DAY 1 Morning flow must not advance past this beat until it is acknowledged;
+- closing / escaping the presentation, if the shell technically permits it, does not consume the
+  beat;
+- acknowledgement marks the D0 beat seen and persists that state before ordinary Morning resumes.
+
+Save / Load:
+- a fresh Run receives this beat exactly once;
+- a save made while the DAY 1 beat is still unresolved must still owe the briefing after reload;
+- after acknowledgement, reload must not replay it;
+- the beat is not implemented as a `day >= 1` catch-up reveal;
+- a save already beyond DAY 1 must not receive a retroactive D0 briefing merely because an older
+  save lacks the seen marker.
+
+After acknowledgement, the existing Morning owner resumes its normal ordering. D0 does not create a
+second Morning Event, second Store Support window or extra decision.
 
 ## RUN START EFFECT APPLICATION
 
@@ -63,8 +113,10 @@ Run presentation order includes:
 
 D0:
 - first Store Support choice resolves first
-- then the D0 Boss objective/investigation appears as its own information beat
-- only after acknowledgement does ordinary DAY 1 flow continue
+- the Run enters DAY 1 MORNING
+- the D0 Boss briefing is the first Morning presentation step
+- only after acknowledgement does the ordinary DAY 1 Morning sequence continue
+- D0 is informational and does not become a permanent Phase
 
 On D5/D10/D15/D20/D25:
 Boss information occurs before the same-Day Store Support decision.

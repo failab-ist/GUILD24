@@ -318,45 +318,83 @@ desktop override shared by every Outcome.
 
 ## BOSS INFORMATION PRESENTATION
 
-D5/D15/D25 use the existing Boss report/reveal shell.
+All Boss-information beats use the existing Guild investigation dossier family.
 
-For these major reveal / preparation beats:
-- Boss art is the clear centered visual anchor, not a small side thumbnail beside unused space
-- Boss identity must register immediately before the Player reads the owned report information
-- owned information sits directly below or around the Boss visual in the same report composition
-- art scale may be strong, but it must not push required information or acknowledgement into
-  avoidable scrolling
+### D0 — FIRST MORNING BRIEFING
 
-D10/D20 use the same shell as a compact one-tap report:
-- Boss name
-- compact identity art
-- 1-2 short report lines
-- no new decision panel
+D0 is basic objective information, not a reveal spectacle.
+
+It appears as the first presentation step of DAY 1 MORNING after the first Store Support choice.
+Exact process / persistence -> CORE_RUN_v2.8.0.md.
+Exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
+
+Presentation:
+- no Boss character art;
+- no Boss silhouette;
+- no Boss domain backdrop;
+- no fake unknown portrait;
+- no decorative timeline cards;
+- the DAY 5 / DAY 30 anchors may use simple typographic hierarchy inside the same dossier;
+- one `확인` acknowledgement;
+- compact enough to read as onboarding information, but large enough that the Run objective cannot
+  be missed.
+
+### D5 / D10 / D15 / D20 / D25
+
+D5/D15/D25 are major reveal / preparation beats.
+D10/D20 are intentionally shorter information beats, but Boss presence is NOT reduced to a small
+thumbnail merely to communicate lower importance.
+
+For D5/D10/D15/D20:
+- use the same centered Boss-art family;
+- Boss identity remains visually present across the investigation;
+- D10/D20 stay compact through fewer lines / weaker information hierarchy / shorter dossier height,
+  not through shrinking the Boss to an icon.
+
+D25 remains information-first because the exact Final Family/Hazard disclosure is the payload.
 
 DIRECTOR DOCUMENT BASELINE — EXACT:
-- D10/D20 portrait: 64px
-- mobile D5/D15 Boss art max-height: 240px
+- mobile D5/D10/D15/D20 Boss art max-height: 240px
 - mobile D25 Boss art max-height: 200px
-- desktop D5/D15 Boss art max-height: 300px
+- desktop D5/D10/D15/D20 Boss art max-height: 300px
 - desktop D25 Boss art max-height: 260px
-
-the report was
-reviewed on a real handset and read too weak. The Boss beat is a takeover with the screen dimmed
-behind it, so the sheet may claim most of the viewport and the major-beat art may grow until it
-would cause overflow. The constraint below is what bounds the values.
 
 At 360x800, core information and acknowledgement control must not be pushed below the first
 viewport solely by Boss art.
 
 The Boss report sheet is a takeover, not a drawer peeking from the bottom: at phone width it
-claims most of the viewport rather than hugging its content.
+claims enough of the viewport to read as a report rather than hugging its content.
 
 Avoid both failure modes:
 - tiny Boss art floating inside a wide / empty report
 - oversized art that buries the report information or creates unnecessary scroll
 
-Information truth remains primary; Boss presence is a co-equal presentation requirement at the
-major reveal / preparation beats.
+### DOCUMENT DETAIL — USER APPROVED
+
+Boss art:
+- sits directly on the report paper;
+- no artificial grey / ink floor line or bottom divider under the character.
+
+D5 Flavor:
+- ordinary report text;
+- no non-semantic coloured left bar;
+- no extra tinted / bordered Flavor box.
+
+D15 Trait:
+- hierarchy is `특성` label -> Trait name -> explanation;
+- no coloured side bar;
+- no replacement text box / tinted panel / bordered card;
+- typography and spacing carry the emphasis.
+
+D25 Final Family / Hazard:
+- each Family may retain its own left colour rule because that colour is semantic identity;
+- do not remove that semantic Family colour;
+- remove the extra black horizontal rule above the Family section;
+- a thin neutral divider between the two peer Families is allowed where needed for scanning;
+- do not turn Hazards into decorative cards.
+
+Information truth remains primary; Boss presence is a co-equal presentation requirement except D25,
+where Family/Hazard disclosure must not be visually buried by art.
 
 ## PRESENTATION POLISH ROUTING
 

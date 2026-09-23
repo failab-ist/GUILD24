@@ -1032,9 +1032,23 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 14-1. D0
 
-**현재**
-> **DAY 30 · 제0게이트 토벌 예정**  
-> 길드 정보원이 토벌 대상을 추적하고 있다.
+**Header**
+> 마왕 조사 개시
+
+**Body**
+> 길드 조사대가 마왕의 정체를 추적하러 출발했다.  
+>
+> **DAY 5**  
+> 첫 조사 보고에서 토벌 대상이 공개된다.  
+> 이후 조사 소식은 5일마다 이어진다.  
+>
+> **DAY 30**  
+> 성장한 모험가 3명을 마왕성으로 보내 최종 토벌에 나선다.  
+>
+> 조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.
+
+**Button**
+> 확인
 
 ---
 
@@ -1050,7 +1064,10 @@ The following four lines are current exact Player-facing copy for these tutorial
 > 확인
 
 **Boss별 Flavor**
-> 현행 7종 유지
+> WRATH / PRIDE / ENVY / GREED / LUST / SLOTH 현행 유지.
+
+**GLUTTONY**
+> 챙겨 간 물건을 써도 몸이 평소만큼 따라주지 않았다.
 
 ---
 
@@ -1076,6 +1093,10 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 **Boss Trait 이름/기능**
 > 현행 mechanic truth 유지.
+
+**GLUTTONY exact Function**
+> 아이템의 투력·강인함·기동·정신 증가량 50% 감소  
+> 환경 대응·보급·보험 효과는 유지
 
 ---
 
@@ -1727,7 +1748,7 @@ The following four lines are current exact Player-facing copy for these tutorial
   - 발주 후
   - 매입 / 수익 / 재고 / 공급 / 유통기한
 - 대부분의 Item Flavor
-- Boss D5의 7종 고유 Flavor
+- Boss D5 Flavor: GLUTTONY는 §14-2 문구로 갱신, 나머지 6종 유지
 - Error / Save 복구 문구:
   - 자동저장 불가
   - 이전 저장 호환 불가
