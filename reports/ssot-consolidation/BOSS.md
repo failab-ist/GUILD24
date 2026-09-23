@@ -361,3 +361,23 @@ Copy / terminology -> `COPY_WORLD_VOICE_v2.8.0.md`
 - GREED `shortfallSlope` has no value in any chain version or current owner, and the formula
   `max(0, greedRevenueTarget - Cumulative Gross Sales)` is an absolute amount while the Exact line says
   "shortfall is measured as a SHARE of the target". Both lines are kept as written.
+
+## AMENDMENT — User decision 2026-09-23: GREED penalty is a share of the target (matches Source)
+
+User: a revenue target; the penalty scales with the unmet share of it; the curve follows the
+implemented Source. Source `effectiveBossPower` (dist/systems/run.js): ratio = max(0, (target -
+revenue) / target), bonus = min(cap, ratio × cap). This removes the unvalued `shortfallSlope` and
+reconciles the absolute formula with the SHARE line (both flagged UNRESOLVED above).
+
+```text
+shortfall
+max(0, greedRevenueTarget - Cumulative Gross Sales)
+min(shortfall × shortfallSlope, shortfallCap)
+```
+
+```new
+shortfallRatio
+max(0, greedRevenueTarget - Cumulative Gross Sales) / greedRevenueTarget
+min(shortfallCap, shortfallRatio × shortfallCap)
+- the penalty is linear in the unmet share: no sales -> the full cap; target met -> 0
+```

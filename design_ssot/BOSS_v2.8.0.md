@@ -386,13 +386,13 @@ Metric ownership -> `ECONOMY_ORDER_v2.8.0.md` / `SALE_v2.8.0.md` / `NIGHT_CLOSIN
 Rule:
 
 ```text
-shortfall
+shortfallRatio
 =
-max(0, greedRevenueTarget - Cumulative Gross Sales)
+max(0, greedRevenueTarget - Cumulative Gross Sales) / greedRevenueTarget
 
 GreedBonus
 =
-min(shortfall × shortfallSlope, shortfallCap)
+min(shortfallCap, shortfallRatio × shortfallCap)
 
 effectiveBossPower
 =
@@ -408,6 +408,7 @@ Therefore:
 Exact:
 - greedRevenueTarget=18800
 - shortfall is measured as a SHARE of the target, so the penalty means the same thing whatever the target is
+- the penalty is linear in the unmet share: no sales -> the full cap; target met -> 0
 
 Keep the existing Gross-Sales metric and revenue target unless separately rebalanced by approved economy evidence.
 
