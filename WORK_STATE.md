@@ -111,13 +111,13 @@ Final Freeze includes:
 No known blocker at this state.
 
 
-## Presentation Batch 5 — Closed / Pending Integration
+## Presentation Batch 5 — Closed / Integrated
 
 - source branch: `claude/guild24-v28-presentation-b5`
-- reviewed closeout HEAD: `2cc31f52461664be4cfd257f1ad412ea4c24aa5c`
-- B5-0 / B5-1 / B5-2 / B5-3 / B5-4: CLOSED by DIRECTOR / User review
-- B5-4 required no END / ENDFAIL Source modification; it added transition QA only
-- controlled Final CLEAR / FAIL / non-Final END transition evidence reported PASS
-- approved B3 END / ENDFAIL presentation remained stable in the reviewed comparison
-- Batch 5 is not yet recorded here as merged into the common integration branch
-- merge / Final Freeze / next Presentation batch: NOT STARTED by this closeout
+- approved source HEAD: `1f76f7965702f6fa51f327ae8d29f9dbea1a43f0`
+- fast-forwarded into `claude/guild24-v28-integration` (from `a6c0b1e5ef6c125e2dee56c8ae94fdc2e1e85ef5`; history preserved)
+- Presentation Batch 1 / 2 / 3 / 4 / 5: CLOSED
+- post-integration QA: PASS (npm test; B5-2 final-prep, B5-3 boss-confirm, B5-4 final-end; qa:visual unchanged;
+  Boss backdrop mapping / SHA unchanged)
+- Final Freeze: NOT STARTED
+- next Presentation batch: NOT STARTED
