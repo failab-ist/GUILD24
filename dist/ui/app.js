@@ -1055,7 +1055,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  /* a short Wallet is a system status on the closed transfer itself - exact need / owned - the
     same place SALE states a disabled price's cause; never a refusal line */
  const finalBlock=isFinal?(noop?Copy.finalPrep.noEffect:full?'가방 가득':poor?Copy.finalPrep.wallet.replace('{need}',finalPrice).replace('{have}',n.money):''):'';
- const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>'+(finalBlock||'이익 '+(finalPrice-st.cost)+'G')+'</small>','supply','stamp',
+ const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>보급</small>','supply','stamp',
     'aria-label="'+E(n.name)+'에게 보급 '+finalPrice+'G'+(finalBlock?' · '+finalBlock:'')+'" '+(finalBlock?'disabled':''))
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
    /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
@@ -1070,8 +1070,10 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
  const forwho='<p class="forwho"><span>'+E(n.name)+(isFinal?'에게 보급':'에게 판매')+'</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>';
  /* a Final no-effect Item: the reason and the closed 보급, and no preview of an effect it will not have */
- if(noop)return '<div class="tillpanel">'+forwho
-  +'<p class="final-noop-why"><b>'+E(Copy.finalPrep.noEffect)+'</b> '+E(Copy.finalPrep.noEffectWhy)+'</p><div class="tills">'+actions+'</div></div>';
+ /* FINAL: why a transfer is closed is the Item's status, said once beside it - never folded
+    into the action's face, which stays 50% / price / 보급 in every state */
+ const status=finalBlock?'<p class="final-status">'+(noop?'<b>'+E(Copy.finalPrep.noEffect)+'</b> '+E(Copy.finalPrep.noEffectWhy):E(finalBlock))+'</p>':'';
+ if(noop)return '<div class="tillpanel">'+forwho+status+'<div class="tills">'+actions+'</div></div>';
  return '<div class="tillpanel">'+forwho
  +(isFinal&&s.bossId==='GLUTTONY'?'<p class="final-boss-note">'+E(Copy.boss.d15.trait.GLUTTONY[0])+' · '+E(Copy.boss.d15.trait.GLUTTONY[1][0])+'</p>':'')
  /* SA-Q30: the rows are still grouped by what actually produced them internally - a Stat that
@@ -1097,7 +1099,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    return '<p class="delta-src">특수 효과</p><ul class="effects">'
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
  +'<p class="smalltext">'+(st.expires===null?'유통기한 없음':'폐기까지 '+(st.expires-s.day)+'일')+'</p>'
- +'<div class="tills">'+actions+'</div></div>';}
+ +status+'<div class="tills">'+actions+'</div></div>';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>'<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p></div>').join('')+'</details>';}
 /* UI-Q111. Both screens that take a commitment - the order and the sale - need what the
@@ -1557,6 +1559,9 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
 
+/* A decision sheet whose footer already carries its way back shows no second 닫기: the footer
+   control is the one cancel owner. Escape still dismisses it (the keydown handler is separate). */
+const ownCancel=new Set(['underConfirm']);
 function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';document.body.style.overflow='';return;}
  const hold=holdFocus(root);
  if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
@@ -1606,12 +1611,12 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
  else if(modal==='settings'){title='영업 설정';body=settings();narrow=true;}
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다. 남은 슬롯과 보급을 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
- else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss')+btn(c.under,'final-commit-go','stamp');narrow=true;}
+ else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss','stamp')+btn(c.under,'final-commit-go','stamp');narrow=true;}
  else if(modal==='retireConfirm'){title='현재 지점을 포기할까요?';body='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.</p>';footer=btn('계속 영업','dismiss')+btn('지점 포기','retire-go','danger');narrow=true;}
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')&&!d0Owed()?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
+ root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')&&!ownCancel.has(modal)&&!d0Owed()?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
     request is consumed here: a later redraw of the same panel must not keep yanking the
     player back to it while they read something else. */

@@ -787,8 +787,13 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  /* v2.7 moves the six categories into player-facing identities owned by COPY_WORLD_VOICE,
     so 포션 and the rest may be shown; what UI-Q81 still forbids is the redundant ROLE chip
     (`속박 전문` sitting above `속박 대응 +16`). The sweep narrows to roles accordingly. */
+ /* B5-2 closeout (User 2026-09-23): the Final transfer's action face is `50% / {price}G / 보급`
+    - the verb of the action, not the 보급 role chip. That one face is set aside, nothing else. */
+ const finalFace="<strong>'+finalPrice+'G</strong><small>보급</small>','supply'";
+ assert.equal(app.split(finalFace).length-1,1,'the Final transfer face is the one exempt place');
+ const swept=app.replace(finalFace,'');
  for(const label of Object.values(DATA.roles))
-  assert.ok(!app.includes("'"+label+"'")&&!app.includes('>'+label+'<'),
+  assert.ok(!swept.includes("'"+label+"'")&&!swept.includes('>'+label+'<'),
    'internal role taxonomy is not rendered: '+label);
  assert.ok(!/D\.categories\[|D\.roles\[/.test(app),'and no render path looks it up');
 
@@ -1944,7 +1949,7 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
  assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;\}/.test(act),
   'Close from this panel lands on preparation rather than doing nothing');
  // ...and the Close button is actually rendered there, which `foundation` used to suppress
- assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
  // no blank stage: with no Run the preparation modal is reopened by render itself
  assert.ok(/if\(!modal\)setModal\('new'\)/.test(app),'a runless app always re-opens preparation');
