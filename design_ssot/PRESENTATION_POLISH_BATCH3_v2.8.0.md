@@ -5,7 +5,7 @@ OWNER=presentation_batch3_routing
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_EXECUTION_ROUTING
-STATUS=ACTIVE_BATCH_3
+STATUS=ACTIVE_BATCH_3_END
 
 ## PURPOSE
 
@@ -22,9 +22,9 @@ Work sequentially.
 Do not polish all four surfaces in one pass.
 
 Execution order:
-1. NIGHT
-2. CLOSING
-3. END / ENDFAIL
+1. NIGHT — CLOSED by User review
+2. CLOSING — CLOSED by User review
+3. END / ENDFAIL — ACTIVE
 
 Each surface stops for DIRECTOR / User screenshot review before the next begins.
 
@@ -112,13 +112,52 @@ Do not create a reward-summary dashboard.
 
 END and ENDFAIL must present the already-resolved Run ending clearly and economically.
 
+This is the ACTIVE Batch 3 sub-phase.
+
+Canonical ending truth:
+- END headline is derived from the already-resolved Run ending;
+- the ending ledger reports only what this Run actually moved;
+- Store Capital settlement is the recorded settlement truth, not a recomputation;
+- ending Gold / remaining Inventory are not Store Capital inputs;
+- sent-off Final members and their last carried supply are shown only when the existing Final report owns them.
+
 Before implementation:
-- identify the exact owner clauses through SPEC_INDEX;
-- compare END and ENDFAIL runtime states;
-- preserve the resolved ending and settlement truth;
+- inspect PHONE 390 and DESKTOP 1280 for both current END and ENDFAIL;
+- compare at least one Boss-clear END and one Final-failure ENDFAIL through the current harness;
+- where reachable through existing fixtures / supported game paths, inspect non-Final normal endings
+  such as bankruptcy or death-limit closure for presentation regressions;
+- preserve the resolved ending, settlement, unlock and progression truth;
 - remove web-page / generic modal presentation only where current Source actually exhibits it.
 
+Presentation hierarchy:
+    ENDING STATEMENT
+    -> REASON
+    -> run-moved progression / Store Capital settlement
+    -> Final party / last supply evidence when owned
+    -> next-store Action
+
+The ending tape is already the owned object language.
+Do not replace it with a hero banner, achievement dashboard, KPI grid or cinematic takeover.
+
+The next-store Action belongs to the ending object and must read as the one remaining action,
+but must not overpower the ending statement / settlement.
+
+Desktop may take one restrained responsive step if the current END still reads as a phone-sized
+receipt in a large viewport. If scaled, keep the same information architecture and scale the tape,
+type and Action coherently. Do not infer CLOSING's exact desktop measure as an automatic END value;
+review END on its own screenshot.
+
 Do not add a new meta-settlement or cinematic layer.
+Do not add standing progression totals that did not move in this Run.
+Do not duplicate unlock / settlement facts in a second notification surface.
+
+Required END evidence:
+- END 390 BEFORE / AFTER
+- END 1280 BEFORE / AFTER
+- ENDFAIL 390 BEFORE / AFTER
+- ENDFAIL 1280 BEFORE / AFTER
+- one screenshot where Final members / last supply are present, if the clear path owns them
+- one screenshot where no such Final-party evidence exists, to verify the region leaves no dead gap
 
 ## EVIDENCE
 
