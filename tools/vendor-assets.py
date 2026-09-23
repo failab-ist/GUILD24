@@ -146,7 +146,11 @@ def portraits():
     keeps them; only the container changes."""
     if not os.path.isdir(ART):
         print('  portraits: GUILD24_NPC_PRODUCTION is absent, skipped'); return
-    from PIL import Image
+    try:
+        from PIL import Image
+    except ImportError:
+        # checked before anything is removed, so the committed portraits stay intact
+        print('  portraits: Pillow is not installed (pip install Pillow), skipped'); return
     jobs=[]
     for g in ('M','F'):
         for f in sorted(os.listdir(os.path.join(ART,'02_NORMAL_WORK',g))):
