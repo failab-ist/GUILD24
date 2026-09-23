@@ -1195,9 +1195,16 @@ function finalScreen(){
  +(art?'<figure class="boss-face"><img src="'+art+'" alt="'+E(b.name)+'"></figure>'
       :'<span class="boss-face fallback">'+Art.mark('final',56)+'</span>')
  +'<div class="who"><span class="label">제0게이트 · 마왕성</span><h1>'+E(b.name)+'</h1></div></div>'
+ /* BATCH 5-1: each Family owns its Hazards. The persisted Final pool is the union of the two
+    Families' tier-II Hazards (shop.js), so each column takes the pool filtered by its own
+    Family, in the pool's order - nothing added, nothing recomputed. A phone still reads the two
+    Families and then the Hazards (the columns are laid out flat there); a desk puts each
+    Family's Hazards under it. Anything the pool held outside both Families would still print. */
  +'<section class="threat"><h2>확인된 위협</h2><div class="fams">'
- +(d.families||[]).map(id=>{const b=D.dungeonBy[id];return '<span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>';}).join('')
- +'</div>'+hazardList(d.hazards)+'</section>'
+ +(d.families||[]).map(id=>{const b=D.dungeonBy[id],own=(D.familyTiers[id]||[])[1]||[];
+   return '<div class="fam-col"><span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>'
+    +hazardList(d.hazards.filter(h=>own.includes(h)))+'</div>';}).join('')
+ +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))))+'</section>'
  +'<div class="party-head"><h2>원정대</h2><span class="count">'+s.team.length+' / '+need+'</span></div>'
  +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'team')).join('')+'</div>'
  +(s.team.length?'<div class="final-team">'+s.team.map(id=>{const n=s.npcs.find(x=>x.id===id);

@@ -2019,6 +2019,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .fam{display:flex;align-items:center;gap:9px;padding:7px 10px;font:400 14px/1.3 var(--ui);color:#f2e0da;
  background:#00000047;box-shadow:inset 4px 0 0 var(--fam,#8a2f26)}
 .threat .hazards b{color:#e8a08e}
+/* the Family columns (BATCH 5-1): flat on a phone, so the two Families read first and their
+   Hazards follow as one run, exactly as before; the desk rule below makes them columns */
+.threat .fam-col{display:contents}
+.threat .fams .hazards{order:1}
+.threat .fams:has(.hazards){margin-bottom:0}
+.threat .fams .fam-col:first-child .hazards{margin-top:4px}
+.threat .fams .fam-col+.fam-col .hazards{margin-top:-5px}
 .threat .hazards span{color:#a4938e}
 /* the muster */
 .party-head{display:flex;align-items:baseline;gap:10px;padding:7px 0;margin-bottom:11px;
@@ -2390,7 +2397,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     `margin-left:auto` no longer needs the full width to push against. */
  .dial{width:max-content;max-width:100%}
  .npc-grid,.unlock-grid,.contract-grid,.final-team,.relic-choices{grid-template-columns:1fr 1fr}
- .threat .fams{grid-template-columns:1fr 1fr}
+ .threat .fams{grid-template-columns:1fr 1fr;column-gap:14px}
+ /* each Family column owns its Hazards: the Family, then only its own Hazards under it */
+ .threat .fam-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+ .threat .fams .fam-col .hazards,.threat .fams .fam-col:first-child .hazards,
+ .threat .fams .fam-col+.fam-col .hazards{margin:0;padding-left:10px}
  /* FINAL at tablet width and up: the Boss stands beside what is known about it rather than
     stacking on top of it, so the roster the player has to choose from stays in view. */
  .p-final .gate-zero{display:flex;align-items:center;gap:26px;text-align:left}
