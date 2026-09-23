@@ -189,3 +189,20 @@ flatter than the shared Action geometry it replaced.
   than true pixel art - 159k unique colours in the backdrop, 10-18k in the frames, and 1px
   run lengths where GUILD24's own art uses flat blocks. That is a runtime-crispness and
   house-consistency question, answered by capture, not by the numbers.
+
+### D30 FINAL Boss domain backdrops — user-provided, project-generated
+- source originals (kept untouched; added `e4039db`, moved one folder down in the next commit so the
+  Boss-form folder stays exactly the reachable forms):
+  `GUILD24_NPC_PRODUCTION/04_BOSS/BACKDROP/B00N_<BOSS>_BACKDROP.png` x7 — 1672x941, PNG RGB, no alpha,
+  C2PA manifest (OpenAI Media Service API) intact. Supplied by the User on 2026-09-23, generated
+  with GPT image generation for this project; no third-party licence is claimed and none applies.
+- shipped runtime files: `dist/ui/assets/presentation/final/B00N_<BOSS>_BACKDROP.png` x7 —
+  byte-identical copies of the originals (same SHA-256), not a derivative: no resize, crop,
+  re-encode, optimisation or metadata change. The PNGs are used as-is.
+- mapping (User-approved): B001 WRATH, B002 PRIDE, B003 ENVY, B004 GREED, B005 GLUTTONY,
+  B006 LUST, B007 SLOTH.
+- role: the Boss's own domain / wall, used ONLY behind the D30 FINAL stage (`.p-final[data-boss]`
+  in `dist/ui/ui.css`). Never in the D0-D25 reports, the Codex, Boss cards or any store phase.
+  Displayed with one axis fixed and the other auto, so the 1672:941 ratio is never stretched:
+  a phone fits the room's height to the gate band and crops the sides (centre kept), a desk
+  shows the full width and lets the room fade into the Final's dark ground under the gate.
