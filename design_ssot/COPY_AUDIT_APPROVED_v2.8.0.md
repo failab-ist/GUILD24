@@ -1635,7 +1635,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 > “오늘은 준비해 간 물건 덕분에 돌아왔네요.”  
 > “마지막에 작동한 게 딱 그거였습니다.”  
 > “다음엔 그 물건부터 찾을 것 같아요.”  
-> “다음엔 그 물건부터 찾을 것 같네요.”
+> “그게 가방에 있어서 다행이었어요.”
 
 ---
 
@@ -1687,7 +1687,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 > 처음 들른 날이 마지막 방문이 됐다. 원정에서 돌아오지 못했다.  
 > 이름을 적은 날, 사망 기록까지 함께 남았다.  
 > 한 번 들렀고, 그날 게이트에서 목숨을 잃었다.  
-> 첫 영수증이 마지막 영수증이 됐다.  
+> 이름 한 줄만 남기고 다시 오지 않았다.  
 > 얼굴을 익힐 새도 없이 사망 소식이 먼저 왔다.  
 > 첫 원정이 마지막 원정이 됐다.
 

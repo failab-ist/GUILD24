@@ -9,7 +9,9 @@ const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const V=Copy.pools.visit,S=Copy.pools.sale,N=Copy.pools.night;
 const every=o=>Object.entries(o).flatMap(([k,v])=>Array.isArray(v)?[[k,v]]:Object.entries(v).map(([k2,v2])=>[k+'.'+k2,v2]));
-const allPools=[...every(V),...every(S),...every(N)];
+/* named `visit.first` etc. - the same keys POOL_MIN and POOL_SECTION use (without the prefix, POOL_MIN
+   matched nothing and the v2.8 minimum-size assertion never ran) */
+const allPools=[...every(V).map(([k,p])=>['visit.'+k,p]),...every(S).map(([k,p])=>['sale.'+k,p]),...every(N).map(([k,p])=>['night.'+k,p])];
 const allLines=allPools.flatMap(([,p])=>p);
 
 /* COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT replaces the old rough 3-5 band
@@ -35,12 +37,39 @@ test('§11.1/§11.2: every repeated situation has a real Variant Pool at its v2.
  assert.equal(new Set(allLines).size,allLines.length,'no line is reused across pools');
 });
 
+/* COPY_WORLD_VOICE_v2.8: "Exact active ARRIVAL / TRAIT / SALE / NIGHT / DEATH pools are owned by
+   COPY_AUDIT_APPROVED". Each Source pool IS that owner's `현재` list, line for line - the guard whose
+   absence let the v2.8 expansion ship unapproved lines (reports/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md). */
+const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3','visit.regular':'16-4','visit.helped':'16-5',
+ 'visit.trait.frugal':'17-1','visit.trait.thrifty':'17-2','visit.trait.coward':'17-3','visit.trait.liar':'17-4','visit.trait.eater':'17-5',
+ 'visit.trait.greed':'17-6','visit.trait.shy':'17-7','visit.trait.social':'17-8','visit.trait.collector':'17-9','visit.trait.aloof':'17-10',
+ 'sale.full':'18-1','sale.half':'18-2','sale.overcharge':'18-3','sale.refuse.price':'18-4','sale.refuse.need':'18-5','sale.refuse.choice':'18-6',
+ 'night.plain':'19-1','night.great':'19-2','night.retreat':'19-3','night.hurt':'19-4','night.severe':'19-5','night.avoided':'19-6',
+ 'night.rescued':'19-7','night.grew':'19-8','night.deathTraded':'20-1','night.deathKnown':'20-2','night.deathStranger':'20-3'};
+const approved=(()=>{const out={};let sec=null,mode=null;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
+  if((h=l.match(/^##\s+(\d+-\d+)\./))){sec=h[1];out[sec]=[];mode=null;continue;}
+  if(/^#\s/.test(l)){sec=null;continue;}if(!sec)continue;
+  if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
+  const q=l.match(/^>\s*(.+?)\s*$/);if(q&&mode==='현재')out[sec].push(q[1]);}
+ return out;})();
+test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재` list',()=>{
+ for(const [name,pool] of allPools){const sec=POOL_SECTION[name];
+  assert.ok(sec,name+' has an approved owner section');
+  assert.deepEqual(pool,approved[sec],name+' is COPY_AUDIT '+sec+' verbatim');}
+ assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
+});
+
 test('§11.1 BAD: a variant is a different observation, not a synonym swap',()=>{
  // The canonical BAD example is 다쳤어요 / 부상을 입었어요 / 상처를 입었어요 — same sentence,
  // different word. Two variants that share almost all of their content words are that.
+ // A line the User approved verbatim in COPY_AUDIT is held by the exact-copy guard above instead:
+ // this word-overlap heuristic judges any line that is NOT approved copy.
  const words=s=>new Set(s.replace(/[“”.,!?…]/g,'').split(/\s+/).filter(w=>w.length>1));
+ const isApproved=l=>Object.values(approved).some(a=>a.includes(l));
  for(const [name,pool] of allPools)
   for(let i=0;i<pool.length;i++)for(let j=i+1;j<pool.length;j++){
+   if(isApproved(pool[i])&&isApproved(pool[j]))continue;
    const a=words(pool[i]),b=words(pool[j]),shared=[...a].filter(w=>b.has(w)).length;
    const overlap=shared/Math.min(a.size,b.size);
    assert.ok(overlap<.7,name+' variants say different things: "'+pool[i]+'" vs "'+pool[j]+'"');
