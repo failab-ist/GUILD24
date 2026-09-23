@@ -284,6 +284,27 @@ Do NOT add:
 
 `영업 시작` remains the other act and does not outrank an active order commit.
 
+### ORDER LEAVE CONTROL — USER APPROVED 2026-09-23
+
+The active `영업 시작` control must belong to the same authored ORDER control family as the
+rest of the supply-desk form.
+
+It must NOT read as a flat modern / web rectangle sitting beside an authored order commit.
+
+When active:
+- use the same cool-steel / paper-desk physical language;
+- show a clear face + one hard external depth / press collapse;
+- a restrained cut / built silhouette is allowed when it matches the ORDER family;
+- remain quieter than an active `발주 N G · 확정` control when both are present.
+
+When disabled because a cart is held:
+- recede by losing active depth / contrast;
+- remain legible;
+- do not use whole-element opacity fade;
+- do not keep an active-looking hard drop.
+
+Do not copy OPENING rivets or brass ornaments onto this control merely for decoration.
+
 ## ORDER RESPONSIVE
 
 PHONE:
