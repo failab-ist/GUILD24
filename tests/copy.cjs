@@ -60,6 +60,34 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
  assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
 });
 
+/* The rest of COPY_AUDIT (every section outside the §16-§20 pools): each literal `현재…` line must
+   appear verbatim somewhere in shipped Source. Lines with a {placeholder} are skipped. A line that
+   Source builds from parts cannot be found as one literal, so it is listed here with where it is
+   built; the set must match exactly, so a newly unadopted line fails instead of joining it. */
+const COMPOSED={
+ '3-5':'not in Source: the coach ships the later §3-7 SUPPLY line instead (whether §3-5 is the same surface is a User question, not settled here)',
+ '4-10':"'폐기까지 '+days+'일' (app.js stock row)",
+ '5-4':"presentation.js labels.visitGold + formatted value",
+ '5-5':"presentation.js labels.loyaltyBonus + formatted value",
+ '6-5':"presentation.js heroLine(): who+' 덕분에 '+said",
+ '8-6':'app.js guide: ${D.balance.deathLimit} (10) in the template',
+ '11-6':"relics.js: HQ price floor constant concatenated into the effect text"};
+test('COPY_AUDIT: every other literal `현재` line is in shipped Source',()=>{
+ const walk=d=>fs.readdirSync(path.join(root,d),{withFileTypes:true}).flatMap(e=>e.isDirectory()?
+  (e.name==='vendor'?[]:walk(d+'/'+e.name)):/\.(js|html)$/.test(e.name)?[d+'/'+e.name]:[]);
+ const src=walk('dist').map(read).join('\n').replace(/\\`/g,'`');
+ const missing=new Set();let checked=0,sec=null,mode=null;
+ for(const l of read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md').split('\n')){let h;
+  if((h=l.match(/^##\s+(\d+)-\d+\./))){sec=h[0].match(/\d+-\d+/)[0];mode=null;if(+h[1]>=16&&+h[1]<=20)sec=null;continue;}
+  if(/^#\s/.test(l)){sec=null;continue;}
+  if((h=l.match(/^\*\*([^*]+)\*\*/))&&!l.startsWith('>')){mode=h[1];continue;}
+  if(/^#{2,3}\s/.test(l)){mode=null;continue;}
+  const q=l.match(/^>\s*(.+?)\s*$/);if(!q||!sec||!mode||!mode.startsWith('현재')||/[{}]|\*\*/.test(q[1]))continue;
+  checked++;if(!src.includes(q[1]))missing.add(sec);}
+ assert.ok(checked>=150,'the audit parse found the literal lines ('+checked+')');
+ assert.deepEqual([...missing].sort(),Object.keys(COMPOSED).sort(),'only the listed composed lines are absent as one literal');
+});
+
 test('§11.1 BAD: a variant is a different observation, not a synonym swap',()=>{
  // The canonical BAD example is 다쳤어요 / 부상을 입었어요 / 상처를 입었어요 — same sentence,
  // different word. Two variants that share almost all of their content words are that.
