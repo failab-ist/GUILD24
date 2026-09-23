@@ -324,4 +324,19 @@ test('NPC_TRAIT §TRAIT MODIFICATION: the normal order catalog holds no Trait-mo
  }
 });
 
+/* NPC_TRAIT / SALE §LOYALTY (User decision 2026-09-23): 50% sale +4, 100% +1, 150% -3; a visit
+   without a paid purchase adds 0 on departure (one with a purchase keeps its +1); survival +1. */
+test('LOYALTY 2026-09-23: 50% +4, visit without purchase 0, survival +1',()=>{
+ assert.deepEqual(['half','full','overcharge'].map(m=>DATA.pricing[m].loyalty),[4,1,-3]);
+ const setup=seed=>{const g=fresh(seed),s=g.run;g.run.facilities=[];g.beginOrder();s.phase='sell';const n=s.npcs[0];
+  n.traits=[];n.loyalty=10;n.money=99999;n.pack=[];n.refused=[];n.history=[];n.introduced=true;n.visits=2;n.destination=0;n.claimedDestination=0;
+  s.queue=[n.id,s.npcs[1].id];s.cursor=0;return {g,s,n};};
+ {const {g,n}=setup('loyal-visit');g.depart();assert.equal(n.loyalty,10,'no purchase, no visit Loyalty');}
+ {const {g,s,n}=setup('loyal-buy');g.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
+  g.stock('rice',1);assert.equal(g.sell(s.inventory.at(-1).id,'half'),true);assert.equal(n.loyalty,14,'50% sale +4');
+  g.depart();assert.equal(n.loyalty,15,'a visit with a paid purchase still adds +1');}
+ {const {g,s,n}=setup('loyal-survive');n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};s.queue=[n.id];
+  g.night();assert.ok(n.alive);assert.equal(n.loyalty,11,'survival +1');}
+});
+
 console.log(count+' trait groups passed');

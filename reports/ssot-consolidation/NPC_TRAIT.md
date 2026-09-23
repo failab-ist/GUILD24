@@ -426,3 +426,22 @@ implementation bug reported above: no Source change.
     - [cost] always, injured or not: result fatigue gain +1 (chronic cost)
 - `grit / 악바리`: +1 always (chronic cost, not limited to Injury)
 ```
+
+## AMENDMENT — User decision 2026-09-23: Store Support rebalance
+
+Game-wide Loyalty (reports/relic-balance/FINAL_PROPOSAL.md): 50% sale +6 -> +4; a finalized visit without a paid purchase that Day -> 0 (a visit with one keeps +1 - the proposal changes only the no-purchase visit); survival +2 -> +1. 100% +1 / 150% -3 unchanged.
+
+```text
+50% sale  -> +6
+Other visit/survival Loyalty changes remain separate and unchanged.
+- when the current customer's visit is finalized/departs -> Loyalty +1
+- if the NPC remains alive after the expedition -> Loyalty +2
+```
+
+```new
+50% sale  -> +4
+Other visit/survival Loyalty changes remain separate.
+- when the current customer's visit is finalized/departs after a paid purchase that Day -> Loyalty +1
+- when the visit is finalized/departs without a paid purchase that Day -> Loyalty 0
+- if the NPC remains alive after the expedition -> Loyalty +1
+```

@@ -174,3 +174,22 @@ Design owner under test -> NPC_TRAIT_v2.8.0.md
 - TRAIT-Q08 keeps its 허세 clause: UI_UX_v2.8.0.md still says "Do not center the tutorial around 허세."
 - NPC-Q08 FAIL SIGNALS keep "Rookie/Royal newcomer events": rookieBoard (RELIC) and 왕립 기사단 방문
   (EVENT) are current.
+
+## AMENDMENT — User decision 2026-09-23: Store Support rebalance
+
+NPC-Q-v28-2B / NPC-Q-v28-8 follow the Loyalty change in NPC_TRAIT: 50% +4, no-purchase visit 0, survival +1.
+
+```text
+50% sale  -> Loyalty +6
+- finalized ordinary visit -> Loyalty +1
+- living expedition result -> Loyalty +2
+- Death -> no survival +2
+```
+
+```new
+50% sale  -> Loyalty +4
+- finalized ordinary visit with a paid purchase that Day -> Loyalty +1
+- finalized ordinary visit without a paid purchase -> Loyalty 0
+- living expedition result -> Loyalty +1
+- Death -> no survival +1
+```

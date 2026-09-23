@@ -265,7 +265,7 @@ G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.1
      is worth, so the term redistributes around ordinary weight instead of taxing every offer.
      할인 and 바가지 carry no weight and are decided exactly as they were before this existed -
      their acceptance is not this patch's to move. */
-  intentPivot:.36,intentWeight:.5},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:6}};
+  intentPivot:.36,intentWeight:.5},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:4}};
 
 /* Three shapes of the ordering decision, named here so a balance candidate can be measured
    against them from the harness without a production edit: how many candidates a Day offers,

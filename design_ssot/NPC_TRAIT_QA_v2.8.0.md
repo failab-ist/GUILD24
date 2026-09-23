@@ -536,7 +536,7 @@ Other support-specific thresholds remain their own conditions and do not redefin
 
 For one successful ordinary paid purchase before explicit modifier effects:
 
-    50% sale  -> Loyalty +6
+    50% sale  -> Loyalty +4
     100% sale -> Loyalty +1
     150% sale -> Loyalty -3
 
@@ -548,9 +548,10 @@ PASS:
 ## NPC-Q-v28-8 — NON-PURCHASE LOYALTY / REVISIT
 
 PASS:
-- finalized ordinary visit -> Loyalty +1
-- living expedition result -> Loyalty +2
-- Death -> no survival +2
+- finalized ordinary visit with a paid purchase that Day -> Loyalty +1
+- finalized ordinary visit without a paid purchase -> Loyalty 0
+- living expedition result -> Loyalty +1
+- Death -> no survival +1
 - purchase Loyalty remains separate
 - final Loyalty remains clamped 0–100
 - ordinary purchase formula receives +0.002 per Loyalty point

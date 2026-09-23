@@ -982,22 +982,23 @@ effects; those do not redefine Trusted Regular.
 
 Base Loyalty change on a successful ordinary paid purchase:
 
-    50% sale  -> +6
+    50% sale  -> +4
     100% sale -> +1
     150% sale -> -3
 
 These are the base transaction deltas before any explicitly owned Trait / Store Support modifier.
 
 Refusal grants no purchase Loyalty change.
-Other visit/survival Loyalty changes remain separate and unchanged.
+Other visit/survival Loyalty changes remain separate.
 
 ### Non-purchase Loyalty — exact
 
 Ordinary customer visit:
-- when the current customer's visit is finalized/departs -> Loyalty +1
+- when the current customer's visit is finalized/departs after a paid purchase that Day -> Loyalty +1
+- when the visit is finalized/departs without a paid purchase that Day -> Loyalty 0
 
 Ordinary expedition:
-- if the NPC remains alive after the expedition -> Loyalty +2
+- if the NPC remains alive after the expedition -> Loyalty +1
 - this includes living Retreat / Injury / Severe Injury outcomes
 - Death grants no survival Loyalty
 
