@@ -109,7 +109,18 @@ test('UI-Q02 / VISUAL DIRECTION: pixel-art material language, not a dashboard',(
   'and names no face value of its own');
  /* the geometry: notch, hard outline, opposed lit/deep edges, a zero-radius offset, and a
     press that swaps the edges rather than tinting the face */
- assert.ok(/clip-path:polygon/.test(stampRule),'its corners are notched - never rounded, never a pill');
+ /* the polygon is named `--stamp-cut` in this same rule and the rule clips to it, so a state
+    the base sheet squares off can take the SAME outline back without a second set of numbers. */
+ assert.ok(/--stamp-cut:polygon/.test(stampRule)&&/clip-path:var\(--stamp-cut\)/.test(stampRule),
+  'its corners are notched - never rounded, never a pill');
+ /* DIRECTOR, 2026-09-23. `.stamp:disabled` squares the silhouette off, so ORDER's leave control
+    stopped being the same cut object as the commit beside it the moment a cart was held. It
+    takes the family outline back, by the shared geometry rather than a restated polygon. */
+ const leaveOff=(css.match(/\.p-order \.dock \.stamp\.leave\[disabled\]\{[\s\S]*?\}/)||[''])[0];
+ assert.ok(/clip-path:var\(--stamp-cut\)/.test(leaveOff),
+  'and a held cart does not turn the leave control back into a rectangle');
+ assert.ok(!/opacity:\.[0-9]/.test(leaveOff)&&/opacity:1/.test(leaveOff),
+  'which recedes by face and depth, never by fading the whole element');
  assert.ok(/inset 0 0 0 3px var\(--act-line/.test(stampRule),'it carries a hard dark outline');
  assert.ok(/inset 0 9px 0 var\(--act-lit/.test(stampRule)&&/inset 0 -10px 0 var\(--act-deep/.test(stampRule),
   'lit along the top-left and deep along the bottom-right');

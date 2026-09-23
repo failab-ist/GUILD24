@@ -126,11 +126,15 @@ button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid
    instead of squaring off behind it, and its radius is zero - a pixel shadow, never a soft
    one. Pressing it is a depth change, not a tint: the plane travels into its own shadow and
    the lit and deep edges trade places, which is what the colour-only :hover never gave. */
+/* the notched silhouette is named once, here, where it is already drawn: a surface that has to
+   keep this exact outline in a state the base sheet squares off reuses `--stamp-cut` rather
+   than writing a second polygon with its own numbers. */
 .stamp{background:var(--act,var(--steel));color:var(--act-ink,var(--text));
  font-weight:600;letter-spacing:.04em;
- clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
+ --stamp-cut:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
   100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
   6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
+ clip-path:var(--stamp-cut);
  filter:drop-shadow(5px 5px 0 #000000a6);
  box-shadow:inset 0 0 0 3px var(--act-line,#0f0d0c),
   inset 0 9px 0 var(--act-lit,#ffffff2e),inset 9px 0 0 var(--act-lit,#ffffff2e),
@@ -612,12 +616,19 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    value difference outside it - a milled edge at the top, a shaded edge at the foot, and one
    hard external depth. The depth is shorter than the commit's and the face is lighter, so with
    both on the dock the commit still leads; alone it is still a plate that was made. */
+/* The drop is a filter, not a box-shadow: an offset box-shadow squares off behind the notch and
+   the clip then cuts it away, so this control was carrying a depth that never drew. It is the
+   same pixel drop the rest of the family uses, one step shorter than the commit's, and it
+   follows the cut corners. */
 .p-order .dock .stamp.leave{background:#434e58;color:#e6edf2;
- box-shadow:inset 0 0 0 2px #7b8894,inset 0 4px 0 #556370,4px 4px 0 #2a231780}
-.p-order .dock .stamp.leave:hover{background:#4d5964;color:#f4f8fa}
+ filter:drop-shadow(4px 4px 0 #000000a6);
+ box-shadow:inset 0 0 0 2px #7b8894,inset 0 4px 0 #556370}
+.p-order .dock .stamp.leave:hover{background:#4d5964;color:#f4f8fa;
+ filter:drop-shadow(4px 4px 0 #000000a6) brightness(1.1)}
 /* the press closes the depth, the way the commit's does */
 .p-order .dock .stamp.leave:active{transform:translate(3px,3px);background:#38424b;
- box-shadow:inset 0 0 0 2px #616e7a,inset 0 4px 0 #454f59,1px 1px 0 #2a231780}
+ filter:drop-shadow(1px 1px 0 #000000a6);
+ box-shadow:inset 0 0 0 2px #616e7a,inset 0 4px 0 #454f59}
 /* USER, 2026-09-23 (second pass): the two dock controls differed in how their EDGES were built
    - the commit carries a 2px machined edge on all four sides, the leave control had only a top
    and a foot line, so their corners read as two different objects whatever the colour. Both are
@@ -626,8 +637,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    a steel commit, which is the web-button reading the active state had just been rebuilt out of.
    It is the same steel plate while a cart is held; it is simply dead. The face is the alloy a
    step back in contrast, the depth is gone and the edges are reversed, so the plate is set INTO
-   the dock rather than raised off it. The label is still read, and nothing here fades. */
-.p-order .dock .stamp.leave[disabled]{background:#8d959c;color:#3f464c;opacity:1;transform:none;
+   the dock rather than raised off it. The label is still read, and nothing here fades.
+
+   DIRECTOR CORRECTION, 2026-09-23: the base sheet's `.stamp:disabled` squares the silhouette off
+   (`clip-path:none`), so the moment a cart was held this control stopped being the same cut
+   object as the commit beside it and went back to a plain web rectangle - the SHAPE, not the
+   colour, is what made the pair read as two different things. It keeps the family's outline
+   here, by reusing the one `--stamp-cut` geometry rather than restating it, and that base rule
+   is left alone for every other control. Disabled changes four things and nothing else: the
+   face contrast, the label contrast, the external depth (`.stamp:disabled` already drops the
+   filter) and the press affordance. */
+.p-order .dock .stamp.leave[disabled]{clip-path:var(--stamp-cut);
+ background:#8d959c;color:#3f464c;opacity:1;transform:none;
  box-shadow:inset 0 0 0 2px #6e767d,inset 0 4px 0 #7d858c}
 /* =====================================================================
    SALE — the customer at the counter.
