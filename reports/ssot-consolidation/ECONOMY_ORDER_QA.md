@@ -319,3 +319,15 @@ Stage 9 reports P10/P25/median/P75/P90.
 - Full-run balance measurement measures 2-slot affordability/use
 Full-run balance measurement reports P10/P25/median/P75/P90.
 ```
+
+## AMENDMENT — User decision 2026-09-23: Store Support rebalance
+
+ORD-Q12: 발주 교환권 no longer consumes the first paid step; after the free Reroll the ordinary curve starts at 50G (reports/relic-balance/FINAL_PROPOSAL.md).
+
+```text
+- the free use consumes the first daily Reroll step
+```
+
+```new
+- after the free use, paid Rerolls follow the ordinary curve from its first step (50 -> 100 -> 200 ...)
+```

@@ -53,7 +53,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */
-  const extras=(s.dayFacilities?.includes('showcase')?D.relicParams.showcase.overheadAdd:0)-(s.dayFacilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  const extras=-(s.dayFacilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
   const base=this.overheadBase(),hub=s.dayFacilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;
@@ -250,7 +250,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      the slot count and every weighted draw are bit-for-bit what they were. */
   const seats=!!arrival&&(ev.rookie||ev.royal||s.dayFacilities.includes('rookieBoard'));
   const capacity=seats?available.filter(n=>n!==arrival).length:available.length;
-  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?D.relicParams.member.revisitMult:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?D.relicParams.lifetime.revisitMult:1);});selected.push(n);}
+  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?D.relicParams.member.revisitMult:1)*(G.Adventurer.isTrustedRegular(n)&&s.dayFacilities.includes('lifetime')?D.relicParams.lifetime.revisitMult:1);});selected.push(n);}
   /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
      than by adding a slot. The number of weighted draws is unchanged, so a Day without the
      event is bit-for-bit what it was. */
@@ -318,7 +318,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     Contract / Event / Offer calculation and inside the same single Math.round, so there is no
     second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
     Final transfer each read their own price and are untouched. */
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?D.relicParams.medicine.supplyBonus:0)+(it.rarity<=1&&s.previousSales>=6&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?D.relicParams.medicine.supplyBonus:0)+(s.previousSales>=4&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
  rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
@@ -448,7 +448,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
-  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=D.relicParams.lifetime.goldBonus;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}if(G.Adventurer.isTrustedRegular(n)&&this.has('lifetime'))n.money+=D.relicParams.lifetime.goldBonus;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  s.daily.operating=this.expectedOperatingCost();
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }

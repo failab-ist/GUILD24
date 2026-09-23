@@ -15,10 +15,10 @@ test('ORD-Q08: base Full-offer Reroll doubles within the Day and resets the next
  assert.equal(g.rerollPrice(),base,'next Day resets the cost');
 });
 
-test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free and consumes its step',()=>{
+test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free, then the ordinary curve from its first step',()=>{
  const g=fresh('reroll-relic');g.beginOrder();g.run.facilities=['delivery'];
  const base=DATA.balance.rerollBase;
- for(const price of [0,base*2,base*4,base*8]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
+ for(const price of [0,base,base*2,base*4,base*8]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
  g.run.day++;g.morning();g.beginOrder();g.run.facilities=['delivery'];
  assert.equal(g.rerollPrice(),0,'next Day restores the free first Reroll');
 });
@@ -245,20 +245,20 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  const food=DATA.items.find(i=>i.category==='food'&&i.effects.supply>0&&i.effects.survival>0);
  const drink=DATA.items.find(i=>i.category==='drink'&&i.effects.supply>0&&i.effects.survival>0);
  const base=id=>DATA.itemBy[id].effects.survival;
- // the owner's own worked examples, to the digit
+ // the owner's own worked examples, to the digit (즉석식품 코너 +25%, 24시간 신선체계 +50%)
  const cases=[
-  [food.id,[],['kitchen','fresh24'],1.80],
-  [food.id,['eater'],['kitchen','fresh24'],2.10],
-  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.30],
-  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.80],
-  [drink.id,[],['kitchen','fresh24','expeditionMeal'],2.00],
-  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.00],
+  [food.id,[],['kitchen','fresh24'],1.75],
+  [food.id,['eater'],['kitchen','fresh24'],2.05],
+  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.25],
+  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.75],
+  [drink.id,[],['kitchen','fresh24','expeditionMeal'],1.95],
+  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.95],
  ];
  for(const [id,traits,fac,want] of cases)
   assert.ok(Math.abs(contribution(id,traits,fac).survival/base(id)-want)<1e-9,
    id+' '+JSON.stringify(traits)+' '+JSON.stringify(fac)+' is base x'+want);
- // sequential multiplication would give 1.3 x 1.3 x 1.5 = 2.535, which is what this rules out
- assert.ok(Math.abs(contribution(food.id,['eater'],['kitchen','fresh24']).survival/base(food.id)-1.3*1.3*1.5)>1e-6,
+ // sequential multiplication would give 1.3 x 1.25 x 1.5 = 2.4375, which is what this rules out
+ assert.ok(Math.abs(contribution(food.id,['eater'],['kitchen','fresh24']).survival/base(food.id)-1.3*1.25*1.5)>1e-6,
   'the layers are summed, never multiplied one after another');
  // and the pool is the POSITIVE NATIVE Core Stat only
  assert.equal(Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,['kitchen','fresh24','expeditionMeal']).effects.supply,

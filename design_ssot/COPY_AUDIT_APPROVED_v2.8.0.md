@@ -533,28 +533,28 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-1. 묶음발주 계약
 
 **현재**
-> 같은 상품 3개 이상 발주 시 3번째부터 매입가 -15%.
+> 같은 상품 3개 이상 발주 시 3번째부터 매입가 -20%.
 
 ---
 
 ## 11-2. 회전 진열대
 
 **현재**
-> 전날 6건 이상 판매하면 다음 날 일반·고급 상품의 공급 수량 +1.
+> 전날 4건 이상 판매하면 다음 날 모든 상품의 공급 수량 +2.
 
 ---
 
 ## 11-3. 단골 스탬프 기계
 
 **현재**
-> 유료 구매로 오르는 단골도 +50% · 생환으로 오르는 단골도 제외.
+> 유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
 
 ---
 
 ## 11-4. 회원 관리대장
 
 **현재**
-> 다음 날부터 이미 만난 손님의 재방문 가중치 +40%.
+> 다음 날부터 이미 만난 손님의 재방문 가중치 +70%.
 
 ---
 
@@ -564,7 +564,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 > 희귀상품 입고 계약
 
 **현재**
-> 희귀 이상 상품 발주 가중치 +70% · 다음 날부터 운영비 +10G.
+> 희귀 이상 상품 발주 가중치 +70%.
 
 ---
 
@@ -578,7 +578,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-7. 원정 위험 게시판
 
 **현재**
-> 현재 알려진 위험에 대응하는 상품이 발주 후보에 나올 가중치 +80%.
+> 오늘 게이트의 위험에 대응하는 상품이 발주 후보에 나올 가중치 +50%.
 
 ---
 
@@ -592,14 +592,14 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-9. 대형 냉장고
 
 **현재**
-> 음식·음료 유통기한 +1일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.
+> 음식·음료 유통기한 +2일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.
 
 ---
 
 ## 11-10. 즉석식품 코너
 
 **현재**
-> 음식·음료가 원래 가진 능력치 증가 효과 +30% · 보급·위험 대응·부작용 제외.
+> 음식·음료가 원래 가진 능력치 증가 효과 +25% · 보급·위험 대응·부작용 제외.
 
 ---
 
@@ -641,7 +641,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-16. 귀환 적립제
 
 **현재**
-> 오늘 유료 구매한 재방문 손님이 단골도 30 이상으로 생환하면 단골도 +2 · 소지금 +30G.
+> 오늘 유료 구매한 재방문 손님이 생환하면 단골도 +5 · 소지금 +30G.
 
 ---
 
@@ -686,7 +686,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-22. 평생 단골제
 
 **현재**
-> 단골도 60 이상 손님이 생환하면 하루 1회 소지금 +50G · 다음 방문 가중치 +50%.
+> 단골 손님이 생환하면 하루 1회 소지금 +50G · 다음 방문 가중치 +50%.
 
 ---
 
@@ -735,7 +735,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-29. 발주 교환권
 
 **현재**
-> 매일 첫 후보 전체 교환 무료 · 이후 100G → 200G → 400G… 순으로 증가.
+> 매일 첫 후보 전체 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.
 
 ---
 

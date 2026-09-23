@@ -333,7 +333,7 @@ Own `발주 교환권`, begin a fresh Day, and use the canonical Full-offer Rero
 
 EXPECT:
 - first Full-offer Reroll costs 0G
-- the free use consumes the first daily Reroll step
+- after the free use, paid Rerolls follow the ordinary curve from its first step (50 -> 100 -> 200 ...)
 - next Day restores the first-Reroll-free benefit
 - eligibility / coverage / rarity rules remain intact
 - Reroll does not advance pity

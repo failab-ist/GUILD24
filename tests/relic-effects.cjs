@@ -47,17 +47,23 @@ test('premium guarantee obeys wallet, daily limit and never guarantees acceptanc
 });
 function nightWith(facilities,visits=2,paid=true){const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=visits;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=60;n.money=100;n.destination=0;n.claimedDestination=0;n.history=paid?[{day:s.day,item:'rice',paid:35,mode:'half'}]:[];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return {g,n};}
 test('return points excludes first visit, no-sale and free transfer',()=>{
- for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?30:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?2:0);}
+ for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?30:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?5:0);}
+ /* 2026-09-23 rebalance: the Loyalty >= 30 condition is gone - a low-Loyalty paid returner earns it too */
+ const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
+ const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,30);
 });
 test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
  const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,50);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
+ /* 2026-09-23 rebalance: the condition is 단골 (Loyalty >= 51, the NPC_TRAIT owner), not 60 */
+ const at=(loyalty,f)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=loyalty;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[];s.queue=[n.id];s.phase='sell';s.facilities=f;s.dayFacilities=f;g.night();return n;};
+ for(const start of [20,40,45,48,49,50,51,55]){const plain=at(start,[]),n=at(start,['lifetime']);assert.equal(n.money-plain.money,n.loyalty>=51?50:0,'평생 단골제 at Loyalty '+n.loyalty);}
  /* Two things this line used to get wrong. hub's cost is a PROPORTION of the overhead base
     under the approved bundle, not the flat +35 it was written against; and the operating cost
     is rounded to the nearest 10G, so what the store is actually charged is not the raw
     modifier - a 30G saving lands as 30G off this base. The expected figure is therefore
     derived from the rule AND its rounding, and the raw modifier each Relic contributes is
     asserted separately, so neither half can drift unnoticed. */
- const raw={showcase:10,hub:base.g.overheadBase()*DATA.balance.hubOverheadRate,efficiency:-30};
+ const raw={showcase:0,hub:base.g.overheadBase()*DATA.balance.hubOverheadRate,efficiency:-30};
  const charged=x=>Math.round((base.g.overheadBase()+x)/10)*10;
  for(const [id,modifier] of Object.entries(raw)){
   assert.equal(nightWith([id]).g.run.daily.operating-base.g.run.daily.operating,
@@ -125,7 +131,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
    a supply engine: high sales yesterday mean more units on today's ordinary offers, which is what
    makes the separate bulk thresholds reachable. Quantity only - not price, not slot count, not
    Rare+. */
-test('REL-Q-v28-14: 회전 진열대 adds supply quantity to Common/Uncommon offers on a >=6 sales Day',()=>{
+test('REL-Q-v28-14: 회전 진열대 adds +2 supply quantity to every offer on a >=4 sales Day',()=>{
  const g=fresh('rotation-supply'),s=g.run;
  const quantity=(it,facilities,sales)=>{
   s.facilities=[];s.previousSales=sales;const state=g.rng.state,plain=g.offerFor(it).quantity;
@@ -134,15 +140,12 @@ test('REL-Q-v28-14: 회전 진열대 adds supply quantity to Common/Uncommon off
  };
  const common=DATA.items.find(i=>i.rarity===0),uncommon=DATA.items.find(i=>i.rarity===1);
  const rare=DATA.items.find(i=>i.rarity===2),epic=DATA.items.find(i=>i.rarity===3);
- for(const it of [common,uncommon]){
-  for(const sales of [0,3,5]){const [plain,got]=quantity(it,['rotation'],sales);
+ /* 2026-09-23 rebalance: 4+ previous sales, every rarity, +2 */
+ for(const it of [common,uncommon,rare,epic]){
+  for(const sales of [0,2,3]){const [plain,got]=quantity(it,['rotation'],sales);
    assert.equal(got,plain,it.id+' is unchanged at '+sales+' previous sales');}
-  for(const sales of [6,7,11]){const [plain,got]=quantity(it,['rotation'],sales);
-   assert.equal(got,plain+1,it.id+' gets +1 at '+sales+' previous sales');}
- }
- for(const it of [rare,epic])for(const sales of [6,12]){
-  const [plain,got]=quantity(it,['rotation'],sales);
-  assert.equal(got,plain,it.id+' (Rare+) quantity is never touched');
+  for(const sales of [4,6,11]){const [plain,got]=quantity(it,['rotation'],sales);
+   assert.equal(got,plain+2,it.id+' gets +2 at '+sales+' previous sales');}
  }
  // it adds units, never slots, and never money off
  s.previousSales=9;s.facilities=[];g.generateOffers();const slots=s.offers.length;
@@ -160,7 +163,7 @@ test('REL-Q-v28-15: 물류 본부계약 takes 25% off the first bulk order once,
  for(const sales of [0,5,6]){s.previousSales=sales;s.bulkUsed=false;assert.equal(g.cartTotal(),base,'no discount at '+sales+' previous sales');}
  s.previousSales=7;s.bulkUsed=false;assert.equal(g.cartTotal(),Math.round(100*.75)*3,'exactly -25% at 7');
  s.bulkUsed=true;assert.equal(g.cartTotal(),base,'and only the first bulk order of the Day');
- assert.equal(DATA.relicBy.logisticsHQ.price,720,'the price is unchanged');
+ assert.equal(DATA.relicBy.logisticsHQ.price,430,'the rebalanced price');
 });
 
 /* REL-Q-v28-17. The three outcomes are one roll and mutually exclusive, so the boundaries are
@@ -177,7 +180,7 @@ test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, excl
  }
  // the stated mean, straight off the approved rates
  assert.ok(Math.abs((.45*1+.15*2+.40*0)-0.75)<1e-12,'+0.75 visitors per applicable Day');
- assert.equal(DATA.relicBy.hub.price,700);
+ assert.equal(DATA.relicBy.hub.price,490);
  assert.equal(DATA.balance.hubOverheadRate,.10,'the operating modifier stays overheadBase +10%');
 });
 
@@ -242,7 +245,7 @@ test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly on
  for(let i=0;i<s.inventory.length;i++){
   const st=s.inventory[i],it=DATA.itemBy[st.item];
   const eligible=['food','drink'].includes(it.category)&&before[i]!==null&&before[i]>s.day;
-  assert.equal(s.inventory[i].expires-again[i],eligible?1:0,st.item+' takes 대형 냉장고 once, and coldcase not twice');
+  assert.equal(s.inventory[i].expires-again[i],eligible?2:0,st.item+' takes 대형 냉장고 (+2) once, and coldcase not twice');
  }
  assert.ok(!DATA.items.some(it=>'fresh' in it),'no Item carries the retired fresh property');
 });
@@ -276,9 +279,14 @@ test('REL-Q-v28-5 / 7: HQ commission is 12% (supplyCert) and 20% (royalCert) of 
 });
 
 test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the catalogue',()=>{
- for(const [id,price] of [['fridge',200],['efficiency',260],['rotation',240],['logisticsHQ',720],
-                          ['returnPoints',400],['lifetime',740],['supplyCert',440],['royalCert',760],
-                          ['hub',700],['expeditionCert',700]])
+ /* User-approved Store Support rebalance 2026-09-23 */
+ for(const [id,price] of [['bulk',180],['rotation',120],['stamp',180],['member',180],['showcase',200],
+                          ['guarantee',200],['hazardBoard',120],['medicine',150],['fridge',120],['kitchen',240],
+                          ['board',150],['rookieBoard',150],['groupFlyer',280],['memberBundle',270],
+                          ['premiumMember',290],['returnPoints',340],['expeditionMeal',280],['coldcase',250],
+                          ['supplyCert',310],['dawnBulk',270],['logisticsHQ',430],['lifetime',440],
+                          ['royalCert',460],['expeditionCert',420],['fresh24',520],['hub',490],
+                          ['warehouse',180],['terminal',190],['delivery',170],['efficiency',180]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
 });
 
