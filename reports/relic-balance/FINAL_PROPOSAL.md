@@ -29,7 +29,7 @@ Relic ids are kept for remakes (save compatibility); only name / price / effect 
 | medicine | 야전 정비대 (remake) | 150 | 판매한 야외장비의 위험 대응 수치 +40%. |
 | fridge | 대형 냉장고 | 120 | 음식·음료 유통기한 +2일 · 확보 시 보유 중인 해당 재고도 1회 연장. |
 | kitchen | 즉석식품 코너 | 240 | 음식·음료가 원래 가진 능력치 증가 효과 +25% · 보급·위험 대응·부작용 제외 · 다음 날부터 기본 운영비 +10%. |
-| board | 길드 전광판 | 150 | 하루 기본 방문객 최소 3명 → 4명. |
+| board | 길드 전광판 | 150 | 하루 기본 최소 방문객을 4명으로 변경 (기존 3명). |
 | rookieBoard | 첫 방문 쿠폰 (remake) | 150 | 처음 방문한 손님의 소지금 +30G 추가 · 구매 의사 +20%p. |
 
 ### Hybrid
