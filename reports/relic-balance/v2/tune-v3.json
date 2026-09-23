@@ -1,0 +1,46 @@
+{
+ "_price": {
+  "bulk": 130,
+  "rotation": 80,
+  "stamp": 130,
+  "member": 130,
+  "showcase": 140,
+  "guarantee": 140,
+  "hazardBoard": 80,
+  "medicine": 80,
+  "fridge": 80,
+  "kitchen": 170,
+  "board": 110,
+  "rookieBoard": 110,
+  "groupFlyer": 200,
+  "memberBundle": 190,
+  "premiumMember": 200,
+  "returnPoints": 300,
+  "expeditionMeal": 200,
+  "coldcase": 180,
+  "supplyCert": 220,
+  "dawnBulk": 190,
+  "logisticsHQ": 340,
+  "lifetime": 310,
+  "royalCert": 320,
+  "expeditionCert": 290,
+  "fresh24": 360,
+  "hub": 340,
+  "warehouse": 130,
+  "terminal": 130,
+  "delivery": 120,
+  "efficiency": 130
+ },
+ "guarantee": {
+  "subsidyRate": 0.3
+ },
+ "premiumMember": {
+  "arrivalGold": 40
+ },
+ "royalCert": {
+  "commissionRate": 0.25
+ },
+ "fridge": {
+  "shelfDays": 3
+ }
+}

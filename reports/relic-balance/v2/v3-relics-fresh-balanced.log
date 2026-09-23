@@ -1,0 +1,8 @@
+premiumMember   dgain 27±10  dreached -0.008±0.011  dwin -0.012±0.007  ddeaths 0.104±0.038  dregulars 0.658±0.120  dsales 3.881±1.112  dmargin 406±63  dfinalRatio -0.009±0.010
+fridge          dgain -15±13  dreached -0.010±0.013  dwin -0.019±0.008  ddeaths 0.013±0.065  dregulars -0.240±0.173  dsales -1.228±1.781  dmargin -110±87  dfinalRatio -0.017±0.012
+royalCert       dgain 58±14  dreached 0.016±0.013  dwin -0.006±0.008  ddeaths 0.347±0.065  dregulars -0.653±0.170  dsales 8.790±1.941  dmargin 597±96  dfinalRatio 0.010±0.012
+guarantee       dgain 76±14  dreached 0.019±0.013  dwin 0.000±0.009  ddeaths 0.222±0.066  dregulars 0.977±0.190  dsales 9.941±1.861  dmargin 950±96  dfinalRatio 0.018±0.013
+premiumMember+royalCert dgain 88±15  dreached 0.031±0.014  dwin -0.002±0.009  ddeaths 0.302±0.066  dregulars -0.165±0.179  dsales 11.579±1.993  dmargin 987±105  dfinalRatio 0.024±0.013
+guarantee+royalCert dgain 121±15  dreached 0.024±0.013  dwin -0.008±0.008  ddeaths 0.552±0.061  dregulars 0.048±0.182  dsales 16.870±1.956  dmargin 1443±101  dfinalRatio 0.014±0.012
+logisticsHQ     dgain 146±15  dreached 0.076±0.014  dwin 0.013±0.009  ddeaths 0.249±0.065  dregulars 2.228±0.203  dsales 26.562±2.002  dmargin 2507±111  dfinalRatio 0.067±0.013
+returnPoints    dgain 215±15  dreached 0.074±0.014  dwin 0.011±0.009  ddeaths 0.392±0.061  dregulars 2.961±0.164  dsales 31.286±1.859  dmargin 2287±102  dfinalRatio 0.062±0.013
