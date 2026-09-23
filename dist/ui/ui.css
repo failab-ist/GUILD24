@@ -1446,7 +1446,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    lose their separate grounds so nothing but a seam sits between them. The receipt keeps its
    344px object width; the Action takes that same measure so the two read as one column. */
 .p-closing{background:var(--tex-wood),#241a10;background-size:32px 12px;justify-content:center}
-.p-closing .stage-scroll{flex:0 1 auto;padding:18px var(--gutter) 10px;background:none}
+/* BATCH 3 CLOSING: a till that runs longer than the screen (a Great Success day prints one more
+   row) rode up under the menu pin, which then covered the receipt's torn top edge. The stage
+   keeps the pin's own 6 + 44px clear above the paper; a short till still centres. The desktop
+   block below sets its own padding, where the pin sits far off the paper. */
+.p-closing .stage-scroll{flex:0 1 auto;padding:58px var(--gutter) 10px;background:none}
 .p-closing .dock{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;
  padding-top:0;background:none;box-shadow:none}
 /* BRICK. The day's last control is this screen's one flow Action, so it carries that family -
@@ -2478,9 +2482,31 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  /* On a desk there is room, so the Action takes it: it is the one thing left to do on this
     screen and a chip under a 344px object read as an afterthought. It takes the paper's own
     measure exactly, so the receipt and its Action are one column with a seam between them.
-    The receipt itself is NOT widened - the paper is the size the paper is. */
+    The receipt keeps its phone measure here; the one desktop step below (Batch 3) scales the
+    paper and this Action together, so they stay one column. */
  .p-closing .dock .stamp,.p-end .dock .stamp{flex:0 0 auto;
   width:344px;min-height:86px;font:600 23px/1 var(--ui);letter-spacing:.06em}
+ /* BATCH 3 CLOSING — DESKTOP STEP (PRESENTATION_SYSTEM §RESPONSIVE DETAILING; the same one step
+    NIGHT takes). At 1280 the phone-sized till printed its figures at 12-15px in the middle of
+    the counter. The same tape, the same rows in the same order and the same single column take
+    one step up: the paper to 420px, every figure and label one type step, the Action keeping the
+    paper's own measure so the two still read as one column. No figure becomes a card. */
+ .p-closing .dock .stamp{width:420px}
+ .p-closing .tape{max-width:420px}
+ .p-closing .print{padding:20px 22px 19px}
+ .p-closing .print .head{padding-bottom:14px;margin-bottom:13px}
+ .p-closing .print .head b{font-size:30px}
+ .p-closing .print .head span{font-size:14px}
+ .p-closing .print .block{padding:11px 0}
+ .p-closing .print .row{font-size:15px;padding:4px 0}
+ .p-closing .print .row b{font-size:18px}
+ .p-closing .print .row.sum b{font-size:20px}
+ .p-closing .print .profit span{font-size:16px}
+ .p-closing .print .profit b{font-size:38px}
+ .p-closing .purse{margin-top:14px;padding:14px 16px}
+ .p-closing .purse span{font-size:14px}
+ .p-closing .purse b{font-size:28px}
+ .p-closing .purse b i{font-size:15px}
  /* a short till still names its own way out, under the same paper */
  .p-closing .dock{flex-wrap:wrap}
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
