@@ -40,6 +40,45 @@ const rows=[
 D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,
  ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})}));
 D.relicBy=Object.fromEntries(D.relics.map(r=>[r.id,r]));D.facilities=D.relics;
+/* Effect STRENGTH of every support, read by its use sites. The trigger conditions (3+ of one
+   SKU, 6+ visitors, loyalty thresholds, rarity gates, previous-day sales) stay at the use site;
+   only how strong the effect is lives here. Descriptions above are still literal copy - a
+   change here does not rewrite them. */
+D.relicParams={
+ bulk:{discount:.15},
+ rotation:{supplyBonus:1},
+ stamp:{loyaltyMult:1.5},
+ member:{revisitMult:1.4},
+ showcase:{rareWeightMult:1.7,overheadAdd:10},
+ guarantee:{subsidyRate:.2},
+ hazardBoard:{weightMult:1.8},
+ medicine:{weightMult:1.6,supplyBonus:1},
+ fridge:{shelfDays:1},
+ kitchen:{statBonus:.30},
+ board:{minVisitors:4},
+ rookieBoard:{},
+ groupFlyer:{discount:.10},
+ memberBundle:{loyaltyBonus:2},
+ premiumMember:{rareIntentBonus:.10},
+ returnPoints:{loyaltyBonus:2,goldBonus:30},
+ expeditionMeal:{hazardCounterMult:1.25,supplyStatBonus:.20},
+ coldcase:{weightMult:1.8,shelfDays:1},
+ supplyCert:{commissionRate:.12},
+ dawnBulk:{discount:.15},
+ logisticsHQ:{discount:.25},
+ lifetime:{goldBonus:50,revisitMult:1.5},
+ royalCert:{commissionRate:.20},
+ expeditionCert:{guaranteedSlots:2},
+ fresh24:{shelfDays:2,statBonus:.50},
+ hub:{p1:.45,p2:.15,overheadRate:.10},
+ warehouse:{slots:10},
+ terminal:{extraOffers:2},
+ delivery:{freeRerolls:1},
+ efficiency:{overheadCut:30}
+};
+/* The hub overhead rate used to be its own D.balance literal; it now reads through to the
+   relic's parameter so there is one lever, under the old name as well. */
+Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.overheadRate,enumerable:true,configurable:true});
 /* RELIC_v2.8 §D30 CANDIDATE ELIGIBILITY — DEFAULT INCLUDE / EXPLICIT EXCLUDE. The inherited
    positive final-useful allowlist is superseded, and it is gone rather than kept beside this:
    an allowlist silently drops every support nobody remembered to add, including every future

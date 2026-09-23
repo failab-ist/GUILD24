@@ -35,7 +35,7 @@ class Game{
  if(this.run.bossId==='SLOTH'){this.run.slothDays=boss.shuffle([15,20,25]).slice(0,2).sort((a,b)=>a-b);this.run.sealBreakCount=0;}
 this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
- capacity(){return D.balance.warehouse+(this.has('warehouse')?10:0);}
+ capacity(){return D.balance.warehouse+(this.has('warehouse')?D.relicParams.warehouse.slots:0);}
  /* ECONOMY_ORDER §OPERATING COST (Stage 10, approved). Overhead follows the Day AND the quality
     of the roster the player has actually built, so a store that grows good adventurers keeps
     having to sell well to hold on to them - the pressure does not fall away after the mid-game.
@@ -53,10 +53,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */
-  const extras=(s.dayFacilities?.includes('showcase')?10:0)-(s.dayFacilities?.includes('efficiency')?30:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  const extras=(s.dayFacilities?.includes('showcase')?D.relicParams.showcase.overheadAdd:0)-(s.dayFacilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
-  const base=this.overheadBase(),hub=s.dayFacilities?.includes('hub')?base*D.balance.hubOverheadRate:0;
+  const base=this.overheadBase(),hub=s.dayFacilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;
   return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
  has(id){return this.run.facilities.includes(id);}
  /* A Decoration is read from the Run's frozen loadout, never from facilities. `has` stays the
@@ -198,9 +198,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      outcomes. The Decoration that touches the same number is applied after, and neither Relic
      knows about it. */
   const rawVisitors=this.rng.int(3,6);
-  const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;
+  const baseVisitors=s.dayFacilities.includes('board')?Math.max(D.relicParams.board.minVisitors,rawVisitors):rawVisitors;
   let hubExtra=0;
-  if(s.dayFacilities.includes('hub')){const r=this.rng.next();hubExtra=r<.45?1:r<.60?2:0;}
+  if(s.dayFacilities.includes('hub')){const r=this.rng.next(),{p1,p2}=D.relicParams.hub;hubExtra=r<p1?1:r<p1+p2?2:0;}
   /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
   const decoExtra=this.wears('guildPlaque')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
   s.expectedVisitors=baseVisitors+hubExtra+decoExtra;
@@ -250,7 +250,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      the slot count and every weighted draw are bit-for-bit what they were. */
   const seats=!!arrival&&(ev.rookie||ev.royal||s.dayFacilities.includes('rookieBoard'));
   const capacity=seats?available.filter(n=>n!==arrival).length:available.length;
-  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?1.4:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?1.5:1);});selected.push(n);}
+  for(let i=0;i<Math.min(visitors,capacity);i++){const pool=available.filter(n=>!selected.includes(n)),existing=pool.filter(n=>n.introduced),fresh=pool.filter(n=>!n.introduced),existingSum=existing.reduce((v,n)=>v+1+n.loyalty*.025,0);const n=this.rng.weighted(pool,n=>{const base=n.introduced?(s.day>20?.8:.62)*(1+n.loyalty*.025)/Math.max(1,existingSum):(s.day>20?.2:.38)/Math.max(1,fresh.length);return base*n.traits.reduce((a,tid)=>a*(D.traitBy[tid].effects.revisitMult||1),1)*(n.introduced&&s.dayFacilities.includes('member')?D.relicParams.member.revisitMult:1)*(n.loyalty>=60&&s.dayFacilities.includes('lifetime')?D.relicParams.lifetime.revisitMult:1);});selected.push(n);}
   /* ...and the new face is guaranteed one of those slots, by taking the last one drawn rather
      than by adding a slot. The number of weighted draws is unchanged, so a Day without the
      event is bit-for-bit what it was. */
@@ -273,7 +273,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
      cleared every Morning so a stale v8 save cannot carry one back in. */
   s.special=null;
  }
- generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?2:0)+(this.wears('dawnSign')?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
+ generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?D.relicParams.terminal.extraOffers:0)+(this.wears('dawnSign')?1:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
@@ -304,7 +304,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   /* the keys the Run has gone longest without an answer to are chosen first; the draw itself
      is still shuffled, so which two are picked is not a fixed reading of the Hazard list. */
   const order=this.rng.shuffle([...hazards]).sort((a,b)=>((s.pity.hazards[b]||0)>=3)-((s.pity.hazards[a]||0)>=3));
-  guarantee(order.slice(0,hazards.length>=2?2:1));
+  guarantee(order.slice(0,D.relicParams.expeditionCert.guaranteedSlots));
  }else if(s.pity.counter>=3&&hazards.length){
   const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
   const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));
@@ -318,12 +318,12 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     Contract / Event / Offer calculation and inside the same single Math.round, so there is no
     second rounding convention. ORDER stock only - Reroll, Relic, Deep sponsorship and the
     Final transfer each read their own price and are untouched. */
- offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?1:0)+(it.rarity<=1&&s.previousSales>=6&&this.has('rotation')?1:0)};}
+ offerFor(it,price=1){const s=this.run,ev=s.event?.effects||{};return {item:it.id,price:Math.round(it.buy*price*(ev.price||1)*(it.category==='potion'?(ev.potionPrice||1):1)),quantity:(it.rarity>=2?1:this.rng.int(2,4))+(this.has('medicine')&&G.Relics.field(it)?D.relicParams.medicine.supplyBonus:0)+(it.rarity<=1&&s.previousSales>=6&&this.has('rotation')?D.relicParams.rotation.supplyBonus:0)};}
  rollOffer(min=0,price=1){const s=this.run,ev=s.event?.effects||{};let pool=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day));/* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the band for the CURRENT Day, so a Reroll
     cannot bypass Day progression - it rolls the same band. The inherited Rare pity rides on
     top of that band rather than restoring the retired fixed table. */
   const band=D.rarityBands.find(b=>s.day<=b.maxDay)||D.rarityBands.at(-1);
-  const rates=band.weights.map((w,v)=>v===2?w+(s.pity.rare>=5?3:0):w);const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('showcase')&&v>=2?1.7:1));pool=pool.filter(it=>it.rarity===rarity);
+  const rates=band.weights.map((w,v)=>v===2?w+(s.pity.rare>=5?3:0):w);const tiers=[0,1,2,3,4].filter(v=>v>=min&&pool.some(it=>it.rarity===v));let rarity=this.rng.weighted(tiers,v=>rates[v]*(this.has('showcase')&&v>=2?D.relicParams.showcase.rareWeightMult:1));pool=pool.filter(it=>it.rarity===rarity);
  const it=this.rng.weighted(pool,it=>{let w=1;if(it.effects.potion)w*=(ev.potionWeight||1);return w*G.Relics.offerWeight(this,it);});return this.offerFor(it,price);}
  order(index){const s=this.run;if(!['order','final'].includes(s.phase))return false;const o=s.offers[index];if(!o||o.quantity<=0)throw Error('품절된 발주입니다.');if(s.money<o.price)throw Error('발주 자금이 부족합니다.');const units=o.promo?2:1;if(!this.canStock(D.itemBy[o.item],units))throw Error('창고가 가득 찼습니다.');s.money-=o.price;s.daily.spent+=o.price;s.stats.spent+=o.price;o.quantity--;for(let k=0;k<units;k++)this.stock(o.item,1,Math.floor(o.price/units)+(k<o.price%units?1:0));this.save();return true;}
  open(){const s=this.run;if(s.phase!=='order')return;if(Object.values(s.cart||{}).some(q=>q>0))throw Error('선택한 발주를 먼저 확정해 주세요.');s.phase='sell';this.arrive();if(!s.queue.length)this.night();this.save();}
@@ -372,10 +372,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     capacity decision by itself. */
   if(n.injury&&it.category==='insurance')need+=.25;
  for(const id of n.traits){const t=D.traitBy[id].effects;need+=t.buyBias||0;if(judged>D.balance.frugalThreshold)need+=t.priceBias||0;need+=(it.rarity>=2?t.rareBias:t.commonBias)||0;if(mode==='overcharge')need+=t.overchargeBias||0;}
- if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=.1;
+ if(this.has('premiumMember')&&it.rarity>=2&&n.loyalty>=50)need+=D.relicParams.premiumMember.rareIntentBonus;
  if(this.run.event?.effects.foodDemand&&['food','drink'].includes(it.category))need+=this.run.event.effects.foodDemand;
  if(this.run.event?.effects.medicalDemand&&it.category==='insurance')need+=this.run.event.effects.medicalDemand;
- const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*.2):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
+ const guarantee=this.has('guarantee')&&!this.run.guaranteeUsed&&it.sell>=D.relicBy.guarantee.minPrice?Math.round(it.sell*D.relicParams.guarantee.subsidyRate):0;const debit=Math.max(0,price-guarantee);const wallet=n.money+(n.eventBudget||0);const burden=Math.max(0,judged-guarantee)/Math.max(1,wallet);
  /* The judged price reaches the decision here, for the mode that declares a weight for it -
     only 정가 does. Until this existed the approved .65 threshold could not move an acceptance
     at all: chance read the flat per-mode sentiment and nothing about what the offer costs
@@ -411,10 +411,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   for(const [other,rule]of Object.entries(D.pricing))if(rule.mult>D.pricing[mode].mult&&!n.refused.includes(it.id+':'+other))n.refused.push(it.id+':'+other);s.say={npc:n.id,text:G.Copy.refuse(n,it.id,reason,s.day,s)};this.save();return false;}
  s.inventory.splice(i,1);n.pack.push(it.id);const fromEvent=Math.min(n.eventBudget||0,intent.debit);if(fromEvent)n.eventBudget-=fromEvent;n.money-=intent.debit-fromEvent;if(intent.guarantee)this.run.guaranteeUsed=true;s.money+=intent.price;s.daily.revenue+=intent.price;s.stats.revenue+=intent.price;
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
- let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*1.5);
+ let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
  if(s.event?.effects.tasting&&mode==='half'&&!s.tastingUsed){s.money+=D.balance.tastingSupport;s.daily.subsidy+=D.balance.tastingSupport;s.tastingUsed=true;}
- if(this.has('memberBundle')&&n.visits>1&&n.history.filter(h=>h.day===s.day&&h.paid>0).length===1)loyalty+=2;
- let commission=0;if(this.has('royalCert')&&mode==='overcharge'&&it.rarity>=2)commission+=Math.round(it.sell*.20);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive))commission+=Math.round(it.sell*.12);s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
+ if(this.has('memberBundle')&&n.visits>1&&n.history.filter(h=>h.day===s.day&&h.paid>0).length===1)loyalty+=D.relicParams.memberBundle.loyaltyBonus;
+ let commission=0;if(this.has('royalCert')&&mode==='overcharge'&&it.rarity>=2)commission+=Math.round(it.sell*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive))commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;
  n.history.push({day:s.day,item:it.id,mode,paid:intent.price,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,commission,loyalty:n.loyalty-before});
  /* SA-Q11. A committed purchase is the one thing the Player did, so the Great Success signal
@@ -448,7 +448,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
    if(bonusXp)rep.changes.push(...G.Adventurer.grow(n,bonusXp,this.rng));
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
-  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,2);n.money+=30;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=50;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+  s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,2);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&n.loyalty>=30&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}if(n.loyalty>=60&&this.has('lifetime'))n.money+=D.relicParams.lifetime.goldBonus;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
  s.daily.operating=this.expectedOperatingCost();
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }

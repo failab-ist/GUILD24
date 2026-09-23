@@ -1120,13 +1120,16 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
 test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exclusive outcome',()=>{
  const src=source('dist/systems/shop.js');
  /* board is a floor on the BASE roll, applied before every other modifier, and draws nothing. */
- assert.ok(src.includes("const baseVisitors=s.dayFacilities.includes('board')?Math.max(4,rawVisitors):rawVisitors;"),
-  'board raises the base roll to 4 and leaves 5 and 6 alone');
+ assert.ok(src.includes("const baseVisitors=s.dayFacilities.includes('board')?Math.max(D.relicParams.board.minVisitors,rawVisitors):rawVisitors;"),
+  'board floors the base roll at its parameter and leaves higher rolls alone');
+ assert.equal(DATA.relicParams.board.minVisitors,4,'board raises the base roll to 4 and leaves 5 and 6 alone');
  /* hub: one roll, three mutually exclusive outcomes. */
- assert.ok(src.includes("const r=this.rng.next();hubExtra=r<.45?1:r<.60?2:0;"),
-  'hub makes exactly one roll: REL-Q-v28-17 45% +1, 15% +2, otherwise none');
+ assert.ok(src.includes("const r=this.rng.next(),{p1,p2}=D.relicParams.hub;hubExtra=r<p1?1:r<p1+p2?2:0;"),
+  'hub makes exactly one roll against its two parameters');
+ const {p1,p2}=DATA.relicParams.hub;
+ assert.deepEqual([p1,p2],[.45,.15],'hub makes exactly one roll: REL-Q-v28-17 45% +1, 15% +2, otherwise none');
  const seen=new Set();
- const rate=[0,0,0];for(let i=0;i<1000;i++){const r=i/1000,x=r<.45?1:r<.60?2:0;seen.add(x);rate[x]++;}
+ const rate=[0,0,0];for(let i=0;i<1000;i++){const r=i/1000,x=r<p1?1:r<p1+p2?2:0;seen.add(x);rate[x]++;}
  assert.deepEqual(rate,[400,450,150],'the approved 45 / 15 / 40 split, and it sums to one roll');
  assert.deepEqual([...seen].sort(),[0,1,2],'all three outcomes are reachable and exclusive');
  /* hub's cost is a share of overheadBase alone - never of the flat extras. */

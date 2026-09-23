@@ -41,9 +41,9 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
  const isFood=item.category==='food';
  if(isFood||item.category==='drink'){
   let pool=isFood?mult.foodMult-1:0;
-  if(facilities.includes('kitchen'))pool+=.30;
-  if(facilities.includes('fresh24'))pool+=.50;
-  if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)pool+=.20;
+  if(facilities.includes('kitchen'))pool+=D.relicParams.kitchen.statBonus;
+  if(facilities.includes('fresh24'))pool+=D.relicParams.fresh24.statBonus;
+  if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)pool+=D.relicParams.expeditionMeal.supplyStatBonus;
   return 1+pool;
  }
  if(item.category==='potion')return mult.potionMult;
@@ -54,7 +54,7 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
    channel from the native pool above, and kept separate on purpose. */
 function hazardCounterFactor(item,k,v,facilities,d){
  return facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)
-  &&v>0&&d.hazards.includes(k)?1.25:1;
+  &&v>0&&d.hazards.includes(k)?D.relicParams.expeditionMeal.hazardCounterMult:1;
 }
 /* Supply is its own channel too: the two Trait deltas, and a Food never drops below 1. */
 function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
