@@ -48,6 +48,18 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
  if(item.category==='potion')return mult.potionMult;
  return 1;
 }
+/* A Hazard Counter value (an Item effect keyed by a Hazard) under the two Counter supports:
+   야전 정비대 x1.40 on Field Gear, 원정 전문 인증 x1.60 on an Item that Counters a Hazard of the
+   Gate actually entered. They multiply each other; neither reaches the flat 원정 도시락 코너 +4,
+   which is added outside this channel. "Counters" is the Relics.counter predicate, read inline
+   because this module loads before systems/relics.js. */
+function counterFactor(item,k,v,facilities,d){
+ if(!(k in D.hazards)||v<=0)return 1;
+ let f=1;
+ if(facilities.includes('medicine')&&item.category==='gear')f*=D.relicParams.medicine.counterMult;
+ if(facilities.includes('expeditionCert')&&d.hazards.some(h=>(item.effects[h]||0)>0||(h==='bind'||h==='mire')&&(item.effects.mobility||0)>0))f*=D.relicParams.expeditionCert.counterMult;
+ return f;
+}
 /* Supply is its own channel too: the two Trait deltas, and a Food never drops below 1. */
 function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
  if(item.category==='food')value=Math.max(1,value+foodSupplyDelta);
@@ -71,6 +83,7 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
    let value=v*power;
    if(k==='supply')value=supplyContribution(item,value,foodSupplyDelta,supplyPerItem);
    value*=nativeStatFactor(item,k,v,mult,facilities,d);
+   value*=counterFactor(item,k,v,facilities,d);
    if(k==='supply')finalSupply+=value;else if(STAT_KEYS.includes(k)){itemE[k]+=value;from[k]=(from[k]||0)+value;}else e[k]=(e[k]||0)+value;
   }
   /* 원정 도시락 코너: per Food/Drink Item in the Bag, a flat Supply +2 and a flat +4 on every

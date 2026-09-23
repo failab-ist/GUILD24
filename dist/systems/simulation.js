@@ -202,7 +202,7 @@ function playRun(g,out,ctx){
   }
   return cost;};
  const originalOffers=g.generateOffers.bind(g);g.generateOffers=(opts)=>{
-  const armed=(s.pity.counter||0)>=3||g.has('expeditionCert');
+  const armed=(s.pity.counter||0)>=3;
   const r=originalOffers(opts);if(armed)out.offerShape.pityFired++;return r;};
  const saleBand=d=>d<=9?'D1-9':d<=19?'D10-19':d<=24?'D20-24':'D25-29';
  const loyaltyBand=v=>v<20?'<20':v<=50?'20-50':'51+';

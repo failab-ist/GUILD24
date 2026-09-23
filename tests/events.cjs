@@ -286,9 +286,10 @@ test('EVENT 왕립 기사단 방문: the royal newcomer is in today queue exactl
  assert.ok(/\(opts\.royal\?3:0\)/.test(src),'and the royal spawn Level is the ordinary one +3');
  assert.ok(rarities.some(r=>r>=1),'the weights really produced something above Common across '+rarities.length+' arrivals');
 
- /* one seating rule serves rookie, royal and the Rookie Board - there is no second writer */
+ /* one seating rule serves rookie and royal - there is no second writer (the Rookie Board seat
+    left with the 2026-09-23 remake to 첫 방문 쿠폰) */
  const shop=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- const seat=shop.match(/if\(\(ev\.rookie\|\|ev\.royal\|\|s\.dayFacilities\.includes\('rookieBoard'\)\)[^\n]*/g)||[];
+ const seat=shop.match(/if\(\(ev\.rookie\|\|ev\.royal\)&&arrival[^\n]*/g)||[];
  assert.equal(seat.length,1,'exactly one deterministic seating rule');
  assert.ok(/selected\[selected\.length-1\]=arrival/.test(seat[0]),'and it replaces a slot rather than adding one');
 });

@@ -16,15 +16,14 @@ test('bulk engines require quantity/traffic/previous-day sales, and affect actua
  for(const [id,threshold]of [['logisticsHQ',6]]){s.facilities=[id];s.cart={0:3};s.previousSales=threshold-1;assert.equal(g.cartTotal(),base);s.previousSales=threshold;assert.ok(g.cartTotal()<base);s.bulkUsed=true;assert.ok(g.cartTotal()<base,'not only the first bulk order');s.bulkUsed=false;}
  s.facilities=['rotation'];s.cart={0:3};for(const sales of [0,5,6,7,12]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'rotation never discounts, at '+sales+' previous sales');}
  s.previousSales=0;
- s.facilities=['groupFlyer'];s.queue=Array(5).fill('fixture');assert.equal(g.cartTotal(),base);s.queue.push('fixture');assert.ok(g.cartTotal()<base);
- s.facilities=['dawnBulk'];assert.ok(g.cartTotal()<base);s.offers[0].item='potion';assert.equal(g.cartTotal(),base);
- s.offers[0].item='rice';const quote=g.cartTotal(),before=s.money;g.confirmOrder();assert.equal(before-s.money,quote);assert.equal(s.inventory.slice(-3).reduce((v,x)=>v+x.cost,0),quote);
+ /* 2026-09-23 remakes: 단체 주문 창구 and 새벽 회수 계약 no longer discount an order */
+ for(const id of ['groupFlyer','dawnBulk']){s.facilities=[id];s.queue=Array(8).fill('fixture');assert.equal(g.cartTotal(),base,id+' discounts nothing');}
+ s.facilities=['bulk'];s.queue=[];const quote=g.cartTotal(),before=s.money;g.confirmOrder();assert.equal(before-s.money,quote);assert.equal(s.inventory.slice(-3).reduce((v,x)=>v+x.cost,0),quote);
 });
 test('offer weights and quantities match relevant product roles',()=>{
  const g=fresh(),s=g.run,potion=DATA.itemBy.potion,premium=DATA.itemBy.premium;
- for(const [id,it]of [['showcase',premium],['medicine',potion],['coldcase',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
+ for(const [id,it]of [['showcase',premium],['coldcase',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
  s.dungeons=[g.makeDungeon('spider',1)];s.facilities=[];const base=Relics.offerWeight(g,DATA.itemBy.antidote);s.facilities=['hazardBoard'];assert.ok(Relics.offerWeight(g,DATA.itemBy.antidote)>base);
- s.facilities=[];let state=g.rng.state,quantity=g.offerFor(potion).quantity;s.facilities=['medicine'];g.rng=new RNG(s.seed,state);assert.equal(g.offerFor(potion).quantity,quantity+1);
  s.facilities=[];g.generateOffers();const n=s.offers.length;s.facilities=['terminal'];g.generateOffers();assert.equal(s.offers.length,n+2);
 });
 test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
@@ -189,37 +188,53 @@ test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, excl
  assert.equal(DATA.balance.hubOverheadRate,.10,'the operating modifier stays overheadBase +10%');
 });
 
-/* REL-Q-v28-3 / SA-Q17. The probability-only +70% is gone. What is left is deterministic
-   seating: a new adventurer generated today takes one of today's own slots. */
-test('REL-Q-v28-3: 신입 모집 게시판 seats the Day newcomer without adding a visitor',()=>{
- /* Both variants are resolved from ONE snapshot, so they share the Day, the roster and the RNG
-    state and the only difference between them is the support. */
- const walk=until=>{const g=new Game();g.autosave=false;g.start('rookie-board');
-  g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
-  while(g.run.day<until){g.beginOrder();g.finishOrder();while(g.run.phase==='sell')g.depart();g.finishNight();g.closeDay();}
-  return Save.export(g.account,g.run);};
- const from=(snap,facilities)=>{const r=Save.import(snap);const h=new Game(r.account,r.run);h.autosave=false;
-  h.run.facilities=[...facilities];h.run.dayFacilities=[...facilities];h.morning();return h;};
- // a Day that generates a new adventurer
- const arrivalDay=walk(3),base=from(arrivalDay,[]),boost=from(arrivalDay,['rookieBoard']);
- const newcomer=boost.run.npcs.at(-1);
- assert.ok(!newcomer.introduced,'the newcomer really is the adventurer generated today');
- assert.ok(!base.run.queue.includes(newcomer.id),'and the Day did not seat them anyway');
- assert.ok(boost.run.queue.includes(newcomer.id),'with the support they take a slot');
- assert.equal(boost.run.queue.length,base.run.queue.length,'the visitor count does not rise');
- assert.equal(boost.run.expectedVisitors,base.run.expectedVisitors,'nor does the intake it is drawn from');
- assert.equal(boost.run.npcs.length,base.run.npcs.length,'and no extra adventurer is created');
- assert.deepEqual(boost.run.queue.slice(0,-1),base.run.queue.slice(0,-1),'one existing slot is taken, the rest stand');
- assert.deepEqual(boost.run.visitorBreakdown,base.run.visitorBreakdown,'the support is no part of the visitor sum');
- assert.ok(boost.run.queue.length<=base.run.visitorBreakdown.available,'the available-adventurer cap still holds');
- // a Day that generates nobody: the support does nothing at all
- const quietDay=walk(4),quiet=from(quietDay,[]),quietBoard=from(quietDay,['rookieBoard']);
- assert.equal(quietBoard.run.npcs.length,quiet.run.npcs.length,'no adventurer was generated to seat');
- assert.deepEqual(quietBoard.run.queue,quiet.run.queue,'so no visitor is added and no slot is taken');
- // and no weight multiplier survives in the selection
+/* 2026-09-23 remake: 첫 방문 쿠폰 replaces 신입 모집 게시판 (REL-Q-v28-3 seating retired with it).
+   An adventurer's first-ever visit: +30G on arrival and purchase intent +20%p for that visit. */
+test('REMAKE 첫 방문 쿠폰: first-ever visit +30G on arrival and intent +20%p, and no seating',()=>{
+ const arrive=(introduced,fac)=>{const g=fresh('coupon'),s=g.run,n=s.npcs[0];n.traits=[];n.money=100;n.introduced=introduced;n.visits=introduced?3:0;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return {g,n};};
+ assert.equal(arrive(false,['rookieBoard']).n.money-arrive(false,[]).n.money,30,'first visit +30G');
+ assert.equal(arrive(true,['rookieBoard']).n.money-arrive(true,[]).n.money,0,'a returning adventurer gets nothing');
+ for(const introduced of [false,true]){
+  const {g,n}=arrive(introduced,[]);n.injury=0;n.money=9999;g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
+  const it=DATA.itemBy.rope,a=g.interest(n,it,'overcharge').chance;g.run.facilities=['rookieBoard'];
+  const b=g.interest(n,it,'overcharge').chance;
+  assert.ok(Math.abs(b-a-(introduced?0:.20))<1e-9,(introduced?'returning':'first visit')+' intent');
+ }
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- const selection=src.slice(src.indexOf('morningQueue({'),src.indexOf('generateOffers({'));
- assert.ok(!/rookieBoard\?1\.7/.test(selection),'the +70% selection weight is gone');
+ assert.ok(!/dayFacilities\.includes\('rookieBoard'\)/.test(src),'the support no longer seats anyone');
+});
+
+/* 2026-09-23 remake: 단체 주문 창구 - its own 20% Morning roll for +1 visitor, and +15G commission
+   on every sale from the Day's 5th. */
+test('REMAKE 단체 주문 창구: own 20% Morning roll +1 visitor; +15G per sale from the 5th',()=>{
+ const g=fresh('group-window'),s=g.run;
+ for(const [r,want] of [[0,1],[.1999,1],[.2,0],[.9,0]]){
+  s.dayFacilities=['groupFlyer'];g.rng={int:()=>3,next:()=>r};const v=g.morningVisitors();
+  assert.equal(v.flyerExtra,want,'r='+r);assert.equal(s.expectedVisitors,3+want);assert.equal(v.baseVisitors,3,'the base roll is untouched');
+ }
+ s.dayFacilities=[];g.rng={int:()=>3,next:()=>0};assert.equal(g.morningVisitors().flyerExtra,0,'not owned, no roll');
+ // commission: sales 1-4 nothing, 5th and later +15G each
+ const g2=fresh('group-commission'),t=g2.run;t.facilities=['groupFlyer'];t.dayFacilities=['groupFlyer'];t.phase='sell';t.daily.commission=0;
+ g2.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
+ const got=[];
+ for(let i=0;i<7;i++){const n=t.npcs[i%t.npcs.length];n.traits=[];n.money=99999;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
+  t.queue=[n.id];t.cursor=0;g2.stock('rice',1);const c=t.daily.commission;assert.equal(g2.sell(t.inventory.at(-1).id,'full'),true);got.push(t.daily.commission-c);}
+ assert.deepEqual(got,[0,0,0,0,15,15,15]);
+});
+
+/* 2026-09-23 remake: 새벽 회수 계약 - expiring Food/Drink is taken back at 50% of its cost instead
+   of being wasted, and each Day's first offer generation carries one extra Food/Drink slot. */
+test('REMAKE 새벽 회수 계약: 50% recovery of expiring Food/Drink, and +1 Food/Drink slot on the first generation',()=>{
+ const g=fresh('dawn-recovery'),s=g.run;s.facilities=['dawnBulk'];s.inventory=[];
+ g.stock('rice',2,40);g.stock('rope',1,50);for(const st of s.inventory)st.expires=s.day+1;
+ const money=s.money,waste=s.stats.waste;s.day++;g.morningReset();
+ assert.equal(s.money-money,40,'2 x 50% of 40G');assert.equal(s.daily.subsidy,40);
+ assert.equal(s.daily.waste,1,'only the non-Food is waste');assert.equal(s.stats.waste-waste,1);assert.equal(s.daily.wasteCost,50);
+ assert.equal(s.inventory.length,0,'all of it left the shelf');
+ const h=fresh('dawn-offers'),t=h.run;t.facilities=[];t.event=null;h.generateOffers();const n=t.offers.length;
+ for(let i=0;i<30;i++){t.facilities=['dawnBulk'];h.generateOffers();assert.equal(t.offers.length,n+1,'one extra slot');
+  assert.ok(Relics.food(DATA.itemBy[t.offers.at(-1).item]),'and it is Food/Drink');}
+ t.phase='order';t.money=99999;h.reroll();assert.equal(t.offers.length,n,'a Reroll is not the first generation');
 });
 
 /* SA-Q16 / REL-Q-v28-9. The acquisition-time predicate named a retired `fresh` property, so it
