@@ -56,6 +56,7 @@ Boss design question:
 - PRIDE = 투력 하나에만 의존했는가?
 - ENVY = 한 명에게만 투자를 몰았는가?
 - GREED = NPC를 키우느라 가게 경영을 버렸는가?
+- GLUTTONY = 모험가 자체를 성장시키기보다 보급품의 능력치 증가에 의존했는가?
 - LUST = 막판 강한 신규 NPC가 아니라 실제 단골을 만들었는가?
 - SLOTH = 현재 Build 강화와 Final 안정성 사이에서 무엇을 선택했는가?
 
@@ -481,6 +482,8 @@ This display value:
 ---
 
 ## GLUTTONY ITEM-STAT SCOPE — EXACT
+
+identity=tests whether Final strength comes from grown NPCs rather than Item-sourced Core-Stat boosts
 
 GLUTTONY reduces only positive Item-sourced Core-Stat increases in the Final.
 

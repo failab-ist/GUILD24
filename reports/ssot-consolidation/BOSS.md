@@ -381,3 +381,13 @@ max(0, greedRevenueTarget - Cumulative Gross Sales) / greedRevenueTarget
 min(shortfallCap, shortfallRatio × shortfallCap)
 - the penalty is linear in the unmet share: no sales -> the full cap; target met -> 0
 ```
+
+## AMENDMENT — User decision 2026-09-23: GLUTTONY design question and identity
+
+The consolidation reported that GLUTTONY had no design question / identity line after the
+rarity-bound v2.5 ones were dropped. The User supplied both.
+
+```new
+- GLUTTONY = 모험가 자체를 성장시키기보다 보급품의 능력치 증가에 의존했는가?
+identity=tests whether Final strength comes from grown NPCs rather than Item-sourced Core-Stat boosts
+```
