@@ -30,7 +30,7 @@ Always read:
 
 Then SMALL READ only as needed:
 - PRESENTATION_POLISH_v2.8.0.md — BOSS / FINAL PRESENTATION PAYOFF and domain-backdrop role
-- FINAL_EXPEDITION_v2.7.0.md — D25 reuse, D30 Player Flow, Final preparation / accounting / acceptance
+- FINAL_EXPEDITION_v2.8.0.md — D25 reuse, D30 Player Flow, Final preparation / accounting / acceptance
 - BOSS_v2.8.0.md — Boss-specific Final modifier truth only when needed
 - UI_UX_v2.8.0.md / UI_UX_QA_v2.8.0.md — FINAL / Boss presentation clauses
 - current FINAL / bossConfirm Source only

@@ -73,7 +73,7 @@ Current routed owners cover the audited design areas:
 - exact Player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md
 - Event -> EVENT_v2.8.0.md
 - Boss -> BOSS_v2.8.0.md
-- Final formula / party / transfer / D25 Final state -> FINAL_EXPEDITION_v2.7.0.md
+- Final formula / party / transfer / D25 Final state -> FINAL_EXPEDITION_v2.8.0.md
 
 Current QA owners are routed by SPEC_INDEX_v2.8.0.md.
 
