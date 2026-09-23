@@ -99,8 +99,8 @@ let lastPhase=null;
 const menuFab=()=>'<button class="menu-pin" data-action="menu" aria-label="게임 메뉴">'+Art.glyph('menu',24)+'</button>';
 const pips=(total,at)=>'<span class="pips" aria-hidden="true">'+Array.from({length:Math.min(total,12)},(_,k)=>'<i class="'+(k===at?'now':k<at?'on':'')+'"></i>').join('')+'</span>';
 const sigilOf=d=>D.dungeonBy[d.family&&d.family!=='final'?d.family:d.id]||D.dungeonBy[d.id]||{};
-function stage(phase,label,head,body,dock){
- return '<div class="stage p-'+phase+'">'+menuFab()+(head||'')
+function stage(phase,label,head,body,dock,attrs=''){
+ return '<div class="stage p-'+phase+'"'+attrs+'>'+menuFab()+(head||'')
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="'+label+'">'+body+'</main>'
  +(dock?'<div class="dock">'+dock+'</div>':'')+'</div>';
 }
@@ -1214,7 +1214,10 @@ function finalScreen(){
  const dock=relicWindowLink()+(need
   ?btn(ready?'마왕성으로 출발':'원정대 '+s.team.length+' / '+need,'boss','stamp',ready?'':'disabled')
   :btn('출전 불가 · 런 종료','boss','danger'));
- return stage('final','최종 원정','',body,dock);
+ /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
+    stands in the Boss's own domain. The stage names which Boss so the stylesheet can hang that
+    Boss's authored room behind it - the only place any of those rooms is used. */
+ return stage('final','최종 원정','',body,dock,' data-boss="'+E(s.bossId)+'"');
 }
 /* Whoever went to the castle is the ending. run.js clears s.results when the Final resolves,
    so after D30 the end screen had the statement and then nothing - the people the player

@@ -1923,6 +1923,26 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    ===================================================================== */
 .p-final{background:#0d0a0c}
 .p-final .stage-scroll{padding:0 var(--gutter) 26px;background:linear-gradient(180deg,#1a1114 0,#120d10 44%,#0d0a0c 100%)}
+.p-final[data-boss="WRATH"]{--room:url('assets/presentation/final/B001_WRATH_BACKDROP.png')}
+.p-final[data-boss="PRIDE"]{--room:url('assets/presentation/final/B002_PRIDE_BACKDROP.png')}
+.p-final[data-boss="ENVY"]{--room:url('assets/presentation/final/B003_ENVY_BACKDROP.png')}
+.p-final[data-boss="GREED"]{--room:url('assets/presentation/final/B004_GREED_BACKDROP.png')}
+.p-final[data-boss="GLUTTONY"]{--room:url('assets/presentation/final/B005_GLUTTONY_BACKDROP.png')}
+.p-final[data-boss="LUST"]{--room:url('assets/presentation/final/B006_LUST_BACKDROP.png')}
+.p-final[data-boss="SLOTH"]{--room:url('assets/presentation/final/B007_SLOTH_BACKDROP.png')}
+/* BATCH 5-1 — THE BOSS'S DOMAIN (D30 FINAL only; PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET
+   ROLE). The authored room is the wall behind the gate, not a card: it is the background of the
+   Final's own scroll surface, scrolling with it, so the Boss (unchanged, foreground) stands in
+   the room at the top and the room gives way to the existing dark ground under the gate, where
+   the Family / Hazard plane and the muster keep their own planes. Never stretched - the source
+   keeps its 1672:941 ratio at every width; a phone sees the room through a narrower camera
+   (height fitted to the gate band, sides cropped), a desk sees all of it. */
+.p-final[data-boss] .stage-scroll{--room-size:auto 400px;--room-clear:300px;--room-end:410px;
+ background:linear-gradient(180deg,#0d0a0c00 0,#0d0a0c00 var(--room-clear),#0d0a0c var(--room-end)) no-repeat,
+  var(--room) center top/var(--room-size) no-repeat,#0d0a0c;
+ background-attachment:local}
+/* the gate band no longer paints its own red void: the room is what stands behind the Boss */
+.p-final[data-boss] .gate-zero{background:none}
 .p-final .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0a0709;box-shadow:inset 0 3px 0 #ffffff12}
 /* THE GATE BAR (UI_UX §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT). The last action
    of a Run was a red rectangle with a label in it, and its first pass replaced that with a
@@ -2355,6 +2375,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-final .gate-zero .boss-face img{height:min(42vh,360px);max-height:none}
  .p-final .gate-zero .who{flex:1 1 auto;min-width:0}
  .p-final .gate-zero h1{margin-top:12px;font-size:40px}
+ /* a desk sees the whole room at the screen's width; it fades into the ground under the gate */
+ .p-final[data-boss] .stage-scroll{--room-size:100% auto;--room-clear:360px;--room-end:640px}
+ /* the confirmed-threat plane already exists; over the fading room it takes a deeper ground */
+ .p-final[data-boss] .threat{background:#000000b8}
  .modal-shade{align-items:center;padding:24px}
  .modal{max-height:88dvh;box-shadow:inset 0 0 0 3px #ffffff1a}
  .p-morning .dock .pull{flex:0 0 auto;min-width:280px;margin-left:auto}
