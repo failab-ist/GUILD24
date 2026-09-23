@@ -613,18 +613,22 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    hard external depth. The depth is shorter than the commit's and the face is lighter, so with
    both on the dock the commit still leads; alone it is still a plate that was made. */
 .p-order .dock .stamp.leave{background:#434e58;color:#e6edf2;
- box-shadow:inset 0 2px 0 #6f7c88,inset 0 -2px 0 #2a323a,4px 4px 0 #2a231780}
+ box-shadow:inset 0 0 0 2px #7b8894,inset 0 4px 0 #556370,4px 4px 0 #2a231780}
 .p-order .dock .stamp.leave:hover{background:#4d5964;color:#f4f8fa}
 /* the press closes the depth, the way the commit's does */
 .p-order .dock .stamp.leave:active{transform:translate(3px,3px);background:#38424b;
- box-shadow:inset 0 2px 0 #4f5a65,inset 0 -2px 0 #262d34,1px 1px 0 #2a231780}
-/* USER, 2026-09-23: disabled, the control had changed MATERIAL - a pale paper rectangle beside
+ box-shadow:inset 0 0 0 2px #616e7a,inset 0 4px 0 #454f59,1px 1px 0 #2a231780}
+/* USER, 2026-09-23 (second pass): the two dock controls differed in how their EDGES were built
+   - the commit carries a 2px machined edge on all four sides, the leave control had only a top
+   and a foot line, so their corners read as two different objects whatever the colour. Both are
+   edged the same way now, in every state; only the face value and the depth separate them.
+   Disabled, the control had also changed MATERIAL - a pale paper rectangle beside
    a steel commit, which is the web-button reading the active state had just been rebuilt out of.
    It is the same steel plate while a cart is held; it is simply dead. The face is the alloy a
    step back in contrast, the depth is gone and the edges are reversed, so the plate is set INTO
    the dock rather than raised off it. The label is still read, and nothing here fades. */
 .p-order .dock .stamp.leave[disabled]{background:#8d959c;color:#3f464c;opacity:1;transform:none;
- box-shadow:inset 0 2px 0 #6e767d,inset 0 -2px 0 #a7aeb4}
+ box-shadow:inset 0 0 0 2px #6e767d,inset 0 4px 0 #7d858c}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
