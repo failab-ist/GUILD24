@@ -344,3 +344,15 @@ actual visit, first and revisit, arrival path, cap 2000); the rule is stated in 
   EVENT); kept verbatim. UNRESOLVED (label only), reported to the User.
 - Retired -0.10 bag modifier / stale `operating=60` lines are current negative rules (Source still
   holds both values); kept.
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+C: old stage label renamed.
+
+```text
+Stage 9 reports at minimum:
+```
+
+```new
+Full-run balance measurement reports at minimum:
+```

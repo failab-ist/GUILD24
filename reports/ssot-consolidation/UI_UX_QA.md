@@ -610,3 +610,17 @@ Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_
   control `마감으로`; no design owner names it (UI_UX: exactly `다음` / `전체 건너뛰기`).
 - UNRESOLVED, reported to the User: UI-Q-v28-31 "every NIGHT Outcome label measures 36px" vs the
   newer UI_UX desktop adaptation (36px is the phone baseline; Source uses 46px on desktop).
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+A6 tutorial wording; A8 36px is the phone baseline (UI_UX NIGHT desktop adaptation).
+
+```text
+- Tutorial says: `특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.`
+- every NIGHT Outcome label measures 36px `var(--f-sign)`, and the NPC name and Outcome summary
+```
+
+```new
+- Tutorial says: `이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.`
+- every NIGHT Outcome label measures 36px `var(--f-sign)` on phone (desktop may scale, one size for all Outcomes), and the NPC name and Outcome summary
+```

@@ -484,3 +484,23 @@ Supply +1 per the Trait owner). Independent review 2026-09-23.
 - `Condition` role (`functionalRole`, `### Condition`, `Condition management`, `Condition effect`): no
   active Item carries a Condition role after Medical / 붕대 were removed and `No active Item creates a
   separate poison Condition/cure subsystem.` Kept, since no version removes the role.
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+A2: 귀환석 cap is Source's value. B10: generic Fresh / category-affinity boosts never touch Supply
+(Source: Fresh boosts only the native Stat pool); Supply changes only where a Trait states it.
+
+```text
+finalEscapeCap≈90–95% tuning band
+- Supply
+Food/Drink nativeCore may include:
+- Supply
+- native Stat/recovery
+```
+
+```new
+finalEscapeCap=0.96 (귀환석 rescue roll clamp; the ordinary retreat roll clamps at 0.94)
+- Supply, only where a Trait entry states it (e.g. 소식가 / 대식가 in NPC_TRAIT)
+Food/Drink nativeCore for Fresh Store Supports and category affinity is positive native Stat only.
+Supply stays its own channel; Fresh Store Supports leave Supply unchanged.
+```

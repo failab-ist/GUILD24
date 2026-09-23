@@ -921,7 +921,7 @@ First forecast tutorial explains:
 actual expedition may differ from prediction.
 
 Destination reliability tutorial explains the system-level rule, not one specific Trait:
-`특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.`
+`이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.` (exact copy: COPY_WORLD_VOICE_v2.8.0.md tutorial coach)
 
 Do not center the tutorial around 허세.
 
@@ -1118,7 +1118,7 @@ Hierarchy:
 2. why
 3. what changed
 
-- Result 정보: 원정 fatigue gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **NPC 소지금 획득**.
+- Result 정보: 원정 fatigue gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **원정 소지금 획득**.
 
 Importance hierarchy:
 - routine success=compact
@@ -1134,7 +1134,7 @@ Avoid:
 ### NIGHT — EXACT CONTROLS
 
 Exactly two Player controls:
-- `다음`
+- `다음` (on the last result it reads `마감으로`)
 - `전체 건너뛰기`
 
 Removed:
@@ -2018,7 +2018,7 @@ Detailed player-facing terminology / DATA-FUNCTION-FLAVOR / Voice:
 
 Already-approved terminology must be used:
 - 폭식 -> 탐식
-- 전리품 -> NPC 소지금 획득
+- 전리품 -> 원정 소지금 획득
 - 탈출 보정 -> 탈출 확률
 - 부상 위험 -> 부상 확률
 - 1200G / 24칸 -> 1000G / 18칸

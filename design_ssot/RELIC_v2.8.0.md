@@ -902,7 +902,7 @@ Other Expedition Relics that inspect Item functional role continue to use actual
 
 Fresh:
 - active Food/Drink pool must span multiple prices/rarities/roles
-- native core boost means Supply + native Stat/recovery only unless Relic explicitly says otherwise
+- native core boost means positive native Stat only; Supply stays its own channel
 - specialist FieldGear must remain the more reliable dedicated Counter
 
 Category checks must use Food/Drink categories rather than stale legacy `fresh` category aliases.

@@ -66,7 +66,7 @@ T2=fire + increasedCombatPower
 T3=strong(fire) + highCombatPower
 
 Gate required Combat Power carries a Family factor `fireCombat=0.90`.
-Fire-family occurrence weighting is not changed.
+Fire has no special occurrence weighting: Families are drawn uniformly.
 
 armorHazard=NO
 
@@ -337,10 +337,24 @@ Day term
 = min(Day, 9) × 1.70 + max(0, Day - 9) × 0.40
 ```
 
-Every other term is unchanged: the base constant, the Tier term, the Family adjustment and the
-Family Combat multiplier all keep their current values.
+Full required Power (Source-exact):
 
-Reference anchors (Tier 1, ordinary Family):
+```text
+Gate Power
+= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat
+× Event danger multiplier × (1 + (50 - region) × 0.001)
+
+FireTerm = 6 + (Tier - 1) × 8 for fire, else 0
+FamilyCombat = fireCombat 0.90 for fire, else 1
+familyBase: spider 2 · slime 2 · fire 3 · crypt 3 · snow 4
+region: 0..100, starts 50; each Night +2 per win, -4 per death, -1 per other result
+
+Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
+Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
+familyReward: spider 1 · slime 1 · fire 1.15 · crypt 1.10 · snow 1.25 · Final 2
+```
+
+Day-term reference anchors:
 
 ```text
 D9  = 15.30

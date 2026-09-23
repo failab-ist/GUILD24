@@ -237,10 +237,8 @@ Do not dump every modifier used in calculation.
 Show only effects that were meaningfully relevant to the actual result.
 
 Good:
-- 농축해독제 → 독 노출 크게 감소
 - 핫팩 → 냉기 대응
 - 대식가 → Food core effect 강화
-- 귀환석 → 퇴각 가능성 확보
 
 Avoid:
 - long modifier ledger
@@ -559,7 +557,7 @@ Do not imply loot that was not actually granted.
 ### NPC WALLET RESULT TERMINOLOGY
 
 Use:
-`NPC 소지금 획득`
+`원정 소지금 획득`
 
 Do not use `전리품` where it can be read as Store/Player Gold.
 
@@ -774,7 +772,6 @@ NIGHT owns:
 CLOSING owns:
 - store economics
 - aggregate business result
-- compact cross-day takeaway
 
 ## D30 / FINAL
 

@@ -394,7 +394,7 @@ Lava Noodle retains Food/Hybrid identity.
 ### DI-Q-v28-3 — MEAL VS WATER IDENTITY
 ### DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
 ### DI-Q-v28-9 — REPLACEMENT FLAVOR
-### ITEM-Q10 — PREMIUM LUNCH
+### ITEM-Q10 — PREMIUM LUNCH (`premium` / 길드 특제 도시락)
 ### ITEM-Q72 — POTION LADDER
 ### ITEM-Q74 — SPIRIT STAT ROUTE
 ### ITEM-Q82 — DIRECT STAT ITEM RELEVANCE
@@ -456,3 +456,9 @@ Design owners under test: `DUNGEON_HAZARD_v2.8.0.md`, `ITEM_v2.8.0.md`.
   NPC_TRAIT_QA NPC-Q03 "NO HIDDEN JOB EFFECT"; no TEST GAP.
 - UNRESOLVED (in ITEM, reported to the User): whether generic Fresh / Food-affinity boosts may touch
   Supply ("Food affinity may boost: Supply" vs "Supply remains its own channel").
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+C: label names the current item.
+
+(The heading was already a declared new line; its declaration above now carries the new label.)

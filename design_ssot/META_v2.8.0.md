@@ -285,7 +285,7 @@ D10:
 - may appear in the same D10 Offer generation
 - new Run still blocks appearance before D10
 - account toast once
-- copy: `새 상품 해금 · 길드 프리미엄 도시락`
+- copy: `새 상품 해금 · 길드 특제 도시락`
 
 D14:
 - account permanent unlock: World Tree Amulet

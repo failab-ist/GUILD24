@@ -591,3 +591,18 @@ Supporting copy:
 아이템을 지급하기 전 현재 상태를 기준으로 한 전망입니다.
 보급과 원정 중 변수에 따라 실제 결과는 달라질 수 있습니다.
 ```
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+A5 D25 report button is `확인` (Source). A6 the older destination wording is replaced by the coach step.
+
+```text
+> 최종 준비
+Authoritative Function wording:
+> 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.
+```
+
+```new
+> 확인
+Authoritative wording: the 목적지 tutorial coach step below.
+```

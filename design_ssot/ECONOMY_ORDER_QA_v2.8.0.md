@@ -666,10 +666,10 @@ Do not auto-tune weights during frozen QA; report a balance finding if measured 
 
 ### WALLET
 PASS:
-- Stage 9 measures 2-slot affordability/use
+- Full-run balance measurement measures 2-slot affordability/use
 
 ### D30 PREP START GOLD
-Stage 9 reports P10/P25/median/P75/P90.
+Full-run balance measurement reports P10/P25/median/P75/P90.
 Target center for normal engaged play:
 `median ≈ 1,500G`.
 

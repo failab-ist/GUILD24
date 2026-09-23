@@ -1010,9 +1010,7 @@ System은 계속 해설하지 않는다.
 Copy Polish 때문에 Rule 설명을 빼지 않는다.
 
 목적지 신뢰도는 특정 Trait 이름을 중심으로 가르치지 않는다.
-Authoritative Function wording:
-
-> 특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.
+Authoritative wording: the 목적지 tutorial coach step below.
 
 App Onboarding 문체를 피한다.
 
@@ -1593,7 +1591,7 @@ Authoritative Hazard wording:
 
 Button:
 
-> 최종 준비
+> 확인
 
 Do not add a strategy-summary sentence after these facts.
 The information itself is the decision material.

@@ -104,7 +104,7 @@ dailyEventChance = 35%
 ```
 
 심층원정 통합 후 정상적인 30일 Run에서 약 6.7–7.0회의 Normal Event 기대값을 시작값으로 한다.
-실제 분포는 Stage 9에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
+실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
 
 ### Deep Expedition Day exclusion
 
@@ -130,7 +130,7 @@ expected Normal Events become approximately **6.65–7.0 per Run** before other
 eligibility exclusions.
 
 Do not automatically raise `dailyEventChance` to compensate.
-Stage 9 measures actual Event count; any later chance rebalance requires approval.
+Full-run balance measurement measures actual Event count; any later chance rebalance requires approval.
 
 On Deep Expedition Days:
 - no Normal Event Focused Reveal

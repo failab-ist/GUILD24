@@ -496,3 +496,15 @@ The same-day-precedence rule itself is kept verbatim.
 ## BALANCE
 ### METRICS
 ```
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+B10: same decision as ITEM (Fresh Store Supports leave Supply unchanged).
+
+```text
+- native core boost means Supply + native Stat/recovery only unless Relic explicitly says otherwise
+```
+
+```new
+- native core boost means positive native Stat only; Supply stays its own channel
+```

@@ -871,7 +871,7 @@ Expected:
 FAIL:
 - skewer/Hotbar Flavor survives on either replacement ID
 
-### ITEM-Q10 — PREMIUM LUNCH
+### ITEM-Q10 — PREMIUM LUNCH (`premium` / 길드 특제 도시락)
 
 SETUP:
 Compare across multiple contexts.

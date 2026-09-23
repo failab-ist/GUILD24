@@ -218,7 +218,7 @@ v2.8 does not change Fire-family occurrence weighting.
 ```
 
 ```new
-Fire-family occurrence weighting is not changed.
+Fire has no special occurrence weighting: Families are drawn uniformly.
 ```
 
 ```text
@@ -635,3 +635,32 @@ Final Hazard aggregation -> `FINAL_EXPEDITION_v2.8.0.md`
 - `v2.8 does not change Fire-family occurrence weighting.` No Fire occurrence weighting is defined anywhere in the chain; kept as the binding constraint `Fire-family occurrence weighting is not changed.` (see also `SOURCE_ADOPTION_QA_v2.8.0.md`: no special occurrence weighting currently proven). The reword has no reference point: Source picks Families uniformly.
 - Source locations for items 1-2 (review finding): the Gate-Power base constant / Tier term / Family adjustment and `Gate scale` / `Gate reward multiplier` exist only in Source (`shop.js:134` / `shop.js:209`, `catalog.js` Family base / reward). Reported to the User; no text change.
 - `departure Fatigue`: the v2.7 general Expose item `- departure Fatigue after preRecovery` is superseded by the v2.8 `SALE may expose:` item `- departure Fatigue after committed preRecovery`; the display surface is now stated only under SALE may expose. Reported to the User; no text change.
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+A3: the Gate Power terms, Gate scale, Gate reward multiplier and the region factor are written down
+from Source (dist/systems/shop.js makeDungeon / morning, dist/data/catalog.js). B13: Fire weighting
+stated as uniform draw (Source).
+
+(Fire line: its earlier declaration above now carries the new wording.)
+
+```text
+Every other term is unchanged: the base constant, the Tier term, the Family adjustment and the
+Family Combat multiplier all keep their current values.
+Reference anchors (Tier 1, ordinary Family):
+```
+
+```new
+Full required Power (Source-exact):
+Gate Power
+= (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat
+× Event danger multiplier × (1 + (50 - region) × 0.001)
+FireTerm = 6 + (Tier - 1) × 8 for fire, else 0
+FamilyCombat = fireCombat 0.90 for fire, else 1
+familyBase: spider 2 · slime 2 · fire 3 · crypt 3 · snow 4
+region: 0..100, starts 50; each Night +2 per win, -4 per death, -1 per other result
+Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
+Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
+familyReward: spider 1 · slime 1 · fire 1.15 · crypt 1.10 · snow 1.25 · Final 2
+Day-term reference anchors:
+```

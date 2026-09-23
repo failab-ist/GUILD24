@@ -305,3 +305,17 @@ Presentation QA -> `UI_UX_QA_v2.8.0.md`
 ## D30 FINAL PREPARATION
 ## BALANCE QA
 ```
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+C: old stage label renamed.
+
+```text
+- Stage 9 measures 2-slot affordability/use
+Stage 9 reports P10/P25/median/P75/P90.
+```
+
+```new
+- Full-run balance measurement measures 2-slot affordability/use
+Full-run balance measurement reports P10/P25/median/P75/P90.
+```

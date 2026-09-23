@@ -221,16 +221,15 @@ Category-based Trait/Relic modifiers only boost the intended category core effec
 
 Example:
 Food affinity may boost:
-- Supply
+- Supply, only where a Trait entry states it (e.g. 소식가 / 대식가 in NPC_TRAIT)
 - food-native recovery/Stat
 
 ### FOOD / DRINK CORE EFFECT
 
 Fresh-category Relics and category-affinity effects use `native core effect`, not a blanket whole-item multiplier.
 
-Food/Drink nativeCore may include:
-- Supply
-- native Stat/recovery
+Food/Drink nativeCore for Fresh Store Supports and category affinity is positive native Stat only.
+Supply stays its own channel; Fresh Store Supports leave Supply unchanged.
 
 genericWholeItemMultiplier=NO
 
@@ -676,7 +675,7 @@ Rare Insurance identity:
 - may convert eligible Severe/Death crisis to Retreat
 
 escapeBonus=+50%p
-finalEscapeCap≈90–95% tuning band
+finalEscapeCap=0.96 (귀환석 rescue roll clamp; the ordinary retreat roll clamps at 0.94)
 
 ### 세계수 생환부적
 rarity=Epic

@@ -207,7 +207,7 @@ PER-PHASE APPLICATION PASS:
   underline / ink on hover and focus, and goes dim and non-interactive when disabled, with no
   whole-element opacity fade; `- / +` keep a 44px touch target and maxQuantity behaviour is
   unchanged (`-` at q=0, `+` at q>=max, `1 / 3` above max, `최대` a q=max shortcut)
-- every NIGHT Outcome label measures 36px `var(--f-sign)`, and the NPC name and Outcome summary
+- every NIGHT Outcome label measures 36px `var(--f-sign)` on phone (desktop may scale, one size for all Outcomes), and the NPC name and Outcome summary
   measure the same whichever Outcome resolved
 - a NIGHT Death renders zero result-data rows and leaves no divider or reserved space where that
   region would be, and no route change, Deep tag, Item / supply cause or incident line either -
@@ -1153,7 +1153,7 @@ SETUP:
 Trigger the destination reliability tutorial, 허세, and 게이트 순례주간.
 
 EXPECT:
-- Tutorial says: `특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.`
+- Tutorial says: `이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.`
 - Tutorial does not frame 허세 as the whole destination system
 - Sale label uses 예상 목적지 where uncertainty is possible
 - 게이트 순례주간 Morning reveal states 1–3 affected range

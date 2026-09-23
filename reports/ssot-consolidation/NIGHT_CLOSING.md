@@ -332,3 +332,19 @@ change the Outcome, NPC name or summary type size. Exact size -> UI_UX_v2.8.0.md
   realisation after `오늘의 보급 영향` was removed.
 - UNRESOLVED, reported to the User: ``Use: `NPC 소지금 획득` `` vs COPY_AUDIT §6-8 / ITEM / Source
   `원정 소지금 획득` (carried from the chain).
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+A4: term follows COPY_AUDIT §6-8 / Source. B11: the two unproven-claim examples are removed.
+B12: the dead cross-day takeaway line is removed.
+
+```text
+`NPC 소지금 획득`
+- 농축해독제 → 독 노출 크게 감소
+- 귀환석 → 퇴각 가능성 확보
+- compact cross-day takeaway
+```
+
+```new
+`원정 소지금 획득`
+```

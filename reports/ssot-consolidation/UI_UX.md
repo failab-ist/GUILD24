@@ -559,3 +559,22 @@ Items raised during consolidation and closed by the independent review:
 2. v2.6 NIGHT `stronger visual emphasis` for meaningful results vs v2.8 same Outcome-label size: different scopes (result-level emphasis vs label size; v2.8 differentiates Outcomes by copy and tone/colour).
 
 3. v2.7 AUDIO FEEDBACK reuse-first rule vs PRESENTATION_POLISH_v2.8.0 audio: SPEC_INDEX routes audio presentation to PRESENTATION_POLISH, which reuses the current audio architecture; the target carries a pointer there.
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+A4 term; A6 destination tutorial follows the current coach wording (Source); A7 the last NIGHT result's
+primary control reads `마감으로` (Source, USER CONFIRMED 2026-09-22).
+
+```text
+- Result 정보: 원정 fatigue gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **NPC 소지금 획득**.
+- 전리품 -> NPC 소지금 획득
+`특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.`
+- `다음`
+```
+
+```new
+- Result 정보: 원정 fatigue gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **원정 소지금 획득**.
+- 전리품 -> 원정 소지금 획득
+`이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.` (exact copy: COPY_WORLD_VOICE_v2.8.0.md tutorial coach)
+- `다음` (on the last result it reads `마감으로`)
+```

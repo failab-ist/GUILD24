@@ -910,7 +910,7 @@ separately and do not define the 1,500G center.
 
 This is a balance center, not a forced per-Run value.
 
-Stage 9 reports at minimum:
+Full-run balance measurement reports at minimum:
 P10 / P25 / median / P75 / P90
 plus Gold In / Gold Out decomposition.
 

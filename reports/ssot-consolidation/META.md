@@ -442,3 +442,15 @@ copy -> `COPY_WORLD_VOICE_v2.8.0.md`
 ## UNRESOLVED — stale product name in the D10 unlock toast copy
 
 Kept verbatim in D10 / D14 PRODUCT UNLOCK — EXACT: the D10 copy line `새 상품 해금 · 길드 프리미엄 도시락`. The current ITEM_v2.8.0.md name is `길드 특제 도시락`; Source already shows `특제` in the toast; COPY_AUDIT_APPROVED_v2.8.0.md has no entry for this line. Needs a User decision; not changed here. (`세계수 생환부적` is current: ITEM id `tree`.)
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+A1: the unlock toast names the current item (ITEM `premium` = 길드 특제 도시락), as Source does.
+
+```text
+- copy: `새 상품 해금 · 길드 프리미엄 도시락`
+```
+
+```new
+- copy: `새 상품 해금 · 길드 특제 도시락`
+```

@@ -464,3 +464,17 @@ hold the v2.5 HAZARD EVENT QA, the Deep-Day embedded QA and the v2.8 numeric acc
   "ordinary selected visitor" is undefined (Source replaces the last-drawn visitor, regulars included).
 - "임시 Wallet Modifier" vs Wallet/Event-budget display: compatible (ECONOMY_ORDER defines purchasing
   power as Wallet + temporary Event budget; display owned by UI_UX / SALE).
+
+## AMENDMENT — User decisions 2026-09-23 (decision list A / B / C)
+
+C: old stage label renamed.
+
+```text
+실제 분포는 Stage 9에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
+Stage 9 measures actual Event count; any later chance rebalance requires approval.
+```
+
+```new
+실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
+Full-run balance measurement measures actual Event count; any later chance rebalance requires approval.
+```
