@@ -798,6 +798,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 #toast.show{transform:translateX(-50%) translateY(0);opacity:1;visibility:visible;
  transition:transform .18s ease-out,opacity .18s ease-out,visibility 0s}
 @media (prefers-reduced-motion:reduce){#toast,#toast.show{transition:opacity .18s ease-out}}
+/* UI_UX §NIGHT LAYOUT — UNLOCK NOTICE: label line, then the product on its own line, which never
+   breaks into a fragment; the notice widens to the name up to the viewport */
+#toast.unlock{padding:9px 18px 11px}
+#toast .toast-label{display:block;font:400 12px/1.4 var(--ui);letter-spacing:.06em;color:var(--ink-2,var(--ink))}
+#toast .toast-name{display:block;margin-top:2px;font:600 16px/1.35 var(--ui);white-space:nowrap}
 
 /* USER-APPROVED OPENING. The runless backdrop is the game's title card: the name on one line,
    the store about to open directly under it and visibly secondary. Mulmaru is the shipped

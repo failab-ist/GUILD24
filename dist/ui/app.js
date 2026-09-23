@@ -26,7 +26,16 @@ let decoPending=null,decoFocus=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;x.cost=st.cost;}}return [...m.values()];};
-function toast(msg){$('#toast').textContent=msg;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
+/* UI_UX §NIGHT LAYOUT — UNLOCK NOTICE: `새 상품 해금 · {상품명}` is two meaning units, so it is set as
+   two lines - the fixed label, then the product - instead of one sentence the notice width
+   happens to break. The message itself is the same string the Run stored; only its setting
+   changes, and any other system message is still one plain line. */
+const UNLOCK_LABEL='새 상품 해금';
+function toast(msg){const t=$('#toast'),m=String(msg);
+ if(m.startsWith(UNLOCK_LABEL+' · ')){t.classList.add('unlock');
+  t.innerHTML='<b class="toast-label">'+E(UNLOCK_LABEL)+'</b><span class="toast-name">'+E(m.slice(UNLOCK_LABEL.length+3))+'</span>';}
+ else{t.classList.remove('unlock');t.textContent=m;}
+ $('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
 function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind);}
 /* UI_UX_v2.8 §NIGHT OUTCOME AUDIO. The Outcome is what the cue says, always. There are two ways
    a result becomes the visible one - the final departure lands on result 0, and 다음 advances to
