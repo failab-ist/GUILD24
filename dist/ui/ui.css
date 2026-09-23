@@ -2570,12 +2570,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal .flavor{margin:0;padding:9px 12px;background:#2c24180a;
  box-shadow:inset 3px 0 0 #b3a685;
  font:400 15px/1.65 var(--ui);color:#5f5440;font-style:italic}
-/* D10 / D20 disclose nothing new, so they carry the identity portrait at the v2.8 64px baseline
-   rather than the full art - the question they open is the primary information. */
-/* the identity thumbnail the compact D10 / D20 beats carry. §ORNAMENT RESTRAINT: no mount box
-   around a 64px thumbnail - it sits on the record. */
-.boss-id{margin:0;display:flex;justify-content:center;align-self:flex-start}
-.boss-id img{display:block;width:auto;max-width:64px;max-height:64px;object-fit:contain;image-rendering:auto}
 /* what the next report answers: a filing note, not a heading */
 .boss-reveal .next-report{margin:6px 0 0;padding-top:9px;box-shadow:inset 0 2px 0 #2c241826;
  font:600 12px/1.5 var(--ui);letter-spacing:.06em;color:#8a7c60}
@@ -2695,7 +2689,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
      face, its explanation attached under one ruled entry.
    - D25: the disclosure line leads in ink, and the two Families are two ruled sections of the
      same record (their colour kept as the entry rule) instead of two tinted, ringed cards.
-   No FINAL domain art, no seal, no new frame. D10 / D20 untouched (.boss-id, compact).
+   No FINAL domain art, no seal, no new frame.
    ===================================================================== */
 /* DIRECTOR 4A closeout: no floor line either - the Boss stands on the paper itself */
 .boss-reveal .boss-art{background:none;padding:0;box-shadow:none}
@@ -2711,6 +2705,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .boss-reveal.final .fam-card{padding:11px 0 11px 13px;background:none;box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
 .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26),inset 0 1px 0 #2c241833}
 .boss-reveal.final .fam-card b{margin-bottom:7px;font-size:18px}
+/* BATCH 4B — D10 / D20, the concise investigation beats. The Boss is the same full figure on the
+   same record (the shared .boss-art caps: 240 phone / 300 desk); what makes them quieter is the
+   rest - one plain report line instead of a name, Trait or Family payload, the small next-report
+   note, a lighter acknowledgement and a shorter sheet. No name card, no accent, no filler. */
+.boss-reveal.d10 .lede,.boss-reveal.d20 .lede{font:400 15px/1.6 var(--ui);color:#3c3527}
+.modal.doc:has(.boss-reveal.d10) .approve,.modal.doc:has(.boss-reveal.d20) .approve{min-height:50px;min-width:148px;font-size:16px}
 /* D0 — the first-Morning briefing (UI_UX §BOSS INFORMATION PRESENTATION / D0): the same record,
    no Boss on it. The objective leads; DAY 5 and DAY 30 are told apart by the record's own LED
    date face and spacing - no timeline cards, no rules, no art. */
@@ -2731,8 +2731,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    compact D10 / D20 records keep theirs */
 @media (min-width:1024px){
  .modal.doc.narrow:has(.boss-reveal.d5),.modal.doc.narrow:has(.boss-reveal.d15){max-width:580px}
- /* D0 is a short briefing, so it takes a smaller step: a readable document, not a poster */
- .modal.doc.narrow:has(.boss-reveal.d0){max-width:540px}
+ /* D0 is a short briefing, so it takes a smaller step: a readable document, not a poster; the
+    concise D10 / D20 reports take the same measure, one step under D5 / D15 */
+ .modal.doc.narrow:has(.boss-reveal.d0),.modal.doc.narrow:has(.boss-reveal.d10),
+ .modal.doc.narrow:has(.boss-reveal.d20){max-width:540px}
+ .boss-reveal.d10 .lede,.boss-reveal.d20 .lede{font-size:16px}
  .boss-reveal.d0 .lede{font-size:18px}
  .boss-reveal .d0-step b{font-size:17px}
  .boss-reveal .d0-step p{font-size:16px}

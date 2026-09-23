@@ -2258,15 +2258,16 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  // the reports reuse the existing shell
  assert.ok(/if\(stage==='d10'\|\|stage==='d20'\)/.test(fn('bossReveal')),'the two beats render through the existing reveal');
  assert.ok(/case'boss-seen'/.test(app)&&/BOSS_BEATS\.find\(x=>x\[1\]===st\)/.test(app),'and D5/D10/D15/D20/D25 are consumed by the existing one');
- // D10/D20 identity portrait at the 64px baseline, which the USER amendment did not move
- assert.ok(/\.boss-id img\{[^}]*max-width:64px;max-height:64px/.test(css),'the D10 / D20 identity portrait is 64px');
- /* The phone art caps are the amended 240 / 200 (see the SA-Q10 group above for why). This
-    clause is about the D10 / D20 beats not growing art of their own, so it asserts the pair
-    still exists at the current baseline rather than at the superseded numbers. */
- assert.ok(/\.boss-art img\{max-height:240px\}/.test(css)&&/\.boss-reveal\.final \.boss-art img\{max-height:200px\}/.test(css),
-  'the phone art limits are the amended pair, and D10 / D20 still carry only the 64px portrait');
- assert.ok(!/class="boss-art"/.test(fn('bossReveal').split("stage==='d10'")[1].split('return')[1]||''),
-  'the one-tap beats do not carry the full art');
+ /* UI_UX §D5 / D10 / D15 / D20 / D25 and UI-Q-v28-10, amended 2026-09-23 (BATCH 4B): the 64px
+    D10 / D20 identity thumbnail is retired. The two concise beats reuse the same full Boss-art
+    figure as D5 / D15 under the same caps (240 phone / 300 desk) - lower importance comes from
+    shorter content, never from a smaller Boss. The superseded 64px expectation is not kept. */
+ const compact=fn('bossReveal').split("stage==='d10'||stage==='d20'")[1].split("stage==='d0'")[0];
+ assert.ok(/\+plate/.test(compact)&&!/boss-id/.test(compact),'D10 / D20 carry the shared full Boss-art figure, not a thumbnail');
+ assert.ok(!/\.boss-id\b/.test(css)&&!/max-width:64px;max-height:64px/.test(css),'the 64px thumbnail rule is gone');
+ assert.ok(/\.boss-art img\{max-height:240px\}/.test(css)&&/\.boss-art img\{max-height:300px\}/.test(css),
+  'the shared phone / desk caps (240 / 300) are the ones D10 / D20 now use');
+ assert.ok(!/\.boss-reveal\.d(10|20)[^{]*\.boss-art img\{/.test(css),'no D10 / D20-only art size - one art family');
 });
 
 test('BOSS cadence: each beat is seen once, precedes the Store Support decision, and draws nothing',()=>{

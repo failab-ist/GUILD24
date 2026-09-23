@@ -1479,11 +1479,13 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    +'<div class="trait"><p class="trait-name"><span class="trait-k">특성</span><span class="trait-sep"> — </span><b>'+E(name)+'</b></p>'
    +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div></div></div>';}
  /* D10 / D20 are one-tap information beats: they open the question the next report answers and
-    disclose nothing new about the Boss, so they carry the compact identity portrait rather than
-    the major-beat art, and stay compact. Neither draws anything from the run stream. */
+    disclose nothing new about the Boss. BATCH 4B (UI_UX §D5 / D10 / D15 / D20 / D25): the Boss
+    stays the same full figure D5 and D15 show - the investigation is about the same subject -
+    and the beat stays concise through its one line, its note and a quieter hierarchy, not by
+    shrinking the Boss to a 64px thumbnail. Neither draws anything from the run stream. */
  if(stage==='d10'||stage==='d20'){const t=stage==='d10'?c.d10:c.d20;
   return '<div class="boss-reveal '+stage+'">'+bossFiled()
-   +(art?'<figure class="boss-id"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'')
+   +plate
    +'<p class="lede">'+E(t.line.replace('{보스명}',b.name))+'</p>'
    +'<p class="next-report">'+E(t.next)+'</p></div>';}
  /* SA-Q47 / BOSS_v2.8 §D0 INFORMATION BOUNDARY: the Run objective and the investigation cadence
