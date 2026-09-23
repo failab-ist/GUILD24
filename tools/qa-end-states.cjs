@@ -8,6 +8,8 @@
 //                 only until that resolution is a clear. No result field is written.
 //   finalfail   - the same setup, a Final that resolves a failure with a party
 //   noparty     - the same setup with nobody able to go (as qa-visual `endfail`)
+//   supplied    - the finalfail party, each member first handed stock through the real Final
+//                 supply API (game.supplyFinal), so the ending owns a last carried supply
 //   deathlimit / bankrupt / other - a Run played to its natural end with the qa-visual policy
 //   node tools/qa-end-states.cjs <out-dir> [seedCount] [statesFrom.json]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
@@ -35,6 +37,7 @@ const STEP=`(()=>{
  return s.phase;
 })`;
 const CLASSIFY=`(()=>{const s=Guild24.game.run;if(!s||s.phase!=='end')return null;
+ if(s.finalReport&&(s.finalReport.members||[]).some(m=>(m.items||[]).length))return 'supplied';
  if(!s.finalReport&&s.day===30)return 'noparty';
  if(s.finalReport)return s.win?'clear':(s.finalReport.members||[]).length?'finalfail':'noparty';
  if(s.stats.deaths>=DATA.balance.deathLimit)return 'deathlimit';
@@ -42,7 +45,7 @@ const CLASSIFY=`(()=>{const s=Guild24.game.run;if(!s||s.phase!=='end')return nul
 const WANT=['clear','finalfail','noparty','deathlimit','bankrupt'];
 // the scan stops once the owned Final endings and one natural ending are in hand; a bankruptcy is
 // recorded if a natural Run happens to reach one, but no policy is bent to force it
-const SCAN_WANT=['clear','finalfail','noparty','deathlimit'];
+const SCAN_WANT=['clear','finalfail','noparty','deathlimit','supplied'];
 
 function serve(){
  const child=spawn(process.execPath,[path.resolve(__dirname,'preview.cjs'),'--port',String(PORT)],{stdio:['ignore','pipe','inherit']});
@@ -69,7 +72,7 @@ async function natural(page){
   await step(page);}
  return false;}
 // qa-visual's controlled D30 setup, then the Final sent (or nobody able to go)
-async function final(page,noparty,grown){
+async function final(page,noparty,grown,supplied){
  for(let i=0;i<800;i++){
   if(await page.evaluate(`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`))break;
   if(await page.evaluate(`Guild24.game.run.phase==='end'`))return false;
@@ -79,11 +82,15 @@ async function final(page,noparty,grown){
  if(noparty)await page.evaluate(`(()=>{for(const n of Guild24.game.run.npcs)n.alive=false;})()`);
  else await page.evaluate(grown=>{const g=Guild24.game;for(const n of g.finalEligible().slice(0,g.finalRequired())){
   if(grown){n.level=40;n.stats={combat:220,survival:160,mobility:140,spirit:120};}g.selectFinal(n.id);}},!!grown);
+ if(supplied)await page.evaluate(`(()=>{const g=Guild24.game,s=g.run;
+  for(const id of s.team){const n=s.npcs.find(x=>x.id===id);
+   for(let i=0;i<Adventurer.slots(n)&&s.inventory.length;i++){const before=s.inventory.length;
+    try{g.supplyFinal(id,s.inventory[0].id);}catch(e){}if(s.inventory.length===before)break;}}})()`);
  await page.evaluate(`(()=>{Guild24.game.boss();Guild24.render();})()`);
  return true;}
 async function reach(page,f){
  await begin(page,f.seed);
- const ok=f.path==='natural'?await natural(page):await final(page,f.path==='noparty',f.path==='grown');
+ const ok=f.path==='natural'?await natural(page):await final(page,f.path==='noparty',f.path==='grown',f.path==='supplied');
  if(!ok)return false;
  /* a player read every Boss beat on its own Morning; this drive never drew them, so they are
     marked seen exactly as qa-visual.cjs does, or the next unseen beat covers the ending */
@@ -106,13 +113,14 @@ async function reach(page,f){
   await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
   for(let k=1;!STATES&&k<=SEEDS&&SCAN_WANT.some(w=>!found[w]);k++){
    const seed='qa-end-'+k;
-   for(const p of ['final','grown','noparty','natural']){
+   for(const p of ['final','grown','noparty','natural','supplied']){
+    if(p==='supplied'&&found.supplied)continue;
     if(p==='noparty'&&found.noparty)continue;
     if(p==='final'&&found.finalfail)continue;
     if(p==='grown'&&found.clear)continue;
     if(p==='natural'&&found.deathlimit&&found.bankrupt)continue;
     await begin(page,seed);
-    const ok=p==='natural'?await natural(page):await final(page,p==='noparty',p==='grown');
+    const ok=p==='natural'?await natural(page):await final(page,p==='noparty',p==='grown',p==='supplied');
     const kind=ok?await page.evaluate(CLASSIFY):null;
     if(kind&&!found[kind])found[kind]={seed,path:p,kind};
    }
