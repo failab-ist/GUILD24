@@ -237,6 +237,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  box-shadow:inset 0 0 0 1px #ffffff1f}
 .relic-ref b{font:500 13px/1 var(--f-led);color:var(--gold);font-variant-numeric:tabular-nums}
 .relic-ref:hover{background:#0000006b;color:#f2e7cd}
+/* BATCH 2A. The same reference control, but ORDER is the one surface where it stands on paper:
+   the dark-surface plate came out washed and orphaned on the form. Here it is a margin note in
+   the document's own ink, still secondary to every decision on the page. */
+.p-order .relic-ref{min-height:32px;padding:6px 2px;background:none;color:#6b6350;box-shadow:none;
+ font-size:12px;text-decoration:underline dotted #6b635099;text-underline-offset:4px}
+.p-order .relic-ref b{color:#8a6a2c}
+.p-order .relic-ref:hover{background:none;color:#3c3527;text-decoration:underline dotted #3c3527}
+.p-order .ref-row{margin:0;padding:6px 16px 0}
 /* Authored phone-first, like the rest of this sheet: on a phone the bottom disclosure would
    be a second copy of the same reading, at the end of the scroll where it is no use before a
    decision, so the compact control replaces it. The desk has room for both and keeps the
@@ -434,9 +442,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    ===================================================================== */
 .p-order{background:var(--tex-wood),#1e150e;background-size:64px 24px}
 .p-order .stage-scroll{padding:22px var(--gutter) 30px}
-.clip{position:relative;z-index:3;width:78px;height:22px;margin:0 auto -10px;
- background:linear-gradient(180deg,#9aa3ab 0 8px,#6e777f 8px 22px);
- box-shadow:inset 2px 2px 0 #cfd6dc,inset -2px -2px 0 #454d54,3px 4px 0 #00000080}
+/* BATCH 2A §ORDER MAJOR OBJECT. At 78px the clip read as a lost pill on an 860px sheet, so
+   the fixture scales with the form it holds: one steel bar across the head of the paper, with
+   the two screws that actually hold it. It is the only fixture on the document. */
+.clip{position:relative;z-index:3;width:clamp(78px,26vw,180px);height:24px;margin:0 auto -10px;
+ background:linear-gradient(180deg,#9aa3ab 0 9px,#6e777f 9px 24px);
+ box-shadow:inset 2px 2px 0 #cfd6dc,inset -2px -2px 0 #454d54,4px 5px 0 #00000080}
+.clip:before,.clip:after{content:'';position:absolute;top:7px;width:8px;height:8px;background:#5a646c;
+ box-shadow:inset 0 0 0 2px #2b3238,inset 3px 3px 0 #99a4ac,3px 0 0 #2b323859,-3px 0 0 #2b323859}
+.clip:before{left:13px}.clip:after{right:13px}
 .form{position:relative;background:var(--tex-paper),#efe7d2;color:var(--ink);box-shadow:5px 6px 0 #00000080;padding:0 0 4px}
 .form:before,.form:after{content:'';display:block;height:8px;
  background:linear-gradient(-45deg,#efe7d2 25%,#00000000 25%) 0 0/12px 8px repeat-x,
@@ -444,14 +458,28 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .form:before{transform:scaleY(-1)}
 /* the document says what it is and nothing more */
 /* the 76px right margin existed to clear the letterhead seal, which §ORNAMENT RESTRAINT removed */
-.form-head{padding:14px 16px 12px;position:relative;box-shadow:inset 0 -3px 0 var(--ink)}
+/* BATCH 2A. A printed letterhead: the title and the DAY / branch line sit on one baseline once
+   there is width for it, closed by the double rule a form is ruled with - a hairline under the
+   ink one - rather than a single bar. Nothing is added to the document and nothing is dropped. */
+.form-head{padding:14px 16px 11px;position:relative;display:grid;grid-template-columns:minmax(0,1fr);
+ align-items:end;gap:7px 14px;background:#2c24180a;
+ box-shadow:inset 0 -3px 0 var(--ink),inset 0 -6px 0 #efe7d2,inset 0 -7px 0 #2c241840}
 .form-head h1{font:500 36px/1 var(--f-sign);letter-spacing:.1em;-webkit-font-smoothing:none}
-.form-head .docno{display:block;margin-top:7px;font:400 12px/1 var(--ui);font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.form-head .docno{display:block;font:400 12px/1 var(--ui);font-variant-numeric:tabular-nums;color:var(--ink-2);
+ letter-spacing:.06em}
 /* ledger: one aligned money column, the result leading */
 .ledger{padding:10px 16px 12px;display:grid;gap:2px;box-shadow:inset 0 -2px 0 var(--paper-rule)}
+/* BATCH 2A §ORDER LEDGER. Five separate label/number rows read as a dashboard stack. A form
+   carries them on one money column joined by a printed leader, so they read as lines of the
+   same document. The result keeps its own weight and takes no leader - the rule above it is
+   what separates it. */
 .ledger div{display:flex;align-items:baseline;gap:12px}
-.ledger span{font:400 13px/1.7 var(--ui);color:var(--ink-2)}
-.ledger b{margin-left:auto;font:400 18px/1.5 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ledger span{display:flex;align-items:baseline;flex:1 1 auto;min-width:0;gap:10px;
+ font:400 13px/1.7 var(--ui);color:var(--ink-2)}
+.ledger span:after{content:'';flex:1 1 auto;min-width:14px;margin-bottom:5px;
+ border-bottom:1px dotted #2c24184d}
+.ledger b{flex:0 0 auto;font:400 18px/1.5 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ledger .out span:after{display:none}
 .ledger .pick b{color:#8a6a2c}
 .ledger .out{margin-top:5px;padding-top:7px;box-shadow:inset 0 2px 0 var(--ink)}
 .ledger .out span{font-weight:600;color:var(--ink)}
@@ -477,8 +505,17 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .line{position:relative;display:grid;grid-template-columns:22px 46px minmax(0,1fr);gap:0 10px;padding:12px 16px 10px;
  box-shadow:inset 0 -2px 0 var(--paper-rule)}
 .line:nth-child(even){background:#00000006}
-.line.on{background:#2f7a4d10;box-shadow:inset 5px 0 0 #2f7a4d,inset 0 -2px 0 var(--paper-rule)}
-.line .no{font:400 12px/2 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72}
+/* BATCH 2A §ORDER OFFER LINES. The selected row was a green full-height left inset stripe over
+   a green wash - the coloured status bar Presentation QA forbids as a selection shortcut, and
+   the runtime capture confirmed it on the real screen. A row carrying a quantity is a row that
+   has been FILLED IN, so it says that as the document does: the entry number is inked in, the
+   paper under the row is worked, and the rule closing it is ink instead of a printed hairline.
+   No colour carries the state, and no second stripe replaces the first. */
+.line.on{background:#2c24180f;box-shadow:inset 0 -2px 0 var(--ink)}
+.line .no{align-self:start;font:400 12px/2 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72;text-align:center}
+/* the entry number only - a chip the height of its own line, never a bar down the row */
+.line.on .no{background:var(--ink);color:#f3ecd8;font-weight:600}
+.line.on .nm b{color:#1f1809}
 .crate-art{position:relative;display:block;width:var(--sz);height:var(--sz)}
 .crate-art svg{position:absolute;inset:0;width:100%;height:100%}
 .crate-in{position:absolute;inset:0;display:grid;place-items:center}
@@ -496,11 +533,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* 4 economics and stock, tertiary */
 .line .have{display:block;margin-top:5px;font:400 12px/1.5 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72}
 /* the price tag hangs at the end of the name row, never off the paper */
-.tag-art{position:relative;flex:0 0 auto;display:block;width:78px;height:32px;margin-left:auto;color:#357f52;
+/* BATCH 2A. The tag was a saturated web-shop green, the loudest object on a paper form and
+   louder than the Item it prices. It is the same tag, tied on in the phase's own steel. */
+.tag-art{position:relative;flex:0 0 auto;display:block;width:78px;height:32px;margin-left:auto;color:#b7c3cb;
  filter:drop-shadow(2px 2px 0 #00000038)}
 .tag-art svg{position:absolute;inset:0;width:100%;height:100%}
 .tag-art b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1px;padding-left:10px;
- white-space:nowrap;font:600 17px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2fbf4}
+ white-space:nowrap;font:600 17px/1 var(--ui);font-variant-numeric:tabular-nums;color:#1c242b}
 .tag-art b i{font-style:normal;font-size:12px;opacity:.85;font-weight:400}
 /* 5 quantity. UI_UX §PER-PHASE APPLICATION RULES (ORDER) — QUANTITY WEIGHT, USER AMENDMENT
    2026-09-22: the cluster read too heavy. Its hierarchy is item information > readout / stepper
@@ -511,15 +550,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    read as a game button; the press darkens the face and moves it.
    The readout is the cluster's centre and the one recessed, read-only part. */
 .dial{grid-column:1/-1;display:flex;align-items:center;gap:2px;margin-top:10px;flex-wrap:wrap}
-.dial button{min-width:44px;min-height:44px;padding:9px 12px;background:#b09a6c;background-clip:content-box;
- color:#1f1809;font:600 17px/1 var(--ui);box-shadow:none}
-.dial button:hover{background:#bda87b;background-clip:content-box}
-.dial button:active{transform:translate(1px,1px);background:#9a8654;background-clip:content-box}
+.dial button{min-width:44px;min-height:44px;padding:9px 12px;background:#97a3ab;background-clip:content-box;
+ color:#161e25;font:600 17px/1 var(--ui);box-shadow:none}
+.dial button:hover{background:#a6b2b9;background-clip:content-box}
+.dial button:active{transform:translate(1px,1px);background:#7f8b94;background-clip:content-box}
 /* an unusable key is a dead face: flat, still legible, never a whole-element fade */
 .dial button:disabled{opacity:1;transform:none;background:#d3c9ad;background-clip:content-box;color:#7d7461}
 /* the one recessed part of the cluster: the number is read, not pressed */
 .dial output{min-width:46px;text-align:center;font:600 18px/40px var(--ui);font-variant-numeric:tabular-nums;
- background:#fbf6e6;color:#1f1809;box-shadow:inset 0 0 0 2px #9c8f72,inset 2px 2px 0 #00000026}
+ background:#f6efda;color:#1f1809;
+ box-shadow:inset 0 0 0 2px #8e8266,inset 3px 3px 0 #2c241833,inset -2px -2px 0 #fffaeb}
 .dial .set{display:flex;gap:1px;margin-left:auto;align-items:center}
 /* the quick set is the light v2.7-class shortcut again: a secondary control with no box, no key
    plane and no shadow of its own - weaker than the stepper at every state, full touch target.
@@ -559,11 +599,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-order .dock .stamp{flex:1 1 140px;min-height:54px;font:600 clamp(15px,4.4vw,20px)/1.2 var(--ui);letter-spacing:.04em;
  display:inline-flex;align-items:center;justify-content:center;
  background:#2f3a44;color:#eef6fa;
- box-shadow:inset 0 0 0 2px #7fb0c4,4px 4px 0 #2a2317a6}
+ box-shadow:inset 0 0 0 2px #7fb0c4,inset 0 3px 0 #4a5a67,6px 6px 0 #2a2317bf}
 .p-order .dock .stamp:hover{background:#384652}
 /* the press travels and the depth closes: the stamp is driven into the form */
-.p-order .dock .stamp:active{transform:translate(3px,3px);background:#27303a;
- box-shadow:inset 0 0 0 2px #5f8899,1px 1px 0 #2a2317a6}
+.p-order .dock .stamp:active{transform:translate(4px,4px);background:#27303a;
+ box-shadow:inset 0 0 0 2px #5f8899,inset 0 3px 0 #333f49,2px 2px 0 #2a2317bf}
 .p-order .dock .stamp:focus-visible{outline:3px solid #39434c;outline-offset:3px}
 /* leaving the desk is the other act, and the only enabled control once the order is committed:
    the same steel, flat, on a neutral edge and a shorter drop, so it never outranks the commit. */
@@ -1862,7 +1902,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 2px 2px 0 #ffffff1f,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 .menu-list button.danger:hover{background:#6b322b}
 /* what is already on the shelf, on the form that decides what to add to it */
-.stock-brief{margin:0 0 14px;background:#2c241814;box-shadow:inset 0 0 0 2px #2c241826}
+/* BATCH 2A. The warehouse was a ringed grey panel dropped onto the paper. It is a section of
+   the same document now - full-bleed between two printed rules, on the form's own gutter. */
+.stock-brief{margin:0 0 2px;background:#2c241808;
+ box-shadow:inset 0 2px 0 var(--paper-rule),inset 0 -2px 0 var(--paper-rule)}
 .stock-brief summary{display:flex;align-items:baseline;gap:9px;padding:9px 11px;cursor:pointer;
  font:600 12px/1 var(--ui);letter-spacing:.1em;color:#6b6350;list-style:none}
 .stock-brief summary::-webkit-details-marker{display:none}
@@ -2147,6 +2190,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .room{max-height:50dvh}
  .notices{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
  .form{max-width:860px;margin:0 auto}
+ /* BATCH 2A. Past the phone the letterhead sets on one baseline: the document's name and the
+    DAY / branch it was issued for, the way a printed form heads itself. */
+ .form-head{grid-template-columns:minmax(0,1fr) auto}
+ .form-head h1{font-size:40px}
  /* past the phone the label fits on one line again, so the control takes only what it needs */
  .slot-option{grid-template-columns:minmax(0,1fr) auto}
  .slot-option>button{padding:10px 16px;white-space:nowrap;font-size:14px}

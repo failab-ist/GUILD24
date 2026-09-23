@@ -5,16 +5,19 @@
 /* ORDER — the warehouse is reference, not the page. It begins open, but the disclosure
    state is persisted by app.js after the player folds/opens it. The contents use the width
    before they use height: two compact columns on a phone, three on a wider form. */
-.stock-brief{margin-bottom:10px}
-.stock-brief summary{padding:8px 10px}
-.stock-brief ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 7px;padding:0 9px 9px}
+.stock-brief{margin-bottom:2px}
+.stock-brief summary{padding:9px 16px}
+.stock-brief ul{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 14px;padding:0 16px 10px}
+/* BATCH 2A §SHARED BATCH 2 FAILURES: "every row becomes a framed card". Each held Item was a
+   boxed cell with its own ring, so the warehouse read as a card grid pasted onto the form. It
+   is a stock list written on the same document: ruled entries in columns, no frame. */
 .stock-brief li{min-width:0;display:grid;grid-template-columns:20px minmax(0,1fr) auto;grid-template-rows:auto auto;
- gap:1px 6px;align-items:center;padding:5px 6px;background:#2c24180a;box-shadow:inset 0 0 0 1px #2c241814}
+ gap:1px 6px;align-items:center;padding:5px 2px;background:none;box-shadow:inset 0 -1px 0 #2c241826}
 .stock-brief li>svg,.stock-brief li>.item-art{grid-row:1 / span 2}
 .stock-brief li b{min-width:0;line-height:1.25;overflow-wrap:anywhere}
 .stock-brief li span{grid-column:3;grid-row:1;margin-left:0;white-space:nowrap}
 .stock-brief li em{grid-column:2 / 4;grid-row:2;min-width:0;text-align:left;font-size:11px;line-height:1.2}
-.stock-brief .none{padding:0 10px 9px}
+.stock-brief .none{padding:0 16px 10px}
 
 /* SALE — the bag belongs beside the adventurer, in the space that was visually idle.
    Keeping it above the counter means the lower dossier no longer grows just to repeat
