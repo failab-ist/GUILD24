@@ -248,3 +248,13 @@ nomination, before the first committed transaction) vs the SALE-entry snapshot f
 visit. DUNGEON_HAZARD also points both ways ("Forecast uses the raised Deep Combat requirement" vs
 the displayed snapshot "uses the NPC/Gate/Condition state at SALE entry"). Source does not
 recalculate: `nominateDeep()` changes the destination but keeps `n.outlook` from `arrive()`.
+
+## REWORD — post-commit heading label follows COPY_AUDIT §4-4 (UI_UX review follow-up)
+
+```text
+A generic heading such as `보급 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
+```
+
+```new
+A generic heading such as `판매 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
+```

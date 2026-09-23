@@ -580,3 +580,14 @@ Header / Intro -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-7.
 - Open, reported to the User: D25 report `Button: 최종 준비` (Source `확인`); v2.5 vs v2.7 destination
   tutorial wording (Source uses v2.7; UI_UX still carries v2.5); two adjacent `Priority:` lists are
   complementary but unlabelled; rare-callback line scope.
+
+## SUPERSEDED — pre-supply "Supporting copy" paragraph (UI_UX review follow-up)
+
+v2.8 UI_UX "Do not keep a permanent explanatory paragraph under the readout", UI-Q-v28-15 and
+PRESENTATION_POLISH_BATCH2 forbid it; Source shows no such paragraph. Same drop as in UI_UX.
+
+```text
+Supporting copy:
+아이템을 지급하기 전 현재 상태를 기준으로 한 전망입니다.
+보급과 원정 중 변수에 따라 실제 결과는 달라질 수 있습니다.
+```

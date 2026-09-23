@@ -571,7 +571,7 @@ Example boundary:
 - if excess Supply crosses a Fatigue penalty band, effective 기동/정신 may also rise through Fatigue recovery
 - those indirect changes must be presented as `보급 부족 완화` / `피로 완화` or equivalent source-readable system effects, never as if 집중 사탕 itself granted those Stats
 
-A generic heading such as `보급 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
+A generic heading such as `판매 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
 If that distinction is not readable, remove the synthetic delta block rather than replacing the pre-supply outlook with post-commit Forecast/Readiness/Death answers.
 
 ## STAT SOURCE UX

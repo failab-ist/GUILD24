@@ -1287,13 +1287,6 @@ Exact Death-risk label:
 실패 시 사망 위험
 ```
 
-Supporting copy:
-
-```text
-아이템을 지급하기 전 현재 상태를 기준으로 한 전망입니다.
-보급과 원정 중 변수에 따라 실제 결과는 달라질 수 있습니다.
-```
-
 This block covers:
 - qualitative Combat Forecast
 - qualitative Hazard Readiness
