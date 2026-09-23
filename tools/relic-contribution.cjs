@@ -17,12 +17,18 @@ function load(){
   require(path.join(root,'dist',f+'.js'));
  return globalThis.GUILD24||globalThis;
 }
+const METRICS=['gain','reached','win','deaths','regulars','sales','margin','finalRatio','spend'];
+// one row per finished Run: the axes each build claims as its strength (RELIC §BUILD AXES)
+const rowOf=s=>{const h=s.reportHistory||[],sum=k=>h.reduce((a,d)=>a+(d[k]||0),0);
+ return {gain:s.settlement?.gain??0,reached:s.day>=30?1:0,win:s.win?1:0,deaths:s.stats.deaths||0,
+  regulars:s.stats.regulars||0,sales:sum('sales'),margin:sum('revenue')-sum('cogs'),
+  finalRatio:s.bossDebug?s.bossDebug.power/s.bossDebug.bossPower:0,spend:s.stats.relicSpent||0};};
 function runBuild(G,seeds,build,overrides){
  const D=G.DATA;
  if(overrides&&D.relicParams)for(const [id,p] of Object.entries(overrides))Object.assign(D.relicParams[id],p);
  const P=G.Game.prototype,end=P.end,rows=[];
  P.end=function(win,reason){const r=end.call(this,win,reason),s=this.run;
-  rows.push({gain:s.settlement?.gain??0,reached:s.day>=30?1:0,win:s.win?1:0,spend:s.stats.relicSpent||0});return r;};
+  rows.push(rowOf(s));return r;};
  try{G.Debug.simulate(seeds,'balanced',null,'adaptive',build);}finally{P.end=end;}
  return rows;
 }
@@ -35,7 +41,7 @@ function runArm(G,seeds,inject,overrides){
   if(inject.own&&!s.facilities.includes(inject.own))s.facilities.push(inject.own);
   return r;};
  P.end=function(win,reason){const r=end.call(this,win,reason),s=this.run;
-  rows.push({gain:s.settlement?.gain??0,reached:s.day>=30?1:0,win:s.win?1:0});return r;};
+  rows.push(rowOf(s));return r;};
  try{G.Debug.simulate(seeds,'balanced',null,'adaptive','none');}finally{P.start=start;P.end=end;}
  return rows;
 }
@@ -59,12 +65,11 @@ if(process.env.RELIC_WORKER){
  const results={},queue=ids.slice();let live=0;
  const next=()=>{if(!queue.length){if(!live)done();return;}const id=queue.shift();live++;
   const c=fork(__filename,[],{env:{...process.env,RELIC_WORKER:'1'}});
-  c.on('message',({id,base,treat,rows})=>{if(rows){const m=k=>rows.reduce((a,x)=>a+x[k],0)/rows.length;
-   results[id]={gain:m('gain'),reached:m('reached'),win:m('win'),spend:m('spend')};
-   console.log(id.padEnd(11),'gain',m('gain').toFixed(0).padStart(6),' reach',m('reached').toFixed(3),' win',m('win').toFixed(3),' spend',m('spend').toFixed(0));return;}
-   results[id]={gain:stat(base,treat,'gain'),reached:stat(base,treat,'reached'),win:stat(base,treat,'win')};
-   console.log(id.padEnd(15),'dGain',results[id].gain.delta.toFixed(1).padStart(8),'±',results[id].gain.se.toFixed(1).padStart(6),
-    ' dReach',results[id].reached.delta.toFixed(3),' dWin',results[id].win.delta.toFixed(3));});
+  c.on('message',({id,base,treat,rows})=>{
+   if(rows){const m=k=>rows.reduce((a,x)=>a+x[k],0)/rows.length;results[id]=Object.fromEntries(METRICS.map(k=>[k,m(k)]));
+    console.log(id.padEnd(11),METRICS.map(k=>k+' '+(+m(k).toFixed(k==='gain'||k==='margin'||k==='spend'?0:3))).join('  '));return;}
+   results[id]=Object.fromEntries(METRICS.map(k=>[k,stat(base,treat,k)]));
+   console.log(id.padEnd(15),METRICS.filter(k=>k!=='spend').map(k=>'d'+k+' '+results[id][k].delta.toFixed(k==='gain'||k==='margin'?0:3)+'±'+results[id][k].se.toFixed(k==='gain'||k==='margin'?0:3)).join('  '));});
   c.on('exit',()=>{live--;next();});c.send({seeds,id,overrides,build:builds?id:null});};
  const done=()=>{const out={seeds,policy:'balanced/adaptive/none',overrides,results};
   if(outFile)fs.writeFileSync(outFile,JSON.stringify(out,null,1));};
