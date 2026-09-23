@@ -661,3 +661,25 @@ STORE SUPPORT FAIL:
   a game decision
 - exact implementation colour values are promoted back into Canonical without a new User decision
 
+
+
+## UI-Q-v28-32 — FINAL PARTY / PREPARATION
+
+Run D30 Final on phone and desktop.
+
+PASS:
+- unselected Final roster cards do not use rarity-coloured outer frames that compete with selection
+- selected state is immediately distinguishable; rarity remains readable as text
+- 1, 2 or 3 participants can be deliberately committed when eligible
+- the selection stage shows the approved forecast-after-commitment guidance and no combat forecast
+- a sub-3 party receives the approved confirmation before commitment
+- after commitment exactly one party-wide `토벌 전망` is shown
+- 1/2/3-person forecasts use the actual committed party
+- the forecast updates after a committed Final transfer
+- no individual `전투 전망` or failure-to-death percentage survives in Final preparation
+- no player-facing `Final 효과 없음` copy remains
+- no-effect Item uses the approved Demon-Castle copy and cannot be committed
+- insufficient Wallet shows exact required/owned Gold inline and transfer remains disabled
+- no ordinary SALE purchase/refusal dialogue appears in Final preparation
+- an otherwise valid affordable Final transfer is deterministic
+- no horizontal overflow at 360/390/412 and desktop 1024/1280

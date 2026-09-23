@@ -571,3 +571,71 @@ Developer reproducibility Seed controls do not appear on the ordinary pre-Run sc
 Technical runtime footer copy is removed from ordinary settings.
 
 This does not require adding a new Debug menu.
+
+
+## FINAL PARTY / PREPARATION PRESENTATION — D30
+
+### PARTY SELECTION
+
+The Final roster is a selection surface, not a rarity gallery.
+
+- up to 3 participants may be selected;
+- 1 or 2 participants may be committed deliberately even when 3+ are eligible;
+- roster count should read as selection capacity, e.g. `선택 1명 · 최대 3명`;
+- rarity remains visible as text;
+- rarity-coloured outer frames do not compete with selection;
+- unselected cards use a neutral edge;
+- selected cards alone own the strong selection frame;
+- rarity text may gain one restrained size/weight step if needed, but never outranks the NPC name or causes overflow.
+
+No ordinary expedition `전투 전망` is shown while the party is provisional.
+Use the exact selection guidance owned by COPY_AUDIT_APPROVED.
+
+### PARTY COMMITMENT
+
+`원정대 확정` creates the transition from roster selection to preparation.
+
+If fewer than 3 are committed, use the approved confirmation copy before crossing that boundary.
+
+After commitment:
+- the full selectable roster no longer remains the main content;
+- only the committed party is prepared;
+- ordinary participant swapping is unavailable.
+
+### PARTY-WIDE SUBJUGATION FORECAST
+
+After commitment, show one compact party-level `토벌 전망`.
+
+It is not a per-NPC panel and not a second dashboard.
+
+The forecast:
+- is hidden before commitment;
+- represents the whole committed 1/2/3-person party;
+- updates as Final supplies are committed;
+- uses qualitative `우세 / 접전 / 불리` only;
+- does not expose Final Power, Boss Power, exact probability or Final Roll.
+
+The approved explanation line appears with or immediately under the forecast.
+Focused Item detail may still show that participant's concrete stat/effect delta.
+
+Remove from Final preparation:
+- ordinary one-NPC `전투 전망`;
+- ordinary expedition failure-to-death risk;
+- any one-NPC environment forecast presented as though it were the whole Final party.
+
+### FINAL ITEM / WALLET FEEDBACK
+
+No-effect Item:
+- visibly blocked;
+- use the approved Demon-Castle wording;
+- do not expose `Final` as a player-facing system term.
+
+Insufficient Wallet:
+- show exact required/owned Gold in the current Item/transfer area;
+- disable the transfer action;
+- use an inline/system status treatment;
+- no NPC refusal speech;
+- no large alert modal.
+
+Final preparation does not reuse ordinary SALE purchase/refusal chatter.
+

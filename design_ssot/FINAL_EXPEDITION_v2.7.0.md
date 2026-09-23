@@ -76,13 +76,56 @@ Final must remain the culmination of the shop-management decisions learned durin
 
 ### 1. Final party selection
 
-Use the inherited current Final party-size / survivor-fallback rules.
+Current v2.8 override to the inherited party-size rule:
 
-The Player selects the Final participants first.
+```text
+maxParticipants = 3
+
+eligible >= 1
+-> Player may choose 1..min(3, eligible) participants
+
+eligible == 0
+-> Run Fail
+```
+
+This supersedes the inherited `survivors >= 3 -> exactly 3` requirement.
+
+A Player may intentionally attempt a 1- or 2-person clear even when 3 or more eligible adventurers exist.
+This is a valid challenge-play route and is not treated as an error state.
+
+No Final-only participant-count modifier is added:
+- no underfill bonus
+- no underfill penalty
+- no person-count multiplier
+- no auto-fill NPC
+- no forced minimum of 3
+
+The natural cost of bringing fewer adventurers is the lower summed Party Power.
+
+Before commitment, selection/removal remains free within the 1..3 limit.
+
+Selection-stage information:
+- no combat forecast is shown while the party is still provisional;
+- tell the Player that up to 3 adventurers may depart;
+- tell the Player that the subjugation forecast becomes available after party commitment.
+
+If the Player commits fewer than 3 participants, show one explicit confirmation before the boundary:
+
+```text
+3명보다 적은 인원으로 출전할까요?
+선택한 {N}명만 마왕성으로 향합니다.
+
+돌아가기 / 이대로 확정
+```
+
 When the Player confirms party selection and enters Final preparation:
-- the participant set is committed for this Final attempt
-- ordinary participant swapping after committed Final Item transfers begin is not allowed
-- Save/Load must not be usable to erase already committed Final transfers or reopen the party-selection decision after that boundary
+- the participant set is committed for this Final attempt;
+- participant swapping is no longer allowed;
+- Final Item transfer cannot begin before this commitment;
+- Save/Load must not erase committed Final transfers or reopen party selection after that boundary.
+
+The Final resolver itself must enforce the same commitment boundary.
+A UI bypass may not auto-commit a non-empty party.
 
 ### 2. Final preparation — fixed 50% / 매입가 transfer
 
@@ -128,6 +171,48 @@ The Player may finish a participant with an empty slot / no additional transfer.
 No normal future-customer queue is introduced inside Final preparation.
 Only the already selected Final participants are processed.
 
+### 2.1 Final subjugation forecast — party-wide
+
+The ordinary one-NPC expedition forecast is not used in Final preparation.
+
+Selection stage:
+- show no `전투 전망`;
+- show no individual failure-to-death percentage;
+- show no one-NPC environment forecast as if it represented the Final party.
+
+After party commitment, show exactly one party-wide qualitative forecast:
+
+```text
+토벌 전망 · {우세|접전|불리}
+```
+
+Exact explanation copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
+
+The forecast:
+- reads the entire committed party, whether it contains 1, 2 or 3 participants;
+- uses each participant's current Final preparation state;
+- uses the known D25 Final Hazards;
+- uses the current Boss participant-side and Boss-side modifiers;
+- updates after each committed Final Item transfer;
+- consumes no Gameplay RNG;
+- exposes no Final Power number, Boss Power number, exact success probability or Final Roll.
+
+Reuse the existing shared qualitative forecast bands:
+
+```text
+ratio = current pre-roll Final Party Power / current effective Boss Power
+
+ratio > 1.2   -> 우세
+ratio >= 0.8  -> 접전
+otherwise     -> 불리
+```
+
+The ratio is a preview only.
+The actual result still resolves once with the authoritative Final Roll after Final Lock.
+
+When the Player focuses an Item, that focused surface may show the target participant's concrete
+before/after changes. It must not replace the one party-wide `토벌 전망`.
+
 ### FINAL ACCOUNTING — EXACT
 
 A committed fixed-price Final transfer is a real paid transaction for economy accounting even though it does not use the ordinary customer haggling/refusal flow.
@@ -144,14 +229,34 @@ Do not double-count them in Final resolution.
 
 ### 3. Final-specific Item boundary
 
-Items marked by this owner as `Final 효과 없음` must be visibly blocked from Final Bag placement when practical.
+Items with no effect in the Demon Castle must be visibly blocked from Final Bag placement.
 
 Current no-effect Insurance:
 - 구급키트
 - 귀환석
 - 세계수 생환부적
 
-Boss-caused visible Item changes, including GLUTTONY, must use the current Boss/UI preview truth during Final preparation so the Player is assigning Items against the actual Final state.
+Player-facing copy must not use the internal term `Final`.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
+
+Boss-caused visible Item changes must use the same current Final truth that resolution will use.
+This applies to both the shelf summary and the focused Item preview; they may not contradict each other.
+
+Audit all seven Bosses, including participant-side rules for PRIDE / ENVY / GLUTTONY / LUST.
+The preview consumes no Gameplay RNG and mutates no Final state.
+
+Final preparation has no ordinary SALE purchase/refusal roll.
+A valid affordable transfer succeeds deterministically when:
+- the party is committed;
+- the target NPC is a committed participant;
+- the target has an open Final Bag slot;
+- the Item has an effect in the Demon Castle;
+- the NPC Wallet covers the fixed Final price.
+
+Ordinary SALE refusal dialogue / customer chatter does not appear in Final preparation.
+
+If Wallet is insufficient, block the transfer and show the system reason with exact required and owned
+Gold values. Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
 ### 4. Result
 
@@ -251,7 +356,7 @@ Therefore the following v2.7 Insurance Items have no Final effect:
 세계수 생환부적
 ```
 
-Player-facing Final preparation must clearly mark `Final 효과 없음` and should block placing them into a Final Bag when practical.
+Player-facing Final preparation must use the approved Demon-Castle wording and block placing them into the Final Bag.
 
 Do not silently grant them a new Final-only effect merely to avoid a dead pick.
 
@@ -307,7 +412,7 @@ PASS:
 
 ### FINAL-Q75 — SELECT -> FIXED-PRICE PREP -> RESULT
 
-Controlled D30 with three eligible survivors.
+Controlled D30 across 1-, 2- and 3-person committed parties, including voluntary underfill when 3+ are eligible.
 
 PASS exact Player-facing order:
 
@@ -318,13 +423,18 @@ PASS exact Player-facing order:
 ```
 
 PASS:
+- the Player may commit 1..min(3, eligible) participants; 0 eligible still fails
+- fewer than 3 may be chosen intentionally even when 3+ are eligible
+- a sub-3 commitment receives the explicit confirmation step
+- no participant-count bonus/penalty/auto-fill exists
 - participant selection is confirmed before Final preparation begins
 - selected participants are processed one at a time
 - each uses exactly two Bag slots
 - only the fixed 50% / 매입가 amount is used
 - 100% / 150% choices are absent
-- no purchase/refusal roll occurs
-- Wallet affordability is real
+- no purchase/refusal roll or ordinary SALE dialogue occurs
+- a valid affordable Final transfer succeeds deterministically
+- Wallet affordability is real and an unaffordable Item gives a system reason
 - committed transfer consumes stock and reduces NPC Wallet by the exact fixed amount
 - unaffordable Item cannot be committed
 - committed Final transfers cannot be erased by Save/Load fishing
@@ -341,6 +451,20 @@ For each committed Final transfer, PASS only if:
 - GREED committed Gross Sales snapshot occurs at Final Lock after all Final preparation transfers
 - no Final transfer is excluded from GREED Gross Sales
 - no Final transfer is counted twice
+
+### FINAL-Q77 — PARTY-WIDE SUBJUGATION FORECAST
+
+PASS:
+- no ordinary one-NPC `전투 전망` appears during Final party selection or preparation
+- no individual failure-to-death percentage appears in Final preparation
+- before commitment the Player sees the approved guidance that commitment unlocks the forecast
+- after commitment exactly one party-wide `토벌 전망` appears
+- 1-person, 2-person and 3-person parties each use the actual committed party
+- the forecast updates after committed Final Item transfers
+- it uses the actual known Final Hazards and current Boss modifiers
+- it reuses the shared `우세 / 접전 / 불리` ratio bands without consuming RNG
+- it exposes no internal Final Power / Boss Power / exact probability / Final Roll
+- focused Item detail may show one participant's before/after delta without being labelled as the party forecast
 
 ## v2.7 BALANCE QA
 

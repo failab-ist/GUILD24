@@ -177,16 +177,31 @@ Classify any mismatch:
 
 Do not redesign the Final mechanics.
 
-Preserve:
-- exact participant count / fallback rules;
-- selection before committed Final preparation;
-- exactly two Bag slots per participant;
-- fixed Final 50% / buy-price transfer truth;
-- real Wallet affordability;
-- real stock consumption / Gold / Gross Sales accounting;
-- no purchase/refusal RNG;
-- Final no-effect Item blocking / communication;
-- Boss-specific Item preview truth.
+Current exact B5-2 truth:
+- eligible 0 -> Fail
+- eligible >=1 -> Player may commit any 1..min(3, eligible) party
+- voluntary 1/2-person challenge parties are valid even when 3+ are eligible
+- no participant-count bonus / penalty / multiplier / auto-fill
+- sub-3 commitment uses the approved confirmation
+- selection precedes committed Final preparation
+- exactly two Bag slots per participant
+- fixed Final 50% / buy-price transfer
+- real Wallet affordability
+- real stock / Gold / Gross Sales accounting
+- no purchase/refusal RNG or ordinary SALE dialogue
+- valid affordable transfer is deterministic
+- no-effect Items are blocked with Demon-Castle wording
+- insufficient Wallet uses inline exact required/owned Gold
+- Boss-specific shelf + focused preview must match actual Final truth
+- one party-wide `토벌 전망` appears only after commitment and uses the committed 1/2/3-person party
+- ordinary one-NPC forecast / failure-death readout does not appear in Final preparation
+- Final resolver may not auto-commit a non-empty party
+- legacy in-progress Final saves may not reopen party selection after proven committed transfer state
+
+Final roster:
+- remove rarity-coloured outer frames that compete with selection
+- rarity stays as text
+- selected state owns the strong frame
 
 Presentation goal:
 the Final should feel like the culmination of the store's preparation, not like an unrelated loadout
@@ -283,6 +298,18 @@ Do not proceed to Batch 6 without approval.
 ## QA
 
 At minimum verify:
+- Final roster selection frame beats rarity frame; no rarity-frame ambiguity
+- voluntary 1/2-person party with 3+ eligible is supported
+- sub-3 confirmation uses approved copy
+- party-wide `토벌 전망` uses actual committed 1/2/3 participants and shared qualitative bands
+- forecast updates after committed transfers without consuming RNG
+- no individual ordinary expedition forecast / death-risk copy in Final prep
+- no player-facing internal `Final 효과 없음` copy
+- insufficient Wallet exact-value status
+- no ordinary SALE dialogue / refusal roll in Final prep
+- Final resolver rejects uncommitted non-empty party
+- legacy in-progress Final save preserves proven commitment / transfer state
+- seven-Boss preview-vs-resolution truth
 - source-original SHA-256 preservation;
 - all seven Boss -> backdrop mappings;
 - phone 360 / 390 / 412;
