@@ -457,26 +457,26 @@ Exact final values match `RELIC_v2.8.0.md` §PRICE.
 
 Expect exactly these approved base prices for these rows:
 
-    bulk 180
-    stamp 180
-    member 180
-    showcase 200
-    guarantee 200
-    hazardBoard 120
-    medicine 150
-    kitchen 240
-    board 150
-    rookieBoard 150
-    groupFlyer 280
-    memberBundle 270
-    premiumMember 290
-    expeditionMeal 280
-    coldcase 250
-    dawnBulk 270
-    fresh24 520
-    warehouse 180
-    terminal 190
-    delivery 170
+    bulk 130
+    stamp 130
+    member 130
+    showcase 140
+    guarantee 140
+    hazardBoard 80
+    medicine 110
+    kitchen 170
+    board 110
+    rookieBoard 110
+    groupFlyer 200
+    memberBundle 190
+    premiumMember 200
+    expeditionMeal 200
+    coldcase 180
+    dawnBulk 190
+    fresh24 360
+    warehouse 130
+    terminal 130
+    delivery 120
 
 FAIL if implementation uses a different base price without a new approved owner amendment.
 
@@ -503,7 +503,7 @@ Expected:
     previous Day sales >= 6
     -> today every same-SKU 3+ order -30%
 
-Price 430G.
+Price 300G.
 
 FAIL:
 - trigger differs from previous Day sales >= 6
@@ -621,7 +621,7 @@ Shelf-life logic stable.
 ### REL-Q72 — LARGE FRIDGE
 
 EXPECT:
-- base price 120G
+- base price 80G
 - Food/Drink shelf life +2
 - existing non-expired eligible stock extends once on acquisition
 - future stock receives extension
@@ -841,7 +841,7 @@ Expected mean before ordinary availability caps:
     +0.75 visitor / applicable Day
 
 Also:
-- Price 490G
+- Price 340G
 - operating modifier remains overheadBase +10%
 - outcomes are mutually exclusive
 
@@ -876,7 +876,7 @@ No stale `0 -> 60 -> 120` curve survives.
 ### REL-Q-v28-8 — OPERATING EFFICIENCY
 
 Expected:
-    Price 180G
+    Price 130G
     from next Day basic operating cost -30G
 
 This is a Production baseline, not harness-only.

@@ -579,32 +579,32 @@ price, store receives the full charged price
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
 the Day's first offer generation
 - 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.25; no shelf life
-bulk 180
-stamp 180
-member 180
-showcase 200
-guarantee 200
-hazardBoard 120
-medicine 150
-kitchen 240
-board 150
-rookieBoard 150
-groupFlyer 280
-memberBundle 270
-premiumMember 290
-expeditionMeal 280
-coldcase 250
-dawnBulk 270
-fresh24 520
-warehouse 180
-terminal 190
-delivery 170
+bulk 130
+stamp 130
+member 130
+showcase 140
+guarantee 140
+hazardBoard 80
+medicine 110
+kitchen 170
+board 110
+rookieBoard 110
+groupFlyer 200
+memberBundle 190
+premiumMember 200
+expeditionMeal 200
+coldcase 180
+dawnBulk 190
+fresh24 360
+warehouse 130
+terminal 130
+delivery 120
 If previous Day sales >= 4:
 - each newly generated ORDER offer, of every rarity, gets quantity +2
 If previous Day sales < 4:
 previous Day sales >= 6
 -> today every same-SKU 3+ order -30%
-Price 430G.
+Price 300G.
 - trigger differs from previous Day sales >= 6
 - only the first bulk order of the Day is discounted
 paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +30G
@@ -625,7 +625,7 @@ Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 acr
 `야전 정비대` multiplies the Hazard Counter values of carried Field Gear by 1.40.
 - Potion / Food / Drink / Insurance Counter values are unchanged
 - no ORDER offer weight or offer quantity effect
-- base price 120G
+- base price 80G
 대형 냉장고 = 120G
 PASS only when the active implementation uses 120G.
 - native Core-Stat +25%
@@ -652,11 +652,11 @@ On an adventurer's first-ever visit, with `첫 방문 쿠폰` owned:
 A returning adventurer receives nothing.
 - board, hub, 단체 주문 창구 and the `wall` Decoration may all be held at once and each applies in its own place
 - 단체 주문 창구 makes its own 20% Morning roll for +1 visitor
-- Price 490G
+- Price 340G
 - next same-Day Reroll uses the first normal cost step
 - next same-Day Reroll uses the first current `ECONOMY_ORDER` step
 - under the current economy this means `0 -> 50 -> 100 -> 200 ...`
-Price 180G
+Price 130G
 - 발주 교환권 sequence after free use starts at 50
 유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
 ```

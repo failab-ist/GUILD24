@@ -470,7 +470,7 @@ purpose=sales->order->sales loop
 `DIRECTOR DOCUMENT BASELINE`
 
 회전 진열대:
-    Price = 120G
+    Price = 80G
     trigger = previous Day sales >= 4
     effect = next generated ORDER offers for every Item rarity get supply quantity +2
 
@@ -529,7 +529,7 @@ tag=Fresh
 `대형 냉장고`:
 
 ```text
-base Price = 120G
+base Price = 80G
 Food/Drink shelf life +2 days
 existing eligible non-expired stock extends once on acquisition
 future eligible stock enters with the extension
@@ -622,7 +622,7 @@ channel=prefer existing loyalty/wallet/revisit systems
 `DIRECTOR DOCUMENT BASELINE`
 
 귀환 적립제:
-    Price = 340G
+    Price = 240G
     condition = paid returning customer today survives (no Loyalty threshold)
     Loyalty +5
     NPC Wallet +30G
@@ -669,7 +669,7 @@ effect=Rare+ expedition-response items gain premium-economy viability
 `DIRECTOR DOCUMENT BASELINE`
 
 길드 납품 인증:
-    Price = 310G
+    Price = 220G
     HQ commission = 20% of Item list price
     buyer NPC Wallet +30G
 
@@ -687,7 +687,7 @@ tag=Rotation
 `DIRECTOR DOCUMENT BASELINE`
 
 물류 본부계약:
-    Price = 430G
+    Price = 300G
     trigger = previous Day sales >= 6
     effect = today every same-SKU 3+ order purchase price -30% (not only the first)
 
@@ -701,7 +701,7 @@ snowballCap=required
 `DIRECTOR DOCUMENT BASELINE`
 
 평생 단골제:
-    Price = 440G
+    Price = 310G
     단골 (Trusted Regular, Loyalty >= 51) survival condition
     NPC Wallet +50G
     next-visit weight +50%
@@ -716,7 +716,7 @@ refusal/inventoryRisk=REMAINS
 `DIRECTOR DOCUMENT BASELINE`
 
 왕도 프리미엄 인증:
-    Price = 460G
+    Price = 320G
     HQ commission = 20% of the charged (150%) sale price
     the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
     the 1.5x price burden and Loyalty -3 are unchanged
@@ -727,7 +727,7 @@ tag=Expedition
 `DIRECTOR DOCUMENT BASELINE`
 
 원정 전문 인증:
-    Price = 420G
+    Price = 290G
 
 - an Item that Counters a Hazard of the adventurer's own Gate: its Hazard Counter values x1.60
 - multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
@@ -761,7 +761,7 @@ livingNpcCapIgnored=NO
 Role: pay overhead to widen the catchment.
 
 지역 거점점 계약:
-    Price = 490G
+    Price = 340G
 
 Each applicable Morning, exactly one mutually exclusive visitor result:
     +1 visitor = 45%
@@ -823,7 +823,7 @@ buildDefiningPower=LOW
 `DIRECTOR DOCUMENT BASELINE`
 
 운영 효율 매뉴얼:
-    Price = 180G
+    Price = 130G
     from next Day, basic operating cost -30G
 
 Late acquisition may rationally be skipped. That alone is not a Balance Finding.
@@ -920,26 +920,26 @@ The following 20 Store Support base prices are the approved baseline.
 
 | ID | Store Support | Base Price |
 |---|---|---:|
-| bulk | 묶음발주 계약 | 180G |
-| stamp | 단골 스탬프 기계 | 180G |
-| member | 회원 관리대장 | 180G |
-| showcase | 희귀상품 입고 계약 | 200G |
-| guarantee | 길드 보증 진열대 | 200G |
-| hazardBoard | 원정 위험 게시판 | 120G |
-| medicine | 야전 정비대 | 150G |
-| kitchen | 즉석식품 코너 | 240G |
-| board | 길드 전광판 | 150G |
-| rookieBoard | 첫 방문 쿠폰 | 150G |
-| groupFlyer | 단체 주문 창구 | 280G |
-| memberBundle | 단골 묶음혜택 | 270G |
-| premiumMember | 프리미엄 멤버십 | 290G |
-| expeditionMeal | 원정 도시락 코너 | 280G |
-| coldcase | 냉장 유통 계약 | 250G |
-| dawnBulk | 새벽 회수 계약 | 270G |
-| fresh24 | 24시간 신선체계 | 520G |
-| warehouse | 후방 창고 증설 | 180G |
-| terminal | 본사 추가발주권 | 190G |
-| delivery | 발주 교환권 | 170G |
+| bulk | 묶음발주 계약 | 130G |
+| stamp | 단골 스탬프 기계 | 130G |
+| member | 회원 관리대장 | 130G |
+| showcase | 희귀상품 입고 계약 | 140G |
+| guarantee | 길드 보증 진열대 | 140G |
+| hazardBoard | 원정 위험 게시판 | 80G |
+| medicine | 야전 정비대 | 110G |
+| kitchen | 즉석식품 코너 | 170G |
+| board | 길드 전광판 | 110G |
+| rookieBoard | 첫 방문 쿠폰 | 110G |
+| groupFlyer | 단체 주문 창구 | 200G |
+| memberBundle | 단골 묶음혜택 | 190G |
+| premiumMember | 프리미엄 멤버십 | 200G |
+| expeditionMeal | 원정 도시락 코너 | 200G |
+| coldcase | 냉장 유통 계약 | 180G |
+| dawnBulk | 새벽 회수 계약 | 190G |
+| fresh24 | 24시간 신선체계 | 360G |
+| warehouse | 후방 창고 증설 | 130G |
+| terminal | 본사 추가발주권 | 130G |
+| delivery | 발주 교환권 | 120G |
 
 The other 10 active support prices are exact in their Store Support entries above.
 

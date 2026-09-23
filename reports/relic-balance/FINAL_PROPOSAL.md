@@ -1,5 +1,8 @@
 # Store Support rebalance — User-approved final proposal (2026-09-23)
 
+> Amendment (User, 2026-09-23 after measurement): every price below x0.7, rounded to 10G — the tested pass line
+> (`reports/relic-balance/v2/price-p70.json`). Current prices live in `dist/data/relics.js` / RELIC owner.
+
 Copy style (User): 개조식 — no sentence endings; clauses joined by ` · `; a final period; "추가 지급" instead of "본사 수당".
 
 Goal: raise overall Store Support impact (prices down, weak supports up, reworks / remakes), keep

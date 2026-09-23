@@ -415,7 +415,7 @@ Price = 760G unchanged
 ```
 
 ```new
-Price = 440G
+Price = 310G
 next-visit weight +50%
 ```
 
@@ -623,7 +623,7 @@ freeUseConsumesFirstRerollStep=YES
 - 첫 방문 쿠폰 (rookieBoard)
 - 단체 주문 창구 (groupFlyer)
 - 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -20%
-Price = 120G
+Price = 80G
 trigger = previous Day sales >= 4
 effect = next generated ORDER offers for every Item rarity get supply quantity +2
 - the existing 묶음발주 계약 / 물류 본부계약 discounts remain separate
@@ -639,7 +639,7 @@ of that charged price for the customer while the Player receives the full chosen
 - 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
 - it changes no ORDER offer weight and no offer quantity
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
-base Price = 120G
+base Price = 80G
 Food/Drink positive native Core-Stat contribution +25%
 from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
 12. 첫 방문 쿠폰
@@ -657,7 +657,7 @@ pays, and is judged on, half the charged price; the store receives the full char
 pays the other half (recorded on that sale)
 - 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +25G; that customer's Rare+
 Item purchase intent +15%p
-Price = 340G
+Price = 240G
 condition = paid returning customer today survives (no Loyalty threshold)
 Loyalty +5
 per Food/Drink Item in the Bag:
@@ -667,37 +667,37 @@ The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads
 No native Core-Stat bonus and no matching-Counter multiplier.
 - Uncommon+ Food/Drink purchase intent +16%p
 - no Stat effect
-Price = 310G
+Price = 220G
 buyer NPC Wallet +30G
 20. 새벽 회수 계약
 - 새벽 회수 계약: Food/Drink stock whose shelf life ends is taken back at 50% of its cost instead of
 being wasted (it is not counted as waste)
 - each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
-Price = 430G
+Price = 300G
 effect = today every same-SKU 3+ order purchase price -30% (not only the first)
 The internal purchase-price floor (45% of list) is unchanged.
 단골 (Trusted Regular, Loyalty >= 51) survival condition
 The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
 effect=successful 150% sale of any rarity -> extra premium commission
-Price = 460G
+Price = 320G
 HQ commission = 20% of the charged (150%) sale price
 the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
 the 1.5x price burden and Loyalty -3 are unchanged
 24. 원정 전문 인증
 원정 전문 인증:
-Price = 420G
+Price = 290G
 - an Item that Counters a Hazard of the adventurer's own Gate: its Hazard Counter values x1.60
 - multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 no shelf-life effect and no operating-cost effect
 Food/Drink ORDER (purchase) price x1.25
-Price = 490G
+Price = 340G
 freeUseConsumesFirstRerollStep=NO
 - after the free first use, same-Day Reroll follows the normal curve from its first step
 paid Rerolls then start at the first normal step
 with 발주 교환권: 0 -> 50 -> 100 -> 200 -> 400 -> x2 thereafter
-Price = 180G
+Price = 130G
 +25% +50%
 => base positive native Stat ×1.75
 `board`, `hub`, `groupFlyer` and the `wall` Decoration are independent and may all be held at once.
@@ -705,26 +705,26 @@ board      = base-roll floor
 hub        = probabilistic catchment, paid for in overhead
 groupFlyer = its own 20% Morning roll, +1 visitor
 wall       = 10% Morning proc (Decoration, not a Relic)
-| bulk | 묶음발주 계약 | 180G |
-| stamp | 단골 스탬프 기계 | 180G |
-| member | 회원 관리대장 | 180G |
-| showcase | 희귀상품 입고 계약 | 200G |
-| guarantee | 길드 보증 진열대 | 200G |
-| hazardBoard | 원정 위험 게시판 | 120G |
-| medicine | 야전 정비대 | 150G |
-| kitchen | 즉석식품 코너 | 240G |
-| board | 길드 전광판 | 150G |
-| rookieBoard | 첫 방문 쿠폰 | 150G |
-| groupFlyer | 단체 주문 창구 | 280G |
-| memberBundle | 단골 묶음혜택 | 270G |
-| premiumMember | 프리미엄 멤버십 | 290G |
-| expeditionMeal | 원정 도시락 코너 | 280G |
-| coldcase | 냉장 유통 계약 | 250G |
-| dawnBulk | 새벽 회수 계약 | 270G |
-| fresh24 | 24시간 신선체계 | 520G |
-| warehouse | 후방 창고 증설 | 180G |
-| terminal | 본사 추가발주권 | 190G |
-| delivery | 발주 교환권 | 170G |
+| bulk | 묶음발주 계약 | 130G |
+| stamp | 단골 스탬프 기계 | 130G |
+| member | 회원 관리대장 | 130G |
+| showcase | 희귀상품 입고 계약 | 140G |
+| guarantee | 길드 보증 진열대 | 140G |
+| hazardBoard | 원정 위험 게시판 | 80G |
+| medicine | 야전 정비대 | 110G |
+| kitchen | 즉석식품 코너 | 170G |
+| board | 길드 전광판 | 110G |
+| rookieBoard | 첫 방문 쿠폰 | 110G |
+| groupFlyer | 단체 주문 창구 | 200G |
+| memberBundle | 단골 묶음혜택 | 190G |
+| premiumMember | 프리미엄 멤버십 | 200G |
+| expeditionMeal | 원정 도시락 코너 | 200G |
+| coldcase | 냉장 유통 계약 | 180G |
+| dawnBulk | 새벽 회수 계약 | 190G |
+| fresh24 | 24시간 신선체계 | 360G |
+| warehouse | 후방 창고 증설 | 130G |
+| terminal | 본사 추가발주권 | 130G |
+| delivery | 발주 교환권 | 120G |
 유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
 하루 기본 최소 방문객을 4명으로 변경 (기존 3명).
 then the ordinary paid curve from its first step: 50G -> 100G -> 200G ...

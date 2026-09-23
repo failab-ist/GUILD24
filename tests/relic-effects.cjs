@@ -167,7 +167,7 @@ test('REL-Q-v28-15: 물류 본부계약 takes 30% off every same-SKU 3+ order, f
  s.bulkUsed=true;s.cart={0:3};assert.equal(g.cartTotal(),Math.round(100*.70)*3,'an earlier bulk order today does not use it up');
  // with 묶음발주 계약 the two stack and the internal 45% floor is not reached
  s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),70+70+Math.round(100*.7*.8));
- assert.equal(DATA.relicBy.logisticsHQ.price,430,'the rebalanced price');
+ assert.equal(DATA.relicBy.logisticsHQ.price,300,'the rebalanced price');
 });
 
 /* REL-Q-v28-17. The three outcomes are one roll and mutually exclusive, so the boundaries are
@@ -184,7 +184,7 @@ test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, excl
  }
  // the stated mean, straight off the approved rates
  assert.ok(Math.abs((.45*1+.15*2+.40*0)-0.75)<1e-12,'+0.75 visitors per applicable Day');
- assert.equal(DATA.relicBy.hub.price,490);
+ assert.equal(DATA.relicBy.hub.price,340);
  assert.equal(DATA.balance.hubOverheadRate,.10,'the operating modifier stays overheadBase +10%');
 });
 
@@ -302,13 +302,13 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 20% of the 
 
 test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the catalogue',()=>{
  /* User-approved Store Support rebalance 2026-09-23 */
- for(const [id,price] of [['bulk',180],['rotation',120],['stamp',180],['member',180],['showcase',200],
-                          ['guarantee',200],['hazardBoard',120],['medicine',150],['fridge',120],['kitchen',240],
-                          ['board',150],['rookieBoard',150],['groupFlyer',280],['memberBundle',270],
-                          ['premiumMember',290],['returnPoints',340],['expeditionMeal',280],['coldcase',250],
-                          ['supplyCert',310],['dawnBulk',270],['logisticsHQ',430],['lifetime',440],
-                          ['royalCert',460],['expeditionCert',420],['fresh24',520],['hub',490],
-                          ['warehouse',180],['terminal',190],['delivery',170],['efficiency',180]])
+ for(const [id,price] of [['bulk',130],['rotation',80],['stamp',130],['member',130],['showcase',140],
+                          ['guarantee',140],['hazardBoard',80],['medicine',110],['fridge',80],['kitchen',170],
+                          ['board',110],['rookieBoard',110],['groupFlyer',200],['memberBundle',190],
+                          ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
+                          ['supplyCert',220],['dawnBulk',190],['logisticsHQ',300],['lifetime',310],
+                          ['royalCert',320],['expeditionCert',290],['fresh24',360],['hub',340],
+                          ['warehouse',130],['terminal',130],['delivery',120],['efficiency',130]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
 });
 
