@@ -1937,12 +1937,25 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the Family / Hazard plane and the muster keep their own planes. Never stretched - the source
    keeps its 1672:941 ratio at every width; a phone sees the room through a narrower camera
    (height fitted to the gate band, sides cropped), a desk sees all of it. */
-.p-final[data-boss] .stage-scroll{--room-size:auto 400px;--room-clear:300px;--room-end:410px;
+.p-final[data-boss] .stage-scroll{--room-size:auto 420px;--room-clear:380px;--room-end:470px;
  background:linear-gradient(180deg,#0d0a0c00 0,#0d0a0c00 var(--room-clear),#0d0a0c var(--room-end)) no-repeat,
   var(--room) center top/var(--room-size) no-repeat,#0d0a0c;
  background-attachment:local}
 /* the gate band no longer paints its own red void: the room is what stands behind the Boss */
 .p-final[data-boss] .gate-zero{background:none}
+/* B5-1 NARROW CORRECTION — ONE SPACE. On a phone the name read under the Boss and lifted the
+   figure off the room's floor. The name now heads the band and the Boss comes after it, on the
+   room's centre axis, lowered until its own base meets the authored floor (the floor of a
+   420px-high room begins ~311px down). Position and margin only - the art is not cropped,
+   stretched or resized. */
+.p-final[data-boss] .gate-zero{display:flex;flex-direction:column;align-items:center;padding-top:12px;padding-bottom:14px}
+/* the name heads the band on the left, clear of the menu pin on the right - the same side the
+   desk puts it on, off the Boss's axis */
+.p-final[data-boss] .gate-zero .who{order:-1;align-self:stretch;padding-right:56px;text-align:left}
+.p-final[data-boss] .gate-zero h1{margin-top:6px}
+.p-final[data-boss] .gate-zero .boss-face{margin:22px 0 0}
+/* the confirmed-threat plane sits over the room's fading floor: its own ground carries it */
+.p-final[data-boss] .threat{background:#000000b8}
 .p-final .dock{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#0a0709;box-shadow:inset 0 3px 0 #ffffff12}
 /* THE GATE BAR (UI_UX §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT). The last action
    of a Run was a red rectangle with a label in it, and its first pass replaced that with a
@@ -1978,7 +1991,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    not the desktop composition scaled down. */
 .gate-zero{position:relative;margin:0 calc(var(--gutter) * -1) 20px;padding:18px var(--gutter) 20px;text-align:center;
  background:radial-gradient(76% 62% at 50% 108%,#5e1f16 0,#2a1214 46%,#150e10 100%)}
-.gate-zero:after{content:'';position:absolute;left:0;right:0;bottom:0;height:4px;background:#8a2f26}
+/* B5-1: the 4px red lintel under the gate is gone - it divided nothing the dark threat plane
+   and the Family colours do not already divide */
 .gate-zero .boss-face{margin:0 0 12px;display:flex;justify-content:center}
 .gate-zero .boss-face img{display:block;width:auto;max-width:100%;height:32vh;min-height:180px;max-height:300px;
  object-fit:contain;image-rendering:auto;filter:drop-shadow(0 6px 0 #00000073)}
@@ -1990,7 +2004,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  color:#f8ece6;text-shadow:2px 2px 0 #00000080}
 /* the confirmed threat, carved above the mouth */
 .threat{margin:0 0 20px;padding:13px 14px;background:#00000047;
- box-shadow:inset 0 3px 0 #8a2f26,inset -2px -2px 0 #00000059}
+ box-shadow:inset -2px -2px 0 #00000059}
 .threat h2{font:600 11px/1 var(--ui);letter-spacing:.18em;color:#b09a92;margin-bottom:10px}
 .fams{display:grid;gap:7px;margin-bottom:11px}
 .fam{display:flex;align-items:center;gap:9px;padding:7px 10px;font:400 14px/1.3 var(--ui);color:#f2e0da;
@@ -2375,10 +2389,20 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-final .gate-zero .boss-face img{height:min(42vh,360px);max-height:none}
  .p-final .gate-zero .who{flex:1 1 auto;min-width:0}
  .p-final .gate-zero h1{margin-top:12px;font-size:40px}
- /* a desk sees the whole room at the screen's width; it fades into the ground under the gate */
- .p-final[data-boss] .stage-scroll{--room-size:100% auto;--room-clear:360px;--room-end:640px}
- /* the confirmed-threat plane already exists; over the fading room it takes a deeper ground */
- .p-final[data-boss] .threat{background:#000000b8}
+ /* a desk sees the whole room at the screen's width; it fades into the ground under the gate.
+    B5-1 NARROW CORRECTION: the Boss-left / name-right layout was the gate's composition without a
+    room. With the room behind it the Boss stands on the room's own centre axis, its base on the
+    authored floor (the room is W x 0.5628W; the floor reads from ~74% of that height, so the
+    base sits at ~83%), and the name takes the open wall to the left, clear of the axis. One
+    rule for every Boss. */
+ .p-final[data-boss] .stage-scroll{--room-size:100% auto;
+  --room-h:calc(min(100vw,1120px) * .5628);--room-clear:calc(var(--room-h) * .8);--room-end:var(--room-h)}
+ .p-final[data-boss] .gate-zero{display:block;position:relative;text-align:center;
+  padding-top:max(16px,calc(var(--room-h) * .83 - min(42vh,360px)));padding-bottom:22px}
+ .p-final[data-boss] .gate-zero .boss-face{display:flex;justify-content:center;margin:0}
+ .p-final[data-boss] .gate-zero .who{position:absolute;left:var(--gutter);top:calc(var(--room-h) * .24);
+  width:calc(50% - min(21vh,180px) - var(--gutter) - 8px);text-align:left}
+ .p-final[data-boss] .gate-zero h1{font-size:36px;white-space:nowrap}
  .modal-shade{align-items:center;padding:24px}
  .modal{max-height:88dvh;box-shadow:inset 0 0 0 3px #ffffff1a}
  .p-morning .dock .pull{flex:0 0 auto;min-width:280px;margin-left:auto}
