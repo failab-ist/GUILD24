@@ -2122,6 +2122,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-member .slot-name{font:400 12px/1.25 var(--ui);color:#f2e7cd;text-align:left}
 .p-final .tillpanel .forwho{display:flex;align-items:baseline;gap:10px}
 .p-final .final-forecast{margin:0 0 12px}
+/* B5-2: the fixed .menu-pin (44px, 6px from the stage's top-right) does not scroll, so FINAL state
+   on the right edge that scrolls into its band was covered: the party count at every width, the
+   forecast ? on a phone (where it is pinned to the readout's right). Each keeps clear of it by the
+   pin's own width; nothing else in the head or the readout moves, and the pin is unchanged. */
+.p-final .party-head{padding-right:44px}
+.p-final .final-forecast .fore>.tip{right:30px}
 .p-final .final-forecast .top{margin-bottom:0}
 .p-final .good.final-noop .tile{opacity:.5}
 .p-final .good .noop{font-style:normal;color:#e39a8c}
