@@ -24,6 +24,7 @@ Detailed Rule / Numeric / UX / QA truth is intentionally not duplicated in this 
 - `dist/`
 - root `index.html` redirects to `dist/index.html`
 - no build step is required for runtime
+- deploy: a push to `main` runs `.github/workflows/pages.yml` (npm test + audit gate), then publishes `dist/` to GitHub Pages
 
 ## Development
 
@@ -38,9 +39,14 @@ Use the scripts currently defined in `package.json`:
 - `npm run longitudinal`
 - `npm run hooks`
 - `npm run mastery`
+- `npm run remeasure`
 - `npm run dev`
+- `npm run qa:presentation:batch{1-4}:{fast|before|after}`
+
+Targeted browser QA harnesses that are not npm scripts live in `tools/qa-*.cjs` (for example the D30 FINAL
+`qa-final-prep`, `qa-boss-confirm` and `qa-final-end`).
 
 ## Assets
 
 - `GUILD24_NPC_PRODUCTION/` is the current character production pipeline/reference source.
-- Runtime assets live under `dist/assets/`.
+- Runtime assets live under `dist/ui/assets/`.
