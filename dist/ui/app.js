@@ -1216,6 +1216,7 @@ function finalForecastView(){const f=game.finalForecast(),c=Copy.finalPrep;if(!f
   +tip(c.forecast,...c.forecastWhy)+'</span></div></div>';}
 function finalScreen(){
  const s=game.run,d=s.dungeons[0],need=game.finalRequired(),committed=!!s.finalCommitted;
+ const pickCount='선택 '+s.team.length+'명 · 최대 '+need+'명';
  if(!s.team.includes(supplyNPC))supplyNPC=s.team[0]||null;
  const roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level);
  /* UI_UX: the Boss is a primary game object, and on the day the player finally faces it the
@@ -1243,7 +1244,9 @@ function finalScreen(){
     muster only; once confirmed (saved) the roster is gone and only the confirmed members are
     prepared, one at a time, against the shelf. */
  +(!committed
-  ?'<div class="party-head"><h2>원정대 선택</h2><span class="count">'+s.team.length+' / '+need+'</span></div>'
+  ?'<div class="party-head"><h2>원정대 선택</h2><span class="count">'+E(pickCount)+'</span></div>'
+   /* v2.8: the party is provisional - capacity, not a quota, and where the forecast will be */
+   +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'</p></div>'
    +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'team')).join('')+'</div>'
   :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'
    +finalForecastView()
@@ -1260,10 +1263,11 @@ function finalScreen(){
     states why the sortie cannot start, on the control itself, rather than leaving a dead
     `마왕성으로 출발` whose reason is a screen-length away in the muster head. The muster's own
     count stays where it is; this is the disabled Action's immediate cause feedback. */
- const ready=s.team.length===need;
+ /* any 1..need may be committed; with nobody picked the dock says what is missing */
+ const ready=s.team.length>0&&s.team.length<=need;
  const dock=relicWindowLink()+(need
   ?committed?btn('마왕성으로 출발','boss','stamp')
-   :btn(ready?'원정대 확정':'원정대 '+s.team.length+' / '+need,'final-commit','stamp',ready?'':'disabled')
+   :btn(ready?'원정대 확정':pickCount,'final-commit','stamp',ready?'':'disabled')
   :btn('출전 불가 · 런 종료','boss','danger'));
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
     stands in the Boss's own domain. The stage names which Boss so the stylesheet can hang that
@@ -1601,6 +1605,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
  else if(modal==='settings'){title='영업 설정';body=settings();narrow=true;}
  else if(modal==='bossConfirm'){title='제0게이트 — 마지막 출발';body='<p>선택한 원정대가 마왕성으로 출발합니다. 남은 슬롯과 보급을 확인하셨나요?</p>';footer=btn('보급으로 돌아가기','dismiss','stamp')+btn('최종 원정 시작','boss-go','stamp');narrow=true;}
+ else if(modal==='underConfirm'){const c=Copy.finalPrep;title=c.underTitle;body='<p>'+E(c.underBody.replace('{N}',game.run.team.length))+'</p>';footer=btn(c.back,'dismiss')+btn(c.under,'final-commit-go','stamp');narrow=true;}
  else if(modal==='retireConfirm'){title='현재 지점을 포기할까요?';body='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다. 본사 기록·점포 자본·보유 장식은 유지됩니다.</p>';footer=btn('계속 영업','dismiss')+btn('지점 포기','retire-go','danger');narrow=true;}
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
@@ -1735,7 +1740,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();break;
  case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
- case'final-commit':game.commitFinalParty();supplyNPC=s.team[0];selected=null;sound('button');render();break;
+ /* FINAL-Q75 v2.8: a sub-3 party is a valid choice, confirmed once before the boundary */
+ case'final-commit':if(s.team.length<3){setModal('underConfirm');break;}   // a full party falls through
+ case'final-commit-go':game.commitFinalParty();supplyNPC=s.team[0];selected=null;setModal(null);sound('button');render();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this
