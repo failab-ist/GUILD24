@@ -75,9 +75,9 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
    can show that something DID appear, never that everything else still CAN. */
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
  const EXCLUDED=['stamp','member','guarantee','fridge','board','rookieBoard','groupFlyer',
-                 'memberBundle','premiumMember','returnPoints','supplyCert','lifetime',
+                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnBulk','lifetime',
                  'royalCert','hub','efficiency'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the approved 15');
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (16)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
  const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
  for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
@@ -105,7 +105,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
  for(const sales of [0,5,6,7,8])for(const id of ['rotation','logisticsHQ'])
   assert.equal(eligibleAtD30(id,sales),true,id+' is not gated by '+sales+' previous sales at D30');
  /* a support that needs a legal D30 ORDER / Reroll action to pay is still eligible */
- for(const id of ['delivery','terminal','bulk','dawnBulk','medicine','showcase','hazardBoard','expeditionCert'])
+ for(const id of ['delivery','terminal','bulk','medicine','showcase','hazardBoard','expeditionCert'])
   assert.equal(eligibleAtD30(id,0),true,id+' realises its value through a legal D30 action');
 
  /* a future Store Support is included by DEFAULT, and leaves only by being named */

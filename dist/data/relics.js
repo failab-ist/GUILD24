@@ -87,7 +87,7 @@ Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.ove
    acquisition and the Final Lock through which it could change anything - not merely when it
    looks weak that late. A future support joins D30 by existing; it leaves only by being added
    here after its own D30-to-Final review. */
-D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','rookieBoard','groupFlyer','memberBundle','premiumMember','returnPoints','supplyCert','lifetime','royalCert','hub','efficiency'];
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','rookieBoard','groupFlyer','memberBundle','premiumMember','returnPoints','supplyCert','dawnBulk','lifetime','royalCert','hub','efficiency'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 /* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
    purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not

@@ -176,6 +176,7 @@ Current explicit D30 no-effect exclusions:
 - 프리미엄 멤버십 (premiumMember)
 - 귀환 적립제 (returnPoints)
 - 길드 납품 인증 (supplyCert)
+- 새벽 회수 계약 (dawnBulk)
 - 평생 단골제 (lifetime)
 - 왕도 프리미엄 인증 (royalCert)
 - 지역 거점점 계약 (hub)

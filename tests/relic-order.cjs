@@ -357,7 +357,7 @@ test('REMAKE 원정 전문 인증: the buyer of a Gate Counter gets +50G on the 
  const g=fresh('exp-cert-gold'),s=g.run,n=s.npcs[0];
  s.facilities=['expeditionCert'];s.dayFacilities=['expeditionCert'];
  s.dungeons=[{...g.makeDungeon('spider',2),requiredSupply:0}];
- n.traits=[];n.money=99999;n.introduced=true;n.visits=2;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
+ n.traits=[];n.money=1500;  /* within the 2000G wallet cap, so arrival Gold is not clipped */n.introduced=true;n.visits=2;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
  s.queue=[n.id];s.cursor=0;s.phase='sell';
  const real=g.rng;g.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
  g.stock('rope',1);g.stock('antidote',1);

@@ -741,3 +741,13 @@ Foundation < Hybrid/Utility < Keystone
 ```new
 Foundation < Hybrid < Keystone; Utility is priced as a cheap support (User decision 2026-09-23)
 ```
+
+## AMENDMENT — D30 exclusion follows the 새벽 회수 계약 remake (review follow-up 2026-09-23)
+
+Applying the existing D30 no-effect rule: the refund happens on a next morning (none after D30) and
+the extra offer joins only the day's first offer generation (before the D30 window), so the remade
+support can change nothing on D30.
+
+```new
+- 새벽 회수 계약 (dawnBulk)
+```

@@ -178,7 +178,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   let expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);
   /* 새벽 회수 계약: Food/Drink whose shelf life ends is taken back at 50% of what it cost instead
      of being wasted - it leaves the shelf all the same, but it is not waste. */
-  if(this.has('dawnBulk')){const back=expired.filter(x=>G.Relics.food(D.itemBy[x.item])),refund=back.reduce((a,x)=>a+Math.round(x.cost*D.relicParams.dawnBulk.refundRate),0);
+  if(this.has('dawnBulk')){const back=expired.filter(x=>G.Relics.food(D.itemBy[x.item])),refund=back.reduce((a,x)=>a+Math.round((Number(x.cost)||0)*D.relicParams.dawnBulk.refundRate),0);
    s.money+=refund;s.daily.subsidy+=refund;expired=expired.filter(x=>!back.includes(x));s.inventory=s.inventory.filter(x=>!back.includes(x));}
   s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
   s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
@@ -341,7 +341,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     (강골's injury-guard, for one) satisfied it with nothing the Player sold. The callback now
     reads `last.heroProof`, the same persisted DUNGEON_HAZARD RESULT-PROOF record NIGHT itself
     proves a Hero Item line from - never a Trait-only or merely-carried Item. */
- arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('rookieBoard'))n.money+=D.relicParams.rookieBoard.arrivalGold;if(n.certGoldDay!=null&&n.certGoldDay<this.run.day){n.money+=D.relicParams.expeditionCert.nextVisitGold;n.certGoldDay=null;}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
+ arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('rookieBoard'))n.money+=D.relicParams.rookieBoard.arrivalGold;if(n.certGoldDay!=null&&n.certGoldDay<this.run.day){n.money+=D.relicParams.expeditionCert.nextVisitGold;n.certGoldDay=null;}n.money=Math.min(2000,n.money);const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
