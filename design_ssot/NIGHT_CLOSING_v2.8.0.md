@@ -5,13 +5,157 @@ OWNER=night,expedition_result,closing,causality,fatigue_result,npc_reaction
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-BASE_DOCUMENT=NIGHT_CLOSING_v2.7.0.md
-PATCH_TYPE=RESULT_READABILITY
+CONSOLIDATED_FROM=history/NIGHT_CLOSING_v2.8.0-patch.md,history/NIGHT_CLOSING_v2.7.0.md,history/NIGHT_CLOSING_v2.6.1.md,history/NIGHT_CLOSING_v2.6.0.md
+CONSOLIDATION_LEDGER=reports/ssot-consolidation/NIGHT_CLOSING.md
 
-## INHERITANCE
+## KEY
 
-All unchanged result resolution, Closing economics, Injury/Aftercare truth, recent snapshot and
-proof-only causality rules inherit NIGHT_CLOSING_v2.7.0.md.
+nightFlow=oneAdventurerAtATime
+resolveCanBePrecomputed=YES
+controls=[NEXT,SKIP_ALL]
+
+resultStructure=[
+WHAT_HAPPENED,
+WHY,
+WHAT_CHANGED
+]
+
+closingFocus=economics
+debugLanguage=NO
+causalityMustMatchActualResolution=YES
+
+## ROLE
+
+NIGHT =
+`내 선택이 어떻게 됐을까?`
+
+CLOSING =
+`오늘 장사는 어땠을까?`
+
+둘의 역할을 분리한다.
+
+NIGHT:
+NPC 원정 이야기 / 생존 / 성장 / 부상 / 사망
+
+CLOSING:
+매출 / 비용 / 손익 / 폐기 / Gold 변화
+
+## NIGHT FLOW
+
+원정 결과는 NPC 1명씩 짧게 보여준다.
+
+Flow:
+resolve/precompute
+→ adventurer result card
+→ NEXT
+→ next adventurer
+
+Result presentation이 진행을 오래 막지 않는다.
+
+Presentation density follows importance:
+- routine/uneventful success may resolve very compactly
+- meaningful level-up / injury / severe injury / death / decisive Item effect / important callback receives stronger emphasis
+- do not force every ordinary result to consume equal screen time
+
+Zero-result Night:
+softlock=NO
+즉시 Closing으로 진행 가능해야 한다.
+
+게이트 순례주간:
+- Night header/summary may show `실제 변경 N명`
+- affected NPC result shows `예상 목적지 -> 실제 목적지`
+- no separate Event result screen is added
+
+## NIGHT CONTROLS — EXACT
+
+Exactly:
+```text
+다음
+전체 건너뛰기
+```
+
+Removed:
+- single-result `건너뛰기`
+- active `nightSkip` presentation/API path
+
+Skip-all affects presentation only and never changes already-resolved results.
+
+## SKIP CONTRACT
+
+Skip affects presentation only.
+
+Skip All must not change:
+- already resolved outcome
+- EXP
+- Loot
+- Injury
+- Death
+- Item effect
+- Wallet/Gold
+- RNG result
+
+Skipping must not become a reroll or different-resolution path.
+
+## SAVE / RESUME
+
+If save is allowed during/around Night:
+already resolved results must remain stable.
+
+Resume must not:
+- recalculate a different outcome
+- duplicate rewards
+- duplicate injury/death
+- duplicate Closing revenue
+
+Canonical save:
+-> CORE_RUN_v2.8.0.md
+
+## RESULT STRUCTURE
+
+각 Result는 기본적으로:
+
+1. WHAT_HAPPENED
+2. WHY
+3. WHAT_CHANGED
+
+순서로 읽힌다.
+
+### WHAT_HAPPENED
+Fantasy world에서 실제로 일어난 사건.
+
+Example meaning:
+- 원정을 무사히 마침
+- 예상보다 좋은 성과
+- 퇴각
+- 부상
+- 중상
+- 사망
+
+### WHY
+실제로 Outcome에 의미 있게 작용한 원인만 보여준다.
+
+가능:
+- 전투에서 밀림
+- 독 대응 성공
+- 거미줄 대응 부족
+- 귀환석으로 탈출
+- Trait가 실제 효과 발휘
+- 준비한 Item이 실제 Hazard를 줄임
+
+### WHAT_CHANGED
+실제 상태 변화.
+
+Possible:
+- EXP
+- Level
+- Stat growth
+- Loot
+- Injury
+- Severe Injury / rest
+- Fatigue/Condition
+- Death
+- Wallet/Loyalty/Revisit-related change if player-relevant
+- canonical Event-caused destination delta when it materially changed the expedition
 
 ## RESULT INFORMATION HIERARCHY
 
@@ -24,6 +168,42 @@ NIGHT reads in this order:
     -> EXP / NPC Wallet / other change
 
 An Item being present in the Bag is not enough to receive Hero feedback.
+
+## RESULT OUTCOMES
+
+Supported narrative outcomes may include:
+
+- Great Success / 대성공
+- Success / 성공
+- Retreat / 퇴각
+- Injury / 부상
+- Severe Injury / 중상
+- Death / 사망
+
+Exact thresholds/formulas:
+HIDDEN / resolution system owned elsewhere.
+
+Outcome label and narrative must describe the same actual state.
+
+## OUTCOME SENTENCE VS PLAYER CAUSE — EXACT
+
+The Outcome sentence states what happened.
+The Hero Item line states why the Player's sold Item mattered.
+
+Do not make the Outcome sentence consume the Item-causality role.
+
+For an avoided-death return:
+
+Outcome sentence:
+    사망 위기를 넘기고 살아 돌아왔다.
+
+Then, only when proven:
+    {Item} 덕분에 살아 돌아왔다.
+
+Do not use the generic Outcome sentence:
+    보급이 마지막 순간의 사망을 막았다.
+
+when a separate proven Item line follows.
 
 ## HERO ITEM FEEDBACK
 
@@ -50,7 +230,200 @@ Do not use vague Hero claims such as:
 
 A hidden risk decrease without a proven resolved difference is not Hero feedback.
 
-## FATIGUE RESULT — SUPERSEDES v2.7 PLAYER LABELS
+## ITEM / TRAIT IMPACT
+
+Do not dump every modifier used in calculation.
+
+Show only effects that were meaningfully relevant to the actual result.
+
+Good:
+- 농축해독제 → 독 노출 크게 감소
+- 핫팩 → 냉기 대응
+- 대식가 → Food core effect 강화
+- 귀환석 → 퇴각 가능성 확보
+
+Avoid:
+- long modifier ledger
+- invisible coefficient list
+- effects unrelated to the actual expedition outcome
+
+Impact summary is explanatory, not a combat log.
+
+## CAUSALITY RULE
+
+Player-facing explanation must be honest.
+
+If Hazard was successfully blocked:
+do not name that Hazard as the cause of an unrelated injury.
+
+If injury came from:
+- combat
+- another Hazard
+- generic expedition accident
+
+say that.
+
+If exact cause cannot be cleanly attributed:
+use a truthful broad narrative.
+
+Example:
+`원정 중 예상치 못한 사고로 부상을 입었습니다.`
+
+Do not manufacture false precision.
+
+### RUNTIME CAUSALITY
+
+A Player-facing Item/Trait/Event cause may appear only when the resolved report contains proof that the effect actually:
+- prevented
+- reduced
+- converted
+- or otherwise changed the relevant resolved risk/outcome
+
+Forbidden evidence:
+- Item merely existed in Bag
+- compatibility alone
+- generic Event flavor text alone
+
+If exact cause is not provable, use truthful broad narration instead of invented precision.
+
+Player-facing cause text requires runtime proof that an Item/Trait/Event actually changed the resolved risk/outcome/state.
+
+Provable contribution types also include:
+- Supply preRecovery
+- Supply outcome Fatigue buffer
+- First Aid Kit Aftercare
+- persistent Injury retained/cleared state
+
+Do not add system-authored failure diagnosis such as `전투 부족`, `독 대응 부족`, or `부상 때문에 사망` when exact causality is not proven.
+
+## INSURANCE CAUSALITY
+
+Insurance wording must match actual causal effect.
+
+### RETURN STONE
+When it actually changes escape/retreat outcome:
+show it as meaningful escape support.
+
+Do not claim:
+`귀환석이 죽음을 막았다`
+unless the actual resolution supports that causal claim.
+
+### WORLD TREE INSURANCE
+When Death is actually converted to Severe Injury:
+strong causal wording is allowed.
+
+Example meaning:
+`세계수의 생환 효과가 치명적인 결과를 중상으로 바꿨다.`
+
+No false hero attribution.
+
+### FIRST AID KIT AFTERCARE — RESULT TRUTH
+
+`구급키트` does not rewrite the expedition Outcome.
+If its Aftercare actually changes persistent Injury state, the report may expose that proven contribution.
+
+Examples of valid proof:
+- resolved `부상`, persistent state changed from would-be injury=1 to injury=0
+- resolved `중상`, persistent state changed from would-be injury=2 recovery-state to injury=1/recovery=0
+
+Do not display:
+- `구급키트가 퇴각시켰다`
+- `구급키트가 원정을 성공시켰다`
+- generic contribution merely because the Item was carried
+
+Insurance resolution order/effect -> `ITEM_v2.8.0.md`.
+
+## RETREAT
+
+Retreat is not normal success.
+
+Direction:
+- EXP reduced but >0
+- Loot very low / nearly none
+- NPC survives
+
+Retreat can still be followed by legitimate injury
+if actual resolution says so.
+
+If both occur:
+narrative must explain the sequence coherently.
+
+Example meaning:
+`도망치는 데는 성공했지만 탈출 과정에서 부상을 입었다.`
+
+Canonical Insurance:
+-> ITEM_v2.8.0.md
+
+## INJURY / SEVERE INJURY
+
+Injury must produce a real persistent consequence
+through the NPC condition system.
+
+Severe Injury:
+- stronger consequence than normal Injury
+- may require multi-day rest according to canonical condition data
+
+Recovery/availability must be consistent across:
+- Night result
+- next-day NPC state
+- Notebook
+- visitor eligibility
+
+Canonical NPC state:
+-> NPC_TRAIT_v2.8.0.md
+
+### INJURY RESULT
+
+Show actual current injury consequence only.
+
+`injury=2`:
+- no Stat penalty
+- show remaining recovery duration
+- recovery completion goes directly to healthy (`2 -> 0`)
+
+### ORDINARY INJURY RESULT CONTINUITY
+
+Natural ordinary-Injury recovery is owned by `NPC_TRAIT_v2.8.0.md`.
+Night/result truth must preserve it exactly.
+
+If the NPC began the expedition at `injury=1`:
+
+```text
+actual Outcome 성공 / 대성공
+-> persistent ordinary Injury clears naturally
+
+actual Outcome 퇴각
+-> persistent ordinary Injury remains
+
+actual Outcome 부상
+-> persistent ordinary Injury remains
+```
+
+Do not display Retreat as natural Injury recovery.
+Do not clear ordinary Injury merely because the result was not a fresh `부상` token.
+
+If an already-injured NPC resolves to Severe Injury or Death, report the actual final outcome/state only.
+The exact pre-supply 실패 시 사망 위험 may already have been shown during SALE, but Night must not invent or expose a separate post-supply/final probability after resolution.
+
+Player-facing result may truthfully state that the NPC departed already injured when that state materially affected the expedition, but must not fabricate an exact cause such as `부상 때문에 죽었다` unless the runtime proves that counterfactual claim.
+
+## DEATH
+
+Death is permanent within the Run.
+
+Result must make permanence clear
+without debug/system wording.
+
+Dead NPC:
+- no future visits
+- does not consume Living NPC Cap
+- retained only where needed for history/notebook/result record
+
+Canonical:
+-> CORE_RUN_v2.8.0.md
+-> NPC_TRAIT_v2.8.0.md
+
+## FATIGUE RESULT
 
 Main NIGHT surface shows one settled value:
 
@@ -72,6 +445,136 @@ Remove player-facing labels:
 
 Exact arithmetic/fields remain unchanged internally.
 
+Show the actual resolved path, not every hypothetical branch.
+
+Rules:
+- omit zero-value subrows when that improves readability
+- actual Outcome Fatigue gain must not be confused with net Fatigue delta
+- Severe Injury / Death actual result Fatigue gain is 0 under the `DUNGEON_HAZARD_v2.8.0.md` owner rule
+
+### RESULT FATIGUE FIELDS
+
+Resolved report/runtime must distinguish at least:
+
+```text
+beforeFatigue
+requiredSupply
+preparedSupply
+excessSupply
+preRecovery
+fatigueBeforeExpedition
+remainingSupplyBuffer
+rawOutcomeFatigueGain
+outcomeBufferUsed
+actualOutcomeFatigueGain
+finalFatigue
+netFatigueDelta
+```
+
+Definitions:
+- `preRecovery` = current Fatigue removed before expedition by Supply remaining after required Supply
+- `fatigueBeforeExpedition` = Fatigue after `preRecovery`
+- `remainingSupplyBuffer` = Supply left after required Supply + preRecovery
+- `rawOutcomeFatigueGain` = actual Outcome baseline plus eligible Trait modifier before Supply buffer
+- `outcomeBufferUsed` = amount of remaining Supply actually consumed to reduce that raw gain
+- `actualOutcomeFatigueGain` = final gain after the buffer
+
+Exact arithmetic -> `DUNGEON_HAZARD_v2.8.0.md`.
+
+Do not reuse `fatigueRecovery` as an ambiguous combined field for both pre-expedition recovery and post-outcome buffering.
+Legacy compatibility aliases may exist internally during implementation only if Player-facing/report truth remains unambiguous.
+
+## GREAT SUCCESS / DEEP EXPEDITION RESULT
+
+### GREAT SUCCESS
+
+Night explicitly distinguishes ordinary Success from `대성공`.
+
+For Great Success show:
+- outcome=`대성공`
+- honest causal explanation using existing rules
+- actual NPC changes
+- for normal expedition only, Store Great Success Gold bonus when earned
+
+Do not expose exact Success %, Great Success %, hidden margin or formula.
+
+### NORMAL GREAT SUCCESS GOLD
+
+Normal Great Success:
+- additional Store Gold
+- same rounded amount in result/history/Closing
+- same-day sale not required
+
+Ordinary Success:
+- no extra Store Gold
+
+### DEEP EXPEDITION RESULT
+
+Use existing outcome vocabulary once.
+
+Deep Success / Great Success shows:
+- Deep Expedition identity
+- NPC bonus EXP/Growth
+- NPC Wallet reward
+- any actual ordinary injury/death consequence
+
+Deep Expedition Store Gold reward=0.
+This includes Deep Great Success.
+Normal Great Success Store Gold bonus is suppressed.
+
+Closing shows sponsorship outflow clearly.
+Do not show a matching Deep cash payout.
+
+Economic read:
+`sponsorship / extra preparation outflow -> NPC future value`
+
+## GROWTH PRESENTATION
+
+Growth must show real change.
+
+Prefer:
+- Lv.4 → Lv.5
+- 투력 21 → 23
+- 강인함 17 → 18
+- EXP +N
+
+Avoid:
+`장비 보강`
+처럼 실제 변화가 보이지 않는 추상 문구만 사용.
+
+Only show stats that actually changed and matter.
+
+## LOOT
+
+Loot/result reward should be readable as actual gained value.
+
+Retreat:
+loot≈very low
+
+Success/Great Success:
+reward follows canonical expedition balance.
+
+Do not imply loot that was not actually granted.
+
+### NPC WALLET RESULT TERMINOLOGY
+
+Use:
+`NPC 소지금 획득`
+
+Do not use `전리품` where it can be read as Store/Player Gold.
+
+## RECENT EXPEDITION SNAPSHOT WRITE
+
+After an expedition result is fully resolved, write the latest snapshot owned by `NPC_TRAIT_v2.8.0.md` using:
+- completed Day
+- actual destination
+- final Outcome
+- exact Item IDs actually accepted/purchased in the completed Bag
+- only contribution/cause tokens already proven by the resolved report
+
+Do not write a claimed/expected destination in place of actual destination.
+Do not invent a cause during snapshot serialization.
+
 ## LIVING NPC REACTION
 
 For every living NIGHT result:
@@ -88,7 +591,7 @@ Death:
 
 Dialogue pool size and recent-repeat handling follow COPY_WORLD_VOICE_v2.8.0.md.
 
-## RESULT PRESENTATION ROUTING — v2.8 POLISH
+## RESULT PRESENTATION ROUTING
 
 NIGHT_CLOSING owns the resolved result category and causal truth.
 UI_UX_v2.8.0.md owns the visual/audio presentation of that already-resolved state.
@@ -130,11 +633,100 @@ records whatever it recorded; this is a render rule. Exact treatment -> UI_UX_v2
 §NIGHT LAYOUT — DEATH PAYLOAD.
 
 Every Outcome label is one size; Outcomes differ by
-copy and tone only. The three-volume rank remains a presentation weight rule, but it no longer
-changes the Outcome, NPC name or summary type size. Exact size -> UI_UX_v2.8.0.md §NIGHT LAYOUT
+copy and tone only. The three-volume rank remains a presentation weight rule, but it does not
+change the Outcome, NPC name or summary type size. Exact size -> UI_UX_v2.8.0.md §NIGHT LAYOUT
 — OUTCOME TYPE, EXACT.
 
+## RARE ACCIDENT COPY
+
+Rare incident narration is allowed when it matches resolution.
+
+Examples of flavor:
+- 장비가 순간적으로 벗겨짐
+- 장비 일부가 손상됨
+- 틈으로 위험에 노출됨
+- 예상보다 강한 환경에 노출됨
+
+Use sparingly.
+
+T1/T2 proper preparation should not repeatedly produce
+copy that makes Counter preparation feel useless.
+
+Canonical hazard reliability:
+-> DUNGEON_HAZARD_v2.8.0.md
+
+## DEBUG LANGUAGE
+
+Player-facing main copy must not use engine/process language.
+
+Forbidden style:
+- 판정 진행
+- 보정 적용
+- 상태 판정
+- 위험도 계산
+- 영구 사망 처리
+- RNG
+- Threshold
+- coefficient
+- resolve
+
+Write what happened in the world,
+not what the code executed.
+
+## COPY TONE
+
+Tone:
+- 담담함
+- 명확함
+- 가끔 웃김
+
+Avoid:
+- AI 분석문
+- 지나친 감탄사
+- 모든 NPC가 같은 말투
+- 시스템을 광고하는 문장
+- 장황한 설명
+
+State/context may influence dialogue:
+- first visit
+- returning
+- high Loyalty
+- injury comeback
+- previous failure
+- previous Item actually helped
+- price experience
+- same Dungeon retry
+
+General lines should remain the majority.
+Callbacks/jokes are occasional.
+
+## PRESENTATION DATA BOUNDARY
+
+Presentation must not read an app-local global `game` implicitly.
+Night result presentation consumes:
+1. the resolved result/report snapshot first
+2. explicit parameters/snapshot supplied by the caller only if required
+
+Adding a global `game` escape hatch is forbidden.
+
 ## CLOSING
+
+Closing is economics-first.
+
+Show at minimum:
+- 총매출
+- 매입/COGS
+- Margin
+- 운영비
+- 폐기
+- Relic 비용
+- 최종 Gold
+
+Exact calculation:
+-> ECONOMY_ORDER_v2.8.0.md
+
+Closing should answer:
+`오늘 장사는 실제로 남는 장사였나?`
 
 Remove explanatory footer prose that teaches internal accounting when the receipt itself already
 shows the actual figures.
@@ -146,28 +738,7 @@ does not belong on the primary Closing receipt.
 
 Closing remains economics-only.
 
-
-## OUTCOME SENTENCE VS PLAYER CAUSE — EXACT
-
-The Outcome sentence states what happened.
-The Hero Item line states why the Player's sold Item mattered.
-
-Do not make the Outcome sentence consume the Item-causality role.
-
-For an avoided-death return:
-
-Outcome sentence:
-    사망 위기를 넘기고 살아 돌아왔다.
-
-Then, only when proven:
-    {Item} 덕분에 살아 돌아왔다.
-
-Do not use the generic Outcome sentence:
-    보급이 마지막 순간의 사망을 막았다.
-
-when a separate proven Item line follows.
-
-## CLOSING ECONOMICS-ONLY — EXACT
+### CLOSING ECONOMICS-ONLY — EXACT
 
 The primary Closing receipt does not repeat NIGHT expedition-impact content.
 
@@ -189,3 +760,73 @@ Closing keeps only economic/accounting results such as:
 - 보유 자금
 
 The NIGHT result is the owner surface for expedition causality and adventurer-state change.
+
+## NIGHT vs CLOSING
+
+Do not duplicate the same information in both.
+
+NIGHT owns:
+- individual NPC story
+- outcome
+- cause
+- growth/injury/death
+
+CLOSING owns:
+- store economics
+- aggregate business result
+- compact cross-day takeaway
+
+## D30 / FINAL
+
+Normal Night expedition resolution does not own D30 Final resolution.
+Boss identity/trait/Sloth state is owned by `BOSS_v2.8.0.md`; Closing does not mutate it.
+
+Final Family / party / Power / Boss clear / post-clear contract:
+-> FINAL_EXPEDITION_v2.8.0.md
+
+NIGHT_CLOSING must not add a second ordinary expedition resolve after a successful Final clear.
+Final presentation should still preserve honest causality and culmination without becoming a debug log.
+
+## ACCEPTANCE
+
+### RUNTIME ACCEPTANCE
+
+Real browser path must complete with Console runtime error = 0:
+```text
+ORDER
+-> SALE all customers
+-> NIGHT
+-> injury result and non-injury result
+-> 다음 / 전체 건너뛰기
+-> CLOSING
+-> next Day
+```
+
+### RESULT ACCEPTANCE
+
+Embedded result acceptance:
+- `대성공` cannot coexist with Injury/Severe Injury/Retreat/Death
+- normal Great Success Store bonus is applied exactly once
+- Deep Great Success Store bonus remains 0
+- Deep bonus EXP/Wallet is reported as NPC change, not Store income
+
+### QA OWNERS
+
+Acceptance criteria:
+- CORE_RUN_QA_v2.8.0.md
+- DUNGEON_ITEM_QA_v2.8.0.md
+- NPC_TRAIT_QA_v2.8.0.md
+- ECONOMY_ORDER_QA_v2.8.0.md
+- UI_UX_QA_v2.8.0.md
+
+## RELATED
+
+game philosophy -> `00_GAME_CORE_v2.8.0.md`
+run/save -> `CORE_RUN_v2.8.0.md`
+final expedition -> `FINAL_EXPEDITION_v2.8.0.md`
+npc condition/growth, Injury natural recovery/re-expedition state, recent snapshot -> `NPC_TRAIT_v2.8.0.md`
+hazard causality, Fatigue/Supply/Death risk -> `DUNGEON_HAZARD_v2.8.0.md`
+item/insurance/Aftercare -> `ITEM_v2.8.0.md`
+economy/settlement -> `ECONOMY_ORDER_v2.8.0.md`
+sale commitments, Sale revisit display -> `SALE_v2.8.0.md`
+presentation / UI -> `UI_UX_v2.8.0.md`
