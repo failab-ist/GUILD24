@@ -298,10 +298,17 @@ When active:
 - remain quieter than an active `발주 N G · 확정` control when both are present.
 
 When disabled because a cart is held:
-- recede by losing active depth / contrast;
+- preserve the SAME authored steel-control silhouette / cut-corner geometry / four-side edge construction as the active ORDER control family;
+- recede by losing active depth / contrast, NOT by reverting to a plain rectangle;
 - remain legible;
 - do not use whole-element opacity fade;
 - do not keep an active-looking hard drop.
+
+USER CLARIFICATION 2026-09-23:
+Changing only face colour / border colours is NOT the requested alignment.
+The disabled `영업 시작` must not inherit a generic disabled rule that removes the crafted silhouette.
+If a shared disabled selector sets `clip-path:none` or otherwise restores rectangular browser-like geometry,
+override that on this ORDER control so the same cut / built silhouette remains.
 
 Do not copy OPENING rivets or brass ornaments onto this control merely for decoration.
 
