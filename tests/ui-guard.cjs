@@ -2204,7 +2204,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.equal(c.d0.header,'마왕 조사 개시');
  assert.equal(c.d0.lead,'길드 조사대가 마왕의 정체를 추적하러 출발했다.');
  assert.deepEqual(c.d0.steps,[['DAY 5',['첫 조사 보고에서 토벌 대상이 공개된다.','이후 조사 소식은 5일마다 이어진다.']],
-  ['DAY 30',['성장한 모험가 3명을 마왕성으로 보내 최종 토벌에 나선다.']]]);
+  ['DAY 30',['성장한 모험가를 최대 3명까지 마왕성으로 보내 최종 토벌에 나선다.']]]);
  assert.equal(c.d0.close,'조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.');
  assert.ok(!/토벌 예정|길드 정보원/.test(read('dist/data/copy.js')+app),'the superseded D0 lines are gone');
  assert.ok(!/class="boss-art"|class="boss-id"|b\.name/.test(fn('bossReveal').split("stage==='d0'")[1].split('</div>\';')[0]),

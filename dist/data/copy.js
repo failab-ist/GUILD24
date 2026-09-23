@@ -222,7 +222,7 @@ Copy.boss={
     cadence, and nothing about the Boss itself. Verbatim. */
  d0:{header:'마왕 조사 개시',lead:'길드 조사대가 마왕의 정체를 추적하러 출발했다.',
   steps:[['DAY 5',['첫 조사 보고에서 토벌 대상이 공개된다.','이후 조사 소식은 5일마다 이어진다.']],
-         ['DAY 30',['성장한 모험가 3명을 마왕성으로 보내 최종 토벌에 나선다.']]],
+         ['DAY 30',['성장한 모험가를 최대 3명까지 마왕성으로 보내 최종 토벌에 나선다.']]],
   close:'조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.',button:'확인'},
  d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
   flavor:{
@@ -283,7 +283,7 @@ Copy.deep={
  reward:'심층원정 보상'
 };
 
-/* COPY_AUDIT_APPROVED_v2.8 §14-7 D30 원정대 선택 / 마왕성 준비, verbatim. Player copy never says
+/* COPY_AUDIT_APPROVED_v2.8 §14-9 D30 원정대 선택 / 마왕성 준비, verbatim. Player copy never says
    `Final`. The forecast explanation is taught once by the coach and kept behind its ? (User
    decision 2026-09-23: no standing explanation line). */
 Copy.finalPrep={
