@@ -107,7 +107,7 @@ async function play(page,day,onNight){
     for(let i=0;i<f.index;i++)await p.click('.p-night .dock [data-action="night-next"]');
     // the pointer that pressed 다음 would otherwise leave the next control in its hover state
     await p.mouse.move(1,1);
-    await p.waitForTimeout(250);
+    await p.waitForTimeout(700);
     const check=await p.evaluate(`(()=>{const s=Guild24.game.run,r=s.results[s.nightCursor||0];return r&&r.name;})()`);
     if(check!==f.name){console.log('DRIFT '+kind+' @'+width+' '+check+' != '+f.name);continue;}
     await p.screenshot({path:path.join(OUT,`night-${kind}-${width}.png`)});
