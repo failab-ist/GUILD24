@@ -145,6 +145,11 @@ Final must remain the culmination of the shop-management decisions learned durin
 ```text
 maxParticipants = 3
 
+eligible
+= alive
++ introduced (has visited the store at least once)
++ not in 중상 recovery (recovery Days remaining = 0)
+
 eligible >= 1
 -> Player may choose 1..min(3, eligible) participants
 

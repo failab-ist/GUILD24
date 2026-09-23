@@ -279,3 +279,15 @@ the Final preparation transfer step.
   is invented here. DESIGN ISSUE.
 - `기존 Design SSOT` / bare owner names (`→ DUNGEON_HAZARD`, `-> ITEM`, ...) in v2.5 text are kept
   verbatim; they resolve through SPEC_INDEX_v2.8.0.md.
+
+## AMENDMENT — User decision 2026-09-23: `eligible` defined, matching Source
+
+The User resolved the DESIGN ISSUE above: `eligible` follows the current Source
+(`finalEligible()`: alive && introduced && !recovery; `recovery` is set only by 중상).
+
+```new
+eligible
+= alive
++ introduced (has visited the store at least once)
++ not in 중상 recovery (recovery Days remaining = 0)
+```
