@@ -618,10 +618,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* the press closes the depth, the way the commit's does */
 .p-order .dock .stamp.leave:active{transform:translate(3px,3px);background:#38424b;
  box-shadow:inset 0 2px 0 #4f5a65,inset 0 -2px 0 #262d34,1px 1px 0 #2a231780}
-/* and while a cart is held it is a dead plate set into the paper: the depth is gone, the plane
-   has receded a step, and nothing about it is raised. The label is still read. */
-.p-order .dock .stamp.leave[disabled]{background:#cdc3a6;color:#8b8169;opacity:1;transform:none;
- box-shadow:inset 0 2px 0 #b3a88c,inset 0 -2px 0 #ded5ba}
+/* USER, 2026-09-23: disabled, the control had changed MATERIAL - a pale paper rectangle beside
+   a steel commit, which is the web-button reading the active state had just been rebuilt out of.
+   It is the same steel plate while a cart is held; it is simply dead. The face is the alloy a
+   step back in contrast, the depth is gone and the edges are reversed, so the plate is set INTO
+   the dock rather than raised off it. The label is still read, and nothing here fades. */
+.p-order .dock .stamp.leave[disabled]{background:#8d959c;color:#3f464c;opacity:1;transform:none;
+ box-shadow:inset 0 2px 0 #6e767d,inset 0 -2px 0 #a7aeb4}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
