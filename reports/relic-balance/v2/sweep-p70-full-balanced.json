@@ -1,0 +1,132 @@
+{
+ "seeds": 2000,
+ "policy": "balanced",
+ "account": "full",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": {
+  "_price": {
+   "bulk": 130,
+   "rotation": 80,
+   "stamp": 130,
+   "member": 130,
+   "showcase": 140,
+   "guarantee": 140,
+   "hazardBoard": 80,
+   "medicine": 110,
+   "fridge": 80,
+   "kitchen": 170,
+   "board": 110,
+   "rookieBoard": 110,
+   "groupFlyer": 200,
+   "memberBundle": 190,
+   "premiumMember": 200,
+   "returnPoints": 240,
+   "expeditionMeal": 200,
+   "coldcase": 180,
+   "supplyCert": 220,
+   "dawnBulk": 190,
+   "logisticsHQ": 300,
+   "lifetime": 310,
+   "royalCert": 320,
+   "expeditionCert": 290,
+   "fresh24": 360,
+   "hub": 340,
+   "warehouse": 130,
+   "terminal": 130,
+   "delivery": 120,
+   "efficiency": 130
+  }
+ },
+ "results": {
+  "none": {
+   "gain": 503.282,
+   "reached": 0.139,
+   "win": 0.0685,
+   "deaths": 9.3065,
+   "regulars": 6.4425,
+   "sales": 145.999,
+   "margin": 4826.927,
+   "finalRatio": 0.1367796183023992,
+   "spend": 0
+  },
+  "vip": {
+   "gain": 552.917,
+   "reached": 0.151,
+   "win": 0.0945,
+   "deaths": 9.138,
+   "regulars": 7.21,
+   "sales": 145.438,
+   "margin": 5893.799,
+   "finalRatio": 0.1587536802816099,
+   "spend": 685.7425
+  },
+  "rotation": {
+   "gain": 549.318,
+   "reached": 0.167,
+   "win": 0.113,
+   "deaths": 9.0615,
+   "regulars": 7.4885,
+   "sales": 148.551,
+   "margin": 5810.7965,
+   "finalRatio": 0.18075497495302054,
+   "spend": 674.2665
+  },
+  "hybrid": {
+   "gain": 550.9505,
+   "reached": 0.174,
+   "win": 0.1225,
+   "deaths": 8.9665,
+   "regulars": 6.948,
+   "sales": 145.94,
+   "margin": 5603.8455,
+   "finalRatio": 0.19196547725940794,
+   "spend": 665.5415
+  },
+  "premium": {
+   "gain": 516.1605,
+   "reached": 0.152,
+   "win": 0.089,
+   "deaths": 8.979,
+   "regulars": 6.303,
+   "sales": 140.819,
+   "margin": 5184.447,
+   "finalRatio": 0.16043725424096025,
+   "spend": 659.289
+  },
+  "expedition": {
+   "gain": 523.36,
+   "reached": 0.1665,
+   "win": 0.115,
+   "deaths": 8.8725,
+   "regulars": 6.53,
+   "sales": 142.6275,
+   "margin": 5321.6135,
+   "finalRatio": 0.18225628489804846,
+   "spend": 657.1945
+  },
+  "fresh": {
+   "gain": 511.137,
+   "reached": 0.179,
+   "win": 0.143,
+   "deaths": 8.58,
+   "regulars": 6.6055,
+   "sales": 139.4055,
+   "margin": 5056.7035,
+   "finalRatio": 0.20821363109744428,
+   "spend": 630.9435
+  },
+  "customer": {
+   "gain": 547.073,
+   "reached": 0.153,
+   "win": 0.1055,
+   "deaths": 9.206,
+   "regulars": 7.204,
+   "sales": 149.8775,
+   "margin": 5589.261,
+   "finalRatio": 0.16614102835509104,
+   "spend": 672.0985
+  }
+ }
+}
