@@ -1446,6 +1446,11 @@ function bossRevealStage(){const s=game.run;if(!s?.bossReveal)return null;
    a filed document rather than a card. It is built only from the Day and the fixed department
    name - never the Boss, the Trait or the Final state - so a beat cannot leak what its own
    reveal has not disclosed yet. */
+/* CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING: the ordinary DAY 1 Morning may not go on past the
+   briefing until it is acknowledged, and closing it must not consume it. Closing a modal does
+   not redraw the Morning under it, so a closed D0 used to leave 발주 reachable with the beat
+   still owed. While D0 is the open report, 확인 is its only way out. */
+const d0Owed=()=>modal==='boss'&&bossRevealStage()==='d0';
 function bossFiled(){return '<p class="filed"><span>길드 조사부</span><b>DAY '
  +String(game.run.day).padStart(2,'0')+'</b></p>';}
 function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bossRevealStage();
@@ -1481,8 +1486,12 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    +(art?'<figure class="boss-id"><img src="'+art+'" alt="'+E(b.name)+'"></figure>':'')
    +'<p class="lede">'+E(t.line.replace('{보스명}',b.name))+'</p>'
    +'<p class="next-report">'+E(t.next)+'</p></div>';}
- /* SA-Q47 / BOSS_v2.8 §D0: investigation only - no Boss identity, no art. That is D5's beat. */
- if(stage==='d0')return '<div class="boss-reveal d0">'+bossFiled()+'<p class="lede">'+E(c.d0.line)+'</p></div>';
+ /* SA-Q47 / BOSS_v2.8 §D0 INFORMATION BOUNDARY: the Run objective and the investigation cadence
+    only - no Boss identity, no art, no Trait, no Final state. That is D5's beat onward. The two
+    Days are told apart by type on the same record, not by timeline cards. */
+ if(stage==='d0')return '<div class="boss-reveal d0">'+bossFiled()+'<p class="lede">'+E(c.d0.lead)+'</p>'
+  +c.d0.steps.map(([day,lines])=>'<div class="d0-step"><b>'+E(day)+'</b>'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>').join('')
+  +'<p class="d0-close">'+E(c.d0.close)+'</p></div>';
  return '<div class="boss-reveal d5">'+bossFiled()+'<p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
@@ -1540,7 +1549,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
+ root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')&&!d0Owed()?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
     request is consumed here: a later redraw of the same panel must not keep yanking the
     player back to it while they read something else. */
@@ -1668,7 +1677,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();break;
- case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation')return;sound('ui');setModal(null);break;
+ case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
@@ -1735,7 +1744,7 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new'))setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new')&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a

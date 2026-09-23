@@ -218,14 +218,19 @@ const Copy={
 Copy.boss={
  /* COPY_AUDIT_APPROVED_v2.8.0 §14. The Boss information cadence is D0 / D5 / D10 / D15 / D20 /
     D25, and D30 adds nothing new. D0, D10 and D20 had no active Copy at all. */
- d0:{header:'DAY 30 · 제0게이트 토벌 예정',line:'길드 정보원이 토벌 대상을 추적하고 있다.',button:'확인'},
+ /* COPY_AUDIT §14-1 D0 — the first-Morning briefing: the Run objective and the investigation
+    cadence, and nothing about the Boss itself. Verbatim. */
+ d0:{header:'마왕 조사 개시',lead:'길드 조사대가 마왕의 정체를 추적하러 출발했다.',
+  steps:[['DAY 5',['첫 조사 보고에서 토벌 대상이 공개된다.','이후 조사 소식은 5일마다 이어진다.']],
+         ['DAY 30',['성장한 모험가 3명을 마왕성으로 보내 최종 토벌에 나선다.']]],
+  close:'조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.',button:'확인'},
  d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
   flavor:{
    WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',
    PRIDE:'검은 갑주에는 아직 흠집 하나 남지 않았다.',
    ENVY:'승전 보고서마다 가장 빛나던 이름 하나가 붉게 지워져 있었다.',
    GREED:'금고가 빈 마을일수록, 놈의 군세는 이상할 만큼 강했다.',
-   GLUTTONY:'최정예 토벌대의 보급품만 유난히 처참한 꼴로 발견됐다.',
+   GLUTTONY:'챙겨 간 물건을 써도 몸이 평소만큼 따라주지 않았다.',
    LUST:'오래 손발을 맞춘 자들만 서로의 이름을 잊지 않았다고 한다.',
    SLOTH:'놈은 움직이지 않았다. 몸을 얽은 봉인만이 낮게 울리고 있었다.'}},
  /* one-tap information beats: they open a question the next report answers. */

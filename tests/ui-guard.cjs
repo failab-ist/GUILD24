@@ -1944,7 +1944,7 @@ test('SA-Q01: pre-Run Store Management has an explicit return to new-Run prepara
  assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;\}/.test(act),
   'Close from this panel lands on preparation rather than doing nothing');
  // ...and the Close button is actually rendered there, which `foundation` used to suppress
- assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)\?btn\('닫기','dismiss'/.test(app),
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
  // no blank stage: with no Run the preparation modal is reopened by render itself
  assert.ok(/if\(!modal\)setModal\('new'\)/.test(app),'a runless app always re-opens preparation');
@@ -2199,8 +2199,17 @@ test('SA-Q36: the Decoration comparison shows only what the decision is made on'
 test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=>{
  const c=Copy.boss;
  // exact §14 copy, verbatim
- assert.equal(c.d0.header,'DAY 30 · 제0게이트 토벌 예정');
- assert.equal(c.d0.line,'길드 정보원이 토벌 대상을 추적하고 있다.');
+ /* COPY_AUDIT §14-1, amended 2026-09-23 (D0 FIRST-MORNING BRIEFING): the old one-line
+    objective is superseded by the briefing; the old strings are not kept as live copy. */
+ assert.equal(c.d0.header,'마왕 조사 개시');
+ assert.equal(c.d0.lead,'길드 조사대가 마왕의 정체를 추적하러 출발했다.');
+ assert.deepEqual(c.d0.steps,[['DAY 5',['첫 조사 보고에서 토벌 대상이 공개된다.','이후 조사 소식은 5일마다 이어진다.']],
+  ['DAY 30',['성장한 모험가 3명을 마왕성으로 보내 최종 토벌에 나선다.']]]);
+ assert.equal(c.d0.close,'조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.');
+ assert.ok(!/토벌 예정|길드 정보원/.test(read('dist/data/copy.js')+app),'the superseded D0 lines are gone');
+ assert.ok(!/class="boss-art"|class="boss-id"|b\.name/.test(fn('bossReveal').split("stage==='d0'")[1].split('</div>\';')[0]),
+  'D0 shows no Boss art, portrait or name');
+ assert.equal(c.d5.flavor.GLUTTONY,'챙겨 간 물건을 써도 몸이 평소만큼 따라주지 않았다.');
  assert.equal(c.d0.button,'확인');
  assert.equal(c.d5.header,'1차 조사 보고');
  assert.equal(c.d5.sub,'토벌 대상 확인');
@@ -2235,6 +2244,11 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
   'D0 fires exactly once, on DAY 1');
  assert.ok(/if\(stage==='d0'\)return/.test(fn('bossReveal')),'D0 renders through the existing reveal shell');
  assert.ok(/st==='d0'\)s\.bossReveal\.d0Seen=true/.test(app),'dismissing D0 persists its own marker, not a BOSS_BEATS entry');
+ /* CORE_RUN §D0 — closing does not consume the beat, and ordinary Morning does not go on past
+    it: no 닫기, no Escape and no dismiss while D0 is the open report */
+ assert.ok(/!d0Owed\(\)\?btn\('닫기'/.test(app),'D0 carries no 닫기');
+ assert.ok(/\(game\.run\|\|modal!=='new'\)&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
+ assert.ok(/phase==='foundation'\|\|d0Owed\(\)\)return/.test(app),'dismiss does not close D0');
  // the cadence table, and D30 reusing D25
  assert.ok(/\[5,'d5','identitySeen'\],\[10,'d10','combatSeen'\],\[15,'d15','traitSeen'\],\s*\[20,'d20','routeSeen'\],\[25,'final','familySeen'\]/.test(app),
   'every D5-D25 beat has its Day and its own persisted marker');
