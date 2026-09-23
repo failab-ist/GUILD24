@@ -11,6 +11,7 @@
 //   Store Capital gain, reached-D30, clear rate and relic spend per build.
 // --policy <name> (default balanced) · --account full : an account owning and wearing every Decoration
 // (one per slot) instead of Meta.fresh(). Workers: one child process per relic / build (os.cpus()).
+// --aware : the simulated player uses what it owns (simulation.js relic-aware layer); off by default.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
 function load(){
@@ -30,16 +31,16 @@ function applyOverrides(D,o){if(!o)return;
   Object.assign(D.relicParams[id],p);}}
 function accountFor(G,kind){if(kind!=='full')return null;const a=G.Meta.fresh();
  G.Meta.addCapital(a,1e7);for(const d of G.DATA.decorations)G.Meta.buyDecoration(a,d.id);return a;}
-function runBuild(G,seeds,build,overrides,policy,account){
+function runBuild(G,seeds,build,overrides,policy,account,aware){
  const D=G.DATA;
  applyOverrides(D,overrides);
  const P=G.Game.prototype,end=P.end,rows=[];
  P.end=function(win,reason){const r=end.call(this,win,reason),s=this.run;
   rows.push(rowOf(s));return r;};
- try{G.Debug.simulate(seeds,policy,accountFor(G,account),'adaptive',build);}finally{P.end=end;}
+ try{G.Debug.simulate(seeds,policy,accountFor(G,account),'adaptive',build,{relicAware:aware});}finally{P.end=end;}
  return rows;
 }
-function runArm(G,seeds,inject,overrides,policy,account){
+function runArm(G,seeds,inject,overrides,policy,account,aware){
  const D=G.DATA;
  applyOverrides(D,overrides);
  const P=G.Game.prototype,start=P.start,end=P.end,rows=[];
@@ -49,24 +50,24 @@ function runArm(G,seeds,inject,overrides,policy,account){
   return r;};
  P.end=function(win,reason){const r=end.call(this,win,reason),s=this.run;
   rows.push(rowOf(s));return r;};
- try{G.Debug.simulate(seeds,policy,accountFor(G,account),'adaptive','none');}finally{P.start=start;P.end=end;}
+ try{G.Debug.simulate(seeds,policy,accountFor(G,account),'adaptive','none',{relicAware:aware});}finally{P.start=start;P.end=end;}
  return rows;
 }
 if(process.env.RELIC_WORKER){
- process.on('message',({seeds,id,overrides,build,policy,account})=>{
+ process.on('message',({seeds,id,overrides,build,policy,account,aware})=>{
   const G=load();
   // exit only after the message is flushed: a large payload sent right before exit can be lost
-  if(build){process.send({id,rows:runBuild(G,seeds,build,overrides,policy,account)},()=>process.exit(0));return;}
-  const base=runArm(G,seeds,{remove:id},overrides,policy,account);
-  const treat=runArm(G,seeds,{remove:id,own:id},overrides,policy,account);
+  if(build){process.send({id,rows:runBuild(G,seeds,build,overrides,policy,account,aware)},()=>process.exit(0));return;}
+  const base=runArm(G,seeds,{remove:id},overrides,policy,account,aware);
+  const treat=runArm(G,seeds,{remove:id,own:id},overrides,policy,account,aware);
   process.send({id,base,treat},()=>process.exit(0));});
 }else{
  const args=process.argv.slice(2),flag=k=>{const i=args.indexOf(k);return i>=0?args[i+1]:null;};
- const pos=args.filter((a,i)=>!a.startsWith('--')&&!(i>0&&args[i-1].startsWith('--')));
+ const valued=['--set','--out','--policy','--account'],pos=args.filter((a,i)=>!a.startsWith('--')&&!(i>0&&valued.includes(args[i-1])));
  const seeds=Number(pos[0])||300,G0=load(),all=G0.DATA.relics.map(r=>r.id);
  const builds=args.includes('--builds');
  const ids=builds?['none','hybrid',...Object.keys(G0.DATA.buildNames)]:pos[1]&&pos[1]!=='all'?pos[1].split(','):all;
- const policy=flag('--policy')||'balanced',account=flag('--account')||'fresh';
+ const policy=flag('--policy')||'balanced',account=flag('--account')||'fresh',aware=args.includes('--aware');
  const setArg=flag('--set'),overrides=setArg?JSON.parse(setArg.startsWith('@')?fs.readFileSync(setArg.slice(1),'utf8'):setArg):null,outFile=flag('--out');
  const stat=(b,t,k)=>{const d=b.map((x,i)=>t[i][k]-x[k]),n=d.length,m=d.reduce((a,v)=>a+v,0)/n,
   sd=Math.sqrt(d.reduce((a,v)=>a+(v-m)**2,0)/Math.max(1,n-1));
@@ -79,8 +80,8 @@ if(process.env.RELIC_WORKER){
     console.log(id.padEnd(11),METRICS.map(k=>k+' '+(+m(k).toFixed(k==='gain'||k==='margin'||k==='spend'?0:3))).join('  '));return;}
    results[id]=Object.fromEntries(METRICS.map(k=>[k,stat(base,treat,k)]));
    console.log(id.padEnd(15),METRICS.filter(k=>k!=='spend').map(k=>'d'+k+' '+results[id][k].delta.toFixed(k==='gain'||k==='margin'?0:3)+'±'+results[id][k].se.toFixed(k==='gain'||k==='margin'?0:3)).join('  '));});
-  c.on('exit',()=>{live--;next();});c.send({seeds,id,overrides,build:builds?id:null,policy,account});};
- const done=()=>{const out={seeds,policy,account,pricing:'adaptive',mode:builds?'builds':'relics',overrides,results};
+  c.on('exit',()=>{live--;next();});c.send({seeds,id,overrides,build:builds?id:null,policy,account,aware});};
+ const done=()=>{const out={seeds,policy,account,aware,pricing:'adaptive',mode:builds?'builds':'relics',overrides,results};
   if(outFile)fs.writeFileSync(outFile,JSON.stringify(out,null,1));};
  for(let i=0;i<Math.max(1,os.cpus().length);i++)next();
 }

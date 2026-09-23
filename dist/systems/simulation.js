@@ -169,11 +169,21 @@ function derive(out,count){
    time so real Meta progression carries forward. */
 function playRun(g,out,ctx){
  const {policy,pricing,build,seed}=ctx,engagement=levers(policy),spend=spending(policy),s=g.run;
+ /* RELIC-AWARE LAYER, measurement only (ctx.relicAware, default off). The policies above were
+    written before most Store Supports existed, so a Support whose value comes from a choice the
+    player makes (150% sales, 3-of-a-SKU orders, a Counter for the Gate) read as ~0 because the
+    simulated player never makes that choice. When on, and ONLY while that Support is owned, a
+    few small rules make the choice from state the player can see. Off, nothing below changes. */
+ const aware=!!ctx.relicAware,owns=id=>aware&&g.has(id),RP=D.relicParams;
  let turns=0;const seenWindows=new Set();let previousCandidates=[];let deepWatches=[];
  /* Interaction-cost proxy: one tick per action a player would actually have to perform. */
  const act=(n=1)=>{out.actions+=n;};
  const stat=d=>out.days[d]??={samples:0,cash:0,wallet:0,level:0,inventory:0,peak:0,visitors:0,actual:0,consumed:0,slots:0,waste:0,revenue:0,cogs:0,spent:0,operating:0,loyalty:0,injury:0,death:0,overAffordable:0,fullAffordable:0,halfOnly:0,offers:0};
- function itemValue(n,it,d){const known=policy==='skilled'?d.hazards:G.Presentation?G.Presentation.known(d,g):d.hazards;let v=(it.effects.combat||0)*.55+(it.effects.survival||0)*.6+(it.effects.mobility||0)*.25+(it.effects.spirit||0)*.3+(d.requiredSupply||0)*(it.effects.supply||0)*.2+known.reduce((a,h)=>a+Math.max(0,it.effects[h]||0)*.5,0);if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
+ function itemValue(n,it,d){const known=policy==='skilled'?d.hazards:G.Presentation?G.Presentation.known(d,g):d.hazards;const hz=known.reduce((a,h)=>a+Math.max(0,it.effects[h]||0)*.5,0);let v=(it.effects.combat||0)*.55+(it.effects.survival||0)*.6+(it.effects.mobility||0)*.25+(it.effects.spirit||0)*.3+(d.requiredSupply||0)*(it.effects.supply||0)*.2+hz;
+ /* aware: 야전 정비대 / 원정 전문 인증 multiply the Counter an Item brings to the Gate this
+    adventurer enters - value that Hazard term by the same factor the game will apply. Only when
+    supplying an adventurer (n given), not when ranking the order sheet. */
+ if(aware&&n&&hz){const f=(owns('medicine')&&it.category==='gear'?RP.medicine.counterMult:1)*(owns('expeditionCert')&&G.Relics.counter(it,d.hazards)?RP.expeditionCert.counterMult:1);v+=hz*(f-1);}if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
  /* The counter guarantee overwrites the last slot, so whether it fired can only be read from the
     state BEFORE the sheet is rolled. Measurement only - the call is passed straight through. */
  const nominees={};
@@ -355,7 +365,14 @@ function playRun(g,out,ctx){
     /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
        warehouse ceiling - and setQuantity throws for it. Counting only the pre-check reported a
        flat zero while the ceiling was really binding, so the throw is counted here too. */
-    try{g.setQuantity(i,(s.cart?.[i]||0)+1);act();(out.items[o.item]??={ordered:0,sold:0}).ordered++;}
+    try{g.setQuantity(i,(s.cart?.[i]||0)+1);act();(out.items[o.item]??={ordered:0,sold:0}).ordered++;
+     /* aware: 묶음발주 계약, or 물류 본부계약 once yesterday's sales armed it - an Item the policy
+        already chose is rounded up to 3 of that SKU when this offer holds enough, the till still
+        clears cashFloor after the discounted quote, and the warehouse takes it (validateCart). */
+     if(owns('bulk')||owns('logisticsHQ')&&s.previousSales>=6){
+      const cart=s.cart||{},same=Object.keys(cart).filter(j=>s.offers[j].item===o.item).reduce((a,j)=>a+cart[j],0),want=cart[i]+3-same;
+      if(same<3&&want<=o.quantity&&s.money-g.cartTotal({...cart,[i]:want})>=spend.cashFloor)
+       try{g.setQuantity(i,want);act();out.items[o.item].ordered+=3-same;}catch(e){}}}
     catch(e){if(String(e?.message||'').includes('창고')){out.capacityBlocked++;capacityHit=true;}}}}
    if(capacityHit)out.shortage.capacityDay++;
    g.confirmOrder();act();day.peak+=s.inventory.length;g.open();act();
@@ -377,8 +394,17 @@ function playRun(g,out,ctx){
        adventurer, so the sink can only be judged next to the growth and the Final seat it buys. */
     (nominees[n.id]??={levelAtNomination:n.level,rarity:n.rarity,cost:0}).cost+=cost;out.deepCollapse.samples++;deepWatches.push(s.day);}
    const d=g.claimedGateFor(n);let attempts=0;
-   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0)});}
-   options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
+   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';/* aware: 왕도 프리미엄 인증 - 150% whenever the wallet comfortably covers it, by the same
+    wallet test the adaptive rule already uses (more than twice the list price), without its
+    loyalty gate; not re-offered at 150% once this customer refused it. */
+ if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&owns('royalCert')&&n.money>it.sell*2&&!n.refused.includes(it.id+':overcharge'))mode='overcharge';
+ if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0),
+    /* aware: 길드 납품 인증 pays on a rare+ Item that Counters this adventurer's Gate, or on
+       rare+ insurance, so those are offered first; value decides within each group. (단골 묶음혜택
+       needs no rule: this loop already fills a 단골's second slot, and interest() already
+       prices that second Item at the bundled debit.) */
+    pref:aware?Number(owns('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,d.hazards)||!!it.effects.escape||!!it.effects.revive)):0});}
+   if(aware)options.sort((a,b)=>(b.pref-a.pref)||(b.v-a.v));else options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
    if(!s.inventory.length)out.stockouts++;
    /* The shelf ran out with customers still to come. Once per Day: the flag is cleared when the
       Day's SALE opens, not here, so a Day with three empty-handed customers still counts one. */
@@ -521,11 +547,12 @@ function playRun(g,out,ctx){
 /* FRESH-ACCOUNT BENCHMARK — kept unchanged as the regression baseline. Every seed starts from
    Meta.fresh() (or a copy of the supplied account), so nothing a Run earns carries anywhere.
    Its Final numbers describe a first-time account and must not be read as the game's ceiling. */
-function simulate(count=100,policy='balanced',account=null,pricing='adaptive',build='hybrid'){
+/* opts.relicAware (default false) turns on playRun's relic-aware layer; off is the baseline. */
+function simulate(count=100,policy='balanced',account=null,pricing='adaptive',build='hybrid',opts={}){
  const out=blank(count,policy,pricing,build);
  for(let seed=0;seed<count;seed++){
   const g=new G.Game(account?copy(account):G.Meta.fresh());g.autosave=false;g.start('revision-'+seed);
-  playRun(g,out,{policy,pricing,build,seed});
+  playRun(g,out,{policy,pricing,build,seed,relicAware:!!opts?.relicAware});
  }
  return derive(out,count);
 }
