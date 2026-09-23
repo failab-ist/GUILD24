@@ -409,3 +409,20 @@ processor (bytes present since ce8fad1); the same file names the clean keys `thi
   though those rules live only here (CORE_RUN routes living capacity to this owner).
 - Reported separately as a possible IMPLEMENTATION BUG: Source gives 악바리 (grit) `fatigue:+1`
   unconditionally, while this owner scopes that cost to "while currently Injured".
+
+## AMENDMENT — User decision 2026-09-23: 악바리 fatigue +1 is always on (Source is right)
+
+User: the Injured combat +20% applies only while Injured; the fatigue +1 is a chronic cost that
+always applies. Matches Source (`grit` `fatigue:1` unconditional). Resolves the possible
+implementation bug reported above: no Source change.
+
+```text
+    - [cost] while currently Injured/Severely Injured: survival -20%, fatigue gain +1
+- `grit / 악바리`: +1 when its current Trait rule applies
+```
+
+```new
+    - [cost] while currently Injured/Severely Injured: survival -20%
+    - [cost] always, injured or not: result fatigue gain +1 (chronic cost)
+- `grit / 악바리`: +1 always (chronic cost, not limited to Injury)
+```

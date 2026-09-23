@@ -527,7 +527,8 @@ Rules:
 27. **악바리**
     - internalDirection=MIXED
     - [benefit] while currently Injured/Severely Injured: 부상 penalty 대체하여 투력 +20%
-    - [cost] while currently Injured/Severely Injured: survival -20%, fatigue gain +1
+    - [cost] while currently Injured/Severely Injured: survival -20%
+    - [cost] always, injured or not: result fatigue gain +1 (chronic cost)
 
 28. **냉담한**
     - internalDirection=MIXED
@@ -633,7 +634,7 @@ Potion catalog/effects -> `ITEM_v2.8.0.md`.
 The existing result-fatigue modifiers remain:
 - `stamina / 지구력`: -1
 - `weary / 쉽게 지침`: +1
-- `grit / 악바리`: +1 when its current Trait rule applies
+- `grit / 악바리`: +1 always (chronic cost, not limited to Injury)
 
 They apply to:
 ```text
