@@ -811,6 +811,30 @@ D25 may strengthen Final-preparation presentation after the exact Final state is
 D30 may strengthen FINAL-entry tension using only information already revealed by D25.
 D30 still adds no new Boss-information beat.
 
+#### BOSS DOMAIN BACKDROP ASSET ROLE — USER APPROVED 2026-09-23
+
+The authored per-Boss throne-room / wall / domain background assets are reserved for the FINAL
+entry payoff at D30.
+
+They are the spatial reveal of the Boss's own domain, not generic decoration for every place the
+Boss is mentioned.
+
+Therefore:
+- D5 / D10 / D15 / D20 / D25 Boss reports do NOT use the full Boss domain backdrop asset;
+- Codex / card / reference surfaces do NOT use the full Boss domain backdrop asset;
+- do not crop strips or fragments from the domain backdrop merely to decorate those report/card
+  surfaces;
+- report surfaces may use the already-owned Boss art, Boss colour family and restrained motif
+  language appropriate to the information already revealed;
+- the first full environment reveal belongs to D30 FINAL entry, where the per-Boss backdrop is
+  used as the authored wall/background behind the Final confrontation/preparation presentation.
+
+The backdrop does not reveal new Boss information at D30. It is presentation payoff for information
+already owned by D25.
+
+Exact Boss-id-to-backdrop asset mapping and production ingest are owned by the later FINAL
+presentation pass. Do not guess the mapping during Boss Report work.
+
 Presentation must not push the owned information/acknowledgement control out of the usable mobile
 viewport.
 
