@@ -606,7 +606,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-11. 길드 전광판
 
 **현재**
-> 하루 기본 방문객 최소 3명 → 4명.
+> 하루 기본 최소 방문객을 4명으로 변경 (기존 3명).
 
 ---
 
