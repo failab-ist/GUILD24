@@ -1228,8 +1228,14 @@ function sentOff(){const s=game.run,rep=s.finalReport;if(!rep?.members?.length)r
     +'<div><b>'+E(m.name)+'</b><span class="who-line">Lv.'+m.level+' '+E(D.jobBy[m.job]?.name||m.job)+'</span>'
     +'<span class="carried">'+(carried.length?'마지막 보급 · '+E(carried.join(' · ')):'빈손으로 갔다')+'</span></div>'
     +'</article>';}).join('')+'</div></section>';}
-function endScreen(){const s=game.run;
- return stage('end','영업 종료','',endBanner()+sentOff()+s.results.map(beat).join(''),btn('다음 점포 열기','new','stamp'));}
+/* BATCH 3 END: a bankruptcy or death-limit closure is decided at closeDay(), after the last
+   NIGHT and CLOSING were already read, yet the ending printed that whole night again under the
+   tape - every record, its growth chips, even a speech balloon left over from the day. The
+   owned ending is statement -> reason -> what this Run moved -> the Final party when there is
+   one -> the next store (PRESENTATION_POLISH_BATCH3 §END); NIGHT stays the owner of those
+   records. A Final ending never had them (run.js clears s.results there). */
+function endScreen(){
+ return stage('end','영업 종료','',endBanner()+sentOff(),btn('다음 점포 열기','new','stamp'));}
 /* The failure line is not a hidden threshold: the book that already lists the dead says how
    many that is, and how many the store has. */
 function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업을 시작하면 모험가 수첩이 열린다.</p>';
