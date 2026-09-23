@@ -24,11 +24,15 @@ const rowOf=s=>{const h=s.reportHistory||[],sum=k=>h.reduce((a,d)=>a+(d[k]||0),0
  return {gain:s.settlement?.gain??0,reached:s.day>=30?1:0,win:s.win?1:0,deaths:s.stats.deaths||0,
   regulars:s.stats.regulars||0,sales:sum('sales'),margin:sum('revenue')-sum('cogs'),
   finalRatio:s.bossDebug?s.bossDebug.power/s.bossDebug.bossPower:0,spend:s.stats.relicSpent||0};};
+// overrides: {"<id>":{param:value}} for D.relicParams, plus optional "_price":{"<id>":gold}
+function applyOverrides(D,o){if(!o)return;
+ for(const [id,p] of Object.entries(o)){if(id==='_price'){for(const [rid,v] of Object.entries(p))D.relicBy[rid].price=v;continue;}
+  Object.assign(D.relicParams[id],p);}}
 function accountFor(G,kind){if(kind!=='full')return null;const a=G.Meta.fresh();
  G.Meta.addCapital(a,1e7);for(const d of G.DATA.decorations)G.Meta.buyDecoration(a,d.id);return a;}
 function runBuild(G,seeds,build,overrides,policy,account){
  const D=G.DATA;
- if(overrides&&D.relicParams)for(const [id,p] of Object.entries(overrides))Object.assign(D.relicParams[id],p);
+ applyOverrides(D,overrides);
  const P=G.Game.prototype,end=P.end,rows=[];
  P.end=function(win,reason){const r=end.call(this,win,reason),s=this.run;
   rows.push(rowOf(s));return r;};
@@ -37,7 +41,7 @@ function runBuild(G,seeds,build,overrides,policy,account){
 }
 function runArm(G,seeds,inject,overrides,policy,account){
  const D=G.DATA;
- if(overrides&&D.relicParams)for(const [id,p] of Object.entries(overrides))Object.assign(D.relicParams[id],p);
+ applyOverrides(D,overrides);
  const P=G.Game.prototype,start=P.start,end=P.end,rows=[];
  P.start=function(seed){const r=start.call(this,seed),s=this.run,w=s.relicWindow;
   if(inject.remove&&w){const i=w.candidateIds.indexOf(inject.remove);if(i>=0){w.candidateIds.splice(i,1);w.candidatePrices.splice(i,1);}}
@@ -63,7 +67,7 @@ if(process.env.RELIC_WORKER){
  const builds=args.includes('--builds');
  const ids=builds?['none','hybrid',...Object.keys(G0.DATA.buildNames)]:pos[1]&&pos[1]!=='all'?pos[1].split(','):all;
  const policy=flag('--policy')||'balanced',account=flag('--account')||'fresh';
- const overrides=flag('--set')?JSON.parse(flag('--set')):null,outFile=flag('--out');
+ const setArg=flag('--set'),overrides=setArg?JSON.parse(setArg.startsWith('@')?fs.readFileSync(setArg.slice(1),'utf8'):setArg):null,outFile=flag('--out');
  const stat=(b,t,k)=>{const d=b.map((x,i)=>t[i][k]-x[k]),n=d.length,m=d.reduce((a,v)=>a+v,0)/n,
   sd=Math.sqrt(d.reduce((a,v)=>a+(v-m)**2,0)/Math.max(1,n-1));
   return {base:b.reduce((a,x)=>a+x[k],0)/n,delta:m,se:sd/Math.sqrt(n)};};
