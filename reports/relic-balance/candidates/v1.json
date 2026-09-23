@@ -1,0 +1,96 @@
+{
+ "_price": {
+  "bulk": 180,
+  "rotation": 170,
+  "stamp": 180,
+  "member": 180,
+  "showcase": 200,
+  "guarantee": 240,
+  "hazardBoard": 180,
+  "medicine": 180,
+  "fridge": 140,
+  "kitchen": 240,
+  "board": 180,
+  "rookieBoard": 170,
+  "groupFlyer": 280,
+  "memberBundle": 270,
+  "premiumMember": 290,
+  "returnPoints": 340,
+  "expeditionMeal": 280,
+  "coldcase": 290,
+  "supplyCert": 310,
+  "dawnBulk": 270,
+  "logisticsHQ": 500,
+  "lifetime": 630,
+  "royalCert": 530,
+  "expeditionCert": 490,
+  "fresh24": 630,
+  "hub": 600,
+  "warehouse": 250,
+  "terminal": 270,
+  "delivery": 240,
+  "efficiency": 180
+ },
+ "fresh24": {
+  "statBonus": 0.35
+ },
+ "kitchen": {
+  "statBonus": 0.2
+ },
+ "stamp": {
+  "loyaltyMult": 1.75
+ },
+ "member": {
+  "revisitMult": 1.7
+ },
+ "memberBundle": {
+  "loyaltyBonus": 3
+ },
+ "premiumMember": {
+  "rareIntentBonus": 0.15
+ },
+ "bulk": {
+  "discount": 0.2
+ },
+ "groupFlyer": {
+  "discount": 0.15
+ },
+ "dawnBulk": {
+  "discount": 0.2
+ },
+ "logisticsHQ": {
+  "discount": 0.35
+ },
+ "rotation": {
+  "supplyBonus": 2
+ },
+ "supplyCert": {
+  "commissionRate": 0.18
+ },
+ "royalCert": {
+  "commissionRate": 0.3
+ },
+ "fridge": {
+  "shelfDays": 2
+ },
+ "coldcase": {
+  "shelfDays": 2
+ },
+ "expeditionMeal": {
+  "hazardCounterMult": 1.4,
+  "supplyStatBonus": 0.3
+ },
+ "hazardBoard": {
+  "weightMult": 1.5
+ },
+ "medicine": {
+  "weightMult": 1.3
+ },
+ "showcase": {
+  "rareWeightMult": 1.5,
+  "overheadAdd": 0
+ },
+ "delivery": {
+  "freeRerolls": 2
+ }
+}
