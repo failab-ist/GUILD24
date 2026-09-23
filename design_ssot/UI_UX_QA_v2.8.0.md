@@ -621,7 +621,7 @@ PER-PHASE APPLICATION PASS:
   separated from the Stat effect
 - the MORNING shutter pull carries no repeating-stripe gradient, while the register readout glow
   and the SALE sticky scrim remain as functional layers
-- FINAL's fixed dock names the disabled cause on the control: `원정대 {current} / {required}`
+- FINAL roster header owns the selection count (`선택 N명 · 최대 M명`); the disabled dock remains `원정대 확정` and does not duplicate that count
 - SALE price modes read as peer register keys; no key is promoted by a stronger frame, refused keys
   lose depth, and the send-customer action stays Secondary
 - NIGHT Outcome is the visual anchor and different outcomes do not read as one identical card with
@@ -674,6 +674,9 @@ PASS:
 - the selection stage shows the approved forecast-after-commitment guidance and no combat forecast
 - a sub-3 party receives the approved confirmation before commitment
 - after commitment exactly one party-wide `토벌 전망` is shown
+- the first activated `토벌 전망` is explained once by the existing Coach
+- afterward the same explanation remains reachable through the anchored `?` Help
+- no standing forecast-explanation paragraph remains under the readout
 - 1/2/3-person forecasts use the actual committed party
 - the forecast updates after a committed Final transfer
 - no individual `전투 전망` or failure-to-death percentage survives in Final preparation

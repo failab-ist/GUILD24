@@ -1043,7 +1043,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 > 이후 조사 소식은 5일마다 이어진다.  
 >
 > **DAY 30**  
-> 성장한 모험가 3명을 마왕성으로 보내 최종 토벌에 나선다.  
+> 성장한 모험가를 최대 3명까지 마왕성으로 보내 최종 토벌에 나선다.  
 >
 > 조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.
 
@@ -1799,7 +1799,7 @@ Absent from this decision surface:
 The D0 Boss objective appears after the first support choice as a separate Boss-information beat.
 
 
-## 14-7. D30 원정대 선택 / 마왕성 준비
+## 14-9. D30 원정대 선택 / 마왕성 준비
 
 **원정대 선택 안내**
 > 최대 3명까지 출전할 수 있다.  
@@ -1814,8 +1814,16 @@ Buttons:
 > 이대로 확정
 
 **토벌 전망**
-> **토벌 전망 · {우세|접전|불리}**  
-> 확정된 원정대의 능력과 보급, 확인된 위협과 마왕의 특성을 함께 반영한 전망.
+> **토벌 전망 · {우세|접전|불리}**
+
+**첫 등장 Coach / `?` Help**
+> 확정된 원정대의 능력과 보급, 확인된 위협과 마왕의 특성을 함께 반영한 전망.  
+> 보급이 바뀌면 전망도 함께 갱신된다.
+
+Placement:
+- 첫 토벌 전망 활성화 시 기존 Coach로 1회 안내
+- 이후 같은 설명은 기존 전망의 anchored `?` Help로 재확인
+- 상시 설명문은 두지 않음
 
 **마왕성에서 효과가 없는 Item**
 > **마왕성에서는 효과 없음**  

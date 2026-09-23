@@ -615,7 +615,11 @@ The forecast:
 - uses qualitative `우세 / 접전 / 불리` only;
 - does not expose Final Power, Boss Power, exact probability or Final Roll.
 
-The approved explanation line appears with or immediately under the forecast.
+Use the same forecast/help language as ordinary `전투 전망`:
+- the first time `토벌 전망` becomes active, teach it once with the existing Coach system;
+- keep the explanation available afterward through the same anchored `?` Help pattern;
+- do not keep a standing explanation paragraph under the forecast.
+
 Focused Item detail may still show that participant's concrete stat/effect delta.
 
 Remove from Final preparation:
