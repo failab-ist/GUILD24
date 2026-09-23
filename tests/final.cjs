@@ -49,32 +49,104 @@ test('FINAL 3/F: the disclosed Family pair survives save/load and cannot be rero
  assert.throws(()=>Save.import(JSON.stringify(broken)),'a non-distinct pair is rejected');
 });
 
-test('FINAL 4: survivor fallback picks exactly 3 / 2 / 1, and 0 is an immediate Run Fail',()=>{
- const five=atFinal('party5',5);
- assert.equal(five.finalRequired(),3);
- const ids=five.finalEligible().map(n=>n.id);
- five.selectFinal(ids[0]);five.selectFinal(ids[1]);five.selectFinal(ids[2]);
+test('FINAL 4 (v2.8): any 1..min(3, eligible) may be committed, and 0 eligible is a Run Fail',()=>{
+ /* FINAL_EXPEDITION v2.8 party rule: the inherited "3+ eligible -> exactly 3" is superseded. */
+ for(const size of [1,2,3]){
+  const g=atFinal('party5-'+size,5);
+  assert.equal(g.finalRequired(),3,'the cap is 3');
+  const ids=g.finalEligible().map(n=>n.id);
+  for(const id of ids.slice(0,size))g.selectFinal(id);
+  g.commitFinalParty();
+  assert.equal(g.run.team.length,size,size+' of 5 eligible may be committed deliberately');
+  g.boss();assert.equal(g.run.phase,'end');
+  assert.equal(g.run.finalLock.members.length,size,'the Final reads only the committed participants');
+ }
+ const five=atFinal('party5',5),ids=five.finalEligible().map(n=>n.id);
+ for(const id of ids.slice(0,3))five.selectFinal(id);
  assert.throws(()=>five.selectFinal(ids[3]),'no fourth participant');
- assert.equal(five.run.team.length,3);
 
- const two=atFinal('party2',2);
- assert.equal(two.finalRequired(),2);
- for(const n of two.finalEligible())two.selectFinal(n.id);
- assert.equal(two.run.team.length,2);
- two.boss();assert.equal(two.run.phase,'end','a 2-person party may depart with no headcount penalty');
+ for(const size of [1,2]){const two=atFinal('party2-'+size,2);
+  assert.equal(two.finalRequired(),2);
+  for(const n of two.finalEligible().slice(0,size))two.selectFinal(n.id);
+  two.commitFinalParty();two.boss();assert.equal(two.run.phase,'end',size+' of 2 eligible may depart');}
 
  const one=atFinal('party1',1);
  assert.equal(one.finalRequired(),1);
- one.selectFinal(one.finalEligible()[0].id);
+ assert.throws(()=>one.commitFinalParty(),/1명 이상/,'an empty party cannot be committed');
+ one.selectFinal(one.finalEligible()[0].id);one.commitFinalParty();
  assert.equal(one.run.team.length,1);
- one.run.team=[];
- assert.throws(()=>one.boss(),/원정대를 구성/,'departing with the wrong party size is refused');
 
  const none=atFinal('party0',0);
  assert.equal(none.finalRequired(),0);
  none.boss();
  assert.equal(none.run.phase,'end');
  assert.equal(none.run.win,false,'zero survivors is an immediate Run Fail');
+});
+
+test('FINAL-Q75 (v2.8): the resolver enforces the commitment and never auto-commits',()=>{
+ const g=atFinal('guard',4);
+ for(const n of g.finalEligible().slice(0,2))g.selectFinal(n.id);
+ const before=JSON.stringify(g.run),rng=g.rng.state;
+ assert.throws(()=>g.boss(),/확정/,'an uncommitted non-empty party does not resolve');
+ assert.equal(JSON.stringify(g.run),before,'and nothing was written');
+ assert.equal(g.rng.state,rng,'nor was the Final Roll drawn');
+ assert.equal(g.run.finalCommitted,undefined,'boss() does not commit on the Player\'s behalf');
+ const src=read('dist/systems/run.js'),fn=src.slice(src.indexOf('P.boss='),src.indexOf('const roll=',src.indexOf('P.boss=')));
+ assert.ok(!/finalCommitted\s*=\s*true/.test(fn),'no auto-commit left in the resolver');
+});
+
+test('FINAL-Q77 / G: no participant-count modifier - Party Power is the plain sum of the committed',()=>{
+ const g=atFinal('sum',4);const ids=g.finalEligible().map(n=>n.id);
+ const solo=id=>{const h=atFinal('sum',4);h.selectFinal(id);h.commitFinalParty();return h.finalPreRoll().power;};
+ for(const id of ids.slice(0,3))g.selectFinal(id);g.commitFinalParty();
+ const party=g.finalPreRoll().power,sum=ids.slice(0,3).reduce((v,id)=>v+solo(id),0);
+ assert.ok(Math.abs(party-sum)<1e-9,'3-person power is exactly the sum of each alone (no bonus/penalty)');
+ assert.ok(!/underfill|headcount|team\.length\s*[*/]/i.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.finalPreRoll='),read('dist/systems/run.js').indexOf('P.finalForecast='))),'no count term in the pre-roll');
+});
+
+test('FINAL-Q77: the party-wide 토벌 전망 is the resolution pre-roll truth, and draws no RNG',()=>{
+ for(const size of [1,2,3]){
+  const g=atFinal('fore-'+size,5);
+  for(const n of g.finalEligible().slice(0,size))g.selectFinal(n.id);
+  assert.equal(g.finalForecast(),null,'no forecast while the party is provisional');
+  g.commitFinalParty();
+  const rng=g.rng.state,state=JSON.stringify(g.run);
+  const label=g.finalForecast(),t=g.finalPreRoll();
+  assert.ok(['우세','접전','불리'].includes(label));
+  assert.equal(label,Dungeon.band(t.power/t.bossPower),'the shared bands over the pre-roll ratio');
+  assert.equal(g.rng.state,rng,'no RNG consumed');assert.equal(JSON.stringify(g.run),state,'no state written');
+  // transfer changes the preview input, and the resolution then reads the same pre-roll truth
+  g.run.money=5000;g.stock('premium',1);const n=g.run.npcs.find(x=>x.id===g.run.team[0]);n.money=9999;
+  const p0=g.finalPreRoll().power;g.supplyFinal(n.id,g.run.inventory.find(x=>x.item==='premium').id);
+  const after=g.finalPreRoll();assert.notEqual(after.power,p0,'the forecast input moves after a transfer');
+  const expect=Dungeon.band(after.power/after.bossPower);assert.equal(g.finalForecast(),expect);
+  g.boss();assert.ok(Math.abs(g.run.bossDebug.power-after.power)<1e-9&&Math.abs(g.run.bossDebug.bossPower-after.bossPower)<1e-9,
+   'the resolution uses the exact pre-roll the forecast read');
+ }
+});
+
+test('FINAL-Q75: a legacy Final save keeps proven preparation, and only that',()=>{
+ const mk=()=>{const g=atFinal('legacy',4);for(const n of g.finalEligible().slice(0,3))g.selectFinal(n.id);return g;};
+ // pre-transfer legacy: team selected, no receipt -> stays uncommitted
+ const a=mk();delete a.run.finalCommitted;
+ const ra=Save.import(Save.export(a.account,a.run));
+ assert.equal('finalCommitted' in ra.run,false,'a selected-only legacy Final is not committed');
+ // post-transfer legacy: write the transfer as the pre-commit build did, then drop the flag
+ const b=mk();b.commitFinalParty();b.run.money=5000;b.stock('potion',1);
+ const n=b.run.npcs.find(x=>x.id===b.run.team[0]);n.money=999;b.supplyFinal(n.id,b.run.inventory[0].id);
+ delete b.run.finalCommitted;
+ const snap=x=>JSON.stringify({gold:x.money,gross:x.stats.revenue,inv:x.inventory,npcs:x.npcs.map(n=>[n.money,n.pack,n.history.length])});
+ const before=snap(b.run);
+ const rb=Save.import(Save.export(b.account,b.run));
+ assert.equal(rb.run.finalCommitted,true,'a legacy Final with a proven transfer is restored to preparation');
+ assert.equal(snap(rb.run),before,'pack / Wallet / Gold / Gross Sales / receipts unchanged, no new transaction');
+ const rc=Save.import(Save.export(rb.account,rb.run));
+ assert.equal(snap(rc.run),before);assert.equal(rc.run.finalCommitted,true,'idempotent across reloads');
+ const resumed=new Game(rb.account,rb.run);resumed.autosave=false;
+ assert.throws(()=>resumed.selectFinal(resumed.run.team[0]),/확정/,'and the team is locked');
+ // a receipt whose Item is no longer in the Bag is not trusted as evidence
+ const c=JSON.parse(Save.export(b.account,b.run));c.run.npcs.find(x=>x.id===c.run.team[0]).pack=[];
+ assert.equal('finalCommitted' in Save.import(JSON.stringify(c)).run,false);
 });
 
 test('FINAL 10: a Boss clear ends the Run at once with no further expedition resolve',()=>{
@@ -85,7 +157,7 @@ test('FINAL 10: a Boss clear ends the Run at once with no further expedition res
   for(let i=0;i<60;i++){
    const g=atFinal('clear-'+i,5);
    for(const n of g.finalEligible().slice(0,3)){n.level=40;n.stats={combat:220,survival:160,mobility:140,spirit:120};g.selectFinal(n.id);}
-   g.boss();
+   g.commitFinalParty();g.boss();
    assert.equal(g.run.phase,'end');
    if(g.run.win)cleared++;else failed++;
    assert.equal(g.run.results.length,0,'the Final produces no per-NPC expedition results');
@@ -101,17 +173,17 @@ test('FINAL 6/7/8: Party Power is a plain sum with no Job-diversity synergy, rol
  const stats={combat:60,survival:40,mobility:30,spirit:20};
  team.forEach((n,i)=>{n.stats={...stats};n.level=10;n.equipment={name:'x',power:0,tier:0};n.traits=[];n.injury=0;n.fatigue=0;n.pack=[];n.job=['warrior','archer','mage'][i];g.selectFinal(n.id);});
  const varied=copy(g.run);
- g.boss();const mixedPower=g.run.bossDebug.power;
+ g.commitFinalParty();g.boss();const mixedPower=g.run.bossDebug.power;
 
  const h=atFinal('power',5),hteam=h.finalEligible().slice(0,3);
  hteam.forEach(n=>{n.stats={...stats};n.level=10;n.equipment={name:'x',power:0,tier:0};n.traits=[];n.injury=0;n.fatigue=0;n.pack=[];n.job='warrior';h.selectFinal(n.id);});
- h.boss();
+ h.commitFinalParty();h.boss();
  assert.ok(Math.abs(mixedPower-h.run.bossDebug.power)<1e-9,'three distinct Jobs give no bonus over three identical Jobs');
 
  for(let i=0;i<80;i++){
   const k=atFinal('roll-'+i,5);
   for(const n of k.finalEligible().slice(0,3))k.selectFinal(n.id);
-  k.boss();
+  k.commitFinalParty();k.boss();
   const r=k.run.bossDebug.roll;
   assert.ok(r>=.88&&r<=1.12,'roll '+r+' inside 0.88-1.12');
   /* Stage 10 switched the approved Boss numerics on, so the Power a Final is judged against is
@@ -133,7 +205,7 @@ test('RUN-Q14/Q16: the D30 Relic window and Family disclosure come before Final 
  assert.equal(g.canBuyRelic(),true,'purchasable before departure');
  assert.ok(g.run.dungeons[0].familyNames.length===2,'both Families are visible before the party is chosen');
  for(const n of g.finalEligible().slice(0,3))g.selectFinal(n.id);
- g.boss();
+ g.commitFinalParty();g.boss();
  assert.equal(g.canBuyRelic(),false,'management cannot retroactively change a locked Final');
 });
 
@@ -152,7 +224,7 @@ test('FINAL: the shared modifier order runs in order, and with no Trait defined 
   const meanGap=p=>p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0;
   const expected=preps.reduce((sum,p)=>sum+p.effects.combat*.50+p.effects.survival*.34
    +p.effects.mobility*.27+p.effects.spirit*.20-meanGap(p)*1.70,0);
-  g.boss();
+  g.commitFinalParty();g.boss();
   /* Stage 10 switched the approved Boss Traits on, so only WRATH still faces the Final with its
      participants untouched - it is the one Run where the party sum can be checked against the
      ordinary prepare. For every other Boss the sum is taken over MODIFIED contributions, and
@@ -176,7 +248,7 @@ test('FINAL: the Lock freezes what the Final was decided from, and reload cannot
  const g=atFinal('lock');
  for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);
  const s=g.run,d=s.dungeons[0];
- g.boss();
+ g.commitFinalParty();g.boss();
  const l=s.finalLock;
  assert.equal(l.bossId,s.bossId,'the Boss that was actually fought');
  assert.deepEqual(l.families,d.families,'the Family pair it was fought on');
@@ -212,7 +284,7 @@ function finalWith(seed,bossId,tuning){
  if(bossId==='SLOTH'){g.run.slothDays=[15,20];g.run.sealBreakCount=g.run.sealBreakCount||0;}
  else {delete g.run.slothDays;delete g.run.sealBreakCount;}
  for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);
- return withTuning(tuning||{},()=>{g.boss();return g;});
+ return withTuning(tuning||{},()=>{g.commitFinalParty();g.boss();return g;});
 }
 
 /* Stage 10 approved every one of these, so this is no longer "nothing attaches" - it is where
@@ -504,8 +576,8 @@ test('FINAL_EXPEDITION FINAL-Q75: the party is confirmed before preparation and 
  assert.deepEqual(s.team,[b,c,d]);
  assert.throws(()=>g.supplyFinal(b,(g.run.money=5000,g.stock('potion',1),s.inventory[0].id)),/확정/,'no transfer before the party is confirmed');
  const confirm=JSON.stringify({rng:g.rng.state,gold:s.money,inv:s.inventory,gross:s.stats.revenue,wallets:s.npcs.map(n=>n.money)});
- g.selectFinal(d);assert.throws(()=>g.commitFinalParty(),/원정대/,'an incomplete party cannot be confirmed');
- g.selectFinal(d);g.commitFinalParty();
+ g.selectFinal(d);g.selectFinal(d);   // v2.8: removal and re-adding stay free before the commitment
+ g.commitFinalParty();
  assert.equal(s.finalCommitted,true);
  assert.equal(JSON.stringify({rng:g.rng.state,gold:s.money,inv:s.inventory,gross:s.stats.revenue,wallets:s.npcs.map(n=>n.money)}),confirm,
   'confirming moves no RNG, Gold, Inventory, Gross Sales or Wallet');

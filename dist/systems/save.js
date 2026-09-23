@@ -197,9 +197,24 @@ function relicWindowOk(w,D){
   && (!w.purchased || w.candidateIds.includes(w.purchased));
 }
 
+/* FINAL-Q75 legacy protection. A save written before the party commitment existed carries no
+   `finalCommitted`. If it already shows a Final transfer, it must not reopen party selection.
+   The only evidence used is one the Source makes unambiguous: D30 has no ordinary SALE, and only
+   supplyFinal() writes a day-30 'half' receipt - so a current team member holding such a receipt
+   for an Item still in their Bag had Final preparation start. Nothing else is inferred; a team
+   that was only selected stays uncommitted. It only sets the flag - no transaction is made, and
+   running it again changes nothing. */
+function legacyFinalCommit(r,D){
+ if(!r||r.phase!=='final'||'finalCommitted' in r||!Array.isArray(r.team)||!r.team.length)return;
+ const proven=r.team.some(id=>{const n=r.npcs.find(x=>x.id===id);
+  return !!n&&(n.history||[]).some(h=>h&&h.day===30&&h.mode==='half'&&!!D.itemBy[h.item]
+   &&Number.isFinite(h.paid)&&(n.pack||[]).includes(h.item));});
+ if(proven)r.finalCommitted=true;
+}
+
 G.Save={
  error:null,
- migrate(s){return s;},
+ migrate(s){if(s&&s.run)legacyFinalCommit(s.run,G.DATA);return s;},
 
  write(account,run){
   try{

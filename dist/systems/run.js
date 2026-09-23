@@ -77,6 +77,9 @@ P.settleStoreCapital=function(){const s=this.run;
  s.settlement={day:s.day,sales,rate,gain,capitalAfter:G.Meta.addCapital(this.account,gain)};
  return s.settlement;};
 P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.settleStoreCapital();this.save();};
+/* FINAL_EXPEDITION v2.8 party rule: the CAP of the party. Any 1..cap may be committed - a 1- or
+   2-person challenge is a valid choice even with 3+ eligible - and 0 eligible is a Run Fail.
+   No participant-count bonus, penalty, multiplier or auto-fill exists anywhere. */
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};
 P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;if(s.finalCommitted)throw Error('원정대가 확정되어 바꿀 수 없습니다.');const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};
 /* FINAL_EXPEDITION FINAL-Q75: participant selection is confirmed before Final preparation begins.
@@ -84,8 +87,8 @@ P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;if(s.fin
    transfer has been paid the party that received it cannot be swapped out, and a reload comes
    back to preparation rather than selection. */
 P.commitFinalParty=function(){const s=this.run;if(s.phase!=='final'||s.finalCommitted)return;
- const required=this.finalRequired();
- if(!required||s.team.length!==required)throw Error(required+'명으로 원정대를 구성해 주세요.');
+ const cap=this.finalRequired();
+ if(!cap||!s.team.length||s.team.length>cap)throw Error('원정대를 1명 이상 선택해 주세요.');
  s.finalCommitted=true;this.save();};
 /* FINAL_EXPEDITION §3: Insurance that has no Final effect, blocked from a Final Bag. */
 const FINAL_NO_EFFECT=new Set(['kit','stone','tree']);
@@ -189,21 +192,32 @@ P.effectiveBossPower=function(partyPower,lock){
  return base;
 };
 
-P.boss=function(){const s=this.run;if(s.phase!=='final')return;
- const required=this.finalRequired();
- if(!required)return this.end(false,'출전할 수 있는 모험가가 없어 마왕성 원정을 시작하지 못했습니다.');
- if(s.team.length!==required)throw Error(required+'명으로 원정대를 구성해 주세요.');
- s.finalCommitted=true;
- const d=s.dungeons[0],team=s.team.map(id=>s.npcs.find(n=>n.id===id));
- /* The shared Final order (BOSS / FINAL_EXPEDITION). Steps 1-3 are the ordinary prepare:
-    locked NPC state, locked Item/Supply/equipment, then the Family Hazard result. Final
-    reuses it; there is no Final-only combat or survival judgement. A Boss Trait attaches
-    at exactly two places, step 4 and step 7, and the rest of the order does not move. */
+/* The shared Final order (BOSS / FINAL_EXPEDITION), steps 1-7: everything before the Roll.
+   Steps 1-3 are the ordinary prepare: locked NPC state, locked Item/Supply/equipment, then the
+   Family Hazard result. Final reuses it; there is no Final-only combat or survival judgement.
+   A Boss Trait attaches at exactly two places, step 4 and step 7. It is pure - no RNG, no
+   write - so the resolution, the party-wide 토벌 전망 and the Item previews all read this one
+   truth. `packs` optionally replaces Bags ({npcId:[items]}) for a hypothetical preview. */
+P.finalPreRoll=function(packs){const s=this.run,d=s.dungeons[0];
+ const team=s.team.map(id=>{const n=s.npcs.find(n=>n.id===id);return packs&&packs[id]?{...n,pack:packs[id]}:n;});
  const preparations=team.map(n=>G.Dungeon.prepare(n,d,s.facilities));              // 1-3
  const context=s.bossId==='ENVY'?{envyTargetNpcId:this.envyTarget(team,preparations)}:null; // 4 target pass
  const snapshots=preparations.map((p,i)=>this.finalSnapshot(team[i],p,d,context));  // 4
  const power=snapshots.reduce((sum,e,i)=>sum+individualPower(e,finalMeanHazardGap(preparations[i])),0); // 5-6
  const bossPower=this.effectiveBossPower(power,{revenue:s.stats.revenue,sealBreakCount:s.sealBreakCount}); // 7
+ return {d,team,preparations,context,snapshots,power,bossPower};};
+/* FINAL-Q77: the one party-wide 토벌 전망 - the committed party's pre-roll truth against the
+   effective Boss, in the shared 우세/접전/불리 bands. Null until the party is committed. */
+P.finalForecast=function(){const s=this.run;if(s.phase!=='final'||!s.finalCommitted||!s.team.length)return null;
+ const t=this.finalPreRoll();return G.Dungeon.band(t.power/t.bossPower);};
+P.boss=function(){const s=this.run;if(s.phase!=='final')return;
+ const cap=this.finalRequired();
+ if(!cap)return this.end(false,'출전할 수 있는 모험가가 없어 마왕성 원정을 시작하지 못했습니다.');
+ /* The resolver enforces the commitment boundary itself: a non-empty party is never
+    auto-committed here, and an uncommitted one does not resolve. */
+ if(!s.finalCommitted)throw Error('먼저 원정대를 확정해 주세요.');
+ if(!s.team.length||s.team.length>cap)throw Error('원정대를 1명 이상 선택해 주세요.');
+ const {d,team,preparations,context,snapshots,power,bossPower}=this.finalPreRoll();
  const roll=.88+this.rng.next()*.24,assault=power*roll,cleared=assault>=bossPower; // 8-9
  /* Final Lock: what the Final was actually decided from, frozen. Reload may not re-roll
     it, re-target it, or re-read a later state (BOSS-Q02). Boss-specific entries join this

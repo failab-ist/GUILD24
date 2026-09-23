@@ -37,7 +37,7 @@ function step(g){
   case'final':{
    const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort((a,b)=>b.level-a.level).slice(0,g.finalRequired());
    for(const n of team)g.selectFinal(n.id);
-   if(team.length)g.boss();else g.end(false,'출전 가능한 모험가 없음');
+   if(team.length){g.commitFinalParty();g.boss();}else g.end(false,'출전 가능한 모험가 없음');
    return true;}
   default:return false;}
 }

@@ -82,11 +82,11 @@ async function final(page,noparty,grown,supplied){
  if(noparty)await page.evaluate(`(()=>{for(const n of Guild24.game.run.npcs)n.alive=false;})()`);
  else await page.evaluate(grown=>{const g=Guild24.game;for(const n of g.finalEligible().slice(0,g.finalRequired())){
   if(grown){n.level=40;n.stats={combat:220,survival:160,mobility:140,spirit:120};}g.selectFinal(n.id);}},!!grown);
- if(supplied)await page.evaluate(`(()=>{const g=Guild24.game,s=g.run;g.commitFinalParty();
+ if(supplied)await page.evaluate(`(()=>{const g=Guild24.game,s=g.run;if(s.team.length)g.commitFinalParty();
   for(const id of s.team){const n=s.npcs.find(x=>x.id===id);
    for(let i=0;i<Adventurer.slots(n)&&s.inventory.length;i++){const before=s.inventory.length;
     try{g.supplyFinal(id,s.inventory[0].id);}catch(e){}if(s.inventory.length===before)break;}}})()`);
- await page.evaluate(`(()=>{Guild24.game.boss();Guild24.render();})()`);
+ await page.evaluate(`(()=>{const g=Guild24.game;if(g.run.team.length&&!g.run.finalCommitted)g.commitFinalParty();g.boss();Guild24.render();})()`);
  return true;}
 async function reach(page,f){
  await begin(page,f.seed);

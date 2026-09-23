@@ -138,7 +138,7 @@ async function drive(page,target,seed){
  if(target==='end'||target==='endfail'){
   if(target==='endfail')await page.evaluate(`(()=>{for(const n of Guild24.game.run.npcs)n.alive=false;})()`);
   else await page.evaluate(`(()=>{const g=Guild24.game;for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);})()`);
-  await page.evaluate(`(()=>{Guild24.game.boss();Guild24.render();})()`);
+  await page.evaluate(`(()=>{const g=Guild24.game;if(g.run.team.length)g.commitFinalParty();g.boss();Guild24.render();})()`);
   await page.waitForTimeout(150);
  }
  // The Event notice, the codex and the store menu are takeovers over a screen, reached the
