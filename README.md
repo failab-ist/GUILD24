@@ -41,10 +41,12 @@ Use the scripts currently defined in `package.json`:
 - `npm run mastery`
 - `npm run remeasure`
 - `npm run dev`
+- `npm run qa:runtime`
 - `npm run qa:presentation:batch{1-4}:{fast|before|after}`
 
-Targeted browser QA harnesses that are not npm scripts live in `tools/qa-*.cjs` (for example the D30 FINAL
-`qa-final-prep`, `qa-boss-confirm` and `qa-final-end`).
+`npm run qa:runtime` runs the pass/fail browser harnesses (D0 flow, D30 FINAL prep / BOSS CONFIRM /
+FINAL->END / Boss backdrops) and exits non-zero on any failure. The other `tools/qa-*.cjs` are capture
+tools for visual review.
 
 ## Assets
 
