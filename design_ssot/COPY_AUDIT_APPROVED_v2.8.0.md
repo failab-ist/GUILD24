@@ -255,7 +255,9 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 5-1. 부상 Stat 명칭
 
 **현재**
-> 부상 효과: 강인함 -20% · 투력 {값}
+> 부상 효과: 투력 {값} · 강인함 -20%
+
+(User 2026-09-23: 표시 순서는 투력 → 강인함. SOURCE_ADOPTION_QA SA-Q03과 동일.)
 
 ---
 
@@ -364,7 +366,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 6-7. Injury Detail
 
 **현재**
-> 남은 부상 · 강인함 -20%
+> 남은 부상 · 투력 {값} · 강인함 -20%
 
 ---
 

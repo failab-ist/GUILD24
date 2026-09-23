@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-23
-STATE: V2_8_FINAL_FROZEN
+STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
 
 ## Current Integration Base
 
@@ -31,7 +31,7 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 - font-subset glyph issue fixed
 - audio regression/runtime verification reported PASS by WORK
 
-## Remaining Adoption Audit — Closed
+## Remaining Adoption Audit — Reopened
 
 Completed audit batches:
 
@@ -55,7 +55,7 @@ Completed audit batches:
 
 No Design change is required from these batches.
 
-Adoption closeout (2026-09-23, integration `1d8e6a2`; re-verified on current evidence, no new FAIL):
+Reopened 2026-09-23 by the final adoption check (see Open below). The three rows re-verified at `1d8e6a2`:
 - UI-Q-v28-26 — CLOSED: the three visual rows were reviewed by DIRECTOR / User on the Presentation B1-B5
   screenshots; qa:visual clean across 360 / 390 / 412 / 430 / 1024 / 1280
 - UI-Q-v28-28 — CLOSED: runtime D0 (qa-d0-flow 12/12), D5-D25 (qa:visual 30/30 at six widths; B4 harness
@@ -73,8 +73,13 @@ Adoption closeout (2026-09-23, integration `1d8e6a2`; re-verified on current evi
 
 Remaining Adoption Audit has no further DIRECTOR review target after the open QA / fix cycles above.
 
-Do not change Design during the audit.
-Any implementation finding enters its own fix cycle.
+Open:
+- MISSING ADOPTION — NPC dialogue pools: `dist/data/copy.js` does not carry the exact COPY_AUDIT §16-§20
+  ARRIVAL / TRAIT / SALE / NIGHT / DEATH pools (287 of 326 approved lines absent; 67 superseded `기존` lines
+  kept, 206 unapproved lines written at `5ed0ce4`). Evidence: `reports/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md`.
+  Fix cycle NOT STARTED (awaiting User go-ahead).
+- Resolved in SSOT: injury display order is 투력 -> 강인함 (User 2026-09-23); COPY_AUDIT 5-1 / 6-7 now match
+  SA-Q03 and Source.
 
 Do not change Design during the audit.
 Any implementation finding enters its own fix cycle.
@@ -96,7 +101,9 @@ Do not combine unrelated fixes or begin Final Freeze inside a Remaining Adoption
 
 ## Final Integration / Freeze
 
-FROZEN — 2026-09-23, content HEAD `1362bf2` on `claude/guild24-v28-integration` (tree clean).
+NOT FROZEN. A freeze was recorded at `1362bf2` / `932c304` and is withdrawn: the final adoption check found
+the open dialogue-pool MISSING ADOPTION above. The checks below ran at that HEAD and stay valid evidence for
+everything except NPC dialogue copy.
 
 - Canonical -> Source adoption audit: CLOSED (see Remaining Adoption Audit)
 - targeted regression: PASS - npm test 342; qa-final-prep 136, qa-boss-confirm 80, qa-final-end 64,
@@ -113,7 +120,7 @@ FROZEN — 2026-09-23, content HEAD `1362bf2` on `claude/guild24-v28-integration
   retuned to a clear rate (FINAL_EXPEDITION)
 - Pages deploy gate reproduced locally: npm test + npm run audit leave no diff
 
-Main merge / Pages deploy: NOT STARTED (pending User approval).
+Main merge / Pages deploy: NOT STARTED (blocked by the open adoption item).
 
 Final Freeze begins only after:
 - remaining adoption audit is closed
