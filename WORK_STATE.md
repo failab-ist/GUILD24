@@ -109,3 +109,15 @@ Final Freeze includes:
 ## Blocker
 
 No known blocker at this state.
+
+
+## Presentation Batch 5 — Closed / Pending Integration
+
+- source branch: `claude/guild24-v28-presentation-b5`
+- reviewed closeout HEAD: `2cc31f52461664be4cfd257f1ad412ea4c24aa5c`
+- B5-0 / B5-1 / B5-2 / B5-3 / B5-4: CLOSED by DIRECTOR / User review
+- B5-4 required no END / ENDFAIL Source modification; it added transition QA only
+- controlled Final CLEAR / FAIL / non-Final END transition evidence reported PASS
+- approved B3 END / ENDFAIL presentation remained stable in the reviewed comparison
+- Batch 5 is not yet recorded here as merged into the common integration branch
+- merge / Final Freeze / next Presentation batch: NOT STARTED by this closeout

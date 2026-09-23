@@ -5,7 +5,7 @@ OWNER=presentation_batch5,final,boss_confirm,final_backdrop
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_EXECUTION_SPEC
-STATUS=ACTIVE_BATCH_5
+STATUS=CLOSED_BATCH_5
 
 ## SCOPE
 
@@ -335,3 +335,28 @@ STOP immediately if:
 Do not guess.
 Do not regenerate missing art.
 Do not silently change Design.
+
+
+## BATCH 5 CLOSEOUT
+
+Batch 5 is CLOSED by DIRECTOR / User review.
+
+Closed scope:
+- B5-0 — seven authored Boss-domain originals preserved and mapped;
+- B5-1 — D30 Boss-domain backdrop / Boss hero / known-threat presentation;
+- B5-2 — 1..3-person Final party selection, committed preparation, deterministic Final transfer,
+  party-wide subjugation forecast, truthful Boss-specific Item preview and Final control hygiene;
+- B5-3 — BOSS CONFIRM as the single Final commitment checkpoint;
+- B5-4 — controlled CLEAR / FAIL / non-Final transition verification into the already-approved B3 END.
+
+Final B5-4 review evidence:
+- current implementation branch reached `2cc31f52461664be4cfd257f1ad412ea4c24aa5c`;
+- B5-4 required no END / ENDFAIL Source change;
+- controlled CLEAR / FAIL each resolved once and preserved Final party / last-supply evidence;
+- Store Capital settlement / Meta finish remained one-shot and reload-idempotent;
+- no D30 Final layer / Boss backdrop / D25 payload leaked onto END;
+- approved B3 END / ENDFAIL captures remained unchanged in the reviewed comparison;
+- existing B5-1 / B5-2 / B5-3 regressions remained green in the closeout run.
+
+This closeout does not authorize a Batch 6, merge, release freeze or unrelated Presentation change.
+Those begin only from a new explicit task.
