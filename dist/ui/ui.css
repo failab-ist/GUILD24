@@ -2697,22 +2697,32 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
      same record (their colour kept as the entry rule) instead of two tinted, ringed cards.
    No FINAL domain art, no seal, no new frame. D10 / D20 untouched (.boss-id, compact).
    ===================================================================== */
-.boss-reveal .boss-art{background:none;padding:0 0 5px;box-shadow:inset 0 -2px 0 #2c241859}
+/* DIRECTOR 4A closeout: no floor line either - the Boss stands on the paper itself */
+.boss-reveal .boss-art{background:none;padding:0;box-shadow:none}
 .boss-reveal.d5 .boss-name,.boss-reveal.d15 .boss-name{font-size:30px;line-height:1.15}
-.boss-reveal .trait{padding:2px 0 3px 14px;box-shadow:inset 3px 0 0 #7a281f}
+/* the Trait is told by type and spacing alone: no accent bar, no box (DIRECTOR 4A closeout) */
+.boss-reveal .trait{margin-top:4px;padding:0;box-shadow:none}
 .boss-reveal .trait-name{margin:0 0 7px}
 .boss-reveal .trait-k{display:block;margin-bottom:4px;font:600 11px/1 var(--ui);letter-spacing:.18em;color:#8a7c60}
 .boss-reveal .trait-sep{display:none}
 .boss-reveal .trait-name b{display:block;font:500 23px/1.25 var(--f-plate);-webkit-font-smoothing:none;color:var(--ink)}
 .boss-reveal.final .lede{font:600 16px/1.45 var(--ui);color:var(--ink)}
-.boss-reveal.final .fams{gap:0;margin:0;box-shadow:inset 0 2px 0 var(--ink)}
+.boss-reveal.final .fams{gap:0;margin:0;box-shadow:none}
 .boss-reveal.final .fam-card{padding:11px 0 11px 13px;background:none;box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
 .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26),inset 0 1px 0 #2c241833}
 .boss-reveal.final .fam-card b{margin-bottom:7px;font-size:18px}
+/* D0 — the first-Morning briefing (UI_UX §BOSS INFORMATION PRESENTATION / D0): the same record,
+   no Boss on it. The objective leads; DAY 5 and DAY 30 are told apart by the record's own LED
+   date face and spacing - no timeline cards, no rules, no art. */
+.boss-reveal.d0{gap:14px}
+.boss-reveal.d0 .lede{font:600 16px/1.5 var(--ui);color:var(--ink)}
+.boss-reveal .d0-step b{display:block;margin-bottom:4px;font:500 16px/1 var(--f-led);letter-spacing:.06em;color:#7a281f}
+.boss-reveal .d0-step p{margin:0;font:400 15px/1.6 var(--ui);color:#3c3527}
+.boss-reveal .d0-close{margin:2px 0 0;font:400 14px/1.6 var(--ui);color:#5f5440}
 /* the pressure each Hazard puts on the party is part of the disclosure, not a footnote */
 .boss-reveal.final .fam-card .hazards .press{font-size:14px;color:#5f5440}
 /* D5's owned line is the record's own note, not a tinted slip laid on it */
-.boss-reveal.d5 .flavor{background:none;padding:2px 0 2px 14px}
+.boss-reveal.d5 .flavor{background:none;padding:0;box-shadow:none}
 @media (min-width:720px){
  .boss-reveal.final .fams{column-gap:22px}
  .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
@@ -2721,6 +2731,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    compact D10 / D20 records keep theirs */
 @media (min-width:1024px){
  .modal.doc.narrow:has(.boss-reveal.d5),.modal.doc.narrow:has(.boss-reveal.d15){max-width:580px}
+ /* D0 is a short briefing, so it takes a smaller step: a readable document, not a poster */
+ .modal.doc.narrow:has(.boss-reveal.d0){max-width:540px}
+ .boss-reveal.d0 .lede{font-size:18px}
+ .boss-reveal .d0-step b{font-size:17px}
+ .boss-reveal .d0-step p{font-size:16px}
+ .boss-reveal .d0-close{font-size:15px}
  .boss-reveal.d5 .boss-name,.boss-reveal.d15 .boss-name{font-size:34px}
  .boss-reveal .trait-name b{font-size:26px}
  .boss-reveal .trait-body p{font-size:16px}
