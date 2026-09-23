@@ -779,6 +779,8 @@ const coachSteps={
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. The copy names 영업 손익, so it points at that row;
     the 발주 지출 / 점포지원 투자 block it says is listed apart is the next row group under it. */
+ /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
+ final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
  closing:[['receipt','.tape .row.profit','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']]
 };
 let activeCoach=null;
@@ -1009,6 +1011,18 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
 /* Sparse player-facing grouping only where the distinction helps comparison. Internal
    category/role taxonomy stays hidden; this reads the item's actual potion marker. */
 const itemKind=it=>it.effects?.potion?'포션':'';
+/* FINAL_EXPEDITION §3 Item truth. What one participant's Final snapshot (Boss participant-side
+   modifier included, ENVY's party-wide target pass included) is now, and would be with this Item
+   in the Bag - both read off game.finalPreRoll(), the pre-roll the resolution itself uses, so no
+   multiplier is restated here. Pure: no RNG, no write. */
+function finalItemTruth(n,item){const s=game.run,i=s.team.indexOf(n.id);if(i<0)return null;
+ const a=game.finalPreRoll(),b=game.finalPreRoll({[n.id]:[...n.pack,item]});
+ return {before:a.snapshots[i],after:b.snapshots[i]};}
+/* The shelf line says the same number the focused preview will: the Item's own Core-Stat rows
+   carry the participant's real Final change; every other row is the Item's effect as written. */
+function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.effects;
+ const e={...it.effects};for(const k of ['combat','survival','mobility','spirit'])if(k in e)e[k]=t.after[k]-t.before[k];
+ return e;}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    return '<section class="shelf">'
@@ -1018,7 +1032,7 @@ function shelf(isFinal=false){
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
-  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">Final 효과 없음</em>':Presentation.rows(it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · '))+'</span></span>'
+  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">'+E(Copy.finalPrep.noEffect)+'</em>':Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · '))+'</span></span>'
   +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span></span></button>'+(open?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
 function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.phase==='final'?s.npcs.find(x=>x.id===supplyNPC):game.current();
@@ -1030,15 +1044,17 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  /* FINAL_EXPEDITION §3: in the Final the preview is taken against the Final itself, and a
     Boss that changes what Items give (GLUTTONY) is applied through the same finalSnapshot the
     resolution uses, so the Player assigns Items against the actual Final state. */
- const moved=isFinal?Presentation.preview(n,s.dungeons[0],s.facilities,it.id,
-    s.bossId==='GLUTTONY'?prep=>game.finalSnapshot(n,prep,s.dungeons[0],null):null)
+ const moved=isFinal?Presentation.preview(n,s.dungeons[0],s.facilities,it.id,finalItemTruth(n,it.id))
   :Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  const changes=moved.direct;
  /* ECONOMY_ORDER_v2.7: the Final price is fixed to the ordinary 50% amount - no 100/150 choice
     and no refusal roll - but the Wallet is real, so an adventurer who cannot afford it cannot
     be given the Item, and the button says which of the two is stopping it. */
  const finalPrice=isFinal?game.finalPrice(it.id):0;
- const finalBlock=isFinal?(game.finalNoEffect(it.id)?'Final 효과 없음':full?'가방 가득':n.money<finalPrice?'손님 소지금 부족':''):'';
+ const noop=isFinal&&game.finalNoEffect(it.id),poor=isFinal&&n.money<finalPrice;
+ /* a short Wallet is a system status on the closed transfer itself - exact need / owned - the
+    same place SALE states a disabled price's cause; never a refusal line */
+ const finalBlock=isFinal?(noop?Copy.finalPrep.noEffect:full?'가방 가득':poor?Copy.finalPrep.wallet.replace('{need}',finalPrice).replace('{have}',n.money):''):'';
  const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>'+(finalBlock||'이익 '+(finalPrice-st.cost)+'G')+'</small>','supply','stamp',
     'aria-label="'+E(n.name)+'에게 보급 '+finalPrice+'G'+(finalBlock?' · '+finalBlock:'')+'" '+(finalBlock?'disabled':''))
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
@@ -1054,8 +1070,8 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
  const forwho='<p class="forwho"><span>'+E(n.name)+(isFinal?'에게 보급':'에게 판매')+'</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>';
  /* a Final no-effect Item: the reason and the closed 보급, and no preview of an effect it will not have */
- if(isFinal&&game.finalNoEffect(it.id))return '<div class="tillpanel">'+forwho
-  +'<p class="final-noop-why">마왕성 원정에서는 쓰이지 않아 Final 가방에 넣을 수 없습니다.</p><div class="tills">'+actions+'</div></div>';
+ if(noop)return '<div class="tillpanel">'+forwho
+  +'<p class="final-noop-why"><b>'+E(Copy.finalPrep.noEffect)+'</b> '+E(Copy.finalPrep.noEffectWhy)+'</p><div class="tills">'+actions+'</div></div>';
  return '<div class="tillpanel">'+forwho
  +(isFinal&&s.bossId==='GLUTTONY'?'<p class="final-boss-note">'+E(Copy.boss.d15.trait.GLUTTONY[0])+' · '+E(Copy.boss.d15.trait.GLUTTONY[1][0])+'</p>':'')
  /* SA-Q30: the rows are still grouped by what actually produced them internally - a Stat that
@@ -1071,7 +1087,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    +'</ul>':'')
  +(moved.derived.length?'<ul class="effects derived">'
    +moved.derived.map(r=>'<li><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')
-   +'</ul>':'')+readout(n,it.id)
+   +'</ul>':'')+(isFinal?'':readout(n,it.id))
  /* SA-Q30: conditional non-delta Item truth - a Counter this customer does not need today, an
     Insurance that only fires on a bad outcome - is still stated plainly rather than folded
     away, under its approved v2.8 heading. */
@@ -1192,6 +1208,12 @@ function npcCard(n,action='npc'){const s=game.run,blocked=action==='team'&&(!n.a
  return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
+/* FINAL-Q77: the one party-wide 토벌 전망, in the place and treatment the ordinary 전투 전망 reads
+   (.readout .top .fore + its ?). It replaces the one-NPC readout in the Final; the explanation is
+   the ? and a one-time coach, not a standing line. */
+function finalForecastView(){const f=game.finalForecast(),c=Copy.finalPrep;if(!f)return '';
+ return '<div class="readout final-forecast"><div class="top"><span class="fore">'+E(c.forecast)+'<b>'+E(f)+'</b>'
+  +tip(c.forecast,...c.forecastWhy)+'</span></div></div>';}
 function finalScreen(){
  const s=game.run,d=s.dungeons[0],need=game.finalRequired(),committed=!!s.finalCommitted;
  if(!s.team.includes(supplyNPC))supplyNPC=s.team[0]||null;
@@ -1223,7 +1245,8 @@ function finalScreen(){
  +(!committed
   ?'<div class="party-head"><h2>원정대 선택</h2><span class="count">'+s.team.length+' / '+need+'</span></div>'
    +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'team')).join('')+'</div>'
-  :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+need+'명</span></div>'
+  :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'
+   +finalForecastView()
    +'<div class="final-team">'+s.team.map(id=>{const n=s.npcs.find(x=>x.id===id),slots=Adventurer.slots(n);
     return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'" aria-pressed="'+(supplyNPC===id)+'">'
     +'<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span>'

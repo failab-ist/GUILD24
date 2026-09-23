@@ -105,7 +105,7 @@ P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.
  const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');
  const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');
  const item=s.inventory[i].item,price=this.finalPrice(item);
- if(this.finalNoEffect(item))throw Error('Final 효과 없음 - 마왕성 원정에서는 쓰이지 않습니다.');
+ if(this.finalNoEffect(item))throw Error(G.Copy.finalPrep.noEffect+' · '+G.Copy.finalPrep.noEffectWhy);
  if(n.money<price)throw Error('이 모험가의 소지금으로는 살 수 없습니다.');
  n.money-=price;s.money+=price;s.daily.revenue+=price;s.stats.revenue+=price;
  n.pack.push(item);n.history.push({day:30,item,mode:'half',paid:price});

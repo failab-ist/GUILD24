@@ -603,13 +603,66 @@ test('FINAL_EXPEDITION FINAL-Q74: no-effect Insurance is blocked from a Final Ba
   assert.equal(g.finalNoEffect(item),true);
   g.stock(item,1);const st=s.inventory.find(x=>x.item===item);
   const before=JSON.stringify({gold:s.money,wallet:n.money,inv:s.inventory.length,gross:s.stats.revenue});
-  assert.throws(()=>g.supplyFinal(n.id,st.id),/Final 효과 없음/,item+' is refused with the Final no-effect reason');
+  assert.throws(()=>g.supplyFinal(n.id,st.id),/마왕성에서는 효과 없음/,item+' is refused with the Demon-Castle no-effect reason');
   assert.equal(JSON.stringify({gold:s.money,wallet:n.money,inv:s.inventory.length,gross:s.stats.revenue}),before,'and nothing moves');
  }
  assert.equal(n.pack.length,0);
  assert.equal(g.finalNoEffect('potion'),false,'ordinary Items stay transferable');
  // ordinary (non-Final) SALE of the same Insurance is untouched
  assert.ok(!read('dist/systems/shop.js').includes('finalNoEffect'),'the block is Final-only');
+});
+
+test('FINAL §3: seven Bosses - the Item preview is the resolution truth, shelf and till read one helper',()=>{
+ const CORE=['combat','survival','mobility','spirit'];
+ for(const boss of ['WRATH','PRIDE','ENVY','GREED','GLUTTONY','LUST','SLOTH']){
+  const g=atFinal('seven-'+boss,4),s=g.run;s.bossId=boss;
+  if(boss==='SLOTH')s.sealBreakCount=1;
+  const team=g.finalEligible().slice(0,3);team.forEach(n=>{n.pack=[];n.money=9999;g.selectFinal(n.id);});
+  if(boss==='LUST')team[0].loyalty=100;   // one trusted regular, two not
+  g.commitFinalParty();s.money=9999;
+  for(const item of ['premium','rice','highpotion'])g.stock(item,1);
+  // the preview for each (participant, Item) is finalPreRoll with that Item added
+  const n=team[1],items=s.inventory.map(x=>x.item);
+  for(const item of items){
+   const i=s.team.indexOf(n.id),a=g.finalPreRoll(),b=g.finalPreRoll({[n.id]:[...n.pack,item]});
+   if(boss==='GLUTTONY'){const raw=Dungeon.prepare({...n,pack:[...n.pack,item]},s.dungeons[0],s.facilities),own=raw.itemStats.filter(x=>x.item===item);
+    for(const k of CORE){const gain=own.reduce((v,x)=>v+Math.max(0,x.stats[k]||0),0);
+     if(gain>0){const plain=raw.effects[k]-Dungeon.prepare(n,s.dungeons[0],s.facilities).effects[k];
+      assert.ok(Math.abs((b.snapshots[i][k]-a.snapshots[i][k])-(plain-gain*0.5))<1e-9,'GLUTTONY halves the positive Item '+k);}}}
+   if(item==='premium')var expect=b;
+  }
+  // commit the previewed transfer: the next pre-roll IS the preview, and the Lock records it
+  const rng=g.rng.state;
+  g.supplyFinal(n.id,s.inventory.find(x=>x.item==='premium').id);
+  const now=g.finalPreRoll();
+  for(let i=0;i<3;i++)for(const k of CORE)assert.ok(Math.abs(now.snapshots[i][k]-expect.snapshots[i][k])<1e-9,boss+': preview == post-transfer truth');
+  assert.equal(g.rng.state,rng,boss+': preview and transfer draw no RNG');
+  g.boss();
+  s.finalLock.members.forEach((m,i)=>{for(const k of CORE)assert.ok(Math.abs(m.stats[k]-expect.snapshots[i][k])<1e-9,boss+': resolution == preview');});
+  /* Boss-side truth is the CURRENT state: GREED reads the Gross Sales the transfer just added */
+  assert.ok(Math.abs(s.bossDebug.bossPower-now.bossPower)<1e-9&&Math.abs(s.bossDebug.power-now.power)<1e-9,boss+': resolution == current pre-roll');
+  if(boss==='GREED')assert.ok(now.bossPower<=expect.bossPower,'GREED: the transfer\'s sale counts toward the target');
+ }
+ // the UI restates no Boss multiplier - it reads the engine helper
+ const ui=read('dist/ui/app.js')+read('dist/ui/presentation.js');
+ assert.ok(!/gluttonyStatFactor|prideCombatFactor|envyStatFactor|lustStatFactor/.test(ui),'no Boss factor copied into the UI');
+ assert.ok(/function finalItemTruth[\s\S]{0,200}game\.finalPreRoll\(/.test(ui),'the Item truth is finalPreRoll');
+ assert.ok(/finalItemEffects\(n,it\)/.test(ui)&&/Presentation\.preview\(n,s\.dungeons\[0\],s\.facilities,it\.id,finalItemTruth\(n,it\.id\)\)/.test(ui),
+  'shelf summary and focused preview read the same helper');
+});
+
+test('FINAL-Q75: a valid affordable transfer is deterministic - no roll, no SALE dialogue',()=>{
+ for(const seed of ['det-1','det-2','det-3']){
+  const g=atFinal(seed,3),s=g.run;
+  for(const n of g.finalEligible())g.selectFinal(n.id);g.commitFinalParty();
+  s.money=9999;g.stock('premium',2);const n=s.npcs.find(x=>x.id===s.team[0]);n.money=g.finalPrice('premium');n.pack=[];
+  const say=JSON.stringify(s.say),rng=g.rng.state,refused=JSON.stringify(n.refused||[]);
+  g.supplyFinal(n.id,s.inventory[0].id);
+  assert.equal(n.pack.length,1,'committed');assert.equal(g.rng.state,rng,'no purchase/refusal roll');
+  assert.equal(JSON.stringify(s.say),say,'no customer line');assert.equal(JSON.stringify(n.refused||[]),refused,'no refusal record');
+ }
+ const app=read('dist/ui/app.js'),c=app.indexOf("case'supply':");
+ assert.ok(!/speech|say|refus/i.test(app.slice(c,app.indexOf('\n',c))),'the Final transfer action voices nothing');
 });
 
 test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exactly',()=>{

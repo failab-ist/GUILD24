@@ -283,5 +283,21 @@ Copy.deep={
  reward:'심층원정 보상'
 };
 
+/* COPY_AUDIT_APPROVED_v2.8 §14-7 D30 원정대 선택 / 마왕성 준비, verbatim. Player copy never says
+   `Final`. The forecast explanation is taught once by the coach and kept behind its ? (User
+   decision 2026-09-23: no standing explanation line). */
+Copy.finalPrep={
+ cap:'최대 3명까지 출전할 수 있다.',
+ unlock:'원정대를 확정하면 토벌 전망을 확인할 수 있다.',
+ underTitle:'3명보다 적은 인원으로 출전할까요?',
+ underBody:'선택한 {N}명만 마왕성으로 향합니다.',
+ back:'돌아가기',under:'이대로 확정',
+ forecast:'토벌 전망',
+ forecastWhy:['확정된 원정대의 능력과 보급,','확인된 위협과 마왕의 특성을 함께 반영한 전망.','보급이 바뀌면 전망도 함께 갱신된다.'],
+ noEffect:'마왕성에서는 효과 없음',
+ noEffectWhy:'이번 원정에서는 효과를 발휘하지 않아 챙겨갈 수 없다.',
+ wallet:'소지금 부족 · {need}G 필요 / {have}G 보유'
+};
+
 G.Copy=Copy;
 })(globalThis);

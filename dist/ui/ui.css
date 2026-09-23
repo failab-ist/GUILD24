@@ -2105,6 +2105,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .final-member .slot.filled{display:flex;gap:6px;justify-content:flex-start;color:#f2e7cd}
 .final-member .slot-name{font:400 12px/1.25 var(--ui);color:#f2e7cd;text-align:left}
 .p-final .tillpanel .forwho{display:flex;align-items:baseline;gap:10px}
+.p-final .final-forecast{margin:0 0 12px}
+.p-final .final-forecast .top{margin-bottom:0}
 .p-final .good.final-noop .tile{opacity:.5}
 .p-final .good .noop{font-style:normal;color:#e39a8c}
 .p-final .final-noop-why,.p-final .final-boss-note{margin:0 0 10px;padding:8px 10px;font:400 12px/1.45 var(--ui);
