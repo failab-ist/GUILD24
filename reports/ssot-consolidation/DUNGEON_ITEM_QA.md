@@ -462,3 +462,21 @@ Design owners under test: `DUNGEON_HAZARD_v2.8.0.md`, `ITEM_v2.8.0.md`.
 C: label names the current item.
 
 (The heading was already a declared new line; its declaration above now carries the new label.)
+
+## AMENDMENT — Store Support rebalance follow-up 2026-09-23
+
+Expected stacking values follow ITEM after the Store Support rebalance.
+
+```text
+= base ×2.50
+대식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= base ×2.75
+소식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= base ×2.25
+```
+
+```new
+= base ×2.05
+소식가 + 즉석식품 코너 + 24시간 신선체계
+= base ×1.55
+```

@@ -913,7 +913,7 @@ randomBand≈±15–20% starting point
 priceFixedForWindow=YES
 
 relative direction:
-Foundation < Hybrid/Utility < Keystone
+Foundation < Hybrid < Keystone; Utility is priced as a cheap support (User decision 2026-09-23)
 
 The following 20 Store Support base prices are the approved baseline.
 

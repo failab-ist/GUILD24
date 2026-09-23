@@ -729,3 +729,15 @@ wall       = 10% Morning proc (Decoration, not a Relic)
 하루 기본 최소 방문객을 4명으로 변경 (기존 3명).
 then the ordinary paid curve from its first step: 50G -> 100G -> 200G ...
 ```
+
+## AMENDMENT — Store Support rebalance follow-up 2026-09-23
+
+Utility prices were cut 50% by User decision, so Utility no longer sits with Hybrid.
+
+```text
+Foundation < Hybrid/Utility < Keystone
+```
+
+```new
+Foundation < Hybrid < Keystone; Utility is priced as a cheap support (User decision 2026-09-23)
+```

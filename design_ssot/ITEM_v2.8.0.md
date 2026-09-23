@@ -256,19 +256,16 @@ Examples of modifier totals:
 
 ```text
 대식가 + 즉석식품 코너 + 24시간 신선체계
-= +30% +40% +80%
-= base ×2.50
+= +30% +25% +50%
+= base ×2.05
 
-대식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
-= +30% +40% +80% +25%
-= base ×2.75
-
-소식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
-= -20% +40% +80% +25%
-= base ×2.25
+소식가 + 즉석식품 코너 + 24시간 신선체계
+= -20% +25% +50%
+= base ×1.55
 ```
 
-Drink has no Food-affinity Trait modifier, so the same three Fresh native-Stat bonuses alone remain base ×2.45 when all conditions apply.
+Drink has no Food-affinity Trait modifier, so the two Fresh native-Stat bonuses alone give base ×1.75.
+원정 도시락 코너 no longer adds a native-Stat bonus (its effects are Supply and flat Hazard defense).
 
 GLUTTONY's Final reduction, when applicable, occurs after the final Item-side positive Core-Stat contribution has been produced, as owned by `BOSS_v2.8.0.md`.
 

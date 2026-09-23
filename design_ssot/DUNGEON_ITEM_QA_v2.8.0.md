@@ -1089,13 +1089,10 @@ EXPECT base-additive modifier composition from `ITEM_v2.8.0.md`:
 
 ```text
 대식가 + 즉석식품 코너 + 24시간 신선체계
-= base ×2.50
+= base ×2.05
 
-대식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
-= base ×2.75
-
-소식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
-= base ×2.25
+소식가 + 즉석식품 코너 + 24시간 신선체계
+= base ×1.55
 ```
 
 PASS:

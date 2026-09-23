@@ -504,3 +504,29 @@ finalEscapeCap=0.96 (귀환석 rescue roll clamp; the ordinary retreat roll clam
 Food/Drink nativeCore for Fresh Store Supports and category affinity is positive native Stat only.
 Supply stays its own channel; Fresh Store Supports leave Supply unchanged.
 ```
+
+## AMENDMENT — Store Support rebalance follow-up 2026-09-23
+
+Stacking examples follow the rebalanced values (즉석식품 +25%, 24시간 신선 +50%, 원정 도시락 has no Stat bonus); the old example numbers were already stale.
+
+```text
+= +30% +40% +80%
+= base ×2.50
+대식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= +30% +40% +80% +25%
+= base ×2.75
+소식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= -20% +40% +80% +25%
+= base ×2.25
+Drink has no Food-affinity Trait modifier, so the same three Fresh native-Stat bonuses alone remain base ×2.45 when all conditions apply.
+```
+
+```new
+= +30% +25% +50%
+= base ×2.05
+소식가 + 즉석식품 코너 + 24시간 신선체계
+= -20% +25% +50%
+= base ×1.55
+Drink has no Food-affinity Trait modifier, so the two Fresh native-Stat bonuses alone give base ×1.75.
+원정 도시락 코너 no longer adds a native-Stat bonus (its effects are Supply and flat Hazard defense).
+```
