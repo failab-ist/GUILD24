@@ -165,3 +165,15 @@ Project-wide pass after the v2.8 release (main `f2fa299`); hygiene only, no Desi
 - User design decisions taken during the pass: Final `eligible` = Source definition; GREED penalty =
   unmet share of target × cap; GLUTTONY design question / identity; 악바리 fatigue +1 always on.
 - Items reported to the User as undecided are listed in each ledger's UNRESOLVED / REVIEW NOTES.
+
+## PRESENTATION PRINCIPLES — 2026-09-23 (User decision)
+
+- The seven presentation owners (PRESENTATION_SYSTEM, PRESENTATION_POLISH, PRESENTATION_POLISH_BATCH1..5;
+  Batches 1-5 CLOSED) are replaced by one principles-only owner, PRESENTATION_PRINCIPLES_v2.8.0.md.
+  Per-screen layout, pixel values, per-surface component specs, batch scope / stop boundaries, capture
+  lists and status history are not carried: implemented detail lives in Source, exact copy in
+  COPY_AUDIT_APPROVED_v2.8.0.md.
+- The seven files moved unchanged to design_ssot/history/ with `CURRENT_ROLE=HISTORICAL_BASE`; Source /
+  test / tool comments that cite them resolve there.
+- Pointers updated in SPEC_INDEX, AGENTS.md §2A, UI_UX and UI_UX_QA (ledger REWORD sections;
+  `npm run ssot:check` PASS).

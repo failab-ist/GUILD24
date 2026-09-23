@@ -185,18 +185,8 @@ Vendor only required weights.
 
 ## PRESENTATION POLISH ROUTING
 
-Presentation construction / asset / ornament / visual-review system:
-- PRESENTATION_SYSTEM_v2.8.0.md
-
-Closed Presentation Batches (surface detail, routed by SPEC_INDEX_v2.8.0.md):
-- PRESENTATION_POLISH_BATCH1_v2.8.0.md
-- PRESENTATION_POLISH_BATCH2_v2.8.0.md
-- PRESENTATION_POLISH_BATCH3_v2.8.0.md
-- PRESENTATION_POLISH_BATCH4_v2.8.0.md
-- PRESENTATION_POLISH_BATCH5_v2.8.0.md
-
-Detailed later-phase / audio Presentation contracts:
-- PRESENTATION_POLISH_v2.8.0.md
+Presentation principles (construction / asset / ornament / audio / visual review):
+- PRESENTATION_PRINCIPLES_v2.8.0.md
 
 UI_UX_v2.8.0.md remains authoritative for surrounding UI / UX / mobile / tutorial / semantic delta /
 popover / Store Management / NIGHT layout rules that remain in this file.
@@ -2189,7 +2179,7 @@ across dark backgrounds and brand accents.
 
 ## AUDIO FEEDBACK
 
-Audio presentation detail (voice / hierarchy / phase BGM identity) -> PRESENTATION_POLISH_v2.8.0.md.
+Audio presentation principles (voice / hierarchy / phase BGM identity) -> PRESENTATION_PRINCIPLES_v2.8.0.md.
 
 ### BGM audibility
 
@@ -2296,5 +2286,5 @@ Boss modifier truth -> BOSS_v2.8.0.md
 Meta / Store Capital / Decoration -> META_v2.8.0.md
 copy/voice -> COPY_WORLD_VOICE_v2.8.0.md
 exact player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md
-presentation system / batches / audio -> PRESENTATION_SYSTEM_v2.8.0.md, PRESENTATION_POLISH_BATCH1..5_v2.8.0.md, PRESENTATION_POLISH_v2.8.0.md
+presentation principles / audio -> PRESENTATION_PRINCIPLES_v2.8.0.md
 UI acceptance -> UI_UX_QA_v2.8.0.md

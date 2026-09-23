@@ -568,7 +568,6 @@ The third sub-bullet (`Counter / Supply / ... remain outside that reduction`) is
 ## MENU / SETTINGS / DEBUG
 ## TUTORIAL / HELP
 ## AUDIO
-Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_SYSTEM_v2.8.0.md / PRESENTATION_POLISH*_v2.8.0.md.
 ```
 
 ## UNRESOLVED — kept verbatim, reported to the User
@@ -623,4 +622,18 @@ A6 tutorial wording; A8 36px is the phone baseline (UI_UX NIGHT desktop adaptati
 ```new
 - Tutorial says: `이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.`
 - every NIGHT Outcome label measures 36px `var(--f-sign)` on phone (desktop may scale, one size for all Outcomes), and the NPC name and Outcome summary
+```
+
+
+## REWORD — presentation pointers (User decision 2026-09-23)
+
+The seven presentation owners moved to `design_ssot/history/`; the current owner is
+PRESENTATION_PRINCIPLES_v2.8.0.md. The SCOPE pointer follows it. The original was a consolidation-new line
+(removed from the `new` fence under "NEW — topic-group headings and the SCOPE owner pointer"; not a chain
+line, so listed outside a fence):
+
+    Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_SYSTEM_v2.8.0.md / PRESENTATION_POLISH*_v2.8.0.md.
+
+```new
+Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_PRINCIPLES_v2.8.0.md.
 ```

@@ -3,6 +3,7 @@
 DOC=PRESENTATION_POLISH
 OWNER=presentation_later_phase_detail,audio_presentation,functional_presentation
 DOC_VERSION=2.8.0
+CURRENT_ROLE=HISTORICAL_BASE  # detail superseded by PRESENTATION_PRINCIPLES_v2.8.0.md (principles only; implemented detail lives in Source)
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 PATCH_TYPE=PRESENTATION_DETAILED_LATER_PHASES

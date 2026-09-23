@@ -3,6 +3,7 @@
 DOC=PRESENTATION_POLISH_BATCH5
 OWNER=presentation_batch5,final_presentation,boss_confirm,final_backdrop
 DOC_VERSION=2.8.0
+CURRENT_ROLE=HISTORICAL_BASE  # detail superseded by PRESENTATION_PRINCIPLES_v2.8.0.md (principles only; implemented detail lives in Source)
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_EXECUTION_SPEC
 STATUS=CLOSED_BATCH_5

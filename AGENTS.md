@@ -73,12 +73,10 @@ For Presentation Upgrade work, do not full-read the project.
 
 ```text
 SPEC_INDEX
--> PRESENTATION_SYSTEM_v2.8.0.md
--> active PRESENTATION_POLISH_BATCH*_v2.8.0.md
+-> PRESENTATION_PRINCIPLES_v2.8.0.md
+-> the relevant current owners (UI_UX etc.)
 -> only relevant Source
 ```
-
-Open PRESENTATION_POLISH_v2.8.0.md only when the active Batch routes to a later-phase / audio rule.
 
 Visual Presentation work is screenshot-driven:
 

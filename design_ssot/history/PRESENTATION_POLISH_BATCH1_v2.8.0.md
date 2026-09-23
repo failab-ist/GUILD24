@@ -3,6 +3,7 @@
 DOC=PRESENTATION_POLISH_BATCH1
 OWNER=presentation_batch1,opening,pre_run,store_management,morning
 DOC_VERSION=2.8.0
+CURRENT_ROLE=HISTORICAL_BASE  # detail superseded by PRESENTATION_PRINCIPLES_v2.8.0.md (principles only; implemented detail lives in Source)
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 PARENT=PRESENTATION_SYSTEM_v2.8.0.md

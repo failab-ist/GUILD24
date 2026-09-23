@@ -314,13 +314,7 @@ Acceptance criteria -> UI_UX_QA_v2.8.0.md
 Active Presentation Batch 1:
 ```
 
-```new
-Closed Presentation Batches (surface detail, routed by SPEC_INDEX_v2.8.0.md):
-- PRESENTATION_POLISH_BATCH2_v2.8.0.md
-- PRESENTATION_POLISH_BATCH3_v2.8.0.md
-- PRESENTATION_POLISH_BATCH4_v2.8.0.md
-- PRESENTATION_POLISH_BATCH5_v2.8.0.md
-```
+New form (superseded; see REWORD — presentation pointers (User decision 2026-09-23)).
 
 
 ## REWORD — version framing / inheritance words removed, rule kept
@@ -430,7 +424,6 @@ Boss modifier truth -> BOSS_v2.8.0.md
 Meta / Store Capital / Decoration -> META_v2.8.0.md
 copy/voice -> COPY_WORLD_VOICE_v2.8.0.md
 exact player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md
-presentation system / batches / audio -> PRESENTATION_SYSTEM_v2.8.0.md, PRESENTATION_POLISH_BATCH1..5_v2.8.0.md, PRESENTATION_POLISH_v2.8.0.md
 UI acceptance -> UI_UX_QA_v2.8.0.md
 ```
 
@@ -538,9 +531,7 @@ Phase subsections of v2.6 PHASE IDENTITY are promoted to `##`; later-version `##
 
 ## NEW — ownership pointer to the Presentation audio owner (SPEC_INDEX: AUDIO PRESENTATION -> PRESENTATION_POLISH_v2.8.0.md)
 
-```new
-Audio presentation detail (voice / hierarchy / phase BGM identity) -> PRESENTATION_POLISH_v2.8.0.md.
-```
+Pointer (superseded; see REWORD — presentation pointers (User decision 2026-09-23)).
 
 
 ## UNRESOLVED — none open after review
@@ -577,4 +568,39 @@ primary control reads `마감으로` (Source, USER CONFIRMED 2026-09-22).
 - 전리품 -> 원정 소지금 획득
 `이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.` (exact copy: COPY_WORLD_VOICE_v2.8.0.md tutorial coach)
 - `다음` (on the last result it reads `마감으로`)
+```
+
+
+## REWORD — presentation pointers (User decision 2026-09-23)
+
+The seven presentation owners (PRESENTATION_SYSTEM / PRESENTATION_POLISH / PRESENTATION_POLISH_BATCH1..5)
+moved to `design_ssot/history/`; the current owner is PRESENTATION_PRINCIPLES_v2.8.0.md (principles only;
+implemented surface detail lives in Source). Pointers follow it; the Batch / later-phase lists are dropped.
+
+Chain originals:
+
+```text
+Presentation construction / asset / ornament / visual-review system:
+- PRESENTATION_SYSTEM_v2.8.0.md
+- PRESENTATION_POLISH_BATCH1_v2.8.0.md
+Detailed later-phase / audio Presentation contracts:
+- PRESENTATION_POLISH_v2.8.0.md
+```
+
+Earlier consolidation-new lines replaced here (removed from their `new` fences above; not chain lines, so
+listed outside a fence):
+
+    Closed Presentation Batches (surface detail, routed by SPEC_INDEX_v2.8.0.md):
+    - PRESENTATION_POLISH_BATCH2_v2.8.0.md
+    - PRESENTATION_POLISH_BATCH3_v2.8.0.md
+    - PRESENTATION_POLISH_BATCH4_v2.8.0.md
+    - PRESENTATION_POLISH_BATCH5_v2.8.0.md
+    Audio presentation detail (voice / hierarchy / phase BGM identity) -> PRESENTATION_POLISH_v2.8.0.md.
+    presentation system / batches / audio -> PRESENTATION_SYSTEM_v2.8.0.md, PRESENTATION_POLISH_BATCH1..5_v2.8.0.md, PRESENTATION_POLISH_v2.8.0.md
+
+```new
+Presentation principles (construction / asset / ornament / audio / visual review):
+- PRESENTATION_PRINCIPLES_v2.8.0.md
+Audio presentation principles (voice / hierarchy / phase BGM identity) -> PRESENTATION_PRINCIPLES_v2.8.0.md.
+presentation principles / audio -> PRESENTATION_PRINCIPLES_v2.8.0.md
 ```

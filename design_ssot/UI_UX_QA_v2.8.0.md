@@ -13,7 +13,7 @@ CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
 Status values are not stored here. FAIL is valid evidence.
 This file defines acceptance criteria only.
 
-Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_SYSTEM_v2.8.0.md / PRESENTATION_POLISH*_v2.8.0.md.
+Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_PRINCIPLES_v2.8.0.md.
 
 ## PHASE IDENTITY / VISUAL LANGUAGE
 
