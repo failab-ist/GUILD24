@@ -1,16 +1,819 @@
-# DUNGEON / ITEM QA
+# DUNGEON_ITEM_QA
 
 DOC=DUNGEON_ITEM_QA
+OWNER=qa,dungeon,item,hazard,preparation,naked_run,fatigue,supply,injury,death_risk,great_success,deep_expedition,result_proof
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
-BASE_DOCUMENT=DUNGEON_ITEM_QA_v2.7.0.md
-PATCH_TYPE=V2_8_ITEM_AND_PROOF_QA
+DOC_AUTHORITY=DESIGN_QA_SPEC
+CONSOLIDATED_FROM=history/DUNGEON_ITEM_QA_v2.8.0-patch.md,history/DUNGEON_ITEM_QA_v2.7.0.md,history/DUNGEON_ITEM_QA_v2.5.0.md
+CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_ITEM_QA.md
 
-## INHERITANCE
+Status values are not stored here.
+This file defines acceptance criteria only.
 
-All non-conflicting v2.7 Dungeon/Item QA remains active.
+Design owners under test: `DUNGEON_HAZARD_v2.8.0.md`, `ITEM_v2.8.0.md`.
 
-## DI-Q-v28-1 — ITEM BASELINE
+## FAMILY / HAZARD IDENTITY
+
+### DUN-Q01 — FAMILY IDENTITIES
+
+SETUP:
+Inspect all 5 Families.
+
+EXPECT:
+SPIDER=poison+bind
+SLIME=corrosion+mire
+FIRE=fire+highCombatPower
+CRYPT=fear+dark
+SNOW=cold+whiteout
+
+PASS:
+Each Family is mechanically distinct.
+
+### DUN-Q02 — STAT MAPPING
+
+SETUP:
+Inspect hazard contributions.
+
+EXPECT:
+- poison -> 강인함
+- bind -> 기동
+- corrosion -> 강인함
+- mire -> 기동
+- fire -> 강인함
+- fear -> 정신
+- dark -> 정신 primary + 기동 secondary
+- cold -> 강인함
+- whiteout -> 정신 primary + 기동 secondary
+
+PASS:
+Player-facing stat roles match actual resolution.
+
+### DUN-Q03 — SPIRIT RELEVANCE
+
+SETUP:
+Play Crypt and Snow content.
+
+EXPECT:
+정신 matters meaningfully in both.
+
+PASS:
+Spirit is not a one-Family stat.
+
+### DUN-Q04 — FAMILY HAZARD BOUNDARIES
+
+SETUP:
+Inspect Family data.
+
+EXPECT:
+- canonical hazards are exactly poison/bind/corrosion/mire/fire/fear/dark/cold/whiteout
+- wet is not an independent Slime hazard
+- slow, if retained internally, is only an implementation alias of mire
+- armor is not a Fire-family hazard
+- undead is a Family Tag, not direct hazard
+- long is not a Hazard
+- thirst is not a Condition/Hazard/resource system
+- fatigue is NPC condition
+- 보급 부담 is global Gate modifier
+- Fire second axis is higher Dungeon Combat Power, not a separate Hazard
+
+PASS:
+No contradictory extra hazard layer or dead key affects resolution.
+
+### DUN-Q19 — NONCANONICAL KEY ISOLATION
+
+SETUP:
+Search runtime resolution paths for wet/armor/undead/long/thirst and Job-specific hazard keys.
+
+EXPECT:
+None changes expedition resolution as an independent Hazard or hidden Job solution.
+
+PASS:
+Only canonical Hazard/Supply systems affect gameplay.
+
+### DUN-Q21 — HAZARD EXPLANATION CONSISTENCY
+
+SETUP:
+Inspect all 9 canonical Hazards in Gate/preparation UI on desktop and touch/mobile.
+
+EXPECT:
+Every Hazard exposes the canonical short pressure explanation:
+- poison / corrosion / fire / cold -> 강인함
+- bind / mire -> 기동
+- fear -> 정신
+- dark / whiteout -> 정신 중심 + 기동 보조
+
+Desktop:
+hover/focus access works where tooltip is used.
+
+Mobile:
+tap or inline access provides the same information.
+
+PASS:
+- no canonical Hazard is name-only while another receives a detailed effect line
+- no hover-only information
+- `slow` is not presented as a separate canonical Hazard
+- exact hidden formula remains hidden
+
+### DUN-Q16 — FINAL FAMILY DATA OWNERSHIP
+
+SETUP:
+Use a Final Expedition that selects canonical Dungeon Families.
+
+EXPECT:
+Final reads each selected Family's existing T2 Hazard definition from `DUNGEON_HAZARD_v2.8.0.md`.
+No alternate/duplicated Final-only Family Hazard table exists here.
+
+PASS:
+Dungeon Family data has one owner.
+Detailed Final combination/power/clear QA -> `FINAL_EXPEDITION_v2.8.0.md`.
+
+## GATE COUNT / TIER GENERATION
+
+### DUN-Q12 — FAMILY INTRODUCTION
+
+SETUP:
+Run multiple seeds.
+
+EXPECT:
+Start with ~3/5 Families.
+Additional Families enter within canonical early/mid windows.
+
+PASS:
+Early mix varies across runs without late impossible surprise.
+
+### DUN-Q13 — TIER DAY PROGRESSION
+
+SETUP:
+Sample generated days across bands.
+
+EXPECT:
+Higher Tier availability/weight rises over Run.
+
+PASS:
+No impossible early T3 and no flat same-difficulty run.
+
+### DUN-Q14 — INTRA-BAND CURVE
+
+SETUP:
+Compare early vs late days inside same band.
+
+EXPECT:
+Higher-tier weight gradually increases.
+
+PASS:
+Day13 and Day18 are not necessarily identical distributions.
+
+### DUN-Q15 — MULTI-GATE VARIETY
+
+SETUP:
+Generate multi-Gate days.
+
+EXPECT:
+Distinct Families preferred where practical.
+
+PASS:
+Repeated identical prep demand is not dominant unless intentional.
+
+### DI-Q-v28-12 — GATE COUNT / TIER DISTRIBUTION EXACT
+
+Gate count PASS:
+- D1–3 exactly 1
+- D4–7 1/2 at 50% / 50%
+- D8–18 exactly 2
+- D19–29 2/3 at 50% / 50%
+- D30 does not run ordinary Gate-count generation
+
+Tier PASS:
+- exact anchor rows equal DUNGEON_HAZARD_v2.8.0.md
+- all in-between Days use linear interpolation between surrounding anchors
+- D30 does not run ordinary Tier generation
+- next-Day forecast reads the same function as generation
+
+FAIL:
+- a forecast-only probability table
+- a different Save/Load forecast roll
+- any alternate approximate band percentages acting as exact truth
+
+## PREPARED POWER / GATE POWER / HAZARD THREAT / FORECAST
+
+### DUN-Q70 — PREPARED POWER WEIGHTS
+
+Controlled Stats with no other modifiers.
+
+EXPECT ordinary expedition prepared ability:
+```text
+투력 .50 + 강인함 .34 + 기동 .27 + 정신 .20
+```
+
+PASS:
+- Forecast uses these weights
+- Resolve uses these weights
+- Great Success prepared margin/signal uses the same weights
+- no stale `.58/.32/.24/.16` ordinary path remains
+
+### DUN-Q-v27-GATE-SLOPE — LATE-DAY GATE POWER
+
+Owner rule: `DUNGEON_HAZARD_v2.8.0.md` §GATE POWER — LATE-DAY SLOPE.
+
+PASS:
+- the Day term is `min(Day, 9) × 1.70 + max(0, Day - 9) × 0.40`
+- D1 through D9 Gate Power is identical to the pre-change value for the same Family, Tier and Day
+- the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
+- D12 T1 ordinary Family reads 16.50 on the Day term, D24 reads 21.30
+
+FAIL:
+- a single slope applied across all Days
+- an early-Day Gate Power that moved
+- the slope implemented as a post-hoc multiplier on the finished Gate Power rather than on the
+  Day term
+
+### DUN-Q71 — HAZARD THREAT CURVE
+
+EXPECT:
+```text
+Threat = 12 + Day*.35 + (Tier-1)*6
+```
+
+Exact anchors:
+- D1 T1 = 12.35
+- D12 T1 = 16.20
+- D18 T2 = 24.30
+- D24 T2 = 26.40
+- D29 T3 = 34.15
+- D30 T2 = 28.50
+
+PASS: runtime threat matches.
+
+### DI-Q-v28-13 — FORECAST / HAZARD LABEL BOUNDARIES
+
+Combat ratio:
+- >1.20 -> 우세
+- >=0.80 -> 접전
+- otherwise -> 불리
+
+Hazard readiness ratio:
+- >=1.00 -> 충분
+- >=0.75 -> 대응
+- >=0.40 -> 불안
+- otherwise -> 취약
+
+PASS:
+- Hazard Defense uses the exact Core-Stat coefficients in DUNGEON_HAZARD_v2.8.0.md
+- displayed label and actual underlying preparation state read the same calculation
+- exact hidden formula is not exposed merely because QA knows it
+
+## TIER PREPARATION / COUNTER ROUTES
+
+### DUN-Q05 — T1 LEARNING / GROWTH OVERRIDE
+
+SETUP:
+Test T1 with:
+- a well-grown suitable NPC without exact Counter
+- the same/similar case with basic Direct Counter
+
+EXPECT:
+- strong growth can often make T1 viable even without exact Counter
+- basic correct prep materially increases reliability
+- T1 does not behave like a mandatory Item tax
+
+PASS:
+Growth matters and correct prep still feels useful.
+
+### DUN-Q06 — T2 JUDGMENT ROUTE
+
+SETUP:
+Test T2 across grown NPCs with:
+- primary Direct Counter
+- Hybrid/Insurance/flex alternatives
+- strong relevant Stats with lighter prep
+
+EXPECT:
+- Counter/Item coverage is materially valuable
+- at least one normal route exists without two dedicated Direct Counters
+- some strong-NPC cases create a real `cover it or trust growth?` decision
+- T2 is not balanced as an automatic hard-counter tax in every case
+
+PASS:
+Preparation matters without eliminating judgment.
+
+### DUN-Q07 — T3 SLOT CONTRACT
+
+SETUP:
+Test all Family T3 variants with appropriately grown NPCs.
+
+EXPECT:
+Viable clear route exists within <=2 meaningful required prep slots.
+
+### DUN-Q72 — TIER PREPARATION TARGET
+
+Representative neutral-fit NPCs:
+- T1 lower/basic response can reach 충분; hybrid commonly slightly short
+- T2 upper/main specialist can reach 충분; lower remains useful but commonly short
+- T3 upper alone commonly 대응/slightly short; upper + secondary/natural/trait/hybrid can reach 충분
+
+PASS:
+- strong natural Stat/growth can reduce Item needs
+- weak-fit NPC may need more
+- no viable route requires a third normal Bag slot
+- drawing one exact Epic SKU is never required for a viable T3 route
+
+### DUN-Q08 — DIRECT VS HYBRID
+
+SETUP:
+Compare specialist Direct vs multi-hazard Hybrid.
+
+EXPECT:
+Direct is more reliable on its specific target.
+Hybrid is more flexible across uncertainty.
+
+PASS:
+Hybrid is not strict superior specialist.
+
+### DUN-Q09 — NO SINGLE ITEM FAMILY DELETE
+
+SETUP:
+Test strongest relevant item in each Family.
+
+EXPECT:
+One item cannot erase entire Family challenge.
+
+PASS:
+Stats/secondary pressure/insurance decisions remain relevant.
+
+### DUN-Q10 — RESIDUAL RISK
+
+SETUP:
+Use proper Direct Counter repeatedly.
+
+EXPECT:
+- T1/T2 very reliable
+- T3 may retain small residual risk
+- no item-specific hidden defect RNG
+
+PASS:
+Risk comes from canonical expedition resolution.
+
+### DUN-Q18 — HAZARD ROUTE COVERAGE
+
+SETUP:
+Audit all 9 canonical Hazards against ITEM matrix.
+
+EXPECT:
+Each Hazard has:
+- 1 Main specialist route
+- >=2 meaningful Alternative routes
+
+Alternative routes may use Hybrid/secondary Counter/relevant Stat/Stat-support Item.
+Insurance does not automatically count.
+
+PASS:
+No canonical Hazard depends on one mandatory SKU and alternatives are not duplicate copies.
+
+### DUN-Q20 — PREPARATION NECESSITY / NAKED RUN
+
+SETUP:
+- representative multi-seed runs
+- normal NPC progression
+- no deliberate exploit
+- compare:
+  - A. repeated minimal/no preparation
+  - B. reasonable Hazard-aware preparation
+
+EXPECT:
+- early game tolerates weak preparation
+- preparation value increases with progression
+- prepared play produces clearly better expedition outcomes
+- naked/minimal-prep play must not remain a stable strategy into mid/late game
+
+PASS:
+- D1–3: weak/no prep usually survivable
+- D4–7: repeated no-prep begins producing visible injury/retreat/failure cost
+- D8–12: no-prep is materially worse than appropriate preparation
+- D13–18: repeated naked play is not a reliable progression strategy
+- D19+: reliable naked progression is exceptional, not normal
+- T3 requires grown NPC + meaningful preparation for reliable outcomes
+
+FAIL:
+- player can routinely progress to mid/late game while ignoring Order/Item preparation
+- NPC stat growth alone makes Hazard preparation largely irrelevant
+- prepared vs unprepared outcome difference is too small to affect player decisions
+
+NOTE:
+Do not solve by adding arbitrary naked-run punishment.
+Tune Dungeon pressure / Stat-route efficiency / growth / Item counter value so preparation naturally matters.
+
+## SUPPLY / FATIGUE
+
+### DUN-Q17 — SUPPLY BURDEN
+
+SETUP:
+Test expeditions with and without active Supply Burden using different Food/Drink Supply totals.
+
+EXPECT:
+- T1 never receives Supply Burden
+- T2 starts from 35% Gate chance / required Supply 3
+- T3 starts from 55% Gate chance / required Supply 5
+- D30 Final receives no extra random Supply Burden
+- Supply Burden and required Supply are visible before Order
+- Food/Drink contribute visible Supply
+- sufficient Supply avoids Supply Deficit
+- insufficient Supply creates one shared expedition-wide penalty
+- no thirst/hunger/caffeine subsystem is created
+- excess Supply alone gives no extra success bonus
+- T3 Supply Burden still has a viable <=2 meaningful required-prep-slot route
+
+PASS:
+Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system, and the approved eligibility/values are implemented.
+
+### DUN-Q76 — SUPPLY DEFICIT BOUNDARY
+
+PASS:
+- T1/T2/T3 Supply-Burden eligibility/requirements remain intact
+- exact hidden deficit formula remains hidden from player UI
+- public required/prepared/deficit quantities are correct
+
+### DUN-Q73 — FATIGUE OUTCOME TABLE
+
+EXPECT base result Fatigue:
+```text
+성공 +3
+대성공 +3
+퇴각 +5
+부상 +6
+중상 0
+사망 0
+```
+
+PASS: exact table before Trait/Supply modifications.
+
+### DUN-Q74 — FATIGUE PENALTY
+
+EXPECT:
+```text
+0~9   none
+10~19 mobility/spirit -15%
+20    mobility/spirit -40%
+```
+
+PASS:
+- applies to NPC Base+Equipment-side Stats
+- Item Stat contribution is not multiplied by this NPC-side percentage
+- Fatigue 20 uses -40%, not stale -25%
+
+### DUN-Q75 — SUPPLY ORDER / OUTCOME BUFFER
+
+Controlled cases must verify exact order:
+1. pay required Supply
+2. remaining Supply reduces current Fatigue
+3. remaining Supply then reduces actual outcome Fatigue 1:1
+4. unused remainder is discarded
+
+PASS:
+- `preparedSupply`, `preRecovery`, `remainingSupplyBuffer`, `outcomeBufferUsed`, `actualOutcomeFatigueGain`, `finalFatigue` match the current owner arithmetic
+- no duplicate `postOutcomeFatigueGain` truth is used for the same result
+- no excess-Supply Power/success/Loot/Hazard bonus
+- no next-expedition buffer persistence
+- Severe/Death raw outcome Fatigue remains 0
+
+### DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
+
+SALE must not display separate 성공/퇴각/부상 future Fatigue rows.
+
+Supply/Fatigue runtime arithmetic follows the current owner truth.
+
+## ORDINARY RESOLVE / DEATH / INJURY / CAUSALITY
+
+### DI-Q-v28-14 — ORDINARY RESOLVE / REWARD BASELINE
+
+Controlled seeded cases must verify:
+- Supply deficit = 6% per missing Supply, cap 30%
+- environment incident chance uses the exact closure formula and 2%–48% clamp
+- escape chance uses the exact closure formula and 15%–94% clamp
+- failed-combat Severe branch uses 42% base before current modifiers
+- environment/other Severe branch uses 13% base before current modifiers
+- injured departure adds the existing +15%p Severe escalation exactly once
+- failure-conditioned Death still follows the separate current Death owner formula exactly once
+
+Reward PASS:
+- EXP base = 22 + Day×4.6
+- EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
+- Wallet base = 35 + Day×8
+- Wallet outcome multipliers are Retreat 0.08 / combat-success 1.00 / other living 0.18
+- explicit XP/Loot/Gate reward modifiers compose once
+- living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
+- equipment gain on hit is seeded integer +2 through +5
+
+FAIL:
+- a second alternative ordinary-resolve formula survives
+- QA retunes any value to improve pass rate
+
+### DUN-Q77 — ORDINARY FAILURE DEATH BASELINE
+
+Controlled prepared states with known Combat and Hazard deficits.
+
+EXPECT:
+
+```text
+CombatDeficit
+= clamp((requiredCombatPower - effectivePreparedPower) / requiredCombatPower, 0, 1)
+
+CombatDeathContribution
+= CombatDeficit * 0.18
+
+HazardDeficit_i
+= clamp((HazardThreat_i - HazardDefense_i) / HazardThreat_i, 0, 1)
+
+EnvironmentDeficit
+= average(HazardDeficit_i)
+
+EnvironmentDeathContribution
+= EnvironmentDeficit * 0.12
+
+healthyFailureDeathChance
+= clamp(
+    CombatDeathContribution + EnvironmentDeathContribution,
+    0.00,
+    0.30
+)
+```
+
+If no canonical Hazard is present:
+```text
+EnvironmentDeficit = 0
+```
+
+PASS:
+- Combat contribution uses the same current prepared-combat truth as Forecast/Resolve before hidden combat variance
+- Environment contribution uses the same current Hazard Threat/Defense truth as readiness
+- healthy minimum may reach exactly 0%
+- healthy conditional cap is exactly 30%
+- an expedition that resolves as `성공 / 대성공` performs zero Death rolls
+- an expedition that enters the ordinary failure path performs exactly one Death roll
+- that failure Death roll is not additionally gated behind a separate failed-escape requirement
+- no second Death roll survives inside escape/injury/severe handling
+- a 0% `실패 시 사망 위험` does not imply guaranteed Success
+- the displayed percentage is not treated as unconditional whole-expedition Death probability
+
+### DUN-Q78 — INJURED RE-EXPEDITION RISK / PRE-SUPPLY DISCLOSURE
+
+Controlled identical NPC/Gate state except departure Injury state.
+
+EXPECT when departure `injury=1`:
+- ordinary visible Injury Stat penalty remains 투력 -15% / 강인함 -20%
+- failure Death chance adds +10%p to the healthy conditional formula and caps at 40%
+- Severe Injury transition chance adds +15%p at the existing Severe-vs-Injury branch
+- no extra independent Death/Severe roll is created
+- `성공 / 대성공` still performs no Death roll
+
+Pre-supply SALE check:
+- exact `실패 시 사망 위험` % includes the +10%p injured modifier
+- qualitative Combat Forecast / Hazard Readiness and exact `실패 시 사망 위험` are captured before any new Item commit
+- after purchase commits, those displayed outlook values remain frozen
+- actual `failureDeathChance` is recalculated internally from the final prepared state
+- post-supply/final actual failure Death % is not exposed during the remaining-slot decision
+- UI does not present the conditional percentage as unconditional whole-expedition Death probability
+
+PASS:
+- injured departure is materially riskier than healthy departure when an expedition fails
+- healthy conditional cap remains 30%
+- injured conditional cap remains 40%
+- exact pre-supply `실패 시 사망 위험` is player-visible while the post-supply actual conditional probability remains hidden
+
+### DUN-Q79 — ORDINARY INJURY NATURAL RECOVERY
+
+Start at `injury=1`.
+
+EXPECT:
+```text
+성공 -> injury 0
+대성공 -> injury 0
+퇴각 -> injury 1
+부상 -> injury 1
+```
+
+PASS:
+- Retreat does not clear ordinary Injury
+- generic completion/non-Injury result does not clear it
+- Severe recovery remains its separate rule in `NPC_TRAIT_v2.8.0.md`
+- First Aid Aftercare may still override persistent Injury exactly as ITEM owns
+
+### DUN-Q11 — CAUSALITY
+
+SETUP:
+Block one hazard but fail due to another/combat.
+
+EXPECT:
+Result copy names actual cause.
+
+PASS:
+Blocked hazard is not falsely blamed.
+
+## GREAT SUCCESS / DEEP EXPEDITION
+
+### GREAT SUCCESS
+PASS:
+- failed expedition cannot become Great Success
+- ordinary combat/environment/injury/escape resolution occurs first without Great Success
+- only final ordinary `성공` may upgrade to `대성공`
+- injury/retreat/severe injury/death cannot coexist with Great Success
+- margin uses prepared pre-noise Combat ability rather than lucky combat noise
+- larger prepared Combat margin never lowers Great Success chance
+- Great Success remains below 100% certainty
+- signal threshold matches actual Great Success calculation
+- no new hidden master-readiness Stat
+
+### DI-Q-v28-10 — GREAT SUCCESS NUMERIC BASELINE
+
+Expected:
+    signal margin 0.26
+    chance slope 0.80
+    chance cap 0.30
+
+PASS:
+- small positive margin may produce Great Success even below the signal threshold
+- signal threshold only controls presentation
+- probability never exceeds 30%
+- repeated Great Success by a well-grown NPC is not itself a failure
+
+### DEEP SCHEDULE
+PASS:
+- only D7/D14/D21/D28 candidate windows
+- exactly 2 or 3 actual occurrences
+- at least one D7/D14
+- at least one D21/D28
+- Save/Load does not reroll
+
+### DI-Q-v28-11 — DEEP OCCURRENCE / DIFFICULTY BASELINE
+
+Expected:
+- occurrence windows remain D7 / D14 / D21 / D28
+- each Run has exactly 2 or 3 occurrences
+- P(3 occurrences) = 50%
+- P(2 occurrences) = 50%
+- Deep required Combat Power = selected base Gate Power ×1.50
+- no Deep Hazard inflation is added
+
+### DEEP GATE
+PASS:
+- base is one of today's highest-Tier actual Gates
+- tie is deterministic/seeded
+- Family unchanged
+- Tier unchanged
+- Hazard set unchanged
+- required Combat Power = base Gate Power × one Deep factor
+- no additive / Day-specific Deep Power curve
+- ordinary Item/Supply resolution used once
+- one expedition / one result
+- no T4 / extra Hazard / second roll
+
+### EVENT EXCLUSION
+PASS:
+- actual Deep Day produces no Normal Event
+- Deep is not selected from Event catalog
+- no automatic 35% chance compensation
+
+## ITEM CATEGORY / CATALOG
+
+### ITEM-Q70 — PLAYER CATEGORY EXACT
+
+Every active Item maps to exactly one of:
+```text
+Food / Drink / Potion / Field Gear / Insurance / Special
+```
+
+PASS:
+- no active Medical category
+- Potion line is not Special
+- 농축 해독제 = Field Gear
+- 구급키트 = Insurance
+
+### ITEM-Q71 — ACTIVE CATALOG EXACT 40
+
+PASS:
+- exactly 40 active Items
+- 붕대 inactive/retired
+- 마석 보조배터리 inactive/retired
+- 진정 허브티 active
+- 중급 포션 active
+- exactly 10 Epic preparation Items from `ITEM_v2.8.0.md` are active
+- no retired ID leaks into Order/Sale generation
+
+### ITEM-Q09 — ACTIVE CATALOG BOUNDARY
+
+SETUP:
+Inspect all sellable/generated Item IDs.
+
+EXPECT:
+Active sellable catalog matches ITEM canonical catalog exactly.
+No extra source-only Item enters Order/Sale/Expedition resolution.
+
+PASS:
+Catalog count/identity is stable and no omitted strict-superior item leaks into play.
+
+### ITEM-Q19 — ACTIVE CATALOG STRUCTURE
+
+SETUP:
+Audit canonical active catalog by Category/Rarity/Role.
+
+EXPECT:
+- each has exactly one player-facing Category
+- low-rarity specialists remain meaningful
+- new Items fill documented Hazard/build coverage gaps
+
+PASS:
+Catalog supports preparation and Relic builds without filler or strict universal upgrades.
+
+### ITEM-Q02 — FUNCTIONAL ROLE
+
+SETUP:
+Audit catalog.
+
+EXPECT:
+Items have understandable gameplay role:
+Stat/Supply/Direct/Hybrid/Condition/Insurance/RiskReward/Economy/Utility
+
+PASS:
+No item exists only as unexplained modifier bundle.
+
+### ITEM-Q03 — MATERIAL EFFECT VISIBILITY
+
+SETUP:
+Inspect Sale/Order item details.
+
+EXPECT:
+Important effect/penalty is player-readable.
+
+PASS:
+Material hidden behavior absent.
+
+### ITEM-Q16 — NEW ITEM JUSTIFICATION
+
+SETUP:
+Review any newly added catalog item.
+
+EXPECT:
+It fills a proven coverage/price/role gap.
+
+PASS:
+No addition exists only to increase item count.
+
+### ITEM-Q77 — FOOD/DRINK BASELINE VALUES
+
+Audit the exact active table in `ITEM_v2.8.0.md`, including:
+- Choco mobility +8 / Supply4
+- Coffee mobility +12 / Supply2
+- Herb Tea spirit +15 / Supply2
+- Energy mobility +15 / Supply2
+- Lava survival +8 / cold6 / Supply4
+- Ramen cold10 / Supply5
+- Ice fire10 / Supply1
+- Candy fear10 / Supply3
+
+PASS: no stale Stat bundle survives.
+
+### ITEM-Q81 — REBALANCED PRICE TABLE
+
+PASS exact Buy/Sell for changed original-catalog prices:
+
+```text
+캔커피                40 / 85
+진정 허브티           40 / 85
+얼음컵                30 / 65
+랜턴 건전지           45 / 95
+구급키트             100 / 210
+핫팩                  60 / 130
+농축 해독제           80 / 170
+쿨링 이온음료         80 / 170
+```
+
+PASS:
+- unchanged original-catalog prices remain exactly as listed in `ITEM_v2.8.0.md`
+- no stale 180/360 antidote or 200/400 ion price survives
+- Main Hazard specialist price bands remain practically comparable rather than rarity-only inflated
+
+### ITEM-Q78 — GOLDEN COUPON PRICE
+
+PASS:
+`황금 1+1 쿠폰` canonical buy/sell = 500/1000 and existing explicit duplication interaction remains intact.
+
+### ITEM-Q META — GOLDEN 1+1 UNLOCK
+
+SETUP:
+Inspect Item offer/acquisition eligibility before and after first distinct Boss clear.
+
+EXPECT:
+- 황금 1+1 쿠폰 remains canonical Item ID 30
+- before META unlock it does not appear through normal acquisition
+- after first distinct Boss clear it becomes eligible under its normal Item rules
+- Item effect itself is unchanged by the unlock system
+
+PASS:
+META gates availability only; ITEM continues to own the effect.
+
+## MEAL / WATER LINE
+
+### DI-Q-v28-1 — ITEM BASELINE
 
 Expect exactly:
 
@@ -31,7 +834,7 @@ PASS:
 - meal shelf life 2, water shelf life 5
 - no replacement creates direct Fatigue reduction
 
-## DI-Q-v28-2 — WALLET GAIN SCOPE
+### DI-Q-v28-2 — WALLET GAIN SCOPE
 
 PASS:
 - U meal adds +0.20 to ordinary expedition loot modifier
@@ -41,7 +844,7 @@ PASS:
 - Store Support/Event/direct Wallet grants are not multiplied
 - player copy says 원정 소지금 획득
 
-## DI-Q-v28-3 — MEAL VS WATER IDENTITY
+### DI-Q-v28-3 — MEAL VS WATER IDENTITY
 
 PASS direction:
 - meal is materially higher-Supply
@@ -51,7 +854,7 @@ PASS direction:
 
 This is a design-shape check, not permission to auto-tune numbers.
 
-## DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
+### DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
 
 PASS:
 - `bar` reads visually as 간단 도시락 / meal-lunchbox
@@ -59,20 +862,342 @@ PASS:
 - neither retains the retired Hotbar/skewered-stick silhouette
 - icon change does not alter ID, Category, Rarity, price, effect or save compatibility
 
-## DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
+### DI-Q-v28-9 — REPLACEMENT FLAVOR
 
-SALE must not display separate 성공/퇴각/부상 future Fatigue rows.
+Expected:
+- 간단 도시락 -> \`반찬은 단출하지만 빈칸은 없다.\`
+- 왕도 천연암반수 -> \`왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.\`
 
-Supply/Fatigue runtime arithmetic follows the current owner truth.
+FAIL:
+- skewer/Hotbar Flavor survives on either replacement ID
 
-## DI-Q-v28-5 — COUNTERFACTUAL DOES NOT ALTER RESOLVE
+### ITEM-Q10 — PREMIUM LUNCH
+
+SETUP:
+Compare across multiple contexts.
+
+EXPECT:
+Useful premium expedition/economy option.
+
+PASS:
+Does not dominate survival+supply+loot+stats simultaneously.
+
+## POTION / STAT ITEMS
+
+### ITEM-Q72 — POTION LADDER
+
+EXPECT:
+- 하급: 70/140, 투력 +8
+- 중급: 110/230, 투력 +12
+- 상급: 150/300, 투력 +16
+- 최상급: 190/400, 투력 +24
+
+All:
+- Potion category
+- Supply 0
+- Counter 0
+- Insurance 0
+- same ordinary Potion-family shelf-life behavior unless explicitly overridden
+
+PASS:
+- no hidden generic success bonus beyond Core Stat contribution
+- 중급 포션 does not inherit retired 마석 보조배터리의 non-expiring/tool-like shelf behavior merely from slot reuse
+
+### ITEM-Q74 — SPIRIT STAT ROUTE
+
+`진정 허브티`:
+- Drink Common
+- 40/85
+- 정신 +15
+- Supply 2
+- no explicit fear/dark/whiteout Counter
+
+PASS: it is a natural-Stat alternative, not a hidden multi-Hazard specialist.
+
+### ITEM-Q82 — DIRECT STAT ITEM RELEVANCE
+
+Controlled representative mid/late-Run NPCs around a marginal Forecast state.
+
+PASS direction:
+- selling one appropriate direct-Stat Item produces a perceptible current Core-Stat change
+- representative marginal cases can cross a qualitative Forecast boundary because of one appropriate Item
+- NPC long-term Growth remains the main body of strength rather than being replaced by Item scaling
+- no Day/Level percentage-scaling Item system exists
+- Fresh/Potionbody can increase the owned Item contribution, but Counter/Supply/Insurance channels remain outside that native-Stat amplification
+
+Exact base Item values must match the current active catalog.
+
+## HAZARD COUNTER ITEMS
+
+### ITEM-Q73 — HAZARD COUNTER VALUES
+
+Exact pre-Epic Main/Lower/Hybrid Item Counter values:
+- antidote poison +18
+- mask poison +12
+- rope bind +16
+- coating corrosion +18
+- cloak corrosion +6 / mire +6
+- boots mire +16
+- ion fire +18
+- ice fire +10
+- wine fear +18
+- candy fear +10
+- battery dark +16
+- heat cold +18
+- ramen cold +10
+- lava cold +6
+- goggles whiteout +16
+
+PASS:
+- specialist Field Gear does not retain stale generic positive Core Stats except explicit current catalog exceptions
+- Hybrid remains weaker per target than dedicated specialist
+
+### ITEM-Q15 — HAZARD ITEM MATRIX
+
+SETUP:
+Build the 9-Hazard × Item/Stat route matrix.
+
+EXPECT:
+For every canonical Hazard:
+- 1 Main specialist
+- >=2 meaningful Alternatives
+- Main remains the most reliable dedicated response
+
+PASS:
+No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate its specialist.
+
+### ITEM-Q07 — HOT PACK VS LAVA NOODLE
+
+SETUP:
+Compare pure Cold response.
+
+EXPECT:
+Hot Pack > Lava Noodle for Cold specialization.
+
+PASS:
+Lava Noodle retains Food/Hybrid identity.
+
+### ITEM-Q79 — ANTIDOTE ROLE BOUNDARY
+
+`농축 해독제`:
+- Field Gear Rare
+- 80 / 170
+- poison Counter +18
+
+PASS:
+- no generic positive Core Stat
+- no hidden poison Condition/cure subsystem
+- its gameplay identity is the dedicated Poison Hazard specialist
+
+## EPIC PREPARATION ITEMS
+
+### ITEM-Q83 — EPIC FAMILY HYBRIDS
+
+EXPECT exact new Epic Field Gear:
+
+```text
+거미줄 방호세트   150/320  독+12 / 속박+12
+연금 방수슈트     150/320  부식+12 / 진창+12
+성화 랜턴         150/320  공포+12 / 어둠+12
+백설 방한고글     150/320  냉기+12 / 화이트아웃+12
+마그마 냉각장비   160/340  화염+14 / 투력+6
+```
+
+PASS:
+- each dual-Hazard value remains below the owning dedicated Main specialist value
+- FIRE item does not invent a second FIRE Hazard
+- `마그마 냉각장비 투력+6` is an explicit exception only
+
+### ITEM-Q84 — EPIC TOP-END STAT/SUPPLY ITEMS
+
+EXPECT:
+
+```text
+초고속 에너지드링크    Drink E   160/340  기동+18 / Supply2
+대현자 허브엘릭서      Drink E   160/340  정신+20 / Supply2
+최상급 포션            Potion E  190/400  투력+24
+```
+
+PASS:
+- ordinary category modifier rules apply
+- no Epic-only hidden multiplier
+- these Items improve one-slot late-Run value without adding Bag slots
+
+### ITEM-Q85 — NO D20 HARD UNLOCK FOR NEW EPICS
+
+PASS:
+- all 10 Epic preparation Items use the ordinary Epic pool
+- no per-Item `day>=20` hard eligibility gate exists for them
+- practical late-Run frequency comes only from current `ECONOMY_ORDER_v2.8.0.md` Day-band Rarity progression plus existing general eligibility rules
+
+## ITEM INTERACTION / MODIFIER SCOPE
+
+### ITEM-Q04 — NO GENERAL HIDDEN COMBO
+
+SETUP:
+Audit item resolution and multi-item use.
+
+EXPECT:
+No hidden:
+- pair synergy
+- threshold combo
+- order-dependent combo
+- penalty cancellation
+
+PASS:
+Only explicit described Special interactions may cross-reference items.
+
+### ITEM-Q05 — EXPLICIT SPECIAL INTERACTION
+
+SETUP:
+Use 황금 1+1 coupon or equivalent explicit item.
+
+EXPECT:
+Interaction is stated in item description and resolves predictably.
+
+PASS:
+No hidden combo knowledge required.
+
+### ITEM-Q14 — CATEGORY AFFINITY SCOPE
+
+SETUP:
+Apply Food affinity to multi-effect Food item.
+
+EXPECT:
+Food-native core effect may increase.
+Unrelated hazard counter does not auto-scale.
+
+PASS:
+Whole-item multiplier absent.
+
+### ITEM-Q18 — FRESH CORE-EFFECT SCOPE
+
+SETUP:
+Apply generic Food/Drink category boosts to multi-role Items.
+
+EXPECT:
+Hazard Counter/Insurance/RiskReward penalty does not auto-scale unless explicitly stated by the Relic/effect.
+
+PASS:
+Fresh-category multipliers do not become blanket whole-item multipliers.
+
+### ITEM-Q80 — FOOD TRAIT × FRESH STACKING
+
+Use a Food Item with a positive native Core Stat and controlled Trait/Relic state.
+
+EXPECT base-additive modifier composition from `ITEM_v2.8.0.md`:
+
+```text
+대식가 + 즉석식품 코너 + 24시간 신선체계
+= base ×2.50
+
+대식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= base ×2.75
+
+소식가 + 즉석식품 코너 + 24시간 신선체계 + active 원정 도시락 코너 Stat condition
+= base ×2.25
+```
+
+PASS:
+- Trait and Relic native-Stat percentages are summed from Item base
+- no sequential Trait×Relic multiplicative layer
+- Counter / Supply / Insurance / Loot / Utility / harmful RiskReward penalty do not enter the native-Stat modifier pool
+- GLUTTONY, when present in Final, applies after the Item-side positive Core-Stat contribution is resolved
+
+### ITEM-Q17 — SUPPLY / NO THIRST
+
+SETUP:
+Audit all Food/Drink effects and expedition resolution.
+
+EXPECT:
+- every active Food/Drink has visible Supply > 0
+- catalog Supply values match the `ITEM_v2.8.0.md` active catalog
+- no Item creates/cleanses thirst
+- no hidden Food+Drink pairing
+- no caffeine stacking
+- no hunger/thirst gauge
+
+PASS:
+Supply is the only canonical generic long-expedition preparation resource.
+
+## INSURANCE
+
+### ITEM-Q11 — RETURN STONE
+
+SETUP:
+Use in losing expeditions.
+
+EXPECT:
+Uses approved escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
+
+PASS:
+Acts as probabilistic lower-tier insurance, not a success item or Death->Severe conversion.
+
+### ITEM-Q12 — RETREAT REWARD
+
+SETUP:
+Trigger Return Stone retreat.
+
+EXPECT:
+EXP reduced but >0.
+Loot nearly none.
+
+PASS:
+Hierarchy feels distinct from success and death.
+
+### ITEM-Q13 — WORLD TREE INSURANCE
+
+SETUP:
+Trigger lethal outcome with Epic World Tree insurance active.
+
+EXPECT:
+Death converts once to Severe Injury.
+
+PASS:
+Clearly stronger survival tier than Return Stone and not treated as Food.
+
+### ITEM-Q75 — FIRST AID AFTERCARE
+
+Controlled final ordinary outcomes:
+
+부상 + 구급키트:
+- Outcome remains 부상
+- XP/Loot/Fatigue follow 부상
+- persistent injury=0/recovery=0
+
+중상 + 구급키트:
+- Outcome remains 중상
+- XP/Loot/Fatigue follow 중상
+- persistent injury=1/recovery=0
+
+사망:
+- kit no effect
+
+PASS:
+- no hidden injury-risk %
+- no Retreat conversion
+- natural Severe-Injury recovery rule itself is unchanged
+
+### ITEM-Q76 — INSURANCE ORDER
+
+With overlapping Insurance, PASS only if:
+1. ordinary outcome resolves
+2. Return Stone emergency escape may convert eligible crisis
+3. remaining Death may be converted by World Tree
+4. First Aid Aftercare applies to final non-death Injury state
+
+No second full resolve after Aftercare.
+
+## RESULT PROOF / ATTRIBUTION
+
+### DI-Q-v28-5 — COUNTERFACTUAL DOES NOT ALTER RESOLVE
 
 For a proof-enabled result:
 - actual expedition outcome/state equals ordinary resolve with proof disabled
 - gameplay RNG state after the expedition is identical
 - no extra Gold/XP/Loot/Loyalty/state mutation occurs from shadow evaluation
 
-## DI-Q-v28-6 — UNPROVEN BRANCH
+### DI-Q-v28-6 — UNPROVEN BRANCH
 
 Construct a case where removing an Item would require a random branch not drawn by the actual
 expedition.
@@ -82,7 +1207,7 @@ PASS:
 - no replacement RNG is drawn
 - no Hero Item claim is authored
 
-## DI-Q-v28-7 — OVERLAP ATTRIBUTION
+### DI-Q-v28-7 — OVERLAP ATTRIBUTION
 
 Cover:
 - only A necessary -> A credited
@@ -92,13 +1217,12 @@ Cover:
 
 No category-priority shortcut is allowed.
 
-## DI-Q-v28-8 — SPECIAL DUPLICATION
+### DI-Q-v28-8 — SPECIAL DUPLICATION
 
 When 황금 1+1 actually changes a provable resolved result, it participates in attribution.
 Its Special category does not exclude it from proof.
 
-
-## DI-Q-v28-8B — HERO ATTRIBUTION BOUNDARY
+### DI-Q-v28-8B — HERO ATTRIBUTION BOUNDARY
 
 PASS:
 - Fatigue-only differences do not produce Hero Item feedback
@@ -108,97 +1232,64 @@ PASS:
 - a named Item WHY line appears only when sold-Item proof exists
 - proof ordering never creates more than the strongest allowed Hero line
 
-## DI-Q-v28-9 — REPLACEMENT FLAVOR
+## SIMULATION / BALANCE QA
 
-Expected:
-- 간단 도시락 -> \`반찬은 단출하지만 빈칸은 없다.\`
-- 왕도 천연암반수 -> \`왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.\`
+### SIM-Q01 — COMBAT VARIANCE
 
-FAIL:
-- skewer/Hotbar Flavor survives on either replacement ID
+SETUP:
+Run full-run simulations/playtests with canonical baseNoise ±17.5%.
 
-
-## DI-Q-v28-10 — GREAT SUCCESS NUMERIC BASELINE
-
-Expected:
-    signal margin 0.26
-    chance slope 0.80
-    chance cap 0.30
+EXPECT:
+Borderline outcomes can swing.
+Strong invested NPC remains trustworthy.
+The hidden exact variance is not exposed to the Player or encoded as a knowledge-check Trait.
 
 PASS:
-- small positive margin may produce Great Success even below the signal threshold
-- signal threshold only controls presentation
-- probability never exceeds 30%
-- repeated Great Success by a well-grown NPC is not itself a failure
+±17.5% is used as the baseline and any later retune is supported by outcome evidence.
 
-## DI-Q-v28-11 — DEEP OCCURRENCE / DIFFICULTY BASELINE
+### SIM-Q02 — ROLE USAGE
 
-Expected:
-- occurrence windows remain D7 / D14 / D21 / D28
-- each Run has exactly 2 or 3 occurrences
-- P(3 occurrences) = 50%
-- P(2 occurrences) = 50%
-- Deep required Combat Power = selected base Gate Power ×1.50
-- no Deep Hazard inflation is added
+SETUP:
+Full-run simulation/playtest.
 
-## DI-Q-v28-12 — GATE COUNT / TIER DISTRIBUTION EXACT
-
-Gate count PASS:
-- D1–3 exactly 1
-- D4–7 1/2 at 50% / 50%
-- D8–18 exactly 2
-- D19–29 2/3 at 50% / 50%
-- D30 does not run ordinary Gate-count generation
-
-Tier PASS:
-- exact anchor rows equal DUNGEON_HAZARD_v2.8.0.md
-- all in-between Days use linear interpolation between surrounding anchors
-- D30 does not run ordinary Tier generation
-- next-Day forecast reads the same function as generation
-
-FAIL:
-- a forecast-only probability table
-- a different Save/Load forecast roll
-- any alternate approximate band percentages acting as exact truth
-
-## DI-Q-v28-13 — FORECAST / HAZARD LABEL BOUNDARIES
-
-Combat ratio:
-- >1.20 -> 우세
-- >=0.80 -> 접전
-- otherwise -> 불리
-
-Hazard readiness ratio:
-- >=1.00 -> 충분
-- >=0.75 -> 대응
-- >=0.40 -> 불안
-- otherwise -> 취약
+EXPECT:
+Supply, Direct, Hybrid, Stat, Insurance, RiskReward and explicit Utility all receive meaningful use where applicable.
 
 PASS:
-- Hazard Defense uses the exact Core-Stat coefficients in DUNGEON_HAZARD_v2.8.0.md
-- displayed label and actual underlying preparation state read the same calculation
-- exact hidden formula is not exposed merely because QA knows it
+No role is effectively dead or always mandatory.
 
-## DI-Q-v28-14 — ORDINARY RESOLVE / REWARD BASELINE
+### SIM-Q70 — THREE PREPARATION AXES
 
-Controlled seeded cases must verify:
-- Supply deficit = 6% per missing Supply, cap 30%
-- environment incident chance uses the exact v2.8 closure formula and 2%–48% clamp
-- escape chance uses the exact v2.8 closure formula and 15%–94% clamp
-- failed-combat Severe branch uses 42% base before current modifiers
-- environment/other Severe branch uses 13% base before current modifiers
-- injured departure adds the existing +15%p Severe escalation exactly once
-- failure-conditioned Death still follows the separate current Death owner formula exactly once
+Full-run simulation/playtest must demonstrate that common rational Bag decisions can trade among:
+- direct combat/stat preparation
+- Hazard response
+- Fatigue/Condition management
 
-Reward PASS:
-- EXP base = 22 + Day×4.6
-- EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
-- Wallet base = 35 + Day×8
-- Wallet outcome multipliers are Retreat 0.08 / combat-success 1.00 / other living 0.18
-- explicit XP/Loot/Gate reward modifiers compose once
-- living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
-- equipment gain on hit is seeded integer +2 through +5
+PASS direction:
+no one axis is universally ignorable or universally mandatory.
 
-FAIL:
-- a second alternative ordinary-resolve formula survives
-- QA retunes any value to improve pass rate
+### SIM-Q71 — ITEM / GROWTH HIERARCHY
+
+Track Item direct contribution against NPC Level/Growth/Equipment.
+
+PASS direction:
+- NPC growth remains the main long-term body of strength
+- one appropriate Item can change an expedition decision
+- late-game Stat Items are not decorative dead picks
+- generic Potion is not the universal best answer over Counter/Food choices
+- Epic improves slot efficiency but does not become mandatory for T3 viability
+
+### SIM-Q72 — REQUIRED METRICS
+
+Record at minimum:
+- Job × Level × Family × Tier outcomes
+- four-Stat/equipment distribution
+- Fatigue distribution and time at 10+/20
+- Food/Drink pick rate by current Fatigue
+- Supply use split: required / preRecovery / outcomeBuffer / waste
+- Potion tier offer/order/sale/use
+- Counter lower/upper/hybrid use
+- Epic offer/order/sale/use by Day band and category
+- healthy vs injured re-expedition outcome distribution
+- healthy vs injured expedition Death/Severe rates by CombatDeficit and EnvironmentDeficit band
+- Item dead-pick / universal-best rates
