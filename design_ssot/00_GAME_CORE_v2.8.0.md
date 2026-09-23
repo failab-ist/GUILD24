@@ -5,7 +5,7 @@ OWNER=game_core,core_fantasy,core_loop,system_ownership,cross_run_identity
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=00_GAME_CORE_v2.8.0.md (pre-consolidation patch),history/00_GAME_CORE_v2.5.0.md
+CONSOLIDATED_FROM=history/00_GAME_CORE_v2.8.0-patch.md,history/00_GAME_CORE_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/00_GAME_CORE.md
 
 ## BRAND
@@ -30,7 +30,6 @@ parent=길드리테일
 그 선택이 모험가의 생환/부상/죽음, 성장, 재방문, 그리고 Run 후반의 전력에 누적된다.
 
 ## CORE LOOP
-
 MORNING — `오늘 어떤 날인가?`
 - 오늘의 상황/게이트/위험/이벤트를 읽는다.
 
@@ -49,7 +48,24 @@ CLOSING — `오늘 장사는 어땠을까?`
 
 ## CORE FUN
 핵심은:
-`관찰 → 추론 → 선택 → 결과 확인 → 다음 선택에 반영`
+
+    observe
+    -> infer
+    -> choose
+    -> see the actual change
+    -> see the resolved result
+    -> remember it for the next decision
+
+Primary principle:
+    information should be easy to read; the decision should remain difficult.
+
+Therefore the design:
+- removes stale/internal information
+- makes current-state changes attributable
+- strengthens choice -> actual result feedback
+- makes existing Fatigue / Loyalty / Store Build axes visible when they matter
+- does not expose hidden final success probability
+- does not add a strategy grader that chooses the Item for the Player
 
 정답 계산보다 불완전한 정보에서의 판단이 중요하다.
 
@@ -100,6 +116,31 @@ Player가 Run을 끝낸 뒤:
 Run Variation의 중심은 단순 NPC Rarity가 아니라
 Player가 선택한 Store Build와 그 안에서의 운영 판단이다.
 
+## CROSS-RUN CORE
+Cross-run progression has two active growth identities.
+
+### STORE GROWTH
+
+    actual Gross Sales x survival depth
+    -> Store Capital
+    -> permanent Decoration ownership
+    -> pre-Run Decoration loadout
+    -> changed store-operation options next Run
+
+Store Growth remains operation/access/economy progression, not account-wide raw combat power.
+
+### JOB MASTERY
+
+    Boss CLEAR with Job
+    -> Job Mastery
+    -> that Job's existing future spawn-growth channel
+
+## RUN / META BUILD SEPARATION
+Run-scoped 점포지원 = Store Build created inside the current Run.
+Decoration = permanent cross-run collection selected before the Run.
+
+Do not merge the two systems.
+
 ## INFORMATION PRINCIPLE
 `재료는 공개, 공식은 숨김.`
 
@@ -112,22 +153,16 @@ Player가 선택한 Store Build와 그 안에서의 운영 판단이다.
 - 발주용 다음날 Dungeon Tier 실제 확률
 
 숨기는 것:
-- 최종 정답을 대신 계산하는 단일 안전점수
-
-준비는 `확신`을 높여야 하지만 `확정`을 만들지는 않는다.
-
-## INFORMATION PRINCIPLE — v2.8 OVERRIDE
-
-The inherited information principle is updated only at the Death-risk boundary.
-
-Keep hidden:
 - exact expedition success probability
 - unconditional whole-expedition Death probability
 - internal coefficients / thresholds unless a current owner explicitly exposes them
+- 최종 정답을 대신 계산하는 단일 안전점수
 
 Current SALE may expose the exact **failure-conditioned Death risk** owned by
 DUNGEON_HAZARD_v2.8.0.md. This is the chance of Death after the expedition has entered its failure
 path; it is not the unconditional whole-expedition Death probability.
+
+준비는 `확신`을 높여야 하지만 `확정`을 만들지는 않는다.
 
 ## SYSTEM OWNERSHIP
 JOB = Base Stats + Growth
@@ -166,72 +201,17 @@ COPY = Player-facing Voice / Expression
 
 세부 규칙/수치/구현 상태는 각 Canonical System Spec을 따른다.
 
-## v2.8 CORE PURPOSE
-
-v2.8 strengthens the existing core loop rather than broadening feature count:
-
-    observe
-    -> infer
-    -> choose
-    -> see the actual change
-    -> see the resolved result
-    -> remember it for the next decision
-
-Primary principle remains:
-    information should be easy to read; the decision should remain difficult.
-
-Therefore v2.8:
-- removes stale/internal information
-- makes current-state changes attributable
-- strengthens choice -> actual result feedback
-- makes existing Fatigue / Loyalty / Store Build axes visible when they matter
-- does not expose hidden final success probability
-- does not add a strategy grader that chooses the Item for the Player
-
-P2+ structural expansion remains v2.9+.
-
-## CROSS-RUN CORE
-
-Cross-run progression has two active growth identities.
-
-### STORE GROWTH
-
-    actual Gross Sales x survival depth
-    -> Store Capital
-    -> permanent Decoration ownership
-    -> pre-Run Decoration loadout
-    -> changed store-operation options next Run
-
-Store Growth remains operation/access/economy progression, not account-wide raw combat power.
-
-### JOB MASTERY
-
-    Boss CLEAR with Job
-    -> Job Mastery
-    -> that Job's existing future spawn-growth channel
-
-## RUN / META BUILD SEPARATION
-
-Run-scoped 점포지원 = Store Build created inside the current Run.
-Decoration = permanent cross-run collection selected before the Run.
-
-Do not merge the two systems.
-
-## INACTIVE LEGACY BOUNDARY
-
-No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
-in the current game. Archive ownership is routed to META_v2.8.0.md.
-
 ## FIRST-CLEAR BOUNDARY
-
 Fresh Store / zero Decoration remains capable of Final access and first Boss clear through strong
 play and valid RNG.
 
-## RELATED
+## INACTIVE LEGACY BOUNDARY
+No Franchise Grade / Franchise Achievement / Grade ORDER discount / Start Contract rule is active
+in the current game. Archive ownership is routed to META_v2.8.0.md.
 
+## RELATED
 Store Capital / Decoration / Job Mastery -> META_v2.8.0.md
 Run / save / timeline -> CORE_RUN_v2.8.0.md
 Core decision UI -> UI_UX_v2.8.0.md
-Boss detailed rule -> BOSS
-Final resolution -> FINAL_EXPEDITION
-Cross-run progression -> META
+Boss detailed rule -> BOSS_v2.8.0.md
+Final resolution -> FINAL_EXPEDITION_v2.8.0.md
