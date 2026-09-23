@@ -1956,6 +1956,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* B5-1 NAME LEGIBILITY — one naming scrim for phone and desk: local darkening behind the words
    only, darkest under the text and fading out to nothing, so the room stays visible around it
    and nothing reads as a card (no edge, no fill boundary, no blur). */
+/* the scrim overhangs the text; the band clips it at its own edges so the phone never scrolls
+   sideways (clip, not hidden: no new scroll container) */
+.p-final[data-boss] .gate-zero{overflow-x:clip}
 .p-final[data-boss] .gate-zero .who{position:relative;isolation:isolate}
 .p-final[data-boss] .gate-zero .who:before{content:'';position:absolute;z-index:-1;inset:-22px -34px -18px -34px;
  background:radial-gradient(closest-side,#000000a6 0,#0000007a 52%,#00000000 100%);pointer-events:none}
