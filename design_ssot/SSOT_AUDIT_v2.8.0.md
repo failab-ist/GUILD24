@@ -138,3 +138,18 @@ The completed audit established that:
 - no Canonical detail gap remains from this audit
 
 Any later Design change must amend the appropriate routed owner rather than this audit record.
+
+## RELEASE DOCUMENT AUDIT — 2026-09-23
+
+Project-wide pass after the v2.8 release (main `f2fa299`); hygiene only, no Design change.
+- historical v2.5-v2.7 files: all 51 still inherited by a current owner (none deletion-eligible); each now
+  carries `CURRENT_ROLE=HISTORICAL_BASE` so a directly opened file is not read as current authority
+- Presentation Batch 1 / 2 status and the later-phase router no longer read "active"; Batch 2 / 5 owner keys
+  scoped to presentation (`order` / `sale` / `final` belong to ECONOMY_ORDER / SALE / FINAL_EXPEDITION)
+- SOURCE_ADOPTION_QA records its resolution status (all recorded SA-Q adopted at release)
+- the final adoption check found and closed the NPC dialogue-pool MISSING ADOPTION
+  (`reports/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md`); COPY_AUDIT 5-1 / 6-7 injury order aligned with SA-Q03
+- outside the SSOT: WORK_STATE reduced to the current pointer (history moved to
+  `archive/WORK_HISTORY_v2.8.md`); README runtime-asset path / deploy / scripts corrected
+- left as is: identical exact-copy quotations in QA acceptance / ITEM flavor / NIGHT_CLOSING (no conflict),
+  orientation docs (GAME_VISION, v2.8 RELEASE_VISION), the v2.9+ deferred router

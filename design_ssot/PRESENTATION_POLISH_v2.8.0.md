@@ -12,11 +12,11 @@ PATCH_TYPE=PRESENTATION_DETAILED_LATER_PHASES
 Global construction / asset / ornament / visual-review system:
 - PRESENTATION_SYSTEM_v2.8.0.md
 
-Active Batch 1 owner:
-- PRESENTATION_POLISH_BATCH1_v2.8.0.md
+Batch owners (Batch 1-5 all CLOSED):
+- PRESENTATION_POLISH_BATCH1_v2.8.0.md ... PRESENTATION_POLISH_BATCH5_v2.8.0.md
 
 This file retains detailed v2.8 Presentation contracts for later phases, audio and cross-surface rules.
-Batch 1 WORK must not full-read it unless a concrete owner conflict routes here.
+Batch WORK must not full-read it unless a concrete owner conflict routes here.
 
 ## v2.8 PRESENTATION POLISH — EXACT BOUNDARY
 

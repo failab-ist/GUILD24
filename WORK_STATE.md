@@ -15,7 +15,7 @@ STATE: V2_8_RELEASED
 
 ## In Progress
 
-- project-wide document audit / cleanup (User 2026-09-23): outdated, owner and duplicate fixes only; no Design change
+- none (the 2026-09-23 project-wide document audit is recorded in `design_ssot/SSOT_AUDIT_v2.8.0.md`)
 
 ## Next
 

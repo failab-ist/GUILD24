@@ -1,18 +1,18 @@
 # PRESENTATION POLISH — BATCH 2
 
 DOC=PRESENTATION_POLISH_BATCH2
-OWNER=presentation_batch2,order,sale
+OWNER=presentation_batch2,order_presentation,sale_presentation
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 PARENT=PRESENTATION_SYSTEM_v2.8.0.md
-STATUS=ACTIVE_BATCH_2
+STATUS=CLOSED_BATCH_2
 
 ## ACTIVATION / READ BOUNDARY
 
-BATCH 1 is closed by User approval. BATCH 2 is active.
+BATCH 1 and BATCH 2 are closed by User approval.
 
-For this active Batch, read only:
+For this Batch, read only:
 1. AGENTS.md
 2. SPEC_INDEX_v2.8.0.md
 3. PRESENTATION_SYSTEM_v2.8.0.md

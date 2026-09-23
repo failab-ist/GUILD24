@@ -112,7 +112,7 @@ Do not create a reward-summary dashboard.
 
 END and ENDFAIL must present the already-resolved Run ending clearly and economically.
 
-This is the ACTIVE Batch 3 sub-phase.
+This was the final Batch 3 sub-phase (Batch 3 CLOSED).
 
 Canonical ending truth:
 - END headline is derived from the already-resolved Run ending;

@@ -1,7 +1,7 @@
 # PRESENTATION POLISH — BATCH 5
 
 DOC=PRESENTATION_POLISH_BATCH5
-OWNER=presentation_batch5,final,boss_confirm,final_backdrop
+OWNER=presentation_batch5,final_presentation,boss_confirm,final_backdrop
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_EXECUTION_SPEC
