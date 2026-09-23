@@ -1,0 +1,99 @@
+{
+ "seeds": 2000,
+ "policy": "balanced",
+ "account": "full",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": null,
+ "results": {
+  "vip": {
+   "gain": 506.5275,
+   "reached": 0.131,
+   "win": 0.0855,
+   "deaths": 9.007,
+   "regulars": 6.7685,
+   "sales": 138.77,
+   "margin": 5519.14,
+   "finalRatio": 0.14158813178529472,
+   "spend": 861.141
+  },
+  "none": {
+   "gain": 503.282,
+   "reached": 0.139,
+   "win": 0.0685,
+   "deaths": 9.3065,
+   "regulars": 6.4425,
+   "sales": 145.999,
+   "margin": 4826.927,
+   "finalRatio": 0.1367796183023992,
+   "spend": 0
+  },
+  "hybrid": {
+   "gain": 506.594,
+   "reached": 0.1525,
+   "win": 0.1055,
+   "deaths": 8.9425,
+   "regulars": 6.574,
+   "sales": 139.883,
+   "margin": 5269.91,
+   "finalRatio": 0.1672848967704723,
+   "spend": 846.7765
+  },
+  "rotation": {
+   "gain": 511.272,
+   "reached": 0.1445,
+   "win": 0.097,
+   "deaths": 8.9525,
+   "regulars": 6.9895,
+   "sales": 142.915,
+   "margin": 5518.955,
+   "finalRatio": 0.1588585214438518,
+   "spend": 850.8165
+  },
+  "premium": {
+   "gain": 484.9955,
+   "reached": 0.1485,
+   "win": 0.087,
+   "deaths": 8.9125,
+   "regulars": 6.167,
+   "sales": 135.6115,
+   "margin": 4941.216,
+   "finalRatio": 0.15809535858486642,
+   "spend": 826.979
+  },
+  "fresh": {
+   "gain": 479.9035,
+   "reached": 0.161,
+   "win": 0.139,
+   "deaths": 8.5425,
+   "regulars": 6.2575,
+   "sales": 134.164,
+   "margin": 4830.3155,
+   "finalRatio": 0.1908972471535593,
+   "spend": 801.1895
+  },
+  "customer": {
+   "gain": 500.629,
+   "reached": 0.125,
+   "win": 0.082,
+   "deaths": 9.1055,
+   "regulars": 6.754,
+   "sales": 143.044,
+   "margin": 5250.185,
+   "finalRatio": 0.13526634036912438,
+   "spend": 844.1765
+  },
+  "expedition": {
+   "gain": 497.0055,
+   "reached": 0.1515,
+   "win": 0.1115,
+   "deaths": 8.8305,
+   "regulars": 6.517,
+   "sales": 138.6535,
+   "margin": 5107.847,
+   "finalRatio": 0.16906072285839732,
+   "spend": 850.633
+  }
+ }
+}

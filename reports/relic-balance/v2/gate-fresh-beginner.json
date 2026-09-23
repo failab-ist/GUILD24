@@ -1,0 +1,99 @@
+{
+ "seeds": 1000,
+ "policy": "beginner",
+ "account": "fresh",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": null,
+ "results": {
+  "rotation": {
+   "gain": 360.332,
+   "reached": 0.046,
+   "win": 0.019,
+   "deaths": 9.82,
+   "regulars": 4.271,
+   "sales": 120.388,
+   "margin": 3616.219,
+   "finalRatio": 0.04489866299176541,
+   "spend": 821.679
+  },
+  "none": {
+   "gain": 379.575,
+   "reached": 0.054,
+   "win": 0.013,
+   "deaths": 10.014,
+   "regulars": 4.943,
+   "sales": 132.099,
+   "margin": 3453.165,
+   "finalRatio": 0.043567060099669534,
+   "spend": 0
+  },
+  "hybrid": {
+   "gain": 394.732,
+   "reached": 0.062,
+   "win": 0.032,
+   "deaths": 9.691,
+   "regulars": 4.937,
+   "sales": 127.838,
+   "margin": 3900.222,
+   "finalRatio": 0.06048197890786235,
+   "spend": 891.413
+  },
+  "vip": {
+   "gain": 400.241,
+   "reached": 0.056,
+   "win": 0.016,
+   "deaths": 9.795,
+   "regulars": 5.716,
+   "sales": 129.589,
+   "margin": 4192.45,
+   "finalRatio": 0.049717173119880845,
+   "spend": 925.878
+  },
+  "premium": {
+   "gain": 367.441,
+   "reached": 0.06,
+   "win": 0.024,
+   "deaths": 9.702,
+   "regulars": 4.495,
+   "sales": 122.918,
+   "margin": 3580.265,
+   "finalRatio": 0.05793919481639347,
+   "spend": 878.459
+  },
+  "fresh": {
+   "gain": 389.895,
+   "reached": 0.079,
+   "win": 0.052,
+   "deaths": 9.52,
+   "regulars": 4.951,
+   "sales": 127.947,
+   "margin": 3721.991,
+   "finalRatio": 0.08329642729540122,
+   "spend": 886.53
+  },
+  "customer": {
+   "gain": 387.445,
+   "reached": 0.055,
+   "win": 0.019,
+   "deaths": 9.886,
+   "regulars": 5.034,
+   "sales": 130.703,
+   "margin": 3885,
+   "finalRatio": 0.050861850674556924,
+   "spend": 892.707
+  },
+  "expedition": {
+   "gain": 409.746,
+   "reached": 0.077,
+   "win": 0.036,
+   "deaths": 9.715,
+   "regulars": 5.298,
+   "sales": 131.036,
+   "margin": 3967.107,
+   "finalRatio": 0.07389312275167648,
+   "spend": 932.707
+  }
+ }
+}

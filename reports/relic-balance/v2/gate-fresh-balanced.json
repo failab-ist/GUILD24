@@ -1,0 +1,99 @@
+{
+ "seeds": 2000,
+ "policy": "balanced",
+ "account": "fresh",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": null,
+ "results": {
+  "vip": {
+   "gain": 412.805,
+   "reached": 0.087,
+   "win": 0.0405,
+   "deaths": 8.963,
+   "regulars": 5.7415,
+   "sales": 125.202,
+   "margin": 4679.7965,
+   "finalRatio": 0.08720901973905457,
+   "spend": 748.0915
+  },
+  "hybrid": {
+   "gain": 410.9315,
+   "reached": 0.1015,
+   "win": 0.062,
+   "deaths": 8.8865,
+   "regulars": 5.404,
+   "sales": 125.7565,
+   "margin": 4511.4845,
+   "finalRatio": 0.10679627728015291,
+   "spend": 730.254
+  },
+  "rotation": {
+   "gain": 432.521,
+   "reached": 0.1245,
+   "win": 0.072,
+   "deaths": 8.864,
+   "regulars": 5.7795,
+   "sales": 129.5695,
+   "margin": 4764.607,
+   "finalRatio": 0.12837817326236206,
+   "spend": 758.4925
+  },
+  "none": {
+   "gain": 425.7125,
+   "reached": 0.097,
+   "win": 0.036,
+   "deaths": 9.3105,
+   "regulars": 5.4675,
+   "sales": 133.562,
+   "margin": 4276.476,
+   "finalRatio": 0.08990726580233938,
+   "spend": 0
+  },
+  "premium": {
+   "gain": 376.842,
+   "reached": 0.083,
+   "win": 0.0425,
+   "deaths": 8.764,
+   "regulars": 4.866,
+   "sales": 120.043,
+   "margin": 4133.9445,
+   "finalRatio": 0.08446072862331812,
+   "spend": 703.394
+  },
+  "fresh": {
+   "gain": 368.8385,
+   "reached": 0.095,
+   "win": 0.0675,
+   "deaths": 8.486,
+   "regulars": 4.9545,
+   "sales": 118.812,
+   "margin": 4020.1685,
+   "finalRatio": 0.10599472048191633,
+   "spend": 665.2775
+  },
+  "expedition": {
+   "gain": 404.2875,
+   "reached": 0.106,
+   "win": 0.066,
+   "deaths": 8.7345,
+   "regulars": 5.2165,
+   "sales": 124.187,
+   "margin": 4360.592,
+   "finalRatio": 0.11159847895891183,
+   "spend": 726.3835
+  },
+  "customer": {
+   "gain": 418.333,
+   "reached": 0.0955,
+   "win": 0.0525,
+   "deaths": 9.037,
+   "regulars": 5.637,
+   "sales": 129.6985,
+   "margin": 4561.61,
+   "finalRatio": 0.09795166403127649,
+   "spend": 740.013
+  }
+ }
+}
