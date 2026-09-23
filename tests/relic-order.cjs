@@ -113,22 +113,26 @@ test('REL-Q77: 긴급보급 선반 targets exactly Potion / Field Gear / Insuran
  }
 });
 
-test('RELIC 17: 원정 도시락 코너 boosts only a matching need',()=>{
+test('RELIC 17: 원정 도시락 코너 gives each Food/Drink flat Supply +2 and +4 on every destination Hazard',()=>{
+ /* 2026-09-23 rework: the old matching-Counter x1.25 and the Supply-Burden native-Stat +20% are
+    gone. Per Food/Drink Item in the Bag: Supply +2, and +4 defence on EVERY Hazard of the Gate
+    the adventurer goes to - flat, whether or not the Item Counters anything. */
  const g=fresh('meal'),n={...g.run.npcs[0],traits:[],pack:['lava']};
- const cold={...g.makeDungeon('snow',2),requiredSupply:0},spider={...g.makeDungeon('spider',2),requiredSupply:0};
- const coldPlain=Dungeon.prepare(n,cold).effects.cold,coldMeal=Dungeon.prepare(n,cold,['expeditionMeal']).effects.cold;
- assert.ok(coldMeal>coldPlain,'matching Hazard Counter is strengthened');
- const offPlain=Dungeon.prepare(n,spider).effects.cold,offMeal=Dungeon.prepare(n,spider,['expeditionMeal']).effects.cold;
- assert.equal(offMeal,offPlain,'unmatched Hazard Counter is untouched');
- /* RELIC_v2.7: the Supply-Burden half raises the POSITIVE NATIVE Core Stat of a Food/Drink
-    that supplies >0, and says "Supply itself unchanged". The v2.6 reading, where the condition
-    boosted Supply, is superseded. */
- const stat=(gate,fac)=>Dungeon.prepare(n,gate,fac).itemStats.find(x=>x.item==='lava').stats.survival;
- const noBurden=stat(spider,['expeditionMeal']),burden=stat({...spider,requiredSupply:3},['expeditionMeal']);
- assert.ok(Math.abs(burden/noBurden-1.20)<1e-9,'an active Supply Burden adds +20% to the native Stat pool');
- assert.equal(stat(spider,[]),noBurden,'and without the Burden the Relic adds nothing here');
- assert.equal(Dungeon.prepare(n,{...spider,requiredSupply:3},['expeditionMeal']).effects.supply,
-              Dungeon.prepare(n,{...spider,requiredSupply:3},[]).effects.supply,'Supply itself is unchanged');
+ const cold={...g.makeDungeon('snow',2),requiredSupply:3},spider={...g.makeDungeon('spider',2),requiredSupply:0};
+ for(const gate of [cold,spider]){
+  const plain=Dungeon.prepare(n,gate),meal=Dungeon.prepare(n,gate,['expeditionMeal']);
+  for(const h of gate.hazards)assert.equal((meal.effects[h]||0)-(plain.effects[h]||0),4,gate.family+' '+h+' +4');
+  assert.equal(meal.effects.supply-plain.effects.supply,2,'Supply +2 per Food/Drink');
+  const off=['poison','fire','cold','corrosion','bind','mire','fear','dark','whiteout'].filter(h=>!gate.hazards.includes(h));
+  for(const h of off)assert.equal(meal.effects[h]||0,plain.effects[h]||0,h+' is not a Hazard of this Gate and is untouched');
+  assert.deepEqual(meal.itemStats,plain.itemStats,'no native Core-Stat bonus remains');
+ }
+ // two Food/Drink -> twice; a non-Food Item -> nothing
+ const two={...n,pack:['lava','water']};
+ assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects.supply-Dungeon.prepare(two,cold).effects.supply,4,'two Food/Drink give Supply +4');
+ for(const h of cold.hazards)assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects[h]-(Dungeon.prepare(two,cold).effects[h]||0),8,h+' +8 for two');
+ const gear={...n,pack:['rope']};
+ assert.deepEqual(Dungeon.prepare(gear,cold,['expeditionMeal']).effects,Dungeon.prepare(gear,cold).effects,'a non-Food/Drink Item takes nothing');
 });
 
 test('ORD-Q09/Q10/Q11: next-day Tier forecast is exact and exposes nothing else',()=>{
@@ -249,10 +253,11 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  const cases=[
   [food.id,[],['kitchen','fresh24'],1.75],
   [food.id,['eater'],['kitchen','fresh24'],2.05],
-  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.25],
-  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.75],
-  [drink.id,[],['kitchen','fresh24','expeditionMeal'],1.95],
-  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.95],
+  // 원정 도시락 코너 no longer joins the native pool (2026-09-23 rework)
+  [food.id,['eater'],['kitchen','fresh24','expeditionMeal'],2.05],
+  [food.id,['small'],['kitchen','fresh24','expeditionMeal'],1.55],
+  [drink.id,[],['kitchen','fresh24','expeditionMeal'],1.75],
+  [drink.id,['eater'],['kitchen','fresh24','expeditionMeal'],1.75],
  ];
  for(const [id,traits,fac,want] of cases)
   assert.ok(Math.abs(contribution(id,traits,fac).survival/base(id)-want)<1e-9,
@@ -261,7 +266,7 @@ test('ITEM_v2.7 / RELIC_v2.7: Trait affinity and the Fresh Relics are ONE base-a
  assert.ok(Math.abs(contribution(food.id,['eater'],['kitchen','fresh24']).survival/base(food.id)-1.3*1.25*1.5)>1e-6,
   'the layers are summed, never multiplied one after another');
  // and the pool is the POSITIVE NATIVE Core Stat only
- assert.equal(Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,['kitchen','fresh24','expeditionMeal']).effects.supply,
+ assert.equal(Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,['kitchen','fresh24']).effects.supply,
               Dungeon.prepare({...bare,traits:['eater'],pack:[food.id]},gate,[]).effects.supply,
               'no Fresh Relic touches Supply');
  const counterFood=DATA.items.find(i=>['food','drink'].includes(i.category)&&gate.hazards.some(h=>(i.effects[h]||0)>0));

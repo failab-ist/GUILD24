@@ -2021,15 +2021,14 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
  assert.ok(!/loyalty>=60/.test(copySrc),'and keeps no second 60 threshold of its own');
  assert.ok(!/loyalty>=60|loyalty >= 60/.test(app),'no UI surface carries a second 단골 threshold');
  assert.ok(/Adventurer\.isTrustedRegular\(n\)\?' · 단골'/.test(app),'the 단골 state asks the owner too');
- // the Store Support thresholds are their own mechanics
- for(const [id,at] of [['premiumMember',50]])
-  assert.ok(shop.includes('loyalty>='+at)||DATA.relicBy[id].description.includes('단골도 '+at),
-   id+' keeps its own condition at '+at);
- /* 2026-09-23 Store Support rebalance: 귀환 적립제 has no Loyalty condition, and 평생 단골제 is
-    conditioned on 단골 itself - asked of the owner, never a second number */
- assert.ok(!/loyalty>=30/.test(shop),'귀환 적립제 carries no Loyalty threshold');
+ /* 2026-09-23 Store Support rebalance: 귀환 적립제 has no Loyalty condition, and 평생 단골제 /
+    프리미엄 멤버십 / 단골 묶음혜택 are conditioned on 단골 itself - asked of the owner, never a
+    second number of their own */
+ assert.ok(!/loyalty>=(30|50|60)/.test(shop),'no Store Support keeps a Loyalty threshold of its own');
  assert.ok(/isTrustedRegular\(n\)&&this\.has\('lifetime'\)/.test(shop),'평생 단골제 asks the 단골 owner');
- assert.ok(DATA.relicBy.lifetime.description.startsWith('단골 손님이'),'and says 단골 in its copy');
+ assert.ok(/this\.has\('premiumMember'\)&&it\.rarity>=2&&G\.Adventurer\.isTrustedRegular\(n\)/.test(shop),'so does 프리미엄 멤버십');
+ for(const id of ['lifetime','premiumMember','memberBundle'])
+  assert.ok(DATA.relicBy[id].description.startsWith('단골 손님'),id+' says 단골 in its copy');
 
  // the compact state: Injury, Fatigue, Loyalty - and no progress bar
  const kit=fn('kitLine');

@@ -43,18 +43,10 @@ function nativeStatFactor(item,k,v,mult,facilities,d){
   let pool=isFood?mult.foodMult-1:0;
   if(facilities.includes('kitchen'))pool+=D.relicParams.kitchen.statBonus;
   if(facilities.includes('fresh24'))pool+=D.relicParams.fresh24.statBonus;
-  if(facilities.includes('expeditionMeal')&&(d.requiredSupply||0)>0&&(item.effects.supply||0)>0)pool+=D.relicParams.expeditionMeal.supplyStatBonus;
   return 1+pool;
  }
  if(item.category==='potion')return mult.potionMult;
  return 1;
-}
-/* 원정 도시락 코너's other half: a Food/Drink's EXPLICIT Hazard Counter, and only when it
-   matches a Hazard the actual destination carries. No universal Hazard solution. A separate
-   channel from the native pool above, and kept separate on purpose. */
-function hazardCounterFactor(item,k,v,facilities,d){
- return facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)
-  &&v>0&&d.hazards.includes(k)?D.relicParams.expeditionMeal.hazardCounterMult:1;
 }
 /* Supply is its own channel too: the two Trait deltas, and a Food never drops below 1. */
 function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
@@ -79,9 +71,13 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
    let value=v*power;
    if(k==='supply')value=supplyContribution(item,value,foodSupplyDelta,supplyPerItem);
    value*=nativeStatFactor(item,k,v,mult,facilities,d);
-   value*=hazardCounterFactor(item,k,v,facilities,d);
    if(k==='supply')finalSupply+=value;else if(STAT_KEYS.includes(k)){itemE[k]+=value;from[k]=(from[k]||0)+value;}else e[k]=(e[k]||0)+value;
   }
+  /* 원정 도시락 코너: per Food/Drink Item in the Bag, a flat Supply +2 and a flat +4 on every
+     Hazard of the Gate the adventurer actually goes to. Flat, so no Counter multiplier reads it. */
+  if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)){
+   const p=D.relicParams.expeditionMeal;finalSupply+=p.supplyPerItem;
+   for(const h of d.hazards)e[h]=(e[h]||0)+p.hazardDefense;}
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
   if(item.effects.survival>=10)why.push(item.name+': 생존 능력 보강');

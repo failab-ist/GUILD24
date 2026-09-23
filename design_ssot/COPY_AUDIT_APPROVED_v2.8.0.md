@@ -571,7 +571,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-6. 길드 보증 진열대
 
 **현재**
-> 하루 1회 · 정가 200G 이상 상품 첫 판매 시 본사가 정가의 20%를 손님 대신 부담. 점주는 선택한 판매가 전액 수령.
+> 하루 1회 · 200G 이상에 판 첫 상품은 판매가의 20%를 본사가 손님 대신 부담. 점주는 판매가 전액 수령.
 
 ---
 
@@ -599,7 +599,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-10. 즉석식품 코너
 
 **현재**
-> 음식·음료가 원래 가진 능력치 증가 효과 +25% · 보급·위험 대응·부작용 제외.
+> 음식·음료가 원래 가진 능력치 증가 효과 +25% · 보급·위험 대응·부작용 제외 · 다음 날부터 기본 운영비 +10%.
 
 ---
 
@@ -627,14 +627,14 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-14. 단골 묶음혜택
 
 **현재**
-> 재방문 손님의 오늘 두 번째 유료 구매에 단골도 +2.
+> 단골 손님의 오늘 두 번째 유료 구매는 손님이 판매가의 절반만 낸다. 점주는 판매가 전액 수령.
 
 ---
 
 ## 11-15. 프리미엄 멤버십
 
 **현재**
-> 단골도 50 이상 손님의 희귀 이상 상품 구매 의사 +10%p.
+> 단골 손님이 방문하면 소지금 +25G · 희귀 이상 상품 구매 의사 +15%p.
 
 ---
 
@@ -648,7 +648,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-17. 원정 도시락 코너
 
 **현재**
-> 실제 목적지와 맞는 음식·음료의 위험 대응 +25% · 보급이 필요한 날, 보급을 주는 음식·음료의 원래 능력치 증가 효과 +20%.
+> 음식·음료 1개당 보급 +2 · 갈 게이트의 모든 위험 대응 +4.
 
 ---
 
@@ -658,14 +658,14 @@ The following four lines are current exact Player-facing copy for these tutorial
 > 냉장 유통 계약
 
 **현재**
-> 고급 이상 음식·음료 발주 가중치 +80% · 유통기한 +1일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.
+> 고급 이상 음식·음료 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 · 처음 확보할 때 보유 중인 해당 재고도 1회 연장.
 
 ---
 
 ## 11-19. 길드 납품 인증
 
 **현재**
-> 현재 알려진 위험에 맞는 희귀 이상 상품 또는 희귀 이상 보험 판매 시 정가의 12% 본사 수당.
+> 오늘 게이트의 위험에 대응하는 희귀 이상 상품, 또는 희귀 이상 보험을 팔면 정가의 20% 본사 수당 · 그 손님 소지금 +30G.
 
 ---
 
@@ -679,7 +679,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-21. 물류 본부계약
 
 **현재**
-> 전날 7건 이상 판매하면 다음 날 첫 묶음발주 매입가 -25%.
+> 전날 6건 이상 판매했다면 오늘 같은 상품 3개 이상 발주 시 매입가 -30%.
 
 ---
 
@@ -693,7 +693,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-23. 왕도 프리미엄 인증
 
 **현재**
-> 희귀 이상 상품을 150%에 판매하면 정가의 20% 본사 수당.
+> 상품을 150% 가격에 팔면 판매가의 20%를 본사 수당으로 받는다 · 150% 가격에 대한 손님의 구매 의사 감소(-16%p)가 없어진다.
 
 ---
 
@@ -707,7 +707,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-25. 24시간 신선체계
 
 **현재**
-> 음식·음료 유통기한 +2일 · 원래 가진 능력치 증가 효과 +50% · 보급·위험 대응·부작용 제외.
+> 음식·음료가 원래 가진 능력치 증가 효과 +50% · 보급·위험 대응·부작용 제외 · 음식·음료 매입가 +25%.
 
 ---
 

@@ -10,10 +10,10 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 test('bulk engines require quantity/traffic/previous-day sales, and affect actual cost',()=>{
  const g=fresh(),s=g.run;g.beginOrder();s.offers=[{item:'rice',price:100,quantity:8}];s.cart={0:3};
  const base=g.cartTotal();s.facilities=['bulk'];assert.ok(g.cartTotal()<base);s.cart={0:2};assert.equal(g.cartTotal(),200);
- /* REL-Q-v28-15: the first-bulk keystone now triggers at 7 previous-Day sales, and it is the
-    only bulk engine left on previous-Day sales - REL-Q-v28-14 took 회전 진열대 off the discount
-    path entirely, so it must not move the quote at any sales figure. */
- for(const [id,threshold]of [['logisticsHQ',7]]){s.facilities=[id];s.cart={0:3};s.previousSales=threshold-1;assert.equal(g.cartTotal(),base);s.previousSales=threshold;assert.ok(g.cartTotal()<base);s.bulkUsed=true;assert.equal(g.cartTotal(),base);s.bulkUsed=false;}
+ /* REL-Q-v28-15: the logistics keystone triggers at 6 previous-Day sales (2026-09-23 rebalance),
+    and it is the only bulk engine on previous-Day sales - REL-Q-v28-14 took 회전 진열대 off the
+    discount path entirely, so it must not move the quote at any sales figure. */
+ for(const [id,threshold]of [['logisticsHQ',6]]){s.facilities=[id];s.cart={0:3};s.previousSales=threshold-1;assert.equal(g.cartTotal(),base);s.previousSales=threshold;assert.ok(g.cartTotal()<base);s.bulkUsed=true;assert.ok(g.cartTotal()<base,'not only the first bulk order');s.bulkUsed=false;}
  s.facilities=['rotation'];s.cart={0:3};for(const sales of [0,5,6,7,12]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'rotation never discounts, at '+sales+' previous sales');}
  s.previousSales=0;
  s.facilities=['groupFlyer'];s.queue=Array(5).fill('fixture');assert.equal(g.cartTotal(),base);s.queue.push('fixture');assert.ok(g.cartTotal()<base);
@@ -155,14 +155,19 @@ test('REL-Q-v28-14: 회전 진열대 adds +2 supply quantity to every offer on a
  assert.equal(g.cartTotal(),plainQuote,'and the support discounts nothing');
 });
 
-test('REL-Q-v28-15: 물류 본부계약 takes 25% off the first bulk order once, from 7 previous sales',()=>{
+test('REL-Q-v28-15: 물류 본부계약 takes 30% off every same-SKU 3+ order, from 6 previous sales',()=>{
  const g=fresh('logistics-hq'),s=g.run;g.beginOrder();
- s.offers=[{item:'rice',price:100,quantity:8},{item:'rice',price:100,quantity:8}];
+ s.offers=[{item:'rice',price:100,quantity:8},{item:'rice',price:100,quantity:8},{item:'water',price:40,quantity:8}];
  s.facilities=[];s.cart={0:3};const base=g.cartTotal();
  s.facilities=['logisticsHQ'];
- for(const sales of [0,5,6]){s.previousSales=sales;s.bulkUsed=false;assert.equal(g.cartTotal(),base,'no discount at '+sales+' previous sales');}
- s.previousSales=7;s.bulkUsed=false;assert.equal(g.cartTotal(),Math.round(100*.75)*3,'exactly -25% at 7');
- s.bulkUsed=true;assert.equal(g.cartTotal(),base,'and only the first bulk order of the Day');
+ for(const sales of [0,4,5]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'no discount at '+sales+' previous sales');}
+ s.previousSales=6;assert.equal(g.cartTotal(),Math.round(100*.70)*3,'exactly -30% at 6');
+ s.cart={0:2};assert.equal(g.cartTotal(),200,'a 2-unit order is not a bulk order');
+ // every bulk SKU of the Day, not only the first, and after an earlier bulk order
+ s.cart={0:3,2:3};assert.equal(g.cartTotal(),Math.round(100*.7)*3+Math.round(40*.7)*3,'both 3+ SKUs are discounted');
+ s.bulkUsed=true;s.cart={0:3};assert.equal(g.cartTotal(),Math.round(100*.70)*3,'an earlier bulk order today does not use it up');
+ // with 묶음발주 계약 the two stack and the internal 45% floor is not reached
+ s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),70+70+Math.round(100*.7*.8));
  assert.equal(DATA.relicBy.logisticsHQ.price,430,'the rebalanced price');
 });
 
@@ -252,7 +257,7 @@ test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly on
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 12% (supplyCert) and 20% (royalCert) of list price',()=>{
+test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 20% of the charged 150% price (royalCert)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -266,10 +271,12 @@ test('REL-Q-v28-5 / 7: HQ commission is 12% (supplyCert) and 20% (royalCert) of 
  };
  const plain=DATA.items.find(i=>i.rarity>=2&&!i.effects.escape&&!i.effects.revive);
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
+ const common=DATA.items.find(i=>i.rarity===0);
  assert.ok(plain&&insured,'the catalogue has both a plain Rare+ and a Rare+ insurance role');
- assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(plain.sell*.20),'royalCert pays 20% of list');
- assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 바가지 sale');
- assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.12),'supplyCert pays 12% of list');
+ assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.20),'royalCert pays 20% of the charged 150% price');
+ assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.20),'at any rarity');
+ assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
+ assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.20),'supplyCert pays 20% of list');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
  // neither inherited rate survives on the Gold path
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
@@ -288,6 +295,105 @@ test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the cata
                           ['royalCert',460],['expeditionCert',420],['fresh24',520],['hub',490],
                           ['warehouse',180],['terminal',190],['delivery',170],['efficiency',180]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
+});
+
+/* ---- User-approved Store Support rebalance 2026-09-23: structural reworks ------------------ */
+/* One accepted sale on a stubbed stream, read off the ledger / wallet / history. */
+function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999}={}){
+ const g=fresh('rework-sale'),s=g.run,n=s.npcs[0];
+ s.facilities=[...facilities];s.dayFacilities=[...facilities];
+ n.traits=[];n.money=money;n.introduced=true;n.visits=2;n.pack=[];n.refused=[];n.loyalty=loyalty;
+ n.history=history.map(h=>({day:s.day,...h}));n.destination=0;n.claimedDestination=0;
+ s.queue=[n.id];s.cursor=0;s.phase='sell';s.daily.commission=0;
+ g.stock(itemId,1);
+ g.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
+ const before={store:s.money,wallet:n.money};
+ assert.equal(g.sell(s.inventory.at(-1).id,mode),true,itemId+' sale was accepted');
+ return {g,s,n,store:s.money-before.store,paid:before.wallet-n.money,last:n.history.at(-1)};
+}
+test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 20% of it',()=>{
+ const g=fresh('guarantee-charged'),n=g.run.npcs[0];n.traits=[];n.money=9999;g.run.facilities=['guarantee'];
+ const bar=DATA.itemBy.bar,premium=DATA.itemBy.premium;           // list 180 / 340
+ const over=g.interest(n,bar,'overcharge');                          // charged 270 on a sub-200 list price
+ assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.2),'a 150% sale over 200G is covered, 20% of charged');
+ assert.equal(over.debit,270-54);
+ assert.equal(g.interest(n,bar,'full').guarantee,0,'180G charged is under the threshold');
+ assert.equal(g.interest(n,premium,'half').guarantee,0,'a 200G+ list Item sold at 170G is not covered');
+ assert.equal(g.interest(n,premium,'full').guarantee,Math.round(340*.2));
+ const r=sellOnce(['guarantee'],'overcharge','bar');
+ assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,216,'the customer pays 80%');
+ assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
+});
+test('REWORK 즉석식품 코너: overheadBase +10% from the next Day, beside hub and never compounded',()=>{
+ const base=nightWith([]),kitchen=nightWith(['kitchen']),both=nightWith(['kitchen','hub']);
+ const b=base.g.overheadBase(),charged=x=>Math.round((b+x)/10)*10;
+ assert.equal(kitchen.g.run.daily.operating,charged(b*.10));
+ assert.equal(both.g.run.daily.operating,charged(b*.10+b*.10),'kitchen and hub each take 10% of the base');
+ const g=fresh();g.run.dayFacilities=[];g.run.facilities=['kitchen'];
+ assert.equal(g.expectedOperatingCost(),charged(0),'bought today: no overhead until the next Day');
+});
+test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.25, no shelf life, no overhead',()=>{
+ const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];
+ for(const id of ['rice','premium','potion','rope']){const it=DATA.itemBy[id];s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['fresh24'];
+  assert.equal(g.offerFor(it).price,['food','drink'].includes(it.category)?Math.round(it.buy*1.25):plain,id+' order price');}
+ assert.equal(Relics.shelf(g,DATA.itemBy.rice),0,'no shelf-life effect');
+ s.inventory=[];g.stock('rice',1);assert.equal(s.inventory[0].expires,s.day+DATA.itemBy.rice.days);
+ assert.equal(nightWith(['fresh24']).g.run.daily.operating,nightWith([]).g.run.daily.operating,'no overhead');
+ // acquisition reprices the Food/Drink offers already on the table, once
+ s.facilities=[];s.phase='order';s.money=9999;s.offers=[{item:'rice',price:35,quantity:3},{item:'rope',price:50,quantity:3}];
+ s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['fresh24'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
+ g.buyRelic('fresh24');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.25),50]);
+});
+test('REWORK 냉장 유통 계약: Uncommon+ Food/Drink purchase intent +16%p, no stat effect',()=>{
+ const g=fresh('coldcase-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
+ g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
+ /* read at 150%, where no 0.97 cap or Counter floor hides the term */
+ const delta=id=>{g.run.facilities=[];const a=g.interest(n,DATA.itemBy[id],'overcharge').chance;g.run.facilities=['coldcase'];return g.interest(n,DATA.itemBy[id],'overcharge').chance-a;};
+ assert.ok(Math.abs(delta('energy')-.16)<1e-9,'Uncommon drink +16%p');
+ assert.ok(Math.abs(delta('bar')-.16)<1e-9,'Uncommon food +16%p');
+ assert.equal(delta('rice'),0,'Common food untouched');assert.equal(delta('rope'),0,'non-Food untouched');
+ const p={...n,pack:['premium']},d=g.run.dungeons[0];
+ assert.deepEqual(Dungeon.prepare(p,d,['coldcase']).effects,Dungeon.prepare(p,d,[]).effects,'no stat effect');
+});
+test('REWORK 단골 묶음혜택: a 단골 second paid purchase is half for the customer, full for the store',()=>{
+ const first=[{item:'rice',paid:70,mode:'full'}];
+ const r=sellOnce(['memberBundle'],'full','premium',{loyalty:60,history:first});
+ assert.equal(r.store,340,'store receives the full charged price');
+ assert.equal(r.paid,170,'the customer pays half');
+ assert.equal(r.last.subsidy,170,'HQ pays the other half, recorded on the sale');
+ for(const [why,opts] of [['not 단골',{loyalty:50,history:first}],['first purchase',{loyalty:60,history:[]}],
+                          ['third purchase',{loyalty:60,history:[...first,...first]}]]){
+  const x=sellOnce(['memberBundle'],'full','premium',opts);assert.equal(x.paid,340,why+': full price');assert.equal(x.last.subsidy,0);}
+ const g=fresh('bundle-judge'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=60;n.history=[{day:g.run.day,item:'rice',paid:70,mode:'full'}];
+ g.run.facilities=['memberBundle'];const q=g.interest(n,DATA.itemBy.premium,'overcharge');
+ assert.equal(q.price,510);assert.equal(q.debit,255,'at 150% too, half of the charged price');
+ g.run.facilities=[];assert.equal(g.interest(n,DATA.itemBy.premium,'overcharge').debit,510);
+});
+test('REWORK 프리미엄 멤버십: a 단골 arrives with +25G, and Rare+ intent +15%p for 단골 only',()=>{
+ const arrive=(loyalty,fac)=>{const g=fresh('premium-member'),s=g.run,n=s.npcs[0];n.traits=[];n.loyalty=loyalty;n.money=100;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n.money;};
+ assert.equal(arrive(51,['premiumMember'])-arrive(51,[]),25);
+ assert.equal(arrive(50,['premiumMember'])-arrive(50,[]),0,'not 단골, no Gold');
+ const g=fresh('premium-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.injury=0;
+ g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
+ const it=DATA.items.find(i=>i.rarity>=2&&!['food','drink'].includes(i.category)&&!i.effects.fear);
+ const delta=l=>{n.loyalty=l;g.run.facilities=[];const a=g.interest(n,it,'overcharge').chance;g.run.facilities=['premiumMember'];return g.interest(n,it,'overcharge').chance-a;};
+ assert.ok(Math.abs(delta(51)-.15)<1e-9,'단골 +15%p');assert.equal(delta(50),0,'Loyalty 50 is not 단골');
+});
+test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150% flat intent penalty lifted',()=>{
+ const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
+ const plain=sellOnce([],'full',insured.id),cert=sellOnce(['supplyCert'],'full',insured.id);
+ assert.equal(cert.n.money-plain.n.money,30,'the buyer of a qualifying sale gets +30G');
+ assert.equal(cert.s.daily.commission,Math.round(insured.sell*.20));
+ const common=sellOnce(['supplyCert'],'full','rice');assert.equal(common.n.money,sellOnce([],'full','rice').n.money,'a non-qualifying sale gives nothing');
+ // 왕도 프리미엄 인증: +16%p back on 150% only; the price burden and Loyalty -3 stay
+ const g=fresh('royal-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
+ g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
+ for(const id of ['rice','rope','premium']){const it=DATA.itemBy[id];
+  g.run.facilities=[];const a=g.interest(n,it,'overcharge'),f=g.interest(n,it,'full').chance;
+  g.run.facilities=['royalCert'];const b=g.interest(n,it,'overcharge');
+  assert.ok(Math.abs(b.chance-Math.min(.97,a.chance+.16))<1e-9,id+' 150% intent +16%p');assert.equal(b.price,a.price);assert.equal(b.debit,a.debit);
+  assert.equal(g.interest(n,it,'full').chance,f,id+' 100% unchanged');}
+ const r=sellOnce(['royalCert'],'overcharge','rice',{loyalty:10});assert.equal(r.last.loyalty,-3,'Loyalty -3 unchanged');
 });
 
 console.log(count+' Relic effect groups passed');
