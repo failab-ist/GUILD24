@@ -2386,18 +2386,44 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .npc-grid,.unlock-grid{grid-template-columns:repeat(3,1fr)}
  .relic-choices{grid-template-columns:repeat(3,1fr)}
  .beat .what{font-size:var(--t-xl)}
- /* BATCH 3 NIGHT: a wide window gave the record nothing - a phone-sized figure and 12px figures
-    in the top-left corner of 1120px. Same composition, one column, scaled to be read across a
-    desk; the Outcome word itself stays 36px (UI_UX §NIGHT LAYOUT — OUTCOME TYPE). */
- .p-night .rail,.p-night .beat-room{width:min(100%,760px);margin-left:auto;margin-right:auto}
- .p-night .beat .who h3{font-size:23px}
- .p-night .beat .place{font-size:15px}
- .p-night .beat .cause li{font-size:16px}
- .p-night .beat .why{font-size:15px}
- .p-night .beat .changed{padding:14px 16px 15px}
- .p-night .changed .tip>summary i,.p-night .changed .tok i{font-size:14px}
- .p-night .changed .tip>summary b,.p-night .changed .tok b,.p-night .changed .tok>em{font-size:16px}
- .p-night .changed .after .tip>summary b{font-size:20px}
+ /* BATCH 3 NIGHT — DESKTOP ADAPTATION (UI_UX §NIGHT LAYOUT — DESKTOP ADAPTATION). A wide window
+    gave the record nothing: a phone-sized figure and 12px figures in the corner of 1120px. This
+    is ONE responsive step across the same record, component by component - never a transform of
+    the whole screen, never a new column, group or order:
+      figure 190 -> 250 (one shared size for EVERY Outcome, like the phone's 190)
+      Outcome 36 -> 46 (one shared size for EVERY Outcome at this breakpoint), identity, balloon /
+      status plate, summary and aftermath each one type step up
+      the record measure 880, spacing a little looser, and the dock's two controls one step up
+      and aligned to the same measure as the record they close. */
+ .p-night .rail,.p-night .beat-room{width:min(100%,880px);margin-left:auto;margin-right:auto}
+ .p-night .rail{padding-bottom:24px}
+ .p-night .pfp.returner{width:250px;height:250px}
+ .p-night .stand-in{gap:22px;margin-bottom:24px}
+ .p-night .beat .verdict{font-size:46px;margin-bottom:10px;padding:8px 15px 7px 31px}
+ .p-night .beat .verdict:before{left:11px;top:calc(50% - 4px);width:8px;height:8px}
+ .p-night .t-gone .verdict{padding-left:0;padding-right:0}
+ .p-night .beat .who h3{font-size:25px}
+ .p-night .beat .place{font-size:16px;margin-top:2px}
+ .p-night .beat .say{padding:11px 16px 12px;font-size:18px;max-width:min(calc(100% - 28px),560px)}
+ .p-night .beat .say:after{left:125px}
+ .p-night .beat .say.status{padding:9px 14px 10px;font-size:18px}
+ .p-night .beat .what{font-size:24px}
+ .p-night .told{margin-bottom:22px}
+ .p-night .beat .cause{margin-top:10px;padding-left:16px}
+ .p-night .beat .cause li{font-size:18px}
+ .p-night .beat .why{font-size:16px;margin-top:13px}
+ .p-night .beat .changed{padding:18px 22px 19px}
+ .p-night .changed .grew{gap:6px 20px}
+ .p-night .changed .after{margin-top:13px;padding-top:12px}
+ .p-night .changed .reward{margin-top:9px}
+ .p-night .changed>div{column-gap:20px}
+ .p-night .changed .tip>summary i,.p-night .changed .tok i{font-size:16px}
+ .p-night .changed .tip>summary b,.p-night .changed .tok b,.p-night .changed .tok>em{font-size:18px}
+ .p-night .changed .after .tip>summary b{font-size:23px}
+ .p-night .dock{padding-left:max(var(--gutter),calc((100% - 880px) / 2));
+  padding-right:max(var(--gutter),calc((100% - 880px) / 2));padding-top:14px}
+ .p-night .dock .bare{font-size:16px;min-height:52px}
+ .p-night .dock .stamp{min-height:60px;min-width:190px;font-size:20px}
  /* The counter has room here, so the customer gets a bigger card and the balloon moves off
     the top row to where a person actually talks from: beside the head, tail pointing back
     at them. Same element, same copy — only the placement is responsive. */

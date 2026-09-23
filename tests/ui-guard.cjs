@@ -403,8 +403,29 @@ test('NIGHT_CLOSING: one resolved report drives every line of the beat',()=>{
  assert.ok(!/heavy\s*\?[^)]*returner/.test(b),'the figure is never branched on importance');
  assert.ok(/\.pfp\.returner\{[^}]*width:min\(44vw,190px\);height:min\(44vw,190px\)/.test(css),
   'one NPC size rule for Night');
- assert.equal((css.match(/\.pfp\.returner[^{]*\{[^}]*width:/g)||[]).length,1,
-  'no second rule resizes the NPC for any outcome');
+ /* UI_UX §NIGHT LAYOUT — DESKTOP ADAPTATION (DIRECTOR, 2026-09-23): "one NPC size" means one
+    size for EVERY Outcome at a given breakpoint. The phone baseline is the rule above; the
+    desktop step may add exactly ONE shared override inside the desktop breakpoint. What stays
+    a FAIL is any sizing rule that an Outcome, rank or tone can select, and any sizing rule at
+    another breakpoint. Every rule that sizes the figure is found with its @media context. */
+ const sized=[];{let media=[],depth=0,buf='';
+  for(const ch of css.replace(/\/\*[\s\S]*?\*\//g,'')){
+   if(ch==='{'){const head=buf.trim();buf='';
+    if(head.startsWith('@'))media.push({head,depth});else sized.push({sel:head,media:media.map(m=>m.head).join(' '),open:true,body:''});
+    depth++;continue;}
+   if(ch==='}'){depth--;const last=sized[sized.length-1];
+    if(last&&last.open){last.open=false;}
+    else if(media.length&&media[media.length-1].depth===depth)media.pop();
+    buf='';continue;}
+   const last=sized[sized.length-1];if(last&&last.open)last.body+=ch;else if(ch===';')buf='';else buf+=ch;}}
+ const figure=sized.filter(r=>/\.returner\b/.test(r.sel)&&/(^|;)\s*(width|height|zoom)\s*:|transform\s*:[^;]*scale/.test(r.body));
+ const base=figure.filter(r=>!r.media),desk=figure.filter(r=>r.media);
+ assert.equal(base.length,1,'one phone-baseline NPC size for every outcome');
+ assert.ok(desk.length<=1,'at most one shared desktop NPC size: '+desk.map(r=>r.sel).join(' | '));
+ for(const r of desk)assert.ok(/min-width:\s*(9\d\d|1\d{3})px/.test(r.media)&&!/max-width/.test(r.media),
+  'the desktop NPC size lives in the desktop tier (900px+), never a phone breakpoint: '+r.media);
+ for(const r of figure)assert.ok(!/\.(t-\w+|major|routine|quiet|gone-beat|cold)\b/.test(r.sel),
+  'no NPC size is selected by an Outcome, rank or tone: '+r.sel);
  /* SA-Q09: the permanent result-card blockquote is gone. Every living result speaks through
     the SAME temporary SALE-style balloon (speech(n)), not a second, permanent mechanism, and
     not only the "weighted" beats. */
