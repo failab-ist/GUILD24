@@ -427,11 +427,14 @@ function playRun(g,out,ctx){
   else if(s.phase==='final'){buySupport();if(engagement.order)for(let i=0;i<s.offers.length;i++){const o=s.offers[i];if(o.quantity&&s.money-o.price>=80&&g.canStock(D.itemBy[o.item])){g.order(i);act();}}out.reached30++;const day=stat(30);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;
    measureFinal();
    const team=s.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery).sort((a,b)=>b.level-a.level).slice(0,3);day.visitors+=team.length;day.level+=team.reduce((a,n)=>a+n.level,0);day.wallet+=team.reduce((a,n)=>a+n.money,0);out.final.reached++;out.final.party+=team.length;out.final.full+=Number(team.length>=3);
-   for(const n of team){g.selectFinal(n.id);act();while(engagement.finalSupply&&n.pack.length<G.Adventurer.slots(n)&&s.inventory.length){
+   /* FINAL-Q75: the party is selected and confirmed first, then prepared one at a time. */
+   for(const n of team){g.selectFinal(n.id);act();}
+   if(team.length){g.commitFinalParty();act();}
+   for(const n of team){while(engagement.finalSupply&&n.pack.length<G.Adventurer.slots(n)&&s.inventory.length){
     /* ECONOMY_ORDER_v2.7: a Final transfer is a real purchase at the fixed 50% amount, so the
        harness can only hand over what the participant can actually afford - it measures the
        rule rather than bypassing it. Nothing affordable left means the slot stays empty. */
-    const afford=s.inventory.filter(x=>n.money>=g.finalPrice(x.item));
+    const afford=s.inventory.filter(x=>!g.finalNoEffect(x.item)&&n.money>=g.finalPrice(x.item));
     if(!afford.length)break;
     const st=afford.slice().sort((a,b)=>itemValue(n,D.itemBy[b.item],s.dungeons[0])-itemValue(n,D.itemBy[a.item],s.dungeons[0]))[0];
     g.supplyFinal(n.id,st.id);act();}}

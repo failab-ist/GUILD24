@@ -78,7 +78,18 @@ P.settleStoreCapital=function(){const s=this.run;
  return s.settlement;};
 P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.settleStoreCapital();this.save();};
 P.finalRequired=function(){return Math.min(3,this.finalEligible().length);};
-P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};
+P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;if(s.finalCommitted)throw Error('원정대가 확정되어 바꿀 수 없습니다.');const n=s.npcs.find(n=>n.id===id);if(!n?.alive||!n.introduced||n.recovery>0)throw Error('현재 원정에 참가할 수 없습니다.');if(s.team.includes(id)){s.team=s.team.filter(x=>x!==id);return this.save();}const cap=this.finalRequired();if(s.team.length>=cap)throw Error('최대 '+cap+'명까지 선택할 수 있습니다.');s.team.push(id);this.save();};
+/* FINAL_EXPEDITION FINAL-Q75: participant selection is confirmed before Final preparation begins.
+   Confirming only closes the roster - no RNG, no Gold, no Inventory - and is saved, so once a
+   transfer has been paid the party that received it cannot be swapped out, and a reload comes
+   back to preparation rather than selection. */
+P.commitFinalParty=function(){const s=this.run;if(s.phase!=='final'||s.finalCommitted)return;
+ const required=this.finalRequired();
+ if(!required||s.team.length!==required)throw Error(required+'명으로 원정대를 구성해 주세요.');
+ s.finalCommitted=true;this.save();};
+/* FINAL_EXPEDITION §3: Insurance that has no Final effect, blocked from a Final Bag. */
+const FINAL_NO_EFFECT=new Set(['kit','stone','tree']);
+P.finalNoEffect=function(item){return FINAL_NO_EFFECT.has(item);};
 /* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION PRICE / WALLET / GOLD OVERRIDE. A Final transfer
    is a real paid transaction, not free equipment: the price is fixed to the ordinary 50% mode
    amount, there is no 100%/150% choice and no purchase/refusal roll, and the Wallet is real -
@@ -87,9 +98,11 @@ P.selectFinal=function(id){const s=this.run;if(s.phase!=='final')return;const n=
    which is the total GREED reads at Final Lock. */
 P.finalPrice=function(item){return Math.round(G.DATA.itemBy[item].sell*G.DATA.pricing.half.mult);};
 P.supplyFinal=function(npcId,stockId){const s=this.run;if(s.phase!=='final'||!s.team.includes(npcId))return;
+ if(!s.finalCommitted)throw Error('먼저 원정대를 확정해 주세요.');
  const n=s.npcs.find(n=>n.id===npcId);if(n.pack.length>=G.Adventurer.slots(n))throw Error('보급 슬롯이 가득 찼습니다.');
  const i=s.inventory.findIndex(x=>x.id===stockId);if(i<0)throw Error('재고가 없습니다.');
  const item=s.inventory[i].item,price=this.finalPrice(item);
+ if(this.finalNoEffect(item))throw Error('Final 효과 없음 - 마왕성 원정에서는 쓰이지 않습니다.');
  if(n.money<price)throw Error('이 모험가의 소지금으로는 살 수 없습니다.');
  n.money-=price;s.money+=price;s.daily.revenue+=price;s.stats.revenue+=price;
  n.pack.push(item);n.history.push({day:30,item,mode:'half',paid:price});
@@ -180,6 +193,7 @@ P.boss=function(){const s=this.run;if(s.phase!=='final')return;
  const required=this.finalRequired();
  if(!required)return this.end(false,'출전할 수 있는 모험가가 없어 마왕성 원정을 시작하지 못했습니다.');
  if(s.team.length!==required)throw Error(required+'명으로 원정대를 구성해 주세요.');
+ s.finalCommitted=true;
  const d=s.dungeons[0],team=s.team.map(id=>s.npcs.find(n=>n.id===id));
  /* The shared Final order (BOSS / FINAL_EXPEDITION). Steps 1-3 are the ordinary prepare:
     locked NPC state, locked Item/Supply/equipment, then the Family Hazard result. Final

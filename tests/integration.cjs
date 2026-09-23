@@ -1076,7 +1076,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales counts each real sale exactly once'
  f.run.day=30;f.morning();
  const n=f.run.npcs.find(x=>x.alive&&x.introduced)||f.run.npcs[0];
  n.alive=true;n.introduced=true;n.recovery=0;n.pack=[];n.money=99999;
- f.run.team=[n.id];
+ f.run.team=[n.id];f.run.finalCommitted=true;
  const stock=f.run.inventory[0];
  if(stock){
   const before=f.run.stats.revenue,price=f.finalPrice(stock.item);

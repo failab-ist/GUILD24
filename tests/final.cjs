@@ -453,6 +453,7 @@ test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is r
  const g=atFinal('final-pay',3),s=g.run;
  const team=g.finalEligible().slice(0,g.finalRequired());
  for(const n of team)g.selectFinal(n.id);
+ g.commitFinalParty();   // FINAL-Q75: selection is confirmed before preparation
  const n=s.npcs.find(x=>x.id===s.team[0]);
  // stock the shelf so there is something to transfer
  g.run.money=5000;g.stock('potion',2);g.stock('premium',1);
@@ -493,6 +494,50 @@ test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is r
  // the slots are still exactly two, and finishing with an empty one is allowed
  assert.equal(Adventurer.slots(n),2);
  assert.doesNotThrow(()=>g.boss(),'a participant may depart with a slot unused');
+});
+
+test('FINAL_EXPEDITION FINAL-Q75: the party is confirmed before preparation and cannot change after',()=>{
+ const g=atFinal('final-lock',4),s=g.run;
+ const [a,b,c,d]=g.finalEligible().map(n=>n.id);
+ // before confirming, selection is free both ways
+ g.selectFinal(a);g.selectFinal(b);g.selectFinal(a);g.selectFinal(c);g.selectFinal(d);
+ assert.deepEqual(s.team,[b,c,d]);
+ assert.throws(()=>g.supplyFinal(b,(g.run.money=5000,g.stock('potion',1),s.inventory[0].id)),/확정/,'no transfer before the party is confirmed');
+ const confirm=JSON.stringify({rng:g.rng.state,gold:s.money,inv:s.inventory,gross:s.stats.revenue,wallets:s.npcs.map(n=>n.money)});
+ g.selectFinal(d);assert.throws(()=>g.commitFinalParty(),/원정대/,'an incomplete party cannot be confirmed');
+ g.selectFinal(d);g.commitFinalParty();
+ assert.equal(s.finalCommitted,true);
+ assert.equal(JSON.stringify({rng:g.rng.state,gold:s.money,inv:s.inventory,gross:s.stats.revenue,wallets:s.npcs.map(n=>n.money)}),confirm,
+  'confirming moves no RNG, Gold, Inventory, Gross Sales or Wallet');
+ // after confirming, nobody joins or leaves - also after a paid transfer
+ const n=s.npcs.find(x=>x.id===b);n.money=9999;g.supplyFinal(b,s.inventory[0].id);
+ assert.throws(()=>g.selectFinal(b),/확정/,'a paid participant cannot be removed');
+ assert.throws(()=>g.selectFinal(a),/확정/,'nobody can be added');
+ assert.deepEqual(s.team,[b,c,d]);
+ // the confirmed party and its transfers reload as they were
+ const back=Save.import(Save.export(g.account,s));
+ assert.equal(back.run.finalCommitted,true);assert.deepEqual(back.run.team,[b,c,d]);
+ assert.deepEqual(back.run.npcs.find(x=>x.id===b).pack,n.pack);
+ const bad=JSON.parse(Save.export(g.account,s));bad.run.finalCommitted='yes';
+ assert.equal(Save.valid(bad),false,'a malformed confirmation is refused');
+});
+
+test('FINAL_EXPEDITION FINAL-Q74: no-effect Insurance is blocked from a Final Bag, with its reason',()=>{
+ const g=atFinal('final-noop',3),s=g.run;
+ for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);
+ g.commitFinalParty();
+ const n=s.npcs.find(x=>x.id===s.team[0]);n.money=99999;n.pack=[];s.money=99999;
+ for(const item of ['kit','stone','tree']){
+  assert.equal(g.finalNoEffect(item),true);
+  g.stock(item,1);const st=s.inventory.find(x=>x.item===item);
+  const before=JSON.stringify({gold:s.money,wallet:n.money,inv:s.inventory.length,gross:s.stats.revenue});
+  assert.throws(()=>g.supplyFinal(n.id,st.id),/Final 효과 없음/,item+' is refused with the Final no-effect reason');
+  assert.equal(JSON.stringify({gold:s.money,wallet:n.money,inv:s.inventory.length,gross:s.stats.revenue}),before,'and nothing moves');
+ }
+ assert.equal(n.pack.length,0);
+ assert.equal(g.finalNoEffect('potion'),false,'ordinary Items stay transferable');
+ // ordinary (non-Final) SALE of the same Insurance is untouched
+ assert.ok(!read('dist/systems/shop.js').includes('finalNoEffect'),'the block is Final-only');
 });
 
 test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exactly',()=>{
