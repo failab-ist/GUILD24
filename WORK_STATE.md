@@ -1,7 +1,7 @@
 # WORK_STATE
 
-DATE: 2026-09-22
-STATE: V2_8_SOURCE_ADOPTION_IN_PROGRESS
+DATE: 2026-09-23
+STATE: V2_8_SOURCE_ADOPTION_CLOSED
 
 ## Current Integration Base
 
@@ -31,7 +31,7 @@ Completed/adoption history: `archive/WORK_HISTORY_v2.8.md`.
 - font-subset glyph issue fixed
 - audio regression/runtime verification reported PASS by WORK
 
-## Remaining Adoption Audit — In Progress
+## Remaining Adoption Audit — Closed
 
 Completed audit batches:
 
@@ -55,10 +55,14 @@ Completed audit batches:
 
 No Design change is required from these batches.
 
-Open QA / fix cycles:
-- UI-Q-v28-26 Director visual closeout for the three non-mechanical acceptance rows
-- UI-Q-v28-28 controlled Boss/milestone phone + desktop runtime acceptance
-- UI-Q-v28-29 modal-close focus-origin fix + runtime regression acceptance
+Adoption closeout (2026-09-23, integration `1d8e6a2`; re-verified on current evidence, no new FAIL):
+- UI-Q-v28-26 — CLOSED: the three visual rows were reviewed by DIRECTOR / User on the Presentation B1-B5
+  screenshots; qa:visual clean across 360 / 390 / 412 / 430 / 1024 / 1280
+- UI-Q-v28-28 — CLOSED: runtime D0 (qa-d0-flow 12/12), D5-D25 (qa:visual 30/30 at six widths; B4 harness
+  clean), D30 (qa-final-bosses 63/63; B5-1..B5-4 harnesses) on phone and desktop
+- UI-Q-v28-29 — CLOSED: setModal() saves the opener only when a sheet first opens and restores it on close;
+  guarded by ui-guard; runtime close-by-닫기 / Escape returns focus to the opener (390 / 1280), and the B5
+  sheets are covered by qa-boss-confirm / qa-final-prep
 
 ### FINAL supply action audio cue ownership
 - PASS: `case 'supply'` currently resolves through the SALE register family via the existing default `sound()`
