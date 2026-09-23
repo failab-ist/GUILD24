@@ -605,16 +605,23 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-order .dock .stamp:active{transform:translate(4px,4px);background:#27303a;
  box-shadow:inset 0 0 0 2px #5f8899,inset 0 3px 0 #333f49,2px 2px 0 #2a2317bf}
 .p-order .dock .stamp:focus-visible{outline:3px solid #39434c;outline-offset:3px}
-/* leaving the desk is the other act, and the only enabled control once the order is committed:
-   the same steel, flat, on a neutral edge and a shorter drop, so it never outranks the commit. */
-.p-order .dock .stamp.leave{background:#39434c;color:#e8eef2;
- box-shadow:inset 0 0 0 2px #6a7783,3px 3px 0 #2a231766}
-.p-order .dock .stamp.leave:hover{background:#44505a;color:#f4f8fa}
-.p-order .dock .stamp.leave:active{transform:translate(2px,2px);background:#313a42;
- box-shadow:inset 0 0 0 2px #56636e,1px 1px 0 #2a231766}
-/* and while a cart is held it is a dead plate on the paper: no depth, nothing to press */
+/* BATCH 2A §ORDER LEAVE CONTROL — USER APPROVED 2026-09-23. Leaving the desk is the other act,
+   and the only enabled control once the order is committed. It used to carry a thin ring on a
+   flat fill, which beside an authored order commit read as a modern web rectangle on a supply
+   desk. It is the same fabricated steel now, built the way the commit is: ONE face plane, the
+   value difference outside it - a milled edge at the top, a shaded edge at the foot, and one
+   hard external depth. The depth is shorter than the commit's and the face is lighter, so with
+   both on the dock the commit still leads; alone it is still a plate that was made. */
+.p-order .dock .stamp.leave{background:#434e58;color:#e6edf2;
+ box-shadow:inset 0 2px 0 #6f7c88,inset 0 -2px 0 #2a323a,4px 4px 0 #2a231780}
+.p-order .dock .stamp.leave:hover{background:#4d5964;color:#f4f8fa}
+/* the press closes the depth, the way the commit's does */
+.p-order .dock .stamp.leave:active{transform:translate(3px,3px);background:#38424b;
+ box-shadow:inset 0 2px 0 #4f5a65,inset 0 -2px 0 #262d34,1px 1px 0 #2a231780}
+/* and while a cart is held it is a dead plate set into the paper: the depth is gone, the plane
+   has receded a step, and nothing about it is raised. The label is still read. */
 .p-order .dock .stamp.leave[disabled]{background:#cdc3a6;color:#8b8169;opacity:1;transform:none;
- box-shadow:inset 0 0 0 2px #bcb193}
+ box-shadow:inset 0 2px 0 #b3a88c,inset 0 -2px 0 #ded5ba}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
