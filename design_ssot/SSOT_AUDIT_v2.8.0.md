@@ -153,3 +153,5 @@ Project-wide pass after the v2.8 release (main `f2fa299`); hygiene only, no Desi
   `archive/WORK_HISTORY_v2.8.md`); README runtime-asset path / deploy / scripts corrected
 - left as is: identical exact-copy quotations in QA acceptance / ITEM flavor / NIGHT_CLOSING (no conflict),
   orientation docs (GAME_VISION, v2.8 RELEASE_VISION), the v2.9+ deferred router
+- layout (User-approved): the 51 historical files moved unchanged to `design_ssot/history/`; the top level
+  holds only the 32 current owners. Full flattening of inheritance chains is deferred to v2.9, per owner.

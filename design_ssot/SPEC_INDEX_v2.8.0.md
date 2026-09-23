@@ -122,6 +122,9 @@ FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.
 ## HISTORICAL / SUPERSEDED FILE POLICY
 
 Versioned owner files not listed in CURRENT CANONICAL FILE SET are historical/base references only.
+They are stored in design_ssot/history/ under their original filenames; filename references
+resolve there. Do not search history/ for current rules; open a history file only when a current
+owner explicitly inherits from it.
 Retain an older owner file when a current owner explicitly inherits from it.
 
 Unreferenced historical navigation/decision snapshots may be removed.
