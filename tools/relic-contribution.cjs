@@ -51,10 +51,11 @@ function runArm(G,seeds,inject,overrides,policy,account){
 if(process.env.RELIC_WORKER){
  process.on('message',({seeds,id,overrides,build,policy,account})=>{
   const G=load();
-  if(build){process.send({id,rows:runBuild(G,seeds,build,overrides,policy,account)});process.exit(0);}
+  // exit only after the message is flushed: a large payload sent right before exit can be lost
+  if(build){process.send({id,rows:runBuild(G,seeds,build,overrides,policy,account)},()=>process.exit(0));return;}
   const base=runArm(G,seeds,{remove:id},overrides,policy,account);
   const treat=runArm(G,seeds,{remove:id,own:id},overrides,policy,account);
-  process.send({id,base,treat});process.exit(0);});
+  process.send({id,base,treat},()=>process.exit(0));});
 }else{
  const args=process.argv.slice(2),flag=k=>{const i=args.indexOf(k);return i>=0?args[i+1]:null;};
  const pos=args.filter((a,i)=>!a.startsWith('--')&&!(i>0&&args[i-1].startsWith('--')));
