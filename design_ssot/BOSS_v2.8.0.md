@@ -5,7 +5,7 @@ OWNER=boss,boss_identity,boss_trait,boss_information_cadence,sloth,lust
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-CONSOLIDATED_FROM=BOSS_v2.8.0.md (pre-consolidation patch),history/BOSS_v2.7.0.md,history/BOSS_v2.5.0.md
+CONSOLIDATED_FROM=history/BOSS_v2.8.0-patch.md,history/BOSS_v2.7.0.md,history/BOSS_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/BOSS.md
 
 ## ROLE
@@ -26,7 +26,7 @@ Boss-specific mechanic 때문에 새로 만들지 않는다:
 - QTE / Real-time action
 - 별도 Final 생존 판정
 
-Final resolution ownership -> FINAL_EXPEDITION
+Final resolution ownership -> FINAL_EXPEDITION_v2.8.0.md
 
 ---
 
@@ -38,9 +38,6 @@ bossSelection=pureSeededRNGOnePerRun
 bossSelectionFixedWithinRun=YES
 bossRerollBySaveLoad=NO
 
-reveal:
-- D5=Boss Identity
-- D15=exact Boss Trait
 
 revealBeforeSameDayRelicDecision=YES
 
@@ -72,33 +69,13 @@ Boss design question:
 | PRIDE | 오만 | 오만의 마왕 프라이드 | D5/D15 BASE | D30 BATTLE |
 | ENVY | 질투 | 질투의 마왕 엔비 | D5/D15 BASE | D30 BATTLE |
 | GREED | 탐욕 | 탐욕의 마왕 그리드 | D5/D15 BASE | D30 BATTLE |
+| GLUTTONY | 탐식 | 탐식의 마왕 글러트니 | D5/D15 BASE | D30 BATTLE |
 | LUST | 색욕 | 색욕의 마왕 러스트 | D5/D15 BASE | D30 BATTLE |
 | SLOTH | 나태 | 나태의 마왕 슬로스 | D5/D15 BASE | D30 state by Seal Break count |
 
 Normal NPC Name Pool is not owned by BOSS.
 Boss fixed identity names above are authoritative Boss IDs/names.
 Portrait filenames / sprite-atlas coordinates belong to production catalog data, not this gameplay rule document.
-
-## BOSS IDENTITY TERMINOLOGY OVERRIDE
-
-Internal Boss ID remains:
-
-```text
-GLUTTONY
-```
-
-Player-facing identity is:
-
-```text
-Sin = 탐식
-Name = 탐식의 마왕 글러트니
-```
-
-The inherited v2.5 player-facing `폭식 / 폭식의 마왕 글러트니` wording is superseded and is not v2.7 Design Truth.
-This terminology override does not change the GLUTTONY mechanic.
-
-The inherited D15 Rare+-based GLUTTONY player prose is also stale.
-Exact v2.7 Trait title/prose is owned by `COPY_WORLD_VOICE_v2.7.0.md`.
 
 ---
 
@@ -132,74 +109,6 @@ Save/Load must not:
 - reevaluate LUST regular status after Final Lock
 
 The Boss may be internally generated before D5 while remaining hidden from the Player until D5.
-
----
-
-## REVEAL ORDER
-
-### D5
-
-Before the D5 Relic focused reveal / decision:
-1. reveal Boss Identity
-2. show Boss fixed name / D5-D15 BASE visual identity
-3. show short Boss-specific Flavor that may hint at the Trait
-4. do NOT reveal the exact Boss Trait yet
-5. then continue to the D5 Relic window
-
-Presentation -> UI_UX
-Exact Player-facing Copy -> COPY_WORLD_VOICE
-
-### D15
-
-Before the D15 Relic focused reveal / decision:
-1. show the same D5/D15 BASE identity visual
-2. reveal the exact Boss Trait
-3. expose the actual material Player-facing effect
-4. if SLOTH and D15 is one of the selected Seal opportunities, expose the Seal choice at this Relic window
-5. then resolve the D15 Relic-window choice
-
-Do not replace exact Function with strategy advice.
-Do not expose exact Final success probability.
-
-Presentation -> UI_UX
-Exact Player-facing Copy -> COPY_WORLD_VOICE
-
-### D20 / D25
-
-If SLOTH and this Day is a selected Seal opportunity, expose the Seal choice with that Day's Relic window.
-
-### D30
-
-Before the D30 Relic focused reveal / decision and before Final party lock:
-3. if SLOTH, expose the mandatory D30 Seal opportunity with the D30 Relic window
-4. resolve D30 Relic / Seal choice
-5. complete Final-relevant preparation
-6. Final lock
-
-Two Families do NOT imply exactly two Hazard keys.
-Use the actual T2 Hazard set owned by DUNGEON_HAZARD.
-
-Family generation / Final Hazard Pool ownership -> FINAL_EXPEDITION
-Relic-window ownership -> RELIC
-Presentation -> UI_UX
-Exact Player-facing Copy -> COPY_WORLD_VOICE
-
----
-
-## FINAL FAMILY REVEAL TIMING — v2.7 OVERRIDE
-
-The v2.5 D30 Family-generation/reveal wording is superseded.
-
-v2.7:
-- exact Final Family Pair + Hazard Pool is generated/revealed/persisted on D25 by `FINAL_EXPEDITION_v2.7.0.md`
-- D30 reuses that exact persisted state
-- no D30 Family reroll
-
-Boss reveal remains:
-- D5 Boss Identity
-- D15 exact Boss Trait
-
-SLOTH D30 Seal opportunity remains part of the D30 Relic window.
 
 ---
 
@@ -269,9 +178,70 @@ D0 must not reveal or depict:
 Exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md.
 D5 remains the first Boss identity / art reveal.
 
-## PRESENTATION PAYOFF — v2.8
+## REVEAL ORDER
 
-Boss-information truth and reveal cadence remain unchanged.
+### D5
+
+Before the D5 Relic focused reveal / decision:
+1. reveal Boss Identity
+2. show Boss fixed name / D5-D15 BASE visual identity
+3. show short Boss-specific Flavor that may hint at the Trait
+4. do NOT reveal the exact Boss Trait yet
+5. then continue to the D5 Relic window
+
+Presentation -> UI_UX_v2.8.0.md
+Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md
+
+### D15
+
+Before the D15 Relic focused reveal / decision:
+1. show the same D5/D15 BASE identity visual
+2. reveal the exact Boss Trait
+3. expose the actual material Player-facing effect
+4. if SLOTH and D15 is one of the selected Seal opportunities, expose the Seal choice at this Relic window
+5. then resolve the D15 Relic-window choice
+
+Do not replace exact Function with strategy advice.
+Do not expose exact Final success probability.
+
+Presentation -> UI_UX_v2.8.0.md
+Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md
+
+### D20 / D25
+
+If SLOTH and this Day is a selected Seal opportunity, expose the Seal choice with that Day's Relic window.
+
+- exact Final Family Pair + Hazard Pool is generated/revealed/persisted on D25 by `FINAL_EXPEDITION_v2.8.0.md`
+
+Two Families do NOT imply exactly two Hazard keys.
+Use the actual T2 Hazard set owned by `DUNGEON_HAZARD_v2.8.0.md`.
+
+### D30
+
+- D30 reuses that exact persisted state
+- no D30 Family reroll
+
+Before the D30 Relic focused reveal / decision and before Final party lock:
+1. if SLOTH, expose the mandatory D30 Seal opportunity with the D30 Relic window
+2. resolve D30 Relic / Seal choice
+3. complete Final-relevant preparation
+4. Final lock
+
+Family generation / Final Hazard Pool ownership -> FINAL_EXPEDITION_v2.8.0.md
+Relic-window ownership -> RELIC_v2.8.0.md
+Presentation -> UI_UX_v2.8.0.md
+Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md
+
+## PERSISTENCE
+
+D0/D5/D15/D25 keep their persisted seen-state behavior.
+
+D10 and D20 each require a persisted one-time seen marker.
+After the Player dismisses that report, save/reload must not replay it.
+
+No new RNG is consumed by merely showing a report.
+
+## PRESENTATION PAYOFF
 
 UI_UX_v2.8.0.md may strengthen the visual/audio acknowledgement of:
 - D0 investigation start
@@ -287,15 +257,6 @@ It may only heighten the transition into FINAL using information already known b
 
 No presentation cue may leak Boss identity, Trait, Final Family/Hazard state or other information
 before the owning reveal beat.
-
-## PERSISTENCE
-
-D0/D5/D15/D25 keep their persisted seen-state behavior.
-
-D10 and D20 each require a persisted one-time seen marker.
-After the Player dismisses that report, save/reload must not replay it.
-
-No new RNG is consumed by merely showing a report.
 
 ---
 
@@ -313,6 +274,8 @@ Rules:
 - Boss Trait state is stable after Final lock
 - Boss and random Family pair may combine, but one specific combination must not become an unavoidable hard lock
 
+`DIRECTOR DOCUMENT BASELINE` values are fixed implementation starting values during adoption; frozen QA may report a `BALANCE FINDING` but may not auto-tune them. Any numeric change requires a separate approved owner-spec update.
+
 ---
 
 ## WRATH — VANILLA / RAW POWER
@@ -328,15 +291,7 @@ Purpose:
 - strongest expression of ordinary Final fundamentals
 - no special counter tax
 
-WRATH effective Boss Power=200 (v2.5 final). It is the unmodified baseline every other Boss is measured against.
-
-## WRATH — BASELINE RETAINED
-
-Keep the existing baseline:
-
-```text
-WRATH effective Boss Power = 200
-```
+WRATH effective Boss Power=200. It is the unmodified baseline every other Boss is measured against.
 
 WRATH adds no special modifier.
 
@@ -345,7 +300,7 @@ Balance intent:
 - first clear must still be possible at Job Mastery 0 through strong Run growth/preparation/build/player mastery
 - no new permanent power is granted merely for failing Runs
 
-Meta progression remains owned by `META_v2.7.0.md`.
+Meta progression remains owned by `META_v2.8.0.md`.
 
 ---
 
@@ -374,21 +329,11 @@ Rules:
 - Player sees `original -> applied` before Final commitment
 - no hidden contribution-coefficient-only implementation may replace this visible Stat change
 
-## PRIDE — v2.7
-
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
 prideCombatFactor = 0.92
 ```
-
-This supersedes 0.90.
-
-Scope otherwise inherits the existing PRIDE rule:
-- Final-only participant Snapshot
-- 투력 only
-- visible original -> applied
-- persistent NPC Stat unchanged
 
 ---
 
@@ -421,7 +366,7 @@ Rules:
 - no new persistent Condition
 - Player sees all affected values as `original -> applied`
 
-`envyStatFactor=0.92` (v2.5 final)
+`envyStatFactor=0.92`
 
 ---
 
@@ -436,7 +381,7 @@ Cumulative Gross Sales
 = sum of actual rounded sale revenue committed before Final lock
 ```
 
-Metric ownership -> ECONOMY_ORDER / SALE / NIGHT_CLOSING
+Metric ownership -> `ECONOMY_ORDER_v2.8.0.md` / `SALE_v2.8.0.md` / `NIGHT_CLOSING_v2.8.0.md`
 
 Rule:
 
@@ -461,37 +406,10 @@ Therefore:
 - exceeding target does not create an unlimited Player bonus
 
 Exact:
-- greedRevenueTarget=18800 (v2.5 final)
+- greedRevenueTarget=18800
 - shortfall is measured as a SHARE of the target, so the penalty means the same thing whatever the target is
 
-No separate wealth meter.
-No hidden Boss-only revenue definition.
-
-Player-readable after D15:
-- 목표 매출
-- 현재 매출
-- 달성률
-- 현재 탐욕 강화 %
-
-For display only:
-
-```text
-greedDisplayStrengtheningRate
-=
-GreedBonus / baseBossPower
-```
-
-This display value:
-- must match the actual applied GreedBonus
-- does not create a second calculation
-- is not a separately persisted truth when derivable
-- does not expose baseBossPower / effectiveBossPower / Final success probability
-
-## GREED — v2.7
-
 Keep the existing Gross-Sales metric and revenue target unless separately rebalanced by approved economy evidence.
-
-Change only the maximum Boss-strengthening cap:
 
 `DIRECTOR DOCUMENT BASELINE`
 
@@ -516,7 +434,7 @@ D30 Final now resolves through:
 The committed GREED gross-sales snapshot is taken at **Final Lock after Final preparation has completed**.
 Do not snapshot before the selected Final participants have finished their preparation interactions.
 
-The current Final owner fixes those preparation transfers to 50% / 매입가, removes 100/150 price choice, and removes refusal RNG.
+The current Final owner fixes those preparation transfers to 50% / 매입가.
 
 ### FINAL TRANSFER GROSS-SALES INCLUSION — EXACT
 
@@ -534,60 +452,32 @@ Therefore:
 - do not exclude them merely because there is no ordinary Final SALE phase
 - do not count them a second time during Final resolution
 
-Exact Wallet/Gold/fixed-price preparation truth -> `ECONOMY_ORDER_v2.7.0.md` / `FINAL_EXPEDITION_v2.7.0.md`.
+Exact Wallet/Gold/fixed-price preparation truth -> `ECONOMY_ORDER_v2.8.0.md` / `FINAL_EXPEDITION_v2.8.0.md`.
 
----
+No separate wealth meter.
+No hidden Boss-only revenue definition.
 
-## GLUTTONY — v2.7 EFFECT SCOPE
+Player-readable after D15:
+- 목표 매출
+- 현재 매출
+- 달성률
+- 현재 탐욕 강화 %
 
-The prior `Rare+ Item raw Stat ×0.80` rule is superseded.
-
-`DIRECTOR DOCUMENT BASELINE`
-
-For every Final participant:
+For display only:
 
 ```text
-all positive Core-Stat contribution originating from Items ×0.50
+greedDisplayStrengtheningRate
+=
+GreedBonus / baseBossPower
 ```
 
-Affected:
-- positive Item contribution to 투력 / 강인함 / 기동 / 정신
-- after Item-side Food/Drink/Potion Trait/Relic amplification has produced the final positive Item Stat contribution
+This display value:
+- must match the actual applied GreedBonus
+- does not create a second calculation
+- is not a separately persisted truth when derivable
+- does not expose baseBossPower / effectiveBossPower / Final success probability
 
-Unaffected:
-- NPC natural/base/growth/equipment Stats
-- Hazard Counter
-- Supply
-- Insurance
-- Utility
-- Loot/economy effects
-- explicit RiskReward harmful penalty
-
-No Rarity threshold remains.
-No extra Item is consumed.
-
-Player-facing Final preview must show the actual changed Item Stat contribution without exposing internal Final success probability.
-
-Player-facing terminology:
-- affected Item presentation uses `보급품`
-- do not present `Stat Item` as a Player-facing category
-
-Unaffected scope remains 100%:
-- Hazard Counter effect
-- Supply effect
-- Insurance behavior
-- Escape / death-mitigation behavior already owned by Insurance/Special effects
-- Utility behavior
-- explicit non-Stat special effect
-
-Rules:
-- no extra inventory unit is secretly consumed
-- no Item is deleted from persistent inventory outside normal use rules
-- material reduction is disclosed at D15
-- Final preview shows actual changed Stat contribution as `original -> applied`
-- Gluttony does not suppress the entire Item effect bundle
-
-Item effect ownership -> ITEM
+---
 
 ## GLUTTONY ITEM-STAT SCOPE — EXACT
 
@@ -611,6 +501,48 @@ Item rarity / price is not a boundary for this Boss effect.
 D5 may hint at the abnormal result but does not reveal the exact 50% value.
 D15 owns the exact Function disclosure.
 
+`DIRECTOR DOCUMENT BASELINE`
+
+For every Final participant:
+
+```text
+all positive Core-Stat contribution originating from Items ×0.50
+```
+
+Affected:
+- positive Item contribution to 투력 / 강인함 / 기동 / 정신
+- after Item-side Food/Drink/Potion Trait/Relic amplification has produced the final positive Item Stat contribution
+
+Unaffected:
+- NPC natural/base/growth/equipment Stats
+- Hazard Counter
+- Supply
+- Insurance
+- Utility
+- Loot/economy effects
+- explicit RiskReward harmful penalty
+- Escape / death-mitigation behavior already owned by Insurance/Special effects
+- explicit non-Stat special effect
+
+No Rarity threshold remains.
+No extra Item is consumed.
+
+Player-facing Final preview must show the actual changed Item Stat contribution without exposing internal Final success probability.
+
+Player-facing terminology:
+- affected Item presentation uses `보급품`
+- do not present `Stat Item` as a Player-facing category
+
+Rules:
+- no extra inventory unit is secretly consumed
+- no Item is deleted from persistent inventory outside normal use rules
+- material reduction is disclosed at D15
+- Final preview shows actual changed Stat contribution as `original -> applied`
+- Gluttony does not suppress the entire Item effect bundle
+
+Item effect ownership -> `ITEM_v2.8.0.md`
+Exact Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.8.0.md`.
+
 ---
 
 ## LUST — TRUSTED REGULAR PROTECTION
@@ -623,7 +555,7 @@ LUST does not define a new:
 - Loyalty threshold
 - Boss-specific relationship state
 
-Protection reads the existing NPC `Trusted Regular / 단골` state owned by NPC_TRAIT.
+Protection reads the existing NPC `Trusted Regular / 단골` state owned by `NPC_TRAIT_v2.8.0.md`.
 
 Evaluation timing:
 - D15 reveals the rule
@@ -659,13 +591,10 @@ Rules:
 - Player sees affected values as `original -> applied`
 - LUST must not create its own alternate regular classification
 
-`lustStatFactor=0.95` (v2.5 final)
+`lustStatFactor=0.95`
+
 
 LUST tests relationship investment, not Job composition.
-
-## ENVY / LUST
-
-No v2.7 numeric change.
 
 ---
 
@@ -704,53 +633,6 @@ Seal Break:
 - committed choice persists
 - Save/Load cannot duplicate or reverse it
 
-Existing Relic candidate generation / Defer lifecycle is reused.
-Exact UI ownership -> RELIC / UI_UX.
-
-### Final difficulty ordering
-
-Let `sealBreakCount` be committed Seal Break choices by Final Lock.
-
-```text
-3 breaks = weakest SLOTH
-2 breaks = weak SLOTH
-0 breaks = strongest SLOTH / hardest-side Boss
-```
-
-Seal Break count is not a permanent Meta resource.
-
-### Visual state
-
-```text
-D5 / D15
-→ BASE
-
-D30 + 0 Seal Break
-→ BASE reuse
-
-D30 + 1 Seal Break
-→ D30 SB1
-
-D30 + 2 Seal Break
-→ D30 SB2
-
-D30 + 3 Seal Break
-→ D30 SB3
-```
-
-There is no separate D30 / SB0 visual requirement.
-Gameplay truth is `bossId + sealBreakCount`, not an asset filename.
-
-## SLOTH — OPPORTUNITY SCHEDULE
-
-Schedule remains inherited:
-
-```text
-exactly 2 distinct opportunities from D15/D20/D25
-+ D30 always
-= 3 total opportunities
-```
-
 Each opportunity remains mutually exclusive:
 
 ```text
@@ -759,9 +641,13 @@ OR
 break one Sloth Seal for 0G
 ```
 
-Relic-window lifecycle -> `RELIC_v2.7.0.md`.
+Existing Relic candidate generation / Defer lifecycle is reused.
+Relic-window lifecycle -> `RELIC_v2.8.0.md`.
+Exact UI ownership -> `RELIC_v2.8.0.md` / `UI_UX_v2.8.0.md`.
 
-## SLOTH — v2.7 BOSS POWER
+### Final difficulty ordering
+
+Let `sealBreakCount` be committed Seal Break choices by Final Lock.
 
 `DIRECTOR DOCUMENT BASELINE`
 
@@ -799,7 +685,31 @@ Acceptance direction:
 - 3 Break is allowed to make a sufficiently mature/well-prepared party near-certain
 - weak Run + 3 Break is not guaranteed clear by rule
 
-## SLOTH TERMINOLOGY
+Seal Break count is not a permanent Meta resource.
+
+### Visual state
+
+```text
+D5 / D15
+→ BASE
+
+D30 + 0 Seal Break
+→ BASE reuse
+
+D30 + 1 Seal Break
+→ D30 SB1
+
+D30 + 2 Seal Break
+→ D30 SB2
+
+D30 + 3 Seal Break
+→ D30 SB3
+```
+
+There is no separate D30 / SB0 visual requirement.
+Gameplay truth is `bossId + sealBreakCount`, not an asset filename.
+
+### Terminology
 
 Player-facing SLOTH text uses:
     점포지원
@@ -839,17 +749,13 @@ Boss-side:
 
 WRATH adds no special modifier.
 
-Final formula / roll / party / clear ownership -> FINAL_EXPEDITION.
+GLUTTONY's Item-stat reduction occurs after Item-side positive Stat amplification and before Individual Final Power is computed.
+
+Final formula / roll / party / clear ownership -> `FINAL_EXPEDITION_v2.8.0.md`.
 
 Boss Clear does not add a second post-clear survival/death gate.
 
 ---
-
-Use the inherited Boss/Final modifier order, with v2.7 Item/Fresh/Final values from their owners.
-
-GLUTTONY's Item-stat reduction occurs after Item-side positive Stat amplification and before Individual Final Power is computed.
-
-Final formula -> `FINAL_EXPEDITION_v2.7.0.md`.
 
 ## META CLEAR SIGNAL
 
@@ -858,20 +764,12 @@ On successful Boss clear, emit one stable result containing:
 - participating distinct Job IDs
 - clear=YES
 
-Cross-run Job Mastery / distinct-Boss unlock processing is owned by META.
-BOSS does not duplicate Meta progression state.
-
-Boss CLEAR continues to emit the existing authoritative clear signal used by Meta.
-
-`META_v2.7.0.md` may use this same signal for:
-- Job×Boss matrix progression / Job Mastery
-- distinct Boss clear progression
-
-## META CLEAR SIGNAL CLEANUP
-
 Boss CLEAR continues to feed:
 - Job x Boss matrix / Job Mastery
 - distinct-Boss unlock progression
+
+Cross-run Job Mastery / distinct-Boss unlock processing is owned by `META_v2.8.0.md`.
+BOSS does not duplicate Meta progression state.
 
 ---
 
@@ -884,8 +782,7 @@ Across seeds, exactly one of 7 Boss IDs is generated and remains fixed.
 Reload cannot change Boss ID, revealed Trait, Sloth opportunity Days, committed Seal Break count, or Final-locked Boss state.
 
 ### BOSS-Q03 — REVEAL ORDER
-D5 Identity precedes D5 Relic reveal; D15 exact Trait precedes D15 Relic reveal; D30 Family disclosure precedes D30 Relic/Sloth decision.
-- inherited `BOSS-Q03` D30-first Family disclosure is superseded by D25 disclosure / D30 reuse
+D5 Identity precedes D5 Relic reveal; D15 exact Trait precedes D15 Relic reveal.
 
 ### BOSS-Q04 — FAMILY INDEPENDENCE
 The same Boss can occur with different valid two-Family Final pairs; no Boss has a fixed Family pair.
@@ -939,12 +836,6 @@ Final uses D30 BATTLE for six ordinary Bosses.
 SLOTH uses BASE for SB0 and matching D30 SB1/SB2/SB3 for 1/2/3 breaks.
 No separate SLOTH D30 SB0 asset is required.
 
----
-
-## v2.7 ACCEPTANCE OVERRIDES
-
-The inherited Boss acceptance suite remains valid except where replaced here.
-
 ### BOSS-Q70 — FINAL INFO TIMING
 PASS:
 - D5 Boss Identity reveal remains
@@ -991,7 +882,7 @@ Also PASS:
 - each window is Relic OR Seal, never both
 - 3 Break produces a materially larger stability return than 2 Break in balance measurement
 
-## v2.7 BALANCE QA
+## BALANCE QA
 
 Measure separately:
 - Mastery-0 early/first-clear attempts
@@ -1006,25 +897,17 @@ Measure separately:
 
 Do not auto-tune Boss values during frozen QA.
 Report `BALANCE FINDING` and run a separate approved tuning cycle.
-- inherited `BOSS-Q14` PASS3 tuning permission is superseded: v2.7 `DIRECTOR DOCUMENT BASELINE` values are fixed implementation starting values during adoption; frozen QA may report a `BALANCE FINDING` but may not auto-tune them. Any numeric change requires a separate approved owner-spec update.
 
 ## RELATED
 
-final formula/family/party/clear -> FINAL_EXPEDITION
-relic/sloth opportunity -> RELIC
-meta/mastery/unlock -> META
-job/loyalty/trusted-regular -> NPC_TRAIT
-item effect -> ITEM
-economy revenue -> ECONOMY_ORDER
-sale revenue commit -> SALE
-closing revenue report -> NIGHT_CLOSING
-presentation -> UI_UX
-copy -> COPY_WORLD_VOICE
-
-Final state/formula/Final preparation -> `FINAL_EXPEDITION_v2.7.0.md`
-Relic/Seal window -> `RELIC_v2.7.0.md`
-Meta -> `META_v2.7.0.md`
-Item/GLUTTONY contribution -> `ITEM_v2.7.0.md`
-Economy/Wallet/Gold -> `ECONOMY_ORDER_v2.7.0.md`
-UI reveal -> `UI_UX_v2.7.0.md`
-Copy/terminology -> `COPY_WORLD_VOICE_v2.7.0.md`
+Final state / formula / family / party / clear / Final preparation -> `FINAL_EXPEDITION_v2.8.0.md`
+Relic / Seal window / Sloth opportunity -> `RELIC_v2.8.0.md`
+Meta / mastery / unlock -> `META_v2.8.0.md`
+Job / loyalty / trusted-regular -> `NPC_TRAIT_v2.8.0.md`
+Item effect / GLUTTONY contribution -> `ITEM_v2.8.0.md`
+Economy / Wallet / Gold / revenue -> `ECONOMY_ORDER_v2.8.0.md`
+Sale revenue commit -> `SALE_v2.8.0.md`
+Closing revenue report -> `NIGHT_CLOSING_v2.8.0.md`
+Presentation / UI reveal -> `UI_UX_v2.8.0.md`
+Copy / terminology -> `COPY_WORLD_VOICE_v2.8.0.md`
+Exact Player-facing Copy -> COPY_AUDIT_APPROVED_v2.8.0.md
