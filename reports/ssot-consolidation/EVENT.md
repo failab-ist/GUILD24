@@ -478,3 +478,19 @@ Stage 9 measures actual Event count; any later chance rebalance requires approva
 실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
 Full-run balance measurement measures actual Event count; any later chance rebalance requires approval.
 ```
+
+## AMENDMENT — User decision 2026-09-23: Store Support rebalance
+
+길드24 원정전문점 인증 was remade into 원정 전문 인증 (id expeditionCert kept); its Counter x1.60 reads the adventurer's actual Gate Hazards, Event Hazards included. Name references follow.
+
+```text
+- 길드24 원정전문점 인증
+- 길드24 원정전문점 인증이 Event Hazard를 인식한다.
+- 원정 위험 게시판 / 길드24 원정전문점 인증 / 기존 Counter coverage logic / Forecast가 Event Hazard를 인식하는가?
+```
+
+```new
+- 원정 전문 인증
+- 원정 위험 게시판 / 원정 전문 인증 / 기존 Counter coverage logic / Forecast가 Event Hazard를 인식하는가?
+- 원정 전문 인증이 Event Hazard를 인식한다.
+```

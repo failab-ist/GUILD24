@@ -388,7 +388,7 @@ Known Hazards
 - Hazard Forecast
 - Known Hazard 기반 Order 처리
 - 원정 위험 게시판
-- 길드24 원정전문점 인증
+- 원정 전문 인증
 - 기존 Counter coverage / pity logic
 - 기타 Known Hazard 참조 로직
 
@@ -1298,7 +1298,7 @@ NO라면 제거 / 수정 후보.
 - 한파가 fire Gate에 적용되지 않는가?
 - 독안개가 이미 poison인 Gate에 적용되지 않는가?
 - Event Hazard가 Known으로 처리되는가?
-- 원정 위험 게시판 / 길드24 원정전문점 인증 / 기존 Counter coverage logic / Forecast가 Event Hazard를 인식하는가?
+- 원정 위험 게시판 / 원정 전문 인증 / 기존 Counter coverage logic / Forecast가 Event Hazard를 인식하는가?
 - Counter Item이 발주에 나오지 않아도 플레이 가능한가?
 
 ### NPC
@@ -1335,7 +1335,7 @@ PASS:
 - 반대로 Event Hazard를 완전히 무시하는 것과 대응하는 것에는 체감 차이가 있다.
 - Event Hazard가 즉시 Known으로 표시된다.
 - 원정 위험 게시판이 Event Hazard를 인식한다.
-- 길드24 원정전문점 인증이 Event Hazard를 인식한다.
+- 원정 전문 인증이 Event Hazard를 인식한다.
 - 기존 Counter coverage / pity logic이 Event Hazard를 인식한다.
 - Forecast가 Event Hazard를 인식한다.
 

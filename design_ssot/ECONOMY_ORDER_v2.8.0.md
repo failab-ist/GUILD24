@@ -518,7 +518,7 @@ When any known Hazard reaches 3 consecutive missing sets:
 
 Reroll does not advance these pity counters.
 
-This base pity is separate from the stronger `길드24 원정전문점 인증` guarantee owned by RELIC.
+No Store Support adds a further Counter-offer guarantee (RELIC).
 
 ## ORDER QUANTITY
 

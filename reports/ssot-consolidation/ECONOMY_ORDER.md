@@ -356,3 +356,15 @@ Stage 9 reports at minimum:
 ```new
 Full-run balance measurement reports at minimum:
 ```
+
+## AMENDMENT — User decision 2026-09-23: Store Support rebalance
+
+The 길드24 원정전문점 인증 ORDER Counter guarantee no longer exists (remade into 원정 전문 인증); the base-pity line no longer points at it.
+
+```text
+This base pity is separate from the stronger `길드24 원정전문점 인증` guarantee owned by RELIC.
+```
+
+```new
+No Store Support adds a further Counter-offer guarantee (RELIC).
+```
