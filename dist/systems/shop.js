@@ -112,6 +112,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   s.money-=cost;s.daily.deepSponsor+=cost;s.stats.spent+=cost;
   s.deep.today.nomineeId=n.id;s.deep.today.paid=cost;
   n.destination=offer.gateIndex;n.claimedDestination=offer.gateIndex;n.destinationFinal=true;
+  /* SALE §DEEP EXPEDITION NOMINATION step 5: the one sanctioned re-take of the SALE-entry outlook.
+     Nomination comes before any committed transaction, so this is still the pre-supply snapshot -
+     now read against the Deep requirement. There is no cancel: the nomination is final. */
+  n.outlook=this.outlookFor(n);
   s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
  addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:this.wears('premiumCase'),...opts});
   const spare=G.Adventurer.EASTER.filter(e=>!s.npcs.some(x=>x.name===e.name));

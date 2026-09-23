@@ -258,3 +258,15 @@ A generic heading such as `보급 후 변화` is acceptable only if the rows cle
 ```new
 A generic heading such as `판매 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
 ```
+
+## AMENDMENT — User decision 2026-09-23: Deep nomination re-takes the outlook (resolves the note above)
+
+User: the forecast is recalculated for the Deep destination; the Player cannot cancel the
+nomination. Nomination precedes any committed transaction, so the re-take is still the pre-supply
+snapshot. Source now does this in `nominateDeep()` (tests/integration.cjs covers it).
+
+```new
+One exception: confirming a Deep Expedition nomination (allowed only before the first committed
+transaction) re-takes this pre-supply snapshot once, against the Deep Gate. The nomination cannot be
+cancelled.
+```

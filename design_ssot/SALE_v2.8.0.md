@@ -502,6 +502,10 @@ For the whole customer visit, keep the SALE-entry snapshot frozen for:
 
 Selecting or previewing an Item never changes those answers.
 
+One exception: confirming a Deep Expedition nomination (allowed only before the first committed
+transaction) re-takes this pre-supply snapshot once, against the Deep Gate. The nomination cannot be
+cancelled.
+
 ## POST-COMMIT CURRENT STATE
 
 Once an Item is actually purchased and committed into the NPC's Bag, it is no longer hypothetical.

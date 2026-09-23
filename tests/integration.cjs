@@ -278,6 +278,10 @@ test('DUNGEON_HAZARD §DEEP EXPEDITION: only the required Power changes, and onl
   g.nominateDeep(n.id);
   assert.equal(g.run.money,moneyBefore-cost,'the sponsorship is charged exactly once');
   assert.equal(g.run.deep.today.nomineeId,n.id,'today is assigned');
+  // SALE step 5 (User decision 2026-09-23): the pre-supply outlook is re-taken against the Deep Gate
+  assert.equal(n.outlook.combat,Dungeon.estimate({...n},g.gateFor(n),g.run.facilities),'the shown Combat Forecast reads the Deep requirement');
+  assert.equal(n.outlook.deathRisk,Dungeon.failureDeathRisk({...n},g.gateFor(n),g.run.facilities).chance,'and so does the failure-conditioned Death risk');
+  assert.equal(typeof g.unnominateDeep,'undefined','and there is no way to cancel the nomination');
 
   const deep=g.gateFor(n);
   assert.equal(deep.family,base.family,'Family is the base Gate\'s');
