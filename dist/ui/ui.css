@@ -2427,6 +2427,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   padding-right:max(var(--gutter),calc((100% - 880px) / 2));padding-top:14px}
  .p-night .dock .bare{font-size:16px;min-height:52px}
  .p-night .dock .stamp{min-height:60px;min-width:190px;font-size:20px}
+ /* the unlock notice takes the same desktop step as the record it sits over: one type/padding
+    class up (about 12-15%), same place, same two lines */
+ #toast.unlock{padding:10px 20px 12px}
+ #toast .toast-label{font-size:13.5px}
+ #toast .toast-name{font-size:18px}
  /* The counter has room here, so the customer gets a bigger card and the balloon moves off
     the top row to where a person actually talks from: beside the head, tail pointing back
     at them. Same element, same copy — only the placement is responsive. */
