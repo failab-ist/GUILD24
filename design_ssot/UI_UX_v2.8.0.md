@@ -276,6 +276,46 @@ Level / Stat, but the region as a whole must not read as a collection of metal b
 read-only figure must never be presented as if it were pressable. A label and its value on one
 line is the default; wrapping happens only where the real phone width requires it.
 
+
+### NIGHT LAYOUT — UNLOCK NOTICE
+
+A NIGHT reward notice that announces a newly unlocked product uses a stable two-line composition:
+
+    새 상품 해금
+    {상품명}
+
+The label and the unlocked product name are separate display lines.
+Do not rely on incidental width wrapping to split `새 상품 해금 · {상품명}`, and do not allow the
+product name to wrap into an awkward fragment merely because the notice width changed.
+
+This is presentation only. It does not change unlock timing, unlock state or reward truth.
+
+
+### NIGHT LAYOUT — DESKTOP ADAPTATION
+
+The phone composition remains the mobile baseline. Desktop must not render the same phone-sized
+record unchanged in a large viewport.
+
+At desktop widths, use the available space for one restrained responsive step across the NIGHT
+record:
+- returning NPC art may be larger;
+- speech / status treatment, Outcome / identity / summary and aftermath typography may scale up
+  coherently;
+- spacing and the Primary / Secondary controls may scale up to desktop-appropriate presence;
+- the record may use a wider desktop measure so it does not read as a small phone panel pinned to
+  the upper-left of an otherwise empty screen.
+
+This is responsive scaling of the SAME information architecture, not a desktop redesign.
+Do not add new columns, duplicate information or enlarge any one element enough to change the
+hierarchy.
+
+The exact 36px Outcome rule is the PHONE baseline. On desktop the Outcome may scale with the rest
+of the record, but every Outcome still uses exactly the same size at a given breakpoint.
+
+Likewise, "one NPC size" means one size for all Outcomes at the same breakpoint. It does NOT forbid
+one shared desktop responsive size. QA must reject Outcome-specific portrait sizing, not a single
+desktop override shared by every Outcome.
+
 ## BOSS INFORMATION PRESENTATION
 
 D5/D15/D25 use the existing Boss report/reveal shell.
