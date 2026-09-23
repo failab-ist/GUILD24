@@ -604,3 +604,19 @@ Presentation principles (construction / asset / ornament / audio / visual review
 Audio presentation principles (voice / hierarchy / phase BGM identity) -> PRESENTATION_PRINCIPLES_v2.8.0.md.
 presentation principles / audio -> PRESENTATION_PRINCIPLES_v2.8.0.md
 ```
+
+## AMENDMENT — User decision 2026-09-23: no FINAL countdown signal
+
+User decision: no `FINAL까지 N일` countdown signal (the five-day Boss beats carry the pacing).
+
+```text
+- D10 `FINAL까지 20일`
+- D20 `FINAL까지 10일` + Recon dispatch beat
+- D25 `FINAL까지 5일` + exact persisted Final Family/Hazard disclosure
+```
+
+```new
+- D10 Boss investigation beat
+- D20 Recon dispatch beat
+- D25 exact persisted Final Family/Hazard disclosure
+```

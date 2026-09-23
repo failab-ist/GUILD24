@@ -287,3 +287,20 @@ Legacy v1~v7:
 - Overhead change control (`Any later base-overhead change requires:` / `- integrated v2.5 multi-seed
   evidence`) is a live gate; only the words "v2.5" are version framing, and the line is left verbatim.
 - Full Reset `- D10/D14 unlocks fresh` is live (META D10/D14 product unlock).
+
+## AMENDMENT — User decision 2026-09-23: no FINAL countdown signal
+
+User decision: no separate `FINAL까지 N일` countdown signal; the five-day Boss information beats
+(D5/D10/D15/D20/D25, each naming the next report Day) already carry the pacing. Source never had it.
+
+```text
+D10 : FINAL까지 20일 signal
+D20 : FINAL까지 10일 signal + Recon dispatch beat
+D25 : FINAL까지 5일 signal + exact Final Family Pair / Hazard Pool generated, revealed, persisted
+```
+
+```new
+D10 : Boss investigation beat owned by BOSS
+D20 : Recon dispatch beat
+D25 : exact Final Family Pair / Hazard Pool generated, revealed, persisted
+```

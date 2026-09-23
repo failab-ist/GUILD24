@@ -350,10 +350,10 @@ Reuse existing Morning/management/SALE/Final surfaces; do not add a new permanen
 ```text
 D0  : inform Player that D30 Final is the Run objective
 D5  : Boss information flow owned by BOSS
-D10 : FINAL까지 20일 signal
+D10 : Boss investigation beat owned by BOSS
 D15 : additional Boss information flow owned by BOSS
-D20 : FINAL까지 10일 signal + Recon dispatch beat
-D25 : FINAL까지 5일 signal + exact Final Family Pair / Hazard Pool generated, revealed, persisted
+D20 : Recon dispatch beat
+D25 : exact Final Family Pair / Hazard Pool generated, revealed, persisted
 D30 : reuse the persisted D25 Final state exactly; resolve Final as 출전 NPC 선택 -> FINAL 준비 -> 결과
 ```
 

@@ -1417,9 +1417,9 @@ Do not add a permanent new Final dashboard.
 
 Required beats:
 - D0 Final objective notice
-- D10 `FINAL까지 20일`
-- D20 `FINAL까지 10일` + Recon dispatch beat
-- D25 `FINAL까지 5일` + exact persisted Final Family/Hazard disclosure
+- D10 Boss investigation beat
+- D20 Recon dispatch beat
+- D25 exact persisted Final Family/Hazard disclosure
 - D30 reuse D25 state; no new Family reroll reveal
 
 Boss reveal timing -> `BOSS_v2.8.0.md`.
