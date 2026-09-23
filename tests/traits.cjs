@@ -283,4 +283,45 @@ test('NPC-Q73 POTIONBODY SCOPE: every Potion tier, positive native Core Stat onl
   'and says nothing when no Potion is carried');
 });
 
+/* NPC_TRAIT §ACTIVE TRAIT CATALOG 27 / §FATIGUE TRAITS - RESULT SCOPE: 악바리 carries result
+   fatigue +1 always, injured or not (a chronic cost), on 성공 / 대성공 / 퇴각 / 부상, and never on
+   중상 / 사망. A healthy 악바리 and a Traitless twin draw the same stream (healthy 악바리 has no
+   combat term), so each pair resolves to the same Outcome and only the fatigue gain may differ. */
+test('NPC_TRAIT §FATIGUE TRAITS: 악바리 adds result fatigue +1 always, a healthy NPC included',()=>{
+ const g=fresh('grit-fatigue'),d=g.run.dungeons[0];
+ const healthy={...JSON.parse(JSON.stringify(g.run.npcs[0])),traits:[],pack:[],injury:0,recovery:0,alive:true};
+ assert.equal(Dungeon.prepare({...healthy,traits:['grit']},d).effects.fatigue,1,'healthy 악바리 carries +1');
+ assert.equal(Dungeon.prepare({...healthy,traits:['grit'],injury:1},d).effects.fatigue,1,'and the same +1 while injured');
+ const seen=new Set();let compared=0;
+ for(let i=0;i<300;i++){
+  const run=traits=>Dungeon.resolve({...JSON.parse(JSON.stringify(healthy)),traits},JSON.parse(JSON.stringify(d)),new RNG('grit-fatigue-'+i),[]);
+  const plain=run([]),grit=run(['grit']);
+  if(plain.outcome!==grit.outcome)continue;
+  seen.add(grit.outcome);compared++;
+  if(['중상','사망'].includes(grit.outcome))assert.equal(grit.rawOutcomeFatigueGain,0,'no fatigue on '+grit.outcome);
+  else assert.equal(grit.rawOutcomeFatigueGain-plain.rawOutcomeFatigueGain,1,'healthy 악바리 gains +1 on '+grit.outcome);
+ }
+ assert.ok(compared>=200,'the paired resolutions really are comparable: '+compared);
+ assert.ok(seen.size>=2,'more than one Outcome was exercised: '+[...seen].join('/'));
+});
+
+/* NPC_TRAIT §TRAIT MODIFICATION: Trait modification items in normal order catalog=NO. No active
+   Item carries a Trait-edit effect, and no generated ORDER offer is anything but an active Item. */
+test('NPC_TRAIT §TRAIT MODIFICATION: the normal order catalog holds no Trait-modification item',()=>{
+ for(const it of DATA.items){
+  for(const k of Object.keys(it.effects))assert.ok(!/trait|mentor|reroll|rename|remove/i.test(k),it.id+' carries a Trait-edit key '+k);
+  assert.ok(!/특성/.test(it.name+' '+(it.description||'')),it.id+' does not offer to change a Trait');
+ }
+ for(let i=0;i<20;i++){
+  const g=fresh('trait-mod-'+i);
+  for(let day=0;day<6;day++){
+   g.run.day=1+day*5;g.generateOffers();
+   for(const o of g.run.offers){
+    assert.ok(DATA.itemBy[o.item],'every offer is an active catalog Item: '+o.item);
+    assert.ok(!Object.keys(DATA.itemBy[o.item].effects).some(k=>/trait/i.test(k)),o.item+' edits no Trait');
+   }
+  }
+ }
+});
+
 console.log(count+' trait groups passed');

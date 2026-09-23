@@ -2661,4 +2661,49 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
  assert.ok(!/mine\?'\ubcf4\uc720 \uc911':'\uad6c\ub9e4'/.test(win),'the old two-way label is gone');
 });
 
+
+/* ECONOMY_ORDER §VISITOR FORECAST + NPC_TRAIT §PRE-REVEAL: before Sale the Morning / ORDER show
+   the expected visitor count, and never a customer's name, Job, Trait, Wallet or destination.
+   On actual appearance the NPC becomes introduced. */
+test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count before Sale, the person on arrival',()=>{
+ const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','gateLine','tierLine'].map(fn).join('\n');
+ assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('s.queue.length'),
+  'Morning and ORDER both state the expected visitor count');
+ assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count');
+ /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
+ assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),
+  'and read no customer Trait, Job, Wallet or destination');
+ for(let i=0;i<10;i++){
+  const g=new Game();g.autosave=false;g.start('pre-reveal-'+i);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  const s=g.run,shown=s.queue.length,queued=[...s.queue];
+  assert.ok(shown>=1,'a count is forecast');
+  assert.ok(queued.every(id=>!s.npcs.find(n=>n.id===id).introduced),'D1: nobody is introduced before they appear');
+  g.beginOrder();
+  assert.equal(s.queue.length,shown,'ORDER repeats the same count');
+  assert.ok(queued.every(id=>!s.npcs.find(n=>n.id===id).introduced),'and ORDER introduces nobody');
+  g.open();let arrived=0;
+  while(s.phase==='sell'){
+   const n=g.current();arrived++;
+   assert.equal(n.introduced,true,'the customer is introduced on appearance');
+   assert.ok(queued.slice(s.cursor+1).every(id=>!s.npcs.find(x=>x.id===id).introduced),'later customers stay unintroduced');
+   g.depart();
+  }
+  assert.equal(arrived,shown,'the forecast count is exactly the customers who appeared');
+ }
+});
+
+/* UI_UX §RETIRED ACTIVE UI / META §RETIRED FRANCHISE SYSTEM: no Franchise Grade, Franchise
+   Achievement list/progress/toast, Grade ORDER discount, Start Contract selection or Grade-gated
+   Contract unlock progress is exposed. Every shipped UI and copy file is scanned with comments
+   removed, so only what can reach the player is judged. */
+test('UI_UX §RETIRED ACTIVE UI: no shipped UI file exposes Franchise Grade, Achievements or Start Contract',()=>{
+ const files=[...walk('dist/ui').filter(f=>/\.js$/.test(f)&&!/vendor/.test(f)),'dist/index.html','dist/qa-mobile.html','dist/data/copy.js'];
+ for(const f of files){
+  const code=read(f).replace(/\/\*[\s\S]*?\*\//g,'').replace(/<!--[\s\S]*?-->/g,'').replace(/^\s*\/\/.*$/gm,'');
+  for(const re of [/grade/i,/franchise/i,/achievement/i,/contract/i,/가맹/,/업적/,/등급 할인/,/시작 계약/,/계약 선택/])
+   assert.ok(!re.test(code),f+' exposes a retired system: '+re);
+  assert.ok(!/archive\//.test(code),f+' loads nothing from the inactive archive');
+ }
+});
+
 console.log(count+' ui guard groups passed');

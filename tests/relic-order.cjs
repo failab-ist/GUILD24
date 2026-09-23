@@ -494,4 +494,63 @@ test('SA-Q19: the Black Market row carries 암시장 provenance, and only that r
  assert.equal((shop.match(/origin:/g)||[]).length,1,'and nowhere else');
 });
 
+/* ECONOMY_ORDER §GOLDEN 1+1: exact economy buy 500 / sell 1000 (ITEM row 30: Special L, 500 / 1000). */
+test('ECONOMY_ORDER §GOLDEN 1+1: 황금 1+1 쿠폰 buys at 500G and sells at 1000G',()=>{
+ const it=DATA.itemBy.coupon;
+ assert.equal(it.name,'황금 1+1 쿠폰');
+ assert.equal(it.buy,500,'buy 500');
+ assert.equal(it.sell,1000,'sell 1000');
+ const g=fresh('golden');g.beginOrder();g.open();
+ assert.equal(g.interest(g.current(),it,'full').price,1000,'정가 charges the 1000G list price');
+});
+
+/* ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: Free/service is not a normal Sale Price Mode, Normal
+   Sale exposes no implicit Free button, and no zero-price action may farm Loyalty. The current
+   Canonical defines no explicit zero-price action, so the only modes are the three paid ones. */
+test('ECONOMY_ORDER §SPECIAL ZERO-PRICE ACTION: no free mode, every sale is paid, no Loyalty for nothing',()=>{
+ assert.deepEqual(Object.keys(DATA.pricing).sort(),['full','half','overcharge'],'only 바가지 / 정가 / 50% 할인');
+ for(const [mode,rule] of Object.entries(DATA.pricing))
+  for(const it of DATA.items)assert.ok(Math.round(it.sell*rule.mult)>0,mode+' '+it.id+' is never a zero price');
+ const g=fresh('zero-price');g.beginOrder();g.open();
+ const n=g.current(),before={loyalty:n.loyalty,money:g.run.money,inv:g.run.inventory.length,history:n.history.length};
+ n.money=99999;
+ for(const mode of ['free','service','zero'])
+  assert.throws(()=>g.sell(g.run.inventory[0].id,mode),'no '+mode+' Price Mode exists');
+ assert.deepEqual({loyalty:n.loyalty,money:g.run.money,inv:g.run.inventory.length,history:n.history.length},before,
+  'a refused zero-price attempt moves no Loyalty, Gold or stock');
+ const app=fs.readFileSync(__dirname+'/../dist/ui/app.js','utf8');
+ assert.ok(!/data-action="sell"[^>]*data-mode="(free|service)"|['"]무료 (제공|증정)['"]/.test(app),'the Sale surface draws no Free button');
+});
+
+/* ECONOMY_ORDER §RELIC GOLD SINK + RELIC §KEY / §PRICE: D0 cost=0; D5+ currency=G, price =
+   basePrice x a limited band (about +-15-20%), fixed for the window; buy<=1; maxOwned/run=7. */
+test('ECONOMY_ORDER §RELIC GOLD SINK: D0 is free, every D5+ Store Support costs Gold and buying it spends it',()=>{
+ const g=new Game();g.autosave=false;g.start('gold-sink');
+ const w0=g.run.relicWindow;
+ assert.deepEqual(w0.candidatePrices,[0,0,0],'D0 is free');
+ const m0=g.run.money;g.buyRelic(w0.candidateIds[0]);assert.equal(g.run.money,m0,'and costs no Gold');
+ for(const day of [5,10,15,20,25,30]){
+  g.run.day=day;g.morning();
+  const w=g.run.relicWindow;
+  assert.equal(w.milestoneDay,day);
+  w.candidateIds.forEach((id,i)=>{const base=DATA.relicBy[id].price,p=w.candidatePrices[i];
+   assert.ok(p>0,'D'+day+' '+id+' costs Gold');
+   assert.ok(p>=Math.floor(base*.8)&&p<=Math.ceil(base*1.2),'D'+day+' '+id+' '+p+'G stays within the limited band of '+base+'G');});
+  g.run.money=10000;const spentBefore=g.run.stats.relicSpent||0;
+  const id=w.candidateIds[0],price=w.candidatePrices[0];
+  g.buyRelic(id);
+  assert.equal(g.run.money,10000-price,'D'+day+': the purchase spends exactly the shown price');
+  assert.equal(g.run.stats.relicSpent,spentBefore+price,'and is booked as Relic spend');
+ }
+ assert.equal(g.run.facilities.filter(id=>DATA.relicBy[id]).length,7,'seven windows, seven Store Supports');
+ // maxOwned/run=7: an eighth is refused even when a window is open and the till can pay
+ g.run.relicWindow={...g.run.relicWindow,purchased:null,candidateIds:[DATA.relics.find(r=>!g.run.facilities.includes(r.id)).id],candidatePrices:[1],expiryDay:99};
+ g.run.money=10000;
+ assert.equal(g.canBuyRelic(),false,'the eighth Store Support cannot be bought');
+ const kept=g.run.facilities.pop();
+ assert.equal(g.canBuyRelic(),true,'the same window is buyable at six owned, so the cap is what refuses it');
+ g.run.facilities.push(kept);
+ assert.throws(()=>g.buyRelic(g.run.relicWindow.candidateIds[0]),'and the purchase is refused');
+});
+
 console.log(count+' relic/order groups passed');
