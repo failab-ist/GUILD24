@@ -201,9 +201,7 @@ Example:
 ### REL-Q-v28-7 — ROYAL PREMIUM
 ### REL-Q36 — PREMIUM POOL SUPPORT
 ### REL-Q21 — EXPEDITION CERTIFICATION
-### REL-Q-v28-16 — EXPEDITION CERT COVERAGE
 ### REL-Q34 — EXPEDITION BUILD CANONICAL HAZARDS
-### REL-Q77 — EXPEDITION SHELF CATEGORY MIGRATION
 ### REL-Q20 — LARGE FRIDGE
 ### REL-Q72 — LARGE FRIDGE
 ### REL-Q-v28-2 — LARGE FRIDGE PRICE
@@ -217,7 +215,6 @@ Example:
 ### REL-Q80 — FRESH DOES NOT DELETE SPECIALISTS
 ### REL-Q23 — VISITOR CAP
 ### REL-Q30 — CUSTOMER BUILD PACING / ATTACHMENT
-### REL-Q-v28-3 — ROOKIE BOARD
 #### board
 #### hub
 #### composition
@@ -324,7 +321,6 @@ Expect exactly these approved base prices for these rows:
 ```
 
 ```new
-- positive native Core Stat +20%
 ```
 
 ## REWORD — REL-Q75: trailing colon removed because the superseded numeric examples it introduced were dropped
@@ -374,7 +370,6 @@ Own 냉장 유통 계약 and generate Order offers repeatedly.
 ```
 
 ```new
-### REL-Q76 — COLD DISTRIBUTION / DAWN DELIVERY CATEGORY
 ```
 
 ## REWORD — REL-Q76: version tag removed
@@ -394,7 +389,6 @@ Own 냉장 유통 계약 and generate Order offers repeatedly.
 ```
 
 ```new
-- their offer/shelf/bulk identities remain intact
 ```
 
 ## REWORD — RELIC-Q-v27-VISITOR heading: version framing ("EXPLICIT OVERRIDE") removed, ID kept; heading level ### under its topic
@@ -424,7 +418,6 @@ Owner rule: `RELIC_v2.8.0.md` §RELIC BLUEPRINTS 11 (길드 전광판) / 26 (지
 ```
 
 ```new
-- under the current economy this means `0 -> 100 -> 200 -> 400 ...`
 ```
 
 ## REWORD — REL-Q81 PASS: version framing ("base-QA", "as v2.7 truth") removed; the no-stale-curve check stays
@@ -456,4 +449,214 @@ No stale `0 -> 60 -> 120` curve survives.
 ## INFORMATION / COPY
 ## BUILD VALUE / BALANCE
 Design owner under test: `RELIC_v2.8.0.md`.
+```
+
+## AMENDMENT — User decision 2026-09-23: Store Support rebalance
+
+RELIC_QA checks follow the User-approved Store Support rebalance in RELIC_v2.8.0.md (prices, number changes, reworks, remakes with ids kept); the retired 원정전문점 offer-coverage, 긴급보급 선반 and 신입 모집 게시판 seating checks are replaced by checks of the new rules.
+
+Lines declared new by an earlier amendment and now removed again (dropped from that ```new fence): 7.
+
+```text
+대형 냉장고 = 200G
+PASS only when the active implementation uses 200G.
+When a new adventurer is generated on a Day and the support is owned:
+- that new adventurer occupies one existing visitor slot
+- total visitor count is not increased by this rule
+- visitor selection uses only the current owner rule above
+When no new adventurer is generated:
+- no visitor is added
+eligible survival -> Loyalty +2 and NPC Wallet +30G
+eligible Rare+ sale -> HQ commission = 12% of list price
+Loyalty >=60 eligible survival -> NPC Wallet +50G
+Does not redefine Trusted Regular.
+eligible Rare+ overcharge -> HQ commission = 20% of list price
+Price 260G
+- 긴급보급 선반 says Potion / Field Gear / Insurance
+- 발주 교환권 sequence after free use starts at 100
+유료 구매의 단골도 증가량 +50%. 생환으로 얻는 단골도에는 적용되지 않는다.
+- 즉석식품 코너 native Core-Stat +30%
+- 원정 도시락 코너 active-Supply native Core-Stat +20%
+- 원정 도시락 코너 matching explicit Hazard Counter remains +25%
+- kitchen + fresh24 => ×1.80 native positive Stat
+- kitchen + fresh24 + active-Supply expeditionMeal => ×2.00
+- matching Hazard Counter is accidentally reduced from +25%
+If previous Day sales >= 6:
+- each newly generated Common / Uncommon ORDER offer gets quantity +1
+- Rare+ quantity is unchanged
+If previous Day sales < 6:
+- Rare+ quantity receives the +1
+previous Day sales >= 7
+-> next Day first bulk order -25%
+Price remains 720G.
+- trigger differs from previous Day sales >= 7
+- discount applies more than once that Day
+With exactly 1 distinct known Hazard:
+- at least 1 generated ORDER offer Counters it.
+With 2+ distinct known Hazards:
+- exactly 2 distinct known Hazard keys are selected for the guarantee
+- 2 distinct offer slots are guaranteed, one against each selected key
+- one multi-Counter Item slot cannot satisfy both guarantee slots
+- ordinary total offer count is preserved
+- full Reroll preserves the guarantee
+- no unknown Hazard is revealed
+- Price remains 700G
+- 묶음발주 계약 -> same SKU 3+, 3rd+ units -15%
+- 단골 스탬프 기계 -> paid-purchase Loyalty gain +50%; survival Loyalty excluded
+- 회원 관리대장 -> returning revisit weight +40% from next Day
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; operating cost +10G from next Day
+- 길드 보증 진열대 -> once/Day first list-price >=200G sale, HQ customer subsidy = 20% of list price,
+Player still receives the full chosen sale price
+- 원정 위험 게시판 -> known-Hazard matching offer weight +80%, never a guarantee
+- 긴급보급 선반 -> Potion / Field Gear / Insurance offer weight +60% and quantity +1
+- 공동구매 전단 -> visitor count >=6 and same SKU 3+ -> bulk purchase price -10%
+- 단골 묶음혜택 -> returning customer's second paid purchase that Day -> Loyalty +2
+- 프리미엄 멤버십 -> Loyalty >=50 + Rare+ Item -> purchase intent +10%p
+- 새벽 공동배송 -> same Food/Drink SKU 3+ -> bulk purchase price -15%
+bulk 260
+stamp 260
+member 260
+showcase 280
+guarantee 280
+hazardBoard 260
+medicine 260
+kitchen 280
+board 260
+rookieBoard 240
+groupFlyer 400
+memberBundle 380
+premiumMember 420
+expeditionMeal 400
+coldcase 420
+dawnBulk 380
+fresh24 740
+warehouse 360
+terminal 380
+delivery 340
+- base price 200G
+- Food/Drink shelf life +1
+When Food/Drink explicit Counter matches actual current destination Hazard:
+- matching Counter +25%
+When active Supply Burden exists and Item supplies >0:
+- Supply itself unchanged
+- no bonus when conditions are false
+- no universal Counter solution
+`긴급보급 선반` targets exactly:
+Potion / Field Gear / Insurance
+- no Medical category dependency
+- no retired Mana/Special proxy for Potion
+- free use consumes the first daily Reroll step
+- next same-Day Reroll uses the second current `ECONOMY_ORDER` step
+- board, hub and the `wall` Decoration may all be held at once and each applies in its own place
+긴급보급 선반
+신입 모집 게시판
+Own `길드24 원정전문점 인증` with known active hazards.
+No exact-item guarantee and no unknown hazard reveal.
+- next same-Day Reroll uses the next normal cost step
+Eligibility targets Uncommon+ Food/Drink and shelf-life relief as defined in RELIC.
+Use 원정 위험 게시판 / 원정 도시락 코너 / 길드24 원정전문점 인증 across all Families.
+```
+
+```new
+야전 정비대
+첫 방문 쿠폰
+- 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
+- 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
+- 회원 관리대장 -> returning revisit weight +70% from next Day
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; no operating-cost modifier
+- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 20% of
+the charged price, Player still receives the full chosen sale price
+- 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
+- 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; from next Day operating cost + overheadBase × 0.10
+- 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
+- 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
+- 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
+price, store receives the full charged price
+- 프리미엄 멤버십 -> 단골 arrival NPC Wallet +25G; 단골 Rare+ purchase intent +15%p
+- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 and flat +4 on every Hazard of the actual Gate
+- 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
+- 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
+the Day's first offer generation
+- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.25; no shelf life
+bulk 180
+stamp 180
+member 180
+showcase 200
+guarantee 200
+hazardBoard 120
+medicine 150
+kitchen 240
+board 150
+rookieBoard 150
+groupFlyer 280
+memberBundle 270
+premiumMember 290
+expeditionMeal 280
+coldcase 250
+dawnBulk 270
+fresh24 520
+warehouse 180
+terminal 190
+delivery 170
+If previous Day sales >= 4:
+- each newly generated ORDER offer, of every rarity, gets quantity +2
+If previous Day sales < 4:
+previous Day sales >= 6
+-> today every same-SKU 3+ order -30%
+Price 430G.
+- trigger differs from previous Day sales >= 6
+- only the first bulk order of the Day is discounted
+paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +30G
+단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G
+Reads the Trusted Regular owner judgement; no second threshold.
+eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wallet +30G
+150% sale of any rarity -> HQ commission = 20% of the charged sale price
+the flat 150% purchase-intent penalty (-0.16) is lifted for the owner
+the 1.5x price burden and Loyalty -3 are unchanged
+Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
+- an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
+- with `야전 정비대` on Field Gear: x1.40 x1.60
+- the flat `원정 도시락 코너` +4 is not multiplied
+- the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
+No ORDER offer guarantee and no unknown hazard reveal.
+Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.
+### REL-Q77 — FIELD MAINTENANCE (야전 정비대)
+`야전 정비대` multiplies the Hazard Counter values of carried Field Gear by 1.40.
+- Potion / Food / Drink / Insurance Counter values are unchanged
+- no ORDER offer weight or offer quantity effect
+- base price 120G
+대형 냉장고 = 120G
+PASS only when the active implementation uses 120G.
+- native Core-Stat +25%
+- from next Day operating cost + overheadBase × 0.10, never compounded
+Per Food/Drink Item in the Bag:
+- Supply +2
+- flat +4 on every Hazard of the Gate the adventurer actually enters
+- no native Core-Stat bonus
+- no matching-Counter multiplier
+- a non-Food/Drink Item takes nothing
+- no shelf-life effect and no operating-cost effect
+- Food/Drink ORDER price x1.25
+- 즉석식품 코너 native Core-Stat +25%
+- 원정 도시락 코너 adds no native Core-Stat bonus
+- kitchen + fresh24 => ×1.75 native positive Stat
+Eligibility targets Uncommon+ Food/Drink, purchase intent +16%p and shelf-life relief as defined in RELIC.
+### REL-Q76 — COLD DISTRIBUTION / DAWN RECOVERY CATEGORY
+- their offer/shelf/recovery identities remain intact
+### REL-Q-v28-3 — FIRST VISIT COUPON
+On an adventurer's first-ever visit, with `첫 방문 쿠폰` owned:
+- NPC Wallet +30G on arrival
+- purchase intent +20%p during that visit
+- no visitor is added and no slot is seated
+A returning adventurer receives nothing.
+- board, hub, 단체 주문 창구 and the `wall` Decoration may all be held at once and each applies in its own place
+- 단체 주문 창구 makes its own 20% Morning roll for +1 visitor
+- Price 490G
+- next same-Day Reroll uses the first normal cost step
+- next same-Day Reroll uses the first current `ECONOMY_ORDER` step
+- under the current economy this means `0 -> 50 -> 100 -> 200 ...`
+Price 180G
+- 발주 교환권 sequence after free use starts at 50
+유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
 ```

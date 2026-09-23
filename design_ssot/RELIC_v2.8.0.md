@@ -170,8 +170,8 @@ Current explicit D30 no-effect exclusions:
 - 길드 보증 진열대 (guarantee)
 - 대형 냉장고 (fridge)
 - 길드 전광판 (board)
-- 신입 모집 게시판 (rookieBoard)
-- 공동구매 전단 (groupFlyer)
+- 첫 방문 쿠폰 (rookieBoard)
+- 단체 주문 창구 (groupFlyer)
 - 단골 묶음혜택 (memberBundle)
 - 프리미엄 멤버십 (premiumMember)
 - 귀환 적립제 (returnPoints)
@@ -459,7 +459,7 @@ The following Store Support Functions are exact:
 ### ROTATION — Foundation
 1. 묶음발주 계약
 tag=Rotation
-- 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -15%
+- 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -20%
 purpose=reward inventory-risk-taking
 
 2. 회전 진열대
@@ -469,53 +469,55 @@ purpose=sales->order->sales loop
 `DIRECTOR DOCUMENT BASELINE`
 
 회전 진열대:
-    Price = 240G
-    trigger = previous Day sales >= 6
-    effect = next generated ORDER offers for Common / Uncommon Items get supply quantity +1
+    Price = 120G
+    trigger = previous Day sales >= 4
+    effect = next generated ORDER offers for every Item rarity get supply quantity +2
 
 Purpose:
     high sales -> more available units -> bulk-order threshold becomes reachable more often
     -> Rotation discounts can actually be exercised -> more stock can support the next sales cycle
 
 Boundaries:
-- Rare+ offer quantity is unchanged by this support
 - it does not add ORDER offer slots
 - it does not lower Item price by itself
-- the existing 묶음발주 계약 / 공동구매 전단 / 새벽 공동배송 discounts remain separate
-- if previous Day sales < 6, this support adds no quantity
+- the existing 묶음발주 계약 / 물류 본부계약 discounts remain separate
+- if previous Day sales < 4, this support adds no quantity
 
 ### VIP — Foundation
 3. 단골 스탬프 기계
 tag=VIP
-- 단골 스탬프 기계: paid-purchase Loyalty gain +50%; survival Loyalty is excluded
+- 단골 스탬프 기계: paid-purchase Loyalty gain +75%; survival Loyalty is excluded
 
 4. 회원 관리대장
 tag=VIP
-- 회원 관리대장: from next Day, returning-adventurer revisit weight +40%
+- 회원 관리대장: from next Day, returning-adventurer revisit weight +70%
 identityPreReveal=NO
 
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약
 tag=Premium
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; from next Day operating cost +10G
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; no operating-cost modifier
 
 6. 길드 보증 진열대
 tag=Premium
-- 길드 보증 진열대: once per Day, first sale of a list-price >=200G Item -> HQ covers 20% of list
-  price for the customer while the Player receives the full chosen sale price
+- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 20%
+  of that charged price for the customer while the Player receives the full chosen sale price
+- the threshold reads the charged price, not the list price
 150AutoSuccess=NO
 playerReceivesChosenPrice=YES
 
 ### EXPEDITION — Foundation
 7. 원정 위험 게시판
 tag=Expedition
-- 원정 위험 게시판: known active-Hazard matching Item offer weight +80%; this is not a guarantee
+- 원정 위험 게시판: today's Gate Hazard (known active-Hazard) matching Item offer weight +50%; this is not a guarantee
 unknownHazardReveal=NO
 specificItemGuarantee=NO
 
-8. 긴급보급 선반
+8. 야전 정비대
 tag=Expedition
-- 긴급보급 선반: Potion / Field Gear / Insurance offer weight +60% and matching offer quantity +1
+- 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
+- it changes no ORDER offer weight and no offer quantity
+- it multiplies with 원정 전문 인증 on a Field Gear Counter
 
 ### FRESH — Foundation
 9. 대형 냉장고
@@ -526,8 +528,8 @@ tag=Fresh
 `대형 냉장고`:
 
 ```text
-base Price = 200G
-Food/Drink shelf life +1 day
+base Price = 120G
+Food/Drink shelf life +2 days
 existing eligible non-expired stock extends once on acquisition
 future eligible stock enters with the extension
 ```
@@ -545,11 +547,12 @@ tag=Fresh
 `즉석식품 코너`:
 
 ```text
-Food/Drink positive native Core-Stat contribution +30%
+Food/Drink positive native Core-Stat contribution +25%
 Supply unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
+from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
 ```
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
@@ -579,36 +582,35 @@ Rules:
 - other modifiers (Relic, Decoration, Event) apply afterward as they already do
 - the available-adventurer limit still caps the actual seating
 
-12. 신입 모집 게시판
+12. 첫 방문 쿠폰
 tag=Customer
-lateRookieMustRemainViable=YES
 
 `DIRECTOR DOCUMENT BASELINE`
 
-신입 모집 게시판 exact rule:
-- when a new adventurer is generated on a Day, that new adventurer occupies one of today's
-  existing visitor slots
-- total visitor count does not increase because of this rule
-- if there is no new adventurer generated, the support adds no visitor
-- available-adventurer cap and ordinary queue length remain
-- use the existing deterministic seating pattern already used by the rookie Event where possible
-
-Purpose:
-make the support's identity observable without false probability attribution or extra customer workload.
+첫 방문 쿠폰 exact rule:
+- on an adventurer's first-ever visit: NPC Wallet +30G on arrival
+- during that visit: purchase intent +0.20
+- it adds no visitor, seats no one and changes no queue
 
 ### HYBRID
-13. 공동구매 전단
+13. 단체 주문 창구
 tags=[Rotation,Customer]
-- 공동구매 전단: if today's visitor count >=6, same SKU 3+ bulk order purchase price -10%
+- 단체 주문 창구: its own Morning roll, 20% -> expected visitors +1, independent of 길드 전광판 /
+  지역 거점점 계약 / wall Decoration
+- from the Day's 5th sale, each sale -> HQ commission +15G
+- it discounts no ORDER
 
 14. 단골 묶음혜택
 tags=[Rotation,VIP]
-- 단골 묶음혜택: returning customer's second paid purchase that Day -> Loyalty +2
+- 단골 묶음혜택: a 단골 (Trusted Regular) customer's second paid purchase that Day -> the customer
+  pays, and is judged on, half the charged price; the store receives the full charged price and HQ
+  pays the other half (recorded on that sale)
 consumerSlotRule=UNCHANGED
 
 15. 프리미엄 멤버십
 tags=[VIP,Premium]
-- 프리미엄 멤버십: Loyalty >=50 customer's Rare+ Item purchase intent +10%p
+- 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +25G; that customer's Rare+
+  Item purchase intent +15%p
 150AutoSuccess=NO
 
 16. 귀환 적립제
@@ -619,33 +621,26 @@ channel=prefer existing loyalty/wallet/revisit systems
 `DIRECTOR DOCUMENT BASELINE`
 
 귀환 적립제:
-    Price = 400G
-    Loyalty +2
+    Price = 340G
+    condition = paid returning customer today survives (no Loyalty threshold)
+    Loyalty +5
     NPC Wallet +30G
 
 17. 원정 도시락 코너
 tags=[Fresh,Expedition]
-effect=Food/Drink expedition-relevant effect strengthened when it matches current known need
-matchingNeed=[explicitHazardCounter,activeSupplyBurden]
-HazardCounterBoostOnlyIfMatching=YES
-universalHazardSolution=NO
 
 `DIRECTOR DOCUMENT BASELINE`
 
 `원정 도시락 코너`:
 
 ```text
-if a Food/Drink explicit Hazard Counter matches the actual current destination Hazard:
-  matching Counter +25%
-
-when active Supply Burden exists and the Food/Drink supplies >0:
-    positive native Core-Stat contribution +20%
-
-Supply itself unchanged
+per Food/Drink Item in the Bag:
+  Supply +2
+  +4 defence on every Hazard of the Gate the adventurer actually goes to
 ```
 
-No universal Hazard solution.
-No boost merely because the Item is Food/Drink.
+The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
+No native Core-Stat bonus and no matching-Counter multiplier.
 
 18. 냉장 유통 계약
 tags=[Fresh,Premium]
@@ -654,6 +649,8 @@ singleSkuDependency=NO
 
 냉장 유통 계약:
 - Uncommon+ Food/Drink offer weight +80%
+- Uncommon+ Food/Drink purchase intent +16%p
+- no Stat effect
 - shelf life +1 day
 - on acquisition, currently owned non-expired eligible stock extends exactly once
 - future eligible stock receives the extension
@@ -671,17 +668,16 @@ effect=Rare+ expedition-response items gain premium-economy viability
 `DIRECTOR DOCUMENT BASELINE`
 
 길드 납품 인증:
-    Price = 440G
-    HQ commission = 12% of Item list price
+    Price = 310G
+    HQ commission = 20% of Item list price
+    buyer NPC Wallet +30G
 
-Player copy should say:
-    현재 알려진 위험에 맞는 희귀 이상 상품 또는 희귀 이상 보험 판매 시
-    정가의 12% 본사 수당
-
-20. 새벽 공동배송
+20. 새벽 회수 계약
 tags=[Fresh,Rotation]
-- 새벽 공동배송: same Food/Drink SKU 3+ bulk order purchase price -15%
-expiryRisk=REMAINS
+- 새벽 회수 계약: Food/Drink stock whose shelf life ends is taken back at 50% of its cost instead of
+  being wasted (it is not counted as waste)
+- each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
+- it discounts no ORDER
 
 ### KEYSTONE
 21. 물류 본부계약
@@ -690,9 +686,11 @@ tag=Rotation
 `DIRECTOR DOCUMENT BASELINE`
 
 물류 본부계약:
-    Price = 720G
-    trigger = previous Day sales >= 7
-    effect = next Day first bulk order purchase price -25%
+    Price = 430G
+    trigger = previous Day sales >= 6
+    effect = today every same-SKU 3+ order purchase price -30% (not only the first)
+
+The internal purchase-price floor (45% of list) is unchanged.
 
 22. 평생 단골제
 tag=VIP
@@ -702,66 +700,50 @@ snowballCap=required
 `DIRECTOR DOCUMENT BASELINE`
 
 평생 단골제:
-    Price = 740G
-    Loyalty >=60 survival condition
+    Price = 440G
+    단골 (Trusted Regular, Loyalty >= 51) survival condition
     NPC Wallet +50G
     next-visit weight +50%
 
-This threshold does not redefine Trusted Regular; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
+The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
 
 23. 왕도 프리미엄 인증
 tag=Premium
-effect=successful Rare+ 150% sale -> extra premium commission
+effect=successful 150% sale of any rarity -> extra premium commission
 refusal/inventoryRisk=REMAINS
 
 `DIRECTOR DOCUMENT BASELINE`
 
 왕도 프리미엄 인증:
-    Price = 760G
-    HQ commission = 20% of Item list price
+    Price = 460G
+    HQ commission = 20% of the charged (150%) sale price
+    the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
+    the 1.5x price burden and Loyalty -3 are unchanged
 
-24. 길드24 원정전문점 인증
+24. 원정 전문 인증
 tag=Expedition
-specificItemGuarantee=NO
-multiHazardChoiceRandomness=REMAINS
 
 `DIRECTOR DOCUMENT BASELINE`
 
-길드24 원정전문점 인증:
-    Price = 700G
+원정 전문 인증:
+    Price = 420G
 
-When current known Hazards contain exactly 1 distinct Hazard:
-    ensure at least 1 ORDER offer that Counters that Hazard.
-
-When current known Hazards contain 2 or more distinct Hazards:
-    choose 2 distinct known Hazard keys
-    and ensure 2 distinct ORDER offer slots,
-    one guaranteed against each selected Hazard key.
-
-For guarantee accounting, one offer slot satisfies only one selected Hazard key even if that Item
-can Counter multiple Hazards.
-
-The guarantee:
-- preserves the ordinary total ORDER offer count; it replaces ordinary slots rather than adding slots
-- remains active after a full Reroll
-- uses only currently legal/unlocked Item candidates
-- does not reveal unknown Hazards
-
-Purpose:
-원정 전문 Build의 Keystone은 "Counter가 하나라도 있나"가 아니라
-여러 알려진 위험에 대한 최소 대응 폭을 보장한다.
+- an Item that Counters a Hazard of the adventurer's own Gate: its Hazard Counter values x1.60
+- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
+- the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
+- it guarantees no ORDER offer
 
 25. 24시간 신선체계
 tag=Fresh
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
-infiniteShelfLife=NO
 
 `DIRECTOR DOCUMENT BASELINE`
 
 `24시간 신선체계`:
 
 ```text
-Food/Drink shelf life +2 days
+no shelf-life effect and no operating-cost effect
+Food/Drink ORDER (purchase) price x1.25
 Food/Drink positive native Core-Stat contribution +50%
 Supply unchanged
 Hazard Counter unchanged
@@ -778,7 +760,7 @@ livingNpcCapIgnored=NO
 Role: pay overhead to widen the catchment.
 
 지역 거점점 계약:
-    Price = 700G
+    Price = 490G
 
 Each applicable Morning, exactly one mutually exclusive visitor result:
     +1 visitor = 45%
@@ -810,19 +792,19 @@ flat modifiers, and it does not compound with them.
 29. 발주 교환권
 effect=매일 첫 canonical Full-offer Reroll 비용 0G
 firstRerollFree=YES
-freeUseConsumesFirstRerollStep=YES
+freeUseConsumesFirstRerollStep=NO
 dailyReset=YES
 singleOfferSwap=NO
 requirements:
 - applies to canonical full-offer reroll
-- after the free first use, same-Day Reroll continues from the next normal cost step
+- after the free first use, same-Day Reroll follows the normal curve from its first step
 - current eligibility/coverage/rarity rules preserved
 - rerollAdvancesPity=NO
 - pity farming=NO
 
 ```text
 each Day's first canonical Full-offer Reroll = 0G
-free use consumes the first daily Reroll step
+paid Rerolls then start at the first normal step
 ```
 
 All paid Reroll costs after that use the current authoritative curve from `ECONOMY_ORDER_v2.8.0.md`.
@@ -831,7 +813,7 @@ With the current curve:
 
 ```text
 normal: 50 -> 100 -> 200 -> 400 -> 800 -> x2 thereafter
-with 발주 교환권: 0 -> 100 -> 200 -> 400 -> 800 -> x2 thereafter
+with 발주 교환권: 0 -> 50 -> 100 -> 200 -> 400 -> x2 thereafter
 ```
 
 30. 운영 효율 매뉴얼
@@ -840,7 +822,7 @@ buildDefiningPower=LOW
 `DIRECTOR DOCUMENT BASELINE`
 
 운영 효율 매뉴얼:
-    Price = 260G
+    Price = 180G
     from next Day, basic operating cost -30G
 
 Late acquisition may rationally be skipped. That alone is not a Balance Finding.
@@ -855,11 +837,8 @@ Fresh native-Stat bonuses stack additively from the Item's base native positive 
 
 Therefore:
     즉석식품 코너 + 24시간 신선체계
-    => base positive native Stat ×1.80
-
-With the active-Supply native-Stat condition:
-    +30% +50% +20%
-    => base positive native Stat ×2.00
+    +25% +50%
+    => base positive native Stat ×1.75
 
 Food-affinity Trait percentages that target the same positive native Core-Stat channel join this same base-additive pool under `ITEM_v2.8.0.md`.
 Do not multiply a completed Fresh percentage layer by `대식가/소식가` as a second sequential layer.
@@ -870,12 +849,13 @@ This high point is an allowed coherent-build reward.
 
 The two answer different questions and neither is a strict upgrade of the other.
 
-`board`, `hub` and the `wall` Decoration are independent and may all be held at once.
+`board`, `hub`, `groupFlyer` and the `wall` Decoration are independent and may all be held at once.
 
 ```text
-board = base-roll floor
-hub   = probabilistic catchment, paid for in overhead
-wall  = 10% Morning proc (Decoration, not a Relic)
+board      = base-roll floor
+hub        = probabilistic catchment, paid for in overhead
+groupFlyer = its own 20% Morning roll, +1 visitor
+wall       = 10% Morning proc (Decoration, not a Relic)
 ```
 
 They share no ownership, no purchase candidacy and no slot. Holding more than one simply applies
@@ -939,26 +919,26 @@ The following 20 Store Support base prices are the approved baseline.
 
 | ID | Store Support | Base Price |
 |---|---|---:|
-| bulk | 묶음발주 계약 | 260G |
-| stamp | 단골 스탬프 기계 | 260G |
-| member | 회원 관리대장 | 260G |
-| showcase | 희귀상품 입고 계약 | 280G |
-| guarantee | 길드 보증 진열대 | 280G |
-| hazardBoard | 원정 위험 게시판 | 260G |
-| medicine | 긴급보급 선반 | 260G |
-| kitchen | 즉석식품 코너 | 280G |
-| board | 길드 전광판 | 260G |
-| rookieBoard | 신입 모집 게시판 | 240G |
-| groupFlyer | 공동구매 전단 | 400G |
-| memberBundle | 단골 묶음혜택 | 380G |
-| premiumMember | 프리미엄 멤버십 | 420G |
-| expeditionMeal | 원정 도시락 코너 | 400G |
-| coldcase | 냉장 유통 계약 | 420G |
-| dawnBulk | 새벽 공동배송 | 380G |
-| fresh24 | 24시간 신선체계 | 740G |
-| warehouse | 후방 창고 증설 | 360G |
-| terminal | 본사 추가발주권 | 380G |
-| delivery | 발주 교환권 | 340G |
+| bulk | 묶음발주 계약 | 180G |
+| stamp | 단골 스탬프 기계 | 180G |
+| member | 회원 관리대장 | 180G |
+| showcase | 희귀상품 입고 계약 | 200G |
+| guarantee | 길드 보증 진열대 | 200G |
+| hazardBoard | 원정 위험 게시판 | 120G |
+| medicine | 야전 정비대 | 150G |
+| kitchen | 즉석식품 코너 | 240G |
+| board | 길드 전광판 | 150G |
+| rookieBoard | 첫 방문 쿠폰 | 150G |
+| groupFlyer | 단체 주문 창구 | 280G |
+| memberBundle | 단골 묶음혜택 | 270G |
+| premiumMember | 프리미엄 멤버십 | 290G |
+| expeditionMeal | 원정 도시락 코너 | 280G |
+| coldcase | 냉장 유통 계약 | 250G |
+| dawnBulk | 새벽 회수 계약 | 270G |
+| fresh24 | 24시간 신선체계 | 520G |
+| warehouse | 후방 창고 증설 | 180G |
+| terminal | 본사 추가발주권 | 190G |
+| delivery | 발주 교환권 | 170G |
 
 The other 10 active support prices are exact in their Store Support entries above.
 
@@ -1032,19 +1012,16 @@ support reference.
 ## COPY TRUTH
 
 단골 스탬프 기계 Player copy:
-    유료 구매의 단골도 증가량 +50%. 생환으로 얻는 단골도에는 적용되지 않는다.
+    유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
 
 Do not mention 무료 보급; the active price system has no free-sale mode.
 
-긴급보급 선반 Player copy uses:
-    포션 · 야외장비 · 보험
-
 길드 전광판 must describe the actual base-roll floor:
-    기본 방문객이 3명이면 4명으로 올린다.
+    하루 기본 최소 방문객을 4명으로 변경 (기존 3명).
 
 발주 교환권:
     first canonical full reroll each Day = 0G
-    then the current paid curve continues from 100G -> 200G -> 400G ...
+    then the ordinary paid curve from its first step: 50G -> 100G -> 200G ...
 
 SLOTH:
     점포지원, not 유물

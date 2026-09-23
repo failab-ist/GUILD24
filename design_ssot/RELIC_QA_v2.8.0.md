@@ -353,11 +353,11 @@ Effects match canonical identities for:
 희귀상품 입고 계약
 길드 보증 진열대
 원정 위험 게시판
-긴급보급 선반
+야전 정비대
 대형 냉장고
 즉석식품 코너
 길드 전광판
-신입 모집 게시판
+첫 방문 쿠폰
 
 PASS:
 No material behavior contradicts RELIC spec.
@@ -416,18 +416,25 @@ No active Store Support uses 쇼케이스 in these two names.
 
 Verify these exact Store Support functions in RELIC_v2.8.0.md:
 
-- 묶음발주 계약 -> same SKU 3+, 3rd+ units -15%
-- 단골 스탬프 기계 -> paid-purchase Loyalty gain +50%; survival Loyalty excluded
-- 회원 관리대장 -> returning revisit weight +40% from next Day
-- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; operating cost +10G from next Day
-- 길드 보증 진열대 -> once/Day first list-price >=200G sale, HQ customer subsidy = 20% of list price,
-  Player still receives the full chosen sale price
-- 원정 위험 게시판 -> known-Hazard matching offer weight +80%, never a guarantee
-- 긴급보급 선반 -> Potion / Field Gear / Insurance offer weight +60% and quantity +1
-- 공동구매 전단 -> visitor count >=6 and same SKU 3+ -> bulk purchase price -10%
-- 단골 묶음혜택 -> returning customer's second paid purchase that Day -> Loyalty +2
-- 프리미엄 멤버십 -> Loyalty >=50 + Rare+ Item -> purchase intent +10%p
-- 새벽 공동배송 -> same Food/Drink SKU 3+ -> bulk purchase price -15%
+- 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
+- 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
+- 회원 관리대장 -> returning revisit weight +70% from next Day
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; no operating-cost modifier
+- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 20% of
+  the charged price, Player still receives the full chosen sale price
+- 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
+- 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; from next Day operating cost + overheadBase × 0.10
+- 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
+- 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
+- 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
+  price, store receives the full charged price
+- 프리미엄 멤버십 -> 단골 arrival NPC Wallet +25G; 단골 Rare+ purchase intent +15%p
+- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 and flat +4 on every Hazard of the actual Gate
+- 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
+- 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
+  the Day's first offer generation
+- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.25; no shelf life
 - 후방 창고 증설 -> inventory capacity +10
 - 본사 추가발주권 -> next ORDER-offer generation candidate count +2
 
@@ -450,26 +457,26 @@ Exact final values match `RELIC_v2.8.0.md` §PRICE.
 
 Expect exactly these approved base prices for these rows:
 
-    bulk 260
-    stamp 260
-    member 260
-    showcase 280
-    guarantee 280
-    hazardBoard 260
-    medicine 260
-    kitchen 280
-    board 260
-    rookieBoard 240
-    groupFlyer 400
-    memberBundle 380
-    premiumMember 420
-    expeditionMeal 400
-    coldcase 420
-    dawnBulk 380
-    fresh24 740
-    warehouse 360
-    terminal 380
-    delivery 340
+    bulk 180
+    stamp 180
+    member 180
+    showcase 200
+    guarantee 200
+    hazardBoard 120
+    medicine 150
+    kitchen 240
+    board 150
+    rookieBoard 150
+    groupFlyer 280
+    memberBundle 270
+    premiumMember 290
+    expeditionMeal 280
+    coldcase 250
+    dawnBulk 270
+    fresh24 520
+    warehouse 180
+    terminal 190
+    delivery 170
 
 FAIL if implementation uses a different base price without a new approved owner amendment.
 
@@ -479,30 +486,28 @@ FAIL if implementation uses a different base price without a new approved owner 
 
 Given 회전 진열대 is owned:
 
-If previous Day sales >= 6:
-- each newly generated Common / Uncommon ORDER offer gets quantity +1
-- Rare+ quantity is unchanged
+If previous Day sales >= 4:
+- each newly generated ORDER offer, of every rarity, gets quantity +2
 - total offer-slot count is unchanged
 
-If previous Day sales < 6:
+If previous Day sales < 4:
 - quantity is unchanged.
 
 FAIL:
 - any first-bulk discount effect is active on 회전 진열대
 - the support directly discounts Item price
-- Rare+ quantity receives the +1
 
 ### REL-Q-v28-15 — LOGISTICS HQ TRIGGER
 
 Expected:
-    previous Day sales >= 7
-    -> next Day first bulk order -25%
+    previous Day sales >= 6
+    -> today every same-SKU 3+ order -30%
 
-Price remains 720G.
+Price 430G.
 
 FAIL:
-- trigger differs from previous Day sales >= 7
-- discount applies more than once that Day
+- trigger differs from previous Day sales >= 6
+- only the first bulk order of the Day is discounted
 
 ### REL-Q35 — ROTATION LOW-RARITY VIABILITY
 SETUP:
@@ -519,15 +524,15 @@ Rotation/low-cost build is not invalidated by universal Rare+ upgrades.
 ### REL-Q-v28-4 — RETURN POINTS
 
 Expected:
-    eligible survival -> Loyalty +2 and NPC Wallet +30G
+    paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +30G
 
 ### REL-Q-v28-6 — LIFETIME
 
 Expected:
-    Loyalty >=60 eligible survival -> NPC Wallet +50G
+    단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G
     revisit weight +50% unchanged
 
-Does not redefine Trusted Regular.
+Reads the Trusted Regular owner judgement; no second threshold.
 
 ## PREMIUM SUPPORTS
 
@@ -544,12 +549,14 @@ No relic turns 150% into automatic acceptance.
 ### REL-Q-v28-5 — SUPPLY CERT
 
 Expected:
-    eligible Rare+ sale -> HQ commission = 12% of list price
+    eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wallet +30G
 
 ### REL-Q-v28-7 — ROYAL PREMIUM
 
 Expected:
-    eligible Rare+ overcharge -> HQ commission = 20% of list price
+    150% sale of any rarity -> HQ commission = 20% of the charged sale price
+    the flat 150% purchase-intent penalty (-0.16) is lifted for the owner
+    the 1.5x price burden and Loyalty -3 are unchanged
 
 ### REL-Q36 — PREMIUM POOL SUPPORT
 SETUP:
@@ -565,27 +572,20 @@ Premium does not depend on a single SKU and Rare+ is not universally superior.
 
 ### REL-Q21 — EXPEDITION CERTIFICATION
 SETUP:
-Own `길드24 원정전문점 인증` with known active hazards.
+Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
+
+EXPECT:
+- an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
+- with `야전 정비대` on Field Gear: x1.40 x1.60
+- the flat `원정 도시락 코너` +4 is not multiplied
+- the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
 
 PASS:
-No exact-item guarantee and no unknown hazard reveal.
-
-### REL-Q-v28-16 — EXPEDITION CERT COVERAGE
-
-With exactly 1 distinct known Hazard:
-- at least 1 generated ORDER offer Counters it.
-
-With 2+ distinct known Hazards:
-- exactly 2 distinct known Hazard keys are selected for the guarantee
-- 2 distinct offer slots are guaranteed, one against each selected key
-- one multi-Counter Item slot cannot satisfy both guarantee slots
-- ordinary total offer count is preserved
-- full Reroll preserves the guarantee
-- no unknown Hazard is revealed
+No ORDER offer guarantee and no unknown hazard reveal.
 
 ### REL-Q34 — EXPEDITION BUILD CANONICAL HAZARDS
 SETUP:
-Use 원정 위험 게시판 / 원정 도시락 코너 / 길드24 원정전문점 인증 across all Families.
+Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.
 
 EXPECT:
 - only the 9 canonical Hazards drive Hazard-counter filtering
@@ -595,16 +595,13 @@ EXPECT:
 PASS:
 Expedition Relics match the current Dungeon×Item model.
 
-### REL-Q77 — EXPEDITION SHELF CATEGORY MIGRATION
+### REL-Q77 — FIELD MAINTENANCE (야전 정비대)
 
-`긴급보급 선반` targets exactly:
-```text
-Potion / Field Gear / Insurance
-```
+`야전 정비대` multiplies the Hazard Counter values of carried Field Gear by 1.40.
 
 PASS:
-- no Medical category dependency
-- no retired Mana/Special proxy for Potion
+- Potion / Food / Drink / Insurance Counter values are unchanged
+- no ORDER offer weight or offer quantity effect
 
 ## FRESH SUPPORTS
 
@@ -624,8 +621,8 @@ Shelf-life logic stable.
 ### REL-Q72 — LARGE FRIDGE
 
 EXPECT:
-- base price 200G
-- Food/Drink shelf life +1
+- base price 120G
+- Food/Drink shelf life +2
 - existing non-expired eligible stock extends once on acquisition
 - future stock receives extension
 - no Stat/Supply multiplier
@@ -634,13 +631,15 @@ EXPECT:
 ### REL-Q-v28-2 — LARGE FRIDGE PRICE
 
 Expected:
-    대형 냉장고 = 200G
+    대형 냉장고 = 120G
 
-PASS only when the active implementation uses 200G.
+PASS only when the active implementation uses 120G.
 
 ### REL-Q73 — INSTANT FOOD CORNER
 
 PASS:
+- native Core-Stat +25%
+- from next Day operating cost + overheadBase × 0.10, never compounded
 - Supply unchanged
 - Hazard Counter unchanged
 - Insurance unchanged
@@ -648,21 +647,20 @@ PASS:
 
 ### REL-Q74 — EXPEDITION MEAL CORNER
 
-When Food/Drink explicit Counter matches actual current destination Hazard:
-- matching Counter +25%
-
-When active Supply Burden exists and Item supplies >0:
-- positive native Core Stat +20%
+Per Food/Drink Item in the Bag:
+- Supply +2
+- flat +4 on every Hazard of the Gate the adventurer actually enters
 
 PASS:
-- Supply itself unchanged
-- no bonus when conditions are false
-- no universal Counter solution
+- no native Core-Stat bonus
+- no matching-Counter multiplier
+- a non-Food/Drink Item takes nothing
 
 ### REL-Q75 — 24H FRESH SYSTEM
 
 EXPECT:
-- Food/Drink shelf life +2
+- no shelf-life effect and no operating-cost effect
+- Food/Drink ORDER price x1.25
 - Supply unchanged
 - Counter unchanged
 
@@ -677,20 +675,17 @@ PASS:
 ### REL-Q-v28-13 — FRESH NATIVE-STAT REBASELINE
 
 Expected:
-- 즉석식품 코너 native Core-Stat +30%
+- 즉석식품 코너 native Core-Stat +25%
 - 24시간 신선체계 native Core-Stat +50%
-- 원정 도시락 코너 active-Supply native Core-Stat +20%
-- 원정 도시락 코너 matching explicit Hazard Counter remains +25%
+- 원정 도시락 코너 adds no native Core-Stat bonus
 
 Composition remains base-additive.
 
 Therefore:
-- kitchen + fresh24 => ×1.80 native positive Stat
-- kitchen + fresh24 + active-Supply expeditionMeal => ×2.00
+- kitchen + fresh24 => ×1.75 native positive Stat
 
 FAIL:
 - any alternate native-Stat percentages are active
-- matching Hazard Counter is accidentally reduced from +25%
 - Supply itself is multiplied by these native-Stat percentages
 
 ### REL-Q31 — FRESH CORE-EFFECT SCOPE
@@ -715,17 +710,17 @@ SETUP:
 Own 냉장 유통 계약 and generate Order offers repeatedly.
 
 EXPECT:
-Eligibility targets Uncommon+ Food/Drink and shelf-life relief as defined in RELIC.
+Eligibility targets Uncommon+ Food/Drink, purchase intent +16%p and shelf-life relief as defined in RELIC.
 
 PASS:
 Effect has a meaningful multi-SKU pool and is not dependent on one or two Rare items.
 
-### REL-Q76 — COLD DISTRIBUTION / DAWN DELIVERY CATEGORY
+### REL-Q76 — COLD DISTRIBUTION / DAWN RECOVERY CATEGORY
 
 PASS:
 - eligibility uses Food/Drink categories
 - no stale legacy `fresh` category dependency
-- their offer/shelf/bulk identities remain intact
+- their offer/shelf/recovery identities remain intact
 
 ### REL-Q-v28-9 — COLD DISTRIBUTION ACQUISITION
 
@@ -785,15 +780,14 @@ EXPECT:
 PASS:
 Customer remains a store-build choice rather than a pure workload multiplier.
 
-### REL-Q-v28-3 — ROOKIE BOARD
+### REL-Q-v28-3 — FIRST VISIT COUPON
 
-When a new adventurer is generated on a Day and the support is owned:
-- that new adventurer occupies one existing visitor slot
-- total visitor count is not increased by this rule
-- visitor selection uses only the current owner rule above
+On an adventurer's first-ever visit, with `첫 방문 쿠폰` owned:
+- NPC Wallet +30G on arrival
+- purchase intent +20%p during that visit
+- no visitor is added and no slot is seated
 
-When no new adventurer is generated:
-- no visitor is added
+A returning adventurer receives nothing.
 
 ### RELIC-Q-v27-VISITOR — BOARD / HUB
 
@@ -830,7 +824,8 @@ FAIL:
 #### composition
 
 PASS:
-- board, hub and the `wall` Decoration may all be held at once and each applies in its own place
+- board, hub, 단체 주문 창구 and the `wall` Decoration may all be held at once and each applies in its own place
+- 단체 주문 창구 makes its own 20% Morning roll for +1 visitor
 - holding the `wall` Decoration does not mark board owned, remove it from a purchase window,
   or consume a Relic slot
 - the board floor resolves on the base roll before the probabilistic additions
@@ -846,7 +841,7 @@ Expected mean before ordinary availability caps:
     +0.75 visitor / applicable Day
 
 Also:
-- Price remains 700G
+- Price 490G
 - operating modifier remains overheadBase +10%
 - outcomes are mutually exclusive
 
@@ -858,8 +853,7 @@ Own `발주 교환권`, start a fresh Day, and use the canonical Full-offer Rero
 
 EXPECT:
 - first Full-offer Reroll costs 0G
-- free use consumes the first daily Reroll step
-- next same-Day Reroll uses the next normal cost step
+- next same-Day Reroll uses the first normal cost step
 - next Day restores the free first Reroll
 - regenerated offers preserve eligibility / coverage / rarity rules
 - Reroll does not advance pity
@@ -871,9 +865,8 @@ The Relic provides a clear daily Utility benefit without single-slot swap behavi
 
 With `발주 교환권`:
 - first canonical Full-offer Reroll of the Day = 0G
-- free use consumes the first daily Reroll step
-- next same-Day Reroll uses the second current `ECONOMY_ORDER` step
-- under the current economy this means `0 -> 100 -> 200 -> 400 ...`
+- next same-Day Reroll uses the first current `ECONOMY_ORDER` step
+- under the current economy this means `0 -> 50 -> 100 -> 200 ...`
 - next Day restores the free first use
 - pity is not advanced by Reroll
 
@@ -883,7 +876,7 @@ No stale `0 -> 60 -> 120` curve survives.
 ### REL-Q-v28-8 — OPERATING EFFICIENCY
 
 Expected:
-    Price 260G
+    Price 180G
     from next Day basic operating cost -30G
 
 This is a Production baseline, not harness-only.
@@ -912,15 +905,14 @@ Build discovery comes from effects, not Director taxonomy labels.
 ### REL-Q-v28-10 — COPY TRUTH
 
 Expected:
-- 긴급보급 선반 says Potion / Field Gear / Insurance
 - 길드 전광판 explains base 3 -> 4 floor, not final minimum visitors 4
-- 발주 교환권 sequence after free use starts at 100
+- 발주 교환권 sequence after free use starts at 50
 - SLOTH active copy says 점포지원
 
 ### REL-Q-v28-12 — STAMP COPY
 
 Expected:
-    유료 구매의 단골도 증가량 +50%. 생환으로 얻는 단골도에는 적용되지 않는다.
+    유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
 
 FAIL:
 - active copy mentions 무료 보급
