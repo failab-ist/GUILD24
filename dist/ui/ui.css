@@ -892,18 +892,22 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    made, sat muddy below it: the energy rank inverted. It is Secondary now - the same register
    key, in a quiet plane on a crisp edge with a shorter drop - and the pop went back to the
    prices. It still presses; it just no longer outranks them. */
+/* BATCH 2B. Built the way the register keys are - one face plane, a milled edge, a shaded foot
+   and one hard depth the press closes - but a step quieter at every one of them: a darker plane,
+   a shorter drop and no mode colour, so an open price decision still leads the eye. */
 .p-sale .dock .stamp{margin-left:auto;min-height:54px;min-width:158px;
  font:600 18px/1 var(--ui);letter-spacing:.04em;background:#3c3122;color:#e7d9b8;
- box-shadow:inset 0 0 0 2px #6a5934,3px 3px 0 #00000080}
+ box-shadow:inset 0 2px 0 #5c4b2c,inset 0 -2px 0 #241c11,3px 3px 0 #00000099}
 .p-sale .dock .stamp:hover{background:#473a29;color:#f2e6c9}
 .p-sale .dock .stamp:active{transform:translate(2px,2px);background:#342a1d;
- box-shadow:inset 0 0 0 2px #59492b,1px 1px 0 #00000080}
+ box-shadow:inset 0 2px 0 #463823,inset 0 -2px 0 #1f180e,1px 1px 0 #00000099}
 .pips{display:flex;gap:3px;align-items:center}
 .pips i{width:9px;height:9px;background:#00000073;box-shadow:inset 1px 1px 0 #00000080;display:block}
 .pips i.on{background:var(--gold)}
 .pips i.now{background:var(--sign-lit)}
 .dest-plate{position:relative;display:grid;grid-template-columns:38px 1fr;gap:10px;margin:0 0 12px;padding:11px 12px;
- background:#00000047;box-shadow:inset 0 3px 0 var(--fam,var(--gold)),inset -2px -2px 0 #00000047}
+ background:#0d0904a6;box-shadow:inset 0 3px 0 var(--fam,var(--gold)),inset 3px 0 0 #000000a6,
+            inset -2px -2px 0 #ffffff12}
 .dest-plate .mark{background:#00000047;padding:2px}
 .dest-plate label{font:600 11px/1 var(--ui);letter-spacing:.16em;color:#9c8d70;display:block;margin-bottom:4px}
 .dest-plate h3{font:500 17px/1.3 var(--f-plate);-webkit-font-smoothing:none;margin-bottom:6px;color:#f6ecd3}
@@ -916,7 +920,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .dest-plate .hazards .press{color:#a2947c}
 .dest-plate .hazards em{font-size:var(--t-sm)}
 .detail-stats{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;margin:0 0 14px;padding:6px 12px 8px;
- background:#00000038;box-shadow:inset 2px 2px 0 #00000047,inset -2px -2px 0 #ffffff0f}
+ background:#0d0904a6;box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12}
 .detail-stat{display:flex;align-items:baseline;gap:8px;padding:5px 0;box-shadow:inset 0 -1px 0 #ffffff14}
 /* A Stat whose change has a provable source is the control itself: the whole cell opens the
    reason. The row keeps its exact shape so the two-column grid does not move, and the marker
@@ -950,8 +954,13 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .kit .slots i.full{background:#3a2c1d;box-shadow:inset 2px 2px 0 #ffffff1f,inset 0 0 0 1px var(--gold)}
 .kit .slots i.free{box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff29}
 /* the readiness readout carries more weight than the rows above it: it is what the sale turns on */
-.readout{position:relative;margin:0 0 4px;padding:11px 12px;background:#120d07;
- box-shadow:inset 0 0 0 2px #6b502959,inset 2px 2px 0 #ffffff0f,3px 3px 0 #00000059}
+/* BATCH 2B §SALE CUSTOMER / DOSSIER. Every customer-state surface carried its own outline, so
+   the counter read as a stack of independent cards under the figure. They are counter-mounted
+   information faces now: one recessed plane each, cut in on the top and left and lipped on the
+   bottom and right, with no frame of their own. Spacing and material separate them - nothing
+   is boxed, no label gains an icon, and the portrait is untouched. */
+.readout{position:relative;margin:0 0 4px;padding:11px 12px;background:#0d0904a6;
+ box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12}
 .readout .top{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px;font:500 13px/1.4 var(--ui)}
 .readout .top span{color:#9c8d70}
 .readout .top b{font:500 19px/1 var(--f-led);color:var(--gold);margin-left:7px}
@@ -1006,7 +1015,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the rows ran together and read as a paragraph. Each Hazard is now its own banded row with the
    verdict on the right, so the eye can take one at a time, and the block is set apart from the
    two forecasts above it rather than continuing out of them. */
-.since{margin:0 0 14px;padding:10px 12px;background:#00000038;box-shadow:inset 3px 0 0 var(--gold);font:400 13px/1.5 var(--ui)}
+/* BATCH 2B. The last-visit record was marked by a gold full-height left inset stripe - the same
+   coloured bar the shelf's selection used, on a surface where it means nothing at all. It is a
+   counter-mounted strip now: recessed into the wood, closed by the counter's own brass edge. */
+.since{margin:0 0 14px;padding:10px 12px;background:#0d0904a6;
+ box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12,inset 0 -2px 0 #6b502973;
+ font:400 13px/1.5 var(--ui)}
 .since b{color:var(--gold);display:block;font-weight:600}
 .since p{color:#a2947c;margin-top:2px}
 /* ---- layer 3 : what to sell — the display case and the register ---------------- */
@@ -1036,16 +1050,34 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .good .price{text-align:right;white-space:nowrap;display:grid;gap:1px}
 .good .price b{font:500 16px/1 var(--f-led);color:var(--gold)}
 .good .price span{font:400 12px/1 var(--ui);color:#8d8067}
-.good.open{background:#ffffff0f;box-shadow:inset 0 -2px 0 var(--gold),inset 3px 0 0 var(--gold)}
+/* BATCH 2B §SALE SHELF / GOODS. The open product was marked by a gold full-height left inset
+   stripe - the coloured status bar Presentation QA forbids as a selection shortcut, confirmed
+   on the real screen. The chosen product is pressed into the counter instead: the whole row is
+   a seat, and its bottom edge is the lip the register drawer hangs from, so the selection and
+   the drawer read as one piece of furniture. No vertical stripe replaces it. */
+.good.open{background:#00000066;box-shadow:inset 0 4px 0 #0000008c,inset 0 -3px 0 var(--gold)}
 /* the register drawer: it opens under the chosen good and the three keys are the decision */
-.tillpanel{position:relative;margin:0 -11px 8px;padding:13px 13px 10px;background:#0f0b06;
- box-shadow:inset 0 4px 0 #000000a6,inset 0 -3px 0 var(--gold)}
-.tillpanel .forwho{font:500 14px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f0e2c2;margin-bottom:9px;
- padding-bottom:7px;box-shadow:inset 0 -2px 0 #6b502973}
+/* BATCH 2B §SALE REGISTER DRAWER. It was a dark rectangle holding another dark rectangle -
+   a second card under the product rather than the machine the sale is rung up on. It is one
+   recessed well now: the floor sits below the counter on all three cut edges, and the gold lip
+   at its foot closes it. Everything the decision needs is inside that one housing. */
+.tillpanel{position:relative;margin:0 -11px 8px;padding:0 13px 10px;background:#15100a;
+ box-shadow:inset 0 5px 0 #000000b3,inset 5px 0 0 #00000099,inset -5px 0 0 #00000099,
+            inset 0 -3px 0 var(--gold)}
+/* the drawer's own header rail: the same brass the shelf head is made of, screwed across the
+   head of the well, so the customer it is ringing up is named on the machine itself */
+.tillpanel .forwho{font:500 14px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f6e9ca;
+ margin:0 -13px 11px;padding:9px 13px 8px;
+ background:linear-gradient(180deg,#6b5029 0,#412f17 100%);
+ box-shadow:inset 0 2px 0 #ffffff29,inset 0 -3px 0 #00000099,0 3px 0 #00000059}
 .tillpanel h4{font:600 11px/1 var(--ui);letter-spacing:.14em;color:#8d8067;margin-bottom:8px}
 .tillpanel .effects{margin-bottom:12px}
+/* BATCH 2B. The forecast face is read INSIDE the drawer, so it is engraved on the well's floor
+   rather than given a well of its own: a housing inside a housing was the box-in-box the card
+   stack was made of. */
+.tillpanel .readout{background:none;box-shadow:inset 0 1px 0 #ffffff14,inset 0 -1px 0 #00000099}
 .tills{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;position:sticky;bottom:0;padding:12px 0 8px;
- background:linear-gradient(0deg,#0f0b06 72%,#0f0b0600)}
+ background:linear-gradient(0deg,#15100a 72%,#15100a00)}
 /* Three register keys, one per price mode. UI_UX §GLOBAL PRESENTATION §15: this is where the
    SALE decision is actually made, so it is where the pop belongs, and the three must read as one
    game control cluster of peer choices - §1's stated exception, equal strength across options
@@ -1059,18 +1091,25 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    a press that collapses it. The key's plane and its drop do the work - USER, 2026-09-22: the
    keys take no border, so none is added, and the mode's Semantic colour (할인 / 정가 / 바가지)
    stays on the key face where it already read. No key is promoted above its peers. */
+/* BATCH 2B §SALE PRICE KEYS. Same rule for all three, so the geometry, the depth and the type
+   rank stay peers and the mode's Semantic colour is the only thing that differs. The face is one
+   plane with the value difference outside it - a milled cap edge, a shaded foot and one hard
+   external depth - so the cluster reads as a register rather than three flat plates. */
 .tills button{display:grid;gap:4px;justify-items:center;padding:10px 2px;min-height:76px;
- background:#463521;color:#f4e9d0;box-shadow:4px 4px 0 #00000080}
+ background:#5a4529;color:#f7edd6;
+ box-shadow:inset 0 2px 0 #82673b,inset 0 -3px 0 #2f2410,4px 4px 0 #000000a6}
 /* UI_UX §15 peer choices. Source gives the 정가 key `class="stamp"`, so it inherits the flow
    control's notch and hard offset while 할인 and 바가지 do not - one of three keys being
    compared side by side, quietly promoted by a silhouette. The colour never reaches it (this
    rule wins on specificity) but the shape did, so the shape is taken back here. */
 .tills .stamp{clip-path:none;filter:none;color:#f4e9d0;letter-spacing:normal;font-weight:400}
-.tills button:not([disabled]):hover{background:#52412a}
-.tills button:not([disabled]):active{transform:translate(3px,3px);box-shadow:1px 1px 0 #00000080}
+/* BATCH 2B §SALE PRICE KEYS */.tills button:not([disabled]):hover{background:#68512f}
+.tills button:not([disabled]):active{transform:translate(4px,4px);background:#4b3921;
+ box-shadow:inset 0 2px 0 #5d4926,inset 0 -3px 0 #281e0d,0 0 0 #000000a6}
 /* a refused or unaffordable price is a dead key: it sits below the till surface, carries no
    depth and nothing to press, and its own `small` already says why. No whole-element fade. */
-.tills button[disabled]{background:#1c150e;color:#8a7d66;opacity:1;transform:none;box-shadow:none}
+.tills button[disabled]{background:#17110a;color:#8a7d66;opacity:1;transform:none;
+ box-shadow:inset 0 3px 0 #000000a6,inset 0 -2px 0 #ffffff0d}
 .tills em{font:500 14px/1 var(--f-led);font-style:normal;color:var(--key,#a2947c)}
 .tills strong{font:500 22px/1 var(--f-led);color:#f6ecd3}
 .tills small{font:400 12px/1.3 var(--ui);color:#b3a688}

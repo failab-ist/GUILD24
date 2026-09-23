@@ -29,8 +29,12 @@
  display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:0 0 6px 8px}
 /* The destination keeps the column's full width: narrowing it to share a row with the deck
    wraps the Hazard rows and costs more height than the deck ever took. */
+/* BATCH 2B §SALE CUSTOMER / DOSSIER: the compact state was a 1px-outlined card beside the
+   figure. Same face, mounted on the counter like the rest of the dossier - recessed, lipped,
+   unframed. */
 .front-side .kit{display:flex;flex-wrap:wrap;align-items:flex-start;gap:9px;margin:0;padding:7px;
- background:#100b0799;box-shadow:inset 0 0 0 1px #ffffff14;font-size:12px;line-height:1.35}
+ background:#0d0904bf;box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12;
+ font-size:12px;line-height:1.35}
 .front-side .vitals{display:grid;gap:3px;flex:1 1 auto;min-width:0}
 .front-side .vitals>span{min-width:0;overflow-wrap:anywhere}
 /* SA-Q46 / UI_UX §SALE BAG COMPACT LAYOUT. The two slot boxes are always horizontal and never
