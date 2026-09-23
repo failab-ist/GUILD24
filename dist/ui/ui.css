@@ -231,9 +231,17 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* On SALE it rides the shelf's own header rather than taking a row: a row of its own pushed
    the first selectable product back under the fold, which is the thing UI-Q109 §8 exists to
    stop. Same control, same target, no height. */
+/* USER, 2026-09-23: this is reference state, so it keeps a plane of its own rather than becoming
+   body text - but a step quieter than it was. A shallow plate set INTO the shelf head: no lifted
+   edge, no external depth and no key face, so it reads below the 진열대 title while staying
+   plainly apart from ordinary copy. The pointer sharpens the ink; nothing moves. */
 .shelf-head .relic-ref{margin-left:0;align-self:center;min-height:30px;padding:5px 9px;
- background:#00000059;box-shadow:inset 0 0 0 1px #ffffff2e;color:#f0dfb4}
-.shelf-head .relic-ref b{color:#ffe9b0}
+ font-size:11px;letter-spacing:.02em;background:#00000066;color:#bda882;
+ box-shadow:inset 2px 2px 0 #00000080,inset -1px -1px 0 #ffffff14}
+.shelf-head .relic-ref b{font-size:12px;color:#d7b878}
+.shelf-head .relic-ref:hover{background:#00000066;color:#e2d0ab}
+.shelf-head .relic-ref:hover b{color:#ecc98a}
+.shelf-head .relic-ref:active{transform:none}
 .shelf-head span{margin-left:auto}
 .relic-ref{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:7px 11px;
  border:0;border-radius:0;cursor:pointer;
@@ -1078,9 +1086,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* BATCH 2B §SALE SHELF / GOODS. The open product was marked by a gold full-height left inset
    stripe - the coloured status bar Presentation QA forbids as a selection shortcut, confirmed
    on the real screen. The chosen product is pressed into the counter instead: the whole row is
-   a seat, and its bottom edge is the lip the register drawer hangs from, so the selection and
-   the drawer read as one piece of furniture. No vertical stripe replaces it. */
-.good.open{background:#00000066;box-shadow:inset 0 4px 0 #0000008c,inset 0 -3px 0 var(--gold)}
+   a seat, and the register drawer opens directly beneath it, so the selection and the machine
+   read as one piece of furniture. No vertical stripe replaces it.
+
+   USER, 2026-09-23: the gold seam under the row went too - SALE's gold accent does not need
+   repeating to say which product is chosen. The row is read by its own recessed state and by
+   the drawer that opens under it; between the two there is material and spacing, and no
+   emphasis line at all. */
+.good.open{background:#00000066;box-shadow:inset 0 4px 0 #0000008c}
 /* the register drawer: it opens under the chosen good and the three keys are the decision */
 /* BATCH 2B §SALE REGISTER DRAWER. It was a dark rectangle holding another dark rectangle -
    a second card under the product rather than the machine the sale is rung up on. It is one
