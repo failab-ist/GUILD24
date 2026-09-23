@@ -2685,6 +2685,51 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 3px #8a2f26,inset 0 0 0 4px #e9dfc4}
 .modal-footer .approve:focus-visible{outline:3px solid #8a2f26;outline-offset:3px}
 
+/* =====================================================================
+   BATCH 4A — THE MAJOR BEATS AS ONE INVESTIGATION RECORD (D5 / D15 / D25).
+   REMOVE -> REUSE -> MERGE, nothing added but ink:
+   - the art lost its grey mat and hairline: the Boss stands ON the record, grounded by one ink
+     floor rule, instead of being a portrait pasted into a card. Exact height caps unchanged.
+   - D5 / D15: the name registers first, one step larger.
+   - D15: the Trait is the payload - a small 특성 label, then the name in the record's plate
+     face, its explanation attached under one ruled entry.
+   - D25: the disclosure line leads in ink, and the two Families are two ruled sections of the
+     same record (their colour kept as the entry rule) instead of two tinted, ringed cards.
+   No FINAL domain art, no seal, no new frame. D10 / D20 untouched (.boss-id, compact).
+   ===================================================================== */
+.boss-reveal .boss-art{background:none;padding:0 0 5px;box-shadow:inset 0 -2px 0 #2c241859}
+.boss-reveal.d5 .boss-name,.boss-reveal.d15 .boss-name{font-size:30px;line-height:1.15}
+.boss-reveal .trait{padding:2px 0 3px 14px;box-shadow:inset 3px 0 0 #7a281f}
+.boss-reveal .trait-name{margin:0 0 7px}
+.boss-reveal .trait-k{display:block;margin-bottom:4px;font:600 11px/1 var(--ui);letter-spacing:.18em;color:#8a7c60}
+.boss-reveal .trait-sep{display:none}
+.boss-reveal .trait-name b{display:block;font:500 23px/1.25 var(--f-plate);-webkit-font-smoothing:none;color:var(--ink)}
+.boss-reveal.final .lede{font:600 16px/1.45 var(--ui);color:var(--ink)}
+.boss-reveal.final .fams{gap:0;margin:0;box-shadow:inset 0 2px 0 var(--ink)}
+.boss-reveal.final .fam-card{padding:11px 0 11px 13px;background:none;box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
+.boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26),inset 0 1px 0 #2c241833}
+.boss-reveal.final .fam-card b{margin-bottom:7px;font-size:18px}
+/* the pressure each Hazard puts on the party is part of the disclosure, not a footnote */
+.boss-reveal.final .fam-card .hazards .press{font-size:14px;color:#5f5440}
+/* D5's owned line is the record's own note, not a tinted slip laid on it */
+.boss-reveal.d5 .flavor{background:none;padding:2px 0 2px 14px}
+@media (min-width:720px){
+ .boss-reveal.final .fams{column-gap:22px}
+ .boss-reveal.final .fam-card+.fam-card{box-shadow:inset 3px 0 0 var(--fam,#8a2f26)}
+}
+/* a desk gives the major records a document measure instead of the 460px utility sheet; the
+   compact D10 / D20 records keep theirs */
+@media (min-width:1024px){
+ .modal.doc.narrow:has(.boss-reveal.d5),.modal.doc.narrow:has(.boss-reveal.d15){max-width:580px}
+ .boss-reveal.d5 .boss-name,.boss-reveal.d15 .boss-name{font-size:34px}
+ .boss-reveal .trait-name b{font-size:26px}
+ .boss-reveal .trait-body p{font-size:16px}
+ .boss-reveal.final .lede{font-size:17px}
+ .boss-reveal.final .fam-card b{font-size:19px}
+ .boss-reveal.final .fam-card .hazards li{font-size:17px}
+ .boss-reveal.final .fam-card .hazards .press{font-size:15px}
+}
+
 /* The seal offer shares the window's one acquisition with the Relic candidates, so it
    reads as the alternative to them rather than as an extra thing to also take. */
 .seal-choice{margin-top:12px;padding:11px 13px;background:#00000047;box-shadow:inset 4px 0 0 #7a5fa8}

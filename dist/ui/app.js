@@ -1467,8 +1467,12 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
   return '<div class="boss-reveal d15">'+bossFiled()+'<p class="lede">'+E(c.d15.intro)+'</p>'
    +'<h3 class="boss-name">'+E(b.name)+'</h3>'
    +plate
-   +'<p class="trait-name">특성 — '+E(name)+'</p>'
-   +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div></div>';}
+   /* BATCH 4A: the Trait is D15's payload, so its name is set as the record's second subject
+      under a small 특성 label, with its explanation attached in the same ruled entry - one
+      entry, not a card. The line's text is unchanged; the dash only stops being visible
+      once the label sits on its own line. */
+   +'<div class="trait"><p class="trait-name"><span class="trait-k">특성</span><span class="trait-sep"> — </span><b>'+E(name)+'</b></p>'
+   +'<div class="trait-body">'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div></div></div>';}
  /* D10 / D20 are one-tap information beats: they open the question the next report answers and
     disclose nothing new about the Boss, so they carry the compact identity portrait rather than
     the major-beat art, and stay compact. Neither draws anything from the run stream. */
