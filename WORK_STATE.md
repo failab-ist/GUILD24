@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-23
-STATE: V2_8_SOURCE_ADOPTION_CLOSED
+STATE: V2_8_FINAL_FROZEN
 
 ## Current Integration Base
 
@@ -96,7 +96,24 @@ Do not combine unrelated fixes or begin Final Freeze inside a Remaining Adoption
 
 ## Final Integration / Freeze
 
-NOT STARTED.
+FROZEN — 2026-09-23, content HEAD `1362bf2` on `claude/guild24-v28-integration` (tree clean).
+
+- Canonical -> Source adoption audit: CLOSED (see Remaining Adoption Audit)
+- targeted regression: PASS - npm test 342; qa-final-prep 136, qa-boss-confirm 80, qa-final-end 64,
+  qa-final-bosses 63, qa-d0-flow 12, B4 harness clean
+- mobile/desktop runtime UX smoke: PASS - qa:visual 126 captures at 360-1280, byte-identical to the
+  pre-integration baseline; B3 END / ENDFAIL identical to the approved B3 captures
+- save/load invariants: PASS - npm test SAVE/LOAD, Final Lock reload, legacy Final save, reload
+  idempotence of the ended Run (qa-final-end)
+- Gameplay RNG invariants: PASS - npm test RNG guards; forecast / preview / confirm draw no RNG;
+  one Final Roll per resolution
+- remaining Balance Finding report: measurement only, no new BALANCE FINDING asserted - `npm run balance`
+  (300 seeds/cohort): D30 reach 0-12% and first-Run clear 0-5.7% across the policy bots; no approved numeric
+  target exists for these, they stay measurement-gated (SPEC_INDEX), and the Final Roll / Boss values are not
+  retuned to a clear rate (FINAL_EXPEDITION)
+- Pages deploy gate reproduced locally: npm test + npm run audit leave no diff
+
+Main merge / Pages deploy: NOT STARTED (pending User approval).
 
 Final Freeze begins only after:
 - remaining adoption audit is closed
