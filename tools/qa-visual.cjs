@@ -781,8 +781,17 @@ async function focusProbe(page){
  try{
   for(const width of WIDTHS){
    const desktop=isDesktop(width),height=heightFor(width);
+   /* The capture clock is frozen (see drive()) so BEFORE and AFTER render the same content.
+      anime's engine reads that same clock, so under the freeze an entry animation applies its
+      FROM value and never advances: `opacity:[0,1]` stays 0 for as long as the page lives, and
+      ORDER - whose whole body is one `.form` that enters that way - photographed as an empty
+      desk. The surface was there, 1818px of it, at opacity 0. That is a harness artefact, not
+      the shipped behaviour: with a live clock the same entry plays out and ends visible.
+      So the capture asks for reduced motion, which is a state the build already supports -
+      motionOK() stands every beat down and each surface renders at its resting CSS values.
+      A screenshot cannot show motion anyway, and this makes it show the screen instead. */
    const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:desktop?1:2,
-    isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR'});
+    isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    const page=await context.newPage();
    page.on('pageerror',e=>{console.error(`  page error @${width}: ${e.message}`);failed++;});
    await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
