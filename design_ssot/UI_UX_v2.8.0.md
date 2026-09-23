@@ -1,19 +1,74 @@
 # UI_UX
 
 DOC=UI_UX
-OWNER=ui,ux,mobile,tutorial,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
+OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
 DOC_VERSION=2.8.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
-BASE_DOCUMENT=UI_UX_v2.7.0.md
-PATCH_TYPE=PROJECT_WIDE_CORE_READABILITY
+CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
+CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
 
-## INHERITANCE
+## ROLE
 
-All unchanged v2.7 ORDER/SALE/NIGHT/Final/mobile/typography/tutorial/visual rules inherit
-UI_UX_v2.7.0.md.
+UI/UX =
+Player가 매 Phase의 핵심 질문에
+빠르게 집중하고 판단하게 만드는 Presentation Layer.
 
-The Decoration/Store-Capital rules previously frozen in this file remain active.
+UI는 정보를 많이 보여주는 것이 목적이 아니다.
+
+우선순위:
+1. 현재 해야 할 판단
+2. 판단에 필요한 정보
+3. 결과/피드백
+4. Secondary reference
+
+## KEY
+
+visualGoal=gameUI, not dashboard
+brandAccent=GUILD24 green
+fullScreenGreenDashboard=NO
+
+phaseIdentity:
+MORNING=situation
+ORDER=management
+SALE=store+customer
+NIGHT=result
+CLOSING=economics
+
+mobile:
+verticalStack=YES
+tinyFontFix=NO
+repeatTouchTarget≈44px
+
+tutorial=coachMark/spotlight
+inFlowTutorialBox=NO
+
+forecast:
+combat=[우세,접전,불리]
+hazard=[취약,불안,대응,충분]
+masterSafetyScore=NO
+expeditionExactProbability=NO
+nextDayTierProbability=EXACT
+eventReveal=MORNING_FOCUSED_OPENING
+orderReroll=FULL_OFFER
+
+## CORE UI PRINCIPLE
+
+```text
+산수는 대신할 수 있다.
+판단은 대신하지 않는다.
+```
+
+UI may calculate deterministic public arithmetic.
+UI may not turn uncertain preparation into a system-authored answer.
+
+Do not add:
+- recommended Item badge
+- `오늘 강함` / fit score
+- automatic best-fit Item ordering
+- future-customer importance hint
+- uncommitted-Item derived Forecast answer
+- system-authored failure diagnosis without proven runtime causality
 
 ## RETIRED ACTIVE UI
 
@@ -26,39 +81,414 @@ Do not expose:
 
 Historical archive policy -> META_v2.8.0.md.
 
-## STORE MANAGEMENT / DECORATION
+## VISUAL DIRECTION
 
-Reuse the existing Codex/management space.
+GUILD24의 브랜드 Green은 유지 가능하지만
+전체 화면을 Green Card Dashboard처럼 만들지 않는다.
 
-Show:
-- current Store Capital
-- four fixed Slots
-- owned/unowned
-- purchase cost
-- exact current effect
-- equipped Decoration
+Avoid:
+- SaaS dashboard composition
+- rounded card inside rounded card
+- 모든 영역의 동일한 초록색 톤
+- 과도한 thin border
+- 반복 badge/chip/header
+- 긴 stacked report page
+- 설명문이 Gameplay보다 더 눈에 띄는 구조
 
-Purchase requires explicit confirmation and spends once.
-Loadout is editable only outside an active Run and frozen after Run start.
+Target:
+- 게임 HUD/게임 오브젝트 중심
+- 명확한 Primary Action
+- Phase별 다른 정보 위계
+- 여백과 큰 덩어리 중심의 Composition
+- Store/NPC/Item 같은 게임 대상이 Container보다 우선
 
-On a pre-Run/foundation store-management screen, an explicit way back to the new-Run preparation
-screen must exist. Mobile system/back navigation must not strand the Player on a blank state.
+Reference를 사용할 때:
+asset/color를 복사하는 것이 아니라
+information hierarchy / HUD / object focus / space usage를 참고한다.
 
-Live store renders equipped Decorations at fixed store locations.
-No free-placement editor / levels / rarity ladder / random Decoration shop is added.
+Perfect commercial art는 Prototype 필수 조건이 아니다.
+구조/위계가 AI-generated dashboard처럼 보이지 않는 것이 우선.
 
-## MOBILE SALE DENSITY
+## VISUAL MATERIAL — ANTI-GENERIC UI PASS
 
-Mobile:
-- remove the decorative waiting/next-customer card/fan
-- keep queue progress/count in the bottom Dock only
-- use recovered space for current-customer state and decision information
+Goal: preserve existing GUILD24 world/material strengths while removing generic SaaS/AI-template grammar.
 
-Desktop may retain richer simultaneous queue presentation.
+Keep/reinforce:
+- Morning store/board/room
+- Order paper/form material
+- Sale character-centered asymmetry
+- Night slate/dark material
+- Closing receipt/till-roll
+- wood / paper / metal / brass
 
-Do not remove the actual queue count.
+Do not create a new UI framework.
 
-## CURRENT CUSTOMER STATE
+## STRONG GREEN SEMANTIC
+
+Strong GUILD24 Sign Green is reserved for:
+
+```text
+영업 시작
+```
+
+Do not use Strong Green as the repeated primary treatment for:
+- 발주 확정
+- Relic purchase
+- SALE progress/finalize
+- NIGHT next
+- CLOSING next day
+- save/export
+
+Material direction:
+
+| Action | Material direction |
+|---|---|
+| 영업 시작 | Strong Sign Green |
+| 발주 확정 | Brass / Paper Transaction |
+| 점포지원 구매 | Metal / Brass |
+| SALE 진행 | Dark Wood |
+| NIGHT 다음 | Slate / Dark Steel |
+| CLOSING 다음 날 | Dark Register / Steel + restrained Brass |
+| Utility | Steel |
+| Destructive | Muted Red |
+
+## TYPOGRAPHY — EXACT PAIR
+
+```text
+ATMOSPHERE = Mulmaru / 물마루
+INFORMATION = Wanted Sans
+```
+
+Do not add a third font family, icon font, or theme-font system.
+
+### Mulmaru
+Use for:
+- DAY / world signage
+- short phase/display headings
+- atmospheric labels
+- fixed-width diegetic/numeric role where Mulmaru Mono is actually needed
+
+Do not use for long body copy.
+Prefer size/spacing/material hierarchy over fake bold.
+
+### Wanted Sans
+Use for:
+- body
+- prices
+- Stats / Item effects
+- Wallet / Gold / counts
+- utility text
+- buttons
+- long Korean information
+
+Vendor only required weights.
+
+## PRESENTATION POLISH ROUTING
+
+Presentation construction / asset / ornament / visual-review system:
+- PRESENTATION_SYSTEM_v2.8.0.md
+
+Closed Presentation Batches (surface detail, routed by SPEC_INDEX_v2.8.0.md):
+- PRESENTATION_POLISH_BATCH1_v2.8.0.md
+- PRESENTATION_POLISH_BATCH2_v2.8.0.md
+- PRESENTATION_POLISH_BATCH3_v2.8.0.md
+- PRESENTATION_POLISH_BATCH4_v2.8.0.md
+- PRESENTATION_POLISH_BATCH5_v2.8.0.md
+
+Detailed later-phase / audio Presentation contracts:
+- PRESENTATION_POLISH_v2.8.0.md
+
+UI_UX_v2.8.0.md remains authoritative for surrounding UI / UX / mobile / tutorial / semantic delta /
+popover / Store Management / NIGHT layout rules that remain in this file.
+
+## PHASE IDENTITY
+
+각 Phase는 다른 질문을 가진다.
+
+## MORNING
+
+question=`오늘 어떤 날인가?`
+
+Primary content:
+- 방문 예상
+- 열린 Gate
+- Known Hazard
+- Event
+
+Morning은 상황 읽기 화면.
+
+Event가 발생한 날:
+1. Event Focused Reveal을 Gate Detail보다 먼저 보여준다.
+2. 확인 후 Event가 반영된 Morning Situation을 보여준다.
+3. 별도의 EVENT Phase는 만들지 않는다.
+
+Authoritative Event timing/effect:
+-> EVENT_v2.8.0.md
+
+Do not:
+- Order controls 대량 노출
+- Sale controls 노출
+- Closing 숫자 반복
+
+Store scene은 사용할 수 있으나
+상황 정보보다 방해되지 않게 한다.
+
+### MORNING — SUPPLY DELTA
+
+Keep the existing Morning Board structure.
+Replace qualitative Supply-burden wording with exact public requirement:
+
+```text
+필요 보급 0
+필요 보급 3
+필요 보급 5
+```
+
+Do not add explanatory recommendation prose or new Supply qualitative labels.
+
+### MORNING — NEXT-DAY GATE FORECAST — REQUIRED
+
+Before ORDER, Morning must expose both next-day Gate quantity pressure and Tier difficulty pressure.
+
+Required information:
+
+```text
+내일 전망
+
+게이트 수
+1개 xx% · 2개 xx% · 3개 xx%
+
+게이트 위험도
+T1 xx% · T2 xx% · T3 xx%
+```
+
+If next-day Gate count is deterministic, show the fixed result instead of a fake distribution:
+
+```text
+게이트 수
+2개 확정
+```
+
+Rules:
+- Gate-count probability/fixed-count truth follows `DUNGEON_HAZARD_v2.8.0.md`
+- Tier probability truth follows `DUNGEON_HAZARD_v2.8.0.md`
+- current-day Gate/Hazard remains the primary preparation information
+- next-day forecast is a secondary future signal
+- do not reveal next-day Family / exact Gate composition / Hazard set
+- do not reveal future customer identity / destination
+- do not add recommended Item/category/quantity prose
+- ORDER may repeat the same forecast compactly; it must not generate a second value
+
+Design intent:
+
+```text
+내일 얼마나 많이, 얼마나 위험한지는 안다.
+정확히 무엇이 필요한지는 모른다.
+```
+
+### DEEP EXPEDITION MORNING
+
+Actual Deep Expedition Day:
+- no Normal Event reveal
+- Deep Expedition is the special Morning operational beat
+- existing Morning -> Order flow remains
+- no new permanent Phase
+
+Before Order, Player can identify:
+- `심층원정` available today
+- base Gate / Family / Tier / known Hazard
+- sponsorship cost exists
+- NPC gets additional Growth / Wallet on success
+- participation optional
+
+## ORDER
+
+question=`무엇을 준비할까?`
+
+Order는 관리 화면.
+
+Store scene:
+REMOVE from Order main composition.
+
+Recommended hierarchy:
+1. `DAY X · 본사 발주`
+2. persistent funds summary
+3. compact current-day Gate / known Hazard reference
+4. compact next-day Tier forecast (secondary)
+5. offer list + quantity (base=6; authoritative modifiers may increase count)
+6. Full-offer reroll + current cost/state
+7. sticky confirm
+
+Funds summary example:
+`보유 1,200G | 선택 280G | 발주 후 920G`
+
+Offer card:
+compact
+avoid excessive height
+
+Quantity controls:
+repeat action touch targets≈44px
+
+Primary action:
+sticky bottom `발주 XXXG · 발주 확정`
+
+Avoid:
+Morning 정보의 불필요한 대량 반복
+오늘 Gate/Hazard 정보를 다시 확인하려고 다른 Phase로 왕복하게 만드는 Flow
+next-day forecast를 오늘 준비 정보보다 더 강하게 보이게 하는 구성
+상하 스크롤 왕복을 요구하는 구매 Flow
+
+ORDER decision information must be readable before commitment:
+- current Gold
+- selected order spend
+- Gold after order
+- **today expected operating cost**
+- warehouse used / remaining capacity
+- Item shelf life / expiry information
+- current-day Gate / known Hazard context
+- next-day T1/T2/T3 forecast as secondary information
+- current Reroll cost/state
+
+Flow is visibly separated:
+1. select quantity
+2. `발주 확정`
+3. Inventory updates, cart clears, ORDER remains
+4. optional Reroll / re-order
+5. separate `영업 시작`
+6. SALE
+
+The dock may not collapse `발주 확정` and `영업 시작` into one contextual button whose same action both commits and advances.
+
+### ORDER Reroll UX
+
+Reroll remains available with an unconfirmed cart.
+Using it:
+- clears only the unconfirmed cart
+- replaces the whole offer set
+- charges the current Reroll cost once
+- preserves already confirmed Inventory
+
+The UI must not require quantity reset to zero before Reroll.
+
+### ORDER Runtime continuity
+
+On mobile and desktop, preserve the current viewed product area and practical focus after:
+- quantity + / -
+- quantity returns to 0
+- order confirm
+- Reroll
+- re-confirm
+
+D30 Final ORDER follows the same continuity contract.
+
+### ORDER — ITEM INFORMATION HIERARCHY
+
+Do not add redundant role chips.
+Within an offer/item card, visual priority is:
+
+1. Item identity
+2. exact actual effect
+   - Core Stat
+   - Hazard Counter
+   - Supply
+   - explicit penalty
+3. economy / stock metadata
+4. quantity interaction
+
+Examples such as `속박 대응 +16` already communicate function; do not add a second `속박 전문` chip.
+No today-fit/recommended badge.
+
+### ORDER — WAREHOUSE DISCLOSURE
+
+Always-visible summary must keep capacity readable.
+Example:
+
+```text
+창고 4 / 18 · 4종
+```
+
+On mobile, the individual held-stock list may be collapsible.
+- default collapsed is allowed
+- open/closed state persists during the current ORDER session
+- used/remaining capacity is never hidden inside the collapsed detail
+
+## SALE
+
+question=`이 손님에게 무엇을, 얼마에 팔까?`
+
+Store scene:
+high visual priority
+
+Customer:
+one at a time
+
+NPC detail mobile order:
+1. portrait/name/job
+2. destination
+3. 2×2 stats
+4. traits
+5. condition/status
+6. bag/equipment
+7. locked/secondary info
+
+NPC inspection entry:
+portrait/sprite/name/card tap all acceptable
+
+Returning NPC:
+show a compact `since last visit` change/history layer before or alongside unchanged detail.
+Useful changes include when actually relevant:
+- level/stat growth
+- injury/recovery/condition change
+- notable previous expedition outcome
+- prior meaningful Item/callback history
+
+Full authoritative profile remains accessible.
+Do not hide important current Stats/Traits behind history.
+
+Item selection:
+all sellable inventory visible
+compact compare
+selected effect preview clear
+
+Price:
+50 / 100 / 150
+visually explicit and easy to switch
+
+Primary focus:
+NPC + selected Item + price decision
+
+High-frequency Sale flow:
+- keep inspect -> Item -> price -> purchase/refusal -> remaining-slot decision visually continuous
+- avoid unnecessary modal/page round trips
+- avoid redundant confirmation for routine actions
+- do not batch away sequential decisions merely to reduce clicks
+
+### SALE — DESKTOP AUTHORITY
+
+- Character / Portrait left
+- upper-right = Core Decision area
+- Bag visually/touch-wise enlarged
+- Forecast + Expected Destination in upper-right Core Decision area
+- NPC Wallet visible in the same decision hierarchy
+- duplicated lower destination / forecast removed
+
+Bag size change is presentation only; capacity does not change.
+
+### SALE — MOBILE AUTHORITY
+
+- compact Character/status top footprint
+- no artwork crop
+- enlarged Bag with no overlap/overflow
+- compact Expected Destination
+- Forecast in the current-decision flow after relevant prior-expedition information
+- core environment signal visible without tap
+- no duplicate environment/forecast blocks
+- ~44px-class repeat touch targets
+
+Same-Customer rerenders preserve scroll/focus.
+New-Customer transition may intentionally start at the top.
+
+### CURRENT CUSTOMER STATE
 
 Compact SALE state includes:
 - Injury state, without 부상 1 style numeric duplication
@@ -79,9 +509,308 @@ The global compact Help remains a separate reference surface under its current o
 Equipment text is omitted from this compact SALE header/state region.
 Equipment remains available in NPC detail and as proven Stat-source attribution.
 
-## SALE BAG COMPACT LAYOUT — EXACT
+### SALE STAT SOURCE UX
+
+- Stat 하단에 실제 적용된 **Source 이름만** 작게 표시 (유리: 초록, 불리: 빨강). 미적용 표시 안함.
+- NPC Detail 창: 실제 부상 효과, 현재 피로/적용 penalty, 남은 휴식일, 회복 방법 표시.
+
+### SALE — FOUR CORE STATS REMAIN PRIMARY INFORMATION
+
+Do not move 투력 / 강인함 / 기동 / 정신 behind a detail accordion merely to simplify the screen.
+Visible Stat growth is part of NPC progression feedback.
+
+When an actual source changes a Stat, keep the small actual source treatment.
+Calculation breakdown belongs in touch/click detail.
+
+### SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT
+
+The expedition outlook shown on the ordinary SALE decision surface is a **pre-supply snapshot**.
+
+Snapshot timing:
+
+```text
+customer SALE decision begins
+-> before any new Item is committed for this visit
+-> capture Combat Forecast / Hazard Readiness / 실패 시 사망 위험
+```
+
+Show:
+- qualitative Combat Forecast
+- qualitative Hazard Readiness for the known current Hazard state
+- exact 실패 시 사망 위험 %
+- existing Injury/Condition state that is already part of that snapshot
+
+Do not show:
+- exact expedition Success probability
+- exact hidden Hazard threshold/formula
+- exact Great Success probability
+
+The displayed 실패 시 사망 위험 % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.8.0.md`. It means the chance that an ordinary failed expedition escalates to Death; it is not the unconditional probability of Death across all expedition attempts.
+
+After any Item purchase commits during the same customer visit:
+- displayed Combat Forecast remains the original pre-supply snapshot
+- displayed Hazard Readiness remains the original pre-supply snapshot
+- displayed 실패 시 사망 위험 % remains the original pre-supply snapshot
+- do not replace them with post-commit `접전 -> 우세`, `불안 -> 충분`, or `12% -> 5%` answer feedback
+
+The underlying runtime preparation **does** change.
+Actual expedition Resolve uses the final committed Items / Supply / Fatigue / Condition state.
+
+Post-commit feedback should instead explain exact actual changes and their sources:
+- direct Item Stat / Counter / Supply
+- proven Supply Deficit relief
+- proven Fatigue recovery / penalty-band change
+- another explicitly owned Trait / Relic / Boss effect
+
+This keeps the UI informative without grading the Player's Item choice before the remaining-slot decision.
+
+#### Exact player-facing copy
+
+Header:
+
+```text
+보급 전 원정 전망
+```
+
+Failure-risk label:
+
+```text
+실패 시 사망 위험
+```
+
+Exact copy ownership -> `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY.
+
+### SALE — GATE VS ITEM INFORMATION
+
+Gate-side shows qualitative readiness:
+
+```text
+Hazard name
+Stat pressure
+충분 / 대응 / 불안 / 취약
+```
+
+Item-side shows exact ingredient values:
+
+```text
+Core Stat +N
+Hazard Counter +N
+Supply +N
+explicit penalty
+```
+
+Do not expose the Gate's exact Counter requirement.
+
+### SALE — DECISION-ONLY ITEM DETAIL
+
+The SALE customer decision surface does not show expandable sections that look strategically meaningful but only contain non-actionable flavor.
+
+Remove from SALE:
+
+```text
+이 손님에게 안 걸리는 효과
+상품 설명
+```
+
+when `상품 설명` is flavor-only.
+
+Keep directly readable:
+- exact Core Stat effect
+- exact Hazard Counter
+- exact Supply
+- explicit penalty
+- Insurance behavior when relevant
+- price / stock / affordability
+
+Flavor text may remain in Item data or another already-existing non-decision context.
+This rule does not require a new encyclopedia/detail screen.
+
+### SALE SELECTED-ITEM INFORMATION
+
+The selected-Item panel uses one primary heading:
+
+    판매 후 변화
+
+Direct Item changes and deterministic derived changes are rows under that heading.
+Do not stack analytical subgroup headings that increase height.
+
+Source/cause belongs in the existing anchored source popover.
+
+Conditional intrinsic Item functions that do not appear as an immediate numeric delta remain readable under
+\`특수 효과\`; do not call them \`이 손님에게는 지금 걸리지 않는 효과\`.
+
+Internal marker rows are never displayed.
+
+### SALE PERMANENT EXPLANATION
+
+The forecast/readiness/death explanation is on demand through the shared anchored popover.
+Do not keep a permanent explanatory paragraph under the readout.
+
+### SALE — UNCOMMITTED PREVIEW
+
+Follow `SALE_v2.8.0.md`.
+
+For an uncommitted selected Item, UI may show:
+- Item exact effect
+- selected price / affordability
+- deterministic Supply/Fatigue arithmetic
+
+Do not show hypothetical derived answer changes such as:
+- `접전 -> 우세`
+- `불안 -> 충분`
+- Great Success signal change
+
+After an actual purchase commits, the displayed pre-supply Forecast / Hazard Readiness / 실패 시 사망 위험 snapshot does not update. Exact proven value/effect changes may still be shown through the post-commit source-truth treatment below.
+
+### SALE — POST-COMMIT DELTA SOURCE TRUTH
+
+Do not update the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 after a committed purchase.
+Instead, show exact actual changed values/effects with truthful source attribution where useful.
+Do not make a derived preparation change look like a hidden direct Item effect.
+
+If delta text is shown:
+- every changed line must be an actual runtime change
+- each changed line must expose a readable source class when the cause is not the Item's direct listed effect
+- an Item directly changes only the channels listed in `ITEM_v2.8.0.md`
+- reducing an active **Supply Deficit** may legitimately improve effective 투력/강인함/기동/정신 and underlying Hazard preparation through the inherited unified Supply system
+- this must read as `보급 부족 완화` or equivalent system-source feedback, not as if the Item itself granted those four Stats or as a newly recalculated Hazard Readiness label
+- excess Supply that lowers current Fatigue may restore effective 기동/정신 when a Fatigue penalty band changes; this must read as `피로 완화` / Condition-derived feedback
+- do not expose the hidden Supply-deficit formula merely to explain the delta
+
+Current `집중 사탕` is the canonical clarity example:
+
+```text
+직접 효과 = 공포 대응 +10 / Supply 3
+```
+
+Therefore:
+- without a Supply Deficit change or Fatigue penalty-band change, it must not show a Core-Stat increase
+- if its Supply reduces an active Supply Deficit, all four effective Core Stats may rise as a **보급 부족 완화** result
+- if excess Supply also crosses a Fatigue penalty band, 기동/정신 may additionally recover as a **피로 완화** result
+
+A generic `판매 후 변화` block is acceptable only when direct Item effects and derived system effects are clearly separated.
+If that distinction is not immediately readable, remove the synthetic block.
+Do not use post-commit value feedback to replace the frozen pre-supply Forecast / Hazard Readiness / 실패 시 사망 위험 with a newly scored answer.
+
+### SALE — REFUSAL PRICE CEILING UI
+
+Follow `SALE_v2.8.0.md`.
+
+For the same ordinary customer + same SKU + current visit:
+- after 50% refusal, 100% and 150% controls are disabled
+- after 100% refusal, 150% is disabled
+- after 150% refusal, lower-price controls may remain usable
+
+Requirements:
+- disabled higher-price states are visually distinct and non-interactive
+- Player can read why the option is blocked; exact short copy may be implementation/localization-owned unless separately frozen
+- do not disable unrelated SKUs
+- do not carry the same-SKU visit lock into a later visit unless another owner explicitly defines persistence
+- this refusal-price UI does not appear in Final preparation because Final has no refusal roll and no 100/150 price modes
+
+The ordinary SALE UI must not invite a higher-price reroll after a lower-price refusal.
+
+### GREAT SUCCESS OPPORTUNITY SIGNAL
+
+When the authoritative Great Success opportunity condition is met, show:
+
+`대성공을 노려볼 만합니다.`
+
+The word `대성공` is mandatory.
+
+Exact placement is Work implementation choice, but it must:
+- appear before departure
+- appear while Player can still change that NPC's preparation
+- hide exact Great Success %
+- hide internal Combat margin/formula
+- not become a master safety score
+
+No signal change while merely selecting/previewing an Item.
+
+After a successful purchase commits, refresh only the Great Success signal from the committed Bag.
+No exact probability.
+
+### RETURNING NPC QUICK SURFACE
+
+Use the latest snapshot owned by NPC_TRAIT/SALE.
+Preferred compact form:
+
+```text
+지난 원정 · DAY X · 결과 · [item] [item]
+```
+
+On mobile it must not push Wallet / Expected Destination / Forecast out of the primary decision flow.
+Expanded detail may show actual destination, Item names, and only proven contribution text.
+
+### QUEUE
+
+Do not expose new future-customer Job/Level/Destination/preparation-need hints.
+Existing authorized queue-count presentation remains sufficient.
+
+### DEEP SALE UI
+
+While nomination is legal, show `심층원정에 추천`.
+
+After nomination:
+- sponsorship payment clear
+- changed destination clear
+- updated forecast clear
+- ordinary Sale continues
+
+### EVENT TEMPORARY BUDGET
+
+When Event purchase budget exists, show persistent Wallet and temporary budget separately enough
+to explain affordability.
+
+Do not relabel temporary Event budget as permanent 소지금.
+
+## MOBILE SALE PLAYABILITY
+
+This section is phone-first. Desktop SALE is regression-protected.
+
+At 360 / 390 / 412-class phone widths, ordinary SALE must prioritize the transaction surface over customer presentation.
+
+### Vertical hierarchy
+
+Within the usable SALE viewport above the fixed bottom dock:
+- customer / expedition summary occupies about half or less
+- Item selection / price / sale interaction receives at least about half
+- this is a responsive proportion target, not a fixed-pixel split
+- do not crop character art or force equal fixed heights that break on shorter phones
+- at first entry, the sale surface must already show the shelf heading and at least one selectable Item row without requiring a scroll
+
+Compact the upper area by reducing presentation footprint, not by hiding required decision information.
+
+### Customer speech
+
+Customer speech is a transient overlay and must not reserve permanent layout height.
+
+Exact behavior:
+- a new customer/reaction line overlays the upper customer area
+- it auto-hides after 3 seconds
+- tapping the bubble hides it immediately
+- a newly emitted line starts a fresh 3-second display
+- hiding speech is presentation-only; do not add Save/account persistence
+- rerendering the same unchanged line must not resurrect an already auto-hidden bubble
+
+### Character / status / destination
+
+On phone:
+- move the character block upward into the space no longer reserved by speech
+- reduce its footprint enough to return meaningful height to the sale surface
+- align it softly with the adjacent status / destination area
+- use responsive flow/flex/grid, not forced equal fixed height
+- preserve full portrait containment; no crop/stretch
+- smaller phones may relax exact alignment rather than overflow
+
+### Bag
 
 The normal customer Bag remains exactly two slots.
+
+On phone:
+- place them in the available upper-right area
+- each slot remains at least ~44px touch class
+- keep "가방 used / 2" readable without a tall horizontal strip
 
 On compact/mobile SALE:
 - the two slot boxes are always horizontal
@@ -93,6 +822,222 @@ Reference shape:
     가방 0 / 2   □ □
 
 Presentation only; Bag capacity/mechanics do not change.
+
+### MOBILE SALE DENSITY
+
+Mobile:
+- remove the decorative waiting/next-customer card/fan
+- keep queue progress/count in the bottom Dock only
+- use recovered space for current-customer state and decision information
+
+Desktop may retain richer simultaneous queue presentation.
+
+Do not remove the actual queue count.
+
+### BAG PRESENTATION
+
+Do not add a separate `최종 준비 결과` dashboard to the Bag.
+The two slots are the handling surface.
+
+Show:
+- contents
+- focused slot
+- replace/remove state
+- sequential transaction state
+
+Interaction mechanics -> `SALE_v2.8.0.md`.
+
+## SUPPLY / FATIGUE PREVIEW
+
+Display public deterministic arithmetic from `DUNGEON_HAZARD_v2.8.0.md`.
+
+Example:
+
+```text
+보급 5 / 필요 3 · 피로 9 -> 출발 7
+```
+
+This is conditional arithmetic, not Outcome prediction.
+
+Player-facing Fatigue remains numeric.
+Do not add new `양호/주의/위험` fatigue tiers.
+
+When actual penalty is active:
+- 10+ must have readable Stat-source feedback
+- 20 must receive strong danger treatment
+
+### FATIGUE SURFACE
+
+SALE main:
+- current Fatigue always compactly readable
+- if a penalty is active, harmful semantic emphasis
+- committed Supply may show 피로 N -> 출발 N
+- show Prepared/Required/excess Supply compactly
+
+Do not show future Outcome-by-Outcome Fatigue table.
+
+NIGHT main:
+    귀환 후 피로 N
+
+Detailed resolved arithmetic opens through the shared popover.
+
+## DANGER DETAIL BOUNDARY
+
+Detailed risk view may show:
+- Hazard name
+- pressured Core Stat label
+- Required Supply
+- system-level meaning of readiness signal
+
+Do not show:
+- recommended SKU
+- recommended Item category
+- optimal combination
+- exact hidden Hazard requirement/threshold/formula
+
+Tutorial teaches how to read the system, not what to buy.
+
+## FORECAST UI
+
+Combat:
+- 우세
+- 접전
+- 불리
+
+Hazard:
+- 취약
+- 불안
+- 대응
+- 충분
+
+Do not show:
+- exact success %
+- combined master safety score
+- fake precision
+
+Forecast should be clearly labeled as estimate.
+
+First forecast tutorial explains:
+actual expedition may differ from prediction.
+
+Destination reliability tutorial explains the system-level rule, not one specific Trait:
+`특성이나 당일 상황에 따라 예상 목적지와 실제 목적지가 달라질 수 있습니다.`
+
+Do not center the tutorial around 허세.
+
+Authoritative logic:
+-> DUNGEON_HAZARD_v2.8.0.md
+
+## STAT PRESENTATION
+
+Player-facing core stats:
+- 투력
+- 강인함
+- 기동
+- 정신
+
+Use clear 2×2 presentation where appropriate.
+
+Avoid overwhelming base NPC panel with
+every resistance/internal coefficient as equal-priority numbers.
+
+Hazard-specific information should appear
+where it is relevant to current destination/preparation.
+
+## TRAIT PRESENTATION
+
+Trait profile/card prioritizes:
+1. Trait name
+2. actual effects
+3. condition/scope when needed
+
+Do not player-face internal Trait direction taxonomy:
+- 이점
+- 양면
+- 약점
+- ▲ / ◆ / ▼ quality label
+
+Internal POSITIVE/MIXED/NEGATIVE remains for generation/Event logic.
+
+Each material effect uses authoritative data-driven semantic tone:
+- benefit
+- cost
+- neutral
+
+Meaning must not be inferred from numeric sign.
+
+Example:
+`신중함`
+- injuryRisk -4%p = benefit
+- loot -8% = cost
+
+Semantic color may reinforce the effect line,
+but wording itself must remain understandable without color.
+
+Do not turn Trait header/background into a green/yellow/red quality grade.
+
+Authoritative:
+-> NPC_TRAIT_v2.8.0.md
+
+## HAZARD NUDGE
+
+System should help the player notice relevant risk
+without solving the puzzle.
+
+Every known authoritative Hazard provides:
+- Hazard name
+- short Stat/readiness pressure explanation from DUNGEON_HAZARD
+
+Examples:
+- 냉기 · 강인함 압박
+- 화이트아웃 · 정신 중심 / 기동 보조
+- 부식 · 강인함 압박
+- 진창 · 기동 압박
+
+Interaction:
+PC:
+- hover and keyboard focus may show tooltip/detail
+
+Mobile/touch:
+- tap or inline disclosure provides equivalent information
+
+hoverOnly=NO
+
+Gate summary may show the short pressure line directly when clearer.
+Do not explain only some Hazards while leaving others name-only.
+
+Allowed:
+- clear Hazard labels
+- readable contrast/icon
+- preparedness label
+- highlighting current relevant information
+
+Avoid:
+- blinking alarm that tells exact required Item
+- `이 아이템 사세요` solution nudge
+- automatic optimal recommendation
+
+Rule:
+clarify ingredients, do not provide the answer.
+
+Exact Hazard pressure ownership:
+-> DUNGEON_HAZARD_v2.8.0.md
+
+## ITEM INFO
+
+Order/Sale must show enough information to decide without
+frequent encyclopedia navigation.
+
+Useful:
+- actual effect
+- buy/sale price where relevant
+- current margin where relevant
+- category/role
+- explicit penalty
+- Counter relevance
+
+Secondary encyclopedia remains optional reference,
+not required navigation for basic decisions.
 
 ## SHARED SEMANTIC CHANGE LANGUAGE
 
@@ -148,29 +1093,72 @@ Deterministic source attribution is allowed.
 Existing special Event offer presentation, such as an 암시장 special Order row, may name its
 Event origin.
 
-## FATIGUE SURFACE
+## HELP
 
-SALE main:
-- current Fatigue always compactly readable
-- if a penalty is active, harmful semantic emphasis
-- committed Supply may show 피로 N -> 출발 N
-- show Prepared/Required/excess Supply compactly
+Per-value/context explanations use anchored popovers, not a modal/accordion that pushes gameplay.
 
-Do not show future Outcome-by-Outcome Fatigue table.
+The global 점주 가이드 may remain as reference, but must be shortened to current rules and must
+not duplicate detailed internal arithmetic.
 
-NIGHT main:
-    귀환 후 피로 N
+Exact help copy -> COPY_WORLD_VOICE_v2.8.0.md.
 
-Detailed resolved arithmetic opens through the shared popover.
+### GLOBAL HELP
 
-## GREAT SUCCESS SIGNAL
+The global 점주 가이드 uses the exact compact Copy owner text.
+Do not retain the old long-form rules manual in parallel.
 
-No signal change while merely selecting/previewing an Item.
+## NIGHT
 
-After a successful purchase commits, refresh only the Great Success signal from the committed Bag.
-No exact probability.
+question=`내 선택이 어떻게 됐을까?`
 
-## NIGHT LAYOUT
+One adventurer result at a time.
+
+Hierarchy:
+1. what happened
+2. why
+3. what changed
+
+- Result 정보: 원정 fatigue gain, 최종 fatigue, 현재 injury penalty, severe 남은 기간, **NPC 소지금 획득**.
+
+Importance hierarchy:
+- routine success=compact
+- meaningful growth/injury/death/decisive Item/callback=stronger visual emphasis
+- on 게이트 순례주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
+
+Avoid:
+- debug log layout
+- giant modifier ledger
+- long mandatory animation
+- giving every result identical presentation weight
+
+### NIGHT — EXACT CONTROLS
+
+Exactly two Player controls:
+- `다음`
+- `전체 건너뛰기`
+
+Removed:
+- single-result `건너뛰기`
+- active `nightSkip` control/API dependency
+
+Both controls remain easy to reach on mobile and neither is visually demoted into a hidden secondary action.
+
+### NIGHT — ACTUAL ARITHMETIC
+
+Keep `다음 / 전체 건너뛰기` controls and proven-causality rule.
+
+Add readable actual arithmetic when relevant:
+
+```text
+피로 2 -> 출발 0 · 보급 회복 -2
+원정 결과 +5 · 보급 완화 -3
+밤 피로 2
+```
+
+If First Aid Kit Aftercare actually changed persistent Injury state, that proven contribution may be shown.
+Do not add speculative failure-cause diagnosis.
+
+### NIGHT LAYOUT
 
 Information order:
     Outcome
@@ -209,8 +1197,7 @@ same visual weight as a living adventurer's line, presented as a neutral status 
   container - text-hugging width, modest padding - and nothing else from the bans above. A
   container is not a bubble: what makes it an utterance is the tail, the paper ground and the
   quotation, and none of those return.
-- AMENDED, 2026-09-22: the translucent dark plate sat so close to the NIGHT background that it
-  read as bare text again. The plate is a COOL SLATE / BLUE-BLACK surface clearly one step
+- The plate is a COOL SLATE / BLUE-BLACK surface clearly one step
   brighter than the NIGHT background, and it carries its own surface colour as a flat plane
   rather than a black veil laid over whatever is behind it. Its edge must register at once, over
   the character art as well. The text stays a neutral light colour, and no paper / parchment
@@ -276,7 +1263,6 @@ Level / Stat, but the region as a whole must not read as a collection of metal b
 read-only figure must never be presented as if it were pressable. A label and its value on one
 line is the default; wrapping happens only where the real phone width requires it.
 
-
 ### NIGHT LAYOUT — UNLOCK NOTICE
 
 A NIGHT reward notice that announces a newly unlocked product uses a stable two-line composition:
@@ -289,7 +1275,6 @@ Do not rely on incidental width wrapping to split `새 상품 해금 · {상품�
 product name to wrap into an awkward fragment merely because the notice width changed.
 
 This is presentation only. It does not change unlock timing, unlock state or reward truth.
-
 
 ### NIGHT LAYOUT — DESKTOP ADAPTATION
 
@@ -316,7 +1301,141 @@ Likewise, "one NPC size" means one size for all Outcomes at the same breakpoint.
 one shared desktop responsive size. QA must reject Outcome-specific portrait sizing, not a single
 desktop override shared by every Outcome.
 
-## BOSS INFORMATION PRESENTATION
+## CLOSING
+
+question=`오늘 장사는 어땠을까?`
+
+Economics-first.
+
+Primary:
+- revenue
+- COGS
+- margin
+- overhead
+- waste
+- Relic spend
+- final Gold
+
+Expedition story belongs to Night.
+Closing may show only compact actual-supply-impact summary.
+
+Remove redundant accounting-explanation footer from the primary receipt.
+The figures themselves remain.
+
+## RELIC UI
+
+Relic Window:
+- candidate comparison must be immediate
+- each candidate shows effect/condition/price clearly
+- Buy / Defer obvious
+- active window availability visible in management phases
+- no purchase-window reopen during Active Sale/Night
+
+Milestone reveal:
+- D5/D10/D15/D20/D25/D30 new Window receives one focused reveal
+- Player can Buy or choose `나중에 결정`
+- dismiss/defer does not reroll candidates/prices
+- Save/Reload does not replay the reveal as an exploit
+
+Candidate cards must NOT expose internal design taxonomy:
+- Foundation / Hybrid / Keystone / Utility
+- Rotation / VIP / Premium / Expedition / Fresh / Customer Axis
+- `신선식품 · 기반` style labels
+
+Player discovers synergy from effects.
+
+Owned Relic Quick View:
+- Morning=YES
+- Order=YES
+- Sale=YES
+- readOnly=YES
+- shows owned Relic name + actual effect/condition
+- does not allow purchase/defer/change timing during Sale
+
+Relic should look like a meaningful Run-build choice,
+not a minor facility settings menu.
+
+Authoritative:
+-> RELIC_v2.8.0.md
+
+### STORE SUPPORT OWNED REFERENCE
+
+When choosing a Store Support, keep the current owned-support reference reachable through the
+existing compact detail/modal.
+
+Do not add a new permanent panel solely for this.
+
+### Store-support reference during ORDER / SALE
+
+ORDER and SALE each provide a compact, immediately reachable reference to currently owned 점포지원.
+
+Requirements:
+- REUSE the existing owned-Relic data and existing Relic detail/modal content
+- do not add a second Relic information system
+- the control is available before the player commits the relevant ORDER / SALE decision
+- keep the control compact enough that it does not compete with the primary decision surface
+- on mobile, avoid retaining a second redundant owned-Relic block lower in SALE if the compact control already exposes the same information
+
+### RELIC VISUAL
+
+Relic keeps existing metal fixture/plate language; purchase reads as metal/brass transaction.
+
+## EVENT PRESENTATION
+
+Event is a MORNING opening beat, not a separate Phase.
+
+When an Event occurs:
+- show a focused overlay/modal/highlight before Gate/Morning detail
+- show Event title, short situation/flavor, and actual gameplay effect
+- primary continuation returns to the normal Morning Situation
+- Event-modified Gate/Hazard/visitor state is then shown in its normal place
+
+After the initial reveal:
+- Order keeps only Event effects relevant to Order
+- Sale keeps only Event effects relevant to Sale
+- Night/Closing mention the Event only when it materially affected that result
+
+Do not:
+- bury a meaningful Event inside ordinary stacked cards
+- repeat the full Event explanation in every Phase
+- create a separate EVENT Phase solely for presentation
+
+Authoritative Event rule/catalog:
+-> EVENT_v2.8.0.md
+
+## BOSS / FINAL REVEAL UI
+
+Boss gameplay ownership -> BOSS_v2.8.0.md
+Final Family ownership -> FINAL_EXPEDITION_v2.8.0.md
+Exact Player-facing wording -> COPY_AUDIT_APPROVED_v2.8.0.md
+
+Reveal sequence:
+
+D5:
+`Boss Identity` focused reveal -> D5 Relic reveal
+
+D15:
+`Boss Trait` focused reveal -> D15 Relic window decision (`Relic 획득` vs `봉인 해제` when Sloth opportunity)
+
+D30:
+D30 Relic window decision (`Relic 획득` vs `봉인 해제` for Sloth) -> Final preparation / lock
+
+### FINAL TIMELINE PRESENTATION
+
+Reuse existing Morning/management/Final surfaces.
+Do not add a permanent new Final dashboard.
+
+Required beats:
+- D0 Final objective notice
+- D10 `FINAL까지 20일`
+- D20 `FINAL까지 10일` + Recon dispatch beat
+- D25 `FINAL까지 5일` + exact persisted Final Family/Hazard disclosure
+- D30 reuse D25 state; no new Family reroll reveal
+
+Boss reveal timing -> `BOSS_v2.8.0.md`.
+Final state -> `FINAL_EXPEDITION_v2.8.0.md`.
+
+### BOSS INFORMATION PRESENTATION
 
 All Boss-information beats use the existing Guild investigation dossier family.
 
@@ -338,6 +1457,43 @@ Presentation:
 - one `확인` acknowledgement;
 - compact enough to read as onboarding information, but large enough that the Run objective cannot
   be missed.
+
+### D5 — 길드 토벌 공고
+
+Presentation identity:
+`in-world 길드 토벌 공고`
+
+Primary hierarchy:
+1. Boss D5/D15 BASE illustration
+2. fixed Player-facing Boss name
+3. short Boss-specific Flavor
+4. continuation to existing D5 Relic reveal
+
+The Flavor may hint at the Trait.
+The exact Trait Function remains hidden.
+
+Boss art is a primary game object.
+Do not reduce it to a tiny icon beside a dashboard card.
+
+### D15 — 길드 정보 보고
+
+Presentation identity:
+`길드 정보 보고`
+
+Primary hierarchy:
+1. same D5/D15 BASE Boss illustration
+2. Boss identity
+3. exact Trait name
+4. exact material Trait effect
+5. relevant current DATA when applicable
+
+Do not replace Function with strategy advice.
+The Player receives the rule and decides the response.
+
+Do not expose:
+- exact Final success probability
+- hidden Final Power
+- internal Factor / Modifier terminology
 
 ### D5 / D10 / D15 / D20 / D25
 
@@ -396,182 +1552,86 @@ D25 Final Family / Hazard:
 Information truth remains primary; Boss presence is a co-equal presentation requirement except D25,
 where Family/Hazard disclosure must not be visually buried by art.
 
-## PRESENTATION POLISH ROUTING
+### D25 — 최종 정찰 보고
 
-Presentation construction / asset / ornament / visual-review system:
-- PRESENTATION_SYSTEM_v2.8.0.md
+If that existing report framing is reused, it belongs to the D25 disclosure beat.
 
-Active Presentation Batch 1:
-- PRESENTATION_POLISH_BATCH1_v2.8.0.md
+Presentation identity:
+`최종 정찰 보고`
 
-Detailed later-phase / audio Presentation contracts:
-- PRESENTATION_POLISH_v2.8.0.md
+Show:
+- exactly two Final Families
+- each selected Family's actual authoritative T2 Hazard set
+- each Hazard's authoritative Stat-pressure label
 
-UI_UX_v2.8.0.md remains authoritative for surrounding UI / UX / mobile / tutorial / semantic delta /
-popover / Store Management / NIGHT layout rules that remain in this file.
+Important:
+`two Families` does NOT mean exactly two Hazard keys.
 
-## FUNCTION / FLAVOR VISUAL HIERARCHY — EXACT
+Do not expose:
+- exact Hazard formula
+- exact Final success probability
+- internal Final Power
 
-On Player decision surfaces, Function must read before Flavor.
+### FINAL MODIFIER PREVIEW
 
-Function / Effect:
-- 14–15px class
-- weight 600
-- normal/high contrast
-- numeric conditions and exact rule effects belong here
+Before Final Lock, whenever a Boss changes a Player-visible value, show:
 
-Secondary factual:
-- 13px class
-- weight 400
-- dimmer than Function
+`original → applied`
 
-Flavor on a decision surface:
-- 12–13px class
-- weight 400
-- lower contrast than Function
-- 1–2 lines recommended
-- no numeric condition/rule payload
+Required:
 
-Event Reveal:
-- Flavor: 13px / 400 / dim
-- Effect: 15px / 600 / primary
+PRIDE:
+- each participant's 투력
 
-Morning Event slip:
-- Flavor: 12px class
-- Effect: 13px / 600
+ENVY:
+- targeted participant's 투력 / 강인함 / 기동 / 정신
 
-Codex/Lore Flavor may remain 13px / 400 / dim and may use italic presentation.
+GLUTTONY:
+Use the current `BOSS_v2.8.0.md` truth:
+- preview the positive Core-Stat contribution originating from Items before -> after the ×0.50 Boss effect
+- no Rarity threshold
+- do not show Counter / Supply / Insurance / Utility / harmful RiskReward penalty as reduced by this effect
 
-NPC Dialogue:
-- 14–15px class
-- normal speech-bubble treatment
+LUST:
+- each affected non-regular participant's 투력 / 강인함 / 기동 / 정신
 
-Death Narration:
-- 13–14px class
-- dim/report treatment
-- no quotation marks or speech bubble
+GREED shows:
+- 목표 매출
+- 현재 매출
+- 달성률
+- 현재 탐욕 강화 %
 
-Boss D5 is an exception:
-its Boss-specific Flavor is primary reveal content and must not be mechanically demoted by the
-ordinary decision-surface Flavor rule.
+SLOTH shows:
+- 봉인 해제 상태
+- 현재 위협 단계
 
-## QA / DEBUG REPRODUCTION ACCESS — EXACT
+Do not expose exact Final success probability.
 
-Ordinary Player UI does not expose reproducibility Seed input or a visible Debug menu.
+Player-facing identity uses `탐식의 마왕 글러트니`.
+Exact changed Trait title/prose is owned by `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
-Removing those Player-facing controls must not remove deterministic QA access.
+### FINAL BOSS ART
 
-Supported manual QA path:
+Normal six Bosses:
 
-1. Start from a controlled Account state:
-   - Full Data Reset, or
-   - import the exact Save fixture required by the test.
-2. Open browser Developer Tools -> Console.
-3. Start a deterministic Run with:
-   `Guild24.game.start('<seed>'); Guild24.render();`
-4. During an active Run, inspect the persisted gameplay state through either:
-   - `Guild24.showDebug()`, or
-   - keyboard shortcut `Ctrl+Shift+D`.
-5. The Debug surface exposes the existing debug payload including:
-   - seed
-   - RNG state / last RNG
-   - ORDER offers
-   - current NPC
-   - current Dungeons
-   - resolved Results with debug evidence
-   - Boss debug state
+`Final prep / confrontation / result -> D30 BATTLE`
 
-The Console / Debug path is development and QA access only.
-It must never be promoted into ordinary Player navigation merely to preserve reproducibility.
+SLOTH:
 
-When a Player-facing QA/debug control is removed, QA must verify both:
-- the control/copy is absent from the ordinary Player surface
-- the equivalent deterministic QA capability remains reachable through the development path above
+- SB0 -> BASE reuse
+- SB1 -> D30 SB1
+- SB2 -> D30 SB2
+- SB3 -> D30 SB3
 
-## HELP
+The Final Boss is a primary game object.
+Do not present the Final confrontation as text/name-only when the authoritative Boss illustration is available.
 
-Per-value/context explanations use anchored popovers, not a modal/accordion that pushes gameplay.
-
-The global 점주 가이드 may remain as reference, but must be shortened to current rules and must
-not duplicate detailed internal arithmetic.
-
-Exact help copy -> COPY_WORLD_VOICE_v2.8.0.md.
-
-## EVENT TEMPORARY BUDGET
-
-When Event purchase budget exists, show persistent Wallet and temporary budget separately enough
-to explain affordability.
-
-Do not relabel temporary Event budget as permanent 소지금.
-
-## STORE SUPPORT OWNED REFERENCE
-
-When choosing a Store Support, keep the current owned-support reference reachable through the
-existing compact detail/modal.
-
-Do not add a new permanent panel solely for this.
-
-## CLOSING
-
-Remove redundant accounting-explanation footer from the primary receipt.
-The figures themselves remain.
-
-## STORE GROWTH SURFACE
-
-Store Capital / Decoration management and run-end settlement requirements from the previous v2.8
-Decoration package remain active exactly as owned by META_v2.8.0.md and CORE_RUN_v2.8.0.md.
-
-
-## COPY-SURFACE RE-AUDIT — EXACT
-
-### SALE SELECTED-ITEM INFORMATION
-
-The selected-Item panel uses one primary heading:
-
-    판매 후 변화
-
-Direct Item changes and deterministic derived changes are rows under that heading.
-Do not stack analytical subgroup headings that increase height.
-
-Source/cause belongs in the existing anchored source popover.
-
-Conditional intrinsic Item functions that do not appear as an immediate numeric delta remain readable under
-\`특수 효과\`; do not call them \`이 손님에게는 지금 걸리지 않는 효과\`.
-
-Internal marker rows are never displayed.
-
-### SALE PERMANENT EXPLANATION
-
-The forecast/readiness/death explanation is on demand through the shared anchored popover.
-Do not keep a permanent explanatory paragraph under the readout.
-
-### DECORATION DECISION SURFACE
-
-Store-management purchase/equip comparison shows:
-- name
-- exact effect
-- price / ownership
-- equipped state
-
-Decoration Flavor prose is not shown on this decision surface.
-
-No new Collection screen is added in v2.8 solely to preserve that Flavor.
-Existing Flavor data may remain in data/Codex-ready form.
-
-### GLOBAL HELP
-
-The global 점주 가이드 uses the exact compact Copy owner text.
-Do not retain the old long-form rules manual in parallel.
-
-### SETTINGS / DEBUG BOUNDARY
-
-Ordinary Player settings are localized and gameplay-facing.
-
-Developer reproducibility Seed controls do not appear on the ordinary pre-Run screen.
-Technical runtime footer copy is removed from ordinary settings.
-
-This does not require adding a new Debug menu.
-
+Rules:
+- do not show Relic choice first and reveal relevant Boss/Family information afterward
+- Sloth choice must visually communicate `Relic 획득` vs `봉인 해제` as mutually exclusive
+- Boss reveal is not a new permanent Phase
+- reveal Seen state is stable across Save/Reload
+- Boss art must not push required decision information excessively below the fold on mobile
 
 ## FINAL PARTY / PREPARATION PRESENTATION — D30
 
@@ -630,6 +1690,38 @@ Remove from Final preparation:
 - ordinary expedition failure-to-death risk;
 - any one-NPC environment forecast presented as though it were the whole Final party.
 
+### FINAL PREPARATION UI — EXACT
+
+After Final participants are selected, reuse the familiar two-slot Item handling surface but remove ordinary end-of-Run haggling/refusal controls.
+
+For each selected participant:
+
+```text
+2 Bag slots
+Item selection
+fixed price = 50% / 매입가
+Wallet affordability
+commit transfer
+```
+
+Required UI behavior:
+- show exactly one deterministic Final transfer price for the selected Item: the ordinary 50% / 매입가 amount
+- do not show 100% / 150% price controls in Final preparation
+- do not show purchase chance, refusal chance, refusal result, or same-SKU refusal-price lock UI
+- Wallet remains visible/readable
+- stock remains visible/readable
+- if Wallet is insufficient, the transfer action is disabled/non-committable and the affordability reason is readable
+- after a valid commit, stock and NPC Wallet update immediately before the remaining-slot decision
+- Player Gold increases by the same fixed amount and may update through the existing Gold presentation
+- Gross Sales increases by the same fixed amount exactly once
+- participant remains limited to two slots
+- Player may leave a slot empty
+- no second free-equip screen after this surface
+- Final no-effect Items are blocked/clearly marked according to `FINAL_EXPEDITION_v2.8.0.md`
+- Boss-caused visible Item changes use the actual current Final truth
+
+No extra GREED-specific counter panel is required solely for this transfer; use the existing Gross Sales truth and current Boss presentation.
+
 ### FINAL ITEM / WALLET FEEDBACK
 
 No-effect Item:
@@ -651,3 +1743,558 @@ the Item/transfer area; the disabled transfer action keeps its normal face and d
 
 Final action labels never wrap by accident on mobile; explanatory body / Item-effect text may wrap normally.
 
+## STORE MANAGEMENT / DECORATION
+
+Reuse the existing Codex/management space.
+
+Show:
+- current Store Capital
+- four fixed Slots
+- owned/unowned
+- purchase cost
+- exact current effect
+- equipped Decoration
+
+Purchase requires explicit confirmation and spends once.
+Loadout is editable only outside an active Run and frozen after Run start.
+
+On a pre-Run/foundation store-management screen, an explicit way back to the new-Run preparation
+screen must exist. Mobile system/back navigation must not strand the Player on a blank state.
+
+Live store renders equipped Decorations at fixed store locations.
+No free-placement editor / levels / rarity ladder / random Decoration shop is added.
+
+### Pre-Run Decoration empty-slot interaction
+
+A Decoration Slot with no equipped Decoration is a neutral state, not a warning.
+
+Required:
+- remove the inherited "주의 ·" treatment from "비움"
+- each Slot row, including "비움", is actionable before a Run
+- tapping a Slot row opens 점포 관리 focused/scrolled to that exact Slot
+- REUSE the existing store-management panel; do not create a second Decoration selector
+- during an active Run, keep the existing read-only/frozen-loadout rule
+
+### DECORATION DECISION SURFACE
+
+Store-management purchase/equip comparison shows:
+- name
+- exact effect
+- price / ownership
+- equipped state
+
+Decoration Flavor prose is not shown on this decision surface.
+
+No new Collection screen is added solely to preserve that Flavor.
+Existing Flavor data may remain in data/Codex-ready form.
+
+### STORE GROWTH SURFACE
+
+Store Capital / Decoration management and run-end settlement requirements remain active exactly as owned by META_v2.8.0.md and CORE_RUN_v2.8.0.md.
+
+## META UI
+
+Meta gameplay ownership -> META_v2.8.0.md
+
+Player-facing Meta presentation must make these source-of-truth concepts distinct:
+- Job × Boss clear matrix
+- Job Mastery 0..7 per Job
+- Total Job Mastery
+- Distinct Boss Clear 0..7
+- approved 1/3/6 unlock milestones
+- Monster Knowledge `보급 생환 N회`
+
+Do not present legacy Global Meta XP as current progression.
+
+## MENU / SETTINGS — EXACT COMPOSITION
+
+Top-level Menu exactly:
+- 모험가 수첩
+- 도감
+- 점포지원
+- 점주 가이드
+- 설정
+- 현재 지점 포기
+
+Top-level removed:
+- Sound Toggle
+- Full Data Reset
+
+Settings contains:
+- 저장 내보내기
+- 저장 가져오기
+- Sound On/Off
+- BGM
+- SFX
+- Full Data Reset
+
+Settings does **not** contain:
+- 현재 지점 포기
+
+### MENU / SETTINGS VISUAL
+
+The Run-abandon action remains top-level, remains separate from Full Data Reset, and uses exact label `현재 지점 포기`.
+
+Visual direction:
+- Menu = one surface + row navigation, not dashboard-card grid
+- subtle separators
+- destructive action separated with muted red
+- optional restrained brass marker
+- Settings = one utility panel
+- preserve native semantic controls
+- native `input[type=range]` may be CSS-reskinned, not replaced by a new slider framework
+- mobile hit target remains ~44px class
+
+### SETTINGS / DEBUG BOUNDARY
+
+Ordinary Player settings are localized and gameplay-facing.
+
+Developer reproducibility Seed controls do not appear on the ordinary pre-Run screen.
+Technical runtime footer copy is removed from ordinary settings.
+
+This does not require adding a new Debug menu.
+
+## RUN ABANDON UX
+
+Confirmation must clearly communicate:
+exact confirmation copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` (현재 지점 포기 Confirm)
+
+Legacy XP / settlement / reward promise must not appear.
+
+## QA / DEBUG REPRODUCTION ACCESS — EXACT
+
+Ordinary Player UI does not expose reproducibility Seed input or a visible Debug menu.
+
+Removing those Player-facing controls must not remove deterministic QA access.
+
+Supported manual QA path:
+
+1. Start from a controlled Account state:
+   - Full Data Reset, or
+   - import the exact Save fixture required by the test.
+2. Open browser Developer Tools -> Console.
+3. Start a deterministic Run with:
+   `Guild24.game.start('<seed>'); Guild24.render();`
+4. During an active Run, inspect the persisted gameplay state through either:
+   - `Guild24.showDebug()`, or
+   - keyboard shortcut `Ctrl+Shift+D`.
+5. The Debug surface exposes the existing debug payload including:
+   - seed
+   - RNG state / last RNG
+   - ORDER offers
+   - current NPC
+   - current Dungeons
+   - resolved Results with debug evidence
+   - Boss debug state
+
+The Console / Debug path is development and QA access only.
+It must never be promoted into ordinary Player navigation merely to preserve reproducibility.
+
+When a Player-facing QA/debug control is removed, QA must verify both:
+- the control/copy is absent from the ordinary Player surface
+- the equivalent deterministic QA capability remains reachable through the development path above
+
+## TUTORIAL
+
+Tutorial UX:
+Coach Mark / Spotlight / FTUE Overlay
+
+Structure:
+- current game screen remains visible
+- dim background
+- spotlight target
+- small anchored bubble
+- `다음`
+- `건너뛰기`
+
+Action tutorial:
+target-only interaction may be allowed
+successful action may auto-advance
+
+Rules:
+- tutorial does not add page height
+- tutorial does not push layout
+- bubble repositions responsively
+- target may scroll into view
+- one concept per step
+- contextual first-use preferred
+- completion persisted
+- reload does not restart completed tutorial
+
+Do not use:
+large green instructional cards inserted into normal flow.
+
+### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
+
+Hazard tutorial teaches:
+- each Hazard pressures a Core Stat
+- natural Stat and Item Counter both contribute
+- readiness is summarized by 취약/불안/대응/충분
+
+Supply/Fatigue tutorial teaches:
+- required Supply is paid first
+- a Supply Deficit applies one expedition-wide preparation penalty through the existing unified Supply system
+- remaining Supply beyond the requirement reduces current Fatigue
+- further remaining Supply reduces that expedition's Fatigue gain
+
+Do not teach the hidden Supply-deficit formula.
+Do not teach `독이면 X 아이템을 사세요` or equivalent solution scripts.
+
+### TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY — REQUIRED
+
+A true fresh current account must actually see the tutorial entry again.
+
+Follow `CORE_RUN_v2.8.0.md` for the exact fresh-init boundary.
+
+Required:
+- after Full Data Reset, tutorial completion/dismissal state is cleared
+- on the first applicable flow of the newly initialized current account, the tutorial appears / starts according to the existing tutorial sequence
+- stale v1~v7 tutorial flags must not suppress the tutorial after fresh v8 initialization
+- deleting/rejecting legacy internal-test state and creating fresh v8 must produce the same tutorial-eligible state as a clean first install
+- ordinary Run Abandon / new Run under the same current account does not need to replay the tutorial if the tutorial was already completed
+
+Implementation must first audit whether the existing tutorial sequence still functions end-to-end.
+If the tutorial already exists, reuse it and fix its trigger/persistence/reset path rather than creating a replacement tutorial system.
+
+### GREAT SUCCESS TUTORIAL
+
+Contextual Tutorial explicitly teaches:
+- `대성공` exists
+- it is above ordinary Success
+- extra preparation can raise its chance
+- Great Success has an additional reward
+- on a **normal expedition**, Great Success gives the Store an additional Gold bonus
+
+Player should understand why another useful Item can matter even when ordinary
+Success already looks likely.
+
+### FIRST-EVER DEEP EXPEDITION TUTORIAL
+
+Trigger:
+the account's **first actual Deep Expedition occurrence during play**.
+
+Not once per Run and not shown before the feature actually occurs.
+
+Completion is account-scoped:
+- current Run abandon -> preserved
+- new Run -> preserved
+- full game-data reset -> deleted
+- after full reset, next first actual occurrence shows it again
+
+Reuse existing Tutorial persistence.
+
+Tutorial must clearly teach:
+1. `심층원정` exists
+2. it is optional
+3. required Combat Power is higher than the ordinary Gate version
+4. one actual visiting NPC can be nominated
+5. nomination costs Store sponsorship Gold
+6. Success gives extra NPC EXP/Growth + Wallet
+7. unlike a normal Great Success, Deep Expedition Store Gold return is 0 even on Great Success
+
+Tutorial appears before the first nomination decision and must not leave
+actionable Morning/Order information obscured after dismissal.
+
+## COPY HIERARCHY
+
+UI text should be:
+- short
+- concrete
+- state-based
+
+Avoid:
+- system marketing language
+- repeated explanatory paragraphs
+- same information in multiple cards
+- AI-style headings everywhere
+
+Important state should be shown once,
+in the place where the decision is made.
+
+Detailed player-facing terminology / DATA-FUNCTION-FLAVOR / Voice:
+-> COPY_WORLD_VOICE_v2.8.0.md
+
+### COPY / TUTORIAL UX RECOVERY
+
+Already-approved terminology must be used:
+- 폭식 -> 탐식
+- 전리품 -> NPC 소지금 획득
+- 탈출 보정 -> 탈출 확률
+- 부상 위험 -> 부상 확률
+- 1200G / 24칸 -> 1000G / 18칸
+- 교환권 30G -> 50G
+- 설정 · 저장 -> 설정
+
+Tutorial/Help must reflect:
+- injury / Severe Injury
+- fatigue / fatigue recovery
+- ORDER confirm / Reroll / 영업 시작 separation
+- D10/D14 unlock
+- current Save/Reset behavior
+
+Stale Night single-skip instructions are prohibited.
+
+## FUNCTION / FLAVOR VISUAL HIERARCHY — EXACT
+
+On Player decision surfaces, Function must read before Flavor.
+
+Function / Effect:
+- 14–15px class
+- weight 600
+- normal/high contrast
+- numeric conditions and exact rule effects belong here
+
+Secondary factual:
+- 13px class
+- weight 400
+- dimmer than Function
+
+Flavor on a decision surface:
+- 12–13px class
+- weight 400
+- lower contrast than Function
+- 1–2 lines recommended
+- no numeric condition/rule payload
+
+Event Reveal:
+- Flavor: 13px / 400 / dim
+- Effect: 15px / 600 / primary
+
+Morning Event slip:
+- Flavor: 12px class
+- Effect: 13px / 600
+
+Codex/Lore Flavor may remain 13px / 400 / dim and may use italic presentation.
+
+NPC Dialogue:
+- 14–15px class
+- normal speech-bubble treatment
+
+Death Narration:
+- 13–14px class
+- dim/report treatment
+- no quotation marks or speech bubble
+
+Boss D5 is an exception:
+its Boss-specific Flavor is primary reveal content and must not be mechanically demoted by the
+ordinary decision-surface Flavor rule.
+
+## NAVIGATION
+
+Primary Phase action stays obvious.
+
+Secondary navigation may include:
+- Notebook
+- Reference/Knowledge
+- HQ/catalog/help
+
+Monster Knowledge progress wording:
+`보급 생환 N회`
+
+Do not use:
+`관찰 N회`
+
+Secondary navigation must not compete visually
+with current Phase objective.
+
+Store remains the emotional/home-space anchor,
+especially outside pure management screens.
+
+## INFORMATION DENSITY
+
+Do not solve desktop density by shrinking text.
+
+Mobile:
+- vertical stacking
+- clear hierarchy
+- collapsible/secondary detail when needed
+- no narrow multi-column compression
+
+PC:
+can use wider layout,
+but information priority should remain same as mobile.
+
+## RESPONSIVE RULE
+
+PC-first, mobile-supported.
+
+Do not preserve desktop composition at all costs.
+
+When width is narrow:
+- stack
+- simplify
+- move secondary detail
+- keep primary actions large
+- reduce unnecessary side gutter
+- current decision/action must be obvious in the first viewport
+- decorative/game-object art must not push required decision information excessively below the fold
+
+Do not:
+shrink all fonts/control sizes to fit desktop columns.
+
+Required mobile visual QA widths:
+- 360px
+- 390px
+- 430px
+
+At each width verify with actual browser screenshot/manual inspection:
+- no zoom required for core text
+- current phase question/action is obvious
+- no desktop composition merely scaled down
+- no clipped sticky action / safe-area overlap
+- game scene remains useful, not a space-consuming poster above the decision
+
+## TOUCH / INTERACTION
+
+Repeated or primary actions:
+target≈44px class
+
+Examples:
+- quantity +/-
+- price buttons
+- next
+- confirm
+- reroll
+- customer/item selection
+
+Avoid:
+- tiny icon-only controls
+- tightly packed adjacent taps
+- controls hidden behind browser safe area
+
+Mobile QA must include:
+- browser top/bottom chrome
+- safe area
+- sticky footer overlap
+- clipped header/action bar
+
+## ACCESSIBILITY / SIGNALS
+
+Do not rely on color alone for:
+- Trait effect benefit/cost semantics
+- danger/preparedness
+- selected state
+- disabled state
+
+Use:
+icon / label / shape / text reinforcement.
+
+Trait exception:
+do not reintroduce `이점/양면/약점` or ▲/◆/▼ as quality labels merely for accessibility.
+The effect sentence itself carries the meaning;
+semantic color/icon is reinforcement only.
+
+Contrast must remain readable
+across dark backgrounds and brand accents.
+
+## AUDIO FEEDBACK
+
+Audio presentation detail (voice / hierarchy / phase BGM identity) -> PRESENTATION_POLISH_v2.8.0.md.
+
+### BGM audibility
+
+At BGM 100% / SFX 100% on a real phone speaker:
+- BGM must be continuously and clearly audible during normal play
+- routine SFX should still read above it
+- do not solve this by globally lowering all SFX
+- keep the existing player-owned BGM/SFX sliders and master mute
+
+First REUSE the current audio system and raise/calibrate the BGM source/bus as the smallest fix.
+If the synthesized loop remains too thin even at a correct level, replacing the BGM content with local free audio assets is allowed.
+
+External audio, if used:
+- development-time download is allowed
+- Runtime must not depend on CDN/network playback
+- vendor the files into the repository
+- prefer CC0/public-domain; otherwise use a license that explicitly permits modification and redistribution in a game
+- no NC / unclear-license material
+- retain source/license attribution in the repository
+- keep file size and mobile load cost reasonable
+- preserve day / night / boss mood separation rather than one generic loop
+
+### SFX coverage
+
+Do not add a unique sound to every click.
+
+Required semantic coverage:
+- soft UI navigation/select feedback for visible interactive controls where silence currently makes the screen feel dead
+- quantity change
+- ORDER confirm
+- store/open transition
+- Item select
+- ordinary 50% / 100% / 150% sale distinctions
+- refusal
+- Gold gain vs spend distinction
+- Relic purchase
+- Decoration purchase and equip/unequip
+- special Guild action
+- reroll
+- liquidation/rescue
+- depart / return / day close
+- Night outcome severity
+- Boss reveal / seal / Final departure
+- unlock/discovery reward
+
+REUSE existing cues where their semantic identity already fits.
+Only add new cue assets/types where reuse would make two meaningfully different actions sound misleadingly identical.
+
+## AI-SLOP CHECK
+
+Before accepting a major UI revision, ask:
+
+- Is the page mostly nested cards?
+- Are badges/chips doing work that hierarchy could do?
+- Is every section using same radius/border?
+- Is brand Green being used as entire visual language?
+- Does it look like a SaaS admin screen?
+- Is the Primary Action visually weaker than explanatory containers?
+- Do phases feel like the same template with different text?
+
+If YES:
+restructure composition before polishing color/shadow/radius.
+
+## FONT / VISUAL QA BOUNDARY
+
+Must verify:
+- mobile 360~390 and 412-class widths
+- desktop 1024 and 1280+
+- no ORDER/SALE/Settings wrap overflow
+- price/%/Stat number legibility
+- ordinary SALE 50/100/150 immediate scanability
+- Final fixed-price presentation does not show ordinary 100/150 controls
+- no runtime network font request
+- no player-facing glyph loss
+- required font license notice retained
+
+Avoid:
+- literal-object button proliferation
+- icon on every row
+- round-all-cards
+- unnecessary gradient/shadow
+- touch-target sacrifice
+- desktop dashboard-card proliferation
+- new nested modal structures
+
+## QA
+
+Acceptance criteria -> UI_UX_QA_v2.8.0.md
+
+## RELATED
+
+game philosophy -> 00_GAME_CORE_v2.8.0.md
+run phases / Final timeline / fresh init -> CORE_RUN_v2.8.0.md
+order / Economy / Final Wallet / Gold -> ECONOMY_ORDER_v2.8.0.md
+sale -> SALE_v2.8.0.md
+night/closing / Night result -> NIGHT_CLOSING_v2.8.0.md
+npc presentation -> NPC_TRAIT_v2.8.0.md
+item info -> ITEM_v2.8.0.md
+relic choice -> RELIC_v2.8.0.md
+forecast / Fatigue / Supply -> DUNGEON_HAZARD_v2.8.0.md
+event reveal -> EVENT_v2.8.0.md
+final expedition / Final preparation -> FINAL_EXPEDITION_v2.8.0.md
+Boss modifier truth -> BOSS_v2.8.0.md
+Meta / Store Capital / Decoration -> META_v2.8.0.md
+copy/voice -> COPY_WORLD_VOICE_v2.8.0.md
+exact player-facing copy -> COPY_AUDIT_APPROVED_v2.8.0.md
+presentation system / batches / audio -> PRESENTATION_SYSTEM_v2.8.0.md, PRESENTATION_POLISH_BATCH1..5_v2.8.0.md, PRESENTATION_POLISH_v2.8.0.md
+UI acceptance -> UI_UX_QA_v2.8.0.md
