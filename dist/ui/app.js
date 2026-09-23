@@ -1263,11 +1263,12 @@ function finalScreen(){
     states why the sortie cannot start, on the control itself, rather than leaving a dead
     `마왕성으로 출발` whose reason is a screen-length away in the muster head. The muster's own
     count stays where it is; this is the disabled Action's immediate cause feedback. */
- /* any 1..need may be committed; with nobody picked the dock says what is missing */
+ /* any 1..need may be committed; with nobody picked the action is closed and the count it
+    waits on is the head's 선택 0명 (stating it on the dock too printed the same line twice) */
  const ready=s.team.length>0&&s.team.length<=need;
  const dock=relicWindowLink()+(need
   ?committed?btn('마왕성으로 출발','boss','stamp')
-   :btn(ready?'원정대 확정':pickCount,'final-commit','stamp',ready?'':'disabled')
+   :btn('원정대 확정','final-commit','stamp',ready?'':'disabled')
   :btn('출전 불가 · 런 종료','boss','danger'));
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
     stands in the Boss's own domain. The stage names which Boss so the stylesheet can hang that
