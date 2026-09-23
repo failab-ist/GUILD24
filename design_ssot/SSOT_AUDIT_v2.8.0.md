@@ -155,3 +155,13 @@ Project-wide pass after the v2.8 release (main `f2fa299`); hygiene only, no Desi
   orientation docs (GAME_VISION, v2.8 RELEASE_VISION), the v2.9+ deferred router
 - layout (User-approved): the 51 historical files moved unchanged to `design_ssot/history/`; the top level
   holds only the 32 current owners. Full flattening of inheritance chains is deferred to v2.9, per owner.
+
+## CONSOLIDATION — 2026-09-23 (User-approved, pre-v2.9)
+
+- 21 owners that inherited older versions (15 design + 6 QA) are now self-contained current specs;
+  the other 11 current files had no chain. Method, per-owner ledgers and `npm run ssot:check`:
+  reports/ssot-consolidation/. Every owner passed line accounting plus an independent semantic review.
+- Legacy (older versions and each owner's pre-consolidation patch) stays in design_ssot/history/.
+- User design decisions taken during the pass: Final `eligible` = Source definition; GREED penalty =
+  unmet share of target × cap; GLUTTONY design question / identity; 악바리 fatigue +1 always on.
+- Items reported to the User as undecided are listed in each ledger's UNRESOLVED / REVIEW NOTES.

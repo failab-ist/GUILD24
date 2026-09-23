@@ -121,11 +121,12 @@ FINAL FORMULA / PARTY / FINAL TRANSFER / D25 FINAL STATE -> FINAL_EXPEDITION_v2.
 
 ## HISTORICAL / SUPERSEDED FILE POLICY
 
-Versioned owner files not listed in CURRENT CANONICAL FILE SET are historical/base references only.
-They are stored in design_ssot/history/ under their original filenames; filename references
-resolve there. Do not search history/ for current rules; open a history file only when a current
-owner explicitly inherits from it.
-Retain an older owner file when a current owner explicitly inherits from it.
+Every owner in CURRENT CANONICAL FILE SET is self-contained: the 2026-09-23 consolidation merged each
+owner's former inheritance chain into the owner itself, keeping current rules only (ledgers:
+reports/ssot-consolidation/). No current owner inherits from an older file.
+
+design_ssot/history/ holds legacy only: older versions and each owner's pre-consolidation v2.8 patch
+(`*_v2.8.0-patch.md`). Do not search or open history/ for current rules; it is audit evidence.
 
 Unreferenced historical navigation/decision snapshots may be removed.
 Historical/base files must not be opened as a second current truth.
@@ -133,7 +134,7 @@ Historical/base files must not be opened as a second current truth.
 GUILD24_v2.8_RELEASE_VISION.md is non-Canonical orientation only and carries no detailed mechanics,
 numbers, exact UX contract or QA requirement.
 
-Do not delete inheritance evidence merely because it is old.
+Do not delete history files merely because they are old; the consolidation ledgers cite them.
 
 ## RETIRED ACTIVE SYSTEMS
 
@@ -176,7 +177,6 @@ A single-run perception is not enough to change an approved baseline.
 
     SPEC_INDEX_v2.8.0
     -> exact routed owner
-    -> only required inherited base section when needed
     -> related current QA
     -> Current Source
 
