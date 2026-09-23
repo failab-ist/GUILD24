@@ -6,7 +6,7 @@
 // Policy 'balanced' / pricing 'adaptive' / build 'none' (no paid Store Support is bought, so the
 // measured relic is the only one besides the free D0 pick). The measured relic is removed from the
 // D0 window in BOTH arms, so both arms choose from the same D0 set.
-//   node tools/relic-contribution.cjs [seeds=300] [ids=all] [--set '{"bulk":{"discount":0.18}}'] [--out file]
+//   node tools/relic-contribution.cjs [seeds=300] [ids=all | a,b,a+b] [--set '{"bulk":{"discount":0.18}}'] [--out file]
 // --builds: instead, play each build strategy (and 'none') with the same seeds and report mean
 //   Store Capital gain, reached-D30, clear rate and relic spend per build.
 // --policy <name> (default balanced) · --account full : an account owning and wearing every Decoration
@@ -44,9 +44,11 @@ function runArm(G,seeds,inject,overrides,policy,account,aware){
  const D=G.DATA;
  applyOverrides(D,overrides);
  const P=G.Game.prototype,start=P.start,end=P.end,rows=[];
+ // an id may be a combination "a+b": every member is removed from the D0 window and owned together
+ const list=v=>v?v.split('+'):[];
  P.start=function(seed){const r=start.call(this,seed),s=this.run,w=s.relicWindow;
-  if(inject.remove&&w){const i=w.candidateIds.indexOf(inject.remove);if(i>=0){w.candidateIds.splice(i,1);w.candidatePrices.splice(i,1);}}
-  if(inject.own&&!s.facilities.includes(inject.own))s.facilities.push(inject.own);
+  for(const id of list(inject.remove))if(w){const i=w.candidateIds.indexOf(id);if(i>=0){w.candidateIds.splice(i,1);w.candidatePrices.splice(i,1);}}
+  for(const id of list(inject.own))if(!s.facilities.includes(id))s.facilities.push(id);
   return r;};
  P.end=function(win,reason){const r=end.call(this,win,reason),s=this.run;
   rows.push(rowOf(s));return r;};
