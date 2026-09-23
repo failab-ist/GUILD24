@@ -221,6 +221,8 @@ test('UI-Q-v28-26: the accepted Action composition holds',()=>{
  assert.ok(/--act:var\(--brown\)/.test(back),'the way back carries BROWN through the role, so its bevel and press are its own');
  assert.ok(/min-height:5\dpx/.test(back),'a step below the commit, not a different kind of object');
  assert.ok(/white-space:nowrap/.test(ruleFor('.modal-footer .stamp{')),'neither label breaks to a second line');
+ /* B5-3: 보급으로 돌아가기 is the sheet's one visible cancel - no header 닫기 beside it */
+ assert.ok(/const ownCancel=new Set\(\[[^\]]*'bossConfirm'/.test(app),'BOSS CONFIRM shows no second 닫기');
 });
 
 /* UI-Q-v28-29 CONTROL / FEEDBACK / LAYOUT CONTINUITY — "modal close returns focus to a

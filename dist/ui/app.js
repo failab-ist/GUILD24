@@ -1560,8 +1560,9 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
 
 /* A decision sheet whose footer already carries its way back shows no second 닫기: the footer
-   control is the one cancel owner. Escape still dismisses it (the keydown handler is separate). */
-const ownCancel=new Set(['underConfirm']);
+   control is the one cancel owner (돌아가기 / 보급으로 돌아가기). Escape still dismisses it (the
+   keydown handler is separate). */
+const ownCancel=new Set(['underConfirm','bossConfirm']);
 function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';document.body.style.overflow='';return;}
  const hold=holdFocus(root);
  if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
