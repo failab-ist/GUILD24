@@ -12,6 +12,10 @@ const PORT=Number(process.env.QA_PORT||5191),FIXED_NOW=1790112000000,KEY='guild2
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
 const NOOP=['kit','stone','tree'];
+const {AUDIT,PAIR}=require('./qa-controls.cjs');
+/* Action buttons of the B5-2 surfaces: the dock, sheet footers, the transfer, and the 마지막 발주
+   controls. Everything else (NPC cards, participant switches, shelf lines) is content. */
+const ACTIONS='.dock button, .modal-footer button, [data-action="supply"], .final-order button';
 const results=[];const check=(name,ok,detail='')=>{results.push(ok);console.log((ok?'PASS ':'FAIL ')+name+(detail?' - '+detail:''));};
 const note=(name,detail)=>console.log('NOTE '+name+(detail?' - '+detail:''));
 function serve(){
@@ -62,6 +66,17 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
     await p.evaluate(`(()=>{const t=document.querySelector('.p-final .party-head');if(t)t.scrollIntoView({block:'start'});})()`);
     await p.waitForTimeout(150);await p.screenshot({path:path.join(OUT,`prep-${n}-${tag}.png`)});};
    const focus=async()=>{await p.evaluate(`document.querySelector('.p-final .good.open')?.scrollIntoView({block:'start'})`);await p.mouse.move(1,1);await p.waitForTimeout(200);};
+   const risks=new Map();
+   const audit=async state=>{for(const scope of ['.stage.p-final','#modal-root']){const r=await p.evaluate(AUDIT(scope,ACTIONS));
+     if(scope==='.stage.p-final')check(`CTRL @${tag} ${state}: no horizontal overflow`,!r.hscroll);
+     if(!r.actions.length&&!r.content.length)continue;
+     check(`CTRL @${tag} ${state} ${scope}: ${r.actions.length} action label(s) one line, nothing clipped / off-screen`,!r.fail.length,
+      r.fail.map(x=>x.label+(x.wrapped.length?' wraps['+x.wrapped.join('|')+']':'')+(x.clip?' clip':'')+(x.off?' off':'')).join('; '));
+     for(const x of r.risk)risks.set(x.label,x.wrapped.join('|'));}};
+   const blocked=async reason=>{const r=await p.evaluate(`(()=>{const b=document.querySelector('.p-final .tillpanel [data-action="supply"]'),st=document.querySelector('.p-final .tillpanel .final-status');
+     return {dis:!!b&&b.disabled,face:b?b.innerText.replace(/\\s+/g,' ').trim():'',status:st?st.innerText:'',inside:!!st&&!!b&&b.contains(st)};})()`);
+    check(`BR @${tag} ${reason}: status outside the button, the button keeps its action face, disabled`,
+     r.dis&&!r.inside&&r.status.includes(reason)&&/^50% \d+G 보급$/.test(r.face)&&!r.face.includes(reason),JSON.stringify({face:r.face,status:r.status}));};
    const cap=await p.evaluate(`Guild24.game.finalRequired()`),ids=await p.evaluate(`Guild24.game.finalEligible().map(n=>n.id)`);
    const t0=(await p.evaluate(acct)).threat;
    check(`setup @${tag} ${ids.length} eligible, cap ${cap}`,ids.length>=3&&cap===3);
@@ -82,6 +97,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    check(`R @${tag} rarity text stays under the name, no overflow`,nameVsRare.r<nameVsRare.h&&!nameVsRare.over,JSON.stringify(nameVsRare));
    check(`S @${tag} 선택 1명 · 최대 3명, still no forecast`,u.count==='선택 1명 · 최대 3명'&&!u.forecasts&&!u.combat);
    await shot('2-select1');
+   await audit('selection');
 
    // ---- A: 1-person, sub-3 confirm: 돌아가기 keeps selection, 이대로 확정 commits
    const before=await p.evaluate(acct);
@@ -89,6 +105,13 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    const modal=await p.evaluate(`(document.querySelector('#modal-root .modal')||{}).innerText||''`);
    check(`A @${tag} sub-3 confirm shows the approved copy`,modal.includes('3명보다 적은 인원으로 출전할까요?')&&modal.includes('선택한 1명만 마왕성으로 향합니다.')&&modal.includes('돌아가기')&&modal.includes('이대로 확정'),modal.replace(/\n/g,' | '));
    await p.mouse.move(1,1);await p.waitForTimeout(200);await p.screenshot({path:path.join(OUT,`prep-3-under-confirm-${tag}.png`)});
+   const pair=await p.evaluate(PAIR);
+   check(`PAIR @${tag} under-3 confirm: two footer actions of one geometry family (height/width/corner/bevel/type)`,pair&&pair.count===2&&pair.same,JSON.stringify(pair&&pair.shapes));
+   check(`PAIR @${tag} no visible header 닫기; 돌아가기 is the one cancel owner`,pair&&!pair.headerClose.length&&pair.cancels===1,JSON.stringify(pair&&{header:pair.headerClose,labels:pair.labels}));
+   await audit('under-3 confirm');
+   await p.keyboard.press('Escape');await p.waitForTimeout(150);
+   check(`PAIR @${tag} Escape still dismisses the sheet`,!(await p.evaluate(`!!document.querySelector('#modal-root .modal')`))&&!(await p.evaluate(acct)).committed);
+   await p.click('.p-final .dock [data-action="final-commit"]');
    await p.click('#modal-root [data-action="dismiss"]');
    let a=await p.evaluate(acct);
    check(`A @${tag} 돌아가기 keeps the provisional selection`,!a.committed&&a.team.length===1&&(await p.evaluate(ui)).roster);
@@ -118,6 +141,9 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    check(`C @${tag} 3-person: one 토벌 전망, roster gone, no one-NPC readout, no 'Final'`,u.forecasts===1&&!u.roster&&!u.combat&&!u.death&&!u.finalWord,u.forecast);
    check(`F @${tag} departure open with every Bag slot empty`,await p.evaluate(`!document.querySelector('.p-final .dock [data-action="boss"]').disabled`));
    await shot('4-prep');
+   await audit('preparation');
+   await p.evaluate(`document.querySelector('.p-final .final-order').open=true`);await audit('마지막 발주 open');
+   await p.evaluate(`document.querySelector('.p-final .final-order').open=false`);
 
    // ---- D: the transfer that moves the forecast input most, exactly once
    const tgt=ids[0];
@@ -131,6 +157,8 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    const tillText=await p.evaluate(`(document.querySelector('.p-final .tillpanel')||{}).innerText||''`);
    check(`D @${tag} focused till carries no one-NPC forecast / death risk`,!tillText.includes('전투 전망')&&!tillText.includes('실패 시 사망 위험'));
    await focus();await p.screenshot({path:path.join(OUT,`prep-7a-transfer-before-${tag}.png`)});
+   await audit('normal transfer');
+   check(`N @${tag} a valid transfer: no status line, action face 50% / price / 보급, enabled`,await p.evaluate(`(()=>{const b=document.querySelector('.p-final .tillpanel [data-action="supply"]');return !b.disabled&&!document.querySelector('.p-final .tillpanel .final-status')&&/^50% \\d+G 보급$/.test(b.innerText.replace(/\\s+/g,' ').trim());})()`));
    const b=await p.evaluate(acct);
    await p.click('.p-final [data-action="supply"]');
    a=await p.evaluate(acct);
@@ -159,6 +187,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
     return {m,same:b===JSON.stringify([s.money,s.stats.revenue,s.inventory.length,n.money,n.pack])};})()`);
    check(`H @${tag} engine refuses all three, nothing moves`,!noopEng.m.includes('COMMITTED')&&noopEng.same,noopEng.m);
    await focus();await p.screenshot({path:path.join(OUT,`prep-5-noeffect-${tag}.png`)});
+   await blocked('마왕성에서는 효과 없음');await audit('no-effect');
    await p.click(`.p-final [data-action="select"][data-id="${noopId}"]`);
 
    // ---- insufficient Wallet
@@ -169,8 +198,20 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
     const exact=`소지금 부족 · ${poor.price}G 필요 / ${poor.have}G 보유`;
     check(`W @${tag} insufficient Wallet: exact inline status, 보급 closed, no modal`,t.dis&&t.txt.includes(exact)&&!(await p.evaluate(`!!document.querySelector('#modal-root .modal')`)),exact);
     await focus();await p.screenshot({path:path.join(OUT,`prep-6-wallet-${tag}.png`)});
+    await blocked(exact);await audit('short Wallet');
     await p.click(`.p-final [data-action="select"][data-id="${poor.id}"]`);}
    else check(`W @${tag} an unaffordable line exists to show`,false);
+
+   // ---- Bag full: fill the first member's second slot through the real control, then focus a line
+   await p.click(`.p-final [data-action="supply-target"][data-id="${tgt}"]`);
+   const fill=await p.evaluate(`(()=>{const g=Guild24.game,s=g.run,n=s.npcs.find(x=>x.id==='${tgt}');if(n.pack.length>=2)return null;
+    const st=s.inventory.filter(x=>!${JSON.stringify(NOOP)}.includes(x.item)&&g.finalPrice(x.item)<=n.money).sort((a,b)=>g.finalPrice(a.item)-g.finalPrice(b.item))[0];return st&&st.id;})()`);
+   if(fill){await p.click(`.p-final [data-action="select"][data-id="${fill}"]`);await p.click('.p-final [data-action="supply"]');}
+   const any=await p.evaluate(`(Guild24.game.run.inventory.find(x=>!${JSON.stringify(NOOP)}.includes(x.item))||{}).id`);
+   await p.click(`.p-final [data-action="select"][data-id="${any}"]`);
+   await focus();await p.screenshot({path:path.join(OUT,`prep-10-bagfull-${tag}.png`)});
+   await blocked('가방 가득');await audit('Bag full');
+   await p.click(`.p-final [data-action="select"][data-id="${any}"]`);
 
    // ---- shelf summary == focused preview (Core-Stat rows) for the current target
    const cmp=await p.evaluate(`(()=>{const g=Guild24.game,s=g.run,out=[];const CORE={combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신'};
@@ -255,6 +296,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
     const l1=(await p.evaluate(ui)).forecast;await shot('7d-cross-after');
     check(`X @${tag} a real transfer moves the shown 토벌 전망`,l0==='불리'&&l1==='접전',`${l0} -> ${l1} (QA-only: 투력 +${x.k} each, ratio ${x.r.toFixed(3)} -> ${x.after.toFixed(3)}, ${x.item})`);}
    else check(`X @${tag} a crossing setup was found`,false);
+   for(const [label,w] of risks)note(`wrap-risk @${tag} content control`,`${label} -> ${w}`);
    await ctx.close();
   }
  }finally{await browser.close();server.kill();}
