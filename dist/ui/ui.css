@@ -1385,6 +1385,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-night .changed .after{margin-top:9px;padding-top:8px;box-shadow:inset 0 1px 0 #ffffff17}
 .p-night .changed .reward{margin-top:6px}
 .p-night .changed .grew{gap:4px 14px}
+/* no growth: the aftermath opens the strip, so it carries no rule and no lead-in space */
+.p-night .changed>div:first-child{margin-top:0;padding-top:0;box-shadow:none}
 /* a death grew nothing, so the aftermath is the first group and there is nothing to divide */
 .changed>div:first-child{margin-top:0;padding-top:0;box-shadow:none}
 /* GROWTH — the one compact cell, because Level and the Stats are compared with each other */
@@ -2416,6 +2418,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-night .changed .grew{gap:6px 20px}
  .p-night .changed .after{margin-top:13px;padding-top:12px}
  .p-night .changed .reward{margin-top:9px}
+ .p-night .changed>div:first-child{margin-top:0;padding-top:0}
  .p-night .changed>div{column-gap:20px}
  .p-night .changed .tip>summary i,.p-night .changed .tok i{font-size:16px}
  .p-night .changed .tip>summary b,.p-night .changed .tok b,.p-night .changed .tok>em{font-size:18px}
