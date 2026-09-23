@@ -8,6 +8,7 @@
 //     viewport
 //   - `actionSel` marks the Action buttons (strict); every other button is content and its
 //     wraps are reported as wrap-risk rather than failed
+// OVERLAP(sel, section): see below - the floating menu pin vs important right-side state.
 // PAIR(sel): the two footer controls of one decision sheet - same geometry family (height,
 //   width, corner, outline/bevel structure with colours masked, clip, type size), and no second
 //   visible dismiss in the header.
@@ -44,4 +45,16 @@ const PAIR=`(()=>{const m=document.querySelector('#modal-root .modal');if(!m)ret
  const cancels=f.filter(b=>b.dataset.action==='dismiss').length;
  const same=s.length===2&&['h','w','radius','border','shadow','clip','font','cls'].every(k=>s[0][k]===s[1][k]);
  return {count:f.length,same,shapes:s,headerClose,cancels,labels:f.map(b=>b.innerText.trim())};})()`;
-module.exports={AUDIT,PAIR};
+// OVERLAP(sel): the fixed `.menu-pin` must never cover `sel`. The element is checked where it
+//   stands, and again after its section is scrolled to the very top of the stage (the worst
+//   case: the pin does not scroll). Returns the two rects and whether they intersect.
+const OVERLAP=(sel,section)=>`(async()=>{const pin=document.querySelector('.menu-pin');const el=[...document.querySelectorAll(${JSON.stringify(sel)})].find(e=>e.getClientRects().length);
+ if(!pin||!el)return {missing:!pin?'pin':'target'};
+ const hit=()=>{const a=pin.getBoundingClientRect(),b=el.getBoundingClientRect();
+  return {pin:[a.left,a.top,a.right,a.bottom].map(Math.round),el:[b.left,b.top,b.right,b.bottom].map(Math.round),
+   hit:a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom};};
+ const here=hit();
+ const top=document.querySelector(${JSON.stringify(section||sel)});top.scrollIntoView({block:'start'});
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+ const scrolled=hit();return {here,scrolled,hit:here.hit||scrolled.hit};})()`;
+module.exports={AUDIT,PAIR,OVERLAP};

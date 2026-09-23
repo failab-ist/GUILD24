@@ -12,7 +12,7 @@ const PORT=Number(process.env.QA_PORT||5191),FIXED_NOW=1790112000000,KEY='guild2
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
 const NOOP=['kit','stone','tree'];
-const {AUDIT,PAIR}=require('./qa-controls.cjs');
+const {AUDIT,PAIR,OVERLAP}=require('./qa-controls.cjs');
 /* Action buttons of the B5-2 surfaces: the dock, sheet footers, the transfer, and the 마지막 발주
    controls. Everything else (NPC cards, participant switches, shelf lines) is content. */
 const ACTIONS='.dock button, .modal-footer button, [data-action="supply"], .final-order button';
@@ -98,6 +98,10 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    check(`S @${tag} 선택 1명 · 최대 3명, still no forecast`,u.count==='선택 1명 · 최대 3명'&&!u.forecasts&&!u.combat);
    await shot('2-select1');
    await audit('selection');
+   const pinCheck=async(state,list)=>{for(const [sel,sec] of list){const r=await p.evaluate(OVERLAP(sel,sec));
+     check(`PIN @${tag} ${state}: the menu pin does not cover ${sel} (in place, and with its section scrolled to the top)`,!r.missing&&!r.hit,JSON.stringify(r));}
+    await p.evaluate(`document.querySelector('.stage-scroll').scrollTop=0`);};
+   await pinCheck('selection',[['.p-final .party-head .count','.p-final .party-head']]);
 
    // ---- A: 1-person, sub-3 confirm: 돌아가기 keeps selection, 이대로 확정 commits
    const before=await p.evaluate(acct);
@@ -142,6 +146,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    check(`F @${tag} departure open with every Bag slot empty`,await p.evaluate(`!document.querySelector('.p-final .dock [data-action="boss"]').disabled`));
    await shot('4-prep');
    await audit('preparation');
+   await pinCheck('preparation',[['.p-final .party-head .count','.p-final .party-head'],['.p-final .final-forecast .tip>summary','.p-final .final-forecast'],['.p-final .shelf-head>span','.p-final .shelf-head']]);
    await p.evaluate(`document.querySelector('.p-final .final-order').open=true`);await audit('마지막 발주 open');
    await p.evaluate(`document.querySelector('.p-final .final-order').open=false`);
 
