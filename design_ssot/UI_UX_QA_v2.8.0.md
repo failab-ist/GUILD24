@@ -686,3 +686,7 @@ PASS:
 - no ordinary SALE purchase/refusal dialogue appears in Final preparation
 - an otherwise valid affordable Final transfer is deterministic
 - no horizontal overflow at 360/390/412 and desktop 1024/1280
+- the sub-3 confirm's two actions share one geometry family; no visible header 닫기 beside `돌아가기`
+- Final action labels are one line at 360/390/412; body / Item-effect text may wrap
+- a blocked transfer shows its reason outside the disabled action
+- the menu pin does not cover the party count, including with the party section scrolled to the top

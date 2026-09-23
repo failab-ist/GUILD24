@@ -586,7 +586,8 @@ The Final roster is a selection surface, not a rarity gallery.
 - rarity-coloured outer frames do not compete with selection;
 - unselected cards use a neutral edge;
 - selected cards alone own the strong selection frame;
-- rarity text may gain one restrained size/weight step if needed, but never outranks the NPC name or causes overflow.
+- rarity text may gain one restrained size/weight step if needed, but never outranks the NPC name or causes overflow;
+- the party count stays fully readable and is never covered by the floating menu pin.
 
 No ordinary expedition `전투 전망` is shown while the party is provisional.
 Use the exact selection guidance owned by COPY_AUDIT_APPROVED.
@@ -596,6 +597,8 @@ Use the exact selection guidance owned by COPY_AUDIT_APPROVED.
 `원정대 확정` creates the transition from roster selection to preparation.
 
 If fewer than 3 are committed, use the approved confirmation copy before crossing that boundary.
+Its two actions (`돌아가기` / `이대로 확정`) are one geometry family (same object, height and type scale;
+meaning differs by semantic weight only), and `돌아가기` is the only visible cancel control.
 
 After commitment:
 - the full selectable roster no longer remains the main content;
@@ -642,4 +645,9 @@ Insufficient Wallet:
 - no large alert modal.
 
 Final preparation does not reuse ordinary SALE purchase/refusal chatter.
+
+Blocked transfer (no-effect / insufficient Wallet / Bag full): the reason is a compact inline status in
+the Item/transfer area; the disabled transfer action keeps its normal face and does not carry the reason.
+
+Final action labels never wrap by accident on mobile; explanatory body / Item-effect text may wrap normally.
 
