@@ -1012,12 +1012,14 @@ const itemKind=it=>it.effects?.potion?'포션':'';
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    return '<section class="shelf">'
-   +'<div class="shelf-head"><h2>'+(isFinal?'대원에게 보급':'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
+   +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
    +(isFinal?'':relicRef())+'</div><div class="goods">'
- +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it);
-  return '<button class="good r'+it.rarity+(open?' open':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
-  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+Presentation.rows(it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · ')+'</span></span>'
-  +'<span class="price"><b>'+it.sell+'G</b><span>재고 '+st.count+'</span></span></button>'+(open?till():'');}).join('')
+ +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id);
+  /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
+     Final effect says so on its row before it is even opened. */
+  return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
+  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">Final 효과 없음</em>':Presentation.rows(it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · '))+'</span></span>'
+  +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span></span></button>'+(open?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
 function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.phase==='final'?s.npcs.find(x=>x.id===supplyNPC):game.current();
  if(!st||!n)return '';
@@ -1025,13 +1027,18 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  /* The same Gate the forecast below and the night itself use. Reading n.destination directly
     computed a Deep nominee's preview against their ordinary Gate while the forecast two lines
     down was already showing the Deep one. */
- const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
+ /* FINAL_EXPEDITION §3: in the Final the preview is taken against the Final itself, and a
+    Boss that changes what Items give (GLUTTONY) is applied through the same finalSnapshot the
+    resolution uses, so the Player assigns Items against the actual Final state. */
+ const moved=isFinal?Presentation.preview(n,s.dungeons[0],s.facilities,it.id,
+    s.bossId==='GLUTTONY'?prep=>game.finalSnapshot(n,prep,s.dungeons[0],null):null)
+  :Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  const changes=moved.direct;
  /* ECONOMY_ORDER_v2.7: the Final price is fixed to the ordinary 50% amount - no 100/150 choice
     and no refusal roll - but the Wallet is real, so an adventurer who cannot afford it cannot
     be given the Item, and the button says which of the two is stopping it. */
  const finalPrice=isFinal?game.finalPrice(it.id):0;
- const finalBlock=isFinal?(full?'가방 가득':n.money<finalPrice?'손님 소지금 부족':''):'';
+ const finalBlock=isFinal?(game.finalNoEffect(it.id)?'Final 효과 없음':full?'가방 가득':n.money<finalPrice?'손님 소지금 부족':''):'';
  const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>'+(finalBlock||'이익 '+(finalPrice-st.cost)+'G')+'</small>','supply','stamp',
     'aria-label="'+E(n.name)+'에게 보급 '+finalPrice+'G'+(finalBlock?' · '+finalBlock:'')+'" '+(finalBlock?'disabled':''))
  :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
@@ -1045,7 +1052,12 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     :full?'가방 가득':'';
    return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
     'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
- return '<div class="tillpanel">'+(isFinal?'':'<p class="forwho"><span>'+E(n.name)+'에게 판매</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>')
+ const forwho='<p class="forwho"><span>'+E(n.name)+(isFinal?'에게 보급':'에게 판매')+'</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>';
+ /* a Final no-effect Item: the reason and the closed 보급, and no preview of an effect it will not have */
+ if(isFinal&&game.finalNoEffect(it.id))return '<div class="tillpanel">'+forwho
+  +'<p class="final-noop-why">마왕성 원정에서는 쓰이지 않아 Final 가방에 넣을 수 없습니다.</p><div class="tills">'+actions+'</div></div>';
+ return '<div class="tillpanel">'+forwho
+ +(isFinal&&s.bossId==='GLUTTONY'?'<p class="final-boss-note">'+E(Copy.boss.d15.trait.GLUTTONY[0])+' · '+E(Copy.boss.d15.trait.GLUTTONY[1][0])+'</p>':'')
  /* SA-Q30: the rows are still grouped by what actually produced them internally - a Stat that
     rose because this Item's Supply relieved a Supply Deficit, or crossed a Fatigue band, is
     still never presented as if the Item itself granted that Stat - but the two group names
@@ -1181,7 +1193,7 @@ function npcCard(n,action='npc'){const s=game.run,blocked=action==='team'&&(!n.a
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
 function finalScreen(){
- const s=game.run,d=s.dungeons[0],need=game.finalRequired();
+ const s=game.run,d=s.dungeons[0],need=game.finalRequired(),committed=!!s.finalCommitted;
  if(!s.team.includes(supplyNPC))supplyNPC=s.team[0]||null;
  const roster=s.npcs.filter(n=>n.alive&&n.introduced).sort((a,b)=>b.level-a.level);
  /* UI_UX: the Boss is a primary game object, and on the day the player finally faces it the
@@ -1205,13 +1217,21 @@ function finalScreen(){
    return '<div class="fam-col"><span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>'
     +hazardList(d.hazards.filter(h=>own.includes(h)))+'</div>';}).join('')
  +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))))+'</section>'
- +'<div class="party-head"><h2>원정대</h2><span class="count">'+s.team.length+' / '+need+'</span></div>'
- +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'team')).join('')+'</div>'
- +(s.team.length?'<div class="final-team">'+s.team.map(id=>{const n=s.npcs.find(x=>x.id===id);
-   return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'"><b>'+E(n.name)+'</b><div class="pack">'
-   +Array.from({length:Adventurer.slots(n)},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28):'빈 칸')+'</div>').join('')+'</div></button>';}).join('')+'</div>':'')
- +shelf(true)
- +'<details class="final-order"><summary>마지막 발주 · 상품과 점포지원 사이의 선택</summary>'+orderForm()+'</details>'
+ /* B5-2 / FINAL-Q75: 출전 NPC 선택 -> FINAL 준비. Until the party is confirmed the screen is the
+    muster only; once confirmed (saved) the roster is gone and only the confirmed members are
+    prepared, one at a time, against the shelf. */
+ +(!committed
+  ?'<div class="party-head"><h2>원정대 선택</h2><span class="count">'+s.team.length+' / '+need+'</span></div>'
+   +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'team')).join('')+'</div>'
+  :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+need+'명</span></div>'
+   +'<div class="final-team">'+s.team.map(id=>{const n=s.npcs.find(x=>x.id===id),slots=Adventurer.slots(n);
+    return '<button class="final-member'+(supplyNPC===id?' active':'')+'" data-action="supply-target" data-id="'+id+'" aria-pressed="'+(supplyNPC===id)+'">'
+    +'<span class="who">'+portrait(n,44)+'<span><b>'+E(n.name)+'</b><small>Lv.'+n.level+' '+E(D.jobBy[n.job].name)+'</small></span>'
+    +'<span class="wallet">'+walletChip(n)+'</span></span>'
+    +'<span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
+    +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></button>';}).join('')+'</div>'
+   +shelf(true)
+   +'<details class="final-order"><summary>마지막 발주 · 상품과 점포지원 사이의 선택</summary>'+orderForm()+'</details>')
  +ownedRelicView();
  /* UI_UX §PER-PHASE (FINAL) — DISABLED COMMIT CAUSE (USER AMENDMENT 2026-09-22): the fixed dock
     states why the sortie cannot start, on the control itself, rather than leaving a dead
@@ -1219,7 +1239,8 @@ function finalScreen(){
     count stays where it is; this is the disabled Action's immediate cause feedback. */
  const ready=s.team.length===need;
  const dock=relicWindowLink()+(need
-  ?btn(ready?'마왕성으로 출발':'원정대 '+s.team.length+' / '+need,'boss','stamp',ready?'':'disabled')
+  ?committed?btn('마왕성으로 출발','boss','stamp')
+   :btn(ready?'원정대 확정':'원정대 '+s.team.length+' / '+need,'final-commit','stamp',ready?'':'disabled')
   :btn('출전 불가 · 런 종료','boss','danger'));
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
     stands in the Boss's own domain. The stage names which Boss so the stylesheet can hang that
@@ -1691,6 +1712,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();break;
  case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
+ case'final-commit':game.commitFinalParty();supplyNPC=s.team[0];selected=null;sound('button');render();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this

@@ -44,10 +44,11 @@ function known(d,g){return d.hazards;}
    it moved through a system, and that system says so in its own row. The hidden Supply-deficit
    formula stays hidden - the row names the channel, never the arithmetic behind it. */
 const fatigueBand=f=>f>=20?2:f>=10?1:0;
-function preview(n,d,fac,item){
+function preview(n,d,fac,item,adjust){
  const visible={...n,traits:traits(n)};
  const a=G.Dungeon.prepare(visible,d,fac),b=G.Dungeon.prepare({...visible,pack:[...visible.pack,item]},d,fac);
- const before=a.effects,after=b.effects,stat=new Set(G.Adventurer.keys);
+ /* adjust: an optional (prep)=>effects the Final passes when its Boss changes Item values */
+ const before=adjust?adjust(a):a.effects,after=adjust?adjust(b):b.effects,stat=new Set(G.Adventurer.keys);
  const own=b.itemStats.filter(x=>x.item===item)
   .reduce((m,x)=>{for(const[k,v]of Object.entries(x.stats))m[k]=(m[k]||0)+v;return m;},{});
  const direct=[],derived=[];
