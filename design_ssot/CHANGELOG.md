@@ -22,6 +22,13 @@ Docs-first. Each owner amendment is listed when committed.
   from 10. Owners: DUNGEON_HAZARD, ITEM, NIGHT_CLOSING, NPC_TRAIT, RELIC, BOSS, FINAL_EXPEDITION, SALE,
   UI_UX, ECONOMY_ORDER, COPY_AUDIT_APPROVED, COPY_WORLD_VOICE + QA owners. Source follows (tests/copy.cjs
   is expected to fail until then).
+- SALE / transaction batch (D-3, commits cbc7e16 / f9a06f1 / 068df2d): PRESENTATION_PRINCIPLES
+  §TRANSACTION BEAT (hand-over, customer reaction, Bag on the counter, customer exit/entry, price-mode
+  sound family, refusal beat; presentation-only, ≤320 ms, reduced-motion no-op); UI_UX / SALE: counter
+  band with the Bag beside the customer, reply lines 5 s, Stat grid pressure tag, matching-effect
+  emphasis, `판매 후 변화` as one delta list with the frozen outlook not repainted (no outlook delta
+  rows), readout = 전투 전망 + 환경 대응 with the Death % in the 전투 전망 help and NPC detail, price role
+  words; COPY_AUDIT §3-7 / §4-1 / §4-3 / §4-19 / §4-20 / §5-7; UI_UX_QA UI-Q-v29-3 … -9.
 - COPY_AUDIT_APPROVED §3 / §4, COPY_WORLD_VOICE §TUTORIAL COACH COPY, UI_UX §TUTORIAL: first-sale coach
   diet — four marks (destination, Hazard, outlook, price), contextual Supply / 대성공 / 재방문 / 가방,
   concept popovers (commit 66f37e4; Source e0d0c44).
