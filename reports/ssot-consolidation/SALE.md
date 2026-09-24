@@ -352,3 +352,15 @@ The compared Item's detail lives on the counter tray, so comparing two Items nev
 - the counter tray sits fixed above the dock; the price keys are always in the same place (User 2026-09-24, v2.9.0)
 - counter tray fill / clear (the shelf list never changes height; (User 2026-09-24, v2.9.0))
 ```
+
+## AMENDMENT — v2.9.0 trims: returning surface / empty tray / coach (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the returning-customer quick surface is desk-only.
+
+```text
+- mobile presentation must not push Wallet / Expected Destination / Forecast below the primary decision flow
+```
+
+```new
+- the quick surface is desk-only (≥1024); on phone the NPC detail 원정 기록 holds the last expedition (User 2026-09-24, v2.9.0)
+```

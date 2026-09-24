@@ -146,7 +146,7 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 `#order-register`) is retired; the register reads itself.
 
 ### PRICING (User 2026-09-24, v2.9.0)
-> 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. 누르면 바로 건네진다.
+> 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.
 
 ### HAZARD
 > 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.
@@ -154,8 +154,8 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 ### SUPPLY (User 2026-09-24, v2.9.0: contextual on the first `피로 A → 출발 B` line)
 > 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
 
-### RETURNING (재방문 손님, contextual on the folded last-expedition line)
-> 다시 온 손님. 지난 원정은 여기, 특성과 기록은 손님을 눌러 본다.
+### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0)
+> 다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.
 
 ### GATES (User 2026-09-24, v2.9.0: anchor = the ORDER 오늘 brief block)
 > 오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.
@@ -430,7 +430,7 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 ## 4-23. 계산대 트레이 — 빈 상태
 
 **노출 위치**
-> SALE 도크 바로 위 계산대 트레이. 고른 상품이 없을 때 한 줄.
+> SALE 도크 바로 위 계산대 트레이. 고른 상품이 없을 때 한 줄 — DAY 1~3, 튜토리얼을 건너뛰지 않은 계정에서만. 그 뒤 빈 트레이는 높이 0 (rule owner: UI_UX §SALE — COUNTER TRAY).
 
 **현재** (User 2026-09-24, v2.9.0)
 > 상품을 누르면 계산대에 올라온다.

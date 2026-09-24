@@ -52,6 +52,9 @@ Docs-first. Each owner amendment is listed when committed.
   the chosen Item, its `판매 후 변화`, `특수 효과` and the three price keys always sit in the same place and
   the shelf list never moves (User-approved composition change; PRESENTATION_PRINCIPLES §COMPOSITION LOCK,
   UI_UX §SALE — COUNTER TRAY, SALE, COPY_AUDIT §4-23 / §4-24, UI_UX_QA UI-Q-v29-18).
+- Trims (U, User 2026-09-24): the `지난 원정` quick surface is desk-only (phone: NPC detail 원정 기록), the empty
+  counter tray shows its prompt on DAY 1~3 with the tutorial only (otherwise no height), the PRICING coach
+  drops the hand-over clause (A7 retired), the RETURNING coach anchors on the customer's card.
 
 ## v2.8.0 — closed 2026-09-24
 

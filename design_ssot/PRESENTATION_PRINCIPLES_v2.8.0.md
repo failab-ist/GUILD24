@@ -420,7 +420,7 @@ General contract, every beat:
 | A4 | 손님 교대 customer exit / entry | `손님 보내기`: the current customer exits left (240 ms), then the next arrives with the existing entry (240~340 ms); `depart` gets a recorded utility cue (door / step family). Entry may still start the view at the top (UI_UX §SALE — MOBILE AUTHORITY) |
 | A5 | 가격 소리 계열 price-mode sound family | 50% / 100% / 150% share the register family and differ by coin ticks (1 / 2 / 3); no mode sounds like the correct answer (§AUDIO PRESENTATION "peer choices") |
 | A6 | 거절 refusal | the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text; refusal reply stays 5 s (A2) |
-| A7 | first-sale price coach | the PRICING coach gains one closing clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
+| A7 | first-sale price coach | retired (User 2026-09-24 revision): the PRICING coach keeps its two sentences and gains no hand-over clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
 
 Exact surface / layout -> UI_UX_v2.8.0.md §SALE; acceptance -> UI_UX_QA_v2.8.0.md.
 

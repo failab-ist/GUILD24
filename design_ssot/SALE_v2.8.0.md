@@ -843,7 +843,7 @@ Rules:
 - only actually accepted/purchased Item IDs from that expedition
 - empty slot remains empty
 - no causal claim from Item presence alone
-- mobile presentation must not push Wallet / Expected Destination / Forecast below the primary decision flow
+- the quick surface is desk-only (≥1024); on phone the NPC detail 원정 기록 holds the last expedition (User 2026-09-24, v2.9.0)
 - detail may expand actual destination, Outcome, Item names, and only proven contribution tokens
 
 No Product XP / Favorite Meter / Familiarity Bonus is created.

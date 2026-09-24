@@ -857,7 +857,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - the counter tray is a fixed band directly above the dock, outside the scrolled column, at every width
 - tapping a shelf row puts that Item on the tray; the row is only highlighted, the shelf rows never change height
 - tray contents, top to bottom: one header line (Item icon · name · kind · sell price · stock · shelf life, and `{손님}에게 · 소지 {N}G` at the right), the `판매 후 변화` delta list (§SALE SELECTED-ITEM INFORMATION; may be one wrapping line), the `특수 효과` line when any, then the three price keys (§SALE — PRICE ROLE WORDS)
-- empty tray: one line, the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
+- empty tray: on DAY 1~3 of a Run while the account tutorial is not skipped, one line (the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23); otherwise the empty tray has no height (User 2026-09-24, v2.9.0)
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag); a refusal keeps the Item on the tray with the refused key locked
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
@@ -867,4 +867,18 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 The selected-Item surface (the counter tray, §SALE — COUNTER TRAY) uses one primary heading:
 - on the counter tray the delta list may be set on one wrapping line, rows joined by ` · ` (User 2026-09-24, v2.9.0)
 - the counter tray is part of the Item / price surface: empty ≤ 48px, filled ≤ 200px at 360, and at least three shelf rows stay visible with the tray filled (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 trims: returning surface / empty tray / coach (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the returning-customer quick surface is desk-only, the empty counter tray prompt is DAY 1~3 / tutorial only (the T amendment's empty-tray line is edited in place above).
+
+```text
+- Forecast in the current-decision flow after relevant prior-expedition information
+On mobile it must not push Wallet / Expected Destination / Forecast out of the primary decision flow.
+```
+
+```new
+- Forecast in the current-decision flow (the `지난 원정` quick surface is desk-only; on phone the NPC detail holds it) (User 2026-09-24, v2.9.0)
+On phone the quick surface is not shown: the customer's status strip and the NPC detail 원정 기록 hold the last expedition; on a desk (≥1024) it stays (User 2026-09-24, v2.9.0).
 ```

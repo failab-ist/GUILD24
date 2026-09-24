@@ -733,7 +733,7 @@ Player does not need to reread the entire unchanged profile to understand what c
 
 Returning customer with snapshot:
 PASS:
-- compact `지난 원정 · DAY X · 결과 · [item] [item]`
+- compact `지난 원정 · DAY X · 결과 · [item] [item]` on a desk; not shown on phone, where the NPC detail 원정 기록 holds it (User 2026-09-24, v2.9.0)
 - exact actually accepted items only
 - empty slot preserved
 - mobile Wallet/Destination/Forecast hierarchy not displaced
@@ -2094,7 +2094,7 @@ SETUP:
 SALE at 360, 390 and 1280: entry, tap one shelf row, tap a second row, one successful sale, one refusal.
 
 PASS:
-- at entry the tray is empty (one line, `상품을 누르면 계산대에 올라온다.`, ≤ 48px at 360) and the shelf heading plus at least one row are visible without a scroll
+- at entry the tray is empty: on DAY 1~3 with the tutorial active one line (`상품을 누르면 계산대에 올라온다.`, ≤ 48px at 360), otherwise no height; the shelf heading plus at least one row are visible without a scroll
 - tapping a row fills the tray (header line, `판매 후 변화`, `특수 효과` when any, three price keys) and the shelf list does not move: no row changes height, scrollTop is unchanged
 - tapping a second row swaps the tray contents; both rows stay where they were
 - the filled tray is ≤ 200px at 360 and at least three shelf rows remain visible above it
