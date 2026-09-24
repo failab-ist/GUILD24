@@ -2724,4 +2724,27 @@ test('의무실 현판: the heal note sits in the kit under the bag, wraps, and 
  assert.ok(/case'open':[^\n]*healCue\(\)/.test(app)&&/else sound\('depart'\);healCue\(\);/.test(app),'played on the arrival that opens SALE and on each next one');
 });
 
+/* USER 2026-09-24 / UI_UX §FIRST STORE SUPPORT TUTORIAL (DAY 0): the first screen of a new store
+   teaches itself - three marks over the DAY 0 takeover, never over any other modal, never a pick. */
+test('DAY 0 Store Support tutorial: three marks over the takeover, DAY 0 only, no answer given',()=>{
+ const steps=(app.match(/ relic:\[(\['relic-what'[\s\S]*?\]\])\n\};/)||[])[1];
+ assert.ok(steps,'the relic lesson exists');
+ for(const [id,sel] of [['relic-what','.relic-open'],['relic-card','.relic-choices .relic-plate'],['relic-buy','.relic-choices .relic-plate .stamp']])
+  assert.ok(steps.includes("['"+id+"','"+sel+"'"),id+' points at '+sel);
+ for(const r of DATA.relics)assert.ok(!steps.includes(r.name),'no Store Support is named as the answer: '+r.name);
+ const show=fn('showCoach');
+ assert.ok(/const relicD0=modal==='relics'&&game\.run\?\.phase==='foundation';/.test(show),'the exception is the DAY 0 takeover alone');
+ assert.ok(/if\(tutorial\.skipped\|\|\(modal&&!relicD0\)\)return;/.test(show),'every other modal still has no mark over it, and a skipped tutorial stays skipped');
+ assert.ok(/relicD0\?coachSteps\.relic:/.test(show),'the takeover reads its own lesson');
+ assert.ok(/\.coach-layer\.over-takeover\{z-index:80\}/.test(css)&&/\.relic-takeover\{[^}]*z-index:70/.test(css),'the mark sits above the takeover it teaches');
+ /* USER 2026-09-24: 건너뛰기 skips this screen's lesson only, never the whole tutorial */
+ const fin=fn('finishCoach');
+ assert.ok(/if\(skip\)for\(const x of activeGroup\|\|\[\]\)t\['coach-'\+x\[0\]\]=true;/.test(fin),'skip marks every mark of the group on screen done');
+ assert.ok(!/skipped=true/.test(fin),'and no longer switches the whole tutorial off');
+ assert.ok(/activeGroup=steps;/.test(show),'the group is the one being shown');
+ assert.ok(/\.coach-bubble p\{[^}]*word-break:keep-all/.test(css),'bubble copy breaks between words');
+ const copy=read('design_ssot/COPY_WORLD_VOICE_v2.8.0.md');
+ for(const line of steps.match(/'[^']*다\.'/g).map(x=>x.slice(1,-1)))assert.ok(copy.includes(line),'the copy is the approved line: '+line);
+});
+
 console.log(count+' ui guard groups passed');

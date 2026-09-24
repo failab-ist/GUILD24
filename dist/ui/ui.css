@@ -1787,6 +1787,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    modal is open, and a system toast is still allowed to speak over it.
    ===================================================================== */
 .coach-layer{position:fixed;inset:0;z-index:50}
+/* the DAY 0 Store Support lesson is read over the takeover it teaches (z 70) */
+.coach-layer.over-takeover{z-index:80}
 .coach-block{position:absolute;background:#05040399;pointer-events:auto}
 .coach-focus{position:absolute;pointer-events:none;
  box-shadow:inset 0 0 0 2px #f0d9a3cc,inset 0 0 0 4px #00000073,0 0 0 2px #00000073}
@@ -1795,7 +1797,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  background:var(--tex-wood),#241a10;background-size:32px 12px;color:#efe3c8;
  box-shadow:inset 0 3px 0 #ffffff21,inset 0 0 0 2px #00000073,3px 3px 0 #00000073}
 .coach-bubble small{font:500 12px/1 var(--f-plate);-webkit-font-smoothing:none;color:#c2a978}
-.coach-bubble p{margin:0;font:400 14px/1.6 var(--ui);color:#e4d6b7}
+.coach-bubble p{margin:0;font:400 14px/1.6 var(--ui);color:#e4d6b7;word-break:keep-all}
 .coach-bubble div{display:flex;gap:8px}
 .coach-bubble button{flex:1 1 auto;min-height:44px;padding:10px 12px;
  font:400 14px/1 var(--ui);background:#3a2c1d;color:#efe3c8;

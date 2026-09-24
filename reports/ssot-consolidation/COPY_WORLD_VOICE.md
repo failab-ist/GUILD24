@@ -606,3 +606,15 @@ Authoritative Function wording:
 > 확인
 Authoritative wording: the 목적지 tutorial coach step below.
 ```
+
+
+## AMENDMENT — DAY 0 Store Support tutorial (User decision 2026-09-24)
+
+```new
+점포지원 (DAY 0, User 2026-09-24)
+점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.
+점포지원 카드
+카드마다 효과와 가격이 적혀 있다. 이번 영업을 어떻게 꾸릴지 떠올리며 고른다.
+점포지원 구매
+누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.
+```

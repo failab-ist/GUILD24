@@ -37,6 +37,7 @@ async function scenario(browser,width,seed){
  return {ctx,page};}
 async function fresh(page,seed){
  await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
+ await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
  await page.click('#modal-root [data-action="start"]');
  await page.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
  await page.click('#modal-root [data-action="buy-relic"]');   // the first Store Support choice

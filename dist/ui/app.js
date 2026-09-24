@@ -790,10 +790,17 @@ const coachSteps={
     the 발주 지출 / 점포지원 투자 block it says is listed apart is the next row group under it. */
  /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
  final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
- closing:[['receipt','.tape .row.profit','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']]
+ closing:[['receipt','.tape .row.profit','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']],
+ /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
+    it used to open with no word of what a Store Support is. These three marks read the takeover
+    - what it is, how a card reads, what the key does and when more arrive - and never name a
+    pick. They run on the DAY 0 takeover only (see showCoach); account-scoped like every mark. */
+ relic:[['relic-what','.relic-open','점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.'],
+  ['relic-card','.relic-choices .relic-plate','카드마다 효과와 가격이 적혀 있다. 이번 영업을 어떻게 꾸릴지 떠올리며 고른다.'],
+  ['relic-buy','.relic-choices .relic-plate .stamp','누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.']]
 };
 let activeCoach=null;
-let coachSettle=0,coachPainted=null;
+let coachSettle=0,coachPainted=null,activeGroup=null;
 /* The target's own position, rounded - the one thing the whole overlay is measured from, so it
    is also what tells us whether a repaint is needed. */
 const coachKey=el=>{const r=el.getBoundingClientRect();
@@ -807,7 +814,7 @@ function paintCoach(step,target){
  /* UI-Q-v28-27: the bubble may not cover the next required control, and on every phase that
     control is the dock. The usable floor is therefore the dock's top edge, not the viewport's -
     the 진열대 lesson used to be placed just below its product row and ran 29px over 손님 보내기. */
- const dockEl=document.querySelector('.stage .dock');
+ const dockEl=document.querySelector(modal==='relics'?'.relic-takeover .close':'.stage .dock');
  const floor=dockEl?Math.min(innerHeight,Math.round(dockEl.getBoundingClientRect().top)):innerHeight;
  /* UI-Q113 §10 raised the cutout from a flat 180px to a share of the viewport so the SALE card
     would fit. 34% of a 780px phone is 265px, which the card (241px) clears - but the NIGHT beat
@@ -822,7 +829,7 @@ function paintCoach(step,target){
  const height=Math.min(b.height+8,Math.max(Math.round(innerHeight*.34),room)),bottom=top+height;
  const bw=Math.min(340,innerWidth-24),bh=210,x=Math.max(12,Math.min(innerWidth-bw-12,left)),y=bottom+bh+12<floor?bottom+12:Math.max(12,top-bh-12);
  const block=(l,t,w,h)=>'<div class="coach-block" style="left:'+l+'px;top:'+t+'px;width:'+Math.max(0,w)+'px;height:'+Math.max(0,h)+'px"></div>';
- root.innerHTML='<div class="coach-layer">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
+ root.innerHTML='<div class="coach-layer'+(modal==='relics'?' over-takeover':'')+'">'+block(0,0,innerWidth,top)+block(0,bottom,innerWidth,innerHeight-bottom)+block(0,top,left,height)+block(left+width,top,innerWidth-left-width,height)+'<div class="coach-focus" style="left:'+left+'px;top:'+top+'px;width:'+width+'px;height:'+height+'px"></div><section class="coach-bubble" role="dialog" aria-label="점주 안내" style="left:'+x+'px;top:'+y+'px;width:'+bw+'px"><small>점주 안내</small><p>'+step[2]+'</p><div>'+btn('안내 건너뛰기','coach-skip','coach-skip')+btn(step[3]?'눌러서 살펴보기':'다음','coach-next','stamp')+'</div></section></div>';
  /* `bh` above is only the estimate that keeps the first paint from flashing. A real bubble is
     120-143px, not 210, so a mark placed ABOVE its target sat up to 106px clear of the cutout
     and the copy stopped reading as belonging to the thing it points at. Re-seat it on its own
@@ -852,11 +859,15 @@ function settleCoach(step,target){
 function showCoach(){
  const root=$('#coach-root');if(!root)return;root.innerHTML='';activeCoach=null;
  cancelAnimationFrame(coachSettle);
- const tutorial=game.account.tutorial||{};if(tutorial.skipped||modal)return;
+ const tutorial=game.account.tutorial||{};
+ /* A mark never sits over a modal - except the DAY 0 Store Support takeover, which IS the first
+    screen of a new store and has its own lesson. */
+ const relicD0=modal==='relics'&&game.run?.phase==='foundation';
+ if(tutorial.skipped||(modal&&!relicD0))return;
  /* Skip a step whose target is not on this screen rather than stopping at it: a contextual
     mark (a Deep notice, a Great Success signal) only exists on some Days, and stopping would
     hold back every mark behind it until that Day came. */
- const steps=coachSteps[game.run?.phase]||[];
+ const steps=relicD0?coachSteps.relic:(coachSteps[game.run?.phase]||[]);activeGroup=steps;
  /* Anchor to a VISIBLE match, not the first one in the DOM. The SALE readout and its
     decision ingredients exist twice - a desktop copy and a phone copy, one of which is always
     display:none - so `$()` handed the coach the hidden one on a phone and those lessons never
@@ -870,7 +881,11 @@ function showCoach(){
  settleCoach(step,target);
 }
 function finishCoach(skip=false){
- if(!activeCoach&&!skip)return;game.account.tutorial??={};if(skip)game.account.tutorial.skipped=true;else game.account.tutorial['coach-'+activeCoach[0]]=true;game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
+ if(!activeCoach&&!skip)return;const t=game.account.tutorial??={};
+ /* USER 2026-09-24: 건너뛰기 skips THIS screen's lesson only - every mark of the group on screen
+    is marked done - and the next screen still teaches its own. `skipped` stays the whole-tutorial
+    switch (reset / harness), no longer set by this button. */
+ if(skip)for(const x of activeGroup||[])t['coach-'+x[0]]=true;else t['coach-'+activeCoach[0]]=true;game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}

@@ -1908,6 +1908,7 @@ Rules:
 - target may scroll into view
 - one concept per step
 - contextual first-use preferred
+- `건너뛰기` skips the current screen's marks only; later screens still teach their own (User 2026-09-24)
 - completion persisted
 - reload does not restart completed tutorial
 
@@ -1957,6 +1958,14 @@ Contextual Tutorial explicitly teaches:
 
 Player should understand why another useful Item can matter even when ordinary
 Success already looks likely.
+
+### FIRST STORE SUPPORT TUTORIAL (DAY 0)
+
+User decision 2026-09-24. The first screen of a new store is the DAY 0 Store Support takeover, so
+the tutorial begins there: three marks read the takeover (what a Store Support is, how a card
+reads, what the key does and when more candidates arrive) and never name a pick. They are the one
+exception to "no mark over a modal", shown over the takeover itself, on DAY 0 only, and persisted
+per account like every other mark. Exact copy: COPY_WORLD_VOICE_v2.8.0.md §TUTORIAL COACH COPY.
 
 ### FIRST-EVER DEEP EXPEDITION TUTORIAL
 

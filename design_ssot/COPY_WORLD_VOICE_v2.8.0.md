@@ -1055,6 +1055,18 @@ Keep each coach step short: one system-reading job, usually one or two sentences
 Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 진열대 (상품 사용) / 가격 (PRICING) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3.
 
 ```text
+점포지원 (DAY 0, User 2026-09-24)
+점포지원은 이번 영업 내내 적용되는 효과다. 첫 지원은 하나를 무료로 고른다.
+
+
+점포지원 카드
+카드마다 효과와 가격이 적혀 있다. 이번 영업을 어떻게 꾸릴지 떠올리며 고른다.
+
+
+점포지원 구매
+누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.
+
+
 방문객
 오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.
 

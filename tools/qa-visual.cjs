@@ -87,6 +87,9 @@ async function drive(page,target,seed){
    await page.waitForTimeout(150);}
   return;
  }
+ /* the DAY 0 Store Support lesson sits over the takeover the drive clicks through; a player who
+    reaches the captured Day has passed it (the coach capture keeps every later lesson) */
+ await page.evaluate(t=>{const u=Guild24.game.account.tutorial??={};if(t!=='coach')u.skipped=true;else for(const k of ['relic-what','relic-card','relic-buy'])u['coach-'+k]=true;},target);
  await page.click('#modal-root [data-action="start"]');      // real first-run flow, on that seed
  await page.click('#modal-root [data-action="buy-relic"]'); // DAY 0 free store support
  // The coach marks are a first-use overlay; by the captured day a player has passed them.
@@ -485,6 +488,7 @@ async function d25OrderProbe(page){
  await page.waitForTimeout(200);
  // same retired Seed control as drive(): plant the planned store, then press the real button
  await page.evaluate(`(()=>{Guild24.game.start('qa-d25-order');Guild24.render();})()`);
+ await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
  await page.click('#modal-root [data-action="start"]');
  await page.click('#modal-root [data-action="buy-relic"]');
  await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;
@@ -624,6 +628,7 @@ async function coachProbe(page,label){
 
  // ---- Deep Expedition coach: a Morning that actually carries a Deep notice
  await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-coach-'+label);
+ await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
  await page.click('#modal-root [data-action="start"]');
  await page.click('#modal-root [data-action="buy-relic"]');
  await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;g.save();})()`);
@@ -669,6 +674,7 @@ async function coachProbe(page,label){
  await page.reload({waitUntil:'load'});
  await page.waitForFunction(`!!window.Guild24&&!!window.__coachTable`);
  await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-coach-great-'+label);
+ await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
  await page.click('#modal-root [data-action="start"]');
  await page.click('#modal-root [data-action="buy-relic"]');
  await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;g.save();Guild24.render();})()`);
