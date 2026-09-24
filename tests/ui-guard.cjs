@@ -2878,15 +2878,20 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.deepEqual([...order.matchAll(/\['([a-z]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['gates','.brief .when'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the five steps in order, on their anchors');
  assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
- // Hazard sentences: nine exact literals that agree with the pressure label, on Gate detail and in the plate help
- const S=Presentation.hazardSentence;
- assert.deepEqual(Object.keys(S).sort(),Object.keys(DATA.hazards).sort(),'all nine');
- for(const [k,s] of Object.entries(S))assert.equal(s,DATA.hazards[k]+' — '+Presentation.hazardPressure[k]+' · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence');
+ // Hazard sentences (User 2026-09-24 revision, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), k = 3 / 4
+ const rate={survival:3,mobility:4,spirit:4};
+ for(const [day,tier] of [[1,1],[6,2],[18,3]]){const d={day,tier};
+  for(const k of Object.keys(DATA.hazards)){const st=Presentation.hazardStat[k],need=Math.ceil(Dungeon.hazardState(k,{},d).threat);
+   assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+' — 대응 '+need+' 필요 · '+Presentation.labels[st]+' 10마다 대응 '+rate[st]+' · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
+   assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요 · '+Presentation.labels[st]+' 10마다 대응 '+rate[st],k+' short row');}}
+ assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독 — 대응 13 필요 · 강인함 10마다 대응 3 · 독 대응 상품이 막는다','the DAY 1 T1 example');
+ assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
  assert.equal(Presentation.PLATE_HELP,'위험은 능력치를 누르고, 대응 상품이 막는다.');
- assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\[h\.key\]/.test(fn('gatePlate')),'Gate detail reads the full sentence');
- assert.ok(!/gatePlate\(d,true\)/.test(fn('morningScreen'))&&/s\.dungeons\.map\(gatePlate\)/.test(fn('morningScreen')),'MORNING keeps the short row');
+ assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\(h\.key,d\)/.test(fn('gatePlate'))&&/Presentation\.hazardShort\(h\.key,d\)/.test(fn('gatePlate')),'Gate detail reads the full sentence, MORNING the short row');
+ assert.ok(!/gatePlate\(d,true\)/.test(fn('morningScreen'))&&/s\.dungeons\.map\(gatePlate\)/.test(fn('morningScreen')),'MORNING renders the plate in short form');
  const plate=fn('destPlate');
- assert.ok(/tip\('위험',Presentation\.PLATE_HELP,\.\.\.Presentation\.known\(d,game\)\.map\(k=>Presentation\.hazardSentence\[k\]\)\)/.test(plate),'the plate has one ? with the rule line and this Gate\'s sentences');
+ assert.ok(/tip\('위험',Presentation\.PLATE_HELP,\.\.\.Presentation\.known\(d,game\)\.map\(k=>Presentation\.hazardSentence\(k,d\)\)\)/.test(plate),'the plate has one ? with the rule line and this Gate\'s sentences');
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),null\)/.test(plate)&&!/hazardShort|hazardNeed/.test(plate),'the plate row itself keeps {위험} · {label}');
  assert.equal((plate.match(/tip\(/g)||[]).length,1,'one ? only');
  // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
  const of=fn('orderForm');

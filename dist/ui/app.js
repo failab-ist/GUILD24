@@ -311,15 +311,15 @@ const hazardList=(keys,states)=>keys.length?'<ul class="hazards">'+Presentation.
 // the gate mark branded into it, the supply requirement stamped underneath.
 // A Gate is a paper notice pinned to the board: family colour along the top, the hazard
 // pictogram beside each pressure line, the supply requirement stamped at the foot.
-/* `full`: Gate detail (the gates modal) reads the nine exact sentences (COPY_AUDIT §4-16); the MORNING plate keeps the
-   short `{위험} · {label}` row. */
+/* `full`: Gate detail (the gates modal) reads the full Gate sentence (COPY_AUDIT §4-16); the MORNING plate reads the
+   short row `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}` - the number first (User 2026-09-24). */
 function gatePlate(d,full=false){const b=sigilOf(d);
  return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
    +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game)).map(h=>full
-     ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence[h.key])+'</span></li>'
-     :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(h.pressure)+'</span></li>').join('')+'</ul>'
+     ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence(h.key,d))+'</span></li>'
+     :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(Presentation.hazardShort(h.key,d))+'</span></li>').join('')+'</ul>'
    +'</article>';}
 function tierLine(){const f=game.tierForecast();return f?'T1 '+f.percent[0]+'% · T2 '+f.percent[1]+'% · T3 '+f.percent[2]+'%':'마왕성 최종 원정';}
 /* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. How many Gates open tomorrow, before the player
@@ -968,7 +968,7 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
     canonical snapshot, in the same vocabulary, from the same outlook. */
   +'<div><label>예상 목적지</label><div class="dest-name"><h3>'+E(d.name)+'</h3>'
   /* v2.9.0 (COPY_AUDIT §4-15 / §4-16): the plate's one `?` - the rule in one line, then this Gate's full Hazard sentences */
-  +tip('위험',Presentation.PLATE_HELP,...Presentation.known(d,game).map(k=>Presentation.hazardSentence[k]))+'</div>'
+  +tip('위험',Presentation.PLATE_HELP,...Presentation.known(d,game).map(k=>Presentation.hazardSentence(k,d)))+'</div>'
   +hazardList(Presentation.known(d,game),null)
  +'</div></div>';}
 function statGrid(n){

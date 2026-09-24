@@ -202,10 +202,13 @@ function tierWeights(day){
  const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
+/* DUNGEON_HAZARD v2.9.0 §Hazard Defense (User 2026-09-24): one non-투력 Stat per Hazard, 3 / 3 / 3 -
+   강인함 ×0.30 for 독·냉기·부식, 기동 ×0.40 for 속박·진창·화염, 정신 ×0.40 for 공포·어둠·화이트아웃.
+   One owner: the readiness calculation below and the player-facing Gate sentence (`{능력치} 10마다 대응 {k}`) read it. */
+const HAZARD_RULES={poison:['survival',.3],cold:['survival',.3],corrosion:['survival',.3],bind:['mobility',.4],mire:['mobility',.4],fire:['mobility',.4],fear:['spirit',.4],dark:['spirit',.4],whiteout:['spirit',.4]};
+function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
 function hazardState(h,e,d){
- /* DUNGEON_HAZARD v2.9.0 §Hazard Defense (User 2026-09-24): one non-투력 Stat per Hazard, 3 / 3 / 3 -
-    강인함 ×0.30 for 독·냉기·부식, 기동 ×0.40 for 속박·진창·화염, 정신 ×0.40 for 공포·어둠·화이트아웃. */
- const rules={poison:['survival',.3],cold:['survival',.3],corrosion:['survival',.3],bind:['mobility',.4],mire:['mobility',.4],fire:['mobility',.4],fear:['spirit',.4],dark:['spirit',.4],whiteout:['spirit',.4]};
+ const rules=HAZARD_RULES;
  /* DUNGEON_HAZARD_v2.7 §HAZARD THREAT: the curve reads the Day and the Tier directly, so a
     Hazard means the same thing wherever it appears on that Day at that Tier. */
  const rule=rules[h]||['survival',.2],threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
@@ -570,5 +573,5 @@ function resolve(n,d,r,facilities=[],run){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,GATE,FATIGUE_MAX,fatigueBand,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);
