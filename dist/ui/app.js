@@ -636,7 +636,7 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
     place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
- +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
+ +'<span class="slots" aria-label="가방 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
   +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span>'+heal+'</div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
