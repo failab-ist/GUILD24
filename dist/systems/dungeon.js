@@ -531,8 +531,9 @@ function resolve(n,d,r,facilities=[],run){
     Trait would add. rawOutcomeFatigueGain and actualOutcomeFatigueGain are separate report
     truths: the buffer only shows as a contribution when it actually absorbed something. */
  const severeOrDead=outcome==='중상'||outcome==='사망';
- /* v2.9.0 §FATIGUE OUTCOME BASELINE: 성공/대성공 +5, 퇴각 +8, 부상 +10, 중상/사망 0; clamp 40 */
- const outcomeBaseline=severeOrDead?0:outcome==='퇴각'?8:outcome==='부상'?10:5;
+ /* v2.9.0 §FATIGUE OUTCOME BASELINE: 성공/대성공 +4, 퇴각 +7, 부상 +9, 중상/사망 0; clamp 40
+    (re-tuned -1 from +5 / +8 / +10 after the I-2 re-measure, User 2026-09-24) */
+ const outcomeBaseline=severeOrDead?0:outcome==='퇴각'?7:outcome==='부상'?9:4;
  const rawOutcomeFatigueGain=severeOrDead?0:Math.max(0,outcomeBaseline+(e.fatigue||0));
  const remainingSupplyBuffer=e.remainingSupplyBuffer||0;
  const actualOutcomeFatigueGain=Math.max(0,rawOutcomeFatigueGain-remainingSupplyBuffer);

@@ -359,7 +359,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
  const base=Adventurer.create(new RNG('excess'),1,10,Meta.fresh());
  const run=(fatigue,pack)=>{const n={...JSON.parse(JSON.stringify(base)),fatigue,traits:[],pack,records:[]};
   Dungeon.resolve(n,d,new RNG('excess-run'));return n.records[n.records.length-1];};
- const baselines={'성공':5,'대성공':5,'퇴각':8,'부상':10,'중상':0,'사망':0};
+ const baselines={'성공':4,'대성공':4,'퇴각':7,'부상':9,'중상':0,'사망':0};
  for(const fatigue of [0,4,9,14,20,33,40])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','premium']]){
   const r=run(fatigue,pack);
   assert.equal(r.requiredSupply,undefined,'no Gate requires Supply');assert.equal(r.excessSupply,undefined,'so there is no excess');
@@ -635,7 +635,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Stats, never post-expe
 
 test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the post-Outcome band',()=>{
  /* n.fatigue is mutated to its post-Outcome value (finalFatigue) BEFORE resultProof() runs.
-    Departure Fatigue 18 sits in the 10-19 (-15%) band; the forced 부상 Outcome's own +10
+    Departure Fatigue 18 sits in the 10-19 (-15%) band; the forced 부상 Outcome's own +9
     Fatigue gain (v2.9.0) crosses it into the 20~29 (-40%) band by the time heroProof is computed - if the
     shadow read that live, post-Outcome Fatigue instead of the frozen departure figure, its
     escape-chance arithmetic would be computed on the WRONG band and the calibrated roll below
@@ -656,7 +656,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the pos
  const n=base();
  const r=Dungeon.resolve(n,hard,scripted([0.5,0.0001,0.999,roll,0.25,0.999,0.999]),[]);
  assert.equal(r.outcome,'부상','WITH the Item, escape succeeds into the harsher .13 threshold and stays 부상');
- assert.equal(r.finalFatigue,24,'sanity: 18 - 4 (초코바 피로 회복) = 14 at departure, and the Outcome\'s own +10 crosses into the 20~29 band downstream of departure');
+ assert.equal(r.finalFatigue,23,'sanity: 18 - 4 (초코바 피로 회복) = 14 at departure, and the Outcome\'s own +9 crosses into the 20~29 band downstream of departure');
  assert.ok(r.heroProof?.outcome?.items?.includes('choco'),
   'proof still credits 초코바 off the DEPARTURE (10-19 band) Fatigue, not the post-Outcome (20 band) figure');
  assert.equal(r.heroProof.outcome.worse,'중상','and names the worse tier losing 초코바 would have reached');
