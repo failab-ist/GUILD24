@@ -80,6 +80,8 @@ customerEnter
 → finalizeCustomer
 → nextCustomer
 
+`finalizeCustomer -> nextCustomer` carries the customer exit-then-entry beat (the current customer exits, then the next arrives with the existing entry). It is presentation only and changes no state (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT) (User 2026-09-24, v2.9.0).
+
 The purchase/refusal result may inform the next remaining-slot decision.
 Therefore do not batch the whole Customer into a single irreversible cart action
 if that removes this sequential decision.
@@ -108,6 +110,7 @@ Rules:
 - do not merge both slots into one cart checkout
 - no separate handling minigame/resource/QTE
 - Item tap is sufficient for the full flow; drag is optional enhancement only
+- the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots sit on the counter beside the customer and remain the handling surface (`UI_UX_v2.8.0.md` §BAG PRESENTATION); tap remains sufficient, no drag is required (User 2026-09-24, v2.9.0)
 
 ## CUSTOMER INFORMATION
 
@@ -383,6 +386,10 @@ Useful decision info may include:
 Exact UI:
 -> UI_UX_v2.8.0.md
 
+### MATCHING-EFFECT EMPHASIS
+
+In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses. Every other effect keeps the default style. No badge, no verdict word, no reorder (User 2026-09-24, v2.9.0).
+
 ## SALE DECISION-ONLY DETAIL — REMOVE NON-DECISION DISCLOSURES
 
 Remove the following SALE-only expandable/detail treatments from the customer decision surface:
@@ -446,6 +453,8 @@ Examples:
 - 피로 회복 N
 - 보험 효과
 
+After an Item is chosen, `판매 후 변화` is one delta list of what changes only: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
+
 Preview must not expose:
 - exact expedition success %
 - exact death %
@@ -477,6 +486,8 @@ Hazard:
 
 No single final safety score.
 
+The always-on outlook is two cells, 전투 전망 + 환경 대응. The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
+
 Forecast is:
 estimate, not guarantee.
 
@@ -489,6 +500,7 @@ Do not repeat the same decision signal as multiple equal-priority labels.
 
 Hazard name, pressured Stat/readiness, and qualitative preparedness belong to one readable hierarchy.
 Long explanatory prose is secondary Help/Tooltip content, not always-on Core Decision copy.
+The exact 실패 시 사망 위험 % sits at that Help level (전투 전망 help, NPC detail), not as an always-on cell (User 2026-09-24, v2.9.0).
 
 No exact Success %, hidden Power, or master safety score.
 
@@ -500,6 +512,7 @@ For the whole customer visit, keep the SALE-entry snapshot frozen for:
 - failure-conditioned Death risk %
 
 Selecting or previewing an Item never changes those answers.
+The Death risk % is frozen where it is now shown: the 전투 전망 help and the NPC detail (User 2026-09-24, v2.9.0).
 
 One exception: confirming a Deep Expedition nomination (allowed only before the first committed
 transaction) re-takes this pre-supply snapshot once, against the Deep Gate. The nomination cannot be
@@ -558,7 +571,7 @@ C. another explicitly owned Trait / Relic / Boss modifier
 Rules:
 - an Item directly changes only the exact channels stated by `ITEM_v2.8.0.md`
 - if a post-commit delta is shown, the changed value must be actual and its source must be provable
-- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 display
+- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes (`피로 {A} → 출발 {B}`); they must not recalculate, replace or repaint the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 readout, and no outlook delta row exists (User 2026-09-24, v2.9.0)
 - ordinary SALE must keep the pre-supply Forecast/Readiness/실패 시 사망 위험 snapshot frozen; post-commit feedback should instead show exact changed values/effects with readable source attribution rather than a new derived expedition answer
 - Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.8.0.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope
@@ -596,6 +609,10 @@ Stat touch/click detail may show:
 - actual source
 - actual applied value
 - calculation breakdown
+
+### STAT GRID PRESSURE TAG
+
+Under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag names the pressing Hazard(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two). 투력 never carries a tag. No number, no verdict. The tag is the one place the Stat grid links to the Gate (User 2026-09-24, v2.9.0).
 
 ## NPC DETAIL — CONDITION TRUTH
 
@@ -644,6 +661,8 @@ Canonical economy:
 Player should understand the role difference
 without seeing exact purchase probability.
 
+Each price button carries its role word with the mode and price (`할인 50%` / `정가` / `바가지 150%`) and the small line `이익 {N}G` (or the existing disabled reason) under it; exact face copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`. Three modes only, no extra depth (User 2026-09-24, v2.9.0).
+
 ## PURCHASE DECISION
 
 Purchase logic may consider:
@@ -689,6 +708,8 @@ Player-facing valid reasons include:
 
 Do not use vague intermediate copy
 that obscures what happened.
+
+Presentation only (User 2026-09-24, v2.9.0): the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text, and the refusal reply stays 5 s (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT). The refusal rules below are unchanged.
 
 Logical retry rules:
 
@@ -904,6 +925,7 @@ Requirements:
 - returning NPC shows relevant since-last-visit changes/history prominently while full profile remains accessible
 - inspect -> Item -> price -> result -> next-slot flow should stay continuous without unnecessary page/modal round trips
 - avoid redundant confirmation steps and mandatory long animations for routine sales
+- transaction beats follow `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT: one sale's beats total < 600 ms, never block input, skipped under `prefers-reduced-motion` with the same end state (User 2026-09-24, v2.9.0)
 - no tiny multi-column compression
 - repeat actions use practical touch targets (~44px class)
 - price choice and item choice stay visually clear

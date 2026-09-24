@@ -75,3 +75,16 @@ Cross-run progression -> META
 Boss detailed rule -> BOSS_v2.8.0.md
 Final resolution -> FINAL_EXPEDITION_v2.8.0.md
 ```
+
+## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0), D-3 rule sheet C5: "Current SALE may expose the exact failure-conditioned Death risk" stays true; one sentence names its surface (the outlook help and the NPC detail, not an always-on cell). The paragraph's last line is extended and re-wrapped. DOC_VERSION bumped to 2.9.0 (header metadata, not a rule line).
+
+```text
+path; it is not the unconditional whole-expedition Death probability.
+```
+
+```new
+path; it is not the unconditional whole-expedition Death probability. It is exposed in the outlook help and
+the NPC detail, not as an always-on cell (User 2026-09-24, v2.9.0).
+```

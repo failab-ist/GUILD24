@@ -281,7 +281,7 @@ Expose exact decision ingredients (User 2026-09-24, v2.9.0):
 - existing Injury state and its visible Stat penalties
 - that sending an injured NPC again increases Severe / failure-Death risk
 - that departing at Fatigue 40 (탈진) increases failure-Death risk
-- exact pre-supply `실패 시 사망 위험` % at SALE entry, owned by this failure-conditioned Death-risk model
+- exact pre-supply `실패 시 사망 위험` % at SALE entry, owned by this failure-conditioned Death-risk model, shown in the 전투 전망 help and the NPC detail rather than as an always-on readout cell (User 2026-09-24, v2.9.0)
 
 Do not expose:
 - exact expedition success probability

@@ -835,3 +835,15 @@ healthyFailureDeathChance + injuryEscalation + fatigueEscalation,
 - departing at Fatigue 40 (탈진) adds the same visible material risk
 - Fatigue-40 conditional cap is 40%; injured and Fatigue-40 together 50%
 ```
+
+## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0), D-3 rule sheet C5: the exact pre-supply `실패 시 사망 위험` % stays exposed at SALE entry, but its surface moves from an always-on readout cell to the 전투 전망 help (second line) and the NPC detail. The boundary line is extended in place; nothing else changes.
+
+```text
+- exact pre-supply `실패 시 사망 위험` % at SALE entry, owned by this failure-conditioned Death-risk model
+```
+
+```new
+- exact pre-supply `실패 시 사망 위험` % at SALE entry, owned by this failure-conditioned Death-risk model, shown in the 전투 전망 help and the NPC detail rather than as an always-on readout cell (User 2026-09-24, v2.9.0)
+```

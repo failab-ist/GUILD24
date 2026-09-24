@@ -2,7 +2,7 @@
 
 DOC=00_GAME_CORE
 OWNER=game_core,core_fantasy,core_loop,system_ownership,cross_run_identity
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/00_GAME_CORE_v2.8.0-patch.md,history/00_GAME_CORE_v2.5.0.md
@@ -160,7 +160,8 @@ Do not merge the two systems.
 
 Current SALE may expose the exact **failure-conditioned Death risk** owned by
 DUNGEON_HAZARD_v2.8.0.md. This is the chance of Death after the expedition has entered its failure
-path; it is not the unconditional whole-expedition Death probability.
+path; it is not the unconditional whole-expedition Death probability. It is exposed in the outlook help and
+the NPC detail, not as an always-on cell (User 2026-09-24, v2.9.0).
 
 준비는 `확신`을 높여야 하지만 `확정`을 만들지는 않는다.
 

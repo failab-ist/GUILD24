@@ -309,11 +309,31 @@ D. another explicitly owned Trait / Relic / Boss modifier
 Current preparation can legitimately change through more than one channel after a Food/Drink Item is committed (User 2026-09-24, v2.9.0):
 B. current-Fatigue recovery / Fatigue band change
 C. another explicitly owned Trait / Relic / Boss modifier
-- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 display
+- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes (`피로 {A} → 출발 {B}`); they must not recalculate, replace or repaint the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 readout, and no outlook delta row exists (User 2026-09-24, v2.9.0)
 - Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.8.0.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - current `집중 사탕` shows `공포 대응 +10 / 피로 회복 3`
 - if there is no Fatigue band change, selling it must not create a Core-Stat delta
 - if its 피로 회복 releases a Fatigue band, effective Core Stats may rise through Fatigue recovery
 - that indirect change must be presented as `피로 완화` or an equivalent source-readable system effect, never as if 집중 사탕 itself granted those Stats
 `북부 설원 폐허 I · 냉기 · 강인함으로 버틴다`
+```
+
+## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0), D-3 rule sheet: the transaction is shown by presentation-only beats (hand-over, customer reaction, counter band with the Bag slots on it, customer exit / entry, refusal button shake) under the contract owned by `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT; SALE reads at a glance (Stat grid pressure tag, matching-effect emphasis, one delta list with outlook delta rows only when they change, price role words with `이익 {N}G`, always-on outlook reduced to 전투 전망 + 환경 대응 with the exact Death risk moved into the 전투 전망 help and the NPC detail). Exact copy stays in `COPY_AUDIT_APPROVED_v2.8.0.md`. One line this ledger had declared new (the post-commit delta-row line of the previous amendment) was edited in place above to its v2.9.0 form. No chain line dropped.
+
+```new
+`finalizeCustomer -> nextCustomer` carries the customer exit-then-entry beat (the current customer exits, then the next arrives with the existing entry). It is presentation only and changes no state (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT) (User 2026-09-24, v2.9.0).
+- the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots sit on the counter beside the customer and remain the handling surface (`UI_UX_v2.8.0.md` §BAG PRESENTATION); tap remains sufficient, no drag is required (User 2026-09-24, v2.9.0)
+### MATCHING-EFFECT EMPHASIS
+In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses. Every other effect keeps the default style. No badge, no verdict word, no reorder (User 2026-09-24, v2.9.0).
+After an Item is chosen, `판매 후 변화` is one delta list of what changes only: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
+The always-on outlook is two cells, 전투 전망 + 환경 대응. The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
+The exact 실패 시 사망 위험 % sits at that Help level (전투 전망 help, NPC detail), not as an always-on cell (User 2026-09-24, v2.9.0).
+The Death risk % is frozen where it is now shown: the 전투 전망 help and the NPC detail (User 2026-09-24, v2.9.0).
+### STAT GRID PRESSURE TAG
+Under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag names the pressing Hazard(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two). 투력 never carries a tag. No number, no verdict. The tag is the one place the Stat grid links to the Gate (User 2026-09-24, v2.9.0).
+Each price button carries its role word with the mode and price (`할인 50%` / `정가` / `바가지 150%`) and the small line `이익 {N}G` (or the existing disabled reason) under it; exact face copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`. Three modes only, no extra depth (User 2026-09-24, v2.9.0).
+Presentation only (User 2026-09-24, v2.9.0): the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text, and the refusal reply stays 5 s (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT). The refusal rules below are unchanged.
+- transaction beats follow `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT: one sale's beats total < 600 ms, never block input, skipped under `prefers-reduced-motion` with the same end state (User 2026-09-24, v2.9.0)
 ```
