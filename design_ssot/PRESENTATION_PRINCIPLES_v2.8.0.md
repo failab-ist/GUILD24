@@ -2,7 +2,7 @@
 
 DOC=PRESENTATION_PRINCIPLES
 OWNER=presentation_system,presentation_principles,visual_construction,asset_quality,ornament_budget,audio_presentation,visual_review
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/PRESENTATION_SYSTEM_v2.8.0.md,history/PRESENTATION_POLISH_v2.8.0.md,history/PRESENTATION_POLISH_BATCH1_v2.8.0.md,history/PRESENTATION_POLISH_BATCH2_v2.8.0.md,history/PRESENTATION_POLISH_BATCH3_v2.8.0.md,history/PRESENTATION_POLISH_BATCH4_v2.8.0.md,history/PRESENTATION_POLISH_BATCH5_v2.8.0.md
@@ -37,6 +37,9 @@ cleaner.
 
 Prefer the current Sound / animation / scene systems before adding a new presentation framework.
 Do not create a theme / skin framework.
+
+The SALE Bag-on-counter composition change (§TRANSACTION BEAT A3) is a User-approved exception to
+§COMPOSITION LOCK (User 2026-09-24, v2.9.0).
 
 ## GOAL / IDENTITY
 
@@ -395,6 +398,32 @@ If runtime evidence shows an existing exact presentation measurement causes a fu
 patch the UI_UX owner before Source implementation. Do not let WORK silently redefine the
 measurement.
 
+## TRANSACTION BEAT
+
+Purpose: selling an Item to a customer must be seen as an act (User 2026-09-24, v2.9.0).
+
+General contract, every beat:
+- presentation-only; no gameplay rule, Save field, Gameplay RNG draw, minigame, required drag or
+  cinematic framework
+- each beat ≤ 320 ms; one sale's beats total < 600 ms
+- never blocks input
+- skipped entirely under `prefers-reduced-motion`; state changes still apply instantly and the end
+  state is identical
+- scroll position kept on the same customer (SALE_v2.8.0.md §SALE RUNTIME CONTINUITY)
+- no beat adds information the resolved state does not already hold
+
+| id | beat | exact behaviour |
+|---|---|---|
+| A1 | 건네기 hand-over | on a price commit that succeeds, the Item icon travels from its shelf row to the customer's Bag slot on the counter (260~320 ms) and the slot settles (scale 1.05→1, 240 ms); the dock Gold counts to its new value (same count-up the Morning till uses); the `판매 후 변화` rows do not vanish — the Stat cells that changed pulse once (300 ms) and keep the new value |
+| A2 | 손님 반응 customer reaction | purchase: the customer figure nods (translateY 4 px, 180 ms × 2); refusal: it shakes its head (translateX ±4 px, the existing bubble-shake timing). The reply line (Copy.buy / Copy.refuse) stays 5 seconds; the greeting keeps the 3-second rule |
+| A3 | 계산대 counter | a thin counter band sits under the customer on every width; the two Bag slots sit ON the counter beside the customer (not under the status line). The Bag slots remain the handling surface (UI_UX §BAG PRESENTATION); composition lock lifted by User for this one change |
+| A4 | 손님 교대 customer exit / entry | `손님 보내기`: the current customer exits left (240 ms), then the next arrives with the existing entry (240~340 ms); `depart` gets a recorded utility cue (door / step family). Entry may still start the view at the top (UI_UX §SALE — MOBILE AUTHORITY) |
+| A5 | 가격 소리 계열 price-mode sound family | 50% / 100% / 150% share the register family and differ by coin ticks (1 / 2 / 3); no mode sounds like the correct answer (§AUDIO PRESENTATION "peer choices") |
+| A6 | 거절 refusal | the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text; refusal reply stays 5 s (A2) |
+| A7 | first-sale price coach | the PRICING coach gains one closing clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
+
+Exact surface / layout -> UI_UX_v2.8.0.md §SALE; acceptance -> UI_UX_QA_v2.8.0.md.
+
 ## AUDIO PRESENTATION
 
 The current audio ARCHITECTURE is reused where it already solves playback, routing, settings and
@@ -425,6 +454,8 @@ Decision SFX outrank Utility SFX. BGM / ambience sits below information and deci
 Utility controls use a quiet, short, low-importance family.
 A decision cue sounds like the act it commits, not a generic click. Peer choices do not sound like the
 correct answer.
+SALE price modes 50% / 100% / 150% share one register family and differ only by coin ticks (1 / 2 / 3);
+no mode sounds like the correct answer (§TRANSACTION BEAT A5; User 2026-09-24, v2.9.0).
 
 Outcomes that share a family must not collapse to one cue with only a pitch change.
 Audio emphasis must never change or overstate the resolved Outcome or proof.

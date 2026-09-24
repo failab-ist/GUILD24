@@ -283,7 +283,7 @@ Meta gameplay ownership -> META_v2.8.0.md
 - Gate-count probability/fixed-count truth follows `DUNGEON_HAZARD_v2.8.0.md`
 - Tier probability truth follows `DUNGEON_HAZARD_v2.8.0.md`
 The displayed 실패 시 사망 위험 % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.8.0.md`. It means the chance that an ordinary failed expedition escalates to Death; it is not the unconditional probability of Death across all expedition attempts.
-Exact copy ownership -> `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY.
+Exact copy ownership -> `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY; help lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-1.
 Follow `SALE_v2.8.0.md`.
 - an Item directly changes only the channels listed in `ITEM_v2.8.0.md`
 Display public deterministic arithmetic from `DUNGEON_HAZARD_v2.8.0.md`.
@@ -733,4 +733,55 @@ the nine exact sentences and the destination-plate help -> COPY_AUDIT_APPROVED_v
 → 귀환 후 2
 Exact copy (User 2026-09-24, v2.9.0) -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
 - do not show Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty as reduced by this effect (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
+
+The sale is shown as an act and SALE reads at a glance: a counter band under the customer carries the two Bag slots at every width (the phone `upper-right area` placement is replaced), the greeting keeps 3 seconds while buy / refuse reply lines stay 5 seconds, the readout `.top` shows 전투 전망 and 환경 대응 only (the `실패 시 사망 위험` cell label and its own `?` are retired; the value moves to the second line of the 전투 전망 help and the NPC detail), the one `판매 후 변화` list holds direct Stat rows, derived rows and `피로 {A} → 출발 {B}` only (the frozen outlook is never repainted inside the till), the price buttons carry role words with an `이익 {N}G` sub-line, the Stat grid gains the Hazard pressure tag, Item rows emphasise the effect that answers the Gate, and the 50 / 100 / 150 sale sounds become one register family with coin ticks. Transaction beat timings live in PRESENTATION_PRINCIPLES §TRANSACTION BEAT; this owner points to them. The earlier ```new declaration of the COPY_WORLD_VOICE exact-copy pointer is edited in place.
+
+```text
+- exact 실패 시 사망 위험 %
+Failure-risk label:
+실패 시 사망 위험
+- it auto-hides after 3 seconds
+- a newly emitted line starts a fresh 3-second display
+- place them in the available upper-right area
+- ordinary 50% / 100% / 150% sale distinctions
+```
+
+```new
+NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0).
+- SALE transaction beats (hand-over, customer reaction, counter, exit / entry, price sound family, refusal) -> PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT (User 2026-09-24, v2.9.0)
+- a thin counter band sits under the customer; the two Bag slots sit on the counter beside the customer, not under the status line (User 2026-09-24, v2.9.0)
+- the counter band and the two Bag slots on it beside the customer apply at every width (User 2026-09-24, v2.9.0)
+`손님 보내기`: the current customer exits left, then the next arrives with the existing entry (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A4; User 2026-09-24, v2.9.0).
+- exact 실패 시 사망 위험 % — not as a readout cell: the readout `.top` shows 전투 전망 and 환경 대응 only; the value is the second line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`, same frozen value) and a line of the NPC detail (User 2026-09-24, v2.9.0)
+전투 전망 `?` help is two lines; the second is `실패 시 사망 위험 {N}%`. `실패 시 사망 위험` as a readout cell label with its own `?` is retired (User 2026-09-24, v2.9.0).
+### SALE — MATCHING-EFFECT EMPHASIS
+In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses (User 2026-09-24, v2.9.0).
+Everything else keeps the default style.
+No badge, no verdict word, no reorder.
+ORDER offer rows follow the same rule against today's Gate (adopted with the ORDER amendments).
+One delta list after choosing an Item (User 2026-09-24, v2.9.0):
+- `판매 후 변화` lists only what changes — direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`
+- the frozen four-cell outlook is not repainted inside the till and never changes for a selected Item
+- `특수 효과` and the shelf-life line stay
+The frozen outlook is not repainted inside the till (§SALE SELECTED-ITEM INFORMATION; User 2026-09-24, v2.9.0).
+### SALE — PRICE ROLE WORDS
+The three price buttons read `할인 50% · {price}G` / `정가 · {price}G` / `바가지 150% · {price}G`, with the small line `이익 {N}G` (or the existing disabled reason) under each (User 2026-09-24, v2.9.0).
+Three modes, no extra depth.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`; price roles -> `SALE_v2.8.0.md` §PRICE ROLE.
+- the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A6; User 2026-09-24, v2.9.0)
+- a greeting line auto-hides after 3 seconds; a reply line (buy / refuse) stays 5 seconds (User 2026-09-24, v2.9.0)
+- a newly emitted line starts a fresh display of its own duration
+- a thin counter band sits under the customer; the Bag slots sit on it, not under the status line (User 2026-09-24, v2.9.0)
+- place them on the counter band beside the customer (User 2026-09-24, v2.9.0)
+At every width the two slots sit on the counter band beside the customer; they remain the handling surface (User 2026-09-24, v2.9.0).
+Stat grid pressure tag (User 2026-09-24, v2.9.0):
+- under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag with the pressing Hazard name(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two)
+- 투력 never carries a tag
+- no number, no verdict
+- the tag is the one place the Stat grid links to the Gate
+- ordinary 50% / 100% / 150% sale distinctions: one register family, 1 / 2 / 3 coin ticks; no mode sounds like the correct answer (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A5; User 2026-09-24, v2.9.0)
+- `손님 보내기` customer exit (`depart`): recorded utility cue, door / step family (User 2026-09-24, v2.9.0)
 ```

@@ -408,6 +408,8 @@ NPC detail mobile order:
 6. bag/equipment
 7. locked/secondary info
 
+NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0).
+
 NPC inspection entry:
 portrait/sprite/name/card tap all acceptable
 
@@ -439,6 +441,7 @@ High-frequency Sale flow:
 - avoid unnecessary modal/page round trips
 - avoid redundant confirmation for routine actions
 - do not batch away sequential decisions merely to reduce clicks
+- SALE transaction beats (hand-over, customer reaction, counter, exit / entry, price sound family, refusal) -> PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT (User 2026-09-24, v2.9.0)
 
 ### SALE — DESKTOP AUTHORITY
 
@@ -448,6 +451,7 @@ High-frequency Sale flow:
 - Forecast + Expected Destination in upper-right Core Decision area
 - NPC Wallet visible in the same decision hierarchy
 - duplicated lower destination / forecast removed
+- a thin counter band sits under the customer; the two Bag slots sit on the counter beside the customer, not under the status line (User 2026-09-24, v2.9.0)
 
 Bag size change is presentation only; capacity does not change.
 
@@ -461,9 +465,11 @@ Bag size change is presentation only; capacity does not change.
 - core environment signal visible without tap
 - no duplicate environment/forecast blocks
 - ~44px-class repeat touch targets
+- the counter band and the two Bag slots on it beside the customer apply at every width (User 2026-09-24, v2.9.0)
 
 Same-Customer rerenders preserve scroll/focus.
 New-Customer transition may intentionally start at the top.
+`손님 보내기`: the current customer exits left, then the next arrives with the existing entry (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A4; User 2026-09-24, v2.9.0).
 
 ### CURRENT CUSTOMER STATE
 
@@ -514,7 +520,7 @@ customer SALE decision begins
 Show:
 - qualitative Combat Forecast
 - qualitative Hazard Readiness for the known current Hazard state
-- exact 실패 시 사망 위험 %
+- exact 실패 시 사망 위험 % — not as a readout cell: the readout `.top` shows 전투 전망 and 환경 대응 only; the value is the second line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`, same frozen value) and a line of the NPC detail (User 2026-09-24, v2.9.0)
 - existing Injury/Condition state that is already part of that snapshot
 
 Do not show:
@@ -548,13 +554,9 @@ Header:
 보급 전 원정 전망
 ```
 
-Failure-risk label:
+전투 전망 `?` help is two lines; the second is `실패 시 사망 위험 {N}%`. `실패 시 사망 위험` as a readout cell label with its own `?` is retired (User 2026-09-24, v2.9.0).
 
-```text
-실패 시 사망 위험
-```
-
-Exact copy ownership -> `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY.
+Exact copy ownership -> `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY; help lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-1.
 
 ### SALE — GATE VS ITEM INFORMATION
 
@@ -601,6 +603,13 @@ Keep directly readable:
 Flavor text may remain in Item data or another already-existing non-decision context.
 This rule does not require a new encyclopedia/detail screen.
 
+### SALE — MATCHING-EFFECT EMPHASIS
+
+In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses (User 2026-09-24, v2.9.0).
+Everything else keeps the default style.
+No badge, no verdict word, no reorder.
+ORDER offer rows follow the same rule against today's Gate (adopted with the ORDER amendments).
+
 ### SALE SELECTED-ITEM INFORMATION
 
 The selected-Item panel uses one primary heading:
@@ -609,6 +618,11 @@ The selected-Item panel uses one primary heading:
 
 Direct Item changes and deterministic derived changes are rows under that heading.
 Do not stack analytical subgroup headings that increase height.
+
+One delta list after choosing an Item (User 2026-09-24, v2.9.0):
+- `판매 후 변화` lists only what changes — direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`
+- the frozen four-cell outlook is not repainted inside the till and never changes for a selected Item
+- `특수 효과` and the shelf-life line stay
 
 Source/cause belongs in the existing anchored source popover.
 
@@ -662,7 +676,14 @@ Therefore:
 
 A generic `판매 후 변화` block is acceptable only when direct Item effects and derived system effects are clearly separated.
 If that distinction is not immediately readable, remove the synthetic block.
+The frozen outlook is not repainted inside the till (§SALE SELECTED-ITEM INFORMATION; User 2026-09-24, v2.9.0).
 Do not use post-commit value feedback to replace the frozen pre-supply Forecast / Hazard Readiness / 실패 시 사망 위험 with a newly scored answer.
+
+### SALE — PRICE ROLE WORDS
+
+The three price buttons read `할인 50% · {price}G` / `정가 · {price}G` / `바가지 150% · {price}G`, with the small line `이익 {N}G` (or the existing disabled reason) under each (User 2026-09-24, v2.9.0).
+Three modes, no extra depth.
+Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`; price roles -> `SALE_v2.8.0.md` §PRICE ROLE.
 
 ### SALE — REFUSAL PRICE CEILING UI
 
@@ -675,6 +696,7 @@ For the same ordinary customer + same SKU + current visit:
 
 Requirements:
 - disabled higher-price states are visually distinct and non-interactive
+- the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A6; User 2026-09-24, v2.9.0)
 - Player can read why the option is blocked; exact short copy may be implementation/localization-owned unless separately frozen
 - do not disable unrelated SKUs
 - do not carry the same-SKU visit lock into a later visit unless another owner explicitly defines persistence
@@ -759,9 +781,9 @@ Customer speech is a transient overlay and must not reserve permanent layout hei
 
 Exact behavior:
 - a new customer/reaction line overlays the upper customer area
-- it auto-hides after 3 seconds
+- a greeting line auto-hides after 3 seconds; a reply line (buy / refuse) stays 5 seconds (User 2026-09-24, v2.9.0)
 - tapping the bubble hides it immediately
-- a newly emitted line starts a fresh 3-second display
+- a newly emitted line starts a fresh display of its own duration
 - hiding speech is presentation-only; do not add Save/account persistence
 - rerendering the same unchanged line must not resurrect an already auto-hidden bubble
 
@@ -774,13 +796,14 @@ On phone:
 - use responsive flow/flex/grid, not forced equal fixed height
 - preserve full portrait containment; no crop/stretch
 - smaller phones may relax exact alignment rather than overflow
+- a thin counter band sits under the customer; the Bag slots sit on it, not under the status line (User 2026-09-24, v2.9.0)
 
 ### Bag
 
 The normal customer Bag remains exactly two slots.
 
 On phone:
-- place them in the available upper-right area
+- place them on the counter band beside the customer (User 2026-09-24, v2.9.0)
 - each slot remains at least ~44px touch class
 - keep "가방 used / 2" readable without a tall horizontal strip
 
@@ -810,6 +833,7 @@ Do not remove the actual queue count.
 
 Do not add a separate `최종 준비 결과` dashboard to the Bag.
 The two slots are the handling surface.
+At every width the two slots sit on the counter band beside the customer; they remain the handling surface (User 2026-09-24, v2.9.0).
 
 Show:
 - contents
@@ -911,6 +935,12 @@ Player-facing core stats:
 - 정신
 
 Use clear 2×2 presentation where appropriate.
+
+Stat grid pressure tag (User 2026-09-24, v2.9.0):
+- under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag with the pressing Hazard name(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two)
+- 투력 never carries a tag
+- no number, no verdict
+- the tag is the one place the Stat grid links to the Gate
 
 Avoid overwhelming base NPC panel with
 every resistance/internal coefficient as equal-priority numbers.
@@ -2209,7 +2239,8 @@ Required semantic coverage:
 - ORDER confirm
 - store/open transition
 - Item select
-- ordinary 50% / 100% / 150% sale distinctions
+- ordinary 50% / 100% / 150% sale distinctions: one register family, 1 / 2 / 3 coin ticks; no mode sounds like the correct answer (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A5; User 2026-09-24, v2.9.0)
+- `손님 보내기` customer exit (`depart`): recorded utility cue, door / step family (User 2026-09-24, v2.9.0)
 - refusal
 - Gold gain vs spend distinction
 - Relic purchase
