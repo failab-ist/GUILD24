@@ -2,7 +2,7 @@
 
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/ITEM_v2.8.0-patch.md,history/ITEM_v2.7.0.md,history/ITEM_v2.5.0.md
@@ -28,7 +28,7 @@ newItemRule=REWORK_EXISTING_BEFORE_ADD
 
 canonicalHazards=[poison,bind,corrosion,mire,fire,fear,dark,cold,whiteout]
 
-globalPressure=[supplyBurden]
+globalPressure=NONE (User 2026-09-24, v2.9.0)
 
 hiddenCombo=NO
 jobIdItemModifier=NO
@@ -49,7 +49,7 @@ ITEM =
 
 Item responsibilities:
 - Stat support
-- Supply preparation
+- Fatigue recovery (Supply) (User 2026-09-24, v2.9.0)
 - Hazard response
 - Condition management
 - Insurance
@@ -84,8 +84,8 @@ Category = 상품 정체성/상점 분류
 Functional Role = 실제 Gameplay 기능
 
 Contracts:
-- Food = high Supply / Fatigue management + small-to-medium secondary Core Stat value
-- Drink = lower Supply + sharper Stat/Counter/RiskReward value
+- Food = large Fatigue recovery (Supply) + lower secondary Core Stat value (User 2026-09-24, v2.9.0)
+- Drink = small Fatigue recovery (Supply) + sharper Stat/Counter/RiskReward value
 - Potion = generic immediate raw-Power specialist
 - Field Gear = narrow Hazard specialist or explicit Hazard Hybrid
 - Insurance = bad-outcome prevention/mitigation/conversion/aftercare
@@ -99,7 +99,7 @@ A normal Item should read primarily as one gameplay purpose with at most one mea
 
 Do not hide:
 - Core Stat value
-- Supply value
+- Supply value (shown as `피로 회복 N`) (User 2026-09-24, v2.9.0)
 - Hazard Counter value
 - Insurance behavior
 - explicit penalty/tradeoff
@@ -114,16 +114,17 @@ The exact active-catalog table below controls approved multi-effect exceptions; 
 direct stat/recovery support
 
 ### Supply
-mitigates global Supply Burden
+reduces the customer's Fatigue; shown as `피로 회복 N` (User 2026-09-24, v2.9.0)
 
 Rules:
+- Supply reduces current Fatigue first, then this expedition's Fatigue gain; no Gate requires Supply
 - Supply is NOT a Hazard Counter
 - no thirst/hunger subsystem
 - no Food+Drink pairing requirement
-- excess Supply alone gives no extra expedition bonus
+- leftover Supply is not persisted and gives no extra expedition bonus
 
-Canonical Supply Burden:
--> `DUNGEON_HAZARD_v2.8.0.md`
+Exact Supply -> Fatigue order and formulas:
+-> `DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE
 
 ### DirectCounter
 single-hazard specialist
@@ -159,6 +160,8 @@ explicit special operation that does not fit Stat/Counter/Insurance/Economy
 ## SUPPLY MODEL
 
 All active Food/Drink Items provide a visible Supply value unless explicitly defined otherwise.
+Its only meaning is Fatigue recovery: the Player sees the value as `피로 회복 N`, never `보급 +N` (User 2026-09-24, v2.9.0)
+Catalog tables below keep the internal notation `Supply N`; the values are unchanged.
 
 Each Food/Drink Item defines:
 - supplyValue
@@ -265,7 +268,7 @@ Examples of modifier totals:
 ```
 
 Drink has no Food-affinity Trait modifier, so the two Fresh native-Stat bonuses alone give base ×1.75.
-원정 도시락 코너 no longer adds a native-Stat bonus (its effects are Supply and flat Hazard defense).
+원정 도시락 코너 no longer adds a native-Stat bonus (its effects are Fatigue recovery via Supply and flat Hazard defense). (User 2026-09-24, v2.9.0)
 
 GLUTTONY's Final reduction, when applicable, occurs after the final Item-side positive Core-Stat contribution has been produced, as owned by `BOSS_v2.8.0.md`.
 
@@ -321,17 +324,19 @@ Canonical Dungeon behavior:
 
 `DIRECTOR DOCUMENT BASELINE`
 
+Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
+
 | Hazard | Main / Upper | Lower | Hybrid / Natural alternative |
 |---|---|---|---|
 | poison | 농축 해독제 +18 | 방진마스크 +12 | 강인함 / 해독가 / 거미줄 방호세트 +12 |
 | bind | 경량 로프 +16 | — | 기동 / Stat support / 거미줄 방호세트 +12 |
 | corrosion | 부식 방지 코팅제 +18 | — | 방수망토 +6 / 강인함 / 연금 방수슈트 +12 |
 | mire | 원정용 장화 +16 | — | 방수망토 +6 / 기동 / 연금 방수슈트 +12 |
-| fire | 쿨링 이온음료 +18 | 얼음컵 +10 | 강인함 / 내열성 / 마그마 냉각장비 +14 |
+| fire | 쿨링 이온음료 +18 | 얼음컵 +10 | 기동 / 내열성 / 마그마 냉각장비 +14 |
 | fear | 용사의 곡주 +18 | 집중 사탕 +10 | 정신 / 성화 랜턴 +12 |
-| dark | 랜턴 건전지 +16 | — | 정신+기동 / 눈썰미 / 성화 랜턴 +12 |
+| dark | 랜턴 건전지 +16 | — | 정신 / 눈썰미 / 성화 랜턴 +12 |
 | cold | 핫팩 +18 | 컵라면 +10 | 불룡볶음면 +6 / 강인함 / 백설 방한고글 +12 |
-| whiteout | 설원 고글 +16 | — | 정신+기동 / 눈썰미 / 백설 방한고글 +12 |
+| whiteout | 설원 고글 +16 | — | 정신 / 눈썰미 / 백설 방한고글 +12 |
 
 Dedicated single-Hazard Field Gear specialist Items carry no generic positive Core Stat unless an explicit active-catalog exception says otherwise.
 Their cost is narrow coverage.
@@ -440,21 +445,21 @@ Start-stock ownership -> `CORE_RUN_v2.8.0.md`.
 ### ROLE SPLIT — EXACT
 
 Meal / 도시락 line:
-- Supply is the primary identity
+- Supply (large Fatigue recovery) is the primary identity (User 2026-09-24, v2.9.0)
 - 강인함 is secondary
 - higher tiers represent a more complete expedition meal
-- no direct Fatigue-reduction effect is created
+- Supply is the direct Fatigue recovery; no separate Fatigue effect is created
 - U/R may invest in the NPC's future Wallet
 
 Water line:
 - Drink identity
-- low Supply
+- low Supply (small Fatigue recovery)
 - 강인함-focused Stat route
 - comparable in structure to mobility/spirit stat Drinks, not to a meal or Potion
 
 Thus:
-- meal asks: do I spend a slot on Supply plus broad survival?
-- water asks: do I spend a slot on concentrated 강인함 with little Supply?
+- meal asks: do I spend a slot on large Fatigue recovery plus broad survival?
+- water asks: do I spend a slot on concentrated 강인함 with small Fatigue recovery?
 
 ### ACTIVE REPLACEMENT IDS
 
@@ -475,7 +480,7 @@ Only the current identities are active for these IDs.
 ### REPLACEMENT ID BOUNDARY
 
 For `bar` / `herobar`:
-- no direct Fatigue-reduction role is active
+- no Fatigue-reduction role beyond the Item's own Supply value is active (User 2026-09-24, v2.9.0)
 - no hidden Hotbar role is active
 - no Hotbar name is a Player-facing alias
 
@@ -548,7 +553,7 @@ Design split:
 = Family-shaped one-slot Hybrid breadth
 
 5 Epic Food/Drink/Potion
-= top-end direct Stat / Supply slot efficiency
+= top-end direct Stat / Fatigue-recovery (Supply) slot efficiency (User 2026-09-24, v2.9.0)
 ```
 
 Purpose:
@@ -728,7 +733,7 @@ The meal Stat ladder is intentionally readable:
     6 -> 10 -> 14 -> 18
 
 The water route is intentionally more Stat-concentrated than the meal at the same broad stage,
-while keeping much lower Supply.
+while keeping much lower Supply (Fatigue recovery). (User 2026-09-24, v2.9.0)
 
 The table above is the approved DIRECTOR DOCUMENT BASELINE.
 
@@ -973,7 +978,7 @@ Canonical:
 Player can see:
 - Category
 - relevant Functional Role
-- Supply contribution
+- Supply contribution as `피로 회복 N` (User 2026-09-24, v2.9.0)
 - actual Stat effect
 - Counter effect
 - Condition effect
@@ -983,7 +988,7 @@ Player can see:
 Player can see exact Item-side values for:
 - Core Stat
 - Hazard Counter
-- Supply
+- Supply (`피로 회복 N`)
 - explicit penalty
 - Insurance behavior
 
@@ -1056,7 +1061,7 @@ Reject:
 
 ## RELATED
 
-Hazard / Fatigue / Supply / Supply Burden -> `DUNGEON_HAZARD_v2.8.0.md`
+Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
 Job / Trait multipliers -> `NPC_TRAIT_v2.8.0.md`
 Relic / build modifiers -> `RELIC_v2.8.0.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`

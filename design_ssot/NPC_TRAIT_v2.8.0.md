@@ -2,7 +2,7 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/NPC_TRAIT_v2.8.0-patch.md,history/NPC_TRAIT_v2.7.0.md,history/NPC_TRAIT_v2.6.1.md,history/NPC_TRAIT_v2.6.0.md
@@ -366,14 +366,14 @@ Forbidden active Trait resolution keys:
 - `undead` as Hazard
 
 Rules:
-- `long` is not a Hazard. Long-expedition preparation is owned by `SUPPLY_BURDEN` in `DUNGEON_HAZARD_v2.8.0.md`.
+- `long` is not a Hazard and no Gate requires Supply; Food/Drink Supply only reduces Fatigue (`DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE). (User 2026-09-24, v2.9.0)
 - `thirst` is not a authoritative Condition/penalty system.
 - `wet` is flavor only.
 - `armor` and `undead` are not authoritative Hazards.
 - old source Trait modifiers that reference these keys must not be preserved automatically.
 
 If an existing Trait concept still needs a Supply-related identity,
-it must be redefined through the visible authoritative Supply/Supply Burden system
+it must be redefined through the visible Supply -> Fatigue recovery rule (`피로 회복 N`)
 and explicitly approved before implementation.
 
 `대식가` / `소식가` use only the visible Food native-core/Supply rules defined in the final Trait catalog below.
@@ -396,7 +396,7 @@ activeTraitCount=37
 Rules:
 - no active Trait may read/write long, thirst, wet, armor, undead, caffeine-stack, or hidden Job-ID effects
 - every material effect is player-readable
-- Traits reuse existing Stats / Hazard / Supply / Condition / Wallet / Loyalty / Revisit systems; no Trait-only subsystem
+- Traits reuse existing Stats / Hazard / Supply (Fatigue recovery) / Condition / Wallet / Loyalty / Revisit systems; no Trait-only subsystem (User 2026-09-24, v2.9.0)
 - internalDirection is not player-facing
 - [benefit] / [cost] / [neutral] is semantic presentation metadata
 - UI must not infer meaning from numeric sign
@@ -415,13 +415,13 @@ Rules:
 3. **대식가**
    - internalDirection=MIXED
    - [benefit] Food positive native Core-Stat contribution +30%
-   - [cost] each Food Item Supply -1, minimum 1
+   - [cost] 음식의 피로 회복 -1: each Food Item Supply -1, minimum 1
    - [neutral] Hazard Counter/Insurance/RiskReward magnitude is not amplified
 
 4. **소식가**
    - internalDirection=MIXED
    - [cost] Food positive native Core-Stat contribution -20%
-   - [benefit] each Food Item Supply +1
+   - [benefit] 음식의 피로 회복 +1: each Food Item Supply +1
    - [neutral] Hazard Counter/Insurance/RiskReward magnitude is not amplified
 
 5. **신중함**
@@ -522,7 +522,7 @@ Rules:
 
 26. **준비성**
     - internalDirection=POSITIVE
-    - [benefit] each Food/Drink Item Supply +1
+    - [benefit] 음식·음료의 피로 회복 +1: each Food/Drink Item Supply +1
 
 27. **악바리**
     - internalDirection=MIXED
@@ -589,20 +589,20 @@ No loyalty is granted on refusal.
 
 ## FOOD AFFINITY TRAIT SCOPE
 
-`eater / 대식가`:
+`eater / 대식가`: (User 2026-09-24, v2.9.0)
 ```text
 Food positive native Core-Stat contribution +30%
-each Food Item Supply -1, minimum 1
+음식의 피로 회복 -1: each Food Item Supply -1, minimum 1
 ```
 
 `small / 소식가`:
 ```text
 Food positive native Core-Stat contribution -20%
-each Food Item Supply +1
+음식의 피로 회복 +1: each Food Item Supply +1
 ```
 
 Scope for both:
-- applies only to the Food Item's own positive Core-Stat contribution and stated Supply adjustment
+- applies only to the Food Item's own positive Core-Stat contribution and stated Supply (피로 회복) adjustment
 - does not amplify/reduce Hazard Counter
 - does not amplify/reduce Insurance
 - does not amplify/reduce RiskReward penalty magnitude
@@ -623,7 +623,7 @@ Potion positive native Core-Stat effect ×1.15
 Scope:
 - applies to Potion positive Core-Stat contribution only
 - does not amplify Hazard Counter
-- does not amplify Supply
+- does not amplify Supply (피로 회복) (User 2026-09-24, v2.9.0)
 - does not amplify Insurance
 - does not amplify unrelated attached effects
 
@@ -652,7 +652,7 @@ They do not apply to:
 
 For Severe Injury / Death, final expedition-result Fatigue gain remains exactly 0 regardless of those Trait modifiers.
 
-Base outcome Fatigue and Supply buffering -> `DUNGEON_HAZARD_v2.8.0.md`.
+Base outcome Fatigue, the 0~40 Fatigue scale with its five bands, and the Supply -> Fatigue recovery order -> `DUNGEON_HAZARD_v2.8.0.md`. (User 2026-09-24, v2.9.0)
 
 ## NPC RARITY
 

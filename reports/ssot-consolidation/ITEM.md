@@ -452,7 +452,7 @@ Final usefulness -> `FINAL_EXPEDITION_v2.7.0.md`
 ```
 
 ```new
-Hazard / Fatigue / Supply / Supply Burden -> `DUNGEON_HAZARD_v2.8.0.md`
+Hazard / Fatigue / Supply -> Fatigue -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
 Job / Trait multipliers -> `NPC_TRAIT_v2.8.0.md`
 Relic / build modifiers -> `RELIC_v2.8.0.md`
 Sale handling / inventory -> `SALE_v2.8.0.md`
@@ -528,5 +528,66 @@ Drink has no Food-affinity Trait modifier, so the same three Fresh native-Stat b
 = -20% +25% +50%
 = base ×1.55
 Drink has no Food-affinity Trait modifier, so the two Fresh native-Stat bonuses alone give base ×1.75.
-원정 도시락 코너 no longer adds a native-Stat bonus (its effects are Supply and flat Hazard defense).
+원정 도시락 코너 no longer adds a native-Stat bonus (its effects are Fatigue recovery via Supply and flat Hazard defense). (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+The Supply Burden Gate modifier is removed (no Gate requires Supply, no deficit / excess). Food/Drink keep
+their Supply values (1~9, > 0), but the only meaning of Supply is Fatigue recovery, shown to the Player as
+`피로 회복 N`; the exact Supply -> Fatigue order is owned by DUNGEON_HAZARD §SUPPLY -> FATIGUE, ITEM points.
+The meal / water role split keeps its amount split, and its "no direct Fatigue-reduction" lines are rewritten
+because Supply now IS the direct Fatigue recovery. Hazard pressure is one non-투력 Stat per Hazard (3 / 3 / 3):
+the HAZARD COUNTER BASELINE natural-alternative column follows 화염 -> 기동, 어둠 / 화이트아웃 -> 정신.
+The two earlier `new` declarations this batch rewrote (RELATED pointer, 원정 도시락 코너 note) are edited in place above.
+
+```text
+globalPressure=[supplyBurden]
+- Supply preparation
+- Food = high Supply / Fatigue management + small-to-medium secondary Core Stat value
+- Drink = lower Supply + sharper Stat/Counter/RiskReward value
+- Supply value
+mitigates global Supply Burden
+- excess Supply alone gives no extra expedition bonus
+Canonical Supply Burden:
+| fire | 쿨링 이온음료 +18 | 얼음컵 +10 | 강인함 / 내열성 / 마그마 냉각장비 +14 |
+| dark | 랜턴 건전지 +16 | — | 정신+기동 / 눈썰미 / 성화 랜턴 +12 |
+| whiteout | 설원 고글 +16 | — | 정신+기동 / 눈썰미 / 백설 방한고글 +12 |
+- Supply is the primary identity
+- no direct Fatigue-reduction effect is created
+- low Supply
+- meal asks: do I spend a slot on Supply plus broad survival?
+- water asks: do I spend a slot on concentrated 강인함 with little Supply?
+- no direct Fatigue-reduction role is active
+= top-end direct Stat / Supply slot efficiency
+while keeping much lower Supply.
+```
+
+```new
+globalPressure=NONE (User 2026-09-24, v2.9.0)
+- Fatigue recovery (Supply) (User 2026-09-24, v2.9.0)
+- Food = large Fatigue recovery (Supply) + lower secondary Core Stat value (User 2026-09-24, v2.9.0)
+- Drink = small Fatigue recovery (Supply) + sharper Stat/Counter/RiskReward value
+- Supply value (shown as `피로 회복 N`) (User 2026-09-24, v2.9.0)
+reduces the customer's Fatigue; shown as `피로 회복 N` (User 2026-09-24, v2.9.0)
+- Supply reduces current Fatigue first, then this expedition's Fatigue gain; no Gate requires Supply
+- leftover Supply is not persisted and gives no extra expedition bonus
+Exact Supply -> Fatigue order and formulas:
+-> `DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE
+Its only meaning is Fatigue recovery: the Player sees the value as `피로 회복 N`, never `보급 +N` (User 2026-09-24, v2.9.0)
+Catalog tables below keep the internal notation `Supply N`; the values are unchanged.
+Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
+| fire | 쿨링 이온음료 +18 | 얼음컵 +10 | 기동 / 내열성 / 마그마 냉각장비 +14 |
+| dark | 랜턴 건전지 +16 | — | 정신 / 눈썰미 / 성화 랜턴 +12 |
+| whiteout | 설원 고글 +16 | — | 정신 / 눈썰미 / 백설 방한고글 +12 |
+- Supply (large Fatigue recovery) is the primary identity (User 2026-09-24, v2.9.0)
+- Supply is the direct Fatigue recovery; no separate Fatigue effect is created
+- low Supply (small Fatigue recovery)
+- meal asks: do I spend a slot on large Fatigue recovery plus broad survival?
+- water asks: do I spend a slot on concentrated 강인함 with small Fatigue recovery?
+- no Fatigue-reduction role beyond the Item's own Supply value is active (User 2026-09-24, v2.9.0)
+= top-end direct Stat / Fatigue-recovery (Supply) slot efficiency (User 2026-09-24, v2.9.0)
+while keeping much lower Supply (Fatigue recovery). (User 2026-09-24, v2.9.0)
+- Supply contribution as `피로 회복 N` (User 2026-09-24, v2.9.0)
+- Supply (`피로 회복 N`)
 ```

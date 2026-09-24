@@ -2,7 +2,7 @@
 
 DOC=RELIC_QA
 OWNER=qa,relic,store_build,fresh,sloth_window
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/RELIC_QA_v2.8.0-patch.md,history/RELIC_QA_v2.7.0.md,history/RELIC_QA_v2.5.0.md
@@ -430,7 +430,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
   price, store receives the full charged price
 - 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 and flat +4 on every Hazard of the actual Gate
+- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 (피로 회복 +2) and flat +4 on every Hazard of the actual Gate (User 2026-09-24, v2.9.0)
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   the Day's first offer generation
@@ -590,7 +590,7 @@ Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 acr
 EXPECT:
 - only the 9 canonical Hazards drive Hazard-counter filtering
 - Main/Alternative Item routes remain possible
-- Supply Burden is handled through Food/Drink Supply, not treated as a Hazard key
+- Food/Drink Supply (피로 회복) is not treated as a Hazard key (User 2026-09-24, v2.9.0)
 
 PASS:
 Expedition Relics match the current Dungeon×Item model.
@@ -625,7 +625,7 @@ EXPECT:
 - Food/Drink shelf life +2
 - existing non-expired eligible stock extends once on acquisition
 - future stock receives extension
-- no Stat/Supply multiplier
+- no Stat/Supply (피로 회복) multiplier (User 2026-09-24, v2.9.0)
 - no repeated daily extension
 
 ### REL-Q-v28-2 — LARGE FRIDGE PRICE
@@ -640,7 +640,7 @@ PASS only when the active implementation uses 120G.
 PASS:
 - native Core-Stat +25%
 - from next Day operating cost + overheadBase × 0.10, never compounded
-- Supply unchanged
+- Supply (피로 회복) unchanged (User 2026-09-24, v2.9.0)
 - Hazard Counter unchanged
 - Insurance unchanged
 - RiskReward penalty unchanged
@@ -648,7 +648,7 @@ PASS:
 ### REL-Q74 — EXPEDITION MEAL CORNER
 
 Per Food/Drink Item in the Bag:
-- Supply +2
+- Supply +2 (피로 회복 +2) (User 2026-09-24, v2.9.0)
 - flat +4 on every Hazard of the Gate the adventurer actually enters
 
 PASS:
@@ -661,7 +661,7 @@ PASS:
 EXPECT:
 - no shelf-life effect and no operating-cost effect
 - Food/Drink ORDER price x1.25
-- Supply unchanged
+- Supply (피로 회복) unchanged (User 2026-09-24, v2.9.0)
 - Counter unchanged
 
 Fresh-to-Fresh stacking uses base-additive bonuses.
@@ -686,7 +686,7 @@ Therefore:
 
 FAIL:
 - any alternate native-Stat percentages are active
-- Supply itself is multiplied by these native-Stat percentages
+- Supply (피로 회복) itself is multiplied by these native-Stat percentages (User 2026-09-24, v2.9.0)
 
 ### REL-Q31 — FRESH CORE-EFFECT SCOPE
 SETUP:

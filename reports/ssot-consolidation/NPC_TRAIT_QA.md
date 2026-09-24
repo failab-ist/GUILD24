@@ -193,3 +193,26 @@ NPC-Q-v28-2B / NPC-Q-v28-8 follow the Loyalty change in NPC_TRAIT: 50% +4, no-pu
 - living expedition result -> Loyalty +1
 - Death -> no survival +1
 ```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+Checks that named the Supply / Supply Burden model or the Trait Supply adjustments are relabelled to the
+visible Supply -> Fatigue recovery rule (`피로 회복 N`; 대식가 `음식의 피로 회복 -1`, 소식가 `+1`, 준비성 `음식·음료의
+피로 회복 +1`); values unchanged. TRAIT-Q14, TRAIT-Q17 and NPC-Q76 expectations change; NPC-Q72 states no band
+numbers and NPC-Q73 is kept.
+
+```text
+- eater: Food positive native Core Stat +30%; each Food Supply -1, minimum 1
+- small: Food positive native Core Stat -20%; each Food Supply +1
+- any active Supply-related Trait effect uses the canonical Supply/Supply Burden model
+- 대식가/소식가 modify Food native core + integer Supply as canonicalized, not legacy long/thirst
+- 준비성 adds +1 Supply per Food/Drink
+```
+
+```new
+- any active Supply-related Trait effect uses the canonical Supply -> Fatigue recovery model (`피로 회복 N`); no Supply requirement or Burden survives (User 2026-09-24, v2.9.0)
+- 대식가/소식가 modify Food native core + integer Supply (음식의 피로 회복 -1 / +1) as canonicalized, not legacy long/thirst (User 2026-09-24, v2.9.0)
+- 준비성 adds +1 Supply (음식·음료의 피로 회복 +1) per Food/Drink
+- eater: Food positive native Core Stat +30%; each Food Supply (피로 회복) -1, minimum 1 (User 2026-09-24, v2.9.0)
+- small: Food positive native Core Stat -20%; each Food Supply (피로 회복) +1
+```

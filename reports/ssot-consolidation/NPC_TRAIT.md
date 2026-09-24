@@ -330,11 +330,11 @@ Meta progress source -> META_v2.8.0.md
 -> DUNGEON_HAZARD_v2.8.0.md
 -> ITEM_v2.8.0.md
 Normal Bag capacity is owned by `SALE_v2.8.0.md` and is exactly 2.
-- `long` is not a Hazard. Long-expedition preparation is owned by `SUPPLY_BURDEN` in `DUNGEON_HAZARD_v2.8.0.md`.
+- `long` is not a Hazard and no Gate requires Supply; Food/Drink Supply only reduces Fatigue (`DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE). (User 2026-09-24, v2.9.0)
 Cross-system native-Stat composition -> `ITEM_v2.8.0.md`.
 Food/Drink Item truth -> `ITEM_v2.8.0.md`.
 Potion catalog/effects -> `ITEM_v2.8.0.md`.
-Base outcome Fatigue and Supply buffering -> `DUNGEON_HAZARD_v2.8.0.md`.
+Base outcome Fatigue, the 0~40 Fatigue scale with its five bands, and the Supply -> Fatigue recovery order -> `DUNGEON_HAZARD_v2.8.0.md`. (User 2026-09-24, v2.9.0)
 -> UI_UX_v2.8.0.md
 -> NIGHT_CLOSING_v2.8.0.md
 Item Aftercare may still remove/lower persistent Injury exactly as owned by `ITEM_v2.8.0.md`; this is separate from natural recovery.
@@ -444,4 +444,39 @@ Other visit/survival Loyalty changes remain separate.
 - when the current customer's visit is finalized/departs after a paid purchase that Day -> Loyalty +1
 - when the visit is finalized/departs without a paid purchase that Day -> Loyalty 0
 - if the NPC remains alive after the expedition -> Loyalty +1
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+The Supply Burden Gate modifier is removed; Food/Drink Supply keeps its values but its only meaning is
+Fatigue recovery, shown as `피로 회복 N`. The Supply-related Trait rules are relabelled through that visible
+rule (대식가 `음식의 피로 회복 -1`, minimum 1 per Food; 소식가 `음식의 피로 회복 +1`; 준비성 `음식·음료의 피로 회복 +1`),
+values unchanged. Fatigue Trait modifiers are unchanged; the Fatigue scale (0~40, five bands) is pointed to
+DUNGEON_HAZARD, not copied. The two earlier `new` pointer declarations this batch rewrote (`long` rule,
+FATIGUE TRAITS owner pointer) are edited in place above.
+
+```text
+`eater / 대식가`:
+each Food Item Supply -1, minimum 1
+each Food Item Supply +1
+- applies only to the Food Item's own positive Core-Stat contribution and stated Supply adjustment
+- does not amplify Supply
+it must be redefined through the visible authoritative Supply/Supply Burden system
+- Traits reuse existing Stats / Hazard / Supply / Condition / Wallet / Loyalty / Revisit systems; no Trait-only subsystem
+- [cost] each Food Item Supply -1, minimum 1
+- [benefit] each Food Item Supply +1
+- [benefit] each Food/Drink Item Supply +1
+```
+
+```new
+it must be redefined through the visible Supply -> Fatigue recovery rule (`피로 회복 N`)
+- Traits reuse existing Stats / Hazard / Supply (Fatigue recovery) / Condition / Wallet / Loyalty / Revisit systems; no Trait-only subsystem (User 2026-09-24, v2.9.0)
+- [cost] 음식의 피로 회복 -1: each Food Item Supply -1, minimum 1
+- [benefit] 음식의 피로 회복 +1: each Food Item Supply +1
+- [benefit] 음식·음료의 피로 회복 +1: each Food/Drink Item Supply +1
+`eater / 대식가`: (User 2026-09-24, v2.9.0)
+음식의 피로 회복 -1: each Food Item Supply -1, minimum 1
+음식의 피로 회복 +1: each Food Item Supply +1
+- applies only to the Food Item's own positive Core-Stat contribution and stated Supply (피로 회복) adjustment
+- does not amplify Supply (피로 회복) (User 2026-09-24, v2.9.0)
 ```

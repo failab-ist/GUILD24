@@ -2,7 +2,7 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/RELIC_v2.8.0-patch.md,history/RELIC_v2.7.0.md,history/RELIC_v2.5.0.md
@@ -412,17 +412,16 @@ cost:
 less direct generic economy power
 
 ### FRESH
-identity=Food/Drink supply / native-stat / flexible-prep operation
+identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep operation (User 2026-09-24, v2.9.0)
 
 questions:
 - shelf life?
-- Supply burden?
 - Food/Drink volume?
 - native Stat/recovery value?
 - can flexible Food/Drink prep cover enough without replacing specialist gear?
 
 strength:
-Supply efficiency / shelf-life control / broad usability / flexible prep
+Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
 
 cost:
 expiry / weaker specialist reliability / limited Insurance access
@@ -549,12 +548,14 @@ tag=Fresh
 
 ```text
 Food/Drink positive native Core-Stat contribution +25%
-Supply unchanged
+Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
 from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
 ```
+
+Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +25% · 피로 회복·위험 대응·부작용 제외 · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
 newCombatSystem=NO
@@ -636,9 +637,11 @@ tags=[Fresh,Expedition]
 
 ```text
 per Food/Drink Item in the Bag:
-  Supply +2
+  Supply +2 (피로 회복 +2)
   +4 defence on every Hazard of the Gate the adventurer actually goes to
 ```
+
+Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
 
 The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
@@ -746,11 +749,13 @@ notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
 no shelf-life effect and no operating-cost effect
 Food/Drink ORDER (purchase) price x1.25
 Food/Drink positive native Core-Stat contribution +50%
-Supply unchanged
+Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
 ```
+
+Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +50% · 피로 회복·위험 대응·부작용 제외 · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
 
 26. 지역 거점점 계약
 tag=Customer
@@ -877,13 +882,13 @@ Premium:
 Expedition:
 - uses canonical 9 Hazard matrix only
 - Counter availability must preserve Main vs Alternative-route choice
-- Supply Burden is not a Hazard; Food/Drink Supply belongs to Fresh or Fresh+Expedition interaction
+- Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
 
 Other Expedition Relics that inspect Item functional role continue to use actual Counter/Insurance functionality rather than physical item shape.
 
 Fresh:
 - active Food/Drink pool must span multiple prices/rarities/roles
-- native core boost means positive native Stat only; Supply stays its own channel
+- native core boost means positive native Stat only; Supply (피로 회복) stays its own channel
 - specialist FieldGear must remain the more reliable dedicated Counter
 
 Category checks must use Food/Drink categories rather than stale legacy `fresh` category aliases.

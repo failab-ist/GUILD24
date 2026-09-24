@@ -497,7 +497,7 @@ B10: same decision as ITEM (Fresh Store Supports leave Supply unchanged).
 ```
 
 ```new
-- native core boost means positive native Stat only; Supply stays its own channel
+- native core boost means positive native Stat only; Supply (피로 회복) stays its own channel
 ```
 
 ## AMENDMENT — User decision 2026-09-23: Store Support rebalance
@@ -661,7 +661,7 @@ Price = 240G
 condition = paid returning customer today survives (no Loyalty threshold)
 Loyalty +5
 per Food/Drink Item in the Bag:
-Supply +2
+Supply +2 (피로 회복 +2)
 +4 defence on every Hazard of the Gate the adventurer actually goes to
 The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
@@ -762,4 +762,31 @@ NPC Wallet +30G
 
 ```new
 NPC Wallet +25G
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+The Supply Burden Gate modifier is removed; Food/Drink Supply keeps its values but its only meaning is
+Fatigue recovery, shown as `피로 회복 N`. FRESH identity drops the Burden question and reads Supply as
+Fatigue-recovery efficiency; the three Fresh Store Support blocks (즉석식품 코너, 원정 도시락 코너, 24시간 신선체계)
+keep their values and quote the approved Player card copy; the Expedition / Fresh balance lines drop the
+Burden clause. The two earlier `new` declarations this batch rewrote (Fresh channel line, 원정 도시락 코너
+`Supply +2`) are edited in place above.
+
+```text
+Supply unchanged
+identity=Food/Drink supply / native-stat / flexible-prep operation
+- Supply burden?
+Supply efficiency / shelf-life control / broad usability / flexible prep
+- Supply Burden is not a Hazard; Food/Drink Supply belongs to Fresh or Fresh+Expedition interaction
+```
+
+```new
+identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep operation (User 2026-09-24, v2.9.0)
+Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
+Supply (피로 회복) unchanged
+Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +25% · 피로 회복·위험 대응·부작용 제외 · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +50% · 피로 회복·위험 대응·부작용 제외 · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
+- Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
 ```

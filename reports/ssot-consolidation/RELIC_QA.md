@@ -574,7 +574,7 @@ the charged price, Player still receives the full chosen sale price
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
 price, store receives the full charged price
 - 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 and flat +4 on every Hazard of the actual Gate
+- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 (피로 회복 +2) and flat +4 on every Hazard of the actual Gate (User 2026-09-24, v2.9.0)
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
 the Day's first offer generation
@@ -631,7 +631,7 @@ PASS only when the active implementation uses 120G.
 - native Core-Stat +25%
 - from next Day operating cost + overheadBase × 0.10, never compounded
 Per Food/Drink Item in the Bag:
-- Supply +2
+- Supply +2 (피로 회복 +2) (User 2026-09-24, v2.9.0)
 - flat +4 on every Hazard of the Gate the adventurer actually enters
 - no native Core-Stat bonus
 - no matching-Counter multiplier
@@ -659,4 +659,26 @@ A returning adventurer receives nothing.
 Price 130G
 - 발주 교환권 sequence after free use starts at 50
 유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+Fresh / Expedition checks that name Supply are relabelled to the visible Supply -> Fatigue recovery rule
+(`피로 회복`), values unchanged: REL-Q-v28-21 (원정 도시락 코너 line), REL-Q72, REL-Q73, REL-Q74, REL-Q75,
+REL-Q-v28-13. REL-Q34 keeps its canonical-Hazard checks; only its Burden line is rewritten (Food/Drink Supply is
+not a Hazard key). The two earlier `new` declarations this batch rewrote (REL-Q-v28-21 원정 도시락 코너 line,
+REL-Q74 `- Supply +2`) are edited in place above.
+
+```text
+- Supply itself is multiplied by these native-Stat percentages
+- no Stat/Supply multiplier
+- Supply unchanged
+- Supply Burden is handled through Food/Drink Supply, not treated as a Hazard key
+```
+
+```new
+- Food/Drink Supply (피로 회복) is not treated as a Hazard key (User 2026-09-24, v2.9.0)
+- no Stat/Supply (피로 회복) multiplier (User 2026-09-24, v2.9.0)
+- Supply (피로 회복) unchanged (User 2026-09-24, v2.9.0)
+- Supply (피로 회복) itself is multiplied by these native-Stat percentages (User 2026-09-24, v2.9.0)
 ```

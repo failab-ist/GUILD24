@@ -2,7 +2,7 @@
 
 DOC=NPC_TRAIT_QA
 OWNER=qa,npc,trait,roster,living_npc_cap,wallet,destination,condition,growth,revisit,recent_expedition,injury
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/NPC_TRAIT_QA_v2.8.0-patch.md,history/NPC_TRAIT_QA_v2.7.0.md,history/NPC_TRAIT_QA_v2.6.1.md,history/NPC_TRAIT_QA_v2.5.0.md
@@ -292,7 +292,7 @@ Inspect any Trait previously or currently associated with food amount, long expe
 
 EXPECT:
 - no legacy `long` value is carried over automatically
-- any active Supply-related Trait effect uses the canonical Supply/Supply Burden model
+- any active Supply-related Trait effect uses the canonical Supply -> Fatigue recovery model (`피로 회복 N`); no Supply requirement or Burden survives (User 2026-09-24, v2.9.0)
 - the effect is visible/understandable to the player
 - active effects match the frozen NPC_TRAIT catalog; no legacy effect is inferred or invented
 
@@ -318,8 +318,8 @@ Exercise 회복체질, 지구력, 쉽게 지침, 눈썰미, 해독가, 수족냉
 
 EXPECT:
 - effects resolve only through existing Recovery/Fatigue/Hazard/Supply/Injury systems
-- 대식가/소식가 modify Food native core + integer Supply as canonicalized, not legacy long/thirst
-- 준비성 adds +1 Supply per Food/Drink
+- 대식가/소식가 modify Food native core + integer Supply (음식의 피로 회복 -1 / +1) as canonicalized, not legacy long/thirst (User 2026-09-24, v2.9.0)
+- 준비성 adds +1 Supply (음식·음료의 피로 회복 +1) per Food/Drink
 - 악바리 reads current injury state and adds its stated Fatigue cost
 - no Trait modifies hidden baseNoise
 
@@ -331,8 +331,8 @@ New/reworked Traits are readable, testable, and do not create hidden micro-syste
 SETUP: use Food Items with positive Core Stat, Supply, Hazard Counter, and/or RiskReward components on `eater` and `small` NPCs.
 
 EXPECT:
-- eater: Food positive native Core Stat +30%; each Food Supply -1, minimum 1
-- small: Food positive native Core Stat -20%; each Food Supply +1
+- eater: Food positive native Core Stat +30%; each Food Supply (피로 회복) -1, minimum 1 (User 2026-09-24, v2.9.0)
+- small: Food positive native Core Stat -20%; each Food Supply (피로 회복) +1
 
 PASS:
 - Hazard Counter unchanged
