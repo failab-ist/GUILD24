@@ -673,7 +673,7 @@ Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 3`) in two contr
 - effective Core Stats may rise according to the current Fatigue owner (`DUNGEON_HAZARD_v2.8.0.md` bands)
 - Item shows exact Stat/Counter/`피로 회복 N`
 - `피로 A -> 출발 B` matches runtime preRecovery; no required / deficit value is shown
-- current/departure Fatigue readable as `피로 A -> 출발 B`; no `보급 X / 필요 Y` cell
+- current Fatigue readable in the status strip; `피로 A -> 출발 B` only on the counter tray for a chosen Food/Drink; no always-on Fatigue line, no `보급 X / 필요 Y` cell (User 2026-09-24 revision, v2.9.0)
 - main label is 귀환 후 피로, with ` · {band}` from Fatigue 20 up
 - detailed path available on demand; the recovery row is `음식·음료로 -N`, never `남은 보급으로`
 - actual Food/Drink preRecovery/outcome buffer use can be read when relevant

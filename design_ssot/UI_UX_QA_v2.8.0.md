@@ -1211,7 +1211,7 @@ PASS:
 
 SALE:
 - no hypothetical Outcome fatigue matrix
-- current/departure Fatigue readable as `피로 A -> 출발 B`; no `보급 X / 필요 Y` cell
+- current Fatigue readable in the status strip; `피로 A -> 출발 B` only on the counter tray for a chosen Food/Drink; no always-on Fatigue line, no `보급 X / 필요 Y` cell (User 2026-09-24 revision, v2.9.0)
 
 NIGHT:
 - main label is 귀환 후 피로, with ` · {band}` from Fatigue 20 up

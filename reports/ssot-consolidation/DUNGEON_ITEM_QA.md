@@ -606,7 +606,7 @@ Controlled NPCs at departure Fatigue 9 / 10 / 19 / 20 / 29 / 30 / 39 / 40, then 
 - NIGHT main line names the band from 20 up (`귀환 후 피로 22 · 과로`); 정상 / 지침 are not named
 - five bands, 0~40, applied to NPC Base+Equipment-side Stats only
 - rest recovery exists only on Severe-Injury recovery days
-SALE shows the one decision line `피로 {A} → 출발 {B}`; no `보급 회복` / `보급 부족` / `남은 보급` tail (User 2026-09-24, v2.9.0).
+SALE shows the one decision line `피로 {A} → 출발 {B}` only on the counter tray for a chosen Food/Drink; no always-on Fatigue line and no `보급 회복` / `보급 부족` / `남은 보급` tail (User 2026-09-24, v2.9.0).
 Controlled seeded cases must verify (User 2026-09-24, v2.9.0: no Supply-deficit row):
 - departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 50% (User 2026-09-24, v2.9.0)
 Stat/Supply (Fatigue recovery, shown `피로 회복 N`)/Direct/Hybrid/Condition/Insurance/RiskReward/Economy/Utility (User 2026-09-24, v2.9.0)

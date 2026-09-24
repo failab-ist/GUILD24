@@ -847,3 +847,17 @@ User decision 2026-09-24 (v2.9.0), D-3 rule sheet C5: the exact pre-supply `실�
 ```new
 - exact pre-supply `실패 시 사망 위험` % at SALE entry, owned by this failure-conditioned Death-risk model, shown in the 전투 전망 help and the NPC detail rather than as an always-on readout cell (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 no always-on SALE Fatigue line (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the SALE-may-expose list names the counter tray as the only place for departure Fatigue; the always-on line is gone.
+
+```text
+- current Fatigue
+- departure Fatigue after committed preRecovery
+```
+
+```new
+- current Fatigue (the customer's status strip)
+- departure Fatigue after committed preRecovery — on the counter tray as `피로 A → 출발 B`, only for a chosen Food/Drink that moves it; no always-on Fatigue line under the outlook (User 2026-09-24 revision, v2.9.0)
+```

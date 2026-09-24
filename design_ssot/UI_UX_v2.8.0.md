@@ -893,6 +893,7 @@ SALE main:
 - current Fatigue always compactly readable
 - if a penalty is active, harmful semantic emphasis
 - committed Food/Drink may show 피로 N -> 출발 N (User 2026-09-24, v2.9.0)
+- SALE carries no always-on Fatigue line: current Fatigue is the status strip's `피로 N`, the tray shows `피로 A -> 출발 B` only for a chosen Food/Drink that moves it, and the expedition's Fatigue is NIGHT's answer (User 2026-09-24 revision, v2.9.0)
 
 Do not show future Outcome-by-Outcome Fatigue table.
 
@@ -1989,7 +1990,7 @@ Hazard tutorial teaches:
 - natural Stat and Item Counter both contribute
 - readiness is summarized by 취약/불안/대응/충분
 
-Supply/Fatigue tutorial teaches one fact, on the first `피로 A → 출발 B` line the Player meets (User 2026-09-24, v2.9.0):
+Supply/Fatigue tutorial teaches one fact, on the counter tray's first `피로 A → 출발 B` row the Player meets — a Food/Drink chosen for a fatigued customer (User 2026-09-24, v2.9.0):
 - Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 
 First SALE (User 2026-09-24): four marks only — destination, Hazard, outlook, price. Great Success, Supply,

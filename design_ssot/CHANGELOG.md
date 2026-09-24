@@ -55,6 +55,9 @@ Docs-first. Each owner amendment is listed when committed.
 - Trims (U, User 2026-09-24): the `지난 원정` quick surface is desk-only (phone: NPC detail 원정 기록), the empty
   counter tray shows its prompt on DAY 1~3 with the tutorial only (otherwise no height), the PRICING coach
   drops the hand-over clause (A7 retired), the RETURNING coach anchors on the customer's card.
+- Fatigue line (I-2a, User 2026-09-24): SALE carries no always-on Fatigue line; `피로 A → 출발 B` lives only on
+  the counter tray for a chosen Food/Drink, the SUPPLY coach anchors there (COPY_AUDIT §3-5 / §3-7 / §4-17 / §6-6
+  band examples, UI_UX, DUNGEON_HAZARD boundary, DUNGEON_ITEM_QA, UI_UX_QA).
 
 ## v2.8.0 — closed 2026-09-24
 

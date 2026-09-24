@@ -647,7 +647,7 @@ Supply/Fatigue tutorial teaches:
 ```
 
 ```new
-Supply/Fatigue tutorial teaches one fact, on the first `피로 A → 출발 B` line the Player meets (User 2026-09-24, v2.9.0):
+Supply/Fatigue tutorial teaches one fact, on the counter tray's first `피로 A → 출발 B` row the Player meets — a Food/Drink chosen for a fatigued customer (User 2026-09-24, v2.9.0):
 - Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 First SALE (User 2026-09-24): four marks only — destination, Hazard, outlook, price. Great Success, Supply,
 returning customer and Bag marks are contextual and appear the first time their situation exists.
@@ -881,4 +881,16 @@ On mobile it must not push Wallet / Expected Destination / Forecast out of the p
 ```new
 - Forecast in the current-decision flow (the `지난 원정` quick surface is desk-only; on phone the NPC detail holds it) (User 2026-09-24, v2.9.0)
 On phone the quick surface is not shown: the customer's status strip and the NPC detail 원정 기록 hold the last expedition; on a desk (≥1024) it stays (User 2026-09-24, v2.9.0).
+```
+
+## AMENDMENT — v2.9.0 no always-on SALE Fatigue line (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): SALE has no always-on Fatigue line; the tutorial anchor moves to the tray row (edited in place above when it was a declared-new line).
+
+```text
+
+```
+
+```new
+- SALE carries no always-on Fatigue line: current Fatigue is the status strip's `피로 N`, the tray shows `피로 A -> 출발 B` only for a chosen Food/Drink that moves it, and the expedition's Fatigue is NIGHT's answer (User 2026-09-24 revision, v2.9.0)
 ```

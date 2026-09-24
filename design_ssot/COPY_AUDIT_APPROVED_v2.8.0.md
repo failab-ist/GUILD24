@@ -123,7 +123,7 @@
 
 ## 3-5. 보급 안내
 
-**현재** (User 2026-09-24, v2.9.0: contextual mark, the first time a `피로 A → 출발 B` line appears; the same line is the §3-7 SUPPLY step)
+**현재** (User 2026-09-24, v2.9.0: contextual mark, the first time the counter tray's `판매 후 변화` shows a `피로 A → 출발 B` row — a Food/Drink chosen for a fatigued customer; the same line is the §3-7 SUPPLY step)
 > 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
 
 ---
@@ -151,7 +151,7 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 ### HAZARD
 > 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.
 
-### SUPPLY (User 2026-09-24, v2.9.0: contextual on the first `피로 A → 출발 B` line)
+### SUPPLY (User 2026-09-24, v2.9.0: contextual on the counter tray's first `피로 A → 출발 B` row)
 > 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
 
 ### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0)
@@ -351,7 +351,10 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ## 4-17. SALE 피로 줄
 
-**현재** (User 2026-09-24, v2.9.0: the only Fatigue arithmetic on the decision surface; `· 보급 회복 -C`, `보급 부족 …`, `남은 보급 …` and the readout `보급 X / Y` cell are deleted)
+**노출 위치**
+> 계산대 트레이의 `판매 후 변화`에서만, 고른 음식·음료가 출발 피로를 바꿀 때. 전망 칸 아래의 상시 피로 줄은 없다 (User 2026-09-24 revision: 현재 피로는 상태 띠의 `피로 N`, 원정 후 피로는 밤 화면이 답한다).
+
+**현재** (User 2026-09-24, v2.9.0: the only Fatigue arithmetic on the decision surface; `· 보급 회복 -C`, `보급 부족 …`, `남은 보급 …`, the readout `보급 X / Y` cell and the always-on readout line are deleted)
 > 피로 {A} → 출발 {B}
 
 ---
@@ -572,7 +575,7 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 **현재 — 다음 원정 안내 (B5)** (User 2026-09-24, v2.9.0; shown from 10 up, whenever a band penalty applies)
 > 피로 {N} · {band} — 다음 원정 {effect}
 
-예: `피로 12 · 지침 — 다음 원정 기동·정신 -15%` / `피로 22 · 과로 — 다음 원정 기동·정신 -40%`
+예: `피로 12 · 지침 — 다음 원정 기동·정신 -15%` / `피로 22 · 과로 — 다음 원정 기동·정신 -40%` / `피로 33 · 소진 — 다음 원정 기동·정신 -40% · 투력·강인함 -20%` / `피로 40 · 탈진 — 다음 원정 모든 능력치 -40% · 실패 시 사망 위험 +10%p`
 
 ---
 
