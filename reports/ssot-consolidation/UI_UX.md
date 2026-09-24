@@ -761,7 +761,7 @@ NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry v
 In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses (User 2026-09-24, v2.9.0).
 Everything else keeps the default style.
 No badge, no verdict word, no reorder.
-ORDER offer rows follow the same rule against today's Gate (adopted with the ORDER amendments).
+ORDER offer rows follow the same rule against today's open Gates (§ORDER — ITEM INFORMATION HIERARCHY; User 2026-09-24, v2.9.0).
 One delta list after choosing an Item (User 2026-09-24, v2.9.0):
 - `판매 후 변화` lists only what changes — direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`
 - the frozen four-cell outlook is not repainted inside the till and never changes for a selected Item
@@ -784,4 +784,45 @@ Stat grid pressure tag (User 2026-09-24, v2.9.0):
 - the tag is the one place the Stat grid links to the Gate
 - ordinary 50% / 100% / 150% sale distinctions: one register family, 1 / 2 / 3 coin ticks; no mode sounds like the correct answer (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A5; User 2026-09-24, v2.9.0)
 - `손님 보내기` customer exit (`depart`): recorded utility cue, door / step family (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 onboarding / ORDER (User decision 2026-09-24)
+
+The screen says what to do: a DAY 1~3 task line (the one exception to "tutorial does not add page height"), the first-ORDER coach order `gates → offer → quantity → confirm → reroll` with `gold` retired, ORDER today-fit typographic emphasis (the "No today-fit/recommended badge" line is narrowed: emphasis of existing effect text is allowed, a badge / verdict word / reorder is not), the per-Gate visitor-count line on the ORDER 오늘 brief, the individual-only reveal boundary (counts per open Gate are public at MORNING and ORDER), the 점주 가이드 `처음 3일` block with a `자세히` disclosure inside the help modal, and the two-line D0 briefing body. The earlier ```new declaration of the SALE emphasis pointer to ORDER is edited in place.
+
+```text
+- do not reveal future customer identity / destination
+No today-fit/recommended badge.
+- tutorial does not add page height
+```
+
+```new
+- do not reveal an individual future customer's identity / individual destination; the visitor count per open Gate of the current day is public at MORNING and ORDER (User 2026-09-24, v2.9.0)
+오늘 brief line (User 2026-09-24, v2.9.0):
+- one open Gate: `{N}명 · {Gate}`
+- two or more open Gates: `{N}명 · {Gate A} {a} · {Gate B} {b}` — the visitor count per open Gate, counted by the destination each customer claims (a liar's or a pilgrimage-rerouted customer's true Gate stays hidden)
+- the counts sum to the visitor count; no name, Job, Trait or Wallet
+Exact line -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
+No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).
+Typographic emphasis of existing effect text that answers today's open Gates is allowed: a Counter for one of today's Hazards, or the Core Stat one of them presses, in the same rule and style as §SALE — MATCHING-EFFECT EMPHASIS, read against today's Gates instead of one customer (User 2026-09-24, v2.9.0).
+The 점주 가이드 opens with a first block `처음 3일` of exactly five lines (one per phase: 아침 / 발주 / 판매 / 밤 / 마감), then keeps the existing eight sections under a `자세히` disclosure, collapsed by default (User 2026-09-24, v2.9.0).
+This disclosure sits inside the help modal, not on a gameplay screen; the anchored-popover rule above is unaffected.
+Exact five lines -> COPY_AUDIT_APPROVED_v2.8.0.md §8.
+- the body is two lines under the unchanged header `마왕 조사 개시` and lead line: the DAY 5 line and the DAY 30 line; the closing sentence is deleted; button unchanged; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §14-1 (User 2026-09-24, v2.9.0);
+- tutorial does not add page height (sole exception: the DAY 1~3 task line, exactly one line; §TUTORIAL — TASK LINE; User 2026-09-24, v2.9.0)
+### TUTORIAL — TASK LINE, DAY 1~3
+On DAY 1, 2 and 3 of a Run, while the account tutorial is not skipped (`tutorial.skipped` false), one fixed text line sits at the top of the phase screen content — under the menu pin, above the first block — on MORNING, ORDER, SALE, NIGHT and CLOSING (User 2026-09-24, v2.9.0).
+- gone from DAY 4; DAY 0 (Store Support takeover) has none
+- hidden when the tutorial is skipped
+- not a coach mark: no spotlight, no button; one text line that never wraps to two on 360
+- reuses the tutorial state; adds no Save field
+- the one User-approved exception to "tutorial does not add page height" (exactly one line)
+Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0.md §3.
+### TUTORIAL — FIRST-ORDER COACH ORDER
+The first-ORDER coach group is, in this order: `gates` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0).
+- `gates` anchors the ORDER 오늘 brief block; `offer` anchors the first offer row
+- `quantity` and `confirm` keep their approved lines; `reroll` keeps its line and is now last
+- the `gold` mark is retired (the register reads itself)
+- one concept per step still holds
+Exact strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
 ```

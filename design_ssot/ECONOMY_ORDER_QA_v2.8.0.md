@@ -488,10 +488,17 @@ FAIL if it newly exposes:
 - next-day Family
 - exact Gate composition
 - Hazard set
-- future customer identity
-- future NPC destination
+- individual future customer identity
+- individual future NPC destination (User 2026-09-24, v2.9.0)
 - exact success/death probability
 - recommended SKU/category/quantity
+
+PASS (per-Gate visitor counts; User 2026-09-24, v2.9.0):
+- with two or more open Gates, MORNING / ORDER show the current-day visitor count per open Gate
+- the per-Gate counts sum to the expected visitor count
+- each count follows the destination the customer claims; a liar's or a pilgrimage-rerouted customer's true Gate is not revealed
+- with one open Gate no per-Gate breakdown appears
+- no name / Job / Trait / Wallet is revealed with the counts
 
 ### ORD-Q85 — ORDER FORECAST CONTINUITY
 

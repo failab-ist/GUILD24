@@ -546,8 +546,11 @@ Before order commitment show/readably expose:
 - **today expected operating cost**
 - warehouse usage / remaining capacity
 - current-day Gate / known Hazard
+- visitor count per open Gate, only when two or more Gates are open (counted by the destination each customer claims; a liar's or a pilgrimage-rerouted customer's true Gate stays hidden) (User 2026-09-24, v2.9.0)
 - next-day Tier forecast
 - current Reroll cost/state
+
+Today-fit emphasis (User 2026-09-24, v2.9.0): in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY.
 
 Expected operating cost must be derived from the same current-day rules used by Closing.
 It is decision information, not a separate charge.
@@ -691,8 +694,8 @@ Keep hidden:
 - next-day Family
 - exact next-day Gate composition
 - next-day Hazard set
-- future visitor identities
-- future NPC destination
+- individual future visitor identities
+- individual future NPC destination (the visitor count per open Gate of the current day is public at MORNING and ORDER; User 2026-09-24, v2.9.0)
 - expedition success/death probability
 - recommended SKU/category/quantity
 
@@ -723,13 +726,14 @@ ORDER may repeat the forecast compactly as decision context.
 
 Before Sale:
 show expected visitor count.
+With two or more open Gates, also the count per open Gate, by the destination each customer claims (User 2026-09-24, v2.9.0).
 
 Do not reveal before customer appearance:
 - name
 - Job
 - Trait
 - Wallet
-- destination
+- individual destination (the count per Gate is public; a liar's or a pilgrimage-rerouted customer's true Gate stays hidden) (User 2026-09-24, v2.9.0)
 
 Canonical NPC reveal -> `SALE_v2.8.0.md` / `NPC_TRAIT_v2.8.0.md`
 

@@ -252,7 +252,7 @@ Rules:
 - current-day Gate/Hazard remains the primary preparation information
 - next-day forecast is a secondary future signal
 - do not reveal next-day Family / exact Gate composition / Hazard set
-- do not reveal future customer identity / destination
+- do not reveal an individual future customer's identity / individual destination; the visitor count per open Gate of the current day is public at MORNING and ORDER (User 2026-09-24, v2.9.0)
 - do not add recommended Item/category/quantity prose
 - ORDER may repeat the same forecast compactly; it must not generate a second value
 
@@ -298,6 +298,12 @@ Recommended hierarchy:
 
 Funds summary example:
 `보유 1,200G | 선택 280G | 발주 후 920G`
+
+오늘 brief line (User 2026-09-24, v2.9.0):
+- one open Gate: `{N}명 · {Gate}`
+- two or more open Gates: `{N}명 · {Gate A} {a} · {Gate B} {b}` — the visitor count per open Gate, counted by the destination each customer claims (a liar's or a pilgrimage-rerouted customer's true Gate stays hidden)
+- the counts sum to the visitor count; no name, Job, Trait or Wallet
+Exact line -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 
 Offer card:
 compact
@@ -373,7 +379,8 @@ Within an offer/item card, visual priority is:
 4. quantity interaction
 
 Examples such as `속박 대응 +16` already communicate function; do not add a second `속박 전문` chip.
-No today-fit/recommended badge.
+No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).
+Typographic emphasis of existing effect text that answers today's open Gates is allowed: a Counter for one of today's Hazards, or the Core Stat one of them presses, in the same rule and style as §SALE — MATCHING-EFFECT EMPHASIS, read against today's Gates instead of one customer (User 2026-09-24, v2.9.0).
 
 ### ORDER — WAREHOUSE DISCLOSURE
 
@@ -608,7 +615,7 @@ This rule does not require a new encyclopedia/detail screen.
 In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses (User 2026-09-24, v2.9.0).
 Everything else keeps the default style.
 No badge, no verdict word, no reorder.
-ORDER offer rows follow the same rule against today's Gate (adopted with the ORDER amendments).
+ORDER offer rows follow the same rule against today's open Gates (§ORDER — ITEM INFORMATION HIERARCHY; User 2026-09-24, v2.9.0).
 
 ### SALE SELECTED-ITEM INFORMATION
 
@@ -1114,6 +1121,10 @@ Exact help copy -> COPY_WORLD_VOICE_v2.8.0.md.
 The global 점주 가이드 uses the exact compact Copy owner text.
 Do not retain the old long-form rules manual in parallel.
 
+The 점주 가이드 opens with a first block `처음 3일` of exactly five lines (one per phase: 아침 / 발주 / 판매 / 밤 / 마감), then keeps the existing eight sections under a `자세히` disclosure, collapsed by default (User 2026-09-24, v2.9.0).
+This disclosure sits inside the help modal, not on a gameplay screen; the anchored-popover rule above is unaffected.
+Exact five lines -> COPY_AUDIT_APPROVED_v2.8.0.md §8.
+
 ## NIGHT
 
 question=`내 선택이 어떻게 됐을까?`
@@ -1463,6 +1474,7 @@ Presentation:
 - no fake unknown portrait;
 - no decorative timeline cards;
 - the DAY 5 / DAY 30 anchors may use simple typographic hierarchy inside the same dossier;
+- the body is two lines under the unchanged header `마왕 조사 개시` and lead line: the DAY 5 line and the DAY 30 line; the closing sentence is deleted; button unchanged; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §14-1 (User 2026-09-24, v2.9.0);
 - one `확인` acknowledgement;
 - compact enough to read as onboarding information, but large enough that the Run objective cannot
   be missed.
@@ -1921,7 +1933,7 @@ target-only interaction may be allowed
 successful action may auto-advance
 
 Rules:
-- tutorial does not add page height
+- tutorial does not add page height (sole exception: the DAY 1~3 task line, exactly one line; §TUTORIAL — TASK LINE; User 2026-09-24, v2.9.0)
 - tutorial does not push layout
 - bubble repositions responsively
 - target may scroll into view
@@ -1933,6 +1945,25 @@ Rules:
 
 Do not use:
 large green instructional cards inserted into normal flow.
+
+### TUTORIAL — TASK LINE, DAY 1~3
+
+On DAY 1, 2 and 3 of a Run, while the account tutorial is not skipped (`tutorial.skipped` false), one fixed text line sits at the top of the phase screen content — under the menu pin, above the first block — on MORNING, ORDER, SALE, NIGHT and CLOSING (User 2026-09-24, v2.9.0).
+- gone from DAY 4; DAY 0 (Store Support takeover) has none
+- hidden when the tutorial is skipped
+- not a coach mark: no spotlight, no button; one text line that never wraps to two on 360
+- reuses the tutorial state; adds no Save field
+- the one User-approved exception to "tutorial does not add page height" (exactly one line)
+Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0.md §3.
+
+### TUTORIAL — FIRST-ORDER COACH ORDER
+
+The first-ORDER coach group is, in this order: `gates` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0).
+- `gates` anchors the ORDER 오늘 brief block; `offer` anchors the first offer row
+- `quantity` and `confirm` keep their approved lines; `reroll` keeps its line and is now last
+- the `gold` mark is retired (the register reads itself)
+- one concept per step still holds
+Exact strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
 
 ### TUTORIAL — READ THE SYSTEM, DO NOT GIVE THE ANSWER
 
