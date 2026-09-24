@@ -64,6 +64,8 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
     accent and never plays on its own; it lands behind the Outcome cue. */
  great:[523,659,784,1047],retreat:[440,392,330,262],injury:[262,220],severe:[196,165],
  death:[147,131],rescue:[659,988],
+ /* 의무실 현판: a soft rising pair - relief, not a fanfare */
+ heal:[587,880],
  /* UI-Q-v28-24 / BOSS / FINAL AUDIO: one motif, two strengths. `bossmajor` and `bosscompact`
     are the same intervals - the major one fuller and longer, the compact one the short read.
     Strength belongs to the beat, never to the Boss behind it, so neither cue can name anything
@@ -180,6 +182,7 @@ const shape={
  /* restrained low drop: no boom, no fanfare, and the only cue allowed to be this long */
  death:{gain:1.1,dur:1.4,type:'sine',step:.5,attack:.06,layer:{ratio:.5,at:0,dur:2,gain:.45},noise:{at:0,dur:1,gain:.2,hz:180,q:.6,filter:'lowpass'},duck:.75},
  rescue:{gain:.9,dur:.3,type:'sine',step:.09,layer:{ratio:2,at:.12,dur:.7,gain:.28},duck:.3},
+ heal:{gain:.7,dur:.22,type:'sine',step:.1,attack:.02,layer:{ratio:2,at:.1,dur:.45,gain:.18},duck:.2},
  /* Boss motif, two strengths: the major one adds the low layer and the rumble, the compact one
     is the same interval read short. D10 / D20 must stay smaller than D5 / D15 / D25. */
  bossmajor:{gain:1.1,dur:.34,type:'sawtooth',step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1,gain:.4},noise:{at:0,dur:.45,gain:.3,hz:230,q:.6,filter:'lowpass'},duck:.55},

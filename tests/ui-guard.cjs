@@ -1128,8 +1128,10 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  const head=fn('endHeadline');
  assert.ok(head.includes("s.finalReport")&&head.includes('마왕이 쓰러졌다.')&&head.includes('마왕을 토벌하지 못했다.'),
   'the Final headline is gated on the Final having actually resolved');
- assert.ok(/s\.stats\.deaths>=G\.Meta\.deathLimit\(s\)\)return '너무 많은 모험가가 돌아오지 못했다\.'/.test(head),
+ assert.ok(/s\.stats\.deaths>=Meta\.deathLimit\(s\)\)return '너무 많은 모험가가 돌아오지 못했다\.'/.test(head),
   'the death ending names the deaths');
+ /* app.js is a page script: the systems' `G` namespace is not in scope there, only its globals */
+ assert.ok(!/\bG\.(Meta|DATA)\b/.test(app),'app.js never reaches through G');
  assert.ok(/s\.money<0\)return '운영비를 마련하지 못해 점포 문을 닫았다\.'/.test(head),'the bankruptcy names the money');
  assert.ok(head.includes("return '이번 점포의 영업이 끝났다.'"),'and anything else keeps the plain close');
  assert.ok(!/s\.win\?'우리가 키운 애들이/.test(app),'the old win/fail pair is gone');
@@ -1145,7 +1147,7 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  for(const rule of ['적자 마감은 재고 정리로 회생할 수 있다','명이 되면 폐점한다','DAY 30 최종 원정이 끝나면'])
   assert.ok(fn('help').includes(rule),'the guide covers: '+rule);
  const roster=fn('rosterList');
- assert.ok(roster.includes('돌아오지 못한 사람')&&roster.includes('G.Meta.deathLimit(s)'),
+ assert.ok(roster.includes('돌아오지 못한 사람')&&roster.includes('Meta.deathLimit(s)')&&!roster.includes('G.Meta'),
   'the roster shows the count against the line');
  assert.ok(roster.includes('s.stats.deaths'),'read from the Run own count, not a second tally');
 
@@ -2708,6 +2710,20 @@ test('UI_UX §RETIRED ACTIVE UI: no shipped UI file exposes Franchise Grade, Ach
    assert.ok(!re.test(code),f+' exposes a retired system: '+re);
   assert.ok(!/archive\//.test(code),f+' loads nothing from the inactive archive');
  }
+});
+
+/* META §DECORATION 의무실 현판 (User 2026-09-24): a heal at the door is one line in the customer's
+   own state strip beside the bag, never makes the strip taller (a phone strip grows upward
+   into the speech balloon), wraps instead of overflowing, and has its own quiet cue. */
+test('의무실 현판: the heal note sits in the kit under the bag, wraps, and has its own cue',()=>{
+ const kit=fn('kitLine');
+ assert.ok(/healedBy==='infirmaryPlaque'/.test(kit)&&kit.includes('의무실 현판 덕분에 부상이 나았다.'),'the note reads the heal the arrival recorded');
+ assert.ok(kit.indexOf("+heal+'</div>'")>kit.indexOf('class="slots"'),'it follows the bag, on the bag row');
+ assert.ok(/\.kit \.heal-note\{flex:1 1 64px;[^}]*overflow-wrap:anywhere/.test(css),'beside the bag, wrapping');
+ assert.ok(/@media\(min-width:1024px\)\{\.kit \.heal-note\{position:absolute;/.test(css),'on a desk it takes the empty foot of the strip');
+ assert.ok(/prefers-reduced-motion:reduce\)\{\.kit \.heal-note\{animation:none\}/.test(css),'no motion when reduced');
+ const audio=read('dist/ui/audio.js');assert.ok(/\bheal:\[/.test(audio)&&/\bheal:\{/.test(audio),'the cue exists');
+ assert.ok(/case'open':[^\n]*healCue\(\)/.test(app)&&/else sound\('depart'\);healCue\(\);/.test(app),'played on the arrival that opens SALE and on each next one');
 });
 
 console.log(count+' ui guard groups passed');

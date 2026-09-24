@@ -508,6 +508,20 @@ The following four lines are current exact Player-facing copy for these tutorial
 **현재**
 > **점포 관리 화면에서는 삭제**
 
+### 길드 추모 게시판 · 의무실 현판 · 비상 구급함 · 훈련용 무기 진열대
+
+(survival / combat alternatives, User decision 2026-09-24)
+
+**현재**
+> **점포 관리 화면에서는 삭제**
+
+---
+
+## 9-4. 의무실 현판 — SALE 손님 상태 (부상 회복 시 한 줄)
+
+**현재**
+> 의무실 현판 덕분에 부상이 나았다.
+
 ---
 
 # 10. META / CODEX

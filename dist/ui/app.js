@@ -37,6 +37,8 @@ function toast(msg){const t=$('#toast'),m=String(msg);
  else{t.classList.remove('unlock');t.textContent=m;}
  $('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
 function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind);}
+/* the heal accent sits behind the arrival's own cue, the same way `rescue` sits behind an Outcome */
+function healCue(){const s=game.run,n=s?.phase==='sell'&&game.current();if(n?.healedBy)Sound.play('heal',.22);}
 /* UI_UX_v2.8 §NIGHT OUTCOME AUDIO. The Outcome is what the cue says, always. There are two ways
    a result becomes the visible one - the final departure lands on result 0, and 다음 advances to
    the next - and both go through here, so neither can drift into a generic return cue. */
@@ -587,12 +589,16 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  /* SA-Q46: Equipment is proven Core-Stat source information, not compact SALE-top decision
     state - it stays readable in NPC detail and does not compete here with Bag/Wallet for
     the same row. */
+ /* META §DECORATION 의무실 현판: an Injury healed at the door says so once, in the customer's own
+    state strip, under the bag where no speech balloon or menu pin sits - one line, no modal,
+    nothing to dismiss. `healedBy` is reset on every arrival. */
+ const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>':'';
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
  +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. */
  +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
-  +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span></div>';}
+  +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span>'+heal+'</div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
 // the loudest thing on screen as a display word, then WHY on the slate, then WHAT CHANGED
@@ -1175,7 +1181,7 @@ function endBanner(){const s=game.run,a=game.account;
    the Final has resolved, and the death count is the one the night has been keeping. */
 function endHeadline(){const s=game.run;
  if(s.finalReport)return s.win?'마왕이 쓰러졌다.':'마왕을 토벌하지 못했다.';
- if(s.stats.deaths>=G.Meta.deathLimit(s))return '너무 많은 모험가가 돌아오지 못했다.';
+ if(s.stats.deaths>=Meta.deathLimit(s))return '너무 많은 모험가가 돌아오지 못했다.';
  if(s.money<0)return '운영비를 마련하지 못해 점포 문을 닫았다.';
  return '이번 점포의 영업이 끝났다.';}
 /* META §PROGRESSION UI. The statement reports what this Run moved and nothing else. A number
@@ -1300,7 +1306,7 @@ function endScreen(){
 /* The failure line is not a hidden threshold: the book that already lists the dead says how
    many that is, and how many the store has. */
 function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업을 시작하면 모험가 수첩이 열린다.</p>';
- const lost=s.stats.deaths,limit=G.Meta.deathLimit(s);
+ const lost=s.stats.deaths,limit=Meta.deathLimit(s);
  return '<p class="lost-count'+(lost>=limit-2?' near':'')+'">돌아오지 못한 사람 <b>'+lost+' / '+limit+'</b>'
  +'<span>'+limit+'명에 이르면 소문이 퍼져 이 점포의 영업이 끝난다.</span></p>'
  +'<p class="smalltext">이름을 누르면 마지막 보급과 원정 기록을 볼 수 있다. 사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'
@@ -1710,7 +1716,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     fixture into the store. Deliberately not the Decoration cue and not the unlock cue. */
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
  case'closing':game.finishNight();game.save();render();break;
- case'open':game.open();selected=null;render();break;
+ case'open':game.open();selected=null;render();healCue();break;
  /* SALE scroll continuity. Opening one good closes another, and when the one that closes
     sits above the viewport the shelf below it slides up by the height of the panel that
     went away - the row the player just tapped walks off under their thumb. Restoring the
@@ -1729,7 +1735,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
     return until the player pressed 다음. */
  case'depart':game.depart();selected=null;render();
-  if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');break;
+  if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');healCue();break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
  case'reroll':game.reroll();sound('spend');render();break;
  case'stock':sound('ui');setModal('stock');break;

@@ -2964,3 +2964,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-sale .front-side .dest-plate label{margin-bottom:4px;font-size:11px}
  .p-sale .front-side .dest-plate h3{margin-bottom:6px;font-size:17px}
 }
+
+/* META §DECORATION 의무실 현판 — the heal note. One quiet note in the customer's state strip: it
+   wraps inside the strip at any width and never makes the strip taller. */
+.kit .heal-note{flex:1 1 64px;min-width:64px;margin:0;align-self:center;font-size:12px;line-height:1.3;
+ color:#9fd8b0;word-break:keep-all;overflow-wrap:anywhere;animation:heal-in .45s ease-out both}
+/* The strip is anchored at its foot on a phone, so any added row would push its head up under
+   the speech balloon. The note therefore takes the free width beside the bag on the bag's own
+   row; on a desk the strip is one row and the note sits in the empty foot under the vitals. */
+@media(min-width:1024px){.kit .heal-note{position:absolute;left:13px;bottom:12px;max-width:calc(100% - 200px)}}
+@keyframes heal-in{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.kit .heal-note{animation:none}}
+/* a 4-digit price keeps its words whole when the Store Management key wraps */
+.slot-option>button{word-break:keep-all}
