@@ -19,7 +19,9 @@ function hazardRows(keys,d){return keys.map(k=>({key:k,name:D.hazards[k],pressur
    n = the Core-Stat points per 1 Counter (강인함 3, 기동 / 정신 2), read from the engine's one rule table. No
    per-customer remaining need is ever composed here; the plate has no help line (§4-15 retired). */
 function hazardNeed(k,d){return Math.ceil(G.Dungeon.hazardState(k,{},d).threat);}
-function hazardRate(k){const r=G.Dungeon.hazardRule(k);return labels[r.stat]+' '+Math.round(1/r.coef)+'당 1';}
+/* `강인함 3당 1` is one unit: its two spaces are no-break spaces so a narrow plate wraps only at the ` · ` separators (the
+   Canonical text is the same string with ordinary spaces). */
+function hazardRate(k){const r=G.Dungeon.hazardRule(k);return labels[r.stat]+'\u00a0'+Math.round(1/r.coef)+'당\u00a01';}
 function hazardSentence(k,d){return D.hazards[k]+' — 대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k)+' · '+D.hazards[k]+' 대응 상품이 막는다';}
 function hazardShort(k,d){return '대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k);}
 /* hazardStat above is the Core Stat each Hazard presses (the same table the engine's hazardState uses);

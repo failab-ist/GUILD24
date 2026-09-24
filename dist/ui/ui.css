@@ -186,7 +186,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .hazards{display:grid;gap:2px}
 .hazards li{display:flex;gap:8px;align-items:baseline;font-size:var(--t-sm);line-height:1.45;flex-wrap:wrap}
 .hazards b{font-weight:600;white-space:nowrap;color:var(--fam,var(--gold))}
-.hazards .press{color:var(--dim)}
+/* v2.9.0 R5: `강인함 3당 1` is one unit (no-break spaces inside it); keep-all stops a break inside a Hangul word so the
+   row wraps only at its ` · ` separators */
+.hazards .press{color:var(--dim);word-break:keep-all}
 /* The readiness is labelled, so it cannot be read as more of the pressure sentence. */
 .hazards .ready{margin-left:auto;display:flex;align-items:baseline;gap:7px;white-space:nowrap}
 .hazards .ready i{font-style:normal;font-weight:600;font-size:11px;letter-spacing:.08em;color:#9c8d70}
