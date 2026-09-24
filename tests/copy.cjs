@@ -65,7 +65,6 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
    Source builds from parts cannot be found as one literal, so it is listed here with where it is
    built; the set must match exactly, so a newly unadopted line fails instead of joining it. */
 const COMPOSED={
- '3-5':'not in Source: the coach ships the later §3-7 SUPPLY line instead (whether §3-5 is the same surface is a User question, not settled here)',
  '4-10':"'폐기까지 '+days+'일' (app.js stock row)",
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",

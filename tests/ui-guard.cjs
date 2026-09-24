@@ -876,9 +876,9 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(lines.length===3,'there are exactly three counter tooltips');
  assert.ok(lines.every(n=>n===1),'and each one is a single line');
  // COPY_AUDIT_APPROVED §4-1 / §4-2 / §4-3, verbatim
- for(const [label,text] of [['전투 전망','손님이 처음 계산대에 왔을 때의 전투 전망. 판매 후에도 바뀌지 않는다.'],
+ for(const [label,text] of [['전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.'],
                             ['실패 시 사망 위험','실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.'],
-                            ['환경 대응','손님이 처음 계산대에 왔을 때의 환경 대응. 판매 후에도 바뀌지 않는다.']])
+                            ['환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.']])
   assert.ok(app.includes("tip('"+label+"','"+text+"')"),label+' carries the approved §4 line');
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
@@ -1835,7 +1835,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
- assert.ok(/\['supply','\.ingredients'/.test(steps),'the Supply/Fatigue lesson is on the arithmetic it explains');
+ assert.ok(/\['supply','\.ingredients \.supply-note'/.test(steps),'the Supply/Fatigue lesson is on the Supply line it explains, so it teaches the first time Supply is actually asked for');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
     verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
     reflects 보급 - it does not, `Game.arrive()` snapshots it with an empty pack (see
@@ -1843,8 +1843,8 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
    ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
-   ['hazard','위험마다 압박하는 능력이 다르다. 어떤 능력이 필요한지 여기서 확인한다.'],
-   ['supply','보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요량을 채우고 남은 보급은 먼저 출발 전 피로를 줄이고, 더 남으면 귀환 후 피로를 줄인다.'],
+   ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
+   ['supply','보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.'],
    ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
@@ -1869,8 +1869,18 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     real result is seen after the expedition rather than claiming nothing changed. */
  /* COPY_AUDIT §3-4: the lesson now says WHEN the reading was taken, which is the same fact
     stated from the other side and is what makes it obviously frozen. */
- assert.ok(/처음 계산대에 왔을 때의 전망/.test(forecast),'the outlook lesson says when the reading was taken');
- assert.ok(/판매 후에도 바뀌지 않는다/.test(forecast),'and that selling does not move it');
+ assert.ok(/계산대에 왔을 때의 원정 전망/.test(forecast),'the outlook lesson says when the reading was taken');
+ assert.ok(/팔아도 이 칸은 그대로/.test(forecast),'and that selling does not move it');
+ /* USER 2026-09-24 first-sale coach diet: four marks on the first SALE, the rest contextual. The
+    destination mark stays because COPY_WORLD_VOICE §Tutorial names it the authoritative wording of
+    the destination rule (tests/copy.cjs §18 holds the line itself). */
+ const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
+ const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
+ assert.deepEqual(ids.slice(0,4),['destination','hazard','forecast','pricing'],'the first SALE reads destination, Hazard, outlook, price - in that order');
+ assert.deepEqual(ids.slice(4).sort(),['bag','great','returning','supply'],'the other four are contextual marks');
+ for(const [id,sel] of [['great','.great-signal'],['returning','.since'],['bag','.slots .full'],['supply','.ingredients .supply-note']])
+  assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
+ assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
  assert.ok(/class="ingredients"/.test(app),'the exact Supply/Fatigue arithmetic is on the decision surface');
  /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
@@ -2376,11 +2386,12 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  for(const line of [
   '같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.',
   '카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.',
-  '구매 후 준비 상태에 따라 대성공 신호가 뜰 수 있다. 신호가 떠도 대성공이 확정되는 건 아니다.',
-  '손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.',
-  // §3-7: the surplus now says WHICH fatigue it reduces first, which the screen states too
-  '보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요량을 채우고 남은 보급은 먼저 출발 전 피로를 줄이고, 더 남으면 귀환 후 피로를 줄인다.',
-  '판매한 상품은 오늘 원정에서 쓰고 사라진다.'])
+  '대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.',
+  '손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.',
+  // §3-5 / §3-7 SUPPLY: two facts, the hidden deficit formula and the second Fatigue stage untaught
+  '보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.',
+  '판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',
+  '다시 온 손님. 지난 원정은 여기, 특성과 기록은 손님을 눌러 본다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
  for(const gone of ['점포 매출에는 영향이 없다','준비가 끝나면 영업 시작을 누른다','보급을 더 챙기면 가능성이 커질 수 있다',
                     '성공·실패 결과는 미리 알 수 없고','원정 준비에 공통 페널티','모든 상품은 1회용이며',
@@ -2389,7 +2400,11 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
                     '발주할 수량을 고른다.',
                     // superseded by §4-1..§4-3
                     '게이트 전투 요구 대비 현재 전투 준비 수준','원정 실패 이후 사망으로 이어질 조건부 위험',
-                    '이 손님의 보급 전 대응 수준'])
+                    '이 손님의 보급 전 대응 수준',
+                    // superseded 2026-09-24 (first-sale coach diet)
+                    '손님이 처음 계산대에 왔을 때','판매 후에도 바뀌지 않는다','손님을 누르면 특성과 지난 원정 기록',
+                    '어떤 능력이 필요한지 여기서 확인한다','더 남으면 귀환 후 피로를 줄인다',
+                    '구매 후 준비 상태에 따라 대성공 신호','판매한 상품은 오늘 원정에서 쓰고 사라진다'])
   assert.ok(!app.includes(gone),'the superseded coach wording is gone: '+gone.slice(0,14));
  // §4-8
  assert.ok(app.includes('<span>현재 준비 변화 없음</span>'),'§4-8 the no-change line');
