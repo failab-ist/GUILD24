@@ -723,3 +723,17 @@ User decision 2026-09-24 (v2.9.0): the first-ORDER coach group becomes `gates` �
 ```new
 The DAY 1~3 task line (`오늘 할 일 — …`, one per phase) is owned by `COPY_AUDIT_APPROVED_v2.8.0.md` §3-8 and follows the coach voice: one sentence, no App Onboarding tone (User 2026-09-24, v2.9.0).
 ```
+
+## AMENDMENT — v2.9.0 구급키트 / utility lines (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the First Aid Kit concise function becomes the compact `원정 후 부상 1단계 완화 (사망 제외)`; the exact string moves to COPY_AUDIT §4-22 with the other three utility lines.
+
+```text
+Concise player function:
+원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.
+```
+
+```new
+Concise player function (User 2026-09-24, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
+원정 후 부상 1단계 완화 (사망 제외)
+```

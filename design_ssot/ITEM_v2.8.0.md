@@ -633,8 +633,10 @@ No separate Epic-only amplifier is created.
 ```text
 Category = Insurance
 Rarity = Uncommon
-Buy / Sell = 100 / 210
+Buy / Sell = 80 / 170
 ```
+
+It carries no Core Stat; its whole function is the Aftercare below, priced as pure Insurance (User 2026-09-24, v2.9.0).
 
 It does not change the resolved expedition Outcome.
 After Outcome resolution and after higher-priority emergency outcome conversions, it changes only the persistent Injury state:
@@ -758,7 +760,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 13 | 불룡볶음면 | Food U | 65 / 135 | 강인함 +8, 냉기 +6, Supply 4 | Cold Hybrid |
 | 14 | 에너지드링크 | Drink U | 70 / 150 | 기동 +15, Supply 2 | Stat route |
 | 15 | 용사의 곡주 | Drink U | 60 / 130 | 공포 +18, 기동 -4, Supply 1 | Fear Main / RiskReward |
-| 16 | 구급키트 | Insurance U | 100 / 210 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
+| 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear U | 65 / 135 | 독 +12 | Poison Lower |
 | 18 | 핫팩 | Field Gear U | 60 / 130 | 냉기 +18 | Cold Main |
 | 19 | 방수망토 | Field Gear U | 75 / 160 | 부식 +6, 진창 +6 | Dual Hybrid |

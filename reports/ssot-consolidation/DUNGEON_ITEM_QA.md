@@ -630,3 +630,15 @@ Supply2 is displayed `피로 회복 2` (User 2026-09-24, v2.9.0).
 - departure Fatigue distribution and time at 10+/20+/30+/40 (User 2026-09-24, v2.9.0)
 - Supply use split: preRecovery / outcomeBuffer / waste
 ```
+
+## AMENDMENT — v2.9.0 구급키트 / utility lines (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): ITEM-Q81 price table row for 구급키트 follows ITEM (80 / 170).
+
+```text
+구급키트             100 / 210
+```
+
+```new
+구급키트              80 / 170
+```

@@ -1240,9 +1240,9 @@ unless an owning tutorial explicitly requires instructional text.
 
 ## FIRST AID KIT
 
-Concise player function:
+Concise player function (User 2026-09-24, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
 
-    원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.
+    원정 후 부상 1단계 완화 (사망 제외)
 
 Do not append redundant 원정 결과는 유지 prose on the primary Item line.
 

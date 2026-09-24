@@ -801,7 +801,7 @@ PASS exact Buy/Sell for changed original-catalog prices:
 진정 허브티           40 / 85
 얼음컵                30 / 65
 랜턴 건전지           45 / 95
-구급키트             100 / 210
+구급키트              80 / 170
 핫팩                  60 / 130
 농축 해독제           80 / 170
 쿨링 이온음료         80 / 170

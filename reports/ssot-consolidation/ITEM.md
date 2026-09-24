@@ -591,3 +591,18 @@ while keeping much lower Supply (Fatigue recovery). (User 2026-09-24, v2.9.0)
 - Supply contribution as `피로 회복 N` (User 2026-09-24, v2.9.0)
 - Supply (`피로 회복 N`)
 ```
+
+## AMENDMENT — v2.9.0 구급키트 / utility lines (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): 구급키트 is pure Insurance — no Core Stat (the catalog `survival:10` was never in this owner), Buy / Sell 100 / 210 → 80 / 170. The BASELINE block and the price table row are rewritten under the same ids.
+
+```text
+Buy / Sell = 100 / 210
+| 16 | 구급키트 | Insurance U | 100 / 210 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
+```
+
+```new
+Buy / Sell = 80 / 170
+It carries no Core Stat; its whole function is the Aftercare below, priced as pure Insurance (User 2026-09-24, v2.9.0).
+| 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
+```
