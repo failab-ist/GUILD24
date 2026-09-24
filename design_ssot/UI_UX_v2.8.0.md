@@ -434,6 +434,7 @@ Item selection:
 all sellable inventory visible
 compact compare
 selected effect preview clear
+the chosen Item goes on the counter tray; the shelf rows never change height (§SALE — COUNTER TRAY; (User 2026-09-24, v2.9.0))
 
 Price:
 50 / 100 / 150
@@ -616,9 +617,24 @@ Everything else keeps the default style.
 No badge, no verdict word, no reorder.
 ORDER offer rows follow the same rule against today's open Gates (§ORDER — ITEM INFORMATION HIERARCHY; User 2026-09-24, v2.9.0).
 
+### SALE — COUNTER TRAY
+
+User-approved composition change (User 2026-09-24, v2.9.0): the per-row price panel is replaced by one counter tray.
+
+- the counter tray is a fixed band directly above the dock, outside the scrolled column, at every width
+- tapping a shelf row puts that Item on the tray; the row is only highlighted, the shelf rows never change height
+- tray contents, top to bottom: one header line (Item icon · name · kind · sell price · stock · shelf life, and `{손님}에게 · 소지 {N}G` at the right), the `판매 후 변화` delta list (§SALE SELECTED-ITEM INFORMATION; may be one wrapping line), the `특수 효과` line when any, then the three price keys (§SALE — PRICE ROLE WORDS)
+- empty tray: one line, the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
+- the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag); a refusal keeps the Item on the tray with the refused key locked
+- the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
+- height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
+- on a desk (≥1024) the tray keeps its place above the dock and aligns its contents under the shelf column
+- the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
+- tap-only; no drag, no minigame, no new Save field
+
 ### SALE SELECTED-ITEM INFORMATION
 
-The selected-Item panel uses one primary heading:
+The selected-Item surface (the counter tray, §SALE — COUNTER TRAY) uses one primary heading:
 
     판매 후 변화
 
@@ -629,6 +645,7 @@ One delta list after choosing an Item (User 2026-09-24, v2.9.0):
 - `판매 후 변화` lists only what changes — direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`
 - the frozen four-cell outlook is not repainted inside the till and never changes for a selected Item
 - `특수 효과` and the shelf-life line stay
+- on the counter tray the delta list may be set on one wrapping line, rows joined by ` · ` (User 2026-09-24, v2.9.0)
 
 Source/cause belongs in the existing anchored source popover.
 
@@ -778,6 +795,7 @@ Within the usable SALE viewport above the fixed bottom dock:
 - this is a responsive proportion target, not a fixed-pixel split
 - do not crop character art or force equal fixed heights that break on shorter phones
 - at first entry, the sale surface must already show the shelf heading and at least one selectable Item row without requiring a scroll
+- the counter tray is part of the Item / price surface: empty ≤ 48px, filled ≤ 200px at 360, and at least three shelf rows stay visible with the tray filled (User 2026-09-24, v2.9.0)
 
 Compact the upper area by reducing presentation footprint, not by hiding required decision information.
 

@@ -99,6 +99,9 @@ reorder a screen merely because another layout is possible.
 Composition change requires an existing Canonical requirement, runtime evidence that current
 composition fails owned UX / responsive QA, or explicit User approval.
 
+User-approved composition change (User 2026-09-24, v2.9.0): the SALE product area — the per-row price panel becomes a
+fixed counter tray above the dock (UI_UX_v2.8.0.md §SALE — COUNTER TRAY).
+
     SAME SCREEN
     + BETTER CRAFT / MATERIAL / EDGES / CONTROL FEEL / TYPOGRAPHY / SPACING
     + SELECTIVE HIGH-VALUE GRAPHICS
@@ -411,7 +414,7 @@ General contract, every beat:
 
 | id | beat | exact behaviour |
 |---|---|---|
-| A1 | 건네기 hand-over | on a price commit that succeeds, the Item icon travels from its shelf row to the customer's Bag slot in the customer-state strip (260~320 ms) and the slot settles (scale 1.05→1, 240 ms); the dock Gold counts to its new value (same count-up the Morning till uses); the `판매 후 변화` rows do not vanish — the Stat cells that changed pulse once (300 ms) and keep the new value |
+| A1 | 건네기 hand-over | on a price commit that succeeds, the Item icon travels from the counter tray to the customer's Bag slot in the customer-state strip (260~320 ms) and the slot settles (scale 1.05→1, 240 ms); the dock Gold counts to its new value (same count-up the Morning till uses); the `판매 후 변화` rows do not vanish — the Stat cells that changed pulse once (300 ms) and keep the new value |
 | A2 | 손님 반응 customer reaction | purchase: the customer figure nods (translateY 4 px, 180 ms × 2); refusal: it shakes its head (translateX ±4 px, the existing bubble-shake timing). The reply line (Copy.buy / Copy.refuse) stays 5 seconds; the greeting keeps the 3-second rule |
 | A3 | 계산대 counter | the Bag keeps its place in the customer-state strip beside the status line at every width, one step larger than v2.8 and never overflowing (UI_UX §BAG PRESENTATION); the counter edge under the front is unchanged; the hand-over (A1) lands on that Bag slot. §COMPOSITION LOCK holds (User 2026-09-24 revision, v2.9.0) |
 | A4 | 손님 교대 customer exit / entry | `손님 보내기`: the current customer exits left (240 ms), then the next arrives with the existing entry (240~340 ms); `depart` gets a recorded utility cue (door / step family). Entry may still start the view at the top (UI_UX §SALE — MOBILE AUTHORITY) |

@@ -337,3 +337,18 @@ Each price button carries its role word with the mode and price (`할인 50%` / 
 Presentation only (User 2026-09-24, v2.9.0): the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text, and the refusal reply stays 5 s (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT). The refusal rules below are unchanged.
 - transaction beats follow `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT: one sale's beats total < 600 ms, never block input, skipped under `prefers-reduced-motion` with the same end state (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 counter tray (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the chosen Item is shown on the counter tray; §COUNTER HANDLING, §ITEM SELECTION, §SALE LAYOUT — MOBILE and §SALE RUNTIME CONTINUITY name it (the `price panel open/close` continuity line becomes the tray fill / clear line).
+
+```text
+- price panel open/close
+```
+
+```new
+- the chosen Item is shown on the counter tray (fixed above the dock) with its `판매 후 변화` and the three price keys; the shelf rows never change height (`UI_UX_v2.8.0.md` §SALE — COUNTER TRAY; (User 2026-09-24, v2.9.0))
+The compared Item's detail lives on the counter tray, so comparing two Items never moves the shelf list (User 2026-09-24, v2.9.0).
+- the counter tray sits fixed above the dock; the price keys are always in the same place (User 2026-09-24, v2.9.0)
+- counter tray fill / clear (the shelf list never changes height; (User 2026-09-24, v2.9.0))
+```

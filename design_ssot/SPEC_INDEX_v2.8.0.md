@@ -31,7 +31,7 @@ seen. Documents are amended first, Source follows per owner (docs-first).
 
 Scope (owner amendments are the truth; this list is routing):
 
-    A. the transaction is visible — hand-over motion into the Bag, customer reaction,
+    A. the transaction is visible — counter tray, hand-over motion into the Bag, customer reaction,
        customer exit/entry, price-mode sound family, refusal beat        -> PRESENTATION_PRINCIPLES / UI_UX / SALE
     B. the screen says what to do — DAY 1~3 task line, first-order coach order, Hazard rows that
        say what resists them, today-fit emphasis on ORDER, per-Gate visitor counts (counts only),

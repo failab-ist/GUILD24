@@ -841,3 +841,30 @@ On mobile, the individual held-stock list may be collapsible.
 The individual held-stock list is collapsible at every width and starts collapsed; opening it is an account-level presentation choice that persists across Days and reloads until the player folds it again (User 2026-09-24, v2.9.0).
 - the collapsed summary line still states the held-stock summary
 ```
+
+## AMENDMENT — v2.9.0 counter tray (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0), approved composition change: the SALE per-row price panel becomes a fixed counter tray above the dock; §SALE — COUNTER TRAY is added, the Item selection list, §SALE SELECTED-ITEM INFORMATION and §Vertical hierarchy point to it.
+
+```text
+The selected-Item panel uses one primary heading:
+```
+
+```new
+the chosen Item goes on the counter tray; the shelf rows never change height (§SALE — COUNTER TRAY; (User 2026-09-24, v2.9.0))
+### SALE — COUNTER TRAY
+User-approved composition change (User 2026-09-24, v2.9.0): the per-row price panel is replaced by one counter tray.
+- the counter tray is a fixed band directly above the dock, outside the scrolled column, at every width
+- tapping a shelf row puts that Item on the tray; the row is only highlighted, the shelf rows never change height
+- tray contents, top to bottom: one header line (Item icon · name · kind · sell price · stock · shelf life, and `{손님}에게 · 소지 {N}G` at the right), the `판매 후 변화` delta list (§SALE SELECTED-ITEM INFORMATION; may be one wrapping line), the `특수 효과` line when any, then the three price keys (§SALE — PRICE ROLE WORDS)
+- empty tray: one line, the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
+- the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag); a refusal keeps the Item on the tray with the refused key locked
+- the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
+- height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
+- on a desk (≥1024) the tray keeps its place above the dock and aligns its contents under the shelf column
+- the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
+- tap-only; no drag, no minigame, no new Save field
+The selected-Item surface (the counter tray, §SALE — COUNTER TRAY) uses one primary heading:
+- on the counter tray the delta list may be set on one wrapping line, rows joined by ` · ` (User 2026-09-24, v2.9.0)
+- the counter tray is part of the Item / price surface: empty ≤ 48px, filled ≤ 200px at 360, and at least three shelf rows stay visible with the tray filled (User 2026-09-24, v2.9.0)
+```

@@ -904,7 +904,7 @@ EXPECT:
 Every beat is presentation only, each ≤ 320 ms, one sale's beats total < 600 ms, input is never blocked, and the scroll position stays on the same customer.
 
 PASS:
-- frame captures at 0 / 150 / 300 / 600 ms of the sale show the Item icon travelling from its shelf row to the customer's Bag slot in the customer-state strip (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
+- frame captures at 0 / 150 / 300 / 600 ms of the sale show the Item icon travelling from the counter tray to the customer's Bag slot in the customer-state strip (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
 - purchase: the customer figure nods (translateY 4px, 180 ms x 2); refusal: it shakes its head (translateX ±4px, the existing bubble-shake timing) and the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text
 - the reply line (buy / refuse) stays 5 seconds; the greeting keeps 3 seconds
 - `손님 보내기`: the current customer exits left (240 ms), the next arrives with the existing entry (240~340 ms), and `depart` plays a recorded utility cue (door / step family); entry may still start the view at the top
@@ -2085,6 +2085,28 @@ PASS:
 
 FAIL:
 - the list starts open on a fresh account, or the summary line hides inside the collapsed detail
+
+### UI-Q-v29-18 — COUNTER TRAY
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+SALE at 360, 390 and 1280: entry, tap one shelf row, tap a second row, one successful sale, one refusal.
+
+PASS:
+- at entry the tray is empty (one line, `상품을 누르면 계산대에 올라온다.`, ≤ 48px at 360) and the shelf heading plus at least one row are visible without a scroll
+- tapping a row fills the tray (header line, `판매 후 변화`, `특수 효과` when any, three price keys) and the shelf list does not move: no row changes height, scrollTop is unchanged
+- tapping a second row swaps the tray contents; both rows stay where they were
+- the filled tray is ≤ 200px at 360 and at least three shelf rows remain visible above it
+- the price keys are at the same place for every Item; the hand-over icon starts from the tray icon and lands on the Bag slot; a successful sale clears the tray
+- a refusal keeps the Item on the tray with the refused key locked (`오늘 거절됨` / `더 싼 값을 거절함`)
+- on 1280 the tray sits above the dock with its contents aligned under the shelf column
+- FINAL keeps its per-row panel (UI-Q-v28 FINAL ids unchanged)
+
+FAIL:
+- the shelf list moves or changes height when a row is tapped
+- the filled tray hides all but two shelf rows at 360
+- the tray needs a drag, a scroll or a second tap to reach the price keys
 
 ### GREAT SUCCESS TUTORIAL
 PASS:

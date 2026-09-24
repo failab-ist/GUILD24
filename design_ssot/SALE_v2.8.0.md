@@ -110,6 +110,7 @@ Rules:
 - do not merge both slots into one cart checkout
 - no separate handling minigame/resource/QTE
 - Item tap is sufficient for the full flow; drag is optional enhancement only
+- the chosen Item is shown on the counter tray (fixed above the dock) with its `판매 후 변화` and the three price keys; the shelf rows never change height (`UI_UX_v2.8.0.md` §SALE — COUNTER TRAY; (User 2026-09-24, v2.9.0))
 - the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.8.0.md` §BAG PRESENTATION); tap remains sufficient, no drag is required (User 2026-09-24, v2.9.0)
 
 ## CUSTOMER INFORMATION
@@ -385,6 +386,8 @@ Useful decision info may include:
 
 Exact UI:
 -> UI_UX_v2.8.0.md
+
+The compared Item's detail lives on the counter tray, so comparing two Items never moves the shelf list (User 2026-09-24, v2.9.0).
 
 ### MATCHING-EFFECT EMPHASIS
 
@@ -906,6 +909,7 @@ Do not restore the older layout where forecast/destination are repeated lower on
 - core environment information visible without tap
 - remove duplicated environment / forecast blocks
 - no tiny compressed multi-column layout
+- the counter tray sits fixed above the dock; the price keys are always in the same place (User 2026-09-24, v2.9.0)
 
 Core environment example form:
 `북부 설원 폐허 I · 냉기 · 강인함으로 버틴다`
@@ -940,7 +944,7 @@ Detailed presentation:
 
 Within the same Customer, the current scroll position and practical focus must be preserved across:
 - item selection
-- price panel open/close
+- counter tray fill / clear (the shelf list never changes height; (User 2026-09-24, v2.9.0))
 - purchase success
 - refusal and reselection
 - accordion/detail open/close

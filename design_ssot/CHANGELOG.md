@@ -47,6 +47,10 @@ Docs-first. Each owner amendment is listed when committed.
 - 구급키트 / utility copy (K): 구급키트 is pure Insurance (no Core Stat; the catalog `강인함 +10` was a
   leftover never owned by ITEM), Buy / Sell 80 / 170 (ITEM, DUNGEON_ITEM_QA ITEM-Q81); the four
   numberless utility lines are compact (COPY_AUDIT §4-22, COPY_WORLD_VOICE §FIRST AID KIT).
+- Counter tray (T / I-1d): the SALE per-row price panel becomes one fixed counter tray above the dock —
+  the chosen Item, its `판매 후 변화`, `특수 효과` and the three price keys always sit in the same place and
+  the shelf list never moves (User-approved composition change; PRESENTATION_PRINCIPLES §COMPOSITION LOCK,
+  UI_UX §SALE — COUNTER TRAY, SALE, COPY_AUDIT §4-23 / §4-24, UI_UX_QA UI-Q-v29-18).
 
 ## v2.8.0 — closed 2026-09-24
 
