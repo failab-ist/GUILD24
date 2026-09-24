@@ -1,6 +1,7 @@
 (function(G){
 const D=G.DATA;
-const labels={supply:'보급',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식 1개당 보급',supplyPerItem:'음식·음료 1개당 보급',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'원정 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'정가·50% 구매 시 단골도',overchargeBias:'바가지 구매 의사',visitGold:'방문 시 소지금',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
+/* v2.9.0 (COPY_AUDIT §4-13 / §4-18): Supply is shown as 피로 회복 N; the two Trait deltas name it too */
+const labels={supply:'피로 회복',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식의 피로 회복',supplyPerItem:'음식·음료의 피로 회복',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'원정 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'정가·50% 구매 시 단골도',overchargeBias:'바가지 구매 의사',visitGold:'방문 시 소지금',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
 const percent=new Set(['escape','injuryGuard','injuryRisk','loot','variance','rareLoot','priceBias','buyBias','rareBias','commonBias','combatPercent','survivalPercent','injuredCombatPercent','overchargeBias']);
 const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','injuryRisk','escape','rareLoot','rareBias','commonBias']);
 const days=new Set(['recoveryDelta']);
@@ -8,14 +9,14 @@ const days=new Set(['recoveryDelta']);
 const gold=new Set(['visitGold']);
 const mult=new Set(['xpMult','foodMult','potionMult','revisitMult']);
 const negative=new Set(['fatigue','injuryRisk','variance']);
-// Canonical player-facing Hazard pressure (DUNGEON_HAZARD 'HAZARD PLAYER-FACING PRESSURE').
-// All 9 Hazards are explained the same way. Rendered inline, so there is no hover-only path.
-const hazardPressure={poison:'강인함 압박',bind:'기동 압박',corrosion:'강인함 압박',mire:'기동 압박',fire:'강인함 압박',fear:'정신 압박',dark:'정신 중심 + 기동 보조 압박',cold:'강인함 압박',whiteout:'정신 중심 + 기동 보조 압박'};
+// Canonical player-facing Hazard pressure (DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE, v2.9.0): one label per
+// pressed Stat, 3 / 3 / 3. All 9 Hazards are explained the same way. Rendered inline, so there is no hover-only path.
+const PRESSURE_LABEL={survival:'강인함으로 버틴다',mobility:'기동으로 피한다',spirit:'정신으로 견딘다'};
+const hazardStat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};
+const hazardPressure=Object.fromEntries(Object.entries(hazardStat).map(([h,s])=>[h,PRESSURE_LABEL[s]]));
 function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
-/* The Core Stat each Hazard presses (DUNGEON_HAZARD Hazard Defense table; the engine's main
-   Stat for the two spirit-centred Hazards). v2.9.0 reads it for the Stat-grid pressure tag and
-   for the matching-effect emphasis; 투력 is never a pressed Stat. */
-const hazardStat={poison:'survival',bind:'mobility',corrosion:'survival',mire:'mobility',fire:'survival',fear:'spirit',dark:'spirit',cold:'survival',whiteout:'spirit'};
+/* hazardStat above is the Core Stat each Hazard presses (the same table the engine's hazardState uses);
+   the Stat-grid pressure tag and the matching-effect emphasis read it; 투력 is never a pressed Stat. */
 function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];if(s)(m[s]=m[s]||[]).push(k);}return m;}
 /* effect keys that answer a Gate: its Hazards' own Counters and the Stats they press */
 function fitKeys(keys){const s=new Set();for(const k of keys){s.add(k);if(hazardStat[k])s.add(hazardStat[k]);}return s;}
@@ -34,7 +35,7 @@ function rows(e,tones){const out=[];for(const[k,v]of Object.entries(e)){
  if(!labels[k]||!v)continue;const value=mult.has(k)?(v-1)*100:percent.has(k)?v*100:v;const rounded=Math.round(value*10)/10;
  const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));
- out.push({key:k,label:labels[k],text:(rounded>0?'+':'')+rounded+suffix,tone,bad:tone==='cost'});}
+ out.push({key:k,label:labels[k],text:(rounded>0&&k!=='supply'?'+':'')+rounded+suffix,tone,bad:tone==='cost'});}
  return out;}
 function traitEffects(id){const t=D.traitBy[id];return rows(t.effects,t.tones);}
 function traits(n){return n.traits;}
@@ -51,7 +52,8 @@ function known(d,g){return d.hazards;}
    A Core Stat that moved without the Item contributing to it is never listed as the Item's:
    it moved through a system, and that system says so in its own row. The hidden Supply-deficit
    formula stays hidden - the row names the channel, never the arithmetic behind it. */
-const fatigueBand=f=>f>=20?2:f>=10?1:0;
+/* v2.9.0: the five Fatigue bands have one owner, Dungeon.fatigueBand */
+const fatigueBand=f=>G.Dungeon.fatigueBand(f).min;
 function preview(n,d,fac,item,final){
  const visible={...n,traits:traits(n)};
  const a=G.Dungeon.prepare(visible,d,fac),b=G.Dungeon.prepare({...visible,pack:[...visible.pack,item]},d,fac);
@@ -70,7 +72,7 @@ function preview(n,d,fac,item,final){
  }
  if(fatigueBand(after.effectiveFatigue)<fatigueBand(before.effectiveFatigue))
   derived.push({key:'fatigueBand',label:'피로 완화',
-   text:'피로 '+before.effectiveFatigue+' → '+after.effectiveFatigue+' · 기동·정신 페널티가 한 단계 풀렸다'});
+   text:'피로 '+before.effectiveFatigue+' → '+after.effectiveFatigue+' · '+G.Dungeon.fatigueBand(before.effectiveFatigue).name+' → '+G.Dungeon.fatigueBand(after.effectiveFatigue).name});
  /* v2.9.0 ONE DELTA LIST (COPY_AUDIT §4-17): the only Fatigue arithmetic under a chosen Item is
     the departure line, and only when this Item moves it. */
  const departure=!final&&after.fatigueBeforeExpedition!==before.fatigueBeforeExpedition
@@ -144,7 +146,7 @@ function nightRank(r){
    the Outcome does NOT already say: an attributed incident, and an event that speaks for itself. */
 function nightWhy(r){const bits=[];
  if(r.environmentHurt)bits.push(r.cause&&r.cause!=='accident'
-  ?(D.hazards[r.cause]||'보급 부담')+' 때문에 원정 내내 고전했다.'
+  ?(D.hazards[r.cause]||'원정 환경')+' 때문에 원정 내내 고전했다.'
   :'원정 중 예상치 못한 사고가 있었다.');
  if(r.events){
   for(const ev of r.events){
@@ -209,12 +211,17 @@ function nightChanges(r, npc){const out=[];
       value, 귀환 후 피로, and the resolved arithmetic behind it is on-demand detail through the
       same shared anchored tip every other ? on this screen already uses - never a second name
       for the primary figure and never a permanent second row. */
-   const steps=['출발 '+r.fatigueBeforeExpedition];
+     /* v2.9.0 (COPY_AUDIT §6-6 / NIGHT_CLOSING §FATIGUE RESULT): the band is named from 20 up, the
+        on-demand recovery row is 음식·음료로 -N, and one next-decision line follows whenever a band
+        penalty applies (10 and up). Band names / effects come from the one owner, Dungeon.fatigueBand. */
+     const band=G.Dungeon.fatigueBand(r.finalFatigue);
+     const steps=['출발 '+r.fatigueBeforeExpedition];
    if(r.rawOutcomeFatigueGain>0)steps.push('원정에서 +'+r.rawOutcomeFatigueGain);
-   if(r.outcomeBufferUsed>0)steps.push('남은 보급으로 -'+r.outcomeBufferUsed);
-   steps.push('귀환 후 '+r.finalFatigue);
-   out.push({kind:r.netFatigueDelta>0?'down':'up',group:'after',label:'귀환 후 피로',value:r.finalFatigue+'',
-    detail:steps.join(' → ')});
+     if(r.outcomeBufferUsed>0)steps.push('음식·음료로 -'+r.outcomeBufferUsed);
+     steps.push('귀환 후 '+r.finalFatigue);
+     out.push({kind:r.netFatigueDelta>0?'down':'up',group:'after',label:'귀환 후 피로',value:r.finalFatigue+(band.min>=20?' · '+band.name:''),
+      detail:steps.join(' → ')});
+     if(band.min>=10)out.push({kind:'down',group:'after',note:true,label:'다음 원정',value:'피로 '+r.finalFatigue+' · '+band.name,extra:band.text});
   }
  if(r.xp)out.push({kind:'',group:'reward',label:'경험치',value:'+'+r.xp});
  if(r.loot)out.push({kind:'gain',group:'reward',label:'원정 소지금 획득',value:r.loot+'G'});

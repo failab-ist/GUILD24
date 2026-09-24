@@ -66,7 +66,7 @@ function checkOne(r, n){
  if(named){
   assert.ok(r.environmentHurt,'a cause line only appears when an incident happened');
   assert.ok(r.cause&&r.cause!=='accident','a named cause is a real attributed cause');
-  assert.equal(named[1],D.hazards[r.cause]||'보급 부담','the named cause is the attributed one');
+  assert.equal(named[1],D.hazards[r.cause]||'원정 환경','the named cause is the attributed one');
  }
  if(!r.environmentHurt)assert.ok(!/때문에|사고가 있었다/.test(why),'no incident language without an incident');
  // D — WHAT_CHANGED reports only what moved, and nothing that resolved to zero

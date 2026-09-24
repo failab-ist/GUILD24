@@ -309,8 +309,7 @@ function gatePlate(d){const b=sigilOf(d);
  +'<b>'+E(d.name)+'</b>'
  +'<ul class="hazards">'+Presentation.hazardRows(Presentation.known(d,game)).map(h=>
    '<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(h.pressure)+'</span></li>').join('')+'</ul>'
- +(d.requiredSupply?'<span class="stamp-line load">보급 '+d.requiredSupply+' 필요</span>':'<span class="foot">보급 부담 없음</span>')
- +'</article>';}
+   +'</article>';}
 function tierLine(){const f=game.tierForecast();return f?'T1 '+f.percent[0]+'% · T2 '+f.percent[1]+'% · T3 '+f.percent[2]+'%':'마왕성 최종 원정';}
 /* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. How many Gates open tomorrow, before the player
    commits an order: a confirmed count where the rule is deterministic, the exact distribution
@@ -448,26 +447,9 @@ function readout(n,extra=null,cls=''){
      bought to move. No new label and no new calculation. */
   +(o.worst?'<span class="fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>'
    +tip('환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.')+'</span>':'')
-  /* v2.9.0 (COPY_AUDIT §4-x, D-2): the '보급 부담 없음' cell is deleted; the requirement line stays only while a Gate still asks for Supply (rule removed in I-2) */
-  +(p.supply.required?'<span>'+'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b></span>':'')
- +'</div>'
- /* DUNGEON_HAZARD §FATIGUE INFORMATION BOUNDARY. These are decision ingredients, not a
-    forecast: exact public arithmetic on the CURRENT committed Bag, so unlike the frozen
-    outlook above they do move as Items are sold. SA-Q06: the hypothetical branch table this
-    used to end on - one projected Fatigue per Outcome that has not happened yet - is gone;
-    only current/departure Fatigue and the compact Supply truth remain. The hidden
-    Supply-deficit formula stays hidden; only the deficit amount is named. */
- +(()=>{const e=p.effects,dep=e.fatigueBeforeExpedition,buf=e.remainingSupplyBuffer;
-   const rows=[];
-   if(e.beforeFatigue||e.preRecovery)
-    rows.push(E('피로 '+e.beforeFatigue+' → 출발 '+dep+(e.preRecovery?' · 보급 회복 -'+e.preRecovery:'')));
-   /* The Supply line is the anchor of the contextual Supply coach mark (COPY_AUDIT §3-5): it
-      teaches the first time a customer's expedition actually asks for Supply, not on DAY 1. */
-   if(p.supply.deficit)rows.push('<span class="supply-note">'+E('보급 부족 '+p.supply.deficit+' · 준비 전체에 페널티')+'</span>');
-   else if(buf)rows.push('<span class="supply-note">'+E('남은 보급 '+Math.round(buf)+' · 결과 피로를 그만큼 줄인다')+'</span>');
-   /* v2.9.0 (User 2026-09-24): the ingredients sit side by side on one wrapping line, each on its own
-      stamped tag - the same tag idiom as the shelf's 포션 mark - never stacked as rows, on every width */
-   return rows.length?'<p class="ingredients">'+rows.map(r=>'<span class="ing">'+r+'</span>').join('')+'</p>':'';})()
+  +'</div>'
+ /* v2.9.0 (User 2026-09-24): no always-on Fatigue line under the outlook - current Fatigue is the status strip's
+    `피로 N`, the counter tray shows `피로 A → 출발 B` for a chosen Food/Drink that moves it, NIGHT answers the rest. */
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
     against it live in one place - the 예상 목적지 plate below - so the player reads the danger
@@ -757,7 +739,10 @@ function changedRows(r){
     anchored tip (same exclusive group, same out-of-flow balloon, same hover/focus/tap and
     outside-tap/Escape behavior everywhere else on screen already uses). Every other token
     stays the plain stamped chip it always was. */
- const stamp=c=>c.detail
+ const stamp=c=>c.note
+  /* v2.9.0 NIGHT next-decision line (COPY_AUDIT §6-6): one sentence under the settled Fatigue, not a chip */
+  ?'<p class="next-decision">'+E(c.value+' — '+c.label+' '+c.extra)+'</p>'
+  :c.detail
   ?'<details class="tip '+c.kind+'" name="sale-tip"><summary aria-label="'+E(c.label+' '+c.value+' · 피로 변화 보기')+'"><i>'+E(c.label)+'</i><b>'+E(c.value)+'</b></summary>'
    +'<p><span>'+E(c.detail)+'</span></p></details>'
   /* UI_UX §NIGHT LAYOUT — EQUIPMENT / POWER TERM: the identity and the Stat effect were one run
@@ -838,7 +823,7 @@ const coachSteps={
  ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
  ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
  /* contextual marks - the hidden Supply-deficit formula is not taught, only the visible consequence */
- ['supply','.ingredients .supply-note','보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.'],
+['supply','.counter-tray .tray-delta .fatigue','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
  ['great','.great-signal','대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.'],
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
@@ -1166,7 +1151,7 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  const parts=[...moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>'),
   ...moved.derived.map(r=>'<b>'+E(r.label+' '+r.text)+'</b>')];
- if(moved.departure)parts.push('<b>'+E(moved.departure)+'</b>');
+ if(moved.departure)parts.push('<b class="fatigue">'+E(moved.departure)+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects).filter(r=>!shown.has(r.key));
  const life=st.expires===null?'유통기한 없음':'폐기까지 '+(st.expires-s.day)+'일';
  return '<div class="counter-tray" role="region" aria-label="계산대">'
@@ -1454,13 +1439,10 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
                         :'회복 방법: 다음 원정에서 성공·대성공으로 귀환 또는 구급키트 애프터케어');
  }
  if(n.fatigue||n.fatigue===0){
-  // DUNGEON_HAZARD_v2.7 §FATIGUE STAT PENALTY: the bands are -15% and -40%.
-  let f_pen='';
-  if(n.fatigue>=20)f_pen='(기동/정신 -40%)';
-  else if(n.fatigue>=10)f_pen='(기동/정신 -15%)';
-  else f_pen='(페널티 없음)';
-  cond.push('현재 피로: '+n.fatigue+' '+f_pen);
-  cond.push('피로 회복: 요구량을 채우고 남은 보급이 줄여 준다');
+  /* DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY: five bands on 0~40, one owner; COPY_AUDIT §4-14 for the recovery line */
+  const band=Dungeon.fatigueBand(n.fatigue);
+  cond.push('현재 피로: '+n.fatigue+(band.min>0?' · '+band.name+' ('+band.text+')':' (페널티 없음)'));
+  cond.push('피로 회복: 음식·음료, 휴식');
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
  if(n.outlook)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');

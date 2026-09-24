@@ -289,15 +289,17 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(/발주 '\+fmt\([^)]+\)\+'G · 확정/.test(app),'the docked stamp states the amount');
 });
 
-test('UI-Q35 / DUN-Q21: all 9 Hazards carry a canonical pressure line',()=>{
- const pressure={poison:'강인함',bind:'기동',corrosion:'강인함',mire:'기동',fire:'강인함',fear:'정신',dark:'정신',cold:'강인함',whiteout:'정신'};
+test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards carry the canonical pressure label, one per Stat (3 / 3 / 3)',()=>{
+ const label={survival:'강인함으로 버틴다',mobility:'기동으로 피한다',spirit:'정신으로 견딘다'};
+ const stat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};
  assert.deepEqual(Object.keys(Presentation.hazardPressure).sort(),Object.keys(DATA.hazards).sort(),'every canonical Hazard is explained');
- for(const [key,stat] of Object.entries(pressure)){
-  assert.ok(Presentation.hazardPressure[key].includes(stat),key+' pressures '+stat);
-  assert.ok(Presentation.hazardPressure[key].includes('압박'),key+' states the pressure');
+ for(const [key,s] of Object.entries(stat)){
+  assert.equal(Presentation.hazardPressure[key],label[s],key+' -> '+label[s]);
+  assert.equal(Presentation.hazardStat[key],s,'the tag / emphasis read the same Stat');
+  assert.equal(Dungeon.hazardState(key,{},{scale:1}).stat,s,'and the engine moves its Defense with that Stat only');
  }
- for(const key of ['dark','whiteout'])
-  assert.ok(Presentation.hazardPressure[key].includes('중심')&&Presentation.hazardPressure[key].includes('보조'),key+' names a primary and a secondary axis');
+ for(const s of Object.keys(label))assert.equal(Object.values(stat).filter(x=>x===s).length,3,s+' presses exactly three Hazards');
+ assert.ok(!Object.values(Presentation.hazardPressure).some(x=>/압박|중심|보조/.test(x)),'no 압박 / 중심 / 보조 label survives');
  assert.equal(Presentation.hazardRows(['cold']).at(0).name,'냉기');
 });
 
@@ -588,7 +590,7 @@ test('COPY 18.5: the Boss reveal says what the spec says, and invents nothing',(
  assert.equal(glut.sin,'탐식','the Sin is 탐식');
  assert.equal(glut.name,'탐식의 마왕 글러트니','and the identity is the v2.7 name');
  assert.deepEqual(c.d15.trait.GLUTTONY,
-  ['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·보급·보험 효과는 유지']],
+['탐식의 권능',['아이템의 투력·강인함·기동·정신 증가량 50% 감소','환경 대응·피로 회복·보험 효과는 유지']],
   'the D15 Function is the exact Canonical copy');
  // no retired wording survives anywhere a player can read
  const everything=JSON.stringify(c)+JSON.stringify(DATA.bosses)+read('dist/ui/app.js')+read('dist/data/copy.js')+read('dist/data/catalog.js');
@@ -1848,7 +1850,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
- assert.ok(/\['supply','\.ingredients \.supply-note'/.test(steps),'the Supply/Fatigue lesson is on the Supply line it explains, so it teaches the first time Supply is actually asked for');
+ assert.ok(/\['supply','\.counter-tray \.tray-delta \.fatigue'/.test(steps),'the Supply/Fatigue lesson is on the tray\'s 피로 A → 출발 B row, so it teaches the first time a Food/Drink actually moves Fatigue (v2.9.0)');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
     verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
     reflects 보급 - it does not, `Game.arrive()` snapshots it with an empty pack (see
@@ -1857,7 +1859,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const [id,text] of [
    ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
    ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
-   ['supply','보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.'],
+   ['supply','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
    ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
  const hazard=/\['hazard',[^\]]*\]/.exec(steps)[0];
@@ -1891,11 +1893,11 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
  assert.deepEqual(ids.slice(0,4),['destination','hazard','forecast','pricing'],'the first SALE reads destination, Hazard, outlook, price - in that order');
  assert.deepEqual(ids.slice(4).sort(),['bag','great','returning','supply'],'the other four are contextual marks');
- for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.ingredients .supply-note']])
+ for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.counter-tray .tray-delta .fatigue']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
- /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
- assert.ok(/class="ingredients"/.test(app),'the exact Supply/Fatigue arithmetic is on the decision surface');
+ /* v2.9.0: no always-on Fatigue line under the outlook; the tray row carries the arithmetic */
+ assert.ok(!/class="ingredients"/.test(app)&&/class="fatigue"/.test(fn('tray')),'the Fatigue arithmetic lives on the tray row only');
  /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
     a desktop copy and a phone copy with one always display:none, so taking the first DOM match
     silently dropped those lessons on a phone. */
@@ -1904,7 +1906,8 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   'the coach resolves its anchor to a visible element');
  assert.ok(!/\$\(x\[1\]\)|const target=\$\(step\[1\]\)/.test(coach),'and never to the first DOM match');
  assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(app),'no superseded v2.6 Fatigue band survives in the UI');
- assert.ok(/기동\/정신 -40%/.test(app)&&/기동\/정신 -15%/.test(app),'the v2.7 bands are what the screen states');
+ assert.ok(!/기동\/정신 -40%|기동\/정신 -15%/.test(app)&&/Dungeon\.fatigueBand\(n\.fatigue\)/.test(app),'the screen reads the five v2.9.0 bands from the one owner');
+ assert.deepEqual([9,10,20,30,40].map(f=>Dungeon.fatigueBand(f).name),['정상','지침','과로','소진','탈진'],'the five band names');
 });
 
 /* SA-Q18 / UI_UX_v2.8 §EVENT TEMPORARY BUDGET. On a 급여일 the customer can spend
@@ -2402,7 +2405,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
   '대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.',
   '손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.',
   // §3-5 / §3-7 SUPPLY: two facts, the hidden deficit formula and the second Fatigue stage untaught
-  '보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.',
+  '음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.',
   '판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',
   '다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));

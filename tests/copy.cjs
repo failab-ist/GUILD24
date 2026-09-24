@@ -66,6 +66,8 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
    built; the set must match exactly, so a newly unadopted line fails instead of joining it. */
 const COMPOSED={
  '4-10':"'폐기까지 '+days+'일' (app.js stock row)",
+ '4-18':'presentation.js rows(): labels.foodSupplyDelta / labels.supplyPerItem + the signed Trait value',
+ '4-20':"app.js statGrid: the pressing Hazard names (D.hazards) joined with ' · '",
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
  '6-5':"presentation.js heroLine(): who+' 덕분에 '+said",
@@ -523,8 +525,8 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
   assert.ok(/능력치 증가 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
-  assert.ok(/보급/.test(DATA.relicBy[id].description)&&!/보급·능력치|보급 효과 \+/.test(DATA.relicBy[id].description),
-   id+' does not claim the Supply it leaves unchanged');
+  assert.ok(/피로 회복·위험 대응은 그대로/.test(DATA.relicBy[id].description)&&!/피로 회복 \+/.test(DATA.relicBy[id].description),
+   id+' does not claim the Fatigue recovery it leaves unchanged (v2.9.0 wording)');
  }
 
  /* D-16: the description slot is flavour. Where it only restated the effect line it told the
@@ -588,14 +590,14 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['hazardBoard','원정 위험 게시판',60,'오늘 게이트의 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
   ['medicine','야전 정비대',80,'판매한 야외장비의 위험 대응 수치 +40%.'],
   ['fridge','대형 냉장고',60,'음식·음료 유통기한 +2일 · 확보 시 보유 중인 해당 재고도 1회 연장.'],
-  ['kitchen','즉석식품 코너',170,'음식·음료가 원래 가진 능력치 증가 효과 +25% · 보급·위험 대응·부작용 제외 · 다음 날부터 기본 운영비 +10%.'],
+  ['kitchen','즉석식품 코너',170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.'],
   ['board','길드 전광판',110,'하루 기본 최소 방문객을 4명으로 변경 (기존 3명).'],
   ['rookieBoard','첫 방문 쿠폰',110,'처음 방문한 손님의 소지금 +30G 추가 · 구매 의사 +20%p.'],
   ['groupFlyer','단체 주문 창구',200,'매일 아침 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G 추가 지급.'],
   ['memberBundle','단골 묶음혜택',190,'단골 손님마다 오늘 두 번째로 사는 상품은 손님이 판매가의 절반만 지불 · 나머지 절반은 본사가 채워 점주는 판매가 전액 수령.'],
   ['premiumMember','프리미엄 멤버십',200,'단골 손님 방문 시 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
   ['returnPoints','귀환 적립제',240,'오늘 유료 구매한 재방문 손님 생환 시 단골도 +5 · 소지금 +25G.'],
-  ['expeditionMeal','원정 도시락 코너',200,'음식·음료 1개당 보급 +2 · 갈 게이트의 모든 위험 대응 +4.'],
+  ['expeditionMeal','원정 도시락 코너',200,'음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.'],
   ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 · 확보 시 보유 중인 해당 재고도 1회 연장.'],
   ['supplyCert','길드 납품 인증',220,'오늘 게이트의 위험에 대응하는 희귀 이상 상품 또는 희귀 이상 보험 판매 시 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
   ['dawnBulk','새벽 회수 계약',190,'유통기한이 끝난 음식·음료는 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식 또는 음료 1칸 추가.'],
@@ -603,7 +605,7 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['lifetime','평생 단골제',310,'단골 손님 생환 시 하루 1회 소지금 +50G · 다음 방문 가중치 +50%.'],
   ['royalCert','왕도 프리미엄 인증',320,'150% 가격 판매 시 판매가의 40% 추가 지급 · 150% 가격 구매 의사 +16%p.'],
   ['expeditionCert','원정 전문 인증',290,'위험 대응 상품의 위험 대응 수치 +60% · 그 상품을 산 손님 다음 방문 시 소지금 +50G.'],
-  ['fresh24','24시간 신선체계',360,'음식·음료가 원래 가진 능력치 증가 효과 +50% · 보급·위험 대응·부작용 제외 · 음식·음료 매입가 +25%.'],
+  ['fresh24','24시간 신선체계',360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.'],
   ['hub','지역 거점점 계약',340,'다음 날부터 방문객 +1명 45% · +2명 15% · 증가 없음 40% · 기본 운영비 +10%.'],
   ['warehouse','후방 창고 증설',130,'창고 용량 +10칸.'],
   ['terminal','본사 추가발주권',130,'다음 발주 후보 생성부터 발주 후보 +2개.'],
