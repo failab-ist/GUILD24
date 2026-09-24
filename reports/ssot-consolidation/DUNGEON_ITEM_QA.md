@@ -573,10 +573,10 @@ Controlled prepared states: vary one Core Stat at a time and read each Hazard's 
 - Counter keys, Item Counter values, readiness labels 충분 / 대응 / 불안 / 취약 and thresholds are unchanged
 - pressure label shown per Hazard matches the Stat that actually moves its Defense
 EXPECT base result Fatigue (User 2026-09-24, v2.9.0):
-성공 +5
-대성공 +5
-퇴각 +8
-부상 +10
+성공 +4
+대성공 +4
+퇴각 +7
+부상 +9
 EXPECT five bands on the 0~40 scale (User 2026-09-24, v2.9.0):
 0~9   정상 none
 10~19 지침 mobility/spirit -15%

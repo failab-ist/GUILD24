@@ -668,7 +668,7 @@ Day-term reference anchors:
 The Supply Burden Gate modifier, required Supply, Supply Deficit and the deficit penalty are removed; Food/Drink
 Supply is Fatigue recovery only (current Fatigue first, remainder buffers this expedition's gain, shown as
 `피로 회복 N`), with Severe-Injury rest days recovering 5 per day. Fatigue runs 0~40 in five named bands
-(정상 / 지침 / 과로 / 소진 / 탈진), outcome gains rise to +5 / +5 / +8 / +10, and Fatigue 40 adds the injured-style
+(정상 / 지침 / 과로 / 소진 / 탈진), outcome gains rise to +4 / +4 / +7 / +9 (first set at +5 / +5 / +8 / +10, re-tuned -1 after the I-2 re-measure, User 2026-09-24), and Fatigue 40 adds the injured-style
 +10%p failure-Death term. Each Hazard presses exactly one non-투력 Stat (강인함 3 / 기동 3 / 정신 3: 화염 -> 기동
 ×0.40, 어둠 / 화이트아웃 -> 정신 ×0.40) with one player-facing pressure label per Stat and one full sentence per
 Hazard. The `## EXCESS SUPPLY -> FATIGUE` heading declaration above now carries `## SUPPLY -> FATIGUE`; the
@@ -789,10 +789,11 @@ recovery (User 2026-09-24, v2.9.0):
 - Food/Drink Supply: each point reduces Fatigue by 1 -> §SUPPLY -> FATIGUE
 - Severe-Injury recovery days: -5 per rest day (floor 0)
 (User 2026-09-24, v2.9.0)
-성공      +5
-대성공    +5
-퇴각      +8
-부상     +10
+성공      +4
+대성공    +4
+퇴각      +7
+부상      +9
+Re-tuned -1 from the first v2.9.0 table (+5 / +5 / +8 / +10) after the I-2 re-measure (User 2026-09-24, v2.9.0).
 Fatigue scale 0~40 (max / clamp 40), five bands (User 2026-09-24, v2.9.0):
 0~9    : 정상 — no Stat penalty
 10~19  : 지침 — 기동 / 정신 -15%

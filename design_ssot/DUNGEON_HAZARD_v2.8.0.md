@@ -159,13 +159,15 @@ recovery (User 2026-09-24, v2.9.0):
 (User 2026-09-24, v2.9.0)
 
 ```text
-성공      +5
-대성공    +5
-퇴각      +8
-부상     +10
+성공      +4
+대성공    +4
+퇴각      +7
+부상      +9
 중상       0
 사망       0
 ```
+
+Re-tuned -1 from the first v2.9.0 table (+5 / +5 / +8 / +10) after the I-2 re-measure (User 2026-09-24, v2.9.0).
 
 Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.8.0.md`.
 

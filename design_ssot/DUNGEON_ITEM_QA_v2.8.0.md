@@ -429,10 +429,10 @@ Tune Dungeon pressure / Stat-route efficiency / growth / Item counter value so p
 
 EXPECT base result Fatigue (User 2026-09-24, v2.9.0):
 ```text
-성공 +5
-대성공 +5
-퇴각 +8
-부상 +10
+성공 +4
+대성공 +4
+퇴각 +7
+부상 +9
 중상 0
 사망 0
 ```
