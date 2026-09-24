@@ -179,7 +179,7 @@ function playRun(g,out,ctx){
  /* Interaction-cost proxy: one tick per action a player would actually have to perform. */
  const act=(n=1)=>{out.actions+=n;};
  const stat=d=>out.days[d]??={samples:0,cash:0,wallet:0,level:0,inventory:0,peak:0,visitors:0,actual:0,consumed:0,slots:0,waste:0,revenue:0,cogs:0,spent:0,operating:0,loyalty:0,injury:0,death:0,overAffordable:0,fullAffordable:0,halfOnly:0,offers:0};
- function itemValue(n,it,d){const known=policy==='skilled'?d.hazards:G.Presentation?G.Presentation.known(d,g):d.hazards;const hz=known.reduce((a,h)=>a+Math.max(0,it.effects[h]||0)*.5,0);let v=(it.effects.combat||0)*.55+(it.effects.survival||0)*.6+(it.effects.mobility||0)*.25+(it.effects.spirit||0)*.3+(d.requiredSupply||0)*(it.effects.supply||0)*.2+hz;
+ function itemValue(n,it,d){const known=policy==='skilled'?d.hazards:G.Presentation?G.Presentation.known(d,g):d.hazards;const hz=known.reduce((a,h)=>a+Math.max(0,it.effects[h]||0)*.5,0);let v=(it.effects.combat||0)*.55+(it.effects.survival||0)*.6+(it.effects.mobility||0)*.25+(it.effects.spirit||0)*.3+(it.effects.aftercare||0)*6+(d.requiredSupply||0)*(it.effects.supply||0)*.2+hz;
  /* aware: 야전 정비대 / 원정 전문 인증 multiply the Counter an Item brings to the Gate this
     adventurer enters - value that Hazard term by the same factor the game will apply. Only when
     supplying an adventurer (n given), not when ranking the order sheet. */

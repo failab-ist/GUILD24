@@ -2449,7 +2449,7 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  assert.ok(!/부상 '\+n\.injury/.test(kit),'the compact state does not repeat Injury as a number');
  assert.ok(/parts=\[n\.status\]/.test(kit),'it carries the state word itself');
  // SA-Q20: the exact First Aid primary function
- assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 남는 부상을 1단계 완화한다. 사망에는 적용되지 않는다.'"),
+ assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 부상 1단계 완화 (사망 제외)'"),
   'the First Aid primary function is the approved sentence');
  assert.ok(!surfaces.includes('결과는 그대로'),'the redundant lead is gone');
  // SA-Q32: the exact Trait effect labels, with the generic ones retired
