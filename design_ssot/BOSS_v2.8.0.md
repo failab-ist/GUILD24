@@ -3,7 +3,7 @@
 DOC=BOSS
 OWNER=boss,boss_identity,boss_trait,boss_information_cadence,sloth,lust
 DOC_VERSION=2.8.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/BOSS_v2.8.0-patch.md,history/BOSS_v2.7.0.md,history/BOSS_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/BOSS.md

@@ -1,13 +1,15 @@
-# GUILD24 v2.9+ — Deferred Expansion Router
+# GUILD24 v3.0+ — Deferred Expansion Router
 
 > Project: 《던전 앞 편의점 / GUILD24》
-> Document role: **v2.9+ DEFERRED DESIGN ROUTER / FUTURE CANDIDATE CONTEXT**
+> Document role: **v3.0+ DEFERRED DESIGN ROUTER / FUTURE CANDIDATE CONTEXT**
 > Status: **NOT CURRENT DESIGN SSOT**
 > Current Design Truth entry: `design_ssot/SPEC_INDEX_v2.8.0.md`
 >
 > User decision:
-> work classified as P2 or later is not part of v2.8.
-> It is deferred to v2.9+ unless the User later promotes it.
+> work classified as P2 or later is not part of v2.8 or v2.9.0.
+> It is deferred to v3.0+ unless the User later promotes it.
+> (2026-09-24: v2.9.0 was scoped to readability / onboarding / transaction visibility / rule
+> simplification only — see SPEC_INDEX §CURRENT v2.9.0 PURPOSE — so every section here moved to v3.0+.)
 
 ---
 
@@ -313,7 +315,7 @@ Asset count is not a substitute for game depth.
 
 ---
 
-# 19. v2.9+ ENTRY GATE
+# 19. v3.0+ ENTRY GATE
 
 Do not enter structural expansion merely because v2.8 is numerically complete.
 

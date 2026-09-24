@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.8.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
+DOC_VERSION=2.9.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=PROJECT_WIDE_V2_8_CANONICAL
-SOURCE_ADOPTION_STATUS=V2_8_CANONICAL_SOURCE_ADOPTION_CLOSED
+FREEZE_STATUS=V2_9_0_IN_PROGRESS (v2.8 canonical baseline closed 2026-09-24)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_DOCS_FIRST (Source adoption follows the owner amendments)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -21,7 +21,46 @@ EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 DESIGN TRUTH = current routed Design SSOT.
 IMPLEMENTATION TRUTH = current Source.
 
-## CURRENT v2.8 PURPOSE
+## CURRENT v2.9.0 PURPOSE — "쉽게 배우고, 깊게 파는"
+
+User decision 2026-09-24. v2.9.0 answers three playtest findings: "너무 복잡하다", "뭘 어떻게 하는 건지
+모르겠다", and "손님에게 직접 파는 게임인데 그것이 보이지 않는다". The goal is easy to learn, hard to
+master: the fun axes stay (Hazard Counter, three price modes, Traits, the four Core Stats always
+visible); the screens explain themselves; complexity that is not fun is removed; the transaction is
+seen. Documents are amended first, Source follows per owner (docs-first).
+
+Scope (owner amendments are the truth; this list is routing):
+
+    A. the transaction is visible — hand-over motion, customer reaction, Bag on the counter,
+       customer exit/entry, price-mode sound family, refusal beat        -> PRESENTATION_PRINCIPLES / UI_UX / SALE
+    B. the screen says what to do — DAY 1~3 task line, first-order coach order, Hazard rows that
+       say what resists them, today-fit emphasis on ORDER, per-Gate visitor counts (counts only),
+       NIGHT -> next-decision line, shorter D1 briefing / guide              -> UI_UX / ECONOMY_ORDER / NIGHT_CLOSING / COPY
+    C. SALE reads at a glance — today's pressure tag on the Stat grid, matching-effect emphasis on
+       rows, one delta list after a sale, price-role words, no always-on Death %, folded last
+       expedition below Stats; first-sale coach diet (done)                  -> SALE / UI_UX / COPY
+    D. simpler rules — Supply becomes Fatigue recovery only (no required Supply, Fatigue 0~40 with
+       five bands), single-Stat Hazard pressure 3/3/3 without 투력, Store Support card copy in two
+       clauses, presentation leftovers                                       -> DUNGEON_HAZARD / ITEM / NIGHT_CLOSING / NPC_TRAIT / RELIC
+
+Not in v2.9.0 (User): a "simple view" toggle, hiding zero receipt rows, direct hints such as
+`도움 됨 / 무관`, extra price depth, removing Hazard Counter / price modes / Traits.
+Every P2+ expansion stays in GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md.
+
+## VERSION POLICY
+
+User decision 2026-09-24: versions are managed the way a maintained project does it, not by renaming
+files.
+- Owner filenames are stable lineage names (`<OWNER>_v2.8.0.md` stays the file for v2.9.0 and later).
+  Ledgers, tests and routing keep their paths.
+- `DESIGN_SSOT=` in every owner header names the project version the file belongs to.
+- `DOC_VERSION=` in an owner header is bumped to the project version in which that owner last changed.
+- `design_ssot/CHANGELOG.md` records what each version changed, per owner, with the User decision date.
+- A release is closed by a git tag (`v2.9.0`) on the commit where SPEC_INDEX, CHANGELOG, owners and
+  Source agree; the tag, not a filename, is the version.
+- history/ keeps pre-consolidation files as audit evidence only; a version bump copies nothing there.
+
+## v2.8 PURPOSE (CLOSED 2026-09-24)
 
 v2.8 is the project-wide current Design SSOT for the focused Core Readability / Playtest Response
 release.
@@ -48,7 +87,7 @@ Priority:
 - full-surface functional-design polish
 - evidence-gated balance follow-up
 
-Structural P2+ expansion remains routed to GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md.
+Structural P2+ expansion remains routed to GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md.
 
 ## CURRENT CANONICAL FILE SET
 
@@ -175,7 +214,20 @@ Current resolution status comes from WORK_STATE + current Source + reviewed comm
 
 If a routed source cannot be accessed after explicit lookup, report PROJECT SOURCE ACCESS/INDEX ISSUE.
 
-## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL
+## v2.9.0 RELEASE ACCEPTANCE — HIGH LEVEL
+
+v2.9.0 is ready to close when:
+- a new player can say what to do on DAY 1 from the screens alone (task line, coach order, Hazard rows)
+- selling an Item to a customer is visible as an act (hand-over, reaction, Bag on the counter)
+- the first SALE teaches four marks; the rest are contextual
+- Supply is one sentence (`음식·음료는 피로를 줄인다`) and Fatigue bands 0~40 are adopted and measured
+- every Hazard presses one non-투력 Stat and every non-투력 Stat is pressed by three Hazards
+- ORDER shows today-fit emphasis and per-Gate visitor counts without a new badge or hint
+- Store Build effects are understood from the cards; SALE -> NIGHT causality is legible (the former
+  v2.9+ entry gate)
+- no unapproved 3.0+ structural expansion is pulled into v2.9.0
+
+## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
 
 v2.8 is ready to close when:
 - known current correctness/runtime UX findings are fixed

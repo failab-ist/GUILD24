@@ -3,7 +3,7 @@
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run,fatigue,supply,injury,death_risk,great_success,deep_expedition,result_proof
 DOC_VERSION=2.8.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_ITEM_QA_v2.8.0-patch.md,history/DUNGEON_ITEM_QA_v2.7.0.md,history/DUNGEON_ITEM_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_ITEM_QA.md

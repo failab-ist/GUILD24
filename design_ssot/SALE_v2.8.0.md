@@ -3,7 +3,7 @@
 DOC=SALE
 OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loyalty_surface,refusal,purchase_flow,deep_nomination
 DOC_VERSION=2.8.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.8.0
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/SALE_v2.8.0-patch.md,history/SALE_v2.7.0.md,history/SALE_v2.6.1.md,history/SALE_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/SALE.md

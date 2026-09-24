@@ -9,8 +9,8 @@ STATE: V2_8_RELEASED
 - released: `main` = `claude/guild24-v28-integration` at `f2fa299`, deployed by Pages run #157
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (SOURCE_ADOPTION_STATUS=CLOSED)
 - v2.8 Source adoption: CLOSED · Presentation Batch 1-5: CLOSED · Final Freeze: `176a8f8`
-- measurement-gated balance items stay as listed in SPEC_INDEX; v2.9+ work stays in
-  `GUILD24_v2.9_PLUS_DEFERRED_DETAILED.md` until the User promotes it
+- measurement-gated balance items stay as listed in SPEC_INDEX; 3.0+ work stays in
+  `GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md` until the User promotes it
 - completed history: `archive/WORK_HISTORY_v2.8.md`
 
 ## In Progress
