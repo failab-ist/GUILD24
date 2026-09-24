@@ -1305,7 +1305,7 @@ const wearing=(ids,seed)=>{const a=Meta.fresh();for(const id of ids){Meta.addCap
  const g=new Game(a);g.autosave=false;g.start(seed);return past0(g);};
 /* past the D0 Store Support pick, so the Day's Gates exist for an arrival to read */
 const past0=g=>{g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;};
-test('길드 추모 게시판: the Death line that ends a Run is one higher while it is worn',()=>{
+test('추모 방명록: the Death line that ends a Run is one higher while it is worn',()=>{
  const base=DATA.balance.deathLimit,g=wearing(['memorialBoard'],'memorial');
  assert.equal(Meta.deathLimit(g.run),base+1);
  assert.equal(Meta.deathLimit(fresh('memorial-plain').run),base,'without it the line is unchanged');
@@ -1325,7 +1325,7 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('비상 구급함: the first Death of the Run becomes 중상, once',()=>{
+test('구급품 진열장: a Death becomes 중상, up to twice per Run',()=>{
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
  const weak=()=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=[];n.injury=0;return n;};
  let seed=null;for(let i=0;i<500&&seed===null;i++){const n=weak();Dungeon.resolve(n,d,new RNG('aid-'+i));if(!n.alive)seed='aid-'+i;}
@@ -1333,12 +1333,14 @@ test('비상 구급함: the first Death of the Run becomes 중상, once',()=>{
  const run={loadout:{counter:'firstAidKit'}};
  const saved=weak(),rep=Dungeon.resolve(saved,d,new RNG(seed),[],run);
  assert.equal(saved.alive,true,'the kit keeps them alive');assert.equal(rep.outcome,'중상');
- assert.equal(rep.avoidedDeath,true);assert.equal(run.aidKitUsed,true,'and is spent');
+ assert.equal(rep.avoidedDeath,true);assert.equal(run.aidKitSaves,1,'one of two is spent');
  assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
- const second=weak();Dungeon.resolve(second,d,new RNG(seed),[],run);assert.equal(second.alive,false,'a second Death is not caught');
+ const second=weak();Dungeon.resolve(second,d,new RNG(seed),[],run);assert.equal(second.alive,true,'the second Death is caught too');
+ assert.equal(run.aidKitSaves,2);
+ const third=weak();Dungeon.resolve(third,d,new RNG(seed),[],run);assert.equal(third.alive,false,'a third is not');
  const bare=weak();Dungeon.resolve(bare,d,new RNG(seed),[],{loadout:{}});assert.equal(bare.alive,false,'without it the Death stands');
 });
-test('훈련용 무기 진열대: an adventurer created while it is worn arrives one Level higher',()=>{
+test('훈련소 제휴 간판: an adventurer created while it is worn arrives one Level higher',()=>{
  const g=wearing(['trainingRack'],'rack'),h=fresh('rack');
  const a=g.run.npcs.map(n=>n.level),b=h.run.npcs.map(n=>n.level);
  assert.deepEqual(a,b.map(l=>l+1),'the same seed, every created adventurer +1 Level');

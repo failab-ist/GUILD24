@@ -1263,39 +1263,39 @@ test('D-27: the named items are drawn as themselves, and no two of them share a 
  assert.deepEqual(shared,[],'no two products are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
 });
 
-// UI_UX_v2.8 §LIVE STORE. The four Decorations shipped as a text plate carrying their name,
-// which said which one was equipped without ever drawing it. This is the same contract D-27
-// holds the shelf to: each Decoration is a picture, its own picture, at its own place.
-test('UI_UX_v2.8 §LIVE STORE: every Decoration is drawn, each as itself, at its own Slot',()=>{
- const Scene=globalThis.Scene,D=globalThis.DATA;
- const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
- const drawn=new Map();
+// UI_UX_v2.8 §LIVE STORE. Each Decoration is a picture, its own picture, at its own place.
+// USER 2026-09-24: the pictures are authored SVG asset files (assets/deco/<id>.svg), not drawing
+// code, and they are seated on the painted room in the painting's own coordinates.
+test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as itself, on the painted room',()=>{
+ const Scene=globalThis.Scene,D=globalThis.DATA,fs=require('node:fs'),path=require('node:path');
+ const seen=new Map();
  for(const d of D.decorations){
-  const art=Scene.decoration(d.id);
-  assert.ok(art&&art.includes('<svg'),d.name+' resolves to a drawing');
-  const shapes=body(art);
-  assert.ok(shapes.length>0,d.name+' is drawn, not an empty frame');
-  // the store scene is pixel art on its own grid; a drawing that scaled smoothly would not be
-  assert.ok(art.includes('shape-rendering="crispEdges"'),d.name+' is drawn on the pixel grid');
-  // a <text> glyph here would bind the store scene to the font subset
-  assert.ok(!/<text/.test(art),d.name+' is a drawing, not a caption');
-  (drawn.get(shapes)||drawn.set(shapes,[]).get(shapes)).push(d);
+  const art=Scene.decoration(d.id),src=(art.match(/src="([^"]+)"/)||[])[1];
+  assert.ok(/^<img /.test(art)&&src==='ui/assets/deco/'+d.id+'.svg',d.name+' resolves to its own asset file');
+  const file=path.resolve(__dirname,'../dist',src);assert.ok(fs.existsSync(file),d.name+' ships its file');
+  const svg=fs.readFileSync(file,'utf8');
+  assert.ok(/<rect /.test(svg),d.name+' is drawn, not an empty frame');
+  assert.ok(svg.includes('shape-rendering="crispEdges"'),d.name+' is drawn on the pixel grid');
+  assert.ok(!/<text|<script|href=/.test(svg),d.name+' is a plain picture: no caption, no script, no external reference');
+  assert.ok(!seen.has(svg),d.name+' is not drawn like '+seen.get(svg));seen.set(svg,d.name);
  }
- const shared=[...drawn.values()].filter(g=>g.length>1);
- assert.deepEqual(shared,[],'no two Decorations are drawn identically: '+shared.map(g=>g.map(x=>x.name).join('/')).join(', '));
- assert.equal(Scene.decoration('nosuch'),'','an id with no drawing resolves to nothing, never a broken frame');
- // the name may still be read by a screen reader, but it is no longer the picture
+ assert.equal(Scene.decoration('nosuch'),'','an id with no picture resolves to nothing, never a broken frame');
+ assert.ok(!/function deco[A-Z]\w*\(\)\{/.test(read('dist/ui/scene.js')),'no Decoration is drawn by code any more');
  const plate=fn('decoPlate');
- assert.ok(plate.includes('Scene.decoration('),'the store scene renders the drawing');
+ assert.ok(plate.includes('Scene.decoration('),'the store scene renders the picture');
  assert.ok(plate.includes('game.run?.loadout'),'and renders only what this Run equipped, from the Run');
- assert.ok(!/>'\+E\(d\.name\)\+'</.test(plate),'the name is not the visual any more');
- // each Slot has a place of its own on the band it belongs to, sized against that band
+ assert.ok(!/>'\+E\(d\.name\)\+'</.test(plate),'the name is not the visual');
+ // one layer over the painting, each Slot placed by the painting's own coordinates, per file
+ assert.ok(fn('morningScreen').includes('<div class="deco-layer">'),'the Decorations sit in one layer over the room');
+ assert.ok(/\.deco-layer\{[^}]*container-type:size/.test(css),'the layer measures the stage it covers');
+ assert.ok(/\.decoplate\{[^}]*left:calc\(50cqw \+ \(var\(--x\) - \.5\) \* 100cqh \* var\(--ar\)\)/.test(css),'x follows the cover-cropped painting');
  for(const slot of D.decorationSlots){
-  const rule=(css.match(new RegExp('\\.decoplate\\.'+slot+'\\{([^}]*)\\}'))||[])[1];
-  assert.ok(rule,slot+' has a placement rule');
-  assert.ok(/width:\d+%/.test(rule),slot+' is sized against its band, not in fixed pixels');
+  const phone=(css.match(new RegExp('\\n\\.decoplate\\.'+slot+'\\{(--x:[^}]*)\\}'))||[])[1];
+  const wide=(css.match(new RegExp('\\n \\.decoplate\\.'+slot+'\\{(--x:[^}]*)\\}'))||[])[1];
+  assert.ok(phone&&/--y:/.test(phone)&&/--w:/.test(phone),slot+' has a place on the phone painting');
+  assert.ok(wide&&/--y:/.test(wide)&&/--w:/.test(wide),slot+' has a place on the wide painting');
  }
- assert.ok(/\.decoplate .deco-art\{[^}]*image-rendering:pixelated/.test(css),'the drawing is not smoothed');
+ assert.ok(/\.decoplate \.deco-art\{[^}]*image-rendering:pixelated/.test(css),'the picture is not smoothed');
 });
 
 /* UI-Q-v28-21 — STORE-GROWTH VISUAL TRACES, controlled-state acceptance.
@@ -1389,10 +1389,8 @@ test('UI-Q-v28-21: the trace is presentation only and owns no state of its own',
  const Meta=globalThis.Meta,drawn=D.decorationSlots.map(s=>plate(s));
  for(const slot of D.decorationSlots)Meta.equipDecoration(g.account,slot,null);
  assert.deepEqual(D.decorationSlots.map(s=>plate(s)),drawn,'an Account unequip cannot reach a Run already started');
- // and the store bands ask for every Slot, so no equipped Decoration is unreachable on screen
- const morning=fn('morningScreen');
- for(const slot of D.decorationSlots)
-  assert.ok(morning.includes("decoPlate('"+slot+"')"),slot+' has a place on the store screen');
+ // and the store asks for every Slot, so no equipped Decoration is unreachable on screen
+ assert.ok(fn('morningScreen').includes('D.decorationSlots.map(decoPlate)'),'every Slot has a place on the store screen');
 });
 
 // UI_UX_v2.8 §PURCHASE CONFIRMATION. Spending permanent Capital is a two-step action, and the

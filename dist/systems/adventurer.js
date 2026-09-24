@@ -63,7 +63,7 @@ function masterySpawnBonus(r,account,jobId){
  return 0;
 }
 function create(r,index,day,account,opts={}){
- const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?[51,30,14,4,1]:[60,27,10,2.5,.5]);
+ const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?[54,27,14,4,1]:[60,27,10,2.5,.5]);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
  const spawnLevel=Math.max(1,r.int(1,3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
  const level=spawnLevel+masterySpawnBonus(r,account,job.id)+(opts.levelBonus||0);

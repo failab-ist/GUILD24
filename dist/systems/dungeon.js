@@ -415,7 +415,7 @@ function resolve(n,d,r,facilities=[],run){
  const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))})),{key:'supply',weight:p.supply.deficit*.02/Math.max(1,Math.sqrt(d.hazards.length))}];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  let escapeRoll,escapeChance,injuryRoll,deathRoll,rescued=false,deathChance=0,avoidedDeath=false;
- const aidKitReady=!!run&&!run.aidKitUsed&&Object.values(run.loadout||{}).includes('firstAidKit');
+ const aidKitReady=!!run&&(run.aidKitSaves||0)<D.decorationParams.firstAidKit.saves&&Object.values(run.loadout||{}).includes('firstAidKit');
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<clamp(e.escape,.0,.96);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
@@ -473,8 +473,8 @@ function resolve(n,d,r,facilities=[],run){
   }
  }
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
- /* 비상 구급함: once per Run, a Death that no carried Insurance prevented becomes 중상. */
- if(outcome==='사망'&&aidKitReady){avoidedDeath=true;outcome='중상';rescued=true;run.aidKitUsed=true;p.why.push('비상 구급함이 사망을 중상으로 변경');p.events.push({id:'aidKit',items:[],text:'비상 구급함이 사망을 중상으로 바꿨다.'});}
+ /* 구급품 진열장: up to twice per Run, a Death that no carried Insurance prevented becomes 중상. */
+ if(outcome==='사망'&&aidKitReady){avoidedDeath=true;outcome='중상';rescued=true;run.aidKitSaves=(run.aidKitSaves||0)+1;p.why.push('구급품 진열장이 사망을 중상으로 변경');p.events.push({id:'aidKit',items:[],text:'구급품 진열장이 사망을 중상으로 바꿨다.'});}
  if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
  /* 강골 alone reaches this branch now. ITEM_v2.7 §INSURANCE HIERARCHY moved 구급키트 off the
     injuryGuard channel entirely - it may not change the resolved Outcome and carries no hidden

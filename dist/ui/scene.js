@@ -79,81 +79,15 @@ function counter(){
     instead of hovering over a strip of empty floor above it. */
  return svg(360,90,s,'band-art');
 }
-/* ---- Decorations: one drawing per Decoration, hung on the store it belongs to ----
-   UI_UX_v2.8 §LIVE STORE. Drawn on the same 4px grid and out of the same palette the room
-   already uses — the shelving's brass rails, the cold case's glass, the register's casing,
-   the PB signage green — so an equipped Decoration reads as a fitting of this store rather
-   than a sticker on it. Each is small enough to sit at its Slot's own corner without
-   covering the surface the interface reads (the DAY sign, the till, the window, the board).
-   No <text>: the name is read in 점포 관리, and drawn glyphs would bind the store scene to
-   the font subset. */
-function decoSign(){        /* 새벽배송 안내판 — a delivery notice board on two straps */
- let s=r(10,0,4,7,'#4a3a24')+r(44,0,4,7,'#4a3a24');
- s+=r(2,6,54,30,'#2f7a4d')+r(2,6,54,3,'#7ddc9f')+r(2,33,54,3,'#12301f')+r(2,36,54,2,'#0d2418');
- s+=r(7,13,28,3,'#e9f7ee')+r(7,19,20,3,'#bfe6cd')+r(7,25,24,3,'#bfe6cd');
- s+=r(38,18,10,3,'#f2e7c2')+r(46,15,3,3,'#f2e7c2')+r(49,18,3,3,'#f2e7c2')+r(46,21,3,3,'#f2e7c2');
- return decoSvg(58,40,s);
-}
-function decoPlaque(){      /* 길드 제휴 현판 — the guild mark struck into a brass plate */
- let s=r(0,0,36,36,'#8a6a2c')+r(3,3,30,30,'#c8a35e')+r(3,3,30,2,'#e3c78c')+r(3,31,30,2,'#5c4419');
- s+=r(6,6,24,24,'#3b2f21')+r(12,11,12,3,'#c8a35e')+`<path d="M12 14H24L18 24Z" fill="#c8a35e"/>`;
- s+=r(5,5,2,2,'#6b5029')+r(29,29,2,2,'#6b5029');
- return decoSvg(36,36,s);
-}
-function decoSafe(){        /* 알뜰 금고 — the float's own strongbox, under the register */
- let s=r(0,2,40,34,'#39434b')+r(0,2,40,3,'#66737d')+r(0,33,40,3,'#232a30');
- s+=r(5,7,24,24,'#4d5157')+r(7,9,20,20,'#39434b')+r(4,9,2,4,'#232a30')+r(4,25,2,4,'#232a30');
- s+=r(14,16,6,6,'#c8a35e')+r(16,13,2,4,'#c8a35e')+r(24,16,3,8,'#c8a35e');
- s+=r(32,12,5,2,'#1a2025')+r(31,24,7,2,'#c8a35e')+r(31,27,7,2,'#c8a35e')+r(31,30,7,2,'#e3c78c');
- return decoSvg(40,36,s);
-}
-function decoCase(){        /* 프리미엄 쇼케이스 — a lit glass case, built like the cold case */
- let s=r(0,0,44,52,'#3f3020')+r(0,0,44,3,'#c8a35e')+r(3,3,38,42,'#4d6b73');
- s+=r(4,4,17,40,'#8fb9c0',' opacity="0.45"')+r(23,4,17,40,'#8fb9c0',' opacity="0.45"')+r(21,3,2,42,'#2c3a40');
- s+=r(4,17,36,3,'#c8a35e')+r(4,31,36,3,'#c8a35e');
- s+=r(7,8,6,9,'#a58bbd')+r(16,8,6,9,'#d8c98a')+r(26,8,6,9,'#c0705c')+r(34,9,5,8,'#7fa8c4');
- s+=r(7,22,5,9,'#d9a05e')+r(15,22,6,9,'#8fb4a0')+r(25,23,6,8,'#cf8f8f')+r(33,22,5,9,'#d8c98a');
- s+=r(6,5,3,38,'#ffffff2e')+r(0,45,44,7,'#6b4a2e')+r(0,50,44,2,'#3c2817');
- return decoSvg(44,52,s);
-}
-function decoMemorial(){    /* 길드 추모 게시판 — a dark board of pinned names, a candle beside it */
- let s=r(10,0,4,7,'#4a3a24')+r(44,0,4,7,'#4a3a24');
- s+=r(2,6,54,30,'#3a2c1e')+r(2,6,54,3,'#6b5334')+r(2,33,54,3,'#1f170f')+r(2,36,54,2,'#140f09');
- s+=r(6,11,30,20,'#e6dcc0')+r(6,11,30,2,'#f4ecd6')+r(19,9,4,4,'#9a2f2f');
- s+=r(9,16,20,2,'#5c4a36')+r(9,20,16,2,'#5c4a36')+r(9,24,22,2,'#5c4a36')+r(9,28,12,2,'#5c4a36');
- s+=r(43,20,6,13,'#efe6cf')+r(43,20,6,2,'#fffaf0')+r(45,15,2,5,'#f2b544')+r(45,13,2,3,'#ffe08a')+r(41,33,10,3,'#8a6a2c');
- return decoSvg(58,40,s);
-}
-function decoInfirmary(){   /* 의무실 현판 — a white plate with the guild infirmary's red cross */
- let s=r(0,0,36,36,'#8a6a2c')+r(3,3,30,30,'#c8a35e')+r(3,3,30,2,'#e3c78c')+r(3,31,30,2,'#5c4419');
- s+=r(6,6,24,24,'#eef0ea')+r(6,6,24,2,'#ffffff')+r(6,28,24,2,'#c9ccc4');
- s+=r(15,9,6,18,'#b83a3a')+r(9,15,18,6,'#b83a3a')+r(15,9,6,2,'#d45a5a')+r(9,15,6,2,'#d45a5a');
- s+=r(5,5,2,2,'#6b5029')+r(29,29,2,2,'#6b5029');
- return decoSvg(36,36,s);
-}
-function decoAidKit(){      /* 비상 구급함 — the red box kept under the register */
- let s=r(13,0,14,3,'#39434b')+r(13,0,3,8,'#39434b')+r(24,0,3,8,'#39434b');
- s+=r(0,6,40,30,'#a8322f')+r(0,6,40,3,'#d0554f')+r(0,33,40,3,'#6e1f1d');
- s+=r(0,17,40,2,'#6e1f1d')+r(17,11,6,18,'#f4efe6')+r(11,17,18,6,'#f4efe6');
- s+=r(3,10,3,3,'#c8a35e')+r(34,10,3,3,'#c8a35e')+r(3,28,3,3,'#c8a35e')+r(34,28,3,3,'#c8a35e');
- return decoSvg(40,36,s);
-}
-function decoRack(){        /* 훈련용 무기 진열대 — a wooden rack of practice arms */
- let s=r(0,0,44,4,'#6b4a2e')+r(0,0,44,2,'#8f6a44')+r(2,4,4,44,'#5a3d24')+r(38,4,4,44,'#5a3d24');
- s+=r(9,6,4,32,'#c9b48a')+r(7,30,8,3,'#6b4a2e')+r(10,33,2,6,'#4a3a24');
- s+=r(19,6,3,40,'#9a7a4e')+r(18,6,5,4,'#7c8a93');
- s+=r(27,12,10,14,'#8a5a32')+r(27,12,10,2,'#b0814f')+r(30,16,4,6,'#c8a35e');
- s+=r(6,40,32,3,'#6b4a2e')+r(0,45,44,7,'#6b4a2e')+r(0,50,44,2,'#3c2817');
- return decoSvg(44,52,s);
-}
-/* contain, never slice: a Decoration is one object and cropping it would cut the object in
-   half rather than reveal more room, which is what the bands do. */
-const decoSvg=(w,h,body)=>`<svg class="deco-art" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" aria-hidden="true">${body}</svg>`;
-const decoArt={dawnSign:decoSign,guildPlaque:decoPlaque,thriftSafe:decoSafe,premiumCase:decoCase,
- memorialBoard:decoMemorial,infirmaryPlaque:decoInfirmary,firstAidKit:decoAidKit,trainingRack:decoRack};
-/* Resolves through slot() like every other scene asset, so a production PNG replaces one by
-   registering manifest['deco.<id>'] and no screen changes. */
-function decoration(id){const draw=decoArt[id];return draw?slot('deco.'+id,draw,'deco-art'):'';}
+/* ---- Decorations: one authored picture per Decoration --------------------------------
+   UI_UX_v2.8 §LIVE STORE. Each Decoration is a pixel-art SVG asset file under
+   assets/deco/ (User 2026-09-24: authored art, not drawing code). They are drawn on the
+   painted room's palette with a dark outline, so an equipped Decoration reads as a fitting of
+   this store. No <text> in the files: the name is read in 점포 관리. The picture resolves through
+   slot() like every other scene asset, so replacing a file changes no screen. */
+const DECO_IDS=['dawnSign','guildPlaque','thriftSafe','premiumCase','trainingRack','infirmaryPlaque','memorialBoard','firstAidKit'];
+const decoArt=Object.fromEntries(DECO_IDS.map(id=>[id,'ui/assets/deco/'+id+'.svg']));
+function decoration(id){if(!decoArt[id])return '';manifest['deco.'+id]??=decoArt[id];return slot('deco.'+id,()=>'','deco-art');}
 /* ---- a cardboard stock box that holds an item pictogram ---- */
 function crate(inner,size=48){
  return `<span class="crate-art" style="--sz:${size}px"><svg viewBox="0 0 48 48" preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true">`

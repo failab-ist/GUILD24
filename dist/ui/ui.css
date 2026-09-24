@@ -2210,17 +2210,36 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .matrix td.open{color:#6b6152}
 .matrix td.tally{font-variant-numeric:tabular-nums;color:#cbb98d;white-space:nowrap}
 .matrix tr.locked th,.matrix tr.locked td{opacity:.45}
-/* UI_UX_v2.8 §LIVE STORE: the equipped Decoration, drawn at its own fixed spot on the band
-   it belongs to. Sized as a percentage of the band so 360 / 390 / desktop place it on the
-   same piece of room the art puts there, instead of a fixed box drifting as the room scales.
-   Each spot is chosen to miss what the interface reads: the DAY sign, the till, the dawn
-   window, the price board, the branch plate. */
-.decoplate{position:absolute;z-index:3;line-height:0;pointer-events:none}
+/* UI_UX_v2.8 §LIVE STORE: the equipped Decoration, at its own fixed spot in the room. Each
+   spot misses what the interface reads: the DAY sign, the board, the till, the branch plate. */
+/* USER 2026-09-24: the room is a painting, so each Decoration is seated on a surface the
+   painting draws - the sign hangs from the ceiling between two fixtures, the plaque is on bare
+   wall, the display and counter pieces stand on the counter top either side of the till - and
+   it is placed in the painting's own coordinates. The painting is `cover` on the stage and at
+   every shipped width only its sides are cropped, so a point at (x, y) of the file is at
+   left = 50cqw + (x - .5) * 100cqh * aspect and top = y * 100cqh of the stage. --x / --y are
+   fractions of the file, --w a fraction of the file's width, --ar the file's aspect. Pieces
+   that stand on something are placed by their foot (--y is the surface). */
+.deco-layer{position:absolute;inset:0;z-index:1;pointer-events:none;container-type:size;--ar:.5628}
+.decoplate{position:absolute;line-height:0;pointer-events:none;
+ left:calc(50cqw + (var(--x) - .5) * 100cqh * var(--ar));width:calc(var(--w) * 100cqh * var(--ar));
+ filter:drop-shadow(0 3px 0 #0000004d)}
 .decoplate .deco-art{display:block;width:100%;height:auto;image-rendering:pixelated}
-.decoplate.sign{left:3%;bottom:0;width:16%}
-.decoplate.wall{left:5%;top:19%;width:10%}
-.decoplate.display{left:40%;bottom:2%;width:15%}
-.decoplate.counter{left:2%;bottom:8%;width:11%}
+.decoplate.sign,.decoplate.wall{top:calc(var(--y) * 100cqh)}
+.decoplate.counter,.decoplate.display{bottom:calc((1 - var(--y)) * 100cqh)}
+/* phone file (941x1672): ceiling 0-18.6, counter top 74.2-76.0 */
+.decoplate.sign{--x:.15;--y:.113;--w:.16}
+.decoplate.wall{--x:.76;--y:.55;--w:.11}
+.decoplate.display{--x:.115;--y:.755;--w:.13}
+.decoplate.counter{--x:.76;--y:.755;--w:.13}
+/* wide file (1672x941): ceiling 0-19, counter top 82.7-85.2 */
+@media(min-width:1024px){
+ .deco-layer{--ar:1.7768}
+ .decoplate.sign{--x:.29;--y:.093;--w:.08}
+ .decoplate.wall{--x:.629;--y:.44;--w:.038}
+ .decoplate.display{--x:.222;--y:.835;--w:.085}
+ .decoplate.counter{--x:.70;--y:.835;--w:.07}
+}
 /* UI_UX_v2.8 §DECORATION UI. Reuses the unlock board's block rhythm and the .effects row
    shape rather than introducing a new card language for one panel. */
 /* The panel is rendered as a child of the codex's `.unlock-grid`, which becomes two and then

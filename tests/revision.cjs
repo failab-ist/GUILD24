@@ -296,11 +296,17 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.balance.decorationStartGold,300,'counter is the approved starting Gold');
- assert.equal(DATA.balance.wallVisitorChance,.10,'wall is the approved Morning chance');
+ assert.equal(DATA.balance.decorationStartGold,500,'counter is the approved starting Gold (User 2026-09-24)');
+ assert.equal(DATA.balance.wallVisitorChance,.20,'wall is the approved Morning chance (User 2026-09-24)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  assert.ok(/wears\('dawnSign'\)\?1:0/.test(src),'sign adds exactly one ORDER candidate');
  assert.ok(/wears\('premiumCase'\)/.test(src),'display reuses the premium rare-NPC weighting');
+ /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so
+    its copy can say 희귀 이상 13% -> 19% and be exactly true. */
+ const adv=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
+ const nums=t=>t.slice(1,-1).split(",").map(Number),w=nums(adv.match(/opts\.premium\?(\[[^\]]+\])/)[1]),base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(w[1],base[1],'유망 is untouched');
+ assert.equal(base[2]+base[3]+base[4],13);assert.equal(w[2]+w[3]+w[4],19,'희귀 이상 13% -> 19%');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -
     otherwise a loaded `guild` or `premium` Run silently plays by retired rules. */

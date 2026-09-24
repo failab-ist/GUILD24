@@ -533,7 +533,7 @@ ORDER offer candidates +1
 
 ### wall — 길드 제휴 현판
 ```text
-each Morning, 10% chance of visitors +1
+each Morning, 20% chance of visitors +1
 ```
 
 The roll happens once per Morning, alongside the ordinary visitor generation, and is independent
@@ -541,17 +541,17 @@ of every other visitor source. It is a chance, not a guarantee: most Days it add
 
 ### counter — 알뜰 금고
 ```text
-Run starting Gold +300G
+Run starting Gold +500G
 ```
 
 ### display — 프리미엄 쇼케이스
 ```text
-rare-NPC rarity weights = [51, 30, 14, 4, 1]
+rare-NPC rarity weights = [54, 27, 14, 4, 1]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-This is the exact baseline for the existing Premium Start Contract positive spawn-weighting
-channel reused by this Decoration. It changes only the rarity weights used by the ordinary NPC spawn
+Only Rare and above are lifted (ordinary [60, 27, 10, 2.5, 0.5]): Rare+ 13% -> 19%, 유망 unchanged
+(User decision 2026-09-24). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active. It adds no extra spawn, no extra rarity roll and no new
 Gameplay RNG draw.
 
@@ -564,9 +564,9 @@ Do not carry the retired Start Contract negative sides into these Decorations:
 
 User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
 
-### sign — 길드 추모 게시판
+### sign — 훈련소 제휴 간판 (id trainingRack)
 ```text
-the Death count that ends a Run +1 (10 -> 11)
+every adventurer created while it is worn: spawn Level +1
 ```
 
 ### wall — 의무실 현판
@@ -577,17 +577,20 @@ an adventurer who arrives with an ordinary Injury (not 중상) is healed on arri
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and
 is shown on the SALE counter and counted in the Day's record (UI_UX owns the presentation).
 
-### counter — 비상 구급함
+### counter — 추모 방명록 (id memorialBoard)
 ```text
-once per Run, a Death that no carried Insurance prevented becomes 중상
+the Death count that ends a Run +1 (10 -> 11)
 ```
 
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the
 RESULT-PROOF counterfactual reads the same availability.
 
-### display — 훈련용 무기 진열대
+Placement (User decision 2026-09-24): the survival alternative with the larger measured effect
+sits in the dearer Slot; ids are kept from the first placement, names and art follow the Slot.
+
+### display — 구급품 진열장 (id firstAidKit)
 ```text
-every adventurer created while it is worn: spawn Level +1
+up to twice per Run, a Death that no carried Insurance prevented becomes 중상
 ```
 
 ### Prices — EXACT
@@ -595,10 +598,10 @@ every adventurer created while it is worn: spawn Level +1
 `DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24)
 
 ```text
-sign    새벽배송 안내판 / 길드 추모 게시판   1450 Store Capital
+sign    새벽배송 안내판 / 훈련소 제휴 간판   1450 Store Capital
 wall    길드 제휴 현판 / 의무실 현판        1250 Store Capital
-counter 알뜰 금고 / 비상 구급함            1150 Store Capital
-display 프리미엄 쇼케이스 / 훈련용 무기 진열대  800 Store Capital
+counter 알뜰 금고 / 추모 방명록            1150 Store Capital
+display 프리미엄 쇼케이스 / 구급품 진열장     800 Store Capital
 ```
 
 Both Decorations of a Slot cost the same, so price never decides between them. The display Slot

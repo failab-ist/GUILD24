@@ -508,7 +508,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 **현재**
 > **점포 관리 화면에서는 삭제**
 
-### 길드 추모 게시판 · 의무실 현판 · 비상 구급함 · 훈련용 무기 진열대
+### 훈련소 제휴 간판 · 의무실 현판 · 추모 방명록 · 구급품 진열장
 
 (survival / combat alternatives, User decision 2026-09-24)
 

@@ -351,7 +351,6 @@ Its active reward effect is the exact v2.8 spawn-Level model below.
 ## RETIRED FRANCHISE SYSTEM — INACTIVE ARCHIVE
 Requirements:
 The active Decoration system adds no system for:
-This is the exact baseline for the existing Premium Start Contract positive spawn-weighting
 Its active reward effect is the exact spawn-Level model below.
 ### Exact spawn-Level model
 ```
@@ -488,23 +487,47 @@ running the store and keeping its people alive. Account/Save/data/UI structures 
 two per Slot forever either.
 ## SURVIVAL / COMBAT ALTERNATIVES — EXACT EFFECT IDENTITY
 User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
-### sign — 길드 추모 게시판
 the Death count that ends a Run +1 (10 -> 11)
 ### wall — 의무실 현판
 an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 35% chance
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and
 is shown on the SALE counter and counted in the Day's record (UI_UX owns the presentation).
-### counter — 비상 구급함
-once per Run, a Death that no carried Insurance prevented becomes 중상
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the
 RESULT-PROOF counterfactual reads the same availability.
-### display — 훈련용 무기 진열대
 every adventurer created while it is worn: spawn Level +1
 `DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24)
-sign    새벽배송 안내판 / 길드 추모 게시판   1450 Store Capital
 wall    길드 제휴 현판 / 의무실 현판        1250 Store Capital
-counter 알뜰 금고 / 비상 구급함            1150 Store Capital
-display 프리미엄 쇼케이스 / 훈련용 무기 진열대  800 Store Capital
 Both Decorations of a Slot cost the same, so price never decides between them. The display Slot
 is the cheapest so a first Decoration is within reach around Run 2.
+```
+
+
+## AMENDMENT — Decoration placement by effect, 알뜰 금고 / 제휴 현판 / 쇼케이스 (User decision 2026-09-24)
+
+Survival alternatives re-seated so the stronger effect is in the dearer Slot (new names), 구급품 진열장
+saves twice, 제휴 현판 20%, 알뜰 금고 +500G, 프리미엄 쇼케이스 lifts Rare+ only. Superseded lines of the
+previous amendment were removed from its new block above.
+
+```text
+each Morning, 10% chance of visitors +1
+Run starting Gold +300G
+rare-NPC rarity weights = [51, 30, 14, 4, 1]
+channel reused by this Decoration. It changes only the rarity weights used by the ordinary NPC spawn
+```
+
+```new
+each Morning, 20% chance of visitors +1
+Run starting Gold +500G
+rare-NPC rarity weights = [54, 27, 14, 4, 1]
+Only Rare and above are lifted (ordinary [60, 27, 10, 2.5, 0.5]): Rare+ 13% -> 19%, 유망 unchanged
+(User decision 2026-09-24). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
+### sign — 훈련소 제휴 간판 (id trainingRack)
+### counter — 추모 방명록 (id memorialBoard)
+Placement (User decision 2026-09-24): the survival alternative with the larger measured effect
+sits in the dearer Slot; ids are kept from the first placement, names and art follow the Slot.
+### display — 구급품 진열장 (id firstAidKit)
+up to twice per Run, a Death that no carried Insurance prevented becomes 중상
+sign    새벽배송 안내판 / 훈련소 제휴 간판   1450 Store Capital
+counter 알뜰 금고 / 추모 방명록            1150 Store Capital
+display 프리미엄 쇼케이스 / 구급품 진열장     800 Store Capital
 ```
