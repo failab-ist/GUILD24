@@ -79,7 +79,7 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
  /* ITEM_v2.7 §HAZARD COUNTER BASELINE moves the Fire Main to 쿨링 이온음료 +18; 얼음컵 +10 is
     the Lower response. Every other Main is unchanged. */
  const main={poison:'antidote',bind:'rope',corrosion:'coating',mire:'boots',fire:'ion',fear:'wine',dark:'battery',cold:'heat',whiteout:'snowgoggles'};
- const stat={poison:'survival',corrosion:'survival',fire:'survival',cold:'survival',bind:'mobility',mire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};
+ const stat={poison:'survival',corrosion:'survival',cold:'survival',fire:'mobility',bind:'mobility',mire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};/* v2.9.0: 화염 presses 기동 */
  for(const h of CANON_HAZARDS){
   const counters=DATA.items.filter(i=>(i.effects[h]||0)>0);
   assert.ok(counters.length>=1,h+' has no counter item');
@@ -101,26 +101,7 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
  assert.ok(DATA.itemBy.lava.effects.cold<DATA.itemBy.heat.effects.cold,'HotPack remains the stronger pure-Cold specialist');
 });
 
-test('DUN-Q17: Supply Burden eligibility and the single shared deficit penalty',()=>{
- const g=new Game();g.autosave=false;g.start('vocab-supply');
- const seen={1:new Set(),2:new Set(),3:new Set()};
- for(let day=1;day<30;day++){g.run.day=day;for(const id of ['spider','slime','fire','crypt','snow'])for(const tier of [1,2,3])seen[tier].add(g.makeDungeon(id,tier).requiredSupply);}
- assert.deepEqual([...seen[1]],[0],'T1 never receives Supply Burden');
- assert.deepEqual([...seen[2]].sort(),[0,3],'T2 starts from required Supply 3');
- assert.deepEqual([...seen[3]].sort(),[0,5],'T3 starts from required Supply 5');
- assert.equal(g.makeFinal().requiredSupply,0,'D30 Final rolls no extra Supply Burden');
-
- const n={...g.run.npcs[0],traits:[],pack:[]},d={...g.makeDungeon('spider',2),requiredSupply:5};
- const bare=Dungeon.prepare(n,d),fed=Dungeon.prepare({...n,pack:['rice','premium']},d);
- assert.equal(bare.supply.required,5);assert.ok(bare.supply.deficit>0&&bare.supply.penalty>0);
- assert.equal(fed.supply.deficit,0,'meeting required Supply removes the deficit');
- assert.equal(fed.supply.penalty,0);
- // one shared penalty across the four core stats, and no bonus for excess Supply
- const over=Dungeon.prepare({...n,pack:['premium','premium']},{...d,requiredSupply:1});
- const none=Dungeon.prepare({...n,pack:['premium','premium']},{...d,requiredSupply:0});
- for(const k of Adventurer.keys)assert.equal(over.effects[k],none.effects[k],'excess Supply grants no extra bonus');
-});
-
+/* DUN-Q17 (Supply Burden / deficit penalty) was deleted in v2.9.0: no Gate requires Supply (DUNGEON_HAZARD §SUPPLY -> FATIGUE). */
 test('DUN-Q70/Q71: prepared Power weights and the Hazard Threat curve',()=>{
  /* One source, read by Forecast, Resolve and the Great-Success margin alike. A stale
     .58/.32/.24/.16 stat weighting anywhere is invalid in v2.7. */

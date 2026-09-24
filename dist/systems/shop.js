@@ -125,7 +125,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(this.rng.next()<D.balance.easterChance&&spare.length)n.name=this.rng.pick(spare).name;
   else for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
   s.npcs.push(n);return n;}
- burden(tier){const roll=this.rng.next();return tier===2&&roll<.35?3:tier===3&&roll<.55?5:0;}
+ /* v2.9.0 (User 2026-09-24): no Gate requires Supply - the Supply Burden modifier is gone. The one
+    draw it used to make is kept as a dead draw so every seeded stream and fixture stays identical. */
+ burden(){this.rng.next();return undefined;}
  finalEligible(){return this.run.npcs.filter(n=>n.alive&&n.introduced&&!n.recovery);}
  /* FINAL_EXPEDITION_v2.7 §D25 FINAL STATE GENERATION. The Pair is drawn on a stream derived
     from the run seed, the way the Deep Days and the Boss already are, rather than from the run
@@ -135,10 +137,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  makeFinal(){const s=this.run,base=D.dungeonBy.final;
   const families=new G.RNG(String(s.seed)+':final').shuffle(['spider','slime','fire','crypt','snow']).slice(0,2);
   const hazards=[...new Set(families.flatMap(id=>D.familyTiers[id][1]))];
-  return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,requiredSupply:0,power:D.balance.bossPower/3,reward:2};}
+  return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,requiredSupply:this.burden(tier),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?D.balance.fireCombat:1),reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?D.balance.fireCombat:1),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
@@ -182,7 +184,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(this.has('dawnBulk')){const back=expired.filter(x=>G.Relics.food(D.itemBy[x.item])),refund=back.reduce((a,x)=>a+Math.round((Number(x.cost)||0)*D.relicParams.dawnBulk.refundRate),0);
    s.money+=refund;s.daily.subsidy+=refund;expired=expired.filter(x=>!back.includes(x));s.inventory=s.inventory.filter(x=>!back.includes(x));}
   s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
-  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
+  /* v2.9.0 rest recovery (DUNGEON_HAZARD §SUPPLY -> FATIGUE 6): a Severe-Injury rest day lowers Fatigue by 5, floor 0 */
+  s.npcs.forEach(n=>{if(n.recovery>0){n.fatigue=Math.max(0,(n.fatigue||0)-5);n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
  }
  /* The milestone window, the Final state, and today's Gates. Returns the Family id pool the
     Event's unknown Gate draws from, or null on the Final Day, which has no more Morning left. */

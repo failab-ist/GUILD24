@@ -1817,9 +1817,8 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  }
  // with neither system moving, there is nothing derived to report
  assert.deepEqual(Presentation.preview(mk({}),gate({}),[],'candy').derived,[],'no system moved, no system row');
- // relieving a Supply Deficit is reported as the Supply Deficit, not as the Item
- const relief=Presentation.preview(mk({}),gate({requiredSupply:3}),[],'candy');
- assert.deepEqual(relief.derived.map(x=>x.label),['보급 부족 완화'],'Supply Deficit relief names itself');
+ // v2.9.0: no Gate requires Supply, so there is no Supply Deficit and no relief row (DUNGEON_HAZARD §SUPPLY -> FATIGUE)
+ assert.deepEqual(Presentation.preview(mk({}),gate({requiredSupply:3}),[],'candy').derived,[],'a stale requiredSupply field on a Gate moves nothing');
  // crossing a Fatigue band is reported as Fatigue
  const rested=Presentation.preview(mk({fatigue:10}),gate({}),[],'candy');
  assert.deepEqual(rested.derived.map(x=>x.label),['피로 완화'],'a crossed Fatigue band names itself');
@@ -1830,7 +1829,7 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  assert.ok(own.direct.some(x=>x.key==='combat'),'a real direct Stat is the Item\'s own');
  assert.deepEqual(own.derived,[],'and brings no system row with it');
  // the hidden Supply-deficit formula is never exposed by the attribution
- for(const r of relief.derived)assert.ok(!/[0-9]+%|penalty|deficit/i.test(r.text),'the row names the channel, not the formula: '+r.text);
+ for(const r of rested.derived)assert.ok(!/[0-9]+%|penalty|deficit/i.test(r.text),'the row names the channel, not the formula: '+r.text);
  /* SA-Q30: the two analytical group names that used to sit over the direct/derived rows
     (이 상품이 직접 / 보급이 상태에 미치는 영향) were the label-density bug v2.8 closes - one
     heading (판매 후 변화) now covers the whole list, and only the `effects`/`effects derived`

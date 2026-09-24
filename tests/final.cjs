@@ -31,7 +31,7 @@ test('FINAL 2: the Hazard Pool is exactly the two Families T2 keys at scale 4.6'
   const expected=[...new Set(d.families.flatMap(f=>DATA.familyTiers[f][1]))];
   assert.deepEqual([...d.hazards].sort(),expected.sort(),'union of the existing T2 Hazards, nothing else');
   assert.equal(d.scale,4.6,'v1 boss scale 5.5 is not used');
-  assert.equal(d.requiredSupply,0,'D30 rolls no additional Supply Burden');
+  assert.equal(d.requiredSupply,undefined,'v2.9.0: no Gate carries a Supply requirement, the Final included');
   assert.ok(!d.hazards.includes('supply'),'FIRE combat power is not a Hazard Pool entry');
  }
 });

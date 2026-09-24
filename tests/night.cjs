@@ -354,22 +354,22 @@ test('NIGHT_CLOSING v2.7 §ORDINARY INJURY RESULT CONTINUITY: only a safe return
  for(const o of ['성공','퇴각','부상'])assert.ok(seen.has(o),'the sweep actually reached '+o);
 });
 
-test('DUNGEON_HAZARD v2.7 §EXCESS SUPPLY: required first, then Fatigue, then the result buffer',()=>{
- const d={...D.dungeonBy.slime,day:18,tier:2,hazards:['poison'],scale:1,power:60,reward:40,requiredSupply:3};
+test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the result buffer, no requirement',()=>{
+ const d={...D.dungeonBy.slime,day:18,tier:2,hazards:['poison'],scale:1,power:60,reward:40};
  const base=Adventurer.create(new RNG('excess'),1,10,Meta.fresh());
  const run=(fatigue,pack)=>{const n={...JSON.parse(JSON.stringify(base)),fatigue,traits:[],pack,records:[]};
   Dungeon.resolve(n,d,new RNG('excess-run'));return n.records[n.records.length-1];};
- const baselines={'성공':3,'대성공':3,'퇴각':5,'부상':6,'중상':0,'사망':0};
- for(const fatigue of [0,4,9,14,20])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','premium']]){
+ const baselines={'성공':5,'대성공':5,'퇴각':8,'부상':10,'중상':0,'사망':0};
+ for(const fatigue of [0,4,9,14,20,33,40])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','premium']]){
   const r=run(fatigue,pack);
-  assert.equal(r.excessSupply,Math.max(0,r.preparedSupply-r.requiredSupply),'excess is what survives the required Supply');
-  assert.equal(r.preRecovery,Math.min(fatigue,r.excessSupply),'leftover Supply removes current Fatigue 1:1');
+  assert.equal(r.requiredSupply,undefined,'no Gate requires Supply');assert.equal(r.excessSupply,undefined,'so there is no excess');
+  assert.equal(r.preRecovery,Math.min(fatigue,r.preparedSupply),'Supply removes current Fatigue 1:1');
   assert.equal(r.fatigueBeforeExpedition,fatigue-r.preRecovery,'departure Fatigue is what preRecovery left');
-  assert.equal(r.remainingSupplyBuffer,r.excessSupply-r.preRecovery,'the same Supply is never spent twice');
-  assert.equal(r.rawOutcomeFatigueGain,baselines[r.outcome],'the raw gain is the v2.7 Outcome baseline');
+  assert.equal(r.remainingSupplyBuffer,r.preparedSupply-r.preRecovery,'the same Supply is never spent twice');
+  assert.equal(r.rawOutcomeFatigueGain,baselines[r.outcome],'the raw gain is the v2.9.0 Outcome baseline');
   assert.equal(r.actualOutcomeFatigueGain,Math.max(0,r.rawOutcomeFatigueGain-r.remainingSupplyBuffer),'the buffer absorbs the gain 1:1');
   assert.equal(r.outcomeBufferUsed,r.rawOutcomeFatigueGain-r.actualOutcomeFatigueGain,'what the buffer used is what the gain lost');
-  assert.equal(r.finalFatigue,Math.max(0,Math.min(20,r.fatigueBeforeExpedition+r.actualOutcomeFatigueGain)),'final Fatigue is clamped departure + actual gain');
+  assert.equal(r.finalFatigue,Math.max(0,Math.min(40,r.fatigueBeforeExpedition+r.actualOutcomeFatigueGain)),'final Fatigue is clamped (0~40) departure + actual gain');
   assert.equal(r.netFatigueDelta,r.finalFatigue-r.beforeFatigue,'the net delta is not the actual gain');
   assert.equal(r.fatigueRecovery,undefined,'the ambiguous combined field is gone');
   assert.equal(r.postOutcomeFatigueGain,undefined,'no second live name for the same value');
@@ -382,19 +382,40 @@ test('DUNGEON_HAZARD v2.7 §EXCESS SUPPLY: required first, then Fatigue, then th
   if(r.outcome==='중상'||r.outcome==='사망')assert.equal(r.rawOutcomeFatigueGain,0,'중상/사망 result Fatigue stays 0');}
 });
 
-test('DUNGEON_HAZARD v2.7 §FATIGUE STAT PENALTY: the two bands are -15% and -40%',()=>{
- const d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:40,reward:40,requiredSupply:0};
+test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 0~40, judged at departure',()=>{
+ const d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:40,reward:40};
  const base=Adventurer.create(new RNG('bands'),1,10,Meta.fresh());
- const at=f=>Dungeon.prepare({...JSON.parse(JSON.stringify(base)),fatigue:f,traits:[],pack:[]},d).effects;
- const clear=at(9),mid=at(10),over=at(20);
- assert.ok(Math.abs(mid.mobility/clear.mobility-0.85)<1e-9,'10~19 is 기동 -15%');
- assert.ok(Math.abs(mid.spirit/clear.spirit-0.85)<1e-9,'10~19 is 정신 -15%');
- assert.ok(Math.abs(over.mobility/clear.mobility-0.60)<1e-9,'20 is 기동 -40%');
- assert.ok(Math.abs(over.spirit/clear.spirit-0.60)<1e-9,'20 is 정신 -40%');
- assert.equal(mid.combat,clear.combat,'Fatigue does not touch 투력');
- assert.equal(mid.survival,clear.survival,'Fatigue does not touch 강인함');
+ const npc=(f,pack=[])=>({...JSON.parse(JSON.stringify(base)),fatigue:f,traits:[],pack});
+ const at=f=>Dungeon.prepare(npc(f),d).effects,clear=at(9);
+ const near=(a,b)=>Math.abs(a-b)<1e-9;
+ for(const [f,ms,cs,name] of [[9,1,1,'정상'],[10,.85,1,'지침'],[19,.85,1,'지침'],[20,.6,1,'과로'],[29,.6,1,'과로'],[30,.6,.8,'소진'],[39,.6,.8,'소진'],[40,.6,.6,'탈진']]){
+  const e=at(f);
+  assert.ok(near(e.mobility/clear.mobility,ms)&&near(e.spirit/clear.spirit,ms),f+' -> 기동/정신 ×'+ms);
+  assert.ok(near(e.combat/clear.combat,cs)&&near(e.survival/clear.survival,cs),f+' -> 투력/강인함 ×'+cs);
+  assert.equal(Dungeon.fatigueBand(f).name,name,f+' is '+name);}
+ // Fatigue 40 adds the +10%p failure-Death term like an injured departure, cap raised the same way
+ const risk39=Dungeon.failureDeathRisk(npc(39),{...d,power:400}),risk40=Dungeon.failureDeathRisk(npc(40),{...d,power:400});
+ assert.ok(near(risk40.chance,Math.min(.40,risk40.healthy+.10))&&risk40.chance>risk39.chance,'탈진 is +10%p over its own healthy chance, under a 40% cap');
+ const both=Dungeon.failureDeathRisk({...npc(40),injury:1},{...d,power:400});
+ assert.ok(both.chance<=.50+1e-9&&near(both.chance,Math.min(.50,both.healthy+.20)),'injured and 탈진 together: +20%p under 50%');
+ // the band is judged after preRecovery: Supply 3 at 22 departs at 19 (지침), not 22 (과로)
+ const fed=Dungeon.prepare(npc(22,['candy']),d).effects;
+ assert.equal(fed.fatigueBeforeExpedition,19);assert.ok(near(fed.mobility/clear.mobility,.85),'judged on departure Fatigue');
+ // clamp: a 성공 at 36 with no Supply ends at 40, not 41
+ for(let i=0;i<200;i++){const n={...npc(36),records:[]};Dungeon.resolve(n,{...d,power:1},new RNG('clamp-'+i));const r=n.records.at(-1);
+  if(r.outcome==='성공'||r.outcome==='대성공'){assert.equal(r.finalFatigue,40,'clamped at 40');break;}}
  const src=read('dist/systems/dungeon.js');
  assert.ok(!/기동\/정신 -10%|기동\/정신 -25%/.test(src),'no superseded v2.6 Fatigue band copy survives');
+ assert.ok(!/requiredSupply|excessSupply|supply\.deficit|supplyDeficit|\.penalty/.test(src),'no Supply requirement, excess or deficit penalty survives in the engine');
+});
+
+test('DUNGEON_HAZARD v2.9.0 rest recovery (DUN-Q-v29-1): a Severe-Injury rest day lowers Fatigue by 5, floor 0; no other morning moves it',()=>{
+ const g=new Game();g.autosave=false;g.start('rest-recovery');const n=g.run.npcs[0],m=g.run.npcs[1];
+ n.recovery=2;n.injury=2;n.status='중상';n.fatigue=12;m.recovery=0;m.fatigue=7;
+ g.morningReset();assert.equal(n.fatigue,7,'first rest day: 12 -> 7');assert.equal(n.recovery,1);assert.equal(m.fatigue,7,'a healthy adventurer gets no morning recovery');
+ g.morningReset();assert.equal(n.fatigue,2,'second rest day: 7 -> 2');assert.equal(n.recovery,0);assert.equal(n.injury,0);
+ g.morningReset();assert.equal(n.fatigue,2,'back on the roster: no further change');
+ const z=g.run.npcs[2];z.recovery=1;z.injury=2;z.fatigue=3;g.morningReset();assert.equal(z.fatigue,0,'floor 0');
 });
 
 test('ITEM_v2.7 §INSURANCE HIERARCHY: 구급키트 is Aftercare, never an Outcome change',()=>{
@@ -455,7 +476,7 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
- assert.deepEqual(Dungeon.DEATH,{combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40},
+ assert.deepEqual(Dungeon.DEATH,{combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40,exhausted:.10},
   'the shipped coefficients are the canonical baseline');
  // the two deficits are the only inputs, and each one alone raises the chance
  const weak=at(1,0).risk,strong=at(400,0).risk;
@@ -614,8 +635,8 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Stats, never post-expe
 
 test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the post-Outcome band',()=>{
  /* n.fatigue is mutated to its post-Outcome value (finalFatigue) BEFORE resultProof() runs.
-    Departure Fatigue 18 sits in the 10-19 (-15%) band; the forced 부상 Outcome's own +6
-    Fatigue gain crosses it into the 20 (-40%) band by the time heroProof is computed - if the
+    Departure Fatigue 18 sits in the 10-19 (-15%) band; the forced 부상 Outcome's own +10
+    Fatigue gain (v2.9.0) crosses it into the 20~29 (-40%) band by the time heroProof is computed - if the
     shadow read that live, post-Outcome Fatigue instead of the frozen departure figure, its
     escape-chance arithmetic would be computed on the WRONG band and the calibrated roll below
     (derived once, from Dungeon.prepare() at the DEPARTURE Fatigue) would no longer land where
@@ -635,7 +656,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the pos
  const n=base();
  const r=Dungeon.resolve(n,hard,scripted([0.5,0.0001,0.999,roll,0.25,0.999,0.999]),[]);
  assert.equal(r.outcome,'부상','WITH the Item, escape succeeds into the harsher .13 threshold and stays 부상');
- assert.equal(r.finalFatigue,20,'sanity: the Outcome\'s own Fatigue gain really did cross into the 20 band downstream of departure');
+ assert.equal(r.finalFatigue,24,'sanity: 18 - 4 (초코바 피로 회복) = 14 at departure, and the Outcome\'s own +10 crosses into the 20~29 band downstream of departure');
  assert.ok(r.heroProof?.outcome?.items?.includes('choco'),
   'proof still credits 초코바 off the DEPARTURE (10-19 band) Fatigue, not the post-Outcome (20 band) figure');
  assert.equal(r.heroProof.outcome.worse,'중상','and names the worse tier losing 초코바 would have reached');

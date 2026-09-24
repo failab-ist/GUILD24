@@ -99,23 +99,29 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
 }
 
 /* ---- 4. Supply / Fatigue state --------------------------------------------------------
-   DUNGEON_HAZARD v2.7 §EXCESS SUPPLY: required Supply is paid first, what is left over
-   removes current Fatigue 1:1, and only what survives THAT becomes the buffer the outcome
-   gain is charged against once the Outcome actually exists. The old single fatigueRecovery
-   spent the same Supply twice over - it cut departure Fatigue and left nothing named for
-   the result - so the two halves are separate fields. */
-function supplyState(n,d,finalSupply){
- const required=d.requiredSupply||0,preparedSupply=finalSupply;
- const excessSupply=Math.max(0,preparedSupply-required);
- const currentFatigue=n.fatigue||0;
- const preRecovery=Math.min(currentFatigue,excessSupply);
+   DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE (User 2026-09-24): every Supply point is Fatigue
+   recovery. No Gate requires Supply, so there is no deficit, no penalty and no excess: current
+   Fatigue is removed first (1:1, before departure) and only what survives THAT becomes the buffer
+   the outcome gain is charged against once the Outcome actually exists. The two halves stay
+   separate fields so the same Supply is never spent twice. */
+function supplyState(n,finalSupply){
+ const preparedSupply=finalSupply,currentFatigue=n.fatigue||0;
+ const preRecovery=Math.min(currentFatigue,preparedSupply);
  const fatigueBeforeExpedition=currentFatigue-preRecovery;
- const remainingSupplyBuffer=excessSupply-preRecovery;
- const actual=finalSupply,deficit=required>0?Math.max(0,required-actual):0;
- return {required,preparedSupply,excessSupply,currentFatigue,preRecovery,fatigueBeforeExpedition,
-  remainingSupplyBuffer,effectiveFatigue:fatigueBeforeExpedition,actual,deficit,
-  penalty:deficit>0?Math.min(.3,deficit*.06):0};
+ const remainingSupplyBuffer=preparedSupply-preRecovery;
+ return {preparedSupply,currentFatigue,preRecovery,fatigueBeforeExpedition,remainingSupplyBuffer,effectiveFatigue:fatigueBeforeExpedition};
 }
+/* DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY: five bands on 0~40, judged on fatigueBeforeExpedition.
+   One owner for the thresholds, the names, the Stat terms and the player text; NIGHT and the NPC
+   detail read the band from here rather than keeping thresholds of their own. */
+const FATIGUE_MAX=40;
+const FATIGUE_BANDS=[
+ {min:40,name:'탈진',mobility:.40,combat:.40,text:'모든 능력치 -40% · 실패 시 사망 위험 +10%p'},
+ {min:30,name:'소진',mobility:.40,combat:.20,text:'기동·정신 -40% · 투력·강인함 -20%'},
+ {min:20,name:'과로',mobility:.40,combat:0,text:'기동·정신 -40%'},
+ {min:10,name:'지침',mobility:.15,combat:0,text:'기동·정신 -15%'},
+ {min:0,name:'정상',mobility:0,combat:0,text:''}];
+function fatigueBand(f){const b=FATIGUE_BANDS.find(x=>(f||0)>=x.min)||FATIGUE_BANDS[FATIGUE_BANDS.length-1];return {...b,exhausted:b.min>=FATIGUE_MAX};}
 
 /* ---- 5. Condition modifiers -----------------------------------------------------------
    What the adventurer's own condition does to their own base Stats - percentages on the
@@ -128,15 +134,17 @@ function conditionModifiers(n,effectiveFatigue,traitSum,why){
   const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=0.15;why.push('부상 페널티: 투력 -15%');}
   survivalMod-=0.20;why.push('부상 페널티: 강인함 -20%');
  }
- if(effectiveFatigue>=10&&effectiveFatigue<20){mobilityMod-=0.15;spiritMod-=0.15;why.push('피로 누적(10~19): 기동/정신 -15%');}
- else if(effectiveFatigue>=20){mobilityMod-=0.40;spiritMod-=0.40;why.push('극심한 피로(20): 기동/정신 -40%');}
+ const band=fatigueBand(effectiveFatigue);
+ if(band.mobility){mobilityMod-=band.mobility;spiritMod-=band.mobility;}
+ if(band.combat){combatMod-=band.combat;survivalMod-=band.combat;}
+ if(band.min>0)why.push('피로 '+effectiveFatigue+' · '+band.name+': '+band.text);
  return {combat:combatMod,survival:survivalMod,mobility:mobilityMod,spirit:spiritMod};
 }
 
 /* ---- 6. Presentation provenance -------------------------------------------------------
    Where each Core Stat came from, for the screen. Reads the state the calculation already
    produced and contributes nothing back to it. */
-function statSources(n,itemStats,effectiveFatigue,penalty,traitSum){
+function statSources(n,itemStats,effectiveFatigue,traitSum){
  const sources={combat:[],survival:[],mobility:[],spirit:[]};
  if(n.equipment&&n.equipment.power)sources.combat.push({name:'장비 ('+n.equipment.name+')',v:n.equipment.power});
  for(const tid of n.traits){
@@ -152,14 +160,9 @@ function statSources(n,itemStats,effectiveFatigue,penalty,traitSum){
  }
  for(const st of itemStats)for(const k of STAT_KEYS)
   if(st.stats[k])sources[k].push({name:D.itemBy[st.item].name,v:st.stats[k]});
- if(effectiveFatigue>=10&&effectiveFatigue<20){
-  sources.mobility.push({name:'피로 누적',v:-15,isPct:true});
-  sources.spirit.push({name:'피로 누적',v:-15,isPct:true});
- }else if(effectiveFatigue>=20){
-  sources.mobility.push({name:'극심한 피로',v:-40,isPct:true});
-  sources.spirit.push({name:'극심한 피로',v:-40,isPct:true});
- }
- if(penalty)for(const k of STAT_KEYS)sources[k].push({name:'보급 부족',v:-Math.round(penalty*100),isPct:true});
+ const band=fatigueBand(effectiveFatigue),tag='피로 · '+band.name;
+ if(band.mobility){sources.mobility.push({name:tag,v:-Math.round(band.mobility*100),isPct:true});sources.spirit.push({name:tag,v:-Math.round(band.mobility*100),isPct:true});}
+ if(band.combat){sources.combat.push({name:tag,v:-Math.round(band.combat*100),isPct:true});sources.survival.push({name:tag,v:-Math.round(band.combat*100),isPct:true});}
  return sources;
 }
 
@@ -172,22 +175,21 @@ function prepare(n,d,facilities=[]){
  const {mult,e,sum:traitSum,foodSupplyDelta,supplyPerItem}=traitModifiers(n);
  const baseE={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit};
  const {itemStats,itemE,finalSupply}=itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,why);
- const sup=supplyState(n,d,finalSupply);
- const {effectiveFatigue,penalty}=sup;
+ const sup=supplyState(n,finalSupply);
+ const {effectiveFatigue}=sup;
  e.supply=finalSupply;
  const mod=conditionModifiers(n,effectiveFatigue,traitSum,why);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
- if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식 1개당 보급 -1');
- if(penalty)for(const k of G.Adventurer.keys)e[k]*=1-penalty;
- const sources=statSources(n,itemStats,effectiveFatigue,penalty,traitSum);
+ if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
+ const sources=statSources(n,itemStats,effectiveFatigue,traitSum);
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});
  if(n.traits.includes('potionbody')&&n.pack.some(id=>D.itemBy[id].effects.potion))events.push({id:'potionbody',text:'포션체질로 포션의 능력치가 15% 올랐다.'});
  e.effectiveFatigue=effectiveFatigue;
- e.beforeFatigue=sup.currentFatigue;e.preparedSupply=sup.preparedSupply;e.excessSupply=sup.excessSupply;
+ e.beforeFatigue=sup.currentFatigue;e.preparedSupply=sup.preparedSupply;
  e.preRecovery=sup.preRecovery;e.fatigueBeforeExpedition=sup.fatigueBeforeExpedition;e.remainingSupplyBuffer=sup.remainingSupplyBuffer;
- return {effects:e,sources,hazard,hazards,itemStats,supply:{required:sup.required,actual:sup.actual,deficit:sup.deficit,penalty,prepared:sup.preparedSupply,excess:sup.excessSupply,preRecovery:sup.preRecovery,remainingBuffer:sup.remainingSupplyBuffer},why,events};
+ return {effects:e,sources,hazard,hazards,itemStats,supply:{prepared:sup.preparedSupply,preRecovery:sup.preRecovery,remainingBuffer:sup.remainingSupplyBuffer},why,events};
 }
 /* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. The inherited Gate-count progression, in one
    place: the generator draws from it and the forecast reads it, so there is no forecast-only
@@ -201,10 +203,12 @@ function tierWeights(day){
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
 function hazardState(h,e,d){
- const rules={poison:['survival',.3],fire:['survival',.32],cold:['survival',.3],corrosion:['survival',.3],bind:['mobility',.4],mire:['mobility',.4],fear:['spirit',.4],dark:['spirit',.3,'mobility',.12],whiteout:['spirit',.3,'mobility',.12]};
+ /* DUNGEON_HAZARD v2.9.0 §Hazard Defense (User 2026-09-24): one non-투력 Stat per Hazard, 3 / 3 / 3 -
+    강인함 ×0.30 for 독·냉기·부식, 기동 ×0.40 for 속박·진창·화염, 정신 ×0.40 for 공포·어둠·화이트아웃. */
+ const rules={poison:['survival',.3],cold:['survival',.3],corrosion:['survival',.3],bind:['mobility',.4],mire:['mobility',.4],fire:['mobility',.4],fear:['spirit',.4],dark:['spirit',.4],whiteout:['spirit',.4]};
  /* DUNGEON_HAZARD_v2.7 §HAZARD THREAT: the curve reads the Day and the Tier directly, so a
     Hazard means the same thing wherever it appears on that Day at that Tier. */
- const rule=rules[h]||['survival',.2],threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,defense=(e[h]||0)+e[rule[0]]*rule[1]+(rule[2]?e[rule[2]]*rule[3]:0),gap=Math.max(0,threat-defense),ratio=defense/threat;
+ const rule=rules[h]||['survival',.2],threat=12+(d.day||1)*.35+((d.tier||1)-1)*6,defense=(e[h]||0)+e[rule[0]]*rule[1],gap=Math.max(0,threat-defense),ratio=defense/threat;
  return {key:h,stat:rule[0],threat,defense,gap,label:ratio>=1?'충분':ratio>=.75?'대응':ratio>=.4?'불안':'취약'};
 }
 /* the shared qualitative forecast bands - the ordinary expedition and the Final party read the same one */
@@ -239,21 +243,24 @@ function greatSuccessSignal(n,d,facilities=[]){
 /* DUNGEON_HAZARD_v2.7 §DEATH RISK — DIRECTOR DOCUMENT BASELINE. Named rather than inlined so
    a harness can measure a candidate against the shipped value without editing the formula.
    These are the canonical numbers; nothing in the game writes to this table. */
-const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40};
+/* v2.9.0: departing at Fatigue 40 (탈진) adds the same +10%p term as an injured departure and lifts the cap
+   the same way (DUNGEON_HAZARD §Healthy / injured failure Death chance): both together 50%. */
+const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40,exhausted:.10};
 /* DUNGEON_HAZARD_v2.7 §GATE POWER — LATE-DAY SLOPE. The Day term bends at D9: a party's
    prepared ability stops growing long before Day 30 does, so a single slope left every late Gate
    further out of reach than the one before it. Only this term changed; every other Gate Power
    term is what it was, which is why D1-D9 is unchanged. */
 const GATE={knee:9,early:1.70,late:0.40};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;
-function failureDeathChanceFor(p,d,departedInjured){
+function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.fatigueBeforeExpedition||0)>=FATIGUE_MAX){
  const required=d.power||1;
  const combatDeficit=clamp((required-preparedPower(p.effects))/required,0,1);
  const environmentDeficit=p.hazards.length
   ?p.hazards.reduce((v,h)=>v+clamp(h.gap/h.threat,0,1),0)/p.hazards.length:0;
  const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit*DEATH.environment,0,DEATH.cap);
- return {combatDeficit,environmentDeficit,healthy,
-  chance:departedInjured?clamp(healthy+DEATH.injured,0,DEATH.injuredCap):healthy};
+ const extra=(departedInjured?DEATH.injured:0)+(departedExhausted?DEATH.exhausted:0);
+ return {combatDeficit,environmentDeficit,healthy,exhausted:!!departedExhausted,
+  chance:extra?clamp(healthy+extra,0,DEATH.cap+extra):healthy};
 }
 function failureDeathRisk(n,d,facilities=[]){
  return failureDeathChanceFor(prepare(n,d,facilities),d,n.injury===1);
@@ -412,7 +419,7 @@ function resolve(n,d,r,facilities=[],run){
  const score=ability*noise;const combatSuccess=score>=d.power;
  const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);
  const affected=envRoll<environment;
- const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))})),{key:'supply',weight:p.supply.deficit*.02/Math.max(1,Math.sqrt(d.hazards.length))}];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
+ const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  let escapeRoll,escapeChance,injuryRoll,deathRoll,rescued=false,deathChance=0,avoidedDeath=false;
  const aidKitReady=!!run&&(run.aidKitSaves||0)<D.decorationParams.firstAidKit.saves&&Object.values(run.loadout||{}).includes('firstAidKit');
@@ -521,13 +528,14 @@ function resolve(n,d,r,facilities=[],run){
     Trait would add. rawOutcomeFatigueGain and actualOutcomeFatigueGain are separate report
     truths: the buffer only shows as a contribution when it actually absorbed something. */
  const severeOrDead=outcome==='중상'||outcome==='사망';
- const outcomeBaseline=severeOrDead?0:outcome==='퇴각'?5:outcome==='부상'?6:3;
+ /* v2.9.0 §FATIGUE OUTCOME BASELINE: 성공/대성공 +5, 퇴각 +8, 부상 +10, 중상/사망 0; clamp 40 */
+ const outcomeBaseline=severeOrDead?0:outcome==='퇴각'?8:outcome==='부상'?10:5;
  const rawOutcomeFatigueGain=severeOrDead?0:Math.max(0,outcomeBaseline+(e.fatigue||0));
  const remainingSupplyBuffer=e.remainingSupplyBuffer||0;
  const actualOutcomeFatigueGain=Math.max(0,rawOutcomeFatigueGain-remainingSupplyBuffer);
  const outcomeBufferUsed=rawOutcomeFatigueGain-actualOutcomeFatigueGain;
  const beforeFatigue=e.beforeFatigue!==undefined?e.beforeFatigue:(n.fatigue||0);
- const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,20);
+ const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?1.4:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);let loot=n.alive?Math.round((35+d.day*8)*(outcome==='퇴각'?.08:won?1:.18)*(1+e.loot)*(d.reward||1)):0;
@@ -542,7 +550,7 @@ function resolve(n,d,r,facilities=[],run){
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
  const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady},severeEscalation,outcome,aftercare);
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,requiredSupply:p.supply.required,preparedSupply:e.preparedSupply,excessSupply:e.excessSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
    /* escapeChance/escapeRoll/injuryRoll are now conditional too (only the combat-failure and
@@ -562,5 +570,5 @@ function resolve(n,d,r,facilities=[],run){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,GATE,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,GATE,FATIGUE_MAX,fatigueBand,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);

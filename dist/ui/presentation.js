@@ -68,9 +68,6 @@ function preview(n,d,fac,item,final){
   if(stat.has(k)&&!own[k])continue;  // moved through a system, reported as that system below
   direct.push({key:k,label:labels[k],before:x,after:y,bad:negative.has(k)?y>x:y<x});
  }
- if(b.supply.penalty<a.supply.penalty)
-  derived.push({key:'supplyDeficit',label:'보급 부족 완화',
-   text:'보급 '+Math.round(a.supply.actual)+' → '+Math.round(b.supply.actual)+' · 네 능력치에 걸린 보급 부족이 줄었다'});
  if(fatigueBand(after.effectiveFatigue)<fatigueBand(before.effectiveFatigue))
   derived.push({key:'fatigueBand',label:'피로 완화',
    text:'피로 '+before.effectiveFatigue+' → '+after.effectiveFatigue+' · 기동·정신 페널티가 한 단계 풀렸다'});
