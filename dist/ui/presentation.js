@@ -9,21 +9,19 @@ const days=new Set(['recoveryDelta']);
 const gold=new Set(['visitGold']);
 const mult=new Set(['xpMult','foodMult','potionMult','revisitMult']);
 const negative=new Set(['fatigue','injuryRisk','variance']);
-// Canonical player-facing Hazard pressure (DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE, v2.9.0): one label per
-// pressed Stat, 3 / 3 / 3. All 9 Hazards are explained the same way. Rendered inline, so there is no hover-only path.
-const PRESSURE_LABEL={survival:'강인함으로 버틴다',mobility:'기동으로 피한다',spirit:'정신으로 견딘다'};
+// Canonical player-facing Hazard pressure (DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE, v2.9.0 revision 2): every
+// Hazard row is the numbered short row `대응 {N} 필요 · {능력치} 10마다 대응 {k}` for the Gate it is about; the pressure
+// labels (`강인함으로 버틴다` …) are retired. All 9 Hazards read the same way, inline, so there is no hover-only path.
 const hazardStat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};
-const hazardPressure=Object.fromEntries(Object.entries(hazardStat).map(([h,s])=>[h,PRESSURE_LABEL[s]]));
-function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
+function hazardRows(keys,d){return keys.map(k=>({key:k,name:D.hazards[k],pressure:d?hazardShort(k,d):''}));}
 /* COPY_AUDIT §4-16 / DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE (User 2026-09-24 revision): the Gate-level
    requirement number comes first. N = the Counter that alone reaches 충분 on that Gate that Day (ceil(Hazard Threat));
    k = the Core-Stat conversion per 10 points (강인함 3, 기동 / 정신 4), read from the engine's one rule table. No
-   per-customer remaining need is ever composed here. §4-15 is the plate's one-line help. */
+   per-customer remaining need is ever composed here; the plate has no help line (§4-15 retired). */
 function hazardNeed(k,d){return Math.ceil(G.Dungeon.hazardState(k,{},d).threat);}
 function hazardRate(k){const r=G.Dungeon.hazardRule(k);return labels[r.stat]+' 10마다 대응 '+Math.round(r.coef*10);}
 function hazardSentence(k,d){return D.hazards[k]+' — 대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k)+' · '+D.hazards[k]+' 대응 상품이 막는다';}
 function hazardShort(k,d){return '대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k);}
-const PLATE_HELP='위험은 능력치를 누르고, 대응 상품이 막는다.';
 /* hazardStat above is the Core Stat each Hazard presses (the same table the engine's hazardState uses);
    the Stat-grid pressure tag and the matching-effect emphasis read it; 투력 is never a pressed Stat. */
 function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];if(s)(m[s]=m[s]||[]).push(k);}return m;}
@@ -287,6 +285,6 @@ function amount(key,value,moved=true){
  if(percent.has(key))return (Math.round(value*1000)/10)+'%p';
  return stat(value,moved);
 }
-G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,hazardSentence,hazardShort,hazardNeed,PLATE_HELP,hazardStat,pressedBy,fitKeys,
+G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardStat,pressedBy,fitKeys,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

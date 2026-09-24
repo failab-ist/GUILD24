@@ -302,7 +302,7 @@ const tip=(label,...lines)=>'<details class="tip" name="sale-tip"><summary aria-
    standing at the counter. The readiness is this NPC's SALE-entry state against it. The player
    has to be able to read `this danger looks at 강인함` and `this character is 취약 to it right
    now` separately, so they are separate elements with the readiness explicitly labelled. */
-const hazardList=(keys,states)=>keys.length?'<ul class="hazards">'+Presentation.hazardRows(keys).map(h=>{
+const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentation.hazardRows(keys,d).map(h=>{
  const st=states&&states.find(x=>x.key===h.key);
  return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span class="press">'+E(h.pressure)+'</span>'
   +(st?'<span class="ready"><i>현재 대응</i><em class="'+(['취약','불안'].includes(st.label)?'lack':'')+'">'+st.label+'</em></span>':'')
@@ -317,7 +317,7 @@ function gatePlate(d,full=false){const b=sigilOf(d);
  return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
-   +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game)).map(h=>full
+   +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game),d).map(h=>full
      ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence(h.key,d))+'</span></li>'
      :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(Presentation.hazardShort(h.key,d))+'</span></li>').join('')+'</ul>'
    +'</article>';}
@@ -967,9 +967,9 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
     decision surface rather than a screen above it. Nothing is lost: 환경 대응 states the same
     canonical snapshot, in the same vocabulary, from the same outlook. */
   +'<div><label>예상 목적지</label><div class="dest-name"><h3>'+E(d.name)+'</h3>'
-  /* v2.9.0 (COPY_AUDIT §4-15 / §4-16): the plate's one `?` - the rule in one line, then this Gate's full Hazard sentences */
-  +tip('위험',Presentation.PLATE_HELP,...Presentation.known(d,game).map(k=>Presentation.hazardSentence(k,d)))+'</div>'
-  +hazardList(Presentation.known(d,game),null)
+  /* v2.9.0 revision 2 (COPY_AUDIT §4-16): the rows carry this Gate's numbers themselves; the plate has no `?` help (§4-15 retired) */
+  +'</div>'
+  +hazardList(Presentation.known(d,game),null,d)
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
@@ -1076,7 +1076,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
       the persisted state itself - D30 reads the same object, and a reload cannot reroll it. */
    +(s.final?'<div class="brief"><div class="when"><span class="k">마왕성</span>'
      +'<p><b>'+E(s.final.familyNames.join(' / '))+'</b></p>'
-     +'<ul class="hazards">'+Presentation.hazardRows(s.final.hazards).map(h=>
+     +'<ul class="hazards">'+Presentation.hazardRows(s.final.hazards,s.final).map(h=>
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span class="press">'+E(h.pressure)+'</span></li>').join('')
      +'</ul></div></div>':'')
    +stockBrief()
@@ -1378,8 +1378,8 @@ function finalScreen(){
  +'<section class="threat"><h2>확인된 위협</h2><div class="fams">'
  +(d.families||[]).map(id=>{const b=D.dungeonBy[id],own=(D.familyTiers[id]||[])[1]||[];
    return '<div class="fam-col"><span class="fam" style="--fam:'+b.color+'">'+Art.mark(b.id,24)+E(b.name)+'</span>'
-    +hazardList(d.hazards.filter(h=>own.includes(h)))+'</div>';}).join('')
- +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))))+'</section>'
+    +hazardList(d.hazards.filter(h=>own.includes(h)),null,d)+'</div>';}).join('')
+ +'</div>'+hazardList(d.hazards.filter(h=>!(d.families||[]).some(id=>((D.familyTiers[id]||[])[1]||[]).includes(h))),null,d)+'</section>'
  /* B5-2 / FINAL-Q75: 출전 NPC 선택 -> FINAL 준비. Until the party is confirmed the screen is the
     muster only; once confirmed (saved) the roster is gone and only the confirmed members are
     prepared, one at a time, against the shelf. */
@@ -1666,7 +1666,7 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    +plate
    +'<div class="fams">'+(d.families||[]).map(id=>{const f=D.dungeonBy[id];
      return '<article class="fam-card" style="--fam:'+f.color+'"><b>'+E(f.name)+'</b>'
-      +hazardList(D.familyTiers[id][1])+'</article>';}).join('')
+      +hazardList(D.familyTiers[id][1],null,d)+'</article>';}).join('')
    +'</div></div>';}
  if(stage==='d15'){const [name,lines]=c.d15.trait[s.bossId];
   return '<div class="boss-reveal d15">'+bossFiled()+'<p class="lede">'+E(c.d15.intro)+'</p>'

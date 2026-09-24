@@ -289,18 +289,19 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(/발주 '\+fmt\([^)]+\)\+'G · 확정/.test(app),'the docked stamp states the amount');
 });
 
-test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards carry the canonical pressure label, one per Stat (3 / 3 / 3)',()=>{
- const label={survival:'강인함으로 버틴다',mobility:'기동으로 피한다',spirit:'정신으로 견딘다'};
+test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row, one pressed Stat each (3 / 3 / 3); the labels are retired',()=>{
  const stat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};
- assert.deepEqual(Object.keys(Presentation.hazardPressure).sort(),Object.keys(DATA.hazards).sort(),'every canonical Hazard is explained');
+ const d={day:1,tier:1},rows=Presentation.hazardRows(Object.keys(DATA.hazards),d);
+ assert.deepEqual(rows.map(r=>r.key).sort(),Object.keys(DATA.hazards).sort(),'every canonical Hazard is explained');
  for(const [key,s] of Object.entries(stat)){
-  assert.equal(Presentation.hazardPressure[key],label[s],key+' -> '+label[s]);
+  assert.equal(rows.find(r=>r.key===key).pressure,Presentation.hazardShort(key,d),key+' row = the numbered short row');
   assert.equal(Presentation.hazardStat[key],s,'the tag / emphasis read the same Stat');
   assert.equal(Dungeon.hazardState(key,{},{scale:1}).stat,s,'and the engine moves its Defense with that Stat only');
  }
- for(const s of Object.keys(label))assert.equal(Object.values(stat).filter(x=>x===s).length,3,s+' presses exactly three Hazards');
- assert.ok(!Object.values(Presentation.hazardPressure).some(x=>/압박|중심|보조/.test(x)),'no 압박 / 중심 / 보조 label survives');
- assert.equal(Presentation.hazardRows(['cold']).at(0).name,'냉기');
+ for(const s of ['survival','mobility','spirit'])assert.equal(Object.values(stat).filter(x=>x===s).length,3,s+' presses exactly three Hazards');
+ assert.ok(!('hazardPressure' in Presentation)&&!/'(강인함으로 버틴다|기동으로 피한다|정신으로 견딘다)'|PRESSURE_LABEL|hazardPressure/.test(read('dist/ui/presentation.js')),'no pressure label string survives (User 2026-09-24 revision 2)');
+ assert.equal(Presentation.hazardRows(['cold'],d).at(0).name,'냉기');
+ assert.equal(Presentation.hazardRows(['cold']).at(0).pressure,'','without a Gate there is no row text to invent');
 });
 
 test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
@@ -831,8 +832,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/환경 대응<b class="env-/.test(readout),'the outlook states this customer readiness');
  assert.ok(/o\.worst/.test(readout),'and it is the engine canonical worst state, not a screen calculation');
  const plate=fn('destPlate');
- assert.ok(/hazardList\(Presentation\.known\(d,game\),null\)/.test(plate),
-  'the destination plate states Hazard pressure only, off the known-Hazard truth');
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),
+  'the destination plate states the Gate\'s numbered Hazard rows only, off the known-Hazard truth');
  assert.ok(!/n\.outlook|n&&n\.outlook/.test(plate.replace(/\/\*[\s\S]*?\*\//g,'')),
   'the plate reads no readiness of its own');
  const codeOnly=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
@@ -878,7 +879,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     lecture in the tooltip. */
  const envTip=fn('readout');
  /* v2.9.0 (COPY_AUDIT §4-15): the plate carries exactly one ? - the Hazard rule line and this Gate's sentences - and no readiness lecture */
- assert.equal((fn('destPlate').match(/tip\(/g)||[]).length,1,'the destination plate has one ? (§4-15), never a second');
+ assert.equal((fn('destPlate').match(/tip\(/g)||[]).length,0,'the destination plate has no ? (§4-15 retired, User 2026-09-24 revision 2)');
  for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','확정된'])
   assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
  /* Each ? names its own reading and stops. Anything longer than one line is the store guide's
@@ -2266,7 +2267,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  assert.equal(c.d20.line,'마왕성으로 향하는 원정 경로와 주변 환경을 정찰한다.');
  assert.equal(c.d20.next,'최종 보고 · DAY 25');
  assert.equal(c.final.header,'최종 정찰 보고');
- assert.equal(c.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다.');
+ assert.equal(c.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.');
  // §14-5 / SA-Q22: the SLOTH lines say 점포지원, never 유물
  const sloth=c.d15.trait.SLOTH[1].join(' ');
  assert.ok(sloth.includes('점포지원을 받는 대신')&&sloth.includes('그때의 점포지원은 받을 수 없으며'),'SLOTH uses 점포지원');
@@ -2890,13 +2891,18 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
    assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요 · '+Presentation.labels[st]+' 10마다 대응 '+rate[st],k+' short row');}}
  assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독 — 대응 13 필요 · 강인함 10마다 대응 3 · 독 대응 상품이 막는다','the DAY 1 T1 example');
  assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
- assert.equal(Presentation.PLATE_HELP,'위험은 능력치를 누르고, 대응 상품이 막는다.');
+ assert.ok(!('PLATE_HELP' in Presentation)&&!/위험은 능력치를 누르고/.test(read('dist/ui/presentation.js')),'the plate help line is retired (§4-15)');
  assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\(h\.key,d\)/.test(fn('gatePlate'))&&/Presentation\.hazardShort\(h\.key,d\)/.test(fn('gatePlate')),'Gate detail reads the full sentence, MORNING the short row');
  assert.ok(!/gatePlate\(d,true\)/.test(fn('morningScreen'))&&/s\.dungeons\.map\(gatePlate\)/.test(fn('morningScreen')),'MORNING renders the plate in short form');
  const plate=fn('destPlate');
- assert.ok(/tip\('위험',Presentation\.PLATE_HELP,\.\.\.Presentation\.known\(d,game\)\.map\(k=>Presentation\.hazardSentence\(k,d\)\)\)/.test(plate),'the plate has one ? with the rule line and this Gate\'s sentences');
- assert.ok(/hazardList\(Presentation\.known\(d,game\),null\)/.test(plate)&&!/hazardShort|hazardNeed/.test(plate),'the plate row itself keeps {위험} · {label}');
- assert.equal((plate.match(/tip\(/g)||[]).length,1,'one ? only');
+ assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
+ assert.equal((plate.match(/tip\(/g)||[]).length,0,'no ? help on the plate (§4-15 retired, User 2026-09-24 revision 2)');
+ // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29)
+ assert.equal(Presentation.hazardShort('poison',{day:30,tier:2}),'대응 29 필요 · 강인함 10마다 대응 3');
+ assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
+ assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalScreen')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
+ assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');
+ assert.equal(Copy.boss.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.','COPY_AUDIT §14-7 intro');
  // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
  const of=fn('orderForm');
  assert.ok(/const fitToday=new Set\(s\.dungeons\.flatMap\(d=>\[\.\.\.Presentation\.fitKeys\(Presentation\.known\(d,game\)\)\]\)\)/.test(of),'fit keys = union over today\'s Gates');

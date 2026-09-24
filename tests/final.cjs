@@ -461,7 +461,7 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
  const app=read('dist/ui/app.js');
  assert.ok(/s\.final\?'<div class="brief">/.test(app),'ORDER shows the known Final state');
  assert.ok(/s\.final\.familyNames/.test(app),'by name');
- assert.ok(/Presentation\.hazardRows\(s\.final\.hazards\)/.test(app),'with the Pool it carries');
+ assert.ok(/Presentation\.hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'with the Pool it carries');
  /* FINAL_EXPEDITION_v2.7 §D25: the disclosure comes BEFORE the ordinary D25 decisions that
     could use it, which in practice means before the D25 Relic window. The stage is due from
     the Day the state exists, and D30 reuses the same flag rather than staging a second reveal.
