@@ -39,6 +39,17 @@ current-play evidence
 
 ---
 
+## REVIEWED AGAINST THE 2026-09 PLAYTEST (User 2026-09-24)
+
+Findings: "너무 복잡하다", "뭘 어떻게 하는 건지 모르겠다", "손님에게 직접 파는 것이 보이지 않는다".
+Nothing here answers them better than the v2.9.0 owner amendments (SPEC_INDEX §CURRENT v2.9.0
+PURPOSE), so no section is promoted. Deferred here from v2.9.0 as not needed now:
+- SALE: move the folded `지난 원정` line below the Stat grid (phone reading order)
+- ORDER: render the next-day forecast at secondary weight
+- Store Support cards: clause-per-line wrapping (the v2.9.0 two-clause copy makes it moot)
+
+---
+
 ## ROUTER BOUNDARY
 
 This file contains only still-deferred future candidates.

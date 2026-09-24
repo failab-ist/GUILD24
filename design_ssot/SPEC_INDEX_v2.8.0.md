@@ -47,6 +47,14 @@ Not in v2.9.0 (User): a "simple view" toggle, hiding zero receipt rows, direct h
 `도움 됨 / 무관`, extra price depth, removing Hazard Counter / price modes / Traits.
 Every P2+ expansion stays in GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md.
 
+Scope review 2026-09-24 (User: pull forward whatever the current playtest needs, defer whatever it
+does not): the v3.0+ router was read against the three findings — nothing is promoted. Drag (§6)
+does not choose a price, so the hand-over is shown by motion on the existing tap flow; desktop
+redesign (§8), item memory (§3) and art waves (§18) do not answer any finding; customer reaction is
+done by motion, not new art. Deferred out of v2.9.0 to v3.0+: moving the folded last-expedition line
+below the Stat grid, the secondary weight of the ORDER next-day forecast, clause-per-line card
+wrapping (superseded by the two-clause card copy).
+
 ## VERSION POLICY
 
 User decision 2026-09-24: versions are managed the way a maintained project does it, not by renaming
