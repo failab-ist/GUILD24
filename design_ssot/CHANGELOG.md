@@ -36,6 +36,10 @@ Docs-first. Each owner amendment is listed when committed.
   individual identity / destination); D0 briefing body two lines; 점주 가이드 opens with 처음 3일 and folds
   the eight sections under 자세히. Owners: UI_UX, ECONOMY_ORDER (+QA), COPY_AUDIT §3-7 / §3-8 / §4-21 /
   §8-0 / §14-1, COPY_WORLD_VOICE, UI_UX_QA UI-Q-v29-10 … -14.
+- Card copy / leftovers batch (D-5): COPY_AUDIT §11-1 … §11-30 rewritten in two clauses (effect · condition,
+  no accounting clause, values unchanged; RELIC citations follow); UI_UX: no second owned-Relic block in
+  SALE at any width, ORDER held-stock list starts collapsed with a persisted open choice; UI_UX_QA
+  UI-Q-v29-15 … -17. Documents-first work is complete; Source batches follow (I-1 … I-4).
 - COPY_AUDIT_APPROVED §3 / §4, COPY_WORLD_VOICE §TUTORIAL COACH COPY, UI_UX §TUTORIAL: first-sale coach
   diet — four marks (destination, Hazard, outlook, price), contextual Supply / 대성공 / 재방문 / 가방,
   concept popovers (commit 66f37e4; Source e0d0c44).

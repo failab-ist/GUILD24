@@ -2040,6 +2040,52 @@ PASS:
 FAIL:
 - the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `처음 3일` is missing; `자세히` is open by default
 
+### UI-Q-v29-15 — STORE SUPPORT CARD COPY, TWO CLAUSES
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+Open the DAY 0 Store Support takeover and the owned-Relic modal on a Run that owns several Store Supports, at 360 and 1280.
+
+EXPECT:
+Every card body is the exact `COPY_AUDIT_APPROVED_v2.8.0.md` §11 line for that Store Support.
+
+PASS:
+- all thirty card bodies match §11-1 … §11-30 verbatim; effect first, condition after ` · `; no HQ-accounting clause
+- values and effects match RELIC_v2.8.0.md (copy changed, rules did not)
+
+FAIL:
+- a card shows the pre-v2.9.0 wording, or a body that is not the §11 line
+
+### UI-Q-v29-16 — NO SECOND OWNED-RELIC BLOCK IN SALE
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+SALE with owned Store Supports at 360, 390, 412, 1024 and 1280; then the FINAL preparation screen.
+
+PASS:
+- SALE shows the compact owned-Relic control in the shelf heading and no owned-Relic block lower in the column at any width
+- the FINAL preparation screen still lists owned Store Supports
+
+FAIL:
+- a `보유 점포지원` block appears under the Trait rows on desktop, or the FINAL list is gone
+
+### UI-Q-v29-17 — WAREHOUSE LIST STARTS COLLAPSED
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+Fresh account, first ORDER at 360 and 1280; open the list; reload; next Day's ORDER.
+
+PASS:
+- the held-stock list is collapsed on first ORDER and the summary line (used / total slots, kinds) is visible
+- at 360 the first offer row is reachable without scrolling past an open list
+- opening it persists across the reload and the next Day until the player folds it
+
+FAIL:
+- the list starts open on a fresh account, or the summary line hides inside the collapsed detail
+
 ### GREAT SUCCESS TUTORIAL
 PASS:
 - explicitly teaches Great Success exists

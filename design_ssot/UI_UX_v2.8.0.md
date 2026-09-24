@@ -391,9 +391,8 @@ Example:
 창고 4 / 18 · 4종
 ```
 
-On mobile, the individual held-stock list may be collapsible.
-- default collapsed is allowed
-- open/closed state persists during the current ORDER session
+The individual held-stock list is collapsible at every width and starts collapsed; opening it is an account-level presentation choice that persists across Days and reloads until the player folds it again (User 2026-09-24, v2.9.0).
+- the collapsed summary line still states the held-stock summary
 - used/remaining capacity is never hidden inside the collapsed detail
 
 ## SALE
@@ -1394,7 +1393,7 @@ Requirements:
 - do not add a second Relic information system
 - the control is available before the player commits the relevant ORDER / SALE decision
 - keep the control compact enough that it does not compete with the primary decision surface
-- on mobile, avoid retaining a second redundant owned-Relic block lower in SALE if the compact control already exposes the same information
+- at every width, do not retain a second owned-Relic block lower in SALE: the compact control is the one reference there (the FINAL preparation screen keeps its owned-Relic list) (User 2026-09-24, v2.9.0)
 
 ### RELIC VISUAL
 

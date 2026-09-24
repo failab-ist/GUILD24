@@ -826,3 +826,20 @@ The first-ORDER coach group is, in this order: `gates` → `offer` → `quantity
 - one concept per step still holds
 Exact strings -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7.
 ```
+
+## AMENDMENT — v2.9.0 presentation leftovers (User decision 2026-09-24)
+
+No second owned-Relic block in SALE at any width; the ORDER held-stock list starts collapsed with a persisted open choice.
+
+```text
+- on mobile, avoid retaining a second redundant owned-Relic block lower in SALE if the compact control already exposes the same information
+On mobile, the individual held-stock list may be collapsible.
+- default collapsed is allowed
+- open/closed state persists during the current ORDER session
+```
+
+```new
+- at every width, do not retain a second owned-Relic block lower in SALE: the compact control is the one reference there (the FINAL preparation screen keeps its owned-Relic list) (User 2026-09-24, v2.9.0)
+The individual held-stock list is collapsible at every width and starts collapsed; opening it is an account-level presentation choice that persists across Days and reloads until the player folds it again (User 2026-09-24, v2.9.0).
+- the collapsed summary line still states the held-stock summary
+```
