@@ -777,6 +777,11 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background:color-mix(in srgb,var(--paper) 88%,transparent);
  box-shadow:inset 0 0 0 2px #00000026,3px 4px 0 #00000073;
  overflow-wrap:anywhere}
+/* v2.9.0 R2 (User 2026-09-24): on SALE the balloon sits 2px from the top, one size smaller and tighter,
+   so a one-row line ends above the Bag slots (measured 360: 35px against the slots' 47px) and a two-row
+   line clears most of them. The approved overlap compromise above is unchanged; director-review.css
+   restores the full size on wide SALE screens (900px+). */
+.p-sale .say{top:2px;padding:6px 10px 7px;font-size:14px;line-height:1.4}
 .say>span{display:block;opacity:1}
 /* the tail: a solid wedge under the balloon, aimed at the card's centre */
 .say:after{content:'';position:absolute;top:100%;left:min(calc(var(--cardw) * .5), 60%);

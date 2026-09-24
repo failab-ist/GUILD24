@@ -104,7 +104,8 @@
    offset rather than a grid cell - same result on screen: across the top of the band, tail
    pointing down at the customer, clear of the bag and the waiting deck. */
 @media(min-width:900px){
- .p-sale .say{left:var(--gutter);top:8px;bottom:auto;max-width:min(calc(100% - var(--gutter) - 52px),560px)}
+ /* v2.9.0 R2: the phone-first SALE balloon is smaller (ui.css .p-sale .say); the wide screen keeps the full size */
+ .p-sale .say{left:var(--gutter);top:8px;bottom:auto;max-width:min(calc(100% - var(--gutter) - 52px),560px);padding:9px 13px 10px;font-size:15px;line-height:1.5}
  .p-sale .say:after{top:100%;bottom:auto;left:min(calc(var(--cardw) * .5),60%);border:9px solid transparent;
   border-top-color:var(--paper);border-bottom:0}
  .front-side{padding-left:16px}
