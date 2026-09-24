@@ -873,7 +873,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
     and still asserted below: one control per reading, one line each, and no ladder / system
     lecture in the tooltip. */
  const envTip=fn('readout');
- assert.ok(!/class="tip"|tip\(/.test(fn('destPlate')),'the destination plate grows no second ?');
+ /* v2.9.0 (COPY_AUDIT §4-15): the plate carries exactly one ? - the Hazard rule line and this Gate's sentences - and no readiness lecture */
+ assert.equal((fn('destPlate').match(/tip\(/g)||[]).length,1,'the destination plate has one ? (§4-15), never a second');
  for(const banned of ['취약·불안·대응·충분','네 단계','누가 서 있든','확정된'])
   assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
  /* Each ? names its own reading and stops. Anything longer than one line is the store guide's
@@ -2240,9 +2241,9 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
     objective is superseded by the briefing; the old strings are not kept as live copy. */
  assert.equal(c.d0.header,'마왕 조사 개시');
  assert.equal(c.d0.lead,'길드 조사대가 마왕의 정체를 추적하러 출발했다.');
- assert.deepEqual(c.d0.steps,[['DAY 5',['첫 조사 보고에서 토벌 대상이 공개된다.','이후 조사 소식은 5일마다 이어진다.']],
-  ['DAY 30',['성장한 모험가를 최대 3명까지 마왕성으로 보내 최종 토벌에 나선다.']]]);
- assert.equal(c.d0.close,'조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.');
+ /* v2.9.0 (COPY_AUDIT §14-1): two lines, no closing sentence */
+ assert.deepEqual(c.d0.lines,['DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.','DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']);
+ assert.equal(c.d0.close,undefined);assert.ok(!app.includes('조사 정보를 확인하며 토벌대를 준비하고'),'the closing sentence is gone');
  assert.ok(!/토벌 예정|길드 정보원/.test(read('dist/data/copy.js')+app),'the superseded D0 lines are gone');
  assert.ok(!/class="boss-art"|class="boss-id"|b\.name/.test(fn('bossReveal').split("stage==='d0'")[1].split('</div>\';')[0]),
   'D0 shows no Boss art, portrait or name');
@@ -2490,7 +2491,12 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  assert.ok(!h.includes('압박')&&!h.includes('환경 대응'),'the Hazard reading stays with its own popover');
  assert.ok(!/필요 보급/.test(h),'and the Supply arithmetic stays with its coach mark');
  // the section set is exactly §8-1..§8-8
- assert.equal((h.match(/<h3>/g)||[]).length,8,'eight sections, one per §8 entry');
+ assert.equal((h.match(/<h3>/g)||[]).length,9,'nine sections: 처음 3일 (§8-0) then one per §8-1..§8-8');
+ /* v2.9.0 §8-0: the guide opens on 처음 3일 (five lines) and keeps the eight sections under a collapsed 자세히 */
+ assert.ok(h.indexOf('<h3>처음 3일</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'처음 3일 first, then 자세히 holding the eight');
+ assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
+ for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 손익을 정리하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
+ assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
 });
 
 /* SA-Q28 / SA-Q31 + COPY_AUDIT §15, §6-2, §6-8 — Store Capital is not Gold, and the two Deep
@@ -2704,7 +2710,10 @@ test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count befor
  const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','gateLine','tierLine'].map(fn).join('\n');
  assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('s.queue.length'),
   'Morning and ORDER both state the expected visitor count');
- assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count');
+ /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
+ assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
+ assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test(fn('orderForm')),'per-Gate counts only with two or more Gates');
+ const gc=fn('gateCounts');assert.ok(/game\.claimedGateFor\(n\)/.test(gc)&&!/\.(traits|job|money|destination|name|portrait)\b/.test(gc),'the helper reads the claimed Gate only and returns counts');
  /* `s.money` is the Store's own till; any other holder's money is a customer Wallet. */
  assert.ok(!/(?<!\bs)\.(traits|job|money|destination|claimedDestination|portrait)\b/.test(pre),
   'and read no customer Trait, Job, Wallet or destination');
@@ -2847,6 +2856,47 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
  assert.ok(/\.counter-tray \.tills button\{min-height:64px/.test(css)&&/\.good\{[^}]*padding:8px 0/.test(css)&&/\.good \.tile\{width:38px/.test(css),'compact keys and rows keep the 360 budget');
  assert.ok(/@media\(min-width:1024px\)\{\.p-sale \.counter-tray\{display:grid;grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,1fr\);gap:0 24px\}\.p-sale \.counter-tray>\*\{grid-column:2\}\}/.test(css),'on a desk the tray aligns under the shelf column');
  assert.ok(/\.good \.what span\{font:600 14px/.test(css),'the effect line keeps its Function class (UI_UX §FUNCTION / FLAVOR)');
+});
+
+
+/* v2.9.0 ONBOARDING / ORDER (User 2026-09-24): UI_UX §TUTORIAL — TASK LINE / FIRST-ORDER COACH ORDER, §HAZARD NUDGE,
+   §ORDER — ITEM INFORMATION HIERARCHY, ECONOMY_ORDER §VISITOR FORECAST; COPY_AUDIT §3-7 / §3-8 / §4-15 / §4-16 / §4-21;
+   UI-Q-v29-10 … UI-Q-v29-13. */
+test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and plate help, ORDER today-fit + per-Gate counts',()=>{
+ const css=read('dist/ui/ui.css');
+ // task line: five exact strings, DAY 1~3 while the tutorial is not skipped, one line
+ for(const [ph,line] of [['morning','오늘 할 일 — 열린 게이트의 위험을 본다'],['order','오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다'],['sell','오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다'],['night','오늘 할 일 — 준비가 어떻게 됐는지 확인한다'],['closing','오늘 할 일 — 오늘 장사를 정리한다']])
+  assert.ok(app.includes(ph+":'"+line+"'"),'task line for '+ph+' is the §3-8 string');
+ const tl=fn('taskLine');
+ assert.ok(/t\.skipped\|\|!\(s\.day>=1&&s\.day<=3\)/.test(tl),'DAY 1~3 only, hidden when the tutorial is skipped (no DAY 0, no DAY 4)');
+ assert.ok(!/account\.\w*task|run\.\w*task/.test(app),'no Save field');
+ for(const scr of ['morningScreen','orderScreen','saleScreen','nightScreen','closingScreen'])assert.ok(fn(scr).includes('taskLine('),scr+' places the line');
+ assert.ok(/\.task-line\{[^}]*font-size:clamp\(12px,3\.3vw,13px\)[^}]*white-space:nowrap/.test(css),'one line, never two at 360 (size follows width, no breakpoint)');
+ assert.ok(!/task-line[^\n]*data-action/.test(app),'not a button, not a coach mark');
+ // first-ORDER coach: gates -> offer -> quantity -> confirm -> reroll, no gold mark
+ const order=/ order:\[(.*)\],\n/.exec(app)[1];
+ assert.deepEqual([...order.matchAll(/\['([a-z]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['gates','.brief .when'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the five steps in order, on their anchors');
+ assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
+ assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
+ // Hazard sentences: nine exact literals that agree with the pressure label, on Gate detail and in the plate help
+ const S=Presentation.hazardSentence;
+ assert.deepEqual(Object.keys(S).sort(),Object.keys(DATA.hazards).sort(),'all nine');
+ for(const [k,s] of Object.entries(S))assert.equal(s,DATA.hazards[k]+' — '+Presentation.hazardPressure[k]+' · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence');
+ assert.equal(Presentation.PLATE_HELP,'위험은 능력치를 누르고, 대응 상품이 막는다.');
+ assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\[h\.key\]/.test(fn('gatePlate')),'Gate detail reads the full sentence');
+ assert.ok(!/gatePlate\(d,true\)/.test(fn('morningScreen'))&&/s\.dungeons\.map\(gatePlate\)/.test(fn('morningScreen')),'MORNING keeps the short row');
+ const plate=fn('destPlate');
+ assert.ok(/tip\('위험',Presentation\.PLATE_HELP,\.\.\.Presentation\.known\(d,game\)\.map\(k=>Presentation\.hazardSentence\[k\]\)\)/.test(plate),'the plate has one ? with the rule line and this Gate\'s sentences');
+ assert.equal((plate.match(/tip\(/g)||[]).length,1,'one ? only');
+ // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
+ const of=fn('orderForm');
+ assert.ok(/const fitToday=new Set\(s\.dungeons\.flatMap\(d=>\[\.\.\.Presentation\.fitKeys\(Presentation\.known\(d,game\)\)\]\)\)/.test(of),'fit keys = union over today\'s Gates');
+ assert.ok(/\(fitToday\.has\(r\.key\)\?' fit':''\)/.test(of),'matching effect text takes the emphasis class');
+ assert.ok(/\.line \.fx \.fit\{color:var\(--ink\);font-weight:600;text-decoration:underline/.test(css),'emphasis is typographic (ink, the shipped bold face, an underline)');
+ assert.ok(!/오늘 필요|추천/.test(of),'no badge or verdict word');
+ // per-Gate counts: only with ≥2 Gates, in the §4-21 form
+ assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one');
+ assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 
 

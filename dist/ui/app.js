@@ -101,6 +101,14 @@ let lastPhase=null;
 const menuFab=()=>'<button class="menu-pin" data-action="menu" aria-label="게임 메뉴">'+Art.glyph('menu',24)+'</button>';
 const pips=(total,at)=>'<span class="pips" aria-hidden="true">'+Array.from({length:Math.min(total,12)},(_,k)=>'<i class="'+(k===at?'now':k<at?'on':'')+'"></i>').join('')+'</span>';
 const sigilOf=d=>D.dungeonBy[d.family&&d.family!=='final'?d.family:d.id]||D.dungeonBy[d.id]||{};
+/* v2.9.0 UI_UX §TUTORIAL — TASK LINE, DAY 1~3 (COPY_AUDIT §3-8, User 2026-09-24): one fixed text line at the top of
+   the phase content on DAY 1~3 while the account tutorial is not skipped. Not a coach mark, no button; it reuses the
+   tutorial state and adds no Save field. DAY 0 and DAY 4+ have none. The one approved exception to "the tutorial
+   adds no page height": exactly one line, which never wraps at 360 (white-space:nowrap). */
+const TASK_LINE={morning:'오늘 할 일 — 열린 게이트의 위험을 본다',order:'오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다',sell:'오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다',closing:'오늘 할 일 — 오늘 장사를 정리한다',night:'오늘 할 일 — 준비가 어떻게 됐는지 확인한다'};
+function taskLine(phase){const s=game.run,t=game.account.tutorial||{};
+ if(!s||t.skipped||!(s.day>=1&&s.day<=3)||!TASK_LINE[phase])return '';
+ return '<p class="task-line">'+E(TASK_LINE[phase])+'</p>';}
 function stage(phase,label,head,body,dock,attrs=''){
  return '<div class="stage p-'+phase+'"'+attrs+'>'+menuFab()+(head||'')
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="'+label+'">'+body+'</main>'
@@ -303,12 +311,15 @@ const hazardList=(keys,states)=>keys.length?'<ul class="hazards">'+Presentation.
 // the gate mark branded into it, the supply requirement stamped underneath.
 // A Gate is a paper notice pinned to the board: family colour along the top, the hazard
 // pictogram beside each pressure line, the supply requirement stamped at the foot.
-function gatePlate(d){const b=sigilOf(d);
+/* `full`: Gate detail (the gates modal) reads the nine exact sentences (COPY_AUDIT §4-16); the MORNING plate keeps the
+   short `{위험} · {label}` row. */
+function gatePlate(d,full=false){const b=sigilOf(d);
  return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
- +'<ul class="hazards">'+Presentation.hazardRows(Presentation.known(d,game)).map(h=>
-   '<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(h.pressure)+'</span></li>').join('')+'</ul>'
+   +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game)).map(h=>full
+     ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence[h.key])+'</span></li>'
+     :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(h.pressure)+'</span></li>').join('')+'</ul>'
    +'</article>';}
 function tierLine(){const f=game.tierForecast();return f?'T1 '+f.percent[0]+'% · T2 '+f.percent[1]+'% · T3 '+f.percent[2]+'%':'마왕성 최종 원정';}
 /* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. How many Gates open tomorrow, before the player
@@ -360,8 +371,8 @@ function morningScreen(){
  +'<div class="store">'
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
-  +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'
-   +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
+    +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
+     +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'</div>'
   /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
@@ -490,7 +501,7 @@ function saleScreen(){
    const preloadArt = nextNpc ? Scene.npcArt(nextNpc) : null;
    const preloadHtml = preloadArt ? '<img src="'+preloadArt+'" style="display:none" aria-hidden="true">' : '';
    const st=s.inventory.find(x=>x.id===selected);
-   return '<div class="stage p-sale">'+menuFab()+preloadHtml
+   return '<div class="stage p-sale">'+menuFab()+preloadHtml+taskLine('sell')
  +'<section class="front" data-npc="'+E(n.id)+'" aria-label="계산대 앞">'
   +'<div class="backwall" aria-hidden="true">'+Scene.shelfStrip()+'</div>'
   /* UI_UX v2.6.1 SALE AUTHORITY: portrait left, Core Decision upper-right. The forecast,
@@ -655,7 +666,7 @@ function nightScreen(){
  return '<div class="stage p-night'+(r&&r.outcome==='사망'?' cold':'')+'">'+menuFab()
  +'<div class="nightband" aria-hidden="true">'+Scene.nightRoom()+'</div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
-  +rail
+  +taskLine('night')+rail
   +'<div class="beat-room">'
    +(s.pilgrimage?'<p class="event-note">게이트 순례주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
    +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>')
@@ -797,7 +808,7 @@ function closingScreen(){
    +(rescue?btn('재고 정리','stock'):'')+btn('폐점','retire','danger')
   :'')+btn('다음 날','close','stamp');
  return '<div class="stage p-closing">'+menuFab()
- +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="마감">'+body+'</main>'
+ +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="마감">'+taskLine('closing')+body+'</main>'
  +'<div class="dock">'+dock+'</div></div>';
 }
 const coachSteps={
@@ -806,7 +817,8 @@ const coachSteps={
     is account-scoped like every other coach mark: a Run abandon keeps it, a full data reset
     clears it and the next first occurrence teaches it again. No new persistence was added. */
  morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.']],
- order:[['gold','#order-register','보유 골드와 현재 발주 후 잔액을 확인한다.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.']],
+ /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself */
+ order:[['gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['offer','.lines .line','후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
  /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
     (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
@@ -954,8 +966,10 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
     player weighs an Item against, so it belongs with 전투 전망 and 실패 시 사망 위험 on the
     decision surface rather than a screen above it. Nothing is lost: 환경 대응 states the same
     canonical snapshot, in the same vocabulary, from the same outlook. */
- +'<div><label>예상 목적지</label><h3>'+E(d.name)+'</h3>'
- +hazardList(Presentation.known(d,game),null)
+  +'<div><label>예상 목적지</label><div class="dest-name"><h3>'+E(d.name)+'</h3>'
+  /* v2.9.0 (COPY_AUDIT §4-15 / §4-16): the plate's one `?` - the rule in one line, then this Gate's full Hazard sentences */
+  +tip('위험',Presentation.PLATE_HELP,...Presentation.known(d,game).map(k=>Presentation.hazardSentence[k]))+'</div>'
+  +hazardList(Presentation.known(d,game),null)
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
@@ -1030,11 +1044,17 @@ function orderScreen(){
  /* UI_UX §GAME-LIKE INTERACTION LANGUAGE + §ORNAMENT RESTRAINT: committing the order is an
     inked impression on the 발주서 - the material and the press, with no repeated seal mark and
     no tilt. Leaving the desk is a different kind of act, so it takes the steel `.leave` plate. */
- return stage('order','발주','',orderForm(),
+ return stage('order','발주',taskLine('order'),orderForm(),
   (cart?'<button class="stamp" data-action="confirm-order">발주 '+fmt(cart)+'G · 확정</button>':'')
   +'<button class="stamp leave" data-action="open-store" '+(cart?'disabled':'')+'>영업 시작</button>');
 }
+/* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, User 2026-09-24): with two or more open Gates the ORDER 오늘 line carries the
+   visitor count per Gate, by the destination each customer claims (a liar's or a rerouted customer's true Gate stays
+   hidden). Counts only: no name, Job, Trait, Wallet or individual destination leaves this helper. */
+function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
+ /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
+ const fitToday=new Set(s.dungeons.flatMap(d=>[...Presentation.fitKeys(Presentation.known(d,game))])),counts=s.dungeons.length>=2?gateCounts():null;
  return '<div class="clip"></div><div class="form">'
  /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24
     seal carried no function or state - it filled the head's right margin and nothing else. The
@@ -1049,7 +1069,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<div class="ref-row">'+relicRef()+'</div>'
    // two groups: what today needs, and the signal for tomorrow's order
    +'<div class="brief"><div class="when"><span class="k">오늘</span>'
-   +'<p><b>'+s.queue.length+'명</b> · '+E(s.dungeons.map(d=>d.name).join(' / '))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
+     +'<p><b>'+s.queue.length+'명</b> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
    +'<div class="when"><span class="k">내일</span><p class="tier">'+E(gateLine())+'</p><p class="tier">'+tierLine()+'</p></div></div>'
    /* FINAL_EXPEDITION_v2.7 §D25: from D25 the Final's Family Pair and Hazard Pool are known,
       so they sit with the other planning signals on ORDER rather than arriving on D30. It is
@@ -1078,7 +1098,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
         organised by, not something a player decides with - and it never reaches a render path.
         The data stays: ordering weights and Relic conditions read `category`. What the row
         needs is right underneath it, in the effects summary. */
-     +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
+       +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+(fitToday.has(r.key)?' fit':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
      +'<span class="have">매입 '+o.price+'G · 수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+' · 유통기한 '+(sl?sl+'일':'없음')+'</span>'
   +'</span>'
   +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
@@ -1584,7 +1604,9 @@ function settings(){return `<div class="stack"><p>자동저장은 현재 브라�
 /* COPY_AUDIT_APPROVED_v2.8.0 §8 is the exact owner of the global guide. The long-form manual
    it replaces described retired rules, understated the refusal ceiling, and repeated what the
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
-function help(){return `<div class="stack"><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 ${D.balance.deathLimit}명이 되면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></div>`;}
+/* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
+   under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 손익을 정리하고 다음 날로 간다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 ${D.balance.deathLimit}명이 되면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -1669,9 +1691,9 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
  /* SA-Q47 / BOSS_v2.8 §D0 INFORMATION BOUNDARY: the Run objective and the investigation cadence
     only - no Boss identity, no art, no Trait, no Final state. That is D5's beat onward. The two
     Days are told apart by type on the same record, not by timeline cards. */
+ /* v2.9.0 (COPY_AUDIT §14-1): the body is two lines; the closing sentence is gone */
  if(stage==='d0')return '<div class="boss-reveal d0">'+bossFiled()+'<p class="lede">'+E(c.d0.lead)+'</p>'
-  +c.d0.steps.map(([day,lines])=>'<div class="d0-step"><b>'+E(day)+'</b>'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>').join('')
-  +'<p class="d0-close">'+E(c.d0.close)+'</p></div>';
+  +c.d0.lines.map(l=>'<p class="d0-line">'+E(l)+'</p>').join('')+'</div>';
  return '<div class="boss-reveal d5">'+bossFiled()+'<p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}
@@ -1719,7 +1741,7 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
  else if(modal==='new'){title='새 점포 준비';body=(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')+newRun();footer=btn('첫 점포지원 고르기','start','stamp');narrow=true;}
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
- else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(gatePlate).join('')+'</div>';}
+else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+'</div>';}
    else if(modal==='menu'){title='점포 메뉴';body='<div class="menu-list">'+btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics'):'')+btn('점주 가이드','help')+btn('설정','settings')
       +(game.run?btn('현재 지점 포기','new','danger'):'')+'</div>';narrow=true;}
  else if(modal==='roster'){title='모험가 수첩';body=rosterList();}

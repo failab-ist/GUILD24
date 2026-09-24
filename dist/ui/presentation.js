@@ -15,6 +15,10 @@ const PRESSURE_LABEL={survival:'강인함으로 버틴다',mobility:'기동으�
 const hazardStat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};
 const hazardPressure=Object.fromEntries(Object.entries(hazardStat).map(([h,s])=>[h,PRESSURE_LABEL[s]]));
 function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
+/* COPY_AUDIT §4-16 / DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE: the full Hazard sentence for Gate detail and the
+   destination-plate help - nine exact literals, no numbers, none name-only. §4-15 is the plate's one-line help. */
+const hazardSentence={poison:'독 — 강인함으로 버틴다 · 독 대응 상품이 막는다',cold:'냉기 — 강인함으로 버틴다 · 냉기 대응 상품이 막는다',corrosion:'부식 — 강인함으로 버틴다 · 부식 대응 상품이 막는다',bind:'속박 — 기동으로 피한다 · 속박 대응 상품이 막는다',mire:'진창 — 기동으로 피한다 · 진창 대응 상품이 막는다',fire:'화염 — 기동으로 피한다 · 화염 대응 상품이 막는다',fear:'공포 — 정신으로 견딘다 · 공포 대응 상품이 막는다',dark:'어둠 — 정신으로 견딘다 · 어둠 대응 상품이 막는다',whiteout:'화이트아웃 — 정신으로 견딘다 · 화이트아웃 대응 상품이 막는다'};
+const PLATE_HELP='위험은 능력치를 누르고, 대응 상품이 막는다.';
 /* hazardStat above is the Core Stat each Hazard presses (the same table the engine's hazardState uses);
    the Stat-grid pressure tag and the matching-effect emphasis read it; 투력 is never a pressed Stat. */
 function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];if(s)(m[s]=m[s]||[]).push(k);}return m;}
@@ -278,6 +282,6 @@ function amount(key,value,moved=true){
  if(percent.has(key))return (Math.round(value*1000)/10)+'%p';
  return stat(value,moved);
 }
-G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,hazardStat,pressedBy,fitKeys,
+G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,hazardSentence,PLATE_HELP,hazardStat,pressedBy,fitKeys,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

@@ -222,9 +222,8 @@ Copy.boss={
  /* COPY_AUDIT §14-1 D0 — the first-Morning briefing: the Run objective and the investigation
     cadence, and nothing about the Boss itself. Verbatim. */
  d0:{header:'마왕 조사 개시',lead:'길드 조사대가 마왕의 정체를 추적하러 출발했다.',
-  steps:[['DAY 5',['첫 조사 보고에서 토벌 대상이 공개된다.','이후 조사 소식은 5일마다 이어진다.']],
-         ['DAY 30',['성장한 모험가를 최대 3명까지 마왕성으로 보내 최종 토벌에 나선다.']]],
-  close:'조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.',button:'확인'},
+  /* v2.9.0 (COPY_AUDIT §14-1, User 2026-09-24): two lines; the closing sentence is deleted */
+  lines:['DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.','DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.'],button:'확인'},
  d5:{header:'1차 조사 보고',sub:'토벌 대상 확인',button:'확인',
   flavor:{
    WRATH:'공성추도 없이 성문이 안쪽으로 무너졌다.',

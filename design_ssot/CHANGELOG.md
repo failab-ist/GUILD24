@@ -60,6 +60,9 @@ Docs-first. Each owner amendment is listed when committed.
   band examples, UI_UX, DUNGEON_HAZARD boundary, DUNGEON_ITEM_QA, UI_UX_QA).
 - Rules adoption in Source (I-2, commits 67e63c3 / 22c288c / 840fbfe): engine, presentation and copy follow the D-2 rules;
   re-measure vs 6cb62b4 in reports/remeasure-v29-summary.md (BALANCE FINDING: reported, not tuned).
+- Onboarding / ORDER in Source (I-3): DAY 1~3 task line on every phase, first-ORDER coach gates -> offer -> quantity ->
+  confirm -> reroll, Gate detail full Hazard sentences + destination-plate ?, ORDER today-fit emphasis and per-Gate
+  visitor counts, D0 briefing two lines, 점주 가이드 처음 3일 + 자세히.
 
 ## v2.8.0 — closed 2026-09-24
 
