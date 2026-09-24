@@ -549,7 +549,7 @@ Exact D15 Trait name:
 ```new
 Confirm title / body / button -> `COPY_AUDIT_APPROVED_v2.8.0.md` §1-3.
 **FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.8.0.md`
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3. The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
+Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 능력치 (STATS) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3. The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
 Exact player-facing Function / Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-5.
 Retained current copy (`COPY_AUDIT_APPROVED_v2.8.0.md` §14-2 / §14-4 / §23): the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below.
 Header / Label / Button and GLUTTONY Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-2.

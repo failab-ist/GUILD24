@@ -138,7 +138,7 @@
 ## 3-7. TUTORIAL / COACH — USER APPROVED EXACT COPY
 
 The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-24: the
-first SALE teaches four marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, 전망 (§3-4), PRICING;
+first SALE teaches five marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, STATS (능력치, User 2026-09-24), 전망 (§3-4), PRICING;
 SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time their situation exists).
 
 ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY → 발주 확정 (§3-2) → 후보 교환
@@ -150,6 +150,9 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 
 ### HAZARD
 > 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.
+
+### STATS (User 2026-09-24, v2.9.0: anchor = the SALE 능력치 grid, right after HAZARD — the first time a customer's Stats are on screen)
+> 이 손님의 능력치. 직업·희귀도·레벨마다 다르다. 투력은 전투를 좌우하고, 강인함·기동·정신은 각 위험에 대응한다.
 
 ### SUPPLY (User 2026-09-24, v2.9.0: contextual on the counter tray's first `피로 A → 출발 B` row)
 > 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.

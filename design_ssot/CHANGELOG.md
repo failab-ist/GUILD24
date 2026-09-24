@@ -77,6 +77,8 @@ Docs-first. Each owner amendment is listed when committed.
 - Revision 4 (User 2026-09-24): the Core-Stat conversion is an integer, read `{능력치} n당 1` — 강인함 ×1/3 (3당 1), 기동 / 정신
   ×1/2 (2당 1), each rounded in the player's favour from ×0.30 / ×0.40. Every Hazard row and sentence, DUNGEON_HAZARD coefficient
   table, DUNGEON_ITEM_QA, COPY_AUDIT §4-16, COPY_WORLD_VOICE §D25, UI_UX, UI_UX_QA, SALE, ECONOMY_ORDER, FINAL_EXPEDITION.
+- First-SALE coach gains a STATS mark on the 능력치 grid, after HAZARD (User 2026-09-24): five marks; exact line COPY_AUDIT §3-7 STATS,
+  UI_UX §TUTORIAL, COPY_WORLD_VOICE §TUTORIAL COACH COPY list.
 
 ## v2.8.0 — closed 2026-09-24
 

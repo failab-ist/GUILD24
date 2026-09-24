@@ -1994,7 +1994,7 @@ Hazard tutorial teaches:
 Supply/Fatigue tutorial teaches one fact, on the counter tray's first `피로 A → 출발 B` row the Player meets — a Food/Drink chosen for a fatigued customer (User 2026-09-24, v2.9.0):
 - Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 
-First SALE (User 2026-09-24): four marks only — destination, Hazard, outlook, price. Great Success, Supply,
+First SALE (User 2026-09-24): five marks only — destination, Hazard, Stats (the customer's own 능력치: they differ by Job / rarity / Level, 투력 drives combat, the other three answer the Hazards; COPY_AUDIT §3-7 STATS), outlook, price. Great Success, Supply,
 returning customer and Bag marks are contextual and appear the first time their situation exists.
 
 Do not teach `독이면 X 아이템을 사세요` or equivalent solution scripts.
