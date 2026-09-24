@@ -1,0 +1,35 @@
+== none (no purchase)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30  11.5%  clear   6.5%  decorations 0.00  capital +446
+  run  5  D30   9.5%  clear   6.0%  decorations 0.00  capital +417
+  run  8  D30  10.5%  clear   5.5%  decorations 0.00  capital +427
+  run 10  D30   6.5%  clear   4.0%  decorations 0.00  capital +405
+  run 12  D30   9.0%  clear   5.0%  decorations 0.00  capital +433
+  run 15  D30   6.5%  clear   3.5%  decorations 0.00  capital +415
+  first clear within 15 Runs: 56.5%  median first-clear Run 12
+== survival (firstAidKit > memorialBoard > infirmaryPlaque > trainingRack)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30  11.5%  clear   5.5%  decorations 0.52  capital +439
+  run  5  D30  16.0%  clear   7.0%  decorations 1.39  capital +463
+  run  8  D30  27.0%  clear  12.5%  decorations 2.50  capital +606
+  run 10  D30  33.0%  clear  12.0%  decorations 3.19  capital +644
+  run 12  D30  44.0%  clear  19.5%  decorations 3.62  capital +766
+  run 15  D30  47.0%  clear  19.5%  decorations 3.94  capital +812
+  #1 firstAidKit      median Run 3  acquired 100%
+  #2 memorialBoard    median Run 5  acquired 100%
+  #3 infirmaryPlaque  median Run 8  acquired 100%
+  #4 trainingRack     median Run 10  acquired 99%
+  first clear within 15 Runs: 79.0%  median first-clear Run 10
+== economy (premiumCase > thriftSafe > guildPlaque > dawnSign)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30   8.0%  clear   4.0%  decorations 0.52  capital +405
+  run  5  D30  12.5%  clear   6.0%  decorations 1.37  capital +496
+  run  8  D30  23.0%  clear  16.5%  decorations 2.54  capital +664
+  run 10  D30  19.5%  clear  11.5%  decorations 3.26  capital +688
+  run 12  D30  24.5%  clear  16.5%  decorations 3.67  capital +781
+  run 15  D30  24.0%  clear  17.5%  decorations 3.96  capital +750
+  #1 premiumCase      median Run 3  acquired 100%
+  #2 thriftSafe       median Run 5  acquired 100%
+  #3 guildPlaque      median Run 7  acquired 100%
+  #4 dawnSign         median Run 9  acquired 99%
+  first clear within 15 Runs: 82.0%  median first-clear Run 9
