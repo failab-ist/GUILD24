@@ -63,7 +63,8 @@ AUDIO=[('typing','tick'),        # ORDER quantity: the shortest thing in the set
        ('close','settle'),       # CLOSING: the drawer/ledger settling the day
        ('blocked','gate'),       # FINAL commit: the heaviest mechanical close in the set
        ('hover','soft'),         # utility navigation, deliberately the quietest file here
-       ('select','key')]         # ordinary pick
+       ('select','key'),         # ordinary pick
+       ('send','door')]          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
 
 def glyphs():
     chars=set()

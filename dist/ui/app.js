@@ -162,17 +162,59 @@ function playPhase(phase){
    whole screen, so an entry animation attached to an element would replay on every click:
    the action names what just happened and the next draw plays that one thing. The marker
    lives for exactly one render and is not state anyone can read back. */
-let cue=null;
-function playCue(){const c=cue;cue=null;
+/* v2.9.0 TRANSACTION BEAT (PRESENTATION_PRINCIPLES §TRANSACTION BEAT, User 2026-09-24). `handoff` is
+   what the click handler saw on screen just before the state moved - the shelf tile's place, the
+   Gold, the four Stat readings - so the draw after it can show the resolved change as an act:
+   the icon travels to the Bag, the Gold counts, the changed cells pulse. It lives for exactly one
+   render, holds nothing the resolved state does not already hold, and is never saved. */
+let cue=null,handoff=null;
+function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
  if(!c||!motionOK())return;
  const A=anime.animate;
  // picking a product opens the price panel under it - the panel arrives, the list does not jump
  if(c==='select'){const open=$('.good.open + .tillpanel');if(open)A(open,{opacity:[0,1],translateY:[-8,0],duration:190,ease:'outQuad'});}
- // a sale lands in the bag: the slot row settles and the customer answers
- if(c==='sale'){const slots=$('.counter .slots');if(slots)A(slots,{scale:[1.05,1],duration:240,ease:'outQuad'});
+ /* A1 건네기: the Item icon travels from its shelf row to the Bag slot it now fills (280 ms), the
+    slot settles (1.05 -> 1, 240 ms), the dock Gold counts to its new value, and each Stat cell that
+    changed pulses once (300 ms) and keeps the new value. A2: the customer nods (4 px, 180 ms x 2).
+    Every beat is under 320 ms and the whole sale is under 600 ms; input is never held. */
+ if(c==='sale'){
+  const slot=[...document.querySelectorAll('.counter .slots i.full')].pop();
+  const settle=()=>{if(slot)A(slot,{scale:[1.05,1],duration:240,ease:'outQuad'});};
+  if(slot&&h.from&&h.icon){const to=slot.getBoundingClientRect(),g=document.createElement('i');g.className='handoff';g.innerHTML=h.icon;
+   g.style.cssText='left:'+h.from.left+'px;top:'+h.from.top+'px;width:'+h.from.width+'px;height:'+h.from.height+'px';
+   document.body.appendChild(g);
+   /* the slot's own icon waits, hidden, until the travelling one lands on it - one Item, not two */
+   const inner=slot.firstElementChild;if(inner)inner.style.opacity='0';
+   const land=()=>{g.remove();if(inner)inner.style.opacity='';};
+   A(g,{translateX:to.left+to.width/2-(h.from.left+h.from.width/2),translateY:to.top+to.height/2-(h.from.top+h.from.height/2),
+    scale:to.width/Math.max(1,h.from.width),duration:280,ease:'inOutQuad',onComplete:()=>{land();settle();}});
+   setTimeout(land,600);}
+  else settle();
+  const gold=$('.dock .on-hand b');
+  if(gold&&h.gold!==undefined&&h.gold!==game.run.money){const box={v:h.gold};A(box,{v:game.run.money,duration:320,ease:'outQuad',onUpdate:()=>{gold.textContent=fmt(box.v);}});}
+  if(h.stats)[...document.querySelectorAll('.detail-stats .detail-stat')].forEach((cell,i)=>{
+   const now=cell.querySelector('strong')?.textContent;if(h.stats[i]!==undefined&&h.stats[i]!==now)A(cell,{scale:[1,1.04,1],duration:300,ease:'inOutQuad'});});
+  const fig=$('.who .figure');if(fig)A(fig,{translateY:[0,4,0,4,0],duration:360,ease:'inOutSine'});
   const said=$('.say');if(said)A(said,{opacity:[0,1],translateY:[6,0],duration:220,ease:'outQuad'});}
- // a refusal is the same channel saying no, so it moves rather than appears
- if(c==='refuse'){const said=$('.say');if(said)A(said,{translateX:[0,-5,4,-2,0],duration:280,ease:'outQuad'});}
+ /* A2 / A6: a refusal is the same channel saying no - the balloon and the figure shake their head,
+    and the price button that was refused shakes once where it locked (오늘 거절됨 is already on it). */
+ if(c==='refuse'){const shake={translateX:[0,-4,4,-2,0],duration:280,ease:'outQuad'};
+  const said=$('.say');if(said)A(said,{translateX:[0,-5,4,-2,0],duration:280,ease:'outQuad'});
+  const fig=$('.who .figure');if(fig)A(fig,shake);
+  const b=h.mode?$('.tills button[data-mode="'+h.mode+'"][disabled]'):null;if(b)A(b,shake);}
+}
+/* A4 손님 교대: the customer walks off left (240 ms) before the next one is drawn. The state moves
+   in `go` exactly as it did without the beat; the beat only delays that call by its own length,
+   a second tap during it is dropped rather than departing two customers, and a timer fires `go`
+   even if the animation never completes, so the beat can never hold the day. */
+let leaving=false;
+function playExit(go){
+ const who=game.run?.phase==='sell'?$('.who'):null;
+ if(leaving)return;
+ if(!motionOK()||!who){go();return;}
+ leaving=true;let done=false;const fire=()=>{if(done)return;done=true;leaving=false;go();};
+ anime.animate(who,{translateX:[0,-40],opacity:[1,0],duration:240,ease:'inQuad',onComplete:fire});
+ setTimeout(fire,260);
 }
 // the approval stamp lands before the phase advances
 function stampPress(el){
@@ -1788,13 +1830,16 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
   break;}
- case'sell':{const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}render();break;}
+ /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
+ case'sell':{const tile=$('.good.open .tile'),seen={mode:el.dataset.mode,from:tile?tile.getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,
+   stats:[...document.querySelectorAll('.detail-stats .detail-stat strong')].map(x=>x.textContent)};
+  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}handoff=seen;render();break;}
  /* The last departure of the day IS the entry to NIGHT, and it lands on result 0 already
     displayed - so it owes that result its own Outcome cue. It used to play the generic return
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
     return until the player pressed 다음. */
- case'depart':game.depart();selected=null;render();
-  if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');healCue();break;
+ case'depart':playExit(()=>{game.depart();selected=null;render();
+  if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');healCue();});break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
  case'reroll':game.reroll();sound('spend');render();break;
  case'stock':sound('ui');setModal('stock');break;

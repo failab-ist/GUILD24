@@ -63,9 +63,9 @@ Regenerate the vendored copies with `npm run assets`.
   file is 87–298 ms long and falls 20 dB within 10–70 ms of its peak.
 - scope: the **tonal** families stay synthesised — NIGHT outcomes, the Boss motif and the phase
   beds have to stay in tune with each other, and a sample set cannot be transposed into a
-  family. Only the twelve object-sounds below ship; the package carries 1872 files and the rest
+  family. Only the thirteen object-sounds below ship; the package carries 1872 files and the rest
   never reach `dist`.
-- how: `tools/vendor-assets.py` copies them into `dist/ui/assets/audio/` (32 KB total, mp3 —
+- how: `tools/vendor-assets.py` copies them into `dist/ui/assets/audio/` (36 KB total, mp3 —
   the one container every current mobile browser decodes). Regenerate with `npm run assets`.
   Nothing is fetched from a host at runtime; the loader reads this build's own files, and every
   sampled cue keeps a synthesised fallback so a failed load is thinner, never silent.
@@ -84,6 +84,7 @@ Regenerate the vendored copies with `npm run assets`.
 | `gate.mp3` | `mechanical/blocked` | FINAL commit |
 | `soft.mp3` | `mechanical/hover` | utility navigation |
 | `key.mp3` | `mechanical/select` | ordinary pick |
+| `door.mp3` | `mechanical/send` | SALE 손님 보내기 — the customer leaves (v2.9.0 TRANSACTION BEAT A4) |
 
 ## Evaluated and rejected
 

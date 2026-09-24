@@ -915,6 +915,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff0f}
 .counter .slots i.full{background:#3a2c1d;box-shadow:inset 2px 2px 0 #ffffff1f,inset 0 0 0 1px var(--gold)}
 .counter .slots i.free{box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff29}
+/* v2.9.0 TRANSACTION BEAT A1: the travelling Item icon - a fixed ghost of the shelf tile that
+   playCue moves onto the Bag slot and removes; it takes no input and holds no state */
+.handoff{position:fixed;z-index:70;display:grid;place-items:center;pointer-events:none;transform-origin:center;will-change:transform}
 /* ---- layer 2 : what is known -------------------------------------------------- */
 /* The stat/forecast dossier, the shelf and the Trait rows read stat -> goods -> Traits
    (UI-Q109 §8 / UI-Q10..Q14): the shelf is the one block a product decision cannot move

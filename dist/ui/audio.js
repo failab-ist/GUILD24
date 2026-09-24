@@ -80,7 +80,9 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
 const sample={quantity:'tick',quantset:'tick',order:'stamp',sale:'register',overcharge:'register',
  half:'register',refusal:'refuse',support:'secure',purchase:'cart',unlock:'unlock',
- open:'shutter',close:'settle',final:'gate',ui:'soft',button:'key'};
+ open:'shutter',close:'settle',final:'gate',ui:'soft',button:'key',
+ /* v2.9.0 TRANSACTION BEAT A4: 손님 보내기 carries a recorded utility object (door / step family) */
+ depart:'door'};
 const buffers=new Map(),lastAt=new Map();
 /* Fetched once, on the first unmuted sync, so a muted player downloads nothing. A failure is
    swallowed on purpose: the synthesised shape is already this cue's fallback. */
@@ -155,10 +157,13 @@ const shape={
  order:{gain:1.1,dur:.14,type:'square',step:.09,attack:.003,glide:.97,sampleGain:1,accent:true,
   noise:{at:.02,dur:.11,gain:.8,hz:2600,q:.6,filter:'highpass'},duck:.5},
  /* SALE. Every price mode commits on the same register body at the same level, so no mode is
-    made to sound like the correct answer; the accent is the same two notes for all three. */
- sale:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35},
- overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35},
- half:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35},
+    made to sound like the correct answer; the accent is the same two notes for all three.
+    v2.9.0 TRANSACTION BEAT A5 (User 2026-09-24): the modes are told apart by coin ticks only -
+    1 / 2 / 3 short high pings after the register, at one level, so 150% is more coins, not a
+    better sound. `ticks` is the count; everything else in the three shapes is identical. */
+ sale:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:2},
+ overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:3},
+ half:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:1},
  /* refusal: clearly not a sale, and deliberately not a failure buzzer - a short dry cancel */
  refusal:{gain:.85,dur:.3,type:'sawtooth',step:.13,attack:.035,glide:.93,sampleGain:1,duck:.45},
  /* STORE SUPPORT: securing a fixture into the store. Heavier than the ordinary purchase below,
@@ -175,7 +180,8 @@ const shape={
   noise:{at:.06,dur:.16,gain:.3,hz:3200,q:.8,filter:'highpass'},duck:.35},
  gold:{gain:.9,dur:.16,type:'triangle',step:.07},
  spend:{gain:.9,dur:.16,type:'triangle',step:.07},
- depart:{gain:.9,dur:.2,type:'sine',step:.1},
+ /* the recorded door is the body; the two notes stay as the fallback when it has not loaded */
+ depart:{gain:.9,dur:.2,type:'sine',step:.1,sampleGain:.8},
  return:{gain:.95,dur:.22,type:'sine',step:.1},
  /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost. */
  great:{gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
@@ -209,6 +215,8 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
   tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1),sh.type||'triangle',sfxBus,sh);
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',sfxBus);});
  if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise);
+ /* coin ticks: the same ping, the same level, only the count differs between price modes */
+ if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(2637,t0+.14+i*.07,.04,SFX_VOICE*.5,'sine',sfxBus,{attack:.002});
  if(sh.duck)duck(t0,sh.duck);}
 function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;if(!enabled||document.hidden){if(timer)clearInterval(timer);timer=null;track='';return;}if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
  buses();preload();

@@ -1522,8 +1522,14 @@ test('D-23: every cue the UI asks for exists, and every step of an ordinary day 
     they resolve to one shared SALE body at one level, not to an ascending fanfare for 바가지. */
  assert.ok(cueFor('sell')&&cueFor('sell').includes('overcharge'),'a sale is priced in the cue it makes');
  const modeShape=m=>{const i=shp.indexOf('\n '+m+':{');assert.ok(i>0,m+' names a shape');return shp.slice(i+m.length+3,shp.indexOf('},',i));};
+ /* v2.9.0 TRANSACTION BEAT A5 (UI_UX §AUDIO 50% / 100% / 150%): the modes differ by coin ticks
+    only - 1 / 2 / 3 - and by nothing else; the count is not a level and no mode rings better. */
  const modes=['sale','overcharge','half'].map(modeShape);
- assert.equal(new Set(modes).size,1,'the three price modes are one SALE family at one level');
+ assert.equal(new Set(modes.map(m=>m.replace(/,ticks:\d/,''))).size,1,'the three price modes are one SALE family at one level');
+ const ticks=Object.fromEntries(['half','sale','overcharge'].map(m=>[m,Number((modeShape(m).match(/ticks:(\d)/)||[])[1])]));
+ assert.deepEqual(ticks,{half:1,sale:2,overcharge:3},'50% / 100% / 150% are told apart by 1 / 2 / 3 coin ticks');
+ assert.ok(/if\(sh\.ticks\)for\(let i=0;i<sh\.ticks;i\+\+\)tone\(2637,t0\+\.14\+i\*\.07,\.04,SFX_VOICE\*\.5,'sine'/.test(read('dist/ui/audio.js')),
+  'and the ticks are the same ping at the same level, only counted');
  const samples=Sound.samples;assert.equal(new Set(['sale','overcharge','half'].map(m=>samples[m])).size,1,
   'and they commit on the same recorded register body');
  assert.ok(/sound\('refusal'\)/.test(app),'and a refusal sounds different from a sale');
@@ -1654,15 +1660,15 @@ test('D-24: the feel layer is optional, and it never animates a redraw of the sa
  assert.ok(/const motionOK=\(\)=>typeof anime==='object'&&!!anime\.animate&&!matchMedia/.test(app),
   'and motion is off when the library is missing as well as when motion is reduced');
  // every animation call sits behind that check
- for(const name of ['playPhase','playCue','stampPress'])
+ for(const name of ['playPhase','playCue','stampPress','playExit'])
   assert.ok(fn(name).includes('if(!motionOK()')||fn(name).includes('||!motionOK()'),name+' stands down on its own');
- const elsewhere=app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'')
+ const elsewhere=app.replace(fn('playPhase'),'').replace(fn('playCue'),'').replace(fn('stampPress'),'').replace(fn('playExit'),'')
   .split('\n').filter(l=>!l.trimStart().startsWith('//')&&!l.trimStart().startsWith('*')&&!l.includes('const motionOK=')).join('\n');
  assert.ok(!/anime\.(animate|stagger)/.test(elsewhere),'nothing animates outside the three guarded places');
  // a redraw replaces the screen, so an entry animation would replay on every click:
  // the phase beats run only when the view actually changed, the in-phase ones on a one-shot marker
  assert.ok(/if\(changed\)playPhase\(phase\);playCue\(\);/.test(app),'the phase beat is gated on the view changing');
- assert.ok(/function playCue\(\)\{const c=cue;cue=null;/.test(app),'and the in-phase marker is consumed by the draw that uses it');
+ assert.ok(/function playCue\(\)\{const c=cue;cue=null;const h=handoff\|\|\{\};handoff=null;/.test(app),'and the in-phase marker is consumed by the draw that uses it');
  assert.ok(/cue=selected\?'select':null/.test(app)&&/cue='sale'/.test(app)&&/cue='refuse'/.test(app),
   'picking, selling and being refused are each their own beat');
  assert.ok(!/account\.\w*cue|run\.\w*cue/.test(app),'the marker is never written into a save');
@@ -2779,5 +2785,48 @@ test('BGM is level across phases; settings keys share one style',()=>{
  const set=fn('settings');
  assert.ok(!/btn\('[^']+','(export|import|sound)','stamp'\)/.test(set),'no settings key is dressed as the pixel primary');
 });
+
+/* v2.9.0 TRANSACTION BEAT (User 2026-09-24) - PRESENTATION_PRINCIPLES §TRANSACTION BEAT A1~A6,
+   UI_UX_QA UI-Q-v29-3. Selling has to be seen as an act: the icon travels to the Bag, the Gold
+   counts, the customer nods or shakes their head, the refused price shakes where it locked, the
+   customer walks off before the next arrives. Presentation only - the state moves exactly as it
+   did, under the same guard as every other beat, and nothing here is saved. */
+test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless',()=>{
+ const css=read('dist/ui/ui.css'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ const sell=app.slice(app.indexOf("case'sell':"),app.indexOf("\n case'",app.indexOf("case'sell':")+1));
+ // the click handler records what the screen showed before the commit, and only that
+ assert.ok(/const tile=\$\('\.good\.open \.tile'\)/.test(sell)&&/from:tile\?tile\.getBoundingClientRect\(\):null/.test(sell),"the shelf tile's place is read before the state moves");
+ assert.ok(/gold:s\.money/.test(sell)&&/stats:\[\.\.\.document\.querySelectorAll\('\.detail-stats \.detail-stat strong'\)\]/.test(sell),'so are the Gold and the four Stat readings');
+ assert.ok(/handoff=seen;render\(\);/.test(sell),'and they are handed to the draw that follows');
+ assert.ok(/const success=game\.sell\(selected,el\.dataset\.mode\);/.test(sell),'the commit itself is unchanged');
+ assert.ok(!/account\.\w*handoff|run\.\w*handoff/.test(app),'the record is never written into a save');
+ const cue=fn('playCue');
+ // A1 hand-over: shelf row -> Bag slot (280 ms), slot settles (240 ms), Gold counts, changed cells pulse (300 ms)
+ assert.ok(/\.counter \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from its shelf row to the slot it fills');
+ assert.ok(/scale:\[1\.05,1\],duration:240/.test(cue),'and the slot settles');
+ assert.ok(/\.dock \.on-hand b/.test(cue)&&/duration:320/.test(cue)&&/gold\.textContent=fmt\(box\.v\)/.test(cue),'the dock Gold counts to its new value');
+ assert.ok(/\.detail-stats \.detail-stat/.test(cue)&&/duration:300/.test(cue),'the changed Stat cells pulse once and keep the new value');
+ assert.ok(/\.handoff\{position:fixed;z-index:70;[^}]*pointer-events:none/.test(css),'the travelling icon takes no input');
+ // A2 / A6: nod on a purchase, head-shake and a shaken locked button on a refusal
+ assert.ok(/translateY:\[0,4,0,4,0\],duration:360/.test(cue),'the customer nods 4 px, 180 ms x 2');
+ assert.ok(/translateX:\[0,-4,4,-2,0\],duration:280/.test(cue),'or shakes their head on the bubble-shake timing');
+ assert.ok(/\.tills button\[data-mode="'\+h\.mode\+'"\]\[disabled\]/.test(cue),'and the refused price shakes where it locked');
+ // every beat is under 320 ms; travel then settle stays under one sale's 600 ms
+ for(const ms of [...cue.matchAll(/duration:(\d+)/g)].map(m=>Number(m[1])))assert.ok(ms<=360,'no beat runs over its contract: '+ms);
+ assert.ok(280+240<600,'travel then settle stays under 600 ms');
+ // A4: exit left (240 ms), then the existing entry; a second tap is dropped, a timer never lets the beat hold the day
+ const exit=fn('playExit');
+ assert.ok(/translateX:\[0,-40\],opacity:\[1,0\],duration:240/.test(exit),'the customer walks off left in 240 ms');
+ assert.ok(/if\(leaving\)return;/.test(exit)&&/setTimeout\(fire,260\)/.test(exit),'a second tap departs nobody twice, and the state always moves');
+ assert.ok(/case'depart':playExit\(\(\)=>\{game\.depart\(\);selected=null;render\(\);/.test(app),'손님 보내기 goes through the beat with its state change intact');
+ assert.equal(Sound.samples.depart,'door','depart carries a recorded utility object');
+ assert.ok(fs.existsSync(path.join(root,'dist/ui/assets/audio/door.mp3')),'and the file ships');
+ assert.ok(/\('send','door'\)/.test(read('tools/vendor-assets.py'))&&read('reports/ASSETS.md').includes('`door.mp3`'),'vendored and recorded like the others');
+ // A2 reply timing: buy / refuse lines stay 5 s, the greeting 3 s
+ assert.ok(/const SAY_MS=3000;/.test(app)&&/const SAY_REPLY_MS=5000;/.test(app)&&/const sayMs=cue==='sale'\|\|cue==='refuse'\?SAY_REPLY_MS:SAY_MS;/.test(app),'the reply stays 5 s, the greeting 3 s');
+ // reduced motion: the same handlers run, the beats stand down, the end state is the same
+ assert.ok(/if\(!motionOK\(\)\|\|!who\)\{go\(\);return;\}/.test(exit),'under reduced motion the departure is immediate');
+});
+
 
 console.log(count+' ui guard groups passed');
