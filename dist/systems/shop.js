@@ -345,14 +345,17 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
- const price=Math.round(it.sell*rule.mult),d=this.gateFor(n)||this.run.dungeons[0],p=it.effects;
+ /* 희귀상품 입고 계약: a Rare+ Item's sale price is 10% higher in every mode. The customer pays and
+    is judged on it out of their own Wallet - HQ fills nothing (User decision 2026-09-24). */
+ const list=Math.round(it.sell*(this.has('showcase')&&it.rarity>=2?D.relicParams.showcase.saleMult:1));
+ const price=Math.round(list*rule.mult),d=this.gateFor(n)||this.run.dungeons[0],p=it.effects;
  /* What the customer weighs the offer against. Identical to `price` for 할인 and 바가지; for
     정가 it is the lower judged price the approved threshold sets. It never changes what is
     charged or what has to be affordable - only how willingly the offer is taken. */
  /* 단골 묶음혜택: a 단골's second paid purchase today - the customer pays, and is judged on, half
     the charged price; the store still receives the whole of it and HQ pays the other half. */
  const bundle=this.has('memberBundle')&&G.Adventurer.isTrustedRegular(n)&&n.history.filter(h=>h.day===this.run.day&&h.paid>0).length===1?price-Math.round(price*D.relicParams.memberBundle.payShare):0;
- const judged=bundle?price-bundle:Math.round(it.sell*(rule.intentMult??rule.mult));
+ const judged=bundle?price-bundle:Math.round(list*(rule.intentMult??rule.mult));
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: 50% 할인 and 정가 are the
     accessible modes and share one flat base need. 바가지 alone keeps the pre-amendment
     Hazard-fit formula - this patch does not touch overcharge acceptance. */

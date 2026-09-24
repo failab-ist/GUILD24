@@ -95,3 +95,9 @@ Relic ids are kept for remakes (save compatibility); only name / price / effect 
 - royalCert: any rarity; commission 20% of charged (150%) price; overcharge flat intent -0.16 removed
   for the owner; 1.5x price burden and loyalty -3 unchanged.
 - delivery: first reroll free, then the ordinary curve from its first step (50 -> 100 -> 200 ...).
+
+## Tuning round 2 (User decision 2026-09-24, on top of the x0.7 prices)
+- rotation supply +2 -> +1 · logisticsHQ -30% -> -25% · royalCert commission 20% -> 40%
+- returnPoints Wallet +30G -> +25G (Loyalty +5 kept) · guarantee 20% -> 30% · premiumMember +25G -> +40G
+- showcase: + Rare+ sale price +10% in every mode, paid by the customer (no HQ fill)
+- prices: medicine 80G, fridge 60G (+2 days kept), hazardBoard 60G

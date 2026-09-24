@@ -540,7 +540,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-2. 회전 진열대
 
 **현재**
-> 전날 4건 이상 판매 시 다음 날 모든 상품 공급 수량 +2.
+> 전날 4건 이상 판매 시 다음 날 모든 상품 공급 수량 +1.
 
 ---
 
@@ -564,14 +564,14 @@ The following four lines are current exact Player-facing copy for these tutorial
 > 희귀상품 입고 계약
 
 **현재**
-> 희귀 이상 상품 발주 가중치 +70%.
+> 희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매가 +10% · 인상분은 손님 부담.
 
 ---
 
 ## 11-6. 길드 보증 진열대
 
 **현재**
-> 하루 1회 · 200G 이상에 판 첫 상품 판매가의 20%를 본사가 손님 대신 부담 · 점주는 판매가 전액 수령.
+> 하루 1회 · 200G 이상에 판 첫 상품 판매가의 30%를 본사가 손님 대신 부담 · 점주는 판매가 전액 수령.
 
 ---
 
@@ -634,14 +634,14 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-15. 프리미엄 멤버십
 
 **현재**
-> 단골 손님 방문 시 소지금 +25G · 희귀 이상 상품 구매 의사 +15%p.
+> 단골 손님 방문 시 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.
 
 ---
 
 ## 11-16. 귀환 적립제
 
 **현재**
-> 오늘 유료 구매한 재방문 손님 생환 시 단골도 +5 · 소지금 +30G.
+> 오늘 유료 구매한 재방문 손님 생환 시 단골도 +5 · 소지금 +25G.
 
 ---
 
@@ -679,7 +679,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-21. 물류 본부계약
 
 **현재**
-> 전날 6건 이상 판매 시 오늘 같은 상품 3개 이상 발주 매입가 -30%.
+> 전날 6건 이상 판매 시 오늘 같은 상품 3개 이상 발주 매입가 -25%.
 
 ---
 
@@ -693,7 +693,7 @@ The following four lines are current exact Player-facing copy for these tutorial
 ## 11-23. 왕도 프리미엄 인증
 
 **현재**
-> 150% 가격 판매 시 판매가의 20% 추가 지급 · 150% 가격 구매 의사 +16%p.
+> 150% 가격 판매 시 판매가의 40% 추가 지급 · 150% 가격 구매 의사 +16%p.
 
 ---
 

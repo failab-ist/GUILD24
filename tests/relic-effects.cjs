@@ -46,10 +46,10 @@ test('premium guarantee obeys wallet, daily limit and never guarantees acceptanc
 });
 function nightWith(facilities,visits=2,paid=true){const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=visits;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=60;n.money=100;n.destination=0;n.claimedDestination=0;n.history=paid?[{day:s.day,item:'rice',paid:35,mode:'half'}]:[];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return {g,n};}
 test('return points excludes first visit, no-sale and free transfer',()=>{
- for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?30:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?5:0);}
+ for(const [visits,paid]of [[1,true],[2,false],[2,true]]){const base=nightWith([],visits,paid),boost=nightWith(['returnPoints'],visits,paid),eligible=visits>1&&paid;assert.equal(boost.n.money-base.n.money,eligible?25:0);assert.equal(boost.n.loyalty-base.n.loyalty,eligible?5:0);}
  /* 2026-09-23 rebalance: the Loyalty >= 30 condition is gone - a low-Loyalty paid returner earns it too */
  const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
- const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,30);
+ const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,25);
 });
 test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
  const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,50);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
@@ -139,12 +139,12 @@ test('REL-Q-v28-14: 회전 진열대 adds +2 supply quantity to every offer on a
  };
  const common=DATA.items.find(i=>i.rarity===0),uncommon=DATA.items.find(i=>i.rarity===1);
  const rare=DATA.items.find(i=>i.rarity===2),epic=DATA.items.find(i=>i.rarity===3);
- /* 2026-09-23 rebalance: 4+ previous sales, every rarity, +2 */
+ /* 2026-09-23 rebalance: 4+ previous sales, every rarity; +1 since the 2026-09-24 tuning */
  for(const it of [common,uncommon,rare,epic]){
   for(const sales of [0,2,3]){const [plain,got]=quantity(it,['rotation'],sales);
    assert.equal(got,plain,it.id+' is unchanged at '+sales+' previous sales');}
   for(const sales of [4,6,11]){const [plain,got]=quantity(it,['rotation'],sales);
-   assert.equal(got,plain+2,it.id+' gets +2 at '+sales+' previous sales');}
+   assert.equal(got,plain+1,it.id+' gets +1 at '+sales+' previous sales');}
  }
  // it adds units, never slots, and never money off
  s.previousSales=9;s.facilities=[];g.generateOffers();const slots=s.offers.length;
@@ -154,19 +154,19 @@ test('REL-Q-v28-14: 회전 진열대 adds +2 supply quantity to every offer on a
  assert.equal(g.cartTotal(),plainQuote,'and the support discounts nothing');
 });
 
-test('REL-Q-v28-15: 물류 본부계약 takes 30% off every same-SKU 3+ order, from 6 previous sales',()=>{
+test('REL-Q-v28-15: 물류 본부계약 takes 25% off every same-SKU 3+ order, from 6 previous sales',()=>{
  const g=fresh('logistics-hq'),s=g.run;g.beginOrder();
  s.offers=[{item:'rice',price:100,quantity:8},{item:'rice',price:100,quantity:8},{item:'water',price:40,quantity:8}];
  s.facilities=[];s.cart={0:3};const base=g.cartTotal();
  s.facilities=['logisticsHQ'];
  for(const sales of [0,4,5]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'no discount at '+sales+' previous sales');}
- s.previousSales=6;assert.equal(g.cartTotal(),Math.round(100*.70)*3,'exactly -30% at 6');
+ s.previousSales=6;assert.equal(g.cartTotal(),Math.round(100*.75)*3,'exactly -25% at 6');
  s.cart={0:2};assert.equal(g.cartTotal(),200,'a 2-unit order is not a bulk order');
  // every bulk SKU of the Day, not only the first, and after an earlier bulk order
- s.cart={0:3,2:3};assert.equal(g.cartTotal(),Math.round(100*.7)*3+Math.round(40*.7)*3,'both 3+ SKUs are discounted');
- s.bulkUsed=true;s.cart={0:3};assert.equal(g.cartTotal(),Math.round(100*.70)*3,'an earlier bulk order today does not use it up');
+ s.cart={0:3,2:3};assert.equal(g.cartTotal(),Math.round(100*.75)*3+Math.round(40*.75)*3,'both 3+ SKUs are discounted');
+ s.bulkUsed=true;s.cart={0:3};assert.equal(g.cartTotal(),Math.round(100*.75)*3,'an earlier bulk order today does not use it up');
  // with 묶음발주 계약 the two stack and the internal 45% floor is not reached
- s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),70+70+Math.round(100*.7*.8));
+ s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),75+75+Math.round(100*.75*.8));
  assert.equal(DATA.relicBy.logisticsHQ.price,300,'the rebalanced price');
 });
 
@@ -272,7 +272,7 @@ test('SA-Q16: 냉장 유통 계약 extends owned Uncommon+ Food/Drink exactly on
 
 /* REL-Q-v28-5 / REL-Q-v28-7. Both commissions are a share of LIST price, so each is resolved
    through an actual accepted sale and read off the Day ledger rather than off the source. */
-test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 20% of the charged 150% price (royalCert)',()=>{
+test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 40% of the charged 150% price (royalCert)',()=>{
  const sale=(facilities,mode,item)=>{
   const g=fresh('commission'),s=g.run,n=s.npcs[0];
   s.facilities=[...facilities];s.dayFacilities=[...facilities];
@@ -288,8 +288,8 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 20% of the 
  const insured=DATA.items.find(i=>i.rarity>=2&&(i.effects.escape||i.effects.revive));
  const common=DATA.items.find(i=>i.rarity===0);
  assert.ok(plain&&insured,'the catalogue has both a plain Rare+ and a Rare+ insurance role');
- assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.20),'royalCert pays 20% of the charged 150% price');
- assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.20),'at any rarity');
+ assert.equal(sale(['royalCert'],'overcharge',plain),Math.round(Math.round(plain.sell*1.5)*.40),'royalCert pays 40% of the charged 150% price');
+ assert.equal(sale(['royalCert'],'overcharge',common),Math.round(Math.round(common.sell*1.5)*.40),'at any rarity');
  assert.equal(sale(['royalCert'],'full',plain),0,'and only on a 150% sale');
  assert.equal(sale(['supplyCert'],'full',insured),Math.round(insured.sell*.20),'supplyCert pays 20% of list');
  assert.equal(sale([],'overcharge',plain),0,'no support, no commission');
@@ -303,7 +303,7 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 20% of the 
 test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the catalogue',()=>{
  /* User-approved Store Support rebalance 2026-09-23 */
  for(const [id,price] of [['bulk',130],['rotation',80],['stamp',130],['member',130],['showcase',140],
-                          ['guarantee',140],['hazardBoard',80],['medicine',110],['fridge',80],['kitchen',170],
+                          ['guarantee',140],['hazardBoard',60],['medicine',80],['fridge',60],['kitchen',170],
                           ['board',110],['rookieBoard',110],['groupFlyer',200],['memberBundle',190],
                           ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
                           ['supplyCert',220],['dawnBulk',190],['logisticsHQ',300],['lifetime',310],
@@ -326,17 +326,17 @@ function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999}={}){
  assert.equal(g.sell(s.inventory.at(-1).id,mode),true,itemId+' sale was accepted');
  return {g,s,n,store:s.money-before.store,paid:before.wallet-n.money,last:n.history.at(-1)};
 }
-test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 20% of it',()=>{
+test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 30% of it',()=>{
  const g=fresh('guarantee-charged'),n=g.run.npcs[0];n.traits=[];n.money=9999;g.run.facilities=['guarantee'];
  const bar=DATA.itemBy.bar,premium=DATA.itemBy.premium;           // list 180 / 340
  const over=g.interest(n,bar,'overcharge');                          // charged 270 on a sub-200 list price
- assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.2),'a 150% sale over 200G is covered, 20% of charged');
- assert.equal(over.debit,270-54);
+ assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.3),'a 150% sale over 200G is covered, 30% of charged');
+ assert.equal(over.debit,270-81);
  assert.equal(g.interest(n,bar,'full').guarantee,0,'180G charged is under the threshold');
  assert.equal(g.interest(n,premium,'half').guarantee,0,'a 200G+ list Item sold at 170G is not covered');
- assert.equal(g.interest(n,premium,'full').guarantee,Math.round(340*.2));
+ assert.equal(g.interest(n,premium,'full').guarantee,Math.round(340*.3));
  const r=sellOnce(['guarantee'],'overcharge','bar');
- assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,216,'the customer pays 80%');
+ assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,189,'the customer pays 70%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
 test('REWORK 즉석식품 코너: overheadBase +10% from the next Day, beside hub and never compounded',()=>{
@@ -384,9 +384,9 @@ test('REWORK 단골 묶음혜택: a 단골 second paid purchase is half for the 
  assert.equal(q.price,510);assert.equal(q.debit,255,'at 150% too, half of the charged price');
  g.run.facilities=[];assert.equal(g.interest(n,DATA.itemBy.premium,'overcharge').debit,510);
 });
-test('REWORK 프리미엄 멤버십: a 단골 arrives with +25G, and Rare+ intent +15%p for 단골 only',()=>{
+test('REWORK 프리미엄 멤버십: a 단골 arrives with +40G, and Rare+ intent +15%p for 단골 only',()=>{
  const arrive=(loyalty,fac)=>{const g=fresh('premium-member'),s=g.run,n=s.npcs[0];n.traits=[];n.loyalty=loyalty;n.money=100;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n.money;};
- assert.equal(arrive(51,['premiumMember'])-arrive(51,[]),25);
+ assert.equal(arrive(51,['premiumMember'])-arrive(51,[]),40);
  assert.equal(arrive(50,['premiumMember'])-arrive(50,[]),0,'not 단골, no Gold');
  const g=fresh('premium-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.injury=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
@@ -412,3 +412,21 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
 });
 
 console.log(count+' Relic effect groups passed');
+
+/* 2026-09-24 tuning (User): 희귀상품 입고 계약 raises a Rare+ Item's sale price 10% in every mode.
+   The customer pays it from their own Wallet - no HQ subsidy, no commission - and is judged on it. */
+test('희귀상품 입고 계약: Rare+ sale price +10%, paid by the customer, nothing from HQ',()=>{
+ const g=fresh('showcase-price'),n=g.run.npcs[0];n.traits=[];n.money=9999;
+ const rare=DATA.items.find(i=>i.rarity>=2),common=DATA.items.find(i=>i.rarity===0);
+ const q=(it,mode,fac)=>{g.run.facilities=fac;return g.interest(n,it,mode);};
+ const list=Math.round(rare.sell*1.1);
+ for(const mode of ['half','full','overcharge']){
+  const plain=q(rare,mode,[]),lifted=q(rare,mode,['showcase']);
+  assert.equal(lifted.price,Math.round(list*DATA.pricing[mode].mult),mode+' charges 110% of list');
+  assert.equal(lifted.debit,lifted.price,mode+': the customer pays all of it');
+  assert.ok(lifted.chance<=plain.chance,mode+': a dearer offer is never easier to accept');}
+ assert.equal(q(common,'full',['showcase']).price,common.sell,'below Rare nothing changes');
+ const r=sellOnce(['showcase'],'full',rare.id);
+ assert.equal(r.store,list,'the store receives the lifted price');assert.equal(r.paid,list,'all of it from the customer');
+ assert.equal(r.last.subsidy||0,0,'HQ fills nothing');assert.equal(r.s.daily.commission||0,0,'and pays no commission');
+});

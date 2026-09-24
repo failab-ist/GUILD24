@@ -625,13 +625,13 @@ freeUseConsumesFirstRerollStep=YES
 - 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -20%
 Price = 80G
 trigger = previous Day sales >= 4
-effect = next generated ORDER offers for every Item rarity get supply quantity +2
+effect = next generated ORDER offers for every Item rarity get supply quantity +1
 - the existing 묶음발주 계약 / 물류 본부계약 discounts remain separate
 - if previous Day sales < 4, this support adds no quantity
 - 단골 스탬프 기계: paid-purchase Loyalty gain +75%; survival Loyalty is excluded
 - 회원 관리대장: from next Day, returning-adventurer revisit weight +70%
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; no operating-cost modifier
-- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 20%
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; Rare+ sale price +10% in every mode, paid by the customer from their own Wallet (no HQ fill); no operating-cost modifier
+- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
 of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
 - 원정 위험 게시판: today's Gate Hazard (known active-Hazard) matching Item offer weight +50%; this is not a guarantee
@@ -639,7 +639,7 @@ of that charged price for the customer while the Player receives the full chosen
 - 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
 - it changes no ORDER offer weight and no offer quantity
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
-base Price = 80G
+base Price = 60G
 Food/Drink positive native Core-Stat contribution +25%
 from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
 12. 첫 방문 쿠폰
@@ -655,7 +655,7 @@ from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 �
 - 단골 묶음혜택: a 단골 (Trusted Regular) customer's second paid purchase that Day -> the customer
 pays, and is judged on, half the charged price; the store receives the full charged price and HQ
 pays the other half (recorded on that sale)
-- 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +25G; that customer's Rare+
+- 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +40G; that customer's Rare+
 Item purchase intent +15%p
 Price = 240G
 condition = paid returning customer today survives (no Loyalty threshold)
@@ -674,13 +674,13 @@ buyer NPC Wallet +30G
 being wasted (it is not counted as waste)
 - each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
 Price = 300G
-effect = today every same-SKU 3+ order purchase price -30% (not only the first)
+effect = today every same-SKU 3+ order purchase price -25% (not only the first)
 The internal purchase-price floor (45% of list) is unchanged.
 단골 (Trusted Regular, Loyalty >= 51) survival condition
 The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
 effect=successful 150% sale of any rarity -> extra premium commission
 Price = 320G
-HQ commission = 20% of the charged (150%) sale price
+HQ commission = 40% of the charged (150%) sale price
 the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
 the 1.5x price burden and Loyalty -3 are unchanged
 24. 원정 전문 인증
@@ -710,8 +710,8 @@ wall       = 10% Morning proc (Decoration, not a Relic)
 | member | 회원 관리대장 | 130G |
 | showcase | 희귀상품 입고 계약 | 140G |
 | guarantee | 길드 보증 진열대 | 140G |
-| hazardBoard | 원정 위험 게시판 | 80G |
-| medicine | 야전 정비대 | 110G |
+| hazardBoard | 원정 위험 게시판 | 60G |
+| medicine | 야전 정비대 | 80G |
 | kitchen | 즉석식품 코너 | 170G |
 | board | 길드 전광판 | 110G |
 | rookieBoard | 첫 방문 쿠폰 | 110G |
@@ -750,4 +750,16 @@ support can change nothing on D30.
 
 ```new
 - 새벽 회수 계약 (dawnBulk)
+```
+
+## AMENDMENT — Store Support tuning round 2 (User decision 2026-09-24)
+
+귀환 적립제 Wallet bonus 30G -> 25G (Loyalty +5 unchanged). Other tuned lines were already declared new above.
+
+```text
+NPC Wallet +30G
+```
+
+```new
+NPC Wallet +25G
 ```

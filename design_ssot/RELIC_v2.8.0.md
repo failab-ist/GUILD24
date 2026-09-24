@@ -472,7 +472,7 @@ purpose=sales->order->sales loop
 회전 진열대:
     Price = 80G
     trigger = previous Day sales >= 4
-    effect = next generated ORDER offers for every Item rarity get supply quantity +2
+    effect = next generated ORDER offers for every Item rarity get supply quantity +1
 
 Purpose:
     high sales -> more available units -> bulk-order threshold becomes reachable more often
@@ -497,11 +497,11 @@ identityPreReveal=NO
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약
 tag=Premium
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; no operating-cost modifier
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; Rare+ sale price +10% in every mode, paid by the customer from their own Wallet (no HQ fill); no operating-cost modifier
 
 6. 길드 보증 진열대
 tag=Premium
-- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 20%
+- 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
   of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
 150AutoSuccess=NO
@@ -529,7 +529,7 @@ tag=Fresh
 `대형 냉장고`:
 
 ```text
-base Price = 80G
+base Price = 60G
 Food/Drink shelf life +2 days
 existing eligible non-expired stock extends once on acquisition
 future eligible stock enters with the extension
@@ -610,7 +610,7 @@ consumerSlotRule=UNCHANGED
 
 15. 프리미엄 멤버십
 tags=[VIP,Premium]
-- 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +25G; that customer's Rare+
+- 프리미엄 멤버십: 단골 (Trusted Regular) customer arrival -> NPC Wallet +40G; that customer's Rare+
   Item purchase intent +15%p
 150AutoSuccess=NO
 
@@ -625,7 +625,7 @@ channel=prefer existing loyalty/wallet/revisit systems
     Price = 240G
     condition = paid returning customer today survives (no Loyalty threshold)
     Loyalty +5
-    NPC Wallet +30G
+    NPC Wallet +25G
 
 17. 원정 도시락 코너
 tags=[Fresh,Expedition]
@@ -689,7 +689,7 @@ tag=Rotation
 물류 본부계약:
     Price = 300G
     trigger = previous Day sales >= 6
-    effect = today every same-SKU 3+ order purchase price -30% (not only the first)
+    effect = today every same-SKU 3+ order purchase price -25% (not only the first)
 
 The internal purchase-price floor (45% of list) is unchanged.
 
@@ -717,7 +717,7 @@ refusal/inventoryRisk=REMAINS
 
 왕도 프리미엄 인증:
     Price = 320G
-    HQ commission = 20% of the charged (150%) sale price
+    HQ commission = 40% of the charged (150%) sale price
     the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
     the 1.5x price burden and Loyalty -3 are unchanged
 
@@ -925,8 +925,8 @@ The following 20 Store Support base prices are the approved baseline.
 | member | 회원 관리대장 | 130G |
 | showcase | 희귀상품 입고 계약 | 140G |
 | guarantee | 길드 보증 진열대 | 140G |
-| hazardBoard | 원정 위험 게시판 | 80G |
-| medicine | 야전 정비대 | 110G |
+| hazardBoard | 원정 위험 게시판 | 60G |
+| medicine | 야전 정비대 | 80G |
 | kitchen | 즉석식품 코너 | 170G |
 | board | 길드 전광판 | 110G |
 | rookieBoard | 첫 방문 쿠폰 | 110G |

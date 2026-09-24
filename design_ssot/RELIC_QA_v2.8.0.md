@@ -419,8 +419,8 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> returning revisit weight +70% from next Day
-- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; no operating-cost modifier
-- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 20% of
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale price +10% in every mode, paid by the customer (no HQ fill); no operating-cost modifier
+- 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
   the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
@@ -429,7 +429,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
   price, store receives the full charged price
-- 프리미엄 멤버십 -> 단골 arrival NPC Wallet +25G; 단골 Rare+ purchase intent +15%p
+- 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
 - 원정 도시락 코너 -> per Food/Drink Item: Supply +2 and flat +4 on every Hazard of the actual Gate
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
@@ -462,8 +462,8 @@ Expect exactly these approved base prices for these rows:
     member 130
     showcase 140
     guarantee 140
-    hazardBoard 80
-    medicine 110
+    hazardBoard 60
+    medicine 80
     kitchen 170
     board 110
     rookieBoard 110
@@ -487,7 +487,7 @@ FAIL if implementation uses a different base price without a new approved owner 
 Given 회전 진열대 is owned:
 
 If previous Day sales >= 4:
-- each newly generated ORDER offer, of every rarity, gets quantity +2
+- each newly generated ORDER offer, of every rarity, gets quantity +1
 - total offer-slot count is unchanged
 
 If previous Day sales < 4:
@@ -501,7 +501,7 @@ FAIL:
 
 Expected:
     previous Day sales >= 6
-    -> today every same-SKU 3+ order -30%
+    -> today every same-SKU 3+ order -25%
 
 Price 300G.
 
@@ -524,7 +524,7 @@ Rotation/low-cost build is not invalidated by universal Rare+ upgrades.
 ### REL-Q-v28-4 — RETURN POINTS
 
 Expected:
-    paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +30G
+    paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +25G
 
 ### REL-Q-v28-6 — LIFETIME
 
@@ -554,7 +554,7 @@ Expected:
 ### REL-Q-v28-7 — ROYAL PREMIUM
 
 Expected:
-    150% sale of any rarity -> HQ commission = 20% of the charged sale price
+    150% sale of any rarity -> HQ commission = 40% of the charged sale price
     the flat 150% purchase-intent penalty (-0.16) is lifted for the owner
     the 1.5x price burden and Loyalty -3 are unchanged
 
@@ -621,7 +621,7 @@ Shelf-life logic stable.
 ### REL-Q72 — LARGE FRIDGE
 
 EXPECT:
-- base price 80G
+- base price 60G
 - Food/Drink shelf life +2
 - existing non-expired eligible stock extends once on acquisition
 - future stock receives extension
