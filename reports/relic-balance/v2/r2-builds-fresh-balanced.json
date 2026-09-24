@@ -1,0 +1,99 @@
+{
+ "seeds": 2000,
+ "policy": "balanced",
+ "account": "fresh",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": null,
+ "results": {
+  "hybrid": {
+   "gain": 441.9905,
+   "reached": 0.108,
+   "win": 0.0635,
+   "deaths": 8.9745,
+   "regulars": 5.8665,
+   "sales": 131.029,
+   "margin": 4816.301,
+   "finalRatio": 0.11011670008864835,
+   "spend": 583.8425
+  },
+  "none": {
+   "gain": 428.2395,
+   "reached": 0.097,
+   "win": 0.0365,
+   "deaths": 9.3265,
+   "regulars": 5.461,
+   "sales": 133.7375,
+   "margin": 4333.438,
+   "finalRatio": 0.0893896615364312,
+   "spend": 0
+  },
+  "rotation": {
+   "gain": 446.8905,
+   "reached": 0.111,
+   "win": 0.061,
+   "deaths": 9.066,
+   "regulars": 6.4315,
+   "sales": 135.0295,
+   "margin": 4987.233,
+   "finalRatio": 0.11290124949065063,
+   "spend": 599.0665
+  },
+  "vip": {
+   "gain": 466.3045,
+   "reached": 0.1135,
+   "win": 0.056,
+   "deaths": 9.063,
+   "regulars": 6.305,
+   "sales": 132.6575,
+   "margin": 5149.7085,
+   "finalRatio": 0.11178245773840038,
+   "spend": 612.286
+  },
+  "fresh": {
+   "gain": 405.553,
+   "reached": 0.113,
+   "win": 0.0775,
+   "deaths": 8.5465,
+   "regulars": 5.3425,
+   "sales": 123.8285,
+   "margin": 4297.3715,
+   "finalRatio": 0.12525622246827514,
+   "spend": 541.4815
+  },
+  "premium": {
+   "gain": 440.9935,
+   "reached": 0.1065,
+   "win": 0.0575,
+   "deaths": 9.0865,
+   "regulars": 5.405,
+   "sales": 128.707,
+   "margin": 4777.707,
+   "finalRatio": 0.10636436010535293,
+   "spend": 597.6675
+  },
+  "expedition": {
+   "gain": 444.413,
+   "reached": 0.1205,
+   "win": 0.0685,
+   "deaths": 8.9495,
+   "regulars": 5.6865,
+   "sales": 130.8765,
+   "margin": 4707.566,
+   "finalRatio": 0.12407682152533357,
+   "spend": 586.9095
+  },
+  "customer": {
+   "gain": 459.184,
+   "reached": 0.1065,
+   "win": 0.0655,
+   "deaths": 9.2235,
+   "regulars": 6.1165,
+   "sales": 136.8635,
+   "margin": 4904.6545,
+   "finalRatio": 0.11156699265579524,
+   "spend": 598.9765
+  }
+ }
+}
