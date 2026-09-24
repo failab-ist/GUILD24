@@ -101,10 +101,10 @@ T3=strong(cold)+strong(whiteout)
 Every canonical Hazard exposes a consistent short explanation
 of what core Stat/readiness it pressures.
 
-One non-투력 Stat per Hazard, 3 / 4 / 2 (User 2026-09-24 revision 3, v2.9.0: 어둠 -> 기동, so that no Gate's Hazards share one Stat):
+One non-투력 Stat per Hazard, 3 / 3 / 3 (User 2026-09-24 revision 5, v2.9.0: 어둠 -> 기동 and 화염 -> 정신, so that no Gate's Hazards share one Stat):
 - 강인함: 독 · 냉기 · 부식
-- 기동: 속박 · 진창 · 화염 · 어둠
-- 정신: 공포 · 화이트아웃
+- 기동: 속박 · 진창 · 어둠
+- 정신: 공포 · 화이트아웃 · 화염
 - 투력 is never a Hazard-pressured Stat (it already carries the largest combat coefficient).
 - Gate constraint: within one Gate (a Family's Tier Hazard set) no two Hazards press the same Stat, so one Stat never answers a whole Gate (망자역 지하묘지 = 정신 + 기동). The Final's merged two-Family pool may repeat a Stat.
 
@@ -117,7 +117,7 @@ Full Hazard sentence (Gate detail only; the Gate-level requirement number first)
 - e.g. `부식 — 대응 13 필요 · 강인함 3당 1 · 부식 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `속박 — 대응 13 필요 · 기동 2당 1 · 속박 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `진창 — 대응 13 필요 · 기동 2당 1 · 진창 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화염 — 대응 13 필요 · 기동 2당 1 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 13 필요 · 정신 2당 1 · 화염 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `공포 — 대응 13 필요 · 정신 2당 1 · 공포 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `어둠 — 대응 13 필요 · 기동 2당 1 · 어둠 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `화이트아웃 — 대응 13 필요 · 정신 2당 1 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
@@ -728,7 +728,7 @@ For each Hazard:
     = explicit Item/Trait Counter contribution
       + mapped Core-Stat contribution
 
-Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 4 / 2, no Gate sharing a Stat; User 2026-09-24 revision 3, v2.9.0):
+Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 3 / 3, no Gate sharing a Stat; User 2026-09-24 revision 5, v2.9.0):
 
 | Hazard | Core-Stat contribution |
 |---|---|
@@ -737,7 +737,7 @@ Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 4 / 2, no Gat
 | 부식 | 강인함 ×1/3 |
 | 속박 | 기동 ×1/2 |
 | 진창 | 기동 ×1/2 |
-| 화염 | 기동 ×1/2 |
+| 화염 | 정신 ×1/2 |
 | 공포 | 정신 ×1/2 |
 | 어둠 | 기동 ×1/2 |
 | 화이트아웃 | 정신 ×1/2 |

@@ -152,7 +152,7 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 > 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.
 
 ### STATS (User 2026-09-24, v2.9.0: anchor = the SALE 능력치 grid, right after HAZARD — the first time a customer's Stats are on screen)
-> 이 손님의 능력치. 직업·희귀도·레벨마다 다르다. 투력은 전투를 좌우하고, 강인함·기동·정신은 각 위험에 대응한다.
+> 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.
 
 ### SUPPLY (User 2026-09-24, v2.9.0: contextual on the counter tray's first `피로 A → 출발 B` row)
 > 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.

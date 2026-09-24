@@ -612,5 +612,5 @@ It carries no Core Stat; its whole function is the Aftercare below, priced as pu
 기동 4 / 정신 2. The revision-1/2 declarations this replaces were edited out of the fences above in place.
 
 ```new
-Natural alternative = the one Stat each Hazard presses (3 / 4 / 2, 투력 never; 어둠 -> 기동 per User 2026-09-24 revision 3) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
+Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동 and 화염 -> 정신 per User 2026-09-24 revisions 3 / 5) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
 ```

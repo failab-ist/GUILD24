@@ -651,10 +651,10 @@ Every Hazard exposes the numbered short row, the same on every surface:
 기동 4 / 정신 2. The revision-1/2 declarations this replaces were edited out of the fences above in place.
 
 ```new
-- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 1` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / fire / dark · 정신: fear / whiteout)
-### DUN-Q-v29-2 — ONE NON-투력 STAT PER HAZARD (3 / 4 / 2, NO GATE SHARES A STAT)
-- 속박 / 진창 / 화염 / 어둠 Defense moves only with 기동 (×1/2)
-- 공포 / 화이트아웃 Defense moves only with 정신 (×1/2)
+- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 1` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / dark · 정신: fear / whiteout / fire)
+### DUN-Q-v29-2 — ONE NON-투력 STAT PER HAZARD (3 / 3 / 3, NO GATE SHARES A STAT)
+- 속박 / 진창 / 어둠 Defense moves only with 기동 (×1/2)
+- 공포 / 화이트아웃 / 화염 Defense moves only with 정신 (×1/2)
 - every Family Tier Hazard set presses two different Stats (독거미 강인함 + 기동, 슬라임 강인함 + 기동, 설원 강인함 + 정신, 지하묘지 정신 + 기동), so no Gate is answered by one Stat (User 2026-09-24 revision 3)
-- 강인함 3 · 기동 4 · 정신 2 Hazards, 투력 never pressed, no Gate's Hazard set sharing a Stat
+- 강인함 3 · 기동 3 · 정신 3 Hazards, 투력 never pressed, no Gate's Hazard set sharing a Stat (User 2026-09-24 revision 5: 화염 -> 정신)
 ```
