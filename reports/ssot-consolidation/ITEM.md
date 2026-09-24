@@ -576,7 +576,6 @@ Exact Supply -> Fatigue order and formulas:
 -> `DUNGEON_HAZARD_v2.8.0.md` §SUPPLY -> FATIGUE
 Its only meaning is Fatigue recovery: the Player sees the value as `피로 회복 N`, never `보급 +N` (User 2026-09-24, v2.9.0)
 Catalog tables below keep the internal notation `Supply N`; the values are unchanged.
-Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
 | fire | 쿨링 이온음료 +18 | 얼음컵 +10 | 기동 / 내열성 / 마그마 냉각장비 +14 |
 | dark | 랜턴 건전지 +16 | — | 정신 / 눈썰미 / 성화 랜턴 +12 |
 | whiteout | 설원 고글 +16 | — | 정신 / 눈썰미 / 백설 방한고글 +12 |
@@ -605,4 +604,13 @@ Buy / Sell = 100 / 210
 Buy / Sell = 80 / 170
 It carries no Core Stat; its whole function is the Aftercare below, priced as pure Insurance (User 2026-09-24, v2.9.0).
 | 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
+```
+
+## AMENDMENT — v2.9.0 revision 3: 어둠 -> 기동, no Gate shares a Stat (User decision 2026-09-24)
+
+어둠 presses 기동 ×0.40 so that 망자역 지하묘지 (공포 + 어둠) is answered by 정신 + 기동, never one Stat; the split is 강인함 3 /
+기동 4 / 정신 2. The revision-1/2 declarations this replaces were edited out of the fences above in place.
+
+```new
+Natural alternative = the one Stat each Hazard presses (3 / 4 / 2, 투력 never; 어둠 -> 기동 per User 2026-09-24 revision 3) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
 ```

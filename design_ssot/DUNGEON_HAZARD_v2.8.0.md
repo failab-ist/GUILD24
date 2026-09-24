@@ -101,11 +101,12 @@ T3=strong(cold)+strong(whiteout)
 Every canonical Hazard exposes a consistent short explanation
 of what core Stat/readiness it pressures.
 
-One non-투력 Stat per Hazard, 3 / 3 / 3 (User 2026-09-24, v2.9.0):
+One non-투력 Stat per Hazard, 3 / 4 / 2 (User 2026-09-24 revision 3, v2.9.0: 어둠 -> 기동, so that no Gate's Hazards share one Stat):
 - 강인함: 독 · 냉기 · 부식
-- 기동: 속박 · 진창 · 화염
-- 정신: 공포 · 어둠 · 화이트아웃
+- 기동: 속박 · 진창 · 화염 · 어둠
+- 정신: 공포 · 화이트아웃
 - 투력 is never a Hazard-pressured Stat (it already carries the largest combat coefficient).
+- Gate constraint: within one Gate (a Family's Tier Hazard set) no two Hazards press the same Stat, so one Stat never answers a whole Gate (망자역 지하묘지 = 정신 + 기동). The Final's merged two-Family pool may repeat a Stat.
 
 Pressure labels are retired (User 2026-09-24 revision 2, v2.9.0): `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` no longer appear anywhere, and the older `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` stay retired. Every player-facing Hazard row is the numbered short row below.
 
@@ -118,7 +119,7 @@ Full Hazard sentence (Gate detail only; the Gate-level requirement number first)
 - e.g. `진창 — 대응 13 필요 · 기동 10마다 대응 4 · 진창 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `화염 — 대응 13 필요 · 기동 10마다 대응 4 · 화염 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `공포 — 대응 13 필요 · 정신 10마다 대응 4 · 공포 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `어둠 — 대응 13 필요 · 정신 10마다 대응 4 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 13 필요 · 기동 10마다 대응 4 · 어둠 대응 상품이 막는다` (DAY 1 T1)
 - e.g. `화이트아웃 — 대응 13 필요 · 정신 10마다 대응 4 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need survive (User 2026-09-24 revision 2, v2.9.0).
 
@@ -727,7 +728,7 @@ For each Hazard:
     = explicit Item/Trait Counter contribution
       + mapped Core-Stat contribution
 
-Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 3 / 3; User 2026-09-24, v2.9.0):
+Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 4 / 2, no Gate sharing a Stat; User 2026-09-24 revision 3, v2.9.0):
 
 | Hazard | Core-Stat contribution |
 |---|---|
@@ -738,7 +739,7 @@ Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 3 / 3; User 2
 | 진창 | 기동 ×0.40 |
 | 화염 | 기동 ×0.40 |
 | 공포 | 정신 ×0.40 |
-| 어둠 | 정신 ×0.40 |
+| 어둠 | 기동 ×0.40 |
 | 화이트아웃 | 정신 ×0.40 |
 
 투력 is never a Hazard-pressured Stat. Counter keys, Items, readiness labels and thresholds are unchanged.

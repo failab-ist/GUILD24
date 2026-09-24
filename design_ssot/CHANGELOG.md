@@ -72,6 +72,8 @@ Docs-first. Each owner amendment is listed when committed.
   reads the numbered short row, the Final / D25 with N = 29 (Day 30 / T2). DUNGEON_HAZARD, UI_UX, UI_UX_QA, COPY_AUDIT §4-15 /
   §4-16 / §14-7, COPY_WORLD_VOICE §D25, DUNGEON_ITEM_QA DUN-Q21, SALE, FINAL_EXPEDITION.
 - Fatigue outcome gain re-tuned -1 to +4 / +7 / +9 after the I-2 re-measure (R1); phone SALE balloon 2px / 14px (R2, CSS only).
+- Revision 3 (User 2026-09-24): 어둠 -> 기동 ×0.40 so no Gate's Hazards share one Stat (망자역 지하묘지 = 정신 + 기동); the split
+  is 강인함 3 / 기동 4 / 정신 2. DUNGEON_HAZARD, DUNGEON_ITEM_QA DUN-Q21 / DUN-Q-v29-2, ITEM, SPEC_INDEX, COPY_WORLD_VOICE §D25.
 
 ## v2.8.0 — closed 2026-09-24
 

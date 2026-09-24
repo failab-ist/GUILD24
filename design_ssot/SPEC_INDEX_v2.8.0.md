@@ -40,7 +40,7 @@ Scope (owner amendments are the truth; this list is routing):
        rows, one delta list after a sale, price-role words, no always-on Death %, folded last
        expedition below Stats; first-sale coach diet (done)                  -> SALE / UI_UX / COPY
     D. simpler rules — Supply becomes Fatigue recovery only (no required Supply, Fatigue 0~40 with
-       five bands), single-Stat Hazard pressure 3/3/3 without 투력, Store Support card copy in two
+       five bands), single-Stat Hazard pressure 3/4/2 without 투력 (no Gate shares a Stat), Store Support card copy in two
        clauses, presentation leftovers                                       -> DUNGEON_HAZARD / ITEM / NIGHT_CLOSING / NPC_TRAIT / RELIC
 
 Not in v2.9.0 (User): a "simple view" toggle, hiding zero receipt rows, direct hints such as

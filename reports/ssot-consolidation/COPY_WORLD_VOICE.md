@@ -746,8 +746,16 @@ Authoritative Hazard wording (User 2026-09-24 revision 2, v2.9.0; the MORNING sh
 진창 · 대응 29 필요 · 기동 10마다 대응 4
 화염 · 대응 29 필요 · 기동 10마다 대응 4
 공포 · 대응 29 필요 · 정신 10마다 대응 4
-어둠 · 대응 29 필요 · 정신 10마다 대응 4
 냉기 · 대응 29 필요 · 강인함 10마다 대응 3
 화이트아웃 · 대응 29 필요 · 정신 10마다 대응 4
 - 최종 정찰 보고가 실제 두 Family의 T2 Hazard 행을 마왕성 기준 수치(대응 29 필요)로 그대로 보여주며 별도 공략문을 덧붙이지 않는가?
+```
+
+## AMENDMENT — v2.9.0 revision 3: 어둠 -> 기동, no Gate shares a Stat (User decision 2026-09-24)
+
+어둠 presses 기동 ×0.40 so that 망자역 지하묘지 (공포 + 어둠) is answered by 정신 + 기동, never one Stat; the split is 강인함 3 /
+기동 4 / 정신 2. The revision-1/2 declarations this replaces were edited out of the fences above in place.
+
+```new
+어둠 · 대응 29 필요 · 기동 10마다 대응 4
 ```

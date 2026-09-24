@@ -324,7 +324,7 @@ Canonical Dungeon behavior:
 
 `DIRECTOR DOCUMENT BASELINE`
 
-Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
+Natural alternative = the one Stat each Hazard presses (3 / 4 / 2, 투력 never; 어둠 -> 기동 per User 2026-09-24 revision 3) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
 
 | Hazard | Main / Upper | Lower | Hybrid / Natural alternative |
 |---|---|---|---|
