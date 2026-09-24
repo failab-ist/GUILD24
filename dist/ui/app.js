@@ -830,6 +830,9 @@ const coachSteps={
     UI_UX §TUTORIAL - READ THE SYSTEM, DO NOT GIVE THE ANSWER: no mark names an Item for a Hazard. */
  sell:[['destination','.dest-plate','이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.'],
  ['hazard','.dest-plate .hazards','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
+ /* COPY_AUDIT §3-7 STATS (User 2026-09-24): the first time a customer's Stats are on screen - what they are, that they
+    differ per customer, 투력 for combat, the other three for the Hazards. No number, no verdict. */
+ ['stats','.dossier .detail-stats','이 손님의 능력치. 직업·희귀도·레벨마다 다르다. 투력은 전투를 좌우하고, 강인함·기동·정신은 각 위험에 대응한다.'],
  /* UI-Q-v28-27. `.top` is the frozen SALE-entry snapshot itself; `.ingredients` and
     `.great-signal` below it move with the committed Bag, so the cutout stops above them. */
  ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],

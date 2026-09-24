@@ -1867,6 +1867,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const [id,text] of [
    ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
    ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
+   ['stats','이 손님의 능력치. 직업·희귀도·레벨마다 다르다. 투력은 전투를 좌우하고, 강인함·기동·정신은 각 위험에 대응한다.'],
    ['supply','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
    ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');
@@ -1874,7 +1875,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  assert.ok(!hazard.includes('현재 대응'),'and the Hazard lesson names no label the screen no longer shows');
  /* The §3-7 lines are longer than the one-decision-unit cap the earlier pass held every lesson
     to, so the cap now covers the lessons the Copy owner has not pinned exactly. */
- const EXACT=['pricing','hazard','supply','quantity'];
+ const EXACT=['pricing','hazard','stats','supply','quantity'];
  for(const [id,,text] of [...steps.matchAll(/\['([a-z]+)','([^']+)','([^']+)'/g)].map(m=>[m[1],m[2],m[3]]))
   if(!EXACT.includes(id))
    assert.ok(text.length<=95,'the '+id+' lesson is one decision unit, not a paragraph ('+text.length+')');
@@ -1899,8 +1900,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     the destination rule (tests/copy.cjs §18 holds the line itself). */
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
- assert.deepEqual(ids.slice(0,4),['destination','hazard','forecast','pricing'],'the first SALE reads destination, Hazard, outlook, price - in that order');
- assert.deepEqual(ids.slice(4).sort(),['bag','great','returning','supply'],'the other four are contextual marks');
+ assert.deepEqual(ids.slice(0,5),['destination','hazard','stats','forecast','pricing'],'the first SALE reads destination, Hazard, Stats, outlook, price - in that order (User 2026-09-24)');
+ assert.deepEqual(ids.slice(5).sort(),['bag','great','returning','supply'],'the other four are contextual marks');
+ assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
  for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.counter-tray .tray-delta .fatigue']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
