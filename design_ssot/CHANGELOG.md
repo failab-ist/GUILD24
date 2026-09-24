@@ -45,8 +45,9 @@ Docs-first. Each owner amendment is listed when committed.
   diet — four marks (destination, Hazard, outlook, price), contextual Supply / 대성공 / 재방문 / 가방,
   concept popovers (commit 66f37e4; Source e0d0c44).
 - 구급키트 / utility copy (K): 구급키트 is pure Insurance (no Core Stat; the catalog `강인함 +10` was a
-  leftover never owned by ITEM), Buy / Sell 80 / 170 (ITEM, DUNGEON_ITEM_QA ITEM-Q81); the four
-  numberless utility lines are compact (COPY_AUDIT §4-22, COPY_WORLD_VOICE §FIRST AID KIT).
+  leftover never owned by ITEM), Buy / Sell 80 / 170 (ITEM, DUNGEON_ITEM_QA ITEM-Q81); the three
+  numberless utility lines are compact (COPY_AUDIT §4-22, COPY_WORLD_VOICE §FIRST AID KIT); the unused
+  `curePoison` effect key is deleted (no Item ever carried it).
 - Counter tray (T / I-1d): the SALE per-row price panel becomes one fixed counter tray above the dock —
   the chosen Item, its `판매 후 변화`, `특수 효과` and the three price keys always sit in the same place and
   the shelf list never moves (User-approved composition change; PRESENTATION_PRINCIPLES §COMPOSITION LOCK,

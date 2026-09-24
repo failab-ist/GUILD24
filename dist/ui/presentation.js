@@ -25,8 +25,8 @@ function fitKeys(keys){const s=new Set();for(const k of keys){s.add(k);if(hazard
    Item data) — it was never meant to author a row here, and a labelless 포션 row is exactly
    that leak. The player-visible '포션' identity is drawn elsewhere, off the same marker, as
    the item-kind badge, not as an effect row. */
-/* v2.9.0 (User 2026-09-24): the four numberless utility lines are compact - exact strings COPY_AUDIT §4-22 */
-const util={aftercare:'원정 후 부상 1단계 완화 (사망 제외)',duplicate:'다음 소비품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망 → 중상 1회',curePoison:'독 대응'};
+/* v2.9.0 (User 2026-09-24): the three numberless utility lines are compact - exact strings COPY_AUDIT §4-22 */
+const util={aftercare:'원정 후 부상 1단계 완화 (사망 제외)',duplicate:'다음 소비품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망 → 중상 1회'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
 function rows(e,tones){const out=[];for(const[k,v]of Object.entries(e)){
