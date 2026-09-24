@@ -1,0 +1,71 @@
+{
+ "N": 1000,
+ "policy": "balanced",
+ "aware": true,
+ "set": null,
+ "results": {
+  "thriftSafe": {
+   "id": "thriftSafe",
+   "reach": 0.102,
+   "win": 0.064,
+   "deaths": 10,
+   "deathFail": 0.65
+  },
+  "none": {
+   "id": "none",
+   "reach": 0.104,
+   "win": 0.064,
+   "deaths": 10,
+   "deathFail": 0.629
+  },
+  "dawnSign": {
+   "id": "dawnSign",
+   "reach": 0.144,
+   "win": 0.081,
+   "deaths": 10,
+   "deathFail": 0.599
+  },
+  "guildPlaque": {
+   "id": "guildPlaque",
+   "reach": 0.12,
+   "win": 0.086,
+   "deaths": 10,
+   "deathFail": 0.645
+  },
+  "premiumCase": {
+   "id": "premiumCase",
+   "reach": 0.116,
+   "win": 0.065,
+   "deaths": 10,
+   "deathFail": 0.61
+  },
+  "memorialBoard": {
+   "id": "memorialBoard",
+   "reach": 0.172,
+   "win": 0.098,
+   "deaths": 11,
+   "deathFail": 0.511
+  },
+  "infirmaryPlaque": {
+   "id": "infirmaryPlaque",
+   "reach": 0.197,
+   "win": 0.1,
+   "deaths": 9,
+   "deathFail": 0.478
+  },
+  "trainingRack": {
+   "id": "trainingRack",
+   "reach": 0.43,
+   "win": 0.279,
+   "deaths": 8,
+   "deathFail": 0.299
+  },
+  "firstAidKit": {
+   "id": "firstAidKit",
+   "reach": 0.144,
+   "win": 0.053,
+   "deaths": 9,
+   "deathFail": 0.46
+  }
+ }
+}
