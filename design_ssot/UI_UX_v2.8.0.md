@@ -457,7 +457,7 @@ High-frequency Sale flow:
 - Forecast + Expected Destination in upper-right Core Decision area
 - NPC Wallet visible in the same decision hierarchy
 - duplicated lower destination / forecast removed
-- a thin counter band sits under the customer; the two Bag slots sit on the counter beside the customer, not under the status line (User 2026-09-24, v2.9.0)
+- the two Bag slots stay in the customer-state strip beside the status line and are the landing point of the hand-over (User 2026-09-24, v2.9.0)
 
 Bag size change is presentation only; capacity does not change.
 
@@ -471,7 +471,7 @@ Bag size change is presentation only; capacity does not change.
 - core environment signal visible without tap
 - no duplicate environment/forecast blocks
 - ~44px-class repeat touch targets
-- the counter band and the two Bag slots on it beside the customer apply at every width (User 2026-09-24, v2.9.0)
+- the Bag stays in the customer-state strip at every width, one step larger than v2.8, never overflowing (User 2026-09-24, v2.9.0)
 
 Same-Customer rerenders preserve scroll/focus.
 New-Customer transition may intentionally start at the top.
@@ -802,14 +802,14 @@ On phone:
 - use responsive flow/flex/grid, not forced equal fixed height
 - preserve full portrait containment; no crop/stretch
 - smaller phones may relax exact alignment rather than overflow
-- a thin counter band sits under the customer; the Bag slots sit on it, not under the status line (User 2026-09-24, v2.9.0)
+- the Bag slots stay in the customer-state strip beside the status lines (User 2026-09-24, v2.9.0)
 
 ### Bag
 
 The normal customer Bag remains exactly two slots.
 
 On phone:
-- place them on the counter band beside the customer (User 2026-09-24, v2.9.0)
+- place them in the available upper-right area
 - each slot remains at least ~44px touch class
 - keep "가방 used / 2" readable without a tall horizontal strip
 
@@ -839,7 +839,7 @@ Do not remove the actual queue count.
 
 Do not add a separate `최종 준비 결과` dashboard to the Bag.
 The two slots are the handling surface.
-At every width the two slots sit on the counter band beside the customer; they remain the handling surface (User 2026-09-24, v2.9.0).
+At every width the two slots stay in the customer-state strip beside the status line; they remain the handling surface and the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) lands on them (User 2026-09-24, v2.9.0).
 
 Show:
 - contents

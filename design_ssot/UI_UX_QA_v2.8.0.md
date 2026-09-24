@@ -629,7 +629,7 @@ PASS:
 - shelf heading and at least one selectable Item row are visible at initial SALE entry without a scroll
 - character art is contained, not cropped or stretched
 - character and right-side information align without fixed-height overflow
-- Bag is exactly two slots on the counter beside the customer and each is ~44px touch class or larger (User 2026-09-24, v2.9.0)
+- Bag is exactly two slots in the upper-right and each is ~44px touch class or larger
 - no required SALE decision information disappears to achieve the compact layout
 - fixed bottom dock remains reachable and does not cover the sale surface
 
@@ -822,7 +822,7 @@ Interaction cost is reduced without batching away the sequential decision.
 All ordinary NPC levels:
 PASS:
 - exactly two visible Bag slots
-- the slots sit on the counter beside the customer (User 2026-09-24, v2.9.0)
+- the slots stay in the customer-state strip beside the status line (User 2026-09-24, v2.9.0)
 - each mobile target ~44px class
 - focus/replace/remove state clear
 - tap-only completion works
@@ -904,7 +904,7 @@ EXPECT:
 Every beat is presentation only, each ≤ 320 ms, one sale's beats total < 600 ms, input is never blocked, and the scroll position stays on the same customer.
 
 PASS:
-- frame captures at 0 / 150 / 300 / 600 ms of the sale show the Item icon travelling from its shelf row to the customer's Bag slot on the counter (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
+- frame captures at 0 / 150 / 300 / 600 ms of the sale show the Item icon travelling from its shelf row to the customer's Bag slot in the customer-state strip (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
 - purchase: the customer figure nods (translateY 4px, 180 ms x 2); refusal: it shakes its head (translateX ±4px, the existing bubble-shake timing) and the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text
 - the reply line (buy / refuse) stays 5 seconds; the greeting keeps 3 seconds
 - `손님 보내기`: the current customer exits left (240 ms), the next arrives with the existing entry (240~340 ms), and `depart` plays a recorded utility cue (door / step family); entry may still start the view at the top
@@ -916,16 +916,16 @@ FAIL:
 - input is blocked during a beat, or one sale's beats total 600 ms or more
 - the view scrolls away from the current customer during a beat
 
-### UI-Q-v29-4 — BAG ON THE COUNTER
+### UI-Q-v29-4 — BAG IN THE STRIP
 
 (User 2026-09-24, v2.9.0)
 
 SETUP:
-SALE at 390 and 1280, before and after one sale.
+SALE at 360, 390 and 1280, before and after one sale.
 
 PASS:
-- a thin counter band sits under the customer on every width
-- the two Bag slots sit on the counter beside the customer, not under the status line
+- the two Bag slots stay in the customer-state strip beside the status line at every width (the v2.8 place), labelled `가방 {n} / {slots}`
+- each slot is at least 34px and the Bag reads as the heaviest element of the strip; the hand-over ghost lands on the slot it fills
 - the slots remain the handling surface: focus / replace / remove and tap-only completion work as in UI-Q87; no third ghost slot
 - no horizontal overflow
 

@@ -38,9 +38,6 @@ cleaner.
 Prefer the current Sound / animation / scene systems before adding a new presentation framework.
 Do not create a theme / skin framework.
 
-The SALE Bag-on-counter composition change (§TRANSACTION BEAT A3) is a User-approved exception to
-§COMPOSITION LOCK (User 2026-09-24, v2.9.0).
-
 ## GOAL / IDENTITY
 
     KEEP THE APPROVED COMPOSITION
@@ -414,9 +411,9 @@ General contract, every beat:
 
 | id | beat | exact behaviour |
 |---|---|---|
-| A1 | 건네기 hand-over | on a price commit that succeeds, the Item icon travels from its shelf row to the customer's Bag slot on the counter (260~320 ms) and the slot settles (scale 1.05→1, 240 ms); the dock Gold counts to its new value (same count-up the Morning till uses); the `판매 후 변화` rows do not vanish — the Stat cells that changed pulse once (300 ms) and keep the new value |
+| A1 | 건네기 hand-over | on a price commit that succeeds, the Item icon travels from its shelf row to the customer's Bag slot in the customer-state strip (260~320 ms) and the slot settles (scale 1.05→1, 240 ms); the dock Gold counts to its new value (same count-up the Morning till uses); the `판매 후 변화` rows do not vanish — the Stat cells that changed pulse once (300 ms) and keep the new value |
 | A2 | 손님 반응 customer reaction | purchase: the customer figure nods (translateY 4 px, 180 ms × 2); refusal: it shakes its head (translateX ±4 px, the existing bubble-shake timing). The reply line (Copy.buy / Copy.refuse) stays 5 seconds; the greeting keeps the 3-second rule |
-| A3 | 계산대 counter | a thin counter band sits under the customer on every width; the two Bag slots sit ON the counter beside the customer (not under the status line). The Bag slots remain the handling surface (UI_UX §BAG PRESENTATION); composition lock lifted by User for this one change |
+| A3 | 계산대 counter | the Bag keeps its place in the customer-state strip beside the status line at every width, one step larger than v2.8 and never overflowing (UI_UX §BAG PRESENTATION); the counter edge under the front is unchanged; the hand-over (A1) lands on that Bag slot. §COMPOSITION LOCK holds (User 2026-09-24 revision, v2.9.0) |
 | A4 | 손님 교대 customer exit / entry | `손님 보내기`: the current customer exits left (240 ms), then the next arrives with the existing entry (240~340 ms); `depart` gets a recorded utility cue (door / step family). Entry may still start the view at the top (UI_UX §SALE — MOBILE AUTHORITY) |
 | A5 | 가격 소리 계열 price-mode sound family | 50% / 100% / 150% share the register family and differ by coin ticks (1 / 2 / 3); no mode sounds like the correct answer (§AUDIO PRESENTATION "peer choices") |
 | A6 | 거절 refusal | the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text; refusal reply stays 5 s (A2) |

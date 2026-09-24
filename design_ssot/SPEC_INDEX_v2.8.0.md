@@ -31,7 +31,7 @@ seen. Documents are amended first, Source follows per owner (docs-first).
 
 Scope (owner amendments are the truth; this list is routing):
 
-    A. the transaction is visible — hand-over motion, customer reaction, Bag on the counter,
+    A. the transaction is visible — hand-over motion into the Bag, customer reaction,
        customer exit/entry, price-mode sound family, refusal beat        -> PRESENTATION_PRINCIPLES / UI_UX / SALE
     B. the screen says what to do — DAY 1~3 task line, first-order coach order, Hazard rows that
        say what resists them, today-fit emphasis on ORDER, per-Gate visitor counts (counts only),
@@ -226,7 +226,7 @@ If a routed source cannot be accessed after explicit lookup, report PROJECT SOUR
 
 v2.9.0 is ready to close when:
 - a new player can say what to do on DAY 1 from the screens alone (task line, coach order, Hazard rows)
-- selling an Item to a customer is visible as an act (hand-over, reaction, Bag on the counter)
+- selling an Item to a customer is visible as an act (hand-over into the Bag, reaction)
 - the first SALE teaches four marks; the rest are contextual
 - Supply is one sentence (`음식·음료는 피로를 줄인다`) and Fatigue bands 0~40 are adopted and measured
 - every Hazard presses one non-투력 Stat and every non-투력 Stat is pressed by three Hazards

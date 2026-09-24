@@ -737,7 +737,7 @@ Exact copy (User 2026-09-24, v2.9.0) -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
 
 ## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
 
-The sale is shown as an act and SALE reads at a glance: a counter band under the customer carries the two Bag slots at every width (the phone `upper-right area` placement is replaced), the greeting keeps 3 seconds while buy / refuse reply lines stay 5 seconds, the readout `.top` shows 전투 전망 and 환경 대응 only (the `실패 시 사망 위험` cell label and its own `?` are retired; the value moves to the second line of the 전투 전망 help and the NPC detail), the one `판매 후 변화` list holds direct Stat rows, derived rows and `피로 {A} → 출발 {B}` only (the frozen outlook is never repainted inside the till), the price buttons carry role words with an `이익 {N}G` sub-line, the Stat grid gains the Hazard pressure tag, Item rows emphasise the effect that answers the Gate, and the 50 / 100 / 150 sale sounds become one register family with coin ticks. Transaction beat timings live in PRESENTATION_PRINCIPLES §TRANSACTION BEAT; this owner points to them. The earlier ```new declaration of the COPY_WORLD_VOICE exact-copy pointer is edited in place.
+The sale is shown as an act and SALE reads at a glance: the Bag keeps its v2.8 place in the customer-state strip (User revision 2026-09-24: not moved, one step larger; the hand-over lands there), the greeting keeps 3 seconds while buy / refuse reply lines stay 5 seconds, the readout `.top` shows 전투 전망 and 환경 대응 only (the `실패 시 사망 위험` cell label and its own `?` are retired; the value moves to the second line of the 전투 전망 help and the NPC detail), the one `판매 후 변화` list holds direct Stat rows, derived rows and `피로 {A} → 출발 {B}` only (the frozen outlook is never repainted inside the till), the price buttons carry role words with an `이익 {N}G` sub-line, the Stat grid gains the Hazard pressure tag, Item rows emphasise the effect that answers the Gate, and the 50 / 100 / 150 sale sounds become one register family with coin ticks. Transaction beat timings live in PRESENTATION_PRINCIPLES §TRANSACTION BEAT; this owner points to them. The earlier ```new declaration of the COPY_WORLD_VOICE exact-copy pointer is edited in place.
 
 ```text
 - exact 실패 시 사망 위험 %
@@ -745,15 +745,14 @@ Failure-risk label:
 실패 시 사망 위험
 - it auto-hides after 3 seconds
 - a newly emitted line starts a fresh 3-second display
-- place them in the available upper-right area
 - ordinary 50% / 100% / 150% sale distinctions
 ```
 
 ```new
 NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0).
 - SALE transaction beats (hand-over, customer reaction, counter, exit / entry, price sound family, refusal) -> PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT (User 2026-09-24, v2.9.0)
-- a thin counter band sits under the customer; the two Bag slots sit on the counter beside the customer, not under the status line (User 2026-09-24, v2.9.0)
-- the counter band and the two Bag slots on it beside the customer apply at every width (User 2026-09-24, v2.9.0)
+- the two Bag slots stay in the customer-state strip beside the status line and are the landing point of the hand-over (User 2026-09-24, v2.9.0)
+- the Bag stays in the customer-state strip at every width, one step larger than v2.8, never overflowing (User 2026-09-24, v2.9.0)
 `손님 보내기`: the current customer exits left, then the next arrives with the existing entry (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A4; User 2026-09-24, v2.9.0).
 - exact 실패 시 사망 위험 % — not as a readout cell: the readout `.top` shows 전투 전망 and 환경 대응 only; the value is the second line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`, same frozen value) and a line of the NPC detail (User 2026-09-24, v2.9.0)
 전투 전망 `?` help is two lines; the second is `실패 시 사망 위험 {N}%`. `실패 시 사망 위험` as a readout cell label with its own `?` is retired (User 2026-09-24, v2.9.0).
@@ -774,9 +773,8 @@ Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`; price roles -> `SALE_v2.8.0.md` �
 - the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A6; User 2026-09-24, v2.9.0)
 - a greeting line auto-hides after 3 seconds; a reply line (buy / refuse) stays 5 seconds (User 2026-09-24, v2.9.0)
 - a newly emitted line starts a fresh display of its own duration
-- a thin counter band sits under the customer; the Bag slots sit on it, not under the status line (User 2026-09-24, v2.9.0)
-- place them on the counter band beside the customer (User 2026-09-24, v2.9.0)
-At every width the two slots sit on the counter band beside the customer; they remain the handling surface (User 2026-09-24, v2.9.0).
+- the Bag slots stay in the customer-state strip beside the status lines (User 2026-09-24, v2.9.0)
+At every width the two slots stay in the customer-state strip beside the status line; they remain the handling surface and the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) lands on them (User 2026-09-24, v2.9.0).
 Stat grid pressure tag (User 2026-09-24, v2.9.0):
 - under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag with the pressing Hazard name(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two)
 - 투력 never carries a tag

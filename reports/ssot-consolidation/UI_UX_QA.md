@@ -466,7 +466,7 @@ Test all current fresh-init paths owned by `CORE_RUN_v2.8.0.md`.
 ```
 
 ```new
-- Bag is exactly two slots on the counter beside the customer and each is ~44px touch class or larger (User 2026-09-24, v2.9.0)
+- Bag is exactly two slots in the upper-right and each is ~44px touch class or larger
 ```
 
 ## REWORD — UI-Q109 CONFIRMED PLACEMENT: approval narration removed from the first rule line
@@ -683,7 +683,7 @@ Tutorial explains Stat pressure / Counter contribution / readiness and one Suppl
 
 ## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
 
-User decision 2026-09-24 (v2.9.0): the SALE readout shows two cells (전투 전망 / 환경 대응) with two `?`, and the exact `실패 시 사망 위험 {N}%` moves into the second line of the 전투 전망 help and the NPC detail; the price buttons carry the role words (`할인 50%` / `정가` / `바가지 150%` with `이익 {N}G`); the Bag slots sit on the counter beside the customer; the purchase / refusal reply line stays 5 seconds while the greeting keeps 3; the transaction beats, Stat grid pressure tag, matching-effect emphasis and one delta list (no outlook delta rows; C3 corrected) get UI-Q-v29-3 … UI-Q-v29-9. UI-Q13 / Q87 / Q107 / Q109 / Q110 / Q-v28-7 / Q-v28-30 expectations are rewritten under the same ids. Declared-new line edited in place above: the UI-Q109 Bag line (now `on the counter beside the customer`).
+User decision 2026-09-24 (v2.9.0): the SALE readout shows two cells (전투 전망 / 환경 대응) with two `?`, and the exact `실패 시 사망 위험 {N}%` moves into the second line of the 전투 전망 help and the NPC detail; the price buttons carry the role words (`할인 50%` / `정가` / `바가지 150%` with `이익 {N}G`); the Bag stays in the customer-state strip (User revision 2026-09-24); the purchase / refusal reply line stays 5 seconds while the greeting keeps 3; the transaction beats, Stat grid pressure tag, matching-effect emphasis and one delta list (no outlook delta rows; C3 corrected) get UI-Q-v29-3 … UI-Q-v29-9. UI-Q13 / Q87 / Q107 / Q109 / Q110 / Q-v28-7 / Q-v28-30 expectations are rewritten under the same ids. The UI-Q109 Bag line keeps its earlier declared-new form (`in the upper-right`).
 
 ```text
 - Combat/Hazard/Death readouts remain frozen
@@ -703,11 +703,11 @@ User decision 2026-09-24 (v2.9.0): the SALE readout shows two cells (전투 전�
 - a greeting auto-hides after 3 seconds; a purchase / refusal reply line after 5 seconds (User 2026-09-24, v2.9.0)
 - a new line restarts its own display
 The three price buttons `할인 50% · {price}G` / `정가 · {price}G` / `바가지 150% · {price}G` are visually distinct, large enough, and easy to switch (User 2026-09-24, v2.9.0).
-- the slots sit on the counter beside the customer (User 2026-09-24, v2.9.0)
+- the slots stay in the customer-state strip beside the status line (User 2026-09-24, v2.9.0)
 ### UI-Q-v29-3 — TRANSACTION BEAT
 One ordinary SALE customer at 390 and 1280: one successful price commit, one refusal, one `손님 보내기`; repeat the same flow under `prefers-reduced-motion`.
 Every beat is presentation only, each ≤ 320 ms, one sale's beats total < 600 ms, input is never blocked, and the scroll position stays on the same customer.
-- frame captures at 0 / 150 / 300 / 600 ms of the sale show the Item icon travelling from its shelf row to the customer's Bag slot on the counter (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
+- frame captures at 0 / 150 / 300 / 600 ms of the sale show the Item icon travelling from its shelf row to the customer's Bag slot in the customer-state strip (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
 - purchase: the customer figure nods (translateY 4px, 180 ms x 2); refusal: it shakes its head (translateX ±4px, the existing bubble-shake timing) and the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text
 - the reply line (buy / refuse) stays 5 seconds; the greeting keeps 3 seconds
 - `손님 보내기`: the current customer exits left (240 ms), the next arrives with the existing entry (240~340 ms), and `depart` plays a recorded utility cue (door / step family); entry may still start the view at the top
@@ -716,10 +716,10 @@ Every beat is presentation only, each ≤ 320 ms, one sale's beats total < 600 m
 - no beat adds information the resolved state does not already hold; no Save field, no Gameplay RNG draw
 - input is blocked during a beat, or one sale's beats total 600 ms or more
 - the view scrolls away from the current customer during a beat
-### UI-Q-v29-4 — BAG ON THE COUNTER
-SALE at 390 and 1280, before and after one sale.
-- a thin counter band sits under the customer on every width
-- the two Bag slots sit on the counter beside the customer, not under the status line
+### UI-Q-v29-4 — BAG IN THE STRIP
+SALE at 360, 390 and 1280, before and after one sale.
+- the two Bag slots stay in the customer-state strip beside the status line at every width (the v2.8 place), labelled `가방 {n} / {slots}`
+- each slot is at least 34px and the Bag reads as the heaviest element of the strip; the hand-over ghost lands on the slot it fills
 - the slots remain the handling surface: focus / replace / remove and tap-only completion work as in UI-Q87; no third ghost slot
 ### UI-Q-v29-5 — STAT GRID PRESSURE TAG
 Customers whose Gate presses one Stat through one Hazard, one Stat through two Hazards, and a Stat the Gate does not press.
