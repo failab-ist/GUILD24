@@ -10,16 +10,16 @@ const gold=new Set(['visitGold']);
 const mult=new Set(['xpMult','foodMult','potionMult','revisitMult']);
 const negative=new Set(['fatigue','injuryRisk','variance']);
 // Canonical player-facing Hazard pressure (DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE, v2.9.0 revision 2): every
-// Hazard row is the numbered short row `대응 {N} 필요 · {능력치} 10마다 대응 {k}` for the Gate it is about; the pressure
+// Hazard row is the numbered short row `대응 {N} 필요 · {능력치} {n}당 1` for the Gate it is about; the pressure
 // labels (`강인함으로 버틴다` …) are retired. All 9 Hazards read the same way, inline, so there is no hover-only path.
 const hazardStat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'mobility',whiteout:'spirit'};
 function hazardRows(keys,d){return keys.map(k=>({key:k,name:D.hazards[k],pressure:d?hazardShort(k,d):''}));}
 /* COPY_AUDIT §4-16 / DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE (User 2026-09-24 revision): the Gate-level
    requirement number comes first. N = the Counter that alone reaches 충분 on that Gate that Day (ceil(Hazard Threat));
-   k = the Core-Stat conversion per 10 points (강인함 3, 기동 / 정신 4), read from the engine's one rule table. No
+   n = the Core-Stat points per 1 Counter (강인함 3, 기동 / 정신 2), read from the engine's one rule table. No
    per-customer remaining need is ever composed here; the plate has no help line (§4-15 retired). */
 function hazardNeed(k,d){return Math.ceil(G.Dungeon.hazardState(k,{},d).threat);}
-function hazardRate(k){const r=G.Dungeon.hazardRule(k);return labels[r.stat]+' 10마다 대응 '+Math.round(r.coef*10);}
+function hazardRate(k){const r=G.Dungeon.hazardRule(k);return labels[r.stat]+' '+Math.round(1/r.coef)+'당 1';}
 function hazardSentence(k,d){return D.hazards[k]+' — 대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k)+' · '+D.hazards[k]+' 대응 상품이 막는다';}
 function hazardShort(k,d){return '대응 '+hazardNeed(k,d)+' 필요 · '+hazardRate(k);}
 /* hazardStat above is the Core Stat each Hazard presses (the same table the engine's hazardState uses);

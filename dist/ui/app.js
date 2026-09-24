@@ -312,7 +312,7 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
 // A Gate is a paper notice pinned to the board: family colour along the top, the hazard
 // pictogram beside each pressure line, the supply requirement stamped at the foot.
 /* `full`: Gate detail (the gates modal) reads the full Gate sentence (COPY_AUDIT §4-16); the MORNING plate reads the
-   short row `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}` - the number first (User 2026-09-24). */
+   short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 1` - the number first (User 2026-09-24). */
 function gatePlate(d,full=false){const b=sigilOf(d);
  return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
