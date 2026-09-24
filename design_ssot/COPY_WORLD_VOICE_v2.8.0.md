@@ -1052,7 +1052,7 @@ Tutorial may point to the relevant UI value without selecting the answer for the
 
 Keep each coach step short: one system-reading job, usually one or two sentences.
 
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 진열대 (상품 사용) / 가격 (PRICING) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3.
+Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3.
 
 ```text
 점포지원 (DAY 0, User 2026-09-24)
@@ -1080,10 +1080,6 @@ Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 �
 
 후보 교환
 후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.
-
-
-손님
-손님을 누르면 특성과 지난 원정 기록을 볼 수 있다.
 
 
 목적지

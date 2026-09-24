@@ -109,44 +109,49 @@
 
 ## 3-3. 대성공 안내
 
-**현재**
-> 구매 후 준비 상태에 따라 대성공 신호가 뜰 수 있다. 신호가 떠도 대성공이 확정되는 건 아니다.
+**현재** (User 2026-09-24: contextual mark, first time the signal is lit)
+> 대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.
 
 ---
 
-## 3-4. 전투 전망 안내
+## 3-4. 전망 안내
 
-**현재**
-> 손님이 처음 계산대에 왔을 때의 전망이다. 판매 후에도 바뀌지 않는다.
+**현재** (User 2026-09-24)
+> 손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.
 
 ---
 
 ## 3-5. 보급 안내
 
-**현재**
-> 보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요 보급을 초과한 보급은 피로를 줄인다.
+**현재** (User 2026-09-24: contextual mark, first time a `보급 부족` / `남은 보급` line appears; the same line is the §3-7 SUPPLY step)
+> 보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.
 
 ---
 
-## 3-6. 상품 사용
+## 3-6. 가방 (상품 사용)
 
-**현재**
-> 판매한 상품은 오늘 원정에서 쓰고 사라진다.
+**현재** (User 2026-09-24: contextual mark on the filled Bag slot, after the first sale)
+> 판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.
 
 ---
 
 ## 3-7. TUTORIAL / COACH — USER APPROVED EXACT COPY
 
-The following four lines are current exact Player-facing copy for these tutorial steps.
+The following lines are current exact Player-facing copy for these tutorial steps (User 2026-09-24: the
+first SALE teaches four marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, 전망 (§3-4), PRICING;
+SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time their situation exists).
 
 ### PRICING
 > 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.
 
 ### HAZARD
-> 위험마다 압박하는 능력이 다르다. 어떤 능력이 필요한지 여기서 확인한다.
+> 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.
 
 ### SUPPLY
-> 보급이 부족하면 투력·강인함·기동·정신이 모두 낮아진다. 필요량을 채우고 남은 보급은 먼저 출발 전 피로를 줄이고, 더 남으면 귀환 후 피로를 줄인다.
+> 보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.
+
+### RETURNING (재방문 손님, contextual on the folded last-expedition line)
+> 다시 온 손님. 지난 원정은 여기, 특성과 기록은 손님을 눌러 본다.
 
 ### QUANTITY
 > 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.
@@ -157,15 +162,15 @@ The following four lines are current exact Player-facing copy for these tutorial
 
 ## 4-1. 전투 전망 Help
 
-**현재**
-> 손님이 처음 계산대에 왔을 때의 전투 전망. 판매 후에도 바뀌지 않는다.
+**현재** (User 2026-09-24)
+> 손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.
 
 ---
 
 ## 4-2. 환경 대응 Help
 
-**현재**
-> 손님이 처음 계산대에 왔을 때의 환경 대응. 판매 후에도 바뀌지 않는다.
+**현재** (User 2026-09-24)
+> 게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.
 
 ---
 

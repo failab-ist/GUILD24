@@ -633,3 +633,24 @@ reads, what the key does and when more candidates arrive) and never name a pick.
 exception to "no mark over a modal", shown over the takeover itself, on DAY 0 only, and persisted
 per account like every other mark. Exact copy: COPY_WORLD_VOICE_v2.8.0.md §TUTORIAL COACH COPY.
 ```
+
+
+## AMENDMENT — first-sale coach diet (User decision 2026-09-24)
+
+The Supply/Fatigue lesson teaches two facts; the first SALE shows four marks and the rest are contextual.
+
+```text
+Supply/Fatigue tutorial teaches:
+- required Supply is paid first
+- a Supply Deficit applies one expedition-wide preparation penalty through the existing unified Supply system
+- remaining Supply beyond the requirement reduces current Fatigue
+- further remaining Supply reduces that expedition's Fatigue gain
+```
+
+```new
+Supply/Fatigue tutorial teaches (User 2026-09-24: two facts, on the first Supply line the Player meets):
+- a Supply Deficit lowers all four Core Stats through the existing unified Supply system
+- remaining Supply beyond the requirement reduces Fatigue
+First SALE (User 2026-09-24): four marks only — destination, Hazard, outlook, price. Great Success, Supply,
+returning customer and Bag marks are contextual and appear the first time their situation exists.
+```

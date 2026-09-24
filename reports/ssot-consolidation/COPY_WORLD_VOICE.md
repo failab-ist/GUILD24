@@ -550,7 +550,7 @@ Exact D15 Trait name:
 ```new
 Confirm title / body / button -> `COPY_AUDIT_APPROVED_v2.8.0.md` §1-3.
 **FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.8.0.md`
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 진열대 (상품 사용) / 가격 (PRICING) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3.
+Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3.
 Exact player-facing Function / Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-5.
 Retained current copy (`COPY_AUDIT_APPROVED_v2.8.0.md` §14-2 / §14-4 / §23): the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below.
 Header / Label / Button and GLUTTONY Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-2.
@@ -618,3 +618,16 @@ Authoritative wording: the 목적지 tutorial coach step below.
 점포지원 구매
 누르면 바로 확보된다. 이후 DAY 5·10·15·20·25·30에 새 후보가 오고, 최대 7개까지 들일 수 있다.
 ```
+
+
+## AMENDMENT — first-sale coach diet (User decision 2026-09-24)
+
+The 손님 coach mark is retired (the 목적지 mark stays: COPY_WORLD_VOICE §Tutorial names it the authoritative
+wording of the destination rule); the returning-customer and Bag marks are contextual and their
+exact copy is owned by COPY_AUDIT_APPROVED_v2.8.0.md §3 (the pointer line, declared new in this ledger, is reworded in place).
+
+```text
+손님
+손님을 누르면 특성과 지난 원정 기록을 볼 수 있다.
+```
+

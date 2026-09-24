@@ -1922,11 +1922,12 @@ Hazard tutorial teaches:
 - natural Stat and Item Counter both contribute
 - readiness is summarized by 취약/불안/대응/충분
 
-Supply/Fatigue tutorial teaches:
-- required Supply is paid first
-- a Supply Deficit applies one expedition-wide preparation penalty through the existing unified Supply system
-- remaining Supply beyond the requirement reduces current Fatigue
-- further remaining Supply reduces that expedition's Fatigue gain
+Supply/Fatigue tutorial teaches (User 2026-09-24: two facts, on the first Supply line the Player meets):
+- a Supply Deficit lowers all four Core Stats through the existing unified Supply system
+- remaining Supply beyond the requirement reduces Fatigue
+
+First SALE (User 2026-09-24): four marks only — destination, Hazard, outlook, price. Great Success, Supply,
+returning customer and Bag marks are contextual and appear the first time their situation exists.
 
 Do not teach the hidden Supply-deficit formula.
 Do not teach `독이면 X 아이템을 사세요` or equivalent solution scripts.
