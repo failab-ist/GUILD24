@@ -337,7 +337,6 @@ When the inherited next-Day Gate count is randomized, expose the exact probabili
 ```
 
 ```new
-When the next-Day Gate count is randomized, expose the exact probability distribution across the possible counts for that next Day.
 ```
 
 ```text
@@ -345,7 +344,6 @@ When the inherited next-Day Gate count is deterministic, expose the fixed count 
 ```
 
 ```new
-When the next-Day Gate count is deterministic, expose the fixed count as confirmed information.
 ```
 
 ```text
@@ -353,7 +351,6 @@ Presentation owner -> `ECONOMY_ORDER_v2.7.0.md` / `UI_UX_v2.7.0.md`.
 ```
 
 ```new
-Presentation owner -> `ECONOMY_ORDER_v2.8.0.md` / `UI_UX_v2.8.0.md`.
 ```
 
 ```text
@@ -621,7 +618,6 @@ Final Hazard aggregation -> `FINAL_EXPEDITION_v2.8.0.md`
 ## GATE POWER — LATE-DAY SLOPE
 ## HAZARD THREAT
 ### NEUTRAL-FIT PREPARATION INTENT
-## NEXT-DAY GATE FORECAST
 ## ORDINARY EXPEDITION FAILURE DEATH RISK
 ## GREAT SUCCESS / DEEP EXPEDITION
 ```
@@ -914,4 +910,52 @@ The Hazard Defense coefficients become integer conversions read `{능력치} n�
 | 속박 | 기동 ×1/2 |
 | 진창 | 기동 ×1/2 |
 | 공포 | 정신 ×1/2 |
+```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```text
+The next-Day Gate-count forecast must read this same rule. It may not maintain a second probability
+table.
+The next-Day T1/T2/T3 forecast uses this exact same function. Save/Load must not create a separate
+forecast roll or a second approximation table.
+Before ORDER commitment, expose both:
+1. next-day Gate-count forecast
+2. next-day Tier forecast
+### Gate-count forecast
+- derive the forecast from the same canonical seeded/current-run generation rules that govern the actual next Day
+- do not create a second forecast-only RNG path
+- Save/Load must not reroll the forecast independently from the actual next-Day generation state
+- do not reveal next-day Family
+- do not reveal exact next-day Gate identities/composition
+- do not reveal next-day Hazard set
+### Tier forecast
+### Design boundary
+Current-day open Gate / known Hazard remains the primary preparation truth.
+The next-day forecast is a secondary planning signal.
+Design intent:
+내일 얼마나 많이, 얼마나 위험한지는 안다.
+정확히 무엇이 필요한지는 모른다.
+The following NEXT-DAY forecast is supplemental only.
+It must not replace or obscure today's Gate/Hazard information.
+Before ordering, expose exact next-day Tier distribution:
+T1 %
+T2 %
+T3 %
+- exact next-day Family
+- actual Gate result
+- visiting NPC identities
+- NPC destination
+- expedition success/death probability
+```
+
+```new
+## NEXT-DAY GATE FORECAST — RETIRED
+(User 2026-09-24, v2.9.0) No player-facing next-day forecast exists. The Gate-count and Tier generation rules below stay the engine's; nothing derived from them is shown before the next Day opens.
+No player-facing next-Day Gate-count forecast exists (User 2026-09-24, v2.9.0); the generator alone reads this rule.
+No player-facing next-Day Tier forecast exists (User 2026-09-24, v2.9.0); the generator alone reads this function.
 ```

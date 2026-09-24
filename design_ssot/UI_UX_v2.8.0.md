@@ -223,45 +223,14 @@ Do not:
 Store scene은 사용할 수 있으나
 상황 정보보다 방해되지 않게 한다.
 
-### MORNING — NEXT-DAY GATE FORECAST — REQUIRED
+### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 
-Before ORDER, Morning must expose both next-day Gate quantity pressure and Tier difficulty pressure.
+(User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown anywhere, MORNING or ORDER. Today's open Gates, their numbered Hazard rows and the visitor count per open Gate are the whole preparation context; the Gate-count / Tier generation rules in `DUNGEON_HAZARD_v2.8.0.md` are unchanged and stay internal.
 
-Required information:
-
-```text
-내일 전망
-
-게이트 수
-1개 xx% · 2개 xx% · 3개 xx%
-
-게이트 위험도
-T1 xx% · T2 xx% · T3 xx%
-```
-
-If next-day Gate count is deterministic, show the fixed result instead of a fake distribution:
-
-```text
-게이트 수
-2개 확정
-```
-
-Rules:
-- Gate-count probability/fixed-count truth follows `DUNGEON_HAZARD_v2.8.0.md`
-- Tier probability truth follows `DUNGEON_HAZARD_v2.8.0.md`
-- current-day Gate/Hazard remains the primary preparation information
-- next-day forecast is a secondary future signal
-- do not reveal next-day Family / exact Gate composition / Hazard set
+Still hidden:
+- next-day Family / exact Gate composition / Hazard set
 - do not reveal an individual future customer's identity / individual destination; the visitor count per open Gate of the current day is public at MORNING and ORDER (User 2026-09-24, v2.9.0)
 - do not add recommended Item/category/quantity prose
-- ORDER may repeat the same forecast compactly; it must not generate a second value
-
-Design intent:
-
-```text
-내일 얼마나 많이, 얼마나 위험한지는 안다.
-정확히 무엇이 필요한지는 모른다.
-```
 
 ### DEEP EXPEDITION MORNING
 
@@ -291,7 +260,7 @@ Recommended hierarchy:
 1. `DAY X · 본사 발주`
 2. persistent funds summary
 3. compact current-day Gate / known Hazard reference
-4. compact next-day Tier forecast (secondary)
+4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
 5. offer list + quantity (base=6; authoritative modifiers may increase count)
 6. Full-offer reroll + current cost/state
 7. sticky confirm
@@ -329,7 +298,6 @@ ORDER decision information must be readable before commitment:
 - warehouse used / remaining capacity
 - Item shelf life / expiry information
 - current-day Gate / known Hazard context
-- next-day T1/T2/T3 forecast as secondary information
 - current Reroll cost/state
 
 Flow is visibly separated:
@@ -370,6 +338,7 @@ Do not add redundant role chips.
 Within an offer/item card, visual priority is:
 
 1. Item identity
+   - the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
 2. exact actual effect
    - Core Stat
    - Hazard Counter
@@ -377,6 +346,7 @@ Within an offer/item card, visual priority is:
    - explicit penalty
 3. economy / stock metadata
 4. quantity interaction
+   - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; a used-up offer answers `오늘 공급이 끝났습니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0)
 
 Examples such as `속박 대응 +16` already communicate function; do not add a second `속박 전문` chip.
 No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).

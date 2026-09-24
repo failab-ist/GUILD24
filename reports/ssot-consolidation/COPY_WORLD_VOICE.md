@@ -759,3 +759,20 @@ Authoritative Hazard wording (User 2026-09-24 revision 2, v2.9.0; the MORNING sh
 ```new
 어둠 · 대응 29 필요 · 기동 2당 1
 ```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```text
+내일 게이트 등장 확률
+T1 50%
+T2 35%
+T3 15%
+```
+
+```new
+v2.9.0 (User 2026-09-24): Trait에 Flavor note는 없다. 남는 note는 거짓말쟁이의 기능 서술(`50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.`) 하나뿐이며, 효과 행으로 렌더된다. 구두쇠·악바리의 note는 삭제(효과 행이 같은 말을 한다).
+```

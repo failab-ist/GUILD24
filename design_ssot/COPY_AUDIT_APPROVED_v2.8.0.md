@@ -199,6 +199,18 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 # 4. SALE — HELP / LABEL
 
+## 3-9. 발주 불가 사유 토스트
+
+**노출 위치**
+> ORDER에서 자금·창고로 막힌 수량 버튼(흐리지만 누를 수 있음)이나 공급이 끝난 행의 버튼을 눌렀을 때의 토스트 한 줄. 주어 없이 쓴다 — 누른 행이 대상이다.
+
+**현재** (User 2026-09-24, v2.9.0)
+> 발주 자금이 부족합니다. {N}G 부족.
+> 창고 칸이 부족합니다.
+> 오늘 공급이 끝났습니다.
+
+---
+
 ## 4-1. 전투 전망 Help
 
 **현재** (User 2026-09-24, v2.9.0: two lines; the second line carries the frozen SALE-entry value that the retired §4-3 cell showed)

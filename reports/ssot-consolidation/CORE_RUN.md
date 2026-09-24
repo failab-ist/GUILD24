@@ -304,3 +304,17 @@ D10 : Boss investigation beat owned by BOSS
 D20 : Recon dispatch beat
 D25 : exact Final Family Pair / Hazard Pool generated, revealed, persisted
 ```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```text
+- next-day Tier probabilities are only a secondary future-planning signal
+```
+
+```new
+- no next-day forecast is shown; today's Gates are the whole planning context (User 2026-09-24, v2.9.0)
+```

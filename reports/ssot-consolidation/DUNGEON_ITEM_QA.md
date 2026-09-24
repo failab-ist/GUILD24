@@ -658,3 +658,17 @@ Every Hazard exposes the numbered short row, the same on every surface:
 - every Family Tier Hazard set presses two different Stats (독거미 강인함 + 기동, 슬라임 강인함 + 기동, 설원 강인함 + 정신, 지하묘지 정신 + 기동), so no Gate is answered by one Stat (User 2026-09-24 revision 3)
 - 강인함 3 · 기동 3 · 정신 3 Hazards, 투력 never pressed, no Gate's Hazard set sharing a Stat (User 2026-09-24 revision 5: 화염 -> 정신)
 ```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```text
+- next-Day forecast reads the same function as generation
+```
+
+```new
+- no player-facing next-Day forecast exists (User 2026-09-24, v2.9.0)
+```

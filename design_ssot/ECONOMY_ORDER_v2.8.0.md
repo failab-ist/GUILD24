@@ -385,10 +385,7 @@ Current Day:
 - known Hazard information is available as the primary preparation context
 
 Next Day:
-- next-day Family / actual Gate result remain hidden
-
-The next-day forecast supplements today's preparation decision;
-it does not replace the current-day Gate/Hazard context.
+- nothing about the next Day is shown; Family / actual Gate result remain hidden (User 2026-09-24, v2.9.0: the next-day forecast surface is retired)
 
 Canonical Gate generation/reveal -> `DUNGEON_HAZARD_v2.8.0.md`
 Canonical phase flow -> `CORE_RUN_v2.8.0.md`
@@ -548,8 +545,9 @@ Before order commitment show/readably expose:
 - current-day Gate / known Hazard
 - each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 1` (Gate detail; User 2026-09-24 revision, v2.9.0)
 - visitor count per open Gate, only when two or more Gates are open (counted by the destination each customer claims; a liar's or a pilgrimage-rerouted customer's true Gate stays hidden) (User 2026-09-24, v2.9.0)
-- next-day Tier forecast
 - current Reroll cost/state
+- each offer's rarity name under the Item name (User 2026-09-24, v2.9.0)
+- the reason when a quantity cannot be ordered — store Gold, warehouse space, or supply used up — as the COPY_AUDIT §3-9 toast on tap (User 2026-09-24, v2.9.0)
 
 Today-fit emphasis (User 2026-09-24, v2.9.0): in offer rows the effect text that answers today's open Gates (a Counter for one of today's Hazards, or the Core Stat one of them presses) is set in the emphasis style; no badge, no verdict word, no reorder, no recommended row -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY.
 
@@ -598,100 +596,11 @@ Its exact modifier model is owned by RELIC and must not be inferred here.
 
 Canonical Relic rule -> `RELIC_v2.8.0.md`
 
-## NEXT-DAY FORECAST
+## NEXT-DAY FORECAST — RETIRED
 
-Before ORDER commitment, MORNING must expose both:
+(User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown at MORNING or ORDER. The seeded generation rules (`DUNGEON_HAZARD_v2.8.0.md`) are unchanged and remain internal; no forecast is drawn at all, so Save/Load cannot create a forecast-only RNG path.
 
-1. next-day Gate-count forecast
-2. next-day Tier forecast
-
-The same information may remain available compactly in ORDER so the Player does not need to navigate back to remember it.
-
-Design intent:
-
-```text
-내일 얼마나 많이, 얼마나 위험한지는 안다.
-정확히 무엇이 필요한지는 모른다.
-```
-
-### NEXT-DAY GATE COUNT FORECAST
-
-If the next Day's Gate count is randomized by the current canonical Day/Gate generation rule, expose the exact probability distribution for each possible Gate count.
-
-Example presentation:
-
-```text
-게이트 수
-2개 65% · 3개 35%
-```
-
-If the next Day's Gate count is deterministic, expose the fixed count instead of a fake probability distribution.
-
-Example:
-
-```text
-게이트 수
-2개 확정
-```
-
-Rules:
-- forecast probabilities must come from the same current seeded/run generation rules that will actually determine the next Day
-- Save/Load must not create an independently rerollable forecast
-- forecast may inform stock quantity, cash reserve, reroll willingness, and inventory planning
-- do not reveal next-day Family
-- do not reveal exact next-day Gate identities/composition
-- do not reveal next-day Hazard set
-
-### NEXT-DAY TIER FORECAST
-
-Before Order decision, show exact next-day Tier probability distribution.
-
-Example:
-T1 35%
-T2 55%
-T3 10%
-
-Public:
-- T1%
-- T2%
-- T3%
-
-Exact T1/T2/T3 probability forecast:
-
-```text
-게이트 위험도
-T1 xx% · T2 xx% · T3 xx%
-```
-
-Rules:
-- use the same canonical next-day Tier generation distribution that will govern the next Day
-- this remains a future-risk signal, not an expedition success probability
-- do not reveal exact next-day Gate result
-
-Forecast is World/Market information,
-not expedition probability.
-
-### FORECAST TIMING
-
-Tier Forecast must be visible before the player commits Order spending.
-
-It should inform:
-- cheap/general stock vs premium preparation
-- insurance stocking
-- reroll willingness
-- cash reserve
-
-without revealing exact future solution.
-
-Canonical Tier generation -> `DUNGEON_HAZARD_v2.8.0.md`
-
-### INFORMATION BOUNDARY
-
-Current-day open Gate / known Hazard remains the primary preparation context for today's ORDER.
-
-Next-day Gate Count + Tier Forecast is secondary future information.
-
-Keep hidden:
+Keep hidden (unchanged):
 - next-day Family
 - exact next-day Gate composition
 - next-day Hazard set
@@ -700,28 +609,10 @@ Keep hidden:
 - expedition success/death probability
 - recommended SKU/category/quantity
 
-The forecast informs planning without revealing the future solution.
-
 ## MORNING / ORDER PRESENTATION CONTRACT
 
-MORNING exposure is required.
-
-Recommended compact structure:
-
-```text
-내일 전망
-
-게이트 수
-1개 xx% · 2개 xx% · 3개 xx%
-
-게이트 위험도
-T1 xx% · T2 xx% · T3 xx%
-```
-
-Fixed impossible counts may be omitted from presentation.
+MORNING shows today's Gates and Hazards; ORDER repeats today's Gate / Hazard context, the per-Gate visitor count and the offer rows. No next-day block (User 2026-09-24, v2.9.0).
 Exact visual layout is owned by `UI_UX_v2.8.0.md`.
-
-ORDER may repeat the forecast compactly as decision context.
 
 ## VISITOR FORECAST
 

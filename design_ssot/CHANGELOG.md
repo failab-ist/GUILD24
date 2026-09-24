@@ -82,6 +82,10 @@ Docs-first. Each owner amendment is listed when committed.
 - Revision 5 (User 2026-09-24, play feedback F1): 화염 -> 정신 ×1/2 restores 3 / 3 / 3 (강인함 독·냉기·부식 / 기동 속박·진창·어둠 / 정신
   공포·화이트아웃·화염) with no Gate sharing a Stat; the STATS coach line reads `능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장
   영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.` DUNGEON_HAZARD, DUNGEON_ITEM_QA, ITEM, SPEC_INDEX, COPY_WORLD_VOICE §D25, COPY_AUDIT §3-7.
+- Play feedback F2 (User 2026-09-24): the next-day Gate / Tier forecast surface is retired (MORNING and ORDER; generator rules unchanged);
+  ORDER rows carry the rarity name under the Item name; a Gold- or space-blocked quantity control answers a tap with the reason toast
+  (COPY_AUDIT §3-9); Trait flavor notes removed (거짓말쟁이 keeps its function line as an effect row). UI_UX, UI_UX_QA, ECONOMY_ORDER,
+  ECONOMY_ORDER_QA, DUNGEON_HAZARD, DUNGEON_ITEM_QA, CORE_RUN, COPY_WORLD_VOICE, NPC_TRAIT, SPEC_INDEX.
 
 ## v2.8.0 — closed 2026-09-24
 

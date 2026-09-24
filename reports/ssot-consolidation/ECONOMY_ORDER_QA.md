@@ -146,7 +146,6 @@ Today's Gate/Hazard is the primary preparation context, while tomorrow contribut
 ```
 
 ```new
-Today's Gate/Hazard is the primary preparation context.
 ```
 
 
@@ -269,14 +268,6 @@ Presentation QA -> `UI_UX_QA_v2.8.0.md`
 ### ORD-Q86 — DAY-BAND RARITY WEIGHTS EXACT
 ### ORD-Q87 — EPIC PROGRESSION WITHOUT HARD D20 UNLOCK
 ### ECO-Q-v28-5 — ORDER PITY EXACT
-### ORD-Q09 — TIER FORECAST TIMING
-### ORD-Q10 — TIER FORECAST ACCURACY
-### ORD-Q14 — TODAY GATE / TOMORROW FORECAST BOUNDARY
-### ORD-Q80 — MORNING NEXT-DAY GATE COUNT FORECAST
-### ORD-Q81 — FIXED NEXT-DAY GATE COUNT
-### ORD-Q82 — NEXT-DAY TIER FORECAST
-### ORD-Q83 — FORECAST SAVE/LOAD INTEGRITY
-### ORD-Q84 — FORECAST INFORMATION BOUNDARY
 ### ORD-Q85 — ORDER FORECAST CONTINUITY
 ### ECO-Q10 — CLOSING ECONOMICS
 ### ECO-Q META/BOSS — CUMULATIVE GROSS SALES CONSISTENCY
@@ -355,12 +346,63 @@ ORD-Q84 reveal boundary narrowed to individual identity / individual destination
 ```
 
 ```new
-- individual future customer identity
-- individual future NPC destination (User 2026-09-24, v2.9.0)
 PASS (per-Gate visitor counts; User 2026-09-24, v2.9.0):
 - with two or more open Gates, MORNING / ORDER show the current-day visitor count per open Gate
 - the per-Gate counts sum to the expected visitor count
 - each count follows the destination the customer claims; a liar's or a pilgrimage-rerouted customer's true Gate is not revealed
 - with one open Gate no per-Gate breakdown appears
 - no name / Job / Trait / Wallet is revealed with the counts
+```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```text
+Controlled next-Day generation state with a randomized Gate-count band.
+- MORNING exposes every possible next-day Gate count with exact probability
+- displayed probabilities match the same canonical generation rule used for the next Day
+- impossible counts are not presented as possible
+- no next-day Family / exact Gate composition / Hazard set is revealed
+Controlled next-Day generation state where Gate count is deterministic.
+- MORNING exposes the fixed count as confirmed/deterministic information
+- UI does not fabricate a probability split for a fixed result
+- MORNING exposes exact T1/T2/T3 probability distribution before ORDER commitment
+- values match the canonical next-day Tier-generation distribution
+- forecast is not mislabeled as expedition success/death probability
+For a controlled seeded Run:
+- record MORNING next-day Gate-count and Tier forecasts
+- save/reload repeatedly without advancing the Day
+- forecast does not reroll on reload
+- the eventual next-Day generation is governed by the same seeded/run generation state represented by the forecast
+- no independent forecast-only RNG path exists
+MORNING/ORDER forecast may expose:
+- next-day Gate-count distribution/fixed count
+- next-day T1/T2/T3 distribution
+FAIL if it newly exposes:
+- exact Gate composition
+- Hazard set
+- exact success/death probability
+- recommended SKU/category/quantity
+Enter Morning/Order.
+Next-day T1/T2/T3 probabilities are visible before order commitment.
+Player can use forecast for purchasing decisions.
+Inspect displayed next-day Tier distribution and generation weights.
+Displayed percentages equal actual next-day Tier distribution.
+No fake/approximate percentage if UI presents exact numbers.
+Enter Morning then Order on a normal Day.
+Before Order commitment, Player can use:
+- current-day open Gate information
+- current-day known Hazard information
+- exact next-day T1/T2/T3 probabilities
+Next-day hidden:
+- Family
+```
+
+```new
+### ORD-Q09 / Q10 / Q14 / Q80 / Q81 / Q82 / Q83 — NEXT-DAY FORECAST — RETIRED
+(User 2026-09-24, v2.9.0) The next-day forecast surface is gone: nothing to time, display or keep consistent. The generation rules themselves are covered by DUNGEON_ITEM_QA. Still FAIL anywhere on MORNING / ORDER if it newly exposes next-day Family, exact Gate composition, Hazard set, an individual future customer's identity or destination, exact success/death probability, or a recommended SKU/category/quantity.
+### ORD-Q84 — PER-GATE VISITOR COUNTS
 ```

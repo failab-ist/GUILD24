@@ -160,7 +160,7 @@ Order timing:
 - Order is same-day replenishment
 - confirmed stock enters Inventory before the current Day SALE
 - current-day Gate/Hazard information is already known before Order commitment
-- next-day Tier probabilities are only a secondary future-planning signal
+- no next-day forecast is shown; today's Gates are the whole planning context (User 2026-09-24, v2.9.0)
 
 Within ORDER, confirming a purchase does **not** advance the phase.
 The Player enters SALE only through the separate `영업 시작` action defined by `ECONOMY_ORDER_v2.8.0.md` / `UI_UX_v2.8.0.md`.

@@ -207,7 +207,7 @@ Tier PASS:
 - exact anchor rows equal DUNGEON_HAZARD_v2.8.0.md
 - all in-between Days use linear interpolation between surrounding anchors
 - D30 does not run ordinary Tier generation
-- next-Day forecast reads the same function as generation
+- no player-facing next-Day forecast exists (User 2026-09-24, v2.9.0)
 
 FAIL:
 - a forecast-only probability table

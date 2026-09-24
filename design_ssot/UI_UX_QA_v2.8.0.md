@@ -206,7 +206,9 @@ PER-PHASE APPLICATION PASS:
 - ORDER's `1 / 3 / 최대` carries the subtle dotted underline when available, sharpens its
   underline / ink on hover and focus, and goes dim and non-interactive when disabled, with no
   whole-element opacity fade; `- / +` keep a 44px touch target and maxQuantity behaviour is
-  unchanged (`-` at q=0, `+` at q>=max, `1 / 3` above max, `최대` a q=max shortcut)
+  unchanged (`-` at q=0, `+` at q>=max, `1 / 3` above max, `최대` a q=max shortcut); a control blocked by Gold or
+  warehouse space (not by the offer's supply) stays dim but answers a tap with the §3-9 reason toast, and `최대` at 0
+  does the same (User 2026-09-24, v2.9.0)
 - every NIGHT Outcome label measures 36px `var(--f-sign)` on phone (desktop may scale, one size for all Outcomes), and the NPC name and Outcome summary
   measure the same whichever Outcome resolved
 - a NIGHT Death renders zero result-data rows and leaves no divider or reserved space where that
@@ -427,33 +429,19 @@ Event Day:
 PASS:
 Today's situation is understandable and a meaningful Event is not buried among ordinary cards.
 
-### UI-Q101 — MORNING NEXT-DAY GATE FORECAST
+### UI-Q101 / UI-Q09 — NEXT-DAY FORECAST — RETIRED
 
-Before ORDER on controlled next-Day states:
+(User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown at MORNING or ORDER; FAIL if any next-day block, percentage or count appears. The individual-customer boundary (name, Job, Trait, Wallet, destination hidden; per-Gate visitor count public) is checked by UI-Q-v29-14 / ORD-Q84.
 
-PASS:
-- MORNING shows next-day Gate-count forecast
-- randomized count shows exact probability per possible count
-- deterministic count shows fixed count rather than fake split
-- MORNING shows exact next-day T1/T2/T3 probability forecast
-- values match `DUNGEON_HAZARD_v2.8.0.md` / `ECONOMY_ORDER_v2.8.0.md`
-- current-day Gate/Hazard remains more prominent as today's preparation context
-- next-day Family / exact Gate composition / Hazard set remain hidden
-- future customer individual identity / individual destination remains hidden; the per-Gate visitor count is public at MORNING and ORDER (User 2026-09-24, v2.9.0)
-- no recommended Item/category/quantity is added
+### UI-Q-v29-20 — ORDER ROW RARITY LINE / BLOCKED-QUANTITY REASON
 
-If ORDER repeats the forecast:
-PASS only when the values exactly match MORNING and are not regenerated independently.
-
-### UI-Q09 — TIER FORECAST VISIBILITY
-SETUP:
-Open Morning/Order before spend.
-
-EXPECT:
-T1/T2/T3 next-day percentages visible and compact.
+(User 2026-09-24, v2.9.0)
 
 PASS:
-Player can act on them before order commitment.
+- every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
+- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; a used-up offer's controls show `오늘 공급이 끝났습니다.` (COPY_AUDIT §3-9)
+- the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
+- no `내일` block on ORDER
 
 ## ORDER
 

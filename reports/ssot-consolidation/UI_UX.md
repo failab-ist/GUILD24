@@ -280,8 +280,6 @@ Final Family ownership -> FINAL_EXPEDITION_v2.8.0.md
 Exact Player-facing wording -> COPY_AUDIT_APPROVED_v2.8.0.md
 Meta gameplay ownership -> META_v2.8.0.md
 -> COPY_WORLD_VOICE_v2.8.0.md
-- Gate-count probability/fixed-count truth follows `DUNGEON_HAZARD_v2.8.0.md`
-- Tier probability truth follows `DUNGEON_HAZARD_v2.8.0.md`
 The displayed 실패 시 사망 위험 % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.8.0.md`. It means the chance that an ordinary failed expedition escalates to Death; it is not the unconditional probability of Death across all expedition attempts.
 Exact copy ownership -> `COPY_WORLD_VOICE_v2.8.0.md` §PRE-SUPPLY EXPEDITION OUTLOOK — EXACT COPY; help lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-1.
 Follow `SALE_v2.8.0.md`.
@@ -485,7 +483,6 @@ Phase subsections of v2.6 PHASE IDENTITY are promoted to `##`; later-version `##
 
 ```new
 ## MORNING
-### MORNING — NEXT-DAY GATE FORECAST — REQUIRED
 ## ORDER
 ### ORDER — ITEM INFORMATION HIERARCHY
 ### ORDER — WAREHOUSE DISCLOSURE
@@ -924,4 +921,42 @@ Examples (User 2026-09-24 revision 2, v2.9.0; every Hazard row — MORNING Gate 
 (no `{위험} · {label}` row survives; the SALE destination plate has no `?` help)
 the sentence forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16.
 - each Hazard's numbered short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`, N for 마왕성 (Day 30 / T2 -> 29), the same row as the MORNING plate (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```text
+Before ORDER, Morning must expose both next-day Gate quantity pressure and Tier difficulty pressure.
+Required information:
+내일 전망
+게이트 수
+1개 xx% · 2개 xx% · 3개 xx%
+게이트 위험도
+T1 xx% · T2 xx% · T3 xx%
+If next-day Gate count is deterministic, show the fixed result instead of a fake distribution:
+게이트 수
+2개 확정
+- current-day Gate/Hazard remains the primary preparation information
+- next-day forecast is a secondary future signal
+- do not reveal next-day Family / exact Gate composition / Hazard set
+- ORDER may repeat the same forecast compactly; it must not generate a second value
+Design intent:
+내일 얼마나 많이, 얼마나 위험한지는 안다.
+정확히 무엇이 필요한지는 모른다.
+- next-day T1/T2/T3 forecast as secondary information
+4. compact next-day Tier forecast (secondary)
+```
+
+```new
+### MORNING — NEXT-DAY GATE FORECAST — RETIRED
+(User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown anywhere, MORNING or ORDER. Today's open Gates, their numbered Hazard rows and the visitor count per open Gate are the whole preparation context; the Gate-count / Tier generation rules in `DUNGEON_HAZARD_v2.8.0.md` are unchanged and stay internal.
+Still hidden:
+- next-day Family / exact Gate composition / Hazard set
+4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
+- the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
+- a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; a used-up offer answers `오늘 공급이 끝났습니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0)
 ```

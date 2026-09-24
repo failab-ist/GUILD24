@@ -453,6 +453,7 @@ Rules:
     - internalDirection=MIXED
     - [cost] 50% 확률로 실제 배정 Gate 변경 (claimedDestination 유지).
     - [neutral] expected destination remains unchanged
+    - player-facing: the function line `50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.` is its effect row; no Trait carries a flavor note (구두쇠 / 악바리 notes removed, User 2026-09-24, v2.9.0)
 
 11. **천재**
     - internalDirection=POSITIVE

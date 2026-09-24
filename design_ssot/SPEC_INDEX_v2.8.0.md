@@ -52,7 +52,7 @@ does not): the v3.0+ router was read against the three findings — nothing is p
 does not choose a price, so the hand-over is shown by motion on the existing tap flow; desktop
 redesign (§8), item memory (§3) and art waves (§18) do not answer any finding; customer reaction is
 done by motion, not new art. Deferred out of v2.9.0 to v3.0+: moving the folded last-expedition line
-below the Stat grid, the secondary weight of the ORDER next-day forecast, clause-per-line card
+below the Stat grid, clause-per-line card (the ORDER next-day forecast itself was retired on 2026-09-24)
 wrapping (superseded by the two-clause card copy).
 
 ## VERSION POLICY

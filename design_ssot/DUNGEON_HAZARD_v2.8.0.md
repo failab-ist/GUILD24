@@ -577,58 +577,9 @@ Expose current-day preparation context:
 
 This is the information the player primarily orders against.
 
-The following NEXT-DAY forecast is supplemental only.
-It must not replace or obscure today's Gate/Hazard information.
+## NEXT-DAY GATE FORECAST — RETIRED
 
-## NEXT-DAY GATE FORECAST
-
-Before ORDER commitment, expose both:
-
-1. next-day Gate-count forecast
-2. next-day Tier forecast
-
-### Gate-count forecast
-
-When the next-Day Gate count is randomized, expose the exact probability distribution across the possible counts for that next Day.
-
-When the next-Day Gate count is deterministic, expose the fixed count as confirmed information.
-
-Rules:
-- derive the forecast from the same canonical seeded/current-run generation rules that govern the actual next Day
-- do not create a second forecast-only RNG path
-- Save/Load must not reroll the forecast independently from the actual next-Day generation state
-- do not reveal next-day Family
-- do not reveal exact next-day Gate identities/composition
-- do not reveal next-day Hazard set
-
-### Tier forecast
-
-Before ordering, expose exact next-day Tier distribution:
-
-T1 %
-T2 %
-T3 %
-
-Do not expose:
-- exact next-day Family
-- actual Gate result
-- visiting NPC identities
-- NPC destination
-- expedition success/death probability
-
-### Design boundary
-
-Current-day open Gate / known Hazard remains the primary preparation truth.
-The next-day forecast is a secondary planning signal.
-
-Design intent:
-
-```text
-내일 얼마나 많이, 얼마나 위험한지는 안다.
-정확히 무엇이 필요한지는 모른다.
-```
-
-Presentation owner -> `ECONOMY_ORDER_v2.8.0.md` / `UI_UX_v2.8.0.md`.
+(User 2026-09-24, v2.9.0) No player-facing next-day forecast exists. The Gate-count and Tier generation rules below stay the engine's; nothing derived from them is shown before the next Day opens.
 
 ## EXPEDITION FORECAST
 
@@ -678,8 +629,7 @@ For ordinary Days:
 | D19–29 | 2 or 3, exactly 50% / 50% |
 | D30 | ordinary Gate-count generation does not run; Final owner applies |
 
-The next-Day Gate-count forecast must read this same rule. It may not maintain a second probability
-table.
+No player-facing next-Day Gate-count forecast exists (User 2026-09-24, v2.9.0); the generator alone reads this rule.
 
 ### Tier generation — exact
 
@@ -702,8 +652,7 @@ Use the following exact anchor rows for ordinary Days:
 For Days between two anchors, linearly interpolate each Tier weight between the surrounding rows.
 D30 does not use ordinary Tier generation.
 
-The next-Day T1/T2/T3 forecast uses this exact same function. Save/Load must not create a separate
-forecast roll or a second approximation table.
+No player-facing next-Day Tier forecast exists (User 2026-09-24, v2.9.0); the generator alone reads this function.
 
 ### Combat Forecast label boundary — exact, hidden formula
 

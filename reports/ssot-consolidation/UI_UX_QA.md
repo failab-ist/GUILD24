@@ -322,8 +322,6 @@ UI-Q92 `NIGHT v2.7 RESULT TRUTH` -> `NIGHT RESULT TRUTH` (version tag removed).
 ### UI-Q23 — SAFE AREA
 ### UI-Q24 — COLOR-INDEPENDENT SIGNAL
 ### UI-Q03 — MORNING HIERARCHY
-### UI-Q101 — MORNING NEXT-DAY GATE FORECAST
-### UI-Q09 — TIER FORECAST VISIBILITY
 ### UI-Q04 — ORDER SCENE
 ### UI-Q05 — ORDER FUNDS
 ### UI-Q06 — ORDER OFFERS
@@ -453,7 +451,6 @@ Test all current fresh-init paths owned by `CORE_RUN_v2.7.0.md`.
 ```
 
 ```new
-- values match `DUNGEON_HAZARD_v2.8.0.md` / `ECONOMY_ORDER_v2.8.0.md`
 - Final no-effect Items are blocked/clearly marked according to `FINAL_EXPEDITION_v2.8.0.md`
 UI matches META_v2.8.0.md and does not resurrect legacy progression truth.
 Test all current fresh-init paths owned by `CORE_RUN_v2.8.0.md`.
@@ -768,7 +765,6 @@ future customer Job/Level/Destination/preparation need/importance is not newly r
 ```
 
 ```new
-- future customer individual identity / individual destination remains hidden; the per-Gate visitor count is public at MORNING and ORDER (User 2026-09-24, v2.9.0)
 - no today-fit/recommended badge or verdict word; the UI-Q-v29-12 typographic emphasis of existing effect text is not a badge (User 2026-09-24, v2.9.0)
 future customer Job/Level/individual Destination/preparation need/importance is not newly revealed; the per-Gate visitor count of the ORDER 오늘 line (UI-Q-v29-13) is not a reveal (User 2026-09-24, v2.9.0).
 ### UI-Q-v29-10 — DAY 1~3 TASK LINE
@@ -927,4 +923,40 @@ retired. The revision-1 declarations this replaces were edited out of the fences
 MORNING Gate plates and the ORDER 위험 보기 modal on a T1, a T2 and a T3 day; the SALE destination plate of a customer going to one of them; the D25 최종 정찰 보고 and the FINAL 확인된 위협 rows.
 - every Hazard row states the Gate-level requirement first: MORNING plate, SALE destination plate, D25 report and FINAL rows read `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; Gate detail alone reads the full sentence `{위험} — 대응 {N} 필요 · {능력치} {n}당 1 · {위험} 대응 상품이 막는다`
 - no `{위험} · {label}` row and no destination-plate `?` help survive; D25 / FINAL show N = 29 (Day 30 / T2); no per-customer remaining need, no readiness number, no 0.75 / 0.40 threshold appears anywhere (User 2026-09-24 revision 2)
+```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```text
+unchanged (`-` at q=0, `+` at q>=max, `1 / 3` above max, `최대` a q=max shortcut)
+Before ORDER on controlled next-Day states:
+- MORNING shows next-day Gate-count forecast
+- randomized count shows exact probability per possible count
+- deterministic count shows fixed count rather than fake split
+- MORNING shows exact next-day T1/T2/T3 probability forecast
+- current-day Gate/Hazard remains more prominent as today's preparation context
+- next-day Family / exact Gate composition / Hazard set remain hidden
+- no recommended Item/category/quantity is added
+If ORDER repeats the forecast:
+PASS only when the values exactly match MORNING and are not regenerated independently.
+Open Morning/Order before spend.
+T1/T2/T3 next-day percentages visible and compact.
+Player can act on them before order commitment.
+```
+
+```new
+unchanged (`-` at q=0, `+` at q>=max, `1 / 3` above max, `최대` a q=max shortcut); a control blocked by Gold or
+warehouse space (not by the offer's supply) stays dim but answers a tap with the §3-9 reason toast, and `최대` at 0
+does the same (User 2026-09-24, v2.9.0)
+### UI-Q101 / UI-Q09 — NEXT-DAY FORECAST — RETIRED
+(User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown at MORNING or ORDER; FAIL if any next-day block, percentage or count appears. The individual-customer boundary (name, Job, Trait, Wallet, destination hidden; per-Gate visitor count public) is checked by UI-Q-v29-14 / ORD-Q84.
+### UI-Q-v29-20 — ORDER ROW RARITY LINE / BLOCKED-QUANTITY REASON
+- every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
+- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; a used-up offer's controls show `오늘 공급이 끝났습니다.` (COPY_AUDIT §3-9)
+- the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
+- no `내일` block on ORDER
 ```

@@ -480,3 +480,13 @@ it must be redefined through the visible Supply -> Fatigue recovery rule (`피�
 - applies only to the Food Item's own positive Core-Stat contribution and stated Supply (피로 회복) adjustment
 - does not amplify Supply (피로 회복) (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
+
+The next-day Gate / Tier forecast surface is retired (MORNING and ORDER; the generator rules stay internal), ORDER rows carry the
+rarity name under the Item name, a Gold- or space-blocked quantity control answers a tap with the COPY_AUDIT §3-9 reason toast, and
+Trait flavor notes are removed (거짓말쟁이 keeps its function line as an effect row). Superseded revision declarations were removed in place.
+
+```new
+- player-facing: the function line `50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.` is its effect row; no Trait carries a flavor note (구두쇠 / 악바리 notes removed, User 2026-09-24, v2.9.0)
+```
