@@ -588,7 +588,7 @@ function masterySpawnPatch(){
  for(let i=0;i<table.length;i++)table[i]=[];
  return ()=>{for(let i=0;i<saved.length;i++)table[i]=saved[i];};
 }
-function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null}={}){
+function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive',build='hybrid',prefix='meta',purchaseOrder=null,relicAware=false}={}){
  const byIndex=[],accountsEnd=[],firstClear=[],ledgers=[];
  const order=purchaseOrder?purchaseOrder.slice():[];
  for(const id of order)if(!D.decorationBy[id])throw Error('없는 장식입니다: '+id);
@@ -605,7 +605,7 @@ function trajectory({trajectories=20,runs=12,policy='balanced',pricing='adaptive
     loadout:{...G.Meta.storeLoadout(account)}};
    const g=new G.Game(account);g.autosave=false;
    g.start(prefix+'-'+t+'-'+i);
-   playRun(g,byIndex[i],{policy,pricing,build,seed:t});
+   playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware});
    /* The Run is settled through the shipped path. `end` is idempotent and `settleStoreCapital`
       carries its own once-only guard, so a Run playRun already ended is not settled twice. */
    g.end(!!g.run.win,g.run.endReason||'측정 종료');

@@ -1,0 +1,35 @@
+== none (no purchase)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30  11.5%  clear   6.5%  decorations 0.00  capital +446
+  run  5  D30   9.5%  clear   6.0%  decorations 0.00  capital +417
+  run  8  D30  10.5%  clear   5.5%  decorations 0.00  capital +427
+  run 10  D30   6.5%  clear   4.0%  decorations 0.00  capital +405
+  run 12  D30   9.0%  clear   5.0%  decorations 0.00  capital +433
+  run 15  D30   6.5%  clear   3.5%  decorations 0.00  capital +415
+  first clear within 15 Runs: 56.5%  median first-clear Run 12
+== economy (premiumCase > thriftSafe > guildPlaque > dawnSign)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30   8.5%  clear   4.5%  decorations 0.51  capital +407
+  run  5  D30  10.5%  clear   7.0%  decorations 1.36  capital +419
+  run  8  D30  13.5%  clear   9.0%  decorations 2.42  capital +491
+  run 10  D30  15.0%  clear  10.0%  decorations 3.02  capital +500
+  run 12  D30  15.5%  clear  11.0%  decorations 3.48  capital +513
+  run 15  D30  20.0%  clear  10.0%  decorations 3.87  capital +602
+  #1 premiumCase      median Run 3  acquired 100%
+  #2 thriftSafe       median Run 5  acquired 100%
+  #3 guildPlaque      median Run 8  acquired 100%
+  #4 dawnSign         median Run 11  acquired 92%
+  first clear within 15 Runs: 74.5%  median first-clear Run 10
+== survival (trainingRack > firstAidKit > infirmaryPlaque > memorialBoard)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30  22.5%  clear  12.0%  decorations 0.59  capital +597
+  run  5  D30  36.5%  clear  25.0%  decorations 1.70  capital +779
+  run  8  D30  50.0%  clear  32.0%  decorations 3.31  capital +868
+  run 10  D30  67.5%  clear  33.5%  decorations 3.80  capital +1018
+  run 12  D30  61.0%  clear  37.0%  decorations 3.96  capital +949
+  run 15  D30  59.5%  clear  30.0%  decorations 4.00  capital +954
+  #1 trainingRack     median Run 3  acquired 100%
+  #2 firstAidKit      median Run 4  acquired 100%
+  #3 infirmaryPlaque  median Run 6  acquired 100%
+  #4 memorialBoard    median Run 7  acquired 100%
+  first clear within 15 Runs: 98.0%  median first-clear Run 6
