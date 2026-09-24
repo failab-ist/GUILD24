@@ -2,7 +2,7 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
@@ -223,19 +223,6 @@ Do not:
 Store scene은 사용할 수 있으나
 상황 정보보다 방해되지 않게 한다.
 
-### MORNING — SUPPLY DELTA
-
-Keep the existing Morning Board structure.
-Replace qualitative Supply-burden wording with exact public requirement:
-
-```text
-필요 보급 0
-필요 보급 3
-필요 보급 5
-```
-
-Do not add explanatory recommendation prose or new Supply qualitative labels.
-
 ### MORNING — NEXT-DAY GATE FORECAST — REQUIRED
 
 Before ORDER, Morning must expose both next-day Gate quantity pressure and Tier difficulty pressure.
@@ -380,7 +367,7 @@ Within an offer/item card, visual priority is:
 2. exact actual effect
    - Core Stat
    - Hazard Counter
-   - Supply
+   - 피로 회복 N (User 2026-09-24, v2.9.0)
    - explicit penalty
 3. economy / stock metadata
 4. quantity interaction
@@ -544,11 +531,10 @@ After any Item purchase commits during the same customer visit:
 - do not replace them with post-commit `접전 -> 우세`, `불안 -> 충분`, or `12% -> 5%` answer feedback
 
 The underlying runtime preparation **does** change.
-Actual expedition Resolve uses the final committed Items / Supply / Fatigue / Condition state.
+Actual expedition Resolve uses the final committed Items / Fatigue / Condition state (User 2026-09-24, v2.9.0).
 
 Post-commit feedback should instead explain exact actual changes and their sources:
-- direct Item Stat / Counter / Supply
-- proven Supply Deficit relief
+- direct Item Stat / Counter / 피로 회복 N
 - proven Fatigue recovery / penalty-band change
 - another explicitly owned Trait / Relic / Boss effect
 
@@ -585,7 +571,7 @@ Item-side shows exact ingredient values:
 ```text
 Core Stat +N
 Hazard Counter +N
-Supply +N
+피로 회복 N
 explicit penalty
 ```
 
@@ -607,7 +593,7 @@ when `상품 설명` is flavor-only.
 Keep directly readable:
 - exact Core Stat effect
 - exact Hazard Counter
-- exact Supply
+- exact 피로 회복 N (User 2026-09-24, v2.9.0)
 - explicit penalty
 - Insurance behavior when relevant
 - price / stock / affordability
@@ -643,7 +629,7 @@ Follow `SALE_v2.8.0.md`.
 For an uncommitted selected Item, UI may show:
 - Item exact effect
 - selected price / affordability
-- deterministic Supply/Fatigue arithmetic
+- deterministic Fatigue arithmetic (`피로 A -> 출발 B`) (User 2026-09-24, v2.9.0)
 
 Do not show hypothetical derived answer changes such as:
 - `접전 -> 우세`
@@ -662,21 +648,17 @@ If delta text is shown:
 - every changed line must be an actual runtime change
 - each changed line must expose a readable source class when the cause is not the Item's direct listed effect
 - an Item directly changes only the channels listed in `ITEM_v2.8.0.md`
-- reducing an active **Supply Deficit** may legitimately improve effective 투력/강인함/기동/정신 and underlying Hazard preparation through the inherited unified Supply system
-- this must read as `보급 부족 완화` or equivalent system-source feedback, not as if the Item itself granted those four Stats or as a newly recalculated Hazard Readiness label
-- excess Supply that lowers current Fatigue may restore effective 기동/정신 when a Fatigue penalty band changes; this must read as `피로 완화` / Condition-derived feedback
-- do not expose the hidden Supply-deficit formula merely to explain the delta
+- Food/Drink 피로 회복 that lowers current Fatigue may restore the effective Stats a Fatigue band pressed when the band changes; this must read as `피로 완화` / Condition-derived feedback (User 2026-09-24, v2.9.0)
 
 Current `집중 사탕` is the canonical clarity example:
 
 ```text
-직접 효과 = 공포 대응 +10 / Supply 3
+직접 효과 = 공포 대응 +10 / 피로 회복 3
 ```
 
 Therefore:
-- without a Supply Deficit change or Fatigue penalty-band change, it must not show a Core-Stat increase
-- if its Supply reduces an active Supply Deficit, all four effective Core Stats may rise as a **보급 부족 완화** result
-- if excess Supply also crosses a Fatigue penalty band, 기동/정신 may additionally recover as a **피로 완화** result
+- without a Fatigue penalty-band change, it must not show a Core-Stat increase
+- if its 피로 회복 releases a Fatigue band, the Stats that band pressed may recover as a **피로 완화** result
 
 A generic `판매 후 변화` block is acceptable only when direct Item effects and derived system effects are clearly separated.
 If that distinction is not immediately readable, remove the synthetic block.
@@ -844,30 +826,33 @@ Display public deterministic arithmetic from `DUNGEON_HAZARD_v2.8.0.md`.
 Example:
 
 ```text
-보급 5 / 필요 3 · 피로 9 -> 출발 7
+피로 9 -> 출발 7
 ```
 
 This is conditional arithmetic, not Outcome prediction.
 
-Player-facing Fatigue remains numeric.
+Player-facing Fatigue remains numeric (0~40; User 2026-09-24, v2.9.0).
 Do not add new `양호/주의/위험` fatigue tiers.
+Band names (정상 / 지침 / 과로 / 소진 / 탈진) and their effects are owned by DUNGEON_HAZARD; the band is named from 20 up.
 
 When actual penalty is active:
-- 10+ must have readable Stat-source feedback
-- 20 must receive strong danger treatment
+- 10+ (지침) must have readable Stat-source feedback
+- 20+ (과로 / 소진 / 탈진, ceiling 40) must receive strong danger treatment
 
 ### FATIGUE SURFACE
 
 SALE main:
 - current Fatigue always compactly readable
 - if a penalty is active, harmful semantic emphasis
-- committed Supply may show 피로 N -> 출발 N
-- show Prepared/Required/excess Supply compactly
+- committed Food/Drink may show 피로 N -> 출발 N (User 2026-09-24, v2.9.0)
 
 Do not show future Outcome-by-Outcome Fatigue table.
 
 NIGHT main:
     귀환 후 피로 N
+    귀환 후 피로 N · {band}
+
+The band is named from 20 up; exact copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
 
 Detailed resolved arithmetic opens through the shared popover.
 
@@ -875,8 +860,7 @@ Detailed resolved arithmetic opens through the shared popover.
 
 Detailed risk view may show:
 - Hazard name
-- pressured Core Stat label
-- Required Supply
+- pressured Core Stat label (User 2026-09-24, v2.9.0)
 - system-level meaning of readiness signal
 
 Do not show:
@@ -978,11 +962,14 @@ Every known authoritative Hazard provides:
 - Hazard name
 - short Stat/readiness pressure explanation from DUNGEON_HAZARD
 
-Examples:
-- 냉기 · 강인함 압박
-- 화이트아웃 · 정신 중심 / 기동 보조
-- 부식 · 강인함 압박
-- 진창 · 기동 압박
+Examples (User 2026-09-24, v2.9.0):
+- 냉기 · 강인함으로 버틴다
+- 화이트아웃 · 정신으로 견딘다
+- 부식 · 강인함으로 버틴다
+- 진창 · 기동으로 피한다
+
+Gate detail shows the full Hazard sentence, e.g. `냉기 — 강인함으로 버틴다 · 냉기 대응 상품이 막는다`;
+the nine exact sentences and the destination-plate help -> COPY_AUDIT_APPROVED_v2.8.0.md §4.
 
 Interaction:
 PC:
@@ -1140,10 +1127,13 @@ Keep `다음 / 전체 건너뛰기` controls and proven-causality rule.
 Add readable actual arithmetic when relevant:
 
 ```text
-피로 2 -> 출발 0 · 보급 회복 -2
-원정 결과 +5 · 보급 완화 -3
-밤 피로 2
+출발 0
+원정에서 +5
+음식·음료로 -3
+→ 귀환 후 2
 ```
+
+Exact copy (User 2026-09-24, v2.9.0) -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
 
 If First Aid Kit Aftercare actually changed persistent Injury state, that proven contribution may be shown.
 Do not add speculative failure-cause diagnosis.
@@ -1307,7 +1297,6 @@ Primary:
 - final Gold
 
 Expedition story belongs to Night.
-Closing may show only compact actual-supply-impact summary.
 
 Remove redundant accounting-explanation footer from the primary receipt.
 The figures themselves remain.
@@ -1580,7 +1569,7 @@ GLUTTONY:
 Use the current `BOSS_v2.8.0.md` truth:
 - preview the positive Core-Stat contribution originating from Items before -> after the ×0.50 Boss effect
 - no Rarity threshold
-- do not show Counter / Supply / Insurance / Utility / harmful RiskReward penalty as reduced by this effect
+- do not show Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty as reduced by this effect (User 2026-09-24, v2.9.0)
 
 LUST:
 - each affected non-regular participant's 투력 / 강인함 / 기동 / 정신
@@ -1922,14 +1911,12 @@ Hazard tutorial teaches:
 - natural Stat and Item Counter both contribute
 - readiness is summarized by 취약/불안/대응/충분
 
-Supply/Fatigue tutorial teaches (User 2026-09-24: two facts, on the first Supply line the Player meets):
-- a Supply Deficit lowers all four Core Stats through the existing unified Supply system
-- remaining Supply beyond the requirement reduces Fatigue
+Supply/Fatigue tutorial teaches one fact, on the first `피로 A → 출발 B` line the Player meets (User 2026-09-24, v2.9.0):
+- Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 
 First SALE (User 2026-09-24): four marks only — destination, Hazard, outlook, price. Great Success, Supply,
 returning customer and Bag marks are contextual and appear the first time their situation exists.
 
-Do not teach the hidden Supply-deficit formula.
 Do not teach `독이면 X 아이템을 사세요` or equivalent solution scripts.
 
 ### TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY — REQUIRED

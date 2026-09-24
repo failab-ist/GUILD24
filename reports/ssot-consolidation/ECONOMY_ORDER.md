@@ -368,3 +368,16 @@ This base pity is separate from the stronger `길드24 원정전문점 인증` g
 ```new
 No Store Support adds a further Counter-offer guarantee (RELIC).
 ```
+
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+Supply is no longer a Player-facing expedition effect; the Deep sponsorship line names Fatigue recovery instead.
+
+```text
+The sponsorship itself grants no Stat, Supply, Counter, Insurance or other expedition effect.
+```
+
+```new
+The sponsorship itself grants no Stat, Fatigue recovery, Counter, Insurance or other expedition effect (User 2026-09-24, v2.9.0).
+```

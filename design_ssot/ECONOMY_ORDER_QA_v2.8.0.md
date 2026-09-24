@@ -2,7 +2,7 @@
 
 DOC=ECONOMY_ORDER_QA
 OWNER=qa,economy,order,reroll,wallet,gate_count_forecast,tier_forecast,rarity_progression,final_price
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/ECONOMY_ORDER_QA_v2.8.0-patch.md,history/ECONOMY_ORDER_QA_v2.7.0.md,history/ECONOMY_ORDER_QA_v2.6.1.md,history/ECONOMY_ORDER_QA_v2.5.0.md
@@ -580,7 +580,7 @@ PASS:
 - no compensating Deep reward/difficulty rebalance
 - sponsorship is priced from the nominated NPC's rarity and current Level
 - no payment tiers / Day/Tier scaling
-- no Stat/Supply effect from sponsorship
+- no Stat / Fatigue-recovery effect from sponsorship (User 2026-09-24, v2.9.0)
 - unaffordable sponsorship cannot be confirmed
 - skip charges 0
 

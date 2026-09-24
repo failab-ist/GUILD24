@@ -331,3 +331,16 @@ ORD-Q12: 발주 교환권 no longer consumes the first paid step; after the free
 ```new
 - after the free use, paid Rerolls follow the ordinary curve from its first step (50 -> 100 -> 200 ...)
 ```
+
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+Supply is no longer a Player-facing expedition effect; ECO-Q-v28-2 names Fatigue recovery instead.
+
+```text
+- no Stat/Supply effect from sponsorship
+```
+
+```new
+- no Stat / Fatigue-recovery effect from sponsorship (User 2026-09-24, v2.9.0)
+```

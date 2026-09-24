@@ -631,3 +631,66 @@ exact copy is owned by COPY_AUDIT_APPROVED_v2.8.0.md §3 (the pointer line, decl
 손님을 누르면 특성과 지난 원정 기록을 볼 수 있다.
 ```
 
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+Supply is no longer a Gate requirement or a Player-facing effect label: Food/Drink reduce Fatigue (`피로 회복 N`), the Gate plate carries no Supply line, the `보급 부족` compact line and the required-Supply Morning block are deleted, the anchored 피로 help and the tutorial fact are restated, GLUTTONY / RESULT CAUSALITY name Fatigue recovery instead of Supply, and the D25 Hazard wording uses the three per-Stat pressure labels (강인함으로 버틴다 / 기동으로 피한다 / 정신으로 견딘다).
+
+```text
+보급 / 피로 explanation:
+필요량을 채우고 남은 보급은 출발 전 현재 피로를 먼저 줄입니다.
+그래도 남으면 귀환 후 쌓이는 피로를 줄입니다.
+## SUPPLY SHORTFALL
+Main compact line:
+보급 부족 {N} · 능력치 감소
+On-demand explanation:
+투력·강인함·기동·정신이 함께 감소한다.
+Do not expose the hidden deficit formula.
+- Hazard Counter / Supply / Insurance / Utility / harmful RiskReward penalty are unaffected
+Where required Supply is known, prefer direct data:
+필요 보급 0
+필요 보급 3
+필요 보급 5
+Do not restate it as recommendation prose such as:
+- Supply +N
+- Required Supply is paid first
+- remaining Supply can reduce current and outcome Fatigue
+The `보급` step names the visible consequence but does not expose the hidden deficit formula.
+- Supply pre-expedition recovery actually applied
+- Supply outcome-Fatigue buffer actually consumed
+Authoritative Hazard wording:
+독 · 강인함 압박
+속박 · 기동 압박
+부식 · 강인함 압박
+진창 · 기동 압박
+화염 · 강인함 압박
+공포 · 정신 압박
+어둠 · 정신 중심 + 기동 보조 압박
+냉기 · 강인함 압박
+화이트아웃 · 정신 중심 + 기동 보조 압박
+```
+
+```new
+- Item Supply value = **피로 회복 N** (User 2026-09-24, v2.9.0)
+- `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 생환 N회`, `보급 상단 도착`)
+- Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0)
+The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0).
+The Morning / Order Gate plate carries no Supply line: `보급 N 필요`, `보급 부담 없음` and `필요 보급 0/3/5` are deleted (User 2026-09-24, v2.9.0).
+Do not add recommendation prose such as:
+- 피로 회복 N (User 2026-09-24, v2.9.0)
+피로 explanation (User 2026-09-24, v2.9.0):
+음식·음료는 피로를 줄인다. 출발 전 피로부터 줄이고, 남으면 이번 원정에서 쌓이는 피로를 줄인다.
+- Food/Drink Fatigue recovery actually applied before departure (User 2026-09-24, v2.9.0)
+- Food/Drink outcome-Fatigue buffer actually consumed
+- Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unaffected (User 2026-09-24, v2.9.0)
+Authoritative Hazard wording (User 2026-09-24, v2.9.0):
+독 · 강인함으로 버틴다
+속박 · 기동으로 피한다
+부식 · 강인함으로 버틴다
+진창 · 기동으로 피한다
+화염 · 기동으로 피한다
+공포 · 정신으로 견딘다
+어둠 · 정신으로 견딘다
+냉기 · 강인함으로 버틴다
+화이트아웃 · 정신으로 견딘다
+```

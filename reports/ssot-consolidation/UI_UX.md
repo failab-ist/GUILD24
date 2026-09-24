@@ -485,7 +485,6 @@ Phase subsections of v2.6 PHASE IDENTITY are promoted to `##`; later-version `##
 
 ```new
 ## MORNING
-### MORNING — SUPPLY DELTA
 ### MORNING — NEXT-DAY GATE FORECAST — REQUIRED
 ## ORDER
 ### ORDER — ITEM INFORMATION HIERARCHY
@@ -648,9 +647,90 @@ Supply/Fatigue tutorial teaches:
 ```
 
 ```new
-Supply/Fatigue tutorial teaches (User 2026-09-24: two facts, on the first Supply line the Player meets):
-- a Supply Deficit lowers all four Core Stats through the existing unified Supply system
-- remaining Supply beyond the requirement reduces Fatigue
+Supply/Fatigue tutorial teaches one fact, on the first `피로 A → 출발 B` line the Player meets (User 2026-09-24, v2.9.0):
+- Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 First SALE (User 2026-09-24): four marks only — destination, Hazard, outlook, price. Great Success, Supply,
 returning customer and Bag marks are contextual and appear the first time their situation exists.
+```
+
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+Supply is no longer a Gate requirement or a Player-facing effect label: the MORNING — SUPPLY DELTA section (`필요 보급 0/3/5`) is deleted, Item effect rows read `피로 회복 N`, the post-commit delta loses Supply Deficit / `보급 부족 완화` / the hidden formula, the Fatigue preview reads `피로 9 -> 출발 7` on the 0~40 scale with DUNGEON_HAZARD band names, NIGHT arithmetic follows COPY_AUDIT_APPROVED §6-6, the Hazard nudge rows use the per-Stat pressure labels, and the Supply/Fatigue tutorial teaches one fact (its earlier ```new declaration in this ledger is edited in place; the `### MORNING — SUPPLY DELTA` heading declaration is removed in place).
+
+```text
+- committed Supply may show 피로 N -> 출발 N
+- show Prepared/Required/excess Supply compactly
+Keep the existing Morning Board structure.
+Replace qualitative Supply-burden wording with exact public requirement:
+필요 보급 0
+필요 보급 3
+필요 보급 5
+Do not add explanatory recommendation prose or new Supply qualitative labels.
+- Supply
+- pressured Core Stat label
+- Required Supply
+Actual expedition Resolve uses the final committed Items / Supply / Fatigue / Condition state.
+- direct Item Stat / Counter / Supply
+- proven Supply Deficit relief
+Supply +N
+- exact Supply
+- deterministic Supply/Fatigue arithmetic
+- reducing an active **Supply Deficit** may legitimately improve effective 투력/강인함/기동/정신 and underlying Hazard preparation through the inherited unified Supply system
+- this must read as `보급 부족 완화` or equivalent system-source feedback, not as if the Item itself granted those four Stats or as a newly recalculated Hazard Readiness label
+- excess Supply that lowers current Fatigue may restore effective 기동/정신 when a Fatigue penalty band changes; this must read as `피로 완화` / Condition-derived feedback
+- do not expose the hidden Supply-deficit formula merely to explain the delta
+직접 효과 = 공포 대응 +10 / Supply 3
+- without a Supply Deficit change or Fatigue penalty-band change, it must not show a Core-Stat increase
+- if its Supply reduces an active Supply Deficit, all four effective Core Stats may rise as a **보급 부족 완화** result
+- if excess Supply also crosses a Fatigue penalty band, 기동/정신 may additionally recover as a **피로 완화** result
+보급 5 / 필요 3 · 피로 9 -> 출발 7
+Player-facing Fatigue remains numeric.
+- 10+ must have readable Stat-source feedback
+- 20 must receive strong danger treatment
+피로 2 -> 출발 0 · 보급 회복 -2
+원정 결과 +5 · 보급 완화 -3
+밤 피로 2
+- do not show Counter / Supply / Insurance / Utility / harmful RiskReward penalty as reduced by this effect
+Do not teach the hidden Supply-deficit formula.
+Closing may show only compact actual-supply-impact summary.
+- 냉기 · 강인함 압박
+- 화이트아웃 · 정신 중심 / 기동 보조
+- 부식 · 강인함 압박
+- 진창 · 기동 압박
+```
+
+```new
+- 피로 회복 N (User 2026-09-24, v2.9.0)
+Actual expedition Resolve uses the final committed Items / Fatigue / Condition state (User 2026-09-24, v2.9.0).
+- direct Item Stat / Counter / 피로 회복 N
+피로 회복 N
+- exact 피로 회복 N (User 2026-09-24, v2.9.0)
+- deterministic Fatigue arithmetic (`피로 A -> 출발 B`) (User 2026-09-24, v2.9.0)
+- Food/Drink 피로 회복 that lowers current Fatigue may restore the effective Stats a Fatigue band pressed when the band changes; this must read as `피로 완화` / Condition-derived feedback (User 2026-09-24, v2.9.0)
+직접 효과 = 공포 대응 +10 / 피로 회복 3
+- without a Fatigue penalty-band change, it must not show a Core-Stat increase
+- if its 피로 회복 releases a Fatigue band, the Stats that band pressed may recover as a **피로 완화** result
+피로 9 -> 출발 7
+Player-facing Fatigue remains numeric (0~40; User 2026-09-24, v2.9.0).
+Band names (정상 / 지침 / 과로 / 소진 / 탈진) and their effects are owned by DUNGEON_HAZARD; the band is named from 20 up.
+- 10+ (지침) must have readable Stat-source feedback
+- 20+ (과로 / 소진 / 탈진, ceiling 40) must receive strong danger treatment
+- committed Food/Drink may show 피로 N -> 출발 N (User 2026-09-24, v2.9.0)
+귀환 후 피로 N · {band}
+The band is named from 20 up; exact copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
+- pressured Core Stat label (User 2026-09-24, v2.9.0)
+Examples (User 2026-09-24, v2.9.0):
+- 냉기 · 강인함으로 버틴다
+- 화이트아웃 · 정신으로 견딘다
+- 부식 · 강인함으로 버틴다
+- 진창 · 기동으로 피한다
+Gate detail shows the full Hazard sentence, e.g. `냉기 — 강인함으로 버틴다 · 냉기 대응 상품이 막는다`;
+the nine exact sentences and the destination-plate help -> COPY_AUDIT_APPROVED_v2.8.0.md §4.
+출발 0
+원정에서 +5
+음식·음료로 -3
+→ 귀환 후 2
+Exact copy (User 2026-09-24, v2.9.0) -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
+- do not show Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty as reduced by this effect (User 2026-09-24, v2.9.0)
 ```

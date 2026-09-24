@@ -2,7 +2,7 @@
 
 DOC=COPY_WORLD_VOICE
 OWNER=copy,world_voice,player_terms,help_copy,boss_report_copy,result_copy,event_copy
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/COPY_WORLD_VOICE_v2.8.0-patch.md,history/COPY_WORLD_VOICE_v2.7.0.md,history/COPY_WORLD_VOICE_v2.5.0.md
@@ -236,6 +236,8 @@ Source 내부 이름과 Player UI 용어를 구분한다.
 - `spirit` = **정신**
 - Monster Knowledge progress = **보급 생환 N회**
 - old Monster Knowledge progress wording `관찰 N회` = 사용하지 않음
+- Item Supply value = **피로 회복 N** (User 2026-09-24, v2.9.0)
+- `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 생환 N회`, `보급 상단 도착`)
 
 실제 싸움 / battle 자체는 **전투**라고 쓴다.
 
@@ -1038,8 +1040,7 @@ Allowed function:
 - Hazard presses a Core Stat
 - natural Stat and Item Counter both contribute
 - readiness labels summarize current preparation
-- Required Supply is paid first
-- remaining Supply can reduce current and outcome Fatigue
+- Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0)
 
 Forbidden solution script:
 ```text
@@ -1095,7 +1096,7 @@ CLOSING
 
 The `전망` step explains display behavior and uncertainty; it does not imply that purchased Items have no runtime effect. Actual Resolve still uses the final committed preparation.
 
-The `보급` step names the visible consequence but does not expose the hidden deficit formula.
+The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0).
 
 ## IMPORTANT RESULT
 
@@ -1229,31 +1230,13 @@ Copy 수정 때문에 Source 구조를 먼저 Refactor하지 않는다.
 
 ## MORNING / SUPPLY COPY
 
-Where required Supply is known, prefer direct data:
+The Morning / Order Gate plate carries no Supply line: `보급 N 필요`, `보급 부담 없음` and `필요 보급 0/3/5` are deleted (User 2026-09-24, v2.9.0).
 
-```text
-필요 보급 0
-필요 보급 3
-필요 보급 5
-```
-
-Do not restate it as recommendation prose such as:
+Do not add recommendation prose such as:
 - `오늘은 보급 준비가 중요합니다`
 - `추천 준비: 음식`
 
 unless an owning tutorial explicitly requires instructional text.
-
-## SUPPLY SHORTFALL
-
-Main compact line:
-
-    보급 부족 {N} · 능력치 감소
-
-On-demand explanation:
-
-    투력·강인함·기동·정신이 함께 감소한다.
-
-Do not expose the hidden deficit formula.
 
 ## FIRST AID KIT
 
@@ -1273,7 +1256,7 @@ Gate copy communicates:
 Item copy communicates exact owned values:
 - Stat +N
 - Counter +N
-- Supply +N
+- 피로 회복 N (User 2026-09-24, v2.9.0)
 - explicit penalty
 - Insurance behavior
 
@@ -1308,9 +1291,8 @@ Do not rewrite the copy to imply the shown Forecast / Readiness / 실패 시 사
 Exact Player-facing SALE Help for 전투 전망 / 환경 대응 / 실패 시 사망 위험 is owned by
 COPY_AUDIT_APPROVED_v2.8.0.md.
 
-보급 / 피로 explanation:
-    필요량을 채우고 남은 보급은 출발 전 현재 피로를 먼저 줄입니다.
-    그래도 남으면 귀환 후 쌓이는 피로를 줄입니다.
+피로 explanation (User 2026-09-24, v2.9.0):
+    음식·음료는 피로를 줄인다. 출발 전 피로부터 줄이고, 남으면 이번 원정에서 쌓이는 피로를 줄인다.
 
 ## LOYALTY COPY BOUNDARY
 
@@ -1373,8 +1355,8 @@ Internal markers such as `potion` are never Player effects.
 ## RESULT CAUSALITY COPY
 
 NIGHT may describe:
-- Supply pre-expedition recovery actually applied
-- Supply outcome-Fatigue buffer actually consumed
+- Food/Drink Fatigue recovery actually applied before departure (User 2026-09-24, v2.9.0)
+- Food/Drink outcome-Fatigue buffer actually consumed
 - First Aid Kit Aftercare actually changed persistent Injury state
 - existing proven Item/Trait/Event contributions
 
@@ -1547,7 +1529,7 @@ All `폭식 / 폭식의 마왕 글러트니 / 폭식의 권능` wording is stale
 
 Current mechanic truth is:
 - all positive Core-Stat contribution originating from Items is reduced to 50%
-- Hazard Counter / Supply / Insurance / Utility / harmful RiskReward penalty are unaffected
+- Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unaffected (User 2026-09-24, v2.9.0)
 
 Exact D15 Trait name:
 
@@ -1579,22 +1561,22 @@ Header / Intro -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-7.
 
 Then show the two selected Family names and each Family's actual T2 Hazard pressure information.
 
-Authoritative Hazard wording:
+Authoritative Hazard wording (User 2026-09-24, v2.9.0):
 
 ```text
-독 · 강인함 압박
-속박 · 기동 압박
+독 · 강인함으로 버틴다
+속박 · 기동으로 피한다
 
-부식 · 강인함 압박
-진창 · 기동 압박
+부식 · 강인함으로 버틴다
+진창 · 기동으로 피한다
 
-화염 · 강인함 압박
+화염 · 기동으로 피한다
 
-공포 · 정신 압박
-어둠 · 정신 중심 + 기동 보조 압박
+공포 · 정신으로 견딘다
+어둠 · 정신으로 견딘다
 
-냉기 · 강인함 압박
-화이트아웃 · 정신 중심 + 기동 보조 압박
+냉기 · 강인함으로 버틴다
+화이트아웃 · 정신으로 견딘다
 ```
 
 Button:
