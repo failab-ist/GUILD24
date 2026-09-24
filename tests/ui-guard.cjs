@@ -1856,7 +1856,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. 누르면 바로 건네진다.'],
+   ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
    ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
    ['supply','보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.'],
    ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
@@ -1892,7 +1892,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
  assert.deepEqual(ids.slice(0,4),['destination','hazard','forecast','pricing'],'the first SALE reads destination, Hazard, outlook, price - in that order');
  assert.deepEqual(ids.slice(4).sort(),['bag','great','returning','supply'],'the other four are contextual marks');
- for(const [id,sel] of [['great','.great-signal'],['returning','.since'],['bag','.slots .full'],['supply','.ingredients .supply-note']])
+ for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.ingredients .supply-note']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* The decision ingredients themselves, and no superseded Fatigue band anywhere on screen. */
@@ -2405,7 +2405,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
   // §3-5 / §3-7 SUPPLY: two facts, the hidden deficit formula and the second Fatigue stage untaught
   '보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.',
   '판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.',
-  '다시 온 손님. 지난 원정은 여기, 특성과 기록은 손님을 눌러 본다.'])
+  '다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'])
   assert.ok(steps.includes(line),'the approved coach line is verbatim: '+line.slice(0,20));
  for(const gone of ['점포 매출에는 영향이 없다','준비가 끝나면 영업 시작을 누른다','보급을 더 챙기면 가능성이 커질 수 있다',
                     '성공·실패 결과는 미리 알 수 없고','원정 준비에 공통 페널티','모든 상품은 1회용이며',

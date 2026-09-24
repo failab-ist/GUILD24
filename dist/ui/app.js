@@ -603,7 +603,7 @@ function armSpeech(ms=SAY_MS){
 }
 function standee(n){
  const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
- return '<button class="who r'+n.rarity+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+' 기록 보기">'
+ return '<button class="who r'+n.rarity+(Presentation.returning(n)?' returning':'')+'" data-action="npc" data-id="'+n.id+'" aria-label="'+E(n.name)+' Lv.'+n.level+' '+job+' 기록 보기">'
  +'<span class="face">'
   +'<span class="portrait">'
    +'<span class="pool" aria-hidden="true"></span>'
@@ -836,11 +836,11 @@ const coachSteps={
  /* UI-Q-v28-27. `.top` is the frozen SALE-entry snapshot itself; `.ingredients` and
     `.great-signal` below it move with the committed Bag, so the cutout stops above them. */
  ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
- ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. 누르면 바로 건네진다.'],
+ ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
  /* contextual marks - the hidden Supply-deficit formula is not taught, only the visible consequence */
  ['supply','.ingredients .supply-note','보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.'],
  ['great','.great-signal','대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.'],
- ['returning','.since','다시 온 손님. 지난 원정은 여기, 특성과 기록은 손님을 눌러 본다.'],
+ ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
  ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
  night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
@@ -1159,7 +1159,9 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    the tray (the Item went into the Bag, and the hand-over starts from the tray icon); a refusal keeps
    the Item here with the refused key locked. Same information as the old per-row panel, one place. */
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
- if(!n||!st)return '<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>';
+ /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
+    task line); afterwards an empty tray has no height and the list gets the room back (User 2026-09-24) */
+ if(!n||!st){const t=game.account.tutorial||{};return !t.skipped&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  const parts=[...moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>'),

@@ -1082,6 +1082,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12,inset 0 -2px 0 #6b502973;
  font:400 13px/1.5 var(--ui)}
 .since b{color:var(--gold);display:block;font-weight:600}
+/* v2.9.0 (User 2026-09-24): the quick surface is desk-only - on a phone the vertical line goes to the decision; the NPC detail keeps the record */
+.p-sale .since{display:none}
+@media(min-width:1024px){.p-sale .since{display:block}}
 .since p{color:#a2947c;margin-top:2px}
 /* ---- layer 3 : what to sell — the display case and the register ---------------- */
 .shelf{position:relative;margin:0;padding:0 11px 11px;background:#1b140c;
