@@ -400,3 +400,15 @@ Today-fit emphasis (User 2026-09-24, v2.9.0): in offer rows the effect text that
 With two or more open Gates, also the count per open Gate, by the destination each customer claims (User 2026-09-24, v2.9.0).
 - individual destination (the count per Gate is public; a liar's or a pilgrimage-rerouted customer's true Gate stays hidden) (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 Gate Hazard requirement number (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0 revision): the ORDER information list names the Gate-level requirement number.
+
+```text
+
+```
+
+```new
+- each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} 10마다 대응 {k}` (Gate detail; User 2026-09-24 revision, v2.9.0)
+```

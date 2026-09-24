@@ -112,16 +112,18 @@ Canonical pressure labels (one per Stat; replaces `강인함 압박` / `기동 �
 - 기동 -> `기동으로 피한다`
 - 정신 -> `정신으로 견딘다`
 
-Full Hazard sentence (Gate detail / destination-plate help; exact, no numbers):
-- `독 — 강인함으로 버틴다 · 독 대응 상품이 막는다`
-- `냉기 — 강인함으로 버틴다 · 냉기 대응 상품이 막는다`
-- `부식 — 강인함으로 버틴다 · 부식 대응 상품이 막는다`
-- `속박 — 기동으로 피한다 · 속박 대응 상품이 막는다`
-- `진창 — 기동으로 피한다 · 진창 대응 상품이 막는다`
-- `화염 — 기동으로 피한다 · 화염 대응 상품이 막는다`
-- `공포 — 정신으로 견딘다 · 공포 대응 상품이 막는다`
-- `어둠 — 정신으로 견딘다 · 어둠 대응 상품이 막는다`
-- `화이트아웃 — 정신으로 견딘다 · 화이트아웃 대응 상품이 막는다`
+Full Hazard sentence (Gate detail / destination-plate help; the Gate-level requirement number first):
+- `{위험} — 대응 {N} 필요 · {능력치} 10마다 대응 {k} · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); k = 3 for 강인함 (×0.30), 4 for 기동 / 정신 (×0.40) (User 2026-09-24 revision, v2.9.0)
+- e.g. `독 — 대응 13 필요 · 강인함 10마다 대응 3 · 독 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `냉기 — 대응 13 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `부식 — 대응 13 필요 · 강인함 10마다 대응 3 · 부식 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `속박 — 대응 13 필요 · 기동 10마다 대응 4 · 속박 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `진창 — 대응 13 필요 · 기동 10마다 대응 4 · 진창 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 13 필요 · 기동 10마다 대응 4 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `공포 — 대응 13 필요 · 정신 10마다 대응 4 · 공포 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 13 필요 · 정신 10마다 대응 4 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화이트아웃 — 대응 13 필요 · 정신 10마다 대응 4 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
+Short row (MORNING Gate plate; the number first): `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`. The SALE destination-plate row stays `{위험} · {label}` and its `?` repeats the full Gate sentence; no per-customer remaining need is shown.
 
 Destination-plate help (one `?`): `위험은 능력치를 누르고, 대응 상품이 막는다.`
 
@@ -286,7 +288,7 @@ Expose exact decision ingredients (User 2026-09-24, v2.9.0):
 Do not expose:
 - exact expedition success probability
 - post-supply/final actual Death probability during the SALE decision
-- exact hidden Hazard threshold/formula
+- the readiness ratio thresholds 대응 / 불안 / 취약 (0.75 / 0.40) and the Hazard Defense formula; the Gate's 충분 requirement `대응 {N} 필요` (N = ceil(Hazard Threat)) and the Core-Stat conversion `{능력치} 10마다 대응 {k}` are public Gate-level facts at MORNING / ORDER (Gate detail) and in the SALE destination-plate help — never a per-customer remaining need (User 2026-09-24 revision, v2.9.0)
 
 Do not show the Player a branch table of hypothetical final Fatigue for 성공 / 퇴각 / 부상.
 
@@ -753,7 +755,7 @@ Player label:
     readinessRatio >= 0.40 -> 불안
     otherwise              -> 취약
 
-These thresholds are Design Truth but remain hidden calculation detail.
+The 0.75 / 0.40 thresholds remain hidden calculation detail; the 충분 requirement (`대응 {N} 필요`, N = ceil(Hazard Threat)) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are shown per Gate (User 2026-09-24 revision, v2.9.0).
 
 ### Ordinary non-Death resolution — exact baseline
 

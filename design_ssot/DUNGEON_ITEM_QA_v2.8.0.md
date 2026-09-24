@@ -101,7 +101,7 @@ Every Hazard exposes the canonical short pressure explanation, one label per Sta
 - poison / corrosion / cold -> `강인함으로 버틴다`
 - bind / mire / fire -> `기동으로 피한다`
 - fear / dark / whiteout -> `정신으로 견딘다`
-- Gate detail / destination-plate help uses the full sentence `<Hazard> — <label> · <Hazard> 대응 상품이 막는다` exactly as `DUNGEON_HAZARD_v2.8.0.md` §HAZARD PLAYER-FACING PRESSURE lists it
+- Gate detail / destination-plate help uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> 10마다 대응 <k> · <Hazard> 대응 상품이 막는다` with N = ceil(Hazard Threat) of that Gate and k = 3 (강인함) / 4 (기동 · 정신); the MORNING plate row reads `<Hazard> · 대응 <N> 필요 · <Stat> 10마다 대응 <k>`; the SALE plate row keeps `<Hazard> · <label>` (User 2026-09-24 revision, v2.9.0)
 - destination-plate help (one `?`) reads `위험은 능력치를 누르고, 대응 상품이 막는다.`
 - no `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` label survives anywhere, including the D25 scouting report
 

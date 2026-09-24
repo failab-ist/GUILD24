@@ -720,12 +720,13 @@ Band names (정상 / 지침 / 과로 / 소진 / 탈진) and their effects are ow
 귀환 후 피로 N · {band}
 The band is named from 20 up; exact copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
 - pressured Core Stat label (User 2026-09-24, v2.9.0)
-Examples (User 2026-09-24, v2.9.0):
-- 냉기 · 강인함으로 버틴다
-- 화이트아웃 · 정신으로 견딘다
-- 부식 · 강인함으로 버틴다
-- 진창 · 기동으로 피한다
-Gate detail shows the full Hazard sentence, e.g. `냉기 — 강인함으로 버틴다 · 냉기 대응 상품이 막는다`;
+Examples (User 2026-09-24 revision, v2.9.0; MORNING Gate plate, the number first):
+- 냉기 · 대응 15 필요 · 강인함 10마다 대응 3
+- 화이트아웃 · 대응 21 필요 · 정신 10마다 대응 4
+- 부식 · 대응 13 필요 · 강인함 10마다 대응 3
+- 진창 · 대응 21 필요 · 기동 10마다 대응 4
+(the SALE destination-plate row stays `{위험} · {label}`, e.g. `냉기 · 강인함으로 버틴다`)
+Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다`;
 the nine exact sentences and the destination-plate help -> COPY_AUDIT_APPROVED_v2.8.0.md §4.
 출발 0
 원정에서 +5
@@ -893,4 +894,20 @@ User decision 2026-09-24 (v2.9.0): SALE has no always-on Fatigue line; the tutor
 
 ```new
 - SALE carries no always-on Fatigue line: current Fatigue is the status strip's `피로 N`, the tray shows `피로 A -> 출발 B` only for a chosen Food/Drink that moves it, and the expedition's Fatigue is NIGHT's answer (User 2026-09-24 revision, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 Gate Hazard requirement number (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0 revision): the Gate-level Hazard requirement number is public (§HAZARD NUDGE examples and the Gate-detail line, declared new earlier, are edited in place); the three hidden-threshold lines are rewritten.
+
+```text
+- exact hidden Hazard threshold/formula
+Do not expose the Gate's exact Counter requirement.
+- exact hidden Hazard requirement/threshold/formula
+```
+
+```new
+- exact hidden Hazard readiness thresholds (0.75 / 0.40) and Defense formula — the Gate-level `대응 {N} 필요` and `{능력치} 10마다 대응 {k}` are public Gate facts (§HAZARD NUDGE; User 2026-09-24 revision, v2.9.0)
+The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are Gate-level facts shown at MORNING / ORDER (Gate detail) and in the destination-plate `?`; no per-customer remaining need is shown — the plate row keeps `{위험} · {label}` and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision, v2.9.0).
+- exact hidden Hazard readiness thresholds / Defense formula (the Gate-level requirement number itself is a public Gate fact; User 2026-09-24 revision, v2.9.0)
 ```

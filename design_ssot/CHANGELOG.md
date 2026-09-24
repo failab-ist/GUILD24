@@ -63,6 +63,10 @@ Docs-first. Each owner amendment is listed when committed.
 - Onboarding / ORDER in Source (I-3): DAY 1~3 task line on every phase, first-ORDER coach gates -> offer -> quantity ->
   confirm -> reroll, Gate detail full Hazard sentences + destination-plate ?, ORDER today-fit emphasis and per-Gate
   visitor counts, D0 briefing two lines, 점주 가이드 처음 3일 + 자세히.
+- Gate Hazard requirement number (User 2026-09-24 revision): the Gate-level 충분 requirement `대응 {N} 필요` (ceil(Hazard
+  Threat)) and the Core-Stat conversion `{능력치} 10마다 대응 {k}` are public at MORNING / ORDER Gate detail and in the
+  SALE plate ?, the number first; no per-customer remaining need. DUNGEON_HAZARD boundary, UI_UX §GATE VS ITEM /
+  §HAZARD NUDGE, ECONOMY_ORDER, COPY_AUDIT §4-16, DUNGEON_ITEM_QA DUN-Q21, UI_UX_QA UI-Q-v29-19.
 
 ## v2.8.0 — closed 2026-09-24
 

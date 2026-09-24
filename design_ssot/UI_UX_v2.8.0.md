@@ -532,7 +532,7 @@ Show:
 
 Do not show:
 - exact expedition Success probability
-- exact hidden Hazard threshold/formula
+- exact hidden Hazard readiness thresholds (0.75 / 0.40) and Defense formula — the Gate-level `대응 {N} 필요` and `{능력치} 10마다 대응 {k}` are public Gate facts (§HAZARD NUDGE; User 2026-09-24 revision, v2.9.0)
 - exact Great Success probability
 
 The displayed 실패 시 사망 위험 % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.8.0.md`. It means the chance that an ordinary failed expedition escalates to Death; it is not the unconditional probability of Death across all expedition attempts.
@@ -584,7 +584,7 @@ Hazard Counter +N
 explicit penalty
 ```
 
-Do not expose the Gate's exact Counter requirement.
+The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are Gate-level facts shown at MORNING / ORDER (Gate detail) and in the destination-plate `?`; no per-customer remaining need is shown — the plate row keeps `{위험} · {label}` and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision, v2.9.0).
 
 ### SALE — DECISION-ONLY ITEM DETAIL
 
@@ -916,7 +916,7 @@ Do not show:
 - recommended SKU
 - recommended Item category
 - optimal combination
-- exact hidden Hazard requirement/threshold/formula
+- exact hidden Hazard readiness thresholds / Defense formula (the Gate-level requirement number itself is a public Gate fact; User 2026-09-24 revision, v2.9.0)
 
 Tutorial teaches how to read the system, not what to buy.
 
@@ -1017,13 +1017,14 @@ Every known authoritative Hazard provides:
 - Hazard name
 - short Stat/readiness pressure explanation from DUNGEON_HAZARD
 
-Examples (User 2026-09-24, v2.9.0):
-- 냉기 · 강인함으로 버틴다
-- 화이트아웃 · 정신으로 견딘다
-- 부식 · 강인함으로 버틴다
-- 진창 · 기동으로 피한다
+Examples (User 2026-09-24 revision, v2.9.0; MORNING Gate plate, the number first):
+- 냉기 · 대응 15 필요 · 강인함 10마다 대응 3
+- 화이트아웃 · 대응 21 필요 · 정신 10마다 대응 4
+- 부식 · 대응 13 필요 · 강인함 10마다 대응 3
+- 진창 · 대응 21 필요 · 기동 10마다 대응 4
+(the SALE destination-plate row stays `{위험} · {label}`, e.g. `냉기 · 강인함으로 버틴다`)
 
-Gate detail shows the full Hazard sentence, e.g. `냉기 — 강인함으로 버틴다 · 냉기 대응 상품이 막는다`;
+Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다`;
 the nine exact sentences and the destination-plate help -> COPY_AUDIT_APPROVED_v2.8.0.md §4.
 
 Interaction:

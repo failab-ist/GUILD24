@@ -2108,6 +2108,22 @@ FAIL:
 - the filled tray hides all but two shelf rows at 360
 - the tray needs a drag, a scroll or a second tap to reach the price keys
 
+### UI-Q-v29-19 — GATE HAZARD REQUIREMENT NUMBER
+
+(User 2026-09-24 revision, v2.9.0)
+
+SETUP:
+MORNING Gate plates and the ORDER 위험 보기 modal on a T1, a T2 and a T3 day; the SALE destination-plate `?` of a customer going to one of them.
+
+PASS:
+- every Hazard row states the Gate-level requirement first: MORNING plate `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`, Gate detail and the plate `?` the full sentence `{위험} — 대응 {N} 필요 · {능력치} 10마다 대응 {k} · {위험} 대응 상품이 막는다`
+- N equals ceil(Hazard Threat) of that Gate on that Day (DUNGEON_HAZARD §HAZARD THREAT), so it rises with Day and Tier; k is 3 for 강인함 and 4 for 기동 / 정신
+- the SALE plate row itself keeps `{위험} · {label}`; no per-customer remaining need, no readiness number, no 0.75 / 0.40 threshold appears anywhere
+- no Item name and no verdict word
+
+FAIL:
+- a per-customer "더 필요" number, a readiness ratio, or a requirement number that does not match ceil(Hazard Threat)
+
 ### GREAT SUCCESS TUTORIAL
 PASS:
 - explicitly teaches Great Success exists
