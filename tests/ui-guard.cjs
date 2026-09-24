@@ -289,8 +289,8 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(/발주 '\+fmt\([^)]+\)\+'G · 확정/.test(app),'the docked stamp states the amount');
 });
 
-test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row, one pressed Stat each (3 / 3 / 3); the labels are retired',()=>{
- const stat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'spirit',whiteout:'spirit'};
+test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row, one pressed Stat each (3 / 4 / 2, no Gate shares a Stat); the labels are retired',()=>{
+ const stat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',dark:'mobility',fear:'spirit',whiteout:'spirit'};
  const d={day:1,tier:1},rows=Presentation.hazardRows(Object.keys(DATA.hazards),d);
  assert.deepEqual(rows.map(r=>r.key).sort(),Object.keys(DATA.hazards).sort(),'every canonical Hazard is explained');
  for(const [key,s] of Object.entries(stat)){
@@ -298,7 +298,9 @@ test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row,
   assert.equal(Presentation.hazardStat[key],s,'the tag / emphasis read the same Stat');
   assert.equal(Dungeon.hazardState(key,{},{scale:1}).stat,s,'and the engine moves its Defense with that Stat only');
  }
- for(const s of ['survival','mobility','spirit'])assert.equal(Object.values(stat).filter(x=>x===s).length,3,s+' presses exactly three Hazards');
+ for(const [s,n] of [['survival',3],['mobility',4],['spirit',2]])assert.equal(Object.values(stat).filter(x=>x===s).length,n,s+' presses exactly '+n+' Hazards (User 2026-09-24 revision 3)');
+ // no Family Tier Hazard set is answered by one Stat (망자역 지하묘지 = 정신 + 기동)
+ for(const [fam,tiers] of Object.entries(DATA.familyTiers))for(const set of tiers)assert.equal(new Set(set.map(h=>stat[h])).size,set.length,fam+' '+set.join('+')+' presses distinct Stats');
  assert.ok(!('hazardPressure' in Presentation)&&!/'(강인함으로 버틴다|기동으로 피한다|정신으로 견딘다)'|PRESSURE_LABEL|hazardPressure/.test(read('dist/ui/presentation.js')),'no pressure label string survives (User 2026-09-24 revision 2)');
  assert.equal(Presentation.hazardRows(['cold'],d).at(0).name,'냉기');
  assert.equal(Presentation.hazardRows(['cold']).at(0).pressure,'','without a Gate there is no row text to invent');

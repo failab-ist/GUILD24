@@ -207,8 +207,8 @@ const EXPECT={
  boss5:'#modal-root [data-action="boss-seen"]',boss10:'#modal-root [data-action="boss-seen"]',
  boss15:'#modal-root [data-action="boss-seen"]',boss20:'#modal-root [data-action="boss-seen"]',
  boss25:'#modal-root [data-action="boss-seen"]'};
-/* v2.9.0: one pressed Stat per Hazard, 3 / 3 / 3 - 화염 presses 기동 (DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE) */
-const PRESSURE={poison:'강인함',bind:'기동',corrosion:'강인함',mire:'기동',fire:'기동',fear:'정신',dark:'정신',cold:'강인함',whiteout:'정신'};
+/* v2.9.0: one pressed Stat per Hazard, 3 / 4 / 2 - 화염 and 어둠 press 기동 (DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE) */
+const PRESSURE={poison:'강인함',bind:'기동',corrosion:'강인함',mire:'기동',fire:'기동',fear:'정신',dark:'기동',cold:'강인함',whiteout:'정신'};
 
 async function audit(page,width,screen,desktop){
  return page.evaluate(({width,screen,PRESSURE,desktop,expect})=>{
