@@ -917,6 +917,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  display:flex;flex-direction:column}
 .p-sale .dossier-col{display:contents}
 .p-sale .dossier:not(.traits){order:1}
+/* v2.9.0 counter tray: the phone gives the tray its 44px back from the dossier margin, so the shelf head and first row still show at entry */
+.p-sale .dossier:not(.traits){margin-bottom:10px}
 .p-sale .shelf{order:2}
 .p-sale .dossier.traits{order:3}
 .p-sale .owned-relics{order:4}
@@ -1065,7 +1067,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    tokens already use, so one movement does not read two ways across the screens. */
 .detail-stat.up strong{color:#9fd6a8}
 .detail-stat.down strong{color:#e8927f}
-.ingredients{margin:6px 0 0;font:400 12px/1.65 var(--ui);color:#a2947c}
+.ingredients{margin:6px 0 0;display:flex;flex-wrap:wrap;gap:4px 8px;font:400 12px/1.4 var(--ui);color:#a2947c}
+/* each ingredient is a stamped tag (the 포션 mark idiom), side by side - not rows, not a divider, not a box */
+.ingredients .ing{display:inline-block;padding:3px 8px;background:#00000047;box-shadow:inset 0 0 0 1px #ffffff1f;color:#cbb98d;font-weight:600;white-space:nowrap}
 .readout .estimate{margin-top:8px;font:400 12px/1.5 var(--ui);color:#8d8067}
 /* D-12. `부식 → 강인함 압박 → 취약` is one sentence about one Hazard, but stacked at a 2px gap
    the rows ran together and read as a paragraph. Each Hazard is now its own banded row with the
@@ -1093,10 +1097,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    Read apart, the two stop looking like one object. */
 .shelf-head span{font:500 12px/1 var(--f-led);color:#e3ca94;font-variant-numeric:tabular-nums}
 .goods{display:grid}
-.good{display:flex;gap:12px;align-items:center;width:100%;text-align:left;padding:11px 0;background:transparent;
+/* v2.9.0 COUNTER TRAY: rows are compact (one name line, one effect line) - the detail lives on the tray */
+.good{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:8px 0;background:transparent;
  box-shadow:inset 0 -2px 0 #6b502959;border-radius:0}
 .good:hover{background:#ffffff08}.good:active{transform:none}
-.good .tile{width:46px;height:46px;flex-shrink:0;display:grid;place-items:center;background:#0d0904;
+.good .tile{width:38px;height:38px;flex-shrink:0;display:grid;place-items:center;background:#0d0904;
  box-shadow:inset 2px 2px 0 #00000099,inset 0 -3px 0 var(--rare,var(--r0))}
 .good .what{flex:1;min-width:0;display:grid;gap:2px}
 .good .what b{font:600 15px/1.3 var(--ui);color:#f2e7cd}
@@ -1125,6 +1130,31 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    a second card under the product rather than the machine the sale is rung up on. It is one
    recessed well now: the floor sits below the counter on all three cut edges, and the gold lip
    at its foot closes it. Everything the decision needs is inside that one housing. */
+/* v2.9.0 SALE — COUNTER TRAY (User 2026-09-24): a fixed band above the dock, outside the scrolled
+   column. Empty: one 44px line. Filled: header, one-line delta list, 특수 효과, the three price keys;
+   budget at 360 is 200px so at least three shelf rows stay visible above it. */
+.p-sale .counter-tray{flex:0 0 auto;padding:7px var(--gutter) 8px;background:#15100a;color:#d8c9a6;
+ box-shadow:inset 0 4px 0 #000000b3,inset 0 -3px 0 var(--gold)}
+.p-sale .counter-tray.empty{padding:0 var(--gutter)}
+.tray-empty{margin:0;min-height:44px;display:flex;align-items:center;font:400 14px/1.3 var(--ui);color:#a2947c}
+.tray-item{display:flex;align-items:center;gap:10px}
+.tray-icon{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;background:#0d0904;
+ box-shadow:inset 2px 2px 0 #00000099,inset 0 -3px 0 var(--gold)}
+.tray-what{flex:1;min-width:0;display:grid;gap:1px}
+.tray-what b{font:600 15px/1.3 var(--ui);color:#f2e7cd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tray-what>span{font:400 12px/1.3 var(--ui);color:#a2947c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tray-who{flex-shrink:0;text-align:right;font:400 12px/1.4 var(--ui);color:#a2947c}
+.tray-who b{color:#f6e9ca;font-weight:600}
+.tray-who .npc-wallet b,.tray-who>b+b{color:var(--gold)}
+.tray-delta{margin:6px 0 0;font:600 14px/1.45 var(--ui);color:#d8c9a6}
+.tray-delta .delta-src{margin:0 8px 0 0}
+.tray-delta b{font-weight:600;color:#f2e7cd;font-variant-numeric:tabular-nums}
+.tray-delta i{font-style:normal;color:#8d8067}
+.tray-delta b.effect-bad{color:var(--tone-cost)}
+.counter-tray .tills{margin-top:8px;padding:0;position:static;background:none}
+.counter-tray .tills button{min-height:64px;padding:8px 2px}
+@media(min-width:1024px){.p-sale .counter-tray{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:0 24px}.p-sale .counter-tray>*{grid-column:2}}
+/* FINAL keeps its per-row panel */
 .tillpanel{position:relative;margin:0 -11px 8px;padding:0 13px 10px;background:#15100a;
  box-shadow:inset 0 5px 0 #000000b3,inset 5px 0 0 #00000099,inset -5px 0 0 #00000099,
             inset 0 -3px 0 var(--gold)}

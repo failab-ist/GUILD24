@@ -2795,14 +2795,14 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  const css=read('dist/ui/ui.css'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  const sell=app.slice(app.indexOf("case'sell':"),app.indexOf("\n case'",app.indexOf("case'sell':")+1));
  // the click handler records what the screen showed before the commit, and only that
- assert.ok(/const tile=\$\('\.good\.open \.tile'\)/.test(sell)&&/from:tile\?tile\.getBoundingClientRect\(\):null/.test(sell),"the shelf tile's place is read before the state moves");
+ assert.ok(/const tile=\$\('\.counter-tray \.tray-icon'\)/.test(sell)&&/from:tile\?tile\.getBoundingClientRect\(\):null/.test(sell),"the tray icon's place is read before the state moves (v2.9.0 counter tray)");
  assert.ok(/gold:s\.money/.test(sell)&&/stats:\[\.\.\.document\.querySelectorAll\('\.detail-stats \.detail-stat strong'\)\]/.test(sell),'so are the Gold and the four Stat readings');
  assert.ok(/handoff=seen;render\(\);/.test(sell),'and they are handed to the draw that follows');
  assert.ok(/const success=game\.sell\(selected,el\.dataset\.mode\);/.test(sell),'the commit itself is unchanged');
  assert.ok(!/account\.\w*handoff|run\.\w*handoff/.test(app),'the record is never written into a save');
  const cue=fn('playCue');
  // A1 hand-over: shelf row -> Bag slot (280 ms), slot settles (240 ms), Gold counts, changed cells pulse (300 ms)
- assert.ok(/\.kit \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from its shelf row to the Bag slot it fills, in the state strip');
+ assert.ok(/\.kit \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from the counter tray to the Bag slot it fills, in the state strip');
  assert.ok(/scale:\[1\.05,1\],duration:240/.test(cue),'and the slot settles');
  assert.ok(/\.dock \.on-hand b/.test(cue)&&/duration:320/.test(cue)&&/gold\.textContent=fmt\(box\.v\)/.test(cue),'the dock Gold counts to its new value');
  assert.ok(/\.detail-stats \.detail-stat/.test(cue)&&/duration:300/.test(cue),'the changed Stat cells pulse once and keep the new value');
@@ -2826,6 +2826,25 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  assert.ok(/const SAY_MS=3000;/.test(app)&&/const SAY_REPLY_MS=5000;/.test(app)&&/const sayMs=cue==='sale'\|\|cue==='refuse'\?SAY_REPLY_MS:SAY_MS;/.test(app),'the reply stays 5 s, the greeting 3 s');
  // reduced motion: the same handlers run, the beats stand down, the end state is the same
  assert.ok(/if\(!motionOK\(\)\|\|!who\)\{go\(\);return;\}/.test(exit),'under reduced motion the departure is immediate');
+});
+
+
+/* v2.9.0 SALE — COUNTER TRAY (User-approved composition change 2026-09-24; UI_UX §SALE — COUNTER TRAY,
+   UI-Q-v29-18). The per-row price panel is gone from the ordinary SALE: the chosen Item sits on one
+   fixed tray above the dock, the shelf rows never change height, and FINAL keeps its own panel. */
+test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves',()=>{
+ const css=read('dist/ui/ui.css'),sale=fn('saleScreen'),shelf=fn('shelf'),tray=fn('tray');
+ assert.ok(sale.indexOf("+'</main>'")<sale.indexOf('+tray()')&&sale.indexOf('+tray()')<sale.indexOf('<div class="dock">'),'the tray sits between the scrolled column and the dock');
+ assert.ok(/open&&isFinal\?till\(\):''/.test(shelf),'an ordinary SALE row opens no panel of its own; FINAL keeps its panel');
+ assert.ok(tray.includes('상품을 누르면 계산대에 올라온다.'),'the empty tray says what to do (COPY_AUDIT §4-23)');
+ assert.ok(/class="tray-icon"/.test(tray)&&/'에게<\/b> · '\+walletChip\(n\)/.test(tray),'header: the Item and who is buying with what (COPY_AUDIT §4-24)');
+ assert.ok(/판매 후 변화/.test(tray)&&/parts\.join\('<i> · <\/i>'\)/.test(tray)&&/현재 준비 변화 없음/.test(tray),'one delta list on one wrapping line');
+ assert.ok(/특수 효과/.test(tray)&&/priceKeys\(n,it,st\)/.test(tray),'특수 효과 and the same three price keys');
+ assert.ok(fn('till').includes(':priceKeys(n,it,st);'),'the FINAL panel and the tray share the one price-key owner');
+ assert.ok(/\.p-sale \.counter-tray\{flex:0 0 auto;/.test(css)&&/\.tray-empty\{margin:0;min-height:44px/.test(css),'fixed band, 44px when empty');
+ assert.ok(/\.counter-tray \.tills button\{min-height:64px/.test(css)&&/\.good\{[^}]*padding:8px 0/.test(css)&&/\.good \.tile\{width:38px/.test(css),'compact keys and rows keep the 360 budget');
+ assert.ok(/@media\(min-width:1024px\)\{\.p-sale \.counter-tray\{display:grid;grid-template-columns:minmax\(0,1\.05fr\) minmax\(0,1fr\);gap:0 24px\}\.p-sale \.counter-tray>\*\{grid-column:2\}\}/.test(css),'on a desk the tray aligns under the shelf column');
+ assert.ok(/\.good \.what span\{font:600 14px/.test(css),'the effect line keeps its Function class (UI_UX §FUNCTION / FLAVOR)');
 });
 
 

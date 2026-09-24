@@ -171,8 +171,8 @@ let cue=null,handoff=null;
 function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
  if(!c||!motionOK())return;
  const A=anime.animate;
- // picking a product opens the price panel under it - the panel arrives, the list does not jump
- if(c==='select'){const open=$('.good.open + .tillpanel');if(open)A(open,{opacity:[0,1],translateY:[-8,0],duration:190,ease:'outQuad'});}
+ // picking a product puts it on the counter tray - the tray contents arrive, the list does not move
+ if(c==='select'){const open=$('.counter-tray .tray-item');if(open)A(open,{opacity:[0,1],translateY:[8,0],duration:190,ease:'outQuad'});}
  /* A1 건네기: the Item icon travels from its shelf row to the Bag slot it now fills (280 ms), the
     slot settles (1.05 -> 1, 240 ms), the dock Gold counts to its new value, and each Stat cell that
     changed pulses once (300 ms) and keeps the new value. A2: the customer nods (4 px, 180 ms x 2).
@@ -448,7 +448,8 @@ function readout(n,extra=null,cls=''){
      bought to move. No new label and no new calculation. */
   +(o.worst?'<span class="fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>'
    +tip('환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.')+'</span>':'')
-  +'<span>'+(p.supply.required?'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b>':'보급 부담 없음')+'</span>'
+  /* v2.9.0 (COPY_AUDIT §4-x, D-2): the '보급 부담 없음' cell is deleted; the requirement line stays only while a Gate still asks for Supply (rule removed in I-2) */
+  +(p.supply.required?'<span>'+'보급<b>'+Math.round(p.supply.actual)+' / '+p.supply.required+'</b></span>':'')
  +'</div>'
  /* DUNGEON_HAZARD §FATIGUE INFORMATION BOUNDARY. These are decision ingredients, not a
     forecast: exact public arithmetic on the CURRENT committed Bag, so unlike the frozen
@@ -464,7 +465,9 @@ function readout(n,extra=null,cls=''){
       teaches the first time a customer's expedition actually asks for Supply, not on DAY 1. */
    if(p.supply.deficit)rows.push('<span class="supply-note">'+E('보급 부족 '+p.supply.deficit+' · 준비 전체에 페널티')+'</span>');
    else if(buf)rows.push('<span class="supply-note">'+E('남은 보급 '+Math.round(buf)+' · 결과 피로를 그만큼 줄인다')+'</span>');
-   return rows.length?'<p class="ingredients">'+rows.join('<br>')+'</p>':'';})()
+   /* v2.9.0 (User 2026-09-24): the ingredients sit side by side on one wrapping line, each on its own
+      stamped tag - the same tag idiom as the shelf's 포션 mark - never stacked as rows, on every width */
+   return rows.length?'<p class="ingredients">'+rows.map(r=>'<span class="ing">'+r+'</span>').join('')+'</p>':'';})()
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')
  /* The environment is NOT repeated here. Every Hazard, its pressure and this NPC's readiness
     against it live in one place - the 예상 목적지 plate below - so the player reads the danger
@@ -531,6 +534,7 @@ function saleScreen(){
   +'</div>'
   +shelf()
  +'</main>'
+ +tray()
  /* D-34. Every price on this screen is a judgement against what the store has, and the
     store's gold was the one number not on it - Morning, Order and Closing all show it and
     Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
@@ -1128,11 +1132,48 @@ function shelf(isFinal=false){
  +stocks.map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id);
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
-  return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
+  return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
   +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">'+E(Copy.finalPrep.noEffect)+'</em>':Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects).slice(0,2).map(effectText).join(' · '))+'</span></span>'
-  +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span></span></button>'+(open?till():'');}).join('')
+  +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span></span></button>'+(open&&isFinal?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
 const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
+/* the three price keys of an ordinary sale - one owner for the tray (SALE) and the FINAL panel's twin */
+function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
+ return ['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100),role=PRICE_ROLE[mode];
+   /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
+      the ceiling was never itself refused - saying 오늘 거절됨 there would be untrue. A mode is
+      ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
+   const said=(n.refusalReasons||[]).filter(x=>x.item===it.id);
+   const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult);
+   const blocked=q.debit>spendable(n)?'손님 소지금 부족'
+    :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
+    :full?'가방 가득':'';
+   /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
+      바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no
+      extra depth; `pct` stays the mode's number, the word is what the coach already says. */
+   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
+    'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');}
+/* v2.9.0 SALE — COUNTER TRAY (User 2026-09-24): the chosen Item sits on a fixed tray above the dock,
+   outside the scrolled column - header line, the one delta list on one wrapping line, 특수 효과, then
+   the three price keys always in the same place. The shelf rows never change height. A sale clears
+   the tray (the Item went into the Bag, and the hand-over starts from the tray icon); a refusal keeps
+   the Item here with the refused key locked. Same information as the old per-row panel, one place. */
+function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
+ if(!n||!st)return '<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>';
+ const it=D.itemBy[st.item],kind=itemKind(it);
+ const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
+ const parts=[...moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>'),
+  ...moved.derived.map(r=>'<b>'+E(r.label+' '+r.text)+'</b>')];
+ if(moved.departure)parts.push('<b>'+E(moved.departure)+'</b>');
+ const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects).filter(r=>!shown.has(r.key));
+ const life=st.expires===null?'유통기한 없음':'폐기까지 '+(st.expires-s.day)+'일';
+ return '<div class="counter-tray" role="region" aria-label="계산대">'
+  +'<div class="tray-item"><span class="tray-icon">'+Art.itemIcon(it.id,32)+'</span>'
+  +'<span class="tray-what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+it.sell+'G · 재고 '+st.count+' · '+life+'</span></span>'
+  +'<span class="tray-who"><b>'+E(n.name)+'에게</b> · '+walletChip(n)+'</span></div>'
+  +'<p class="tray-delta"><span class="delta-src">판매 후 변화</span>'+(parts.length?parts.join('<i> · </i>'):'<b>현재 준비 변화 없음</b>')+'</p>'
+  +(rest.length?'<p class="tray-delta special"><span class="delta-src">특수 효과</span>'+rest.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label+' '+r.text)+'</b>').join('<i> · </i>')+'</p>':'')
+  +'<div class="tills">'+priceKeys(n,it,st)+'</div></div>';}
 function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.phase==='final'?s.npcs.find(x=>x.id===supplyNPC):game.current();
  if(!st||!n)return '';
  const it=D.itemBy[st.item],isFinal=s.phase==='final',full=n.pack.length>=Adventurer.slots(n);
@@ -1155,20 +1196,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  const finalBlock=isFinal?(noop?Copy.finalPrep.noEffect:full?'가방 가득':poor?Copy.finalPrep.wallet.replace('{need}',finalPrice).replace('{have}',n.money):''):'';
  const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>보급</small>','supply','stamp',
     'aria-label="'+E(n.name)+'에게 보급 '+finalPrice+'G'+(finalBlock?' · '+finalBlock:'')+'" '+(finalBlock?'disabled':''))
- :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100),role=PRICE_ROLE[mode];
-   /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
-      the ceiling was never itself refused - saying 오늘 거절됨 there would be untrue. A mode is
-      ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
-   const said=(n.refusalReasons||[]).filter(x=>x.item===it.id);
-   const ceiling=said.some(x=>D.pricing[x.mode].mult<D.pricing[mode].mult);
-   const blocked=q.debit>spendable(n)?'손님 소지금 부족'
-    :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
-    :full?'가방 가득':'';
-   /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
-      바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no
-      extra depth; `pct` stays the mode's number, the word is what the coach already says. */
-   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
-    'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
+ :priceKeys(n,it,st);
  const forwho='<p class="forwho"><span>'+E(n.name)+(isFinal?'에게 보급':'에게 판매')+'</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>';
  /* a Final no-effect Item: the reason and the closed 보급, and no preview of an effect it will not have */
  /* FINAL: why a transfer is closed is the Item's status, said once beside it - never folded
@@ -1829,7 +1857,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
   break;}
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
- case'sell':{const tile=$('.good.open .tile'),seen={mode:el.dataset.mode,from:tile?tile.getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,
+ case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?tile.getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,
    stats:[...document.querySelectorAll('.detail-stats .detail-stat strong')].map(x=>x.textContent)};
   const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}handoff=seen;render();break;}
  /* The last departure of the day IS the entry to NIGHT, and it lands on result 0 already

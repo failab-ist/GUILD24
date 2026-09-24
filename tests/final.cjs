@@ -557,7 +557,8 @@ test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is r
  // no 100/150 choice and no refusal roll in the Final
  const app=read('dist/ui/app.js');
  const start=app.indexOf('const finalPrice=isFinal');
- const till=app.slice(start,app.indexOf(":['half','full','overcharge']",start));
+ /* v2.9.0 counter tray: the ordinary price keys live in priceKeys(); the FINAL branch of till() ends where it hands over to them */
+ const till=app.slice(start,app.indexOf(':priceKeys(n,it,st);',start));
  assert.ok(/<em>50%<\/em>/.test(till),'the Final offers the 50% amount only');
  assert.ok(!/overcharge|150%/.test(till),'no 바가지 in the Final');
  const src=read('dist/systems/run.js');
