@@ -58,6 +58,8 @@ Docs-first. Each owner amendment is listed when committed.
 - Fatigue line (I-2a, User 2026-09-24): SALE carries no always-on Fatigue line; `피로 A → 출발 B` lives only on
   the counter tray for a chosen Food/Drink, the SUPPLY coach anchors there (COPY_AUDIT §3-5 / §3-7 / §4-17 / §6-6
   band examples, UI_UX, DUNGEON_HAZARD boundary, DUNGEON_ITEM_QA, UI_UX_QA).
+- Rules adoption in Source (I-2, commits 67e63c3 / 22c288c / 840fbfe): engine, presentation and copy follow the D-2 rules;
+  re-measure vs 6cb62b4 in reports/remeasure-v29-summary.md (BALANCE FINDING: reported, not tuned).
 
 ## v2.8.0 — closed 2026-09-24
 
