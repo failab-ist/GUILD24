@@ -1487,7 +1487,7 @@ function mixer(){const st=game.account.settings,d=Sound.defaults;
   +row('bgm','BGM',Number.isFinite(st.bgm)?st.bgm:d.bgm)
   +row('sfx','SFX',Number.isFinite(st.sfx)?st.sfx:d.sfx)
   +`</div>`;}
-function settings(){return `<div class="stack"><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="row wrap">${btn('저장 내보내기','export','stamp')}${btn('저장 가져오기','import')}</div><div class="row wrap">${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}<hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="muted">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p><div class="row wrap">${btn('전체 데이터 초기화','reset','danger')}</div></div>`;}
+function settings(){return `<div class="stack"><p>자동저장은 현재 브라우저에 보관됩니다. 다른 기기로 옮길 때 저장 파일을 내보내세요.</p><div class="row wrap">${btn('저장 내보내기','export')}${btn('저장 가져오기','import')}</div><div class="row wrap">${btn(game.account.settings.muted?'소리 켜기':'소리 끄기','sound')}</div>${mixer()}<hr style="border:0;border-top:1px solid var(--line);width:100%"><p class="muted">게임의 시간은 행동할 때만 흐릅니다. 소리는 처음에 꺼져 있습니다.</p><div class="row wrap">${btn('전체 데이터 초기화','reset','danger')}</div></div>`;}
 /* COPY_AUDIT_APPROVED_v2.8.0 §8 is the exact owner of the global guide. The long-form manual
    it replaces described retired rules, understated the refusal ceiling, and repeated what the
    anchored popovers and coach marks already say in context. Approved text, verbatim. */

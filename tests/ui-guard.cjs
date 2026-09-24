@@ -2747,4 +2747,14 @@ test('DAY 0 Store Support tutorial: three marks over the takeover, DAY 0 only, n
  for(const line of steps.match(/'[^']*다\.'/g).map(x=>x.slice(1,-1)))assert.ok(copy.includes(line),'the copy is the approved line: '+line);
 });
 
+/* USER 2026-09-24: every phase's music at one loudness, and the settings keys in one style */
+test('BGM is level across phases; settings keys share one style',()=>{
+ const audio=read('dist/ui/audio.js');
+ const levels=[...audio.matchAll(/\n (morning|order|sale|night|boss):\{[^\n]*level:([\d.]+)\}/g)].map(m=>[m[1],Number(m[2])]);
+ assert.equal(levels.length,5,'every track carries its trim');
+ assert.ok(/BGM_VOICE\*lv/.test(audio)&&/BGM_BASS\*lv/.test(audio)&&/BGM_BASS\*\.7\*lv/.test(audio),'melody, bass and drone all take it');
+ const set=fn('settings');
+ assert.ok(!/btn\('[^']+','(export|import|sound)','stamp'\)/.test(set),'no settings key is dressed as the pixel primary');
+});
+
 console.log(count+' ui guard groups passed');

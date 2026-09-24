@@ -29,11 +29,14 @@ const clamp=v=>Number.isFinite(v)?Math.min(1,Math.max(0,v)):null;
    was already here. MORNING / ORDER / SALE stay in the same key so the store still sounds like
    one store across its own day; NIGHT and FINAL drop out of it on purpose. */
 const tunes={
- morning:{notes:[262,330,392,330,294,349,440,349],ms:620,wave:'sine',bass:4,bassWave:'triangle'},
- order:{notes:[294,392,349,440,392,294,330,392],ms:520,wave:'triangle',bass:2,bassWave:'square'},
- sale:{notes:[330,392,494,440,392,523,440,392],ms:450,wave:'sine',bass:4,bassWave:'triangle'},
- night:{notes:[220,262,294,262,196,247,262,247],ms:700,wave:'sine',bass:4,bassWave:'triangle'},
- boss:{notes:[147,165,175,196,147,220,196,165],ms:760,wave:'sine',bass:2,bassWave:'triangle',drone:73.4}};
+ morning:{notes:[262,330,392,330,294,349,440,349],ms:620,wave:'sine',bass:4,bassWave:'triangle',level:1.201},
+ order:{notes:[294,392,349,440,392,294,330,392],ms:520,wave:'triangle',bass:2,bassWave:'square',level:.897},
+ sale:{notes:[330,392,494,440,392,523,440,392],ms:450,wave:'sine',bass:4,bassWave:'triangle',level:1.201},
+ night:{notes:[220,262,294,262,196,247,262,247],ms:700,wave:'sine',bass:4,bassWave:'triangle',level:1.168},
+ boss:{notes:[147,165,175,196,147,220,196,165],ms:760,wave:'sine',bass:2,bassWave:'triangle',drone:73.4,level:.662}};
+/* USER 2026-09-24: every phase plays at the same loudness. `level` is each track's gain trim,
+   measured by rendering the track offline through this sequencer (K-weighted RMS) and matched to
+   the five tracks' mean - waveform, bass and drone made them differ by up to ~5 dB. */
 const trackFor=phase=>phase==='final'||phase==='end'?'boss'
  :phase==='night'?'night':phase==='order'?'order':phase==='sell'?'sale':'morning';
 /* Music used to be mixed a quarter as loud as the smallest button click, which is why it
@@ -212,9 +215,10 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;if(
  const next=trackFor(phase);if(track===next&&timer)return;if(timer)clearInterval(timer);track=next;beat=0;
  const tune=tunes[track];
  timer=setInterval(()=>{if(!enabled||document.hidden||ctx.state!=='running')return;const melody=tune.notes,hz=melody[beat%melody.length];
-  tone(hz,ctx.currentTime,tune.ms/1000*.9,BGM_VOICE,tune.wave,bgmBus);
-  if(beat%tune.bass===0)tone(hz/2,ctx.currentTime,tune.ms/1000*1.35,BGM_BASS,tune.bassWave,bgmBus);
-  if(tune.drone&&beat%4===0)tone(tune.drone,ctx.currentTime,tune.ms/1000*4.2,BGM_BASS*.7,'sine',bgmBus);
+  const lv=tune.level??1;
+  tone(hz,ctx.currentTime,tune.ms/1000*.9,BGM_VOICE*lv,tune.wave,bgmBus);
+  if(beat%tune.bass===0)tone(hz/2,ctx.currentTime,tune.ms/1000*1.35,BGM_BASS*lv,tune.bassWave,bgmBus);
+  if(tune.drone&&beat%4===0)tone(tune.drone,ctx.currentTime,tune.ms/1000*4.2,BGM_BASS*.7*lv,'sine',bgmBus);
   beat++;},tune.ms);}
 G.Sound={play,sync,mix,cues:Object.keys(sfx),tracks:Object.keys(tunes),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);
