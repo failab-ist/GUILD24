@@ -1175,7 +1175,7 @@ function endBanner(){const s=game.run,a=game.account;
    the Final has resolved, and the death count is the one the night has been keeping. */
 function endHeadline(){const s=game.run;
  if(s.finalReport)return s.win?'마왕이 쓰러졌다.':'마왕을 토벌하지 못했다.';
- if(s.stats.deaths>=D.balance.deathLimit)return '너무 많은 모험가가 돌아오지 못했다.';
+ if(s.stats.deaths>=G.Meta.deathLimit(s))return '너무 많은 모험가가 돌아오지 못했다.';
  if(s.money<0)return '운영비를 마련하지 못해 점포 문을 닫았다.';
  return '이번 점포의 영업이 끝났다.';}
 /* META §PROGRESSION UI. The statement reports what this Run moved and nothing else. A number
@@ -1300,7 +1300,7 @@ function endScreen(){
 /* The failure line is not a hidden threshold: the book that already lists the dead says how
    many that is, and how many the store has. */
 function rosterList(){const s=game.run;if(!s)return '<p class="muted">첫 영업을 시작하면 모험가 수첩이 열린다.</p>';
- const lost=s.stats.deaths,limit=D.balance.deathLimit;
+ const lost=s.stats.deaths,limit=G.Meta.deathLimit(s);
  return '<p class="lost-count'+(lost>=limit-2?' near':'')+'">돌아오지 못한 사람 <b>'+lost+' / '+limit+'</b>'
  +'<span>'+limit+'명에 이르면 소문이 퍼져 이 점포의 영업이 끝난다.</span></p>'
  +'<p class="smalltext">이름을 누르면 마지막 보급과 원정 기록을 볼 수 있다. 사망한 모험가의 기록도 남는다.</p><div class="npc-grid">'

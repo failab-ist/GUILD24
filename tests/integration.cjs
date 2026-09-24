@@ -1242,32 +1242,31 @@ test('META_v2.8 §RETIRED: active play writes no retired Franchise progress',()=
    here is the Account side it drives — that the spend happens once and only once, whatever the
    caller does, and that a Decoration is never a Relic. */
 test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is permanent',()=>{
- const a=Meta.fresh();
- Meta.addCapital(a,900);
- const d=DATA.decorationBy.thriftSafe;
+ const a=Meta.fresh(),d=DATA.decorationBy.thriftSafe,start=d.price+250;
+ Meta.addCapital(a,start);
  assert.equal(Meta.decorationOwned(a,d.id),false,'nothing is owned to begin with');
  Meta.buyDecoration(a,d.id);
- assert.equal(Meta.storeCapital(a),900-d.price,'the price is deducted once');
+ assert.equal(Meta.storeCapital(a),start-d.price,'the price is deducted once');
  assert.equal(Meta.decorationOwned(a,d.id),true,'and the Decoration is owned');
  assert.equal(Meta.storeLoadout(a)[d.slot],d.id,'an empty Slot of that kind takes it');
  /* A second confirmation - a double click, a stale button, a replayed action - is refused at
     the Account layer, so the UI is not the only thing standing between it and a second spend. */
  assert.throws(()=>Meta.buyDecoration(a,d.id),/이미 보유/,'a second purchase is refused');
- assert.equal(Meta.storeCapital(a),900-d.price,'and deducts nothing');
+ assert.equal(Meta.storeCapital(a),start-d.price,'and deducts nothing');
  /* Cancel is the absence of a call, so what it must leave alone is measured here as the state
     a purchase never made: another Decoration is untouched by this one. */
  const other=DATA.decorationBy.dawnSign;
  assert.equal(Meta.decorationOwned(a,other.id),false,'an unconfirmed purchase owns nothing');
  assert.equal(Meta.storeLoadout(a)[other.slot],null,'and equips nothing');
  assert.throws(()=>Meta.buyDecoration(a,other.id),/자본이 부족/,'what cannot be afforded cannot be bought');
- assert.equal(Meta.storeCapital(a),900-d.price,'a refused purchase deducts nothing');
+ assert.equal(Meta.storeCapital(a),start-d.price,'a refused purchase deducts nothing');
  /* Reload: a save round trip carries ownership and the loadout, and carries no pending state. */
  const save={account:a,run:null,version:8};
  assert.equal(Save.valid(JSON.parse(JSON.stringify(save))),true,'the Account with a Decoration is a valid save');
  const back=JSON.parse(JSON.stringify(save)).account;
  assert.equal(Meta.decorationOwned(back,d.id),true,'ownership survives the reload');
  assert.equal(Meta.storeLoadout(back)[d.slot],d.id,'so does the Slot');
- assert.equal(Meta.storeCapital(back),900-d.price,'and the Capital is not credited back');
+ assert.equal(Meta.storeCapital(back),start-d.price,'and the Capital is not credited back');
  assert.equal(JSON.stringify(back).includes('decoPending'),false,'no half-finished purchase is stored');
  /* Decoration ≠ Relic: buying one touches no Relic state anywhere on the Account. */
  assert.deepEqual(Meta.opened(a),Meta.opened(Meta.fresh()),'a Decoration unlocks nothing');
@@ -1299,6 +1298,50 @@ test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Can
  s.npcs=[mk(3,9,4,{alive:false})];s.day=30;
  assert.equal(g.overheadBase(),90+2*29,'empty Core Roster: the Day base alone');
  assert.equal(g.expectedOperatingCost(),150,'148 -> 150G');
+});
+
+/* ---- META §DECORATION survival alternatives (User decision 2026-09-24) ---------------------- */
+const wearing=(ids,seed)=>{const a=Meta.fresh();for(const id of ids){Meta.addCapital(a,DATA.decorationBy[id].price);Meta.buyDecoration(a,id);Meta.equipDecoration(a,DATA.decorationBy[id].slot,id);}
+ const g=new Game(a);g.autosave=false;g.start(seed);return past0(g);};
+/* past the D0 Store Support pick, so the Day's Gates exist for an arrival to read */
+const past0=g=>{g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;};
+test('길드 추모 게시판: the Death line that ends a Run is one higher while it is worn',()=>{
+ const base=DATA.balance.deathLimit,g=wearing(['memorialBoard'],'memorial');
+ assert.equal(Meta.deathLimit(g.run),base+1);
+ assert.equal(Meta.deathLimit(fresh('memorial-plain').run),base,'without it the line is unchanged');
+ g.run.phase='closing';g.run.stats.deaths=base;assert.equal(g.closeDay(),true,'at the old line the store still trades');
+ const h=wearing(['memorialBoard'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+1;h.closeDay();
+ assert.equal(h.run.phase,'end','one past it, it closes');
+});
+test('의무실 현판: an ordinarily injured arrival may be healed at the door, 중상 never',()=>{
+ let healed=0,tries=0;
+ for(let i=0;i<200;i++){const g=wearing(['infirmaryPlaque'],'infirmary-'+i),s=g.run,n=s.npcs[0];
+  n.injury=1;n.status='부상';s.queue=[n.id];s.cursor=0;g.arrive();tries++;
+  if(n.healedBy){healed++;assert.equal(n.injury,0);assert.equal(n.status,'건강');assert.equal(s.daily.infirmaryHeals,1);}
+  else assert.equal(n.injury,1,'a miss leaves the Injury');}
+ const rate=healed/tries;assert.ok(rate>.25&&rate<.45,'about 35% heal: '+rate);
+ const g=wearing(['infirmaryPlaque'],'infirmary-severe'),n=g.run.npcs[0];n.injury=2;n.recovery=2;g.run.queue=[n.id];g.run.cursor=0;g.arrive();
+ assert.equal(n.injury,2,'중상 is not touched');assert.equal(n.healedBy,null);
+ const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
+ assert.equal(m.injury,1,'without the Decoration nothing heals');
+});
+test('비상 구급함: the first Death of the Run becomes 중상, once',()=>{
+ const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
+ const weak=()=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=[];n.injury=0;return n;};
+ let seed=null;for(let i=0;i<500&&seed===null;i++){const n=weak();Dungeon.resolve(n,d,new RNG('aid-'+i));if(!n.alive)seed='aid-'+i;}
+ assert.ok(seed,'a Death case exists');
+ const run={loadout:{counter:'firstAidKit'}};
+ const saved=weak(),rep=Dungeon.resolve(saved,d,new RNG(seed),[],run);
+ assert.equal(saved.alive,true,'the kit keeps them alive');assert.equal(rep.outcome,'중상');
+ assert.equal(rep.avoidedDeath,true);assert.equal(run.aidKitUsed,true,'and is spent');
+ assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
+ const second=weak();Dungeon.resolve(second,d,new RNG(seed),[],run);assert.equal(second.alive,false,'a second Death is not caught');
+ const bare=weak();Dungeon.resolve(bare,d,new RNG(seed),[],{loadout:{}});assert.equal(bare.alive,false,'without it the Death stands');
+});
+test('훈련용 무기 진열대: an adventurer created while it is worn arrives one Level higher',()=>{
+ const g=wearing(['trainingRack'],'rack'),h=fresh('rack');
+ const a=g.run.npcs.map(n=>n.level),b=h.run.npcs.map(n=>n.level);
+ assert.deepEqual(a,b.map(l=>l+1),'the same seed, every created adventurer +1 Level');
 });
 
 console.log(count+' integration groups passed');

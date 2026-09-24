@@ -116,10 +116,41 @@ function decoCase(){        /* 프리미엄 쇼케이스 — a lit glass case, b
  s+=r(6,5,3,38,'#ffffff2e')+r(0,45,44,7,'#6b4a2e')+r(0,50,44,2,'#3c2817');
  return decoSvg(44,52,s);
 }
+function decoMemorial(){    /* 길드 추모 게시판 — a dark board of pinned names, a candle beside it */
+ let s=r(10,0,4,7,'#4a3a24')+r(44,0,4,7,'#4a3a24');
+ s+=r(2,6,54,30,'#3a2c1e')+r(2,6,54,3,'#6b5334')+r(2,33,54,3,'#1f170f')+r(2,36,54,2,'#140f09');
+ s+=r(6,11,30,20,'#e6dcc0')+r(6,11,30,2,'#f4ecd6')+r(19,9,4,4,'#9a2f2f');
+ s+=r(9,16,20,2,'#5c4a36')+r(9,20,16,2,'#5c4a36')+r(9,24,22,2,'#5c4a36')+r(9,28,12,2,'#5c4a36');
+ s+=r(43,20,6,13,'#efe6cf')+r(43,20,6,2,'#fffaf0')+r(45,15,2,5,'#f2b544')+r(45,13,2,3,'#ffe08a')+r(41,33,10,3,'#8a6a2c');
+ return decoSvg(58,40,s);
+}
+function decoInfirmary(){   /* 의무실 현판 — a white plate with the guild infirmary's red cross */
+ let s=r(0,0,36,36,'#8a6a2c')+r(3,3,30,30,'#c8a35e')+r(3,3,30,2,'#e3c78c')+r(3,31,30,2,'#5c4419');
+ s+=r(6,6,24,24,'#eef0ea')+r(6,6,24,2,'#ffffff')+r(6,28,24,2,'#c9ccc4');
+ s+=r(15,9,6,18,'#b83a3a')+r(9,15,18,6,'#b83a3a')+r(15,9,6,2,'#d45a5a')+r(9,15,6,2,'#d45a5a');
+ s+=r(5,5,2,2,'#6b5029')+r(29,29,2,2,'#6b5029');
+ return decoSvg(36,36,s);
+}
+function decoAidKit(){      /* 비상 구급함 — the red box kept under the register */
+ let s=r(13,0,14,3,'#39434b')+r(13,0,3,8,'#39434b')+r(24,0,3,8,'#39434b');
+ s+=r(0,6,40,30,'#a8322f')+r(0,6,40,3,'#d0554f')+r(0,33,40,3,'#6e1f1d');
+ s+=r(0,17,40,2,'#6e1f1d')+r(17,11,6,18,'#f4efe6')+r(11,17,18,6,'#f4efe6');
+ s+=r(3,10,3,3,'#c8a35e')+r(34,10,3,3,'#c8a35e')+r(3,28,3,3,'#c8a35e')+r(34,28,3,3,'#c8a35e');
+ return decoSvg(40,36,s);
+}
+function decoRack(){        /* 훈련용 무기 진열대 — a wooden rack of practice arms */
+ let s=r(0,0,44,4,'#6b4a2e')+r(0,0,44,2,'#8f6a44')+r(2,4,4,44,'#5a3d24')+r(38,4,4,44,'#5a3d24');
+ s+=r(9,6,4,32,'#c9b48a')+r(7,30,8,3,'#6b4a2e')+r(10,33,2,6,'#4a3a24');
+ s+=r(19,6,3,40,'#9a7a4e')+r(18,6,5,4,'#7c8a93');
+ s+=r(27,12,10,14,'#8a5a32')+r(27,12,10,2,'#b0814f')+r(30,16,4,6,'#c8a35e');
+ s+=r(6,40,32,3,'#6b4a2e')+r(0,45,44,7,'#6b4a2e')+r(0,50,44,2,'#3c2817');
+ return decoSvg(44,52,s);
+}
 /* contain, never slice: a Decoration is one object and cropping it would cut the object in
    half rather than reveal more room, which is what the bands do. */
 const decoSvg=(w,h,body)=>`<svg class="deco-art" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" aria-hidden="true">${body}</svg>`;
-const decoArt={dawnSign:decoSign,guildPlaque:decoPlaque,thriftSafe:decoSafe,premiumCase:decoCase};
+const decoArt={dawnSign:decoSign,guildPlaque:decoPlaque,thriftSafe:decoSafe,premiumCase:decoCase,
+ memorialBoard:decoMemorial,infirmaryPlaque:decoInfirmary,firstAidKit:decoAidKit,trainingRack:decoRack};
 /* Resolves through slot() like every other scene asset, so a production PNG replaces one by
    registering manifest['deco.<id>'] and no screen changes. */
 function decoration(id){const draw=decoArt[id];return draw?slot('deco.'+id,draw,'deco-art'):'';}

@@ -15,7 +15,7 @@ P.finishNight=function(){if(this.run.phase!=='night')return;this.run.phase='clos
    Before the money branch, because that branch offers liquidation to keep trading and there is
    nothing left to keep trading for. */
 P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;
- if(s.stats.deaths>=G.DATA.balance.deathLimit)
+ if(s.stats.deaths>=G.Meta.deathLimit(s))
   return this.end(false,'소문이 퍼지자 모험가들의 발길이 끊겼고, 더는 장사를 이어갈 수 없었다.');
  if(s.money<0){if(s.inventory.length&&this.canRescue()){s.notice='운영비가 부족합니다. 재고를 정리해 회생하거나 폐점을 선택하세요. (회생 '+(s.rescueUsed||0)+' / '+this.rescueLimit()+')';this.save();return false;}this.end(false,'장사를 이어갈 자금이 바닥났다.');return;}
  this.nextDay();this.save();return true;};

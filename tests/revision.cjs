@@ -257,7 +257,9 @@ test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slo
  for(const d of DATA.decorations)assert.ok(DATA.decorationSlots.includes(d.slot),d.id+' belongs to a real Slot');
  // the four approved effects and prices, read from the data rather than restated
  assert.deepEqual(DATA.decorations.map(d=>[d.slot,d.price]),
-  [['sign',800],['wall',700],['counter',650],['display',550]],'the approved prices ship');
+  [['sign',1450],['wall',1250],['counter',1150],['display',800],
+   ['sign',1450],['wall',1250],['counter',1150],['display',800]],
+  'the approved prices ship: each Slot\'s survival alternative costs what its economy Decoration costs (User 2026-09-24)');
 });
 
 test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{
@@ -291,7 +293,8 @@ assert.equal(Meta.itemUnlocked(a,DATA.itemBy.tree),false);
 test('META_v2.8: the Decoration effects are the Start Contract positives, without their costs',()=>{
  /* The four Decorations deliberately reuse the positive channels the retired Start Contracts
     used. None of the negative sides comes with them, which is the whole point of the reuse. */
- const eff=Object.fromEntries(DATA.decorations.map(d=>[d.slot,d]));
+ /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
+ const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
  assert.equal(DATA.balance.decorationStartGold,300,'counter is the approved starting Gold');
  assert.equal(DATA.balance.wallVisitorChance,.10,'wall is the approved Morning chance');

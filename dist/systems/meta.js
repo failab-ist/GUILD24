@@ -64,6 +64,8 @@ function plannedLoadout(a){const st=store(a);
  return Object.fromEntries(D.decorationSlots
   .map(s=>[s,st.loadout[s]&&st.owned.includes(st.loadout[s])?st.loadout[s]:null])
   .filter(([,id])=>id));}
+/* The Death count that ends a Run: the base line, +1 while 길드 추모 게시판 is worn. */
+const deathLimit=run=>D.balance.deathLimit+(Object.values(run?.loadout||{}).includes('memorialBoard')?D.decorationParams.memorialBoard.deathLimitBonus:0);
 /* META_v2.8 §STORE CAPITAL. The Day the Run reached picks the rate; nothing else does. */
 const capitalRate=day=>(D.capitalRates.find(b=>day<=b.maxDay)||D.capitalRates.at(-1)).rate;
 function addCapital(a,amount){const st=store(a);st.capital+=Math.max(0,Math.round(amount));return st.capital;}
@@ -148,5 +150,5 @@ const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>({...store(a).loadout});
 G.Meta={fresh,freshFranchise,observe,finish,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
- freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital};
+ freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit};
 })(globalThis);

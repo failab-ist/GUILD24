@@ -529,12 +529,12 @@ function playRun(g,out,ctx){
   /* META_v2.8 §Run-end settlement structure: Gross Sales x the reached-Day rate, per Run. The
      Ending Gold beside it is Run-result information, never a Store Capital input. */
   t.sales.push(s.stats.revenue);t.gains.push(Math.round(s.stats.revenue*G.Meta.capitalRate(s.day)));
-  t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=D.balance.deathLimit?'deaths':'bankrupt')]
+  t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=G.Meta.deathLimit(s)?'deaths':'bankrupt')]
    ??={runs:0,sales:0,gain:0};
-  const e=t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=D.balance.deathLimit?'deaths':'bankrupt')];
+  const e=t.byEnd[s.bossDebug?(s.win?'cleared':'finalFail'):(s.stats.deaths>=G.Meta.deathLimit(s)?'deaths':'bankrupt')];
   e.runs++;e.sales+=s.stats.revenue;e.gain+=Math.round(s.stats.revenue*G.Meta.capitalRate(s.day));
   const bg=t.byBand[band];bg.gain=(bg.gain||0)+Math.round(s.stats.revenue*G.Meta.capitalRate(s.day));}
- const byDeaths=s.stats.deaths>=D.balance.deathLimit;
+ const byDeaths=s.stats.deaths>=G.Meta.deathLimit(s);
  out.endedBy[byDeaths?'deaths':s.bossDebug?(s.win?'cleared':'finalFail'):'bankrupt']++;
  /* Per-Boss conditional clear: only Runs whose Final actually resolved, so WRATH (no Trait) can
     be read apart from the six that carry one. */

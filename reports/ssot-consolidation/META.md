@@ -454,3 +454,57 @@ A1: the unlock toast names the current item (ITEM `premium` = 길드 특제 도�
 ```new
 - copy: `새 상품 해금 · 길드 특제 도시락`
 ```
+
+
+## AMENDMENT — Decoration survival alternatives and prices (User decision 2026-09-24)
+
+Each Slot gains a survival / combat alternative at the same price; prices x1.8 (display 800G);
+acquisition target: first Decoration around Run 2-3, all four Slots around Run 10-11.
+
+```text
+1st Decoration : around Run 3-4
+2nd            : around Run 6
+3rd            : around Run 8-9
+4th            : around Run 10-11
+The initial Decoration-package content contains one Decoration in each Slot, but Account/Save/data/UI structures must not assume one Decoration forever.
+Future content may add multiple alternatives to the same Slot.
+sign    새벽배송 안내판     800 Store Capital
+wall    길드 제휴 현판      700 Store Capital
+counter 알뜰 금고          650 Store Capital
+display 프리미엄 쇼케이스   550 Store Capital
+The spread is deliberately narrow. The four measured within 1.37x of each other in Run value, so
+a wider price spread would let price decide the pick instead of the effect.
+```
+
+```new
+1st Decoration : around Run 2-3
+all four Slots : around Run 10-11
+(User decision 2026-09-24: the first Decoration comes sooner, the four Slots fill by Run 10-11,
+and a Boss clear becomes worth attempting after that. Collecting both Decorations of every Slot
+is a longer tail beyond Run 11.)
+Each Slot now holds two Decorations: an economy Decoration and a survival / combat alternative
+(User decision 2026-09-24). A Slot still wears exactly one, so the pick is a choice between
+running the store and keeping its people alive. Account/Save/data/UI structures must not assume
+two per Slot forever either.
+## SURVIVAL / COMBAT ALTERNATIVES — EXACT EFFECT IDENTITY
+User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
+### sign — 길드 추모 게시판
+the Death count that ends a Run +1 (10 -> 11)
+### wall — 의무실 현판
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 35% chance
+One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and
+is shown on the SALE counter and counted in the Day's record (UI_UX owns the presentation).
+### counter — 비상 구급함
+once per Run, a Death that no carried Insurance prevented becomes 중상
+It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the
+RESULT-PROOF counterfactual reads the same availability.
+### display — 훈련용 무기 진열대
+every adventurer created while it is worn: spawn Level +1
+`DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24)
+sign    새벽배송 안내판 / 길드 추모 게시판   1450 Store Capital
+wall    길드 제휴 현판 / 의무실 현판        1250 Store Capital
+counter 알뜰 금고 / 비상 구급함            1150 Store Capital
+display 프리미엄 쇼케이스 / 훈련용 무기 진열대  800 Store Capital
+Both Decorations of a Slot cost the same, so price never decides between them. The display Slot
+is the cheapest so a first Decoration is within reach around Run 2.
+```
