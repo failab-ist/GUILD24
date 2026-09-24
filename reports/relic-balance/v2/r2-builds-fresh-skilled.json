@@ -1,0 +1,99 @@
+{
+ "seeds": 2000,
+ "policy": "skilled",
+ "account": "fresh",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": null,
+ "results": {
+  "none": {
+   "gain": 515.8865,
+   "reached": 0.1195,
+   "win": 0.0335,
+   "deaths": 9.9125,
+   "regulars": 6.78,
+   "sales": 156.6445,
+   "margin": 4958.4295,
+   "finalRatio": 0.1011169396469605,
+   "spend": 0
+  },
+  "vip": {
+   "gain": 590.4105,
+   "reached": 0.136,
+   "win": 0.061,
+   "deaths": 9.839,
+   "regulars": 8.061,
+   "sales": 161.679,
+   "margin": 6293.864,
+   "finalRatio": 0.13010496668778448,
+   "spend": 851.295
+  },
+  "rotation": {
+   "gain": 591.546,
+   "reached": 0.1735,
+   "win": 0.0835,
+   "deaths": 9.746,
+   "regulars": 8.684,
+   "sales": 165.497,
+   "margin": 6212.6255,
+   "finalRatio": 0.17042402163584314,
+   "spend": 835.806
+  },
+  "hybrid": {
+   "gain": 594.402,
+   "reached": 0.182,
+   "win": 0.0885,
+   "deaths": 9.6825,
+   "regulars": 7.8005,
+   "sales": 162.4405,
+   "margin": 5955.1415,
+   "finalRatio": 0.18147685966239435,
+   "spend": 836.773
+  },
+  "premium": {
+   "gain": 574.3155,
+   "reached": 0.152,
+   "win": 0.054,
+   "deaths": 9.8045,
+   "regulars": 6.9235,
+   "sales": 158.137,
+   "margin": 5777.3855,
+   "finalRatio": 0.14042996159698612,
+   "spend": 835.667
+  },
+  "expedition": {
+   "gain": 598.7375,
+   "reached": 0.1865,
+   "win": 0.098,
+   "deaths": 9.6925,
+   "regulars": 7.7275,
+   "sales": 164.0965,
+   "margin": 5850.646,
+   "finalRatio": 0.1869814496765897,
+   "spend": 836.913
+  },
+  "customer": {
+   "gain": 571.678,
+   "reached": 0.1305,
+   "win": 0.0655,
+   "deaths": 9.8775,
+   "regulars": 7.8005,
+   "sales": 164.302,
+   "margin": 5868.0625,
+   "finalRatio": 0.13257148336924604,
+   "spend": 820.1725
+  },
+  "fresh": {
+   "gain": 629.784,
+   "reached": 0.2255,
+   "win": 0.145,
+   "deaths": 9.533,
+   "regulars": 7.9365,
+   "sales": 165.784,
+   "margin": 5868.8725,
+   "finalRatio": 0.24195289013887603,
+   "spend": 856.6485
+  }
+ }
+}

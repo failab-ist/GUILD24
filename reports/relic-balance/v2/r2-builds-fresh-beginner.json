@@ -1,0 +1,99 @@
+{
+ "seeds": 2000,
+ "policy": "beginner",
+ "account": "fresh",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": null,
+ "results": {
+  "rotation": {
+   "gain": 391.128,
+   "reached": 0.0545,
+   "win": 0.02,
+   "deaths": 9.8845,
+   "regulars": 4.823,
+   "sales": 128.1065,
+   "margin": 3837.8695,
+   "finalRatio": 0.04827851040869416,
+   "spend": 650.0865
+  },
+  "vip": {
+   "gain": 418.084,
+   "reached": 0.054,
+   "win": 0.018,
+   "deaths": 9.8755,
+   "regulars": 6.137,
+   "sales": 133.7815,
+   "margin": 4313.1265,
+   "finalRatio": 0.048269832699258795,
+   "spend": 699.427
+  },
+  "none": {
+   "gain": 386.9725,
+   "reached": 0.059,
+   "win": 0.014,
+   "deaths": 9.997,
+   "regulars": 5.0215,
+   "sales": 132.9395,
+   "margin": 3517.17,
+   "finalRatio": 0.047816000563650436,
+   "spend": 0
+  },
+  "hybrid": {
+   "gain": 407.6375,
+   "reached": 0.063,
+   "win": 0.0275,
+   "deaths": 9.841,
+   "regulars": 5.3235,
+   "sales": 132.332,
+   "margin": 4036.4665,
+   "finalRatio": 0.06035371526482474,
+   "spend": 670.1505
+  },
+  "premium": {
+   "gain": 407.7895,
+   "reached": 0.0545,
+   "win": 0.0185,
+   "deaths": 9.9185,
+   "regulars": 4.895,
+   "sales": 130.5445,
+   "margin": 4050.6875,
+   "finalRatio": 0.05078838081221571,
+   "spend": 689.313
+  },
+  "customer": {
+   "gain": 396.568,
+   "reached": 0.0465,
+   "win": 0.0235,
+   "deaths": 9.968,
+   "regulars": 5.3085,
+   "sales": 134.3535,
+   "margin": 3948.3375,
+   "finalRatio": 0.04563646500191132,
+   "spend": 670.936
+  },
+  "expedition": {
+   "gain": 420.3335,
+   "reached": 0.0765,
+   "win": 0.0345,
+   "deaths": 9.824,
+   "regulars": 5.591,
+   "sales": 134.947,
+   "margin": 4027.3695,
+   "finalRatio": 0.07407967611462032,
+   "spend": 689.609
+  },
+  "fresh": {
+   "gain": 420.6415,
+   "reached": 0.086,
+   "win": 0.051,
+   "deaths": 9.6355,
+   "regulars": 5.231,
+   "sales": 133.509,
+   "margin": 3893.3285,
+   "finalRatio": 0.09038922363435745,
+   "spend": 676.7845
+  }
+ }
+}
