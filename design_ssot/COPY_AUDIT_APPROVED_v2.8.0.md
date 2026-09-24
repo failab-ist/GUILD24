@@ -141,6 +141,10 @@ The following lines are current exact Player-facing copy for these tutorial step
 first SALE teaches four marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, 전망 (§3-4), PRICING;
 SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time their situation exists).
 
+ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY → 발주 확정 (§3-2) → 후보 교환
+(COPY_WORLD_VOICE §TUTORIAL COACH COPY). The `gold` mark (`보유 골드와 현재 발주 후 잔액을 확인한다.` on
+`#order-register`) is retired; the register reads itself.
+
 ### PRICING (User 2026-09-24, v2.9.0)
 > 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. 누르면 바로 건네진다.
 
@@ -153,8 +157,40 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 ### RETURNING (재방문 손님, contextual on the folded last-expedition line)
 > 다시 온 손님. 지난 원정은 여기, 특성과 기록은 손님을 눌러 본다.
 
+### GATES (User 2026-09-24, v2.9.0: anchor = the ORDER 오늘 brief block)
+> 오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.
+
+### OFFER (User 2026-09-24, v2.9.0: anchor = the first offer row)
+> 후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.
+
 ### QUANTITY
 > 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.
+
+---
+
+## 3-8. 오늘 할 일 (DAY 1~3)
+
+**노출 위치**
+> DAY 1~3 각 Phase 화면 내용 맨 위(메뉴 핀 아래, 첫 블록 위)의 고정 한 줄. 계정 튜토리얼을 건너뛰지 않은 동안만 보이고 DAY 4부터 사라진다. DAY 0에는 없다. 360에서 두 줄로 넘어가지 않는다.
+
+**현재** (User 2026-09-24, v2.9.0)
+
+MORNING
+> 오늘 할 일 — 열린 게이트의 위험을 본다
+
+ORDER
+> 오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다
+
+SALE
+> 오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다
+
+NIGHT
+> 오늘 할 일 — 준비가 어떻게 됐는지 확인한다
+
+CLOSING
+> 오늘 할 일 — 오늘 장사를 정리한다
+
+Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coach voice를 따른다 (rule owner: UI_UX §TUTORIAL).
 
 ---
 
@@ -357,6 +393,21 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 
 ---
 
+## 4-21. 발주 오늘 줄
+
+**노출 위치**
+> ORDER 오늘 brief block의 방문 줄. 게이트별 인원은 게이트가 둘 이상 열린 날에만 붙는다.
+
+**현재 — 게이트 둘 이상** (User 2026-09-24, v2.9.0)
+> {N}명 · {Gate A} {a} · {Gate B} {b}
+
+**현재 — 게이트 하나** (User 2026-09-24, v2.9.0)
+> {N}명 · {Gate}
+
+게이트별 수는 손님이 밝힌 목적지 기준이며 이름·직업·특성·소지금은 붙지 않는다 (rule owner: ECONOMY_ORDER / UI_UX).
+
+---
+
 # 5. NPC DETAIL / TRAIT LABEL
 
 ## 5-1. 부상 Stat 명칭
@@ -520,6 +571,23 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 ---
 
 # 8. GLOBAL HELP — 전체 교체안
+
+## 8-0. 처음 3일
+
+**노출 위치**
+> 점주 가이드(help modal)의 첫 블록. 아래 §8-1 … §8-8은 `자세히` disclosure 안에 들어가며 기본은 접힌 상태다.
+
+**현재** (User 2026-09-24, v2.9.0: exactly five lines, in this order)
+> 아침 — 오늘 열린 게이트의 위험을 본다.  
+> 발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.  
+> 판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.  
+> 밤 — 원정 결과와 손님의 변화를 본다.  
+> 마감 — 손익을 정리하고 다음 날로 간다.
+
+**Disclosure label**
+> 자세히
+
+---
 
 ## 8-1. 점포지원
 
@@ -1174,16 +1242,14 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 **Header**
 > 마왕 조사 개시
 
-**Body**
-> 길드 조사대가 마왕의 정체를 추적하러 출발했다.  
->
-> **DAY 5**  
-> 첫 조사 보고에서 토벌 대상이 공개된다.  
-> 이후 조사 소식은 5일마다 이어진다.  
->
-> **DAY 30**  
-> 성장한 모험가를 최대 3명까지 마왕성으로 보내 최종 토벌에 나선다.  
->
+**Lead**
+> 길드 조사대가 마왕의 정체를 추적하러 출발했다.
+
+**Body — 현재** (User 2026-09-24, v2.9.0: two lines; the `DAY 5` / `DAY 30` paragraph body is replaced)
+> DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.  
+> DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.
+
+**삭제** (User 2026-09-24, v2.9.0)
 > 조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.
 
 **Button**

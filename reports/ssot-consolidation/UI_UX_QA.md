@@ -756,3 +756,62 @@ Select an Item that changes a Stat and releases a Fatigue band; then an Item tha
 - after first and second committed Item transactions, the two readout cells and the help-line % remain unchanged on screen
 - Combat/Hazard readout cells and the help-line Death % remain frozen (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 onboarding / ORDER (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the DAY 1~3 task line, the first-ORDER coach order (`gates` → `offer` → `quantity` → `confirm` → `reroll`, `gold` retired), the ORDER today-fit emphasis, the per-Gate visitor counts and the two-line D0 briefing / 처음 3일 guide get UI-Q-v29-10 … UI-Q-v29-14. The reveal boundary is narrowed to the individual customer (identity / destination): the UI-Q101 and UI-Q91 lines are rewritten under their ids, and the UI-Q81 badge line names the allowed typographic emphasis. No existing id asserted the old ORDER coach order or the four-paragraph briefing body.
+
+```text
+- future customer identity/destination remains hidden
+future customer Job/Level/Destination/preparation need/importance is not newly revealed.
+- no today-fit/recommended badge
+```
+
+```new
+- future customer individual identity / individual destination remains hidden; the per-Gate visitor count is public at MORNING and ORDER (User 2026-09-24, v2.9.0)
+- no today-fit/recommended badge or verdict word; the UI-Q-v29-12 typographic emphasis of existing effect text is not a badge (User 2026-09-24, v2.9.0)
+future customer Job/Level/individual Destination/preparation need/importance is not newly revealed; the per-Gate visitor count of the ORDER 오늘 line (UI-Q-v29-13) is not a reveal (User 2026-09-24, v2.9.0).
+### UI-Q-v29-10 — DAY 1~3 TASK LINE
+Fresh account with the tutorial not skipped: DAY 1, 2, 3 and 4 of one Run at 360 and 1280, every phase; DAY 0; then an account whose tutorial is skipped (`tutorial.skipped` true) on DAY 1.
+One fixed text line at the top of the phase content (under the menu pin, above the first block): no coach mark, no spotlight, no button.
+- DAY 1~3 MORNING / ORDER / SALE / NIGHT / CLOSING each show exactly the `COPY_AUDIT_APPROVED_v2.8.0.md` §3-8 string: `오늘 할 일 — 열린 게이트의 위험을 본다` / `오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다` / `오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다` / `오늘 할 일 — 준비가 어떻게 됐는지 확인한다` / `오늘 할 일 — 오늘 장사를 정리한다`
+- the line never wraps to a second line at 360
+- DAY 0 has no task line; from DAY 4 the line is gone
+- with the account tutorial skipped the line is absent on DAY 1~3
+- it reuses the tutorial state, adds no Save field, and adds exactly one line of page height (the User-approved exception to "tutorial does not add page height")
+- the line appears on DAY 0, on DAY 4 or later, or with the tutorial skipped
+- the line is a coach mark / spotlight / button, or wraps at 360
+### UI-Q-v29-11 — FIRST-ORDER COACH ORDER / TARGETS
+Fresh account, first ORDER at 360 and 1280; step through the coach.
+The ORDER coach group runs `gates` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
+- the steps appear in exactly that order and nothing else is in the group
+- `gates` highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
+- `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
+- `quantity` / `confirm` / `reroll` keep their approved lines (COPY_AUDIT §3-7 QUANTITY / §3-2 / COPY_WORLD_VOICE §TUTORIAL COACH COPY); `reroll` is last
+- no `gold` mark: `#order-register` carries no coach step
+- every step passes UI-Q-v28-27 target truth
+- a step reads 보유 골드, or the register is the first target
+### UI-Q-v29-12 — ORDER TODAY-FIT EMPHASIS
+ORDER on a day with known open Gates; offers holding a Counter for one of today's Hazards, an Item that raises a Core Stat one of those Hazards presses, and an Item that does neither.
+The same rule and style as UI-Q-v29-6, judged against today's open Gates instead of one customer.
+- only effect text that is a Counter for one of today's Hazards, or the Core Stat one of them presses, is set in the emphasis style
+- no badge, no `오늘 필요` or other verdict word, no row reorder, no recommended row
+- a badge / word / reorder marks the fit, or a non-matching effect is emphasised
+### UI-Q-v29-13 — ORDER PER-GATE VISITOR COUNTS
+ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례주간 reroute where available.
+The ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21.
+- one Gate: the line reads `{N}명 · {Gate}` with no per-Gate count
+- two or more Gates: `{N}명 · {Gate A} {a} · {Gate B} {b}`; the per-Gate numbers sum to N
+- each count follows the destination the customer claims; a liar's or a rerouted customer's true Gate is not exposed by the count
+- no name, Job, Trait, Wallet or individual destination of a future customer is revealed (UI-Q91 / UI-Q101, narrowed to the individual)
+- per-Gate counts on a one-Gate day, a count that exposes a true Gate, or any individual identity
+### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 처음 3일
+Fresh Run: the D0 Boss briefing after the first Store Support choice; then open 점주 가이드 from the menu at 360 and 1280.
+The briefing body is the two `COPY_AUDIT_APPROVED_v2.8.0.md` §14-1 lines; the guide opens on `처음 3일` (§8-0) with the eight sections under `자세히`.
+- the briefing shows header `마왕 조사 개시`, the unchanged lead line, exactly `DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.` / `DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.`, and the unchanged button
+- `조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.` is absent
+- 점주 가이드 opens on a first block `처음 3일` with exactly the five §8-0 lines in order
+- the existing eight sections (§8-1 … §8-8) sit under a `자세히` disclosure, collapsed by default, and open on tap
+- the disclosure exists only inside the help modal; no gameplay screen gains one
+- the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `처음 3일` is missing; `자세히` is open by default
+```

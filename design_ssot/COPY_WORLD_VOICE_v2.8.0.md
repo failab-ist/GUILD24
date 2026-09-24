@@ -1055,7 +1055,7 @@ Tutorial may point to the relevant UI value without selecting the answer for the
 
 Keep each coach step short: one system-reading job, usually one or two sentences.
 
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3.
+Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3. The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
 
 ```text
 점포지원 (DAY 0, User 2026-09-24)
@@ -1077,10 +1077,6 @@ Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 �
 열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.
 
 
-보유 골드
-보유 골드와 현재 발주 후 잔액을 확인한다.
-
-
 후보 교환
 후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.
 
@@ -1099,6 +1095,8 @@ CLOSING
 The `전망` step explains display behavior and uncertainty; it does not imply that purchased Items have no runtime effect. Actual Resolve still uses the final committed preparation.
 
 The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0).
+
+The DAY 1~3 task line (`오늘 할 일 — …`, one per phase) is owned by `COPY_AUDIT_APPROVED_v2.8.0.md` §3-8 and follows the coach voice: one sentence, no App Onboarding tone (User 2026-09-24, v2.9.0).
 
 ## IMPORTANT RESULT
 

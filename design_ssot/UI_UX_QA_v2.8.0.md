@@ -439,7 +439,7 @@ PASS:
 - values match `DUNGEON_HAZARD_v2.8.0.md` / `ECONOMY_ORDER_v2.8.0.md`
 - current-day Gate/Hazard remains more prominent as today's preparation context
 - next-day Family / exact Gate composition / Hazard set remain hidden
-- future customer identity/destination remains hidden
+- future customer individual identity / individual destination remains hidden; the per-Gate visitor count is public at MORNING and ORDER (User 2026-09-24, v2.9.0)
 - no recommended Item/category/quantity is added
 
 If ORDER repeats the forecast:
@@ -561,7 +561,7 @@ PASS:
 - Item identity and exact effect read before economy metadata
 - exact Stat/Counter/`피로 회복 N`/penalty values are readable
 - no redundant role chip such as `속박 전문` above `속박 대응 +16`
-- no today-fit/recommended badge
+- no today-fit/recommended badge or verdict word; the UI-Q-v29-12 typographic emphasis of existing effect text is not a badge (User 2026-09-24, v2.9.0)
 - no automatic best-fit ranking
 
 ### UI-Q82 — ORDER WAREHOUSE COLLAPSE
@@ -742,7 +742,7 @@ PASS:
 ### UI-Q91 — QUEUE UNCERTAINTY
 
 PASS:
-future customer Job/Level/Destination/preparation need/importance is not newly revealed.
+future customer Job/Level/individual Destination/preparation need/importance is not newly revealed; the per-Gate visitor count of the ORDER 오늘 line (UI-Q-v29-13) is not a reveal (User 2026-09-24, v2.9.0).
 Existing authorized queue-count info may remain.
 
 ### UI-Q68 — SALE SCROLL / FOCUS
@@ -1940,6 +1940,105 @@ FAIL examples:
 
 If the runtime target is wrong, fix targeting/layout.
 If the Copy is wrong, route the Copy correction through the current Copy owner.
+
+### UI-Q-v29-10 — DAY 1~3 TASK LINE
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+Fresh account with the tutorial not skipped: DAY 1, 2, 3 and 4 of one Run at 360 and 1280, every phase; DAY 0; then an account whose tutorial is skipped (`tutorial.skipped` true) on DAY 1.
+
+EXPECT:
+One fixed text line at the top of the phase content (under the menu pin, above the first block): no coach mark, no spotlight, no button.
+
+PASS:
+- DAY 1~3 MORNING / ORDER / SALE / NIGHT / CLOSING each show exactly the `COPY_AUDIT_APPROVED_v2.8.0.md` §3-8 string: `오늘 할 일 — 열린 게이트의 위험을 본다` / `오늘 할 일 — 위험에 맞는 능력을 올리는 상품을 발주한다` / `오늘 할 일 — 손님이 갈 게이트를 보고 상품과 가격을 정한다` / `오늘 할 일 — 준비가 어떻게 됐는지 확인한다` / `오늘 할 일 — 오늘 장사를 정리한다`
+- the line never wraps to a second line at 360
+- DAY 0 has no task line; from DAY 4 the line is gone
+- with the account tutorial skipped the line is absent on DAY 1~3
+- it reuses the tutorial state, adds no Save field, and adds exactly one line of page height (the User-approved exception to "tutorial does not add page height")
+
+FAIL:
+- the line appears on DAY 0, on DAY 4 or later, or with the tutorial skipped
+- the line is a coach mark / spotlight / button, or wraps at 360
+
+### UI-Q-v29-11 — FIRST-ORDER COACH ORDER / TARGETS
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+Fresh account, first ORDER at 360 and 1280; step through the coach.
+
+EXPECT:
+The ORDER coach group runs `gates` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
+
+PASS:
+- the steps appear in exactly that order and nothing else is in the group
+- `gates` highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
+- `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
+- `quantity` / `confirm` / `reroll` keep their approved lines (COPY_AUDIT §3-7 QUANTITY / §3-2 / COPY_WORLD_VOICE §TUTORIAL COACH COPY); `reroll` is last
+- no `gold` mark: `#order-register` carries no coach step
+- every step passes UI-Q-v28-27 target truth
+
+FAIL:
+- a step reads 보유 골드, or the register is the first target
+
+### UI-Q-v29-12 — ORDER TODAY-FIT EMPHASIS
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+ORDER on a day with known open Gates; offers holding a Counter for one of today's Hazards, an Item that raises a Core Stat one of those Hazards presses, and an Item that does neither.
+
+EXPECT:
+The same rule and style as UI-Q-v29-6, judged against today's open Gates instead of one customer.
+
+PASS:
+- only effect text that is a Counter for one of today's Hazards, or the Core Stat one of them presses, is set in the emphasis style
+- every other effect text keeps the default style
+- no badge, no `오늘 필요` or other verdict word, no row reorder, no recommended row
+
+FAIL:
+- a badge / word / reorder marks the fit, or a non-matching effect is emphasised
+
+### UI-Q-v29-13 — ORDER PER-GATE VISITOR COUNTS
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례주간 reroute where available.
+
+EXPECT:
+The ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21.
+
+PASS:
+- one Gate: the line reads `{N}명 · {Gate}` with no per-Gate count
+- two or more Gates: `{N}명 · {Gate A} {a} · {Gate B} {b}`; the per-Gate numbers sum to N
+- each count follows the destination the customer claims; a liar's or a rerouted customer's true Gate is not exposed by the count
+- no name, Job, Trait, Wallet or individual destination of a future customer is revealed (UI-Q91 / UI-Q101, narrowed to the individual)
+
+FAIL:
+- per-Gate counts on a one-Gate day, a count that exposes a true Gate, or any individual identity
+
+### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 처음 3일
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+Fresh Run: the D0 Boss briefing after the first Store Support choice; then open 점주 가이드 from the menu at 360 and 1280.
+
+EXPECT:
+The briefing body is the two `COPY_AUDIT_APPROVED_v2.8.0.md` §14-1 lines; the guide opens on `처음 3일` (§8-0) with the eight sections under `자세히`.
+
+PASS:
+- the briefing shows header `마왕 조사 개시`, the unchanged lead line, exactly `DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.` / `DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.`, and the unchanged button
+- `조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.` is absent
+- 점주 가이드 opens on a first block `처음 3일` with exactly the five §8-0 lines in order
+- the existing eight sections (§8-1 … §8-8) sit under a `자세히` disclosure, collapsed by default, and open on tap
+- the disclosure exists only inside the help modal; no gameplay screen gains one
+
+FAIL:
+- the `DAY 5` / `DAY 30` paragraph body or the closing sentence remains; `처음 3일` is missing; `자세히` is open by default
 
 ### GREAT SUCCESS TUTORIAL
 PASS:

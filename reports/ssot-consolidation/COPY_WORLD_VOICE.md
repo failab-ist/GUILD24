@@ -550,7 +550,7 @@ Exact D15 Trait name:
 ```new
 Confirm title / body / button -> `COPY_AUDIT_APPROVED_v2.8.0.md` §1-3.
 **FLAVOR** -> exact DEATH NARRATION pools: `COPY_AUDIT_APPROVED_v2.8.0.md`
-Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3.
+Exact copy for the 심층원정 / 수량 / 발주 확정 / 대성공 / 환경 대응 (HAZARD) / 전망 / 보급 / 재방문 손님 / 가방 (상품 사용) / 가격 (PRICING) / 게이트 (ORDER GATES) / 후보 (OFFER) steps -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3. The ORDER coach steps run 게이트 / 후보 / 수량 / 발주 확정 / 후보 교환, in that order; the `보유 골드` mark is retired (User 2026-09-24, v2.9.0).
 Exact player-facing Function / Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-5.
 Retained current copy (`COPY_AUDIT_APPROVED_v2.8.0.md` §14-2 / §14-4 / §23): the six non-GLUTTONY D5 Flavor lines and the D15 Trait names / Function lines below.
 Header / Label / Button and GLUTTONY Flavor -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-2.
@@ -709,4 +709,17 @@ Exact Player-facing SALE Help for 전투 전망 / 환경 대응 / 실패 시 사
 Exact Player-facing SALE Help for 전투 전망 (two lines, the second is `실패 시 사망 위험 {N}%`) / 환경 대응 is owned by
 Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.8.0.md §4-19) (User 2026-09-24, v2.9.0).
 The purchase / refusal reply line stays visible 5 seconds; the greeting keeps the 3-second rule (timing owner -> UI_UX_v2.8.0.md §Customer speech).
+```
+
+## AMENDMENT — v2.9.0 onboarding / ORDER (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the first-ORDER coach group becomes `gates` → `offer` → `quantity` → `confirm` → `reroll` (exact GATES / OFFER lines in COPY_AUDIT_APPROVED_v2.8.0.md §3-7); the `보유 골드` mark is retired, so its two lines leave the TUTORIAL COACH COPY block; the DAY 1~3 task line strings are owned by COPY_AUDIT §3-8. Declared-new line edited in place above: the §3 routing pointer (now also lists 게이트 (ORDER GATES) / 후보 (OFFER) and the ORDER step order).
+
+```text
+보유 골드
+보유 골드와 현재 발주 후 잔액을 확인한다.
+```
+
+```new
+The DAY 1~3 task line (`오늘 할 일 — …`, one per phase) is owned by `COPY_AUDIT_APPROVED_v2.8.0.md` §3-8 and follows the coach voice: one sentence, no App Onboarding tone (User 2026-09-24, v2.9.0).
 ```

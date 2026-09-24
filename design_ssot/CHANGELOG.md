@@ -29,6 +29,13 @@ Docs-first. Each owner amendment is listed when committed.
   emphasis, `판매 후 변화` as one delta list with the frozen outlook not repainted (no outlook delta
   rows), readout = 전투 전망 + 환경 대응 with the Death % in the 전투 전망 help and NPC detail, price role
   words; COPY_AUDIT §3-7 / §4-1 / §4-3 / §4-19 / §4-20 / §5-7; UI_UX_QA UI-Q-v29-3 … -9.
+- Onboarding / ORDER batch (D-4, commits c156f33 / this): DAY 1~3 task line (`오늘 할 일 — …`, one per
+  phase, hidden when the tutorial is skipped); first-ORDER coach order gates → offer → quantity → confirm →
+  reroll (gold mark retired); ORDER today-fit typographic emphasis (no badge / verdict word); per-Gate
+  visitor counts on the ORDER 오늘 line when two or more Gates are open (reveal boundary narrowed to
+  individual identity / destination); D0 briefing body two lines; 점주 가이드 opens with 처음 3일 and folds
+  the eight sections under 자세히. Owners: UI_UX, ECONOMY_ORDER (+QA), COPY_AUDIT §3-7 / §3-8 / §4-21 /
+  §8-0 / §14-1, COPY_WORLD_VOICE, UI_UX_QA UI-Q-v29-10 … -14.
 - COPY_AUDIT_APPROVED §3 / §4, COPY_WORLD_VOICE §TUTORIAL COACH COPY, UI_UX §TUTORIAL: first-sale coach
   diet — four marks (destination, Hazard, outlook, price), contextual Supply / 대성공 / 재방문 / 가방,
   concept popovers (commit 66f37e4; Source e0d0c44).
