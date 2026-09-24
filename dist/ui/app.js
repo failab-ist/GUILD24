@@ -178,7 +178,7 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
     changed pulses once (300 ms) and keeps the new value. A2: the customer nods (4 px, 180 ms x 2).
     Every beat is under 320 ms and the whole sale is under 600 ms; input is never held. */
  if(c==='sale'){
-  const slot=[...document.querySelectorAll('.counter .slots i.full')].pop();
+  const slot=[...document.querySelectorAll('.kit .slots i.full')].pop();
   const settle=()=>{if(slot)A(slot,{scale:[1.05,1],duration:240,ease:'outQuad'});};
   if(slot&&h.from&&h.icon){const to=slot.getBoundingClientRect(),g=document.createElement('i');g.className='handoff';g.innerHTML=h.icon;
    g.style.cssText='left:'+h.from.left+'px;top:'+h.from.top+'px;width:'+h.from.width+'px;height:'+h.from.height+'px';
@@ -515,7 +515,7 @@ function saleScreen(){
     expedition - so nothing is duplicated on screen. */
  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+waitingLine(waiting)+'</div>'
  +'</section>'
- +counterBand(n)
+ +'<div class="counter-edge" aria-hidden="true"></div>'
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
   /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
      the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
@@ -646,14 +646,12 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
     nothing to dismiss. `healedBy` is reset on every arrival. */
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>':'';
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
- +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'+heal+'</div>';}
-/* v2.9.0 TRANSACTION BEAT A3 (User 2026-09-24): the Bag is the handling surface, so it sits ON the
-   counter beside the customer at every width - the band under the front that used to be an empty
-   edge - and not in the state strip. The hand-over lands here. It still says the count as well as
-   showing it: a row of boxes has to be counted before it can be used. Same slots, same aria name. */
-function counterBand(n){const slots=Adventurer.slots(n);
- return '<div class="counter-edge counter" aria-label="계산대"><span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
-  +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span></div>';}
+ +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
+ /* how many slots are left is a decision on every sale, so it says the count as well as
+    showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
+    place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
+ +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
+  +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span>'+heal+'</div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
 // the loudest thing on screen as a display word, then WHY on the slate, then WHAT CHANGED

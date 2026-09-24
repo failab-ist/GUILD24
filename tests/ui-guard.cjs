@@ -1207,12 +1207,12 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
         && /\.event-reveal \.flavor\{[^}]*white-space:pre-line/.test(css),
   'a situation authored across lines keeps its lines, on the board and in the reveal');
 
- // D-9 / v2.9.0 A3. The slots say the count as well as showing it, and they sit ON the counter band.
- assert.ok(fn('counterBand').includes("가방 '+n.pack.length+' / '+slots"),'the bag states used / total');
- assert.ok(!fn('kitLine').includes('class="slots"'),'the state strip no longer carries the bag');
- assert.ok(fn('saleScreen').includes('+counterBand(n)')&&!fn('saleScreen').includes('<div class="counter-edge" aria-hidden'),'the counter band under the front holds it');
- assert.ok(/\.counter \.slots i\{[^}]*width:34px/.test(css),'and the slots are big enough to read at a glance');
- assert.ok(!css.includes('.counter .slots{display:grid'),'without becoming a panel of their own');
+ // D-9. The slots say the count as well as showing it - a row of boxes has to be counted first.
+ // v2.9.0 (User 2026-09-24): the Bag is NOT moved - it keeps its place in the state strip, one step larger.
+ assert.ok(fn('kitLine').includes("가방 '+n.pack.length+' / '+slots"),'the bag states used / total');
+ assert.ok(!app.includes('function counterBand(')&&fn('saleScreen').includes('<div class="counter-edge" aria-hidden'),'the counter edge under the front stays empty; the bag stays in the strip');
+ assert.ok(/\.kit \.slots i\{[^}]*width:36px/.test(css)&&!/\.kit \.slots i \{ width: 32px/.test(css),'and the slots are big enough to read at a glance, not overridden smaller');
+ assert.ok(!css.includes('.kit .slots{display:grid'),'without becoming a panel of their own');
 
  // D-12. One Hazard reads as one row, and the block is set apart from the forecasts above it.
  // (the block moved to the destination plate when the environment stopped being shown twice)
@@ -2745,7 +2745,7 @@ test('UI_UX §RETIRED ACTIVE UI: no shipped UI file exposes Franchise Grade, Ach
 test('의무실 현판: the heal note sits in the kit under the bag, wraps, and has its own cue',()=>{
  const kit=fn('kitLine');
  assert.ok(/healedBy==='infirmaryPlaque'/.test(kit)&&kit.includes('의무실 현판 덕분에 부상이 나았다.'),'the note reads the heal the arrival recorded');
- assert.ok(kit.indexOf("+heal+'</div>'")>kit.indexOf('class="vitals"'),'it follows the vitals in the strip (the bag moved to the counter, v2.9.0)');
+ assert.ok(kit.indexOf("+heal+'</div>'")>kit.indexOf('class="slots"'),'it follows the bag, on the bag row');
  assert.ok(/\.kit \.heal-note\{flex:1 1 64px;[^}]*overflow-wrap:anywhere/.test(css),'beside the bag, wrapping');
  assert.ok(/@media\(min-width:1024px\)\{\.kit \.heal-note\{position:absolute;/.test(css),'on a desk it takes the empty foot of the strip');
  assert.ok(/prefers-reduced-motion:reduce\)\{\.kit \.heal-note\{animation:none\}/.test(css),'no motion when reduced');
@@ -2802,7 +2802,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  assert.ok(!/account\.\w*handoff|run\.\w*handoff/.test(app),'the record is never written into a save');
  const cue=fn('playCue');
  // A1 hand-over: shelf row -> Bag slot (280 ms), slot settles (240 ms), Gold counts, changed cells pulse (300 ms)
- assert.ok(/\.counter \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from its shelf row to the slot it fills');
+ assert.ok(/\.kit \.slots i\.full/.test(cue)&&/g\.className='handoff'/.test(cue)&&/duration:280/.test(cue),'the icon travels from its shelf row to the Bag slot it fills, in the state strip');
  assert.ok(/scale:\[1\.05,1\],duration:240/.test(cue),'and the slot settles');
  assert.ok(/\.dock \.on-hand b/.test(cue)&&/duration:320/.test(cue)&&/gold\.textContent=fmt\(box\.v\)/.test(cue),'the dock Gold counts to its new value');
  assert.ok(/\.detail-stats \.detail-stat/.test(cue)&&/duration:300/.test(cue),'the changed Stat cells pulse once and keep the new value');

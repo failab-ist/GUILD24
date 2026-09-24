@@ -903,18 +903,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .counter-edge{flex:0 0 auto;height:18px;
  background:linear-gradient(180deg,#d3ac71 0 3px,#b98d52 3px 10px,#7c5730 10px 14px,#4a331d 14px 18px);
  box-shadow:0 5px 0 #00000073}
-/* v2.9.0 TRANSACTION BEAT A3: the edge is the counter. The Bag sits on it beside the customer at
-   every width - the hand-over lands here - so the band takes the height of the slots and keeps
-   its wood. The slot boxes keep the weight of something you are meant to count. */
-.counter-edge.counter{height:auto;min-height:46px;display:flex;align-items:center;gap:10px;padding:5px var(--gutter) 6px;
- background:linear-gradient(180deg,#d3ac71 0 3px,#b98d52 3px 8px,#7c5730 8px 12px,#4a331d 12px)}
-.counter .slots{display:flex;gap:6px;align-items:center;padding:4px 6px;background:#00000047;
- box-shadow:inset 0 0 0 1px #ffffff14;font:400 13px/1.4 var(--ui);color:#a2947c}
-.counter .slot-label{color:#f2e7cd;margin-right:4px;font-weight:600}
-.counter .slots i{width:34px;height:34px;display:grid;place-items:center;background:#00000059;
- box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff0f}
-.counter .slots i.full{background:#3a2c1d;box-shadow:inset 2px 2px 0 #ffffff1f,inset 0 0 0 1px var(--gold)}
-.counter .slots i.free{box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff29}
 /* v2.9.0 TRANSACTION BEAT A1: the travelling Item icon - a fixed ghost of the shelf tile that
    playCue moves onto the Bag slot and removes; it takes no input and holds no state */
 .handoff{position:fixed;z-index:70;display:grid;place-items:center;pointer-events:none;transform-origin:center;will-change:transform}
@@ -1009,7 +997,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .kit{position:relative;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 14px;padding:9px 0;
  box-shadow:inset 0 1px 0 #ffffff14,inset 0 -1px 0 #ffffff14;font:400 13px/1.4 var(--ui);color:#a2947c}
 .kit b{color:#f2e7cd;font-weight:600}
-/* v2.9.0: the Bag moved to the counter band (.counter .slots, above); the strip keeps the vitals. */
+/* D-9. How many supply slots this customer has, and how many are already spent, is a decision
+   the player makes on every sale - it was the quietest thing in the row. The slots keep their
+   place in the customer's own line rather than becoming a panel of their own; they are just
+   given the weight of something you are meant to count. v2.9.0 (User 2026-09-24): the Bag is
+   not moved - it stays here, one step larger, and the hand-over lands on it. */
+.kit .slots{display:flex;gap:6px;margin-left:auto;align-items:center;padding:4px 6px;background:#00000047;
+ box-shadow:inset 0 0 0 1px #ffffff14}
+.kit .slot-label{color:#f2e7cd;margin-right:4px;font-weight:600}
+.kit .slots i{width:36px;height:36px;display:grid;place-items:center;background:#00000059;
+ box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff0f}
+.kit .slots i.full{background:#3a2c1d;box-shadow:inset 2px 2px 0 #ffffff1f,inset 0 0 0 1px var(--gold)}
+.kit .slots i.free{box-shadow:inset 2px 2px 0 #00000080,inset 0 0 0 1px #ffffff29}
 /* the readiness readout carries more weight than the rows above it: it is what the sale turns on */
 /* BATCH 2B §SALE CUSTOMER / DOSSIER. Every customer-state surface carried its own outline, so
    the counter read as a stack of independent cards under the figure. They are counter-mounted
@@ -2918,9 +2917,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* SALE LAYOUT v2.6 OVERRIDES */
 /* Enlarge Bag in kitLine */
 .kit { gap: 10px; margin-top: 4px; }
-.counter .slots { gap: 4px; padding: 4px; }
-.counter .slots i { width: 32px; height: 32px; }
-.counter .slot-label { font-size: 14px; }
+.kit .slots { gap: 4px; padding: 4px; }
+.kit .slot-label { font-size: 14px; }
 
 /* Mobile dest-plate compact */
 @media(max-width:1023px){
