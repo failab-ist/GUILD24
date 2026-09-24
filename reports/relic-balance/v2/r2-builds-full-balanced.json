@@ -1,0 +1,99 @@
+{
+ "seeds": 2000,
+ "policy": "balanced",
+ "account": "full",
+ "aware": true,
+ "pricing": "adaptive",
+ "mode": "builds",
+ "overrides": null,
+ "results": {
+  "none": {
+   "gain": 508.77,
+   "reached": 0.1425,
+   "win": 0.066,
+   "deaths": 9.3035,
+   "regulars": 6.465,
+   "sales": 146.638,
+   "margin": 4893.47,
+   "finalRatio": 0.13915492834591453,
+   "spend": 0
+  },
+  "vip": {
+   "gain": 552.624,
+   "reached": 0.1545,
+   "win": 0.101,
+   "deaths": 9.2195,
+   "regulars": 7.232,
+   "sales": 145.439,
+   "margin": 5907.9085,
+   "finalRatio": 0.16386146596202905,
+   "spend": 680.5145
+  },
+  "hybrid": {
+   "gain": 545.59,
+   "reached": 0.1655,
+   "win": 0.1155,
+   "deaths": 9.06,
+   "regulars": 7.0515,
+   "sales": 146.227,
+   "margin": 5623.6105,
+   "finalRatio": 0.184086699452539,
+   "spend": 659.306
+  },
+  "rotation": {
+   "gain": 558.0925,
+   "reached": 0.181,
+   "win": 0.126,
+   "deaths": 9.09,
+   "regulars": 8.0785,
+   "sales": 151.785,
+   "margin": 5866.9035,
+   "finalRatio": 0.19530308282882286,
+   "spend": 690.134
+  },
+  "premium": {
+   "gain": 540.289,
+   "reached": 0.161,
+   "win": 0.093,
+   "deaths": 9.1335,
+   "regulars": 6.4505,
+   "sales": 142.939,
+   "margin": 5547.4635,
+   "finalRatio": 0.1680872939852334,
+   "spend": 680.2085
+  },
+  "expedition": {
+   "gain": 533.138,
+   "reached": 0.1755,
+   "win": 0.12,
+   "deaths": 8.945,
+   "regulars": 6.717,
+   "sales": 143.8165,
+   "margin": 5382.5015,
+   "finalRatio": 0.1930234237744615,
+   "spend": 650.75
+  },
+  "fresh": {
+   "gain": 520.5665,
+   "reached": 0.185,
+   "win": 0.146,
+   "deaths": 8.615,
+   "regulars": 6.725,
+   "sales": 140.7235,
+   "margin": 5137.2305,
+   "finalRatio": 0.21377256116534937,
+   "spend": 632.699
+  },
+  "customer": {
+   "gain": 540.745,
+   "reached": 0.146,
+   "win": 0.097,
+   "deaths": 9.232,
+   "regulars": 7.1595,
+   "sales": 149.518,
+   "margin": 5574.162,
+   "finalRatio": 0.15889344427841381,
+   "spend": 666.2435
+  }
+ }
+}
