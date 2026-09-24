@@ -233,9 +233,7 @@ Fire has no special occurrence weighting: Families are drawn uniformly.
 v2.5 retained starting values:
 ```
 
-```new
-Supply Burden values:
-```
+(v2.9.0: its reworded form `Supply Burden values:` was deleted with the SUPPLY_BURDEN section; see the v2.9.0 AMENDMENT below.)
 
 ```text
 All active Food/Drink have Supply > 0 according to ITEM.
@@ -617,7 +615,7 @@ Final Hazard aggregation -> `FINAL_EXPEDITION_v2.8.0.md`
 ## NEW — headings replacing version-tagged headings
 
 ```new
-## EXCESS SUPPLY -> FATIGUE
+## SUPPLY -> FATIGUE
 ## PREPARATION SEQUENCE
 ## PREPARED POWER
 ## GATE POWER — LATE-DAY SLOPE
@@ -663,4 +661,177 @@ Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
 Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
 familyReward: spider 1 · slime 1 · fire 1.15 · crypt 1.10 · snow 1.25 · Final 2
 Day-term reference anchors:
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+The Supply Burden Gate modifier, required Supply, Supply Deficit and the deficit penalty are removed; Food/Drink
+Supply is Fatigue recovery only (current Fatigue first, remainder buffers this expedition's gain, shown as
+`피로 회복 N`), with Severe-Injury rest days recovering 5 per day. Fatigue runs 0~40 in five named bands
+(정상 / 지침 / 과로 / 소진 / 탈진), outcome gains rise to +5 / +5 / +8 / +10, and Fatigue 40 adds the injured-style
++10%p failure-Death term. Each Hazard presses exactly one non-투력 Stat (강인함 3 / 기동 3 / 정신 3: 화염 -> 기동
+×0.40, 어둠 / 화이트아웃 -> 정신 ×0.40) with one player-facing pressure label per Stat and one full sentence per
+Hazard. The `## EXCESS SUPPLY -> FATIGUE` heading declaration above now carries `## SUPPLY -> FATIGUE`; the
+`Supply Burden values:` declaration is retired in place.
+
+```text
+- Prepared Supply / Required Supply / excess
+Mapped Core-Stat coefficients:
+| 화염 | 강인함 ×0.32 |
+| 어둠 | 정신 ×0.30 + 기동 ×0.12 |
+| 화이트아웃 | 정신 ×0.30 + 기동 ×0.12 |
+### Supply-deficit penalty — exact
+If Required Supply is not met:
+deficit = max(0, requiredSupply - preparedSupply)
+sharedPenalty = min(0.30, deficit × 0.06)
+Apply the same percentage reduction to the prepared four Core Stats before ordinary combat/Hazard
+resolution. This remains one shared Supply system, not four independent penalties.
+성공      +3
+대성공    +3
+퇴각      +5
+부상      +6
+0~9    : no Stat penalty
+10~19  : 기동 / 정신 -15%
+20     : 기동 / 정신 -40%
+Fatigue 20 is an explicit overuse state, not a mild second tier.
+excessSupply
+= max(0, preparedSupply - requiredSupply)
+= min(currentFatigue, excessSupply)
+= excessSupply - preRecovery
+= clamp(fatigueBeforeExpedition + actualOutcomeFatigueGain, 0, 20)
+1. Required Supply is paid first.
+2. Remaining Supply reduces current Fatigue first.
+C. pay required Supply, calculate preRecovery, fatigueBeforeExpedition, remainingSupplyBuffer
+D. apply NPC-side Trait / Injury / Fatigue modifiers using fatigueBeforeExpedition
+F. apply existing Supply Deficit / Hazard calculations
+G. after actual expedition Outcome is known, calculate rawOutcomeFatigueGain, outcomeBufferUsed, actualOutcomeFatigueGain, finalFatigue
+Expose exact decision ingredients:
+- Required Supply
+- Supply Deficit amount
+- remaining Supply buffer
+- hidden Supply-deficit formula
+fire -> 강인함
+dark -> 정신(primary)+기동(secondary)
+whiteout -> 정신(primary)+기동(secondary)
+Canonical pressure labels:
+- poison / 독 -> 강인함 압박
+- bind / 속박 -> 기동 압박
+- corrosion / 부식 -> 강인함 압박
+- mire / 진창 -> 기동 압박
+- fire / 화염 -> 강인함 압박
+- fear / 공포 -> 정신 압박
+- dark / 어둠 -> 정신 중심 + 기동 보조 압박
+- cold / 냉기 -> 강인함 압박
+- whiteout / 화이트아웃 -> 정신 중심 + 기동 보조 압박
+recovery may include:
+- rest
+- explicit Condition items/effects
+### SUPPLY_BURDEN
+playerLabel=보급 부담
+type=globalGateModifier
+familyHazard=NO
+familyExclusive=NO
+Purpose:
+장거리/장시간 원정의 준비 압박을 별도 Hazard가 아니라 원정 전체 보급 문제로 표현한다.
+Tier eligibility:
+- T1 = NO
+- T2 = eligible
+- T3 = eligible
+- D30 Final = no additional random Supply Burden modifier
+T2 Supply Burden chance = 35% per generated Gate
+T2 requiredSupply = 3
+T3 Supply Burden chance = 55% per generated Gate
+T3 requiredSupply = 5
+Food/Drink provide visible `Supply` values.
+Resolution:
+- actualSupply >= requiredSupply => no Supply Deficit
+- actualSupply < requiredSupply => Supply Deficit
+- Supply Deficit applies one shared expedition-wide penalty across effective Combat/Hazard readiness
+- implementation may express the shared penalty through effective 투력/강인함/기동/정신 values, but must remain one unified Supply system
+- excess Supply does not create an additional success bonus by itself
+Player-facing:
+- Supply Burden is visible before Order when active
+- required Supply is visible
+- current prepared Supply is visible where preparation is shown
+- Item Supply contribution is visible
+- exact deficit formula remains hidden
+Slot contract:
+Supply Burden must not turn T3 into a forced 3-slot tax.
+A normal T2/T3 route with Supply Burden must still respect the canonical <=2 meaningful required-prep-slot contract.
+```
+
+```new
+fire -> 기동 (User 2026-09-24, v2.9.0)
+dark -> 정신 (User 2026-09-24, v2.9.0)
+whiteout -> 정신 (User 2026-09-24, v2.9.0)
+One non-투력 Stat per Hazard, 3 / 3 / 3 (User 2026-09-24, v2.9.0):
+- 강인함: 독 · 냉기 · 부식
+- 기동: 속박 · 진창 · 화염
+- 정신: 공포 · 어둠 · 화이트아웃
+- 투력 is never a Hazard-pressured Stat (it already carries the largest combat coefficient).
+Canonical pressure labels (one per Stat; replaces `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` everywhere, including the D25 scouting report):
+- 강인함 -> `강인함으로 버틴다`
+- 기동 -> `기동으로 피한다`
+- 정신 -> `정신으로 견딘다`
+Full Hazard sentence (Gate detail / destination-plate help; exact, no numbers):
+- `독 — 강인함으로 버틴다 · 독 대응 상품이 막는다`
+- `냉기 — 강인함으로 버틴다 · 냉기 대응 상품이 막는다`
+- `부식 — 강인함으로 버틴다 · 부식 대응 상품이 막는다`
+- `속박 — 기동으로 피한다 · 속박 대응 상품이 막는다`
+- `진창 — 기동으로 피한다 · 진창 대응 상품이 막는다`
+- `화염 — 기동으로 피한다 · 화염 대응 상품이 막는다`
+- `공포 — 정신으로 견딘다 · 공포 대응 상품이 막는다`
+- `어둠 — 정신으로 견딘다 · 어둠 대응 상품이 막는다`
+- `화이트아웃 — 정신으로 견딘다 · 화이트아웃 대응 상품이 막는다`
+Destination-plate help (one `?`): `위험은 능력치를 누르고, 대응 상품이 막는다.`
+recovery (User 2026-09-24, v2.9.0):
+- Food/Drink Supply: each point reduces Fatigue by 1 -> §SUPPLY -> FATIGUE
+- Severe-Injury recovery days: -5 per rest day (floor 0)
+(User 2026-09-24, v2.9.0)
+성공      +5
+대성공    +5
+퇴각      +8
+부상     +10
+Fatigue scale 0~40 (max / clamp 40), five bands (User 2026-09-24, v2.9.0):
+0~9    : 정상 — no Stat penalty
+10~19  : 지침 — 기동 / 정신 -15%
+20~29  : 과로 — 기동 / 정신 -40%
+30~39  : 소진 — 기동 / 정신 -40% + 투력 / 강인함 -20%
+40     : 탈진 — 투력 / 강인함 / 기동 / 정신 -40% + failure-conditioned Death risk +10%p
+The band is judged on `fatigueBeforeExpedition`.
+The Fatigue-40 Death term is the same additive +10%p term as re-sending an injured NPC, and raises the cap the same way -> §ORDINARY EXPEDITION FAILURE DEATH RISK.
+Fatigue 40 (탈진) is an explicit overuse state, not a mild top band.
+NIGHT main line shows the band name from 20 up: `귀환 후 피로 22 · 과로` (`정상` / `지침` are not named).
+= min(currentFatigue, preparedSupply)
+= preparedSupply - preRecovery
+= clamp(fatigueBeforeExpedition + actualOutcomeFatigueGain, 0, 40)
+netFatigueDelta
+= finalFatigue - beforeFatigue
+restRecovery
+= 5 per Severe-Injury recovery day, applied at that morning, floor 0
+1. No Gate has a required Supply; there is no Supply Deficit and no excess Supply. Every Supply point is Fatigue recovery.
+2. Supply reduces current Fatigue first (1:1, before departure).
+5. The Item value is shown as `피로 회복 N` (never `보급 +N`). One-sentence rule: `음식·음료는 피로를 줄인다.`
+6. Rest recovery: while an adventurer is out on Severe-Injury recovery days, Fatigue -5 per rest day (floor 0). No morning natural recovery.
+Result fields: beforeFatigue, preparedSupply, preRecovery, fatigueBeforeExpedition, remainingSupplyBuffer, rawOutcomeFatigueGain, outcomeBufferUsed, actualOutcomeFatigueGain, finalFatigue, netFatigueDelta.
+Removed: requiredSupply, excessSupply.
+C. calculate preRecovery, fatigueBeforeExpedition, remainingSupplyBuffer
+D. apply NPC-side Trait / Injury / Fatigue-band modifiers using fatigueBeforeExpedition
+F. apply existing Hazard calculations
+G. after the actual Outcome is known, calculate rawOutcomeFatigueGain, outcomeBufferUsed, actualOutcomeFatigueGain, finalFatigue
+Expose exact decision ingredients (User 2026-09-24, v2.9.0):
+- current Fatigue band name from 20 up
+- that departing at Fatigue 40 (탈진) increases failure-Death risk
+Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 3 / 3; User 2026-09-24, v2.9.0):
+| 화염 | 기동 ×0.40 |
+| 어둠 | 정신 ×0.40 |
+| 화이트아웃 | 정신 ×0.40 |
+투력 is never a Hazard-pressured Stat. Counter keys, Items, readiness labels and thresholds are unchanged.
+Fatigue 40 departure (User 2026-09-24, v2.9.0): if `fatigueBeforeExpedition = 40` (탈진), the same additive term applies, and the cap is raised the same way:
+injuryEscalation  = 0.10 if injury=1, else 0
+fatigueEscalation = 0.10 if fatigueBeforeExpedition = 40, else 0
+healthyFailureDeathChance + injuryEscalation + fatigueEscalation,
+0.30 + injuryEscalation + fatigueEscalation
+- departing at Fatigue 40 (탈진) adds the same visible material risk
+- Fatigue-40 conditional cap is 40%; injured and Fatigue-40 together 50%
 ```

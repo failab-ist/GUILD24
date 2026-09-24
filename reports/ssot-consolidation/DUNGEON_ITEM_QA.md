@@ -192,9 +192,9 @@ Uses approved v2.5 retained starting escapeBonus +50%p and raises escape/retreat
 ±17.5% is used as the v2.5 retained baseline and any later retune is supported by outcome evidence.
 ```
 
+(v2.9.0: the reworded DUN-Q17 PASS line and DUN-Q76 `T1/T2/T3 Supply-Burden eligibility/requirements remain intact` line were deleted with those checks; see the v2.9.0 AMENDMENT below.)
+
 ```new
-Long-expedition preparation is one global Supply decision rather than an extra Hazard/micro-system, and the approved eligibility/values are implemented.
-- T1/T2/T3 Supply-Burden eligibility/requirements remain intact
 - environment incident chance uses the exact closure formula and 2%–48% clamp
 - escape chance uses the exact closure formula and 15%–94% clamp
 PASS: no stale Stat bundle survives.
@@ -365,8 +365,6 @@ Lava Noodle retains Food/Hybrid identity.
 ### DUN-Q10 — RESIDUAL RISK
 ### DUN-Q18 — HAZARD ROUTE COVERAGE
 ### DUN-Q20 — PREPARATION NECESSITY / NAKED RUN
-### DUN-Q17 — SUPPLY BURDEN
-### DUN-Q76 — SUPPLY DEFICIT BOUNDARY
 ### DUN-Q73 — FATIGUE OUTCOME TABLE
 ### DUN-Q74 — FATIGUE PENALTY
 ### DUN-Q75 — SUPPLY ORDER / OUTCOME BUFFER
@@ -410,7 +408,7 @@ Lava Noodle retains Food/Hybrid identity.
 ### ITEM-Q14 — CATEGORY AFFINITY SCOPE
 ### ITEM-Q18 — FRESH CORE-EFFECT SCOPE
 ### ITEM-Q80 — FOOD TRAIT × FRESH STACKING
-### ITEM-Q17 — SUPPLY / NO THIRST
+### ITEM-Q17 — SUPPLY = FATIGUE RECOVERY / NO THIRST
 ### ITEM-Q11 — RETURN STONE
 ### ITEM-Q12 — RETREAT REWARD
 ### ITEM-Q13 — WORLD TREE INSURANCE
@@ -479,4 +477,156 @@ Expected stacking values follow ITEM after the Store Support rebalance.
 = base ×2.05
 소식가 + 즉석식품 코너 + 24시간 신선체계
 = base ×1.55
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+Checks follow the amended `DUNGEON_HAZARD` owner: DUN-Q17 and DUN-Q76 (Supply Burden / deficit) are deleted, the
+DI-Q-v28-14 deficit row is deleted, DUN-Q73 / DUN-Q74 / DUN-Q75 / DUN-Q02 / DUN-Q21 / DUN-Q04 / DUN-Q19 / DUN-Q78 /
+DI-Q-v28-1 / DI-Q-v28-3 / DI-Q-v28-4 / ITEM-Q02 / ITEM-Q10 / ITEM-Q17 / ITEM-Q72 / ITEM-Q74 / ITEM-Q77 / ITEM-Q80 /
+ITEM-Q82 / ITEM-Q84 / SIM-Q72 keep their ids with the new expectation (Supply = `피로 회복 N` Fatigue recovery, five
+Fatigue bands 0~40, 3 / 3 / 3 Hazard pressure), and DUN-Q-v29-1 / DUN-Q-v29-2 are added. The DUN-Q17 / DUN-Q76 heading
+declarations and their two reworded lines are retired in place above; the ITEM-Q17 heading declaration now carries its
+new title.
+
+```text
+| Item | Rarity | Buy/Sell | 강인함 | Supply | Extra |
+- no replacement creates direct Fatigue reduction
+- meal is materially higher-Supply
+- water is materially more Stat-concentrated for its stage
+- Water does not become a meal substitute through Supply
+Controlled seeded cases must verify:
+- Supply deficit = 6% per missing Supply, cap 30%
+EXPECT base result Fatigue:
+성공 +3
+대성공 +3
+퇴각 +5
+부상 +6
+0~9   none
+10~19 mobility/spirit -15%
+20    mobility/spirit -40%
+- Fatigue 20 uses -40%, not stale -25%
+Controlled cases must verify exact order:
+1. pay required Supply
+2. remaining Supply reduces current Fatigue
+3. remaining Supply then reduces actual outcome Fatigue 1:1
+4. unused remainder is discarded
+- `preparedSupply`, `preRecovery`, `remainingSupplyBuffer`, `outcomeBufferUsed`, `actualOutcomeFatigueGain`, `finalFatigue` match the current owner arithmetic
+- no excess-Supply Power/success/Loot/Hazard bonus
+- exact hidden deficit formula remains hidden from player UI
+- public required/prepared/deficit quantities are correct
+- Supply 0
+- Supply 2
+Exact base Item values must match the current active catalog.
+- Fatigue distribution and time at 10+/20
+- Supply use split: required / preRecovery / outcomeBuffer / waste
+- fire -> 강인함
+- dark -> 정신 primary + 기동 secondary
+- whiteout -> 정신 primary + 기동 secondary
+- 보급 부담 is global Gate modifier
+Test expeditions with and without active Supply Burden using different Food/Drink Supply totals.
+- T1 never receives Supply Burden
+- T2 starts from 35% Gate chance / required Supply 3
+- T3 starts from 55% Gate chance / required Supply 5
+- D30 Final receives no extra random Supply Burden
+- Supply Burden and required Supply are visible before Order
+- Food/Drink contribute visible Supply
+- sufficient Supply avoids Supply Deficit
+- insufficient Supply creates one shared expedition-wide penalty
+- no thirst/hunger/caffeine subsystem is created
+- excess Supply alone gives no extra success bonus
+- T3 Supply Burden still has a viable <=2 meaningful required-prep-slot route
+Only canonical Hazard/Supply systems affect gameplay.
+Stat/Supply/Direct/Hybrid/Condition/Insurance/RiskReward/Economy/Utility
+Does not dominate survival+supply+loot+stats simultaneously.
+- every active Food/Drink has visible Supply > 0
+Supply is the only canonical generic long-expedition preparation resource.
+Every Hazard exposes the canonical short pressure explanation:
+- poison / corrosion / fire / cold -> 강인함
+- bind / mire -> 기동
+- dark / whiteout -> 정신 중심 + 기동 보조
+```
+
+```new
+EXPECT (User 2026-09-24, v2.9.0):
+- fire -> 기동
+- dark -> 정신
+- whiteout -> 정신
+- no Supply Burden Gate modifier or required Supply exists; Food/Drink Supply is Fatigue recovery only (User 2026-09-24, v2.9.0)
+Only canonical Hazard systems and Supply -> Fatigue recovery affect gameplay (User 2026-09-24, v2.9.0).
+Every Hazard exposes the canonical short pressure explanation, one label per Stat:
+- poison / corrosion / cold -> `강인함으로 버틴다`
+- bind / mire / fire -> `기동으로 피한다`
+- fear / dark / whiteout -> `정신으로 견딘다`
+- Gate detail / destination-plate help uses the full sentence `<Hazard> — <label> · <Hazard> 대응 상품이 막는다` exactly as `DUNGEON_HAZARD_v2.8.0.md` §HAZARD PLAYER-FACING PRESSURE lists it
+- destination-plate help (one `?`) reads `위험은 능력치를 누르고, 대응 상품이 막는다.`
+- no `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` label survives anywhere, including the D25 scouting report
+### DUN-Q-v29-2 — ONE NON-투력 STAT PER HAZARD (3 / 3 / 3)
+(User 2026-09-24, v2.9.0)
+Controlled prepared states: vary one Core Stat at a time and read each Hazard's Defense.
+- 독 / 냉기 / 부식 Defense moves only with 강인함 (×0.30)
+- 속박 / 진창 / 화염 Defense moves only with 기동 (×0.40)
+- 공포 / 어둠 / 화이트아웃 Defense moves only with 정신 (×0.40)
+- no Hazard Defense moves with 투력
+- no Hazard reads a second Core Stat (no 정신 + 기동 split for 어둠 / 화이트아웃, no 강인함 for 화염)
+- exactly three Hazards per pressed Stat, 투력 never pressed
+- Counter keys, Item Counter values, readiness labels 충분 / 대응 / 불안 / 취약 and thresholds are unchanged
+- pressure label shown per Hazard matches the Stat that actually moves its Defense
+EXPECT base result Fatigue (User 2026-09-24, v2.9.0):
+성공 +5
+대성공 +5
+퇴각 +8
+부상 +10
+EXPECT five bands on the 0~40 scale (User 2026-09-24, v2.9.0):
+0~9   정상 none
+10~19 지침 mobility/spirit -15%
+20~29 과로 mobility/spirit -40%
+30~39 소진 mobility/spirit -40% + combat/survival -20%
+40    탈진 all four Core Stats -40% + failure-conditioned Death risk +10%p
+- the band is judged on `fatigueBeforeExpedition`
+- Fatigue never exceeds 40; no stale 20 cap or -25% value survives
+- Fatigue 40 adds the +10%p failure-Death term exactly like an injured departure (cap raised the same way)
+Controlled cases must verify exact order (User 2026-09-24, v2.9.0):
+1. Supply reduces current Fatigue 1:1 before departure (`preRecovery`)
+2. remaining Supply then reduces actual outcome Fatigue 1:1
+3. unused remainder is discarded
+4. Severe-Injury recovery days reduce Fatigue 5 per rest day at that morning, floor 0
+- `preparedSupply`, `preRecovery`, `fatigueBeforeExpedition`, `remainingSupplyBuffer`, `rawOutcomeFatigueGain`, `outcomeBufferUsed`, `actualOutcomeFatigueGain`, `finalFatigue`, `netFatigueDelta` match the current owner arithmetic
+- no `requiredSupply` / `excessSupply` field or Supply payment step exists
+- no Supply Power/success/Loot/Hazard bonus
+- no morning natural recovery
+### DUN-Q-v29-1 — FATIGUE BANDS / REST RECOVERY
+Controlled NPCs at departure Fatigue 9 / 10 / 19 / 20 / 29 / 30 / 39 / 40, then a Severe-Injury recovery period.
+- 9 -> 정상, no penalty; 10 and 19 -> 지침 -15% 기동/정신; 20 and 29 -> 과로 -40% 기동/정신
+- 30 and 39 -> 소진 -40% 기동/정신 and -20% 투력/강인함
+- 40 -> 탈진 -40% on all four Core Stats and `실패 시 사망 위험` +10%p over the same state at 39
+- a 성공 at 36 with no Supply ends at 40, not 41 (clamp)
+- Supply 3 at current Fatigue 22 departs at 19 (지침), not 22 (과로): the band is judged after preRecovery
+- each Severe-Injury rest day lowers Fatigue by 5, floor 0; no other morning changes Fatigue
+- NIGHT main line names the band from 20 up (`귀환 후 피로 22 · 과로`); 정상 / 지침 are not named
+- five bands, 0~40, applied to NPC Base+Equipment-side Stats only
+- rest recovery exists only on Severe-Injury recovery days
+SALE shows the one decision line `피로 {A} → 출발 {B}`; no `보급 회복` / `보급 부족` / `남은 보급` tail (User 2026-09-24, v2.9.0).
+Controlled seeded cases must verify (User 2026-09-24, v2.9.0: no Supply-deficit row):
+- departure at Fatigue 40 (탈진, judged on `fatigueBeforeExpedition`) adds the same +10%p failure-Death term and raises the cap the same way; injured and Fatigue-40 together cap at 50% (User 2026-09-24, v2.9.0)
+Stat/Supply (Fatigue recovery, shown `피로 회복 N`)/Direct/Hybrid/Condition/Insurance/RiskReward/Economy/Utility (User 2026-09-24, v2.9.0)
+Supply N is displayed as `피로 회복 N` (User 2026-09-24, v2.9.0).
+| Item | Rarity | Buy/Sell | 강인함 | Supply (`피로 회복 N`) | Extra |
+- Supply is the direct Fatigue reduction (`피로 회복 N`, current Fatigue first, remainder buffers this expedition's gain); no replacement carries any other Fatigue effect (User 2026-09-24, v2.9.0)
+PASS direction (User 2026-09-24, v2.9.0):
+- meal is materially higher Fatigue recovery (Supply): Food = large recovery + lower Core Stat
+- water is materially more Stat-concentrated for its stage: Drink = small recovery + sharper Stat/Counter
+- Water does not become a meal substitute through Fatigue recovery
+Does not dominate survival+Fatigue recovery+loot+stats simultaneously (User 2026-09-24, v2.9.0).
+- Supply 0 (no `피로 회복` row; User 2026-09-24, v2.9.0)
+- Supply 2, displayed `피로 회복 2` (User 2026-09-24, v2.9.0)
+Exact base Item values must match the current active catalog; Supply is displayed `피로 회복 N` (User 2026-09-24, v2.9.0).
+Supply2 is displayed `피로 회복 2` (User 2026-09-24, v2.9.0).
+- the Supply value (`피로 회복 N`) is unchanged by Fresh / Relic native-Stat percentages (User 2026-09-24, v2.9.0)
+- every active Food/Drink has visible Supply > 0, shown as `피로 회복 N` (never `보급 +N`)
+- Supply reduces the customer's Fatigue only: current Fatigue first, remainder against this expedition's gain, leftover discarded
+- no Gate requires Supply; no Supply Deficit, deficit penalty or excess-Supply concept exists
+`음식·음료는 피로를 줄인다.` is the whole Supply rule; no long-expedition requirement resource exists.
+- departure Fatigue distribution and time at 10+/20+/30+/40 (User 2026-09-24, v2.9.0)
+- Supply use split: preRecovery / outcomeBuffer / waste
 ```
