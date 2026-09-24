@@ -2,7 +2,7 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
@@ -427,13 +427,6 @@ Event Day:
 PASS:
 Today's situation is understandable and a meaningful Event is not buried among ordinary cards.
 
-### UI-Q80 — MORNING REQUIRED SUPPLY
-
-PASS:
-- Morning keeps current compact Gate/Hazard structure
-- required Supply is shown as exact `필요 보급 N`
-- no added recommendation paragraph / easy-medium-hard Supply label
-
 ### UI-Q101 — MORNING NEXT-DAY GATE FORECAST
 
 Before ORDER on controlled next-Day states:
@@ -560,11 +553,13 @@ PASS: current offer location does not jump to top; practical focus preserved whe
 
 ### UI-Q81 — ORDER ITEM HIERARCHY
 
+(User 2026-09-24, v2.9.0)
+
 Inspect desktop/mobile offers.
 
 PASS:
 - Item identity and exact effect read before economy metadata
-- exact Stat/Counter/Supply/penalty values are readable
+- exact Stat/Counter/`피로 회복 N`/penalty values are readable
 - no redundant role chip such as `속박 전문` above `속박 대응 +16`
 - no today-fit/recommended badge
 - no automatic best-fit ranking
@@ -933,12 +928,14 @@ PASS:
 
 ### UI-Q86 — UNCOMMITTED PREVIEW / FROZEN PRE-SUPPLY OUTLOOK
 
+(User 2026-09-24, v2.9.0)
+
 Select/focus an uncommitted Item.
 
 May show:
 - exact Item effect
 - price/affordability
-- deterministic Supply/Fatigue arithmetic
+- deterministic Fatigue-recovery arithmetic (`피로 A -> 출발 B`)
 
 Must not show hypothetical post-Item answers:
 - `접전 -> 우세`
@@ -958,30 +955,26 @@ After actual purchase commit, PASS only if:
 
 ### UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
 
-Use current `집중 사탕` (`공포 +10 / Supply 3`) in three controlled setups.
+(User 2026-09-24, v2.9.0)
 
-#### Case A — no active Supply Deficit change, no Fatigue penalty-band change
+Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 3`) in two controlled setups.
+
+#### Case A — no Fatigue band change
 
 PASS:
-- direct effect shows 공포 Counter / Supply only
+- direct effect shows 공포 Counter / 피로 회복 only
 - 투력/강인함/기동/정신 do not rise
 - no hidden direct Core-Stat effect is attributed to 집중 사탕
+- no `보급 부족 완화` row exists
 
-#### Case B — its Supply reduces an active Supply Deficit
+#### Case B — its 피로 회복 releases a Fatigue band
 
 PASS:
-- effective 투력/강인함/기동/정신 and underlying Hazard preparation may improve if the canonical unified Supply Deficit system actually changes them
-- any displayed Core-Stat delta is attributed to `보급 부족 완화` or equivalent system source
+- effective Core Stats may rise according to the current Fatigue owner (`DUNGEON_HAZARD_v2.8.0.md` bands)
+- displayed delta is attributed to `피로 완화` / Condition source
 - displayed pre-supply Hazard Readiness remains frozen rather than being replaced by a new readiness label
 - displayed pre-supply 실패 시 사망 위험 remains frozen rather than being replaced by a new percentage
 - UI does not imply that 집중 사탕 directly grants those Stats
-- exact hidden deficit formula remains undisclosed
-
-#### Case C — excess Supply crosses a Fatigue penalty band
-
-PASS:
-- effective 기동/정신 may rise according to the current Fatigue owner
-- displayed delta is attributed to `피로 완화` / Condition source
 - direct Item effect remains separately readable
 
 All cases:
@@ -1057,17 +1050,20 @@ All:
 
 ### UI-Q85 — ITEM VS GATE INFORMATION BOUNDARY
 
+(User 2026-09-24, v2.9.0)
+
 PASS:
-- Item shows exact Stat/Counter/Supply
+- Item shows exact Stat/Counter/`피로 회복 N`
 - Gate shows qualitative readiness
 - exact Gate Counter threshold stays hidden
 
 ### UI-Q83 — DANGER DETAIL DOES NOT GIVE ANSWER
 
+(User 2026-09-24, v2.9.0)
+
 PASS detail may show:
 - Hazard
 - pressured Stat
-- required Supply
 - readiness meaning
 
 FAIL if it exposes:
@@ -1100,22 +1096,26 @@ No hover-only or inconsistent Hazard explanation.
 
 ### UI-Q89 — SUPPLY/FATIGUE CONDITIONAL ARITHMETIC
 
+(User 2026-09-24, v2.9.0)
+
 Controlled setup with known Fatigue/Supply/Trait.
 
 PASS:
-- Required/Prepared/Deficit values match runtime
+- `피로 A -> 출발 B` matches runtime preRecovery; no required / deficit value is shown
 - departure Fatigue matches runtime
 - no single Outcome is predicted as guaranteed
 
 ### UI-Q-v28-8 — FATIGUE
 
+(User 2026-09-24, v2.9.0)
+
 SALE:
 - no hypothetical Outcome fatigue matrix
-- current/departure Fatigue and compact Supply arithmetic readable
+- current/departure Fatigue readable as `피로 A -> 출발 B`; no `보급 X / 필요 Y` cell
 
 NIGHT:
-- main label is 귀환 후 피로
-- detailed path available on demand
+- main label is 귀환 후 피로, with ` · {band}` from Fatigue 20 up
+- detailed path available on demand; the recovery row is `음식·음료로 -N`, never `남은 보급으로`
 - 보급 회복 / 보급 완화 / 밤 피로 are absent as primary labels
 
 ### UI-Q32 — PLAYER STAT TERMINOLOGY
@@ -1222,8 +1222,10 @@ PASS:
 
 ### UI-Q92 — NIGHT RESULT TRUTH
 
+(User 2026-09-24, v2.9.0)
+
 PASS:
-- actual Supply preRecovery/outcome buffer use can be read when relevant
+- actual Food/Drink preRecovery/outcome buffer use can be read when relevant
 - final Fatigue matches runtime
 - First Aid Aftercare shown only if it actually changed persistent Injury state
 - no invented `전투 부족` / `독 대응 부족` diagnosis
@@ -1386,7 +1388,7 @@ Final preview:
 - PRIDE participant 투력 original -> applied
 - ENVY target 4 Stats original -> applied
 - GLUTTONY preview follows `BOSS_v2.8.0.md`: all positive Core-Stat contribution originating from Items is reduced to 50%; no Rarity threshold
-  - Counter / Supply / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
+  - Counter / 피로 회복 / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
 - LUST affected non-regular participant 4 Stats original -> applied
 - GREED display matches actual applied strengthening
 - SLOTH displayed state matches Seal state
@@ -1789,8 +1791,10 @@ PASS: Tutorial can appear again and no stale completion state survives.
 
 ### UI-Q94 — TUTORIAL TEACHES READING, NOT SKU ANSWER
 
+(User 2026-09-24, v2.9.0)
+
 PASS:
-Tutorial explains Stat pressure / Counter contribution / readiness and Supply->Fatigue order.
+Tutorial explains Stat pressure / Counter contribution / readiness and one Supply/Fatigue fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신.
 
 FAIL:
 Tutorial instructs a specific correct SKU for a Hazard as the solution.

@@ -165,10 +165,9 @@ If `FINAL_EXPEDITION_v2.7.0.md` marks an Item as having no Final effect, the Fin
 -> DUNGEON_HAZARD_v2.8.0.md
 - destination is random among eligible open Gates according to `NPC_TRAIT_v2.8.0.md`
 Save/Load persistence -> `CORE_RUN_v2.8.0.md`.
-- deterministic Supply/Fatigue arithmetic owned by `DUNGEON_HAZARD_v2.8.0.md`
+- deterministic Fatigue-recovery arithmetic (`피로 A -> 출발 B`) owned by `DUNGEON_HAZARD_v2.8.0.md`
 The exact 실패 시 사망 위험 % shown here is the fixed **pre-supply** snapshot owned by `DUNGEON_HAZARD_v2.8.0.md`, not a hypothetical post-Item answer. It is conditional on the expedition entering a failure path and is not the unconditional whole-expedition Death probability.
 - an Item directly changes only the exact channels stated by `ITEM_v2.8.0.md`
-- exact hidden Supply-deficit formula remains hidden under `DUNGEON_HAZARD_v2.8.0.md`; source attribution does not expose that formula
 When a returning NPC has a recent-expedition snapshot owned by `NPC_TRAIT_v2.8.0.md`, show one compact quick surface:
 For each committed Final transfer, Player Gold and Gross Sales both increase by the exact fixed 50% / 매입가 amount once, matching `ECONOMY_ORDER_v2.8.0.md` / `FINAL_EXPEDITION_v2.8.0.md` / `BOSS_v2.8.0.md`.
 If `FINAL_EXPEDITION_v2.8.0.md` marks an Item as having no Final effect, the Final preparation surface must clearly expose that fact and should block placing it into a Final Bag when practical.
@@ -269,4 +268,52 @@ snapshot. Source now does this in `nominateDeep()` (tests/integration.cjs covers
 One exception: confirming a Deep Expedition nomination (allowed only before the first committed
 transaction) re-takes this pre-supply snapshot once, against the Deep Gate. The nomination cannot be
 cancelled.
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): Supply is Fatigue recovery only, shown as `피로 회복 N`; the `보급 X / 필요 Y · 여유 Z` decision cell, the Supply Deficit relief channel, the hidden deficit formula and the `보급 부족 완화` derived row are deleted (`피로 완화` stays); the 집중 사탕 example becomes `공포 대응 +10 / 피로 회복 3`; the 냉기 environment example uses the v2.9.0 pressure label `강인함으로 버틴다`. Two lines this ledger had declared new were edited in place above: the uncommitted-preview arithmetic line (reworded) and the hidden Supply-deficit formula line (removed from the target; its v2.7 original stays dropped).
+
+```text
+The decision surface may also show:
+보급 5 / 필요 3 · 여유 2
+- exact Item Stat / Counter / Supply / explicit penalty
+- exact proven derived changes from Supply/Fatigue/other owned systems may be shown with their source
+- current Supply/Fatigue arithmetic may update where it is deterministic public arithmetic
+Current preparation can legitimately change through more than one channel after a Supply Item is committed:
+B. Supply Deficit relief
+C. current-Fatigue recovery / Fatigue penalty-band change
+D. another explicitly owned Trait / Relic / Boss modifier
+- post-commit delta rows may show exact Core-Stat / Counter / Supply / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 display
+- the inherited Supply Deficit system may change effective expedition preparation across all four Core Stats / Hazard readiness when Prepared Supply moves toward the Required Supply threshold; this is a **Supply Deficit effect**, not a hidden direct Item Stat
+- excess Supply that reduces current Fatigue may restore effective 기동/정신 when a canonical Fatigue penalty band changes; this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
+- current `집중 사탕` has `공포 +10 / Supply 3`
+- if there is no Supply Deficit change and no Fatigue penalty-band change, selling it must not create a Core-Stat delta
+- if its Supply reduces an existing Supply Deficit, effective 투력/강인함/기동/정신 may legitimately rise through the unified Supply Deficit system
+- if excess Supply crosses a Fatigue penalty band, effective 기동/정신 may also rise through Fatigue recovery
+- those indirect changes must be presented as `보급 부족 완화` / `피로 완화` or equivalent source-readable system effects, never as if 집중 사탕 itself granted those Stats
+- do not hide actual Counter / Core Stat / Supply / penalty / Insurance behavior merely to remove flavor
+`북부 설원 폐허 I · 냉기 · 강인함 압박`
+- 피로 변화
+- Supply
+```
+
+```new
+(User 2026-09-24, v2.9.0)
+- Fatigue recovery (Food/Drink)
+- do not hide actual Counter / Core Stat / 피로 회복 / penalty / Insurance behavior merely to remove flavor
+- exact Item Stat / Counter / `피로 회복 N` / explicit penalty
+- 피로 회복 N
+- exact proven derived changes from Fatigue/other owned systems may be shown with their source
+- current Fatigue-recovery arithmetic (`피로 A -> 출발 B`) may update where it is deterministic public arithmetic
+Current preparation can legitimately change through more than one channel after a Food/Drink Item is committed (User 2026-09-24, v2.9.0):
+B. current-Fatigue recovery / Fatigue band change
+C. another explicitly owned Trait / Relic / Boss modifier
+- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 display
+- Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.8.0.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
+- current `집중 사탕` shows `공포 대응 +10 / 피로 회복 3`
+- if there is no Fatigue band change, selling it must not create a Core-Stat delta
+- if its 피로 회복 releases a Fatigue band, effective Core Stats may rise through Fatigue recovery
+- that indirect change must be presented as `피로 완화` or an equivalent source-readable system effect, never as if 집중 사탕 itself granted those Stats
+`북부 설원 폐허 I · 냉기 · 강인함으로 버틴다`
 ```

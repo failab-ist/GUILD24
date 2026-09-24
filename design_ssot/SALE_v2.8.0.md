@@ -2,7 +2,7 @@
 
 DOC=SALE
 OWNER=sale,customer,price,bag,sale_decision_ux,great_signal,fatigue_surface,loyalty_surface,refusal,purchase_flow,deep_nomination
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/SALE_v2.8.0-patch.md,history/SALE_v2.7.0.md,history/SALE_v2.6.1.md,history/SALE_v2.5.0.md
@@ -151,6 +151,8 @@ Exact compact/mobile layout -> UI_UX_v2.8.0.md.
 
 ## FATIGUE AS CURRENT CUSTOMER STATE
 
+(User 2026-09-24, v2.9.0)
+
 Fatigue is visible in the compact current-customer state during SALE.
 
 Normal example:
@@ -158,9 +160,6 @@ Normal example:
 
 If a committed purchase reduces departure Fatigue:
     피로 12 -> 출발 8
-
-The decision surface may also show:
-    보급 5 / 필요 3 · 여유 2
 
 Do not show:
     성공 N · 퇴각 N · 부상 N
@@ -292,7 +291,7 @@ After nomination, ordinary Sale rules remain:
 - Wallet
 - purchase slots
 - Item
-- Supply
+- Fatigue recovery (Food/Drink)
 - refusal logic
 
 No free Item / free sale / Deep-only purchase slot.
@@ -399,7 +398,7 @@ Rules:
 - SALE shows the exact Item effects that can actually matter to the current transaction/expedition
 - do not create a disclosure control that looks strategically important but opens only flavor prose
 - flavor text may continue to exist in Item data or another existing non-decision context; this rule does not require adding a new catalog/detail screen
-- do not hide actual Counter / Core Stat / Supply / penalty / Insurance behavior merely to remove flavor
+- do not hide actual Counter / Core Stat / 피로 회복 / penalty / Insurance behavior merely to remove flavor
 
 Purpose:
 reduce false information weight on the decision screen and keep SALE focused on actionable truth.
@@ -417,12 +416,12 @@ Always readable ingredients remain:
 - pre-supply qualitative Combat Forecast
 - pre-supply qualitative Hazard Readiness
 - exact pre-supply 실패 시 사망 위험 %
-- exact Item Stat / Counter / Supply / explicit penalty
+- exact Item Stat / Counter / `피로 회복 N` / explicit penalty
 
 When the Player focuses/selects an **uncommitted** Item, UI may additionally show:
 - that Item's exact effects
 - selected price / affordability
-- deterministic Supply/Fatigue arithmetic owned by `DUNGEON_HAZARD_v2.8.0.md`
+- deterministic Fatigue-recovery arithmetic (`피로 A -> 출발 B`) owned by `DUNGEON_HAZARD_v2.8.0.md`
 
 Before actual purchase commitment, do **not** show a hypothetical post-Item derived answer such as:
 - `접전 -> 우세`
@@ -444,7 +443,7 @@ Examples:
 - 투력 +X
 - 강인함 +X
 - 독 대응 +X
-- 피로 변화
+- 피로 회복 N
 - 보험 효과
 
 Preview must not expose:
@@ -517,8 +516,8 @@ After a purchase commits:
 - pre-supply Hazard Readiness does **not** update
 - pre-supply 실패 시 사망 위험 % does **not** update
 - exact Item/direct-effect changes may be shown
-- exact proven derived changes from Supply/Fatigue/other owned systems may be shown with their source
-- current Supply/Fatigue arithmetic may update where it is deterministic public arithmetic
+- exact proven derived changes from Fatigue/other owned systems may be shown with their source
+- current Fatigue-recovery arithmetic (`피로 A -> 출발 B`) may update where it is deterministic public arithmetic
 
 A refusal does not grant the Item effect.
 
@@ -548,32 +547,28 @@ This is feedback on an already committed choice, not a pre-purchase answer.
 
 Do not present a generic aggregate panel that makes every changed value look like a direct Item Stat effect.
 
-Current preparation can legitimately change through more than one channel after a Supply Item is committed:
+Current preparation can legitimately change through more than one channel after a Food/Drink Item is committed (User 2026-09-24, v2.9.0):
 
 ```text
 A. direct Item effect
-B. Supply Deficit relief
-C. current-Fatigue recovery / Fatigue penalty-band change
-D. another explicitly owned Trait / Relic / Boss modifier
+B. current-Fatigue recovery / Fatigue band change
+C. another explicitly owned Trait / Relic / Boss modifier
 ```
 
 Rules:
 - an Item directly changes only the exact channels stated by `ITEM_v2.8.0.md`
 - if a post-commit delta is shown, the changed value must be actual and its source must be provable
-- post-commit delta rows may show exact Core-Stat / Counter / Supply / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 display
+- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes, but must not recalculate or replace the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 display
 - ordinary SALE must keep the pre-supply Forecast/Readiness/실패 시 사망 위험 snapshot frozen; post-commit feedback should instead show exact changed values/effects with readable source attribution rather than a new derived expedition answer
-- the inherited Supply Deficit system may change effective expedition preparation across all four Core Stats / Hazard readiness when Prepared Supply moves toward the Required Supply threshold; this is a **Supply Deficit effect**, not a hidden direct Item Stat
-- excess Supply that reduces current Fatigue may restore effective 기동/정신 when a canonical Fatigue penalty band changes; this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
-- exact hidden Supply-deficit formula remains hidden under `DUNGEON_HAZARD_v2.8.0.md`; source attribution does not expose that formula
+- Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.8.0.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope
 
 Example boundary:
-- current `집중 사탕` has `공포 +10 / Supply 3`
+- current `집중 사탕` shows `공포 대응 +10 / 피로 회복 3`
 - it has no direct positive four-Core-Stat contribution
-- if there is no Supply Deficit change and no Fatigue penalty-band change, selling it must not create a Core-Stat delta
-- if its Supply reduces an existing Supply Deficit, effective 투력/강인함/기동/정신 may legitimately rise through the unified Supply Deficit system
-- if excess Supply crosses a Fatigue penalty band, effective 기동/정신 may also rise through Fatigue recovery
-- those indirect changes must be presented as `보급 부족 완화` / `피로 완화` or equivalent source-readable system effects, never as if 집중 사탕 itself granted those Stats
+- if there is no Fatigue band change, selling it must not create a Core-Stat delta
+- if its 피로 회복 releases a Fatigue band, effective Core Stats may rise through Fatigue recovery
+- that indirect change must be presented as `피로 완화` or an equivalent source-readable system effect, never as if 집중 사탕 itself granted those Stats
 
 A generic heading such as `판매 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
 If that distinction is not readable, remove the synthetic delta block rather than replacing the pre-supply outlook with post-commit Forecast/Readiness/Death answers.
@@ -892,7 +887,7 @@ Do not restore the older layout where forecast/destination are repeated lower on
 - no tiny compressed multi-column layout
 
 Core environment example form:
-`북부 설원 폐허 I · 냉기 · 강인함 압박`
+`북부 설원 폐허 I · 냉기 · 강인함으로 버틴다`
 
 Tap/tooltip may add detail; it may not hide the core risk needed for the sale decision.
 

@@ -2,7 +2,7 @@
 
 DOC=SOURCE_ADOPTION_QA
 OWNER=qa,source_adoption,root_cause,playtest_recovery
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_QA_SPEC
 AUDIT_SOURCE_HEAD=af7bb7d5575b224740d659038f7f90078c2199d1
@@ -108,6 +108,7 @@ Source implements the superseded v2.7 display clause.
 
 Required:
 remove future Outcome rows; keep current/departure Fatigue + compact Supply arithmetic.
+v2.9.0 (User 2026-09-24): the compact arithmetic is only `피로 A -> 출발 B`; no required Supply / deficit / `보급 X / 필요 Y` cell exists.
 
 ## SA-Q07 — NIGHT INTERNAL FATIGUE LABELS
 
@@ -124,6 +125,7 @@ runtime accounting fields are surfaced 1:1 instead of a settled Player result.
 
 Required:
 main 귀환 후 피로 N; resolved arithmetic only on demand.
+v2.9.0 (User 2026-09-24): the on-demand recovery row is `음식·음료로 -N`; `보급 회복` / `보급 완화` stay absent.
 
 ## SA-Q08 — UNPROVEN HAZARD HERO FEEDBACK
 
@@ -549,6 +551,7 @@ Required:
 - permanent forecast paragraph removed
 - tooltip/popover copy replaced with COPY_WORLD_VOICE_v2.8 exact text
 - internal potion marker remains hidden per SA-Q05
+v2.9.0 (User 2026-09-24): no `보급 부족 완화` derived row exists; the only derived Fatigue row is `피로 완화` (band released).
 
 ### SA-Q31 — DEEP COPY REPEATED ON MORNING AND SALE
 
@@ -620,6 +623,7 @@ Then, when proof exists:
     {Item} 덕분에 살아 돌아왔다.
 
 No generic causality sentence competes with the proven Item line.
+v2.9.0 (User 2026-09-24): a proven Food/Drink contribution is Fatigue recovery (preRecovery / outcome buffer), never a required-Supply or deficit effect.
 
 ### SA-Q34 — CLOSING REPEATS NIGHT ITEM IMPACT
 
@@ -636,6 +640,7 @@ expedition causality is repeated in Closing after NIGHT already owns that inform
 Required:
 remove the entire \`오늘의 보급 영향\` block from the primary Closing receipt.
 Keep economics-only rows and remove the already-recorded explanatory footer per SA-Q21.
+v2.9.0 (User 2026-09-24): no Supply requirement / deficit summary returns to Closing; Food/Drink impact is Fatigue recovery shown in NIGHT only.
 
 ### SA-Q35 — SETTINGS / PRE-RUN DEVELOPMENT COPY
 
@@ -744,6 +749,7 @@ Active Rarity distribution after adoption:
     C11 / U12 / R5 / E11 / L1
 
 Do not move another Item from the approved active Rarity distribution.
+v2.9.0 (User 2026-09-24): the Supply value is displayed as `피로 회복 N` and only reduces Fatigue; no Gate requires Supply.
 
 ### SA-Q40 — FRESH NATIVE-STAT AMPLIFICATION TOO HIGH FOR v2.8 ITEM BASES
 
@@ -762,6 +768,7 @@ Required:
 - fresh24 +50%
 - active-Supply expeditionMeal native Stat +20%
 - matching Hazard Counter multiplier remains +25%
+v2.9.0 (User 2026-09-24): "active-Supply" means a Food/Drink whose Supply (`피로 회복 N`) is in the Bag; no required-Supply / deficit reading applies.
 
 Root cause:
 the inherited Fresh amplification was calibrated before the v2.8 Food/Water native-Stat rebaseline.

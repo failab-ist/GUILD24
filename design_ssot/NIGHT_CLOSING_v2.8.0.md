@@ -2,7 +2,7 @@
 
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,closing,causality,fatigue_result,npc_reaction
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/NIGHT_CLOSING_v2.8.0-patch.md,history/NIGHT_CLOSING_v2.7.0.md,history/NIGHT_CLOSING_v2.6.1.md,history/NIGHT_CLOSING_v2.6.0.md
@@ -287,8 +287,8 @@ If exact cause is not provable, use truthful broad narration instead of invented
 Player-facing cause text requires runtime proof that an Item/Trait/Event actually changed the resolved risk/outcome/state.
 
 Provable contribution types also include:
-- Supply preRecovery
-- Supply outcome Fatigue buffer
+- Food/Drink Fatigue recovery before departure (`preRecovery`)
+- Food/Drink outcome Fatigue buffer (`outcomeBufferUsed`)
 - First Aid Kit Aftercare
 - persistent Injury retained/cleared state
 
@@ -423,15 +423,29 @@ Canonical:
 
 ## FATIGUE RESULT
 
+(User 2026-09-24, v2.9.0)
+
 Main NIGHT surface shows one settled value:
 
     귀환 후 피로 11
+
+From Fatigue 20 up the main line also names the band (`정상` / `지침` are not named):
+
+    귀환 후 피로 22 · 과로
+
+Under the settled value, one next-decision line `피로 {N} · {band} — 다음 원정 {effect}` whenever a
+Fatigue band penalty applies (10 and up; nothing at 정상):
+
+    피로 12 · 지침 — 다음 원정 기동·정신 -15%
+    피로 22 · 과로 — 다음 원정 기동·정신 -40%
+
+Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.8.0.md`.
 
 On demand, the same result may expand to:
 
     출발 8
     원정에서 +5
-    남은 보급으로 -2
+    음식·음료로 -2
     -> 귀환 후 11
 
 Remove player-facing labels:
@@ -456,9 +470,7 @@ Resolved report/runtime must distinguish at least:
 
 ```text
 beforeFatigue
-requiredSupply
 preparedSupply
-excessSupply
 preRecovery
 fatigueBeforeExpedition
 remainingSupplyBuffer
@@ -470,9 +482,9 @@ netFatigueDelta
 ```
 
 Definitions:
-- `preRecovery` = current Fatigue removed before expedition by Supply remaining after required Supply
+- `preRecovery` = current Fatigue removed before expedition by the prepared Food/Drink Supply (1:1)
 - `fatigueBeforeExpedition` = Fatigue after `preRecovery`
-- `remainingSupplyBuffer` = Supply left after required Supply + preRecovery
+- `remainingSupplyBuffer` = Supply left after preRecovery
 - `rawOutcomeFatigueGain` = actual Outcome baseline plus eligible Trait modifier before Supply buffer
 - `outcomeBufferUsed` = amount of remaining Supply actually consumed to reduce that raw gain
 - `actualOutcomeFatigueGain` = final gain after the buffer

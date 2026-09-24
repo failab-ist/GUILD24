@@ -348,3 +348,33 @@ B12: the dead cross-day takeaway line is removed.
 ```new
 `원정 소지금 획득`
 ```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): Supply is Fatigue recovery only (no required / excess Supply), Fatigue runs 0~40 in five bands, and the NIGHT surface names the band from 20 up plus one next-decision line. The provable-contribution list, §FATIGUE RESULT and §RESULT FATIGUE FIELDS follow; `requiredSupply` / `excessSupply` are removed from the field list. Formula owner stays DUNGEON_HAZARD.
+
+```text
+남은 보급으로 -2
+requiredSupply
+excessSupply
+- `preRecovery` = current Fatigue removed before expedition by Supply remaining after required Supply
+- `remainingSupplyBuffer` = Supply left after required Supply + preRecovery
+- Supply preRecovery
+- Supply outcome Fatigue buffer
+```
+
+```new
+- Food/Drink Fatigue recovery before departure (`preRecovery`)
+- Food/Drink outcome Fatigue buffer (`outcomeBufferUsed`)
+(User 2026-09-24, v2.9.0)
+From Fatigue 20 up the main line also names the band (`정상` / `지침` are not named):
+귀환 후 피로 22 · 과로
+Under the settled value, one next-decision line `피로 {N} · {band} — 다음 원정 {effect}` whenever a
+Fatigue band penalty applies (10 and up; nothing at 정상):
+피로 12 · 지침 — 다음 원정 기동·정신 -15%
+피로 22 · 과로 — 다음 원정 기동·정신 -40%
+Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_v2.8.0.md`.
+음식·음료로 -2
+- `preRecovery` = current Fatigue removed before expedition by the prepared Food/Drink Supply (1:1)
+- `remainingSupplyBuffer` = Supply left after preRecovery
+```

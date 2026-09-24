@@ -291,3 +291,25 @@ eligible
 + introduced (has visited the store at least once)
 + not in 중상 recovery (recovery Days remaining = 0)
 ```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the Supply Burden Gate modifier and any required Supply no longer exist, so the Final `Supply Burden boundary` loses its Burden / requirement lines (Food/Drink ordinary-effect line and ownership pointer kept) and the locked-state / calculation-order / unchanged-system lists name Food/Drink Fatigue recovery instead of Supply. No Final rule value changes.
+
+```text
+Supply Burden boundary:
+- D30 Final does not roll an additional random Supply Burden modifier
+- no Final-only Supply requirement is invented
+- 적용 Item / Supply state
+- Supply / Item
+2. locked Item / Supply / equipment effects
+- 기존 Equipment / Supply
+```
+
+```new
+Food/Drink boundary (User 2026-09-24, v2.9.0):
+- 적용 Item / Food·Drink Fatigue recovery state
+- Food·Drink Fatigue recovery / Item
+2. locked Item / Food·Drink Fatigue recovery / equipment effects
+- 기존 Equipment / Food·Drink 피로 회복
+```

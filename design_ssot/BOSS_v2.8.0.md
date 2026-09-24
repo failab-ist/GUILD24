@@ -2,7 +2,7 @@
 
 DOC=BOSS
 OWNER=boss,boss_identity,boss_trait,boss_information_cadence,sloth,lust
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/BOSS_v2.8.0-patch.md,history/BOSS_v2.7.0.md,history/BOSS_v2.5.0.md
@@ -495,9 +495,9 @@ Affected:
 
 Each positive Item contribution to those Stats is applied at 50%.
 
-Not reduced by GLUTTONY:
+Not reduced by GLUTTONY (User 2026-09-24, v2.9.0):
 - 환경 대응
-- 보급
+- 피로 회복
 - 보험
 - other non-Stat Item effects
 
@@ -520,7 +520,7 @@ Affected:
 Unaffected:
 - NPC natural/base/growth/equipment Stats
 - Hazard Counter
-- Supply
+- Fatigue recovery (Food/Drink Supply)
 - Insurance
 - Utility
 - Loot/economy effects
@@ -731,7 +731,7 @@ Shared order:
 
 ```text
 1. locked NPC base/growth/current Condition state
-2. locked Item / Supply / equipment effects
+2. locked Item / Food·Drink Fatigue recovery / equipment effects
 3. Final Family Hazard preparation result
 4. participant-side Boss Final Snapshot modifier
 5. Individual Final Power
@@ -869,7 +869,7 @@ PASS:
 - every positive Core-Stat contribution originating from Items is multiplied by 0.50
 - no Rarity threshold remains
 - NPC natural/base/growth/equipment Stats are unchanged
-- Hazard Counter / Supply / Insurance / Utility / harmful RiskReward penalty are unchanged
+- Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unchanged
 - previewed changed Item Stat matches actual Final resolution
 
 ### BOSS-Q74 — SLOTH POWER BY BREAK COUNT

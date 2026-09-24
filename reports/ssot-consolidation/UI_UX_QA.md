@@ -322,7 +322,6 @@ UI-Q92 `NIGHT v2.7 RESULT TRUTH` -> `NIGHT RESULT TRUTH` (version tag removed).
 ### UI-Q23 — SAFE AREA
 ### UI-Q24 — COLOR-INDEPENDENT SIGNAL
 ### UI-Q03 — MORNING HIERARCHY
-### UI-Q80 — MORNING REQUIRED SUPPLY
 ### UI-Q101 — MORNING NEXT-DAY GATE FORECAST
 ### UI-Q09 — TIER FORECAST VISIBILITY
 ### UI-Q04 — ORDER SCENE
@@ -367,9 +366,8 @@ UI-Q92 `NIGHT v2.7 RESULT TRUTH` -> `NIGHT RESULT TRUTH` (version tag removed).
 ### UI-Q107 — PRE-SUPPLY EXPEDITION OUTLOOK / DEATH RISK
 ### UI-Q86 — UNCOMMITTED PREVIEW / FROZEN PRE-SUPPLY OUTLOOK
 ### UI-Q103 — POST-COMMIT DELTA SOURCE TRUTH
-#### Case A — no active Supply Deficit change, no Fatigue penalty-band change
-#### Case B — its Supply reduces an active Supply Deficit
-#### Case C — excess Supply crosses a Fatigue penalty band
+#### Case A — no Fatigue band change
+#### Case B — its 피로 회복 releases a Fatigue band
 ### UI-Q-v28-7 — GREAT SUCCESS SIGNAL
 ### UI-Q84 — FOUR CORE STATS REMAIN VISIBLE
 ### UI-Q69 — STAT SOURCE
@@ -636,4 +634,49 @@ line, so listed outside a fence):
 
 ```new
 Design owner under test -> UI_UX_v2.8.0.md; presentation checks -> PRESENTATION_PRINCIPLES_v2.8.0.md.
+```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): Supply is Fatigue recovery only (`피로 회복 N`, `피로 A -> 출발 B`, no required Supply / deficit / `보급 부족 완화`), Fatigue bands run 0~40 and NIGHT names the band from 20 up with `음식·음료로 -N` in the expanded path. UI-Q80 is deleted (its whole point was the required-Supply line); UI-Q81 / Q86 / Q103 / Q85 / Q83 / Q89 / Q-v28-8 / Q92 / Q43 / Q94 expectations are rewritten under the same ids. Declared-new lines edited in place above: the `### UI-Q80` heading (removed) and the three UI-Q103 `#### Case` headings (now two: `no Fatigue band change` / `its 피로 회복 releases a Fatigue band`).
+
+```text
+- current/departure Fatigue and compact Supply arithmetic readable
+- main label is 귀환 후 피로
+- detailed path available on demand
+- Counter / Supply / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
+- Morning keeps current compact Gate/Hazard structure
+- required Supply is shown as exact `필요 보급 N`
+- no added recommendation paragraph / easy-medium-hard Supply label
+- exact Stat/Counter/Supply/penalty values are readable
+- required Supply
+- Item shows exact Stat/Counter/Supply
+- deterministic Supply/Fatigue arithmetic
+- Required/Prepared/Deficit values match runtime
+- actual Supply preRecovery/outcome buffer use can be read when relevant
+Tutorial explains Stat pressure / Counter contribution / readiness and Supply->Fatigue order.
+Use current `집중 사탕` (`공포 +10 / Supply 3`) in three controlled setups.
+- direct effect shows 공포 Counter / Supply only
+- effective 투력/강인함/기동/정신 and underlying Hazard preparation may improve if the canonical unified Supply Deficit system actually changes them
+- any displayed Core-Stat delta is attributed to `보급 부족 완화` or equivalent system source
+- exact hidden deficit formula remains undisclosed
+- effective 기동/정신 may rise according to the current Fatigue owner
+```
+
+```new
+(User 2026-09-24, v2.9.0)
+- exact Stat/Counter/`피로 회복 N`/penalty values are readable
+- deterministic Fatigue-recovery arithmetic (`피로 A -> 출발 B`)
+Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 3`) in two controlled setups.
+- direct effect shows 공포 Counter / 피로 회복 only
+- no `보급 부족 완화` row exists
+- effective Core Stats may rise according to the current Fatigue owner (`DUNGEON_HAZARD_v2.8.0.md` bands)
+- Item shows exact Stat/Counter/`피로 회복 N`
+- `피로 A -> 출발 B` matches runtime preRecovery; no required / deficit value is shown
+- current/departure Fatigue readable as `피로 A -> 출발 B`; no `보급 X / 필요 Y` cell
+- main label is 귀환 후 피로, with ` · {band}` from Fatigue 20 up
+- detailed path available on demand; the recovery row is `음식·음료로 -N`, never `남은 보급으로`
+- actual Food/Drink preRecovery/outcome buffer use can be read when relevant
+- Counter / 피로 회복 / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
+Tutorial explains Stat pressure / Counter contribution / readiness and one Supply/Fatigue fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신.
 ```

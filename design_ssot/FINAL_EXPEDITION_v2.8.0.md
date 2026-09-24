@@ -2,7 +2,7 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/FINAL_EXPEDITION_v2.8.0-patch.md,history/FINAL_EXPEDITION_v2.5.0.md
@@ -360,16 +360,14 @@ who was selected
 - D30 Relic decision
 - 기타 기존 시스템이 허용하는 Final-relevant management choice
 
-Supply Burden boundary:
-- D30 Final does not roll an additional random Supply Burden modifier
+Food/Drink boundary (User 2026-09-24, v2.9.0):
 - Food/Drink may still be chosen for their ordinary Stat/Counter/other authoritative effects
-- no Final-only Supply requirement is invented
 - authoritative ownership -> DUNGEON_HAZARD / ITEM
 
 Final Lock 시점에 확정:
 - 출전 NPC
 - NPC Final Snapshot
-- 적용 Item / Supply state
+- 적용 Item / Food·Drink Fatigue recovery state
 - Final Family Pair
 - Hazard preparation state
 - Boss Trait application state
@@ -403,7 +401,7 @@ Prepare에는 기존 시스템에서 반영하는 요소를 그대로 사용한�
 - 기동 (`mobility`)
 - 정신 (`spirit`)
 - Equipment
-- Supply / Item
+- Food·Drink Fatigue recovery / Item
 - Trait
 - Injury / Fatigue 등 Condition
 
@@ -416,7 +414,7 @@ Shared order:
 
 ```text
 1. locked NPC base/growth/current Condition state
-2. locked Item / Supply / equipment effects
+2. locked Item / Food·Drink Fatigue recovery / equipment effects
 3. Final Family Hazard preparation result
 4. participant-side Boss Final Snapshot modifier
 5. Individual Final Power
@@ -806,7 +804,7 @@ REUSE:
 - 기존 Hazard Formula
 - 기존 Prepare
 - 기존 NPC Stats / Growth
-- 기존 Equipment / Supply
+- 기존 Equipment / Food·Drink 피로 회복
 - 기존 Trait / Condition
 - 기존 Final Roll 구조
 

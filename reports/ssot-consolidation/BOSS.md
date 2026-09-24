@@ -391,3 +391,23 @@ rarity-bound v2.5 ones were dropped. The User supplied both.
 - GLUTTONY = 모험가 자체를 성장시키기보다 보급품의 능력치 증가에 의존했는가?
 identity=tests whether Final strength comes from grown NPCs rather than Item-sourced Core-Stat boosts
 ```
+
+## AMENDMENT — v2.9.0 Supply→Fatigue / Fatigue bands / Hazard pressure (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): Supply is Fatigue recovery only. GLUTTONY's untouched-effect lists and BOSS-Q73 name Fatigue recovery instead of Supply; the shared Final calculation order names the Food/Drink Fatigue-recovery effect instead of a Supply effect. Numbers and scope are unchanged.
+
+```text
+Not reduced by GLUTTONY:
+- 보급
+- Supply
+- Hazard Counter / Supply / Insurance / Utility / harmful RiskReward penalty are unchanged
+2. locked Item / Supply / equipment effects
+```
+
+```new
+Not reduced by GLUTTONY (User 2026-09-24, v2.9.0):
+- 피로 회복
+- Fatigue recovery (Food/Drink Supply)
+2. locked Item / Food·Drink Fatigue recovery / equipment effects
+- Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unchanged
+```
