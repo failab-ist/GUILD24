@@ -1,0 +1,26 @@
+== mixA (premiumCase > memorialBoard > infirmaryPlaque > trainingRack)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30   9.0%  clear   4.5%  decorations 0.52  capital +403
+  run  5  D30  11.0%  clear   6.5%  decorations 1.36  capital +438
+  run  8  D30  25.5%  clear  12.5%  decorations 2.57  capital +595
+  run 10  D30  34.0%  clear  21.0%  decorations 3.13  capital +697
+  run 12  D30  45.0%  clear  30.5%  decorations 3.63  capital +824
+  run 15  D30  44.0%  clear  32.5%  decorations 3.95  capital +825
+  #1 premiumCase      median Run 3  acquired 100%
+  #2 memorialBoard    median Run 5  acquired 100%
+  #3 infirmaryPlaque  median Run 7  acquired 100%
+  #4 trainingRack     median Run 10  acquired 99%
+  first clear within 15 Runs: 85.0%  median first-clear Run 9
+== mixB (firstAidKit > thriftSafe > infirmaryPlaque > dawnSign)
+  run  1  D30  12.5%  clear   6.5%  decorations 0.00  capital +445
+  run  3  D30  12.0%  clear   6.0%  decorations 0.52  capital +444
+  run  5  D30  14.0%  clear   5.5%  decorations 1.39  capital +502
+  run  8  D30  32.0%  clear  11.0%  decorations 2.69  capital +711
+  run 10  D30  42.5%  clear  17.5%  decorations 3.36  capital +828
+  run 12  D30  49.5%  clear  22.0%  decorations 3.80  capital +922
+  run 15  D30  54.5%  clear  24.5%  decorations 3.99  capital +935
+  #1 firstAidKit      median Run 3  acquired 100%
+  #2 thriftSafe       median Run 5  acquired 100%
+  #3 infirmaryPlaque  median Run 7  acquired 100%
+  #4 dawnSign         median Run 9  acquired 100%
+  first clear within 15 Runs: 84.0%  median first-clear Run 10

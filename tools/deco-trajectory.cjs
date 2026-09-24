@@ -9,6 +9,10 @@ const ORDERS={
  none:[],
  economy:['premiumCase','thriftSafe','guildPlaque','dawnSign'],
  survival:['firstAidKit','memorialBoard','infirmaryPlaque','trainingRack'],
+ // mixed: the stronger single of each Slot, cheapest first (User 2026-09-24 combination check)
+ mixA:['premiumCase','memorialBoard','infirmaryPlaque','trainingRack'],
+ // mixed the other way round: economy where the economy piece is closest
+ mixB:['firstAidKit','thriftSafe','infirmaryPlaque','dawnSign'],
 };
 function load(){for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
  require(path.join(root,'dist',f+'.js'));return globalThis.GUILD24||globalThis;}
@@ -19,10 +23,11 @@ if(process.env.DECO_WORKER){
   process.send({name,part,T,idx,acq:t.acquisition.map(a=>a.runs),first:t.firstClear.runIndex},()=>process.exit(0));});
 }else{
  const args=process.argv.slice(2),flag=k=>{const i=args.indexOf(k);return i>=0?args[i+1]:null;};
- const pos=args.filter((a,i)=>!a.startsWith('--')&&!(i>0&&['--policy','--build','--out'].includes(args[i-1])));
+ const pos=args.filter((a,i)=>!a.startsWith('--')&&!(i>0&&['--policy','--build','--out','--orders'].includes(args[i-1])));
  const T=Number(pos[0])||200,R=Number(pos[1])||15,policy=flag('--policy')||'balanced',build=flag('--build')||'hybrid',aware=args.includes('--aware');
  const PARTS=Math.max(1,Math.floor(os.cpus().length/Object.keys(ORDERS).length))||1,per=Math.ceil(T/PARTS);
- const jobs=[];for(const name of Object.keys(ORDERS))for(let p=0;p<PARTS;p++)jobs.push({name,part:p,T:per});
+ const only=flag('--orders')?flag('--orders').split(','):Object.keys(ORDERS);
+ const jobs=[];for(const name of only)for(let p=0;p<PARTS;p++)jobs.push({name,part:p,T:per});
  const acc={};let live=0;
  const next=()=>{if(!jobs.length){if(!live)done();return;}const j=jobs.shift();live++;
   const c=fork(__filename,[],{env:{...process.env,DECO_WORKER:'1'}});
