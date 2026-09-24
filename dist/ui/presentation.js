@@ -12,6 +12,13 @@ const negative=new Set(['fatigue','injuryRisk','variance']);
 // All 9 Hazards are explained the same way. Rendered inline, so there is no hover-only path.
 const hazardPressure={poison:'강인함 압박',bind:'기동 압박',corrosion:'강인함 압박',mire:'기동 압박',fire:'강인함 압박',fear:'정신 압박',dark:'정신 중심 + 기동 보조 압박',cold:'강인함 압박',whiteout:'정신 중심 + 기동 보조 압박'};
 function hazardRows(keys){return keys.map(k=>({key:k,name:D.hazards[k],pressure:hazardPressure[k]||''}));}
+/* The Core Stat each Hazard presses (DUNGEON_HAZARD Hazard Defense table; the engine's main
+   Stat for the two spirit-centred Hazards). v2.9.0 reads it for the Stat-grid pressure tag and
+   for the matching-effect emphasis; 투력 is never a pressed Stat. */
+const hazardStat={poison:'survival',bind:'mobility',corrosion:'survival',mire:'mobility',fire:'survival',fear:'spirit',dark:'spirit',cold:'survival',whiteout:'spirit'};
+function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];if(s)(m[s]=m[s]||[]).push(k);}return m;}
+/* effect keys that answer a Gate: its Hazards' own Counters and the Stats they press */
+function fitKeys(keys){const s=new Set();for(const k of keys){s.add(k);if(hazardStat[k])s.add(hazardStat[k]);}return s;}
 /* ITEM_v2.7 §INSURANCE HIERARCHY: Aftercare is a utility, not a magnitude. Rendering it as
    `+1` would read as a hidden injury-risk percentage, which the owner says it does not have. */
 /* SA-Q05: `potion` is an internal marker (potionbody's own trigger test reads it directly off
@@ -66,7 +73,11 @@ function preview(n,d,fac,item,final){
  if(fatigueBand(after.effectiveFatigue)<fatigueBand(before.effectiveFatigue))
   derived.push({key:'fatigueBand',label:'피로 완화',
    text:'피로 '+before.effectiveFatigue+' → '+after.effectiveFatigue+' · 기동·정신 페널티가 한 단계 풀렸다'});
- return {direct,derived};
+ /* v2.9.0 ONE DELTA LIST (COPY_AUDIT §4-17): the only Fatigue arithmetic under a chosen Item is
+    the departure line, and only when this Item moves it. */
+ const departure=!final&&after.fatigueBeforeExpedition!==before.fatigueBeforeExpedition
+  ?'피로 '+(n.fatigue||0)+' → 출발 '+after.fatigueBeforeExpedition:null;
+ return {direct,derived,departure};
 }
 function returning(n){if(!n.introduced||n.newToday||!n.records.length)return null;const r=n.records.at(-1),changes=(r.changes||[]).filter(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));if(r.injury>n.injury)changes.push(n.injury?'부상 완화':'부상 회복');if(r.recovery>0&&!n.recovery)changes.push('휴식 종료');return {day:r.day,outcome:r.outcome,changes,impact:supplyLines(r)[0]?.text||null};}
 /* ---- NIGHT: one resolved state, told four ways --------------------------------
@@ -262,6 +273,6 @@ function amount(key,value,moved=true){
  if(percent.has(key))return (Math.round(value*1000)/10)+'%p';
  return stat(value,moved);
 }
-G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,
+G.Presentation={returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardPressure,hazardRows,hazardStat,pressedBy,fitKeys,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

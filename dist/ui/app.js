@@ -169,7 +169,7 @@ function playCue(){const c=cue;cue=null;
  // picking a product opens the price panel under it - the panel arrives, the list does not jump
  if(c==='select'){const open=$('.good.open + .tillpanel');if(open)A(open,{opacity:[0,1],translateY:[-8,0],duration:190,ease:'outQuad'});}
  // a sale lands in the bag: the slot row settles and the customer answers
- if(c==='sale'){const slots=$('.kit .slots');if(slots)A(slots,{scale:[1.05,1],duration:240,ease:'outQuad'});
+ if(c==='sale'){const slots=$('.counter .slots');if(slots)A(slots,{scale:[1.05,1],duration:240,ease:'outQuad'});
   const said=$('.say');if(said)A(said,{opacity:[0,1],translateY:[6,0],duration:220,ease:'outQuad'});}
  // a refusal is the same channel saying no, so it moves rather than appears
  if(c==='refuse'){const said=$('.say');if(said)A(said,{translateX:[0,-5,4,-2,0],duration:280,ease:'outQuad'});}
@@ -233,7 +233,8 @@ function render(){
  else if(bossRevealDue())modal='boss';
  else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
- renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech();
+ const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
+ renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -393,11 +394,11 @@ function readout(n,extra=null,cls=''){
  return '<div class="readout'+(cls?' '+cls:'')+'">'
  +'<div class="top">'
   +'<span class="fore">전투 전망<b>'+o.combat+'</b>'
-   +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.')+'</span>'
-  /* DUNGEON_HAZARD_v2.7 §Pre-supply player-facing failure Death risk: the exact conditional
-     percentage, said as a conditional - never as the chance this expedition ends in death. */
-  +'<span class="fore">실패 시 사망 위험<b>'+Math.round(o.deathRisk*100)+'%</b>'
-   +tip('실패 시 사망 위험','실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.')+'</span>'
+  /* v2.9.0 (User 2026-09-24, COPY_AUDIT §4-1): the exact failure-conditioned Death risk is the
+     second line of this help, not an always-on cell - the readout reads 전투 전망 and 환경 대응.
+     Same frozen SALE-entry value, said as a conditional, never as the chance the expedition
+     ends in death. The NPC detail states it too (§5-7). */
+   +tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')+'</span>'
   /* The environment half of the pair the comment above describes. It is `outlook.worst` - the
      weakest of the Hazard states the destination plate lists, in the same canonical
      vocabulary (충분/대응/불안/취약) and off the same frozen SALE-entry snapshot. It reads
@@ -472,7 +473,7 @@ function saleScreen(){
     expedition - so nothing is duplicated on screen. */
  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+waitingLine(waiting)+'</div>'
  +'</section>'
- +'<div class="counter-edge" aria-hidden="true"></div>'
+ +counterBand(n)
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
   /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
      the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
@@ -521,6 +522,10 @@ function waitingLine(waiting){
    about. A plain redraw in the same speech state must not bring a dismissed balloon back, so
    the marker is keyed by speaker AND line, and only a genuinely new line clears it. */
 const SAY_MS=3000;
+/* v2.9.0 TRANSACTION BEAT A2 (User 2026-09-24): the customer's answer to a sale or a refusal stays
+   longer than a greeting. Which kind a line is comes from the cue of the draw that first shows it,
+   so no speech state is added. */
+const SAY_REPLY_MS=5000;
 let sayKey=null,sayHidden=false,sayTimer=null,sayArmed=null;
 function speech(n){
  const said=game.run.say;
@@ -543,12 +548,12 @@ function hideSpeech(){
  sayArmed=null;sayHidden=true;
  const el=$('.say');if(el)el.remove();
 }
-function armSpeech(){
+function armSpeech(ms=SAY_MS){
  if(!$('.say:not(.status)')){if(sayTimer){clearTimeout(sayTimer);sayTimer=null;}sayArmed=null;return;}
  if(sayArmed===sayKey)return;
  if(sayTimer)clearTimeout(sayTimer);
  sayArmed=sayKey;
- sayTimer=setTimeout(hideSpeech,SAY_MS);
+ sayTimer=setTimeout(hideSpeech,ms);
 }
 function standee(n){
  const art=Scene.npcArt(n),job=D.jobBy[n.job].name,rank=D.npcRarities[n.rarity]||'';
@@ -599,11 +604,14 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
     nothing to dismiss. `healedBy` is reset on every arrival. */
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>':'';
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
- +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
- /* how many slots are left is a decision on every sale, so it says the count as well as
-    showing it - a row of boxes has to be counted before it can be used. */
- +'<span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
-  +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span>'+heal+'</div>';}
+ +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'+heal+'</div>';}
+/* v2.9.0 TRANSACTION BEAT A3 (User 2026-09-24): the Bag is the handling surface, so it sits ON the
+   counter beside the customer at every width - the band under the front that used to be an empty
+   edge - and not in the state strip. The hand-over lands here. It still says the count as well as
+   showing it: a row of boxes has to be counted before it can be used. Same slots, same aria name. */
+function counterBand(n){const slots=Adventurer.slots(n);
+ return '<div class="counter-edge counter" aria-label="계산대"><span class="slots" aria-label="보급 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
+  +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span></div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
 // the loudest thing on screen as a display word, then WHY on the slate, then WHAT CHANGED
@@ -784,7 +792,7 @@ const coachSteps={
  /* UI-Q-v28-27. `.top` is the frozen SALE-entry snapshot itself; `.ingredients` and
     `.great-signal` below it move with the committed Bag, so the cutout stops above them. */
  ['forecast','.readout .top','손님이 계산대에 왔을 때의 원정 전망. 팔아도 이 칸은 그대로고, 변화는 상품을 고르면 아래에 나온다.'],
- ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
+ ['pricing','.tills','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. 누르면 바로 건네진다.'],
  /* contextual marks - the hidden Supply-deficit formula is not taught, only the visible consequence */
  ['supply','.ingredients .supply-note','보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.'],
  ['great','.great-signal','대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.'],
@@ -922,8 +930,13 @@ function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sig
  +'</div></div>';}
 function statGrid(n){
    const tList = Presentation.traits(n);
-   const prep = Dungeon.prepare({...n,traits:tList},game.claimedGateFor(n),game.run.facilities);
+   const gate = game.claimedGateFor(n);
+   const prep = Dungeon.prepare({...n,traits:tList},gate,game.run.facilities);
    const values = prep.effects;
+   /* v2.9.0 (User 2026-09-24, UI_UX §STAT PRESENTATION): under a Stat this customer's Gate
+      presses, a small tag with the pressing Hazard name(s) - the one place the grid links to
+      the Gate. No number, no verdict; 투력 is never pressed. */
+   const pressed = gate ? Presentation.pressedBy(Presentation.known(gate,game)) : {};
    /* One display rule for every stat the player reads: a plain value is a whole number, and a
       value something moved keeps the one decimal that shows it moved. Presentation owns it, so
       this grid and the 보급 후 변화 list below it cannot disagree about 19 versus 19.0.
@@ -946,7 +959,8 @@ function statGrid(n){
        never existed, which is why the old `?` opened on nothing. Nothing is recomputed here. */
     const list = moved ? (prep.sources?.[k] || []) : [];
     const label = Presentation.labels[k];
-    const face = '<label>'+label+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
+    const press = pressed[k] ? '<i class="press">'+pressed[k].map(h=>E(D.hazards[h])).join(' · ')+'</i>' : '';
+    const face = '<label>'+label+press+'</label><strong>'+Presentation.stat(values[k],moved)+'</strong>';
     const cls = 'detail-stat'+(sense?' '+sense:'');
     if(!list.length)return '<div class="'+cls+'">'+face+'</div>';
     /* the accessible name carries what colour alone cannot: which way it moved, and that the
@@ -1063,6 +1077,11 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
  return e;}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
+   /* v2.9.0 SALE — MATCHING-EFFECT EMPHASIS (User 2026-09-24): the effect text that answers this
+      customer's Gate - a Counter for one of its Hazards, or the Core Stat one of them presses -
+      is set in the emphasis style. Nothing is reordered, no badge, no verdict word. */
+   const gate=!isFinal&&n?game.claimedGateFor(n):null,fit=gate?Presentation.fitKeys(Presentation.known(gate,game)):new Set();
+   const effectText=r=>fit.has(r.key)?'<b class="fit">'+E(r.label+' '+r.text)+'</b>':E(r.label+' '+r.text);
    return '<section class="shelf">'
    +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
    +(isFinal?'':relicRef())+'</div><div class="goods">'
@@ -1070,9 +1089,10 @@ function shelf(isFinal=false){
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" aria-expanded="'+open+'">'
-  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">'+E(Copy.finalPrep.noEffect)+'</em>':Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects).slice(0,2).map(r=>E(r.label+' '+r.text)).join(' · '))+'</span></span>'
+  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">'+E(Copy.finalPrep.noEffect)+'</em>':Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects).slice(0,2).map(effectText).join(' · '))+'</span></span>'
   +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span></span></button>'+(open?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
+const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
 function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.phase==='final'?s.npcs.find(x=>x.id===supplyNPC):game.current();
  if(!st||!n)return '';
  const it=D.itemBy[st.item],isFinal=s.phase==='final',full=n.pack.length>=Adventurer.slots(n);
@@ -1095,7 +1115,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  const finalBlock=isFinal?(noop?Copy.finalPrep.noEffect:full?'가방 가득':poor?Copy.finalPrep.wallet.replace('{need}',finalPrice).replace('{have}',n.money):''):'';
  const actions=isFinal?btn('<em>50%</em><strong>'+finalPrice+'G</strong><small>보급</small>','supply','stamp',
     'aria-label="'+E(n.name)+'에게 보급 '+finalPrice+'G'+(finalBlock?' · '+finalBlock:'')+'" '+(finalBlock?'disabled':''))
- :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100);
+ :['half','full','overcharge'].map(mode=>{const q=game.interest(n,it,mode),pct=Math.round(D.pricing[mode].mult*100),role=PRICE_ROLE[mode];
    /* SALE_v2.7 requires the reason for a disabled price to be readable, and a price closed by
       the ceiling was never itself refused - saying 오늘 거절됨 there would be untrue. A mode is
       ceiling-locked when this customer refused this SKU at a LOWER price during this visit. */
@@ -1104,8 +1124,11 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    const blocked=q.debit>spendable(n)?'손님 소지금 부족'
     :n.refused.includes(it.id+':'+mode)?(ceiling?'더 싼 값을 거절함':'오늘 거절됨')
     :full?'가방 가득':'';
-   return btn('<em>'+pct+'%</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
-    'data-mode="'+mode+'" aria-label="'+pct+'% '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
+   /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face reads 할인 50% · 35G / 정가 · 70G /
+      바가지 150% · 105G, the sub-line 이익 NG or the reason a price is closed. Three modes, no
+      extra depth; `pct` stays the mode's number, the word is what the coach already says. */
+   return btn('<em>'+role+'</em><strong>'+q.price+'G</strong><small>'+(blocked||'이익 '+(q.price-st.cost)+'G')+'</small>','sell',mode==='full'?'stamp':'',
+    'data-mode="'+mode+'" aria-label="'+role+' · '+q.price+'G'+(blocked?' · '+blocked:'')+'" '+(blocked?'disabled':''));}).join('');
  const forwho='<p class="forwho"><span>'+E(n.name)+(isFinal?'에게 보급':'에게 판매')+'</span><b class="wallet" style="margin-left:auto">'+walletChip(n)+'</b></p>';
  /* a Final no-effect Item: the reason and the closed 보급, and no preview of an effect it will not have */
  /* FINAL: why a transfer is closed is the Item's status, said once beside it - never folded
@@ -1127,7 +1150,9 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    +'</ul>':'')
  +(moved.derived.length?'<ul class="effects derived">'
    +moved.derived.map(r=>'<li><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')
-   +'</ul>':'')+(isFinal?'':readout(n,it.id))
+   +'</ul>':'')
+ /* v2.9.0 ONE DELTA LIST: the departure line, only when this Item moves it (COPY_AUDIT §4-17) */
+ +(moved.departure?'<ul class="effects derived"><li><span></span><b>'+E(moved.departure)+'</b></li></ul>':'')
  /* SA-Q30: conditional non-delta Item truth - a Counter this customer does not need today, an
     Insurance that only fires on a bad outcome - is still stated plainly rather than folded
     away, under its approved v2.8 heading. */
@@ -1367,6 +1392,8 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
   cond.push('현재 피로: '+n.fatigue+' '+f_pen);
   cond.push('피로 회복: 요구량을 채우고 남은 보급이 줄여 준다');
  }
+ /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
+ if(n.outlook)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
  return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so

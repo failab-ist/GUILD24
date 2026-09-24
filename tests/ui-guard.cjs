@@ -362,7 +362,9 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  assert.ok(app.includes('예상 목적지')&&!app.includes("'말한 목적지'"),'the destination label is 예상 목적지');
  assert.ok(!app.includes("modal==='saleItem'"),'item and price resolve inline, with no modal round trip');
  assert.ok(app.includes("selected=selected===id?null:id"),'tapping a product toggles its panel in place');
- assert.ok(app.includes("Math.round(D.pricing[mode].mult*100)")&&app.includes("<em>'+pct+'%</em>"),'price modes read as 50/100/150%');
+ /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face is the role word, the number stays the mode's */
+ assert.ok(app.includes("Math.round(D.pricing[mode].mult*100)")&&app.includes("<em>'+role+'</em>"),'price modes read by their role word');
+ assert.ok(app.includes("const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'}"),'할인 50% / 정가 / 바가지 150% are the three faces');
  for(const reason of ['소지금 부족','오늘 거절됨','가방 가득'])assert.ok(app.includes(reason),'a blocked price says why: '+reason);
  assert.ok(app.includes('Adventurer.slots(n)'),'remaining consumer slots are readable');
  /* COPY_AUDIT_APPROVED §4-3 is the exact owner of the death-risk Help, and its approved wording
@@ -370,9 +372,10 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
     fails on the approved copy itself. The intent is unchanged and is asserted more tightly: the
     game must never PRESENT one, so the phrase is pinned to that single approved sentence and
     forbidden anywhere else. */
- const DEATH_HELP='실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.';
- assert.ok(app.includes(DEATH_HELP),'the approved §4-3 death-risk Help is adopted verbatim');
- assert.equal((app.match(/사망 확률/g)||[]).length,1,'사망 확률 appears only inside that negation');
+ /* v2.9.0: §4-3 is retired (the value is the second line of the 전투 전망 help, §4-1, and the NPC
+    detail, §5-7), so no surface names a whole-expedition 사망 확률 at all. */
+ assert.ok(!app.includes('실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.'),'the retired §4-3 death-risk Help is gone');
+ assert.equal((app.match(/사망 확률/g)||[]).length,0,'no surface names a 사망 확률');
  for(const bad of ['성공 확률','안전 점수'])assert.ok(!app.includes(bad),'no exact probability or master safety score');
 });
 
@@ -689,8 +692,9 @@ test('UI_UX / COPY 2026-09-12: the amendment surfaces exist, and say the locked 
     decision surface may expose is the pre-supply 실패 시 사망 위험. The Great Success signal
     still carries no percentage, no margin and no readiness score, and the exact expedition
     success chance stays hidden. */
- assert.ok(/실패 시 사망 위험<b>'\+Math\.round\(o\.deathRisk\*100\)\+'%/.test(readout),'the one exact percentage is the conditional Death risk');
- const others=readoutCode.replace(/실패 시 사망 위험<b>'\+Math\.round\(o\.deathRisk\*100\)\+'%/,'');
+ /* v2.9.0: the same one percentage, now the second line of the 전투 전망 help (COPY_AUDIT §4-1) */
+ assert.ok(/'실패 시 사망 위험 '\+Math\.round\(o\.deathRisk\*100\)\+'%'/.test(readout),'the one exact percentage is the conditional Death risk');
+ const others=readoutCode.replace(/'실패 시 사망 위험 '\+Math\.round\(o\.deathRisk\*100\)\+'%'/,'');
  assert.ok(!/[0-9]+%/.test(others),'and no other percentage is exposed');
  assert.ok(!/margin|readiness/i.test(readoutCode),'nor a margin or a readiness score');
  assert.ok(!/successChance|winChance|clearChance/i.test(readoutCode),'nor an expedition success chance');
@@ -872,14 +876,16 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
   assert.ok(!envTip.includes(banned),'the destination ? does not explain the system: '+banned);
  /* Each ? names its own reading and stops. Anything longer than one line is the store guide's
     job, so the sweep holds every counter tooltip to a single short line. */
- const lines=[...app.matchAll(/tip\('[^']+',((?:'[^']*',?)+)\)/g)].map(m=>m[1].split("','").length);
- assert.ok(lines.length===3,'there are exactly three counter tooltips');
- assert.ok(lines.every(n=>n===1),'and each one is a single line');
- // COPY_AUDIT_APPROVED §4-1 / §4-2 / §4-3, verbatim
- for(const [label,text] of [['전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.'],
-                            ['실패 시 사망 위험','실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.'],
-                            ['환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.']])
-  assert.ok(app.includes("tip('"+label+"','"+text+"')"),label+' carries the approved §4 line');
+ /* v2.9.0 (COPY_AUDIT §4-1 / §4-2 / §4-3): two readout cells, two ?s. The 전투 전망 help carries
+    the exact failure-conditioned Death risk as its second line; the Death cell and its own ? are
+    retired (§4-3 삭제). */
+ const tips=[...fn('readout').matchAll(/tip\('([^']+)'/g)].map(m=>m[1]);
+ assert.deepEqual(tips,['전투 전망','환경 대응'],'exactly two counter tooltips, on the two readout cells');
+ assert.ok(!fn('readout').includes('<span class="fore">실패 시 사망 위험'),'no always-on Death cell');
+ assert.ok(app.includes("tip('전투 전망','손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.','실패 시 사망 위험 '+Math.round(o.deathRisk*100)+'%')"),'전투 전망 carries the approved two lines');
+ assert.ok(app.includes("tip('환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.')"),'환경 대응 carries the approved §4-2 line');
+ assert.ok(!app.includes('실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.'),'the retired §4-3 line is gone');
+ assert.ok(fn('npcDetail').includes("'실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%'"),'§5-7 the NPC detail states the same value');
  assert.ok(/\.tip>p>span[^\n]*display:block/.test(css),'a multi-line tooltip would still break its facts apart');
  /* Opening a ? may never make its panel taller - the explanation is a balloon over the block,
     not an accordion inside it - and the group is exclusive so two never stack on one anchor. */
@@ -888,8 +894,8 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\.detail-stats \.tip>p\{top:calc\(100% - 4px\)\}/.test(css),'and so does the Stat balloon, anchored on the grid itself');
  assert.ok(/\.dest-plate \.tip>p\{bottom:calc\(100% - 4px\)\}/.test(css),'and the plate balloon rises, clear of the counter edge');
  assert.ok(!/\.tip\[open\][^\n]*width:100%/.test(css),'nothing makes the open state a full-width block again');
- /* All three counter readings are read here now, so all three ? controls are here (UI-Q109). */
- assert.equal((readout.match(/\+tip\(/g)||[]).length,3,'the outlook explains the fight, the Death risk and the environment');
+ /* v2.9.0: two counter readings, two ? controls; the Death risk is the second line of the first. */
+ assert.equal((readout.match(/\+tip\(/g)||[]).length,2,'the outlook explains the fight (with the Death risk line) and the environment');
  assert.ok(/tip\('환경 대응'/.test(readout),'and the environment help sits with the reading it explains');
  /* SA-Q30: the permanent forecast-disclaimer paragraph this used to close on is gone - the
     existing anchored ?s already say what each figure is, and nothing replaces it with a
@@ -1201,10 +1207,12 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
         && /\.event-reveal \.flavor\{[^}]*white-space:pre-line/.test(css),
   'a situation authored across lines keeps its lines, on the board and in the reveal');
 
- // D-9. The slots say the count as well as showing it - a row of boxes has to be counted first.
- assert.ok(fn('kitLine').includes("가방 '+n.pack.length+' / '+slots"),'the bag states used / total');
- assert.ok(/\.kit \.slots i\{[^}]*width:34px/.test(css),'and the slots are big enough to read at a glance');
- assert.ok(!css.includes('.kit .slots{display:grid'),'without becoming a panel of their own');
+ // D-9 / v2.9.0 A3. The slots say the count as well as showing it, and they sit ON the counter band.
+ assert.ok(fn('counterBand').includes("가방 '+n.pack.length+' / '+slots"),'the bag states used / total');
+ assert.ok(!fn('kitLine').includes('class="slots"'),'the state strip no longer carries the bag');
+ assert.ok(fn('saleScreen').includes('+counterBand(n)')&&!fn('saleScreen').includes('<div class="counter-edge" aria-hidden'),'the counter band under the front holds it');
+ assert.ok(/\.counter \.slots i\{[^}]*width:34px/.test(css),'and the slots are big enough to read at a glance');
+ assert.ok(!css.includes('.counter .slots{display:grid'),'without becoming a panel of their own');
 
  // D-12. One Hazard reads as one row, and the block is set apart from the forecasts above it.
  // (the block moved to the destination plate when the environment stopped being shown twice)
@@ -1842,7 +1850,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
     dist/systems/shop.js), and it described a figure that is not inside this step's highlight -
     so the approved line keeps the step on the pressure the Hazard rows actually show. */
  for(const [id,text] of [
-   ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
+   ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. 누르면 바로 건네진다.'],
    ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
    ['supply','보급이 모자라면 네 능력치가 모두 낮아진다. 남는 보급은 피로를 줄인다.'],
    ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
@@ -2731,7 +2739,7 @@ test('UI_UX §RETIRED ACTIVE UI: no shipped UI file exposes Franchise Grade, Ach
 test('의무실 현판: the heal note sits in the kit under the bag, wraps, and has its own cue',()=>{
  const kit=fn('kitLine');
  assert.ok(/healedBy==='infirmaryPlaque'/.test(kit)&&kit.includes('의무실 현판 덕분에 부상이 나았다.'),'the note reads the heal the arrival recorded');
- assert.ok(kit.indexOf("+heal+'</div>'")>kit.indexOf('class="slots"'),'it follows the bag, on the bag row');
+ assert.ok(kit.indexOf("+heal+'</div>'")>kit.indexOf('class="vitals"'),'it follows the vitals in the strip (the bag moved to the counter, v2.9.0)');
  assert.ok(/\.kit \.heal-note\{flex:1 1 64px;[^}]*overflow-wrap:anywhere/.test(css),'beside the bag, wrapping');
  assert.ok(/@media\(min-width:1024px\)\{\.kit \.heal-note\{position:absolute;/.test(css),'on a desk it takes the empty foot of the strip');
  assert.ok(/prefers-reduced-motion:reduce\)\{\.kit \.heal-note\{animation:none\}/.test(css),'no motion when reduced');
