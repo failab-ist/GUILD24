@@ -315,7 +315,6 @@ C. another explicitly owned Trait / Relic / Boss modifier
 - if there is no Fatigue band change, selling it must not create a Core-Stat delta
 - if its 피로 회복 releases a Fatigue band, effective Core Stats may rise through Fatigue recovery
 - that indirect change must be presented as `피로 완화` or an equivalent source-readable system effect, never as if 집중 사탕 itself granted those Stats
-`북부 설원 폐허 I · 냉기 · 강인함으로 버틴다`
 ```
 
 ## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
@@ -363,4 +362,14 @@ User decision 2026-09-24 (v2.9.0): the returning-customer quick surface is desk-
 
 ```new
 - the quick surface is desk-only (≥1024); on phone the NPC detail 원정 기록 holds the last expedition (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
+
+Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
+`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+retired. The revision-1 declarations this replaces were edited out of the fences above in place.
+
+```new
+`북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 10마다 대응 3` (User 2026-09-24 revision 2, v2.9.0: the numbered row, no label, no `?`)
 ```

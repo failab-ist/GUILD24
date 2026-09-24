@@ -720,14 +720,11 @@ Band names (정상 / 지침 / 과로 / 소진 / 탈진) and their effects are ow
 귀환 후 피로 N · {band}
 The band is named from 20 up; exact copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
 - pressured Core Stat label (User 2026-09-24, v2.9.0)
-Examples (User 2026-09-24 revision, v2.9.0; MORNING Gate plate, the number first):
 - 냉기 · 대응 15 필요 · 강인함 10마다 대응 3
 - 화이트아웃 · 대응 21 필요 · 정신 10마다 대응 4
 - 부식 · 대응 13 필요 · 강인함 10마다 대응 3
 - 진창 · 대응 21 필요 · 기동 10마다 대응 4
-(the SALE destination-plate row stays `{위험} · {label}`, e.g. `냉기 · 강인함으로 버틴다`)
 Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다`;
-the nine exact sentences and the destination-plate help -> COPY_AUDIT_APPROVED_v2.8.0.md §4.
 출발 0
 원정에서 +5
 음식·음료로 -3
@@ -908,6 +905,23 @@ Do not expose the Gate's exact Counter requirement.
 
 ```new
 - exact hidden Hazard readiness thresholds (0.75 / 0.40) and Defense formula — the Gate-level `대응 {N} 필요` and `{능력치} 10마다 대응 {k}` are public Gate facts (§HAZARD NUDGE; User 2026-09-24 revision, v2.9.0)
-The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are Gate-level facts shown at MORNING / ORDER (Gate detail) and in the destination-plate `?`; no per-customer remaining need is shown — the plate row keeps `{위험} · {label}` and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision, v2.9.0).
 - exact hidden Hazard readiness thresholds / Defense formula (the Gate-level requirement number itself is a public Gate fact; User 2026-09-24 revision, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
+
+Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
+`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+retired. The revision-1 declarations this replaces were edited out of the fences above in place.
+
+```text
+- each Hazard's authoritative Stat-pressure label
+```
+
+```new
+The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are Gate-level facts shown on every Hazard row, the SALE destination plate included (`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`); the plate has no `?` help; no per-customer remaining need is shown and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision 2, v2.9.0).
+Examples (User 2026-09-24 revision 2, v2.9.0; every Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL — the number first):
+(no `{위험} · {label}` row survives; the SALE destination plate has no `?` help)
+the sentence forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16.
+- each Hazard's numbered short row `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`, N for 마왕성 (Day 30 / T2 -> 29), the same row as the MORNING plate (User 2026-09-24, v2.9.0)
 ```

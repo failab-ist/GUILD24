@@ -912,7 +912,7 @@ Do not restore the older layout where forecast/destination are repeated lower on
 - the counter tray sits fixed above the dock; the price keys are always in the same place (User 2026-09-24, v2.9.0)
 
 Core environment example form:
-`북부 설원 폐허 I · 냉기 · 강인함으로 버틴다`
+`북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 10마다 대응 3` (User 2026-09-24 revision 2, v2.9.0: the numbered row, no label, no `?`)
 
 Tap/tooltip may add detail; it may not hide the core risk needed for the sale decision.
 

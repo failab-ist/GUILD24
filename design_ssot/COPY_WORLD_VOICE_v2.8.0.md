@@ -1564,24 +1564,24 @@ Use 점포지원 consistently in all active Player-facing SLOTH lines.
 
 Header / Intro -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-7.
 
-Then show the two selected Family names and each Family's actual T2 Hazard pressure information.
+Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 29).
 
-Authoritative Hazard wording (User 2026-09-24, v2.9.0):
+Authoritative Hazard wording (User 2026-09-24 revision 2, v2.9.0; the MORNING short row with the Final's N):
 
 ```text
-독 · 강인함으로 버틴다
-속박 · 기동으로 피한다
+독 · 대응 29 필요 · 강인함 10마다 대응 3
+속박 · 대응 29 필요 · 기동 10마다 대응 4
 
-부식 · 강인함으로 버틴다
-진창 · 기동으로 피한다
+부식 · 대응 29 필요 · 강인함 10마다 대응 3
+진창 · 대응 29 필요 · 기동 10마다 대응 4
 
-화염 · 기동으로 피한다
+화염 · 대응 29 필요 · 기동 10마다 대응 4
 
-공포 · 정신으로 견딘다
-어둠 · 정신으로 견딘다
+공포 · 대응 29 필요 · 정신 10마다 대응 4
+어둠 · 대응 29 필요 · 정신 10마다 대응 4
 
-냉기 · 강인함으로 버틴다
-화이트아웃 · 정신으로 견딘다
+냉기 · 대응 29 필요 · 강인함 10마다 대응 3
+화이트아웃 · 대응 29 필요 · 정신 10마다 대응 4
 ```
 
 Button:
@@ -1631,7 +1631,7 @@ Meta copy:
 - Player-facing Boss copy에 Run / Final Snapshot / Factor / Modifier 같은 내부 설계어가 노출되는가?
 - ENVY 문구가 능력치 감소가 최종전 동안 유지됨을 명확히 하는가?
 - LUST가 `비단골=4 Stats 감소 / 단골=영향 없음`으로 정확히 설명되는가?
-- 최종 정찰 보고가 실제 두 Family의 T2 Hazard pressure를 그대로 보여주며 별도 공략문을 덧붙이지 않는가?
+- 최종 정찰 보고가 실제 두 Family의 T2 Hazard 행을 마왕성 기준 수치(대응 29 필요)로 그대로 보여주며 별도 공략문을 덧붙이지 않는가?
 - exact signal remains `대성공을 노려볼 만합니다.`
 - `심층원정` term is not replaced by a synonym
 - Run abandon never promises XP/settlement/reward

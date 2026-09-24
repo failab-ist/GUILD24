@@ -584,7 +584,7 @@ Hazard Counter +N
 explicit penalty
 ```
 
-The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are Gate-level facts shown at MORNING / ORDER (Gate detail) and in the destination-plate `?`; no per-customer remaining need is shown — the plate row keeps `{위험} · {label}` and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision, v2.9.0).
+The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are Gate-level facts shown on every Hazard row, the SALE destination plate included (`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`); the plate has no `?` help; no per-customer remaining need is shown and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision 2, v2.9.0).
 
 ### SALE — DECISION-ONLY ITEM DETAIL
 
@@ -1017,15 +1017,15 @@ Every known authoritative Hazard provides:
 - Hazard name
 - short Stat/readiness pressure explanation from DUNGEON_HAZARD
 
-Examples (User 2026-09-24 revision, v2.9.0; MORNING Gate plate, the number first):
+Examples (User 2026-09-24 revision 2, v2.9.0; every Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL — the number first):
 - 냉기 · 대응 15 필요 · 강인함 10마다 대응 3
 - 화이트아웃 · 대응 21 필요 · 정신 10마다 대응 4
 - 부식 · 대응 13 필요 · 강인함 10마다 대응 3
 - 진창 · 대응 21 필요 · 기동 10마다 대응 4
-(the SALE destination-plate row stays `{위험} · {label}`, e.g. `냉기 · 강인함으로 버틴다`)
+(no `{위험} · {label}` row survives; the SALE destination plate has no `?` help)
 
 Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다`;
-the nine exact sentences and the destination-plate help -> COPY_AUDIT_APPROVED_v2.8.0.md §4.
+the sentence forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16.
 
 Interaction:
 PC:
@@ -1602,7 +1602,7 @@ Presentation identity:
 Show:
 - exactly two Final Families
 - each selected Family's actual authoritative T2 Hazard set
-- each Hazard's authoritative Stat-pressure label
+- each Hazard's numbered short row `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`, N for 마왕성 (Day 30 / T2 -> 29), the same row as the MORNING plate (User 2026-09-24, v2.9.0)
 
 Important:
 `two Families` does NOT mean exactly two Hazard keys.

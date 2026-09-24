@@ -67,6 +67,11 @@ Docs-first. Each owner amendment is listed when committed.
   Threat)) and the Core-Stat conversion `{능력치} 10마다 대응 {k}` are public at MORNING / ORDER Gate detail and in the
   SALE plate ?, the number first; no per-customer remaining need. DUNGEON_HAZARD boundary, UI_UX §GATE VS ITEM /
   §HAZARD NUDGE, ECONOMY_ORDER, COPY_AUDIT §4-16, DUNGEON_ITEM_QA DUN-Q21, UI_UX_QA UI-Q-v29-19.
+- Revision 2 (User 2026-09-24): the pressure labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the
+  SALE destination-plate ? help are retired; every Hazard row (SALE plate, D25 scouting report, FINAL 확인된 위협 included)
+  reads the numbered short row, the Final / D25 with N = 29 (Day 30 / T2). DUNGEON_HAZARD, UI_UX, UI_UX_QA, COPY_AUDIT §4-15 /
+  §4-16 / §14-7, COPY_WORLD_VOICE §D25, DUNGEON_ITEM_QA DUN-Q21, SALE, FINAL_EXPEDITION.
+- Fatigue outcome gain re-tuned -1 to +4 / +7 / +9 after the I-2 re-measure (R1); phone SALE balloon 2px / 14px (R2, CSS only).
 
 ## v2.8.0 — closed 2026-09-24
 
