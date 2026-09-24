@@ -906,7 +906,7 @@ User decision 2026-09-24 (v2.9.0 revision): UI-Q-v29-19 GATE HAZARD REQUIREMENT 
 (User 2026-09-24 revision, v2.9.0)
 SETUP:
 PASS:
-- N equals ceil(Hazard Threat) of that Gate on that Day (DUNGEON_HAZARD §HAZARD THREAT), so it rises with Day and Tier; k is 3 for 강인함 and 4 for 기동 / 정신
+- N equals ceil(Hazard Threat) of that Gate on that Day (DUNGEON_HAZARD §HAZARD THREAT), so it rises with Day and Tier; n is 3 for 강인함 and 2 for 기동 / 정신 (Stat n당 대응 1)
 - no Item name and no verdict word
 FAIL:
 - a per-customer "더 필요" number, a readiness ratio, or a requirement number that does not match ceil(Hazard Threat)
@@ -915,7 +915,7 @@ FAIL:
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
 
 Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
-`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```text
@@ -923,8 +923,8 @@ retired. The revision-1 declarations this replaces were edited out of the fences
 ```
 
 ```new
-- each Hazard provides its numbered short row `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}` (User 2026-09-24, v2.9.0)
+- each Hazard provides its numbered short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 1` (User 2026-09-24, v2.9.0)
 MORNING Gate plates and the ORDER 위험 보기 modal on a T1, a T2 and a T3 day; the SALE destination plate of a customer going to one of them; the D25 최종 정찰 보고 and the FINAL 확인된 위협 rows.
-- every Hazard row states the Gate-level requirement first: MORNING plate, SALE destination plate, D25 report and FINAL rows read `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`; Gate detail alone reads the full sentence `{위험} — 대응 {N} 필요 · {능력치} 10마다 대응 {k} · {위험} 대응 상품이 막는다`
+- every Hazard row states the Gate-level requirement first: MORNING plate, SALE destination plate, D25 report and FINAL rows read `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; Gate detail alone reads the full sentence `{위험} — 대응 {N} 필요 · {능력치} {n}당 1 · {위험} 대응 상품이 막는다`
 - no `{위험} · {label}` row and no destination-plate `?` help survive; D25 / FINAL show N = 29 (Day 30 / T2); no per-customer remaining need, no readiness number, no 0.75 / 0.40 threshold appears anywhere (User 2026-09-24 revision 2)
 ```

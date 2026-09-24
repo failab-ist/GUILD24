@@ -111,17 +111,17 @@ One non-투력 Stat per Hazard, 3 / 4 / 2 (User 2026-09-24 revision 3, v2.9.0: �
 Pressure labels are retired (User 2026-09-24 revision 2, v2.9.0): `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` no longer appear anywhere, and the older `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` stay retired. Every player-facing Hazard row is the numbered short row below.
 
 Full Hazard sentence (Gate detail only; the Gate-level requirement number first):
-- `{위험} — 대응 {N} 필요 · {능력치} 10마다 대응 {k} · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); k = 3 for 강인함 (×0.30), 4 for 기동 / 정신 (×0.40) (User 2026-09-24 revision, v2.9.0)
-- e.g. `독 — 대응 13 필요 · 강인함 10마다 대응 3 · 독 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `냉기 — 대응 13 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `부식 — 대응 13 필요 · 강인함 10마다 대응 3 · 부식 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `속박 — 대응 13 필요 · 기동 10마다 대응 4 · 속박 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `진창 — 대응 13 필요 · 기동 10마다 대응 4 · 진창 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화염 — 대응 13 필요 · 기동 10마다 대응 4 · 화염 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `공포 — 대응 13 필요 · 정신 10마다 대응 4 · 공포 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `어둠 — 대응 13 필요 · 기동 10마다 대응 4 · 어둠 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화이트아웃 — 대응 13 필요 · 정신 10마다 대응 4 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
-Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need survive (User 2026-09-24 revision 2, v2.9.0).
+- `{위험} — 대응 {N} 필요 · {능력치} {n}당 1 · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); n = 3 for 강인함 (×1/3), 2 for 기동 / 정신 (×1/2) — integer conversions, each rounded in the player's favour from the earlier ×0.30 / ×0.40 (User 2026-09-24 revision 4, v2.9.0)
+- e.g. `독 — 대응 13 필요 · 강인함 3당 1 · 독 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `냉기 — 대응 13 필요 · 강인함 3당 1 · 냉기 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `부식 — 대응 13 필요 · 강인함 3당 1 · 부식 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `속박 — 대응 13 필요 · 기동 2당 1 · 속박 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `진창 — 대응 13 필요 · 기동 2당 1 · 진창 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 13 필요 · 기동 2당 1 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `공포 — 대응 13 필요 · 정신 2당 1 · 공포 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 13 필요 · 기동 2당 1 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화이트아웃 — 대응 13 필요 · 정신 2당 1 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
+Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need survive (User 2026-09-24 revision 2, v2.9.0).
 
 The destination-plate help (`?`) is retired: the numbered row carries the detail itself (User 2026-09-24 revision 2, v2.9.0).
 
@@ -288,7 +288,7 @@ Expose exact decision ingredients (User 2026-09-24, v2.9.0):
 Do not expose:
 - exact expedition success probability
 - post-supply/final actual Death probability during the SALE decision
-- the readiness ratio thresholds 대응 / 불안 / 취약 (0.75 / 0.40) and the Hazard Defense formula; the Gate's 충분 requirement `대응 {N} 필요` (N = ceil(Hazard Threat)) and the Core-Stat conversion `{능력치} 10마다 대응 {k}` are public Gate-level facts on every Hazard row (MORNING, ORDER Gate detail, SALE destination plate, D25 scouting report, FINAL) — never a per-customer remaining need (User 2026-09-24 revision 2, v2.9.0)
+- the readiness ratio thresholds 대응 / 불안 / 취약 (0.75 / 0.40) and the Hazard Defense formula; the Gate's 충분 requirement `대응 {N} 필요` (N = ceil(Hazard Threat)) and the Core-Stat conversion `{능력치} {n}당 1` are public Gate-level facts on every Hazard row (MORNING, ORDER Gate detail, SALE destination plate, D25 scouting report, FINAL) — never a per-customer remaining need (User 2026-09-24 revision 2, v2.9.0)
 
 Do not show the Player a branch table of hypothetical final Fatigue for 성공 / 퇴각 / 부상.
 
@@ -732,15 +732,15 @@ Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 4 / 2, no Gat
 
 | Hazard | Core-Stat contribution |
 |---|---|
-| 독 | 강인함 ×0.30 |
-| 냉기 | 강인함 ×0.30 |
-| 부식 | 강인함 ×0.30 |
-| 속박 | 기동 ×0.40 |
-| 진창 | 기동 ×0.40 |
-| 화염 | 기동 ×0.40 |
-| 공포 | 정신 ×0.40 |
-| 어둠 | 기동 ×0.40 |
-| 화이트아웃 | 정신 ×0.40 |
+| 독 | 강인함 ×1/3 |
+| 냉기 | 강인함 ×1/3 |
+| 부식 | 강인함 ×1/3 |
+| 속박 | 기동 ×1/2 |
+| 진창 | 기동 ×1/2 |
+| 화염 | 기동 ×1/2 |
+| 공포 | 정신 ×1/2 |
+| 어둠 | 기동 ×1/2 |
+| 화이트아웃 | 정신 ×1/2 |
 
 투력 is never a Hazard-pressured Stat. Counter keys, Items, readiness labels and thresholds are unchanged.
 
@@ -755,7 +755,7 @@ Player label:
     readinessRatio >= 0.40 -> 불안
     otherwise              -> 취약
 
-The 0.75 / 0.40 thresholds remain hidden calculation detail; the 충분 requirement (`대응 {N} 필요`, N = ceil(Hazard Threat)) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are shown per Gate (User 2026-09-24 revision, v2.9.0).
+The 0.75 / 0.40 thresholds remain hidden calculation detail; the 충분 requirement (`대응 {N} 필요`, N = ceil(Hazard Threat)) and the Core-Stat conversion (`{능력치} {n}당 1`) are shown per Gate (User 2026-09-24 revision, v2.9.0).
 
 ### Ordinary non-Death resolution — exact baseline
 

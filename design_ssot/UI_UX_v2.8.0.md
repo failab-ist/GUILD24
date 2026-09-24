@@ -532,7 +532,7 @@ Show:
 
 Do not show:
 - exact expedition Success probability
-- exact hidden Hazard readiness thresholds (0.75 / 0.40) and Defense formula — the Gate-level `대응 {N} 필요` and `{능력치} 10마다 대응 {k}` are public Gate facts (§HAZARD NUDGE; User 2026-09-24 revision, v2.9.0)
+- exact hidden Hazard readiness thresholds (0.75 / 0.40) and Defense formula — the Gate-level `대응 {N} 필요` and `{능력치} {n}당 1` are public Gate facts (§HAZARD NUDGE; User 2026-09-24 revision, v2.9.0)
 - exact Great Success probability
 
 The displayed 실패 시 사망 위험 % follows the exact pre-supply calculation owned by `DUNGEON_HAZARD_v2.8.0.md`. It means the chance that an ordinary failed expedition escalates to Death; it is not the unconditional probability of Death across all expedition attempts.
@@ -584,7 +584,7 @@ Hazard Counter +N
 explicit penalty
 ```
 
-The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are Gate-level facts shown on every Hazard row, the SALE destination plate included (`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`); the plate has no `?` help; no per-customer remaining need is shown and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision 2, v2.9.0).
+The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} {n}당 1`) are Gate-level facts shown on every Hazard row, the SALE destination plate included (`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`); the plate has no `?` help; no per-customer remaining need is shown and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision 2, v2.9.0).
 
 ### SALE — DECISION-ONLY ITEM DETAIL
 
@@ -1018,13 +1018,13 @@ Every known authoritative Hazard provides:
 - short Stat/readiness pressure explanation from DUNGEON_HAZARD
 
 Examples (User 2026-09-24 revision 2, v2.9.0; every Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL — the number first):
-- 냉기 · 대응 15 필요 · 강인함 10마다 대응 3
-- 화이트아웃 · 대응 21 필요 · 정신 10마다 대응 4
-- 부식 · 대응 13 필요 · 강인함 10마다 대응 3
-- 진창 · 대응 21 필요 · 기동 10마다 대응 4
+- 냉기 · 대응 15 필요 · 강인함 3당 1
+- 화이트아웃 · 대응 21 필요 · 정신 2당 1
+- 부식 · 대응 13 필요 · 강인함 3당 1
+- 진창 · 대응 21 필요 · 기동 2당 1
 (no `{위험} · {label}` row survives; the SALE destination plate has no `?` help)
 
-Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다`;
+Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 3당 1 · 냉기 대응 상품이 막는다`;
 the sentence forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16.
 
 Interaction:
@@ -1602,7 +1602,7 @@ Presentation identity:
 Show:
 - exactly two Final Families
 - each selected Family's actual authoritative T2 Hazard set
-- each Hazard's numbered short row `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`, N for 마왕성 (Day 30 / T2 -> 29), the same row as the MORNING plate (User 2026-09-24, v2.9.0)
+- each Hazard's numbered short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`, N for 마왕성 (Day 30 / T2 -> 29), the same row as the MORNING plate (User 2026-09-24, v2.9.0)
 
 Important:
 `two Families` does NOT mean exactly two Hazard keys.

@@ -766,15 +766,15 @@ dark -> 정신 (User 2026-09-24, v2.9.0)
 whiteout -> 정신 (User 2026-09-24, v2.9.0)
 - 강인함: 독 · 냉기 · 부식
 - 투력 is never a Hazard-pressured Stat (it already carries the largest combat coefficient).
-- `{위험} — 대응 {N} 필요 · {능력치} 10마다 대응 {k} · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); k = 3 for 강인함 (×0.30), 4 for 기동 / 정신 (×0.40) (User 2026-09-24 revision, v2.9.0)
-- e.g. `독 — 대응 13 필요 · 강인함 10마다 대응 3 · 독 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `냉기 — 대응 13 필요 · 강인함 10마다 대응 3 · 냉기 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `부식 — 대응 13 필요 · 강인함 10마다 대응 3 · 부식 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `속박 — 대응 13 필요 · 기동 10마다 대응 4 · 속박 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `진창 — 대응 13 필요 · 기동 10마다 대응 4 · 진창 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화염 — 대응 13 필요 · 기동 10마다 대응 4 · 화염 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `공포 — 대응 13 필요 · 정신 10마다 대응 4 · 공포 대응 상품이 막는다` (DAY 1 T1)
-- e.g. `화이트아웃 — 대응 13 필요 · 정신 10마다 대응 4 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
+- `{위험} — 대응 {N} 필요 · {능력치} {n}당 1 · {위험} 대응 상품이 막는다` — N = the Counter that alone reaches 충분 on that Gate that Day (`ceil(Hazard Threat)`); n = 3 for 강인함 (×1/3), 2 for 기동 / 정신 (×1/2) — integer conversions, each rounded in the player's favour from the earlier ×0.30 / ×0.40 (User 2026-09-24 revision 4, v2.9.0)
+- e.g. `독 — 대응 13 필요 · 강인함 3당 1 · 독 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `냉기 — 대응 13 필요 · 강인함 3당 1 · 냉기 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `부식 — 대응 13 필요 · 강인함 3당 1 · 부식 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `속박 — 대응 13 필요 · 기동 2당 1 · 속박 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `진창 — 대응 13 필요 · 기동 2당 1 · 진창 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화염 — 대응 13 필요 · 기동 2당 1 · 화염 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `공포 — 대응 13 필요 · 정신 2당 1 · 공포 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `화이트아웃 — 대응 13 필요 · 정신 2당 1 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 recovery (User 2026-09-24, v2.9.0):
 - Food/Drink Supply: each point reduces Fatigue by 1 -> §SUPPLY -> FATIGUE
 - Severe-Injury recovery days: -5 per rest day (floor 0)
@@ -814,8 +814,8 @@ G. after the actual Outcome is known, calculate rawOutcomeFatigueGain, outcomeBu
 Expose exact decision ingredients (User 2026-09-24, v2.9.0):
 - current Fatigue band name from 20 up
 - that departing at Fatigue 40 (탈진) increases failure-Death risk
-| 화염 | 기동 ×0.40 |
-| 화이트아웃 | 정신 ×0.40 |
+| 화염 | 기동 ×1/2 |
+| 화이트아웃 | 정신 ×1/2 |
 투력 is never a Hazard-pressured Stat. Counter keys, Items, readiness labels and thresholds are unchanged.
 Fatigue 40 departure (User 2026-09-24, v2.9.0): if `fatigueBeforeExpedition = 40` (탈진), the same additive term applies, and the cap is raised the same way:
 injuryEscalation  = 0.10 if injury=1, else 0
@@ -862,21 +862,21 @@ These thresholds are Design Truth but remain hidden calculation detail.
 ```
 
 ```new
-The 0.75 / 0.40 thresholds remain hidden calculation detail; the 충분 requirement (`대응 {N} 필요`, N = ceil(Hazard Threat)) and the Core-Stat conversion (`{능력치} 10마다 대응 {k}`) are shown per Gate (User 2026-09-24 revision, v2.9.0).
+The 0.75 / 0.40 thresholds remain hidden calculation detail; the 충분 requirement (`대응 {N} 필요`, N = ceil(Hazard Threat)) and the Core-Stat conversion (`{능력치} {n}당 1`) are shown per Gate (User 2026-09-24 revision, v2.9.0).
 ```
 
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
 
 Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
-`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```new
 Pressure labels are retired (User 2026-09-24 revision 2, v2.9.0): `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` no longer appear anywhere, and the older `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` stay retired. Every player-facing Hazard row is the numbered short row below.
 Full Hazard sentence (Gate detail only; the Gate-level requirement number first):
-Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need survive (User 2026-09-24 revision 2, v2.9.0).
+Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need survive (User 2026-09-24 revision 2, v2.9.0).
 The destination-plate help (`?`) is retired: the numbered row carries the detail itself (User 2026-09-24 revision 2, v2.9.0).
-- the readiness ratio thresholds 대응 / 불안 / 취약 (0.75 / 0.40) and the Hazard Defense formula; the Gate's 충분 requirement `대응 {N} 필요` (N = ceil(Hazard Threat)) and the Core-Stat conversion `{능력치} 10마다 대응 {k}` are public Gate-level facts on every Hazard row (MORNING, ORDER Gate detail, SALE destination plate, D25 scouting report, FINAL) — never a per-customer remaining need (User 2026-09-24 revision 2, v2.9.0)
+- the readiness ratio thresholds 대응 / 불안 / 취약 (0.75 / 0.40) and the Hazard Defense formula; the Gate's 충분 requirement `대응 {N} 필요` (N = ceil(Hazard Threat)) and the Core-Stat conversion `{능력치} {n}당 1` are public Gate-level facts on every Hazard row (MORNING, ORDER Gate detail, SALE destination plate, D25 scouting report, FINAL) — never a per-customer remaining need (User 2026-09-24 revision 2, v2.9.0)
 ```
 
 ## AMENDMENT — v2.9.0 revision 3: 어둠 -> 기동, no Gate shares a Stat (User decision 2026-09-24)
@@ -889,7 +889,29 @@ One non-투력 Stat per Hazard, 3 / 4 / 2 (User 2026-09-24 revision 3, v2.9.0: �
 - 기동: 속박 · 진창 · 화염 · 어둠
 - 정신: 공포 · 화이트아웃
 - Gate constraint: within one Gate (a Family's Tier Hazard set) no two Hazards press the same Stat, so one Stat never answers a whole Gate (망자역 지하묘지 = 정신 + 기동). The Final's merged two-Family pool may repeat a Stat.
-- e.g. `어둠 — 대응 13 필요 · 기동 10마다 대응 4 · 어둠 대응 상품이 막는다` (DAY 1 T1)
+- e.g. `어둠 — 대응 13 필요 · 기동 2당 1 · 어둠 대응 상품이 막는다` (DAY 1 T1)
 Mapped Core-Stat coefficients (one non-투력 Stat per Hazard, 3 / 4 / 2, no Gate sharing a Stat; User 2026-09-24 revision 3, v2.9.0):
-| 어둠 | 기동 ×0.40 |
+| 어둠 | 기동 ×1/2 |
+```
+
+## AMENDMENT — v2.9.0 revision 4: integer Core-Stat conversion (User decision 2026-09-24)
+
+The Hazard Defense coefficients become integer conversions read `{능력치} n당 1`: 강인함 ×1/3 (3당 1), 기동 / 정신 ×1/2 (2당 1), each rounded in the player's favour from ×0.30 / ×0.40. The revision-1..3 declarations that carried `10마다 대응 {k}` were rewritten in place above.
+
+```text
+| 독 | 강인함 ×0.30 |
+| 냉기 | 강인함 ×0.30 |
+| 부식 | 강인함 ×0.30 |
+| 속박 | 기동 ×0.40 |
+| 진창 | 기동 ×0.40 |
+| 공포 | 정신 ×0.40 |
+```
+
+```new
+| 독 | 강인함 ×1/3 |
+| 냉기 | 강인함 ×1/3 |
+| 부식 | 강인함 ×1/3 |
+| 속박 | 기동 ×1/2 |
+| 진창 | 기동 ×1/2 |
+| 공포 | 정신 ×1/2 |
 ```

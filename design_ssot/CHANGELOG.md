@@ -64,7 +64,7 @@ Docs-first. Each owner amendment is listed when committed.
   confirm -> reroll, Gate detail full Hazard sentences + destination-plate ?, ORDER today-fit emphasis and per-Gate
   visitor counts, D0 briefing two lines, 점주 가이드 처음 3일 + 자세히.
 - Gate Hazard requirement number (User 2026-09-24 revision): the Gate-level 충분 requirement `대응 {N} 필요` (ceil(Hazard
-  Threat)) and the Core-Stat conversion `{능력치} 10마다 대응 {k}` are public at MORNING / ORDER Gate detail and in the
+  Threat)) and the Core-Stat conversion `{능력치} {n}당 1` are public at MORNING / ORDER Gate detail and in the
   SALE plate ?, the number first; no per-customer remaining need. DUNGEON_HAZARD boundary, UI_UX §GATE VS ITEM /
   §HAZARD NUDGE, ECONOMY_ORDER, COPY_AUDIT §4-16, DUNGEON_ITEM_QA DUN-Q21, UI_UX_QA UI-Q-v29-19.
 - Revision 2 (User 2026-09-24): the pressure labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the
@@ -74,6 +74,9 @@ Docs-first. Each owner amendment is listed when committed.
 - Fatigue outcome gain re-tuned -1 to +4 / +7 / +9 after the I-2 re-measure (R1); phone SALE balloon 2px / 14px (R2, CSS only).
 - Revision 3 (User 2026-09-24): 어둠 -> 기동 ×0.40 so no Gate's Hazards share one Stat (망자역 지하묘지 = 정신 + 기동); the split
   is 강인함 3 / 기동 4 / 정신 2. DUNGEON_HAZARD, DUNGEON_ITEM_QA DUN-Q21 / DUN-Q-v29-2, ITEM, SPEC_INDEX, COPY_WORLD_VOICE §D25.
+- Revision 4 (User 2026-09-24): the Core-Stat conversion is an integer, read `{능력치} n당 1` — 강인함 ×1/3 (3당 1), 기동 / 정신
+  ×1/2 (2당 1), each rounded in the player's favour from ×0.30 / ×0.40. Every Hazard row and sentence, DUNGEON_HAZARD coefficient
+  table, DUNGEON_ITEM_QA, COPY_AUDIT §4-16, COPY_WORLD_VOICE §D25, UI_UX, UI_UX_QA, SALE, ECONOMY_ORDER, FINAL_EXPEDITION.
 
 ## v2.8.0 — closed 2026-09-24
 

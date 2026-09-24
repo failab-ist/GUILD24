@@ -546,7 +546,7 @@ Before order commitment show/readably expose:
 - **today expected operating cost**
 - warehouse usage / remaining capacity
 - current-day Gate / known Hazard
-- each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} 10마다 대응 {k}` (Gate detail; User 2026-09-24 revision, v2.9.0)
+- each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 1` (Gate detail; User 2026-09-24 revision, v2.9.0)
 - visitor count per open Gate, only when two or more Gates are open (counted by the destination each customer claims; a liar's or a pilgrimage-rerouted customer's true Gate stays hidden) (User 2026-09-24, v2.9.0)
 - next-day Tier forecast
 - current Reroll cost/state

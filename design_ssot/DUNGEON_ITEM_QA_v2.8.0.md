@@ -98,8 +98,8 @@ Inspect all 9 canonical Hazards in Gate/preparation UI on desktop and touch/mobi
 
 EXPECT (User 2026-09-24, v2.9.0):
 Every Hazard exposes the numbered short row, the same on every surface:
-- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> 10마다 대응 <k>` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and k = 3 (강인함: poison / corrosion / cold) / 4 (기동: bind / mire / fire / dark · 정신: fear / whiteout)
-- Gate detail alone uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> 10마다 대응 <k> · <Hazard> 대응 상품이 막는다`
+- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 1` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / fire / dark · 정신: fear / whiteout)
+- Gate detail alone uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> <n>당 1 · <Hazard> 대응 상품이 막는다`
 - no `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` label row and no destination-plate `?` help survive (User 2026-09-24 revision 2, v2.9.0)
 - no `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` label survives anywhere, including the D25 scouting report
 
@@ -122,9 +122,9 @@ PASS:
 Controlled prepared states: vary one Core Stat at a time and read each Hazard's Defense.
 
 EXPECT:
-- 독 / 냉기 / 부식 Defense moves only with 강인함 (×0.30)
-- 속박 / 진창 / 화염 / 어둠 Defense moves only with 기동 (×0.40)
-- 공포 / 화이트아웃 Defense moves only with 정신 (×0.40)
+- 독 / 냉기 / 부식 Defense moves only with 강인함 (×1/3)
+- 속박 / 진창 / 화염 / 어둠 Defense moves only with 기동 (×1/2)
+- 공포 / 화이트아웃 Defense moves only with 정신 (×1/2)
 - no Hazard Defense moves with 투력
 - no Hazard reads a second Core Stat (no 정신 + 기동 split for 어둠 / 화이트아웃, no 강인함 for 화염)
 - every Family Tier Hazard set presses two different Stats (독거미 강인함 + 기동, 슬라임 강인함 + 기동, 설원 강인함 + 정신, 지하묘지 정신 + 기동), so no Gate is answered by one Stat (User 2026-09-24 revision 3)

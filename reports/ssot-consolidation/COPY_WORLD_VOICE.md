@@ -730,7 +730,7 @@ Concise player function (User 2026-09-24, v2.9.0; exact string -> `COPY_AUDIT_AP
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
 
 Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
-`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```text
@@ -740,14 +740,14 @@ Then show the two selected Family names and each Family's actual T2 Hazard press
 ```new
 Then show the two selected Family names and each Family's actual T2 Hazard rows, numbered for 마왕성 (Day 30 / T2: N = 29).
 Authoritative Hazard wording (User 2026-09-24 revision 2, v2.9.0; the MORNING short row with the Final's N):
-독 · 대응 29 필요 · 강인함 10마다 대응 3
-속박 · 대응 29 필요 · 기동 10마다 대응 4
-부식 · 대응 29 필요 · 강인함 10마다 대응 3
-진창 · 대응 29 필요 · 기동 10마다 대응 4
-화염 · 대응 29 필요 · 기동 10마다 대응 4
-공포 · 대응 29 필요 · 정신 10마다 대응 4
-냉기 · 대응 29 필요 · 강인함 10마다 대응 3
-화이트아웃 · 대응 29 필요 · 정신 10마다 대응 4
+독 · 대응 29 필요 · 강인함 3당 1
+속박 · 대응 29 필요 · 기동 2당 1
+부식 · 대응 29 필요 · 강인함 3당 1
+진창 · 대응 29 필요 · 기동 2당 1
+화염 · 대응 29 필요 · 기동 2당 1
+공포 · 대응 29 필요 · 정신 2당 1
+냉기 · 대응 29 필요 · 강인함 3당 1
+화이트아웃 · 대응 29 필요 · 정신 2당 1
 - 최종 정찰 보고가 실제 두 Family의 T2 Hazard 행을 마왕성 기준 수치(대응 29 필요)로 그대로 보여주며 별도 공략문을 덧붙이지 않는가?
 ```
 
@@ -757,5 +757,5 @@ Authoritative Hazard wording (User 2026-09-24 revision 2, v2.9.0; the MORNING sh
 기동 4 / 정신 2. The revision-1/2 declarations this replaces were edited out of the fences above in place.
 
 ```new
-어둠 · 대응 29 필요 · 기동 10마다 대응 4
+어둠 · 대응 29 필요 · 기동 2당 1
 ```

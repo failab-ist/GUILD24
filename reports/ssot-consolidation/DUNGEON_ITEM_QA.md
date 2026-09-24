@@ -557,7 +557,7 @@ Only canonical Hazard systems and Supply -> Fatigue recovery affect gameplay (Us
 - no `강인함 압박` / `기동 압박` / `정신 압박` / `정신 중심 + 기동 보조 압박` label survives anywhere, including the D25 scouting report
 (User 2026-09-24, v2.9.0)
 Controlled prepared states: vary one Core Stat at a time and read each Hazard's Defense.
-- 독 / 냉기 / 부식 Defense moves only with 강인함 (×0.30)
+- 독 / 냉기 / 부식 Defense moves only with 강인함 (×1/3)
 - no Hazard Defense moves with 투력
 - no Hazard reads a second Core Stat (no 정신 + 기동 split for 어둠 / 화이트아웃, no 강인함 for 화염)
 - Counter keys, Item Counter values, readiness labels 충분 / 대응 / 불안 / 취약 and thresholds are unchanged
@@ -636,12 +636,12 @@ User decision 2026-09-24 (v2.9.0): ITEM-Q81 price table row for 구급키트 fol
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
 
 Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
-`{위험} · 대응 {N} 필요 · {능력치} 10마다 대응 {k}`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```new
 Every Hazard exposes the numbered short row, the same on every surface:
-- Gate detail alone uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> 10마다 대응 <k> · <Hazard> 대응 상품이 막는다`
+- Gate detail alone uses the full sentence `<Hazard> — 대응 <N> 필요 · <Stat> <n>당 1 · <Hazard> 대응 상품이 막는다`
 - no `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` label row and no destination-plate `?` help survive (User 2026-09-24 revision 2, v2.9.0)
 ```
 
@@ -651,10 +651,10 @@ Every Hazard exposes the numbered short row, the same on every surface:
 기동 4 / 정신 2. The revision-1/2 declarations this replaces were edited out of the fences above in place.
 
 ```new
-- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> 10마다 대응 <k>` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and k = 3 (강인함: poison / corrosion / cold) / 4 (기동: bind / mire / fire / dark · 정신: fear / whiteout)
+- MORNING plate, SALE destination plate, D25 scouting report and FINAL rows read `<Hazard> · 대응 <N> 필요 · <Stat> <n>당 1` with N = ceil(Hazard Threat) of that Gate (the Final: Day 30 / T2 -> 29) and n = 3 (강인함: poison / corrosion / cold) / 2 (기동: bind / mire / fire / dark · 정신: fear / whiteout)
 ### DUN-Q-v29-2 — ONE NON-투력 STAT PER HAZARD (3 / 4 / 2, NO GATE SHARES A STAT)
-- 속박 / 진창 / 화염 / 어둠 Defense moves only with 기동 (×0.40)
-- 공포 / 화이트아웃 Defense moves only with 정신 (×0.40)
+- 속박 / 진창 / 화염 / 어둠 Defense moves only with 기동 (×1/2)
+- 공포 / 화이트아웃 Defense moves only with 정신 (×1/2)
 - every Family Tier Hazard set presses two different Stats (독거미 강인함 + 기동, 슬라임 강인함 + 기동, 설원 강인함 + 정신, 지하묘지 정신 + 기동), so no Gate is answered by one Stat (User 2026-09-24 revision 3)
 - 강인함 3 · 기동 4 · 정신 2 Hazards, 투력 never pressed, no Gate's Hazard set sharing a Stat
 ```
