@@ -785,8 +785,12 @@ Supply efficiency / shelf-life control / broad usability / flexible prep
 identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep operation (User 2026-09-24, v2.9.0)
 Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
 Supply (피로 회복) unchanged
-Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +25% · 피로 회복·위험 대응·부작용 제외 · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
 Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
-Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +50% · 피로 회복·위험 대응·부작용 제외 · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
 - Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 Store Support card copy in two clauses (User decision 2026-09-24)
+
+The two quoted card lines (즉석식품 코너, 24시간 신선체계) follow the COPY_AUDIT §11 rewrite (effect · condition, no accounting clause; values unchanged); the earlier declared-new lines above were edited in place.

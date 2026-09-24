@@ -555,7 +555,7 @@ RiskReward penalty unchanged
 from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
 ```
 
-Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +25% · 피로 회복·위험 대응·부작용 제외 · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
 newCombatSystem=NO
@@ -755,7 +755,7 @@ Insurance unchanged
 RiskReward penalty unchanged
 ```
 
-Player card copy: `음식·음료가 원래 가진 능력치 증가 효과 +50% · 피로 회복·위험 대응·부작용 제외 · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
 
 26. 지역 거점점 계약
 tag=Customer
