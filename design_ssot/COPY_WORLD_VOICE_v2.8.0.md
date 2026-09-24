@@ -85,6 +85,8 @@ Copy / Flavor / Joke / Meme 하나를 위해 현재 없는 Gameplay / UI / Dialo
 - 상품 패러디용 새 Item Mechanic 신설
 - Joke용 Event System 신설
 
+판매의 건네기 / 손님 반응 / 손님 교대 beat는 presentation-only이며 Dialogue Step을 추가하지 않는다 (User 2026-09-24, v2.9.0).
+
 **현재 존재하는 게임 위에서 표현을 개선한다.**
 
 ## TRUTH-CRITICAL COPY
@@ -1276,6 +1278,8 @@ Exact Death-risk label:
 실패 시 사망 위험
 ```
 
+`실패 시 사망 위험` is a help line, not a readout cell (User 2026-09-24, v2.9.0): the SALE readout shows 전투 전망 and 환경 대응 only; the exact % is the second line of the 전투 전망 `?` and an NPC detail line (exact lines -> COPY_AUDIT_APPROVED_v2.8.0.md §4-1 / §5-7).
+
 This block covers:
 - qualitative Combat Forecast
 - qualitative Hazard Readiness
@@ -1288,7 +1292,7 @@ Do not rewrite the copy to imply the shown Forecast / Readiness / 실패 시 사
 
 ## ANCHORED HELP ROUTING
 
-Exact Player-facing SALE Help for 전투 전망 / 환경 대응 / 실패 시 사망 위험 is owned by
+Exact Player-facing SALE Help for 전투 전망 (two lines, the second is `실패 시 사망 위험 {N}%`) / 환경 대응 is owned by
 COPY_AUDIT_APPROVED_v2.8.0.md.
 
 피로 explanation (User 2026-09-24, v2.9.0):
@@ -1351,6 +1355,9 @@ by COPY_AUDIT_APPROVED_v2.8.0.md.
 
 Direct and derived changed rows remain readable under the current single-heading structure.
 Internal markers such as `potion` are never Player effects.
+
+Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.8.0.md §4-19) (User 2026-09-24, v2.9.0).
+The purchase / refusal reply line stays visible 5 seconds; the greeting keeps the 3-second rule (timing owner -> UI_UX_v2.8.0.md §Customer speech).
 
 ## RESULT CAUSALITY COPY
 

@@ -141,8 +141,8 @@ The following lines are current exact Player-facing copy for these tutorial step
 first SALE teaches four marks — 목적지 (COPY_WORLD_VOICE §TUTORIAL COACH COPY), HAZARD, 전망 (§3-4), PRICING;
 SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time their situation exists).
 
-### PRICING
-> 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.
+### PRICING (User 2026-09-24, v2.9.0)
+> 50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다. 누르면 바로 건네진다.
 
 ### HAZARD
 > 이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.
@@ -162,8 +162,9 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 
 ## 4-1. 전투 전망 Help
 
-**현재** (User 2026-09-24)
-> 손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.
+**현재** (User 2026-09-24, v2.9.0: two lines; the second line carries the frozen SALE-entry value that the retired §4-3 cell showed)
+> 손님의 힘과 게이트의 요구 전력을 견준 전망. 우세 · 접전 · 불리.  
+> 실패 시 사망 위험 {N}%
 
 ---
 
@@ -176,8 +177,11 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 
 ## 4-3. 실패 시 사망 위험 Help
 
-**현재**
+**기존**
 > 실패했을 때 사망으로 이어질 위험. 원정 전체 사망 확률은 아니다.
+
+**현재** (User 2026-09-24, v2.9.0: the readout cell and its own `?` are retired; the value lives in §4-1 line 2 and the NPC detail line §5-7)
+> **삭제**
 
 ---
 
@@ -325,6 +329,34 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 
 ---
 
+## 4-19. 가격 버튼
+
+**노출 위치**
+> SALE 가격 버튼 세 개의 face와 각 버튼 아래의 작은 줄.
+
+**현재** (User 2026-09-24, v2.9.0)
+> 할인 50% · {price}G  
+> 정가 · {price}G  
+> 바가지 150% · {price}G
+
+**아래 줄**
+> 이익 {N}G
+
+거절 잠금 시에는 기존 비활성 사유 문구가 이 줄을 대신한다.
+
+---
+
+## 4-20. Stat 압박 태그
+
+**노출 위치**
+> SALE Stat 칸 네 개 아래. 손님의 게이트가 그 능력치를 누를 때만 붙는 작은 태그(아이콘 + 이름). 투력에는 붙지 않는다.
+
+**현재** (User 2026-09-24, v2.9.0: Hazard 이름만, 숫자·판정 없음)
+> 냉기  
+> 독 · 속박
+
+---
+
 # 5. NPC DETAIL / TRAIT LABEL
 
 ## 5-1. 부상 Stat 명칭
@@ -375,6 +407,16 @@ SUPPLY, 대성공 (§3-3), RETURNING and 가방 (§3-6) appear the first time th
 
 **현재**
 > **Player-facing 효과 목록에서 삭제**
+
+---
+
+## 5-7. NPC 상세 — 실패 시 사망 위험
+
+**노출 위치**
+> NPC 상세 모달의 상태 설명 행. SALE 진입 시점의 같은 고정값.
+
+**현재** (User 2026-09-24, v2.9.0)
+> 실패 시 사망 위험 {N}%
 
 ---
 

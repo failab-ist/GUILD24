@@ -694,3 +694,19 @@ Authoritative Hazard wording (User 2026-09-24, v2.9.0):
 냉기 · 강인함으로 버틴다
 화이트아웃 · 정신으로 견딘다
 ```
+
+## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the SALE readout shows 전투 전망 and 환경 대응 only, and `실패 시 사망 위험` moves into the second line of the 전투 전망 `?` and the NPC detail (no separate Help of its own); the three price buttons carry the role words 할인 / 정가 / 바가지 with an `이익 {N}G` sub-line; the purchase / refusal reply line stays 5 seconds while the greeting keeps 3; the transaction beats (건네기 / 손님 반응 / 손님 교대) are presentation only and add no Dialogue Step. The ANCHORED HELP ROUTING sentence is reworded to the two-line 전투 전망 help.
+
+```text
+Exact Player-facing SALE Help for 전투 전망 / 환경 대응 / 실패 시 사망 위험 is owned by
+```
+
+```new
+판매의 건네기 / 손님 반응 / 손님 교대 beat는 presentation-only이며 Dialogue Step을 추가하지 않는다 (User 2026-09-24, v2.9.0).
+`실패 시 사망 위험` is a help line, not a readout cell (User 2026-09-24, v2.9.0): the SALE readout shows 전투 전망 and 환경 대응 only; the exact % is the second line of the 전투 전망 `?` and an NPC detail line (exact lines -> COPY_AUDIT_APPROVED_v2.8.0.md §4-1 / §5-7).
+Exact Player-facing SALE Help for 전투 전망 (two lines, the second is `실패 시 사망 위험 {N}%`) / 환경 대응 is owned by
+Price-button vocabulary is the three role words 할인 / 정가 / 바가지 (exact button faces and the `이익 {N}G` sub-line -> COPY_AUDIT_APPROVED_v2.8.0.md §4-19) (User 2026-09-24, v2.9.0).
+The purchase / refusal reply line stays visible 5 seconds; the greeting keeps the 3-second rule (timing owner -> UI_UX_v2.8.0.md §Customer speech).
+```

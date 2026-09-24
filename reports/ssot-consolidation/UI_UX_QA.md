@@ -466,7 +466,7 @@ Test all current fresh-init paths owned by `CORE_RUN_v2.8.0.md`.
 ```
 
 ```new
-- Bag is exactly two slots in the upper-right and each is ~44px touch class or larger
+- Bag is exactly two slots on the counter beside the customer and each is ~44px touch class or larger (User 2026-09-24, v2.9.0)
 ```
 
 ## REWORD — UI-Q109 CONFIRMED PLACEMENT: approval narration removed from the first rule line
@@ -679,4 +679,80 @@ Use current `집중 사탕` (`공포 대응 +10 / 피로 회복 3`) in two contr
 - actual Food/Drink preRecovery/outcome buffer use can be read when relevant
 - Counter / 피로 회복 / Insurance / Utility / harmful RiskReward penalty remain outside that reduction
 Tutorial explains Stat pressure / Counter contribution / readiness and one Supply/Fatigue fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신.
+```
+
+## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
+
+User decision 2026-09-24 (v2.9.0): the SALE readout shows two cells (전투 전망 / 환경 대응) with two `?`, and the exact `실패 시 사망 위험 {N}%` moves into the second line of the 전투 전망 help and the NPC detail; the price buttons carry the role words (`할인 50%` / `정가` / `바가지 150%` with `이익 {N}G`); the Bag slots sit on the counter beside the customer; the purchase / refusal reply line stays 5 seconds while the greeting keeps 3; the transaction beats, Stat grid pressure tag, matching-effect emphasis and one delta list (no outlook delta rows; C3 corrected) get UI-Q-v29-3 … UI-Q-v29-9. UI-Q13 / Q87 / Q107 / Q109 / Q110 / Q-v28-7 / Q-v28-30 expectations are rewritten under the same ids. Declared-new line edited in place above: the UI-Q109 Bag line (now `on the counter beside the customer`).
+
+```text
+- Combat/Hazard/Death readouts remain frozen
+- still auto-dismisses around 3 seconds and is tap-dismissible
+- the exact risk label is `실패 시 사망 위험`
+- exact pre-supply 실패 시 사망 위험 % is shown from the same state
+- after first and second committed Item transactions, the three outlook values remain unchanged on screen
+`전투 전망` and `실패 시 사망 위험`. It is the same canonical ladder off the same frozen
+- it auto-hides after 3 seconds
+- a new line restarts the 3-second display
+50/100/150 are visually distinct, large enough, and easy to switch.
+```
+
+```new
+- the greeting still auto-dismisses around 3 seconds (a purchase / refusal reply line after 5 seconds) and is tap-dismissible (User 2026-09-24, v2.9.0)
+`전투 전망` (the readout's only two cells; User 2026-09-24, v2.9.0). It is the same canonical ladder off the same frozen
+- a greeting auto-hides after 3 seconds; a purchase / refusal reply line after 5 seconds (User 2026-09-24, v2.9.0)
+- a new line restarts its own display
+The three price buttons `할인 50% · {price}G` / `정가 · {price}G` / `바가지 150% · {price}G` are visually distinct, large enough, and easy to switch (User 2026-09-24, v2.9.0).
+- the slots sit on the counter beside the customer (User 2026-09-24, v2.9.0)
+### UI-Q-v29-3 — TRANSACTION BEAT
+One ordinary SALE customer at 390 and 1280: one successful price commit, one refusal, one `손님 보내기`; repeat the same flow under `prefers-reduced-motion`.
+Every beat is presentation only, each ≤ 320 ms, one sale's beats total < 600 ms, input is never blocked, and the scroll position stays on the same customer.
+- frame captures at 0 / 150 / 300 / 600 ms of the sale show the Item icon travelling from its shelf row to the customer's Bag slot on the counter (260~320 ms), the slot settling (scale 1.05 -> 1, 240 ms), the dock Gold counting to its new value, and the changed Stat cells pulsing once (300 ms) and keeping the new value; the `판매 후 변화` rows do not vanish
+- purchase: the customer figure nods (translateY 4px, 180 ms x 2); refusal: it shakes its head (translateX ±4px, the existing bubble-shake timing) and the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text
+- the reply line (buy / refuse) stays 5 seconds; the greeting keeps 3 seconds
+- `손님 보내기`: the current customer exits left (240 ms), the next arrives with the existing entry (240~340 ms), and `depart` plays a recorded utility cue (door / step family); entry may still start the view at the top
+- 50% / 100% / 150% share one register sound family and differ only by coin ticks (1 / 2 / 3); no mode sounds like the correct answer
+- under reduced motion the same flow completes instantly with an identical end state (Gold, Bag, Stat values, lock state, reply line)
+- no beat adds information the resolved state does not already hold; no Save field, no Gameplay RNG draw
+- input is blocked during a beat, or one sale's beats total 600 ms or more
+- the view scrolls away from the current customer during a beat
+### UI-Q-v29-4 — BAG ON THE COUNTER
+SALE at 390 and 1280, before and after one sale.
+- a thin counter band sits under the customer on every width
+- the two Bag slots sit on the counter beside the customer, not under the status line
+- the slots remain the handling surface: focus / replace / remove and tap-only completion work as in UI-Q87; no third ghost slot
+### UI-Q-v29-5 — STAT GRID PRESSURE TAG
+Customers whose Gate presses one Stat through one Hazard, one Stat through two Hazards, and a Stat the Gate does not press.
+- under a pressed Stat cell a small tag shows the pressing Hazard icon + name only (e.g. `냉기`; two Hazards joined as `독 · 속박`)
+- the tag sits under the Stat that Hazard actually presses (강인함 / 기동 / 정신 per `DUNGEON_HAZARD_v2.8.0.md`)
+- 투력 never carries a tag
+- an unpressed Stat carries no tag
+- the tag carries no number and no verdict word
+### UI-Q-v29-6 — MATCHING-EFFECT EMPHASIS
+SALE shelf holding an Item that counters one of the customer's Gate Hazards, an Item that raises a Core Stat one of those Hazards presses, and an Item that does neither.
+- only the effect text that is a Counter for one of the Gate's Hazards, or the Core Stat one of its Hazards presses, is set in the emphasis style (bold, ink colour)
+- every other effect text keeps the default style
+- no badge, no verdict word, no row reorder
+- ORDER offer rows follow the same rule against today's Gate once the D-4 batch adopts it
+### UI-Q-v29-7 — ONE DELTA LIST
+Select an Item that changes a Stat and releases a Fatigue band; then an Item that changes a Stat only; then commit one of them.
+- `판매 후 변화` is one list of what changes: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and the §4-17 line `피로 {A} → 출발 {B}`
+- no outlook delta row (no `전투 전망 A → B`, no `환경 대응 A → B`) for a selected or a committed Item
+- the frozen SALE-entry outlook is not repainted inside the till and never changes for a selected Item (UI-Q86)
+- `특수 효과` and the shelf-life line stay
+- an outlook block or outlook delta row appears under the Item
+- a row appears for a value that did not change
+### UI-Q-v29-8 — PRICE ROLE WORDS
+- the three price buttons read `할인 50% · {price}G` / `정가 · {price}G` / `바가지 150% · {price}G`
+- under each: `이익 {N}G`, or the existing disabled reason
+- three modes and no extra depth; no fourth control
+### UI-Q-v29-9 — DEATH % ONLY IN THE 전투 전망 HELP AND NPC DETAIL
+- the SALE readout `.top` shows exactly two cells, 전투 전망 and 환경 대응, each with its own `?`; no `실패 시 사망 위험` cell and no third `?`
+- the 전투 전망 `?` shows two lines: the outlook help and `실패 시 사망 위험 {N}%` with the frozen SALE-entry value
+- the NPC detail modal shows `실패 시 사망 위험 {N}%`
+- the % appears nowhere else on the SALE surface; Final preparation is unchanged (UI-Q-v28-32)
+- the readout shows exactly two cells, 전투 전망 and 환경 대응; the exact risk label `실패 시 사망 위험` is the second line of the 전투 전망 `?` (`실패 시 사망 위험 {N}%`) and an NPC detail line, not a readout cell (User 2026-09-24, v2.9.0)
+- exact pre-supply 실패 시 사망 위험 % in that help line is computed from the same state
+- after first and second committed Item transactions, the two readout cells and the help-line % remain unchanged on screen
+- Combat/Hazard readout cells and the help-line Death % remain frozen (User 2026-09-24, v2.9.0)
 ```
