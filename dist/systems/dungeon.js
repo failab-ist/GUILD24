@@ -203,10 +203,10 @@ function tierWeights(day){
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
 /* DUNGEON_HAZARD v2.9.0 §Hazard Defense (User 2026-09-24, revision 3): one non-투력 Stat per Hazard and no Gate's
-   Hazards on the same Stat, 3 / 4 / 2 - 강인함 ×1/3 for 독·냉기·부식, 기동 ×1/2 for 속박·진창·화염·어둠, 정신 ×1/2 for
-   공포·화이트아웃 (revision 4: integer conversions `{능력치} n당 대응 1`, rounded in the player's favour from ×0.30 / ×0.40).
+   Hazards on the same Stat, 3 / 3 / 3 - 강인함 ×1/3 for 독·냉기·부식, 기동 ×1/2 for 속박·진창·어둠, 정신 ×1/2 for
+   공포·화이트아웃·화염 (revision 5: 화염 -> 정신; revision 4: integer conversions `{능력치} n당 대응 1`, rounded in the player's favour from ×0.30 / ×0.40).
    One owner: the readiness calculation below and the player-facing Gate sentence (`{능력치} {n}당 1`) read it. */
-const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['survival',1/3],bind:['mobility',1/2],mire:['mobility',1/2],fire:['mobility',1/2],fear:['spirit',1/2],dark:['mobility',1/2],whiteout:['spirit',1/2]};
+const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['survival',1/3],bind:['mobility',1/2],mire:['mobility',1/2],fire:['spirit',1/2],fear:['spirit',1/2],dark:['mobility',1/2],whiteout:['spirit',1/2]};
 function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
 function hazardState(h,e,d){
  const rules=HAZARD_RULES;

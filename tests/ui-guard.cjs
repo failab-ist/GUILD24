@@ -289,8 +289,8 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(/발주 '\+fmt\([^)]+\)\+'G · 확정/.test(app),'the docked stamp states the amount');
 });
 
-test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row, one pressed Stat each (3 / 4 / 2, no Gate shares a Stat); the labels are retired',()=>{
- const stat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',dark:'mobility',fear:'spirit',whiteout:'spirit'};
+test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row, one pressed Stat each (3 / 3 / 3, no Gate shares a Stat); the labels are retired',()=>{
+ const stat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',dark:'mobility',fire:'spirit',fear:'spirit',whiteout:'spirit'};
  const d={day:1,tier:1},rows=Presentation.hazardRows(Object.keys(DATA.hazards),d);
  assert.deepEqual(rows.map(r=>r.key).sort(),Object.keys(DATA.hazards).sort(),'every canonical Hazard is explained');
  for(const [key,s] of Object.entries(stat)){
@@ -298,7 +298,7 @@ test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row,
   assert.equal(Presentation.hazardStat[key],s,'the tag / emphasis read the same Stat');
   assert.equal(Dungeon.hazardState(key,{},{scale:1}).stat,s,'and the engine moves its Defense with that Stat only');
  }
- for(const [s,n] of [['survival',3],['mobility',4],['spirit',2]])assert.equal(Object.values(stat).filter(x=>x===s).length,n,s+' presses exactly '+n+' Hazards (User 2026-09-24 revision 3)');
+ for(const [s,n] of [['survival',3],['mobility',3],['spirit',3]])assert.equal(Object.values(stat).filter(x=>x===s).length,n,s+' presses exactly '+n+' Hazards (User 2026-09-24 revision 5)');
  // no Family Tier Hazard set is answered by one Stat (망자역 지하묘지 = 정신 + 기동)
  for(const [fam,tiers] of Object.entries(DATA.familyTiers))for(const set of tiers)assert.equal(new Set(set.map(h=>stat[h])).size,set.length,fam+' '+set.join('+')+' presses distinct Stats');
  assert.ok(!('hazardPressure' in Presentation)&&!/'(강인함으로 버틴다|기동으로 피한다|정신으로 견딘다)'|PRESSURE_LABEL|hazardPressure/.test(read('dist/ui/presentation.js')),'no pressure label string survives (User 2026-09-24 revision 2)');
@@ -1867,7 +1867,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  for(const [id,text] of [
    ['pricing','50% 할인은 단골도를 크게 올리고, 정가는 조금 올린다. 바가지는 더 남지만 단골도가 깎이고 거절될 수 있다.'],
    ['hazard','이 손님이 갈 게이트의 위험. 위험마다 압박하는 능력이 다르다.'],
-   ['stats','이 손님의 능력치. 직업·희귀도·레벨마다 다르다. 투력은 전투를 좌우하고, 강인함·기동·정신은 각 위험에 대응한다.'],
+   ['stats','능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.'],
    ['supply','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
    ['quantity','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.']])
   assert.ok(steps.includes("'"+text+"'"),'the approved §3-7 '+id+' lesson is adopted verbatim');

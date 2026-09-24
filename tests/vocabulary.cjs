@@ -79,7 +79,7 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
  /* ITEM_v2.7 §HAZARD COUNTER BASELINE moves the Fire Main to 쿨링 이온음료 +18; 얼음컵 +10 is
     the Lower response. Every other Main is unchanged. */
  const main={poison:'antidote',bind:'rope',corrosion:'coating',mire:'boots',fire:'ion',fear:'wine',dark:'battery',cold:'heat',whiteout:'snowgoggles'};
- const stat={poison:'survival',corrosion:'survival',cold:'survival',fire:'mobility',bind:'mobility',mire:'mobility',fear:'spirit',dark:'mobility',whiteout:'spirit'};/* v2.9.0: 화염 and 어둠 press 기동 (revision 3) */
+ const stat={poison:'survival',corrosion:'survival',cold:'survival',fire:'spirit',bind:'mobility',mire:'mobility',fear:'spirit',dark:'mobility',whiteout:'spirit'};/* v2.9.0: 어둠 presses 기동, 화염 presses 정신 (revision 5) */
  for(const h of CANON_HAZARDS){
   const counters=DATA.items.filter(i=>(i.effects[h]||0)>0);
   assert.ok(counters.length>=1,h+' has no counter item');

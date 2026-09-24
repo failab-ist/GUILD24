@@ -12,7 +12,7 @@ const negative=new Set(['fatigue','injuryRisk','variance']);
 // Canonical player-facing Hazard pressure (DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE, v2.9.0 revision 2): every
 // Hazard row is the numbered short row `대응 {N} 필요 · {능력치} {n}당 1` for the Gate it is about; the pressure
 // labels (`강인함으로 버틴다` …) are retired. All 9 Hazards read the same way, inline, so there is no hover-only path.
-const hazardStat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'mobility',fear:'spirit',dark:'mobility',whiteout:'spirit'};
+const hazardStat={poison:'survival',cold:'survival',corrosion:'survival',bind:'mobility',mire:'mobility',fire:'spirit',fear:'spirit',dark:'mobility',whiteout:'spirit'};
 function hazardRows(keys,d){return keys.map(k=>({key:k,name:D.hazards[k],pressure:d?hazardShort(k,d):''}));}
 /* COPY_AUDIT §4-16 / DUNGEON_HAZARD §HAZARD PLAYER-FACING PRESSURE (User 2026-09-24 revision): the Gate-level
    requirement number comes first. N = the Counter that alone reaches 충분 on that Gate that Day (ceil(Hazard Threat));
