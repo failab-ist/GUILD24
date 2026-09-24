@@ -248,7 +248,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={wallVisitorChance:.20,decorationStartGold:500,operating:60,frugalThreshold:120,tastingSupport:50,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90,
+G.DATA.balance={wallVisitorChance:.25,operating:60,frugalThreshold:120,tastingSupport:50,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90,
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: flat base purchase need for the
     accessible SALE modes (50% 할인 / 정가). 바가지 keeps its own Hazard-fit formula. */
  accessibleNeed:.80};

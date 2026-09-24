@@ -374,7 +374,7 @@ test('REMAKE 원정 전문 인증: the buyer of a Gate Counter gets +50G on the 
 
 /* The pity Counter guarantee (ECONOMY_ORDER base pity) may never overwrite the Black Market row. */
 test('SA-Q19 / 암시장: the pity Counter guarantee never overwrites the Black Market special offer',()=>{
- const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?1:0)+((g.run.event?.effects||{}).offers||0);
+ const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?DATA.decorationParams.dawnSign.extraOffers:0)+((g.run.event?.effects||{}).offers||0);
  for(let i=0;i<40;i++){
   const g=fresh('pity-blackmarket-'+i);g.run.facilities=[];g.run.dungeons=[{id:'fixture',hazards:['poison']}];
   g.run.event={id:'blackmarket',effects:{blackmarket:true}};
@@ -394,7 +394,7 @@ test('SA-Q19: the Black Market row carries 암시장 provenance, and only that r
  const fsx=require('node:fs'),pathx=require('node:path');
  const app=fsx.readFileSync(pathx.resolve(__dirname,'../dist/ui/app.js'),'utf8');
  const shop=fsx.readFileSync(pathx.resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?1:0)
+ const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?DATA.decorationParams.dawnSign.extraOffers:0)
   +((g.run.event?.effects||{}).offers||0);
 
  for(const facilities of [[],['terminal']]){

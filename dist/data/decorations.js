@@ -7,19 +7,19 @@
    report may hold its own copy. */
 G.DATA.decorationSlots=['sign','wall','counter','display'];
 G.DATA.decorations=[
- {id:'dawnSign', kind:'economy', slot:'sign',    name:'새벽배송 안내판',  price:1450, effect:'매일 발주 후보 1칸 추가.',
+ {id:'dawnSign', kind:'economy', slot:'sign',    name:'새벽배송 안내판',  price:1450, effect:'매일 발주 후보 2칸 추가.',
   text:'새벽마다 본사 물류가 한 줄 더 붙는다.'},
- {id:'guildPlaque', kind:'economy', slot:'wall', name:'길드 제휴 현판',   price:1250, effect:'매일 아침 20% 확률로 방문객 +1명.',
+ {id:'guildPlaque', kind:'economy', slot:'wall', name:'길드 제휴 현판',   price:1250, effect:'매일 아침 25% 확률로 방문객 +1명.',
   text:'길드 도장이 찍힌 현판. 가끔 이걸 보고 한 명이 더 들른다.'},
- {id:'thriftSafe', kind:'economy', slot:'counter',name:'알뜰 금고',      price:1150, effect:'영업 시작 자금 +500G.',
-  text:'카운터 아래 작은 금고. 개점 자금에 여유가 생긴다.'},
- {id:'premiumCase', kind:'economy',slot:'display',name:'프리미엄 쇼케이스',price:800, effect:'희귀 이상 모험가 등장 확률 19%로 증가 (기존 13%).',
+ {id:'thriftSafe', kind:'economy', slot:'counter',name:'알뜰 금고',      price:1150, effect:'매일 아침 영업 자금 +40G.',
+  text:'카운터 아래 작은 금고. 아침마다 조금씩 여유가 생긴다.'},
+ {id:'premiumCase', kind:'economy',slot:'display',name:'프리미엄 쇼케이스',price:800, effect:'평범보다 높은 등급의 모험가 등장 확률 50%로 증가 (기존 40%).',
   text:'유리 너머로 좋은 물건이 보이면, 좋은 손님이 온다.'},
  /* Survival / combat alternatives, one per Slot (User decision 2026-09-24). A Slot still wears
     ONE Decoration, so each Slot is a choice between running the store and keeping people alive.
     Same price as the economy Decoration of the same Slot, and the stronger effect sits in the
     dearer Slot. Ids are kept from the first placement; names and Slots follow the effect. */
- {id:'trainingRack', kind:'survival', slot:'sign',   name:'훈련소 제휴 간판', price:1450, effect:'처음 찾아오는 모험가 레벨 +1.',
+ {id:'trainingRack', kind:'survival', slot:'sign',   name:'훈련소 제휴 간판', price:1450, effect:'처음 찾아오는 모험가 50% 확률로 레벨 +1.',
   text:'길드 훈련소 문장을 건 간판. 조금 더 단련된 사람이 문을 연다.'},
  {id:'infirmaryPlaque', kind:'survival', slot:'wall', name:'의무실 현판',     price:1250, effect:'부상 모험가가 방문하면 35% 확률로 부상 회복.',
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
@@ -28,7 +28,10 @@ G.DATA.decorations=[
  {id:'firstAidKit', kind:'survival', slot:'display',  name:'구급품 진열장',   price:800, effect:'영업마다 사망 최대 2회를 중상으로 바꿈.',
   text:'붉은 상자가 놓인 유리장. 두 번은 누군가를 데려온다.'}];
 /* The numbers the four alternatives read. Presentation copy above states the same values. */
-G.DATA.decorationParams={memorialBoard:{deathLimitBonus:1},infirmaryPlaque:{healChance:.35},trainingRack:{levelBonus:1},firstAidKit:{saves:2}};
+/* The numbers every Decoration reads (User 2026-09-24). Presentation copy above states the same
+   values. The wall chance stays D.balance.wallVisitorChance, its original owner. */
+G.DATA.decorationParams={dawnSign:{extraOffers:2},thriftSafe:{dailyGold:40},
+ memorialBoard:{deathLimitBonus:1},infirmaryPlaque:{healChance:.35},trainingRack:{levelBonus:1,chance:.5},firstAidKit:{saves:2}};
 G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §STORE CAPITAL. The band is the Day the Run actually reached. */
 /* META_v2.8 §Day-reach conversion rate — DIRECTOR DOCUMENT BASELINE. The band is the Day the

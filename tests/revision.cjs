@@ -296,17 +296,19 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.balance.decorationStartGold,500,'counter is the approved starting Gold (User 2026-09-24)');
- assert.equal(DATA.balance.wallVisitorChance,.20,'wall is the approved Morning chance (User 2026-09-24)');
+ assert.equal(DATA.decorationParams.thriftSafe.dailyGold,40,'counter pays 40G every morning (User 2026-09-24)');
+ assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
+ assert.equal(DATA.balance.wallVisitorChance,.25,'wall is the approved Morning chance (User 2026-09-24)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- assert.ok(/wears\('dawnSign'\)\?1:0/.test(src),'sign adds exactly one ORDER candidate');
+ assert.ok(/wears\('dawnSign'\)\?D\.decorationParams\.dawnSign\.extraOffers:0/.test(src)&&DATA.decorationParams.dawnSign.extraOffers===2,'sign adds two ORDER candidates');
  assert.ok(/wears\('premiumCase'\)/.test(src),'display reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so
-    its copy can say 희귀 이상 13% -> 19% and be exactly true. */
+    its copy can say 희귀 이상 13% -> 19% and be exactly true. Amended the same day: every grade
+    above 평범 is lifted, 평범 60% -> 50%. */
  const adv=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=nums(adv.match(/opts\.premium\?(\[[^\]]+\])/)[1]),base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(w[1],base[1],'유망 is untouched');
- assert.equal(base[2]+base[3]+base[4],13);assert.equal(w[2]+w[3]+w[4],19,'희귀 이상 13% -> 19%');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.equal(w[0],50,'평범 60% -> 50%, so above 평범 40% -> 50%');
+ for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -
     otherwise a loaded `guild` or `premium` Run silently plays by retired rules. */

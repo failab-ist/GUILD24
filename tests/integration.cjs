@@ -1100,7 +1100,10 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
  Meta.buyDecoration(a,'thriftSafe');
  const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
- assert.equal(g.run.money,1000+DATA.balance.decorationStartGold,'counter is applied at start');
+ assert.equal(g.run.money,1000,'nothing is paid before DAY 1 opens');
+ g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
+ assert.equal(g.run.money,1000+DATA.decorationParams.thriftSafe.dailyGold,'DAY 1 morning pays the counter once');
+ assert.equal(g.run.daily.safeGold,DATA.decorationParams.thriftSafe.dailyGold,'and the DAY 1 ledger says so');
  assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
  assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
  // changing the Account mid-Run must not reach the Run that already started
@@ -1340,10 +1343,25 @@ test('구급품 진열장: a Death becomes 중상, up to twice per Run',()=>{
  const third=weak();Dungeon.resolve(third,d,new RNG(seed),[],run);assert.equal(third.alive,false,'a third is not');
  const bare=weak();Dungeon.resolve(bare,d,new RNG(seed),[],{loadout:{}});assert.equal(bare.alive,false,'without it the Death stands');
 });
-test('훈련소 제휴 간판: an adventurer created while it is worn arrives one Level higher',()=>{
- const g=wearing(['trainingRack'],'rack'),h=fresh('rack');
- const a=g.run.npcs.map(n=>n.level),b=h.run.npcs.map(n=>n.level);
- assert.deepEqual(a,b.map(l=>l+1),'the same seed, every created adventurer +1 Level');
+test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 50% chance',()=>{
+ const P=DATA.decorationParams.trainingRack,saved=P.chance;
+ try{
+  // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
+  P.chance=1;const hit=wearing(['trainingRack'],'rack').run.npcs.map(n=>n.level);
+  P.chance=0;const miss=wearing(['trainingRack'],'rack').run.npcs.map(n=>n.level);
+  assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
+ }finally{P.chance=saved;}
+ assert.equal(P.chance,.5);
+ let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingRack'],'rack-rate-'+i);
+  P.chance=0;const base=wearing(['trainingRack'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
+  g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
+ assert.ok(up/all>.4&&up/all<.6,'about half: '+(up/all));
+});
+test('알뜰 금고: 40G every morning, on the receipt',()=>{
+ const g=wearing(['thriftSafe'],'safe'),s=g.run;
+ s.phase='closing';g.closeDay();
+ assert.equal(s.day,2,'the Day turned');assert.equal(s.daily.safeGold,40,'the new morning pays into a fresh ledger');
+ assert.ok(source('dist/ui/app.js').includes("(d.safeGold?line('알뜰 금고',d.safeGold):'')"),'and the receipt names it');
 });
 
 console.log(count+' integration groups passed');

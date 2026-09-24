@@ -728,7 +728,7 @@ function changedRows(r){
 // and the money actually in the drawer is the last thing stamped on it.
 function closingScreen(){
  const s=game.run,d=s.daily,margin=d.revenue-d.cogs;
- const profit=margin+(d.subsidy||0)+(d.commission||0)+(d.greatSuccess||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
+ const profit=margin+(d.subsidy||0)+(d.commission||0)+(d.greatSuccess||0)+(d.safeGold||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
  /* a printed zero is still printed - the receipt states every figure - but it is marked so the
     detail rows that did not move stay quiet under the day's result (UI_UX §CLOSING). */
  const line=(label,value,cls='')=>'<div class="row '+cls+(value?'':' nil')+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
@@ -745,7 +745,7 @@ function closingScreen(){
    +line('판매 마진',margin,'sum')+'</div>'
   +'<div class="block">'+line('운영비',-d.operating)+line('폐기 원가',-d.wasteCost)
    +line('발주 교환',-d.rerollSpent)+line('본사 지원·수당',(d.subsidy||0)+(d.commission||0))
-   +(d.greatSuccess?line('대성공 본사 보상',d.greatSuccess):'')+'</div>'
+   +(d.greatSuccess?line('대성공 본사 보상',d.greatSuccess):'')+(d.safeGold?line('알뜰 금고',d.safeGold):'')+'</div>'
   +'<div class="row profit'+(profit<0?' loss':'')+'"><span>영업 손익</span><b>'+(profit>0?'+':'')+fmt(profit)+'</b></div>'
   +'<div class="block">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)
    +(d.deepSponsor?line(Copy.deep.sponsor,-d.deepSponsor):'')+line('재고 정리',d.liquidation)+'</div>'

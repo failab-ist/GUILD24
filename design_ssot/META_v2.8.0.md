@@ -528,12 +528,12 @@ a Relic that touch the same quantity simply both apply.
 
 ### sign — 새벽배송 안내판
 ```text
-ORDER offer candidates +1
+ORDER offer candidates +2
 ```
 
 ### wall — 길드 제휴 현판
 ```text
-each Morning, 20% chance of visitors +1
+each Morning, 25% chance of visitors +1
 ```
 
 The roll happens once per Morning, alongside the ordinary visitor generation, and is independent
@@ -541,16 +541,16 @@ of every other visitor source. It is a chance, not a guarantee: most Days it add
 
 ### counter — 알뜰 금고
 ```text
-Run starting Gold +500G
+every morning, store Gold +40G (DAY 1 included), shown on the day's receipt
 ```
 
 ### display — 프리미엄 쇼케이스
 ```text
-rare-NPC rarity weights = [54, 27, 14, 4, 1]
+rare-NPC rarity weights = [50, 30, 15, 4, 1]
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-Only Rare and above are lifted (ordinary [60, 27, 10, 2.5, 0.5]): Rare+ 13% -> 19%, 유망 unchanged
+Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 50%
 (User decision 2026-09-24). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active. It adds no extra spawn, no extra rarity roll and no new
 Gameplay RNG draw.
@@ -566,7 +566,7 @@ User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
 
 ### sign — 훈련소 제휴 간판 (id trainingRack)
 ```text
-every adventurer created while it is worn: spawn Level +1
+every adventurer created while it is worn: 50% chance of spawn Level +1
 ```
 
 ### wall — 의무실 현판
