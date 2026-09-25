@@ -25,7 +25,7 @@ if (V.strain === 'injOnly') patch('systems/dungeon', '+STRAIN.step*Math.max(0,we
 if (V.strain === 'injOnly5') { patch('systems/dungeon', 'const STRAIN={step:.08,cap:.30,weary:20};', 'const STRAIN={step:.05,cap:.15,weary:20};'); patch('systems/dungeon', '+STRAIN.step*Math.max(0,wearyRuns-1));', ');'); }
 if (V.strain === 'off') patch('systems/dungeon', 'const STRAIN={step:.08,cap:.30,weary:20};', 'const STRAIN={step:0,cap:0,weary:20};');
 // 4 operating cost
-if (V.op !== undefined && V.op !== 5) patch('systems/shop', 'const dayBase=90+5*(this.run.day-1);', `const dayBase=90+${V.op}*(this.run.day-1);`);
+if (typeof V.op === 'number' && V.op !== 5) patch('systems/shop', 'const dayBase=90+5*(this.run.day-1);', `const dayBase=90+${V.op}*(this.run.day-1);`);
 // 6 shelf: no expiry needs the null path back in stock()
 if (V.shelf === 'giNone' || V.shelf === 'old') patch('systems/shop', 'expires:this.run.day+it.days+G.Relics.shelf(this,it),', 'expires:it.days?this.run.day+it.days+G.Relics.shelf(this,it):null,');
 // 7 wallet
@@ -48,10 +48,19 @@ if (V.retreatHeal) patch('systems/dungeon', "outcome==='퇴각'?n.injury:Math.ma
 const ABANDON = V.injAware === 'save' ? 'false' : V.injAware === 'stage' ? 'c[n.id]>=4' : 'n.level<5||c[n.id]>=4';
 if (V.injAware) {
   patch('systems/simulation', 'const d=g.claimedGateFor(n);let attempts=0;',
-    `{const c=(s.__inj??={});c[n.id]=n.injury===1?(c[n.id]||0)+1:0;if(n.injury===1&&(${ABANDON})){globalThis.__abandon=(globalThis.__abandon||0)+1;g.depart();act();continue;}}const d=g.claimedGateFor(n);let attempts=0;`);
+    `{const c=(s.__inj??={});c[n.id]=n.injury===1?(c[n.id]||0)+1:0;if(globalThis.__injOn!==false&&n.injury===1&&(${ABANDON})){globalThis.__abandon=(globalThis.__abandon||0)+1;g.depart();act();continue;}}const d=g.claimedGateFor(n);let attempts=0;`);
   patch('systems/simulation', 'v:itemValue(n,it,d)+(st.expires?',
-    'v:itemValue(n,it,d)+(n.injury===1?((it.effects.combat||0)*.6+(it.effects.survival||0)*.4+(it.effects.aftercare?25:0)+(it.effects.escape?10:0)):0)+(st.expires?');
+    'v:itemValue(n,it,d)+(globalThis.__injOn!==false&&n.injury===1?((it.effects.combat||0)*.6+(it.effects.survival||0)*.4+(it.effects.aftercare?25:0)+(it.effects.escape?10:0)):0)+(st.expires?');
 }
+// operating cost 'mid': +5/Day up to D20, +2/Day after (User 2026-09-25 discussion: mid-game wall, calmer late game)
+if (V.op === 'mid') patch('systems/shop', 'const dayBase=90+5*(this.run.day-1);', 'const dayBase=90+5*Math.min(this.run.day-1,19)+2*Math.max(0,this.run.day-20);');
+// learning schedule for the trajectory: the policy is picked per Run index (runs 1-3 beginner, 4-6 balanced,
+// 7+ skilled + relic-aware + injury-aware); the injury layer is on only in the skilled phase
+if (V.schedule) patch('systems/simulation', 'playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware});',
+  "{const P=globalThis.__schedule(i);globalThis.__injOn=!!P.inj;playRun(g,byIndex[i],{policy:P.policy,pricing:P.pricing,build:P.build,seed:t,relicAware:!!P.relicAware});}");
+globalThis.__schedule = i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' }
+  : i < 6 ? { policy: 'balanced', pricing: 'adaptive', build: 'hybrid' }
+  : { policy: 'skilled', pricing: 'adaptive', build: 'expedition', relicAware: true, inj: true };
 // 7-b buffer removal (only when asked)
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
@@ -80,6 +89,10 @@ for (const f of files) {
     for (const it of D.items) { if (it.category === 'gear' && it.id !== 'antidote') it.days = 0; if (old[it.id] !== undefined) it.days = old[it.id]; } }
   if (V.need) D.balance.accessibleNeed = V.need;
   if (V.capRates) D.capitalRates = V.capRates;
+  // Decoration prices by Slot (both kinds of a Slot share the price)
+  if (V.decoPrices) for (const d of D.decorations) { if (V.decoPrices[d.slot] == null) throw Error('no price for ' + d.slot); d.price = V.decoPrices[d.slot]; }
+  // Boss: WRATH base Boss Power, and the Bosses that hold their own absolute Power numbers scaled with it
+  if (V.boss) { D.balance.bossPower = V.boss.power; if (V.boss.sloth) D.bossTuning.slothBossPower = V.boss.sloth; if (V.boss.greedCap != null) D.bossTuning.greedShortfallCap = V.boss.greedCap; }
 }
 const out = {};
 const slim = (r) => {
@@ -93,6 +106,8 @@ const slim = (r) => {
     capitalPerRun: st.runs ? Object.values(st.byBand || {}).reduce((a, b) => a + (b.gain || 0), 0) / st.runs : null,
     goldInTotal: r.goldInTotal, goldOutTotal: r.goldOutTotal, goldOut: r.goldOut, goldIn: r.goldIn,
     waste: r.shortage?.waste ?? null, stockouts: r.stockouts, bands: r.bands, npc: r.npc, final: r.final, days: r.days,
+    bossRuns: r.bossRuns, endDay: r.dayReached,
+    deathEndDay: (r.deathFailDay || []).reduce((h, d) => (h[d] = (h[d] || 0) + 1, h), {}),
   };
 };
 for (const [policy, pricing, build, opts = {}] of policies) {
@@ -107,7 +122,10 @@ for (const [policy, pricing, build, opts = {}] of policies) {
       acquisitionRuns: t.acquisition.map(a => ({ id: a.id, price: a.price, runs: a.runs })),
       firstClearRuns: t.firstClear.runIndex, heal: globalThis.__heal, abandon: globalThis.__abandon };
   } else {
-    const r = Debug.simulate(seeds, policy, null, pricing, build, { relicAware: !!opts.relicAware });
+    let account = null;
+    if (V.loadout) { account = Meta.fresh(); account.store.capital = 1e9; for (const id of V.loadout) Meta.buyDecoration(account, id); account.store.capital = 0; }
+    if (V.injAware) globalThis.__injOn = opts.inj !== false;
+    const r = Debug.simulate(seeds, policy, account, pricing, build, { relicAware: !!opts.relicAware });
     out[key] = { ...slim(r), heal: globalThis.__heal, abandon: globalThis.__abandon };
   }
 }
