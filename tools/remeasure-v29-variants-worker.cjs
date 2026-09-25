@@ -89,6 +89,11 @@ if (V.badluck) {
   patch('systems/dungeon', "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);",
     "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48)*(1-(globalThis.__bl||0));");
 }
+// Gate power curve (User 2026-09-25 discussion): the day term's early / late slope and the per-Tier Power step
+if (V.gate) {
+  patch('systems/dungeon', 'const GATE={knee:9,early:1.70,late:0.40};', `const GATE={knee:9,early:${V.gate.early},late:${V.gate.late}};`);
+  if (V.gate.tier != null) patch('systems/shop', 'power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+', `power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*${V.gate.tier}+`);
+}
 // 7-b buffer removal (only when asked)
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
