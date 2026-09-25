@@ -176,7 +176,9 @@ function playRun(g,out,ctx){
     `balanced` skips: it fills a healthy, rested customer's Bag to reach 만반의 준비 even with an Item of little direct
     value to that Gate. It also drops to 50% whenever the wallet cannot cover the asked price (the `policy!=='balanced'`
     test below is left as is), where `balanced` does that only for its top roster or a crisis Item. (A till floor at the operating cost was tried and dropped: with Sell = Buy x 2, holding cash back
-    starves the shelf and spirals into bankruptcy - a player keeps ordering.) */
+    starves the shelf and spirals into bankruptcy - a player keeps ordering.) Adopted as the v2.9.2 review's primary lens after
+    the User's save (run-level revenue, knowledge, first-discovery Days) sat closer to it than to `balanced`
+    (reports/v292-balance-review.md §2). */
  const bal=policy==='balanced'||policy==='human',human=policy==='human',spend=spending(policy);
  /* RELIC-AWARE LAYER, measurement only (ctx.relicAware, default off). The policies above were
     written before most Store Supports existed, so a Support whose value comes from a choice the
