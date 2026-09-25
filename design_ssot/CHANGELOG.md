@@ -19,6 +19,8 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   H3 cascade capped ≤ 320 ms / ≤ 3 hits; H5 becomes one seal stamp per verdict (the expedition commits 1~3
   members, and a FINAL loss is not a per-member death); H4 body prints as one run; H6 conditional on the
   sequence review. Docs only.
+- Order (User 2026-09-25): H1 → H5 → H2 → H3 → H4 → H6 — the two heaviest landings are authored first in one
+  hand; the rest reuse their patterns. WORK_STATE splits the session plan into two stages.
 
 ## v2.9.1 — balance, PLANNED (User 2026-09-25)
 

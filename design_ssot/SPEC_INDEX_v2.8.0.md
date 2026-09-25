@@ -253,12 +253,12 @@ touches Source only after the User authorizes that batch.
 
       H1 NIGHT 판정 도장 (verdict stamp, per-Outcome weight, Hero Item cause beat, Insurance reversal overstamp)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §NIGHT LAYOUT / NIGHT_CLOSING (display order) / UI_UX_QA
+      H5 FINAL 최종 토벌 (one seal stamp on a win, one failure stamp on a loss; never the death tape, never a party count)
+                                     -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
       H2 SALE 계산대 (key press, first coin tick, stub after the stamp; no streak rhythm)
                                      -> PRESENTATION §TRANSACTION BEAT A5 / A8 / UI_UX §SALE — COUNTER TRAY / UI_UX_QA
       H3 ORDER 확정 (crate cascade ≤ 320 ms, ≤ 3 audible hits, balance count-down)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §ORDER — WAREHOUSE DISCLOSURE / ECONOMY_ORDER_QA or UI_UX_QA
-      H5 FINAL 최종 토벌 (one seal stamp on a win, one failure stamp on a loss; never the death tape, never a party count)
-                                     -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
       H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part after v2.9.1)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
       H6 장면 전환 (conditional: entry beat only for the hard cuts the sequence review finds intrusive)

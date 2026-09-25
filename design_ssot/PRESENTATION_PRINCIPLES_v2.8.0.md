@@ -485,7 +485,9 @@ General contract, every game feel beat (extends §TRANSACTION BEAT):
 | H4 | CLOSING 마감 receipt | the receipt body prints as one fast run (all rows within ≤ 200 ms, one printer tick, not a tick per row — this screen repeats every Day for 30 Days) and only the final profit / loss line lands as a stamp (gold for profit, red for loss). No `어제보다 +N` line (stays deferred in the v3.0+ router). Store Capital settlement: count-up with a click when a decoration price line is crossed — only after the v2.9.1 balance values are adopted (rates are halved today) | PRESENTATION (this row), UI_UX §CLOSING, UI_UX_QA | PLANNED (Store Capital part waits on v2.9.1) |
 | H6 | 장면 전환 phase entry | conditional, decided last: CLOSING, FINAL, END and the DAY 0 screen are hard cuts today (`playPhase` gives morning / order / night / sell an entry). After H1 / H4 / H5 are in, the sequence-review captures decide which of these cuts actually intrudes; only those screens get an entry beat of the same family (≤ 240 ms, one movement, 일반 intensity). A screen whose cut does not intrude stays a cut; DAY 0 is not dressed by default | PRESENTATION (this row), UI_UX (the affected screens' sections), UI_UX_QA | PLANNED (conditional) |
 
-Execution order: H1 → H2 → H3 → H5 → H4 → H6. One batch per turn: owner amendment (UI_UX / QA with their
+Execution order: H1 → H5 → H2 → H3 → H4 → H6 (User 2026-09-25: H5 follows H1 directly because it reuses
+H1's stamp language and cue shape, and the two heaviest landings are then authored in one hand; the
+remaining batches copy those patterns and invent no new ones). One batch per turn: owner amendment (UI_UX / QA with their
 ledgers; this owner has no ledger) → Source → ui-guard pins → npm test / ssot:check / qa:runtime →
 before / after capture at 390 and 1280 with reduced-motion → commit → report → STOP. A row's status
 flips to ADOPTED when its batch is committed; §VISUAL REVIEW PROCESS decides quality, not the
