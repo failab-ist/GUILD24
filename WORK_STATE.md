@@ -24,7 +24,7 @@ Read AGENTS.md first and follow it.
 
 - Active task: adopt the balance-close owner amendments in Source, one owner-sized batch per commit, then re-verify and close the release.
 - Batches (owner -> Source entry points):
-  1. DUNGEON_HAZARD -> `dist/systems/dungeon.js`: outcome Fatigue (中상 0), Severe shares `.42/.13` (real + shadow paths),
+  1. DUNGEON_HAZARD -> `dist/systems/dungeon.js`: outcome Fatigue (중상 0), Severe shares `.42/.13` (real + shadow paths),
      `STRAIN` / strainFor (consecutive injured only), death roll (preparedFactor × levelFactor, removed band -> 중상 .36 / 부상),
      SALE death-risk estimate (levelFactor), retreat healing in the injury step, `WALLET_MULT` success 1, `GATE` 1.20 / 0.80;
      bad-luck assist in `dist/systems/shop.js` night loop (skip `d.deep`, Final excluded)
