@@ -1498,7 +1498,7 @@ Presentation:
 - no fake unknown portrait;
 - no decorative timeline cards;
 - the DAY 5 / DAY 30 anchors may use simple typographic hierarchy inside the same dossier;
-- the body is two lines under the unchanged header `마왕 조사 개시` and lead line: the DAY 5 line and the DAY 30 line; the closing sentence is deleted; button unchanged; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §14-1 (User 2026-09-24, v2.9.0);
+- the body is two entries under the unchanged header `마왕 조사 개시` and lead line: a `DAY 05` label on the record's LED face over its one line, then a `DAY 30` label over its one line; the closing sentence is deleted; button unchanged; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §14-1 (User 2026-09-25, v2.9.0);
 - one `확인` acknowledgement;
 - compact enough to read as onboarding information, but large enough that the Run objective cannot
   be missed.

@@ -1743,7 +1743,8 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
     Days are told apart by type on the same record, not by timeline cards. */
  /* v2.9.0 (COPY_AUDIT §14-1): the body is two lines; the closing sentence is gone */
  if(stage==='d0')return '<div class="boss-reveal d0">'+bossFiled()+'<p class="lede">'+E(c.d0.lead)+'</p>'
-  +c.d0.lines.map(l=>'<p class="d0-line">'+E(l)+'</p>').join('')+'</div>';
+  /* COPY_AUDIT §14-1 (User 2026-09-25): the DAY 05 / DAY 30 anchors read on their own LED label above each line */
+  +c.d0.steps.map(([day,lines])=>'<div class="d0-step"><b>'+E(day)+'</b>'+lines.map(l=>'<p>'+E(l)+'</p>').join('')+'</div>').join('')+'</div>';
  return '<div class="boss-reveal d5">'+bossFiled()+'<p class="lede">'+E(c.d5.sub)+'</p>'
   +'<h3 class="boss-name">'+E(b.name)+'</h3>'
   +plate+'<p class="flavor">'+E(c.d5.flavor[s.bossId])+'</p></div>';}

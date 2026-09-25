@@ -425,6 +425,86 @@ General contract, every beat:
 
 Exact surface / layout -> UI_UX_v2.8.0.md §SALE; acceptance -> UI_UX_QA_v2.8.0.md.
 
+## GAME FEEL BEAT (v2.9.2, PLANNED)
+
+Purpose (User 2026-09-25): the game has no visible enemy, so the moments where a decision comes back
+as a result must carry the weight a hit carries elsewhere. Principles were taken from a design talk
+and its comments, not copied: a card that has weight, sound and a landing (Hearthstone); repeated
+inputs that feel like a combo (DMC); "well done" said by a rising number, never by a word (mass-market
+games); the reversal at the brink and the weight of a death (Darkest Dungeon). Status: PLANNED —
+registered as the v2.9.2 presentation batches; each batch is docs-first and touches Source only after
+the User authorizes that batch. Nothing here is adopted in Source yet.
+
+Where the principles land:
+
+| principle | our beat | Source today (dist/ui) |
+|---|---|---|
+| a card with weight, sound, landing | NIGHT verdict stamp, SALE price stamp, ORDER confirm | NIGHT: the beat slides in per tone (340~760 ms) and the verdict tag follows 160 ms later (scale 1.12→1 260 ms, or translateY -6→0); SALE: the receipt stub stamps in 1.12→1 200 ms, Gold counts up 320 ms; ORDER: the form slides in 280 ms and one `order` stamp sample plays. No wind-up, no landing after-motion |
+| repeated inputs feel like a combo | consecutive sales, consecutive returns in one night | every sale plays the same beat; no rhythm, no acceleration |
+| "well done" as a rising number | receipt stub, Gold count-up, CLOSING receipt, Store Capital | the stub exists (2.5 s); CLOSING and Store Capital are static tables; no praise word (§LEARNING AFTER RESULT forbids a right-answer cue, so acknowledgement lives in the result only) |
+| the reversal at the brink | the night an Insurance (귀환석, 세계수, 구급품 진열장, 구급키트, 강골) turns a death or Severe Injury into a return; 대성공; the final expedition | one proof sentence and the `rescue` cue behind the Outcome cue; the reversal is stated, not shown |
+| the weight of a death | the 사망 result | `gone` tone fades in 760 ms with the 1.4 s `death` cue; the direction is right, the weight is short |
+
+Three-part beat: wind-up (a held stillness or pull) → impact (one short, hard frame: press, flash,
+sound, ink) → after-motion (settle, number jump, bleed). Today the impact is soft and the wind-up and
+after-motion are missing.
+
+Where the hit of this game lives (User 2026-09-25, second review): there is no enemy to strike. The
+hit is the moment a choice comes back — what I sold at the counter → the NIGHT result landing → the
+line that says that Item actually changed it. A heavier verdict stamp alone only improves a result
+screen; the cause has to land with it (NIGHT_CLOSING §HERO ITEM FEEDBACK, §INSURANCE CAUSALITY).
+
+General contract, every game feel beat (extends §TRANSACTION BEAT):
+- presentation-only; no gameplay rule, Save field, Gameplay RNG draw, proof or dialogue change; a beat
+  uses only what the resolved result object already holds
+- each beat ≤ 320 ms; one exception: the 사망 tape (H1) may take ≤ 500 ms, matching the death cue
+- never blocks input; skipped entirely under `prefers-reduced-motion` with an identical end state
+- motion stays inside the card / panel it belongs to; no full-screen shake, no particle or flash
+  spread, no cinematic layer
+- no combo counter, no streak UI, no praise word, no fit or right-answer cue (§LEARNING AFTER RESULT)
+- all of it lives in the presentation layer (`playCue` / `playPhase`, ui.css, audio cue parameters)
+- intensity follows the event's weight, never the same level everywhere (User 2026-09-25, from a
+  game-feel talk): 일반 = a sale, an order, a button, a phase entry; 중요 = a NIGHT verdict, the CLOSING
+  profit stamp; 클라이맥스 = the Insurance reversal overstamp, 사망, the FINAL result. A 일반 beat is a
+  press and a settle; a 중요 beat adds wind-up and after-motion; only a 클라이맥스 beat may use the two-step
+  stamp or the tape
+- impact budget (User 2026-09-25): at one event's landing, at most one primary visual response, one
+  primary sound and, when the event carries one, one number / cause response are emphasised at the same
+  time. A motion, sound or stamp that repeats a meaning already carried by another response is not
+  added. A beat that would exceed the budget is cut, not layered
+- a held stillness (wind-up) is not a beat and is never used at 일반 intensity; at 중요 / 클라이맥스 it is
+  ≤ 200 ms and the whole run (hold + impact + after-motion) still keeps a result readable within the
+  time the current entry takes (NIGHT: 340~760 ms per tone today)
+
+| id | beat | planned behaviour | owners at execution | status |
+|---|---|---|---|---|
+| H1 | NIGHT 판정 도장 verdict stamp | the card stands, then the verdict tag lands from above (scale 1.6→1, 90 ms); on the landing frame the card dips 4 px and settles — that dip is the stamp's physicality and the only companion motion (no ink ring: it would repeat the same "it landed" meaning, impact budget). Hold before the landing: none for 성공 / 퇴각 (일반), ≤ 200 ms for 대성공 / 부상 / 중상 (중요) and for 사망 / a reversal (클라이맥스) — a NIGHT with several results must not slow down. Weight per Outcome: 대성공 one gold stamp (one landing, differentiated by colour and cue, never two — the two-step stamp is 클라이맥스-only), 성공 once, 퇴각 shallow, 부상 / 중상 land as a red-ink spread / a slightly misaligned stamp (paper language, not a wound), 사망 gets no stamp — a black tape lays across slowly (≤ 500 ms). After-motion has one owner: **with a verified Hero Item line** (NIGHT_CLOSING §HERO ITEM FEEDBACK — `{Item} 덕분에 …`) that line is the after-motion — it settles once inside its own area (120~180 ms) after the stamp, and the numbers (Gold, EXP, 단골도) only update to their values, no jump or count-up; **without one**, the numbers of the result group that changed count up after the stamp. The cause outranks the money because the hit of this game is "what I sold made that result", not "what I earned". Reversal night (`rescued` / `avoidedDeath` on the result): the stamp lands in two steps — the original Outcome's silhouette starts to print (≤ 200 ms) and the Insurance name cuts in, overstamping the actual Outcome; the `rescue` cue lands on that overstamp frame and the cause beat is that overstamp, not a second pulse. Outcome cues keep their notes; the first note comes earlier and harder on the impact frame | PRESENTATION (this row), UI_UX §NIGHT LAYOUT, NIGHT_CLOSING (display order only), UI_UX_QA | PLANNED |
+| H2 | SALE 계산대 counter feel | a sale already answers in several places (A1 hand-over, Bag settle, Gold count-up, Stat pulse, A2 nod, A8 stub), so this batch adds only the press and the landing: the pressed price key travels 3 px for 60 ms and returns; A5 coin ticks keep 1 / 2 / 3 with the first tick harder; 바가지's first tick lands 40 ms later with a lower tone; the A8 stub lands right after the impact frame of the price-key commit / first register tick instead of on render. There is no separate "price stamp" object — the key press and the first tick are the impact, the A8 stub is the only stamp SALE has. No counter-band bump, no faster second stamp, no overtone from the fifth sale — a sale count must never make the game sound more excited (User 2026-09-25, second review: the judgement is the reward, not the streak). No combo number, no streak UI | PRESENTATION §TRANSACTION BEAT A5 / A8, UI_UX §SALE — COUNTER TRAY, UI_UX_QA | PLANNED |
+| H3 | ORDER 확정 confirm | on 발주 확정 the warehouse cells fill as crates land in a cascade, each warehouse count goes from its prior value straight to its resolved value on its crate's landing (one crate per SKU, never one per unit; neither the crate count nor the number motion may misstate the ordered quantity), the balance counts down to the resolved value. The whole cascade is capped at ≤ 320 ms whatever the SKU count (the stagger shrinks as SKUs grow; 70 ms is the ceiling per step, not a fixed value) and at most 3 audible `order`-family hits play — the rest of the cascade is silent. The `발주 완료.` line is unchanged | PRESENTATION (this row), UI_UX §ORDER — WAREHOUSE DISCLOSURE, ECONOMY_ORDER_QA or UI_UX_QA | PLANNED |
+| H5 | FINAL 최종 토벌 | one final seal stamp on the Boss name for a win (클라이맥스 weight, the heaviest single landing in the game), one failure stamp for a loss. The stamp count never encodes the party (the expedition commits 1~3 members, so "three stamps" would misreport a one- or two-member run), and a loss does not use the H1 death tape — the FINAL failure is a run verdict, not a per-member death (FINAL_EXPEDITION §RUN CLEAR / FAILURE). No new copy; the existing result sentence follows the stamp | PRESENTATION (this row), FINAL_EXPEDITION §BOSS CLEAR / §RUN CLEAR (display order only), UI_UX_QA | PLANNED |
+| H4 | CLOSING 마감 receipt | the receipt body prints as one fast run (all rows within ≤ 200 ms, one printer tick, not a tick per row — this screen repeats every Day for 30 Days) and only the final profit / loss line lands as a stamp (gold for profit, red for loss). No `어제보다 +N` line (stays deferred in the v3.0+ router). Store Capital settlement: count-up with a click when a decoration price line is crossed — only after the v2.9.1 balance values are adopted (rates are halved today) | PRESENTATION (this row), UI_UX §CLOSING, UI_UX_QA | PLANNED (Store Capital part waits on v2.9.1) |
+| H6 | 장면 전환 phase entry | conditional, decided last: CLOSING, FINAL, END and the DAY 0 screen are hard cuts today (`playPhase` gives morning / order / night / sell an entry). After H1 / H4 / H5 are in, the H6 batch first captures the four cuts in the two review sequences and reports them; the User decides which screens get the beat (UNRESOLVED until that decision — WORK does not pick the targets, AGENTS §9). Only the chosen screens get an entry beat of the same family (≤ 240 ms, one movement, 일반 intensity); the others stay a cut; DAY 0 is not dressed by default | PRESENTATION (this row), UI_UX (the chosen screens' sections), UI_UX_QA | PLANNED (targets UNRESOLVED until the sequence review) |
+
+Execution order: H1 → H5 → H2 → H3 → H4 → H6 (User 2026-09-25: H5 follows H1 directly because it reuses
+H1's stamp language and cue shape, and the two heaviest landings are then authored in one hand; the
+remaining batches copy those patterns and invent no new ones). One batch per turn: owner amendment (UI_UX / QA with their
+ledgers; this owner has no ledger) → Source → ui-guard pins → npm test / ssot:check / qa:runtime →
+before / after capture at 390 and 1280 with reduced-motion → commit → report → STOP. A row's status
+flips to ADOPTED when its batch is committed; §VISUAL REVIEW PROCESS decides quality, not the
+implementer's reading.
+
+Sequence review (User 2026-09-25): two runs are reviewed as one continuous experience, not as separate
+effects — the last NIGHT verdict → `마감으로` → the CLOSING receipt printing → `다음 날` (H1 + H4 + H6),
+and the FINAL result → the clear / failure screen (H5 + H6). The capture for the batch that completes
+a sequence covers the whole run, and the run must not grow long enough to hurt repeated play.
+
+Audit lens before a batch (adapted from the talk's review prompt; screen shake, particles and camera
+items dropped as excluded above): read each event the batch touches as
+입력 → 예비 → 행동 → 충돌 / 변화 → 결과 → 정착, and look first for events whose logic already exists
+but whose expression is missing (a sale that works without feeling handed over, a death that is stated
+without a process, a win without an emotional full stop). Only what has a felt effect in this game is
+proposed; nothing is added to make it richer.
+
 ## LEARNING AFTER RESULT
 
 (User 2026-09-24, v2.9.0): the game teaches through results the player already caused — the NIGHT proof system (verified causes, the Item that actually changed an Outcome) and the per-customer transaction result — never through a hint placed before the decision. No dynamic fit emphasis, no recommendation, no "right answer" cue is added ahead of a choice; the category grammar is explained once (COPY_AUDIT §8-0) as vocabulary, not as advice.

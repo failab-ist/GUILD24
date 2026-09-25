@@ -2967,9 +2967,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    date face and spacing - no timeline cards, no rules, no art. */
 .boss-reveal.d0{gap:14px}
 .boss-reveal.d0 .lede{font:600 16px/1.5 var(--ui);color:var(--ink)}
+/* the two entries (UI-Q-v29-14, User 2026-09-25): the DAY 05 / DAY 30 anchor on the record's LED face over each
+   line, the line in the record's body weight */
 .boss-reveal .d0-step b{display:block;margin-bottom:4px;font:500 16px/1 var(--f-led);letter-spacing:.06em;color:#7a281f}
 .boss-reveal .d0-step p{margin:0;font:400 15px/1.6 var(--ui);color:#3c3527}
-.boss-reveal .d0-close{margin:2px 0 0;font:400 14px/1.6 var(--ui);color:#5f5440}
 /* the pressure each Hazard puts on the party is part of the disclosure, not a footnote */
 .boss-reveal.final .fam-card .hazards .press{font-size:14px;color:#5f5440}
 /* D5's owned line is the record's own note, not a tinted slip laid on it */
@@ -2990,7 +2991,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .boss-reveal.d0 .lede{font-size:18px}
  .boss-reveal .d0-step b{font-size:17px}
  .boss-reveal .d0-step p{font-size:16px}
- .boss-reveal .d0-close{font-size:15px}
  .boss-reveal.d5 .boss-name,.boss-reveal.d15 .boss-name{font-size:34px}
  .boss-reveal .trait-name b{font-size:26px}
  .boss-reveal .trait-body p{font-size:16px}

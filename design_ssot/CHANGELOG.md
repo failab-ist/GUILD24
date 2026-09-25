@@ -3,6 +3,29 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.2 — game feel (타격감), PLANNED (User 2026-09-25)
+
+Docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
+counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
+(execution order H1 → H2 → H3 → H5 → H4; each batch docs-first, Source after User authorization);
+SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATION and SPEC_INDEX changed.
+- Review against a game-feel talk (User 2026-09-25): intensity by event weight (일반 / 중요 / 클라이맥스)
+  added to the contract; H6 phase entry beat for CLOSING / FINAL / END / DAY 0 (hard cuts today) registered
+  last in the order; two sequence reviews and a pre-batch audit lens added. Excluded: screen shake, camera,
+  particles, haptics. Docs only.
+- Second review (User 2026-09-25, outside opinion checked against Canonical / Source): impact budget added to
+  the contract; the wind-up hold is 일반-free and ≤ 200 ms otherwise; H1 gains the Hero Item cause beat and
+  paper-language injury stamps; H2 loses the streak rhythm (faster second stamp, fifth-sale overtone, band bump);
+  H3 cascade capped ≤ 320 ms / ≤ 3 hits; H5 becomes one seal stamp per verdict (the expedition commits 1~3
+  members, and a FINAL loss is not a per-member death); H4 body prints as one run; H6 conditional on the
+  sequence review. Docs only.
+- Order (User 2026-09-25): H1 → H5 → H2 → H3 → H4 → H6 — the two heaviest landings are authored first in one
+  hand; the rest reuse their patterns. WORK_STATE splits the session plan into two stages.
+- Third review (User 2026-09-25): H1 drops the ink ring and the double 대성공 stamp (one gold landing; the two-step
+  stamp stays 클라이맥스-only) and gives the after-motion one owner (the Hero Item line when present, else the
+  numbers); H2 names no "price stamp" (the A8 stub is SALE's only stamp); H3 counts go prior → resolved, never
+  a unit per crate; H6 targets are the User's decision after the capture, not WORK's. Docs only.
+
 ## v2.9.1 — balance (User decisions 2026-09-25); owners amended docs-first, Source adoption pending
 
 The v2.9.0 BALANCE FINDING is resolved as its own version (User 2026-09-25). Values: `reports/v29-balance-agreements.md`;
@@ -50,6 +73,8 @@ The BALANCE FINDING (`reports/v29-balance-finding-handoff.md`) and 7-b were deci
 - Quick fix (User 2026-09-25): the ORDER supply-cap toast reads `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9, UI_UX, UI_UX_QA) — the
   old `오늘 공급이 끝났습니다.` read as if nothing could be ordered at all.
 
+- Fix (2026-09-25, RUNTIME UX BUG from I-3): the D0 briefing's two body lines had no style rule and fell to the secondary tone.
+  User 2026-09-25: the `DAY 05` / `DAY 30` anchors come back as an LED label over each line (COPY_AUDIT §14-1, UI_UX §BOSS D0, UI-Q-v29-14).
 - Close-out (2026-09-25): EVENT §08 — on a morning with no existing slot the newcomer is the Day's only visitor (User);
   평생 단골제 card drops `(하루 1회)`; SPEC_INDEX status / acceptance updated; WORK_STATE carries the balance handoff.
 

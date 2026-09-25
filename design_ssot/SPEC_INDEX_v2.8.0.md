@@ -240,8 +240,9 @@ The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29
 (F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
-User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). `v2.9.0` is tagged on `main` `3f18ceb`, the
-implementation-complete state (User 2026-09-25; WORK_STATE notes if the tag still has to be pushed).
+User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). `v2.9.0` is tagged (User 2026-09-25) on the last
+v2.9.0 Source commit on `main`, `3d0ddc6` (the close-out `3f18ceb` plus the D0 briefing fix); WORK_STATE notes if the tag
+still has to be pushed.
 
 ## v2.9.1 — BALANCE
 
@@ -249,10 +250,41 @@ User decisions 2026-09-25. Every value: `reports/v29-balance-agreements.md`; mea
 `reports/v29-balance-ideal.md`; owner amendments: CHANGELOG §v2.9.1. 7-b is closed (the remaining-Supply buffer stays).
 
 v2.9.1 is ready to close when:
-- every v2.9.1 owner amendment is in Source (WORK_STATE lists the batches) and the copy-only open items are approved and adopted
+- every v2.9.1 owner amendment is in Source (`reports/v291-implementation-handoff.md` lists the batches)
 - `npm test`, `npm run ssot:check`, `npm run qa:runtime` PASS and the UI batch passes its screenshot review
 - the native build reproduces the closing measurement (`tools/remeasure-v29-closing-results.json`) within sampling error
 - `reports/deco-balance` is regenerated
+
+## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25, PLANNED)
+
+Version routing (User 2026-09-25): the balance session is **v2.9.1**; the game feel presentation
+batches are **v2.9.2**. Both run in separate sessions on branches from `main`; each is docs-first and
+touches Source only after the User authorizes that batch.
+
+- v2.9.1 BALANCE: decided 2026-09-25, owners amended — §v2.9.1 — BALANCE above; Source adoption per
+  `reports/v291-implementation-handoff.md`.
+- v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
+  (principles table, contract, H1~H5 rows). Routing per batch, in execution order:
+
+      H1 NIGHT 판정 도장 (verdict stamp, per-Outcome weight, Hero Item cause beat, Insurance reversal overstamp)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §NIGHT LAYOUT / NIGHT_CLOSING (display order) / UI_UX_QA
+      H5 FINAL 최종 토벌 (one seal stamp on a win, one failure stamp on a loss; never the death tape, never a party count)
+                                     -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
+      H2 SALE 계산대 (key press, first coin tick, stub after the stamp; no streak rhythm)
+                                     -> PRESENTATION §TRANSACTION BEAT A5 / A8 / UI_UX §SALE — COUNTER TRAY / UI_UX_QA
+      H3 ORDER 확정 (crate cascade ≤ 320 ms, ≤ 3 audible hits, balance count-down)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §ORDER — WAREHOUSE DISCLOSURE / ECONOMY_ORDER_QA or UI_UX_QA
+      H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part after v2.9.1)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
+      H6 장면 전환 (conditional: the batch captures the four hard cuts and the User picks the targets; UNRESOLVED until then)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX (the affected screens) / UI_UX_QA
+
+  Contract: presentation-only, ≤ 320 ms per beat (사망 tape ≤ 500 ms), no input block, reduced-motion
+  no-op, motion inside the card, no full-screen shake, no combo / streak UI, no praise word, no rule /
+  Save / RNG / proof change. Intensity by event weight (일반 / 중요 / 클라이맥스), the impact budget (one
+  visual + one sound + at most one number / cause response per landing) and the two sequence reviews
+  (last verdict → CLOSING → next day; FINAL result → clear screen) -> PRESENTATION §GAME FEEL BEAT.
+  Not in v2.9.2: the `어제보다 +N` line (v3.0+ router), new copy, haptics (no iOS Safari support).
 
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
 
