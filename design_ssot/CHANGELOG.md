@@ -9,6 +9,10 @@ Docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT ve
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
 (execution order H1 → H2 → H3 → H5 → H4; each batch docs-first, Source after User authorization);
 SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATION and SPEC_INDEX changed.
+- Review against a game-feel talk (User 2026-09-25): intensity by event weight (일반 / 중요 / 클라이맥스)
+  added to the contract; H6 phase entry beat for CLOSING / FINAL / END / DAY 0 (hard cuts today) registered
+  last in the order; two sequence reviews and a pre-batch audit lens added. Excluded: screen shake, camera,
+  particles, haptics. Docs only.
 
 ## v2.9.1 — balance, PLANNED (User 2026-09-25)
 

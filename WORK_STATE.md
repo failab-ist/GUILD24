@@ -13,7 +13,7 @@ STATE: V2_9_0_IMPLEMENTATION_COMPLETE — RELEASE OPEN ON BALANCE
 - verification at the close-out commit: `npm test` PASS (tests/copy.cjs whole), `npm run ssot:check` PASS, `npm run qa:runtime` 5/5
 - last tagged release: v2.8 (`49a291f`); v2.9.0 is deployed from main but not tagged
 - version routing (User 2026-09-25): balance = v2.9.1, game feel (타격감) = v2.9.2; both in separate sessions, branches from `main`
-- v2.9.2 game feel batches H1 … H5 are registered as PLANNED (docs only: PRESENTATION §GAME FEEL BEAT, SPEC_INDEX §v2.9.1 / v2.9.2, CHANGELOG); no Source touched
+- v2.9.2 game feel batches H1 … H6 are registered as PLANNED (docs only: PRESENTATION §GAME FEEL BEAT, SPEC_INDEX §v2.9.1 / v2.9.2, CHANGELOG); no Source touched
 - completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
 ## In Progress
@@ -46,7 +46,8 @@ AGENTS.md를 먼저 읽고 따른다.
 AGENTS.md를 먼저 읽고 따른다.
 
 - 역할 / 기점: 프레젠테이션 WORK, `main`(`3d0ddc6` 이후)에서 새 브랜치. 결과는 v2.9.2. H4의 점포 자본 부분을 빼면 밸런스 세션과 독립.
-- 활성 태스크: PLANNED 상태의 타격감 비트를 등록된 순서 H1 → H2 → H3 → H5 → H4로 한 배치씩 반영한다. H1(NIGHT 판정 도장 + 보험 반전 덮어찍기)부터 시작. 한 턴에 한 배치, 그리고 STOP.
+- 활성 태스크: PLANNED 상태의 타격감 비트를 등록된 순서 H1 → H2 → H3 → H5 → H4 → H6로 한 배치씩 반영한다. H1(NIGHT 판정 도장 + 보험 반전 덮어찍기)부터 시작. 한 턴에 한 배치, 그리고 STOP.
+- 배치 전 감사 렌즈: 배치가 건드리는 사건을 입력 → 예비 → 행동 → 충돌/변화 → 결과 → 정착으로 읽고, 로직은 있는데 표현이 빠진 사건부터 찾는다(PRESENTATION §GAME FEEL BEAT "Audit lens"). BEFORE 캡처 뒤에 돌린다.
 - 진입점:
   - 설계 + 상태: `design_ssot/PRESENTATION_PRINCIPLES_v2.8.0.md` §GAME FEEL BEAT (원리 표, 계약, H1~H5 행; 배치가 커밋되면 그 행을 ADOPTED로 바꾼다)
   - 라우팅: `design_ssot/SPEC_INDEX_v2.8.0.md` §v2.9.1 / v2.9.2
@@ -55,8 +56,9 @@ AGENTS.md를 먼저 읽고 따른다.
   - Source(프레젠테이션 레이어만): `dist/ui/app.js` — `playPhase` night 블록(beat / 판정 태그 진입), `playCue`(sale / refuse 비트, 영수증 조각), `nightSound` / `nightCue`(Outcome 큐 + `rescue` 악센트); `dist/ui/audio.js` — 큐 음표 표와 합성 파라미터(great / retreat / injury / severe / death / rescue, order, sale 계열); `dist/ui/ui.css` — `.p-night .beat .verdict`, `.receipt-stub`, 계산대 트레이 / dock 도장
   - 핀: `tests/ui-guard.cjs`(Source 문자열 / CSS), `tests/copy.cjs`(새 카피 없음 예상)
   - 캡처: 390·1280에서 before / after, reduced-motion 포함; PRESENTATION §VISUAL REVIEW PROCESS대로 별도 시각 검수
-- 모든 배치에서 지킬 계약: 프레젠테이션 전용; 비트당 ≤ 320 ms(사망 테이프 ≤ 500 ms); 입력 차단 없음; reduced-motion에서 무효이고 최종 상태 동일; 카드 안에서만 움직임; 화면 전체 흔들림·콤보/연속 UI·칭찬 문구·규칙/저장/RNG/증명 변경 금지.
-- 이미 내려졌지만 아직 문서에 반영 안 된 User 결정: 등록된 행 외에 없음. 열린 것: H1 … H3 / H5 없음; H4의 점포 자본 정산은 v2.9.1 값 확정 뒤.
+- 모든 배치에서 지킬 계약: 프레젠테이션 전용; 비트당 ≤ 320 ms(사망 테이프 ≤ 500 ms); 입력 차단 없음; reduced-motion에서 무효이고 최종 상태 동일; 카드 안에서만 움직임; 화면 전체 흔들림·카메라·파티클·햅틱·콤보/연속 UI·칭찬 문구·규칙/저장/RNG/증명 변경 금지. 강도는 사건 무게를 따른다(일반 / 중요 / 클라이맥스 — §GAME FEEL BEAT 계약).
+- 연속 시퀀스 검수: 마지막 밤 판정 → `마감으로` → 영수증 인쇄 → `다음 날`(H1+H4+H6)과 최종 결과 → 클리어/실패 화면(H5+H6)은 개별 효과가 아니라 한 흐름으로 캡처한다. 시퀀스를 완성하는 배치가 그 캡처를 맡는다.
+- 이미 내려졌지만 아직 문서에 반영 안 된 User 결정: 등록된 행 외에 없음. 열린 것: H1 … H3 / H5 / H6 없음; H4의 점포 자본 정산은 v2.9.1 값 확정 뒤.
 - 정지 경계: 한 배치(문서 → Source → 핀 → `npm test` / `ssot:check` / `qa:runtime` → 캡처 검수 → 커밋) → 보고 → STOP. User 승인 없이 다음 H로 넘어가지 않는다.
 
 ## Execution Boundary

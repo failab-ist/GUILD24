@@ -458,6 +458,11 @@ General contract, every game feel beat (extends §TRANSACTION BEAT):
   spread, no cinematic layer
 - no combo counter, no streak UI, no praise word, no fit or right-answer cue (§LEARNING AFTER RESULT)
 - all of it lives in the presentation layer (`playCue` / `playPhase`, ui.css, audio cue parameters)
+- intensity follows the event's weight, never the same level everywhere (User 2026-09-25, from a
+  game-feel talk): 일반 = a sale, an order, a button, a phase entry; 중요 = a NIGHT verdict, the CLOSING
+  profit stamp; 클라이맥스 = the Insurance reversal overstamp, 사망, the FINAL result. A 일반 beat is a
+  press and a settle; a 중요 beat adds wind-up and after-motion; only a 클라이맥스 beat may use the two-step
+  stamp or the tape
 
 | id | beat | planned behaviour | owners at execution | status |
 |---|---|---|---|---|
@@ -466,12 +471,25 @@ General contract, every game feel beat (extends §TRANSACTION BEAT):
 | H3 | ORDER 확정 confirm | on 발주 확정 the warehouse cells fill as crates land (70 ms stagger per SKU, one dull `order`-family hit each), each warehouse count ticks up one step, the balance counts down. The `발주 완료.` line is unchanged | PRESENTATION (this row), UI_UX §ORDER — WAREHOUSE DISCLOSURE, ECONOMY_ORDER_QA or UI_UX_QA | PLANNED |
 | H5 | FINAL 최종 토벌 | a D30 win stamps the Boss name three times (the three-member expedition); a loss lays the black tape. No new copy; the existing result sentence follows the stamp | PRESENTATION (this row), FINAL_EXPEDITION §BOSS CLEAR / §RUN CLEAR (display order only), UI_UX_QA | PLANNED |
 | H4 | CLOSING 마감 receipt | receipt rows print one at a time (printer tick) and the final profit / loss is stamped (gold for profit, red for loss). No `어제보다 +N` line (stays deferred in the v3.0+ router). Store Capital settlement: count-up with a click when a decoration price line is crossed — only after the v2.9.1 balance values are adopted (rates are halved today) | PRESENTATION (this row), UI_UX §CLOSING, UI_UX_QA | PLANNED (Store Capital part waits on v2.9.1) |
+| H6 | 장면 전환 phase entry | CLOSING, FINAL, END and the DAY 0 screen get an entry beat of the same family the other phases already have (`playPhase` gives morning / order / night / sell one; these are hard cuts today): ≤ 240 ms, one movement, 일반 intensity. The Day's joints become visible; nothing else changes | PRESENTATION (this row), UI_UX (the four screens' sections), UI_UX_QA | PLANNED |
 
-Execution order: H1 → H2 → H3 → H5 → H4. One batch per turn: owner amendment (UI_UX / QA with their
+Execution order: H1 → H2 → H3 → H5 → H4 → H6. One batch per turn: owner amendment (UI_UX / QA with their
 ledgers; this owner has no ledger) → Source → ui-guard pins → npm test / ssot:check / qa:runtime →
 before / after capture at 390 and 1280 with reduced-motion → commit → report → STOP. A row's status
 flips to ADOPTED when its batch is committed; §VISUAL REVIEW PROCESS decides quality, not the
 implementer's reading.
+
+Sequence review (User 2026-09-25): two runs are reviewed as one continuous experience, not as separate
+effects — the last NIGHT verdict → `마감으로` → the CLOSING receipt printing → `다음 날` (H1 + H4 + H6),
+and the FINAL result → the clear / failure screen (H5 + H6). The capture for the batch that completes
+a sequence covers the whole run, and the run must not grow long enough to hurt repeated play.
+
+Audit lens before a batch (adapted from the talk's review prompt; screen shake, particles and camera
+items dropped as excluded above): read each event the batch touches as
+입력 → 예비 → 행동 → 충돌 / 변화 → 결과 → 정착, and look first for events whose logic already exists
+but whose expression is missing (a sale that works without feeling handed over, a death that is stated
+without a process, a win without an emotional full stop). Only what has a felt effect in this game is
+proposed; nothing is added to make it richer.
 
 ## LEARNING AFTER RESULT
 

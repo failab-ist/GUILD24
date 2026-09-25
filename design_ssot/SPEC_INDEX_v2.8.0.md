@@ -261,10 +261,14 @@ touches Source only after the User authorizes that batch.
                                      -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
       H4 CLOSING 마감 (rows print one by one, profit stamp; Store Capital part after v2.9.1)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
+      H6 장면 전환 (entry beat for CLOSING / FINAL / END / DAY 0, which are hard cuts today)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX (the four screens) / UI_UX_QA
 
   Contract: presentation-only, ≤ 320 ms per beat (사망 tape ≤ 500 ms), no input block, reduced-motion
   no-op, motion inside the card, no full-screen shake, no combo / streak UI, no praise word, no rule /
-  Save / RNG / proof change. Not in v2.9.2: the `어제보다 +N` line (v3.0+ router), new copy.
+  Save / RNG / proof change. Intensity by event weight (일반 / 중요 / 클라이맥스) and the two sequence
+  reviews (last verdict → CLOSING → next day; FINAL result → clear screen) -> PRESENTATION §GAME FEEL BEAT.
+  Not in v2.9.2: the `어제보다 +N` line (v3.0+ router), new copy, haptics (no iOS Safari support).
 
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
 
