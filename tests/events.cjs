@@ -1,4 +1,4 @@
-// Chunk B acceptance: Event timing, frequency, eligibility and the canonical 22-event catalog.
+// Chunk B acceptance: Event timing, frequency, eligibility and the canonical 23-event catalog.
 // Covers EVENT-001/002/003, EVENT sections 1/2/8/9, and the per-event contracts in section 11.
 const assert=require('node:assert/strict');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
@@ -8,10 +8,10 @@ function fresh(seed='events'){const g=new Game();g.autosave=false;g.start(seed);
 function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
 const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
-const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 지원','늙은 음유시인','본사 야간 근무 수칙'];
+const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 지원','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제'];
 
-test('EVENT-003: catalog is exactly the canonical 22 with the two rare easter eggs at 0.35',()=>{
- assert.equal(DATA.events.length,22);
+test('EVENT-003: catalog is exactly the canonical 23 with the two rare easter eggs at 0.35',()=>{
+ assert.equal(DATA.events.length,23);
  assert.deepEqual(DATA.events.map(e=>e.name),CATALOG);
  const rare=DATA.events.filter(e=>e.weight!==1);
  assert.deepEqual(rare.map(e=>e.name),['늙은 음유시인','본사 야간 근무 수칙']);

@@ -229,6 +229,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
    if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
   if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+  if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
     chosen once the Gates are final so the recorded Power is the real one. The tie is broken on

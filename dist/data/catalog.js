@@ -172,7 +172,8 @@ events:[
 ['clinic','치유소 휴무','치유소 문에 휴무 팻말이 걸렸다. 보험 창구 앞줄이 금세 길어졌다.','오늘 보험 상품 구매 의사 +20%p',{medicalDemand:0.2}],
 ['wastecover','본사 폐기 지원','본사가 오늘 폐기비를 대신 낸다. 점주는 공문 날짜를 두 번 확인했다.','오늘 폐기 비용 0G',{wasteFree:1}],
 ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2',{visitors:2},.35],
-['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G',{overheadFree:1},.35]
+['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G',{overheadFree:1},.35],
+['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','남은 영업 동안 사망 한도 +1',{deathLimit:1}]
 ].map(([id,name,reveal,description,effects,weight=1])=>({id,name,reveal,description,effects,weight})),
 /* META_v2.8 §RETIRED v2.7 FRANCHISE SYSTEM: the Start Contract table is retired and lives at
    archive/inactive/v2_7_franchise/contracts.js. Nothing active read it any more. A stale v8

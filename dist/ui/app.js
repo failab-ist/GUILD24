@@ -1531,9 +1531,10 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
  if(n.outlook)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');
- /* DUNGEON_HAZARD v2.9.0 §strainEscalation (User 2026-09-25): an information row, no verdict -
-    expeditions this adventurer began injured or at Fatigue 20+. */
- cond.push('무리한 출발 '+(n.records||[]).filter(r=>r.departedInjured||r.departedWeary).length+'회');
+ /* DUNGEON_HAZARD §STRAIN (v2.9.1 balance): an information row, no verdict - consecutive
+    expeditions this adventurer began injured, counted back from the most recent record and
+    reset to 0 by a healthy departure. Same helper STRAIN itself reads (Dungeon.injuredStreak). */
+ cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
  return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so

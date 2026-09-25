@@ -71,7 +71,8 @@ const COMPOSED={
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
  '6-5':"presentation.js heroLine(): who+' 덕분에 '+said",
- '11-6':"relics.js: HQ price floor constant concatenated into the effect text"};
+ '11-6':"relics.js: HQ price floor constant concatenated into the effect text",
+ '9-5':"decorations.js name/effect are separate fields, rendered as separate elements (app.js loadoutModal / decoModal) - never joined with ' — '"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
    substring search finds it although its own surface is still composed. Named, so the exact-set
    comparison below stays exact. */
@@ -667,7 +668,7 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
    Function. This is a 1:1 equality table: a paraphrase, a missed row or a stale example is a
    FAIL here rather than something a pattern absorbs. Mechanics are out of scope and untouched -
    the effects objects are asserted to be exactly what they were. */
-test('SA-Q37 / COPY_AUDIT §13: all 22 Events carry the approved Flavor and Function',()=>{
+test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Function',()=>{
  const APPROVED=[
   ['logistics','물류대란','북문 운송로가 막혔다. 오늘 들어온 상자마다 우회 운임 딱지가 붙어 있다.','오늘 모든 발주 매입가 +15%'],
   ['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','지정 발주 상품 1종 · 1개 발주 시 2개 입고'],
@@ -691,8 +692,9 @@ test('SA-Q37 / COPY_AUDIT §13: all 22 Events carry the approved Flavor and Func
   ['wastecover','본사 폐기 지원','본사가 오늘 폐기비를 대신 낸다. 점주는 공문 날짜를 두 번 확인했다.','오늘 폐기 비용 0G'],
   ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2'],
   ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G'],
+  ['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','남은 영업 동안 사망 한도 +1'],
  ];
- assert.equal(APPROVED.length,22,'§13 audits all 22 Events');
+ assert.equal(APPROVED.length,23,'§13 audits all 23 Events');
  assert.deepEqual(DATA.events.map(e=>e.id),APPROVED.map(r=>r[0]),'the catalogue is exactly those 22, in order');
  for(const [id,name,reveal,description] of APPROVED){
   const e=DATA.events.find(x=>x.id===id);
@@ -715,7 +717,8 @@ test('SA-Q37 / COPY_AUDIT §13: all 22 Events carry the approved Flavor and Func
   shortage:{potionWeight:0.08},rookie:{rookie:1},royal:{royal:1},blackmarket:{blackmarket:1},
   audit:{audit:1},festival:{foodDemand:0.2},strike:{visitors:-1},unknown:{unknown:1},
   tasting:{tasting:1},poisonfog:{poison:1},caravan:{offers:2},payday:{wallet:1.2},
-  clinic:{medicalDemand:0.2},wastecover:{wasteFree:1},bard:{visitors:2},nightshift:{overheadFree:1}};
+  clinic:{medicalDemand:0.2},wastecover:{wasteFree:1},bard:{visitors:2},nightshift:{overheadFree:1},
+  rite:{deathLimit:1}};
  for(const e of DATA.events)assert.deepEqual(e.effects,EFFECTS[e.id],e.id+' mechanics are unchanged');
  assert.deepEqual(DATA.events.filter(e=>e.weight!==1).map(e=>e.id).sort(),['bard','nightshift'],
   'and so are the two rare weights');

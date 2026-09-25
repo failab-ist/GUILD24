@@ -635,7 +635,11 @@ test('CORE_RUN §RUN FAIL: only a death counts, and the night that reaches the l
  assert.ok(close.indexOf('deathLimit')<close.indexOf('s.money<0'),
   'before the money branch, so a finished Run is never offered liquidation');
  const night=source('dist/systems/shop.js');
- assert.ok(!night.includes('deathLimit'),'night() still reports the whole evening before anything ends it');
+ /* v2.9.1 balance: 위령제 accumulates its own bonus onto s.riteBonus in morningEvent() by
+    reading the drawn Event's own `effects.deathLimit` field - a data key, not a call to
+    Meta.deathLimit(...). The line under test is still the only place that RESOLVES the limit
+    and decides an ending; shop.js reads no such resolved value anywhere. */
+ assert.ok(!night.includes('Meta.deathLimit('),'night() still reports the whole evening before anything ends it');
 
  // a Run at the line still carries its full set of results from that night
  const g=fresh('deaths-night');g.run.phase='closing';g.run.stats.deaths=limit;
