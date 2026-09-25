@@ -1,5 +1,5 @@
 (function(G){
-const KEY='guild24.save.v8';
+const VERSION=8,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup';
 /* Every schema this game has ever written, current one apart. Read() uses it to tell a
    player their old save cannot be continued; reset() uses the same list to erase it, so a
    version bump is made in one place and both paths follow. */
@@ -218,9 +218,9 @@ G.Save={
 
  write(account,run){
   try{
-   const json=JSON.stringify({version:8,account,run});
+   const json=JSON.stringify({version:VERSION,account,run});
    const previous=localStorage.getItem(KEY);
-   if(previous)localStorage.setItem(KEY+'.backup',previous);
+   if(previous)localStorage.setItem(BACKUP,previous);
    localStorage.setItem(KEY,json);
    this.error=null;
    return true;
@@ -232,14 +232,14 @@ G.Save={
 
  read(){
   if(typeof localStorage==='undefined')return null;
-  if(!localStorage.getItem(KEY)&&!localStorage.getItem(KEY+'.backup')){
+  if(!localStorage.getItem(KEY)&&!localStorage.getItem(BACKUP)){
    /* Only an older format is left. The original is never erased; the player is told in plain words. */
    if(LEGACY.some(v=>localStorage.getItem('guild24.save.'+v)))
     this.error='규칙 개편으로 이전 영업은 이어갈 수 없습니다. 새 점포를 열어 주세요. 이전 저장 원본은 보관됩니다.';
    return null;
   }
   /* If the newest save will not read, fall back to the previous backup. */
-  for(const key of [KEY,KEY+'.backup'])try{
+  for(const key of [KEY,BACKUP])try{
    const raw=localStorage.getItem(key);
    if(!raw)continue;
    const s=JSON.parse(raw);
@@ -252,10 +252,10 @@ G.Save={
  valid(s){
   try{
    const D=G.DATA,a=s?.account,r=s?.run;
-   if(s?.version!==8)return false;
+   if(s?.version!==VERSION)return false;
    if(!accountOk(a,D))return false;
    if(r===null)return true;              // an account-only save, with no run in progress
-   if(r?.version!==8)return false;
+   if(r?.version!==VERSION)return false;
    if(!runShapeOk(r,D))return false;
    if(!bossOk(r,D))return false;
    const ids=r.npcs.map(n=>n.id);
@@ -276,7 +276,7 @@ G.Save={
  reset(){
   if(typeof localStorage==='undefined')return false;
   try{
-   for(const key of [KEY,KEY+'.backup',...LEGACY.map(v=>'guild24.save.'+v)])localStorage.removeItem(key);
+   for(const key of [KEY,BACKUP,...LEGACY.map(v=>'guild24.save.'+v)])localStorage.removeItem(key);
    this.error=null;
    return true;
   }catch(e){
@@ -285,7 +285,7 @@ G.Save={
   }
  },
 
- export(account,run){return JSON.stringify({version:8,account,run},null,2);},
+ export(account,run){return JSON.stringify({version:VERSION,account,run},null,2);},
  import(raw){
   const s=JSON.parse(raw);
   if(!this.valid(s))throw Error('이 버전의 저장 파일이 아닙니다.');

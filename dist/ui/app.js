@@ -1840,8 +1840,6 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
   game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound(el.closest('.set')?'quantset':'quantity');render();
   anchorOffer(key,y0);break;}
- case'confirm-order':game.confirmOrder();sound('order');render();break;
- 
  case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();
   nightSound(s.results[s.nightCursor]);break;
  case'event-seen':setModal(null);render();break;
