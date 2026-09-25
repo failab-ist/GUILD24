@@ -25,8 +25,12 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   stamp stays 클라이맥스-only) and gives the after-motion one owner (the Hero Item line when present, else the
   numbers); H2 names no "price stamp" (the A8 stub is SALE's only stamp); H3 counts go prior → resolved, never
   a unit per crate; H6 targets are the User's decision after the capture, not WORK's. Docs only.
+- Fourth review, wording only (User 2026-09-25, checked at `8448f08`): the principles table names SALE's beat as key
+  impact / receipt stub (no "price stamp") and the repeated-input row as tactile without escalation (no combo);
+  SPEC_INDEX H2 reads "stub after impact" and the routing names H1~H6. v2.9.2 starts after v2.9.1 closed (User
+  2026-09-25, no parallel run); H4's Store Capital part is unblocked. Docs only.
 
-## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted 2026-09-25
+## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted, CLOSED 2026-09-25 (main `d23d076`, tag `v2.9.1`)
 
 The v2.9.0 BALANCE FINDING is resolved as its own version (User 2026-09-25). Values: `reports/v29-balance-agreements.md`;
 measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Source adoption ran in a separate session
