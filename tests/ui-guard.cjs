@@ -310,6 +310,9 @@ test('UI-Q35 / DUN-Q21 / DUN-Q-v29-2: all 9 Hazards read the numbered short row,
  assert.ok(!('hazardPressure' in Presentation)&&!/'(강인함으로 버틴다|기동으로 피한다|정신으로 견딘다)'|PRESSURE_LABEL|hazardPressure/.test(read('dist/ui/presentation.js')),'no pressure label string survives (User 2026-09-24 revision 2)');
  assert.equal(Presentation.hazardRows(['cold'],d).at(0).name,'냉기');
  assert.equal(Presentation.hazardRows(['cold']).at(0).pressure,'','without a Gate there is no row text to invent');
+ assert.ok(/const pressCell=h=>h\.need\?'<span class="press"><b class="need">'[^;]*<small class="rate">/.test(app),'the short row renders as need over rate (User 2026-09-25)');
+ assert.ok(/\.hazards \.press \.rate\{display:block;font-size:11px/.test(read('dist/ui/ui.css'))&&/@media\(min-width:900px\)\{\.hazards \.press \.need,\.hazards \.press \.rate\{display:inline/.test(read('dist/ui/ui.css')),'two lines on a phone, one line at 900px+');
+ assert.ok(/\.detail-stat label \.press\{display:inline;[^}]*text-overflow:ellipsis/.test(read('dist/ui/ui.css'))&&/\.detail-stat strong\{margin-left:auto;flex:none;font:600 18px/.test(read('dist/ui/ui.css')),'the Stat grid tag is inline beside the name and the value is 18px');
 });
 
 test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and honest refusal',()=>{
@@ -856,7 +859,7 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(/\['취약','불안','대응','충분'\]/.test(shop),'the readiness ladder belongs to the engine');
  assert.ok(!/\['취약','불안','대응','충분'\]/.test(app),'and the screen does not keep a second copy of that ladder');
  /* The Hazard's pressure and the NPC's readiness are two facts, never one sentence. */
- const list=app.slice(app.indexOf('const hazardList='),app.indexOf('const hazardList=')+700);
+ const list=app.slice(app.indexOf('const pressCell='),app.indexOf('const hazardList=')+700);
  assert.ok(/<span class="press">/.test(list)&&/<span class="ready">/.test(list),'pressure and readiness are separate elements');
  assert.ok(/<i>현재 대응<\/i>/.test(list),'the readiness is explicitly labelled as the NPC state');
  assert.ok(css.includes('.hazards .ready'),'and the readiness has its own style, not the pressure one');
@@ -2898,19 +2901,20 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  for(const [k,[st,n]] of Object.entries({poison:['survival',3],bind:['mobility',2],fear:['spirit',2],dark:['mobility',2]})){const r=Dungeon.hazardRule(k);assert.equal(r.stat,st);assert.ok(Math.abs(r.coef-1/n)<1e-12,k+' coefficient is exactly 1/'+n);}
  for(const [day,tier] of [[1,1],[6,2],[18,3]]){const d={day,tier};
   for(const k of Object.keys(DATA.hazards)){const st=Presentation.hazardStat[k],need=Math.ceil(Dungeon.hazardState(k,{},d).threat);
-   assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+' — 대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a01 · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
-   assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a01',k+' short row');}}
+   assert.equal(Presentation.hazardSentence(k,d),DATA.hazards[k]+' — 대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공 · '+DATA.hazards[k]+' 대응 상품이 막는다',k+' sentence at D'+day+' T'+tier);
+   assert.equal(Presentation.hazardShort(k,d),'대응 '+need+' 필요 · '+Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공',k+' short row');
+   assert.deepEqual(Presentation.hazardParts(k,d),{need:'대응 '+need+' 필요',rate:Presentation.labels[st]+'\u00a0'+rate[st]+'당\u00a0대응\u00a01\u00a0제공'},k+' two parts');}}
  assert.ok(!/\u00a0/.test(read('design_ssot/COPY_AUDIT_APPROVED_v2.8.0.md')),'the Canonical text keeps ordinary spaces; only the rendered rate unit is no-break');
- assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독 — 대응 13 필요 · 강인함\u00a03당\u00a01 · 독 대응 상품이 막는다','the DAY 1 T1 example');
+ assert.equal(Presentation.hazardSentence('poison',{day:1,tier:1}),'독 — 대응 13 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공 · 독 대응 상품이 막는다','the DAY 1 T1 example');
  assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
  assert.ok(!('PLATE_HELP' in Presentation)&&!/위험은 능력치를 누르고/.test(read('dist/ui/presentation.js')),'the plate help line is retired (§4-15)');
- assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\(h\.key,d\)/.test(fn('gatePlate'))&&/Presentation\.hazardShort\(h\.key,d\)/.test(fn('gatePlate')),'Gate detail reads the full sentence, MORNING the short row');
+ assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\(h\.key,d\)/.test(fn('gatePlate'))&&/pressCell\(h\)/.test(fn('gatePlate')),'Gate detail reads the full sentence, MORNING the short row (need over rate)');
  assert.ok(!/gatePlate\(d,true\)/.test(fn('morningScreen'))&&/s\.dungeons\.map\(gatePlate\)/.test(fn('morningScreen')),'MORNING renders the plate in short form');
  const plate=fn('destPlate');
  assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
  assert.equal((plate.match(/tip\(/g)||[]).length,0,'no ? help on the plate (§4-15 retired, User 2026-09-24 revision 2)');
  // D25 / FINAL: the same numbered rows with the Final object (Day 30 / T2 -> 29)
- assert.equal(Presentation.hazardShort('poison',{day:30,tier:2}),'대응 29 필요 · 강인함\u00a03당\u00a01');
+ assert.equal(Presentation.hazardShort('poison',{day:30,tier:2}),'대응 29 필요 · 강인함\u00a03당\u00a0대응\u00a01\u00a0제공');
  assert.ok(/hazardList\(D\.familyTiers\[id\]\[1\],null,d\)/.test(fn('bossReveal')),'the D25 report rows are numbered for 마왕성');
  assert.ok(/hazardList\(d\.hazards\.filter\(h=>own\.includes\(h\)\),null,d\)/.test(fn('finalScreen')),'the FINAL 확인된 위협 rows are numbered for 마왕성');
  assert.ok(/hazardRows\(s\.final\.hazards,s\.final\)/.test(fn('orderScreen'))||/hazardRows\(s\.final\.hazards,s\.final\)/.test(app),'the ORDER 마왕성 brief rows are numbered too');

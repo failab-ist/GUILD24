@@ -302,9 +302,11 @@ const tip=(label,...lines)=>'<details class="tip" name="sale-tip"><summary aria-
    standing at the counter. The readiness is this NPC's SALE-entry state against it. The player
    has to be able to read `this danger looks at 강인함` and `this character is 취약 to it right
    now` separately, so they are separate elements with the readiness explicitly labelled. */
+/* The short row's two parts: `대응 N 필요` over the smaller `{능력치} n당 대응 1 제공`; CSS joins them on one line at 900px+ (User 2026-09-25). */
+const pressCell=h=>h.need?'<span class="press"><b class="need">'+E(h.need)+'</b><small class="rate">'+E(h.rate)+'</small></span>':'<span class="press">'+E(h.pressure)+'</span>';
 const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentation.hazardRows(keys,d).map(h=>{
  const st=states&&states.find(x=>x.key===h.key);
- return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span class="press">'+E(h.pressure)+'</span>'
+ return '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)
   +(st?'<span class="ready"><i>현재 대응</i><em class="'+(['취약','불안'].includes(st.label)?'lack':'')+'">'+st.label+'</em></span>':'')
   +'</li>';}).join('')+'</ul>':'';
 // A Gate is a plank notice nailed to the wall: family colour burned along the top edge,
@@ -312,14 +314,14 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
 // A Gate is a paper notice pinned to the board: family colour along the top, the hazard
 // pictogram beside each pressure line, the supply requirement stamped at the foot.
 /* `full`: Gate detail (the gates modal) reads the full Gate sentence (COPY_AUDIT §4-16); the MORNING plate reads the
-   short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 1` - the number first (User 2026-09-24). */
+   short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` - the number first (User 2026-09-24). */
 function gatePlate(d,full=false){const b=sigilOf(d);
  return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
  +'<b>'+E(d.name)+'</b>'
    +'<ul class="hazards'+(full?' full':'')+'">'+Presentation.hazardRows(Presentation.known(d,game),d).map(h=>full
      ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence(h.key,d))+'</span></li>'
-     :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(Presentation.hazardShort(h.key,d))+'</span></li>').join('')+'</ul>'
+     :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i>'+pressCell(h)+'</li>').join('')+'</ul>'
    +'</article>';}
 /* v2.9.0 (User 2026-09-24): no next-day Gate / Tier forecast is shown anywhere - today's Gates, their numbered Hazard rows and
    the per-Gate visitor count are the whole planning context (ECONOMY_ORDER §NEXT-DAY FORECAST — RETIRED). */
@@ -1072,7 +1074,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +(s.final?'<div class="brief"><div class="when"><span class="k">마왕성</span>'
      +'<p><b>'+E(s.final.familyNames.join(' / '))+'</b></p>'
      +'<ul class="hazards">'+Presentation.hazardRows(s.final.hazards,s.final).map(h=>
-       '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span class="press">'+E(h.pressure)+'</span></li>').join('')
+       '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)+'</li>').join('')
      +'</ul></div></div>':'')
    +stockBrief()
    +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects).slice(0,3);
