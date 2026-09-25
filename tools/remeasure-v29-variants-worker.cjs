@@ -135,6 +135,8 @@ for (const f of files) {
   if (V.need) D.balance.accessibleNeed = V.need;
   // item spec / price table {id: {effects: {...}, buy, sell}} (User 2026-09-25 agreements §5)
   if (V.items) for (const [id, x] of Object.entries(V.items)) { if (!I[id]) throw Error('no item ' + id); Object.assign(I[id].effects, x.effects || {}); if (x.buy != null) I[id].buy = x.buy; if (x.sell != null) I[id].sell = x.sell; }
+  // sell = buy x 2 for every item (User 2026-09-25), applied after the item table
+  if (V.sell2x) for (const it of D.items) it.sell = it.buy * 2;
   if (V.memorial != null) D.decorationParams.memorialBoard.deathLimitBonus = V.memorial;
   if (V.capRates) D.capitalRates = V.capRates;
   // Decoration prices by Slot (both kinds of a Slot share the price)
