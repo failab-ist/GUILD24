@@ -13,6 +13,12 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   added to the contract; H6 phase entry beat for CLOSING / FINAL / END / DAY 0 (hard cuts today) registered
   last in the order; two sequence reviews and a pre-batch audit lens added. Excluded: screen shake, camera,
   particles, haptics. Docs only.
+- Second review (User 2026-09-25, outside opinion checked against Canonical / Source): impact budget added to
+  the contract; the wind-up hold is 일반-free and ≤ 200 ms otherwise; H1 gains the Hero Item cause beat and
+  paper-language injury stamps; H2 loses the streak rhythm (faster second stamp, fifth-sale overtone, band bump);
+  H3 cascade capped ≤ 320 ms / ≤ 3 hits; H5 becomes one seal stamp per verdict (the expedition commits 1~3
+  members, and a FINAL loss is not a per-member death); H4 body prints as one run; H6 conditional on the
+  sequence review. Docs only.
 
 ## v2.9.1 — balance, PLANNED (User 2026-09-25)
 
