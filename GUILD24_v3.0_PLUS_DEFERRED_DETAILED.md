@@ -65,12 +65,6 @@ Routed to the balance session, not here (see `reports/v29-balance-finding-handof
 - tension vs freedom: keeping Fatigue recovery scarce is the tension route, but it must stay a cost, not a dead end
   (Food that surely clears Fatigue at a price / short shelf life) — decisions 1 and 5 of the handoff
 
-Deferred here (v3.0+ candidates):
-- daily reward loop: one line of "today vs yesterday" (e.g. `어제보다 +N`) at CLOSING on top of the per-customer
-  receipt stub; a short loop between the per-sale beat and the D30 goal
-- ORDER allowed-range surface: before confirming, what today's stock can serve (how many of today's customers) —
-  sits on the boundary of "the judgement is the player's"; needs a User decision before any design
-
 Playtest checklist, not features (record only):
 - control assist: 바가지 next to 정가 as a mis-tap risk; whether the same-SKU refusal ceiling reads as a penalty
 - information density: SALE at 360 with the tray filled (three shelf rows visible is the current floor); one more
