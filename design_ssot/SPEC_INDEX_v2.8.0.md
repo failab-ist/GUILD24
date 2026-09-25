@@ -5,7 +5,7 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.9.1
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25 (v2.8 canonical baseline closed 2026-09-24)
+FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) (v2.8 canonical baseline closed 2026-09-24)
 SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
@@ -241,8 +241,7 @@ The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
 User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). `v2.9.0` is tagged (User 2026-09-25) on the last
-v2.9.0 Source commit on `main`, `3d0ddc6` (the close-out `3f18ceb` plus the D0 briefing fix); WORK_STATE notes if the tag
-still has to be pushed.
+v2.9.0 Source commit on `main`, `3d0ddc6` (the close-out `3f18ceb` plus the D0 briefing fix); the tag is on the remote.
 
 ## v2.9.1 — BALANCE
 
@@ -255,26 +254,28 @@ v2.9.1 is ready to close when:
 - the native build reproduces the closing measurement (`tools/remeasure-v29-closing-results.json`) within sampling error
 - `reports/deco-balance` is regenerated
 
-## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25, PLANNED)
+Closed 2026-09-25: merged to `main` (`d23d076`, PR #2) and tagged `v2.9.1` there (User 2026-09-25).
+
+## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25; v2.9.1 CLOSED, v2.9.2 PLANNED)
 
 Version routing (User 2026-09-25): the balance session is **v2.9.1**; the game feel presentation
-batches are **v2.9.2**. Both run in separate sessions on branches from `main`; each is docs-first and
-touches Source only after the User authorizes that batch.
+batches are **v2.9.2**. Each is docs-first and touches Source only after the User authorizes that batch.
+v2.9.2 starts only after v2.9.1 is closed on `main` (User 2026-09-25: the two sessions touched the same UI owners,
+ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met at tag `v2.9.1`.
 
-- v2.9.1 BALANCE: decided 2026-09-25, owners amended — §v2.9.1 — BALANCE above; Source adoption per
-  `reports/v291-implementation-handoff.md`.
+- v2.9.1 BALANCE: CLOSED 2026-09-25 — §v2.9.1 — BALANCE above; merged to `main` `d23d076`, tagged `v2.9.1`.
 - v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
-  (principles table, contract, H1~H5 rows). Routing per batch, in execution order:
+  (principles table, contract, H1~H6 rows). Routing per batch, in execution order:
 
       H1 NIGHT 판정 도장 (verdict stamp, per-Outcome weight, Hero Item cause beat, Insurance reversal overstamp)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §NIGHT LAYOUT / NIGHT_CLOSING (display order) / UI_UX_QA
       H5 FINAL 최종 토벌 (one seal stamp on a win, one failure stamp on a loss; never the death tape, never a party count)
                                      -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
-      H2 SALE 계산대 (key press, first coin tick, stub after the stamp; no streak rhythm)
+      H2 SALE 계산대 (key press, first coin tick, stub after impact; no streak rhythm)
                                      -> PRESENTATION §TRANSACTION BEAT A5 / A8 / UI_UX §SALE — COUNTER TRAY / UI_UX_QA
       H3 ORDER 확정 (crate cascade ≤ 320 ms, ≤ 3 audible hits, balance count-down)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §ORDER — WAREHOUSE DISCLOSURE / ECONOMY_ORDER_QA or UI_UX_QA
-      H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part after v2.9.1)
+      H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part on the v2.9.1 rates)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
       H6 장면 전환 (conditional: the batch captures the four hard cuts and the User picks the targets; UNRESOLVED until then)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX (the affected screens) / UI_UX_QA
