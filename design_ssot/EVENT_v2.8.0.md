@@ -2,7 +2,7 @@
 
 DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,event_purchase_budget,event_order_source
-DOC_VERSION=2.8.0
+DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/EVENT_v2.8.0-patch.md,history/EVENT_v2.7.0.md,history/EVENT_v2.5.0.md
@@ -525,7 +525,7 @@ Event 발생 시 적용 가능한 Gate에만 Poison을 추가한다.
 
 ## CANONICAL EVENT CATALOG
 
-총 22종.
+총 23종 (23. 위령제 — User 2026-09-25, v2.9.0 balance close).
 eventCatalogStatus=FROZEN
 
 Work는 임의로 Event를 추가하거나
@@ -1070,6 +1070,25 @@ Reference를 모르는 플레이어에게도:
 - 후속 Horror Event Chain
 
 Flavor와 실제 Gameplay Effect는 분리한다.
+
+### 23. 위령제
+
+(User 2026-09-25, v2.9.0 balance close.)
+
+EFFECT:
+
+```text
+이 날부터 Run 끝까지 모든 구간 사망 한도 +1
+```
+
+사망 한도 구간과 추모 방명록 -> `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.
+
+UNRESOLVED (User 결정 필요, Work가 정하지 않는다):
+
+- TYPE / WEIGHT
+- 발생 조건 (예: 사망이 한 번 이상 있었던 Run에서만 Eligible인지)
+- 한 Run에 최대 1회인지
+- reveal / 효과 문구 -> `COPY_AUDIT_APPROVED_v2.8.0.md`
 
 ## CATEGORY AUDIT
 

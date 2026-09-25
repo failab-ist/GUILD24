@@ -502,3 +502,24 @@ v2.9.0 F3 (2026-09-25): the repeated-strain Death cut surfaced a morning whose w
 ```new
 - if the Day has no existing visitor slot to give (every other adventurer dead or on recovery days that morning), the newcomer is that Day's only visitor — the one case the Event adds a visitor, on a Day that would otherwise have none (User 2026-09-25, v2.9.0; the same rule for 왕립 기사단 방문)
 ```
+
+## AMENDMENT — v2.9.0 balance close: 23. 위령제 (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md` §3): the catalog gains 23. 위령제 — every segment Death limit +1 from the Day it occurs. TYPE / WEIGHT / eligibility / once-per-Run / copy are UNRESOLVED and stated so in the owner.
+
+```text
+총 22종.
+```
+
+```new
+총 23종 (23. 위령제 — User 2026-09-25, v2.9.0 balance close).
+### 23. 위령제
+(User 2026-09-25, v2.9.0 balance close.)
+이 날부터 Run 끝까지 모든 구간 사망 한도 +1
+사망 한도 구간과 추모 방명록 -> `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.
+UNRESOLVED (User 결정 필요, Work가 정하지 않는다):
+- TYPE / WEIGHT
+- 발생 조건 (예: 사망이 한 번 이상 있었던 Run에서만 Eligible인지)
+- 한 Run에 최대 1회인지
+- reveal / 효과 문구 -> `COPY_AUDIT_APPROVED_v2.8.0.md`
+```
