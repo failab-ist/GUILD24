@@ -1717,6 +1717,19 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 /* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
    stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
    gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
+/* UI_UX §SALE — COUNTER TRAY (User 2026-09-25): the shelf row states every effect on one line; it used to stop at two */
+test('SALE shelf row: every effect, one line, the utility Items by their core',()=>{
+ const sh=fn('shelf'),se=fn('shelfEffects');
+ assert.ok(!/\.slice\(0,2\)/.test(sh),'no effect is cut from the shelf row');
+ assert.ok(/shelfEffects\(Presentation\.rows\(/.test(sh),'the row hands every row to one owner');
+ assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'a longer line steps down instead of wrapping');
+ for(const [c,px] of [['tight',13],['dense',12],['densest',11]])assert.ok(new RegExp('\\.good \\.what span\\.'+c+'\\{font-size:'+px+'px').test(css),c+' is '+px+'px');
+ assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소비품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
+ // the core is the approved line's own words, not new copy
+ const rowsFor=k=>Presentation.rows({[k]:1}).map(r=>r.label).join('');
+ assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소비품 효과 2회'),'both cores are cut from the approved lines');
+});
+
 test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  const src=app.slice(app.indexOf('const STAMP_FALL='),app.indexOf('const stampLand='));

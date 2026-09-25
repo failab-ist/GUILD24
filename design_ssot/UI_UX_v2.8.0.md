@@ -612,6 +612,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
+- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소비품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
 - on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
 - the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
 - tap-only; no drag, no minigame, no new Save field

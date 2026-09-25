@@ -1228,9 +1228,17 @@ function shelf(isFinal=false){
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
-  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">'+E(Copy.finalPrep.noEffect)+'</em>':Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects,undefined,it.category).slice(0,2).map(effectText).join(' · '))+'</span></span>'
+  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b>'+(noop?'<span><em class="noop">'+E(Copy.finalPrep.noEffect)+'</em></span>':shelfEffects(Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects,undefined,it.category)))+'</span>'
   +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span><em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em></span></button>'+(open&&isFinal?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
+/* ITEM §PRESENTATION ORDER / UI_UX §SALE (User 2026-09-25): the shelf row states EVERY effect line, like the ORDER row
+   and the codex - it used to stop at two, so a third effect (불룡볶음면's 냉기 대응) only appeared on the tray. The row
+   keeps one effect line: a longer line takes one or two type steps down instead of wrapping or being cut. */
+/* User 2026-09-25: the two utility Items read their core on the shelf only - the approved line's own words, the
+   condition in brackets left to the tray's 특수 효과 and the codex, which keep the full line */
+const SHELF_CORE={aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소비품 효과 2회'};
+function shelfEffects(rows){const t=rows.map(r=>SHELF_CORE[r.key]||(r.label+' '+r.text).trim()).join(' · '),len=[...t].length;
+ return '<span'+(len>28?' class="densest"':len>24?' class="dense"':len>19?' class="tight"':'')+'>'+E(t)+'</span>';}
 const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
 /* the three price keys of an ordinary sale - one owner for the tray (SALE) and the FINAL panel's twin */
 function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);

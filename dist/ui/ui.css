@@ -1145,6 +1145,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    tier - which put the one fact a sale is decided on below the row's own 재고 count in weight.
    The name above it keeps its rank: it stays 15px and brighter. */
 .good .what span{font:600 14px/1.4 var(--ui);color:#d8c9a6}
+/* one effect line whatever the count (User 2026-09-25): a longer payload steps the type down, never wraps or clips */
+.good .what span.tight{font-size:13px}
+.good .what span.dense{font-size:12px;letter-spacing:-.01em}
+.good .what span.densest{font-size:11px;letter-spacing:-.03em}
+.good:has(.what .densest){gap:6px}
 .good .price{text-align:right;white-space:nowrap;display:grid;gap:1px}
 .good .price b{font:500 16px/1 var(--f-led);color:var(--gold)}
 .good .price span{font:400 12px/1 var(--ui);color:#8d8067}

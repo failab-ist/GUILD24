@@ -1151,3 +1151,11 @@ reversal cut-in)
 stamp, 전체 건너뛰기 leaves the list without waiting, and a cue still waiting for its landing frame
 is dropped rather than heard over the next screen
 ```
+
+## AMENDMENT — v2.9.2: SALE shelf row states every effect (User decision 2026-09-25)
+
+User 2026-09-25 (phone capture of 불룡볶음면): the shelf row stopped at two effects; it now states all of them on one line.
+
+```new
+- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소비품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
+```
