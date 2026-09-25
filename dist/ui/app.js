@@ -525,7 +525,7 @@ function saleScreen(){
     expedition - so nothing is duplicated on screen. */
  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+waitingLine(waiting)+'</div>'
  +'</section>'
- +'<div class="counter-edge" aria-hidden="true"></div>'
+ +'<div class="counter-edge" aria-hidden="true"></div>'+forecastPin(n)
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
   /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
      the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
@@ -541,7 +541,7 @@ function saleScreen(){
   +'</div>'
   +shelf()
  +'</main>'
- +forecastPin(n)+tray()
+ +tray()
  /* D-34. Every price on this screen is a judgement against what the store has, and the
     store's gold was the one number not on it - Morning, Order and Closing all show it and
     Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
@@ -1185,12 +1185,12 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    the tray (the Item went into the Bag, and the hand-over starts from the tray icon); a refusal keeps
    the Item here with the refused key locked. Same information as the old per-row panel, one place. */
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
-   the Player works the shelf, so the same two readings float just above the counter tray - only while the readout
-   itself is off screen, the same frozen SALE-entry values and colours, never a second source. One tap folds it to a
-   `전망` chip and back. The anchor has no height: it reserves nothing in the layout. */
+   the Player works the shelf, so the same two readings float at the top of the scrolled column, where the readout
+   sat - only while the readout itself is off screen, the same frozen SALE-entry values and colours, never a second
+   source. One tap folds it to a `전망` chip and back. The anchor has no height: it reserves nothing in the layout. */
 function forecastPin(n){const o=n.outlook||game.outlookFor(n);
  return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
-  +'<span class="pin-full">전투 전망<b>'+E(o.combat)+'</b>'+(o.worst?'<i> · </i>환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>':'')+'</span>'
+  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(o.worst?'<span class="pin-fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b></span>':'')+'</span>'
   +'<span class="pin-chip">전망</span></button></div>';}
 function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
  pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
