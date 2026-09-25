@@ -86,6 +86,9 @@ Docs-first. Each owner amendment is listed when committed.
   (rest days included); 중상 takes the 부상 Fatigue gain (+9); repeated-strain Death escalation (+8%p per repeated injured / Fatigue-20+
   departure, cap +30%p) with the NPC detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 with correct particles.
   ITEM, NIGHT_CLOSING, DUNGEON_HAZARD, DUNGEON_ITEM_QA, UI_UX, COPY_AUDIT §4-22 / §14-10, COPY_WORLD_VOICE.
+- I-4 (User 2026-09-25): the 30 Store Support card texts read condition first (`조건 · 효과`, COPY_AUDIT §11-1 … §11-30 exact, adopted in
+  relics.js so tests/copy.cjs passes whole); SALE keeps no second owned-Relic block on desktop (UI-Q-v29-16); the ORDER warehouse list starts
+  collapsed (UI-Q-v29-17). COPY_AUDIT.
 - F7 (User 2026-09-24): owned Store Support quick view carries a runtime status line for condition-type supports (RELIC §QUICK VIEW STATUS LINE,
   COPY_AUDIT §11-32); purchase notice `{점포지원명} 확보.` (§11-33); Counter judgement split into 직접 대응 / 관련 준비 (RELIC §COUNTER JUDGEMENT) —
   acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers / pity / cert rewards read 직접 대응, the 기동-for-속박/진창 exception retired;
