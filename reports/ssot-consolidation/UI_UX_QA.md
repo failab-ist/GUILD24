@@ -1169,3 +1169,19 @@ ORDER on a Day with two or more Gates at 360 / 390 / 412 and 1280: at the top, t
 - the two facts read apart (rule, its own `오늘` label); the counts equal the block's; nothing covers the offer controls
 - the 오늘 line doubled while its block is on screen, merged into the Death sentence, or a count that differs from the block
 ```
+
+## AMENDMENT — v2.9.2 H5: FINAL result seal stamp (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.2 H5): one seal bearing the Boss's name on a Final ending tape; the result sentence follows it.
+
+```new
+### UI-Q-v29-30 — FINAL RESULT SEAL STAMP
+(User 2026-09-25, v2.9.2 H5; owner `UI_UX_v2.8.0.md` §FINAL RESULT — SEAL STAMP.)
+A Final clear and a Final failure with 1-, 2- and 3-member parties, and a non-Final ending, at 390 and 1280, motion on and reduced motion.
+- a Final ending shows exactly one seal with the Boss's name at the right of the headline; a non-Final ending shows none
+- clear: 200 ms hold, 2 × → 1 × in 90 ms, the tape gives 6 px; failure: 1.6 ×, 3 px, faint, crooked, partly printed
+- the headline and reason appear after the landing and never sit under the seal; no word breaks mid-word
+- one landing cue (`sealwin` / `sealfail`) on the landing frame; the `final` cue plays once
+- under reduced motion the end state (seal, text, ink strength) is identical
+- a seal per member, the NIGHT death tape on a failure, a seal covering the headline, or a failure seal as crisp as a clear
+```

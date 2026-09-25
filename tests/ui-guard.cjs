@@ -1765,6 +1765,28 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
  assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소비품 효과 2회'),'both cores are cut from the approved lines');
 });
 
+/* UI-Q-v29-30 (v2.9.2 H5, UI_UX §FINAL RESULT — SEAL STAMP): one seal bearing the Boss's name on a Final ending tape */
+test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a failure, the sentence after it',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const fs_=bare(fn('finalSeal'));
+ assert.ok(/if\(!s\.finalReport\)return '';/.test(fs_),'no seal on a non-Final ending');
+ assert.ok(/'<span class="seal '\+\(s\.win\?'won':'lost'\)\+'" aria-hidden="true"><b>'\+E\(b\?\.name\|\|''\)\+'<\/b><\/span>'/.test(fs_),'one seal, the Boss\'s name, the result read off s.win');
+ assert.ok(!/members|team|forEach|map\(/.test(fs_),'never one per member');
+ assert.ok(/<div class="print">'\+finalSeal\(\)/.test(fn('endBanner')),'struck on the ending tape');
+ assert.ok(/const FINAL_SEAL=\{hold:200,won:\{from:2,dip:6\},lost:\{from:1\.6,dip:3\}\};/.test(app),'the clear is the heaviest landing; both hold 200 ms (클라이맥스)');
+ const pp=bare(fn('playPhase')),end=pp.slice(pp.indexOf("if(phase==='end')"),pp.indexOf("if(phase==='sell')"));
+ assert.ok(/scale:\{from:v\.from,to:1,duration:STAMP_FALL,delay:at/.test(end),'the seal reuses the NIGHT stamp\'s fall');
+ assert.ok(/to:parseFloat\(getComputedStyle\(seal\)\.opacity\)/.test(end),'its ink ends where the stylesheet leaves it');
+ assert.ok(/'\.end-tape \.closed,\.end-tape \.reason'/.test(end)&&/delay:land/.test(end),'the result sentence follows the landing');
+ assert.ok(!/tape|--tape/.test(end.replace(/end-tape|const seal=\$\('\.end-tape \.seal'\),tape=\$\('\.end-tape'\)|if\(tape\)A\(tape/g,'')),'no NIGHT death tape on a failure');
+ assert.ok(/\.end-tape \.seal\{[^}]*rotate:-7deg/.test(css)&&/\.end-tape \.seal\.lost\{[^}]*rotate:9deg;[^}]*opacity:\.5;[^}]*clip-path/.test(css),'clear square-on and crisp; failure crooked, faint, partly printed');
+ assert.ok(/\.end-tape \.print:has\(\.seal\) \.closed\{padding-right:84px\}/.test(css)&&/\.end-tape \.seal\{[^}]*transform-origin:100% 0\}/.test(css),'the headline keeps clear of the seal, and the fall stays on the tape');
+ assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);render\(\);sealSound\(\);break;/.test(app),'the landing cue follows the departure once');
+ const ss=bare(fn('sealSound'));assert.ok(/clearTimeout\(sealCueAt\)/.test(ss)&&/Sound\.play\(kind\)/.test(ss)&&/FINAL_SEAL\.hold\+STAMP_FALL/.test(ss),'on the landing frame, never twice');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ for(const c of ['sealwin','sealfail'])assert.ok(Sound.cues.includes(c)&&!Sound.samples[c],c+' is a synthesised cue');
+});
+
 test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  const src=app.slice(app.indexOf('const STAMP_FALL='),app.indexOf('const stampLand='));

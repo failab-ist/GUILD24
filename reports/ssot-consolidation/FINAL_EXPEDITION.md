@@ -342,3 +342,13 @@ ordinary order form, optional, confirmed on its own 발주 확정; `원정대 �
 or release is made from the notebook's footer. FINAL 준비 shows the Stat grid of the adventurer being supplied; the order
 form is not repeated there.
 ```
+
+## AMENDMENT — v2.9.2 H5: FINAL result seal stamp (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.2 H5): one seal bearing the Boss's name on a Final ending tape; the result sentence follows it.
+
+```new
+Display order (User 2026-09-25, v2.9.2 H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a
+clear, faint and crooked for a failure, never one per member and never the NIGHT death tape - and the existing result
+sentence follows it. Result, wording and settlement are unchanged. Timing -> UI_UX_v2.8.0.md §FINAL RESULT — SEAL STAMP.
+```

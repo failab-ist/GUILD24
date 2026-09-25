@@ -2565,6 +2565,21 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .goer .carried{display:block;margin-top:5px;font:400 13px/1.5 var(--ui);color:#cbb98d}
 /* its own class names: .verdict / .why belong to the Night beat and carry a display word
    with a rule under it, which is not what a printed statement is */
+/* v2.9.2 H5 — THE FINAL SEAL (UI_UX §FINAL RESULT — SEAL STAMP). One carved seal bearing the Boss's name, struck on the
+   tape's head: vermilion and square-on for a clear, faint and crooked for a failure. The tilt is the individual `rotate`
+   property so the landing's transform never overrides it; reduced motion ends on the same seal. */
+.end-tape .print{position:relative}
+.end-tape .seal{position:absolute;z-index:2;right:8px;top:62px;width:74px;padding:7px 6px 6px;pointer-events:none;
+ font:500 13px/1.3 var(--f-plate);-webkit-font-smoothing:none;text-align:center;word-break:keep-all;
+ color:#b3372a;box-shadow:inset 0 0 0 2px #b3372a,inset 0 0 0 4px #efe7d200,inset 0 0 0 5px #b3372a;rotate:-7deg;opacity:.9;
+ transform-origin:100% 0}
+.end-tape .seal b{font-weight:500}
+/* the sealed tape keeps its headline clear of the seal (the reason sits below it) and breaks at word boundaries;
+   the seal grows from its own top-right corner so the fall stays on the tape */
+.end-tape .print:has(.seal) .closed{padding-right:84px}
+.end-tape .print:has(.seal) .closed,.end-tape .print:has(.seal) .reason{word-break:keep-all}
+.end-tape .seal.lost{color:#6d3b30;box-shadow:inset 0 0 0 2px #6d3b30,inset 0 0 0 5px #6d3b3000;rotate:9deg;translate:-6px 6px;opacity:.5;
+ clip-path:polygon(0 0,100% 0,100% 62%,86% 62%,86% 100%,0 100%)}
 .end-tape .closed{margin:12px 0 0;font:500 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
 .end-tape .reason{margin:7px 0 12px;font:400 14px/1.65 var(--ui);color:#5f5847}
 /* BATCH 3 END: 도감에서 보기 was a full-width grey box inside the tape - a second, web-style

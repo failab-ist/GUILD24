@@ -54,6 +54,13 @@ const STAMP_FALL=90,NIGHT_STAMP={
  severe:{entry:280,hold:160,from:1.6,dip:4,y:-14},saved:{entry:240,hold:180,from:1.6,dip:4,scale:.97,print:true},
  gone:{entry:240,hold:60,tape:440}};
 const stampLand=st=>st.entry+st.hold+STAMP_FALL;
+/* H5: the Final seal reuses the same fall. Both verdicts are climax weight: a 200 ms hold on the standing tape; the clear
+   is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
+const FINAL_SEAL={hold:200,won:{from:2,dip:6},lost:{from:1.6,dip:3}};
+let sealCueAt=null;
+function sealSound(){clearTimeout(sealCueAt);const s=game.run;if(!s?.finalReport)return;const kind=s.win?'sealwin':'sealfail';
+ if(!motionOK()){Sound.play(kind);return;}
+ sealCueAt=setTimeout(()=>Sound.play(kind),FINAL_SEAL.hold+STAMP_FALL);}
 /* The life-saving accent lands BEHIND its own Outcome cue, never instead of it, so a rescued
    퇴각 still reads as a 퇴각. It appears only where the result itself carries the proof, so
    nothing that was not already resolved can be inferred from it.
@@ -197,6 +204,15 @@ function playPhase(phase){
    const text=b.textContent,m=text.match(/\d[\d,]*/);if(!m)return;
    const to=Number(m[0].replace(/,/g,'')),box={v:0},put=()=>{b.textContent=text.replace(m[0],fmt(box.v));};
    put();A(box,{v:to,duration:220,delay:land,ease:'outQuad',onUpdate:put,onComplete:()=>{b.textContent=text;}});});
+ }
+ /* v2.9.2 H5: the Final seal lands on the standing tape and the ending's own sentence follows it */
+ if(phase==='end'){const seal=$('.end-tape .seal'),tape=$('.end-tape');
+  if(seal){const v=FINAL_SEAL[seal.classList.contains('won')?'won':'lost'],at=FINAL_SEAL.hold,land=at+STAMP_FALL;
+   /* the ink ends where the stylesheet leaves it (a failure is faint), so reduced motion and motion end alike */
+   A(seal,{scale:{from:v.from,to:1,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:parseFloat(getComputedStyle(seal).opacity)||1,duration:40,delay:at,ease:'linear'}});
+   if(tape)A(tape,{translateY:[{from:0,to:0,duration:land},{to:v.dip,duration:40,ease:'in(2)'},{to:0,duration:170,ease:'outQuad'}]});
+   document.querySelectorAll('.end-tape .closed,.end-tape .reason').forEach(el=>A(el,{opacity:{from:0,to:1,duration:160,delay:land,ease:'outQuad'},
+    translateY:{from:-4,to:0,duration:160,delay:land,ease:'outQuad'}}));}
  }
  // SALE reveal: the next back walks up to the counter and turns face up. It only ever
  // moves layers that are already laid out, so nothing shifts and no reflow is queued.
@@ -1448,8 +1464,14 @@ function sealChoice(){const s=game.run,w=s.relicWindow;
    player reads every night rather than announced on a landing banner. The English eyebrow,
    the hero headline and the loose row of numbers under it are gone: what closed the store is
    the first line, and the standing totals sit in the ledger where standing totals live. */
+/* v2.9.2 H5 FINAL SEAL (UI_UX §FINAL RESULT — SEAL STAMP, PRESENTATION §GAME FEEL BEAT): one seal bearing the Boss's
+   name on the tape of a Final ending - struck clean on a clear, faint and crooked on a failure. Never one per member
+   (the party is 1~3) and never the NIGHT death tape: the Final verdict is the Run's, not a member's. The headline
+   below says the result; the seal is aria-hidden and names nothing the Run has not already revealed. */
+function finalSeal(){const s=game.run;if(!s.finalReport)return '';const b=D.bossBy[s.bossId];
+ return '<span class="seal '+(s.win?'won':'lost')+'" aria-hidden="true"><b>'+E(b?.name||'')+'</b></span>';}
 function endBanner(){const s=game.run,a=game.account;
- return '<div class="tape end-tape"><div class="tear top"></div><div class="print">'
+ return '<div class="tape end-tape"><div class="tear top"></div><div class="print">'+finalSeal()
  +'<div class="head"><b>GUILD24</b><span>'+(s.win?'제0게이트 폐쇄':'영업 종료')+' · '+E(s.branch)+'</span></div>'
  +'<p class="closed">'+E(endHeadline())+'</p>'
  +'<p class="reason">'+E(s.endReason)+'</p>'
@@ -2083,7 +2105,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     when one is actually credited - this fired every Final, unlock or not, and twice with one */
  /* §BOSS / FINAL AUDIO: the Final commit is the run's heaviest short action cue - a gate
     closing - and it adds no new-information signal; everything it stands on was revealed at D25. */
- case'boss-go':sound('final');game.boss();setModal(null);render();break;
+ case'boss-go':sound('final');game.boss();setModal(null);render();sealSound();break;
  case'retire':setModal('retireConfirm');break;
  case'retire-go':game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');sound('close');setModal(null);render();break;
  case'export':{const blob=new Blob([Save.export(game.account,s)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='guild24-save-day-'+(s?.day||0)+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('저장 파일을 내보냈습니다.');break;}

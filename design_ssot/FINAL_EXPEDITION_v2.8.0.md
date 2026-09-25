@@ -601,6 +601,10 @@ Final Clear 자체가 Run Victory다.
 
 마왕 토벌 실패는 Run Clear가 아니다.
 
+Display order (User 2026-09-25, v2.9.2 H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a
+clear, faint and crooked for a failure, never one per member and never the NIGHT death tape - and the existing result
+sentence follows it. Result, wording and settlement are unchanged. Timing -> UI_UX_v2.8.0.md §FINAL RESULT — SEAL STAMP.
+
 ## FINAL INSURANCE VALUE — EXACT
 
 The ordinary Final resolution does not run normal expedition Retreat/Injury/Severe/Death outcome resolution after the Boss check.

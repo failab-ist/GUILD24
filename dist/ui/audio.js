@@ -74,7 +74,10 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
     Strength belongs to the beat, never to the Boss behind it, so neither cue can name anything
     the plate has not already shown. `boss` is the seal-break decision, which is not an
     information beat, and `final` is the D30 commit. */
- bossmajor:[165,196,147],bosscompact:[165,196],boss:[165,196,147],final:[98,123.47,146.83]};
+ bossmajor:[165,196,147],bosscompact:[165,196],boss:[165,196,147],final:[98,123.47,146.83],
+ /* v2.9.2 H5: the Final seal on the ending tape - a clear rings up out of the Boss motif's root, a failure falls
+    under it. Both land on the stamp's frame with the NIGHT `hit`; neither plays anywhere else. */
+ sealwin:[165,247,330,494],sealfail:[165,147]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
@@ -201,6 +204,8 @@ const shape={
  boss:{gain:1.15,dur:.36,type:'sawtooth',step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1.1,gain:.45},noise:{at:0,dur:.5,gain:.35,hz:220,q:.6,filter:'lowpass'},duck:.6},
  /* FINAL commit: the heaviest mechanical close in the build, with the tension under it. It adds
     no information - D25 already revealed everything it stands on. */
+ sealwin:{hit:1,gain:1.1,dur:.34,type:'triangle',step:.08,layer:{ratio:2,at:.24,dur:1.2,gain:.3},noise:{at:0,dur:.12,gain:.5,hz:1800,q:.7,filter:'bandpass'},duck:.6},
+ sealfail:{hit:1,gain:1,dur:.5,type:'sawtooth',step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
  final:{gain:1.1,dur:1,type:'sawtooth',step:.3,attack:.08,glide:.98,sampleGain:1.2,accent:true,
   layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also
