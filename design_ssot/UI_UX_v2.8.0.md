@@ -1783,7 +1783,7 @@ A Decoration Slot with no equipped Decoration is a neutral state, not a warning.
 Required:
 - remove the inherited "주의 ·" treatment from "비움"
 - each Slot row, including "비움", is actionable before a Run
-- tapping a Slot row opens 점포 관리 focused/scrolled to that exact Slot
+- tapping a Slot row opens 점포 장식 (the codex tab formerly labelled 점포 관리; (User 2026-09-24, v2.9.0)) focused/scrolled to that exact Slot
 - REUSE the existing store-management panel; do not create a second Decoration selector
 - during an active Run, keep the existing read-only/frozen-loadout rule
 
@@ -1824,9 +1824,17 @@ Top-level Menu exactly:
 - 모험가 수첩
 - 도감
 - 점포지원
+- 이번 영업의 장식
 - 점주 가이드
 - 설정
 - 현재 지점 포기
+
+Menu row behavior (User 2026-09-24, v2.9.0):
+- 점포지원: while a Store Support window is open and purchasable (RELIC §reopenAllowed, `canBuyRelic`) it opens the selection surface; otherwise it opens the owned list `보유 점포지원` (a closable modal), never the selection surface with nothing to choose
+- 이번 영업의 장식: read-only, the four Slots of this Run's frozen loadout as `{Slot 이름} · {장식 이름} · {효과 한 줄}`; an empty Slot reads `비어 있음` (COPY_AUDIT §1-7); 세계관 vocabulary only (영업 · 점포), never 런
+- 현재 지점 포기: the confirm of COPY_AUDIT §1-3; on confirm the Run is discarded at once (CORE_RUN §CURRENT RUN ABANDON) and the screen returns to 새 점포 준비 with no Run, where Decorations can be bought and equipped; a new Run starts only from `첫 점포지원 고르기`
+- the DAY 0 첫 점포지원 surface has no way back: the retired `장식 구성 다시 보기` button is gone; the choice is mandatory and the surface has no close
+- 점포지원 and 이번 영업의 장식 and 현재 지점 포기 appear only while a Run exists
 
 Top-level removed:
 - Sound Toggle

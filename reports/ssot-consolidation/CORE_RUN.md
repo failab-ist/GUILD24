@@ -330,3 +330,18 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 ```new
 `overhead = (90 + 5 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)` (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 F5: menu routing / 이번 영업의 장식 / abandon flow / 점포 장식 tab / capital rates halved (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F5): the menu 점포지원 row opens the owned list when no Store Support window is purchasable; a read-only menu row 이번 영업의 장식; the DAY 0 `장식 구성 다시 보기` way back is retired; the codex tab 점포 관리 is labelled 점포 장식; 현재 지점 포기 discards the Run at once and returns to 새 점포 준비 with no Run (Decorations purchasable there), no automatic new Run; the Store Capital Day-reach rate table is halved (0.5 / 1 / 1.5 / 2 / 2.5%), prices unchanged. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```text
+Starting a new Run while another Run is active means:
+**abandon the current Run with no settlement and start a fresh Run.**
+```
+
+```new
+Confirming `현재 지점 포기` means (User 2026-09-24, v2.9.0):
+**abandon the current Run with no settlement, at once: `run = null`, and return to 새 점포 준비 (no Run).**
+No new Run starts by itself. On that screen Decorations can be bought and equipped (META §DECORATION COLLECTION / LOADOUT); the next Run starts only when the player chooses `첫 점포지원 고르기`, on the ordinary fresh-Run start path.
+```

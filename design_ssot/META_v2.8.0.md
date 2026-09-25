@@ -454,12 +454,14 @@ answer.
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-D1-9    = 1%
-D10-19  = 2%
-D20-24  = 3%
-D25-29  = 4%
-D30     = 5%
+D1-9    = 0.5%
+D10-19  = 1%
+D20-24  = 1.5%
+D25-29  = 2%
+D30     = 2.5%
 ```
+
+(User 2026-09-24, v2.9.0): the table is halved from 1 / 2 / 3 / 4 / 5%. Buying a Decoration inside the first Run is not a goal; the first Decoration lands at Run 2 at the earliest (a fresh Run reaching D28 sells ≈ 22,500G → ≈ 450 Store Capital; the cheapest Decoration is 800G). Decoration prices are unchanged.
 
 The band is the Day the Run actually reached. Boss CLEAR does not multiply it.
 
@@ -654,6 +656,8 @@ Validation must confirm:
 If validation produces a Balance Finding, report it and stop. Do not auto-tune the rate table,
 Decoration prices, or unrelated Run balance.
 
+User decision 2026-09-24 (v2.9.0): the rate table was halved by decision, not by measurement; the acquisition expectation (first Decoration Run 2-3, four Slots Run 10-11) is re-measured after adoption and reported.
+
 ## RETIRED FRANCHISE SYSTEM — INACTIVE ARCHIVE
 
 The following are retired from active gameplay by the Decoration Package:
@@ -754,7 +758,7 @@ Full Data Reset is the explicit deletion action.
 
 ### FULL DATA RESET vs ABANDON
 - **Full Data Reset**: Run, Account/Meta, Tutorial, D10/D14 해금/Toast 모두 Fresh 초기화.
-- **현재 지점 포기(Abandon)**: Run만 초기화. Account/Meta, Tutorial, 해금 상태는 유지.
+- **현재 지점 포기(Abandon)**: Run만 초기화. Account/Meta, Tutorial, 해금 상태는 유지. 포기 직후 영업이 없는 새 점포 준비 화면으로 돌아오며, 거기서 장식 구매·장착이 가능하다 (User 2026-09-24, v2.9.0).
 
 ## SAVE RELATIONSHIP
 

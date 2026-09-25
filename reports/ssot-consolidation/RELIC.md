@@ -794,3 +794,11 @@ Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위�
 ## AMENDMENT — v2.9.0 Store Support card copy in two clauses (User decision 2026-09-24)
 
 The two quoted card lines (즉석식품 코너, 24시간 신선체계) follow the COPY_AUDIT §11 rewrite (effect · condition, no accounting clause; values unchanged); the earlier declared-new lines above were edited in place.
+
+## AMENDMENT — v2.9.0 F5: menu routing / 이번 영업의 장식 / abandon flow / 점포 장식 tab / capital rates halved (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F5): the menu 점포지원 row opens the owned list when no Store Support window is purchasable; a read-only menu row 이번 영업의 장식; the DAY 0 `장식 구성 다시 보기` way back is retired; the codex tab 점포 관리 is labelled 점포 장식; 현재 지점 포기 discards the Run at once and returns to 새 점포 준비 with no Run (Decorations purchasable there), no automatic new Run; the Store Capital Day-reach rate table is halved (0.5 / 1 / 1.5 / 2 / 2.5%), prices unchanged. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+Menu 점포지원 row (User 2026-09-24, v2.9.0): opens the selection surface only while reopenAllowed holds and the window is still purchasable; otherwise it opens the owned Store Support list. The DAY 0 first choice has no way back and no close.
+```

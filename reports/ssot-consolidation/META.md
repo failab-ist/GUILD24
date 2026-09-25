@@ -545,3 +545,27 @@ rare-NPC rarity weights = [50, 30, 15, 4, 1]
 Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 50%
 every adventurer created while it is worn: 50% chance of spawn Level +1
 ```
+
+## AMENDMENT — v2.9.0 F5: menu routing / 이번 영업의 장식 / abandon flow / 점포 장식 tab / capital rates halved (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F5): the menu 점포지원 row opens the owned list when no Store Support window is purchasable; a read-only menu row 이번 영업의 장식; the DAY 0 `장식 구성 다시 보기` way back is retired; the codex tab 점포 관리 is labelled 점포 장식; 현재 지점 포기 discards the Run at once and returns to 새 점포 준비 with no Run (Decorations purchasable there), no automatic new Run; the Store Capital Day-reach rate table is halved (0.5 / 1 / 1.5 / 2 / 2.5%), prices unchanged. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```text
+D1-9    = 1%
+D10-19  = 2%
+D20-24  = 3%
+D25-29  = 4%
+D30     = 5%
+- **현재 지점 포기(Abandon)**: Run만 초기화. Account/Meta, Tutorial, 해금 상태는 유지.
+```
+
+```new
+D1-9    = 0.5%
+D10-19  = 1%
+D20-24  = 1.5%
+D25-29  = 2%
+D30     = 2.5%
+(User 2026-09-24, v2.9.0): the table is halved from 1 / 2 / 3 / 4 / 5%. Buying a Decoration inside the first Run is not a goal; the first Decoration lands at Run 2 at the earliest (a fresh Run reaching D28 sells ≈ 22,500G → ≈ 450 Store Capital; the cheapest Decoration is 800G). Decoration prices are unchanged.
+User decision 2026-09-24 (v2.9.0): the rate table was halved by decision, not by measurement; the acquisition expectation (first Decoration Run 2-3, four Slots Run 10-11) is re-measured after adoption and reported.
+- **현재 지점 포기(Abandon)**: Run만 초기화. Account/Meta, Tutorial, 해금 상태는 유지. 포기 직후 영업이 없는 새 점포 준비 화면으로 돌아오며, 거기서 장식 구매·장착이 가능하다 (User 2026-09-24, v2.9.0).
+```

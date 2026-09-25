@@ -984,3 +984,25 @@ SALE with a shelf holding units stocked on different days (some at 1 day left), 
 - rows keep one name line + one effect line; no overflow at 360
 - an order that changes with the customer's Gate, or a recommendation word
 ```
+
+## AMENDMENT — v2.9.0 F5: menu routing / 이번 영업의 장식 / abandon flow / 점포 장식 tab / capital rates halved (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F5): the menu 점포지원 row opens the owned list when no Store Support window is purchasable; a read-only menu row 이번 영업의 장식; the DAY 0 `장식 구성 다시 보기` way back is retired; the codex tab 점포 관리 is labelled 점포 장식; 현재 지점 포기 discards the Run at once and returns to 새 점포 준비 with no Run (Decorations purchasable there), no automatic new Run; the Store Capital Day-reach rate table is halved (0.5 / 1 / 1.5 / 2 / 2.5%), prices unchanged. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```text
+- tapping a Slot row enters existing 점포 관리 focused/scrolled to that Slot
+```
+
+```new
+- tapping a Slot row enters the existing 점포 장식 codex tab (label `점포 장식`, (User 2026-09-24, v2.9.0)) focused/scrolled to that Slot
+### UI-Q-v29-21 — MENU ROUTING / THIS RUN'S DECORATIONS / ABANDON FLOW
+A Run on DAY 0 (first choice pending), a Run on a Day whose Store Support window is spent or closed, and a Run at SALE; the menu on each.
+- menu rows exactly 모험가 수첩 / 도감 / 점포지원 / 이번 영업의 장식 / 점주 가이드 / 설정 / 현재 지점 포기
+- 점포지원 opens the selection surface only while `canBuyRelic` holds; otherwise the owned list `보유 점포지원` with a close
+- 이번 영업의 장식 lists the four Slots with the Run's frozen loadout and effect line; an empty Slot reads `비어 있음`; nothing is editable
+- DAY 0 첫 점포지원 has no `장식 구성 다시 보기` button and no close
+- 현재 지점 포기 → confirm (§1-3) → the Run is gone (`run = null`), the screen is 새 점포 준비 with no Run, a Decoration can be bought and equipped there, and no new Run has started; `첫 점포지원 고르기` starts it
+- every other Run end (bankruptcy, death limit, 폐점, FINAL end) reaches a screen from which 다음 점포 열기 leads to the same 새 점포 준비 where Decorations can be bought
+- the codex tab reads `점포 장식`
+- abandon starting a new Run by itself, or a Decoration purchase refused with no Run
+```

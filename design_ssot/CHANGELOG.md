@@ -86,6 +86,10 @@ Docs-first. Each owner amendment is listed when committed.
   (rest days included); 중상 takes the 부상 Fatigue gain (+9); repeated-strain Death escalation (+8%p per repeated injured / Fatigue-20+
   departure, cap +30%p) with the NPC detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 with correct particles.
   ITEM, NIGHT_CLOSING, DUNGEON_HAZARD, DUNGEON_ITEM_QA, UI_UX, COPY_AUDIT §4-22 / §14-10, COPY_WORLD_VOICE.
+- F5 (User 2026-09-24): menu row 점포지원 opens the owned list when no window is purchasable; new menu row 이번 영업의 장식 (read-only
+  loadout, empty Slot `비어 있음`); DAY 0 `장식 구성 다시 보기` retired; codex tab 점포 관리 → 점포 장식; 현재 지점 포기 discards the Run at once
+  and returns to 새 점포 준비 (no Run) where Decorations can be bought; Store Capital Day-reach rates halved (0.5 / 1 / 1.5 / 2 / 2.5%).
+  UI_UX, UI_UX_QA, RELIC, CORE_RUN, META, COPY_AUDIT §1-7 / §9.
 - F4 (User 2026-09-24/25): Food/Drink Fatigue recovery redistributed (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 · 집중 사탕 2 ·
   불룡볶음면 2 with 강인함 +5 · 길드 특제 도시락 6; 영웅 결전 도시락 stays 9; Drinks unchanged); every Item expires (ITEM §SHELF LIFE — EXACT,
   2~5 days); SALE shelf ordered by days left with a `폐기 N일` chip; operating cost dayBase 90 + 5 × (Day − 1); expedition Wallet

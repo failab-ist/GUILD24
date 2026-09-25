@@ -555,8 +555,9 @@ Reload must not:
 Player-facing action:
 `현재 지점 포기`
 
-Starting a new Run while another Run is active means:
-**abandon the current Run with no settlement and start a fresh Run.**
+Confirming `현재 지점 포기` means (User 2026-09-24, v2.9.0):
+**abandon the current Run with no settlement, at once: `run = null`, and return to 새 점포 준비 (no Run).**
+No new Run starts by itself. On that screen Decorations can be bought and equipped (META §DECORATION COLLECTION / LOADOUT); the next Run starts only when the player chooses `첫 점포지원 고르기`, on the ordinary fresh-Run start path.
 
 Abandoned Run must NOT trigger:
 - `Meta.finish()`

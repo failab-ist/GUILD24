@@ -259,6 +259,8 @@ reopenBlocked:
 - Active Sale
 - Night Resolution
 
+Menu 점포지원 row (User 2026-09-24, v2.9.0): opens the selection surface only while reopenAllowed holds and the window is still purchasable; otherwise it opens the owned Store Support list. The DAY 0 first choice has no way back and no close.
+
 ownedRelicQuickView:
 mode=READ_ONLY
 availablePhases=[Morning,Order,Sale]

@@ -984,3 +984,22 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 ```new
 - §SALE — SHELF ORDER (User 2026-09-25, v2.9.0): rows are ordered by days left before discard, nearest first, ties in the existing order, the same for every customer; each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
 ```
+
+## AMENDMENT — v2.9.0 F5: menu routing / 이번 영업의 장식 / abandon flow / 점포 장식 tab / capital rates halved (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F5): the menu 점포지원 row opens the owned list when no Store Support window is purchasable; a read-only menu row 이번 영업의 장식; the DAY 0 `장식 구성 다시 보기` way back is retired; the codex tab 점포 관리 is labelled 점포 장식; 현재 지점 포기 discards the Run at once and returns to 새 점포 준비 with no Run (Decorations purchasable there), no automatic new Run; the Store Capital Day-reach rate table is halved (0.5 / 1 / 1.5 / 2 / 2.5%), prices unchanged. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```text
+- tapping a Slot row opens 점포 관리 focused/scrolled to that exact Slot
+```
+
+```new
+- tapping a Slot row opens 점포 장식 (the codex tab formerly labelled 점포 관리; (User 2026-09-24, v2.9.0)) focused/scrolled to that exact Slot
+- 이번 영업의 장식
+Menu row behavior (User 2026-09-24, v2.9.0):
+- 점포지원: while a Store Support window is open and purchasable (RELIC §reopenAllowed, `canBuyRelic`) it opens the selection surface; otherwise it opens the owned list `보유 점포지원` (a closable modal), never the selection surface with nothing to choose
+- 이번 영업의 장식: read-only, the four Slots of this Run's frozen loadout as `{Slot 이름} · {장식 이름} · {효과 한 줄}`; an empty Slot reads `비어 있음` (COPY_AUDIT §1-7); 세계관 vocabulary only (영업 · 점포), never 런
+- 현재 지점 포기: the confirm of COPY_AUDIT §1-3; on confirm the Run is discarded at once (CORE_RUN §CURRENT RUN ABANDON) and the screen returns to 새 점포 준비 with no Run, where Decorations can be bought and equipped; a new Run starts only from `첫 점포지원 고르기`
+- the DAY 0 첫 점포지원 surface has no way back: the retired `장식 구성 다시 보기` button is gone; the choice is mandatory and the surface has no close
+- 점포지원 and 이번 영업의 장식 and 현재 지점 포기 appear only while a Run exists
+```
