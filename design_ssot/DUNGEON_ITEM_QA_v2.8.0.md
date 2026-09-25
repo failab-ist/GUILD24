@@ -432,7 +432,7 @@ EXPECT base result Fatigue (User 2026-09-24, v2.9.0):
 대성공 +4
 퇴각 +7
 부상 +9
-중상 0
+중상 +9
 사망 0
 ```
 
@@ -462,7 +462,7 @@ Controlled cases must verify exact order (User 2026-09-24, v2.9.0):
 1. Supply reduces current Fatigue 1:1 before departure (`preRecovery`)
 2. remaining Supply then reduces actual outcome Fatigue 1:1
 3. unused remainder is discarded
-4. Severe-Injury recovery days reduce Fatigue 5 per rest day at that morning, floor 0
+4. no morning changes Fatigue, a Severe-Injury rest day included (User 2026-09-25, v2.9.0)
 
 PASS:
 - `preparedSupply`, `preRecovery`, `fatigueBeforeExpedition`, `remainingSupplyBuffer`, `rawOutcomeFatigueGain`, `outcomeBufferUsed`, `actualOutcomeFatigueGain`, `finalFatigue`, `netFatigueDelta` match the current owner arithmetic
@@ -471,9 +471,9 @@ PASS:
 - no Supply Power/success/Loot/Hazard bonus
 - no next-expedition buffer persistence
 - no morning natural recovery
-- Severe/Death raw outcome Fatigue remains 0
+- Death raw outcome Fatigue remains 0; 중상 takes the 부상 gain (User 2026-09-25, v2.9.0)
 
-### DUN-Q-v29-1 — FATIGUE BANDS / REST RECOVERY
+### DUN-Q-v29-1 — FATIGUE BANDS / NO REST RECOVERY
 
 (User 2026-09-24, v2.9.0)
 
@@ -485,12 +485,27 @@ EXPECT:
 - 40 -> 탈진 -40% on all four Core Stats and `실패 시 사망 위험` +10%p over the same state at 39
 - a 성공 at 36 with no Supply ends at 40, not 41 (clamp)
 - Supply 3 at current Fatigue 22 departs at 19 (지침), not 22 (과로): the band is judged after preRecovery
-- each Severe-Injury rest day lowers Fatigue by 5, floor 0; no other morning changes Fatigue
+- no morning changes Fatigue, a Severe-Injury rest day included (User 2026-09-25, v2.9.0)
 - NIGHT main line names the band from 20 up (`귀환 후 피로 22 · 과로`); 정상 / 지침 are not named
 
 PASS:
 - five bands, 0~40, applied to NPC Base+Equipment-side Stats only
-- rest recovery exists only on Severe-Injury recovery days
+- no rest recovery exists; Fatigue falls only through Food/Drink (User 2026-09-25, v2.9.0)
+
+### DUN-Q-v29-3 — REPEATED-STRAIN DEATH ESCALATION
+
+(User 2026-09-25, v2.9.0)
+
+Controlled adventurer records: 0 / 1 / 2 / 3 / 5 expeditions begun at injury=1, and separately 0 / 1 / 2 / 3 / 5 begun at Fatigue 20+, then a failed expedition.
+
+EXPECT:
+- the first injured departure and the first weary departure add nothing beyond the existing injured / 탈진 terms
+- every further repeat of each kind adds +8%p to the conditional failure Death chance and to its cap, summed across both kinds, capped at +30%p
+- the counts come from the adventurer's own records (this departure included); no new NPC field
+- NPC detail shows `무리한 출발 {n}회` (injured + weary departures so far) as an information row, no verdict
+
+PASS:
+- strainEscalation equals min(0.30, 0.08·max(0,i−1) + 0.08·max(0,w−1)) exactly
 
 ### DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
 
@@ -1183,14 +1198,14 @@ Clearly stronger survival tier than Return Stone and not treated as Food.
 
 Controlled final ordinary outcomes:
 
-부상 + 구급키트:
-- Outcome remains 부상
+부상 + 구급키트 (User 2026-09-25, v2.9.0):
+- Outcome stays 부상
 - XP/Loot/Fatigue follow 부상
 - persistent injury=0/recovery=0
 
 중상 + 구급키트:
-- Outcome remains 중상
-- XP/Loot/Fatigue follow 중상
+- Outcome becomes 부상 (NIGHT verdict 부상, event `구급키트가 중상을 부상으로 낮췄다.`)
+- XP/Loot/Fatigue follow 부상
 - persistent injury=1/recovery=0
 
 사망:

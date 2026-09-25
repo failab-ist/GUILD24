@@ -723,8 +723,6 @@ Concise player function:
 ```
 
 ```new
-Concise player function (User 2026-09-24, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
-원정 후 부상 1단계 완화 (사망 제외)
 ```
 
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
@@ -775,4 +773,13 @@ T3 15%
 
 ```new
 v2.9.0 (User 2026-09-24): Trait에 Flavor note는 없다. 남는 note는 거짓말쟁이의 기능 서술(`50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.`) 하나뿐이며, 효과 행으로 렌더된다. 구두쇠·악바리의 note는 삭제(효과 행이 같은 말을 한다).
+```
+
+## AMENDMENT — v2.9.0 F3: kit Outcome step / no rest recovery / 중상 +9 / repeated-strain cut (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome one step (중상 → 부상 with the 부상 XP/Loot/Fatigue/injury 1; 부상 → 부상 with no lasting injury; 사망 excluded); no natural Fatigue recovery of any kind for any adventurer (the Severe-Injury rest-day -5 is retired); 중상 takes the 부상 Fatigue gain (+9) and only 사망 stays 0; repeated injured / weary (Fatigue 20+) departures escalate the failure Death chance (+8%p per repeat of each kind from the second, cap +30%p, from the adventurer's own records) with the NPC-detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 / 순례 with particles by final consonant. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+Concise player function (User 2026-09-25, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
+원정 후 중상 → 부상, 부상 → 무사 (사망 제외)
 ```

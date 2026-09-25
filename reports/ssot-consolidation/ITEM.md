@@ -603,7 +603,6 @@ Buy / Sell = 100 / 210
 ```new
 Buy / Sell = 80 / 170
 It carries no Core Stat; its whole function is the Aftercare below, priced as pure Insurance (User 2026-09-24, v2.9.0).
-| 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
 ```
 
 ## AMENDMENT — v2.9.0 revision 3: 어둠 -> 기동, no Gate shares a Stat (User decision 2026-09-24)
@@ -613,4 +612,26 @@ It carries no Core Stat; its whole function is the Aftercare below, priced as pu
 
 ```new
 Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동 and 화염 -> 정신 per User 2026-09-24 revisions 3 / 5) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 F3: kit Outcome step / no rest recovery / 중상 +9 / repeated-strain cut (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome one step (중상 → 부상 with the 부상 XP/Loot/Fatigue/injury 1; 부상 → 부상 with no lasting injury; 사망 excluded); no natural Fatigue recovery of any kind for any adventurer (the Severe-Injury rest-day -5 is retired); 중상 takes the 부상 Fatigue gain (+9) and only 사망 stays 0; repeated injured / weary (Fatigue 20+) departures escalate the failure Death chance (+8%p per repeat of each kind from the second, cap +30%p, from the adventurer's own records) with the NPC-detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 / 순례 with particles by final consonant. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+It does not change the resolved expedition Outcome.
+After Outcome resolution and after higher-priority emergency outcome conversions, it changes only the persistent Injury state:
+-> Outcome/XP/Loot/Fatigue remain 부상
+-> persistent injury=0, recovery=0
+-> Outcome/XP/Loot/Fatigue remain 중상
+-> persistent injury=1, recovery=0
+4. 구급키트 Aftercare applies to the final non-death Injury state
+```
+
+```new
+It lowers the resolved expedition Outcome one step, after the higher-priority emergency conversions (User 2026-09-25, v2.9.0):
+-> Outcome becomes 부상: XP/Loot/Fatigue follow 부상, persistent injury=1, recovery=0
+-> Outcome stays 부상: XP/Loot/Fatigue follow 부상, persistent injury=0 (no lasting injury)
+4. 구급키트 Aftercare lowers the final non-death Outcome one step (중상 -> 부상; a 부상 keeps its Outcome but leaves no injury); XP/Loot/Fatigue follow the lowered Outcome (User 2026-09-25, v2.9.0)
+| 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
 ```

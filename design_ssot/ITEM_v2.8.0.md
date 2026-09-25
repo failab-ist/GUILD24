@@ -638,17 +638,14 @@ Buy / Sell = 80 / 170
 
 It carries no Core Stat; its whole function is the Aftercare below, priced as pure Insurance (User 2026-09-24, v2.9.0).
 
-It does not change the resolved expedition Outcome.
-After Outcome resolution and after higher-priority emergency outcome conversions, it changes only the persistent Injury state:
+It lowers the resolved expedition Outcome one step, after the higher-priority emergency conversions (User 2026-09-25, v2.9.0):
 
 ```text
-부상 Outcome
--> Outcome/XP/Loot/Fatigue remain 부상
--> persistent injury=0, recovery=0
-
 중상 Outcome
--> Outcome/XP/Loot/Fatigue remain 중상
--> persistent injury=1, recovery=0
+-> Outcome becomes 부상: XP/Loot/Fatigue follow 부상, persistent injury=1, recovery=0
+
+부상 Outcome
+-> Outcome stays 부상: XP/Loot/Fatigue follow 부상, persistent injury=0 (no lasting injury)
 
 사망
 -> no effect
@@ -708,7 +705,7 @@ Where multiple effects are present:
 1. resolve ordinary expedition outcome
 2. 귀환석 emergency-escape conversion when eligible
 3. if Death remains, 세계수 생환부적 Death -> Severe Injury
-4. 구급키트 Aftercare applies to the final non-death Injury state
+4. 구급키트 Aftercare lowers the final non-death Outcome one step (중상 -> 부상; a 부상 keeps its Outcome but leaves no injury); XP/Loot/Fatigue follow the lowered Outcome (User 2026-09-25, v2.9.0)
 ```
 
 Do not rerun the whole outcome-resolution chain after Aftercare.
@@ -760,7 +757,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 13 | 불룡볶음면 | Food U | 65 / 135 | 강인함 +8, 냉기 +6, Supply 4 | Cold Hybrid |
 | 14 | 에너지드링크 | Drink U | 70 / 150 | 기동 +15, Supply 2 | Stat route |
 | 15 | 용사의 곡주 | Drink U | 60 / 130 | 공포 +18, 기동 -4, Supply 1 | Fear Main / RiskReward |
-| 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 유지 / persistent Injury 1단계 Aftercare | Aftercare |
+| 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
 | 17 | 방진마스크 | Field Gear U | 65 / 135 | 독 +12 | Poison Lower |
 | 18 | 핫팩 | Field Gear U | 60 / 130 | 냉기 +18 | Cold Main |
 | 19 | 방수망토 | Field Gear U | 75 / 160 | 부식 +6, 진창 +6 | Dual Hybrid |

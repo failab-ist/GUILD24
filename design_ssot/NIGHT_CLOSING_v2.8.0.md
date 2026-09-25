@@ -64,6 +64,7 @@ softlock=NO
 게이트 순례주간:
 - Night header/summary may show `실제 변경 N명`
 - affected NPC result shows `예상 목적지 -> 실제 목적지`
+- the route-change line (User 2026-09-25, v2.9.0; exact -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-10): `순례 행렬을 따라 {name}{은/는} 예상 목적지 {A} 대신 {B}{으로/로} 향했다.` for a pilgrimage reroute, `거짓말쟁이 {name}{은/는} 말했던 {A} 대신 {B}{으로/로} 향했다.` for the Trait; the retired name 허세 never appears and the particles follow the final consonant
 - no separate Event result screen is added
 
 ## NIGHT CONTROLS — EXACT
@@ -317,12 +318,11 @@ No false hero attribution.
 
 ### FIRST AID KIT AFTERCARE — RESULT TRUTH
 
-`구급키트` does not rewrite the expedition Outcome.
-If its Aftercare actually changes persistent Injury state, the report may expose that proven contribution.
+`구급키트` lowers the expedition Outcome one step (User 2026-09-25, v2.9.0): a would-be `중상` resolves as `부상` (injury=1, recovery=0, the 부상 XP/Loot/Fatigue), a would-be `부상` resolves as `부상` with no lasting injury. The NIGHT verdict reads the lowered Outcome; the report exposes the proven contribution.
 
 Examples of valid proof:
-- resolved `부상`, persistent state changed from would-be injury=1 to injury=0
-- resolved `중상`, persistent state changed from would-be injury=2 recovery-state to injury=1/recovery=0
+- would-be `부상` -> `부상`, persistent injury 0 (`구급키트가 남을 부상을 없앴다.`)
+- would-be `중상` -> `부상`, injury=1 / recovery=0 (`구급키트가 중상을 부상으로 낮췄다.`)
 
 Do not display:
 - `구급키트가 퇴각시켰다`

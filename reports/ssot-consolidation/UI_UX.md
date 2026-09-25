@@ -744,7 +744,6 @@ Failure-risk label:
 ```
 
 ```new
-NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0).
 - SALE transaction beats (hand-over, customer reaction, counter, exit / entry, price sound family, refusal) -> PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT (User 2026-09-24, v2.9.0)
 - the two Bag slots stay in the customer-state strip beside the status line and are the landing point of the hand-over (User 2026-09-24, v2.9.0)
 - the Bag stays in the customer-state strip at every width, one step larger than v2.8, never overflowing (User 2026-09-24, v2.9.0)
@@ -968,4 +967,12 @@ beside the Stat name and the value is one step smaller. Superseded declarations 
 ```new
 - beside the Stat name, on the same line (`강인함  독`), when the customer's Gate presses that Stat, a small tag with the pressing Hazard name(s) (e.g. `냉기`, or `독 · 속박` for two); the tag never adds a line or horizontal overflow — it is clipped with an ellipsis before the value would move (User 2026-09-25, v2.9.0)
 - the Stat value is one step smaller than before but still larger than the Stat name (User 2026-09-25, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 F3: kit Outcome step / no rest recovery / 중상 +9 / repeated-strain cut (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome one step (중상 → 부상 with the 부상 XP/Loot/Fatigue/injury 1; 부상 → 부상 with no lasting injury; 사망 excluded); no natural Fatigue recovery of any kind for any adventurer (the Severe-Injury rest-day -5 is retired); 중상 takes the 부상 Fatigue gain (+9) and only 사망 stays 0; repeated injured / weary (Fatigue 20+) departures escalate the failure Death chance (+8%p per repeat of each kind from the second, cap +30%p, from the adventurer's own records) with the NPC-detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 / 순례 with particles by final consonant. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `무리한 출발 {n}회` — the number of expeditions this adventurer began injured or at Fatigue 20+, no verdict (User 2026-09-25, v2.9.0).
 ```

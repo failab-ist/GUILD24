@@ -148,7 +148,7 @@ sources may include:
 
 recovery (User 2026-09-24, v2.9.0):
 - Food/Drink Supply: each point reduces Fatigue by 1 -> §SUPPLY -> FATIGUE
-- Severe-Injury recovery days: -5 per rest day (floor 0)
+- no rest recovery: a Severe-Injury recovery day does not change Fatigue (User 2026-09-25, v2.9.0)
 
 - 아침 자연 회복(-2/일) 삭제.
 
@@ -161,7 +161,7 @@ recovery (User 2026-09-24, v2.9.0):
 대성공    +4
 퇴각      +7
 부상      +9
-중상       0
+중상      +9
 사망       0
 ```
 
@@ -169,7 +169,7 @@ Re-tuned -1 from the first v2.9.0 table (+5 / +5 / +8 / +10) after the I-2 re-me
 
 Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.8.0.md`.
 
-Severe Injury and Death remain final result-Fatigue gain 0; a Trait may not raise them above 0.
+Death remains final result-Fatigue gain 0 and a Trait may not raise it; 중상 takes the 부상 gain (+9) so a Severe Injury is a clear penalty on every axis (User 2026-09-25, v2.9.0).
 
 ## FATIGUE STAT PENALTY
 
@@ -241,7 +241,7 @@ netFatigueDelta
 = finalFatigue - beforeFatigue
 
 restRecovery
-= 5 per Severe-Injury recovery day, applied at that morning, floor 0
+= 0 (retired, User 2026-09-25, v2.9.0)
 ```
 
 Meaning:
@@ -250,7 +250,7 @@ Meaning:
 3. Any still-remaining Supply buffers this expedition's resulting Fatigue gain 1:1.
 4. Leftover Supply does not become Power, success chance, Loot, Hazard defense, or a persisted next-expedition buffer.
 5. The Item value is shown as `피로 회복 N` (never `보급 +N`). One-sentence rule: `음식·음료는 피로를 줄인다.`
-6. Rest recovery: while an adventurer is out on Severe-Injury recovery days, Fatigue -5 per rest day (floor 0). No morning natural recovery.
+6. No natural recovery of any kind: neither a morning nor a Severe-Injury rest day changes Fatigue; only Food/Drink lower it (User 2026-09-25, v2.9.0).
 
 Result fields: beforeFatigue, preparedSupply, preRecovery, fatigueBeforeExpedition, remainingSupplyBuffer, rawOutcomeFatigueGain, outcomeBufferUsed, actualOutcomeFatigueGain, finalFatigue, netFatigueDelta.
 Removed: requiredSupply, excessSupply.
@@ -940,12 +940,16 @@ Fatigue 40 departure (User 2026-09-24, v2.9.0): if `fatigueBeforeExpedition = 40
 ```text
 injuryEscalation  = 0.10 if injury=1, else 0
 fatigueEscalation = 0.10 if fatigueBeforeExpedition = 40, else 0
+strainEscalation  = min(0.30, 0.08 × max(0, injuredDepartures − 1) + 0.08 × max(0, wearyDepartures − 1))
+  injuredDepartures = this adventurer's expeditions so far, this one included, begun at injury=1
+  wearyDepartures   = begun at fatigueBeforeExpedition ≥ 20
+  (User 2026-09-25, v2.9.0: the first injured and the first weary departure are free; every repeat adds 8%p, up to 30%p — the repeated-strain cut)
 
 failureDeathChance
 = clamp(
-    healthyFailureDeathChance + injuryEscalation + fatigueEscalation,
+    healthyFailureDeathChance + injuryEscalation + fatigueEscalation + strainEscalation,
     0.00,
-    0.30 + injuryEscalation + fatigueEscalation
+    0.30 + injuryEscalation + fatigueEscalation + strainEscalation
 )
 ```
 
@@ -956,6 +960,7 @@ Meaning:
 - weak Hazard preparation independently raises the conditional failure Death risk
 - repeating expeditions with an already-injured NPC adds a visible material risk
 - departing at Fatigue 40 (탈진) adds the same visible material risk
+- repeating injured or weary (Fatigue 20+) departures escalates further: +8%p per repeat of each kind, up to +30%p, and the cap rises with it (User 2026-09-25, v2.9.0)
 - healthy conditional cap remains 30%
 - injured conditional cap remains 40%
 - Fatigue-40 conditional cap is 40%; injured and Fatigue-40 together 50%

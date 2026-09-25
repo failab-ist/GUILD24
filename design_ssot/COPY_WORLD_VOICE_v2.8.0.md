@@ -1237,9 +1237,9 @@ unless an owning tutorial explicitly requires instructional text.
 
 ## FIRST AID KIT
 
-Concise player function (User 2026-09-24, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
+Concise player function (User 2026-09-25, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
 
-    원정 후 부상 1단계 완화 (사망 제외)
+    원정 후 중상 → 부상, 부상 → 무사 (사망 제외)
 
 Do not append redundant 원정 결과는 유지 prose on the primary Item line.
 

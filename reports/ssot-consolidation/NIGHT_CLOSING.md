@@ -378,3 +378,21 @@ Band names / thresholds / effects (Fatigue 0~40, five bands) -> `DUNGEON_HAZARD_
 - `preRecovery` = current Fatigue removed before expedition by the prepared Food/Drink Supply (1:1)
 - `remainingSupplyBuffer` = Supply left after preRecovery
 ```
+
+## AMENDMENT — v2.9.0 F3: kit Outcome step / no rest recovery / 중상 +9 / repeated-strain cut (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome one step (중상 → 부상 with the 부상 XP/Loot/Fatigue/injury 1; 부상 → 부상 with no lasting injury; 사망 excluded); no natural Fatigue recovery of any kind for any adventurer (the Severe-Injury rest-day -5 is retired); 중상 takes the 부상 Fatigue gain (+9) and only 사망 stays 0; repeated injured / weary (Fatigue 20+) departures escalate the failure Death chance (+8%p per repeat of each kind from the second, cap +30%p, from the adventurer's own records) with the NPC-detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 / 순례 with particles by final consonant. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+`구급키트` does not rewrite the expedition Outcome.
+If its Aftercare actually changes persistent Injury state, the report may expose that proven contribution.
+- resolved `부상`, persistent state changed from would-be injury=1 to injury=0
+- resolved `중상`, persistent state changed from would-be injury=2 recovery-state to injury=1/recovery=0
+```
+
+```new
+- the route-change line (User 2026-09-25, v2.9.0; exact -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-10): `순례 행렬을 따라 {name}{은/는} 예상 목적지 {A} 대신 {B}{으로/로} 향했다.` for a pilgrimage reroute, `거짓말쟁이 {name}{은/는} 말했던 {A} 대신 {B}{으로/로} 향했다.` for the Trait; the retired name 허세 never appears and the particles follow the final consonant
+`구급키트` lowers the expedition Outcome one step (User 2026-09-25, v2.9.0): a would-be `중상` resolves as `부상` (injury=1, recovery=0, the 부상 XP/Loot/Fatigue), a would-be `부상` resolves as `부상` with no lasting injury. The NIGHT verdict reads the lowered Outcome; the report exposes the proven contribution.
+- would-be `부상` -> `부상`, persistent injury 0 (`구급키트가 남을 부상을 없앴다.`)
+- would-be `중상` -> `부상`, injury=1 / recovery=0 (`구급키트가 중상을 부상으로 낮췄다.`)
+```

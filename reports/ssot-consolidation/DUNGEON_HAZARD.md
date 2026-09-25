@@ -773,7 +773,6 @@ whiteout -> 정신 (User 2026-09-24, v2.9.0)
 - e.g. `화이트아웃 — 대응 13 필요 · 정신 2당 대응 1 제공 · 화이트아웃 대응 상품이 막는다` (DAY 1 T1)
 recovery (User 2026-09-24, v2.9.0):
 - Food/Drink Supply: each point reduces Fatigue by 1 -> §SUPPLY -> FATIGUE
-- Severe-Injury recovery days: -5 per rest day (floor 0)
 (User 2026-09-24, v2.9.0)
 성공      +4
 대성공    +4
@@ -796,11 +795,9 @@ NIGHT main line shows the band name from 20 up: `귀환 후 피로 22 · 과로`
 netFatigueDelta
 = finalFatigue - beforeFatigue
 restRecovery
-= 5 per Severe-Injury recovery day, applied at that morning, floor 0
 1. No Gate has a required Supply; there is no Supply Deficit and no excess Supply. Every Supply point is Fatigue recovery.
 2. Supply reduces current Fatigue first (1:1, before departure).
 5. The Item value is shown as `피로 회복 N` (never `보급 +N`). One-sentence rule: `음식·음료는 피로를 줄인다.`
-6. Rest recovery: while an adventurer is out on Severe-Injury recovery days, Fatigue -5 per rest day (floor 0). No morning natural recovery.
 Result fields: beforeFatigue, preparedSupply, preRecovery, fatigueBeforeExpedition, remainingSupplyBuffer, rawOutcomeFatigueGain, outcomeBufferUsed, actualOutcomeFatigueGain, finalFatigue, netFatigueDelta.
 Removed: requiredSupply, excessSupply.
 C. calculate preRecovery, fatigueBeforeExpedition, remainingSupplyBuffer
@@ -816,8 +813,6 @@ Expose exact decision ingredients (User 2026-09-24, v2.9.0):
 Fatigue 40 departure (User 2026-09-24, v2.9.0): if `fatigueBeforeExpedition = 40` (탈진), the same additive term applies, and the cap is raised the same way:
 injuryEscalation  = 0.10 if injury=1, else 0
 fatigueEscalation = 0.10 if fatigueBeforeExpedition = 40, else 0
-healthyFailureDeathChance + injuryEscalation + fatigueEscalation,
-0.30 + injuryEscalation + fatigueEscalation
 - departing at Fatigue 40 (탈진) adds the same visible material risk
 - Fatigue-40 conditional cap is 40%; injured and Fatigue-40 together 50%
 ```
@@ -966,4 +961,28 @@ beside the Stat name and the value is one step smaller. Superseded declarations 
 
 ```new
 Short row (every other Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL 확인된 위협; the number first): `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`. N is that Gate's own Day / Tier (the Final: Day 30 / T2 -> 29). No label row and no per-customer remaining need survive (User 2026-09-24 revision 2, v2.9.0). The short row renders as two lines on a phone — `대응 {N} 필요` (body size) over the smaller sub-line `{능력치} {n}당 대응 1 제공` — and as one ` · ` line where the width allows (900px+) (User 2026-09-25, v2.9.0).
+```
+
+## AMENDMENT — v2.9.0 F3: kit Outcome step / no rest recovery / 중상 +9 / repeated-strain cut (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome one step (중상 → 부상 with the 부상 XP/Loot/Fatigue/injury 1; 부상 → 부상 with no lasting injury; 사망 excluded); no natural Fatigue recovery of any kind for any adventurer (the Severe-Injury rest-day -5 is retired); 중상 takes the 부상 Fatigue gain (+9) and only 사망 stays 0; repeated injured / weary (Fatigue 20+) departures escalate the failure Death chance (+8%p per repeat of each kind from the second, cap +30%p, from the adventurer's own records) with the NPC-detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 / 순례 with particles by final consonant. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+중상       0
+Severe Injury and Death remain final result-Fatigue gain 0; a Trait may not raise them above 0.
+```
+
+```new
+- no rest recovery: a Severe-Injury recovery day does not change Fatigue (User 2026-09-25, v2.9.0)
+중상      +9
+Death remains final result-Fatigue gain 0 and a Trait may not raise it; 중상 takes the 부상 gain (+9) so a Severe Injury is a clear penalty on every axis (User 2026-09-25, v2.9.0).
+= 0 (retired, User 2026-09-25, v2.9.0)
+6. No natural recovery of any kind: neither a morning nor a Severe-Injury rest day changes Fatigue; only Food/Drink lower it (User 2026-09-25, v2.9.0).
+strainEscalation  = min(0.30, 0.08 × max(0, injuredDepartures − 1) + 0.08 × max(0, wearyDepartures − 1))
+injuredDepartures = this adventurer's expeditions so far, this one included, begun at injury=1
+wearyDepartures   = begun at fatigueBeforeExpedition ≥ 20
+(User 2026-09-25, v2.9.0: the first injured and the first weary departure are free; every repeat adds 8%p, up to 30%p — the repeated-strain cut)
+healthyFailureDeathChance + injuryEscalation + fatigueEscalation + strainEscalation,
+0.30 + injuryEscalation + fatigueEscalation + strainEscalation
+- repeating injured or weary (Fatigue 20+) departures escalates further: +8%p per repeat of each kind, up to +30%p, and the cap rises with it (User 2026-09-25, v2.9.0)
 ```
