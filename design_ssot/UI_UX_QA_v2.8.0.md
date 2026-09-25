@@ -2106,7 +2106,7 @@ MORNING Gate plates and the ORDER 위험 보기 modal on a T1, a T2 and a T3 day
 
 PASS:
 - every Hazard row states the Gate-level requirement first: MORNING plate, SALE destination plate, D25 report and FINAL rows read `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; Gate detail alone reads the full sentence `{위험} — 대응 {N} 필요 · {능력치} {n}당 대응 1 제공 · {위험} 대응 상품이 막는다`
-- on a phone the short row is two lines, `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공`; at 900px+ one ` · ` line; the SALE Stat grid shows the pressing Hazard tag beside the Stat name on one line with no overflow, and the value is smaller than before yet larger than the name (User 2026-09-25)
+- on a phone the short row is two lines, `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공`; on the SALE destination plate `{위험}` and `대응 {N} 필요` share the first line and the conversion line starts under the Hazard name, so no Hazard takes a third line and nothing overflows at 360 / 390 / 412 (`대응 {N} 필요` one type step smaller there; User 2026-09-25); at 900px+ one ` · ` line; the SALE Stat grid shows the pressing Hazard tag beside the Stat name on one line with no overflow, and the value is smaller than before yet larger than the name (User 2026-09-25)
 - N equals ceil(Hazard Threat) of that Gate on that Day (DUNGEON_HAZARD §HAZARD THREAT), so it rises with Day and Tier; n is 3 for 강인함 and 2 for 기동 / 정신 (Stat n당 대응 1)
 - no `{위험} · {label}` row and no destination-plate `?` help survive; D25 / FINAL show N = 29 (Day 30 / T2); no per-customer remaining need, no readiness number, no 0.75 / 0.40 threshold appears anywhere (User 2026-09-24 revision 2)
 - no Item name and no verdict word

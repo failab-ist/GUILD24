@@ -3104,7 +3104,20 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    carries stays - the destination, and each Hazard with the ability it presses on - the rows
    are just no longer set a line apart from each other. */
 .p-sale .front-side .dest-plate .hazards{margin-top:4px}
-.p-sale .front-side .dest-plate .hazards li{padding:4px 6px;gap:6px}
+.p-sale .front-side .dest-plate .hazards li{padding:4px 6px;column-gap:5px;row-gap:0}
+/* COPY_AUDIT §4-16 render note (User 2026-09-25, SALE destination plate on a phone): the requirement
+   block was one piece, so it wrapped whole under the Hazard name and every Hazard took three lines.
+   Its two parts join the row itself now - `{위험}` and `대응 {N} 필요` on the first line, the conversion
+   line on its own line from the name's left edge - one step smaller so the pair fits at 360. From
+   900px the row is the one ` · ` line again, exactly as before. */
+.dest-plate .hazards .press{display:contents}
+.dest-plate .hazards .press .need{white-space:nowrap;font-size:12px}
+.dest-plate .hazards .press .rate{flex:1 0 100%}
+@media(min-width:900px){
+ .p-sale .front-side .dest-plate .hazards li{gap:6px}
+ .dest-plate .hazards .press{display:inline}
+ .dest-plate .hazards .press .need{font-size:inherit}
+}
 
 @media(min-width:1024px){
  .front-side .readout.core-desk{display:block;margin:0}

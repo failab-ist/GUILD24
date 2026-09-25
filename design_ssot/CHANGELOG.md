@@ -29,6 +29,11 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   impact / receipt stub (no "price stamp") and the repeated-input row as tactile without escalation (no combo);
   SPEC_INDEX H2 reads "stub after impact" and the routing names H1~H6. v2.9.2 starts after v2.9.1 closed (User
   2026-09-25, no parallel run); H4's Store Capital part is unblocked. Docs only.
+- Play-report fixes (User 2026-09-25, phone captures; outside the H batches, one commit each): the SALE forecast `?`
+  balloon laid out 24px wide on a phone (RUNTIME UX BUG, Source only — `158d001`); MORNING printed every Gate after the
+  first as the Gate-detail sentence (IMPLEMENTATION BUG, Source only — `0510b53`); the SALE destination plate's Hazard row
+  took three lines on a phone — `{위험}` and `대응 {N} 필요` now share the first line and the conversion line sits under
+  the name (User decision; COPY_AUDIT §4-16 render note, UI_UX_QA F2-b line).
 
 ## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted, CLOSED 2026-09-25 (main `d23d076`, tag `v2.9.1`)
 

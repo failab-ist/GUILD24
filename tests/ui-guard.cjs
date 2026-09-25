@@ -949,6 +949,12 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/\.readout \.fore\{[^}]*position:/.test(css),'no breakpoint positions the forecast cell');
  assert.ok(!/\.readout \.fore>\.tip\{[^}]*position:/.test(css),'nor the ? inside it');
  assert.ok(/\.readout\{position:relative/.test(css),'the balloon is anchored to the panel');
+ /* COPY_AUDIT §4-16 render note (User 2026-09-25): on a phone the SALE destination plate reads
+    `{위험}  대응 {N} 필요` on one line and the conversion line under the name - never three lines. */
+ assert.ok(/\n\.dest-plate \.hazards \.press\{display:contents\}/.test(css),'the requirement block joins the row');
+ assert.ok(/\n\.dest-plate \.hazards \.press \.rate\{flex:1 0 100%\}/.test(css),'the conversion line takes its own line from the name');
+ assert.ok(/\n\.dest-plate \.hazards \.press \.need\{white-space:nowrap;font-size:12px\}/.test(css),'and the requirement stays beside the name, one step smaller');
+ assert.ok(/@media\(min-width:900px\)\{\n \.p-sale \.front-side \.dest-plate \.hazards li\{gap:6px\}\n \.dest-plate \.hazards \.press\{display:inline\}/.test(css),'from 900px the row is one line again');
 
  /* SALE_v2.7 §SALE DECISION-ONLY DETAIL: no disclosure control on the decision surface that
     opens flavour prose. The real effects it used to hide are still shown - plainly, not folded

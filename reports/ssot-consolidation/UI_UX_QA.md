@@ -961,9 +961,11 @@ does the same (User 2026-09-24, v2.9.0)
 
 The Hazard short row reads `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공` (one line at 900px+); the SALE Stat grid tag sits
 beside the Stat name and the value is one step smaller. Superseded declarations were edited in place.
+User 2026-09-25 (v2.9.2 play report): on the SALE destination plate `{위험}` and `대응 {N} 필요` share one line and the conversion
+line sits under the Hazard name; the phone line in the fence below is edited in place.
 
 ```new
-- on a phone the short row is two lines, `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공`; at 900px+ one ` · ` line; the SALE Stat grid shows the pressing Hazard tag beside the Stat name on one line with no overflow, and the value is smaller than before yet larger than the name (User 2026-09-25)
+- on a phone the short row is two lines, `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공`; on the SALE destination plate `{위험}` and `대응 {N} 필요` share the first line and the conversion line starts under the Hazard name, so no Hazard takes a third line and nothing overflows at 360 / 390 / 412 (`대응 {N} 필요` one type step smaller there; User 2026-09-25); at 900px+ one ` · ` line; the SALE Stat grid shows the pressing Hazard tag beside the Stat name on one line with no overflow, and the value is smaller than before yet larger than the name (User 2026-09-25)
 ```
 
 ## AMENDMENT — v2.9.0 F4: Fatigue recovery values / shelf life / operating cost / Wallet multipliers / 세계수 price (User decision 2026-09-24/25)
