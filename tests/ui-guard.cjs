@@ -2848,7 +2848,7 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
  // the click handler records what the screen showed before the commit, and only that
  assert.ok(/const tile=\$\('\.counter-tray \.tray-icon'\)/.test(sell)&&/from:tile\?tile\.getBoundingClientRect\(\):null/.test(sell),"the tray icon's place is read before the state moves (v2.9.0 counter tray)");
  assert.ok(/gold:s\.money/.test(sell)&&/stats:\[\.\.\.document\.querySelectorAll\('\.detail-stats \.detail-stat strong'\)\]/.test(sell),'so are the Gold and the four Stat readings');
- assert.ok(/handoff=seen;render\(\);/.test(sell),'and they are handed to the draw that follows');
+ assert.ok(/handoff=seen;showStub\(\);render\(\);/.test(sell),'and they are handed to the draw that follows (the receipt stub is placed before that draw so playCue can animate it)');
  assert.ok(/const success=game\.sell\(selected,el\.dataset\.mode\);/.test(sell),'the commit itself is unchanged');
  assert.ok(!/account\.\w*handoff|run\.\w*handoff/.test(app),'the record is never written into a save');
  const cue=fn('playCue');
@@ -2916,7 +2916,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  // first-ORDER coach: gates -> offer -> quantity -> confirm -> reroll, no gold mark
  const order=/ order:\[(.*)\],\n/.exec(app)[1];
  assert.deepEqual([...order.matchAll(/\['([a-z]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['gates','.brief .when'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the five steps in order, on their anchors');
- assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
+ assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 / 2 (Stat n당 대응 1)
  const rate={survival:3,mobility:2,spirit:2};
@@ -2943,10 +2943,19 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.equal(Copy.boss.final.intro,'마왕성으로 향하는 최종 원정 환경이 확인됐다. 대응 수치는 마왕성 기준.','COPY_AUDIT §14-7 intro');
  // ORDER today-fit emphasis: the SALE rule against today's Gates, typographic only
  const of=fn('orderForm');
- assert.ok(/const fitToday=new Set\(s\.dungeons\.flatMap\(d=>\[\.\.\.Presentation\.fitKeys\(Presentation\.known\(d,game\)\)\]\)\)/.test(of),'fit keys = union over today\'s Gates');
- assert.ok(/\(fitToday\.has\(r\.key\)\?' fit':''\)/.test(of),'matching effect text takes the emphasis class');
- assert.ok(/\.line \.fx \.fit\{color:var\(--ink\);font-weight:600;text-decoration:underline/.test(css),'emphasis is typographic (ink, the shipped bold face, an underline)');
+ // v2.9.0 F6 (User 2026-09-24): the today-fit / matching-effect emphasis is retired on ORDER and SALE
+ assert.ok(!/fitToday|fitKeys/.test(app)&&!('fitKeys' in Presentation),'no fit computation survives');
+ assert.ok(!/class="fit"|' fit'/.test(app)&&!/\.fit\{/.test(css),'no emphasis class or rule survives');
  assert.ok(!/오늘 필요|추천/.test(of),'no badge or verdict word');
+ // ITEM §PRESENTATION ORDER: every row passes its category, so the fixed order is the same everywhere
+ for(const f of ['effectList','shelf','tray','till','orderForm'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.bar.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'Food leads with 피로 회복');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','mobility','supply'],'a Drink ends with 피로 회복');
+ // §TRANSACTION RESULT STUB
+ assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
+ assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('playCue').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
+ assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
+ assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
  assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');

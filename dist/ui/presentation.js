@@ -30,7 +30,6 @@ function hazardShort(k,d){return '대응 '+hazardNeed(k,d)+' 필요 · '+hazardR
    the Stat-grid pressure tag and the matching-effect emphasis read it; 투력 is never a pressed Stat. */
 function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];if(s)(m[s]=m[s]||[]).push(k);}return m;}
 /* effect keys that answer a Gate: its Hazards' own Counters and the Stats they press */
-function fitKeys(keys){const s=new Set();for(const k of keys){s.add(k);if(hazardStat[k])s.add(hazardStat[k]);}return s;}
 /* ITEM_v2.7 §INSURANCE HIERARCHY: Aftercare is a utility, not a magnitude. Rendering it as
    `+1` would read as a hidden injury-risk percentage, which the owner says it does not have. */
 /* SA-Q05: `potion` is an internal marker (potionbody's own trigger test reads it directly off
@@ -41,12 +40,16 @@ function fitKeys(keys){const s=new Set();for(const k of keys){s.add(k);if(hazard
 const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망 제외)',duplicate:'다음 소비품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망 → 중상 1회'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
-function rows(e,tones){const out=[];for(const[k,v]of Object.entries(e)){
+function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e)){
  if(util[k]){out.push({key:k,label:util[k],text:'',tone:'neutral',bad:false,utility:true});continue;}
  if(!labels[k]||!v)continue;const value=mult.has(k)?(v-1)*100:percent.has(k)?v*100:v;const rounded=Math.round(value*10)/10;
  const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));
  out.push({key:k,label:labels[k],text:(rounded>0&&k!=='supply'?'+':'')+rounded+suffix,tone,bad:tone==='cost'});}
+ /* ITEM §PRESENTATION ORDER — EXACT (User 2026-09-24, v2.9.0): one fixed order by category, never by the
+    situation. Food leads with 피로 회복; a Drink ends with it; everything else keeps catalog order. */
+ if(category==='food'){const i=out.findIndex(r=>r.key==='supply');if(i>0)out.unshift(...out.splice(i,1));}
+ else if(category==='drink'){const i=out.findIndex(r=>r.key==='supply');if(i>=0&&i<out.length-1)out.push(...out.splice(i,1));}
  return out;}
 function traitEffects(id){const t=D.traitBy[id];return rows(t.effects,t.tones);}
 function traits(n){return n.traits;}
@@ -292,6 +295,6 @@ function amount(key,value,moved=true){
 /* josa() / routeChangeLine() live in data/copy.js (G.Copy) so the engine's NIGHT line needs no UI layer;
    re-exported here for the screens. */
 const josa=G.Copy.josa,routeChangeLine=G.Copy.routeChangeLine;
-G.Presentation={josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,fitKeys,
+G.Presentation={josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);

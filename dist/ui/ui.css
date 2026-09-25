@@ -928,7 +928,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .dest-plate .dest-name{display:flex;align-items:center;gap:6px;min-width:0}
 .dest-plate .dest-name h3{margin:0;min-width:0}
 /* ORDER today-fit emphasis: the same typographic rule as SALE, on paper */
-.line .fx .fit{color:var(--ink);font-weight:600;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;text-decoration-color:#2c241866}
 /* 점주 가이드: 처음 3일 first, the rest under 자세히 */
 .stack .first-days p{margin:0 0 4px}
 .stack details.more>summary{cursor:pointer;margin:12px 0 6px;font:600 13px/1.3 var(--ui);color:#a2947c;letter-spacing:.08em}
@@ -1012,7 +1011,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    warm tone; no number, no verdict */
 .detail-stat label .press{display:inline;margin:0;font:600 11px/1.2 var(--ui);color:#d98a5a;font-style:normal;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 /* v2.9.0 MATCHING-EFFECT EMPHASIS: the effect that answers the Gate reads in the ink weight */
-.good .what .fit{color:#f6e9ca;font-weight:600}
 .detail-stat strong{margin-left:auto;flex:none;font:600 18px/1 var(--ui);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .trait-list{margin:0 0 12px;display:grid}
 .trait-row{padding:7px 0;box-shadow:inset 0 1px 0 #ffffff14;display:grid;gap:2px}
@@ -1167,6 +1165,14 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .counter-tray{flex:0 0 auto;padding:7px var(--gutter) 8px;background:#15100a;color:#d8c9a6;
  box-shadow:inset 0 4px 0 #000000b3,inset 0 -3px 0 var(--gold)}
 .p-sale .counter-tray.empty{padding:0 var(--gutter)}
+/* v2.9.0 SALE — TRANSACTION RESULT STUB (PRESENTATION §TRANSACTION BEAT A8): a paper receipt stub over the counter
+   band above the dock; fixed, so it reserves no height; pointer-events none, so it never holds input. */
+.receipt-stub{position:fixed;left:var(--gutter);z-index:65;pointer-events:none;padding:7px 12px 8px;
+ background:var(--tex-paper),#efe7d2;color:#2c2418;font:600 13px/1.3 var(--ui);font-variant-numeric:tabular-nums;
+ box-shadow:2px 3px 0 #00000066,inset 0 0 0 1px #c6b894;transform-origin:left bottom;
+ clip-path:polygon(0 0,100% 0,100% calc(100% - 4px),calc(100% - 6px) 100%,6px 100%,0 calc(100% - 4px))}
+.receipt-stub::before{content:'';display:inline-block;width:8px;height:8px;margin:0 7px 0 0;background:var(--gold);box-shadow:inset 0 0 0 2px #2c2418;vertical-align:-1px}
+@media(min-width:1024px){.receipt-stub{left:calc(50% + 12px)}}
 .tray-empty{margin:0;min-height:44px;display:flex;align-items:center;font:400 14px/1.3 var(--ui);color:#a2947c}
 .tray-item{display:flex;align-items:center;gap:10px}
 .tray-icon{width:40px;height:40px;flex-shrink:0;display:grid;place-items:center;background:#0d0904;

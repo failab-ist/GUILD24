@@ -176,6 +176,19 @@ function playPhase(phase){
    the icon travels to the Bag, the Gold counts, the changed cells pulse. It lives for exactly one
    render, holds nothing the resolved state does not already hold, and is never saved. */
 let cue=null,handoff=null;
+/* PRESENTATION §TRANSACTION BEAT A8 / UI_UX §SALE — TRANSACTION RESULT STUB (User 2026-09-24, v2.9.0): one
+   receipt stub per successful sale, over the counter band above the dock, `단골도 {±N} · 소지금 {A} → {B}`
+   (COPY_AUDIT §4-24) for about 2.5 s; no reserved height, no input held, replaced by the next sale's stub,
+   no motion under reduced motion. Presentation only - it reads the resolved state and writes nothing. */
+let stub=null,stubTimer=null;
+function showStub(){if(!stub)return;const st=stub;stub=null;
+ document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
+ const el=document.createElement('div');el.className='receipt-stub';el.setAttribute('role','status');
+ el.textContent='단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to;
+ const dock=$('.p-sale .dock');el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
+ document.body.appendChild(el);
+ /* the stamp-in and the fade are playCue()'s (the one guarded place for in-phase motion); this only removes it */
+ stubTimer=setTimeout(()=>el.remove(),motionOK()?2800:2500);}
 function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
  if(!c||!motionOK())return;
  const A=anime.animate;
@@ -186,6 +199,8 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
     changed pulses once (300 ms) and keeps the new value. A2: the customer nods (4 px, 180 ms x 2).
     Every beat is under 320 ms and the whole sale is under 600 ms; input is never held. */
  if(c==='sale'){
+  /* A8 영수증 조각: stamps in (1.12 -> 1, 200 ms) and fades after 2.5 s; showStub() owns its removal */
+  const stubEl=$('.receipt-stub');if(stubEl){A(stubEl,{scale:[1.12,1],opacity:[0,1],duration:200,ease:'outQuad'});setTimeout(()=>{if(stubEl.isConnected)A(stubEl,{opacity:[1,0],duration:280,ease:'outQuad'});},2500);}
   const slot=[...document.querySelectorAll('.kit .slots i.full')].pop();
   const settle=()=>{if(slot)A(slot,{scale:[1.05,1],duration:240,ease:'outQuad'});};
   if(slot&&h.from&&h.icon){const to=slot.getBoundingClientRect(),g=document.createElement('i');g.className='handoff';g.innerHTML=h.icon;
@@ -813,7 +828,7 @@ const coachSteps={
     clears it and the next first occurrence teaches it again. No new persistence was added. */
  morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.']],
  /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself */
- order:[['gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['offer','.lines .line','후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
+ order:[['gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
  /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
     (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
@@ -949,7 +964,7 @@ function finishCoach(skip=false){
  if(skip)for(const x of activeGroup||[])t['coach-'+x[0]]=true;else t['coach-'+activeCoach[0]]=true;game.save();$('#coach-root').innerHTML='';activeCoach=null;requestAnimationFrame(showCoach);
 }
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
-function effectList(it,compact=false){const rows=Presentation.rows(it.effects);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
+function effectList(it,compact=false){const rows=Presentation.rows(it.effects,undefined,it.category);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
 function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}${tr.note?`<em class="tone-cost">${E(tr.note)}</em>`:''}</span></div>`;}).join('')}</div>`;}
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
@@ -1052,7 +1067,7 @@ function orderScreen(){
 function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
- const fitToday=new Set(s.dungeons.flatMap(d=>[...Presentation.fitKeys(Presentation.known(d,game))])),counts=s.dungeons.length>=2?gateCounts():null;
+ const counts=s.dungeons.length>=2?gateCounts():null;
  return '<div class="clip"></div><div class="form">'
  /* UI_UX §ORNAMENT RESTRAINT, audited across the whole Player-facing UI: the letterhead's G24
     seal carried no function or state - it filled the head's right margin and nothing else. The
@@ -1077,7 +1092,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b>'+pressCell(h)+'</li>').join('')
      +'</ul></div></div>':'')
    +stockBrief()
-   +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects).slice(0,3);
+   +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects,undefined,it.category).slice(0,3);
     /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
     const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
     const sl = it.days + Relics.shelf(game, it); /* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */
@@ -1099,7 +1114,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
         organised by, not something a player decides with - and it never reaches a render path.
         The data stays: ordering weights and Relic conditions read `category`. What the row
         needs is right underneath it, in the effects summary. */
-       +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+(fitToday.has(r.key)?' fit':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
+       +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
      +'<span class="have">매입 '+o.price+'G · 수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+' · 유통기한 '+sl+'일</span>'
   +'</span>'
   +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
@@ -1127,11 +1142,9 @@ function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.
  return e;}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
-   /* v2.9.0 SALE — MATCHING-EFFECT EMPHASIS (User 2026-09-24): the effect text that answers this
-      customer's Gate - a Counter for one of its Hazards, or the Core Stat one of them presses -
-      is set in the emphasis style. Nothing is reordered, no badge, no verdict word. */
-   const gate=!isFinal&&n?game.claimedGateFor(n):null,fit=gate?Presentation.fitKeys(Presentation.known(gate,game)):new Set();
-   const effectText=r=>fit.has(r.key)?'<b class="fit">'+E(r.label+' '+r.text)+'</b>':E(r.label+' '+r.text);
+   /* SALE §MATCHING-EFFECT EMPHASIS — RETIRED (User 2026-09-24, v2.9.0): every effect text keeps the default
+      style whatever the customer's Gate; the row states what the Item does, in its fixed category order. */
+   const effectText=r=>E(r.label+' '+r.text);
    return '<section class="shelf">'
    +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
    +(isFinal?'':relicRef())+'</div><div class="goods">'
@@ -1141,7 +1154,7 @@ function shelf(isFinal=false){
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
-  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">'+E(Copy.finalPrep.noEffect)+'</em>':Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects).slice(0,2).map(effectText).join(' · '))+'</span></span>'
+  +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+(noop?'<em class="noop">'+E(Copy.finalPrep.noEffect)+'</em>':Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects,undefined,it.category).slice(0,2).map(effectText).join(' · '))+'</span></span>'
   +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span><em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em></span></button>'+(open&&isFinal?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
 const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
@@ -1175,7 +1188,7 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  const parts=[...moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>'),
   ...moved.derived.map(r=>'<b>'+E(r.label+' '+r.text)+'</b>')];
  if(moved.departure)parts.push('<b class="fatigue">'+E(moved.departure)+'</b>');
- const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects).filter(r=>!shown.has(r.key));
+ const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  const life='폐기까지 '+(st.expires-s.day)+'일';
  return '<div class="counter-tray" role="region" aria-label="계산대">'
   +'<div class="tray-item"><span class="tray-icon">'+Art.itemIcon(it.id,32)+'</span>'
@@ -1235,7 +1248,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     Insurance that only fires on a bad outcome - is still stated plainly rather than folded
     away, under its approved v2.8 heading. */
  +(()=>{const shown=new Set(changes.map(r=>r.key));
-   const rest=Presentation.rows(it.effects).filter(r=>!shown.has(r.key));
+   const rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
    if(!rest.length)return '';
    return '<p class="delta-src">특수 효과</p><ul class="effects">'
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
@@ -1620,7 +1633,7 @@ function settings(){return `<div class="stack"><p>자동저장은 현재 브라�
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
 /* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
    under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 손익을 정리하고 다음 날로 간다.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 ${D.balance.deathLimit}명이 되면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 손익을 정리하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 ${D.balance.deathLimit}명이 되면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -1886,12 +1899,15 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
  case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?tile.getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,
    stats:[...document.querySelectorAll('.detail-stats .detail-stat strong')].map(x=>x.textContent)};
-  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';}else{sound('refusal');cue='refuse';}handoff=seen;render();break;}
+  /* SALE §TRANSACTION RESULT — PER CUSTOMER (User 2026-09-24, v2.9.0): the customer's own Loyalty and Wallet
+     before the commit, so the receipt stub can state the real result of this price choice. */
+  const who=game.current(),wasM=who?who.money:0,wasL=who?who.loyalty:0;
+  const success=game.sell(selected,el.dataset.mode);if(success){sound(el.dataset.mode==='overcharge'?'overcharge':el.dataset.mode==='half'?'half':'sale');selected=null;cue='sale';stub={loyalty:who.loyalty-wasL,from:wasM,to:who.money};}else{sound('refusal');cue='refuse';}handoff=seen;showStub();render();break;}
  /* The last departure of the day IS the entry to NIGHT, and it lands on result 0 already
     displayed - so it owes that result its own Outcome cue. It used to play the generic return
     cue instead, which made a 사망 or a 퇴각 at the head of the queue sound like an ordinary
     return until the player pressed 다음. */
- case'depart':playExit(()=>{game.depart();selected=null;render();
+ case'depart':playExit(()=>{game.depart();selected=null;render();document.querySelector('.receipt-stub')?.remove();
   if(s.phase==='night')nightSound(s.results[s.nightCursor||0]);else sound('depart');healCue();});break;
  case'close':game.closeDay();selected=null;sound('close');render();if(s.money<0&&s.phase==='closing')setModal('stock');break;
  case'reroll':game.reroll();sound('spend');render();break;
