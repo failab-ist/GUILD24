@@ -233,6 +233,10 @@ let pinFolded=false,pinWatch=null,orderWatch=null;
    player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
    again. Presentation only: which Item is selected does not change, and nothing here is saved. */
 let trayFolded=false,trayArm=0,trayBase=0;
+/* FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): the last order comes first, the way an ordinary Day starts.
+   Which step is showing is presentation: the muster opens once the player moves on from the order - or at once when
+   a saved party pick exists - and the confirmed party is the prep. Nothing new is saved. */
+let finalOrdered=false;
 function syncTray(){const t=$('.p-sale .counter-tray');if(!t)return;t.classList.toggle('folded',trayFolded);
  t.querySelector('.tray-unfold')?.setAttribute('aria-expanded',String(!trayFolded));}
 function foldTray(){if(!selected||trayFolded||innerWidth>=1024||game.run?.phase!=='sell')return;trayFolded=true;syncTray();}
@@ -333,6 +337,7 @@ function render(){
     data-action="qty" on one screen with no id, so the key by itself picks the wrong one. */
  const focusHold=holdFocus($('#app'));
  $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
+ if(phase!=='final')finalOrdered=false;
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
@@ -1485,8 +1490,9 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
    원정대 선택 - a dead promise on an unavailable control, the same defect the approved Store
    Support state fixed by not leaving a dead 구매. The row already states the cause on the line
    above (중상 · N일 휴식), so the affordance label is simply dropped rather than restated. */
-function npcCard(n,action='npc'){const s=game.run,blocked=action==='team'&&(!n.alive||n.recovery);
- const call=action!=='team'?'기록 보기':blocked?'':(s.team.includes(n.id)?'선택됨':'원정대 선택');
+function npcCard(n,action='npc'){const s=game.run,muster=action==='final-npc',blocked=muster&&(!n.alive||n.recovery);
+ /* the FINAL muster card opens the adventurer's notebook; picking happens there (User 2026-09-25) */
+ const call=!muster?'기록 보기':s.team.includes(n.id)?'선택됨':'기록 보기';
  return `<button class="npc-card r${n.rarity} ${!n.alive?'dead':''} ${s.team.includes(n.id)?'chosen':''}" data-action="${action}" data-id="${n.id}" ${blocked?'disabled':''}><div class="row">${portrait(n,60)}<div>${badge(n.rarity,true)}<h3 style="margin-top:5px">${E(n.name)}</h3><p>Lv.${n.level} ${D.jobBy[n.job].name}</p><p>${n.status}${n.recovery?' · '+n.recovery+'일 휴식':''} · 방문 ${n.visits}회</p></div></div><div class="loyalty"><div class="row between"><span>단골도 ${n.loyalty}</span><span>${call}</span></div><div class="bar"><span style="width:${n.loyalty}%"></span></div></div></button>`;}
 // FINAL — climax. Both Families are disclosed above every choice; party and supply
 // follow; the D30 Relic decision is reachable before lock (FINAL_EXPEDITION §3, §4.1).
@@ -1525,11 +1531,14 @@ function finalScreen(){
  /* B5-2 / FINAL-Q75: 출전 NPC 선택 -> FINAL 준비. Until the party is confirmed the screen is the
     muster only; once confirmed (saved) the roster is gone and only the confirmed members are
     prepared, one at a time, against the shelf. */
- +(!committed
+ +(!committed&&!finalOrdered&&!s.team.length
+  /* step 1: the last order, open - the same form as ORDER, confirmed on its own 발주 확정 */
+  ?'<div class="party-head"><h2>마지막 발주</h2></div><div class="final-order open">'+orderForm()+'</div>'
+  :!committed
   ?'<div class="party-head"><h2>원정대 선택</h2><span class="count">'+E(pickCount)+'</span></div>'
    /* v2.8: the party is provisional - capacity, not a quota, and where the forecast will be */
    +'<div class="readout final-forecast pending"><p>'+E(Copy.finalPrep.cap)+'<br>'+E(Copy.finalPrep.unlock)+'</p></div>'
-   +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'team')).join('')+'</div>'
+   +'<div class="npc-grid">'+roster.map(n=>npcCard(n,'final-npc')).join('')+'</div>'
   :'<div class="party-head"><h2>원정대 준비</h2><span class="count">확정 '+s.team.length+'명</span></div>'
    +finalForecastView()
    +'<div class="final-team">'+s.team.map(id=>{const n=s.npcs.find(x=>x.id===id),slots=Adventurer.slots(n);
@@ -1538,8 +1547,9 @@ function finalScreen(){
     +'<span class="wallet">'+walletChip(n)+'</span></span>'
     +'<span class="bag-label">가방 '+n.pack.length+' / '+slots+'</span><div class="pack">'
     +Array.from({length:slots},(_,i)=>'<div class="slot '+(n.pack[i]?'filled':'')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],28)+'<span class="slot-name">'+E(D.itemBy[n.pack[i]].name)+'</span>':'빈 칸')+'</div>').join('')+'</div></button>';}).join('')+'</div>'
-   +shelf(true)
-   +'<details class="final-order"><summary>마지막 발주 · 상품과 점포지원 사이의 선택</summary>'+orderForm()+'</details>')
+   /* the adventurer being supplied reads the same Stat grid SALE shows (User 2026-09-25) */
+   +(supplyNPC?'<div class="final-stats">'+statGrid(s.npcs.find(x=>x.id===supplyNPC))+'</div>':'')
+   +shelf(true))
  +ownedRelicView();
  /* UI_UX §PER-PHASE (FINAL) — DISABLED COMMIT CAUSE (USER AMENDMENT 2026-09-22): the fixed dock
     states why the sortie cannot start, on the control itself, rather than leaving a dead
@@ -1550,6 +1560,7 @@ function finalScreen(){
  const ready=s.team.length>0&&s.team.length<=need;
  const dock=relicWindowLink()+(need
   ?committed?btn('마왕성으로 출발','boss','stamp')
+   :!finalOrdered&&!s.team.length?btn('원정대 선택','final-ordered','stamp',Object.values(s.cart||{}).some(q=>q>0)?'disabled':'')
    :btn('원정대 확정','final-commit','stamp',ready?'':'disabled')
   :btn('출전 불가 · 런 종료','boss','danger'));
  /* BATCH 5-1 / PRESENTATION_POLISH §BOSS DOMAIN BACKDROP ASSET ROLE: D30 is where the Run finally
@@ -1897,7 +1908,11 @@ else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-
    else if(modal==='loadout'){title='이번 영업의 장식';body=loadoutModal();footer=btn('확인','dismiss','stamp');narrow=true;}
    else if(modal==='abandonConfirm'){title='현재 지점을 포기할까요?';body=ABANDON_BODY;footer=btn('계속 영업','dismiss')+btn('지점 포기','abandon-go','danger');narrow=true;}
  else if(modal==='roster'){title='모험가 수첩';body=rosterList();}
- else if(modal.startsWith('npc:')){title='우리 점포의 모험가';body=npcDetail(modal.slice(4));footer=btn('수첩으로','roster');}
+ else if(modal.startsWith('npc:')){const id=modal.slice(4),s=game.run,n=s?.npcs.find(x=>x.id===id);title='우리 점포의 모험가';body=npcDetail(id);
+  /* FINAL muster (User 2026-09-25): the notebook is where a member is taken on or let go */
+  if(s?.phase==='final'&&!s.finalCommitted&&n){const inTeam=s.team.includes(id),out=!n.alive||!n.introduced||n.recovery>0,full=!inTeam&&s.team.length>=game.finalRequired();
+   footer=btn(inTeam?'원정대에서 빼기':'원정대 선택','final-team','stamp','data-id="'+id+'" '+(out||full?'disabled':''));}
+  else footer=btn('수첩으로','roster');}
  else if(modal==='codex'){title='도감';body=codex();if(preRunReturn)footer=btn('새 점포 준비로 돌아가기','store-return','stamp');}
  else if(modal==='stock'){title='창고 재고';body=stockModal();}
  else if(modal==='help'){title='점주 가이드';body=help();narrow=true;}
@@ -2048,6 +2063,10 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();break;
  case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
+ case'final-ordered':finalOrdered=true;sound('button');render();break;
+ case'final-npc':sound('ui');setModal('npc:'+id);break;
+ /* picked from the notebook, the choice is confirmed where the adventurer was read, and the muster shows it */
+ case'final-team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');setModal(null);render();break;
  /* FINAL-Q75 v2.8: a sub-3 party is a valid choice, confirmed once before the boundary */
  case'final-commit':if(s.team.length<3){setModal('underConfirm');break;}   // a full party falls through
  case'final-commit-go':game.commitFinalParty();supplyNPC=s.team[0];selected=null;setModal(null);sound('button');render();break;

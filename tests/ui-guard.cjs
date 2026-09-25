@@ -1717,6 +1717,19 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 /* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
    stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
    gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
+/* FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 출전 NPC 선택 (notebook) -> FINAL 준비 (Stat grid) */
+test('FINAL: the last order first, the pick from the notebook, the Stat grid while supplying',()=>{
+ const f=fn('finalScreen');
+ assert.ok(/!committed&&!finalOrdered&&!s\.team\.length\s*\n?\s*\/\*[^*]*\*\/\s*\?'<div class="party-head"><h2>마지막 발주<\/h2><\/div><div class="final-order open">'\+orderForm\(\)/.test(f),'D30 opens on the last order');
+ assert.ok(/btn\('원정대 선택','final-ordered','stamp',Object\.values\(s\.cart\|\|\{\}\)\.some\(q=>q>0\)\?'disabled':''\)/.test(f),'moving on waits for a pending cart');
+ assert.ok(/npcCard\(n,'final-npc'\)/.test(f)&&!/npcCard\(n,'team'\)/.test(app),'a muster card opens the notebook instead of picking');
+ assert.ok(/case'final-npc':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'the notebook is the ordinary adventurer notebook');
+ assert.ok(/btn\(inTeam\?'원정대에서 빼기':'원정대 선택','final-team','stamp'/.test(app),'the pick / release is the notebook footer');
+ assert.ok(/case'final-team':game\.selectFinal\(id\)/.test(app),'and goes through the one selection rule');
+ assert.ok(/'<div class="final-stats">'\+statGrid\(/.test(f)&&!/details class="final-order"/.test(f),'FINAL 준비 shows the Stat grid and no second order form');
+ assert.ok(/if\(phase!=='final'\)finalOrdered=false;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
+});
+
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25) */
 test('ORDER: the 오늘 line rides in the floating Death rail only while its own block is out of view',()=>{
  const of=fn('orderForm');
