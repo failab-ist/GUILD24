@@ -395,3 +395,11 @@ Every Item row (ORDER offer, SALE shelf, counter tray, codex) lists its effects 
 - refusal: the customer's reply line is drawn from the pool of the engine's actual refusal reason (§REFUSAL: 가격 / 필요도 / 일반 선택 — COPY_AUDIT §18-4 / §18-5 / §18-6) and stays the reply-line 5 seconds (PRESENTATION_PRINCIPLES §TRANSACTION BEAT A2). No new pool is added.
 - both are presentation of the resolved state: no gameplay rule, Save field or RNG draw.
 ```
+
+## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carries a runtime status line for condition-type supports only; the purchase notice drops its second sentence; the Counter judgement is split into 직접 대응 / 관련 준비 with one owner (RELIC §COUNTER JUDGEMENT) — the acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers, pity and cert rewards read 직접 대응, the 기동-for-속박/진창 exception is retired; the accessible-mode base need is 0.72 (measured, not tuned). Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+The acceptance floor for an accessible-mode offer reads 관련 준비 (a direct Counter for one of the customer's Gate Hazards, or the Stat that Hazard presses), one owner: `RELIC_v2.8.0.md` §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0).
+```

@@ -341,8 +341,9 @@ For every affordable mode:
       + burdenIntentBonus
       + applicable current modifiers
 
-For affordable 50% 할인 / 정가, if the Item validly Counters at least one Hazard of this customer's
-actual Gate under the game's canonical Counter semantics:
+For affordable 50% 할인 / 정가, if the Item is 관련 준비 for this customer's actual Gate (RELIC
+§COUNTER JUDGEMENT: a direct Counter for one of its Hazards, or a positive value of the Core Stat one of
+them presses; (User 2026-09-24, v2.9.0)):
 
     purchaseChance = 0.97
 
@@ -357,9 +358,12 @@ For 바가지:
 
 No new Counter floor is added to 바가지.
 
-Reuse canonical Counter truth; do not maintain a second narrower purchase-only definition.
-Existing mobility-based answers for bind/mire remain valid wherever the canonical Counter predicate
-recognizes them.
+Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
+The legacy 기동-for-속박/진창 Counter exception is retired: 기동 on those Gates is 관련 준비, not a Counter (User 2026-09-24, v2.9.0).
+
+Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72 (was 0.80), lowered so that 관련 준비 (the 0.97 floor) is a visible
+difference against an unrelated Item; measured and reported, not tuned further by WORK. 바가지 keeps its own
+fit-based need, whose fit sums the Item's direct Counter values and the values of the pressed Stats (관련 준비).
 
 Exact acceptance probability remains hidden from the Player.
 
@@ -503,7 +507,7 @@ Canonical Full-offer Reroll:
 Track each currently known Hazard independently.
 
 For each qualifying normal offer-set generation:
-- if at least one offered Item validly Counters that Hazard -> its missing count resets
+- if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)) -> its missing count resets
 - otherwise -> its missing count +1
 
 When any known Hazard reaches 3 consecutive missing sets:

@@ -1010,3 +1010,11 @@ Retired (User 2026-09-24, v2.9.0): no effect text is emphasized against the cust
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
 The 점주 가이드 opens with a first block `처음 3일` of exactly five lines (one per phase: 아침 / 발주 / 판매 / 밤 / 마감), followed by one category-grammar line (COPY_AUDIT §8-0, taught once, an explanation of the vocabulary and never a recommendation; (User 2026-09-24, v2.9.0)), then keeps the existing eight sections under a `자세히` disclosure, collapsed by default (User 2026-09-24, v2.9.0).
 ```
+
+## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carries a runtime status line for condition-type supports only; the purchase notice drops its second sentence; the Counter judgement is split into 직접 대응 / 관련 준비 with one owner (RELIC §COUNTER JUDGEMENT) — the acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers, pity and cert rewards read 직접 대응, the 기동-for-속박/진창 exception is retired; the accessible-mode base need is 0.72 (measured, not tuned). Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+- for a condition-type support only, one runtime status line under them (RELIC §QUICK VIEW STATUS LINE; exact lines COPY_AUDIT §11-32); no HUD, no badge, no verdict word (User 2026-09-24, v2.9.0)
+```

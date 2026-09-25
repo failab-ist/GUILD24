@@ -418,3 +418,19 @@ dayBase = 90 + 2×(Day-1)
 ```new
 dayBase = 90 + 5×(Day-1)    (v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carries a runtime status line for condition-type supports only; the purchase notice drops its second sentence; the Counter judgement is split into 직접 대응 / 관련 준비 with one owner (RELIC §COUNTER JUDGEMENT) — the acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers, pity and cert rewards read 직접 대응, the 기동-for-속박/진창 exception is retired; the accessible-mode base need is 0.72 (measured, not tuned). Earlier lines this batch supersedes were removed from the fences above in place.
+
+```text
+- 50% / 100% base need = 0.80
+- affordable 50% / 100% canonical Counter -> final chance 0.97
+- canonical Counter semantics are reused, including mobility answers for bind/mire
+```
+
+```new
+- 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0; was 0.80)
+- affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> final chance 0.97
+- no separate purchase-only Counter definition; the legacy 기동-for-속박/진창 Counter exception is gone (User 2026-09-24, v2.9.0)
+```

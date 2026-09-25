@@ -344,6 +344,8 @@ Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never;
 | cold | 핫팩 +18 | 컵라면 +10 | 불룡볶음면 +6 / 강인함 / 백설 방한고글 +12 |
 | whiteout | 설원 고글 +16 | — | 정신 / 눈썰미 / 백설 방한고글 +12 |
 
+The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)).
+
 Dedicated single-Hazard Field Gear specialist Items carry no generic positive Core Stat unless an explicit active-catalog exception says otherwise.
 Their cost is narrow coverage.
 

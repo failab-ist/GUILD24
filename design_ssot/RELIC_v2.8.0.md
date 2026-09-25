@@ -270,12 +270,33 @@ Rules:
 - Sale에서는 읽기만 가능
 - Quick View가 Relic 구매/Defer timing을 우회하지 않는다
 
+### QUICK VIEW STATUS LINE
+
+(User 2026-09-24, v2.9.0): a Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never written as inactive. The exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32; the conditional supports are exactly: 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only), 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: the engine pays every surviving 단골 at NIGHT with no daily use state to read (its card copy `하루 1회` is a reported mismatch, not resolved here).
+
 expiry:
 next relic window begins
 
 Example:
 D5 offer valid through D9
 D10 => new window
+
+## COUNTER JUDGEMENT
+
+(User 2026-09-24, v2.9.0): two predicates, one owner, no third definition anywhere.
+
+```text
+직접 대응 directCounter(item, hazards)
+  = the Item carries a positive Counter value for at least one of those Hazards
+관련 준비 relatedPrep(item, hazards)
+  = directCounter, or the Item carries a positive value of the one Core Stat one of those Hazards presses
+    (DUNGEON_HAZARD §HAZARD RULES: 강인함 for 독/냉기/부식, 기동 for 속박/진창/어둠, 정신 for 화염/공포/화이트아웃)
+```
+
+Who reads which:
+- 관련 준비: SALE purchase acceptance (the accessible-mode floor and the 바가지 fit term, ECONOMY_ORDER §PURCHASE ACCEPTANCE), 원정 위험 게시판 offer weight
+- 직접 대응: 야전 정비대 and 원정 전문 인증 Counter multipliers, the Known-Hazard Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold
+- the legacy exception that read 기동 as a Counter for 속박/진창 is retired; 기동 on those Gates is 관련 준비, never a Counter
 
 ## CANDIDATE RULES
 
@@ -511,7 +532,7 @@ playerReceivesChosenPrice=YES
 ### EXPEDITION — Foundation
 7. 원정 위험 게시판
 tag=Expedition
-- 원정 위험 게시판: today's Gate Hazard (known active-Hazard) matching Item offer weight +50%; this is not a guarantee
+- 원정 위험 게시판: today's Gate Hazard (known active-Hazard) 관련 준비 Item offer weight +50% (§COUNTER JUDGEMENT; a direct Counter or the Stat that Hazard presses; (User 2026-09-24, v2.9.0)); this is not a guarantee
 unknownHazardReveal=NO
 specificItemGuarantee=NO
 
@@ -734,7 +755,7 @@ tag=Expedition
 원정 전문 인증:
     Price = 290G
 
-- an Item that Counters a Hazard of the adventurer's own Gate: its Hazard Counter values x1.60
+- an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat Item does not qualify; (User 2026-09-24, v2.9.0)): its Hazard Counter values x1.60
 - multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer

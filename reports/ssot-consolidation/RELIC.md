@@ -634,7 +634,6 @@ effect = next generated ORDER offers for every Item rarity get supply quantity +
 - 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
 of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
-- 원정 위험 게시판: today's Gate Hazard (known active-Hazard) matching Item offer weight +50%; this is not a guarantee
 8. 야전 정비대
 - 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
 - it changes no ORDER offer weight and no offer quantity
@@ -686,7 +685,6 @@ the 1.5x price burden and Loyalty -3 are unchanged
 24. 원정 전문 인증
 원정 전문 인증:
 Price = 290G
-- an Item that Counters a Hazard of the adventurer's own Gate: its Hazard Counter values x1.60
 - multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
@@ -801,4 +799,26 @@ User decisions 2026-09-24 (v2.9.0 F5): the menu 점포지원 row opens the owned
 
 ```new
 Menu 점포지원 row (User 2026-09-24, v2.9.0): opens the selection surface only while reopenAllowed holds and the window is still purchasable; otherwise it opens the owned Store Support list. The DAY 0 first choice has no way back and no close.
+```
+
+## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carries a runtime status line for condition-type supports only; the purchase notice drops its second sentence; the Counter judgement is split into 직접 대응 / 관련 준비 with one owner (RELIC §COUNTER JUDGEMENT) — the acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers, pity and cert rewards read 직접 대응, the 기동-for-속박/진창 exception is retired; the accessible-mode base need is 0.72 (measured, not tuned). Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+### QUICK VIEW STATUS LINE
+(User 2026-09-24, v2.9.0): a Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never written as inactive. The exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32; the conditional supports are exactly: 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only), 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: the engine pays every surviving 단골 at NIGHT with no daily use state to read (its card copy `하루 1회` is a reported mismatch, not resolved here).
+## COUNTER JUDGEMENT
+(User 2026-09-24, v2.9.0): two predicates, one owner, no third definition anywhere.
+직접 대응 directCounter(item, hazards)
+= the Item carries a positive Counter value for at least one of those Hazards
+관련 준비 relatedPrep(item, hazards)
+= directCounter, or the Item carries a positive value of the one Core Stat one of those Hazards presses
+(DUNGEON_HAZARD §HAZARD RULES: 강인함 for 독/냉기/부식, 기동 for 속박/진창/어둠, 정신 for 화염/공포/화이트아웃)
+Who reads which:
+- 관련 준비: SALE purchase acceptance (the accessible-mode floor and the 바가지 fit term, ECONOMY_ORDER §PURCHASE ACCEPTANCE), 원정 위험 게시판 offer weight
+- 직접 대응: 야전 정비대 and 원정 전문 인증 Counter multipliers, the Known-Hazard Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold
+- the legacy exception that read 기동 as a Counter for 속박/진창 is retired; 기동 on those Gates is 관련 준비, never a Counter
+- 원정 위험 게시판: today's Gate Hazard (known active-Hazard) 관련 준비 Item offer weight +50% (§COUNTER JUDGEMENT; a direct Counter or the Stat that Hazard presses; (User 2026-09-24, v2.9.0)); this is not a guarantee
+- an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat Item does not qualify; (User 2026-09-24, v2.9.0)): its Hazard Counter values x1.60
 ```

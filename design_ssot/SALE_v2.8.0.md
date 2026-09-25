@@ -685,6 +685,8 @@ Purchase logic may consider:
 
 Hidden Job-based purchase bonus=NO
 
+The acceptance floor for an accessible-mode offer reads 관련 준비 (a direct Counter for one of the customer's Gate Hazards, or the Stat that Hazard presses), one owner: `RELIC_v2.8.0.md` §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0).
+
 Exact purchase probability=HIDDEN
 
 Exact hidden purchase acceptance, NPC Wallet income and Deep sponsorship are owned by

@@ -1024,3 +1024,17 @@ ORDER with offers of every category; SALE with a shelf of every category for two
 - under reduced motion the stub appears and disappears without motion; the numbers are identical
 - any fit emphasis, any recommendation word, a stub at the end of the day instead of per customer, or a stub whose numbers differ from the customer's record
 ```
+
+## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carries a runtime status line for condition-type supports only; the purchase notice drops its second sentence; the Counter judgement is split into 직접 대응 / 관련 준비 with one owner (RELIC §COUNTER JUDGEMENT) — the acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers, pity and cert rewards read 직접 대응, the 기동-for-속박/진창 exception is retired; the accessible-mode base need is 0.72 (measured, not tuned). Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+### UI-Q-v29-23 — OWNED STORE SUPPORT STATUS LINE / PURCHASE NOTICE
+A Run owning 회전 진열대, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약, 단골 묶음혜택 and 야전 정비대; the owned list opened from the menu at MORNING, ORDER and SALE, before and after the condition changes (a guarantee used, the free reroll used, three of one SKU in the cart, a 단골 customer's second purchase).
+- each conditional support shows exactly the COPY_AUDIT §11-32 line for the current runtime state; 야전 정비대 (always on) shows no line
+- the line changes when the state changes and never says 추천 / 필요 / any verdict
+- 묶음발주 계약 shows its line only at ORDER, 단골 묶음혜택 only at SALE for the current customer
+- the purchase notice reads `{점포지원명} 확보.` and nothing about 다음 날부터
+- a status line on an always-on support, a chance-based support written as inactive, or a new Save field behind any line
+```

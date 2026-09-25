@@ -682,3 +682,11 @@ REL-Q74 `- Supply +2`) are edited in place above.
 - Supply (피로 회복) unchanged (User 2026-09-24, v2.9.0)
 - Supply (피로 회복) itself is multiplied by these native-Stat percentages (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carries a runtime status line for condition-type supports only; the purchase notice drops its second sentence; the Counter judgement is split into 직접 대응 / 관련 준비 with one owner (RELIC §COUNTER JUDGEMENT) — the acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers, pity and cert rewards read 직접 대응, the 기동-for-속박/진창 exception is retired; the accessible-mode base need is 0.72 (measured, not tuned). Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+- COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 원정 전문 인증 x1.60, the Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
+```

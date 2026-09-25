@@ -1363,6 +1363,7 @@ Owned Relic Quick View:
 - Sale=YES
 - readOnly=YES
 - shows owned Relic name + actual effect/condition
+- for a condition-type support only, one runtime status line under them (RELIC §QUICK VIEW STATUS LINE; exact lines COPY_AUDIT §11-32); no HUD, no badge, no verdict word (User 2026-09-24, v2.9.0)
 - does not allow purchase/defer/change timing during Sale
 
 Relic should look like a meaningful Run-build choice,

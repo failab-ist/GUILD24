@@ -502,3 +502,28 @@ dayBase = 90 + 2 × (Day - 1)
 ```new
 dayBase = 90 + 5 × (Day - 1)    (User 2026-09-24, v2.9.0; was 2 × (Day - 1))
 ```
+
+## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carries a runtime status line for condition-type supports only; the purchase notice drops its second sentence; the Counter judgement is split into 직접 대응 / 관련 준비 with one owner (RELIC §COUNTER JUDGEMENT) — the acceptance floor and 원정 위험 게시판 read 관련 준비, the multipliers, pity and cert rewards read 직접 대응, the 기동-for-속박/진창 exception is retired; the accessible-mode base need is 0.72 (measured, not tuned). Earlier lines this batch supersedes were removed from the fences above in place.
+
+```text
+For affordable 50% 할인 / 정가, if the Item validly Counters at least one Hazard of this customer's
+actual Gate under the game's canonical Counter semantics:
+Reuse canonical Counter truth; do not maintain a second narrower purchase-only definition.
+Existing mobility-based answers for bind/mire remain valid wherever the canonical Counter predicate
+recognizes them.
+- if at least one offered Item validly Counters that Hazard -> its missing count resets
+```
+
+```new
+For affordable 50% 할인 / 정가, if the Item is 관련 준비 for this customer's actual Gate (RELIC
+§COUNTER JUDGEMENT: a direct Counter for one of its Hazards, or a positive value of the Core Stat one of
+them presses; (User 2026-09-24, v2.9.0)):
+Reuse the one owner (RELIC §COUNTER JUDGEMENT); do not maintain a second purchase-only definition.
+The legacy 기동-for-속박/진창 Counter exception is retired: 기동 on those Gates is 관련 준비, not a Counter (User 2026-09-24, v2.9.0).
+Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72 (was 0.80), lowered so that 관련 준비 (the 0.97 floor) is a visible
+difference against an unrelated Item; measured and reported, not tuned further by WORK. 바가지 keeps its own
+fit-based need, whose fit sums the Item's direct Counter values and the values of the pressed Stats (관련 준비).
+- if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)) -> its missing count resets
+```

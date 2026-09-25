@@ -114,7 +114,7 @@ PASS:
   - 100% = 1.00 / 0.65
   - 150% = 1.50 / 1.50
 - judgedPrice uses the mode intent multiplier and never changes the actual charged amount
-- 50% / 100% base need = 0.80
+- 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0; was 0.80)
 - 150% uses the owner-defined fit-based need calculation
 - flat mode intent remains +0.18 / 0 / -0.16
 - one occupied Bag slot applies no purchase penalty
@@ -123,8 +123,8 @@ PASS:
 - only 100% keeps pivot 0.36 / weight 0.50 burden bonus, never a penalty
 - effective Wallet includes temporary Event purchase budget
 - unaffordable debit -> chance 0
-- affordable 50% / 100% canonical Counter -> final chance 0.97
-- canonical Counter semantics are reused, including mobility answers for bind/mire
+- affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> final chance 0.97
+- no separate purchase-only Counter definition; the legacy 기동-for-속박/진창 Counter exception is gone (User 2026-09-24, v2.9.0)
 - non-Counter 50% / 100% and all 150% use normal 0.08–0.97 clamp
 - 150% receives no new Counter floor
 
