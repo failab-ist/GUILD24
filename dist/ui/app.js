@@ -336,7 +336,9 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
 // A Gate is a paper notice pinned to the board: family colour along the top, the hazard
 // pictogram beside each pressure line, the supply requirement stamped at the foot.
 /* `full`: Gate detail (the gates modal) reads the full Gate sentence (COPY_AUDIT §4-16); the MORNING plate reads the
-   short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` - the number first (User 2026-09-24). */
+   short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` - the number first (User 2026-09-24).
+   MORNING calls it with the Gate alone: handed to .map directly, the array index arrived as `full`
+   and every Gate after the first printed the Gate-detail sentence (User 2026-09-25). */
 function gatePlate(d,full=false){const b=sigilOf(d);
  return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
@@ -395,7 +397,7 @@ function morningScreen(){
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
     +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
      +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b>'+deathLimitItem()+'</p>'
-   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+'</div></div>'
+   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(d=>gatePlate(d)).join('')+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'</div>'
   /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
      counter-band element and is placed in the counter's own coordinates. Presentation only -
