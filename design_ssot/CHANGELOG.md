@@ -26,11 +26,12 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   numbers); H2 names no "price stamp" (the A8 stub is SALE's only stamp); H3 counts go prior → resolved, never
   a unit per crate; H6 targets are the User's decision after the capture, not WORK's. Docs only.
 
-## v2.9.1 — balance (User decisions 2026-09-25); owners amended docs-first, Source adoption pending
+## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted 2026-09-25
 
 The v2.9.0 BALANCE FINDING is resolved as its own version (User 2026-09-25). Values: `reports/v29-balance-agreements.md`;
-measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Source adoption runs in a separate session
-(WORK_STATE). Each owner amendment is listed with its commit.
+measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Source adoption ran in a separate session
+(branch `claude/v291-balance-source-adoption`, batches 1-6, `reports/v291-implementation-handoff.md`) and is complete.
+Each owner amendment is listed with its commit.
 
   - DUNGEON_HAZARD (8854c89): 중상 Fatigue 0; Severe shares .36 / .11; repeated-strain cut on consecutive injured departures
     only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing 25 → 100%; hidden bad-luck
@@ -53,6 +54,14 @@ measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Sou
   - Copy (User 2026-09-25): 23. 길드 합동 위령제 (COPY_AUDIT §13-23), the 만반의 준비 tutorial line (§3-7), the Decoration effect
     lines (§9-5, 추모 방명록 `사망 한도 +2명.`), the Night lines for retreat healing and 만반의 준비 (§19-9); the NPC-detail row
     becomes `연속 부상 출발 {n}회` (UI_UX, DUNGEON_ITEM_QA DUN-Q-v29-3).
+  - **Source adoption** (2026-09-25, branch `claude/v291-balance-source-adoption`, 배치 1~6): DUNGEON_HAZARD / shop.js
+    (`09e65fd`; pre-existing pilgrimage/claimedDestination bugfix surfaced and fixed, `2d06b9d`), ITEM catalog (`a7b3cca`),
+    ECONOMY_ORDER (`2b29c97`), META / CORE_RUN / BOSS / decorations (`5df9448`), UI_UX 사망 한도 줄 + 만반의 준비 튜토리얼
+    (`5f68bda`), EVENT 위령제 + NPC `연속 부상 출발` 줄 (`dd0fba0`). `npm test` / `npm run ssot:check`(21/21) /
+    `npm run qa:runtime`(5/5) / `npm run qa:visual` all PASS (`781ce5f` fixes a v2.9.1-only qa fixture seed that hit the
+    new D1-10 Death limit before D6). Native remeasurement — the shipped Source itself, no rule patches — against
+    `reports/v29-balance-ideal.md` §종결 측정 is recorded in that report's §네이티브 재측정 (`2f0753d`): several metrics
+    exceed the handoff's ±4%p, accepted by the User as sampling-error-range known differences (not tuned).
 
 ## v2.9.0 — implementation complete 2026-09-25; the BALANCE FINDING moved to v2.9.1 (User decisions 2026-09-24/25)
 

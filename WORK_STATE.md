@@ -1,15 +1,15 @@
 # WORK_STATE
 
 DATE: 2026-09-25
-STATE: V2_9_1_BALANCE_DECIDED — OWNER 문서 반영 완료, 소스 반영 대기 · V2_9_2_GAME_FEEL_PLANNED
+STATE: V2_9_1_SOURCE_ADOPTED — owner 문서·소스 반영·네이티브 재측정 완료(User 수용) · V2_9_2_GAME_FEEL_PLANNED
 
 ## Current
 
 - repository: `failab-ist/GUILD24`
 - `main` = v2.9.0 close-out `3f18ceb` + D0 브리핑 수정(`2b97202`, `3d0ddc6`) + 문서 전용 커밋(v2.9.1 / v2.9.2 등록, AGENTS §11-A). Pages는 main을 배포한다(밸런스 전 v2.9.0 상태, User 수용).
 - 태그: User 결정(2026-09-25)으로 `v2.9.0`을 마지막 v2.9.0 소스 커밋 `3d0ddc6`에 단다. 밸런스 세션에서는 태그 푸시가 거부됐다(HTTP 403) — GitHub Releases에서 만든다(아래 §태그).
-- v2.9.1 밸런스: `claude/sleepy-volta-ywkjeu`에서 결정 완료, owner 문서 반영 완료(docs-first, `npm run ssot:check` PASS, 소스 미변경 `npm test` PASS). 이 브랜치는 `main`을 병합한 상태다. main 병합은 User가 정한다.
-  - 결정값: `reports/v29-balance-agreements.md` · 측정과 수용한 차이: `reports/v29-balance-ideal.md` · owner 변경: `design_ssot/CHANGELOG.md` §v2.9.1
+- v2.9.1 밸런스: `claude/sleepy-volta-ywkjeu`에서 결정·owner 문서 반영 완료. 소스 반영은 `claude/v291-balance-source-adoption`(그 브랜치에서 분기)에서 배치 1~6 완료 — `npm test` / `npm run ssot:check`(21/21) / `qa:runtime`(5/5) / `qa:visual` 전부 PASS. 네이티브 재측정(규칙 패치 없이 반영된 소스 자체로 재측정)은 여러 지표에서 핸드오프의 ±4%p를 넘었으나, User 판단으로 표본오차 범위의 알려진 차이로 수용했다. main 병합·`v2.9.1` 태그는 User가 확인한 뒤 정한다.
+  - 결정값: `reports/v29-balance-agreements.md` · 측정과 수용한 차이(종결 측정 + 네이티브 재측정): `reports/v29-balance-ideal.md` · owner 변경 + 소스 반영 커밋: `design_ssot/CHANGELOG.md` §v2.9.1 · 소스 배치 지도: `reports/v291-implementation-handoff.md`
 - v2.9.2 타격감: H1 … H6 PLANNED(문서만, PRESENTATION §GAME FEEL BEAT). 소스 미변경.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - last tagged release: v2.8 (`49a291f`); completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
@@ -17,16 +17,6 @@ STATE: V2_9_1_BALANCE_DECIDED — OWNER 문서 반영 완료, 소스 반영 대�
 ## In Progress
 
 - 없음
-
-## Next — v2.9.1 밸런스 소스 반영 (핸드오프)
-
-AGENTS.md를 먼저 읽고 따른다.
-
-- 기점: `claude/sleepy-volta-ywkjeu`(또는 User가 main에 병합했다면 현재 `main`)에서 새 브랜치.
-- 작업 지도: **`reports/v291-implementation-handoff.md`** — 배치 1~6(owner별 소스 위치, 참고 구현, 테스트 기대값), 마무리 검증(네이티브 재측정), 정지 조건.
-- 열린 설계 결정: 없음.
-- 정지 경계: 배치 하나 = 소스 + 테스트 → `npm test` → 커밋. UI 배치(5)는 캡처 검수 후 커밋. 마무리 검증 뒤 보고하고 STOP. `v2.9.1` 태그는 User 확인 후.
-- v2.9.2와의 관계: v2.9.2 H4(마감 영수증)의 점포 자본 정산 표시는 v2.9.1 값이 소스에 들어간 뒤.
 
 ## Next — v2.9.2 타격감 세션 (핸드오프)
 
