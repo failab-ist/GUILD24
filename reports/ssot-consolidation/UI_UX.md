@@ -949,7 +949,7 @@ Still hidden:
 - next-day Family / exact Gate composition / Hazard set
 4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
 - the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
-- a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; a used-up offer answers `오늘 공급이 끝났습니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0)
+- a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 ```
 
 ## AMENDMENT — v2.9.0 F2-b: two-line Hazard short row, inline Stat tag (User decision 2026-09-25)

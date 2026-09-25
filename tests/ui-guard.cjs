@@ -285,7 +285,7 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(!/내일|tierLine|gateLine/.test(order)&&!/function (tierLine|gateLine)\(/.test(app),'no next-day forecast block on ORDER (User 2026-09-24, v2.9.0)');
  assert.ok(/<span class="kind">'\+E\(D\.rarities\[it\.rarity\]\)\+'<\/span>/.test(order),'each offer row carries the rarity name line');
  assert.ok(/lim=game\.quantityLimit\(i\)/.test(order)&&/aria-disabled="true" data-reason=/.test(order),'a blocked quantity control is dim but tappable, with its reason');
- for(const t of ['창고 칸이 부족합니다.','오늘 공급이 끝났습니다.',"'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.'"])assert.ok(app.includes(t),'§3-9 toast: '+t);
+ for(const t of ['창고 칸이 부족합니다.','오늘 공급 최대 수량입니다.',"'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.'"])assert.ok(app.includes(t),'§3-9 toast: '+t);
  assert.ok(/getAttribute\('aria-disabled'\)==='true'/.test(app),'the click listener answers a blocked control with the toast and nothing else');
  assert.ok(!/'비싼 상품일수록|일반 부상의 투력 페널티를 대체/.test(read('dist/data/catalog.js')),'no Trait flavor note survives');
  assert.ok(/tr\.note\?`<em class="tone-cost">/.test(fn('traitRows')),'the one remaining note (거짓말쟁이) renders as an effect row');

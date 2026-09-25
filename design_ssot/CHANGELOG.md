@@ -12,6 +12,9 @@ Docs-first. Each owner amendment is listed when committed.
 State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
 Open before the tag: the BALANCE FINDING (`reports/v29-balance-finding-handoff.md`, decisions taken in a separate session) and 7-b.
 
+- Quick fix (User 2026-09-25): the ORDER supply-cap toast reads `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9, UI_UX, UI_UX_QA) — the
+  old `오늘 공급이 끝났습니다.` read as if nothing could be ordered at all.
+
 - Close-out (2026-09-25): EVENT §08 — on a morning with no existing slot the newcomer is the Day's only visitor (User);
   평생 단골제 card drops `(하루 1회)`; SPEC_INDEX status / acceptance updated; WORK_STATE carries the balance handoff.
 

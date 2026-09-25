@@ -346,7 +346,7 @@ Within an offer/item card, visual priority is:
    - explicit penalty
 3. economy / stock metadata
 4. quantity interaction
-   - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; a used-up offer answers `오늘 공급이 끝났습니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0)
+   - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 
 Examples such as `속박 대응 +16` already communicate function; do not add a second `속박 전문` chip.
 No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).

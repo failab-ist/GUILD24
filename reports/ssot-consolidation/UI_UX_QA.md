@@ -953,7 +953,7 @@ does the same (User 2026-09-24, v2.9.0)
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown at MORNING or ORDER; FAIL if any next-day block, percentage or count appears. The individual-customer boundary (name, Job, Trait, Wallet, destination hidden; per-Gate visitor count public) is checked by UI-Q-v29-14 / ORD-Q84.
 ### UI-Q-v29-20 — ORDER ROW RARITY LINE / BLOCKED-QUANTITY REASON
 - every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
-- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; a used-up offer's controls show `오늘 공급이 끝났습니다.` (COPY_AUDIT §3-9)
+- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; an offer whose whole supply for today is already in the cart shows `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9)
 - the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
 - no `내일` block on ORDER
 ```

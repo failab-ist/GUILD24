@@ -439,7 +439,7 @@ Today's situation is understandable and a meaningful Event is not buried among o
 
 PASS:
 - every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
-- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; a used-up offer's controls show `오늘 공급이 끝났습니다.` (COPY_AUDIT §3-9)
+- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; an offer whose whole supply for today is already in the cart shows `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9)
 - the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
 - no `내일` block on ORDER
 

@@ -1967,7 +1967,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
-const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급이 끝났습니다.'};
+const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
  if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);});
