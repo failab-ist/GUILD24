@@ -396,3 +396,19 @@ If its Aftercare actually changes persistent Injury state, the report may expose
 - would-be `부상` -> `부상`, persistent injury 0 (`구급키트가 남을 부상을 없앴다.`)
 - would-be `중상` -> `부상`, injury=1 / recovery=0 (`구급키트가 중상을 부상으로 낮췄다.`)
 ```
+
+## AMENDMENT — v2.9.2 H1: NIGHT verdict stamp (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.2 H1): display order only - the Hero Item line is the stamp's after-motion, and a proven reversal prints the turned-away Outcome before `생환` overstamps it.
+
+```new
+Display order (User 2026-09-25, v2.9.2 H1): when the Hero Item line is present it is the after-motion
+of the NIGHT verdict stamp - it settles once after the stamp lands and the figures do not count up; the
+cause outranks the money. Wording and proof are unchanged. Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT —
+VERDICT STAMP.
+Display order (User 2026-09-25, v2.9.2 H1): on a result carrying `rescued` / `avoidedDeath` the verdict
+first prints the Outcome the Insurance turned away (`사망` when `avoidedDeath`, otherwise `중상`) and the
+resolved label `생환` overstamps it; the proof lines that name the Insurance appear on that overstamp.
+Only those two result flags trigger it; the wording, the proof and the resolved Outcome are unchanged.
+Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT — VERDICT STAMP.
+```

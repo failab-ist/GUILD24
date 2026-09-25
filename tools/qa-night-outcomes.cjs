@@ -8,12 +8,16 @@
 //   node tools/qa-night-outcomes.cjs <out-dir> [seedCount] [statesFrom.json]
 // Passing a states.json from an earlier run skips the scan and replays exactly those results,
 // so a BEFORE and an AFTER photograph the same resolved states.
+// QA_FRAMES=90,200,... (v2.9.2 H1) also photographs the landing itself with motion on: the anime
+// engine is slowed ten times for the result's own entry and a frame is taken at each beat-time
+// offset (ms), next to the settled reduced-motion capture. Nothing else about the run changes.
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
 const OUT=path.resolve(__dirname,'..',process.argv[2]||'reports/ui/night-outcomes');
 const SEEDS=Number(process.argv[3]||60),PORT=Number(process.env.QA_PORT||5198);
 const FIXED_NOW=1790112000000,EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const WIDTHS=(process.env.QA_WIDTHS||'390,1280').split(',').map(Number);
 const STATES=process.argv[4]?path.resolve(__dirname,'..',process.argv[4]):null;
+const FRAMES=(process.env.QA_FRAMES||'').split(',').filter(Boolean).map(Number),SLOW=10;
 // the same page-side step as qa-visual.cjs, so the Runs are the same kind of Run
 const STEP=`(()=>{
  const g=Guild24.game,s=g.run,D=DATA;
@@ -36,7 +40,7 @@ const STEP=`(()=>{
 // what one resolved result is, read only from the record the resolver wrote
 const CLASSIFY=`(r=>r.outcome==='사망'?'death':(r.rescued||r.avoidedDeath)?'rescue':r.outcome==='중상'?'severe'
  :r.outcome==='부상'?'injury':r.outcome==='퇴각'?'retreat':r.outcome==='대성공'?'great':'success')`;
-const WANT=['success','great','retreat','injury','severe','death','rescue','hero'];
+const WANT=['success','great','retreat','injury','severe','death','rescue','hero','brink'];
 
 function serve(){
  const child=spawn(process.execPath,[path.resolve(__dirname,'preview.cjs'),'--port',String(PORT)],{stdio:['ignore','pipe','inherit']});
@@ -83,10 +87,12 @@ async function play(page,day,onNight){
    const seed='qa-night-'+k;
    await begin(page,seed);
    await play(page,null,async day=>{
-    const rows=await page.evaluate(`Guild24.game.run.results.map(r=>({kind:${CLASSIFY}(r),hero:!!Presentation.heroLine(r),outcome:r.outcome,name:r.name}))`);
+    const rows=await page.evaluate(`Guild24.game.run.results.map(r=>({kind:${CLASSIFY}(r),hero:!!Presentation.heroLine(r),brink:!!r.avoidedDeath,outcome:r.outcome,name:r.name}))`);
     rows.forEach((r,index)=>{
      if(!found[r.kind])found[r.kind]={seed,day,index,outcome:r.outcome,name:r.name};
      if(r.hero&&!found.hero)found.hero={seed,day,index,outcome:r.outcome,name:r.name};
+     // v2.9.2 H1: a Death turned into a return (the reversal whose first print is `사망`)
+     if(r.brink&&!found.brink)found.brink={seed,day,index,outcome:r.outcome,name:r.name};
     });
    });
   }
@@ -109,6 +115,32 @@ async function play(page,day,onNight){
     // the pointer that pressed 다음 would otherwise leave the next control in its hover state
     await p.mouse.move(1,1);
     await p.waitForTimeout(700);
+    if(FRAMES.length){
+     // the same result with motion on, reached the same way (the real 다음); the engine is slowed
+     // just before the press (or the NIGHT entry) that brings it on screen, so each frame is exact
+     const m=await browser.newContext({viewport:{width,height:desktop?880:780},deviceScaleFactor:desktop?1:2,
+      isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'no-preference'});
+     const mp=await m.newPage();
+     await mp.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
+     // begin() freezes Date.now for the Run, and the anime clock keeps the Date.now it finds at load:
+     // it gets a wrapper that honours the freeze until the replay switches the real clock back on
+     await mp.addInitScript(()=>{const real=Date.now.bind(Date);let frozen=null;
+      const now=()=>window.__live||!frozen?real():frozen();
+      Object.defineProperty(Date,'now',{configurable:true,get:()=>now,set:f=>{frozen=f;}});});
+     await begin(mp,f.seed);
+     if(await play(mp,f.day)){
+      await mp.evaluate(clearReveals);
+      const slow=`(()=>{window.__live=true;anime.engine.speed=1/${SLOW};})()`,mark=`(()=>{window.__t0=performance.now();})()`;
+      if(!f.index)await mp.evaluate(slow);
+      await mp.evaluate(`Guild24.render()`);
+      for(let i=0;i<f.index;i++){if(i===f.index-1)await mp.evaluate(slow);
+       await mp.click('.p-night .dock [data-action="night-next"]');}
+      await mp.evaluate(mark);await mp.mouse.move(1,1);
+      for(const ms of FRAMES){
+       await mp.waitForFunction(t=>performance.now()-window.__t0>=t,ms*SLOW);
+       await mp.screenshot({path:path.join(OUT,`night-${kind}-${width}-f${String(ms).padStart(4,'0')}.png`)});}
+      console.log('FRAMES '+kind+' @'+width+' '+FRAMES.join('/')+' ms');}
+     await m.close();}
     const check=await p.evaluate(`(()=>{const s=Guild24.game.run,r=s.results[s.nightCursor||0];return r&&r.name;})()`);
     if(check!==f.name){console.log('DRIFT '+kind+' @'+width+' '+check+' != '+f.name);continue;}
     await p.screenshot({path:path.join(OUT,`night-${kind}-${width}.png`)});

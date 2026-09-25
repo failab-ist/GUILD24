@@ -1345,6 +1345,56 @@ Likewise, "one NPC size" means one size for all Outcomes at the same breakpoint.
 one shared desktop responsive size. QA must reject Outcome-specific portrait sizing, not a single
 desktop override shared by every Outcome.
 
+### NIGHT LAYOUT — VERDICT STAMP (v2.9.2 H1)
+
+(User 2026-09-25, v2.9.2 H1; the principle, contract and impact budget ->
+PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT; acceptance -> UI_UX_QA UI-Q-v29-27.)
+
+The Outcome tag is stamped onto the record after the card stands, instead of sliding in with it.
+Presentation only: the tag, words, order and end layout are the ones above; every figure below is
+motion-on timing measured from the moment the result comes on screen, and under reduced motion
+none of it runs and the record appears in its end state at once.
+
+Weight and timing per Outcome (entry = the card's own arrival; hold = stillness before the stamp;
+the stamp itself falls from 1.6 × to 1 × in 90 ms and lands on the last frame):
+
+    성공    일반       entry 200 · no hold · stamp lands 290 · card dips 4 px
+    퇴각    일반       entry 240 · no hold · shallow stamp (1.3 × → 1) lands 330 · card dips 2 px
+    대성공  중요       entry 220 · hold 100 · one gold stamp lands 410 · card dips 4 px
+    부상    중요       entry 240 · hold 120 · stamp lands 450 with red ink spread from the word · dips 4 px
+    중상    중요       entry 280 · hold 160 · stamp lands 530 slightly misaligned (−2.5°, 2 px) · dips 4 px
+    생환    클라이맥스  entry 240 · the resolved-away Outcome prints (180 ms) · `생환` overstamps it at 510 · dips 4 px
+    사망    클라이맥스  entry 240 · hold 60 · no stamp: a black tape lays across under the word (440 ms, ends 740)
+
+- the dip is the stamp's only companion motion: 4 px down in 40 ms and back in 150 ms, inside the
+  card; no ring, flash, shake or particle
+- the ink spread (부상), the misalignment (중상) and the tape (사망) stay in the end state; they are
+  tone, like the tag's cut and colour, and never change the Outcome type size (one size for every
+  Outcome, above)
+- 생환 (a result carrying `rescued` / `avoidedDeath`): the tag first prints the Outcome the
+  Insurance turned away — `사망` when `avoidedDeath`, otherwise `중상` — faint and in that Outcome's
+  own tag, then `생환` lands over it and the faint print is gone within 120 ms; nothing of the first
+  print remains in the end state. The proof lines under the summary (the Hero Item line and the
+  incident line that name the Insurance) cut in on the overstamp frame with no motion of their own;
+  that cut-in is the landing's cause response
+- after-motion has one owner. With a Hero Item line (NIGHT_CLOSING §HERO ITEM FEEDBACK) and no
+  reversal, that line settles into place once (160 ms, 4 px, from the landing frame) and the figures
+  simply stand at their values. Without one, the REWARD group's figures (경험치, 원정 소지금 획득,
+  대성공 본사 보상, the Deep reward) count up from 0 to their values in 220 ms from the landing frame.
+  GROWTH and AFTERMATH figures never count. A death has no after-motion
+- the whole run fits the time today's entry took (340~760 ms): the last motion ends by 770 ms
+- sound: the Outcome cue keeps its notes and its first note plays on the landing frame, with a sharper
+  attack and one step louder; 사망 keeps its restrained attack and starts with the tape; on a
+  reversal the Outcome cue starts with the first print and `rescue` lands on the overstamp frame.
+  The sharper first note is the cue's own shape at every setting; under reduced motion the cues keep
+  today's timing (Outcome at once, `rescue` 0.42 s behind it)
+- one landing emphasises at most one visual (the stamp), one sound (the Outcome cue's first note, or
+  `rescue` on a reversal) and one cause / number response (the Hero line settle, the count-up or the
+  reversal cut-in)
+- 다음 and 전체 건너뛰기 stay live throughout; pressing 다음 mid-stamp shows the next result's own
+  stamp, 전체 건너뛰기 leaves the list without waiting, and a cue still waiting for its landing frame
+  is dropped rather than heard over the next screen
+
 ## CLOSING
 
 question=`오늘 장사는 어땠을까?`

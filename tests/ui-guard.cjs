@@ -1714,6 +1714,57 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
  assert.ok(!/sound\('|Sound\.play\(/.test(fn('render')),'render() plays no one-shot cue');
 });
 
+/* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
+   stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
+   gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
+test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const src=app.slice(app.indexOf('const STAMP_FALL='),app.indexOf('const stampLand='));
+ const T=new Function(src.replace('const STAMP_FALL=','var STAMP_FALL=').replace(',NIGHT_STAMP=','; var NIGHT_STAMP=')+';return {F:STAMP_FALL,S:NIGHT_STAMP};')();
+ assert.equal(T.F,90,'the stamp falls in 90 ms');
+ assert.ok(/const stampLand=st=>st\.entry\+st\.hold\+STAMP_FALL;/.test(app),'it lands after the entry and the hold');
+ const S=T.S,land=k=>S[k].entry+S[k].hold+T.F;
+ // intensity by weight: 일반 has no hold, 중요 / 클라이맥스 hold at most 200 ms; 대성공 is one landing
+ for(const k of ['safe','pull'])assert.equal(S[k].hold,0,k+' is 일반: no wind-up');
+ for(const k of ['great','hurt','severe','saved','gone'])assert.ok(S[k].hold>0&&S[k].hold<=200,k+' holds ≤ 200 ms');
+ assert.deepEqual(Object.fromEntries(['safe','pull','great','hurt','severe','saved'].map(k=>[k,land(k)])),
+  {safe:290,pull:330,great:410,hurt:450,severe:530,saved:510},'landing frames as UI_UX states them');
+ assert.ok(S.pull.from<S.safe.from&&S.pull.dip<S.safe.dip,'퇴각 is the shallow stamp');
+ for(const k of ['safe','great','hurt','severe','saved'])assert.equal(S[k].dip,4,k+' dips 4 px');
+ assert.ok(S.gone.tape&&S.gone.tape<=500&&!S.gone.from,'사망 has no stamp and a tape ≤ 500 ms');
+ // each beat ≤ 320 ms after the landing (dip 190, settle 160, count 220), and the whole run ends by 770 ms
+ for(const k of Object.keys(S))assert.ok((S[k].tape?S[k].entry+S[k].hold+S[k].tape:land(k)+220)<=770,k+' ends by 770 ms');
+ const pp=bare(fn('playPhase')),night=pp.slice(pp.indexOf("if(phase==='night')"),pp.indexOf("if(phase==='sell')"));
+ assert.ok(/to:st\.dip,duration:40/.test(night)&&/to:0,duration:150/.test(night),'the card gives 4 px and settles - the only companion motion');
+ assert.ok(/scale:\{from:st\.from,to:1,duration:STAMP_FALL,delay:at/.test(night),'the tag falls onto the card after it stands');
+ assert.ok(!/stagger|rotate:|translateX:\{from:[^s]|document\.body|#app|\.stage/.test(night),'no ring, shake, scatter or screen-level motion');
+ // one after-motion owner, in this order: reversal cut-in, else the Hero line, else the REWARD count-up; never on a death
+ const own=night.indexOf('if(st.print)told'),h=night.indexOf('else if(hero)A(hero.parentElement.children.length===1?hero.parentElement:hero,'),c=night.indexOf("else if(!st.tape)document.querySelectorAll('.beat .changed .reward .tok b')");
+ assert.ok(own>0&&own<h&&h<c,'one owner per landing: cut-in, Hero line, or the REWARD figures');
+ assert.ok(/duration:1,delay:land/.test(night),'the reversal proof lines cut in on the overstamp frame');
+ assert.ok(/'verdict ghost t-'\+\(r\.avoidedDeath\?'gone':'severe'\)/.test(night)&&/r\.avoidedDeath\?'사망':'중상'/.test(night),
+  'the first print is the Outcome the result says was turned away');
+ assert.ok(/onComplete:\(\)=>g\.remove\(\)/.test(night)&&!/ghost/.test(bare(fn('beat'))),'the first print is never rendered and never stays');
+ assert.ok(/'<li'\+\(hero&&!i\?' class="hero"':''\)/.test(fn('causeLines')),'the proven Hero claim is the line that settles');
+ // end state lives in CSS at full strength, so reduced motion ends on the same record
+ assert.ok(/\.p-night \.t-hurt \.verdict:after\{[^}]*opacity:var\(--ink,1\);transform:scale\(var\(--ink,1\)\)/.test(css),'부상 keeps its ink spread');
+ assert.ok(!/\.p-night \.t-hurt \.verdict:after\{[^}]*(gradient|blur)/.test(css),'the ink is a hard-edged spread, not a glow');
+ assert.ok(/\.verdict\.ghost\.t-gone\{[^}]*--rt-ink:#cfd3dd/.test(css),'a turned-away 사망 prints in its own bone ink');
+ assert.ok(/\.p-night \.t-severe \.verdict\{rotate:-2\.5deg;translate:2px 0\}/.test(css),'중상 keeps its misaligned stamp');
+ assert.ok(/\.p-night \.t-gone \.verdict:after\{[^}]*transform:rotate\(-1\.5deg\) scaleX\(var\(--tape,1\)\)/.test(css),'사망 keeps its tape');
+ assert.ok(/\.p-night \.beat \.verdict\.ghost\{position:absolute;margin:0;pointer-events:none;opacity:0\}/.test(css),'a first print left behind would be invisible');
+ // sound: the landing carries the cue; a waiting cue never plays over the next screen
+ const ns=bare(fn('nightSound'));
+ assert.ok(/^function nightSound\(result\)\{nightCueAt\.forEach\(clearTimeout\);nightCueAt=\[\];if\(!result\)return;/.test(ns),'a pending cue is dropped first');
+ assert.ok(/const st=motionOK\(\)&&NIGHT_STAMP\[Presentation\.nightTone\(result\)\]/.test(ns),'motion decides the timing, the resolved tone the entry');
+ assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
+ assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
+ const audio=read('dist/ui/audio.js');
+ for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');
+ assert.ok(!/\n death:\{[^}]*hit:1/.test(audio)&&!/\n rescue:\{[^}]*hit:1/.test(audio),'사망 keeps its restrained attack; rescue is an accent');
+ assert.ok(/hit=sh\.hit&&!i/.test(audio)&&/hit\?\{\.\.\.sh,attack:\.002\}:sh/.test(audio),'only the first note changes; the notes stay');
+});
+
 test('D-24: the feel layer is optional, and it never animates a redraw of the same view',()=>{
  assert.ok(/matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/.test(app),'the OS setting is read');
  assert.ok(/const motionOK=\(\)=>typeof anime==='object'&&!!anime\.animate&&!matchMedia/.test(app),

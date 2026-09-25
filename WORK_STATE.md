@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-25
-STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_GAME_FEEL_PLANNED (H1부터 시작 가능)
+STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_ADOPTED (브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`) — H5는 User 승인 대기
 
 ## Current
 
@@ -10,7 +10,7 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_GAME_F
 - 태그: `v2.9.0` → `3d0ddc6`(마지막 v2.9.0 소스 커밋), `v2.9.1` → `d23d076`. 둘 다 원격에 있음.
 - v2.9.1 밸런스: **완료 · main 병합 · 태그 완료**(User 2026-09-25). owner 반영 + 소스 배치 1~6, `npm test` / `ssot:check`(21/21) / `qa:runtime`(5/5) / `qa:visual` PASS, 네이티브 재측정의 ±4%p 초과는 User가 표본오차 범위로 수용.
   - 결정값: `reports/v29-balance-agreements.md` · 측정과 수용한 차이: `reports/v29-balance-ideal.md` · owner 변경 + 커밋: `design_ssot/CHANGELOG.md` §v2.9.1
-- v2.9.2 타격감: H1 … H6 PLANNED(문서만, PRESENTATION §GAME FEEL BEAT). 소스 미변경. 4차 검토(`8448f08` 기준) 판정: Design PASS · 핸드오프 PASS · stale 문구 4개 정리로 strict Canonical PASS(이 커밋).
+- v2.9.2 타격감: H1 ADOPTED(브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`, 아직 main 미병합) · H2~H6 PLANNED. 같은 브랜치에 플레이 리포트 마이너 수정 3건(`158d001` SALE `?` 말풍선, `0510b53` MORNING 두 번째 게이트, `61b9734` SALE 목적지 판 위험 줄 압축).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - last tagged release: `v2.9.1`; completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
@@ -30,7 +30,16 @@ AGENTS.md를 먼저 읽고 따른다.
   - MORNING / ORDER에 `사망 {n} / {limit} · D{end}까지` 줄이 상시 표시된다(UI-Q-v29-26). H3 캡처에 함께 보인다.
   - SALE 계산대 배치·전망 핀(UI-Q-v29-24 / 25)이 반영됐다. H2는 이 배치 위에서 한다.
   - 점포 자본 비율 1 / 2 / 3 / 4 / 5%가 반영됐다. H4의 점포 자본 부분은 더 이상 대기가 아니다.
-- 활성 태스크: PLANNED 상태의 타격감 비트를 등록된 순서 H1 → H5 → H2 → H3 → H4 → H6로 한 배치씩 반영한다. H1(NIGHT 판정 도장 + Hero Item 인과 비트 + 보험 반전 덮어찍기)부터 시작. 한 턴에 한 배치, 그리고 STOP.
+- 활성 태스크: PLANNED 상태의 타격감 비트를 등록된 순서 H1 → H5 → H2 → H3 → H4 → H6로 한 배치씩 반영한다. **H1 완료(ADOPTED)** — 다음은 H5(FINAL 봉인 도장 / 실패 도장), User 승인 뒤에만. 한 턴에 한 배치, 그리고 STOP.
+- H1이 확정한 패턴(H5와 2단계가 재사용; H5 뒤 2단계 지시에 다시 정리한다):
+  - 타이밍 표 하나: `dist/ui/app.js`의 `STAMP_FALL=90`, `NIGHT_STAMP`(톤별 `entry` / `hold` / `from` / `dip` / `y`·`x`·`scale` / `print` / `tape`), `stampLand(st)=entry+hold+STAMP_FALL`. 모션(`playPhase` night 블록)과 큐(`nightSound`)가 같은 표를 읽는다.
+  - 도장: 대상 `scale:{from:st.from,to:1,duration:STAMP_FALL,delay:entry+hold,ease:'in(3)'}` + `opacity` 40 ms; 카드 착지 `translateY` 키프레임 `{to:dip,40,'in(2)'}` → `{to:0,150,'outQuad'}`.
+  - 끝 상태는 CSS에 전량(`--ink` / `--tape` 기본값 1, `.t-severe .verdict{rotate;translate}` 개별 transform 속성) — anime는 CSS 변수만 0→1로 들여온다. reduced-motion과 끝 상태가 같게 하는 방법.
+  - 첫 인쇄(반전): `playPhase`가 `p.verdict.ghost`를 만들어 겹치고 `onComplete`에서 제거(렌더에 없음).
+  - 여운 주인 하나: 반전 컷인(`duration:1,delay:land`) → Hero 줄(`li.hero`, 목록 유일 줄이면 목록째) 정착 160 ms → 없으면 REWARD 숫자 카운트업 220 ms.
+  - 큐: `nightSound`가 `setTimeout`으로 착지 프레임에 재생하고, 다음 결과·`전체 건너뛰기`(`nightSound(null)`)에서 대기 큐를 버린다. reduced-motion은 기존 타이밍. `audio.js` shape `hit:1` = 첫 음 attack .002 · ×1.3(음표 불변).
+  - 캡처: `QA_FRAMES=60,160,260,360,460,600,800 node tools/qa-night-outcomes.cjs <out> <seeds> [states.json]` — 모션 프레임은 anime 엔진 10배 감속 + 실제 시계 래퍼. H1 상태 파일의 시드: success/retreat/injury/severe/death/hero = `qa-night-1`, rescue = `qa-night-51` D16 #2, brink(`avoidedDeath`) = `qa-night-84` D21 #2.
+- H1 감사에서 나온 설계 질문(UNRESOLVED, User 결정 필요 — 구현하지 않음): `만반의 준비`는 사망을 부상·중상으로 바꾸지만 `rescued` / `avoidedDeath`를 세우지 않아 반전 덮어찍기 대상이 아니다(H1 행 트리거는 두 플래그뿐). 강골·구급키트의 한 단계 완화도 마찬가지. 이것들도 "벼랑 끝 반전"으로 보여줄지는 User 결정.
 - 세션 계획(User 2026-09-25) — 두 단계:
   - 1단계 = 상위 모델 · 하이 이펙트 세션: H1, 그다음 H5. 가장 무거운 두 착지를 한 손으로 만든다. 도장·잉크·테이프·큐 어택의 패턴이 여기서 확정된다.
   - 1단계 세션의 마지막 산출물: H5 커밋 뒤, 2단계 세션이 그대로 따라 할 수 있는 작업 지시를 이 §Next에 다시 쓴다. 담을 것 — H1/H5가 커밋한 패턴의 정확한 이름(클래스, 큐 키, 타이밍 상수, `playPhase` / `playCue`의 진입 지점), 각 남은 배치(H2 → H3 → H4 → H6)가 그 패턴 중 무엇을 어디에 재사용하는지, 배치별 owner 줄과 원장 선언, 캡처 시나리오(시드·화면·뷰포트), 그리고 아래 2단계 지침.
@@ -51,7 +60,7 @@ AGENTS.md를 먼저 읽고 따른다.
 - 3차 검토 반영(User 2026-09-25): H1은 잉크 링 없음(카드 4px 내려앉음이 유일한 동반 모션), 대성공은 금색 도장 1회(2단계 도장은 클라이맥스 전용), 여운의 주인은 하나 — Hero Item 줄이 있으면 그 줄이 정착하고 숫자는 값만 갱신, 없으면 바뀐 결과 그룹의 숫자가 카운트업. H2에 "price stamp"라는 물건은 없다 — 키 눌림 + 첫 틱이 임팩트, A8 조각이 SALE의 유일한 도장. H3 창고 숫자는 이전 값 → 확정 값으로 직접, 상자는 SKU당 1개(수량을 허위 표현하지 않음).
 - 4차 검토 반영(User 2026-09-25, `8448f08` 기준, 문구 정리만 — 설계 재논의 없음): 원리 표의 `SALE price stamp` → `SALE key impact / receipt stub`; `repeated inputs feel like a combo` → `repeated actions remain tactile without escalation`(판매 횟수로 게임이 흥분하지 않음 — "반복 리듬을 살려야 하나?"로 읽지 않는다); SPEC_INDEX H2 `stub after the stamp` → `stub after impact`; 라우팅 소개 `H1~H5` → `H1~H6`. 판정: Design PASS, 핸드오프 PASS, 정리 후 strict Canonical PASS. 4차 설계 리뷰는 다시 돌리지 않고 H1로 들어간다.
 - 연속 시퀀스 검수: 마지막 밤 판정 → `마감으로` → 영수증 인쇄 → `다음 날`(H1+H4+H6)과 최종 결과 → 클리어/실패 화면(H5+H6)은 개별 효과가 아니라 한 흐름으로 캡처한다. 시퀀스를 완성하는 배치가 그 캡처를 맡는다.
-- 이미 내려졌지만 아직 문서에 반영 안 된 User 결정: 없음. 열린 것: H6 대상 화면만 — 캡처 보고 뒤 User 결정(UNRESOLVED). H1 … H5는 열린 것 없음(H4 점포 자본 대기는 v2.9.1 종료로 해소).
+- 이미 내려졌지만 아직 문서에 반영 안 된 User 결정: 없음. 열린 것: H6 대상 화면(캡처 보고 뒤 User 결정), 위 `만반의 준비` 등 비플래그 완화의 반전 표시 여부(UNRESOLVED). H5 … H4는 열린 것 없음.
 - 정지 경계: 한 배치(문서 → 원장 → Source → `ui-guard` 핀 → `npm test` / `ssot:check` / `qa:runtime` → 390·1280 before/after 캡처 + reduced-motion 검수 → 커밋) → 보고 → STOP. User 승인 없이 다음 H로 넘어가지 않는다. 1단계 세션은 H5 뒤에 2단계 작업 지시를 쓰고 STOP.
 
 ## Execution Boundary

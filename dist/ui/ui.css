@@ -1427,6 +1427,30 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .t-saved{--rt-face:#173c39;--rt-ink:#93e2d8;--rt-lit:inset 0 4px 0 #6fc7c0}
 .p-night .t-gone .verdict{padding-left:0;padding-right:0;background:none;clip-path:none}
 .p-night .t-gone .verdict:before{display:none}
+/* v2.9.2 H1 — THE STAMP'S END STATE (UI_UX §NIGHT LAYOUT — VERDICT STAMP). What the landing leaves
+   behind is tone, like the cut and the colour above, and is here at every motion setting so reduced
+   motion ends on the same record; playPhase only brings it in (--ink / --tape). The word keeps its
+   one size. The tag isolates so these layers sit on its face and under its word.
+     부상  red ink spread out from the word, on the tag's face
+     중상  the stamp landed slightly crooked
+     사망  no stamp: a black tape laid across under the bare word */
+.p-night .beat .verdict{isolation:isolate}
+.p-night .t-hurt .verdict:after{content:'';position:absolute;z-index:-1;left:30%;right:4%;top:14%;bottom:8%;
+ background:#c2402f80;
+ clip-path:polygon(8% 30%,20% 30%,20% 8%,44% 8%,44% 0,70% 0,70% 16%,88% 16%,88% 40%,100% 40%,100% 72%,90% 72%,90% 92%,
+  62% 92%,62% 100%,34% 100%,34% 86%,12% 86%,12% 64%,0 64%,0 44%,8% 44%);
+ opacity:var(--ink,1);transform:scale(var(--ink,1));pointer-events:none}
+.p-night .t-severe .verdict{rotate:-2.5deg;translate:2px 0}
+.p-night .t-gone .verdict:after{content:'';position:absolute;z-index:-1;left:-10px;right:-16px;top:14%;bottom:2%;
+ background:linear-gradient(180deg,#9aa0ab 0 2px,#3b3f47 2px 4px,#08090b 4px calc(100% - 3px),#2c2f36 calc(100% - 3px) calc(100% - 1px),#000 calc(100% - 1px));
+ clip-path:polygon(0 0,100% 0,100% 20%,97% 20%,97% 45%,100% 45%,100% 75%,98% 75%,98% 100%,0 100%,0 80%,3% 80%,3% 55%,0 55%,0 30%,2% 30%,2% 12%,0 12%);
+ transform-origin:left center;transform:rotate(-1.5deg) scaleX(var(--tape,1));pointer-events:none}
+/* the reversal's first print: the turned-away Outcome in its own tag, laid over the real one's place
+   and gone before the record settles (playPhase adds and removes it; it is never rendered) */
+.p-night .beat .who{position:relative}
+.p-night .beat .verdict.ghost{position:absolute;margin:0;pointer-events:none;opacity:0}
+.p-night .beat .verdict.ghost.t-gone{padding-left:0;padding-right:0;background:none;clip-path:none;box-shadow:none;--rt-ink:#cfd3dd}
+.p-night .beat .verdict.ghost.t-gone:before{display:none}
 /* the lamp on the figure is the other half of the tag's state: the one warm light in the shop
    falls fully on a Great Success, cools on a withdrawal, and thins out as the damage grows. A
    death keeps its existing cold treatment below. Tone only - one size for every Outcome. */

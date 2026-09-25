@@ -1109,3 +1109,24 @@ User 2026-09-25: the D0 briefing's DAY 05 / DAY 30 anchors return as an LED labe
 - the briefing shows header `마왕 조사 개시`, the unchanged lead line, then a `DAY 05` label over exactly `첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.` and a `DAY 30` label over exactly `성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.` (User 2026-09-25), and the unchanged button
 - the two labels read on the record's LED face (16px; 17px on a desk) and the two lines in the record's body weight (15px ink; 16px on a desk), never the secondary tone (RUNTIME UX BUG found on the live build 2026-09-25: the two-line body had no style rule)
 ```
+
+## AMENDMENT — v2.9.2 H1: NIGHT verdict stamp (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.2 H1): UI-Q-v29-27 checks the NIGHT verdict stamp, the cause beat and the reversal overstamp.
+
+```new
+### UI-Q-v29-27 — NIGHT VERDICT STAMP / CAUSE BEAT / REVERSAL OVERSTAMP
+(User 2026-09-25, v2.9.2 H1; owner `UI_UX_v2.8.0.md` §NIGHT LAYOUT — VERDICT STAMP, principle PRESENTATION_PRINCIPLES §GAME FEEL BEAT.)
+NIGHT results reached through 다음 at 390 and 1280, motion on and reduced motion: 성공, 대성공, 퇴각, 부상, 중상, 사망, a
+result with a Hero Item line, a 귀환석 reversal (`rescued`) and a Death turned away (`avoidedDeath`); frames through the landing.
+- the card stands first and the tag lands after it; 성공 / 퇴각 have no hold, 대성공 / 부상 / 중상 / 생환 / 사망 hold ≤ 200 ms
+- the stamp falls from 1.6 × (퇴각 1.3 ×) in 90 ms; on the landing the card dips 4 px (퇴각 2 px) and settles, nothing else moves
+- 대성공 is one gold landing; 부상 keeps a red ink spread, 중상 a slightly misaligned tag, 사망 a black tape laid in ≤ 500 ms
+- a reversal prints the turned-away Outcome (`사망` / `중상`) first, then `생환` overstamps it; the Insurance proof lines appear on that frame
+- with a Hero Item line that line settles once and the figures do not count; without one only the REWARD figures count up
+- the Outcome cue's first note is heard on the landing; on a reversal `rescue` is heard on the overstamp; one visual, one sound, one cause / number at a landing
+- the last motion ends by 770 ms; 다음 / 전체 건너뛰기 answer at any frame and no pending cue plays over the next screen
+- under reduced motion the end state is identical: same tag, ink / misalignment / tape, figures at their values, no first print
+- a stamp on a death, two stamps on a 대성공, a reversal on 만반의 준비 / 강골 / 구급키트 results, a ring, flash, shake or particle
+- a count-up beside a Hero Item line, a count on GROWTH / AFTERMATH figures, a faint first print left in the end state, or a changed Outcome type size
+```

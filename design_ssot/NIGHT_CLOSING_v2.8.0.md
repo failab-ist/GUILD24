@@ -231,6 +231,11 @@ Do not use vague Hero claims such as:
 
 A hidden risk decrease without a proven resolved difference is not Hero feedback.
 
+Display order (User 2026-09-25, v2.9.2 H1): when the Hero Item line is present it is the after-motion
+of the NIGHT verdict stamp - it settles once after the stamp lands and the figures do not count up; the
+cause outranks the money. Wording and proof are unchanged. Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT —
+VERDICT STAMP.
+
 ## ITEM / TRAIT IMPACT
 
 Do not dump every modifier used in calculation.
@@ -298,6 +303,12 @@ Do not add system-authored failure diagnosis such as `전투 부족`, `독 대�
 ## INSURANCE CAUSALITY
 
 Insurance wording must match actual causal effect.
+
+Display order (User 2026-09-25, v2.9.2 H1): on a result carrying `rescued` / `avoidedDeath` the verdict
+first prints the Outcome the Insurance turned away (`사망` when `avoidedDeath`, otherwise `중상`) and the
+resolved label `생환` overstamps it; the proof lines that name the Insurance appear on that overstamp.
+Only those two result flags trigger it; the wording, the proof and the resolved Outcome are unchanged.
+Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT — VERDICT STAMP.
 
 ### RETURN STONE
 When it actually changes escape/retreat outcome:

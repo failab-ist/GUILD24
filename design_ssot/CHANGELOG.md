@@ -3,9 +3,9 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.2 — game feel (타격감), PLANNED (User 2026-09-25)
+## v2.9.2 — game feel (타격감), H1 ADOPTED, H2~H6 PLANNED (User 2026-09-25)
 
-Docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
+H1 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
 (execution order H1 → H2 → H3 → H5 → H4; each batch docs-first, Source after User authorization);
 SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATION and SPEC_INDEX changed.
@@ -29,6 +29,11 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   impact / receipt stub (no "price stamp") and the repeated-input row as tactile without escalation (no combo);
   SPEC_INDEX H2 reads "stub after impact" and the routing names H1~H6. v2.9.2 starts after v2.9.1 closed (User
   2026-09-25, no parallel run); H4's Store Capital part is unblocked. Docs only.
+- H1 NIGHT verdict stamp ADOPTED (User 2026-09-25): UI_UX §NIGHT LAYOUT — VERDICT STAMP (per-Outcome timing table, ink /
+  misalignment / tape end states, one after-motion owner, reversal first print + overstamp, cue on the landing frame);
+  NIGHT_CLOSING §HERO ITEM FEEDBACK / §INSURANCE CAUSALITY display-order notes; UI_UX_QA UI-Q-v29-27; ledgers UI_UX /
+  UI_UX_QA / NIGHT_CLOSING; PRESENTATION H1 row ADOPTED. Source: app.js (NIGHT_STAMP, playPhase night, nightSound),
+  ui.css (stamp end states), audio.js (`hit` on the NIGHT Outcome cues). No copy, rule, Save, RNG or proof change.
 - Play-report fixes (User 2026-09-25, phone captures; outside the H batches, one commit each): the SALE forecast `?`
   balloon laid out 24px wide on a phone (RUNTIME UX BUG, Source only — `158d001`); MORNING printed every Gate after the
   first as the Gate-detail sentence (IMPLEMENTATION BUG, Source only — `0510b53`); the SALE destination plate's Hazard row
