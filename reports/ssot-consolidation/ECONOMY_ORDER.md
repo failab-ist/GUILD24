@@ -499,9 +499,6 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 dayBase = 90 + 2 × (Day - 1)
 ```
 
-```new
-dayBase = 90 + 5 × (Day - 1)    (User 2026-09-24, v2.9.0; was 2 × (Day - 1))
-```
 
 ## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
 
@@ -526,4 +523,18 @@ Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72 (was 0.80), lowered so
 difference against an unrelated Item; measured and reported, not tuned further by WORK. 바가지 keeps its own
 fit-based need, whose fit sums the Item's direct Counter values and the values of the pressed Stats (관련 준비).
 - if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)) -> its missing count resets
+```
+
+## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md` §4): operating cost dayBase 170 + 1 × (Day − 1) and Level factor 0.03. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+× (1 + 0.02 × (avgLevel - 1))
+```
+
+```new
+dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.0 balance close: heavy from DAY 1, flat after — the D1~10
+store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term)
+× (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.0 balance close; was 0.02)
 ```

@@ -647,11 +647,12 @@ Let:
     avgLevel  = Core Roster average Level, or 1 if empty
     avgRarity = Core Roster average numeric Rarity index, or 0 if empty
 
-    dayBase = 90 + 5 × (Day - 1)    (User 2026-09-24, v2.9.0; was 2 × (Day - 1))
+    dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.0 balance close: heavy from DAY 1, flat after — the D1~10
+                                      store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term)
 
     overheadBase
     = dayBase
-      × (1 + 0.02 × (avgLevel - 1))
+      × (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.0 balance close; was 0.02)
       × (1 + 0.06 × avgRarity)
 
 Current Store Support/Event flat or percentage modifiers apply only through their own owner rules.
