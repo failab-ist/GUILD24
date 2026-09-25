@@ -147,11 +147,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.poison)return s.dungeons.some(d=>!d.hazards.includes('poison'));
   if(fx.pilgrimage)return s.dungeons.length>=2&&s.expectedVisitors>=3;
   if(fx.audit)return s.stats.waste>=6;
-  /* EVENT §08 / §09: the newcomer is guaranteed an EXISTING visitor slot and never adds one, so a
-     morning whose roster (after the rest-day countdown) holds nobody who could be drawn has no
-     slot to give - the Event is not eligible then, exactly as it is not when the Living NPC Cap
-     is full (v2.9.0, surfaced by the repeated-strain cut). */
-  if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22&&s.npcs.some(n=>n.alive&&!n.recovery);
+  if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22;
   return true;}
  /* EVENT §DEEP EXPEDITION DAY EXCLUSION: a Day this Run actually holds a 심층원정 produces no
     Normal Event, whether or not the player later nominates anyone. rollEvent draws before it
@@ -277,6 +273,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      without the knight ever visiting. One seating rule serves both. (The Store Support that also
      seated here was remade into 첫 방문 쿠폰 on 2026-09-23 and no longer seats anyone.) */
   if((ev.rookie||ev.royal)&&arrival&&selected.length&&!selected.includes(arrival))selected[selected.length-1]=arrival;
+  /* EVENT §08 (User 2026-09-25, v2.9.0): a morning with no existing slot to give (every other adventurer dead or
+     on recovery days) would seat nobody - the newcomer is then that Day's only visitor. The one case the Event
+     adds a visitor, on a Day that would otherwise have none. */
+  else if((ev.rookie||ev.royal)&&arrival&&!selected.length)selected.push(arrival);
   s.visitorBreakdown={base:baseVisitors,rawBase:rawVisitors,board:baseVisitors-rawVisitors,hub:hubExtra,flyer:flyerExtra,decoration:decoExtra,event:ev.visitors||0,available:available.length};s.queue=selected.map(n=>n.id);s.cursor=0;
   for(const n of selected){n.destination=this.rng.int(0,s.dungeons.length-1);n.claimedDestination=n.destination;n.destinationFinal=true;if(n.traits.includes('liar')&&s.dungeons.length>1&&this.rng.next()<0.5){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(others.length)n.destination=this.rng.pick(others);}/* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49 re-measure amendment: visit income
     narrowed to randomInt(0,80) inclusive (was 0..100) after the four-arm re-measure isolated the

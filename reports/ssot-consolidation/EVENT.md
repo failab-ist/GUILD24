@@ -500,5 +500,5 @@ Full-run balance measurement measures actual Event count; any later chance rebal
 v2.9.0 F3 (2026-09-25): the repeated-strain Death cut surfaced a morning whose whole roster is dead or on recovery days while 신입 모험가 시즌 fires; the guaranteed existing slot cannot exist then, so the eligibility clause is extended in the same spirit as the Living NPC Cap clause (flagged for User confirmation in the F3 report).
 
 ```new
-- if the Day has no existing visitor slot to give (no living adventurer off recovery days on that morning), the Event is not eligible (v2.9.0, 2026-09-25; the same rule for 왕립 기사단 방문)
+- if the Day has no existing visitor slot to give (every other adventurer dead or on recovery days that morning), the newcomer is that Day's only visitor — the one case the Event adds a visitor, on a Day that would otherwise have none (User 2026-09-25, v2.9.0; the same rule for 왕립 기사단 방문)
 ```

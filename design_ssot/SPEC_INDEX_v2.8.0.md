@@ -5,8 +5,8 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_9_0_IN_PROGRESS (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_DOCS_FIRST (Source adoption follows the owner amendments)
+FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25; RELEASE_OPEN_ON_BALANCE (v2.8 canonical baseline closed 2026-09-24)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED (every owner amendment of the 2026-09-24/25 decisions is in Source; npm test / ssot:check / qa:runtime PASS at the close-out commit)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -34,10 +34,10 @@ Scope (owner amendments are the truth; this list is routing):
     A. the transaction is visible — counter tray, hand-over motion into the Bag, customer reaction,
        customer exit/entry, price-mode sound family, refusal beat        -> PRESENTATION_PRINCIPLES / UI_UX / SALE
     B. the screen says what to do — DAY 1~3 task line, first-order coach order, Hazard rows that
-       say what resists them, today-fit emphasis on ORDER, per-Gate visitor counts (counts only),
+       say what resists them, per-Gate visitor counts (counts only; the ORDER today-fit emphasis was retired by F6, User 2026-09-24),
        NIGHT -> next-decision line, shorter D1 briefing / guide              -> UI_UX / ECONOMY_ORDER / NIGHT_CLOSING / COPY
-    C. SALE reads at a glance — today's pressure tag on the Stat grid, matching-effect emphasis on
-       rows, one delta list after a sale, price-role words, no always-on Death %, folded last
+    C. SALE reads at a glance — today's pressure tag on the Stat grid, fixed per-category effect order on
+       rows (the matching-effect emphasis was retired by F6), one delta list after a sale, the per-customer receipt stub, price-role words, no always-on Death %, folded last
        expedition below Stats; first-sale coach diet (done)                  -> SALE / UI_UX / COPY
     D. simpler rules — Supply becomes Fatigue recovery only (no required Supply, Fatigue 0~40 with
        five bands), single-Stat Hazard pressure 3/3/3 without 투력 (no Gate shares a Stat), Store Support card copy in two
@@ -230,10 +230,15 @@ v2.9.0 is ready to close when:
 - the first SALE teaches four marks; the rest are contextual
 - Supply is one sentence (`음식·음료는 피로를 줄인다`) and Fatigue bands 0~40 are adopted and measured
 - every Hazard presses one non-투력 Stat and every non-투력 Stat is pressed by three Hazards
-- ORDER shows today-fit emphasis and per-Gate visitor counts without a new badge or hint
+- ORDER shows per-Gate visitor counts without a new badge, hint or fit emphasis (F6 retired the emphasis; the judgement is the player's)
 - Store Build effects are understood from the cards; SALE -> NIGHT causality is legible (the former
   v2.9+ entry gate)
 - no unapproved 3.0+ structural expansion is pulled into v2.9.0
+
+Close-out state 2026-09-25: every item above is adopted in Source (F2 … F7, I-4; CHANGELOG lists the commits).
+The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29-balance-finding-handoff.md`
+(F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
+session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
 

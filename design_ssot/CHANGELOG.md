@@ -3,11 +3,17 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.0 — in progress (User decisions 2026-09-24)
+## v2.9.0 — implementation complete 2026-09-25; release open on the BALANCE FINDING (User decisions 2026-09-24/25)
 
 Theme: easy to learn, hard to master. Readability, onboarding, a visible transaction, simpler rules.
 
 Docs-first. Each owner amendment is listed when committed.
+
+State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
+Open before the tag: the BALANCE FINDING (`reports/v29-balance-finding-handoff.md`, decisions taken in a separate session) and 7-b.
+
+- Close-out (2026-09-25): EVENT §08 — on a morning with no existing slot the newcomer is the Day's only visitor (User);
+  평생 단골제 card drops `(하루 1회)`; SPEC_INDEX status / acceptance updated; WORK_STATE carries the balance handoff.
 
 - SPEC_INDEX: v2.9.0 purpose / scope, VERSION POLICY, v2.9.0 release acceptance; v2.8 sections kept as
   closed record. Deferred router renamed to GUILD24_v3.0_PLUS_DEFERRED_DETAILED.md (content unchanged).

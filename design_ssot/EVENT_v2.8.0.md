@@ -694,7 +694,7 @@ If Living NPC Cap has room:
 - total visitor count does not increase because of this Event
 - the Event does not create a special Level/Rarity band
 - if no legal newcomer can be generated because the Living NPC Cap is full, the Event is not eligible
-- if the Day has no existing visitor slot to give (no living adventurer off recovery days on that morning), the Event is not eligible (v2.9.0, 2026-09-25; the same rule for 왕립 기사단 방문)
+- if the Day has no existing visitor slot to give (every other adventurer dead or on recovery days that morning), the newcomer is that Day's only visitor — the one case the Event adds a visitor, on a Day that would otherwise have none (User 2026-09-25, v2.9.0; the same rule for 왕립 기사단 방문)
 
 The guaranteed newcomer replaces one ordinary selected visitor when necessary.
 

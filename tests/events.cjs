@@ -290,20 +290,31 @@ test('EVENT 왕립 기사단 방문: the royal newcomer is in today queue exactl
     left with the 2026-09-23 remake to 첫 방문 쿠폰) */
  const shop=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  const seat=shop.match(/if\(\(ev\.rookie\|\|ev\.royal\)&&arrival[^\n]*/g)||[];
- assert.equal(seat.length,1,'exactly one deterministic seating rule');
+ /* v2.9.0 (User 2026-09-25): plus the one empty-morning case, where the newcomer is the Day's only visitor */
+ assert.equal(seat.length,2,'one deterministic seating rule and its empty-morning case');
  assert.ok(/selected\[selected\.length-1\]=arrival/.test(seat[0]),'and it replaces a slot rather than adding one');
+ assert.ok(/&&!selected\.length\)selected\.push\(arrival\)/.test(seat[1]),'the empty morning seats the newcomer alone');
 });
 
-test('EVENT §08 v2.9.0: a newcomer Event is not eligible on a morning with no existing visitor slot',()=>{
- const g=fresh('no-slot');for(let d=0;d<3;d++){g.run.money=5000;advance(g);}
- const rookie=DATA.events.find(x=>x.id==='rookie'),royal=DATA.events.find(x=>x.id==='royal');
- assert.ok(g.eventEligible(rookie)&&g.eventEligible(royal),'sanity: eligible with a living roster');
- for(const n of g.run.npcs)n.recovery=2;
- assert.ok(!g.eventEligible(rookie)&&!g.eventEligible(royal),'everyone on recovery days: no slot to give, not eligible');
- g.run.npcs[0].recovery=0;
- assert.ok(g.eventEligible(rookie),'one adventurer off recovery is one slot');
- for(const n of g.run.npcs)n.alive=false;
- assert.ok(!g.eventEligible(rookie),'no living adventurer: not eligible');
+test('EVENT §08 v2.9.0 (User 2026-09-25): on a morning with no existing slot the newcomer is the Day\'s only visitor',()=>{
+ let seen=0;
+ for(let i=0;i<40&&seen<3;i++){
+  const g=fresh('no-slot-'+i);
+  // reach a morning that can hold a Normal Event and is not a third-day intake (which would add a drawable body)
+  for(let d=0;d<12&&g.run.phase!=='end'&&!(g.eventEligibleDay(g.run.day+1)&&(g.run.day+1)%3!==0);d++){g.run.money=5000;advance(g);}
+  if(g.run.phase==='end'||!g.eventEligibleDay(g.run.day+1))continue;
+  for(const n of g.run.npcs){n.recovery=3;n.injury=2;}      // nobody can be drawn tomorrow
+  const snap=Save.export(g.account,g.run);
+  const run=withEvent=>{const r=Save.import(snap);const h=new Game(r.account,r.run);h.autosave=false;if(withEvent)force(h,'rookie');else h.rollEvent=()=>null;h.run.day++;h.morning();return h.run;};
+  const plain=run(false),evt=run(true);
+  if(evt.event?.id!=='rookie')continue;
+  seen++;
+  assert.equal(plain.queue.length,0,'without the Event the Day seats nobody');
+  const newcomer=evt.npcs[evt.npcs.length-1];
+  assert.deepEqual(evt.queue,[newcomer.id],'the newcomer is the only visitor');
+  assert.equal(evt.expectedVisitors,plain.expectedVisitors,'the intake itself did not change');
+ }
+ assert.ok(seen>0,'the no-slot morning was reached');
 });
 
 test('EVENT 왕립 기사단 방문 / 신입 모험가 시즌: neither Event raises the visitor count',()=>{
@@ -328,6 +339,8 @@ test('EVENT 왕립 기사단 방문 / 신입 모험가 시즌: neither Event rai
    /* the Day's intake is what the Event may not raise, and it is the number the seating rule
       could actually move: the newcomer replaces a drawn slot rather than adding one. */
    assert.equal(evt.expectedVisitors,plain.expectedVisitors,id+': the intake did not change');
+   /* EVENT §08 v2.9.0 (User 2026-09-25): a morning that would seat nobody seats the newcomer alone */
+   if(plain.queue.length===0){assert.deepEqual(evt.queue,[evt.npcs[evt.npcs.length-1].id],id+': on an empty morning the newcomer is the only visitor');continue;}
    assert.ok(evt.queue.includes(evt.npcs[evt.npcs.length-1].id),id+': the newcomer took a slot');
    assert.equal(evt.queue.filter(x=>x===evt.npcs[evt.npcs.length-1].id).length,1,id+': exactly once');
    assert.equal(evt.npcs.length,plain.npcs.length+1,id+': exactly one newcomer was generated');
