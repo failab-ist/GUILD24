@@ -512,7 +512,7 @@ PASS:
 ### DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
 
 SALE must not display separate 성공/퇴각/부상 future Fatigue rows.
-SALE shows the one decision line `피로 {A} → 출발 {B}` only on the counter tray for a chosen Food/Drink; no always-on Fatigue line and no `보급 회복` / `보급 부족` / `남은 보급` tail (User 2026-09-24, v2.9.0).
+SALE shows no Fatigue arithmetic line: the counter tray lists a Food/Drink's own `피로 회복` row only; no `피로 {A} → 출발 {B}`, no always-on Fatigue line and no `보급 회복` / `보급 부족` / `남은 보급` tail (User 2026-09-25; the v2.9.0 line is retired).
 
 Supply/Fatigue runtime arithmetic follows the current owner truth.
 

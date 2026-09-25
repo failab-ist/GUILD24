@@ -731,8 +731,8 @@ SALE shelf holding an Item that counters one of the customer's Gate Hazards, an 
 - no badge, no verdict word, no row reorder
 - ORDER offer rows follow the same rule against today's Gate once the D-4 batch adopts it
 ### UI-Q-v29-7 — ONE DELTA LIST
-Select an Item that changes a Stat and releases a Fatigue band; then an Item that changes a Stat only; then commit one of them.
-- `판매 후 변화` is one list of what changes: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and the §4-17 line `피로 {A} → 출발 {B}`
+Select a Food/Drink that releases a Fatigue band for a fatigued customer; then an Item that changes a Stat only; then commit one of them; the same Items in the till and in FINAL preparation.
+- `판매 후 변화` lists only the Item's own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`); no `피로 완화` row and no `피로 {A} → 출발 {B}` line anywhere (User 2026-09-25)
 - no outlook delta row (no `전투 전망 A → B`, no `환경 대응 A → B`) for a selected or a committed Item
 - the frozen SALE-entry outlook is not repainted inside the till and never changes for a selected Item (UI-Q86)
 - `특수 효과` and the shelf-life line stay
@@ -1129,4 +1129,16 @@ result with a Hero Item line, a 귀환석 reversal (`rescued`) and a Death turne
 - under reduced motion the end state is identical: same tag, ink / misalignment / tape, figures at their values, no first print
 - a stamp on a death, two stamps on a 대성공, a reversal on 만반의 준비 / 강골 / 구급키트 results, a ring, flash, shake or particle
 - a count-up beside a Hero Item line, a count on GROWTH / AFTERMATH figures, a faint first print left in the end state, or a changed Outcome type size
+```
+
+## AMENDMENT — v2.9.2: `판매 후 변화` lists the Item's own effects only (User decision 2026-09-25)
+
+User decision 2026-09-25: no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line; the inherited line below is superseded.
+
+```text
+- displayed delta is attributed to `피로 완화` / Condition source
+```
+
+```new
+- the band recovery is not listed in `판매 후 변화` and is never attributed to the Item (User 2026-09-25)
 ```

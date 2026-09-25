@@ -949,10 +949,10 @@ PASS:
 (User 2026-09-24, v2.9.0)
 
 SETUP:
-Select an Item that changes a Stat and releases a Fatigue band; then an Item that changes a Stat only; then commit one of them.
+Select a Food/Drink that releases a Fatigue band for a fatigued customer; then an Item that changes a Stat only; then commit one of them; the same Items in the till and in FINAL preparation.
 
 PASS:
-- `판매 후 변화` is one list of what changes: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and the §4-17 line `피로 {A} → 출발 {B}`
+- `판매 후 변화` lists only the Item's own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`); no `피로 완화` row and no `피로 {A} → 출발 {B}` line anywhere (User 2026-09-25)
 - no outlook delta row (no `전투 전망 A → B`, no `환경 대응 A → B`) for a selected or a committed Item
 - the frozen SALE-entry outlook is not repainted inside the till and never changes for a selected Item (UI-Q86)
 - `특수 효과` and the shelf-life line stay
@@ -1059,7 +1059,7 @@ PASS:
 
 PASS:
 - effective Core Stats may rise according to the current Fatigue owner (`DUNGEON_HAZARD_v2.8.0.md` bands)
-- displayed delta is attributed to `피로 완화` / Condition source
+- the band recovery is not listed in `판매 후 변화` and is never attributed to the Item (User 2026-09-25)
 - displayed pre-supply Hazard Readiness remains frozen rather than being replaced by a new readiness label
 - displayed pre-supply 실패 시 사망 위험 remains frozen rather than being replaced by a new percentage
 - UI does not imply that 집중 사탕 directly grants those Stats

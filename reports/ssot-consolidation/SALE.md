@@ -309,12 +309,12 @@ D. another explicitly owned Trait / Relic / Boss modifier
 Current preparation can legitimately change through more than one channel after a Food/Drink Item is committed (User 2026-09-24, v2.9.0):
 B. current-Fatigue recovery / Fatigue band change
 C. another explicitly owned Trait / Relic / Boss modifier
-- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes (`피로 {A} → 출발 {B}`); they must not recalculate, replace or repaint the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 readout, and no outlook delta row exists (User 2026-09-24, v2.9.0)
+- post-commit delta rows may show the exact Core-Stat / Counter / 피로 회복 changes the Item itself makes, never a Fatigue arithmetic line (User 2026-09-25); they must not recalculate, replace or repaint the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 readout, and no outlook delta row exists (User 2026-09-24, v2.9.0)
 - Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.8.0.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - current `집중 사탕` shows `공포 대응 +10 / 피로 회복 3`
 - if there is no Fatigue band change, selling it must not create a Core-Stat delta
 - if its 피로 회복 releases a Fatigue band, effective Core Stats may rise through Fatigue recovery
-- that indirect change must be presented as `피로 완화` or an equivalent source-readable system effect, never as if 집중 사탕 itself granted those Stats
+- that indirect change is never presented as if 집중 사탕 itself granted those Stats, and `판매 후 변화` does not list it — only the Item's own effects are listed (User 2026-09-25; the `피로 완화` row is retired)
 ```
 
 ## AMENDMENT — v2.9.0 transaction beat / SALE at a glance (User decision 2026-09-24)
@@ -324,7 +324,7 @@ User decision 2026-09-24 (v2.9.0), D-3 rule sheet: the transaction is shown by p
 ```new
 `finalizeCustomer -> nextCustomer` carries the customer exit-then-entry beat (the current customer exits, then the next arrives with the existing entry). It is presentation only and changes no state (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT) (User 2026-09-24, v2.9.0).
 - the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.8.0.md` §BAG PRESENTATION); tap remains sufficient, no drag is required (User 2026-09-24, v2.9.0)
-After an Item is chosen, `판매 후 변화` is one delta list of what changes only: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
+After an Item is chosen, `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `원정 소지금 획득 0%p → 40%p`); no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation (User 2026-09-25, replaces the v2.9.0 derived / departure rows). The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 The always-on outlook is two cells, 전투 전망 + 환경 대응. The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 The exact 실패 시 사망 위험 % sits at that Help level (전투 전망 help, NPC detail), not as an always-on cell (User 2026-09-24, v2.9.0).
 The Death risk % is frozen where it is now shown: the 전투 전망 help and the NPC detail (User 2026-09-24, v2.9.0).

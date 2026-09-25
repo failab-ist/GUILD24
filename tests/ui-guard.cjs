@@ -1925,21 +1925,16 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
   assert.ok(r.direct.every(x=>!core.has(x.key)),'집중 사탕 never grants a Core Stat directly');
   assert.ok(r.direct.some(x=>x.key==='supply')&&r.direct.some(x=>x.key==='fear'),'its own two channels are its own');
  }
- // with neither system moving, there is nothing derived to report
- assert.deepEqual(Presentation.preview(mk({}),gate({}),[],'candy').derived,[],'no system moved, no system row');
- // v2.9.0: no Gate requires Supply, so there is no Supply Deficit and no relief row (DUNGEON_HAZARD §SUPPLY -> FATIGUE)
- assert.deepEqual(Presentation.preview(mk({}),gate({requiredSupply:3}),[],'candy').derived,[],'a stale requiredSupply field on a Gate moves nothing');
- // crossing a Fatigue band is reported as Fatigue
- const rested=Presentation.preview(mk({fatigue:10}),gate({}),[],'candy');
- assert.deepEqual(rested.derived.map(x=>x.label),['피로 완화'],'a crossed Fatigue band names itself');
  // an Item that really does grant a Stat still reports it as its own
  const potion=DATA.itemBy.potion;
  assert.ok(potion.effects.combat>0);
  const own=Presentation.preview(mk({}),gate({}),[],'potion');
  assert.ok(own.direct.some(x=>x.key==='combat'),'a real direct Stat is the Item\'s own');
- assert.deepEqual(own.derived,[],'and brings no system row with it');
- // the hidden Supply-deficit formula is never exposed by the attribution
- for(const r of rested.derived)assert.ok(!/[0-9]+%|penalty|deficit/i.test(r.text),'the row names the channel, not the formula: '+r.text);
+ /* User 2026-09-25: `판매 후 변화` lists the Item's own effects only - a Fatigue band the Item's 피로 회복
+    releases is not listed at all, and nothing but the direct rows leaves the preview */
+ const rested=Presentation.preview(mk({fatigue:10}),gate({}),[],'candy');
+ assert.deepEqual(Object.keys(rested),['direct'],'no derived row and no departure line exist');
+ assert.ok(!/피로 완화|→ 출발/.test(read('dist/ui/presentation.js').replace(/\/\*[\s\S]*?\*\//g,'')),'the retired rows are gone from the source');
  /* SA-Q30: the two analytical group names that used to sit over the direct/derived rows
     (이 상품이 직접 / 보급이 상태에 미치는 영향) were the label-density bug v2.8 closes - one
     heading (판매 후 변화) now covers the whole list, and only the `effects`/`effects derived`
@@ -1949,8 +1944,9 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  assert.ok(!/이 상품이 직접/.test(tillEmitted)&&!/보급이 상태에 미치는 영향/.test(tillEmitted),
   'the old per-group analytical headings are gone');
  assert.ok(tillEmitted.includes('<h4>판매 후 변화</h4>'),'one heading covers the whole list');
- assert.ok(/changes\.length\?'<ul class="effects">/.test(tillEmitted)&&/moved\.derived\.length\?'<ul class="effects derived">/.test(tillEmitted),
-  'and a group with nothing in it is still absent');
+ assert.ok(/changes\.length\?'<ul class="effects">/.test(tillEmitted)&&!/moved\.derived|moved\.departure/.test(tillEmitted),
+  'the till lists the Item\'s own rows only (User 2026-09-25)');
+ assert.ok(!/moved\.derived|moved\.departure/.test(fn('tray')),'and so does the counter tray');
  assert.ok(/\.delta-src\{/.test(css),'the remaining 특수 효과 heading keeps its own style');
 });
 
@@ -1958,7 +1954,8 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
- assert.ok(/\['supply','\.counter-tray \.tray-delta \.fatigue'/.test(steps),'the Supply/Fatigue lesson is on the tray\'s 피로 A → 출발 B row, so it teaches the first time a Food/Drink actually moves Fatigue (v2.9.0)');
+ assert.ok(/\['supply','\.counter-tray \.tray-delta \.fatigue'/.test(steps),'the Supply/Fatigue lesson is on the tray\'s 피로 회복 row for a fatigued customer (User 2026-09-25; the 피로 A → 출발 B row is retired)');
+ assert.ok(/r\.key==='supply'&&n\.fatigue>0\?'fatigue'/.test(fn('tray')),'that row carries the anchor only when the customer has Fatigue to lose');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
     verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
     reflects 보급 - it does not, `Game.arrive()` snapshots it with an empty pack (see
@@ -2007,7 +2004,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* v2.9.0: no always-on Fatigue line under the outlook; the tray row carries the arithmetic */
- assert.ok(!/class="ingredients"/.test(app)&&/class="fatigue"/.test(fn('tray')),'the Fatigue arithmetic lives on the tray row only');
+ assert.ok(!/class="ingredients"/.test(app),'no always-on Fatigue line under the outlook');
  /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
     a desktop copy and a phone copy with one always display:none, so taking the first DOM match
     silently dropped those lessons on a phone. */

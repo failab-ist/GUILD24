@@ -1273,9 +1273,10 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  if(!n||!st){const t=game.account.tutorial||{};return !t.skipped&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
- const parts=[...moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>'),
-  ...moved.derived.map(r=>'<b>'+E(r.label+' '+r.text)+'</b>')];
- if(moved.departure)parts.push('<b class="fatigue">'+E(moved.departure)+'</b>');
+ /* User 2026-09-25: the Item's own effects only. A Food/Drink's `피로 회복` row for a customer who carries
+    Fatigue is the SUPPLY lesson's anchor (`.fatigue`), which replaced the retired `피로 A → 출발 B` line. */
+ const parts=moved.direct.map(r=>'<b class="'+[r.bad?'effect-bad':'',r.key==='supply'&&n.fatigue>0?'fatigue':''].filter(Boolean).join(' ')+'">'
+  +E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  const life='폐기까지 '+(st.expires-s.day)+'일';
  return '<div class="counter-tray" role="region" aria-label="계산대">'
@@ -1320,18 +1321,13 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     rose because this Item's Supply relieved a Supply Deficit, or crossed a Fatigue band, is
     still never presented as if the Item itself granted that Stat - but the two group names
     that used to sit over them (이 상품이 직접 / 보급이 상태에 미치는 영향) were the analytical
-    label stack v2.8 removes: one heading now covers the whole list, and only the underlying
-    `effects`/`effects derived` class still tells them apart for styling. */
+    label stack v2.8 removes: one heading now covers the whole list. Since User 2026-09-25 the list
+    holds the Item's own effects only - no derived row and no departure line are left under it. */
  +'<h4>판매 후 변화</h4>'
- +(changes.length||moved.derived.length?'':'<ul class="effects"><li><span>현재 준비 변화 없음</span><b></b></li></ul>')
+ +(changes.length?'':'<ul class="effects"><li><span>현재 준비 변화 없음</span><b></b></li></ul>')
  +(changes.length?'<ul class="effects">'
    +changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join('')
    +'</ul>':'')
- +(moved.derived.length?'<ul class="effects derived">'
-   +moved.derived.map(r=>'<li><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')
-   +'</ul>':'')
- /* v2.9.0 ONE DELTA LIST: the departure line, only when this Item moves it (COPY_AUDIT §4-17) */
- +(moved.departure?'<ul class="effects derived"><li><span></span><b>'+E(moved.departure)+'</b></li></ul>':'')
  /* SA-Q30: conditional non-delta Item truth - a Counter this customer does not need today, an
     Insurance that only fires on a bad outcome - is still stated plainly rather than folded
     away, under its approved v2.8 heading. */

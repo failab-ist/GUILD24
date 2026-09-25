@@ -57,17 +57,10 @@ function traitText(id){const t=D.traitBy[id],parts=traitEffects(id).map(r=>r.lab
 function known(d,g){return d.hazards;}
 /* SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH. Preparation can move through four different
    channels, and a single flat list of before -> after makes every one of them look like a
-   direct Item Stat. So the change is split by its PROVEN source rather than by its size:
-
-     direct   the Item's own contribution, read off the preparation's per-item breakdown
-     derived  a system that moved because the Item's Supply moved - the unified Supply
-              Deficit relief, or a canonical Fatigue penalty band being crossed
-
-   A Core Stat that moved without the Item contributing to it is never listed as the Item's:
-   it moved through a system, and that system says so in its own row. The hidden Supply-deficit
-   formula stays hidden - the row names the channel, never the arithmetic behind it. */
-/* v2.9.0: the five Fatigue bands have one owner, Dungeon.fatigueBand */
-const fatigueBand=f=>G.Dungeon.fatigueBand(f).min;
+   direct Item Stat. Only the Item's own contribution is listed, read off the preparation's
+   per-item breakdown. A Core Stat that moved without the Item contributing to it - a Fatigue band
+   released by its 피로 회복 - is never listed as the Item's, and since User 2026-09-25 it is not
+   listed at all (the derived `피로 완화` row and the departure line are retired). */
 function preview(n,d,fac,item,final){
  const visible={...n,traits:traits(n)};
  const a=G.Dungeon.prepare(visible,d,fac),b=G.Dungeon.prepare({...visible,pack:[...visible.pack,item]},d,fac);
@@ -76,7 +69,7 @@ function preview(n,d,fac,item,final){
  const before=final?final.before:a.effects,after=final?final.after:b.effects,stat=new Set(G.Adventurer.keys);
  const own=b.itemStats.filter(x=>x.item===item)
   .reduce((m,x)=>{for(const[k,v]of Object.entries(x.stats))m[k]=(m[k]||0)+v;return m;},{});
- const direct=[],derived=[];
+ const direct=[];
  for(const k of Object.keys(labels)){
   if(['priceBias','buyBias','variance'].includes(k))continue;
   const x=before[k]||0,y=after[k]||0;
@@ -84,14 +77,10 @@ function preview(n,d,fac,item,final){
   if(stat.has(k)&&!own[k])continue;  // moved through a system, reported as that system below
   direct.push({key:k,label:labels[k],before:x,after:y,bad:negative.has(k)?y>x:y<x});
  }
- if(fatigueBand(after.effectiveFatigue)<fatigueBand(before.effectiveFatigue))
-  derived.push({key:'fatigueBand',label:'피로 완화',
-   text:'피로 '+before.effectiveFatigue+' → '+after.effectiveFatigue+' · '+G.Dungeon.fatigueBand(before.effectiveFatigue).name+' → '+G.Dungeon.fatigueBand(after.effectiveFatigue).name});
- /* v2.9.0 ONE DELTA LIST (COPY_AUDIT §4-17): the only Fatigue arithmetic under a chosen Item is
-    the departure line, and only when this Item moves it. */
- const departure=!final&&after.fatigueBeforeExpedition!==before.fatigueBeforeExpedition
-  ?'피로 '+(n.fatigue||0)+' → 출발 '+after.fatigueBeforeExpedition:null;
- return {direct,derived,departure};
+ /* User 2026-09-25 (SALE §ONE DELTA LIST, COPY_AUDIT §4-17 retired): `판매 후 변화` lists only what the
+    Item itself changes. A Stat a Fatigue band gave back, and the departure-Fatigue arithmetic, are
+    not the Item's own and are not listed at all - no `피로 완화` row, no `피로 A → 출발 B` line. */
+ return {direct};
 }
 function returning(n){if(!n.introduced||n.newToday||!n.records.length)return null;const r=n.records.at(-1),changes=(r.changes||[]).filter(c=>c.startsWith('Lv.')||c.startsWith('새 특성'));if(r.injury>n.injury)changes.push(n.injury?'부상 완화':'부상 회복');if(r.recovery>0&&!n.recovery)changes.push('휴식 종료');return {day:r.day,outcome:r.outcome,changes,impact:supplyLines(r)[0]?.text||null};}
 /* ---- NIGHT: one resolved state, told four ways --------------------------------

@@ -39,6 +39,10 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   first as the Gate-detail sentence (IMPLEMENTATION BUG, Source only — `0510b53`); the SALE destination plate's Hazard row
   took three lines on a phone — `{위험}` and `대응 {N} 필요` now share the first line and the conversion line sits under
   the name (User decision; COPY_AUDIT §4-16 render note, UI_UX_QA F2-b line).
+- `판매 후 변화` lists the Item's own effects only (User 2026-09-25, phone capture of 길드 특제 도시락): the derived `피로 완화`
+  row and the `피로 {A} → 출발 {B}` line are retired on the counter tray, the till and FINAL preparation; the SUPPLY lesson
+  moves to the tray's `피로 회복` row for a fatigued customer (User choice). SALE, UI_UX, UI_UX_QA UI-Q-v29-7, DUNGEON_HAZARD,
+  DUNGEON_ITEM_QA, SOURCE_ADOPTION_QA, COPY_AUDIT §3-5 / §3-7 / §4-17 (retired); ledgers edited in place.
 
 ## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted, CLOSED 2026-09-25 (main `d23d076`, tag `v2.9.1`)
 

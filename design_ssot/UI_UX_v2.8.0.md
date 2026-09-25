@@ -645,7 +645,7 @@ Direct Item changes and deterministic derived changes are rows under that headin
 Do not stack analytical subgroup headings that increase height.
 
 One delta list after choosing an Item (User 2026-09-24, v2.9.0):
-- `판매 후 변화` lists only what changes — direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`
+- `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `원정 소지금 획득 0%p → 40%p`); no `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation (User 2026-09-25)
 - the frozen four-cell outlook is not repainted inside the till and never changes for a selected Item
 - `특수 효과` and the shelf-life line stay
 - on the counter tray the delta list may be set on one wrapping line, rows joined by ` · ` (User 2026-09-24, v2.9.0)
@@ -688,7 +688,7 @@ If delta text is shown:
 - every changed line must be an actual runtime change
 - each changed line must expose a readable source class when the cause is not the Item's direct listed effect
 - an Item directly changes only the channels listed in `ITEM_v2.8.0.md`
-- Food/Drink 피로 회복 that lowers current Fatigue may restore the effective Stats a Fatigue band pressed when the band changes; this must read as `피로 완화` / Condition-derived feedback (User 2026-09-24, v2.9.0)
+- Food/Drink 피로 회복 that lowers current Fatigue may restore the effective Stats a Fatigue band pressed when the band changes; that recovery is never shown as the Item's own Stat and `판매 후 변화` does not list it (User 2026-09-25; the v2.9.0 `피로 완화` row is retired)
 
 Current `집중 사탕` is the canonical clarity example:
 
@@ -698,7 +698,7 @@ Current `집중 사탕` is the canonical clarity example:
 
 Therefore:
 - without a Fatigue penalty-band change, it must not show a Core-Stat increase
-- if its 피로 회복 releases a Fatigue band, the Stats that band pressed may recover as a **피로 완화** result
+- if its 피로 회복 releases a Fatigue band, the Stats that band pressed may recover; `판매 후 변화` still lists only its own 공포 대응 / 피로 회복 (User 2026-09-25)
 
 A generic `판매 후 변화` block is acceptable only when direct Item effects and derived system effects are clearly separated.
 If that distinction is not immediately readable, remove the synthetic block.
@@ -2054,7 +2054,7 @@ Hazard tutorial teaches:
 - natural Stat and Item Counter both contribute
 - readiness is summarized by 취약/불안/대응/충분
 
-Supply/Fatigue tutorial teaches one fact, on the counter tray's first `피로 A → 출발 B` row the Player meets — a Food/Drink chosen for a fatigued customer (User 2026-09-24, v2.9.0):
+Supply/Fatigue tutorial teaches one fact, on the counter tray's `피로 회복` row the first time a Food/Drink is chosen for a fatigued customer (User 2026-09-25; it sat on the retired `피로 A → 출발 B` row):
 - Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신
 
 First SALE (User 2026-09-24): five marks only — destination, Hazard, Stats (the customer's own 능력치: they differ by Job / rarity / Level, 투력 drives combat, the other three answer the Hazards; COPY_AUDIT §3-7 STATS), outlook, price. Great Success, Supply,
