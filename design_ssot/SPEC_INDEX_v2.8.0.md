@@ -240,6 +240,32 @@ The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29
 (F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
+## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25, PLANNED)
+
+Version routing (User 2026-09-25): the balance session is **v2.9.1**; the game feel presentation
+batches are **v2.9.2**. Both run in separate sessions on branches from `main`; each is docs-first and
+touches Source only after the User authorizes that batch.
+
+- v2.9.1 BALANCE: `reports/v29-balance-finding-handoff.md` (decisions 1–8, 7-b), rule owners per
+  WORK_STATE §Next — BALANCE SESSION.
+- v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
+  (principles table, contract, H1~H5 rows). Routing per batch, in execution order:
+
+      H1 NIGHT 판정 도장 (verdict stamp, per-Outcome weight, Insurance reversal overstamp)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §NIGHT LAYOUT / NIGHT_CLOSING (display order) / UI_UX_QA
+      H2 SALE 계산대 (key press, first coin tick, consecutive-sale rhythm, stub after the stamp)
+                                     -> PRESENTATION §TRANSACTION BEAT A1 / A5 / A8 / UI_UX §SALE — COUNTER TRAY / UI_UX_QA
+      H3 ORDER 확정 (crates landing per SKU, balance count-down)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §ORDER — WAREHOUSE DISCLOSURE / ECONOMY_ORDER_QA or UI_UX_QA
+      H5 FINAL 최종 토벌 (three stamps on a win, tape on a loss)
+                                     -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
+      H4 CLOSING 마감 (rows print one by one, profit stamp; Store Capital part after v2.9.1)
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
+
+  Contract: presentation-only, ≤ 320 ms per beat (사망 tape ≤ 500 ms), no input block, reduced-motion
+  no-op, motion inside the card, no full-screen shake, no combo / streak UI, no praise word, no rule /
+  Save / RNG / proof change. Not in v2.9.2: the `어제보다 +N` line (v3.0+ router), new copy.
+
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
 
 v2.8 is ready to close when:

@@ -3,6 +3,18 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.2 — game feel (타격감), PLANNED (User 2026-09-25)
+
+Docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
+counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
+(execution order H1 → H2 → H3 → H5 → H4; each batch docs-first, Source after User authorization);
+SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATION and SPEC_INDEX changed.
+
+## v2.9.1 — balance, PLANNED (User 2026-09-25)
+
+The v2.9.0 BALANCE FINDING is resolved in its own session as v2.9.1 (`reports/v29-balance-finding-handoff.md`,
+decisions 1–8 and 7-b; WORK_STATE §Next — BALANCE SESSION). Nothing adopted yet.
+
 ## v2.9.0 — implementation complete 2026-09-25; release open on the BALANCE FINDING (User decisions 2026-09-24/25)
 
 Theme: easy to learn, hard to master. Readability, onboarding, a visible transaction, simpler rules.

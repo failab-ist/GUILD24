@@ -12,17 +12,19 @@ STATE: V2_9_0_IMPLEMENTATION_COMPLETE — RELEASE OPEN ON BALANCE
 - v2.9.0 batches D-0 … D-5, I-1 … I-4, K, T, U, R1 … R6, F1 … F7: all adopted in Source (`design_ssot/CHANGELOG.md` §v2.9.0 lists each with commits)
 - verification at the close-out commit: `npm test` PASS (tests/copy.cjs whole), `npm run ssot:check` PASS, `npm run qa:runtime` 5/5
 - last tagged release: v2.8 (`49a291f`); v2.9.0 is deployed from main but not tagged
+- version routing (User 2026-09-25): balance = v2.9.1, game feel (타격감) = v2.9.2; both in separate sessions, branches from `main`
+- v2.9.2 game feel batches H1 … H5 are registered as PLANNED (docs only: PRESENTATION §GAME FEEL BEAT, SPEC_INDEX §v2.9.1 / v2.9.2, CHANGELOG); no Source touched
 - completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
 ## In Progress
 
 - none on this branch
 
-## Next — BALANCE SESSION (handoff)
+## Next — v2.9.1 BALANCE SESSION (handoff)
 
 Read AGENTS.md first and follow it.
 
-- Role / base: balance WORK on a new branch from `main` (`3f18ceb` or later).
+- Role / base: balance WORK on a new branch from `main` (`3f18ceb` or later); the result is v2.9.1.
 - Active task: resolve the v2.9.0 BALANCE FINDING — the F3 / F4 rule values collapsed run survival in measurement
   (balanced policy reach D30 0.122 → 0.007, clear 0.077 → 0.007, avg money 1358 → 407). Decide the eight items,
   re-measure the chosen combination, adopt the approved values in the routed owners and Source, then close 7-b.
@@ -38,6 +40,24 @@ Read AGENTS.md first and follow it.
 - User decisions already taken and not yet promoted anywhere: none. Decisions still open: the eight in the handoff report, and 7-b.
 - Not regenerated: `reports/deco-balance` (Store Capital rates halved; capital near zero under the current state).
 - Stop boundary: BALANCE FINDING → report the measured combination and stop for User approval before adopting values (AGENTS §9). After adoption: re-run `npm test`, `ssot:check`, `qa:runtime`, remeasure, then the release can close (tag `v2.9.0`, SPEC_INDEX / CHANGELOG state, WORK_STATE).
+
+## Next — v2.9.2 GAME FEEL SESSION (handoff)
+
+Read AGENTS.md first and follow it.
+
+- Role / base: presentation WORK on a new branch from `main` (`3d0ddc6` or later); the result is v2.9.2. Independent of the balance session except H4's Store Capital part.
+- Active task: adopt the PLANNED game feel beats one batch at a time, in the registered order H1 → H2 → H3 → H5 → H4. Start with H1 (NIGHT verdict stamp + Insurance reversal overstamp). One batch per turn, then STOP.
+- Entry points:
+  - design + status: `design_ssot/PRESENTATION_PRINCIPLES_v2.8.0.md` §GAME FEEL BEAT (principles table, contract, H1~H5 rows; flip a row to ADOPTED when its batch is committed)
+  - routing: `design_ssot/SPEC_INDEX_v2.8.0.md` §v2.9.1 / v2.9.2
+  - owners each batch amends first: UI_UX (§NIGHT LAYOUT, §SALE — COUNTER TRAY, §ORDER — WAREHOUSE DISCLOSURE, §CLOSING), UI_UX_QA (new UI-Q-v29 cases), NIGHT_CLOSING §INSURANCE CAUSALITY / §HERO ITEM FEEDBACK (display order only), FINAL_EXPEDITION §BOSS CLEAR / §RUN CLEAR; PRESENTATION §TRANSACTION BEAT A1 / A5 / A8 for H2
+  - ledgers: `reports/ssot-consolidation/<OWNER>.md` for UI_UX / UI_UX_QA / NIGHT_CLOSING / FINAL_EXPEDITION (declare every new line); PRESENTATION_PRINCIPLES has no ledger
+  - Source (presentation layer only): `dist/ui/app.js` — `playPhase` night block (beat / verdict tag entry), `playCue` (sale / refuse beats, receipt stub), `nightSound` / `nightCue` (Outcome cue + `rescue` accent); `dist/ui/audio.js` — cue note tables and synth parameters (great / retreat / injury / severe / death / rescue, order, sale family); `dist/ui/ui.css` — `.p-night .beat .verdict`, `.receipt-stub`, counter tray / dock stamps
+  - pins: `tests/ui-guard.cjs` (source strings / CSS), `tests/copy.cjs` (no new copy expected)
+  - capture: before / after at 390 and 1280, reduced-motion included; separate visual review per PRESENTATION §VISUAL REVIEW PROCESS
+- Contract to keep in every batch: presentation-only; ≤ 320 ms per beat (사망 tape ≤ 500 ms); no input block; reduced-motion no-op with an identical end state; motion inside the card; no full-screen shake, combo / streak UI, praise word, or rule / Save / RNG / proof change.
+- User decisions already taken and not yet promoted anywhere: none beyond the registered rows. Open: none for H1 … H3 / H5; H4's Store Capital settlement waits on the v2.9.1 values.
+- Stop boundary: one batch (docs → Source → pins → `npm test` / `ssot:check` / `qa:runtime` → capture review → commit) → report → STOP; do not continue into the next H without User authorization.
 
 ## Execution Boundary
 
