@@ -78,6 +78,17 @@ if (V.prep || V.lvl) patch('systems/dungeon', "  deathRoll=r.next();\n  if(death
 if (V.seal) patch('systems/simulation', 'function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;',
   "function buySupport(){const w=s.relicWindow;if(!w||w.purchased||w.consumedBySealBreak)return;if(g.canBreakSeal&&g.canBreakSeal()){const __any=w.candidateIds.some((id,i)=>s.money-w.candidatePrices[i]>=(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve));"
   + (V.seal === 'always' ? "if(true" : "if(!__any||s.day>=25") + "){g.breakSeal();act();globalThis.__seal=(globalThis.__seal||0)+1;return;}}");
+// bad-luck protection (User 2026-09-25): within one night, expeditions that carried 1+ Item and ended as anything but
+// 성공/대성공 count; after 2 in a row the next Item-carrying adventurer gets +base preparation (combat power up, incident
+// chance down), +step more for every further failure in the chain; any success resets; bare-handed runs are ignored
+if (V.badluck) {
+  patch('systems/shop', "s.results=[];for(const id of s.queue){", "s.results=[];const __st={fails:0};for(const id of s.queue){");
+  patch('systems/shop', "const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);",
+    `const __carry=n.pack.length>0;globalThis.__bl=__carry&&__st.fails>=2?${V.badluck.base}+${V.badluck.step}*(__st.fails-2):0;if(globalThis.__bl)globalThis.__blUsed=(globalThis.__blUsed||0)+1;const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);globalThis.__bl=0;if(__carry){if(rep.outcome==='성공'||rep.outcome==='대성공')__st.fails=0;else __st.fails++;}`);
+  patch('systems/dungeon', " const ability=preparedPower(e);", " const ability=preparedPower(e)*(1+(globalThis.__bl||0));");
+  patch('systems/dungeon', "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);",
+    "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48)*(1-(globalThis.__bl||0));");
+}
 // 7-b buffer removal (only when asked)
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
@@ -128,7 +139,7 @@ const slim = (r) => {
   };
 };
 for (const [policy, pricing, build, opts = {}] of policies) {
-  globalThis.__heal = 0; globalThis.__abandon = 0; globalThis.__prepSaved = 0; globalThis.__seal = 0;
+  globalThis.__heal = 0; globalThis.__abandon = 0; globalThis.__prepSaved = 0; globalThis.__seal = 0; globalThis.__blUsed = 0;
   const key = `${policy}:${pricing}:${build}` + (opts.relicAware ? ':aware' : '');
   if (V.traj) {
     const t = Debug.trajectory({ trajectories: V.traj.T, runs: V.traj.R, policy, pricing, build, prefix: V.traj.prefix, purchaseOrder: V.traj.order, relicAware: !!opts.relicAware });
@@ -143,7 +154,7 @@ for (const [policy, pricing, build, opts = {}] of policies) {
     if (V.loadout) { account = Meta.fresh(); account.store.capital = 1e9; for (const id of V.loadout) Meta.buyDecoration(account, id); account.store.capital = 0; }
     if (V.injAware) globalThis.__injOn = opts.inj !== false;
     const r = Debug.simulate(seeds, policy, account, pricing, build, { relicAware: !!opts.relicAware });
-    out[key] = { ...slim(r), heal: globalThis.__heal, abandon: globalThis.__abandon, prepSaved: globalThis.__prepSaved, seal: globalThis.__seal };
+    out[key] = { ...slim(r), heal: globalThis.__heal, abandon: globalThis.__abandon, prepSaved: globalThis.__prepSaved, seal: globalThis.__seal, badluckUsed: globalThis.__blUsed };
   }
 }
 process.stdout.write(JSON.stringify(out));
