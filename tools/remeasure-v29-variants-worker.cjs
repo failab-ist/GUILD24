@@ -58,7 +58,7 @@ if (V.op === 'mid') patch('systems/shop', 'const dayBase=90+5*(this.run.day-1);'
 // 7+ skilled + relic-aware + injury-aware); the injury layer is on only in the skilled phase
 if (V.schedule) patch('systems/simulation', 'playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware});',
   "{const P=globalThis.__schedule(i);globalThis.__injOn=!!P.inj;globalThis.__human=P.human||false;playRun(g,byIndex[i],{policy:P.policy,pricing:P.pricing,build:P.build,seed:t,relicAware:!!P.relicAware});}");
-globalThis.__schedule = V.schedule === 'human' ? (i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' } : { policy: 'balanced', pricing: 'adaptive', build: 'hybrid', human: V.human === 2 ? 2 : true }) : i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' }
+globalThis.__schedule = V.schedule === 'human' ? (i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' } : { policy: 'balanced', pricing: 'adaptive', build: 'hybrid' }) : i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' }
   : i < 6 ? { policy: 'balanced', pricing: 'adaptive', build: 'hybrid' }
   : { policy: 'skilled', pricing: 'adaptive', build: 'expedition', relicAware: true, inj: true };
 // 만반의 준비 (User 2026-09-25): departed without injury, departure Fatigue < 20 and 2+ Items in the Bag -> the
@@ -94,19 +94,8 @@ if (V.gate) {
   patch('systems/dungeon', 'const GATE={knee:9,early:1.70,late:0.40};', `const GATE={knee:9,early:${V.gate.early},late:${V.gate.late}};`);
   if (V.gate.tier != null) patch('systems/shop', 'power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+', `power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*${V.gate.tier}+`);
 }
-// human-type seller (User 2026-09-25): policy 'balanced' with {human:true}. Full price by default, 50% only for a customer
-// just below 단골 (loyalty 41~50), no automatic discount when the wallet falls short, at most one reroll a day, Deep
-// sponsorship only with three Days of operating cost left and for a top-level adventurer, no Item that does nothing for
-// this customer, and the order sheet read against every Gate open today
-if (V.human) {
-patch('systems/simulation', "n.level>=6&&n.loyalty<50?'half':'full';", "(globalThis.__human?(n.loyalty>=41&&n.loyalty<51):(n.level>=6&&n.loyalty<50))?'half':'full';");
-patch('systems/simulation', "if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';", "if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit&&(!globalThis.__human||(globalThis.__human===2&&(n.level>=Math.max(...s.npcs.filter(x=>x.alive).map(x=>x.level))-1||((G.Relics.directCounter(it,d.hazards)||it.category==='insurance')&&!(n.level<=3&&n.rarity===0))))))mode='half';");
-patch('systems/simulation', "while(poor()&&used<20){", "while((globalThis.__human===2?!s.offers.some(o=>o.quantity&&(D.itemBy[o.item].category==='food'||s.dungeons.some(dd=>G.Relics.directCounter(D.itemBy[o.item],dd.hazards)))):poor())&&used<(globalThis.__human===2?2:globalThis.__human?1:20)){");
-patch('systems/simulation', "if(engagement.order&&g.canNominateDeep(n)){", "if(engagement.order&&g.canNominateDeep(n)&&(!globalThis.__human||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&n.level>=Math.max(...s.npcs.filter(x=>x.alive).map(x=>x.level))-1))){");
-patch('systems/simulation', "options.push({st,mode,v:itemValue(n,it,d)", "if(globalThis.__human&&itemValue(n,it,d)<1&&!(globalThis.__human===2&&((st.expires-s.day)<=1||(n.outlook?.greatSignal&&(it.category==='food'||it.category==='potion')))))continue;options.push({st,mode,v:itemValue(n,it,d)");
-patch('systems/simulation', "const v=o=>itemValue(null,D.itemBy[o.item],s.dungeons[0])/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;",
-  "const v=o=>(globalThis.__human?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;");
-}
+// human-type seller: since the harness change of 2026-09-25 the simulation's own `balanced` policy IS the human-type
+// seller (v2), so no patch is needed; `human` in older variant specs is ignored.
 // operating-cost level factor (User 2026-09-25): the per-level share of the base operating cost
 if (V.opLevel != null) patch('systems/shop', 'return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}', `return dayBase*(1+${V.opLevel}*(avgLevel-1))*(1+.06*avgRarity);}`);
 // 7-b buffer removal (only when asked)
