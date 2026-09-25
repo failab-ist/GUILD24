@@ -107,6 +107,8 @@ if (V.opBase) patch('systems/shop', 'const dayBase=90+5*(this.run.day-1);', `con
 if (V.startGold != null) patch('systems/shop', 'const startGold=1000;', `const startGold=${V.startGold};`);
 // segmented death limit (User 2026-09-25): limit by the current Day's segment [{maxDay, limit}], 추모 방명록 bonus on every segment
 if (V.deathSeg) patch('systems/meta', 'deathLimit=run=>D.balance.deathLimit+', `deathLimit=run=>(${JSON.stringify(V.deathSeg)}.find(x=>(run?.day||1)<=x.maxDay)||{limit:D.balance.deathLimit}).limit+`);
+// 프리미엄 쇼케이스 rarity weights (User 2026-09-25 discussion)
+if (V.premiumWeights) patch('systems/adventurer', 'opts.premium?[50,30,15,4,1]:', `opts.premium?${JSON.stringify(V.premiumWeights)}:`);
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
 const files = ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'];
@@ -137,6 +139,12 @@ for (const f of files) {
   if (V.items) for (const [id, x] of Object.entries(V.items)) { if (!I[id]) throw Error('no item ' + id); Object.assign(I[id].effects, x.effects || {}); if (x.buy != null) I[id].buy = x.buy; if (x.sell != null) I[id].sell = x.sell; }
   // sell = buy x 2 for every item (User 2026-09-25), applied after the item table
   if (V.sell2x) for (const it of D.items) it.sell = it.buy * 2;
+  // Decoration effect numbers (User 2026-09-25 discussion): any of extraOffers / dailyGold / wallChance / trainingChance /
+  // healChance / saves
+  if (V.deco) { const P = D.decorationParams, x = V.deco;
+    if (x.extraOffers != null) P.dawnSign.extraOffers = x.extraOffers; if (x.dailyGold != null) P.thriftSafe.dailyGold = x.dailyGold;
+    if (x.wallChance != null) D.balance.wallVisitorChance = x.wallChance; if (x.trainingChance != null) P.trainingRack.chance = x.trainingChance;
+    if (x.healChance != null) P.infirmaryPlaque.healChance = x.healChance; if (x.saves != null) P.firstAidKit.saves = x.saves; }
   if (V.memorial != null) D.decorationParams.memorialBoard.deathLimitBonus = V.memorial;
   if (V.capRates) D.capitalRates = V.capRates;
   // Decoration prices by Slot (both kinds of a Slot share the price)
