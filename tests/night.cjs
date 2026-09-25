@@ -410,10 +410,10 @@ test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 
  assert.ok(near(risk40.chance,Math.min(.40,risk40.healthy+.10))&&risk40.chance>risk39.chance,'탈진 is +10%p over its own healthy chance, under a 40% cap');
  const both=Dungeon.failureDeathRisk({...npc(40),injury:1},{...d,power:400});
  assert.ok(both.chance<=.50+1e-9&&near(both.chance,Math.min(.50,both.healthy+.20)),'injured and 탈진 together: +20%p under 50%');
- // the band is judged after preRecovery: 삼각김밥 Supply 4 (v2.9.0 F4) at 22 departs at 18 (지침), not 22 (과로)
- assert.equal(D.itemBy.rice.effects.supply,4);
+ // the band is judged after preRecovery: 삼각김밥 Supply 5 (v2.9.1 balance, was 4) at 22 departs at 17 (지침), not 22 (과로)
+ assert.equal(D.itemBy.rice.effects.supply,5);
  const fed=Dungeon.prepare(npc(22,['rice']),d).effects;
- assert.equal(fed.fatigueBeforeExpedition,18);assert.ok(near(fed.mobility/clear.mobility,.85),'judged on departure Fatigue');
+ assert.equal(fed.fatigueBeforeExpedition,17);assert.ok(near(fed.mobility/clear.mobility,.85),'judged on departure Fatigue');
  // clamp: a 성공 at 36 with no Supply ends at 40, not 41
  for(let i=0;i<200;i++){const n={...npc(36),records:[]};Dungeon.resolve(n,{...d,power:1},new RNG('clamp-'+i));const r=n.records.at(-1);
   if(r.outcome==='성공'||r.outcome==='대성공'){assert.equal(r.finalFatigue,40,'clamped at 40');break;}}
