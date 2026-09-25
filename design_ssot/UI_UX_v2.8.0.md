@@ -593,6 +593,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 
 - the counter tray is a fixed band directly above the dock, outside the scrolled column, at every width
 - tapping a shelf row puts that Item on the tray; the row is only highlighted, the shelf rows never change height
+- §SALE — SHELF ORDER (User 2026-09-25, v2.9.0): rows are ordered by days left before discard, nearest first, ties in the existing order, the same for every customer; each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
 - tray contents, top to bottom: one header line (Item icon · name · kind · sell price · stock · shelf life, and `{손님}에게 · 소지 {N}G` at the right), the `판매 후 변화` delta list (§SALE SELECTED-ITEM INFORMATION; may be one wrapping line), the `특수 효과` line when any, then the three price keys (§SALE — PRICE ROLE WORDS)
 - empty tray: on DAY 1~3 of a Run while the account tutorial is not skipped, one line (the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23); otherwise the empty tray has no height (User 2026-09-24, v2.9.0)
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag); a refusal keeps the Item on the tray with the refused key locked

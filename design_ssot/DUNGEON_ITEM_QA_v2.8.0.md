@@ -530,7 +530,7 @@ Reward PASS:
 - EXP base = 22 + Day×4.6
 - EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are Retreat 0.08 / combat-success 1.00 / other living 0.18
+- Wallet outcome multipliers are 대성공 / 성공 0.90 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.0)
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5

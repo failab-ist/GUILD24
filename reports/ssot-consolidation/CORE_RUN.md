@@ -318,3 +318,15 @@ Trait flavor notes are removed (거짓말쟁이 keeps its function line as an ef
 ```new
 - no next-day forecast is shown; today's Gates are the whole planning context (User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 F4: Fatigue recovery values / shelf life / operating cost / Wallet multipliers / 세계수 price (User decision 2026-09-24/25)
+
+User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistributed (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 · 집중 사탕 2 · 불룡볶음면 2 with 강인함 +5 · 길드 특제 도시락 6; 영웅 결전 도시락 stays 9; Drinks unchanged); every Item expires (ITEM §SHELF LIFE — EXACT, 2~5 days); the SALE shelf is ordered by days left with a `폐기 N일` chip; operating cost dayBase 90 + 5 × (Day − 1); expedition Wallet multipliers keyed on the Outcome (대성공/성공 0.90 · 퇴각 0.35 · 부상 0.20 · 중상 0.10 · 사망 0); 세계수 생환부적 400 / 800. Earlier rows this batch supersedes were removed from the fences above in place.
+
+```text
+`overhead = (90 + 2 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)`
+```
+
+```new
+`overhead = (90 + 5 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)` (User 2026-09-24, v2.9.0)
+```

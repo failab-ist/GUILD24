@@ -161,7 +161,13 @@ explicit special operation that does not fit Stat/Counter/Insurance/Economy
 
 All active Food/Drink Items provide a visible Supply value unless explicitly defined otherwise.
 Its only meaning is Fatigue recovery: the Player sees the value as `피로 회복 N`, never `보급 +N` (User 2026-09-24, v2.9.0)
-Catalog tables below keep the internal notation `Supply N`; the values are unchanged.
+Catalog tables below keep the internal notation `Supply N`.
+
+Fatigue-recovery contract (User 2026-09-24/25, v2.9.0): Food is the main recovery route; a Drink recovers 1~2; no Food
+recovers more than 6 except 영웅 결전 도시락 (Epic, 9), so the worst single outcome gain (+9) is never
+erased by one ordinary Item; a Hazard-Counter Food keeps at least 2 so 대식가's -1 stays a real cost.
+The redistributed values are the ACTIVE CATALOG rows (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 ·
+집중 사탕 2 · 불룡볶음면 2 · 길드 특제 도시락 6 · 영웅 결전 도시락 9; Drinks unchanged).
 
 Each Food/Drink Item defines:
 - supplyValue
@@ -430,7 +436,7 @@ The active catalog slot is replaced by:
 Category = Drink
 Rarity = Common
 Buy / Sell = 40 / 85
-Shelf Life = 5
+Shelf Life = 2 (§SHELF LIFE — EXACT, v2.9.0)
 정신 +15
 Supply 2
 ```
@@ -683,6 +689,7 @@ rarity=Epic
 category=Insurance
 role=Insurance
 subrole=DeathInsurance
+Buy / Sell = 400 / 800 (User 2026-09-24, v2.9.0; was 600 / 1200)
 
 core:
 Death -> Severe Injury
@@ -714,18 +721,18 @@ Final-specific usability -> `FINAL_EXPEDITION_v2.8.0.md`.
 
 ## ACTIVE CATALOG
 
-Unlisted implementation-only flavor fields/shelf lives inherit the previous Item where identity remains unchanged, except where this spec states otherwise.
+Unlisted implementation-only flavor fields inherit the previous Item where identity remains unchanged, except where this spec states otherwise; shelf lives are the §SHELF LIFE — EXACT table (v2.9.0).
 
 ### MEAL / WATER LINE — DIRECTOR DOCUMENT BASELINE — EXACT
 
 | ID | Item | Category/Rarity | Buy / Sell | Effect | Shelf |
 |---|---|---|---:|---|---:|
-| rice | 삼각김밥 | Food C | 35 / 70 | 강인함 +6, Supply 5 | 2d |
-| water | 생수 | Drink C | 40 / 85 | 강인함 +10, Supply 2 | 5d |
-| bar | 간단 도시락 | Food U | 85 / 180 | 강인함 +10, Supply 6, 원정 소지금 획득 +20% | 2d |
-| premium | 길드 특제 도시락 | Food R | 160 / 340 | 강인함 +14, Supply 7, 원정 소지금 획득 +40% | 2d |
+| rice | 삼각김밥 | Food C | 35 / 70 | 강인함 +6, Supply 4 | 2d |
+| water | 생수 | Drink C | 40 / 85 | 강인함 +10, Supply 2 | 2d |
+| bar | 간단 도시락 | Food U | 85 / 180 | 강인함 +10, Supply 5, 원정 소지금 획득 +20% | 2d |
+| premium | 길드 특제 도시락 | Food R | 160 / 340 | 강인함 +14, Supply 6, 원정 소지금 획득 +40% | 2d |
 | battlelunch | 영웅 결전 도시락 | Food E | 210 / 440 | 강인함 +18, Supply 9 | 2d |
-| herobar | 왕도 천연암반수 | Drink E | 185 / 390 | 강인함 +20, Supply 2 | 5d |
+| herobar | 왕도 천연암반수 | Drink E | 185 / 390 | 강인함 +20, Supply 2 | 3d |
 
 The meal Stat ladder is intentionally readable:
 
@@ -745,16 +752,16 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 
 | # | Item | Category / Rarity | Buy / Sell | Effect | Hazard Role |
 |---:|---|---|---:|---|---|
-| 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 5 | Cold Lower |
-| 5 | 초코바 | Food C | 30 / 65 | 기동 +8, Supply 4 | — |
+| 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 2 | Cold Lower |
+| 5 | 초코바 | Food C | 30 / 65 | 기동 +8, Supply 3 | — |
 | 6 | 캔커피 | Drink C | 40 / 85 | 기동 +12, Supply 2 | Stat route |
 | 7 | 진정 허브티 | Drink C | 40 / 85 | 정신 +15, Supply 2 | Stat route |
 | 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +8 | — |
 | 9 | 얼음컵 | Drink C | 30 / 65 | 화염 +10, Supply 1 | Fire Lower |
 | 10 | 랜턴 건전지 | Field Gear C | 45 / 95 | 어둠 +16 | Dark Main |
 | 11 | 경량 로프 | Field Gear C | 50 / 105 | 속박 +16 | Bind Main |
-| 12 | 집중 사탕 | Food C | 35 / 75 | 공포 +10, Supply 3 | Fear Lower |
-| 13 | 불룡볶음면 | Food U | 65 / 135 | 강인함 +8, 냉기 +6, Supply 4 | Cold Hybrid |
+| 12 | 집중 사탕 | Food C | 35 / 75 | 공포 +10, Supply 2 | Fear Lower |
+| 13 | 불룡볶음면 | Food U | 65 / 135 | 강인함 +5, 냉기 +6, Supply 2 | Cold Hybrid |
 | 14 | 에너지드링크 | Drink U | 70 / 150 | 기동 +15, Supply 2 | Stat route |
 | 15 | 용사의 곡주 | Drink U | 60 / 130 | 공포 +18, 기동 -4, Supply 1 | Fear Main / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 170 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
@@ -769,7 +776,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 25 | 귀환석 | Insurance R | 260 / 520 | Emergency Escape +50%p path | Severe/Death Insurance |
 | 26 | 중급 포션 | Potion U | 110 / 230 | 투력 +12 | — |
 | 28 | 쿨링 이온음료 | Drink R | 80 / 170 | 화염 +18, Supply 1 | Fire Main |
-| 29 | 세계수 생환부적 | Insurance E | 600 / 1200 | Death -> Severe Injury once | Death Insurance |
+| 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death -> Severe Injury once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
 | 31 | 거미줄 방호세트 | Field Gear E | 150 / 320 | 독 +12, 속박 +12 | Spider Hybrid |
 | 32 | 연금 방수슈트 | Field Gear E | 150 / 320 | 부식 +12, 진창 +12 | Slime Hybrid |
@@ -802,6 +809,61 @@ The active 40-Item distribution is therefore:
     Legendary 1
 
 Do not move another Item solely to alter these approved Common/Uncommon counts.
+
+## SHELF LIFE — EXACT
+
+(User 2026-09-24/25, v2.9.0): no active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the
+stocking day, and is discarded at the morning it runs out. The rule behind the table:
+
+- Food: 2 days unless it carries a Hazard Counter (컵라면 3, 집중 사탕 4, 불룡볶음면 3); 초코바 is 2
+- Drink: 2 days unless Uncommon or above (3) or a Hazard Counter Drink (얼음컵 3, 용사의 곡주 4, 쿨링 이온음료 5)
+- Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
+- Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)
+- Insurance / Special: 구급키트 4, 귀환석 4, 세계수 생환부적 5, 황금 1+1 쿠폰 5
+- 대형 냉장고 and 냉장 유통 계약 extend Food/Drink exactly as `RELIC_v2.8.0.md` states; nothing else moves a shelf life
+
+| ID | Item | Category | Shelf |
+|---|---|---|---:|
+| rice | 삼각김밥 | Food | 2d |
+| ramen | 컵라면 | Food | 3d |
+| bar | 간단 도시락 | Food | 2d |
+| choco | 초코바 | Food | 2d |
+| candy | 집중 사탕 | Food | 4d |
+| lava | 불룡볶음면 | Food | 3d |
+| premium | 길드 특제 도시락 | Food | 2d |
+| battlelunch | 영웅 결전 도시락 | Food | 2d |
+| water | 생수 | Drink | 2d |
+| coffee | 캔커피 | Drink | 2d |
+| herbtea | 진정 허브티 | Drink | 2d |
+| ice | 얼음컵 | Drink | 3d |
+| energy | 에너지드링크 | Drink | 3d |
+| wine | 용사의 곡주 | Drink | 4d |
+| ion | 쿨링 이온음료 | Drink | 5d |
+| herobar | 왕도 천연암반수 | Drink | 3d |
+| hyperenergy | 초고속 에너지드링크 | Drink | 3d |
+| sageelixir | 대현자 허브엘릭서 | Drink | 3d |
+| potion | 하급 포션 | Potion | 3d |
+| midpotion | 중급 포션 | Potion | 4d |
+| highpotion | 상급 포션 | Potion | 5d |
+| toppotion | 최상급 포션 | Potion | 5d |
+| battery | 랜턴 건전지 | Field Gear | 3d |
+| rope | 경량 로프 | Field Gear | 3d |
+| mask | 방진마스크 | Field Gear | 4d |
+| heat | 핫팩 | Field Gear | 4d |
+| cloak | 방수망토 | Field Gear | 4d |
+| coating | 부식 방지 코팅제 | Field Gear | 4d |
+| boots | 원정용 장화 | Field Gear | 4d |
+| snowgoggles | 설원 고글 | Field Gear | 4d |
+| antidote | 농축 해독제 | Field Gear | 5d |
+| spiderkit | 거미줄 방호세트 | Field Gear | 5d |
+| slimesuit | 연금 방수슈트 | Field Gear | 5d |
+| cryptlantern | 성화 랜턴 | Field Gear | 5d |
+| snowvisor | 백설 방한고글 | Field Gear | 5d |
+| magmagear | 마그마 냉각장비 | Field Gear | 5d |
+| kit | 구급키트 | Insurance | 4d |
+| stone | 귀환석 | Insurance | 4d |
+| tree | 세계수 생환부적 | Insurance | 5d |
+| coupon | 황금 1+1 쿠폰 | Special | 5d |
 
 ## ITEM ROLE NOTES
 
@@ -1013,6 +1075,8 @@ item type
 
 Consumed physical unit:
 nearest expiry first
+
+SALE shelf order: nearest expiry first, ties in the existing order; each row carries `폐기 N일` (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0)
 
 Consumer slot limit is separate from inventory visibility.
 

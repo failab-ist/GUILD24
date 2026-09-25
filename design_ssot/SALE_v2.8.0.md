@@ -389,6 +389,8 @@ Exact UI:
 
 The compared Item's detail lives on the counter tray, so comparing two Items never moves the shelf list (User 2026-09-24, v2.9.0).
 
+Shelf order: rows are sorted by days left before discard, nearest first, ties in the existing order; every row carries `폐기 N일` and a row at 1 day or less is emphasized. This is stock management, never a best-fit or recommendation order; it does not change with the customer (User 2026-09-25, v2.9.0).
+
 ### MATCHING-EFFECT EMPHASIS
 
 In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses. Every other effect keeps the default style. No badge, no verdict word, no reorder (User 2026-09-24, v2.9.0).

@@ -2113,6 +2113,22 @@ PASS:
 FAIL:
 - a per-customer "더 필요" number, a readiness ratio, or a requirement number that does not match ceil(Hazard Threat)
 
+### UI-Q-v29-20 — SHELF EXPIRY ORDER
+
+(User 2026-09-25, v2.9.0)
+
+SETUP:
+SALE with a shelf holding units stocked on different days (some at 1 day left), at 360 and 1280; the same shelf for two customers going to different Gates.
+
+PASS:
+- the shelf rows are ordered by days left before discard, nearest first; ties keep the existing order; the order is identical for both customers
+- every row carries `폐기 N일`; a row at 1 day or less is emphasized in the warehouse `.soon` color
+- no `유통기한 없음` / `기한 없음` state appears on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
+- rows keep one name line + one effect line; no overflow at 360
+
+FAIL:
+- an order that changes with the customer's Gate, or a recommendation word
+
 ### GREAT SUCCESS TUTORIAL
 PASS:
 - explicitly teaches Great Success exists

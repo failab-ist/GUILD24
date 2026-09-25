@@ -461,7 +461,7 @@ Core Roster:
 
 Expected:
 
-    dayBase = 90 + 2×(Day-1)
+    dayBase = 90 + 5×(Day-1)    (v2.9.0)
     base = dayBase × (1 + .02×(avgLevel-1)) × (1 + .06×avgRarity)
 
 Then apply only current owned modifiers and round final daily operating cost to nearest 10G under

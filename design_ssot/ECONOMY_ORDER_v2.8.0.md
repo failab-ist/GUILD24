@@ -643,7 +643,7 @@ Let:
     avgLevel  = Core Roster average Level, or 1 if empty
     avgRarity = Core Roster average numeric Rarity index, or 0 if empty
 
-    dayBase = 90 + 2 × (Day - 1)
+    dayBase = 90 + 5 × (Day - 1)    (User 2026-09-24, v2.9.0; was 2 × (Day - 1))
 
     overheadBase
     = dayBase

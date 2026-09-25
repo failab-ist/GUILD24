@@ -257,7 +257,7 @@ Capacity modifiers may come from explicit Relic effects.
 
 dailyOverhead follows the Day AND the roster the Store has actually built:
 
-`overhead = (90 + 2 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)`
+`overhead = (90 + 5 x (Day - 1)) x (1 + 0.02 x (coreAvgLevel - 1)) x (1 + 0.06 x coreAvgRarity)` (User 2026-09-24, v2.9.0)
 charged rounded to 10G.
 
 Core Roster = the six best living adventurers, by Level then Rarity (all of them if fewer).

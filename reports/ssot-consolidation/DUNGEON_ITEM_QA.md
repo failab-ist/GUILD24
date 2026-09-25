@@ -701,3 +701,15 @@ Controlled adventurer records: 0 / 1 / 2 / 3 / 5 expeditions begun at injury=1, 
 - Outcome stays 부상
 - Outcome becomes 부상 (NIGHT verdict 부상, event `구급키트가 중상을 부상으로 낮췄다.`)
 ```
+
+## AMENDMENT — v2.9.0 F4: Fatigue recovery values / shelf life / operating cost / Wallet multipliers / 세계수 price (User decision 2026-09-24/25)
+
+User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistributed (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 · 집중 사탕 2 · 불룡볶음면 2 with 강인함 +5 · 길드 특제 도시락 6; 영웅 결전 도시락 stays 9; Drinks unchanged); every Item expires (ITEM §SHELF LIFE — EXACT, 2~5 days); the SALE shelf is ordered by days left with a `폐기 N일` chip; operating cost dayBase 90 + 5 × (Day − 1); expedition Wallet multipliers keyed on the Outcome (대성공/성공 0.90 · 퇴각 0.35 · 부상 0.20 · 중상 0.10 · 사망 0); 세계수 생환부적 400 / 800. Earlier rows this batch supersedes were removed from the fences above in place.
+
+```text
+- Wallet outcome multipliers are Retreat 0.08 / combat-success 1.00 / other living 0.18
+```
+
+```new
+- Wallet outcome multipliers are 대성공 / 성공 0.90 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.0)
+```

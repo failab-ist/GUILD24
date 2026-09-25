@@ -795,11 +795,13 @@ Ordinary expedition Wallet reward:
 
     baseWalletReward = 35 + Day × 8
 
-Outcome multiplier:
+Outcome multiplier (User 2026-09-25, v2.9.0; keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공):
 
-    퇴각 = 0.08
-    combat-success path = 1.00
-    other surviving path = 0.18
+    대성공 / 성공 = 0.90
+    퇴각 = 0.35
+    부상 = 0.20
+    중상 = 0.10
+    사망 = 0
 
 Then:
 

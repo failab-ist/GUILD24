@@ -373,3 +373,11 @@ retired. The revision-1 declarations this replaces were edited out of the fences
 ```new
 `북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 3당 대응 1 제공` (User 2026-09-24 revision 2, v2.9.0: the numbered row, no label, no `?`)
 ```
+
+## AMENDMENT — v2.9.0 F4: Fatigue recovery values / shelf life / operating cost / Wallet multipliers / 세계수 price (User decision 2026-09-24/25)
+
+User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistributed (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 · 집중 사탕 2 · 불룡볶음면 2 with 강인함 +5 · 길드 특제 도시락 6; 영웅 결전 도시락 stays 9; Drinks unchanged); every Item expires (ITEM §SHELF LIFE — EXACT, 2~5 days); the SALE shelf is ordered by days left with a `폐기 N일` chip; operating cost dayBase 90 + 5 × (Day − 1); expedition Wallet multipliers keyed on the Outcome (대성공/성공 0.90 · 퇴각 0.35 · 부상 0.20 · 중상 0.10 · 사망 0); 세계수 생환부적 400 / 800. Earlier rows this batch supersedes were removed from the fences above in place.
+
+```new
+Shelf order: rows are sorted by days left before discard, nearest first, ties in the existing order; every row carries `폐기 N일` and a row at 1 day or less is emphasized. This is stock management, never a best-fit or recommendation order; it does not change with the customer (User 2026-09-25, v2.9.0).
+```
