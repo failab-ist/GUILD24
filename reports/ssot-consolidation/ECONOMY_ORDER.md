@@ -525,16 +525,16 @@ fit-based need, whose fit sums the Item's direct Counter values and the values o
 - if at least one offered Item directly Counters that Hazard (직접 대응, RELIC §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)) -> its missing count resets
 ```
 
-## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md` §4): operating cost dayBase 170 + 1 × (Day − 1) and Level factor 0.03. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §4): operating cost dayBase 170 + 1 × (Day − 1) and Level factor 0.03. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 × (1 + 0.02 × (avgLevel - 1))
 ```
 
 ```new
-dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.0 balance close: heavy from DAY 1, flat after — the D1~10
+dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
 store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term)
-× (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.0 balance close; was 0.02)
+× (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance; was 0.02)
 ```

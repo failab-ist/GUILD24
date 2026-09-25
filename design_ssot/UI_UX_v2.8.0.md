@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -225,7 +225,7 @@ Store scene은 사용할 수 있으나
 
 ### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
 
-(User 2026-09-25, v2.9.0 balance close.) The Run's cumulative Death count and the current segment limit
+(User 2026-09-25, v2.9.1 balance.) The Run's cumulative Death count and the current segment limit
 (`CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED) are always on screen at MORNING and ORDER, in the top status line —
 not only in the 도감.
 - one compact item: count / current limit / the Day the segment ends; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
@@ -2039,6 +2039,16 @@ Contextual Tutorial explicitly teaches:
 
 Player should understand why another useful Item can matter even when ordinary
 Success already looks likely.
+
+### 만반의 준비 TUTORIAL
+
+(User 2026-09-25, v2.9.1 balance.) Contextual, like the other first-time marks: shown once per account, the first time
+the Player fills BOTH Bag slots of a customer who is uninjured and whose departure Fatigue (the tray's `출발 B`) is
+below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) is first achieved.
+- anchor: the customer's Bag slots on the SALE counter
+- teaches the condition and the effect in words only; no number, no percentage
+- persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 (User 승인 대기)
 
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 

@@ -984,9 +984,9 @@ other surviving path = 0.18
 사망 = 0
 ```
 
-## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md`): 중상 Fatigue gain 0; Severe shares 0.36 / 0.11; the repeated-strain cut counts consecutive injured departures only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing; hidden bad-luck preparation assist; expedition Wallet 대성공 / 성공 1.00; Gate Day term 1.20 / 0.80. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md`): 중상 Fatigue gain 0; Severe shares 0.36 / 0.11; the repeated-strain cut counts consecutive injured departures only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing; hidden bad-luck preparation assist; expedition Wallet 대성공 / 성공 1.00; Gate Day term 1.20 / 0.80. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 0.42
@@ -1000,8 +1000,8 @@ D29 = 23.30
 ```
 
 ```new
-Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue (User 2026-09-25, v2.9.0 balance close).
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.0 balance close: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises):
+Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue (User 2026-09-25, v2.9.1 balance).
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises):
 = min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80
 D9  = 10.80
 D12 = 13.20
@@ -1010,18 +1010,18 @@ D24 = 22.80
 D29 = 26.80
 0.36
 0.11
-Base shares 0.36 / 0.11 (User 2026-09-25, v2.9.0 balance close; were 0.42 / 0.13).
-Outcome multiplier (User 2026-09-25, v2.9.0; keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공; 대성공 / 성공 back to 1.00 at the balance close):
+Base shares 0.36 / 0.11 (User 2026-09-25, v2.9.1 balance; were 0.42 / 0.13).
+Outcome multiplier (User 2026-09-25, v2.9.0; keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공; 대성공 / 성공 back to 1.00 in v2.9.1):
 대성공 / 성공 = 1.00
 strainEscalation  = min(0.30, 0.08 × max(0, consecutiveInjuredDepartures − 1))
 consecutiveInjuredDepartures = this departure, if begun at injury=1, plus the unbroken run of this adventurer's
 immediately preceding expeditions also begun at injury=1; 0 when this departure is healthy
-(User 2026-09-25, v2.9.0 balance close: only CONSECUTIVE injured departures count — a healthy departure, including the
+(User 2026-09-25, v2.9.1 balance: only CONSECUTIVE injured departures count — a healthy departure, including the
 return after a Severe-Injury rest, resets the chain; the first injured departure is free, every further one adds 8%p,
 up to 30%p; Fatigue no longer feeds this term)
 - sending an adventurer out injured again and again escalates further: +8%p per consecutive injured departure after the first, up to +30%p, and the cap rises with it; one healthy departure resets it (User 2026-09-25, v2.9.0)
 ### Preparation / Level Death reduction
-(User 2026-09-25, v2.9.0 balance close.) The failure Death roll uses
+(User 2026-09-25, v2.9.1 balance.) The failure Death roll uses
 rolledDeathChance = failureDeathChance × preparedFactor × levelFactor
 preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
 - departed without Injury (injury=0)
@@ -1035,7 +1035,7 @@ levelFactor = max(0.75, 1 − 0.015 × (Level − 1))      (Lv1 = 1.00, −1.5% 
 - the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`
 5. if that roll hits `rolledDeathChance`, the ordinary Outcome becomes `사망`; if it hits only the removed band, the Outcome becomes 중상 / 부상 (§Preparation / Level Death reduction)
 ## RETREAT HEALING
-(User 2026-09-25, v2.9.0 balance close.) An adventurer who began the expedition at `injury=1` and whose Outcome is
+(User 2026-09-25, v2.9.1 balance.) An adventurer who began the expedition at `injury=1` and whose Outcome is
 `퇴각` is healed (injury → 0) with chance
 healChance = min(1, 0.25 × (1 + k))        → 25% · 50% · 75% · 100%
 k = the unbroken run of this adventurer's immediately preceding expeditions that also began at injury=1 and ended 퇴각
@@ -1045,7 +1045,7 @@ succeeds is already healed by the ordinary Injury step)
 - the Night report says the adventurer recovered with one line; the chance is never shown; exact copy ->
 `COPY_AUDIT_APPROVED_v2.8.0.md`
 ## BAD-LUCK PREPARATION ASSIST (hidden)
-(User 2026-09-25, v2.9.0 balance close; a hidden correction kept minimal.) Within one Night's ordinary expeditions, in
+(User 2026-09-25, v2.9.1 balance; a hidden correction kept minimal.) Within one Night's ordinary expeditions, in
 resolution order:
 - count only expeditions that carried 1+ Item; a bare-handed expedition neither counts nor breaks the chain
 - a carried expedition that ends anything but `성공` / `대성공` adds 1 to the chain; a `성공` / `대성공` resets it to 0

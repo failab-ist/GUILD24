@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run,fatigue,supply,injury,death_risk,great_success,deep_expedition,result_proof
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_ITEM_QA_v2.8.0-patch.md,history/DUNGEON_ITEM_QA_v2.7.0.md,history/DUNGEON_ITEM_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_ITEM_QA.md
@@ -236,7 +236,7 @@ PASS:
 Owner rule: `DUNGEON_HAZARD_v2.8.0.md` §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.0 balance close)
+- the Day term is `min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance)
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
 - the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
 
@@ -496,7 +496,7 @@ PASS:
 (User 2026-09-25, v2.9.0)
 
 Controlled adventurer records: 1 / 2 / 3 / 5 consecutive expeditions begun at injury=1 ending in this injured departure, the same
-chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.0 balance close).
+chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.1 balance).
 
 EXPECT:
 - the first injured departure adds nothing beyond the existing injured term
@@ -522,7 +522,7 @@ Supply/Fatigue runtime arithmetic follows the current owner truth.
 Controlled seeded cases must verify (User 2026-09-24, v2.9.0: no Supply-deficit row):
 - environment incident chance uses the exact closure formula and 2%–48% clamp
 - escape chance uses the exact closure formula and 15%–94% clamp
-- failed-combat Severe branch uses 36% base before current modifiers (User 2026-09-25, v2.9.0 balance close)
+- failed-combat Severe branch uses 36% base before current modifiers (User 2026-09-25, v2.9.1 balance)
 - environment/other Severe branch uses 11% base before current modifiers
 - injured departure adds the existing +15%p Severe escalation exactly once
 - failure-conditioned Death still follows the separate current Death owner formula exactly once
@@ -531,7 +531,7 @@ Reward PASS:
 - EXP base = 22 + Day×4.6
 - EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.0 balance close)
+- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.1 balance)
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
@@ -542,7 +542,7 @@ FAIL:
 
 ### DUN-Q-v29-BC1 — 만반의 준비 / LEVEL DEATH REDUCTION
 
-(User 2026-09-25, v2.9.0 balance close; owner `DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction.)
+(User 2026-09-25, v2.9.1 balance; owner `DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction.)
 
 Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 만반의 준비 (healthy, Fatigue < 20, 2+ Items),
 and the three near misses (injured / Fatigue 20 / one Item).
@@ -556,7 +556,7 @@ PASS:
 
 ### DUN-Q-v29-BC2 — RETREAT HEALING
 
-(User 2026-09-25, v2.9.0 balance close; owner §RETREAT HEALING.)
+(User 2026-09-25, v2.9.1 balance; owner §RETREAT HEALING.)
 
 PASS:
 - only an injured departure ending 퇴각 can heal; chance 25% / 50% / 75% / 100% for 0 / 1 / 2 / 3+ preceding consecutive injured 퇴각
@@ -565,7 +565,7 @@ PASS:
 
 ### DUN-Q-v29-BC3 — HIDDEN BAD-LUCK ASSIST
 
-(User 2026-09-25, v2.9.0 balance close; owner §BAD-LUCK PREPARATION ASSIST.)
+(User 2026-09-25, v2.9.1 balance; owner §BAD-LUCK PREPARATION ASSIST.)
 
 Controlled Night queues: 3 / 4 / 5 carried failures in a row, a bare-handed expedition inside the chain, a success inside the
 chain, a Deep expedition inside the chain.
@@ -838,7 +838,7 @@ Audit the exact active table in `ITEM_v2.8.0.md`, including:
 - Ramen cold10 / Supply3
 - Ice fire10 / Supply1
 - Candy fear10 / Supply2
-(v2.9.0 balance close values, User 2026-09-25)
+(v2.9.1 balance values, User 2026-09-25)
 
 Supply N is displayed as `피로 회복 N` (User 2026-09-24, v2.9.0).
 
@@ -846,7 +846,7 @@ PASS: no stale Stat bundle survives.
 
 ### ITEM-Q81 — REBALANCED PRICE TABLE
 
-PASS (User 2026-09-25, v2.9.0 balance close):
+PASS (User 2026-09-25, v2.9.1 balance):
 - every Item's Sell = Buy × 2 exactly
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
@@ -1016,11 +1016,11 @@ Exact pre-Epic Main/Lower/Hybrid Item Counter values:
 - ramen cold +10
 - lava cold +6
 - goggles whiteout +20
-(v2.9.0 balance close values, User 2026-09-25: within a Rarity, Counter + pressed-Stat contribution is equal)
+(v2.9.1 balance values, User 2026-09-25: within a Rarity, Counter + pressed-Stat contribution is equal)
 
 PASS:
 - specialist Field Gear does not retain stale generic positive Core Stats except explicit current catalog exceptions
-- Hybrid remains weaker per target than dedicated specialist
+- Hybrid remains weaker per target than any dedicated specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1)
 
 ### ITEM-Q15 — HAZARD ITEM MATRIX
 
@@ -1034,7 +1034,7 @@ For every canonical Hazard:
 - Main remains the most reliable dedicated response
 
 PASS:
-No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate its specialist.
+No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1).
 
 ### ITEM-Q07 — HOT PACK VS LAVA NOODLE
 
@@ -1074,9 +1074,8 @@ EXPECT exact new Epic Field Gear:
 ```
 
 PASS:
-- each dual-Hazard value remains below the owning dedicated Main specialist value
-  UNRESOLVED (reported 2026-09-25): 속박 +18 and 어둠 +18 exceed their Common Main specialists (경량 로프 / 랜턴 건전지 +16)
-  under the balance-close values; the User decides which rule holds
+- each dual-Hazard value remains below every dedicated specialist of the same or a higher Rarity for that Hazard
+  (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16)
 - FIRE item does not invent a second FIRE Hazard
 - `마그마 냉각장비 투력+6` is an explicit exception only
 

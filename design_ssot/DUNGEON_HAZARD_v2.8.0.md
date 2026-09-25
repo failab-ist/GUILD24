@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_HAZARD_v2.8.0-patch.md,history/DUNGEON_HAZARD_v2.7.0.md,history/DUNGEON_HAZARD_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_HAZARD.md
@@ -169,7 +169,7 @@ Re-tuned -1 from the first v2.9.0 table (+5 / +5 / +8 / +10) after the I-2 re-me
 
 Trait result modifiers and their outcome scope -> `NPC_TRAIT_v2.8.0.md`.
 
-Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue (User 2026-09-25, v2.9.0 balance close).
+Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue (User 2026-09-25, v2.9.1 balance).
 
 ## FATIGUE STAT PENALTY
 
@@ -320,7 +320,7 @@ Rules:
 
 ## GATE POWER — LATE-DAY SLOPE
 
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.0 balance close: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises):
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises):
 
 ```text
 Day term
@@ -770,7 +770,7 @@ On an environment/other Injury branch:
       )
 
 The injured-departure escalation is +15%p under INJURED RE-EXPEDITION SEVERE ESCALATION.
-Base shares 0.36 / 0.11 (User 2026-09-25, v2.9.0 balance close; were 0.42 / 0.13).
+Base shares 0.36 / 0.11 (User 2026-09-25, v2.9.1 balance; were 0.42 / 0.13).
 The single failure-conditioned Death rule, Insurance conversions, Aftercare and Great Success keep
 their current owner ordering and are not redefined here.
 
@@ -796,7 +796,7 @@ Ordinary expedition Wallet reward:
 
     baseWalletReward = 35 + Day × 8
 
-Outcome multiplier (User 2026-09-25, v2.9.0; keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공; 대성공 / 성공 back to 1.00 at the balance close):
+Outcome multiplier (User 2026-09-25, v2.9.0; keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공; 대성공 / 성공 back to 1.00 in v2.9.1):
 
     대성공 / 성공 = 1.00
     퇴각 = 0.35
@@ -946,7 +946,7 @@ fatigueEscalation = 0.10 if fatigueBeforeExpedition = 40, else 0
 strainEscalation  = min(0.30, 0.08 × max(0, consecutiveInjuredDepartures − 1))
   consecutiveInjuredDepartures = this departure, if begun at injury=1, plus the unbroken run of this adventurer's
     immediately preceding expeditions also begun at injury=1; 0 when this departure is healthy
-  (User 2026-09-25, v2.9.0 balance close: only CONSECUTIVE injured departures count — a healthy departure, including the
+  (User 2026-09-25, v2.9.1 balance: only CONSECUTIVE injured departures count — a healthy departure, including the
    return after a Severe-Injury rest, resets the chain; the first injured departure is free, every further one adds 8%p,
    up to 30%p; Fatigue no longer feeds this term)
 
@@ -974,7 +974,7 @@ These caps are conditional failure-risk caps, not unconditional whole-expedition
 
 ### Preparation / Level Death reduction
 
-(User 2026-09-25, v2.9.0 balance close.) The failure Death roll uses
+(User 2026-09-25, v2.9.1 balance.) The failure Death roll uses
 
 ```text
 rolledDeathChance = failureDeathChance × preparedFactor × levelFactor
@@ -1045,7 +1045,7 @@ This modifier is about the danger of sending an already-wounded adventurer back 
 
 ## RETREAT HEALING
 
-(User 2026-09-25, v2.9.0 balance close.) An adventurer who began the expedition at `injury=1` and whose Outcome is
+(User 2026-09-25, v2.9.1 balance.) An adventurer who began the expedition at `injury=1` and whose Outcome is
 `퇴각` is healed (injury → 0) with chance
 
 ```text
@@ -1061,7 +1061,7 @@ k = the unbroken run of this adventurer's immediately preceding expeditions that
 
 ## BAD-LUCK PREPARATION ASSIST (hidden)
 
-(User 2026-09-25, v2.9.0 balance close; a hidden correction kept minimal.) Within one Night's ordinary expeditions, in
+(User 2026-09-25, v2.9.1 balance; a hidden correction kept minimal.) Within one Night's ordinary expeditions, in
 resolution order:
 
 - count only expeditions that carried 1+ Item; a bare-handed expedition neither counts nor breaks the chain

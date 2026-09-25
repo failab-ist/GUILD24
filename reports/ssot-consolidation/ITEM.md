@@ -736,9 +736,9 @@ User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carrie
 The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)).
 ```
 
-## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md` §5): Counter values by Rarity with the 강인함 +4 rule; Potion 8 / 14 / 20 / 28; 간단 도시락 강인함 12 · 불룡볶음면 강인함 8 · 길드 특제 도시락 강인함 16 · 에너지드링크 기동 17 · Epic drinks 22 / 24; Fatigue recovery 삼각김밥 5 · 컵라면 3 · 간단 도시락 6 · 불룡볶음면 3 · 길드 특제 도시락 7; prices raised with the effect (+15% / +20% / Epic +10%); Sell = Buy × 2 for every Item. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §5): Counter values by Rarity with the 강인함 +4 rule; Potion 8 / 14 / 20 / 28; 간단 도시락 강인함 12 · 불룡볶음면 강인함 8 · 길드 특제 도시락 강인함 16 · 에너지드링크 기동 17 · Epic drinks 22 / 24; Fatigue recovery 삼각김밥 5 · 컵라면 3 · 간단 도시락 6 · 불룡볶음면 3 · 길드 특제 도시락 7; prices raised with the effect (+15% / +20% / Epic +10%); Sell = Buy × 2 for every Item. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 | battlelunch | 영웅 결전 도시락 | Food E | 210 / 440 | 강인함 +18, Supply 9 | 2d |
@@ -797,10 +797,10 @@ Buy / Sell = 40 / 85
 
 ```new
 - narrow Main Hazard specialists of one Rarity should remain in comparable practical SALE bands
-- Sell = Buy × 2 for every Item, so the Player can predict a price from its cost (User 2026-09-25, v2.9.0 balance close)
+- Sell = Buy × 2 for every Item, so the Player can predict a price from its cost (User 2026-09-25, v2.9.1 balance)
 - Common prices hold (the early low margin is the D1~10 operating-cost pressure); an Uncommon / Rare whose effect rose at the
-balance close costs +15% (+20% when the effect rose 30%+), an Epic whose effect rose +10%, Insurance holds
-(User 2026-09-25, v2.9.0 balance close)
+v2.9.1 balance costs +15% (+20% when the effect rose 30%+), an Epic whose effect rose +10%, Insurance holds
+(User 2026-09-25, v2.9.1 balance)
 | poison | 농축 해독제 +30 | 방진마스크 +24 | 강인함 / 해독가 / 거미줄 방호세트 +22 |
 | bind | 경량 로프 +16 | — | 기동 / Stat support / 거미줄 방호세트 +18 |
 | corrosion | 부식 방지 코팅제 +24 | — | 방수망토 +6 / 강인함 / 연금 방수슈트 +22 |
@@ -810,10 +810,9 @@ balance close costs +15% (+20% when the effect rose 30%+), an Epic whose effect 
 | dark | 랜턴 건전지 +16 | — | 정신 / 눈썰미 / 성화 랜턴 +18 |
 | cold | 핫팩 +24 | 컵라면 +10 | 불룡볶음면 +6 / 강인함 / 백설 방한고글 +22 |
 | whiteout | 설원 고글 +20 | — | 정신 / 눈썰미 / 백설 방한고글 +18 |
-Counter values by Rarity (User 2026-09-25, v2.9.0 balance close): within one Rarity, `Counter + the pressed Stat's
+Counter values by Rarity (User 2026-09-25, v2.9.1 balance): within one Rarity, `Counter + the pressed Stat's
 defense contribution` is equal, so a 강인함-pressed Hazard (독 · 냉기 · 부식, 강인함 ÷3) carries +4 over a 기동- / 정신-pressed
 one (÷2). Field Gear and the Main Drink Counters: Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22
-(a hybrid stays below the Uncommon specialist of each Hazard it covers). Food / Drink secondary Counters (컵라면, 집중 사탕,
 얼음컵, 불룡볶음면 냉기, 방수망토) keep their values.
 | 중급 포션 | Uncommon | 125 / 250 | 투력 +14 |
 | 상급 포션 | Rare | 175 / 350 | 투력 +20 |
@@ -870,4 +869,25 @@ Buy / Sell = 80 / 160
 | 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +22, Supply 2 | Top-end mobility |
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +24, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 210 / 420 | 투력 +28 | Top-end raw Power |
+```
+
+## AMENDMENT — v2.9.1 balance: 위령제 conditions / 만반의 준비 tutorial / hybrid rule (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may recur, +1 each time); a contextual 만반의 준비 tutorial the first time both Bag slots of an uninjured customer departing below Fatigue 20 are filled; an Epic hybrid stays below every specialist of the same or a higher Rarity (it may exceed a Common Main). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+(a hybrid stays below every specialist of the same or a higher Rarity for each Hazard it covers; it may exceed a
+Common Main such as 경량 로프 / 랜턴 건전지 — User 2026-09-25, v2.9.1). Food / Drink secondary Counters (컵라면, 집중 사탕,
+```
+
+## AMENDMENT — v2.9.1 balance: hybrid dominance rule (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the no-dominance rule compares a hybrid with Directs of the same or a higher Rarity only.
+
+```text
+- Hybrid must not strictly dominate Direct
+```
+
+```new
+- Hybrid must not strictly dominate a Direct of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main)
 ```

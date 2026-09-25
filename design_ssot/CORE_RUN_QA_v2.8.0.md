@@ -2,8 +2,8 @@
 
 DOC=CORE_RUN_QA
 OWNER=qa,run,phase,save,abandon,runtime_progression,final_timeline,fresh_init,tutorial_reset
-DOC_VERSION=2.8.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/CORE_RUN_QA_v2.8.0-patch.md,history/CORE_RUN_QA_v2.7.0.md,history/CORE_RUN_QA_v2.6.1.md,history/CORE_RUN_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/CORE_RUN_QA.md
@@ -19,7 +19,7 @@ Start a new run.
 
 EXPECT:
 - Day=1 normal flow starts after D0 setup
-- current Run baseline remains `Gold=700G`, `InventoryCapacity=18` (v2.9.0 balance close, User 2026-09-25)
+- current Run baseline remains `Gold=700G`, `InventoryCapacity=18` (v2.9.1 balance, User 2026-09-25)
 - start stock is owned by `CORE_RUN_v2.8.0.md` / `RUN-Q72`
 - no unintended extra resources
 
@@ -28,7 +28,7 @@ All starting values match canonical state.
 
 ### RUN-Q-v29-DL — SEGMENTED DEATH LIMIT
 
-(User 2026-09-25, v2.9.0 balance close; owner `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.)
+(User 2026-09-25, v2.9.1 balance; owner `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.)
 
 Controlled Runs reaching cumulative Deaths 4 / 5 on D10, 5 on D11, 7 / 8 on D20, 10 / 11 on D30; each with and without
 추모 방명록, and with a 위령제 on an earlier Day.

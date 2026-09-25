@@ -700,9 +700,9 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 - Wallet outcome multipliers are Retreat 0.08 / combat-success 1.00 / other living 0.18
 ```
 
-## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.0 balance close): QA expectations follow the amended owners — Gate Day term 1.20 / 0.80, 중상 Fatigue 0, consecutive-only strain cut, Severe shares 36% / 11%, Wallet success 1.00, new BC1 (만반의 준비 / Level) · BC2 (retreat healing) · BC3 (bad-luck assist), Item values and prices with Sell = Buy × 2; the Epic-hybrid-vs-Common-Main conflict (속박 / 어둠 18 > 16) is marked UNRESOLVED. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance): QA expectations follow the amended owners — Gate Day term 1.20 / 0.80, 중상 Fatigue 0, consecutive-only strain cut, Severe shares 36% / 11%, Wallet success 1.00, new BC1 (만반의 준비 / Level) · BC2 (retreat healing) · BC3 (bad-luck assist), Item values and prices with Sell = Buy × 2; the Epic-hybrid-vs-Common-Main conflict (속박 / 어둠 18 > 16) is marked UNRESOLVED. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 | 생수 | C | 40/85 | +10 | 2 | — |
@@ -754,20 +754,20 @@ PASS exact Buy/Sell for changed original-catalog prices:
 ```
 
 ```new
-- the Day term is `min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.0 balance close)
+- the Day term is `min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance)
 - the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
 Controlled adventurer records: 1 / 2 / 3 / 5 consecutive expeditions begun at injury=1 ending in this injured departure, the same
-chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.0 balance close).
+chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.1 balance).
 - the first injured departure adds nothing beyond the existing injured term
 - every further CONSECUTIVE injured departure adds +8%p to the conditional failure Death chance and to its cap, capped at +30%p
 - one healthy departure resets the chain; Fatigue 20+ departures add nothing to this term
 - the count comes from the adventurer's own records (this departure included); no new NPC field
 - strainEscalation equals min(0.30, 0.08·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
-- failed-combat Severe branch uses 36% base before current modifiers (User 2026-09-25, v2.9.0 balance close)
+- failed-combat Severe branch uses 36% base before current modifiers (User 2026-09-25, v2.9.1 balance)
 - environment/other Severe branch uses 11% base before current modifiers
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.0 balance close)
+- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.1 balance)
 ### DUN-Q-v29-BC1 — 만반의 준비 / LEVEL DEATH REDUCTION
-(User 2026-09-25, v2.9.0 balance close; owner `DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction.)
+(User 2026-09-25, v2.9.1 balance; owner `DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction.)
 Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 만반의 준비 (healthy, Fatigue < 20, 2+ Items),
 and the three near misses (injured / Fatigue 20 / one Item).
 - rolledDeathChance = failureDeathChance × preparedFactor × levelFactor exactly; preparedFactor 0.80 only when all three hold
@@ -776,12 +776,12 @@ and the three near misses (injured / Fatigue 20 / one Item).
 - the SALE `실패 시 사망 위험` includes levelFactor and never preparedFactor
 - the Night report shows the 만반의 준비 save line once, only when the band was hit
 ### DUN-Q-v29-BC2 — RETREAT HEALING
-(User 2026-09-25, v2.9.0 balance close; owner §RETREAT HEALING.)
+(User 2026-09-25, v2.9.1 balance; owner §RETREAT HEALING.)
 - only an injured departure ending 퇴각 can heal; chance 25% / 50% / 75% / 100% for 0 / 1 / 2 / 3+ preceding consecutive injured 퇴각
 - a 부상 / 중상 result resets the chain; 구급키트 does not change the chance
 - one extra draw only on this path; the Night line appears only on a heal and never shows the chance
 ### DUN-Q-v29-BC3 — HIDDEN BAD-LUCK ASSIST
-(User 2026-09-25, v2.9.0 balance close; owner §BAD-LUCK PREPARATION ASSIST.)
+(User 2026-09-25, v2.9.1 balance; owner §BAD-LUCK PREPARATION ASSIST.)
 Controlled Night queues: 3 / 4 / 5 carried failures in a row, a bare-handed expedition inside the chain, a success inside the
 chain, a Deep expedition inside the chain.
 - no assist before the chain reaches 3; then assist 0.10 and +0.05 per further failure
@@ -793,8 +793,8 @@ chain, a Deep expedition inside the chain.
 - Lava survival +8 / cold6 / Supply3
 - Ramen cold10 / Supply3
 - Candy fear10 / Supply2
-(v2.9.0 balance close values, User 2026-09-25)
-PASS (User 2026-09-25, v2.9.0 balance close):
+(v2.9.1 balance values, User 2026-09-25)
+PASS (User 2026-09-25, v2.9.1 balance):
 - every Item's Sell = Buy × 2 exactly
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 간단 도시락 100 · 불룡볶음면 80 · 에너지드링크 80 · 용사의 곡주 70 · 방진마스크 80 · 핫팩 70 · 부식 방지 코팅제 85
@@ -819,7 +819,7 @@ PASS (User 2026-09-25, v2.9.0 balance close):
 - wine fear +20
 - heat cold +24
 - goggles whiteout +20
-(v2.9.0 balance close values, User 2026-09-25: within a Rarity, Counter + pressed-Stat contribution is equal)
+(v2.9.1 balance values, User 2026-09-25: within a Rarity, Counter + pressed-Stat contribution is equal)
 - 95 / 190
 - poison Counter +30
 거미줄 방호세트   165/330  독+22 / 속박+18
@@ -827,9 +827,24 @@ PASS (User 2026-09-25, v2.9.0 balance close):
 성화 랜턴         165/330  공포+18 / 어둠+18
 백설 방한고글     165/330  냉기+22 / 화이트아웃+18
 마그마 냉각장비   175/350  화염+18 / 투력+6
-UNRESOLVED (reported 2026-09-25): 속박 +18 and 어둠 +18 exceed their Common Main specialists (경량 로프 / 랜턴 건전지 +16)
-under the balance-close values; the User decides which rule holds
 초고속 에너지드링크    Drink E   175/350  기동+22 / Supply2
 대현자 허브엘릭서      Drink E   175/350  정신+24 / Supply2
 최상급 포션            Potion E  210/420  투력+28
+```
+
+## AMENDMENT — v2.9.1 balance: 위령제 conditions / 만반의 준비 tutorial / hybrid rule (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may recur, +1 each time); a contextual 만반의 준비 tutorial the first time both Bag slots of an uninjured customer departing below Fatigue 20 are filled; an Epic hybrid stays below every specialist of the same or a higher Rarity (it may exceed a Common Main). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+- Hybrid remains weaker per target than dedicated specialist
+- each dual-Hazard value remains below the owning dedicated Main specialist value
+No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate its specialist.
+```
+
+```new
+- Hybrid remains weaker per target than any dedicated specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1)
+No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1).
+- each dual-Hazard value remains below every dedicated specialist of the same or a higher Rarity for that Hazard
+(User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16)
 ```

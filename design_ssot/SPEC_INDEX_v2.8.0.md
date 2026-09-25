@@ -2,12 +2,12 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_9_0_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; SOURCE_ADOPTION_PENDING (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED except the balance-close amendments of 2026-09-25 (owners amended docs-first; Source adoption pending — CHANGELOG §v2.9.0 balance close)
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=EVENT 23. 위령제 TYPE / WEIGHT / eligibility / copy; Night copy for retreat healing and 만반의 준비; Epic hybrid 속박 / 어둠 18 vs Common Main 16 (DUNGEON_ITEM_QA ITEM-Q83)
+FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; SOURCE_ADOPTION_PENDING (v2.8 canonical baseline closed 2026-09-24)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_PENDING (owners amended docs-first; Source adoption in a separate session — CHANGELOG §v2.9.1)
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=copy only — 위령제 title / reveal, 만반의 준비 tutorial line, Night lines for retreat healing and 만반의 준비 (drafts proposed, awaiting User)
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -240,10 +240,19 @@ The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29
 (F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
-Balance close 2026-09-25 (User): the BALANCE FINDING is decided — every value is in `reports/v29-balance-agreements.md`, the
-measurements in `reports/v29-balance-ideal.md`; 7-b is closed (the buffer stays). The owners are amended docs-first
-(CHANGELOG §v2.9.0 balance close). The tag waits on Source adoption of those amendments and the three UNRESOLVED details in
-the header.
+User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). Whether and where `v2.9.0` is tagged is the
+User's call; the v2.9.0 implementation is `main` `3f18ceb`.
+
+## v2.9.1 — BALANCE
+
+User decisions 2026-09-25. Every value: `reports/v29-balance-agreements.md`; measurements and the accepted gaps:
+`reports/v29-balance-ideal.md`; owner amendments: CHANGELOG §v2.9.1. 7-b is closed (the remaining-Supply buffer stays).
+
+v2.9.1 is ready to close when:
+- every v2.9.1 owner amendment is in Source (WORK_STATE lists the batches) and the copy-only open items are approved and adopted
+- `npm test`, `npm run ssot:check`, `npm run qa:runtime` PASS and the UI batch passes its screenshot review
+- the native build reproduces the closing measurement (`tools/remeasure-v29-closing-results.json`) within sampling error
+- `reports/deco-balance` is regenerated
 
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
 

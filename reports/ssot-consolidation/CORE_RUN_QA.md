@@ -339,18 +339,18 @@ Every check heading goes from `##` to `###`; text unchanged. Topic group heading
 - RUN-Q73 lists no D25 `FINAL까지 5일` signal (FINAL TIMELINE — EXACT has it).
 - Core-Roster overhead formula value itself (RUN-Q06 checks only consistency / single charge).
 
-## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.0 balance close): QA expectations follow the amended owners — operating cost 170 + 1 × (Day − 1) with Level factor .03; start Gold 700G; segmented Death limit (RUN-Q-v29-DL). Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance): QA expectations follow the amended owners — operating cost 170 + 1 × (Day − 1) with Level factor .03; start Gold 700G; segmented Death limit (RUN-Q-v29-DL). Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 - current Run baseline remains `Gold=1000G`, `InventoryCapacity=18`
 ```
 
 ```new
-- current Run baseline remains `Gold=700G`, `InventoryCapacity=18` (v2.9.0 balance close, User 2026-09-25)
+- current Run baseline remains `Gold=700G`, `InventoryCapacity=18` (v2.9.1 balance, User 2026-09-25)
 ### RUN-Q-v29-DL — SEGMENTED DEATH LIMIT
-(User 2026-09-25, v2.9.0 balance close; owner `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.)
+(User 2026-09-25, v2.9.1 balance; owner `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.)
 Controlled Runs reaching cumulative Deaths 4 / 5 on D10, 5 on D11, 7 / 8 on D20, 10 / 11 on D30; each with and without
 추모 방명록, and with a 위령제 on an earlier Day.
 - the Run ends at Closing exactly when the cumulative count reaches the current segment limit 5 / 8 / 11

@@ -3,14 +3,12 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.0 — implementation complete 2026-09-25; release open on the BALANCE FINDING (User decisions 2026-09-24/25)
+## v2.9.1 — balance (User decisions 2026-09-25); owners amended docs-first, Source adoption pending
 
-Theme: easy to learn, hard to master. Readability, onboarding, a visible transaction, simpler rules.
+The v2.9.0 BALANCE FINDING is resolved as its own version (User 2026-09-25). Values: `reports/v29-balance-agreements.md`;
+measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Source adoption runs in a separate session
+(WORK_STATE). Each owner amendment is listed with its commit.
 
-Docs-first. Each owner amendment is listed when committed.
-
-- Balance close (User 2026-09-25; values `reports/v29-balance-agreements.md`, measurements `reports/v29-balance-ideal.md`) —
-  owners amended docs-first, Source adoption pending:
   - DUNGEON_HAZARD (8854c89): 중상 Fatigue 0; Severe shares .36 / .11; repeated-strain cut on consecutive injured departures
     only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing 25 → 100%; hidden bad-luck
     preparation assist; expedition Wallet 대성공 / 성공 1.00; Gate Day term 1.20 / 0.80.
@@ -21,14 +19,25 @@ Docs-first. Each owner amendment is listed when committed.
     Capital 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects +3 offers · 30% · 50G ·
     55% · 65% · 45% · three saves.
   - BOSS (2c900c7): WRATH 180, GREED cap 11, SLOTH 200 / 189 / 171 / 149.
-  - EVENT (c03d205): 23. 위령제 — trigger, weight and copy UNRESOLVED.
+  - EVENT (c03d205, then the conditions below): 23. 위령제.
   - UI_UX / COPY_AUDIT (c862a7c): `사망 {n} / {limit} · D{end}까지` always on MORNING and ORDER.
   - QA (5a9a645, 06a2de9): DUNGEON_ITEM_QA, ECONOMY_ORDER_QA, CORE_RUN_QA (RUN-Q-v29-DL), UI_UX_QA (UI-Q-v29-26).
   - 7-b closed: the remaining-Supply buffer stays. Known measured gaps accepted by the User are in `reports/v29-balance-ideal.md`
     §종결 측정.
+  - Follow-up decisions (User 2026-09-25): 위령제 uses the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may
+    recur, +1 each time); a contextual 만반의 준비 tutorial (UI_UX §만반의 준비 TUTORIAL); an Epic hybrid stays below every
+    specialist of the same or a higher Rarity (ITEM, DUNGEON_ITEM_QA ITEM-Q73 / Q83 / Q15).
+  - Open (copy only, drafts proposed to the User): 위령제 title / reveal, the 만반의 준비 tutorial line, the Night lines for
+    retreat healing and 만반의 준비.
+
+## v2.9.0 — implementation complete 2026-09-25; the BALANCE FINDING moved to v2.9.1 (User decisions 2026-09-24/25)
+
+Theme: easy to learn, hard to master. Readability, onboarding, a visible transaction, simpler rules.
+
+Docs-first. Each owner amendment is listed when committed.
 
 State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
-Open before the tag: the BALANCE FINDING (`reports/v29-balance-finding-handoff.md`, decisions taken in a separate session) and 7-b.
+The BALANCE FINDING (`reports/v29-balance-finding-handoff.md`) and 7-b were decided in the balance session and are v2.9.1 (User 2026-09-25).
 
 - Quick fix (User 2026-09-25): SALE desk layout — on a desk the dossier column is its own area down to the dock, the counter
   tray sits under the shelf column only, and the two columns scroll separately; a redraw keeps both positions

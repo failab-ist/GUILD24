@@ -1077,13 +1077,13 @@ SALE with a customer at 1024 and 1280 with a shelf taller than the column; scrol
 - a full-width tray on a desk, the dossier column cut off above the tray, the dossier column scrolling with the shelf, or a shelf that jumps to the top after a pick
 ```
 
-## AMENDMENT — v2.9.0 balance close: UI-Q-v29-26 (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance: UI-Q-v29-26 (User decision 2026-09-25)
 
-User decision 2026-09-25 (v2.9.0 balance close): UI-Q-v29-26 checks the always-visible Death count / segment limit on MORNING and ORDER.
+User decision 2026-09-25 (v2.9.1 balance): UI-Q-v29-26 checks the always-visible Death count / segment limit on MORNING and ORDER.
 
 ```new
 ### UI-Q-v29-26 — DEATH LIMIT ALWAYS VISIBLE
-(User 2026-09-25, v2.9.0 balance close; owner `UI_UX_v2.8.0.md` §DEATH LIMIT — ALWAYS VISIBLE, copy COPY_AUDIT §4-23.)
+(User 2026-09-25, v2.9.1 balance; owner `UI_UX_v2.8.0.md` §DEATH LIMIT — ALWAYS VISIBLE, copy COPY_AUDIT §4-23.)
 MORNING and ORDER at 360 / 390 / 412 and 1280 with 0 Deaths, with 4 Deaths on D10 (one left), on D11 after the segment
 step, and with 추모 방명록 worn.
 - both screens show `사망 {n} / {limit} · D{end}까지` in the top status line without scrolling, on every Day

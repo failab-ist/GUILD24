@@ -2,8 +2,8 @@
 
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/CORE_RUN_v2.8.0-patch.md,history/CORE_RUN_v2.7.0.md,history/CORE_RUN_v2.6.1.md,history/CORE_RUN_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/CORE_RUN.md
@@ -210,7 +210,7 @@ Canonical:
 
 At new run:
 
-Gold=700G    (User 2026-09-25, v2.9.0 balance close; was 1000G)
+Gold=700G    (User 2026-09-25, v2.9.1 balance; was 1000G)
 InventoryCapacity=18
 
 Stock:
@@ -668,7 +668,7 @@ Seed UI/debug controls are not core player progression.
 
 ## DEATH LIMIT — SEGMENTED
 
-(User 2026-09-25, v2.9.0 balance close.) A Run ends at Closing when the Run's cumulative Death count reaches the limit of the
+(User 2026-09-25, v2.9.1 balance.) A Run ends at Closing when the Run's cumulative Death count reaches the limit of the
 segment the current Day is in:
 
 ```text

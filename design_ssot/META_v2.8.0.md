@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/META_v2.8.0-patch.md,history/META_v2.7.0.md,history/META_v2.6.1.md,history/META_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/META.md
@@ -461,7 +461,7 @@ D25-29  = 4%
 D30     = 5%
 ```
 
-(User 2026-09-25, v2.9.0 balance close): back to 1 / 2 / 3 / 4 / 5% with the cheaper Decoration prices below. Buying a Decoration inside the first Run is still not a goal.
+(User 2026-09-25, v2.9.1 balance): back to 1 / 2 / 3 / 4 / 5% with the cheaper Decoration prices below. Buying a Decoration inside the first Run is still not a goal.
 
 The band is the Day the Run actually reached. Boss CLEAR does not multiply it.
 
@@ -470,7 +470,7 @@ The band is the Day the Run actually reached. Boss CLEAR does not multiply it.
 Measured under the approved balance, across the ordinary purchase orders:
 
 ```text
-1st Decoration : around Run 4-6     (measured at the v2.9.0 balance close; the 2026-09-24 expectation was Run 2-3)
+1st Decoration : around Run 4-6     (measured at the v2.9.1 balance; the 2026-09-24 expectation was Run 2-3)
 all four Slots : around Run 9
 ```
 
@@ -530,12 +530,12 @@ a Relic that touch the same quantity simply both apply.
 
 ### sign — 새벽배송 안내판
 ```text
-ORDER offer candidates +3    (User 2026-09-25, v2.9.0 balance close; was +2)
+ORDER offer candidates +3    (User 2026-09-25, v2.9.1 balance; was +2)
 ```
 
 ### wall — 길드 제휴 현판
 ```text
-each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.0 balance close; was 25%)
+each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%)
 ```
 
 The roll happens once per Morning, alongside the ordinary visitor generation, and is independent
@@ -543,17 +543,17 @@ of every other visitor source. It is a chance, not a guarantee: most Days it add
 
 ### counter — 알뜰 금고
 ```text
-every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (User 2026-09-25, v2.9.0 balance close; was +40G)
+every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (User 2026-09-25, v2.9.1 balance; was +40G)
 ```
 
 ### display — 프리미엄 쇼케이스
 ```text
-rare-NPC rarity weights = [45, 31.5, 17.5, 4.75, 1.25]    (User 2026-09-25, v2.9.0 balance close; was [50, 30, 15, 4, 1])
+rare-NPC rarity weights = [45, 31.5, 17.5, 4.75, 1.25]    (User 2026-09-25, v2.9.1 balance; was [50, 30, 15, 4, 1])
 rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
 Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 55%
-(User decision 2026-09-24; 55% at the v2.9.0 balance close 2026-09-25, each grade's lift × 1.5). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
+(User decision 2026-09-24; 55% at the v2.9.1 balance 2026-09-25, each grade's lift × 1.5). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 rarity draw when the Decoration is active. It adds no extra spawn, no extra rarity roll and no new
 Gameplay RNG draw.
 
@@ -568,12 +568,12 @@ User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
 
 ### sign — 훈련소 제휴 간판 (id trainingRack)
 ```text
-every adventurer created while it is worn: 65% chance of spawn Level +1    (User 2026-09-25, v2.9.0 balance close; was 50%)
+every adventurer created while it is worn: 65% chance of spawn Level +1    (User 2026-09-25, v2.9.1 balance; was 50%)
 ```
 
 ### wall — 의무실 현판
 ```text
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 45% chance    (User 2026-09-25, v2.9.0 balance close; was 35%)
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 45% chance    (User 2026-09-25, v2.9.1 balance; was 35%)
 ```
 
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and
@@ -581,7 +581,7 @@ is shown on the SALE counter and counted in the Day's record (UI_UX owns the pre
 
 ### counter — 추모 방명록 (id memorialBoard)
 ```text
-every segment Death limit +2 (5 / 8 / 11 -> 7 / 10 / 13; CORE_RUN §DEATH LIMIT — SEGMENTED; User 2026-09-25, v2.9.0 balance close)
+every segment Death limit +2 (5 / 8 / 11 -> 7 / 10 / 13; CORE_RUN §DEATH LIMIT — SEGMENTED; User 2026-09-25, v2.9.1 balance)
 ```
 
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the
@@ -592,12 +592,12 @@ sits in the dearer Slot; ids are kept from the first placement, names and art fo
 
 ### display — 구급품 진열장 (id firstAidKit)
 ```text
-up to three times per Run, a Death that no carried Insurance prevented becomes 중상    (User 2026-09-25, v2.9.0 balance close; was twice)
+up to three times per Run, a Death that no carried Insurance prevented becomes 중상    (User 2026-09-25, v2.9.1 balance; was twice)
 ```
 
 ### Prices — EXACT
 
-`DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24; prices 2026-09-25, v2.9.0 balance close — cheapest 500, dearest 2.5×, total 3,500)
+`DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24; prices 2026-09-25, v2.9.1 balance — cheapest 500, dearest 2.5×, total 3,500)
 
 ```text
 sign    새벽배송 안내판 / 훈련소 제휴 간판   1250 Store Capital
@@ -656,7 +656,7 @@ Validation must confirm:
 If validation produces a Balance Finding, report it and stop. Do not auto-tune the rate table,
 Decoration prices, or unrelated Run balance.
 
-User decision 2026-09-25 (v2.9.0 balance close): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`reports/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
+User decision 2026-09-25 (v2.9.1 balance): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`reports/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
 
 ## RETIRED FRANCHISE SYSTEM — INACTIVE ARCHIVE
 

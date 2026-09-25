@@ -2,8 +2,8 @@
 
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/ITEM_v2.8.0-patch.md,history/ITEM_v2.7.0.md,history/ITEM_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/ITEM.md
@@ -219,10 +219,10 @@ Item price should follow actual gameplay breadth/slot value, not Rarity label al
 
 Rules:
 - narrow Main Hazard specialists of one Rarity should remain in comparable practical SALE bands
-- Sell = Buy × 2 for every Item, so the Player can predict a price from its cost (User 2026-09-25, v2.9.0 balance close)
+- Sell = Buy × 2 for every Item, so the Player can predict a price from its cost (User 2026-09-25, v2.9.1 balance)
 - Common prices hold (the early low margin is the D1~10 operating-cost pressure); an Uncommon / Rare whose effect rose at the
-  balance close costs +15% (+20% when the effect rose 30%+), an Epic whose effect rose +10%, Insurance holds
-  (User 2026-09-25, v2.9.0 balance close)
+  v2.9.1 balance costs +15% (+20% when the effect rose 30%+), an Epic whose effect rose +10%, Insurance holds
+  (User 2026-09-25, v2.9.1 balance)
 - Rarity may justify a modest premium but must not make a simple single-Hazard answer practically unsellable to the customers who need it
 - broad multi-role Food / strong Insurance / exceptional Utility may remain materially more expensive
 - Epic late-Run Items may command a slot-efficiency premium, but 50% pricing must remain a plausible NPC-investment route rather than becoming fake affordability
@@ -323,7 +323,7 @@ Hybrid = flexibility
 Rules:
 - one Hazard must not require one specific mandatory SKU
 - one Item must not solve an entire Family
-- Hybrid must not strictly dominate Direct
+- Hybrid must not strictly dominate a Direct of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main)
 - T3 must retain viable <=2 required-prep-slot routes
 - proper Main/Direct prep should feel reliable, especially T1/T2
 
@@ -348,10 +348,11 @@ Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never;
 | cold | 핫팩 +24 | 컵라면 +10 | 불룡볶음면 +6 / 강인함 / 백설 방한고글 +22 |
 | whiteout | 설원 고글 +20 | — | 정신 / 눈썰미 / 백설 방한고글 +18 |
 
-Counter values by Rarity (User 2026-09-25, v2.9.0 balance close): within one Rarity, `Counter + the pressed Stat's
+Counter values by Rarity (User 2026-09-25, v2.9.1 balance): within one Rarity, `Counter + the pressed Stat's
 defense contribution` is equal, so a 강인함-pressed Hazard (독 · 냉기 · 부식, 강인함 ÷3) carries +4 over a 기동- / 정신-pressed
 one (÷2). Field Gear and the Main Drink Counters: Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22
-(a hybrid stays below the Uncommon specialist of each Hazard it covers). Food / Drink secondary Counters (컵라면, 집중 사탕,
+(a hybrid stays below every specialist of the same or a higher Rarity for each Hazard it covers; it may exceed a
+Common Main such as 경량 로프 / 랜턴 건전지 — User 2026-09-25, v2.9.1). Food / Drink secondary Counters (컵라면, 집중 사탕,
 얼음컵, 불룡볶음면 냉기, 방수망토) keep their values.
 
 The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)).

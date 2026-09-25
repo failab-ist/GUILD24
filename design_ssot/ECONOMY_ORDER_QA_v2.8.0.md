@@ -2,8 +2,8 @@
 
 DOC=ECONOMY_ORDER_QA
 OWNER=qa,economy,order,reroll,wallet,gate_count_forecast,tier_forecast,rarity_progression,final_price
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/ECONOMY_ORDER_QA_v2.8.0-patch.md,history/ECONOMY_ORDER_QA_v2.7.0.md,history/ECONOMY_ORDER_QA_v2.6.1.md,history/ECONOMY_ORDER_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/ECONOMY_ORDER_QA.md
@@ -461,7 +461,7 @@ Core Roster:
 
 Expected:
 
-    dayBase = 170 + 1×(Day-1)    (v2.9.0 balance close, User 2026-09-25)
+    dayBase = 170 + 1×(Day-1)    (v2.9.1 balance, User 2026-09-25)
     base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 
 Then apply only current owned modifiers and round final daily operating cost to nearest 10G under

@@ -2,8 +2,8 @@
 
 DOC=BOSS
 OWNER=boss,boss_identity,boss_trait,boss_information_cadence,sloth,lust
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/BOSS_v2.8.0-patch.md,history/BOSS_v2.7.0.md,history/BOSS_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/BOSS.md
@@ -292,7 +292,7 @@ Purpose:
 - strongest expression of ordinary Final fundamentals
 - no special counter tax
 
-WRATH effective Boss Power=180 (User 2026-09-25, v2.9.0 balance close; was 200 — the ~10th-Run clear rate is the target, the
+WRATH effective Boss Power=180 (User 2026-09-25, v2.9.1 balance; was 200 — the ~10th-Run clear rate is the target, the
 ratio Bosses (PRIDE / ENVY / GLUTTONY / LUST) follow it automatically and the absolute-number Bosses below are scaled with it).
 It is the unmodified baseline every other Boss is measured against.
 
@@ -418,7 +418,7 @@ Keep the existing Gross-Sales metric and revenue target unless separately rebala
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-shortfallCap = 11 Boss Power    (v2.9.0 balance close; was 12, scaled with WRATH 200 -> 180)
+shortfallCap = 11 Boss Power    (v2.9.1 balance; was 12, scaled with WRATH 200 -> 180)
 ```
 
 Thus with WRATH base 180:
@@ -666,7 +666,7 @@ Effective Boss Power by committed `sealBreakCount`:
 3 breaks = 149
 ```
 
-(User 2026-09-25, v2.9.0 balance close; were 225 / 210 / 190 / 165. 1-3 breaks scaled with WRATH 200 -> 180; 0 breaks set
+(User 2026-09-25, v2.9.1 balance; were 225 / 210 / 190 / 165. 1-3 breaks scaled with WRATH 200 -> 180; 0 breaks set
 to 200 by decision.)
 
 Design intent:

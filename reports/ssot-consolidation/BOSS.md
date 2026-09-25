@@ -411,9 +411,9 @@ Not reduced by GLUTTONY (User 2026-09-24, v2.9.0):
 - Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unchanged
 ```
 
-## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md` §7): WRATH 200 -> 180 (ratio Bosses follow); GREED shortfall cap 12 -> 11; SLOTH 200 / 189 / 171 / 149. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §7): WRATH 200 -> 180 (ratio Bosses follow); GREED shortfall cap 12 -> 11; SLOTH 200 / 189 / 171 / 149. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 shortfallCap = 12 Boss Power
@@ -434,10 +434,10 @@ Thus with WRATH base 200:
 ```
 
 ```new
-WRATH effective Boss Power=180 (User 2026-09-25, v2.9.0 balance close; was 200 — the ~10th-Run clear rate is the target, the
+WRATH effective Boss Power=180 (User 2026-09-25, v2.9.1 balance; was 200 — the ~10th-Run clear rate is the target, the
 ratio Bosses (PRIDE / ENVY / GLUTTONY / LUST) follow it automatically and the absolute-number Bosses below are scaled with it).
 It is the unmodified baseline every other Boss is measured against.
-shortfallCap = 11 Boss Power    (v2.9.0 balance close; was 12, scaled with WRATH 200 -> 180)
+shortfallCap = 11 Boss Power    (v2.9.1 balance; was 12, scaled with WRATH 200 -> 180)
 Thus with WRATH base 180:
 - target met -> effective Boss Power 180
 - maximum shortfall penalty -> effective Boss Power 191
@@ -445,7 +445,7 @@ Thus with WRATH base 180:
 1 break  = 189
 2 breaks = 171
 3 breaks = 149
-(User 2026-09-25, v2.9.0 balance close; were 225 / 210 / 190 / 165. 1-3 breaks scaled with WRATH 200 -> 180; 0 breaks set
+(User 2026-09-25, v2.9.1 balance; were 225 / 210 / 190 / 165. 1-3 breaks scaled with WRATH 200 -> 180; 0 breaks set
 to 200 by decision.)
 - applied shortfall strengthening caps at +11 Boss Power
 - target met returns to 180 baseline

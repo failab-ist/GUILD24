@@ -1046,9 +1046,9 @@ User decision 2026-09-25: on a desk the SALE dossier column is its own area down
 - phones keep the single scrolled column and the full-width tray (§SALE — FORECAST PIN covers the readout there)
 ```
 
-## AMENDMENT — v2.9.0 balance close: Death limit always visible (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance: Death limit always visible (User decision 2026-09-25)
 
-User decision 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md` §3): the Death count and the current segment limit are always shown on MORNING and ORDER in the top status line, warning color at one Death left; exact copy COPY_AUDIT §4-23.
+User decision 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3): the Death count and the current segment limit are always shown on MORNING and ORDER in the top status line, warning color at one Death left; exact copy COPY_AUDIT §4-23.
 
 ```text
 2. persistent funds summary
@@ -1056,7 +1056,7 @@ User decision 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.
 
 ```new
 ### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
-(User 2026-09-25, v2.9.0 balance close.) The Run's cumulative Death count and the current segment limit
+(User 2026-09-25, v2.9.1 balance.) The Run's cumulative Death count and the current segment limit
 (`CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED) are always on screen at MORNING and ORDER, in the top status line —
 not only in the 도감.
 - one compact item: count / current limit / the Day the segment ends; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
@@ -1065,4 +1065,19 @@ not only in the 도감.
 - no extra popover, badge or explanation text; the same line on both screens
 - exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
 2. persistent funds summary (the top status line also carries the Death count / limit, §DEATH LIMIT — ALWAYS VISIBLE)
+```
+
+## AMENDMENT — v2.9.1 balance: 위령제 conditions / 만반의 준비 tutorial / hybrid rule (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may recur, +1 each time); a contextual 만반의 준비 tutorial the first time both Bag slots of an uninjured customer departing below Fatigue 20 are filled; an Epic hybrid stays below every specialist of the same or a higher Rarity (it may exceed a Common Main). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+### 만반의 준비 TUTORIAL
+(User 2026-09-25, v2.9.1 balance.) Contextual, like the other first-time marks: shown once per account, the first time
+the Player fills BOTH Bag slots of a customer who is uninjured and whose departure Fatigue (the tray's `출발 B`) is
+below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) is first achieved.
+- anchor: the customer's Bag slots on the SALE counter
+- teaches the condition and the effect in words only; no number, no percentage
+- persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 (User 승인 대기)
 ```

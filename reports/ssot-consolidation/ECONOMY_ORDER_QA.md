@@ -430,15 +430,15 @@ User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carrie
 - no separate purchase-only Counter definition; the legacy 기동-for-속박/진창 Counter exception is gone (User 2026-09-24, v2.9.0)
 ```
 
-## AMENDMENT — v2.9.0 balance close (User decision 2026-09-25)
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.0 balance close): QA expectations follow the amended owners — operating cost 170 + 1 × (Day − 1) with Level factor .03; start Gold 700G; segmented Death limit (RUN-Q-v29-DL). Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance): QA expectations follow the amended owners — operating cost 170 + 1 × (Day − 1) with Level factor .03; start Gold 700G; segmented Death limit (RUN-Q-v29-DL). Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 base = dayBase × (1 + .02×(avgLevel-1)) × (1 + .06×avgRarity)
 ```
 
 ```new
-dayBase = 170 + 1×(Day-1)    (v2.9.0 balance close, User 2026-09-25)
+dayBase = 170 + 1×(Day-1)    (v2.9.1 balance, User 2026-09-25)
 base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 ```

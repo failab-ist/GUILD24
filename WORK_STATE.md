@@ -10,7 +10,7 @@ STATE: V2_9_0_BALANCE_DECIDED — OWNERS AMENDED, SOURCE ADOPTION PENDING
 - balance branch: `claude/sleepy-volta-ywkjeu` — balance decided with the User, owners amended docs-first
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - decided values: `reports/v29-balance-agreements.md`; measurements and accepted gaps: `reports/v29-balance-ideal.md`
-- owner amendments: `design_ssot/CHANGELOG.md` §v2.9.0 balance close (commit per owner); `npm run ssot:check` PASS
+- owner amendments: `design_ssot/CHANGELOG.md` §v2.9.1 balance (commit per owner); `npm run ssot:check` PASS
 - last tagged release: v2.8 (`49a291f`)
 - completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
