@@ -48,6 +48,37 @@ PURPOSE), so no section is promoted. Deferred here from v2.9.0 as not needed now
 - ORDER: render the next-day forecast at secondary weight
 - Store Support cards: clause-per-line wrapping (the v2.9.0 two-clause copy makes it moot)
 
+## REVIEWED AGAINST A GAME-DESIGN TALK (User 2026-09-25)
+
+Source: a design talk the User watched (themes: allowed-action clarity and expectation/function match; simplicity
+built around the core fun; "kind lies" — situational difficulty / probability adjustment and control assist;
+detail; information density; short reward loops). Read against the v2.9.0 state. Nothing is promoted now.
+
+Already covered by v2.9.0 (not deferred): expectation/function match (category grammar line, fixed effect order),
+simplicity around the core fun (Supply → Fatigue only, one Stat per Hazard, two-clause cards), detail (receipt stub,
+hand-over, reason-specific refusal lines).
+
+Routed to the balance session, not here (see `reports/v29-balance-finding-handoff.md`):
+- kind lies as hidden assists: bad-luck protection after consecutive failures, an overhead easing on the day before
+  bankruptcy — allowed by `재료는 공개, 공식은 숨김`, must never contradict the NIGHT proof surface; an alternative or
+  companion to re-tuning the F3 / F4 values
+- tension vs freedom: keeping Fatigue recovery scarce is the tension route, but it must stay a cost, not a dead end
+  (Food that surely clears Fatigue at a price / short shelf life) — decisions 1 and 5 of the handoff
+
+Deferred here (v3.0+ candidates):
+- daily reward loop: one line of "today vs yesterday" (e.g. `어제보다 +N`) at CLOSING on top of the per-customer
+  receipt stub; a short loop between the per-sale beat and the D30 goal
+- ORDER allowed-range surface: before confirming, what today's stock can serve (how many of today's customers) —
+  sits on the boundary of "the judgement is the player's"; needs a User decision before any design
+
+Playtest checklist, not features (record only):
+- control assist: 바가지 next to 정가 as a mis-tap risk; whether the same-SKU refusal ceiling reads as a penalty
+- information density: SALE at 360 with the tray filled (three shelf rows visible is the current floor); one more
+  screenshot review pass for what can still go
+
+Not applicable: choice-control / narrative manipulation (Stanley Parable); any probability adjustment the player
+could catch, which would break `재료는 공개`.
+
 ---
 
 ## ROUTER BOUNDARY
