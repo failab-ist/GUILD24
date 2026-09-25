@@ -272,7 +272,7 @@ Rules:
 
 ### QUICK VIEW STATUS LINE
 
-(User 2026-09-24, v2.9.0): a Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never written as inactive. The exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32; the conditional supports are exactly: 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only), 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: the engine pays every surviving 단골 at NIGHT with no daily use state to read (its card copy `하루 1회` is a reported mismatch, not resolved here).
+(User 2026-09-24, v2.9.0): a Store Support whose effect today depends on a condition, a use count or yesterday's result carries at most one status line under its name and effect in the owned quick view, computed from runtime truth at render time. No new Save field, no HUD element, no badge, no verdict word; an always-on support carries no line; a chance-based support is never written as inactive. The exact lines -> `COPY_AUDIT_APPROVED_v2.8.0.md` §11-32; the conditional supports are exactly: 회전 진열대, 물류 본부계약, 길드 보증 진열대, 단체 주문 창구, 발주 교환권, 묶음발주 계약 (ORDER only), 단골 묶음혜택 (SALE only, the current customer). 평생 단골제 carries no line: it pays every surviving 단골 at NIGHT (once per customer per Day, which is every expedition), always on; its card drops `(하루 1회)` (User 2026-09-25).
 
 expiry:
 next relic window begins
