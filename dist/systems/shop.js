@@ -285,6 +285,15 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     narrowed to randomInt(0,80) inclusive (was 0..100) after the four-arm re-measure isolated the
     excess Store-Gold expansion to this step. Fresh base 180, Level x8 and the 2000 cap unchanged. */
 n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.int(0,80)));n.newToday=!n.introduced;}
+  /* NPC_TRAIT destinationDefault / SALE §EXPECTED DESTINATION (User 2026-09-25): every open Gate is claimed by at
+     least one visitor whenever there are as many visitors as Gates - the per-Gate count on MORNING / ORDER was
+     showing Gates nobody would visit. The ordinary draw above is untouched; only a Day that left a Gate empty
+     moves one visitor into it, picked at random from a Gate that holds two or more and never one a 거짓말쟁이
+     already sent elsewhere, so the stream of every other Day is unchanged. */
+  if(s.dungeons.length>1&&selected.length>=s.dungeons.length)for(let g=0;g<s.dungeons.length;g++){
+   if(selected.some(n=>n.claimedDestination===g))continue;
+   const movable=selected.filter(n=>n.destination===n.claimedDestination&&selected.filter(m=>m.claimedDestination===n.claimedDestination).length>1);
+   if(!movable.length)continue;const n=this.rng.pick(movable);n.destination=n.claimedDestination=g;}
   /* EVENT §03 게이트 순례주간: "actual destination changes to a different currently open Gate"
      reads against the expected/reported destination (claimedDestination) - the one thing the
      Player was shown - not against the current actual n.destination, which a 거짓말쟁이 may

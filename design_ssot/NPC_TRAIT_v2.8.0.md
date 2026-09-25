@@ -29,6 +29,7 @@ targetTrustedRegulars/run≈2–4
 livingNpcCap=22
 
 destinationDefault=randomAmongOpenGates
+destinationCoverage=EVERY_OPEN_GATE_WHEN_VISITORS_AT_LEAST_GATES (User 2026-09-25: after the ordinary random draw, a Gate left empty takes one visitor, picked at random, from a Gate that holds two or more; a visitor a 거짓말쟁이 roll already diverted is never moved; Days without an empty Gate draw nothing more)
 autoBestFitRouting=NO
 
 noncanonicalTraitResolutionKeys=[long,thirst,wet,armor,undead]

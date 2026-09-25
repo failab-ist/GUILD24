@@ -490,3 +490,11 @@ Trait flavor notes are removed (거짓말쟁이 keeps its function line as an ef
 ```new
 - player-facing: the function line `50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.` is its effect row; no Trait carries a flavor note (구두쇠 / 악바리 notes removed, User 2026-09-24, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.2: every open Gate gets a visitor (User decision 2026-09-25)
+
+User 2026-09-25: minimum one visitor per open Gate when visitors ≥ Gates.
+
+```new
+destinationCoverage=EVERY_OPEN_GATE_WHEN_VISITORS_AT_LEAST_GATES (User 2026-09-25: after the ordinary random draw, a Gate left empty takes one visitor, picked at random, from a Gate that holds two or more; a visitor a 거짓말쟁이 roll already diverted is never moved; Days without an empty Gate draw nothing more)
+```
