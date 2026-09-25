@@ -43,9 +43,12 @@ if (V.retreatHeal) patch('systems/dungeon', "outcome==='퇴각'?n.injury:Math.ma
 // injury-aware seller (harness layer, measurement input): a save-able injured customer gets combat / survival /
 // 구급키트 / 귀환석 first; an injured customer on the 4th+ consecutive injured visit (zombie stage 3+) or below Lv5 is
 // sent out with nothing. Visits = departures, so the sim-side counter matches the consecutive rule on either build.
+// injAware: true = the first rule (Lv<5 or zombie stage 3+), 'stage' = zombie stage 3+ only (User 2026-09-25),
+// 'save' = never abandon, only the save-able priority
+const ABANDON = V.injAware === 'save' ? 'false' : V.injAware === 'stage' ? 'c[n.id]>=4' : 'n.level<5||c[n.id]>=4';
 if (V.injAware) {
   patch('systems/simulation', 'const d=g.claimedGateFor(n);let attempts=0;',
-    "{const c=(s.__inj??={});c[n.id]=n.injury===1?(c[n.id]||0)+1:0;if(n.injury===1&&(n.level<5||c[n.id]>=4)){globalThis.__abandon=(globalThis.__abandon||0)+1;g.depart();act();continue;}}const d=g.claimedGateFor(n);let attempts=0;");
+    `{const c=(s.__inj??={});c[n.id]=n.injury===1?(c[n.id]||0)+1:0;if(n.injury===1&&(${ABANDON})){globalThis.__abandon=(globalThis.__abandon||0)+1;g.depart();act();continue;}}const d=g.claimedGateFor(n);let attempts=0;`);
   patch('systems/simulation', 'v:itemValue(n,it,d)+(st.expires?',
     'v:itemValue(n,it,d)+(n.injury===1?((it.effects.combat||0)*.6+(it.effects.survival||0)*.4+(it.effects.aftercare?25:0)+(it.effects.escape?10:0)):0)+(st.expires?');
 }
