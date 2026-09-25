@@ -1178,11 +1178,13 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 
  /* The failure line is not a hidden threshold: it is stated before it matters and the count
     is visible while it climbs, in the book that already lists the dead. */
- /* COPY_AUDIT §8-6 states the same three endings in one compact line. The count is still built
-    from the constant rather than written out, so the sentence cannot drift from the rule. */
- assert.ok(fn('help').includes('D.balance.deathLimit'),
-  'the guide names the death line from the constant rather than a written-out number');
- for(const rule of ['적자 마감은 재고 정리로 회생할 수 있다','명이 되면 폐점한다','DAY 30 최종 원정이 끝나면'])
+ /* COPY_AUDIT §8-6 states the same three endings in one compact line. CORE_RUN §DEATH LIMIT —
+    SEGMENTED (v2.9.1 balance) made the limit Day-dependent, so this general guide no longer
+    names a specific count - MORNING/ORDER's own always-visible line (§4-23) is where the exact
+    current count/limit lives. */
+ assert.ok(!fn('help').includes('D.balance.deathLimit'),
+  'the retired flat constant is not read here');
+ for(const rule of ['적자 마감은 재고 정리로 회생할 수 있다','사망 한도에 이르면 폐점한다','DAY 30 최종 원정이 끝나면'])
   assert.ok(fn('help').includes(rule),'the guide covers: '+rule);
  const roster=fn('rosterList');
  assert.ok(roster.includes('돌아오지 못한 사람')&&roster.includes('Meta.deathLimit(s)')&&!roster.includes('G.Meta'),

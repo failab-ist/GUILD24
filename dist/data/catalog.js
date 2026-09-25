@@ -225,13 +225,13 @@ G.DATA.bossTuning={
                                 //   = 90% of the median engaged Run's gross sales measured on
                                 //   the Stage 10 economy (median 20,909 across the engaged
                                 //   strategies, 200 seeds each), rounded to 100G.
- greedShortfallCap:12,          // GREED: the most that a total shortfall can add to Boss Power (v2.7)
+ greedShortfallCap:11,          // GREED: the most that a total shortfall can add to Boss Power (v2.9.1 balance, was 12, scaled with WRATH 200 -> 180)
  /* GLUTTONY v2.7: the Rare+ threshold is superseded. EVERY positive Core-Stat contribution
     that came from an Item is halved, whatever its Rarity, after the Item-side amplification
     has produced that contribution. No Rarity threshold remains. */
  gluttonyStatFactor:0.50,       // GLUTTONY: positive Item Core-Stat contribution x this
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
- slothBossPower:[225,210,190,165] // SLOTH v2.7: effective Boss Power by break count [0,1,2,3]
+ slothBossPower:[200,189,171,149] // SLOTH: effective Boss Power by break count [0,1,2,3] (v2.9.1 balance, User 2026-09-25; were 225/210/190/165, 1-3 breaks scaled with WRATH 200 -> 180, 0 breaks set to 200 by decision)
 };
 /* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
    Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
@@ -251,7 +251,10 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={wallVisitorChance:.25,operating:60,frugalThreshold:120,tastingSupport:50,bossPower:200,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90,
+G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,tastingSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90,
+ /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
+    count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
+ deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: flat base purchase need for the
     accessible SALE modes (50% 할인 / 정가). 바가지 keeps its own Hazard-fit formula. */
  accessibleNeed:.72};/* ECONOMY_ORDER §PURCHASE ACCEPTANCE (User 2026-09-24, v2.9.0): 0.72, was 0.80 - measured, not tuned */

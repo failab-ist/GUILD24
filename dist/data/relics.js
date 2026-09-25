@@ -95,10 +95,9 @@ D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',ex
    the settled figure. Level contribution, carry and per-NPC variation are unchanged, and no
    Day-based Wallet inflation was added - this one number is the whole lever. */
 D.balance.relicPriceScale=1;
-/* How many adventurers can fail to come back before a store is finished. Stage 9 measurement
-   baseline, not a settled number: the rate, the Day it lands on and how it differs between
-   bare and prepared play are measured before anyone moves it. */
-D.balance.deathLimit=10;
+/* CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): the flat D.balance.deathLimit=10 baseline
+   is retired - D.balance.deathLimitSegments (catalog.js) and Meta.deathLimit(run) are the only
+   truth now. */
 /* How many deficit Closings a Run may trade its way out of by clearing stock. Three, so the
    shelf is an emergency and not a deposit account: one rescue is one short Closing, and inside
    it the player keeps choosing what to give up until the till reaches zero. */

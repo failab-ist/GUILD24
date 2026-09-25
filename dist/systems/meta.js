@@ -64,8 +64,19 @@ function plannedLoadout(a){const st=store(a);
  return Object.fromEntries(D.decorationSlots
   .map(s=>[s,st.loadout[s]&&st.owned.includes(st.loadout[s])?st.loadout[s]:null])
   .filter(([,id])=>id));}
-/* The Death count that ends a Run: the base line, +1 while 길드 추모 게시판 is worn. */
-const deathLimit=run=>D.balance.deathLimit+(Object.values(run?.loadout||{}).includes('memorialBoard')?D.decorationParams.memorialBoard.deathLimitBonus:0);
+/* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the limit steps up by
+   the current Day's segment (D.balance.deathLimitSegments) - the count itself never resets at a
+   boundary. 추모 방명록 and the 위령제 Event (run.riteBonus) each add on top of that segment,
+   never a second base. deathLimitSegmentEnd is exported so UI reads the same segment table
+   rather than recomputing the 10/20/30 boundaries itself. */
+function deathLimitSegment(run){
+ const day=run?.day||1;
+ return D.balance.deathLimitSegments.find(s=>day<=s.maxDay)||D.balance.deathLimitSegments.at(-1);
+}
+const deathLimit=run=>deathLimitSegment(run).limit
+ +(Object.values(run?.loadout||{}).includes('memorialBoard')?D.decorationParams.memorialBoard.deathLimitBonus:0)
+ +(run?.riteBonus||0);
+const deathLimitSegmentEnd=run=>deathLimitSegment(run).maxDay;
 /* META_v2.8 §STORE CAPITAL. The Day the Run reached picks the rate; nothing else does. */
 const capitalRate=day=>(D.capitalRates.find(b=>day<=b.maxDay)||D.capitalRates.at(-1)).rate;
 function addCapital(a,amount){const st=store(a);st.capital+=Math.max(0,Math.round(amount));return st.capital;}
@@ -150,5 +161,5 @@ const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>({...store(a).loadout});
 G.Meta={fresh,freshFranchise,observe,finish,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
- freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit};
+ freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);

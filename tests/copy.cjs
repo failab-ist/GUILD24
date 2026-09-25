@@ -71,7 +71,6 @@ const COMPOSED={
  '5-4':"presentation.js labels.visitGold + formatted value",
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
  '6-5':"presentation.js heroLine(): who+' 덕분에 '+said",
- '8-6':'app.js guide: ${D.balance.deathLimit} (10) in the template',
  '11-6':"relics.js: HQ price floor constant concatenated into the effect text"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
    substring search finds it although its own surface is still composed. Named, so the exact-set

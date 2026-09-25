@@ -256,9 +256,10 @@ test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slo
  assert.equal(Object.keys(Meta.storeLoadout(a)).length,DATA.decorationSlots.length,'one entry per Slot, always');
  for(const d of DATA.decorations)assert.ok(DATA.decorationSlots.includes(d.slot),d.id+' belongs to a real Slot');
  // the four approved effects and prices, read from the data rather than restated
+ // prices re-tuned 2026-09-25, v2.9.1 balance: cheapest 500, dearest 2.5x, total 3,500
  assert.deepEqual(DATA.decorations.map(d=>[d.slot,d.price]),
-  [['sign',1450],['wall',1250],['counter',1150],['display',800],
-   ['sign',1450],['wall',1250],['counter',1150],['display',800]],
+  [['sign',1250],['wall',1000],['counter',750],['display',500],
+   ['sign',1250],['wall',1000],['counter',750],['display',500]],
   'the approved prices ship: each Slot\'s survival alternative costs what its economy Decoration costs (User 2026-09-24)');
 });
 
@@ -266,9 +267,10 @@ test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{
  /* META_v2.8 §Day-reach conversion rate, DIRECTOR DOCUMENT BASELINE. These multiply Gross
     Sales, not an end-state net worth, which is why they are a fraction of the retired
     net-asset table this line used to carry. */
- for(const [day,rate] of [[1,.005],[9,.005],[10,.01],[19,.01],[20,.015],[24,.015],[25,.02],[29,.02],[30,.025]]) // halved (User 2026-09-24, v2.9.0)
+ // back to the full 1/2/3/4/5% (User 2026-09-25, v2.9.1 balance; was halved in v2.9.0)
+ for(const [day,rate] of [[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]])
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
- assert.equal(Meta.capitalRate(31),.025,'past D30 stays on the last band rather than falling off');
+ assert.equal(Meta.capitalRate(31),.05,'past D30 stays on the last band rather than falling off');
  const a=Meta.fresh();
  Meta.addCapital(a,120);assert.equal(Meta.storeCapital(a),120,'capital accumulates');
  Meta.addCapital(a,-500);assert.equal(Meta.storeCapital(a),120,'and never goes backwards');
@@ -296,18 +298,19 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  /* the four economy Decorations; each Slot's survival alternative (2026-09-24) is tested on its own */
  const eff=Object.fromEntries(DATA.decorations.filter(d=>d.kind==='economy').map(d=>[d.slot,d]));
  assert.equal(eff.counter.id,'thriftSafe');
- assert.equal(DATA.decorationParams.thriftSafe.dailyGold,40,'counter pays 40G every morning (User 2026-09-24)');
+ assert.equal(DATA.decorationParams.thriftSafe.dailyGold,50,'counter pays 50G every morning (User 2026-09-25, v2.9.1 balance; was 40G)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
- assert.equal(DATA.balance.wallVisitorChance,.25,'wall is the approved Morning chance (User 2026-09-24)');
+ assert.equal(DATA.balance.wallVisitorChance,.30,'wall is the approved Morning chance (User 2026-09-25, v2.9.1 balance; was 25%)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- assert.ok(/wears\('dawnSign'\)\?D\.decorationParams\.dawnSign\.extraOffers:0/.test(src)&&DATA.decorationParams.dawnSign.extraOffers===2,'sign adds two ORDER candidates');
+ assert.ok(/wears\('dawnSign'\)\?D\.decorationParams\.dawnSign\.extraOffers:0/.test(src)&&DATA.decorationParams.dawnSign.extraOffers===3,'sign adds three ORDER candidates (v2.9.1 balance; was two)');
  assert.ok(/wears\('premiumCase'\)/.test(src),'display reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so
     its copy can say 희귀 이상 13% -> 19% and be exactly true. Amended the same day: every grade
-    above 평범 is lifted, 평범 60% -> 50%. */
+    above 평범 is lifted, 평범 60% -> 50%. Re-tuned 2026-09-25, v2.9.1 balance: each grade's lift
+    x1.5, so 평범 60% -> 45%. */
  const adv=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=nums(adv.match(/opts\.premium\?(\[[^\]]+\])/)[1]),base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.equal(w[0],50,'평범 60% -> 50%, so above 평범 40% -> 50%');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.equal(w[0],45,'평범 60% -> 45%, so above 평범 40% -> 55%');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -
