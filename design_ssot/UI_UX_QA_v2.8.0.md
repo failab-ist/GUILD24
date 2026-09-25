@@ -2212,6 +2212,23 @@ PASS:
 FAIL:
 - a full-width tray on a desk, the dossier column cut off above the tray, the dossier column scrolling with the shelf, or a shelf that jumps to the top after a pick
 
+### UI-Q-v29-26 — DEATH LIMIT ALWAYS VISIBLE
+
+(User 2026-09-25, v2.9.0 balance close; owner `UI_UX_v2.8.0.md` §DEATH LIMIT — ALWAYS VISIBLE, copy COPY_AUDIT §4-23.)
+
+SETUP:
+MORNING and ORDER at 360 / 390 / 412 and 1280 with 0 Deaths, with 4 Deaths on D10 (one left), on D11 after the segment
+step, and with 추모 방명록 worn.
+
+PASS:
+- both screens show `사망 {n} / {limit} · D{end}까지` in the top status line without scrolling, on every Day
+- the limit and end Day follow the current segment (5 · D10 / 8 · D20 / 11 · D30) and include 추모 방명록 / 위령제
+- warning color exactly when count = limit − 1; no popover, badge or extra text
+- the line never wraps mid-token and does not push the ORDER confirm off the phone screen
+
+FAIL:
+- the count only in the 도감, a stale segment limit, or a limit that ignores 추모 방명록 / 위령제
+
 ### GREAT SUCCESS TUTORIAL
 PASS:
 - explicitly teaches Great Success exists
