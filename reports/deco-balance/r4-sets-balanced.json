@@ -1,0 +1,43 @@
+{
+ "N": 1000,
+ "policy": "balanced",
+ "aware": true,
+ "set": null,
+ "results": {
+  "none": {
+   "id": "none",
+   "reach": 0.233,
+   "win": 0.125,
+   "deaths": 8,
+   "deathFail": 0.553
+  },
+  "dawnSign+guildPlaque+thriftSafe+premiumCase": {
+   "id": "dawnSign+guildPlaque+thriftSafe+premiumCase",
+   "reach": 0.454,
+   "win": 0.346,
+   "deaths": 8,
+   "deathFail": 0.538
+  },
+  "trainingRack+infirmaryPlaque+memorialBoard+premiumCase": {
+   "id": "trainingRack+infirmaryPlaque+memorialBoard+premiumCase",
+   "reach": 0.779,
+   "win": 0.479,
+   "deaths": 6,
+   "deathFail": 0.017
+  },
+  "trainingRack+infirmaryPlaque+memorialBoard+firstAidKit": {
+   "id": "trainingRack+infirmaryPlaque+memorialBoard+firstAidKit",
+   "reach": 0.77,
+   "win": 0.344,
+   "deaths": 4,
+   "deathFail": 0.005
+  },
+  "dawnSign+infirmaryPlaque+thriftSafe+firstAidKit": {
+   "id": "dawnSign+infirmaryPlaque+thriftSafe+firstAidKit",
+   "reach": 0.87,
+   "win": 0.422,
+   "deaths": 6,
+   "deathFail": 0.089
+  }
+ }
+}
