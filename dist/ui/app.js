@@ -228,7 +228,7 @@ let cue=null,handoff=null;
 let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
    Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
-let pinFolded=false,pinWatch=null;
+let pinFolded=false,pinWatch=null,orderWatch=null;
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): on a phone the filled tray folds to its header line while the
    player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
    again. Presentation only: which Item is selected does not change, and nothing here is saved. */
@@ -362,6 +362,7 @@ function render(){
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
+ if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;}
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -1148,6 +1149,15 @@ function orderScreen(){
    visitor count per Gate, by the destination each customer claims (a liar's or a rerouted customer's true Gate stays
    hidden). Counts only: no name, Job, Trait, Wallet or individual destination leaves this helper. */
 function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){const n=s.npcs.find(x=>x.id===id),g=game.claimedGateFor(n);if(g)c.set(g.id,(c.get(g.id)||0)+1);}return c;}
+/* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
+function todayLine(counts,tag='em'){const s=game.run;
+ return '<'+tag+'>'+s.queue.length+'명</'+tag+'> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')));}
+function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
+ const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),sc=$('.p-order .stage-scroll');
+ if(!rail||!brief||!sc||typeof IntersectionObserver!=='function')return;
+ orderWatch=new IntersectionObserver(([e])=>{rail.classList.toggle('show-today',!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+rail.offsetHeight+4);},
+  {root:sc,rootMargin:'-'+(rail.offsetHeight+4)+'px 0px 0px 0px',threshold:0});
+ orderWatch.observe(brief);}
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  const counts=s.dungeons.length>=2?gateCounts():null;
@@ -1156,7 +1166,11 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
     seal carried no function or state - it filled the head's right margin and nothing else. The
     document is identified by 발주서 and its DAY / branch line. */
  +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span></div>'
-   +'<p class="board-rail death-limit-row">'+deathLimitItem()+'</p>'
+   /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the rail floats while the order is scrolled; once the
+      `오늘` block has gone under it, the same line rides in the rail's own box under a rule, so the Gates and their
+      visitors stay in view while the player orders. Hidden while the block itself is on screen. */
+   +'<p class="board-rail death-limit-row">'+deathLimitItem()
+     +'<span class="rail-today" aria-hidden="true"><i>오늘</i>'+todayLine(counts)+'</span></p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
    +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'
@@ -1166,7 +1180,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<div class="ref-row">'+relicRef()+'</div>'
    // today only: who is coming and where (no next-day block, User 2026-09-24)
    +'<div class="brief"><div class="when"><span class="k">오늘</span>'
-     +'<p><b>'+s.queue.length+'명</b> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')))+'<button class="look" data-action="gates">위험 보기</button></p></div></div>'
+     +'<p>'+todayLine(counts,'b')+'<button class="look" data-action="gates">위험 보기</button></p></div></div>'
    /* FINAL_EXPEDITION_v2.7 §D25: from D25 the Final's Family Pair and Hazard Pool are known,
       so they sit with the other planning signals on ORDER rather than arriving on D30. It is
       the persisted state itself - D30 reads the same object, and a reload cannot reroll it. */

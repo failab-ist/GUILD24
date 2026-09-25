@@ -1717,6 +1717,16 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 /* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
    stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
    gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
+/* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25) */
+test('ORDER: the 오늘 line rides in the floating Death rail only while its own block is out of view',()=>{
+ const of=fn('orderForm');
+ assert.ok(/'<p class="board-rail death-limit-row">'\+deathLimitItem\(\)\s*\+'<span class="rail-today" aria-hidden="true"><i>오늘<\/i>'\+todayLine\(counts\)/.test(of),'the same line, in the Death rail\'s own box, under its own label');
+ assert.ok(/'<p>'\+todayLine\(counts,'b'\)/.test(of),'one owner writes both copies');
+ const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/show-today',!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w),'shown only once the block has gone above, under the rail');
+ assert.ok(/if\(phase==='order'\)watchOrderToday\(\)/.test(app),'watched on ORDER only');
+ assert.ok(/\.rail-today\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today\{display:block\}/.test(css),'hidden by default, set apart by a rule');
+});
+
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): scrolling the shelf or tapping elsewhere folds the tray to its header */
 test('SALE counter tray folds while the shelf is read and opens on any row',()=>{
  assert.ok(/function foldTray\(\)\{if\(!selected\|\|trayFolded\|\|innerWidth>=1024/.test(app),'only a filled tray folds, and never on a desk');
@@ -2851,9 +2861,9 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
    the expected visitor count, and never a customer's name, Job, Trait, Wallet or destination.
    On actual appearance the NPC becomes introduced. */
 test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count before Sale, the person on arrival',()=>{
- const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip'].map(fn).join('\n');
- assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('s.queue.length'),
-  'Morning and ORDER both state the expected visitor count');
+ const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','todayLine'].map(fn).join('\n');
+ assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('todayLine(counts')&&fn('todayLine').includes('s.queue.length'),
+  'Morning and ORDER both state the expected visitor count (ORDER through todayLine, its block and its floating copy)');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
  assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test(fn('orderForm')),'per-Gate counts only with two or more Gates');
@@ -3091,7 +3101,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/relics.js'))&&!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/dungeon.js')),'the 기동-for-속박/진창 Counter exception is gone');
  assert.ok(/const counters=mode!=='overcharge'&&G\.Relics\.relatedPrep\(it,d\.hazards\);/.test(read('dist/systems/shop.js'))&&!/G\.Relics\.counter\(/.test(read('dist/systems/shop.js')),'SALE acceptance reads 관련 준비; no third predicate is called');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
- assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one');
+ assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of+fn('todayLine')),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 

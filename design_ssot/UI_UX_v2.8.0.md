@@ -233,6 +233,7 @@ not only in the 도감.
 - the limit shown already includes 추모 방명록 and 위령제
 - no extra popover, badge or explanation text; the same line on both screens
 - exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
+- ORDER — FLOATING TODAY LINE (User 2026-09-25; recommended form taken while the User is away - to reconfirm): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button
 
 ### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 

@@ -388,6 +388,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    without needing the MORNING board's pinned-column context. */
 .board-rail.death-limit-row{margin:10px 16px 0}
 .board-rail.death-limit-row b{margin-left:0}
+/* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the 오늘 line joins the floating rail only while its own block
+   is out of view; a rule and its own small label keep it apart from the Death count above it */
+.rail-today{display:none;flex:1 0 100%;margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #f0dcb24d;
+ font:400 13px/1.4 var(--ui);letter-spacing:0;color:#f0dcb2;-webkit-font-smoothing:antialiased}
+.rail-today i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.12em;color:#c9ad7c;margin-right:8px}
+.rail-today em{font-style:normal;font-weight:600;color:#fff0c9}
+.board-rail.show-today .rail-today{display:block}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;

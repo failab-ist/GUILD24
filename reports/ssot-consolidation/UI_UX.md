@@ -1167,3 +1167,11 @@ User 2026-09-25: the filled SALE tray folds to its header while the shelf is rea
 ```new
 - COUNTER TRAY FOLD (User 2026-09-25; the User's own suggestion, recommended form taken while the User is away - to reconfirm): on a phone a filled tray folds to its header line (Item, customer, wallet, a small ▲) when the player scrolls the shelf past 32px or taps outside the tray, a shelf row, the dock or an overlay; tapping the folded strip or any shelf row (the one already on the tray included) opens it again. The selected Item never changes by folding, nothing is saved, and a desk (≥1024) never folds
 ```
+
+## AMENDMENT — v2.9.2: ORDER floating today line (User decision 2026-09-25)
+
+User 2026-09-25: the 오늘 line joins the floating Death box while its block is out of view.
+
+```new
+- ORDER — FLOATING TODAY LINE (User 2026-09-25; recommended form taken while the User is away - to reconfirm): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button
+```

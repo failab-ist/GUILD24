@@ -1156,3 +1156,16 @@ SALE at 360 / 390 / 412 and 1280 with a long shelf: pick a row, scroll the shelf
 - picking a row never folds the tray it just filled; a desk never folds; nothing is saved
 - the tray stays full height while the shelf is scrolled on a phone, a fold that clears the selection, or a folded tray that only reopens through the price keys
 ```
+
+## AMENDMENT — v2.9.2: UI-Q-v29-29 ORDER floating today line (User decision 2026-09-25)
+
+User 2026-09-25: the 오늘 line joins the floating Death box while its block is out of view.
+
+```new
+### UI-Q-v29-29 — ORDER FLOATING TODAY LINE
+(User 2026-09-25; owner `UI_UX_v2.8.0.md` §DEATH LIMIT — ALWAYS VISIBLE.)
+ORDER on a Day with two or more Gates at 360 / 390 / 412 and 1280: at the top, then scrolled to the offer rows.
+- at the top the floating box holds the Death line only; scrolled past the `오늘` block it adds the same `오늘` line under a rule
+- the two facts read apart (rule, its own `오늘` label); the counts equal the block's; nothing covers the offer controls
+- the 오늘 line doubled while its block is on screen, merged into the Death sentence, or a count that differs from the block
+```
