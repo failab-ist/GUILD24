@@ -147,7 +147,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   if(fx.poison)return s.dungeons.some(d=>!d.hazards.includes('poison'));
   if(fx.pilgrimage)return s.dungeons.length>=2&&s.expectedVisitors>=3;
   if(fx.audit)return s.stats.waste>=6;
-  if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22;
+  /* EVENT §08 / §09: the newcomer is guaranteed an EXISTING visitor slot and never adds one, so a
+     morning whose roster (after the rest-day countdown) holds nobody who could be drawn has no
+     slot to give - the Event is not eligible then, exactly as it is not when the Living NPC Cap
+     is full (v2.9.0, surfaced by the repeated-strain cut). */
+  if(fx.rookie||fx.royal)return s.npcs.filter(n=>n.alive).length<22&&s.npcs.some(n=>n.alive&&!n.recovery);
   return true;}
  /* EVENT §DEEP EXPEDITION DAY EXCLUSION: a Day this Run actually holds a 심층원정 produces no
     Normal Event, whether or not the player later nominates anyone. rollEvent draws before it
@@ -185,7 +189,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    s.money+=refund;s.daily.subsidy+=refund;expired=expired.filter(x=>!back.includes(x));s.inventory=s.inventory.filter(x=>!back.includes(x));}
   s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
   /* v2.9.0 rest recovery (DUNGEON_HAZARD §SUPPLY -> FATIGUE 6): a Severe-Injury rest day lowers Fatigue by 5, floor 0 */
-  s.npcs.forEach(n=>{if(n.recovery>0){n.fatigue=Math.max(0,(n.fatigue||0)-5);n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
+  s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
  }
  /* The milestone window, the Final state, and today's Gates. Returns the Family id pool the
     Event's unknown Gate draws from, or null on the Final Day, which has no more Morning left. */
@@ -455,7 +459,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  /* SALE / NPC_TRAIT §NON-PURCHASE LOYALTY (2026-09-23): a visit that ends with a paid purchase
     today still adds +1 on departure; a visit without one adds nothing. Survival is +1. */
  depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
- night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=(n.pilgrim?'순례 행렬을 따라 '+n.name+'은 예상 목적지 ':'허세를 부린 '+n.name+'은 말했던 ')+s.dungeons[n.claimedDestination].name+' 대신 '+d.name+'으로 향했다.';n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
+ night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Presentation.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
      Two bands only - Success and Great Success - with no extra Day/Tier multiplier, because the
      ordinary reward already carries that. EXP goes through the ordinary growth curve (no
      automatic Level +1) and the Wallet bonus uses the ordinary persisted money channel, so a

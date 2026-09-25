@@ -172,7 +172,7 @@ test('SA-Q25: the helped-return callback needs COMPLETE proven sold-Item contrib
  // D — a proven persistent-state (구급키트 Aftercare) contribution IS eligible, even though the
  // text Outcome is unchanged (outcome:null)
  {const {g,n}=setup();
-  n.records=[{outcome:'중상',items:['kit'],events:[{id:'aftercare',items:['kit'],text:'구급키트가 중상 후 상태를 부상까지 낮췄다.'}],
+  n.records=[{outcome:'부상',items:['kit'],events:[{id:'aftercare',items:['kit'],text:'구급키트가 남을 부상을 없앴다.'}],
    heroProof:{outcome:null,state:{items:['kit']}}}];
   g.arrive();
   assert.ok(V.helped.includes(g.run.say.text),'D: a proven Aftercare state contribution makes the callback eligible too');
@@ -192,7 +192,7 @@ test('SA-Q25: the helped-return callback needs COMPLETE proven sold-Item contrib
  // (state:{items:null}, no single Item named) is eligible too - the callback does not require
  // a named Item, only a proven state contribution.
  {const {g,n}=setup();
-  n.records=[{outcome:'중상',items:['kit','kit'],events:[{id:'aftercare',items:['kit'],text:'구급키트가 중상 후 상태를 부상까지 낮췄다.'}],
+  n.records=[{outcome:'부상',items:['kit','kit'],events:[{id:'aftercare',items:['kit'],text:'구급키트가 남을 부상을 없앴다.'}],
    heroProof:{outcome:null,state:{items:null}}}];
   g.arrive();
   assert.ok(V.helped.includes(g.run.say.text),'F: a proven but generic (whole-Bag) state contribution is still eligible, with no named Item required');

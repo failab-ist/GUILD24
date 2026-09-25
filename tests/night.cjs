@@ -137,14 +137,17 @@ test('the next persistent NPC state matches the outcome that was told',()=>{
  for(const {n,r} of all){
   assert.equal(n.alive,r.outcome!=='사망','death is permanent for this run');
   assert.equal(n.status==='사망',r.outcome==='사망','status word matches the outcome');
-  /* ITEM_v2.7 §Insurance resolution order step 4: 구급키트 Aftercare is the ONLY thing that
-     may move the persistent state away from what the Outcome itself wrote, and the report
-     has to carry the proof when it did. */
+  /* ITEM v2.9.0 §Insurance resolution order step 4 (User 2026-09-25): 구급키트 lowers the
+     Outcome itself one step - a told 중상 therefore never carries Aftercare, and a told 부상
+     carries it as either a relieved 중상 (injury 1) or a 부상 with no lasting injury. */
   if(r.outcome==='중상'){
-   if(r.aftercare){assert.deepEqual([r.aftercare.from,r.aftercare.to],[2,1],'중상 Aftercare is 2 -> 1');assert.equal(n.injury,1);assert.equal(n.recovery,0,'Aftercare clears the rest days');}
-   else{assert.equal(n.injury,2,'중상 leaves the heavier injury');assert.ok(n.recovery>0,'중상 needs rest');}}
+   assert.equal(r.aftercare,null,'a told 중상 was not kitted');
+   assert.equal(n.injury,2,'중상 leaves the heavier injury');assert.ok(n.recovery>0,'중상 needs rest');}
   if(r.outcome==='부상'){
-   if(r.aftercare){assert.deepEqual([r.aftercare.from,r.aftercare.to],[1,0],'부상 Aftercare is 1 -> 0');assert.equal(n.injury,0);}
+   if(r.aftercare){assert.ok([1,2].includes(r.aftercare.from),'Aftercare starts from a would-be 부상 or 중상');
+    assert.equal(r.aftercare.to,r.aftercare.from===2?1:0,'중상 -> 부상 keeps injury 1; 부상 -> no lasting injury');
+    assert.equal(r.aftercare.outcomeFrom,r.aftercare.from===2?'중상':'부상','the report names the would-be Outcome');
+    assert.equal(n.injury,r.aftercare.to);assert.equal(n.recovery,0,'no rest days after the kit');}
    else assert.equal(n.injury,1,'부상 leaves the lighter injury');}
   if(r.outcome==='사망')assert.equal(r.aftercare,null,'Aftercare never touches a death');
   assert.equal(r.injury,n.injury,'the report and the adventurer agree on injury');
@@ -359,7 +362,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
  const base=Adventurer.create(new RNG('excess'),1,10,Meta.fresh());
  const run=(fatigue,pack)=>{const n={...JSON.parse(JSON.stringify(base)),fatigue,traits:[],pack,records:[]};
   Dungeon.resolve(n,d,new RNG('excess-run'));return n.records[n.records.length-1];};
- const baselines={'성공':4,'대성공':4,'퇴각':7,'부상':9,'중상':0,'사망':0};
+ const baselines={'성공':4,'대성공':4,'퇴각':7,'부상':9,'중상':9,'사망':0}; // v2.9.0 (User 2026-09-25): 중상 takes the 부상 gain
  for(const fatigue of [0,4,9,14,20,33,40])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','premium']]){
   const r=run(fatigue,pack);
   assert.equal(r.requiredSupply,undefined,'no Gate requires Supply');assert.equal(r.excessSupply,undefined,'so there is no excess');
@@ -374,12 +377,16 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
   assert.equal(r.fatigueRecovery,undefined,'the ambiguous combined field is gone');
   assert.equal(r.postOutcomeFatigueGain,undefined,'no second live name for the same value');
  }
- // 중상/사망 stay at zero result Fatigue even with a Trait that would add to it
+ // v2.9.0 (User 2026-09-25): only 사망 stays at zero result Fatigue; 중상 takes the 부상 gain (+9)
+ // plus whatever a Trait adds, exactly like a 부상
  const weary={...JSON.parse(JSON.stringify(base)),fatigue:5,traits:['weary'],pack:[],records:[]};
+ let severeSeen=0;
  for(let i=0;i<300;i++){const n={...JSON.parse(JSON.stringify(weary)),records:[]};
   Dungeon.resolve(n,{...d,power:900+i},new RNG('severe-'+i));
   const r=n.records[n.records.length-1];
-  if(r.outcome==='중상'||r.outcome==='사망')assert.equal(r.rawOutcomeFatigueGain,0,'중상/사망 result Fatigue stays 0');}
+  if(r.outcome==='사망')assert.equal(r.rawOutcomeFatigueGain,0,'사망 result Fatigue stays 0');
+  if(r.outcome==='중상'){severeSeen++;assert.equal(r.rawOutcomeFatigueGain,9+(DATA.traitBy.weary.effects.fatigue||0),'중상 takes the 부상 gain (+9) plus the Trait');}}
+ assert.ok(severeSeen>0,'the sweep reached a 중상');
 });
 
 test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 0~40, judged at departure',()=>{
@@ -409,16 +416,16 @@ test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 
  assert.ok(!/requiredSupply|excessSupply|supply\.deficit|supplyDeficit|\.penalty/.test(src),'no Supply requirement, excess or deficit penalty survives in the engine');
 });
 
-test('DUNGEON_HAZARD v2.9.0 rest recovery (DUN-Q-v29-1): a Severe-Injury rest day lowers Fatigue by 5, floor 0; no other morning moves it',()=>{
+test('DUNGEON_HAZARD v2.9.0 no rest recovery (DUN-Q-v29-1, User 2026-09-25): no morning changes Fatigue, a Severe-Injury rest day included',()=>{
  const g=new Game();g.autosave=false;g.start('rest-recovery');const n=g.run.npcs[0],m=g.run.npcs[1];
  n.recovery=2;n.injury=2;n.status='중상';n.fatigue=12;m.recovery=0;m.fatigue=7;
- g.morningReset();assert.equal(n.fatigue,7,'first rest day: 12 -> 7');assert.equal(n.recovery,1);assert.equal(m.fatigue,7,'a healthy adventurer gets no morning recovery');
- g.morningReset();assert.equal(n.fatigue,2,'second rest day: 7 -> 2');assert.equal(n.recovery,0);assert.equal(n.injury,0);
- g.morningReset();assert.equal(n.fatigue,2,'back on the roster: no further change');
- const z=g.run.npcs[2];z.recovery=1;z.injury=2;z.fatigue=3;g.morningReset();assert.equal(z.fatigue,0,'floor 0');
+ g.morningReset();assert.equal(n.fatigue,12,'first rest day: Fatigue unchanged');assert.equal(n.recovery,1,'the rest day still counts down');assert.equal(m.fatigue,7,'a healthy adventurer gets no morning recovery');
+ g.morningReset();assert.equal(n.fatigue,12,'second rest day: still unchanged');assert.equal(n.recovery,0);assert.equal(n.injury,0,'the injury itself still heals on schedule');
+ g.morningReset();assert.equal(n.fatigue,12,'back on the roster: no change either');
+ assert.ok(!/fatigue\|\|0\)-5|fatigue-5/.test(read('dist/systems/shop.js')),'no morning Fatigue decrement survives in the engine');
 });
 
-test('ITEM_v2.7 §INSURANCE HIERARCHY: 구급키트 is Aftercare, never an Outcome change',()=>{
+test('ITEM v2.9.0 §INSURANCE resolution order step 4: 구급키트 lowers the Outcome one step (User 2026-09-25)',()=>{
  const src=read('dist/systems/dungeon.js');
  assert.equal(D.itemBy.kit.effects.injuryGuard,undefined,'구급키트 carries no hidden injury-risk percentage');
  assert.equal(D.itemBy.kit.effects.aftercare,1,'구급키트 carries the Aftercare channel instead');
@@ -434,18 +441,24 @@ test('ITEM_v2.7 §INSURANCE HIERARCHY: 구급키트 is Aftercare, never an Outco
   const kitted=JSON.parse(JSON.stringify(bare));kitted.pack=['kit'];
   Dungeon.resolve(bare,{...d,power:20+i%90},new RNG('roll-'+i));
   Dungeon.resolve(kitted,{...d,power:20+i%90},new RNG('roll-'+i));
-  const rb=bare.records.at(-1),rk=kitted.records.at(-1);seen.add(rk.outcome);
-  if(!rk.aftercare)continue;
+  const rb=bare.records.at(-1),rk=kitted.records.at(-1);seen.add(rb.outcome);
+  // the kit carries no Stat, so both paths draw the same rolls up to the kit step
+  if(!['부상','중상'].includes(rb.outcome)){assert.equal(rk.outcome,rb.outcome,'the kit changes nothing else');assert.equal(rk.aftercare,null);continue;}
   withKit++;
-  // Outcome, XP, Loot and the whole Fatigue chain are exactly what the expedition produced
-  assert.equal(rk.aftercare.to,rk.outcome==='중상'?1:0,'Aftercare moves exactly one step');
-  assert.equal(kitted.injury,rk.aftercare.to,'the adventurer carries the Aftercare state');
-  assert.equal(kitted.recovery,0,'Aftercare clears the rest days');
-  assert.equal(rk.finalFatigue,rk.fatigueBeforeExpedition+rk.actualOutcomeFatigueGain,'Aftercare does not touch Fatigue');
-  assert.ok(rk.events.some(e=>e.id==='aftercare'&&e.items.includes('kit')),'the proven contribution names the Item that carried it');
+  assert.equal(rk.outcome,'부상','a would-be '+rb.outcome+' resolves as 부상');
+  assert.equal(rk.aftercare.outcomeFrom,rb.outcome,'the report names the would-be Outcome');
+  assert.deepEqual([rk.aftercare.from,rk.aftercare.to],rb.outcome==='중상'?[2,1]:[1,0],'중상 -> 부상 keeps injury 1; 부상 -> no lasting injury');
+  assert.equal(kitted.injury,rk.aftercare.to,'the adventurer carries the lowered state');
+  assert.equal(kitted.recovery,0,'no rest days after the kit');
+  // XP, Loot and Fatigue follow the LOWERED Outcome (the 부상 rules), not the would-be one
+  assert.equal(rk.rawOutcomeFatigueGain,9,'the 부상 Fatigue gain');
+  assert.equal(rk.finalFatigue,rk.fatigueBeforeExpedition+rk.actualOutcomeFatigueGain,'the Fatigue chain is the 부상 chain');
+  assert.equal(rk.xp,rb.outcome==='부상'?rb.xp:rk.xp,'a would-be 부상 keeps its 부상 XP');
+  assert.ok(rk.events.some(e=>e.id==='aftercare'&&e.items.includes('kit')&&e.text===(rb.outcome==='중상'?'구급키트가 중상을 부상으로 낮췄다.':'구급키트가 남을 부상을 없앴다.')),'the event names the Item and the exact step');
  }
- assert.ok(withKit>0,'the sweep actually exercised Aftercare');
- assert.ok(seen.has('사망'),'the sweep reached a death, where Aftercare must not fire');
+ assert.ok(withKit>0,'the sweep actually exercised the kit');
+ assert.ok(seen.has('중상')&&seen.has('부상'),'the sweep reached both a would-be 중상 and a would-be 부상');
+ assert.ok(seen.has('사망'),'the sweep reached a death, where the kit must not fire');
  // and a death is untouched
  for(let i=0;i<400;i++){
   const n=Adventurer.create(new RNG('kit-death-'+i),1,10,Meta.fresh());
@@ -585,8 +598,10 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
     threads severeEscalation through one more shadowOutcome() call (1 more site) - the same
     minimal, explainable widening the two source blockers required, nothing else.
     outcomeProof()/stateProof() each thread it through to shadowOutcome(); resultProof() takes
-    it once and hands it to both. */
- assert.equal((src.match(/severeEscalation/g)||[]).length,19,
+    it once and hands it to both. v2.9.0 F3 split shadowOutcome() into the tier wrapper and
+    shadowSettle() (tier + persistent Injury, so the state proof reads the same 구급키트 step):
+    the wrapper's signature and its one pass-through add 2 sites, nothing else. */
+ assert.equal((src.match(/severeEscalation/g)||[]).length,21,
   'one definition, its real decision-point uses (now including the escaped-but-still-failed '+
   'retreat branch), and the full proof engine that replays them - nothing else');
 });
@@ -909,12 +924,19 @@ test('RESULT-PROOF: persistent-state proof for 구급키트 Aftercare, and what 
  // 10C: departure Injury vs post-resolution Injury vs the expected state proof, made explicit
  // rather than left implicit in the outcome/aftercare fields alone.
  assert.equal(departureInjury,1,'sanity: departed already injured (1), the escalation this case needs');
- assert.equal(r.outcome,'중상','departed already injured, the escalated threshold is crossed');
- assert.ok(r.aftercare&&r.aftercare.from===2&&r.aftercare.to===1,'구급키트 Aftercare actually relieved it to 부상 (persistent Injury 2 -> 1)');
- assert.equal(n.injury,1,'the adventurer\'s own persistent Injury after resolution is the Aftercare-relieved value, not the pre-Aftercare 중상 one');
- assert.equal(r.heroProof?.outcome,null,'the text Outcome (중상) is unchanged by 구급키트, so there is no Outcome proof');
- assert.ok(r.heroProof?.state?.items?.includes('kit'),
-  '구급키트 is credited as a proven PERSISTENT-STATE contribution instead - without it, the shadow settles the SAME 중상 tier but with no Aftercare gate to relieve it, leaving a worse persistent Injury than the real, relieved one');
+ assert.equal(r.outcome,'부상','departed already injured, the escalated threshold is crossed into a would-be 중상, and 구급키트 lowers it to 부상 (v2.9.0)');
+ assert.ok(r.aftercare&&r.aftercare.from===2&&r.aftercare.to===1&&r.aftercare.outcomeFrom==='중상','구급키트 lowered a would-be 중상 to 부상 (persistent Injury 2 -> 1)');
+ assert.equal(n.injury,1,'the adventurer\'s own persistent Injury after resolution is the lowered value');
+ assert.ok(r.heroProof?.outcome?.items?.includes('kit')&&r.heroProof.outcome.worse==='중상','the kit changed the text Outcome, so it is credited as an OUTCOME proof naming the worse tier');
+ assert.equal(r.heroProof?.state,null,'no separate state proof - the differing tier is the outcome proof\'s claim');
+ // a would-be 부상: the tier stays 부상 but the kit leaves no lasting injury - that is the STATE proof
+ {const m=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['kit'],injury:0,fatigue:0,alive:true,recovery:0}));
+  const rm=Dungeon.resolve(m,{...gate,power:1e9},scripted([0.5,0.999,0.999,0.999,0.999,0.999,0.999]),[]);
+  assert.equal(rm.outcome,'부상','a plain 부상 path');
+  assert.ok(rm.aftercare&&rm.aftercare.from===1&&rm.aftercare.to===0,'the kit removed the lasting injury');
+  assert.equal(m.injury,0);
+  assert.equal(rm.heroProof?.outcome,null,'the text Outcome (부상) is unchanged, so no Outcome proof');
+  assert.ok(rm.heroProof?.state?.items?.includes('kit'),'구급키트 is credited as a proven PERSISTENT-STATE contribution - without it the same 부상 tier leaves injury 1');}
  // Fatigue-only and Wallet-only differences are never promoted to Hero feedback, on any report.
  for(const rep of [r]){
   assert.ok(!(rep.heroProof?.outcome?.worse==='부상'&&rep.heroProof?.outcome?.items?.some(id=>!DATA.itemBy[id].effects.combat&&!DATA.itemBy[id].effects.survival&&!DATA.itemBy[id].effects.mobility&&!DATA.itemBy[id].effects.spirit&&!DATA.itemBy[id].effects.escape&&!DATA.itemBy[id].effects.revive)),
@@ -938,12 +960,59 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
  assert.ok(withKit>0&&withTwoKits>0,'sanity: a single 구급키트 already carries Aftercare, or this case proves nothing about the SECOND copy alone');
  const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['kit','kit'],injury:1,fatigue:0,alive:true,recovery:0}));
  const r=Dungeon.resolve(n,{...gate,power:1e9},scripted([0.5,0.999,0.999,0.999,0.50,0.999,0.999]),[]);
- assert.equal(r.outcome,'중상','departed already injured, the escalated threshold is crossed');
- assert.ok(r.aftercare&&r.aftercare.from===2&&r.aftercare.to===1,'Aftercare relieves it to 부상 with the full two-구급키트 Bag');
- assert.equal(r.heroProof?.outcome,null,'the text Outcome is still unchanged by Aftercare, so no Outcome proof');
- assert.ok(r.heroProof?.state,'the whole Bag is provably necessary for the persistent-state relief');
- assert.equal(r.heroProof.state.items,null,
+ assert.equal(r.outcome,'부상','departed already injured, the would-be 중상 is lowered by the kits (v2.9.0)');
+ assert.ok(r.aftercare&&r.aftercare.from===2&&r.aftercare.to===1,'the kits lower it to 부상 with the full two-구급키트 Bag');
+ assert.ok(r.heroProof?.outcome&&r.heroProof.outcome.worse==='중상','only the whole Bag is provably what kept the Outcome from 중상');
+ assert.equal(r.heroProof.outcome.items,null,'no single copy is credited - removing either still leaves the other');
+ // the same whole-Bag rule for the STATE proof, on a would-be 부상 with two kits
+ const m=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['kit','kit'],injury:0,fatigue:0,alive:true,recovery:0}));
+ const rs=Dungeon.resolve(m,{...gate,power:1e9},scripted([0.5,0.999,0.999,0.999,0.999,0.999,0.999]),[]);
+ assert.equal(rs.outcome,'부상');assert.ok(rs.aftercare&&rs.aftercare.from===1&&rs.aftercare.to===0);
+ assert.equal(rs.heroProof?.outcome,null,'the text Outcome is unchanged, so no Outcome proof');
+ assert.ok(rs.heroProof?.state,'the whole Bag is provably necessary for the persistent-state relief');
+ assert.equal(rs.heroProof.state.items,null,
   'ownership is generic ({items:null}) - since either single 구급키트 copy alone still relieves it, no one copy is invented as the sole cause');
 });
 
 console.log(groups+' night groups passed');
+
+test('DUNGEON_HAZARD v2.9.0 §strainEscalation (DUN-Q-v29-3, User 2026-09-25): repeated injured / weary departures raise the failure Death chance',()=>{
+ assert.deepEqual(Dungeon.STRAIN,{step:.08,cap:.30,weary:20},'the shipped coefficients are the canonical baseline');
+ for(const [i,w,exp] of [[0,0,0],[1,0,0],[0,1,0],[1,1,0],[2,0,.08],[3,0,.16],[5,0,.30],[0,2,.08],[0,5,.30],[2,2,.16],[3,3,.30],[5,5,.30]])
+  assert.ok(Math.abs(Dungeon.strainEscalation(i,w)-exp)<1e-12,'strain('+i+','+w+') = '+exp);
+ const d={...D.dungeonBy.slime,day:14,tier:2,hazards:['poison','mire'],scale:1,power:80,reward:40,requiredSupply:0};
+ const base=Adventurer.create(new RNG('strain'),1,10,Meta.fresh());
+ const mk=(injured,weary,injury=0,fatigue=0)=>{const n=JSON.parse(JSON.stringify(base));n.traits=[];n.fatigue=fatigue;n.injury=injury;n.pack=[];
+  n.stats={combat:1,survival:1,mobility:1,spirit:1};n.equipment={power:0,name:'-'};
+  n.records=[...Array(injured).fill({departedInjured:true,departedWeary:false}),...Array(weary).fill({departedInjured:false,departedWeary:true})];return n;};
+ const healthy=Dungeon.failureDeathRisk(mk(0,0),d);
+ assert.equal(healthy.strain,0,'no records, no strain');
+ // the counts come from the records, THIS departure included: one past injured run + departing injured now = 2 -> +8%p
+ const once=Dungeon.failureDeathRisk(mk(1,0,1),d);
+ assert.ok(Math.abs(once.strain-.08)<1e-12,'a second injured departure adds 8%p');
+ assert.ok(Math.abs(once.chance-Math.min(.40+.08,once.healthy+.10+.08))<1e-12,'the +8%p rides the injured term and lifts the cap with it');
+ const firstInjured=Dungeon.failureDeathRisk(mk(0,0,1),d);
+ assert.equal(firstInjured.strain,0,'the first injured departure is free');
+ assert.ok(Math.abs(firstInjured.chance-Math.min(.40,firstInjured.healthy+.10))<1e-12,'the injured departure itself is unchanged');
+ // weary: Fatigue 20+ at departure counts, and past weary departures stack the same way
+ const weary2=Dungeon.failureDeathRisk(mk(0,1,0,25),d);
+ assert.ok(Math.abs(weary2.strain-.08)<1e-12,'a second weary departure adds 8%p');
+ assert.equal(Dungeon.failureDeathRisk(mk(0,1,0,19),d).strain,0,'Fatigue 19 is not weary');
+ // both kinds sum and cap at 30%p; the cap of the chance rises by the same amount
+ const both=Dungeon.failureDeathRisk(mk(3,3,1,25),d);
+ assert.ok(Math.abs(both.strain-.30)<1e-12,'3+3 repeats sum past the cap to exactly 30%p');
+ assert.ok(both.chance<=.40+.30+1e-9&&both.chance>=.30,'the cap rises with the strain');
+ // the live resolution records the departure facts and uses the same strain
+ const hard={...d,power:1e9};
+ for(let i=0;i<50;i++){const n=mk(2,0,1,0);
+  Dungeon.resolve(n,hard,new RNG('strain-'+i));
+  const r=n.records.at(-1);
+  assert.equal(r.departedInjured,true,'the record says it began injured');assert.equal(r.departedWeary,false);
+  assert.equal(r.debug,undefined,'the persisted record carries no development payload');}
+ const n=mk(2,0,1,0);const r=Dungeon.resolve(n,hard,new RNG('strain-live'));
+ const expected=Dungeon.failureDeathRisk(mk(2,0,1,0),hard);
+ assert.ok(Math.abs(expected.strain-.16)<1e-12,'two past injured runs + this one = 3 -> +16%p');
+ assert.ok(Math.abs(r.debug.deathChance-expected.chance)<1e-12,'the resolution draws Death against the strained chance');
+ const w=mk(0,0,0,30);Dungeon.resolve(w,{...d,power:1e9},new RNG('strain-w'));
+ assert.equal(w.records.at(-1).departedWeary,true,'Fatigue 30 at departure is recorded as weary');
+});

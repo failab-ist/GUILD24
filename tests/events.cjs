@@ -294,6 +294,18 @@ test('EVENT 왕립 기사단 방문: the royal newcomer is in today queue exactl
  assert.ok(/selected\[selected\.length-1\]=arrival/.test(seat[0]),'and it replaces a slot rather than adding one');
 });
 
+test('EVENT §08 v2.9.0: a newcomer Event is not eligible on a morning with no existing visitor slot',()=>{
+ const g=fresh('no-slot');for(let d=0;d<3;d++){g.run.money=5000;advance(g);}
+ const rookie=DATA.events.find(x=>x.id==='rookie'),royal=DATA.events.find(x=>x.id==='royal');
+ assert.ok(g.eventEligible(rookie)&&g.eventEligible(royal),'sanity: eligible with a living roster');
+ for(const n of g.run.npcs)n.recovery=2;
+ assert.ok(!g.eventEligible(rookie)&&!g.eventEligible(royal),'everyone on recovery days: no slot to give, not eligible');
+ g.run.npcs[0].recovery=0;
+ assert.ok(g.eventEligible(rookie),'one adventurer off recovery is one slot');
+ for(const n of g.run.npcs)n.alive=false;
+ assert.ok(!g.eventEligible(rookie),'no living adventurer: not eligible');
+});
+
 test('EVENT 왕립 기사단 방문 / 신입 모험가 시즌: neither Event raises the visitor count',()=>{
  /* Both variants are resolved from ONE exported snapshot, so the Event is the only difference
     between them and the headcount can be compared directly. */

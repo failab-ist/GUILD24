@@ -205,7 +205,7 @@ function tierWeights(day){
 /* DUNGEON_HAZARD v2.9.0 §Hazard Defense (User 2026-09-24, revision 3): one non-투력 Stat per Hazard and no Gate's
    Hazards on the same Stat, 3 / 3 / 3 - 강인함 ×1/3 for 독·냉기·부식, 기동 ×1/2 for 속박·진창·어둠, 정신 ×1/2 for
    공포·화이트아웃·화염 (revision 5: 화염 -> 정신; revision 4: integer conversions `{능력치} n당 대응 1`, rounded in the player's favour from ×0.30 / ×0.40).
-   One owner: the readiness calculation below and the player-facing Gate sentence (`{능력치} {n}당 1`) read it. */
+   One owner: the readiness calculation below and the player-facing Gate sentence (`{능력치} {n}당 대응 1 제공`) read it. */
 const HAZARD_RULES={poison:['survival',1/3],cold:['survival',1/3],corrosion:['survival',1/3],bind:['mobility',1/2],mire:['mobility',1/2],fire:['spirit',1/2],fear:['spirit',1/2],dark:['mobility',1/2],whiteout:['spirit',1/2]};
 function hazardRule(h){const r=HAZARD_RULES[h]||['survival',.2];return {stat:r[0],coef:r[1]};}
 function hazardState(h,e,d){
@@ -250,24 +250,36 @@ function greatSuccessSignal(n,d,facilities=[]){
 /* v2.9.0: departing at Fatigue 40 (탈진) adds the same +10%p term as an injured departure and lifts the cap
    the same way (DUNGEON_HAZARD §Healthy / injured failure Death chance): both together 50%. */
 const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40,exhausted:.10};
+/* DUNGEON_HAZARD v2.9.0 §strainEscalation (User 2026-09-25): the repeated-strain cut. The first
+   injured departure and the first weary (Fatigue 20+) departure are free; every repeat of each
+   kind adds 8%p to the failure Death chance and to its cap, summed and capped at 30%p. The counts
+   come from the adventurer's own records (this departure included) - no new NPC field. */
+const STRAIN={step:.08,cap:.30,weary:20};
+const strainEscalation=(injuredRuns,wearyRuns)=>Math.min(STRAIN.cap,STRAIN.step*Math.max(0,injuredRuns-1)+STRAIN.step*Math.max(0,wearyRuns-1));
+function strainRuns(records,departedInjured,departedWeary){
+ const past=records||[];
+ return {injuredRuns:past.filter(x=>x.departedInjured).length+(departedInjured?1:0),wearyRuns:past.filter(x=>x.departedWeary).length+(departedWeary?1:0)};
+}
+const strainFor=(records,departedInjured,departedWeary)=>{const s=strainRuns(records,departedInjured,departedWeary);return strainEscalation(s.injuredRuns,s.wearyRuns);};
 /* DUNGEON_HAZARD_v2.7 §GATE POWER — LATE-DAY SLOPE. The Day term bends at D9: a party's
    prepared ability stops growing long before Day 30 does, so a single slope left every late Gate
    further out of reach than the one before it. Only this term changed; every other Gate Power
    term is what it was, which is why D1-D9 is unchanged. */
 const GATE={knee:9,early:1.70,late:0.40};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;
-function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.fatigueBeforeExpedition||0)>=FATIGUE_MAX){
+function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.fatigueBeforeExpedition||0)>=FATIGUE_MAX,strain=0){
  const required=d.power||1;
  const combatDeficit=clamp((required-preparedPower(p.effects))/required,0,1);
  const environmentDeficit=p.hazards.length
   ?p.hazards.reduce((v,h)=>v+clamp(h.gap/h.threat,0,1),0)/p.hazards.length:0;
  const healthy=clamp(combatDeficit*DEATH.combat+environmentDeficit*DEATH.environment,0,DEATH.cap);
- const extra=(departedInjured?DEATH.injured:0)+(departedExhausted?DEATH.exhausted:0);
- return {combatDeficit,environmentDeficit,healthy,exhausted:!!departedExhausted,
+ const extra=(departedInjured?DEATH.injured:0)+(departedExhausted?DEATH.exhausted:0)+(strain||0);
+ return {combatDeficit,environmentDeficit,healthy,exhausted:!!departedExhausted,strain:strain||0,
   chance:extra?clamp(healthy+extra,0,DEATH.cap+extra):healthy};
 }
 function failureDeathRisk(n,d,facilities=[]){
- return failureDeathChanceFor(prepare(n,d,facilities),d,n.injury===1);
+ const p=prepare(n,d,facilities),departedInjured=n.injury===1,departedWeary=(p.effects.fatigueBeforeExpedition||0)>=STRAIN.weary;
+ return failureDeathChanceFor(p,d,departedInjured,undefined,strainFor(n.records,departedInjured,departedWeary));
 }
 /* RESULT-PROOF COUNTERFACTUAL (DUNGEON_HAZARD §RESULT-PROOF). The real expedition resolves
    exactly once, above, under ordinary rules - this never runs before it and never changes what
@@ -280,6 +292,13 @@ function failureDeathRisk(n,d,facilities=[]){
 const OUTCOME_ORDER=['대성공','성공','퇴각','부상','중상','사망'];
 const UNPROVEN=Symbol('unproven');
 function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
+ const s=shadowSettle(departure,d,facilities,pack,ev,severeEscalation);
+ return s===UNPROVEN?UNPROVEN:s.tier;
+}
+/* The settled shadow: the Outcome tier AND the persistent Injury it leaves, so the state proof
+   reads the same 구급키트 step the real resolution applies (중상 -> 부상 keeps injury 1; a 부상
+   leaves none) instead of re-deriving it. */
+function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
  const sAbility=preparedPower(se);
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
@@ -304,7 +323,7 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
   sOutcome='성공';
  }else{
   if(ev.deathRoll===undefined)return UNPROVEN;
-  const sDeathChance=failureDeathChanceFor(sp,d,severeEscalation>0).chance;
+  const sDeathChance=failureDeathChanceFor(sp,d,severeEscalation>0,undefined,ev.strain||0).chance;
   if(ev.deathRoll<sDeathChance){
    sOutcome='사망';
   }else if(!sCombatSuccess){
@@ -339,8 +358,18 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
   if(ev.injuryGuardRoll===undefined)return UNPROVEN;
   if(ev.injuryGuardRoll<clamp(se.injuryGuard,0,.9))sOutcome=sOutcome==='중상'?'부상':'퇴각';
  }
+ const kit=kitSettle(sOutcome,(se.aftercare||0)>0,departure.injury);sOutcome=kit.tier;
  if(sOutcome==='성공'&&ev.greatRoll<greatSuccessChance(sAbility/d.power-1))sOutcome='대성공';
- return sOutcome;
+ return {tier:sOutcome,injury:kit.injury};
+}
+/* ITEM v2.9.0 §Insurance resolution order step 4 (User 2026-09-25): 구급키트 lowers the settled
+   non-death Outcome one step - a would-be 중상 resolves as 부상 (injury 1, no rest days), a
+   would-be 부상 resolves as 부상 with no lasting injury. Shared by the real resolution and the
+   shadow so both settle the same tier and the same persistent Injury. */
+function kitSettle(tier,hasKit,departureInjury){
+ if(hasKit&&tier==='중상')return {tier:'부상',injury:1,from:2};
+ if(hasKit&&tier==='부상')return {tier:'부상',injury:0,from:1};
+ return {tier,injury:tier==='중상'?2:tier==='부상'?1:tier==='퇴각'?departureInjury:0};
 }
 /* One Item at a time (by Bag slot, not by id, so two copies of the same Item are still two
    separate removals), then the whole Bag if no single Item is individually provable. Ties on
@@ -366,30 +395,21 @@ function outcomeProof(departure,pack,d,facilities,ev,severeEscalation,actualOutc
    item gone, does the shadow settle on the SAME Outcome tier (a different tier is already the
    outcome proof's claim, not this one) but WITHOUT the aftercare gate that only that item
    supplies, leaving a worse persistent Injury than the real, aftercare-relieved one? */
-function shadowInjuryBeforeAftercare(tier,departureInjury){
- return tier==='중상'?2:tier==='부상'?1:tier==='퇴각'?departureInjury:0;
-}
 function stateProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
  if(!actualAftercare||!pack.length)return null;
  const idx=OUTCOME_ORDER.indexOf(actualOutcome);
  const items=[...new Set(pack.map((id,i)=>{
   const shadowPack=pack.filter((_,j)=>j!==i);
-  const tier=shadowOutcome(departure,d,facilities,shadowPack,ev,severeEscalation);
-  if(tier===UNPROVEN||OUTCOME_ORDER.indexOf(tier)!==idx)return null; // a differing tier is outcomeProof's claim, not this one
-  const sp=prepare({...departure,pack:shadowPack},d,facilities);
-  const before=shadowInjuryBeforeAftercare(tier,departure.injury);
-  const shadowFinal=((sp.effects.aftercare||0)>0&&before>0)?(before===2?1:0):before;
-  return shadowFinal>actualAftercare.to?id:null;
+  const s=shadowSettle(departure,d,facilities,shadowPack,ev,severeEscalation);
+  if(s===UNPROVEN||OUTCOME_ORDER.indexOf(s.tier)!==idx)return null; // a differing tier is outcomeProof's claim, not this one
+  return s.injury>actualAftercare.to?id:null;
  }).filter(Boolean))];
  if(items.length)return {items};
  /* Whole-Bag fallback: no single Item alone proves it, but removing the whole Bag might -
     same pattern as outcomeProof's bare-tier fallback. Never invented as one Item's credit. */
- const bareTier=shadowOutcome(departure,d,facilities,[],ev,severeEscalation);
- if(bareTier===UNPROVEN||OUTCOME_ORDER.indexOf(bareTier)!==idx)return null;
- const bareSp=prepare({...departure,pack:[]},d,facilities);
- const bareBefore=shadowInjuryBeforeAftercare(bareTier,departure.injury);
- const bareFinal=((bareSp.effects.aftercare||0)>0&&bareBefore>0)?(bareBefore===2?1:0):bareBefore;
- if(bareFinal>actualAftercare.to)return {items:null};
+ const bare=shadowSettle(departure,d,facilities,[],ev,severeEscalation);
+ if(bare===UNPROVEN||OUTCOME_ORDER.indexOf(bare.tier)!==idx)return null;
+ if(bare.injury>actualAftercare.to)return {items:null};
  return null;
 }
 function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutcome,actualAftercare){
@@ -434,6 +454,7 @@ function resolve(n,d,r,facilities=[],run){
     Severe-vs-ordinary decision is made, on the departure state alone - still one decision
     point, still no second Severe roll, still applied before that branch's clamp. */
  const departedInjured=n.injury===1,severeEscalation=departedInjured?.15:0;
+ const departedWeary=(e.fatigueBeforeExpedition||0)>=STRAIN.weary,strain=strainFor(n.records,departedInjured,departedWeary);
  /* DUNGEON_HAZARD_v2.7 §Resolution order, complete: the game decides SUCCESS-PATH vs
     FAILURE-PATH using only noise/envRoll (and, only when genuinely needed to make that one
     decision, injuryRiskRoll) - never escape/injury evidence, which settles WHICH failure this
@@ -453,7 +474,7 @@ function resolve(n,d,r,facilities=[],run){
  if(!failurePath){
   outcome='성공';
  }else{
-  deathChance=failureDeathChanceFor(p,d,departedInjured).chance;
+  deathChance=failureDeathChanceFor(p,d,departedInjured,undefined,strain).chance;
   deathRoll=r.next();
   if(deathRoll<deathChance){
    outcome='사망';
@@ -492,6 +513,14 @@ function resolve(n,d,r,facilities=[],run){
     injury-risk percentage - so the line no longer credits 치료용품 for a downgrade it no longer
     performs. The Trait's own `injuryGuard +23%p` identity is unchanged. */
  if(['부상','중상'].includes(outcome)&&injuryGuardCheck()){outcome=outcome==='중상'?'부상':'퇴각';p.why.push('강골이 부상 단계를 완화');p.events.push({id:'injury-guard',text:'강골이 부상 단계를 낮췄다.'});}
+ /* ITEM v2.9.0 §Insurance resolution order step 4 (User 2026-09-25): 구급키트 lowers the settled
+    non-death Outcome one step. XP, Loot and Fatigue follow the lowered Outcome; the report keeps
+    the would-be persistent state so NIGHT_CLOSING can name the proven contribution. */
+ let aftercare=null;
+ {const kit=kitSettle(outcome,(e.aftercare||0)>0,n.injury);
+  if(kit.from){aftercare={from:kit.from,to:kit.injury,outcomeFrom:outcome};outcome=kit.tier;
+   p.why.push(kit.from===2?'구급키트가 중상을 부상으로 완화':'구급키트가 남을 부상을 제거');
+   p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),text:kit.from===2?'구급키트가 중상을 부상으로 낮췄다.':'구급키트가 남을 부상을 없앴다.'});}}
  /* Only now, with the ordinary outcome settled, may a 성공 become 대성공. Assigning it right
     after combat let a later environmental injury overwrite it, and judging it on the post-noise
     score let a lucky hidden roll pass itself off as preparation - so it is judged on `ability`,
@@ -512,30 +541,18 @@ function resolve(n,d,r,facilities=[],run){
  /* NPC_TRAIT v2.7 §Natural recovery: an ordinary Injury is cleared only by actually coming
     back safe. 퇴각 is not a safe return, so it keeps the Injury; the old blanket decrement
     let a Retreat read as healing. 중상/사망 keep their own transitions. */
- n.injury=outcome==='중상'?2:outcome==='부상'?1:outcome==='퇴각'?n.injury:Math.max(0,n.injury-1);
+ n.injury=outcome==='중상'?2:outcome==='부상'?(aftercare?aftercare.to:1):outcome==='퇴각'?n.injury:Math.max(0,n.injury-1);
  n.recovery=outcome==='중상'?Math.max(1,r.int(2,4)+n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects.recoveryDelta||0),0)):0;
- /* ITEM_v2.7 §Insurance resolution order step 4: Aftercare is last, it runs on the settled
-    non-death state, and it changes ONLY persistent Injury - Outcome, XP, Loot and Fatigue keep
-    whatever the expedition actually produced. The whole chain is not re-run. The report carries
-    the would-be state so NIGHT_CLOSING can name a proven contribution instead of a carried Item. */
- let aftercare=null;
- if((e.aftercare||0)>0&&outcome!=='사망'&&n.injury>0){
-  const wouldBe={injury:n.injury,recovery:n.recovery};
-  n.injury=n.injury===2?1:0;n.recovery=0;
-  aftercare={from:wouldBe.injury,to:n.injury,recoveryFrom:wouldBe.recovery};
-  p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),
-   text:n.injury?'구급키트가 중상 후 상태를 부상까지 낮췄다.':'구급키트가 남을 부상을 없앴다.'});
- }
  n.status=outcome==='사망'?'사망':n.injury===2?'중상':n.injury?'부상':'건강';
- /* DUNGEON_HAZARD v2.7 §FATIGUE OUTCOME BASELINE + §EXCESS SUPPLY step G. The buffer is
-    spent only now, once the actual Outcome exists, and 중상/사망 stay at 0 no matter what a
-    Trait would add. rawOutcomeFatigueGain and actualOutcomeFatigueGain are separate report
-    truths: the buffer only shows as a contribution when it actually absorbed something. */
- const severeOrDead=outcome==='중상'||outcome==='사망';
- /* v2.9.0 §FATIGUE OUTCOME BASELINE: 성공/대성공 +4, 퇴각 +7, 부상 +9, 중상/사망 0; clamp 40
-    (re-tuned -1 from +5 / +8 / +10 after the I-2 re-measure, User 2026-09-24) */
- const outcomeBaseline=severeOrDead?0:outcome==='퇴각'?7:outcome==='부상'?9:4;
- const rawOutcomeFatigueGain=severeOrDead?0:Math.max(0,outcomeBaseline+(e.fatigue||0));
+ /* DUNGEON_HAZARD §FATIGUE OUTCOME BASELINE + §EXCESS SUPPLY step G. The buffer is spent only
+    now, once the actual Outcome exists, and 사망 stays at 0 no matter what a Trait would add.
+    rawOutcomeFatigueGain and actualOutcomeFatigueGain are separate report truths: the buffer
+    only shows as a contribution when it actually absorbed something. */
+ const dead=outcome==='사망';
+ /* v2.9.0 §FATIGUE OUTCOME BASELINE: 성공/대성공 +4, 퇴각 +7, 부상 +9, 중상 +9 (the 부상 gain,
+    User 2026-09-25), 사망 0; clamp 40 */
+ const outcomeBaseline=dead?0:outcome==='퇴각'?7:(outcome==='부상'||outcome==='중상')?9:4;
+ const rawOutcomeFatigueGain=dead?0:Math.max(0,outcomeBaseline+(e.fatigue||0));
  const remainingSupplyBuffer=e.remainingSupplyBuffer||0;
  const actualOutcomeFatigueGain=Math.max(0,rawOutcomeFatigueGain-remainingSupplyBuffer);
  const outcomeBufferUsed=rawOutcomeFatigueGain-actualOutcomeFatigueGain;
@@ -554,8 +571,8 @@ function resolve(n,d,r,facilities=[],run){
  /* The real outcome is fully settled above; this only asks, from here, whether a specific
     sold Item is what kept it from being worse - using the same rolls already drawn, never a
     new one. `pack` above was `n.pack` unmutated through the whole resolution. */
- const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady},severeEscalation,outcome,aftercare);
- const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
+ const heroProof=resultProof(departure,departurePack,d,facilities,{noiseRoll,envRoll,escapeRoll,injuryRoll,deathRoll,injuryRiskRoll,escapeItemRoll,injuryGuardRoll,greatRoll,aidKitReady,strain},severeEscalation,outcome,aftercare);
+ const report={cause:incidentCause,npcId:n.id,name:n.name,day:d.day,dungeon:d.id,dungeonName:d.name,outcome,won,xp,loot,storeBonus,greatMargin,changes,items:[...n.pack],why:p.why,events:p.events,rescued,avoidedDeath,heroProof,statChanges:G.Adventurer.keys.filter(k=>n.stats[k]!==beforeStats[k]).map(k=>({key:k,before:beforeStats[k],after:n.stats[k]})),equipmentGain:n.equipment.power-beforeEquipment,level:n.level,injury:n.injury,recovery:n.recovery,aftercare,departedInjured,departedWeary,beforeFatigue,preparedSupply:e.preparedSupply,preRecovery:e.preRecovery,fatigueBeforeExpedition:e.fatigueBeforeExpedition,remainingSupplyBuffer:e.remainingSupplyBuffer,rawOutcomeFatigueGain,outcomeBufferUsed,actualOutcomeFatigueGain,effectiveFatigue:e.effectiveFatigue,finalFatigue,netFatigueDelta,combatWon:combatSuccess,environmentHurt:affected,poison:d.hazards.includes('poison')&&(e.poison||0)>10,/* deathRoll is undefined on a 성공 path (Fix 2: no Death roll is drawn there at all) - `null`
     here, not `undefined`, so a JSON save/reload round-trip does not drop the key and disagree
     with the live pre-reload object (JSON has no `undefined`). */
    /* escapeChance/escapeRoll/injuryRoll are now conditional too (only the combat-failure and
@@ -575,5 +592,5 @@ function resolve(n,d,r,facilities=[],run){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,STRAIN,strainEscalation,strainRuns,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);

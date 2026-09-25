@@ -2470,8 +2470,15 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  assert.ok(!/부상 '\+n\.injury/.test(kit),'the compact state does not repeat Injury as a number');
  assert.ok(/parts=\[n\.status\]/.test(kit),'it carries the state word itself');
  // SA-Q20: the exact First Aid primary function
- assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 부상 1단계 완화 (사망 제외)'"),
-  'the First Aid primary function is the approved sentence');
+ assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망 제외)'"),
+  'the First Aid primary function is the approved sentence (COPY_AUDIT §4-22, User 2026-09-25)');
+ // v2.9.0 F3 (User 2026-09-25): the NPC detail rows and the route-change line
+ assert.ok(fn('npcDetail').includes("cond.push('피로 회복: 음식·음료')"),'§4-14 no rest recovery: Food/Drink only');
+ assert.ok(fn('npcDetail').includes("'무리한 출발 '+(n.records||[]).filter(r=>r.departedInjured||r.departedWeary).length+'회'"),'the strained-departure information row reads the records');
+ assert.ok(read('dist/systems/shop.js').includes('rep.routeChange=G.Presentation.routeChangeLine('),'the route-change line is composed once in the presentation layer');
+ assert.ok(!/허세/.test(read('dist/systems/shop.js')),'the retired Trait name never appears in the engine');
+ assert.equal(Presentation.routeChangeLine({name:'하람',pilgrim:false},'슬라임 초원','거미 동굴'),'거짓말쟁이 하람은 말했던 슬라임 초원 대신 거미 동굴로 향했다.','§14-10 exact, particles by the final consonant');
+ assert.equal(Presentation.routeChangeLine({name:'유리',pilgrim:true},'거미 동굴','슬라임 초원'),'순례 행렬을 따라 유리는 예상 목적지 거미 동굴 대신 슬라임 초원으로 향했다.','§14-10 pilgrimage form');
  assert.ok(!surfaces.includes('결과는 그대로'),'the redundant lead is gone');
  // SA-Q32: the exact Trait effect labels, with the generic ones retired
  assert.equal(Presentation.traitText('rich'),'방문 시 소지금 +50G');
