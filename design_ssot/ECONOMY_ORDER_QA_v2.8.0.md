@@ -127,6 +127,8 @@ PASS:
 - no separate purchase-only Counter definition; the legacy 기동-for-속박/진창 Counter exception is gone (User 2026-09-24, v2.9.0)
 - non-Counter 50% / 100% and all 150% use normal 0.08–0.97 clamp
 - 150% receives no new Counter floor
+- 100% only: the final chance above (0.97 관련 준비 included) is × 0.90 (User 2026-09-25, v2.9.2); 50% / 150% carry no scale;
+  accessible base need 0.72 is not lowered for it
 
 FAIL:
 - Bag occupancy subtracts from purchase intent

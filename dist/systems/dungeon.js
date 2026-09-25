@@ -278,8 +278,9 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    ability stops growing long before Day 30 does, so a single slope left every late Gate further
    out of reach than the one before it. Only this term changes (User 2026-09-25, v2.9.1 balance:
    early 1.70 -> 1.20, late 0.40 -> 0.80 - the early Gates no longer outrun adventurer growth, the
-   D20~30 Tier-3 pressure rises); every other Gate Power term is what it was. */
-const GATE={knee:9,early:1.20,late:0.80};
+   D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early 1.20 -> 1.50, late kept -
+   a fresh first Run cleared the Boss); every other Gate Power term is what it was. */
+const GATE={knee:9,early:1.50,late:0.80};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance). The
    failure Death roll is judged against `failureDeathChance x preparedFactor x levelFactor`, not

@@ -426,7 +426,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  const counters=mode!=='overcharge'&&G.Relics.relatedPrep(it,d.hazards);
  /* 왕도 프리미엄 인증 lifts the flat 바가지 intent penalty for its owner; nothing else about 150% moves. */
  const flat=mode==='overcharge'&&this.has('royalCert')?0:rule.intent;
- const chance=wallet<debit?0:counters?.97:clamp(need+n.loyalty*.002+flat+burdenIntentBonus,.08,.97);
+ /* ECONOMY_ORDER §PURCHASE INTENT final scale (v2.9.2, User 2026-09-25): only 정가 carries one, applied after the
+    floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio. */
+ const chance=wallet<debit?0:(counters?.97:clamp(need+n.loyalty*.002+flat+burdenIntentBonus,.08,.97))*(rule.finalScale||1);
  return {price,debit,guarantee,bundle,chance,need:need>=.75?'높음':need>=.5?'보통':'낮음',burden:wallet<debit?'손님 소지금 부족':burden>.7?'높음':burden>.35?'보통':'낮음',label:wallet<debit?'손님 소지금 부족':need>=.75?'필요도 높음':need>=.5?'필요도 보통':'필요도 낮음',reason:wallet<debit?'손님 소지금이 모자랍니다.':mode==='overcharge'||burden>.7?'가격 부담으로 구매를 망설입니다.':need<.5?'필요도가 낮아 구매를 망설입니다.':'이번 제안을 받아들이지 않았습니다.'};
  }
  sell(stockId,mode='full'){

@@ -365,6 +365,12 @@ Accessible-mode base need (User 2026-09-24, v2.9.0): 0.72 (was 0.80), lowered so
 difference against an unrelated Item; measured and reported, not tuned further by WORK. 바가지 keeps its own
 fit-based need, whose fit sums the Item's direct Counter values and the values of the pressed Stats (관련 준비).
 
+정가 final scale (User 2026-09-25, v2.9.2 balance): the FINAL 정가 purchaseChance above — the 0.97 관련 준비 case
+included — is multiplied by 0.90 (a ~10% relative cut, not percentage points). 50% 할인 and 바가지 carry no scale, and the
+shared accessible-mode base need is not lowered for it:
+
+    정가 purchaseChance = (the 0.97 floor or the clamped rawChance) × 0.90
+
 Exact acceptance probability remains hidden from the Player.
 
 ## ORDER ARRIVAL / DAY INFORMATION

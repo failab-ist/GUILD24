@@ -2,8 +2,9 @@
 
 - 범위: 이 3개 레버만 본다. 다른 v2.9.1 밸런스 시스템은 건드리지 않았다.
 - 확정 반영: 대성공 EXP 1.40 → 1.10 (`9b1db0c`). 발생 조건·확률, Store Gold, 원정 NPC Wallet 보상은 그대로 뒀다.
-- 미확정(User 결정 필요): GATE SLOPE early 1.40(A) / 1.50(B), 정가 구매의사 ×0.90(A) / ×0.80(B).
-  Production Source에는 반영하지 않았다. 측정 프로세스 안에서만 적용했다.
+- User 결정(2026-09-25): **GATE SLOPE early 1.50 + 정가 구매의사 ×0.90** 채택. 프레쉬 첫 런 클리어였으니 메타가 쌓이면 더 쉬워진다는 판단이다.
+  메타 5런 궤적(human, 150개)의 클리어율: 현재 .07 → .19, 1.4 + 0.9는 .05 → .05, 1.5 + 0.9는 .01 → .02~.04.
+  배포 빌드에서 User가 플레이한 뒤 데이터로 다시 본다.
 - 원자료: `reports/v292-balance-matrix.json` (8개 후보 × 2개 정책 × 각 1000런, fresh account, adaptive pricing, hybrid build)
 - 재현: `PAR=4 node tools/remeasure-v292.cjs <out.json> 1000 balanced,human`
 

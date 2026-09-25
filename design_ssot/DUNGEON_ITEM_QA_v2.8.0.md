@@ -236,7 +236,7 @@ PASS:
 Owner rule: `DUNGEON_HAZARD_v2.8.0.md` §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance)
+- the Day term is `min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2)
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
 - the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
 

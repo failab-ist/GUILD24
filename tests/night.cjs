@@ -486,11 +486,11 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE (User 2026-09-25, v2.9.1 balance: early 1.70 ->
     1.20, late 0.40 -> 0.80). D1-D9 must be bit-for-bit the single 1.20 slope, and only the Day
     term may bend - a post-hoc multiplier on the finished Gate Power would move the Tier and
-    Family terms with it. */
- assert.deepEqual(Dungeon.GATE,{knee:9,early:1.20,late:0.80},'the shipped slope is the canonical one');
+    Family terms with it. v2.9.2 balance (User 2026-09-25): early 1.20 -> 1.50, late 0.80 kept. */
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.50,late:0.80},'the shipped slope is the canonical one');
  for(const day of [1,2,5,8,9])
-  assert.equal(Dungeon.gateDayTerm(day),day*1.20,'D'+day+' is unchanged');
- for(const [day,term] of [[10,11.6],[12,13.2],[24,22.8],[29,26.8],[30,27.6]])
+  assert.equal(Dungeon.gateDayTerm(day),day*1.50,'D'+day+' is the single early slope');
+ for(const [day,term] of [[10,14.3],[12,15.9],[24,25.5],[29,29.5],[30,30.3]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
  /* The coefficients are named so a harness can measure a candidate without editing the

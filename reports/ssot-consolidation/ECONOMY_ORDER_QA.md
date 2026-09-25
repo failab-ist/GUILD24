@@ -442,3 +442,13 @@ base = dayBase × (1 + .02×(avgLevel-1)) × (1 + .06×avgRarity)
 dayBase = 170 + 1×(Day-1)    (v2.9.1 balance, User 2026-09-25)
 base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 ```
+
+## AMENDMENT — v2.9.2 balance: 정가 final purchase chance x 0.90 (User decision 2026-09-25)
+
+User 2026-09-25: the final 정가 purchase chance, the 0.97 관련 준비 case included, is scaled by 0.90; 50% / 150% and the shared
+accessible need are unchanged. Nothing is dropped.
+
+```new
+- 100% only: the final chance above (0.97 관련 준비 included) is × 0.90 (User 2026-09-25, v2.9.2); 50% / 150% carry no scale;
+  accessible base need 0.72 is not lowered for it
+```
