@@ -32,6 +32,23 @@ if (V.shelf === 'giNone' || V.shelf === 'old') patch('systems/shop', 'expires:th
 if (V.wallet === 'old') patch('systems/dungeon', "const WALLET_MULT={'대성공':.90,'성공':.90,'퇴각':.35,'부상':.20,'중상':.10,'사망':0};", "const WALLET_MULT={'대성공':1,'성공':1,'퇴각':.08,'부상':.18,'중상':.18,'사망':0};");
 // 중상 share of an injury (real resolution + shadow): failed-escape path .42, other injury paths .13
 if (V.sevp) { patch('systems/dungeon', 'clamp(.42+', `clamp(${V.sevp[0]}+`, 2); patch('systems/dungeon', 'clamp(.13-', `clamp(${V.sevp[1]}-`, 4); }
+// 3' zombie cut, User 2026-09-25 discussion: consecutive injured departures only (a healthy departure resets),
+// 2nd on +step, cap unchanged, weary term dropped
+if (V.strain === 'consec') patch('systems/dungeon', 'const strainFor=(records,departedInjured,departedWeary)=>{const s=strainRuns(records,departedInjured,departedWeary);return strainEscalation(s.injuredRuns,s.wearyRuns);};',
+  "const strainFor=(records,departedInjured)=>{if(!departedInjured)return 0;const past=records||[];let k=1;for(let i=past.length-1;i>=0&&past[i].departedInjured;i--)k++;return Math.min(STRAIN.cap,STRAIN.step*(k-1));};");
+// retreat healing, User 2026-09-25 discussion: an injured departure that ends 퇴각 heals with 25% x (1 + previous
+// consecutive injured 퇴각), a 부상 result breaks the chain; one extra RNG draw only on that path
+if (V.retreatHeal) patch('systems/dungeon', "outcome==='퇴각'?n.injury:Math.max(0,n.injury-1);",
+  `outcome==='퇴각'?(departedInjured&&(()=>{let k=0;const rs=n.records||[];for(let i=rs.length-1;i>=0&&rs[i].departedInjured&&rs[i].outcome==='퇴각';i--)k++;const hit=r.next()<Math.min(1,${V.retreatHeal}*(k+1));if(hit)globalThis.__heal=(globalThis.__heal||0)+1;return hit;})()?0:n.injury):Math.max(0,n.injury-1);`);
+// injury-aware seller (harness layer, measurement input): a save-able injured customer gets combat / survival /
+// 구급키트 / 귀환석 first; an injured customer on the 4th+ consecutive injured visit (zombie stage 3+) or below Lv5 is
+// sent out with nothing. Visits = departures, so the sim-side counter matches the consecutive rule on either build.
+if (V.injAware) {
+  patch('systems/simulation', 'const d=g.claimedGateFor(n);let attempts=0;',
+    "{const c=(s.__inj??={});c[n.id]=n.injury===1?(c[n.id]||0)+1:0;if(n.injury===1&&(n.level<5||c[n.id]>=4)){globalThis.__abandon=(globalThis.__abandon||0)+1;g.depart();act();continue;}}const d=g.claimedGateFor(n);let attempts=0;");
+  patch('systems/simulation', 'v:itemValue(n,it,d)+(st.expires?',
+    'v:itemValue(n,it,d)+(n.injury===1?((it.effects.combat||0)*.6+(it.effects.survival||0)*.4+(it.effects.aftercare?25:0)+(it.effects.escape?10:0)):0)+(st.expires?');
+}
 // 7-b buffer removal (only when asked)
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
@@ -59,20 +76,36 @@ for (const f of files) {
   if (V.shelf === 'old') { const old = { water: 5, ramen: 4, choco: 5, coffee: 5, herbtea: 5, potion: 7, ice: 4, candy: 5, lava: 4, energy: 5, wine: 5, kit: 7, highpotion: 7, antidote: 7, midpotion: 7, herobar: 5, hyperenergy: 5, sageelixir: 5, toppotion: 7, stone: 0, tree: 0, coupon: 0 };
     for (const it of D.items) { if (it.category === 'gear' && it.id !== 'antidote') it.days = 0; if (old[it.id] !== undefined) it.days = old[it.id]; } }
   if (V.need) D.balance.accessibleNeed = V.need;
+  if (V.capRates) D.capitalRates = V.capRates;
 }
 const out = {};
-for (const [policy, pricing, build] of policies) {
-  const r = Debug.simulate(seeds, policy, null, pricing, build);
+const slim = (r) => {
   const ph = {};
   for (const [b, p] of Object.entries(r.phase || {})) { const { ratio, ...rest } = p; ph[b] = rest; }
   const st = r.settlement || {};
-  out[`${policy}:${pricing}:${build}`] = {
+  return {
     averageDay: r.averageDay, reach10: r.reach10, reach20: r.reach20, reach25: r.reach25, reach30: r.reach30,
     clear: r.overallClearRate, bossWinGivenReach: r.bossWinGivenReach, deaths: r.averageDeaths, deathFail: r.deathFailRate,
     money: r.averageMoney, endedBy: r.endedBy, fatigue: r.fatigue, phase: ph,
     capitalPerRun: st.runs ? Object.values(st.byBand || {}).reduce((a, b) => a + (b.gain || 0), 0) / st.runs : null,
     goldInTotal: r.goldInTotal, goldOutTotal: r.goldOutTotal, goldOut: r.goldOut, goldIn: r.goldIn,
-    waste: r.shortage?.waste ?? null, stockouts: r.stockouts,
+    waste: r.shortage?.waste ?? null, stockouts: r.stockouts, bands: r.bands, npc: r.npc, final: r.final, days: r.days,
   };
+};
+for (const [policy, pricing, build, opts = {}] of policies) {
+  globalThis.__heal = 0; globalThis.__abandon = 0;
+  const key = `${policy}:${pricing}:${build}` + (opts.relicAware ? ':aware' : '');
+  if (V.traj) {
+    const t = Debug.trajectory({ trajectories: V.traj.T, runs: V.traj.R, policy, pricing, build, prefix: V.traj.prefix, purchaseOrder: V.traj.order, relicAware: !!opts.relicAware });
+    out[key] = { mode: 'trajectory', T: V.traj.T, byIndex: t.byIndex.map(b => ({
+      runIndex: b.runIndex, reach20: b.reach20, reach30: b.reach30, clear: b.overallClearRate, averageDay: b.averageDay,
+      money: b.averageMoney, deaths: b.averageDeaths, endedBy: b.endedBy, capitalGained: b.capitalGained,
+      capitalAtStart: b.capitalAtStart, decorationsAtStart: b.decorationsAtStart, masteryAtStart: b.masteryAtStart })),
+      acquisitionRuns: t.acquisition.map(a => ({ id: a.id, price: a.price, runs: a.runs })),
+      firstClearRuns: t.firstClear.runIndex, heal: globalThis.__heal, abandon: globalThis.__abandon };
+  } else {
+    const r = Debug.simulate(seeds, policy, null, pricing, build, { relicAware: !!opts.relicAware });
+    out[key] = { ...slim(r), heal: globalThis.__heal, abandon: globalThis.__abandon };
+  }
 }
 process.stdout.write(JSON.stringify(out));
