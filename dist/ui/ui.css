@@ -1427,6 +1427,30 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .t-saved{--rt-face:#173c39;--rt-ink:#93e2d8;--rt-lit:inset 0 4px 0 #6fc7c0}
 .p-night .t-gone .verdict{padding-left:0;padding-right:0;background:none;clip-path:none}
 .p-night .t-gone .verdict:before{display:none}
+/* v2.9.2 H1 — THE STAMP'S END STATE (UI_UX §NIGHT LAYOUT — VERDICT STAMP). What the landing leaves
+   behind is tone, like the cut and the colour above, and is here at every motion setting so reduced
+   motion ends on the same record; playPhase only brings it in (--ink / --tape). The word keeps its
+   one size. The tag isolates so these layers sit on its face and under its word.
+     부상  red ink spread out from the word, on the tag's face
+     중상  the stamp landed slightly crooked
+     사망  no stamp: a black tape laid across under the bare word */
+.p-night .beat .verdict{isolation:isolate}
+.p-night .t-hurt .verdict:after{content:'';position:absolute;z-index:-1;left:30%;right:4%;top:14%;bottom:8%;
+ background:#c2402f80;
+ clip-path:polygon(8% 30%,20% 30%,20% 8%,44% 8%,44% 0,70% 0,70% 16%,88% 16%,88% 40%,100% 40%,100% 72%,90% 72%,90% 92%,
+  62% 92%,62% 100%,34% 100%,34% 86%,12% 86%,12% 64%,0 64%,0 44%,8% 44%);
+ opacity:var(--ink,1);transform:scale(var(--ink,1));pointer-events:none}
+.p-night .t-severe .verdict{rotate:-2.5deg;translate:2px 0}
+.p-night .t-gone .verdict:after{content:'';position:absolute;z-index:-1;left:-10px;right:-16px;top:14%;bottom:2%;
+ background:linear-gradient(180deg,#9aa0ab 0 2px,#3b3f47 2px 4px,#08090b 4px calc(100% - 3px),#2c2f36 calc(100% - 3px) calc(100% - 1px),#000 calc(100% - 1px));
+ clip-path:polygon(0 0,100% 0,100% 20%,97% 20%,97% 45%,100% 45%,100% 75%,98% 75%,98% 100%,0 100%,0 80%,3% 80%,3% 55%,0 55%,0 30%,2% 30%,2% 12%,0 12%);
+ transform-origin:left center;transform:rotate(-1.5deg) scaleX(var(--tape,1));pointer-events:none}
+/* the reversal's first print: the turned-away Outcome in its own tag, laid over the real one's place
+   and gone before the record settles (playPhase adds and removes it; it is never rendered) */
+.p-night .beat .who{position:relative}
+.p-night .beat .verdict.ghost{position:absolute;margin:0;pointer-events:none;opacity:0}
+.p-night .beat .verdict.ghost.t-gone{padding-left:0;padding-right:0;background:none;clip-path:none;box-shadow:none;--rt-ink:#cfd3dd}
+.p-night .beat .verdict.ghost.t-gone:before{display:none}
 /* the lamp on the figure is the other half of the tag's state: the one warm light in the shop
    falls fully on a Great Success, cools on a withdrawal, and thins out as the damage grows. A
    death keeps its existing cold treatment below. Tone only - one size for every Outcome. */
@@ -3052,11 +3076,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
      when the longer label wrapped, its ? was pushed onto a third line and the whole panel grew.
      The ? is now pinned to each cell's top-right and taken out of flow entirely, so only the
      label and the value are laid out. The cells stretch to a common height, so the two read as
-     one row whichever of them wraps. Desktop is untouched - this is inside the phone query. */
+     one row whichever of them wraps. Desktop is untouched - this is inside the phone query.
+     The ? is held at the cell's top-right by the row itself (no wrap, pushed right), never by
+     positioning the <details>: a positioned ? became the balloon's containing block, so the
+     explanation was laid out 24px wide, one word per line down the screen (User 2026-09-25,
+     UI_UX §SHARED ANCHORED POPOVER). Unpositioned, it floats against the panel as on desktop. */
   .readout .top{align-items:stretch}
-  .readout .fore{position:relative;flex-wrap:wrap;padding-right:26px}
-  .readout .fore>.tip{position:absolute;top:0;right:0;margin-left:0}
+  .readout .fore{flex-wrap:nowrap}
+  .readout .fore>.tip{align-self:flex-start;margin-left:auto}
   .readout .fore>.tip>summary{white-space:nowrap}
+  .p-final .final-forecast .fore>.tip{margin-right:30px}
 }
 @media(min-width:1024px){
   /* Desktop layout tweaks */
@@ -3099,7 +3128,20 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    carries stays - the destination, and each Hazard with the ability it presses on - the rows
    are just no longer set a line apart from each other. */
 .p-sale .front-side .dest-plate .hazards{margin-top:4px}
-.p-sale .front-side .dest-plate .hazards li{padding:4px 6px;gap:6px}
+.p-sale .front-side .dest-plate .hazards li{padding:4px 6px;column-gap:5px;row-gap:0}
+/* COPY_AUDIT §4-16 render note (User 2026-09-25, SALE destination plate on a phone): the requirement
+   block was one piece, so it wrapped whole under the Hazard name and every Hazard took three lines.
+   Its two parts join the row itself now - `{위험}` and `대응 {N} 필요` on the first line, the conversion
+   line on its own line from the name's left edge - one step smaller so the pair fits at 360. From
+   900px the row is the one ` · ` line again, exactly as before. */
+.dest-plate .hazards .press{display:contents}
+.dest-plate .hazards .press .need{white-space:nowrap;font-size:12px}
+.dest-plate .hazards .press .rate{flex:1 0 100%}
+@media(min-width:900px){
+ .p-sale .front-side .dest-plate .hazards li{gap:6px}
+ .dest-plate .hazards .press{display:inline}
+ .dest-plate .hazards .press .need{font-size:inherit}
+}
 
 @media(min-width:1024px){
  .front-side .readout.core-desk{display:block;margin:0}

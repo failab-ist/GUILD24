@@ -294,7 +294,7 @@ Do not show the Player a branch table of hypothetical final Fatigue for 성공 /
 
 SALE may expose:
 - current Fatigue (the customer's status strip)
-- departure Fatigue after committed preRecovery — on the counter tray as `피로 A → 출발 B`, only for a chosen Food/Drink that moves it; no always-on Fatigue line under the outlook (User 2026-09-24 revision, v2.9.0)
+- departure Fatigue after committed preRecovery — not a SALE line: the counter tray lists a Food/Drink's own `피로 회복` only, current Fatigue is the status strip's `피로 N` and NIGHT answers the rest; no always-on Fatigue line under the outlook (User 2026-09-25; the v2.9.0 `피로 A → 출발 B` line is retired)
 - actual deterministic current arithmetic
 
 NIGHT exposes the one resolved final Fatigue path.

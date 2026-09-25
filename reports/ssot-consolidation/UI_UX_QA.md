@@ -731,8 +731,8 @@ SALE shelf holding an Item that counters one of the customer's Gate Hazards, an 
 - no badge, no verdict word, no row reorder
 - ORDER offer rows follow the same rule against today's Gate once the D-4 batch adopts it
 ### UI-Q-v29-7 — ONE DELTA LIST
-Select an Item that changes a Stat and releases a Fatigue band; then an Item that changes a Stat only; then commit one of them.
-- `판매 후 변화` is one list of what changes: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and the §4-17 line `피로 {A} → 출발 {B}`
+Select a Food/Drink that releases a Fatigue band for a fatigued customer; then an Item that changes a Stat only; then commit one of them; the same Items in the till and in FINAL preparation.
+- `판매 후 변화` lists only the Item's own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`); no `피로 완화` row and no `피로 {A} → 출발 {B}` line anywhere (User 2026-09-25)
 - no outlook delta row (no `전투 전망 A → B`, no `환경 대응 A → B`) for a selected or a committed Item
 - the frozen SALE-entry outlook is not repainted inside the till and never changes for a selected Item (UI-Q86)
 - `특수 효과` and the shelf-life line stay
@@ -961,9 +961,11 @@ does the same (User 2026-09-24, v2.9.0)
 
 The Hazard short row reads `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공` (one line at 900px+); the SALE Stat grid tag sits
 beside the Stat name and the value is one step smaller. Superseded declarations were edited in place.
+User 2026-09-25 (v2.9.2 play report): on the SALE destination plate `{위험}` and `대응 {N} 필요` share one line and the conversion
+line sits under the Hazard name; the phone line in the fence below is edited in place.
 
 ```new
-- on a phone the short row is two lines, `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공`; at 900px+ one ` · ` line; the SALE Stat grid shows the pressing Hazard tag beside the Stat name on one line with no overflow, and the value is smaller than before yet larger than the name (User 2026-09-25)
+- on a phone the short row is two lines, `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공`; on the SALE destination plate `{위험}` and `대응 {N} 필요` share the first line and the conversion line starts under the Hazard name, so no Hazard takes a third line and nothing overflows at 360 / 390 / 412 (`대응 {N} 필요` one type step smaller there; User 2026-09-25); at 900px+ one ` · ` line; the SALE Stat grid shows the pressing Hazard tag beside the Stat name on one line with no overflow, and the value is smaller than before yet larger than the name (User 2026-09-25)
 ```
 
 ## AMENDMENT — v2.9.0 F4: Fatigue recovery values / shelf life / operating cost / Wallet multipliers / 세계수 price (User decision 2026-09-24/25)
@@ -1106,4 +1108,37 @@ User 2026-09-25: the D0 briefing's DAY 05 / DAY 30 anchors return as an LED labe
 ```new
 - the briefing shows header `마왕 조사 개시`, the unchanged lead line, then a `DAY 05` label over exactly `첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.` and a `DAY 30` label over exactly `성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.` (User 2026-09-25), and the unchanged button
 - the two labels read on the record's LED face (16px; 17px on a desk) and the two lines in the record's body weight (15px ink; 16px on a desk), never the secondary tone (RUNTIME UX BUG found on the live build 2026-09-25: the two-line body had no style rule)
+```
+
+## AMENDMENT — v2.9.2 H1: NIGHT verdict stamp (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.2 H1): UI-Q-v29-27 checks the NIGHT verdict stamp, the cause beat and the reversal overstamp.
+
+```new
+### UI-Q-v29-27 — NIGHT VERDICT STAMP / CAUSE BEAT / REVERSAL OVERSTAMP
+(User 2026-09-25, v2.9.2 H1; owner `UI_UX_v2.8.0.md` §NIGHT LAYOUT — VERDICT STAMP, principle PRESENTATION_PRINCIPLES §GAME FEEL BEAT.)
+NIGHT results reached through 다음 at 390 and 1280, motion on and reduced motion: 성공, 대성공, 퇴각, 부상, 중상, 사망, a
+result with a Hero Item line, a 귀환석 reversal (`rescued`) and a Death turned away (`avoidedDeath`); frames through the landing.
+- the card stands first and the tag lands after it; 성공 / 퇴각 have no hold, 대성공 / 부상 / 중상 / 생환 / 사망 hold ≤ 200 ms
+- the stamp falls from 1.6 × (퇴각 1.3 ×) in 90 ms; on the landing the card dips 4 px (퇴각 2 px) and settles, nothing else moves
+- 대성공 is one gold landing; 부상 keeps a red ink spread, 중상 a slightly misaligned tag, 사망 a black tape laid in ≤ 500 ms
+- a reversal prints the turned-away Outcome (`사망` / `중상`) first, then `생환` overstamps it; the Insurance proof lines appear on that frame
+- with a Hero Item line that line settles once and the figures do not count; without one only the REWARD figures count up
+- the Outcome cue's first note is heard on the landing; on a reversal `rescue` is heard on the overstamp; one visual, one sound, one cause / number at a landing
+- the last motion ends by 770 ms; 다음 / 전체 건너뛰기 answer at any frame and no pending cue plays over the next screen
+- under reduced motion the end state is identical: same tag, ink / misalignment / tape, figures at their values, no first print
+- a stamp on a death, two stamps on a 대성공, a reversal on 만반의 준비 / 강골 / 구급키트 results, a ring, flash, shake or particle
+- a count-up beside a Hero Item line, a count on GROWTH / AFTERMATH figures, a faint first print left in the end state, or a changed Outcome type size
+```
+
+## AMENDMENT — v2.9.2: `판매 후 변화` lists the Item's own effects only (User decision 2026-09-25)
+
+User decision 2026-09-25: no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line; the inherited line below is superseded.
+
+```text
+- displayed delta is attributed to `피로 완화` / Condition source
+```
+
+```new
+- the band recovery is not listed in `판매 후 변화` and is never attributed to the Item (User 2026-09-25)
 ```

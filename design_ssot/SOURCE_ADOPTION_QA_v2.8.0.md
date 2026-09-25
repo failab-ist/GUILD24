@@ -551,7 +551,7 @@ Required:
 - permanent forecast paragraph removed
 - tooltip/popover copy replaced with COPY_WORLD_VOICE_v2.8 exact text
 - internal potion marker remains hidden per SA-Q05
-v2.9.0 (User 2026-09-24): no `보급 부족 완화` derived row exists; the only derived Fatigue row is `피로 완화` (band released).
+v2.9.0 (User 2026-09-24): no `보급 부족 완화` derived row exists. User 2026-09-25: no derived row exists at all — the `피로 완화` row is retired and `판매 후 변화` lists the Item's own effects only.
 
 ### SA-Q31 — DEEP COPY REPEATED ON MORNING AND SALE
 

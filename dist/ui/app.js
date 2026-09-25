@@ -44,11 +44,28 @@ function healCue(){const s=game.run,n=s?.phase==='sell'&&game.current();if(n?.he
    the next - and both go through here, so neither can drift into a generic return cue. */
 const nightCue=r=>r.outcome==='사망'?'death':r.outcome==='중상'?'severe':r.outcome==='부상'?'injury'
  :r.outcome==='퇴각'?'retreat':r.outcome==='대성공'?'great':'return';
+/* v2.9.2 H1 (UI_UX §NIGHT LAYOUT — VERDICT STAMP): one timing table for the stamp and its cue, by the
+   tone the Outcome already set. entry = the card's arrival, hold = the stillness before the stamp
+   (none at 일반), `from` = the stamp's fall, dip = the card's give on the landing frame. 생환 holds
+   for the first print of the turned-away Outcome; 사망 has no stamp and lays a tape instead. */
+const STAMP_FALL=90,NIGHT_STAMP={
+ safe:{entry:200,hold:0,from:1.6,dip:4,y:6},pull:{entry:240,hold:0,from:1.3,dip:2,x:-16},
+ great:{entry:220,hold:100,from:1.6,dip:4,y:10},hurt:{entry:240,hold:120,from:1.6,dip:4,y:-8},
+ severe:{entry:280,hold:160,from:1.6,dip:4,y:-14},saved:{entry:240,hold:180,from:1.6,dip:4,scale:.97,print:true},
+ gone:{entry:240,hold:60,tape:440}};
+const stampLand=st=>st.entry+st.hold+STAMP_FALL;
 /* The life-saving accent lands BEHIND its own Outcome cue, never instead of it, so a rescued
    퇴각 still reads as a 퇴각. It appears only where the result itself carries the proof, so
-   nothing that was not already resolved can be inferred from it. */
-function nightSound(result){if(!result)return;sound(nightCue(result));
- if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);}
+   nothing that was not already resolved can be inferred from it.
+   With motion the Outcome cue waits for the stamp's landing frame (a death's for its tape, a
+   reversal's for its first print, `rescue` then on the overstamp); a waiting cue is dropped when
+   the next result or the next screen comes first, so it is never heard over it. */
+let nightCueAt=[];
+function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!result)return;
+ const st=motionOK()&&NIGHT_STAMP[Presentation.nightTone(result)];
+ if(!st){sound(nightCue(result));if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
+ nightCueAt=[setTimeout(()=>sound(nightCue(result)),st.tape||st.print?st.entry+(st.tape?st.hold:0):stampLand(st))];
+ if(st.print)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
@@ -137,21 +154,49 @@ function playPhase(phase){
   const form=$('.form');
   if(form)A(form,{translateY:[16,0],opacity:[0,1],duration:280,ease:'outQuad'});
  }
- /* BATCH 3 NIGHT: one entry used to carry every Outcome the same way. The record and its tag now
-    arrive the way that return actually happened - resolved from the tag tone the Outcome already
-    set, never from anything the result does not state. Same family, short, no cinematic layer. */
+ /* v2.9.2 H1 NIGHT VERDICT STAMP (UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT).
+    The card arrives the way that return happened (BATCH 3), stands, and the tag is stamped onto
+    it: one hard 90 ms fall, the card dipping under it on the landing frame. Weight follows the
+    Outcome - no hold for the everyday 성공 / 퇴각, a short one for the rest - and the one response
+    after the landing belongs to the cause when there is one (the Hero Item line settles) and to
+    the money only when there is not (REWARD figures count up). A reversal prints what the
+    Insurance turned away and overstamps it; a death gets a tape, not a stamp. Everything reads
+    the tone and the result already resolved; nothing here is state. */
  if(phase==='night'){
   const beat=$('.beat'),tag=$('.beat .verdict');
-  const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1];
-  const IN={great:{translateY:[10,0],opacity:[0,1],duration:340},safe:{translateY:[6,0],opacity:[0,1],duration:280},
-   pull:{translateX:[-16,0],opacity:[0,1],duration:420},hurt:{translateY:[-8,0],opacity:[0,1],duration:380},
-   severe:{translateY:[-14,0],opacity:[0,1],duration:560},gone:{opacity:[0,1],duration:760},
-   saved:{scale:[.97,1],opacity:[0,1],duration:420}};
-  if(beat)A(beat,{...(IN[tone]||IN.safe),ease:'outQuad'});
-  /* the tag is handed over a beat after the figure: a clean return lands it, damage lets it drop */
-  if(tag&&tone!=='gone')A(tag,tone==='great'||tone==='saved'
-   ?{scale:[1.12,1],opacity:[0,1],duration:260,delay:160,ease:'outQuad'}
-   :{translateY:[-6,0],opacity:[0,1],duration:tone==='severe'||tone==='hurt'?380:240,delay:160,ease:'outQuad'});
+  const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],st=NIGHT_STAMP[tone]||NIGHT_STAMP.safe;
+  const at=st.entry+st.hold,land=stampLand(st),r=game.run.results[game.run.nightCursor||0];
+  if(beat){const p={opacity:{from:0,to:1,duration:st.entry,ease:'outQuad'},
+    translateY:[{from:st.y||0,to:0,duration:st.entry,ease:'outQuad'}].concat(st.tape?[]
+     :[{to:0,duration:land-st.entry},{to:st.dip,duration:40,ease:'in(2)'},{to:0,duration:150,ease:'outQuad'}])};
+   if(st.x)p.translateX={from:st.x,to:0,duration:st.entry,ease:'outQuad'};
+   if(st.scale)p.scale={from:st.scale,to:1,duration:st.entry,ease:'outQuad'};
+   A(beat,p);}
+  /* 사망: the word comes with the card and a black tape lays across under it - no stamp */
+  if(tag&&st.tape)A(tag,{'--tape':{from:0,to:1,duration:st.tape,delay:at,ease:'inOut(2)'}});
+  else if(tag){
+   A(tag,{scale:{from:st.from,to:1,duration:STAMP_FALL,delay:at,ease:'in(3)'},
+    opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});
+   if(tone==='hurt')A(tag,{'--ink':{from:.35,to:1,duration:220,delay:land,ease:'outQuad'}});
+   /* the reversal: the Outcome the Insurance turned away starts to print in its own tag, then the
+      resolved label lands over it and the faint print goes */
+   if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
+    g.className='verdict ghost t-'+(r.avoidedDeath?'gone':'severe');g.textContent=r.avoidedDeath?'사망':'중상';
+    g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
+    A(g,{opacity:[{from:0,to:.4,duration:st.hold,delay:st.entry},{to:.4,duration:STAMP_FALL},{to:0,duration:120}],
+     scale:{from:1.15,to:1,duration:st.hold,delay:st.entry,ease:'outQuad'},onComplete:()=>g.remove()});}
+  }
+  /* after-motion has one owner: the reversal's proof lines cut in on the overstamp; else the Hero
+     Item line settles; else the REWARD figures count up. A death has none. */
+  const told=[...document.querySelectorAll('.beat .told .cause,.beat .told .why')],hero=$('.beat .cause li.hero');
+  if(st.print)told.forEach(el=>A(el,{opacity:{from:0,to:1,duration:1,delay:land}}));
+  /* the claim's accent bar belongs to its list: when the claim is the list's only line, the list settles */
+  else if(hero)A(hero.parentElement.children.length===1?hero.parentElement:hero,{opacity:{from:0,to:1,duration:160,delay:land,ease:'outQuad'},
+   translateY:{from:-4,to:0,duration:160,delay:land,ease:'outQuad'}});
+  else if(!st.tape)document.querySelectorAll('.beat .changed .reward .tok b').forEach(b=>{
+   const text=b.textContent,m=text.match(/\d[\d,]*/);if(!m)return;
+   const to=Number(m[0].replace(/,/g,'')),box={v:0},put=()=>{b.textContent=text.replace(m[0],fmt(box.v));};
+   put();A(box,{v:to,duration:220,delay:land,ease:'outQuad',onUpdate:put,onComplete:()=>{b.textContent=text;}});});
  }
  // SALE reveal: the next back walks up to the counter and turns face up. It only ever
  // moves layers that are already laid out, so nothing shifts and no reflow is queued.
@@ -336,7 +381,9 @@ const hazardList=(keys,states,d)=>keys.length?'<ul class="hazards">'+Presentatio
 // A Gate is a paper notice pinned to the board: family colour along the top, the hazard
 // pictogram beside each pressure line, the supply requirement stamped at the foot.
 /* `full`: Gate detail (the gates modal) reads the full Gate sentence (COPY_AUDIT §4-16); the MORNING plate reads the
-   short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` - the number first (User 2026-09-24). */
+   short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` - the number first (User 2026-09-24).
+   MORNING calls it with the Gate alone: handed to .map directly, the array index arrived as `full`
+   and every Gate after the first printed the Gate-detail sentence (User 2026-09-25). */
 function gatePlate(d,full=false){const b=sigilOf(d);
  return '<article class="slip gate" style="--fam:'+(b.color||'#caa46a')+'"><span class="pin"></span>'
  +'<span class="crest">'+Art.mark(b.id||d.id,28)+'</span>'
@@ -395,7 +442,7 @@ function morningScreen(){
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
     +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
      +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b>'+deathLimitItem()+'</p>'
-   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+'</div></div>'
+   +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(d=>gatePlate(d)).join('')+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'</div>'
   /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
      counter-band element and is placed in the counter's own coordinates. Presentation only -
@@ -762,7 +809,8 @@ function causeLines(r){
  const supply=Presentation.supplyLines(r).filter(l=>!(hero&&proven
   &&l.items.every(name=>proven.some(id=>D.itemBy[id]?.name===name))));
  const lines=(hero?[hero]:[]).concat(supply.slice(0,1).map(l=>l.text));
- return lines.length?'<ul class="cause">'+lines.map(t=>'<li>'+E(t)+'</li>').join('')+'</ul>':'';}
+ /* the proven claim is marked so the verdict stamp can hand it the landing's after-motion (H1) */
+ return lines.length?'<ul class="cause">'+lines.map((t,i)=>'<li'+(hero&&!i?' class="hero"':'')+'>'+E(t)+'</li>').join('')+'</ul>':'';}
 // WHAT CHANGED — Presentation decides what actually moved; this only stamps it.
 function changedRows(r){
  /* NIGHT_CLOSING 2026-09-12: a normal 대성공 also pays the Store, and a 심층원정 pays it
@@ -1225,9 +1273,10 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  if(!n||!st){const t=game.account.tutorial||{};return !t.skipped&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
- const parts=[...moved.direct.map(r=>'<b class="'+(r.bad?'effect-bad':'')+'">'+E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>'),
-  ...moved.derived.map(r=>'<b>'+E(r.label+' '+r.text)+'</b>')];
- if(moved.departure)parts.push('<b class="fatigue">'+E(moved.departure)+'</b>');
+ /* User 2026-09-25: the Item's own effects only. A Food/Drink's `피로 회복` row for a customer who carries
+    Fatigue is the SUPPLY lesson's anchor (`.fatigue`), which replaced the retired `피로 A → 출발 B` line. */
+ const parts=moved.direct.map(r=>'<b class="'+[r.bad?'effect-bad':'',r.key==='supply'&&n.fatigue>0?'fatigue':''].filter(Boolean).join(' ')+'">'
+  +E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  const life='폐기까지 '+(st.expires-s.day)+'일';
  return '<div class="counter-tray" role="region" aria-label="계산대">'
@@ -1272,18 +1321,13 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
     rose because this Item's Supply relieved a Supply Deficit, or crossed a Fatigue band, is
     still never presented as if the Item itself granted that Stat - but the two group names
     that used to sit over them (이 상품이 직접 / 보급이 상태에 미치는 영향) were the analytical
-    label stack v2.8 removes: one heading now covers the whole list, and only the underlying
-    `effects`/`effects derived` class still tells them apart for styling. */
+    label stack v2.8 removes: one heading now covers the whole list. Since User 2026-09-25 the list
+    holds the Item's own effects only - no derived row and no departure line are left under it. */
  +'<h4>판매 후 변화</h4>'
- +(changes.length||moved.derived.length?'':'<ul class="effects"><li><span>현재 준비 변화 없음</span><b></b></li></ul>')
+ +(changes.length?'':'<ul class="effects"><li><span>현재 준비 변화 없음</span><b></b></li></ul>')
  +(changes.length?'<ul class="effects">'
    +changes.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b></li>').join('')
    +'</ul>':'')
- +(moved.derived.length?'<ul class="effects derived">'
-   +moved.derived.map(r=>'<li><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')
-   +'</ul>':'')
- /* v2.9.0 ONE DELTA LIST: the departure line, only when this Item moves it (COPY_AUDIT §4-17) */
- +(moved.departure?'<ul class="effects derived"><li><span></span><b>'+E(moved.departure)+'</b></li></ul>':'')
  /* SA-Q30: conditional non-delta Item truth - a Counter this customer does not need today, an
     Insurance that only fires on a bad outcome - is still stated plainly rather than folded
     away, under its approved v2.8 heading. */
@@ -1925,7 +1969,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* §STORE SUPPORT: acquisition is heavier than an ordinary purchase and reads as securing a
     fixture into the store. Deliberately not the Decoration cue and not the unlock cue. */
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
- case'closing':game.finishNight();game.save();render();break;
+ case'closing':game.finishNight();game.save();render();nightSound(null);break;
  case'open':game.open();selected=null;render();healCue();break;
  /* SALE scroll continuity. Opening one good closes another, and when the one that closes
     sits above the viewport the shelf below it slides up by the height of the panel that

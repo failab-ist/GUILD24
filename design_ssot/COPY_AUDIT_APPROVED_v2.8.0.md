@@ -138,7 +138,7 @@
 
 ## 3-5. 보급 안내
 
-**현재** (User 2026-09-24, v2.9.0: contextual mark, the first time the counter tray's `판매 후 변화` shows a `피로 A → 출발 B` row — a Food/Drink chosen for a fatigued customer; the same line is the §3-7 SUPPLY step)
+**현재** (User 2026-09-25: contextual mark, the first time the counter tray's `판매 후 변화` shows the `피로 회복` row of a Food/Drink chosen for a fatigued customer; the same line is the §3-7 SUPPLY step. It sat on the retired `피로 A → 출발 B` row before)
 > 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
 
 ---
@@ -169,7 +169,7 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 ### STATS (User 2026-09-24, v2.9.0: anchor = the SALE 능력치 grid, right after HAZARD — the first time a customer's Stats are on screen)
 > 능력치는 직업·희귀도·레벨마다 다르다. 투력은 전투에 가장 영향력이 크며, 강인함·기동·정신은 각 위험에 대응한다.
 
-### SUPPLY (User 2026-09-24, v2.9.0: contextual on the counter tray's first `피로 A → 출발 B` row)
+### SUPPLY (User 2026-09-25: contextual on the counter tray's `피로 회복` row, the first time a Food/Drink is chosen for a fatigued customer)
 > 음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.
 
 ### RETURNING (재방문 손님, contextual on the returning customer's card) (User 2026-09-24, v2.9.0)
@@ -368,6 +368,7 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 > {위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공
 
 렌더(User 2026-09-25): 폰에서는 `대응 {N} 필요`가 본문 크기 한 줄, `{능력치} {n}당 대응 1 제공`이 한 단계 작은 서브 줄; 900px 이상에서는 ` · `로 이어 한 줄.
+SALE 목적지 판(폰, User 2026-09-25): 첫 줄은 `{위험}`과 `대응 {N} 필요`가 나란히, 서브 줄 `{능력치} {n}당 대응 1 제공`은 위험 이름의 왼쪽 끝부터 그 아래에 놓는다 — 한 위험이 세 줄을 차지하지 않는다. 폭이 모자라면 `대응 {N} 필요`의 글자 크기를 한 단계 줄인다(문구는 그대로).
 
 **압박 Label 폐지** (User 2026-09-24 revision 2, v2.9.0)
 > `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다`는 폐지. 라벨 행 `{위험} · {label}`은 어디에도 없다.
@@ -376,13 +377,9 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
-## 4-17. SALE 피로 줄
+## 4-17. SALE 피로 줄 — 폐지
 
-**노출 위치**
-> 계산대 트레이의 `판매 후 변화`에서만, 고른 음식·음료가 출발 피로를 바꿀 때. 전망 칸 아래의 상시 피로 줄은 없다 (User 2026-09-24 revision: 현재 피로는 상태 띠의 `피로 N`, 원정 후 피로는 밤 화면이 답한다).
-
-**현재** (User 2026-09-24, v2.9.0: the only Fatigue arithmetic on the decision surface; `· 보급 회복 -C`, `보급 부족 …`, `남은 보급 …`, the readout `보급 X / Y` cell and the always-on readout line are deleted)
-> 피로 {A} → 출발 {B}
+**폐지** (User 2026-09-25): `판매 후 변화`에는 아이템이 직접 바꾸는 효과만 적는다 — 음식·음료는 자기 `피로 회복` 줄만 나온다. `피로 {A} → 출발 {B}` 줄과 파생 `피로 완화` 줄은 없다(계산대 트레이 · 손님 상세 · FINAL 준비 모두). 현재 피로는 상태 띠의 `피로 N`, 원정 후 피로는 밤 화면이 답한다. 전망 칸 아래의 상시 피로 줄도 없다(v2.9.0).
 
 ---
 

@@ -462,7 +462,7 @@ Examples:
 - 피로 회복 N
 - 보험 효과
 
-After an Item is chosen, `판매 후 변화` is one delta list of what changes only: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
+After an Item is chosen, `판매 후 변화` lists only what the Item itself changes — its own effect rows (`피로 회복 2 → 9`, `강인함 17 → 23`, `원정 소지금 획득 0%p → 40%p`); no derived `피로 완화` row and no `피로 {A} → 출발 {B}` line, on the counter tray, the till and FINAL preparation (User 2026-09-25, replaces the v2.9.0 derived / departure rows). The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 
 Preview must not expose:
 - exact expedition success %
@@ -580,7 +580,7 @@ C. another explicitly owned Trait / Relic / Boss modifier
 Rules:
 - an Item directly changes only the exact channels stated by `ITEM_v2.8.0.md`
 - if a post-commit delta is shown, the changed value must be actual and its source must be provable
-- post-commit delta rows may show exact Core-Stat / Counter / Fatigue changes (`피로 {A} → 출발 {B}`); they must not recalculate, replace or repaint the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 readout, and no outlook delta row exists (User 2026-09-24, v2.9.0)
+- post-commit delta rows may show the exact Core-Stat / Counter / 피로 회복 changes the Item itself makes, never a Fatigue arithmetic line (User 2026-09-25); they must not recalculate, replace or repaint the pre-supply Combat Forecast / Hazard Readiness / 실패 시 사망 위험 readout, and no outlook delta row exists (User 2026-09-24, v2.9.0)
 - ordinary SALE must keep the pre-supply Forecast/Readiness/실패 시 사망 위험 snapshot frozen; post-commit feedback should instead show exact changed values/effects with readable source attribution rather than a new derived expedition answer
 - Food/Drink Fatigue recovery that reduces current Fatigue may restore effective Core Stats when a canonical Fatigue band changes (bands -> `DUNGEON_HAZARD_v2.8.0.md`); this is a **Fatigue/Condition effect**, not a hidden direct Item Stat
 - Trait/Relic/Boss modifiers may change an Item contribution only within their exact owned scope
@@ -590,7 +590,7 @@ Example boundary:
 - it has no direct positive four-Core-Stat contribution
 - if there is no Fatigue band change, selling it must not create a Core-Stat delta
 - if its 피로 회복 releases a Fatigue band, effective Core Stats may rise through Fatigue recovery
-- that indirect change must be presented as `피로 완화` or an equivalent source-readable system effect, never as if 집중 사탕 itself granted those Stats
+- that indirect change is never presented as if 집중 사탕 itself granted those Stats, and `판매 후 변화` does not list it — only the Item's own effects are listed (User 2026-09-25; the `피로 완화` row is retired)
 
 A generic heading such as `판매 후 변화` is acceptable only if the rows clearly distinguish direct Item effects from derived system changes.
 If that distinction is not readable, remove the synthetic delta block rather than replacing the pre-supply outlook with post-commit Forecast/Readiness/Death answers.

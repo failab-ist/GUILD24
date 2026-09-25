@@ -943,6 +943,18 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  const envCell=readout.slice(readout.indexOf('환경 대응<b'),readout.indexOf("</span>':''",readout.indexOf('환경 대응<b')));
  assert.ok(envCell.includes("tip('환경 대응'"),'the environment help sits in the same cell as the reading');
  assert.ok(!/\.readout \.fore>\.tip[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
+ /* UI_UX §SHARED ANCHORED POPOVER (User 2026-09-25, phone): a positioned ? or cell becomes the
+    balloon's containing block, and the help was laid out 24px wide, one word per line. At every
+    breakpoint the balloon floats against the readout panel, so neither may be positioned. */
+ assert.ok(!/\.readout \.fore\{[^}]*position:/.test(css),'no breakpoint positions the forecast cell');
+ assert.ok(!/\.readout \.fore>\.tip\{[^}]*position:/.test(css),'nor the ? inside it');
+ assert.ok(/\.readout\{position:relative/.test(css),'the balloon is anchored to the panel');
+ /* COPY_AUDIT §4-16 render note (User 2026-09-25): on a phone the SALE destination plate reads
+    `{위험}  대응 {N} 필요` on one line and the conversion line under the name - never three lines. */
+ assert.ok(/\n\.dest-plate \.hazards \.press\{display:contents\}/.test(css),'the requirement block joins the row');
+ assert.ok(/\n\.dest-plate \.hazards \.press \.rate\{flex:1 0 100%\}/.test(css),'the conversion line takes its own line from the name');
+ assert.ok(/\n\.dest-plate \.hazards \.press \.need\{white-space:nowrap;font-size:12px\}/.test(css),'and the requirement stays beside the name, one step smaller');
+ assert.ok(/@media\(min-width:900px\)\{\n \.p-sale \.front-side \.dest-plate \.hazards li\{gap:6px\}\n \.dest-plate \.hazards \.press\{display:inline\}/.test(css),'from 900px the row is one line again');
 
  /* SALE_v2.7 §SALE DECISION-ONLY DETAIL: no disclosure control on the decision surface that
     opens flavour prose. The real effects it used to hide are still shown - plainly, not folded
@@ -1702,6 +1714,57 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
  assert.ok(!/sound\('|Sound\.play\(/.test(fn('render')),'render() plays no one-shot cue');
 });
 
+/* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
+   stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
+   gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
+test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const src=app.slice(app.indexOf('const STAMP_FALL='),app.indexOf('const stampLand='));
+ const T=new Function(src.replace('const STAMP_FALL=','var STAMP_FALL=').replace(',NIGHT_STAMP=','; var NIGHT_STAMP=')+';return {F:STAMP_FALL,S:NIGHT_STAMP};')();
+ assert.equal(T.F,90,'the stamp falls in 90 ms');
+ assert.ok(/const stampLand=st=>st\.entry\+st\.hold\+STAMP_FALL;/.test(app),'it lands after the entry and the hold');
+ const S=T.S,land=k=>S[k].entry+S[k].hold+T.F;
+ // intensity by weight: 일반 has no hold, 중요 / 클라이맥스 hold at most 200 ms; 대성공 is one landing
+ for(const k of ['safe','pull'])assert.equal(S[k].hold,0,k+' is 일반: no wind-up');
+ for(const k of ['great','hurt','severe','saved','gone'])assert.ok(S[k].hold>0&&S[k].hold<=200,k+' holds ≤ 200 ms');
+ assert.deepEqual(Object.fromEntries(['safe','pull','great','hurt','severe','saved'].map(k=>[k,land(k)])),
+  {safe:290,pull:330,great:410,hurt:450,severe:530,saved:510},'landing frames as UI_UX states them');
+ assert.ok(S.pull.from<S.safe.from&&S.pull.dip<S.safe.dip,'퇴각 is the shallow stamp');
+ for(const k of ['safe','great','hurt','severe','saved'])assert.equal(S[k].dip,4,k+' dips 4 px');
+ assert.ok(S.gone.tape&&S.gone.tape<=500&&!S.gone.from,'사망 has no stamp and a tape ≤ 500 ms');
+ // each beat ≤ 320 ms after the landing (dip 190, settle 160, count 220), and the whole run ends by 770 ms
+ for(const k of Object.keys(S))assert.ok((S[k].tape?S[k].entry+S[k].hold+S[k].tape:land(k)+220)<=770,k+' ends by 770 ms');
+ const pp=bare(fn('playPhase')),night=pp.slice(pp.indexOf("if(phase==='night')"),pp.indexOf("if(phase==='sell')"));
+ assert.ok(/to:st\.dip,duration:40/.test(night)&&/to:0,duration:150/.test(night),'the card gives 4 px and settles - the only companion motion');
+ assert.ok(/scale:\{from:st\.from,to:1,duration:STAMP_FALL,delay:at/.test(night),'the tag falls onto the card after it stands');
+ assert.ok(!/stagger|rotate:|translateX:\{from:[^s]|document\.body|#app|\.stage/.test(night),'no ring, shake, scatter or screen-level motion');
+ // one after-motion owner, in this order: reversal cut-in, else the Hero line, else the REWARD count-up; never on a death
+ const own=night.indexOf('if(st.print)told'),h=night.indexOf('else if(hero)A(hero.parentElement.children.length===1?hero.parentElement:hero,'),c=night.indexOf("else if(!st.tape)document.querySelectorAll('.beat .changed .reward .tok b')");
+ assert.ok(own>0&&own<h&&h<c,'one owner per landing: cut-in, Hero line, or the REWARD figures');
+ assert.ok(/duration:1,delay:land/.test(night),'the reversal proof lines cut in on the overstamp frame');
+ assert.ok(/'verdict ghost t-'\+\(r\.avoidedDeath\?'gone':'severe'\)/.test(night)&&/r\.avoidedDeath\?'사망':'중상'/.test(night),
+  'the first print is the Outcome the result says was turned away');
+ assert.ok(/onComplete:\(\)=>g\.remove\(\)/.test(night)&&!/ghost/.test(bare(fn('beat'))),'the first print is never rendered and never stays');
+ assert.ok(/'<li'\+\(hero&&!i\?' class="hero"':''\)/.test(fn('causeLines')),'the proven Hero claim is the line that settles');
+ // end state lives in CSS at full strength, so reduced motion ends on the same record
+ assert.ok(/\.p-night \.t-hurt \.verdict:after\{[^}]*opacity:var\(--ink,1\);transform:scale\(var\(--ink,1\)\)/.test(css),'부상 keeps its ink spread');
+ assert.ok(!/\.p-night \.t-hurt \.verdict:after\{[^}]*(gradient|blur)/.test(css),'the ink is a hard-edged spread, not a glow');
+ assert.ok(/\.verdict\.ghost\.t-gone\{[^}]*--rt-ink:#cfd3dd/.test(css),'a turned-away 사망 prints in its own bone ink');
+ assert.ok(/\.p-night \.t-severe \.verdict\{rotate:-2\.5deg;translate:2px 0\}/.test(css),'중상 keeps its misaligned stamp');
+ assert.ok(/\.p-night \.t-gone \.verdict:after\{[^}]*transform:rotate\(-1\.5deg\) scaleX\(var\(--tape,1\)\)/.test(css),'사망 keeps its tape');
+ assert.ok(/\.p-night \.beat \.verdict\.ghost\{position:absolute;margin:0;pointer-events:none;opacity:0\}/.test(css),'a first print left behind would be invisible');
+ // sound: the landing carries the cue; a waiting cue never plays over the next screen
+ const ns=bare(fn('nightSound'));
+ assert.ok(/^function nightSound\(result\)\{nightCueAt\.forEach\(clearTimeout\);nightCueAt=\[\];if\(!result\)return;/.test(ns),'a pending cue is dropped first');
+ assert.ok(/const st=motionOK\(\)&&NIGHT_STAMP\[Presentation\.nightTone\(result\)\]/.test(ns),'motion decides the timing, the resolved tone the entry');
+ assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
+ assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
+ const audio=read('dist/ui/audio.js');
+ for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');
+ assert.ok(!/\n death:\{[^}]*hit:1/.test(audio)&&!/\n rescue:\{[^}]*hit:1/.test(audio),'사망 keeps its restrained attack; rescue is an accent');
+ assert.ok(/hit=sh\.hit&&!i/.test(audio)&&/hit\?\{\.\.\.sh,attack:\.002\}:sh/.test(audio),'only the first note changes; the notes stay');
+});
+
 test('D-24: the feel layer is optional, and it never animates a redraw of the same view',()=>{
  assert.ok(/matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches/.test(app),'the OS setting is read');
  assert.ok(/const motionOK=\(\)=>typeof anime==='object'&&!!anime\.animate&&!matchMedia/.test(app),
@@ -1862,21 +1925,16 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
   assert.ok(r.direct.every(x=>!core.has(x.key)),'집중 사탕 never grants a Core Stat directly');
   assert.ok(r.direct.some(x=>x.key==='supply')&&r.direct.some(x=>x.key==='fear'),'its own two channels are its own');
  }
- // with neither system moving, there is nothing derived to report
- assert.deepEqual(Presentation.preview(mk({}),gate({}),[],'candy').derived,[],'no system moved, no system row');
- // v2.9.0: no Gate requires Supply, so there is no Supply Deficit and no relief row (DUNGEON_HAZARD §SUPPLY -> FATIGUE)
- assert.deepEqual(Presentation.preview(mk({}),gate({requiredSupply:3}),[],'candy').derived,[],'a stale requiredSupply field on a Gate moves nothing');
- // crossing a Fatigue band is reported as Fatigue
- const rested=Presentation.preview(mk({fatigue:10}),gate({}),[],'candy');
- assert.deepEqual(rested.derived.map(x=>x.label),['피로 완화'],'a crossed Fatigue band names itself');
  // an Item that really does grant a Stat still reports it as its own
  const potion=DATA.itemBy.potion;
  assert.ok(potion.effects.combat>0);
  const own=Presentation.preview(mk({}),gate({}),[],'potion');
  assert.ok(own.direct.some(x=>x.key==='combat'),'a real direct Stat is the Item\'s own');
- assert.deepEqual(own.derived,[],'and brings no system row with it');
- // the hidden Supply-deficit formula is never exposed by the attribution
- for(const r of rested.derived)assert.ok(!/[0-9]+%|penalty|deficit/i.test(r.text),'the row names the channel, not the formula: '+r.text);
+ /* User 2026-09-25: `판매 후 변화` lists the Item's own effects only - a Fatigue band the Item's 피로 회복
+    releases is not listed at all, and nothing but the direct rows leaves the preview */
+ const rested=Presentation.preview(mk({fatigue:10}),gate({}),[],'candy');
+ assert.deepEqual(Object.keys(rested),['direct'],'no derived row and no departure line exist');
+ assert.ok(!/피로 완화|→ 출발/.test(read('dist/ui/presentation.js').replace(/\/\*[\s\S]*?\*\//g,'')),'the retired rows are gone from the source');
  /* SA-Q30: the two analytical group names that used to sit over the direct/derived rows
     (이 상품이 직접 / 보급이 상태에 미치는 영향) were the label-density bug v2.8 closes - one
     heading (판매 후 변화) now covers the whole list, and only the `effects`/`effects derived`
@@ -1886,8 +1944,9 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
  assert.ok(!/이 상품이 직접/.test(tillEmitted)&&!/보급이 상태에 미치는 영향/.test(tillEmitted),
   'the old per-group analytical headings are gone');
  assert.ok(tillEmitted.includes('<h4>판매 후 변화</h4>'),'one heading covers the whole list');
- assert.ok(/changes\.length\?'<ul class="effects">/.test(tillEmitted)&&/moved\.derived\.length\?'<ul class="effects derived">/.test(tillEmitted),
-  'and a group with nothing in it is still absent');
+ assert.ok(/changes\.length\?'<ul class="effects">/.test(tillEmitted)&&!/moved\.derived|moved\.departure/.test(tillEmitted),
+  'the till lists the Item\'s own rows only (User 2026-09-25)');
+ assert.ok(!/moved\.derived|moved\.departure/.test(fn('tray')),'and so does the counter tray');
  assert.ok(/\.delta-src\{/.test(css),'the remaining 특수 효과 heading keeps its own style');
 });
 
@@ -1895,7 +1954,8 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const steps=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;'));
  /* The two v2.7 subjects are taught, on the surfaces that actually show them. */
  assert.ok(/\['hazard','\.dest-plate \.hazards'/.test(steps),'the Hazard lesson is on the Hazard rows');
- assert.ok(/\['supply','\.counter-tray \.tray-delta \.fatigue'/.test(steps),'the Supply/Fatigue lesson is on the tray\'s 피로 A → 출발 B row, so it teaches the first time a Food/Drink actually moves Fatigue (v2.9.0)');
+ assert.ok(/\['supply','\.counter-tray \.tray-delta \.fatigue'/.test(steps),'the Supply/Fatigue lesson is on the tray\'s 피로 회복 row for a fatigued customer (User 2026-09-25; the 피로 A → 출발 B row is retired)');
+ assert.ok(/r\.key==='supply'&&n\.fatigue>0\?'fatigue'/.test(fn('tray')),'that row carries the anchor only when the customer has Fatigue to lose');
  /* COPY_AUDIT_APPROVED §3-7 is the exact owner of four of these lessons, so they are asserted
     verbatim rather than by keyword. The Hazard lesson's old second sentence claimed 환경 대응
     reflects 보급 - it does not, `Game.arrive()` snapshots it with an empty pack (see
@@ -1944,7 +2004,7 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* v2.9.0: no always-on Fatigue line under the outlook; the tray row carries the arithmetic */
- assert.ok(!/class="ingredients"/.test(app)&&/class="fatigue"/.test(fn('tray')),'the Fatigue arithmetic lives on the tray row only');
+ assert.ok(!/class="ingredients"/.test(app),'no always-on Fatigue line under the outlook');
  /* A coach mark anchors to a VISIBLE match. The SALE readout and its ingredients exist twice,
     a desktop copy and a phone copy with one always display:none, so taking the first DOM match
     silently dropped those lessons on a phone. */
@@ -2968,7 +3028,10 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/더 필요/.test(app)&&!/더 필요/.test(read('dist/ui/presentation.js')),'no per-customer remaining need');
  assert.ok(!('PLATE_HELP' in Presentation)&&!/위험은 능력치를 누르고/.test(read('dist/ui/presentation.js')),'the plate help line is retired (§4-15)');
  assert.ok(/s\.dungeons\.map\(d=>gatePlate\(d,true\)\)/.test(app)&&/Presentation\.hazardSentence\(h\.key,d\)/.test(fn('gatePlate'))&&/pressCell\(h\)/.test(fn('gatePlate')),'Gate detail reads the full sentence, MORNING the short row (need over rate)');
- assert.ok(!/gatePlate\(d,true\)/.test(fn('morningScreen'))&&/s\.dungeons\.map\(gatePlate\)/.test(fn('morningScreen')),'MORNING renders the plate in short form');
+ assert.ok(!/gatePlate\(d,true\)/.test(fn('morningScreen'))&&/s\.dungeons\.map\(d=>gatePlate\(d\)\)/.test(fn('morningScreen')),'MORNING renders the plate in short form');
+ /* User 2026-09-25: `map(gatePlate)` handed the array index in as `full`, so the second Gate read the
+    Gate-detail sentence. The plate is never passed to .map bare. */
+ assert.ok(!/\.map\(gatePlate\)/.test(app),'no Gate after the first is printed as Gate detail');
  const plate=fn('destPlate');
  assert.ok(/hazardList\(Presentation\.known\(d,game\),null,d\)/.test(plate),'the plate rows carry this Gate\'s numbers (hazardList with the Gate)');
  assert.equal((plate.match(/tip\(/g)||[]).length,0,'no ? help on the plate (§4-15 retired, User 2026-09-24 revision 2)');

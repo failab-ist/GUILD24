@@ -182,12 +182,14 @@ const shape={
  spend:{gain:.9,dur:.16,type:'triangle',step:.07},
  /* the recorded door is the body; the two notes stay as the fallback when it has not loaded */
  depart:{gain:.9,dur:.2,type:'sine',step:.1,sampleGain:.8},
- return:{gain:.95,dur:.22,type:'sine',step:.1},
- /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost. */
- great:{gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
- retreat:{gain:1,dur:.11,type:'square',step:.065,attack:.005,noise:{at:0,dur:.34,gain:.4,hz:900,q:.5,filter:'bandpass'},duck:.4},
- injury:{gain:1,dur:.24,type:'triangle',step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
- severe:{gain:1.1,dur:.4,type:'sawtooth',step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.55,hz:280,q:.7,filter:'lowpass'},duck:.5},
+ return:{gain:.95,dur:.22,type:'sine',step:.1,hit:1},
+ /* NIGHT outcomes: one family, six readings. Resolution first, then how much it cost.
+    v2.9.2 H1: `hit` - the first note is the stamp's landing, so it starts at once and one step
+    louder; every note, interval and step is unchanged. 사망 keeps its slow restrained attack. */
+ great:{hit:1,gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
+ retreat:{hit:1,gain:1,dur:.11,type:'square',step:.065,attack:.005,noise:{at:0,dur:.34,gain:.4,hz:900,q:.5,filter:'bandpass'},duck:.4},
+ injury:{hit:1,gain:1,dur:.24,type:'triangle',step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
+ severe:{hit:1,gain:1.1,dur:.4,type:'sawtooth',step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.55,hz:280,q:.7,filter:'lowpass'},duck:.5},
  /* restrained low drop: no boom, no fanfare, and the only cue allowed to be this long */
  death:{gain:1.1,dur:1.4,type:'sine',step:.5,attack:.06,layer:{ratio:.5,at:0,dur:2,gain:.45},noise:{at:0,dur:1,gain:.2,hz:180,q:.6,filter:'lowpass'},duck:.75},
  rescue:{gain:.9,dur:.3,type:'sine',step:.09,layer:{ratio:2,at:.12,dur:.7,gain:.28},duck:.3},
@@ -211,8 +213,8 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
  const body=file?sampleVoice(file,t0,SAMPLE_VOICE*(sh.sampleGain??1)):false;
  /* The notes are the accent when a recorded body carried the cue, and the whole cue when it
     did not - so a cue is never silent because a file has not arrived yet. */
- if(!body||sh.accent)notes.forEach((hz,i)=>{const at=t0+i*(sh.step??.07);
-  tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1),sh.type||'triangle',sfxBus,sh);
+ if(!body||sh.accent)notes.forEach((hz,i)=>{const at=t0+i*(sh.step??.07),hit=sh.hit&&!i;
+  tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1),sh.type||'triangle',sfxBus,hit?{...sh,attack:.002}:sh);
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',sfxBus);});
  if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise);
  /* coin ticks: the same ping, the same level, only the count differs between price modes */
