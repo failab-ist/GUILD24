@@ -27,8 +27,8 @@ measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Sou
   - Follow-up decisions (User 2026-09-25): 위령제 uses the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may
     recur, +1 each time); a contextual 만반의 준비 tutorial (UI_UX §만반의 준비 TUTORIAL); an Epic hybrid stays below every
     specialist of the same or a higher Rarity (ITEM, DUNGEON_ITEM_QA ITEM-Q73 / Q83 / Q15).
-  - Open (copy only, drafts proposed to the User): 위령제 title / reveal, the 만반의 준비 tutorial line, the Night lines for
-    retreat healing and 만반의 준비.
+  - Copy (User 2026-09-25): 23. 길드 합동 위령제 (COPY_AUDIT §13-23), the 만반의 준비 tutorial line (§3-7), the Decoration effect
+    lines (§9-5, 추모 방명록 `사망 한도 +2명.`). Open: the Night lines for retreat healing and 만반의 준비.
 
 ## v2.9.0 — implementation complete 2026-09-25; the BALANCE FINDING moved to v2.9.1 (User decisions 2026-09-24/25)
 

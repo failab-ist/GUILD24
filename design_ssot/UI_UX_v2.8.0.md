@@ -2048,7 +2048,7 @@ below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparati
 - anchor: the customer's Bag slots on the SALE counter
 - teaches the condition and the effect in words only; no number, no percentage
 - persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
-- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 (User 승인 대기)
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
 
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 

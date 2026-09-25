@@ -525,7 +525,7 @@ Event 발생 시 적용 가능한 Gate에만 Poison을 추가한다.
 
 ## CANONICAL EVENT CATALOG
 
-총 23종 (23. 위령제 — User 2026-09-25, v2.9.1 balance).
+총 23종 (23. 길드 합동 위령제 — User 2026-09-25, v2.9.1 balance).
 eventCatalogStatus=FROZEN
 
 Work는 임의로 Event를 추가하거나
@@ -1071,7 +1071,7 @@ Reference를 모르는 플레이어에게도:
 
 Flavor와 실제 Gameplay Effect는 분리한다.
 
-### 23. 위령제
+### 23. 길드 합동 위령제
 
 (User 2026-09-25, v2.9.1 balance.)
 
@@ -1090,7 +1090,7 @@ EFFECT:
 따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않고, 다른 Event처럼 한 Run에 다시 나올 수 있으며
 나올 때마다 +1이 더해진다.
 
-Exact title / reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` (User 승인 대기).
+Exact reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-23.
 
 ## CATEGORY AUDIT
 
@@ -1107,7 +1107,7 @@ Do not broaden category events to unrelated Items merely to preserve old source 
 
 ### Opportunity
 
-- 위령제
+- 길드 합동 위령제
 - 본사 1+1 행사
 - 왕도 축제
 - 본사 반값 행사

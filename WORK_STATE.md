@@ -44,7 +44,7 @@ Read AGENTS.md first and follow it.
   `tools/remeasure-v29-closing-results.json` — after adoption the native build should reproduce it without patches
 - Close-out: `npm test`, `npm run ssot:check`, `npm run qa:runtime`, qa:visual for the UI batch, regenerate `reports/deco-balance`,
   then SPEC_INDEX / CHANGELOG state, tag `v2.9.1` (SPEC_INDEX §v2.9.1 — BALANCE lists the close conditions)
-- Decisions still open (User, copy only): 위령제 title / reveal, 만반의 준비 tutorial line, Night lines for retreat healing and 만반의 준비
+- Decisions still open (User, copy only): Night lines for retreat healing and 만반의 준비
 
 ## Execution Boundary
 

@@ -512,8 +512,6 @@ User decision 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §
 ```
 
 ```new
-총 23종 (23. 위령제 — User 2026-09-25, v2.9.1 balance).
-### 23. 위령제
 (User 2026-09-25, v2.9.1 balance.)
 이 날부터 Run 끝까지 모든 구간 사망 한도 +1
 사망 한도 구간과 추모 방명록 -> `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.
@@ -532,7 +530,16 @@ TYPE: Run / Opportunity
 발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 35% 발생 Roll, 같은 Weight 기반 선택.
 따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않고, 다른 Event처럼 한 Run에 다시 나올 수 있으며
 나올 때마다 +1이 더해진다.
-Exact title / reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` (User 승인 대기).
 23종은 다음 역할을 가진다.
-- 위령제
+```
+
+## AMENDMENT — v2.9.1: approved copy pointers (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; its reveal copy and the 만반의 준비 tutorial line are approved in COPY_AUDIT §13-23 / §3-7. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+총 23종 (23. 길드 합동 위령제 — User 2026-09-25, v2.9.1 balance).
+### 23. 길드 합동 위령제
+Exact reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-23.
+- 길드 합동 위령제
 ```

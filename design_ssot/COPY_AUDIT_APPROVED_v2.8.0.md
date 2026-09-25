@@ -184,6 +184,9 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 ### QUANTITY
 > 오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.
 
+### 만반의 준비 (User 2026-09-25, v2.9.1: contextual on the Bag slots, the first time both slots of an uninjured customer departing below Fatigue 20 are filled — UI_UX §만반의 준비 TUTORIAL)
+> 건강한 손님의 가방을 가득 채웠다. 만반의 준비를 하면 실패해도 살아 돌아올 가능성이 커진다.
+
 ---
 
 ## 3-8. 오늘 할 일 (DAY 1~3)
@@ -802,6 +805,23 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
+## 9-5. 장식 효과 줄 (User 2026-09-25, v2.9.1)
+
+**노출 위치**
+> 장식 카드의 효과 한 줄 (data `decorations[].effect`). 수치 owner: META.
+
+**현재**
+> 새벽배송 안내판 — 매일 발주 후보 3칸 추가.  
+> 길드 제휴 현판 — 매일 아침 30% 확률로 방문객 +1명.  
+> 알뜰 금고 — 매일 아침 영업 자금 +50G.  
+> 프리미엄 쇼케이스 — 평범보다 높은 등급의 모험가 등장 확률 55%로 증가 (기존 40%).  
+> 훈련소 제휴 간판 — 처음 찾아오는 모험가 65% 확률로 레벨 +1.  
+> 의무실 현판 — 부상 모험가가 방문하면 45% 확률로 부상 회복.  
+> 추모 방명록 — 사망 한도 +2명.  
+> 구급품 진열장 — 영업마다 사망 최대 3회를 중상으로 바꿈.
+
+---
+
 ## 9-4. 의무실 현판 — SALE 손님 상태 (부상 회복 시 한 줄)
 
 **현재**
@@ -1129,7 +1149,7 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 ---
 
-# 13. EVENT 22종 — CURRENT FUNCTION + FLAVOR
+# 13. EVENT 23종 — CURRENT FUNCTION + FLAVOR
 
 ## 13-1. 물류대란
 
@@ -1357,6 +1377,18 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 **현재 Function**
 > 오늘 운영비 0G
+
+---
+
+## 13-23. 길드 합동 위령제
+
+(User 2026-09-25, v2.9.1)
+
+**현재 Flavor**
+> 길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.
+
+**현재 Function**
+> 남은 영업 동안 사망 한도 +1
 
 ---
 

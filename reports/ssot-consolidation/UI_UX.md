@@ -1079,5 +1079,12 @@ below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparati
 - anchor: the customer's Bag slots on the SALE counter
 - teaches the condition and the effect in words only; no number, no percentage
 - persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
-- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 (User 승인 대기)
+```
+
+## AMENDMENT — v2.9.1: approved copy pointers (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; its reveal copy and the 만반의 준비 tutorial line are approved in COPY_AUDIT §13-23 / §3-7. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
 ```

@@ -7,7 +7,7 @@ DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; SOURCE_ADOPTION_PENDING (v2.8 canonical baseline closed 2026-09-24)
 SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_PENDING (owners amended docs-first; Source adoption in a separate session — CHANGELOG §v2.9.1)
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=copy only — 위령제 title / reveal, 만반의 준비 tutorial line, Night lines for retreat healing and 만반의 준비 (drafts proposed, awaiting User)
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=copy only — Night lines for retreat healing and 만반의 준비 (drafts proposed, awaiting User)
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
