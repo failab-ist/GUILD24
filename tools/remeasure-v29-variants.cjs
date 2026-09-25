@@ -14,7 +14,7 @@ const results = fs.existsSync(outFile) ? JSON.parse(fs.readFileSync(outFile, 'ut
 const WORKER = path.join(__dirname, 'remeasure-v29-variants-worker.cjs');
 const DIST = process.env.DIST || path.join(__dirname, '..', 'dist');
 const PARTS = 4;
-const pkey = p => p.slice(0, 3).join(':') + (p[3]?.relicAware ? ':aware' : '');
+const pkey = p => p.slice(0, 3).join(':') + (p[3]?.relicAware ? ':aware' : '') + (p[3]?.human ? ':human' : '');
 const jobs = [];
 for (const [name, v] of Object.entries(variants)) for (const p of policies) {
   if (v.traj) for (let part = 0; part < PARTS; part++)

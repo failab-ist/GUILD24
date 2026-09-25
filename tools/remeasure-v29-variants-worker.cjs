@@ -57,8 +57,8 @@ if (V.op === 'mid') patch('systems/shop', 'const dayBase=90+5*(this.run.day-1);'
 // learning schedule for the trajectory: the policy is picked per Run index (runs 1-3 beginner, 4-6 balanced,
 // 7+ skilled + relic-aware + injury-aware); the injury layer is on only in the skilled phase
 if (V.schedule) patch('systems/simulation', 'playRun(g,byIndex[i],{policy,pricing,build,seed:t,relicAware});',
-  "{const P=globalThis.__schedule(i);globalThis.__injOn=!!P.inj;playRun(g,byIndex[i],{policy:P.policy,pricing:P.pricing,build:P.build,seed:t,relicAware:!!P.relicAware});}");
-globalThis.__schedule = i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' }
+  "{const P=globalThis.__schedule(i);globalThis.__injOn=!!P.inj;globalThis.__human=!!P.human;playRun(g,byIndex[i],{policy:P.policy,pricing:P.pricing,build:P.build,seed:t,relicAware:!!P.relicAware});}");
+globalThis.__schedule = V.schedule === 'human' ? (i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' } : { policy: 'balanced', pricing: 'adaptive', build: 'hybrid', human: true }) : i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' }
   : i < 6 ? { policy: 'balanced', pricing: 'adaptive', build: 'hybrid' }
   : { policy: 'skilled', pricing: 'adaptive', build: 'expedition', relicAware: true, inj: true };
 // 만반의 준비 (User 2026-09-25): departed without injury, departure Fatigue < 20 and 2+ Items in the Bag -> the
@@ -84,7 +84,7 @@ if (V.seal) patch('systems/simulation', 'function buySupport(){const w=s.relicWi
 if (V.badluck) {
   patch('systems/shop', "s.results=[];for(const id of s.queue){", "s.results=[];const __st={fails:0};for(const id of s.queue){");
   patch('systems/shop', "const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);",
-    `const __carry=n.pack.length>0;globalThis.__bl=__carry&&__st.fails>=2?${V.badluck.base}+${V.badluck.step}*(__st.fails-2):0;if(globalThis.__bl)globalThis.__blUsed=(globalThis.__blUsed||0)+1;const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);globalThis.__bl=0;if(__carry){if(rep.outcome==='성공'||rep.outcome==='대성공')__st.fails=0;else __st.fails++;}`);
+    `const __carry=n.pack.length>0;globalThis.__bl=__carry&&__st.fails>=${V.badluck.after||2}?${V.badluck.base}+${V.badluck.step}*(__st.fails-${V.badluck.after||2}):0;if(globalThis.__bl)globalThis.__blUsed=(globalThis.__blUsed||0)+1;const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);globalThis.__bl=0;if(__carry){if(rep.outcome==='성공'||rep.outcome==='대성공')__st.fails=0;else __st.fails++;}`);
   patch('systems/dungeon', " const ability=preparedPower(e);", " const ability=preparedPower(e)*(1+(globalThis.__bl||0));");
   patch('systems/dungeon', "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);",
     "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48)*(1-(globalThis.__bl||0));");
@@ -93,6 +93,19 @@ if (V.badluck) {
 if (V.gate) {
   patch('systems/dungeon', 'const GATE={knee:9,early:1.70,late:0.40};', `const GATE={knee:9,early:${V.gate.early},late:${V.gate.late}};`);
   if (V.gate.tier != null) patch('systems/shop', 'power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+', `power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*${V.gate.tier}+`);
+}
+// human-type seller (User 2026-09-25): policy 'balanced' with {human:true}. Full price by default, 50% only for a customer
+// just below 단골 (loyalty 41~50), no automatic discount when the wallet falls short, at most one reroll a day, Deep
+// sponsorship only with three Days of operating cost left and for a top-level adventurer, no Item that does nothing for
+// this customer, and the order sheet read against every Gate open today
+if (V.human) {
+patch('systems/simulation', "n.level>=6&&n.loyalty<50?'half':'full';", "(globalThis.__human?(n.loyalty>=41&&n.loyalty<51):(n.level>=6&&n.loyalty<50))?'half':'full';");
+patch('systems/simulation', "if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit)mode='half';", "if(pricing==='adaptive'&&!globalThis.__human&&n.money<g.interest(n,it,mode).debit)mode='half';");
+patch('systems/simulation', "while(poor()&&used<20){", "while(poor()&&used<(globalThis.__human?1:20)){");
+patch('systems/simulation', "if(engagement.order&&g.canNominateDeep(n)){", "if(engagement.order&&g.canNominateDeep(n)&&(!globalThis.__human||(s.money-g.deepCost(n)>=3*g.expectedOperatingCost()&&n.level>=Math.max(...s.npcs.filter(x=>x.alive).map(x=>x.level))-1))){");
+patch('systems/simulation', "options.push({st,mode,v:itemValue(n,it,d)", "if(globalThis.__human&&itemValue(n,it,d)<1)continue;options.push({st,mode,v:itemValue(n,it,d)");
+patch('systems/simulation', "const v=o=>itemValue(null,D.itemBy[o.item],s.dungeons[0])/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;",
+  "const v=o=>(globalThis.__human?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;");
 }
 // 7-b buffer removal (only when asked)
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
@@ -145,7 +158,7 @@ const slim = (r) => {
 };
 for (const [policy, pricing, build, opts = {}] of policies) {
   globalThis.__heal = 0; globalThis.__abandon = 0; globalThis.__prepSaved = 0; globalThis.__seal = 0; globalThis.__blUsed = 0;
-  const key = `${policy}:${pricing}:${build}` + (opts.relicAware ? ':aware' : '');
+  const key = `${policy}:${pricing}:${build}` + (opts.relicAware ? ':aware' : '') + (opts.human ? ':human' : '');
   if (V.traj) {
     const t = Debug.trajectory({ trajectories: V.traj.T, runs: V.traj.R, policy, pricing, build, prefix: V.traj.prefix, purchaseOrder: V.traj.order, relicAware: !!opts.relicAware });
     out[key] = { mode: 'trajectory', T: V.traj.T, byIndex: t.byIndex.map(b => ({
@@ -158,6 +171,7 @@ for (const [policy, pricing, build, opts = {}] of policies) {
     let account = null;
     if (V.loadout) { account = Meta.fresh(); account.store.capital = 1e9; for (const id of V.loadout) Meta.buyDecoration(account, id); account.store.capital = 0; }
     if (V.injAware) globalThis.__injOn = opts.inj !== false;
+    globalThis.__human = !!opts.human;
     const r = Debug.simulate(seeds, policy, account, pricing, build, { relicAware: !!opts.relicAware });
     out[key] = { ...slim(r), heal: globalThis.__heal, abandon: globalThis.__abandon, prepSaved: globalThis.__prepSaved, seal: globalThis.__seal, badluckUsed: globalThis.__blUsed };
   }
