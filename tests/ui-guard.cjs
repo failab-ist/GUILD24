@@ -2481,7 +2481,7 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  // v2.9.0 F3 (User 2026-09-25): the NPC detail rows and the route-change line
  assert.ok(fn('npcDetail').includes("cond.push('피로 회복: 음식·음료')"),'§4-14 no rest recovery: Food/Drink only');
  assert.ok(fn('npcDetail').includes("'무리한 출발 '+(n.records||[]).filter(r=>r.departedInjured||r.departedWeary).length+'회'"),'the strained-departure information row reads the records');
- assert.ok(read('dist/systems/shop.js').includes('rep.routeChange=G.Presentation.routeChangeLine('),'the route-change line is composed once in the presentation layer');
+ assert.ok(read('dist/systems/shop.js').includes('rep.routeChange=G.Copy.routeChangeLine('),'the route-change line is composed once, in data/copy.js so the engine needs no UI layer (the simulation worker loads no presentation.js)');
  assert.ok(!/허세/.test(read('dist/systems/shop.js')),'the retired Trait name never appears in the engine');
  assert.equal(Presentation.routeChangeLine({name:'하람',pilgrim:false},'슬라임 초원','거미 동굴'),'거짓말쟁이 하람은 말했던 슬라임 초원 대신 거미 동굴로 향했다.','§14-10 exact, particles by the final consonant');
  assert.equal(Presentation.routeChangeLine({name:'유리',pilgrim:true},'거미 동굴','슬라임 초원'),'순례 행렬을 따라 유리는 예상 목적지 거미 동굴 대신 슬라임 초원으로 향했다.','§14-10 pilgrimage form');

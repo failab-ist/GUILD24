@@ -299,5 +299,14 @@ Copy.finalPrep={
  wallet:'소지금 부족 · {need}G 필요 / {have}G 보유'
 };
 
+/* Korean particle by the final consonant of the word's last syllable (받침 -> the first form;
+   a final rieul (jong index 8) takes 로, not 으로). Only Hangul syllables are judged; anything else takes the
+   no-받침 form. */
+Copy.josa=function josa(word,withBatchim,without){const c=String(word||'').replace(/\s+$/,'').slice(-1).charCodeAt(0);const jong=(c>=0xAC00&&c<=0xD7A3)?(c-0xAC00)%28:0;return word+((jong>0&&!(jong===8&&withBatchim==='으로'))?withBatchim:without);}
+/* NIGHT_CLOSING §route-change line (COPY_AUDIT §14-10, User 2026-09-25): the Trait is named by
+   its own name, never the retired 허세; the particles follow the final consonant. */
+Copy.routeChangeLine=function routeChangeLine(n,claimed,actual){
+ return (n.pilgrim?'순례 행렬을 따라 '+Copy.josa(n.name,'은','는')+' 예상 목적지 ':'거짓말쟁이 '+Copy.josa(n.name,'은','는')+' 말했던 ')+claimed+' 대신 '+Copy.josa(actual,'으로','로')+' 향했다.';
+}
 G.Copy=Copy;
 })(globalThis);

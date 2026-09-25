@@ -289,15 +289,9 @@ function amount(key,value,moved=true){
  if(percent.has(key))return (Math.round(value*1000)/10)+'%p';
  return stat(value,moved);
 }
-/* Korean particle by the final consonant of the word's last syllable (받침 -> the first form;
-   a final rieul (jong index 8) takes 로, not 으로). Only Hangul syllables are judged; anything else takes the
-   no-받침 form. */
-function josa(word,withBatchim,without){const c=String(word||'').replace(/\s+$/,'').slice(-1).charCodeAt(0);const jong=(c>=0xAC00&&c<=0xD7A3)?(c-0xAC00)%28:0;return word+((jong>0&&!(jong===8&&withBatchim==='으로'))?withBatchim:without);}
-/* NIGHT_CLOSING §route-change line (COPY_AUDIT §14-10, User 2026-09-25): the Trait is named by
-   its own name, never the retired 허세; the particles follow the final consonant. */
-function routeChangeLine(n,claimed,actual){
- return (n.pilgrim?'순례 행렬을 따라 '+josa(n.name,'은','는')+' 예상 목적지 ':'거짓말쟁이 '+josa(n.name,'은','는')+' 말했던 ')+claimed+' 대신 '+josa(actual,'으로','로')+' 향했다.';
-}
+/* josa() / routeChangeLine() live in data/copy.js (G.Copy) so the engine's NIGHT line needs no UI layer;
+   re-exported here for the screens. */
+const josa=G.Copy.josa,routeChangeLine=G.Copy.routeChangeLine;
 G.Presentation={josa,routeChangeLine,returning,amount,stat,labels,rows,traits,traitText,traitEffects,known,preview,modeLabel,hazardRows,hazardSentence,hazardShort,hazardNeed,hazardParts,hazardStat,pressedBy,fitKeys,
  eventLine,nightTone,nightVerdict,nightHappened,nightWhy,heroLine,nightChanges,nightWeight,nightRank,supplyLines,supplyImpact};
 })(globalThis);
