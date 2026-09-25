@@ -323,3 +323,32 @@ retired. The revision-1 declarations this replaces were edited out of the fences
 ```new
 Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier (`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×1.70 term stays hidden (User 2026-09-24, v2.9.0).
 ```
+
+## AMENDMENT — v2.9.2: D30 flow opens on the last order; the muster picks from the notebook (User decision 2026-09-25)
+
+User 2026-09-25: 마지막 발주 -> 출전 NPC 선택 (from each adventurer's notebook) -> FINAL 준비 (with the Stat grid) -> 결과. The flow's
+first line becomes `-> 출전 NPC 선택` under the new `마지막 발주` head.
+
+```text
+출전 NPC 선택
+```
+
+```new
+마지막 발주
+-> 출전 NPC 선택
+(User 2026-09-25, recommended form taken while the User is away - to reconfirm.) D30 opens on the last order - the
+ordinary order form, optional, confirmed on its own 발주 확정; `원정대 선택` moves on once no cart is pending. In 출전 NPC
+선택 a roster card opens that adventurer's notebook (Stats, Traits, equipment, condition, expedition records) and the pick
+or release is made from the notebook's footer. FINAL 준비 shows the Stat grid of the adventurer being supplied; the order
+form is not repeated there.
+```
+
+## AMENDMENT — v2.9.2 H5: FINAL result seal stamp (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.2 H5): one seal bearing the Boss's name on a Final ending tape; the result sentence follows it.
+
+```new
+Display order (User 2026-09-25, v2.9.2 H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a
+clear, faint and crooked for a failure, never one per member and never the NIGHT death tape - and the existing result
+sentence follows it. Result, wording and settlement are unchanged. Timing -> UI_UX_v2.8.0.md §FINAL RESULT — SEAL STAMP.
+```

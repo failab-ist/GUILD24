@@ -376,7 +376,7 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  assert.ok(!/function cardBack\([^)]/.test(scene),'the card back takes no per-customer argument');
  assert.ok(app.includes('예상 목적지')&&!app.includes("'말한 목적지'"),'the destination label is 예상 목적지');
  assert.ok(!app.includes("modal==='saleItem'"),'item and price resolve inline, with no modal round trip');
- assert.ok(app.includes("selected=selected===id?null:id"),'tapping a product toggles its panel in place');
+ assert.ok(app.includes("selected=reopen||selected!==id?id:null"),'tapping a product toggles its panel in place, and a folded tray reopens instead (User 2026-09-25)');
  /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face is the role word, the number stays the mode's */
  assert.ok(app.includes("Math.round(D.pricing[mode].mult*100)")&&app.includes("<em>'+role+'</em>"),'price modes read by their role word');
  assert.ok(app.includes("const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'}"),'할인 50% / 정가 / 바가지 150% are the three faces');
@@ -1717,6 +1717,76 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 /* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
    stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
    gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
+/* FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 출전 NPC 선택 (notebook) -> FINAL 준비 (Stat grid) */
+test('FINAL: the last order first, the pick from the notebook, the Stat grid while supplying',()=>{
+ const f=fn('finalScreen');
+ assert.ok(/!committed&&!finalOrdered&&!s\.team\.length\s*\n?\s*\/\*[^*]*\*\/\s*\?'<div class="party-head"><h2>마지막 발주<\/h2><\/div><div class="final-order open">'\+orderForm\(\)/.test(f),'D30 opens on the last order');
+ assert.ok(/btn\('원정대 선택','final-ordered','stamp',Object\.values\(s\.cart\|\|\{\}\)\.some\(q=>q>0\)\?'disabled':''\)/.test(f),'moving on waits for a pending cart');
+ assert.ok(/npcCard\(n,'final-npc'\)/.test(f)&&!/npcCard\(n,'team'\)/.test(app),'a muster card opens the notebook instead of picking');
+ assert.ok(/case'final-npc':sound\('ui'\);setModal\('npc:'\+id\);break;/.test(app),'the notebook is the ordinary adventurer notebook');
+ assert.ok(/btn\(inTeam\?'원정대에서 빼기':'원정대 선택','final-team','stamp'/.test(app),'the pick / release is the notebook footer');
+ assert.ok(/case'final-team':game\.selectFinal\(id\)/.test(app),'and goes through the one selection rule');
+ assert.ok(/'<div class="final-stats">'\+statGrid\(/.test(f)&&!/details class="final-order"/.test(f),'FINAL 준비 shows the Stat grid and no second order form');
+ assert.ok(/if\(phase!=='final'\)finalOrdered=false;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
+});
+
+/* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25) */
+test('ORDER: the 오늘 line rides in the floating Death rail only while its own block is out of view',()=>{
+ const of=fn('orderForm');
+ assert.ok(/'<p class="board-rail death-limit-row">'\+deathLimitItem\(\)\s*\+'<span class="rail-today" aria-hidden="true"><i>오늘<\/i>'\+todayLine\(counts\)/.test(of),'the same line, in the Death rail\'s own box, under its own label');
+ assert.ok(/'<p>'\+todayLine\(counts,'b'\)/.test(of),'one owner writes both copies');
+ const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/show-today',!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w),'shown only once the block has gone above, under the rail');
+ assert.ok(/if\(phase==='order'\)watchOrderToday\(\)/.test(app),'watched on ORDER only');
+ assert.ok(/\.rail-today\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today\{display:block\}/.test(css),'hidden by default, set apart by a rule');
+});
+
+/* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): scrolling the shelf or tapping elsewhere folds the tray to its header */
+test('SALE counter tray folds while the shelf is read and opens on any row',()=>{
+ assert.ok(/function foldTray\(\)\{if\(!selected\|\|trayFolded\|\|innerWidth>=1024/.test(app),'only a filled tray folds, and never on a desk');
+ assert.ok(/Math\.abs\(sc\.scrollTop-trayBase\)>32\)foldTray\(\)/.test(fn('watchTray')),'a shelf scroll past 32px folds it');
+ assert.ok(/performance\.now\(\)<trayArm/.test(fn('watchTray')),'the anchoring scroll of a pick does not fold it');
+ assert.ok(/if\(!ev\.target\.closest\('\.counter-tray,\[data-action="select"\],\.dock,#modal-root,#coach-root'\)\)foldTray\(\)/.test(app),'a tap outside the tray folds it');
+ assert.ok(/case'tray-open':trayFolded=false;syncTray\(\)/.test(app),'the folded strip opens it again');
+ assert.ok(/const reopen=trayFolded&&selected===id;trayFolded=false;/.test(app),'any shelf row opens it again');
+ assert.ok(/\.p-sale \.counter-tray\.folded \.tray-delta,\.p-sale \.counter-tray\.folded \.tills\{display:none\}/.test(css),'folded, only the header line stays');
+ assert.ok(!/trayFolded/.test(read('dist/systems/shop.js'))&&!/account\.\w*tray|run\.\w*tray/i.test(app),'the fold is never saved');
+});
+
+/* UI_UX §SALE — COUNTER TRAY (User 2026-09-25): the shelf row states every effect on one line; it used to stop at two */
+test('SALE shelf row: every effect, one line, the utility Items by their core',()=>{
+ const sh=fn('shelf'),se=fn('shelfEffects');
+ assert.ok(!/\.slice\(0,2\)/.test(sh),'no effect is cut from the shelf row');
+ assert.ok(/shelfEffects\(Presentation\.rows\(/.test(sh),'the row hands every row to one owner');
+ assert.ok(/len>28\?' class="densest"':len>24\?' class="dense"':len>19\?' class="tight"'/.test(se),'a longer line steps down instead of wrapping');
+ for(const [c,px] of [['tight',13],['dense',12],['densest',11]])assert.ok(new RegExp('\\.good \\.what span\\.'+c+'\\{font-size:'+px+'px').test(css),c+' is '+px+'px');
+ assert.ok(/SHELF_CORE=\{aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소비품 효과 2회'\}/.test(app),'구급키트 / 황금 1+1 쿠폰 read their core on the shelf');
+ // the core is the approved line's own words, not new copy
+ const rowsFor=k=>Presentation.rows({[k]:1}).map(r=>r.label).join('');
+ assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소비품 효과 2회'),'both cores are cut from the approved lines');
+});
+
+/* UI-Q-v29-30 (v2.9.2 H5, UI_UX §FINAL RESULT — SEAL STAMP): one seal bearing the Boss's name on a Final ending tape */
+test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a failure, the sentence after it',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const fs_=bare(fn('finalSeal'));
+ assert.ok(/if\(!s\.finalReport\)return '';/.test(fs_),'no seal on a non-Final ending');
+ assert.ok(/'<span class="seal '\+\(s\.win\?'won':'lost'\)\+'" aria-hidden="true"><b>'\+E\(b\?\.name\|\|''\)\+'<\/b><\/span>'/.test(fs_),'one seal, the Boss\'s name, the result read off s.win');
+ assert.ok(!/members|team|forEach|map\(/.test(fs_),'never one per member');
+ assert.ok(/<div class="print">'\+finalSeal\(\)/.test(fn('endBanner')),'struck on the ending tape');
+ assert.ok(/const FINAL_SEAL=\{hold:200,won:\{from:2,dip:6\},lost:\{from:1\.6,dip:3\}\};/.test(app),'the clear is the heaviest landing; both hold 200 ms (클라이맥스)');
+ const pp=bare(fn('playPhase')),end=pp.slice(pp.indexOf("if(phase==='end')"),pp.indexOf("if(phase==='sell')"));
+ assert.ok(/scale:\{from:v\.from,to:1,duration:STAMP_FALL,delay:at/.test(end),'the seal reuses the NIGHT stamp\'s fall');
+ assert.ok(/to:parseFloat\(getComputedStyle\(seal\)\.opacity\)/.test(end),'its ink ends where the stylesheet leaves it');
+ assert.ok(/'\.end-tape \.closed,\.end-tape \.reason'/.test(end)&&/delay:land/.test(end),'the result sentence follows the landing');
+ assert.ok(!/tape|--tape/.test(end.replace(/end-tape|const seal=\$\('\.end-tape \.seal'\),tape=\$\('\.end-tape'\)|if\(tape\)A\(tape/g,'')),'no NIGHT death tape on a failure');
+ assert.ok(/\.end-tape \.seal\{[^}]*rotate:-7deg/.test(css)&&/\.end-tape \.seal\.lost\{[^}]*rotate:9deg;[^}]*opacity:\.5;[^}]*clip-path/.test(css),'clear square-on and crisp; failure crooked, faint, partly printed');
+ assert.ok(/\.end-tape \.print:has\(\.seal\) \.closed\{padding-right:84px\}/.test(css)&&/\.end-tape \.seal\{[^}]*transform-origin:100% 0\}/.test(css),'the headline keeps clear of the seal, and the fall stays on the tape');
+ assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);render\(\);sealSound\(\);break;/.test(app),'the landing cue follows the departure once');
+ const ss=bare(fn('sealSound'));assert.ok(/clearTimeout\(sealCueAt\)/.test(ss)&&/Sound\.play\(kind\)/.test(ss)&&/FINAL_SEAL\.hold\+STAMP_FALL/.test(ss),'on the landing frame, never twice');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ for(const c of ['sealwin','sealfail'])assert.ok(Sound.cues.includes(c)&&!Sound.samples[c],c+' is a synthesised cue');
+});
+
 test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  const src=app.slice(app.indexOf('const STAMP_FALL='),app.indexOf('const stampLand='));
@@ -1742,7 +1812,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  const own=night.indexOf('if(st.print)told'),h=night.indexOf('else if(hero)A(hero.parentElement.children.length===1?hero.parentElement:hero,'),c=night.indexOf("else if(!st.tape)document.querySelectorAll('.beat .changed .reward .tok b')");
  assert.ok(own>0&&own<h&&h<c,'one owner per landing: cut-in, Hero line, or the REWARD figures');
  assert.ok(/duration:1,delay:land/.test(night),'the reversal proof lines cut in on the overstamp frame');
- assert.ok(/'verdict ghost t-'\+\(r\.avoidedDeath\?'gone':'severe'\)/.test(night)&&/r\.avoidedDeath\?'사망':'중상'/.test(night),
+ assert.ok(/const fromDeath=r\.avoidedDeath\|\|st\.brink;/.test(night)&&/'verdict ghost t-'\+\(fromDeath\?'gone':'severe'\)/.test(night)&&/fromDeath\?'사망':'중상'/.test(night),
   'the first print is the Outcome the result says was turned away');
  assert.ok(/onComplete:\(\)=>g\.remove\(\)/.test(night)&&!/ghost/.test(bare(fn('beat'))),'the first print is never rendered and never stays');
  assert.ok(/'<li'\+\(hero&&!i\?' class="hero"':''\)/.test(fn('causeLines')),'the proven Hero claim is the line that settles');
@@ -1756,7 +1826,10 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  // sound: the landing carries the cue; a waiting cue never plays over the next screen
  const ns=bare(fn('nightSound'));
  assert.ok(/^function nightSound\(result\)\{nightCueAt\.forEach\(clearTimeout\);nightCueAt=\[\];if\(!result\)return;/.test(ns),'a pending cue is dropped first');
- assert.ok(/const st=motionOK\(\)&&NIGHT_STAMP\[Presentation\.nightTone\(result\)\]/.test(ns),'motion decides the timing, the resolved tone the entry');
+ assert.ok(/const st=motionOK\(\)&&nightStampOf\(result\)/.test(ns),'motion decides the timing, the resolved tone the entry');
+ assert.ok(/const preparedBrink=r=>!!r&&!r\.rescued&&!r\.avoidedDeath&&\(r\.events\|\|\[\]\)\.some\(e=>e\.id==='prepared'\);/.test(app),'만반의 준비 reverses only its turned-away Death (User 2026-09-25)');
+ assert.ok(/if\(st\.print&&!st\.brink\)nightCueAt\.push\(/.test(ns),'and carries no rescue accent');
+ assert.ok(!/injury-guard|aftercare/.test(fn('nightSound')+app.slice(app.indexOf('const preparedBrink='),app.indexOf('const nightStampOf='))),'강골 / 구급키트 never reverse');
  assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');
@@ -2826,9 +2899,9 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
    the expected visitor count, and never a customer's name, Job, Trait, Wallet or destination.
    On actual appearance the NPC becomes introduced. */
 test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count before Sale, the person on arrival',()=>{
- const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip'].map(fn).join('\n');
- assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('s.queue.length'),
-  'Morning and ORDER both state the expected visitor count');
+ const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','todayLine'].map(fn).join('\n');
+ assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('todayLine(counts')&&fn('todayLine').includes('s.queue.length'),
+  'Morning and ORDER both state the expected visitor count (ORDER through todayLine, its block and its floating copy)');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */
  assert.ok(!/s\.queue(?!\.length)|queue\[|game\.current\(\)/.test(pre),'the pre-Sale surfaces read the queue only as a count, or through gateCounts()');
  assert.ok(/counts=s\.dungeons\.length>=2\?gateCounts\(\):null/.test(fn('orderForm')),'per-Gate counts only with two or more Gates');
@@ -3066,7 +3139,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/relics.js'))&&!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/dungeon.js')),'the 기동-for-속박/진창 Counter exception is gone');
  assert.ok(/const counters=mode!=='overcharge'&&G\.Relics\.relatedPrep\(it,d\.hazards\);/.test(read('dist/systems/shop.js'))&&!/G\.Relics\.counter\(/.test(read('dist/systems/shop.js')),'SALE acceptance reads 관련 준비; no third predicate is called');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
- assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one');
+ assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of+fn('todayLine')),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 

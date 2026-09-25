@@ -435,4 +435,17 @@ test('EVENT: the ordinary periodic newcomer is unchanged by the SA-Q45 seat acco
  }
 });
 
+test('NPC_TRAIT destinationDefault (User 2026-09-25): with as many visitors as Gates, every open Gate is claimed by someone',()=>{
+ let days=0,covered=0,fixes=0;
+ for(let k=1;k<=24;k++){const g=fresh('gate-cover-'+k);
+  for(let d=0;d<30&&g.run.phase!=='end';d++){const s=g.run;
+   if(s.phase==='morning'&&s.dungeons.length>1&&s.queue.length>=s.dungeons.length){days++;
+    const claimed=new Set(s.queue.map(id=>s.npcs.find(n=>n.id===id).claimedDestination));
+    if(claimed.size===s.dungeons.length)covered++;}
+   s.money=5000;advance(g);}}
+ assert.ok(days>50,'enough multi-Gate Days were seen: '+days);
+ assert.equal(covered,days,'every multi-Gate Day with enough visitors covers every Gate');
+ const src=require('node:fs').readFileSync(require('node:path').join(__dirname,'../dist/systems/shop.js'),'utf8');
+ assert.ok(/n\.destination===n\.claimedDestination&&selected\.filter/.test(src),'a visitor a 거짓말쟁이 roll already diverted is never the one moved');
+});
 console.log(count+' event groups passed');

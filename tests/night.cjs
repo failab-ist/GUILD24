@@ -486,11 +486,11 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  /* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE (User 2026-09-25, v2.9.1 balance: early 1.70 ->
     1.20, late 0.40 -> 0.80). D1-D9 must be bit-for-bit the single 1.20 slope, and only the Day
     term may bend - a post-hoc multiplier on the finished Gate Power would move the Tier and
-    Family terms with it. */
- assert.deepEqual(Dungeon.GATE,{knee:9,early:1.20,late:0.80},'the shipped slope is the canonical one');
+    Family terms with it. v2.9.2 balance (User 2026-09-25): early 1.20 -> 1.50, late 0.80 kept. */
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.50,late:0.80},'the shipped slope is the canonical one');
  for(const day of [1,2,5,8,9])
-  assert.equal(Dungeon.gateDayTerm(day),day*1.20,'D'+day+' is unchanged');
- for(const [day,term] of [[10,11.6],[12,13.2],[24,22.8],[29,26.8],[30,27.6]])
+  assert.equal(Dungeon.gateDayTerm(day),day*1.50,'D'+day+' is the single early slope');
+ for(const [day,term] of [[10,14.3],[12,15.9],[24,25.5],[29,29.5],[30,30.3]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
  /* The coefficients are named so a harness can measure a candidate without editing the
@@ -984,6 +984,20 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
   'ownership is generic ({items:null}) - since either single 구급키트 copy alone still relieves it, no one copy is invented as the sole cause');
 });
 
+test('DUNGEON_HAZARD §Ordinary EXP (User 2026-09-25, v2.9.2 balance): 대성공 EXP multiplier 1.10, the other paths unchanged',()=>{
+ assert.equal(Dungeon.GREAT.xp,1.10);
+ const src=read('dist/systems/dungeon.js');
+ assert.ok(/\(22\+d\.day\*4\.6\)\*\(outcome==='대성공'\?GREAT\.xp:outcome==='퇴각'\?\.38:won\?1:\.5\)\*e\.xpMult/.test(src),'base, Retreat 0.38, win 1.00 and other living 0.50 keep their values');
+ assert.equal(Dungeon.WALLET_MULT['대성공'],1,'the Great Success Wallet reward is unchanged');
+ // a real resolved 대성공 pays exactly round(base x 1.10 x the explicit XP modifiers)
+ let seen=0;
+ for(let k=0;k<400&&seen<3;k++){const g=new Game();g.autosave=false;g.start('great-xp-'+k);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  for(let d=0;d<12&&g.run.phase!=='end'&&seen<3;d++){const s=g.run;s.money=5000;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();
+   for(const r of s.results)if(r.outcome==='대성공'&&!r.deep){const e=Dungeon.prepare({...s.npcs.find(n=>n.id===r.npcId),pack:r.items},s.dungeons.find(x=>x.id===r.dungeon)||s.dungeons[0],s.facilities).effects;
+    assert.equal(r.xp,Math.round((22+r.day*4.6)*1.10*e.xpMult),'대성공 EXP = round(base x 1.10 x xpMult)');seen++;}
+   g.finishNight();g.closeDay();}}
+ assert.ok(seen>0,'a 대성공 was resolved and checked');
+});
 console.log(groups+' night groups passed');
 
 test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 balance): only CONSECUTIVE injured departures raise the failure Death chance',()=>{

@@ -5,6 +5,9 @@
 // press: pick members, 원정대 확정 (and the sub-3 confirm), focus a member, pick a stock line, 보급.
 //   node tools/qa-final-prep.cjs <out-dir> [widths] [BOSS]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+// FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
+const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
+const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
 const OUT=path.resolve(__dirname,'..',process.argv[2]||'reports/ui/final-prep');
 const WIDTHS=(process.argv[3]||'390,1280').split(',').map(Number);
 const BOSS=process.argv[4]||'WRATH';
@@ -29,7 +32,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
  const f=document.querySelector('.p-final .final-forecast:not(.pending) .top b');
  return {forecast:f?f.textContent:null,forecasts:document.querySelectorAll('.p-final .final-forecast:not(.pending)').length,
   pending:!!document.querySelector('.p-final .final-forecast.pending'),count:(document.querySelector('.p-final .party-head .count')||{}).textContent,
-  combat:t.includes('전투 전망'),death:t.includes('실패 시 사망 위험'),finalWord:/Final/.test(t),roster:!!document.querySelector('.p-final [data-action="team"]'),
+  combat:t.includes('전투 전망'),death:t.includes('실패 시 사망 위험'),finalWord:/Final/.test(t),roster:!!document.querySelector('.p-final [data-action="final-npc"]'),
   text:t};})()`;
 (async()=>{
  const playwright=require('playwright');fs.mkdirSync(OUT,{recursive:true});
@@ -82,13 +85,23 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    const t0=(await p.evaluate(acct)).threat;
    check(`setup @${tag} ${ids.length} eligible, cap ${cap}`,ids.length>=3&&cap===3);
 
+   // ---- the last order comes first (User 2026-09-25); moving on opens the muster
+   check(`O @${tag} D30 opens on 마지막 발주, before the muster`,await p.evaluate(`!!document.querySelector('.p-final .final-order.open .form')&&!document.querySelector('.p-final [data-action="final-npc"]')&&!!document.querySelector('.p-final .dock [data-action="final-ordered"]')`));
+   await shot('0-order',false);await audit('마지막 발주');
+   await toMuster(p);
+   // ---- the muster card opens the notebook; the pick is made there (User 2026-09-25)
+   await p.click(`.p-final [data-action="final-npc"][data-id="${ids[0]}"]`);
+   const nb=await p.evaluate(`(()=>{const m=document.querySelector('#modal-root .modal');return m?{stats:!!m.querySelector('.detail-stats'),records:m.innerText.includes('원정 기록'),pick:(m.querySelector('[data-action="final-team"]')||{}).innerText||''}:null;})()`);
+   check(`N @${tag} the notebook shows Stats and records, and picks from its footer`,nb&&nb.stats&&nb.records&&nb.pick.trim()==='원정대 선택',JSON.stringify(nb));
+   await audit('notebook');await p.mouse.move(1,1);await p.screenshot({path:path.join(OUT,`prep-0b-notebook-${tag}.png`)});
+   await p.keyboard.press('Escape');await p.waitForTimeout(150);
    // ---- selection: 0, then 1 picked
    let u=await p.evaluate(ui);
    check(`S @${tag} capacity reads 선택 0명 · 최대 3명`,u.count==='선택 0명 · 최대 3명',u.count);
    check(`S @${tag} guidance, no forecast / 전투 전망 / 사망 위험`,u.pending&&u.text.includes('최대 3명까지 출전할 수 있다.')&&u.text.includes('원정대를 확정하면 토벌 전망을 확인할 수 있다.')&&!u.forecasts&&!u.combat&&!u.death);
    check(`S @${tag} 원정대 확정 closed with nobody picked`,await p.evaluate(`document.querySelector('.p-final .dock [data-action="final-commit"]').disabled`));
    await shot('1-select0',false);await shot('1-select0-below');
-   await p.click(`.p-final [data-action="team"][data-id="${ids[0]}"]`);
+   await pickFinal(p,ids[0]);
    u=await p.evaluate(ui);
    const frames=await p.evaluate(`[...document.querySelectorAll('.p-final .npc-card')].map(c=>({chosen:c.classList.contains('chosen'),dis:c.disabled,sh:getComputedStyle(c).boxShadow}))`);
    const plain=frames.filter(f=>!f.chosen&&!f.dis),pick=frames.filter(f=>f.chosen);
@@ -130,7 +143,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
 
    // ---- B: 2-person
    await restore();
-   for(const id of ids.slice(0,2))await p.click(`.p-final [data-action="team"][data-id="${id}"]`);
+   for(const id of ids.slice(0,2))await pickFinal(p,id);
    await p.click('.p-final .dock [data-action="final-commit"]');
    const modal2=await p.evaluate(`(document.querySelector('#modal-root .modal')||{}).innerText||''`);
    await p.click('#modal-root [data-action="final-commit-go"]');
@@ -139,7 +152,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
 
    // ---- C: 3-person, no confirm
    await restore();
-   for(const id of ids.slice(0,3))await p.click(`.p-final [data-action="team"][data-id="${id}"]`);
+   for(const id of ids.slice(0,3))await pickFinal(p,id);
    await p.click('.p-final .dock [data-action="final-commit"]');
    a=await p.evaluate(acct);u=await p.evaluate(ui);
    check(`C @${tag} 3-person commits directly, no confirm`,a.committed&&a.team.length===3&&!(await p.evaluate(`!!document.querySelector('#modal-root .modal')`)));
@@ -148,8 +161,8 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    await shot('4-prep');
    await audit('preparation');
    await pinCheck('preparation',[['.p-final .party-head .count','.p-final .party-head'],['.p-final .final-forecast .tip>summary','.p-final .final-forecast'],['.p-final .shelf-head>span','.p-final .shelf-head']]);
-   await p.evaluate(`document.querySelector('.p-final .final-order').open=true`);await audit('마지막 발주 open');
-   await p.evaluate(`document.querySelector('.p-final .final-order').open=false`);
+   check(`O @${tag} preparation carries no second order form`,await p.evaluate(`!document.querySelector('.p-final .final-order')`));
+   check(`ST @${tag} the adventurer being supplied shows the Stat grid`,await p.evaluate(`!!document.querySelector('.p-final .final-stats .detail-stats')`));
 
    // ---- D: the transfer that moves the forecast input most, exactly once
    const tgt=ids[0];
@@ -264,7 +277,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
 
    // ---- Save/Load in the browser: pre-commit, and the two legacy shapes (no finalCommitted field)
    const load=async raw=>{await p.evaluate(([k,v])=>{Guild24.game.autosave=false;localStorage.setItem(k,v);},[KEY,raw]);await p.reload({waitUntil:'load'});await p.waitForTimeout(250);};
-   await restore();await p.click(`.p-final [data-action="team"][data-id="${ids[0]}"]`);await p.click(`.p-final [data-action="team"][data-id="${ids[1]}"]`);
+   await restore();await pickFinal(p,ids[0]);await pickFinal(p,ids[1]);
    const preRaw=await p.evaluate(k=>localStorage.getItem(k),KEY);
    await p.reload({waitUntil:'load'});await p.waitForTimeout(250);
    a=await p.evaluate(acct);
@@ -272,7 +285,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    const legacyPre=JSON.parse(preRaw);delete legacyPre.run.finalCommitted;
    await load(JSON.stringify(legacyPre));a=await p.evaluate(acct);
    check(`SL @${tag} legacy pre-transfer save stays in selection`,!a.committed&&(await p.evaluate(ui)).roster&&!(await p.evaluate(`'finalCommitted' in Guild24.game.run`)));
-   await restore();for(const id of ids.slice(0,3))await p.click(`.p-final [data-action="team"][data-id="${id}"]`);
+   await restore();for(const id of ids.slice(0,3))await pickFinal(p,id);
    await p.click('.p-final .dock [data-action="final-commit"]');
    await p.click(`.p-final [data-action="select"][data-id="qa-rice"]`);await p.click('.p-final [data-action="supply"]');
    const postRaw=JSON.parse(await p.evaluate(k=>localStorage.getItem(k),KEY));delete postRaw.run.finalCommitted;
@@ -288,7 +301,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    //      affordable transfer crosses the shared 0.8 line - the label then moves 불리 -> 접전
    //      through the real 보급 press, nothing about the Final is written.
    await restore();
-   for(const id of ids.slice(0,3))await p.click(`.p-final [data-action="team"][data-id="${id}"]`);
+   for(const id of ids.slice(0,3))await pickFinal(p,id);
    await p.click('.p-final .dock [data-action="final-commit"]');
    const x=await p.evaluate(`(()=>{const g=Guild24.game,s=g.run,team=s.team.map(id=>s.npcs.find(n=>n.id===id)),orig=team.map(n=>n.stats.combat),n=team[0];
     const best=()=>{let b=null;for(const st of s.inventory){if(${JSON.stringify(NOOP)}.includes(st.item)||g.finalPrice(st.item)>n.money)continue;

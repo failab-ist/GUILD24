@@ -252,6 +252,10 @@ function greatSuccessSignal(n,d,facilities=[]){
    the same way (DUNGEON_HAZARD §Healthy / injured failure Death chance): both together 50%. */
 /* DUNGEON_HAZARD §Ordinary EXP / expedition-Wallet baseline (User 2026-09-25, v2.9.1 balance):
    대성공/성공 back to 1.00 (were .90). */
+/* DUNGEON_HAZARD §Ordinary EXP (User 2026-09-25, v2.9.2 balance): 대성공 EXP multiplier 1.40 -> 1.10 - a Great Success still
+   pays (Store Gold, Wallet and the occurrence are unchanged); what shrinks is the snowball of a grown adventurer out-growing
+   the rest through it. */
+const GREAT={xp:1.10};
 const WALLET_MULT={'대성공':1,'성공':1,'퇴각':.35,'부상':.20,'중상':.10,'사망':0};
 const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40,exhausted:.10};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation (User 2026-09-25,
@@ -274,8 +278,9 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    ability stops growing long before Day 30 does, so a single slope left every late Gate further
    out of reach than the one before it. Only this term changes (User 2026-09-25, v2.9.1 balance:
    early 1.70 -> 1.20, late 0.40 -> 0.80 - the early Gates no longer outrun adventurer growth, the
-   D20~30 Tier-3 pressure rises); every other Gate Power term is what it was. */
-const GATE={knee:9,early:1.20,late:0.80};
+   D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early 1.20 -> 1.50, late kept -
+   a fresh first Run cleared the Boss); every other Gate Power term is what it was. */
+const GATE={knee:9,early:1.50,late:0.80};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance). The
    failure Death roll is judged against `failureDeathChance x preparedFactor x levelFactor`, not
@@ -634,7 +639,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const beforeFatigue=e.beforeFatigue!==undefined?e.beforeFatigue:(n.fatigue||0);
  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
- const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?1.4:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
+ const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?GREAT.xp:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
  const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward (User 2026-09-25, v2.9.0): keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
  let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
@@ -668,5 +673,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,WALLET_MULT,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,levelFactor,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,WALLET_MULT,GREAT,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,levelFactor,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);

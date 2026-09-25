@@ -483,6 +483,9 @@ test('RUN-Q10 / RUN-Q11 / RUN-Q12: reload is not a Gate, Order or Relic reroll',
  const g=fresh('no-reroll');g.buyRelic(g.run.relicWindow.candidateIds[0]);
  for(let day=0;day<6;day++){
   while(g.run.phase!=='order')step(g);
+  /* The subject is reload determinism, not the till: the scripted Run may be short of the reroll price on a
+     harder economy (v2.9.2 Gate slope / 정가 intent), so the reroll below is funded before the snapshot. */
+  g.run.money=Math.max(g.run.money,g.rerollPrice());
   const gate=copy(g.run.dungeons),offers=copy(g.run.offers),window=copy(g.run.relicWindow),money=g.run.money;
   for(let again=0;again<3;again++){
    const h=reload(g);

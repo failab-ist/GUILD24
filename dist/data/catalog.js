@@ -272,7 +272,10 @@ G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.1
      is worth, so the term redistributes around ordinary weight instead of taxing every offer.
      할인 and 바가지 carry no weight and are decided exactly as they were before this existed -
      their acceptance is not this patch's to move. */
-  intentPivot:.36,intentWeight:.5},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:4}};
+  intentPivot:.36,intentWeight:.5,
+  /* v2.9.2 balance (User 2026-09-25): the FINAL 정가 purchase chance, the 0.97 관련 준비 case included, is scaled
+     by 0.90 - a ~10% relative cut, not percentage points. 할인 and 바가지 carry no scale; the shared need is untouched. */
+  finalScale:.90},half:{label:'50% 할인',mult:.5,intentMult:.5,intent:.18,loyalty:4}};
 
 /* Three shapes of the ordering decision, named here so a balance candidate can be measured
    against them from the harness without a production edit: how many candidates a Day offers,

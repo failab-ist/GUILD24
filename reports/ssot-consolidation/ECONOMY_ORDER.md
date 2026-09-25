@@ -538,3 +538,15 @@ dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.1 balance: heavy from D
 store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term)
 × (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance; was 0.02)
 ```
+
+## AMENDMENT — v2.9.2 balance: 정가 final purchase chance x 0.90 (User decision 2026-09-25)
+
+User 2026-09-25: the final 정가 purchase chance, the 0.97 관련 준비 case included, is scaled by 0.90; 50% / 150% and the shared
+accessible need are unchanged. Nothing is dropped.
+
+```new
+정가 final scale (User 2026-09-25, v2.9.2 balance): the FINAL 정가 purchaseChance above — the 0.97 관련 준비 case
+included — is multiplied by 0.90 (a ~10% relative cut, not percentage points). 50% 할인 and 바가지 carry no scale, and the
+shared accessible-mode base need is not lowered for it:
+    정가 purchaseChance = (the 0.97 floor or the clamped rawChance) × 0.90
+```

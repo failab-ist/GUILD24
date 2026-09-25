@@ -1151,3 +1151,59 @@ reversal cut-in)
 stamp, 전체 건너뛰기 leaves the list without waiting, and a cue still waiting for its landing frame
 is dropped rather than heard over the next screen
 ```
+
+## AMENDMENT — v2.9.2: SALE shelf row states every effect (User decision 2026-09-25)
+
+User 2026-09-25 (phone capture of 불룡볶음면): the shelf row stopped at two effects; it now states all of them on one line.
+
+```new
+- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소비품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
+```
+
+## AMENDMENT — v2.9.2: SALE counter tray fold (User decision 2026-09-25)
+
+User 2026-09-25: the filled SALE tray folds to its header while the shelf is read on a phone.
+
+```new
+- COUNTER TRAY FOLD (User 2026-09-25; the User's own suggestion, recommended form taken while the User is away - to reconfirm): on a phone a filled tray folds to its header line (Item, customer, wallet, a small ▲) when the player scrolls the shelf past 32px or taps outside the tray, a shelf row, the dock or an overlay; tapping the folded strip or any shelf row (the one already on the tray included) opens it again. The selected Item never changes by folding, nothing is saved, and a desk (≥1024) never folds
+```
+
+## AMENDMENT — v2.9.2: ORDER floating today line (User decision 2026-09-25)
+
+User 2026-09-25: the 오늘 line joins the floating Death box while its block is out of view.
+
+```new
+- ORDER — FLOATING TODAY LINE (User 2026-09-25; recommended form taken while the User is away - to reconfirm): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button
+```
+
+## AMENDMENT — v2.9.2 H5: FINAL result seal stamp (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.2 H5): one seal bearing the Boss's name on a Final ending tape; the result sentence follows it.
+
+```new
+### FINAL RESULT — SEAL STAMP (v2.9.2 H5)
+(User 2026-09-25, v2.9.2 H5; principle, contract and impact budget -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT;
+acceptance -> UI_UX_QA UI-Q-v29-30.)
+A Final ending carries one seal on its tape: a carved seal bearing the Boss's name, struck at the right of the headline.
+- clear: vermilion, square-on, crisp; the heaviest landing in the game - the tape stands still 200 ms, the seal falls from
+2 × to 1 × in 90 ms (the NIGHT stamp's fall) and the tape gives 6 px and settles (170 ms)
+- failure: the same seal struck lighter (1.6 ×, the tape gives 3 px), faint, crooked and only partly printed - a run
+verdict in paper language; never the NIGHT death tape
+- one seal whatever the party size (1~3); no seal on a non-Final ending
+- the existing headline and reason follow the stamp: they settle in (160 ms, 4 px) from the landing frame; while a seal
+is present they keep clear of it and break at word boundaries
+- sound: one cue on the landing frame (`sealwin` rings up out of the Boss motif's root, `sealfail` falls under it); the
+departure's own `final` cue is unchanged and plays once
+- presentation only: the seal is aria-hidden, the headline states the result; under reduced motion the seal, the text
+and the cue are there at once and the end state is identical
+```
+
+## AMENDMENT — v2.9.2 H1: only a turned-away Death reverses (User decision 2026-09-25)
+
+User 2026-09-25: the reversal overstamp also covers a Death 만반의 준비 turned away; 강골 / 구급키트 never reverse. Superseded declarations were removed in place.
+
+```new
+- 만반의 준비 (User 2026-09-25: a reversal only when a death was turned away): a result whose Death 만반의 준비 turned into
+부상 / 중상 prints `사망` first the same way and its own Outcome overstamps it; the Outcome cue plays on the overstamp and
+there is no `rescue` accent. 강골 and 구급키트 only lower an injury and never reverse
+```

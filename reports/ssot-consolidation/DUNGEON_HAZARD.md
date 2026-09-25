@@ -1001,13 +1001,13 @@ D29 = 23.30
 
 ```new
 Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue (User 2026-09-25, v2.9.1 balance).
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises):
-= min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80
-D9  = 10.80
-D12 = 13.20
-D18 = 18.00
-D24 = 22.80
-D29 = 26.80
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss):
+= min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80
+D9  = 13.50
+D12 = 15.90
+D18 = 20.70
+D24 = 25.50
+D29 = 29.50
 0.36
 0.11
 Base shares 0.36 / 0.11 (User 2026-09-25, v2.9.1 balance; were 0.42 / 0.13).
@@ -1055,3 +1055,21 @@ environmentIncidentChance × (1 − assist)
 - Deep expeditions and the Final are excluded (neither counted nor assisted)
 - never shown to the Player; no forecast, SALE or Night surface reads it
 ```
+
+## AMENDMENT — v2.9.2 balance: Great Success EXP 1.40 -> 1.10 (User decision 2026-09-25)
+
+User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Gold and Wallet are unchanged. The superseded line is dropped.
+
+```text
+대성공 = 1.40
+```
+
+```new
+ 대성공 = 1.10   (User 2026-09-25, v2.9.2 balance; was 1.40 — Great Success occurrence, Store Gold and Wallet unchanged)
+```
+
+## AMENDMENT — v2.9.2 balance: Gate early slope 1.20 -> 1.50 (User decision 2026-09-25)
+
+User 2026-09-25: the Day term's early slope becomes 1.50, the late slope 0.80 and the knee Day 9 are kept (a fresh first Run
+cleared the Boss). The v2.9.1 slope lines were declared new above, not chain lines, so their `new` fence is edited in place
+(formula, heading sentence, Day-term anchors) rather than dropped here.

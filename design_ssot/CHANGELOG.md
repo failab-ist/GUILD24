@@ -3,9 +3,9 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.2 — game feel (타격감), H1 ADOPTED, H2~H6 PLANNED (User 2026-09-25)
+## v2.9.2 — game feel (타격감), H1 / H5 ADOPTED, H2 / H3 / H4 / H6 PLANNED (User 2026-09-25)
 
-H1 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
+H1 and H5 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
 (execution order H1 → H2 → H3 → H5 → H4; each batch docs-first, Source after User authorization);
 SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATION and SPEC_INDEX changed.
@@ -34,6 +34,10 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   NIGHT_CLOSING §HERO ITEM FEEDBACK / §INSURANCE CAUSALITY display-order notes; UI_UX_QA UI-Q-v29-27; ledgers UI_UX /
   UI_UX_QA / NIGHT_CLOSING; PRESENTATION H1 row ADOPTED. Source: app.js (NIGHT_STAMP, playPhase night, nightSound),
   ui.css (stamp end states), audio.js (`hit` on the NIGHT Outcome cues). No copy, rule, Save, RNG or proof change.
+- H5 FINAL seal ADOPTED (User 2026-09-25): UI_UX §FINAL RESULT — SEAL STAMP (one seal bearing the Boss's name on the ending
+  tape; clear = 200 ms hold, 2 × fall, 6 px give, vermilion; failure = 1.6 ×, 3 px, faint, crooked, partly printed; the
+  headline and reason follow the landing; `sealwin` / `sealfail` cues on the landing frame); FINAL_EXPEDITION §RUN CLEAR /
+  FAILURE display order; UI_UX_QA UI-Q-v29-30; ledgers; PRESENTATION H5 row ADOPTED. Capture tool tools/qa-final-seal.cjs.
 - Play-report fixes (User 2026-09-25, phone captures; outside the H batches, one commit each): the SALE forecast `?`
   balloon laid out 24px wide on a phone (RUNTIME UX BUG, Source only — `158d001`); MORNING printed every Gate after the
   first as the Gate-detail sentence (IMPLEMENTATION BUG, Source only — `0510b53`); the SALE destination plate's Hazard row
@@ -43,6 +47,14 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   row and the `피로 {A} → 출발 {B}` line are retired on the counter tray, the till and FINAL preparation; the SUPPLY lesson
   moves to the tray's `피로 회복` row for a fatigued customer (User choice). SALE, UI_UX, UI_UX_QA UI-Q-v29-7, DUNGEON_HAZARD,
   DUNGEON_ITEM_QA, SOURCE_ADOPTION_QA, COPY_AUDIT §3-5 / §3-7 / §4-17 (retired); ledgers edited in place.
+- Balance, Great Success EXP 1.40 → 1.10 (User 2026-09-25): only the EXP multiplier; Great Success occurrence / probability,
+  Store Gold and the expedition NPC Wallet reward unchanged. Purpose: weaken the snowball of a strong NPC growing faster
+  through Great Success EXP. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA; ledgers amended.
+- Balance, Gate early slope 1.20 → 1.50 and 정가 final purchase chance × 0.90 (User 2026-09-25, after the relative review in
+  reports/v292-balance-review.md, `human` lens): late slope 0.80 / knee Day 9 kept; the × 0.90 applies to the final 정가 chance
+  with the 0.97 관련 준비 case included, 50% / 150% and the shared accessible need unchanged. DUNGEON_HAZARD §GATE POWER,
+  DUNGEON_ITEM_QA, ECONOMY_ORDER §PURCHASE INTENT, ECONOMY_ORDER_QA, SOURCE_ADOPTION_QA note; ledgers amended. To be
+  checked in User play on the deployed build.
 
 ## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted, CLOSED 2026-09-25 (main `d23d076`, tag `v2.9.1`)
 

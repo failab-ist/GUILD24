@@ -1354,6 +1354,52 @@ PASS:
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
 
+### UI-Q-v29-29 — ORDER FLOATING TODAY LINE
+
+(User 2026-09-25; owner `UI_UX_v2.8.0.md` §DEATH LIMIT — ALWAYS VISIBLE.)
+
+SETUP:
+ORDER on a Day with two or more Gates at 360 / 390 / 412 and 1280: at the top, then scrolled to the offer rows.
+
+PASS:
+- at the top the floating box holds the Death line only; scrolled past the `오늘` block it adds the same `오늘` line under a rule
+- the two facts read apart (rule, its own `오늘` label); the counts equal the block's; nothing covers the offer controls
+
+FAIL:
+- the 오늘 line doubled while its block is on screen, merged into the Death sentence, or a count that differs from the block
+
+### UI-Q-v29-30 — FINAL RESULT SEAL STAMP
+
+(User 2026-09-25, v2.9.2 H5; owner `UI_UX_v2.8.0.md` §FINAL RESULT — SEAL STAMP.)
+
+SETUP:
+A Final clear and a Final failure with 1-, 2- and 3-member parties, and a non-Final ending, at 390 and 1280, motion on and reduced motion.
+
+PASS:
+- a Final ending shows exactly one seal with the Boss's name at the right of the headline; a non-Final ending shows none
+- clear: 200 ms hold, 2 × → 1 × in 90 ms, the tape gives 6 px; failure: 1.6 ×, 3 px, faint, crooked, partly printed
+- the headline and reason appear after the landing and never sit under the seal; no word breaks mid-word
+- one landing cue (`sealwin` / `sealfail`) on the landing frame; the `final` cue plays once
+- under reduced motion the end state (seal, text, ink strength) is identical
+
+FAIL:
+- a seal per member, the NIGHT death tape on a failure, a seal covering the headline, or a failure seal as crisp as a clear
+
+### UI-Q-v29-28 — SALE COUNTER TRAY FOLD
+
+(User 2026-09-25; owner `UI_UX_v2.8.0.md` §SALE — COUNTER TRAY.)
+
+SETUP:
+SALE at 360 / 390 / 412 and 1280 with a long shelf: pick a row, scroll the shelf, tap the folded strip, tap the readout, tap the same row, tap another row.
+
+PASS:
+- scrolling the shelf past 32px or tapping outside the tray / a row / the dock folds a filled tray to its header line on a phone
+- the folded strip, the same row or another row opens it again; the selected Item never changes by folding
+- picking a row never folds the tray it just filled; a desk never folds; nothing is saved
+
+FAIL:
+- the tray stays full height while the shelf is scrolled on a phone, a fold that clears the selection, or a folded tray that only reopens through the price keys
+
 ### UI-Q-v29-27 — NIGHT VERDICT STAMP / CAUSE BEAT / REVERSAL OVERSTAMP
 
 (User 2026-09-25, v2.9.2 H1; owner `UI_UX_v2.8.0.md` §NIGHT LAYOUT — VERDICT STAMP, principle PRESENTATION_PRINCIPLES §GAME FEEL BEAT.)
@@ -1366,14 +1412,14 @@ PASS:
 - the card stands first and the tag lands after it; 성공 / 퇴각 have no hold, 대성공 / 부상 / 중상 / 생환 / 사망 hold ≤ 200 ms
 - the stamp falls from 1.6 × (퇴각 1.3 ×) in 90 ms; on the landing the card dips 4 px (퇴각 2 px) and settles, nothing else moves
 - 대성공 is one gold landing; 부상 keeps a red ink spread, 중상 a slightly misaligned tag, 사망 a black tape laid in ≤ 500 ms
-- a reversal prints the turned-away Outcome (`사망` / `중상`) first, then `생환` overstamps it; the Insurance proof lines appear on that frame
+- a reversal prints the turned-away Outcome (`사망` / `중상`) first, then `생환` overstamps it; the Insurance proof lines appear on that frame; a Death 만반의 준비 turned away prints `사망` and its own 부상 / 중상 overstamps it (User 2026-09-25)
 - with a Hero Item line that line settles once and the figures do not count; without one only the REWARD figures count up
 - the Outcome cue's first note is heard on the landing; on a reversal `rescue` is heard on the overstamp; one visual, one sound, one cause / number at a landing
 - the last motion ends by 770 ms; 다음 / 전체 건너뛰기 answer at any frame and no pending cue plays over the next screen
 - under reduced motion the end state is identical: same tag, ink / misalignment / tape, figures at their values, no first print
 
 FAIL:
-- a stamp on a death, two stamps on a 대성공, a reversal on 만반의 준비 / 강골 / 구급키트 results, a ring, flash, shake or particle
+- a stamp on a death, two stamps on a 대성공, a reversal on 강골 / 구급키트 results, a ring, flash, shake or particle
 - a count-up beside a Hero Item line, a count on GROWTH / AFTERMATH figures, a faint first print left in the end state, or a changed Outcome type size
 
 ## CLOSING

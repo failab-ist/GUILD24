@@ -208,6 +208,7 @@ Player-facing label:
 Default:
 - expected destination = actual assigned destination
 - destination is random among eligible open Gates according to `NPC_TRAIT_v2.8.0.md`
+- when a Day has at least as many visitors as open Gates, every open Gate is some visitor's expected destination: a Gate the draw left empty takes one visitor from a Gate that holds two or more (`NPC_TRAIT_v2.8.0.md` destinationCoverage; User 2026-09-25 — the per-Gate visitor count showed Gates nobody would visit)
 
 Canonical uncertainty:
 - an explicitly defined Event may change actual destination while leaving the earlier expected destination as the player-facing expectation

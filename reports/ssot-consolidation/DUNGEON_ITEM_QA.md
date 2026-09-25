@@ -753,7 +753,7 @@ PASS exact Buy/Sell for changed original-catalog prices:
 ```
 
 ```new
-- the Day term is `min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance)
+- the Day term is `min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2)
 - the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
 Controlled adventurer records: 1 / 2 / 3 / 5 consecutive expeditions begun at injury=1 ending in this injured departure, the same
 chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.1 balance).
@@ -868,3 +868,20 @@ Hybrid is not strict superior specialist.
 Hybrid is not strict superior to a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may
 exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16).
 ```
+
+## AMENDMENT — v2.9.2 balance: Great Success EXP 1.40 -> 1.10 (User decision 2026-09-25)
+
+User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Gold and Wallet are unchanged. The superseded line is dropped.
+
+```text
+- EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
+```
+
+```new
+ - EXP outcome multipliers are Great 1.10 / Retreat 0.38 / combat-success 1.00 / other living 0.50 (User 2026-09-25, v2.9.2 balance; Great was 1.40)
+```
+
+## AMENDMENT — v2.9.2 balance: Gate early slope 1.20 -> 1.50 (User decision 2026-09-25)
+
+User 2026-09-25: the Day-term QA line reads early 1.50 (late 0.80 kept). The v2.9.1 line was declared new above, so that
+`new` fence is edited in place.

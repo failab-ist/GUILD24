@@ -10,6 +10,9 @@
 // its last supply against the Final snapshot, no FINAL leak, and reload idempotence.
 //   node tools/qa-final-end.cjs <out-dir> [widths] [BOSS]
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
+// FINAL_EXPEDITION §D30 PLAYER FLOW (User 2026-09-25): 마지막 발주 -> 원정대 선택 (from each adventurer's notebook) -> FINAL 준비
+const toMuster=async p=>{if(await p.$('.p-final .dock [data-action="final-ordered"]'))await p.click('.p-final .dock [data-action="final-ordered"]');};
+const pickFinal=async(p,id)=>{await toMuster(p);await p.click(`.p-final [data-action="final-npc"][data-id="${id}"]`);await p.click('#modal-root [data-action="final-team"]');};
 const OUT=path.resolve(__dirname,'..',process.argv[2]||'reports/ui/final-end');
 const WIDTHS=(process.argv[3]||'390,1280').split(',').map(Number);
 const BOSS=process.argv[4]||'WRATH';
@@ -39,7 +42,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
  return {pEnd:!!document.querySelector('.stage.p-end'),pFinal:!!document.querySelector('.p-final'),dataBoss:!!document.querySelector('[data-boss]'),
   backdrop:/BACKDROP/.test(bg),bossImg:[...document.querySelectorAll('.stage img')].filter(i=>/boss|BACKDROP/i.test(i.src)).length,
   modal:!!document.querySelector('#modal-root .modal'),bodyLock:document.body.style.overflow,
-  finalUi:['.final-team','.final-forecast','.shelf','.final-order','[data-action="team"]','[data-action="boss"]','[data-action="supply"]'].filter(q=>document.querySelector(q)),
+  finalUi:['.final-team','.final-forecast','.shelf','.final-order','[data-action="final-npc"]','[data-action="boss"]','[data-action="supply"]'].filter(q=>document.querySelector(q)),
   copied:names.filter(x=>t.includes(x)),power:/투력 합|전투력|확률|Final Roll/.test(t)};})()`;
 (async()=>{
  const playwright=require('playwright');fs.mkdirSync(OUT,{recursive:true});
@@ -74,7 +77,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
     const ids=await p.evaluate(`Guild24.game.finalEligible().slice(0,3).map(n=>n.id)`);
     if(kind==='clear')await p.evaluate(`(()=>{const s=Guild24.game.run;for(const id of ${JSON.stringify(ids)}){const n=s.npcs.find(x=>x.id===id);
      n.level=40;n.stats={combat:220,survival:160,mobility:140,spirit:120};}Guild24.game.save();Guild24.render();})()`);
-    for(const id of ids)await p.click(`.p-final [data-action="team"][data-id="${id}"]`);
+    for(const id of ids)await pickFinal(p,id);
     await p.click('.p-final .dock [data-action="final-commit"]');
     await p.click(`.p-final [data-action="supply-target"][data-id="${ids[0]}"]`);
     const rev0=await p.evaluate(`Guild24.game.run.stats.revenue`),price=await p.evaluate(`Guild24.game.finalPrice('rice')`);

@@ -233,6 +233,7 @@ not only in the 도감.
 - the limit shown already includes 추모 방명록 and 위령제
 - no extra popover, badge or explanation text; the same line on both screens
 - exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
+- ORDER — FLOATING TODAY LINE (User 2026-09-25; recommended form taken while the User is away - to reconfirm): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button
 
 ### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 
@@ -612,6 +613,8 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
+- COUNTER TRAY FOLD (User 2026-09-25; the User's own suggestion, recommended form taken while the User is away - to reconfirm): on a phone a filled tray folds to its header line (Item, customer, wallet, a small ▲) when the player scrolls the shelf past 32px or taps outside the tray, a shelf row, the dock or an overlay; tapping the folded strip or any shelf row (the one already on the tray included) opens it again. The selected Item never changes by folding, nothing is saved, and a desk (≥1024) never folds
+- the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소비품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
 - on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
 - the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
 - tap-only; no drag, no minigame, no new Save field
@@ -1377,6 +1380,9 @@ the stamp itself falls from 1.6 × to 1 × in 90 ms and lands on the last frame)
   print remains in the end state. The proof lines under the summary (the Hero Item line and the
   incident line that name the Insurance) cut in on the overstamp frame with no motion of their own;
   that cut-in is the landing's cause response
+- 만반의 준비 (User 2026-09-25: a reversal only when a death was turned away): a result whose Death 만반의 준비 turned into
+  부상 / 중상 prints `사망` first the same way and its own Outcome overstamps it; the Outcome cue plays on the overstamp and
+  there is no `rescue` accent. 강골 and 구급키트 only lower an injury and never reverse
 - after-motion has one owner. With a Hero Item line (NIGHT_CLOSING §HERO ITEM FEEDBACK) and no
   reversal, that line settles into place once (160 ms, 4 px, from the landing frame) and the figures
   simply stand at their values. Without one, the REWARD group's figures (경험치, 원정 소지금 획득,
@@ -1837,6 +1843,24 @@ Blocked transfer (no-effect / insufficient Wallet / Bag full): the reason is a c
 the Item/transfer area; the disabled transfer action keeps its normal face and does not carry the reason.
 
 Final action labels never wrap by accident on mobile; explanatory body / Item-effect text may wrap normally.
+
+### FINAL RESULT — SEAL STAMP (v2.9.2 H5)
+
+(User 2026-09-25, v2.9.2 H5; principle, contract and impact budget -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT;
+acceptance -> UI_UX_QA UI-Q-v29-30.)
+
+A Final ending carries one seal on its tape: a carved seal bearing the Boss's name, struck at the right of the headline.
+- clear: vermilion, square-on, crisp; the heaviest landing in the game - the tape stands still 200 ms, the seal falls from
+  2 × to 1 × in 90 ms (the NIGHT stamp's fall) and the tape gives 6 px and settles (170 ms)
+- failure: the same seal struck lighter (1.6 ×, the tape gives 3 px), faint, crooked and only partly printed - a run
+  verdict in paper language; never the NIGHT death tape
+- one seal whatever the party size (1~3); no seal on a non-Final ending
+- the existing headline and reason follow the stamp: they settle in (160 ms, 4 px) from the landing frame; while a seal
+  is present they keep clear of it and break at word boundaries
+- sound: one cue on the landing frame (`sealwin` rings up out of the Boss motif's root, `sealfail` falls under it); the
+  departure's own `final` cue is unchanged and plays once
+- presentation only: the seal is aria-hidden, the headline states the result; under reduced motion the seal, the text
+  and the cue are there at once and the end state is identical
 
 ## STORE MANAGEMENT / DECORATION
 

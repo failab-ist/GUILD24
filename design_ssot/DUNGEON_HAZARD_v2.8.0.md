@@ -320,11 +320,11 @@ Rules:
 
 ## GATE POWER — LATE-DAY SLOPE
 
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises):
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss):
 
 ```text
 Day term
-= min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80
+= min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80
 ```
 
 Full required Power (Source-exact):
@@ -347,11 +347,11 @@ familyReward: spider 1 · slime 1 · fire 1.15 · crypt 1.10 · snow 1.25 · Fin
 Day-term reference anchors:
 
 ```text
-D9  = 10.80
-D12 = 13.20
-D18 = 18.00
-D24 = 22.80
-D29 = 26.80
+D9  = 13.50
+D12 = 15.90
+D18 = 20.70
+D24 = 25.50
+D29 = 29.50
 ```
 
 ## HAZARD THREAT
@@ -782,7 +782,7 @@ For a living adventurer:
 
 Outcome multiplier:
 
-    대성공 = 1.40
+    대성공 = 1.10   (User 2026-09-25, v2.9.2 balance; was 1.40 — Great Success occurrence, Store Gold and Wallet unchanged)
     퇴각   = 0.38
     combat-success path = 1.00
     other surviving non-retreat path = 0.50

@@ -1,0 +1,560 @@
+{
+ "generated": "v2.9.2 balance review",
+ "runs": 1000,
+ "arms": {
+  "base": {
+   "xp": 1.4,
+   "early": 1.2,
+   "full": 1
+  },
+  "gs110": {
+   "xp": 1.1,
+   "early": 1.2,
+   "full": 1
+  },
+  "gs110-s14": {
+   "xp": 1.1,
+   "early": 1.4,
+   "full": 1
+  },
+  "gs110-s15": {
+   "xp": 1.1,
+   "early": 1.5,
+   "full": 1
+  },
+  "gs110-s14-i90": {
+   "xp": 1.1,
+   "early": 1.4,
+   "full": 0.9
+  },
+  "gs110-s14-i80": {
+   "xp": 1.1,
+   "early": 1.4,
+   "full": 0.8
+  },
+  "gs110-s15-i90": {
+   "xp": 1.1,
+   "early": 1.5,
+   "full": 0.9
+  },
+  "gs110-s15-i80": {
+   "xp": 1.1,
+   "early": 1.5,
+   "full": 0.8
+  }
+ },
+ "results": [
+  {
+   "arm": "gs110",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.784,
+   "reach20": 0.204,
+   "reach30": 0.139,
+   "bossWinGivenReach": 0.49640287769784175,
+   "clear": 0.069,
+   "deaths": 5.233,
+   "endedBy": {
+    "deaths": 280,
+    "bankrupt": 581,
+    "finalFail": 70,
+    "cleared": 69
+   },
+   "avgDay": 15.225,
+   "greatSuccessRate": 0.14538212596465025,
+   "partyLevel": 17.652278177458033,
+   "partyTop": 20.107913669064747,
+   "d20Top3": 12.84967320261438,
+   "accept": {
+    "half": 0.9385064730028418,
+    "full": 0.8509803322746152,
+    "overcharge": 0.6016054541455905
+   },
+   "offers": {
+    "half": 38004,
+    "full": 65488,
+    "overcharge": 9094
+   }
+  },
+  {
+   "arm": "base",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.794,
+   "reach20": 0.216,
+   "reach30": 0.156,
+   "bossWinGivenReach": 0.5961538461538461,
+   "clear": 0.093,
+   "deaths": 5.257,
+   "endedBy": {
+    "deaths": 283,
+    "bankrupt": 561,
+    "finalFail": 63,
+    "cleared": 93
+   },
+   "avgDay": 15.646,
+   "greatSuccessRate": 0.1522371628528741,
+   "partyLevel": 18.322649572649574,
+   "partyTop": 21,
+   "d20Top3": 13.316358024691358,
+   "accept": {
+    "half": 0.9393633540372671,
+    "full": 0.8522956459841025,
+    "overcharge": 0.6035441606183429
+   },
+   "offers": {
+    "half": 38640,
+    "full": 67432,
+    "overcharge": 10609
+   }
+  },
+  {
+   "arm": "gs110",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.807,
+   "reach20": 0.354,
+   "reach30": 0.206,
+   "bossWinGivenReach": 0.5,
+   "clear": 0.103,
+   "deaths": 6.88,
+   "endedBy": {
+    "deaths": 546,
+    "bankrupt": 248,
+    "finalFail": 103,
+    "cleared": 103
+   },
+   "avgDay": 17.903,
+   "greatSuccessRate": 0.15815151633425706,
+   "partyLevel": 17.22977346278317,
+   "partyTop": 20.315533980582526,
+   "d20Top3": 12.523540489642185,
+   "accept": {
+    "half": 0.9503901631591393,
+    "full": 0.8653850541928123,
+    "overcharge": 0.6220232237748474
+   },
+   "offers": {
+    "half": 21145,
+    "full": 87650,
+    "overcharge": 10162
+   }
+  },
+  {
+   "arm": "base",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.819,
+   "reach20": 0.379,
+   "reach30": 0.238,
+   "bossWinGivenReach": 0.5756302521008403,
+   "clear": 0.137,
+   "deaths": 7.016,
+   "endedBy": {
+    "deaths": 533,
+    "bankrupt": 229,
+    "finalFail": 101,
+    "cleared": 137
+   },
+   "avgDay": 18.565,
+   "greatSuccessRate": 0.1587137312881168,
+   "partyLevel": 17.80532212885154,
+   "partyTop": 20.99579831932773,
+   "d20Top3": 12.87598944591029,
+   "accept": {
+    "half": 0.9506815251427518,
+    "full": 0.866523072189193,
+    "overcharge": 0.630937880633374
+   },
+   "offers": {
+    "half": 21716,
+    "full": 90997,
+    "overcharge": 11494
+   }
+  },
+  {
+   "arm": "gs110-s14",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.727,
+   "reach20": 0.124,
+   "reach30": 0.064,
+   "bossWinGivenReach": 0.421875,
+   "clear": 0.027,
+   "deaths": 5.243,
+   "endedBy": {
+    "deaths": 379,
+    "bankrupt": 557,
+    "finalFail": 37,
+    "cleared": 27
+   },
+   "avgDay": 13.495,
+   "greatSuccessRate": 0.13204747774480713,
+   "partyLevel": 17.375,
+   "partyTop": 20.484375,
+   "d20Top3": 12.330645161290322,
+   "accept": {
+    "half": 0.938090179414542,
+    "full": 0.8446136880556896,
+    "overcharge": 0.5861744207948766
+   },
+   "offers": {
+    "half": 33888,
+    "full": 58036,
+    "overcharge": 5309
+   }
+  },
+  {
+   "arm": "gs110-s14",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.76,
+   "reach20": 0.23,
+   "reach30": 0.097,
+   "bossWinGivenReach": 0.4329896907216495,
+   "clear": 0.042,
+   "deaths": 6.628,
+   "endedBy": {
+    "deaths": 617,
+    "bankrupt": 286,
+    "finalFail": 55,
+    "cleared": 42
+   },
+   "avgDay": 15.661,
+   "greatSuccessRate": 0.13822360648695092,
+   "partyLevel": 16.68041237113402,
+   "partyTop": 20.443298969072163,
+   "d20Top3": 11.997101449275362,
+   "accept": {
+    "half": 0.9501232186863816,
+    "full": 0.8609587217043941,
+    "overcharge": 0.6055030934549007
+   },
+   "offers": {
+    "half": 18666,
+    "full": 75100,
+    "overcharge": 6142
+   }
+  },
+  {
+   "arm": "gs110-s15",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.7,
+   "reach20": 0.084,
+   "reach30": 0.037,
+   "bossWinGivenReach": 0.43243243243243246,
+   "clear": 0.016,
+   "deaths": 5.163,
+   "endedBy": {
+    "deaths": 390,
+    "bankrupt": 573,
+    "finalFail": 21,
+    "cleared": 16
+   },
+   "avgDay": 12.729,
+   "greatSuccessRate": 0.12719242902208203,
+   "partyLevel": 17.117117117117118,
+   "partyTop": 21.08108108108108,
+   "d20Top3": 12.28968253968254,
+   "accept": {
+    "half": 0.9389780209589168,
+    "full": 0.8409803310542042,
+    "overcharge": 0.591094216671192
+   },
+   "offers": {
+    "half": 32349,
+    "full": 54553,
+    "overcharge": 3683
+   }
+  },
+  {
+   "arm": "gs110-s15",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.725,
+   "reach20": 0.186,
+   "reach30": 0.078,
+   "bossWinGivenReach": 0.2692307692307692,
+   "clear": 0.021,
+   "deaths": 6.538,
+   "endedBy": {
+    "deaths": 659,
+    "bankrupt": 263,
+    "finalFail": 57,
+    "cleared": 21
+   },
+   "avgDay": 14.71,
+   "greatSuccessRate": 0.12946317103620475,
+   "partyLevel": 15.773504273504274,
+   "partyTop": 19.858974358974358,
+   "d20Top3": 11.64336917562724,
+   "accept": {
+    "half": 0.9493142857142857,
+    "full": 0.8589696176604461,
+    "overcharge": 0.6158119658119658
+   },
+   "offers": {
+    "half": 17500,
+    "full": 70304,
+    "overcharge": 4680
+   }
+  },
+  {
+   "arm": "gs110-s14-i90",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.739,
+   "reach20": 0.203,
+   "reach30": 0.072,
+   "bossWinGivenReach": 0.5138888888888888,
+   "clear": 0.037,
+   "deaths": 6.516,
+   "endedBy": {
+    "deaths": 644,
+    "bankrupt": 284,
+    "finalFail": 35,
+    "cleared": 37
+   },
+   "avgDay": 14.937,
+   "greatSuccessRate": 0.14201418439716312,
+   "partyLevel": 16.88425925925926,
+   "partyTop": 20.083333333333332,
+   "d20Top3": 11.883415435139574,
+   "accept": {
+    "half": 0.9460370994940978,
+    "full": 0.7736802550081634,
+    "overcharge": 0.6039208882720333
+   },
+   "offers": {
+    "half": 17790,
+    "full": 77174,
+    "overcharge": 5764
+   }
+  },
+  {
+   "arm": "gs110-s14-i90",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.74,
+   "reach20": 0.112,
+   "reach30": 0.045,
+   "bossWinGivenReach": 0.6222222222222222,
+   "clear": 0.028,
+   "deaths": 5.142,
+   "endedBy": {
+    "deaths": 344,
+    "bankrupt": 611,
+    "finalFail": 17,
+    "cleared": 28
+   },
+   "avgDay": 13.338,
+   "greatSuccessRate": 0.1265587090221746,
+   "partyLevel": 17.68148148148148,
+   "partyTop": 20.68888888888889,
+   "d20Top3": 12.491071428571429,
+   "accept": {
+    "half": 0.9388396265194668,
+    "full": 0.7581019073656611,
+    "overcharge": 0.6002824858757062
+   },
+   "offers": {
+    "half": 34058,
+    "full": 62547,
+    "overcharge": 4956
+   }
+  },
+  {
+   "arm": "gs110-s14-i80",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.704,
+   "reach20": 0.086,
+   "reach30": 0.039,
+   "bossWinGivenReach": 0.46153846153846156,
+   "clear": 0.018,
+   "deaths": 4.789,
+   "endedBy": {
+    "deaths": 344,
+    "bankrupt": 617,
+    "finalFail": 21,
+    "cleared": 18
+   },
+   "avgDay": 12.593,
+   "greatSuccessRate": 0.12083011238627579,
+   "partyLevel": 17.042735042735043,
+   "partyTop": 20,
+   "d20Top3": 12.565891472868216,
+   "accept": {
+    "half": 0.9393390813414746,
+    "full": 0.6749193176579069,
+    "overcharge": 0.5978365384615385
+   },
+   "offers": {
+    "half": 32591,
+    "full": 65070,
+    "overcharge": 4160
+   }
+  },
+  {
+   "arm": "gs110-s14-i80",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.757,
+   "reach20": 0.196,
+   "reach30": 0.069,
+   "bossWinGivenReach": 0.36231884057971014,
+   "clear": 0.025,
+   "deaths": 6.434,
+   "endedBy": {
+    "deaths": 594,
+    "bankrupt": 337,
+    "finalFail": 44,
+    "cleared": 25
+   },
+   "avgDay": 14.896,
+   "greatSuccessRate": 0.13654687859940107,
+   "partyLevel": 16.555555555555557,
+   "partyTop": 20.420289855072465,
+   "d20Top3": 11.70748299319728,
+   "accept": {
+    "half": 0.9496332235892104,
+    "full": 0.6875452098329163,
+    "overcharge": 0.5965250965250966
+   },
+   "offers": {
+    "half": 17313,
+    "full": 84329,
+    "overcharge": 5698
+   }
+  },
+  {
+   "arm": "gs110-s15-i90",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.702,
+   "reach20": 0.075,
+   "reach30": 0.032,
+   "bossWinGivenReach": 0.46875,
+   "clear": 0.015,
+   "deaths": 5.07,
+   "endedBy": {
+    "deaths": 369,
+    "bankrupt": 599,
+    "finalFail": 17,
+    "cleared": 15
+   },
+   "avgDay": 12.602,
+   "greatSuccessRate": 0.1188163983575572,
+   "partyLevel": 17.145833333333332,
+   "partyTop": 20.15625,
+   "d20Top3": 12.364444444444445,
+   "accept": {
+    "half": 0.9382819533699668,
+    "full": 0.7563219171107566,
+    "overcharge": 0.5940399212819792
+   },
+   "offers": {
+    "half": 32211,
+    "full": 58922,
+    "overcharge": 3557
+   }
+  },
+  {
+   "arm": "gs110-s15-i80",
+   "policy": "human",
+   "runs": 1000,
+   "reach10": 0.669,
+   "reach20": 0.064,
+   "reach30": 0.025,
+   "bossWinGivenReach": 0.64,
+   "clear": 0.016,
+   "deaths": 4.843,
+   "endedBy": {
+    "deaths": 393,
+    "bankrupt": 582,
+    "finalFail": 9,
+    "cleared": 16
+   },
+   "avgDay": 12.122,
+   "greatSuccessRate": 0.1204924650161464,
+   "partyLevel": 17.973333333333333,
+   "partyTop": 21.24,
+   "d20Top3": 12.109375,
+   "accept": {
+    "half": 0.9387871672008378,
+    "full": 0.6738702716425489,
+    "overcharge": 0.5882352941176471
+   },
+   "offers": {
+    "half": 31513,
+    "full": 63024,
+    "overcharge": 2958
+   }
+  },
+  {
+   "arm": "gs110-s15-i90",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.735,
+   "reach20": 0.173,
+   "reach30": 0.056,
+   "bossWinGivenReach": 0.4107142857142857,
+   "clear": 0.023,
+   "deaths": 6.406,
+   "endedBy": {
+    "deaths": 645,
+    "bankrupt": 299,
+    "finalFail": 33,
+    "cleared": 23
+   },
+   "avgDay": 14.353,
+   "greatSuccessRate": 0.13064495611245389,
+   "partyLevel": 16.047619047619047,
+   "partyTop": 19.660714285714285,
+   "d20Top3": 11.535645472061658,
+   "accept": {
+    "half": 0.9460202351014679,
+    "full": 0.7713406818764419,
+    "overcharge": 0.6028614784305224
+   },
+   "offers": {
+    "half": 17099,
+    "full": 74119,
+    "overcharge": 4613
+   }
+  },
+  {
+   "arm": "gs110-s15-i80",
+   "policy": "balanced",
+   "runs": 1000,
+   "reach10": 0.711,
+   "reach20": 0.14,
+   "reach30": 0.05,
+   "bossWinGivenReach": 0.44,
+   "clear": 0.022,
+   "deaths": 6.284,
+   "endedBy": {
+    "deaths": 635,
+    "bankrupt": 315,
+    "finalFail": 28,
+    "cleared": 22
+   },
+   "avgDay": 13.876,
+   "greatSuccessRate": 0.1307098148888001,
+   "partyLevel": 16.706666666666667,
+   "partyTop": 20.34,
+   "d20Top3": 11.676190476190476,
+   "accept": {
+    "half": 0.947921820880752,
+    "full": 0.6841333214281159,
+    "overcharge": 0.6033480585910254
+   },
+   "offers": {
+    "half": 16168,
+    "full": 78397,
+    "overcharge": 4301
+   }
+  }
+ ]
+}

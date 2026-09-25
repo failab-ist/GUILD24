@@ -132,10 +132,17 @@ Player-facing 정보 공개 원칙은 기존 Design SSOT를 따른다.
 Player-facing Final flow is:
 
 ```text
-출전 NPC 선택
+마지막 발주
+-> 출전 NPC 선택
 -> FINAL 준비
 -> 결과
 ```
+
+(User 2026-09-25, recommended form taken while the User is away - to reconfirm.) D30 opens on the last order - the
+ordinary order form, optional, confirmed on its own 발주 확정; `원정대 선택` moves on once no cart is pending. In 출전 NPC
+선택 a roster card opens that adventurer's notebook (Stats, Traits, equipment, condition, expedition records) and the pick
+or release is made from the notebook's footer. FINAL 준비 shows the Stat grid of the adventurer being supplied; the order
+form is not repeated there.
 
 Purpose:
 Final must remain the culmination of the shop-management decisions learned during the Run rather than switching to an opaque separate combat interaction.
@@ -594,6 +601,10 @@ Final Clear 자체가 Run Victory다.
 
 마왕 토벌 실패는 Run Clear가 아니다.
 
+Display order (User 2026-09-25, v2.9.2 H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a
+clear, faint and crooked for a failure, never one per member and never the NIGHT death tape - and the existing result
+sentence follows it. Result, wording and settlement are unchanged. Timing -> UI_UX_v2.8.0.md §FINAL RESULT — SEAL STAMP.
+
 ## FINAL INSURANCE VALUE — EXACT
 
 The ordinary Final resolution does not run normal expedition Retreat/Injury/Severe/Death outcome resolution after the Boss check.
@@ -746,7 +757,8 @@ Controlled D30 across 1-, 2- and 3-person committed parties, including voluntary
 PASS exact Player-facing order:
 
 ```text
-출전 NPC 선택
+마지막 발주
+-> 출전 NPC 선택
 -> FINAL 준비
 -> 결과
 ```

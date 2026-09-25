@@ -914,7 +914,7 @@ Required:
 - Loyalty +0.002 per point remains
 - Bag -0.10 retired
 - current modifiers remain
-- affordable canonical Counter at 50% / 100% -> final 0.97
+- affordable canonical Counter at 50% / 100% -> final 0.97 (100%: then × 0.90, User 2026-09-25 v2.9.2 — ECONOMY_ORDER §PURCHASE INTENT)
 - canonical Counter predicate reused
 - 150% keeps existing behavior / no new floor
 
