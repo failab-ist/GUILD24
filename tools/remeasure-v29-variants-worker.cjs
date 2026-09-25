@@ -67,7 +67,7 @@ globalThis.__schedule = V.schedule === 'human' ? (i => i < 3 ? { policy: 'beginn
 // multiplies with 만반의 준비 and its removed band goes the same way (부상/중상)
 if (V.prep || V.lvl) patch('systems/dungeon', "  deathRoll=r.next();\n  if(deathRoll<deathChance){\n   outcome='사망';\n  }else if(!combatSuccess){",
   `  deathRoll=r.next();const __prep=${V.prep ? '!departedInjured&&(e.fatigueBeforeExpedition||0)<20&&n.pack.length>=2' : 'false'};
-  const __lvl=${V.lvl ? `Math.max(1-${V.lvl.cap},1-${V.lvl.slope}*Math.max(0,n.level-5))` : '1'};
+  const __lvl=${V.lvl ? `Math.max(1-${V.lvl.cap},1-${V.lvl.slope}*Math.max(0,n.level-${V.lvl.from ?? 5}))` : '1'};
   if(deathRoll<deathChance*(__prep?${V.prep || 1}:1)*__lvl){
    outcome='사망';
   }else if(deathRoll<deathChance){
@@ -84,7 +84,7 @@ if (V.seal) patch('systems/simulation', 'function buySupport(){const w=s.relicWi
 if (V.badluck) {
   patch('systems/shop', "s.results=[];for(const id of s.queue){", "s.results=[];const __st={fails:0};for(const id of s.queue){");
   patch('systems/shop', "const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);",
-    `const __carry=n.pack.length>0;globalThis.__bl=__carry&&__st.fails>=${V.badluck.after||2}?${V.badluck.base}+${V.badluck.step}*(__st.fails-${V.badluck.after||2}):0;if(globalThis.__bl)globalThis.__blUsed=(globalThis.__blUsed||0)+1;const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);globalThis.__bl=0;if(__carry){if(rep.outcome==='성공'||rep.outcome==='대성공')__st.fails=0;else __st.fails++;}`);
+    `const __carry=n.pack.length>0&&!d.deep;globalThis.__bl=__carry&&__st.fails>=${V.badluck.after||2}?${V.badluck.base}+${V.badluck.step}*(__st.fails-${V.badluck.after||2}):0;if(globalThis.__bl)globalThis.__blUsed=(globalThis.__blUsed||0)+1;const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);globalThis.__bl=0;if(__carry){if(rep.outcome==='성공'||rep.outcome==='대성공')__st.fails=0;else __st.fails++;}`);
   patch('systems/dungeon', " const ability=preparedPower(e);", " const ability=preparedPower(e)*(1+(globalThis.__bl||0));");
   patch('systems/dungeon', "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48);",
     "const envRoll=r.next(),environment=clamp(.06+p.hazard*.012-e.survival*.001, .02,.48)*(1-(globalThis.__bl||0));");
@@ -99,6 +99,14 @@ if (V.gate) {
 // operating-cost level factor (User 2026-09-25): the per-level share of the base operating cost
 if (V.opLevel != null) patch('systems/shop', 'return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}', `return dayBase*(1+${V.opLevel}*(avgLevel-1))*(1+.06*avgRarity);}`);
 // 7-b buffer removal (only when asked)
+// wallet 'succ1' (User 2026-09-25): success / great success back to 1.0, the failure shares unchanged
+if (V.wallet === 'succ1') patch('systems/dungeon', "const WALLET_MULT={'대성공':.90,'성공':.90,", "const WALLET_MULT={'대성공':1,'성공':1,");
+// operating-cost baseline as {base, step}: dayBase = base + step x (Day - 1) (User 2026-09-25: 140 + 2)
+if (V.opBase) patch('systems/shop', 'const dayBase=90+5*(this.run.day-1);', `const dayBase=${V.opBase.base}+${V.opBase.step}*(this.run.day-1);`);
+// start gold (User 2026-09-25: 700G)
+if (V.startGold != null) patch('systems/shop', 'const startGold=1000;', `const startGold=${V.startGold};`);
+// segmented death limit (User 2026-09-25): limit by the current Day's segment [{maxDay, limit}], 추모 방명록 bonus on every segment
+if (V.deathSeg) patch('systems/meta', 'deathLimit=run=>D.balance.deathLimit+', `deathLimit=run=>(${JSON.stringify(V.deathSeg)}.find(x=>(run?.day||1)<=x.maxDay)||{limit:D.balance.deathLimit}).limit+`);
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
 const files = ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'];
@@ -125,6 +133,9 @@ for (const f of files) {
   if (V.shelf === 'old') { const old = { water: 5, ramen: 4, choco: 5, coffee: 5, herbtea: 5, potion: 7, ice: 4, candy: 5, lava: 4, energy: 5, wine: 5, kit: 7, highpotion: 7, antidote: 7, midpotion: 7, herobar: 5, hyperenergy: 5, sageelixir: 5, toppotion: 7, stone: 0, tree: 0, coupon: 0 };
     for (const it of D.items) { if (it.category === 'gear' && it.id !== 'antidote') it.days = 0; if (old[it.id] !== undefined) it.days = old[it.id]; } }
   if (V.need) D.balance.accessibleNeed = V.need;
+  // item spec / price table {id: {effects: {...}, buy, sell}} (User 2026-09-25 agreements §5)
+  if (V.items) for (const [id, x] of Object.entries(V.items)) { if (!I[id]) throw Error('no item ' + id); Object.assign(I[id].effects, x.effects || {}); if (x.buy != null) I[id].buy = x.buy; if (x.sell != null) I[id].sell = x.sell; }
+  if (V.memorial != null) D.decorationParams.memorialBoard.deathLimitBonus = V.memorial;
   if (V.capRates) D.capitalRates = V.capRates;
   // Decoration prices by Slot (both kinds of a Slot share the price)
   if (V.decoPrices) for (const d of D.decorations) { if (V.decoPrices[d.slot] == null) throw Error('no price for ' + d.slot); d.price = V.decoPrices[d.slot]; }
