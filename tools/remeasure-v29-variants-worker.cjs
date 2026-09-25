@@ -63,9 +63,12 @@ globalThis.__schedule = i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', 
   : { policy: 'skilled', pricing: 'adaptive', build: 'expedition', relicAware: true, inj: true };
 // 만반의 준비 (User 2026-09-25): departed without injury, departure Fatigue < 20 and 2+ Items in the Bag -> the
 // failure Death chance x prep; a roll inside the removed band becomes 부상/중상 (중상 at the failed-escape share)
-if (V.prep) patch('systems/dungeon', "  deathRoll=r.next();\n  if(deathRoll<deathChance){\n   outcome='사망';\n  }else if(!combatSuccess){",
-  `  deathRoll=r.next();const __prep=!departedInjured&&(e.fatigueBeforeExpedition||0)<20&&n.pack.length>=2;
-  if(deathRoll<deathChance*(__prep?${V.prep}:1)){
+// level factor (User 2026-09-25): from Lv6 the failure Death chance x (1 - slope x (Lv - 5)), floored at 1 - cap; it
+// multiplies with 만반의 준비 and its removed band goes the same way (부상/중상)
+if (V.prep || V.lvl) patch('systems/dungeon', "  deathRoll=r.next();\n  if(deathRoll<deathChance){\n   outcome='사망';\n  }else if(!combatSuccess){",
+  `  deathRoll=r.next();const __prep=${V.prep ? '!departedInjured&&(e.fatigueBeforeExpedition||0)<20&&n.pack.length>=2' : 'false'};
+  const __lvl=${V.lvl ? `Math.max(1-${V.lvl.cap},1-${V.lvl.slope}*Math.max(0,n.level-5))` : '1'};
+  if(deathRoll<deathChance*(__prep?${V.prep || 1}:1)*__lvl){
    outcome='사망';
   }else if(deathRoll<deathChance){
    injuryRoll=r.next();outcome=injuryRoll<${(V.sevp || [0.42])[0]}?'중상':'부상';globalThis.__prepSaved=(globalThis.__prepSaved||0)+1;
