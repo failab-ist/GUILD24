@@ -1191,6 +1191,19 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
   'the roster shows the count against the line');
  assert.ok(roster.includes('s.stats.deaths'),'read from the Run own count, not a second tally');
 
+ /* UI-Q-v29-26 — DEATH LIMIT ALWAYS VISIBLE (v2.9.1 balance, owner UI_UX §DEATH LIMIT —
+    ALWAYS VISIBLE, copy COPY_AUDIT §4-23). One shared line, MORNING and ORDER both, sourced
+    from Meta.deathLimit / Meta.deathLimitSegmentEnd so 추모 방명록 and 위령제 are always
+    included and the 5/8/11 · D10/D20/D30 segment table is never restated by hand. */
+ const dl=fn('deathLimitItem');
+ assert.ok(dl.includes('Meta.deathLimit(s)')&&dl.includes('Meta.deathLimitSegmentEnd(s)'),
+  'the line reads the segment table through Meta, not a copy of it');
+ assert.ok(/'">사망 '\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'exact COPY_AUDIT §4-23 format');
+ assert.ok(/n===limit-1\?' warn':''/.test(dl),'warning color exactly at count = limit - 1');
+ assert.ok(!/popover|badge|title=/.test(dl),'no popover, badge or extra text');
+ assert.ok(fn('morningScreen').includes('deathLimitItem()'),'MORNING shows the line, always on screen');
+ assert.ok(fn('orderForm').includes('deathLimitItem()'),'ORDER shows the same line');
+
  /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
     the form showed only a per-SKU 재고 N. The warehouse is on it now, from the same grouping
     the shelf and the stock modal read. Director review: it opens for a player who has never
@@ -1925,9 +1938,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
  assert.deepEqual(ids.slice(0,5),['destination','hazard','stats','forecast','pricing'],'the first SALE reads destination, Hazard, Stats, outlook, price - in that order (User 2026-09-24)');
- assert.deepEqual(ids.slice(5).sort(),['bag','great','returning','supply'],'the other four are contextual marks');
+ assert.deepEqual(ids.slice(5).sort(),['bag','great','prepared','returning','supply'],'the other five are contextual marks (v2.9.1 balance adds 만반의 준비)');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
- for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.counter-tray .tray-delta .fatigue']])
+ for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.counter-tray .tray-delta .fatigue'],['prepared','.slots.prepared']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* v2.9.0: no always-on Fatigue line under the outlook; the tray row carries the arithmetic */

@@ -378,6 +378,11 @@ function deepOfferUI(n){
 // (ceiling and shutter, shelving wall, notice board, counter) and the interface hangs on
 // those surfaces: the day on the shop sign, today's gates pinned to the board, the till
 // showing the float, the store support sitting on the counter.
+/* UI_UX §DEATH LIMIT — ALWAYS VISIBLE (MORNING/ORDER, v2.9.1 balance): one compact item, the
+   same line on both screens - count / current segment limit / the Day it ends. The limit already
+   includes 추모 방명록 and 위령제 (Meta.deathLimit). Warning color only at count = limit - 1. */
+function deathLimitItem(){const s=game.run,n=s.stats.deaths,limit=Meta.deathLimit(s),end=Meta.deathLimitSegmentEnd(s);
+ return '<b class="death-limit'+(n===limit-1?' warn':'')+'">사망 '+n+' / '+limit+' · D'+end+'까지</b>';}
 /* The board is hung high on the wall, directly under the day sign, because that is the
    order the morning is read in: DAY, then today's expedition, then the Gates and their
    Hazards, then the float on the counter, then the shutter. The scenery keeps whatever
@@ -389,7 +394,7 @@ function morningScreen(){
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
     +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
-     +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
+     +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b>'+deathLimitItem()+'</p>'
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'</div>'
   /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
@@ -659,12 +664,20 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
     state strip, under the bag where no speech balloon or menu pin sits - one line, no modal,
     nothing to dismiss. `healedBy` is reset on every arrival. */
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>':'';
+ /* DUNGEON_HAZARD §Preparation / Level Death reduction / UI_UX §만반의 준비 TUTORIAL (v2.9.1
+    balance): a state class only, no visible style of its own - it exists so the coach mark
+    below can anchor to it the first time this customer's confirmed Bag actually reaches 만반의
+    준비 (healthy, departure Fatigue < 20, 2+ Items). fatigueBeforeExpedition mirrors what the
+    counter tray's own `출발 B` reads. */
+ const gate=game.claimedGateFor(n);
+ const fatigueBeforeExpedition=gate?Dungeon.prepare(n,gate,game.run.facilities).effects.fatigueBeforeExpedition:0;
+ const prepared=!!gate&&Dungeon.fullyPrepared(n,fatigueBeforeExpedition);
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
  +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
     place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
- +'<span class="slots" aria-label="가방 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
+ +'<span class="slots'+(prepared?' prepared':'')+'" aria-label="가방 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
   +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span>'+heal+'</div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
@@ -858,7 +871,11 @@ const coachSteps={
 ['supply','.counter-tray .tray-delta .fatigue','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
  ['great','.great-signal','대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.'],
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
+ /* UI_UX §만반의 준비 TUTORIAL (v2.9.1 balance): contextual on kitLine()'s own `.slots.prepared`
+    state class - the first time a healthy, well-rested customer's Bag actually reaches 만반의
+    준비 (DUNGEON_HAZARD §Preparation / Level Death reduction). Words only, no number. */
+ ['prepared','.slots.prepared','건강한 손님의 가방을 가득 채웠다. 만반의 준비를 하면 실패해도 살아 돌아올 가능성이 커진다.']],
  night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
@@ -1081,6 +1098,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
     seal carried no function or state - it filled the head's right margin and nothing else. The
     document is identified by 발주서 and its DAY / branch line. */
  +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span></div>'
+   +'<p class="board-rail death-limit-row">'+deathLimitItem()+'</p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
    +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'

@@ -381,6 +381,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .board-rail b{margin-left:auto;align-self:baseline;font:400 13px/1.4 var(--ui);
  font-variant-numeric:tabular-nums;color:#fff0c9;letter-spacing:0}
 .board-rail b+b{margin-left:0}
+/* UI_UX §DEATH LIMIT — ALWAYS VISIBLE (v2.9.1 balance): the same warning color the 도감 already
+   uses, exactly at count = limit - 1. No badge, no popover. */
+.board-rail b.death-limit.warn{color:#e8907c}
+/* ORDER carries the line alone, ahead of the ledger, so it keeps the board's own rail look
+   without needing the MORNING board's pinned-column context. */
+.board-rail.death-limit-row{margin:10px 16px 0}
+.board-rail.death-limit-row b{margin-left:0}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;
