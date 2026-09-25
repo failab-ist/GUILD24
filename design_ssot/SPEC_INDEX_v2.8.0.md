@@ -240,8 +240,8 @@ The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29
 (F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
-User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). Whether and where `v2.9.0` is tagged is the
-User's call; the v2.9.0 implementation is `main` `3f18ceb`.
+User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). `v2.9.0` is tagged on `main` `3f18ceb`, the
+implementation-complete state (User 2026-09-25; WORK_STATE notes if the tag still has to be pushed).
 
 ## v2.9.1 — BALANCE
 

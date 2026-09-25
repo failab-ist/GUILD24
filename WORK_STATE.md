@@ -6,7 +6,7 @@ STATE: V2_9_1_BALANCE_DECIDED — OWNERS AMENDED, SOURCE ADOPTION PENDING (separ
 ## Current
 
 - repository: `failab-ist/GUILD24`
-- `main` = v2.9.0 close-out `3f18ceb`; Pages deploys main (the unbalanced v2.9.0 state, User accepted); no tag yet (tagging v2.9.0 is the User's call)
+- `main` = v2.9.0 close-out `3f18ceb`; Pages deploys main (the unbalanced v2.9.0 state, User accepted); User decided (2026-09-25) to tag it `v2.9.0`; the tag push was refused in the balance session (HTTP 403 on tag refs) — create it from GitHub (Releases → tag `v2.9.0` on `3f18ceb`) or `git tag -a v2.9.0 3f18ceb && git push origin v2.9.0` from a machine with push rights
 - the balance work is **v2.9.1** (User 2026-09-25)
 - balance branch: `claude/sleepy-volta-ywkjeu` — balance decided with the User, owners amended docs-first
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
