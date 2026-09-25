@@ -3052,11 +3052,16 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
      when the longer label wrapped, its ? was pushed onto a third line and the whole panel grew.
      The ? is now pinned to each cell's top-right and taken out of flow entirely, so only the
      label and the value are laid out. The cells stretch to a common height, so the two read as
-     one row whichever of them wraps. Desktop is untouched - this is inside the phone query. */
+     one row whichever of them wraps. Desktop is untouched - this is inside the phone query.
+     The ? is held at the cell's top-right by the row itself (no wrap, pushed right), never by
+     positioning the <details>: a positioned ? became the balloon's containing block, so the
+     explanation was laid out 24px wide, one word per line down the screen (User 2026-09-25,
+     UI_UX §SHARED ANCHORED POPOVER). Unpositioned, it floats against the panel as on desktop. */
   .readout .top{align-items:stretch}
-  .readout .fore{position:relative;flex-wrap:wrap;padding-right:26px}
-  .readout .fore>.tip{position:absolute;top:0;right:0;margin-left:0}
+  .readout .fore{flex-wrap:nowrap}
+  .readout .fore>.tip{align-self:flex-start;margin-left:auto}
   .readout .fore>.tip>summary{white-space:nowrap}
+  .p-final .final-forecast .fore>.tip{margin-right:30px}
 }
 @media(min-width:1024px){
   /* Desktop layout tweaks */

@@ -943,6 +943,12 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  const envCell=readout.slice(readout.indexOf('환경 대응<b'),readout.indexOf("</span>':''",readout.indexOf('환경 대응<b')));
  assert.ok(envCell.includes("tip('환경 대응'"),'the environment help sits in the same cell as the reading');
  assert.ok(!/\.readout \.fore>\.tip[^\n]*display:\s*none/.test(css),'and no breakpoint hides it');
+ /* UI_UX §SHARED ANCHORED POPOVER (User 2026-09-25, phone): a positioned ? or cell becomes the
+    balloon's containing block, and the help was laid out 24px wide, one word per line. At every
+    breakpoint the balloon floats against the readout panel, so neither may be positioned. */
+ assert.ok(!/\.readout \.fore\{[^}]*position:/.test(css),'no breakpoint positions the forecast cell');
+ assert.ok(!/\.readout \.fore>\.tip\{[^}]*position:/.test(css),'nor the ? inside it');
+ assert.ok(/\.readout\{position:relative/.test(css),'the balloon is anchored to the panel');
 
  /* SALE_v2.7 §SALE DECISION-ONLY DETAIL: no disclosure control on the decision surface that
     opens flavour prose. The real effects it used to hide are still shown - plainly, not folded
