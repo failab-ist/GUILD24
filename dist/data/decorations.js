@@ -37,5 +37,6 @@ G.DATA.decorationBy=Object.fromEntries(G.DATA.decorations.map(d=>[d.id,d]));
 /* META_v2.8 §Day-reach conversion rate — DIRECTOR DOCUMENT BASELINE. The band is the Day the
    Run actually reached, and it multiplies Gross Sales, not an end-state net worth - which is
    why these are a fraction of the rates the retired net-asset formula used. */
-G.DATA.capitalRates=[{maxDay:9,rate:.01},{maxDay:19,rate:.02},{maxDay:24,rate:.03},{maxDay:29,rate:.04},{maxDay:30,rate:.05}];
+/* META §Day-reach conversion rate — EXACT (User 2026-09-24, v2.9.0): halved from 1/2/3/4/5%; a Decoration inside the first Run is not a goal */
+G.DATA.capitalRates=[{maxDay:9,rate:.005},{maxDay:19,rate:.01},{maxDay:24,rate:.015},{maxDay:29,rate:.02},{maxDay:30,rate:.025}];
 })(globalThis);

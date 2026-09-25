@@ -71,6 +71,10 @@ P.liquidate=function(stockId){const s=this.run;
    Settled exactly once. The guard lives on the Run, so a reload of an ended Run reads the
    recorded settlement instead of earning it again. A manual abandon never reaches end(), which
    is what makes abandon worth nothing. */
+/* CORE_RUN §CURRENT RUN ABANDON (User 2026-09-24, v2.9.0): the Run is discarded at once with no
+   settlement - end() is deliberately NOT called - and the Game is back in the no-Run state the
+   pre-Run screen serves (Decorations purchasable). The next Run starts on the ordinary start() path. */
+P.abandon=function(){if(!this.run)return;this.run=null;this.rng=null;this.save();};
 P.settleStoreCapital=function(){const s=this.run;
  if(s.settled)return s.settlement;
  const sales=s.stats.revenue,rate=G.Meta.capitalRate(s.day);

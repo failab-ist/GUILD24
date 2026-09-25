@@ -266,9 +266,9 @@ test('META_v2.8 §STORE CAPITAL: the Day-reach rate table',()=>{
  /* META_v2.8 §Day-reach conversion rate, DIRECTOR DOCUMENT BASELINE. These multiply Gross
     Sales, not an end-state net worth, which is why they are a fraction of the retired
     net-asset table this line used to carry. */
- for(const [day,rate] of [[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]])
+ for(const [day,rate] of [[1,.005],[9,.005],[10,.01],[19,.01],[20,.015],[24,.015],[25,.02],[29,.02],[30,.025]]) // halved (User 2026-09-24, v2.9.0)
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
- assert.equal(Meta.capitalRate(31),.05,'past D30 stays on the last band rather than falling off');
+ assert.equal(Meta.capitalRate(31),.025,'past D30 stays on the last band rather than falling off');
  const a=Meta.fresh();
  Meta.addCapital(a,120);assert.equal(Meta.storeCapital(a),120,'capital accumulates');
  Meta.addCapital(a,-500);assert.equal(Meta.storeCapital(a),120,'and never goes backwards');

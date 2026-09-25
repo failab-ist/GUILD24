@@ -670,8 +670,8 @@ test('COPY §Run abandon: the abandon says it costs everything, and promises not
  assert.ok(!/현재 런/.test(app),'no player-facing surface calls it a 런');
  assert.ok(!app.includes('현재 런 마감 · 새 점포 준비'),'the old "마감" wording is gone');
  // ...and it is told apart from the full wipe, which is the other destructive action
- assert.ok(fn('renderModal').includes('다음 점포로 이어지지 않습니다'),
-  'abandoning a store is distinguished from erasing the account');
+ assert.ok(fn('renderModal').includes('body=ABANDON_BODY')&&app.includes("const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다. 모험가·재고·골드·점포지원은 다음 점포로 이어지지 않습니다."),
+  'abandoning a store is distinguished from erasing the account (one §1-3 body for both confirmations)');
 
  // No surface may promise XP, settlement or compensation for it. 점주 XP does not exist at all
  // since the Meta replacement, so any remaining promise of one is a lie, not just off-tone.
@@ -770,9 +770,10 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  // without a way back the only exit was to spend the Run. Nothing has been played at that
  // point, so the pre-Run screen may win over the takeover. CORE_RUN_v2.8 retired the Start
  // Contract, so what that screen now confirms is the Decoration loadout.
- assert.ok(app.includes("if(phase==='foundation'&&modal!=='new')modal='relics'"),
-  'the pre-Run screen can be reopened during the foundation takeover');
- assert.ok(fn('relicTakeover').includes("'new'"),'and the way back is offered there');
+ /* v2.9.0 F5 (User 2026-09-24): the DAY 0 choice is mandatory - no way back to the pre-Run screen,
+    Decorations are managed from 새 점포 준비 before a Run (and after an abandon, which now discards the Run at once). */
+ assert.ok(app.includes("if(phase==='foundation'&&modal!=='new')modal='relics'"),'the foundation takeover owns the screen (the pre-Run modal still wins only when it is already open, e.g. a boot into a fresh account)');
+ assert.ok(!fn('relicTakeover').includes('장식 구성 다시 보기')&&!fn('relicTakeover').includes("'new'"),'the retired way back is gone from the DAY 0 surface');
  const back=app.slice(app.indexOf("case'new':"),app.indexOf("case'new':")+220);
  assert.ok(!/game\.end\(|runs\+\+/.test(back),'going back never spends the Run');
  // ...and it must not become a free re-roll either. The DAY 0 store support has already been
@@ -799,7 +800,14 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  const menu=app.slice(app.indexOf("modal==='menu'"),app.indexOf("modal==='menu'")+900);
  assert.ok(menu.includes("btn('도감','codex')"),'the codex is just 도감');
  assert.ok(!menu.includes('본사 · 도감'),'the old label is gone');
- assert.ok(menu.includes("btn('현재 지점 포기','new','danger')"),'the store abandon is in the menu');
+ assert.ok(menu.includes("btn('현재 지점 포기','abandon','danger')"),'the store abandon is in the menu and confirms first');
+ // v2.9.0 F5 (User 2026-09-24): exact composition and routing
+ assert.ok(menu.includes("btn('모험가 수첩','roster')+btn('도감','codex')+(game.run?btn('점포지원','relics')+btn('이번 영업의 장식','loadout'):'')+btn('점주 가이드','help')+btn('설정','settings')"),'menu rows: 모험가 수첩 / 도감 / 점포지원 / 이번 영업의 장식 / 점주 가이드 / 설정 / 현재 지점 포기');
+ const act5=app.slice(app.indexOf('async function action(el)'));
+ assert.ok(act5.includes("case'relics':sound('ui');setModal(game.canBuyRelic()?'relics':'owned');break;"),'점포지원 opens the selection only while purchasable, else the owned list');
+ assert.ok(act5.includes("case'abandon-go':game.abandon();")&&!/case'abandon-go':[^\n]*game\.(start|end)\(/.test(act5),'abandon discards the Run at once and starts nothing');
+ assert.ok(fn('loadoutModal').includes("'비어 있음'")&&fn('loadoutModal').includes('D.decorationSlots.map(')&&!fn('loadoutModal').includes('data-action'),'이번 영업의 장식 is read-only, four Slots, empty reads 비어 있음');
+ assert.ok(app.includes("modal==='abandonConfirm'")&&app.includes("btn('지점 포기','abandon-go','danger')"),'the §1-3 confirm guards the abandon');
  assert.ok(!menu.includes('모든 게임 데이터 초기화') && !menu.includes('Full Data Reset'),'full reset is removed from menu');
 });
 
@@ -1101,8 +1109,9 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     codex, and every number it shows is read from the Decoration data rather than written out
     here a second time. */
  const store=fn('storePanel');
- assert.ok(cx.includes("['store','점포 관리']")&&cx.includes('storePanel()'),
-  '점포 관리 is a tab on the existing codex, not a new screen');
+ assert.ok(cx.includes("['store','점포 장식']")&&cx.includes('storePanel()'),
+  '점포 장식 (User 2026-09-24, v2.9.0; formerly 점포 관리) is a tab on the existing codex, not a new screen');
+ assert.ok(!app.includes("'점포 관리'")&&!app.includes('점포 관리에서 보기'),'no screen still says 점포 관리');
  assert.ok(!cx.includes("['contracts','시작 계약']"),'and the retired Start Contract tab is gone');
  assert.ok(/D\.decorationSlots\.map\(slot=>/.test(store),
   'the panel is Slot -> owned options -> selected, not four hard-coded booleans');

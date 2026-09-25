@@ -180,6 +180,26 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
  }finally{delete global.localStorage;}
 });
 
+test('CORE_RUN §CURRENT RUN ABANDON (v2.9.0 F5): abandon() discards the Run at once, settles nothing, starts nothing, and Decorations are purchasable after it',()=>{
+ const g=fresh('abandon-now');
+ for(let i=0;i<40&&g.run.phase!=='end';i++)step(g);
+ assert.ok(g.run.day>1,'the precondition is a run with progress in it');
+ g.account.knowledge.snow=3;Meta.addCapital(g.account,5000);
+ const before=copy(g.account),liveRun=g.run;
+ g.abandon();
+ assert.equal(g.run,null,'the Run is gone');
+ assert.deepEqual(copy(g.account),before,'the account is untouched: no settlement, no runs++, no Store Capital');
+ assert.equal(liveRun.rewarded,false,'Meta.finish never ran');
+ const cheapest=DATA.decorations.slice().sort((a,b)=>a.price-b.price)[0];
+ Meta.buyDecoration(g.account,cheapest.id);
+ assert.ok(Meta.ownedDecorations(g.account).includes(cheapest.id),'a Decoration can be bought with no Run');
+ assert.equal(Meta.storeCapital(g.account),5000-cheapest.price);
+ g.abandon();assert.equal(g.run,null,'a second abandon is a no-op');
+ g.start('after-abandon');
+ assert.ok(g.run&&g.run.day===1&&g.run.phase!=='end','the next Run starts on the ordinary path');
+ assert.equal(g.run.loadout[cheapest.slot],cheapest.id,'and carries the Decoration equipped before it');
+});
+
 test('CORE_RUN §CURRENT RUN ABANDON: starting a new Run settles nothing from the old one',()=>{
  // The engine contract, checked where the abandon actually happens: start() on a Game that
  // already has a live run. app.js reaches this by calling start() and nothing else.
@@ -965,7 +985,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
  }
 
  // B. each Day band converts at its exact Canonical rate
- const BANDS=[[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]];
+ const BANDS=[[1,.005],[9,.005],[10,.01],[19,.01],[20,.015],[24,.015],[25,.02],[29,.02],[30,.025]]; // META §Day-reach conversion rate (User 2026-09-24, v2.9.0: halved)
  for(const [day,rate] of BANDS){
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
   const g=at(10000,day);
@@ -985,7 +1005,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
  rich.run.inventory=[];                          // and nothing on the shelf either
  const a1=poor.settleStoreCapital(),a2=rich.settleStoreCapital();
  assert.equal(a1.gain,a2.gain,'Ending Gold and Inventory change nothing: '+a1.gain+' vs '+a2.gain);
- assert.equal(a1.gain,Math.round(8000*0.03),'and the gain is the sales at the band rate');
+ assert.equal(a1.gain,Math.round(8000*Meta.capitalRate(22)),'and the gain is the sales at the band rate (D22 band)');
  assert.equal('gold' in a1,false,'the recorded settlement states no Gold input');
  assert.equal('stock' in a1,false,'and no stock input');
  assert.equal('value' in a1,false,'and no net-asset Settlement Value');
@@ -1034,18 +1054,18 @@ test('META_v2.8 §STORE CAPITAL: a failed Run still earns on what it actually so
 
  // D. bankrupt: no Gold, nothing on the shelf, but it sold 6,000G worth on the way down
  const bank=drive('sc-bankrupt',22,6000,g=>{g.run.money=-500;g.run.inventory=[];});
- assert.equal(bank.gain,Math.round(6000*0.03),'a bankrupt Run earns on its Gross Sales');
+ assert.equal(bank.gain,Math.round(6000*Meta.capitalRate(22)),'a bankrupt Run earns on its Gross Sales (D22 band)');
  assert.ok(bank.gain>0,'which is not zero');
  assert.equal(Meta.storeCapital(bank.g.account),bank.before+bank.gain,'and the Account receives it');
 
  // E. the Death limit closed the store
  const dead=drive('sc-deaths',15,4000,g=>{g.run.stats.deaths=DATA.balance.deathLimit;});
- assert.equal(dead.gain,Math.round(4000*0.02),'a Death-limit closure uses the ordinary formula');
+ assert.equal(dead.gain,Math.round(4000*Meta.capitalRate(15)),'a Death-limit closure uses the ordinary formula');
 
  // F. reached D30 and lost the Final
  const failed=drive('sc-finalfail',30,9000,g=>{g.run.win=false;});
- assert.equal(failed.gain,Math.round(9000*0.05),'a lost Final uses the ordinary formula');
- assert.equal(failed.st.rate,0.05,'at the D30 rate it actually reached');
+ assert.equal(failed.gain,Math.round(9000*Meta.capitalRate(30)),'a lost Final uses the ordinary formula');
+ assert.equal(failed.st.rate,0.025,'at the D30 rate it actually reached (halved, User 2026-09-24)');
 
  // the failures are still failures: none of them kept anything Run-scoped
  for(const r of [bank,dead,failed]){
@@ -1176,8 +1196,8 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
  assert.equal(h.wears('thriftSafe'),false,'a Run with no frozen loadout wears nothing');
  h.run.day=12;h.run.stats.revenue=3000;
  const legacySettle=h.settleStoreCapital();
- assert.equal(legacySettle.rate,0.02,'and it still settles on the Day it reached');
- assert.equal(legacySettle.gain,Math.round(3000*0.02),'on its own Gross Sales');
+ assert.equal(legacySettle.rate,Meta.capitalRate(12),'and it still settles on the Day it reached');
+ assert.equal(legacySettle.gain,Math.round(3000*Meta.capitalRate(12)),'on its own Gross Sales');
  /* A live Run round-trips with both new fields intact. */
  const live=fresh('save-decoration');
  Meta.addCapital(live.account,DATA.decorationBy.dawnSign.price);
