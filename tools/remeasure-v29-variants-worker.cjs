@@ -61,6 +61,20 @@ if (V.schedule) patch('systems/simulation', 'playRun(g,byIndex[i],{policy,pricin
 globalThis.__schedule = i => i < 3 ? { policy: 'beginner', pricing: 'adaptive', build: 'hybrid' }
   : i < 6 ? { policy: 'balanced', pricing: 'adaptive', build: 'hybrid' }
   : { policy: 'skilled', pricing: 'adaptive', build: 'expedition', relicAware: true, inj: true };
+// 만반의 준비 (User 2026-09-25): departed without injury, departure Fatigue < 20 and 2+ Items in the Bag -> the
+// failure Death chance x prep; a roll inside the removed band becomes 부상/중상 (중상 at the failed-escape share)
+if (V.prep) patch('systems/dungeon', "  deathRoll=r.next();\n  if(deathRoll<deathChance){\n   outcome='사망';\n  }else if(!combatSuccess){",
+  `  deathRoll=r.next();const __prep=!departedInjured&&(e.fatigueBeforeExpedition||0)<20&&n.pack.length>=2;
+  if(deathRoll<deathChance*(__prep?${V.prep}:1)){
+   outcome='사망';
+  }else if(deathRoll<deathChance){
+   injuryRoll=r.next();outcome=injuryRoll<${(V.sevp || [0.42])[0]}?'중상':'부상';globalThis.__prepSaved=(globalThis.__prepSaved||0)+1;
+  }else if(!combatSuccess){`);
+// SLOTH seal-break policy for the simulated player: 'always' breaks whenever a window allows it; 'rule' breaks
+// when the policy would buy nothing from this window anyway (reserve / price) or from D25 on
+if (V.seal) patch('systems/simulation', 'function buySupport(){const w=s.relicWindow;if(!w||w.purchased)return;',
+  "function buySupport(){const w=s.relicWindow;if(!w||w.purchased||w.consumedBySealBreak)return;if(g.canBreakSeal&&g.canBreakSeal()){const __any=w.candidateIds.some((id,i)=>s.money-w.candidatePrices[i]>=(s.phase==='foundation'?0:s.day===30?180:spend.relicReserve));"
+  + (V.seal === 'always' ? "if(true" : "if(!__any||s.day>=25") + "){g.breakSeal();act();globalThis.__seal=(globalThis.__seal||0)+1;return;}}");
 // 7-b buffer removal (only when asked)
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
@@ -111,7 +125,7 @@ const slim = (r) => {
   };
 };
 for (const [policy, pricing, build, opts = {}] of policies) {
-  globalThis.__heal = 0; globalThis.__abandon = 0;
+  globalThis.__heal = 0; globalThis.__abandon = 0; globalThis.__prepSaved = 0; globalThis.__seal = 0;
   const key = `${policy}:${pricing}:${build}` + (opts.relicAware ? ':aware' : '');
   if (V.traj) {
     const t = Debug.trajectory({ trajectories: V.traj.T, runs: V.traj.R, policy, pricing, build, prefix: V.traj.prefix, purchaseOrder: V.traj.order, relicAware: !!opts.relicAware });
@@ -126,7 +140,7 @@ for (const [policy, pricing, build, opts = {}] of policies) {
     if (V.loadout) { account = Meta.fresh(); account.store.capital = 1e9; for (const id of V.loadout) Meta.buyDecoration(account, id); account.store.capital = 0; }
     if (V.injAware) globalThis.__injOn = opts.inj !== false;
     const r = Debug.simulate(seeds, policy, account, pricing, build, { relicAware: !!opts.relicAware });
-    out[key] = { ...slim(r), heal: globalThis.__heal, abandon: globalThis.__abandon };
+    out[key] = { ...slim(r), heal: globalThis.__heal, abandon: globalThis.__abandon, prepSaved: globalThis.__prepSaved, seal: globalThis.__seal };
   }
 }
 process.stdout.write(JSON.stringify(out));
