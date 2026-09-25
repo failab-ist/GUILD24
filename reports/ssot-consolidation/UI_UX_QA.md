@@ -801,7 +801,6 @@ The ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21.
 ### UI-Q-v29-14 — D0 BRIEFING TWO LINES / GUIDE 처음 3일
 Fresh Run: the D0 Boss briefing after the first Store Support choice; then open 점주 가이드 from the menu at 360 and 1280.
 The briefing body is the two `COPY_AUDIT_APPROVED_v2.8.0.md` §14-1 lines; the guide opens on `처음 3일` (§8-0) with the eight sections under `자세히`.
-- the briefing shows header `마왕 조사 개시`, the unchanged lead line, exactly `DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.` / `DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.`, and the unchanged button
 - `조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.` is absent
 - 점주 가이드 opens on a first block `처음 3일` with exactly the five §8-0 lines in order
 - the existing eight sections (§8-1 … §8-8) sit under a `자세히` disclosure, collapsed by default, and open on tap
@@ -1044,5 +1043,13 @@ A Run owning 회전 진열대, 길드 보증 진열대, 단체 주문 창구, �
 UI-Q-v29-14 (2026-09-25): the D0 briefing's two body lines carry the record's body weight; the I-3 two-line markup had no style rule (RUNTIME UX BUG on the live build).
 
 ```new
-- the two body lines are set in the record's body weight (15px ink; 16px on a desk), never the secondary tone (RUNTIME UX BUG found on the live build 2026-09-25: the two-line body had no style rule)
+```
+
+## AMENDMENT — v2.9.0: D0 briefing DAY labels (User decision 2026-09-25)
+
+User 2026-09-25: the D0 briefing's DAY 05 / DAY 30 anchors return as an LED label over each of the two approved lines (COPY_AUDIT §14-1); the closing sentence stays deleted. The earlier plain-two-line wording this supersedes was removed from the fences above in place.
+
+```new
+- the briefing shows header `마왕 조사 개시`, the unchanged lead line, then a `DAY 05` label over exactly `첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.` and a `DAY 30` label over exactly `성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.` (User 2026-09-25), and the unchanged button
+- the two labels read on the record's LED face (16px; 17px on a desk) and the two lines in the record's body weight (15px ink; 16px on a desk), never the secondary tone (RUNTIME UX BUG found on the live build 2026-09-25: the two-line body had no style rule)
 ```

@@ -1360,7 +1360,13 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 **Lead**
 > 길드 조사대가 마왕의 정체를 추적하러 출발했다.
 
-**Body — 현재** (User 2026-09-24, v2.9.0: two lines; the `DAY 5` / `DAY 30` paragraph body is replaced)
+**Body — 현재** (User 2026-09-25, v2.9.0: two entries, each a DAY label on the record's LED face over one line)
+> DAY 05  
+> 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.  
+> DAY 30  
+> 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.
+
+**이전** (User 2026-09-24, v2.9.0: two plain lines — superseded the same day the label was asked back)
 > DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.  
 > DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.
 

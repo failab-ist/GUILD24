@@ -793,7 +793,6 @@ Exact line -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).
 This disclosure sits inside the help modal, not on a gameplay screen; the anchored-popover rule above is unaffected.
 Exact five lines -> COPY_AUDIT_APPROVED_v2.8.0.md §8.
-- the body is two lines under the unchanged header `마왕 조사 개시` and lead line: the DAY 5 line and the DAY 30 line; the closing sentence is deleted; button unchanged; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §14-1 (User 2026-09-24, v2.9.0);
 - tutorial does not add page height (sole exception: the DAY 1~3 task line, exactly one line; §TUTORIAL — TASK LINE; User 2026-09-24, v2.9.0)
 ### TUTORIAL — TASK LINE, DAY 1~3
 On DAY 1, 2 and 3 of a Run, while the account tutorial is not skipped (`tutorial.skipped` false), one fixed text line sits at the top of the phase screen content — under the menu pin, above the first block — on MORNING, ORDER, SALE, NIGHT and CLOSING (User 2026-09-24, v2.9.0).
@@ -1017,4 +1016,12 @@ User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carrie
 
 ```new
 - for a condition-type support only, one runtime status line under them (RELIC §QUICK VIEW STATUS LINE; exact lines COPY_AUDIT §11-32); no HUD, no badge, no verdict word (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0: D0 briefing DAY labels (User decision 2026-09-25)
+
+User 2026-09-25: the D0 briefing's DAY 05 / DAY 30 anchors return as an LED label over each of the two approved lines (COPY_AUDIT §14-1); the closing sentence stays deleted. The earlier plain-two-line wording this supersedes was removed from the fences above in place.
+
+```new
+- the body is two entries under the unchanged header `마왕 조사 개시` and lead line: a `DAY 05` label on the record's LED face over its one line, then a `DAY 30` label over its one line; the closing sentence is deleted; button unchanged; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §14-1 (User 2026-09-25, v2.9.0);
 ```

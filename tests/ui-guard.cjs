@@ -2269,8 +2269,8 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
     objective is superseded by the briefing; the old strings are not kept as live copy. */
  assert.equal(c.d0.header,'마왕 조사 개시');
  assert.equal(c.d0.lead,'길드 조사대가 마왕의 정체를 추적하러 출발했다.');
- /* v2.9.0 (COPY_AUDIT §14-1): two lines, no closing sentence */
- assert.deepEqual(c.d0.lines,['DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.','DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']);
+ /* v2.9.0 (COPY_AUDIT §14-1, User 2026-09-25): a DAY label over each of the two lines, no closing sentence */
+ assert.deepEqual(c.d0.steps,[['DAY 05',['첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.']],['DAY 30',['성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.']]]);assert.equal(c.d0.lines,undefined);
  assert.equal(c.d0.close,undefined);assert.ok(!app.includes('조사 정보를 확인하며 토벌대를 준비하고'),'the closing sentence is gone');
  assert.ok(!/토벌 예정|길드 정보원/.test(read('dist/data/copy.js')+app),'the superseded D0 lines are gone');
  assert.ok(!/class="boss-art"|class="boss-id"|b\.name/.test(fn('bossReveal').split("stage==='d0'")[1].split('</div>\';')[0]),
@@ -2958,9 +2958,9 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
  // UI-Q-v29-14 D0 briefing: the two body lines carry the record's body weight (RUNTIME UX BUG fixed 2026-09-25: the I-3 markup had no rule)
- assert.ok(fn('bossReveal').includes('<p class="d0-line">'),'the D0 body is two d0-line paragraphs');
- assert.ok(/\.boss-reveal \.d0-line\{margin:0;font:400 15px\/1\.6 var\(--ui\);color:#3c3527\}/.test(css)&&/ \.boss-reveal \.d0-line\{font-size:16px\}/.test(css),'and they are styled: 15px ink, 16px on a desk');
- assert.ok(!/d0-step|d0-close/.test(css)&&!/d0-step|d0-close/.test(app),'no orphan rule from the old stepped body survives');
+ assert.ok(fn('bossReveal').includes('<div class="d0-step"><b>'),'the D0 body is two labelled entries');
+ assert.ok(/\.boss-reveal \.d0-step b\{display:block;[^}]*var\(--f-led\)[^}]*color:#7a281f\}/.test(css)&&/\.boss-reveal \.d0-step p\{margin:0;font:400 15px\/1\.6 var\(--ui\);color:#3c3527\}/.test(css),'label on the LED face, line in the body weight');
+ assert.ok(!/d0-line|d0-close/.test(css)&&!/d0-line|d0-close/.test(app),'no orphan rule survives');
  // v2.9.0 F7 (User 2026-09-24): quick-view status line, purchase notice, Counter judgement split
  assert.ok(fn('ownedRelicView').includes('Relics.status(game,r.id)')&&fn('relicsModal').includes('Relics.status(game,r.id)')&&/<p class="status">/.test(app),'both owned lists carry the runtime status line');
  assert.ok(read('dist/systems/relics.js').includes("s.notice=D.relicBy[id].name+' 확보.';")&&!/다음 날부터 적용됩니다/.test(read('dist/systems/relics.js')),'§11-33 the notice is the name and 확보 only');
