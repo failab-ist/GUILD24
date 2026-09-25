@@ -641,7 +641,7 @@ that explains pressure and readiness moves with it.
 
 PASS:
 - the destination block states Hazard pressure only
-- `환경 대응` is rendered in exactly one place, in the forecast
+- `환경 대응` is on screen at most once at a time: in the forecast, or — only while the forecast is scrolled out of view on a phone — in the forecast pin that mirrors it (UI-Q-v29-24; User 2026-09-25, v2.9.0)
 - per-Hazard readiness no longer wraps the destination rows or pulls a row for its own help
 
 ### UI-Q-v28-3 — MOBILE SALE QUEUE
@@ -2181,6 +2181,21 @@ PASS:
 
 FAIL:
 - a status line on an always-on support, a chance-based support written as inactive, or a new Save field behind any line
+
+### UI-Q-v29-24 — SALE FORECAST PIN
+
+(User 2026-09-25, v2.9.0)
+
+SETUP:
+SALE with a customer at 360 / 390 / 412 and at 1280; pick a shelf row with the column at the top, then scroll the column until the readout leaves the view and pick a lower row; tap the pin twice; scroll back to the top.
+
+PASS:
+- with the readout in view no pin is shown; with it out of view the pin reads the readout's two words in the readout's colours, just above the tray
+- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again
+- at 1280 no pin is shown in any scroll state; no layout row moves when the pin appears; no runtime error
+
+FAIL:
+- a pin while the readout is visible, a pin on a desk, values that differ from the readout, a pin that pushes the layout, or a Save / account field for the fold
 
 ### GREAT SUCCESS TUTORIAL
 PASS:

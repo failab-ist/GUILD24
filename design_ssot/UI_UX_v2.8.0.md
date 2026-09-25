@@ -605,6 +605,15 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
 - tap-only; no drag, no minigame, no new Save field
 
+### SALE — FORECAST PIN
+
+(User 2026-09-25, v2.9.0) On a phone the readout scrolls away with the dossier while the Player works the shelf.
+
+- while the readout is outside the scrolled column's view, one floating line shows the same two readings just above the counter tray (above the dock when the tray is empty): `전투 전망 {우세|접전|불리} · 환경 대응 {충분|대응|불안|취약}` — the same frozen SALE-entry values and colours, never a second source
+- while the readout is on screen the pin is not shown; on a desk (≥1024) it is never shown (the readout sits beside the portrait there)
+- one tap folds it to a `전망` chip and back; the fold holds for the page session only — no Save or account field
+- it floats over the bottom of the scrolled column and reserves no layout height; the column ends with room for it, so the last row can always be scrolled above the pin; the touch target is at least 44px
+
 ### SALE SELECTED-ITEM INFORMATION
 
 The selected-Item surface (the counter tray, §SALE — COUNTER TRAY) uses one primary heading:

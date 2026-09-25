@@ -1038,3 +1038,27 @@ A Run owning 회전 진열대, 길드 보증 진열대, 단체 주문 창구, �
 - the purchase notice reads `{점포지원명} 확보.` and nothing about 다음 날부터
 - a status line on an always-on support, a chance-based support written as inactive, or a new Save field behind any line
 ```
+
+## AMENDMENT — v2.9.0 SALE forecast pin (User decision 2026-09-25)
+
+User decision 2026-09-25: on a phone the readout's two readings float above the counter tray while the readout is scrolled out of view; one tap folds them to a chip; no Save field.
+
+```new
+### UI-Q-v29-24 — SALE FORECAST PIN
+(User 2026-09-25, v2.9.0)
+SALE with a customer at 360 / 390 / 412 and at 1280; pick a shelf row with the column at the top, then scroll the column until the readout leaves the view and pick a lower row; tap the pin twice; scroll back to the top.
+- with the readout in view no pin is shown; with it out of view the pin reads the readout's two words in the readout's colours, just above the tray
+- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again
+- at 1280 no pin is shown in any scroll state; no layout row moves when the pin appears; no runtime error
+- a pin while the readout is visible, a pin on a desk, values that differ from the readout, a pin that pushes the layout, or a Save / account field for the fold
+```
+
+### Reworded by the forecast pin (User 2026-09-25): the environment stays at most once on screen, the pin mirrors the forecast only while it is scrolled away
+
+```text
+- `환경 대응` is rendered in exactly one place, in the forecast
+```
+
+```new
+- `환경 대응` is on screen at most once at a time: in the forecast, or — only while the forecast is scrolled out of view on a phone — in the forecast pin that mirrors it (UI-Q-v29-24; User 2026-09-25, v2.9.0)
+```

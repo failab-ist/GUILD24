@@ -1163,6 +1163,23 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .counter-tray{flex:0 0 auto;padding:7px var(--gutter) 8px;background:#15100a;color:#d8c9a6;
  box-shadow:inset 0 4px 0 #000000b3,inset 0 -3px 0 var(--gold)}
 .p-sale .counter-tray.empty{padding:0 var(--gutter)}
+/* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): phone only, floats over the bottom of the scrolled column,
+   shown only while the readout is off screen; the anchor has no height so nothing in the layout moves */
+.forecast-pin-anchor{position:relative;height:0;z-index:3}
+.forecast-pin{position:absolute;right:var(--gutter);bottom:8px;display:none;align-items:baseline;max-width:calc(100% - 2 * var(--gutter));
+ min-height:44px;padding:8px 12px;background:#0d0904eb;color:#9c8d70;font:500 13px/1.3 var(--ui);word-break:keep-all;
+ box-shadow:inset 0 0 0 1px #ffffff1f,0 4px 12px #0009}
+.forecast-pin.show{display:inline-flex}
+.forecast-pin b{margin-left:6px;font:500 17px/1 var(--f-led);color:var(--gold)}
+.forecast-pin b.env-lack{color:var(--blood)}
+.forecast-pin i{font-style:normal;margin:0 6px;color:#6f6450}
+.forecast-pin .pin-chip{display:none;color:var(--gold)}
+.forecast-pin.folded .pin-full{display:none}
+.forecast-pin.folded .pin-chip{display:inline}
+.forecast-pin.folded{box-shadow:inset 0 0 0 1px #d8b25a80,0 4px 12px #0009}
+/* room at the end of the phone column so the last row can scroll above the pin */
+.p-sale .stage-scroll::after{content:'';flex:0 0 54px}
+@media(min-width:1024px){.forecast-pin-anchor{display:none}.p-sale .stage-scroll::after{display:none}}
 /* v2.9.0 SALE — TRANSACTION RESULT STUB (PRESENTATION §TRANSACTION BEAT A8): a paper receipt stub over the counter
    band above the dock; fixed, so it reserves no height; pointer-events none, so it never holds input. */
 .receipt-stub{position:fixed;left:var(--gutter);z-index:65;pointer-events:none;padding:7px 12px 8px;

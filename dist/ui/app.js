@@ -181,6 +181,9 @@ let cue=null,handoff=null;
    (COPY_AUDIT §4-24) for about 2.5 s; no reserved height, no input held, replaced by the next sale's stub,
    no motion under reduced motion. Presentation only - it reads the resolved state and writes nothing. */
 let stub=null,stubTimer=null;
+/* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
+   Presentation only, held for this page session - no Save or account field. */
+let pinFolded=false,pinWatch=null;
 function showStub(){if(!stub)return;const st=stub;stub=null;
  document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
  const el=document.createElement('div');el.className='receipt-stub';el.setAttribute('role','status');
@@ -300,6 +303,7 @@ function render(){
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
+ if(phase==='sell')watchForecastPin();else{pinWatch?.disconnect();pinWatch=null;}
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -537,7 +541,7 @@ function saleScreen(){
   +'</div>'
   +shelf()
  +'</main>'
- +tray()
+ +forecastPin(n)+tray()
  /* D-34. Every price on this screen is a judgement against what the store has, and the
     store's gold was the one number not on it - Morning, Order and Closing all show it and
     Sale did not. It goes on the strip that is already pinned here, beside the queue, rather
@@ -1180,6 +1184,19 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    the three price keys always in the same place. The shelf rows never change height. A sale clears
    the tray (the Item went into the Bag, and the hand-over starts from the tray icon); a refusal keeps
    the Item here with the refused key locked. Same information as the old per-row panel, one place. */
+/* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
+   the Player works the shelf, so the same two readings float just above the counter tray - only while the readout
+   itself is off screen, the same frozen SALE-entry values and colours, never a second source. One tap folds it to a
+   `전망` chip and back. The anchor has no height: it reserves nothing in the layout. */
+function forecastPin(n){const o=n.outlook||game.outlookFor(n);
+ return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
+  +'<span class="pin-full">전투 전망<b>'+E(o.combat)+'</b>'+(o.worst?'<i> · </i>환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>':'')+'</span>'
+  +'<span class="pin-chip">전망</span></button></div>';}
+function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
+ pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
+function watchForecastPin(){pinWatch?.disconnect();pinWatch=null;const pin=$('.forecast-pin'),src=$('.readout.core-mob'),sc=$('.stage-scroll');
+ if(!pin||!src||!sc||typeof IntersectionObserver!=='function')return;syncForecastPin();
+ pinWatch=new IntersectionObserver(([e])=>pin.classList.toggle('show',!e.isIntersecting),{root:sc,threshold:0});pinWatch.observe(src);}
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
  /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
     task line); afterwards an empty tray has no height and the list gets the room back (User 2026-09-24) */
@@ -1931,6 +1948,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* FINAL-Q75 v2.8: a sub-3 party is a valid choice, confirmed once before the boundary */
  case'final-commit':if(s.team.length<3){setModal('underConfirm');break;}   // a full party falls through
  case'final-commit-go':game.commitFinalParty();supplyNPC=s.team[0];selected=null;setModal(null);sound('button');render();break;
+ case'forecast-pin':pinFolded=!pinFolded;syncForecastPin();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this

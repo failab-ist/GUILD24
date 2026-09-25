@@ -857,7 +857,10 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/n\.outlook|n&&n\.outlook/.test(plate.replace(/\/\*[\s\S]*?\*\//g,'')),
   'the plate reads no readiness of its own');
  const codeOnly=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
- assert.equal((codeOnly.match(/환경 대응<b/g)||[]).length,1,'the readiness reading is rendered in exactly one place');
+ /* UI-Q-v29-24 (User 2026-09-25): the forecast pin mirrors the readout while the readout is scrolled away, so the words have two
+    render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
+ assert.equal((codeOnly.match(/환경 대응<b/g)||[]).length,2,'the readiness reading is rendered in the readout and in the pin that mirrors it, nowhere else');
+ assert.ok(/환경 대응<b/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
@@ -2884,6 +2887,15 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
 /* v2.9.0 SALE — COUNTER TRAY (User-approved composition change 2026-09-24; UI_UX §SALE — COUNTER TRAY,
    UI-Q-v29-18). The per-row price panel is gone from the ordinary SALE: the chosen Item sits on one
    fixed tray above the dock, the shelf rows never change height, and FINAL keeps its own panel. */
+test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the readout is off screen, folds on a tap, and saves nothing',()=>{
+ const pin=fn('forecastPin'),watch=fn('watchForecastPin'),sync=fn('syncForecastPin');
+ assert.ok(/forecastPin\(n\)\+tray\(\)/.test(fn('saleScreen')),'the pin anchor sits directly above the counter tray');
+ assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('전투 전망')&&pin.includes('환경 대응')&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry outlook and folds to a 전망 chip');
+ assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
+ assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');
+ assert.ok(/aria-expanded/.test(sync),'the fold state is announced');
+ assert.ok(/\.forecast-pin-anchor\{position:relative;height:0/.test(css)&&/@media\(min-width:1024px\)\{\.forecast-pin-anchor\{display:none\}\.p-sale \.stage-scroll::after\{display:none\}\}/.test(css)&&/\.p-sale \.stage-scroll::after\{content:'';flex:0 0 \d+px\}/.test(css)&&/\.forecast-pin\{[^}]*min-height:44px/.test(css),'no layout height, never on a desk, room to scroll the last row above it, a 44px target');
+});
 test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves',()=>{
  const css=read('dist/ui/ui.css'),sale=fn('saleScreen'),shelf=fn('shelf'),tray=fn('tray');
  assert.ok(sale.indexOf("+'</main>'")<sale.indexOf('+tray()')&&sale.indexOf('+tray()')<sale.indexOf('<div class="dock">'),'the tray sits between the scrolled column and the dock');
