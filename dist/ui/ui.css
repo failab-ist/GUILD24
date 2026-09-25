@@ -270,7 +270,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    be a second copy of the same reading, at the end of the scroll where it is no use before a
    decision, so the compact control replaces it. The desk has room for both and keeps the
    disclosure it already had - the min-width block below hands it back. */
-.p-sale .owned-relics{display:none}
 .effect-bad span:before{content:'주의 · ';font-size:var(--t-xs);color:var(--tone-cost)}
 .tone-benefit{color:var(--tone-benefit)}.tone-cost{color:var(--tone-cost)}.tone-neutral{color:var(--tone-neutral)}
 .rare-badge{font-size:var(--t-xs);color:var(--rare,var(--r0));white-space:nowrap;font-weight:600;font-family:var(--mono);letter-spacing:.06em}
@@ -946,7 +945,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .dossier:not(.traits){margin-bottom:10px}
 .p-sale .shelf{order:2}
 .p-sale .dossier.traits{order:3}
-.p-sale .owned-relics{order:4}
 .dossier{margin:0 0 18px}
 .p-sale .dock{display:flex;align-items:center;gap:12px;background:#170f0a;box-shadow:inset 0 3px 0 #ffffff14}
 .p-sale .dock .queue{display:grid;gap:5px}
@@ -2765,7 +2763,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
  .p-sale .dossier-col{display:block;grid-column:1;margin:0}
  .p-sale .shelf{grid-column:2;margin:0}
- .p-sale .owned-relics{display:block}
+ 
 }
 
 /* ---- Boss reveal -------------------------------------------------------------

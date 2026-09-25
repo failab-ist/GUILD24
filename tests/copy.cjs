@@ -446,8 +446,9 @@ test('SALE: a reaction leaves the screen without leaving the Run',()=>{
  const app=read('dist/ui/app.js');
  const hide=app.slice(app.indexOf('function hideSpeech('),app.indexOf('function armSpeech('));
  const arm=app.slice(app.indexOf('function armSpeech('),app.indexOf('\n// NIGHT'));
- assert.ok(/setTimeout\(hideSpeech,SAY_MS\)/.test(arm),'the balloon is dismissed on a timer');
- assert.ok(/SAY_MS=3000/.test(app),'that timer is the canonical three seconds');
+ /* v2.9.0 D-3: the timer is the duration the draw hands in - SAY_MS (3 s) for a greeting, SAY_REPLY_MS (5 s) for a reply */
+ assert.ok(/setTimeout\(hideSpeech,ms\)/.test(arm)&&/function armSpeech\(ms=SAY_MS\)/.test(arm),'the balloon is dismissed on a timer');
+ assert.ok(/SAY_MS=3000/.test(app)&&/SAY_REPLY_MS=5000/.test(app),'the canonical three seconds, five for a reply');
  for(const src of [hide,arm]){
   assert.ok(!/\.say\s*=/.test(src),'hiding the balloon never writes the dialogue');
   assert.ok(!/game\.save\(\)|Save\./.test(src),'hiding the balloon never touches the Save');
@@ -524,7 +525,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     description has to say the channel it moves and the ones it does not. */
  for(const id of ['kitchen','fresh24']){
   assert.ok(!DATA.relicBy[id].description.includes('포만감'),id+' no longer names an effect that does not exist');
-  assert.ok(/능력치 증가 효과/.test(DATA.relicBy[id].description),id+' names the channel it does move');
+  assert.ok(/능력치 효과 \+/.test(DATA.relicBy[id].description),id+' names the channel it does move (COPY_AUDIT §11-10 / §11-25 wording)');
   assert.ok(/피로 회복·위험 대응은 그대로/.test(DATA.relicBy[id].description)&&!/피로 회복 \+/.test(DATA.relicBy[id].description),
    id+' does not claim the Fatigue recovery it leaves unchanged (v2.9.0 wording)');
  }
@@ -581,36 +582,37 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
    reads right at the wrong price is still the wrong row. */
 test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are the approved text',()=>{
  const SUPPORTS=[
-  ['bulk','묶음발주 계약',130,'같은 상품 3개 이상 발주 시 3번째부터 매입가 -20%.'],
-  ['rotation','회전 진열대',80,'전날 4건 이상 판매 시 다음 날 모든 상품 공급 수량 +1.'],
-  ['stamp','단골 스탬프 기계',130,'유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.'],
-  ['member','회원 관리대장',130,'다음 날부터 이미 만난 손님의 재방문 가중치 +70%.'],
-  ['showcase','희귀상품 입고 계약',140,'희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매가 +10% · 인상분은 손님 부담.'],
-  ['guarantee','길드 보증 진열대',140,'하루 1회 · 200G 이상에 판 첫 상품 판매가의 30%를 본사가 손님 대신 부담 · 점주는 판매가 전액 수령.'],
-  ['hazardBoard','원정 위험 게시판',60,'오늘 게이트의 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
+  ['bulk','묶음발주 계약',130,'같은 상품을 3개 이상 발주하면 3번째부터 · 매입가 -20%.'],
+  ['rotation','회전 진열대',80,'전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1.'],
+  ['stamp','단골 스탬프 기계',130,'유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.'],
+  ['member','회원 관리대장',130,'다음 날부터 · 이미 만난 손님의 재방문 가중치 +70%.'],
+  ['showcase','희귀상품 입고 계약',140,'희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매가 +10%, 인상분은 손님 부담.'],
+  ['guarantee','길드 보증 진열대',140,'하루 첫 200G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
+  ['hazardBoard','원정 위험 게시판',60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
   ['medicine','야전 정비대',80,'판매한 야외장비의 위험 대응 수치 +40%.'],
-  ['fridge','대형 냉장고',60,'음식·음료 유통기한 +2일 · 확보 시 보유 중인 해당 재고도 1회 연장.'],
+  ['fridge','대형 냉장고',60,'음식·음료 유통기한 +2일 · 확보 시 보유 재고도 1회 연장.'],
   ['kitchen','즉석식품 코너',170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.'],
-  ['board','길드 전광판',110,'하루 기본 최소 방문객을 4명으로 변경 (기존 3명).'],
-  ['rookieBoard','첫 방문 쿠폰',110,'처음 방문한 손님의 소지금 +30G 추가 · 구매 의사 +20%p.'],
-  ['groupFlyer','단체 주문 창구',200,'매일 아침 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G 추가 지급.'],
-  ['memberBundle','단골 묶음혜택',190,'단골 손님마다 오늘 두 번째로 사는 상품은 손님이 판매가의 절반만 지불 · 나머지 절반은 본사가 채워 점주는 판매가 전액 수령.'],
-  ['premiumMember','프리미엄 멤버십',200,'단골 손님 방문 시 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
-  ['returnPoints','귀환 적립제',240,'오늘 유료 구매한 재방문 손님 생환 시 단골도 +5 · 소지금 +25G.'],
+  ['board','길드 전광판',110,'하루 기본 최소 방문객 4명 (기존 3명).'],
+  ['rookieBoard','첫 방문 쿠폰',110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
+  ['groupFlyer','단체 주문 창구',200,'아침마다 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
+  ['memberBundle','단골 묶음혜택',190,'단골 손님의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
+  ['premiumMember','프리미엄 멤버십',200,'단골 손님 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
+  ['returnPoints','귀환 적립제',240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +25G.'],
   ['expeditionMeal','원정 도시락 코너',200,'음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.'],
-  ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 · 확보 시 보유 중인 해당 재고도 1회 연장.'],
-  ['supplyCert','길드 납품 인증',220,'오늘 게이트의 위험에 대응하는 희귀 이상 상품 또는 희귀 이상 보험 판매 시 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
-  ['dawnBulk','새벽 회수 계약',190,'유통기한이 끝난 음식·음료는 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식 또는 음료 1칸 추가.'],
-  ['logisticsHQ','물류 본부계약',300,'전날 6건 이상 판매 시 오늘 같은 상품 3개 이상 발주 매입가 -25%.'],
-  ['lifetime','평생 단골제',310,'단골 손님 생환 시 하루 1회 소지금 +50G · 다음 방문 가중치 +50%.'],
-  ['royalCert','왕도 프리미엄 인증',320,'150% 가격 판매 시 판매가의 40% 추가 지급 · 150% 가격 구매 의사 +16%p.'],
-  ['expeditionCert','원정 전문 인증',290,'위험 대응 상품의 위험 대응 수치 +60% · 그 상품을 산 손님 다음 방문 시 소지금 +50G.'],
+  ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료 · 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 (보유 재고도 1회 연장).'],
+  ['supplyCert','길드 납품 인증',220,'오늘 위험에 대응하는 희귀 이상 상품이나 희귀 이상 보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
+  ['dawnBulk','새벽 회수 계약',190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
+  ['logisticsHQ','물류 본부계약',300,'전날 6건 이상 팔았을 때 · 같은 상품 3개 이상 발주 매입가 -25%.'],
+  ['lifetime','평생 단골제',310,'단골 손님 생환 시 · 소지금 +50G (하루 1회) · 다음 방문 가중치 +50%.'],
+  ['royalCert','왕도 프리미엄 인증',320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +16%p.'],
+  ['expeditionCert','원정 전문 인증',290,'위험 대응 상품의 대응 수치 +60% · 그 상품을 산 손님의 다음 방문 시 소지금 +50G.'],
   ['fresh24','24시간 신선체계',360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.'],
-  ['hub','지역 거점점 계약',340,'다음 날부터 방문객 +1명 45% · +2명 15% · 증가 없음 40% · 기본 운영비 +10%.'],
+  ['hub','지역 거점점 계약',340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
   ['warehouse','후방 창고 증설',130,'창고 용량 +10칸.'],
-  ['terminal','본사 추가발주권',130,'다음 발주 후보 생성부터 발주 후보 +2개.'],
-  ['delivery','발주 교환권',120,'매일 첫 후보 전체 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
-  ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 기본 운영비 -30G.']];
+  ['terminal','본사 추가발주권',130,'다음 후보 생성부터 · 발주 후보 +2개.'],
+  ['delivery','발주 교환권',120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
+  ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 · 기본 운영비 -30G.']];
+ /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30 exact */
  assert.equal(SUPPORTS.length,30,'§11 audits all 30 Store Supports');
  assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 30, in order');
  for(const [id,name,price,description] of SUPPORTS){
@@ -627,7 +629,8 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
  /* REL-Q-v28-10 / SA-Q26: the exact stale phrases the amendment retires, gone from every row. */
  const all=DATA.relics.map(r=>r.description).join('\n');
  /* '+25G' left this list with the 2026-09-23 rebalance: 프리미엄 멤버십's approved copy now says 소지금 +25G */
- for(const stale of ['무료 보급','치료·야외장비','50G부터','최소 4명','8건 이상','+12G','8%를','바가지','15G 절감','신선식품 발주'])
+ /* '바가지' left this list with v2.9.0 (COPY_AUDIT §4-19 price role words / §11-23): 왕도 프리미엄 인증 now says 바가지(150%) by approval */
+ for(const stale of ['무료 보급','치료·야외장비','50G부터','최소 4명','8건 이상','+12G','8%를','15G 절감','신선식품 발주'])
   assert.ok(!all.includes(stale),'no Store Support row still says "'+stale+'"');
  /* §11-31: the acquired state reads as 확보/보유, not 설치 - 계약·인증·매뉴얼 are not installed. */
  const app=read('dist/ui/app.js');

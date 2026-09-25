@@ -338,8 +338,9 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
   'below the desktop width, Sale is a flex column so `order` actually applies');
  assert.ok(/\.p-sale \.dossier-col\{display:contents\}/.test(css),'the wrapper is invisible to that flex order until the desktop grid needs it as one box');
  assert.ok(/\.p-sale \.dossier:not\(\.traits\)\{order:1\}/.test(css)&&/\.p-sale \.shelf\{order:2\}/.test(css)
-  &&/\.p-sale \.dossier\.traits\{order:3\}/.test(css)&&/\.p-sale \.owned-relics\{order:4\}/.test(css),
-  'the restored mobile order is stat dossier, then shelf, then Trait rows, then owned Relics');
+  &&/\.p-sale \.dossier\.traits\{order:3\}/.test(css)&&!/\.p-sale \.owned-relics/.test(css),
+  'the restored mobile order is stat dossier, then shelf, then Trait rows; no owned-Relic block in SALE at any width (UI-Q-v29-16, v2.9.0)');
+ assert.ok(!fn('saleScreen').includes('ownedRelicView()')&&fn('finalScreen').includes('ownedRelicView()'),'SALE keeps only the shelf-head control; FINAL keeps its list');
  assert.ok(/\.p-sale \.dossier-col\{display:block;grid-column:1;margin:0\}/.test(css),
   'the desktop grid reverts the wrapper to one real box - a single column, exactly as tall as its own content');
  // the active customer is a placed sticker, never a cropped or stretched thumbnail
@@ -1194,8 +1195,8 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  const brief=fn('stockBrief');
  assert.ok(brief.includes('groupStock()'),'reusing the existing grouping, not a second one');
  assert.ok(brief.includes('game.capacity()')&&brief.includes('s.inventory.length'),'used against total slots');
- assert.ok(brief.includes("settings.stockBriefOpen!==false")&&brief.includes("(opened?'open':'')"),
-  'open by default, and foldable');
+ assert.ok(brief.includes("settings.stockBriefOpen===true")&&brief.includes("(opened?'open':'')")&&app.includes("stock.open=game.account.settings.stockBriefOpen===true"),
+  'collapsed by default (UI-Q-v29-17, v2.9.0), and foldable');
  assert.ok(/stock\.addEventListener\('toggle'[\s\S]{0,200}stockBriefOpen=stock\.open;game\.save\(\)/.test(app),
   'folding it writes the preference so the next Day and the next reload honour it');
  // eleven products used to be eleven rows: the override sheet reads them across instead

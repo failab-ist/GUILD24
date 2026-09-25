@@ -282,7 +282,7 @@ function render(){
  /* The warehouse is a native disclosure, but its preference is an account-level presentation
     choice: it opens for a new player and, once folded, stays folded on later Days and reloads
     until the player opens it again. It is not progression and does not need another state owner. */
- const stock=$('.stock-brief');if(stock){stock.open=game.account.settings.stockBriefOpen!==false;
+ const stock=$('.stock-brief');if(stock){stock.open=game.account.settings.stockBriefOpen===true;
   stock.addEventListener('toggle',()=>{if(game.account.settings.stockBriefOpen===stock.open)return;
    game.account.settings.stockBriefOpen=stock.open;game.save();});}
  // An Event is the Morning opening beat and comes before Gate detail; a new milestone window opens once.
@@ -533,7 +533,7 @@ function saleScreen(){
   +'<div class="dossier-col">'
    +'<div class="dossier">'+returningSummary(n)+readout(n,st?st.item:null,'core-mob')+statGrid(n)+deepOfferUI(n)+'</div>'
    +'<div class="dossier traits">'+traitRows(n)+'</div>'
-   +ownedRelicView()
+   /* UI-Q-v29-16 (User 2026-09-24, v2.9.0): no second owned-Relic block in SALE at any width - the shelf-head control is the one reference */
   +'</div>'
   +shelf()
  +'</main>'
@@ -1038,7 +1038,8 @@ function statGrid(n){
    stock modal already read. It opens the first time; after the player folds it, that preference
    survives later Days and reloads until they open it again. */
 function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.length,cap=game.capacity();
- const opened=game.account.settings.stockBriefOpen!==false;
+ /* UI-Q-v29-17 (User 2026-09-24, v2.9.0): the held-stock list starts collapsed; opening it is the account's presentation choice */
+ const opened=game.account.settings.stockBriefOpen===true;
  return '<details class="stock-brief" '+(opened?'open':'')+'><summary><span class="k">창고</span>'
  +'<b>'+used+' / '+cap+'칸</b>'+(stocks.length?'<i>'+stocks.length+'종</i>':'')+'</summary>'
  +(stocks.length?'<ul>'+stocks.map(st=>{const it=D.itemBy[st.item],left=st.expires-s.day;
