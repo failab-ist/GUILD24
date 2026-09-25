@@ -282,7 +282,13 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(order.includes('본사 발주')||order.includes('발주서'),'the form is titled as the HQ order');
  for(const label of ['운영비(예상)','창고 잔여 칸','보유','발주 금액','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
- assert.ok(order.includes('tierLine()'),'the next-day Tier forecast is present and secondary');
+ assert.ok(!/내일|tierLine|gateLine/.test(order)&&!/function (tierLine|gateLine)\(/.test(app),'no next-day forecast block on ORDER (User 2026-09-24, v2.9.0)');
+ assert.ok(/<span class="kind">'\+E\(D\.rarities\[it\.rarity\]\)\+'<\/span>/.test(order),'each offer row carries the rarity name line');
+ assert.ok(/lim=game\.quantityLimit\(i\)/.test(order)&&/aria-disabled="true" data-reason=/.test(order),'a blocked quantity control is dim but tappable, with its reason');
+ for(const t of ['창고 칸이 부족합니다.','오늘 공급이 끝났습니다.',"'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.'"])assert.ok(app.includes(t),'§3-9 toast: '+t);
+ assert.ok(/getAttribute\('aria-disabled'\)==='true'/.test(app),'the click listener answers a blocked control with the toast and nothing else');
+ assert.ok(!/'비싼 상품일수록|일반 부상의 투력 페널티를 대체/.test(read('dist/data/catalog.js')),'no Trait flavor note survives');
+ assert.ok(/tr\.note\?`<em class="tone-cost">/.test(fn('traitRows')),'the one remaining note (거짓말쟁이) renders as an effect row');
  assert.ok(order.includes('후보 전체 교환'),'the reroll names its full-offer scope');
  assert.ok(order.includes("fmt(price)+'G'"),'the current reroll cost is visible before use');
  assert.ok(order.includes('발주 교환권'),'the free first use is called out');
@@ -2716,7 +2722,7 @@ test('UI_UX §STORE SUPPORT — FINAL VISUAL SPEC: the green ban, the exact plan
    the expected visitor count, and never a customer's name, Job, Trait, Wallet or destination.
    On actual appearance the NPC becomes introduced. */
 test('ECONOMY_ORDER §VISITOR FORECAST / NPC_TRAIT §PRE-REVEAL: the count before Sale, the person on arrival',()=>{
- const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip','gateLine','tierLine'].map(fn).join('\n');
+ const pre=['morningScreen','orderForm','orderScreen','deepSlip','gatePlate','eventSlip'].map(fn).join('\n');
  assert.ok(fn('morningScreen').includes('s.queue.length')&&fn('orderForm').includes('s.queue.length'),
   'Morning and ORDER both state the expected visitor count');
  /* v2.9.0 (ECONOMY_ORDER §VISITOR FORECAST, narrowed): the per-Gate count is public with ≥2 Gates; gateCounts() is the one reader */

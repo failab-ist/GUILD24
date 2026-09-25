@@ -110,7 +110,7 @@ button{min-height:44px;min-width:44px;padding:10px 14px;border-radius:0;cursor:p
  transition:transform .08s steps(2),box-shadow .08s steps(2)}
 button:hover{background:#43505a}
 button:active{transform:translate(2px,2px);box-shadow:inset 2px 2px 0 #ffffff14,inset -2px -2px 0 #00000066,2px 2px 0 #0000006e}
-button:disabled{opacity:.4;cursor:default;box-shadow:inset 2px 2px 0 #ffffff10,inset -2px -2px 0 #00000044}
+button:disabled,button[aria-disabled="true"]{opacity:.4;cursor:default;box-shadow:inset 2px 2px 0 #ffffff10,inset -2px -2px 0 #00000044}
 button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .bare{background:transparent;box-shadow:none;color:var(--dim);padding:8px 6px}
 .bare:hover{background:transparent;color:var(--text)}
@@ -502,14 +502,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .ledger .out b{font:600 28px/1.1 var(--ui);color:var(--ink)}
 .ledger .out b i{font-style:normal;font-size:15px;margin-left:2px;opacity:.7}
 .ledger .out.short b{color:#a1372c}
-/* today vs tomorrow, spatially separated */
 .brief{padding:10px 16px 12px;display:grid;gap:9px;box-shadow:inset 0 -2px 0 var(--paper-rule)}
 .brief .when{display:grid;grid-template-columns:38px minmax(0,1fr);gap:2px 10px;align-items:baseline}
 .brief .when>*:not(.k){grid-column:2}
 .brief .k{font:500 12px/1.6 var(--f-sign);-webkit-font-smoothing:none;color:#8a6a2c;letter-spacing:.1em}
 .brief p{font:400 13px/1.6 var(--ui);color:#4b4231}
 .brief p b{font-weight:600;color:var(--ink)}
-.brief .tier{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:600}
 .brief .sub{font-size:12px;color:#8a7c60}
 .brief .look{display:inline-block;margin-left:8px;vertical-align:baseline;background:transparent;box-shadow:none;
  color:#7a5a2a;font:600 12px/1 var(--ui);padding:9px 2px;min-height:32px;min-width:0;
@@ -571,7 +569,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .dial button:hover{background:#a6b2b9;background-clip:content-box}
 .dial button:active{transform:translate(1px,1px);background:#7f8b94;background-clip:content-box}
 /* an unusable key is a dead face: flat, still legible, never a whole-element fade */
-.dial button:disabled{opacity:1;transform:none;background:#d3c9ad;background-clip:content-box;color:#7d7461}
+.dial button:disabled,.dial button[aria-disabled="true"]{opacity:1;transform:none;background:#d3c9ad;background-clip:content-box;color:#7d7461}
 /* the one recessed part of the cluster: the number is read, not pressed */
 .dial output{min-width:46px;text-align:center;font:600 18px/40px var(--ui);font-variant-numeric:tabular-nums;
  background:#f6efda;color:#1f1809;
@@ -589,7 +587,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  text-decoration:underline dotted #4f4530}
 .dial .set button:active{transform:none;background:none;color:#3b3323;
  text-decoration:underline dotted #3b3323}
-.dial .set button:disabled{transform:none;background:none;color:#b3a78b;text-decoration:none}
+.dial .set button:disabled,.dial .set button[aria-disabled="true"]{transform:none;background:none;color:#b3a78b;text-decoration:none}
 .rubber{display:block;width:calc(100% - 32px);margin:12px 16px 6px;background:transparent;color:#7a5a2a;
  font:600 14px/1 var(--ui);letter-spacing:.02em;box-shadow:inset 0 0 0 3px #7a5a2a;opacity:.8}
 .rubber:hover{background:#00000008;opacity:1}

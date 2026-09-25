@@ -321,15 +321,8 @@ function gatePlate(d,full=false){const b=sigilOf(d);
      ?'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<span class="sentence">'+E(Presentation.hazardSentence(h.key,d))+'</span></li>'
      :'<li data-hazard="'+h.key+'">'+Scene.hazardIcon(h.key,18)+'<i>'+E(h.name)+'</i><span>'+E(Presentation.hazardShort(h.key,d))+'</span></li>').join('')+'</ul>'
    +'</article>';}
-function tierLine(){const f=game.tierForecast();return f?'T1 '+f.percent[0]+'% · T2 '+f.percent[1]+'% · T3 '+f.percent[2]+'%':'마왕성 최종 원정';}
-/* DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST. How many Gates open tomorrow, before the player
-   commits an order: a confirmed count where the rule is deterministic, the exact distribution
-   where it is drawn. What is deliberately not said is WHICH - no Family, no Gate identity, no
-   Hazard set - so the player knows how much and how dangerous, never exactly what to pack. */
-function gateLine(){const f=game.gateForecast();if(!f)return '';
- if(f.final)return '게이트 1곳 · 마왕성';
- if(f.fixed!==null)return '게이트 '+f.fixed+'곳';
- return f.counts.map(c=>c.count+'곳 '+c.percent+'%').join(' · ');}
+/* v2.9.0 (User 2026-09-24): no next-day Gate / Tier forecast is shown anywhere - today's Gates, their numbered Hazard rows and
+   the per-Gate visitor count are the whole planning context (ECONOMY_ORDER §NEXT-DAY FORECAST — RETIRED). */
 /* UI_UX §DEEP SALE UI. Offered only while a nomination is still legal, so it never appears as
    a disabled control the player has to reason about. Once taken it states what left the till
    and that the destination changed - the forecast above has already been recomputed against
@@ -955,7 +948,7 @@ function finishCoach(skip=false){
 }
 window.addEventListener('resize',()=>{if(activeCoach)showCoach();});
 function effectList(it,compact=false){const rows=Presentation.rows(it.effects);const html=r=>`<li class="${r.bad?'effect-bad':''}"><span>${E(r.label)}</span><b>${r.text}</b></li>`;return `<ul class="effects">${rows.slice(0,compact?4:rows.length).map(html).join('')}</ul>${compact&&rows.length>4?`<details><summary>전체 효과</summary><ul class="effects">${rows.slice(4).map(html).join('')}</ul></details>`:''}`;}
-function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}</span>${tr.note?`<small>${E(tr.note)}</small>`:''}</div>`;}).join('')}</div>`;}
+function traitRows(n){return `<div class="trait-list">${Presentation.traits(n).map(t=>{const tr=D.traitBy[t];return `<div class="trait-row"><b>${E(tr.name)}</b><span>${Presentation.traitEffects(t).map(r=>`<em class="tone-${r.tone}">${E(r.label+' '+r.text)}</em>`).join('')}${tr.note?`<em class="tone-cost">${E(tr.note)}</em>`:''}</span></div>`;}).join('')}</div>`;}
 function destPlate(n){const d=game.claimedGateFor(n);if(!d)return '';const b=sigilOf(d);
  return '<div class="dest-plate" style="--fam:'+(b.color||'#cbd5b6')+'">'+Art.mark(b.id||d.id,32)
  /* The plate says what is fixed about where this customer is going: the Gate, each Hazard it
@@ -1070,10 +1063,9 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    +'<div class="pick"><span>발주 금액</span><b>'+(total?'-'+fmt(total):'0')+'</b></div>'
    +'<div class="out'+(after<0?' short':'')+'"><span>발주 후</span><b>'+fmt(after)+'<i>G</i></b></div></div>'
    +'<div class="ref-row">'+relicRef()+'</div>'
-   // two groups: what today needs, and the signal for tomorrow's order
+   // today only: who is coming and where (no next-day block, User 2026-09-24)
    +'<div class="brief"><div class="when"><span class="k">오늘</span>'
-     +'<p><b>'+s.queue.length+'명</b> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')))+'<button class="look" data-action="gates">위험 보기</button></p></div>'
-   +'<div class="when"><span class="k">내일</span><p class="tier">'+E(gateLine())+'</p><p class="tier">'+tierLine()+'</p></div></div>'
+     +'<p><b>'+s.queue.length+'명</b> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')))+'<button class="look" data-action="gates">위험 보기</button></p></div></div>'
    /* FINAL_EXPEDITION_v2.7 §D25: from D25 the Final's Family Pair and Hazard Pool are known,
       so they sit with the other planning signals on ORDER rather than arriving on D30. It is
       the persisted state itself - D30 reads the same object, and a reload cannot reroll it. */
@@ -1083,7 +1075,9 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
        '<li data-hazard="'+h.key+'"><b>'+E(h.name)+'</b><span class="press">'+E(h.pressure)+'</span></li>').join('')
      +'</ul></div></div>':'')
    +stockBrief()
-   +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,max=game.maxQuantity(i),rows=Presentation.rows(it.effects).slice(0,3);
+   +'<ol class="lines">'+s.offers.map((o,i)=>{const it=D.itemBy[o.item],q=s.cart?.[i]||0,lim=game.quantityLimit(i),max=lim.max,rows=Presentation.rows(it.effects).slice(0,3);
+    /* UI_UX §ORDER quantity interaction (User 2026-09-24): a control the cap blocks is dim but answers a tap with the reason (§3-9) */
+    const block=' aria-disabled="true" data-reason="'+lim.reason+'" data-lack="'+Math.max(0,Math.ceil(lim.lack))+'"';
     const sl = it.days ? (it.days + Relics.shelf(game, it)) : null;
     /* data-offer is the row's handle across a redraw: the qty controls inside it flip
        between enabled and disabled as the quantity hits 0 or the cap, so the pressed
@@ -1097,6 +1091,8 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
         ordinary offer has no origin and no source label, so this stays special-offer
         presentation rather than a generic rarity-attribution UI. */
      +'<span class="nm"><b>'+E(it.name)+'</b>'+(o.origin==='blackmarket'?'<i class="origin">암시장</i>':'')+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
+     /* UI_UX §ORDER ITEM INFORMATION HIERARCHY (User 2026-09-24, v2.9.0): the rarity name as one small identity line, not a role chip */
+     +'<span class="kind">'+E(D.rarities[it.rarity])+'</span>'
      /* UI-Q39: `야외채집 · 마력 보강 / 주문 제작` is the internal taxonomy the catalogue is
         organised by, not something a player decides with - and it never reaches a render path.
         The data stays: ordering weights and Relic conditions read `category`. What the row
@@ -1106,10 +1102,10 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
   +'</span>'
   +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
-   +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?'disabled':''))
-   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?'disabled':''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'"')+'</span></span></li>';
+   +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?block:''))
+   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>';
  }).join('')+'</ol>'
- +'<button class="rubber" data-action="reroll" '+(price>s.money?'disabled':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
+ +'<button class="rubber" data-action="reroll" '+(price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}
 /* Sparse player-facing grouping only where the distinction helps comparison. Internal
@@ -1929,7 +1925,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  if(game.run?.toast){toast(game.run.toast);delete game.run.toast;game.save();}
  }catch(err){toast(err.message);}
 }
-document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(el&&!el.disabled){if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);}});
+/* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
+   is the subject, so two rows of the same Item cannot be confused. */
+const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급이 끝났습니다.'};
+document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
+ if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
+ if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);});
 /* A tooltip is dismissed by tapping outside it, the way every other popover on the phone is.
    <details> closes on its own summary already, and the shared name closes a sibling, so this
    only has to handle the outside tap and Escape. */

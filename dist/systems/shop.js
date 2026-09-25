@@ -443,7 +443,13 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  if(this.cartTotal(cart)>s.money)throw Error('발주 자금이 부족합니다.');const existingFood=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
  if(s.inventory.length+count>this.capacity())throw Error('창고가 가득 찼습니다.');return true;}
  setQuantity(i,q){const cart={...(this.run.cart||{}),[i]:q};this.validateCart(cart);this.run.cart=cart;this.save();}
- maxQuantity(i){let q=0;for(let n=1;n<=this.run.offers[i].quantity;n++){try{this.validateCart({...this.run.cart,[i]:n});q=n;}catch(e){break;}}return q;}
+ /* UI_UX §ORDER quantity interaction (User 2026-09-24, v2.9.0): the largest quantity this offer takes right now AND what stops
+    the next one - `supply` (the offer's own count), `money` (with the Gold still missing for one more) or `space` (warehouse).
+    The reason is what the blocked dial control says when tapped (COPY_AUDIT §3-9); maxQuantity keeps its old contract. */
+ quantityLimit(i){const s=this.run,o=s.offers[i];let q=0,reason='supply',lack=0;
+  for(let n=1;n<=o.quantity;n++){const cart={...(s.cart||{}),[i]:n};try{this.validateCart(cart);q=n;}catch(e){reason=e.message==='발주 자금이 부족합니다.'?'money':'space';if(reason==='money')lack=this.cartTotal(cart)-s.money;break;}}
+  return {max:q,reason,lack};}
+ maxQuantity(i){return this.quantityLimit(i).max;}
  confirmOrder(){const s=this.run,cart=s.cart||{};this.validateCart(cart);let bulk=Object.keys(cart).some(i=>Object.keys(cart).filter(j=>s.offers[j].item===s.offers[i].item).reduce((n,j)=>n+cart[j],0)>=3);for(const [i,q]of Object.entries(cart)){if(!q)continue;const o=s.offers[i],price=this.relicQuote(Number(i),q,cart);s.money-=price;s.daily.spent+=price;s.stats.spent+=price;o.quantity-=q;const units=q*(o.promo?2:1),unit=Math.floor(price/units);for(let k=0;k<units;k++)this.stock(o.item,1,unit+(k<price%units?1:0));if(q>=3)bulk=true;}if(bulk)s.bulkUsed=true;s.cart={};s.notice='발주 완료.';this.save();}
  loyal(n,amount){const was=G.Adventurer.isTrustedRegular(n);n.loyalty=clamp(n.loyalty+amount,0,100);if(!was&&G.Adventurer.isTrustedRegular(n))this.run.stats.regulars++;}
  /* SALE / NPC_TRAIT §NON-PURCHASE LOYALTY (2026-09-23): a visit that ends with a paid purchase

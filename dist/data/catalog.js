@@ -87,7 +87,7 @@ traits:[
 ['careful','신중함','mixed',{injuryRisk:-0.04,loot:-0.10},{injuryRisk:'benefit',loot:'cost'}],
 ['reckless','무모함','mixed',{combatPercent:0.10,escape:-0.08,injuryRisk:0.035},{combatPercent:'benefit',escape:'cost',injuryRisk:'cost'}],
 ['greed','탐욕','mixed',{loot:0.3,escape:-0.07},{loot:'benefit',escape:'cost'}],
-['frugal','구두쇠','negative',{priceBias:-0.16},{priceBias:'cost'},'비싼 상품일수록 구매를 망설입니다.'],
+['frugal','구두쇠','negative',{priceBias:-0.16},{priceBias:'cost'}],
 ['impulse','충동구매','positive',{buyBias:0.12},{buyBias:'benefit'}],
 ['liar','거짓말쟁이','mixed',{},{},'50% 확률로 실제 목적지가 다른 열린 게이트로 바뀝니다.'],
 ['genius','천재','positive',{xpMult:1.25},{xpMult:'benefit'}],
@@ -109,7 +109,7 @@ traits:[
 ['antitoxin','해독가','positive',{poison:6},{poison:'benefit'}],
 ['coldhand','수족냉증','negative',{cold:-6},{cold:'cost'}],
 ['prepared','준비성','positive',{supplyPerItem:1},{supplyPerItem:'benefit'}],
-['grit','악바리','mixed',{injuredCombatPercent:0.20,fatigue:1},{injuredCombatPercent:'benefit',fatigue:'cost'},'일반 부상의 투력 페널티를 대체하여 투력이 증가합니다.'],
+['grit','악바리','mixed',{injuredCombatPercent:0.20,fatigue:1},{injuredCombatPercent:'benefit',fatigue:'cost'}],
 ['aloof','냉담한','mixed',{revisitMult:0.80,cold:6},{revisitMult:'cost',cold:'benefit'}]
 ,
 ['honest','정직한','mixed',{loyaltyBonus:1,overchargeBias:-0.10},{loyaltyBonus:'benefit',overchargeBias:'cost'}],
