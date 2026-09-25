@@ -6,11 +6,12 @@ STATE: V2_9_0_IMPLEMENTATION_COMPLETE — RELEASE OPEN ON BALANCE
 ## Current
 
 - repository: `failab-ist/GUILD24`
-- v2.9.0 work branch: `claude/ux-simplify-handoff-7oorbc` (origin/main `49a291f` merged in; not merged back to `main`, no tag yet)
+- `main` = v2.9.0 close-out `3f18ceb` (fast-forward from `claude/ux-simplify-handoff-7oorbc`, User 2026-09-25); Pages deploys main, so the live build is this unbalanced v2.9.0 state (User accepted: no live players yet); no tag yet
+- the balance session branches from `main`
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (DOC_VERSION 2.9.0; FREEZE_STATUS / SOURCE_ADOPTION_STATUS in its header)
 - v2.9.0 batches D-0 … D-5, I-1 … I-4, K, T, U, R1 … R6, F1 … F7: all adopted in Source (`design_ssot/CHANGELOG.md` §v2.9.0 lists each with commits)
 - verification at the close-out commit: `npm test` PASS (tests/copy.cjs whole), `npm run ssot:check` PASS, `npm run qa:runtime` 5/5
-- released: `main` = v2.8 (`49a291f`); v2.9.0 is not released
+- last tagged release: v2.8 (`49a291f`); v2.9.0 is deployed from main but not tagged
 - completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
 ## In Progress
@@ -21,7 +22,7 @@ STATE: V2_9_0_IMPLEMENTATION_COMPLETE — RELEASE OPEN ON BALANCE
 
 Read AGENTS.md first and follow it.
 
-- Role / base: balance WORK on `claude/ux-simplify-handoff-7oorbc` at its current HEAD (or a branch from it).
+- Role / base: balance WORK on a new branch from `main` (`3f18ceb` or later).
 - Active task: resolve the v2.9.0 BALANCE FINDING — the F3 / F4 rule values collapsed run survival in measurement
   (balanced policy reach D30 0.122 → 0.007, clear 0.077 → 0.007, avg money 1358 → 407). Decide the eight items,
   re-measure the chosen combination, adopt the approved values in the routed owners and Source, then close 7-b.
