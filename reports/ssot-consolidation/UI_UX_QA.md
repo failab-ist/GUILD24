@@ -1062,3 +1062,17 @@ SALE with a customer at 360 / 390 / 412 and at 1280; pick a shelf row with the c
 ```new
 - `환경 대응` is on screen at most once at a time: in the forecast, or — only while the forecast is scrolled out of view on a phone — in the forecast pin that mirrors it (UI-Q-v29-24; User 2026-09-25, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 SALE desk split scroll (User decision 2026-09-25)
+
+User decision 2026-09-25: on a desk the SALE dossier column and shelf column scroll separately, so the left side never empties while the shelf scrolls.
+
+```new
+### UI-Q-v29-25 — SALE DESK SPLIT SCROLL
+(User 2026-09-25, v2.9.0)
+SALE with a customer at 1024 and 1280 with a shelf taller than the column; scroll the shelf to its end with the wheel over it, then pick a row.
+- the SALE area itself does not scroll; the shelf scrolls alone and the dossier column does not move
+- after the pick (a redraw) the shelf keeps its scroll position; the next customer starts at the top
+- at 360 / 390 / 412 the single scrolled column is unchanged
+- the dossier column scrolling with the shelf, an empty left column beside a scrolled shelf, or a shelf that jumps to the top after a pick
+```

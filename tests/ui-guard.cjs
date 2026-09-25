@@ -2887,6 +2887,12 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
 /* v2.9.0 SALE — COUNTER TRAY (User-approved composition change 2026-09-24; UI_UX §SALE — COUNTER TRAY,
    UI-Q-v29-18). The per-row price panel is gone from the ordinary SALE: the chosen Item sits on one
    fixed tray above the dock, the shelf rows never change height, and FINAL keeps its own panel. */
+test('UI-Q-v29-25: on a desk the SALE dossier and shelf columns scroll apart, and a redraw keeps both',()=>{
+ const desk=css.slice(css.indexOf('@media(min-width:1024px){\n /* The stat/forecast column'));
+ assert.ok(/\.p-sale \.stage-scroll\{overflow:hidden;grid-template-rows:minmax\(0,1fr\);padding-top:10px;padding-bottom:6px\}/.test(desk),'the SALE area itself does not scroll on a desk');
+ assert.ok(/\.p-sale \.dossier-col,\.p-sale \.shelf\{max-height:100%;overflow-y:auto/.test(desk),'each column scrolls inside the area');
+ assert.ok(/const previousCols=\['\.p-sale \.dossier-col','\.p-sale \.shelf'\]/.test(app)&&/el\.scrollTop=changed\?0:previousCols\[i\]/.test(app),'a redraw keeps both column positions; a new view starts at the top');
+});
 test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the readout is off screen, folds on a tap, and saves nothing',()=>{
  const pin=fn('forecastPin'),watch=fn('watchForecastPin'),sync=fn('syncForecastPin');
  assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');

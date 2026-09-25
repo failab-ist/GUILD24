@@ -257,6 +257,8 @@ function render(){
     on a desk, in the bottom-left corner of the title card. */
  if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
+ /* UI_UX §SALE — DESK SPLIT SCROLL: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
+ const previousCols=['.p-sale .dossier-col','.p-sale .shelf'].map(q=>$(q)?.scrollTop||0);
  /* SA-Q09: every LIVING Night result speaks through the same temporary balloon the SALE
     counter uses - no permanent blockquote, no second speech mechanism. `speech()` already
     ignores a redraw of the line it is already showing (its own sayKey/sayHidden guard), so
@@ -278,6 +280,7 @@ function render(){
  $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
+ ['.p-sale .dossier-col','.p-sale .shelf'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
  /* The control that answered the last press is often disabled by it (a quantity driven to
     zero or to the cap), and a disabled button cannot take focus: fall to its nearest live
     neighbour inside the same group rather than back to the top. */

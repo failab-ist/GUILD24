@@ -2781,6 +2781,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
  .p-sale .dossier-col{display:block;grid-column:1;margin:0}
  .p-sale .shelf{grid-column:2;margin:0}
+ /* UI_UX §SALE — DESK SPLIT SCROLL (User 2026-09-25, v2.9.0): on a desk the two columns scroll apart. The SALE area
+    itself no longer scrolls; each column is as tall as its own content up to the area's height and scrolls inside it,
+    so working down the shelf never empties the dossier column beside it. */
+ .p-sale .stage-scroll{overflow:hidden;grid-template-rows:minmax(0,1fr);padding-top:10px;padding-bottom:6px}
+ .p-sale .dossier-col,.p-sale .shelf{max-height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
  
 }
 

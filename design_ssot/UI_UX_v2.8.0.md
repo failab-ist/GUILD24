@@ -614,6 +614,15 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - one tap folds it to a `전망` chip and back; the fold lasts only until the readout is on screen again — the next time the readout scrolls away the pin opens unfolded; no Save or account field
 - it floats over the top of the scrolled column and reserves no layout height; a row it covers is read by folding it; the touch target is at least 44px
 
+### SALE — DESK SPLIT SCROLL
+
+(User 2026-09-25, v2.9.0) On a desk (≥1024) the SALE area below the counter band does not scroll as one column.
+
+- the dossier column (Stat grid, Traits) and the shelf column scroll separately; each is as tall as its own content up to the area's height
+- scrolling the shelf never moves the dossier column, so the left side never empties while the Player works down the shelf
+- a redraw of the same customer keeps both columns' scroll positions; a new customer starts both at the top
+- phones keep the single scrolled column (§SALE — FORECAST PIN covers the readout there)
+
 ### SALE SELECTED-ITEM INFORMATION
 
 The selected-Item surface (the counter tray, §SALE — COUNTER TRAY) uses one primary heading:
