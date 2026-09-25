@@ -30,7 +30,8 @@ const SPEND={
     it is not, or as soon as the next reroll would take the till under the floor it already
     keeps. The price doubles within a Day and resets the next morning, so this converges. */
  'balanced':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
- 'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:true}};
+ 'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:true},
+ 'human':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
 /* Boss clear is `power * roll >= bossPower` with roll uniform on [0.88, 1.12], so the clear
@@ -170,7 +171,13 @@ function derive(out,count){
    here: `simulate` hands in a fresh one per seed, `trajectory` hands in the same one every
    time so real Meta progression carries forward. */
 function playRun(g,out,ctx){
- const {policy,pricing,build,seed}=ctx,engagement=levers(policy),spend=spending(policy),s=g.run;
+ const {policy,pricing,build,seed}=ctx,engagement=levers(policy),s=g.run;
+ /* `human` (v2.9.2 balance review, measurement only) is `balanced` plus the one thing the tutorial teaches that
+    `balanced` skips: it fills a healthy, rested customer's Bag to reach 만반의 준비 even with an Item of little direct
+    value to that Gate. It also drops to 50% whenever the wallet cannot cover the asked price (the `policy!=='balanced'`
+    test below is left as is), where `balanced` does that only for its top roster or a crisis Item. (A till floor at the operating cost was tried and dropped: with Sell = Buy x 2, holding cash back
+    starves the shelf and spirals into bankruptcy - a player keeps ordering.) */
+ const bal=policy==='balanced'||policy==='human',human=policy==='human',spend=spending(policy);
  /* RELIC-AWARE LAYER, measurement only (ctx.relicAware, default off). The policies above were
     written before most Store Supports existed, so a Support whose value comes from a choice the
     player makes (150% sales, 3-of-a-SKU orders, a Counter for the Gate) read as ~0 because the
@@ -204,7 +211,7 @@ function playRun(g,out,ctx){
  /* The candidate order the ordering loop below uses. Shared with the planner so the two cannot
     drift: whatever the loop would work through is what the plan walks. */
  const sortedOffers=()=>s.offers.map((o,i)=>({o,i})).sort((a,b)=>{
-  const v=o=>(policy==='balanced'?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;
+  const v=o=>(bal?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;
   return v(b.o)-v(a.o);});
  /* What that loop would spend on the sheet as it stands, computed without touching any state.
     Same rounds, same stock target, same floor, same capacity rule - it is the ordering loop,
@@ -363,7 +370,7 @@ function playRun(g,out,ctx){
       Not "reroll until the wanted item shows up" - it stops the moment the sheet is not poor. */
    if(spend.reroll){let used=0;
     const poor=()=>s.offers.reduce((a,o)=>o.quantity?Math.max(a,itemValue(null,D.itemBy[o.item],s.dungeons[0])):a,0)<8;
-    while((policy==='balanced'?!s.offers.some(o=>o.quantity&&(D.itemBy[o.item].category==='food'||s.dungeons.some(dd=>G.Relics.directCounter(D.itemBy[o.item],dd.hazards)))):poor())&&used<(policy==='balanced'?2:20)){
+    while((bal?!s.offers.some(o=>o.quantity&&(D.itemBy[o.item].category==='food'||s.dungeons.some(dd=>G.Relics.directCounter(D.itemBy[o.item],dd.hazards)))):poor())&&used<(bal?2:20)){
      const cost=g.rerollPrice(),planned=plannedOrderSpend(sortedOffers(),s.money);
      if(s.money-cost-planned<spend.cashFloor)break;
      try{g.reroll();}catch(e){break;}
@@ -407,11 +414,11 @@ function playRun(g,out,ctx){
        adventurer, so the sink can only be judged next to the growth and the Final seat it buys. */
     (nominees[n.id]??={levelAtNomination:n.level,rarity:n.rarity,cost:0}).cost+=cost;out.deepCollapse.samples++;deepWatches.push(s.day);}
    const d=g.claimedGateFor(n);let attempts=0;
-   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':policy==='balanced'?(n.loyalty>=41&&n.loyalty<51?'half':'full'):n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';/* aware: 왕도 프리미엄 인증 - 150% whenever the wallet comfortably covers it, by the same
+   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':bal?(n.loyalty>=41&&n.loyalty<51?'half':'full'):n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';/* aware: 왕도 프리미엄 인증 - 150% whenever the wallet comfortably covers it, by the same
     wallet test the adaptive rule already uses (more than twice the list price), without its
     loyalty gate; not re-offered at 150% once this customer refused it. */
  if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&owns('royalCert')&&n.money>it.sell*2&&!n.refused.includes(it.id+':overcharge'))mode='overcharge';
- if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit&&(policy!=='balanced'||topRoster(n)||(crisisItem(it,d)&&!(n.level<=3&&n.rarity===0))))mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;if(policy==='balanced'&&itemValue(n,it,d)<1&&!((st.expires-s.day)<=1||(n.outlook?.greatSignal&&(it.category==='food'||it.category==='potion'))))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0),
+ if(pricing==='adaptive'&&n.money<g.interest(n,it,mode).debit&&(policy!=='balanced'||topRoster(n)||(crisisItem(it,d)&&!(n.level<=3&&n.rarity===0))))mode='half';const intent=g.interest(n,it,mode);if(intent.debit>n.money||n.refused.includes(it.id+':'+mode))continue;if(bal&&itemValue(n,it,d)<1&&!((st.expires-s.day)<=1||(n.outlook?.greatSignal&&(it.category==='food'||it.category==='potion'))||(human&&!n.injury&&(n.fatigue||0)<20)))continue;options.push({st,mode,v:itemValue(n,it,d)+(st.expires?5/(st.expires-s.day+1):0),
     /* aware: 길드 납품 인증 pays on a rare+ Item that Counters this adventurer's Gate, or on
        rare+ insurance, so those are offered first; value decides within each group. (단골 묶음혜택
        needs no rule: this loop already fills a 단골's second slot, and interest() already
