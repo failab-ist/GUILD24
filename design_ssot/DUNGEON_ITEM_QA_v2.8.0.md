@@ -236,10 +236,9 @@ PASS:
 Owner rule: `DUNGEON_HAZARD_v2.8.0.md` §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.70 + max(0, Day - 9) × 0.40`
-- D1 through D9 Gate Power is identical to the pre-change value for the same Family, Tier and Day
+- the Day term is `min(Day, 9) × 1.20 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.0 balance close)
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
-- D12 T1 ordinary Family reads 16.50 on the Day term, D24 reads 21.30
+- the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
 
 FAIL:
 - a single slope applied across all Days
@@ -432,7 +431,7 @@ EXPECT base result Fatigue (User 2026-09-24, v2.9.0):
 대성공 +4
 퇴각 +7
 부상 +9
-중상 +9
+중상 0
 사망 0
 ```
 
@@ -496,16 +495,18 @@ PASS:
 
 (User 2026-09-25, v2.9.0)
 
-Controlled adventurer records: 0 / 1 / 2 / 3 / 5 expeditions begun at injury=1, and separately 0 / 1 / 2 / 3 / 5 begun at Fatigue 20+, then a failed expedition.
+Controlled adventurer records: 1 / 2 / 3 / 5 consecutive expeditions begun at injury=1 ending in this injured departure, the same
+chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.0 balance close).
 
 EXPECT:
-- the first injured departure and the first weary departure add nothing beyond the existing injured / 탈진 terms
-- every further repeat of each kind adds +8%p to the conditional failure Death chance and to its cap, summed across both kinds, capped at +30%p
-- the counts come from the adventurer's own records (this departure included); no new NPC field
+- the first injured departure adds nothing beyond the existing injured term
+- every further CONSECUTIVE injured departure adds +8%p to the conditional failure Death chance and to its cap, capped at +30%p
+- one healthy departure resets the chain; Fatigue 20+ departures add nothing to this term
+- the count comes from the adventurer's own records (this departure included); no new NPC field
 - NPC detail shows `무리한 출발 {n}회` (injured + weary departures so far) as an information row, no verdict
 
 PASS:
-- strainEscalation equals min(0.30, 0.08·max(0,i−1) + 0.08·max(0,w−1)) exactly
+- strainEscalation equals min(0.30, 0.08·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
 
 ### DI-Q-v28-4 — NO HYPOTHETICAL FATIGUE MATRIX
 
@@ -521,8 +522,8 @@ Supply/Fatigue runtime arithmetic follows the current owner truth.
 Controlled seeded cases must verify (User 2026-09-24, v2.9.0: no Supply-deficit row):
 - environment incident chance uses the exact closure formula and 2%–48% clamp
 - escape chance uses the exact closure formula and 15%–94% clamp
-- failed-combat Severe branch uses 42% base before current modifiers
-- environment/other Severe branch uses 13% base before current modifiers
+- failed-combat Severe branch uses 36% base before current modifiers (User 2026-09-25, v2.9.0 balance close)
+- environment/other Severe branch uses 11% base before current modifiers
 - injured departure adds the existing +15%p Severe escalation exactly once
 - failure-conditioned Death still follows the separate current Death owner formula exactly once
 
@@ -530,7 +531,7 @@ Reward PASS:
 - EXP base = 22 + Day×4.6
 - EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 0.90 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.0)
+- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.0 balance close)
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5
@@ -538,6 +539,42 @@ Reward PASS:
 FAIL:
 - a second alternative ordinary-resolve formula survives
 - QA retunes any value to improve pass rate
+
+### DUN-Q-v29-BC1 — 만반의 준비 / LEVEL DEATH REDUCTION
+
+(User 2026-09-25, v2.9.0 balance close; owner `DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction.)
+
+Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 만반의 준비 (healthy, Fatigue < 20, 2+ Items),
+and the three near misses (injured / Fatigue 20 / one Item).
+
+PASS:
+- rolledDeathChance = failureDeathChance × preparedFactor × levelFactor exactly; preparedFactor 0.80 only when all three hold
+- levelFactor = max(0.75, 1 − 0.015 × (Level − 1)): Lv1 1.00 · Lv2 0.985 · Lv10 0.865 · Lv20 0.75
+- a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
+- the SALE `실패 시 사망 위험` includes levelFactor and never preparedFactor
+- the Night report shows the 만반의 준비 save line once, only when the band was hit
+
+### DUN-Q-v29-BC2 — RETREAT HEALING
+
+(User 2026-09-25, v2.9.0 balance close; owner §RETREAT HEALING.)
+
+PASS:
+- only an injured departure ending 퇴각 can heal; chance 25% / 50% / 75% / 100% for 0 / 1 / 2 / 3+ preceding consecutive injured 퇴각
+- a 부상 / 중상 result resets the chain; 구급키트 does not change the chance
+- one extra draw only on this path; the Night line appears only on a heal and never shows the chance
+
+### DUN-Q-v29-BC3 — HIDDEN BAD-LUCK ASSIST
+
+(User 2026-09-25, v2.9.0 balance close; owner §BAD-LUCK PREPARATION ASSIST.)
+
+Controlled Night queues: 3 / 4 / 5 carried failures in a row, a bare-handed expedition inside the chain, a success inside the
+chain, a Deep expedition inside the chain.
+
+PASS:
+- no assist before the chain reaches 3; then assist 0.10 and +0.05 per further failure
+- the assist multiplies prepared ability for the combat check by (1 + assist) and environmentIncidentChance by (1 − assist)
+- bare-handed expeditions neither count nor reset; a success resets; Deep and Final are neither counted nor assisted
+- no screen, forecast or report shows it
 
 ### DUN-Q77 — ORDINARY FAILURE DEATH BASELINE
 
@@ -793,14 +830,15 @@ No addition exists only to increase item count.
 ### ITEM-Q77 — FOOD/DRINK BASELINE VALUES
 
 Audit the exact active table in `ITEM_v2.8.0.md`, including:
-- Choco mobility +8 / Supply4
+- Choco mobility +8 / Supply3
 - Coffee mobility +12 / Supply2
 - Herb Tea spirit +15 / Supply2
-- Energy mobility +15 / Supply2
-- Lava survival +8 / cold6 / Supply4
-- Ramen cold10 / Supply5
+- Energy mobility +17 / Supply2
+- Lava survival +8 / cold6 / Supply3
+- Ramen cold10 / Supply3
 - Ice fire10 / Supply1
-- Candy fear10 / Supply3
+- Candy fear10 / Supply2
+(v2.9.0 balance close values, User 2026-09-25)
 
 Supply N is displayed as `피로 회복 N` (User 2026-09-24, v2.9.0).
 
@@ -808,22 +846,19 @@ PASS: no stale Stat bundle survives.
 
 ### ITEM-Q81 — REBALANCED PRICE TABLE
 
-PASS exact Buy/Sell for changed original-catalog prices:
+PASS (User 2026-09-25, v2.9.0 balance close):
+- every Item's Sell = Buy × 2 exactly
+- Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
 ```text
-캔커피                40 / 85
-진정 허브티           40 / 85
-얼음컵                30 / 65
-랜턴 건전지           45 / 95
-구급키트              80 / 170
-핫팩                  60 / 130
-농축 해독제           80 / 170
-쿨링 이온음료         80 / 170
+간단 도시락 100 · 불룡볶음면 80 · 에너지드링크 80 · 용사의 곡주 70 · 방진마스크 80 · 핫팩 70 · 부식 방지 코팅제 85
+원정용 장화 75 · 설원 고글 70 · 중급 포션 125 · 상급 포션 175 · 농축 해독제 95 · 길드 특제 도시락 185 · 쿨링 이온음료 95
+거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 165 · 마그마 냉각장비 175 · 초고속 에너지드링크 175
+대현자 허브엘릭서 175 · 최상급 포션 210
 ```
 
 PASS:
-- unchanged original-catalog prices remain exactly as listed in `ITEM_v2.8.0.md`
-- no stale 180/360 antidote or 200/400 ion price survives
+- no stale pre-close price or a Sell other than Buy × 2 survives
 - Main Hazard specialist price bands remain practically comparable rather than rarity-only inflated
 
 ### ITEM-Q78 — GOLDEN COUPON PRICE
@@ -854,11 +889,11 @@ Expect exactly:
 | Item | Rarity | Buy/Sell | 강인함 | Supply (`피로 회복 N`) | Extra |
 |---|---|---:|---:|---:|---|
 | 삼각김밥 | C | 35/70 | +6 | 5 | — |
-| 생수 | C | 40/85 | +10 | 2 | — |
-| 간단 도시락 | U | 85/180 | +10 | 6 | expedition Wallet +20% |
-| 길드 특제 도시락 | R | 160/340 | +14 | 7 | expedition Wallet +40% |
-| 영웅 결전 도시락 | E | 210/440 | +18 | 9 | — |
-| 왕도 천연암반수 | E | 185/390 | +20 | 2 | — |
+| 생수 | C | 40/80 | +10 | 2 | — |
+| 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
+| 길드 특제 도시락 | R | 185/370 | +16 | 7 | expedition Wallet +40% |
+| 영웅 결전 도시락 | E | 210/420 | +18 | 9 | — |
+| 왕도 천연암반수 | E | 185/370 | +20 | 2 | — |
 
 PASS:
 - active catalog count remains 40
@@ -922,9 +957,9 @@ Does not dominate survival+Fatigue recovery+loot+stats simultaneously (User 2026
 
 EXPECT:
 - 하급: 70/140, 투력 +8
-- 중급: 110/230, 투력 +12
-- 상급: 150/300, 투력 +16
-- 최상급: 190/400, 투력 +24
+- 중급: 125/250, 투력 +14
+- 상급: 175/350, 투력 +20
+- 최상급: 210/420, 투력 +28
 
 All:
 - Potion category
@@ -941,7 +976,7 @@ PASS:
 
 `진정 허브티`:
 - Drink Common
-- 40/85
+- 40/80
 - 정신 +15
 - Supply 2, displayed `피로 회복 2` (User 2026-09-24, v2.9.0)
 - no explicit fear/dark/whiteout Counter
@@ -966,21 +1001,22 @@ Exact base Item values must match the current active catalog; Supply is displaye
 ### ITEM-Q73 — HAZARD COUNTER VALUES
 
 Exact pre-Epic Main/Lower/Hybrid Item Counter values:
-- antidote poison +18
-- mask poison +12
+- antidote poison +30
+- mask poison +24
 - rope bind +16
-- coating corrosion +18
+- coating corrosion +24
 - cloak corrosion +6 / mire +6
-- boots mire +16
-- ion fire +18
+- boots mire +20
+- ion fire +26
 - ice fire +10
-- wine fear +18
+- wine fear +20
 - candy fear +10
 - battery dark +16
-- heat cold +18
+- heat cold +24
 - ramen cold +10
 - lava cold +6
-- goggles whiteout +16
+- goggles whiteout +20
+(v2.9.0 balance close values, User 2026-09-25: within a Rarity, Counter + pressed-Stat contribution is equal)
 
 PASS:
 - specialist Field Gear does not retain stale generic positive Core Stats except explicit current catalog exceptions
@@ -1015,8 +1051,8 @@ Lava Noodle retains Food/Hybrid identity.
 
 `농축 해독제`:
 - Field Gear Rare
-- 80 / 170
-- poison Counter +18
+- 95 / 190
+- poison Counter +30
 
 PASS:
 - no generic positive Core Stat
@@ -1030,15 +1066,17 @@ PASS:
 EXPECT exact new Epic Field Gear:
 
 ```text
-거미줄 방호세트   150/320  독+12 / 속박+12
-연금 방수슈트     150/320  부식+12 / 진창+12
-성화 랜턴         150/320  공포+12 / 어둠+12
-백설 방한고글     150/320  냉기+12 / 화이트아웃+12
-마그마 냉각장비   160/340  화염+14 / 투력+6
+거미줄 방호세트   165/330  독+22 / 속박+18
+연금 방수슈트     165/330  부식+22 / 진창+18
+성화 랜턴         165/330  공포+18 / 어둠+18
+백설 방한고글     165/330  냉기+22 / 화이트아웃+18
+마그마 냉각장비   175/350  화염+18 / 투력+6
 ```
 
 PASS:
 - each dual-Hazard value remains below the owning dedicated Main specialist value
+  UNRESOLVED (reported 2026-09-25): 속박 +18 and 어둠 +18 exceed their Common Main specialists (경량 로프 / 랜턴 건전지 +16)
+  under the balance-close values; the User decides which rule holds
 - FIRE item does not invent a second FIRE Hazard
 - `마그마 냉각장비 투력+6` is an explicit exception only
 
@@ -1047,9 +1085,9 @@ PASS:
 EXPECT:
 
 ```text
-초고속 에너지드링크    Drink E   160/340  기동+18 / Supply2
-대현자 허브엘릭서      Drink E   160/340  정신+20 / Supply2
-최상급 포션            Potion E  190/400  투력+24
+초고속 에너지드링크    Drink E   175/350  기동+22 / Supply2
+대현자 허브엘릭서      Drink E   175/350  정신+24 / Supply2
+최상급 포션            Potion E  210/420  투력+28
 ```
 
 Supply2 is displayed `피로 회복 2` (User 2026-09-24, v2.9.0).
