@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -223,6 +223,17 @@ Do not:
 Store scene은 사용할 수 있으나
 상황 정보보다 방해되지 않게 한다.
 
+### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
+
+(User 2026-09-25, v2.9.1 balance.) The Run's cumulative Death count and the current segment limit
+(`CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED) are always on screen at MORNING and ORDER, in the top status line —
+not only in the 도감.
+- one compact item: count / current limit / the Day the segment ends; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
+- warning color when one more Death ends the Run (count = limit − 1)
+- the limit shown already includes 추모 방명록 and 위령제
+- no extra popover, badge or explanation text; the same line on both screens
+- exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
+
 ### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown anywhere, MORNING or ORDER. Today's open Gates, their numbered Hazard rows and the visitor count per open Gate are the whole preparation context; the Gate-count / Tier generation rules in `DUNGEON_HAZARD_v2.8.0.md` are unchanged and stay internal.
@@ -258,7 +269,7 @@ REMOVE from Order main composition.
 
 Recommended hierarchy:
 1. `DAY X · 본사 발주`
-2. persistent funds summary
+2. persistent funds summary (the top status line also carries the Death count / limit, §DEATH LIMIT — ALWAYS VISIBLE)
 3. compact current-day Gate / known Hazard reference
 4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
 5. offer list + quantity (base=6; authoritative modifiers may increase count)
@@ -346,7 +357,7 @@ Within an offer/item card, visual priority is:
    - explicit penalty
 3. economy / stock metadata
 4. quantity interaction
-   - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; a used-up offer answers `오늘 공급이 끝났습니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0)
+   - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 
 Examples such as `속박 대응 +16` already communicate function; do not add a second `속박 전문` chip.
 No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).
@@ -384,7 +395,7 @@ NPC detail mobile order:
 6. bag/equipment
 7. locked/secondary info
 
-NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `무리한 출발 {n}회` — the number of expeditions this adventurer began injured or at Fatigue 20+, no verdict (User 2026-09-25, v2.9.0).
+NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `연속 부상 출발 {n}회` — the unbroken run of this adventurer's most recent expeditions begun injured (the chain the v2.9.1 strain cut reads; 0 after a healthy departure), no verdict (User 2026-09-25, v2.9.1; replaces `무리한 출발 {n}회`).
 
 NPC inspection entry:
 portrait/sprite/name/card tap all acceptable
@@ -601,9 +612,28 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
-- on a desk (≥1024) the tray keeps its place above the dock and aligns its contents under the shelf column
+- on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
 - the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
 - tap-only; no drag, no minigame, no new Save field
+
+### SALE — FORECAST PIN
+
+(User 2026-09-25, v2.9.0) On a phone the readout scrolls away with the dossier while the Player works the shelf.
+
+- while the readout is outside the scrolled column's view, one floating line shows the same two readings at the top of the scrolled column, where the readout sat: `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` — the same frozen SALE-entry values and colours, never a second source
+- while the readout is on screen the pin is not shown; on a desk (≥1024) it is never shown (the readout sits beside the portrait there)
+- one tap folds it to a `전망` chip and back; the fold lasts only until the readout is on screen again — the next time the readout scrolls away the pin opens unfolded; no Save or account field
+- it floats over the top of the scrolled column and reserves no layout height; a row it covers is read by folding it; the touch target is at least 44px
+
+### SALE — DESK LAYOUT
+
+(User 2026-09-25, v2.9.0) On a desk (≥1024) the SALE area below the counter band is two areas, not one scrolled column.
+
+- the dossier column (Stat grid, Traits) is its own area on the wood, running down to the dock
+- the shelf column holds the shelf on the wood and, under it, the counter tray: the tray takes only the shelf column's width, and the wood above it stays clearly apart from the tray's dark band
+- each column scrolls on its own; scrolling the shelf never moves or empties the dossier column
+- a redraw of the same customer keeps both columns' scroll positions; a new customer starts both at the top
+- phones keep the single scrolled column and the full-width tray (§SALE — FORECAST PIN covers the readout there)
 
 ### SALE SELECTED-ITEM INFORMATION
 
@@ -2009,6 +2039,16 @@ Contextual Tutorial explicitly teaches:
 
 Player should understand why another useful Item can matter even when ordinary
 Success already looks likely.
+
+### 만반의 준비 TUTORIAL
+
+(User 2026-09-25, v2.9.1 balance.) Contextual, like the other first-time marks: shown once per account, the first time
+the Player fills BOTH Bag slots of a customer who is uninjured and whose departure Fatigue (the tray's `출발 B`) is
+below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) is first achieved.
+- anchor: the customer's Bag slots on the SALE counter
+- teaches the condition and the effect in words only; no number, no percentage
+- persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
 
 ### FIRST STORE SUPPORT TUTORIAL (DAY 0)
 

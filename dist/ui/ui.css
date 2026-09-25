@@ -381,6 +381,13 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .board-rail b{margin-left:auto;align-self:baseline;font:400 13px/1.4 var(--ui);
  font-variant-numeric:tabular-nums;color:#fff0c9;letter-spacing:0}
 .board-rail b+b{margin-left:0}
+/* UI_UX §DEATH LIMIT — ALWAYS VISIBLE (v2.9.1 balance): the same warning color the 도감 already
+   uses, exactly at count = limit - 1. No badge, no popover. */
+.board-rail b.death-limit.warn{color:#e8907c}
+/* ORDER carries the line alone, ahead of the ledger, so it keeps the board's own rail look
+   without needing the MORNING board's pinned-column context. */
+.board-rail.death-limit-row{margin:10px 16px 0}
+.board-rail.death-limit-row b{margin-left:0}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;
@@ -944,6 +951,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* v2.9.0 counter tray: the phone gives the tray its 44px back from the dossier margin, so the shelf head and first row still show at entry */
 .p-sale .dossier:not(.traits){margin-bottom:10px}
 .p-sale .shelf{order:2}
+/* the shelf's desk column (UI_UX §SALE — DESK LAYOUT); on a phone it is no box at all */
+.p-sale .shelf-col{display:contents}
 .p-sale .dossier.traits{order:3}
 .dossier{margin:0 0 18px}
 .p-sale .dock{display:flex;align-items:center;gap:12px;background:#170f0a;box-shadow:inset 0 3px 0 #ffffff14}
@@ -1163,6 +1172,24 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-sale .counter-tray{flex:0 0 auto;padding:7px var(--gutter) 8px;background:#15100a;color:#d8c9a6;
  box-shadow:inset 0 4px 0 #000000b3,inset 0 -3px 0 var(--gold)}
 .p-sale .counter-tray.empty{padding:0 var(--gutter)}
+/* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): phone only, floats at the top of the scrolled column where the
+   readout sat, shown only while the readout is off screen; the anchor has no height so nothing in the layout moves */
+.forecast-pin-anchor{position:relative;height:0;z-index:3}
+.forecast-pin{position:absolute;left:var(--gutter);right:var(--gutter);top:0;display:none;align-items:baseline;
+ min-height:44px;padding:8px 12px;background:#0d0904;color:#9c8d70;font:500 13px/1.3 var(--ui);word-break:keep-all;text-align:left;
+ box-shadow:inset 0 0 0 1px #ffffff1f,0 4px 12px #0009}
+.forecast-pin .pin-full{display:flex;flex:1;gap:16px}
+.forecast-pin .pin-fore{flex:1 1 46%}
+.forecast-pin.folded{left:auto}
+.forecast-pin.show{display:inline-flex}
+.forecast-pin:hover{background:#0d0904}
+.forecast-pin b{margin-left:6px;font:500 17px/1 var(--f-led);color:var(--gold)}
+.forecast-pin b.env-lack{color:var(--blood)}
+.forecast-pin .pin-chip{display:none;color:var(--gold)}
+.forecast-pin.folded .pin-full{display:none}
+.forecast-pin.folded .pin-chip{display:inline}
+.forecast-pin.folded{box-shadow:inset 0 0 0 1px #d8b25a80,0 4px 12px #0009}
+@media(min-width:1024px){.forecast-pin-anchor{display:none}}
 /* v2.9.0 SALE — TRANSACTION RESULT STUB (PRESENTATION §TRANSACTION BEAT A8): a paper receipt stub over the counter
    band above the dock; fixed, so it reserves no height; pointer-events none, so it never holds input. */
 .receipt-stub{position:fixed;left:var(--gutter);z-index:65;pointer-events:none;padding:7px 12px 8px;
@@ -2763,6 +2790,24 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
  .p-sale .dossier-col{display:block;grid-column:1;margin:0}
  .p-sale .shelf{grid-column:2;margin:0}
+ /* UI_UX §SALE — DESK LAYOUT (User 2026-09-25, v2.9.0): below the counter band the desk is two areas. The dossier
+    column is its own area running down to the dock; the shelf column holds the shelf on the wood and, under it, the
+    counter tray - the tray takes only the shelf column's width. Each column scrolls on its own, so working down the
+    shelf never moves or empties the dossier side. The scrolled column of the phone is no box here. */
+ .stage.p-sale{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  grid-template-rows:auto auto auto minmax(0,1fr) auto auto;
+  grid-template-areas:"task task" "front front" "edge edge" "left shelf" "left tray" "dock dock"}
+ .p-sale>.task-line{grid-area:task}
+ .p-sale>.front{grid-area:front}
+ .p-sale>.counter-edge{grid-area:edge}
+ .p-sale>.dock{grid-area:dock}
+ .p-sale>.stage-scroll{display:contents}
+ .p-sale .dossier-col,.p-sale .shelf-col{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+  background:var(--tex-wood),#2b2013}
+ .p-sale .dossier-col{grid-area:left;padding:16px 12px 16px var(--gutter)}
+ .p-sale .shelf-col{display:block;grid-area:shelf;padding:16px var(--gutter) 12px 12px}
+ .p-sale>.counter-tray{grid-area:tray;display:block;padding-left:12px}
+ .p-sale>.counter-tray>*{grid-column:auto}
  
 }
 

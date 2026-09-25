@@ -31,6 +31,13 @@ const SCREENS=list(process.env.QA_SCREENS,['opening','store','morning','order','
  'relic','final','end','endfail','event','codex','menu','help','settings',
  'boss5','boss10','boss15','boss20','boss25']);
 const MODAL={event:'event',codex:'codex',menu:'menu'};
+/* v2.9.1 balance: the D1-10 death limit dropped 10 -> 5 (CORE_RUN §DEATH LIMIT — SEGMENTED),
+   and the fixed seed `qa-v24-morning` happens to hit it - this drive's own crude, hazard-blind
+   sell policy racks up 5 deaths by D3 under that seed and the Run ends (RUN FAIL) before D6, so
+   drive() never reaches 'morning'. Confirmed on other seeds this same policy reaches D6 cleanly,
+   so this is a fixture pick, not a balance claim - only THIS screen's seed is swapped for one
+   that survives; nothing about what a seed is FOR changes for any other screen. */
+const SEED_OVERRIDE={morning:'qa-v24-morning2'};
 // Surfaces that exist before a Run does, so drive() stops before DAY 0.
 const PRERUN=new Set(['opening','store']);
 // The Boss-information beats. Each is a takeover over the Morning it belongs to, reached by
@@ -803,7 +810,7 @@ async function focusProbe(page){
    page.on('pageerror',e=>{console.error(`  page error @${width}: ${e.message}`);failed++;});
    await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
    for(const screen of SCREENS){
-    await drive(page,screen,'qa-v24-'+screen);
+    await drive(page,screen,SEED_OVERRIDE[screen]||'qa-v24-'+screen);
     const file=path.join(OUT,`${screen}-${width}.png`);
     await page.screenshot({path:file});
     const {fails,warn}=await audit(page,width,screen,desktop);

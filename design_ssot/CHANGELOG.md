@@ -26,19 +26,61 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   numbers); H2 names no "price stamp" (the A8 stub is SALE's only stamp); H3 counts go prior → resolved, never
   a unit per crate; H6 targets are the User's decision after the capture, not WORK's. Docs only.
 
-## v2.9.1 — balance, PLANNED (User 2026-09-25)
+## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted 2026-09-25
 
-The v2.9.0 BALANCE FINDING is resolved in its own session as v2.9.1 (`reports/v29-balance-finding-handoff.md`,
-decisions 1–8 and 7-b; WORK_STATE §Next — BALANCE SESSION). Nothing adopted yet.
+The v2.9.0 BALANCE FINDING is resolved as its own version (User 2026-09-25). Values: `reports/v29-balance-agreements.md`;
+measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Source adoption ran in a separate session
+(branch `claude/v291-balance-source-adoption`, batches 1-6, `reports/v291-implementation-handoff.md`) and is complete.
+Each owner amendment is listed with its commit.
 
-## v2.9.0 — implementation complete 2026-09-25; release open on the BALANCE FINDING (User decisions 2026-09-24/25)
+  - DUNGEON_HAZARD (8854c89): 중상 Fatigue 0; Severe shares .36 / .11; repeated-strain cut on consecutive injured departures
+    only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing 25 → 100%; hidden bad-luck
+    preparation assist; expedition Wallet 대성공 / 성공 1.00; Gate Day term 1.20 / 0.80.
+  - ITEM (ec2a90f): Counter values by Rarity (강인함-pressed +4); Potion 8 / 14 / 20 / 28; stat Food / Drink raises; Fatigue
+    recovery 삼각김밥 5 · 컵라면 3 · 간단 도시락 6 · 불룡볶음면 3 · 길드 특제 도시락 7; prices raised with the effect; Sell = Buy × 2.
+  - ECONOMY_ORDER (f702580): operating cost dayBase 170 + 1 × (Day − 1), Level factor .03.
+  - CORE_RUN / META (2c86615): start Gold 700G; Death limit by segment 5 / 8 / 11 (추모 방명록 +2, 위령제 +1); Store
+    Capital 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects +3 offers · 30% · 50G ·
+    55% · 65% · 45% · three saves.
+  - BOSS (2c900c7): WRATH 180, GREED cap 11, SLOTH 200 / 189 / 171 / 149.
+  - EVENT (c03d205, then the conditions below): 23. 위령제.
+  - UI_UX / COPY_AUDIT (c862a7c): `사망 {n} / {limit} · D{end}까지` always on MORNING and ORDER.
+  - QA (5a9a645, 06a2de9): DUNGEON_ITEM_QA, ECONOMY_ORDER_QA, CORE_RUN_QA (RUN-Q-v29-DL), UI_UX_QA (UI-Q-v29-26).
+  - 7-b closed: the remaining-Supply buffer stays. Known measured gaps accepted by the User are in `reports/v29-balance-ideal.md`
+    §종결 측정.
+  - Follow-up decisions (User 2026-09-25): 위령제 uses the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may
+    recur, +1 each time); a contextual 만반의 준비 tutorial (UI_UX §만반의 준비 TUTORIAL); an Epic hybrid stays below every
+    specialist of the same or a higher Rarity (ITEM, DUNGEON_ITEM_QA ITEM-Q73 / Q83 / Q15).
+  - Copy (User 2026-09-25): 23. 길드 합동 위령제 (COPY_AUDIT §13-23), the 만반의 준비 tutorial line (§3-7), the Decoration effect
+    lines (§9-5, 추모 방명록 `사망 한도 +2명.`), the Night lines for retreat healing and 만반의 준비 (§19-9); the NPC-detail row
+    becomes `연속 부상 출발 {n}회` (UI_UX, DUNGEON_ITEM_QA DUN-Q-v29-3).
+  - **Source adoption** (2026-09-25, branch `claude/v291-balance-source-adoption`, 배치 1~6): DUNGEON_HAZARD / shop.js
+    (`09e65fd`; pre-existing pilgrimage/claimedDestination bugfix surfaced and fixed, `2d06b9d`), ITEM catalog (`a7b3cca`),
+    ECONOMY_ORDER (`2b29c97`), META / CORE_RUN / BOSS / decorations (`5df9448`), UI_UX 사망 한도 줄 + 만반의 준비 튜토리얼
+    (`5f68bda`), EVENT 위령제 + NPC `연속 부상 출발` 줄 (`dd0fba0`). `npm test` / `npm run ssot:check`(21/21) /
+    `npm run qa:runtime`(5/5) / `npm run qa:visual` all PASS (`781ce5f` fixes a v2.9.1-only qa fixture seed that hit the
+    new D1-10 Death limit before D6). Native remeasurement — the shipped Source itself, no rule patches — against
+    `reports/v29-balance-ideal.md` §종결 측정 is recorded in that report's §네이티브 재측정 (`2f0753d`): several metrics
+    exceed the handoff's ±4%p, accepted by the User as sampling-error-range known differences (not tuned).
+
+## v2.9.0 — implementation complete 2026-09-25; the BALANCE FINDING moved to v2.9.1 (User decisions 2026-09-24/25)
 
 Theme: easy to learn, hard to master. Readability, onboarding, a visible transaction, simpler rules.
 
 Docs-first. Each owner amendment is listed when committed.
 
 State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
-Open before the tag: the BALANCE FINDING (`reports/v29-balance-finding-handoff.md`, decisions taken in a separate session) and 7-b.
+The BALANCE FINDING (`reports/v29-balance-finding-handoff.md`) and 7-b were decided in the balance session and are v2.9.1 (User 2026-09-25).
+
+- Quick fix (User 2026-09-25): SALE desk layout — on a desk the dossier column is its own area down to the dock, the counter
+  tray sits under the shelf column only, and the two columns scroll separately; a redraw keeps both positions
+  (UI_UX §SALE — DESK LAYOUT, UI-Q-v29-25).
+
+- Quick fix (User 2026-09-25): SALE forecast pin — on a phone, while the readout is scrolled out of view, its two readings
+  float at the top of the scrolled column, where the readout sat; one tap folds them to a `전망` chip until the readout is on screen again; no Save field (UI_UX §SALE — FORECAST PIN, UI-Q-v29-24).
+
+- Quick fix (User 2026-09-25): the ORDER supply-cap toast reads `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9, UI_UX, UI_UX_QA) — the
+  old `오늘 공급이 끝났습니다.` read as if nothing could be ordered at all.
 
 - Fix (2026-09-25, RUNTIME UX BUG from I-3): the D0 briefing's two body lines had no style rule and fell to the secondary tone.
   User 2026-09-25: the `DAY 05` / `DAY 30` anchors come back as an LED label over each line (COPY_AUDIT §14-1, UI_UX §BOSS D0, UI-Q-v29-14).

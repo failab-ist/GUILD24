@@ -672,11 +672,11 @@ test('BOSS_v2.7 §DIRECTOR DOCUMENT BASELINE: the approved starting values, exac
     implementation starting values during adoption. Frozen QA may report a BALANCE FINDING but
     may not auto-tune them, so they are pinned here and a change has to come from an approved
     owner-spec update rather than from a harness. */
- assert.equal(DATA.balance.bossPower,200,'WRATH keeps the retained 200 baseline');
+ assert.equal(DATA.balance.bossPower,180,'WRATH is 180 (User 2026-09-25, v2.9.1 balance; was 200)');
  assert.equal(t.prideCombatFactor,0.92,'PRIDE is 0.92, superseding 0.90');
- assert.equal(t.greedShortfallCap,12,'GREED shortfall caps at +12');
- assert.equal(DATA.balance.bossPower+t.greedShortfallCap,212,'so GREED alone cannot pass 212');
- assert.deepEqual(t.slothBossPower,[225,210,190,165],'SLOTH by committed break count');
+ assert.equal(t.greedShortfallCap,11,'GREED shortfall caps at +11 (v2.9.1 balance; was 12, scaled with WRATH 200 -> 180)');
+ assert.equal(DATA.balance.bossPower+t.greedShortfallCap,191,'so GREED alone cannot pass 191');
+ assert.deepEqual(t.slothBossPower,[200,189,171,149],'SLOTH by committed break count (v2.9.1 balance; were 225/210/190/165, 0 breaks set to 200 by decision)');
  assert.equal(t.gluttonyStatFactor,0.50,'GLUTTONY halves the Item Core-Stat contribution');
  assert.equal(t.gluttonyRarityThreshold,undefined,'and keeps no Rarity threshold');
  // ENVY and LUST take no v2.7 numeric change

@@ -285,7 +285,7 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  assert.ok(!/내일|tierLine|gateLine/.test(order)&&!/function (tierLine|gateLine)\(/.test(app),'no next-day forecast block on ORDER (User 2026-09-24, v2.9.0)');
  assert.ok(/<span class="kind">'\+E\(D\.rarities\[it\.rarity\]\)\+'<\/span>/.test(order),'each offer row carries the rarity name line');
  assert.ok(/lim=game\.quantityLimit\(i\)/.test(order)&&/aria-disabled="true" data-reason=/.test(order),'a blocked quantity control is dim but tappable, with its reason');
- for(const t of ['창고 칸이 부족합니다.','오늘 공급이 끝났습니다.',"'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.'"])assert.ok(app.includes(t),'§3-9 toast: '+t);
+ for(const t of ['창고 칸이 부족합니다.','오늘 공급 최대 수량입니다.',"'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.'"])assert.ok(app.includes(t),'§3-9 toast: '+t);
  assert.ok(/getAttribute\('aria-disabled'\)==='true'/.test(app),'the click listener answers a blocked control with the toast and nothing else');
  assert.ok(!/'비싼 상품일수록|일반 부상의 투력 페널티를 대체/.test(read('dist/data/catalog.js')),'no Trait flavor note survives');
  assert.ok(/tr\.note\?`<em class="tone-cost">/.test(fn('traitRows')),'the one remaining note (거짓말쟁이) renders as an effect row');
@@ -857,7 +857,10 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  assert.ok(!/n\.outlook|n&&n\.outlook/.test(plate.replace(/\/\*[\s\S]*?\*\//g,'')),
   'the plate reads no readiness of its own');
  const codeOnly=app.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
- assert.equal((codeOnly.match(/환경 대응<b/g)||[]).length,1,'the readiness reading is rendered in exactly one place');
+ /* UI-Q-v29-24 (User 2026-09-25): the forecast pin mirrors the readout while the readout is scrolled away, so the words have two
+    render sites - the readout and the pin - and never a third; UI-Q-v29-24's own guard holds the pin to off-screen only */
+ assert.equal((codeOnly.match(/환경 대응<b/g)||[]).length,2,'the readiness reading is rendered in the readout and in the pin that mirrors it, nowhere else');
+ assert.ok(/환경 대응<b/.test(fn('forecastPin').replace(/\/\*[\s\S]*?\*\//g,'')),'the second site is the forecast pin');
  assert.ok(!/display:none/.test((css.match(/\.p-sale \.front-side \.dest-plate[^\n]*hazards[^\n]*/g)||[]).join(' ')),
   'and the Hazard rows are never hidden, since nothing else shows the destination environment');
  /* The fight verdict is still the engine's own canonical vocabulary; under SALE_v2.7 it is
@@ -1175,16 +1178,31 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
 
  /* The failure line is not a hidden threshold: it is stated before it matters and the count
     is visible while it climbs, in the book that already lists the dead. */
- /* COPY_AUDIT §8-6 states the same three endings in one compact line. The count is still built
-    from the constant rather than written out, so the sentence cannot drift from the rule. */
- assert.ok(fn('help').includes('D.balance.deathLimit'),
-  'the guide names the death line from the constant rather than a written-out number');
- for(const rule of ['적자 마감은 재고 정리로 회생할 수 있다','명이 되면 폐점한다','DAY 30 최종 원정이 끝나면'])
+ /* COPY_AUDIT §8-6 states the same three endings in one compact line. CORE_RUN §DEATH LIMIT —
+    SEGMENTED (v2.9.1 balance) made the limit Day-dependent, so this general guide no longer
+    names a specific count - MORNING/ORDER's own always-visible line (§4-23) is where the exact
+    current count/limit lives. */
+ assert.ok(!fn('help').includes('D.balance.deathLimit'),
+  'the retired flat constant is not read here');
+ for(const rule of ['적자 마감은 재고 정리로 회생할 수 있다','사망 한도에 이르면 폐점한다','DAY 30 최종 원정이 끝나면'])
   assert.ok(fn('help').includes(rule),'the guide covers: '+rule);
  const roster=fn('rosterList');
  assert.ok(roster.includes('돌아오지 못한 사람')&&roster.includes('Meta.deathLimit(s)')&&!roster.includes('G.Meta'),
   'the roster shows the count against the line');
  assert.ok(roster.includes('s.stats.deaths'),'read from the Run own count, not a second tally');
+
+ /* UI-Q-v29-26 — DEATH LIMIT ALWAYS VISIBLE (v2.9.1 balance, owner UI_UX §DEATH LIMIT —
+    ALWAYS VISIBLE, copy COPY_AUDIT §4-23). One shared line, MORNING and ORDER both, sourced
+    from Meta.deathLimit / Meta.deathLimitSegmentEnd so 추모 방명록 and 위령제 are always
+    included and the 5/8/11 · D10/D20/D30 segment table is never restated by hand. */
+ const dl=fn('deathLimitItem');
+ assert.ok(dl.includes('Meta.deathLimit(s)')&&dl.includes('Meta.deathLimitSegmentEnd(s)'),
+  'the line reads the segment table through Meta, not a copy of it');
+ assert.ok(/'">사망 '\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'exact COPY_AUDIT §4-23 format');
+ assert.ok(/n===limit-1\?' warn':''/.test(dl),'warning color exactly at count = limit - 1');
+ assert.ok(!/popover|badge|title=/.test(dl),'no popover, badge or extra text');
+ assert.ok(fn('morningScreen').includes('deathLimitItem()'),'MORNING shows the line, always on screen');
+ assert.ok(fn('orderForm').includes('deathLimitItem()'),'ORDER shows the same line');
 
  /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
     the form showed only a per-SKU 재고 N. The warehouse is on it now, from the same grouping
@@ -1920,9 +1938,9 @@ test('UI_UX_v2.7 §TUTORIAL: it teaches how to read the system, never the answer
  const sell=/sell:\[[\s\S]*?\]\],\n/.exec(steps)[0];
  const ids=[...sell.matchAll(/\['([a-z]+)','/g)].map(m=>m[1]);
  assert.deepEqual(ids.slice(0,5),['destination','hazard','stats','forecast','pricing'],'the first SALE reads destination, Hazard, Stats, outlook, price - in that order (User 2026-09-24)');
- assert.deepEqual(ids.slice(5).sort(),['bag','great','returning','supply'],'the other four are contextual marks');
+ assert.deepEqual(ids.slice(5).sort(),['bag','great','prepared','returning','supply'],'the other five are contextual marks (v2.9.1 balance adds 만반의 준비)');
  assert.ok(/\['stats','\.dossier \.detail-stats'/.test(steps),'the Stats lesson is on the SALE 능력치 grid');
- for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.counter-tray .tray-delta .fatigue']])
+ for(const [id,sel] of [['great','.great-signal'],['returning','.who.returning'],['bag','.slots .full'],['supply','.counter-tray .tray-delta .fatigue'],['prepared','.slots.prepared']])
   assert.ok(sell.includes("['"+id+"','"+sel+"'"),id+' anchors to an element that only exists in its situation ('+sel+')');
  assert.ok(!/\['npc'|\['inventory'/.test(sell),'the 손님 / 상품 사용 marks are retired');
  /* v2.9.0: no always-on Fatigue line under the outlook; the tray row carries the arithmetic */
@@ -2490,7 +2508,7 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
   'the First Aid primary function is the approved sentence (COPY_AUDIT §4-22, User 2026-09-25)');
  // v2.9.0 F3 (User 2026-09-25): the NPC detail rows and the route-change line
  assert.ok(fn('npcDetail').includes("cond.push('피로 회복: 음식·음료')"),'§4-14 no rest recovery: Food/Drink only');
- assert.ok(fn('npcDetail').includes("'무리한 출발 '+(n.records||[]).filter(r=>r.departedInjured||r.departedWeary).length+'회'"),'the strained-departure information row reads the records');
+ assert.ok(fn('npcDetail').includes("'연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회'"),'the strained-departure information row reads the records through the STRAIN helper (v2.9.1 balance)');
  assert.ok(read('dist/systems/shop.js').includes('rep.routeChange=G.Copy.routeChangeLine('),'the route-change line is composed once, in data/copy.js so the engine needs no UI layer (the simulation worker loads no presentation.js)');
  assert.ok(!/허세/.test(read('dist/systems/shop.js')),'the retired Trait name never appears in the engine');
  assert.equal(Presentation.routeChangeLine({name:'하람',pilgrim:false},'슬라임 초원','거미 동굴'),'거짓말쟁이 하람은 말했던 슬라임 초원 대신 거미 동굴로 향했다.','§14-10 exact, particles by the final consonant');
@@ -2884,6 +2902,24 @@ test('UI-Q-v29-3: the transaction beat is visible, short, guarded and stateless'
 /* v2.9.0 SALE — COUNTER TRAY (User-approved composition change 2026-09-24; UI_UX §SALE — COUNTER TRAY,
    UI-Q-v29-18). The per-row price panel is gone from the ordinary SALE: the chosen Item sits on one
    fixed tray above the dock, the shelf rows never change height, and FINAL keeps its own panel. */
+test('UI-Q-v29-25: on a desk the SALE dossier column runs to the dock, the tray sits under the shelf only, and the columns scroll apart',()=>{
+ const desk=css.slice(css.indexOf('@media(min-width:1024px){\n /* The stat/forecast column'));
+ assert.ok(/grid-template-areas:"task task" "front front" "edge edge" "left shelf" "left tray" "dock dock"/.test(desk),'two areas below the counter band: the dossier beside the shelf and the tray');
+ assert.ok(/\.p-sale>\.stage-scroll\{display:contents\}/.test(desk)&&/\.p-sale \.dossier-col\{grid-area:left/.test(desk)&&/\.p-sale \.shelf-col\{display:block;grid-area:shelf/.test(desk)&&/\.p-sale>\.counter-tray\{grid-area:tray/.test(desk),'the dossier runs to the dock; the tray is only the shelf column wide');
+ assert.ok(/\.p-sale \.dossier-col,\.p-sale \.shelf-col\{min-height:0;overflow-y:auto/.test(desk),'each column scrolls on its own');
+ assert.ok(/\.p-sale \.shelf-col\{display:contents\}/.test(css)&&/'<div class="shelf-col">'\+shelf\(\)\+'<\/div>'/.test(fn('saleScreen')),'the shelf column is no box on a phone');
+ assert.ok(/const previousCols=\['\.p-sale \.dossier-col','\.p-sale \.shelf-col'\]/.test(app)&&/el\.scrollTop=changed\?0:previousCols\[i\]/.test(app),'a redraw keeps both column positions; a new view starts at the top');
+});
+test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the readout is off screen, folds on a tap, and saves nothing',()=>{
+ const pin=fn('forecastPin'),watch=fn('watchForecastPin'),sync=fn('syncForecastPin');
+ assert.ok(/counter-edge" aria-hidden="true"><\/div>'\+forecastPin\(n\)\s*\+'<main class="stage-scroll"/.test(fn('saleScreen')),'the pin anchor sits at the top of the scrolled column, where the readout sat');
+ assert.ok(/n\.outlook\|\|game\.outlookFor\(n\)/.test(pin)&&pin.includes('전투 전망')&&pin.includes('환경 대응')&&pin.includes('>전망<'),'the pin reads the frozen SALE-entry outlook and folds to a 전망 chip');
+ assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
+ assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');
+ assert.ok(/aria-expanded/.test(sync),'the fold state is announced');
+ assert.ok(/if\(e\.isIntersecting&&pinFolded\)\{pinFolded=false;syncForecastPin\(\);\}/.test(watch),'the fold clears once the readout is back on screen, so the next pin opens unfolded');
+ assert.ok(/\.forecast-pin-anchor\{position:relative;height:0/.test(css)&&/@media\(min-width:1024px\)\{\.forecast-pin-anchor\{display:none\}\}/.test(css)&&/\.forecast-pin\{[^}]*min-height:44px/.test(css),'no layout height, never on a desk, a 44px target');
+});
 test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves',()=>{
  const css=read('dist/ui/ui.css'),sale=fn('saleScreen'),shelf=fn('shelf'),tray=fn('tray');
  assert.ok(sale.indexOf("+'</main>'")<sale.indexOf('+tray()')&&sale.indexOf('+tray()')<sale.indexOf('<div class="dock">'),'the tray sits between the scrolled column and the dock');

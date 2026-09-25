@@ -162,7 +162,7 @@ test('the simulation observes the run and never rewrites it',()=>{
    approved baseline is and never writes one of its own. */
 test('PASS3 GATE: the harness reports Boss Power evidence and leaves the value alone',()=>{
  const r=cached('balanced');
- assert.equal(DATA.balance.bossPower,200,'the approved Source baseline is untouched by simulation');
+ assert.equal(DATA.balance.bossPower,180,'the approved Source baseline is untouched by simulation (v2.9.1 balance; was 200)');
  /* The gate is that the harness MEASURES and never writes a baseline of its own, so it is
     asserted on the baseline and on the reporting - not on whether a fresh-Account cohort
     happened to reach a Final to measure against, which is a balance question. */

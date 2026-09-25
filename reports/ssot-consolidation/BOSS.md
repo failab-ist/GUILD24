@@ -197,7 +197,6 @@ WRATH effective Boss Power=200 (v2.5 final). It is the unmodified baseline every
 ```
 
 ```new
-WRATH effective Boss Power=200. It is the unmodified baseline every other Boss is measured against.
 `envyStatFactor=0.92`
 - greedRevenueTarget=18800
 `lustStatFactor=0.95`
@@ -410,4 +409,49 @@ Not reduced by GLUTTONY (User 2026-09-24, v2.9.0):
 - Fatigue recovery (Food/Drink Supply)
 2. locked Item / Food·Drink Fatigue recovery / equipment effects
 - Hazard Counter / Fatigue recovery / Insurance / Utility / harmful RiskReward penalty are unchanged
+```
+
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §7): WRATH 200 -> 180 (ratio Bosses follow); GREED shortfall cap 12 -> 11; SLOTH 200 / 189 / 171 / 149. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+shortfallCap = 12 Boss Power
+Thus with WRATH base 200:
+- target met -> effective Boss Power 200
+- maximum shortfall penalty -> effective Boss Power 212
+0 breaks = 225
+1 break  = 210
+2 breaks = 190
+3 breaks = 165
+- applied shortfall strengthening caps at +12 Boss Power
+- target met returns to 200 baseline
+- maximum shortfall cannot exceed 212 through GREED alone
+0 = 225
+1 = 210
+2 = 190
+3 = 165
+```
+
+```new
+WRATH effective Boss Power=180 (User 2026-09-25, v2.9.1 balance; was 200 — the ~10th-Run clear rate is the target, the
+ratio Bosses (PRIDE / ENVY / GLUTTONY / LUST) follow it automatically and the absolute-number Bosses below are scaled with it).
+It is the unmodified baseline every other Boss is measured against.
+shortfallCap = 11 Boss Power    (v2.9.1 balance; was 12, scaled with WRATH 200 -> 180)
+Thus with WRATH base 180:
+- target met -> effective Boss Power 180
+- maximum shortfall penalty -> effective Boss Power 191
+0 breaks = 200
+1 break  = 189
+2 breaks = 171
+3 breaks = 149
+(User 2026-09-25, v2.9.1 balance; were 225 / 210 / 190 / 165. 1-3 breaks scaled with WRATH 200 -> 180; 0 breaks set
+to 200 by decision.)
+- applied shortfall strengthening caps at +11 Boss Power
+- target met returns to 180 baseline
+- maximum shortfall cannot exceed 191 through GREED alone
+0 = 200
+1 = 189
+2 = 171
+3 = 149
 ```

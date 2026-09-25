@@ -592,7 +592,9 @@ test('CORE_RUN §SAVE/LOAD: the validator reads as named checks, and each one st
 });
 
 test('CORE_RUN §RUN FAIL: a store ends when too many of the people it sent stop coming back',()=>{
- const limit=DATA.balance.deathLimit;
+ // CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): every fresh() Run below starts on Day 1,
+ // so they all share the D1~10 segment limit.
+ const limit=Meta.deathLimit(fresh('deaths-limit-ref').run);
  assert.ok(Number.isInteger(limit)&&limit>0,'the failure line is a named constant');
 
  // one short of it the store keeps trading; on it, it does not
@@ -619,7 +621,7 @@ test('CORE_RUN §RUN FAIL: a store ends when too many of the people it sent stop
 });
 
 test('CORE_RUN §RUN FAIL: only a death counts, and the night that reaches the line is read in full',()=>{
- const limit=DATA.balance.deathLimit;
+ const limit=Meta.deathLimit(fresh('deaths-limit-ref2').run);
  /* s.stats.deaths is the count night() has always kept - it rises only where the report left
     the adventurer dead, so an injury or a stay in recovery was never in it. */
  const shop=source('dist/systems/shop.js'),dungeon=source('dist/systems/dungeon.js');
@@ -633,7 +635,11 @@ test('CORE_RUN §RUN FAIL: only a death counts, and the night that reaches the l
  assert.ok(close.indexOf('deathLimit')<close.indexOf('s.money<0'),
   'before the money branch, so a finished Run is never offered liquidation');
  const night=source('dist/systems/shop.js');
- assert.ok(!night.includes('deathLimit'),'night() still reports the whole evening before anything ends it');
+ /* v2.9.1 balance: 위령제 accumulates its own bonus onto s.riteBonus in morningEvent() by
+    reading the drawn Event's own `effects.deathLimit` field - a data key, not a call to
+    Meta.deathLimit(...). The line under test is still the only place that RESOLVES the limit
+    and decides an ending; shop.js reads no such resolved value anywhere. */
+ assert.ok(!night.includes('Meta.deathLimit('),'night() still reports the whole evening before anything ends it');
 
  // a Run at the line still carries its full set of results from that night
  const g=fresh('deaths-night');g.run.phase='closing';g.run.stats.deaths=limit;
@@ -918,6 +924,7 @@ test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every high
   const g=fresh('ceiling-'+seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);
   for(let turn=0;turn<600&&g.run.phase!=='end';turn++){
    const s=g.run;
+   s.money=Math.max(s.money,5000);  // controlled: the economy is not the subject here (see controlledStep above)
    if(s.phase!=='sell'){if(!step(g))break;continue;}
    const n=g.current();
    visits++;
@@ -985,7 +992,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales x the reached-Day rate, once, and n
  }
 
  // B. each Day band converts at its exact Canonical rate
- const BANDS=[[1,.005],[9,.005],[10,.01],[19,.01],[20,.015],[24,.015],[25,.02],[29,.02],[30,.025]]; // META §Day-reach conversion rate (User 2026-09-24, v2.9.0: halved)
+ const BANDS=[[1,.01],[9,.01],[10,.02],[19,.02],[20,.03],[24,.03],[25,.04],[29,.04],[30,.05]]; // META §Day-reach conversion rate (User 2026-09-25, v2.9.1 balance: back to full 1/2/3/4/5%)
  for(const [day,rate] of BANDS){
   assert.equal(Meta.capitalRate(day),rate,'D'+day+' converts at '+rate);
   const g=at(10000,day);
@@ -1059,13 +1066,13 @@ test('META_v2.8 §STORE CAPITAL: a failed Run still earns on what it actually so
  assert.equal(Meta.storeCapital(bank.g.account),bank.before+bank.gain,'and the Account receives it');
 
  // E. the Death limit closed the store
- const dead=drive('sc-deaths',15,4000,g=>{g.run.stats.deaths=DATA.balance.deathLimit;});
+ const dead=drive('sc-deaths',15,4000,g=>{g.run.stats.deaths=Meta.deathLimit(g.run);});
  assert.equal(dead.gain,Math.round(4000*Meta.capitalRate(15)),'a Death-limit closure uses the ordinary formula');
 
  // F. reached D30 and lost the Final
  const failed=drive('sc-finalfail',30,9000,g=>{g.run.win=false;});
  assert.equal(failed.gain,Math.round(9000*Meta.capitalRate(30)),'a lost Final uses the ordinary formula');
- assert.equal(failed.st.rate,0.025,'at the D30 rate it actually reached (halved, User 2026-09-24)');
+ assert.equal(failed.st.rate,0.05,'at the D30 rate it actually reached (v2.9.1 balance, User 2026-09-25: back to full)');
 
  // the failures are still failures: none of them kept anything Run-scoped
  for(const r of [bank,dead,failed]){
@@ -1120,9 +1127,9 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
  Meta.buyDecoration(a,'thriftSafe');
  const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
- assert.equal(g.run.money,1000,'nothing is paid before DAY 1 opens');
+ assert.equal(g.run.money,700,'nothing is paid before DAY 1 opens');
  g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
- assert.equal(g.run.money,1000+DATA.decorationParams.thriftSafe.dailyGold,'DAY 1 morning pays the counter once');
+ assert.equal(g.run.money,700+DATA.decorationParams.thriftSafe.dailyGold,'DAY 1 morning pays the counter once');
  assert.equal(g.run.daily.safeGold,DATA.decorationParams.thriftSafe.dailyGold,'and the DAY 1 ledger says so');
  assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
  assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
@@ -1137,7 +1144,7 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  assert.equal(g.has('thriftSafe'),false,'and `has` - the Relic question - does not answer for it');
  const next=new Game(a);next.autosave=false;next.start('loadout-freeze-2');
  assert.deepEqual(next.run.loadout,{sign:'dawnSign'},'the next Run picks up the current Account loadout');
- assert.equal(next.run.money,1000,'and the unequipped counter no longer pays out');
+ assert.equal(next.run.money,700,'and the unequipped counter no longer pays out');
 });
 
 test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exclusive outcome',()=>{
@@ -1189,7 +1196,7 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
  assert.deepEqual(Meta.ownedDecorations(back.account),[],'owned defaults to empty');
  assert.deepEqual(Meta.plannedLoadout(back.account),{},'and the loadout to empty');
  const g=new Game(back.account);g.autosave=false;g.start('legacy-v8-start');
- assert.equal(g.run.money,1000,'a Run from it starts on the neutral baseline');
+ assert.equal(g.run.money,700,'a Run from it starts on the neutral baseline');
  /* A Run saved before the loadout existed must not claim to wear anything. */
  const older=copy(g.run);delete older.loadout;delete older.settled;
  const h=new Game(back.account,older);h.autosave=false;
@@ -1300,8 +1307,9 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
    Core Roster = alive only, Level desc then Rarity desc, top 6; recovering adventurers count.
    D11 roster (alive): L7R3 L7R2 L5R1 L4R0 L3R4(recovering) L3R1 | L3R0 L1R0, plus a dead L10R4.
    top 6 levels 7,7,5,4,3,3 -> avg 29/6; rarities 3,2,1,0,4,1 -> avg 11/6.
-   dayBase = 90 + 5 x 10 = 140 (v2.9.0 F4); base = 140 x (1 + .02 x 23/6) x (1 + .06 x 11/6) = 167.314
-   charged = round(16.7314) x 10 = 170G. */
+   dayBase = 170 + 1 x 10 = 180 (v2.9.1 balance, User 2026-09-25 - was 90+5x10=140);
+   base = 180 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 222.777 (level coefficient .02 -> .03)
+   charged = round(22.2777) x 10 = 220G. */
 test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Canonical formula',()=>{
  const g=fresh('core-roster-overhead'),s=g.run;
  const proto=copy(s.npcs[0]);
@@ -1311,16 +1319,16 @@ test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Can
  s.day=11;s.dayFacilities=[];s.facilities=[];s.event=null;
  assert.deepEqual(g.coreRoster().map(n=>n.id).sort((a,b)=>a-b),[1,2,3,4,5,6],
   'the six best living: the dead L10 is out, the recovering L3R4 is in, and L3R1 beats L3R0 on Rarity');
- const want=140*(1+.02*(29/6-1))*(1+.06*(11/6));
+ const want=180*(1+.03*(29/6-1))*(1+.06*(11/6));
  assert.ok(Math.abs(g.overheadBase()-want)<1e-9,'overheadBase '+g.overheadBase()+' = '+want);
- assert.equal(g.expectedOperatingCost(),170,'charged rounded to 10G');
+ assert.equal(g.expectedOperatingCost(),220,'charged rounded to 10G');
  // fewer than six alive: all of them; an empty roster reads Level 1 / Rarity 0
  s.npcs=[mk(1,5,2),mk(2,3,0),mk(3,9,4,{alive:false})];s.day=1;
- assert.ok(Math.abs(g.overheadBase()-90*(1+.02*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
- assert.equal(g.expectedOperatingCost(),100,'90 x 1.06 x 1.06 = 101.124 -> 100G');
+ assert.ok(Math.abs(g.overheadBase()-170*(1+.03*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
+ assert.equal(g.expectedOperatingCost(),200,'170 x 1.09 x 1.06 = 196.418 -> 200G');
  s.npcs=[mk(3,9,4,{alive:false})];s.day=30;
- assert.equal(g.overheadBase(),90+5*29,'empty Core Roster: the Day base alone');
- assert.equal(g.expectedOperatingCost(),240,'235 -> 240G');
+ assert.equal(g.overheadBase(),170+1*29,'empty Core Roster: the Day base alone');
+ assert.equal(g.expectedOperatingCost(),200,'199 -> 200G');
 });
 
 /* ---- META §DECORATION survival alternatives (User decision 2026-09-24) ---------------------- */
@@ -1328,13 +1336,15 @@ const wearing=(ids,seed)=>{const a=Meta.fresh();for(const id of ids){Meta.addCap
  const g=new Game(a);g.autosave=false;g.start(seed);return past0(g);};
 /* past the D0 Store Support pick, so the Day's Gates exist for an arrival to read */
 const past0=g=>{g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;};
-test('추모 방명록: the Death line that ends a Run is one higher while it is worn',()=>{
- const base=DATA.balance.deathLimit,g=wearing(['memorialBoard'],'memorial');
- assert.equal(Meta.deathLimit(g.run),base+1);
- assert.equal(Meta.deathLimit(fresh('memorial-plain').run),base,'without it the line is unchanged');
- g.run.phase='closing';g.run.stats.deaths=base;assert.equal(g.closeDay(),true,'at the old line the store still trades');
- const h=wearing(['memorialBoard'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+1;h.closeDay();
- assert.equal(h.run.phase,'end','one past it, it closes');
+test('추모 방명록: the Death line that ends a Run is two higher while it is worn',()=>{
+ // CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): both Runs start Day 1, so `base` is the
+ // plain D1~10 segment limit; memorialBoard adds +2 to it now (was +1).
+ const base=Meta.deathLimit(fresh('memorial-plain').run),g=wearing(['memorialBoard'],'memorial');
+ assert.equal(Meta.deathLimit(g.run),base+2);
+ assert.equal(Meta.deathLimit(fresh('memorial-plain-2').run),base,'without it the line is unchanged');
+ g.run.phase='closing';g.run.stats.deaths=base;assert.equal(g.closeDay(),true,'at the plain line the store still trades');
+ const h=wearing(['memorialBoard'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+2;h.closeDay();
+ assert.equal(h.run.phase,'end','at the bonused (+2) line, it closes');
 });
 test('의무실 현판: an ordinarily injured arrival may be healed at the door, 중상 never',()=>{
  let healed=0,tries=0;
@@ -1342,13 +1352,13 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
   n.injury=1;n.status='부상';s.queue=[n.id];s.cursor=0;g.arrive();tries++;
   if(n.healedBy){healed++;assert.equal(n.injury,0);assert.equal(n.status,'건강');assert.equal(s.daily.infirmaryHeals,1);}
   else assert.equal(n.injury,1,'a miss leaves the Injury');}
- const rate=healed/tries;assert.ok(rate>.25&&rate<.45,'about 35% heal: '+rate);
+ const rate=healed/tries;assert.ok(rate>.35&&rate<.55,'about 45% heal (v2.9.1 balance; was 35%): '+rate);
  const g=wearing(['infirmaryPlaque'],'infirmary-severe'),n=g.run.npcs[0];n.injury=2;n.recovery=2;g.run.queue=[n.id];g.run.cursor=0;g.arrive();
  assert.equal(n.injury,2,'중상 is not touched');assert.equal(n.healedBy,null);
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: a Death becomes 중상, up to twice per Run',()=>{
+test('구급품 진열장: a Death becomes 중상, up to three times per Run (v2.9.1 balance; was twice)',()=>{
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
  const weak=()=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=[];n.injury=0;return n;};
  let seed=null;for(let i=0;i<500&&seed===null;i++){const n=weak();Dungeon.resolve(n,d,new RNG('aid-'+i));if(!n.alive)seed='aid-'+i;}
@@ -1356,14 +1366,16 @@ test('구급품 진열장: a Death becomes 중상, up to twice per Run',()=>{
  const run={loadout:{counter:'firstAidKit'}};
  const saved=weak(),rep=Dungeon.resolve(saved,d,new RNG(seed),[],run);
  assert.equal(saved.alive,true,'the kit keeps them alive');assert.equal(rep.outcome,'중상');
- assert.equal(rep.avoidedDeath,true);assert.equal(run.aidKitSaves,1,'one of two is spent');
+ assert.equal(rep.avoidedDeath,true);assert.equal(run.aidKitSaves,1,'one of three is spent');
  assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
  const second=weak();Dungeon.resolve(second,d,new RNG(seed),[],run);assert.equal(second.alive,true,'the second Death is caught too');
  assert.equal(run.aidKitSaves,2);
- const third=weak();Dungeon.resolve(third,d,new RNG(seed),[],run);assert.equal(third.alive,false,'a third is not');
+ const third=weak();Dungeon.resolve(third,d,new RNG(seed),[],run);assert.equal(third.alive,true,'the third Death is caught too');
+ assert.equal(run.aidKitSaves,3);
+ const fourth=weak();Dungeon.resolve(fourth,d,new RNG(seed),[],run);assert.equal(fourth.alive,false,'a fourth is not');
  const bare=weak();Dungeon.resolve(bare,d,new RNG(seed),[],{loadout:{}});assert.equal(bare.alive,false,'without it the Death stands');
 });
-test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 50% chance',()=>{
+test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 65% chance (v2.9.1 balance; was 50%)',()=>{
  const P=DATA.decorationParams.trainingRack,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
@@ -1371,16 +1383,16 @@ test('훈련소 제휴 간판: an adventurer created while it is worn is one Lev
   P.chance=0;const miss=wearing(['trainingRack'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
- assert.equal(P.chance,.5);
+ assert.equal(P.chance,.65);
  let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingRack'],'rack-rate-'+i);
   P.chance=0;const base=wearing(['trainingRack'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
- assert.ok(up/all>.4&&up/all<.6,'about half: '+(up/all));
+ assert.ok(up/all>.55&&up/all<.75,'about 65%: '+(up/all));
 });
-test('알뜰 금고: 40G every morning, on the receipt',()=>{
+test('알뜰 금고: 50G every morning, on the receipt (v2.9.1 balance; was 40G)',()=>{
  const g=wearing(['thriftSafe'],'safe'),s=g.run;
  s.phase='closing';g.closeDay();
- assert.equal(s.day,2,'the Day turned');assert.equal(s.daily.safeGold,40,'the new morning pays into a fresh ledger');
+ assert.equal(s.day,2,'the Day turned');assert.equal(s.daily.safeGold,50,'the new morning pays into a fresh ledger');
  assert.ok(source('dist/ui/app.js').includes("(d.safeGold?line('알뜰 금고',d.safeGold):'')"),'and the receipt names it');
 });
 

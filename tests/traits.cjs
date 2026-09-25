@@ -300,8 +300,9 @@ test('NPC_TRAIT §FATIGUE TRAITS: 악바리 adds result fatigue +1 always, a hea
   const plain=run([]),grit=run(['grit']);
   if(plain.outcome!==grit.outcome)continue;
   seen.add(grit.outcome);compared++;
-  if(grit.outcome==='사망')assert.equal(grit.rawOutcomeFatigueGain,0,'no fatigue on a death');
-  // v2.9.0 (User 2026-09-25): 중상 takes the 부상 gain, so the Trait's +1 rides it like any other result
+  // v2.9.1 balance (User 2026-09-25, DUNGEON_HAZARD §FATIGUE OUTCOME BASELINE): 중상 joined 사망
+  // at a final result-Fatigue gain of 0 that no Trait may raise, so the +1 no longer rides it.
+  if(['사망','중상'].includes(grit.outcome))assert.equal(grit.rawOutcomeFatigueGain,0,'no fatigue on '+grit.outcome);
   else assert.equal(grit.rawOutcomeFatigueGain-plain.rawOutcomeFatigueGain,1,'healthy 악바리 gains +1 on '+grit.outcome);
  }
  assert.ok(compared>=200,'the paired resolutions really are comparable: '+compared);

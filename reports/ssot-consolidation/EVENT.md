@@ -502,3 +502,44 @@ v2.9.0 F3 (2026-09-25): the repeated-strain Death cut surfaced a morning whose w
 ```new
 - if the Day has no existing visitor slot to give (every other adventurer dead or on recovery days that morning), the newcomer is that Day's only visitor — the one case the Event adds a visitor, on a Day that would otherwise have none (User 2026-09-25, v2.9.0; the same rule for 왕립 기사단 방문)
 ```
+
+## AMENDMENT — v2.9.1 balance: 23. 위령제 (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3): the catalog gains 23. 위령제 — every segment Death limit +1 from the Day it occurs. TYPE / WEIGHT / eligibility / once-per-Run / copy are UNRESOLVED and stated so in the owner.
+
+```text
+총 22종.
+```
+
+```new
+(User 2026-09-25, v2.9.1 balance.)
+이 날부터 Run 끝까지 모든 구간 사망 한도 +1
+사망 한도 구간과 추모 방명록 -> `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.
+```
+
+## AMENDMENT — v2.9.1 balance: 위령제 conditions / 만반의 준비 tutorial / hybrid rule (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may recur, +1 each time); a contextual 만반의 준비 tutorial the first time both Bag slots of an uninjured customer departing below Fatigue 20 are filled; an Epic hybrid stays below every specialist of the same or a higher Rarity (it may exceed a Common Main). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+22종은 다음 역할을 가진다.
+```
+
+```new
+TYPE: Run / Opportunity
+발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 35% 발생 Roll, 같은 Weight 기반 선택.
+따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않고, 다른 Event처럼 한 Run에 다시 나올 수 있으며
+나올 때마다 +1이 더해진다.
+23종은 다음 역할을 가진다.
+```
+
+## AMENDMENT — v2.9.1: approved copy pointers (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; its reveal copy and the 만반의 준비 tutorial line are approved in COPY_AUDIT §13-23 / §3-7. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+총 23종 (23. 길드 합동 위령제 — User 2026-09-25, v2.9.1 balance).
+### 23. 길드 합동 위령제
+Exact reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-23.
+- 길드 합동 위령제
+```

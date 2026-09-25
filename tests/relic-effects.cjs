@@ -328,15 +328,16 @@ function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999}={}){
 }
 test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 30% of it',()=>{
  const g=fresh('guarantee-charged'),n=g.run.npcs[0];n.traits=[];n.money=9999;g.run.facilities=['guarantee'];
- const bar=DATA.itemBy.bar,premium=DATA.itemBy.premium;           // list 180 / 340
- const over=g.interest(n,bar,'overcharge');                          // charged 270 on a sub-200 list price
- assert.equal(over.price,270);assert.equal(over.guarantee,Math.round(270*.3),'a 150% sale over 200G is covered, 30% of charged');
- assert.equal(over.debit,270-81);
- assert.equal(g.interest(n,bar,'full').guarantee,0,'180G charged is under the threshold');
- assert.equal(g.interest(n,premium,'half').guarantee,0,'a 200G+ list Item sold at 170G is not covered');
- assert.equal(g.interest(n,premium,'full').guarantee,Math.round(340*.3));
+ const bar=DATA.itemBy.bar,premium=DATA.itemBy.premium;           // list 200 / 370 (v2.9.1 balance)
+ const over=g.interest(n,bar,'overcharge');                          // charged 300 on a 200 list price
+ assert.equal(over.price,300);assert.equal(over.guarantee,Math.round(300*.3),'a 150% sale over 200G is covered, 30% of charged');
+ assert.equal(over.debit,300-90);
+ // bar's 정가 (list x1) now lands exactly on the 200G threshold, which the >= check covers
+ assert.equal(g.interest(n,bar,'full').guarantee,Math.round(200*.3),'200G charged reaches the threshold (>=)');
+ assert.equal(g.interest(n,premium,'half').guarantee,0,'a 200G+ list Item sold at 185G is not covered');
+ assert.equal(g.interest(n,premium,'full').guarantee,Math.round(370*.3));
  const r=sellOnce(['guarantee'],'overcharge','bar');
- assert.equal(r.store,270,'the store still receives the full charged price');assert.equal(r.paid,189,'the customer pays 70%');
+ assert.equal(r.store,300,'the store still receives the full charged price');assert.equal(r.paid,210,'the customer pays 70%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
 test('REWORK 즉석식품 코너: overheadBase +10% from the next Day, beside hub and never compounded',()=>{
@@ -371,18 +372,19 @@ test('REWORK 냉장 유통 계약: Uncommon+ Food/Drink purchase intent +16%p, n
  assert.deepEqual(Dungeon.prepare(p,d,['coldcase']).effects,Dungeon.prepare(p,d,[]).effects,'no stat effect');
 });
 test('REWORK 단골 묶음혜택: a 단골 second paid purchase is half for the customer, full for the store',()=>{
+ // premium sell 370 (v2.9.1 balance, was 340)
  const first=[{item:'rice',paid:70,mode:'full'}];
  const r=sellOnce(['memberBundle'],'full','premium',{loyalty:60,history:first});
- assert.equal(r.store,340,'store receives the full charged price');
- assert.equal(r.paid,170,'the customer pays half');
- assert.equal(r.last.subsidy,170,'HQ pays the other half, recorded on the sale');
+ assert.equal(r.store,370,'store receives the full charged price');
+ assert.equal(r.paid,185,'the customer pays half');
+ assert.equal(r.last.subsidy,185,'HQ pays the other half, recorded on the sale');
  for(const [why,opts] of [['not 단골',{loyalty:50,history:first}],['first purchase',{loyalty:60,history:[]}],
                           ['third purchase',{loyalty:60,history:[...first,...first]}]]){
-  const x=sellOnce(['memberBundle'],'full','premium',opts);assert.equal(x.paid,340,why+': full price');assert.equal(x.last.subsidy,0);}
+  const x=sellOnce(['memberBundle'],'full','premium',opts);assert.equal(x.paid,370,why+': full price');assert.equal(x.last.subsidy,0);}
  const g=fresh('bundle-judge'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=60;n.history=[{day:g.run.day,item:'rice',paid:70,mode:'full'}];
  g.run.facilities=['memberBundle'];const q=g.interest(n,DATA.itemBy.premium,'overcharge');
- assert.equal(q.price,510);assert.equal(q.debit,255,'at 150% too, half of the charged price');
- g.run.facilities=[];assert.equal(g.interest(n,DATA.itemBy.premium,'overcharge').debit,510);
+ assert.equal(q.price,555);assert.equal(q.debit,278,'at 150% too, half of the charged price');
+ g.run.facilities=[];assert.equal(g.interest(n,DATA.itemBy.premium,'overcharge').debit,555);
 });
 test('REWORK 프리미엄 멤버십: a 단골 arrives with +40G, and Rare+ intent +15%p for 단골 only',()=>{
  const arrive=(loyalty,fac)=>{const g=fresh('premium-member'),s=g.run,n=s.npcs[0];n.traits=[];n.loyalty=loyalty;n.money=100;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n.money;};

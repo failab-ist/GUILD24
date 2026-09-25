@@ -30,14 +30,15 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 40',()=>{
  assert.deepEqual([0,1,2,3,4].map(v=>DATA.items.filter(i=>i.rarity===v).length),[11,12,5,11,1],
   'active Rarity distribution is the approved C11/U12/R5/E11/L1');
  /* ITEM §DIRECTOR DOCUMENT BASELINE - the six rebaselined active identities, to the digit
-    (v2.9.0 F4: Supply 4 / 5 / 6 on the meals, shelf lives from ITEM §SHELF LIFE — EXACT). */
+    (v2.9.1 balance, User 2026-09-25: Sell = Buy x 2 for every Item; bar/premium buy+effects rose;
+    shelf lives from ITEM §SHELF LIFE — EXACT are unchanged). */
  for(const [id,name,rarity,buy,sell,category,days,fx] of [
-  ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:4}],
-  ['water','생수',0,40,85,'drink',2,{survival:10,supply:2}],
-  ['bar','간단 도시락',1,85,180,'food',2,{survival:10,supply:5,loot:0.2}],
-  ['premium','길드 특제 도시락',2,160,340,'food',2,{survival:14,supply:6,loot:0.4}],
-  ['battlelunch','영웅 결전 도시락',3,210,440,'food',2,{survival:18,supply:9}],
-  ['herobar','왕도 천연암반수',3,185,390,'drink',3,{survival:20,supply:2}]]){
+  ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:5}],
+  ['water','생수',0,40,80,'drink',2,{survival:10,supply:2}],
+  ['bar','간단 도시락',1,100,200,'food',2,{survival:12,supply:6,loot:0.2}],
+  ['premium','길드 특제 도시락',2,185,370,'food',2,{survival:16,supply:7,loot:0.4}],
+  ['battlelunch','영웅 결전 도시락',3,210,420,'food',2,{survival:18,supply:9}],
+  ['herobar','왕도 천연암반수',3,185,370,'drink',3,{survival:20,supply:2}]]){
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');
@@ -65,11 +66,12 @@ test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to 
  assert.equal(Object.keys(shelf).length,40);
  for(const it of DATA.items){assert.equal(it.days,shelf[it.id],it.id+' shelf life');assert.ok(it.days>=2&&it.days<=5,it.id+' within 2~5 days');}
  // the redistributed Fatigue recovery (ITEM §SUPPLY MODEL contract) and the two price / Stat moves
- const supply={rice:4,ramen:2,bar:5,choco:3,candy:2,lava:2,premium:6,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,herobar:2,hyperenergy:2,sageelixir:2};
+ // (v2.9.1 balance, User 2026-09-25: rice/ramen/bar/premium/lava Supply each +1)
+ const supply={rice:5,ramen:3,bar:6,choco:3,candy:2,lava:3,premium:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,herobar:2,hyperenergy:2,sageelixir:2};
  for(const [id,v] of Object.entries(supply))assert.equal(DATA.itemBy[id].effects.supply,v,id+' 피로 회복');
- for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=6||it.id==='battlelunch','no Food above 6 except 영웅 결전 도시락');
+ for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
- assert.equal(DATA.itemBy.lava.effects.survival,5,'불룡볶음면 강인함 +5');
+ assert.equal(DATA.itemBy.lava.effects.survival,8,'불룡볶음면 강인함 +8 (v2.9.1 balance)');
  assert.deepEqual([DATA.itemBy.tree.buy,DATA.itemBy.tree.sell],[400,800],'세계수 생환부적 400 / 800');
  // every stocked unit carries a finite expiry
  const g=new Game();g.autosave=false;g.start('shelf-life');g.run.facilities=[];
@@ -95,23 +97,38 @@ test('SIM-Q01: combat variance uses the approved v2.4 starting value',()=>{
 
 test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes',()=>{
  /* ITEM_v2.7 §HAZARD COUNTER BASELINE moves the Fire Main to 쿨링 이온음료 +18; 얼음컵 +10 is
-    the Lower response. Every other Main is unchanged. */
+    the Lower response. Every other Main is unchanged. The catalog's per-item Hazard Role
+    (ITEM_v2.8.0 §ACTIVE CATALOG) still names these as the dedicated Main - a raw-value search
+    alone no longer finds them for bind/dark now that an Epic hybrid may outscore a Common Main
+    (see the ITEM-Q83 note just below), so the search excludes the known Epic hybrids. */
  const main={poison:'antidote',bind:'rope',corrosion:'coating',mire:'boots',fire:'ion',fear:'wine',dark:'battery',cold:'heat',whiteout:'snowgoggles'};
  const stat={poison:'survival',corrosion:'survival',cold:'survival',fire:'spirit',bind:'mobility',mire:'mobility',fear:'spirit',dark:'mobility',whiteout:'spirit'};/* v2.9.0: 어둠 presses 기동, 화염 presses 정신 (revision 5) */
+ const EPIC_HYBRIDS=['spiderkit','slimesuit','cryptlantern','snowvisor','magmagear'];
  for(const h of CANON_HAZARDS){
   const counters=DATA.items.filter(i=>(i.effects[h]||0)>0);
   assert.ok(counters.length>=1,h+' has no counter item');
-  const best=counters.reduce((a,b)=>(b.effects[h]>a.effects[h]?b:a));
+  const best=counters.filter(i=>!EPIC_HYBRIDS.includes(i.id)).reduce((a,b)=>(b.effects[h]>a.effects[h]?b:a));
   assert.equal(best.id,main[h],h+' Main specialist should be '+main[h]);
   const statRoute=DATA.items.filter(i=>(i.effects[stat[h]]||0)>0&&!(i.effects[h]>0));
   assert.ok(counters.length-1+statRoute.length>=2,h+' lacks two alternative routes');
  }
- /* ITEM-Q83: an Epic Family hybrid trades peak strength for one-slot breadth, so it never
-    outperforms the dedicated Main on any Hazard it covers. */
- for(const id of ['spiderkit','slimesuit','cryptlantern','snowvisor','magmagear'])
+ /* ITEM-Q73/ITEM-Q83/ITEM-Q15 (User 2026-09-25, v2.9.1 balance): a Hybrid stays weaker per
+    target than any dedicated specialist of the SAME OR HIGHER Rarity - it may now exceed a
+    Rarity strictly below its own. An Epic hybrid may therefore outscore a Common Main
+    (속박/어둠 +18 over 경량 로프/랜턴 건전지 +16 is the explicit named exception); it still may
+    not outscore any Uncommon-or-above specialist on that Hazard. */
+ for(const id of EPIC_HYBRIDS){
+  const hybridRarity=DATA.itemBy[id].rarity;
   for(const h of CANON_HAZARDS){const v=DATA.itemBy[id].effects[h]||0;if(!v)continue;
-   assert.ok(v<DATA.itemBy[main[h]].effects[h],DATA.itemBy[id].name+' stays under the '+h+' Main');}
- // Hybrid must not beat either dedicated Main on its own Hazard.
+   for(const spec of DATA.items){
+    if(spec.id===id||spec.rarity<hybridRarity)continue;
+    const sv=spec.effects[h]||0;if(!sv)continue;
+    assert.ok(v<sv,DATA.itemBy[id].name+' stays under '+spec.name+' on '+h+' (same-or-higher Rarity)');
+   }
+  }
+ }
+ // Hybrid must not beat either dedicated Main on its own Hazard - 방수망토 is Uncommon, so both
+ // corrosion/mire Mains (coating U, boots U) are same-Rarity and the plain rule still applies.
  for(const h of ['corrosion','mire'])assert.ok(DATA.itemBy.cloak.effects[h]<DATA.itemBy[main[h]].effects[h],'방수망토 must not outperform the '+h+' Main');
  /* v2.7 inverts this pair: 쿨링 이온음료 +18 is the Fire Main and 얼음컵 +10 the Lower
     response, so the Lower one is the one that has to stay under. */

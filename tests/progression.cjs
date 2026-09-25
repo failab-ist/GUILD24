@@ -126,8 +126,9 @@ const out={version:2,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',seedsPerTier:seed
 console.log('== arm:',ARM,'==');
 
 /* Two play qualities, because the targets are written against the first of them. `beginner` is
-   the first-run-like policy the Fresh D30 target is read from; `balanced` is skilled play, an
-   analysis axis rather than a target. Both are heuristics, not people. */
+   the first-run-like policy the Fresh D30 target is read from; `balanced` is the human-type seller
+   (User 2026-09-25, modelled on the User's own play), an analysis axis rather than a target. Both
+   are heuristics, not people. */
 const POLICIES=[['beginner','배우는 중'],['balanced','숙련'],['spender','숙련+지출']];
 console.log('tier'.padEnd(20),'정책      장식 숙련 distinct   D10    D20    D30   D30후Final  전체Clear  평균사망');
 for(const [policy,policyLabel] of POLICIES)

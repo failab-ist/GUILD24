@@ -345,3 +345,29 @@ Confirming `현재 지점 포기` means (User 2026-09-24, v2.9.0):
 **abandon the current Run with no settlement, at once: `run = null`, and return to 새 점포 준비 (no Run).**
 No new Run starts by itself. On that screen Decorations can be bought and equipped (META §DECORATION COLLECTION / LOADOUT); the next Run starts only when the player chooses `첫 점포지원 고르기`, on the ordinary fresh-Run start path.
 ```
+
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3 / §4 / §6): start Gold 700G; segmented Death limit 5 / 8 / 11 with 추모 방명록 +2 and 위령제 +1 on every later segment; Store Capital rates 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects (+3 offers · 30% · 50G · 55% above 평범 · 65% · 45% · three saves). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+startGold=1000G
+Gold=1000G
+```
+
+```new
+startGold=700G
+Gold=700G    (User 2026-09-25, v2.9.1 balance; was 1000G)
+## DEATH LIMIT — SEGMENTED
+(User 2026-09-25, v2.9.1 balance.) A Run ends at Closing when the Run's cumulative Death count reaches the limit of the
+segment the current Day is in:
+D1~D10   5
+D11~D20  8
+D21~D30  11
+- the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
+- 추모 방명록 adds +2 to every segment limit (`META_v2.8.0.md`)
+- the 위령제 Event adds +1 to every segment limit from the Day it occurs to the end of the Run (`EVENT_v2.8.0.md`)
+- the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.8.0.md`)
+- death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
+- checked at Closing before the money branch, as today; the ending copy is unchanged
+```

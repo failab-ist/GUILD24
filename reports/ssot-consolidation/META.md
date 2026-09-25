@@ -476,8 +476,6 @@ a wider price spread would let price decide the pick instead of the effect.
 ```
 
 ```new
-1st Decoration : around Run 2-3
-all four Slots : around Run 10-11
 (User decision 2026-09-24: the first Decoration comes sooner, the four Slots fill by Run 10-11,
 and a Boss clear becomes worth attempting after that. Collecting both Decorations of every Slot
 is a longer tail beyond Run 11.)
@@ -487,17 +485,12 @@ running the store and keeping its people alive. Account/Save/data/UI structures 
 two per Slot forever either.
 ## SURVIVAL / COMBAT ALTERNATIVES — EXACT EFFECT IDENTITY
 User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
-the Death count that ends a Run +1 (10 -> 11)
 ### wall — 의무실 현판
-an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 35% chance
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and
 is shown on the SALE counter and counted in the Day's record (UI_UX owns the presentation).
 It resolves after 귀환석 / 세계수 생환부적, so carried Insurance is never wasted by it, and the
 RESULT-PROOF counterfactual reads the same availability.
-`DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24)
-wall    길드 제휴 현판 / 의무실 현판        1250 Store Capital
 Both Decorations of a Slot cost the same, so price never decides between them. The display Slot
-is the cheapest so a first Decoration is within reach around Run 2.
 ```
 
 
@@ -515,16 +508,11 @@ channel reused by this Decoration. It changes only the rarity weights used by th
 ```
 
 ```new
-(User decision 2026-09-24). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
 ### sign — 훈련소 제휴 간판 (id trainingRack)
 ### counter — 추모 방명록 (id memorialBoard)
 Placement (User decision 2026-09-24): the survival alternative with the larger measured effect
 sits in the dearer Slot; ids are kept from the first placement, names and art follow the Slot.
 ### display — 구급품 진열장 (id firstAidKit)
-up to twice per Run, a Death that no carried Insurance prevented becomes 중상
-sign    새벽배송 안내판 / 훈련소 제휴 간판   1450 Store Capital
-counter 알뜰 금고 / 추모 방명록            1150 Store Capital
-display 프리미엄 쇼케이스 / 구급품 진열장     800 Store Capital
 ```
 
 
@@ -537,14 +525,6 @@ grade above 평범, 훈련소 제휴 간판 Level +1 at 50%. Superseded lines we
 ORDER offer candidates +1
 ```
 
-```new
-ORDER offer candidates +2
-each Morning, 25% chance of visitors +1
-every morning, store Gold +40G (DAY 1 included), shown on the day's receipt
-rare-NPC rarity weights = [50, 30, 15, 4, 1]
-Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 50%
-every adventurer created while it is worn: 50% chance of spawn Level +1
-```
 
 ## AMENDMENT — v2.9.0 F5: menu routing / 이번 영업의 장식 / abandon flow / 점포 장식 tab / capital rates halved (User decision 2026-09-24)
 
@@ -560,12 +540,32 @@ D30     = 5%
 ```
 
 ```new
-D1-9    = 0.5%
-D10-19  = 1%
-D20-24  = 1.5%
-D25-29  = 2%
-D30     = 2.5%
-(User 2026-09-24, v2.9.0): the table is halved from 1 / 2 / 3 / 4 / 5%. Buying a Decoration inside the first Run is not a goal; the first Decoration lands at Run 2 at the earliest (a fresh Run reaching D28 sells ≈ 22,500G → ≈ 450 Store Capital; the cheapest Decoration is 800G). Decoration prices are unchanged.
-User decision 2026-09-24 (v2.9.0): the rate table was halved by decision, not by measurement; the acquisition expectation (first Decoration Run 2-3, four Slots Run 10-11) is re-measured after adoption and reported.
 - **현재 지점 포기(Abandon)**: Run만 초기화. Account/Meta, Tutorial, 해금 상태는 유지. 포기 직후 영업이 없는 새 점포 준비 화면으로 돌아오며, 거기서 장식 구매·장착이 가능하다 (User 2026-09-24, v2.9.0).
+```
+
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3 / §4 / §6): start Gold 700G; segmented Death limit 5 / 8 / 11 with 추모 방명록 +2 and 위령제 +1 on every later segment; Store Capital rates 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects (+3 offers · 30% · 50G · 55% above 평범 · 65% · 45% · three saves). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+(User 2026-09-25, v2.9.1 balance): back to 1 / 2 / 3 / 4 / 5% with the cheaper Decoration prices below. Buying a Decoration inside the first Run is still not a goal.
+1st Decoration : around Run 4-6     (measured at the v2.9.1 balance; the 2026-09-24 expectation was Run 2-3)
+all four Slots : around Run 9
+ORDER offer candidates +3    (User 2026-09-25, v2.9.1 balance; was +2)
+each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%)
+every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (User 2026-09-25, v2.9.1 balance; was +40G)
+rare-NPC rarity weights = [45, 31.5, 17.5, 4.75, 1.25]    (User 2026-09-25, v2.9.1 balance; was [50, 30, 15, 4, 1])
+Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 55%
+(User decision 2026-09-24; 55% at the v2.9.1 balance 2026-09-25, each grade's lift × 1.5). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
+every adventurer created while it is worn: 65% chance of spawn Level +1    (User 2026-09-25, v2.9.1 balance; was 50%)
+an adventurer who arrives with an ordinary Injury (not 중상) is healed on arrival with 45% chance    (User 2026-09-25, v2.9.1 balance; was 35%)
+every segment Death limit +2 (5 / 8 / 11 -> 7 / 10 / 13; CORE_RUN §DEATH LIMIT — SEGMENTED; User 2026-09-25, v2.9.1 balance)
+up to three times per Run, a Death that no carried Insurance prevented becomes 중상    (User 2026-09-25, v2.9.1 balance; was twice)
+`DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24; prices 2026-09-25, v2.9.1 balance — cheapest 500, dearest 2.5×, total 3,500)
+sign    새벽배송 안내판 / 훈련소 제휴 간판   1250 Store Capital
+wall    길드 제휴 현판 / 의무실 현판        1000 Store Capital
+counter 알뜰 금고 / 추모 방명록             750 Store Capital
+display 프리미엄 쇼케이스 / 구급품 진열장     500 Store Capital
+is the cheapest so a first Decoration is the earliest within reach.
+User decision 2026-09-25 (v2.9.1 balance): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`reports/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
 ```

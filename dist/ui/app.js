@@ -181,6 +181,9 @@ let cue=null,handoff=null;
    (COPY_AUDIT §4-24) for about 2.5 s; no reserved height, no input held, replaced by the next sale's stub,
    no motion under reduced motion. Presentation only - it reads the resolved state and writes nothing. */
 let stub=null,stubTimer=null;
+/* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
+   Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
+let pinFolded=false,pinWatch=null;
 function showStub(){if(!stub)return;const st=stub;stub=null;
  document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
  const el=document.createElement('div');el.className='receipt-stub';el.setAttribute('role','status');
@@ -254,6 +257,8 @@ function render(){
     on a desk, in the bottom-left corner of the title card. */
  if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
+ /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
+ const previousCols=['.p-sale .dossier-col','.p-sale .shelf-col'].map(q=>$(q)?.scrollTop||0);
  /* SA-Q09: every LIVING Night result speaks through the same temporary balloon the SALE
     counter uses - no permanent blockquote, no second speech mechanism. `speech()` already
     ignores a redraw of the line it is already showing (its own sayKey/sayHidden guard), so
@@ -275,6 +280,7 @@ function render(){
  $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
  const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
+ ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
  /* The control that answered the last press is often disabled by it (a quantity driven to
     zero or to the cap), and a disabled button cannot take focus: fall to its nearest live
     neighbour inside the same group rather than back to the top. */
@@ -300,6 +306,7 @@ function render(){
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
+ if(phase==='sell')watchForecastPin();else{pinWatch?.disconnect();pinWatch=null;}
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -371,6 +378,11 @@ function deepOfferUI(n){
 // (ceiling and shutter, shelving wall, notice board, counter) and the interface hangs on
 // those surfaces: the day on the shop sign, today's gates pinned to the board, the till
 // showing the float, the store support sitting on the counter.
+/* UI_UX §DEATH LIMIT — ALWAYS VISIBLE (MORNING/ORDER, v2.9.1 balance): one compact item, the
+   same line on both screens - count / current segment limit / the Day it ends. The limit already
+   includes 추모 방명록 and 위령제 (Meta.deathLimit). Warning color only at count = limit - 1. */
+function deathLimitItem(){const s=game.run,n=s.stats.deaths,limit=Meta.deathLimit(s),end=Meta.deathLimitSegmentEnd(s);
+ return '<b class="death-limit'+(n===limit-1?' warn':'')+'">사망 '+n+' / '+limit+' · D'+end+'까지</b>';}
 /* The board is hung high on the wall, directly under the day sign, because that is the
    order the morning is read in: DAY, then today's expedition, then the Gates and their
    Hazards, then the float on the counter, then the shutter. The scenery keeps whatever
@@ -382,7 +394,7 @@ function morningScreen(){
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
    +'<span class="daysign" style="'+Scene.anchorStyle('daysign')+'"><i>DAY</i><b>'+String(s.day).padStart(2,'0')+'</b></span></span></div>'
     +'<div class="board" id="phase-content" tabindex="-1" aria-label="아침">'+taskLine('morning')
-     +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b></p>'
+     +'<p class="board-rail" id="visitor-count">오늘의 원정<b>손님 '+s.queue.length+'</b><b>게이트 '+s.dungeons.length+'</b>'+deathLimitItem()+'</p>'
    +'<div class="pinned">'+(s.event?eventSlip(s.event):'')+deepSlip()+s.dungeons.map(gatePlate).join('')+'</div></div>'
   +'<div class="band wall">'+Scene.wall(s.day)+'</div>'
   /* The store plate is furniture, not signage: it is screwed to the counter, so it is a
@@ -521,7 +533,7 @@ function saleScreen(){
     expedition - so nothing is duplicated on screen. */
  +speech(n)+standee(n)+'<div class="front-side">'+kitLine(n)+readout(n,st?st.item:null,'core-desk')+destPlate(n)+waitingLine(waiting)+'</div>'
  +'</section>'
- +'<div class="counter-edge" aria-hidden="true"></div>'
+ +'<div class="counter-edge" aria-hidden="true"></div>'+forecastPin(n)
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="영업">'
   /* UI-Q109 §8. Reading order stays what it was - who this is, then what to sell them - but
      the shelf has to be reachable without a scroll, and measured on a phone the Trait rows
@@ -535,7 +547,7 @@ function saleScreen(){
    +'<div class="dossier traits">'+traitRows(n)+'</div>'
    /* UI-Q-v29-16 (User 2026-09-24, v2.9.0): no second owned-Relic block in SALE at any width - the shelf-head control is the one reference */
   +'</div>'
-  +shelf()
+  +'<div class="shelf-col">'+shelf()+'</div>'
  +'</main>'
  +tray()
  /* D-34. Every price on this screen is a judgement against what the store has, and the
@@ -652,12 +664,20 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
     state strip, under the bag where no speech balloon or menu pin sits - one line, no modal,
     nothing to dismiss. `healedBy` is reset on every arrival. */
  const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>':'';
+ /* DUNGEON_HAZARD §Preparation / Level Death reduction / UI_UX §만반의 준비 TUTORIAL (v2.9.1
+    balance): a state class only, no visible style of its own - it exists so the coach mark
+    below can anchor to it the first time this customer's confirmed Bag actually reaches 만반의
+    준비 (healthy, departure Fatigue < 20, 2+ Items). fatigueBeforeExpedition mirrors what the
+    counter tray's own `출발 B` reads. */
+ const gate=game.claimedGateFor(n);
+ const fatigueBeforeExpedition=gate?Dungeon.prepare(n,gate,game.run.facilities).effects.fatigueBeforeExpedition:0;
+ const prepared=!!gate&&Dungeon.fullyPrepared(n,fatigueBeforeExpedition);
  return '<div class="kit"><div class="vitals"><span>상태 <b>'+parts.join('</b> · <b>')+'</b></span>'
  +'<span class="npc-wallet">'+walletChip(n)+'</span></div>'
  /* how many slots are left is a decision on every sale, so it says the count as well as
     showing it - a row of boxes has to be counted before it can be used. The Bag keeps this
     place in the customer's own strip (User 2026-09-24: not moved); the hand-over lands here. */
- +'<span class="slots" aria-label="가방 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
+ +'<span class="slots'+(prepared?' prepared':'')+'" aria-label="가방 '+n.pack.length+' / '+slots+'칸"><b class="slot-label">가방 '+n.pack.length+' / '+slots+'</b>'
   +Array.from({length:slots},(_,i)=>'<i class="'+(n.pack[i]?'full':'free')+'">'+(n.pack[i]?Art.itemIcon(n.pack[i],24):'')+'</i>').join('')+'</span>'+heal+'</div>';}
 // NIGHT — the shop after closing, one lamp still on, and whoever came back standing in
 // the doorway. Not a report and not a card: no paper, no shelf, no frame. The outcome is
@@ -851,7 +871,11 @@ const coachSteps={
 ['supply','.counter-tray .tray-delta .fatigue','음식·음료는 피로를 줄인다. 피로가 10을 넘으면 기동·정신이 떨어진다.'],
  ['great','.great-signal','대성공 신호. 준비가 넉넉할 때 뜨지만, 대성공이 확정되는 건 아니다.'],
  ['returning','.who.returning','다시 온 손님. 지난 원정과 특성, 기록은 손님을 눌러 본다.'],
- ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.']],
+ ['bag','.slots .full','판 상품은 손님 가방에 들어가 오늘 원정에서 쓰고 사라진다.'],
+ /* UI_UX §만반의 준비 TUTORIAL (v2.9.1 balance): contextual on kitLine()'s own `.slots.prepared`
+    state class - the first time a healthy, well-rested customer's Bag actually reaches 만반의
+    준비 (DUNGEON_HAZARD §Preparation / Level Death reduction). Words only, no number. */
+ ['prepared','.slots.prepared','건강한 손님의 가방을 가득 채웠다. 만반의 준비를 하면 실패해도 살아 돌아올 가능성이 커진다.']],
  night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
@@ -1074,6 +1098,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
     seal carried no function or state - it filled the head's right margin and nothing else. The
     document is identified by 발주서 and its DAY / branch line. */
  +'<div class="form-head"><h1>발주서</h1><span class="docno">DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span></div>'
+   +'<p class="board-rail death-limit-row">'+deathLimitItem()+'</p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
    +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'
@@ -1180,6 +1205,20 @@ function priceKeys(n,it,st){const full=n.pack.length>=Adventurer.slots(n);
    the three price keys always in the same place. The shelf rows never change height. A sale clears
    the tray (the Item went into the Bag, and the hand-over starts from the tray icon); a refusal keeps
    the Item here with the refused key locked. Same information as the old per-row panel, one place. */
+/* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0). On a phone the readout scrolls away with the dossier while
+   the Player works the shelf, so the same two readings float at the top of the scrolled column, where the readout
+   sat - only while the readout itself is off screen, the same frozen SALE-entry values and colours, never a second
+   source. One tap folds it to a `전망` chip and back. The anchor has no height: it reserves nothing in the layout. */
+function forecastPin(n){const o=n.outlook||game.outlookFor(n);
+ return '<div class="forecast-pin-anchor"><button type="button" class="forecast-pin" data-action="forecast-pin" aria-expanded="true" aria-label="전망 접기">'
+  +'<span class="pin-full"><span class="pin-fore">전투 전망<b>'+E(o.combat)+'</b></span>'+(o.worst?'<span class="pin-fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b></span>':'')+'</span>'
+  +'<span class="pin-chip">전망</span></button></div>';}
+function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.classList.toggle('folded',pinFolded);
+ pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
+function watchForecastPin(){pinWatch?.disconnect();pinWatch=null;const pin=$('.forecast-pin'),src=$('.readout.core-mob'),sc=$('.stage-scroll');
+ if(!pin||!src||!sc||typeof IntersectionObserver!=='function')return;syncForecastPin();
+ /* the fold is for this stretch of scrolling only: once the readout is back on screen the next pin opens unfolded */
+ pinWatch=new IntersectionObserver(([e])=>{pin.classList.toggle('show',!e.isIntersecting);if(e.isIntersecting&&pinFolded){pinFolded=false;syncForecastPin();}},{root:sc,threshold:0});pinWatch.observe(src);}
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
  /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
     task line); afterwards an empty tray has no height and the list gets the room back (User 2026-09-24) */
@@ -1492,9 +1531,10 @@ function npcDetail(id){const n=game.run.npcs.find(n=>n.id===id);if(!n)return '';
  }
  /* v2.9.0 (COPY_AUDIT §5-7): the frozen SALE-entry Death risk reads here as well as in the help. */
  if(n.outlook)cond.push('실패 시 사망 위험 '+Math.round(n.outlook.deathRisk*100)+'%');
- /* DUNGEON_HAZARD v2.9.0 §strainEscalation (User 2026-09-25): an information row, no verdict -
-    expeditions this adventurer began injured or at Fatigue 20+. */
- cond.push('무리한 출발 '+(n.records||[]).filter(r=>r.departedInjured||r.departedWeary).length+'회');
+ /* DUNGEON_HAZARD §STRAIN (v2.9.1 balance): an information row, no verdict - consecutive
+    expeditions this adventurer began injured, counted back from the most recent record and
+    reset to 0 by a healthy departure. Same helper STRAIN itself reads (Dungeon.injuredStreak). */
+ cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');
  let condHtml = '<div style="background:var(--soil-2);padding:12px;border-radius:4px;margin:8px 0;line-height:1.5;">'+cond.map(E).join('<br>')+'</div>';
  return `<div class="npc-detail"><div class="identity">${portrait(n,96)}<div>${badge(n.rarity,true)}<h2>${E(n.name)} · Lv.${n.level}</h2><p>${D.jobBy[n.job].name} · ${n.status}</p><p>단골도 ${n.loyalty} · 방문 ${n.visits}회</p></div></div>${game.run.phase==='sell'&&game.current()?.id===n.id?destPlate(n):''}${statGrid(n)}${traitRows(n)}<p>${E(n.equipment.name)} · 투력 +${n.equipment.power}</p>${condHtml}<h3>원정 기록</h3>${n.records.slice().reverse().map(r=>`<div class="history-row"><b>DAY ${r.day} · ${E(r.dungeonName)} · ${r.outcome}</b><p>${r.items.map(i=>D.itemBy[i].name).join(' + ')||'보급 없음'}</p>${r.routeChange?`<p>${E(r.routeChange)}</p>`:''}</div>`).join('')||'<p>아직 원정 기록이 없다.</p>'}<h3>구매 영수증</h3>${n.history.slice(-12).reverse().map(h=>`<div class="history-row">DAY ${h.day} · ${D.itemBy[h.item].name} · ${Presentation.modeLabel(h.mode)} ${fmt(h.paid)}G</div>`).join('')}</div>`;}
 /* What a locked entry is still waiting for. Both axes are derived from the matrix, so
@@ -1635,7 +1675,7 @@ function settings(){return `<div class="stack"><p>자동저장은 현재 브라�
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
 /* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
    under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 손익을 정리하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 ${D.balance.deathLimit}명이 되면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 손익을 정리하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;
@@ -1932,6 +1972,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* FINAL-Q75 v2.8: a sub-3 party is a valid choice, confirmed once before the boundary */
  case'final-commit':if(s.team.length<3){setModal('underConfirm');break;}   // a full party falls through
  case'final-commit-go':game.commitFinalParty();supplyNPC=s.team[0];selected=null;setModal(null);sound('button');render();break;
+ case'forecast-pin':pinFolded=!pinFolded;syncForecastPin();break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this
@@ -1968,7 +2009,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 }
 /* COPY_AUDIT §3-9: a blocked ORDER control is dim but not dead - the tap says why it is blocked. No subject noun: the tapped row
    is the subject, so two rows of the same Item cannot be confused. */
-const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급이 끝났습니다.'};
+const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
  if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);});

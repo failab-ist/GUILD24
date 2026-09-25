@@ -145,8 +145,6 @@ bonus; ECO-Q-v28-3; ECONOMY_ORDER_v2.8.0 `## ORDINARY SALE PURCHASE ACCEPTANCE`)
 Today's Gate/Hazard is the primary preparation context, while tomorrow contributes only the allowed Tier probability forecast.
 ```
 
-```new
-```
 
 
 ## REWORD — ORD-Q87 pointer to the current Item owner, version framing "new" removed
@@ -415,9 +413,6 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 dayBase = 90 + 2×(Day-1)
 ```
 
-```new
-dayBase = 90 + 5×(Day-1)    (v2.9.0)
-```
 
 ## AMENDMENT — v2.9.0 F7: quick-view status line / purchase notice / Counter judgement split (User decision 2026-09-24)
 
@@ -433,4 +428,17 @@ User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carrie
 - 50% / 100% base need = 0.72 (User 2026-09-24, v2.9.0; was 0.80)
 - affordable 50% / 100% 관련 준비 (direct Counter or the pressed Stat, RELIC §COUNTER JUDGEMENT) -> final chance 0.97
 - no separate purchase-only Counter definition; the legacy 기동-for-속박/진창 Counter exception is gone (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1 balance): QA expectations follow the amended owners — operating cost 170 + 1 × (Day − 1) with Level factor .03; start Gold 700G; segmented Death limit (RUN-Q-v29-DL). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```text
+base = dayBase × (1 + .02×(avgLevel-1)) × (1 + .06×avgRarity)
+```
+
+```new
+dayBase = 170 + 1×(Day-1)    (v2.9.1 balance, User 2026-09-25)
+base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 ```

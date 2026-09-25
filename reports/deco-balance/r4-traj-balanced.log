@@ -1,0 +1,61 @@
+== none (no purchase)
+  run  1  D30  20.5%  clear  11.5%  decorations 0.00  capital +454
+  run  3  D30  25.0%  clear  14.0%  decorations 0.00  capital +479
+  run  5  D30  25.5%  clear  14.0%  decorations 0.00  capital +512
+  run  8  D30  23.5%  clear  15.0%  decorations 0.00  capital +476
+  run 10  D30  26.5%  clear  15.0%  decorations 0.00  capital +506
+  run 12  D30  28.0%  clear  17.5%  decorations 0.00  capital +540
+  run 15  D30  31.0%  clear  19.0%  decorations 0.00  capital +591
+  first clear within 15 Runs: 91.5%  median first-clear Run 6
+== economy (premiumCase > thriftSafe > guildPlaque > dawnSign)
+  run  1  D30  20.5%  clear  11.5%  decorations 0.00  capital +454
+  run  3  D30  33.0%  clear  18.5%  decorations 1.00  capital +571
+  run  5  D30  41.0%  clear  30.5%  decorations 2.25  capital +788
+  run  8  D30  53.0%  clear  43.5%  decorations 3.44  capital +964
+  run 10  D30  53.5%  clear  40.0%  decorations 3.79  capital +963
+  run 12  D30  57.0%  clear  44.0%  decorations 3.92  capital +1006
+  run 15  D30  57.5%  clear  47.5%  decorations 4.00  capital +1036
+  #1 premiumCase      median Run 2  acquired 100%
+  #2 thriftSafe       median Run 3  acquired 100%
+  #3 guildPlaque      median Run 5  acquired 100%
+  #4 dawnSign         median Run 6  acquired 100%
+  first clear within 15 Runs: 97.5%  median first-clear Run 5
+== mixA (premiumCase > memorialBoard > infirmaryPlaque > trainingRack)
+  run  1  D30  20.5%  clear  11.5%  decorations 0.00  capital +454
+  run  3  D30  29.5%  clear  14.5%  decorations 1.01  capital +534
+  run  5  D30  42.0%  clear  18.0%  decorations 2.24  capital +671
+  run  8  D30  67.5%  clear  39.5%  decorations 3.48  capital +944
+  run 10  D30  74.5%  clear  47.0%  decorations 3.80  capital +1042
+  run 12  D30  78.0%  clear  47.0%  decorations 3.96  capital +1082
+  run 15  D30  75.0%  clear  42.5%  decorations 4.00  capital +1041
+  #1 premiumCase      median Run 2  acquired 100%
+  #2 memorialBoard    median Run 3  acquired 100%
+  #3 infirmaryPlaque  median Run 5  acquired 100%
+  #4 trainingRack     median Run 6  acquired 100%
+  first clear within 15 Runs: 100.0%  median first-clear Run 5
+== survival (firstAidKit > memorialBoard > infirmaryPlaque > trainingRack)
+  run  1  D30  20.5%  clear  11.5%  decorations 0.00  capital +454
+  run  3  D30  33.5%  clear  15.5%  decorations 1.03  capital +550
+  run  5  D30  41.5%  clear  17.5%  decorations 2.29  capital +618
+  run  8  D30  70.5%  clear  33.0%  decorations 3.48  capital +953
+  run 10  D30  70.0%  clear  32.5%  decorations 3.81  capital +963
+  run 12  D30  79.0%  clear  37.5%  decorations 3.96  capital +1059
+  run 15  D30  76.0%  clear  33.0%  decorations 3.99  capital +1008
+  #1 firstAidKit      median Run 2  acquired 100%
+  #2 memorialBoard    median Run 3  acquired 100%
+  #3 infirmaryPlaque  median Run 5  acquired 100%
+  #4 trainingRack     median Run 6  acquired 100%
+  first clear within 15 Runs: 96.5%  median first-clear Run 6
+== mixB (firstAidKit > thriftSafe > infirmaryPlaque > dawnSign)
+  run  1  D30  20.5%  clear  11.5%  decorations 0.00  capital +454
+  run  3  D30  44.5%  clear  21.5%  decorations 1.08  capital +685
+  run  5  D30  68.0%  clear  29.0%  decorations 2.50  capital +942
+  run  8  D30  83.5%  clear  43.0%  decorations 3.65  capital +1134
+  run 10  D30  87.0%  clear  44.5%  decorations 3.90  capital +1190
+  run 12  D30  88.5%  clear  46.0%  decorations 3.98  capital +1198
+  run 15  D30  89.0%  clear  54.0%  decorations 4.00  capital +1216
+  #1 firstAidKit      median Run 2  acquired 100%
+  #2 thriftSafe       median Run 3  acquired 100%
+  #3 infirmaryPlaque  median Run 4  acquired 100%
+  #4 dawnSign         median Run 6  acquired 100%
+  first clear within 15 Runs: 98.0%  median first-clear Run 5

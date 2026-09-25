@@ -952,7 +952,7 @@ does the same (User 2026-09-24, v2.9.0)
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown at MORNING or ORDER; FAIL if any next-day block, percentage or count appears. The individual-customer boundary (name, Job, Trait, Wallet, destination hidden; per-Gate visitor count public) is checked by UI-Q-v29-14 / ORD-Q84.
 ### UI-Q-v29-20 — ORDER ROW RARITY LINE / BLOCKED-QUANTITY REASON
 - every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
-- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; a used-up offer's controls show `오늘 공급이 끝났습니다.` (COPY_AUDIT §3-9)
+- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; an offer whose whole supply for today is already in the cart shows `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9)
 - the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
 - no `내일` block on ORDER
 ```
@@ -1036,6 +1036,60 @@ A Run owning 회전 진열대, 길드 보증 진열대, 단체 주문 창구, �
 - 묶음발주 계약 shows its line only at ORDER, 단골 묶음혜택 only at SALE for the current customer
 - the purchase notice reads `{점포지원명} 확보.` and nothing about 다음 날부터
 - a status line on an always-on support, a chance-based support written as inactive, or a new Save field behind any line
+```
+
+## AMENDMENT — v2.9.0 SALE forecast pin (User decision 2026-09-25)
+
+User decision 2026-09-25: on a phone the readout's two readings float above the counter tray while the readout is scrolled out of view; one tap folds them to a chip; no Save field.
+
+```new
+### UI-Q-v29-24 — SALE FORECAST PIN
+(User 2026-09-25, v2.9.0)
+SALE with a customer at 360 / 390 / 412 and at 1280; pick a shelf row with the column at the top, then scroll the column until the readout leaves the view and pick a lower row; tap the pin twice; scroll back to the top.
+- with the readout in view no pin is shown; with it out of view the pin reads the readout's two words in the readout's colours, at the top of the scrolled column
+- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again, and after a fold, scrolling away again shows the full line, not the chip
+- at 1280 no pin is shown in any scroll state; no layout row moves when the pin appears; no runtime error
+- a pin while the readout is visible, a pin on a desk, values that differ from the readout, a pin that pushes the layout, or a Save / account field for the fold
+```
+
+### Reworded by the forecast pin (User 2026-09-25): the environment stays at most once on screen, the pin mirrors the forecast only while it is scrolled away
+
+```text
+- `환경 대응` is rendered in exactly one place, in the forecast
+```
+
+```new
+- `환경 대응` is on screen at most once at a time: in the forecast, or — only while the forecast is scrolled out of view on a phone — in the forecast pin that mirrors it (UI-Q-v29-24; User 2026-09-25, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 SALE desk layout (User decision 2026-09-25)
+
+User decision 2026-09-25: on a desk the SALE dossier column is its own area down to the dock, the counter tray sits under the shelf column only, and the two columns scroll separately.
+
+```new
+### UI-Q-v29-25 — SALE DESK LAYOUT
+(User 2026-09-25, v2.9.0)
+SALE with a customer at 1024 and 1280 with a shelf taller than the column; scroll the shelf to its end with the wheel over it, then pick a row.
+- the dossier column runs on the wood down to the dock; the counter tray is only as wide as the shelf column and sits under the shelf
+- the shelf scrolls alone and the dossier column does not move; after the pick (a redraw) the shelf keeps its scroll position; the next customer starts at the top
+- at 360 / 390 / 412 the single scrolled column and the full-width tray are unchanged
+- a full-width tray on a desk, the dossier column cut off above the tray, the dossier column scrolling with the shelf, or a shelf that jumps to the top after a pick
+```
+
+## AMENDMENT — v2.9.1 balance: UI-Q-v29-26 (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1 balance): UI-Q-v29-26 checks the always-visible Death count / segment limit on MORNING and ORDER.
+
+```new
+### UI-Q-v29-26 — DEATH LIMIT ALWAYS VISIBLE
+(User 2026-09-25, v2.9.1 balance; owner `UI_UX_v2.8.0.md` §DEATH LIMIT — ALWAYS VISIBLE, copy COPY_AUDIT §4-23.)
+MORNING and ORDER at 360 / 390 / 412 and 1280 with 0 Deaths, with 4 Deaths on D10 (one left), on D11 after the segment
+step, and with 추모 방명록 worn.
+- both screens show `사망 {n} / {limit} · D{end}까지` in the top status line without scrolling, on every Day
+- the limit and end Day follow the current segment (5 · D10 / 8 · D20 / 11 · D30) and include 추모 방명록 / 위령제
+- warning color exactly when count = limit − 1; no popover, badge or extra text
+- the line never wraps mid-token and does not push the ORDER confirm off the phone screen
+- the count only in the 도감, a stale segment limit, or a limit that ignores 추모 방명록 / 위령제
 ```
 
 ## AMENDMENT — v2.9.0 fix: D0 briefing body weight (2026-09-25)

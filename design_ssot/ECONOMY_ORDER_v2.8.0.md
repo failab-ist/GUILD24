@@ -2,8 +2,8 @@
 
 DOC=ECONOMY_ORDER
 OWNER=economy,order,gold,wallet,offer,reroll,tier_forecast,gate_count_forecast,rarity_progression,final_price,great_success_store_gold,deep_sponsorship
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/ECONOMY_ORDER_v2.8.0-patch.md,history/ECONOMY_ORDER_v2.7.0.md,history/ECONOMY_ORDER_v2.6.1.md,history/ECONOMY_ORDER_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/ECONOMY_ORDER.md
@@ -647,11 +647,12 @@ Let:
     avgLevel  = Core Roster average Level, or 1 if empty
     avgRarity = Core Roster average numeric Rarity index, or 0 if empty
 
-    dayBase = 90 + 5 × (Day - 1)    (User 2026-09-24, v2.9.0; was 2 × (Day - 1))
+    dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
+                                      store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term)
 
     overheadBase
     = dayBase
-      × (1 + 0.02 × (avgLevel - 1))
+      × (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance; was 0.02)
       × (1 + 0.06 × avgRarity)
 
 Current Store Support/Event flat or percentage modifiers apply only through their own owner rules.

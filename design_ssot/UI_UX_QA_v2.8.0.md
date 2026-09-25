@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -439,7 +439,7 @@ Today's situation is understandable and a meaningful Event is not buried among o
 
 PASS:
 - every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
-- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; a used-up offer's controls show `오늘 공급이 끝났습니다.` (COPY_AUDIT §3-9)
+- tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; an offer whose whole supply for today is already in the cart shows `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9)
 - the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
 - no `내일` block on ORDER
 
@@ -641,7 +641,7 @@ that explains pressure and readiness moves with it.
 
 PASS:
 - the destination block states Hazard pressure only
-- `환경 대응` is rendered in exactly one place, in the forecast
+- `환경 대응` is on screen at most once at a time: in the forecast, or — only while the forecast is scrolled out of view on a phone — in the forecast pin that mirrors it (UI-Q-v29-24; User 2026-09-25, v2.9.0)
 - per-Hazard readiness no longer wraps the destination rows or pulls a row for its own help
 
 ### UI-Q-v28-3 — MOBILE SALE QUEUE
@@ -2182,6 +2182,53 @@ PASS:
 
 FAIL:
 - a status line on an always-on support, a chance-based support written as inactive, or a new Save field behind any line
+
+### UI-Q-v29-24 — SALE FORECAST PIN
+
+(User 2026-09-25, v2.9.0)
+
+SETUP:
+SALE with a customer at 360 / 390 / 412 and at 1280; pick a shelf row with the column at the top, then scroll the column until the readout leaves the view and pick a lower row; tap the pin twice; scroll back to the top.
+
+PASS:
+- with the readout in view no pin is shown; with it out of view the pin reads the readout's two words in the readout's colours, at the top of the scrolled column
+- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again, and after a fold, scrolling away again shows the full line, not the chip
+- at 1280 no pin is shown in any scroll state; no layout row moves when the pin appears; no runtime error
+
+FAIL:
+- a pin while the readout is visible, a pin on a desk, values that differ from the readout, a pin that pushes the layout, or a Save / account field for the fold
+
+### UI-Q-v29-25 — SALE DESK LAYOUT
+
+(User 2026-09-25, v2.9.0)
+
+SETUP:
+SALE with a customer at 1024 and 1280 with a shelf taller than the column; scroll the shelf to its end with the wheel over it, then pick a row.
+
+PASS:
+- the dossier column runs on the wood down to the dock; the counter tray is only as wide as the shelf column and sits under the shelf
+- the shelf scrolls alone and the dossier column does not move; after the pick (a redraw) the shelf keeps its scroll position; the next customer starts at the top
+- at 360 / 390 / 412 the single scrolled column and the full-width tray are unchanged
+
+FAIL:
+- a full-width tray on a desk, the dossier column cut off above the tray, the dossier column scrolling with the shelf, or a shelf that jumps to the top after a pick
+
+### UI-Q-v29-26 — DEATH LIMIT ALWAYS VISIBLE
+
+(User 2026-09-25, v2.9.1 balance; owner `UI_UX_v2.8.0.md` §DEATH LIMIT — ALWAYS VISIBLE, copy COPY_AUDIT §4-23.)
+
+SETUP:
+MORNING and ORDER at 360 / 390 / 412 and 1280 with 0 Deaths, with 4 Deaths on D10 (one left), on D11 after the segment
+step, and with 추모 방명록 worn.
+
+PASS:
+- both screens show `사망 {n} / {limit} · D{end}까지` in the top status line without scrolling, on every Day
+- the limit and end Day follow the current segment (5 · D10 / 8 · D20 / 11 · D30) and include 추모 방명록 / 위령제
+- warning color exactly when count = limit − 1; no popover, badge or extra text
+- the line never wraps mid-token and does not push the ORDER confirm off the phone screen
+
+FAIL:
+- the count only in the 도감, a stale segment limit, or a limit that ignores 추모 방명록 / 위령제
 
 ### GREAT SUCCESS TUTORIAL
 PASS:

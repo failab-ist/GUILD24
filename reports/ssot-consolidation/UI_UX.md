@@ -846,7 +846,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - empty tray: on DAY 1~3 of a Run while the account tutorial is not skipped, one line (the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23); otherwise the empty tray has no height (User 2026-09-24, v2.9.0)
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
-- on a desk (≥1024) the tray keeps its place above the dock and aligns its contents under the shelf column
+- on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
 - the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
 - tap-only; no drag, no minigame, no new Save field
 The selected-Item surface (the counter tray, §SALE — COUNTER TRAY) uses one primary heading:
@@ -948,7 +948,7 @@ Still hidden:
 - next-day Family / exact Gate composition / Hazard set
 4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
 - the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
-- a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; a used-up offer answers `오늘 공급이 끝났습니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0)
+- a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 ```
 
 ## AMENDMENT — v2.9.0 F2-b: two-line Hazard short row, inline Stat tag (User decision 2026-09-25)
@@ -965,9 +965,6 @@ beside the Stat name and the value is one step smaller. Superseded declarations 
 
 User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome one step (중상 → 부상 with the 부상 XP/Loot/Fatigue/injury 1; 부상 → 부상 with no lasting injury; 사망 excluded); no natural Fatigue recovery of any kind for any adventurer (the Severe-Injury rest-day -5 is retired); 중상 takes the 부상 Fatigue gain (+9) and only 사망 stays 0; repeated injured / weary (Fatigue 20+) departures escalate the failure Death chance (+8%p per repeat of each kind from the second, cap +30%p, from the adventurer's own records) with the NPC-detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 / 순례 with particles by final consonant. Earlier declarations this batch supersedes were removed from the fences above in place.
 
-```new
-NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `무리한 출발 {n}회` — the number of expeditions this adventurer began injured or at Fatigue 20+, no verdict (User 2026-09-25, v2.9.0).
-```
 
 ## AMENDMENT — v2.9.0 F4: Fatigue recovery values / shelf life / operating cost / Wallet multipliers / 세계수 price (User decision 2026-09-24/25)
 
@@ -1016,6 +1013,84 @@ User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carrie
 
 ```new
 - for a condition-type support only, one runtime status line under them (RELIC §QUICK VIEW STATUS LINE; exact lines COPY_AUDIT §11-32); no HUD, no badge, no verdict word (User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 SALE forecast pin (User decision 2026-09-25)
+
+User decision 2026-09-25: on a phone the readout's two readings float above the counter tray while the readout is scrolled out of view; one tap folds them to a chip; no Save field.
+
+```new
+### SALE — FORECAST PIN
+(User 2026-09-25, v2.9.0) On a phone the readout scrolls away with the dossier while the Player works the shelf.
+- while the readout is outside the scrolled column's view, one floating line shows the same two readings at the top of the scrolled column, where the readout sat: `전투 전망 {우세|접전|불리}` and `환경 대응 {충분|대응|불안|취약}` — the same frozen SALE-entry values and colours, never a second source
+- while the readout is on screen the pin is not shown; on a desk (≥1024) it is never shown (the readout sits beside the portrait there)
+- one tap folds it to a `전망` chip and back; the fold lasts only until the readout is on screen again — the next time the readout scrolls away the pin opens unfolded; no Save or account field
+- it floats over the top of the scrolled column and reserves no layout height; a row it covers is read by folding it; the touch target is at least 44px
+```
+
+## AMENDMENT — v2.9.0 SALE desk layout (User decision 2026-09-25)
+
+User decision 2026-09-25: on a desk the SALE dossier column is its own area down to the dock, the counter tray sits under the shelf column only, and the two columns scroll separately.
+
+```new
+### SALE — DESK LAYOUT
+(User 2026-09-25, v2.9.0) On a desk (≥1024) the SALE area below the counter band is two areas, not one scrolled column.
+- the dossier column (Stat grid, Traits) is its own area on the wood, running down to the dock
+- the shelf column holds the shelf on the wood and, under it, the counter tray: the tray takes only the shelf column's width, and the wood above it stays clearly apart from the tray's dark band
+- each column scrolls on its own; scrolling the shelf never moves or empties the dossier column
+- a redraw of the same customer keeps both columns' scroll positions; a new customer starts both at the top
+- phones keep the single scrolled column and the full-width tray (§SALE — FORECAST PIN covers the readout there)
+```
+
+## AMENDMENT — v2.9.1 balance: Death limit always visible (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3): the Death count and the current segment limit are always shown on MORNING and ORDER in the top status line, warning color at one Death left; exact copy COPY_AUDIT §4-23.
+
+```text
+2. persistent funds summary
+```
+
+```new
+### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
+(User 2026-09-25, v2.9.1 balance.) The Run's cumulative Death count and the current segment limit
+(`CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED) are always on screen at MORNING and ORDER, in the top status line —
+not only in the 도감.
+- one compact item: count / current limit / the Day the segment ends; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
+- warning color when one more Death ends the Run (count = limit − 1)
+- the limit shown already includes 추모 방명록 and 위령제
+- no extra popover, badge or explanation text; the same line on both screens
+- exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
+2. persistent funds summary (the top status line also carries the Death count / limit, §DEATH LIMIT — ALWAYS VISIBLE)
+```
+
+## AMENDMENT — v2.9.1 balance: 위령제 conditions / 만반의 준비 tutorial / hybrid rule (User decision 2026-09-25)
+
+User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may recur, +1 each time); a contextual 만반의 준비 tutorial the first time both Bag slots of an uninjured customer departing below Fatigue 20 are filled; an Epic hybrid stays below every specialist of the same or a higher Rarity (it may exceed a Common Main). Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+### 만반의 준비 TUTORIAL
+(User 2026-09-25, v2.9.1 balance.) Contextual, like the other first-time marks: shown once per account, the first time
+the Player fills BOTH Bag slots of a customer who is uninjured and whose departure Fatigue (the tray's `출발 B`) is
+below 20 — the moment 만반의 준비 (`DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction) is first achieved.
+- anchor: the customer's Bag slots on the SALE counter
+- teaches the condition and the effect in words only; no number, no percentage
+- persisted and reset with the other tutorial marks (§TUTORIAL — FRESH INITIALIZATION / RESET VISIBILITY)
+```
+
+## AMENDMENT — v2.9.1: approved copy pointers (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; its reveal copy and the 만반의 준비 tutorial line are approved in COPY_AUDIT §13-23 / §3-7. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+- exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
+```
+
+## AMENDMENT — v2.9.1: 연속 부상 출발 row (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the NPC-detail row `무리한 출발 {n}회` becomes `연속 부상 출발 {n}회` — the current chain the strain cut reads. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `연속 부상 출발 {n}회` — the unbroken run of this adventurer's most recent expeditions begun injured (the chain the v2.9.1 strain cut reads; 0 after a healthy departure), no verdict (User 2026-09-25, v2.9.1; replaces `무리한 출발 {n}회`).
 ```
 
 ## AMENDMENT — v2.9.0: D0 briefing DAY labels (User decision 2026-09-25)

@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25; RELEASE_OPEN_ON_BALANCE (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED (every owner amendment of the 2026-09-24/25 decisions is in Source; npm test / ssot:check / qa:runtime PASS at the close-out commit)
+FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25 (v2.8 canonical baseline closed 2026-09-24)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -240,14 +240,29 @@ The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29
 (F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
+User 2026-09-25: the BALANCE FINDING and 7-b are resolved as v2.9.1 (below). `v2.9.0` is tagged (User 2026-09-25) on the last
+v2.9.0 Source commit on `main`, `3d0ddc6` (the close-out `3f18ceb` plus the D0 briefing fix); WORK_STATE notes if the tag
+still has to be pushed.
+
+## v2.9.1 — BALANCE
+
+User decisions 2026-09-25. Every value: `reports/v29-balance-agreements.md`; measurements and the accepted gaps:
+`reports/v29-balance-ideal.md`; owner amendments: CHANGELOG §v2.9.1. 7-b is closed (the remaining-Supply buffer stays).
+
+v2.9.1 is ready to close when:
+- every v2.9.1 owner amendment is in Source (`reports/v291-implementation-handoff.md` lists the batches)
+- `npm test`, `npm run ssot:check`, `npm run qa:runtime` PASS and the UI batch passes its screenshot review
+- the native build reproduces the closing measurement (`tools/remeasure-v29-closing-results.json`) within sampling error
+- `reports/deco-balance` is regenerated
+
 ## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25, PLANNED)
 
 Version routing (User 2026-09-25): the balance session is **v2.9.1**; the game feel presentation
 batches are **v2.9.2**. Both run in separate sessions on branches from `main`; each is docs-first and
 touches Source only after the User authorizes that batch.
 
-- v2.9.1 BALANCE: `reports/v29-balance-finding-handoff.md` (decisions 1–8, 7-b), rule owners per
-  WORK_STATE §Next — BALANCE SESSION.
+- v2.9.1 BALANCE: decided 2026-09-25, owners amended — §v2.9.1 — BALANCE above; Source adoption per
+  `reports/v291-implementation-handoff.md`.
 - v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
   (principles table, contract, H1~H5 rows). Routing per batch, in execution order:
 

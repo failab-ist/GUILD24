@@ -2,8 +2,8 @@
 
 DOC=BOSS
 OWNER=boss,boss_identity,boss_trait,boss_information_cadence,sloth,lust
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
+DOC_VERSION=2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/BOSS_v2.8.0-patch.md,history/BOSS_v2.7.0.md,history/BOSS_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/BOSS.md
@@ -292,7 +292,9 @@ Purpose:
 - strongest expression of ordinary Final fundamentals
 - no special counter tax
 
-WRATH effective Boss Power=200. It is the unmodified baseline every other Boss is measured against.
+WRATH effective Boss Power=180 (User 2026-09-25, v2.9.1 balance; was 200 — the ~10th-Run clear rate is the target, the
+ratio Bosses (PRIDE / ENVY / GLUTTONY / LUST) follow it automatically and the absolute-number Bosses below are scaled with it).
+It is the unmodified baseline every other Boss is measured against.
 
 WRATH adds no special modifier.
 
@@ -416,12 +418,12 @@ Keep the existing Gross-Sales metric and revenue target unless separately rebala
 `DIRECTOR DOCUMENT BASELINE`
 
 ```text
-shortfallCap = 12 Boss Power
+shortfallCap = 11 Boss Power    (v2.9.1 balance; was 12, scaled with WRATH 200 -> 180)
 ```
 
-Thus with WRATH base 200:
-- target met -> effective Boss Power 200
-- maximum shortfall penalty -> effective Boss Power 212
+Thus with WRATH base 180:
+- target met -> effective Boss Power 180
+- maximum shortfall penalty -> effective Boss Power 191
 
 Displayed strengthening must still derive from the actual applied Greed bonus.
 
@@ -658,11 +660,14 @@ Let `sealBreakCount` be committed Seal Break choices by Final Lock.
 Effective Boss Power by committed `sealBreakCount`:
 
 ```text
-0 breaks = 225
-1 break  = 210
-2 breaks = 190
-3 breaks = 165
+0 breaks = 200
+1 break  = 189
+2 breaks = 171
+3 breaks = 149
 ```
+
+(User 2026-09-25, v2.9.1 balance; were 225 / 210 / 190 / 165. 1-3 breaks scaled with WRATH 200 -> 180; 0 breaks set
+to 200 by decision.)
 
 Design intent:
 - 0 Break: keep the full Relic build, face a Boss clearly harder than WRATH
@@ -857,9 +862,9 @@ PASS:
 ### BOSS-Q72 — GREED CAP / SNAPSHOT / FINAL TRANSFER ACCOUNTING
 PASS:
 - existing revenue metric/target path is reused
-- applied shortfall strengthening caps at +12 Boss Power
-- target met returns to 200 baseline
-- maximum shortfall cannot exceed 212 through GREED alone
+- applied shortfall strengthening caps at +11 Boss Power
+- target met returns to 180 baseline
+- maximum shortfall cannot exceed 191 through GREED alone
 - every committed Final transfer contributes its exact fixed 50% / 매입가 amount to Gross Sales exactly once
 - committed Gross Sales snapshot occurs at Final Lock after Final preparation completes
 - no committed Final transfer is excluded or double-counted
@@ -875,10 +880,10 @@ PASS:
 ### BOSS-Q74 — SLOTH POWER BY BREAK COUNT
 PASS exact:
 ```text
-0 = 225
-1 = 210
-2 = 190
-3 = 165
+0 = 200
+1 = 189
+2 = 171
+3 = 149
 ```
 
 Also PASS:

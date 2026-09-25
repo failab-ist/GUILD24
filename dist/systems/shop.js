@@ -18,7 +18,7 @@ class Game{
  start(seed){
  const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
  /* 알뜰 금고 is paid by morningReset, which DAY 1 also runs once the DAY 0 pick is made */
- const startGold=1000;
+ const startGold=700; /* CORE_RUN §START STATE (User 2026-09-25, v2.9.1 balance; was 1000G) */
  this.rng=new G.RNG(seed);this.run={version:8,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   for(const[id,num]of D.openingStock)this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
@@ -49,8 +49,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  overheadBase(){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
-  const dayBase=90+5*(this.run.day-1); /* ECONOMY_ORDER §BASE OPERATING COST (User 2026-09-24, v2.9.0) */
-  return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}
+  /* ECONOMY_ORDER §BASE OPERATING COST (User 2026-09-25, v2.9.1 balance: heavy from D1, flat
+     after - was 90+5*(day-1); level coefficient .02 -> .03). */
+  const dayBase=170+1*(this.run.day-1);
+  return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */
@@ -227,6 +229,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
    if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
   if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+  if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
     chosen once the Gates are final so the recorded Power is the real one. The tie is broken on
@@ -282,8 +285,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     narrowed to randomInt(0,80) inclusive (was 0..100) after the four-arm re-measure isolated the
     excess Store-Gold expansion to this step. Fresh base 180, Level x8 and the 2000 cap unchanged. */
 n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.int(0,80)));n.newToday=!n.introduced;}
+  /* EVENT §03 게이트 순례주간: "actual destination changes to a different currently open Gate"
+     reads against the expected/reported destination (claimedDestination) - the one thing the
+     Player was shown - not against the current actual n.destination, which a 거짓말쟁이 may
+     already have secretly diverted. Filtering on n.destination let a 거짓말쟁이's own reroute
+     land the reroll back on exactly what was shown, silently erasing the Event for them. */
   if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
-   for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
+   for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
   /* SA-Q43: the non-Canonical random 길드 지원 opportunity is not generated. The field is still
      cleared every Morning so a stale v8 save cannot carry one back in. */
   s.special=null;
@@ -460,7 +468,16 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  /* SALE / NPC_TRAIT §NON-PURCHASE LOYALTY (2026-09-23): a visit that ends with a paid purchase
     today still adds +1 on departure; a visit without one adds nothing. Survival is +1. */
  depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
- night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
+ night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];
+  /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden, User 2026-09-25, v2.9.1 balance): a
+     per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
+     shown to the Player, never persisted past it. Deep expeditions neither count nor are assisted. */
+  let badLuckChain=0;
+ for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);
+  const carried=n.pack.length>0&&!d.deep,assist=carried&&badLuckChain>=3?.10+.05*(badLuckChain-3):0;
+  const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);
+  if(carried)badLuckChain=['성공','대성공'].includes(rep.outcome)?0:badLuckChain+1;
+  if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
      Two bands only - Success and Great Success - with no extra Day/Tier multiplier, because the
      ordinary reward already carries that. EXP goes through the ordinary growth curve (no
      automatic Level +1) and the Wallet bonus uses the ordinary persisted money channel, so a
