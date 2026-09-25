@@ -282,8 +282,13 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     narrowed to randomInt(0,80) inclusive (was 0..100) after the four-arm re-measure isolated the
     excess Store-Gold expansion to this step. Fresh base 180, Level x8 and the 2000 cap unchanged. */
 n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.int(0,80)));n.newToday=!n.introduced;}
+  /* EVENT §03 게이트 순례주간: "actual destination changes to a different currently open Gate"
+     reads against the expected/reported destination (claimedDestination) - the one thing the
+     Player was shown - not against the current actual n.destination, which a 거짓말쟁이 may
+     already have secretly diverted. Filtering on n.destination let a 거짓말쟁이's own reroute
+     land the reroll back on exactly what was shown, silently erasing the Event for them. */
   if(ev.pilgrimage&&s.dungeons.length>1&&selected.length){const targets=this.rng.shuffle(selected).slice(0,Math.min(this.rng.int(1,3),selected.length));
-   for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.destination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
+   for(const n of targets){const others=s.dungeons.map((d,i)=>i).filter(i=>i!==n.claimedDestination);if(!others.length)continue;n.destination=this.rng.pick(others);n.pilgrim=true;s.pilgrimage++;}}
   /* SA-Q43: the non-Canonical random 길드 지원 opportunity is not generated. The field is still
      cleared every Morning so a stale v8 save cannot carry one back in. */
   s.special=null;
