@@ -6,7 +6,7 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_GAME_F
 ## Current
 
 - repository: `failab-ist/GUILD24`
-- `main` = `d23d076` (PR #2, `claude/v291-balance-source-adoption` 병합). Pages는 main을 배포한다 — 라이브 빌드가 v2.9.1 밸런스 상태.
+- `main` = v2.9.1 `d23d076`(PR #2) + 감사 보고 재생성 `05dac68`(PR #3) + v2.9.2 문서 정리 `0b85a72`(이 브랜치 PR). Pages는 main을 배포한다 — 라이브 빌드가 v2.9.1 밸런스 상태.
 - 태그: `v2.9.0` → `3d0ddc6`(마지막 v2.9.0 소스 커밋), `v2.9.1` → `d23d076`. 둘 다 원격에 있음.
 - v2.9.1 밸런스: **완료 · main 병합 · 태그 완료**(User 2026-09-25). owner 반영 + 소스 배치 1~6, `npm test` / `ssot:check`(21/21) / `qa:runtime`(5/5) / `qa:visual` PASS, 네이티브 재측정의 ±4%p 초과는 User가 표본오차 범위로 수용.
   - 결정값: `reports/v29-balance-agreements.md` · 측정과 수용한 차이: `reports/v29-balance-ideal.md` · owner 변경 + 커밋: `design_ssot/CHANGELOG.md` §v2.9.1
