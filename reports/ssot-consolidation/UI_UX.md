@@ -717,11 +717,11 @@ Band names (정상 / 지침 / 과로 / 소진 / 탈진) and their effects are ow
 귀환 후 피로 N · {band}
 The band is named from 20 up; exact copy and the B5 next-decision line -> COPY_AUDIT_APPROVED_v2.8.0.md §6-6.
 - pressured Core Stat label (User 2026-09-24, v2.9.0)
-- 냉기 · 대응 15 필요 · 강인함 3당 1
-- 화이트아웃 · 대응 21 필요 · 정신 2당 1
-- 부식 · 대응 13 필요 · 강인함 3당 1
-- 진창 · 대응 21 필요 · 기동 2당 1
-Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 3당 1 · 냉기 대응 상품이 막는다`;
+- 냉기 · 대응 15 필요 · 강인함 3당 대응 1 제공
+- 화이트아웃 · 대응 21 필요 · 정신 2당 대응 1 제공
+- 부식 · 대응 13 필요 · 강인함 3당 대응 1 제공
+- 진창 · 대응 21 필요 · 기동 2당 대응 1 제공
+Gate detail shows the full Hazard sentence, e.g. `냉기 — 대응 15 필요 · 강인함 3당 대응 1 제공 · 냉기 대응 상품이 막는다`;
 출발 0
 원정에서 +5
 음식·음료로 -3
@@ -771,7 +771,6 @@ Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`; price roles -> `SALE_v2.8.0.md` �
 - the Bag slots stay in the customer-state strip beside the status lines (User 2026-09-24, v2.9.0)
 At every width the two slots stay in the customer-state strip beside the status line; they remain the handling surface and the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) lands on them (User 2026-09-24, v2.9.0).
 Stat grid pressure tag (User 2026-09-24, v2.9.0):
-- under each of the four Stat cells, when the customer's Gate presses that Stat, a small tag with the pressing Hazard name(s) (icon + name, e.g. `냉기`, or `독 · 속박` for two)
 - 투력 never carries a tag
 - no number, no verdict
 - the tag is the one place the Stat grid links to the Gate
@@ -901,14 +900,14 @@ Do not expose the Gate's exact Counter requirement.
 ```
 
 ```new
-- exact hidden Hazard readiness thresholds (0.75 / 0.40) and Defense formula — the Gate-level `대응 {N} 필요` and `{능력치} {n}당 1` are public Gate facts (§HAZARD NUDGE; User 2026-09-24 revision, v2.9.0)
+- exact hidden Hazard readiness thresholds (0.75 / 0.40) and Defense formula — the Gate-level `대응 {N} 필요` and `{능력치} {n}당 대응 1 제공` are public Gate facts (§HAZARD NUDGE; User 2026-09-24 revision, v2.9.0)
 - exact hidden Hazard readiness thresholds / Defense formula (the Gate-level requirement number itself is a public Gate fact; User 2026-09-24 revision, v2.9.0)
 ```
 
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
 
 Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```text
@@ -916,11 +915,11 @@ retired. The revision-1 declarations this replaces were edited out of the fences
 ```
 
 ```new
-The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} {n}당 1`) are Gate-level facts shown on every Hazard row, the SALE destination plate included (`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`); the plate has no `?` help; no per-customer remaining need is shown and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision 2, v2.9.0).
+The Gate's 충분 Counter requirement (`대응 {N} 필요`) and the Core-Stat conversion (`{능력치} {n}당 대응 1 제공`) are Gate-level facts shown on every Hazard row, the SALE destination plate included (`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`); the plate has no `?` help; no per-customer remaining need is shown and readiness stays 충분 / 대응 / 불안 / 취약 (User 2026-09-24 revision 2, v2.9.0).
 Examples (User 2026-09-24 revision 2, v2.9.0; every Hazard row — MORNING Gate plate, SALE destination plate, D25 scouting report, FINAL — the number first):
 (no `{위험} · {label}` row survives; the SALE destination plate has no `?` help)
 the sentence forms -> COPY_AUDIT_APPROVED_v2.8.0.md §4-16.
-- each Hazard's numbered short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`, N for 마왕성 (Day 30 / T2 -> 29), the same row as the MORNING plate (User 2026-09-24, v2.9.0)
+- each Hazard's numbered short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`, N for 마왕성 (Day 30 / T2 -> 29), the same row as the MORNING plate (User 2026-09-24, v2.9.0)
 ```
 
 ## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)
@@ -959,4 +958,14 @@ Still hidden:
 4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
 - the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
 - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; a used-up offer answers `오늘 공급이 끝났습니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0)
+```
+
+## AMENDMENT — v2.9.0 F2-b: two-line Hazard short row, inline Stat tag (User decision 2026-09-25)
+
+The Hazard short row reads `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공` (one line at 900px+); the SALE Stat grid tag sits
+beside the Stat name and the value is one step smaller. Superseded declarations were edited in place.
+
+```new
+- beside the Stat name, on the same line (`강인함  독`), when the customer's Gate presses that Stat, a small tag with the pressing Hazard name(s) (e.g. `냉기`, or `독 · 속박` for two); the tag never adds a line or horizontal overflow — it is clipped with an ellipsis before the value would move (User 2026-09-25, v2.9.0)
+- the Stat value is one step smaller than before but still larger than the Stat name (User 2026-09-25, v2.9.0)
 ```

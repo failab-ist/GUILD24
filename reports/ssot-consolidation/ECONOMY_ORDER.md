@@ -406,7 +406,7 @@ User decision 2026-09-24 (v2.9.0 revision): the ORDER information list names the
 ```
 
 ```new
-- each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 1` (Gate detail; User 2026-09-24 revision, v2.9.0)
+- each open Gate's Hazard requirement number `대응 {N} 필요` and the Core-Stat conversion `{능력치} {n}당 대응 1 제공` (Gate detail; User 2026-09-24 revision, v2.9.0)
 ```
 
 ## AMENDMENT — v2.9.0 play feedback F2 (User decision 2026-09-24)

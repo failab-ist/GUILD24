@@ -367,9 +367,9 @@ User decision 2026-09-24 (v2.9.0): the returning-customer quick surface is desk-
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
 
 Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```new
-`북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 3당 1` (User 2026-09-24 revision 2, v2.9.0: the numbered row, no label, no `?`)
+`북부 설원 폐허 I · 냉기 · 대응 13 필요 · 강인함 3당 대응 1 제공` (User 2026-09-24 revision 2, v2.9.0: the numbered row, no label, no `?`)
 ```

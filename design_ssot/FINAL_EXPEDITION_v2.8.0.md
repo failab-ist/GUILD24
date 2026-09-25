@@ -453,7 +453,7 @@ Exact threat ownership -> `DUNGEON_HAZARD_v2.8.0.md`.
 No separate Final-only Hazard defense table.
 No standalone `scale=4.6` path is used in Final resolution.
 
-Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier (`대응 29 필요 · {능력치} {n}당 1`); the mean-gap ×1.70 term stays hidden (User 2026-09-24, v2.9.0).
+Player-facing: the FINAL 확인된 위협 rows and the D25 scouting report read the numbered short row with this Day / Tier (`대응 29 필요 · {능력치} {n}당 대응 1 제공`); the mean-gap ×1.70 term stays hidden (User 2026-09-24, v2.9.0).
 
 기존 v1 Boss의 고정 scale 5.5는 Final Hazard 계산에 사용하지 않는다.
 

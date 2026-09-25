@@ -911,7 +911,7 @@ FAIL:
 ## AMENDMENT — v2.9.0 revision 2: pressure labels and the destination-plate ? retired (User decision 2026-09-24)
 
 Every player-facing Hazard row (SALE destination plate, D25 scouting report, FINAL 확인된 위협 included) reads the numbered short row
-`{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
+`{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; the labels `강인함으로 버틴다` / `기동으로 피한다` / `정신으로 견딘다` and the plate `?` help are
 retired. The revision-1 declarations this replaces were edited out of the fences above in place.
 
 ```text
@@ -919,9 +919,9 @@ retired. The revision-1 declarations this replaces were edited out of the fences
 ```
 
 ```new
-- each Hazard provides its numbered short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 1` (User 2026-09-24, v2.9.0)
+- each Hazard provides its numbered short row `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공` (User 2026-09-24, v2.9.0)
 MORNING Gate plates and the ORDER 위험 보기 modal on a T1, a T2 and a T3 day; the SALE destination plate of a customer going to one of them; the D25 최종 정찰 보고 and the FINAL 확인된 위협 rows.
-- every Hazard row states the Gate-level requirement first: MORNING plate, SALE destination plate, D25 report and FINAL rows read `{위험} · 대응 {N} 필요 · {능력치} {n}당 1`; Gate detail alone reads the full sentence `{위험} — 대응 {N} 필요 · {능력치} {n}당 1 · {위험} 대응 상품이 막는다`
+- every Hazard row states the Gate-level requirement first: MORNING plate, SALE destination plate, D25 report and FINAL rows read `{위험} · 대응 {N} 필요 · {능력치} {n}당 대응 1 제공`; Gate detail alone reads the full sentence `{위험} — 대응 {N} 필요 · {능력치} {n}당 대응 1 제공 · {위험} 대응 상품이 막는다`
 - no `{위험} · {label}` row and no destination-plate `?` help survive; D25 / FINAL show N = 29 (Day 30 / T2); no per-customer remaining need, no readiness number, no 0.75 / 0.40 threshold appears anywhere (User 2026-09-24 revision 2)
 ```
 
@@ -959,4 +959,13 @@ does the same (User 2026-09-24, v2.9.0)
 - tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; a used-up offer's controls show `오늘 공급이 끝났습니다.` (COPY_AUDIT §3-9)
 - the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
 - no `내일` block on ORDER
+```
+
+## AMENDMENT — v2.9.0 F2-b: two-line Hazard short row, inline Stat tag (User decision 2026-09-25)
+
+The Hazard short row reads `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공` (one line at 900px+); the SALE Stat grid tag sits
+beside the Stat name and the value is one step smaller. Superseded declarations were edited in place.
+
+```new
+- on a phone the short row is two lines, `대응 {N} 필요` over the smaller `{능력치} {n}당 대응 1 제공`; at 900px+ one ` · ` line; the SALE Stat grid shows the pressing Hazard tag beside the Stat name on one line with no overflow, and the value is smaller than before yet larger than the name (User 2026-09-25)
 ```
