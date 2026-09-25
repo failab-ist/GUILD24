@@ -601,7 +601,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
-- on a desk (≥1024) the tray keeps its place above the dock and aligns its contents under the shelf column
+- on a desk (≥1024) the tray sits under the shelf column only, above the dock; the dossier column runs down beside it (§SALE — DESK LAYOUT; User 2026-09-25, v2.9.0)
 - the FINAL preparation screen keeps its per-row panel (FINAL_EXPEDITION_v2.8.0.md §3)
 - tap-only; no drag, no minigame, no new Save field
 
@@ -614,14 +614,15 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - one tap folds it to a `전망` chip and back; the fold lasts only until the readout is on screen again — the next time the readout scrolls away the pin opens unfolded; no Save or account field
 - it floats over the top of the scrolled column and reserves no layout height; a row it covers is read by folding it; the touch target is at least 44px
 
-### SALE — DESK SPLIT SCROLL
+### SALE — DESK LAYOUT
 
-(User 2026-09-25, v2.9.0) On a desk (≥1024) the SALE area below the counter band does not scroll as one column.
+(User 2026-09-25, v2.9.0) On a desk (≥1024) the SALE area below the counter band is two areas, not one scrolled column.
 
-- the dossier column (Stat grid, Traits) and the shelf column scroll separately; each is as tall as its own content up to the area's height
-- scrolling the shelf never moves the dossier column, so the left side never empties while the Player works down the shelf
+- the dossier column (Stat grid, Traits) is its own area on the wood, running down to the dock
+- the shelf column holds the shelf on the wood and, under it, the counter tray: the tray takes only the shelf column's width, and the wood above it stays clearly apart from the tray's dark band
+- each column scrolls on its own; scrolling the shelf never moves or empties the dossier column
 - a redraw of the same customer keeps both columns' scroll positions; a new customer starts both at the top
-- phones keep the single scrolled column (§SALE — FORECAST PIN covers the readout there)
+- phones keep the single scrolled column and the full-width tray (§SALE — FORECAST PIN covers the readout there)
 
 ### SALE SELECTED-ITEM INFORMATION
 

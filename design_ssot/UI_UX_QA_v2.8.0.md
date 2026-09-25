@@ -2197,7 +2197,7 @@ PASS:
 FAIL:
 - a pin while the readout is visible, a pin on a desk, values that differ from the readout, a pin that pushes the layout, or a Save / account field for the fold
 
-### UI-Q-v29-25 — SALE DESK SPLIT SCROLL
+### UI-Q-v29-25 — SALE DESK LAYOUT
 
 (User 2026-09-25, v2.9.0)
 
@@ -2205,12 +2205,12 @@ SETUP:
 SALE with a customer at 1024 and 1280 with a shelf taller than the column; scroll the shelf to its end with the wheel over it, then pick a row.
 
 PASS:
-- the SALE area itself does not scroll; the shelf scrolls alone and the dossier column does not move
-- after the pick (a redraw) the shelf keeps its scroll position; the next customer starts at the top
-- at 360 / 390 / 412 the single scrolled column is unchanged
+- the dossier column runs on the wood down to the dock; the counter tray is only as wide as the shelf column and sits under the shelf
+- the shelf scrolls alone and the dossier column does not move; after the pick (a redraw) the shelf keeps its scroll position; the next customer starts at the top
+- at 360 / 390 / 412 the single scrolled column and the full-width tray are unchanged
 
 FAIL:
-- the dossier column scrolling with the shelf, an empty left column beside a scrolled shelf, or a shelf that jumps to the top after a pick
+- a full-width tray on a desk, the dossier column cut off above the tray, the dossier column scrolling with the shelf, or a shelf that jumps to the top after a pick
 
 ### GREAT SUCCESS TUTORIAL
 PASS:

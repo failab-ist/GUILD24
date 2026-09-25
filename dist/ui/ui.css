@@ -944,6 +944,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* v2.9.0 counter tray: the phone gives the tray its 44px back from the dossier margin, so the shelf head and first row still show at entry */
 .p-sale .dossier:not(.traits){margin-bottom:10px}
 .p-sale .shelf{order:2}
+/* the shelf's desk column (UI_UX §SALE — DESK LAYOUT); on a phone it is no box at all */
+.p-sale .shelf-col{display:contents}
 .p-sale .dossier.traits{order:3}
 .dossier{margin:0 0 18px}
 .p-sale .dock{display:flex;align-items:center;gap:12px;background:#170f0a;box-shadow:inset 0 3px 0 #ffffff14}
@@ -2781,11 +2783,24 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
  .p-sale .dossier-col{display:block;grid-column:1;margin:0}
  .p-sale .shelf{grid-column:2;margin:0}
- /* UI_UX §SALE — DESK SPLIT SCROLL (User 2026-09-25, v2.9.0): on a desk the two columns scroll apart. The SALE area
-    itself no longer scrolls; each column is as tall as its own content up to the area's height and scrolls inside it,
-    so working down the shelf never empties the dossier column beside it. */
- .p-sale .stage-scroll{overflow:hidden;grid-template-rows:minmax(0,1fr);padding-top:10px;padding-bottom:6px}
- .p-sale .dossier-col,.p-sale .shelf{max-height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+ /* UI_UX §SALE — DESK LAYOUT (User 2026-09-25, v2.9.0): below the counter band the desk is two areas. The dossier
+    column is its own area running down to the dock; the shelf column holds the shelf on the wood and, under it, the
+    counter tray - the tray takes only the shelf column's width. Each column scrolls on its own, so working down the
+    shelf never moves or empties the dossier side. The scrolled column of the phone is no box here. */
+ .stage.p-sale{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  grid-template-rows:auto auto auto minmax(0,1fr) auto auto;
+  grid-template-areas:"task task" "front front" "edge edge" "left shelf" "left tray" "dock dock"}
+ .p-sale>.task-line{grid-area:task}
+ .p-sale>.front{grid-area:front}
+ .p-sale>.counter-edge{grid-area:edge}
+ .p-sale>.dock{grid-area:dock}
+ .p-sale>.stage-scroll{display:contents}
+ .p-sale .dossier-col,.p-sale .shelf-col{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+  background:var(--tex-wood),#2b2013}
+ .p-sale .dossier-col{grid-area:left;padding:16px 12px 16px var(--gutter)}
+ .p-sale .shelf-col{display:block;grid-area:shelf;padding:16px var(--gutter) 12px 12px}
+ .p-sale>.counter-tray{grid-area:tray;display:block;padding-left:12px}
+ .p-sale>.counter-tray>*{grid-column:auto}
  
 }
 

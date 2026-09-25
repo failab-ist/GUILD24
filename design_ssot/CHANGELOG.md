@@ -12,8 +12,9 @@ Docs-first. Each owner amendment is listed when committed.
 State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
 Open before the tag: the BALANCE FINDING (`reports/v29-balance-finding-handoff.md`, decisions taken in a separate session) and 7-b.
 
-- Quick fix (User 2026-09-25): SALE desk split scroll — on a desk the dossier column and the shelf scroll separately, so
-  the left side never empties while the shelf scrolls; a redraw keeps both positions (UI_UX §SALE — DESK SPLIT SCROLL, UI-Q-v29-25).
+- Quick fix (User 2026-09-25): SALE desk layout — on a desk the dossier column is its own area down to the dock, the counter
+  tray sits under the shelf column only, and the two columns scroll separately; a redraw keeps both positions
+  (UI_UX §SALE — DESK LAYOUT, UI-Q-v29-25).
 
 - Quick fix (User 2026-09-25): SALE forecast pin — on a phone, while the readout is scrolled out of view, its two readings
   float at the top of the scrolled column, where the readout sat; one tap folds them to a `전망` chip until the readout is on screen again; no Save field (UI_UX §SALE — FORECAST PIN, UI-Q-v29-24).
