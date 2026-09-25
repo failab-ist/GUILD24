@@ -433,6 +433,16 @@ Coach mark / spotlight / button이 아닌 텍스트 한 줄이며, 문장은 coa
 
 게이트별 수는 손님이 밝힌 목적지 기준이며 이름·직업·특성·소지금은 붙지 않는다 (rule owner: ECONOMY_ORDER / UI_UX).
 
+## 4-23. 사망 한도 — MORNING / ORDER 상단 정보줄
+
+**노출 위치**
+> MORNING · ORDER 상단 정보줄. 항상 보인다 (rule owner: CORE_RUN §DEATH LIMIT — SEGMENTED / UI_UX §DEATH LIMIT — ALWAYS VISIBLE).
+
+**현재** (User 2026-09-25, v2.9.0 balance close)
+> 사망 {n} / {limit} · D{segmentEndDay}까지
+
+예: `사망 3 / 5 · D10까지`. {limit}는 추모 방명록 · 위령제가 반영된 현재 구간 한도. 한도까지 1명 남으면 경고색 (문구는 같다).
+
 ## 4-22. 특수 효과 행 — 유틸리티 3종
 
 **노출 위치**

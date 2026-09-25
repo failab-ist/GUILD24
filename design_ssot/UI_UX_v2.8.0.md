@@ -223,6 +223,17 @@ Do not:
 Store scene은 사용할 수 있으나
 상황 정보보다 방해되지 않게 한다.
 
+### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
+
+(User 2026-09-25, v2.9.0 balance close.) The Run's cumulative Death count and the current segment limit
+(`CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED) are always on screen at MORNING and ORDER, in the top status line —
+not only in the 도감.
+- one compact item: count / current limit / the Day the segment ends; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
+- warning color when one more Death ends the Run (count = limit − 1)
+- the limit shown already includes 추모 방명록 and 위령제
+- no extra popover, badge or explanation text; the same line on both screens
+- exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
+
 ### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown anywhere, MORNING or ORDER. Today's open Gates, their numbered Hazard rows and the visitor count per open Gate are the whole preparation context; the Gate-count / Tier generation rules in `DUNGEON_HAZARD_v2.8.0.md` are unchanged and stay internal.
@@ -258,7 +269,7 @@ REMOVE from Order main composition.
 
 Recommended hierarchy:
 1. `DAY X · 본사 발주`
-2. persistent funds summary
+2. persistent funds summary (the top status line also carries the Death count / limit, §DEATH LIMIT — ALWAYS VISIBLE)
 3. compact current-day Gate / known Hazard reference
 4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
 5. offer list + quantity (base=6; authoritative modifiers may increase count)

@@ -1045,3 +1045,24 @@ User decision 2026-09-25: on a desk the SALE dossier column is its own area down
 - a redraw of the same customer keeps both columns' scroll positions; a new customer starts both at the top
 - phones keep the single scrolled column and the full-width tray (§SALE — FORECAST PIN covers the readout there)
 ```
+
+## AMENDMENT — v2.9.0 balance close: Death limit always visible (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.0 balance close, `reports/v29-balance-agreements.md` §3): the Death count and the current segment limit are always shown on MORNING and ORDER in the top status line, warning color at one Death left; exact copy COPY_AUDIT §4-23.
+
+```text
+2. persistent funds summary
+```
+
+```new
+### DEATH LIMIT — ALWAYS VISIBLE (MORNING / ORDER)
+(User 2026-09-25, v2.9.0 balance close.) The Run's cumulative Death count and the current segment limit
+(`CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED) are always on screen at MORNING and ORDER, in the top status line —
+not only in the 도감.
+- one compact item: count / current limit / the Day the segment ends; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23
+- warning color when one more Death ends the Run (count = limit − 1)
+- the limit shown already includes 추모 방명록 and 위령제
+- no extra popover, badge or explanation text; the same line on both screens
+- exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
+2. persistent funds summary (the top status line also carries the Death count / limit, §DEATH LIMIT — ALWAYS VISIBLE)
+```
