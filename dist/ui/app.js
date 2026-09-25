@@ -1255,7 +1255,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
  +'<p class="smalltext">폐기까지 '+(st.expires-s.day)+'일</p>'
  +status+'<div class="tills">'+actions+'</div></div>';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
-function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>'<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p></div>').join('')+'</details>';}
+function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>{const st=Relics.status(game,r.id);return '<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</div>';}).join('')+'</details>';}
 /* UI-Q111. Both screens that take a commitment - the order and the sale - need what the
    store is already running to be checkable in one tap before committing, and neither had it:
    ORDER showed nothing, SALE only a disclosure at the very bottom of the scroll. This is one
@@ -1274,7 +1274,8 @@ function loadoutModal(){const lo=game.run?.loadout||{};
 function relicsModal(){
    const owned=game.ownedRelics();
    if(!owned.length) return '<div class="owned-relics"><p class="muted" style="padding:16px;text-align:center">보유한 점포지원이 없다.</p></div>';
-   return '<div class="owned-relics">'+owned.map(r=>'<article class="slip"><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p></article>').join('')+'</div>';
+   /* RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): one runtime line for a condition-type support, none otherwise */
+   return '<div class="owned-relics">'+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
   }
 function relicTakeover(){const s=game.run,w=s.relicWindow;
  if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 5일 단위 영업일에 도착한다.</p></div></div><div class="close">'+btn('닫기','dismiss','stamp')+'</div></div>';

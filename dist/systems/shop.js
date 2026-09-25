@@ -303,13 +303,13 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  if(advancePity&&this.has('dawnBulk'))for(let i=0;i<D.relicParams.dawnBulk.extraOffers;i++)s.offers.push(this.rollOffer(0,1,G.Relics.food));
  const ordinary=num;
  const rare=s.offers.some(o=>D.itemBy[o.item].rarity>=2);if(advancePity)s.pity.rare=rare?0:s.pity.rare+1;
- const hazards=G.Relics.known(this);s.pity.hazards??={};if(advancePity){for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
+ const hazards=G.Relics.known(this);s.pity.hazards??={};if(advancePity){for(const h of hazards)s.pity.hazards[h]=s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h]))?0:(s.pity.hazards[h]||0)+1;s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
  if(s.pity.counter>=3&&hazards.length){
   const missing=hazards.filter(h=>s.pity.hazards[h]>=3),target=missing.length?missing:hazards;
-  const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.counter(it,target));
+  const matches=D.items.filter(it=>G.Meta.itemUnlocked(this.account,it,s.day)&&G.Relics.directCounter(it,target));
   if(matches.length)s.offers[ordinary-1]=this.offerFor(this.rng.pick(matches));
  }
- if(advancePity&&hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.counter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
+ if(advancePity&&hazards.length){for(const h of hazards)if(s.offers.some(o=>G.Relics.directCounter(D.itemBy[o.item],[h])))s.pity.hazards[h]=0;
   s.pity.counter=Math.max(0,...hazards.map(h=>s.pity.hazards[h]));}
  for(const o of s.offers){const it=D.itemBy[o.item];if(it.rarity>=2)s.stats.rare++;if(it.rarity===4)s.stats.legendary++;if(!this.account.discovered.includes(it.id)){this.account.discovered.push(it.id);s.stats.discoveries++;}}
  }
@@ -372,7 +372,8 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     Hazard-fit formula - this patch does not touch overcharge acceptance. */
  let need;
  if(mode==='overcharge'){
-  const fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0),0);
+  /* 관련 준비 (RELIC §COUNTER JUDGEMENT): the direct Counter values plus the pressed Stats' values */
+  const fit=d.hazards.reduce((v,h)=>v+Math.max(0,p[h]||0)+Math.max(0,p[G.Dungeon.hazardRule(h).stat]||0),0);
   need=.53+Math.min(.29,fit*.012);
  }else need=D.balance.accessibleNeed;
  /* The healing good an injured adventurer reaches for is Insurance now; `medical` is gone.
@@ -405,7 +406,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     least one Hazard of this customer's actual Gate under the canonical Counter predicate, the
     acceptance is floored/capped at 0.97 - even when a negative purchase Trait would otherwise
     lower rawChance. No new Counter floor is added to 바가지. */
- const counters=mode!=='overcharge'&&G.Relics.counter(it,d.hazards);
+ const counters=mode!=='overcharge'&&G.Relics.relatedPrep(it,d.hazards);
  /* 왕도 프리미엄 인증 lifts the flat 바가지 intent penalty for its owner; nothing else about 150% moves. */
  const flat=mode==='overcharge'&&this.has('royalCert')?0:rule.intent;
  const chance=wallet<debit?0:counters?.97:clamp(need+n.loyalty*.002+flat+burdenIntentBonus,.08,.97);
@@ -427,10 +428,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  if(Number.isFinite(st.cost)&&!st.costUnknown)s.daily.cogs+=st.cost;else {s.daily.unknownCosts=(s.daily.unknownCosts||0)+1;s.daily.unknownRevenue=(s.daily.unknownRevenue||0)+intent.price;}s.daily.sales=(s.daily.sales||0)+1;s.daily.overcharge+=Math.max(0,intent.price-it.sell);s.daily.discount+=Math.max(0,it.sell-intent.price);
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
  if(s.event?.effects.tasting&&mode==='half'&&!s.tastingUsed){s.money+=D.balance.tastingSupport;s.daily.subsidy+=D.balance.tastingSupport;s.tastingUsed=true;}
- let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
+ let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
  if(this.has('groupFlyer')&&s.daily.sales>=D.relicParams.groupFlyer.commissionFrom)commission+=D.relicParams.groupFlyer.commission;
  /* 원정 전문 인증: the buyer of a Counter for their own Gate collects +50G on the next visit, once per purchase Day */
- if(this.has('expeditionCert')&&G.Relics.counter(it,(this.gateFor(n)||s.dungeons[0]).hazards))n.certGoldDay=s.day;s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
+ if(this.has('expeditionCert')&&G.Relics.directCounter(it,(this.gateFor(n)||s.dungeons[0]).hazards))n.certGoldDay=s.day;s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;
  const before=n.loyalty;this.loyal(n,loyalty);s.daily.loyalty+=n.loyalty-before;
  n.history.push({day:s.day,item:it.id,mode,paid:intent.price,cost:st.cost,costUnknown:!!st.costUnknown,debit:intent.debit,guarantee:intent.guarantee,subsidy:intent.bundle,commission,loyalty:n.loyalty-before});
  /* SA-Q11. A committed purchase is the one thing the Player did, so the Great Success signal

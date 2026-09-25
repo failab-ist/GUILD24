@@ -430,3 +430,43 @@ test('희귀상품 입고 계약: Rare+ sale price +10%, paid by the customer, n
  assert.equal(r.store,list,'the store receives the lifted price');assert.equal(r.paid,list,'all of it from the customer');
  assert.equal(r.last.subsidy||0,0,'HQ fills nothing');assert.equal(r.s.daily.commission||0,0,'and pays no commission');
 });
+
+test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관련 준비, and the 기동 exception is gone',()=>{
+ const coffee=DATA.itemBy.coffee,rope=DATA.itemBy.rope,rice=DATA.itemBy.rice;
+ assert.equal(Relics.directCounter(coffee,['bind']),false,'기동 is not a Counter for 속박 any more');
+ assert.equal(Relics.relatedPrep(coffee,['bind']),true,'but it is 관련 준비 (the Stat 속박 presses)');
+ assert.equal(Relics.directCounter(rope,['bind']),true);assert.equal(Relics.relatedPrep(rope,['bind']),true);
+ assert.equal(Relics.relatedPrep(rice,['bind']),false,'강인함 is not what 속박 presses');
+ assert.equal(Relics.relatedPrep(rice,['poison']),true,'강인함 is what 독 presses');
+ assert.equal('counter' in Relics,false,'no third predicate survives');
+ // 원정 위험 게시판 reads 관련 준비; the multipliers, pity and cert rewards read 직접 대응
+ const g=fresh('judgement'),s=g.run;s.dungeons=[{...g.makeDungeon('spider',1),hazards:['bind']}];
+ s.facilities=[];const base=Relics.offerWeight(g,coffee);s.facilities=['hazardBoard'];
+ assert.ok(Relics.offerWeight(g,coffee)>base,'게시판 weights a 기동 Drink on a 속박 Gate (관련 준비)');
+ const n={...s.npcs[0],traits:[],pack:['coffee'],injury:0,fatigue:0};
+ const plain=Dungeon.prepare(n,s.dungeons[0],[]).effects,cert=Dungeon.prepare(n,s.dungeons[0],['expeditionCert']).effects;
+ assert.equal(cert.mobility,plain.mobility,'원정 전문 인증 does not multiply a pressed Stat');
+ const withRope={...n,pack:['rope']};
+ assert.ok(Dungeon.prepare(withRope,s.dungeons[0],['expeditionCert']).effects.bind>Dungeon.prepare(withRope,s.dungeons[0],[]).effects.bind,'it still multiplies a direct Counter');
+ // SALE acceptance floor reads 관련 준비
+ s.phase='sell';s.queue=[n.id];const cust=s.npcs[0];cust.money=9999;cust.destination=0;cust.claimedDestination=0;cust.traits=[];
+ assert.equal(g.interest(cust,coffee,'full').chance,.97,'a 기동 Drink for a 속박 Gate takes the 관련 준비 floor');
+ assert.ok(g.interest(cust,rice,'full').chance<.97,'an unrelated Item does not');
+ assert.equal(DATA.balance.accessibleNeed,.72,'ECONOMY_ORDER: base need 0.72');
+});
+
+test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime truth, COPY_AUDIT §11-32 exact',()=>{
+ const g=fresh('status'),s=g.run;s.facilities=['rotation','logisticsHQ','guarantee','groupFlyer','delivery','bulk','memberBundle','medicine'];
+ s.previousSales=3;assert.equal(Relics.status(g,'rotation'),'전날 판매 3건 · 오늘 미적용');s.previousSales=4;assert.equal(Relics.status(g,'rotation'),'전날 판매 4건 · 오늘 적용 중');
+ assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건 · 오늘 미적용');s.previousSales=6;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 6건 · 오늘 적용 중');
+ s.guaranteeUsed=false;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 1회 남음');s.guaranteeUsed=true;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 사용함');
+ s.daily.sales=2;assert.equal(Relics.status(g,'groupFlyer'),'오늘 판매 2건 · 5번째부터 +15G');s.daily.sales=4;assert.equal(Relics.status(g,'groupFlyer'),'오늘 판매 4건 · 판매마다 +15G 지급 중');
+ s.rerollCount=0;assert.equal(Relics.status(g,'delivery'),'오늘 무료 교환 남음');s.rerollCount=1;assert.equal(Relics.status(g,'delivery'),'오늘 무료 교환 사용함');
+ s.phase='sell';assert.equal(Relics.status(g,'bulk'),'','묶음발주 계약 speaks only at ORDER');
+ s.phase='order';g.generateOffers();s.cart={};assert.equal(Relics.status(g,'bulk'),'지금 발주에서 적용 없음');s.cart={0:3};assert.equal(Relics.status(g,'bulk'),'지금 발주에서 1종 적용');
+ assert.equal(Relics.status(g,'memberBundle'),'','단골 묶음혜택 speaks only at SALE');
+ s.phase='sell';const n=s.npcs[0];s.queue=[n.id];s.cursor=0;n.loyalty=10;n.history=[];assert.equal(Relics.status(g,'memberBundle'),n.name+' · 단골 아님');
+ n.loyalty=60;n.history=[{day:s.day,paid:50}];assert.equal(Relics.status(g,'memberBundle'),n.name+' · 단골 · 오늘 유료 구매 1건');
+ assert.equal(Relics.status(g,'medicine'),'','an always-on support carries no line');
+ assert.equal(Relics.status(g,'lifetime'),'','평생 단골제 has no daily use state to read');
+});

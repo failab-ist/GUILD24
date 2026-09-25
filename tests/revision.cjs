@@ -447,14 +447,18 @@ test('정가 threshold reaches the decision, and 할인/바가지 are untouched 
 
  /* Turning 정가's weight off is exactly the pre-wiring decision, so it is the control. */
  const off=(fn)=>{const w=rule.intentWeight;rule.intentWeight=0;try{return fn();}finally{rule.intentWeight=w;}};
- let fullMoved=0;
+ /* v2.9.0 F7 (RELIC §COUNTER JUDGEMENT): a 관련 준비 Item for this customer's Gate sits on the 0.97 floor, where
+    no judged-price bonus can move it - so the count reads the Items the floor does not cover. */
+ const gate=g.gateFor(n),floored=it=>Relics.relatedPrep(it,gate.hazards);
+ let fullMoved=0,movable=0;
  for(const it of DATA.items){
   for(const mode of ['half','overcharge'])
    assert.deepEqual(g.interest(n,it,mode),off(()=>g.interest(n,it,mode)),
     mode+' decides the same as before the judged price reached chance');
-  if(g.interest(n,it,'full').chance!==off(()=>g.interest(n,it,'full')).chance)fullMoved++;
+  if(floored(it)){const q=g.interest(n,it,'full');assert.equal(q.chance,q.debit>n.money?0:.97,it.id+' takes the 관련 준비 floor when affordable');continue;}
+  movable++;if(g.interest(n,it,'full').chance!==off(()=>g.interest(n,it,'full')).chance)fullMoved++;
  }
- assert.ok(fullMoved>DATA.items.length/2,'and 정가 actually moves - '+fullMoved+' of '+DATA.items.length);
+ assert.ok(movable>0&&fullMoved>movable/2,'and 정가 actually moves - '+fullMoved+' of '+movable+' uncovered Items');
 
  /* And what moves it is the threshold: judged at 1.00 the same offer is weighed more heavily.
     The burden term is a bonus floored at zero, so it only separates the two judgements where it

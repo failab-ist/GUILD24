@@ -2242,6 +2242,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  font:400 14px/1.4 var(--ui);color:#cbb98d;cursor:pointer}
 .owned-relics>div,.special-event>div,.special-event>p{padding:0 14px 12px;font:400 13px/1.6 var(--ui);color:#a2947c}
 .owned-relics>div b{color:#f2e7cd}
+/* RELIC §QUICK VIEW STATUS LINE: the runtime state of a condition-type support, one small line, no badge */
+.owned-relics .status{margin:2px 0 0;font:600 12px/1.5 var(--ui);color:#e0b98a;font-variant-numeric:tabular-nums}
+.owned-relics .slip .status{margin-top:4px;color:#7a5a24}
 .special-event button{margin:0 14px 8px 0;min-height:44px;padding:10px 14px;background:#3a2c1d;color:#efe3c8;
  box-shadow:inset 2px 2px 0 #ffffff21,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 .menu-list{display:grid;gap:9px}

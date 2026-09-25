@@ -185,7 +185,7 @@ function playRun(g,out,ctx){
  /* aware: 야전 정비대 / 원정 전문 인증 multiply the Counter an Item brings to the Gate this
     adventurer enters - value that Hazard term by the same factor the game will apply. Only when
     supplying an adventurer (n given), not when ranking the order sheet. */
- if(aware&&n&&hz){const f=(owns('medicine')&&it.category==='gear'?RP.medicine.counterMult:1)*(owns('expeditionCert')&&G.Relics.counter(it,d.hazards)?RP.expeditionCert.counterMult:1);v+=hz*(f-1);}if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
+ if(aware&&n&&hz){const f=(owns('medicine')&&it.category==='gear'?RP.medicine.counterMult:1)*(owns('expeditionCert')&&G.Relics.directCounter(it,d.hazards)?RP.expeditionCert.counterMult:1);v+=hz*(f-1);}if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
  /* The counter guarantee overwrites the last slot, so whether it fired can only be read from the
     state BEFORE the sheet is rolled. Measurement only - the call is passed straight through. */
  const nominees={};
@@ -250,8 +250,8 @@ function playRun(g,out,ctx){
       answered it; "matched" when what actually departed answers one of them. */
    if(d.hazards.length){
     const shelf=s.inventory.map(x=>D.itemBy[x.item]);
-    if(shelf.some(it=>G.Relics.counter(it,d.hazards))||n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterRelevant++;
-    if(n.pack.some(id=>G.Relics.counter(D.itemBy[id],d.hazards)))P.counterMatched++;}
+    if(shelf.some(it=>G.Relics.directCounter(it,d.hazards))||n.pack.some(id=>G.Relics.directCounter(D.itemBy[id],d.hazards)))P.counterRelevant++;
+    if(n.pack.some(id=>G.Relics.directCounter(D.itemBy[id],d.hazards)))P.counterMatched++;}
    P.ratioBare.push(G.Dungeon.preparedPower(a.effects)/(d.power||1));
    P.ratioReady.push(G.Dungeon.preparedPower(b.effects)/(d.power||1));}const ability=p=>G.Dungeon.preparedPower(p.effects);out.impact.characterAbility+=ability(a);out.impact.preparedAbility+=ability(b);out.impact.samples++;const rng=new G.RNG(s.seed,g.rng.state),bare=G.Dungeon.resolve({...copy(n),pack:[]},d,new G.RNG(s.seed,rng.state),s.facilities),ready=G.Dungeon.resolve(copy(n),d,rng,s.facilities);const rank={'사망':0,'중상':1,'부상':2,'퇴각':3,'성공':4,'대성공':5};if(rank[ready.outcome]>rank[bare.outcome])out.impact.improved++;if(bare.outcome==='사망'&&ready.outcome!=='사망')out.impact.saved++;}
  originalNight();
@@ -340,12 +340,12 @@ function playRun(g,out,ctx){
   if(s.phase==='order'){buySupport();capacityHit=false;depletedToday=false;out.shortage.orderDays++;
    {const o=out.offerShape,known=G.Relics.known(g),items=s.offers.map(x=>D.itemBy[x.item]);
     const uniq=new Set(s.offers.map(x=>x.item)).size;
-    const counters=items.filter(it=>G.Relics.counter(it,known)).length;
+    const counters=items.filter(it=>G.Relics.directCounter(it,known)).length;
     const need=[...new Set(s.dungeons.flatMap(d=>d.hazards||[]))].filter(h=>known.includes(h));
     o.days++;o.slots+=s.offers.length;o.unique+=uniq;o.dupes+=s.offers.length-uniq;
     o.counterSlots+=counters;o.counterHeavy+=Number(counters*2>=s.offers.length);
     o.thin+=Number(s.offers.length-counters<=3);
-    o.missingCounterDays+=Number(need.some(h=>!items.some(it=>G.Relics.counter(it,[h]))));}
+    o.missingCounterDays+=Number(need.some(h=>!items.some(it=>G.Relics.directCounter(it,[h]))));}
    /* Take this sheet or pay to look again. Same poor-sheet test as before, re-applied after each
       reroll, and the price is now weighed against what the store is about to spend on stock as
       well as against the floor: the till has to still clear cashFloor AFTER both the next reroll
@@ -406,7 +406,7 @@ function playRun(g,out,ctx){
        rare+ insurance, so those are offered first; value decides within each group. (단골 묶음혜택
        needs no rule: this loop already fills a 단골's second slot, and interest() already
        prices that second Item at the bundled debit.) */
-    pref:aware?Number(owns('supplyCert')&&it.rarity>=2&&(G.Relics.counter(it,d.hazards)||!!it.effects.escape||!!it.effects.revive)):0});}
+    pref:aware?Number(owns('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,d.hazards)||!!it.effects.escape||!!it.effects.revive)):0});}
    if(aware)options.sort((a,b)=>(b.pref-a.pref)||(b.v-a.v));else options.sort((a,b)=>b.v-a.v);if(!options.length)break;g.sell(options[0].st.id,options[0].mode);}
    if(!s.inventory.length)out.stockouts++;
    /* The shelf ran out with customers still to come. Once per Day: the flag is cleared when the

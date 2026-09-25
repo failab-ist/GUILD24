@@ -104,7 +104,9 @@ test('TRAIT-Q17: 회복체질 shortens and 허약함 lengthens Severe Injury res
 test('TRAIT-Q16 / SALE: purchase and revisit Traits use the existing systems',()=>{
  const g=fresh('sale'),s=g.run;
  g.beginOrder();g.open();const n=g.current();
- const rare=DATA.itemBy.highpotion,common=DATA.itemBy.rice;
+ /* v2.9.0 F7: 삼각김밥 (강인함) is 관련 준비 for most Gates and takes the 0.97 floor, so the Common comparison
+    reads 하급 포션 (투력 is never a pressed Stat) - the Rarity contrast this test compares is unchanged. */
+ const rare=DATA.itemBy.highpotion,common=DATA.itemBy.potion;
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: a Wallet far above price (the old
     9999) drives 정가 burden to ~0, and the flat 0.80 accessible-mode base plus that bonus now
     saturates every case at the 0.97 cap - hiding the Trait bias this test exists to compare.

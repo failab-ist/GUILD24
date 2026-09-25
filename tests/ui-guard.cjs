@@ -2956,6 +2956,11 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('playCue').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
+ // v2.9.0 F7 (User 2026-09-24): quick-view status line, purchase notice, Counter judgement split
+ assert.ok(fn('ownedRelicView').includes('Relics.status(game,r.id)')&&fn('relicsModal').includes('Relics.status(game,r.id)')&&/<p class="status">/.test(app),'both owned lists carry the runtime status line');
+ assert.ok(read('dist/systems/relics.js').includes("s.notice=D.relicBy[id].name+' 확보.';")&&!/다음 날부터 적용됩니다/.test(read('dist/systems/relics.js')),'§11-33 the notice is the name and 확보 only');
+ assert.ok(!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/relics.js'))&&!/h==='bind'\|\|h==='mire'/.test(read('dist/systems/dungeon.js')),'the 기동-for-속박/진창 Counter exception is gone');
+ assert.ok(/const counters=mode!=='overcharge'&&G\.Relics\.relatedPrep\(it,d\.hazards\);/.test(read('dist/systems/shop.js'))&&!/G\.Relics\.counter\(/.test(read('dist/systems/shop.js')),'SALE acceptance reads 관련 준비; no third predicate is called');
  // per-Gate counts: only with ≥2 Gates, in the §4-21 form
  assert.ok(/counts\?s\.dungeons\.map\(d=>E\(d\.name\)\+' '\+\(counts\.get\(d\.id\)\|\|0\)\)\.join\(' · '\):E\(s\.dungeons\.map\(d=>d\.name\)\.join\(' \/ '\)\)/.test(of),'{N}명 · {Gate A} {a} · {Gate B} {b} with two or more Gates, {N}명 · {Gate} with one');
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');

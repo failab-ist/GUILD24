@@ -57,7 +57,8 @@ function counterFactor(item,k,v,facilities,d){
  if(!(k in D.hazards)||v<=0)return 1;
  let f=1;
  if(facilities.includes('medicine')&&item.category==='gear')f*=D.relicParams.medicine.counterMult;
- if(facilities.includes('expeditionCert')&&d.hazards.some(h=>(item.effects[h]||0)>0||(h==='bind'||h==='mire')&&(item.effects.mobility||0)>0))f*=D.relicParams.expeditionCert.counterMult;
+ /* 직접 대응 only (RELIC §COUNTER JUDGEMENT, User 2026-09-24, v2.9.0): the 기동-for-속박/진창 exception is retired */
+ if(facilities.includes('expeditionCert')&&d.hazards.some(h=>(item.effects[h]||0)>0))f*=D.relicParams.expeditionCert.counterMult;
  return f;
 }
 /* Supply is its own channel too: the two Trait deltas, and a Food never drops below 1. */
