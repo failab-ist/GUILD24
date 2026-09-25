@@ -28,7 +28,8 @@ measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Sou
     recur, +1 each time); a contextual 만반의 준비 tutorial (UI_UX §만반의 준비 TUTORIAL); an Epic hybrid stays below every
     specialist of the same or a higher Rarity (ITEM, DUNGEON_ITEM_QA ITEM-Q73 / Q83 / Q15).
   - Copy (User 2026-09-25): 23. 길드 합동 위령제 (COPY_AUDIT §13-23), the 만반의 준비 tutorial line (§3-7), the Decoration effect
-    lines (§9-5, 추모 방명록 `사망 한도 +2명.`). Open: the Night lines for retreat healing and 만반의 준비.
+    lines (§9-5, 추모 방명록 `사망 한도 +2명.`), the Night lines for retreat healing and 만반의 준비 (§19-9); the NPC-detail row
+    becomes `연속 부상 출발 {n}회` (UI_UX, DUNGEON_ITEM_QA DUN-Q-v29-3).
 
 ## v2.9.0 — implementation complete 2026-09-25; the BALANCE FINDING moved to v2.9.1 (User decisions 2026-09-24/25)
 

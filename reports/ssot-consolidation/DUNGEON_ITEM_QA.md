@@ -686,7 +686,6 @@ User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome 
 - no rest recovery exists; Fatigue falls only through Food/Drink (User 2026-09-25, v2.9.0)
 ### DUN-Q-v29-3 — REPEATED-STRAIN DEATH ESCALATION
 (User 2026-09-25, v2.9.0)
-- NPC detail shows `무리한 출발 {n}회` (injured + weary departures so far) as an information row, no verdict
 부상 + 구급키트 (User 2026-09-25, v2.9.0):
 - Outcome stays 부상
 - Outcome becomes 부상 (NIGHT verdict 부상, event `구급키트가 중상을 부상으로 낮췄다.`)
@@ -847,4 +846,12 @@ No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate
 No Hazard relies on a single mandatory SKU and Hybrid does not strictly dominate a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1).
 - each dual-Hazard value remains below every dedicated specialist of the same or a higher Rarity for that Hazard
 (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16)
+```
+
+## AMENDMENT — v2.9.1: 연속 부상 출발 row (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the NPC-detail row `무리한 출발 {n}회` becomes `연속 부상 출발 {n}회` — the current chain the strain cut reads. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+- NPC detail shows `연속 부상 출발 {n}회` (the current chain of consecutive injured departures; 0 after a healthy one) as an information row, no verdict (User 2026-09-25, v2.9.1)
 ```

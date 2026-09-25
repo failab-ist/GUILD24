@@ -395,7 +395,7 @@ NPC detail mobile order:
 6. bag/equipment
 7. locked/secondary info
 
-NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `무리한 출발 {n}회` — the number of expeditions this adventurer began injured or at Fatigue 20+, no verdict (User 2026-09-25, v2.9.0).
+NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `연속 부상 출발 {n}회` — the unbroken run of this adventurer's most recent expeditions begun injured (the chain the v2.9.1 strain cut reads; 0 after a healthy departure), no verdict (User 2026-09-25, v2.9.1; replaces `무리한 출발 {n}회`).
 
 NPC inspection entry:
 portrait/sprite/name/card tap all acceptable

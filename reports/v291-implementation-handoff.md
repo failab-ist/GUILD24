@@ -7,7 +7,7 @@ the owner wins and the difference is reported, not resolved here.
 - Decided values in one place (Korean): `reports/v29-balance-agreements.md`.
 - Measurements and the gaps the User accepted: `reports/v29-balance-ideal.md` (§종결 측정 is the final state).
 - Base: branch `claude/sleepy-volta-ywkjeu` at or after `5e9ccb3` (owners amended, Source untouched, `npm test` PASS).
-- Stop boundary: batches 1–5 below, one commit each. Batch 6 is partly blocked (see §6). Do not tune any value to make a
+- Stop boundary: batches 1–6 below, one commit each; then §7 close-out. No open design decision remains. Do not tune any value to make a
   test or a measurement pass (AGENTS §5 / §9).
 
 ---
@@ -46,11 +46,11 @@ QA: `DUNGEON_ITEM_QA_v2.8.0.md` DUN-Q73, DUN-Q-v29-3, DI-Q-v28-14, DUN-Q-v29-BC1
 |---|---|---|---|---|
 | 1a | 중상 Fatigue gain 0 | `outcomeBaseline=dead?0:outcome==='퇴각'?7:(outcome==='부상'\|\|outcome==='중상')?9:4` and `rawOutcomeFatigueGain=dead?0:…` (~l.556) | 중상 → 0 and a Trait may not raise it: make both lines treat `중상` like `사망` **for Fatigue only**. Do not change the meaning of `dead` elsewhere (alive, injury, records). Update the comment above | `sev: 0` (the harness shortcut changed `dead`; do not copy that) |
 | 1b | Severe shares .36 / .11 | `clamp(.42+…)` ×2 and `clamp(.13-…)` ×4 — lines ~336 / 345 / 350 (RESULT-PROOF shadow) and ~488 / 501 / 506 (real) | `.42 → .36`, `.13 → .11` in **all six**; the shadow must stay identical to the real path | `sevp: [.36,.11]` |
-| 1c | Strain cut: consecutive injured only | `STRAIN`, `strainEscalation`, `strainRuns`, `strainFor` (~l.259–264); callers l.284, l.459 | `strain = min(0.30, 0.08 × max(0, c − 1))`, c = this departure (if injury=1) + the unbroken run of immediately preceding records with `departedInjured`; 0 when healthy. Drop the weary term (`STRAIN.weary` stays only if something else reads it — grep). Keep recording `departedWeary` on records. The NPC-detail row `무리한 출발 {n}회` (`app.js` l.1518, UI_UX l.398) still counts injured + weary departures — **leave it unchanged**; its redefinition is an open User decision (§6) | `strain: 'consec'` |
-| 1d | 만반의 준비 × Level factor | failure branch `deathChance=…; deathRoll=r.next(); if(deathRoll<deathChance){outcome='사망'}` (~l.479–482) | `rolled = deathChance × prepared × level`; `prepared = 0.80` when `n.injury===0` (departed healthy) and `e.fatigueBeforeExpedition < 20` and `n.pack.length >= 2`, else 1; `level = max(0.75, 1 − 0.015 × (n.level − 1))`. `deathRoll < rolled` → 사망. `rolled ≤ deathRoll < deathChance` → one extra draw `bandRoll=r.next()`, outcome `bandRoll < 0.36 ? '중상' : '부상'`, then continue into the insurance / aftercare steps as any 중상 / 부상. Else → existing non-Death branch. Push a report event (e.g. `id:'prepared'`) only when the band was hit **and** `prepared<1` (the Night line, §6). Export a pure helper, e.g. `G.Dungeon.fullyPrepared(n, fatigueBeforeExpedition)`, used by 1d and by the tutorial (Batch 5) so the condition lives once | `prep: .8`, `lvl: {slope:.015,cap:.25,from:1}` |
+| 1c | Strain cut: consecutive injured only | `STRAIN`, `strainEscalation`, `strainRuns`, `strainFor` (~l.259–264); callers l.284, l.459 | `strain = min(0.30, 0.08 × max(0, c − 1))`, c = this departure (if injury=1) + the unbroken run of immediately preceding records with `departedInjured`; 0 when healthy. Drop the weary term (`STRAIN.weary` stays only if something else reads it — grep). Keep recording `departedWeary` on records. The NPC-detail row changes in Batch 6 (`연속 부상 출발 {n}회`) | `strain: 'consec'` |
+| 1d | 만반의 준비 × Level factor | failure branch `deathChance=…; deathRoll=r.next(); if(deathRoll<deathChance){outcome='사망'}` (~l.479–482) | `rolled = deathChance × prepared × level`; `prepared = 0.80` when `n.injury===0` (departed healthy) and `e.fatigueBeforeExpedition < 20` and `n.pack.length >= 2`, else 1; `level = max(0.75, 1 − 0.015 × (n.level − 1))`. `deathRoll < rolled` → 사망. `rolled ≤ deathRoll < deathChance` → one extra draw `bandRoll=r.next()`, outcome `bandRoll < 0.36 ? '중상' : '부상'`, then continue into the insurance / aftercare steps as any 중상 / 부상. Else → existing non-Death branch. Push a report event (e.g. `id:'prepared'`) only when the band was hit **and** `prepared<1`, with the approved line COPY_AUDIT §19-9 `{이름}은(는) 만반의 준비 덕분에 목숨을 건졌다.` (particle by the name's final consonant, as the route-change line already does). Export a pure helper, e.g. `G.Dungeon.fullyPrepared(n, fatigueBeforeExpedition)`, used by 1d and by the tutorial (Batch 5) so the condition lives once | `prep: .8`, `lvl: {slope:.015,cap:.25,from:1}` |
 | 1d′ | RESULT-PROOF shadow | `shadowSettle` (~l.300–360) | Mirror 1d with the shadow pack: `sRolled = sDeathChance × sPrepared × level`. Record `ev.bandRoll` in the real run; in the shadow, a death roll in the removed band needs `ev.bandRoll` (return `UNPROVEN` if undefined). A shadow pack with one fewer Item may lose `prepared` — that is correct and is how a sold 2nd Item can be proven to have saved a life | (not in harness — the harness reused `injuryRoll`; do it properly) |
 | 1e | SALE `실패 시 사망 위험` | `failureDeathRisk(n,d,facilities)` (l.282), read by `shop.js` l.345 and `simulation.js` l.297 | multiply the returned `chance` by `level` (never by `prepared`) | — |
-| 1f | Retreat healing | `n.injury=…outcome==='퇴각'?n.injury:…` (~l.546) | when the NPC departed with injury=1 and the outcome is 퇴각: `k` = unbroken run of immediately preceding records with `departedInjured && outcome==='퇴각'`; one draw `r.next() < min(1, 0.25 × (1+k))` → injury 0, else keep. Records are pushed later (l.591), so `n.records` here holds only previous expeditions. Push a report event (e.g. `id:'retreatHeal'`) on a heal (Night line, §6). The draw exists only on this path | `retreatHeal: .25` |
+| 1f | Retreat healing | `n.injury=…outcome==='퇴각'?n.injury:…` (~l.546) | when the NPC departed with injury=1 and the outcome is 퇴각: `k` = unbroken run of immediately preceding records with `departedInjured && outcome==='퇴각'`; one draw `r.next() < min(1, 0.25 × (1+k))` → injury 0, else keep. Records are pushed later (l.591), so `n.records` here holds only previous expeditions. Push a report event (e.g. `id:'retreatHeal'`) on a heal with the approved line COPY_AUDIT §19-9 `{이름}은(는) 물러나 쉬는 동안 부상이 나았다.`; never show the chance. The draw exists only on this path | `retreatHeal: .25` |
 | 1g | Wallet 대성공 / 성공 1.00 | `WALLET_MULT` (l.253) | `'대성공':1,'성공':1`; comment | `wallet: 'succ1'` |
 | 1h | Gate Day term | `GATE={knee:9,early:1.70,late:0.40}` (l.270) + comment | `early:1.20, late:0.80`; the comment's "D1-D9 is unchanged" is no longer true — rewrite it | `gate: {early:1.2, late:0.8}` |
 | 1i | Bad-luck assist (hidden) | `shop.js` `night()` loop (l.463) around `G.Dungeon.resolve(n,d,this.rng,s.facilities,s)`; `dungeon.js` `const ability=preparedPower(e)` and `environment=clamp(.06+…)` | per Night: `chain=0`; before each resolve, `carried = n.pack.length>0 && !d.deep`; `assist = carried && chain>=3 ? 0.10 + 0.05×(chain−3) : 0`; pass `assist` into resolve (a parameter or an options object, not a global); in resolve `ability × (1+assist)` for the combat check and `environment × (1−assist)`; after: if carried → `성공/대성공 ? chain=0 : chain++`. The Final does not go through this loop — confirm. Record `assist` on `ev` so the shadow uses the same value. Nothing on screen | `badluck: {base:.1, step:.05, after:3}` |
@@ -176,7 +176,7 @@ QA: UI_UX_QA UI-Q-v29-26. Presentation work is screenshot-driven (AGENTS §2A): 
 
 ---
 
-## 6. Batch 6 — 길드 합동 위령제 Event + Night lines
+## 6. Batch 6 — 길드 합동 위령제 Event + NPC-detail row
 
 Owner: `EVENT_v2.8.0.md` §23, COPY_AUDIT §13-23.
 
@@ -185,15 +185,14 @@ Owner: `EVENT_v2.8.0.md` §23, COPY_AUDIT §13-23.
   Ordinary conditions: no special eligibility, may recur. On the Morning the event is rolled (`shop.js` l.224 where `ev` is
   read), `s.riteBonus=(s.riteBonus||0)+ev.deathLimit`. The pool grows from 22 to 23, so seeded Event sequences shift:
   tests that pin a seed's Event must be re-read, not blindly re-pinned; `tests/events.cjs` counts the catalog.
-- Night lines for retreat healing and 만반의 준비: **BLOCKED — copy not approved yet.** Drafts proposed to the User:
-  `{이름}은(는) 물러나 쉬는 동안 부상이 나았다.` / `{이름}은(는) 만반의 준비 덕분에 목숨을 건졌다.` Implement the report events
-  in Batch 1 with no player-facing text change until COPY_AUDIT carries the approved lines; then add them.
+- Night lines: done in Batch 1 (COPY_AUDIT §19-9, approved). Check the Night report renders them where the other
+  insurance lines (`구급품 진열장이 사망을 중상으로 바꿨다.`) appear.
 
 ---
 
-- NPC-detail row `무리한 출발 {n}회`: **BLOCKED — open User decision.** It counts every injured or Fatigue 20+ departure, but
-  the v2.9.1 strain cut counts only consecutive injured departures and ignores Fatigue. Keep the row as is until the User
-  decides (proposal: `연속 부상 출발 {n}회`, the current chain; or retire the row).
+- NPC-detail row (`app.js` l.1518): `무리한 출발 {n}회` → `연속 부상 출발 {n}회`, n = the unbroken run of this adventurer's most
+  recent records with `departedInjured` (0 after a healthy departure) — the same count the strain cut reads; reuse the
+  Batch 1 helper. Owner UI_UX l.398, QA DUN-Q-v29-3. Update the comment above it.
 
 ## 7. Close-out verification (after batches 1–6)
 

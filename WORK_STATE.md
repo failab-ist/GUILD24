@@ -34,9 +34,9 @@ Read AGENTS.md first and follow it.
   4. META / BOSS -> `dist/data/decorations.js` (capitalRates, prices, decorationParams, effect strings),
      `dist/data/catalog.js` balance (`wallVisitorChance`, `bossPower`, bossTuning `greedShortfallCap` / `slothBossPower`),
      `dist/systems/adventurer.js` premium weights, `dist/systems/meta.js` deathLimit (segments + 추모 방명록 +2)
-  5. UI -> MORNING / ORDER status line `사망 {n} / {limit} · D{end}까지` (`dist/ui/app.js`, `dist/data/copy.js`), screenshot-driven
-  6. once the copy is approved: 위령제 Event (ordinary Event conditions, EVENT §23), 만반의 준비 tutorial (UI_UX §만반의 준비 TUTORIAL),
-     Night lines for retreat healing and 만반의 준비
+  5. UI -> MORNING / ORDER status line `사망 {n} / {limit} · D{end}까지` and the 만반의 준비 tutorial (`dist/ui/app.js`), screenshot-driven
+  6. 길드 합동 위령제 Event (EVENT §23, COPY_AUDIT §13-23), Night lines for retreat healing and 만반의 준비 (COPY_AUDIT §19-9),
+     NPC-detail row `연속 부상 출발 {n}회` (UI_UX)
 - Tests that pin old values (update only to the amended owner values): tests/night.cjs, tests/integration.cjs, tests/revision.cjs,
   tests/final.cjs, tests/relic-order.cjs, tests/copy.cjs, tests/ui-guard.cjs, tests/simulation.cjs, tests/progression.cjs,
   tests/acquisition.cjs, tests/antifarm.cjs (and any other the run surfaces)
@@ -44,7 +44,7 @@ Read AGENTS.md first and follow it.
   `tools/remeasure-v29-closing-results.json` — after adoption the native build should reproduce it without patches
 - Close-out: `npm test`, `npm run ssot:check`, `npm run qa:runtime`, qa:visual for the UI batch, regenerate `reports/deco-balance`,
   then SPEC_INDEX / CHANGELOG state, tag `v2.9.1` (SPEC_INDEX §v2.9.1 — BALANCE lists the close conditions)
-- Decisions still open (User): Night lines for retreat healing and 만반의 준비 (copy); the NPC-detail row `무리한 출발 {n}회`
+- Decisions still open (User): none
 - **Implementer entry point: `reports/v291-implementation-handoff.md`** (batch map, anchors, test expectations, verification)
 
 ## Execution Boundary
@@ -59,4 +59,4 @@ one owner batch
 
 ## Blocker
 
-None for batches 1-5. Batch 6 waits on the copy approval above.
+None.

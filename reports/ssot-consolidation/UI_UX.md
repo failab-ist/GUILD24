@@ -966,9 +966,6 @@ beside the Stat name and the value is one step smaller. Superseded declarations 
 
 User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome one step (중상 → 부상 with the 부상 XP/Loot/Fatigue/injury 1; 부상 → 부상 with no lasting injury; 사망 excluded); no natural Fatigue recovery of any kind for any adventurer (the Severe-Injury rest-day -5 is retired); 중상 takes the 부상 Fatigue gain (+9) and only 사망 stays 0; repeated injured / weary (Fatigue 20+) departures escalate the failure Death chance (+8%p per repeat of each kind from the second, cap +30%p, from the adventurer's own records) with the NPC-detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 / 순례 with particles by final consonant. Earlier declarations this batch supersedes were removed from the fences above in place.
 
-```new
-NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `무리한 출발 {n}회` — the number of expeditions this adventurer began injured or at Fatigue 20+, no verdict (User 2026-09-25, v2.9.0).
-```
 
 ## AMENDMENT — v2.9.0 F4: Fatigue recovery values / shelf life / operating cost / Wallet multipliers / 세계수 price (User decision 2026-09-24/25)
 
@@ -1087,4 +1084,12 @@ User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; i
 
 ```new
 - exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §3-7 만반의 준비
+```
+
+## AMENDMENT — v2.9.1: 연속 부상 출발 row (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the NPC-detail row `무리한 출발 {n}회` becomes `연속 부상 출발 {n}회` — the current chain the strain cut reads. Earlier declarations this batch supersedes were removed from the fences above in place.
+
+```new
+NPC detail also carries `실패 시 사망 위험 {N}%` (the frozen SALE-entry value) (User 2026-09-24, v2.9.0), and the information row `연속 부상 출발 {n}회` — the unbroken run of this adventurer's most recent expeditions begun injured (the chain the v2.9.1 strain cut reads; 0 after a healthy departure), no verdict (User 2026-09-25, v2.9.1; replaces `무리한 출발 {n}회`).
 ```

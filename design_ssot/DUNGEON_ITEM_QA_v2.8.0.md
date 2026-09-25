@@ -503,7 +503,7 @@ EXPECT:
 - every further CONSECUTIVE injured departure adds +8%p to the conditional failure Death chance and to its cap, capped at +30%p
 - one healthy departure resets the chain; Fatigue 20+ departures add nothing to this term
 - the count comes from the adventurer's own records (this departure included); no new NPC field
-- NPC detail shows `무리한 출발 {n}회` (injured + weary departures so far) as an information row, no verdict
+- NPC detail shows `연속 부상 출발 {n}회` (the current chain of consecutive injured departures; 0 after a healthy one) as an information row, no verdict (User 2026-09-25, v2.9.1)
 
 PASS:
 - strainEscalation equals min(0.30, 0.08·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
