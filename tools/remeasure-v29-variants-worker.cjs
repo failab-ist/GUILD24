@@ -107,6 +107,8 @@ patch('systems/simulation', "options.push({st,mode,v:itemValue(n,it,d)", "if(glo
 patch('systems/simulation', "const v=o=>itemValue(null,D.itemBy[o.item],s.dungeons[0])/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;",
   "const v=o=>(globalThis.__human?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;");
 }
+// operating-cost level factor (User 2026-09-25): the per-level share of the base operating cost
+if (V.opLevel != null) patch('systems/shop', 'return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}', `return dayBase*(1+${V.opLevel}*(avgLevel-1))*(1+.06*avgRarity);}`);
 // 7-b buffer removal (only when asked)
 if (V.buffer === 'off') patch('systems/dungeon', 'const remainingSupplyBuffer=preparedSupply-preRecovery;', 'const remainingSupplyBuffer=0;');
 
