@@ -1059,6 +1059,21 @@ Do not expose:
 
 Do not expose hidden Gate requirement/formula or exact success probability through the Item panel.
 
+### PRESENTATION ORDER — EXACT
+
+(User 2026-09-24, v2.9.0): an Item's effect lines are listed in one fixed order by category, the same on the ORDER offer row, the SALE shelf row, the counter tray's `특수 효과` line and the codex, never reordered or emphasized by the Gate or the customer:
+
+```text
+Food       : 피로 회복 N first, then the Item's other effects in catalog order
+Drink      : Stat / Hazard Counter effects in catalog order first, then 피로 회복 N
+Potion     : 투력 +N
+Field Gear : Hazard Counter effects in catalog order (a Hybrid keeps both)
+Insurance  : its one function line
+Special    : its one function line
+```
+
+The order is identity information (what kind of Item this is), not advice.
+
 Principle:
 `재료는 공개, 공식은 숨김`
 

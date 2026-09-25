@@ -421,8 +421,13 @@ General contract, every beat:
 | A5 | 가격 소리 계열 price-mode sound family | 50% / 100% / 150% share the register family and differ by coin ticks (1 / 2 / 3); no mode sounds like the correct answer (§AUDIO PRESENTATION "peer choices") |
 | A6 | 거절 refusal | the refused price button shakes once and locks with the existing `오늘 거절됨` / `더 싼 값을 거절함` text; refusal reply stays 5 s (A2) |
 | A7 | first-sale price coach | retired (User 2026-09-24 revision): the PRICING coach keeps its two sentences and gains no hand-over clause; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §3-7 PRICING |
+| A8 | 영수증 조각 transaction result stub | on a price commit that succeeds, a paper receipt stub stamps in over the counter band (scale 1.12→1, ≤ 200 ms) reading `단골도 {±N} · 소지금 {A} → {B}` for that customer, stays about 2.5 s and fades (≤ 300 ms); replaced by the next sale's stub; no reserved height; under reduced motion it appears and disappears without motion. A refusal shows no stub — the reason-pool reply line (A2) is the result surface. Exact surface -> UI_UX §SALE — TRANSACTION RESULT STUB; copy -> COPY_AUDIT §4-24 (User 2026-09-24, v2.9.0) |
 
 Exact surface / layout -> UI_UX_v2.8.0.md §SALE; acceptance -> UI_UX_QA_v2.8.0.md.
+
+## LEARNING AFTER RESULT
+
+(User 2026-09-24, v2.9.0): the game teaches through results the player already caused — the NIGHT proof system (verified causes, the Item that actually changed an Outcome) and the per-customer transaction result — never through a hint placed before the decision. No dynamic fit emphasis, no recommendation, no "right answer" cue is added ahead of a choice; the category grammar is explained once (COPY_AUDIT §8-0) as vocabulary, not as advice.
 
 ## AUDIO PRESENTATION
 

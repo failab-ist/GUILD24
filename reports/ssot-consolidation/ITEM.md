@@ -725,3 +725,19 @@ stocking day, and is discarded at the morning it runs out. The rule behind the t
 | coupon | 황금 1+1 쿠폰 | Special | 5d |
 SALE shelf order: nearest expiry first, ties in the existing order; each row carries `폐기 N일` (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0)
 ```
+
+## AMENDMENT — v2.9.0 F6: fit emphasis retired / fixed effect order / category grammar once / transaction result stub (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F6): the matching-effect / today-fit emphasis is retired on SALE and ORDER rows (the judgement is the player's); Item effect lines stand in one fixed per-category order (ITEM §PRESENTATION ORDER); the category grammar is taught once (COPY_AUDIT §8-0 / §3-7 OFFER); each sale shows a per-customer receipt stub `단골도 {±N} · 소지금 {A} → {B}` (~2.5 s, PRESENTATION §TRANSACTION BEAT A8); refusals keep the engine-reason reply pools; PRESENTATION §LEARNING AFTER RESULT. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+### PRESENTATION ORDER — EXACT
+(User 2026-09-24, v2.9.0): an Item's effect lines are listed in one fixed order by category, the same on the ORDER offer row, the SALE shelf row, the counter tray's `특수 효과` line and the codex, never reordered or emphasized by the Gate or the customer:
+Food       : 피로 회복 N first, then the Item's other effects in catalog order
+Drink      : Stat / Hazard Counter effects in catalog order first, then 피로 회복 N
+Potion     : 투력 +N
+Field Gear : Hazard Counter effects in catalog order (a Hybrid keeps both)
+Insurance  : its one function line
+Special    : its one function line
+The order is identity information (what kind of Item this is), not advice.
+```

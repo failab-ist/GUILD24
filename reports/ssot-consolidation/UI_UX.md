@@ -750,10 +750,6 @@ Failure-risk label:
 `손님 보내기`: the current customer exits left, then the next arrives with the existing entry (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A4; User 2026-09-24, v2.9.0).
 - exact 실패 시 사망 위험 % — not as a readout cell: the readout `.top` shows 전투 전망 and 환경 대응 only; the value is the second line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`, same frozen value) and a line of the NPC detail (User 2026-09-24, v2.9.0)
 전투 전망 `?` help is two lines; the second is `실패 시 사망 위험 {N}%`. `실패 시 사망 위험` as a readout cell label with its own `?` is retired (User 2026-09-24, v2.9.0).
-### SALE — MATCHING-EFFECT EMPHASIS
-In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses (User 2026-09-24, v2.9.0).
-Everything else keeps the default style.
-No badge, no verdict word, no reorder.
 ORDER offer rows follow the same rule against today's open Gates (§ORDER — ITEM INFORMATION HIERARCHY; User 2026-09-24, v2.9.0).
 One delta list after choosing an Item (User 2026-09-24, v2.9.0):
 - `판매 후 변화` lists only what changes — direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`
@@ -795,8 +791,6 @@ No today-fit/recommended badge.
 - the counts sum to the visitor count; no name, Job, Trait or Wallet
 Exact line -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).
-Typographic emphasis of existing effect text that answers today's open Gates is allowed: a Counter for one of today's Hazards, or the Core Stat one of them presses, in the same rule and style as §SALE — MATCHING-EFFECT EMPHASIS, read against today's Gates instead of one customer (User 2026-09-24, v2.9.0).
-The 점주 가이드 opens with a first block `처음 3일` of exactly five lines (one per phase: 아침 / 발주 / 판매 / 밤 / 마감), then keeps the existing eight sections under a `자세히` disclosure, collapsed by default (User 2026-09-24, v2.9.0).
 This disclosure sits inside the help modal, not on a gameplay screen; the anchored-popover rule above is unaffected.
 Exact five lines -> COPY_AUDIT_APPROVED_v2.8.0.md §8.
 - the body is two lines under the unchanged header `마왕 조사 개시` and lead line: the DAY 5 line and the DAY 30 line; the closing sentence is deleted; button unchanged; exact copy -> COPY_AUDIT_APPROVED_v2.8.0.md §14-1 (User 2026-09-24, v2.9.0);
@@ -851,7 +845,6 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - tapping a shelf row puts that Item on the tray; the row is only highlighted, the shelf rows never change height
 - tray contents, top to bottom: one header line (Item icon · name · kind · sell price · stock · shelf life, and `{손님}에게 · 소지 {N}G` at the right), the `판매 후 변화` delta list (§SALE SELECTED-ITEM INFORMATION; may be one wrapping line), the `특수 효과` line when any, then the three price keys (§SALE — PRICE ROLE WORDS)
 - empty tray: on DAY 1~3 of a Run while the account tutorial is not skipped, one line (the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23); otherwise the empty tray has no height (User 2026-09-24, v2.9.0)
-- the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag); a refusal keeps the Item on the tray with the refused key locked
 - the hand-over (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A1) starts from the tray icon
 - height budget at 360: empty tray ≤ 48px, filled tray ≤ 200px, and at least three shelf rows stay visible with the tray filled; shelf rows are compact (one name line + one effect line)
 - on a desk (≥1024) the tray keeps its place above the dock and aligns its contents under the shelf column
@@ -1002,4 +995,18 @@ Menu row behavior (User 2026-09-24, v2.9.0):
 - 현재 지점 포기: the confirm of COPY_AUDIT §1-3; on confirm the Run is discarded at once (CORE_RUN §CURRENT RUN ABANDON) and the screen returns to 새 점포 준비 with no Run, where Decorations can be bought and equipped; a new Run starts only from `첫 점포지원 고르기`
 - the DAY 0 첫 점포지원 surface has no way back: the retired `장식 구성 다시 보기` button is gone; the choice is mandatory and the surface has no close
 - 점포지원 and 이번 영업의 장식 and 현재 지점 포기 appear only while a Run exists
+```
+
+## AMENDMENT — v2.9.0 F6: fit emphasis retired / fixed effect order / category grammar once / transaction result stub (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F6): the matching-effect / today-fit emphasis is retired on SALE and ORDER rows (the judgement is the player's); Item effect lines stand in one fixed per-category order (ITEM §PRESENTATION ORDER); the category grammar is taught once (COPY_AUDIT §8-0 / §3-7 OFFER); each sale shows a per-customer receipt stub `단골도 {±N} · 소지금 {A} → {B}` (~2.5 s, PRESENTATION §TRANSACTION BEAT A8); refusals keep the engine-reason reply pools; PRESENTATION §LEARNING AFTER RESULT. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+No emphasis of any effect text against today's Gates either: the earlier typographic today-fit emphasis is retired, every effect text keeps the default style, and the row's effects stand in the fixed per-category order (`ITEM_v2.8.0.md` §PRESENTATION ORDER) (User 2026-09-24, v2.9.0).
+### SALE — MATCHING-EFFECT EMPHASIS — RETIRED
+Retired (User 2026-09-24, v2.9.0): no effect text is emphasized against the customer's Gate; every effect text keeps the default style. No badge, no verdict word, no reorder. The row's effects stand in the fixed per-category order (`ITEM_v2.8.0.md` §PRESENTATION ORDER), the same for every customer.
+### SALE — TRANSACTION RESULT STUB
+(User 2026-09-24, v2.9.0): on each successful sale a receipt stub (`.receipt-stub`, paper texture, a stamp-in motion) appears over the counter band above the dock for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (COPY_AUDIT §4-24). It reserves no height (the tray keeps its own rules), never blocks input, is replaced by the next stub, and under `prefers-reduced-motion` appears and disappears without motion. On a refusal the customer's reply line (drawn from the engine's reason pool) is the result surface; no stub.
+- the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
+The 점주 가이드 opens with a first block `처음 3일` of exactly five lines (one per phase: 아침 / 발주 / 판매 / 밤 / 마감), followed by one category-grammar line (COPY_AUDIT §8-0, taught once, an explanation of the vocabulary and never a recommendation; (User 2026-09-24, v2.9.0)), then keeps the existing eight sections under a `자세히` disclosure, collapsed by default (User 2026-09-24, v2.9.0).
 ```

@@ -86,6 +86,10 @@ Docs-first. Each owner amendment is listed when committed.
   (rest days included); 중상 takes the 부상 Fatigue gain (+9); repeated-strain Death escalation (+8%p per repeated injured / Fatigue-20+
   departure, cap +30%p) with the NPC detail row `무리한 출발 {n}회`; the route-change line names 거짓말쟁이 with correct particles.
   ITEM, NIGHT_CLOSING, DUNGEON_HAZARD, DUNGEON_ITEM_QA, UI_UX, COPY_AUDIT §4-22 / §14-10, COPY_WORLD_VOICE.
+- F6 (User 2026-09-24): the matching-effect / today-fit emphasis is retired (SALE, ORDER); Item effect lines stand in one fixed per-category
+  order (ITEM §PRESENTATION ORDER); the category grammar is taught once (COPY_AUDIT §8-0 line under 처음 3일, the first ORDER OFFER coach);
+  each sale shows a per-customer receipt stub `단골도 {±N} · 소지금 {A} → {B}` (~2.5 s, PRESENTATION §TRANSACTION BEAT A8, COPY_AUDIT §4-24);
+  refusals keep the engine-reason reply pools; PRESENTATION §LEARNING AFTER RESULT. SALE, UI_UX, UI_UX_QA (UI-Q-v29-22), PRESENTATION_PRINCIPLES, ITEM, COPY_AUDIT.
 - F5 (User 2026-09-24): menu row 점포지원 opens the owned list when no window is purchasable; new menu row 이번 영업의 장식 (read-only
   loadout, empty Slot `비어 있음`); DAY 0 `장식 구성 다시 보기` retired; codex tab 점포 관리 → 점포 장식; 현재 지점 포기 discards the Run at once
   and returns to 새 점포 준비 (no Run) where Decorations can be bought; Store Capital Day-reach rates halved (0.5 / 1 / 1.5 / 2 / 2.5%).

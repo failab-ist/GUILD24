@@ -324,8 +324,6 @@ User decision 2026-09-24 (v2.9.0), D-3 rule sheet: the transaction is shown by p
 ```new
 `finalizeCustomer -> nextCustomer` carries the customer exit-then-entry beat (the current customer exits, then the next arrives with the existing entry). It is presentation only and changes no state (contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT) (User 2026-09-24, v2.9.0).
 - the hand/commit step is shown by the transaction beats (presentation only, contract -> `PRESENTATION_PRINCIPLES_v2.8.0.md` §TRANSACTION BEAT); the two Bag slots stay in the customer-state strip beside the status line and remain the handling surface (`UI_UX_v2.8.0.md` §BAG PRESENTATION); tap remains sufficient, no drag is required (User 2026-09-24, v2.9.0)
-### MATCHING-EFFECT EMPHASIS
-In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses. Every other effect keeps the default style. No badge, no verdict word, no reorder (User 2026-09-24, v2.9.0).
 After an Item is chosen, `판매 후 변화` is one delta list of what changes only: direct Stat rows (`강인함 17 → 23`), derived rows (`피로 완화`) and `피로 {A} → 출발 {B}`. The outlook (Combat Forecast / Hazard Readiness / Death risk) is never shown moving for an uncommitted Item and the frozen four-cell outlook is not repainted inside the till; `특수 효과` and the shelf-life line stay (heading and row copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 The always-on outlook is two cells, 전투 전망 + 환경 대응. The exact failure-conditioned Death risk is still exposed at SALE entry, as the second line of the 전투 전망 help (`실패 시 사망 위험 {N}%`) and in the NPC detail, not as an always-on readout cell; it is frozen like the rest (exact help copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`) (User 2026-09-24, v2.9.0).
 The exact 실패 시 사망 위험 % sits at that Help level (전투 전망 help, NPC detail), not as an always-on cell (User 2026-09-24, v2.9.0).
@@ -380,4 +378,20 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 
 ```new
 Shelf order: rows are sorted by days left before discard, nearest first, ties in the existing order; every row carries `폐기 N일` and a row at 1 day or less is emphasized. This is stock management, never a best-fit or recommendation order; it does not change with the customer (User 2026-09-25, v2.9.0).
+```
+
+## AMENDMENT — v2.9.0 F6: fit emphasis retired / fixed effect order / category grammar once / transaction result stub (User decision 2026-09-24)
+
+User decisions 2026-09-24 (v2.9.0 F6): the matching-effect / today-fit emphasis is retired on SALE and ORDER rows (the judgement is the player's); Item effect lines stand in one fixed per-category order (ITEM §PRESENTATION ORDER); the category grammar is taught once (COPY_AUDIT §8-0 / §3-7 OFFER); each sale shows a per-customer receipt stub `단골도 {±N} · 소지금 {A} → {B}` (~2.5 s, PRESENTATION §TRANSACTION BEAT A8); refusals keep the engine-reason reply pools; PRESENTATION §LEARNING AFTER RESULT. Earlier lines this batch supersedes were removed from the fences above in place.
+
+```new
+### MATCHING-EFFECT EMPHASIS — RETIRED
+The dynamic emphasis of the effect text that answers the customer's Gate is retired (User 2026-09-24, v2.9.0): every effect text keeps the default style on every row, whatever the customer's Gate. The judgement is the player's; the row states what the Item does and nothing about fit. No badge, no verdict word, no reorder, no recommendation remain the rule.
+### ITEM ROW EFFECT ORDER — FIXED
+Every Item row (ORDER offer, SALE shelf, counter tray, codex) lists its effects in one fixed order by category, never by the situation (User 2026-09-24, v2.9.0): Food = 피로 회복 first, then its other effects; Drink = its Stat / Hazard Counter effects first, then 피로 회복; Potion = 투력; Field Gear = its Hazard Counter effects; Insurance = its one function line. Exact rule -> `ITEM_v2.8.0.md` §PRESENTATION ORDER.
+## TRANSACTION RESULT — PER CUSTOMER
+(User 2026-09-24, v2.9.0): the real result of the player's own price choice is shown at the moment of each sale or refusal, for that customer, never as a summary at the end of the day.
+- sale: a receipt stub appears at the counter for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (the customer's Loyalty change of this sale and their Wallet before → after; exact format -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-24). It reserves no layout height, overlaps the counter band, and a second sale to the same customer replaces it. It is not a system message and not a toast.
+- refusal: the customer's reply line is drawn from the pool of the engine's actual refusal reason (§REFUSAL: 가격 / 필요도 / 일반 선택 — COPY_AUDIT §18-4 / §18-5 / §18-6) and stays the reply-line 5 seconds (PRESENTATION_PRINCIPLES §TRANSACTION BEAT A2). No new pool is added.
+- both are presentation of the resolved state: no gameplay rule, Save field or RNG draw.
 ```

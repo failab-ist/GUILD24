@@ -391,9 +391,13 @@ The compared Item's detail lives on the counter tray, so comparing two Items nev
 
 Shelf order: rows are sorted by days left before discard, nearest first, ties in the existing order; every row carries `폐기 N일` and a row at 1 day or less is emphasized. This is stock management, never a best-fit or recommendation order; it does not change with the customer (User 2026-09-25, v2.9.0).
 
-### MATCHING-EFFECT EMPHASIS
+### MATCHING-EFFECT EMPHASIS — RETIRED
 
-In SALE Item rows, the effect text that answers the customer's Gate is set in the emphasis style (bold, ink colour): a Counter for one of the Gate's Hazards, or the Core Stat that one of its Hazards presses. Every other effect keeps the default style. No badge, no verdict word, no reorder (User 2026-09-24, v2.9.0).
+The dynamic emphasis of the effect text that answers the customer's Gate is retired (User 2026-09-24, v2.9.0): every effect text keeps the default style on every row, whatever the customer's Gate. The judgement is the player's; the row states what the Item does and nothing about fit. No badge, no verdict word, no reorder, no recommendation remain the rule.
+
+### ITEM ROW EFFECT ORDER — FIXED
+
+Every Item row (ORDER offer, SALE shelf, counter tray, codex) lists its effects in one fixed order by category, never by the situation (User 2026-09-24, v2.9.0): Food = 피로 회복 first, then its other effects; Drink = its Stat / Hazard Counter effects first, then 피로 회복; Potion = 투력; Field Gear = its Hazard Counter effects; Insurance = its one function line. Exact rule -> `ITEM_v2.8.0.md` §PRESENTATION ORDER.
 
 ## SALE DECISION-ONLY DETAIL — REMOVE NON-DECISION DISCLOSURES
 
@@ -801,6 +805,14 @@ A confirmed purchase must atomically update:
 Avoid partial state where:
 Gold changed but stock did not,
 or stock changed without purchase state.
+
+## TRANSACTION RESULT — PER CUSTOMER
+
+(User 2026-09-24, v2.9.0): the real result of the player's own price choice is shown at the moment of each sale or refusal, for that customer, never as a summary at the end of the day.
+
+- sale: a receipt stub appears at the counter for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (the customer's Loyalty change of this sale and their Wallet before → after; exact format -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-24). It reserves no layout height, overlaps the counter band, and a second sale to the same customer replaces it. It is not a system message and not a toast.
+- refusal: the customer's reply line is drawn from the pool of the engine's actual refusal reason (§REFUSAL: 가격 / 필요도 / 일반 선택 — COPY_AUDIT §18-4 / §18-5 / §18-6) and stays the reply-line 5 seconds (PRESENTATION_PRINCIPLES §TRANSACTION BEAT A2). No new pool is added.
+- both are presentation of the resolved state: no gameplay rule, Save field or RNG draw.
 
 ## SALE FINALIZATION
 

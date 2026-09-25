@@ -549,7 +549,7 @@ PASS:
 - Item identity and exact effect read before economy metadata
 - exact Stat/Counter/`피로 회복 N`/penalty values are readable
 - no redundant role chip such as `속박 전문` above `속박 대응 +16`
-- no today-fit/recommended badge or verdict word; the UI-Q-v29-12 typographic emphasis of existing effect text is not a badge (User 2026-09-24, v2.9.0)
+- no today-fit/recommended badge or verdict word, and no emphasized effect text (UI-Q-v29-12 retired; (User 2026-09-24, v2.9.0))
 - no automatic best-fit ranking
 
 ### UI-Q82 — ORDER WAREHOUSE COLLAPSE
@@ -931,9 +931,9 @@ PASS:
 - an unpressed Stat carries no tag
 - the tag carries no number and no verdict word
 
-### UI-Q-v29-6 — MATCHING-EFFECT EMPHASIS
+### UI-Q-v29-6 — MATCHING-EFFECT EMPHASIS — RETIRED
 
-(User 2026-09-24, v2.9.0)
+Retired (User 2026-09-24, v2.9.0): see UI-Q-v29-22. PASS is now: no effect text on any SALE row carries an emphasis style, whatever the customer's Gate. The setup below is kept as the negative case.
 
 SETUP:
 SALE shelf holding an Item that counters one of the customer's Gate Hazards, an Item that raises a Core Stat one of those Hazards presses, and an Item that does neither.
@@ -1971,9 +1971,9 @@ PASS:
 FAIL:
 - a step reads 보유 골드, or the register is the first target
 
-### UI-Q-v29-12 — ORDER TODAY-FIT EMPHASIS
+### UI-Q-v29-12 — ORDER TODAY-FIT EMPHASIS — RETIRED
 
-(User 2026-09-24, v2.9.0)
+Retired (User 2026-09-24, v2.9.0): see UI-Q-v29-22. PASS is now: no effect text on any ORDER offer row carries an emphasis style against today's Gates. The setup below is kept as the negative case.
 
 SETUP:
 ORDER on a day with known open Gates; offers holding a Counter for one of today's Hazards, an Item that raises a Core Stat one of those Hazards presses, and an Item that does neither.
@@ -2147,6 +2147,24 @@ PASS:
 
 FAIL:
 - abandon starting a new Run by itself, or a Decoration purchase refused with no Run
+
+### UI-Q-v29-22 — FIXED EFFECT ORDER / NO FIT EMPHASIS / TRANSACTION RESULT STUB
+
+(User 2026-09-24, v2.9.0)
+
+SETUP:
+ORDER with offers of every category; SALE with a shelf of every category for two customers going to different Gates; one 50% sale, one 정가 sale, one 150% sale and one refusal on the same customer; the 점주 가이드; reduced-motion on and off, at 360 and 1280.
+
+PASS:
+- no effect text on any ORDER offer row or SALE shelf row is emphasized; the rows read the same for both customers
+- every row lists its effects in the fixed per-category order: Food 피로 회복 first, Drink Stat / Counter first then 피로 회복, Potion 투력, Field Gear its Counters, Insurance its one line; the same order on the tray's 특수 효과 line and in the codex
+- the first ORDER OFFER coach and the 점주 가이드 line under 처음 3일 read the exact category-grammar sentence (COPY_AUDIT §3-7 OFFER / §8-0)
+- each successful sale shows one receipt stub over the counter band for about 2.5 s reading `단골도 {±N} · 소지금 {A} → {B}` with that customer's real Loyalty change and Wallet before → after; a second sale to the same customer replaces it; nothing reserves height and input is never blocked
+- a refusal shows no stub; the reply line comes from the engine's reason pool (가격 / 필요도 / 일반 선택) and stays 5 s
+- under reduced motion the stub appears and disappears without motion; the numbers are identical
+
+FAIL:
+- any fit emphasis, any recommendation word, a stub at the end of the day instead of per customer, or a stub whose numbers differ from the customer's record
 
 ### GREAT SUCCESS TUTORIAL
 PASS:
