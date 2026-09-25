@@ -18,7 +18,7 @@ class Game{
  start(seed){
  const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
  /* 알뜰 금고 is paid by morningReset, which DAY 1 also runs once the DAY 0 pick is made */
- const startGold=1000;
+ const startGold=700; /* CORE_RUN §START STATE (User 2026-09-25, v2.9.1 balance; was 1000G) */
  this.rng=new G.RNG(seed);this.run={version:8,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   for(const[id,num]of D.openingStock)this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
@@ -49,8 +49,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  overheadBase(){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
-  const dayBase=90+5*(this.run.day-1); /* ECONOMY_ORDER §BASE OPERATING COST (User 2026-09-24, v2.9.0) */
-  return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}
+  /* ECONOMY_ORDER §BASE OPERATING COST (User 2026-09-25, v2.9.1 balance: heavy from D1, flat
+     after - was 90+5*(day-1); level coefficient .02 -> .03). */
+  const dayBase=170+1*(this.run.day-1);
+  return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */

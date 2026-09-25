@@ -8,7 +8,7 @@ const copy=x=>JSON.parse(JSON.stringify(x));
 function fresh(seed='relic-order'){const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);return g;}
 
 test('ORD-Q08: base Full-offer Reroll doubles within the Day and resets the next morning',()=>{
- const g=fresh();g.beginOrder();g.run.facilities=[];
+ const g=fresh();g.beginOrder();g.run.facilities=[];g.run.money=5000;
  const base=DATA.balance.rerollBase;
  for(const price of [base,base*2,base*4,base*8]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
  g.run.day++;g.morning();g.beginOrder();g.run.facilities=[];
@@ -16,7 +16,7 @@ test('ORD-Q08: base Full-offer Reroll doubles within the Day and resets the next
 });
 
 test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free, then the ordinary curve from its first step',()=>{
- const g=fresh('reroll-relic');g.beginOrder();g.run.facilities=['delivery'];
+ const g=fresh('reroll-relic');g.beginOrder();g.run.facilities=['delivery'];g.run.money=5000;
  const base=DATA.balance.rerollBase;
  for(const price of [0,base,base*2,base*4,base*8]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
  g.run.day++;g.morning();g.beginOrder();g.run.facilities=['delivery'];
@@ -24,7 +24,7 @@ test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free, then the or
 });
 
 test('ORD-Q06/Q07: Reroll regenerates every slot, keeps legality and never advances pity',()=>{
- const g=fresh('reroll-pity');g.beginOrder();g.run.facilities=[];
+ const g=fresh('reroll-pity');g.beginOrder();g.run.facilities=[];g.run.money=5000;
  const pity=copy(g.run.pity);
  for(let i=0;i<3;i++){
   g.reroll();
@@ -38,7 +38,7 @@ test('REL-Q38: a milestone window is revealed once and reload cannot replay or r
  const g=fresh('reveal');
  assert.equal(g.run.relicWindow.milestoneDay,0);
  assert.equal(g.run.relicWindow.focusedRevealSeen,true,'D0 is the start flow, not an extra reveal');
- while(g.run.day<5){g.beginOrder();g.finishOrder();while(g.run.phase==='sell')g.depart();g.finishNight();g.closeDay();}
+ while(g.run.day<5){g.run.money=5000;g.beginOrder();g.finishOrder();while(g.run.phase==='sell')g.depart();g.finishNight();g.closeDay();}
  const w=g.run.relicWindow;
  assert.equal(w.milestoneDay,5);
  assert.equal(w.focusedRevealSeen,false,'a new milestone window starts unrevealed');

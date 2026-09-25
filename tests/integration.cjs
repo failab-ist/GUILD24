@@ -918,6 +918,7 @@ test('SALE_v2.7 §SAME-ITEM REFUSAL PRICE CEILING: any refusal closes every high
   const g=fresh('ceiling-'+seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);
   for(let turn=0;turn<600&&g.run.phase!=='end';turn++){
    const s=g.run;
+   s.money=Math.max(s.money,5000);  // controlled: the economy is not the subject here (see controlledStep above)
    if(s.phase!=='sell'){if(!step(g))break;continue;}
    const n=g.current();
    visits++;
@@ -1120,9 +1121,9 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
  Meta.buyDecoration(a,'thriftSafe');
  const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
- assert.equal(g.run.money,1000,'nothing is paid before DAY 1 opens');
+ assert.equal(g.run.money,700,'nothing is paid before DAY 1 opens');
  g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];
- assert.equal(g.run.money,1000+DATA.decorationParams.thriftSafe.dailyGold,'DAY 1 morning pays the counter once');
+ assert.equal(g.run.money,700+DATA.decorationParams.thriftSafe.dailyGold,'DAY 1 morning pays the counter once');
  assert.equal(g.run.daily.safeGold,DATA.decorationParams.thriftSafe.dailyGold,'and the DAY 1 ledger says so');
  assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
  assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
@@ -1137,7 +1138,7 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  assert.equal(g.has('thriftSafe'),false,'and `has` - the Relic question - does not answer for it');
  const next=new Game(a);next.autosave=false;next.start('loadout-freeze-2');
  assert.deepEqual(next.run.loadout,{sign:'dawnSign'},'the next Run picks up the current Account loadout');
- assert.equal(next.run.money,1000,'and the unequipped counter no longer pays out');
+ assert.equal(next.run.money,700,'and the unequipped counter no longer pays out');
 });
 
 test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exclusive outcome',()=>{
@@ -1189,7 +1190,7 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
  assert.deepEqual(Meta.ownedDecorations(back.account),[],'owned defaults to empty');
  assert.deepEqual(Meta.plannedLoadout(back.account),{},'and the loadout to empty');
  const g=new Game(back.account);g.autosave=false;g.start('legacy-v8-start');
- assert.equal(g.run.money,1000,'a Run from it starts on the neutral baseline');
+ assert.equal(g.run.money,700,'a Run from it starts on the neutral baseline');
  /* A Run saved before the loadout existed must not claim to wear anything. */
  const older=copy(g.run);delete older.loadout;delete older.settled;
  const h=new Game(back.account,older);h.autosave=false;
@@ -1300,8 +1301,9 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
    Core Roster = alive only, Level desc then Rarity desc, top 6; recovering adventurers count.
    D11 roster (alive): L7R3 L7R2 L5R1 L4R0 L3R4(recovering) L3R1 | L3R0 L1R0, plus a dead L10R4.
    top 6 levels 7,7,5,4,3,3 -> avg 29/6; rarities 3,2,1,0,4,1 -> avg 11/6.
-   dayBase = 90 + 5 x 10 = 140 (v2.9.0 F4); base = 140 x (1 + .02 x 23/6) x (1 + .06 x 11/6) = 167.314
-   charged = round(16.7314) x 10 = 170G. */
+   dayBase = 170 + 1 x 10 = 180 (v2.9.1 balance, User 2026-09-25 - was 90+5x10=140);
+   base = 180 x (1 + .03 x 23/6) x (1 + .06 x 11/6) = 222.777 (level coefficient .02 -> .03)
+   charged = round(22.2777) x 10 = 220G. */
 test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Canonical formula',()=>{
  const g=fresh('core-roster-overhead'),s=g.run;
  const proto=copy(s.npcs[0]);
@@ -1311,16 +1313,16 @@ test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Can
  s.day=11;s.dayFacilities=[];s.facilities=[];s.event=null;
  assert.deepEqual(g.coreRoster().map(n=>n.id).sort((a,b)=>a-b),[1,2,3,4,5,6],
   'the six best living: the dead L10 is out, the recovering L3R4 is in, and L3R1 beats L3R0 on Rarity');
- const want=140*(1+.02*(29/6-1))*(1+.06*(11/6));
+ const want=180*(1+.03*(29/6-1))*(1+.06*(11/6));
  assert.ok(Math.abs(g.overheadBase()-want)<1e-9,'overheadBase '+g.overheadBase()+' = '+want);
- assert.equal(g.expectedOperatingCost(),170,'charged rounded to 10G');
+ assert.equal(g.expectedOperatingCost(),220,'charged rounded to 10G');
  // fewer than six alive: all of them; an empty roster reads Level 1 / Rarity 0
  s.npcs=[mk(1,5,2),mk(2,3,0),mk(3,9,4,{alive:false})];s.day=1;
- assert.ok(Math.abs(g.overheadBase()-90*(1+.02*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
- assert.equal(g.expectedOperatingCost(),100,'90 x 1.06 x 1.06 = 101.124 -> 100G');
+ assert.ok(Math.abs(g.overheadBase()-170*(1+.03*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
+ assert.equal(g.expectedOperatingCost(),200,'170 x 1.09 x 1.06 = 196.418 -> 200G');
  s.npcs=[mk(3,9,4,{alive:false})];s.day=30;
- assert.equal(g.overheadBase(),90+5*29,'empty Core Roster: the Day base alone');
- assert.equal(g.expectedOperatingCost(),240,'235 -> 240G');
+ assert.equal(g.overheadBase(),170+1*29,'empty Core Roster: the Day base alone');
+ assert.equal(g.expectedOperatingCost(),200,'199 -> 200G');
 });
 
 /* ---- META §DECORATION survival alternatives (User decision 2026-09-24) ---------------------- */

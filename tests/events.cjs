@@ -80,7 +80,7 @@ test('EVENT 9-1/9-2: Hazard Events skip ineligible Gates and are excluded when n
 
 test('EVENT 8-1: an Event-revealed Hazard is immediately Known and never doubled',()=>{
  const g=fresh('known');force(g,'coldwave');
- let guard=0;while(guard++<40){advance(g);if(g.run.event?.id==='coldwave')break;}
+ let guard=0;while(guard++<40){g.run.money=5000;advance(g);if(g.run.event?.id==='coldwave')break;}
  assert.equal(g.run.event?.id,'coldwave','coldwave reached');
  const touched=g.run.dungeons.filter(d=>d.hazards.includes('cold'));
  assert.ok(touched.length,'at least one Gate carries cold');
@@ -98,7 +98,7 @@ test('EVENT 03: 게이트 순례주간 needs two Gates and three expected visito
  s.expectedVisitors=3;assert.equal(g.eventEligible(pil),true);
 
  const h=fresh('pilgrim-run');force(h,'pilgrimage');
- let guard=0;while(guard++<60){advance(h);if(h.run.event?.id==='pilgrimage'&&h.run.pilgrimage>0)break;}
+ let guard=0;while(guard++<60){h.run.money=5000;advance(h);if(h.run.event?.id==='pilgrimage'&&h.run.pilgrimage>0)break;}
  assert.ok(h.run.pilgrimage>0&&h.run.pilgrimage<=3,'1-3 adventurers actually wander');
  const moved=h.run.queue.map(id=>h.run.npcs.find(n=>n.id===id)).filter(n=>n.pilgrim);
  assert.equal(moved.length,h.run.pilgrimage);
@@ -110,7 +110,7 @@ test('EVENT 03: 게이트 순례주간 needs two Gates and three expected visito
 
 test('EVENT 18: 길드 급여일 is a today-only budget and never edits the persistent Wallet',()=>{
  const g=fresh('payday');force(g,'payday');
-   let guard=0;while(guard++<60){advance(g);if(g.run.event?.id==='payday')break;}
+   let guard=0;while(guard++<60){g.run.money=5000;advance(g);if(g.run.event?.id==='payday')break;}
    assert.equal(g.run.event?.id,'payday');
    g.beginOrder(); g.open();
    const visitors=[];
@@ -129,7 +129,7 @@ test('EVENT 18: 길드 급여일 is a today-only budget and never edits the pers
 
 test('EVENT 18 + RICH: arrival order applies rich +50, cap 2000, then eventBudget', () => {
    const g = fresh('payday-rich'); force(g, 'payday');
-   let guard=0;while(guard++<60){advance(g);if(g.run.event?.id==='payday')break;}
+   let guard=0;while(guard++<60){g.run.money=5000;advance(g);if(g.run.event?.id==='payday')break;}
    const n = g.run.npcs[0];
    n.traits = ['rich'];
    n.money = 1980;
@@ -145,7 +145,7 @@ test('EVENT 18 + RICH: arrival order applies rich +50, cap 2000, then eventBudge
 
 test('EVENT 02: 본사 1+1 delivers double units for a single order cost',()=>{
  const g=fresh('promo');force(g,'oneplus');
- let guard=0;while(guard++<60){advance(g);if(g.run.event?.id==='oneplus')break;}
+ let guard=0;while(guard++<60){g.run.money=5000;advance(g);if(g.run.event?.id==='oneplus')break;}
  const s=g.run,i=s.offers.findIndex(o=>o.promo);
  assert.ok(i>=0,'a promo SKU is designated');
  g.beginOrder();
@@ -168,7 +168,7 @@ test('EVENT 20/22: 본사 폐기 지원 clears waste cost but not waste count; �
  assert.ok(s.stats.waste>wasteBefore,'누적 폐기도 정상 누적');
 
  const h=fresh('overhead');force(h,'nightshift');
- let guard=0;while(guard++<60){advance(h);if(h.run.event?.id==='nightshift')break;}
+ let guard=0;while(guard++<60){h.run.money=5000;advance(h);if(h.run.event?.id==='nightshift')break;}
  assert.equal(h.run.event?.id,'nightshift');
  const baseline=h.run.reportHistory.at(-1).operating;
  advance(h); // close the 야간 근무 수칙 day so its Closing lands in reportHistory
