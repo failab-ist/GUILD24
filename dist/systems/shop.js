@@ -465,7 +465,16 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  /* SALE / NPC_TRAIT §NON-PURCHASE LOYALTY (2026-09-23): a visit that ends with a paid purchase
     today still adds +1 on departure; a visit without one adds nothing. Survival is +1. */
  depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
- night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s);if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
+ night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];
+  /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden, User 2026-09-25, v2.9.1 balance): a
+     per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
+     shown to the Player, never persisted past it. Deep expeditions neither count nor are assisted. */
+  let badLuckChain=0;
+ for(const id of s.queue){const n=s.npcs.find(n=>n.id===id);if(!n?.alive)continue;const d=this.gateFor(n);
+  const carried=n.pack.length>0&&!d.deep,assist=carried&&badLuckChain>=3?.10+.05*(badLuckChain-3):0;
+  const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);
+  if(carried)badLuckChain=['성공','대성공'].includes(rep.outcome)?0:badLuckChain+1;
+  if(n.claimedDestination!==undefined&&n.destination!==n.claimedDestination){rep.routeChange=G.Copy.routeChangeLine(n,s.dungeons[n.claimedDestination].name,d.name);n.records.at(-1).routeChange=rep.routeChange;} /* NPC_TRAIT §DEEP EXPEDITION NPC REWARD: on top of the ordinary result, never instead of it.
      Two bands only - Success and Great Success - with no extra Day/Tier multiplier, because the
      ordinary reward already carries that. EXP goes through the ordinary growth curve (no
      automatic Level +1) and the Wallet bonus uses the ordinary persisted money channel, so a

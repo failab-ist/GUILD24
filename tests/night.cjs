@@ -350,7 +350,10 @@ test('NIGHT_CLOSING v2.7 §ORDINARY INJURY RESULT CONTINUITY: only a safe return
   Dungeon.resolve(n,{...d,power:8+i%80},new RNG('cont-'+i));
   const r=n.records[n.records.length-1];seen.add(r.outcome);
   if(r.outcome==='성공'||r.outcome==='대성공')assert.equal(n.injury,0,'coming back safe clears the ordinary Injury');
-  if(r.outcome==='퇴각')assert.equal(n.injury,1,'퇴각 is not a natural recovery');
+  // DUNGEON_HAZARD §RETREAT HEALING (v2.9.1 balance): 퇴각 is not automatic recovery, but a fresh
+  // adventurer's first-ever 퇴각 (empty records, k=0) does heal on a 25% roll - see the dedicated
+  // RETREAT HEALING test below for the exact chain formula.
+  if(r.outcome==='퇴각')assert.ok(n.injury===0||n.injury===1,'퇴각 either keeps the Injury or heals it via RETREAT HEALING');
   if(r.outcome==='부상')assert.equal(n.injury,1,'a fresh 부상 keeps the ordinary Injury');
   if(r.outcome==='중상')assert.equal(n.injury,2,'중상 follows its own transition');
  }
@@ -362,7 +365,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
  const base=Adventurer.create(new RNG('excess'),1,10,Meta.fresh());
  const run=(fatigue,pack)=>{const n={...JSON.parse(JSON.stringify(base)),fatigue,traits:[],pack,records:[]};
   Dungeon.resolve(n,d,new RNG('excess-run'));return n.records[n.records.length-1];};
- const baselines={'성공':4,'대성공':4,'퇴각':7,'부상':9,'중상':9,'사망':0}; // v2.9.0 (User 2026-09-25): 중상 takes the 부상 gain
+ const baselines={'성공':4,'대성공':4,'퇴각':7,'부상':9,'중상':0,'사망':0}; // v2.9.1 balance (User 2026-09-25): 중상 joins 사망 at 0, no Trait may raise it
  for(const fatigue of [0,4,9,14,20,33,40])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','premium']]){
   const r=run(fatigue,pack);
   assert.equal(r.requiredSupply,undefined,'no Gate requires Supply');assert.equal(r.excessSupply,undefined,'so there is no excess');
@@ -377,22 +380,24 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
   assert.equal(r.fatigueRecovery,undefined,'the ambiguous combined field is gone');
   assert.equal(r.postOutcomeFatigueGain,undefined,'no second live name for the same value');
  }
- // v2.9.0 (User 2026-09-25): only 사망 stays at zero result Fatigue; 중상 takes the 부상 gain (+9)
- // plus whatever a Trait adds, exactly like a 부상
+ // v2.9.1 balance (User 2026-09-25): 중상 now joins 사망 at a final result-Fatigue gain of exactly
+ // 0, and no Trait - weary's own +fatigue included - may raise either of them.
  const weary={...JSON.parse(JSON.stringify(base)),fatigue:5,traits:['weary'],pack:[],records:[]};
  let severeSeen=0;
  for(let i=0;i<300;i++){const n={...JSON.parse(JSON.stringify(weary)),records:[]};
   Dungeon.resolve(n,{...d,power:900+i},new RNG('severe-'+i));
   const r=n.records[n.records.length-1];
   if(r.outcome==='사망')assert.equal(r.rawOutcomeFatigueGain,0,'사망 result Fatigue stays 0');
-  if(r.outcome==='중상'){severeSeen++;assert.equal(r.rawOutcomeFatigueGain,9+(DATA.traitBy.weary.effects.fatigue||0),'중상 takes the 부상 gain (+9) plus the Trait');}}
+  if(r.outcome==='중상'){severeSeen++;assert.equal(r.rawOutcomeFatigueGain,0,'중상 result Fatigue is 0 too, even with the weary Trait carried');}}
  assert.ok(severeSeen>0,'the sweep reached a 중상');
 });
 
 test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 0~40, judged at departure',()=>{
  const d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:40,reward:40};
  const base=Adventurer.create(new RNG('bands'),1,10,Meta.fresh());
- const npc=(f,pack=[])=>({...JSON.parse(JSON.stringify(base)),fatigue:f,traits:[],pack});
+ // level pinned to 1 so failureDeathRisk's own levelFactor (DUNGEON_HAZARD §Preparation / Level
+ // Death reduction) stays 1.00 and does not confound this test's Fatigue-band-only comparisons.
+ const npc=(f,pack=[])=>({...JSON.parse(JSON.stringify(base)),fatigue:f,traits:[],pack,level:1});
  const at=f=>Dungeon.prepare(npc(f),d).effects,clear=at(9);
  const near=(a,b)=>Math.abs(a-b)<1e-9;
  for(const [f,ms,cs,name] of [[9,1,1,'정상'],[10,.85,1,'지침'],[19,.85,1,'지침'],[20,.6,1,'과로'],[29,.6,1,'과로'],[30,.6,.8,'소진'],[39,.6,.8,'소진'],[40,.6,.6,'탈진']]){
@@ -474,19 +479,20 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
  const d={...D.dungeonBy.slime,day:14,tier:2,hazards:['poison','mire'],scale:1,power:80,reward:40,requiredSupply:0};
  const base=Adventurer.create(new RNG('death-model'),1,10,Meta.fresh());
  const at=(over,injury)=>{
-  const n=JSON.parse(JSON.stringify(base));n.traits=[];n.fatigue=0;n.pack=[];n.injury=injury;
+  const n=JSON.parse(JSON.stringify(base));n.traits=[];n.fatigue=0;n.pack=[];n.injury=injury;n.level=1;
   n.stats={combat:over,survival:over,mobility:over,spirit:over};n.equipment={power:0,name:'-'};
   return {n,risk:Dungeon.failureDeathRisk(n,d)};
  };
- /* DUNGEON_HAZARD_v2.7 §GATE POWER — LATE-DAY SLOPE. D1-D9 must be bit-for-bit what the single
-    1.70 slope produced, and only the Day term may bend - a post-hoc multiplier on the finished
-    Gate Power would move the Tier and Family terms with it. */
- assert.deepEqual(Dungeon.GATE,{knee:9,early:1.70,late:0.40},'the shipped slope is the canonical one');
+ /* DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE (User 2026-09-25, v2.9.1 balance: early 1.70 ->
+    1.20, late 0.40 -> 0.80). D1-D9 must be bit-for-bit the single 1.20 slope, and only the Day
+    term may bend - a post-hoc multiplier on the finished Gate Power would move the Tier and
+    Family terms with it. */
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.20,late:0.80},'the shipped slope is the canonical one');
  for(const day of [1,2,5,8,9])
-  assert.equal(Dungeon.gateDayTerm(day),day*1.70,'D'+day+' is unchanged');
- for(const [day,term] of [[10,15.70],[12,16.50],[24,21.30],[29,23.30],[30,23.70]])
+  assert.equal(Dungeon.gateDayTerm(day),day*1.20,'D'+day+' is unchanged');
+ for(const [day,term] of [[10,11.6],[12,13.2],[24,22.8],[29,26.8],[30,27.6]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
- assert.ok(Dungeon.gateDayTerm(30)<30*1.70,'the late slope actually bends the curve down');
+ assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
  /* The coefficients are named so a harness can measure a candidate without editing the
     formula. What ships is the DIRECTOR DOCUMENT BASELINE, and an experiment that forgot to
     put it back would otherwise leave no trace at all. */
@@ -556,7 +562,8 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
  /* Path A — environment incident on a WON fight. combat succeeds (noise 1.0 against power 1),
     the environment roll lands inside the incident window (so failurePath is settled without an
     injuryRiskRoll), deathRoll 0.9 misses, and since combatSuccess stays true the very next roll
-    is injuryRoll 0.20, sitting between the ordinary threshold (.13) and the escalated one (.28). */
+    is injuryRoll 0.20, sitting between the ordinary threshold (.11, v2.9.1 balance - was .13) and
+    the escalated one (.26, v2.9.1 balance - was .28). */
  const easy={...gate,power:1};
  const healthyA=run(0,[1.0,0.0001,0.9,0.20,0.999],easy);
  const injuredA=run(1,[1.0,0.0001,0.9,0.20,0.999],easy);
@@ -568,7 +575,8 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
  /* Path B — the ordinary combat-failure path the rule already covered, so the fix did not
     trade one branch for the other. The fight is lost, so failurePath is settled with no
     injuryRiskRoll; deathRoll 0.999 misses; escapeRoll 0.999 fails (always >= the escape
-    chance ceiling of .94, forcing 부상 over 퇴각); injuryRoll 0.50 sits between .42 and .57. */
+    chance ceiling of .94, forcing 부상 over 퇴각); injuryRoll 0.50 sits between .36 and .51
+    (v2.9.1 balance - was .42 and .57). */
  const hard={...gate,power:100000};
  const healthyB=run(0,[1.0,0.999,0.999,0.999,0.50,0.999],hard);
  const injuredB=run(1,[1.0,0.999,0.999,0.999,0.50,0.999],hard);
@@ -616,8 +624,9 @@ test('DUN §INJURED RE-EXPEDITION: +15%p wherever the Severe branch is reached, 
    under the corrected Death-order (an environment incident forces the retreat-still-injured
    branch to draw injuryRoll regardless of whether escape succeeded, so a real 퇴각/부상 split
    stays provable; injuryRoll 0.25 is calibrated once, here, to sit strictly between the
-   escape-succeeded threshold (.13) and the escape-failed one (.42) so it never itself decides
-   the case - only the escape chance the departure snapshot produces does). */
+   escape-succeeded threshold (.11, v2.9.1 balance - was .13) and the escape-failed one (.36,
+   v2.9.1 balance - was .42) so it never itself decides the case - only the escape chance the
+   departure snapshot produces does). */
 test('RESULT-PROOF: the shadow preparation uses DEPARTURE Stats, never post-expedition Growth',()=>{
  /* If the shadow used the returned (post-growth) NPC instead of a frozen pre-resolution
     snapshot, this proof would silently vanish once growth pushed mobility high enough that
@@ -688,8 +697,8 @@ test('RESULT-PROOF: the departure snapshot freezes Equipment before the Outcome\
  const src=read('dist/systems/dungeon.js');
  assert.ok(/equipment:\{power:beforeEquipment,name:n\.equipment\.name\}/.test(src),
   'the departure snapshot captures equipment.power/name before this resolution\'s own equipment-tier win');
- assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury\};/.test(src),
-  'stats/equipment/traits/fatigue/injury are captured together, in one snapshot, before any of this resolution\'s own mutations');
+ assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury,level:beforeLevel\};/.test(src),
+  'stats/equipment/traits/fatigue/injury/level are captured together, in one snapshot, before any of this resolution\'s own mutations');
  assert.ok(/prepare\(\{\.\.\.departure,pack\}/.test(src),
   'shadowOutcome() prepares every shadow against that frozen departure snapshot, never against `n`');
  // and live behaviourally: an equipment-tier win during THIS resolution must not change what a
@@ -789,7 +798,7 @@ test('RESULT-PROOF: the counterfactual proof functions carry no RNG draw / resee
     introduced - this reads dist/systems/dungeon.js as text and asserts on it. */
  const src=read('dist/systems/dungeon.js');
  const start=src.indexOf('function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){');
- const end=src.indexOf('function resolve(n,d,r,facilities=[],run){');
+ const end=src.indexOf('function resolve(n,d,r,facilities=[],run,assist=0){');
  assert.ok(start>=0&&end>start,
   'sanity: both region boundaries (shadowOutcome start, resolve start) are found in Source, in order');
  const region=src.slice(start,end);
@@ -977,43 +986,173 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
 
 console.log(groups+' night groups passed');
 
-test('DUNGEON_HAZARD v2.9.0 §strainEscalation (DUN-Q-v29-3, User 2026-09-25): repeated injured / weary departures raise the failure Death chance',()=>{
+test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 balance): only CONSECUTIVE injured departures raise the failure Death chance',()=>{
  assert.deepEqual(Dungeon.STRAIN,{step:.08,cap:.30,weary:20},'the shipped coefficients are the canonical baseline');
- for(const [i,w,exp] of [[0,0,0],[1,0,0],[0,1,0],[1,1,0],[2,0,.08],[3,0,.16],[5,0,.30],[0,2,.08],[0,5,.30],[2,2,.16],[3,3,.30],[5,5,.30]])
-  assert.ok(Math.abs(Dungeon.strainEscalation(i,w)-exp)<1e-12,'strain('+i+','+w+') = '+exp);
+ for(const [c,exp] of [[0,0],[1,0],[2,.08],[3,.16],[5,.30],[8,.30]])
+  assert.ok(Math.abs(Dungeon.strainEscalation(c)-exp)<1e-12,'strain('+c+') = '+exp);
  const d={...D.dungeonBy.slime,day:14,tier:2,hazards:['poison','mire'],scale:1,power:80,reward:40,requiredSupply:0};
  const base=Adventurer.create(new RNG('strain'),1,10,Meta.fresh());
- const mk=(injured,weary,injury=0,fatigue=0)=>{const n=JSON.parse(JSON.stringify(base));n.traits=[];n.fatigue=fatigue;n.injury=injury;n.pack=[];
+ const mk=(records,injury=0,fatigue=0)=>{const n=JSON.parse(JSON.stringify(base));n.traits=[];n.fatigue=fatigue;n.injury=injury;n.pack=[];n.level=1;
   n.stats={combat:1,survival:1,mobility:1,spirit:1};n.equipment={power:0,name:'-'};
-  n.records=[...Array(injured).fill({departedInjured:true,departedWeary:false}),...Array(weary).fill({departedInjured:false,departedWeary:true})];return n;};
- const healthy=Dungeon.failureDeathRisk(mk(0,0),d);
- assert.equal(healthy.strain,0,'no records, no strain');
- // the counts come from the records, THIS departure included: one past injured run + departing injured now = 2 -> +8%p
- const once=Dungeon.failureDeathRisk(mk(1,0,1),d);
- assert.ok(Math.abs(once.strain-.08)<1e-12,'a second injured departure adds 8%p');
+  n.records=records;return n;};
+ const healthy=Dungeon.failureDeathRisk(mk([]),d);
+ assert.equal(healthy.strain,0,'no records, no strain, and a healthy departure never reads it at all');
+ // one past injured run + departing injured now = 2 consecutive -> +8%p
+ const once=Dungeon.failureDeathRisk(mk([{departedInjured:true,outcome:'부상'}],1),d);
+ assert.ok(Math.abs(once.strain-.08)<1e-12,'a second consecutive injured departure adds 8%p');
  assert.ok(Math.abs(once.chance-Math.min(.40+.08,once.healthy+.10+.08))<1e-12,'the +8%p rides the injured term and lifts the cap with it');
- const firstInjured=Dungeon.failureDeathRisk(mk(0,0,1),d);
+ const firstInjured=Dungeon.failureDeathRisk(mk([],1),d);
  assert.equal(firstInjured.strain,0,'the first injured departure is free');
  assert.ok(Math.abs(firstInjured.chance-Math.min(.40,firstInjured.healthy+.10))<1e-12,'the injured departure itself is unchanged');
- // weary: Fatigue 20+ at departure counts, and past weary departures stack the same way
- const weary2=Dungeon.failureDeathRisk(mk(0,1,0,25),d);
- assert.ok(Math.abs(weary2.strain-.08)<1e-12,'a second weary departure adds 8%p');
- assert.equal(Dungeon.failureDeathRisk(mk(0,1,0,19),d).strain,0,'Fatigue 19 is not weary');
- // both kinds sum and cap at 30%p; the cap of the chance rises by the same amount
- const both=Dungeon.failureDeathRisk(mk(3,3,1,25),d);
- assert.ok(Math.abs(both.strain-.30)<1e-12,'3+3 repeats sum past the cap to exactly 30%p');
- assert.ok(both.chance<=.40+.30+1e-9&&both.chance>=.30,'the cap rises with the strain');
- // the live resolution records the departure facts and uses the same strain
+ // two past + this one = 3 consecutive -> +16%p
+ const chain3=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1),d);
+ assert.ok(Math.abs(chain3.strain-.16)<1e-12,'two past + this one = 3 consecutive -> +16%p');
+ // a healthy departure anywhere in between resets the chain - only the trailing run counts
+ const broken=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true},{departedInjured:false}],1),d);
+ assert.equal(broken.strain,0,'a healthy departure - including the return after a Severe-Injury rest - resets the chain');
+ // Fatigue no longer feeds this term at all, however weary the departure or the past records
+ const wearyIgnored=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1,25),d);
+ assert.ok(Math.abs(wearyIgnored.strain-.16)<1e-12,'Fatigue at departure does not change the strain term');
+ const wearyRecordsIgnored=Dungeon.failureDeathRisk(mk([{departedInjured:false,departedWeary:true},{departedInjured:false,departedWeary:true}],0),d);
+ assert.equal(wearyRecordsIgnored.strain,0,'past weary (non-injured) records do not feed strain');
+ // caps at 30%p
+ const capped=Dungeon.failureDeathRisk(mk(Array(7).fill({departedInjured:true}),1),d);
+ assert.ok(Math.abs(capped.strain-.30)<1e-12,'the strain term caps at 30%p');
+ assert.ok(capped.chance<=.40+.30+1e-9&&capped.chance>=.30,'the cap rises with the strain');
+ // the live resolution still records departedInjured (and keeps departedWeary, even unused) and uses the same strain
  const hard={...d,power:1e9};
- for(let i=0;i<50;i++){const n=mk(2,0,1,0);
+ for(let i=0;i<50;i++){const n=mk([{departedInjured:true},{departedInjured:true}],1);
   Dungeon.resolve(n,hard,new RNG('strain-'+i));
   const r=n.records.at(-1);
-  assert.equal(r.departedInjured,true,'the record says it began injured');assert.equal(r.departedWeary,false);
+  assert.equal(r.departedInjured,true,'the record says it began injured');
   assert.equal(r.debug,undefined,'the persisted record carries no development payload');}
- const n=mk(2,0,1,0);const r=Dungeon.resolve(n,hard,new RNG('strain-live'));
- const expected=Dungeon.failureDeathRisk(mk(2,0,1,0),hard);
- assert.ok(Math.abs(expected.strain-.16)<1e-12,'two past injured runs + this one = 3 -> +16%p');
+ const n=mk([{departedInjured:true},{departedInjured:true}],1);const r=Dungeon.resolve(n,hard,new RNG('strain-live'));
+ const expected=Dungeon.failureDeathRisk(mk([{departedInjured:true},{departedInjured:true}],1),hard);
+ assert.ok(Math.abs(expected.strain-.16)<1e-12,'two past injured runs + this one = 3 consecutive -> +16%p');
  assert.ok(Math.abs(r.debug.deathChance-expected.chance)<1e-12,'the resolution draws Death against the strained chance');
- const w=mk(0,0,0,30);Dungeon.resolve(w,{...d,power:1e9},new RNG('strain-w'));
- assert.equal(w.records.at(-1).departedWeary,true,'Fatigue 30 at departure is recorded as weary');
+ const w=mk([],0,30);Dungeon.resolve(w,{...d,power:1e9},new RNG('strain-w'));
+ assert.equal(w.records.at(-1).departedWeary,true,'Fatigue 30 at departure is still recorded as weary, even though strain ignores it');
+});
+
+test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, v2.9.1 balance)',()=>{
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],
+  weighted:a=>a[0],shuffle:a=>a.slice()};};
+ for(const [lv,exp] of [[1,1],[2,.985],[10,.865],[20,.75]])
+  assert.ok(Math.abs(Dungeon.levelFactor(lv)-exp)<1e-9,'levelFactor('+lv+') = '+exp);
+ assert.equal(Dungeon.PREPARED.factor,.80);assert.equal(Dungeon.PREPARED.bandSevere,.36);
+ const base={injury:0,pack:['rice','rice']};
+ assert.equal(Dungeon.fullyPrepared(base,10),true,'healthy, Fatigue<20, 2+ Items -> fully prepared');
+ assert.equal(Dungeon.fullyPrepared({...base,injury:1},10),false,'an injured departure loses it');
+ assert.equal(Dungeon.fullyPrepared(base,20),false,'Fatigue 20 loses it (< 20 required)');
+ assert.equal(Dungeon.fullyPrepared({...base,pack:['rice']},10),false,'one Item loses it');
+ const d={...D.dungeonBy.slime,day:20,tier:2,hazards:['poison'],scale:1,power:1e9,reward:40,requiredSupply:0};
+ const npc=(level,prepared)=>{const n=JSON.parse(JSON.stringify(Adventurer.create(new RNG('bc1'),1,10,Meta.fresh())));
+  n.traits=[];n.level=level;n.stats={combat:1,survival:1,mobility:1,spirit:1};n.equipment={power:0,name:'-'};n.records=[];
+  n.injury=0;n.fatigue=0;n.pack=prepared?['rice','rice']:[];return n;};
+ /* a controlled, guaranteed-combat-failure Gate: !combatSuccess is decided from noise/env alone
+    (no injuryRiskRoll draw), so the death-roll branch is reached in exactly 3 draws
+    [noise, envRoll, deathRoll], and - only on a hit in the removed band - a 4th (bandRoll). */
+ for(const level of [1,2,10,20])for(const prepared of [false,true]){
+  const n=npc(level,prepared);
+  const raw=Dungeon.failureDeathRisk({...n,fatigue:0},d).chance/Dungeon.levelFactor(level); // undo the SALE snapshot's own levelFactor to read the pure failureDeathChance
+  const preparedFactor=prepared?Dungeon.PREPARED.factor:1;
+  const rolled=raw*preparedFactor*Dungeon.levelFactor(level);
+  const below=Dungeon.resolve(JSON.parse(JSON.stringify(n)),d,scripted([.5,.999,Math.max(0,rolled-1e-6)]));
+  assert.equal(below.outcome,'사망','level '+level+' prepared '+prepared+': a roll inside the reduced band is 사망');
+  if(rolled<raw-1e-9){
+   const between=Dungeon.resolve(JSON.parse(JSON.stringify(n)),d,scripted([.5,.999,(rolled+raw)/2,.10]));
+   assert.notEqual(between.outcome,'사망','level '+level+' prepared '+prepared+': a roll in the removed band never becomes 사망');
+   assert.ok(['중상','부상'].includes(between.outcome),'and settles 중상/부상 off one extra draw');
+   if(prepared){
+    assert.ok(between.events.some(e=>e.id==='prepared'),'the 만반의 준비 save line appears when the band was actually hit and preparedFactor<1');
+    assert.ok(between.events.find(e=>e.id==='prepared').text.includes('만반의 준비 덕분에 목숨을 건졌다'),'exact COPY_AUDIT §19-9 copy');
+   }
+  }
+ }
+ // SALE snapshot: levelFactor applied, preparedFactor never (Bag is excluded from the snapshot)
+ const lv10=npc(10,false);
+ const snap=Dungeon.failureDeathRisk(lv10,d);
+ const rawChance=Dungeon.failureDeathRisk({...lv10,level:1},d).chance;
+ assert.ok(Math.abs(snap.chance-rawChance*Dungeon.levelFactor(10))<1e-9,'SALE chance = raw x levelFactor only');
+ // a carried Bag changes combat/environment prep as it always has (rice raises 강인함, which
+ // lowers the deficit terms) - what must NEVER apply on top of that is preparedFactor itself.
+ // Reconstruct the raw chance straight from DEATH/prepare() and confirm the SALE snapshot is
+ // exactly that x levelFactor, with no further x0.80.
+ const lv10Prepared=npc(10,true);
+ const p=Dungeon.prepare(lv10Prepared,d),required=d.power||1;
+ const combatDeficit=Math.max(0,Math.min(1,(required-Dungeon.preparedPower(p.effects))/required));
+ const environmentDeficit=p.hazards.length?p.hazards.reduce((v,h)=>v+Math.max(0,Math.min(1,h.gap/h.threat)),0)/p.hazards.length:0;
+ const expectedHealthy=Math.max(0,Math.min(.30,combatDeficit*Dungeon.DEATH.combat+environmentDeficit*Dungeon.DEATH.environment));
+ assert.ok(Math.abs(Dungeon.failureDeathRisk(lv10Prepared,d).chance-expectedHealthy*Dungeon.levelFactor(10))<1e-9,
+  'a carried Bag only ever moves the SALE snapshot through the ordinary combat/environment deficit terms, never through preparedFactor');
+});
+
+test('DUN-Q-v29-BC2: RETREAT HEALING (User 2026-09-25, v2.9.1 balance)',()=>{
+ const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],
+  weighted:a=>a[0],shuffle:a=>a.slice()};};
+ const d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:1,reward:1,requiredSupply:0};
+ const npc=(records)=>{const n=JSON.parse(JSON.stringify(Adventurer.create(new RNG('bc2'),1,10,Meta.fresh())));
+  n.traits=[];n.level=1;n.injury=1;n.fatigue=0;n.pack=[];n.records=JSON.parse(JSON.stringify(records));
+  n.stats={combat:1,survival:1,mobility:1,spirit:1};n.equipment={power:0,name:'-'};return n;};
+ /* force a pure 퇴각: guaranteed combat failure (no injuryRiskRoll for failurePath itself), a
+    deathRoll miss, an escapeRoll under the escape ceiling, then the escaped-but-still-failed
+    branch's own injuryRiskRoll (0 injuryRisk here, so it never takes the Injury tier), then the
+    unconditional greatRoll, and only then - because this departure began injured and retreated -
+    the RETREAT HEALING draw itself. */
+ const forceRetreat=(n,healRoll)=>Dungeon.resolve(n,{...d,power:1e9},scripted([.5,.999,.999,.01,.5,.5,healRoll]));
+ for(const [k,exp] of [[0,.25],[1,.50],[2,.75],[3,1],[9,1]]){
+  const records=Array(k).fill({departedInjured:true,outcome:'퇴각'});
+  const healed=forceRetreat(npc(records),Math.max(0,exp-1e-6));
+  assert.equal(healed.injury,0,'k='+k+': a roll just inside '+exp+' heals');
+  if(exp<1){const notHealed=forceRetreat(npc(records),Math.min(.999999,exp+1e-6));assert.equal(notHealed.injury,1,'k='+k+': a roll just outside '+exp+' does not heal');}
+ }
+ // a 부상/중상 anywhere in the chain resets it back to the free 25%
+ const brokenByInjury=forceRetreat(npc([{departedInjured:true,outcome:'퇴각'},{departedInjured:true,outcome:'부상'}]),.20);
+ assert.equal(brokenByInjury.injury,0,'a 부상 breaks the chain back to k=0 (25%), still inside .20');
+ const brokenBySevere=forceRetreat(npc([{departedInjured:true,outcome:'퇴각'},{departedInjured:true,outcome:'중상'}]),.20);
+ assert.equal(brokenBySevere.injury,0,'a 중상 also breaks the chain back to k=0');
+ // a healthy departure that retreats never rolls this at all: no Injury to heal, no extra draw
+ const healthy=npc([]);healthy.injury=0;
+ const r=Dungeon.resolve(healthy,{...d,power:1e9},scripted([.5,.999,.999,.01,.5]));
+ assert.equal(r.outcome,'퇴각');assert.equal(r.injury,0,'a healthy departure that retreats has no Injury to heal');
+ // the Night line appears only on an actual heal, and never states the chance
+ const healedReport=forceRetreat(npc([]),0);
+ assert.ok(healedReport.events.find(e=>e.id==='retreatHeal'),'a heal reports the retreatHeal event');
+ assert.equal(healedReport.events.find(e=>e.id==='retreatHeal').text,
+  Copy.josa(healedReport.name,'은','는')+' 물러나 쉬는 동안 부상이 나았다.','exact COPY_AUDIT §19-9 copy, no chance stated');
+ const notHealedReport=forceRetreat(npc([]),.99);
+ assert.ok(!notHealedReport.events.some(e=>e.id==='retreatHeal'),'no heal, no event line');
+});
+
+test('DUN-Q-v29-BC3: HIDDEN BAD-LUCK PREPARATION ASSIST (User 2026-09-25, v2.9.1 balance)',()=>{
+ const mkGame=seed=>{const g=new Game();g.autosave=false;g.start(seed);return g;};
+ const mkNpc=i=>{const n=Adventurer.create(new RNG('bc3-npc-'+i),i,10,Meta.fresh());n.alive=true;n.traits=[];n.introduced=true;
+  n.records=[];n.pack=['rice'];n.destination=0;n.claimedDestination=0;n.injury=0;n.fatigue=0;n.recovery=0;return n;};
+ const hardGate={...D.dungeonBy.spider,id:'spider',tier:1,day:10,hazards:D.familyTiers.spider[0],power:1e9,scale:1,reward:1};
+ // 4 carried NPCs queued: the chain only reaches the assist threshold (>=3 prior carried
+ // failures) at the 4th, so only that resolve() call should see a nonzero assist.
+ const g=mkGame('bc3');const s=g.run;s.phase='sell';
+ s.npcs=[0,1,2,3].map(mkNpc);s.queue=s.npcs.map(n=>n.id);s.cursor=0;s.dungeons=[hardGate];
+ g.gateFor=()=>hardGate;
+ const seenAssist=[];const realResolve=Dungeon.resolve;
+ Dungeon.resolve=(n,dd,r,facilities,run,assist)=>{seenAssist.push(assist);return realResolve(n,dd,r,facilities,run,assist);};
+ try{g.night();}finally{Dungeon.resolve=realResolve;}
+ assert.deepEqual(seenAssist,[0,0,0,.10],'no assist until the chain reaches 3 prior carried failures, then 0.10');
+ // a bare-handed expedition inside the chain neither counts nor resets it, and is never itself assisted
+ const g2=mkGame('bc3b');const s2=g2.run;s2.phase='sell';
+ s2.npcs=[0,1,2,3,4].map(mkNpc);s2.npcs[2].pack=[];// the middle one is bare-handed
+ s2.queue=s2.npcs.map(n=>n.id);s2.cursor=0;s2.dungeons=[hardGate];
+ g2.gateFor=()=>hardGate;
+ const seen2=[];const rr2=Dungeon.resolve;
+ Dungeon.resolve=(n,dd,r,facilities,run,assist)=>{seen2.push(assist);return rr2(n,dd,r,facilities,run,assist);};
+ try{g2.night();}finally{Dungeon.resolve=rr2;}
+ assert.deepEqual(seen2,[0,0,0,0,.10],'the bare-handed expedition (index 2) is skipped, and does not itself gain the assist');
+ // the assist formula itself: 0.10 + 0.05 per further failure past the third
+ for(const [chain,exp] of [[3,.10],[4,.15],[5,.20]]){
+  const carried=true,assist=carried&&chain>=3?.10+.05*(chain-3):0;
+  assert.ok(Math.abs(assist-exp)<1e-12,'chain '+chain+' -> assist '+exp);
+ }
+ // never surfaced: the outlook carries no assist field
+ const anyNpc=g.run.npcs[0];
+ assert.equal(Object.keys(g.outlookFor(anyNpc)).some(k=>/assist/i.test(k)),false,'the outlook carries no assist field');
 });
