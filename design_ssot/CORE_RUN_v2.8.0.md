@@ -15,7 +15,7 @@ targetPlaytime=30–50 min
 turnBased=YES
 realTimeGameplay=NO
 
-startGold=1000G
+startGold=700G
 inventoryCapacity=18
 dailyOverhead=DayAndCoreRosterScaled
 baseVisitors/day=3–6
@@ -210,7 +210,7 @@ Canonical:
 
 At new run:
 
-Gold=1000G
+Gold=700G    (User 2026-09-25, v2.9.0 balance close; was 1000G)
 InventoryCapacity=18
 
 Stock:
@@ -665,6 +665,24 @@ Randomness should not make:
 Seeded reproduction should be possible for QA/debug if the project supports a seed input.
 
 Seed UI/debug controls are not core player progression.
+
+## DEATH LIMIT — SEGMENTED
+
+(User 2026-09-25, v2.9.0 balance close.) A Run ends at Closing when the Run's cumulative Death count reaches the limit of the
+segment the current Day is in:
+
+```text
+D1~D10   5
+D11~D20  8
+D21~D30  11
+```
+
+- the count is cumulative over the whole Run (it never resets at a segment boundary); only the limit steps up
+- 추모 방명록 adds +2 to every segment limit (`META_v2.8.0.md`)
+- the 위령제 Event adds +1 to every segment limit from the Day it occurs to the end of the Run (`EVENT_v2.8.0.md`)
+- the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.8.0.md`)
+- death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
+- checked at Closing before the money branch, as today; the ending copy is unchanged
 
 ## FAILURE / LOSS PRINCIPLE
 
