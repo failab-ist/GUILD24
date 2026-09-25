@@ -1159,3 +1159,11 @@ User 2026-09-25 (phone capture of 불룡볶음면): the shelf row stopped at two
 ```new
 - the shelf row's effect line states every effect of the Item in the ITEM §PRESENTATION ORDER order (it stopped at two before); a longer line steps its type down (14 → 13 → 12 → 11px) to stay one line at 360 rather than wrap or be cut; 구급키트 and 황금 1+1 쿠폰 read their core on the shelf only (`중상 → 부상 · 부상 → 무사`, `다음 소비품 효과 2회`) while the tray's `특수 효과` and the codex keep the full line (User 2026-09-25)
 ```
+
+## AMENDMENT — v2.9.2: SALE counter tray fold (User decision 2026-09-25)
+
+User 2026-09-25: the filled SALE tray folds to its header while the shelf is read on a phone.
+
+```new
+- COUNTER TRAY FOLD (User 2026-09-25; the User's own suggestion, recommended form taken while the User is away - to reconfirm): on a phone a filled tray folds to its header line (Item, customer, wallet, a small ▲) when the player scrolls the shelf past 32px or taps outside the tray, a shelf row, the dock or an overlay; tapping the folded strip or any shelf row (the one already on the tray included) opens it again. The selected Item never changes by folding, nothing is saved, and a desk (≥1024) never folds
+```

@@ -1354,6 +1354,21 @@ PASS:
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
 
+### UI-Q-v29-28 — SALE COUNTER TRAY FOLD
+
+(User 2026-09-25; owner `UI_UX_v2.8.0.md` §SALE — COUNTER TRAY.)
+
+SETUP:
+SALE at 360 / 390 / 412 and 1280 with a long shelf: pick a row, scroll the shelf, tap the folded strip, tap the readout, tap the same row, tap another row.
+
+PASS:
+- scrolling the shelf past 32px or tapping outside the tray / a row / the dock folds a filled tray to its header line on a phone
+- the folded strip, the same row or another row opens it again; the selected Item never changes by folding
+- picking a row never folds the tray it just filled; a desk never folds; nothing is saved
+
+FAIL:
+- the tray stays full height while the shelf is scrolled on a phone, a fold that clears the selection, or a folded tray that only reopens through the price keys
+
 ### UI-Q-v29-27 — NIGHT VERDICT STAMP / CAUSE BEAT / REVERSAL OVERSTAMP
 
 (User 2026-09-25, v2.9.2 H1; owner `UI_UX_v2.8.0.md` §NIGHT LAYOUT — VERDICT STAMP, principle PRESENTATION_PRINCIPLES §GAME FEEL BEAT.)

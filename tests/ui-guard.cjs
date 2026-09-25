@@ -376,7 +376,7 @@ test('UI-Q10..Q14 / UI-Q29 / UI-Q30: the Sale stack, the inline price flow and h
  assert.ok(!/function cardBack\([^)]/.test(scene),'the card back takes no per-customer argument');
  assert.ok(app.includes('예상 목적지')&&!app.includes("'말한 목적지'"),'the destination label is 예상 목적지');
  assert.ok(!app.includes("modal==='saleItem'"),'item and price resolve inline, with no modal round trip');
- assert.ok(app.includes("selected=selected===id?null:id"),'tapping a product toggles its panel in place');
+ assert.ok(app.includes("selected=reopen||selected!==id?id:null"),'tapping a product toggles its panel in place, and a folded tray reopens instead (User 2026-09-25)');
  /* v2.9.0 PRICE ROLE WORDS (COPY_AUDIT §4-19): the face is the role word, the number stays the mode's */
  assert.ok(app.includes("Math.round(D.pricing[mode].mult*100)")&&app.includes("<em>'+role+'</em>"),'price modes read by their role word');
  assert.ok(app.includes("const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'}"),'할인 50% / 정가 / 바가지 150% are the three faces');
@@ -1717,6 +1717,18 @@ test('UI-Q-v28-23 / -24: NIGHT outcomes and Boss beats are heard for what they a
 /* UI-Q-v29-27 (v2.9.2 H1, UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT): the NIGHT verdict is
    stamped after the card stands; weight follows the Outcome; one after-motion owner; the reversal overprints; a death
    gets a tape. The timing lives in one table read by both the motion and the cue, so it is checked as numbers. */
+/* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): scrolling the shelf or tapping elsewhere folds the tray to its header */
+test('SALE counter tray folds while the shelf is read and opens on any row',()=>{
+ assert.ok(/function foldTray\(\)\{if\(!selected\|\|trayFolded\|\|innerWidth>=1024/.test(app),'only a filled tray folds, and never on a desk');
+ assert.ok(/Math\.abs\(sc\.scrollTop-trayBase\)>32\)foldTray\(\)/.test(fn('watchTray')),'a shelf scroll past 32px folds it');
+ assert.ok(/performance\.now\(\)<trayArm/.test(fn('watchTray')),'the anchoring scroll of a pick does not fold it');
+ assert.ok(/if\(!ev\.target\.closest\('\.counter-tray,\[data-action="select"\],\.dock,#modal-root,#coach-root'\)\)foldTray\(\)/.test(app),'a tap outside the tray folds it');
+ assert.ok(/case'tray-open':trayFolded=false;syncTray\(\)/.test(app),'the folded strip opens it again');
+ assert.ok(/const reopen=trayFolded&&selected===id;trayFolded=false;/.test(app),'any shelf row opens it again');
+ assert.ok(/\.p-sale \.counter-tray\.folded \.tray-delta,\.p-sale \.counter-tray\.folded \.tills\{display:none\}/.test(css),'folded, only the header line stays');
+ assert.ok(!/trayFolded/.test(read('dist/systems/shop.js'))&&!/account\.\w*tray|run\.\w*tray/i.test(app),'the fold is never saved');
+});
+
 /* UI_UX §SALE — COUNTER TRAY (User 2026-09-25): the shelf row states every effect on one line; it used to stop at two */
 test('SALE shelf row: every effect, one line, the utility Items by their core',()=>{
  const sh=fn('shelf'),se=fn('shelfEffects');

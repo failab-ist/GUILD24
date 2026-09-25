@@ -229,6 +229,16 @@ let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
    Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
 let pinFolded=false,pinWatch=null;
+/* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): on a phone the filled tray folds to its header line while the
+   player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
+   again. Presentation only: which Item is selected does not change, and nothing here is saved. */
+let trayFolded=false,trayArm=0,trayBase=0;
+function syncTray(){const t=$('.p-sale .counter-tray');if(!t)return;t.classList.toggle('folded',trayFolded);
+ t.querySelector('.tray-unfold')?.setAttribute('aria-expanded',String(!trayFolded));}
+function foldTray(){if(!selected||trayFolded||innerWidth>=1024||game.run?.phase!=='sell')return;trayFolded=true;syncTray();}
+function watchTray(){const sc=$('.p-sale .stage-scroll');if(!sc)return;trayArm=performance.now()+300;trayBase=sc.scrollTop;
+ sc.addEventListener('scroll',()=>{if(performance.now()<trayArm){trayBase=sc.scrollTop;return;}
+  if(Math.abs(sc.scrollTop-trayBase)>32)foldTray();},{passive:true});}
 function showStub(){if(!stub)return;const st=stub;stub=null;
  document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
  const el=document.createElement('div');el.className='receipt-stub';el.setAttribute('role','status');
@@ -351,7 +361,7 @@ function render(){
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
- if(phase==='sell')watchForecastPin();else{pinWatch?.disconnect();pinWatch=null;}
+ if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -1278,7 +1288,7 @@ function watchForecastPin(){pinWatch?.disconnect();pinWatch=null;const pin=$('.f
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
  /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
     task line); afterwards an empty tray has no height and the list gets the room back (User 2026-09-24) */
- if(!n||!st){const t=game.account.tutorial||{};return !t.skipped&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
+ if(!n||!st){trayFolded=false;const t=game.account.tutorial||{};return !t.skipped&&s.day>=1&&s.day<=3?'<div class="counter-tray empty" role="region" aria-label="계산대"><p class="tray-empty">상품을 누르면 계산대에 올라온다.</p></div>':'';}
  const it=D.itemBy[st.item],kind=itemKind(it);
  const moved=Presentation.preview(n,game.claimedGateFor(n),s.facilities,it.id);
  /* User 2026-09-25: the Item's own effects only. A Food/Drink's `피로 회복` row for a customer who carries
@@ -1287,7 +1297,8 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
   +E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
  const life='폐기까지 '+(st.expires-s.day)+'일';
- return '<div class="counter-tray" role="region" aria-label="계산대">'
+ return '<div class="counter-tray'+(trayFolded?' folded':'')+'" role="region" aria-label="계산대">'
+  +'<button type="button" class="tray-unfold" data-action="tray-open" aria-expanded="'+!trayFolded+'" aria-label="계산대 열기"></button>'
   +'<div class="tray-item"><span class="tray-icon">'+Art.itemIcon(it.id,32)+'</span>'
   +'<span class="tray-what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+it.sell+'G · 재고 '+st.count+' · '+life+'</span></span>'
   +'<span class="tray-who"><b>'+E(n.name)+'에게</b> · '+walletChip(n)+'</span></div>'
@@ -1987,7 +1998,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     product area you were looking at" actually means. */
  case'select':{
   const y0=el.getBoundingClientRect().top;
-  selected=selected===id?null:id;cue=selected?'select':null;render();sound('button');
+  /* a folded tray opens on any shelf row - the one already on it too - rather than letting that row clear it */
+  const reopen=trayFolded&&selected===id;trayFolded=false;
+  selected=reopen||selected!==id?id:null;cue=selected?'select':null;render();sound('button');
   const sc=$('.stage-scroll'),back=$('[data-action="select"][data-id="'+CSS.escape(id)+'"]');
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
   break;}
@@ -2025,6 +2038,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'final-commit':if(s.team.length<3){setModal('underConfirm');break;}   // a full party falls through
  case'final-commit-go':game.commitFinalParty();supplyNPC=s.team[0];selected=null;setModal(null);sound('button');render();break;
  case'forecast-pin':pinFolded=!pinFolded;syncForecastPin();break;
+ case'tray-open':trayFolded=false;syncTray();sound('ui');break;
  case'supply-target':supplyNPC=id;sound('button');render();break;
  case'supply':game.supplyFinal(supplyNPC,selected);selected=null;sound();render();break;
  /* With nobody able to go there is no party to confirm, and the Final already owns this
@@ -2069,7 +2083,9 @@ document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]
    <details> closes on its own summary already, and the shared name closes a sibling, so this
    only has to handle the outside tap and Escape. */
 const closeTips=except=>{for(const t of document.querySelectorAll('.tip[open]'))if(t!==except)t.open=false;};
-document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);},true);
+document.addEventListener('pointerdown',ev=>{const inside=ev.target.closest('.tip');closeTips(inside);
+ /* a tap anywhere but the tray itself, a shelf row, the dock or an overlay folds the tray (UI_UX §SALE — COUNTER TRAY FOLD) */
+ if(!ev.target.closest('.counter-tray,[data-action="select"],.dock,#modal-root,#coach-root'))foldTray();},true);
 /* UI_UX_QA §UI-Q-v28-6. A popover a mouse has to click is a phone control wearing a desktop
    coat: on a pointer device the explanation opens on hover, and for a keyboard it opens on
    focus. Both drive the SAME <details> the tap toggles - no second popover mechanism, no CSS

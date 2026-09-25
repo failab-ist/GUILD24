@@ -1142,3 +1142,17 @@ User decision 2026-09-25: no derived `피로 완화` row and no `피로 {A} → 
 ```new
 - the band recovery is not listed in `판매 후 변화` and is never attributed to the Item (User 2026-09-25)
 ```
+
+## AMENDMENT — v2.9.2: UI-Q-v29-28 SALE counter tray fold (User decision 2026-09-25)
+
+User 2026-09-25: the filled SALE tray folds to its header while the shelf is read on a phone.
+
+```new
+### UI-Q-v29-28 — SALE COUNTER TRAY FOLD
+(User 2026-09-25; owner `UI_UX_v2.8.0.md` §SALE — COUNTER TRAY.)
+SALE at 360 / 390 / 412 and 1280 with a long shelf: pick a row, scroll the shelf, tap the folded strip, tap the readout, tap the same row, tap another row.
+- scrolling the shelf past 32px or tapping outside the tray / a row / the dock folds a filled tray to its header line on a phone
+- the folded strip, the same row or another row opens it again; the selected Item never changes by folding
+- picking a row never folds the tray it just filled; a desk never folds; nothing is saved
+- the tray stays full height while the shelf is scrolled on a phone, a fold that clears the selection, or a folded tray that only reopens through the price keys
+```
