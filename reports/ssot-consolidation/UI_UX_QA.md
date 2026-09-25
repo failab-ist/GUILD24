@@ -1038,3 +1038,11 @@ A Run owning 회전 진열대, 길드 보증 진열대, 단체 주문 창구, �
 - the purchase notice reads `{점포지원명} 확보.` and nothing about 다음 날부터
 - a status line on an always-on support, a chance-based support written as inactive, or a new Save field behind any line
 ```
+
+## AMENDMENT — v2.9.0 fix: D0 briefing body weight (2026-09-25)
+
+UI-Q-v29-14 (2026-09-25): the D0 briefing's two body lines carry the record's body weight; the I-3 two-line markup had no style rule (RUNTIME UX BUG on the live build).
+
+```new
+- the two body lines are set in the record's body weight (15px ink; 16px on a desk), never the secondary tone (RUNTIME UX BUG found on the live build 2026-09-25: the two-line body had no style rule)
+```

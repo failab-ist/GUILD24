@@ -2957,6 +2957,10 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('playCue').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');
  assert.ok(/\.receipt-stub\{position:fixed;[^}]*pointer-events:none/.test(css),'no reserved height, no input held');
  assert.ok(!/stub/.test(read('dist/systems/shop.js'))&&!/stub/.test(read('dist/systems/run.js')),'presentation only');
+ // UI-Q-v29-14 D0 briefing: the two body lines carry the record's body weight (RUNTIME UX BUG fixed 2026-09-25: the I-3 markup had no rule)
+ assert.ok(fn('bossReveal').includes('<p class="d0-line">'),'the D0 body is two d0-line paragraphs');
+ assert.ok(/\.boss-reveal \.d0-line\{margin:0;font:400 15px\/1\.6 var\(--ui\);color:#3c3527\}/.test(css)&&/ \.boss-reveal \.d0-line\{font-size:16px\}/.test(css),'and they are styled: 15px ink, 16px on a desk');
+ assert.ok(!/d0-step|d0-close/.test(css)&&!/d0-step|d0-close/.test(app),'no orphan rule from the old stepped body survives');
  // v2.9.0 F7 (User 2026-09-24): quick-view status line, purchase notice, Counter judgement split
  assert.ok(fn('ownedRelicView').includes('Relics.status(game,r.id)')&&fn('relicsModal').includes('Relics.status(game,r.id)')&&/<p class="status">/.test(app),'both owned lists carry the runtime status line');
  assert.ok(read('dist/systems/relics.js').includes("s.notice=D.relicBy[id].name+' 확보.';")&&!/다음 날부터 적용됩니다/.test(read('dist/systems/relics.js')),'§11-33 the notice is the name and 확보 only');

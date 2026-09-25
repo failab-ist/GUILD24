@@ -12,6 +12,8 @@ Docs-first. Each owner amendment is listed when committed.
 State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
 Open before the tag: the BALANCE FINDING (`reports/v29-balance-finding-handoff.md`, decisions taken in a separate session) and 7-b.
 
+- Fix (2026-09-25, RUNTIME UX BUG from I-3): the D0 briefing's two body lines had no style rule and fell to the secondary tone;
+  `.d0-line` now carries the record's body weight, the orphan `.d0-step` / `.d0-close` rules are gone (UI_UX_QA UI-Q-v29-14).
 - Close-out (2026-09-25): EVENT §08 — on a morning with no existing slot the newcomer is the Day's only visitor (User);
   평생 단골제 card drops `(하루 1회)`; SPEC_INDEX status / acceptance updated; WORK_STATE carries the balance handoff.
 

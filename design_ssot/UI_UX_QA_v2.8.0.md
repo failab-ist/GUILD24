@@ -2021,6 +2021,7 @@ The briefing body is the two `COPY_AUDIT_APPROVED_v2.8.0.md` §14-1 lines; the g
 PASS:
 - the briefing shows header `마왕 조사 개시`, the unchanged lead line, exactly `DAY 5에 첫 조사 보고로 토벌 대상이 공개된다. 이후 5일마다 이어진다.` / `DAY 30에 성장한 모험가 최대 3명을 마왕성으로 보내 최종 토벌에 나선다.`, and the unchanged button
 - `조사 정보를 확인하며 토벌대를 준비하고, DAY 30까지 점포를 운영해야 한다.` is absent
+- the two body lines are set in the record's body weight (15px ink; 16px on a desk), never the secondary tone (RUNTIME UX BUG found on the live build 2026-09-25: the two-line body had no style rule)
 - 점주 가이드 opens on a first block `처음 3일` with exactly the five §8-0 lines in order
 - the existing eight sections (§8-1 … §8-8) sit under a `자세히` disclosure, collapsed by default, and open on tap
 - the disclosure exists only inside the help modal; no gameplay screen gains one
