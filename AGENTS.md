@@ -334,6 +334,18 @@ Do not repeat AGENTS rules inside the handoff beyond "Read AGENTS.md first and f
 WORK's own PASS is not final DIRECTOR approval.
 If no next task was explicitly authorized, stop after the assigned scope.
 
+## 11-A. LANGUAGE OF REPORTS / HANDOFFS — 한글 (User 2026-09-25)
+
+User에게 가는 보고와 핸드오프는 한글로 쓴다. 채팅 보고, 최종 리뷰 패킷, `WORK_STATE.md` §Next 핸드오프,
+`reports/` 아래 핸드오프·발견 문서가 모두 해당된다.
+
+그대로 두는 것:
+- 상태 라벨(PASS / IMPLEMENTATION BUG / BLOCKED 등), owner 파일명, 섹션 이름, 파일 경로, 함수·변수·CSS 이름,
+  명령어, 커밋 해시
+- Canonical 문서 본문의 기존 언어(영문 owner는 영문 그대로; 이 규칙은 보고·핸드오프에만 적용된다)
+
+영문으로만 쓰인 보고·핸드오프는 미완성으로 본다.
+
 ---
 
 # 12. STOP CONDITIONS
