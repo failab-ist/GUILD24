@@ -40,7 +40,7 @@ const STEP=`(()=>{
 // what one resolved result is, read only from the record the resolver wrote
 const CLASSIFY=`(r=>r.outcome==='사망'?'death':(r.rescued||r.avoidedDeath)?'rescue':r.outcome==='중상'?'severe'
  :r.outcome==='부상'?'injury':r.outcome==='퇴각'?'retreat':r.outcome==='대성공'?'great':'success')`;
-const WANT=['success','great','retreat','injury','severe','death','rescue','hero','brink'];
+const WANT=['success','great','retreat','injury','severe','death','rescue','hero','brink','prepared'];
 
 function serve(){
  const child=spawn(process.execPath,[path.resolve(__dirname,'preview.cjs'),'--port',String(PORT)],{stdio:['ignore','pipe','inherit']});
@@ -87,12 +87,14 @@ async function play(page,day,onNight){
    const seed='qa-night-'+k;
    await begin(page,seed);
    await play(page,null,async day=>{
-    const rows=await page.evaluate(`Guild24.game.run.results.map(r=>({kind:${CLASSIFY}(r),hero:!!Presentation.heroLine(r),brink:!!r.avoidedDeath,outcome:r.outcome,name:r.name}))`);
+    const rows=await page.evaluate(`Guild24.game.run.results.map(r=>({kind:${CLASSIFY}(r),hero:!!Presentation.heroLine(r),brink:!!r.avoidedDeath,prepared:!r.rescued&&(r.events||[]).some(e=>e.id==='prepared'),outcome:r.outcome,name:r.name}))`);
     rows.forEach((r,index)=>{
      if(!found[r.kind])found[r.kind]={seed,day,index,outcome:r.outcome,name:r.name};
      if(r.hero&&!found.hero)found.hero={seed,day,index,outcome:r.outcome,name:r.name};
      // v2.9.2 H1: a Death turned into a return (the reversal whose first print is `사망`)
      if(r.brink&&!found.brink)found.brink={seed,day,index,outcome:r.outcome,name:r.name};
+     // User 2026-09-25: a 만반의 준비 Death avoided without the Insurance flags - it reverses too
+     if(r.prepared&&!found.prepared)found.prepared={seed,day,index,outcome:r.outcome,name:r.name};
     });
    });
   }

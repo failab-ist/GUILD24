@@ -54,6 +54,13 @@ const STAMP_FALL=90,NIGHT_STAMP={
  severe:{entry:280,hold:160,from:1.6,dip:4,y:-14},saved:{entry:240,hold:180,from:1.6,dip:4,scale:.97,print:true},
  gone:{entry:240,hold:60,tape:440}};
 const stampLand=st=>st.entry+st.hold+STAMP_FALL;
+/* User 2026-09-25: a reversal is shown only when a death was turned away. 만반의 준비 turns a Death into 부상 / 중상 without
+   the Insurance flags, so its result prints `사망` first and its own Outcome overstamps it - the same first print and
+   hold as 생환, the Outcome cue on the overstamp and no `rescue` accent (that stays with the flags). 강골 and 구급키트 only
+   lower an injury, so they never reverse. */
+const preparedBrink=r=>!!r&&!r.rescued&&!r.avoidedDeath&&(r.events||[]).some(e=>e.id==='prepared');
+const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_STAMP.safe;
+ return preparedBrink(r)?{...st,hold:NIGHT_STAMP.saved.hold,print:true,brink:true}:st;};
 /* H5: the Final seal reuses the same fall. Both verdicts are climax weight: a 200 ms hold on the standing tape; the clear
    is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
 const FINAL_SEAL={hold:200,won:{from:2,dip:6},lost:{from:1.6,dip:3}};
@@ -69,10 +76,10 @@ function sealSound(){clearTimeout(sealCueAt);const s=game.run;if(!s?.finalReport
    the next result or the next screen comes first, so it is never heard over it. */
 let nightCueAt=[];
 function nightSound(result){nightCueAt.forEach(clearTimeout);nightCueAt=[];if(!result)return;
- const st=motionOK()&&NIGHT_STAMP[Presentation.nightTone(result)];
+ const st=motionOK()&&nightStampOf(result);
  if(!st){sound(nightCue(result));if(result.rescued||result.avoidedDeath)Sound.play('rescue',.42);return;}
- nightCueAt=[setTimeout(()=>sound(nightCue(result)),st.tape||st.print?st.entry+(st.tape?st.hold:0):stampLand(st))];
- if(st.print)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));}
+ nightCueAt=[setTimeout(()=>sound(nightCue(result)),st.tape?st.entry+st.hold:st.print&&!st.brink?st.entry:stampLand(st))];
+ if(st.print&&!st.brink)nightCueAt.push(setTimeout(()=>Sound.play('rescue'),stampLand(st)));}
 /* A redraw replaces a whole surface, and a destroyed control cannot keep the keyboard.
    Remember which control answered the last press by what it does rather than by object
    identity, then put the keyboard back on its replacement. Used by #app and by
@@ -171,8 +178,8 @@ function playPhase(phase){
     the tone and the result already resolved; nothing here is state. */
  if(phase==='night'){
   const beat=$('.beat'),tag=$('.beat .verdict');
-  const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],st=NIGHT_STAMP[tone]||NIGHT_STAMP.safe;
-  const at=st.entry+st.hold,land=stampLand(st),r=game.run.results[game.run.nightCursor||0];
+  const tone=(beat?.className.match(/\bt-(\w+)/)||[])[1],r=game.run.results[game.run.nightCursor||0];
+  const st=r?nightStampOf(r):NIGHT_STAMP[tone]||NIGHT_STAMP.safe,at=st.entry+st.hold,land=stampLand(st);
   if(beat){const p={opacity:{from:0,to:1,duration:st.entry,ease:'outQuad'},
     translateY:[{from:st.y||0,to:0,duration:st.entry,ease:'outQuad'}].concat(st.tape?[]
      :[{to:0,duration:land-st.entry},{to:st.dip,duration:40,ease:'in(2)'},{to:0,duration:150,ease:'outQuad'}])};
@@ -188,7 +195,8 @@ function playPhase(phase){
    /* the reversal: the Outcome the Insurance turned away starts to print in its own tag, then the
       resolved label lands over it and the faint print goes */
    if(st.print&&r){const g=document.createElement('p');g.setAttribute('aria-hidden','true');
-    g.className='verdict ghost t-'+(r.avoidedDeath?'gone':'severe');g.textContent=r.avoidedDeath?'사망':'중상';
+    const fromDeath=r.avoidedDeath||st.brink;
+    g.className='verdict ghost t-'+(fromDeath?'gone':'severe');g.textContent=fromDeath?'사망':'중상';
     g.style.left=tag.offsetLeft+'px';g.style.top=tag.offsetTop+'px';tag.before(g);
     A(g,{opacity:[{from:0,to:.4,duration:st.hold,delay:st.entry},{to:.4,duration:STAMP_FALL},{to:0,duration:120}],
      scale:{from:1.15,to:1,duration:st.hold,delay:st.entry,ease:'outQuad'},onComplete:()=>g.remove()});}

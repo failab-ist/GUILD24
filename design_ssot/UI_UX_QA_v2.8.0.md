@@ -1412,14 +1412,14 @@ PASS:
 - the card stands first and the tag lands after it; 성공 / 퇴각 have no hold, 대성공 / 부상 / 중상 / 생환 / 사망 hold ≤ 200 ms
 - the stamp falls from 1.6 × (퇴각 1.3 ×) in 90 ms; on the landing the card dips 4 px (퇴각 2 px) and settles, nothing else moves
 - 대성공 is one gold landing; 부상 keeps a red ink spread, 중상 a slightly misaligned tag, 사망 a black tape laid in ≤ 500 ms
-- a reversal prints the turned-away Outcome (`사망` / `중상`) first, then `생환` overstamps it; the Insurance proof lines appear on that frame
+- a reversal prints the turned-away Outcome (`사망` / `중상`) first, then `생환` overstamps it; the Insurance proof lines appear on that frame; a Death 만반의 준비 turned away prints `사망` and its own 부상 / 중상 overstamps it (User 2026-09-25)
 - with a Hero Item line that line settles once and the figures do not count; without one only the REWARD figures count up
 - the Outcome cue's first note is heard on the landing; on a reversal `rescue` is heard on the overstamp; one visual, one sound, one cause / number at a landing
 - the last motion ends by 770 ms; 다음 / 전체 건너뛰기 answer at any frame and no pending cue plays over the next screen
 - under reduced motion the end state is identical: same tag, ink / misalignment / tape, figures at their values, no first print
 
 FAIL:
-- a stamp on a death, two stamps on a 대성공, a reversal on 만반의 준비 / 강골 / 구급키트 results, a ring, flash, shake or particle
+- a stamp on a death, two stamps on a 대성공, a reversal on 강골 / 구급키트 results, a ring, flash, shake or particle
 - a count-up beside a Hero Item line, a count on GROWTH / AFTERMATH figures, a faint first print left in the end state, or a changed Outcome type size
 
 ## CLOSING

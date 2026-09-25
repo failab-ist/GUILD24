@@ -1380,6 +1380,9 @@ the stamp itself falls from 1.6 × to 1 × in 90 ms and lands on the last frame)
   print remains in the end state. The proof lines under the summary (the Hero Item line and the
   incident line that name the Insurance) cut in on the overstamp frame with no motion of their own;
   that cut-in is the landing's cause response
+- 만반의 준비 (User 2026-09-25: a reversal only when a death was turned away): a result whose Death 만반의 준비 turned into
+  부상 / 중상 prints `사망` first the same way and its own Outcome overstamps it; the Outcome cue plays on the overstamp and
+  there is no `rescue` accent. 강골 and 구급키트 only lower an injury and never reverse
 - after-motion has one owner. With a Hero Item line (NIGHT_CLOSING §HERO ITEM FEEDBACK) and no
   reversal, that line settles into place once (160 ms, 4 px, from the landing frame) and the figures
   simply stand at their values. Without one, the REWARD group's figures (경험치, 원정 소지금 획득,

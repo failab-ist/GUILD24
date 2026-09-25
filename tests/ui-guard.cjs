@@ -1812,7 +1812,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  const own=night.indexOf('if(st.print)told'),h=night.indexOf('else if(hero)A(hero.parentElement.children.length===1?hero.parentElement:hero,'),c=night.indexOf("else if(!st.tape)document.querySelectorAll('.beat .changed .reward .tok b')");
  assert.ok(own>0&&own<h&&h<c,'one owner per landing: cut-in, Hero line, or the REWARD figures');
  assert.ok(/duration:1,delay:land/.test(night),'the reversal proof lines cut in on the overstamp frame');
- assert.ok(/'verdict ghost t-'\+\(r\.avoidedDeath\?'gone':'severe'\)/.test(night)&&/r\.avoidedDeath\?'사망':'중상'/.test(night),
+ assert.ok(/const fromDeath=r\.avoidedDeath\|\|st\.brink;/.test(night)&&/'verdict ghost t-'\+\(fromDeath\?'gone':'severe'\)/.test(night)&&/fromDeath\?'사망':'중상'/.test(night),
   'the first print is the Outcome the result says was turned away');
  assert.ok(/onComplete:\(\)=>g\.remove\(\)/.test(night)&&!/ghost/.test(bare(fn('beat'))),'the first print is never rendered and never stays');
  assert.ok(/'<li'\+\(hero&&!i\?' class="hero"':''\)/.test(fn('causeLines')),'the proven Hero claim is the line that settles');
@@ -1826,7 +1826,10 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  // sound: the landing carries the cue; a waiting cue never plays over the next screen
  const ns=bare(fn('nightSound'));
  assert.ok(/^function nightSound\(result\)\{nightCueAt\.forEach\(clearTimeout\);nightCueAt=\[\];if\(!result\)return;/.test(ns),'a pending cue is dropped first');
- assert.ok(/const st=motionOK\(\)&&NIGHT_STAMP\[Presentation\.nightTone\(result\)\]/.test(ns),'motion decides the timing, the resolved tone the entry');
+ assert.ok(/const st=motionOK\(\)&&nightStampOf\(result\)/.test(ns),'motion decides the timing, the resolved tone the entry');
+ assert.ok(/const preparedBrink=r=>!!r&&!r\.rescued&&!r\.avoidedDeath&&\(r\.events\|\|\[\]\)\.some\(e=>e\.id==='prepared'\);/.test(app),'만반의 준비 reverses only its turned-away Death (User 2026-09-25)');
+ assert.ok(/if\(st\.print&&!st\.brink\)nightCueAt\.push\(/.test(ns),'and carries no rescue accent');
+ assert.ok(!/injury-guard|aftercare/.test(fn('nightSound')+app.slice(app.indexOf('const preparedBrink='),app.indexOf('const nightStampOf='))),'강골 / 구급키트 never reverse');
  assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
  assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');

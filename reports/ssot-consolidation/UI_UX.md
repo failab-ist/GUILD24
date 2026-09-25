@@ -1197,3 +1197,13 @@ departure's own `final` cue is unchanged and plays once
 - presentation only: the seal is aria-hidden, the headline states the result; under reduced motion the seal, the text
 and the cue are there at once and the end state is identical
 ```
+
+## AMENDMENT — v2.9.2 H1: only a turned-away Death reverses (User decision 2026-09-25)
+
+User 2026-09-25: the reversal overstamp also covers a Death 만반의 준비 turned away; 강골 / 구급키트 never reverse. Superseded declarations were removed in place.
+
+```new
+- 만반의 준비 (User 2026-09-25: a reversal only when a death was turned away): a result whose Death 만반의 준비 turned into
+부상 / 중상 prints `사망` first the same way and its own Outcome overstamps it; the Outcome cue plays on the overstamp and
+there is no `rescue` accent. 강골 and 구급키트 only lower an injury and never reverse
+```
