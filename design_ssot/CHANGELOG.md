@@ -9,6 +9,24 @@ Theme: easy to learn, hard to master. Readability, onboarding, a visible transac
 
 Docs-first. Each owner amendment is listed when committed.
 
+- Balance close (User 2026-09-25; values `reports/v29-balance-agreements.md`, measurements `reports/v29-balance-ideal.md`) —
+  owners amended docs-first, Source adoption pending:
+  - DUNGEON_HAZARD (8854c89): 중상 Fatigue 0; Severe shares .36 / .11; repeated-strain cut on consecutive injured departures
+    only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing 25 → 100%; hidden bad-luck
+    preparation assist; expedition Wallet 대성공 / 성공 1.00; Gate Day term 1.20 / 0.80.
+  - ITEM (ec2a90f): Counter values by Rarity (강인함-pressed +4); Potion 8 / 14 / 20 / 28; stat Food / Drink raises; Fatigue
+    recovery 삼각김밥 5 · 컵라면 3 · 간단 도시락 6 · 불룡볶음면 3 · 길드 특제 도시락 7; prices raised with the effect; Sell = Buy × 2.
+  - ECONOMY_ORDER (f702580): operating cost dayBase 170 + 1 × (Day − 1), Level factor .03.
+  - CORE_RUN / META (2c86615): start Gold 700G; Death limit by segment 5 / 8 / 11 (추모 방명록 +2, 위령제 +1); Store
+    Capital 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects +3 offers · 30% · 50G ·
+    55% · 65% · 45% · three saves.
+  - BOSS (2c900c7): WRATH 180, GREED cap 11, SLOTH 200 / 189 / 171 / 149.
+  - EVENT (c03d205): 23. 위령제 — trigger, weight and copy UNRESOLVED.
+  - UI_UX / COPY_AUDIT (c862a7c): `사망 {n} / {limit} · D{end}까지` always on MORNING and ORDER.
+  - QA (5a9a645, 06a2de9): DUNGEON_ITEM_QA, ECONOMY_ORDER_QA, CORE_RUN_QA (RUN-Q-v29-DL), UI_UX_QA (UI-Q-v29-26).
+  - 7-b closed: the remaining-Supply buffer stays. Known measured gaps accepted by the User are in `reports/v29-balance-ideal.md`
+    §종결 측정.
+
 State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
 Open before the tag: the BALANCE FINDING (`reports/v29-balance-finding-handoff.md`, decisions taken in a separate session) and 7-b.
 

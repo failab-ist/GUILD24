@@ -5,9 +5,9 @@ OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.9.0
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.0
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25; RELEASE_OPEN_ON_BALANCE (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED (every owner amendment of the 2026-09-24/25 decisions is in Source; npm test / ssot:check / qa:runtime PASS at the close-out commit)
-IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
+FREEZE_STATUS=V2_9_0_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; SOURCE_ADOPTION_PENDING (v2.8 canonical baseline closed 2026-09-24)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED except the balance-close amendments of 2026-09-25 (owners amended docs-first; Source adoption pending — CHANGELOG §v2.9.0 balance close)
+IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=EVENT 23. 위령제 TYPE / WEIGHT / eligibility / copy; Night copy for retreat healing and 만반의 준비; Epic hybrid 속박 / 어둠 18 vs Common Main 16 (DUNGEON_ITEM_QA ITEM-Q83)
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
 
@@ -239,6 +239,11 @@ Close-out state 2026-09-25: every item above is adopted in Source (F2 … F7, I-
 The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29-balance-finding-handoff.md`
 (F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
+
+Balance close 2026-09-25 (User): the BALANCE FINDING is decided — every value is in `reports/v29-balance-agreements.md`, the
+measurements in `reports/v29-balance-ideal.md`; 7-b is closed (the buffer stays). The owners are amended docs-first
+(CHANGELOG §v2.9.0 balance close). The tag waits on Source adoption of those amendments and the three UNRESOLVED details in
+the header.
 
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)
 
