@@ -47,6 +47,10 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   row and the `피로 {A} → 출발 {B}` line are retired on the counter tray, the till and FINAL preparation; the SUPPLY lesson
   moves to the tray's `피로 회복` row for a fatigued customer (User choice). SALE, UI_UX, UI_UX_QA UI-Q-v29-7, DUNGEON_HAZARD,
   DUNGEON_ITEM_QA, SOURCE_ADOPTION_QA, COPY_AUDIT §3-5 / §3-7 / §4-17 (retired); ledgers edited in place.
+- Balance, Great Success EXP 1.40 → 1.10 (User 2026-09-25): only the EXP multiplier; Great Success occurrence / probability,
+  Store Gold and the expedition NPC Wallet reward unchanged. Purpose: weaken the snowball of a strong NPC growing faster
+  through Great Success EXP. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA; ledgers amended. Gate early slope (1.40 / 1.50)
+  and the 정가 purchase chance (×0.90 / ×0.80) are measured only, awaiting the User (reports/v292-balance-review.md).
 
 ## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted, CLOSED 2026-09-25 (main `d23d076`, tag `v2.9.1`)
 

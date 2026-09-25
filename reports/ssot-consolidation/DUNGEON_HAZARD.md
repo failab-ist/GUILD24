@@ -1055,3 +1055,15 @@ environmentIncidentChance × (1 − assist)
 - Deep expeditions and the Final are excluded (neither counted nor assisted)
 - never shown to the Player; no forecast, SALE or Night surface reads it
 ```
+
+## AMENDMENT — v2.9.2 balance: Great Success EXP 1.40 -> 1.10 (User decision 2026-09-25)
+
+User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Gold and Wallet are unchanged. The superseded line is dropped.
+
+```text
+대성공 = 1.40
+```
+
+```new
+ 대성공 = 1.10   (User 2026-09-25, v2.9.2 balance; was 1.40 — Great Success occurrence, Store Gold and Wallet unchanged)
+```

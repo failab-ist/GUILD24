@@ -868,3 +868,15 @@ Hybrid is not strict superior specialist.
 Hybrid is not strict superior to a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may
 exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16).
 ```
+
+## AMENDMENT — v2.9.2 balance: Great Success EXP 1.40 -> 1.10 (User decision 2026-09-25)
+
+User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Gold and Wallet are unchanged. The superseded line is dropped.
+
+```text
+- EXP outcome multipliers are Great 1.40 / Retreat 0.38 / combat-success 1.00 / other living 0.50
+```
+
+```new
+ - EXP outcome multipliers are Great 1.10 / Retreat 0.38 / combat-success 1.00 / other living 0.50 (User 2026-09-25, v2.9.2 balance; Great was 1.40)
+```

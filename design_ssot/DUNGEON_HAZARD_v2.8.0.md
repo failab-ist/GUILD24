@@ -782,7 +782,7 @@ For a living adventurer:
 
 Outcome multiplier:
 
-    대성공 = 1.40
+    대성공 = 1.10   (User 2026-09-25, v2.9.2 balance; was 1.40 — Great Success occurrence, Store Gold and Wallet unchanged)
     퇴각   = 0.38
     combat-success path = 1.00
     other surviving non-retreat path = 0.50
