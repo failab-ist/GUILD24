@@ -855,3 +855,16 @@ User decision 2026-09-25 (v2.9.1): the NPC-detail row `무리한 출발 {n}회` 
 ```new
 - NPC detail shows `연속 부상 출발 {n}회` (the current chain of consecutive injured departures; 0 after a healthy one) as an information row, no verdict (User 2026-09-25, v2.9.1)
 ```
+
+## AMENDMENT — v2.9.1: hybrid dominance line in DUN-Q (User decision 2026-09-25)
+
+User decision 2026-09-25 (v2.9.1): the last unqualified 'Hybrid is not strict superior specialist' line gets the same-or-higher-Rarity scope the other hybrid rules already carry.
+
+```text
+Hybrid is not strict superior specialist.
+```
+
+```new
+Hybrid is not strict superior to a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may
+exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16).
+```

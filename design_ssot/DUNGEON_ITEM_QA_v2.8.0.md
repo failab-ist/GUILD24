@@ -346,7 +346,8 @@ Direct is more reliable on its specific target.
 Hybrid is more flexible across uncertainty.
 
 PASS:
-Hybrid is not strict superior specialist.
+Hybrid is not strict superior to a specialist of the same or a higher Rarity (User 2026-09-25, v2.9.1: an Epic hybrid may
+exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16).
 
 ### DUN-Q09 — NO SINGLE ITEM FAMILY DELETE
 
