@@ -2191,7 +2191,7 @@ SALE with a customer at 360 / 390 / 412 and at 1280; pick a shelf row with the c
 
 PASS:
 - with the readout in view no pin is shown; with it out of view the pin reads the readout's two words in the readout's colours, just above the tray
-- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again
+- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again, and after a fold, scrolling away again shows the full line, not the chip
 - at 1280 no pin is shown in any scroll state; no layout row moves when the pin appears; no runtime error
 
 FAIL:

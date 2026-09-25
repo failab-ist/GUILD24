@@ -1048,7 +1048,7 @@ User decision 2026-09-25: on a phone the readout's two readings float above the 
 (User 2026-09-25, v2.9.0)
 SALE with a customer at 360 / 390 / 412 and at 1280; pick a shelf row with the column at the top, then scroll the column until the readout leaves the view and pick a lower row; tap the pin twice; scroll back to the top.
 - with the readout in view no pin is shown; with it out of view the pin reads the readout's two words in the readout's colours, just above the tray
-- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again
+- one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again, and after a fold, scrolling away again shows the full line, not the chip
 - at 1280 no pin is shown in any scroll state; no layout row moves when the pin appears; no runtime error
 - a pin while the readout is visible, a pin on a desk, values that differ from the readout, a pin that pushes the layout, or a Save / account field for the fold
 ```

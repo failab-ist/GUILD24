@@ -2894,6 +2894,7 @@ test('UI-Q-v29-24: the SALE forecast pin floats the readout words only while the
  assert.ok(/IntersectionObserver/.test(watch)&&/\.readout\.core-mob/.test(watch)&&/'show',!e\.isIntersecting/.test(watch),'shown only while the phone readout is out of the scrolled view');
  assert.ok(/case'forecast-pin':pinFolded=!pinFolded;syncForecastPin\(\);break;/.test(app)&&!/pinFolded[^;]*(game\.save|account\.settings|localStorage)/.test(app),'one tap folds / unfolds, held in memory only');
  assert.ok(/aria-expanded/.test(sync),'the fold state is announced');
+ assert.ok(/if\(e\.isIntersecting&&pinFolded\)\{pinFolded=false;syncForecastPin\(\);\}/.test(watch),'the fold clears once the readout is back on screen, so the next pin opens unfolded');
  assert.ok(/\.forecast-pin-anchor\{position:relative;height:0/.test(css)&&/@media\(min-width:1024px\)\{\.forecast-pin-anchor\{display:none\}\.p-sale \.stage-scroll::after\{display:none\}\}/.test(css)&&/\.p-sale \.stage-scroll::after\{content:'';flex:0 0 \d+px\}/.test(css)&&/\.forecast-pin\{[^}]*min-height:44px/.test(css),'no layout height, never on a desk, room to scroll the last row above it, a 44px target');
 });
 test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves',()=>{

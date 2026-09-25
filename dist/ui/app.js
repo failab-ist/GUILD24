@@ -182,7 +182,7 @@ let cue=null,handoff=null;
    no motion under reduced motion. Presentation only - it reads the resolved state and writes nothing. */
 let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
-   Presentation only, held for this page session - no Save or account field. */
+   Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
 let pinFolded=false,pinWatch=null;
 function showStub(){if(!stub)return;const st=stub;stub=null;
  document.querySelector('.receipt-stub')?.remove();clearTimeout(stubTimer);
@@ -1196,7 +1196,8 @@ function syncForecastPin(){const pin=$('.forecast-pin');if(!pin)return;pin.class
  pin.setAttribute('aria-expanded',String(!pinFolded));pin.setAttribute('aria-label',pinFolded?'전망 보기':'전망 접기');}
 function watchForecastPin(){pinWatch?.disconnect();pinWatch=null;const pin=$('.forecast-pin'),src=$('.readout.core-mob'),sc=$('.stage-scroll');
  if(!pin||!src||!sc||typeof IntersectionObserver!=='function')return;syncForecastPin();
- pinWatch=new IntersectionObserver(([e])=>pin.classList.toggle('show',!e.isIntersecting),{root:sc,threshold:0});pinWatch.observe(src);}
+ /* the fold is for this stretch of scrolling only: once the readout is back on screen the next pin opens unfolded */
+ pinWatch=new IntersectionObserver(([e])=>{pin.classList.toggle('show',!e.isIntersecting);if(e.isIntersecting&&pinFolded){pinFolded=false;syncForecastPin();}},{root:sc,threshold:0});pinWatch.observe(src);}
 function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id===selected);
  /* the empty prompt is onboarding: DAY 1~3 while the account tutorial is not skipped (the same window as the
     task line); afterwards an empty tray has no height and the list gets the room back (User 2026-09-24) */
