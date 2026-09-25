@@ -261,7 +261,7 @@ touches Source only after the User authorizes that batch.
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §ORDER — WAREHOUSE DISCLOSURE / ECONOMY_ORDER_QA or UI_UX_QA
       H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part after v2.9.1)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
-      H6 장면 전환 (conditional: entry beat only for the hard cuts the sequence review finds intrusive)
+      H6 장면 전환 (conditional: the batch captures the four hard cuts and the User picks the targets; UNRESOLVED until then)
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX (the affected screens) / UI_UX_QA
 
   Contract: presentation-only, ≤ 320 ms per beat (사망 tape ≤ 500 ms), no input block, reduced-motion

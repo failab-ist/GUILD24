@@ -21,6 +21,10 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   sequence review. Docs only.
 - Order (User 2026-09-25): H1 → H5 → H2 → H3 → H4 → H6 — the two heaviest landings are authored first in one
   hand; the rest reuse their patterns. WORK_STATE splits the session plan into two stages.
+- Third review (User 2026-09-25): H1 drops the ink ring and the double 대성공 stamp (one gold landing; the two-step
+  stamp stays 클라이맥스-only) and gives the after-motion one owner (the Hero Item line when present, else the
+  numbers); H2 names no "price stamp" (the A8 stub is SALE's only stamp); H3 counts go prior → resolved, never
+  a unit per crate; H6 targets are the User's decision after the capture, not WORK's. Docs only.
 
 ## v2.9.1 — balance, PLANNED (User 2026-09-25)
 
