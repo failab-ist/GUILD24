@@ -1143,6 +1143,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .good .price{text-align:right;white-space:nowrap;display:grid;gap:1px}
 .good .price b{font:500 16px/1 var(--f-led);color:var(--gold)}
 .good .price span{font:400 12px/1 var(--ui);color:#8d8067}
+.good .price em.expiry{font:400 11px/1 var(--ui);font-style:normal;color:#8d8067}
+.good .price em.expiry.soon{color:#a8442f;font-weight:600}
 /* BATCH 2B §SALE SHELF / GOODS. The open product was marked by a gold full-height left inset
    stripe - the coloured status bar Presentation QA forbids as a selection shortcut, confirmed
    on the real screen. The chosen product is pressed into the counter instead: the whole row is

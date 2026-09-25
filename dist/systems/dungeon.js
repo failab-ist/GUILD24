@@ -249,6 +249,7 @@ function greatSuccessSignal(n,d,facilities=[]){
    These are the canonical numbers; nothing in the game writes to this table. */
 /* v2.9.0: departing at Fatigue 40 (탈진) adds the same +10%p term as an injured departure and lifts the cap
    the same way (DUNGEON_HAZARD §Healthy / injured failure Death chance): both together 50%. */
+const WALLET_MULT={'대성공':.90,'성공':.90,'퇴각':.35,'부상':.20,'중상':.10,'사망':0};
 const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40,exhausted:.10};
 /* DUNGEON_HAZARD v2.9.0 §strainEscalation (User 2026-09-25): the repeated-strain cut. The first
    injured departure and the first weary (Fatigue 20+) departure are free; every repeat of each
@@ -560,7 +561,8 @@ function resolve(n,d,r,facilities=[],run){
  const finalFatigue=clamp(e.fatigueBeforeExpedition+actualOutcomeFatigueGain,0,FATIGUE_MAX);
  const netFatigueDelta=finalFatigue-beforeFatigue;n.fatigue=finalFatigue;
  const won=combatSuccess&&n.alive;let xp=n.alive?Math.round((22+d.day*4.6)*(outcome==='대성공'?1.4:outcome==='퇴각'?.38:won?1:.5)*e.xpMult):0;
- const changes=G.Adventurer.grow(n,xp,r);let loot=n.alive?Math.round((35+d.day*8)*(outcome==='퇴각'?.08:won?1:.18)*(1+e.loot)*(d.reward||1)):0;
+ const changes=G.Adventurer.grow(n,xp,r);/* DUNGEON_HAZARD §expeditionWalletReward (User 2026-09-25, v2.9.0): keyed on the Outcome, 중상 < 부상 < 퇴각 < 성공 */
+ let loot=n.alive?Math.round((35+d.day*8)*WALLET_MULT[outcome]*(1+e.loot)*(d.reward||1)):0;
  if(won&&r.next()<.2+(e.rareLoot||0)){n.equipment.tier++;n.equipment.power+=r.int(2,5);n.equipment.name=['보강된','은빛','마력 깃든','고대의','영웅의'][Math.min(4,n.equipment.tier-1)]+' '+D.jobBy[n.job].name+' 장비';changes.push(n.equipment.name+' · 전투 +'+(n.equipment.power-beforeEquipment));}
  n.money+=loot;
  if(p.hazard<bare.hazard){const mitigated=d.hazards.filter(h=>n.pack.some(id=>(D.itemBy[id].effects[h]||0)>0));if(mitigated.length){const prevented=envRoll>=environment&&envRoll<clamp(.06+bare.hazard*.012-bare.effects.survival*.001,.02,.48);
@@ -592,5 +594,5 @@ function resolve(n,d,r,facilities=[],run){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,STRAIN,strainEscalation,strainRuns,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,WALLET_MULT,STRAIN,strainEscalation,strainRuns,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);

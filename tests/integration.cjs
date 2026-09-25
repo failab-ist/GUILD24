@@ -1280,8 +1280,8 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
    Core Roster = alive only, Level desc then Rarity desc, top 6; recovering adventurers count.
    D11 roster (alive): L7R3 L7R2 L5R1 L4R0 L3R4(recovering) L3R1 | L3R0 L1R0, plus a dead L10R4.
    top 6 levels 7,7,5,4,3,3 -> avg 29/6; rarities 3,2,1,0,4,1 -> avg 11/6.
-   dayBase = 90 + 2 x 10 = 110; base = 110 x (1 + .02 x 23/6) x (1 + .06 x 11/6) = 131.4587
-   charged = round(13.14587) x 10 = 130G. */
+   dayBase = 90 + 5 x 10 = 140 (v2.9.0 F4); base = 140 x (1 + .02 x 23/6) x (1 + .06 x 11/6) = 167.314
+   charged = round(16.7314) x 10 = 170G. */
 test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Canonical formula',()=>{
  const g=fresh('core-roster-overhead'),s=g.run;
  const proto=copy(s.npcs[0]);
@@ -1291,16 +1291,16 @@ test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Can
  s.day=11;s.dayFacilities=[];s.facilities=[];s.event=null;
  assert.deepEqual(g.coreRoster().map(n=>n.id).sort((a,b)=>a-b),[1,2,3,4,5,6],
   'the six best living: the dead L10 is out, the recovering L3R4 is in, and L3R1 beats L3R0 on Rarity');
- const want=110*(1+.02*(29/6-1))*(1+.06*(11/6));
+ const want=140*(1+.02*(29/6-1))*(1+.06*(11/6));
  assert.ok(Math.abs(g.overheadBase()-want)<1e-9,'overheadBase '+g.overheadBase()+' = '+want);
- assert.equal(g.expectedOperatingCost(),130,'charged rounded to 10G');
+ assert.equal(g.expectedOperatingCost(),170,'charged rounded to 10G');
  // fewer than six alive: all of them; an empty roster reads Level 1 / Rarity 0
  s.npcs=[mk(1,5,2),mk(2,3,0),mk(3,9,4,{alive:false})];s.day=1;
  assert.ok(Math.abs(g.overheadBase()-90*(1+.02*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
  assert.equal(g.expectedOperatingCost(),100,'90 x 1.06 x 1.06 = 101.124 -> 100G');
  s.npcs=[mk(3,9,4,{alive:false})];s.day=30;
- assert.equal(g.overheadBase(),90+2*29,'empty Core Roster: the Day base alone');
- assert.equal(g.expectedOperatingCost(),150,'148 -> 150G');
+ assert.equal(g.overheadBase(),90+5*29,'empty Core Roster: the Day base alone');
+ assert.equal(g.expectedOperatingCost(),240,'235 -> 240G');
 });
 
 /* ---- META §DECORATION survival alternatives (User decision 2026-09-24) ---------------------- */

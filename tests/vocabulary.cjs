@@ -29,14 +29,15 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 40',()=>{
     active 40 are C11 / U12 / R5 / E11 / L1 and no other Item moves to restore the old counts. */
  assert.deepEqual([0,1,2,3,4].map(v=>DATA.items.filter(i=>i.rarity===v).length),[11,12,5,11,1],
   'active Rarity distribution is the approved C11/U12/R5/E11/L1');
- /* ITEM_v2.8 §DIRECTOR DOCUMENT BASELINE - the six rebaselined active identities, to the digit. */
+ /* ITEM §DIRECTOR DOCUMENT BASELINE - the six rebaselined active identities, to the digit
+    (v2.9.0 F4: Supply 4 / 5 / 6 on the meals, shelf lives from ITEM §SHELF LIFE — EXACT). */
  for(const [id,name,rarity,buy,sell,category,days,fx] of [
-  ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:5}],
-  ['water','생수',0,40,85,'drink',5,{survival:10,supply:2}],
-  ['bar','간단 도시락',1,85,180,'food',2,{survival:10,supply:6,loot:0.2}],
-  ['premium','길드 특제 도시락',2,160,340,'food',2,{survival:14,supply:7,loot:0.4}],
+  ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:4}],
+  ['water','생수',0,40,85,'drink',2,{survival:10,supply:2}],
+  ['bar','간단 도시락',1,85,180,'food',2,{survival:10,supply:5,loot:0.2}],
+  ['premium','길드 특제 도시락',2,160,340,'food',2,{survival:14,supply:6,loot:0.4}],
   ['battlelunch','영웅 결전 도시락',3,210,440,'food',2,{survival:18,supply:9}],
-  ['herobar','왕도 천연암반수',3,185,390,'drink',5,{survival:20,supply:2}]]){
+  ['herobar','왕도 천연암반수',3,185,390,'drink',3,{survival:20,supply:2}]]){
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');
@@ -56,6 +57,23 @@ test('ITEM-Q02/Q03: every Item declares canonical roles and every effect is pres
   for(const r of it.roles)assert.ok(r in DATA.roles,it.id+' unknown role '+r);
   for(const k of Object.keys(it.effects))assert.ok(k in Presentation.labels||util.has(k),it.id+' effect '+k+' is not player-readable');
  }
+});
+
+test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to the digit',()=>{
+ const shelf={rice:2,ramen:3,bar:2,choco:2,candy:4,lava:3,premium:2,battlelunch:2,water:2,coffee:2,herbtea:2,ice:3,energy:3,wine:4,ion:5,herobar:3,hyperenergy:3,sageelixir:3,
+  potion:3,midpotion:4,highpotion:5,toppotion:5,battery:3,rope:3,mask:4,heat:4,cloak:4,coating:4,boots:4,snowgoggles:4,antidote:5,spiderkit:5,slimesuit:5,cryptlantern:5,snowvisor:5,magmagear:5,kit:4,stone:4,tree:5,coupon:5};
+ assert.equal(Object.keys(shelf).length,40);
+ for(const it of DATA.items){assert.equal(it.days,shelf[it.id],it.id+' shelf life');assert.ok(it.days>=2&&it.days<=5,it.id+' within 2~5 days');}
+ // the redistributed Fatigue recovery (ITEM §SUPPLY MODEL contract) and the two price / Stat moves
+ const supply={rice:4,ramen:2,bar:5,choco:3,candy:2,lava:2,premium:6,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,herobar:2,hyperenergy:2,sageelixir:2};
+ for(const [id,v] of Object.entries(supply))assert.equal(DATA.itemBy[id].effects.supply,v,id+' 피로 회복');
+ for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=6||it.id==='battlelunch','no Food above 6 except 영웅 결전 도시락');
+ for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
+ assert.equal(DATA.itemBy.lava.effects.survival,5,'불룡볶음면 강인함 +5');
+ assert.deepEqual([DATA.itemBy.tree.buy,DATA.itemBy.tree.sell],[400,800],'세계수 생환부적 400 / 800');
+ // every stocked unit carries a finite expiry
+ const g=new Game();g.autosave=false;g.start('shelf-life');g.run.facilities=[];
+ for(const it of DATA.items){g.stock(it.id,1);const st=g.run.inventory.at(-1);assert.equal(st.expires,g.run.day+it.days,it.id+' expires on stocking day + shelf life');}
 });
 
 test('ITEM SUPPLY MODEL: every active Food/Drink has Supply > 0',()=>{

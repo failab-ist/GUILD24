@@ -51,7 +51,7 @@ test('window deferral and expiration; purchases blocked during sale',()=>{const 
    DAY 0 window can now offer a shelf-life relic - which would leave the opening stock already
    extended and silently make this test about the wrong thing. The clean state this test needs
    is both: no facility, and no extension already recorded on the stock. */
-test('fridge existing stock only once, future stock and expiry finite',()=>{const g=fresh();g.run.facilities=[];for(const x of g.run.inventory)delete x.extensions;const st=g.run.inventory.find(x=>x.item==='water'),before=st.expires;g.run.relicWindow={milestoneDay:5,candidateIds:['fridge'],candidatePrices:[0],purchased:null,expiryDay:10};g.buyRelic('fridge');assert.equal(st.expires,before+DATA.relicParams.fridge.shelfDays);assert.equal(DATA.relicParams.fridge.shelfDays,2,'대형 냉장고 is +2 days');g.run.day=2;g.morning();assert.equal(st.expires,before+2);g.stock('water',1);assert.equal(g.run.inventory.at(-1).expires,2+5+2);});
+test('fridge existing stock only once, future stock and expiry finite',()=>{const g=fresh();g.run.facilities=[];for(const x of g.run.inventory)delete x.extensions;const st=g.run.inventory.find(x=>x.item==='water'),before=st.expires;g.run.relicWindow={milestoneDay:5,candidateIds:['fridge'],candidatePrices:[0],purchased:null,expiryDay:10};g.buyRelic('fridge');assert.equal(st.expires,before+DATA.relicParams.fridge.shelfDays);assert.equal(DATA.relicParams.fridge.shelfDays,2,'대형 냉장고 is +2 days');g.run.day=2;g.morning();assert.equal(st.expires,before+2);g.stock('water',1);assert.equal(g.run.inventory.at(-1).expires,2+DATA.itemBy.water.days+2);});
 test('no pre-reveal; dead NPCs release active capacity; contradictory traits absent',()=>{const g=fresh();assert.ok(g.run.npcs.every(n=>!n.introduced));g.open();assert.equal(g.run.npcs.filter(n=>n.introduced).length,1);while(g.run.npcs.filter(n=>n.alive).length<22)g.addNPC();g.run.npcs[0].alive=false;assert.ok(g.addNPC());for(const n of g.run.npcs)for(const pair of DATA.traitExclusions)assert.ok(!pair.every(t=>n.traits.includes(t)));});
 test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const g=fresh('tier-'+seed);assert.ok(g.run.dungeons.every(d=>d.tier===1));assert.equal(g.run.familyOrder.length,5);g.run.day=29;g.morning();assert.ok(g.run.dungeons.every(d=>d.tier>=2));if(!g.run.event?.effects.unknown)assert.equal(new Set(g.run.dungeons.map(d=>d.family)).size,g.run.dungeons.length);}});
 test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','delivery'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
@@ -102,7 +102,7 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   const d={...DATA.dungeonBy.spider,day:r.int(1,29),tier:2,hazards:['poison'],scale:1.6,power:r.int(60,140),reward:1};
   const rep=Dungeon.resolve(npc,d,r,[]);
   if(rep.outcome==='퇴각'){
-   assert.equal(rep.loot,Math.round((35+d.day*8)*.08*(d.reward||1)),'a 퇴각 Loot follows its own untouched formula');
+   assert.equal(Dungeon.WALLET_MULT['퇴각'],.35,'v2.9.0 F4: 퇴각 Wallet multiplier');assert.equal(rep.loot,Math.round((35+d.day*8)*.35*(d.reward||1)),'a 퇴각 Loot follows its own formula');
    sampled++;
   }
  }

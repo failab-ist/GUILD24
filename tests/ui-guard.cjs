@@ -2446,7 +2446,13 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!app.includes('이 손님의 준비는 달라지지 않는다'),'and its old sentence is gone');
  // §4-10: the shelf-life state only, with the FIFO explanation retired
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
- assert.ok(app.includes("'유통기한 없음'")&&app.includes("'폐기까지 '"),'and the actual shelf-life state stays');
+ assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("'폐기까지 '"),'§4-10 the shelf-life state stays and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
+ // UI_UX §SALE — SHELF ORDER (User 2026-09-25, v2.9.0): nearest discard first, ties in the existing order; the `폐기 N일` chip
+ assert.ok(fn('shelf').includes('stocks.slice().sort((a,b)=>a.expires-b.expires)'),'the shelf is ordered by expiry, stable for ties');
+ assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em>`),'every row carries 폐기 N일, emphasized at 1 day or less');
+ assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
+ assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
+ assert.ok(read('dist/ui/app.js').includes("' · 유통기한 '+sl+'일</span>'"),'the ORDER row states the shelf life as days, never 없음');
 });
 
 /* SA-Q02 / Q03 / Q04 / Q20 / Q32 — NPC detail, Injury and Trait information truth. */

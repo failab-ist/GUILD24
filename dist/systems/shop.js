@@ -49,7 +49,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  overheadBase(){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
-  const dayBase=90+2*(this.run.day-1);
+  const dayBase=90+5*(this.run.day-1); /* ECONOMY_ORDER §BASE OPERATING COST (User 2026-09-24, v2.9.0) */
   return dayBase*(1+.02*(avgLevel-1))*(1+.06*avgRarity);}
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
@@ -66,7 +66,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     Relic question and the two never answer for each other. */
  wears(id){return Object.values(this.run.loadout||{}).includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
- stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:it.days?this.run.day+it.days+G.Relics.shelf(this,it):null,cost:cost??it.buy});}
+ stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.day+it.days+G.Relics.shelf(this,it),/* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */cost:cost??it.buy});}
  /* COPY_WORLD_VOICE 9: rarely the visitor is a Rare Reference identity instead of an ordinary
     one. Only the name changes - no stat, trait, rarity or reward differs, so the reference is
     the whole easter egg and a player who misses it loses nothing. The roll is always drawn so

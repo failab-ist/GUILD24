@@ -405,9 +405,10 @@ test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 
  assert.ok(near(risk40.chance,Math.min(.40,risk40.healthy+.10))&&risk40.chance>risk39.chance,'탈진 is +10%p over its own healthy chance, under a 40% cap');
  const both=Dungeon.failureDeathRisk({...npc(40),injury:1},{...d,power:400});
  assert.ok(both.chance<=.50+1e-9&&near(both.chance,Math.min(.50,both.healthy+.20)),'injured and 탈진 together: +20%p under 50%');
- // the band is judged after preRecovery: Supply 3 at 22 departs at 19 (지침), not 22 (과로)
- const fed=Dungeon.prepare(npc(22,['candy']),d).effects;
- assert.equal(fed.fatigueBeforeExpedition,19);assert.ok(near(fed.mobility/clear.mobility,.85),'judged on departure Fatigue');
+ // the band is judged after preRecovery: 삼각김밥 Supply 4 (v2.9.0 F4) at 22 departs at 18 (지침), not 22 (과로)
+ assert.equal(D.itemBy.rice.effects.supply,4);
+ const fed=Dungeon.prepare(npc(22,['rice']),d).effects;
+ assert.equal(fed.fatigueBeforeExpedition,18);assert.ok(near(fed.mobility/clear.mobility,.85),'judged on departure Fatigue');
  // clamp: a 성공 at 36 with no Supply ends at 40, not 41
  for(let i=0;i<200;i++){const n={...npc(36),records:[]};Dungeon.resolve(n,{...d,power:1},new RNG('clamp-'+i));const r=n.records.at(-1);
   if(r.outcome==='성공'||r.outcome==='대성공'){assert.equal(r.finalFatigue,40,'clamped at 40');break;}}
@@ -671,7 +672,7 @@ test('RESULT-PROOF: the shadow preparation uses DEPARTURE Fatigue, never the pos
  const n=base();
  const r=Dungeon.resolve(n,hard,scripted([0.5,0.0001,0.999,roll,0.25,0.999,0.999]),[]);
  assert.equal(r.outcome,'부상','WITH the Item, escape succeeds into the harsher .13 threshold and stays 부상');
- assert.equal(r.finalFatigue,23,'sanity: 18 - 4 (초코바 피로 회복) = 14 at departure, and the Outcome\'s own +9 crosses into the 20~29 band downstream of departure');
+ assert.equal(r.finalFatigue,24,'sanity: 18 - 3 (초코바 피로 회복, v2.9.0 F4) = 15 at departure, and the Outcome\'s own +9 crosses into the 20~29 band downstream of departure');
  assert.ok(r.heroProof?.outcome?.items?.includes('choco'),
   'proof still credits 초코바 off the DEPARTURE (10-19 band) Fatigue, not the post-Outcome (20 band) figure');
  assert.equal(r.heroProof.outcome.worse,'중상','and names the worse tier losing 초코바 would have reached');
