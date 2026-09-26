@@ -22,7 +22,7 @@ const ARMS=[
  ['firstAidKit (cur)','firstAidKit',{}],['firstAidKit inj3','firstAidKit',{kit:'injury',saves:3}],['firstAidKit inj5','firstAidKit',{kit:'injury',saves:5}],
  ['firstAidKit inj10','firstAidKit',{kit:'injury',saves:10}],['firstAidKit daily1','firstAidKit',{kit:'injury',saves:1,daily:true}],
  /* 새벽배송 안내판 remake candidates (User 2026-09-26: an economy Decoration as strong as 훈련소 제휴 간판); the +3 offers are off */
- ['dawn C20','dawnSign',{dawn:'budget',share:.2}],['dawn C30','dawnSign',{dawn:'budget',share:.3}],['dawn buy-20%','dawnSign',{dawn:'buy'}],['dawn wallet+30%','dawnSign',{dawn:'wallet'}],['dawn overhead-25%','dawnSign',{dawn:'overhead'}]];
+ ['dawn C20','dawnSign',{dawn:'budget',share:.2}],['dawn C25','dawnSign',{dawn:'budget',share:.25}],['dawn C30','dawnSign',{dawn:'budget',share:.3}],['dawn buy-20%','dawnSign',{dawn:'buy'}],['dawn wallet+30%','dawnSign',{dawn:'wallet'}],['dawn overhead-25%','dawnSign',{dawn:'overhead'}]];
 const one=(src,a,b)=>{const n=src.split(a).length-1;if(n!==1)throw Error('patch point x'+n+': '+a.slice(0,60));return src.replace(a,b);};
 function load(p){for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
   if(f==='systems/adventurer'&&p.potential)src=one(src,'potential=1+rarity*.06+r.next()*.10','potential=1+rarity*'+p.potential+'+r.next()*.10');
