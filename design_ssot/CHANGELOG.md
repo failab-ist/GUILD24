@@ -3,7 +3,7 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.2 — game feel (타격감), H1 / H5 / H2 / H3 ADOPTED, H4 / H6 PLANNED (User 2026-09-25)
+## v2.9.2 — game feel (타격감), H1 / H5 / H2 / H3 / H4 ADOPTED, H6 PLANNED (User 2026-09-25)
 
 H1 and H5 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
@@ -59,6 +59,14 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   sale / refuse), ui.css (`.counter-tray.held`), audio.js (tickLate / tickLow). Also fixes a RUNTIME UX BUG found on the way:
   the global button `transition:transform .08s steps(2)` swallowed every scripted key motion, so A6's refusal shake was never
   visible; a pressed key now drops that transition. Capture tool tools/qa-sale-beat.cjs.
+- H4 CLOSING receipt ADOPTED (User 2026-09-25): UI_UX §CLOSING — RECEIPT STAMP (the receipt body prints as one 200 ms pass
+  behind one printer tick, never a tick per row; only the 영업 손익 row's number lands as a stamp - 100 ms hold, the NIGHT
+  stamp's 90 ms fall, the tape gives 4 px; profit stamps gold, loss stamps red; the END settlement's 현재 점포 자본 counts up
+  in 320 ms with one `ui` click per Decoration price line it passes, read from the live price list); UI_UX_QA UI-Q-v29-33;
+  ledgers UI_UX / UI_UX_QA; PRESENTATION H4 row ADOPTED. Source: app.js (CLOSING_STAMP, closingSound, playPhase closing / end
+  settlement count-up), audio.js (new synthesised `receipt` cue), ui.css (`.print .profit b` corrected to the actual `--gold`
+  token - the pre-existing colour was a dark green, an IMPLEMENTATION BUG the written "gold for profit" contract already
+  required fixed; found by the separate visual review, not self-reported). Capture tool tools/qa-closing-beat.cjs.
 - Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — reports/v292-bot-harness.md §9-10): the Gate
   Day term climbs at 1.10 per Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ returns to the 0.80 slope carrying the D20 offset; D20 25.3, D29 32.5); levelFactor floor 0.75 → 0.85
   (identical through Lv11); DAY 21~29 move 0.10 of the T2 weight to T3. Measured together (GLT): `reader` all-fresh D30 12.1% →

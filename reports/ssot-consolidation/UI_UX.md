@@ -1237,3 +1237,26 @@ User 2026-09-25 (v2.9.2 H3, PRESENTATION §GAME FEEL BEAT H3): §ORDER — WAREH
   are silent. The till's 보유 골드 counts down to the resolved value in 220 ms. The `발주 완료.` line is unchanged. 일반
   intensity: no hold. Under reduced motion the `order` stamp plays once and every value is resolved at once
 ```
+
+## AMENDMENT — v2.9.2 H4 CLOSING receipt stamp (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H4, PRESENTATION §GAME FEEL BEAT H4): §CLOSING gains the CLOSING — RECEIPT STAMP subsection. Nothing is dropped.
+
+```new
+### CLOSING — RECEIPT STAMP (v2.9.2 H4)
+
+(User 2026-09-25, v2.9.2 H4; principle, contract and impact budget -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT;
+acceptance -> UI_UX_QA UI-Q-v29-33.)
+
+The receipt body (every row of both figure blocks) prints as one pass - the whole body settles within 200 ms behind
+one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `영업 손익`
+row lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
+gives 4 px and settles: gold for a profit, red for a loss, the end colour stated in CSS so reduced motion matches it
+exactly. No `어제보다 +N` line (stays deferred in the v3.0+ router).
+
+The END tape's `점포 자본 정산` block (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; the v2.9.1 rates
+1 / 2 / 3 / 4 / 5% are unchanged) counts its `현재 점포 자본` row up from the account's prior total to the resolved one
+in 320 ms; a quiet `ui` cue marks each Decoration price (500 / 750 / 1000 / 1250, META_v2.8.0.md §DECORATION) the
+count passes on the way, read from the same price list rather than a second copy of the numbers. 일반 intensity: no
+hold. Under reduced motion the receipt prints and stamps at once and the settlement figure resolves at once.
+```

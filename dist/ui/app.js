@@ -71,6 +71,18 @@ let sealCueAt=null;
    ORDER_BEAT.till ms. 일반 intensity: no hold. */
 const ORDER_BEAT={total:320,step:70,hits:3,till:220};
 let orderCueAt=[];
+/* v2.9.2 H4 CLOSING receipt: the body prints as one pass, and only the profit/loss row stamps -
+   reusing the NIGHT stamp's own fall, a fixed 100 ms hold (중요, this screen repeats every Day). */
+const CLOSING_STAMP={hold:100,dip:4};
+let closingCueAt=null;
+/* one printer tick for the whole receipt, then the profit/loss row's own cue on its landing frame;
+   the direction is read off the rendered row so this never re-derives the day's figures itself */
+function closingSound(){clearTimeout(closingCueAt);const s=game.run;if(!s||s.phase!=='closing')return;
+ sound('receipt');
+ const row=$('.p-closing .tape .row.profit');if(!row)return;
+ const kind=row.classList.contains('loss')?'spend':'gold';
+ if(!motionOK()){sound(kind);return;}
+ closingCueAt=setTimeout(()=>sound(kind),CLOSING_STAMP.hold+STAMP_FALL);}
 function sealSound(){clearTimeout(sealCueAt);const s=game.run;if(!s?.finalReport)return;const kind=s.win?'sealwin':'sealfail';
  if(!motionOK()){Sound.play(kind);return;}
  sealCueAt=setTimeout(()=>Sound.play(kind),FINAL_SEAL.hold+STAMP_FALL);}
@@ -174,6 +186,17 @@ function playPhase(phase){
   const form=$('.form');
   if(form)A(form,{translateY:[16,0],opacity:[0,1],duration:280,ease:'outQuad'});
  }
+ /* v2.9.2 H4 CLOSING receipt (UI_UX §CLOSING — RECEIPT STAMP): every row of the two figure blocks
+    settles together in one 200 ms pass - never a tick per row - and only the 영업 손익 row lands as
+    a stamp on a fixed 100 ms hold, reusing the NIGHT stamp's own 90 ms fall and card dip. */
+ if(phase==='closing'){
+  const printed=[...document.querySelectorAll('.p-closing .tape .print>.block,.p-closing .tape .print>.purse')];
+  if(printed.length)A(printed,{opacity:[0,1],translateY:[-4,0],duration:200,ease:'outQuad'});
+  const row=$('.p-closing .tape .row.profit'),val=row?.querySelector('b'),tape=$('.p-closing .tape'),land=CLOSING_STAMP.hold+STAMP_FALL;
+  if(row)A(row,{opacity:{from:0,to:1,duration:40,delay:CLOSING_STAMP.hold,ease:'linear'}});
+  if(val)A(val,{scale:{from:1.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP.hold,ease:'in(3)'}});
+  if(tape)A(tape,{translateY:[{from:0,to:0,duration:land},{to:CLOSING_STAMP.dip,duration:40,ease:'in(2)'},{to:0,duration:150,ease:'outQuad'}]});
+ }
  /* v2.9.2 H1 NIGHT VERDICT STAMP (UI_UX §NIGHT LAYOUT — VERDICT STAMP, PRESENTATION §GAME FEEL BEAT).
     The card arrives the way that return happened (BATCH 3), stands, and the tag is stamped onto
     it: one hard 90 ms fall, the card dipping under it on the landing frame. Weight follows the
@@ -227,6 +250,18 @@ function playPhase(phase){
    if(tape)A(tape,{translateY:[{from:0,to:0,duration:land},{to:v.dip,duration:40,ease:'in(2)'},{to:0,duration:170,ease:'outQuad'}]});
    document.querySelectorAll('.end-tape .closed,.end-tape .reason').forEach(el=>A(el,{opacity:{from:0,to:1,duration:160,delay:land,ease:'outQuad'},
     translateY:{from:-4,to:0,duration:160,delay:land,ease:'outQuad'}}));}
+  /* v2.9.2 H4: 점포 자본 정산's 현재 점포 자본 counts up to its resolved figure - one quiet `ui`
+     click for each Decoration price it passes, read off the live price list rather than a second
+     copy of the numbers. 일반 intensity: no hold. */
+  const settle=game.run?.settlement,capRow=settle&&[...document.querySelectorAll('.end-tape .settlement .row')]
+   .find(r=>r.firstElementChild?.textContent==='현재 점포 자본')?.querySelector('b');
+  if(capRow){const from=settle.capitalAfter-settle.gain,to=settle.capitalAfter;
+   if(to>from){const lines=[...new Set(D.decorations.map(d=>d.price))].filter(p=>p>from&&p<=to);
+    let last=from;const box={v:from};
+    A(box,{v:to,duration:320,ease:'outQuad',onUpdate:()=>{
+     capRow.textContent=Math.round(box.v).toLocaleString();
+     for(const p of lines)if(last<p&&box.v>=p)sound('ui');
+     last=box.v;},onComplete:()=>{capRow.textContent=to.toLocaleString();}});}}
  }
  // SALE reveal: the next back walks up to the counter and turns face up. It only ever
  // moves layers that are already laid out, so nothing shifts and no reflow is queued.
@@ -2085,7 +2120,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound(el.closest('.set')?'quantset':'quantity');render();
   anchorOffer(key,y0);break;}
  case'night-next':s.nightCursor=Math.min(s.results.length,(s.nightCursor||0)+1);if(s.nightCursor>=s.results.length)game.finishNight();game.save();render();
-  nightSound(s.results[s.nightCursor]);break;
+  nightSound(s.results[s.nightCursor]);if(s.phase==='closing')closingSound();break;
  case'event-seen':setModal(null);render();break;
  case'event-again':sound('ui');setModal('event');break;
  case'gates':sound('ui');setModal('gates');break;
@@ -2098,7 +2133,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* §STORE SUPPORT: acquisition is heavier than an ordinary purchase and reads as securing a
     fixture into the store. Deliberately not the Decoration cue and not the unlock cue. */
  case'buy-relic':game.buyRelic(id);setModal(null);render();sound('support');break;
- case'closing':game.finishNight();game.save();render();nightSound(null);break;
+ case'closing':game.finishNight();game.save();render();nightSound(null);closingSound();break;
  case'open':game.open();selected=null;render();healCue();break;
  /* SALE scroll continuity. Opening one good closes another, and when the one that closes
     sits above the viewport the shelf below it slides up by the height of the panel that

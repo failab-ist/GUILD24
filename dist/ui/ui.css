@@ -1650,7 +1650,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .print .profit{margin:11px 0 2px;padding:11px 0 12px;background:none;
  box-shadow:inset 0 3px 0 #2c2418,inset 0 -3px 0 #2c2418}
 .print .profit span{font-weight:600;color:#2c2418}
-.print .profit b{font:500 30px/1 var(--f-led);color:#1f6b3f}
+.print .profit b{font:500 30px/1 var(--f-led);color:var(--gold)}
 .print .profit.loss b{color:#a1372c}
 /* detail accounting reads last, and a figure that did not move is not a result: a zero stays
    printed, because a receipt prints it, but it is not competing for the eye */

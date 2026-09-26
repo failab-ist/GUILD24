@@ -79,7 +79,10 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
     under it. Both land on the stamp's frame with the NIGHT `hit`; neither plays anywhere else. */
  sealwin:[165,247,330,494],sealfail:[165,147],
  /* v2.9.2 H3: the second and third crate of an ORDER cascade - the `order` stamp's root, short and dry */
- crate:[110]};
+ crate:[110],
+ /* v2.9.2 H4: the CLOSING receipt prints as one pass, never a tick per row - a single dry paper
+    tick, the same `order` stamp root played light and short */
+ receipt:[110]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
@@ -210,6 +213,9 @@ const shape={
  sealwin:{hit:1,gain:1.1,dur:.34,type:'triangle',step:.08,layer:{ratio:2,at:.24,dur:1.2,gain:.3},noise:{at:0,dur:.12,gain:.5,hz:1800,q:.7,filter:'bandpass'},duck:.6},
  sealfail:{hit:1,gain:1,dur:.5,type:'sawtooth',step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
  crate:{hit:1,gain:.8,dur:.07,type:'square',step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.45,hz:2600,q:.6,filter:'highpass'},duck:.3},
+ /* v2.9.2 H4: one quiet dry tick for the whole receipt body - lighter and shorter than `crate`,
+    never repeated per row */
+ receipt:{gain:.5,dur:.05,type:'square',attack:.003,noise:{at:0,dur:.04,gain:.3,hz:2400,q:.6,filter:'highpass'},duck:.15},
  final:{gain:1.1,dur:1,type:'sawtooth',step:.3,attack:.08,glide:.98,sampleGain:1.2,accent:true,
   layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also

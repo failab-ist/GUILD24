@@ -1239,3 +1239,32 @@ PASS:
 FAIL:
 - a crate per unit, a count that ticks up unit by unit, a cascade longer than 320 ms, a fourth audible hit, a changed `발주 완료.` line
 ```
+
+## AMENDMENT — v2.9.2 H4 CLOSING receipt stamp (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H4, PRESENTATION §GAME FEEL BEAT H4): UI-Q-v29-33 is added. Nothing is dropped.
+
+```new
+### UI-Q-v29-33 — CLOSING RECEIPT STAMP
+
+(User 2026-09-25, v2.9.2 H4; owner `UI_UX_v2.8.0.md` §CLOSING — RECEIPT STAMP.)
+
+SETUP:
+CLOSING at 390 and 1280, motion on and reduced motion, one Day ending in profit and one in loss; the sequence
+`마감으로` -> receipt printing -> `다음 날`; the END settlement (`점포 자본 정산`) on an account whose prior Store
+Capital sits below at least one Decoration price and a Run that carries it past one or more; frames through the
+stamp landing and through the settlement count.
+
+PASS:
+- every receipt row is on screen together within 200 ms behind one printer tick; nothing prints row by row
+- only the `영업 손익` row stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
+- a profit stamps gold, a loss stamps red, and reduced motion shows the same row, colour and figures at once
+- no `어제보다 +N` line anywhere on the receipt
+- the END `현재 점포 자본` row counts from the account's prior total to the resolved one in 320 ms, with one `ui`
+  click for each Decoration price it passes; a count that crosses no price plays none
+
+FAIL:
+- a tick per receipt row, a second stamp anywhere on the receipt, a profit and a loss reading the same colour, a
+  click that fires off a hardcoded price rather than the current Decoration price list, or a settlement figure
+  that differs between motion and reduced motion
+```
