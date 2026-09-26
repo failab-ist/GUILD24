@@ -1828,6 +1828,18 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
 });
 
+/* UI-Q-v29-38 (UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT, User 2026-09-26, v2.9.5): one thin words-only line under the
+   readout .top, only for an injured departure with a chain behind it; the NPC detail row's wording and number; the % stays in the help */
+test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail number, no %',()=>{
+ const r=fn('readout'),top=r.indexOf("+'</div>'"),line=r.indexOf('class="strain"');
+ assert.ok(top>0&&line>top&&line<r.indexOf('great-signal'),'directly under the readout .top');
+ assert.ok(/n\.injury===1&&Dungeon\.injuredStreak\(n\.records\)>0\?'<p class="strain">연속 부상 출발 '\+Dungeon\.injuredStreak\(n\.records\)\+'회<\/p>':''/.test(r),'injured departures with a chain of 1 or more, the same injuredStreak');
+ assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
+ assert.equal((r.match(/<span class="fore">/g)||[]).length,2,'the .top still holds the two cells');
+ assert.ok(!/strain[^']*%|deathRisk[^;]*strain/.test(r),'no % on the line');
+ assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
+});
+
 /* UI-Q-v29-36 (UI_UX §BUILD MARKER, User 2026-09-26): the opening screen names the build; the deploy stamps the commit */
 test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build, stamped by the deploy',()=>{
  const b=read('dist/build.js');

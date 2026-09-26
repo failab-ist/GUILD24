@@ -664,6 +664,10 @@ function readout(n,extra=null,cls=''){
   +(o.worst?'<span class="fore">환경 대응<b class="env-'+(['취약','불안'].includes(o.worst)?'lack':'ok')+'">'+E(o.worst)+'</b>'
    +tip('환경 대응','게이트의 위험을 얼마나 막을 수 있는지. 충분 · 대응 · 불안 · 취약.')+'</span>':'')
   +'</div>'
+ /* v2.9.5 (User 2026-09-26, COPY_AUDIT §4-25): the % in the 전투 전망 help did not register in play, so the chain that raises it
+    reads here - one thin line, only for an injured departure with a chain behind it (the first adds nothing), the NPC detail
+    row's own wording and number. Words only; the % stays in the help. */
+ +(n.injury===1&&Dungeon.injuredStreak(n.records)>0?'<p class="strain">연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회</p>':'')
  /* v2.9.0 (User 2026-09-24): no always-on Fatigue line under the outlook - current Fatigue is the status strip's
     `피로 N`, the counter tray shows `피로 A → 출발 B` for a chosen Food/Drink that moves it, NIGHT answers the rest. */
  +(signal?'<p class="great-signal">'+E(Copy.great.signal)+'</p>':'')

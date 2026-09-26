@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.4
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.5
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.5
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1353,6 +1353,20 @@ PASS:
 - no presentation branch mutates Outcome, reward, Fatigue, proof, Wallet or Store Gold
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
+
+### UI-Q-v29-38 — SALE STRAIN LINE
+
+(User 2026-09-26, v2.9.5; owner `UI_UX_v2.8.0.md` §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; COPY_AUDIT §4-25.)
+
+PASS:
+- a customer departing injured with an injured-departure chain of {n} >= 1 shows exactly one `연속 부상 출발 {n}회` line directly
+  under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail row
+- a healthy customer (whatever chain their records hold) and an injured customer with no chain show no line
+- the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`
+- `node tools/qa-strain-line.cjs` (in qa:runtime)
+
+FAIL:
+- a %, a verdict word, a second line, a `?`, or the line on a healthy or first-injured customer
 
 ### UI-Q-v29-37 — REPLAY NUDGE
 

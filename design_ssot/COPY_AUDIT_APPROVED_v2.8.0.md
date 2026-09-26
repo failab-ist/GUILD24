@@ -504,6 +504,14 @@ SALE 목적지 판(폰, User 2026-09-25): 첫 줄은 `{위험}`과 `대응 {N} �
 
 행사 추가 구매액이 있으면 기존 `추가 구매 +{N}G`가 그 뒤에 붙는다 (rule owner: UI_UX §SALE — COUNTER TRAY).
 
+## 4-25. SALE 판독 — 연속 부상 출발
+
+**노출 위치**
+> SALE 판독 `.top`(전투 전망 · 환경 대응) 바로 아래 얇은 한 줄. 부상 상태로 출발하는 손님이고 연속 부상 출발이 1회 이상일 때만 (rule owner: UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT).
+
+**현재** (User 2026-09-26, v2.9.5: 실패 시 사망 위험이 `?` 안에만 있어 눈에 들어오지 않았다는 플레이 피드백. %는 그대로 `?` 안, 이 줄은 NPC 상세의 `연속 부상 출발 {n}회` 줄(UI_UX NPC detail)과 같은 문구·같은 숫자)
+> 연속 부상 출발 {n}회
+
 ---
 
 # 5. NPC DETAIL / TRAIT LABEL

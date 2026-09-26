@@ -3,6 +3,14 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.5 — SALE strain line (User 2026-09-26)
+
+- SALE strain line (User 2026-09-26, after the v2.9.4 16-day playtest: 실패 시 사망 위험 sat inside the 전투 전망 `?` and did not
+  register; 7 of the 8 deaths departed injured): a customer departing injured with an injured-departure chain of {n} >= 1 shows one
+  thin line `연속 부상 출발 {n}회` directly under the readout `.top` - the NPC detail row's wording and number, no %, no verdict. The
+  % stays the second line of the `?` (v2.9.0 kept). UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT, UI_UX_QA UI-Q-v29-38,
+  COPY_AUDIT §4-25; ledgers; build marker 2.9.5; ui-guard pin; runtime tools/qa-strain-line.cjs (in qa:runtime).
+
 ## v2.9.4 — replay nudge (User 2026-09-26)
 
 - Replay nudge, "show, never assign" (User 2026-09-26, after the v3.0 prep review with GPT - reports/v3.0-prep.md §3-1): the END

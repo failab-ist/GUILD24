@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.4
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.5
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.5
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -519,6 +519,7 @@ Show:
 - qualitative Hazard Readiness for the known current Hazard state
 - exact 실패 시 사망 위험 % — not as a readout cell: the readout `.top` shows 전투 전망 and 환경 대응 only; the value is the second line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`, same frozen value) and a line of the NPC detail (User 2026-09-24, v2.9.0)
 - existing Injury/Condition state that is already part of that snapshot
+- `연속 부상 출발 {n}회` — one thin, small line directly under the readout `.top` (under 전투 전망), only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the failure Death chance); `{n}` is the NPC detail row's number, the chain of injured departures behind this one; words only — no %, no verdict, no `?`, no new color (User 2026-09-26, v2.9.5)
 
 Do not show:
 - exact expedition Success probability

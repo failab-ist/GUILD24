@@ -1364,3 +1364,18 @@ account's first ending and a manual 현재 지점 포기 print nothing and a man
 - a Decoration named, a list of goals, a remaining-count, a second line, a line on an abandoned Run, or a mark on a Slot
 whose unowned Decorations cost more than the capital
 ```
+
+## AMENDMENT — SALE strain line (User 2026-09-26, v2.9.5)
+
+User 2026-09-26: UI-Q-v29-38 is new. Nothing is dropped.
+
+```new
+### UI-Q-v29-38 — SALE STRAIN LINE
+(User 2026-09-26, v2.9.5; owner `UI_UX_v2.8.0.md` §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; COPY_AUDIT §4-25.)
+- a customer departing injured with an injured-departure chain of {n} >= 1 shows exactly one `연속 부상 출발 {n}회` line directly
+under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail row
+- a healthy customer (whatever chain their records hold) and an injured customer with no chain show no line
+- the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`
+- `node tools/qa-strain-line.cjs` (in qa:runtime)
+- a %, a verdict word, a second line, a `?`, or the line on a healthy or first-injured customer
+```

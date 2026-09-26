@@ -8,13 +8,15 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(`d6fcfbd`) · V2_9_3_CLOSED(`229df9
 - repository: `failab-ist/GUILD24`. main = v2.9.4(PR #13 다회차 넛지, `630b6d0`, Pages #185). 배포 빌드는 첫 화면 왼쪽 위 `v2.9.4 · 커밋`으로 확인한다.
 - 태그: `v2.9.0` → `3d0ddc6`, `v2.9.1` → `d23d076`(원격에 있음). `v2.9.2` → `d6fcfbd`, `v2.9.3` → `229df97`, `v2.9.4` → `630b6d0`은 User가 걸어야 함
   (WORK 세션은 태그 push가 막혀 있다).
-- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 / v2.9.2 / v2.9.3 / v2.9.4). 닫힌 버전의 보고서·측정 도구는 `archive/`(`archive/README.md`가 옛 경로 → 새 경로 표).
+- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 / v2.9.2 / v2.9.3 / v2.9.4 / v2.9.5). 닫힌 버전의 보고서·측정 도구는 `archive/`(`archive/README.md`가 옛 경로 → 새 경로 표).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - 현행 밸런스(4차까지, v2.9.3에서 바뀐 뒤 그대로): 근거 `archive/v2.9.2/v292-bot-harness.md` §7~11. User 런 보정 도구 `tools/calibrate-bot-v292.cjs`(현행).
 
 ## In Progress
 
-- 없음. 다음은 배포 빌드(v2.9.4)로 User 프레쉬 플레이 데이터를 받아 4차 밸런스와 다회차 넛지를 확인하는 것. 데이터에는 첫 화면의 커밋 번호를 같이 받는다.
+- v2.9.5 (User 2026-09-26, 16일차 플레이 피드백): SALE 판독 `.top` 아래 `연속 부상 출발 {n}회` 한 줄(부상 출발 + 연속 1회 이상만). CHANGELOG §v2.9.5.
+  User 16일차 판은 `reports/v3.0-prep.md` §2-1-A에 기록. 사망 8명 중 7명이 부상 출발이었다(실패 중 사망: 부상 출발 32% / 건강 출발 3%). 수치 조정은 하지 않았다.
+- 다음 배치(User 승인): 측정 봇을 성향 밴드로 정리 — `reader`를 기준(디렉터 성향) 봇으로 고정하고 양 끝 페르소나 2개(신중형 · 공격형) 추가. 밸런스 판정은 세 성향 모두로 한다.
 - 후보 감사(User 미결정, 손대지 않음): Final 확정승 여유(파티/보스 비율), RoyalCert 후반 경제.
 - v3.0 준비 목록(WORK 정리본, Design 아님): `reports/v3.0-prep.md`. 그중 다회차 넛지(§3-1)는 v2.9.4로 반영됨.
 

@@ -2309,6 +2309,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .slip.deep .body{display:block}
 .slip.deep .body+.body{margin-top:6px}
 .great-signal{margin:8px 0 0;font:600 13px/1.5 var(--ui);color:#e6c766}
+/* v2.9.5 SALE strain line (COPY_AUDIT §4-25): thin and small under 전투 전망, in the readout's own label tone */
+.readout .strain{margin:-2px 0 0;font:500 12px/1.3 var(--ui);color:#b3a282}
 .deep-offer>summary{color:#c9b0e6}
 .deep-offer button{background:#3b2b4d}
 .deep-taken{margin:0 0 14px;padding:12px 14px;background:#00000038;box-shadow:inset 0 0 0 2px #ffffff0f}

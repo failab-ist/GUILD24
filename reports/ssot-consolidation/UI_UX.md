@@ -1341,3 +1341,12 @@ D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run record
 - a Slot row whose Slot holds a Decoration the account does not own and can afford now carries a small `들일 수 있음` mark at its
 end (a current state, not a "new" flag; no Decoration named); exact copy -> COPY_AUDIT §1-8 (User 2026-09-26, v2.9.4)
 ```
+
+## AMENDMENT — SALE strain line (User 2026-09-26, v2.9.5)
+
+User 2026-09-26 (the 16-day playtest: 실패 시 사망 위험 inside the `?` did not register): §SALE — PRE-SUPPLY EXPEDITION OUTLOOK —
+EXACT gains one Show row. Nothing is dropped.
+
+```new
+- `연속 부상 출발 {n}회` — one thin, small line directly under the readout `.top` (under 전투 전망), only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the failure Death chance); `{n}` is the NPC detail row's number, the chain of injured departures behind this one; words only — no %, no verdict, no `?`, no new color (User 2026-09-26, v2.9.5)
+```
