@@ -545,7 +545,7 @@ D30     = 5%
 
 ## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3 / §4 / §6): start Gold 700G; segmented Death limit 5 / 8 / 11 with 추모 방명록 +2 and 위령제 +1 on every later segment; Store Capital rates 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects (+3 offers · 30% · 50G · 55% above 평범 · 65% · 45% · three saves). Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md` §3 / §4 / §6): start Gold 700G; segmented Death limit 5 / 8 / 11 with 추모 방명록 +2 and 위령제 +1 on every later segment; Store Capital rates 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects (+3 offers · 30% · 50G · 55% above 평범 · 65% · 45% · three saves). Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```new
 (User 2026-09-25, v2.9.1 balance): back to 1 / 2 / 3 / 4 / 5% with the cheaper Decoration prices below. Buying a Decoration inside the first Run is still not a goal.
@@ -567,5 +567,5 @@ wall    길드 제휴 현판 / 의무실 현판        1000 Store Capital
 counter 알뜰 금고 / 추모 방명록             750 Store Capital
 display 프리미엄 쇼케이스 / 구급품 진열장     500 Store Capital
 is the cheapest so a first Decoration is the earliest within reach.
-User decision 2026-09-25 (v2.9.1 balance): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`reports/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
+User decision 2026-09-25 (v2.9.1 balance): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`archive/v2.9.1-balance/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
 ```

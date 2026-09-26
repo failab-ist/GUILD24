@@ -38,10 +38,8 @@ Use the scripts currently defined in `package.json`:
 - `npm run longitudinal`
 - `npm run hooks`
 - `npm run mastery`
-- `npm run remeasure`
 - `npm run dev`
 - `npm run qa:runtime`
-- `npm run qa:presentation:batch{1-4}:{fast|before|after}`
 
 `npm run qa:runtime` runs the pass/fail browser harnesses (D0 flow, D30 FINAL prep / BOSS CONFIRM /
 FINAL->END / Boss backdrops) and exits non-zero on any failure. The other `tools/qa-*.cjs` are capture

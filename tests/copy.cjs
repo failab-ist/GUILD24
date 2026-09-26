@@ -39,7 +39,7 @@ test('§11.1/§11.2: every repeated situation has a real Variant Pool at its v2.
 
 /* COPY_WORLD_VOICE_v2.8: "Exact active ARRIVAL / TRAIT / SALE / NIGHT / DEATH pools are owned by
    COPY_AUDIT_APPROVED". Each Source pool IS that owner's `현재` list, line for line - the guard whose
-   absence let the v2.8 expansion ship unapproved lines (reports/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md). */
+   absence let the v2.8 expansion ship unapproved lines (archive/v2.8/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md). */
 const POOL_SECTION={'visit.first':'16-1','visit.back':'16-2','visit.hurt':'16-3','visit.regular':'16-4','visit.helped':'16-5',
  'visit.trait.frugal':'17-1','visit.trait.thrifty':'17-2','visit.trait.coward':'17-3','visit.trait.liar':'17-4','visit.trait.eater':'17-5',
  'visit.trait.greed':'17-6','visit.trait.shy':'17-7','visit.trait.social':'17-8','visit.trait.collector':'17-9','visit.trait.aloof':'17-10',

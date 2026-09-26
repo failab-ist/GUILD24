@@ -348,7 +348,7 @@ No new Run starts by itself. On that screen Decorations can be bought and equipp
 
 ## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3 / §4 / §6): start Gold 700G; segmented Death limit 5 / 8 / 11 with 추모 방명록 +2 and 위령제 +1 on every later segment; Store Capital rates 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects (+3 offers · 30% · 50G · 55% above 평범 · 65% · 45% · three saves). Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md` §3 / §4 / §6): start Gold 700G; segmented Death limit 5 / 8 / 11 with 추모 방명록 +2 and 위령제 +1 on every later segment; Store Capital rates 1 / 2 / 3 / 4 / 5%; Decoration prices 500 / 750 / 1000 / 1250; Decoration effects (+3 offers · 30% · 50G · 55% above 평범 · 65% · 45% · three saves). Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 startGold=1000G

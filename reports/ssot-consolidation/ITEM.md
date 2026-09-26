@@ -738,7 +738,7 @@ The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no
 
 ## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §5): Counter values by Rarity with the 강인함 +4 rule; Potion 8 / 14 / 20 / 28; 간단 도시락 강인함 12 · 불룡볶음면 강인함 8 · 길드 특제 도시락 강인함 16 · 에너지드링크 기동 17 · Epic drinks 22 / 24; Fatigue recovery 삼각김밥 5 · 컵라면 3 · 간단 도시락 6 · 불룡볶음면 3 · 길드 특제 도시락 7; prices raised with the effect (+15% / +20% / Epic +10%); Sell = Buy × 2 for every Item. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md` §5): Counter values by Rarity with the 강인함 +4 rule; Potion 8 / 14 / 20 / 28; 간단 도시락 강인함 12 · 불룡볶음면 강인함 8 · 길드 특제 도시락 강인함 16 · 에너지드링크 기동 17 · Epic drinks 22 / 24; Fatigue recovery 삼각김밥 5 · 컵라면 3 · 간단 도시락 6 · 불룡볶음면 3 · 길드 특제 도시락 7; prices raised with the effect (+15% / +20% / Epic +10%); Sell = Buy × 2 for every Item. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 | battlelunch | 영웅 결전 도시락 | Food E | 210 / 440 | 강인함 +18, Supply 9 | 2d |

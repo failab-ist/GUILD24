@@ -7,7 +7,7 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 
 - repository: `failab-ist/GUILD24`
 - 태그: `v2.9.0` → `3d0ddc6`, `v2.9.1` → `d23d076`. 둘 다 원격에 있음.
-- v2.9.1 밸런스: 완료 · main 병합 · 태그 완료(User 2026-09-25). 결정값 `reports/v29-balance-agreements.md`, 측정 `reports/v29-balance-ideal.md`, owner 변경 `design_ssot/CHANGELOG.md` §v2.9.1.
+- v2.9.1 밸런스: 완료 · main 병합 · 태그 완료(User 2026-09-25). 결정값 `archive/v2.9.1-balance/v29-balance-agreements.md`, 측정 `archive/v2.9.1-balance/v29-balance-ideal.md`, owner 변경 `design_ssot/CHANGELOG.md` §v2.9.1.
 - v2.9.2 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`:
   - PR #5로 main에 병합됨(`dd3feb4`, Pages 배포): H1(`8c1c6bd`) + 플레이 리포트 수정 `158d001` / `0510b53` / `61b9734` / `771ba8f`.
   - PR #6으로 main에 병합됨(`9414293`, Pages 배포 성공): 진열대 한 줄 · SALE 트레이 접기 · 게이트 방문 최소 1명 · 발주 플로팅 오늘 줄 · D30 흐름 · H5 봉인 · H1 만반의 준비 반전 · 밸런스(대성공 EXP 1.10, slope 1.50, 정가 ×0.90).

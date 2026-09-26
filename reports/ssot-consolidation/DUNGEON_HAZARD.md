@@ -986,7 +986,7 @@ other surviving path = 0.18
 
 ## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md`): 중상 Fatigue gain 0; Severe shares 0.36 / 0.11; the repeated-strain cut counts consecutive injured departures only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing; hidden bad-luck preparation assist; expedition Wallet 대성공 / 성공 1.00; Gate Day term 1.20 / 0.80. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md`): 중상 Fatigue gain 0; Severe shares 0.36 / 0.11; the repeated-strain cut counts consecutive injured departures only; 만반의 준비 ×0.80 and Level factor on the failure Death roll; retreat healing; hidden bad-luck preparation assist; expedition Wallet 대성공 / 성공 1.00; Gate Day term 1.20 / 0.80. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 0.42

@@ -135,9 +135,9 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
 
 ## v2.9.1 — balance (User decisions 2026-09-25); owners amended, Source adopted, CLOSED 2026-09-25 (main `d23d076`, tag `v2.9.1`)
 
-The v2.9.0 BALANCE FINDING is resolved as its own version (User 2026-09-25). Values: `reports/v29-balance-agreements.md`;
-measurements and the gaps the User accepted: `reports/v29-balance-ideal.md`. Source adoption ran in a separate session
-(branch `claude/v291-balance-source-adoption`, batches 1-6, `reports/v291-implementation-handoff.md`) and is complete.
+The v2.9.0 BALANCE FINDING is resolved as its own version (User 2026-09-25). Values: `archive/v2.9.1-balance/v29-balance-agreements.md`;
+measurements and the gaps the User accepted: `archive/v2.9.1-balance/v29-balance-ideal.md`. Source adoption ran in a separate session
+(branch `claude/v291-balance-source-adoption`, batches 1-6, `archive/v2.9.1-balance/v291-implementation-handoff.md`) and is complete.
 Each owner amendment is listed with its commit.
 
   - DUNGEON_HAZARD (8854c89): 중상 Fatigue 0; Severe shares .36 / .11; repeated-strain cut on consecutive injured departures
@@ -153,7 +153,7 @@ Each owner amendment is listed with its commit.
   - EVENT (c03d205, then the conditions below): 23. 위령제.
   - UI_UX / COPY_AUDIT (c862a7c): `사망 {n} / {limit} · D{end}까지` always on MORNING and ORDER.
   - QA (5a9a645, 06a2de9): DUNGEON_ITEM_QA, ECONOMY_ORDER_QA, CORE_RUN_QA (RUN-Q-v29-DL), UI_UX_QA (UI-Q-v29-26).
-  - 7-b closed: the remaining-Supply buffer stays. Known measured gaps accepted by the User are in `reports/v29-balance-ideal.md`
+  - 7-b closed: the remaining-Supply buffer stays. Known measured gaps accepted by the User are in `archive/v2.9.1-balance/v29-balance-ideal.md`
     §종결 측정.
   - Follow-up decisions (User 2026-09-25): 위령제 uses the ordinary Event conditions (TYPE Run / Opportunity, WEIGHT 1.0, may
     recur, +1 each time); a contextual 만반의 준비 tutorial (UI_UX §만반의 준비 TUTORIAL); an Epic hybrid stays below every
@@ -167,7 +167,7 @@ Each owner amendment is listed with its commit.
     (`5f68bda`), EVENT 위령제 + NPC `연속 부상 출발` 줄 (`dd0fba0`). `npm test` / `npm run ssot:check`(21/21) /
     `npm run qa:runtime`(5/5) / `npm run qa:visual` all PASS (`781ce5f` fixes a v2.9.1-only qa fixture seed that hit the
     new D1-10 Death limit before D6). Native remeasurement — the shipped Source itself, no rule patches — against
-    `reports/v29-balance-ideal.md` §종결 측정 is recorded in that report's §네이티브 재측정 (`2f0753d`): several metrics
+    `archive/v2.9.1-balance/v29-balance-ideal.md` §종결 측정 is recorded in that report's §네이티브 재측정 (`2f0753d`): several metrics
     exceed the handoff's ±4%p, accepted by the User as sampling-error-range known differences (not tuned).
 
 ## v2.9.0 — implementation complete 2026-09-25; the BALANCE FINDING moved to v2.9.1 (User decisions 2026-09-24/25)
@@ -177,7 +177,7 @@ Theme: easy to learn, hard to master. Readability, onboarding, a visible transac
 Docs-first. Each owner amendment is listed when committed.
 
 State 2026-09-25: every batch below is in Source on `claude/ux-simplify-handoff-7oorbc` (npm test, ssot:check and qa:runtime PASS).
-The BALANCE FINDING (`reports/v29-balance-finding-handoff.md`) and 7-b were decided in the balance session and are v2.9.1 (User 2026-09-25).
+The BALANCE FINDING (`archive/v2.9.1-balance/v29-balance-finding-handoff.md`) and 7-b were decided in the balance session and are v2.9.1 (User 2026-09-25).
 
 - Quick fix (User 2026-09-25): SALE desk layout — on a desk the dossier column is its own area down to the dock, the counter
   tray sits under the shelf column only, and the two columns scroll separately; a redraw keeps both positions
@@ -244,7 +244,7 @@ The BALANCE FINDING (`reports/v29-balance-finding-handoff.md`) and 7-b were deci
   the counter tray for a chosen Food/Drink, the SUPPLY coach anchors there (COPY_AUDIT §3-5 / §3-7 / §4-17 / §6-6
   band examples, UI_UX, DUNGEON_HAZARD boundary, DUNGEON_ITEM_QA, UI_UX_QA).
 - Rules adoption in Source (I-2, commits 67e63c3 / 22c288c / 840fbfe): engine, presentation and copy follow the D-2 rules;
-  re-measure vs 6cb62b4 in reports/remeasure-v29-summary.md (BALANCE FINDING: reported, not tuned).
+  re-measure vs 6cb62b4 in archive/v2.9.1-balance/remeasure-v29-summary.md (BALANCE FINDING: reported, not tuned).
 - Onboarding / ORDER in Source (I-3): DAY 1~3 task line on every phase, first-ORDER coach gates -> offer -> quantity ->
   confirm -> reroll, Gate detail full Hazard sentences + destination-plate ?, ORDER today-fit emphasis and per-Gate
   visitor counts, D0 briefing two lines, 점주 가이드 처음 3일 + 자세히.

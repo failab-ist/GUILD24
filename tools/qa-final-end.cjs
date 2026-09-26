@@ -2,10 +2,10 @@
 // The qa-boss-confirm path, pressed through: real run to D5, qa-visual's controlled D30, then real
 // controls - 3 picked, 원정대 확정, one 보급 to the first member (the others go empty-handed),
 // 마왕성으로 출발, 최종 원정 시작 (double-clicked, then Enter / Space repeats). The resolver decides:
-//   clear - the members get the canonical grown-party fixture (tests/final.cjs FINAL 10 / qa-end-states
+//   clear - the members get the canonical grown-party fixture (tests/final.cjs FINAL 10 / archive/v2.8/tools/qa-end-states.cjs
 //           `grown`: Lv 40, fixed Stats) before they are picked; nothing about the result is written
 //   fail  - the qa-visual party as it stands
-// and a natural (non-Final) ending from the qa-end-states baseline seed (death limit).
+// and a natural (non-Final) ending from the archive/v2.8/tools/qa-end-states.cjs baseline seed (death limit).
 // Checks the resolved truth against END, one resolution / settlement / unlock, the sent-off party and
 // its last supply against the Final snapshot, no FINAL leak, and reload idempotence.
 //   node tools/qa-final-end.cjs <out-dir> [widths] [BOSS]
@@ -138,7 +138,7 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
     await restore(acct0);
    }
 
-   // NON-FINAL: a natural Run to its own end from the qa-end-states baseline seed
+   // NON-FINAL: a natural Run to its own end from the archive/v2.8/tools/qa-end-states.cjs baseline seed
    await p.evaluate(`(()=>{Guild24.game.autosave=false;})()`);
    await p.evaluate(()=>localStorage.clear());await p.reload({waitUntil:'load'});
    await p.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-end-1');
