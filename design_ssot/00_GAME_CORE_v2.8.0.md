@@ -3,7 +3,7 @@
 DOC=00_GAME_CORE
 OWNER=game_core,core_fantasy,core_loop,system_ownership,cross_run_identity
 DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/00_GAME_CORE_v2.8.0-patch.md,history/00_GAME_CORE_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/00_GAME_CORE.md
