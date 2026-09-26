@@ -336,7 +336,7 @@ first line becomes `-> 출전 NPC 선택` under the new `마지막 발주` head.
 ```new
 마지막 발주
 -> 출전 NPC 선택
-(User 2026-09-25, recommended form taken while the User is away - to reconfirm.) D30 opens on the last order - the
+(User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3.) D30 opens on the last order - the
 ordinary order form, optional, confirmed on its own 발주 확정; `원정대 선택` moves on once no cart is pending. In 출전 NPC
 선택 a roster card opens that adventurer's notebook (Stats, Traits, equipment, condition, expedition records) and the pick
 or release is made from the notebook's footer. FINAL 준비 shows the Stat grid of the adventurer being supplied; the order
