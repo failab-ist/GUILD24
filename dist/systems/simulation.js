@@ -186,7 +186,7 @@ function playRun(g,out,ctx){
     that outlookFor() shows as 전투 전망 · 환경 대응 · 사망 위험 - trying each shelf Item in the Bag and taking the one that
     moves that reading most. It never sends a customer out with an empty slot it could fill: 정가 when the purse covers
     it, else 50% (the User sold 30% of Items at 50%), and 150% only for a customer already 우세 and 충분 with a 단골's
-    purse. Ordering, rerolls, Store Support and the Final are `balanced`'s (the Store Support offer is not the player's
+    purse (refined 2026-09-26 below: a regular from D10, one Item per visit). Ordering, rerolls, Store Support and the Final are `balanced`'s (the Store Support offer is not the player's
     to fix). Pure reads only: no RNG draw, no write. */
  const readScore=(n,pack,d)=>{const v={...n,pack},e=G.Dungeon.prepare(v,d,s.facilities).effects;
   const ratio=Math.min(1.5,G.Dungeon.preparedPower(e)/(d.power||1));
@@ -440,9 +440,13 @@ function playRun(g,out,ctx){
    const d=g.claimedGateFor(n);let attempts=0;
    if(reader)while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){
     const base=readScore(n,n.pack,d),o=G.Dungeon.estimate(n,d,s.facilities),seen=new Set(),picks=[];
-    const strong=o==='우세'&&d.hazards.every(h=>G.Dungeon.hazardState(h,G.Dungeon.prepare(n,d,s.facilities).effects,d).label==='충분');
+    /* 150% the way the User used it (16 of 270 sales, all from D10): one Item per visit, to a regular (12+ visits in the
+       User's Run; 8+ visits or loyalty 50+ here) whose purse covers it, the other slot at 정가. A refusal at 150% leaves
+       정가 open for the same Item (only higher prices close). */
+    const overToday=n.history.some(h=>h.day===s.day&&h.mode==='overcharge'),regular=n.visits>=8||n.loyalty>=50;
+    const strong=s.day>=10&&regular&&!overToday;
     for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);const it=D.itemBy[st.item];
-     const modes=strong&&n.loyalty>50&&n.money>it.sell*2?['overcharge','full','half']:['full','half'];
+     const modes=strong?['overcharge','full','half']:['full','half'];
      const mode=modes.find(m=>!n.refused.includes(it.id+':'+m)&&g.interest(n,it,m).debit<=n.money);if(!mode)continue;
      /* 50% is a margin of zero (Sell = Buy x 2): it is the answer to a short purse, not to a first refusal */
      picks.push({st,mode,gain:readScore(n,[...n.pack,it.id],d)-base+(st.expires?1/(st.expires-s.day+1):0)-(mode==='half'?4:0)});}
