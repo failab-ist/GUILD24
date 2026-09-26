@@ -35,7 +35,6 @@ Use the scripts currently defined in `package.json`:
 - `npm run audit`
 - `npm run qa:visual`
 - `npm run assets`
-- `npm run report`
 - `npm run longitudinal`
 - `npm run hooks`
 - `npm run mastery`
