@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-26
-STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED_TAGGED(main `d6fcfbd`, 태그 `v2.9.2`) · V2_9_3 main 병합·태그 `v2.9.3`(이 PR 머지 뒤)
+STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 User가 걸어야 함) · V2_9_3_CLOSED(main 병합, 태그 `v2.9.3`는 User가 걸어야 함)
 
 ## Current
 
@@ -14,7 +14,7 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED_TAGGED(main `d6fcfbd`, 태그 `v2.9
   - PR #7으로 main에 병합됨(`49c853b`, 2026-09-26): H2 SALE 계산대 · H3 ORDER 확정 · 봇 하네스 `reader`와 측정 도구 · 2차 밸런스 · 3차 밸런스(G1 + L2 + T).
   - PR #8(`claude/v2-9-2-h4-closing-j24s8w`)으로 main에 병합됨(`d6fcfbd`): H4 CLOSING 마감 영수증 · H6 캡처와 FINAL 진입 비트 — **v2.9.2 H1~H6 전 배치 완료**.
   - PR #9로 main에 병합됨(`dbc2736`): 전체 초기화 seed 버그 수정 · 4차 밸런스 · 마왕 조사 모달 대기.
-  - v2.9.3 마무리(이 브랜치 → main, 태그 `v2.9.3`): 빌드 표식(첫 화면 `v2.9.3 · 커밋`, 콘솔, `Guild24.build`, 배포 시 커밋 기록) ·
+  - v2.9.3 마무리(이 브랜치 → main; 태그 push는 WORK 세션에서 막혀 있어 User가 건다): 빌드 표식(첫 화면 `v2.9.3 · 커밋`, 콘솔, `Guild24.build`, 배포 시 커밋 기록) ·
     qa:visual 하네스 복구(전부 통과) · ORDER `gates` 코치 미표시 버그 수정 · 문서 헤더 버전 정리. 내용은 CHANGELOG §v2.9.3.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - last tagged release: `v2.9.1`; completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`

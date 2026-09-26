@@ -5,8 +5,8 @@ the owner headers and in the git tag.
 
 ## v2.9.3 — balance fourth pass, two runtime fixes, build marker (User 2026-09-26)
 
-Version routing (User 2026-09-26): v2.9.2 closes at `main` `d6fcfbd` (H1~H6 all adopted, balance through the third pass) and is tagged
-there; everything merged after it is v2.9.3. Owner headers now carry the version they last changed in (VERSION POLICY; the v2.9.2
+Version routing (User 2026-09-26): v2.9.2 closes at `main` `d6fcfbd` (H1~H6 all adopted, balance through the third pass), where its tag
+goes; everything merged after it is v2.9.3. Owner headers now carry the version they last changed in (VERSION POLICY; the v2.9.2
 bumps had not been made and are made here with the v2.9.3 ones).
 - Build marker (User 2026-09-26): the opening screen shows a small `v2.9.3 · {commit}` in its corner and the console prints it on load;
   the Pages deploy stamps the commit. UI_UX §BUILD MARKER, UI_UX_QA UI-Q-v29-36; ledgers; ui-guard pin.
@@ -33,7 +33,7 @@ bumps had not been made and are made here with the v2.9.3 ones).
   the reset was reopened on the same seed - and the same Boss - after it. The reset now drops the plan with the rest of the Run
   state. No design, RNG, seed-format or save change. Runtime regression tools/qa-reset-seed.cjs (in qa:runtime).
 
-## v2.9.2 — game feel (타격감), H1 / H2 / H3 / H4 / H5 / H6 ADOPTED (User 2026-09-25); CLOSED 2026-09-26 (main `d6fcfbd`, tag `v2.9.2`)
+## v2.9.2 — game feel (타격감), H1 / H2 / H3 / H4 / H5 / H6 ADOPTED (User 2026-09-25); CLOSED 2026-09-26 at main `d6fcfbd` (tag `v2.9.2` to be set there by the User - tag pushes are not available to WORK sessions)
 
 H1~H6 are all adopted in Source (entries below, in the order they happened). PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
