@@ -395,8 +395,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
 test('DUNGEON_HAZARD v2.9.0 §FATIGUE STAT PENALTY / DUN-Q-v29-1: five bands on 0~40, judged at departure',()=>{
  const d={...D.dungeonBy.slime,day:6,tier:1,hazards:['poison'],scale:1,power:40,reward:40};
  const base=Adventurer.create(new RNG('bands'),1,10,Meta.fresh());
- // level pinned to 1 so failureDeathRisk's own levelFactor (DUNGEON_HAZARD §Preparation / Level
- // Death reduction) stays 1.00 and does not confound this test's Fatigue-band-only comparisons.
+ // level pinned to 1 (a fixed fixture; Level no longer moves the Death roll since v2.9.2 fourth pass).
  const npc=(f,pack=[])=>({...JSON.parse(JSON.stringify(base)),fatigue:f,traits:[],pack,level:1});
  const at=f=>Dungeon.prepare(npc(f),d).effects,clear=at(9);
  const near=(a,b)=>Math.abs(a-b)<1e-9;
@@ -698,8 +697,8 @@ test('RESULT-PROOF: the departure snapshot freezes Equipment before the Outcome\
  const src=read('dist/systems/dungeon.js');
  assert.ok(/equipment:\{power:beforeEquipment,name:n\.equipment\.name\}/.test(src),
   'the departure snapshot captures equipment.power/name before this resolution\'s own equipment-tier win');
- assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury,level:beforeLevel\};/.test(src),
-  'stats/equipment/traits/fatigue/injury/level are captured together, in one snapshot, before any of this resolution\'s own mutations');
+ assert.ok(/const departure=\{stats:beforeStats,equipment:\{power:beforeEquipment,name:n\.equipment\.name\},traits:n\.traits,fatigue:n\.fatigue,injury:n\.injury\};/.test(src),
+  'stats/equipment/traits/fatigue/injury are captured together, in one snapshot, before any of this resolution\'s own mutations (Level left it with the Level factor, v2.9.2 fourth pass)');
  assert.ok(/prepare\(\{\.\.\.departure,pack\}/.test(src),
   'shadowOutcome() prepares every shadow against that frozen departure snapshot, never against `n`');
  // and live behaviourally: an equipment-tier win during THIS resolution must not change what a
@@ -1066,12 +1065,11 @@ test('DUNGEON_HAZARD §Tier generation (v2.9.2 third pass, User 2026-09-26): DAY
   if(d<21)assert.ok(w[2]<=.172+1e-9,'D'+d+' carries no late shift');}
 });
 
-test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, v2.9.1 balance)',()=>{
+test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, v2.9.1 balance; Level part removed 2026-09-26)',()=>{
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],
   weighted:a=>a[0],shuffle:a=>a.slice()};};
- /* v2.9.2 third pass (User 2026-09-26): floor .85 - identical through Lv11 */
- for(const [lv,exp] of [[1,1],[2,.985],[10,.865],[11,.85],[12,.85],[20,.85]])
-  assert.ok(Math.abs(Dungeon.levelFactor(lv)-exp)<1e-9,'levelFactor('+lv+') = '+exp);
+ /* v2.9.2 fourth pass (User 2026-09-26): the Level factor is gone - nothing Level-shaped is exported */
+ assert.equal(Dungeon.levelFactor,undefined,'no levelFactor');
  assert.equal(Dungeon.PREPARED.factor,.80);assert.equal(Dungeon.PREPARED.bandSevere,.36);
  const base={injury:0,pack:['rice','rice']};
  assert.equal(Dungeon.fullyPrepared(base,10),true,'healthy, Fatigue<20, 2+ Items -> fully prepared');
@@ -1087,9 +1085,10 @@ test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, 
     [noise, envRoll, deathRoll], and - only on a hit in the removed band - a 4th (bandRoll). */
  for(const level of [1,2,10,20])for(const prepared of [false,true]){
   const n=npc(level,prepared);
-  const raw=Dungeon.failureDeathRisk({...n,fatigue:0},d).chance/Dungeon.levelFactor(level); // undo the SALE snapshot's own levelFactor to read the pure failureDeathChance
+  const raw=Dungeon.failureDeathRisk({...n,fatigue:0},d).chance; // the SALE snapshot is the pure failureDeathChance
+  assert.ok(Math.abs(raw-Dungeon.failureDeathRisk({...n,fatigue:0,level:1},d).chance)<1e-12,'level '+level+' reads the same chance as Lv1');
   const preparedFactor=prepared?Dungeon.PREPARED.factor:1;
-  const rolled=raw*preparedFactor*Dungeon.levelFactor(level);
+  const rolled=raw*preparedFactor;
   const below=Dungeon.resolve(JSON.parse(JSON.stringify(n)),d,scripted([.5,.999,Math.max(0,rolled-1e-6)]));
   assert.equal(below.outcome,'사망','level '+level+' prepared '+prepared+': a roll inside the reduced band is 사망');
   if(rolled<raw-1e-9){
@@ -1102,21 +1101,24 @@ test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, 
    }
   }
  }
- // SALE snapshot: levelFactor applied, preparedFactor never (Bag is excluded from the snapshot)
+ // SALE snapshot: no Level factor, preparedFactor never (Bag is excluded from the snapshot)
  const lv10=npc(10,false);
  const snap=Dungeon.failureDeathRisk(lv10,d);
  const rawChance=Dungeon.failureDeathRisk({...lv10,level:1},d).chance;
- assert.ok(Math.abs(snap.chance-rawChance*Dungeon.levelFactor(10))<1e-9,'SALE chance = raw x levelFactor only');
+ assert.ok(Math.abs(snap.chance-rawChance)<1e-9,'SALE chance = raw, the same at Lv10 as at Lv1');
+ // an unprepared Lv20 failure inside the old Level band (raw x .85 .. raw) is 사망 now
+ const lv20=npc(20,false),raw20=Dungeon.failureDeathRisk(lv20,d).chance;
+ assert.equal(Dungeon.resolve(JSON.parse(JSON.stringify(lv20)),d,scripted([.5,.999,raw20*.95])).outcome,'사망','a roll the old Lv20 factor turned away is 사망');
  // a carried Bag changes combat/environment prep as it always has (rice raises 강인함, which
  // lowers the deficit terms) - what must NEVER apply on top of that is preparedFactor itself.
  // Reconstruct the raw chance straight from DEATH/prepare() and confirm the SALE snapshot is
- // exactly that x levelFactor, with no further x0.80.
+ // exactly that, with no further x0.80.
  const lv10Prepared=npc(10,true);
  const p=Dungeon.prepare(lv10Prepared,d),required=d.power||1;
  const combatDeficit=Math.max(0,Math.min(1,(required-Dungeon.preparedPower(p.effects))/required));
  const environmentDeficit=p.hazards.length?p.hazards.reduce((v,h)=>v+Math.max(0,Math.min(1,h.gap/h.threat)),0)/p.hazards.length:0;
  const expectedHealthy=Math.max(0,Math.min(.30,combatDeficit*Dungeon.DEATH.combat+environmentDeficit*Dungeon.DEATH.environment));
- assert.ok(Math.abs(Dungeon.failureDeathRisk(lv10Prepared,d).chance-expectedHealthy*Dungeon.levelFactor(10))<1e-9,
+ assert.ok(Math.abs(Dungeon.failureDeathRisk(lv10Prepared,d).chance-expectedHealthy)<1e-9,
   'a carried Bag only ever moves the SALE snapshot through the ordinary combat/environment deficit terms, never through preparedFactor');
 });
 

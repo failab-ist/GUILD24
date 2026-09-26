@@ -813,7 +813,7 @@ flat modifiers, and it does not compound with them.
 
 ### UTILITY
 27. 후방 창고 증설
-- 후방 창고 증설: inventory capacity +10
+- 후방 창고 증설: inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
 
 28. 본사 추가발주권
 - 본사 추가발주권: from the next ORDER-offer generation, offer candidate count +2

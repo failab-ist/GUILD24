@@ -170,6 +170,7 @@ function stage(phase,label,head,body,dock,attrs=''){
 // absent or the player asked for reduced motion, and none of them touch game state.
 const motionOK=()=>typeof anime==='object'&&!!anime.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
 let lastTill=null;
+const BOSS_HOLD=420;let bossHold=null; // UI_UX §BOSS REVEAL — MORNING LANDS FIRST
 function playPhase(phase){
  if(!motionOK())return;
  const A=anime.animate;
@@ -472,7 +473,10 @@ function render(){
     spend it. The pre-Run screen may therefore win over it - nothing has been played yet, so
     going back costs nothing and creates no second Run. */
  if(phase==='foundation'&&modal!=='new')modal='relics';
- else if(bossRevealDue())modal='boss';
+ /* UI_UX §BOSS REVEAL — MORNING LANDS FIRST (User 2026-09-26): a reveal due on a fresh MORNING entry waits for the
+    shutter to land (BOSS_HOLD), so the dossier never opens in the same frame as the cut. Reduced motion opens it at once.
+    The screen takes no input while it waits: the Day may not advance past an owed reveal (CORE_RUN §D0 briefing). */
+ else if(bossRevealDue()){if(bossHold){}else if(changed&&phase==='morning'&&motionOK()){$('#app').inert=true;bossHold=setTimeout(()=>{bossHold=null;$('#app').inert=false;render();},BOSS_HOLD);}else modal='boss';}
  else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
@@ -1131,7 +1135,7 @@ function showCoach(){
  /* A mark never sits over a modal - except the DAY 0 Store Support takeover, which IS the first
     screen of a new store and has its own lesson. */
  const relicD0=modal==='relics'&&game.run?.phase==='foundation';
- if(tutorial.skipped||(modal&&!relicD0))return;
+ if(tutorial.skipped||(modal&&!relicD0)||bossHold)return; // a held Boss reveal is a modal on its way
  /* Skip a step whose target is not on this screen rather than stopping at it: a contextual
     mark (a Deep notice, a Great Success signal) only exists on some Days, and stopping would
     hold back every mark behind it until that Day came. */
@@ -2213,7 +2217,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'reset':setModal('resetConfirm');break;
  /* Nothing is touched until this point. Erasing every key and starting from Meta.fresh()
     is exactly the first-launch path, so no separate reset state exists to go stale. */
- case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;setModal(null);render();toast(ok?'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.':Save.error);break;}
+ case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;pendingSeed=null;setModal(null);render();toast(ok?'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.':Save.error);break;}
  case'import-go':$('#save-file').click();break;
 
  }

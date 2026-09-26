@@ -628,7 +628,8 @@ For ordinary Days:
 | D1–3 | exactly 1 |
 | D4–7 | 1 or 2, exactly 50% / 50% |
 | D8–18 | exactly 2 |
-| D19–29 | 2 or 3, exactly 50% / 50% |
+| D19–24 | 3 at 70%, otherwise 2 (User 2026-09-26, v2.9.2 fourth pass; was 2 or 3 at 50% / 50% through D29) |
+| D25–29 | exactly 3, no draw (User 2026-09-26, v2.9.2 fourth pass) |
 | D30 | ordinary Gate-count generation does not run; Final owner applies |
 
 No player-facing next-Day Gate-count forecast exists (User 2026-09-24, v2.9.0); the generator alone reads this rule.
@@ -980,21 +981,20 @@ These caps are conditional failure-risk caps, not unconditional whole-expedition
 
 ### Preparation / Level Death reduction
 
-(User 2026-09-25, v2.9.1 balance.) The failure Death roll uses
+(User 2026-09-25, v2.9.1 balance; the Level part removed User 2026-09-26, v2.9.2 fourth pass — Level no longer lowers the Death roll.) The failure Death roll uses
 
 ```text
-rolledDeathChance = failureDeathChance × preparedFactor × levelFactor
+rolledDeathChance = failureDeathChance × preparedFactor
 
 preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
   - departed without Injury (injury=0)
   - fatigueBeforeExpedition < 20
   - 2 or more Items in the Bag
-levelFactor = max(0.85, 1 − 0.015 × (Level − 1))      (Lv1 = 1.00, −1.5% per Level, floor −15%; User 2026-09-26, v2.9.2 third pass: floor was 0.75 — identical through Lv11)
 ```
 
 - a Death roll inside `failureDeathChance` but outside `rolledDeathChance` does not become 사망: the Outcome becomes
   중상 with a flat 0.36 chance, otherwise 부상 — one extra draw, no second Death roll
-- the SALE `실패 시 사망 위험` snapshot includes `levelFactor` (NPC state at SALE entry) and never `preparedFactor`
+- the SALE `실패 시 사망 위험` snapshot is the raw `failureDeathChance` and never includes `preparedFactor`
   (it depends on the Bag, which the snapshot excludes)
 - the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`
 

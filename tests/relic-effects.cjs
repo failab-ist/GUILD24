@@ -20,6 +20,11 @@ test('bulk engines require quantity/traffic/previous-day sales, and affect actua
  for(const id of ['groupFlyer','dawnBulk']){s.facilities=[id];s.queue=Array(8).fill('fixture');assert.equal(g.cartTotal(),base,id+' discounts nothing');}
  s.facilities=['bulk'];s.queue=[];const quote=g.cartTotal(),before=s.money;g.confirmOrder();assert.equal(before-s.money,quote);assert.equal(s.inventory.slice(-3).reduce((v,x)=>v+x.cost,0),quote);
 });
+test('후방 창고 증설 adds 5 warehouse slots (User 2026-09-26, v2.9.2 fourth pass; was 10)',()=>{
+ const g=fresh(),s=g.run;s.facilities=[];assert.equal(g.capacity(),18,'base warehouse 18');
+ s.facilities=['warehouse'];assert.equal(g.capacity(),23,'with the Relic 18 + 5');
+ s.inventory=[];for(let i=0;i<23;i++)g.stock('rice',1,10);assert.equal(g.canStock(DATA.itemBy.rice),false,'the 24th unit does not fit');
+});
 test('offer weights and quantities match relevant product roles',()=>{
  const g=fresh(),s=g.run,potion=DATA.itemBy.potion,premium=DATA.itemBy.premium;
  for(const [id,it]of [['showcase',premium],['coldcase',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}

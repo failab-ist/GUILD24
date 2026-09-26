@@ -1803,6 +1803,19 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
  assert.ok(!/previousSales|daily\.sales|streak|combo/.test(sale),'no streak, no combo, no faster second sale');
 });
 
+/* UI-Q-v29-35 (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, User 2026-09-26): a reveal due on a fresh MORNING entry waits
+   for the shutter to land; reduced motion opens it at once; no other modal jumps the queue while it waits */
+test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same frame as the cut',()=>{
+ const src=read('dist/ui/app.js');
+ assert.ok(/const BOSS_HOLD=420;let bossHold=null;/.test(src),'one 420 ms hold - the MORNING shutter\'s own length');
+ assert.ok(/A\(shutter,\{translateY:\[-14,0\],duration:420,/.test(src),'and the shutter it waits for is still 420 ms');
+ const r=fn('render');
+ assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;bossHold=setTimeout\(\(\)=>\{bossHold=null;\$\('#app'\)\.inert=false;render\(\);\},BOSS_HOLD\);\}else modal='boss';\}/.test(r),
+  'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
+ assert.ok(r.indexOf('bossRevealDue()')<r.indexOf("modal='event'")&&r.indexOf('bossRevealDue()')<r.indexOf("modal='relics';\n",r.indexOf('bossRevealDue()')),'the reveal keeps its place ahead of the Event and the Relic window');
+ assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
+});
+
 /* UI-Q-v29-34 (v2.9.2 H6, UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate settle in as one
    movement on FINAL's own entry - the only H6 target left after the four-cut capture excluded the rest */
 test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one movement, nothing else moves',()=>{
@@ -2822,10 +2835,12 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  // 6: the preview cannot touch gameplay RNG - it is its own throwaway instance
  assert.ok(!/game\.rng/.test(app.slice(app.indexOf('let pendingSeed'),app.indexOf('function render()'))),
   'the preview never reaches the run stream');
- // 5: only two places touch the plan - the memoise, and spending it at Start
+ // 5: only three places touch the plan - the memoise, spending it at Start, and dropping it on a full reset
+ //    (bug fix 2026-09-26: `reset-go` kept a plan made before the reset, so the next store reused its seed and Boss)
  const writes=app.match(/pendingSeed(\?\?)?=/g)||[];
- assert.deepEqual(writes,['pendingSeed=','pendingSeed??=','pendingSeed='],
-  'the plan has exactly three sites: declared, memoised once, cleared once');
+ assert.deepEqual(writes,['pendingSeed=','pendingSeed??=','pendingSeed=','pendingSeed='],
+  'the plan has exactly four sites: declared, memoised once, cleared at Start, cleared on full reset');
+ assert.ok(/case'reset-go':\{[^}]*game=new Game\(Meta\.fresh\(\),null\);[^}]*pendingSeed=null;/.test(app),'a full reset drops a pending plan with the rest of the Run state');
  assert.ok(/let pendingSeed=null;/.test(app),'declared empty');
  const ret=app.slice(app.indexOf("case'store-return'"),app.indexOf("break;",app.indexOf("case'store-return'")));
  assert.ok(!/pendingSeed|plannedSeed/.test(ret),'a Store Management round trip does not touch the plan');
@@ -3042,7 +3057,7 @@ test('DAY 0 Store Support tutorial: three marks over the takeover, DAY 0 only, n
  for(const r of DATA.relics)assert.ok(!steps.includes(r.name),'no Store Support is named as the answer: '+r.name);
  const show=fn('showCoach');
  assert.ok(/const relicD0=modal==='relics'&&game\.run\?\.phase==='foundation';/.test(show),'the exception is the DAY 0 takeover alone');
- assert.ok(/if\(tutorial\.skipped\|\|\(modal&&!relicD0\)\)return;/.test(show),'every other modal still has no mark over it, and a skipped tutorial stays skipped');
+ assert.ok(/if\(tutorial\.skipped\|\|\(modal&&!relicD0\)\|\|bossHold\)return;/.test(show),'every other modal (and a held Boss reveal, UI-Q-v29-35) still has no mark over it, and a skipped tutorial stays skipped');
  assert.ok(/relicD0\?coachSteps\.relic:/.test(show),'the takeover reads its own lesson');
  assert.ok(/\.coach-layer\.over-takeover\{z-index:80\}/.test(css)&&/\.relic-takeover\{[^}]*z-index:70/.test(css),'the mark sits above the takeover it teaches');
  /* USER 2026-09-24: 건너뛰기 skips this screen's lesson only, never the whole tutorial */

@@ -690,3 +690,16 @@ User decisions 2026-09-24 (v2.9.0 F7): the owned Store Support quick view carrie
 ```new
 - COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 원정 전문 인증 x1.60, the Counter pity, 길드 납품 인증 and the 원정 전문 인증 next-visit Gold read 직접 대응 only (a 기동 Item on a 속박/진창 Gate does not qualify); the SALE acceptance floor and 원정 위험 게시판 read 관련 준비 (direct Counter or the pressed Stat)
 ```
+
+## AMENDMENT — v2.9.2 balance, fourth pass: 후방 창고 증설 +10 -> +5 (User decision 2026-09-26)
+
+User 2026-09-26 (reports/v292-bot-harness.md §11; the User save held ~24 Items before the Final on a 28-slot warehouse): the
+Warehouse Relic adds 5 slots, not 10. Price and every other Relic unchanged.
+
+```text
+- 후방 창고 증설 -> inventory capacity +10
+```
+
+```new
+- 후방 창고 증설 -> inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
+```

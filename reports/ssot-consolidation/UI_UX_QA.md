@@ -1294,3 +1294,29 @@ FAIL:
 - a staggered or multi-part reveal, any motion outside `.gate-zero`, a hold before the movement starts,
   a new sound or line, or a settled end state that differs between motion and reduced motion
 ```
+
+## AMENDMENT — Boss reveal after MORNING lands (User 2026-09-26)
+
+User 2026-09-26 (the DAY 0 -> DAY 1 overlap the H6 capture reported, fixed on the User's instruction): UI-Q-v29-35 is new. Nothing is dropped.
+
+```new
+### UI-Q-v29-35 — BOSS REVEAL AFTER MORNING LANDS
+
+(User 2026-09-26; owner `UI_UX_v2.8.0.md` §BOSS REVEAL — MORNING LANDS FIRST.)
+
+SETUP:
+DAY 0 첫 점포지원 -> 구매 -> DAY 1 MORNING at 390 and 1280, motion on and reduced motion; frames at 120 ms and 600 ms after
+the press.
+
+PASS:
+- motion on: at 120 ms MORNING is on screen with no modal; by 600 ms the `마왕 조사 개시` dossier is open
+- reduced motion: the dossier is open at 120 ms
+- the dossier, its copy and its `확인` are unchanged; after `확인` the Day continues exactly as before
+- no Event or Relic window opens during the hold
+- MORNING takes no input during the hold: a tap on `문 열기` (or the menu) in it does nothing, and the Day is still MORNING
+  when the dossier opens
+
+FAIL:
+- the dossier opening in the same frame as the MORNING cut with motion on, a hold under reduced motion, a lost or repeated
+  reveal, a Day that advances during the hold, or any new motion, sound or copy
+```

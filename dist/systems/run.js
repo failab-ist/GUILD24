@@ -23,9 +23,9 @@ P.closeDay=function(){const s=this.run;if(s.phase!=='closing')return;
    the generator uses. What is never told is which - no Family, no Gate identity, no Hazard. */
 P.gateForecast=function(){const day=this.run.day+1;if(day>30)return null;
  if(day===30)return {day,final:true,counts:null,fixed:null};
- const counts=G.Dungeon.gateCountRule(day),p=Math.round(1000/counts.length)/10;
+ const counts=G.Dungeon.gateCountRule(day),odds=G.Dungeon.gateCountOdds(day);
  return {day,final:false,fixed:counts.length===1?counts[0]:null,
-  counts:counts.map(c=>({count:c,percent:p}))};};
+  counts:counts.map((c,i)=>({count:c,percent:Math.round(odds[i]*1000)/10}))};};
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){
   this.run.day++;

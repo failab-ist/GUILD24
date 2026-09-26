@@ -1023,16 +1023,15 @@ return after a Severe-Injury rest, resets the chain; the first injured departure
 up to 30%p; Fatigue no longer feeds this term)
 - sending an adventurer out injured again and again escalates further: +8%p per consecutive injured departure after the first, up to +30%p, and the cap rises with it; one healthy departure resets it (User 2026-09-25, v2.9.0)
 ### Preparation / Level Death reduction
-(User 2026-09-25, v2.9.1 balance.) The failure Death roll uses
-rolledDeathChance = failureDeathChance × preparedFactor × levelFactor
+(User 2026-09-25, v2.9.1 balance; the Level part removed User 2026-09-26, v2.9.2 fourth pass — Level no longer lowers the Death roll.) The failure Death roll uses
+rolledDeathChance = failureDeathChance × preparedFactor
 preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
 - departed without Injury (injury=0)
 - fatigueBeforeExpedition < 20
 - 2 or more Items in the Bag
-levelFactor = max(0.85, 1 − 0.015 × (Level − 1))      (Lv1 = 1.00, −1.5% per Level, floor −15%; User 2026-09-26, v2.9.2 third pass: floor was 0.75 — identical through Lv11)
 - a Death roll inside `failureDeathChance` but outside `rolledDeathChance` does not become 사망: the Outcome becomes
 중상 with a flat 0.36 chance, otherwise 부상 — one extra draw, no second Death roll
-- the SALE `실패 시 사망 위험` snapshot includes `levelFactor` (NPC state at SALE entry) and never `preparedFactor`
+- the SALE `실패 시 사망 위험` snapshot is the raw `failureDeathChance` and never includes `preparedFactor`
 (it depends on the Bag, which the snapshot excludes)
 - the Night report names a 만반의 준비 save with one line; exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`
 5. if that roll hits `rolledDeathChance`, the ordinary Outcome becomes `사망`; if it hits only the removed band, the Outcome becomes 중상 / 부상 (§Preparation / Level Death reduction)
@@ -1100,4 +1099,19 @@ paragraph is new.
 Late T3 pressure (User 2026-09-26, v2.9.2 third pass): after the interpolation, DAY 21~29 move 0.10 of the T2 weight to T3
 (never more than T2 holds); T1 and every other Day keep the anchor values. The late Days lean on Hazard / Item preparation,
 not raw Power alone. Examples: D24 10 / 50 / 40 · D25 5 / 40 / 55 · D29 0 / 35 / 65.
+```
+
+## AMENDMENT — v2.9.2 balance, fourth pass: Gate count D19~29, Level Death reduction removed, Warehouse +5 (User decision 2026-09-26)
+
+User 2026-09-26 (after the package measurement, reports/v292-bot-harness.md §11; "PL"): DAY 19~24 open 3 Gates at 70% (2 at 30%),
+DAY 25~29 exactly 3; the Level factor on the failure Death roll is removed. The §Preparation / Level Death reduction lines declared
+above are edited in place (the levelFactor line is gone); the D19–29 Gate-count row is replaced by two rows.
+
+```text
+| D19–29 | 2 or 3, exactly 50% / 50% |
+```
+
+```new
+| D19–24 | 3 at 70%, otherwise 2 (User 2026-09-26, v2.9.2 fourth pass; was 2 or 3 at 50% / 50% through D29) |
+| D25–29 | exactly 3, no draw (User 2026-09-26, v2.9.2 fourth pass) |
 ```

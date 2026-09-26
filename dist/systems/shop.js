@@ -200,7 +200,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      and never generates a new Pair. D25 grants no Counter Items, no free stock and no shop. */
   if(s.day>=25&&!s.final)s.final=this.makeFinal();
   if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];return null;}
-  s.familyOrder??=this.rng.shuffle(['spider','slime','fire','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),count=counts.length===1?counts[0]:this.rng.int(counts[0],counts.at(-1));s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
+  s.familyOrder??=this.rng.shuffle(['spider','slime','fire','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),odds=G.Dungeon.gateCountOdds(s.day),count=counts.length===1?counts[0]:odds[0]===odds[1]?this.rng.int(counts[0],counts.at(-1)):(this.rng.next()<odds[1]?counts[1]:counts[0]);s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
   return ids;
  }
  /* How many people are coming, composed in one place so the order of the four sources can be

@@ -1572,6 +1572,17 @@ Final state -> `FINAL_EXPEDITION_v2.8.0.md`.
 
 All Boss-information beats use the existing Guild investigation dossier family.
 
+### BOSS REVEAL — MORNING LANDS FIRST (v2.9.2)
+
+(User 2026-09-26, the DAY 0 -> DAY 1 overlap reported by the H6 capture; acceptance -> UI_UX_QA UI-Q-v29-35.)
+
+A Boss reveal that is due when MORNING is entered opens once MORNING's own entry has landed: a 420 ms hold (the shutter's
+length) after the screen appears, then the dossier opens as it always has. It applies to every reveal stage (the D0 briefing
+and D5 ~ D25), because they share one mechanism; the reveal order is unchanged, and no Event or Relic window opens during the
+hold. MORNING is shown but takes no input during the hold - the reveal is already owed, and the Day does not advance past it
+before it is acknowledged (CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING); a second tap on the 구매 that cut to MORNING does
+nothing. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
+
 ### D0 — FIRST MORNING BRIEFING
 
 D0 is basic objective information, not a reveal spectacle.
