@@ -754,7 +754,7 @@ PASS exact Buy/Sell for changed original-catalog prices:
 
 ```new
 - the Day term is `min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2; DAY 11~20 at 1.10 in the v2.9.2 third pass, User 2026-09-26)
-- the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
+- the Day term reads D9 13.50, D10 14.30, D12 16.50, D18 23.10, D20 25.30, D24 28.50, D29 32.50 (User 2026-09-26, v2.9.2 third pass)
 Controlled adventurer records: 1 / 2 / 3 / 5 consecutive expeditions begun at injury=1 ending in this injured departure, the same
 chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.1 balance).
 - the first injured departure adds nothing beyond the existing injured term
@@ -892,7 +892,8 @@ User 2026-09-26: Great 1.00, combat-success 0.90; the line declared above is edi
 
 ## AMENDMENT — v2.9.2 balance, third pass (User decision 2026-09-26)
 
-User 2026-09-26: the Day-term and levelFactor lines declared above are edited in place; the late T3 line is new.
+User 2026-09-26: the Day-term and levelFactor lines declared above are edited in place; the late T3 line is new. The Day-term anchor line (a
+chain line kept from the early-1.20 days) is edited in place to the current values.
 
 ```new
 - DAY 21~29 then move 0.10 of T2 to T3 (D24 10 / 50 / 40 · D29 0 / 35 / 65); no other Day shifts (User 2026-09-26, v2.9.2 third pass)

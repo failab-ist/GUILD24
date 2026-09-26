@@ -1054,6 +1054,10 @@ test('DUNGEON_HAZARD §Tier generation (v2.9.2 third pass, User 2026-09-26): DAY
  const near=(a,b)=>a.every((x,i)=>Math.abs(x-b[i])<1e-9);
  // anchors, then the shift: D19 and D20 are the anchors' interpolation, D21~29 carry +0.10 T3 / -0.10 T2, D30 is the Final
  assert.ok(near(Dungeon.tierWeights(19),[.26,.60,.14]),'D19 anchor unchanged');
+ // the boundary: D20 carries no shift, D21 is the first Day that moves 0.10 of T2 to T3
+ const lerp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t),a19=[.26,.60,.14],a24=[.10,.60,.30];
+ assert.ok(near(Dungeon.tierWeights(20),lerp(a19,a24,1/5)),'D20 is the plain interpolation');
+ const d21=lerp(a19,a24,2/5);assert.ok(near(Dungeon.tierWeights(21),[d21[0],d21[1]-.10,d21[2]+.10]),'D21 is the first shifted Day');
  assert.ok(near(Dungeon.tierWeights(24),[.10,.50,.40]),'D24: 10 / 60 / 30 -> 10 / 50 / 40');
  assert.ok(near(Dungeon.tierWeights(25),[.05,.40,.55]),'D25: 5 / 50 / 45 -> 5 / 40 / 55');
  assert.ok(near(Dungeon.tierWeights(29),[0,.35,.65]),'D29: 0 / 45 / 55 -> 0 / 35 / 65');
