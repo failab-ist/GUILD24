@@ -976,7 +976,6 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 ### UI-Q-v29-20 — SHELF EXPIRY ORDER
 (User 2026-09-25, v2.9.0)
 SALE with a shelf holding units stocked on different days (some at 1 day left), at 360 and 1280; the same shelf for two customers going to different Gates.
-- the shelf rows are ordered by days left before discard, nearest first; ties keep the existing order; the order is identical for both customers
 - every row carries `폐기 N일`; a row at 1 day or less is emphasized in the warehouse `.soon` color
 - no `유통기한 없음` / `기한 없음` state appears on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
 - rows keep one name line + one effect line; no overflow at 360
@@ -1438,4 +1437,13 @@ User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보�
 영업 전 자금 -> 매출 / 발주 / 운영비 (+ other moved rows) -> 보유 자금 box (stamped) with 영업 손익 ±N (green / red, gold at 0);
 창고 재고 and 오늘 폐기 on separate lines, 오늘 폐기 naming up to three Items (×n from two) then 외 N종; 내일 운영비 예상 (not on DAY 29);
 no 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 전 자금 + ins - outs = 보유 자금 exactly; no page scroll at 390 x 780
+```
+
+## AMENDMENT — v2.9.7 SALE shelf order by kind (User 2026-09-26)
+
+User 2026-09-26: the SALE shelf sorts by kind (대응 장비, 음식, 음료, 포션, 보험, 특수), then nearest discard, then higher Rarity, held for the Day. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the shelf rows are ordered by kind (대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수), then days left before discard, nearest first, then higher Rarity; ties keep the existing order; the order is identical for both customers (v2.9.7)
+- selling units, including the last unit of an Item's oldest batch, moves no other row within the Day; a sold-out row leaves; the next Day sorts afresh (v2.9.7)
 ```

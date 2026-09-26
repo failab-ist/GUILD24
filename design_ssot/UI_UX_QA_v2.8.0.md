@@ -2345,7 +2345,8 @@ SETUP:
 SALE with a shelf holding units stocked on different days (some at 1 day left), at 360 and 1280; the same shelf for two customers going to different Gates.
 
 PASS:
-- the shelf rows are ordered by days left before discard, nearest first; ties keep the existing order; the order is identical for both customers
+- the shelf rows are ordered by kind (대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수), then days left before discard, nearest first, then higher Rarity; ties keep the existing order; the order is identical for both customers (v2.9.7)
+- selling units, including the last unit of an Item's oldest batch, moves no other row within the Day; a sold-out row leaves; the next Day sorts afresh (v2.9.7)
 - every row carries `폐기 N일`; a row at 1 day or less is emphasized in the warehouse `.soon` color
 - no `유통기한 없음` / `기한 없음` state appears on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
 - rows keep one name line + one effect line; no overflow at 360

@@ -1375,6 +1375,17 @@ function finalItemTruth(n,item){const s=game.run,i=s.team.indexOf(n.id);if(i<0)r
 function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.effects;
  const e={...it.effects};for(const k of ['combat','survival','mobility','spirit'])if(k in e)e[k]=t.after[k]-t.before[k];
  return e;}
+/* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): 대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수 - the player
+   looks for a Gate's Counter first; inside a kind the nearest discard first, then the higher Rarity. The discard day an
+   Item is sorted by is the one it showed when the Day's shelf first appeared, so selling out a batch never moves a row
+   mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
+   and the next Day sorts afresh. */
+const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
+function shelfOrder(stocks){const s=game.run,key=s.seed+':'+s.day+':'+s.phase;
+ if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
+ for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
+ const rank=st=>{const it=D.itemBy[st.item];return [SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity];};
+ return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2];});}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    /* SALE §MATCHING-EFFECT EMPHASIS — RETIRED (User 2026-09-24, v2.9.0): every effect text keeps the default
@@ -1383,9 +1394,9 @@ function shelf(isFinal=false){
    return '<section class="shelf">'
    +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
    +(isFinal?'':relicRef())+'</div><div class="goods">'
- /* UI_UX §SALE — SHELF ORDER (User 2026-09-25, v2.9.0): nearest discard first, ties in the existing order,
-    the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
- +stocks.slice().sort((a,b)=>a.expires-b.expires).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
+ /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
+    held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
+ +shelfOrder(stocks).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'

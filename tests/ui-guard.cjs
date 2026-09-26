@@ -2772,8 +2772,11 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  // §4-10: the shelf-life state only, with the FIFO explanation retired
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
  assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("'폐기까지 '"),'§4-10 the shelf-life state stays and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
- // UI_UX §SALE — SHELF ORDER (User 2026-09-25, v2.9.0): nearest discard first, ties in the existing order; the `폐기 N일` chip
- assert.ok(fn('shelf').includes('stocks.slice().sort((a,b)=>a.expires-b.expires)'),'the shelf is ordered by expiry, stable for ties');
+ // UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): kind, then nearest discard, then higher Rarity, held for the Day
+ assert.ok(fn('shelf').includes('+shelfOrder(stocks).map(st=>{'),'the shelf reads its order from shelfOrder');
+ assert.ok(app.includes("const SHELF_KIND=['gear','food','drink','potion','insurance','special']"),'대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수');
+ assert.ok(/key=s\.seed\+':'\+s\.day\+':'\+s\.phase/.test(fn('shelfOrder'))&&fn('shelfOrder').includes('if(!(st.item in at))at[st.item]=st.expires;'),'the discard day a row sorts by is held for the Day, so a sale never moves a row');
+ assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2];')&&fn('shelfOrder').includes('-it.rarity'),'kind, then nearest discard, then higher Rarity; ties stay stable');
  assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em>`),'every row carries 폐기 N일, emphasized at 1 day or less');
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
