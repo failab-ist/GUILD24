@@ -2763,7 +2763,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em>`),'every row carries 폐기 N일, emphasized at 1 day or less');
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
- assert.ok(read('dist/ui/app.js').includes("' · 유통기한 '+sl+'일</span>'"),'the ORDER row states the shelf life as days, never 없음');
+ assert.ok(read('dist/ui/app.js').includes("' · <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
 });
 
 /* SA-Q02 / Q03 / Q04 / Q20 / Q32 — NPC detail, Injury and Trait information truth. */

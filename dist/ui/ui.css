@@ -566,7 +566,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .line .fx .cost{color:#a1372c}
 .line .fx em{font-style:normal;color:#b0a488}
 /* 4 economics and stock, tertiary */
-.line .have{display:block;margin-top:5px;font:400 12px/1.5 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72}
+.line .have{display:block;margin-top:5px;font:400 12px/1.5 var(--ui);font-variant-numeric:tabular-nums;color:#9c8f72;word-break:keep-all}
+.line .have i{font-style:normal;white-space:nowrap} /* `유통기한 N일` never splits (keep-all still breaks between a digit and 일) */
 /* the price tag hangs at the end of the name row, never off the paper */
 /* BATCH 2A. The tag was a saturated web-shop green, the loudest object on a paper form and
    louder than the Item it prices. It is the same tag, tied on in the phase's own steel. */
@@ -580,10 +581,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .line .prices{float:right;margin:0 0 4px 10px;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .line .prices .tag-art{width:96px;margin-left:0}
 .line .fx{clear:right} /* the effects keep the full width, as before the stack */
-.tag-art b small{font-size:11px;font-weight:600;margin-right:4px;opacity:.75}
+.tag-art b small{font-size:11px;line-height:1;font-weight:600;margin-right:4px;color:#3e4a55} /* the global small colour read 1.4:1 on steel */
 .line .prices .tone-sell{width:84px;height:24px;color:#ddd5c1;filter:drop-shadow(1px 1px 0 #00000026)}
 .line .prices .tone-sell b{font-size:13px;font-weight:500;color:#5f5541}
 .line .prices .tone-sell b i{font-size:11px}
+.line .prices .tone-sell b small{color:#6e5f43;font-weight:600}
+.line .prices{gap:3px}
 /* 5 quantity. UI_UX §PER-PHASE APPLICATION RULES (ORDER) — QUANTITY WEIGHT, USER AMENDMENT
    2026-09-22: the cluster read too heavy. Its hierarchy is item information > readout / stepper
    > `1 / 3 / 최대`, and being a pixel UI is not a reason to box every control.
