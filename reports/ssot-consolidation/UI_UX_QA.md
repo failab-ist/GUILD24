@@ -1320,3 +1320,23 @@ FAIL:
 - the dossier opening in the same frame as the MORNING cut with motion on, a hold under reduced motion, a lost or repeated
   reveal, a Day that advances during the hold, or any new motion, sound or copy
 ```
+
+## AMENDMENT — build marker (User 2026-09-26, v2.9.3)
+
+User 2026-09-26: UI-Q-v29-36 is new. Nothing is dropped.
+
+```new
+### UI-Q-v29-36 — BUILD MARKER
+
+(User 2026-09-26; owner `UI_UX_v2.8.0.md` §BUILD MARKER.)
+
+PASS:
+- the opening screen shows `v2.9.3 · {commit}` small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
+  the menu button and the preparation panel
+- no other screen shows it
+- the console prints `GUILD24 v2.9.3 · {commit}` once on load and `Guild24.build` returns the same pair
+- the deployed site reads the deployed commit; a local build reads `dev`
+
+FAIL:
+- the marker overlapping or pushing the title, taking input, or appearing during a Run; a deployed build still reading `dev`
+```

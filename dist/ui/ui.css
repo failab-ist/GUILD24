@@ -865,6 +865,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    hard cast. It stays deliberately low in the hierarchy - smaller, darker and quieter than the
    Primary, which it must never compete with. Only the Opening's is restyled; every other phase
    keeps the shared control. */
+/* UI_UX §BUILD MARKER (v2.9.3): small, muted, not a control - the opening screen only */
+.p-start .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:1;
+ margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.55;pointer-events:none;white-space:nowrap}
 .p-start .menu-pin{background:linear-gradient(180deg,#39434c 0,#2a323a 46%,#1d232a 100%);
  color:#cdbfa4;
  box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #6b5029,inset 0 3px 0 #5b6a7280;

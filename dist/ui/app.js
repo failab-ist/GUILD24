@@ -1,6 +1,8 @@
 (function(){
 'use strict';
 const D=DATA,E=Art.esc,$=s=>document.querySelector(s),fmt=n=>Math.round(n).toLocaleString('ko-KR');
+/* UI_UX §BUILD MARKER (v2.9.3): the build a report was played on - the opening screen's corner and the console */
+const BUILD=window.GUILD24_BUILD||{version:'dev',commit:'dev'};console.info('GUILD24 v'+BUILD.version+' · '+BUILD.commit);
 let stored=Save.read(),game=new Game(stored?.account||Meta.fresh(),stored?.run||null),selected=null,modal=null,codexTab='items',supplyNPC=null,toastTimer,previousFocus=null;
 /* USER-APPROVED OPENING. The backdrop names the store that is about to open, so the branch it
    shows must be the branch the Run actually receives. Game.start(seed) takes that name as the
@@ -426,7 +428,7 @@ function render(){
     so the preparation modal cannot be dismissed, and the line below re-opens it on every draw
     of this state anyway. The button was only ever an orphan control sitting behind the shade -
     on a desk, in the bottom-left corner of the title card. */
- if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
+ if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div><p class="build-mark">v'+E(BUILD.version)+' · '+E(BUILD.commit)+'</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
  /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
  const previousCols=['.p-sale .dossier-col','.p-sale .shelf-col'].map(q=>$(q)?.scrollTop||0);
@@ -2284,5 +2286,5 @@ document.addEventListener('input',ev=>{const el=ev.target.closest('[data-mix]');
  const out=$('#'+el.id+'-val');if(out)out.textContent=Math.round(v*100)+'%';});
 document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  game.save();if(el.dataset.mix==='sfx')sound('button');});
-window.Guild24={get game(){return game;},render,simulate:Debug.simulate,showDebug:()=>setModal('debug')};render();
+window.Guild24={get game(){return game;},render,build:BUILD,simulate:Debug.simulate,showDebug:()=>setModal('debug')};render();
 })();

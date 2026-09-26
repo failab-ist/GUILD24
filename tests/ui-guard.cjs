@@ -1803,6 +1803,21 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
  assert.ok(!/previousSales|daily\.sales|streak|combo/.test(sale),'no streak, no combo, no faster second sale');
 });
 
+/* UI-Q-v29-36 (UI_UX §BUILD MARKER, User 2026-09-26): the opening screen names the build; the deploy stamps the commit */
+test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build, stamped by the deploy',()=>{
+ const b=read('dist/build.js');
+ assert.ok(/window\.GUILD24_BUILD=\{version:'2\.9\.3',commit:'dev'\};/.test(b),'the repository copy names the version and reads dev');
+ assert.ok(/<script src="build\.js"><\/script><script src="ui\/app\.js"><\/script>/.test(html),'loaded before the app');
+ assert.ok(/console\.info\('GUILD24 v'\+BUILD\.version\+' · '\+BUILD\.commit\)/.test(app),'printed once on load');
+ assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,build:BUILD,/.test(app),'Guild24.build');
+ const r=fn('render'),open=r.slice(0,r.indexOf('const phase=s.phase'));
+ assert.ok(/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(open),'the opening screen (no Run) shows it');
+ assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
+ assert.ok(/\.p-start \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
+ const wf=read('.github/workflows/pages.yml');
+ assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');
+});
+
 /* UI-Q-v29-35 (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, User 2026-09-26): a reveal due on a fresh MORNING entry waits
    for the shutter to land; reduced motion opens it at once; no other modal jumps the queue while it waits */
 test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same frame as the cut',()=>{

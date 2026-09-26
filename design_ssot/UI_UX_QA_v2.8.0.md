@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
+DOC_VERSION=2.9.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1353,6 +1353,20 @@ PASS:
 - no presentation branch mutates Outcome, reward, Fatigue, proof, Wallet or Store Gold
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
+
+### UI-Q-v29-36 — BUILD MARKER
+
+(User 2026-09-26; owner `UI_UX_v2.8.0.md` §BUILD MARKER.)
+
+PASS:
+- the opening screen shows `v2.9.3 · {commit}` small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
+  the menu button and the preparation panel
+- no other screen shows it
+- the console prints `GUILD24 v2.9.3 · {commit}` once on load and `Guild24.build` returns the same pair
+- the deployed site reads the deployed commit; a local build reads `dev`
+
+FAIL:
+- the marker overlapping or pushing the title, taking input, or appearing during a Run; a deployed build still reading `dev`
 
 ### UI-Q-v29-35 — BOSS REVEAL AFTER MORNING LANDS
 
