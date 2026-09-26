@@ -11,7 +11,7 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
 - v2.9.2 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`:
   - PR #5로 main에 병합됨(`dd3feb4`, Pages 배포): H1(`8c1c6bd`) + 플레이 리포트 수정 `158d001` / `0510b53` / `61b9734` / `771ba8f`.
   - PR #6으로 main에 병합됨(`9414293`, Pages 배포 성공): 진열대 한 줄 · SALE 트레이 접기 · 게이트 방문 최소 1명 · 발주 플로팅 오늘 줄 · D30 흐름 · H5 봉인 · H1 만반의 준비 반전 · 밸런스(대성공 EXP 1.10, slope 1.50, 정가 ×0.90).
-  - 그 뒤(이 브랜치, main 미병합): H2 SALE 계산대 · 봇 하네스 `reader` · 2차 밸런스 · H3 ORDER 확정.
+  - PR #7으로 main에 병합됨(`49c853b`, 2026-09-26): H2 SALE 계산대 · H3 ORDER 확정 · 봇 하네스 `reader`와 측정 도구 · 2차 밸런스 · 3차 밸런스(G1 + L2 + T).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - last tagged release: `v2.9.1`; completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
