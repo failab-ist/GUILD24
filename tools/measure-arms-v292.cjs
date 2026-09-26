@@ -8,24 +8,29 @@
 //   L     Level Death protection off: levelFactor = 1 (preparedFactor and everything else unchanged)
 //   T     D21~29: T3 weight +0.10, taken from T2 (T1 unchanged)
 //   E     D21~30 Great Success Store Gold 200 -> 150 (D1~10 50, D11~20 100 unchanged)
+//   (2026-09-26, second round) G1 = G's D11~20 part only · G2 = G's D21~29 part only · L2 = levelFactor floor .75 -> .85
+//   (identical through Lv11) · GLT = G + L2 + T together · GT = G + T together
 //   node tools/measure-arms-v292.cjs <out.json> [seeds=5000] [arms=base,G,L,T,E]      (PAR workers, default CPU count)
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{spawn}=require('node:child_process');
 const ARMS=['base','G','L','T','E'];
+// the levers each arm switches on at the fork
+const LEVERS={base:[],G:['gMid','gLate'],L:['lOff'],T:['t3'],E:['gold'],G1:['gMid'],G2:['gLate'],L2:['l2'],GLT:['gMid','gLate','l2','t3'],GT:['gMid','gLate','t3']};
 if(process.argv[2]==='--worker'){
  const [,,,,arm,from,count,dir]=process.argv;
  // one patched copy per worker process; every patch is inert until its flag is set at the fork
  fs.rmSync(dir,{recursive:true,force:true});fs.cpSync(path.join(__dirname,'..','dist'),dir,{recursive:true});
  const dj=path.join(dir,'systems','dungeon.js');let t=fs.readFileSync(dj,'utf8');
  const patch=(old,nw)=>{if(!t.includes(old))throw Error('patch site moved: '+old.slice(0,60));t=t.replace(old,nw);};
- patch("function levelFactor(level){return Math.max(.75,1-.015*((level||1)-1));}","function levelFactor(level){if(globalThis.__L_OFF)return 1;return Math.max(.75,1-.015*((level||1)-1));}");
+ patch("function levelFactor(level){return Math.max(.75,1-.015*((level||1)-1));}","function levelFactor(level){if(globalThis.__L_OFF)return 1;return Math.max(globalThis.__L2?.85:.75,1-.015*((level||1)-1));}");
  patch("const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;",
-  "const gateDayTerm0=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;\nconst gateDayTerm=day=>globalThis.__G_ON&&day>10?gateDayTerm0(10)+1.10*(Math.min(day,20)-10)+.90*Math.max(0,day-20):gateDayTerm0(day);");
+  "const gateDayTerm0=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;\nconst gateDayTerm=day=>(globalThis.__G_MID||globalThis.__G_LATE)&&day>10?gateDayTerm0(10)+(globalThis.__G_MID?1.10:GATE.late)*(Math.min(day,20)-10)+(globalThis.__G_LATE?.90:GATE.late)*Math.max(0,day-20):gateDayTerm0(day);");
  patch("  const rolledDeathChance=deathChance*prepared*levelFactor(n.level);","  const rolledDeathChance=deathChance*prepared*levelFactor(n.level);if(globalThis.__DEATH_ROLL)globalThis.__DEATH_ROLL(deathRoll,deathChance*prepared,rolledDeathChance,n.level,d.day);");
  fs.writeFileSync(dj,t);
  for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])require(path.join(dir,f+'.js'));
  const tier0=Dungeon.tierWeights;Dungeon.tierWeights=day=>{const w=tier0(day);if(!globalThis.__T_ON||day<21||day>29)return w;const m=Math.min(.10,w[1]);return [w[0],w[1]-m,w[2]+m];};
  const gold=DATA.greatSuccess.storeGoldByBand,late=gold.find(b=>b.maxDay>20),lateGold=late?.gold;
- const on=a=>{globalThis.__G_ON=a==='G';globalThis.__L_OFF=a==='L';globalThis.__T_ON=a==='T';if(late)late.gold=a==='E'?150:lateGold;};
+ const on=a=>{const L=LEVERS[a];if(!L)throw Error('unknown arm '+a);globalThis.__G_MID=L.includes('gMid');globalThis.__G_LATE=L.includes('gLate');globalThis.__L_OFF=L.includes('lOff');
+  globalThis.__L2=L.includes('l2');globalThis.__T_ON=L.includes('t3');if(late)late.gold=L.includes('gold')?150:lateGold;};
  const P=Game.prototype,start=P.start,end=P.end,morning=P.morning,night=P.night,off=Number(from),rows=[];
  const hash=str=>{let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}return h.toString(16);};
  const top3=(R,d)=>{const lv={};for(const x of R)if(x.day<=d)lv[x.npcId]=x.level;const v=Object.values(lv).sort((a,b)=>b-a).slice(0,3);return v.length?v.reduce((a,b)=>a+b,0)/v.length:0;};
@@ -35,7 +40,7 @@ if(process.argv[2]==='--worker'){
  // in L, a Death that the Production factor would have turned away.
  globalThis.__DEATH_ROLL=(roll,unreduced,rolled,level,day)=>{if(!cur||!cur.fork)return;const lf=Math.max(.75,1-.015*((level||1)-1)),prod=unreduced*lf;
   if(roll>=prod&&roll<unreduced){const k=seg(day)+':'+lvBand(level);cur.lvlSaved[k]=(cur.lvlSaved[k]||0)+1;}
-  if(globalThis.__L_OFF&&roll<rolled&&roll>=prod){const k=seg(day)+':'+lvBand(level);cur.lvlExtra[k]=(cur.lvlExtra[k]||0)+1;}};
+  if(rolled>prod&&roll<rolled&&roll>=prod){const k=seg(day)+':'+lvBand(level);cur.lvlExtra[k]=(cur.lvlExtra[k]||0)+1;}};
  P.start=function(seed,...x){on('base');const m=/^revision-(\d+)$/.exec(seed);const r=start.call(this,m?'revision-'+(Number(m[1])+off):seed,...x);
   cur={seed:Number(/^revision-(\d+)$/.exec(this.run.seed)?.[1]??-1),fork:null,lvlSaved:{},lvlExtra:{},t3:{n:0,worst:{}},at:{}};this.__cur=cur;return r;};
  P.morning=function(...x){const s=this.run,c=this.__cur;
@@ -83,7 +88,7 @@ const job=(arm,from,count)=>new Promise((ok,no)=>{let buf='';const c=spawn(proce
   OLD_USER_MATCH:bank.filter(r=>r.d10top3>=7.666666666666667-1e-9&&r.d10deaths<=1).map(r=>r.i)};
  const med=v=>qn(v.filter(x=>x!==null&&x!==undefined),.5),share=(set,f)=>set.length?set.filter(f).length/set.length:null;
  const sum=(set,f)=>{const o={};for(const r of set){const x=f(r)||{};for(const [k,v] of Object.entries(x))o[k]=(o[k]||0)+v;}return o;};
- const res={generated:'v2.9.2 single-lever arms, paired D10 fork',policy:'reader',account:'fresh',seeds:'revision-0..'+(seeds-1),arms,
+ const res={generated:'v2.9.2 lever arms, paired D10 fork',policy:'reader',account:'fresh',seeds:'revision-0..'+(seeds-1),arms,
   allSeeds:{n:seeds,reach10:ids.length/seeds},
   d10Bank:{snapshots:bank.length,identicalAcrossArms:same,mismatched:diff,top3LevelPercentiles:pct,deathsLe1:low.length,
    deathsLe1AtOrAbove:Object.fromEntries(Object.entries(pct).map(([k,t])=>[k+' ('+t+')',low.filter(r=>r.d10top3>=t-1e-9).length]))},cohorts:{}};
@@ -99,6 +104,7 @@ const job=(arm,from,count)=>new Promise((ok,no)=>{let buf='';const c=spawn(proce
     T3:{expeditions:sum(R,r=>({n:r.t3prep.n})).n||0,outcomes:sum(R,r=>r.T3),worstHazardAtDeparture:sum(R,r=>r.t3prep.worst)},
     levelSavedDeaths:sum(R,r=>r.lvlSaved),levelExtraDeaths:sum(R,r=>r.lvlExtra),deathsByBand:sum(R,r=>r.deathLv),
     great21_29:sum(R,r=>({n:r.great29})).n||0,greatGold21_29:sum(R,r=>({g:r.greatGold29})).g||0};
+   if(name==='ALL_D10')x.d30PerSeed=R.filter(r=>r.day>=30).length/seeds;
    if(a!==arms[0]){let lost=0,gained=0;for(const id of set){const p=by[arms[0]].get(id)?.day>=30,q=by[a].get(id)?.day>=30;if(p&&!q)lost++;if(!p&&q)gained++;}x.vsBaseD30={lost,gained};}
    c.byArm[a]=x;}
   res.cohorts[name]=c;}
