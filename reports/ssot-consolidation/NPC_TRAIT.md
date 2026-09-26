@@ -498,3 +498,15 @@ User 2026-09-25: minimum one visitor per open Gate when visitors ≥ Gates.
 ```new
 destinationCoverage=EVERY_OPEN_GATE_WHEN_VISITORS_AT_LEAST_GATES (User 2026-09-25: after the ordinary random draw, a Gate left empty takes one visitor, picked at random, from a Gate that holds two or more; a visitor a 거짓말쟁이 roll already diverted is never moved; Days without an empty Gate draw nothing more)
 ```
+
+## AMENDMENT — decorations and Rarity (User 2026-09-26, v2.9.7)
+
+User 2026-09-26: 원정 지원금 간판 (sign economy remake), wall / display economy Decorations swap Slots (길드 추천 매대, 명예 모험가 액자 [35, 30, 22, 9, 4]), 구급품 진열장 부상 10회 -> 무사, Rarity growth step 0.10 written into NPC_TRAIT, no Trait-slot field.
+
+```new
+Exact generation values (User 2026-09-26, v2.9.7; the step was 0.06 in Source and written nowhere):
+- growth potential = 1 + 0.10 × Rarity + a uniform 0~0.10 roll; every Level-up adds the Job growth × potential
+- Trait count at spawn: 1~2, or 1~3 at 희귀 and above
+- no Trait-slot field: Traits are only drawn at spawn (the per-Level Trait slot was dropped by the User earlier)
+- Rarity's costs stay where they are owned: operating cost (ECONOMY_ORDER, × (1 + 0.06 × core average Rarity)) and Deep sponsorship (+20% a step)
+```

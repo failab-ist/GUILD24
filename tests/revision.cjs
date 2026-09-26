@@ -238,7 +238,7 @@ test('META_v2.8 §DECORATION COLLECTION / LOADOUT: owning, equipping and the Slo
  assert.equal(Meta.storeCapital(a),0,'a fresh Account owns no capital');
  assert.deepEqual(Meta.ownedDecorations(a),[],'and no Decoration');
  assert.deepEqual(Meta.plannedLoadout(a),{},'so an empty loadout is legal');
- const wall=DATA.decorationBy.guildPlaque;
+ const wall=DATA.decorations.find(d=>d.slot==='wall'&&d.kind==='economy'); // 명예 모험가 액자 since v2.9.7 (the wall / display swap)
  assert.throws(()=>Meta.buyDecoration(a,wall.id),/자본/,'no capital, no purchase');
  assert.throws(()=>Meta.equipDecoration(a,'wall',wall.id),/보유/,'unowned cannot be equipped');
  Meta.addCapital(a,wall.price);
@@ -303,15 +303,20 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
  assert.equal(DATA.balance.wallVisitorChance,.30,'wall is the approved Morning chance (User 2026-09-25, v2.9.1 balance; was 25%)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- assert.ok(/wears\('dawnSign'\)\?D\.decorationParams\.dawnSign\.extraOffers:0/.test(src)&&DATA.decorationParams.dawnSign.extraOffers===3,'sign adds three ORDER candidates (v2.9.1 balance; was two)');
- assert.ok(/wears\('premiumCase'\)/.test(src),'display reuses the premium rare-NPC weighting');
+ /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
+    instead of three ORDER candidates */
+ assert.ok(/wears\('dawnSign'\)\?D\.decorationParams\.dawnSign\.budgetShare:0/.test(src)&&DATA.decorationParams.dawnSign.budgetShare===.25,'sign: 25% of the purse as a that-visit extra budget');
+ assert.ok(!/dawnSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.dawnSign),'and no longer adds ORDER candidates');
+ assert.ok(/wears\('premiumCase'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so
     its copy can say 희귀 이상 13% -> 19% and be exactly true. Amended the same day: every grade
     above 평범 is lifted, 평범 60% -> 50%. Re-tuned 2026-09-25, v2.9.1 balance: each grade's lift
     x1.5, so 평범 60% -> 45%. */
  const adv=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
- const nums=t=>t.slice(1,-1).split(",").map(Number),w=nums(adv.match(/opts\.premium\?(\[[^\]]+\])/)[1]),base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.equal(w[0],45,'평범 60% -> 45%, so above 평범 40% -> 55%');
+ const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.premiumCase.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
+ assert.ok(/opts\.premium\?D\.decorationParams\.premiumCase\.weights/.test(adv),'the weights have one owner, the Decoration param');
+ /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 평범 40% -> 65%, 영웅 · 전설 the most */
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[35,30,22,9,4],'평범 60% -> 35%, so above 평범 40% -> 65%');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -

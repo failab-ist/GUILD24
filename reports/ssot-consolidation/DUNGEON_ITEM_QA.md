@@ -825,7 +825,7 @@ PASS (User 2026-09-25, v2.9.1 balance):
 연금 방수슈트     165/330  부식+22 / 진창+18
 성화 랜턴         165/330  공포+18 / 어둠+18
 백설 방한고글     165/330  냉기+22 / 화이트아웃+18
-마그마 냉각장비   175/350  화염+18 / 투력+6
+마그마 냉각장비   175/350  화염+18 / 투력+10
 초고속 에너지드링크    Drink E   175/350  기동+26 / Supply2
 대현자 허브엘릭서      Drink E   175/350  정신+28 / Supply2
 최상급 포션            Potion E  210/420  투력+28
@@ -915,3 +915,15 @@ User 2026-09-26: the DUN-Q-v29-BC1 lines declared above are edited in place; the
 ## AMENDMENT — Item values (User 2026-09-26, v2.9.6)
 
 User 2026-09-26: 불룡볶음면 냉기 +12 / 강인함 +6, 귀환석 200 / 400, Epic Drink Stat +4. Lines declared earlier are edited in place above.
+
+## AMENDMENT — 마그마 냉각장비 투력 +10 (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: 투력 +6 → +10. The superseded lines below are dropped; a line declared earlier is edited in place above.
+
+```text
+- `마그마 냉각장비 투력+6` is an explicit exception only
+```
+
+```new
+- `마그마 냉각장비 투력+10` is an explicit exception only (User 2026-09-26, v2.9.6: +6 → +10)
+```

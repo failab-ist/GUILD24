@@ -407,14 +407,15 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
   if(ev.escapeItemRoll<clamp(se.escape,.0,.96))sOutcome='퇴각';
  }
  if(sOutcome==='사망'&&se.revive>=1)sOutcome='중상';
- if(sOutcome==='사망'&&ev.aidKitReady)sOutcome='중상';
  if(['부상','중상'].includes(sOutcome)&&se.injuryGuard>0){
   if(ev.injuryGuardRoll===undefined)return UNPROVEN;
   if(ev.injuryGuardRoll<clamp(se.injuryGuard,0,.9))sOutcome=sOutcome==='중상'?'부상':'퇴각';
  }
  const kit=kitSettle(sOutcome,(se.aftercare||0)>0,departure.injury);sOutcome=kit.tier;
+ /* 구급품 진열장 (META §display, v2.9.7): the same availability as the real resolution below */
+ const injury=!kit.from&&sOutcome==='부상'&&ev.aidKitReady?0:kit.injury;
  if(sOutcome==='성공'&&ev.greatRoll<greatSuccessChance(sAbility/d.power-1))sOutcome='대성공';
- return {tier:sOutcome,injury:kit.injury};
+ return {tier:sOutcome,injury};
 }
 /* ITEM v2.9.0 §Insurance resolution order step 4 (User 2026-09-25): 구급키트 lowers the settled
    non-death Outcome one step - a would-be 중상 resolves as 부상 (injury 1, no rest days), a
@@ -578,8 +579,6 @@ function resolve(n,d,r,facilities=[],run,assist=0){
   }
  }
  if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
- /* 구급품 진열장: up to twice per Run, a Death that no carried Insurance prevented becomes 중상. */
- if(outcome==='사망'&&aidKitReady){avoidedDeath=true;outcome='중상';rescued=true;run.aidKitSaves=(run.aidKitSaves||0)+1;p.why.push('구급품 진열장이 사망을 중상으로 변경');p.events.push({id:'aidKit',items:[],text:'구급품 진열장이 사망을 중상으로 바꿨다.'});}
  if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
  /* 강골 alone reaches this branch now. ITEM_v2.7 §INSURANCE HIERARCHY moved 구급키트 off the
     injuryGuard channel entirely - it may not change the resolved Outcome and carries no hidden
@@ -593,7 +592,11 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  {const kit=kitSettle(outcome,(e.aftercare||0)>0,n.injury);
   if(kit.from){aftercare={from:kit.from,to:kit.injury,outcomeFrom:outcome};outcome=kit.tier;
    p.why.push(kit.from===2?'구급키트가 중상을 부상으로 완화':'구급키트가 남을 부상을 제거');
-   p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),text:kit.from===2?'구급키트가 중상을 부상으로 낮췄다.':'구급키트가 남을 부상을 없앴다.'});}}
+   p.events.push({id:'aftercare',items:n.pack.filter(id=>D.itemBy[id].effects.aftercare),text:kit.from===2?'구급키트가 중상을 부상으로 낮췄다.':'구급키트가 남을 부상을 없앴다.'});}
+  /* META §display — 구급품 진열장 (User 2026-09-26, v2.9.7): up to ten times per Run, an ordinary Injury the expedition would
+     leave is not left - 구급키트's 부상 -> 무사 step. A carried 구급키트 settles first, so an expedition it acted on spends nothing. */
+  else if(outcome==='부상'&&aidKitReady){aftercare={from:1,to:0,outcomeFrom:outcome};run.aidKitSaves=(run.aidKitSaves||0)+1;
+   p.why.push('구급품 진열장이 남을 부상을 제거');p.events.push({id:'aidKit',items:[],text:'구급품 진열장이 남을 부상을 없앴다.'});}}
  /* Only now, with the ordinary outcome settled, may a 성공 become 대성공. Assigning it right
     after combat let a later environmental injury overwrite it, and judging it on the post-noise
     score let a lucky hidden roll pass itself off as preparation - so it is judged on `ability`,

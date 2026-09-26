@@ -1073,14 +1073,14 @@ EXPECT exact new Epic Field Gear:
 연금 방수슈트     165/330  부식+22 / 진창+18
 성화 랜턴         165/330  공포+18 / 어둠+18
 백설 방한고글     165/330  냉기+22 / 화이트아웃+18
-마그마 냉각장비   175/350  화염+18 / 투력+6
+마그마 냉각장비   175/350  화염+18 / 투력+10
 ```
 
 PASS:
 - each dual-Hazard value remains below every dedicated specialist of the same or a higher Rarity for that Hazard
   (User 2026-09-25, v2.9.1: an Epic hybrid may exceed a Common Main — 속박 / 어둠 +18 over 경량 로프 / 랜턴 건전지 +16)
 - FIRE item does not invent a second FIRE Hazard
-- `마그마 냉각장비 투력+6` is an explicit exception only
+- `마그마 냉각장비 투력+10` is an explicit exception only (User 2026-09-26, v2.9.6: +6 → +10)
 
 ### ITEM-Q84 — EPIC TOP-END STAT/SUPPLY ITEMS
 

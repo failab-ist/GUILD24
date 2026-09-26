@@ -216,3 +216,17 @@ numbers and NPC-Q73 is kept.
 - eater: Food positive native Core Stat +30%; each Food Supply (피로 회복) -1, minimum 1 (User 2026-09-24, v2.9.0)
 - small: Food positive native Core Stat -20%; each Food Supply (피로 회복) +1
 ```
+
+## AMENDMENT — decorations and Rarity (User 2026-09-26, v2.9.7)
+
+User 2026-09-26: 원정 지원금 간판 (sign economy remake), wall / display economy Decorations swap Slots (길드 추천 매대, 명예 모험가 액자 [35, 30, 22, 9, 4]), 구급품 진열장 부상 10회 -> 무사, Rarity growth step 0.10 written into NPC_TRAIT, no Trait-slot field. The superseded chain lines below are dropped.
+
+```text
+With the `프리미엄 쇼케이스` Decoration active, the ordinary NPC rarity draw uses exactly:
+[51, 30, 14, 4, 1]
+```
+
+```new
+With the `명예 모험가 액자` Decoration (id premiumCase) active, the ordinary NPC rarity draw uses exactly (User 2026-09-26, v2.9.7; META §wall — 명예 모험가 액자):
+[35, 30, 22, 9, 4]
+```

@@ -443,7 +443,7 @@ Where the principles land:
 | a card with weight, sound, landing | NIGHT verdict stamp, SALE key impact / receipt stub, ORDER confirm | NIGHT: the beat slides in per tone (340~760 ms) and the verdict tag follows 160 ms later (scale 1.12→1 260 ms, or translateY -6→0); SALE: the receipt stub stamps in 1.12→1 200 ms, Gold counts up 320 ms; ORDER: the form slides in 280 ms and one `order` stamp sample plays. No wind-up, no landing after-motion |
 | repeated actions remain tactile without escalation | consecutive sales, consecutive returns in one night (a sale count never makes the game more excited — H2) | every sale plays the same beat; no rhythm, no acceleration |
 | "well done" as a rising number | receipt stub, Gold count-up, CLOSING receipt, Store Capital | the stub exists (2.5 s); CLOSING and Store Capital are static tables; no praise word (§LEARNING AFTER RESULT forbids a right-answer cue, so acknowledgement lives in the result only) |
-| the reversal at the brink | the night an Insurance (귀환석, 세계수, 구급품 진열장, 구급키트, 강골) turns a death or Severe Injury into a return; 대성공; the final expedition | one proof sentence and the `rescue` cue behind the Outcome cue; the reversal is stated, not shown |
+| the reversal at the brink | the night an Insurance (귀환석, 세계수, 구급키트, 강골) turns a death or Severe Injury into a return; 대성공; the final expedition | one proof sentence and the `rescue` cue behind the Outcome cue; the reversal is stated, not shown |
 | the weight of a death | the 사망 result | `gone` tone fades in 760 ms with the 1.4 s `death` cue; the direction is right, the weight is short |
 
 Three-part beat: wind-up (a held stillness or pull) → impact (one short, hard frame: press, flash,

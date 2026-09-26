@@ -703,3 +703,15 @@ Warehouse Relic adds 5 slots, not 10. Price and every other Relic unchanged.
 ```new
 - 후방 창고 증설 -> inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
 ```
+
+## AMENDMENT — decorations and Rarity (User 2026-09-26, v2.9.7)
+
+User 2026-09-26: 원정 지원금 간판 (sign economy remake), wall / display economy Decorations swap Slots (길드 추천 매대, 명예 모험가 액자 [35, 30, 22, 9, 4]), 구급품 진열장 부상 10회 -> 무사, Rarity growth step 0.10 written into NPC_TRAIT, no Trait-slot field. The superseded chain lines below are dropped.
+
+```text
+- Decoration 프리미엄 쇼케이스 remains unchanged
+```
+
+```new
+- the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 (v2.9.7); no Store Support is named 쇼케이스
+```

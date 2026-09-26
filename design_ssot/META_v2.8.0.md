@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.9.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/META_v2.8.0-patch.md,history/META_v2.7.0.md,history/META_v2.6.1.md,history/META_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/META.md
@@ -533,34 +533,41 @@ Decoration effect must not inject a Relic id into the Run's facilities, mark a R
 remove a Relic from a purchase window, or consume one of the Run's Relic slots. A Decoration and
 a Relic that touch the same quantity simply both apply.
 
-### sign — 새벽배송 안내판
+v2.9.7 (User 2026-09-26, after the decoration re-measure in reports/deco-balance-v296.md): the sign economy Decoration is remade as
+원정 지원금 간판; the wall and display economy Decorations swap Slots, names and art following the Slot (길드 제휴 현판 -> 길드 추천 매대
+on display, 프리미엄 쇼케이스 -> 명예 모험가 액자 on wall); ids are kept. An Account whose loadout holds a Decoration on a Slot it no
+longer belongs to has that Slot empty; ownership is kept.
+
+### sign — 원정 지원금 간판 (id dawnSign)
 ```text
-ORDER offer candidates +3    (User 2026-09-25, v2.9.1 balance; was +2)
+each visiting adventurer: an extra purchase budget of 25% of their current purse, that visit only    (User 2026-09-26, v2.9.7; replaces ORDER offer candidates +3)
 ```
 
-### wall — 길드 제휴 현판
+It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never taken
+from it, and is gone at the end of the Day, so nothing compounds. On a Day whose Event also grants 추가 구매, the two shares add.
+
+### wall — 명예 모험가 액자 (id premiumCase)
 ```text
-each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%)
+rare-NPC rarity weights = [35, 30, 22, 9, 4]    (User 2026-09-26, v2.9.7; was [45, 31.5, 17.5, 4.75, 1.25] on the display Slot)
+rarity order = Common / Uncommon / Rare / Epic / Legendary
 ```
 
-The roll happens once per Morning, alongside the ordinary visitor generation, and is independent
-of every other visitor source. It is a chance, not a guarantee: most Days it adds nothing.
+Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 65%, 영웅 and 전설 the most. This reuses the
+existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn rarity draw when the
+Decoration is active. It adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
 
 ### counter — 알뜰 금고
 ```text
 every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (User 2026-09-25, v2.9.1 balance; was +40G)
 ```
 
-### display — 프리미엄 쇼케이스
+### display — 길드 추천 매대 (id guildPlaque)
 ```text
-rare-NPC rarity weights = [45, 31.5, 17.5, 4.75, 1.25]    (User 2026-09-25, v2.9.1 balance; was [50, 30, 15, 4, 1])
-rarity order = Common / Uncommon / Rare / Epic / Legendary
+each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%. On the display Slot from v2.9.7, User 2026-09-26)
 ```
 
-Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 55%
-(User decision 2026-09-24; 55% at the v2.9.1 balance 2026-09-25, each grade's lift × 1.5). This reuses the existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn
-rarity draw when the Decoration is active. It adds no extra spawn, no extra rarity roll and no new
-Gameplay RNG draw.
+The roll happens once per Morning, alongside the ordinary visitor generation, and is independent
+of every other visitor source. It is a chance, not a guarantee: most Days it adds nothing.
 
 Do not carry the retired Start Contract negative sides into these Decorations:
 - no +5% ORDER purchase penalty
@@ -597,18 +604,22 @@ sits in the dearer Slot; ids are kept from the first placement, names and art fo
 
 ### display — 구급품 진열장 (id firstAidKit)
 ```text
-up to three times per Run, a Death that no carried Insurance prevented becomes 중상    (User 2026-09-25, v2.9.1 balance; was twice)
+up to ten times per Run, an expedition that would leave an ordinary Injury (부상) leaves none (무사)    (User 2026-09-26, v2.9.7; was: up to three Deaths -> 중상)
 ```
+
+It is 구급키트's `부상 -> 무사` step (ITEM §INSURANCE HIERARCHY), taken in order and counted per Run. A carried 구급키트 settles first,
+and an expedition it already acted on spends nothing; 중상 and 사망 are not touched. The RESULT-PROOF counterfactual reads
+the same availability.
 
 ### Prices — EXACT
 
 `DIRECTOR DOCUMENT BASELINE` (User decision 2026-09-24; prices 2026-09-25, v2.9.1 balance — cheapest 500, dearest 2.5×, total 3,500)
 
 ```text
-sign    새벽배송 안내판 / 훈련소 제휴 간판   1250 Store Capital
-wall    길드 제휴 현판 / 의무실 현판        1000 Store Capital
+sign    원정 지원금 간판 / 훈련소 제휴 간판   1250 Store Capital
+wall    명예 모험가 액자 / 의무실 현판        1000 Store Capital
 counter 알뜰 금고 / 추모 방명록             750 Store Capital
-display 프리미엄 쇼케이스 / 구급품 진열장     500 Store Capital
+display 길드 추천 매대 / 구급품 진열장       500 Store Capital
 ```
 
 Both Decorations of a Slot cost the same, so price never decides between them. The display Slot

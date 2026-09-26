@@ -34,7 +34,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    r=await ending(2,15,30000);check(width+' 2 a settlement that crosses an unowned price names no Decoration',r.line==='점포 자본으로 새 장식을 들일 수 있다.',r.line);
    // a Decoration bought from the ending does not rewrite the receipt (judged once at the settlement); the purchase is undone
    // after so the rest of the account story is unchanged
-   const after=await p.evaluate(()=>{const a=Guild24.game.account,kept=JSON.parse(JSON.stringify(a.store));Meta.buyDecoration(a,'premiumCase');Guild24.render();
+   const after=await p.evaluate(()=>{const a=Guild24.game.account,kept=JSON.parse(JSON.stringify(a.store));Meta.buyDecoration(a,DATA.decorations.find(d=>d.slot==='display'&&d.kind==='economy').id);Guild24.render();
     const line=document.querySelector('.end-tape .replay')?.textContent||'';a.store=kept;Guild24.game.save();Guild24.render();return line;});
    check(width+' 2 a purchase from the ending leaves the printed line as it was',after==='점포 자본으로 새 장식을 들일 수 있다.',after);
    r=await ending(3,18,1000);check(width+' 3 a new best Day',r.line==='지금까지 가장 오래 버틴 점포다 · DAY 18',r.line);

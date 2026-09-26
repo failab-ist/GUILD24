@@ -2,8 +2,8 @@
 
 DOC=RELIC_QA
 OWNER=qa,relic,store_build,fresh,sloth_window
-DOC_VERSION=2.9.3
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/RELIC_QA_v2.8.0-patch.md,history/RELIC_QA_v2.7.0.md,history/RELIC_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/RELIC_QA.md
@@ -408,7 +408,7 @@ No excluded facility is offered, owned, or applied as a hidden modifier.
 Expected:
 - showcase -> 희귀상품 입고 계약
 - coldcase -> 냉장 유통 계약
-- Decoration 프리미엄 쇼케이스 remains unchanged
+- the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 (v2.9.7); no Store Support is named 쇼케이스
 
 No active Store Support uses 쇼케이스 in these two names.
 

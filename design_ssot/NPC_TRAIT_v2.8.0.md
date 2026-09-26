@@ -2,8 +2,8 @@
 
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
-DOC_VERSION=2.9.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/NPC_TRAIT_v2.8.0-patch.md,history/NPC_TRAIT_v2.7.0.md,history/NPC_TRAIT_v2.6.1.md,history/NPC_TRAIT_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/NPC_TRAIT.md
@@ -661,6 +661,12 @@ Base outcome Fatigue, the 0~40 Fatigue scale with its five bands, and the Supply
 Rarity may influence:
 - stat/potential profile
 - other explicitly defined generation values
+
+Exact generation values (User 2026-09-26, v2.9.7; the step was 0.06 in Source and written nowhere):
+- growth potential = 1 + 0.10 × Rarity + a uniform 0~0.10 roll; every Level-up adds the Job growth × potential
+- Trait count at spawn: 1~2, or 1~3 at 희귀 and above
+- no Trait-slot field: Traits are only drawn at spawn (the per-Level Trait slot was dropped by the User earlier)
+- Rarity's costs stay where they are owned: operating cost (ECONOMY_ORDER, × (1 + 0.06 × core average Rarity)) and Deep sponsorship (+20% a step)
 
 Rarity must not directly guarantee good Trait quality.
 

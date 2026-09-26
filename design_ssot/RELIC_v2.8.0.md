@@ -2,8 +2,8 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.9.3
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/RELIC_v2.8.0-patch.md,history/RELIC_v2.7.0.md,history/RELIC_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/RELIC.md
@@ -15,7 +15,7 @@ Player-facing active system name:
 
 Internal source IDs/files may retain relic where changing them adds unnecessary migration/refactor risk.
 
-The Decoration named 프리미엄 쇼케이스 remains unchanged.
+The Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 since v2.9.7 (User 2026-09-26).
 Thus 쇼케이스 is no longer reused by these active Store Supports.
 
 ## KEY
