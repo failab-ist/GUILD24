@@ -75,9 +75,10 @@ const s=run(STRONG,'강한 것부터');
 const w=run(WEAK,'약한 것부터');
 console.log('획득 Run 중앙값  강한 것부터 '+s.map(x=>x??'미획득').join(' / '));
 console.log('                약한 것부터 '+w.map(x=>x??'미획득').join(' / '));
-console.log('승인된 기대      3~4 / 6 / 8~9 / 10~11');
+/* the expectation lives in META §Approved progression expectation - this line only quotes it (was a stale 2026-09-19 copy) */
+console.log('META 기대       첫 장식 Run 4~6 · 네 칸 Run 9 (User 2026-09-24: 네 칸 Run 10~11까지)');
 fs.writeFileSync(require('node:path').resolve(__dirname,'acquisition-results-v5.json'),
  JSON.stringify({version:5,trajectories:T,runsPerTrajectory:R,policy:'balanced',
   prices:Object.fromEntries(STRONG.map(id=>[id,D.decorationBy[id].price])),
   rates:D.capitalRates,strongFirst:s,weakFirst:w,detail,
-  approvedExpectation:'3~4 / 6 / 8~9 / 10~11'},null,2));
+  approvedExpectation:'META: 1st Decoration around Run 4-6, all four Slots around Run 9 (User 2026-09-24: four Slots by Run 10-11)'},null,2));
