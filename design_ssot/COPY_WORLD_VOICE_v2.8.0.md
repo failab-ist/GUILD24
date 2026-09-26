@@ -2,8 +2,8 @@
 
 DOC=COPY_WORLD_VOICE
 OWNER=copy,world_voice,player_terms,help_copy,boss_report_copy,result_copy,event_copy
-DOC_VERSION=2.9.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/COPY_WORLD_VOICE_v2.8.0-patch.md,history/COPY_WORLD_VOICE_v2.7.0.md,history/COPY_WORLD_VOICE_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/COPY_WORLD_VOICE.md
@@ -1085,7 +1085,7 @@ NIGHT
 한 명씩 원정 결과와 변화를 확인한다. ‘전체 건너뛰기’로 바로 정산할 수 있다.
 
 CLOSING
-오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.
+영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
 ```
 
 The `전망` step explains display behavior and uncertainty; it does not imply that purchased Items have no runtime effect. Actual Resolve still uses the final committed preparation.

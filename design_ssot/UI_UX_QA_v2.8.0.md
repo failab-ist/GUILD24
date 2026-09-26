@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1466,8 +1466,8 @@ stamp landing and through the settlement count.
 
 PASS:
 - every receipt row is on screen together within 200 ms behind one printer tick; nothing prints row by row
-- only the `영업 손익` row stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
-- a profit stamps gold, a loss stamps red, and reduced motion shows the same row, colour and figures at once
+- only the `보유 자금` figure (the purse box; the `영업 손익` row until v2.9.7) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
+- the `영업 손익` figure is green on a profit, red on a loss, gold at 0, and reduced motion shows the same row, colour and figures at once
 - no `어제보다 +N` line anywhere on the receipt
 - the END `현재 점포 자본` row counts from the account's prior total to the resolved one in 320 ms, with one `ui`
   click for each Decoration price it passes; a count that crosses no price plays none
@@ -1587,8 +1587,10 @@ SETUP:
 Open Closing.
 
 EXPECT:
-Economic result is visually primary:
-revenue/COGS/margin/overhead/waste/relic/final Gold
+Economic result is visually primary (v2.9.7 cash-flow receipt):
+영업 전 자금 -> 매출 / 발주 / 운영비 (+ other moved rows) -> 보유 자금 box (stamped) with 영업 손익 ±N (green / red, gold at 0);
+창고 재고 and 오늘 폐기 on separate lines, 오늘 폐기 naming up to three Items (×n from two) then 외 N종; 내일 운영비 예상 (not on DAY 29);
+no 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 전 자금 + ins - outs = 보유 자금 exactly; no page scroll at 390 x 780
 
 PASS:
 Night story is not duplicated as dominant content.
@@ -2343,7 +2345,8 @@ SETUP:
 SALE with a shelf holding units stocked on different days (some at 1 day left), at 360 and 1280; the same shelf for two customers going to different Gates.
 
 PASS:
-- the shelf rows are ordered by days left before discard, nearest first; ties keep the existing order; the order is identical for both customers
+- the shelf rows are ordered by kind (대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수), then days left before discard, nearest first, then higher Rarity; ties keep the existing order; the order is identical for both customers (v2.9.7)
+- selling units, including the last unit of an Item's oldest batch, moves no other row within the Day; a sold-out row leaves; the next Day sorts afresh (v2.9.7)
 - every row carries `폐기 N일`; a row at 1 day or less is emphasized in the warehouse `.soon` color
 - no `유통기한 없음` / `기한 없음` state appears on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
 - rows keep one name line + one effect line; no overflow at 360

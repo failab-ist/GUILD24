@@ -709,7 +709,6 @@ stocking day, and is discarded at the morning it runs out. The rule behind the t
 | stone | 귀환석 | Insurance | 4d |
 | tree | 세계수 생환부적 | Insurance | 5d |
 | coupon | 황금 1+1 쿠폰 | Special | 5d |
-SALE shelf order: nearest expiry first, ties in the existing order; each row carries `폐기 N일` (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0)
 ```
 
 ## AMENDMENT — v2.9.0 F6: fit emphasis retired / fixed effect order / category grammar once / transaction result stub (User decision 2026-09-24)
@@ -920,4 +919,12 @@ The `투력 +6` on `마그마 냉각장비` is an explicit catalog exception; it
 투력 +10
 The `투력 +10` on `마그마 냉각장비` is an explicit catalog exception; it is not permission for generic specialist Field Gear to gain Core Stats.
 투력 +6 → +10 (User 2026-09-26, v2.9.6): the only Epic hybrid for a one-Hazard Gate read weaker at its own Gate than the Rare 쿨링 이온음료; the combat half is what the Fire Gate's higher Power asks for, and 화염 +18 stays below the Main's +26.
+```
+
+## AMENDMENT — v2.9.7 SALE shelf order by kind (User 2026-09-26)
+
+User 2026-09-26: the SALE shelf sorts by kind (대응 장비, 음식, 음료, 포션, 보험, 특수), then nearest discard, then higher Rarity, held for the Day. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries `폐기 N일` (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
 ```

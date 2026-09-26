@@ -798,3 +798,22 @@ User 2026-09-26: every Gate's Hazards are public, so the codex `몬스터 지식
 ```new
 - Monster Knowledge has no player-facing term: no screen shows it (User 2026-09-26, v2.9.6)
 ```
+
+## AMENDMENT — closing cash-flow receipt (User 2026-09-26, v2.9.7)
+
+User 2026-09-26: the Closing receipt reads as the Day's cash (opening Gold, the Gold that moved, closing Gold with the change, stock / waste counts, tomorrow's operating estimate) instead of an income statement; the stamped row is 오늘 끝. The superseded chain lines below are dropped.
+
+```text
+오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.
+```
+
+```new
+```
+
+## AMENDMENT — v2.9.7 CLOSING labels (User 2026-09-26)
+
+User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보유 자금 / 영업 손익; the stamp sits on 보유 자금, only 영업 손익 is coloured (green / red, gold at 0); 창고 재고 and 오늘 폐기 take separate lines and the waste line names the Items. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
+```

@@ -242,7 +242,6 @@ After an expedition result is fully resolved, write the latest snapshot owned by
 -> NPC_TRAIT_v2.8.0.md
 -> CORE_RUN_v2.8.0.md
 -> DUNGEON_HAZARD_v2.8.0.md
--> ECONOMY_ORDER_v2.8.0.md
 Boss identity/trait/Sloth state is owned by `BOSS_v2.8.0.md`; Closing does not mutate it.
 -> FINAL_EXPEDITION_v2.8.0.md
 ```
@@ -419,4 +418,85 @@ User 2026-09-25: the reversal overstamp also covers a Death 만반의 준비 tur
 ```new
 Only a turned-away Death reverses (User 2026-09-25): those two result flags, and a Death 만반의 준비 turned into 부상 / 중상
 (its `prepared` event); 강골 / 구급키트 never do. The wording, the proof and the resolved Outcome are unchanged.
+```
+
+## AMENDMENT — closing cash-flow receipt (User 2026-09-26, v2.9.7)
+
+User 2026-09-26: the Closing receipt reads as the Day's cash (opening Gold, the Gold that moved, closing Gold with the change, stock / waste counts, tomorrow's operating estimate) instead of an income statement; the stamped row is 오늘 끝. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+Closing keeps only economic/accounting results such as:
+- 매출
+- 판매 원가 / 마진
+- 운영비
+- 폐기
+- 발주 교환
+- 본사 지원·수당
+- 영업 손익
+- 발주 지출
+- 점포지원 투자
+- 재고 정리
+- 보유 자금
+매출 / 비용 / 손익 / 폐기 / Gold 변화
+Show at minimum:
+- 총매출
+- 매입/COGS
+- Margin
+- 운영비
+- 폐기
+- Relic 비용
+- 최종 Gold
+Exact calculation:
+`오늘 장사는 실제로 남는 장사였나?`
+```
+
+```new
+### CLOSING — CASH FLOW RECEIPT — EXACT (User 2026-09-26, v2.9.7)
+The receipt is the Day's cash, not an income statement: a player judges the Day by what the store started with and
+what it ends with, and by what moved in between - not by cost of goods sold, margin or an accounting profit (the old
+`영업 손익` row read as Gold leaving the store when it counted stock already paid for).
+2. the Gold that moved today, inflows then outflows; 매출 / 발주 / 운영비 always print, every other row only when it moved:
+in - 매출, 본사 지원·수당, 대성공 본사 보상, 알뜰 금고, 재고 정리; out - 발주, 발주 교환, 점포지원 투자, 원정 후원, 운영비
+5. `내일 운영비 예상 {N}G` - tomorrow's base operating cost with today's Store Support and roster, no Event; not on DAY 29
+(the Final Day has no operating cost)
+`오늘 돈이 얼마 남았고, 내일 괜찮은가?`
+```
+
+## AMENDMENT — closing change row (User 2026-09-26, v2.9.7)
+
+The Day's change prints as its own 오늘 변화 row under 오늘 끝. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+```
+
+## AMENDMENT — v2.9.7 CLOSING labels (User 2026-09-26)
+
+User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보유 자금 / 영업 손익; the stamp sits on 보유 자금, only 영업 손익 is coloured (green / red, gold at 0); 창고 재고 and 오늘 폐기 take separate lines and the waste line names the Items. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+영업 전 자금 / 들어오고 나간 돈 / 보유 자금 · 영업 손익 / 창고 재고 / 오늘 폐기 (v2.9.7 CASH FLOW RECEIPT)
+3. the `보유 자금 {N}G` box - the Day's end Gold, the receipt's largest figure and its stamp (UI_UX §CLOSING — RECEIPT
+STAMP) - with `영업 손익 ±{N}G` inside it: the end Gold less the opening. Only the 영업 손익 figure is coloured: green
+above 0, red below 0, gold at exactly 0 (User 2026-09-26)
+4. `창고 재고 {n}개` on its own line, and `오늘 폐기 {n}개` on the next line when any - never Gold: an expired Item was
+paid for when it was ordered. After the count come the expired Items' names, most first, `×{n}` only when two or more
+of one Item expired, at most three names then `외 {n}종`
+No 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 손익 is the cash change, not an accounting profit. Exact calculation of each flow -> ECONOMY_ORDER_v2.8.0.md.
+Closing keeps only the cash-flow receipt above (v2.9.7): 영업 전 자금, the in / out rows, 보유 자금 with 영업 손익, 창고
+재고, 오늘 폐기 and 내일 운영비 예상.
+```
+
+## AMENDMENT — v2.9.7 CLOSING opening box (User 2026-09-26)
+
+User 2026-09-26: 영업 전 자금 gets a light outlined box, quieter than the 보유 자금 box. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+```
+
+## AMENDMENT — v2.9.7 CLOSING boxes (User 2026-09-26)
+
+User 2026-09-26: the 영업 전 자금 box is a light fill, both boxes take the dotted leader and the stepped pixel corner, the figures step down. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+1. `영업 전 자금 {N}G` in a light filled box (the pair of the 보유 자금 box, quieter than it; both boxes keep the receipt's dotted leader and the stamp keys' stepped pixel corner) - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
 ```

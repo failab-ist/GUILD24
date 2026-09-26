@@ -2,8 +2,8 @@
 
 DOC=NIGHT_CLOSING
 OWNER=night,expedition_result,closing,causality,fatigue_result,npc_reaction
-DOC_VERSION=2.9.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/NIGHT_CLOSING_v2.8.0-patch.md,history/NIGHT_CLOSING_v2.7.0.md,history/NIGHT_CLOSING_v2.6.1.md,history/NIGHT_CLOSING_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/NIGHT_CLOSING.md
@@ -38,7 +38,7 @@ NIGHT:
 NPC 원정 이야기 / 생존 / 성장 / 부상 / 사망
 
 CLOSING:
-매출 / 비용 / 손익 / 폐기 / Gold 변화
+영업 전 자금 / 들어오고 나간 돈 / 보유 자금 · 영업 손익 / 창고 재고 / 오늘 폐기 (v2.9.7 CASH FLOW RECEIPT)
 
 ## NIGHT FLOW
 
@@ -735,20 +735,28 @@ Adding a global `game` escape hatch is forbidden.
 
 Closing is economics-first.
 
-Show at minimum:
-- 총매출
-- 매입/COGS
-- Margin
-- 운영비
-- 폐기
-- Relic 비용
-- 최종 Gold
+### CLOSING — CASH FLOW RECEIPT — EXACT (User 2026-09-26, v2.9.7)
 
-Exact calculation:
--> ECONOMY_ORDER_v2.8.0.md
+The receipt is the Day's cash, not an income statement: a player judges the Day by what the store started with and
+what it ends with, and by what moved in between - not by cost of goods sold, margin or an accounting profit (the old
+`영업 손익` row read as Gold leaving the store when it counted stock already paid for).
+
+1. `영업 전 자금 {N}G` in a light filled box (the pair of the 보유 자금 box, quieter than it; both boxes keep the receipt's dotted leader and the stamp keys' stepped pixel corner) - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
+2. the Gold that moved today, inflows then outflows; 매출 / 발주 / 운영비 always print, every other row only when it moved:
+   in - 매출, 본사 지원·수당, 대성공 본사 보상, 알뜰 금고, 재고 정리; out - 발주, 발주 교환, 점포지원 투자, 원정 후원, 운영비
+3. the `보유 자금 {N}G` box - the Day's end Gold, the receipt's largest figure and its stamp (UI_UX §CLOSING — RECEIPT
+   STAMP) - with `영업 손익 ±{N}G` inside it: the end Gold less the opening. Only the 영업 손익 figure is coloured: green
+   above 0, red below 0, gold at exactly 0 (User 2026-09-26)
+4. `창고 재고 {n}개` on its own line, and `오늘 폐기 {n}개` on the next line when any - never Gold: an expired Item was
+   paid for when it was ordered. After the count come the expired Items' names, most first, `×{n}` only when two or more
+   of one Item expired, at most three names then `외 {n}종`
+5. `내일 운영비 예상 {N}G` - tomorrow's base operating cost with today's Store Support and roster, no Event; not on DAY 29
+   (the Final Day has no operating cost)
+
+No 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 손익 is the cash change, not an accounting profit. Exact calculation of each flow -> ECONOMY_ORDER_v2.8.0.md.
 
 Closing should answer:
-`오늘 장사는 실제로 남는 장사였나?`
+`오늘 돈이 얼마 남았고, 내일 괜찮은가?`
 
 Remove explanatory footer prose that teaches internal accounting when the receipt itself already
 shows the actual figures.
@@ -768,18 +776,8 @@ Remove the current block headed:
 
     오늘의 보급 영향
 
-Closing keeps only economic/accounting results such as:
-- 매출
-- 판매 원가 / 마진
-- 운영비
-- 폐기
-- 발주 교환
-- 본사 지원·수당
-- 영업 손익
-- 발주 지출
-- 점포지원 투자
-- 재고 정리
-- 보유 자금
+Closing keeps only the cash-flow receipt above (v2.9.7): 영업 전 자금, the in / out rows, 보유 자금 with 영업 손익, 창고
+재고, 오늘 폐기 and 내일 운영비 예상.
 
 The NIGHT result is the owner surface for expedition causality and adventurer-state change.
 

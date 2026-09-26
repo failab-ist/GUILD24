@@ -81,7 +81,7 @@ let closingCueAt=null;
    the direction is read off the rendered row so this never re-derives the day's figures itself */
 function closingSound(){clearTimeout(closingCueAt);const s=game.run;if(!s||s.phase!=='closing')return;
  sound('receipt');
- const row=$('.p-closing .tape .row.profit');if(!row)return;
+ const row=$('.p-closing .tape .purse');if(!row)return;
  const kind=row.classList.contains('loss')?'spend':'gold';
  if(!motionOK()){sound(kind);return;}
  closingCueAt=setTimeout(()=>sound(kind),CLOSING_STAMP.hold+STAMP_FALL);}
@@ -196,12 +196,12 @@ function playPhase(phase){
   if(gate)A(gate,{translateY:[10,0],opacity:[0,1],duration:220,ease:'outQuad'});
  }
  /* v2.9.2 H4 CLOSING receipt (UI_UX §CLOSING — RECEIPT STAMP): every row of the two figure blocks
-    settles together in one 200 ms pass - never a tick per row - and only the 영업 손익 row lands as
+    settles together in one 200 ms pass - never a tick per row - and only the 보유 자금 figure (v2.9.7) lands as
     a stamp on a fixed 100 ms hold, reusing the NIGHT stamp's own 90 ms fall and card dip. */
  if(phase==='closing'){
-  const printed=[...document.querySelectorAll('.p-closing .tape .print>.block,.p-closing .tape .print>.purse')];
+  const printed=[...document.querySelectorAll('.p-closing .tape .print>.block')];
   if(printed.length)A(printed,{opacity:[0,1],translateY:[-4,0],duration:200,ease:'outQuad'});
-  const row=$('.p-closing .tape .row.profit'),val=row?.querySelector('b'),tape=$('.p-closing .tape'),land=CLOSING_STAMP.hold+STAMP_FALL;
+  const row=$('.p-closing .tape .purse'),val=row?.querySelector(':scope>b'),tape=$('.p-closing .tape'),land=CLOSING_STAMP.hold+STAMP_FALL;
   if(row)A(row,{opacity:{from:0,to:1,duration:40,delay:CLOSING_STAMP.hold,ease:'linear'}});
   if(val)A(val,{scale:{from:1.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP.hold,ease:'in(3)'}});
   if(tape)A(tape,{translateY:[{from:0,to:0,duration:land},{to:CLOSING_STAMP.dip,duration:40,ease:'in(2)'},{to:0,duration:150,ease:'outQuad'}]});
@@ -995,29 +995,32 @@ function changedRows(r){
 // every figure is monospace and right-aligned on a dotted leader, subtotals rule off,
 // and the money actually in the drawer is the last thing stamped on it.
 function closingScreen(){
- const s=game.run,d=s.daily,margin=d.revenue-d.cogs;
- const profit=margin+(d.subsidy||0)+(d.commission||0)+(d.greatSuccess||0)+(d.safeGold||0)-d.operating-(d.wasteCost||0)-(d.rerollSpent||0);
- /* a printed zero is still printed - the receipt states every figure - but it is marked so the
-    detail rows that did not move stay quiet under the day's result (UI_UX §CLOSING). */
- const line=(label,value,cls='')=>'<div class="row '+cls+(value?'':' nil')+'"><span>'+label+'</span><b>'+fmt(value||0)+'</b></div>';
- /* SA-Q21 / SA-Q34: Closing is economics-only. What an actual sold Item did for an actual
-    expedition is NIGHT's own causality, already told there through the Outcome sentence and
-    the proven Hero Item line - repeating it here under 오늘의 보급 영향 duplicated it, in a
-    place with no adventurer on screen to attribute it to. The explanatory footer taught
-    internal accounting the receipt above it already shows in real figures. Neither returns. */
+ /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): the receipt is the Day's cash - what the store
+    started with, the Gold that moved, what it ends with - not an income statement. The opening is derived from the Day's own
+    flows (end - ins + outs), so the tape always adds up. Stock and waste are counts: an expired Item was paid for when it was
+    ordered, and printing its cost as a loss read as Gold leaving the drawer twice. */
+ const s=game.run,d=s.daily;
+ const ins=[['매출',d.revenue,true],['본사 지원·수당',(d.subsidy||0)+(d.commission||0)],['대성공 본사 보상',d.greatSuccess],['알뜰 금고',d.safeGold],['재고 정리',d.liquidation]];
+ const outs=[['발주',d.spent,true],['발주 교환',d.rerollSpent],['점포지원 투자',d.relicSpent],[Copy.deep.sponsor,d.deepSponsor],['운영비',d.operating,true]];
+ const total=rows=>rows.reduce((t,r)=>t+(r[1]||0),0),change=total(ins)-total(outs),open=s.money-change;
+ const line=(r,sign)=>r[1]||r[2]?'<div class="row"><span>'+E(r[0])+'</span><b>'+(r[1]?sign:'')+fmt(r[1]||0)+'</b></div>':'';
+ const tomorrow=s.day<29?game.tomorrowOperatingCost():null,tone=change>0?'gain':change<0?'loss':'even';
+ /* what expired: a name alone for one, `×n` from two, three kinds at most and the rest as `외 N종` so it stays one line */
+ const wasted=Object.entries(d.wasteItems||{}).sort((x,y)=>y[1]-x[1]),wasteNames=wasted.length?' · '+wasted.slice(0,3).map(([id,n])=>E(D.itemBy[id]?.name||id)+(n>1?' ×'+n:'')).join(' · ')+(wasted.length>3?' 외 '+(wasted.length-3)+'종':''):'';
  const body='<div class="tape">'
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
   +'<div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span>영업 종료</span></div>'
-  +'<div class="block">'+line('매출',d.revenue)+line('판매 원가',-d.cogs)
-   +line('판매 마진',margin,'sum')+'</div>'
-  +'<div class="block">'+line('운영비',-d.operating)+line('폐기 원가',-d.wasteCost)
-   +line('발주 교환',-d.rerollSpent)+line('본사 지원·수당',(d.subsidy||0)+(d.commission||0))
-   +(d.greatSuccess?line('대성공 본사 보상',d.greatSuccess):'')+(d.safeGold?line('알뜰 금고',d.safeGold):'')+'</div>'
-  +'<div class="row profit'+(profit<0?' loss':'')+'"><span>영업 손익</span><b>'+(profit>0?'+':'')+fmt(profit)+'</b></div>'
-  +'<div class="block">'+line('발주 지출',-d.spent)+line('점포지원 투자',-d.relicSpent)
-   +(d.deepSponsor?line(Copy.deep.sponsor,-d.deepSponsor):'')+line('재고 정리',d.liquidation)+'</div>'
-  +'<div class="purse"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b></div>'
+  +'<div class="block"><div class="row open"><span>영업 전 자금</span><b>'+fmt(open)+'<i>G</i></b></div></div>'
+  +'<div class="block ins">'+ins.map(r=>line(r,'+')).join('')+'</div>'
+  +'<div class="block outs">'+outs.map(r=>line(r,'-')).join('')+'</div>'
+  /* the stamped figure (UI_UX §CLOSING — RECEIPT STAMP) is 보유 자금, the Gold the Day ends with, in the purse box at the
+     largest size and one colour; only 영업 손익 is coloured - green up, red down, gold at exactly 0 (User 2026-09-26) */
+  +'<div class="purse '+tone+'"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b>'
+   +'<p class="pl"><span>영업 손익</span><b>'+(change>0?'+':'')+fmt(change)+'<i>G</i></b></p></div>'
+  +'<div class="block info"><p>창고 재고 '+s.inventory.length+'개</p>'
+   +(d.waste?'<p>오늘 폐기 '+d.waste+'개'+wasteNames+'</p>':'')
+   +(tomorrow!==null?'<p>내일 운영비 예상 '+fmt(tomorrow)+'G</p>':'')+'</div>'
  +'</div>'
  +'<div class="tear bottom" aria-hidden="true"></div></div>';
  const rescue=game.canRescue(),spent=(s.rescueUsed||0),cap=game.rescueLimit();
@@ -1069,11 +1072,11 @@ const coachSteps={
  night:[['result','.beat','한 명씩 원정 결과와 변화를 확인한다. 전체 건너뛰기로 바로 정산할 수 있다.']],
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
-    which is not what this lesson is about. The copy names 영업 손익, so it points at that row;
-    the 발주 지출 / 점포지원 투자 block it says is listed apart is the next row group under it. */
+    which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
+    purse box that carries both 보유 자금 and 영업 손익. */
  /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
  final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
- closing:[['receipt','.tape .row.profit','오늘 영업 손익을 확인한다. 발주·점포지원 지출은 따로 표시된다.']],
+ closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
     it used to open with no word of what a Store Support is. These three marks read the takeover
     - what it is, how a card reads, what the key does and when more arrive - and never name a
@@ -1372,6 +1375,17 @@ function finalItemTruth(n,item){const s=game.run,i=s.team.indexOf(n.id);if(i<0)r
 function finalItemEffects(n,it){const t=finalItemTruth(n,it.id);if(!t)return it.effects;
  const e={...it.effects};for(const k of ['combat','survival','mobility','spirit'])if(k in e)e[k]=t.after[k]-t.before[k];
  return e;}
+/* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): 대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수 - the player
+   looks for a Gate's Counter first; inside a kind the nearest discard first, then the higher Rarity. The discard day an
+   Item is sorted by is the one it showed when the Day's shelf first appeared, so selling out a batch never moves a row
+   mid-Day (the v2.9.0 order did: an Item jumped down when its oldest units sold); a row only leaves when it sells out,
+   and the next Day sorts afresh. */
+const SHELF_KIND=['gear','food','drink','potion','insurance','special'];let shelfHeld={key:null,at:{}};
+function shelfOrder(stocks){const s=game.run,key=s.seed+':'+s.day+':'+s.phase;
+ if(shelfHeld.key!==key)shelfHeld={key,at:{}};const at=shelfHeld.at;
+ for(const st of stocks)if(!(st.item in at))at[st.item]=st.expires;
+ const rank=st=>{const it=D.itemBy[st.item];return [SHELF_KIND.indexOf(it.category),at[st.item],-it.rarity];};
+ return stocks.slice().sort((a,b)=>{const x=rank(a),y=rank(b);return x[0]-y[0]||x[1]-y[1]||x[2]-y[2];});}
 function shelf(isFinal=false){
    const s=game.run,stocks=groupStock(),n=isFinal?s.npcs.find(x=>x.id===supplyNPC):game.current(),st=s.inventory.find(x=>x.id===selected);
    /* SALE §MATCHING-EFFECT EMPHASIS — RETIRED (User 2026-09-24, v2.9.0): every effect text keeps the default
@@ -1380,9 +1394,9 @@ function shelf(isFinal=false){
    return '<section class="shelf">'
    +'<div class="shelf-head"><h2>'+(isFinal?(n?E(n.name)+'에게 보급':'대원에게 보급'):'진열대')+'</h2><span>'+stocks.length+'종 · '+s.inventory.length+'개</span>'
    +(isFinal?'':relicRef())+'</div><div class="goods">'
- /* UI_UX §SALE — SHELF ORDER (User 2026-09-25, v2.9.0): nearest discard first, ties in the existing order,
-    the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
- +stocks.slice().sort((a,b)=>a.expires-b.expires).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
+ /* UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): by kind, then nearest discard, then higher Rarity,
+    held for the Day (shelfOrder); the same for every customer; each row carries `폐기 N일`, emphasized at 1 day or less. */
+ +shelfOrder(stocks).map(st=>{const it=D.itemBy[st.item],open=selected===st.id,kind=itemKind(it),noop=isFinal&&game.finalNoEffect(it.id),left=st.expires-s.day;
   /* FINAL_EXPEDITION §3: in the Final the shelf states the Final price, and an Item with no
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
@@ -1914,7 +1928,7 @@ function settings(){return `<div class="stack"><p>자동저장은 현재 브라�
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
 /* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
    under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 손익을 정리하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;

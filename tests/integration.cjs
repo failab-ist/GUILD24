@@ -1405,7 +1405,14 @@ test('알뜰 금고: 50G every morning, on the receipt (v2.9.1 balance; was 40G)
  const g=wearing(['thriftSafe'],'safe'),s=g.run;
  s.phase='closing';g.closeDay();
  assert.equal(s.day,2,'the Day turned');assert.equal(s.daily.safeGold,50,'the new morning pays into a fresh ledger');
- assert.ok(source('dist/ui/app.js').includes("(d.safeGold?line('알뜰 금고',d.safeGold):'')"),'and the receipt names it');
+ assert.ok(source('dist/ui/app.js').includes("['알뜰 금고',d.safeGold]"),'and the cash-flow receipt names it (v2.9.7)');
+});
+
+test('NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT: tomorrow\'s operating estimate is tomorrow\'s real base cost (v2.9.7)',()=>{
+ const g=wearing([],'cash-flow'),s=g.run;s.phase='closing';
+ const t=g.tomorrowOperatingCost();g.closeDay();s.event=null;
+ assert.equal(t,g.expectedOperatingCost(),'the same rule, the next Day, today\'s Store Support and roster');
+ assert.ok(t>0);
 });
 
 test('UI-Q-v29-37 / META §BEST DAY: the ending records the best Day, an abandon never does; D10 / D14 opens are on the Run',()=>{

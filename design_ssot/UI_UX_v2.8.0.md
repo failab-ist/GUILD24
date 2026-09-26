@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -617,7 +617,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 
 - the counter tray is a fixed band directly above the dock, outside the scrolled column, at every width
 - tapping a shelf row puts that Item on the tray; the row is only highlighted, the shelf rows never change height
-- §SALE — SHELF ORDER (User 2026-09-25, v2.9.0): rows are ordered by days left before discard, nearest first, ties in the existing order, the same for every customer; each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
+- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
 - tray contents, top to bottom: one header line (Item icon · name · kind · sell price · stock · shelf life, and `{손님}에게 · 소지 {N}G` at the right), the `판매 후 변화` delta list (§SALE SELECTED-ITEM INFORMATION; may be one wrapping line), the `특수 효과` line when any, then the three price keys (§SALE — PRICE ROLE WORDS)
 - empty tray: on DAY 1~3 of a Run while the account tutorial is not skipped, one line (the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23); otherwise the empty tray has no height (User 2026-09-24, v2.9.0)
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
@@ -1425,14 +1425,9 @@ question=`오늘 장사는 어땠을까?`
 
 Economics-first.
 
-Primary:
-- revenue
-- COGS
-- margin
-- overhead
-- waste
-- Relic spend
-- final Gold
+Primary (v2.9.7, User 2026-09-26): the cash-flow receipt - opening Gold, the Gold that moved in and out, closing Gold with the
+Day's change, then stock / waste counts and tomorrow's operating estimate (rule and rows -> NIGHT_CLOSING §CLOSING — CASH FLOW
+RECEIPT — EXACT).
 
 Expedition story belongs to Night.
 
@@ -1445,10 +1440,10 @@ The figures themselves remain.
 acceptance -> UI_UX_QA UI-Q-v29-33.)
 
 The receipt body (every row of both figure blocks) prints as one pass - the whole body settles within 200 ms behind
-one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `영업 손익`
-row lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
-gives 4 px and settles: gold for a profit, red for a loss, the end colour stated in CSS so reduced motion matches it
-exactly. No `어제보다 +N` line (stays deferred in the v3.0+ router).
+one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `보유 자금` figure (the Day's end Gold, in the box that also holds `영업 손익`; the stamp sat on the
+`영업 손익` row until v2.9.7) lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
+gives 4 px and settles. The figure stays cream; only the `영업 손익` figure beneath it is coloured - green up, red down,
+gold at exactly 0 (User 2026-09-26) - each colour stated in CSS so reduced motion matches it exactly. No `어제보다 +N` line (stays deferred in the v3.0+ router).
 
 The END tape's `점포 자본 정산` block (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; the v2.9.1 rates
 1 / 2 / 3 / 4 / 5% are unchanged) counts its `현재 점포 자본` row up from the account's prior total to the resolved one
