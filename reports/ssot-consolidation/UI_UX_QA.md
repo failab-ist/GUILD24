@@ -1395,3 +1395,17 @@ Old `관찰 N회` progress wording is absent.
 (User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §META UI.)
 - the codex tabs are 진행도 · 상품 · 직업 · 점포지원 · 점포 장식; no `몬스터 지식` tab, and no `보급 생환 N회` / `관찰 N회` progress line on any screen
 ```
+
+## AMENDMENT — ORDER price tags (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: UI-Q-v29-39 is new. Nothing is dropped.
+
+```new
+### UI-Q-v29-39 — ORDER PRICE TAGS
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY; COPY_AUDIT §4-26.)
+- every offer row shows two tags at the end of the name row: `매입 {N}G` (the offer's price, including today's Event multiplier) and,
+under it, a smaller muted `판매 {N}G`; at 360 / 390 / 1280 neither clips, overlaps the name or leaves the paper
+- the metadata line starts `수익 +{N}G` and carries no `매입`
+- the ORDER total, the cart and the purchase are unchanged
+- an unlabelled price, the sale price in the larger tag, or `매입` still in the metadata line
+```

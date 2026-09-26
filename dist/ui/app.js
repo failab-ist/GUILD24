@@ -1332,11 +1332,14 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
     +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
     +Scene.crate(Art.itemIcon(it.id,30),46)
     +'<span class="col">'
+     /* UI_UX §ORDER — ITEM INFORMATION HIERARCHY (User 2026-09-26, v2.9.6, COPY_AUDIT §4-26): the tag is what 발주 spends, labelled;
+         the sale price is the smaller muted tag under it; floated so the name, rarity and effects wrap beside it */
+     +'<span class="prices">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')+'</span>'
      /* SA-Q19 / EVENT_v2.8 §암시장 상인: the Event-origin row says where it came from, beside
         the name where the Player reads it. Only a row carrying that provenance is marked - an
         ordinary offer has no origin and no source label, so this stays special-offer
         presentation rather than a generic rarity-attribution UI. */
-     +'<span class="nm"><b>'+E(it.name)+'</b>'+(o.origin==='blackmarket'?'<i class="origin">암시장</i>':'')+Scene.priceTag(it.sell+'<i>G</i>')+'</span>'
+     +'<span class="nm"><b>'+E(it.name)+'</b>'+(o.origin==='blackmarket'?'<i class="origin">암시장</i>':'')+'</span>'
      /* UI_UX §ORDER ITEM INFORMATION HIERARCHY (User 2026-09-24, v2.9.0): the rarity name as one small identity line, not a role chip */
      +'<span class="kind">'+E(D.rarities[it.rarity])+'</span>'
      /* UI-Q39: `야외채집 · 마력 보강 / 주문 제작` is the internal taxonomy the catalogue is
@@ -1344,7 +1347,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
         The data stays: ordering weights and Relic conditions read `category`. What the row
         needs is right underneath it, in the effects summary. */
        +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
-     +'<span class="have">매입 '+o.price+'G · 수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+' · 유통기한 '+sl+'일</span>'
+     +'<span class="have">수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+' · 유통기한 '+sl+'일</span>'
   +'</span>'
   +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'

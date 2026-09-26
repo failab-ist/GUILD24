@@ -357,6 +357,7 @@ Within an offer/item card, visual priority is:
    - 피로 회복 N (User 2026-09-24, v2.9.0)
    - explicit penalty
 3. economy / stock metadata
+   - the price tag reads `매입 {N}G` - the offer's actual buy price today, what 발주 spends - and a smaller, muted tag under it reads `판매 {N}G`; the metadata line keeps `수익 +{N}G · 재고 · 공급 · 유통기한` and loses its `매입 {N}G` (User 2026-09-26, v2.9.6: the unlabelled tag showed the sale price on the screen that spends the buy price)
 4. quantity interaction
    - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 

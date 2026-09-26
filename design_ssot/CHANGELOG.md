@@ -17,6 +17,9 @@ the owner headers and in the git tag.
   no effect changes. 귀환석's crisis roll was said only in its Flavor, so its escape row now carries it
   (`탈출 확률 +{N}%p (사망·중상 위기에도 한 번 더 판정)`; the shelf keeps the part before the bracket, as the other utility rows do).
   COPY_AUDIT §12-4 / §4-22; font subset regenerated (`npm run assets`); tests copy.
+- ORDER price tags (User 2026-09-26: the unlabelled tag showed the sale price on the screen that spends the buy price): `매입 {N}G`
+  on the tag, a smaller muted `판매 {N}G` under it, the metadata line starts at `수익 +{N}G`. UI_UX §ORDER — ITEM INFORMATION
+  HIERARCHY, UI_UX_QA UI-Q-v29-39, COPY_AUDIT §4-26; ledgers; ui-guard pin.
 - Codex cards break between words only (`word-break:keep-all`; separate visual review, RUNTIME UX BUG that predates v2.9.6:
   the narrow 1280 cards split Hangul words mid-word).
 

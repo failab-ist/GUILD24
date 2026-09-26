@@ -576,6 +576,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .tag-art b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:1px;padding-left:10px;
  white-space:nowrap;font:600 17px/1 var(--ui);font-variant-numeric:tabular-nums;color:#1c242b}
 .tag-art b i{font-style:normal;font-size:12px;opacity:.85;font-weight:400}
+/* v2.9.6 ORDER price tags (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): 매입 on the steel tag, 판매 on a smaller muted one under it */
+.line .prices{float:right;margin:0 0 4px 10px;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.line .prices .tag-art{width:96px;margin-left:0}
+.line .fx{clear:right} /* the effects keep the full width, as before the stack */
+.tag-art b small{font-size:11px;font-weight:600;margin-right:4px;opacity:.75}
+.line .prices .tone-sell{width:84px;height:24px;color:#ddd5c1;filter:drop-shadow(1px 1px 0 #00000026)}
+.line .prices .tone-sell b{font-size:13px;font-weight:500;color:#5f5541}
+.line .prices .tone-sell b i{font-size:11px}
 /* 5 quantity. UI_UX §PER-PHASE APPLICATION RULES (ORDER) — QUANTITY WEIGHT, USER AMENDMENT
    2026-09-22: the cluster read too heavy. Its hierarchy is item information > readout / stepper
    > `1 / 3 / 최대`, and being a pixel UI is not a reason to box every control.

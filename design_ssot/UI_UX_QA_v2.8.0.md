@@ -1354,6 +1354,19 @@ PASS:
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
 
+### UI-Q-v29-39 — ORDER PRICE TAGS
+
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY; COPY_AUDIT §4-26.)
+
+PASS:
+- every offer row shows two tags at the end of the name row: `매입 {N}G` (the offer's price, including today's Event multiplier) and,
+  under it, a smaller muted `판매 {N}G`; at 360 / 390 / 1280 neither clips, overlaps the name or leaves the paper
+- the metadata line starts `수익 +{N}G` and carries no `매입`
+- the ORDER total, the cart and the purchase are unchanged
+
+FAIL:
+- an unlabelled price, the sale price in the larger tag, or `매입` still in the metadata line
+
 ### UI-Q-v29-38 — SALE STRAIN LINE
 
 (User 2026-09-26, v2.9.5; owner `UI_UX_v2.8.0.md` §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; COPY_AUDIT §4-25.)

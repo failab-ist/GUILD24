@@ -1840,6 +1840,14 @@ test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail 
  assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
 });
 
+/* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
+test('UI-Q-v29-39: ORDER price tags - 매입 labelled on top, 판매 under it, no 매입 in the metadata line',()=>{
+ assert.ok(app.includes("'<span class=\"prices\">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')+'</span>'"),'the two labelled tags, buy price first');
+ assert.ok(app.includes("+'<span class=\"have\">수익 +'"),'the metadata line starts with 수익');
+ assert.ok(!/class="have">매입/.test(app),'and carries no 매입');
+ assert.ok(!/Scene\.priceTag\(it\.sell\+'<i>G<\/i>'\)/.test(app),'no unlabelled sale-price tag');
+});
+
 /* UI-Q-v29-36 (UI_UX §BUILD MARKER, User 2026-09-26): the opening screen names the build; the deploy stamps the commit */
 test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build, stamped by the deploy',()=>{
  const b=read('dist/build.js');

@@ -1365,3 +1365,11 @@ Monster Knowledge progress wording:
 ```new
 Monster Knowledge has no player-facing surface: the codex `몬스터 지식` tab is retired (User 2026-09-26, v2.9.6; every Gate's Hazards are public from MORNING, so a tab that unlocked them by returns had nothing left to teach). The account record stays, unshown (META §MONSTER KNOWLEDGE).
 ```
+
+## AMENDMENT — ORDER price tags (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: §ORDER — ITEM INFORMATION HIERARCHY gains the price-tag row. Nothing is dropped.
+
+```new
+- the price tag reads `매입 {N}G` - the offer's actual buy price today, what 발주 spends - and a smaller, muted tag under it reads `판매 {N}G`; the metadata line keeps `수익 +{N}G · 재고 · 공급 · 유통기한` and loses its `매입 {N}G` (User 2026-09-26, v2.9.6: the unlabelled tag showed the sale price on the screen that spends the buy price)
+```
