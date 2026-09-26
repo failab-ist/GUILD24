@@ -1207,3 +1207,18 @@ User 2026-09-25: the reversal overstamp also covers a Death 만반의 준비 tur
 부상 / 중상 prints `사망` first the same way and its own Outcome overstamps it; the Outcome cue plays on the overstamp and
 there is no `rescue` accent. 강골 and 구급키트 only lower an injury and never reverse
 ```
+
+## AMENDMENT — v2.9.2 H2 SALE counter feel (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H2, PRESENTATION §GAME FEEL BEAT H2): §SALE — COUNTER TRAY gains the COUNTER FEEL line. Nothing is dropped.
+
+```new
+- COUNTER FEEL (User 2026-09-25, v2.9.2 H2; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H2;
+  acceptance -> UI_UX_QA UI-Q-v29-31): the pressed price key travels down 3px in 60 ms and returns in 60 ms (일반 intensity,
+  no hold). On a successful sale the tray that was pressed stays in place, inert, for that press only (its Item icon hidden:
+  the Item travels as the A1 hand-over), then the counter draws without it; the A8 stub stamps in (1.12 → 1, 200 ms) from the
+  key's landing frame instead of the draw. A refused key is pressed the same way while A6 shakes it. The register's first
+  coin tick is the impact (×1.3); 바가지's tick run starts 40 ms later on a lower first tick (×0.75), the 1 / 2 / 3 count and
+  its 70 ms spacing unchanged. No counter-band bump, no faster second sale, no sale-count overtone, no combo or streak UI.
+  Under reduced motion there is no press or held tray and the stub appears at once; the end state is identical
+```

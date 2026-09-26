@@ -1368,6 +1368,24 @@ PASS:
 FAIL:
 - the 오늘 line doubled while its block is on screen, merged into the Death sentence, or a count that differs from the block
 
+### UI-Q-v29-31 — SALE COUNTER FEEL
+
+(User 2026-09-25, v2.9.2 H2; owner `UI_UX_v2.8.0.md` §SALE — COUNTER TRAY, COUNTER FEEL.)
+
+SETUP:
+SALE at 390 and 1280, motion on and reduced motion: one sale each at 50% / 정가 / 150% and one refused 정가, the tray unfolded; frames at 0 / 60 / 120 / 200 / 320 ms.
+
+PASS:
+- the pressed key moves 3px down and back within 120 ms; on a sale the pressed tray is visible for that press only and takes no input
+- the A8 stub starts at the key landing (60 ms) and is settled by 260 ms; no stub on a refusal
+- the refused key is pressed and shakes once where it locks
+- the first coin tick is louder; 바가지's ticks start 40 ms later with a lower first tick; the counts stay 1 / 2 / 3
+- a fifth sale looks and sounds exactly like the first
+- under reduced motion the end state (tray cleared, stub text, Gold, Bag) is identical
+
+FAIL:
+- a second press on the 정가 key, a pressed tray that answers a tap, a stub before the key lands, any escalation with the sale count
+
 ### UI-Q-v29-30 — FINAL RESULT SEAL STAMP
 
 (User 2026-09-25, v2.9.2 H5; owner `UI_UX_v2.8.0.md` §FINAL RESULT — SEAL STAMP.)

@@ -1233,6 +1233,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): folded, the tray keeps only its header line - the Item and the
    customer - so the shelf gets the room back; the whole folded strip is one button that opens it again. A desk never folds. */
 .p-sale .counter-tray{position:relative}
+/* H2: the pressed tray held for its key's press after a sale; it answers no input */
+.p-sale .counter-tray.held{pointer-events:none}
 .tray-unfold{display:none;position:absolute;inset:0;z-index:2;width:100%;min-height:0;padding:0;background:transparent;border:0;box-shadow:none;cursor:pointer}
 .p-sale .counter-tray.folded{padding-top:5px;padding-bottom:6px}
 .p-sale .counter-tray.folded .tray-unfold{display:block}

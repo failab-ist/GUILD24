@@ -163,9 +163,10 @@ const shape={
     made to sound like the correct answer; the accent is the same two notes for all three.
     v2.9.0 TRANSACTION BEAT A5 (User 2026-09-24): the modes are told apart by coin ticks only -
     1 / 2 / 3 short high pings after the register, at one level, so 150% is more coins, not a
-    better sound. `ticks` is the count; everything else in the three shapes is identical. */
+    better sound. `ticks` is the count; everything else in the three shapes is identical (v2.9.2 H2 adds only
+    바가지's first-tick offset, `tickLate` / `tickLow`). */
  sale:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:2},
- overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:3},
+ overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:3,tickLate:.04,tickLow:.75},
  half:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:1},
  /* refusal: clearly not a sale, and deliberately not a failure buzzer - a short dry cancel */
  refusal:{gain:.85,dur:.3,type:'sawtooth',step:.13,attack:.035,glide:.93,sampleGain:1,duck:.45},
@@ -222,8 +223,10 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
   tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1),sh.type||'triangle',sfxBus,hit?{...sh,attack:.002}:sh);
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',sfxBus);});
  if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise);
- /* coin ticks: the same ping, the same level, only the count differs between price modes */
- if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(2637,t0+.14+i*.07,.04,SFX_VOICE*.5,'sine',sfxBus,{attack:.002});
+ /* coin ticks: the same ping, the same level, only the count differs between price modes. v2.9.2 H2: the first tick is
+    the register's impact (x1.3, like `hit`); 바가지's run starts `tickLate` later on a lower first tick (`tickLow`) - the
+    whole run moves, so the 70 ms spacing that states the count is kept. */
+ if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(i?2637:2637*(sh.tickLow??1),t0+.14+(sh.tickLate??0)+i*.07,.04,SFX_VOICE*.5*(i?1:1.3),'sine',sfxBus,{attack:.002});
  if(sh.duck)duck(t0,sh.duck);}
 function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;if(!enabled||document.hidden){if(timer)clearInterval(timer);timer=null;track='';return;}if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
  buses();preload();

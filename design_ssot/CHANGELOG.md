@@ -3,7 +3,7 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.2 — game feel (타격감), H1 / H5 ADOPTED, H2 / H3 / H4 / H6 PLANNED (User 2026-09-25)
+## v2.9.2 — game feel (타격감), H1 / H5 / H2 ADOPTED, H3 / H4 / H6 PLANNED (User 2026-09-25)
 
 H1 and H5 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
@@ -47,6 +47,13 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   row and the `피로 {A} → 출발 {B}` line are retired on the counter tray, the till and FINAL preparation; the SUPPLY lesson
   moves to the tray's `피로 회복` row for a fatigued customer (User choice). SALE, UI_UX, UI_UX_QA UI-Q-v29-7, DUNGEON_HAZARD,
   DUNGEON_ITEM_QA, SOURCE_ADOPTION_QA, COPY_AUDIT §3-5 / §3-7 / §4-17 (retired); ledgers edited in place.
+- H2 SALE counter feel ADOPTED (User 2026-09-25): UI_UX §SALE — COUNTER TRAY, COUNTER FEEL (the pressed price key 3 px / 60 + 60 ms;
+  on a sale the pressed tray held inert for that press only; the A8 stub from the key landing, its ink in 40 ms; a refused key
+  pressed while A6 shakes it; the first coin tick ×1.3, 바가지's tick run +40 ms on a ×0.75 first tick, counts 1 / 2 / 3 kept);
+  UI_UX_QA UI-Q-v29-31; ledgers UI_UX / UI_UX_QA; PRESENTATION H2 row ADOPTED. Source: app.js (KEY_PRESS, keyPress, playCue
+  sale / refuse), ui.css (`.counter-tray.held`), audio.js (tickLate / tickLow). Also fixes a RUNTIME UX BUG found on the way:
+  the global button `transition:transform .08s steps(2)` swallowed every scripted key motion, so A6's refusal shake was never
+  visible; a pressed key now drops that transition. Capture tool tools/qa-sale-beat.cjs.
 - Balance, Great Success EXP 1.40 → 1.10 (User 2026-09-25): only the EXP multiplier; Great Success occurrence / probability,
   Store Gold and the expedition NPC Wallet reward unchanged. Purpose: weaken the snowball of a strong NPC growing faster
   through Great Success EXP. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA; ledgers amended.

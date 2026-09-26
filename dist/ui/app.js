@@ -274,7 +274,7 @@ function showStub(){if(!stub)return;const st=stub;stub=null;
  const dock=$('.p-sale .dock');el.style.bottom=(dock?Math.max(0,Math.round(innerHeight-dock.getBoundingClientRect().top))+8:92)+'px';
  document.body.appendChild(el);
  /* the stamp-in and the fade are playCue()'s (the one guarded place for in-phase motion); this only removes it */
- stubTimer=setTimeout(()=>el.remove(),motionOK()?2800:2500);}
+ stubTimer=setTimeout(()=>el.remove(),motionOK()?2800+KEY_PRESS.down:2500);}
 function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
  if(!c||!motionOK())return;
  const A=anime.animate;
@@ -286,7 +286,17 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
     Every beat is under 320 ms and the whole sale is under 600 ms; input is never held. */
  if(c==='sale'){
   /* A8 영수증 조각: stamps in (1.12 -> 1, 200 ms) and fades after 2.5 s; showStub() owns its removal */
-  const stubEl=$('.receipt-stub');if(stubEl){A(stubEl,{scale:[1.12,1],opacity:[0,1],duration:200,ease:'outQuad'});setTimeout(()=>{if(stubEl.isConnected)A(stubEl,{opacity:[1,0],duration:280,ease:'outQuad'});},2500);}
+  const stubEl=$('.receipt-stub');if(stubEl){A(stubEl,{scale:{from:1.12,to:1,duration:200,delay:KEY_PRESS.down,ease:'outQuad'},opacity:{from:0,to:1,duration:40,delay:KEY_PRESS.down,ease:'linear'}});setTimeout(()=>{if(stubEl.isConnected)A(stubEl,{opacity:[1,0],duration:280,ease:'outQuad'});},2500+KEY_PRESS.down);}
+  /* H2: a successful sale draws the counter without its tray, so the tray that was pressed is put back where it stood,
+     inert (it no longer answers input - the next tap reaches the new screen), for the key's press and return only;
+     its Item already travels as the A1 hand-over, so the tray's own icon is hidden. */
+  const stage=$('.p-sale'),held=h.tray,key=held&&held.querySelector('.tills button[data-mode="'+h.mode+'"]');
+  if(stage&&key){const now=stage.querySelector(':scope>.counter-tray'),dock=stage.querySelector(':scope>.dock');
+   held.inert=true;held.setAttribute('aria-hidden','true');held.classList.add('held');
+   const icon=held.querySelector('.tray-icon');if(icon&&h.icon)icon.style.visibility='hidden';
+   if(now)now.replaceWith(held);else stage.insertBefore(held,dock);
+   let gone=false;const put=()=>{if(gone)return;gone=true;if(now)held.replaceWith(now);else held.remove();};
+   keyPress(A,key,{onComplete:put});setTimeout(put,1500);}
   const slot=[...document.querySelectorAll('.kit .slots i.full')].pop();
   const settle=()=>{if(slot)A(slot,{scale:[1.05,1],duration:240,ease:'outQuad'});};
   if(slot&&h.from&&h.icon){const to=slot.getBoundingClientRect(),g=document.createElement('i');g.className='handoff';g.innerHTML=h.icon;
@@ -310,7 +320,8 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
  if(c==='refuse'){const shake={translateX:[0,-4,4,-2,0],duration:280,ease:'outQuad'};
   const said=$('.say');if(said)A(said,{translateX:[0,-5,4,-2,0],duration:280,ease:'outQuad'});
   const fig=$('.who .figure');if(fig)A(fig,shake);
-  const b=h.mode?$('.tills button[data-mode="'+h.mode+'"][disabled]'):null;if(b)A(b,shake);}
+  /* H2: the refused key is pressed like any other (3 px, 60 + 60 ms) while it shakes where it locked */
+  const b=h.mode?$('.tills button[data-mode="'+h.mode+'"][disabled]'):null;if(b){keyPress(A,b);A(b,shake);}}
 }
 /* A4 손님 교대: the customer walks off left (240 ms) before the next one is drawn. The state moves
    in `go` exactly as it did without the beat; the beat only delays that call by its own length,
@@ -325,6 +336,12 @@ function playExit(go){
  anime.animate(who,{translateX:[0,-40],opacity:[1,0],duration:240,ease:'inQuad',onComplete:fire});
  setTimeout(fire,260);
 }
+/* v2.9.2 H2 SALE counter feel: the pressed price key travels KEY_PRESS.y px for KEY_PRESS.down ms and returns in
+   KEY_PRESS.up ms; the A8 stub lands on that key's landing frame (KEY_PRESS.down). 일반 intensity: no hold. */
+const KEY_PRESS={y:3,down:60,up:60};
+/* every button carries `transition:transform .08s steps(2)` for its :active press; left on, it would swallow each frame this
+   writes (and A6's shake with it), so the key drops it for the rest of its life - it is redrawn on the next render */
+const keyPress=(A,key,more={})=>(key.style.transition='none',A(key,{translateY:[{from:0,to:KEY_PRESS.y,duration:KEY_PRESS.down,ease:'out(2)'},{to:0,duration:KEY_PRESS.up,ease:'outQuad'}],...more}));
 // the approval stamp lands before the phase advances
 function stampPress(el){
  if(!motionOK()||!el)return;
@@ -2064,7 +2081,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   if(sc&&back)sc.scrollTop+=back.getBoundingClientRect().top-y0;
   break;}
  /* v2.9.0 TRANSACTION BEAT: what the screen showed before the commit, for the draw after it (playCue) */
- case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?tile.getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,
+ case'sell':{const tile=$('.counter-tray .tray-icon'),seen={mode:el.dataset.mode,from:tile?tile.getBoundingClientRect():null,icon:tile?tile.innerHTML:'',gold:s.money,tray:el.closest('.counter-tray'),
    stats:[...document.querySelectorAll('.detail-stats .detail-stat strong')].map(x=>x.textContent)};
   /* SALE §TRANSACTION RESULT — PER CUSTOMER (User 2026-09-24, v2.9.0): the customer's own Loyalty and Wallet
      before the commit, so the receipt stub can state the real result of this price choice. */
@@ -2141,7 +2158,8 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
 const BLOCK_REASON={money:lack=>'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.',space:()=>'창고 칸이 부족합니다.',supply:()=>'오늘 공급 최대 수량입니다.'};
 document.addEventListener('click',ev=>{const el=ev.target.closest('[data-action]');if(!el||el.disabled)return;
  if(el.getAttribute('aria-disabled')==='true'){const say=BLOCK_REASON[el.dataset.reason];if(say)toast(say(Number(el.dataset.lack||0)));return;}
- if(el.classList.contains('stamp')||el.classList.contains('pull'))stampPress(el);action(el);});
+ /* H2: a price key has its own press (KEY_PRESS, playCue) - the 정가 key's `stamp` class must not add a second one */
+ if((el.classList.contains('stamp')||el.classList.contains('pull'))&&el.dataset.action!=='sell')stampPress(el);action(el);});
 /* A tooltip is dismissed by tapping outside it, the way every other popover on the phone is.
    <details> closes on its own summary already, and the shared name closes a sibling, so this
    only has to handle the outside tap and Escape. */
