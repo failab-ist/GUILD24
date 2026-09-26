@@ -805,7 +805,7 @@ PASS (User 2026-09-25, v2.9.1 balance):
 | 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
 | 길드 특제 도시락 | R | 185/370 | +16 | 7 | expedition Wallet +40% |
 | 영웅 결전 도시락 | E | 210/420 | +18 | 9 | — |
-| 왕도 천연암반수 | E | 185/370 | +20 | 2 | — |
+| 왕도 천연암반수 | E | 185/370 | +24 | 2 | — |
 - 중급: 125/250, 투력 +14
 - 상급: 175/350, 투력 +20
 - 최상급: 210/420, 투력 +28
@@ -826,8 +826,8 @@ PASS (User 2026-09-25, v2.9.1 balance):
 성화 랜턴         165/330  공포+18 / 어둠+18
 백설 방한고글     165/330  냉기+22 / 화이트아웃+18
 마그마 냉각장비   175/350  화염+18 / 투력+6
-초고속 에너지드링크    Drink E   175/350  기동+22 / Supply2
-대현자 허브엘릭서      Drink E   175/350  정신+24 / Supply2
+초고속 에너지드링크    Drink E   175/350  기동+26 / Supply2
+대현자 허브엘릭서      Drink E   175/350  정신+28 / Supply2
 최상급 포션            Potion E  210/420  투력+28
 ```
 
@@ -911,3 +911,7 @@ User 2026-09-26: the DUN-Q-v29-BC1 lines declared above are edited in place; the
 - D19–24 3 at 70%, otherwise 2 (User 2026-09-26, v2.9.2 fourth pass)
 - D25–29 exactly 3, no draw (User 2026-09-26, v2.9.2 fourth pass)
 ```
+
+## AMENDMENT — Item values (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: 불룡볶음면 냉기 +12 / 강인함 +6, 귀환석 200 / 400, Epic Drink Stat +4. Lines declared earlier are edited in place above.

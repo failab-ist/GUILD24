@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run,fatigue,supply,injury,death_risk,great_success,deep_expedition,result_proof
-DOC_VERSION=2.9.3
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_ITEM_QA_v2.8.0-patch.md,history/DUNGEON_ITEM_QA_v2.7.0.md,history/DUNGEON_ITEM_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_ITEM_QA.md
@@ -896,7 +896,7 @@ Expect exactly:
 | 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
 | 길드 특제 도시락 | R | 185/370 | +16 | 7 | expedition Wallet +40% |
 | 영웅 결전 도시락 | E | 210/420 | +18 | 9 | — |
-| 왕도 천연암반수 | E | 185/370 | +20 | 2 | — |
+| 왕도 천연암반수 | E | 185/370 | +24 | 2 | — |
 
 PASS:
 - active catalog count remains 40
@@ -1087,8 +1087,8 @@ PASS:
 EXPECT:
 
 ```text
-초고속 에너지드링크    Drink E   175/350  기동+22 / Supply2
-대현자 허브엘릭서      Drink E   175/350  정신+24 / Supply2
+초고속 에너지드링크    Drink E   175/350  기동+26 / Supply2
+대현자 허브엘릭서      Drink E   175/350  정신+28 / Supply2
 최상급 포션            Potion E  210/420  투력+28
 ```
 

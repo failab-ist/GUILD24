@@ -20,6 +20,12 @@ the owner headers and in the git tag.
 - ORDER price tags (User 2026-09-26: the unlabelled tag showed the sale price on the screen that spends the buy price): `매입 {N}G`
   on the tag, a smaller muted `판매 {N}G` under it, the metadata line starts at `수익 +{N}G`. UI_UX §ORDER — ITEM INFORMATION
   HIERARCHY, UI_UX_QA UI-Q-v29-39, COPY_AUDIT §4-26; ledgers; ui-guard pin.
+- Item values (User 2026-09-26, after the item review reports/item-balance-v296.md and the second fresh Run to DAY 24 - judged on
+  target, no injury lever): 불룡볶음면 냉기 +6 → +12 / 강인함 +8 → +6 (its Cold read below 컵라면's); 귀환석 260 / 520 → 200 / 400
+  (its sale price sat above the p90 customer purse until ~D20); Epic Drink Stat +4 - 초고속 에너지드링크 기동 26, 대현자 허브엘릭서
+  정신 28, 왕도 천연암반수 강인함 24. 방수망토 and 마그마 냉각장비 unchanged. `reader` 200 runs before → after: reach D20 .17 → .21,
+  D30 .05 → .07, clear .025 → .020. ITEM §HAZARD COUNTER BASELINE / §EPIC FOOD / DRINK / POTION / §OTHER ACTIVE ITEMS / ACTIVE
+  CATALOG, DUNGEON_ITEM_QA; ledgers; tests vocabulary; reports/ITEM-PRICES.md regenerated.
 - Codex cards break between words only (`word-break:keep-all`; separate visual review, RUNTIME UX BUG that predates v2.9.6:
   the narrow 1280 cards split Hangul words mid-word).
 

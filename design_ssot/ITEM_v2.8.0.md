@@ -2,8 +2,8 @@
 
 DOC=ITEM
 OWNER=item,catalog,category,role,food,drink,potion,field_gear,insurance,special,counter,supply,modifier_composition,item_role,item_economy
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/ITEM_v2.8.0-patch.md,history/ITEM_v2.7.0.md,history/ITEM_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/ITEM.md
@@ -345,7 +345,7 @@ Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never;
 | fire | 쿨링 이온음료 +26 | 얼음컵 +10 | 기동 / 내열성 / 마그마 냉각장비 +18 |
 | fear | 용사의 곡주 +20 | 집중 사탕 +10 | 정신 / 성화 랜턴 +18 |
 | dark | 랜턴 건전지 +16 | — | 정신 / 눈썰미 / 성화 랜턴 +18 |
-| cold | 핫팩 +24 | 컵라면 +10 | 불룡볶음면 +6 / 강인함 / 백설 방한고글 +22 |
+| cold | 핫팩 +24 | 컵라면 +10 | 불룡볶음면 +12 / 강인함 / 백설 방한고글 +22 |
 | whiteout | 설원 고글 +20 | — | 정신 / 눈썰미 / 백설 방한고글 +18 |
 
 Counter values by Rarity (User 2026-09-25, v2.9.1 balance): within one Rarity, `Counter + the pressed Stat's
@@ -353,7 +353,8 @@ defense contribution` is equal, so a 강인함-pressed Hazard (독 · 냉기 · 
 one (÷2). Field Gear and the Main Drink Counters: Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22
 (a hybrid stays below every specialist of the same or a higher Rarity for each Hazard it covers; it may exceed a
 Common Main such as 경량 로프 / 랜턴 건전지 — User 2026-09-25, v2.9.1). Food / Drink secondary Counters (컵라면, 집중 사탕,
-얼음컵, 불룡볶음면 냉기, 방수망토) keep their values.
+얼음컵, 방수망토) keep their values.
+불룡볶음면 냉기 +6 → +12 with 강인함 +8 → +6 (User 2026-09-26, v2.9.6): its Cold defense read below 컵라면's; it now sits between the Common Lower (10) and the Uncommon Main (24).
 
 The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)).
 
@@ -619,17 +620,19 @@ The `투력 +6` on `마그마 냉각장비` is an explicit catalog exception; it
 
 ### EPIC FOOD / DRINK / POTION — TOP-END PREPARATION
 
+Epic Drink Stat +4 (User 2026-09-26, v2.9.6): 초고속 에너지드링크 기동 22 → 26, 대현자 허브엘릭서 정신 24 → 28, 왕도 천연암반수 강인함 20 → 24 - one Rarity step over the Uncommon Drink was +5 for 2.2× the price.
+
 ```text
 초고속 에너지드링크
 Drink / Epic
 175 / 350
-기동 +22
+기동 +26
 Supply 2
 
 대현자 허브엘릭서
 Drink / Epic
 175 / 350
-정신 +24
+정신 +28
 Supply 2
 
 최상급 포션
@@ -745,7 +748,7 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 | bar | 간단 도시락 | Food U | 100 / 200 | 강인함 +12, Supply 6, 원정 소지금 획득 +20% | 2d |
 | premium | 길드 특제 도시락 | Food R | 185 / 370 | 강인함 +16, Supply 7, 원정 소지금 획득 +40% | 2d |
 | battlelunch | 영웅 결전 도시락 | Food E | 210 / 420 | 강인함 +18, Supply 9 | 2d |
-| herobar | 왕도 천연암반수 | Drink E | 185 / 370 | 강인함 +20, Supply 2 | 3d |
+| herobar | 왕도 천연암반수 | Drink E | 185 / 370 | 강인함 +24, Supply 2 | 3d |
 
 The meal Stat ladder is intentionally readable:
 
@@ -774,7 +777,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 10 | 랜턴 건전지 | Field Gear C | 45 / 90 | 어둠 +16 | Dark Main |
 | 11 | 경량 로프 | Field Gear C | 50 / 100 | 속박 +16 | Bind Main |
 | 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +10, Supply 2 | Fear Lower |
-| 13 | 불룡볶음면 | Food U | 80 / 160 | 강인함 +8, 냉기 +6, Supply 3 | Cold Hybrid |
+| 13 | 불룡볶음면 | Food U | 80 / 160 | 강인함 +6, 냉기 +12, Supply 3 | Cold Hybrid |
 | 14 | 에너지드링크 | Drink U | 80 / 160 | 기동 +17, Supply 2 | Stat route |
 | 15 | 용사의 곡주 | Drink U | 70 / 140 | 공포 +20, 기동 -4, Supply 1 | Fear Main / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
@@ -786,7 +789,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 22 | 설원 고글 | Field Gear U | 70 / 140 | 화이트아웃 +20 | Whiteout Main |
 | 23 | 상급 포션 | Potion R | 175 / 350 | 투력 +20 | — |
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +30 | Poison Main |
-| 25 | 귀환석 | Insurance R | 260 / 520 | Emergency Escape +50%p path | Severe/Death Insurance |
+| 25 | 귀환석 | Insurance R | 200 / 400 | Emergency Escape +50%p path | Severe/Death Insurance |
 | 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +14 | — |
 | 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +26, Supply 1 | Fire Main |
 | 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death -> Severe Injury once | Death Insurance |
@@ -796,8 +799,8 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 33 | 성화 랜턴 | Field Gear E | 165 / 330 | 공포 +18, 어둠 +18 | Crypt Hybrid |
 | 34 | 백설 방한고글 | Field Gear E | 165 / 330 | 냉기 +22, 화이트아웃 +18 | Snow Hybrid |
 | 35 | 마그마 냉각장비 | Field Gear E | 175 / 350 | 화염 +18, 투력 +6 | Fire Hybrid |
-| 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +22, Supply 2 | Top-end mobility |
-| 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +24, Supply 2 | Top-end spirit |
+| 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +26, Supply 2 | Top-end mobility |
+| 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 210 / 420 | 투력 +28 | Top-end raw Power |
 
 Active catalog count is exactly 40.

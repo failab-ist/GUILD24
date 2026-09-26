@@ -27,7 +27,7 @@ item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가
 item('battery','랜턴 건전지',0,45,90,'gear',3,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:16}),
 item('rope','경량 로프',0,50,100,'gear',3,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:16}),
 item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:10,supply:2}),
-item('lava','불룡볶음면',1,80,160,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:8,cold:6,supply:3}),
+item('lava','불룡볶음면',1,80,160,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:12,supply:3}),
 item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨왔다.',{mobility:17,supply:2}),
 item('wine','용사의 곡주',1,70,140,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:20,mobility:-4,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
@@ -42,7 +42,7 @@ item('snowgoggles','설원 고글',1,70,140,'gear',4,'goggles','귀환안심','�
 item('highpotion','상급 포션',2,175,350,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:20,potion:1}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
 item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:30}),
-item('stone','귀환석',2,260,520,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.5}),
+item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.5}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14,potion:1}),
@@ -60,9 +60,9 @@ item('snowvisor','백설 방한고글',3,165,330,'gear',5,'snowvisor','귀환안
 item('magmagear','마그마 냉각장비',3,175,350,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:6}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
-item('herobar','왕도 천연암반수',3,185,370,'drink',3,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:20,supply:2}),
-item('hyperenergy','초고속 에너지드링크',3,175,350,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:22,supply:2}),
-item('sageelixir','대현자 허브엘릭서',3,175,350,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:24,supply:2}),
+item('herobar','왕도 천연암반수',3,185,370,'drink',3,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),
+item('hyperenergy','초고속 에너지드링크',3,175,350,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:26,supply:2}),
+item('sageelixir','대현자 허브엘릭서',3,175,350,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:28,supply:2}),
 item('toppotion','최상급 포션',3,210,420,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:28,potion:1})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
