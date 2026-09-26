@@ -1330,8 +1330,11 @@ test('CORE_RUN §DAILY ECONOMIC BASE: Core-Roster daily overhead follows the Can
  assert.ok(Math.abs(g.overheadBase()-170*(1+.03*3)*(1+.06*1))<1e-9,'all living adventurers when fewer than six');
  assert.equal(g.expectedOperatingCost(),200,'170 x 1.09 x 1.06 = 196.418 -> 200G');
  s.npcs=[mk(3,9,4,{alive:false})];s.day=30;
- assert.equal(g.overheadBase(),170+1*29,'empty Core Roster: the Day base alone');
- assert.equal(g.expectedOperatingCost(),200,'199 -> 200G');
+ /* v2.9.2 (User 2026-09-26): + 12 per Day after DAY 15 */
+ assert.equal(g.overheadBase(),170+1*29+12*15,'empty Core Roster: the Day base alone');
+ assert.equal(g.expectedOperatingCost(),380,'379 -> 380G');
+ s.day=15;assert.equal(g.overheadBase(),170+14,'DAY 15 carries no late term');
+ s.day=16;assert.equal(g.overheadBase(),170+15+12,'DAY 16 carries the first +12');
 });
 
 /* ---- META §DECORATION survival alternatives (User decision 2026-09-24) ---------------------- */

@@ -653,8 +653,10 @@ Let:
     avgLevel  = Core Roster average Level, or 1 if empty
     avgRarity = Core Roster average numeric Rarity index, or 0 if empty
 
-    dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
-                                      store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term)
+    dayBase = 170 + 1 × (Day - 1) + 12 × max(0, Day - 15)
+                                     (User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
+                                      store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term;
+                                      User 2026-09-26, v2.9.2: +12 per Day after DAY 15 — the late store sat on ~5,000G by D29)
 
     overheadBase
     = dayBase

@@ -54,6 +54,11 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   sale / refuse), ui.css (`.counter-tray.held`), audio.js (tickLate / tickLow). Also fixes a RUNTIME UX BUG found on the way:
   the global button `transition:transform .08s steps(2)` swallowed every scripted key motion, so A6's refusal shake was never
   visible; a pressed key now drops that transition. Capture tool tools/qa-sale-beat.cjs.
+- Balance, second pass (User 2026-09-26, after the `reader` harness review — reports/v292-bot-harness.md §7): 대성공 EXP 1.10 → 1.00,
+  combat-success EXP 1.00 → 0.90 (퇴각 0.38 / other living 0.50 unchanged); operating dayBase + 12 × max(0, Day − 15). Measured:
+  `reader` clear 14.9% → 7.2%, the D29 cash median ~5,100 → ~3,400; a level-coefficient raise (0.05~0.10) was rejected - it taxed
+  D1~15 too and doubled bankruptcies. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA, ECONOMY_ORDER §BASE OPERATING COST,
+  ECONOMY_ORDER_QA; ledgers amended; tests night (EXP) / integration (operating cost).
 - Balance, Great Success EXP 1.40 → 1.10 (User 2026-09-25): only the EXP multiplier; Great Success occurrence / probability,
   Store Gold and the expedition NPC Wallet reward unchanged. Purpose: weaken the snowball of a strong NPC growing faster
   through Great Success EXP. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA; ledgers amended.

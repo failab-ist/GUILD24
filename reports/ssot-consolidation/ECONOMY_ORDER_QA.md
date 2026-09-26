@@ -439,7 +439,7 @@ base = dayBase × (1 + .02×(avgLevel-1)) × (1 + .06×avgRarity)
 ```
 
 ```new
-dayBase = 170 + 1×(Day-1)    (v2.9.1 balance, User 2026-09-25)
+dayBase = 170 + 1×(Day-1) + 12×max(0, Day-15)    (v2.9.1 balance, User 2026-09-25; late term v2.9.2, User 2026-09-26)
 base = dayBase × (1 + .03×(avgLevel-1)) × (1 + .06×avgRarity)
 ```
 
@@ -452,3 +452,7 @@ accessible need are unchanged. Nothing is dropped.
 - 100% only: the final chance above (0.97 관련 준비 included) is × 0.90 (User 2026-09-25, v2.9.2); 50% / 150% carry no scale;
   accessible base need 0.72 is not lowered for it
 ```
+
+## AMENDMENT — v2.9.2 balance: operating dayBase late term (User decision 2026-09-26)
+
+User 2026-09-26: the QA dayBase line declared above carries the +12 per Day after DAY 15; edited in place.

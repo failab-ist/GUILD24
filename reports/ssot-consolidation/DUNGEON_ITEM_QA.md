@@ -878,10 +878,14 @@ User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Go
 ```
 
 ```new
- - EXP outcome multipliers are Great 1.10 / Retreat 0.38 / combat-success 1.00 / other living 0.50 (User 2026-09-25, v2.9.2 balance; Great was 1.40)
+ - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50 (User 2026-09-26, v2.9.2 balance; Great was 1.10, 1.40 before; combat-success was 1.00)
 ```
 
 ## AMENDMENT — v2.9.2 balance: Gate early slope 1.20 -> 1.50 (User decision 2026-09-25)
 
 User 2026-09-25: the Day-term QA line reads early 1.50 (late 0.80 kept). The v2.9.1 line was declared new above, so that
 `new` fence is edited in place.
+
+## AMENDMENT — v2.9.2 balance, second pass: EXP multipliers (User decision 2026-09-26)
+
+User 2026-09-26: Great 1.00, combat-success 0.90; the line declared above is edited in place.

@@ -534,8 +534,10 @@ User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` �
 ```
 
 ```new
-dayBase = 170 + 1 × (Day - 1)    (User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
-store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term)
+dayBase = 170 + 1 × (Day - 1) + 12 × max(0, Day - 15)
+(User 2026-09-25, v2.9.1 balance: heavy from DAY 1, flat after — the D1~10
+store bleeds a little every day, the D10~20 growth phase is not taxed by the Day term;
+User 2026-09-26, v2.9.2: +12 per Day after DAY 15 — the late store sat on ~5,000G by D29)
 × (1 + 0.03 × (avgLevel - 1))    (User 2026-09-25, v2.9.1 balance; was 0.02)
 ```
 
@@ -550,3 +552,7 @@ included — is multiplied by 0.90 (a ~10% relative cut, not percentage points).
 shared accessible-mode base need is not lowered for it:
     정가 purchaseChance = (the 0.97 floor or the clamped rawChance) × 0.90
 ```
+
+## AMENDMENT — v2.9.2 balance: operating dayBase +12 per Day after DAY 15 (User decision 2026-09-26)
+
+User 2026-09-26 (after the `reader` harness review): the late term is added to the dayBase line declared above, edited in place.

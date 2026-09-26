@@ -530,7 +530,7 @@ Controlled seeded cases must verify (User 2026-09-24, v2.9.0: no Supply-deficit 
 
 Reward PASS:
 - EXP base = 22 + Day×4.6
-- EXP outcome multipliers are Great 1.10 / Retreat 0.38 / combat-success 1.00 / other living 0.50 (User 2026-09-25, v2.9.2 balance; Great was 1.40)
+- EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50 (User 2026-09-26, v2.9.2 balance; Great was 1.10, 1.40 before; combat-success was 1.00)
 - Wallet base = 35 + Day×8
 - Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.1 balance)
 - explicit XP/Loot/Gate reward modifiers compose once

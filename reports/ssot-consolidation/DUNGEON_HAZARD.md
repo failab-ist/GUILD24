@@ -1065,7 +1065,7 @@ User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Go
 ```
 
 ```new
- 대성공 = 1.10   (User 2026-09-25, v2.9.2 balance; was 1.40 — Great Success occurrence, Store Gold and Wallet unchanged)
+ 대성공 = 1.00   (User 2026-09-26, v2.9.2 balance; was 1.10, 1.40 before — Great Success occurrence, Store Gold and Wallet unchanged)
 ```
 
 ## AMENDMENT — v2.9.2 balance: Gate early slope 1.20 -> 1.50 (User decision 2026-09-25)
@@ -1073,3 +1073,16 @@ User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Go
 User 2026-09-25: the Day term's early slope becomes 1.50, the late slope 0.80 and the knee Day 9 are kept (a fresh first Run
 cleared the Boss). The v2.9.1 slope lines were declared new above, not chain lines, so their `new` fence is edited in place
 (formula, heading sentence, Day-term anchors) rather than dropped here.
+
+## AMENDMENT — v2.9.2 balance, second pass: 대성공 EXP 1.10 -> 1.00, combat-success EXP 1.00 -> 0.90 (User decision 2026-09-26)
+
+User 2026-09-26 (after the `reader` harness review, reports/v292-bot-harness.md): the 대성공 line declared above is edited in place;
+the combat-success line is a chain line, dropped here for its new form. 퇴각 0.38 and other living 0.50 are unchanged.
+
+```text
+combat-success path = 1.00
+```
+
+```new
+    combat-success path = 0.90   (User 2026-09-26, v2.9.2 balance; was 1.00 — 성공, or a won fight that came home hurt)
+```

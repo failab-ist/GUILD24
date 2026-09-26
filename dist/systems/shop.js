@@ -51,7 +51,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
   /* ECONOMY_ORDER §BASE OPERATING COST (User 2026-09-25, v2.9.1 balance: heavy from D1, flat
      after - was 90+5*(day-1); level coefficient .02 -> .03). */
-  const dayBase=170+1*(this.run.day-1);
+  /* v2.9.2 (User 2026-09-26): +12G per Day after DAY 15 - the late store sat on ~5,000G by D29 (User's Run and the
+     `reader` harness alike); the D1~15 cost is unchanged. */
+  const dayBase=170+1*(this.run.day-1)+12*Math.max(0,this.run.day-15);
   return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
  expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
