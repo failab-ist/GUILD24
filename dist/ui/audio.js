@@ -77,7 +77,9 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
  bossmajor:[165,196,147],bosscompact:[165,196],boss:[165,196,147],final:[98,123.47,146.83],
  /* v2.9.2 H5: the Final seal on the ending tape - a clear rings up out of the Boss motif's root, a failure falls
     under it. Both land on the stamp's frame with the NIGHT `hit`; neither plays anywhere else. */
- sealwin:[165,247,330,494],sealfail:[165,147]};
+ sealwin:[165,247,330,494],sealfail:[165,147],
+ /* v2.9.2 H3: the second and third crate of an ORDER cascade - the `order` stamp's root, short and dry */
+ crate:[110]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
@@ -163,9 +165,10 @@ const shape={
     made to sound like the correct answer; the accent is the same two notes for all three.
     v2.9.0 TRANSACTION BEAT A5 (User 2026-09-24): the modes are told apart by coin ticks only -
     1 / 2 / 3 short high pings after the register, at one level, so 150% is more coins, not a
-    better sound. `ticks` is the count; everything else in the three shapes is identical. */
+    better sound. `ticks` is the count; everything else in the three shapes is identical (v2.9.2 H2 adds only
+    바가지's first-tick offset, `tickLate` / `tickLow`). */
  sale:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:2},
- overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:3},
+ overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:3,tickLate:.04,tickLow:.75},
  half:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:1},
  /* refusal: clearly not a sale, and deliberately not a failure buzzer - a short dry cancel */
  refusal:{gain:.85,dur:.3,type:'sawtooth',step:.13,attack:.035,glide:.93,sampleGain:1,duck:.45},
@@ -206,6 +209,7 @@ const shape={
     no information - D25 already revealed everything it stands on. */
  sealwin:{hit:1,gain:1.1,dur:.34,type:'triangle',step:.08,layer:{ratio:2,at:.24,dur:1.2,gain:.3},noise:{at:0,dur:.12,gain:.5,hz:1800,q:.7,filter:'bandpass'},duck:.6},
  sealfail:{hit:1,gain:1,dur:.5,type:'sawtooth',step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
+ crate:{hit:1,gain:.8,dur:.07,type:'square',step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.45,hz:2600,q:.6,filter:'highpass'},duck:.3},
  final:{gain:1.1,dur:1,type:'sawtooth',step:.3,attack:.08,glide:.98,sampleGain:1.2,accent:true,
   layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also
@@ -222,8 +226,10 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
   tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1),sh.type||'triangle',sfxBus,hit?{...sh,attack:.002}:sh);
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',sfxBus);});
  if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise);
- /* coin ticks: the same ping, the same level, only the count differs between price modes */
- if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(2637,t0+.14+i*.07,.04,SFX_VOICE*.5,'sine',sfxBus,{attack:.002});
+ /* coin ticks: the same ping, the same level, only the count differs between price modes. v2.9.2 H2: the first tick is
+    the register's impact (x1.3, like `hit`); 바가지's run starts `tickLate` later on a lower first tick (`tickLow`) - the
+    whole run moves, so the 70 ms spacing that states the count is kept. */
+ if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(i?2637:2637*(sh.tickLow??1),t0+.14+(sh.tickLate??0)+i*.07,.04,SFX_VOICE*.5*(i?1:1.3),'sine',sfxBus,{attack:.002});
  if(sh.duck)duck(t0,sh.duck);}
 function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;if(!enabled||document.hidden){if(timer)clearInterval(timer);timer=null;track='';return;}if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){enabled=false;return;}}
  buses();preload();

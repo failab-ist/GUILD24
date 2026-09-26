@@ -487,10 +487,11 @@ test('DUNGEON_HAZARD_v2.7 §DEATH RISK: one failure-conditioned roll, off the pr
     1.20, late 0.40 -> 0.80). D1-D9 must be bit-for-bit the single 1.20 slope, and only the Day
     term may bend - a post-hoc multiplier on the finished Gate Power would move the Tier and
     Family terms with it. v2.9.2 balance (User 2026-09-25): early 1.20 -> 1.50, late 0.80 kept. */
- assert.deepEqual(Dungeon.GATE,{knee:9,early:1.50,late:0.80},'the shipped slope is the canonical one');
+ /* v2.9.2 third pass (User 2026-09-26): DAY 11~20 at 1.10, DAY 21+ back to the late 0.80 */
+ assert.deepEqual(Dungeon.GATE,{knee:9,early:1.50,late:0.80,mid:1.10,midFrom:10,midTo:20},'the shipped slope is the canonical one');
  for(const day of [1,2,5,8,9])
   assert.equal(Dungeon.gateDayTerm(day),day*1.50,'D'+day+' is the single early slope');
- for(const [day,term] of [[10,14.3],[12,15.9],[24,25.5],[29,29.5],[30,30.3]])
+ for(const [day,term] of [[10,14.3],[11,15.4],[12,16.5],[20,25.3],[21,26.1],[24,28.5],[29,32.5],[30,33.3]])
   assert.ok(Math.abs(Dungeon.gateDayTerm(day)-term)<1e-9,'D'+day+' Day term is '+term);
  assert.ok(Dungeon.gateDayTerm(30)<30*Dungeon.GATE.early,'the late slope actually bends the curve down');
  /* The coefficients are named so a harness can measure a candidate without editing the
@@ -984,19 +985,19 @@ test('RESULT-PROOF: persistent-state whole-Bag fallback credits generic state, n
   'ownership is generic ({items:null}) - since either single 구급키트 copy alone still relieves it, no one copy is invented as the sole cause');
 });
 
-test('DUNGEON_HAZARD §Ordinary EXP (User 2026-09-25, v2.9.2 balance): 대성공 EXP multiplier 1.10, the other paths unchanged',()=>{
- assert.equal(Dungeon.GREAT.xp,1.10);
+test('DUNGEON_HAZARD §Ordinary EXP (v2.9.2 balance, User 2026-09-25 / 2026-09-26): 대성공 1.00, combat-success 0.90, the rest unchanged',()=>{
+ assert.equal(Dungeon.GREAT.xp,1.00);assert.equal(Dungeon.WIN.xp,.90);
  const src=read('dist/systems/dungeon.js');
- assert.ok(/\(22\+d\.day\*4\.6\)\*\(outcome==='대성공'\?GREAT\.xp:outcome==='퇴각'\?\.38:won\?1:\.5\)\*e\.xpMult/.test(src),'base, Retreat 0.38, win 1.00 and other living 0.50 keep their values');
+ assert.ok(/\(22\+d\.day\*4\.6\)\*\(outcome==='대성공'\?GREAT\.xp:outcome==='퇴각'\?\.38:won\?WIN\.xp:\.5\)\*e\.xpMult/.test(src),'base, Retreat 0.38 and other living 0.50 keep their values');
  assert.equal(Dungeon.WALLET_MULT['대성공'],1,'the Great Success Wallet reward is unchanged');
- // a real resolved 대성공 pays exactly round(base x 1.10 x the explicit XP modifiers)
- let seen=0;
- for(let k=0;k<400&&seen<3;k++){const g=new Game();g.autosave=false;g.start('great-xp-'+k);g.buyRelic(g.run.relicWindow.candidateIds[0]);
-  for(let d=0;d<12&&g.run.phase!=='end'&&seen<3;d++){const s=g.run;s.money=5000;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();
-   for(const r of s.results)if(r.outcome==='대성공'&&!r.deep){const e=Dungeon.prepare({...s.npcs.find(n=>n.id===r.npcId),pack:r.items},s.dungeons.find(x=>x.id===r.dungeon)||s.dungeons[0],s.facilities).effects;
-    assert.equal(r.xp,Math.round((22+r.day*4.6)*1.10*e.xpMult),'대성공 EXP = round(base x 1.10 x xpMult)');seen++;}
+ // real resolved results pay exactly round(base x multiplier x the explicit XP modifiers)
+ const want={'대성공':1.00,'성공':.90};const seen={'대성공':0,'성공':0};
+ for(let k=0;k<400&&(seen['대성공']<3||seen['성공']<3);k++){const g=new Game();g.autosave=false;g.start('great-xp-'+k);g.buyRelic(g.run.relicWindow.candidateIds[0]);
+  for(let d=0;d<12&&g.run.phase!=='end';d++){const s=g.run;s.money=5000;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();
+   for(const r of s.results)if(want[r.outcome]&&!r.deep&&seen[r.outcome]<3){const e=Dungeon.prepare({...s.npcs.find(n=>n.id===r.npcId),pack:r.items},s.dungeons.find(x=>x.id===r.dungeon)||s.dungeons[0],s.facilities).effects;
+    assert.equal(r.xp,Math.round((22+r.day*4.6)*want[r.outcome]*e.xpMult),r.outcome+' EXP = round(base x '+want[r.outcome]+' x xpMult)');seen[r.outcome]++;}
    g.finishNight();g.closeDay();}}
- assert.ok(seen>0,'a 대성공 was resolved and checked');
+ assert.ok(seen['대성공']>0&&seen['성공']>0,'a 대성공 and a 성공 were resolved and checked');
 });
 console.log(groups+' night groups passed');
 
@@ -1048,10 +1049,28 @@ test('DUNGEON_HAZARD §strainEscalation (DUN-Q-v29-3, User 2026-09-25, v2.9.1 ba
  assert.equal(w.records.at(-1).departedWeary,true,'Fatigue 30 at departure is still recorded as weary, even though strain ignores it');
 });
 
+test('DUNGEON_HAZARD §Tier generation (v2.9.2 third pass, User 2026-09-26): DAY 21~29 move 0.10 of T2 to T3',()=>{
+ assert.deepEqual(Dungeon.LATE_T3,{from:21,to:29,shift:.10});
+ const near=(a,b)=>a.every((x,i)=>Math.abs(x-b[i])<1e-9);
+ // anchors, then the shift: D19 and D20 are the anchors' interpolation, D21~29 carry +0.10 T3 / -0.10 T2, D30 is the Final
+ assert.ok(near(Dungeon.tierWeights(19),[.26,.60,.14]),'D19 anchor unchanged');
+ // the boundary: D20 carries no shift, D21 is the first Day that moves 0.10 of T2 to T3
+ const lerp=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t),a19=[.26,.60,.14],a24=[.10,.60,.30];
+ assert.ok(near(Dungeon.tierWeights(20),lerp(a19,a24,1/5)),'D20 is the plain interpolation');
+ const d21=lerp(a19,a24,2/5);assert.ok(near(Dungeon.tierWeights(21),[d21[0],d21[1]-.10,d21[2]+.10]),'D21 is the first shifted Day');
+ assert.ok(near(Dungeon.tierWeights(24),[.10,.50,.40]),'D24: 10 / 60 / 30 -> 10 / 50 / 40');
+ assert.ok(near(Dungeon.tierWeights(25),[.05,.40,.55]),'D25: 5 / 50 / 45 -> 5 / 40 / 55');
+ assert.ok(near(Dungeon.tierWeights(29),[0,.35,.65]),'D29: 0 / 45 / 55 -> 0 / 35 / 65');
+ assert.ok(near(Dungeon.tierWeights(30),[0,0,0]),'D30 does not use ordinary Tier generation');
+ for(let d=1;d<=29;d++){const w=Dungeon.tierWeights(d);assert.ok(Math.abs(w[0]+w[1]+w[2]-1)<1e-9&&w.every(x=>x>=-1e-12),'D'+d+' weights are a distribution');
+  if(d<21)assert.ok(w[2]<=.172+1e-9,'D'+d+' carries no late shift');}
+});
+
 test('DUN-Q-v29-BC1: 만반의 준비 / LEVEL DEATH REDUCTION (User 2026-09-25, v2.9.1 balance)',()=>{
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],
   weighted:a=>a[0],shuffle:a=>a.slice()};};
- for(const [lv,exp] of [[1,1],[2,.985],[10,.865],[20,.75]])
+ /* v2.9.2 third pass (User 2026-09-26): floor .85 - identical through Lv11 */
+ for(const [lv,exp] of [[1,1],[2,.985],[10,.865],[11,.85],[12,.85],[20,.85]])
   assert.ok(Math.abs(Dungeon.levelFactor(lv)-exp)<1e-9,'levelFactor('+lv+') = '+exp);
  assert.equal(Dungeon.PREPARED.factor,.80);assert.equal(Dungeon.PREPARED.bandSevere,.36);
  const base={injury:0,pack:['rice','rice']};

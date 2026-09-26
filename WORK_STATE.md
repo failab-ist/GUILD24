@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-25
-STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_ADOPTED (1단계 완료) · 2단계(H2 → H3 → H4 → H6) 대기
+STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_H2_H3_ADOPTED · 2단계 H4 → H6 대기
 
 ## Current
 
@@ -10,7 +10,8 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
 - v2.9.1 밸런스: 완료 · main 병합 · 태그 완료(User 2026-09-25). 결정값 `reports/v29-balance-agreements.md`, 측정 `reports/v29-balance-ideal.md`, owner 변경 `design_ssot/CHANGELOG.md` §v2.9.1.
 - v2.9.2 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`:
   - PR #5로 main에 병합됨(`dd3feb4`, Pages 배포): H1(`8c1c6bd`) + 플레이 리포트 수정 `158d001` / `0510b53` / `61b9734` / `771ba8f`.
-  - 그 뒤 커밋: `0de22d2` 진열대 효과 전부 한 줄 · `a3ec6d6` SALE 트레이 접기 · `99463b4` 게이트 방문 최소 1명 · `229fb31` 발주 플로팅 오늘 줄 · `d8bb916` D30 흐름(발주 → 수첩 편성 → 준비 스탯) · `8ec02cb` H5 FINAL 봉인 도장.
+  - PR #6으로 main에 병합됨(`9414293`, Pages 배포 성공): 진열대 한 줄 · SALE 트레이 접기 · 게이트 방문 최소 1명 · 발주 플로팅 오늘 줄 · D30 흐름 · H5 봉인 · H1 만반의 준비 반전 · 밸런스(대성공 EXP 1.10, slope 1.50, 정가 ×0.90).
+  - 그 뒤(이 브랜치, main 미병합): H2 SALE 계산대 · 봇 하네스 `reader` · 2차 밸런스 · H3 ORDER 확정.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - last tagged release: `v2.9.1`; completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
@@ -19,6 +20,10 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
 - v2.9.2 밸런스(User 2026-09-25, 3개 레버만): 대성공 EXP 1.10, GATE SLOPE early 1.50(late 0.80 유지), 정가 최종 구매의사 ×0.90
   (0.97 관련 준비 포함, 50%/150% 불변) 반영 완료. 근거 `reports/v292-balance-review.md`(`human` 주 렌즈).
   배포 후 User 플레이 데이터(가능하면 D30 직후 또는 런 종료 직후 저장)로 재확인할 예정.
+- v2.9.2 봇 하네스(User 2026-09-26): `reader` 정책과 User 런 보정 도구 추가(`reports/v292-bot-harness.md`). 그 결과로 2차 밸런스 반영
+  (User 2026-09-26 권고안): 대성공 EXP 1.00, 전투 승리 EXP 0.90, 운영비 D15 이후 +12/일. 다음 User 플레이 데이터로 재확인.
+  late Gate slope 측정(측정 전용, 2026-09-26): 0.80 / 0.90 / 1.00 비교 결과 `reports/v292-bot-harness.md` §8. Source는 late 0.80 그대로.
+  3차 밸런스(User 2026-09-26 "g1 l2 t"): Gate D11~20 1.10/일, levelFactor 하한 0.85, D21~29 T3 +0.10 반영(§9~10 측정 근거).
 
 ## User 재확인 필요 (User 2026-09-25 자리 비운 동안 추천안으로 임시 적용 — 이후 확인)
 
@@ -30,7 +35,7 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
 6. H5 세부: 마왕 이름이 새겨진 봉인 1개(승리 주홍·정면 / 패배 흐리고 비뚤고 일부만), 착지 큐 `sealwin` / `sealfail`.
 7. ~~H1 반전 범위~~ → User 확정(2026-09-25): 사망을 면했을 때만 반전. `만반의 준비`가 사망을 막은 밤만 덮어찍기, 강골·구급키트는 반전 없음(`eb30e16`).
 
-## Next — v2.9.2 타격감 2단계 (H2 → H3 → H4 → H6) 작업 지시
+## Next — v2.9.2 타격감 남은 배치 (H4 → H6) 작업 지시 — H2(`8874e19`) · H3(`96375e1`) 완료
 
 AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 — 하위 모델 · 하이 이펙트). 기점: 이 브랜치의 최신 커밋(또는 병합된 main). 병렬 금지(같은 UI owner / 원장 / `app.js` / `ui.css` / `ui-guard.cjs`를 고치는 다른 세션이 있으면 BLOCKED).
 
@@ -50,13 +55,13 @@ AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 �
 
 ### 배치별 지시
 
-- **H2 SALE 계산대** (PRESENTATION H2 행 + §TRANSACTION BEAT A5 / A8; owner 줄: PRESENTATION A5/A8, UI_UX §SALE — COUNTER TRAY, UI_UX_QA 새 `UI-Q-v29-31`, 원장 UI_UX / UI_UX_QA):
+- ~~H2 SALE 계산대~~ **완료(`8874e19`)** (PRESENTATION H2 행 + §TRANSACTION BEAT A5 / A8; owner 줄: PRESENTATION A5/A8, UI_UX §SALE — COUNTER TRAY, UI_UX_QA 새 `UI-Q-v29-31`, 원장 UI_UX / UI_UX_QA):
   - 누른 가격 키: `case'sell'`에서 누른 버튼을 `translateY` 3 px 60 ms 내려갔다 복귀(기존 `stampPress`와 같은 자리에서, 카드 밖 모션 없음).
   - A5: `audio.js`의 `sale` / `half` / `overcharge` 코인 틱 루프(`if(sh.ticks)`)에서 첫 틱만 `hit` 방식으로 세게; `overcharge`(바가지)의 첫 틱은 40 ms 늦고 낮은 음. 틱 수 1 / 2 / 3 불변.
   - A8 영수증 조각(`showStub()` / `.receipt-stub`): 렌더 시점이 아니라 키 눌림의 착지(60 ms) 뒤에 기존 1.12→1 ≤ 200 ms로 찍힘.
   - 없는 것: 계산대 띠 튐, 빨라지는 두 번째 도장, 다섯 번째 판매 배음, 콤보/연속 UI(2차 검토).
   - 캡처: 390·1280, 판매 50/100/150%와 거절 각 1회, 모션 프레임 0/60/120/200/320 ms. SALE 트레이 접기(UI-Q-v29-28)는 펼친 상태에서만 판매한다.
-- **H3 ORDER 확정** (owner: UI_UX §ORDER — WAREHOUSE DISCLOSURE, UI_UX_QA `UI-Q-v29-32`, 원장):
+- ~~H3 ORDER 확정~~ **완료(`96375e1`)** (owner: UI_UX §ORDER — WAREHOUSE DISCLOSURE, UI_UX_QA `UI-Q-v29-32`, 원장):
   - `case'confirm-order'` 뒤 `playCue`에 1회성 표식 `'order'`를 두고 창고 칸(`stockBrief()`의 행; 접혀 있으면 요약 `N / M칸` 숫자만)에 SKU당 상자 1개가 계단식 착지, 전체 ≤ 320 ms(간격 = min(70, 320 / SKU 수)), 들리는 `order` 계열 타격 최대 3회(나머지 무음), 각 창고 숫자는 이전 값 → 확정 값으로 바로(수량만큼 반복 금지), 잔고(`#order-register`의 보유 골드 / 발주 후)는 H1 카운트업 패턴의 역방향 카운트다운 220 ms. `발주 완료.` 줄 불변.
 - **H4 CLOSING 마감** (owner: UI_UX §CLOSING, UI_UX_QA `UI-Q-v29-33`, 원장):
   - `playPhase('closing')` 새 분기: 영수증 본문 행을 한 번에 ≤ 200 ms로 인쇄(프린터 틱 1회, 행마다 틱 금지), 마지막 `영업 손익` 줄만 도장(중요: hold 100 ms, `STAMP_FALL`, 테이프 dip 4 px; 이익 금색 / 손실 적색 — 끝 상태 CSS에).
@@ -64,6 +69,24 @@ AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 �
   - `어제보다 +N` 줄 없음(v3.0+).
   - 연속 시퀀스 캡처(이 배치가 H1 + H4를 잇는다): 마지막 밤 판정 → `마감으로` → 영수증 인쇄 → `다음 날`을 한 흐름으로.
 - **H6 장면 전환** (조건부): CLOSING / FINAL / END / DAY 0 네 하드 컷을 두 연속 시퀀스(밤 → 마감 → 다음 날, FINAL 결과 → END)에서 캡처해 **보고만** 하고 STOP — 대상 화면은 User 결정(UNRESOLVED). 선택된 화면만 같은 계열 진입 비트(≤ 240 ms, 한 동작, 일반 강도).
+
+### H2 / H3에서 확인된 함정 (다음 배치에서 반복하지 말 것)
+
+- 모든 `button`에 `transition:transform .08s steps(2)`가 걸려 있다. anime로 버튼을 움직이면 CSS 전환이 매 프레임을 삼킨다. 움직일 버튼은 먼저 `el.style.transition='none'`으로 끈다(`keyPress` 참고).
+- 캡처 도구는 페이지 시계를 멈춰 둔다(`Date.now` 래퍼). 누르기 전에 재생돼야 할 애니메이션(선택 트레이 등)이 있으면 `window.__live=true`를 먼저 켠다. 안 그러면 캡처할 때만 흐리게 보이는 가짜 결함이 생긴다.
+- 캡처는 anime만 10배 느리게 한다. `setTimeout`(스텁 페이드, 사운드)은 벽시계로 돈다. 늦은 프레임에서 사라지는 요소는 캡처 인공물일 수 있으니 `QA_SLOW=1`로 최종 상태를 확인한다.
+- 렌더가 대상 요소를 지우면(판매 성공 뒤 트레이) 모션이 보이지 않는다. 떼어 둔 원래 노드를 `inert`로 잠깐 되돌려 놓는 방식을 쓴다(H2 `held`).
+- 시퀀스 값(개수·잔고)은 `setTimeout`이 아니라 anime `onComplete`(필요하면 `A({t:0},{t:1,duration})`)로 바꾼다. 그래야 느린 캡처에서도 타이밍이 맞는다.
+- 캡처 픽스처는 조건을 실제로 만족해야 한다(H3: 서로 다른 SKU k개. 같은 품목 중복 금지). 검수 에이전트가 이런 TEST GAP을 잡아낸다.
+- 새 한글은 주석까지 폰트 서브셋 검사에 걸린다. 새 카피가 없으면 주석도 영어로 쓴다.
+- 캡처 도구 템플릿: `tools/qa-sale-beat.cjs`, `tools/qa-order-beat.cjs`(최종 DOM 비교 `QA_DOM=1` 포함).
+
+### 별도 FIX 대기 (User 결정 전 손대지 않음)
+
+- `npm run qa:visual`
+  - 밸런스 변경 뒤 자동 진행이 D5 전에 죽어 boss10 캡처에서 멈춘다(하네스 문제).
+  - H5 봉인과 END 제목 사이에 "text collision" 14건이 뜬다. 390 캡처로는 실제로 겹치지 않아 오탐으로 보이며, ROOT CAUSE UNRESOLVED.
+  - 그 밖에 기존(`dd3feb4`)부터 있던 20건.
 
 ### 2단계 지침(하네스 엄격)
 

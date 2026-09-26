@@ -1001,13 +1001,15 @@ D29 = 23.30
 
 ```new
 Severe Injury and Death are final result-Fatigue gain 0 and a Trait may not raise them; a Severe Injury already costs the adventurer rest days, and its rest day recovers no Fatigue (User 2026-09-25, v2.9.1 balance).
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss):
-= min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss; v2.9.2 third pass, User 2026-09-26: DAY 11~20 climb at 1.10 per Day — the NPC-growth check of GAME_VISION's Run Progression Arc — DAY 1~10 unchanged; DAY 21+ returns to the existing 0.80 slope while keeping the offset accumulated by D20, so its absolute Day term is higher than before):
+= min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
 D9  = 13.50
-D12 = 15.90
-D18 = 20.70
-D24 = 25.50
-D29 = 29.50
+D10 = 14.30
+D12 = 16.50
+D18 = 23.10
+D20 = 25.30
+D24 = 28.50
+D29 = 32.50
 0.36
 0.11
 Base shares 0.36 / 0.11 (User 2026-09-25, v2.9.1 balance; were 0.42 / 0.13).
@@ -1027,7 +1029,7 @@ preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
 - departed without Injury (injury=0)
 - fatigueBeforeExpedition < 20
 - 2 or more Items in the Bag
-levelFactor = max(0.75, 1 − 0.015 × (Level − 1))      (Lv1 = 1.00, −1.5% per Level, floor −25%)
+levelFactor = max(0.85, 1 − 0.015 × (Level − 1))      (Lv1 = 1.00, −1.5% per Level, floor −15%; User 2026-09-26, v2.9.2 third pass: floor was 0.75 — identical through Lv11)
 - a Death roll inside `failureDeathChance` but outside `rolledDeathChance` does not become 사망: the Outcome becomes
 중상 with a flat 0.36 chance, otherwise 부상 — one extra draw, no second Death roll
 - the SALE `실패 시 사망 위험` snapshot includes `levelFactor` (NPC state at SALE entry) and never `preparedFactor`
@@ -1065,7 +1067,7 @@ User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Go
 ```
 
 ```new
- 대성공 = 1.10   (User 2026-09-25, v2.9.2 balance; was 1.40 — Great Success occurrence, Store Gold and Wallet unchanged)
+ 대성공 = 1.00   (User 2026-09-26, v2.9.2 balance; was 1.10, 1.40 before — Great Success occurrence, Store Gold and Wallet unchanged)
 ```
 
 ## AMENDMENT — v2.9.2 balance: Gate early slope 1.20 -> 1.50 (User decision 2026-09-25)
@@ -1073,3 +1075,29 @@ User 2026-09-25: the 대성공 EXP multiplier becomes 1.10; occurrence, Store Go
 User 2026-09-25: the Day term's early slope becomes 1.50, the late slope 0.80 and the knee Day 9 are kept (a fresh first Run
 cleared the Boss). The v2.9.1 slope lines were declared new above, not chain lines, so their `new` fence is edited in place
 (formula, heading sentence, Day-term anchors) rather than dropped here.
+
+## AMENDMENT — v2.9.2 balance, second pass: 대성공 EXP 1.10 -> 1.00, combat-success EXP 1.00 -> 0.90 (User decision 2026-09-26)
+
+User 2026-09-26 (after the `reader` harness review, reports/v292-bot-harness.md): the 대성공 line declared above is edited in place;
+the combat-success line is a chain line, dropped here for its new form. 퇴각 0.38 and other living 0.50 are unchanged.
+
+```text
+combat-success path = 1.00
+```
+
+```new
+    combat-success path = 0.90   (User 2026-09-26, v2.9.2 balance; was 1.00 — 성공, or a won fight that came home hurt)
+```
+
+## AMENDMENT — v2.9.2 balance, third pass: Gate DAY 11~20 at 1.10, levelFactor floor 0.85, late T3 +0.10 (User decision 2026-09-26)
+
+User 2026-09-26 (after the paired D10-fork arms, reports/v292-bot-harness.md §9-10; "g1 l2 t"): the Gate Day term climbs at 1.10 per
+Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ back on the 0.80 slope, carrying the D20 offset), the Level Death protection floor is 0.85 (identical through Lv11), and DAY 21~29 move
+0.10 of T2 to T3. The Day-term sentence, formula, anchors and levelFactor lines declared above are edited in place; the late T3
+paragraph is new.
+
+```new
+Late T3 pressure (User 2026-09-26, v2.9.2 third pass): after the interpolation, DAY 21~29 move 0.10 of the T2 weight to T3
+(never more than T2 holds); T1 and every other Day keep the anchor values. The late Days lean on Hazard / Item preparation,
+not raw Power alone. Examples: D24 10 / 50 / 40 · D25 5 / 40 / 55 · D29 0 / 35 / 65.
+```

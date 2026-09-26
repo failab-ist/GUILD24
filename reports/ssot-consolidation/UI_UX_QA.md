@@ -1192,3 +1192,50 @@ User 2026-09-25: the reversal overstamp also covers a Death 만반의 준비 tur
 - a reversal prints the turned-away Outcome (`사망` / `중상`) first, then `생환` overstamps it; the Insurance proof lines appear on that frame; a Death 만반의 준비 turned away prints `사망` and its own 부상 / 중상 overstamps it (User 2026-09-25)
 - a stamp on a death, two stamps on a 대성공, a reversal on 강골 / 구급키트 results, a ring, flash, shake or particle
 ```
+
+## AMENDMENT — v2.9.2 H2 SALE counter feel (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H2, PRESENTATION §GAME FEEL BEAT H2): UI-Q-v29-31 is added. Nothing is dropped.
+
+```new
+### UI-Q-v29-31 — SALE COUNTER FEEL
+
+(User 2026-09-25, v2.9.2 H2; owner `UI_UX_v2.8.0.md` §SALE — COUNTER TRAY, COUNTER FEEL.)
+
+SETUP:
+SALE at 390 and 1280, motion on and reduced motion: one sale each at 50% / 정가 / 150% and one refused 정가, the tray unfolded; frames at 0 / 60 / 120 / 200 / 320 ms.
+
+PASS:
+- the pressed key moves 3px down and back within 120 ms; on a sale the pressed tray is visible for that press only and takes no input
+- the A8 stub starts at the key landing (60 ms) and is settled by 260 ms; no stub on a refusal
+- the refused key is pressed and shakes once where it locks
+- the first coin tick is louder; 바가지's ticks start 40 ms later with a lower first tick; the counts stay 1 / 2 / 3
+- a fifth sale looks and sounds exactly like the first
+- under reduced motion the end state (tray cleared, stub text, Gold, Bag) is identical
+
+FAIL:
+- a second press on the 정가 key, a pressed tray that answers a tap, a stub before the key lands, any escalation with the sale count
+```
+
+## AMENDMENT — v2.9.2 H3 ORDER confirm (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H3, PRESENTATION §GAME FEEL BEAT H3): UI-Q-v29-32 is added. Nothing is dropped.
+
+```new
+### UI-Q-v29-32 — ORDER CONFIRM CASCADE
+
+(User 2026-09-25, v2.9.2 H3; owner `UI_UX_v2.8.0.md` §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM.)
+
+SETUP:
+ORDER at 390 and 1280, motion on and reduced motion: 발주 확정 with 1 / 3 / 6 SKUs in the cart, the warehouse list open, and with 3 SKUs folded; frames at 0 / 45 / 90 / 160 / 230 / 320 / 400 ms.
+
+PASS:
+- one crate per ordered SKU lands on its own row; the last landing is within 320 ms at every SKU count
+- each count moves once, prior -> resolved, on its crate's landing; a new SKU's row arrives with its crate
+- the summary `N / M칸` · `N종` and the register's 창고 잔여 칸 move together on the last landing; folded, only they move
+- at most three audible hits; 보유 골드 counts down to the resolved value in 220 ms
+- under reduced motion the end state (counts, summary, till) is identical
+
+FAIL:
+- a crate per unit, a count that ticks up unit by unit, a cascade longer than 320 ms, a fourth audible hit, a changed `발주 완료.` line
+```

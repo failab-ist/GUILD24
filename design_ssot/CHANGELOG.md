@@ -3,7 +3,7 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.2 — game feel (타격감), H1 / H5 ADOPTED, H2 / H3 / H4 / H6 PLANNED (User 2026-09-25)
+## v2.9.2 — game feel (타격감), H1 / H5 / H2 / H3 ADOPTED, H4 / H6 PLANNED (User 2026-09-25)
 
 H1 and H5 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
@@ -47,6 +47,29 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   row and the `피로 {A} → 출발 {B}` line are retired on the counter tray, the till and FINAL preparation; the SUPPLY lesson
   moves to the tray's `피로 회복` row for a fatigued customer (User choice). SALE, UI_UX, UI_UX_QA UI-Q-v29-7, DUNGEON_HAZARD,
   DUNGEON_ITEM_QA, SOURCE_ADOPTION_QA, COPY_AUDIT §3-5 / §3-7 / §4-17 (retired); ledgers edited in place.
+- H3 ORDER confirm ADOPTED (User 2026-09-25): UI_UX §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM (one crate per ordered SKU falls onto its
+  warehouse row with the NIGHT stamp's fall, a cascade capped at 320 ms with a step of at most 70 ms; each count prior -> resolved on
+  its landing; the warehouse figures (`N / M칸` · `N종` · 창고 잔여 칸) move together on the last landing; at most three audible hits - `order`, then the new synthesised `crate`; the till
+  counts down in 220 ms); UI_UX_QA UI-Q-v29-32; ledgers UI_UX / UI_UX_QA; PRESENTATION H3 ADOPTED. Source: app.js (ORDER_BEAT,
+  playCue order, stockBrief rows carry data-item), audio.js (`crate`). Capture tool tools/qa-order-beat.cjs.
+- H2 SALE counter feel ADOPTED (User 2026-09-25): UI_UX §SALE — COUNTER TRAY, COUNTER FEEL (the pressed price key 3 px / 60 + 60 ms;
+  on a sale the pressed tray held inert for that press only; the A8 stub from the key landing, its ink in 40 ms; a refused key
+  pressed while A6 shakes it; the first coin tick ×1.3, 바가지's tick run +40 ms on a ×0.75 first tick, counts 1 / 2 / 3 kept);
+  UI_UX_QA UI-Q-v29-31; ledgers UI_UX / UI_UX_QA; PRESENTATION H2 row ADOPTED. Source: app.js (KEY_PRESS, keyPress, playCue
+  sale / refuse), ui.css (`.counter-tray.held`), audio.js (tickLate / tickLow). Also fixes a RUNTIME UX BUG found on the way:
+  the global button `transition:transform .08s steps(2)` swallowed every scripted key motion, so A6's refusal shake was never
+  visible; a pressed key now drops that transition. Capture tool tools/qa-sale-beat.cjs.
+- Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — reports/v292-bot-harness.md §9-10): the Gate
+  Day term climbs at 1.10 per Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ returns to the 0.80 slope carrying the D20 offset; D20 25.3, D29 32.5); levelFactor floor 0.75 → 0.85
+  (identical through Lv11); DAY 21~29 move 0.10 of the T2 weight to T3. Measured together (GLT): `reader` all-fresh D30 12.1% →
+  8.6%, CURRENT_SKILLED_D10 .558 → .450; the D21~29 slope 0.90 and a Great Success Gold cut were measured and not taken; the
+  all-fresh 10% floor is not a real-player measure (User). DUNGEON_HAZARD §GATE POWER / §Tier generation / Level Death reduction,
+  DUNGEON_ITEM_QA; ledgers amended; tests night (Gate term, tiers, levelFactor).
+- Balance, second pass (User 2026-09-26, after the `reader` harness review — reports/v292-bot-harness.md §7): 대성공 EXP 1.10 → 1.00,
+  combat-success EXP 1.00 → 0.90 (퇴각 0.38 / other living 0.50 unchanged); operating dayBase + 12 × max(0, Day − 15). Measured:
+  `reader` clear 14.9% → 7.2%, the D29 cash median ~5,100 → ~3,400; a level-coefficient raise (0.05~0.10) was rejected - it taxed
+  D1~15 too and doubled bankruptcies. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA, ECONOMY_ORDER §BASE OPERATING COST,
+  ECONOMY_ORDER_QA; ledgers amended; tests night (EXP) / integration (operating cost).
 - Balance, Great Success EXP 1.40 → 1.10 (User 2026-09-25): only the EXP multiplier; Great Success occurrence / probability,
   Store Gold and the expedition NPC Wallet reward unchanged. Purpose: weaken the snowball of a strong NPC growing faster
   through Great Success EXP. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA; ledgers amended.

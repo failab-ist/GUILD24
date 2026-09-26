@@ -1584,11 +1584,14 @@ test('D-23: every cue the UI asks for exists, and every step of an ordinary day 
  /* v2.9.0 TRANSACTION BEAT A5 (UI_UX §AUDIO 50% / 100% / 150%): the modes differ by coin ticks
     only - 1 / 2 / 3 - and by nothing else; the count is not a level and no mode rings better. */
  const modes=['sale','overcharge','half'].map(modeShape);
- assert.equal(new Set(modes.map(m=>m.replace(/,ticks:\d/,''))).size,1,'the three price modes are one SALE family at one level');
+ /* v2.9.2 H2 (PRESENTATION H2, UI-Q-v29-31): 바가지 alone carries the first-tick offset - 40 ms later, a lower first tick */
+ assert.ok(/,ticks:3,tickLate:\.04,tickLow:\.75$/.test(modeShape('overcharge')),'바가지 first tick: +40 ms, x0.75 pitch');
+ assert.ok(!/tickLate|tickLow/.test(modeShape('sale')+modeShape('half')),'정가 / 50% carry no offset');
+ assert.equal(new Set(modes.map(m=>m.replace(/,ticks:\d(,tickLate:[\d.]+,tickLow:[\d.]+)?/,''))).size,1,'the three price modes are one SALE family at one level');
  const ticks=Object.fromEntries(['half','sale','overcharge'].map(m=>[m,Number((modeShape(m).match(/ticks:(\d)/)||[])[1])]));
  assert.deepEqual(ticks,{half:1,sale:2,overcharge:3},'50% / 100% / 150% are told apart by 1 / 2 / 3 coin ticks');
- assert.ok(/if\(sh\.ticks\)for\(let i=0;i<sh\.ticks;i\+\+\)tone\(2637,t0\+\.14\+i\*\.07,\.04,SFX_VOICE\*\.5,'sine'/.test(read('dist/ui/audio.js')),
-  'and the ticks are the same ping at the same level, only counted');
+ assert.ok(/if\(sh\.ticks\)for\(let i=0;i<sh\.ticks;i\+\+\)tone\(i\?2637:2637\*\(sh\.tickLow\?\?1\),t0\+\.14\+\(sh\.tickLate\?\?0\)\+i\*\.07,\.04,SFX_VOICE\*\.5\*\(i\?1:1\.3\),'sine'/.test(read('dist/ui/audio.js')),
+  'and the ticks are the same ping at the same level, only counted - the first one the harder impact (H2)');
  const samples=Sound.samples;assert.equal(new Set(['sale','overcharge','half'].map(m=>samples[m])).size,1,
   'and they commit on the same recorded register body');
  assert.ok(/sound\('refusal'\)/.test(app),'and a refusal sounds different from a sale');
@@ -1763,6 +1766,41 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
  // the core is the approved line's own words, not new copy
  const rowsFor=k=>Presentation.rows({[k]:1}).map(r=>r.label).join('');
  assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소비품 효과 2회'),'both cores are cut from the approved lines');
+});
+
+/* UI-Q-v29-32 (v2.9.2 H3, UI_UX §ORDER — WAREHOUSE DISCLOSURE): one crate per SKU, capped cascade, three hits at most */
+test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its landing, <= 320 ms, <= 3 hits, the till counts down',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ assert.ok(/const ORDER_BEAT=\{total:320,step:70,hits:3,till:220\};/.test(app),'320 ms cap, 70 ms step ceiling, 3 hits, 220 ms till');
+ const pc=bare(fn('playCue')),o=pc.slice(pc.indexOf("if(c==='order')"),pc.indexOf("if(c==='sale')"));
+ assert.ok(/step=Math\.min\(ORDER_BEAT\.step,\(ORDER_BEAT\.total-STAMP_FALL\)\/Math\.max\(1,k\.length-1\)\)/.test(o),'the step shrinks so the last landing stays within the cap');
+ assert.ok(/k\.forEach\(\(item,i\)=>/.test(o)&&!/quantity|cart\[/.test(o),'one crate per SKU, never per unit');
+ assert.ok(/translateY:\{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in\(3\)'\}/.test(o),'the crate reuses the NIGHT stamp fall');
+ assert.ok(/cnt\.textContent=was\+'개'/.test(o)&&/onComplete:\(\)=>\{cnt\.textContent=now;\}/.test(o),'prior value, then the resolved one on the landing');
+ assert.ok(/if\(i<ORDER_BEAT\.hits\)orderCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(i\?'crate':'order'\),land\)\)/.test(o),'at most three audible landings');
+ assert.ok(/A\(box,\{v:game\.run\.money,duration:ORDER_BEAT\.till/.test(o),'the till counts down');
+ assert.ok(/summary i/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
+ assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
+ assert.ok(/'<li data-item="'\+it\.id\+'">'/.test(fn('stockBrief')),'rows are addressable by SKU');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
+ assert.ok(/s\.notice='발주 완료\.'/.test(read('dist/systems/shop.js')),'the 발주 완료. line is unchanged');
+});
+
+/* UI-Q-v29-31 (v2.9.2 H2, UI_UX §SALE — COUNTER TRAY): the pressed price key and the A8 stub on its landing */
+test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, the first tick harder',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ assert.ok(/const KEY_PRESS=\{y:3,down:60,up:60\};/.test(app),'3 px, 60 ms down and 60 ms back - 일반, no hold');
+ assert.ok(/translateY:\[\{from:0,to:KEY_PRESS\.y,duration:KEY_PRESS\.down/.test(app),'the key travels down and returns');
+ const pc=bare(fn('playCue')),sale=pc.slice(pc.indexOf("if(c==='sale')"),pc.indexOf("if(c==='refuse')")),refuse=pc.slice(pc.indexOf("if(c==='refuse')"));
+ assert.ok(/scale:\{from:1\.12,to:1,duration:200,delay:KEY_PRESS\.down/.test(sale)&&/opacity:\{from:0,to:1,duration:40,delay:KEY_PRESS\.down/.test(sale),'the A8 stub lands on the key landing, 1.12 -> 1 in 200 ms');
+ assert.ok(/held\.inert=true/.test(sale)&&/keyPress\(A,key,\{onComplete:put\}\)/.test(sale)&&/setTimeout\(put,/.test(sale),'the pressed tray is held inert for the press only, with a fallback');
+ assert.ok(/\.p-sale \.counter-tray\.held\{pointer-events:none\}/.test(css),'and it answers no input');
+ assert.ok(/keyPress\(A,b\);A\(b,shake\)/.test(refuse),'a refused key is pressed too, while A6 shakes it');
+ assert.ok(/const keyPress=\(A,key,more=\{\}\)=>\(key\.style\.transition='none',/.test(app),'the button transition is dropped so the frames are not swallowed');
+ assert.ok(/el\.dataset\.action!=='sell'\)stampPress\(el\)/.test(app),'the 정가 key does not add the generic stamp press');
+ assert.ok(/tray:el\.closest\('\.counter-tray'\)/.test(app),'the tray is read before the draw that drops it');
+ // nothing that escalates: no count of sales reaches the beat
+ assert.ok(!/previousSales|daily\.sales|streak|combo/.test(sale),'no streak, no combo, no faster second sale');
 });
 
 /* UI-Q-v29-30 (v2.9.2 H5, UI_UX §FINAL RESULT — SEAL STAMP): one seal bearing the Boss's name on a Final ending tape */

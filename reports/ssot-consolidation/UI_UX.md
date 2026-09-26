@@ -1207,3 +1207,33 @@ User 2026-09-25: the reversal overstamp also covers a Death 만반의 준비 tur
 부상 / 중상 prints `사망` first the same way and its own Outcome overstamps it; the Outcome cue plays on the overstamp and
 there is no `rescue` accent. 강골 and 구급키트 only lower an injury and never reverse
 ```
+
+## AMENDMENT — v2.9.2 H2 SALE counter feel (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H2, PRESENTATION §GAME FEEL BEAT H2): §SALE — COUNTER TRAY gains the COUNTER FEEL line. Nothing is dropped.
+
+```new
+- COUNTER FEEL (User 2026-09-25, v2.9.2 H2; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H2;
+  acceptance -> UI_UX_QA UI-Q-v29-31): the pressed price key travels down 3px in 60 ms and returns in 60 ms (일반 intensity,
+  no hold). On a successful sale the tray that was pressed stays in place, inert, for that press only (its Item icon hidden:
+  the Item travels as the A1 hand-over), then the counter draws without it; the A8 stub stamps in (1.12 → 1, 200 ms) from the
+  key's landing frame instead of the draw. A refused key is pressed the same way while A6 shakes it. The register's first
+  coin tick is the impact (×1.3); 바가지's tick run starts 40 ms later on a lower first tick (×0.75), the 1 / 2 / 3 count and
+  its 70 ms spacing unchanged. No counter-band bump, no faster second sale, no sale-count overtone, no combo or streak UI.
+  Under reduced motion there is no press or held tray and the stub appears at once; the end state is identical
+```
+
+## AMENDMENT — v2.9.2 H3 ORDER confirm (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H3, PRESENTATION §GAME FEEL BEAT H3): §ORDER — WAREHOUSE DISCLOSURE gains the ORDER CONFIRM line. Nothing is dropped.
+
+```new
+- ORDER CONFIRM (User 2026-09-25, v2.9.2 H3; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H3;
+  acceptance -> UI_UX_QA UI-Q-v29-32): on 발주 확정 one crate per ordered SKU - its warehouse row's icon - falls onto its row
+  (the NIGHT stamp's 90 ms fall) in a cascade whose step is at most 70 ms and shrinks so the last landing is within 320 ms;
+  each row's count goes from its prior value straight to the resolved one on its crate's landing (never a unit at a time), and
+  a SKU new to the warehouse brings its row in with its crate. The warehouse figures - the summary `N / M칸` and `N종` and the
+  register's 창고 잔여 칸 - move together on the last landing (a folded list shows only those). At most three landings are audible (the `order` stamp, then the short `crate` of the same family); the rest
+  are silent. The till's 보유 골드 counts down to the resolved value in 220 ms. The `발주 완료.` line is unchanged. 일반
+  intensity: no hold. Under reduced motion the `order` stamp plays once and every value is resolved at once
+```

@@ -206,6 +206,7 @@ Gate count PASS:
 Tier PASS:
 - exact anchor rows equal DUNGEON_HAZARD_v2.8.0.md
 - all in-between Days use linear interpolation between surrounding anchors
+- DAY 21~29 then move 0.10 of T2 to T3 (D24 10 / 50 / 40 · D29 0 / 35 / 65); no other Day shifts (User 2026-09-26, v2.9.2 third pass)
 - D30 does not run ordinary Tier generation
 - no player-facing next-Day forecast exists (User 2026-09-24, v2.9.0)
 
@@ -236,9 +237,9 @@ PASS:
 Owner rule: `DUNGEON_HAZARD_v2.8.0.md` §GATE POWER — LATE-DAY SLOPE.
 
 PASS:
-- the Day term is `min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2)
+- the Day term is `min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2; DAY 11~20 at 1.10 in the v2.9.2 third pass, User 2026-09-26)
 - the base constant, Tier term, Family adjustment and Family Combat multiplier are unchanged
-- the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
+- the Day term reads D9 13.50, D10 14.30, D12 16.50, D18 23.10, D20 25.30, D24 28.50, D29 32.50 (User 2026-09-26, v2.9.2 third pass)
 
 FAIL:
 - a single slope applied across all Days
@@ -530,7 +531,7 @@ Controlled seeded cases must verify (User 2026-09-24, v2.9.0: no Supply-deficit 
 
 Reward PASS:
 - EXP base = 22 + Day×4.6
-- EXP outcome multipliers are Great 1.10 / Retreat 0.38 / combat-success 1.00 / other living 0.50 (User 2026-09-25, v2.9.2 balance; Great was 1.40)
+- EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50 (User 2026-09-26, v2.9.2 balance; Great was 1.10, 1.40 before; combat-success was 1.00)
 - Wallet base = 35 + Day×8
 - Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.1 balance)
 - explicit XP/Loot/Gate reward modifiers compose once
@@ -550,7 +551,7 @@ and the three near misses (injured / Fatigue 20 / one Item).
 
 PASS:
 - rolledDeathChance = failureDeathChance × preparedFactor × levelFactor exactly; preparedFactor 0.80 only when all three hold
-- levelFactor = max(0.75, 1 − 0.015 × (Level − 1)): Lv1 1.00 · Lv2 0.985 · Lv10 0.865 · Lv20 0.75
+- levelFactor = max(0.85, 1 − 0.015 × (Level − 1)): Lv1 1.00 · Lv2 0.985 · Lv10 0.865 · Lv11+ 0.85 (User 2026-09-26, v2.9.2 third pass; floor was 0.75)
 - a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
 - the SALE `실패 시 사망 위험` includes levelFactor and never preparedFactor
 - the Night report shows the 만반의 준비 save line once, only when the band was hit
