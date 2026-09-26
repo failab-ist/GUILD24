@@ -33,7 +33,7 @@ const SPY=`(()=>{const g=Guild24.game;window.__qa={boss:0,draws:0,end:0,settle:0
  const play=Sound.play;Sound.play=k=>{__qa.cues.push(k);return play(k);};})()`;
 const ACCOUNT=`(()=>{const a=Guild24.game.account;return {capital:Meta.storeCapital(a),runs:a.runs,wins:a.wins,opened:JSON.stringify(Meta.opened(a))};})()`;
 const ENDED=`(()=>{const s=Guild24.game.run;return JSON.stringify({phase:s.phase,win:s.win,reason:s.endReason,lock:s.finalLock,debug:s.bossDebug,report:s.finalReport,
- settlement:s.settlement,settled:s.settled,rewarded:s.rewarded,unlocked:s.unlocked,rng:Guild24.game.rng.state});})()`;
+ settlement:s.settlement,settled:s.settled,rewarded:s.rewarded,unlocked:s.unlocked,dayUnlocked:s.dayUnlocked,rng:Guild24.game.rng.state});})()`;
 // what an ending must not carry from the Final
 const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=document.querySelector('.stage');const t=st?st.innerText:'';
  const trait=Copy.boss.d15.trait[s.bossId]&&Copy.boss.d15.trait[s.bossId][0];
@@ -114,11 +114,11 @@ const LEAK=`(()=>{const s=Guild24.game.run,d=s.dungeons&&s.dungeons[0]||{},st=do
     // 9 settlement truth
     const st=s.settlement;
     check(`${kind} @${tag} settlement reads the recorded Gross Sales (Final transfer included) - not Gold or Inventory`,
-     st&&st.sales===pre.revenue&&pre.revenue===rev0+price&&st.gain===Math.round(st.sales*st.rate)&&a1.capital===a0.capital+st.gain&&Object.keys(st).sort().join()==='capitalAfter,day,gain,rate,sales',
+     st&&st.sales===pre.revenue&&pre.revenue===rev0+price&&st.gain===Math.round(st.sales*st.rate)&&a1.capital===a0.capital+st.gain&&/* reach (v2.9.4 REPLAY NUDGE) is a verdict on the settlement, never an input to it */Object.keys(st).sort().join()==='capitalAfter,day,gain,rate,reach,sales',
      JSON.stringify({sales:st&&st.sales,transfer:price,gain:st&&st.gain,capital:[a0.capital,a1.capital],gold:pre.gold,stock:pre.stock}));
     // 10 unlock
     check(`${kind} @${tag} ${won?'the clear credits once; runs +1, wins +1':'a fail credits a run only'}`,a1.runs===a0.runs+1&&a1.wins===a0.wins+(won?1:0),JSON.stringify({a0,a1}));
-    if(won)check(`${kind} @${tag} unlocks (if any) are shown once, on the END statement, with no toast`,(s.unlocked||[]).length?dom.opened.length===1&&dom.opened[0].includes(s.unlocked.join(' · '))&&!dom.toast.length:!dom.opened.length&&!dom.toast.length,
+    if(won)check(`${kind} @${tag} unlocks (if any) are shown once, on the END statement, with no toast`,/* v2.9.4: 본사 해금 also lists the D10 / D14 opens the Run recorded */[...(s.unlocked||[]),...(s.dayUnlocked||[])].length?dom.opened.length===1&&dom.opened[0].includes([...(s.unlocked||[]),...(s.dayUnlocked||[])].join(' · '))&&!dom.toast.length:!dom.opened.length&&!dom.toast.length,
      JSON.stringify({unlocked:s.unlocked,opened:dom.opened,toast:dom.toast}));
     // 7 / 8 / 14 no Final leak
     const leak=await p.evaluate(LEAK);

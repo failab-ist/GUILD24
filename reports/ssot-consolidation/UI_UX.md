@@ -1333,8 +1333,8 @@ so the next store reads as a little closer - no task, checklist, progress bar, r
 - the `본사 해금` row lists every product / Job this Run opened: the distinct-Boss unlocks it already listed, and the D10 /
 D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run records when they open; their Day toast stays as it is
 - when the Run opened nothing, one line may sit at the foot of the tape, above `다음 점포 열기` - the first that applies:
-1. this settlement carried Store Capital across the price of a Decoration the account does not own (before < price <=
-after): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
+1. this settlement carried Store Capital across the price of a Decoration the account did not own at that settlement
+(before < price <= after; judged once, so a purchase made from the ending does not change the receipt): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
 2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
 3. otherwise nothing
 - no new motion or sound: the line prints with the receipt body; exact copy -> COPY_AUDIT §10-3

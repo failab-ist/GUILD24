@@ -1820,7 +1820,8 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/const nudge=opened\?'':replayLine\(\);/.test(l),'no line beside 본사 해금');
  const r=fn('replayLine');
  assert.ok(r.indexOf("'점포 자본으로 새 장식을 들일 수 있다.'")<r.indexOf("'지금까지 가장 오래 버틴 점포다 · DAY '"),'a Decoration newly in reach comes before a best Day');
- assert.ok(/before<d\.price&&d\.price<=st\.capitalAfter/.test(r)&&/!Meta\.decorationOwned\(a,d\.id\)/.test(r),'only an unowned price this settlement crossed');
+ const run=read('dist/systems/run.js');
+ assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 들일 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');
  assert.ok(/s\.bestBefore>0&&s\.day>s\.bestBefore/.test(r),'strictly above an existing record');
  assert.ok(!/d\.name|decorationBy/.test(r),'never a Decoration name');
  assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('newRun'))&&/x\.price<=capital/.test(fn('newRun')),'the pre-Run Slot mark reads the current capital');

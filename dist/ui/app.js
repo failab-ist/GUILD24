@@ -1620,11 +1620,11 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'')
   +(nudge?'<p class="replay">'+E(nudge)+'</p>':'');}
 /* UI_UX §END — REPLAY NUDGE: when the Run opened nothing, at most one fact it left behind - the settlement crossed the price
-   of a Decoration the account does not own, else a new best Day (META §BEST DAY) - else nothing. Read from the recorded
-   settlement and the Run's own bestBefore, so a reload prints the same line. Never names a Decoration (two per Slot). */
-function replayLine(){const s=game.run,a=game.account,st=s.settlement;
- if(st){const before=st.capitalAfter-st.gain;
-  if(D.decorations.some(d=>!Meta.decorationOwned(a,d.id)&&before<d.price&&d.price<=st.capitalAfter))return '점포 자본으로 새 장식을 들일 수 있다.';}
+   of a Decoration the account did not own at that settlement (judged once, in settleStoreCapital), else a new best Day
+   (META §BEST DAY) - else nothing. Both are recorded on the Run, so a reload or a purchase from the ending prints the same
+   line. Never names a Decoration (two per Slot). */
+function replayLine(){const s=game.run,st=s.settlement;
+ if(st?.reach)return '점포 자본으로 새 장식을 들일 수 있다.';
  if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
  return '';}
 /* UI_UX §CONTROL / FEEDBACK HYGIENE: a muster row that cannot be sent used to keep offering
@@ -1887,7 +1887,7 @@ function newRun(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta
  const lines=D.decorationSlots.map(slot=>{const id=loadout[slot],d=id&&D.decorationBy[id];
   return '<li class="deco-line'+(d?'':' empty')+'">'
    +'<button class="deco-jump" data-action="store-manage" data-id="'+E(slot)+'"'
-   +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+' · 점포 장식에서 보기">'
+   +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+(canBuy(slot)?' · 들일 수 있음':'')+' · 점포 장식에서 보기">'
    +'<span>'+E(SLOT_COPY[slot]||slot)+'</span>'+(canBuy(slot)?'<em class="can-buy">들일 수 있음</em>':'')+'<b>'+(d?E(d.name):'비움')+'</b></button></li>';}).join('');
  return `<h2 class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</h2><p class="muted">찾아오는 모험가를 보급하고, 성장시킨다.</p><div class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음'}</p><p class="store-capital"><i class="coin-mark" aria-hidden="true"></i>점포 자본 ${Meta.storeCapital(a).toLocaleString()}</p>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
 /* Two levels, one row each, with the number said out loud beside the control - the slider
