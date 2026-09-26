@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-25
-STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_H2_H3_H4_ADOPTED · 2단계 H6 대기(User 승인 필요)
+STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED(전체 완료, main 미병합)
 
 ## Current
 
@@ -12,8 +12,9 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
   - PR #5로 main에 병합됨(`dd3feb4`, Pages 배포): H1(`8c1c6bd`) + 플레이 리포트 수정 `158d001` / `0510b53` / `61b9734` / `771ba8f`.
   - PR #6으로 main에 병합됨(`9414293`, Pages 배포 성공): 진열대 한 줄 · SALE 트레이 접기 · 게이트 방문 최소 1명 · 발주 플로팅 오늘 줄 · D30 흐름 · H5 봉인 · H1 만반의 준비 반전 · 밸런스(대성공 EXP 1.10, slope 1.50, 정가 ×0.90).
   - 그 뒤(이 브랜치, main 미병합): H2 SALE 계산대 · 봇 하네스 `reader` · 2차 밸런스 · H3 ORDER 확정 · H4 CLOSING 마감 영수증
-    · H6 1단계(캡처 전용, Source 미변경): 네 하드 컷(DAY 0 / CLOSING / FINAL / END) 캡처 완료, 결과 `reports/v292-h6-transitions.md`,
-    대상 화면은 User 결정 대기(UNRESOLVED).
+    · H6 1단계(캡처 전용): 네 하드 컷 캡처, 결과 `reports/v292-h6-transitions.md` · H6 2단계: User가 FINAL만 선택,
+    `.gate-zero` 진입 비트(220ms) 구현 완료 — **v2.9.2 H1~H6 전 배치 완료**. 남은 것: DAY0→DAY1 마왕 모달 겹침은
+    DESIGN ISSUE로 별도 보고(UNRESOLVED, 6개 리빌 스테이지 공유 로직이라 이 배치 범위 밖). main 병합·태그는 User 결정 대기.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - last tagged release: `v2.9.1`; completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
@@ -37,43 +38,22 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
 6. H5 세부: 마왕 이름이 새겨진 봉인 1개(승리 주홍·정면 / 패배 흐리고 비뚤고 일부만), 착지 큐 `sealwin` / `sealfail`.
 7. ~~H1 반전 범위~~ → User 확정(2026-09-25): 사망을 면했을 때만 반전. `만반의 준비`가 사망을 막은 밤만 덮어찍기, 강골·구급키트는 반전 없음(`eb30e16`).
 
-## Next — v2.9.2 타격감 남은 배치 (H6) 작업 지시 — H2(`8874e19`) · H3(`96375e1`) · H4(`97c8f42`) 완료
+## Next — v2.9.2 타격감 완료, main 병합 대기
 
-AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 — 하위 모델 · 하이 이펙트). 기점: 이 브랜치의 최신 커밋(또는 병합된 main). 병렬 금지(같은 UI owner / 원장 / `app.js` / `ui.css` / `ui-guard.cjs`를 고치는 다른 세션이 있으면 BLOCKED).
+**v2.9.2 H1~H6 전 배치 ADOPTED.** 정확한 내용·owner·커밋은 `design_ssot/CHANGELOG.md` §v2.9.2 참고(배치별 상세 지시문은 여기서 지움 — 이미 Source·문서·커밋 로그에 그대로 있어 이 파일에 다시 베끼지 않는다).
 
-새 연출 방식을 발명하지 않는다. 아래 H1 / H5 패턴만 재사용하고, 지시에 없는 것은 넣지 않고 UNRESOLVED로 보고한다. 한 배치 → 커밋 → 보고 → STOP(User 승인 없이 다음 H로 넘어가지 않는다).
+커밋: H1 `8c1c6bd` · H5(§FINAL RESULT — SEAL STAMP) · H2 `8874e19` · H3 `96375e1` · H4 `97c8f42` · H6 캡처
+`38d11bd`/`f4a6133` · H6 FINAL 진입 비트(이 커밋).
 
-### 1단계가 확정한 패턴 (정확한 이름)
+### User 결정 대기 (WORK가 판단하지 않음)
 
-- 타이밍 표 하나를 모션과 큐가 같이 읽는다: `dist/ui/app.js`의 `STAMP_FALL=90`(도장 낙하 90 ms), `NIGHT_STAMP`(톤별 `entry` / `hold` / `from` / `dip` / `y`·`x`·`scale` / `print` / `tape`), `stampLand(st)=entry+hold+STAMP_FALL`, `FINAL_SEAL={hold:200,won:{from:2,dip:6},lost:{from:1.6,dip:3}}`.
-- 도장 착지(`playPhase` 안에서만, `motionOK()` 뒤): 대상 `scale:{from:X,to:1,duration:STAMP_FALL,delay:at,ease:'in(3)'}` + `opacity:{from:0,to:<CSS 끝값>,duration:40,delay:at,ease:'linear'}`; 받침(카드/테이프) `translateY` 키프레임 `[{from:0,to:0,duration:land},{to:dip,duration:40,ease:'in(2)'},{to:0,duration:150~170,ease:'outQuad'}]`.
-- 끝 상태는 CSS에 전량: 기울기는 개별 속성 `rotate` / `translate`(anime의 `transform`과 충돌하지 않음), 번짐·테이프는 CSS 변수 기본값 1(`--ink` / `--tape`)을 anime가 0→1로 들여옴, 불투명도 목표는 `getComputedStyle(el).opacity`. 그래야 reduced-motion 끝 상태가 같다(캡처로 픽셀 비교).
-- 임시 요소(반전 첫 인쇄 `p.verdict.ghost`)는 `playPhase`가 만들고 `onComplete`에서 제거 — 렌더에 넣지 않는다.
-- 여운 주인 하나: 원인 줄 정착(`opacity`+`translateY -4→0`, 160 ms, `delay:land`) 또는 숫자 카운트업(`box={v:0}`, `onUpdate`로 `textContent` 교체, `onComplete`에서 원문 복원, 220 ms) 중 하나만.
-- 큐: 착지 프레임에 `setTimeout`으로 재생하고 다음 화면·다음 결과에서 `clearTimeout`(`nightSound` / `nightCueAt`, `sealSound` / `sealCueAt`). reduced-motion은 즉시 재생. `dist/ui/audio.js` shape의 `hit:1` = 첫 음 attack .002 · ×1.3, 음표 불변.
-- 금지 재확인: 화면 흔들림·파티클·링·플래시·콤보·칭찬 문구·규칙/저장/RNG 변경, 카드 밖 모션. 비트당 ≤ 320 ms, 정적(hold)은 일반 강도에 없음, 그 외 ≤ 200 ms.
-- 캡처: `QA_FRAMES=... node tools/qa-night-outcomes.cjs <out> <seeds> [states.json]`(NIGHT), `QA_FRAMES=... node tools/qa-final-seal.cjs <out> [widths] [BOSS]`(END). 모션 프레임은 anime 엔진 10배 감속 + 고정 시계 래퍼(`Date.now=()=>window.__live?real():t`). 새 화면은 `tools/qa-final-seal.cjs` 구조를 복사해 `tools/qa-<surface>-beat.cjs`를 만든다(캡처 전용, qa:runtime에 넣지 않음).
-- 시각 검수: 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion 정착 캡처를 시트로 묶어 **별도 에이전트(읽기 전용)** 에 PRESENTATION §VISUAL REVIEW PROCESS 질문으로 검수시키고, NARROW FIX → 재캡처 → 모션 끝 = reduced-motion 끝을 픽셀 비교.
+1. **DAY0→DAY1 마왕 조사 모달 겹침 (DESIGN ISSUE, UNRESOLVED)**: `render()`의 `bossRevealDue()` 자동 모달 로직이
+   D0/D5/D10/D15/D20/D25 여섯 리빌 스테이지 모두에서 지연 없이 즉시 뜨는 공유 메커니즘이고, Source에 그 설계 의도가
+   주석으로 명시돼 있다. D0만 따로 지연시키는 건 이 프레젠테이션 배치 권한 밖의 더 큰 설계 결정이라 손대지 않았다.
+   원하면 범위(D0만 / 전체 6개 다) 확정 후 별도 배치로.
+2. **main 병합 · 태그**: 이 브랜치(`claude/v2-9-2-h4-closing-j24s8w`)를 main에 병합하고 v2.9.2를 닫을지는 User 결정.
 
-### 배치별 지시
-
-- ~~H2 SALE 계산대~~ **완료(`8874e19`)** (PRESENTATION H2 행 + §TRANSACTION BEAT A5 / A8; owner 줄: PRESENTATION A5/A8, UI_UX §SALE — COUNTER TRAY, UI_UX_QA 새 `UI-Q-v29-31`, 원장 UI_UX / UI_UX_QA):
-  - 누른 가격 키: `case'sell'`에서 누른 버튼을 `translateY` 3 px 60 ms 내려갔다 복귀(기존 `stampPress`와 같은 자리에서, 카드 밖 모션 없음).
-  - A5: `audio.js`의 `sale` / `half` / `overcharge` 코인 틱 루프(`if(sh.ticks)`)에서 첫 틱만 `hit` 방식으로 세게; `overcharge`(바가지)의 첫 틱은 40 ms 늦고 낮은 음. 틱 수 1 / 2 / 3 불변.
-  - A8 영수증 조각(`showStub()` / `.receipt-stub`): 렌더 시점이 아니라 키 눌림의 착지(60 ms) 뒤에 기존 1.12→1 ≤ 200 ms로 찍힘.
-  - 없는 것: 계산대 띠 튐, 빨라지는 두 번째 도장, 다섯 번째 판매 배음, 콤보/연속 UI(2차 검토).
-  - 캡처: 390·1280, 판매 50/100/150%와 거절 각 1회, 모션 프레임 0/60/120/200/320 ms. SALE 트레이 접기(UI-Q-v29-28)는 펼친 상태에서만 판매한다.
-- ~~H3 ORDER 확정~~ **완료(`96375e1`)** (owner: UI_UX §ORDER — WAREHOUSE DISCLOSURE, UI_UX_QA `UI-Q-v29-32`, 원장):
-  - `case'confirm-order'` 뒤 `playCue`에 1회성 표식 `'order'`를 두고 창고 칸(`stockBrief()`의 행; 접혀 있으면 요약 `N / M칸` 숫자만)에 SKU당 상자 1개가 계단식 착지, 전체 ≤ 320 ms(간격 = min(70, 320 / SKU 수)), 들리는 `order` 계열 타격 최대 3회(나머지 무음), 각 창고 숫자는 이전 값 → 확정 값으로 바로(수량만큼 반복 금지), 잔고(`#order-register`의 보유 골드 / 발주 후)는 H1 카운트업 패턴의 역방향 카운트다운 220 ms. `발주 완료.` 줄 불변.
-- ~~H4 CLOSING 마감~~ **완료(`97c8f42`)** (owner: UI_UX §CLOSING — RECEIPT STAMP, UI_UX_QA `UI-Q-v29-33`, 원장 UI_UX / UI_UX_QA):
-  - `playPhase('closing')`: 영수증 본문(두 `.block` + `.purse`)이 한 번에 200 ms로 인쇄(프린터 틱 1회, 행마다 틱 금지), `영업 손익` 값(`<b>`)만 도장(hold 100 ms, `STAMP_FALL`, 테이프 dip 4 px). 행 전체가 아니라 숫자만 scale — 행 전체를 scale하면 넓은 flex 행이라 카드 밖으로 넘친다(검수에서 잡힘, NARROW FIX).
-  - `closingSound()`: 진입 시 새 합성 큐 `receipt`(프린터 틱) + 착지 프레임에 기존 `gold`/`spend` 재사용(이익/손실). `전체 건너뛰기`(`case'closing'`)와 마지막 결과의 `마감으로`(`case'night-next'`가 `finishNight()`를 부르는 경로) 양쪽에서 호출 — 처음엔 후자를 빠뜨렸다가 검수 전 자체 스모크 캡처에서 발견해 고쳤다.
-  - END `점포 자본 정산`의 `현재 점포 자본` 카운트업(320 ms) 중 장식 가격선을 지날 때 `ui` 큐 — 가격은 `D.decorations.map(d=>d.price)`에서 읽어 하드코딩 없음.
-  - `어제보다 +N` 줄 없음(v3.0+). 이익 금색 / 손실 적색: 기존 `.print .profit b`가 실제로는 진녹색(`#1f6b3f`)이었다 — 검수 에이전트가 잡은 진짜 결함, NARROW FIX로 `var(--gold)`로 교정(`ui.css`).
-  - 연속 시퀀스 캡처(H1 + H4): 마지막 밤 판정 → `마감으로` → 영수증 인쇄 → `다음 날`. 캡처 도구 `tools/qa-closing-beat.cjs`.
-- **H6 장면 전환** (조건부): CLOSING / FINAL / END / DAY 0 네 하드 컷을 두 연속 시퀀스(밤 → 마감 → 다음 날, FINAL 결과 → END)에서 캡처해 **보고만** 하고 STOP — 대상 화면은 User 결정(UNRESOLVED). 선택된 화면만 같은 계열 진입 비트(≤ 240 ms, 한 동작, 일반 강도).
-
-### H2 / H3 / H4에서 확인된 함정 (다음 배치에서 반복하지 말 것)
+### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
 
 - 모든 `button`에 `transition:transform .08s steps(2)`가 걸려 있다. anime로 버튼을 움직이면 CSS 전환이 매 프레임을 삼킨다. 움직일 버튼은 먼저 `el.style.transition='none'`으로 끈다(`keyPress` 참고).
 - 캡처 도구는 페이지 시계를 멈춰 둔다(`Date.now` 래퍼). 누르기 전에 재생돼야 할 애니메이션(선택 트레이 등)이 있으면 `window.__live=true`를 먼저 켠다. 안 그러면 캡처할 때만 흐리게 보이는 가짜 결함이 생긴다.
@@ -87,6 +67,11 @@ AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 �
 - 화면 전환을 만드는 액션 경로가 두 개 이상이면(H4: `전체 건너뛰기` = `case'closing'`, 보통 진행 = `case'night-next'`가 마지막 결과에서 `finishNight()`를 부르는 경로) 새 큐 호출을 양쪽 모두에 건다. 한쪽만 걸면 UI 상으로는 똑같이 화면이 바뀌어 보여서 놓치기 쉽다.
 - D0 마왕 브리핑 모달(`bossRevealDue()`)은 Day 1에 자동으로 뜨고 실제 DOM 클릭을 막는다(STEP 스크립트 자체는 직접 메서드 호출이라 안 막히지만, 캡처 도구의 실제 클릭은 막힌다). 캡처 전에 `[data-action="boss-seen"]`을 반복 닫는다.
 - CSS의 "끝 상태" 문구(예: 이익 금색)는 실제 색상값을 대조해서 확인한다 — 설명과 실제 hex가 다를 수 있다(H4: `.print .profit b`가 오래전부터 초록이었다). 캡처 이미지만 보고 "그럴듯하니 통과"로 넘기지 않는다.
+- 캡처 도구가 `Date.now` 래퍼만 걸고 `window.__live=true`를 세션 내내 한 번도 안 켜면(모션 프레임을 안 쓰는 캡처라서), 그 눌림이 트리거한 진입 애니메이션 자체가 `Date.now`를 쓰는 anime 엔진 시계상 영원히 멈춰서(실제로 `anime.umd.min.js`는 `Date.now`를 씀) `opacity:0`에서 안 움직인다 — 실제 wait를 아무리 늘려도 안 풀린다(H6 최초 구현에서 발생, 카드가 통째로 안 보이는 가짜 결함으로 나타났다). 모션이 필요 없는 캡처라도 페이지 로드 직후 `window.__live=true`를 한 번 켜 둔다.
+- N일치 시뮬레이션에서 파산 방지용 골드 보정은 STEP 호출 **전에** 건다. STEP의 `closing` 분기 자체가 `liquidate` 후 `closeDay()`(파산 처리 포함)까지 한 번에 하므로, 보정을 STEP 호출 뒤에 걸면 이미 늦다.
+- STEP 스크립트는 게임 상태만 직접 메서드로 바꾸고 DOM은 절대 안 건드린다. 여러 날을 빠르게 감고 나서 진짜 클릭을 하기 전에 `Guild24.render()`를 한 번 직접 불러 화면을 최신 상태로 맞춰야 한다 — 안 그러면 클릭 대상이 화면에 없어 타임아웃난다.
+- FINAL `원정대 확정`은 팀이 3명 미만이면 바로 커밋되지 않고 `나중에 결정`류 확인 모달(`final-commit-go`)이 먼저 뜬다. D30 시드의 로스터가 3명이 안 될 수 있으니 이 모달도 조건부로 닫아준다.
+- 컷(즉시 화면 전환) 캡처에서 "누른 직후"만 찍으면(30ms 등) 이미 있는 진입 모션이 다 나오기 전이라 실제보다 더 "날것 컷"처럼 보인다(User가 잡아낸 실제 사례: H6 CLOSING/END/DAY0 첫 캡처). 컷 자체를 보여줄 즉시 프레임과, 그 화면 자체 모션이 다 끝난 정착 프레임을 같이 찍는다.
 
 ### 별도 FIX 대기 (User 결정 전 손대지 않음)
 

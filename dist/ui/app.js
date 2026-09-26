@@ -186,6 +186,12 @@ function playPhase(phase){
   const form=$('.form');
   if(form)A(form,{translateY:[16,0],opacity:[0,1],duration:280,ease:'outQuad'});
  }
+ /* v2.9.2 H6 FINAL boss reveal entry (UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate
+    settle in as one movement - the only H6 target the four-cut capture and report left in scope. */
+ if(phase==='final'){
+  const gate=$('.gate-zero');
+  if(gate)A(gate,{translateY:[10,0],opacity:[0,1],duration:220,ease:'outQuad'});
+ }
  /* v2.9.2 H4 CLOSING receipt (UI_UX §CLOSING — RECEIPT STAMP): every row of the two figure blocks
     settles together in one 200 ms pass - never a tick per row - and only the 영업 손익 row lands as
     a stamp on a fixed 100 ms hold, reusing the NIGHT stamp's own 90 ms fall and card dip. */

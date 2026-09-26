@@ -6,7 +6,7 @@ DOC_VERSION=2.9.1
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H5_ADOPTED (2026-09-25, branch claude/v2-9-2-presentation-game-feel-4if32m; H2 / H3 / H4 / H6 PLANNED)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -256,7 +256,7 @@ v2.9.1 is ready to close when:
 
 Closed 2026-09-25: merged to `main` (`d23d076`, PR #2) and tagged `v2.9.1` there (User 2026-09-25).
 
-## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25; v2.9.1 CLOSED, v2.9.2 H1 / H5 ADOPTED, H2 / H3 / H4 / H6 PLANNED)
+## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25; v2.9.1 CLOSED, v2.9.2 H1 / H2 / H3 / H4 / H5 / H6 ADOPTED)
 
 Version routing (User 2026-09-25): the balance session is **v2.9.1**; the game feel presentation
 batches are **v2.9.2**. Each is docs-first and touches Source only after the User authorizes that batch.
@@ -271,14 +271,15 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §NIGHT LAYOUT / NIGHT_CLOSING (display order) / UI_UX_QA
       H5 FINAL 최종 토벌 (one seal stamp on a win, one failure stamp on a loss; never the death tape, never a party count) — ADOPTED
                                      -> PRESENTATION §GAME FEEL BEAT / FINAL_EXPEDITION §BOSS CLEAR · §RUN CLEAR (display order) / UI_UX_QA
-      H2 SALE 계산대 (key press, first coin tick, stub after impact; no streak rhythm)
+      H2 SALE 계산대 (key press, first coin tick, stub after impact; no streak rhythm) — ADOPTED
                                      -> PRESENTATION §TRANSACTION BEAT A5 / A8 / UI_UX §SALE — COUNTER TRAY / UI_UX_QA
-      H3 ORDER 확정 (crate cascade ≤ 320 ms, ≤ 3 audible hits, balance count-down)
+      H3 ORDER 확정 (crate cascade ≤ 320 ms, ≤ 3 audible hits, balance count-down) — ADOPTED
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §ORDER — WAREHOUSE DISCLOSURE / ECONOMY_ORDER_QA or UI_UX_QA
-      H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part on the v2.9.1 rates)
+      H4 CLOSING 마감 (body prints as one fast run, only the profit line lands; Store Capital part on the v2.9.1 rates) — ADOPTED
                                      -> PRESENTATION §GAME FEEL BEAT / UI_UX §CLOSING / UI_UX_QA
-      H6 장면 전환 (conditional: the batch captures the four hard cuts and the User picks the targets; UNRESOLVED until then)
-                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX (the affected screens) / UI_UX_QA
+      H6 장면 전환 (the batch captured the four hard cuts and reported them; User picked FINAL alone,
+      CLOSING / END / DAY 0 already softened by H4 / H5 / MORNING's own entries) — ADOPTED
+                                     -> PRESENTATION §GAME FEEL BEAT / UI_UX §FINAL — BOSS REVEAL ENTRY / UI_UX_QA
 
   Contract: presentation-only, ≤ 320 ms per beat (사망 tape ≤ 500 ms), no input block, reduced-motion
   no-op, motion inside the card, no full-screen shake, no combo / streak UI, no praise word, no rule /

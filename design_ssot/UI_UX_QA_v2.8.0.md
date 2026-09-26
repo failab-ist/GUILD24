@@ -1354,6 +1354,26 @@ PASS:
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
 
+### UI-Q-v29-34 — FINAL BOSS REVEAL ENTRY
+
+(User 2026-09-25, v2.9.2 H6; owner `UI_UX_v2.8.0.md` §FINAL — BOSS REVEAL ENTRY.)
+
+SETUP:
+D29's CLOSING receipt through to D30's FINAL screen (the real `다음 날` press) at 390 and 1280, motion
+on and reduced motion; frames through the entry.
+
+PASS:
+- the `.gate-zero` boss art and name plate settle in together as one movement: translateY 10px -> 0,
+  opacity 0 -> 1, 220 ms, outQuad
+- nothing else on the screen moves (the threat board, the last-order form and the dock are unaffected)
+- no new sound and no new copy; the existing entry into FINAL is otherwise unchanged
+- under reduced motion the block is present at full opacity with no motion, and the end state matches
+  the motion-on settled state exactly
+
+FAIL:
+- a staggered or multi-part reveal, any motion outside `.gate-zero`, a hold before the movement starts,
+  a new sound or line, or a settled end state that differs between motion and reduced motion
+
 ### UI-Q-v29-33 — CLOSING RECEIPT STAMP
 
 (User 2026-09-25, v2.9.2 H4; owner `UI_UX_v2.8.0.md` §CLOSING — RECEIPT STAMP.)

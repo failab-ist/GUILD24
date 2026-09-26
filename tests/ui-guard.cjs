@@ -1803,6 +1803,17 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
  assert.ok(!/previousSales|daily\.sales|streak|combo/.test(sale),'no streak, no combo, no faster second sale');
 });
 
+/* UI-Q-v29-34 (v2.9.2 H6, UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate settle in as one
+   movement on FINAL's own entry - the only H6 target left after the four-cut capture excluded the rest */
+test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one movement, nothing else moves',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const pp=bare(fn('playPhase')),final=pp.slice(pp.indexOf("if(phase==='final')"),pp.indexOf("if(phase==='closing')"));
+ assert.ok(/const gate=\$\('\.gate-zero'\);/.test(final),'the boss art and name plate are read as one block');
+ assert.ok(/if\(gate\)A\(gate,\{translateY:\[10,0\],opacity:\[0,1\],duration:220,ease:'outQuad'\}\);/.test(final),'one movement, 220 ms, outQuad - 일반 intensity, no hold');
+ assert.ok(!/stagger|scale:|\.threat|\.dock|\.final-order/.test(final),'nothing else on the screen moves, and the block is never scaled (a wide flex block scaling would overflow, H4\'s own lesson)');
+ assert.ok(!/sound\(|Sound\.play|setTimeout/.test(final),'no new sound and no new cue timer - the existing entry into FINAL carries none today and gains none');
+});
+
 /* UI-Q-v29-33 (v2.9.2 H4, UI_UX §CLOSING — RECEIPT STAMP): the receipt prints as one pass and only the profit/loss
    row stamps; the END settlement counts up with a click per Decoration price line it actually passes */
 test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts past each Decoration price',()=>{
