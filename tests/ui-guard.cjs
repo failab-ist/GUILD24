@@ -485,8 +485,8 @@ test('SA-Q21 / SA-Q34: Closing is economics-only, and supply-impact attribution 
 test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progress wording',()=>{
  assert.ok(!/traitDirections|▲|◆ 양면|▼/.test(app),'no Trait quality label reaches the render path');
  assert.ok(!app.includes('buildNames'),'no Relic Build Axis name is rendered');
- assert.ok(!app.includes('관찰'),'Monster Knowledge progress is 보급 생환 N회');
- assert.ok(app.includes('보급 생환'),'the canonical progress wording is present');
+ /* UI-Q39 (User 2026-09-26, v2.9.6): Monster Knowledge left the codex - neither progress wording is rendered */
+ assert.ok(!app.includes('관찰')&&!app.includes('보급 생환')&&!app.includes('몬스터 지식'),'no Monster Knowledge tab or progress line');
  assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
  assert.ok(/focusedRevealSeen/.test(app),'the Relic milestone reveal is once per window');
 });

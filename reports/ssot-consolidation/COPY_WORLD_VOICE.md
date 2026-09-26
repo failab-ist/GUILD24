@@ -671,7 +671,7 @@ Authoritative Hazard wording:
 
 ```new
 - Item Supply value = **피로 회복 N** (User 2026-09-24, v2.9.0)
-- `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 생환 N회`, `보급 상단 도착`)
+- `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 상단 도착`)
 - Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0)
 The `보급` step names the one fact: Food/Drink reduce Fatigue; Fatigue 10+ lowers 기동/정신 (User 2026-09-24, v2.9.0).
 The Morning / Order Gate plate carries no Supply line: `보급 N 필요`, `보급 부담 없음` and `필요 보급 0/3/5` are deleted (User 2026-09-24, v2.9.0).
@@ -782,4 +782,19 @@ User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome 
 ```new
 Concise player function (User 2026-09-25, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
 원정 후 중상 → 부상, 부상 → 무사 (사망 제외)
+```
+
+## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: every Gate's Hazards are public, so the codex `몬스터 지식` tab is retired and no screen shows Monster Knowledge; the account record stays. The progress-wording lines below are dropped as superseded.
+
+```text
+- Monster Knowledge progress = **보급 생환 N회**
+- old Monster Knowledge progress wording `관찰 N회` = 사용하지 않음
+- Monster Knowledge 진행도가 아직 `관찰 N회`로 표시되는가?
+- Monster Knowledge progress remains `보급 생환 N회`
+```
+
+```new
+- Monster Knowledge has no player-facing term: no screen shows it (User 2026-09-26, v2.9.6)
 ```

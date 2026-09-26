@@ -585,3 +585,18 @@ The Run that opens one records it, so its END lists it in `본사 해금` (UI_UX
 - Full Data Reset clears it; a save without it reads 0
 - the best Day (§BEST DAY)
 ```
+
+## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: every Gate's Hazards are public, so the codex `몬스터 지식` tab is retired and no screen shows Monster Knowledge; the account record stays. The progress-wording lines below are dropped as superseded.
+
+```text
+Player-facing progress term:
+보급 생환 N회
+Do not use:
+관찰 N회
+```
+
+```new
+No screen shows Monster Knowledge (User 2026-09-26, v2.9.6): the codex `몬스터 지식` tab is retired - every Gate's Hazards are public from MORNING, so a tab that opened them by returns had nothing left to teach. The record stays on the account; it unlocks and changes nothing.
+```

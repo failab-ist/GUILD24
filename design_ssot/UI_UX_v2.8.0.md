@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.5
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.5
+DOC_VERSION=2.9.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -2002,9 +2002,10 @@ Player-facing Meta presentation must make these source-of-truth concepts distinc
 - Total Job Mastery
 - Distinct Boss Clear 0..7
 - approved 1/3/6 unlock milestones
-- Monster Knowledge `보급 생환 N회`
 
 Do not present legacy Global Meta XP as current progression.
+
+Monster Knowledge has no player-facing surface: the codex `몬스터 지식` tab is retired (User 2026-09-26, v2.9.6; every Gate's Hazards are public from MORNING, so a tab that unlocked them by returns had nothing left to teach). The account record stays, unshown (META §MONSTER KNOWLEDGE).
 
 ## MENU / SETTINGS — EXACT COMPOSITION
 
@@ -2344,12 +2345,6 @@ Secondary navigation may include:
 - Notebook
 - Reference/Knowledge
 - HQ/catalog/help
-
-Monster Knowledge progress wording:
-`보급 생환 N회`
-
-Do not use:
-`관찰 N회`
 
 Secondary navigation must not compete visually
 with current Phase objective.

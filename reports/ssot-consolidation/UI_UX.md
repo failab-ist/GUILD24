@@ -1350,3 +1350,18 @@ EXACT gains one Show row. Nothing is dropped.
 ```new
 - `연속 부상 출발 {n}회` — one thin, small line directly under the readout `.top` (under 전투 전망), only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the failure Death chance); `{n}` is the NPC detail row's number, the chain of injured departures behind this one; words only — no %, no verdict, no `?`, no new color (User 2026-09-26, v2.9.5)
 ```
+
+## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: every Gate's Hazards are public, so the codex `몬스터 지식` tab is retired and no screen shows Monster Knowledge; the account record stays. The progress-wording lines below are dropped as superseded.
+
+```text
+- Monster Knowledge `보급 생환 N회`
+Monster Knowledge progress wording:
+`보급 생환 N회`
+`관찰 N회`
+```
+
+```new
+Monster Knowledge has no player-facing surface: the codex `몬스터 지식` tab is retired (User 2026-09-26, v2.9.6; every Gate's Hazards are public from MORNING, so a tab that unlocked them by returns had nothing left to teach). The account record stays, unshown (META §MONSTER KNOWLEDGE).
+```

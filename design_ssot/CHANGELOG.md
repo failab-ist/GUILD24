@@ -3,6 +3,13 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.6 — codex and Item Flavor cleanup (User 2026-09-26)
+
+- Monster Knowledge leaves the codex (User 2026-09-26: every Gate's Hazards are public, so the tab that opened them by
+  returns had nothing left to teach): the `몬스터 지식` tab and its `보급 생환 N회` line are gone; the account record stays,
+  unshown (save shape unchanged; the measurement harness still reads it). META §MONSTER KNOWLEDGE, UI_UX §META UI,
+  UI_UX_QA UI-Q39 (retired to a guard), COPY_WORLD_VOICE; ledgers; tests revision / traits / ui-guard now pin its absence.
+
 ## v2.9.5 — SALE strain line (User 2026-09-26)
 
 - SALE strain line (User 2026-09-26, after the v2.9.4 16-day playtest: 실패 시 사망 위험 sat inside the 전투 전망 `?` and did not

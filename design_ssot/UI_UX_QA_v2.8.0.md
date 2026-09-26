@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.5
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.5
+DOC_VERSION=2.9.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1908,16 +1908,11 @@ EXPECT:
 PASS:
 UI matches META_v2.8.0.md and does not resurrect legacy progression truth.
 
-### UI-Q39 — MONSTER KNOWLEDGE PROGRESS COPY
-SETUP:
-Open Monster Knowledge/Codex with progress.
-
-EXPECT:
-Progress label is:
-`보급 생환 N회`
+### UI-Q39 — MONSTER KNOWLEDGE — RETIRED FROM THE CODEX
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §META UI.)
 
 PASS:
-Old `관찰 N회` progress wording is absent.
+- the codex tabs are 진행도 · 상품 · 직업 · 점포지원 · 점포 장식; no `몬스터 지식` tab, and no `보급 생환 N회` / `관찰 N회` progress line on any screen
 
 ## MENU / SETTINGS / DEBUG
 

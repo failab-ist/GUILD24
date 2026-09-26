@@ -409,7 +409,7 @@ UI-Q92 `NIGHT v2.7 RESULT TRUTH` -> `NIGHT RESULT TRUTH` (version tag removed).
 ### UI-Q-v28-18 — STORE CAPITAL CURRENCY
 ### UI-Q-v28-14 — DECORATION ART / SETTLEMENT
 ### UI-Q42 — META PROGRESSION PRESENTATION
-### UI-Q39 — MONSTER KNOWLEDGE PROGRESS COPY
+### UI-Q39 — MONSTER KNOWLEDGE — RETIRED FROM THE CODEX
 ### UI-Q71 — MENU EXACT
 ### UI-Q72 — SETTINGS EXACT
 ### UI-Q96 — MENU / SETTINGS VISUAL GRAMMAR
@@ -1378,4 +1378,20 @@ under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail r
 - the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`
 - `node tools/qa-strain-line.cjs` (in qa:runtime)
 - a %, a verdict word, a second line, a `?`, or the line on a healthy or first-injured customer
+```
+
+## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: every Gate's Hazards are public, so the codex `몬스터 지식` tab is retired and no screen shows Monster Knowledge; the account record stays. The progress-wording lines below are dropped as superseded.
+
+```text
+Open Monster Knowledge/Codex with progress.
+Progress label is:
+`보급 생환 N회`
+Old `관찰 N회` progress wording is absent.
+```
+
+```new
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §META UI.)
+- the codex tabs are 진행도 · 상품 · 직업 · 점포지원 · 점포 장식; no `몬스터 지식` tab, and no `보급 생환 N회` / `관찰 N회` progress line on any screen
 ```
