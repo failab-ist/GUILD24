@@ -1077,7 +1077,7 @@ cleared the Boss). The v2.9.1 slope lines were declared new above, not chain lin
 
 ## AMENDMENT — v2.9.2 balance, second pass: 대성공 EXP 1.10 -> 1.00, combat-success EXP 1.00 -> 0.90 (User decision 2026-09-26)
 
-User 2026-09-26 (after the `reader` harness review, reports/v292-bot-harness.md): the 대성공 line declared above is edited in place;
+User 2026-09-26 (after the `reader` harness review, archive/v2.9.2/v292-bot-harness.md): the 대성공 line declared above is edited in place;
 the combat-success line is a chain line, dropped here for its new form. 퇴각 0.38 and other living 0.50 are unchanged.
 
 ```text
@@ -1090,7 +1090,7 @@ combat-success path = 1.00
 
 ## AMENDMENT — v2.9.2 balance, third pass: Gate DAY 11~20 at 1.10, levelFactor floor 0.85, late T3 +0.10 (User decision 2026-09-26)
 
-User 2026-09-26 (after the paired D10-fork arms, reports/v292-bot-harness.md §9-10; "g1 l2 t"): the Gate Day term climbs at 1.10 per
+User 2026-09-26 (after the paired D10-fork arms, archive/v2.9.2/v292-bot-harness.md §9-10; "g1 l2 t"): the Gate Day term climbs at 1.10 per
 Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ back on the 0.80 slope, carrying the D20 offset), the Level Death protection floor is 0.85 (identical through Lv11), and DAY 21~29 move
 0.10 of T2 to T3. The Day-term sentence, formula, anchors and levelFactor lines declared above are edited in place; the late T3
 paragraph is new.
@@ -1103,7 +1103,7 @@ not raw Power alone. Examples: D24 10 / 50 / 40 · D25 5 / 40 / 55 · D29 0 / 35
 
 ## AMENDMENT — v2.9.2 balance, fourth pass: Gate count D19~29, Level Death reduction removed, Warehouse +5 (User decision 2026-09-26)
 
-User 2026-09-26 (after the package measurement, reports/v292-bot-harness.md §11; "PL"): DAY 19~24 open 3 Gates at 70% (2 at 30%),
+User 2026-09-26 (after the package measurement, archive/v2.9.2/v292-bot-harness.md §11; "PL"): DAY 19~24 open 3 Gates at 70% (2 at 30%),
 DAY 25~29 exactly 3; the Level factor on the failure Death roll is removed. The §Preparation / Level Death reduction lines declared
 above are edited in place (the levelFactor line is gone); the D19–29 Gate-count row is replaced by two rows.
 

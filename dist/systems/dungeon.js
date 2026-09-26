@@ -290,7 +290,7 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    early 1.70 -> 1.20, late 0.40 -> 0.80 - the early Gates no longer outrun adventurer growth, the
    D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early 1.20 -> 1.50, late kept -
    a fresh first Run cleared the Boss); every other Gate Power term is what it was. */
-/* v2.9.2 balance, third pass (User 2026-09-26, after the paired D10-fork arms in reports/v292-bot-harness.md §9-10): DAY 11~20
+/* v2.9.2 balance, third pass (User 2026-09-26, after the paired D10-fork arms in archive/v2.9.2/v292-bot-harness.md §9-10): DAY 11~20
    climb at `mid` 1.10 per Day (the NPC-growth check of the Run Progression Arc); DAY 1~10 and DAY 21+ keep their slopes. */
 const GATE={knee:9,early:1.50,late:0.80,mid:1.10,midFrom:10,midTo:20};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.late

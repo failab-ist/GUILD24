@@ -17,7 +17,7 @@ bumps had not been made and are made here with the v2.9.3 ones).
   step is now `order-gates` (UI_UX_QA line edited in place); a player who already saw MORNING's lesson gets ORDER's once. ui-guard
   pin: coach ids unique across phases. The Boss-reveal hold also ends at once if the Day leaves the MORNING it belongs to (only a
   scripted path can), so the screen is never left inert (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, edited in place).
-- Balance, fourth pass (User 2026-09-26, "PL", after the package measurement — reports/v292-bot-harness.md §11): Gate count DAY 19~24
+- Balance, fourth pass (User 2026-09-26, "PL", after the package measurement — archive/v2.9.2/v292-bot-harness.md §11): Gate count DAY 19~24
   3 at 70% (2 at 30%, one draw), DAY 25~29 exactly 3 (no draw); the Level factor on the failure Death roll is removed (rolledDeathChance =
   failureDeathChance × preparedFactor; the SALE risk snapshot is the raw chance); 후방 창고 증설 +10 → +5 slots (price 130G kept). Measured
   (paired D10 fork): `reader` all-fresh D30 12.4% → 8.9%, CURRENT_SKILLED_D10 .465 → .364; the Warehouse change is not binding for the bot
@@ -99,7 +99,7 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   required fixed; found by the separate visual review, not self-reported). Capture tool tools/qa-closing-beat.cjs.
 - H6 장면 전환, capture-and-report phase (User 2026-09-25): all four candidate hard cuts (CLOSING, FINAL, END,
   the DAY 0 screen) captured as real before/after frames, one continuous seeded Run, 390 / 1280
-  (`reports/v292-h6-transitions.md`, capture tool `tools/qa-h6-transitions.cjs`). Finding: CLOSING and END
+  (`archive/v2.9.2/v292-h6-transitions.md`, capture tool `tools/qa-h6-transitions.cjs`). Finding: CLOSING and END
   already carry content entry from H4 / H5 once settled, and DAY 0 lands on MORNING's pre-existing entry - a
   first pass at 390 only used a 30 ms post-press frame and read as more bare than the settled truth; a
   `-settled` (+600 ms) frame was added and re-verified before reporting. No Source change this phase (AGENTS
@@ -113,13 +113,13 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   boss-modal overlap the User also flagged is left UNRESOLVED / DESIGN ISSUE - it is the same immediate,
   no-delay `bossRevealDue()` mechanism shared by D0/D5/D10/D15/D20/D25 with an explicit design-intent comment
   in Source, so changing its timing is a bigger design call than this batch's authorized scope.
-- Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — reports/v292-bot-harness.md §9-10): the Gate
+- Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — archive/v2.9.2/v292-bot-harness.md §9-10): the Gate
   Day term climbs at 1.10 per Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ returns to the 0.80 slope carrying the D20 offset; D20 25.3, D29 32.5); levelFactor floor 0.75 → 0.85
   (identical through Lv11); DAY 21~29 move 0.10 of the T2 weight to T3. Measured together (GLT): `reader` all-fresh D30 12.1% →
   8.6%, CURRENT_SKILLED_D10 .558 → .450; the D21~29 slope 0.90 and a Great Success Gold cut were measured and not taken; the
   all-fresh 10% floor is not a real-player measure (User). DUNGEON_HAZARD §GATE POWER / §Tier generation / Level Death reduction,
   DUNGEON_ITEM_QA; ledgers amended; tests night (Gate term, tiers, levelFactor).
-- Balance, second pass (User 2026-09-26, after the `reader` harness review — reports/v292-bot-harness.md §7): 대성공 EXP 1.10 → 1.00,
+- Balance, second pass (User 2026-09-26, after the `reader` harness review — archive/v2.9.2/v292-bot-harness.md §7): 대성공 EXP 1.10 → 1.00,
   combat-success EXP 1.00 → 0.90 (퇴각 0.38 / other living 0.50 unchanged); operating dayBase + 12 × max(0, Day − 15). Measured:
   `reader` clear 14.9% → 7.2%, the D29 cash median ~5,100 → ~3,400; a level-coefficient raise (0.05~0.10) was rejected - it taxed
   D1~15 too and doubled bankruptcies. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA, ECONOMY_ORDER §BASE OPERATING COST,
@@ -128,7 +128,7 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   Store Gold and the expedition NPC Wallet reward unchanged. Purpose: weaken the snowball of a strong NPC growing faster
   through Great Success EXP. DUNGEON_HAZARD §Ordinary EXP, DUNGEON_ITEM_QA; ledgers amended.
 - Balance, Gate early slope 1.20 → 1.50 and 정가 final purchase chance × 0.90 (User 2026-09-25, after the relative review in
-  reports/v292-balance-review.md, `human` lens): late slope 0.80 / knee Day 9 kept; the × 0.90 applies to the final 정가 chance
+  archive/v2.9.2/v292-balance-review.md, `human` lens): late slope 0.80 / knee Day 9 kept; the × 0.90 applies to the final 정가 chance
   with the 0.97 관련 준비 case included, 50% / 150% and the shared accessible need unchanged. DUNGEON_HAZARD §GATE POWER,
   DUNGEON_ITEM_QA, ECONOMY_ORDER §PURCHASE INTENT, ECONOMY_ORDER_QA, SOURCE_ADOPTION_QA note; ledgers amended. To be
   checked in User play on the deployed build.
