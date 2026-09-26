@@ -69,7 +69,7 @@ const out=process.argv[2]||'reports/v292-arms.json',seeds=Number(process.argv[3]
  PAR=Number(process.env.PAR||os.cpus().length),BLOCK=250,TMP=fs.mkdtempSync(path.join(os.tmpdir(),'g24-arms-'));
 const by=Object.fromEntries(arms.map(a=>[a,new Map()]));let w=0;
 const job=(arm,from,count)=>new Promise((ok,no)=>{let buf='';const c=spawn(process.execPath,[__filename,'--worker','',arm,from,count,path.join(TMP,'w'+(w++))]);
- c.stdout.on('data',d=>buf+=d);c.stderr.pipe(process.stderr);c.on('close',code=>code?no(Error('worker '+arm+'@'+from+' exit '+code)):ok(JSON.parse(buf)));});
+ c.stdout.setEncoding('utf8');/* decode as one UTF-8 stream: a chunk boundary inside a Korean key otherwise corrupts it */c.stdout.on('data',d=>buf+=d);c.stderr.pipe(process.stderr);c.on('close',code=>code?no(Error('worker '+arm+'@'+from+' exit '+code)):ok(JSON.parse(buf)));});
 (async()=>{
  const q=[];for(const a of arms)for(let s=0;s<seeds;s+=BLOCK)q.push([a,s,Math.min(BLOCK,seeds-s)]);let i=0;
  await Promise.all(Array.from({length:PAR},async()=>{while(i<q.length){const [a,s,n]=q[i++];for(const r of await job(a,s,n))by[a].set(r.i,r);}}));
