@@ -35,7 +35,7 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
 6. H5 세부: 마왕 이름이 새겨진 봉인 1개(승리 주홍·정면 / 패배 흐리고 비뚤고 일부만), 착지 큐 `sealwin` / `sealfail`.
 7. ~~H1 반전 범위~~ → User 확정(2026-09-25): 사망을 면했을 때만 반전. `만반의 준비`가 사망을 막은 밤만 덮어찍기, 강골·구급키트는 반전 없음(`eb30e16`).
 
-## Next — v2.9.2 타격감 남은 배치 (H4 → H6) 작업 지시 — H2(`8874e19`) · H3(`96375e1`) 완료
+## Next — v2.9.2 타격감 남은 배치 (H6) 작업 지시 — H2(`8874e19`) · H3(`96375e1`) · H4(`97c8f42`) 완료
 
 AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 — 하위 모델 · 하이 이펙트). 기점: 이 브랜치의 최신 커밋(또는 병합된 main). 병렬 금지(같은 UI owner / 원장 / `app.js` / `ui.css` / `ui-guard.cjs`를 고치는 다른 세션이 있으면 BLOCKED).
 
@@ -63,14 +63,15 @@ AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 �
   - 캡처: 390·1280, 판매 50/100/150%와 거절 각 1회, 모션 프레임 0/60/120/200/320 ms. SALE 트레이 접기(UI-Q-v29-28)는 펼친 상태에서만 판매한다.
 - ~~H3 ORDER 확정~~ **완료(`96375e1`)** (owner: UI_UX §ORDER — WAREHOUSE DISCLOSURE, UI_UX_QA `UI-Q-v29-32`, 원장):
   - `case'confirm-order'` 뒤 `playCue`에 1회성 표식 `'order'`를 두고 창고 칸(`stockBrief()`의 행; 접혀 있으면 요약 `N / M칸` 숫자만)에 SKU당 상자 1개가 계단식 착지, 전체 ≤ 320 ms(간격 = min(70, 320 / SKU 수)), 들리는 `order` 계열 타격 최대 3회(나머지 무음), 각 창고 숫자는 이전 값 → 확정 값으로 바로(수량만큼 반복 금지), 잔고(`#order-register`의 보유 골드 / 발주 후)는 H1 카운트업 패턴의 역방향 카운트다운 220 ms. `발주 완료.` 줄 불변.
-- **H4 CLOSING 마감** (owner: UI_UX §CLOSING, UI_UX_QA `UI-Q-v29-33`, 원장):
-  - `playPhase('closing')` 새 분기: 영수증 본문 행을 한 번에 ≤ 200 ms로 인쇄(프린터 틱 1회, 행마다 틱 금지), 마지막 `영업 손익` 줄만 도장(중요: hold 100 ms, `STAMP_FALL`, 테이프 dip 4 px; 이익 금색 / 손실 적색 — 끝 상태 CSS에).
-  - 점포 자본 정산(END 테이프의 `점포 자본 정산` 행): 카운트업 중 장식 가격선(500 / 750 / 1000 / 1250)을 넘을 때 클릭(`ui` 큐) — v2.9.1 비율 반영.
-  - `어제보다 +N` 줄 없음(v3.0+).
-  - 연속 시퀀스 캡처(이 배치가 H1 + H4를 잇는다): 마지막 밤 판정 → `마감으로` → 영수증 인쇄 → `다음 날`을 한 흐름으로.
+- ~~H4 CLOSING 마감~~ **완료(`97c8f42`)** (owner: UI_UX §CLOSING — RECEIPT STAMP, UI_UX_QA `UI-Q-v29-33`, 원장 UI_UX / UI_UX_QA):
+  - `playPhase('closing')`: 영수증 본문(두 `.block` + `.purse`)이 한 번에 200 ms로 인쇄(프린터 틱 1회, 행마다 틱 금지), `영업 손익` 값(`<b>`)만 도장(hold 100 ms, `STAMP_FALL`, 테이프 dip 4 px). 행 전체가 아니라 숫자만 scale — 행 전체를 scale하면 넓은 flex 행이라 카드 밖으로 넘친다(검수에서 잡힘, NARROW FIX).
+  - `closingSound()`: 진입 시 새 합성 큐 `receipt`(프린터 틱) + 착지 프레임에 기존 `gold`/`spend` 재사용(이익/손실). `전체 건너뛰기`(`case'closing'`)와 마지막 결과의 `마감으로`(`case'night-next'`가 `finishNight()`를 부르는 경로) 양쪽에서 호출 — 처음엔 후자를 빠뜨렸다가 검수 전 자체 스모크 캡처에서 발견해 고쳤다.
+  - END `점포 자본 정산`의 `현재 점포 자본` 카운트업(320 ms) 중 장식 가격선을 지날 때 `ui` 큐 — 가격은 `D.decorations.map(d=>d.price)`에서 읽어 하드코딩 없음.
+  - `어제보다 +N` 줄 없음(v3.0+). 이익 금색 / 손실 적색: 기존 `.print .profit b`가 실제로는 진녹색(`#1f6b3f`)이었다 — 검수 에이전트가 잡은 진짜 결함, NARROW FIX로 `var(--gold)`로 교정(`ui.css`).
+  - 연속 시퀀스 캡처(H1 + H4): 마지막 밤 판정 → `마감으로` → 영수증 인쇄 → `다음 날`. 캡처 도구 `tools/qa-closing-beat.cjs`.
 - **H6 장면 전환** (조건부): CLOSING / FINAL / END / DAY 0 네 하드 컷을 두 연속 시퀀스(밤 → 마감 → 다음 날, FINAL 결과 → END)에서 캡처해 **보고만** 하고 STOP — 대상 화면은 User 결정(UNRESOLVED). 선택된 화면만 같은 계열 진입 비트(≤ 240 ms, 한 동작, 일반 강도).
 
-### H2 / H3에서 확인된 함정 (다음 배치에서 반복하지 말 것)
+### H2 / H3 / H4에서 확인된 함정 (다음 배치에서 반복하지 말 것)
 
 - 모든 `button`에 `transition:transform .08s steps(2)`가 걸려 있다. anime로 버튼을 움직이면 CSS 전환이 매 프레임을 삼킨다. 움직일 버튼은 먼저 `el.style.transition='none'`으로 끈다(`keyPress` 참고).
 - 캡처 도구는 페이지 시계를 멈춰 둔다(`Date.now` 래퍼). 누르기 전에 재생돼야 할 애니메이션(선택 트레이 등)이 있으면 `window.__live=true`를 먼저 켠다. 안 그러면 캡처할 때만 흐리게 보이는 가짜 결함이 생긴다.
@@ -79,7 +80,11 @@ AGENTS.md를 먼저 읽고 따른다. 역할: 프레젠테이션 WORK(2단계 �
 - 시퀀스 값(개수·잔고)은 `setTimeout`이 아니라 anime `onComplete`(필요하면 `A({t:0},{t:1,duration})`)로 바꾼다. 그래야 느린 캡처에서도 타이밍이 맞는다.
 - 캡처 픽스처는 조건을 실제로 만족해야 한다(H3: 서로 다른 SKU k개. 같은 품목 중복 금지). 검수 에이전트가 이런 TEST GAP을 잡아낸다.
 - 새 한글은 주석까지 폰트 서브셋 검사에 걸린다. 새 카피가 없으면 주석도 영어로 쓴다.
-- 캡처 도구 템플릿: `tools/qa-sale-beat.cjs`, `tools/qa-order-beat.cjs`(최종 DOM 비교 `QA_DOM=1` 포함).
+- 캡처 도구 템플릿: `tools/qa-sale-beat.cjs`, `tools/qa-order-beat.cjs`(최종 DOM 비교 `QA_DOM=1` 포함), `tools/qa-closing-beat.cjs`(profit/loss/settlement 픽스처 포함).
+- 넓은(전체 폭) flex 행 전체를 `scale`로 도장 찍으면 카드 밖으로 넘친다(H4 최초 구현에서 발생, 자체 스모크에서 발견). 도장은 항상 값(숫자) 요소 하나에만 걸고, 라벨·구분선을 포함한 행 컨테이너는 `opacity`만 쓴다.
+- 화면 전환을 만드는 액션 경로가 두 개 이상이면(H4: `전체 건너뛰기` = `case'closing'`, 보통 진행 = `case'night-next'`가 마지막 결과에서 `finishNight()`를 부르는 경로) 새 큐 호출을 양쪽 모두에 건다. 한쪽만 걸면 UI 상으로는 똑같이 화면이 바뀌어 보여서 놓치기 쉽다.
+- D0 마왕 브리핑 모달(`bossRevealDue()`)은 Day 1에 자동으로 뜨고 실제 DOM 클릭을 막는다(STEP 스크립트 자체는 직접 메서드 호출이라 안 막히지만, 캡처 도구의 실제 클릭은 막힌다). 캡처 전에 `[data-action="boss-seen"]`을 반복 닫는다.
+- CSS의 "끝 상태" 문구(예: 이익 금색)는 실제 색상값을 대조해서 확인한다 — 설명과 실제 hex가 다를 수 있다(H4: `.print .profit b`가 오래전부터 초록이었다). 캡처 이미지만 보고 "그럴듯하니 통과"로 넘기지 않는다.
 
 ### 별도 FIX 대기 (User 결정 전 손대지 않음)
 
