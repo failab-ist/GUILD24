@@ -1803,6 +1803,30 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
  assert.ok(!/previousSales|daily\.sales|streak|combo/.test(sale),'no streak, no combo, no faster second sale');
 });
 
+/* coach seen state is keyed by step id alone: an id shared by two phases marks the second lesson seen before it is shown
+   (ORDER's gates lesson never appeared after MORNING's, fixed 2026-09-26) */
+test('coach step ids are unique across phases',()=>{
+ const body=app.slice(app.indexOf('const coachSteps={'),app.indexOf('let activeCoach=null;')),ids={};
+ for(const m of body.matchAll(/^ (\w+):\[(.*)\],?$/gm))for(const x of m[2].matchAll(/\['([a-z-]+)',/g))(ids[x[1]]??=[]).push(m[1]);
+ assert.ok(Object.keys(ids).length>=10,'the step table was read');
+ for(const [id,phases] of Object.entries(ids))assert.equal(phases.length,1,'coach id '+id+' is used by '+phases.join(' / '));
+});
+
+/* UI-Q-v29-36 (UI_UX §BUILD MARKER, User 2026-09-26): the opening screen names the build; the deploy stamps the commit */
+test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build, stamped by the deploy',()=>{
+ const b=read('dist/build.js');
+ assert.ok(/window\.GUILD24_BUILD=\{version:'2\.9\.3',commit:'dev'\};/.test(b),'the repository copy names the version and reads dev');
+ assert.ok(/<script src="build\.js"><\/script><script src="ui\/app\.js"><\/script>/.test(html),'loaded before the app');
+ assert.ok(/console\.info\('GUILD24 v'\+BUILD\.version\+' · '\+BUILD\.commit\)/.test(app),'printed once on load');
+ assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,build:BUILD,/.test(app),'Guild24.build');
+ const r=fn('render'),open=r.slice(0,r.indexOf('const phase=s.phase'));
+ assert.ok(/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(open),'the opening screen (no Run) shows it');
+ assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
+ assert.ok(/\.p-start \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
+ const wf=read('.github/workflows/pages.yml');
+ assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');
+});
+
 /* UI-Q-v29-35 (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, User 2026-09-26): a reveal due on a fresh MORNING entry waits
    for the shutter to land; reduced motion opens it at once; no other modal jumps the queue while it waits */
 test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same frame as the cut',()=>{
@@ -1814,6 +1838,7 @@ test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same 
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
  assert.ok(r.indexOf('bossRevealDue()')<r.indexOf("modal='event'")&&r.indexOf('bossRevealDue()')<r.indexOf("modal='relics';\n",r.indexOf('bossRevealDue()')),'the reveal keeps its place ahead of the Event and the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
+ assert.ok(/if\(bossHold&&\(phase!=='morning'\|\|!bossRevealDue\(\)\)\)\{clearTimeout\(bossHold\);bossHold=null;\$\('#app'\)\.inert=false;\}/.test(r),'the hold ends with the MORNING it belongs to - the screen is never left inert');
 });
 
 /* UI-Q-v29-34 (v2.9.2 H6, UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate settle in as one
@@ -3176,7 +3201,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/task-line[^\n]*data-action/.test(app),'not a button, not a coach mark');
  // first-ORDER coach: gates -> offer -> quantity -> confirm -> reroll, no gold mark
  const order=/ order:\[(.*)\],\n/.exec(app)[1];
- assert.deepEqual([...order.matchAll(/\['([a-z]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['gates','.brief .when'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the five steps in order, on their anchors');
+ assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['order-gates','.brief .when'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the five steps in order, on their anchors');
  assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 / 2 (Stat n당 대응 1)

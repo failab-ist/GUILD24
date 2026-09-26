@@ -75,6 +75,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # UI_UX §BUILD MARKER: the shipped build.js names the commit it was deployed from (the repository copy reads dev).
+      # Only this job's checkout is touched, after `verify` passed on the committed tree.
+      - name: Stamp the build marker
+        run: |
+          sed -i "s/commit:'dev'/commit:'${GITHUB_SHA::7}'/" dist/build.js
+          grep -q "commit:'${GITHUB_SHA::7}'" dist/build.js
       # dist/ is the site root, so the game is served at the Pages root rather than under /dist.
       - uses: actions/upload-pages-artifact@v3
         with:

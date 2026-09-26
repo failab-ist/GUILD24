@@ -3,9 +3,39 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.2 — game feel (타격감), H1 / H2 / H3 / H4 / H5 / H6 ADOPTED (User 2026-09-25)
+## v2.9.3 — balance fourth pass, two runtime fixes, build marker (User 2026-09-26)
 
-H1 and H5 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
+Version routing (User 2026-09-26): v2.9.2 closes at `main` `d6fcfbd` (H1~H6 all adopted, balance through the third pass), where its tag
+goes; everything merged after it is v2.9.3. Owner headers now carry the version they last changed in (VERSION POLICY; the v2.9.2
+bumps had not been made and are made here with the v2.9.3 ones).
+- Build marker (User 2026-09-26): the opening screen shows a small `v2.9.3 · {commit}` in its corner and the console prints it on load;
+  the Pages deploy stamps the commit. UI_UX §BUILD MARKER, UI_UX_QA UI-Q-v29-36; ledgers; ui-guard pin.
+- `npm run qa:visual` harness (2026-09-26, TEST GAP): its crude drive now ends a Run before DAY 5 under the current balance, so the gate
+  stopped at `relic`; the till and the Death count are kept afloat during the fast-forward, as the capture tools already do. Harness only.
+- ORDER coach `gates` never shown (2026-09-26, IMPLEMENTATION BUG, found once `qa:visual` reached its coach probe again): coach seen
+  state is keyed by step id alone and ORDER's `gates` step shared MORNING's id, so the first ORDER coach started at `offer`. ORDER's
+  step is now `order-gates` (UI_UX_QA line edited in place); a player who already saw MORNING's lesson gets ORDER's once. ui-guard
+  pin: coach ids unique across phases. The Boss-reveal hold also ends at once if the Day leaves the MORNING it belongs to (only a
+  scripted path can), so the screen is never left inert (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, edited in place).
+- Balance, fourth pass (User 2026-09-26, "PL", after the package measurement — reports/v292-bot-harness.md §11): Gate count DAY 19~24
+  3 at 70% (2 at 30%, one draw), DAY 25~29 exactly 3 (no draw); the Level factor on the failure Death roll is removed (rolledDeathChance =
+  failureDeathChance × preparedFactor; the SALE risk snapshot is the raw chance); 후방 창고 증설 +10 → +5 slots (price 130G kept). Measured
+  (paired D10 fork): `reader` all-fresh D30 12.4% → 8.9%, CURRENT_SKILLED_D10 .465 → .364; the Warehouse change is not binding for the bot
+  (peak stock 14) and rests on the User save (~24 Items before the Final). DUNGEON_HAZARD §Gate-count generation / §Preparation / Level
+  Death reduction, DUNGEON_ITEM_QA DI-Q-v28-12 / DUN-Q-v29-BC1, RELIC / RELIC_QA, COPY_AUDIT §11-27; ledgers amended; tests night / delta /
+  copy.
+- Boss reveal after MORNING lands (User 2026-09-26, the DAY 0 -> DAY 1 overlap the H6 capture reported, RUNTIME UX BUG): a reveal due on
+  a fresh MORNING entry waited 0 ms, so the dossier opened in the same frame as the cut. It now waits 420 ms (the shutter) with the screen
+  inert - the Day still cannot advance past an owed reveal (CORE_RUN §D0; a double tap on 구매 used to be able to reach 문 열기 once the
+  wait existed, caught by the separate review) - and reduced motion opens it at once. Every reveal stage shares the one mechanism. UI_UX
+  §BOSS REVEAL — MORNING LANDS FIRST, UI_UX_QA UI-Q-v29-35; ledgers; ui-guard pin; runtime tools/qa-boss-hold.cjs (in qa:runtime).
+- Bug fix (2026-09-26, IMPLEMENTATION BUG): a full data reset (`reset-go`) kept the UI's pending Run seed, so a store planned before
+  the reset was reopened on the same seed - and the same Boss - after it. The reset now drops the plan with the rest of the Run
+  state. No design, RNG, seed-format or save change. Runtime regression tools/qa-reset-seed.cjs (in qa:runtime).
+
+## v2.9.2 — game feel (타격감), H1 / H2 / H3 / H4 / H5 / H6 ADOPTED (User 2026-09-25); CLOSED 2026-09-26 at main `d6fcfbd` (tag `v2.9.2` to be set there by the User - tag pushes are not available to WORK sessions)
+
+H1~H6 are all adopted in Source (entries below, in the order they happened). PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
 (execution order H1 → H2 → H3 → H5 → H4; each batch docs-first, Source after User authorization);
 SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATION and SPEC_INDEX changed.
@@ -83,21 +113,6 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   boss-modal overlap the User also flagged is left UNRESOLVED / DESIGN ISSUE - it is the same immediate,
   no-delay `bossRevealDue()` mechanism shared by D0/D5/D10/D15/D20/D25 with an explicit design-intent comment
   in Source, so changing its timing is a bigger design call than this batch's authorized scope.
-- Bug fix (2026-09-26, IMPLEMENTATION BUG): a full data reset (`reset-go`) kept the UI's pending Run seed, so a store planned before
-  the reset was reopened on the same seed - and the same Boss - after it. The reset now drops the plan with the rest of the Run
-  state. No design, RNG, seed-format or save change. Runtime regression tools/qa-reset-seed.cjs (in qa:runtime).
-- Boss reveal after MORNING lands (User 2026-09-26, the DAY 0 -> DAY 1 overlap the H6 capture reported, RUNTIME UX BUG): a reveal due on
-  a fresh MORNING entry waited 0 ms, so the dossier opened in the same frame as the cut. It now waits 420 ms (the shutter) with the screen
-  inert - the Day still cannot advance past an owed reveal (CORE_RUN §D0; a double tap on 구매 used to be able to reach 문 열기 once the
-  wait existed, caught by the separate review) - and reduced motion opens it at once. Every reveal stage shares the one mechanism. UI_UX
-  §BOSS REVEAL — MORNING LANDS FIRST, UI_UX_QA UI-Q-v29-35; ledgers; ui-guard pin; runtime tools/qa-boss-hold.cjs (in qa:runtime).
-- Balance, fourth pass (User 2026-09-26, "PL", after the package measurement — reports/v292-bot-harness.md §11): Gate count DAY 19~24
-  3 at 70% (2 at 30%, one draw), DAY 25~29 exactly 3 (no draw); the Level factor on the failure Death roll is removed (rolledDeathChance =
-  failureDeathChance × preparedFactor; the SALE risk snapshot is the raw chance); 후방 창고 증설 +10 → +5 slots (price 130G kept). Measured
-  (paired D10 fork): `reader` all-fresh D30 12.4% → 8.9%, CURRENT_SKILLED_D10 .465 → .364; the Warehouse change is not binding for the bot
-  (peak stock 14) and rests on the User save (~24 Items before the Final). DUNGEON_HAZARD §Gate-count generation / §Preparation / Level
-  Death reduction, DUNGEON_ITEM_QA DI-Q-v28-12 / DUN-Q-v29-BC1, RELIC / RELIC_QA, COPY_AUDIT §11-27; ledgers amended; tests night / delta /
-  copy.
 - Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — reports/v292-bot-harness.md §9-10): the Gate
   Day term climbs at 1.10 per Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ returns to the 0.80 slope carrying the D20 offset; D20 25.3, D29 32.5); levelFactor floor 0.75 → 0.85
   (identical through Lv11); DAY 21~29 move 0.10 of the T2 weight to T3. Measured together (GLT): `reader` all-fresh D30 12.1% →

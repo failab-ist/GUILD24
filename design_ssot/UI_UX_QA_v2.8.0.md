@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
+DOC_VERSION=2.9.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1354,6 +1354,20 @@ PASS:
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
 
+### UI-Q-v29-36 — BUILD MARKER
+
+(User 2026-09-26; owner `UI_UX_v2.8.0.md` §BUILD MARKER.)
+
+PASS:
+- the opening screen shows `v2.9.3 · {commit}` small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
+  the menu button and the preparation panel
+- no other screen shows it
+- the console prints `GUILD24 v2.9.3 · {commit}` once on load and `Guild24.build` returns the same pair
+- the deployed site reads the deployed commit; a local build reads `dev`
+
+FAIL:
+- the marker overlapping or pushing the title, taking input, or appearing during a Run; a deployed build still reading `dev`
+
 ### UI-Q-v29-35 — BOSS REVEAL AFTER MORNING LANDS
 
 (User 2026-09-26; owner `UI_UX_v2.8.0.md` §BOSS REVEAL — MORNING LANDS FIRST.)
@@ -2128,7 +2142,7 @@ The ORDER coach group runs `gates` → `offer` → `quantity` → `confirm` → 
 
 PASS:
 - the steps appear in exactly that order and nothing else is in the group
-- `gates` highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
+- `gates` (step id `order-gates`, apart from MORNING's `gates`, so seeing one never marks the other seen) highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
 - `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
 - `quantity` / `confirm` / `reroll` keep their approved lines (COPY_AUDIT §3-7 QUANTITY / §3-2 / COPY_WORLD_VOICE §TUTORIAL COACH COPY); `reroll` is last
 - no `gold` mark: `#order-register` carries no coach step

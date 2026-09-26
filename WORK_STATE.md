@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-26
-STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED(main `d6fcfbd`) · 4차 밸런스·버그 수정 main 병합 대기
+STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 User가 걸어야 함) · V2_9_3_CLOSED(main 병합, 태그 `v2.9.3`는 User가 걸어야 함)
 
 ## Current
 
@@ -13,7 +13,9 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H2_
   - PR #6으로 main에 병합됨(`9414293`, Pages 배포 성공): 진열대 한 줄 · SALE 트레이 접기 · 게이트 방문 최소 1명 · 발주 플로팅 오늘 줄 · D30 흐름 · H5 봉인 · H1 만반의 준비 반전 · 밸런스(대성공 EXP 1.10, slope 1.50, 정가 ×0.90).
   - PR #7으로 main에 병합됨(`49c853b`, 2026-09-26): H2 SALE 계산대 · H3 ORDER 확정 · 봇 하네스 `reader`와 측정 도구 · 2차 밸런스 · 3차 밸런스(G1 + L2 + T).
   - PR #8(`claude/v2-9-2-h4-closing-j24s8w`)으로 main에 병합됨(`d6fcfbd`): H4 CLOSING 마감 영수증 · H6 캡처와 FINAL 진입 비트 — **v2.9.2 H1~H6 전 배치 완료**.
-  - 이 브랜치의 그 뒤(병합 대기): 전체 초기화 seed 버그 수정 `9690e33` · 4차 밸런스 `8707dc7` · 마왕 조사 모달 대기 `e4cd761`.
+  - PR #9로 main에 병합됨(`dbc2736`): 전체 초기화 seed 버그 수정 · 4차 밸런스 · 마왕 조사 모달 대기.
+  - v2.9.3 마무리(이 브랜치 → main; 태그 push는 WORK 세션에서 막혀 있어 User가 건다): 빌드 표식(첫 화면 `v2.9.3 · 커밋`, 콘솔, `Guild24.build`, 배포 시 커밋 기록) ·
+    qa:visual 하네스 복구(전부 통과) · ORDER `gates` 코치 미표시 버그 수정 · 문서 헤더 버전 정리. 내용은 CHANGELOG §v2.9.3.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - last tagged release: `v2.9.1`; completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
 
@@ -72,16 +74,14 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H2_
 - FINAL `원정대 확정`은 팀이 3명 미만이면 바로 커밋되지 않고 `나중에 결정`류 확인 모달(`final-commit-go`)이 먼저 뜬다. D30 시드의 로스터가 3명이 안 될 수 있으니 이 모달도 조건부로 닫아준다.
 - 컷(즉시 화면 전환) 캡처에서 "누른 직후"만 찍으면(30ms 등) 이미 있는 진입 모션이 다 나오기 전이라 실제보다 더 "날것 컷"처럼 보인다(User가 잡아낸 실제 사례: H6 CLOSING/END/DAY0 첫 캡처). 컷 자체를 보여줄 즉시 프레임과, 그 화면 자체 모션이 다 끝난 정착 프레임을 같이 찍는다.
 
-### 별도 FIX 대기 (User 결정 전 손대지 않음)
+### qa:visual (2026-09-26 해결)
 
-- `npm run qa:visual`
-  - 밸런스 변경 뒤 자동 진행이 D5 전에 죽어 boss10 캡처에서 멈춘다(하네스 문제).
-  - H5 봉인과 END 제목 사이에 "text collision" 14건이 뜬다. 390 캡처로는 실제로 겹치지 않아 오탐으로 보이며, ROOT CAUSE UNRESOLVED.
-  - 그 밖에 기존(`dd3feb4`)부터 있던 20건.
+- `npm run qa:visual` 전부 통과(126 캡처, `visual QA clean`). 원인과 수정은 `2e1a045`(하네스: 런 유지, D25 대기, 글자 박스 기준 충돌, 장식 행 예외)와
+  `daf83b9`(ORDER 코치 id 버그, 대기 해제). 앞으로 배치마다 qa:runtime과 함께 돌린다.
 
 ### 2단계 지침(하네스 엄격)
 
-- 배치마다 전부: `npm test` 전체, `npm run ssot:check`(21/21), `npm run qa:runtime` 7/7, 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 일부만 돌리고 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
+- 배치마다 전부: `npm test` 전체, `npm run ssot:check`(21/21), `npm run qa:runtime` 7/7, `npm run qa:visual`(clean), 390·1280 BEFORE/AFTER + 모션 프레임 + reduced-motion, 별도 검수 에이전트 판정 → NARROW FIX → 재캡처. 일부만 돌리고 PASS라 하지 않는다. 명령을 `;`로 이어 테스트 실패 뒤 커밋하지 않는다(`&&`).
 - 새 한글 글자는 폰트 서브셋 검사에 걸린다(코멘트 포함) — 새 카피가 없으면 새 글자도 없어야 한다.
 - 핀·원장 누락은 커밋 전에 잡는다(`ssot:check`가 UNDECLARED NEW를 보고). 계약(≤ 320 ms, 임팩트 예산, 카드 안, 금지 목록)을 넘는 제안은 구현하지 않고 보고한다.
 - 환경: 얕은 클론이면 `git fetch --unshallow`; `pip install fonttools brotli pillow`; `npm install`.

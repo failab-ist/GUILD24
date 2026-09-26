@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
+DOC_VERSION=2.9.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
-FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture)
+FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) ; V2_9_2_CLOSED_2026-09-26 (main d6fcfbd; tag v2.9.2 pending, set by the User); V2_9_3_CLOSED_2026-09-26 (main; tag v2.9.3 pending, set by the User) (v2.8 canonical baseline closed 2026-09-24)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture); V2_9_3_ADOPTED (balance fourth pass, Boss reveal hold, reset-seed fix, build marker — CHANGELOG §v2.9.3)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -256,7 +256,7 @@ v2.9.1 is ready to close when:
 
 Closed 2026-09-25: merged to `main` (`d23d076`, PR #2) and tagged `v2.9.1` there (User 2026-09-25).
 
-## v2.9.1 / v2.9.2 — NEXT VERSIONS (User 2026-09-25; v2.9.1 CLOSED, v2.9.2 H1 / H2 / H3 / H4 / H5 / H6 ADOPTED)
+## v2.9.1 / v2.9.2 / v2.9.3 — NEXT VERSIONS (User 2026-09-25/26; v2.9.1, v2.9.2 and v2.9.3 CLOSED)
 
 Version routing (User 2026-09-25): the balance session is **v2.9.1**; the game feel presentation
 batches are **v2.9.2**. Each is docs-first and touches Source only after the User authorizes that batch.
@@ -264,6 +264,9 @@ v2.9.2 starts only after v2.9.1 is closed on `main` (User 2026-09-25: the two se
 ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met at tag `v2.9.1`.
 
 - v2.9.1 BALANCE: CLOSED 2026-09-25 — §v2.9.1 — BALANCE above; merged to `main` `d23d076`, tagged `v2.9.1`.
+- v2.9.2 GAME FEEL: CLOSED 2026-09-26 — merged to `main` `d6fcfbd` (H1~H6 all adopted); tag `v2.9.2` goes on that commit (set by the User).
+- v2.9.3 (User 2026-09-26): balance fourth pass, Boss reveal after MORNING lands, reset-seed fix, build marker -> CHANGELOG §v2.9.3;
+  CLOSED 2026-09-26 on `main`; tag `v2.9.3` goes on that merge (set by the User).
 - v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
   (principles table, contract, H1~H6 rows). Routing per batch, in execution order:
 

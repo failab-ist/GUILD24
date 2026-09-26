@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.1
+DOC_VERSION=2.9.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -1581,7 +1581,8 @@ length) after the screen appears, then the dossier opens as it always has. It ap
 and D5 ~ D25), because they share one mechanism; the reveal order is unchanged, and no Event or Relic window opens during the
 hold. MORNING is shown but takes no input during the hold - the reveal is already owed, and the Day does not advance past it
 before it is acknowledged (CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING); a second tap on the 구매 that cut to MORNING does
-nothing. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
+nothing. The hold belongs to the MORNING it started on: if the Day leaves MORNING or the reveal is no longer owed (only a scripted
+path can do either), it ends at once. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
 
 ### D0 — FIRST MORNING BRIEFING
 
@@ -2043,6 +2044,18 @@ Developer reproducibility Seed controls do not appear on the ordinary pre-Run sc
 Technical runtime footer copy is removed from ordinary settings.
 
 This does not require adding a new Debug menu.
+
+### BUILD MARKER (v2.9.3)
+
+(User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-36.) A QA marker so a play report can name the build it was played on.
+
+- the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
+  corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
+  from the title and appears on no other screen
+- `{version}` is the project version (2.9.3); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
+  by the Pages deploy step; a local or unstamped build reads `dev`
+- the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`
+- the one technical label the opening screen carries (User-approved); ordinary settings still carry no runtime footer
 
 ## RUN ABANDON UX
 

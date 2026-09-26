@@ -102,7 +102,12 @@ async function drive(page,target,seed){
  // The coach marks are a first-use overlay; by the captured day a player has passed them.
  // UI-Q19/Q20 get their own capture below.
  if(target!=='coach')await page.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
- const until=async pred=>{for(let i=0;i<800;i++){if(await page.evaluate(pred))return true;await page.evaluate(`${STEP}()`);}return false;};
+ /* v2.9.2 balance (2026-09-26): this crude, hazard-blind drive now ends its Run by bankruptcy or the Death limit before
+    DAY 5, so no seed reaches the D5 Relic window by playing. As the capture tools already do (qa-final-reveal-beat,
+    qa-h6-transitions), the till and the Death count are kept afloat BEFORE each step while fast-forwarding - the step
+    itself can end the Run - so the drive reaches the screen it captures; the screen captured is still the real one. */
+ const afloat=`(()=>{const s=Guild24.game.run;if(s&&s.phase!=='end'){if(s.money<300)s.money=800;s.stats.deaths=0;}})()`;
+ const until=async pred=>{for(let i=0;i<800;i++){if(await page.evaluate(pred))return true;await page.evaluate(afloat);await page.evaluate(`${STEP}()`);}return false;};
  /* D30 is a ~3% outcome under the approved balance, and this drive plays a cruder policy than
     the measured one: its Run ends legitimately around D15, by RUN FAIL, whatever seed it is
     handed. So the three Final captures are taken on a CONTROLLED D30 SETUP - the same device
@@ -293,9 +298,10 @@ async function audit(page,width,screen,desktop){
   const layer=new Map(leaves.map(el=>[el,pinned(el)]));
   // An inline run that wraps has one box per line; its bounding rect is the union of them
   // and spills across lines it does not occupy, which reads as a collision that is not
-  // there. Compare the per-line boxes instead.
-  const boxes=el=>{const c=clip(el),out=[];
-   for(const r of el.getClientRects()){
+  // there. Compare the per-line boxes instead - of the TEXT, not of the element: a block leaf (a heading) has one
+  // full-width box, so a stamp set beside a short headline (the END seal) read as sitting on it.
+  const boxes=el=>{const c=clip(el),out=[],rg=document.createRange();rg.selectNodeContents(el);
+   for(const r of rg.getClientRects()){
     const b={left:Math.max(r.left,c.left),right:Math.min(r.right,c.right),
              top:Math.max(r.top,c.top),bottom:Math.min(r.bottom,c.bottom)};
     if(b.right>b.left&&b.bottom>b.top)out.push(b);}
@@ -467,7 +473,8 @@ async function audit(page,width,screen,desktop){
   for(const el of leaves){
    const t=phrase(el);
    if(t.length<8||!/[가-힣]/.test(t))continue;
-   if(el.closest('li,tr,.good,.npc-card,.slip,.unlock,.trait-row,.effects,.fams'))continue;
+   /* .slot-option: one Decoration per row in Store Management, each with its own `N 자본으로 구매` (two share a price) */
+   if(el.closest('li,tr,.good,.npc-card,.slip,.unlock,.trait-row,.effects,.fams,.slot-option'))continue;
    const key=surface(el)+'|'+t;
    if(seen.has(key)){fails.push(`the same line is stated twice on this surface: "${t.slice(0,24)}"`);
     if(fails.length>14)break;}
@@ -506,6 +513,9 @@ async function d25OrderProbe(page){
      on screen at Day 25 and read as a missing D25 disclosure. Clear them all but familySeen. */
   Object.assign(g.run.bossReveal,{d0Seen:true,identitySeen:true,combatSeen:true,traitSeen:true,routeSeen:true});
   g.run.day=25;g.morning();g.save();Guild24.render();})()`);
+ /* UI-Q-v29-35 (2026-09-26): with motion on, a reveal due on a fresh MORNING opens after the 420 ms shutter hold -
+    wait for the dossier (or give up after 2 s and let the checks below report what is there) */
+ await page.waitForSelector('#modal-root [data-action="boss-seen"]',{timeout:2000}).catch(()=>{});
  await page.waitForTimeout(150);
 
  const seen=async()=>page.evaluate(`(()=>{const m=document.querySelector('#modal-root');
@@ -643,6 +653,8 @@ async function coachProbe(page,label){
  let reached=false;
  for(let i=0;i<900;i++){
   if(await page.evaluate(`Guild24.game.run.phase==='morning'&&!!Guild24.game.run.deep?.today`)){reached=true;break;}
+  // kept afloat as in drive(): the Run otherwise ends before its first Deep Expedition under the current balance
+  await page.evaluate(`(()=>{const s=Guild24.game.run;if(s&&s.phase!=='end'){if(s.money<300)s.money=800;s.stats.deaths=0;}})()`);
   await page.evaluate(`${STEP}()`);
  }
  if(!reached)fails.push(`${label}: no Morning in this Run carried a Deep Expedition notice`);

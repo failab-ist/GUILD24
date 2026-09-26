@@ -1300,5 +1300,24 @@ length) after the screen appears, then the dossier opens as it always has. It ap
 and D5 ~ D25), because they share one mechanism; the reveal order is unchanged, and no Event or Relic window opens during the
 hold. MORNING is shown but takes no input during the hold - the reveal is already owed, and the Day does not advance past it
 before it is acknowledged (CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING); a second tap on the 구매 that cut to MORNING does
-nothing. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
+nothing. The hold belongs to the MORNING it started on: if the Day leaves MORNING or the reveal is no longer owed (only a scripted
+path can do either), it ends at once. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
+```
+
+## AMENDMENT — build marker (User 2026-09-26, v2.9.3)
+
+User 2026-09-26: §SETTINGS / DEBUG BOUNDARY is followed by the new BUILD MARKER subsection. Nothing is dropped.
+
+```new
+### BUILD MARKER (v2.9.3)
+
+(User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-36.) A QA marker so a play report can name the build it was played on.
+
+- the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
+  corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
+  from the title and appears on no other screen
+- `{version}` is the project version (2.9.3); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
+  by the Pages deploy step; a local or unstamped build reads `dev`
+- the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`
+- the one technical label the opening screen carries (User-approved); ordinary settings still carry no runtime footer
 ```
