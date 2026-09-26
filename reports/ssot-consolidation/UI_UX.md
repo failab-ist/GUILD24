@@ -1285,3 +1285,20 @@ existing entry into FINAL carries none today and gains none), no new copy, no ch
 board or the order form beneath it. Under reduced motion the block is present at full opacity with no
 motion, identical to the settled end state.
 ```
+
+## AMENDMENT — Boss reveal after MORNING lands (User 2026-09-26)
+
+User 2026-09-26 (the DAY 0 -> DAY 1 overlap the H6 capture reported, fixed on the User's instruction): §BOSS INFORMATION PRESENTATION gains the BOSS REVEAL — MORNING LANDS FIRST subsection. Nothing is dropped.
+
+```new
+### BOSS REVEAL — MORNING LANDS FIRST (v2.9.2)
+
+(User 2026-09-26, the DAY 0 -> DAY 1 overlap reported by the H6 capture; acceptance -> UI_UX_QA UI-Q-v29-35.)
+
+A Boss reveal that is due when MORNING is entered opens once MORNING's own entry has landed: a 420 ms hold (the shutter's
+length) after the screen appears, then the dossier opens as it always has. It applies to every reveal stage (the D0 briefing
+and D5 ~ D25), because they share one mechanism; the reveal order is unchanged, and no Event or Relic window opens during the
+hold. MORNING is shown but takes no input during the hold - the reveal is already owed, and the Day does not advance past it
+before it is acknowledged (CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING); a second tap on the 구매 that cut to MORNING does
+nothing. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
+```
