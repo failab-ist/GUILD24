@@ -1665,11 +1665,20 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    a total, at the largest figure on the receipt. §EDGE / BORDER DISCIPLINE: the old full 2px
    outline plus a coloured under-rule was a framed box inside the receipt frame - the semantic
    benefit / harm colour stays where it belongs, on the figure itself. */
-.print .profit{margin:11px 0 2px;padding:11px 0 12px;background:none;
- box-shadow:inset 0 3px 0 #2c2418,inset 0 -3px 0 #2c2418}
+.print .profit{margin:11px 0 0;padding:11px 0 8px;background:none;
+ box-shadow:inset 0 3px 0 #2c2418} /* v2.9.7: the closing rule moved under 오늘 변화 */
 .print .profit span{font-weight:600;color:#2c2418}
 .print .profit b{font:500 30px/1 var(--f-led);color:var(--gold)}
 .print .profit.loss b{color:#a1372c}
+/* v2.9.7 cash-flow receipt (NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT): the Day's change sits under 오늘 끝, the end Gold is stamped */
+.print .row.open span{color:#2c2418;font-weight:600}
+.print .row.open b{font-size:17px}
+.print .row.change{margin:0 0 2px;padding:0 0 11px;box-shadow:inset 0 -3px 0 #2c2418}
+.print .row.change b{color:#2f7a4d}
+.print .row.change.loss b{color:#a1372c}
+.print .profit b i{font-style:normal;font-size:.5em;margin-left:3px;color:#8e8674}
+.print .info{box-shadow:none;padding-bottom:0}
+.print .info p{margin:0;padding:2px 0;font:400 13px/1.6 var(--ui);color:#5f5847}
 /* detail accounting reads last, and a figure that did not move is not a result: a zero stays
    printed, because a receipt prints it, but it is not competing for the eye */
 .print .row.nil span,.print .row.nil b{color:#8e8674}
@@ -2849,6 +2858,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-closing .print .row.sum b{font-size:20px}
  .p-closing .print .profit span{font-size:16px}
  .p-closing .print .profit b{font-size:38px}
+ .p-closing .print .row.open b{font-size:20px}
+ .p-closing .print .info p{font-size:15px}
  .p-closing .purse{margin-top:14px;padding:14px 16px}
  .p-closing .purse span{font-size:14px}
  .p-closing .purse b{font-size:28px}

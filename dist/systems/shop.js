@@ -46,25 +46,28 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     Nothing is persisted: both averages are derived from the roster as it stands. */
  coreRoster(){return this.run.npcs.filter(n=>n.alive)
   .sort((a,b)=>b.level-a.level||b.rarity-a.rarity).slice(0,6);}
- overheadBase(){const core=this.coreRoster();
+ overheadBase(day=this.run.day){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
   /* ECONOMY_ORDER §BASE OPERATING COST (User 2026-09-25, v2.9.1 balance: heavy from D1, flat
      after - was 90+5*(day-1); level coefficient .02 -> .03). */
   /* v2.9.2 (User 2026-09-26): +12G per Day after DAY 15 - the late store sat on ~5,000G by D29 (User's Run and the
      `reader` harness alike); the D1~15 cost is unchanged. */
-  const dayBase=170+1*(this.run.day-1)+12*Math.max(0,this.run.day-15);
+  const dayBase=170+1*(day-1)+12*Math.max(0,day-15);
   return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);}
- expectedOperatingCost(){const s=this.run,ev=s.event?.effects||{};
+ expectedOperatingCost({day=this.run.day,facilities=this.run.dayFacilities,event=this.run.event}={}){const s=this.run,ev=event?.effects||{};
   /* META_v2.8 §RETIRED: no Start Contract branch survives here. A stale v8 save may still
      carry a `contract` value, and it must change nothing at all. */
-  const extras=-(s.dayFacilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
+  const extras=-(facilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0);
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
-  const base=this.overheadBase(),hub=s.dayFacilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;
+  const base=this.overheadBase(day),hub=facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;
   /* 즉석식품 코너 costs the same way as hub: a share of overheadBase alone, from the next Day. */
-  const kitchen=s.dayFacilities?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0;
+  const kitchen=facilities?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0;
   return ev.overheadFree?0:Math.round((base+hub+kitchen+extras)/10)*10;}
+ /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): tomorrow's base operating cost - the same rule, the
+    next Day, today's Store Support (tomorrow's frozen set) and roster, no Event (tomorrow's is not drawn yet). */
+ tomorrowOperatingCost(){const s=this.run;return this.expectedOperatingCost({day:s.day+1,facilities:[...s.facilities],event:null});}
  has(id){return this.run.facilities.includes(id);}
  /* A Decoration is read from the Run's frozen loadout, never from facilities. `has` stays the
     Relic question and the two never answer for each other. */

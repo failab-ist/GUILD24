@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -1425,14 +1425,9 @@ question=`오늘 장사는 어땠을까?`
 
 Economics-first.
 
-Primary:
-- revenue
-- COGS
-- margin
-- overhead
-- waste
-- Relic spend
-- final Gold
+Primary (v2.9.7, User 2026-09-26): the cash-flow receipt - opening Gold, the Gold that moved in and out, closing Gold with the
+Day's change, then stock / waste counts and tomorrow's operating estimate (rule and rows -> NIGHT_CLOSING §CLOSING — CASH FLOW
+RECEIPT — EXACT).
 
 Expedition story belongs to Night.
 
@@ -1445,9 +1440,9 @@ The figures themselves remain.
 acceptance -> UI_UX_QA UI-Q-v29-33.)
 
 The receipt body (every row of both figure blocks) prints as one pass - the whole body settles within 200 ms behind
-one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `영업 손익`
+one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `오늘 끝` (the Day's change; was `영업 손익` until v2.9.7)
 row lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
-gives 4 px and settles: gold for a profit, red for a loss, the end colour stated in CSS so reduced motion matches it
+gives 4 px and settles: gold when the Day ends up, red when it ends down (v2.9.7), the end colour stated in CSS so reduced motion matches it
 exactly. No `어제보다 +N` line (stays deferred in the v3.0+ router).
 
 The END tape's `점포 자본 정산` block (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; the v2.9.1 rates

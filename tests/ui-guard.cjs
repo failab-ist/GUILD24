@@ -1888,13 +1888,24 @@ test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one mov
  assert.ok(!/sound\(|Sound\.play|setTimeout/.test(final),'no new sound and no new cue timer - the existing entry into FINAL carries none today and gains none');
 });
 
+/* UI-Q18 (v2.9.7, User 2026-09-26, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT): the receipt is the Day's cash */
+test('UI-Q18: CLOSING cash-flow receipt - opening, what moved, end with its change, counts, tomorrow',()=>{
+ const c=fn('closingScreen').replace(/\/\*[\s\S]*?\*\//g,'');
+ for(const gone of ['영업 손익','판매 원가','판매 마진','폐기 원가','보유 자금'])assert.ok(!c.includes(gone),'no '+gone+' row');
+ for(const l of ['오늘 시작','오늘 끝','오늘 변화','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
+ assert.ok(/change=total\(ins\)-total\(outs\),open=s\.money-change/.test(c),'the opening is derived from the Day\'s own flows, so the tape adds up');
+ assert.ok(/\['매출',d\.revenue,true\]/.test(c)&&/\['발주',d\.spent,true\]/.test(c)&&/\['운영비',d\.operating,true\]/.test(c),'매출 / 발주 / 운영비 always print');
+ assert.ok(/const tomorrow=s\.day<29\?game\.tomorrowOperatingCost\(\):null/.test(c),'no tomorrow line before the Final Day');
+ assert.ok(/'<div class="row profit'\+\(change<0\?' loss':''\)\+'"><span>오늘 끝<\/span>/.test(c),'the stamped row is 오늘 끝, red on a down Day');
+});
+
 /* UI-Q-v29-33 (v2.9.2 H4, UI_UX §CLOSING — RECEIPT STAMP): the receipt prints as one pass and only the profit/loss
    row stamps; the END settlement counts up with a click per Decoration price line it actually passes */
 test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts past each Decoration price',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const CLOSING_STAMP=\{hold:100,dip:4\};/.test(app),'100 ms hold, 4 px dip - 중요, reusing the NIGHT fall');
  const pp=bare(fn('playPhase')),closing=pp.slice(pp.indexOf("if(phase==='closing')"),pp.indexOf("if(phase==='night')"));
- assert.ok(/document\.querySelectorAll\('\.p-closing \.tape \.print>\.block,\.p-closing \.tape \.print>\.purse'\)/.test(closing),'every figure block and the purse print together');
+ assert.ok(/document\.querySelectorAll\('\.p-closing \.tape \.print>\.block,\.p-closing \.tape \.print>\.row\.change'\)/.test(closing),'every figure block and the 오늘 변화 row print together (v2.9.7: no purse box)');
  assert.ok(/opacity:\[0,1\],translateY:\[-4,0\],duration:200,ease:'outQuad'/.test(closing)&&!/stagger/.test(closing),'one 200 ms pass, never a per-row stagger');
  assert.ok(/scale:\{from:1\.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP\.hold,ease:'in\(3\)'\}/.test(closing),'the profit/loss value reuses the NIGHT stamp fall on the fixed hold');
  assert.ok(/const row=\$\('\.p-closing \.tape \.row\.profit'\),val=row\?\.querySelector\('b'\)/.test(closing)&&/if\(row\)A\(row,\{opacity:/.test(closing),'the scale lands on the number alone, never the full-width row - a whole-row scale overflows the card');
@@ -2837,7 +2848,7 @@ test('COPY_AUDIT §8: the global Help is the approved compact guide',()=>{
  /* v2.9.0 §8-0: the guide opens on 처음 3일 (five lines) and keeps the eight sections under a collapsed 자세히 */
  assert.ok(h.indexOf('<h3>처음 3일</h3>')<h.indexOf('<details class="more"><summary>자세히</summary>')&&h.indexOf('<summary>자세히</summary>')<h.indexOf('<h3>점포지원</h3>'),'처음 3일 first, then 자세히 holding the eight');
  assert.ok(!/<details class="more" open/.test(h),'자세히 is collapsed by default');
- for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 손익을 정리하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
+ for(const l of ['아침 — 오늘 열린 게이트의 위험을 본다.','발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.','판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.','밤 — 원정 결과와 손님의 변화를 본다.','마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.'])assert.ok(h.includes('<p>'+l+'</p>'),'§8-0 line verbatim: '+l.slice(0,6));
  assert.equal((h.match(/<div class="first-days">[\s\S]*?<\/div>/)[0].match(/<p>/g)||[]).length,5,'exactly five lines');
 });
 

@@ -1257,7 +1257,6 @@ stamp landing and through the settlement count.
 
 PASS:
 - every receipt row is on screen together within 200 ms behind one printer tick; nothing prints row by row
-- only the `영업 손익` row stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
 - a profit stamps gold, a loss stamps red, and reduced motion shows the same row, colour and figures at once
 - no `어제보다 +N` line anywhere on the receipt
 - the END `현재 점포 자본` row counts from the account's prior total to the resolved one in 320 ms, with one `ui`
@@ -1408,4 +1407,27 @@ under it, a smaller muted `판매 {N}G`; at 360 / 390 / 1280 neither clips, over
 - the metadata line starts `수익 +{N}G` and carries no `매입`
 - the ORDER total, the cart and the purchase are unchanged
 - an unlabelled price, the sale price in the larger tag, or `매입` still in the metadata line
+```
+
+## AMENDMENT — closing cash-flow receipt (User 2026-09-26, v2.9.7)
+
+User 2026-09-26: the Closing receipt reads as the Day's cash (opening Gold, the Gold that moved, closing Gold with the change, stock / waste counts, tomorrow's operating estimate) instead of an income statement; the stamped row is 오늘 끝. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+Economic result is visually primary:
+revenue/COGS/margin/overhead/waste/relic/final Gold
+```
+
+```new
+- only the `오늘 끝` row (the Day's change; `영업 손익` until v2.9.7) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
+Economic result is visually primary (v2.9.7 cash-flow receipt):
+no 판매 원가 / 판매 마진 / 폐기 원가 / 영업 손익 row; 오늘 시작 + ins - outs = 오늘 끝 exactly
+```
+
+## AMENDMENT — closing change row (User 2026-09-26, v2.9.7)
+
+The Day's change prints as its own 오늘 변화 row under 오늘 끝. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+오늘 시작 -> 매출 / 발주 / 운영비 (+ other moved rows) -> 오늘 끝 (stamped) -> 오늘 변화 ±N; 창고 재고 · 오늘 폐기 counts; 내일 운영비 예상 (not on DAY 29);
 ```

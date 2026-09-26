@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.6
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1466,7 +1466,7 @@ stamp landing and through the settlement count.
 
 PASS:
 - every receipt row is on screen together within 200 ms behind one printer tick; nothing prints row by row
-- only the `영업 손익` row stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
+- only the `오늘 끝` row (the Day's change; `영업 손익` until v2.9.7) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
 - a profit stamps gold, a loss stamps red, and reduced motion shows the same row, colour and figures at once
 - no `어제보다 +N` line anywhere on the receipt
 - the END `현재 점포 자본` row counts from the account's prior total to the resolved one in 320 ms, with one `ui`
@@ -1587,8 +1587,9 @@ SETUP:
 Open Closing.
 
 EXPECT:
-Economic result is visually primary:
-revenue/COGS/margin/overhead/waste/relic/final Gold
+Economic result is visually primary (v2.9.7 cash-flow receipt):
+오늘 시작 -> 매출 / 발주 / 운영비 (+ other moved rows) -> 오늘 끝 (stamped) -> 오늘 변화 ±N; 창고 재고 · 오늘 폐기 counts; 내일 운영비 예상 (not on DAY 29);
+no 판매 원가 / 판매 마진 / 폐기 원가 / 영업 손익 row; 오늘 시작 + ins - outs = 오늘 끝 exactly
 
 PASS:
 Night story is not duplicated as dominant content.

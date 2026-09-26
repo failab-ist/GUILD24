@@ -242,7 +242,6 @@ After an expedition result is fully resolved, write the latest snapshot owned by
 -> NPC_TRAIT_v2.8.0.md
 -> CORE_RUN_v2.8.0.md
 -> DUNGEON_HAZARD_v2.8.0.md
--> ECONOMY_ORDER_v2.8.0.md
 Boss identity/trait/Sloth state is owned by `BOSS_v2.8.0.md`; Closing does not mutate it.
 -> FINAL_EXPEDITION_v2.8.0.md
 ```
@@ -419,4 +418,60 @@ User 2026-09-25: the reversal overstamp also covers a Death 만반의 준비 tur
 ```new
 Only a turned-away Death reverses (User 2026-09-25): those two result flags, and a Death 만반의 준비 turned into 부상 / 중상
 (its `prepared` event); 강골 / 구급키트 never do. The wording, the proof and the resolved Outcome are unchanged.
+```
+
+## AMENDMENT — closing cash-flow receipt (User 2026-09-26, v2.9.7)
+
+User 2026-09-26: the Closing receipt reads as the Day's cash (opening Gold, the Gold that moved, closing Gold with the change, stock / waste counts, tomorrow's operating estimate) instead of an income statement; the stamped row is 오늘 끝. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+Closing keeps only economic/accounting results such as:
+- 매출
+- 판매 원가 / 마진
+- 운영비
+- 폐기
+- 발주 교환
+- 본사 지원·수당
+- 영업 손익
+- 발주 지출
+- 점포지원 투자
+- 재고 정리
+- 보유 자금
+매출 / 비용 / 손익 / 폐기 / Gold 변화
+Show at minimum:
+- 총매출
+- 매입/COGS
+- Margin
+- 운영비
+- 폐기
+- Relic 비용
+- 최종 Gold
+Exact calculation:
+`오늘 장사는 실제로 남는 장사였나?`
+```
+
+```new
+오늘 시작 Gold / 들어오고 나간 돈 / 오늘 끝 Gold · 창고 재고 · 폐기 개수 (v2.9.7 CASH FLOW RECEIPT)
+### CLOSING — CASH FLOW RECEIPT — EXACT (User 2026-09-26, v2.9.7)
+The receipt is the Day's cash, not an income statement: a player judges the Day by what the store started with and
+what it ends with, and by what moved in between - not by cost of goods sold, margin or an accounting profit (the old
+`영업 손익` row read as Gold leaving the store when it counted stock already paid for).
+1. `오늘 시작 {N}G` - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
+2. the Gold that moved today, inflows then outflows; 매출 / 발주 / 운영비 always print, every other row only when it moved:
+in - 매출, 본사 지원·수당, 대성공 본사 보상, 알뜰 금고, 재고 정리; out - 발주, 발주 교환, 점포지원 투자, 원정 후원, 운영비
+4. `창고 재고 {n}개`, and `오늘 폐기 {n}개` when any - counts only, never Gold: an expired Item was paid for when it was ordered
+5. `내일 운영비 예상 {N}G` - tomorrow's base operating cost with today's Store Support and roster, no Event; not on DAY 29
+(the Final Day has no operating cost)
+No 판매 원가 / 판매 마진 / 폐기 원가 / 영업 손익 row. Exact calculation of each flow -> ECONOMY_ORDER_v2.8.0.md.
+`오늘 돈이 얼마 남았고, 내일 괜찮은가?`
+Closing keeps only the cash-flow receipt above (v2.9.7): 오늘 시작, the in / out rows, 오늘 끝 with its change, 창고 재고 ·
+오늘 폐기 counts and 내일 운영비 예상.
+```
+
+## AMENDMENT — closing change row (User 2026-09-26, v2.9.7)
+
+The Day's change prints as its own 오늘 변화 row under 오늘 끝. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+3. `오늘 끝 {N}G` - the stamped row (UI_UX §CLOSING — RECEIPT STAMP) - and right under it `오늘 변화 ±{N}`, red on a down Day
 ```
