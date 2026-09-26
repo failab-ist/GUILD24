@@ -5,7 +5,8 @@
 // deaths, reach, core level), so both kinds read on one table.
 // Arms may apply a PROPOSAL in memory only (the files on disk are not touched):
 //   premiumCase weights  -> {weights:[..5]}   (the premium rarity draw in adventurer.js)
-//   firstAidKit rework   -> {kit:'injury', saves:N}  (부상 N회 -> 무사 instead of 사망 -> 중상)
+//   firstAidKit rework   -> {kit:'injury', saves:N[, daily:true]}  (부상 N회 -> 무사 instead of 사망 -> 중상; daily: N a Day)
+//   node tools/deco-impact.cjs [runs] --arms 'none,firstAidKit inj10'   runs only the named arms
 //   node tools/deco-impact.cjs [runs=600] [--out file]
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),vm=require('node:vm'),{fork}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
@@ -15,7 +16,8 @@ const ARMS=[
  ['infirmaryPlaque','infirmaryPlaque',{}],['thriftSafe','thriftSafe',{}],['memorialBoard','memorialBoard',{}],
  ['premiumCase (cur)','premiumCase',{}],['premiumCase P2','premiumCase',{weights:[40,30,20,7.5,2.5]}],
  ['premiumCase P3','premiumCase',{weights:[35,30,22,9,4]}],
- ['firstAidKit (cur)','firstAidKit',{}],['firstAidKit inj3','firstAidKit',{kit:'injury',saves:3}],['firstAidKit inj5','firstAidKit',{kit:'injury',saves:5}]];
+ ['firstAidKit (cur)','firstAidKit',{}],['firstAidKit inj3','firstAidKit',{kit:'injury',saves:3}],['firstAidKit inj5','firstAidKit',{kit:'injury',saves:5}],
+ ['firstAidKit inj10','firstAidKit',{kit:'injury',saves:10}],['firstAidKit daily1','firstAidKit',{kit:'injury',saves:1,daily:true}]];
 const one=(src,a,b)=>{const n=src.split(a).length-1;if(n!==1)throw Error('patch point x'+n+': '+a.slice(0,60));return src.replace(a,b);};
 function load(p){for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
   if(f==='systems/adventurer'&&p.weights)src=one(src,'opts.premium?[45,31.5,17.5,4.75,1.25]','opts.premium?['+p.weights+']');
@@ -23,6 +25,7 @@ function load(p){for(const f of FILES){let src=fs.readFileSync(path.join(root,'d
    src=one(src,"if(outcome==='사망'&&aidKitReady){","if(false){");
    src=one(src,"  if(kit.from){aftercare={from:kit.from,to:kit.injury,outcomeFrom:outcome};outcome=kit.tier;",
     "  if(!kit.from&&outcome==='부상'&&aidKitReady){kit.from=1;kit.injury=0;run.aidKitSaves=(run.aidKitSaves||0)+1;}\n  if(kit.from){aftercare={from:kit.from,to:kit.injury,outcomeFrom:outcome};outcome=kit.tier;");}
+  if(f==='systems/shop'&&p.daily)src=one(src,'s.bulkUsed=false;s.guaranteeUsed=false;','s.bulkUsed=false;s.guaranteeUsed=false;s.aidKitSaves=0;');
   vm.runInThisContext(src,{filename:f+'.js'});}
  if(p.saves)globalThis.DATA.decorationParams.firstAidKit.saves=p.saves;}
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
@@ -36,13 +39,13 @@ if(process.env.DECO_WORKER){
    capital:mean(r.settlement.gains),sales:mean(r.settlement.sales),visitorsPerDay:vis,endMoney:r.averageMoney,
    coreLevel:r.coreLevelMedian,coreRarity:r.coreRarityMedian,great:r.greatSuccessRate},()=>process.exit(0));});
 }else{
- const args=process.argv.slice(2),N=Number(args.find(a=>/^\d+$/.test(a))||600),oi=args.indexOf('--out'),res={};let live=0;const q=ARMS.slice();
+ const args=process.argv.slice(2),N=Number(args.find(a=>/^\d+$/.test(a))||600),oi=args.indexOf('--out'),res={};let live=0;const pick=args.indexOf('--arms')>=0?args[args.indexOf('--arms')+1].split(','):null,q=ARMS.filter(a=>!pick||pick.includes(a[0]));
  const next=()=>{if(!q.length){if(!live)done();return;}const [label,id,p]=q.shift();live++;
   const c=fork(__filename,[],{env:{...process.env,DECO_WORKER:'1'}});c.on('message',m=>{res[m.label]=m;});c.on('exit',()=>{live--;next();});c.send({label,id,p,N});};
  const f=(x,d=1)=>x.toFixed(d),pp=(x,b)=>(x>=b?'+':'')+f(100*(x-b));
  const done=()=>{const b=res.none;
   console.log('arm'.padEnd(20),'D30','(Δ%p)','clear','(Δ%p)','avgDay','deaths','end:death','end:bankrupt','capital/run','(Δ)','sales/run','visitors/day','coreLv');
-  for(const [label] of ARMS){const r=res[label];if(!r){console.log(label,'FAILED');continue;}
+  for(const [label] of ARMS){if(pick&&!pick.includes(label))continue;const r=res[label];if(!r){console.log(label,'FAILED');continue;}
    console.log(label.padEnd(20),f(100*r.reach30)+'%',pp(r.reach30,b.reach30),f(100*r.clear)+'%',pp(r.clear,b.clear),f(r.avgDay),f(r.deaths,2),f(100*r.endDeaths,0)+'%',f(100*r.endBankrupt,0)+'%',
     Math.round(r.capital),(r.capital>=b.capital?'+':'')+Math.round(r.capital-b.capital),Math.round(r.sales),f(r.visitorsPerDay,2),f(r.coreLevel));}
   if(oi>=0)fs.writeFileSync(args[oi+1],JSON.stringify({N,policy:'reader',aware:true,results:res},null,1));};
