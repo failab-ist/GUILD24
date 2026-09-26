@@ -2065,7 +2065,9 @@ This does not require adding a new Debug menu.
 
 - the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
   corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
-  from the title and appears on no other screen
+  from the title
+- 영업 설정 (점포 메뉴 -> 설정) ends with the same `v{version} · {commit}` line, centred, small (11 px) and muted, so the build can
+  be read mid-Run (User 2026-09-26, v2.9.7); no other screen shows it
 - `{version}` is the current project version (the CHANGELOG head); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
   by the Pages deploy step; a local or unstamped build reads `dev`
 - the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`

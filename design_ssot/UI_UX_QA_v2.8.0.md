@@ -1407,12 +1407,12 @@ FAIL:
 PASS:
 - the opening screen shows `v{version} · {commit}` (the CHANGELOG head version) small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
   the menu button and the preparation panel
-- no other screen shows it
+- 영업 설정 ends with the same pair, before and during a Run (v2.9.7); no other screen shows it
 - the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair
 - the deployed site reads the deployed commit; a local build reads `dev`
 
 FAIL:
-- the marker overlapping or pushing the title, taking input, or appearing during a Run; a deployed build still reading `dev`
+- the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
 
 ### UI-Q-v29-35 — BOSS REVEAL AFTER MORNING LANDS
 
