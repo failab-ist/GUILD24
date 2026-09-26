@@ -859,15 +859,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background-position:0 0,0 0,0 0,50% 50%;
  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
  background-origin:content-box}
+/* UI_UX §BUILD MARKER (v2.9.3): small, muted, not a control - the opening screen only. It sits above the preparation
+   panel's shade (60), which is always up on this screen and would otherwise sink it to ~1.5:1; under takeovers and coach marks. */
+.p-start .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:61;
+ margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.8;pointer-events:none;white-space:nowrap}
 /* USER 2026-09-23: the menu pin was the last browser-like control left on this stage - a dark
    rounded-looking chip with a generic bevel. On the OPENING it is a small iron fixture in the
    same family as everything else: cut corners, an iron face over brass, a lit top edge and a
    hard cast. It stays deliberately low in the hierarchy - smaller, darker and quieter than the
    Primary, which it must never compete with. Only the Opening's is restyled; every other phase
    keeps the shared control. */
-/* UI_UX §BUILD MARKER (v2.9.3): small, muted, not a control - the opening screen only */
-.p-start .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:1;
- margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.55;pointer-events:none;white-space:nowrap}
 .p-start .menu-pin{background:linear-gradient(180deg,#39434c 0,#2a323a 46%,#1d232a 100%);
  color:#cdbfa4;
  box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #6b5029,inset 0 3px 0 #5b6a7280;

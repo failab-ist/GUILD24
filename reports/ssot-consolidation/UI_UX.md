@@ -1314,7 +1314,8 @@ User 2026-09-26: §SETTINGS / DEBUG BOUNDARY is followed by the new BUILD MARKER
 (User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-36.) A QA marker so a play report can name the build it was played on.
 
 - the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
-  corner, small (10 px) and muted; it is not a control, takes no space from the title and appears on no other screen
+  corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
+  from the title and appears on no other screen
 - `{version}` is the project version (2.9.3); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
   by the Pages deploy step; a local or unstamped build reads `dev`
 - the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`
