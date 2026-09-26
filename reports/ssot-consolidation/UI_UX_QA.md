@@ -779,7 +779,7 @@ One fixed text line at the top of the phase content (under the menu pin, above t
 Fresh account, first ORDER at 360 and 1280; step through the coach.
 The ORDER coach group runs `gates` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
 - the steps appear in exactly that order and nothing else is in the group
-- `gates` highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
+- `gates` (step id `order-gates`, apart from MORNING's `gates`, so seeing one never marks the other seen) highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
 - `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
 - `quantity` / `confirm` / `reroll` keep their approved lines (COPY_AUDIT §3-7 QUANTITY / §3-2 / COPY_WORLD_VOICE §TUTORIAL COACH COPY); `reroll` is last
 - no `gold` mark: `#order-register` carries no coach step
@@ -1340,3 +1340,7 @@ PASS:
 FAIL:
 - the marker overlapping or pushing the title, taking input, or appearing during a Run; a deployed build still reading `dev`
 ```
+
+## AMENDMENT — ORDER coach step id (2026-09-26, IMPLEMENTATION BUG fix)
+
+The ORDER `gates` coach line declared above is edited in place to name its own step id. Nothing is dropped.

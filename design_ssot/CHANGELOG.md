@@ -12,6 +12,11 @@ bumps had not been made and are made here with the v2.9.3 ones).
   the Pages deploy stamps the commit. UI_UX §BUILD MARKER, UI_UX_QA UI-Q-v29-36; ledgers; ui-guard pin.
 - `npm run qa:visual` harness (2026-09-26, TEST GAP): its crude drive now ends a Run before DAY 5 under the current balance, so the gate
   stopped at `relic`; the till and the Death count are kept afloat during the fast-forward, as the capture tools already do. Harness only.
+- ORDER coach `gates` never shown (2026-09-26, IMPLEMENTATION BUG, found once `qa:visual` reached its coach probe again): coach seen
+  state is keyed by step id alone and ORDER's `gates` step shared MORNING's id, so the first ORDER coach started at `offer`. ORDER's
+  step is now `order-gates` (UI_UX_QA line edited in place); a player who already saw MORNING's lesson gets ORDER's once. ui-guard
+  pin: coach ids unique across phases. The Boss-reveal hold also ends at once if the Day leaves the MORNING it belongs to (only a
+  scripted path can), so the screen is never left inert (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, edited in place).
 - Balance, fourth pass (User 2026-09-26, "PL", after the package measurement — reports/v292-bot-harness.md §11): Gate count DAY 19~24
   3 at 70% (2 at 30%, one draw), DAY 25~29 exactly 3 (no draw); the Level factor on the failure Death roll is removed (rolledDeathChance =
   failureDeathChance × preparedFactor; the SALE risk snapshot is the raw chance); 후방 창고 증설 +10 → +5 slots (price 130G kept). Measured

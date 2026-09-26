@@ -1581,7 +1581,8 @@ length) after the screen appears, then the dossier opens as it always has. It ap
 and D5 ~ D25), because they share one mechanism; the reveal order is unchanged, and no Event or Relic window opens during the
 hold. MORNING is shown but takes no input during the hold - the reveal is already owed, and the Day does not advance past it
 before it is acknowledged (CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING); a second tap on the 구매 that cut to MORNING does
-nothing. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
+nothing. The hold belongs to the MORNING it started on: if the Day leaves MORNING or the reveal is no longer owed (only a scripted
+path can do either), it ends at once. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
 
 ### D0 — FIRST MORNING BRIEFING
 
