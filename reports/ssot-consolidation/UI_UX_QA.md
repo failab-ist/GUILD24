@@ -1331,10 +1331,10 @@ User 2026-09-26: UI-Q-v29-36 is new. Nothing is dropped.
 (User 2026-09-26; owner `UI_UX_v2.8.0.md` §BUILD MARKER.)
 
 PASS:
-- the opening screen shows `v2.9.3 · {commit}` small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
+- the opening screen shows `v{version} · {commit}` (the CHANGELOG head version) small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
   the menu button and the preparation panel
 - no other screen shows it
-- the console prints `GUILD24 v2.9.3 · {commit}` once on load and `Guild24.build` returns the same pair
+- the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair
 - the deployed site reads the deployed commit; a local build reads `dev`
 
 FAIL:
@@ -1344,3 +1344,23 @@ FAIL:
 ## AMENDMENT — ORDER coach step id (2026-09-26, IMPLEMENTATION BUG fix)
 
 The ORDER `gates` coach line declared above is edited in place to name its own step id. Nothing is dropped.
+
+## AMENDMENT — replay nudge (User 2026-09-26, v2.9.4)
+
+User 2026-09-26: UI-Q-v29-37 is new. Nothing is dropped.
+
+```new
+### UI-Q-v29-37 — REPLAY NUDGE
+(User 2026-09-26, v2.9.4; owner `UI_UX_v2.8.0.md` §END — REPLAY NUDGE / §Pre-Run Decoration empty-slot interaction; META §BEST DAY.)
+- a Run that reached D10 / D14 for the first time on the account lists that product in `본사 해금` on END, beside any
+distinct-Boss unlock; the Day toast still fires once; a later Run that reaches D10 again lists nothing
+- with no unlock, a settlement that crosses an unowned Decoration's price prints `점포 자본으로 새 장식을 들일 수 있다.`;
+capital that was already above that price, or an owned Decoration's price, prints nothing
+- with neither, a Run that beats the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`; a tie, the
+account's first ending and a manual 현재 지점 포기 print nothing and a manual abandon never moves the best Day
+- at most one of the two lines, never beside `본사 해금`; a reload of the ended Run prints the same line
+- 새 점포 준비: exactly the Slot rows with an affordable unowned Decoration carry `들일 수 있음`
+- no new motion, sound, screen or button
+- a Decoration named, a list of goals, a remaining-count, a second line, a line on an abandoned Run, or a mark on a Slot
+whose unowned Decorations cost more than the capital
+```

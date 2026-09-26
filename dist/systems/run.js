@@ -29,8 +29,8 @@ P.gateForecast=function(){const day=this.run.day+1;if(day>30)return null;
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){
   this.run.day++;
-  if(this.run.day===10&&!this.account.unlocks?.premium){this.account.unlocks??={};this.account.unlocks.premium=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';}
-  if(this.run.day===14&&!this.account.unlocks?.tree){this.account.unlocks??={};this.account.unlocks.tree=true;this.run.toast='새 상품 해금 · 세계수 생환부적';}
+  if(this.run.day===10&&!this.account.unlocks?.premium){this.account.unlocks??={};this.account.unlocks.premium=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';(this.run.dayUnlocked??=[]).push(D.itemBy.premium.name);}
+  if(this.run.day===14&&!this.account.unlocks?.tree){this.account.unlocks??={};this.account.unlocks.tree=true;this.run.toast='새 상품 해금 · 세계수 생환부적';(this.run.dayUnlocked??=[]).push(D.itemBy.tree.name);}
   this.morning();
 };
 /* 발주 교환권: the free Rerolls come first, then the ordinary curve from its FIRST step
@@ -82,7 +82,7 @@ P.settleStoreCapital=function(){const s=this.run;
  s.settled=true;
  s.settlement={day:s.day,sales,rate,gain,capitalAfter:G.Meta.addCapital(this.account,gain)};
  return s.settlement;};
-P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);this.settleStoreCapital();this.save();};
+P.end=function(win,reason){const s=this.run;if(s.phase==='end')return;s.win=win;s.endReason=reason;s.phase='end';s.unlocked=G.Meta.finish(this.account,s,win);G.Meta.recordBestDay(this.account,s);this.settleStoreCapital();this.save();};
 /* FINAL_EXPEDITION v2.8 party rule: the CAP of the party. Any 1..cap may be committed - a 1- or
    2-person challenge is a valid choice even with 3+ eligible - and 0 eligible is a Run Fail.
    No participant-count bonus, penalty, multiplier or auto-fill exists anywhere. */

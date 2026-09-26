@@ -1812,10 +1812,25 @@ test('coach step ids are unique across phases',()=>{
  for(const [id,phases] of Object.entries(ids))assert.equal(phases.length,1,'coach id '+id+' is used by '+phases.join(' / '));
 });
 
+/* UI-Q-v29-37 (UI_UX §END — REPLAY NUDGE, User 2026-09-26, v2.9.4): show, never assign - one line at most, only when the
+   Run opened nothing, never a Decoration's name; 본사 해금 carries the D10 / D14 opens; the pre-Run Slot mark is a current state */
+test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goals',()=>{
+ const l=fn('ledger');
+ assert.ok(/const openedNames=\[\.\.\.\(s\.unlocked\|\|\[\]\),\.\.\.\(s\.dayUnlocked\|\|\[\]\)\];/.test(l),'본사 해금 lists the distinct-Boss unlocks and the D10 / D14 opens');
+ assert.ok(/const nudge=opened\?'':replayLine\(\);/.test(l),'no line beside 본사 해금');
+ const r=fn('replayLine');
+ assert.ok(r.indexOf("'점포 자본으로 새 장식을 들일 수 있다.'")<r.indexOf("'지금까지 가장 오래 버틴 점포다 · DAY '"),'a Decoration newly in reach comes before a best Day');
+ assert.ok(/before<d\.price&&d\.price<=st\.capitalAfter/.test(r)&&/!Meta\.decorationOwned\(a,d\.id\)/.test(r),'only an unowned price this settlement crossed');
+ assert.ok(/s\.bestBefore>0&&s\.day>s\.bestBefore/.test(r),'strictly above an existing record');
+ assert.ok(!/d\.name|decorationBy/.test(r),'never a Decoration name');
+ assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('newRun'))&&/x\.price<=capital/.test(fn('newRun')),'the pre-Run Slot mark reads the current capital');
+ assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
+});
+
 /* UI-Q-v29-36 (UI_UX §BUILD MARKER, User 2026-09-26): the opening screen names the build; the deploy stamps the commit */
 test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build, stamped by the deploy',()=>{
  const b=read('dist/build.js');
- assert.ok(/window\.GUILD24_BUILD=\{version:'2\.9\.3',commit:'dev'\};/.test(b),'the repository copy names the version and reads dev');
+ assert.ok(/window\.GUILD24_BUILD=\{version:'\d+\.\d+\.\d+',commit:'dev'\};/.test(b),'the repository copy names the version and reads dev');
  assert.ok(/<script src="build\.js"><\/script><script src="ui\/app\.js"><\/script>/.test(html),'loaded before the app');
  assert.ok(/console\.info\('GUILD24 v'\+BUILD\.version\+' · '\+BUILD\.commit\)/.test(app),'printed once on load');
  assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,build:BUILD,/.test(app),'Guild24.build');

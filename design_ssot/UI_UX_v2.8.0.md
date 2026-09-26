@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.3
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
+DOC_VERSION=2.9.4
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -1454,6 +1454,20 @@ in 320 ms; a quiet `ui` cue marks each Decoration price (500 / 750 / 1000 / 1250
 count passes on the way, read from the same price list rather than a second copy of the numbers. 일반 intensity: no
 hold. Under reduced motion the receipt prints and stamps at once and the settlement figure resolves at once.
 
+### END — REPLAY NUDGE (v2.9.4)
+
+(User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-37.) Show, never assign: the END tape tells what this Run left behind,
+so the next store reads as a little closer - no task, checklist, progress bar, remaining-count, mission or reward.
+
+- the `본사 해금` row lists every product / Job this Run opened: the distinct-Boss unlocks it already listed, and the D10 /
+  D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run records when they open; their Day toast stays as it is
+- when the Run opened nothing, one line may sit at the foot of the tape, above `다음 점포 열기` - the first that applies:
+  1. this settlement carried Store Capital across the price of a Decoration the account does not own (before < price <=
+     after): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
+  2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
+  3. otherwise nothing
+- no new motion or sound: the line prints with the receipt body; exact copy -> COPY_AUDIT §10-3
+
 ## RELIC UI
 
 Relic Window:
@@ -1957,6 +1971,8 @@ Required:
 - tapping a Slot row opens 점포 장식 (the codex tab formerly labelled 점포 관리; (User 2026-09-24, v2.9.0)) focused/scrolled to that exact Slot
 - REUSE the existing store-management panel; do not create a second Decoration selector
 - during an active Run, keep the existing read-only/frozen-loadout rule
+- a Slot row whose Slot holds a Decoration the account does not own and can afford now carries a small `들일 수 있음` mark at its
+  end (a current state, not a "new" flag; no Decoration named); exact copy -> COPY_AUDIT §1-8 (User 2026-09-26, v2.9.4)
 
 ### DECORATION DECISION SURFACE
 
@@ -2052,7 +2068,7 @@ This does not require adding a new Debug menu.
 - the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
   corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
   from the title and appears on no other screen
-- `{version}` is the project version (2.9.3); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
+- `{version}` is the current project version (the CHANGELOG head); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
   by the Pages deploy step; a local or unstamped build reads `dev`
 - the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`
 - the one technical label the opening screen carries (User-approved); ordinary settings still carry no runtime footer

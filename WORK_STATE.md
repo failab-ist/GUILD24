@@ -5,7 +5,7 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.9.3 마감(PR #10 기능, PR #11 레포 정리, PR #12 UX 재확인 마감). 배포 빌드는 첫 화면 왼쪽 위 `v2.9.3 · 커밋`으로 확인한다.
+- repository: `failab-ist/GUILD24`. main = v2.9.3 마감(PR #10 기능, PR #11 레포 정리, PR #12 UX 재확인 마감) → v2.9.4 다회차 넛지. 배포 빌드는 첫 화면 왼쪽 위 `v2.9.3 · 커밋`으로 확인한다.
 - 태그: `v2.9.0` → `3d0ddc6`, `v2.9.1` → `d23d076`(원격에 있음). `v2.9.2` → `d6fcfbd`, `v2.9.3` → v2.9.3을 닫는 PR #12 머지 커밋은 User가 걸어야 함
   (WORK 세션은 태그 push가 막혀 있다).
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 / v2.9.2 / v2.9.3). 닫힌 버전의 보고서·측정 도구는 `archive/`(`archive/README.md`가 옛 경로 → 새 경로 표).
@@ -16,7 +16,7 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 
 - 없음. 다음은 배포 빌드(v2.9.3)로 User 프레쉬 플레이 데이터를 받아 4차 밸런스를 재확인하는 것. 데이터에는 첫 화면의 커밋 번호를 같이 받는다.
 - 후보 감사(User 미결정, 손대지 않음): Final 확정승 여유(파티/보스 비율), RoyalCert 후반 경제.
-- v3.0 준비 목록(WORK 정리본, Design 아님): `reports/v3.0-prep.md`.
+- v3.0 준비 목록(WORK 정리본, Design 아님): `reports/v3.0-prep.md`. 그중 다회차 넛지(§3-1)는 v2.9.4로 반영됨.
 
 ## UX 재확인 — 닫힘 (User 2026-09-26, v2.9.3)
 

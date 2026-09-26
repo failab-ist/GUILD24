@@ -3,6 +3,18 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.4 — replay nudge (User 2026-09-26)
+
+- Replay nudge, "show, never assign" (User 2026-09-26, after the v3.0 prep review with GPT - reports/v3.0-prep.md §3-1): the END
+  `본사 해금` row also lists the D10 / D14 products the Run opened (the Run records them; their Day toast is unchanged); when the
+  Run opened nothing, one line at the foot of the tape - the settlement crossed an unowned Decoration's price
+  (`점포 자본으로 새 장식을 들일 수 있다.`), else a new best Day (`지금까지 가장 오래 버틴 점포다 · DAY {N}`), else nothing; 새 점포
+  준비 marks a Slot whose unowned Decoration the capital covers (`들일 수 있음`). One new account record, `bestDay` (natural
+  endings only; a manual abandon never reaches it). No task, list, count, reward, motion or sound. META §BEST DAY / §D10 / D14
+  PRODUCT UNLOCK / §SAVE, UI_UX §END — REPLAY NUDGE / §Pre-Run Decoration empty-slot interaction, UI_UX_QA UI-Q-v29-37,
+  COPY_AUDIT §1-8 / §10-3; ledgers; build marker 2.9.4; tests integration / ui-guard; runtime tools/qa-replay-nudge.cjs (in
+  qa:runtime). tests/acquisition.cjs now quotes the META Decoration expectation instead of a stale 2026-09-19 line.
+
 ## v2.9.3 — balance fourth pass, two runtime fixes, build marker (User 2026-09-26)
 
 Version routing (User 2026-09-26): v2.9.2 closes at `main` `d6fcfbd` (H1~H6 all adopted, balance through the third pass), where its tag

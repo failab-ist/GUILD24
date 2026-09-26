@@ -1599,8 +1599,11 @@ function endHeadline(){const s=game.run;
 function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
  const row=(label,value)=>'<div class="row"><span>'+label+'</span><b>'+value+'</b></div>';
  const moved=(gain?.jobs||[]).map(g=>row(E(D.jobBy[g.job]?.name||g.job)+' 숙련',g.from+' → '+g.to)).join('');
- const opened=(s.unlocked||[]).length
-  ?'<div class="opened"><span>본사 해금</span><b>'+E(s.unlocked.join(' · '))+'</b></div>':'';
+ /* UI_UX §END — REPLAY NUDGE (User 2026-09-26, v2.9.4): 본사 해금 lists everything this Run opened - the distinct-Boss
+    unlocks Meta.finish credited and the D10 / D14 products the Run recorded as they opened. */
+ const openedNames=[...(s.unlocked||[]),...(s.dayUnlocked||[])];
+ const opened=openedNames.length
+  ?'<div class="opened"><span>본사 해금</span><b>'+E(openedNames.join(' · '))+'</b></div>':'';
  /* UI_UX_v2.8 §RUN-END SETTLEMENT FEEDBACK. Read in the order it is computed:
     총매출 -> (도달일 비율) -> 얻은 점포 자본 -> 현재 점포 자본. Ending Gold and the
     remaining stock may appear elsewhere as Run results, but never as inputs to this - they are
@@ -1612,8 +1615,18 @@ function ledger(){const s=game.run,a=game.account,gain=s.metaGain;
   +row('DAY '+st.day+' 도달 비율','×'+Math.round(st.rate*100)+'%')
   +row('얻은 점포 자본','+'+st.gain.toLocaleString())
   +row('현재 점포 자본',st.capitalAfter.toLocaleString())+'</div>':'';
+ const nudge=opened?'':replayLine();
  return '<div class="block">'+moved+row('지금까지 연 점포',a.runs)+'</div>'+settle+opened
-  +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'');}
+  +(moved||opened||settle?btn('도감에서 보기','codex','bare'):'')
+  +(nudge?'<p class="replay">'+E(nudge)+'</p>':'');}
+/* UI_UX §END — REPLAY NUDGE: when the Run opened nothing, at most one fact it left behind - the settlement crossed the price
+   of a Decoration the account does not own, else a new best Day (META §BEST DAY) - else nothing. Read from the recorded
+   settlement and the Run's own bestBefore, so a reload prints the same line. Never names a Decoration (two per Slot). */
+function replayLine(){const s=game.run,a=game.account,st=s.settlement;
+ if(st){const before=st.capitalAfter-st.gain;
+  if(D.decorations.some(d=>!Meta.decorationOwned(a,d.id)&&before<d.price&&d.price<=st.capitalAfter))return '점포 자본으로 새 장식을 들일 수 있다.';}
+ if(s.bestBefore>0&&s.day>s.bestBefore)return '지금까지 가장 오래 버틴 점포다 · DAY '+s.day;
+ return '';}
 /* UI_UX §CONTROL / FEEDBACK HYGIENE: a muster row that cannot be sent used to keep offering
    원정대 선택 - a dead promise on an unavailable control, the same defect the approved Store
    Support state fixed by not leaving a dead 구매. The row already states the cause on the line
@@ -1868,11 +1881,14 @@ function newRun(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta
     for when they want to change it, so it opens the 점포 장식 panel already scrolled to that
     Slot rather than making them find it. During a Run the loadout is frozen, so the row is
     still readable and still opens the panel - which states that it is read-only. */
+ /* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a Slot whose unowned Decoration the capital covers now says
+    so - a current state, not a "new" flag, and no Decoration named. */
+ const capital=Meta.storeCapital(a),canBuy=slot=>D.decorations.some(x=>x.slot===slot&&!Meta.decorationOwned(a,x.id)&&x.price<=capital);
  const lines=D.decorationSlots.map(slot=>{const id=loadout[slot],d=id&&D.decorationBy[id];
   return '<li class="deco-line'+(d?'':' empty')+'">'
    +'<button class="deco-jump" data-action="store-manage" data-id="'+E(slot)+'"'
    +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+' · 점포 장식에서 보기">'
-   +'<span>'+E(SLOT_COPY[slot]||slot)+'</span><b>'+(d?E(d.name):'비움')+'</b></button></li>';}).join('');
+   +'<span>'+E(SLOT_COPY[slot]||slot)+'</span>'+(canBuy(slot)?'<em class="can-buy">들일 수 있음</em>':'')+'<b>'+(d?E(d.name):'비움')+'</b></button></li>';}).join('');
  return `<h2 class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</h2><p class="muted">찾아오는 모험가를 보급하고, 성장시킨다.</p><div class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음'}</p><p class="store-capital"><i class="coin-mark" aria-hidden="true"></i>점포 자본 ${Meta.storeCapital(a).toLocaleString()}</p>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
 /* Two levels, one row each, with the number said out loud beside the control - the slider
    position alone is not a readable value. The master switch above them is the existing

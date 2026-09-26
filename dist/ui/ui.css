@@ -230,6 +230,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .deco-jump>span{font:400 var(--t-sm)/1.4 var(--ui)}
 .deco-jump b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums;color:#f2e7cd}
 .deco-line.empty .deco-jump b{color:#8d8067;font-weight:400}
+/* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a small current-state mark beside the Slot's value, not a control */
+.deco-jump .can-buy{margin-left:auto;align-self:center;padding:3px 6px;font:600 11px/1 var(--ui);font-style:normal;letter-spacing:.04em;
+ color:#e0c89c;box-shadow:inset 0 0 0 1px #e0c89c73;white-space:nowrap}
 .decoration-panel .slot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 /* UI-Q111. The one-tap reference to what the store is already running. It reads as a quiet
    reference control, not a decision key, so it never competes with the screen's primary
@@ -2588,6 +2591,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  clip-path:polygon(0 0,100% 0,100% 62%,86% 62%,86% 100%,0 100%)}
 .end-tape .closed{margin:12px 0 0;font:500 19px/1.45 var(--f-plate);-webkit-font-smoothing:none;color:#241d12}
 .end-tape .reason{margin:7px 0 12px;font:400 14px/1.65 var(--ui);color:#5f5847}
+/* UI_UX §END — REPLAY NUDGE (v2.9.4): one quiet line at the foot of the tape, printed with the body */
+.end-tape .replay{margin:12px 0 2px;font:400 13px/1.55 var(--ui);color:#5f5847;text-align:center}
 /* BATCH 3 END: 도감에서 보기 was a full-width grey box inside the tape - a second, web-style
    button competing with the Action under it. It is a quiet printed line on the tape now, with
    its 44px target intact: the one next Action stays the only control that reads as one. */

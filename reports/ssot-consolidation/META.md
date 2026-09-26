@@ -569,3 +569,19 @@ display 프리미엄 쇼케이스 / 구급품 진열장     500 Store Capital
 is the cheapest so a first Decoration is the earliest within reach.
 User decision 2026-09-25 (v2.9.1 balance): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`archive/v2.9.1-balance/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
 ```
+
+## AMENDMENT — replay nudge (User 2026-09-26, v2.9.4)
+
+User 2026-09-26: §BEST DAY is new; §D10 / D14 PRODUCT UNLOCK and §SAVE / ACCOUNT PERSISTENCE gain one line each. Nothing is dropped.
+
+```new
+The Run that opens one records it, so its END lists it in `본사 해금` (UI_UX §END — REPLAY NUDGE; User 2026-09-26, v2.9.4).
+## BEST DAY
+(User 2026-09-26, v2.9.4.) One account record: the highest Day a Run has reached, `bestDay` (0 on a fresh account).
+- set when a Run ends naturally (Run Fail, bankruptcy, Final): `bestDay = max(bestDay, the Run's Day)`
+- a manual 현재 지점 포기 never reaches the ending, so it never moves `bestDay`
+- a personal record for the END replay line (UI_UX §END — REPLAY NUDGE) only: no Power, unlock, price or reward reads it
+- the Run keeps the value it replaced, so a reload of the ended Run reads the same comparison
+- Full Data Reset clears it; a save without it reads 0
+- the best Day (§BEST DAY)
+```
