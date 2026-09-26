@@ -3,7 +3,7 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.2 — game feel (타격감), H1 / H5 / H2 / H3 ADOPTED, H4 / H6 PLANNED (User 2026-09-25)
+## v2.9.2 — game feel (타격감), H1 / H2 / H3 / H4 / H5 / H6 ADOPTED (User 2026-09-25)
 
 H1 and H5 adopted in Source (below); the rest is docs only so far. PRESENTATION_PRINCIPLES §GAME FEEL BEAT registers H1 NIGHT verdict stamp, H2 SALE
 counter feel, H3 ORDER confirm, H5 FINAL stamps, H4 CLOSING receipt as PLANNED presentation batches
@@ -59,6 +59,30 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   sale / refuse), ui.css (`.counter-tray.held`), audio.js (tickLate / tickLow). Also fixes a RUNTIME UX BUG found on the way:
   the global button `transition:transform .08s steps(2)` swallowed every scripted key motion, so A6's refusal shake was never
   visible; a pressed key now drops that transition. Capture tool tools/qa-sale-beat.cjs.
+- H4 CLOSING receipt ADOPTED (User 2026-09-25): UI_UX §CLOSING — RECEIPT STAMP (the receipt body prints as one 200 ms pass
+  behind one printer tick, never a tick per row; only the 영업 손익 row's number lands as a stamp - 100 ms hold, the NIGHT
+  stamp's 90 ms fall, the tape gives 4 px; profit stamps gold, loss stamps red; the END settlement's 현재 점포 자본 counts up
+  in 320 ms with one `ui` click per Decoration price line it passes, read from the live price list); UI_UX_QA UI-Q-v29-33;
+  ledgers UI_UX / UI_UX_QA; PRESENTATION H4 row ADOPTED. Source: app.js (CLOSING_STAMP, closingSound, playPhase closing / end
+  settlement count-up), audio.js (new synthesised `receipt` cue), ui.css (`.print .profit b` corrected to the actual `--gold`
+  token - the pre-existing colour was a dark green, an IMPLEMENTATION BUG the written "gold for profit" contract already
+  required fixed; found by the separate visual review, not self-reported). Capture tool tools/qa-closing-beat.cjs.
+- H6 장면 전환, capture-and-report phase (User 2026-09-25): all four candidate hard cuts (CLOSING, FINAL, END,
+  the DAY 0 screen) captured as real before/after frames, one continuous seeded Run, 390 / 1280
+  (`reports/v292-h6-transitions.md`, capture tool `tools/qa-h6-transitions.cjs`). Finding: CLOSING and END
+  already carry content entry from H4 / H5 once settled, and DAY 0 lands on MORNING's pre-existing entry - a
+  first pass at 390 only used a 30 ms post-press frame and read as more bare than the settled truth; a
+  `-settled` (+600 ms) frame was added and re-verified before reporting. No Source change this phase (AGENTS
+  §9 - WORK does not pick the targets).
+- H6 FINAL boss reveal entry ADOPTED (User 2026-09-25, after reviewing the capture): FINAL alone chosen (the
+  only screen with no `playPhase` branch at all); UI_UX §FINAL — BOSS REVEAL ENTRY (the `.gate-zero` boss
+  art/name plate settles in as one movement, translateY 10px -> 0 + opacity 0 -> 1, 220 ms outQuad, 일반
+  intensity, no new sound or copy); UI_UX_QA UI-Q-v29-34; ledgers UI_UX / UI_UX_QA; PRESENTATION H6 row
+  ADOPTED; SPEC_INDEX updated (v2.9.2 H1-H6 all ADOPTED). Source: app.js (`playPhase` final branch only).
+  Capture tool tools/qa-final-reveal-beat.cjs. Separate visual review: PASS, no fix needed. The DAY 0 -> DAY 1
+  boss-modal overlap the User also flagged is left UNRESOLVED / DESIGN ISSUE - it is the same immediate,
+  no-delay `bossRevealDue()` mechanism shared by D0/D5/D10/D15/D20/D25 with an explicit design-intent comment
+  in Source, so changing its timing is a bigger design call than this batch's authorized scope.
 - Bug fix (2026-09-26, IMPLEMENTATION BUG): a full data reset (`reset-go`) kept the UI's pending Run seed, so a store planned before
   the reset was reopened on the same seed - and the same Boss - after it. The reset now drops the plan with the rest of the Run
   state. No design, RNG, seed-format or save change. Runtime regression tools/qa-reset-seed.cjs (in qa:runtime).
