@@ -1440,10 +1440,10 @@ The figures themselves remain.
 acceptance -> UI_UX_QA UI-Q-v29-33.)
 
 The receipt body (every row of both figure blocks) prints as one pass - the whole body settles within 200 ms behind
-one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `오늘 끝` (the Day's change; was `영업 손익` until v2.9.7)
-row lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
-gives 4 px and settles: gold when the Day ends up, red when it ends down (v2.9.7), the end colour stated in CSS so reduced motion matches it
-exactly. No `어제보다 +N` line (stays deferred in the v3.0+ router).
+one printer tick, never a tick per row, because this screen repeats every Day for 30 Days. Only the closing `보유 자금` figure (the Day's end Gold, in the box that also holds `영업 손익`; the stamp sat on the
+`영업 손익` row until v2.9.7) lands as a stamp (중요 weight, the NIGHT stamp's own fall reused): a 100 ms hold, the 90 ms fall, the receipt tape
+gives 4 px and settles. The figure stays cream; only the `영업 손익` figure beneath it is coloured - green up, red down,
+gold at exactly 0 (User 2026-09-26) - each colour stated in CSS so reduced motion matches it exactly. No `어제보다 +N` line (stays deferred in the v3.0+ router).
 
 The END tape's `점포 자본 정산` block (META_v2.8.0.md §STORE CAPITAL Run-end settlement structure; the v2.9.1 rates
 1 / 2 / 3 / 4 / 5% are unchanged) counts its `현재 점포 자본` row up from the account's prior total to the resolved one

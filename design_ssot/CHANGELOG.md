@@ -20,10 +20,11 @@ reader 800 runs per arm):
 - 구급품 진열장: up to ten times per Run an ordinary Injury the expedition would leave is not left (구급키트's 부상 -> 무사 step);
   it no longer turns a Death into 중상 (that overlapped 추모 방명록). A carried 구급키트 settles first.
 - Store-panel effect lines break between words (`word-break:keep-all`).
-- CLOSING cash-flow receipt (User 2026-09-26, same version): the receipt reads as the Day's cash - 오늘 시작, the Gold that moved
-  (매출 / 발주 / 운영비 always, the rest only when they moved), 오늘 끝 (stamped) with 오늘 변화 ±N, then 창고 재고 · 오늘 폐기
-  counts and 내일 운영비 예상 (not on DAY 29). 판매 원가 / 판매 마진 / 폐기 원가 / 영업 손익 and the 보유 자금 box are gone: the
-  waste cost printed as a loss read as Gold leaving twice. The opening is derived from the Day's flows, so it always adds up
+- CLOSING cash-flow receipt (User 2026-09-26, same version): the receipt reads as the Day's cash - 영업 전 자금, the Gold that
+  moved (매출 / 발주 / 운영비 always, the rest only when they moved), the 보유 자금 box (stamped) with 영업 손익 ±N (the cash
+  change: green up, red down, gold at 0), then 창고 재고 and 오늘 폐기 on their own lines (the expired Items named, ×n from two,
+  up to three then 외 N종) and 내일 운영비 예상 (not on DAY 29). 판매 원가 / 판매 마진 / 폐기 원가 are gone: the waste cost
+  printed as a loss read as Gold leaving twice. The opening is derived from the Day's flows, so it always adds up
   (checked against every Day of the User's 24-Day save). NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT — EXACT, UI_UX §CLOSING,
   UI_UX_QA UI-Q18 / UI-Q-v29-33, COPY_AUDIT §7-3 / §8-0, COPY_WORLD_VOICE coach line; ledgers; `tomorrowOperatingCost()` reads the
   same operating rule for the next Day; tests ui-guard / integration.

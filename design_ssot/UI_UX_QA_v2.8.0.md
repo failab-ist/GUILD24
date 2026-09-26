@@ -1466,8 +1466,8 @@ stamp landing and through the settlement count.
 
 PASS:
 - every receipt row is on screen together within 200 ms behind one printer tick; nothing prints row by row
-- only the `오늘 끝` row (the Day's change; `영업 손익` until v2.9.7) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
-- a profit stamps gold, a loss stamps red, and reduced motion shows the same row, colour and figures at once
+- only the `보유 자금` figure (the purse box; the `영업 손익` row until v2.9.7) stamps: 100 ms hold, then the NIGHT stamp's 90 ms fall, the tape gives 4 px and settles
+- the `영업 손익` figure is green on a profit, red on a loss, gold at 0, and reduced motion shows the same row, colour and figures at once
 - no `어제보다 +N` line anywhere on the receipt
 - the END `현재 점포 자본` row counts from the account's prior total to the resolved one in 320 ms, with one `ui`
   click for each Decoration price it passes; a count that crosses no price plays none
@@ -1588,8 +1588,9 @@ Open Closing.
 
 EXPECT:
 Economic result is visually primary (v2.9.7 cash-flow receipt):
-오늘 시작 -> 매출 / 발주 / 운영비 (+ other moved rows) -> 오늘 끝 (stamped) -> 오늘 변화 ±N; 창고 재고 · 오늘 폐기 counts; 내일 운영비 예상 (not on DAY 29);
-no 판매 원가 / 판매 마진 / 폐기 원가 / 영업 손익 row; 오늘 시작 + ins - outs = 오늘 끝 exactly
+영업 전 자금 -> 매출 / 발주 / 운영비 (+ other moved rows) -> 보유 자금 box (stamped) with 영업 손익 ±N (green / red, gold at 0);
+창고 재고 and 오늘 폐기 on separate lines, 오늘 폐기 naming up to three Items (×n from two) then 외 N종; 내일 운영비 예상 (not on DAY 29);
+no 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 전 자금 + ins - outs = 보유 자금 exactly; no page scroll at 390 x 780
 
 PASS:
 Night story is not duplicated as dominant content.

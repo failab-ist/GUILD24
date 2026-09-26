@@ -808,5 +808,12 @@ User 2026-09-26: the Closing receipt reads as the Day's cash (opening Gold, the 
 ```
 
 ```new
-오늘 시작한 돈과 끝난 돈을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
+```
+
+## AMENDMENT — v2.9.7 CLOSING labels (User 2026-09-26)
+
+User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보유 자금 / 영업 손익; the stamp sits on 보유 자금, only 영업 손익 is coloured (green / red, gold at 0); 창고 재고 and 오늘 폐기 take separate lines and the waste line names the Items. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
 ```

@@ -81,7 +81,7 @@ let closingCueAt=null;
    the direction is read off the rendered row so this never re-derives the day's figures itself */
 function closingSound(){clearTimeout(closingCueAt);const s=game.run;if(!s||s.phase!=='closing')return;
  sound('receipt');
- const row=$('.p-closing .tape .row.profit');if(!row)return;
+ const row=$('.p-closing .tape .purse');if(!row)return;
  const kind=row.classList.contains('loss')?'spend':'gold';
  if(!motionOK()){sound(kind);return;}
  closingCueAt=setTimeout(()=>sound(kind),CLOSING_STAMP.hold+STAMP_FALL);}
@@ -196,12 +196,12 @@ function playPhase(phase){
   if(gate)A(gate,{translateY:[10,0],opacity:[0,1],duration:220,ease:'outQuad'});
  }
  /* v2.9.2 H4 CLOSING receipt (UI_UX §CLOSING — RECEIPT STAMP): every row of the two figure blocks
-    settles together in one 200 ms pass - never a tick per row - and only the 영업 손익 row lands as
+    settles together in one 200 ms pass - never a tick per row - and only the 보유 자금 figure (v2.9.7) lands as
     a stamp on a fixed 100 ms hold, reusing the NIGHT stamp's own 90 ms fall and card dip. */
  if(phase==='closing'){
-  const printed=[...document.querySelectorAll('.p-closing .tape .print>.block,.p-closing .tape .print>.row.change')];
+  const printed=[...document.querySelectorAll('.p-closing .tape .print>.block')];
   if(printed.length)A(printed,{opacity:[0,1],translateY:[-4,0],duration:200,ease:'outQuad'});
-  const row=$('.p-closing .tape .row.profit'),val=row?.querySelector('b'),tape=$('.p-closing .tape'),land=CLOSING_STAMP.hold+STAMP_FALL;
+  const row=$('.p-closing .tape .purse'),val=row?.querySelector(':scope>b'),tape=$('.p-closing .tape'),land=CLOSING_STAMP.hold+STAMP_FALL;
   if(row)A(row,{opacity:{from:0,to:1,duration:40,delay:CLOSING_STAMP.hold,ease:'linear'}});
   if(val)A(val,{scale:{from:1.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP.hold,ease:'in(3)'}});
   if(tape)A(tape,{translateY:[{from:0,to:0,duration:land},{to:CLOSING_STAMP.dip,duration:40,ease:'in(2)'},{to:0,duration:150,ease:'outQuad'}]});
@@ -1004,18 +1004,22 @@ function closingScreen(){
  const outs=[['발주',d.spent,true],['발주 교환',d.rerollSpent],['점포지원 투자',d.relicSpent],[Copy.deep.sponsor,d.deepSponsor],['운영비',d.operating,true]];
  const total=rows=>rows.reduce((t,r)=>t+(r[1]||0),0),change=total(ins)-total(outs),open=s.money-change;
  const line=(r,sign)=>r[1]||r[2]?'<div class="row"><span>'+E(r[0])+'</span><b>'+(r[1]?sign:'')+fmt(r[1]||0)+'</b></div>':'';
- const tomorrow=s.day<29?game.tomorrowOperatingCost():null;
+ const tomorrow=s.day<29?game.tomorrowOperatingCost():null,tone=change>0?'gain':change<0?'loss':'even';
+ /* what expired: a name alone for one, `×n` from two, three kinds at most and the rest as `외 N종` so it stays one line */
+ const wasted=Object.entries(d.wasteItems||{}).sort((x,y)=>y[1]-x[1]),wasteNames=wasted.length?' · '+wasted.slice(0,3).map(([id,n])=>E(D.itemBy[id]?.name||id)+(n>1?' ×'+n:'')).join(' · ')+(wasted.length>3?' 외 '+(wasted.length-3)+'종':''):'';
  const body='<div class="tape">'
  +'<div class="tear top" aria-hidden="true"></div>'
  +'<div class="print">'
   +'<div class="head"><b>GUILD24</b><span>DAY '+String(s.day).padStart(2,'0')+' · '+E(s.branch)+'</span><span>영업 종료</span></div>'
-  +'<div class="block"><div class="row open"><span>오늘 시작</span><b>'+fmt(open)+'</b></div></div>'
+  +'<div class="block"><div class="row open"><span>영업 전 자금</span><b>'+fmt(open)+'<i>G</i></b></div></div>'
   +'<div class="block ins">'+ins.map(r=>line(r,'+')).join('')+'</div>'
   +'<div class="block outs">'+outs.map(r=>line(r,'-')).join('')+'</div>'
-  /* the stamped row (UI_UX §CLOSING — RECEIPT STAMP): the Gold the Day ends with; the Day's change right under it */
-  +'<div class="row profit'+(change<0?' loss':'')+'"><span>오늘 끝</span><b>'+fmt(s.money)+'<i>G</i></b></div>'
-  +'<div class="row change'+(change<0?' loss':'')+'"><span>오늘 변화</span><b>'+(change>0?'+':'')+fmt(change)+'</b></div>'
-  +'<div class="block info"><p>창고 재고 '+s.inventory.length+'개'+(d.waste?' · 오늘 폐기 '+d.waste+'개':'')+'</p>'
+  /* the stamped figure (UI_UX §CLOSING — RECEIPT STAMP) is 보유 자금, the Gold the Day ends with, in the purse box at the
+     largest size and one colour; only 영업 손익 is coloured - green up, red down, gold at exactly 0 (User 2026-09-26) */
+  +'<div class="purse '+tone+'"><span>보유 자금</span><b>'+fmt(s.money)+'<i>G</i></b>'
+   +'<p class="pl"><span>영업 손익</span><b>'+(change>0?'+':'')+fmt(change)+'<i>G</i></b></p></div>'
+  +'<div class="block info"><p>창고 재고 '+s.inventory.length+'개</p>'
+   +(d.waste?'<p>오늘 폐기 '+d.waste+'개'+wasteNames+'</p>':'')
    +(tomorrow!==null?'<p>내일 운영비 예상 '+fmt(tomorrow)+'G</p>':'')+'</div>'
  +'</div>'
  +'<div class="tear bottom" aria-hidden="true"></div></div>';
@@ -1069,10 +1073,10 @@ const coachSteps={
  /* UI-Q-v28-27. `.tape` is the whole receipt - 653px on a phone, which no cutout can hold
     with the bubble - so the mark cut out its top 265px: the head and the 매출 / 판매 원가 block,
     which is not what this lesson is about. v2.9.7: the copy compares the Day's opening and end Gold, so it points at the
-    stamped 오늘 끝 row that carries both the end Gold and the Day's change. */
+    purse box that carries both 보유 자금 and 영업 손익. */
  /* FINAL-Q77: the first time the party-wide forecast appears, once per account. */
  final:[['subjugation','.final-forecast .top',Copy.finalPrep.forecastWhy.join(' ')]],
- closing:[['receipt','.tape .row.profit','오늘 시작한 돈과 끝난 돈을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.']],
+ closing:[['receipt','.tape .purse','영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.']],
  /* USER 2026-09-24: the very first decision of a new store is the DAY 0 Store Support pick, and
     it used to open with no word of what a Store Support is. These three marks read the takeover
     - what it is, how a card reads, what the key does and when more arrive - and never name a

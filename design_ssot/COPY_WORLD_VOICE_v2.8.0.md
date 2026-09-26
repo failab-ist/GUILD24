@@ -1085,7 +1085,7 @@ NIGHT
 한 명씩 원정 결과와 변화를 확인한다. ‘전체 건너뛰기’로 바로 정산할 수 있다.
 
 CLOSING
-오늘 시작한 돈과 끝난 돈을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
+영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
 ```
 
 The `전망` step explains display behavior and uncertainty; it does not imply that purchased Items have no runtime effect. Actual Resolve still uses the final committed preparation.

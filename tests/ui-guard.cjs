@@ -1889,14 +1889,17 @@ test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one mov
 });
 
 /* UI-Q18 (v2.9.7, User 2026-09-26, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT): the receipt is the Day's cash */
-test('UI-Q18: CLOSING cash-flow receipt - opening, what moved, end with its change, counts, tomorrow',()=>{
+test('UI-Q18: CLOSING cash-flow receipt - 영업 전 자금, what moved, 보유 자금 with 영업 손익, counts, tomorrow',()=>{
  const c=fn('closingScreen').replace(/\/\*[\s\S]*?\*\//g,'');
- for(const gone of ['영업 손익','판매 원가','판매 마진','폐기 원가','보유 자금'])assert.ok(!c.includes(gone),'no '+gone+' row');
- for(const l of ['오늘 시작','오늘 끝','오늘 변화','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
+ for(const gone of ['판매 원가','판매 마진','폐기 원가','오늘 시작','오늘 끝','오늘 변화'])assert.ok(!c.includes(gone),'no '+gone+' row');
+ for(const l of ['영업 전 자금','보유 자금','영업 손익','창고 재고 ','오늘 폐기 ','내일 운영비 예상 '])assert.ok(c.includes(l),'prints '+l);
  assert.ok(/change=total\(ins\)-total\(outs\),open=s\.money-change/.test(c),'the opening is derived from the Day\'s own flows, so the tape adds up');
  assert.ok(/\['매출',d\.revenue,true\]/.test(c)&&/\['발주',d\.spent,true\]/.test(c)&&/\['운영비',d\.operating,true\]/.test(c),'매출 / 발주 / 운영비 always print');
- assert.ok(/const tomorrow=s\.day<29\?game\.tomorrowOperatingCost\(\):null/.test(c),'no tomorrow line before the Final Day');
- assert.ok(/'<div class="row profit'\+\(change<0\?' loss':''\)\+'"><span>오늘 끝<\/span>/.test(c),'the stamped row is 오늘 끝, red on a down Day');
+ assert.ok(/const tomorrow=s\.day<29\?game\.tomorrowOperatingCost\(\):null,tone=change>0\?'gain':change<0\?'loss':'even'/.test(c),'no tomorrow line before the Final Day; 영업 손익 green / red / gold at 0');
+ assert.ok(/'<div class="purse '\+tone\+'"><span>보유 자금<\/span><b>'\+fmt\(s\.money\)/.test(c),'보유 자금 is the purse figure');
+ assert.ok(c.includes("fmt(change)+'<i>G</i></b>")&&c.includes("<span>영업 전 자금</span><b>'+fmt(open)+'<i>G</i></b>"),'the 영업 손익 G is set apart like the purse G - in the LED face a bare G reads as 6 (+5G as +56)');
+ assert.ok(/\(n>1\?' ×'\+n:''\)/.test(c)&&/' 외 '\+\(wasted\.length-3\)\+'종'/.test(c),'waste names: ×n from two, three kinds then 외 N종');
+ assert.ok(/\.p-closing \.purse>b\{font-size:\d+px;color:#f3ecd8\}/.test(css)&&/\.print \.row\.open\{[^}]*inset 0 0 0 1px #2c24184d;background:#e3d6b5;clip-path:var\(--px-cut\)\}/.test(css)&&/\.p-closing \.purse:after,\.p-closing \.purse \.pl:after\{content:/.test(css)&&/\.p-closing \.purse\.even \.pl b\{color:var\(--gold\)\}/.test(css),'one colour for 보유 자금, gold only for an even Day');
 });
 
 /* UI-Q-v29-33 (v2.9.2 H4, UI_UX §CLOSING — RECEIPT STAMP): the receipt prints as one pass and only the profit/loss
@@ -1905,12 +1908,12 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(/const CLOSING_STAMP=\{hold:100,dip:4\};/.test(app),'100 ms hold, 4 px dip - 중요, reusing the NIGHT fall');
  const pp=bare(fn('playPhase')),closing=pp.slice(pp.indexOf("if(phase==='closing')"),pp.indexOf("if(phase==='night')"));
- assert.ok(/document\.querySelectorAll\('\.p-closing \.tape \.print>\.block,\.p-closing \.tape \.print>\.row\.change'\)/.test(closing),'every figure block and the 오늘 변화 row print together (v2.9.7: no purse box)');
+ assert.ok(/document\.querySelectorAll\('\.p-closing \.tape \.print>\.block'\)/.test(closing),'every figure block prints together; the purse box is the stamp (v2.9.7)');
  assert.ok(/opacity:\[0,1\],translateY:\[-4,0\],duration:200,ease:'outQuad'/.test(closing)&&!/stagger/.test(closing),'one 200 ms pass, never a per-row stagger');
  assert.ok(/scale:\{from:1\.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP\.hold,ease:'in\(3\)'\}/.test(closing),'the profit/loss value reuses the NIGHT stamp fall on the fixed hold');
- assert.ok(/const row=\$\('\.p-closing \.tape \.row\.profit'\),val=row\?\.querySelector\('b'\)/.test(closing)&&/if\(row\)A\(row,\{opacity:/.test(closing),'the scale lands on the number alone, never the full-width row - a whole-row scale overflows the card');
+ assert.ok(/const row=\$\('\.p-closing \.tape \.purse'\),val=row\?\.querySelector\(':scope>b'\)/.test(closing)&&/if\(row\)A\(row,\{opacity:/.test(closing),'the scale lands on the number alone, never the full-width row - a whole-row scale overflows the card');
  assert.ok(/translateY:\[\{from:0,to:0,duration:land\},\{to:CLOSING_STAMP\.dip,duration:40,ease:'in\(2\)'\}/.test(closing),'the tape gives 4 px on the landing frame and settles');
- assert.ok(/\.print \.profit b\{font:500 30px\/1 var\(--f-led\);color:var\(--gold\)\}/.test(css)&&/\.print \.profit\.loss b\{color:#a1372c\}/.test(css),'profit stamps the actual gold token, loss stamps red - the end state a reduced-motion capture also shows');
+ assert.ok(/\.p-closing \.purse\.gain \.pl b\{color:#6fcf93\}/.test(css)&&/\.p-closing \.purse\.loss \.pl b\{color:#e0645a\}/.test(css),'v2.9.7: 보유 자금 stamps in one colour; 영업 손익 alone is green / red - the end state a reduced-motion capture also shows');
  const cs=bare(fn('closingSound'));
  assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&/sound\('receipt'\)/.test(cs),'one printer tick, and a stale timer is cleared first');
  assert.ok(/kind=row\.classList\.contains\('loss'\)\?'spend':'gold'/.test(cs),'the stamp cue is read off the rendered row, never recomputed from the day\'s figures');
