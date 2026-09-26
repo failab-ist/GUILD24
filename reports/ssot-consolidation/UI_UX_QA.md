@@ -1330,12 +1330,10 @@ User 2026-09-26: UI-Q-v29-36 is new. Nothing is dropped.
 PASS:
 - the opening screen shows `v{version} · {commit}` (the CHANGELOG head version) small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
   the menu button and the preparation panel
-- no other screen shows it
 - the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair
 - the deployed site reads the deployed commit; a local build reads `dev`
 
 FAIL:
-- the marker overlapping or pushing the title, taking input, or appearing during a Run; a deployed build still reading `dev`
 ```
 
 ## AMENDMENT — ORDER coach step id (2026-09-26, IMPLEMENTATION BUG fix)
@@ -1446,4 +1444,13 @@ User 2026-09-26: the SALE shelf sorts by kind (대응 장비, 음식, 음료, �
 ```new
 - the shelf rows are ordered by kind (대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수), then days left before discard, nearest first, then higher Rarity; ties keep the existing order; the order is identical for both customers (v2.9.7)
 - selling units, including the last unit of an Item's oldest batch, moves no other row within the Day; a sold-out row leaves; the next Day sorts afresh (v2.9.7)
+```
+
+## AMENDMENT — v2.9.7 build marker in 영업 설정 (User 2026-09-26)
+
+User 2026-09-26: the build marker also ends 영업 설정, readable mid-Run. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- 영업 설정 ends with the same pair, before and during a Run (v2.9.7); no other screen shows it
+- the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
 ```

@@ -1310,7 +1310,6 @@ User 2026-09-26: §SETTINGS / DEBUG BOUNDARY is followed by the new BUILD MARKER
 
 - the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
   corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
-  from the title and appears on no other screen
 - `{version}` is the current project version (the CHANGELOG head); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
   by the Pages deploy step; a local or unstamped build reads `dev`
 - the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`
@@ -1407,4 +1406,14 @@ User 2026-09-26: the SALE shelf sorts by kind (대응 장비, 음식, 음료, �
 
 ```new
 - §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
+```
+
+## AMENDMENT — v2.9.7 build marker in 영업 설정 (User 2026-09-26)
+
+User 2026-09-26: the build marker also ends 영업 설정, readable mid-Run. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+from the title
+- 영업 설정 (점포 메뉴 -> 설정) ends with the same `v{version} · {commit}` line, centred, small (11 px) and muted, so the build can
+be read mid-Run (User 2026-09-26, v2.9.7); no other screen shows it
 ```
