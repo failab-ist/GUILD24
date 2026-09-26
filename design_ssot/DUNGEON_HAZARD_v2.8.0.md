@@ -320,11 +320,11 @@ Rules:
 
 ## GATE POWER — LATE-DAY SLOPE
 
-Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss):
+Gate required Power keeps its current generation inputs. The Day term is (User 2026-09-25, v2.9.1 balance: early slope 1.70 → 1.20, late slope 0.40 → 0.80 — the early Gates no longer outrun adventurer growth, the D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early slope 1.20 → 1.50, late 0.80 kept — a fresh first Run cleared the Boss; v2.9.2 third pass, User 2026-09-26: DAY 11~20 climb at 1.10 per Day — the NPC-growth check of GAME_VISION's Run Progression Arc — DAY 1~10 and DAY 21+ unchanged):
 
 ```text
 Day term
-= min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80
+= min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80
 ```
 
 Full required Power (Source-exact):
@@ -348,10 +348,12 @@ Day-term reference anchors:
 
 ```text
 D9  = 13.50
-D12 = 15.90
-D18 = 20.70
-D24 = 25.50
-D29 = 29.50
+D10 = 14.30
+D12 = 16.50
+D18 = 23.10
+D20 = 25.30
+D24 = 28.50
+D29 = 32.50
 ```
 
 ## HAZARD THREAT
@@ -651,6 +653,10 @@ Use the following exact anchor rows for ordinary Days:
 
 For Days between two anchors, linearly interpolate each Tier weight between the surrounding rows.
 D30 does not use ordinary Tier generation.
+
+Late T3 pressure (User 2026-09-26, v2.9.2 third pass): after the interpolation, DAY 21~29 move 0.10 of the T2 weight to T3
+(never more than T2 holds); T1 and every other Day keep the anchor values. The late Days lean on Hazard / Item preparation,
+not raw Power alone. Examples: D24 10 / 50 / 40 · D25 5 / 40 / 55 · D29 0 / 35 / 65.
 
 No player-facing next-Day Tier forecast exists (User 2026-09-24, v2.9.0); the generator alone reads this function.
 
@@ -983,7 +989,7 @@ preparedFactor (만반의 준비) = 0.80 when ALL hold, else 1:
   - departed without Injury (injury=0)
   - fatigueBeforeExpedition < 20
   - 2 or more Items in the Bag
-levelFactor = max(0.75, 1 − 0.015 × (Level − 1))      (Lv1 = 1.00, −1.5% per Level, floor −25%)
+levelFactor = max(0.85, 1 − 0.015 × (Level − 1))      (Lv1 = 1.00, −1.5% per Level, floor −15%; User 2026-09-26, v2.9.2 third pass: floor was 0.75 — identical through Lv11)
 ```
 
 - a Death roll inside `failureDeathChance` but outside `rolledDeathChance` does not become 사망: the Outcome becomes

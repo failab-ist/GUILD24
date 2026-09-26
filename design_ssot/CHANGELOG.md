@@ -59,6 +59,12 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   sale / refuse), ui.css (`.counter-tray.held`), audio.js (tickLate / tickLow). Also fixes a RUNTIME UX BUG found on the way:
   the global button `transition:transform .08s steps(2)` swallowed every scripted key motion, so A6's refusal shake was never
   visible; a pressed key now drops that transition. Capture tool tools/qa-sale-beat.cjs.
+- Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — reports/v292-bot-harness.md §9-10): the Gate
+  Day term climbs at 1.10 per Day on DAY 11~20 (DAY 1~10 and 21+ unchanged; D20 25.3, D29 32.5); levelFactor floor 0.75 → 0.85
+  (identical through Lv11); DAY 21~29 move 0.10 of the T2 weight to T3. Measured together (GLT): `reader` all-fresh D30 12.1% →
+  8.6%, CURRENT_SKILLED_D10 .558 → .450; the D21~29 slope 0.90 and a Great Success Gold cut were measured and not taken; the
+  all-fresh 10% floor is not a real-player measure (User). DUNGEON_HAZARD §GATE POWER / §Tier generation / Level Death reduction,
+  DUNGEON_ITEM_QA; ledgers amended; tests night (Gate term, tiers, levelFactor).
 - Balance, second pass (User 2026-09-26, after the `reader` harness review — reports/v292-bot-harness.md §7): 대성공 EXP 1.10 → 1.00,
   combat-success EXP 1.00 → 0.90 (퇴각 0.38 / other living 0.50 unchanged); operating dayBase + 12 × max(0, Day − 15). Measured:
   `reader` clear 14.9% → 7.2%, the D29 cash median ~5,100 → ~3,400; a level-coefficient raise (0.05~0.10) was rejected - it taxed

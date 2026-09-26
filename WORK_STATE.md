@@ -22,7 +22,8 @@ STATE: V2_9_1_CLOSED_TAGGED — main `d23d076`, 태그 `v2.9.1` · V2_9_2_H1_H5_
   배포 후 User 플레이 데이터(가능하면 D30 직후 또는 런 종료 직후 저장)로 재확인할 예정.
 - v2.9.2 봇 하네스(User 2026-09-26): `reader` 정책과 User 런 보정 도구 추가(`reports/v292-bot-harness.md`). 그 결과로 2차 밸런스 반영
   (User 2026-09-26 권고안): 대성공 EXP 1.00, 전투 승리 EXP 0.90, 운영비 D15 이후 +12/일. 다음 User 플레이 데이터로 재확인.
-  late Gate slope 측정(측정 전용, 2026-09-26): 0.80 / 0.90 / 1.00 비교 결과 `reports/v292-bot-harness.md` §8. **User 판단 대기.** Source는 late 0.80 그대로.
+  late Gate slope 측정(측정 전용, 2026-09-26): 0.80 / 0.90 / 1.00 비교 결과 `reports/v292-bot-harness.md` §8. Source는 late 0.80 그대로.
+  3차 밸런스(User 2026-09-26 "g1 l2 t"): Gate D11~20 1.10/일, levelFactor 하한 0.85, D21~29 T3 +0.10 반영(§9~10 측정 근거).
 
 ## User 재확인 필요 (User 2026-09-25 자리 비운 동안 추천안으로 임시 적용 — 이후 확인)
 

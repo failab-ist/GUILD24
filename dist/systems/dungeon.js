@@ -199,10 +199,14 @@ function prepare(n,d,facilities=[]){
 function gateCountRule(day){
  return day<=3?[1]:day<=7?[1,2]:day<=18?[2]:[2,3];
 }
-function tierWeights(day){
+function tierWeights0(day){
  const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
 }
+/* v2.9.2 third pass (User 2026-09-26): DAY 21~29 move LATE_T3 of the T2 weight to T3 - the late Days lean on Hazard / Item
+   preparation, not raw Power alone. T1 and every other Day are the anchors above. */
+const LATE_T3={from:21,to:29,shift:.10};
+function tierWeights(day){const w=tierWeights0(day);if(day<LATE_T3.from||day>LATE_T3.to)return w;const m=Math.min(LATE_T3.shift,w[1]);return [w[0],w[1]-m,w[2]+m];}
 /* DUNGEON_HAZARD v2.9.0 §Hazard Defense (User 2026-09-24, revision 3): one non-투력 Stat per Hazard and no Gate's
    Hazards on the same Stat, 3 / 3 / 3 - 강인함 ×1/3 for 독·냉기·부식, 기동 ×1/2 for 속박·진창·어둠, 정신 ×1/2 for
    공포·화이트아웃·화염 (revision 5: 화염 -> 정신; revision 4: integer conversions `{능력치} n당 대응 1`, rounded in the player's favour from ×0.30 / ×0.40).
@@ -281,8 +285,11 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
    early 1.70 -> 1.20, late 0.40 -> 0.80 - the early Gates no longer outrun adventurer growth, the
    D20~30 Tier-3 pressure rises; v2.9.2 balance, User 2026-09-25: early 1.20 -> 1.50, late kept -
    a fresh first Run cleared the Boss); every other Gate Power term is what it was. */
-const GATE={knee:9,early:1.50,late:0.80};
-const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,day-GATE.knee)*GATE.late;
+/* v2.9.2 balance, third pass (User 2026-09-26, after the paired D10-fork arms in reports/v292-bot-harness.md §9-10): DAY 11~20
+   climb at `mid` 1.10 per Day (the NPC-growth check of the Run Progression Arc); DAY 1~10 and DAY 21+ keep their slopes. */
+const GATE={knee:9,early:1.50,late:0.80,mid:1.10,midFrom:10,midTo:20};
+const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.late
+ +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
 /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance). The
    failure Death roll is judged against `failureDeathChance x preparedFactor x levelFactor`, not
    the raw failureDeathChance - a miss that only clears the raw chance settles as 중상/부상 instead
@@ -292,7 +299,8 @@ const PREPARED={factor:.80,bandSevere:.36};
 function fullyPrepared(n,fatigueBeforeExpedition){
  return n.injury===0&&fatigueBeforeExpedition<20&&(n.pack?n.pack.length:0)>=2;
 }
-function levelFactor(level){return Math.max(.75,1-.015*((level||1)-1));}
+/* v2.9.2 third pass (User 2026-09-26): floor .75 -> .85 - identical through Lv11, the automatic protection stops at 15% */
+function levelFactor(level){return Math.max(.85,1-.015*((level||1)-1));}
 /* DUNGEON_HAZARD §RETREAT HEALING (User 2026-09-25, v2.9.1 balance). An adventurer who departed
    already injured and comes back as 퇴각 is healed with a chance that rises with an unbroken run
    of the same (departed injured, ended 퇴각) result - any other preceding expedition resets it. */
@@ -674,5 +682,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,WALLET_MULT,GREAT,WIN,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,levelFactor,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,levelFactor,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
 })(globalThis);

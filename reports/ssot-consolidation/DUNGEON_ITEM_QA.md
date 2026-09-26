@@ -753,7 +753,7 @@ PASS exact Buy/Sell for changed original-catalog prices:
 ```
 
 ```new
-- the Day term is `min(Day, 9) × 1.50 + max(0, Day - 9) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2)
+- the Day term is `min(Day, 9) × 1.50 + max(0, min(Day, 10) - 9) × 0.80 + max(0, min(Day, 20) - 10) × 1.10 + max(0, Day - 20) × 0.80` (User 2026-09-25, v2.9.1 balance; early 1.20 → 1.50 in v2.9.2; DAY 11~20 at 1.10 in the v2.9.2 third pass, User 2026-09-26)
 - the Day term reads D9 10.80, D12 13.20, D18 18.00, D24 22.80, D29 26.80
 Controlled adventurer records: 1 / 2 / 3 / 5 consecutive expeditions begun at injury=1 ending in this injured departure, the same
 chain broken once by a healthy departure, and a Fatigue 20+ departure chain (User 2026-09-25, v2.9.1 balance).
@@ -770,7 +770,7 @@ chain broken once by a healthy departure, and a Fatigue 20+ departure chain (Use
 Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 만반의 준비 (healthy, Fatigue < 20, 2+ Items),
 and the three near misses (injured / Fatigue 20 / one Item).
 - rolledDeathChance = failureDeathChance × preparedFactor × levelFactor exactly; preparedFactor 0.80 only when all three hold
-- levelFactor = max(0.75, 1 − 0.015 × (Level − 1)): Lv1 1.00 · Lv2 0.985 · Lv10 0.865 · Lv20 0.75
+- levelFactor = max(0.85, 1 − 0.015 × (Level − 1)): Lv1 1.00 · Lv2 0.985 · Lv10 0.865 · Lv11+ 0.85 (User 2026-09-26, v2.9.2 third pass; floor was 0.75)
 - a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
 - the SALE `실패 시 사망 위험` includes levelFactor and never preparedFactor
 - the Night report shows the 만반의 준비 save line once, only when the band was hit
@@ -889,3 +889,11 @@ User 2026-09-25: the Day-term QA line reads early 1.50 (late 0.80 kept). The v2.
 ## AMENDMENT — v2.9.2 balance, second pass: EXP multipliers (User decision 2026-09-26)
 
 User 2026-09-26: Great 1.00, combat-success 0.90; the line declared above is edited in place.
+
+## AMENDMENT — v2.9.2 balance, third pass (User decision 2026-09-26)
+
+User 2026-09-26: the Day-term and levelFactor lines declared above are edited in place; the late T3 line is new.
+
+```new
+- DAY 21~29 then move 0.10 of T2 to T3 (D24 10 / 50 / 40 · D29 0 / 35 / 65); no other Day shifts (User 2026-09-26, v2.9.2 third pass)
+```
