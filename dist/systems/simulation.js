@@ -31,7 +31,8 @@ const SPEND={
     keeps. The price doubles within a Day and resets the next morning, so this converges. */
  'balanced':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
  'spender':{stockPerVisitor:3,stockSlack:3,cashFloor:80,relicReserve:200,reroll:true},
- 'human':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
+ 'human':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true},
+ 'reader':{stockPerVisitor:2,stockSlack:2,cashFloor:140,relicReserve:380,reroll:true}};
 const spending=policy=>SPEND[policy]||SPEND.default;
 
 /* Boss clear is `power * roll >= bossPower` with roll uniform on [0.88, 1.12], so the clear
@@ -179,7 +180,21 @@ function playRun(g,out,ctx){
     starves the shelf and spirals into bankruptcy - a player keeps ordering.) Adopted as the v2.9.2 review's primary lens after
     the User's save (run-level revenue, knowledge, first-discovery Days) sat closer to it than to `balanced`
     (reports/v292-balance-review.md §2). */
- const bal=policy==='balanced'||policy==='human',human=policy==='human',spend=spending(policy);
+ const reader=policy==='reader',bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
+ /* `reader` (v2.9.2 harness, measurement only; User 2026-09-26: the bots lost their customers where the User kept them):
+    it sells by what the SALE screen itself reads - the same prepare / preparedPower / hazardState / failureDeathRisk
+    that outlookFor() shows as 전투 전망 · 환경 대응 · 사망 위험 - trying each shelf Item in the Bag and taking the one that
+    moves that reading most. It never sends a customer out with an empty slot it could fill: 정가 when the purse covers
+    it, else 50% (the User sold 30% of Items at 50%), and 150% only for a customer already 우세 and 충분 with a 단골's
+    purse. Ordering, rerolls, Store Support and the Final are `balanced`'s (the Store Support offer is not the player's
+    to fix). Pure reads only: no RNG draw, no write. */
+ const readScore=(n,pack,d)=>{const v={...n,pack},e=G.Dungeon.prepare(v,d,s.facilities).effects;
+  const ratio=Math.min(1.5,G.Dungeon.preparedPower(e)/(d.power||1));
+  const env=d.hazards.reduce((a,h)=>{const x=G.Dungeon.hazardState(h,e,d);return a+Math.min(1,x.defense/(x.threat||1));},0);
+  const risk=G.Dungeon.failureDeathRisk(v,d,s.facilities).chance;
+  /* supply also buffers the fatigue THIS expedition will add, so the customer comes back fresh - the User's run carried
+     food / drink on 86% of D1-10 expeditions (fatigue after 3.0 vs the bot's 7.8), and the screen does not show it */
+  return ratio*10+env*8-risk*30+Math.min(12,e.supply||0)*.5;};
  /* RELIC-AWARE LAYER, measurement only (ctx.relicAware, default off). The policies above were
     written before most Store Supports existed, so a Support whose value comes from a choice the
     player makes (150% sales, 3-of-a-SKU orders, a Counter for the Gate) read as ~0 because the
@@ -213,7 +228,8 @@ function playRun(g,out,ctx){
  /* The candidate order the ordering loop below uses. Shared with the planner so the two cannot
     drift: whatever the loop would work through is what the plan walks. */
  const sortedOffers=()=>s.offers.map((o,i)=>({o,i})).sort((a,b)=>{
-  const v=o=>(bal?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price;
+  const v=o=>(bal?Math.max(...s.dungeons.map(dd=>itemValue(null,D.itemBy[o.item],dd))):itemValue(null,D.itemBy[o.item],s.dungeons[0]))/Math.sqrt(o.price)+(D.itemBy[o.item].sell-o.price)/o.price
+   +(reader?(D.itemBy[o.item].effects.supply||0)*.6/Math.sqrt(o.price):0);
   return v(b.o)-v(a.o);});
  /* What that loop would spend on the sheet as it stands, computed without touching any state.
     Same rounds, same stock target, same floor, same capacity rule - it is the ordering loop,
@@ -381,7 +397,13 @@ function playRun(g,out,ctx){
    const day=stat(s.day);day.samples++;day.cash+=s.money;day.inventory+=s.inventory.length;day.visitors+=s.queue.length;if(out.goldCheckpoints[s.day])out.goldCheckpoints[s.day].push(s.money);const visitors=s.queue.map(id=>s.npcs.find(n=>n.id===id));(out.wallets[s.day]??=[]).push(...visitors.map(n=>n.money));day.wallet+=visitors.reduce((a,n)=>a+n.money,0);day.level+=visitors.reduce((a,n)=>a+n.level,0);day.loyalty+=visitors.reduce((a,n)=>a+n.loyalty,0);
    for(const n of visitors){(n.introduced?out.walletReturning:out.walletFresh).push(n.money);out.walletCapSamples++;if(n.money>=2000)out.walletCapHits++;}
    for(const n of visitors)for(const o of s.offers){const it=D.itemBy[o.item];day.offers++;if(n.money>=Math.round(it.sell*D.pricing.overcharge.mult))day.overAffordable++;if(n.money>=it.sell)day.fullAffordable++;else if(n.money>=Math.round(it.sell*.5))day.halfOnly++;}
-   const offers=sortedOffers();
+   let offers=sortedOffers();
+   /* reader: one meal per expected visitor goes on the sheet before anything else */
+   if(reader){const meals=offers.filter(x=>['food','drink'].includes(D.itemBy[x.o.item].category)),rest=offers.filter(x=>!meals.includes(x));
+    const onShelf=s.inventory.filter(x=>['food','drink'].includes(D.itemBy[x.item].category)).length;
+    let need=Math.max(0,s.queue.length-onShelf);for(const x of meals){if(!need)break;const take=Math.min(need,x.o.quantity);
+     for(let k=0;k<take&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor;k++){try{g.setQuantity(x.i,(s.cart?.[x.i]||0)+1);act();(out.items[x.o.item]??={ordered:0,sold:0}).ordered++;need--;}catch(e){break;}}}
+    offers=[...meals,...rest];}
    if(engagement.order==='minimum'){const cheap=s.offers.map((o,i)=>({o,i})).filter(x=>x.o.quantity).sort((a,b)=>a.o.price-b.o.price)[0];if(cheap&&s.money-cheap.o.price>=600&&g.canStock(D.itemBy[cheap.o.item]))try{g.setQuantity(cheap.i,1);act();(out.items[cheap.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}
    else if(engagement.order)for(let round=0;round<4;round++)for(const {o,i}of offers){if(s.inventory.length+Object.values(s.cart||{}).reduce((a,b)=>a+b,0)>=s.queue.length*(policy==='protective'?2.5:spend.stockPerVisitor)+spend.stockSlack)break;if(o.quantity&&s.money-g.cartTotal()-o.price>=spend.cashFloor){if(!g.canStock(D.itemBy[o.item])){out.capacityBlocked++;capacityHit=true;continue;}
     /* canStock only weighs what is already on the shelf, so the cart is what actually hits the
@@ -416,7 +438,19 @@ function playRun(g,out,ctx){
        adventurer, so the sink can only be judged next to the growth and the Final seat it buys. */
     (nominees[n.id]??={levelAtNomination:n.level,rarity:n.rarity,cost:0}).cost+=cost;out.deepCollapse.samples++;deepWatches.push(s.day);}
    const d=g.claimedGateFor(n);let attempts=0;
-   while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':bal?(n.loyalty>=41&&n.loyalty<51?'half':'full'):n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';/* aware: 왕도 프리미엄 인증 - 150% whenever the wallet comfortably covers it, by the same
+   if(reader)while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){
+    const base=readScore(n,n.pack,d),o=G.Dungeon.estimate(n,d,s.facilities),seen=new Set(),picks=[];
+    const strong=o==='우세'&&d.hazards.every(h=>G.Dungeon.hazardState(h,G.Dungeon.prepare(n,d,s.facilities).effects,d).label==='충분');
+    for(const st of s.inventory.slice().sort((a,b)=>(a.expires??99)-(b.expires??99))){if(seen.has(st.item))continue;seen.add(st.item);const it=D.itemBy[st.item];
+     const modes=strong&&n.loyalty>50&&n.money>it.sell*2?['overcharge','full','half']:['full','half'];
+     const mode=modes.find(m=>!n.refused.includes(it.id+':'+m)&&g.interest(n,it,m).debit<=n.money);if(!mode)continue;
+     /* 50% is a margin of zero (Sell = Buy x 2): it is the answer to a short purse, not to a first refusal */
+     picks.push({st,mode,gain:readScore(n,[...n.pack,it.id],d)-base+(st.expires?1/(st.expires-s.day+1):0)-(mode==='half'?4:0)});}
+    if(!picks.length)break;picks.sort((a,b)=>b.gain-a.gain);
+    /* the User's rule of thumb: every customer leaves with something to eat or drink (86% of D1-10 expeditions) */
+    const fed=n.pack.some(id=>['food','drink'].includes(D.itemBy[id].category)),meal=!fed&&picks.find(p=>['food','drink'].includes(D.itemBy[p.st.item].category)&&p.mode!=='half');
+    g.sell((meal||picks[0]).st.id,(meal||picks[0]).mode);}
+   else while(n.pack.length<G.Adventurer.slots(n)&&attempts++<15){const options=[];for(const st of s.inventory){const it=D.itemBy[st.item];let mode=pricing==='overcharge'?'overcharge':pricing==='full'?'full':pricing==='half'?'half':pricing==='vip'?(n.level>=Math.max(...s.npcs.map(x=>x.level))-1?'half':'full'):policy==='greedy'?'overcharge':policy==='protective'?'half':bal?(n.loyalty>=41&&n.loyalty<51?'half':'full'):n.level>=6&&n.loyalty<50?'half':'full';if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&n.money>it.sell*2&&n.loyalty>50)mode='overcharge';/* aware: 왕도 프리미엄 인증 - 150% whenever the wallet comfortably covers it, by the same
     wallet test the adaptive rule already uses (more than twice the list price), without its
     loyalty gate; not re-offered at 150% once this customer refused it. */
  if(pricing==='adaptive'&&policy!=='protective'&&policy!=='greedy'&&owns('royalCert')&&n.money>it.sell*2&&!n.refused.includes(it.id+':overcharge'))mode='overcharge';
