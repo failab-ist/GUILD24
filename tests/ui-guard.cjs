@@ -1803,6 +1803,44 @@ test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, t
  assert.ok(!/previousSales|daily\.sales|streak|combo/.test(sale),'no streak, no combo, no faster second sale');
 });
 
+/* UI-Q-v29-34 (v2.9.2 H6, UI_UX §FINAL — BOSS REVEAL ENTRY): the boss art and name plate settle in as one
+   movement on FINAL's own entry - the only H6 target left after the four-cut capture excluded the rest */
+test('UI-Q-v29-34: FINAL boss reveal - the gate-zero block settles in as one movement, nothing else moves',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const pp=bare(fn('playPhase')),final=pp.slice(pp.indexOf("if(phase==='final')"),pp.indexOf("if(phase==='closing')"));
+ assert.ok(/const gate=\$\('\.gate-zero'\);/.test(final),'the boss art and name plate are read as one block');
+ assert.ok(/if\(gate\)A\(gate,\{translateY:\[10,0\],opacity:\[0,1\],duration:220,ease:'outQuad'\}\);/.test(final),'one movement, 220 ms, outQuad - 일반 intensity, no hold');
+ assert.ok(!/stagger|scale:|\.threat|\.dock|\.final-order/.test(final),'nothing else on the screen moves, and the block is never scaled (a wide flex block scaling would overflow, H4\'s own lesson)');
+ assert.ok(!/sound\(|Sound\.play|setTimeout/.test(final),'no new sound and no new cue timer - the existing entry into FINAL carries none today and gains none');
+});
+
+/* UI-Q-v29-33 (v2.9.2 H4, UI_UX §CLOSING — RECEIPT STAMP): the receipt prints as one pass and only the profit/loss
+   row stamps; the END settlement counts up with a click per Decoration price line it actually passes */
+test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts past each Decoration price',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ assert.ok(/const CLOSING_STAMP=\{hold:100,dip:4\};/.test(app),'100 ms hold, 4 px dip - 중요, reusing the NIGHT fall');
+ const pp=bare(fn('playPhase')),closing=pp.slice(pp.indexOf("if(phase==='closing')"),pp.indexOf("if(phase==='night')"));
+ assert.ok(/document\.querySelectorAll\('\.p-closing \.tape \.print>\.block,\.p-closing \.tape \.print>\.purse'\)/.test(closing),'every figure block and the purse print together');
+ assert.ok(/opacity:\[0,1\],translateY:\[-4,0\],duration:200,ease:'outQuad'/.test(closing)&&!/stagger/.test(closing),'one 200 ms pass, never a per-row stagger');
+ assert.ok(/scale:\{from:1\.6,to:1,duration:STAMP_FALL,delay:CLOSING_STAMP\.hold,ease:'in\(3\)'\}/.test(closing),'the profit/loss value reuses the NIGHT stamp fall on the fixed hold');
+ assert.ok(/const row=\$\('\.p-closing \.tape \.row\.profit'\),val=row\?\.querySelector\('b'\)/.test(closing)&&/if\(row\)A\(row,\{opacity:/.test(closing),'the scale lands on the number alone, never the full-width row - a whole-row scale overflows the card');
+ assert.ok(/translateY:\[\{from:0,to:0,duration:land\},\{to:CLOSING_STAMP\.dip,duration:40,ease:'in\(2\)'\}/.test(closing),'the tape gives 4 px on the landing frame and settles');
+ assert.ok(/\.print \.profit b\{font:500 30px\/1 var\(--f-led\);color:var\(--gold\)\}/.test(css)&&/\.print \.profit\.loss b\{color:#a1372c\}/.test(css),'profit stamps the actual gold token, loss stamps red - the end state a reduced-motion capture also shows');
+ const cs=bare(fn('closingSound'));
+ assert.ok(/clearTimeout\(closingCueAt\)/.test(cs)&&/sound\('receipt'\)/.test(cs),'one printer tick, and a stale timer is cleared first');
+ assert.ok(/kind=row\.classList\.contains\('loss'\)\?'spend':'gold'/.test(cs),'the stamp cue is read off the rendered row, never recomputed from the day\'s figures');
+ assert.ok(/closingCueAt=setTimeout\(\(\)=>sound\(kind\),CLOSING_STAMP\.hold\+STAMP_FALL\)/.test(cs),'the stamp cue lands on the same frame as the visual stamp');
+ assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 plays it once');
+ assert.ok(/nightSound\(s\.results\[s\.nightCursor\]\);if\(s\.phase==='closing'\)closingSound\(\);break;/.test(app),'the ordinary 마감으로 press (night-next reaching the last result) plays it too');
+ const end=pp.slice(pp.indexOf("if(phase==='end')"),pp.indexOf("if(phase==='sell')"));
+ assert.ok(/\[\.\.\.new Set\(D\.decorations\.map\(d=>d\.price\)\)\]/.test(end),'the price lines are read from the live Decoration list, never a second copy of the numbers');
+ assert.ok(/for\(const p of lines\)if\(last<p&&box\.v>=p\)sound\('ui'\)/.test(end),'a quiet ui click on each price the count actually passes, none otherwise');
+ assert.ok(/capRow\.textContent=to\.toLocaleString\(\)/.test(end),'the settlement figure ends on the same resolved value with or without motion');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ assert.ok(Sound.cues.includes('receipt')&&!Sound.samples.receipt,'receipt is a synthesised cue');
+ assert.ok(!/receipt/.test(read('dist/systems/run.js'))&&!/receipt/.test(read('dist/systems/meta.js')),'presentation only: no Run or Meta field carries the new cue');
+});
+
 /* UI-Q-v29-30 (v2.9.2 H5, UI_UX §FINAL RESULT — SEAL STAMP): one seal bearing the Boss's name on a Final ending tape */
 test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a failure, the sentence after it',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
@@ -1869,7 +1907,7 @@ test('UI-Q-v29-27: NIGHT verdict stamp, cause beat and reversal overstamp',()=>{
  assert.ok(/if\(st\.print&&!st\.brink\)nightCueAt\.push\(/.test(ns),'and carries no rescue accent');
  assert.ok(!/injury-guard|aftercare/.test(fn('nightSound')+app.slice(app.indexOf('const preparedBrink='),app.indexOf('const nightStampOf='))),'강골 / 구급키트 never reverse');
  assert.ok(/setTimeout\(\(\)=>Sound\.play\('rescue'\),stampLand\(st\)\)/.test(ns),'rescue lands on the overstamp');
- assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
+ assert.ok(/case'closing':game\.finishNight\(\);game\.save\(\);render\(\);nightSound\(null\);closingSound\(\);break;/.test(app),'전체 건너뛰기 drops a waiting cue');
  const audio=read('dist/ui/audio.js');
  for(const c of ['return','great','retreat','injury','severe'])assert.ok(new RegExp('\\n '+c+':\\{[^}]*hit:1').test(audio),c+' hits on its first note');
  assert.ok(!/\n death:\{[^}]*hit:1/.test(audio)&&!/\n rescue:\{[^}]*hit:1/.test(audio),'사망 keeps its restrained attack; rescue is an accent');
