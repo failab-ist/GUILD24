@@ -5,8 +5,8 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.9.3(`47a70b7`, PR #10) 이후 레포 정리 커밋. 배포 빌드는 첫 화면 왼쪽 위 `v2.9.3 · 커밋`으로 확인한다.
-- 태그: `v2.9.0` → `3d0ddc6`, `v2.9.1` → `d23d076`(원격에 있음). `v2.9.2` → `d6fcfbd`, `v2.9.3` → `47a70b7`은 User가 걸어야 함
+- repository: `failab-ist/GUILD24`. main = v2.9.3 마감(PR #10 기능, PR #11 레포 정리, PR #12 UX 재확인 마감). 배포 빌드는 첫 화면 왼쪽 위 `v2.9.3 · 커밋`으로 확인한다.
+- 태그: `v2.9.0` → `3d0ddc6`, `v2.9.1` → `d23d076`(원격에 있음). `v2.9.2` → `d6fcfbd`, `v2.9.3` → v2.9.3을 닫는 PR #12 머지 커밋은 User가 걸어야 함
   (WORK 세션은 태그 push가 막혀 있다).
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 / v2.9.2 / v2.9.3). 닫힌 버전의 보고서·측정 도구는 `archive/`(`archive/README.md`가 옛 경로 → 새 경로 표).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
@@ -18,15 +18,11 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 - 후보 감사(User 미결정, 손대지 않음): Final 확정승 여유(파티/보스 비율), RoyalCert 후반 경제.
 - v3.0 준비 목록(WORK 정리본, Design 아님): `reports/v3.0-prep.md`.
 
-## User 재확인 필요 (User 2026-09-25 자리 비운 동안 추천안으로 임시 적용 — 이후 확인)
+## UX 재확인 — 닫힘 (User 2026-09-26, v2.9.3)
 
-1. SALE 트레이 접기(UI-Q-v29-28): 폰에서만, 진열대 32px 이상 스크롤 또는 트레이·상품·도크·오버레이 밖 탭 → 머리 줄 칩(▲); 칩·아무 상품(같은 상품 포함) 탭 → 펼침.
-2. 발주 플로팅 오늘 줄(UI-Q-v29-29): `오늘` 블록이 사라졌을 때만 사망 줄 상자에 구분선 + `오늘` 라벨로 붙임.
-3. 게이트 방문 최소 1명(NPC_TRAIT destinationCoverage): 기존 무작위 추첨 뒤, 손님 수 ≥ 게이트 수인데 빈 게이트가 있을 때만 2명 이상 게이트의 손님 1명(무작위, 거짓말쟁이로 이미 바뀐 손님 제외)을 옮김. 빈 게이트가 없는 날은 RNG 흐름 불변.
-4. D30 흐름(FINAL_EXPEDITION §D30 PLAYER FLOW): 마지막 발주(펼침, 카트가 남으면 `원정대 선택` 잠금) → 명단 카드가 수첩을 열고 수첩 아래 `원정대 선택` / `원정대에서 빼기`로 편성 → 준비 화면에 보급 대상 스탯 격자. 새 카피: `원정대에서 빼기`, 단계 제목 `마지막 발주`(COPY_AUDIT §14-9).
-5. 진열대 요약: 구급키트 `중상 → 부상 · 부상 → 무사`, 황금 1+1 쿠폰 `다음 소비품 효과 2회`(승인 문구에서 잘라낸 핵심; 트레이 특수 효과·도감은 전체 문구).
-6. H5 세부: 마왕 이름이 새겨진 봉인 1개(승리 주홍·정면 / 패배 흐리고 비뚤고 일부만), 착지 큐 `sealwin` / `sealfail`.
-7. ~~H1 반전 범위~~ → User 확정(2026-09-25): 사망을 면했을 때만 반전. `만반의 준비`가 사망을 막은 밤만 덮어찍기, 강골·구급키트는 반전 없음(`eb30e16`).
+2026-09-25에 User 부재 중 추천안으로 들어간 6건을 현재 구현대로 확정했다. SALE 트레이 접기(UI-Q-v29-28), 발주 플로팅 오늘 줄(UI-Q-v29-29),
+게이트 방문 최소 1명(NPC_TRAIT destinationCoverage), D30 흐름(FINAL_EXPEDITION §D30 PLAYER FLOW, COPY_AUDIT §14-9), 진열대 요약 문구,
+H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(CHANGELOG §v2.9.3).
 
 ## Next
 
@@ -34,7 +30,7 @@ v2.9.2 H1~H6 전 배치와 v2.9.3 마무리 모두 main에 있다. 새 작업 �
 
 ### User 할 일
 
-1. 태그 두 개: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `47a70b7` (GitHub Releases에서 새 태그로 만들면 된다).
+1. 태그 두 개: `v2.9.2` → `d6fcfbd`, `v2.9.3` → PR #12 머지 커밋 (GitHub Releases에서 새 태그로 만들면 된다).
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
 

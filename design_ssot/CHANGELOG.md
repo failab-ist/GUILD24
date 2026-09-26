@@ -8,6 +8,9 @@ the owner headers and in the git tag.
 Version routing (User 2026-09-26): v2.9.2 closes at `main` `d6fcfbd` (H1~H6 all adopted, balance through the third pass), where its tag
 goes; everything merged after it is v2.9.3. Owner headers now carry the version they last changed in (VERSION POLICY; the v2.9.2
 bumps had not been made and are made here with the v2.9.3 ones).
+- UX reconfirmations closed (User 2026-09-26): the six items taken on a recommendation while the User was away on 2026-09-25 are
+  confirmed as built - SALE tray fold, ORDER floating today line, every open Gate visited, the D30 flow, the shelf summary lines, the
+  H5 seal details. UI_UX / FINAL_EXPEDITION / COPY_AUDIT §14-9 lose their "to reconfirm" marks (ledgers edited in place).
 - Build marker (User 2026-09-26): the opening screen shows a small `v2.9.3 · {commit}` in its corner and the console prints it on load;
   the Pages deploy stamps the commit. UI_UX §BUILD MARKER, UI_UX_QA UI-Q-v29-36; ledgers; ui-guard pin.
 - `npm run qa:visual` harness (2026-09-26, TEST GAP): its crude drive now ends a Run before DAY 5 under the current balance, so the gate

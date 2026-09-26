@@ -2,7 +2,7 @@
 
 DOC=FINAL_EXPEDITION
 OWNER=final,D30,final_party,final_hazard,final_power,final_clear,final_prereveal,final_preparation
-DOC_VERSION=2.9.2
+DOC_VERSION=2.9.3
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/FINAL_EXPEDITION_v2.8.0-patch.md,history/FINAL_EXPEDITION_v2.5.0.md
@@ -138,7 +138,7 @@ Player-facing Final flow is:
 -> 결과
 ```
 
-(User 2026-09-25, recommended form taken while the User is away - to reconfirm.) D30 opens on the last order - the
+(User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3.) D30 opens on the last order - the
 ordinary order form, optional, confirmed on its own 발주 확정; `원정대 선택` moves on once no cart is pending. In 출전 NPC
 선택 a roster card opens that adventurer's notebook (Stats, Traits, equipment, condition, expedition records) and the pick
 or release is made from the notebook's footer. FINAL 준비 shows the Stat grid of the adventurer being supplied; the order
