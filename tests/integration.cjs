@@ -1402,4 +1402,25 @@ test('알뜰 금고: 50G every morning, on the receipt (v2.9.1 balance; was 40G)
  assert.ok(source('dist/ui/app.js').includes("(d.safeGold?line('알뜰 금고',d.safeGold):'')"),'and the receipt names it');
 });
 
+test('UI-Q-v29-37 / META §BEST DAY: the ending records the best Day, an abandon never does; D10 / D14 opens are on the Run',()=>{
+ const g=new Game();g.autosave=false;
+ assert.equal(g.account.bestDay,0,'a fresh account has no record');
+ g.start('best-day-a');g.run.day=12;g.end(false,'qa');
+ assert.equal(g.run.bestBefore,0,'the first ending had no record to beat');assert.equal(g.account.bestDay,12);
+ g.end(false,'qa again');assert.equal(g.account.bestDay,12,'an ended Run is not recorded twice');
+ g.start('best-day-b');g.run.day=12;g.end(false,'qa');assert.equal(g.run.bestBefore,12,'a tie keeps the old record');assert.equal(g.account.bestDay,12);
+ g.start('best-day-c');g.run.day=20;g.abandon();assert.equal(g.account.bestDay,12,'a manual abandon never moves the best Day');
+ g.start('best-day-d');g.run.day=17;g.end(false,'qa');assert.equal(g.run.bestBefore,12);assert.equal(g.account.bestDay,17);
+ // a save without the field is an old save, not a malformed one; a non-Day value is refused
+ const acc=copy(g.account);delete acc.bestDay;assert.ok(Save.import(Save.export(acc,null)),'no bestDay reads as 0');
+ const bad=copy(g.account);bad.bestDay=31;assert.throws(()=>Save.import(Save.export(bad,null)),'bestDay 31 is not a Day');
+ // D10 / D14: the Run records what it opened; a second Run reaching D10 opens nothing
+ const h=new Game();h.autosave=false;h.start('day-unlock');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
+ assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.premium.name],'D10 records 길드 특제 도시락 on the Run');assert.ok(h.run.toast,'the Day toast still fires');
+ h.run.day=13;h.run.phase='closing';h.closeDay();
+ assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.premium.name,DATA.itemBy.tree.name],'D14 adds 세계수 생환부적');
+ h.start('day-unlock-2');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
+ assert.equal(h.run.dayUnlocked,undefined,'an account that already opened them records nothing');
+});
+
 console.log(count+' integration groups passed');

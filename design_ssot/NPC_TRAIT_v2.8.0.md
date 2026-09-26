@@ -3,7 +3,7 @@
 DOC=NPC_TRAIT
 OWNER=npc,job,trait,growth,roster,loyalty,trusted_regular,revisit,recent_expedition,living_npc_cap,destination
 DOC_VERSION=2.9.2
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/NPC_TRAIT_v2.8.0-patch.md,history/NPC_TRAIT_v2.7.0.md,history/NPC_TRAIT_v2.6.1.md,history/NPC_TRAIT_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/NPC_TRAIT.md

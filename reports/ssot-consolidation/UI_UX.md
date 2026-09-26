@@ -1316,8 +1316,28 @@ User 2026-09-26: §SETTINGS / DEBUG BOUNDARY is followed by the new BUILD MARKER
 - the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
   corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
   from the title and appears on no other screen
-- `{version}` is the project version (2.9.3); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
+- `{version}` is the current project version (the CHANGELOG head); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
   by the Pages deploy step; a local or unstamped build reads `dev`
 - the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`
 - the one technical label the opening screen carries (User-approved); ordinary settings still carry no runtime footer
+```
+
+## AMENDMENT — replay nudge (User 2026-09-26, v2.9.4)
+
+User 2026-09-26: §END — REPLAY NUDGE is new; §Pre-Run Decoration empty-slot interaction gains the `들일 수 있음` mark. Nothing is dropped.
+
+```new
+### END — REPLAY NUDGE (v2.9.4)
+(User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-37.) Show, never assign: the END tape tells what this Run left behind,
+so the next store reads as a little closer - no task, checklist, progress bar, remaining-count, mission or reward.
+- the `본사 해금` row lists every product / Job this Run opened: the distinct-Boss unlocks it already listed, and the D10 /
+D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run records when they open; their Day toast stays as it is
+- when the Run opened nothing, one line may sit at the foot of the tape, above `다음 점포 열기` - the first that applies:
+1. this settlement carried Store Capital across the price of a Decoration the account did not own at that settlement
+(before < price <= after; judged once, so a purchase made from the ending does not change the receipt): `점포 자본으로 새 장식을 들일 수 있다.` - never a Decoration's name (each Slot offers two)
+2. the Run beat the account's best Day (META §BEST DAY): `지금까지 가장 오래 버틴 점포다 · DAY {N}`
+3. otherwise nothing
+- no new motion or sound: the line prints with the receipt body; exact copy -> COPY_AUDIT §10-3
+- a Slot row whose Slot holds a Decoration the account does not own and can afford now carries a small `들일 수 있음` mark at its
+end (a current state, not a "new" flag; no Decoration named); exact copy -> COPY_AUDIT §1-8 (User 2026-09-26, v2.9.4)
 ```

@@ -33,6 +33,8 @@ function accountOk(a,D){
   if(a.settings[k]!==undefined&&!(Number.isFinite(a.settings[k])&&a.settings[k]>=0&&a.settings[k]<=1))return false;
  if(!Array.isArray(a.discovered)||!a.discovered.every(k=>D.itemBy[k]))return false;
  if(a.tutorial!==undefined&&(typeof a.tutorial!=='object'||!a.tutorial))return false;
+ /* META §BEST DAY: absent on a save that predates it (reads 0), a Day when present */
+ if(a.bestDay!==undefined&&!(Number.isInteger(a.bestDay)&&a.bestDay>=0&&a.bestDay<=30))return false;
  const m=a.matrix,jobs=D.jobs.map(j=>j.id),bosses=D.bosses.map(b=>b.id);
  if(!m||typeof m!=='object')return false;
  if(Object.keys(m).length!==jobs.length)return false;

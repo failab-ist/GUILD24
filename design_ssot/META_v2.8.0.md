@@ -2,8 +2,8 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
+DOC_VERSION=2.9.4
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/META_v2.8.0-patch.md,history/META_v2.7.0.md,history/META_v2.6.1.md,history/META_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/META.md
@@ -297,6 +297,19 @@ D14:
 
 Full Reset clears unlock + toast state.
 Run Abandon preserves unlock + toast state.
+The Run that opens one records it, so its END lists it in `본사 해금` (UI_UX §END — REPLAY NUDGE; User 2026-09-26, v2.9.4).
+
+---
+
+## BEST DAY
+
+(User 2026-09-26, v2.9.4.) One account record: the highest Day a Run has reached, `bestDay` (0 on a fresh account).
+
+- set when a Run ends naturally (Run Fail, bankruptcy, Final): `bestDay = max(bestDay, the Run's Day)`
+- a manual 현재 지점 포기 never reaches the ending, so it never moves `bestDay`
+- a personal record for the END replay line (UI_UX §END — REPLAY NUDGE) only: no Power, unlock, price or reward reads it
+- the Run keeps the value it replaced, so a reload of the ended Run reads the same comparison
+- Full Data Reset clears it; a save without it reads 0
 
 ---
 
@@ -738,6 +751,7 @@ Cross-run account persistence must preserve:
 - 7 Boss-cleared flags or equivalent derived set
 - approved unlock state derivable from Distinct Boss Clear Count
 - Monster Knowledge progress
+- the best Day (§BEST DAY)
 
 Run save and account Meta state may use separate storage structures.
 

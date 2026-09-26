@@ -3,7 +3,7 @@
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
 DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.3
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/CORE_RUN_v2.8.0-patch.md,history/CORE_RUN_v2.7.0.md,history/CORE_RUN_v2.6.1.md,history/CORE_RUN_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/CORE_RUN.md

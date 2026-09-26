@@ -27,7 +27,7 @@ function freshStore(){
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{premium:false,tree:false},
+  runs:0,wins:0,bestDay:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{premium:false,tree:false},
   store:freshStore(),
   /* Retired v2.7 Franchise payload, kept dormant for data preservation only: no active effect,
      no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
@@ -156,10 +156,14 @@ function finish(a,run,win){
   .map(id=>names.find(x=>x.id===id)?.name).filter(Boolean);
 }
 
+/* META §BEST DAY (User 2026-09-26, v2.9.4): the highest Day a Run reached, a personal record for the END replay line and
+   nothing else. Recorded by the ending only, so a manual abandon (which never reaches it) cannot move it; the Run keeps
+   the value it replaced so a reload reads the same comparison. */
+function recordBestDay(a,run){if(run.bestBefore!==undefined)return;run.bestBefore=a.bestDay||0;a.bestDay=Math.max(run.bestBefore,run.day);}
 const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>[...store(a).owned];
 const storeLoadout=a=>({...store(a).loadout});
-G.Meta={fresh,freshFranchise,observe,finish,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
+G.Meta={fresh,freshFranchise,observe,finish,recordBestDay,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};
 })(globalThis);
