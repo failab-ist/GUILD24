@@ -16,6 +16,7 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 
 - 없음. 다음은 배포 빌드(v2.9.3)로 User 프레쉬 플레이 데이터를 받아 4차 밸런스를 재확인하는 것. 데이터에는 첫 화면의 커밋 번호를 같이 받는다.
 - 후보 감사(User 미결정, 손대지 않음): Final 확정승 여유(파티/보스 비율), RoyalCert 후반 경제.
+- v3.0 준비 목록(WORK 정리본, Design 아님): `reports/v3.0-prep.md`.
 
 ## User 재확인 필요 (User 2026-09-25 자리 비운 동안 추천안으로 임시 적용 — 이후 확인)
 
