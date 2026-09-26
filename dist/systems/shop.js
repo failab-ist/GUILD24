@@ -307,7 +307,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
      cleared every Morning so a stale v8 save cannot carry one back in. */
   s.special=null;
  }
- generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?D.relicParams.terminal.extraOffers:0)+(this.wears('dawnSign')?D.decorationParams.dawnSign.extraOffers:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
+ generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('terminal')?D.relicParams.terminal.extraOffers:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
  if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
@@ -371,7 +371,10 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  arrive(){const n=this.current();if(!n)return;n.newToday=!n.introduced;n.introduced=true;n.visits++;n.outlook=this.outlookFor(n);if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.has('premiumMember')&&G.Adventurer.isTrustedRegular(n))n.money+=D.relicParams.premiumMember.arrivalGold;if(n.newToday&&this.has('rookieBoard'))n.money+=D.relicParams.rookieBoard.arrivalGold;if(n.certGoldDay!=null&&n.certGoldDay<this.run.day){n.money+=D.relicParams.expeditionCert.nextVisitGold;n.certGoldDay=null;}n.money=Math.min(2000,n.money);
  /* 의무실 현판: an adventurer who walks in with an ordinary Injury (never 중상) may leave it at the
     door. The roll is drawn only while the Decoration is worn and only for an injured arrival. */
- n.healedBy=null;if(n.injury===1&&this.wears('infirmaryPlaque')&&this.rng.next()<D.decorationParams.infirmaryPlaque.healChance){n.injury=0;n.status='건강';n.healedBy='infirmaryPlaque';this.run.daily.infirmaryHeals=(this.run.daily.infirmaryHeals||0)+1;}const ev=this.run.event?.effects||{};n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
+ n.healedBy=null;if(n.injury===1&&this.wears('infirmaryPlaque')&&this.rng.next()<D.decorationParams.infirmaryPlaque.healChance){n.injury=0;n.status='건강';n.healedBy='infirmaryPlaque';this.run.daily.infirmaryHeals=(this.run.daily.infirmaryHeals||0)+1;}const ev=this.run.event?.effects||{};
+  /* META §sign — 원정 지원금 간판 (User 2026-09-26, v2.9.7): the Event 추가 구매 channel - a share of the purse spendable this
+     visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
+  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('dawnSign')?D.decorationParams.dawnSign.budgetShare:0)));const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');

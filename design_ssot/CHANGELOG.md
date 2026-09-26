@@ -3,6 +3,27 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.7 — decorations and Rarity (User 2026-09-26)
+
+After the decoration and Rarity review (reports/deco-balance-v296.md §1~7; `tools/deco-impact.cjs`, `tools/rarity-value.cjs`,
+reader 800 runs per arm):
+- Rarity growth step 0.06 -> 0.10 (NPC_TRAIT §NPC RARITY now writes the generation values down; the step lived only in Source).
+  At 0.06 Rarity's benefit and its operating-cost price roughly cancelled; at 0.10 the benefit is clear (clear +3.7%p vs cost
+  -0.2%p) and a fresh account sits at D30 9.8% / clear 6.8%. The unused `traitSlots` field is removed (User: the per-Level Trait slot
+  was dropped earlier).
+- 원정 지원금 간판 (sign economy, id dawnSign, remakes 새벽배송 안내판): each visiting adventurer gets an extra purchase budget of 25%
+  of their purse, that visit only - the Event 추가 구매 channel, cleared every night, so nothing compounds (the ×purse variant was
+  rejected for that). Measured D30 +19.6 / clear +10.7 / Store Capital per Run +481, beside 훈련소 제휴 간판 (+22.0 / +16.6 / +369).
+- wall and display economy Decorations swap Slots, names and art following the Slot: 길드 추천 매대 (display 500, 30% visitor +1
+  unchanged) and 명예 모험가 액자 (wall 1000, rarity weights [35, 30, 22, 9, 4], above 평범 65%). Ids kept; an Account holding one on
+  the Slot it left has that Slot empty, ownership kept.
+- 구급품 진열장: up to ten times per Run an ordinary Injury the expedition would leave is not left (구급키트's 부상 -> 무사 step);
+  it no longer turns a Death into 중상 (that overlapped 추모 방명록). A carried 구급키트 settles first.
+- Store-panel effect lines break between words (`word-break:keep-all`).
+- META §INITIAL FOUR DECORATIONS / §SURVIVAL ALTERNATIVES / §Prices, NPC_TRAIT §NPC RARITY, NPC_TRAIT_QA, RELIC / RELIC_QA (name
+  collision lines), COPY_AUDIT §9-3 / §9-5 / §4-24, PRESENTATION_PRINCIPLES (the brink row); ledgers; art dawnSign / guildPlaque /
+  premiumCase; font subset regenerated; tests revision / copy / integration; qa-replay-nudge buys the display Decoration.
+
 ## v2.9.6 — codex and Item Flavor cleanup (User 2026-09-26)
 
 - Monster Knowledge leaves the codex (User 2026-09-26: every Gate's Hazards are public, so the tab that opened them by

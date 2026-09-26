@@ -2,8 +2,8 @@
 
 DOC=NPC_TRAIT_QA
 OWNER=qa,npc,trait,roster,living_npc_cap,wallet,destination,condition,growth,revisit,recent_expedition,injury
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/NPC_TRAIT_QA_v2.8.0-patch.md,history/NPC_TRAIT_QA_v2.7.0.md,history/NPC_TRAIT_QA_v2.6.1.md,history/NPC_TRAIT_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/NPC_TRAIT_QA.md
@@ -672,9 +672,9 @@ No separate punishment system is needed to make care matter.
 
 ## NPC-Q-v28-10 — PREMIUM DISPLAY RARITY WEIGHTING
 
-With the `프리미엄 쇼케이스` Decoration active, the ordinary NPC rarity draw uses exactly:
+With the `명예 모험가 액자` Decoration (id premiumCase) active, the ordinary NPC rarity draw uses exactly (User 2026-09-26, v2.9.7; META §wall — 명예 모험가 액자):
 
-    [51, 30, 14, 4, 1]
+    [35, 30, 22, 9, 4]
 
 for Common / Uncommon / Rare / Epic / Legendary.
 

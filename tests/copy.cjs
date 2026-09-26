@@ -630,7 +630,8 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
  /* REL-Q-v28-1: the two renamed rows really dropped 쇼케이스, and the Decoration that owns the
     word keeps it. */
  for(const id of ['showcase','coldcase'])assert.ok(!DATA.relicBy[id].name.includes('쇼케이스'),id+' no longer reuses 쇼케이스');
- assert.ok(DATA.decorations.some(d=>d.name==='프리미엄 쇼케이스'),'the Decoration of that name is untouched');
+ /* v2.9.7 (User 2026-09-26): the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 (RELIC §name collision, REL-Q-v28-1) */
+ assert.equal(DATA.decorationBy.premiumCase.name,'명예 모험가 액자','the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자');
  /* REL-Q-v28-10 / SA-Q26: the exact stale phrases the amendment retires, gone from every row. */
  const all=DATA.relics.map(r=>r.description).join('\n');
  /* '+25G' left this list with the 2026-09-23 rebalance: 프리미엄 멤버십's approved copy now says 소지금 +25G */

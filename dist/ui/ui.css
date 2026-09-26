@@ -3229,3 +3229,4 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 @media (prefers-reduced-motion:reduce){.kit .heal-note{animation:none}}
 /* a 4-digit price keeps its words whole when the Store Management key wraps */
 .slot-option>button{word-break:keep-all}
+.slot-option{word-break:keep-all} /* v2.9.7: the effect line broke Hangul words mid-word at 390 (`확률 / 로`) */

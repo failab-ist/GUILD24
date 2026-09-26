@@ -37,6 +37,9 @@ function fresh(){
    Relic: a Decoration never enters `run.facilities`, never marks a Relic owned and never consumes
    a Relic slot. */
 const store=a=>(a.store??=freshStore());
+/* META §INITIAL FOUR DECORATIONS (v2.9.7): a Decoration only counts on its own Slot - an Account saved before the wall / display
+   swap may still hold one on the Slot it left, and that Slot is simply empty. Ownership is untouched. */
+const fits=(s,id)=>!!id&&D.decorationBy[id]?.slot===s;
 const decorationOwned=(a,id)=>store(a).owned.includes(id);
 function buyDecoration(a,id){
  const d=D.decorationBy[id];if(!d)throw Error('없는 장식입니다.');
@@ -46,7 +49,7 @@ function buyDecoration(a,id){
  st.capital-=d.price;st.owned.push(id);
  /* Buying is not equipping. An empty Slot simply takes the first thing bought for it, which is
     a convenience, not a rule - it can be unequipped again. */
- if(!st.loadout[d.slot])st.loadout[d.slot]=id;
+ if(!fits(d.slot,st.loadout[d.slot]))st.loadout[d.slot]=id;
  return d;
 }
 function equipDecoration(a,slot,id){
@@ -62,7 +65,7 @@ function equipDecoration(a,slot,id){
    a copy of this at start and never re-reads the Account. */
 function plannedLoadout(a){const st=store(a);
  return Object.fromEntries(D.decorationSlots
-  .map(s=>[s,st.loadout[s]&&st.owned.includes(st.loadout[s])?st.loadout[s]:null])
+  .map(s=>[s,fits(s,st.loadout[s])&&st.owned.includes(st.loadout[s])?st.loadout[s]:null])
   .filter(([,id])=>id));}
 /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the limit steps up by
    the current Day's segment (D.balance.deathLimitSegments) - the count itself never resets at a
@@ -162,7 +165,7 @@ function finish(a,run,win){
 function recordBestDay(a,run){if(run.bestBefore!==undefined)return;run.bestBefore=a.bestDay||0;a.bestDay=Math.max(run.bestBefore,run.day);}
 const storeCapital=a=>store(a).capital;
 const ownedDecorations=a=>[...store(a).owned];
-const storeLoadout=a=>({...store(a).loadout});
+const storeLoadout=a=>Object.fromEntries(Object.entries(store(a).loadout).map(([s,id])=>[s,fits(s,id)?id:null]));
 G.Meta={fresh,freshFranchise,observe,finish,recordBestDay,storeCapital,ownedDecorations,storeLoadout,freshMatrix,jobMastery,totalJobMastery,distinctBossClear,
  opened,itemUnlocked,jobUnlocked,JOBS,BOSSES,
  freshStore,decorationOwned,buyDecoration,equipDecoration,plannedLoadout,capitalRate,addCapital,deathLimit,deathLimitSegmentEnd};

@@ -1809,7 +1809,7 @@ const SLOT_COPY={sign:'간판',wall:'벽면',counter:'계산대',display:'진열
    wall, the safe at the register, the showcase in front of the shelving. The loadout is read
    from the Run, never from the Account, so what is on screen is what this Run started with. */
 function decoPlate(slot){const id=game.run?.loadout?.[slot];if(!id)return '';
- const d=D.decorationBy[id],art=Scene.decoration(id);if(!d||!art)return '';
+ const d=D.decorationBy[id],art=Scene.decoration(id);if(!d||!art||d.slot!==slot)return ''; /* v2.9.7: art belongs to its own Slot */
  /* No hover-only title: the effect is read in 점포 장식. A tooltip would be the only place a
     touch player could not reach. The name lives in the label, for anyone not reading the art. */
  return '<span class="decoplate '+slot+'" role="img" aria-label="'+E(SLOT_COPY[slot]||slot)+' · '+E(d.name)+'">'+art+'</span>';}

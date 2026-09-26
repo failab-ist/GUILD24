@@ -1364,22 +1364,28 @@ test('의무실 현판: an ordinarily injured arrival may be healed at the door,
  const p=past0(fresh('infirmary-none')),m=p.run.npcs[0];m.injury=1;p.run.queue=[m.id];p.run.cursor=0;p.arrive();
  assert.equal(m.injury,1,'without the Decoration nothing heals');
 });
-test('구급품 진열장: a Death becomes 중상, up to three times per Run (v2.9.1 balance; was twice)',()=>{
+test('구급품 진열장: an ordinary Injury the expedition would leave is not left, up to ten times per Run (User 2026-09-26, v2.9.7)',()=>{
  const g=past0(fresh('aidkit')),d={...g.run.dungeons[0],power:9999};
- const weak=()=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=[];n.injury=0;return n;};
- let seed=null;for(let i=0;i<500&&seed===null;i++){const n=weak();Dungeon.resolve(n,d,new RNG('aid-'+i));if(!n.alive)seed='aid-'+i;}
- assert.ok(seed,'a Death case exists');
- const run={loadout:{counter:'firstAidKit'}};
- const saved=weak(),rep=Dungeon.resolve(saved,d,new RNG(seed),[],run);
- assert.equal(saved.alive,true,'the kit keeps them alive');assert.equal(rep.outcome,'중상');
- assert.equal(rep.avoidedDeath,true);assert.equal(run.aidKitSaves,1,'one of three is spent');
- assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
- const second=weak();Dungeon.resolve(second,d,new RNG(seed),[],run);assert.equal(second.alive,true,'the second Death is caught too');
- assert.equal(run.aidKitSaves,2);
- const third=weak();Dungeon.resolve(third,d,new RNG(seed),[],run);assert.equal(third.alive,true,'the third Death is caught too');
- assert.equal(run.aidKitSaves,3);
- const fourth=weak();Dungeon.resolve(fourth,d,new RNG(seed),[],run);assert.equal(fourth.alive,false,'a fourth is not');
- const bare=weak();Dungeon.resolve(bare,d,new RNG(seed),[],{loadout:{}});assert.equal(bare.alive,false,'without it the Death stands');
+ const weak=(pack=[])=>{const n=copy(g.run.npcs[0]);n.stats={combat:1,survival:1,mobility:1,spirit:1};n.traits=[];n.pack=pack;n.injury=0;return n;};
+ const find=want=>{for(let i=0;i<800;i++){const n=weak(),r=Dungeon.resolve(n,d,new RNG('aid-'+i));if(r.outcome===want&&(want!=='부상'||n.injury===1))return 'aid-'+i;}return null;};
+ const hurt=find('부상'),dead=find('사망');
+ assert.ok(hurt&&dead,'an Injury case and a Death case exist');
+ const run={loadout:{display:'firstAidKit'}};
+ const healed=weak(),rep=Dungeon.resolve(healed,d,new RNG(hurt),[],run);
+ assert.equal(rep.outcome,'부상','the Outcome is the same 부상');assert.equal(healed.injury,0,'but no Injury is left');
+ assert.equal(run.aidKitSaves,1,'one of ten is spent');assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
+ const bare=weak();Dungeon.resolve(bare,d,new RNG(hurt),[],{loadout:{}});assert.equal(bare.injury,1,'without it the Injury stands');
+ /* a carried 구급키트 settles first: the expedition it acted on spends nothing */
+ const withKit=weak(['kit']),kitRun={loadout:{display:'firstAidKit'}};Dungeon.resolve(withKit,d,new RNG(hurt),[],kitRun);
+ assert.equal(withKit.injury,0);assert.equal(kitRun.aidKitSaves||0,0,'the Item took it, the count is untouched');
+ /* 사망 is not its business any more */
+ const died=weak(),deadRun={loadout:{display:'firstAidKit'}};Dungeon.resolve(died,d,new RNG(dead),[],deadRun);
+ assert.equal(died.alive,false,'a Death stands');assert.equal(deadRun.aidKitSaves||0,0);
+ /* the tenth is the last */
+ const late={loadout:{display:'firstAidKit'},aidKitSaves:9},tenth=weak();Dungeon.resolve(tenth,d,new RNG(hurt),[],late);
+ assert.equal(tenth.injury,0);assert.equal(late.aidKitSaves,10);
+ const eleventh=weak();Dungeon.resolve(eleventh,d,new RNG(hurt),[],late);assert.equal(eleventh.injury,1,'an eleventh is not');
+ assert.equal(DATA.decorationParams.firstAidKit.saves,10);
 });
 test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 65% chance (v2.9.1 balance; was 50%)',()=>{
  const P=DATA.decorationParams.trainingRack,saved=P.chance;
