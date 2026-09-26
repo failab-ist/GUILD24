@@ -540,9 +540,14 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
   assert.ok(it,'the catalog still has an item called '+id);
   assert.ok(!it.description.includes(banned),it.name+' flavour no longer restates its own effect line');
  }
+ /* v2.9.6 (User 2026-09-26, COPY_AUDIT §4-22 / §12-4): the return stone's crisis roll used to live only in its flavour;
+    it moved to its own effect row, and the flavour is flavour again */
  const stone=DATA.items.find(x=>x.id==='stone');
- assert.ok(stone&&/한 번 더 돌아올 기회/.test(stone.description),
-  'the return stone keeps the rule that is only written there');
+ assert.ok(stone&&!/위기|한 번 더/.test(stone.description),'the return stone flavour no longer carries the rule');
+ const esc=Presentation.rows(stone.effects,undefined,stone.category).find(r=>r.key==='escape');
+ assert.equal(esc&&esc.label,'탈출 확률 +'+Math.round(stone.effects.escape*100)+'%p (사망·중상 위기에 한 번 더)','its escape row states it');
+ for(const id of ['ramen','wine','cloak','coffee','boots'])
+  assert.ok(!/대응|냉기|공포|부식|진창|발걸음|저항/.test(DATA.itemBy[id].description),DATA.itemBy[id].name+' flavour does not restate its effect line');
 
  /* The ten v2.7 Epics shipped with the flavour slot empty because Canonical gave names and no
     prose. The approved copy is now in, and it is flavour: it may not name a channel, a number

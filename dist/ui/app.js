@@ -1392,7 +1392,7 @@ function shelf(isFinal=false){
 /* User 2026-09-25: the two utility Items read their core on the shelf only - the approved line's own words, the
    condition in brackets left to the tray's 특수 효과 and the codex, which keep the full line */
 const SHELF_CORE={aftercare:'중상 → 부상 · 부상 → 무사',duplicate:'다음 소비품 효과 2회'};
-function shelfEffects(rows){const t=rows.map(r=>SHELF_CORE[r.key]||(r.label+' '+r.text).trim()).join(' · '),len=[...t].length;
+function shelfEffects(rows){const t=rows.map(r=>SHELF_CORE[r.key]||(r.utility?r.label.replace(/ \([^)]*\)$/,''):(r.label+' '+r.text).trim())).join(' · '),len=[...t].length;
  return '<span'+(len>28?' class="densest"':len>24?' class="dense"':len>19?' class="tight"':'')+'>'+E(t)+'</span>';}
 const PRICE_ROLE={half:'할인 50%',full:'정가',overcharge:'바가지 150%'};
 /* the three price keys of an ordinary sale - one owner for the tray (SALE) and the FINAL panel's twin */
