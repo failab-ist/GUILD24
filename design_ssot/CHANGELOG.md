@@ -23,7 +23,8 @@ the owner headers and in the git tag.
 - Item values (User 2026-09-26, after the item review reports/item-balance-v296.md and the second fresh Run to DAY 24 - judged on
   target, no injury lever): 불룡볶음면 냉기 +6 → +12 / 강인함 +8 → +6 (its Cold read below 컵라면's); 귀환석 260 / 520 → 200 / 400
   (its sale price sat above the p90 customer purse until ~D20); Epic Drink Stat +4 - 초고속 에너지드링크 기동 26, 대현자 허브엘릭서
-  정신 28, 왕도 천연암반수 강인함 24. 방수망토 and 마그마 냉각장비 unchanged. `reader` 200 runs before → after: reach D20 .17 → .21,
+  정신 28, 왕도 천연암반수 강인함 24. 방수망토 unchanged. 마그마 냉각장비 투력 +6 → +10 (User 2026-09-26, after the merge; the
+  only Epic hybrid for a one-Hazard Gate read weaker at its own Gate than 쿨링 이온음료). `reader` 200 runs before → after: reach D20 .17 → .21,
   D30 .05 → .07, clear .025 → .020. ITEM §HAZARD COUNTER BASELINE / §EPIC FOOD / DRINK / POTION / §OTHER ACTIVE ITEMS / ACTIVE
   CATALOG, DUNGEON_ITEM_QA; ledgers; tests vocabulary; reports/ITEM-PRICES.md regenerated.
 - Codex cards break between words only (`word-break:keep-all`; separate visual review, RUNTIME UX BUG that predates v2.9.6:

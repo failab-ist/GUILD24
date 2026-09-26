@@ -57,7 +57,7 @@ item('spiderkit','거미줄 방호세트',3,165,330,'gear',5,'spiderkit','귀환
 item('slimesuit','연금 방수슈트',3,165,330,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:22,mire:18}),
 item('cryptlantern','성화 랜턴',3,165,330,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:18,dark:18}),
 item('snowvisor','백설 방한고글',3,165,330,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:22,whiteout:18}),
-item('magmagear','마그마 냉각장비',3,175,350,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:6}),
+item('magmagear','마그마 냉각장비',3,175,350,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
 item('herobar','왕도 천연암반수',3,185,370,'drink',3,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),

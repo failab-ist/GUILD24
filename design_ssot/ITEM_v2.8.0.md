@@ -612,11 +612,12 @@ Field Gear / Epic
 Field Gear / Epic
 175 / 350
 화염 +18
-투력 +6
+투력 +10
 ```
 
 FIRE uses one Hazard plus its existing higher-combat identity instead of inventing a second FIRE Hazard.
-The `투력 +6` on `마그마 냉각장비` is an explicit catalog exception; it is not permission for generic specialist Field Gear to gain Core Stats.
+The `투력 +10` on `마그마 냉각장비` is an explicit catalog exception; it is not permission for generic specialist Field Gear to gain Core Stats.
+투력 +6 → +10 (User 2026-09-26, v2.9.6): the only Epic hybrid for a one-Hazard Gate read weaker at its own Gate than the Rare 쿨링 이온음료; the combat half is what the Fire Gate's higher Power asks for, and 화염 +18 stays below the Main's +26.
 
 ### EPIC FOOD / DRINK / POTION — TOP-END PREPARATION
 
@@ -798,7 +799,7 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 32 | 연금 방수슈트 | Field Gear E | 165 / 330 | 부식 +22, 진창 +18 | Slime Hybrid |
 | 33 | 성화 랜턴 | Field Gear E | 165 / 330 | 공포 +18, 어둠 +18 | Crypt Hybrid |
 | 34 | 백설 방한고글 | Field Gear E | 165 / 330 | 냉기 +22, 화이트아웃 +18 | Snow Hybrid |
-| 35 | 마그마 냉각장비 | Field Gear E | 175 / 350 | 화염 +18, 투력 +6 | Fire Hybrid |
+| 35 | 마그마 냉각장비 | Field Gear E | 175 / 350 | 화염 +18, 투력 +10 | Fire Hybrid |
 | 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +26, Supply 2 | Top-end mobility |
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
 | 40 | 최상급 포션 | Potion E | 210 / 420 | 투력 +28 | Top-end raw Power |
