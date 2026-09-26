@@ -8,7 +8,8 @@
 //   firstAidKit rework   -> {kit:'injury', saves:N[, daily:true]}  (부상 N회 -> 무사 instead of 사망 -> 중상; daily: N a Day)
 //   node tools/deco-impact.cjs [runs] --arms 'none,firstAidKit inj10'   runs only the named arms
 //   --potential 0.10   every arm runs with Rarity's growth step at 0.10 instead of 0.06 (the rarity proposal)
-//   dawn remake arms   {dawn:'buy'|'wallet'|'overhead'}: ORDER buy price -20% / visiting wallet +30% / operating cost -25%
+//   dawn remake arms   {dawn:'budget',share} (User 2026-09-26 plan C: an extra purchase budget of share x the purse, that visit only -
+//                      the Event 추가 구매 channel, reset every night, so nothing compounds) | 'buy' | 'wallet' | 'overhead'
 //   node tools/deco-impact.cjs [runs=600] [--out file]
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),vm=require('node:vm'),{fork}=require('node:child_process');
 const root=path.resolve(__dirname,'..');
@@ -21,10 +22,11 @@ const ARMS=[
  ['firstAidKit (cur)','firstAidKit',{}],['firstAidKit inj3','firstAidKit',{kit:'injury',saves:3}],['firstAidKit inj5','firstAidKit',{kit:'injury',saves:5}],
  ['firstAidKit inj10','firstAidKit',{kit:'injury',saves:10}],['firstAidKit daily1','firstAidKit',{kit:'injury',saves:1,daily:true}],
  /* 새벽배송 안내판 remake candidates (User 2026-09-26: an economy Decoration as strong as 훈련소 제휴 간판); the +3 offers are off */
- ['dawn buy-20%','dawnSign',{dawn:'buy'}],['dawn wallet+30%','dawnSign',{dawn:'wallet'}],['dawn overhead-25%','dawnSign',{dawn:'overhead'}]];
+ ['dawn C20','dawnSign',{dawn:'budget',share:.2}],['dawn C30','dawnSign',{dawn:'budget',share:.3}],['dawn buy-20%','dawnSign',{dawn:'buy'}],['dawn wallet+30%','dawnSign',{dawn:'wallet'}],['dawn overhead-25%','dawnSign',{dawn:'overhead'}]];
 const one=(src,a,b)=>{const n=src.split(a).length-1;if(n!==1)throw Error('patch point x'+n+': '+a.slice(0,60));return src.replace(a,b);};
 function load(p){for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
   if(f==='systems/adventurer'&&p.potential)src=one(src,'potential=1+rarity*.06+r.next()*.10','potential=1+rarity*'+p.potential+'+r.next()*.10');
+  if(f==='systems/shop'&&p.dawn==='budget')src=one(src,'n.eventBudget=ev.wallet?Math.round(n.money*(ev.wallet-1)):0;','n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears(\'dawnSign\')?'+p.share+':0)));');
   if(f==='systems/shop'&&p.dawn==='buy')src=one(src,'return {item:it.id,price:Math.round(it.buy*price','return {item:it.id,price:Math.round((this.wears(\'dawnSign\')?.8:1)*it.buy*price');
   if(f==='systems/shop'&&p.dawn==='wallet')src=one(src,"if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}","if(n.traits.includes('rich')){n.money=Math.min(2000,n.money+50);}if(this.wears('dawnSign'))n.money=Math.min(2000,Math.round(n.money*1.3));");
   if(f==='systems/shop'&&p.dawn==='overhead')src=one(src,'return dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);','return (this.wears(\'dawnSign\')?.75:1)*dayBase*(1+.03*(avgLevel-1))*(1+.06*avgRarity);');
