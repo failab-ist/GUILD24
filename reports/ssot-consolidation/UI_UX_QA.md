@@ -1216,3 +1216,26 @@ PASS:
 FAIL:
 - a second press on the 정가 key, a pressed tray that answers a tap, a stub before the key lands, any escalation with the sale count
 ```
+
+## AMENDMENT — v2.9.2 H3 ORDER confirm (User 2026-09-25)
+
+User 2026-09-25 (v2.9.2 H3, PRESENTATION §GAME FEEL BEAT H3): UI-Q-v29-32 is added. Nothing is dropped.
+
+```new
+### UI-Q-v29-32 — ORDER CONFIRM CASCADE
+
+(User 2026-09-25, v2.9.2 H3; owner `UI_UX_v2.8.0.md` §ORDER — WAREHOUSE DISCLOSURE, ORDER CONFIRM.)
+
+SETUP:
+ORDER at 390 and 1280, motion on and reduced motion: 발주 확정 with 1 / 3 / 6 SKUs in the cart, the warehouse list open, and with 3 SKUs folded; frames at 0 / 45 / 90 / 160 / 230 / 320 / 400 ms.
+
+PASS:
+- one crate per ordered SKU lands on its own row; the last landing is within 320 ms at every SKU count
+- each count moves once, prior -> resolved, on its crate's landing; a new SKU's row arrives with its crate
+- the summary `N / M칸` · `N종` and the register's 창고 잔여 칸 move together on the last landing; folded, only they move
+- at most three audible hits; 보유 골드 counts down to the resolved value in 220 ms
+- under reduced motion the end state (counts, summary, till) is identical
+
+FAIL:
+- a crate per unit, a count that ticks up unit by unit, a cascade longer than 320 ms, a fourth audible hit, a changed `발주 완료.` line
+```

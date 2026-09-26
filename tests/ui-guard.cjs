@@ -1768,6 +1768,24 @@ test('SALE shelf row: every effect, one line, the utility Items by their core',(
  assert.ok(rowsFor('aftercare').includes('중상 → 부상, 부상 → 무사')&&rowsFor('duplicate').startsWith('다음 소비품 효과 2회'),'both cores are cut from the approved lines');
 });
 
+/* UI-Q-v29-32 (v2.9.2 H3, UI_UX §ORDER — WAREHOUSE DISCLOSURE): one crate per SKU, capped cascade, three hits at most */
+test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its landing, <= 320 ms, <= 3 hits, the till counts down',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ assert.ok(/const ORDER_BEAT=\{total:320,step:70,hits:3,till:220\};/.test(app),'320 ms cap, 70 ms step ceiling, 3 hits, 220 ms till');
+ const pc=bare(fn('playCue')),o=pc.slice(pc.indexOf("if(c==='order')"),pc.indexOf("if(c==='sale')"));
+ assert.ok(/step=Math\.min\(ORDER_BEAT\.step,\(ORDER_BEAT\.total-STAMP_FALL\)\/Math\.max\(1,k\.length-1\)\)/.test(o),'the step shrinks so the last landing stays within the cap');
+ assert.ok(/k\.forEach\(\(item,i\)=>/.test(o)&&!/quantity|cart\[/.test(o),'one crate per SKU, never per unit');
+ assert.ok(/translateY:\{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in\(3\)'\}/.test(o),'the crate reuses the NIGHT stamp fall');
+ assert.ok(/cnt\.textContent=was\+'개'/.test(o)&&/onComplete:\(\)=>\{cnt\.textContent=now;\}/.test(o),'prior value, then the resolved one on the landing');
+ assert.ok(/if\(i<ORDER_BEAT\.hits\)orderCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(i\?'crate':'order'\),land\)\)/.test(o),'at most three audible landings');
+ assert.ok(/A\(box,\{v:game\.run\.money,duration:ORDER_BEAT\.till/.test(o),'the till counts down');
+ assert.ok(/summary i/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
+ assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
+ assert.ok(/'<li data-item="'\+it\.id\+'">'/.test(fn('stockBrief')),'rows are addressable by SKU');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
+ assert.ok(/s\.notice='발주 완료\.'/.test(read('dist/systems/shop.js')),'the 발주 완료. line is unchanged');
+});
+
 /* UI-Q-v29-31 (v2.9.2 H2, UI_UX §SALE — COUNTER TRAY): the pressed price key and the A8 stub on its landing */
 test('UI-Q-v29-31: SALE counter feel - the key press, the stub on its landing, the first tick harder',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');

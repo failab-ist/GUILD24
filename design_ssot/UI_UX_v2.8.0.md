@@ -376,6 +376,14 @@ Example:
 The individual held-stock list is collapsible at every width and starts collapsed; opening it is an account-level presentation choice that persists across Days and reloads until the player folds it again (User 2026-09-24, v2.9.0).
 - the collapsed summary line still states the held-stock summary
 - used/remaining capacity is never hidden inside the collapsed detail
+- ORDER CONFIRM (User 2026-09-25, v2.9.2 H3; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H3;
+  acceptance -> UI_UX_QA UI-Q-v29-32): on 발주 확정 one crate per ordered SKU - its warehouse row's icon - falls onto its row
+  (the NIGHT stamp's 90 ms fall) in a cascade whose step is at most 70 ms and shrinks so the last landing is within 320 ms;
+  each row's count goes from its prior value straight to the resolved one on its crate's landing (never a unit at a time), and
+  a SKU new to the warehouse brings its row in with its crate. The warehouse figures - the summary `N / M칸` and `N종` and the
+  register's 창고 잔여 칸 - move together on the last landing (a folded list shows only those). At most three landings are audible (the `order` stamp, then the short `crate` of the same family); the rest
+  are silent. The till's 보유 골드 counts down to the resolved value in 220 ms. The `발주 완료.` line is unchanged. 일반
+  intensity: no hold. Under reduced motion the `order` stamp plays once and every value is resolved at once
 
 ## SALE
 

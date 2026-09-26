@@ -65,6 +65,12 @@ const nightStampOf=r=>{const st=NIGHT_STAMP[Presentation.nightTone(r)]||NIGHT_ST
    is the heaviest landing in the game (from 2 ×, the tape gives 6 px), the failure a lighter, crooked one (1.6 ×, 3 px). */
 const FINAL_SEAL={hold:200,won:{from:2,dip:6},lost:{from:1.6,dip:3}};
 let sealCueAt=null;
+/* v2.9.2 H3 ORDER confirm: one crate per ordered SKU lands on the warehouse list in a cascade capped at ORDER_BEAT.total ms
+   (the step shrinks as SKUs grow; ORDER_BEAT.step is its ceiling); only the first ORDER_BEAT.hits landings are audible - the
+   first is the existing `order` stamp, the next are the short `crate` of the same family - and the till counts down in
+   ORDER_BEAT.till ms. 일반 intensity: no hold. */
+const ORDER_BEAT={total:320,step:70,hits:3,till:220};
+let orderCueAt=[];
 function sealSound(){clearTimeout(sealCueAt);const s=game.run;if(!s?.finalReport)return;const kind=s.win?'sealwin':'sealfail';
  if(!motionOK()){Sound.play(kind);return;}
  sealCueAt=setTimeout(()=>Sound.play(kind),FINAL_SEAL.hold+STAMP_FALL);}
@@ -284,6 +290,29 @@ function playCue(){const c=cue;cue=null;const h=handoff||{};handoff=null;
     slot settles (1.05 -> 1, 240 ms), the dock Gold counts to its new value, and each Stat cell that
     changed pulses once (300 ms) and keeps the new value. A2: the customer nods (4 px, 180 ms x 2).
     Every beat is under 320 ms and the whole sale is under 600 ms; input is never held. */
+ /* H3 ORDER confirm (UI_UX §ORDER — WAREHOUSE DISCLOSURE, UI-Q-v29-32): each ordered SKU's crate - its warehouse row's icon -
+    falls onto its row with the NIGHT stamp's fall, and that row's count goes from its prior value straight to the resolved one on
+    the landing frame (one crate per SKU, never one per unit); a SKU new to the warehouse brings its row in with it. A folded list
+    shows the `N / M칸` summary only, which moves on the last landing. The till's 보유 골드 counts down to the resolved value. */
+ if(c==='order'){const k=h.skus||[],step=Math.min(ORDER_BEAT.step,(ORDER_BEAT.total-STAMP_FALL)/Math.max(1,k.length-1));
+  const brief=$('.p-order .stock-brief'),sum=brief?.querySelector('summary b'),open=!!brief?.open;
+  k.forEach((item,i)=>{const at=Math.round(i*step),land=at+STAMP_FALL;
+   const row=open?brief.querySelector('li[data-item="'+item+'"]'):null,icon=row?.firstElementChild,cnt=row?.querySelector('span');
+   if(row&&icon&&cnt){const now=cnt.textContent,was=h.before?.[item];
+    if(was===undefined)A(row,{opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'}});else cnt.textContent=was+'개';
+    A(icon,{translateY:{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in(3)'},opacity:{from:0,to:1,duration:40,delay:at,ease:'linear'},
+     onComplete:()=>{cnt.textContent=now;}});}
+   if(i<ORDER_BEAT.hits)orderCueAt.push(setTimeout(()=>Sound.play(i?'crate':'order'),land));});
+  if(!k.length)Sound.play('order');
+  /* the warehouse figures - the summary's `N / M칸` and `N종`, and the register's 창고 잔여 칸 - are one fact; all three move on the last landing */
+  if(k.length){const last=Math.round((k.length-1)*step)+STAMP_FALL,kinds=brief?.querySelector('summary i'),
+    room=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='창고 잔여 칸')?.querySelector('b'),
+    held=[[sum,h.used+' / '+game.capacity()+'칸'],[kinds,Object.keys(h.before||{}).length+'종'],[room,(game.capacity()-h.used)+' / '+game.capacity()]].filter(([el])=>el);
+   const now=held.map(([el])=>el.textContent);held.forEach(([el,was])=>{el.textContent=was;});
+   A({t:0},{t:1,duration:last,onComplete:()=>{held.forEach(([el],i)=>{el.textContent=now[i];});}});}
+  const gold=[...document.querySelectorAll('#order-register>div')].find(d=>d.firstElementChild?.textContent==='보유 골드')?.querySelector('b');
+  if(gold&&h.gold!==undefined&&h.gold!==game.run.money){const now=gold.textContent,box={v:h.gold};
+   A(box,{v:game.run.money,duration:ORDER_BEAT.till,ease:'outQuad',onUpdate:()=>{gold.textContent=fmt(Math.round(box.v));},onComplete:()=>{gold.textContent=now;}});}}
  if(c==='sale'){
   /* A8 영수증 조각: stamps in (1.12 -> 1, 200 ms) and fades after 2.5 s; showStub() owns its removal */
   const stubEl=$('.receipt-stub');if(stubEl){A(stubEl,{scale:{from:1.12,to:1,duration:200,delay:KEY_PRESS.down,ease:'outQuad'},opacity:{from:0,to:1,duration:40,delay:KEY_PRESS.down,ease:'linear'}});setTimeout(()=>{if(stubEl.isConnected)A(stubEl,{opacity:[1,0],duration:280,ease:'outQuad'});},2500+KEY_PRESS.down);}
@@ -1172,7 +1201,7 @@ function stockBrief(){const s=game.run,stocks=groupStock(),used=s.inventory.leng
  return '<details class="stock-brief" '+(opened?'open':'')+'><summary><span class="k">창고</span>'
  +'<b>'+used+' / '+cap+'칸</b>'+(stocks.length?'<i>'+stocks.length+'종</i>':'')+'</summary>'
  +(stocks.length?'<ul>'+stocks.map(st=>{const it=D.itemBy[st.item],left=st.expires-s.day;
-   return '<li>'+Art.itemIcon(it.id,20)+'<b>'+E(it.name)+'</b><span>'+st.count+'개</span>'
+   return '<li data-item="'+it.id+'">'+Art.itemIcon(it.id,20)+'<b>'+E(it.name)+'</b><span>'+st.count+'개</span>'
     +'<em'+(left<=1?' class="soon"':'')+'>'+left+'일</em></li>';}).join('')+'</ul>'
   :'<p class="none">창고가 비어 있다.</p>')+'</details>';}
 /* UI-Q-v28-26 / UI-Q-v28-29. The dock is the phase's primary action, and every other phase
@@ -2000,7 +2029,12 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'break-seal':game.breakSeal();sound('boss');render();break;
  case'menu':sound('ui');setModal('menu');break;
  case'begin-order':game.beginOrder();sound('open');render();break;
- case'confirm-order':game.confirmOrder();sound('order');render();break;
+ case'confirm-order':{/* H3: what the warehouse and the till held before the commit, for the cascade after it (playCue) */
+  const before=Object.fromEntries(groupStock().map(st=>[st.item,st.count])),used=s.inventory.length,gold=s.money,
+   skus=[...new Set(Object.entries(s.cart||{}).filter(([,q])=>q).map(([i])=>s.offers[i].item))];
+  orderCueAt.forEach(clearTimeout);orderCueAt=[];game.confirmOrder();
+  if(motionOK()){cue='order';handoff={before,used,gold,skus};Sound.sync(game.account.settings.muted,s.phase,game.account.settings);}else sound('order');
+  render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
  case'new':setModal('new');break;
