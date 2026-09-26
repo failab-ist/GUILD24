@@ -179,7 +179,7 @@ function playRun(g,out,ctx){
     test below is left as is), where `balanced` does that only for its top roster or a crisis Item. (A till floor at the operating cost was tried and dropped: with Sell = Buy x 2, holding cash back
     starves the shelf and spirals into bankruptcy - a player keeps ordering.) Adopted as the v2.9.2 review's primary lens after
     the User's save (run-level revenue, knowledge, first-discovery Days) sat closer to it than to `balanced`
-    (reports/v292-balance-review.md §2). */
+    (archive/v2.9.2/v292-balance-review.md §2). */
  const reader=policy==='reader',bal=policy==='balanced'||policy==='human'||reader,human=policy==='human',spend=spending(policy);
  /* `reader` (v2.9.2 harness, measurement only; User 2026-09-26: the bots lost their customers where the User kept them):
     it sells by what the SALE screen itself reads - the same prepare / preparedPower / hazardState / failureDeathRisk

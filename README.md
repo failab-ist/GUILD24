@@ -7,6 +7,7 @@
 - Product / design direction: `GAME_VISION.md`
 - Contributor / agent workflow: `AGENTS.md`
 - Current work state: `WORK_STATE.md`
+- Version history: `design_ssot/CHANGELOG.md`; closed-version evidence (old reports, measurement tools): `archive/` (`archive/README.md`)
 
 ## Current Design Truth
 
@@ -24,29 +25,25 @@ Detailed Rule / Numeric / UX / QA truth is intentionally not duplicated in this 
 - `dist/`
 - root `index.html` redirects to `dist/index.html`
 - no build step is required for runtime
-- deploy: a push to `main` runs `.github/workflows/pages.yml` (npm test + audit gate), then publishes `dist/` to GitHub Pages
+- deploy: a push to `main` runs `.github/workflows/pages.yml` (npm test + audit gate), stamps the commit into `dist/build.js`,
+  then publishes `dist/` to GitHub Pages; the opening screen shows `v{version} · {commit}` and the console prints it
 
 ## Development
 
 Use the scripts currently defined in `package.json`:
 
-- `npm test`
-- `npm run balance`
-- `npm run audit`
-- `npm run qa:visual`
-- `npm run assets`
-- `npm run report`
-- `npm run longitudinal`
-- `npm run hooks`
-- `npm run mastery`
-- `npm run remeasure`
-- `npm run dev`
-- `npm run qa:runtime`
-- `npm run qa:presentation:batch{1-4}:{fast|before|after}`
+- `npm test` - the suite (also the deploy gate)
+- `npm run ssot:check` - SSOT ledger line accounting (`reports/ssot-consolidation/`)
+- `npm run audit` - regenerates the Source-derived reports (`reports/COVERAGE.md`, `ITEM-PRICES.md`, `TRAITS.md`)
+- `npm run qa:runtime` - pass/fail browser harnesses
+- `npm run qa:visual` - the full visual / mobile gate (captures to `reports/ui/`, ignored)
+- `npm run dev` - local preview server
+- `npm run balance` / `longitudinal` / `mastery` - measurement harnesses (write `tests/*-results-v5.json`, ignored)
+- `npm run assets` / `npm run hooks` - vendor assets / install the git hooks
 
-`npm run qa:runtime` runs the pass/fail browser harnesses (D0 flow, D30 FINAL prep / BOSS CONFIRM /
-FINAL->END / Boss backdrops) and exits non-zero on any failure. The other `tools/qa-*.cjs` are capture
-tools for visual review.
+`npm run qa:runtime` runs the pass/fail browser harnesses (D0 flow, D30 FINAL prep / BOSS CONFIRM / FINAL->END /
+Boss backdrops, full-reset seed, Boss-reveal hold) and exits non-zero on any failure. The other `tools/qa-*.cjs` are
+capture tools for visual review. Measurement tools write nothing Canonical; a closed question's tools move to `archive/`.
 
 ## Assets
 

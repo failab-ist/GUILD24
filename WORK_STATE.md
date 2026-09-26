@@ -5,31 +5,17 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 
 ## Current
 
-- repository: `failab-ist/GUILD24`
-- 태그: `v2.9.0` → `3d0ddc6`, `v2.9.1` → `d23d076`. 둘 다 원격에 있음.
-- v2.9.1 밸런스: 완료 · main 병합 · 태그 완료(User 2026-09-25). 결정값 `reports/v29-balance-agreements.md`, 측정 `reports/v29-balance-ideal.md`, owner 변경 `design_ssot/CHANGELOG.md` §v2.9.1.
-- v2.9.2 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`:
-  - PR #5로 main에 병합됨(`dd3feb4`, Pages 배포): H1(`8c1c6bd`) + 플레이 리포트 수정 `158d001` / `0510b53` / `61b9734` / `771ba8f`.
-  - PR #6으로 main에 병합됨(`9414293`, Pages 배포 성공): 진열대 한 줄 · SALE 트레이 접기 · 게이트 방문 최소 1명 · 발주 플로팅 오늘 줄 · D30 흐름 · H5 봉인 · H1 만반의 준비 반전 · 밸런스(대성공 EXP 1.10, slope 1.50, 정가 ×0.90).
-  - PR #7으로 main에 병합됨(`49c853b`, 2026-09-26): H2 SALE 계산대 · H3 ORDER 확정 · 봇 하네스 `reader`와 측정 도구 · 2차 밸런스 · 3차 밸런스(G1 + L2 + T).
-  - PR #8(`claude/v2-9-2-h4-closing-j24s8w`)으로 main에 병합됨(`d6fcfbd`): H4 CLOSING 마감 영수증 · H6 캡처와 FINAL 진입 비트 — **v2.9.2 H1~H6 전 배치 완료**.
-  - PR #9로 main에 병합됨(`dbc2736`): 전체 초기화 seed 버그 수정 · 4차 밸런스 · 마왕 조사 모달 대기.
-  - v2.9.3 마무리(이 브랜치 → main; 태그 push는 WORK 세션에서 막혀 있어 User가 건다): 빌드 표식(첫 화면 `v2.9.3 · 커밋`, 콘솔, `Guild24.build`, 배포 시 커밋 기록) ·
-    qa:visual 하네스 복구(전부 통과) · ORDER `gates` 코치 미표시 버그 수정 · 문서 헤더 버전 정리. 내용은 CHANGELOG §v2.9.3.
+- repository: `failab-ist/GUILD24`. main = v2.9.3(`47a70b7`, PR #10) 이후 레포 정리 커밋. 배포 빌드는 첫 화면 왼쪽 위 `v2.9.3 · 커밋`으로 확인한다.
+- 태그: `v2.9.0` → `3d0ddc6`, `v2.9.1` → `d23d076`(원격에 있음). `v2.9.2` → `d6fcfbd`, `v2.9.3` → `47a70b7`은 User가 걸어야 함
+  (WORK 세션은 태그 push가 막혀 있다).
+- 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 / v2.9.2 / v2.9.3). 닫힌 버전의 보고서·측정 도구는 `archive/`(`archive/README.md`가 옛 경로 → 새 경로 표).
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
-- last tagged release: `v2.9.1`; completed v2.8 history: `archive/WORK_HISTORY_v2.8.md`
+- 현행 밸런스(v2.9.3, 4차까지): 근거 `archive/v2.9.2/v292-bot-harness.md` §7~11. User 런 보정 도구 `tools/calibrate-bot-v292.cjs`(현행).
 
 ## In Progress
 
-- v2.9.2 밸런스(User 2026-09-25, 3개 레버만): 대성공 EXP 1.10, GATE SLOPE early 1.50(late 0.80 유지), 정가 최종 구매의사 ×0.90
-  (0.97 관련 준비 포함, 50%/150% 불변) 반영 완료. 근거 `reports/v292-balance-review.md`(`human` 주 렌즈).
-  배포 후 User 플레이 데이터(가능하면 D30 직후 또는 런 종료 직후 저장)로 재확인할 예정.
-- v2.9.2 봇 하네스(User 2026-09-26): `reader` 정책과 User 런 보정 도구 추가(`reports/v292-bot-harness.md`). 그 결과로 2차 밸런스 반영
-  (User 2026-09-26 권고안): 대성공 EXP 1.00, 전투 승리 EXP 0.90, 운영비 D15 이후 +12/일. 다음 User 플레이 데이터로 재확인.
-  late Gate slope 측정(측정 전용, 2026-09-26): 0.80 / 0.90 / 1.00 비교 결과 `reports/v292-bot-harness.md` §8. Source는 late 0.80 그대로.
-  3차 밸런스(User 2026-09-26 "g1 l2 t"): Gate D11~20 1.10/일, levelFactor 하한 0.85, D21~29 T3 +0.10 반영(§9~10 측정 근거).
-  4차 밸런스(User 2026-09-26 "PL", §11 측정 근거): Gate 수 D19~24 3개 70% · D25~29 3개 고정, Level 사망 보정 제거, 후방 창고 증설 +5칸.
-  다음: 배포 빌드로 User 프레쉬 플레이 데이터 재확인. 후보 감사(User 미결정): Final 확정승 여유, RoyalCert 후반 경제.
+- 없음. 다음은 배포 빌드(v2.9.3)로 User 프레쉬 플레이 데이터를 받아 4차 밸런스를 재확인하는 것. 데이터에는 첫 화면의 커밋 번호를 같이 받는다.
+- 후보 감사(User 미결정, 손대지 않음): Final 확정승 여유(파티/보스 비율), RoyalCert 후반 경제.
 
 ## User 재확인 필요 (User 2026-09-25 자리 비운 동안 추천안으로 임시 적용 — 이후 확인)
 
@@ -41,18 +27,13 @@ STATE: V2_9_1_CLOSED_TAGGED · V2_9_2_CLOSED(main `d6fcfbd`, 태그 `v2.9.2`는 
 6. H5 세부: 마왕 이름이 새겨진 봉인 1개(승리 주홍·정면 / 패배 흐리고 비뚤고 일부만), 착지 큐 `sealwin` / `sealfail`.
 7. ~~H1 반전 범위~~ → User 확정(2026-09-25): 사망을 면했을 때만 반전. `만반의 준비`가 사망을 막은 밤만 덮어찍기, 강골·구급키트는 반전 없음(`eb30e16`).
 
-## Next — v2.9.2 타격감 완료(main 병합됨)
+## Next
 
-**v2.9.2 H1~H6 전 배치 ADOPTED.** 정확한 내용·owner·커밋은 `design_ssot/CHANGELOG.md` §v2.9.2 참고(배치별 상세 지시문은 여기서 지움 — 이미 Source·문서·커밋 로그에 그대로 있어 이 파일에 다시 베끼지 않는다).
+v2.9.2 H1~H6 전 배치와 v2.9.3 마무리 모두 main에 있다. 새 작업 지시가 없으면 여기서 멈춘다. 연출 작업을 다시 열 때는 아래 함정 목록을 먼저 읽는다.
 
-커밋: H1 `8c1c6bd` · H5(§FINAL RESULT — SEAL STAMP) · H2 `8874e19` · H3 `96375e1` · H4 `97c8f42` · H6 캡처
-`38d11bd`/`f4a6133` · H6 FINAL 진입 비트(이 커밋).
+### User 할 일
 
-### User 결정 대기 (WORK가 판단하지 않음)
-
-1. ~~DAY0→DAY1 마왕 조사 모달 겹침~~ → User 지시로 해결(2026-09-26, `e4cd761`): MORNING 진입 뒤 420ms(셔터) 대기 후 열림,
-   대기 중 화면 입력 차단(CORE_RUN §D0), reduced motion은 즉시. 여섯 리빌 스테이지 공통. UI-Q-v29-35, `tools/qa-boss-hold.cjs`.
-2. **v2.9.2 태그**: 닫을지는 User 결정.
+1. 태그 두 개: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `47a70b7` (GitHub Releases에서 새 태그로 만들면 된다).
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
 

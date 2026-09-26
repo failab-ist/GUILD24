@@ -296,7 +296,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    await p.reload({waitUntil:'load'});await p.waitForTimeout(250);
    check(`SL @${tag} and a second reload is the same (idempotent)`,await p.evaluate(`(()=>{const r=Guild24.game.run;return JSON.stringify([r.money,r.stats.revenue,r.inventory.length,r.npcs.map(n=>[n.money,n.pack,n.history.length])]);})()`)===legacyAcct);
 
-   // ---- X: a visible label change. Controlled setup (like qa-end-states "grown"): the three members'
+   // ---- X: a visible label change. Controlled setup (like archive/v2.8/tools/qa-end-states.cjs "grown"): the three members'
    //      투력 is raised by one flat amount, chosen as the first at which the single best
    //      affordable transfer crosses the shared 0.8 line - the label then moves 불리 -> 접전
    //      through the real 보급 press, nothing about the Final is written.

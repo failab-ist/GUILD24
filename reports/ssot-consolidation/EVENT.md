@@ -505,7 +505,7 @@ v2.9.0 F3 (2026-09-25): the repeated-strain Death cut surfaced a morning whose w
 
 ## AMENDMENT — v2.9.1 balance: 23. 위령제 (User decision 2026-09-25)
 
-User decision 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3): the catalog gains 23. 위령제 — every segment Death limit +1 from the Day it occurs. TYPE / WEIGHT / eligibility / once-per-Run / copy are UNRESOLVED and stated so in the owner.
+User decision 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md` §3): the catalog gains 23. 위령제 — every segment Death limit +1 from the Day it occurs. TYPE / WEIGHT / eligibility / once-per-Run / copy are UNRESOLVED and stated so in the owner.
 
 ```text
 총 22종.

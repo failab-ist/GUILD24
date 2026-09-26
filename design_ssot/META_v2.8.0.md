@@ -656,7 +656,7 @@ Validation must confirm:
 If validation produces a Balance Finding, report it and stop. Do not auto-tune the rate table,
 Decoration prices, or unrelated Run balance.
 
-User decision 2026-09-25 (v2.9.1 balance): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`reports/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
+User decision 2026-09-25 (v2.9.1 balance): the rate table (1 / 2 / 3 / 4 / 5%), the prices (500 / 750 / 1000 / 1250) and the Decoration effects were set together with the Run balance and measured (`archive/v2.9.1-balance/v29-balance-ideal.md`); the measured acquisition (first Decoration Run 4-6, four Slots Run 9) is later than the 2026-09-24 expectation (Run 2-3) and is reported, not tuned here.
 
 ## RETIRED FRANCHISE SYSTEM — INACTIVE ARCHIVE
 

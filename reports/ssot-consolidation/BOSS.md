@@ -413,7 +413,7 @@ Not reduced by GLUTTONY (User 2026-09-24, v2.9.0):
 
 ## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §7): WRATH 200 -> 180 (ratio Bosses follow); GREED shortfall cap 12 -> 11; SLOTH 200 / 189 / 171 / 149. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md` §7): WRATH 200 -> 180 (ratio Bosses follow); GREED shortfall cap 12 -> 11; SLOTH 200 / 189 / 171 / 149. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 shortfallCap = 12 Boss Power

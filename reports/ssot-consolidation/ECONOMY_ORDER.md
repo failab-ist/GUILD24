@@ -527,7 +527,7 @@ fit-based need, whose fit sums the Item's direct Counter values and the values o
 
 ## AMENDMENT — v2.9.1 balance (User decision 2026-09-25)
 
-User decisions 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §4): operating cost dayBase 170 + 1 × (Day − 1) and Level factor 0.03. Earlier declarations this batch supersedes were removed from the fences above in place.
+User decisions 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md` §4): operating cost dayBase 170 + 1 × (Day − 1) and Level factor 0.03. Earlier declarations this batch supersedes were removed from the fences above in place.
 
 ```text
 × (1 + 0.02 × (avgLevel - 1))

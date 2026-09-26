@@ -58,7 +58,7 @@ Already covered by v2.9.0 (not deferred): expectation/function match (category g
 simplicity around the core fun (Supply → Fatigue only, one Stat per Hazard, two-clause cards), detail (receipt stub,
 hand-over, reason-specific refusal lines).
 
-Routed to the balance session, not here (see `reports/v29-balance-finding-handoff.md`):
+Routed to the balance session, not here (see `archive/v2.9.1-balance/v29-balance-finding-handoff.md`):
 - kind lies as hidden assists: bad-luck protection after consecutive failures, an overhead easing on the day before
   bankruptcy — allowed by `재료는 공개, 공식은 숨김`, must never contradict the NIGHT proof surface; an alternative or
   companion to re-tuning the F3 / F4 values

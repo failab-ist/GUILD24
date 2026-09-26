@@ -1,7 +1,7 @@
 // Runtime QA suite — runs the assertion-based browser harnesses in sequence and fails if any fails.
 // Dev-only, never part of `npm test`. Screenshots go to a temp dir (pass an out-dir to keep them);
-// the tracked reports/ui evidence is never overwritten. Capture-only harnesses (qa-visual,
-// qa-presentation-batch*, qa-*-states, qa-night-outcomes) are review tools, not pass/fail, and are
+// reports/ui is left alone. Capture-only harnesses (qa-visual,
+// the v2.8 presentation review tools now in archive/v2.8/tools/) are review tools, not pass/fail, and are
 // not run here.
 const {spawnSync}=require('node:child_process'),os=require('node:os'),path=require('node:path');
 const HARNESSES=['qa-d0-flow','qa-final-prep','qa-boss-confirm','qa-final-end','qa-final-bosses','qa-reset-seed','qa-boss-hold'];

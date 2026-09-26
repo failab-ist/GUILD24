@@ -88,7 +88,7 @@ Current authority comes only from SPEC_INDEX_v2.8.0.md and its routed owners.
 
 ## RELEASE VISION BOUNDARY
 
-GUILD24_v2.8_RELEASE_VISION.md is retained as non-Canonical orientation only.
+archive/v2.8/GUILD24_v2.8_RELEASE_VISION.md is retained as non-Canonical orientation only.
 
 It may explain:
 - why v2.8 exists
@@ -148,7 +148,7 @@ Project-wide pass after the v2.8 release (main `f2fa299`); hygiene only, no Desi
   scoped to presentation (`order` / `sale` / `final` belong to ECONOMY_ORDER / SALE / FINAL_EXPEDITION)
 - SOURCE_ADOPTION_QA records its resolution status (all recorded SA-Q adopted at release)
 - the final adoption check found and closed the NPC dialogue-pool MISSING ADOPTION
-  (`reports/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md`); COPY_AUDIT 5-1 / 6-7 injury order aligned with SA-Q03
+  (`archive/v2.8/COPY_DIALOGUE_ADOPTION_AUDIT_v2.8.md`); COPY_AUDIT 5-1 / 6-7 injury order aligned with SA-Q03
 - outside the SSOT: WORK_STATE reduced to the current pointer (history moved to
   `archive/WORK_HISTORY_v2.8.md`); README runtime-asset path / deploy / scripts corrected
 - left as is: identical exact-copy quotations in QA acceptance / ITEM flavor / NIGHT_CLOSING (no conflict),

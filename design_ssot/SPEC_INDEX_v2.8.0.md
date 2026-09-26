@@ -166,7 +166,7 @@ design_ssot/history/ holds legacy only: older versions and each owner's pre-cons
 Unreferenced historical navigation/decision snapshots may be removed.
 Historical/base files must not be opened as a second current truth.
 
-GUILD24_v2.8_RELEASE_VISION.md is non-Canonical orientation only and carries no detailed mechanics,
+archive/v2.8/GUILD24_v2.8_RELEASE_VISION.md is non-Canonical orientation only and carries no detailed mechanics,
 numbers, exact UX contract or QA requirement.
 
 Do not delete history files merely because they are old; the consolidation ledgers cite them.
@@ -236,7 +236,7 @@ v2.9.0 is ready to close when:
 - no unapproved 3.0+ structural expansion is pulled into v2.9.0
 
 Close-out state 2026-09-25: every item above is adopted in Source (F2 … F7, I-4; CHANGELOG lists the commits).
-The release stays OPEN on one gate: the BALANCE FINDING recorded in `reports/v29-balance-finding-handoff.md`
+The release stays OPEN on one gate: the BALANCE FINDING recorded in `archive/v2.9.1-balance/v29-balance-finding-handoff.md`
 (F3 / F4 rule values collapsed run survival in measurement; decisions listed there, taken in a separate balance
 session). 7-b (remaining-Supply outcome buffer) is undecided until that session. The tag `v2.9.0` waits on both.
 
@@ -245,13 +245,13 @@ v2.9.0 Source commit on `main`, `3d0ddc6` (the close-out `3f18ceb` plus the D0 b
 
 ## v2.9.1 — BALANCE
 
-User decisions 2026-09-25. Every value: `reports/v29-balance-agreements.md`; measurements and the accepted gaps:
-`reports/v29-balance-ideal.md`; owner amendments: CHANGELOG §v2.9.1. 7-b is closed (the remaining-Supply buffer stays).
+User decisions 2026-09-25. Every value: `archive/v2.9.1-balance/v29-balance-agreements.md`; measurements and the accepted gaps:
+`archive/v2.9.1-balance/v29-balance-ideal.md`; owner amendments: CHANGELOG §v2.9.1. 7-b is closed (the remaining-Supply buffer stays).
 
 v2.9.1 is ready to close when:
-- every v2.9.1 owner amendment is in Source (`reports/v291-implementation-handoff.md` lists the batches)
+- every v2.9.1 owner amendment is in Source (`archive/v2.9.1-balance/v291-implementation-handoff.md` lists the batches)
 - `npm test`, `npm run ssot:check`, `npm run qa:runtime` PASS and the UI batch passes its screenshot review
-- the native build reproduces the closing measurement (`tools/remeasure-v29-closing-results.json`) within sampling error
+- the native build reproduces the closing measurement (`archive/v2.9.1-balance/results/remeasure-v29-closing-results.json`) within sampling error
 - `reports/deco-balance` is regenerated
 
 Closed 2026-09-25: merged to `main` (`d23d076`, PR #2) and tagged `v2.9.1` there (User 2026-09-25).

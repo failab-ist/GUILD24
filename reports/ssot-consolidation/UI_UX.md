@@ -1044,7 +1044,7 @@ User decision 2026-09-25: on a desk the SALE dossier column is its own area down
 
 ## AMENDMENT — v2.9.1 balance: Death limit always visible (User decision 2026-09-25)
 
-User decision 2026-09-25 (v2.9.1 balance, `reports/v29-balance-agreements.md` §3): the Death count and the current segment limit are always shown on MORNING and ORDER in the top status line, warning color at one Death left; exact copy COPY_AUDIT §4-23.
+User decision 2026-09-25 (v2.9.1 balance, `archive/v2.9.1-balance/v29-balance-agreements.md` §3): the Death count and the current segment limit are always shown on MORNING and ORDER in the top status line, warning color at one Death left; exact copy COPY_AUDIT §4-23.
 
 ```text
 2. persistent funds summary

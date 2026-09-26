@@ -10,4 +10,4 @@ Kept only as evidence of earlier measurement work. Do not use as current QA.
 | `qa-task17-strict.cjs`, `qa-task17-strict-fast.cjs` | one-off Task 17 browser checks; default to a Windows Chrome path |
 | `v26_acceptance.cjs` | v2.6 acceptance; fails on superseded v2.6 wallet formulas (current rules: SPEC_INDEX_v2.8.0) |
 | `v26_metrics.cjs` | v2.6 metric printout |
-| `progression-results-v5-*.json` | output of retired `tests/progression.cjs --arm=` candidate arms (v2.5-v2.7 tuning); the baseline `tests/progression-results-v5.json` stays with the live harness |
+| `progression-results-v5-*.json` | output of retired `tests/progression.cjs --arm=` candidate arms (v2.5-v2.7 tuning); the baseline `tests/progression-results-v5.json` was dropped 2026-09-26 as stale output (the live harness rewrites it; ignored) |
