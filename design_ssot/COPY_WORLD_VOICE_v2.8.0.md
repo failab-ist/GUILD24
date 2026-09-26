@@ -2,8 +2,8 @@
 
 DOC=COPY_WORLD_VOICE
 OWNER=copy,world_voice,player_terms,help_copy,boss_report_copy,result_copy,event_copy
-DOC_VERSION=2.9.0
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/COPY_WORLD_VOICE_v2.8.0-patch.md,history/COPY_WORLD_VOICE_v2.7.0.md,history/COPY_WORLD_VOICE_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/COPY_WORLD_VOICE.md
@@ -236,10 +236,9 @@ Source 내부 이름과 Player UI 용어를 구분한다.
 - `survival` = **강인함**
 - `mobility` = **기동**
 - `spirit` = **정신**
-- Monster Knowledge progress = **보급 생환 N회**
-- old Monster Knowledge progress wording `관찰 N회` = 사용하지 않음
+- Monster Knowledge has no player-facing term: no screen shows it (User 2026-09-26, v2.9.6)
 - Item Supply value = **피로 회복 N** (User 2026-09-24, v2.9.0)
-- `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 생환 N회`, `보급 상단 도착`)
+- `보급` is not an effect label; it survives only as a generic word (보급품, the Final transfer verb, `보급 상단 도착`)
 
 실제 싸움 / battle 자체는 **전투**라고 쓴다.
 
@@ -1593,7 +1592,6 @@ The information itself is the decision material.
 Meta copy:
 - use Job Mastery / 직업 숙련 language consistently with META
 - do not present legacy Global Meta XP as current progression
-- Monster Knowledge progress remains `보급 생환 N회`
 
 
 ## COPY QA
@@ -1622,7 +1620,6 @@ Meta copy:
 - Copy 때문에 기존 Gameplay Rule이나 Balance가 달라졌는가?
 - normal NPC Name Pool이 한국식+판타지+유쾌한 비틀기보다 서양 High-Fantasy 이름에 치우쳤는가?
 - 이름이 Random Syllable Soup 또는 억지 Meme 목록처럼 보이는가?
-- Monster Knowledge 진행도가 아직 `관찰 N회`로 표시되는가?
 - D5 Boss Flavor가 Trait을 암시하되 exact Function을 미리 공개하지 않는가?
 - D15 Boss copy가 실제 Trait effect를 정확히 말하고 별도 공략 조언으로 대체하지 않는가?
 - Player-facing Boss copy에 Run / Final Snapshot / Factor / Modifier 같은 내부 설계어가 노출되는가?

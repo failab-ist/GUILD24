@@ -26,6 +26,7 @@
 | `v2.9.2/v292-bot-harness.md` 외 `v292-*.json`, `v292-balance-review.md` | v2.9.2 밸런스 1~4차 근거(`reader` 봇, D10 fork 측정, User 런 프로필) | `reports/` |
 | `v2.9.2/v292-h6-transitions.md` | H6 장면 전환 캡처 보고 | `reports/` |
 | `v2.9.2/tools/` | `measure-arms`, `measure-late-slope`, `measure-late-fork`, `measure-package`, `calibrate-human`, `remeasure-v292` (끝난 질문의 측정 도구) | `tools/` |
+| `v2.9.6/dungeon-monster-identity.md` | 도감 몬스터 지식 탭과 함께 화면에서 사라진 던전 몬스터 이름·약점 데이터 | `dist/data/catalog.js` |
 
 ## 규칙
 

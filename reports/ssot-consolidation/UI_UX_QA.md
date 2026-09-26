@@ -409,7 +409,7 @@ UI-Q92 `NIGHT v2.7 RESULT TRUTH` -> `NIGHT RESULT TRUTH` (version tag removed).
 ### UI-Q-v28-18 — STORE CAPITAL CURRENCY
 ### UI-Q-v28-14 — DECORATION ART / SETTLEMENT
 ### UI-Q42 — META PROGRESSION PRESENTATION
-### UI-Q39 — MONSTER KNOWLEDGE PROGRESS COPY
+### UI-Q39 — MONSTER KNOWLEDGE — RETIRED FROM THE CODEX
 ### UI-Q71 — MENU EXACT
 ### UI-Q72 — SETTINGS EXACT
 ### UI-Q96 — MENU / SETTINGS VISUAL GRAMMAR
@@ -1363,4 +1363,49 @@ account's first ending and a manual 현재 지점 포기 print nothing and a man
 - no new motion, sound, screen or button
 - a Decoration named, a list of goals, a remaining-count, a second line, a line on an abandoned Run, or a mark on a Slot
 whose unowned Decorations cost more than the capital
+```
+
+## AMENDMENT — SALE strain line (User 2026-09-26, v2.9.5)
+
+User 2026-09-26: UI-Q-v29-38 is new. Nothing is dropped.
+
+```new
+### UI-Q-v29-38 — SALE STRAIN LINE
+(User 2026-09-26, v2.9.5; owner `UI_UX_v2.8.0.md` §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; COPY_AUDIT §4-25.)
+- a customer departing injured with an injured-departure chain of {n} >= 1 shows exactly one `연속 부상 출발 {n}회` line directly
+under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail row
+- a healthy customer (whatever chain their records hold) and an injured customer with no chain show no line
+- the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`
+- `node tools/qa-strain-line.cjs` (in qa:runtime)
+- a %, a verdict word, a second line, a `?`, or the line on a healthy or first-injured customer
+```
+
+## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: every Gate's Hazards are public, so the codex `몬스터 지식` tab is retired and no screen shows Monster Knowledge; the account record stays. The progress-wording lines below are dropped as superseded.
+
+```text
+Open Monster Knowledge/Codex with progress.
+Progress label is:
+`보급 생환 N회`
+Old `관찰 N회` progress wording is absent.
+```
+
+```new
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §META UI.)
+- the codex tabs are 진행도 · 상품 · 직업 · 점포지원 · 점포 장식; no `몬스터 지식` tab, and no `보급 생환 N회` / `관찰 N회` progress line on any screen
+```
+
+## AMENDMENT — ORDER price tags (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: UI-Q-v29-39 is new. Nothing is dropped.
+
+```new
+### UI-Q-v29-39 — ORDER PRICE TAGS
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY; COPY_AUDIT §4-26.)
+- every offer row shows two tags at the end of the name row: `매입 {N}G` (the offer's price, including today's Event multiplier) and,
+under it, a smaller muted `판매 {N}G`; at 360 / 390 / 1280 neither clips, overlaps the name or leaves the paper
+- the metadata line starts `수익 +{N}G` and carries no `매입`
+- the ORDER total, the cart and the purchase are unchanged
+- an unlabelled price, the sale price in the larger tag, or `매입` still in the metadata line
 ```

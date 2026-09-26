@@ -1341,3 +1341,35 @@ D14 first-reach products (META §D10 / D14 PRODUCT UNLOCK), which the Run record
 - a Slot row whose Slot holds a Decoration the account does not own and can afford now carries a small `들일 수 있음` mark at its
 end (a current state, not a "new" flag; no Decoration named); exact copy -> COPY_AUDIT §1-8 (User 2026-09-26, v2.9.4)
 ```
+
+## AMENDMENT — SALE strain line (User 2026-09-26, v2.9.5)
+
+User 2026-09-26 (the 16-day playtest: 실패 시 사망 위험 inside the `?` did not register): §SALE — PRE-SUPPLY EXPEDITION OUTLOOK —
+EXACT gains one Show row. Nothing is dropped.
+
+```new
+- `연속 부상 출발 {n}회` — one thin, small line directly under the readout `.top` (under 전투 전망), only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the failure Death chance); `{n}` is the NPC detail row's number, the chain of injured departures behind this one; words only — no %, no verdict, no `?`, no new color (User 2026-09-26, v2.9.5)
+```
+
+## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: every Gate's Hazards are public, so the codex `몬스터 지식` tab is retired and no screen shows Monster Knowledge; the account record stays. The progress-wording lines below are dropped as superseded.
+
+```text
+- Monster Knowledge `보급 생환 N회`
+Monster Knowledge progress wording:
+`보급 생환 N회`
+`관찰 N회`
+```
+
+```new
+Monster Knowledge has no player-facing surface: the codex `몬스터 지식` tab is retired (User 2026-09-26, v2.9.6; every Gate's Hazards are public from MORNING, so a tab that unlocked them by returns had nothing left to teach). The account record stays, unshown (META §MONSTER KNOWLEDGE).
+```
+
+## AMENDMENT — ORDER price tags (User 2026-09-26, v2.9.6)
+
+User 2026-09-26: §ORDER — ITEM INFORMATION HIERARCHY gains the price-tag row. Nothing is dropped.
+
+```new
+- the price tag reads `매입 {N}G` - the offer's actual buy price today, what 발주 spends - and a smaller, muted tag under it reads `판매 {N}G`; the metadata line keeps `수익 +{N}G · 재고 · 공급 · 유통기한` and loses its `매입 {N}G` (User 2026-09-26, v2.9.6: the unlabelled tag showed the sale price on the screen that spends the buy price)
+```

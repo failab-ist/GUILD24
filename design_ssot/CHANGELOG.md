@@ -3,6 +3,40 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.6 — codex and Item Flavor cleanup (User 2026-09-26)
+
+- Monster Knowledge leaves the codex (User 2026-09-26: every Gate's Hazards are public, so the tab that opened them by
+  returns had nothing left to teach): the `몬스터 지식` tab and its `보급 생환 N회` line are gone; the account record stays,
+  unshown (save shape unchanged; the measurement harness still reads it). META §MONSTER KNOWLEDGE, UI_UX §META UI,
+  UI_UX_QA UI-Q39 (retired to a guard), COPY_WORLD_VOICE; ledgers; tests revision / traits / ui-guard now pin its absence.
+  The Gate `monster` / `weakness` fields only that tab read are archived (User 2026-09-26) -> archive/v2.9.6/dungeon-monster-identity.md;
+  the Monster Knowledge record itself stays for balance measurement (User 2026-09-26).
+- Item Flavor cleanup (User 2026-09-26: "기능설명 같거나 어색하거나 뭔 말인지 모르겠는 것"): ten Flavors that restated the
+  effect line, contradicted it (쿨링 이온음료 "less cool than 얼음컵" while its 화염 대응 is larger) or did not read are
+  replaced - 컵라면 · 캔커피 · 용사의 곡주 · 경량 로프 · 구급키트 · 방수망토 · 원정용 장화 · 설원 고글 · 귀환석 · 쿨링 이온음료;
+  no effect changes. 귀환석's crisis roll was said only in its Flavor, so its escape row now carries it
+  (`탈출 확률 +{N}%p (사망·중상 위기에도 한 번 더 판정)`; the shelf keeps the part before the bracket, as the other utility rows do).
+  COPY_AUDIT §12-4 / §4-22; font subset regenerated (`npm run assets`); tests copy.
+- ORDER price tags (User 2026-09-26: the unlabelled tag showed the sale price on the screen that spends the buy price): `매입 {N}G`
+  on the tag, a smaller muted `판매 {N}G` under it, the metadata line starts at `수익 +{N}G`. UI_UX §ORDER — ITEM INFORMATION
+  HIERARCHY, UI_UX_QA UI-Q-v29-39, COPY_AUDIT §4-26; ledgers; ui-guard pin.
+- Item values (User 2026-09-26, after the item review reports/item-balance-v296.md and the second fresh Run to DAY 24 - judged on
+  target, no injury lever): 불룡볶음면 냉기 +6 → +12 / 강인함 +8 → +6 (its Cold read below 컵라면's); 귀환석 260 / 520 → 200 / 400
+  (its sale price sat above the p90 customer purse until ~D20); Epic Drink Stat +4 - 초고속 에너지드링크 기동 26, 대현자 허브엘릭서
+  정신 28, 왕도 천연암반수 강인함 24. 방수망토 and 마그마 냉각장비 unchanged. `reader` 200 runs before → after: reach D20 .17 → .21,
+  D30 .05 → .07, clear .025 → .020. ITEM §HAZARD COUNTER BASELINE / §EPIC FOOD / DRINK / POTION / §OTHER ACTIVE ITEMS / ACTIVE
+  CATALOG, DUNGEON_ITEM_QA; ledgers; tests vocabulary; reports/ITEM-PRICES.md regenerated.
+- Codex cards break between words only (`word-break:keep-all`; separate visual review, RUNTIME UX BUG that predates v2.9.6:
+  the narrow 1280 cards split Hangul words mid-word).
+
+## v2.9.5 — SALE strain line (User 2026-09-26)
+
+- SALE strain line (User 2026-09-26, after the v2.9.4 16-day playtest: 실패 시 사망 위험 sat inside the 전투 전망 `?` and did not
+  register; 7 of the 8 deaths departed injured): a customer departing injured with an injured-departure chain of {n} >= 1 shows one
+  thin line `연속 부상 출발 {n}회` directly under the readout `.top` - the NPC detail row's wording and number, no %, no verdict. The
+  % stays the second line of the `?` (v2.9.0 kept). UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT, UI_UX_QA UI-Q-v29-38,
+  COPY_AUDIT §4-25; ledgers; build marker 2.9.5; ui-guard pin; runtime tools/qa-strain-line.cjs (in qa:runtime).
+
 ## v2.9.4 — replay nudge (User 2026-09-26)
 
 - Replay nudge, "show, never assign" (User 2026-09-26, after the v3.0 prep review with GPT - reports/v3.0-prep.md §3-1): the END

@@ -2,8 +2,8 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.4
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -357,6 +357,7 @@ Within an offer/item card, visual priority is:
    - 피로 회복 N (User 2026-09-24, v2.9.0)
    - explicit penalty
 3. economy / stock metadata
+   - the price tag reads `매입 {N}G` - the offer's actual buy price today, what 발주 spends - and a smaller, muted tag under it reads `판매 {N}G`; the metadata line keeps `수익 +{N}G · 재고 · 공급 · 유통기한` and loses its `매입 {N}G` (User 2026-09-26, v2.9.6: the unlabelled tag showed the sale price on the screen that spends the buy price)
 4. quantity interaction
    - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 
@@ -519,6 +520,7 @@ Show:
 - qualitative Hazard Readiness for the known current Hazard state
 - exact 실패 시 사망 위험 % — not as a readout cell: the readout `.top` shows 전투 전망 and 환경 대응 only; the value is the second line of the 전투 전망 `?` help (`실패 시 사망 위험 {N}%`, same frozen value) and a line of the NPC detail (User 2026-09-24, v2.9.0)
 - existing Injury/Condition state that is already part of that snapshot
+- `연속 부상 출발 {n}회` — one thin, small line directly under the readout `.top` (under 전투 전망), only when the customer departs injured and `{n}` ≥ 1 (the first injured departure adds nothing to the failure Death chance); `{n}` is the NPC detail row's number, the chain of injured departures behind this one; words only — no %, no verdict, no `?`, no new color (User 2026-09-26, v2.9.5)
 
 Do not show:
 - exact expedition Success probability
@@ -2001,9 +2003,10 @@ Player-facing Meta presentation must make these source-of-truth concepts distinc
 - Total Job Mastery
 - Distinct Boss Clear 0..7
 - approved 1/3/6 unlock milestones
-- Monster Knowledge `보급 생환 N회`
 
 Do not present legacy Global Meta XP as current progression.
+
+Monster Knowledge has no player-facing surface: the codex `몬스터 지식` tab is retired (User 2026-09-26, v2.9.6; every Gate's Hazards are public from MORNING, so a tab that unlocked them by returns had nothing left to teach). The account record stays, unshown (META §MONSTER KNOWLEDGE).
 
 ## MENU / SETTINGS — EXACT COMPOSITION
 
@@ -2343,12 +2346,6 @@ Secondary navigation may include:
 - Notebook
 - Reference/Knowledge
 - HQ/catalog/help
-
-Monster Knowledge progress wording:
-`보급 생환 N회`
-
-Do not use:
-`관찰 N회`
 
 Secondary navigation must not compete visually
 with current Phase objective.

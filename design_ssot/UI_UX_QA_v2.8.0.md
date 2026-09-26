@@ -2,8 +2,8 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.4
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.6
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1354,6 +1354,33 @@ PASS:
 - Death still has no living NPC speech bubble
 - primary result information remains readable on mobile
 
+### UI-Q-v29-39 — ORDER PRICE TAGS
+
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY; COPY_AUDIT §4-26.)
+
+PASS:
+- every offer row shows two tags at the end of the name row: `매입 {N}G` (the offer's price, including today's Event multiplier) and,
+  under it, a smaller muted `판매 {N}G`; at 360 / 390 / 1280 neither clips, overlaps the name or leaves the paper
+- the metadata line starts `수익 +{N}G` and carries no `매입`
+- the ORDER total, the cart and the purchase are unchanged
+
+FAIL:
+- an unlabelled price, the sale price in the larger tag, or `매입` still in the metadata line
+
+### UI-Q-v29-38 — SALE STRAIN LINE
+
+(User 2026-09-26, v2.9.5; owner `UI_UX_v2.8.0.md` §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT; COPY_AUDIT §4-25.)
+
+PASS:
+- a customer departing injured with an injured-departure chain of {n} >= 1 shows exactly one `연속 부상 출발 {n}회` line directly
+  under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail row
+- a healthy customer (whatever chain their records hold) and an injured customer with no chain show no line
+- the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`
+- `node tools/qa-strain-line.cjs` (in qa:runtime)
+
+FAIL:
+- a %, a verdict word, a second line, a `?`, or the line on a healthy or first-injured customer
+
 ### UI-Q-v29-37 — REPLAY NUDGE
 
 (User 2026-09-26, v2.9.4; owner `UI_UX_v2.8.0.md` §END — REPLAY NUDGE / §Pre-Run Decoration empty-slot interaction; META §BEST DAY.)
@@ -1894,16 +1921,11 @@ EXPECT:
 PASS:
 UI matches META_v2.8.0.md and does not resurrect legacy progression truth.
 
-### UI-Q39 — MONSTER KNOWLEDGE PROGRESS COPY
-SETUP:
-Open Monster Knowledge/Codex with progress.
-
-EXPECT:
-Progress label is:
-`보급 생환 N회`
+### UI-Q39 — MONSTER KNOWLEDGE — RETIRED FROM THE CODEX
+(User 2026-09-26, v2.9.6; owner `UI_UX_v2.8.0.md` §META UI.)
 
 PASS:
-Old `관찰 N회` progress wording is absent.
+- the codex tabs are 진행도 · 상품 · 직업 · 점포지원 · 점포 장식; no `몬스터 지식` tab, and no `보급 생환 N회` / `관찰 N회` progress line on any screen
 
 ## MENU / SETTINGS / DEBUG
 

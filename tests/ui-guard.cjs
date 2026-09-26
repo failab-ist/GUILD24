@@ -485,8 +485,8 @@ test('SA-Q21 / SA-Q34: Closing is economics-only, and supply-impact attribution 
 test('UI-Q34 / REL-Q39 / UI-Q39: no quality grade, no taxonomy, canonical progress wording',()=>{
  assert.ok(!/traitDirections|▲|◆ 양면|▼/.test(app),'no Trait quality label reaches the render path');
  assert.ok(!app.includes('buildNames'),'no Relic Build Axis name is rendered');
- assert.ok(!app.includes('관찰'),'Monster Knowledge progress is 보급 생환 N회');
- assert.ok(app.includes('보급 생환'),'the canonical progress wording is present');
+ /* UI-Q39 (User 2026-09-26, v2.9.6): Monster Knowledge left the codex - neither progress wording is rendered */
+ assert.ok(!app.includes('관찰')&&!app.includes('보급 생환')&&!app.includes('몬스터 지식'),'no Monster Knowledge tab or progress line');
  assert.ok(app.includes('나중에 결정'),'the Relic window offers an explicit defer');
  assert.ok(/focusedRevealSeen/.test(app),'the Relic milestone reveal is once per window');
 });
@@ -1828,6 +1828,26 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
 });
 
+/* UI-Q-v29-38 (UI_UX §SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT, User 2026-09-26, v2.9.5): one thin words-only line under the
+   readout .top, only for an injured departure with a chain behind it; the NPC detail row's wording and number; the % stays in the help */
+test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail number, no %',()=>{
+ const r=fn('readout'),top=r.indexOf("+'</div>'"),line=r.indexOf('class="strain"');
+ assert.ok(top>0&&line>top&&line<r.indexOf('great-signal'),'directly under the readout .top');
+ assert.ok(/n\.injury===1&&Dungeon\.injuredStreak\(n\.records\)>0\?'<p class="strain">연속 부상 출발 '\+Dungeon\.injuredStreak\(n\.records\)\+'회<\/p>':''/.test(r),'injured departures with a chain of 1 or more, the same injuredStreak');
+ assert.ok(app.includes("cond.push('연속 부상 출발 '+Dungeon.injuredStreak(n.records)+'회');"),'the NPC detail row reads the same function and wording');
+ assert.equal((r.match(/<span class="fore">/g)||[]).length,2,'the .top still holds the two cells');
+ assert.ok(!/strain[^']*%|deathRisk[^;]*strain/.test(r),'no % on the line');
+ assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
+});
+
+/* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
+test('UI-Q-v29-39: ORDER price tags - 매입 labelled on top, 판매 under it, no 매입 in the metadata line',()=>{
+ assert.ok(app.includes("'<span class=\"prices\">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')+'</span>'"),'the two labelled tags, buy price first');
+ assert.ok(app.includes("+'<span class=\"have\">수익 +'"),'the metadata line starts with 수익');
+ assert.ok(!/class="have">매입/.test(app),'and carries no 매입');
+ assert.ok(!/Scene\.priceTag\(it\.sell\+'<i>G<\/i>'\)/.test(app),'no unlabelled sale-price tag');
+});
+
 /* UI-Q-v29-36 (UI_UX §BUILD MARKER, User 2026-09-26): the opening screen names the build; the deploy stamps the commit */
 test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build, stamped by the deploy',()=>{
  const b=read('dist/build.js');
@@ -2743,7 +2763,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em>`),'every row carries 폐기 N일, emphasized at 1 day or less');
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
- assert.ok(read('dist/ui/app.js').includes("' · 유통기한 '+sl+'일</span>'"),'the ORDER row states the shelf life as days, never 없음');
+ assert.ok(read('dist/ui/app.js').includes("' · <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
 });
 
 /* SA-Q02 / Q03 / Q04 / Q20 / Q32 — NPC detail, Injury and Trait information truth. */

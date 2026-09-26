@@ -16,38 +16,38 @@ items:[
    again. */
 item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:6,supply:5}),
 item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:10,supply:2}),
-item('ramen','컵라면',0,45,90,'food',3,'ramen','원정한끼','뜨거운 국물과 약간의 냉기 저항.',{cold:10,supply:3}),
+item('ramen','컵라면',0,45,90,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:10,supply:3}),
 item('bar','간단 도시락',1,100,200,'food',2,'bar','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:12,supply:6,loot:0.2}),
 item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:8,supply:3}),
-item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','발걸음이 조금 가벼워진다.',{mobility:12,supply:2}),
+item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 잠이 반쯤 깬다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
 item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:15,supply:2}),
 item('potion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
 item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:10,supply:1}),
 item('battery','랜턴 건전지',0,45,90,'gear',3,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:16}),
-item('rope','경량 로프',0,50,100,'gear',3,'rope','귀환안심','매듭을 풀고 감았다. 다시 묶어야 한다.',{bind:16}),
+item('rope','경량 로프',0,50,100,'gear',3,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:16}),
 item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:10,supply:2}),
-item('lava','불룡볶음면',1,80,160,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:8,cold:6,supply:3}),
+item('lava','불룡볶음면',1,80,160,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:12,supply:3}),
 item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨왔다.',{mobility:17,supply:2}),
-item('wine','용사의 곡주',1,70,140,'drink',4,'wine','원정한끼','공포를 잊게 한다. 발걸음은 살짝 꼬인다.',{fear:20,mobility:-4,supply:1}),
+item('wine','용사의 곡주',1,70,140,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:20,mobility:-4,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
    only its identity (Insurance / Uncommon / 80-160). */
-item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','열어 본 사람은 대개 그날을 오래 기억한다.',{aftercare:1}),
+item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),
 item('mask','방진마스크',1,80,160,'gear',4,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:24}),
 item('heat','핫팩',1,70,140,'gear',4,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:24}),
-item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','부식과 진창에 두루 쓴다. 어느 쪽도 전문가만은 못하다.',{corrosion:6,mire:6}),
+item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:6,mire:6}),
 item('coating','부식 방지 코팅제',1,85,170,'gear',4,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:24}),
-item('boots','원정용 장화',1,75,150,'gear',4,'boots','귀환안심','밑창에 진흙이 잘 붙지 않는다.',{mire:20}),
-item('snowgoggles','설원 고글',1,70,140,'gear',4,'goggles','귀환안심','눈보라 속에서도 앞이 남는다.',{whiteout:20}),
+item('boots','원정용 장화',1,75,150,'gear',4,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:20}),
+item('snowgoggles','설원 고글',1,70,140,'gear',4,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:20}),
 item('highpotion','상급 포션',2,175,350,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:20,potion:1}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
 item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:30}),
-item('stone','귀환석',2,260,520,'insurance',4,'stone','귀환안심','사망·중상 위기에서도 같은 수치로 한 번 더 돌아올 기회가 생긴다.',{escape:0.5}),
+item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.5}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14,potion:1}),
 item('premium','길드 특제 도시락',2,185,370,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:16,supply:7,loot:0.4}),
-item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','얼음컵만큼 시원하진 않지만 오래 간다.',{fire:26,supply:1}),
+item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:26,supply:1}),
 item('tree','세계수 생환부적',3,400,800,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
@@ -60,9 +60,9 @@ item('snowvisor','백설 방한고글',3,165,330,'gear',5,'snowvisor','귀환안
 item('magmagear','마그마 냉각장비',3,175,350,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:18,combat:6}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
-item('herobar','왕도 천연암반수',3,185,370,'drink',3,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:20,supply:2}),
-item('hyperenergy','초고속 에너지드링크',3,175,350,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:22,supply:2}),
-item('sageelixir','대현자 허브엘릭서',3,175,350,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:24,supply:2}),
+item('herobar','왕도 천연암반수',3,185,370,'drink',3,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),
+item('hyperenergy','초고속 에너지드링크',3,175,350,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:26,supply:2}),
+item('sageelixir','대현자 허브엘릭서',3,175,350,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:28,supply:2}),
 item('toppotion','최상급 포션',3,210,420,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:28,potion:1})
 ],
 /* Stage 10, approved. NPC_TRAIT:102 held the v2.4 table as a deliberate placeholder until a
@@ -127,11 +127,11 @@ traits:[
 
 ].map(([id,name,direction,effects,tones,note=''])=>({id,name,direction,effects,tones,note})),
 dungeons:[
-{id:'spider',name:'독거미 동굴',short:'독거미 동굴',base:2,icon:'🕷',color:'#a4b980',hazards:['poison','bind'],monster:'독거미 여왕',weakness:'화염',reward:1},
-{id:'fire',name:'화염 골렘 광산',short:'골렘 광산',base:3,icon:'◆',color:'#ea9561',hazards:['fire'],monster:'화염 골렘',weakness:'강한 전투력',reward:1.15},
-{id:'crypt',name:'망자역 지하묘지',short:'망자역',base:3,icon:'☾',color:'#b3a1d0',hazards:['fear','dark'],tags:['undead'],monster:'망자역 차장',weakness:'정신과 시야 확보',reward:1.1},
-{id:'snow',name:'북부 설원 폐허',short:'설원 폐허',base:4,icon:'❄',color:'#a0d5e0',hazards:['cold','whiteout'],monster:'서리 거인',weakness:'강인함과 정신',reward:1.25},
-{id:'slime',name:'슬라임 하수도',short:'슬라임 하수도',base:2,icon:'◉',color:'#8ac3a8',hazards:['corrosion','mire'],monster:'산성 슬라임',weakness:'강인함과 기동',reward:1},
+{id:'spider',name:'독거미 동굴',short:'독거미 동굴',base:2,icon:'🕷',color:'#a4b980',hazards:['poison','bind'],reward:1},
+{id:'fire',name:'화염 골렘 광산',short:'골렘 광산',base:3,icon:'◆',color:'#ea9561',hazards:['fire'],reward:1.15},
+{id:'crypt',name:'망자역 지하묘지',short:'망자역',base:3,icon:'☾',color:'#b3a1d0',hazards:['fear','dark'],tags:['undead'],reward:1.1},
+{id:'snow',name:'북부 설원 폐허',short:'설원 폐허',base:4,icon:'❄',color:'#a0d5e0',hazards:['cold','whiteout'],reward:1.25},
+{id:'slime',name:'슬라임 하수도',short:'슬라임 하수도',base:2,icon:'◉',color:'#8ac3a8',hazards:['corrosion','mire'],reward:1},
 {id:'final',name:'제0게이트 — 마왕성',short:'마왕성',base:5,icon:'♜',color:'#e28e9c',hazards:[],reward:2}
 ],
 hazards:{poison:'독',bind:'속박',corrosion:'부식',mire:'진창',fire:'화염',fear:'공포',dark:'어둠',cold:'냉기',whiteout:'화이트아웃'},

@@ -170,8 +170,8 @@ test('the retired single-Boss identity is gone and nothing was invented to repla
  assert.equal(final.monster,undefined,'the Final gate no longer names a fixed Boss');
  assert.equal(final.weakness,undefined,'and carries no placeholder weakness line');
  const ui=require('node:fs').readFileSync(require('node:path').join(__dirname,'../dist/ui/app.js'),'utf8');
- assert.ok(/monsters'\?D\.dungeons\.filter\(d=>d\.id!=='final'\)/.test(ui.replace(/\s+/g,'')),
-  'Monster Knowledge lists only Families that can actually accrue it');
+ /* UI-Q39 (User 2026-09-26, v2.9.6): Monster Knowledge left the codex - every Gate's Hazards are public */
+ assert.ok(!/몬스터 지식|'monsters'|보급 생환/.test(ui),'no Monster Knowledge tab, panel or progress line');
  for(const f of ['dist/data/catalog.js','dist/ui/app.js'])
   assert.ok(!require('node:fs').readFileSync(require('node:path').join(__dirname,'..',f),'utf8').includes('아르카돈'),
    f+' carries no trace of the retired identity');
