@@ -43,7 +43,7 @@ const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망 �
 function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e)){
  if(util[k]){out.push({key:k,label:util[k],text:'',tone:'neutral',bad:false,utility:true});continue;}
  /* v2.9.6 (User 2026-09-26, COPY_AUDIT §4-22): 귀환석's crisis roll was said only in its Flavor - the Item's escape row carries it */
- if(k==='escape'&&category==='insurance'&&v){out.push({key:k,label:labels[k]+' +'+Math.round(v*100)+'%p (사망·중상 위기에 한 번 더)',text:'',tone:'benefit',bad:false,utility:true});continue;}
+ if(k==='escape'&&category==='insurance'&&v){out.push({key:k,label:labels[k]+' +'+Math.round(v*100)+'%p (사망·중상 위기에도 한 번 더 판정)',text:'',tone:'benefit',bad:false,utility:true});continue;}
  if(!labels[k]||!v)continue;const value=mult.has(k)?(v-1)*100:percent.has(k)?v*100:v;const rounded=Math.round(value*10)/10;
  const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));

@@ -545,7 +545,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
  const stone=DATA.items.find(x=>x.id==='stone');
  assert.ok(stone&&!/위기|한 번 더/.test(stone.description),'the return stone flavour no longer carries the rule');
  const esc=Presentation.rows(stone.effects,undefined,stone.category).find(r=>r.key==='escape');
- assert.equal(esc&&esc.label,'탈출 확률 +'+Math.round(stone.effects.escape*100)+'%p (사망·중상 위기에 한 번 더)','its escape row states it');
+ assert.equal(esc&&esc.label,'탈출 확률 +'+Math.round(stone.effects.escape*100)+'%p (사망·중상 위기에도 한 번 더 판정)','its escape row states it');
  for(const id of ['ramen','wine','cloak','coffee','boots'])
   assert.ok(!/대응|냉기|공포|부식|진창|발걸음|저항/.test(DATA.itemBy[id].description),DATA.itemBy[id].name+' flavour does not restate its effect line');
 

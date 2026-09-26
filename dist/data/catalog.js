@@ -37,8 +37,8 @@ item('mask','방진마스크',1,80,160,'gear',4,'mask','귀환안심','쓰고 �
 item('heat','핫팩',1,70,140,'gear',4,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:24}),
 item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:6,mire:6}),
 item('coating','부식 방지 코팅제',1,85,170,'gear',4,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:24}),
-item('boots','원정용 장화',1,75,150,'gear',4,'boots','귀환안심','벗을 때는 누가 뒤에서 잡아 줘야 한다.',{mire:20}),
-item('snowgoggles','설원 고글',1,70,140,'gear',4,'goggles','귀환안심','끈이 헐거우면 바람이 먼저 벗겨 간다.',{whiteout:20}),
+item('boots','원정용 장화',1,75,150,'gear',4,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:20}),
+item('snowgoggles','설원 고글',1,70,140,'gear',4,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:20}),
 item('highpotion','상급 포션',2,175,350,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:20,potion:1}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
 item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:30}),

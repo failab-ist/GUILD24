@@ -2212,6 +2212,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .unlock .tale{margin:9px 0 0;padding-top:9px;box-shadow:inset 0 1px 0 #ffffff14;
  font:400 13px/1.65 var(--ui);font-style:italic;color:#a2947c}
 .unlock .gold-text{font:400 12px/1.4 var(--ui)}
+/* v2.9.6 (visual review, RUNTIME UX BUG): the narrow 1280 codex cards broke Hangul words mid-word (`상/자`, `3/분`) - break
+   between words only, and still wrap a token that alone is wider than the card */
+.unlock-grid .unlock{word-break:keep-all;overflow-wrap:anywhere}
 .unlock.locked{opacity:.72}
 /* one adventurer on the muster list — a tag, not a profile card.
    USER DIRECTION 2026-09-22: rarity used to be a coloured strip down the card's left edge, the

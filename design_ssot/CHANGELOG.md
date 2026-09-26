@@ -13,8 +13,10 @@ the owner headers and in the git tag.
   effect line, contradicted it (쿨링 이온음료 "less cool than 얼음컵" while its 화염 대응 is larger) or did not read are
   replaced - 컵라면 · 캔커피 · 용사의 곡주 · 경량 로프 · 구급키트 · 방수망토 · 원정용 장화 · 설원 고글 · 귀환석 · 쿨링 이온음료;
   no effect changes. 귀환석's crisis roll was said only in its Flavor, so its escape row now carries it
-  (`탈출 확률 +{N}%p (사망·중상 위기에 한 번 더)`; the shelf keeps the part before the bracket, as the other utility rows do).
+  (`탈출 확률 +{N}%p (사망·중상 위기에도 한 번 더 판정)`; the shelf keeps the part before the bracket, as the other utility rows do).
   COPY_AUDIT §12-4 / §4-22; font subset regenerated (`npm run assets`); tests copy.
+- Codex cards break between words only (`word-break:keep-all`; separate visual review, RUNTIME UX BUG that predates v2.9.6:
+  the narrow 1280 cards split Hangul words mid-word).
 
 ## v2.9.5 — SALE strain line (User 2026-09-26)
 
