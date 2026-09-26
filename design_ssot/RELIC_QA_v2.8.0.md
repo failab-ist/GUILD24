@@ -436,7 +436,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   the Day's first offer generation
 - 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.25; no shelf life
-- 후방 창고 증설 -> inventory capacity +10
+- 후방 창고 증설 -> inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
 - 본사 추가발주권 -> next ORDER-offer generation candidate count +2
 
 FAIL if Source omits one of these exact functions or uses a different numeric value.

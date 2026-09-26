@@ -200,7 +200,8 @@ Gate count PASS:
 - D1–3 exactly 1
 - D4–7 1/2 at 50% / 50%
 - D8–18 exactly 2
-- D19–29 2/3 at 50% / 50%
+- D19–24 3 at 70%, otherwise 2 (User 2026-09-26, v2.9.2 fourth pass)
+- D25–29 exactly 3, no draw (User 2026-09-26, v2.9.2 fourth pass)
 - D30 does not run ordinary Gate-count generation
 
 Tier PASS:
@@ -550,10 +551,10 @@ Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 
 and the three near misses (injured / Fatigue 20 / one Item).
 
 PASS:
-- rolledDeathChance = failureDeathChance × preparedFactor × levelFactor exactly; preparedFactor 0.80 only when all three hold
-- levelFactor = max(0.85, 1 − 0.015 × (Level − 1)): Lv1 1.00 · Lv2 0.985 · Lv10 0.865 · Lv11+ 0.85 (User 2026-09-26, v2.9.2 third pass; floor was 0.75)
+- rolledDeathChance = failureDeathChance × preparedFactor exactly; preparedFactor 0.80 only when all three hold
+- Level never changes the Death roll or the SALE snapshot: Lv1 / Lv2 / Lv10 / Lv20 read the same chance (User 2026-09-26, v2.9.2 fourth pass; the Level factor is removed)
 - a roll in the removed band ends 중상 (flat 0.36) or 부상, never 사망; still exactly one Death roll
-- the SALE `실패 시 사망 위험` includes levelFactor and never preparedFactor
+- the SALE `실패 시 사망 위험` never includes preparedFactor
 - the Night report shows the 만반의 준비 save line once, only when the band was hit
 
 ### DUN-Q-v29-BC2 — RETREAT HEALING

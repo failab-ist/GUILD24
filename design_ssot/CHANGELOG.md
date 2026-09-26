@@ -86,6 +86,13 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
 - Bug fix (2026-09-26, IMPLEMENTATION BUG): a full data reset (`reset-go`) kept the UI's pending Run seed, so a store planned before
   the reset was reopened on the same seed - and the same Boss - after it. The reset now drops the plan with the rest of the Run
   state. No design, RNG, seed-format or save change. Runtime regression tools/qa-reset-seed.cjs (in qa:runtime).
+- Balance, fourth pass (User 2026-09-26, "PL", after the package measurement — reports/v292-bot-harness.md §11): Gate count DAY 19~24
+  3 at 70% (2 at 30%, one draw), DAY 25~29 exactly 3 (no draw); the Level factor on the failure Death roll is removed (rolledDeathChance =
+  failureDeathChance × preparedFactor; the SALE risk snapshot is the raw chance); 후방 창고 증설 +10 → +5 slots (price 130G kept). Measured
+  (paired D10 fork): `reader` all-fresh D30 12.4% → 8.9%, CURRENT_SKILLED_D10 .465 → .364; the Warehouse change is not binding for the bot
+  (peak stock 14) and rests on the User save (~24 Items before the Final). DUNGEON_HAZARD §Gate-count generation / §Preparation / Level
+  Death reduction, DUNGEON_ITEM_QA DI-Q-v28-12 / DUN-Q-v29-BC1, RELIC / RELIC_QA, COPY_AUDIT §11-27; ledgers amended; tests night / delta /
+  copy.
 - Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — reports/v292-bot-harness.md §9-10): the Gate
   Day term climbs at 1.10 per Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ returns to the 0.80 slope carrying the D20 offset; D20 25.3, D29 32.5); levelFactor floor 0.75 → 0.85
   (identical through Lv11); DAY 21~29 move 0.10 of the T2 weight to T3. Measured together (GLT): `reader` all-fresh D30 12.1% →

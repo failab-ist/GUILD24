@@ -196,9 +196,14 @@ function prepare(n,d,facilities=[]){
    place: the generator draws from it and the forecast reads it, so there is no forecast-only
    RNG path and a reload cannot make the two disagree. A band with one count is deterministic
    and is told as confirmed; a band with two is drawn uniformly, exactly as morning() draws it. */
+/* v2.9.2 fourth pass (User 2026-09-26): DAY 19~24 draw 3 Gates at 70% (2 at 30%), DAY 25~29 open exactly 3 - the late Days
+   widen the Hazards one shelf has to cover. A two-count band with even odds keeps its uniform draw. */
+const GATE_COUNT_LATE={from:19,three:.70,fixedFrom:25};
 function gateCountRule(day){
- return day<=3?[1]:day<=7?[1,2]:day<=18?[2]:[2,3];
+ return day<=3?[1]:day<=7?[1,2]:day<=18?[2]:day<GATE_COUNT_LATE.fixedFrom?[2,3]:[3];
 }
+function gateCountOdds(day){const c=gateCountRule(day);if(c.length===1)return [1];
+ return day>=GATE_COUNT_LATE.from?[1-GATE_COUNT_LATE.three,GATE_COUNT_LATE.three]:c.map(()=>1/c.length);}
 function tierWeights0(day){
  const anchors=[[1,[1,0,0]],[5,[1,0,0]],[7,[.85,.15,0]],[8,[.70,.30,0]],[12,[.65,.35,0]],[13,[.55,.42,.03]],[18,[.30,.60,.10]],[19,[.26,.60,.14]],[24,[.10,.60,.30]],[25,[.05,.50,.45]],[29,[0,.45,.55]]];
  if(day>=30)return [0,0,0];for(let i=1;i<anchors.length;i++){const [end,b]=anchors[i],[start,a]=anchors[i-1];if(day<=end){const t=clamp((day-start)/(end-start),0,1);return a.map((v,j)=>v+(b[j]-v)*t);}}return anchors.at(-1)[1].slice();
@@ -290,8 +295,9 @@ const strainFor=(records,departedInjured)=>departedInjured?strainEscalation(inju
 const GATE={knee:9,early:1.50,late:0.80,mid:1.10,midFrom:10,midTo:20};
 const gateDayTerm=day=>Math.min(day,GATE.knee)*GATE.early+Math.max(0,Math.min(day,GATE.midFrom)-GATE.knee)*GATE.late
  +Math.max(0,Math.min(day,GATE.midTo)-GATE.midFrom)*GATE.mid+Math.max(0,day-GATE.midTo)*GATE.late;
-/* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance). The
-   failure Death roll is judged against `failureDeathChance x preparedFactor x levelFactor`, not
+/* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; the Level
+   factor removed User 2026-09-26, v2.9.2 fourth pass). The
+   failure Death roll is judged against `failureDeathChance x preparedFactor`, not
    the raw failureDeathChance - a miss that only clears the raw chance settles as 중상/부상 instead
    (§1d in the resolve() failure branch below), never a second Death roll. fullyPrepared() is
    exported so the SALE 만반의 준비 tutorial (batch 5) reads the exact same condition. */
@@ -299,8 +305,6 @@ const PREPARED={factor:.80,bandSevere:.36};
 function fullyPrepared(n,fatigueBeforeExpedition){
  return n.injury===0&&fatigueBeforeExpedition<20&&(n.pack?n.pack.length:0)>=2;
 }
-/* v2.9.2 third pass (User 2026-09-26): floor .75 -> .85 - identical through Lv11, the automatic protection stops at 15% */
-function levelFactor(level){return Math.max(.85,1-.015*((level||1)-1));}
 /* DUNGEON_HAZARD §RETREAT HEALING (User 2026-09-25, v2.9.1 balance). An adventurer who departed
    already injured and comes back as 퇴각 is healed with a chance that rises with an unbroken run
    of the same (departed injured, ended 퇴각) result - any other preceding expedition resets it. */
@@ -316,12 +320,11 @@ function failureDeathChanceFor(p,d,departedInjured,departedExhausted=(p.effects.
   chance:extra?clamp(healthy+extra,0,DEATH.cap+extra):healthy};
 }
 /* DUNGEON_HAZARD §Pre-supply player-facing failure Death risk (User 2026-09-25, v2.9.1 balance):
-   the SALE snapshot includes levelFactor (NPC state at SALE entry) and never preparedFactor,
-   which depends on the Bag the snapshot excludes. */
+   the SALE snapshot is the raw failureDeathChance and never includes preparedFactor, which
+   depends on the Bag the snapshot excludes (no Level factor since v2.9.2 fourth pass). */
 function failureDeathRisk(n,d,facilities=[]){
  const p=prepare(n,d,facilities),departedInjured=n.injury===1;
- const base=failureDeathChanceFor(p,d,departedInjured,undefined,strainFor(n.records,departedInjured));
- return {...base,chance:base.chance*levelFactor(n.level)};
+ return failureDeathChanceFor(p,d,departedInjured,undefined,strainFor(n.records,departedInjured));
 }
 /* RESULT-PROOF COUNTERFACTUAL (DUNGEON_HAZARD §RESULT-PROOF). The real expedition resolves
    exactly once, above, under ordinary rules - this never runs before it and never changes what
@@ -371,7 +374,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
      (2+ Items in the Bag) that the real Bag had, which is exactly the path that proves a second
      sold Item kept the death roll out of the removed band. */
   const sPrepared=fullyPrepared({injury:departure.injury,pack},se.fatigueBeforeExpedition)?PREPARED.factor:1;
-  const sRolled=sDeathChance*sPrepared*levelFactor(departure.level);
+  const sRolled=sDeathChance*sPrepared;
   if(ev.deathRoll<sRolled){
    sOutcome='사망';
   }else if(ev.deathRoll<sDeathChance){
@@ -472,15 +475,14 @@ function resultProof(departure,pack,d,facilities,ev,severeEscalation,actualOutco
    into the Night line below - see data/copy.js. Omitting it (every direct call in this repo's
    own tests) keeps the plain deterministic pick this function always returned. */
 function resolve(n,d,r,facilities=[],run,assist=0){
- const beforeStats={...n.stats},beforeEquipment=n.equipment.power,beforeLevel=n.level;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
+ const beforeStats={...n.stats},beforeEquipment=n.equipment.power;const p=prepare(n,d,facilities),e=p.effects;const bare=prepare({...n,pack:[]},d,facilities);
  /* RESULT-PROOF DEPARTURE SNAPSHOT. This is the ONLY state prepare() actually reads off `n`
     (stats/equipment/traits/fatigue/injury), captured before this resolution touches any of
     it. Every Result-Proof shadow below prepares against THIS, never against the live `n` -
     which by the time resultProof() runs has already been mutated by this same resolution
     (growth, injury/aftercare, fatigue, equipment). Only Bag composition may differ between
-    the actual and shadow preparation states. `level` rides along too, for the same shadow
-    §Preparation / Level Death reduction reading. */
- const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury,level:beforeLevel};
+    the actual and shadow preparation states. */
+ const departure={stats:beforeStats,equipment:{power:beforeEquipment,name:n.equipment.name},traits:n.traits,fatigue:n.fatigue,injury:n.injury};
  const departurePack=[...n.pack];
 
  const ability=preparedPower(e);
@@ -533,13 +535,13 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  }else{
   deathChance=failureDeathChanceFor(p,d,departedInjured,undefined,strain).chance;
   deathRoll=r.next();
-  /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance): the
-     Death roll is judged against failureDeathChance x preparedFactor x levelFactor, not the raw
+  /* DUNGEON_HAZARD §Preparation / Level Death reduction (User 2026-09-25, v2.9.1 balance; no Level
+     factor since v2.9.2 fourth pass): the Death roll is judged against failureDeathChance x preparedFactor, not the raw
      chance. A roll that only clears the raw chance - inside failureDeathChance but outside the
      reduced band - is not a second Death roll; it settles 중상/부상 the same as any other
      non-Death failure, via one extra draw (bandRoll). */
   const prepared=fullyPrepared(n,e.fatigueBeforeExpedition)?PREPARED.factor:1;
-  const rolledDeathChance=deathChance*prepared*levelFactor(n.level);
+  const rolledDeathChance=deathChance*prepared;
   if(deathRoll<rolledDeathChance){
    outcome='사망';
   }else if(deathRoll<deathChance){
@@ -682,5 +684,5 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  report.quote=G.Copy.night(report,n,run);
  n.pack=[];return report;
 }
-G.Dungeon={DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,levelFactor,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule};
+G.Dungeon={DEATH,WALLET_MULT,GREAT,WIN,LATE_T3,STRAIN,strainEscalation,injuredStreak,PREPARED,fullyPrepared,RETREAT_HEAL,GATE,FATIGUE_MAX,fatigueBand,hazardRule,gateDayTerm,greatSuccessSignal,prepare,estimate,band,resolve,tierWeights,hazardState,preparedPower,failureDeathRisk,gateCountRule,gateCountOdds,GATE_COUNT_LATE};
 })(globalThis);

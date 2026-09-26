@@ -822,3 +822,16 @@ Who reads which:
 - 원정 위험 게시판: today's Gate Hazard (known active-Hazard) 관련 준비 Item offer weight +50% (§COUNTER JUDGEMENT; a direct Counter or the Stat that Hazard presses; (User 2026-09-24, v2.9.0)); this is not a guarantee
 - an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat Item does not qualify; (User 2026-09-24, v2.9.0)): its Hazard Counter values x1.60
 ```
+
+## AMENDMENT — v2.9.2 balance, fourth pass: 후방 창고 증설 +10 -> +5 (User decision 2026-09-26)
+
+User 2026-09-26 (reports/v292-bot-harness.md §11; the User save held ~24 Items before the Final on a 28-slot warehouse): the
+Warehouse Relic adds 5 slots, not 10. Price and every other Relic unchanged.
+
+```text
+- 후방 창고 증설: inventory capacity +10
+```
+
+```new
+- 후방 창고 증설: inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
+```

@@ -125,6 +125,10 @@ test('DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST: how many, never which',()=>{
   assert.equal(f.fixed,rule.length===1?rule[0]:null,'a single-count band is confirmed, a drawn one is not');
   assert.ok(Math.abs(f.counts.reduce((a,c)=>a+c.percent,0)-100)<0.11,'the distribution sums to 100%');
  }
+ /* v2.9.2 fourth pass (User 2026-09-26): D19~24 3 Gates at 70%, D25~29 exactly 3; D4~7 keeps its even draw */
+ const pct=day=>{g.run.day=day-1;return g.gateForecast().counts.map(c=>c.count+':'+c.percent).join(' ');};
+ assert.equal(pct(5),'1:50 2:50');assert.equal(pct(18),'2:100');assert.equal(pct(19),'2:30 3:70');assert.equal(pct(24),'2:30 3:70');
+ for(const day of [25,29]){g.run.day=day-1;assert.equal(g.gateForecast().fixed,3,'D'+day+' opens exactly 3');}
  g.run.day=29;assert.equal(g.gateForecast().final,true,'D30 is the Final, not a Gate count');
  g.run.day=30;assert.equal(g.gateForecast(),null,'and there is no day after it');
  // the generator really does land inside its own forecast, every Day, over many seeds
@@ -140,6 +144,9 @@ test('DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST: how many, never which',()=>{
    if(f.fixed!==null)assert.equal(base,f.fixed,'a confirmed count is actually confirmed');
   }
  }
+ // the D19~24 draw lands near its 70%
+ {let three=0,n=0;for(let seed=0;seed<400;seed++){const h=fresh('gate70-'+seed);h.run.day=19+seed%6;h.morning();n++;if(h.run.dungeons.filter(d=>!d.temporary).length===3)three++;}
+  assert.ok(Math.abs(three/n-.70)<.07,'D19~24 opened 3 Gates on '+three+' / '+n+' Days');}
  // it says how many and how dangerous, never what
  g.run.day=5;
  const line=JSON.stringify(g.gateForecast());
