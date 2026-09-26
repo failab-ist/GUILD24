@@ -2172,7 +2172,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  case'reset':setModal('resetConfirm');break;
  /* Nothing is touched until this point. Erasing every key and starting from Meta.fresh()
     is exactly the first-launch path, so no separate reset state exists to go stale. */
- case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;setModal(null);render();toast(ok?'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.':Save.error);break;}
+ case'reset-go':{const ok=Save.reset();game=new Game(Meta.fresh(),null);selected=null;pendingSeed=null;setModal(null);render();toast(ok?'전체 데이터가 초기화되었습니다. 새 점포를 시작합니다.':Save.error);break;}
  case'import-go':$('#save-file').click();break;
 
  }

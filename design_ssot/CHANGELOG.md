@@ -59,6 +59,9 @@ SPEC_INDEX §v2.9.1 / v2.9.2 carries the routing. No owner other than PRESENTATI
   sale / refuse), ui.css (`.counter-tray.held`), audio.js (tickLate / tickLow). Also fixes a RUNTIME UX BUG found on the way:
   the global button `transition:transform .08s steps(2)` swallowed every scripted key motion, so A6's refusal shake was never
   visible; a pressed key now drops that transition. Capture tool tools/qa-sale-beat.cjs.
+- Bug fix (2026-09-26, IMPLEMENTATION BUG): a full data reset (`reset-go`) kept the UI's pending Run seed, so a store planned before
+  the reset was reopened on the same seed - and the same Boss - after it. The reset now drops the plan with the rest of the Run
+  state. No design, RNG, seed-format or save change. Runtime regression tools/qa-reset-seed.cjs (in qa:runtime).
 - Balance, third pass (User 2026-09-26, "g1 l2 t", after the paired D10-fork arms — reports/v292-bot-harness.md §9-10): the Gate
   Day term climbs at 1.10 per Day on DAY 11~20 (DAY 1~10 unchanged; DAY 21+ returns to the 0.80 slope carrying the D20 offset; D20 25.3, D29 32.5); levelFactor floor 0.75 → 0.85
   (identical through Lv11); DAY 21~29 move 0.10 of the T2 weight to T3. Measured together (GLT): `reader` all-fresh D30 12.1% →

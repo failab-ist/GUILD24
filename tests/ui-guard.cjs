@@ -2784,10 +2784,12 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  // 6: the preview cannot touch gameplay RNG - it is its own throwaway instance
  assert.ok(!/game\.rng/.test(app.slice(app.indexOf('let pendingSeed'),app.indexOf('function render()'))),
   'the preview never reaches the run stream');
- // 5: only two places touch the plan - the memoise, and spending it at Start
+ // 5: only three places touch the plan - the memoise, spending it at Start, and dropping it on a full reset
+ //    (bug fix 2026-09-26: `reset-go` kept a plan made before the reset, so the next store reused its seed and Boss)
  const writes=app.match(/pendingSeed(\?\?)?=/g)||[];
- assert.deepEqual(writes,['pendingSeed=','pendingSeed??=','pendingSeed='],
-  'the plan has exactly three sites: declared, memoised once, cleared once');
+ assert.deepEqual(writes,['pendingSeed=','pendingSeed??=','pendingSeed=','pendingSeed='],
+  'the plan has exactly four sites: declared, memoised once, cleared at Start, cleared on full reset');
+ assert.ok(/case'reset-go':\{[^}]*game=new Game\(Meta\.fresh\(\),null\);[^}]*pendingSeed=null;/.test(app),'a full reset drops a pending plan with the rest of the Run state');
  assert.ok(/let pendingSeed=null;/.test(app),'declared empty');
  const ret=app.slice(app.indexOf("case'store-return'"),app.indexOf("break;",app.indexOf("case'store-return'")));
  assert.ok(!/pendingSeed|plannedSeed/.test(ret),'a Store Management round trip does not touch the plan');

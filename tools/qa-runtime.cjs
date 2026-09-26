@@ -4,7 +4,7 @@
 // qa-presentation-batch*, qa-*-states, qa-night-outcomes) are review tools, not pass/fail, and are
 // not run here.
 const {spawnSync}=require('node:child_process'),os=require('node:os'),path=require('node:path');
-const HARNESSES=['qa-d0-flow','qa-final-prep','qa-boss-confirm','qa-final-end','qa-final-bosses'];
+const HARNESSES=['qa-d0-flow','qa-final-prep','qa-boss-confirm','qa-final-end','qa-final-bosses','qa-reset-seed'];
 const OUT=process.argv[2]||path.join(os.tmpdir(),'guild24-qa-runtime');
 const failed=[];
 for(const h of HARNESSES){
