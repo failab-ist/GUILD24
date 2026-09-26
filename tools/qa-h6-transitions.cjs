@@ -50,6 +50,10 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
     await p.click('#modal-root [data-action="buy-relic"]');
     await p.waitForTimeout(120);
     await p.screenshot({path:path.join(OUT,`day0-${width}-after.png`)});
+    // this cut lands on Day 1 MORNING, which already has its own pre-existing entry (shutter 420 ms,
+    // staggered slips, till count-up 520 ms) - same settle-frame reasoning as CLOSING/END below
+    await p.waitForTimeout(600);
+    await p.screenshot({path:path.join(OUT,`day0-${width}-settled.png`)});
     console.log('CAPTURE day0 @'+width);
    }else{
     await p.click('#modal-root [data-action="buy-relic"]');
@@ -68,6 +72,11 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
     await p.click('.p-night .dock [data-action="night-next"]');
     await p.waitForTimeout(30);
     await p.screenshot({path:path.join(OUT,`closing-${width}-after.png`)});
+    // H4 already animates this screen's own content (200 ms print + 190 ms stamp landing + dip); the
+    // instant-after frame above is honest about the cut itself but says nothing about the settled
+    // result, so a second frame once that motion is done is required for a fair before/after read
+    await p.waitForTimeout(600);
+    await p.screenshot({path:path.join(OUT,`closing-${width}-settled.png`)});
     console.log('CAPTURE closing @'+width);
     await p.evaluate(()=>{if(Guild24.game.run.phase==='closing')Guild24.game.closeDay();Guild24.render();});
    }
@@ -117,6 +126,10 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
      await p.waitForTimeout(30);
      const won=await p.evaluate(`Guild24.game.run.win`);
      await p.screenshot({path:path.join(OUT,`end-${width}-after.png`)});
+     // H5 already animates this screen's own content (200 ms hold + 90 ms seal fall + tape dip); same
+     // reasoning as CLOSING above - the instant frame alone would overstate how bare this cut still is
+     await p.waitForTimeout(600);
+     await p.screenshot({path:path.join(OUT,`end-${width}-settled.png`)});
      console.log('CAPTURE end @'+width+' win='+won);
     }
    }
