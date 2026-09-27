@@ -755,24 +755,24 @@ test('SAVE V7 EXACT CONTRACT', () => {
  assert.equal(Save.valid(raw), false, 'a run.version !== 7 is rejected');
  raw.run.version = 7;
  
- // 3. unlocks.premium non-boolean -> Save.valid() === false
- raw.account.unlocks.premium = "true";
+ // 3. unlocks.guildlunch non-boolean -> Save.valid() === false
+ raw.account.unlocks.guildlunch = "true";
  assert.equal(Save.valid(raw), false, 'premium as string is refused');
- delete raw.account.unlocks.premium;
+ delete raw.account.unlocks.guildlunch;
  assert.equal(Save.valid(raw), false, 'missing premium is refused');
- raw.account.unlocks.premium = false;
+ raw.account.unlocks.guildlunch = false;
  
- // 4. unlocks.tree non-boolean -> Save.valid() === false
- raw.account.unlocks.tree = 1;
+ // 4. unlocks.worldcharm non-boolean -> Save.valid() === false
+ raw.account.unlocks.worldcharm = 1;
  assert.equal(Save.valid(raw), false, 'tree as number is refused');
- delete raw.account.unlocks.tree;
+ delete raw.account.unlocks.worldcharm;
  assert.equal(Save.valid(raw), false, 'missing tree is refused');
- raw.account.unlocks.tree = false;
+ raw.account.unlocks.worldcharm = false;
  
  // 5. Meta.fresh() -> premium === false, tree === false, valid account shape
  const fresh = Meta.fresh();
- assert.equal(fresh.unlocks.premium, false, 'fresh account premium is false boolean');
- assert.equal(fresh.unlocks.tree, false, 'fresh account tree is false boolean');
+ assert.equal(fresh.unlocks.guildlunch, false, 'fresh account premium is false boolean');
+ assert.equal(fresh.unlocks.worldcharm, false, 'fresh account tree is false boolean');
  assert.ok(Save.valid({version:8, account:fresh, run:null}), 'fresh account alone is a valid save payload');
  
  // 5.1 extra keys in unlocks do not invalidate
@@ -785,7 +785,7 @@ test('SAVE V7 EXACT CONTRACT', () => {
  h.start('fresh-test');
  const payload = Save.export(h.account, h.run);
  const loaded = Save.import(payload);
- assert.equal(loaded.account.unlocks.premium, false);
+ assert.equal(loaded.account.unlocks.guildlunch, false);
  assert.equal(loaded.run.version, 8);
 });
 
@@ -1429,9 +1429,9 @@ test('UI-Q-v29-37 / META §BEST DAY: the ending records the best Day, an abandon
  const bad=copy(g.account);bad.bestDay=31;assert.throws(()=>Save.import(Save.export(bad,null)),'bestDay 31 is not a Day');
  // D10 / D14: the Run records what it opened; a second Run reaching D10 opens nothing
  const h=new Game();h.autosave=false;h.start('day-unlock');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
- assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.premium.name],'D10 records 길드 특제 도시락 on the Run');assert.ok(h.run.toast,'the Day toast still fires');
+ assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.guildlunch.name],'D10 records 길드 특제 도시락 on the Run');assert.ok(h.run.toast,'the Day toast still fires');
  h.run.day=13;h.run.phase='closing';h.closeDay();
- assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.premium.name,DATA.itemBy.tree.name],'D14 adds 세계수 생환부적');
+ assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.guildlunch.name,DATA.itemBy.worldcharm.name],'D14 adds 세계수 생환부적');
  h.start('day-unlock-2');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
  assert.equal(h.run.dayUnlocked,undefined,'an account that already opened them records nothing');
 });

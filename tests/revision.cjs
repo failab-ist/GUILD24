@@ -14,12 +14,12 @@ test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.e
    the test asserts. */
 test('trait source of truth; frugal changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=it.sell;n.traits=[];
  assert.ok(Math.round(it.sell*DATA.pricing.full.intentMult)>DATA.balance.frugalThreshold,'the item is judged above the frugal threshold at 정가');
- assert.ok(Math.round(DATA.itemBy.potion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
+ assert.ok(Math.round(DATA.itemBy.lowpotion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
  const a=g.interest(n,it).chance;n.traits=['frugal'];/* v2.9.2 (User 2026-09-25): 정가's final chance carries ECONOMY_ORDER's final scale, so the additive raw shift lands scaled. */
  assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias*DATA.pricing.full.finalScale)<1e-9);});
 test('coupon pending capped; explicit duplication; ordinary effects additive',()=>{const g=fresh(),n={...g.run.npcs[0],traits:[]},d=g.run.dungeons[0];const e=pack=>Dungeon.prepare({...n,pack},d).effects;assert.equal(e(['coupon','coupon','highpotion']).combat,e(['coupon','highpotion']).combat);/* ITEM_v2.7: 상급 포션 is 투력 +16, not the old 강인함 +27. The subject here is the coupon's
    duplication, so the amount is read from the catalogue instead of being restated. */
-assert.equal(e(['highpotion','coupon']).combat+DATA.itemBy.highpotion.effects.combat,e(['coupon','highpotion']).combat);assert.equal(e(['lava','water']).thirst,DATA.itemBy.lava.effects.thirst);assert.equal(e(['coupon','tree']).revive,2);});
+assert.equal(e(['highpotion','coupon']).combat+DATA.itemBy.highpotion.effects.combat,e(['coupon','highpotion']).combat);assert.equal(e(['dragonramen','water']).thirst,DATA.itemBy.dragonramen.effects.thirst);assert.equal(e(['coupon','worldcharm']).revive,2);});
 test('atomic cart validates funds, capacity and supply without mutation',()=>{const g=fresh();const before=copy(g.run);assert.throws(()=>g.setQuantity(0,999));assert.deepEqual(g.run,before);g.setQuantity(0,1);const cost=g.cartTotal();assert.equal(g.run.money,before.money);assert.throws(()=>g.open());g.confirmOrder();assert.equal(g.run.money,before.money-cost);assert.equal(g.cartTotal(),0);const money=g.run.money;g.confirmOrder();assert.equal(g.run.money,money);});
 test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',()=>{const g=fresh();g.run.inventory=[];g.run.facilities=['fridge'];g.stock('battery',24);assert.equal(g.canStock(DATA.itemBy.battery),false);assert.equal(g.canStock(DATA.itemBy.rice),false);g.run.inventory=[];g.stock('rice',2);/* SALE_v2.7 §NORMAL CONSUMER BAG: two slots for every NPC regardless of Level, Job, Rarity
  or Trait. The Lv10+ third slot is removed, not disabled or hidden. */
@@ -30,11 +30,11 @@ test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',(
 test('night only once, empty night neutral, visitor forecast exact',()=>{const g=fresh();const count=g.run.queue.length;g.open();while(g.run.phase==='sell')g.depart();assert.equal(g.run.results.length,count);const money=g.run.money;g.night();assert.equal(g.run.money,money);const h=fresh();h.run.queue=[];h.open();assert.match(h.run.regionReport,/없었다/);});
 test('old prototype rejected; v6 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,8);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
 test('seed and mid-day save replay deterministic',()=>{let a=fresh('replay2'),b=fresh('replay2');a.order(0);b.order(0);b.save();const state=Save.import(Save.export(b.account,b.run));b=new Game(state.account,state.run);b.autosave=false;a.open();b.open();while(a.run.phase==='sell'){a.depart();b.depart();}assert.deepEqual(a.run,b.run);});
-test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.stock("potion",1);
+test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.stock("lowpotion",1);
  /* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a Final transfer is a real paid transaction at
     the fixed 50% amount, so the participant has to be able to afford it and the receipt
     records that price rather than the retired free-equipment mode. */
- const finalPrice=g.finalPrice('potion');n.money=finalPrice;const goldBefore=g.run.money;
+ const finalPrice=g.finalPrice('lowpotion');n.money=finalPrice;const goldBefore=g.run.money;
  g.supplyFinal(n.id,g.run.inventory[0].id);
  assert.equal(n.history.at(-1).mode,'half');assert.equal(n.history.at(-1).paid,finalPrice);
  assert.equal(n.money,0);assert.equal(g.run.money,goldBefore+finalPrice);g.boss();const xp=g.account.xp;g.boss();assert.equal(g.account.xp,xp);const h=fresh();h.run.phase='closing';h.run.money=-1;h.run.inventory=[];h.closeDay();assert.equal(h.run.phase,'end');});
@@ -282,8 +282,8 @@ test('META-Q07/Q08/Q09/Q10 + NPC-Q09: the 1/3/6 gates open exactly what they say
   'a fresh account generates only the four starting Jobs');
  assert.equal(DATA.items.filter(i=>Meta.itemUnlocked(a,i)).length, DATA.items.length - 3, 'all but coupon, premium, tree');
 assert.equal(Meta.itemUnlocked(a,DATA.itemBy.coupon),false);
-assert.equal(Meta.itemUnlocked(a,DATA.itemBy.premium),false);
-assert.equal(Meta.itemUnlocked(a,DATA.itemBy.tree),false);
+assert.equal(Meta.itemUnlocked(a,DATA.itemBy.guildlunch),false);
+assert.equal(Meta.itemUnlocked(a,DATA.itemBy.worldcharm),false);
  const bosses=Meta.BOSSES();
  const beat=n=>{const b=Meta.fresh();for(let i=0;i<n;i++)clear(b,bosses[i],['warrior']);return b;};
  assert.equal(Meta.itemUnlocked(beat(1),DATA.itemBy.coupon),true,'one distinct clear opens the coupon');

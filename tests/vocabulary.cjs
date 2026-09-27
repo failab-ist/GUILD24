@@ -37,10 +37,10 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 43 (v2.9.7 Counter ladde
  for(const [id,name,rarity,buy,sell,category,days,fx] of [
   ['rice','삼각김밥',0,35,70,'food',2,{survival:6,supply:5}],
   ['water','생수',0,40,80,'drink',2,{survival:10,supply:2}],
-  ['bar','간단 도시락',1,100,200,'food',2,{survival:12,supply:6,loot:0.2}],
-  ['premium','길드 특제 도시락',2,185,370,'food',2,{survival:16,supply:7,loot:0.4}],
+  ['lunchbox','간단 도시락',1,100,200,'food',2,{survival:12,supply:6,loot:0.2}],
+  ['guildlunch','길드 특제 도시락',2,185,370,'food',2,{survival:16,supply:7,loot:0.4}],
   ['battlelunch','영웅 결전 도시락',3,210,420,'food',2,{survival:18,supply:9}],
-  ['herobar','왕도 천연암반수',3,185,370,'drink',3,{survival:24,supply:2}]]){ // 강인함 20 -> 24 (User 2026-09-26, v2.9.6 Epic Drink +4)
+  ['kingwater','왕도 천연암반수',3,185,370,'drink',3,{survival:24,supply:2}]]){ // 강인함 20 -> 24 (User 2026-09-26, v2.9.6 Epic Drink +4)
   const it=DATA.itemBy[id];
   assert.deepEqual([it.name,it.rarity,it.buy,it.sell,it.category,it.days],[name,rarity,buy,sell,category,days],id+' matches the v2.8 baseline row');
   assert.deepEqual(it.effects,fx,id+' effects match the v2.8 baseline row');
@@ -63,19 +63,19 @@ test('ITEM-Q02/Q03: every Item declares canonical roles and every effect is pres
 });
 
 test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to the digit',()=>{
- const shelf={rice:2,ramen:3,bar:2,choco:2,candy:4,lava:3,premium:2,battlelunch:2,water:2,coffee:2,herbtea:2,ice:3,soda:3,energy:3,wine:4,ion:5,herobar:3,hyperenergy:3,sageelixir:3,
-  potion:3,midpotion:4,highpotion:5,toppotion:5,battery:5,rope:5,mask:3,heat:4,webgloves:4,holylight:4,cloak:4,coating:5,boots:5,snowgoggles:5,antidote:5,spiderkit:5,slimesuit:5,cryptlantern:5,snowvisor:5,magmagear:5,kit:4,stone:4,tree:5,coupon:5};
+ const shelf={rice:2,ramen:3,lunchbox:2,choco:2,candy:4,dragonramen:3,guildlunch:2,battlelunch:2,water:2,coffee:2,herbtea:2,ice:3,soda:3,energy:3,wine:4,ion:5,kingwater:3,hyperenergy:3,sageelixir:3,
+  lowpotion:3,midpotion:4,highpotion:5,toppotion:5,battery:5,rope:5,mask:3,hood:4,webgloves:4,holylight:4,cloak:4,coating:5,boots:5,snowgoggles:5,antidote:5,spiderkit:5,slimesuit:5,cryptlantern:5,snowvisor:5,magmagear:5,kit:4,stone:4,worldcharm:5,coupon:5};
  assert.equal(Object.keys(shelf).length,43);
  for(const it of DATA.items){assert.equal(it.days,shelf[it.id],it.id+' shelf life');assert.ok(it.days>=2&&it.days<=5,it.id+' within 2~5 days');}
  // the redistributed Fatigue recovery (ITEM §SUPPLY MODEL contract) and the two price / Stat moves
- // (v2.9.1 balance, User 2026-09-25: rice/ramen/bar/premium/lava Supply each +1)
- const supply={soda:1,rice:5,ramen:3,bar:6,choco:3,candy:2,lava:3,premium:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,herobar:2,hyperenergy:2,sageelixir:2};
+ // (v2.9.1 balance, User 2026-09-25: rice/ramen/bar/premium/lava (now lunchbox / guildlunch / dragonramen) Supply each +1)
+ const supply={soda:1,rice:5,ramen:3,lunchbox:6,choco:3,candy:2,dragonramen:3,guildlunch:7,battlelunch:9,water:2,coffee:2,herbtea:2,ice:1,energy:2,wine:1,ion:1,kingwater:2,hyperenergy:2,sageelixir:2};
  for(const [id,v] of Object.entries(supply))assert.equal(DATA.itemBy[id].effects.supply,v,id+' 피로 회복');
  for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
- assert.equal(DATA.itemBy.lava.effects.survival,6,'불룡볶음면 강인함 +6 (User 2026-09-26, v2.9.6: 냉기 +12 / 강인함 +6)');
- assert.equal(DATA.itemBy.lava.effects.cold,21,'불룡볶음면 냉기 +21: the Cold 중반 대응, one step under the 강인함 rung 23 because its 강인함 +6 is worth 냉기 +2 (ITEM §COUNTER LADDER, User 2026-09-27)');
- assert.deepEqual([DATA.itemBy.tree.buy,DATA.itemBy.tree.sell],[400,800],'세계수 생환부적 400 / 800');
+ assert.equal(DATA.itemBy.dragonramen.effects.survival,6,'불룡볶음면 강인함 +6 (User 2026-09-26, v2.9.6: 냉기 +12 / 강인함 +6)');
+ assert.equal(DATA.itemBy.dragonramen.effects.cold,21,'불룡볶음면 냉기 +21: the Cold 중반 대응, one step under the 강인함 rung 23 because its 강인함 +6 is worth 냉기 +2 (ITEM §COUNTER LADDER, User 2026-09-27)');
+ assert.deepEqual([DATA.itemBy.worldcharm.buy,DATA.itemBy.worldcharm.sell],[400,800],'세계수 생환부적 400 / 800');
  // every stocked unit carries a finite expiry
  const g=new Game();g.autosave=false;g.start('shelf-life');g.run.facilities=[];
  for(const it of DATA.items){g.stock(it.id,1);const st=g.run.inventory.at(-1);assert.equal(st.expires,g.run.day+it.days,it.id+' expires on stocking day + shelf life');}
@@ -91,7 +91,7 @@ test('ITEM SUPPLY MODEL: every active Food/Drink has Supply > 0',()=>{
 test('ITEM-Q11: Return Stone escape bonus is the approved +50%p',()=>{
  assert.equal(DATA.itemBy.stone.effects.escape,.5);
  assert.deepEqual(DATA.itemBy.stone.roles,['insurance']);
- assert.equal(DATA.itemBy.tree.effects.revive,1);
+ assert.equal(DATA.itemBy.worldcharm.effects.revive,1);
 });
 
 test('SIM-Q01: combat variance uses the approved v2.4 starting value',()=>{
@@ -104,7 +104,7 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
     (ITEM_v2.8.0 §ACTIVE CATALOG) still names these as the dedicated Main - a raw-value search
     alone no longer finds them for bind/dark now that an Epic hybrid may outscore a Common Main
     (see the ITEM-Q83 note just below), so the search excludes the known Epic hybrids. */
- const main={poison:'antidote',bind:'rope',corrosion:'coating',mire:'boots',fire:'ion',fear:'wine',dark:'battery',cold:'lava',whiteout:'snowgoggles'};
+ const main={poison:'antidote',bind:'rope',corrosion:'coating',mire:'boots',fire:'ion',fear:'wine',dark:'battery',cold:'dragonramen',whiteout:'snowgoggles'};
  const stat={poison:'survival',corrosion:'survival',cold:'survival',fire:'spirit',bind:'mobility',mire:'mobility',fear:'spirit',dark:'mobility',whiteout:'spirit'};/* v2.9.0: 어둠 presses 기동, 화염 presses 정신 (revision 5) */
  const EPIC_HYBRIDS=['spiderkit','slimesuit','cryptlantern','snowvisor','magmagear'];
  for(const h of CANON_HAZARDS){
@@ -131,7 +131,7 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
  for(const id of EPIC_HYBRIDS)for(const h of CANON_HAZARDS){const v=DATA.itemBy[id].effects[h]||0;if(!v)continue;
   assert.ok(v<DATA.itemBy[main[h]].effects[h],DATA.itemBy[id].name+' stays under the '+h+' 중반 대응 '+DATA.itemBy[main[h]].name);}
  /* 초반 하이브리드 under the 후반 하이브리드 of its Gate, on both Hazards */
- for(const [early,late] of [['webgloves','spiderkit'],['cloak','slimesuit'],['holylight','cryptlantern'],['heat','snowvisor']])for(const h of CANON_HAZARDS){const v=DATA.itemBy[early].effects[h]||0;if(!v)continue;
+ for(const [early,late] of [['webgloves','spiderkit'],['cloak','slimesuit'],['holylight','cryptlantern'],['hood','snowvisor']])for(const h of CANON_HAZARDS){const v=DATA.itemBy[early].effects[h]||0;if(!v)continue;
   assert.ok(v<DATA.itemBy[late].effects[h],DATA.itemBy[early].name+' (초반 하이브리드) stays under '+DATA.itemBy[late].name+' on '+h);}
  // Hybrid must not beat either dedicated Main on its own Hazard - 방수망토 is Uncommon, so both
  // corrosion/mire Mains (coating U, boots U) are same-Rarity and the plain rule still applies.
@@ -139,7 +139,7 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
  /* v2.7 inverts this pair: 쿨링 이온음료 +18 is the Fire Main and 얼음컵 +10 the Lower
     response, so the Lower one is the one that has to stay under. */
  assert.ok(DATA.itemBy.ice.effects.fire<DATA.itemBy.ion.effects.fire,'얼음컵 is the Lower Fire response');
- assert.ok(DATA.itemBy.heat.effects.cold<DATA.itemBy.lava.effects.cold,'ITEM §COUNTER LADDER: 방한 두건 (초반 하이브리드) stays under 불룡볶음면 (Cold 중반 대응)');
+ assert.ok(DATA.itemBy.hood.effects.cold<DATA.itemBy.dragonramen.effects.cold,'ITEM §COUNTER LADDER: 방한 두건 (초반 하이브리드) stays under 불룡볶음면 (Cold 중반 대응)');
 });
 
 /* DUN-Q17 (Supply Burden / deficit penalty) was deleted in v2.9.0: no Gate requires Supply (DUNGEON_HAZARD §SUPPLY -> FATIGUE). */

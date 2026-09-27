@@ -949,8 +949,8 @@ Owner: ECONOMY_ORDER_v2.8.0.md
 Classification: VISUAL IDENTITY ADOPTION
 
 Required:
-- `bar` -> meal/lunchbox identity
-- `herobar` -> bottled/mineral-water identity
+- `lunchbox` -> meal/lunchbox identity
+- `kingwater` -> bottled/mineral-water identity
 - mechanics/save IDs unchanged
 
 Owner: ITEM_v2.8.0.md

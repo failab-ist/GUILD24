@@ -27,7 +27,7 @@ function freshStore(){
 }
 function fresh(){
  return {version:3,matrix:freshMatrix(),knowledge:{},discovered:[],
-  runs:0,wins:0,bestDay:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{premium:false,tree:false},
+  runs:0,wins:0,bestDay:0,discoveries:[],tutorial:{},settings:{muted:true,bgm:1,sfx:1},unlocks:{guildlunch:false,worldcharm:false},
   store:freshStore(),
   /* Retired v2.7 Franchise payload, kept dormant for data preservation only: no active effect,
      no new progress, no Grade derivation, no discount, no UI. See archive/inactive/v2_7_franchise. */
@@ -115,7 +115,7 @@ function opened(a){
   jobs:D.jobs.filter(j=>j.metaUnlock&&n>=j.metaUnlock).map(j=>j.id)};
 }
 
-const itemUnlocked=(a,it,day=1)=>{if(it.id==='premium')return !!a.unlocks?.premium&&day>=10;if(it.id==='tree')return !!a.unlocks?.tree&&day>=14;return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
+const itemUnlocked=(a,it,day=1)=>{if(it.id==='guildlunch')return !!a.unlocks?.guildlunch&&day>=10;if(it.id==='worldcharm')return !!a.unlocks?.worldcharm&&day>=14;return !it.metaUnlock||distinctBossClear(a)>=it.metaUnlock;};
 const jobUnlocked=(a,j)=>!j.metaUnlock||distinctBossClear(a)>=j.metaUnlock;
 
 /* What one expedition leaves on the account. Dungeon knowledge accrues only when a supplied

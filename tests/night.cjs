@@ -366,7 +366,7 @@ test('DUNGEON_HAZARD v2.9.0 §SUPPLY -> FATIGUE: current Fatigue first, then the
  const run=(fatigue,pack)=>{const n={...JSON.parse(JSON.stringify(base)),fatigue,traits:[],pack,records:[]};
   Dungeon.resolve(n,d,new RNG('excess-run'));return n.records[n.records.length-1];};
  const baselines={'성공':4,'대성공':4,'퇴각':7,'부상':9,'중상':0,'사망':0}; // v2.9.1 balance (User 2026-09-25): 중상 joins 사망 at 0, no Trait may raise it
- for(const fatigue of [0,4,9,14,20,33,40])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','premium']]){
+ for(const fatigue of [0,4,9,14,20,33,40])for(const pack of [[],['water'],['rice','water'],['rice','water','ramen','guildlunch']]){
   const r=run(fatigue,pack);
   assert.equal(r.requiredSupply,undefined,'no Gate requires Supply');assert.equal(r.excessSupply,undefined,'so there is no excess');
   assert.equal(r.preRecovery,Math.min(fatigue,r.preparedSupply),'Supply removes current Fatigue 1:1');
@@ -816,7 +816,7 @@ test('RESULT-PROOF: UNPROVEN branches are never invented, and proof consumes no 
  const gate=g.makeDungeon('spider',1);
  const scripted=seq=>{let i=0;return {next:()=>i<seq.length?seq[i++]:0.999,int:a=>a,pick:a=>a[0],weighted:a=>a[0],shuffle:a=>a.slice()};};
  // actual Success (no Death roll drawn); shadow (Item removed) fails combat and would need one.
- {const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['potion'],injury:0,fatigue:0,alive:true,recovery:0}));
+ {const n=JSON.parse(JSON.stringify({...g.run.npcs[0],traits:[],pack:['lowpotion'],injury:0,fatigue:0,alive:true,recovery:0}));
   const withPotion=Dungeon.prepare(n,gate,[]).effects.combat,withoutPotion=Dungeon.prepare({...n,pack:[]},gate,[]).effects.combat;
   assert.ok(withPotion>withoutPotion,'하급 포션 raises 투력, or this case proves nothing');
   const tight={...gate,power:(withPotion+withoutPotion)/2}; // succeeds WITH, fails WITHOUT
@@ -832,7 +832,7 @@ test('RESULT-PROOF: UNPROVEN branches are never invented, and proof consumes no 
  // touches no Run/NPC/economy state.
  {const heavy=()=>{const g2=new Game();g2.autosave=false;g2.start('rng-neutral');
    const gate2=g2.makeDungeon('spider',1);
-   const n=JSON.parse(JSON.stringify({...g2.run.npcs[0],traits:[],pack:['choco','potion','kit'],injury:0,fatigue:0,alive:true,recovery:0}));
+   const n=JSON.parse(JSON.stringify({...g2.run.npcs[0],traits:[],pack:['choco','lowpotion','kit'],injury:0,fatigue:0,alive:true,recovery:0}));
    const money=g2.run.money;
    const rng=new RNG('rng-neutral-draw');
    const rep=Dungeon.resolve(n,gate2,rng,[]);

@@ -534,7 +534,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     player nothing they could not read one line up. Rules that live ONLY there are kept. */
  for(const [id,banned] of [['ice','화염 대응'],['kit','중상 위험을 줄여'],
                            ['antidote','독 대응을 크게'],['mask','독과 가스 환경에 대응'],
-                           ['battery','어둠 속 시야를 확보'],['tree','사망 판정을 한 번 중상으로'],
+                           ['battery','어둠 속 시야를 확보'],['worldcharm','사망 판정을 한 번 중상으로'],
                            ['coupon','다음 소모품의 효과를 복제']]){
   const it=DATA.items.find(x=>x.id===id);
   assert.ok(it,'the catalog still has an item called '+id);
@@ -559,7 +559,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
   snowvisor:'김은 안 서린다. 눈썹은 얼 수 있다.',
   magmagear:'설명서 첫 줄: 마그마에 직접 넣지 마시오.',
   battlelunch:'동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',
-  herobar:'왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',
+  kingwater:'왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',
   hyperenergy:'마시고 나면 계산대보다 먼저 문을 나선다.',
   sageelixir:'한 모금 마시면 괜히 턱을 쓰다듬게 된다.',
   toppotion:'병은 작다. 값은 작지 않다.'};

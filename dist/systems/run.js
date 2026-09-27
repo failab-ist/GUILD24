@@ -29,8 +29,8 @@ P.gateForecast=function(){const day=this.run.day+1;if(day>30)return null;
 P.tierForecast=function(){const day=this.run.day+1;if(day>=30)return null;const weights=G.Dungeon.tierWeights(day);return {day,weights,percent:weights.map(x=>Math.round(x*1000)/10)};};
 P.nextDay=function(){
   this.run.day++;
-  if(this.run.day===10&&!this.account.unlocks?.premium){this.account.unlocks??={};this.account.unlocks.premium=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';(this.run.dayUnlocked??=[]).push(D.itemBy.premium.name);}
-  if(this.run.day===14&&!this.account.unlocks?.tree){this.account.unlocks??={};this.account.unlocks.tree=true;this.run.toast='새 상품 해금 · 세계수 생환부적';(this.run.dayUnlocked??=[]).push(D.itemBy.tree.name);}
+  if(this.run.day===10&&!this.account.unlocks?.guildlunch){this.account.unlocks??={};this.account.unlocks.guildlunch=true;this.run.toast='새 상품 해금 · 길드 특제 도시락';(this.run.dayUnlocked??=[]).push(D.itemBy.guildlunch.name);}
+  if(this.run.day===14&&!this.account.unlocks?.worldcharm){this.account.unlocks??={};this.account.unlocks.worldcharm=true;this.run.toast='새 상품 해금 · 세계수 생환부적';(this.run.dayUnlocked??=[]).push(D.itemBy.worldcharm.name);}
   this.morning();
 };
 /* 발주 교환권: the free Rerolls come first, then the ordinary curve from its FIRST step
@@ -101,7 +101,7 @@ P.commitFinalParty=function(){const s=this.run;if(s.phase!=='final'||s.finalComm
  if(!cap||!s.team.length||s.team.length>cap)throw Error('원정대를 1명 이상 선택해 주세요.');
  s.finalCommitted=true;this.save();};
 /* FINAL_EXPEDITION §3: Insurance that has no Final effect, blocked from a Final Bag. */
-const FINAL_NO_EFFECT=new Set(['kit','stone','tree']);
+const FINAL_NO_EFFECT=new Set(['kit','stone','worldcharm']);
 P.finalNoEffect=function(item){return FINAL_NO_EFFECT.has(item);};
 /* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION PRICE / WALLET / GOLD OVERRIDE. A Final transfer
    is a real paid transaction, not free equipment: the price is fixed to the ordinary 50% mode

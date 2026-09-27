@@ -14,13 +14,13 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='rice')s=`<path d="M6 34L20 8L34 34V38H6Z" fill="${base}"/><path d="M14 29H26V38H14Z" fill="${dark}"/>`+rect(14,20,13,5,'#eaaa67')+rect(17,21,7,2,'#f6ecd1');
  /* SA-Q51: 왕도 천연암반수 shares the bottled-water silhouette this language already has for
     every bottle-shaped drink, distinguished by its own colour rather than a recoloured cousin. */
- if(['water','potion','antidote','wine','herobar'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:p==='herobar'?'#4f86b0':'#b094be';s=rect(16,3,10,5,p==='water'||p==='herobar'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
+ if(['water','potion','antidote','wine','kingwater'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:p==='kingwater'?'#4f86b0':'#b094be';s=rect(16,3,10,5,p==='water'||p==='kingwater'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
  if(['coffee','energy'].includes(p))s=rect(12,7,19,30,p==='coffee'?'#bc9971':'#9abb75')+rect(12,5,19,3,'#cbd9d0')+rect(12,35,19,3,'#9baea6')+rect(14,17,15,11,'#efe3c4')+`<path d="M23 17L17 24H22L18 31L27 22H22Z" fill="${dark}"/>`;
- if(p==='ramen')s=`<path d="M7 14H35L31 37H11Z" fill="${id==='lava'?'#d96958':'#dfa05e'}"/>`+rect(5,11,32,5,'#ede6ce')+rect(10,21,23,9,'#f4e6c5')+rect(15,24,12,3,'#bc6650')+rect(14,5,2,4,'#dbe9d6')+rect(24,3,2,6,'#dbe9d6');
+ if(p==='ramen')s=`<path d="M7 14H35L31 37H11Z" fill="${id==='dragonramen'?'#d96958':'#dfa05e'}"/>`+rect(5,11,32,5,'#ede6ce')+rect(10,21,23,9,'#f4e6c5')+rect(15,24,12,3,'#bc6650')+rect(14,5,2,4,'#dbe9d6')+rect(24,3,2,6,'#dbe9d6');
  /* SA-Q51: 간단 도시락 is a simple single-tier meal box - its own silhouette, distinct from the
     다칸 길드 특제 도시락 ('lunch') and the stacked 영웅 결전 도시락 ('battlelunch') - replacing
     the retired Hotbar/skewered-stick shape this ID used to carry. */
- if(p==='bar')s=rect(7,14,30,22,'#4f5847')+rect(9,16,26,18,'#e9dfc2')+rect(9,25,26,2,'#cbb98a')+rect(11,18,11,6,'#f4eedb')+rect(24,18,9,6,'#a6b97b');
+ if(p==='lunchbox')s=rect(7,14,30,22,'#4f5847')+rect(9,16,26,18,'#e9dfc2')+rect(9,25,26,2,'#cbb98a')+rect(11,18,11,6,'#f4eedb')+rect(24,18,9,6,'#a6b97b');
  if(p==='choco')s=rect(7,13,30,19,'#8e7267')+rect(10,16,24,13,'#d9af82')+rect(19,13,15,19,'#746158')+rect(23,17,7,11,'#aa8470');
  if(['bandage','kit','mask'].includes(p)){const col=p==='kit'?'#d5dfcc':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,'#bd7d6a')+rect(14,21,15,5,'#bd7d6a');}
  /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): 중화 탄산수 is a fizzing can; 방독 작업장갑 a two-layer rubber glove;

@@ -27,7 +27,7 @@ const CANDIDATE=USE.e1||USE.h1||USE.eco||USE.abl;
    the counter ceiling, the Warehouse Relic, the rescue, Deep's reward and its rarity/level
    coefficients, and Store Gold 0 for a Deep Great Success are all exactly as they ship. */
 const ECO={warehouse:18,offers:5,rerollBase:50,sponsorBase:350,
- openingStock:[['rice',1],['water',1],['bandage',1],['potion',1]]};
+ openingStock:[['rice',1],['water',1],['bandage',1],['lowpotion',1]]};
 
 /* The next balance pass, E1 + F1 + H1, injected HARNESS-ONLY. Nothing below is written to the
    catalog on disk: D.balance and D.bossTuning are plain data so they are assigned and restored

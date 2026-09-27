@@ -373,8 +373,8 @@ with 강인함 +6 (its own Stat is worth 냉기 +2).
 | 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 12 · 화이트아웃 9 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 18 | 백설 방한고글 16 · 12 |
 | 화염 골렘 광산 (화염) | 얼음컵 화염 8 | — | 쿨링 이온음료 화염 18 | 마그마 냉각장비 화염 12 · 투력 10 |
 
-중화 탄산수, 방독 작업장갑 and 축성 손전등 are new with this ladder. 방한 두건 replaces 핫팩 (Uncommon 냉기 +24) and keeps its
-id `heat`, so a saved unit carries over as the Snow 초반 하이브리드.
+중화 탄산수, 방독 작업장갑 and 축성 손전등 are new with this ladder. 방한 두건 replaces 핫팩 (Uncommon 냉기 +24); its id is `hood`
+(v2.9.8 ID cleanup).
 Superseded: the v2.9.1 by-Rarity Counter values (Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22) and
 the v2.9.6 불룡볶음면 냉기 +12 line.
 
@@ -521,7 +521,7 @@ Only the current identities are active for these IDs.
 
 ### REPLACEMENT ID BOUNDARY
 
-For `bar` / `herobar`:
+For `lunchbox` / `kingwater` (ids `bar` / `herobar` until v2.9.8):
 - no Fatigue-reduction role beyond the Item's own Supply value is active (User 2026-09-24, v2.9.0)
 - no hidden Hotbar role is active
 - no Hotbar name is a Player-facing alias
@@ -531,8 +531,8 @@ For `bar` / `herobar`:
 Save-safe internal ID reuse must preserve the current Item's visible identity.
 
 Required icons:
-- `bar` / 간단 도시락 -> simple meal/lunchbox icon in the existing Item-art language
-- `herobar` / 왕도 천연암반수 -> bottled/mineral-water icon in the existing Item-art language
+- `lunchbox` / 간단 도시락 -> simple meal/lunchbox icon in the existing Item-art language
+- `kingwater` / 왕도 천연암반수 -> bottled/mineral-water icon in the existing Item-art language
 
 Do not use a Hotbar / skewered-stick silhouette for either ID.
 
@@ -664,7 +664,7 @@ Potion / Epic
 투력 +28
 ```
 
-The Epic meal / water rows (`battlelunch` 영웅 결전 도시락, `herobar` 왕도 천연암반수) are in the ACTIVE CATALOG meal / water table.
+The Epic meal / water rows (`battlelunch` 영웅 결전 도시락, `kingwater` 왕도 천연암반수) are in the ACTIVE CATALOG meal / water table.
 
 Fresh/Food-affinity/Potionbody rules apply normally by category.
 No separate Epic-only amplifier is created.
@@ -768,10 +768,10 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 |---|---|---|---:|---|---:|
 | rice | 삼각김밥 | Food C | 35 / 70 | 강인함 +6, Supply 5 | 2d |
 | water | 생수 | Drink C | 40 / 80 | 강인함 +10, Supply 2 | 2d |
-| bar | 간단 도시락 | Food U | 100 / 200 | 강인함 +12, Supply 6, 원정 소지금 획득 +20% | 2d |
-| premium | 길드 특제 도시락 | Food R | 185 / 370 | 강인함 +16, Supply 7, 원정 소지금 획득 +40% | 2d |
+| lunchbox | 간단 도시락 | Food U | 100 / 200 | 강인함 +12, Supply 6, 원정 소지금 획득 +20% | 2d |
+| guildlunch | 길드 특제 도시락 | Food R | 185 / 370 | 강인함 +16, Supply 7, 원정 소지금 획득 +40% | 2d |
 | battlelunch | 영웅 결전 도시락 | Food E | 210 / 420 | 강인함 +18, Supply 9 | 2d |
-| herobar | 왕도 천연암반수 | Drink E | 185 / 370 | 강인함 +24, Supply 2 | 3d |
+| kingwater | 왕도 천연암반수 | Drink E | 185 / 370 | 강인함 +24, Supply 2 | 3d |
 
 The meal Stat ladder is intentionally readable:
 
@@ -838,9 +838,17 @@ Retired active identities:
 
 No active Item creates a separate poison Condition/cure subsystem.
 
+### ITEM IDS (User 2026-09-27, v2.9.8)
+
+Each id reads as its current Item; ids that had been carried over from an earlier Item or name were renamed, and the
+save schema moved to v9 so no old id is read back: `heat` → `hood` (방한 두건), `lava` → `dragonramen` (불룡볶음면),
+`bar` → `lunchbox` (간단 도시락), `premium` → `guildlunch` (길드 특제 도시락; the D10 unlock key follows), `herobar` →
+`kingwater` (왕도 천연암반수), `tree` → `worldcharm` (세계수 생환부적; the D14 unlock key follows), `potion` →
+`lowpotion` (하급 포션). Art keys (`icon`) name a drawing and may be shared; they are not ids.
+
 ### ACTIVE RARITY DISTRIBUTION — EXACT
 
-The approved `bar` repurpose is Uncommon.
+The approved `lunchbox` (was `bar`) repurpose is Uncommon.
 
 The active 43-Item distribution is therefore:
 
@@ -872,11 +880,11 @@ stocking day, and is discarded at the morning it runs out. The rule behind the t
 |---|---|---|---:|
 | rice | 삼각김밥 | Food | 2d |
 | ramen | 컵라면 | Food | 3d |
-| bar | 간단 도시락 | Food | 2d |
+| lunchbox | 간단 도시락 | Food | 2d |
 | choco | 초코바 | Food | 2d |
 | candy | 집중 사탕 | Food | 4d |
-| lava | 불룡볶음면 | Food | 3d |
-| premium | 길드 특제 도시락 | Food | 2d |
+| dragonramen | 불룡볶음면 | Food | 3d |
+| guildlunch | 길드 특제 도시락 | Food | 2d |
 | battlelunch | 영웅 결전 도시락 | Food | 2d |
 | water | 생수 | Drink | 2d |
 | coffee | 캔커피 | Drink | 2d |
@@ -886,17 +894,17 @@ stocking day, and is discarded at the morning it runs out. The rule behind the t
 | energy | 에너지드링크 | Drink | 3d |
 | wine | 용사의 곡주 | Drink | 4d |
 | ion | 쿨링 이온음료 | Drink | 5d |
-| herobar | 왕도 천연암반수 | Drink | 3d |
+| kingwater | 왕도 천연암반수 | Drink | 3d |
 | hyperenergy | 초고속 에너지드링크 | Drink | 3d |
 | sageelixir | 대현자 허브엘릭서 | Drink | 3d |
-| potion | 하급 포션 | Potion | 3d |
+| lowpotion | 하급 포션 | Potion | 3d |
 | midpotion | 중급 포션 | Potion | 4d |
 | highpotion | 상급 포션 | Potion | 5d |
 | toppotion | 최상급 포션 | Potion | 5d |
 | battery | 랜턴 건전지 | Field Gear | 5d |
 | rope | 경량 로프 | Field Gear | 5d |
 | mask | 방진마스크 | Field Gear | 3d |
-| heat | 방한 두건 | Field Gear | 4d |
+| hood | 방한 두건 | Field Gear | 4d |
 | webgloves | 방독 작업장갑 | Field Gear | 4d |
 | holylight | 축성 손전등 | Field Gear | 4d |
 | cloak | 방수망토 | Field Gear | 4d |
@@ -911,7 +919,7 @@ stocking day, and is discarded at the morning it runs out. The rule behind the t
 | magmagear | 마그마 냉각장비 | Field Gear | 5d |
 | kit | 구급키트 | Insurance | 4d |
 | stone | 귀환석 | Insurance | 4d |
-| tree | 세계수 생환부적 | Insurance | 5d |
+| worldcharm | 세계수 생환부적 | Insurance | 5d |
 | coupon | 황금 1+1 쿠폰 | Special | 5d |
 
 ## ITEM ROLE NOTES

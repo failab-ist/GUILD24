@@ -390,7 +390,6 @@ Lava Noodle retains Food/Hybrid identity.
 ### DI-Q-v28-3 — MEAL VS WATER IDENTITY
 ### DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
 ### DI-Q-v28-9 — REPLACEMENT FLAVOR
-### ITEM-Q10 — PREMIUM LUNCH (`premium` / 길드 특제 도시락)
 ### ITEM-Q72 — POTION LADDER
 ### ITEM-Q74 — SPIRIT STAT ROUTE
 ### ITEM-Q82 — DIRECT STAT ITEM RELEVANCE
@@ -939,4 +938,19 @@ User 2026-09-27: 중화 탄산수, 방독 작업장갑 and 축성 손전등 join
 방진마스크 45 · 중화 탄산수 35 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
 농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 / 불룡볶음면 / 용사의 곡주 / 쿨링 이온음료 95
 거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
+```
+
+## AMENDMENT — v2.9.8 Item ids (User 2026-09-27)
+
+User 2026-09-27: Item ids renamed to read as the current Items (heat/lava/bar/premium/herobar/tree/potion); save schema v9. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+- `bar` reads visually as 간단 도시락 / meal-lunchbox
+- `herobar` reads visually as 왕도 천연암반수 / bottled water
+```
+
+```new
+- `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
+- `kingwater` reads visually as 왕도 천연암반수 / bottled water
+### ITEM-Q10 — PREMIUM LUNCH (`guildlunch` / 길드 특제 도시락)
 ```

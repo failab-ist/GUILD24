@@ -33,7 +33,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    await p.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
    for(let i=0;i<200;i++){if(await p.evaluate(`Guild24.game.run.phase==='sell'&&Guild24.game.run.day>=2`))break;await p.evaluate(`(${STEP})()`);}
    await p.evaluate(`(()=>{const g=Guild24.game,s=g.run,n=g.current();n.money=9999;n.pack=[];n.refused=[];
-    for(const id of ['potion','rice','water','herbtea'])s.inventory.push({id:'qa-'+id,item:id,cost:Math.round(DATA.itemBy[id].sell*.5),expires:s.day+3});
+    for(const id of ['lowpotion','rice','water','herbtea'])s.inventory.push({id:'qa-'+id,item:id,cost:Math.round(DATA.itemBy[id].sell*.5),expires:s.day+3});
     const orig=g.interest.bind(g);g.interest=(a,b,c)=>{const r=orig(a,b,c);return {...r,chance:window.__force??r.chance};};
     g.save();Guild24.render();})()`);
    await p.waitForTimeout(500);

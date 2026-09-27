@@ -930,8 +930,8 @@ This is a design-shape check, not permission to auto-tune numbers.
 ### DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
 
 PASS:
-- `bar` reads visually as 간단 도시락 / meal-lunchbox
-- `herobar` reads visually as 왕도 천연암반수 / bottled water
+- `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
+- `kingwater` reads visually as 왕도 천연암반수 / bottled water
 - neither retains the retired Hotbar/skewered-stick silhouette
 - icon change does not alter ID, Category, Rarity, price, effect or save compatibility
 
@@ -944,7 +944,7 @@ Expected:
 FAIL:
 - skewer/Hotbar Flavor survives on either replacement ID
 
-### ITEM-Q10 — PREMIUM LUNCH (`premium` / 길드 특제 도시락)
+### ITEM-Q10 — PREMIUM LUNCH (`guildlunch` / 길드 특제 도시락)
 
 SETUP:
 Compare across multiple contexts.

@@ -14,7 +14,7 @@ const BOSS=process.argv[4]||'WRATH';
 const PORT=Number(process.env.QA_PORT||5191),FIXED_NOW=1790112000000,KEY='guild24.save.v8';
 const EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
 const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').match(/const STEP=`([\s\S]*?)`;/)[1];
-const NOOP=['kit','stone','tree'];
+const NOOP=['kit','stone','worldcharm'];
 const {AUDIT,PAIR,OVERLAP}=require('./qa-controls.cjs');
 /* Action buttons of the B5-2 surfaces: the dock, sheet footers, the transfer, and the 마지막 발주
    controls. Everything else (NPC cards, participant switches, shelf lines) is content. */

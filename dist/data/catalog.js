@@ -17,19 +17,19 @@ items:[
 item('rice','삼각김밥',0,35,70,'food',2,'rice','용사픽','김 끝을 잡고 천천히.',{survival:6,supply:5}),
 item('water','생수',0,40,80,'drink',2,'water','용사픽','뚜껑까지 챙겨 돌아오세요.',{survival:10,supply:2}),
 item('ramen','컵라면',0,45,90,'food',3,'ramen','원정한끼','뚜껑 위에 젓가락을 올려 두고 3분.',{cold:10,supply:3}),
-item('bar','간단 도시락',1,100,200,'food',2,'bar','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:12,supply:6,loot:0.2}),
+item('lunchbox','간단 도시락',1,100,200,'food',2,'lunchbox','용사픽','반찬은 단출하지만 빈칸은 없다.',{survival:12,supply:6,loot:0.2}),
 item('choco','초코바',0,30,60,'food',2,'choco','용사픽','주머니에서 녹기 전에 드세요.',{mobility:8,supply:3}),
 item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 잠이 반쯤 깬다.',{mobility:12,supply:2}),
 /* Replaces the retired 붕대 slot as a plain Spirit route - not a fear/dark/whiteout Counter. */
 item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:15,supply:2}),
-item('potion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
+item('lowpotion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
 item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:8,supply:1}),
 /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
 item('soda','중화 탄산수',0,35,70,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:10,supply:1}),
 item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:21}),
 item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:21}),
 item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:8,supply:2}),
-item('lava','불룡볶음면',2,95,190,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:21,supply:3}),
+item('dragonramen','불룡볶음면',2,95,190,'food',3,'ramen','원정한끼','용 그림은 장식이 아니다.',{survival:6,cold:21,supply:3}),
 item('energy','에너지드링크',1,80,160,'drink',3,'energy','MANA+','오늘 쓸 기운을 당겨왔다.',{mobility:17,supply:2}),
 item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 속 용사의 얼굴이 해마다 조금씩 바뀐다.',{fear:18,mobility:-4,supply:1}),
 /* The Aftercare rewrite of this effect line is owned by the Insurance step; this row moves
@@ -37,7 +37,7 @@ item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 
 item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),
 item('mask','방진마스크',0,45,90,'gear',3,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:10}),
 /* was 핫팩 (냉기 +24): the id stays so a saved unit carries over as the Snow 초반 하이브리드 (User 2026-09-27) */
-item('heat','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:12,whiteout:9}),
+item('hood','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:12,whiteout:9}),
 item('webgloves','방독 작업장갑',1,75,150,'gear',4,'gloves','귀환안심','고무가 두 겹이다. 거미줄이 잘 안 붙는다.',{poison:12,bind:9}),
 item('holylight','축성 손전등',1,75,150,'gear',4,'holylight','귀환안심','배터리 칸 옆에 성수 칸이 하나 더 있다.',{fear:9,dark:9}),
 item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:12,mire:9}),
@@ -51,9 +51,9 @@ item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨�
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14,potion:1}),
-item('premium','길드 특제 도시락',2,185,370,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:16,supply:7,loot:0.4}),
+item('guildlunch','길드 특제 도시락',2,185,370,'food',2,'lunch','길드초이스','뚜껑이 잘 안 닫힌다.',{survival:16,supply:7,loot:0.4}),
 item('ion','쿨링 이온음료',2,95,190,'drink',5,'ion','MANA+','병을 꺼내면 겉에 이슬부터 맺힌다.',{fire:18,supply:1}),
-item('tree','세계수 생환부적',3,400,800,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
+item('worldcharm','세계수 생환부적',3,400,800,'insurance',5,'amulet','길드초이스','잎맥이 아직 마르지 않았다.',{revive:1}),
 item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이스','본사 도장이 선명하다. 유효기간은 적혀 있지 않다.',{duplicate:1},1),
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
@@ -65,7 +65,7 @@ item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안
 item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:12,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
-item('herobar','왕도 천연암반수',3,185,370,'drink',3,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),
+item('kingwater','왕도 천연암반수',3,185,370,'drink',3,'kingwater','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),
 item('hyperenergy','초고속 에너지드링크',3,175,350,'drink',3,'hyperenergy','MANA+','마시고 나면 계산대보다 먼저 문을 나선다.',{mobility:26,supply:2}),
 item('sageelixir','대현자 허브엘릭서',3,175,350,'drink',3,'sageelixir','길드초이스','한 모금 마시면 괜히 턱을 쓰다듬게 된다.',{spirit:28,supply:2}),
 item('toppotion','최상급 포션',3,235,470,'potion',5,'toppotion','길드초이스','병은 작다. 값은 작지 않다.',{combat:28,potion:1})
@@ -289,6 +289,6 @@ G.DATA.pricing={overcharge:{label:'바가지',mult:1.5,intentMult:1.5,intent:-.1
    5-8 points of skilled D30 reach and raised rescue dependence by 7 - and took the 18 slots,
    which produce about one capacity decision per eight order Days at almost no survival cost. */
 G.DATA.balance.orderOffers=6;G.DATA.balance.warehouse=18;
-G.DATA.openingStock=[['rice',1],['water',1],['herbtea',1],['potion',1]];
+G.DATA.openingStock=[['rice',1],['water',1],['herbtea',1],['lowpotion',1]];
 G.DATA.itemBy=Object.fromEntries(G.DATA.items.map(x=>[x.id,x]));G.DATA.jobBy=Object.fromEntries(G.DATA.jobs.map(x=>[x.id,x]));G.DATA.traitBy=Object.fromEntries(G.DATA.traits.map(x=>[x.id,x]));G.DATA.dungeonBy=Object.fromEntries(G.DATA.dungeons.map(x=>[x.id,x]));G.DATA.bossBy=Object.fromEntries(G.DATA.bosses.map(x=>[x.id,x]));
 })(globalThis);

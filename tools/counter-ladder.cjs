@@ -26,9 +26,9 @@ function ladder(mid,late,mr=[2,95,5]){return {
  webgloves:[1,80,4,{poison:12,bind:9},{},{name:'방독 작업장갑',category:'gear',brand:'귀환안심',icon:'mask'}],
  cloak:[1,80,4,{corrosion:12,mire:9}],
  holylight:[1,80,4,{fear:9,dark:9},{},{name:'축성 손전등',category:'gear',brand:'귀환안심',icon:'battery'}],
- heat:[1,80,4,{cold:12,whiteout:9},{},{name:'방한 두건'}],
+ hood:[1,80,4,{cold:12,whiteout:9},{},{name:'방한 두건'}],
  // 중반 대응 (희귀)
- antidote:[...mr,{poison:mid[0]}],coating:[...mr,{corrosion:mid[0]}],lava:[mr[0],mr[1],4,{cold:mid[0]-2}],
+ antidote:[...mr,{poison:mid[0]}],coating:[...mr,{corrosion:mid[0]}],dragonramen:[mr[0],mr[1],4,{cold:mid[0]-2}],
  rope:[...mr,{bind:mid[1]}],boots:[...mr,{mire:mid[1]}],battery:[...mr,{dark:mid[1]}],
  wine:[...mr,{fear:mid[2]}],ion:[...mr,{fire:mid[2]}],snowgoggles:[...mr,{whiteout:mid[2]}],
  // 후반 하이브리드 (영웅) - price and Rarity unchanged
@@ -61,7 +61,7 @@ function load(arm){const ll=/\+L$/.test(arm);arm=arm.replace(/\+L$/,'');const cc
    /* +P: 상급 포션 175 -> 195, 최상급 포션 210 -> 235 (User 2026-09-27: 상급 above 길드 특제 도시락 185) */
    if(pp){const B=globalThis.DATA.itemBy;B.highpotion.buy=195;B.highpotion.sell=390;B.toppotion.buy=235;B.toppotion.sell=470;}
    /* +L: 초반 하이브리드 80 -> 75G, 후반 하이브리드 165 -> 135G, 마그마 냉각장비 175 -> 145G (User 2026-09-27 price review) */
-   if(ll){const B=globalThis.DATA.itemBy;for(const id of ['cloak','webgloves','holylight','heat'])if(B[id]&&B[id].rarity===1&&Object.keys(B[id].effects).filter(k=>HZ.includes(k)).length===2){B[id].buy=75;B[id].sell=150;}
+   if(ll){const B=globalThis.DATA.itemBy;for(const id of ['cloak','webgloves','holylight','hood'])if(B[id]&&B[id].rarity===1&&Object.keys(B[id].effects).filter(k=>HZ.includes(k)).length===2){B[id].buy=75;B[id].sell=150;}
     for(const id of ['spiderkit','slimesuit','cryptlantern','snowvisor']){B[id].buy=135;B[id].sell=270;}B.magmagear.buy=145;B.magmagear.sell=290;}
    /* +R: 희귀 rises from mid-Run, taken from 일반 (User 2026-09-27: 희귀 should turn up from the middle) */
    if(rr)globalThis.DATA.rarityBands=[{maxDay:3,weights:[68,24,7,1,0]},{maxDay:7,weights:[63,25,11,1,0]},{maxDay:12,weights:[55,27,15,2,1]},
@@ -85,7 +85,7 @@ if(process.env.CL_WORKER){
  let live=0;const next=()=>{if(!jobs.length){if(!live)done();return;}const j=jobs.shift();live++;
   const c=fork(__filename,[],{env:{...process.env,CL_WORKER:'1'}});c.on('message',m=>{(res[j.arm]??=[]).push(m);});c.on('exit',()=>{live--;next();});c.send(j);};
  for(let i=0;i<W;i++)next();
- const done=()=>{globalThis.window=globalThis;load('V0');const names={soda:'중화 탄산수',webgloves:'방독 작업장갑',holylight:'축성 손전등'};const nm=id=>(id==='heat'?'핫팩/방한 두건':names[id]||DATA.itemBy[id]?.name||id);
+ const done=()=>{globalThis.window=globalThis;load('V0');const names={soda:'중화 탄산수',webgloves:'방독 작업장갑',holylight:'축성 손전등'};const nm=id=>(id==='hood'?'핫팩/방한 두건':names[id]||DATA.itemBy[id]?.name||id);
   const sum={};for(const arm of arms){const p=res[arm]||[],t={acc:{},items:{}};for(const k of ['runs','exp','ctrCarried','statCarried','reach20','reach30','clear','day','bankrupt','deathsEnd','deaths','capital'])t[k]=p.reduce((v,m)=>v+m[k],0);
    t.trade={};for(const m of p)for(const id in m.trade){const x=(t.trade[id]??={ordered:0,sold:0});x.ordered+=m.trade[id].ordered||0;x.sold+=m.trade[id].sold||0;}
    for(const m of p){for(const h in m.acc)for(const b in m.acc[h]){const c=m.acc[h][b],x=((t.acc[h]??={})[b]??={exp:0,ratio:0,covered:0,carried:0});for(const k in c)x[k]+=c[k];}for(const id in m.items)t.items[id]=(t.items[id]||0)+m.items[id];}

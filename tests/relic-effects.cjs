@@ -26,7 +26,7 @@ test('후방 창고 증설 adds 5 warehouse slots (User 2026-09-26, v2.9.2 fourt
  s.inventory=[];for(let i=0;i<23;i++)g.stock('rice',1,10);assert.equal(g.canStock(DATA.itemBy.rice),false,'the 24th unit does not fit');
 });
 test('offer weights and quantities match relevant product roles',()=>{
- const g=fresh(),s=g.run,potion=DATA.itemBy.potion,premium=DATA.itemBy.premium;
+ const g=fresh(),s=g.run,potion=DATA.itemBy.lowpotion,premium=DATA.itemBy.guildlunch;
  for(const [id,it]of [['showcase',premium],['coldcase',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
  s.dungeons=[g.makeDungeon('spider',1)];s.facilities=[];const base=Relics.offerWeight(g,DATA.itemBy.antidote);s.facilities=['hazardBoard'];assert.ok(Relics.offerWeight(g,DATA.itemBy.antidote)>base);
  s.facilities=[];g.generateOffers();const n=s.offers.length;s.facilities=['terminal'];g.generateOffers();assert.equal(s.offers.length,n+2);
@@ -36,15 +36,15 @@ test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
     POSITIVE NATIVE Core Stat and nothing else. There is no `effects.food` channel any more -
     that was the v2.5 shape this assertion was written against - so what is measured is the
     Core Stat the Item actually carries, with the Hazard Counter and the Supply held fixed. */
- const g=fresh(),n={...g.run.npcs[0],traits:[],pack:['lava']},d=g.makeDungeon('snow',2),base=Dungeon.prepare(n,d).effects;
+ const g=fresh(),n={...g.run.npcs[0],traits:[],pack:['dragonramen']},d=g.makeDungeon('snow',2),base=Dungeon.prepare(n,d).effects;
  for(const id of ['kitchen','fresh24']){const e=Dungeon.prepare(n,d,[id]).effects;
   assert.ok(e.survival>base.survival,id+' raises the Food native Core Stat');
   assert.equal(e.cold,base.cold,id+' does not touch the Hazard Counter');
   assert.equal(e.supply,base.supply,id+' does not touch Supply');}
- const it=DATA.itemBy.premium;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.ok(Relics.shelf(g,it)>f);assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
+ const it=DATA.itemBy.guildlunch;s=g.run;s.facilities=['fridge'];const f=Relics.shelf(g,it);assert.ok(f>0);s.facilities=['fridge','coldcase','fresh24'];assert.ok(Relics.shelf(g,it)>f);assert.equal(Relics.shelf(g,DATA.itemBy.stone),0);
 });
 test('premium guarantee obeys wallet, daily limit and never guarantees acceptance',()=>{
- const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.premium;n.traits=[];n.money=999;
+ const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.guildlunch;n.traits=[];n.money=999;
  const base=g.interest(n,it,'overcharge');g.run.facilities=['guarantee'];const credit=g.interest(n,it,'overcharge');assert.equal(credit.price,base.price);assert.ok(credit.debit<base.debit);assert.ok(credit.chance<1);
  n.money=credit.debit-1;assert.equal(g.interest(n,it,'overcharge').chance,0);g.run.guaranteeUsed=true;assert.equal(g.interest(n,it,'overcharge').guarantee,0);
  n.money=999;n.loyalty=60;g.run.facilities=['premiumMember'];const member=g.interest(n,it,'overcharge');g.run.facilities=[];assert.ok(member.chance>g.interest(n,it,'overcharge').chance);assert.ok(member.chance<1);
@@ -333,7 +333,7 @@ function sellOnce(facilities,mode,itemId,{loyalty=0,history=[],money=99999}={}){
 }
 test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ covers 30% of it',()=>{
  const g=fresh('guarantee-charged'),n=g.run.npcs[0];n.traits=[];n.money=9999;g.run.facilities=['guarantee'];
- const bar=DATA.itemBy.bar,premium=DATA.itemBy.premium;           // list 200 / 370 (v2.9.1 balance)
+ const bar=DATA.itemBy.lunchbox,premium=DATA.itemBy.guildlunch;           // list 200 / 370 (v2.9.1 balance)
  const over=g.interest(n,bar,'overcharge');                          // charged 300 on a 200 list price
  assert.equal(over.price,300);assert.equal(over.guarantee,Math.round(300*.3),'a 150% sale over 200G is covered, 30% of charged');
  assert.equal(over.debit,300-90);
@@ -341,7 +341,7 @@ test('REWORK 길드 보증 진열대: the CHARGED price must reach 200G, and HQ 
  assert.equal(g.interest(n,bar,'full').guarantee,Math.round(200*.3),'200G charged reaches the threshold (>=)');
  assert.equal(g.interest(n,premium,'half').guarantee,0,'a 200G+ list Item sold at 185G is not covered');
  assert.equal(g.interest(n,premium,'full').guarantee,Math.round(370*.3));
- const r=sellOnce(['guarantee'],'overcharge','bar');
+ const r=sellOnce(['guarantee'],'overcharge','lunchbox');
  assert.equal(r.store,300,'the store still receives the full charged price');assert.equal(r.paid,210,'the customer pays 70%');
  assert.equal(r.g.interest(r.n,bar,'overcharge').guarantee,0,'once per Day');
 });
@@ -355,7 +355,7 @@ test('REWORK 즉석식품 코너: overheadBase +10% from the next Day, beside hu
 });
 test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.25, no shelf life, no overhead',()=>{
  const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];
- for(const id of ['rice','premium','potion','rope']){const it=DATA.itemBy[id];s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['fresh24'];
+ for(const id of ['rice','guildlunch','lowpotion','rope']){const it=DATA.itemBy[id];s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['fresh24'];
   assert.equal(g.offerFor(it).price,['food','drink'].includes(it.category)?Math.round(it.buy*1.25):plain,id+' order price');}
  assert.equal(Relics.shelf(g,DATA.itemBy.rice),0,'no shelf-life effect');
  s.inventory=[];g.stock('rice',1);assert.equal(s.inventory[0].expires,s.day+DATA.itemBy.rice.days);
@@ -371,25 +371,25 @@ test('REWORK 냉장 유통 계약: Uncommon+ Food/Drink purchase intent +16%p, n
  /* read at 150%, where no 0.97 cap or Counter floor hides the term */
  const delta=id=>{g.run.facilities=[];const a=g.interest(n,DATA.itemBy[id],'overcharge').chance;g.run.facilities=['coldcase'];return g.interest(n,DATA.itemBy[id],'overcharge').chance-a;};
  assert.ok(Math.abs(delta('energy')-.16)<1e-9,'Uncommon drink +16%p');
- assert.ok(Math.abs(delta('bar')-.16)<1e-9,'Uncommon food +16%p');
+ assert.ok(Math.abs(delta('lunchbox')-.16)<1e-9,'Uncommon food +16%p');
  assert.equal(delta('rice'),0,'Common food untouched');assert.equal(delta('rope'),0,'non-Food untouched');
- const p={...n,pack:['premium']},d=g.run.dungeons[0];
+ const p={...n,pack:['guildlunch']},d=g.run.dungeons[0];
  assert.deepEqual(Dungeon.prepare(p,d,['coldcase']).effects,Dungeon.prepare(p,d,[]).effects,'no stat effect');
 });
 test('REWORK 단골 묶음혜택: a 단골 second paid purchase is half for the customer, full for the store',()=>{
  // premium sell 370 (v2.9.1 balance, was 340)
  const first=[{item:'rice',paid:70,mode:'full'}];
- const r=sellOnce(['memberBundle'],'full','premium',{loyalty:60,history:first});
+ const r=sellOnce(['memberBundle'],'full','guildlunch',{loyalty:60,history:first});
  assert.equal(r.store,370,'store receives the full charged price');
  assert.equal(r.paid,185,'the customer pays half');
  assert.equal(r.last.subsidy,185,'HQ pays the other half, recorded on the sale');
  for(const [why,opts] of [['not 단골',{loyalty:50,history:first}],['first purchase',{loyalty:60,history:[]}],
                           ['third purchase',{loyalty:60,history:[...first,...first]}]]){
-  const x=sellOnce(['memberBundle'],'full','premium',opts);assert.equal(x.paid,370,why+': full price');assert.equal(x.last.subsidy,0);}
+  const x=sellOnce(['memberBundle'],'full','guildlunch',opts);assert.equal(x.paid,370,why+': full price');assert.equal(x.last.subsidy,0);}
  const g=fresh('bundle-judge'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=60;n.history=[{day:g.run.day,item:'rice',paid:70,mode:'full'}];
- g.run.facilities=['memberBundle'];const q=g.interest(n,DATA.itemBy.premium,'overcharge');
+ g.run.facilities=['memberBundle'];const q=g.interest(n,DATA.itemBy.guildlunch,'overcharge');
  assert.equal(q.price,555);assert.equal(q.debit,278,'at 150% too, half of the charged price');
- g.run.facilities=[];assert.equal(g.interest(n,DATA.itemBy.premium,'overcharge').debit,555);
+ g.run.facilities=[];assert.equal(g.interest(n,DATA.itemBy.guildlunch,'overcharge').debit,555);
 });
 test('REWORK 프리미엄 멤버십: a 단골 arrives with +40G, and Rare+ intent +15%p for 단골 only',()=>{
  const arrive=(loyalty,fac)=>{const g=fresh('premium-member'),s=g.run,n=s.npcs[0];n.traits=[];n.loyalty=loyalty;n.money=100;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n.money;};
@@ -410,7 +410,7 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
  // 왕도 프리미엄 인증: +16%p back on 150% only; the price burden and Loyalty -3 stay
  const g=fresh('royal-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;
  g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
- for(const id of ['rice','rope','premium']){const it=DATA.itemBy[id];
+ for(const id of ['rice','rope','guildlunch']){const it=DATA.itemBy[id];
   g.run.facilities=[];const a=g.interest(n,it,'overcharge'),f=g.interest(n,it,'full').chance;
   g.run.facilities=['royalCert'];const b=g.interest(n,it,'overcharge');
   assert.ok(Math.abs(b.chance-Math.min(.97,a.chance+.16))<1e-9,id+' 150% intent +16%p');assert.equal(b.price,a.price);assert.equal(b.debit,a.debit);
