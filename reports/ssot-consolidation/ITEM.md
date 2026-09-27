@@ -939,18 +939,12 @@ the v2.9.6 불룡볶음면 냉기 +12 line.
 | 13 | 불룡볶음면 | Food R | 95 / 190 | 강인함 +6, 냉기 +21, Supply 3 | Cold 중반 대응 |
 | 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +18, 기동 -4, Supply 1 | Fear 중반 대응 / RiskReward |
 | 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +10 | Poison 초반 대응 |
-| 19 | 방수망토 | Field Gear U | 80 / 160 | 부식 +12, 진창 +9 | Slime 초반 하이브리드 |
 | 20 | 부식 방지 코팅제 | Field Gear R | 95 / 190 | 부식 +23 | Corrosion 중반 대응 |
 | 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +21 | Mire 중반 대응 |
 | 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +18 | Whiteout 중반 대응 |
 | 23 | 상급 포션 | Potion R | 195 / 390 | 투력 +20 | — |
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +23 | Poison 중반 대응 |
 | 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +18, Supply 1 | Fire 중반 대응 |
-| 31 | 거미줄 방호세트 | Field Gear E | 165 / 330 | 독 +16, 속박 +14 | Spider 후반 하이브리드 |
-| 32 | 연금 방수슈트 | Field Gear E | 165 / 330 | 부식 +16, 진창 +14 | Slime 후반 하이브리드 |
-| 33 | 성화 랜턴 | Field Gear E | 165 / 330 | 공포 +12, 어둠 +14 | Crypt 후반 하이브리드 |
-| 34 | 백설 방한고글 | Field Gear E | 165 / 330 | 냉기 +16, 화이트아웃 +12 | Snow 후반 하이브리드 |
-| 35 | 마그마 냉각장비 | Field Gear E | 175 / 350 | 화염 +12, 투력 +10 | Fire 후반 하이브리드 |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
 Common 10
 Uncommon 6
@@ -963,4 +957,19 @@ Rare 12
 | coating | 부식 방지 코팅제 | Field Gear | 5d |
 | boots | 원정용 장화 | Field Gear | 5d |
 | snowgoggles | 설원 고글 | Field Gear | 5d |
+```
+
+## AMENDMENT — v2.9.7 Counter prices (User 2026-09-27)
+
+User 2026-09-27 price review: 초반 하이브리드 75G, 후반 하이브리드 135G, 마그마 냉각장비 145G. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+Prices by rung (User 2026-09-27 price review): 초반 대응 30~45G, 초반 하이브리드 75G, 중반 대응 95G, 후반 하이브리드
+135G (마그마 냉각장비 145G, its 투력 +10 included). A 후반 하이브리드 at 135G sells at 270G, inside the D25 median wallet.
+| 19 | 방수망토 | Field Gear U | 75 / 150 | 부식 +12, 진창 +9 | Slime 초반 하이브리드 |
+| 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +16, 속박 +14 | Spider 후반 하이브리드 |
+| 32 | 연금 방수슈트 | Field Gear E | 135 / 270 | 부식 +16, 진창 +14 | Slime 후반 하이브리드 |
+| 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +12, 어둠 +14 | Crypt 후반 하이브리드 |
+| 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +16, 화이트아웃 +12 | Snow 후반 하이브리드 |
+| 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +12, 투력 +10 | Fire 후반 하이브리드 |
 ```

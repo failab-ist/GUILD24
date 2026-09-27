@@ -35,7 +35,7 @@ item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 
 item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),
 item('mask','방진마스크',0,45,90,'gear',3,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:10}),
 item('heat','핫팩',1,70,140,'gear',4,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:24}),
-item('cloak','방수망토',1,80,160,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:12,mire:9}),
+item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:12,mire:9}),
 item('coating','부식 방지 코팅제',2,95,190,'gear',5,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:23}),
 item('boots','원정용 장화',2,95,190,'gear',5,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:21}),
 item('snowgoggles','설원 고글',2,95,190,'gear',5,'goggles','귀환안심','끈이 헐거우면 눈보라가 벗겨 간다.',{whiteout:18}),
@@ -53,11 +53,11 @@ item('coupon','황금 1+1 쿠폰',4,500,1000,'special',5,'coupon','길드초이�
 /* Epic Family hybrids: one slot answers a Family's pair, always below the dedicated Main
    specialist on each covered Hazard. FIRE keeps one Hazard plus its combat identity rather
    than inventing a second FIRE Hazard, and its 투력 +6 is an explicit catalogue exception. */
-item('spiderkit','거미줄 방호세트',3,165,330,'gear',5,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:16,bind:14}),
-item('slimesuit','연금 방수슈트',3,165,330,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:16,mire:14}),
-item('cryptlantern','성화 랜턴',3,165,330,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:12,dark:14}),
-item('snowvisor','백설 방한고글',3,165,330,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:16,whiteout:12}),
-item('magmagear','마그마 냉각장비',3,175,350,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:12,combat:10}),
+item('spiderkit','거미줄 방호세트',3,135,270,'gear',5,'spiderkit','귀환안심','손목을 앞으로 내밀어도 아무것도 나오진 않는다.',{poison:16,bind:14}),
+item('slimesuit','연금 방수슈트',3,135,270,'gear',5,'slimesuit','귀환안심','방수 테스트에 쓴 액체는 묻지 않는 게 좋다.',{corrosion:16,mire:14}),
+item('cryptlantern','성화 랜턴',3,135,270,'gear',5,'cryptlantern','귀환안심','성당 납품용이었는데 어쩌다 편의점까지 왔다.',{fear:12,dark:14}),
+item('snowvisor','백설 방한고글',3,135,270,'gear',5,'snowvisor','귀환안심','김은 안 서린다. 눈썹은 얼 수 있다.',{cold:16,whiteout:12}),
+item('magmagear','마그마 냉각장비',3,145,290,'gear',5,'magmagear','귀환안심','설명서 첫 줄: 마그마에 직접 넣지 마시오.',{fire:12,combat:10}),
 /* Epic top-end preparation: what one slot can do late in a Run, not a third Bag slot. */
 item('battlelunch','영웅 결전 도시락',3,210,420,'food',2,'battlelunch','길드초이스','동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',{survival:18,supply:9}),
 item('herobar','왕도 천연암반수',3,185,370,'drink',3,'herobar','길드초이스','왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',{survival:24,supply:2}),

@@ -25,6 +25,7 @@ reader 800 runs per arm):
   집중 사탕 · 얼음컵 8; 방수망토 12 · 9; 해독제 · 코팅제 23, 로프 · 장화 · 건전지 21, 불룡볶음면 21 (+강인함 6), 곡주 · 쿨링 ·
   설원 고글 18, all Rare 95G; Epic hybrids 16 · 14 / 12 · 14 / 16 · 12, 마그마 냉각장비 화염 12. 상급 / 최상급 포션 195 / 235G.
   A Rare ORDER offer holds 1~3 units (was 1; ECONOMY_ORDER §ORDER OFFER QUANTITY). Measured in reports/counter-ladder-v297.md.
+  Price review: 방수망토 75G, Epic hybrids 135G, 마그마 냉각장비 145G (were 80 / 165 / 175).
   The new Items (중화 탄산수, 방독 작업장갑, 축성 손전등) and 핫팩 → 방한 두건 land as their own change.
 - Build marker in 영업 설정 (User 2026-09-26, same version): the `v{version} · {commit}` line the opening screen shows also
   ends 영업 설정, so the build can be read mid-Run. UI_UX §BUILD MARKER, UI_UX_QA UI-Q-v29-36; ledgers; ui-guard.
