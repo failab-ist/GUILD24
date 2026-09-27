@@ -24,6 +24,8 @@ item('coffee','캔커피',0,40,80,'drink',2,'coffee','MANA+','따는 소리에 �
 item('herbtea','진정 허브티',0,40,80,'drink',2,'herbtea','MANA+','마시기 전에 심호흡부터 하는 손님이 많다.',{spirit:15,supply:2}),
 item('potion','하급 포션',0,70,140,'potion',3,'potion','귀환안심','차갑게 보관하지 않아도 됩니다.',{combat:8,potion:1}),
 item('ice','얼음컵',0,30,60,'drink',3,'ice','용사픽','컵에 얼음만 가득 담아 판다. 녹기 전에 도착하길.',{fire:8,supply:1}),
+/* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): the Slime 초반 대응 and the Spider / Crypt 초반 하이브리드 */
+item('soda','중화 탄산수',0,35,70,'drink',3,'soda','용사픽','튄 자리에 먼저 붓고, 남으면 마신다.',{corrosion:10,supply:1}),
 item('battery','랜턴 건전지',2,95,190,'gear',5,'battery','귀환안심','흔들면 조금 더 간다. 근거는 없다.',{dark:21}),
 item('rope','경량 로프',2,95,190,'gear',5,'rope','귀환안심','생각보다 가볍고, 생각보다 질기다.',{bind:21}),
 item('candy','집중 사탕',0,35,70,'food',4,'candy','용사픽','시험 전에도 잘 팔린다.',{fear:8,supply:2}),
@@ -34,7 +36,10 @@ item('wine','용사의 곡주',2,95,190,'drink',4,'wine','원정한끼','라벨 
    only its identity (Insurance / Uncommon / 80-160). */
 item('kit','구급키트',1,80,160,'insurance',4,'kit','귀환안심','안 열고 돌아오는 게 가장 좋은 상자.',{aftercare:1}),
 item('mask','방진마스크',0,45,90,'gear',3,'mask','귀환안심','쓰고 나면 얼굴 자국이 한참 남는다.',{poison:10}),
-item('heat','핫팩',1,70,140,'gear',4,'heat','귀환안심','주머니 안에서 겨울을 버틴다.',{cold:24}),
+/* was 핫팩 (냉기 +24): the id stays so a saved unit carries over as the Snow 초반 하이브리드 (User 2026-09-27) */
+item('heat','방한 두건',1,75,150,'gear',4,'hood','귀환안심','환풍구 근처에서는 벗어 두는 게 좋다. 괜한 오해를 산다.',{cold:12,whiteout:9}),
+item('webgloves','방독 작업장갑',1,75,150,'gear',4,'gloves','귀환안심','고무가 두 겹이다. 거미줄이 잘 안 붙는다.',{poison:12,bind:9}),
+item('holylight','축성 손전등',1,75,150,'gear',4,'holylight','귀환안심','배터리 칸 옆에 성수 칸이 하나 더 있다.',{fear:9,dark:9}),
 item('cloak','방수망토',1,75,150,'gear',4,'cloak','귀환안심','비 오는 날엔 우산 대신 사 가는 손님도 있다.',{corrosion:12,mire:9}),
 item('coating','부식 방지 코팅제',2,95,190,'gear',5,'coating','귀환안심','장비 겉면에 얇게 펴 바른다. 굳기 전에 서두를 것.',{corrosion:23}),
 item('boots','원정용 장화',2,95,190,'gear',5,'boots','귀환안심','벗을 때는 누가 뒤꿈치를 잡아당겨 줘야 한다.',{mire:21}),

@@ -500,3 +500,15 @@ User 2026-09-26: the 영업 전 자금 box is a light fill, both boxes take the 
 ```new
 1. `영업 전 자금 {N}G` in a light filled box (the pair of the 보유 자금 box, quieter than it; both boxes keep the receipt's dotted leader and the stamp keys' stepped pixel corner) - the Day's opening Gold: the end Gold less today's inflows plus today's outflows (exact; not stored)
 ```
+
+## AMENDMENT — v2.9.7 Counter ladder new Items (User 2026-09-27)
+
+User 2026-09-27: 중화 탄산수, 방독 작업장갑 and 축성 손전등 join the catalog and 핫팩 becomes 방한 두건; the role notes follow the ladder. The superseded chain lines below are dropped.
+
+```text
+- 핫팩 → 냉기 대응
+```
+
+```new
+- 방한 두건 → 냉기 대응
+```

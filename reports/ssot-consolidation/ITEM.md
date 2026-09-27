@@ -360,7 +360,6 @@ Supply > 0 is preserved for every active Food/Drink.
 ```
 
 ```new
-21. 원정용 장화
 27. 길드 특제 도시락
 ```
 
@@ -662,7 +661,6 @@ Unlisted implementation-only flavor fields inherit the previous Item where ident
 (User 2026-09-24/25, v2.9.0): no active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the
 stocking day, and is discarded at the morning it runs out. The rule behind the table:
 - Food: 2 days unless it carries a Hazard Counter (컵라면 3, 집중 사탕 4, 불룡볶음면 3); 초코바 is 2
-- Drink: 2 days unless Uncommon or above (3) or a Hazard Counter Drink (얼음컵 3, 용사의 곡주 4, 쿨링 이온음료 5)
 - Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
 - Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)
 - Insurance / Special: 구급키트 4, 귀환석 4, 세계수 생환부적 5, 황금 1+1 쿠폰 5
@@ -691,7 +689,6 @@ stocking day, and is discarded at the morning it runs out. The rule behind the t
 | midpotion | 중급 포션 | Potion | 4d |
 | highpotion | 상급 포션 | Potion | 5d |
 | toppotion | 최상급 포션 | Potion | 5d |
-| heat | 핫팩 | Field Gear | 4d |
 | cloak | 방수망토 | Field Gear | 4d |
 | antidote | 농축 해독제 | Field Gear | 5d |
 | spiderkit | 거미줄 방호세트 | Field Gear | 5d |
@@ -824,7 +821,6 @@ Buy / Sell = 80 / 160
 | 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +15, Supply 2 | Stat route |
 | 14 | 에너지드링크 | Drink U | 80 / 160 | 기동 +17, Supply 2 | Stat route |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
-| 18 | 핫팩 | Field Gear U | 70 / 140 | 냉기 +24 | Cold Main |
 | 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +14 | — |
 | 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +26, Supply 2 | Top-end mobility |
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
@@ -922,13 +918,7 @@ A Food / Drink Counter keeps its Supply and reads one step lower where it also r
 with 강인함 +6 (its own Stat is worth 냉기 +2).
 | Gate (Hazards) | 초반 대응 | 초반 하이브리드 | 중반 대응 | 후반 하이브리드 |
 |---|---|---|---|---|
-| 독거미 동굴 (독 · 속박) | 방진마스크 독 10 | 방독 작업장갑 독 12 · 속박 9 (new) | 농축 해독제 독 23 · 경량 로프 속박 21 | 거미줄 방호세트 16 · 14 |
-| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 10 (new) | 방수망토 부식 12 · 진창 9 | 부식 방지 코팅제 23 · 원정용 장화 21 | 연금 방수슈트 16 · 14 |
-| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 8 | 축성 손전등 공포 9 · 어둠 9 (new) | 용사의 곡주 공포 18 · 랜턴 건전지 어둠 21 | 성화 랜턴 공포 12 · 어둠 14 |
-| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 12 · 화이트아웃 9 (핫팩 converted) | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 18 | 백설 방한고글 16 · 12 |
 | 화염 골렘 광산 (화염) | 얼음컵 화염 8 | — | 쿨링 이온음료 화염 18 | 마그마 냉각장비 화염 12 · 투력 10 |
-The Items marked (new) and the 핫팩 → 방한 두건 conversion are approved with this ladder (User 2026-09-27) and are
-added to the catalog as their own change; until then the catalog carries 핫팩 as the Uncommon 냉기 +24 specialist.
 Superseded: the v2.9.1 by-Rarity Counter values (Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22) and
 the v2.9.6 불룡볶음면 냉기 +12 line.
 | 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 3 | Cold 초반 대응 |
@@ -946,11 +936,8 @@ the v2.9.6 불룡볶음면 냉기 +12 line.
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +23 | Poison 중반 대응 |
 | 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +18, Supply 1 | Fire 중반 대응 |
 | 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
-Common 10
-Uncommon 6
 Rare 12
 (User 2026-09-27, v2.9.7: the Counter ladder moves 방진마스크 to Common and 경량 로프 / 랜턴 건전지 / 부식 방지 코팅제 /
-원정용 장화 / 설원 고글 / 용사의 곡주 / 불룡볶음면 to Rare; it was C11 / U12 / R5 / E11 / L1.)
 | battery | 랜턴 건전지 | Field Gear | 5d |
 | rope | 경량 로프 | Field Gear | 5d |
 | mask | 방진마스크 | Field Gear | 3d |
@@ -972,4 +959,92 @@ Prices by rung (User 2026-09-27 price review): 초반 대응 30~45G, 초반 하�
 | 33 | 성화 랜턴 | Field Gear E | 135 / 270 | 공포 +12, 어둠 +14 | Crypt 후반 하이브리드 |
 | 34 | 백설 방한고글 | Field Gear E | 135 / 270 | 냉기 +16, 화이트아웃 +12 | Snow 후반 하이브리드 |
 | 35 | 마그마 냉각장비 | Field Gear E | 145 / 290 | 화염 +12, 투력 +10 | Fire 후반 하이브리드 |
+```
+
+## AMENDMENT — v2.9.7 Counter ladder new Items (User 2026-09-27)
+
+User 2026-09-27: 중화 탄산수, 방독 작업장갑 and 축성 손전등 join the catalog and 핫팩 becomes 방한 두건; the role notes follow the ladder. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+The active 40-Item distribution is therefore:
+Active catalog count is exactly 40.
+counter=cold(low)
+identity=cheap supply with light Cold flexibility
+10. 랜턴 건전지
+mainCounter=dark
+identity=Dark specialist
+11. 경량 로프
+mainCounter=bind
+identity=Bind specialist
+counter=fear(low)
+rule=HotPack remains stronger pure-Cold specialist
+mainCounter=fear
+identity=Fear specialist with explicit Mobility trade-off
+identity=affordable secondary Poison response
+18. 핫팩
+mainCounter=cold
+identity=affordable efficient Cold specialist
+identity=flexible Slime-family gear
+rule=must not outperform either dedicated Main on its own Hazard
+20. 부식 방지 코팅제
+mainCounter=corrosion
+identity=Corrosion specialist
+mainCounter=mire
+identity=Mire specialist
+22. 설원 고글
+mainCounter=whiteout
+identity=Whiteout specialist
+24. 농축 해독제
+mainCounter=poison
+identity=strong Poison specialist
+```
+
+```new
+| 독거미 동굴 (독 · 속박) | 방진마스크 독 10 | 방독 작업장갑 독 12 · 속박 9 | 농축 해독제 독 23 · 경량 로프 속박 21 | 거미줄 방호세트 16 · 14 |
+| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 10 | 방수망토 부식 12 · 진창 9 | 부식 방지 코팅제 23 · 원정용 장화 21 | 연금 방수슈트 16 · 14 |
+| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 8 | 축성 손전등 공포 9 · 어둠 9 | 용사의 곡주 공포 18 · 랜턴 건전지 어둠 21 | 성화 랜턴 공포 12 · 어둠 14 |
+| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 12 · 화이트아웃 9 | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 18 | 백설 방한고글 16 · 12 |
+중화 탄산수, 방독 작업장갑 and 축성 손전등 are new with this ladder. 방한 두건 replaces 핫팩 (Uncommon 냉기 +24) and keeps its
+id `heat`, so a saved unit carries over as the Snow 초반 하이브리드.
+| 41 | 중화 탄산수 | Drink C | 35 / 70 | 부식 +10, Supply 1 | Corrosion 초반 대응 |
+| 18 | 방한 두건 (was 핫팩) | Field Gear U | 75 / 150 | 냉기 +12, 화이트아웃 +9 | Snow 초반 하이브리드 |
+| 42 | 방독 작업장갑 | Field Gear U | 75 / 150 | 독 +12, 속박 +9 | Spider 초반 하이브리드 |
+| 43 | 축성 손전등 | Field Gear U | 75 / 150 | 공포 +9, 어둠 +9 | Crypt 초반 하이브리드 |
+Active catalog count is exactly 43 (40 until the v2.9.7 Counter ladder, User 2026-09-27).
+The active 43-Item distribution is therefore:
+Uncommon 8
+원정용 장화 / 설원 고글 / 용사의 곡주 / 불룡볶음면 to Rare and adds 중화 탄산수 (Common), 방독 작업장갑 and 축성 손전등
+(Uncommon); it was C11 / U12 / R5 / E11 / L1.)
+- Drink: 2 days unless Uncommon or above (3) or a Hazard Counter Drink (얼음컵 3, 중화 탄산수 3, 용사의 곡주 4, 쿨링 이온음료 5)
+| soda | 중화 탄산수 | Drink | 3d |
+| heat | 방한 두건 | Field Gear | 4d |
+| webgloves | 방독 작업장갑 | Field Gear | 4d |
+| holylight | 축성 손전등 | Field Gear | 4d |
+counter=cold
+identity=Cold 초반 대응 with Supply
+counter=fire
+identity=Fire 초반 대응 with Supply
+41. 중화 탄산수
+counter=corrosion
+identity=Corrosion 초반 대응 with Supply
+counter=fear
+identity=Fear 초반 대응 with Supply
+identity=Poison 초반 대응
+18. 방한 두건 (was 핫팩)
+counters=[cold,whiteout]
+identity=Snow 초반 하이브리드
+42. 방독 작업장갑
+counters=[poison,bind]
+identity=Spider 초반 하이브리드
+43. 축성 손전등
+counters=[fear,dark]
+identity=Crypt 초반 하이브리드
+identity=Slime 초반 하이브리드
+rule=stays under the Slime 후반 하이브리드 and each 중반 대응 on its own Hazard (§COUNTER LADDER)
+24. 농축 해독제 · 20. 부식 방지 코팅제 · 11. 경량 로프 · 21. 원정용 장화 · 10. 랜턴 건전지 · 22. 설원 고글
+identity=중반 대응 of its Hazard (§COUNTER LADDER)
+roles=[Supply,Stat,DirectCounter]
+identity=Cold 중반 대응; one step under the 강인함 rung because its 강인함 +6 also defends Cold
+identity=Fear 중반 대응 with an explicit Mobility trade-off
+identity=Fire 중반 대응 with Supply
 ```
