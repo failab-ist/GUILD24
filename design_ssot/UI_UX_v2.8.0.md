@@ -493,6 +493,19 @@ The global compact Help remains a separate reference surface under its current o
 Equipment text is omitted from this compact SALE header/state region.
 Equipment remains available in NPC detail and as proven Stat-source attribution.
 
+### SALE — SHELF LIP (v2.9.9)
+
+(User 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-45.) On SALE each shelf row ends on the thin edge of a board of the display
+case (a lit line over its shadow, 2 px inside the row's own padding), so the goods stand on a shelf. The row's dark face,
+type and height are unchanged, so the shelf shows as many rows as before; the open row keeps its board under its recess.
+The whole row is not turned to wood (legibility of the price and stock first).
+
+### SALE — SHELF HEAD (v2.9.9)
+
+(User 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-45.) The `진열대 {N}종 · {M}개` head is one step lower (5 px above and below)
+and its `점포지원 {n} / {m}` plate compact (24 px), so the shelf gets that height back. The plate keeps its own frame so it
+still reads as a control to press, and its touch target stays about 44 px through an invisible margin around it.
+
 ### SALE STAT SOURCE UX
 
 - Stat 하단에 실제 적용된 **Source 이름만** 작게 표시 (유리: 초록, 불리: 빨강). 미적용 표시 안함.

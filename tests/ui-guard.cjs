@@ -2998,6 +2998,14 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
 
 /* UI-Q-v29-42 (UI_UX §NEW STORE PREPARATION — STORE SCENE, User 2026-09-27, v2.9.9): 새 점포 준비 is the MORNING room, not a
    panel; the runtime geometry (no overlap, on screen, the ending round trip) is tools/qa-prep-scene.cjs. */
+/* UI-Q-v29-45 (UI_UX §SALE — SHELF LIP, User 2026-09-27, v2.9.9); the destination stays the dark plate (the paper notice was tried and dropped) */
+test('UI-Q-v29-45: the SALE shelf rows stand on boards, the head is lower, the destination stays the dark plate',()=>{
+ assert.ok(/\.p-sale \.good\{box-shadow:inset 0 -1px 0 #3a2814,inset 0 -2px 0 #a07a45\}/.test(css),'each row ends on a thin board edge');
+ assert.ok(/\.shelf-head\{[^}]*padding:5px 13px/.test(css)&&/\.shelf-head \.relic-ref\{position:relative;[^}]*min-height:24px/.test(css),'the head is lower and the plate compact');
+ assert.ok(/\.shelf-head \.relic-ref\{[^}]*box-shadow:inset 2px 2px 0 #00000080/.test(css)&&/\.shelf-head \.relic-ref:after\{content:'';position:absolute;inset:-10px -4px\}/.test(css),'still a framed plate, with a ~44 px touch target');
+ assert.ok(!/\.p-sale \.good\{[^}]*padding/.test(css),'without changing the row height');
+ assert.ok(!/\.p-sale \.dest-plate\{background:var\(--tex-paper\)/.test(css)&&!fn('destPlate').includes('class="pin"'),'the destination is not a paper notice');
+});
 /* UI-Q-v29-44 (UI_UX §PRIMARY ACTION GRAMMAR, User 2026-09-27, v2.9.9): the eight Phase Actions press one way - a
    down-right cast and a diagonal press - at two sizes; the measured cast / press / height per Phase is runtime evidence in
    tools/qa-primary-grammar.cjs (read off the screen), this pins the construction */

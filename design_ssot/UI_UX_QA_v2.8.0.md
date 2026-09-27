@@ -1414,6 +1414,21 @@ PASS:
 FAIL:
 - the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
 
+### UI-Q-v29-45 — SALE SHELF LIP AND HEAD
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §SALE — SHELF LIP / §SALE — SHELF HEAD.)
+
+SETUP: a mid-Run SALE (Day 5+, six or more kinds on the shelf) at 360x640, 390x664, 390x844, 412x915 and 1280x880.
+
+PASS:
+- every shelf row ends on a thin (2 px) board edge; row height and type unchanged
+- the shelf head is lower and its 점포지원 plate compact but still a framed plate with a ~44 px touch target; the room the
+  shelf gets above the tray / dock is 12 px more than before (measured: 120 / 133 / 313 / 382 / 323 -> 132 / 145 / 325 /
+  394 / 335 px)
+
+FAIL:
+- a row turned to wood, a row taller than before, or less shelf room at any size
+
 ### UI-Q-v29-44 — PRIMARY ACTION GRAMMAR
 
 (User 2026-09-27; owner `UI_UX_v2.8.0.md` §PRIMARY ACTION GRAMMAR.)

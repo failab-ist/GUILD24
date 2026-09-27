@@ -1631,3 +1631,30 @@ the wide framing the 간판's tag, which runs left from it toward the stage's ed
 stacks its two lines, sits level with the sign's plate rather than its hangers and grows only with the stage's height, at
 most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1120 px wide) and clear of the fixture
 ```
+
+## AMENDMENT — SALE — DESTINATION SLIP / SHELF LIP (User 2026-09-27, v2.9.9)
+
+New owner sections and acceptance UI-Q-v29-45: the destination is the pinned paper Gate notice, the shelf rows stand on boards.
+
+```new
+### SALE — SHELF LIP (v2.9.9)
+type and height are unchanged, so the shelf shows as many rows as before; the open row keeps its board under its recess.
+The whole row is not turned to wood (legibility of the price and stock first).
+```
+
+## AMENDMENT — SALE — destination slip dropped (User 2026-09-27, v2.9.9)
+
+The destination slip was reverted to the dark plate (User: it was the one surface that stood out); the shelf lip stays. Lines declared earlier and now superseded are removed from their fences above.
+
+## AMENDMENT — SALE — shelf lip thinner, shelf head lower (User 2026-09-27, v2.9.9)
+
+The shelf lip is 2 px; the shelf head and its 점포지원 plate are compact; the shelf gets 12 px. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+(User 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-45.) On SALE each shelf row ends on the thin edge of a board of the display
+case (a lit line over its shadow, 2 px inside the row's own padding), so the goods stand on a shelf. The row's dark face,
+### SALE — SHELF HEAD (v2.9.9)
+(User 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-45.) The `진열대 {N}종 · {M}개` head is one step lower (5 px above and below)
+and its `점포지원 {n} / {m}` plate compact (24 px), so the shelf gets that height back. The plate keeps its own frame so it
+still reads as a control to press, and its touch target stays about 44 px through an invisible margin around it.
+```

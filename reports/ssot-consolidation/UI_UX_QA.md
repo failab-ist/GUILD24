@@ -1608,3 +1608,31 @@ The desk 간판 tag stacks and caps its growth so it stays inside the 1120-wide 
 stage (390x844, 768x1024, 1366x680, 1920x1080), the plates on the pixel face's steps, still overlapping nothing and every
 tag and plate inside the stage (not only the window)
 ```
+
+## AMENDMENT — SALE — DESTINATION SLIP / SHELF LIP (User 2026-09-27, v2.9.9)
+
+New owner sections and acceptance UI-Q-v29-45: the destination is the pinned paper Gate notice, the shelf rows stand on boards.
+
+```new
+```
+
+## AMENDMENT — SALE — destination slip dropped (User 2026-09-27, v2.9.9)
+
+The destination slip was reverted to the dark plate (User: it was the one surface that stood out); the shelf lip stays. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- a row turned to wood, a row taller than before, or less shelf room at any size
+```
+
+## AMENDMENT — SALE — shelf lip thinner, shelf head lower (User 2026-09-27, v2.9.9)
+
+The shelf lip is 2 px; the shelf head and its 점포지원 plate are compact; the shelf gets 12 px. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+### UI-Q-v29-45 — SALE SHELF LIP AND HEAD
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §SALE — SHELF LIP / §SALE — SHELF HEAD.)
+- every shelf row ends on a thin (2 px) board edge; row height and type unchanged
+- the shelf head is lower and its 점포지원 plate compact but still a framed plate with a ~44 px touch target; the room the
+shelf gets above the tray / dock is 12 px more than before (measured: 120 / 133 / 313 / 382 / 323 -> 132 / 145 / 325 /
+394 / 335 px)
+```

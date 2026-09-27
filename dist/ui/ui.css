@@ -232,13 +232,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* USER, 2026-09-23: the count belongs to 진열대, so it sets right beside the title and the
    free space goes after it - the reference plate is pushed to the far end of the head instead.
    Read apart, the two stop looking like one object. */
-.shelf-head .relic-ref{margin-left:auto;align-self:center;min-height:30px;padding:5px 9px;
+/* v2.9.9 (User 2026-09-27, UI_UX §SALE — SHELF HEAD): the head is one step lower, so the plate is compact - still a pressable
+   plate with its own frame, and its touch target stays about 44 px through an invisible margin around it */
+.shelf-head .relic-ref{position:relative;margin-left:auto;align-self:center;min-height:24px;padding:3px 8px;
  font-size:11px;letter-spacing:.02em;background:#00000066;color:#bda882;
  box-shadow:inset 2px 2px 0 #00000080,inset -1px -1px 0 #ffffff14}
 .shelf-head .relic-ref b{font-size:12px;color:#d7b878}
 .shelf-head .relic-ref:hover{background:#00000066;color:#e2d0ab}
 .shelf-head .relic-ref:hover b{color:#ecc98a}
 .shelf-head .relic-ref:active{transform:none}
+.shelf-head .relic-ref:after{content:'';position:absolute;inset:-10px -4px}
 .relic-ref{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:7px 11px;
  border:0;border-radius:0;cursor:pointer;
  font:400 12px/1 var(--ui);color:#cbb98d;background:#00000047;
@@ -1107,7 +1110,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 3px #6b5029,inset 0 0 0 6px #2a1e11,4px 4px 0 #00000066}
 .shelf:before{content:'';position:absolute;z-index:1;left:6px;right:6px;top:6px;height:30px;pointer-events:none;
  background:linear-gradient(180deg,#ffffff1c 0,#ffffff00 100%)}
-.shelf-head{display:flex;align-items:baseline;gap:8px;margin:0 -11px 6px;padding:8px 13px;
+.shelf-head{display:flex;align-items:baseline;gap:8px;margin:0 -11px 6px;padding:5px 13px;
  background:linear-gradient(180deg,#8d6c3b 0,#5b421f 100%);
  box-shadow:inset 0 2px 0 #ffffff33,inset 0 -3px 0 #00000080}
 .shelf-head h2{font:500 15px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f8efd8}
@@ -1151,6 +1154,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the drawer that opens under it; between the two there is material and spacing, and no
    emphasis line at all. */
 .good.open{background:#00000066;box-shadow:inset 0 4px 0 #0000008c}
+/* v2.9.9 (User 2026-09-27, UI_UX §SALE — SHELF LIP): on SALE each row ends on the thin edge of a board of the display case -
+   a lit line over its shadow, 2 px inside the row's own padding - so the goods stand on a shelf; the row's dark face,
+   its type and its height are unchanged. The open row keeps its board under its own recess. */
+.p-sale .good{box-shadow:inset 0 -1px 0 #3a2814,inset 0 -2px 0 #a07a45}
+.p-sale .good.open{box-shadow:inset 0 4px 0 #0000008c,inset 0 -1px 0 #3a2814,inset 0 -2px 0 #a07a45}
 /* the register drawer: it opens under the chosen good and the three keys are the decision */
 /* BATCH 2B §SALE REGISTER DRAWER. It was a dark rectangle holding another dark rectangle -
    a second card under the product rather than the machine the sale is rung up on. It is one

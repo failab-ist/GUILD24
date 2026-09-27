@@ -43,6 +43,10 @@ confirmed by the User.
   the title (User 2026-09-27), the board is one step tighter under 800 px high, and the 간판 keeps the gap from the title;
   the Slot tags, the branch plate and the Capital plate keep their 360x640 share of a taller or wider stage (the tags
   grow smoothly, the pixel-face plates step 12 -> 18 -> 24 / 17 -> 24 px).
+- SALE shelf (UI_UX §SALE — SHELF LIP / §SALE — SHELF HEAD, UI_UX_QA UI-Q-v29-45): each shelf row ends on a thin board
+  edge, and the `진열대` head is lower with a compact (still framed) 점포지원 plate, so the shelf gets 12 px more room. Tried and dropped (User 2026-09-27): the destination as MORNING's paper notice
+  (the one bright surface on the screen), an adventurer card merge and a larger customer (no room freed on a phone, and
+  the separate parts read faster).
   Short-desk sizes added to `qa-prep-scene`.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
