@@ -2,7 +2,7 @@
 
 DOC=RELIC_QA
 OWNER=qa,relic,store_build,fresh,sloth_window
-DOC_VERSION=2.9.7
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/RELIC_QA_v2.8.0-patch.md,history/RELIC_QA_v2.7.0.md,history/RELIC_QA_v2.5.0.md
@@ -192,8 +192,8 @@ Current explicit exclusions:
     guarantee
     fridge
     board
-    rookieBoard
-    groupFlyer
+    firstVisitCoupon
+    groupOrder
     memberBundle
     premiumMember
     returnPoints
@@ -406,7 +406,7 @@ No excluded facility is offered, owned, or applied as a hidden modifier.
 ### REL-Q-v28-1 — NAME COLLISION CLEANUP
 
 Expected:
-- showcase -> 희귀상품 입고 계약
+- rareContract -> 희귀상품 입고 계약
 - coldcase -> 냉장 유통 계약
 - the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 (v2.9.7); no Store Support is named 쇼케이스
 
@@ -461,23 +461,23 @@ Expect exactly these approved base prices for these rows:
     bulk 130
     stamp 130
     member 130
-    showcase 140
+    rareContract 140
     guarantee 140
     hazardBoard 60
-    medicine 80
+    fieldRepair 80
     kitchen 170
     board 110
-    rookieBoard 110
-    groupFlyer 200
+    firstVisitCoupon 110
+    groupOrder 200
     memberBundle 190
     premiumMember 200
     expeditionMeal 200
     coldcase 180
-    dawnBulk 190
+    dawnRecovery 190
     fresh24 360
     warehouse 130
-    terminal 130
-    delivery 120
+    extraOrder 130
+    rerollTicket 120
 
 FAIL if implementation uses a different base price without a new approved owner amendment.
 

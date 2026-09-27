@@ -5,7 +5,7 @@ for(const f of ['data/catalog','data/relics','data/decorations','data/copy','sys
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const copy=x=>JSON.parse(JSON.stringify(x));
 const read=p=>require('node:fs').readFileSync(require('node:path').join(__dirname,'..',p),'utf8');
-const FAMILIES=['spider','slime','fire','crypt','snow'];
+const FAMILIES=['spider','slime','golem','crypt','snow'];
 
 function atFinal(seed='final',eligible=5){
  const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);
@@ -116,8 +116,8 @@ test('FINAL-Q77: the party-wide 토벌 전망 is the resolution pre-roll truth, 
   assert.equal(label,Dungeon.band(t.power/t.bossPower),'the shared bands over the pre-roll ratio');
   assert.equal(g.rng.state,rng,'no RNG consumed');assert.equal(JSON.stringify(g.run),state,'no state written');
   // transfer changes the preview input, and the resolution then reads the same pre-roll truth
-  g.run.money=5000;g.stock('premium',1);const n=g.run.npcs.find(x=>x.id===g.run.team[0]);n.money=9999;
-  const p0=g.finalPreRoll().power;g.supplyFinal(n.id,g.run.inventory.find(x=>x.item==='premium').id);
+  g.run.money=5000;g.stock('guildlunch',1);const n=g.run.npcs.find(x=>x.id===g.run.team[0]);n.money=9999;
+  const p0=g.finalPreRoll().power;g.supplyFinal(n.id,g.run.inventory.find(x=>x.item==='guildlunch').id);
   const after=g.finalPreRoll();assert.notEqual(after.power,p0,'the forecast input moves after a transfer');
   const expect=Dungeon.band(after.power/after.bossPower);assert.equal(g.finalForecast(),expect);
   g.boss();assert.ok(Math.abs(g.run.bossDebug.power-after.power)<1e-9&&Math.abs(g.run.bossDebug.bossPower-after.bossPower)<1e-9,
@@ -132,7 +132,7 @@ test('FINAL-Q75: a legacy Final save keeps proven preparation, and only that',()
  const ra=Save.import(Save.export(a.account,a.run));
  assert.equal('finalCommitted' in ra.run,false,'a selected-only legacy Final is not committed');
  // post-transfer legacy: write the transfer as the pre-commit build did, then drop the flag
- const b=mk();b.commitFinalParty();b.run.money=5000;b.stock('potion',1);
+ const b=mk();b.commitFinalParty();b.run.money=5000;b.stock('lowpotion',1);
  const n=b.run.npcs.find(x=>x.id===b.run.team[0]);n.money=999;b.supplyFinal(n.id,b.run.inventory[0].id);
  delete b.run.finalCommitted;
  const snap=x=>JSON.stringify({gold:x.money,gross:x.stats.revenue,inv:x.inventory,npcs:x.npcs.map(n=>[n.money,n.pack,n.history.length])});
@@ -424,7 +424,7 @@ test('RUN-Q15 on a controlled D30 setup: regulars and newcomers are read off the
   const e=bare(n);
   assert.ok(Object.values(e).every(v=>typeof v!=='number'||Number.isFinite(v)),'a classified adventurer has a finite bare state');
  }
- const packed=Dungeon.prepare({...copy(alive[0]),pack:['potion']},d,s.facilities).effects;
+ const packed=Dungeon.prepare({...copy(alive[0]),pack:['lowpotion']},d,s.facilities).effects;
  assert.notEqual(packed.combat,bare(alive[0]).combat,'and the bare reading really is without stock');
 });
 
@@ -528,10 +528,10 @@ test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is r
  g.commitFinalParty();   // FINAL-Q75: selection is confirmed before preparation
  const n=s.npcs.find(x=>x.id===s.team[0]);
  // stock the shelf so there is something to transfer
- g.run.money=5000;g.stock('potion',2);g.stock('premium',1);
- const st=s.inventory.find(x=>x.item==='potion');
- const price=g.finalPrice('potion');
- assert.equal(price,Math.round(DATA.itemBy.potion.sell*DATA.pricing.half.mult),'the fixed price IS the ordinary 50% amount');
+ g.run.money=5000;g.stock('lowpotion',2);g.stock('guildlunch',1);
+ const st=s.inventory.find(x=>x.item==='lowpotion');
+ const price=g.finalPrice('lowpotion');
+ assert.equal(price,Math.round(DATA.itemBy.lowpotion.sell*DATA.pricing.half.mult),'the fixed price IS the ordinary 50% amount');
  assert.ok(DATA.pricing.half.mult===0.5);
  n.money=Math.max(n.money,price);
  const before={wallet:n.money,gold:s.money,gross:s.stats.revenue,stock:s.inventory.length,pack:n.pack.length};
@@ -545,13 +545,13 @@ test('ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a fixed 50% transfer that is r
  assert.notEqual(n.history.at(-1).paid,0,'this is not free equipment');
  // affordability is real: below the fixed amount, the Item cannot be committed
  const poor=s.npcs.find(x=>x.id===s.team[1]);
- const st2=s.inventory.find(x=>x.item==='premium');
- poor.money=g.finalPrice('premium')-1;
+ const st2=s.inventory.find(x=>x.item==='guildlunch');
+ poor.money=g.finalPrice('guildlunch')-1;
  const goldBefore=s.money,stockBefore=s.inventory.length;
  assert.throws(()=>g.supplyFinal(poor.id,st2.id),/소지금/,'an unaffordable transfer is refused');
  assert.equal(s.money,goldBefore,'a refused transfer moves no Gold');
  assert.equal(s.inventory.length,stockBefore,'and consumes no stock');
- poor.money=g.finalPrice('premium');
+ poor.money=g.finalPrice('guildlunch');
  g.supplyFinal(poor.id,st2.id);
  assert.equal(poor.money,0,'exactly affordable is affordable');
  // no 100/150 choice and no refusal roll in the Final
@@ -575,7 +575,7 @@ test('FINAL_EXPEDITION FINAL-Q75: the party is confirmed before preparation and 
  // before confirming, selection is free both ways
  g.selectFinal(a);g.selectFinal(b);g.selectFinal(a);g.selectFinal(c);g.selectFinal(d);
  assert.deepEqual(s.team,[b,c,d]);
- assert.throws(()=>g.supplyFinal(b,(g.run.money=5000,g.stock('potion',1),s.inventory[0].id)),/확정/,'no transfer before the party is confirmed');
+ assert.throws(()=>g.supplyFinal(b,(g.run.money=5000,g.stock('lowpotion',1),s.inventory[0].id)),/확정/,'no transfer before the party is confirmed');
  const confirm=JSON.stringify({rng:g.rng.state,gold:s.money,inv:s.inventory,gross:s.stats.revenue,wallets:s.npcs.map(n=>n.money)});
  g.selectFinal(d);g.selectFinal(d);   // v2.8: removal and re-adding stay free before the commitment
  g.commitFinalParty();
@@ -600,7 +600,7 @@ test('FINAL_EXPEDITION FINAL-Q74: no-effect Insurance is blocked from a Final Ba
  for(const n of g.finalEligible().slice(0,g.finalRequired()))g.selectFinal(n.id);
  g.commitFinalParty();
  const n=s.npcs.find(x=>x.id===s.team[0]);n.money=99999;n.pack=[];s.money=99999;
- for(const item of ['kit','stone','tree']){
+ for(const item of ['kit','stone','worldcharm']){
   assert.equal(g.finalNoEffect(item),true);
   g.stock(item,1);const st=s.inventory.find(x=>x.item===item);
   const before=JSON.stringify({gold:s.money,wallet:n.money,inv:s.inventory.length,gross:s.stats.revenue});
@@ -608,7 +608,7 @@ test('FINAL_EXPEDITION FINAL-Q74: no-effect Insurance is blocked from a Final Ba
   assert.equal(JSON.stringify({gold:s.money,wallet:n.money,inv:s.inventory.length,gross:s.stats.revenue}),before,'and nothing moves');
  }
  assert.equal(n.pack.length,0);
- assert.equal(g.finalNoEffect('potion'),false,'ordinary Items stay transferable');
+ assert.equal(g.finalNoEffect('lowpotion'),false,'ordinary Items stay transferable');
  // ordinary (non-Final) SALE of the same Insurance is untouched
  assert.ok(!read('dist/systems/shop.js').includes('finalNoEffect'),'the block is Final-only');
 });
@@ -621,7 +621,7 @@ test('FINAL §3: seven Bosses - the Item preview is the resolution truth, shelf 
   const team=g.finalEligible().slice(0,3);team.forEach(n=>{n.pack=[];n.money=9999;g.selectFinal(n.id);});
   if(boss==='LUST')team[0].loyalty=100;   // one trusted regular, two not
   g.commitFinalParty();s.money=9999;
-  for(const item of ['premium','rice','highpotion'])g.stock(item,1);
+  for(const item of ['guildlunch','rice','highpotion'])g.stock(item,1);
   // the preview for each (participant, Item) is finalPreRoll with that Item added
   const n=team[1],items=s.inventory.map(x=>x.item);
   for(const item of items){
@@ -630,11 +630,11 @@ test('FINAL §3: seven Bosses - the Item preview is the resolution truth, shelf 
     for(const k of CORE){const gain=own.reduce((v,x)=>v+Math.max(0,x.stats[k]||0),0);
      if(gain>0){const plain=raw.effects[k]-Dungeon.prepare(n,s.dungeons[0],s.facilities).effects[k];
       assert.ok(Math.abs((b.snapshots[i][k]-a.snapshots[i][k])-(plain-gain*0.5))<1e-9,'GLUTTONY halves the positive Item '+k);}}}
-   if(item==='premium')var expect=b;
+   if(item==='guildlunch')var expect=b;
   }
   // commit the previewed transfer: the next pre-roll IS the preview, and the Lock records it
   const rng=g.rng.state;
-  g.supplyFinal(n.id,s.inventory.find(x=>x.item==='premium').id);
+  g.supplyFinal(n.id,s.inventory.find(x=>x.item==='guildlunch').id);
   const now=g.finalPreRoll();
   for(let i=0;i<3;i++)for(const k of CORE)assert.ok(Math.abs(now.snapshots[i][k]-expect.snapshots[i][k])<1e-9,boss+': preview == post-transfer truth');
   assert.equal(g.rng.state,rng,boss+': preview and transfer draw no RNG');
@@ -656,7 +656,7 @@ test('FINAL-Q75: a valid affordable transfer is deterministic - no roll, no SALE
  for(const seed of ['det-1','det-2','det-3']){
   const g=atFinal(seed,3),s=g.run;
   for(const n of g.finalEligible())g.selectFinal(n.id);g.commitFinalParty();
-  s.money=9999;g.stock('premium',2);const n=s.npcs.find(x=>x.id===s.team[0]);n.money=g.finalPrice('premium');n.pack=[];
+  s.money=9999;g.stock('guildlunch',2);const n=s.npcs.find(x=>x.id===s.team[0]);n.money=g.finalPrice('guildlunch');n.pack=[];
   const say=JSON.stringify(s.say),rng=g.rng.state,refused=JSON.stringify(n.refused||[]);
   g.supplyFinal(n.id,s.inventory[0].id);
   assert.equal(n.pack.length,1,'committed');assert.equal(g.rng.state,rng,'no purchase/refusal roll');

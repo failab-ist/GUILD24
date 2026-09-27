@@ -1,9 +1,9 @@
 (function(G){
-const VERSION=8,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup';
+const VERSION=9,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup';
 /* Every schema this game has ever written, current one apart. Read() uses it to tell a
    player their old save cannot be continued; reset() uses the same list to erase it, so a
    version bump is made in one place and both paths follow. */
-const LEGACY=['v1','v2','v3','v4','v5','v6','v7'];
+const LEGACY=['v1','v2','v3','v4','v5','v6','v7','v8'];
 
 /* Save validation. One clause out of line and the save is refused.
    Each check stands alone under its own name. This function was extended twice in v2.4
@@ -25,7 +25,7 @@ const RELIC_WINDOWS=[0,5,10,15,20,25,30];
 function accountOk(a,D){
  if(!a||!a.knowledge||!a.settings)return false;
  if(!a.unlocks||typeof a.unlocks!=='object')return false;
- if(typeof a.unlocks.premium!=='boolean'||typeof a.unlocks.tree!=='boolean')return false;
+ if(typeof a.unlocks.guildlunch!=='boolean'||typeof a.unlocks.worldcharm!=='boolean')return false;
  /* Mix levels are a presentation preference, not progression truth: checked for shape when
     present, the way tutorial is, and defaulted by the audio layer when a save predates them.
     A save that carries a level carries a real one - a string or a 7 is malformed, not old. */

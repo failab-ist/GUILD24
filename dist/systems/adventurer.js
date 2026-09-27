@@ -65,7 +65,7 @@ function masterySpawnBonus(r,account,jobId){
 function create(r,index,day,account,opts={}){
  /* META §wall — 명예 모험가 액자 (User 2026-09-26, v2.9.7): above 평범 40% -> 65%, 영웅 · 전설 the most; the weights are the
     Decoration's own param, one owner. */
- const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.premiumCase.weights:[60,27,10,2.5,.5]);
+ const rarity=r.weighted([0,1,2,3,4],opts.royal?[40,36,17,6,1]:opts.premium?D.decorationParams.honorFrame.weights:[60,27,10,2.5,.5]);
  const pool=D.jobs.filter(j=>G.Meta.jobUnlocked(account,j));const job=r.pick(pool);
  const spawnLevel=Math.max(1,r.int(1,3)+Math.floor((day-1)*.25)+(opts.royal?3:0));
  const level=spawnLevel+masterySpawnBonus(r,account,job.id)+(opts.levelBonus||0);

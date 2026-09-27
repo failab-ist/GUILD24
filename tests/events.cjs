@@ -72,7 +72,7 @@ test('EVENT 9-1/9-2: Hazard Events skip ineligible Gates and are excluded when n
  const g=fresh('hazard'),s=g.run;
  const cold=DATA.events.find(e=>e.id==='coldwave'),fog=DATA.events.find(e=>e.id==='poisonfog');
  s.dungeons=[{...g.makeDungeon('snow',2)}];assert.equal(g.eventEligible(cold),false,'cold Gate only -> 한파 excluded');
- s.dungeons=[{...g.makeDungeon('fire',2)}];assert.equal(g.eventEligible(cold),false,'fire Gate only -> 한파 excluded');
+ s.dungeons=[{...g.makeDungeon('golem',2)}];assert.equal(g.eventEligible(cold),false,'fire Gate only -> 한파 excluded');
  s.dungeons=[{...g.makeDungeon('spider',2)}];assert.equal(g.eventEligible(cold),true);
  assert.equal(g.eventEligible(fog),false,'poison Gate only -> 독안개 excluded');
  s.dungeons=[{...g.makeDungeon('snow',2)}];assert.equal(g.eventEligible(fog),true);
@@ -422,7 +422,7 @@ test('EVENT: the ordinary periodic newcomer is unchanged by the SA-Q45 seat acco
    const s=g.run;s.money=5000;
    if(s.phase==='morning'&&s.day>1&&s.day%3===0){
     sawPeriodic=true;
-    assert.ok(!s.dayFacilities.includes('rookieBoard'),'no support is seating here');
+    assert.ok(!s.dayFacilities.includes('firstVisitCoupon'),'no support is seating here');
     assert.equal(s.event,null,'and no Event is seating here either');
     // the queue is the ordinary min(intake, everyone who could come) - the newcomer included
     const able=s.npcs.filter(n=>n.alive&&!n.recovery).length;

@@ -16,10 +16,10 @@ test('ORD-Q08: base Full-offer Reroll doubles within the Day and resets the next
 });
 
 test('REL-Q24/ORD-Q12: 발주 교환권 makes the first Reroll free, then the ordinary curve from its first step',()=>{
- const g=fresh('reroll-relic');g.beginOrder();g.run.facilities=['delivery'];g.run.money=5000;
+ const g=fresh('reroll-relic');g.beginOrder();g.run.facilities=['rerollTicket'];g.run.money=5000;
  const base=DATA.balance.rerollBase;
  for(const price of [0,base,base*2,base*4,base*8]){assert.equal(g.rerollPrice(),price);const before=g.run.money;g.reroll();assert.equal(before-g.run.money,price);}
- g.run.day++;g.morning();g.beginOrder();g.run.facilities=['delivery'];
+ g.run.day++;g.morning();g.beginOrder();g.run.facilities=['rerollTicket'];
  assert.equal(g.rerollPrice(),0,'next Day restores the free first Reroll');
 });
 
@@ -62,7 +62,7 @@ test('REL-Q39: internal taxonomy never reaches a player-facing render path',()=>
 
 test('REL-Q40: owned Relic quick view is read-only name/effect data',()=>{
  const g=fresh('quickview');
- g.run.facilities=['fridge','terminal'];
+ g.run.facilities=['fridge','extraOrder'];
  const owned=g.ownedRelics();
  assert.equal(owned.length,2);
  for(const r of owned){
@@ -80,7 +80,7 @@ test('REL-Q33: 냉장 유통 계약 targets Uncommon+ Food/Drink, not a one-SKU 
  assert.ok(eligible.length>=4,'multi-SKU pool, got '+eligible.length);
  for(const it of eligible)assert.ok(Relics.offerWeight(g,it)>1,it.id+' should be favoured');
  for(const it of DATA.items.filter(i=>['food','drink'].includes(i.category)&&i.rarity===0))assert.equal(Relics.offerWeight(g,it),1,it.id+' common Food/Drink is not favoured');
- assert.ok(Relics.shelf(g,DATA.itemBy.lava)>0,'shelf-life relief reaches Uncommon Food');
+ assert.ok(Relics.shelf(g,DATA.itemBy.dragonramen)>0,'shelf-life relief reaches Uncommon Food');
 });
 
 // REL-Q77 kept only as the category helper check: Relics.field() still names Potion / Field Gear /
@@ -102,23 +102,23 @@ test('REMAKE 야전 정비대: Field Gear Hazard Counter values x1.40, nothing e
  const gate={...g.makeDungeon('spider',2),requiredSupply:0};                 // poison + bind
  for(const [id,h] of [['rope','bind'],['antidote','poison']]){
   const it=DATA.itemBy[id],p={...n,pack:[id]};
-  const plain=Dungeon.prepare(p,gate).effects[h],with_=Dungeon.prepare(p,gate,['medicine']).effects[h];
+  const plain=Dungeon.prepare(p,gate).effects[h],with_=Dungeon.prepare(p,gate,['fieldRepair']).effects[h];
   assert.ok(it.effects[h]>0,id+' carries a '+h+' Counter');
   assert.equal(it.category,'gear');
   assert.ok(Math.abs((with_-plain)-it.effects[h]*.40)<1e-9,id+' '+h+' Counter +40%');
  }
  const food={...n,pack:['ramen']},cold={...g.makeDungeon('snow',1),requiredSupply:0};
- assert.deepEqual(Dungeon.prepare(food,cold,['medicine']).effects,Dungeon.prepare(food,cold).effects,'a Food Counter is not Field Gear');
+ assert.deepEqual(Dungeon.prepare(food,cold,['fieldRepair']).effects,Dungeon.prepare(food,cold).effects,'a Food Counter is not Field Gear');
  // no offer weight, no quantity
- for(const it of DATA.items){g.run.facilities=[];const w=Relics.offerWeight(g,it);g.run.facilities=['medicine'];assert.equal(Relics.offerWeight(g,it),w,it.id+' weight');}
- for(const it of [DATA.itemBy.potion,DATA.itemBy.boots]){g.run.facilities=[];const st=g.rng.state,q=g.offerFor(it).quantity;g.run.facilities=['medicine'];g.rng=new RNG(g.run.seed,st);assert.equal(g.offerFor(it).quantity,q);}
+ for(const it of DATA.items){g.run.facilities=[];const w=Relics.offerWeight(g,it);g.run.facilities=['fieldRepair'];assert.equal(Relics.offerWeight(g,it),w,it.id+' weight');}
+ for(const it of [DATA.itemBy.lowpotion,DATA.itemBy.boots]){g.run.facilities=[];const st=g.rng.state,q=g.offerFor(it).quantity;g.run.facilities=['fieldRepair'];g.rng=new RNG(g.run.seed,st);assert.equal(g.offerFor(it).quantity,q);}
 });
 
 test('RELIC 17: 원정 도시락 코너 gives each Food/Drink flat Supply +2 and +4 on every destination Hazard',()=>{
  /* 2026-09-23 rework: the old matching-Counter x1.25 and the Supply-Burden native-Stat +20% are
     gone. Per Food/Drink Item in the Bag: Supply +2, and +4 defence on EVERY Hazard of the Gate
     the adventurer goes to - flat, whether or not the Item Counters anything. */
- const g=fresh('meal'),n={...g.run.npcs[0],traits:[],pack:['lava']};
+ const g=fresh('meal'),n={...g.run.npcs[0],traits:[],pack:['dragonramen']};
  const cold={...g.makeDungeon('snow',2),requiredSupply:3},spider={...g.makeDungeon('spider',2),requiredSupply:0};
  for(const gate of [cold,spider]){
   const plain=Dungeon.prepare(n,gate),meal=Dungeon.prepare(n,gate,['expeditionMeal']);
@@ -129,7 +129,7 @@ test('RELIC 17: 원정 도시락 코너 gives each Food/Drink flat Supply +2 and
   assert.deepEqual(meal.itemStats,plain.itemStats,'no native Core-Stat bonus remains');
  }
  // two Food/Drink -> twice; a non-Food Item -> nothing
- const two={...n,pack:['lava','water']};
+ const two={...n,pack:['dragonramen','water']};
  assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects.supply-Dungeon.prepare(two,cold).effects.supply,4,'two Food/Drink give Supply +4');
  for(const h of cold.hazards)assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects[h]-(Dungeon.prepare(two,cold).effects[h]||0),8,h+' +8 for two');
  const gear={...n,pack:['rope']};
@@ -330,7 +330,7 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
  // the new Epics ride the ordinary Epic pool - no separate D20 hard unlock
  const epics=DATA.items.filter(i=>i.rarity===3);
  assert.ok(epics.length>=10);
- for(const it of epics)assert.equal(it.metaUnlock??null,it.id==='tree'?null:null,it.name+' needs no unlock of its own');
+ for(const it of epics)assert.equal(it.metaUnlock??null,it.id==='worldcharm'?null:null,it.name+' needs no unlock of its own');
 });
 
 /* 2026-09-23 remake: 원정 전문 인증 replaces the 길드24 원정전문점 인증 offer guarantee (REL-Q-v28-16
@@ -343,7 +343,7 @@ test('REMAKE 원정 전문 인증: Gate Counters x1.60, stacks with 야전 정�
  const val=(pack,gate,fac,h)=>Dungeon.prepare({...n,pack},gate,fac).effects[h]||0;
  const rope=DATA.itemBy.rope.effects.bind;                                     // Field Gear, bind
  assert.ok(Math.abs(val(['rope'],spider,['expeditionCert'],'bind')-val(['rope'],spider,[],'bind')-rope*.60)<1e-9,'+60% on a Gate Counter');
- assert.ok(Math.abs(val(['rope'],spider,['expeditionCert','medicine'],'bind')-val(['rope'],spider,[],'bind')-rope*(1.4*1.6-1))<1e-9,'x1.40 x1.60 for Field Gear');
+ assert.ok(Math.abs(val(['rope'],spider,['expeditionCert','fieldRepair'],'bind')-val(['rope'],spider,[],'bind')-rope*(1.4*1.6-1))<1e-9,'x1.40 x1.60 for Field Gear');
  assert.equal(val(['rope'],snow,['expeditionCert'],'bind'),val(['rope'],snow,[],'bind'),'no bonus when the Item Counters nothing on this Gate');
  const ramen=DATA.itemBy.ramen.effects.cold;                                   // Food, cold
  const meal=val(['ramen'],snow,['expeditionMeal'],'cold'),both=val(['ramen'],snow,['expeditionMeal','expeditionCert'],'cold');
@@ -374,7 +374,7 @@ test('REMAKE 원정 전문 인증: the buyer of a Gate Counter gets +50G on the 
 
 /* The pity Counter guarantee (ECONOMY_ORDER base pity) may never overwrite the Black Market row. */
 test('SA-Q19 / 암시장: the pity Counter guarantee never overwrites the Black Market special offer',()=>{
- const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?DATA.decorationParams.dawnSign.extraOffers:0)+((g.run.event?.effects||{}).offers||0);
+ const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('extraOrder')?2:0)+(g.wears('sponsorSign')?DATA.decorationParams.sponsorSign.extraOffers:0)+((g.run.event?.effects||{}).offers||0);
  for(let i=0;i<40;i++){
   const g=fresh('pity-blackmarket-'+i);g.run.facilities=[];g.run.dungeons=[{id:'fixture',hazards:['poison']}];
   g.run.event={id:'blackmarket',effects:{blackmarket:true}};
@@ -394,10 +394,10 @@ test('SA-Q19: the Black Market row carries 암시장 provenance, and only that r
  const fsx=require('node:fs'),pathx=require('node:path');
  const app=fsx.readFileSync(pathx.resolve(__dirname,'../dist/ui/app.js'),'utf8');
  const shop=fsx.readFileSync(pathx.resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('terminal')?2:0)+(g.wears('dawnSign')?DATA.decorationParams.dawnSign.extraOffers:0)
+ const ordinaryCount=g=>DATA.balance.orderOffers+(g.has('extraOrder')?2:0)+(g.wears('sponsorSign')?DATA.decorationParams.sponsorSign.extraOffers:0)
   +((g.run.event?.effects||{}).offers||0);
 
- for(const facilities of [[],['terminal']]){
+ for(const facilities of [[],['extraOrder']]){
   for(let i=0;i<25;i++){
    const g=fresh('provenance-'+facilities.join('')+i);
    g.run.facilities=[...facilities];

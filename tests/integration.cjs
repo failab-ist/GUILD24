@@ -147,7 +147,7 @@ test('CORE_RUN §SAVE/LOAD: a v2.4 save is never read as a v2.5 save',()=>{
    assert.equal(Save.read(),null,label+' written by v2.4 does not load');
    assert.ok(Save.error&&/새 점포/.test(Save.error),label+': the player is told, not shown an error code');
    assert.equal(store.get('guild24.save.v5'),payload,label+': the v5 bytes are left untouched');
-   assert.equal(store.get('guild24.save.v8'),undefined,label+': nothing is migrated into the v7 key');
+   assert.equal(store.get('guild24.save.v9'),undefined,label+': nothing is migrated into the current key');
   }
   // the same shape is refused by the validator itself, not only by the key it sits under
   assert.equal(Save.valid({version:5,account,run:null}),false,'a v5 payload is not a valid v6 save');
@@ -168,14 +168,14 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are left untouched');
   // A v6 write over an existing v6 save keeps the previous bytes under .backup.
   g.autosave=true;g.save();
-  const first=store.get('guild24.save.v8');
+  const first=store.get('guild24.save.v9');
   g.run.money+=1;g.save();
-  assert.equal(store.get('guild24.save.v8.backup'),first,'the previous save is preserved as a backup');
+  assert.equal(store.get('guild24.save.v9.backup'),first,'the previous save is preserved as a backup');
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are still there afterwards');
   // A corrupted head falls back to the backup rather than losing the run.
-  store.set('guild24.save.v8','{not json');
+  store.set('guild24.save.v9','{not json');
   const recovered=Save.read();
-  assert.ok(recovered&&recovered.version===8,'the backup is read when the head is unreadable');
+  assert.ok(recovered&&recovered.version===9,'the backup is read when the head is unreadable');
   assert.equal(recovered.run.money,g.run.money-1,'the recovered run is the previous save, not an invention');
  }finally{delete global.localStorage;}
 });
@@ -243,7 +243,7 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
   g.account.runs=3;g.autosave=true;g.save();
   for(const v of ['v1','v2','v3','v4','v5'])store.set('guild24.save.'+v,'{"version":'+v.slice(1)+'}');
   g.run.money+=1;g.save();   // so the .backup key exists too
-  assert.ok(store.get('guild24.save.v8')&&store.get('guild24.save.v8.backup'),'the precondition is a real save');
+  assert.ok(store.get('guild24.save.v9')&&store.get('guild24.save.v9.backup'),'the precondition is a real save');
 
   assert.equal(Save.reset(),true,'the reset reports success');
   assert.equal(store.size,0,'every key this game owns is gone - current, backup and legacy alike');
@@ -711,7 +711,7 @@ test('RESCUE: the count survives a save and a load, and a forged one is refused'
  const g=fresh('rescue-save'),s=g.run;
  g.stock('ramen',1);s.phase='closing';s.money=-10;g.liquidate(s.inventory[0].id);
  assert.equal(s.rescueUsed,1);
- const round=copy({version:8,account:g.account,run:s});
+ const round=copy({version:9,account:g.account,run:s});
  assert.ok(Save.valid(round),'a run carrying a rescue count is valid');
  assert.equal(round.run.rescueUsed,1,'and the count is what is written');
  for(const bad of [{rescueUsed:DATA.balance.rescueLimit+1},{rescueUsed:-1},{rescueUsed:1.5},{rescueUsed:undefined}]){
@@ -745,8 +745,8 @@ test('SAVE V7 EXACT CONTRACT', () => {
  g.autosave = false;
  g.start('v8-contract');
  
- // 1. new Run -> run.version === 8
- assert.equal(g.run.version, 8, 'a new run is created at version 8');
+ // 1. new Run -> run.version === 9 (v2.9.8 id cleanup, User 2026-09-27)
+ assert.equal(g.run.version, 9, 'a new run is created at version 9');
  
  // 2. Save.valid()가 run.version !== 8 reject
  const raw = JSON.parse(Save.export(g.account, g.run));
@@ -755,25 +755,25 @@ test('SAVE V7 EXACT CONTRACT', () => {
  assert.equal(Save.valid(raw), false, 'a run.version !== 7 is rejected');
  raw.run.version = 7;
  
- // 3. unlocks.premium non-boolean -> Save.valid() === false
- raw.account.unlocks.premium = "true";
+ // 3. unlocks.guildlunch non-boolean -> Save.valid() === false
+ raw.account.unlocks.guildlunch = "true";
  assert.equal(Save.valid(raw), false, 'premium as string is refused');
- delete raw.account.unlocks.premium;
+ delete raw.account.unlocks.guildlunch;
  assert.equal(Save.valid(raw), false, 'missing premium is refused');
- raw.account.unlocks.premium = false;
+ raw.account.unlocks.guildlunch = false;
  
- // 4. unlocks.tree non-boolean -> Save.valid() === false
- raw.account.unlocks.tree = 1;
+ // 4. unlocks.worldcharm non-boolean -> Save.valid() === false
+ raw.account.unlocks.worldcharm = 1;
  assert.equal(Save.valid(raw), false, 'tree as number is refused');
- delete raw.account.unlocks.tree;
+ delete raw.account.unlocks.worldcharm;
  assert.equal(Save.valid(raw), false, 'missing tree is refused');
- raw.account.unlocks.tree = false;
+ raw.account.unlocks.worldcharm = false;
  
  // 5. Meta.fresh() -> premium === false, tree === false, valid account shape
  const fresh = Meta.fresh();
- assert.equal(fresh.unlocks.premium, false, 'fresh account premium is false boolean');
- assert.equal(fresh.unlocks.tree, false, 'fresh account tree is false boolean');
- assert.ok(Save.valid({version:8, account:fresh, run:null}), 'fresh account alone is a valid save payload');
+ assert.equal(fresh.unlocks.guildlunch, false, 'fresh account premium is false boolean');
+ assert.equal(fresh.unlocks.worldcharm, false, 'fresh account tree is false boolean');
+ assert.ok(Save.valid({version:9, account:fresh, run:null}), 'fresh account alone is a valid save payload');
  
  // 5.1 extra keys in unlocks do not invalidate
  const extraRaw = JSON.parse(Save.export(g.account, g.run));
@@ -785,8 +785,8 @@ test('SAVE V7 EXACT CONTRACT', () => {
  h.start('fresh-test');
  const payload = Save.export(h.account, h.run);
  const loaded = Save.import(payload);
- assert.equal(loaded.account.unlocks.premium, false);
- assert.equal(loaded.run.version, 8);
+ assert.equal(loaded.account.unlocks.guildlunch, false);
+ assert.equal(loaded.run.version, 9);
 });
 
 test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for the visit',()=>{
@@ -1127,7 +1127,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales counts each real sale exactly once'
 
 test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run never re-reads it',()=>{
  const a=Meta.fresh();
- Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
+ Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.sponsorSign.price);
  Meta.buyDecoration(a,'thriftSafe');
  const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
  assert.equal(g.run.money,700,'nothing is paid before DAY 1 opens');
@@ -1137,8 +1137,8 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
  assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
  // changing the Account mid-Run must not reach the Run that already started
- Meta.buyDecoration(a,'dawnSign');
- assert.equal(g.wears('dawnSign'),false,'a Decoration bought mid-Run does not join this Run');
+ Meta.buyDecoration(a,'sponsorSign');
+ assert.equal(g.wears('sponsorSign'),false,'a Decoration bought mid-Run does not join this Run');
  Meta.equipDecoration(a,'counter',null);
  assert.equal(g.wears('thriftSafe'),true,'and unequipping mid-Run does not remove it either');
  assert.deepEqual(reload(g).run.loadout,g.run.loadout,'the frozen loadout survives a reload');
@@ -1146,7 +1146,7 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  assert.ok(!g.run.facilities.includes('thriftSafe'),'no Decoration id is injected into facilities');
  assert.equal(g.has('thriftSafe'),false,'and `has` - the Relic question - does not answer for it');
  const next=new Game(a);next.autosave=false;next.start('loadout-freeze-2');
- assert.deepEqual(next.run.loadout,{sign:'dawnSign'},'the next Run picks up the current Account loadout');
+ assert.deepEqual(next.run.loadout,{sign:'sponsorSign'},'the next Run picks up the current Account loadout');
  assert.equal(next.run.money,700,'and the unequipped counter no longer pays out');
 });
 
@@ -1176,9 +1176,9 @@ test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exc
  assert.ok(withHub>plain,'and it really is a cost');
  assert.ok(!src.includes("includes('hub')?35:0"),'the retired flat +35G is gone');
  /* board, hub and the wall Decoration are independent: none marks another owned or shares a slot. */
- assert.equal(g.wears('guildPlaque'),false,'holding the Relic does not equip the Decoration');
- const deco=Meta.fresh();Meta.addCapital(deco,DATA.decorationBy.guildPlaque.price);
- Meta.buyDecoration(deco,'guildPlaque');
+ assert.equal(g.wears('guildShelf'),false,'holding the Relic does not equip the Decoration');
+ const deco=Meta.fresh();Meta.addCapital(deco,DATA.decorationBy.guildShelf.price);
+ Meta.buyDecoration(deco,'guildShelf');
  const h=new Game(deco);h.autosave=false;h.start('deco-not-relic');
  assert.ok(!h.run.facilities.includes('board'),'and equipping the Decoration does not grant the Relic');
 });
@@ -1188,11 +1188,11 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
     frozen loadout, the settlement guard). None of it is a schema blocker, so v8 stands and no
     migration layer is invented for internal-development saves. */
  const fresh0=Meta.fresh();
- assert.equal(JSON.parse(Save.export(fresh0,null)).version,8,'the save generation is unchanged');
+ assert.equal(JSON.parse(Save.export(fresh0,null)).version,9,'the save generation is v9 (v2.9.8 id cleanup)');
  assert.ok(Save.valid(JSON.parse(Save.export(fresh0,null))),'an Account-only save validates');
  /* An existing v8 Account written before any of this must load and behave, not crash. */
  const legacy=Meta.fresh();delete legacy.store;
- const raw={version:8,account:legacy,run:null};
+ const raw={version:9,account:legacy,run:null};
  assert.ok(Save.valid(raw),'a v8 Account with no store block is still valid');
  const back=Save.import(JSON.stringify(raw));
  assert.equal(Meta.storeCapital(back.account),0,'capital defaults to zero');
@@ -1210,13 +1210,13 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
  assert.equal(legacySettle.gain,Math.round(3000*Meta.capitalRate(12)),'on its own Gross Sales');
  /* A live Run round-trips with both new fields intact. */
  const live=fresh('save-decoration');
- Meta.addCapital(live.account,DATA.decorationBy.dawnSign.price);
- Meta.buyDecoration(live.account,'dawnSign');
- live.run.loadout={sign:'dawnSign'};
+ Meta.addCapital(live.account,DATA.decorationBy.sponsorSign.price);
+ Meta.buyDecoration(live.account,'sponsorSign');
+ live.run.loadout={sign:'sponsorSign'};
  const round=reload(live);
  assert.deepEqual(round.run.loadout,live.run.loadout,'the frozen loadout survives export/import');
  assert.equal(Meta.storeCapital(round.account),0,'and the Account capital round-trips');
- assert.deepEqual(Meta.ownedDecorations(round.account),['dawnSign'],'with what it owns');
+ assert.deepEqual(Meta.ownedDecorations(round.account),['sponsorSign'],'with what it owns');
  assert.deepEqual(Meta.storeLoadout(round.account),Meta.storeLoadout(live.account),'and its planned loadout');
 });
 
@@ -1242,7 +1242,7 @@ test('META_v2.8 §RETIRED: a stale Contract or Franchise payload changes nothing
  /* A filled retired Franchise block must not unlock, discount or gate anything. */
  const filled=Meta.fresh();
  filled.franchise={sales:9999,overcharged:9999,returning:9999,relics:9999,
-  families:['spider','slime','fire','crypt','snow'],done:['nowaste','nodeath','allsupplied','grosssales']};
+  families:['spider','slime','golem','crypt','snow'],done:['nowaste','nodeath','allsupplied','grosssales']};
  const withPayload=new Game(filled);withPayload.autosave=false;withPayload.start(seed);
  assert.deepEqual(shape(withPayload),shape(base),'a filled Franchise payload changes no Run value');
  assert.deepEqual(Meta.opened(filled),Meta.opened(Meta.fresh()),'and unlocks nothing');
@@ -1288,13 +1288,13 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
  assert.equal(Meta.storeCapital(a),start-d.price,'and deducts nothing');
  /* Cancel is the absence of a call, so what it must leave alone is measured here as the state
     a purchase never made: another Decoration is untouched by this one. */
- const other=DATA.decorationBy.dawnSign;
+ const other=DATA.decorationBy.sponsorSign;
  assert.equal(Meta.decorationOwned(a,other.id),false,'an unconfirmed purchase owns nothing');
  assert.equal(Meta.storeLoadout(a)[other.slot],null,'and equips nothing');
  assert.throws(()=>Meta.buyDecoration(a,other.id),/자본이 부족/,'what cannot be afforded cannot be bought');
  assert.equal(Meta.storeCapital(a),start-d.price,'a refused purchase deducts nothing');
  /* Reload: a save round trip carries ownership and the loadout, and carries no pending state. */
- const save={account:a,run:null,version:8};
+ const save={account:a,run:null,version:9};
  assert.equal(Save.valid(JSON.parse(JSON.stringify(save))),true,'the Account with a Decoration is a valid save');
  const back=JSON.parse(JSON.stringify(save)).account;
  assert.equal(Meta.decorationOwned(back,d.id),true,'ownership survives the reload');
@@ -1344,12 +1344,12 @@ const wearing=(ids,seed)=>{const a=Meta.fresh();for(const id of ids){Meta.addCap
 const past0=g=>{g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;};
 test('추모 방명록: the Death line that ends a Run is two higher while it is worn',()=>{
  // CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): both Runs start Day 1, so `base` is the
- // plain D1~10 segment limit; memorialBoard adds +2 to it now (was +1).
- const base=Meta.deathLimit(fresh('memorial-plain').run),g=wearing(['memorialBoard'],'memorial');
+ // plain D1~10 segment limit; memorialBook adds +2 to it now (was +1).
+ const base=Meta.deathLimit(fresh('memorial-plain').run),g=wearing(['memorialBook'],'memorial');
  assert.equal(Meta.deathLimit(g.run),base+2);
  assert.equal(Meta.deathLimit(fresh('memorial-plain-2').run),base,'without it the line is unchanged');
  g.run.phase='closing';g.run.stats.deaths=base;assert.equal(g.closeDay(),true,'at the plain line the store still trades');
- const h=wearing(['memorialBoard'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+2;h.closeDay();
+ const h=wearing(['memorialBook'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+2;h.closeDay();
  assert.equal(h.run.phase,'end','at the bonused (+2) line, it closes');
 });
 test('의무실 현판: an ordinarily injured arrival may be healed at the door, 중상 never',()=>{
@@ -1370,34 +1370,34 @@ test('구급품 진열장: an ordinary Injury the expedition would leave is not 
  const find=want=>{for(let i=0;i<800;i++){const n=weak(),r=Dungeon.resolve(n,d,new RNG('aid-'+i));if(r.outcome===want&&(want!=='부상'||n.injury===1))return 'aid-'+i;}return null;};
  const hurt=find('부상'),dead=find('사망');
  assert.ok(hurt&&dead,'an Injury case and a Death case exist');
- const run={loadout:{display:'firstAidKit'}};
+ const run={loadout:{display:'aidCabinet'}};
  const healed=weak(),rep=Dungeon.resolve(healed,d,new RNG(hurt),[],run);
  assert.equal(rep.outcome,'부상','the Outcome is the same 부상');assert.equal(healed.injury,0,'but no Injury is left');
  assert.equal(run.aidKitSaves,1,'one of ten is spent');assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
  const bare=weak();Dungeon.resolve(bare,d,new RNG(hurt),[],{loadout:{}});assert.equal(bare.injury,1,'without it the Injury stands');
  /* a carried 구급키트 settles first: the expedition it acted on spends nothing */
- const withKit=weak(['kit']),kitRun={loadout:{display:'firstAidKit'}};Dungeon.resolve(withKit,d,new RNG(hurt),[],kitRun);
+ const withKit=weak(['kit']),kitRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(withKit,d,new RNG(hurt),[],kitRun);
  assert.equal(withKit.injury,0);assert.equal(kitRun.aidKitSaves||0,0,'the Item took it, the count is untouched');
  /* 사망 is not its business any more */
- const died=weak(),deadRun={loadout:{display:'firstAidKit'}};Dungeon.resolve(died,d,new RNG(dead),[],deadRun);
+ const died=weak(),deadRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(died,d,new RNG(dead),[],deadRun);
  assert.equal(died.alive,false,'a Death stands');assert.equal(deadRun.aidKitSaves||0,0);
  /* the tenth is the last */
- const late={loadout:{display:'firstAidKit'},aidKitSaves:9},tenth=weak();Dungeon.resolve(tenth,d,new RNG(hurt),[],late);
+ const late={loadout:{display:'aidCabinet'},aidKitSaves:9},tenth=weak();Dungeon.resolve(tenth,d,new RNG(hurt),[],late);
  assert.equal(tenth.injury,0);assert.equal(late.aidKitSaves,10);
  const eleventh=weak();Dungeon.resolve(eleventh,d,new RNG(hurt),[],late);assert.equal(eleventh.injury,1,'an eleventh is not');
- assert.equal(DATA.decorationParams.firstAidKit.saves,10);
+ assert.equal(DATA.decorationParams.aidCabinet.saves,10);
 });
 test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 65% chance (v2.9.1 balance; was 50%)',()=>{
- const P=DATA.decorationParams.trainingRack,saved=P.chance;
+ const P=DATA.decorationParams.trainingSign,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
-  P.chance=1;const hit=wearing(['trainingRack'],'rack').run.npcs.map(n=>n.level);
-  P.chance=0;const miss=wearing(['trainingRack'],'rack').run.npcs.map(n=>n.level);
+  P.chance=1;const hit=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
+  P.chance=0;const miss=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
  assert.equal(P.chance,.65);
- let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingRack'],'rack-rate-'+i);
-  P.chance=0;const base=wearing(['trainingRack'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
+ let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingSign'],'rack-rate-'+i);
+  P.chance=0;const base=wearing(['trainingSign'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.55&&up/all<.75,'about 65%: '+(up/all));
 });
@@ -1429,9 +1429,9 @@ test('UI-Q-v29-37 / META §BEST DAY: the ending records the best Day, an abandon
  const bad=copy(g.account);bad.bestDay=31;assert.throws(()=>Save.import(Save.export(bad,null)),'bestDay 31 is not a Day');
  // D10 / D14: the Run records what it opened; a second Run reaching D10 opens nothing
  const h=new Game();h.autosave=false;h.start('day-unlock');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
- assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.premium.name],'D10 records 길드 특제 도시락 on the Run');assert.ok(h.run.toast,'the Day toast still fires');
+ assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.guildlunch.name],'D10 records 길드 특제 도시락 on the Run');assert.ok(h.run.toast,'the Day toast still fires');
  h.run.day=13;h.run.phase='closing';h.closeDay();
- assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.premium.name,DATA.itemBy.tree.name],'D14 adds 세계수 생환부적');
+ assert.deepEqual(h.run.dayUnlocked,[DATA.itemBy.guildlunch.name,DATA.itemBy.worldcharm.name],'D14 adds 세계수 생환부적');
  h.start('day-unlock-2');h.run.day=9;h.run.phase='closing';h.run.money=99999;h.closeDay();
  assert.equal(h.run.dayUnlocked,undefined,'an account that already opened them records nothing');
 });

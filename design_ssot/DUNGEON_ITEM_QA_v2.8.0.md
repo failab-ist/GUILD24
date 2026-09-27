@@ -2,7 +2,7 @@
 
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run,fatigue,supply,injury,death_risk,great_success,deep_expedition,result_proof
-DOC_VERSION=2.9.6
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_ITEM_QA_v2.8.0-patch.md,history/DUNGEON_ITEM_QA_v2.7.0.md,history/DUNGEON_ITEM_QA_v2.5.0.md
@@ -760,10 +760,10 @@ PASS:
 - 농축 해독제 = Field Gear
 - 구급키트 = Insurance
 
-### ITEM-Q71 — ACTIVE CATALOG EXACT 40
+### ITEM-Q71 — ACTIVE CATALOG EXACT 43
 
 PASS:
-- exactly 40 active Items
+- exactly 43 active Items (v2.9.7 Counter ladder: + 중화 탄산수, 방독 작업장갑, 축성 손전등; 핫팩 is now 방한 두건)
 - 붕대 inactive/retired
 - 마석 보조배터리 inactive/retired
 - 진정 허브티 active
@@ -854,10 +854,11 @@ PASS (User 2026-09-25, v2.9.1 balance):
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
 
 ```text
-간단 도시락 100 · 불룡볶음면 80 · 에너지드링크 80 · 용사의 곡주 70 · 방진마스크 80 · 핫팩 70 · 부식 방지 코팅제 85
-원정용 장화 75 · 설원 고글 70 · 중급 포션 125 · 상급 포션 175 · 농축 해독제 95 · 길드 특제 도시락 185 · 쿨링 이온음료 95
-거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 165 · 마그마 냉각장비 175 · 초고속 에너지드링크 175
-대현자 허브엘릭서 175 · 최상급 포션 210
+간단 도시락 100 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 185 · 초고속 에너지드링크 175 · 대현자 허브엘릭서 175
+(v2.9.7 Counter ladder and price review, User 2026-09-27 - ITEM §COUNTER LADDER:)
+방진마스크 45 · 중화 탄산수 35 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
+농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 / 불룡볶음면 / 용사의 곡주 / 쿨링 이온음료 95
+거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
 ```
 
 PASS:
@@ -929,8 +930,8 @@ This is a design-shape check, not permission to auto-tune numbers.
 ### DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
 
 PASS:
-- `bar` reads visually as 간단 도시락 / meal-lunchbox
-- `herobar` reads visually as 왕도 천연암반수 / bottled water
+- `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
+- `kingwater` reads visually as 왕도 천연암반수 / bottled water
 - neither retains the retired Hotbar/skewered-stick silhouette
 - icon change does not alter ID, Category, Rarity, price, effect or save compatibility
 
@@ -943,7 +944,7 @@ Expected:
 FAIL:
 - skewer/Hotbar Flavor survives on either replacement ID
 
-### ITEM-Q10 — PREMIUM LUNCH (`premium` / 길드 특제 도시락)
+### ITEM-Q10 — PREMIUM LUNCH (`guildlunch` / 길드 특제 도시락)
 
 SETUP:
 Compare across multiple contexts.

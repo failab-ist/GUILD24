@@ -534,7 +534,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
     player nothing they could not read one line up. Rules that live ONLY there are kept. */
  for(const [id,banned] of [['ice','화염 대응'],['kit','중상 위험을 줄여'],
                            ['antidote','독 대응을 크게'],['mask','독과 가스 환경에 대응'],
-                           ['battery','어둠 속 시야를 확보'],['tree','사망 판정을 한 번 중상으로'],
+                           ['battery','어둠 속 시야를 확보'],['worldcharm','사망 판정을 한 번 중상으로'],
                            ['coupon','다음 소모품의 효과를 복제']]){
   const it=DATA.items.find(x=>x.id===id);
   assert.ok(it,'the catalog still has an item called '+id);
@@ -559,7 +559,7 @@ test('D-16 / D-19 / D-20 / D-25: the words match the channel the engine actually
   snowvisor:'김은 안 서린다. 눈썹은 얼 수 있다.',
   magmagear:'설명서 첫 줄: 마그마에 직접 넣지 마시오.',
   battlelunch:'동쪽 나라의 인심 좋은 어머님이 떠오르는 구성.',
-  herobar:'왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',
+  kingwater:'왕도 외곽 암반층에서 길어 올렸다고 적혀 있다.',
   hyperenergy:'마시고 나면 계산대보다 먼저 문을 나선다.',
   sageelixir:'한 모금 마시면 괜히 턱을 쓰다듬게 된다.',
   toppotion:'병은 작다. 값은 작지 않다.'};
@@ -591,22 +591,22 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['rotation','회전 진열대',80,'전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1.'],
   ['stamp','단골 스탬프 기계',130,'유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.'],
   ['member','회원 관리대장',130,'다음 날부터 · 이미 만난 손님의 재방문 가중치 +70%.'],
-  ['showcase','희귀상품 입고 계약',140,'희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매가 +10%, 인상분은 손님 부담.'],
+  ['rareContract','희귀상품 입고 계약',140,'희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매가 +10%, 인상분은 손님 부담.'],
   ['guarantee','길드 보증 진열대',140,'하루 첫 200G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
   ['hazardBoard','원정 위험 게시판',60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
-  ['medicine','야전 정비대',80,'판매한 야외장비의 위험 대응 수치 +40%.'],
+  ['fieldRepair','야전 정비대',80,'판매한 야외장비의 위험 대응 수치 +40%.'],
   ['fridge','대형 냉장고',60,'음식·음료 유통기한 +2일 · 확보 시 보유 재고도 1회 연장.'],
   ['kitchen','즉석식품 코너',170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.'],
   ['board','길드 전광판',110,'하루 기본 최소 방문객 4명 (기존 3명).'],
-  ['rookieBoard','첫 방문 쿠폰',110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
-  ['groupFlyer','단체 주문 창구',200,'아침마다 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
+  ['firstVisitCoupon','첫 방문 쿠폰',110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
+  ['groupOrder','단체 주문 창구',200,'아침마다 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
   ['memberBundle','단골 묶음혜택',190,'단골 손님의 오늘 두 번째 상품 · 손님은 반값만 내고 점주는 전액 받는다.'],
   ['premiumMember','프리미엄 멤버십',200,'단골 손님 방문 시 · 소지금 +40G · 희귀 이상 상품 구매 의사 +15%p.'],
   ['returnPoints','귀환 적립제',240,'오늘 유료 구매한 재방문 손님이 생환했을 때 · 단골도 +5 · 소지금 +25G.'],
   ['expeditionMeal','원정 도시락 코너',200,'음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.'],
   ['coldcase','냉장 유통 계약',180,'고급 이상 음식·음료 · 발주 가중치 +80% · 구매 의사 +16%p · 유통기한 +1일 (보유 재고도 1회 연장).'],
   ['supplyCert','길드 납품 인증',220,'오늘 위험에 대응하는 희귀 이상 상품이나 희귀 이상 보험을 팔았을 때 · 정가의 20% 추가 지급 · 그 손님 소지금 +30G.'],
-  ['dawnBulk','새벽 회수 계약',190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
+  ['dawnRecovery','새벽 회수 계약',190,'유통기한이 끝난 음식·음료 · 폐기 대신 매입가의 50% 회수 · 매일 첫 발주 후보에 음식이나 음료 1칸 추가.'],
   ['logisticsHQ','물류 본부계약',300,'전날 6건 이상 팔았을 때 · 같은 상품 3개 이상 발주 매입가 -25%.'],
   ['lifetime','평생 단골제',310,'단골 손님 생환 시 · 소지금 +50G · 다음 방문 가중치 +50%.'],
   ['royalCert','왕도 프리미엄 인증',320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +16%p.'],
@@ -614,8 +614,8 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['fresh24','24시간 신선체계',360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.'],
   ['hub','지역 거점점 계약',340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
   ['warehouse','후방 창고 증설',130,'창고 용량 +5칸.'],
-  ['terminal','본사 추가발주권',130,'다음 후보 생성부터 · 발주 후보 +2개.'],
-  ['delivery','발주 교환권',120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
+  ['extraOrder','본사 추가발주권',130,'다음 후보 생성부터 · 발주 후보 +2개.'],
+  ['rerollTicket','발주 교환권',120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
   ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 · 기본 운영비 -30G.']];
  /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30 exact */
  assert.equal(SUPPORTS.length,30,'§11 audits all 30 Store Supports');
@@ -629,9 +629,9 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
  }
  /* REL-Q-v28-1: the two renamed rows really dropped 쇼케이스, and the Decoration that owns the
     word keeps it. */
- for(const id of ['showcase','coldcase'])assert.ok(!DATA.relicBy[id].name.includes('쇼케이스'),id+' no longer reuses 쇼케이스');
+ for(const id of ['rareContract','coldcase'])assert.ok(!DATA.relicBy[id].name.includes('쇼케이스'),id+' no longer reuses 쇼케이스');
  /* v2.9.7 (User 2026-09-26): the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 (RELIC §name collision, REL-Q-v28-1) */
- assert.equal(DATA.decorationBy.premiumCase.name,'명예 모험가 액자','the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자');
+ assert.equal(DATA.decorationBy.honorFrame.name,'명예 모험가 액자','the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자');
  /* REL-Q-v28-10 / SA-Q26: the exact stale phrases the amendment retires, gone from every row. */
  const all=DATA.relics.map(r=>r.description).join('\n');
  /* '+25G' left this list with the 2026-09-23 rebalance: 프리미엄 멤버십's approved copy now says 소지금 +25G */
@@ -690,7 +690,7 @@ test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Func
   ['festival','왕도 축제','왕도 쪽 음악이 게이트 앞까지 넘어온다. 원정 나서는 사람들 손에도 먹을 것이 들렸다.','오늘 음식·음료 구매 의사 +20%p'],
   ['strike','길드 파업','길드 정문에 현수막이 걸리고 접수창구가 닫혔다.','오늘 방문객 -1'],
   ['unknown','미확인 게이트','새벽 순찰대가 지도에 없는 게이트를 발견했다. 아직 이름도 없다.','오늘 고위험·고보상 임시 게이트 +1'],
-  ['tasting','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G'],
+  ['halfPrice','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G'],
   ['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','적용 가능한 게이트에 독 위험 추가'],
   ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보 +2'],
   ['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능'],
@@ -722,7 +722,7 @@ test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Func
   overflow:{danger:1.12,reward:1.3},potionPrice:{potionPrice:1.35},coldwave:{cold:1},
   shortage:{potionWeight:0.08},rookie:{rookie:1},royal:{royal:1},blackmarket:{blackmarket:1},
   audit:{audit:1},festival:{foodDemand:0.2},strike:{visitors:-1},unknown:{unknown:1},
-  tasting:{tasting:1},poisonfog:{poison:1},caravan:{offers:2},payday:{wallet:1.2},
+  halfPrice:{halfPrice:1},poisonfog:{poison:1},caravan:{offers:2},payday:{wallet:1.2},
   clinic:{medicalDemand:0.2},wastecover:{wasteFree:1},bard:{visitors:2},nightshift:{overheadFree:1},
   rite:{deathLimit:1}};
  for(const e of DATA.events)assert.deepEqual(e.effects,EFFECTS[e.id],e.id+' mechanics are unchanged');

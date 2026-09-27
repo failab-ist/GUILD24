@@ -15,8 +15,8 @@ for(const f of ['data/catalog','data/relics','data/decorations','data/copy','sys
 const {Debug,DATA:D}=globalThis;
 const T=Number(process.env.T||120),R=Number(process.env.R||20);
 
-const STRONG=['dawnSign','guildPlaque','thriftSafe','premiumCase'];
-const WEAK=['premiumCase','thriftSafe','guildPlaque','dawnSign'];
+const STRONG=['sponsorSign','guildShelf','thriftSafe','honorFrame'];
+const WEAK=['honorFrame','thriftSafe','guildShelf','sponsorSign'];
 console.log('가격 확인: '+STRONG.map(id=>id+' '+D.decorationBy[id].price).join(' / '));
 console.log('trajectories='+T+', runs per trajectory='+R+', policy=balanced\n');
 

@@ -2,7 +2,7 @@
 
 DOC=META
 OWNER=meta,job_mastery,boss_clear_matrix,store_capital,decoration,cross_run,account_save,inactive_archive
-DOC_VERSION=2.9.7
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/META_v2.8.0-patch.md,history/META_v2.7.0.md,history/META_v2.6.1.md,history/META_v2.6.0.md
@@ -538,7 +538,12 @@ v2.9.7 (User 2026-09-26, after the decoration re-measure in reports/deco-balance
 on display, 프리미엄 쇼케이스 -> 명예 모험가 액자 on wall); ids are kept. An Account whose loadout holds a Decoration on a Slot it no
 longer belongs to has that Slot empty; ownership is kept.
 
-### sign — 원정 지원금 간판 (id dawnSign)
+v2.9.8 (User 2026-09-27): Decoration ids and art files read as the current names - `dawnSign` → `sponsorSign`,
+`premiumCase` → `honorFrame`, `guildPlaque` → `guildShelf`, `trainingRack` → `trainingSign`, `memorialBoard` →
+`memorialBook`, `firstAidKit` → `aidCabinet`; `thriftSafe` and `infirmaryPlaque` already did. The save schema moved
+to v9, so no Account carries an old id.
+
+### sign — 원정 지원금 간판 (id sponsorSign)
 ```text
 each visiting adventurer: an extra purchase budget of 25% of their current purse, that visit only    (User 2026-09-26, v2.9.7; replaces ORDER offer candidates +3)
 ```
@@ -546,7 +551,7 @@ each visiting adventurer: an extra purchase budget of 25% of their current purse
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never taken
 from it, and is gone at the end of the Day, so nothing compounds. On a Day whose Event also grants 추가 구매, the two shares add.
 
-### wall — 명예 모험가 액자 (id premiumCase)
+### wall — 명예 모험가 액자 (id honorFrame)
 ```text
 rare-NPC rarity weights = [35, 30, 22, 9, 4]    (User 2026-09-26, v2.9.7; was [45, 31.5, 17.5, 4.75, 1.25] on the display Slot)
 rarity order = Common / Uncommon / Rare / Epic / Legendary
@@ -561,7 +566,7 @@ Decoration is active. It adds no extra spawn, no extra rarity roll and no new Ga
 every morning, store Gold +50G (DAY 1 included), shown on the day's receipt    (User 2026-09-25, v2.9.1 balance; was +40G)
 ```
 
-### display — 길드 추천 매대 (id guildPlaque)
+### display — 길드 추천 매대 (id guildShelf)
 ```text
 each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%. On the display Slot from v2.9.7, User 2026-09-26)
 ```
@@ -578,7 +583,7 @@ Do not carry the retired Start Contract negative sides into these Decorations:
 
 User decision 2026-09-24. One per Slot, beside that Slot's economy Decoration.
 
-### sign — 훈련소 제휴 간판 (id trainingRack)
+### sign — 훈련소 제휴 간판 (id trainingSign)
 ```text
 every adventurer created while it is worn: 65% chance of spawn Level +1    (User 2026-09-25, v2.9.1 balance; was 50%)
 ```
@@ -591,7 +596,7 @@ an adventurer who arrives with an ordinary Injury (not 중상) is healed on arri
 One roll per injured arrival, drawn only while the Decoration is worn. A heal sets Injury 0 and
 is shown on the SALE counter and counted in the Day's record (UI_UX owns the presentation).
 
-### counter — 추모 방명록 (id memorialBoard)
+### counter — 추모 방명록 (id memorialBook)
 ```text
 every segment Death limit +2 (5 / 8 / 11 -> 7 / 10 / 13; CORE_RUN §DEATH LIMIT — SEGMENTED; User 2026-09-25, v2.9.1 balance)
 ```
@@ -602,7 +607,7 @@ RESULT-PROOF counterfactual reads the same availability.
 Placement (User decision 2026-09-24): the survival alternative with the larger measured effect
 sits in the dearer Slot; ids are kept from the first placement, names and art follow the Slot.
 
-### display — 구급품 진열장 (id firstAidKit)
+### display — 구급품 진열장 (id aidCabinet)
 ```text
 up to ten times per Run, an expedition that would leave an ordinary Injury (부상) leaves none (무사)    (User 2026-09-26, v2.9.7; was: up to three Deaths -> 중상)
 ```

@@ -7,12 +7,12 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{for
 const root=path.resolve(__dirname,'..');
 const ORDERS={
  none:[],
- economy:['premiumCase','thriftSafe','guildPlaque','dawnSign'],
- survival:['firstAidKit','memorialBoard','infirmaryPlaque','trainingRack'],
+ economy:['honorFrame','thriftSafe','guildShelf','sponsorSign'],
+ survival:['aidCabinet','memorialBook','infirmaryPlaque','trainingSign'],
  // mixed: the stronger single of each Slot, cheapest first (User 2026-09-24 combination check)
- mixA:['premiumCase','memorialBoard','infirmaryPlaque','trainingRack'],
+ mixA:['honorFrame','memorialBook','infirmaryPlaque','trainingSign'],
  // mixed the other way round: economy where the economy piece is closest
- mixB:['firstAidKit','thriftSafe','infirmaryPlaque','dawnSign'],
+ mixB:['aidCabinet','thriftSafe','infirmaryPlaque','sponsorSign'],
 };
 function load(){for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])
  require(path.join(root,'dist',f+'.js'));return globalThis.GUILD24||globalThis;}

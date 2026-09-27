@@ -2,7 +2,7 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.9.7
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/RELIC_v2.8.0-patch.md,history/RELIC_v2.7.0.md,history/RELIC_v2.5.0.md
@@ -170,13 +170,13 @@ Current explicit D30 no-effect exclusions:
 - 길드 보증 진열대 (guarantee)
 - 대형 냉장고 (fridge)
 - 길드 전광판 (board)
-- 첫 방문 쿠폰 (rookieBoard)
-- 단체 주문 창구 (groupFlyer)
+- 첫 방문 쿠폰 (firstVisitCoupon)
+- 단체 주문 창구 (groupOrder)
 - 단골 묶음혜택 (memberBundle)
 - 프리미엄 멤버십 (premiumMember)
 - 귀환 적립제 (returnPoints)
 - 길드 납품 인증 (supplyCert)
-- 새벽 회수 계약 (dawnBulk)
+- 새벽 회수 계약 (dawnRecovery)
 - 평생 단골제 (lifetime)
 - 왕도 프리미엄 인증 (royalCert)
 - 지역 거점점 계약 (hub)
@@ -878,12 +878,12 @@ This high point is an allowed coherent-build reward.
 
 The two answer different questions and neither is a strict upgrade of the other.
 
-`board`, `hub`, `groupFlyer` and the `wall` Decoration are independent and may all be held at once.
+`board`, `hub`, `groupOrder` and the `wall` Decoration are independent and may all be held at once.
 
 ```text
 board      = base-roll floor
 hub        = probabilistic catchment, paid for in overhead
-groupFlyer = its own 20% Morning roll, +1 visitor
+groupOrder = its own 20% Morning roll, +1 visitor
 wall       = 10% Morning proc (Decoration, not a Relic)
 ```
 
@@ -932,6 +932,13 @@ excludedFacilityNames=[포션 냉장고,마석 충전대,상권 분석대]
 
 No excluded facility effect may modify Order/Item/NPC/Dungeon resolution.
 
+## STORE SUPPORT IDS (User 2026-09-27, v2.9.8)
+
+Ids read as the current names: `medicine` → `fieldRepair` (야전 정비대), `dawnBulk` → `dawnRecovery` (새벽 회수 계약),
+`showcase` → `rareContract` (희귀상품 입고 계약), `rookieBoard` → `firstVisitCoupon` (첫 방문 쿠폰), `groupFlyer` →
+`groupOrder` (단체 주문 창구), `terminal` → `extraOrder` (본사 추가발주권), `delivery` → `rerollTicket` (발주 교환권).
+The Event 본사 반값 행사 is `halfPrice` (was `tasting`, with its effect key and support value). Save schema v9.
+
 ## PRICE
 
 D0=free
@@ -951,23 +958,23 @@ The following 20 Store Support base prices are the approved baseline.
 | bulk | 묶음발주 계약 | 130G |
 | stamp | 단골 스탬프 기계 | 130G |
 | member | 회원 관리대장 | 130G |
-| showcase | 희귀상품 입고 계약 | 140G |
+| rareContract | 희귀상품 입고 계약 | 140G |
 | guarantee | 길드 보증 진열대 | 140G |
 | hazardBoard | 원정 위험 게시판 | 60G |
-| medicine | 야전 정비대 | 80G |
+| fieldRepair | 야전 정비대 | 80G |
 | kitchen | 즉석식품 코너 | 170G |
 | board | 길드 전광판 | 110G |
-| rookieBoard | 첫 방문 쿠폰 | 110G |
-| groupFlyer | 단체 주문 창구 | 200G |
+| firstVisitCoupon | 첫 방문 쿠폰 | 110G |
+| groupOrder | 단체 주문 창구 | 200G |
 | memberBundle | 단골 묶음혜택 | 190G |
 | premiumMember | 프리미엄 멤버십 | 200G |
 | expeditionMeal | 원정 도시락 코너 | 200G |
 | coldcase | 냉장 유통 계약 | 180G |
-| dawnBulk | 새벽 회수 계약 | 190G |
+| dawnRecovery | 새벽 회수 계약 | 190G |
 | fresh24 | 24시간 신선체계 | 360G |
 | warehouse | 후방 창고 증설 | 130G |
-| terminal | 본사 추가발주권 | 130G |
-| delivery | 발주 교환권 | 120G |
+| extraOrder | 본사 추가발주권 | 130G |
+| rerollTicket | 발주 교환권 | 120G |
 
 The other 10 active support prices are exact in their Store Support entries above.
 

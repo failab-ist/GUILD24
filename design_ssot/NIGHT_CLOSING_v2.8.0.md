@@ -243,7 +243,7 @@ Do not dump every modifier used in calculation.
 Show only effects that were meaningfully relevant to the actual result.
 
 Good:
-- 핫팩 → 냉기 대응
+- 방한 두건 → 냉기 대응
 - 대식가 → Food core effect 강화
 
 Avoid:

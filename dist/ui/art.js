@@ -14,15 +14,26 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
  if(p==='rice')s=`<path d="M6 34L20 8L34 34V38H6Z" fill="${base}"/><path d="M14 29H26V38H14Z" fill="${dark}"/>`+rect(14,20,13,5,'#eaaa67')+rect(17,21,7,2,'#f6ecd1');
  /* SA-Q51: 왕도 천연암반수 shares the bottled-water silhouette this language already has for
     every bottle-shaped drink, distinguished by its own colour rather than a recoloured cousin. */
- if(['water','potion','antidote','wine','herobar'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:p==='herobar'?'#4f86b0':'#b094be';s=rect(16,3,10,5,p==='water'||p==='herobar'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
+ if(['water','potion','antidote','wine','kingwater'].includes(p)){const c=p==='water'?'#80bfce':p==='potion'?'#e09b9c':p==='antidote'?green:p==='kingwater'?'#4f86b0':'#b094be';s=rect(16,3,10,5,p==='water'||p==='kingwater'?'#639aa9':'#a68464')+rect(16,8,10,7,base)+rect(11,15,20,21,c)+rect(15,18,3,13,'#dceee1')+rect(18,23,13,9,base)+rect(22,24,3,6,dark)+rect(20,26,7,2,dark);}
  if(['coffee','energy'].includes(p))s=rect(12,7,19,30,p==='coffee'?'#bc9971':'#9abb75')+rect(12,5,19,3,'#cbd9d0')+rect(12,35,19,3,'#9baea6')+rect(14,17,15,11,'#efe3c4')+`<path d="M23 17L17 24H22L18 31L27 22H22Z" fill="${dark}"/>`;
- if(p==='ramen')s=`<path d="M7 14H35L31 37H11Z" fill="${id==='lava'?'#d96958':'#dfa05e'}"/>`+rect(5,11,32,5,'#ede6ce')+rect(10,21,23,9,'#f4e6c5')+rect(15,24,12,3,'#bc6650')+rect(14,5,2,4,'#dbe9d6')+rect(24,3,2,6,'#dbe9d6');
+ if(p==='ramen')s=`<path d="M7 14H35L31 37H11Z" fill="${id==='dragonramen'?'#d96958':'#dfa05e'}"/>`+rect(5,11,32,5,'#ede6ce')+rect(10,21,23,9,'#f4e6c5')+rect(15,24,12,3,'#bc6650')+rect(14,5,2,4,'#dbe9d6')+rect(24,3,2,6,'#dbe9d6');
  /* SA-Q51: 간단 도시락 is a simple single-tier meal box - its own silhouette, distinct from the
     다칸 길드 특제 도시락 ('lunch') and the stacked 영웅 결전 도시락 ('battlelunch') - replacing
     the retired Hotbar/skewered-stick shape this ID used to carry. */
- if(p==='bar')s=rect(7,14,30,22,'#4f5847')+rect(9,16,26,18,'#e9dfc2')+rect(9,25,26,2,'#cbb98a')+rect(11,18,11,6,'#f4eedb')+rect(24,18,9,6,'#a6b97b');
+ if(p==='lunchbox')s=rect(7,14,30,22,'#4f5847')+rect(9,16,26,18,'#e9dfc2')+rect(9,25,26,2,'#cbb98a')+rect(11,18,11,6,'#f4eedb')+rect(24,18,9,6,'#a6b97b');
  if(p==='choco')s=rect(7,13,30,19,'#8e7267')+rect(10,16,24,13,'#d9af82')+rect(19,13,15,19,'#746158')+rect(23,17,7,11,'#aa8470');
- if(['bandage','kit','mask','heat'].includes(p)){const col=p==='kit'?'#d5dfcc':p==='heat'?'#d69776':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,p==='heat'?'#f5d7a5':'#bd7d6a')+rect(14,21,15,5,p==='heat'?'#f5d7a5':'#bd7d6a');}
+ if(['bandage','kit','mask'].includes(p)){const col=p==='kit'?'#d5dfcc':'#e0dfc8';s=rect(7,12,30,23,col)+rect(12,9,20,3,col);if(p==='mask')s+=rect(11,17,22,13,'#96b5ab')+rect(12,20,20,2,'#cbdbcf');else s+=rect(19,16,5,15,'#bd7d6a')+rect(14,21,15,5,'#bd7d6a');}
+ /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): 중화 탄산수 is a fizzing can; 방독 작업장갑 a two-layer rubber glove;
+    축성 손전등 a torch with a holy-water window and a light fan; 방한 두건 (the old 핫팩 id) a knit balaclava with a tinted eye slit. */
+ if(p==='soda')s=rect(15,1,2,2,'#cfe6e0')+rect(21,2,2,2,'#cfe6e0')+rect(26,0,2,2,'#cfe6e0')+rect(12,7,19,30,'#8fc4b5')+rect(12,5,19,3,'#dfe9e4')+rect(12,35,19,3,'#6f9c8f')
+  +rect(12,15,19,13,'#f0efe0')+rect(16,18,3,3,'#7fb8cc')+rect(22,21,4,4,'#7fb8cc')+rect(17,24,2,2,'#7fb8cc')+rect(24,17,2,2,'#7fb8cc');
+ if(p==='gloves')s=rect(12,8,4,10,'#d3c25e')+rect(17,5,4,13,'#d3c25e')+rect(22,6,4,12,'#d3c25e')+rect(27,9,4,10,'#d3c25e')+rect(6,20,7,6,'#d3c25e')
+  +rect(11,16,20,19,'#d3c25e')+rect(14,21,14,11,'#b09d3e')+rect(17,24,8,5,'#d3c25e')+rect(10,34,22,7,'#5f7d57')+rect(10,36,22,2,'#86a37a');
+ if(p==='holylight')s=rect(4,17,22,11,'#56666e')+rect(4,19,22,2,'#6f8088')+rect(26,14,8,17,'#8a9aa2')+rect(34,16,3,13,'#f6e4b4')
+  +`<path d="M37 17L44 12V33L37 28Z" fill="#f6e4b4" opacity=".45"/>`+rect(16,19,6,7,'#8dc6cd')+rect(17,20,2,2,'#cfe6e0');
+ if(p==='hood')s=rect(19,1,6,4,'#e7eef2')+rect(16,4,12,3,'#b55a4c')+rect(13,7,18,3,'#b55a4c')+rect(11,10,22,22,'#b55a4c')+rect(12,32,20,3,'#b55a4c')
+  +rect(13,15,18,7,'#2b3238')+rect(14,16,16,5,'#9fd0dc')+rect(15,17,5,2,'#d7eef3')+rect(15,24,14,2,'#a44f43')
+  +rect(8,35,28,8,'#8f4136')+rect(11,36,2,7,'#7a372e')+rect(16,36,2,7,'#7a372e')+rect(21,36,2,7,'#7a372e')+rect(26,36,2,7,'#7a372e')+rect(31,36,2,7,'#7a372e');
  if(p==='ice')s=`<path d="M9 10H34L30 37H13Z" fill="#8dc6cd"/>`+rect(7,8,29,4,'#d5e8df')+rect(13,16,9,9,'#cce5df')+rect(23,22,7,8,'#b7dfdc');
  if(p==='battery')s=rect(14,5,15,4,'#c6d0c5')+rect(10,9,23,28,'#d0ad69')+rect(10,19,23,15,'#435956')+rect(18,14,7,2,'#f6e4b4')+rect(20,12,2,6,'#f6e4b4')+rect(17,26,9,3,'#e0c793');
  if(p==='cloak')s=`<path d="M16 5H26L31 14L37 37H6L11 14Z" fill="#7da4a2"/><path d="M16 6L13 14H29L25 6Z" fill="#4b7474"/>`+rect(20,17,2,19,'#a1c2b3');
@@ -107,7 +118,7 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
 // the interface never falls back to emoji for a game object (UI_UX ACCESSIBILITY/SIGNALS).
 function mark(family,size=32){const c=DATA.dungeonBy[family]?.color||'#cbd5b6';let s='';
  if(family==='spider')s=rect(12,10,8,8,c)+rect(10,14,12,4,c)+rect(4,8,4,4,c)+rect(8,12,2,2,c)+rect(24,8,4,4,c)+rect(22,12,2,2,c)+rect(4,20,4,4,c)+rect(8,18,2,2,c)+rect(24,20,4,4,c)+rect(22,18,2,2,c)+rect(14,20,4,6,c)+rect(13,4,2,4,c)+rect(17,4,2,4,c);
- if(family==='fire')s=rect(14,4,4,4,c)+rect(12,8,8,4,c)+rect(8,12,16,6,c)+rect(6,18,20,8,c)+rect(10,26,12,2,'#f3d78a')+rect(12,14,8,8,'#f6e3ab')+rect(14,18,4,4,'#fffbe8');
+ if(family==='golem')s=rect(14,4,4,4,c)+rect(12,8,8,4,c)+rect(8,12,16,6,c)+rect(6,18,20,8,c)+rect(10,26,12,2,'#f3d78a')+rect(12,14,8,8,'#f6e3ab')+rect(14,18,4,4,'#fffbe8');
  if(family==='crypt')s=rect(10,4,12,4,c)+rect(6,8,4,16,c)+rect(22,8,4,16,c)+rect(10,20,12,4,c)+rect(12,8,8,12,'#2a2436')+rect(14,10,4,4,c)+rect(4,24,24,4,c);
  if(family==='snow')s=rect(14,2,4,28,c)+rect(2,14,28,4,c)+rect(6,6,4,4,c)+rect(22,6,4,4,c)+rect(6,22,4,4,c)+rect(22,22,4,4,c)+rect(10,10,12,12,'#e6f6fb')+rect(14,14,4,4,c);
  if(family==='slime')s=rect(8,12,16,4,c)+rect(4,16,24,10,c)+rect(10,8,10,4,c)+rect(10,18,4,4,'#22392f')+rect(18,18,4,4,'#22392f')+rect(6,26,20,2,'#2c4a3d');

@@ -508,11 +508,8 @@ channel reused by this Decoration. It changes only the rarity weights used by th
 ```
 
 ```new
-### sign — 훈련소 제휴 간판 (id trainingRack)
-### counter — 추모 방명록 (id memorialBoard)
 Placement (User decision 2026-09-24): the survival alternative with the larger measured effect
 sits in the dearer Slot; ids are kept from the first placement, names and art follow the Slot.
-### display — 구급품 진열장 (id firstAidKit)
 ```
 
 
@@ -609,16 +606,13 @@ v2.9.7 (User 2026-09-26, after the decoration re-measure in reports/deco-balance
 원정 지원금 간판; the wall and display economy Decorations swap Slots, names and art following the Slot (길드 제휴 현판 -> 길드 추천 매대
 on display, 프리미엄 쇼케이스 -> 명예 모험가 액자 on wall); ids are kept. An Account whose loadout holds a Decoration on a Slot it no
 longer belongs to has that Slot empty; ownership is kept.
-### sign — 원정 지원금 간판 (id dawnSign)
 each visiting adventurer: an extra purchase budget of 25% of their current purse, that visit only    (User 2026-09-26, v2.9.7; replaces ORDER offer candidates +3)
 It is the Event `추가 구매` channel (the same budget the purse-share Event grants): it is spent before the purse, never taken
 from it, and is gone at the end of the Day, so nothing compounds. On a Day whose Event also grants 추가 구매, the two shares add.
-### wall — 명예 모험가 액자 (id premiumCase)
 rare-NPC rarity weights = [35, 30, 22, 9, 4]    (User 2026-09-26, v2.9.7; was [45, 31.5, 17.5, 4.75, 1.25] on the display Slot)
 Every grade above 평범 is lifted (ordinary [60, 27, 10, 2.5, 0.5]): above 평범 40% -> 65%, 영웅 and 전설 the most. This reuses the
 existing Premium spawn-weighting channel. It changes only the rarity weights used by the ordinary NPC spawn rarity draw when the
 Decoration is active. It adds no extra spawn, no extra rarity roll and no new Gameplay RNG draw.
-### display — 길드 추천 매대 (id guildPlaque)
 each Morning, 30% chance of visitors +1    (User 2026-09-25, v2.9.1 balance; was 25%. On the display Slot from v2.9.7, User 2026-09-26)
 up to ten times per Run, an expedition that would leave an ordinary Injury (부상) leaves none (무사)    (User 2026-09-26, v2.9.7; was: up to three Deaths -> 중상)
 It is 구급키트's `부상 -> 무사` step (ITEM §INSURANCE HIERARCHY), taken in order and counted per Run. A carried 구급키트 settles first,
@@ -627,4 +621,21 @@ the same availability.
 sign    원정 지원금 간판 / 훈련소 제휴 간판   1250 Store Capital
 wall    명예 모험가 액자 / 의무실 현판        1000 Store Capital
 display 길드 추천 매대 / 구급품 진열장       500 Store Capital
+```
+
+## AMENDMENT — v2.9.8 Decoration ids (User 2026-09-27)
+
+User 2026-09-27: Decoration ids and art files renamed to read as the current names; save schema v9. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+v2.9.8 (User 2026-09-27): Decoration ids and art files read as the current names - `dawnSign` → `sponsorSign`,
+`premiumCase` → `honorFrame`, `guildPlaque` → `guildShelf`, `trainingRack` → `trainingSign`, `memorialBoard` →
+`memorialBook`, `firstAidKit` → `aidCabinet`; `thriftSafe` and `infirmaryPlaque` already did. The save schema moved
+to v9, so no Account carries an old id.
+### sign — 원정 지원금 간판 (id sponsorSign)
+### wall — 명예 모험가 액자 (id honorFrame)
+### display — 길드 추천 매대 (id guildShelf)
+### sign — 훈련소 제휴 간판 (id trainingSign)
+### counter — 추모 방명록 (id memorialBook)
+### display — 구급품 진열장 (id aidCabinet)
 ```

@@ -631,7 +631,7 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
  // the visitor sources named to the player are the ones morning() actually composes
  const morning=read('dist/systems/shop.js');
  const composes=morning.slice(morning.indexOf('morningVisitors(){'),morning.indexOf('morningEvent(ids){'));
- assert.ok(/board/.test(composes)&&/hub/.test(composes)&&/guildPlaque/.test(composes),
+ assert.ok(/board/.test(composes)&&/hub/.test(composes)&&/guildShelf/.test(composes),
   'the visitor count is composed from Relics and the wall Decoration');
  assert.ok(!/contract/i.test(composes),'and from no Contract');
  const helpText=fn('help');
@@ -1306,9 +1306,9 @@ test('D-27: the named items are drawn as themselves, and no two of them share a 
  const Art=require('../dist/ui/art.js')&&globalThis.Art,D=globalThis.DATA;
  /* The twelve products v2.7 added join the named set: each was briefly drawn as the cousin
     it is a premium version of, so they are exactly the ones worth pinning. */
- const named=['rope','candy','coating','boots','goggles','ion','tree','potionHigh','potion',
+ const named=['rope','candy','coating','boots','goggles','ion','worldcharm','potionHigh','potion',
   'herbtea','midpotion','spiderkit','slimesuit','cryptlantern','snowvisor','magmagear',
-  'battlelunch','herobar','hyperenergy','sageelixir','toppotion'];
+  'battlelunch','kingwater','hyperenergy','sageelixir','toppotion'];
  const body=svg=>svg.replace(/^[\s\S]*?crispEdges"[^>]*>/,'').replace(/<\/svg>$/,'');
  const drawn=new Map();
  for(const it of D.items){
@@ -1323,7 +1323,7 @@ test('D-27: the named items are drawn as themselves, and no two of them share a 
   assert.equal(others.length,0,it.name+' has its own drawing, not '+others.map(x=>x.name).join('/')+"'s");
  }
  // 하급/상급 포션 were the clearest case: same key, so the same picture at the size these render.
- assert.notEqual(D.itemBy.potion.icon,D.itemBy.highpotion.icon,'the two potions do not share an icon key');
+ assert.notEqual(D.itemBy.lowpotion.icon,D.itemBy.highpotion.icon,'the two potions do not share an icon key');
  // Nothing on the shelf is drawn as something else any more. The two cup ramen still share a
  // key, but the branch colours 불룡볶음면 by its own id, so the pictures differ.
  const shared=[...drawn.values()].filter(g=>g.length>1);
@@ -1525,7 +1525,7 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  assert.equal(fresh.settings.muted,true,'sound still starts off, as the copy says');
  for(const k of ['bgm','sfx'])assert.equal(fresh.settings[k],1,k+' starts at its design maximum');
  // presentation preference, so it is checked for shape when present the way tutorial is
- const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:8}));
+ const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:9}));
  const withSettings=v=>{const s=base();s.account.settings={muted:true,...v};return s;};
  assert.equal(Save.valid(withSettings({})),true,'a save with no levels at all is still a save');
  assert.equal(Save.valid(withSettings({bgm:.5,sfx:0})),true,'real levels are accepted');
@@ -2164,9 +2164,9 @@ test('SALE_v2.7 §POST-COMMIT DELTA SOURCE TRUTH: a change is reported by what p
   assert.ok(r.direct.some(x=>x.key==='supply')&&r.direct.some(x=>x.key==='fear'),'its own two channels are its own');
  }
  // an Item that really does grant a Stat still reports it as its own
- const potion=DATA.itemBy.potion;
+ const potion=DATA.itemBy.lowpotion;
  assert.ok(potion.effects.combat>0);
- const own=Presentation.preview(mk({}),gate({}),[],'potion');
+ const own=Presentation.preview(mk({}),gate({}),[],'lowpotion');
  assert.ok(own.direct.some(x=>x.key==='combat'),'a real direct Stat is the Item\'s own');
  /* User 2026-09-25: `판매 후 변화` lists the Item's own effects only - a Fatigue band the Item's 피로 회복
     releases is not listed at all, and nothing but the direct rows leaves the preview */
@@ -3292,7 +3292,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/오늘 필요|추천/.test(of),'no badge or verdict word');
  // ITEM §PRESENTATION ORDER: every row passes its category, so the fixed order is the same everywhere
  for(const f of ['effectList','shelf','tray','till','orderForm'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
- assert.deepEqual(Presentation.rows(DATA.itemBy.bar.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'Food leads with 피로 회복');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.lunchbox.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'Food leads with 피로 회복');
  assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','mobility','supply'],'a Drink ends with 피로 회복');
  // §TRANSACTION RESULT STUB
  assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');

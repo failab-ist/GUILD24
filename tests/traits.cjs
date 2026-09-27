@@ -61,7 +61,7 @@ test('TRAIT-Q03/Q04: nine exclusion pairs hold on every acquisition path; 탐욕
 });
 
 test('TRAIT-Q07/ITEM-Q14: Food affinity touches native core only',()=>{
- const g=fresh('affinity'),base={...g.run.npcs[0],traits:[],pack:['rice','lava','kit']},d=g.run.dungeons[0];
+ const g=fresh('affinity'),base={...g.run.npcs[0],traits:[],pack:['rice','dragonramen','kit']},d=g.run.dungeons[0];
  const plain=Dungeon.prepare(base,d).effects;
  const eater=Dungeon.prepare({...base,traits:['eater']},d).effects;
  assert.ok(eater.survival>plain.survival,'Food native Stat is boosted');
@@ -106,7 +106,7 @@ test('TRAIT-Q16 / SALE: purchase and revisit Traits use the existing systems',()
  g.beginOrder();g.open();const n=g.current();
  /* v2.9.0 F7: 삼각김밥 (강인함) is 관련 준비 for most Gates and takes the 0.97 floor, so the Common comparison
     reads 하급 포션 (투력 is never a pressed Stat) - the Rarity contrast this test compares is unchanged. */
- const rare=DATA.itemBy.highpotion,common=DATA.itemBy.potion;
+ const rare=DATA.itemBy.highpotion,common=DATA.itemBy.lowpotion;
  /* ECONOMY_ORDER_v2.8 §FULL-CHAIN NUMERIC CLOSURE / SA-Q48: a Wallet far above price (the old
     9999) drives 정가 burden to ~0, and the flat 0.80 accessible-mode base plus that bonus now
     saturates every case at the 0.97 cap - hiding the Trait bias this test exists to compare.
@@ -276,7 +276,7 @@ test('NPC-Q73 POTIONBODY SCOPE: every Potion tier, positive native Core Stat onl
   for(const k of [...keys,...stats])assert.equal(body[k],plain[k],id+' '+k+' is not a Potion effect');
  }
  // and the screen says what the rule is
- const note=Dungeon.prepare({...base('potion'),traits:['potionbody']},d).events.find(e=>e.id==='potionbody');
+ const note=Dungeon.prepare({...base('lowpotion'),traits:['potionbody']},d).events.find(e=>e.id==='potionbody');
  assert.ok(note,'the Trait reports itself when a Potion is carried');
  assert.ok(/15%/.test(note.text)&&!/30%/.test(note.text),'and states 15%, not the retired 30%: '+note.text);
  assert.equal(Presentation.labels.potionMult,'포션의 능력치','the label is no longer survival-only');

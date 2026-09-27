@@ -376,7 +376,6 @@ Lava Noodle retains Food/Hybrid identity.
 ### DI-Q-v28-10 — GREAT SUCCESS NUMERIC BASELINE
 ### DI-Q-v28-11 — DEEP OCCURRENCE / DIFFICULTY BASELINE
 ### ITEM-Q70 — PLAYER CATEGORY EXACT
-### ITEM-Q71 — ACTIVE CATALOG EXACT 40
 ### ITEM-Q09 — ACTIVE CATALOG BOUNDARY
 ### ITEM-Q19 — ACTIVE CATALOG STRUCTURE
 ### ITEM-Q02 — FUNCTIONAL ROLE
@@ -391,7 +390,6 @@ Lava Noodle retains Food/Hybrid identity.
 ### DI-Q-v28-3 — MEAL VS WATER IDENTITY
 ### DI-Q-v28-3B — CURRENT ITEM ART IDENTITY
 ### DI-Q-v28-9 — REPLACEMENT FLAVOR
-### ITEM-Q10 — PREMIUM LUNCH (`premium` / 길드 특제 도시락)
 ### ITEM-Q72 — POTION LADDER
 ### ITEM-Q74 — SPIRIT STAT ROUTE
 ### ITEM-Q82 — DIRECT STAT ITEM RELEVANCE
@@ -796,10 +794,6 @@ chain, a Deep expedition inside the chain.
 PASS (User 2026-09-25, v2.9.1 balance):
 - every Item's Sell = Buy × 2 exactly
 - Buy matches the `ITEM_v2.8.0.md` active catalog; the raised ones:
-간단 도시락 100 · 불룡볶음면 80 · 에너지드링크 80 · 용사의 곡주 70 · 방진마스크 80 · 핫팩 70 · 부식 방지 코팅제 85
-원정용 장화 75 · 설원 고글 70 · 중급 포션 125 · 상급 포션 175 · 농축 해독제 95 · 길드 특제 도시락 185 · 쿨링 이온음료 95
-거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 165 · 마그마 냉각장비 175 · 초고속 에너지드링크 175
-대현자 허브엘릭서 175 · 최상급 포션 210
 - no stale pre-close price or a Sell other than Buy × 2 survives
 | 생수 | C | 40/80 | +10 | 2 | — |
 | 간단 도시락 | U | 100/200 | +12 | 6 | expedition Wallet +20% |
@@ -926,4 +920,37 @@ User 2026-09-26: 투력 +6 → +10. The superseded lines below are dropped; a li
 
 ```new
 - `마그마 냉각장비 투력+10` is an explicit exception only (User 2026-09-26, v2.9.6: +6 → +10)
+```
+
+## AMENDMENT — v2.9.7 Counter ladder new Items (User 2026-09-27)
+
+User 2026-09-27: 중화 탄산수, 방독 작업장갑 and 축성 손전등 join the catalog and 핫팩 becomes 방한 두건; the role notes follow the ladder. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+- exactly 40 active Items
+```
+
+```new
+### ITEM-Q71 — ACTIVE CATALOG EXACT 43
+- exactly 43 active Items (v2.9.7 Counter ladder: + 중화 탄산수, 방독 작업장갑, 축성 손전등; 핫팩 is now 방한 두건)
+간단 도시락 100 · 에너지드링크 80 · 중급 포션 125 · 길드 특제 도시락 185 · 초고속 에너지드링크 175 · 대현자 허브엘릭서 175
+(v2.9.7 Counter ladder and price review, User 2026-09-27 - ITEM §COUNTER LADDER:)
+방진마스크 45 · 중화 탄산수 35 · 방수망토 / 방독 작업장갑 / 축성 손전등 / 방한 두건 75
+농축 해독제 / 부식 방지 코팅제 / 경량 로프 / 원정용 장화 / 랜턴 건전지 / 설원 고글 / 불룡볶음면 / 용사의 곡주 / 쿨링 이온음료 95
+거미줄 방호세트 / 연금 방수슈트 / 성화 랜턴 / 백설 방한고글 135 · 마그마 냉각장비 145 · 상급 포션 195 · 최상급 포션 235
+```
+
+## AMENDMENT — v2.9.8 Item ids (User 2026-09-27)
+
+User 2026-09-27: Item ids renamed to read as the current Items (heat/lava/bar/premium/herobar/tree/potion); save schema v9. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+- `bar` reads visually as 간단 도시락 / meal-lunchbox
+- `herobar` reads visually as 왕도 천연암반수 / bottled water
+```
+
+```new
+- `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
+- `kingwater` reads visually as 왕도 천연암반수 / bottled water
+### ITEM-Q10 — PREMIUM LUNCH (`guildlunch` / 길드 특제 도시락)
 ```

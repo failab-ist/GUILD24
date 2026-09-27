@@ -2,7 +2,7 @@
 
 DOC=CORE_RUN_QA
 OWNER=qa,run,phase,save,abandon,runtime_progression,final_timeline,fresh_init,tutorial_reset
-DOC_VERSION=2.9.1
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/CORE_RUN_QA_v2.8.0-patch.md,history/CORE_RUN_QA_v2.7.0.md,history/CORE_RUN_QA_v2.6.1.md,history/CORE_RUN_QA_v2.5.0.md
@@ -319,20 +319,22 @@ PASS:
 
 ## SAVE VERSION / LEGACY SAVE
 
-### RUN-Q70 — SAVE V8 EXACT
+### RUN-Q70 — SAVE V9 EXACT
+
+(v8 until v2.9.8, User 2026-09-27.)
 
 EXPECT:
-- key `guild24.save.v8`
-- envelope 8
-- export 8
-- validation 8
-- new Run `run.version=8`
+- key `guild24.save.v9`
+- envelope 9
+- export 9
+- validation 9
+- new Run `run.version=9`
 
-PASS only if all are 8.
+PASS only if all are 9.
 
 ### RUN-Q62 — LEGACY SAVE SAFETY
 
-SETUP: leave v1~v7 save bytes with no valid v8 current save.
+SETUP: leave v1~v8 save bytes with no valid v9 current save.
 EXPECT:
 - cannot continue old run
 - clear fresh-start guidance
@@ -343,27 +345,27 @@ PASS: no migration and no auto-delete.
 ### RUN-Q71 — LEGACY INTERNAL SAVE REJECTION / FRESH V8
 
 SETUP:
-- no valid current v8 save
-- valid current v7 internal-test save with known Account/Meta progression and active Run
+- no valid current v9 save
+- valid v8 internal-test save with known Account/Meta progression and active Run
 
 EXPECT:
-- v7 Run state does not continue
-- v7 Account/Meta progression is not imported into v8
-- a fresh current v8 Account/Meta is created
-- a fresh current v8 Run is created
+- v8 Run state does not continue
+- v8 Account/Meta progression is not imported into v9
+- a fresh current v9 Account/Meta is created
+- a fresh current v9 Run is created
 - no old Franchise Grade / Start Contract / Job Mastery / Boss matrix / Monster Knowledge conversion shim runs
 - legacy bytes need not be destructively deleted merely to reject migration
 
 PASS:
-current v8 starts clean without compatibility logic for older internal-test progression.
+current v9 starts clean without compatibility logic for older internal-test progression.
 
 ### RUN-Q-v28-6 — ITEM ID REUSE / SAVE
 
-Current meal/water identities reuse existing Item IDs.
+Superseded by v2.9.8 (User 2026-09-27): the meal / water ids were renamed (`bar` → `lunchbox`, `herobar` → `kingwater`)
+with the v9 schema, so no reused id remains to test.
 
 PASS:
-- current internal v8 save loads without requiring a new schema solely for those identity changes
-- active references resolve to current v2.8 Item identities
+- no active Item carries a v2.8-reused id (`bar`, `herobar`)
 - no second legacy Hotbar Item is created
 
 ## BOSS / FINAL TIMELINE
@@ -421,7 +423,7 @@ Remaining preparation uses ordinary management systems.
 ### RUN-Q77 — D25 CONTROLLED REPAIR IS ONE-TIME
 
 SETUP:
-Use only a development fixture, development Save, or explicitly controlled migration/debug state that is already represented as v8 at D25+ but lacks the required Final prereveal state.
+Use only a development fixture, development Save, or explicitly controlled migration/debug state that is already represented as v9 at D25+ but lacks the required Final prereveal state.
 
 EXPECT:
 - first valid entry generates the authoritative Final Family Pair/Hazard Pool exactly once using the ordinary seeded/fixed selection principle
@@ -431,8 +433,8 @@ EXPECT:
 
 PASS:
 - repair cannot be used for Final fishing
-- ordinary valid D25+ v8 Player Saves already contain the state
-- this repair path does not authorize v1~v7 Player Run continuation
+- ordinary valid D25+ v9 Player Saves already contain the state
+- this repair path does not authorize v1~v8 Player Run continuation
 
 ## D30 FINAL
 
@@ -527,7 +529,7 @@ PASS: next launch behaves as a first launch and Tutorial can appear again.
 SETUP A:
 - current account has completed or dismissed tutorial
 - perform Full Data Reset
-- allow game to initialize a new current v8 state
+- allow game to initialize a new current v9 state
 
 PASS:
 - old tutorial-complete / dismissed state is gone
@@ -535,16 +537,16 @@ PASS:
 - tutorial actually begins on the first applicable flow
 
 SETUP B:
-- only legacy v1~v7 internal-test save remains
-- launch current v8 build
+- only legacy v1~v8 internal-test save remains
+- launch current v9 build
 
 PASS:
 - legacy state is not migrated
-- fresh v8 is created
+- fresh v9 is created
 - stale legacy tutorial flags cannot suppress the current tutorial
 
 SETUP C:
-- tutorial is completed on a current v8 account
+- tutorial is completed on a current v9 account
 - ordinary Run Abandon / new Run occurs without Full Data Reset
 
 PASS:

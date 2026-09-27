@@ -162,8 +162,6 @@ v2.5 removes legacy Global Meta XP.
 ```new
 dailyOverhead follows the Day AND the roster the Store has actually built:
 `bandage` is retired and is not an active Item ID.
-- v1~v7 **Run state** cannot continue as a current v8 Run.
-The meal/water identity pass reuses existing Item IDs and does not itself require a migration
 Legacy Global Meta XP is removed.
 ```
 
@@ -175,7 +173,6 @@ Legacy Global Meta XP is removed.
 ```
 
 ```new
-### SAVE v8 — EXACT
 ### SAVE BOUNDARY
 ```
 
@@ -279,7 +276,6 @@ Legacy v1~v6:
 ```
 
 ```new
-Legacy v1~v7:
 ```
 
 ## NOTES — reviewed, kept verbatim, not unresolved
@@ -370,4 +366,56 @@ D21~D30  11
 - the current count and the current segment limit are always visible on MORNING and ORDER (`UI_UX_v2.8.0.md`)
 - death management must matter in every phase: no later rule may make the late-Run limit effectively unreachable
 - checked at Closing before the money branch, as today; the ending copy is unchanged
+```
+
+## AMENDMENT — v2.9.8 save schema v9 and version headers (User 2026-09-27)
+
+User 2026-09-27: v2.9.8 id cleanup - the save schema moves to v9; owner headers name the version that last touched them. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+Current internal save generation remains v8 unless Source adoption discovers a real incompatible
+schema need.
+or schema bump.
+Existing saved IDs resolve to current active identities.
+KEY = guild24.save.v8
+Envelope version = 8
+Export version = 8
+Validation version = 8
+run.version = 8
+LEGACY = v1~v7
+- New Run initializes `run.version=8`.
+- v1~v7 **Account/Meta state** is not migrated into v8.
+- When only legacy v1~v7 data exists, initialize a fresh current v8 Account/Meta + fresh current v8 Run rather than importing legacy progression.
+- no valid current v8 Account/Run exists and a new v8 state is created
+- only legacy v1~v7 internal-test state exists and current policy rejects migration, causing fresh v8 initialization
+- stale legacy tutorial flags must not suppress tutorial on a fresh v8 initialization
+For every normally created valid v8 Run:
+If a development fixture, development Save, or explicitly controlled migration/debug state is already represented as a v8 Run at D25+ but lacks the required Final prereveal state:
+- normal valid v8 Player Saves must already contain the D25 state
+- this boundary does not authorize v1~v7 Player Run continuation into v8
+```
+
+```new
+For every normally created valid v9 Run:
+If a development fixture, development Save, or explicitly controlled migration/debug state is already represented as a v9 Run at D25+ but lacks the required Final prereveal state:
+- normal valid v9 Player Saves must already contain the D25 state
+- this boundary does not authorize v1~v8 Player Run continuation into v9
+### SAVE v9 — EXACT
+(v8 until v2.9.8: the id cleanup renamed saved ids, User 2026-09-27.)
+KEY = guild24.save.v9
+Envelope version = 9
+Export version = 9
+Validation version = 9
+run.version = 9
+LEGACY = v1~v8
+- New Run initializes `run.version=9`.
+- v1~v8 **Run state** cannot continue as a current v9 Run.
+- v1~v8 **Account/Meta state** is not migrated into v9.
+- When only legacy v1~v8 data exists, initialize a fresh current v9 Account/Meta + fresh current v9 Run rather than importing legacy progression.
+Legacy v1~v8:
+Current internal save generation is v9: the v2.9.8 id cleanup (User 2026-09-27) renamed saved Item, Decoration,
+Store Support, Event and Family ids, so the schema moved and no migration is kept.
+- no valid current v9 Account/Run exists and a new v9 state is created
+- only legacy v1~v8 internal-test state exists and current policy rejects migration, causing fresh v9 initialization
+- stale legacy tutorial flags must not suppress tutorial on a fresh v9 initialization
 ```

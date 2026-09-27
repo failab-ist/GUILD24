@@ -2,7 +2,7 @@ const assert=require('node:assert/strict');for(const f of ['data/catalog','data/
 const copy=x=>JSON.parse(JSON.stringify(x));const fresh=seed=>{let g=new Game();g.autosave=false;g.start(seed||'revision-test');g.buyRelic(g.run.relicWindow.candidateIds[0]);g.beginOrder();return g;};let checks=0;function test(name,fn){fn();checks++;console.log('PASS '+name);}function accept(g,fn){const original=g.rng.next.bind(g.rng);g.rng.next=()=>{original();return 0;};try{return fn();}finally{g.rng.next=original;}}
 test('pricing and actual acquisition cost; wallet and stock conservation',()=>{for(const mode of Object.keys(DATA.pricing)){const g=fresh();g.order(0);const st=g.run.inventory.at(-1);assert.equal(st.cost,g.run.offers[0].price);g.open();const n=g.current();n.money=9999;const before=g.run.money,wallet=n.money;accept(g,()=>g.sell(st.id,mode));const paid=Math.round(DATA.itemBy[st.item].sell*DATA.pricing[mode].mult);assert.equal(g.run.money-before,paid);assert.equal(wallet-n.money,paid);assert.equal(g.run.daily.cogs,st.cost);assert.ok(n.loyalty>=0);}});
 test('all paid modes obey wallet, unknown modes rejected, refusal keys safe',()=>{const g=fresh();g.open();g.current().money=0;for(const mode of Object.keys(DATA.pricing))assert.throws(()=>g.sell(g.run.inventory[0].id,mode));assert.throws(()=>g.interest(g.current(),DATA.itemBy.water,'free'));const n=g.current();n.money=999;const original=g.rng.next;g.rng.next=()=>.999;assert.equal(g.sell(g.run.inventory[0].id,'full'),false);g.rng.next=original;assert.ok(n.refused[0].includes(':full'));assert.throws(()=>g.sell(g.run.inventory[0].id,'full'));});
-test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.event=DATA.events.find(e=>e.id==='tasting');g.open();g.current().money=999;accept(g,()=>g.sell(g.run.inventory[0].id,'half'));accept(g,()=>g.sell(g.run.inventory[0].id,'half'));assert.equal(g.run.daily.subsidy,50);});
+test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.event=DATA.events.find(e=>e.id==='halfPrice');g.open();g.current().money=999;accept(g,()=>g.sell(g.run.inventory[0].id,'half'));accept(g,()=>g.sell(g.run.inventory[0].id,'half'));assert.equal(g.run.daily.subsidy,50);});
 /* Stage 10: the price a Trait's 구매의사 reacts to is the JUDGED price (pricing.intentMult), not
    what is charged. 하급 포션 at 140G used to cross frugalThreshold at 정가 and no longer does -
    it is judged at 91 - so the aversion is shown on an item that still crosses it at 195. */
@@ -14,12 +14,12 @@ test('tasting grants first half-price subsidy once',()=>{const g=fresh();g.run.e
    the test asserts. */
 test('trait source of truth; frugal changes information only',()=>{const g=fresh(),n=g.run.npcs[0],it=DATA.itemBy.highpotion;n.money=it.sell;n.traits=[];
  assert.ok(Math.round(it.sell*DATA.pricing.full.intentMult)>DATA.balance.frugalThreshold,'the item is judged above the frugal threshold at 정가');
- assert.ok(Math.round(DATA.itemBy.potion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
+ assert.ok(Math.round(DATA.itemBy.lowpotion.sell*DATA.pricing.full.intentMult)<=DATA.balance.frugalThreshold,'and an ordinary potion at 정가 is not');
  const a=g.interest(n,it).chance;n.traits=['frugal'];/* v2.9.2 (User 2026-09-25): 정가's final chance carries ECONOMY_ORDER's final scale, so the additive raw shift lands scaled. */
  assert.ok(Math.abs(g.interest(n,it).chance-a-DATA.traitBy.frugal.effects.priceBias*DATA.pricing.full.finalScale)<1e-9);});
 test('coupon pending capped; explicit duplication; ordinary effects additive',()=>{const g=fresh(),n={...g.run.npcs[0],traits:[]},d=g.run.dungeons[0];const e=pack=>Dungeon.prepare({...n,pack},d).effects;assert.equal(e(['coupon','coupon','highpotion']).combat,e(['coupon','highpotion']).combat);/* ITEM_v2.7: 상급 포션 is 투력 +16, not the old 강인함 +27. The subject here is the coupon's
    duplication, so the amount is read from the catalogue instead of being restated. */
-assert.equal(e(['highpotion','coupon']).combat+DATA.itemBy.highpotion.effects.combat,e(['coupon','highpotion']).combat);assert.equal(e(['lava','water']).thirst,DATA.itemBy.lava.effects.thirst);assert.equal(e(['coupon','tree']).revive,2);});
+assert.equal(e(['highpotion','coupon']).combat+DATA.itemBy.highpotion.effects.combat,e(['coupon','highpotion']).combat);assert.equal(e(['dragonramen','water']).thirst,DATA.itemBy.dragonramen.effects.thirst);assert.equal(e(['coupon','worldcharm']).revive,2);});
 test('atomic cart validates funds, capacity and supply without mutation',()=>{const g=fresh();const before=copy(g.run);assert.throws(()=>g.setQuantity(0,999));assert.deepEqual(g.run,before);g.setQuantity(0,1);const cost=g.cartTotal();assert.equal(g.run.money,before.money);assert.throws(()=>g.open());g.confirmOrder();assert.equal(g.run.money,before.money-cost);assert.equal(g.cartTotal(),0);const money=g.run.money;g.confirmOrder();assert.equal(g.run.money,money);});
 test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',()=>{const g=fresh();g.run.inventory=[];g.run.facilities=['fridge'];g.stock('battery',24);assert.equal(g.canStock(DATA.itemBy.battery),false);assert.equal(g.canStock(DATA.itemBy.rice),false);g.run.inventory=[];g.stock('rice',2);/* SALE_v2.7 §NORMAL CONSUMER BAG: two slots for every NPC regardless of Level, Job, Rarity
  or Trait. The Lv10+ third slot is removed, not disabled or hidden. */
@@ -28,13 +28,13 @@ test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',(
  /* rice: D1 + 2 shelf days + 대형 냉장고 +2 -> gone on the D5 Morning */
  g.run.day=5;g.morning();assert.equal(g.run.inventory.length,0);});
 test('night only once, empty night neutral, visitor forecast exact',()=>{const g=fresh();const count=g.run.queue.length;g.open();while(g.run.phase==='sell')g.depart();assert.equal(g.run.results.length,count);const money=g.run.money;g.night();assert.equal(g.run.money,money);const h=fresh();h.run.queue=[];h.open();assert.match(h.run.regionReport,/없었다/);});
-test('old prototype rejected; v6 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,8);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
+test('old prototype rejected; v6 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,9);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
 test('seed and mid-day save replay deterministic',()=>{let a=fresh('replay2'),b=fresh('replay2');a.order(0);b.order(0);b.save();const state=Save.import(Save.export(b.account,b.run));b=new Game(state.account,state.run);b.autosave=false;a.open();b.open();while(a.run.phase==='sell'){a.depart();b.depart();}assert.deepEqual(a.run,b.run);});
-test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.stock("potion",1);
+test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.stock("lowpotion",1);
  /* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a Final transfer is a real paid transaction at
     the fixed 50% amount, so the participant has to be able to afford it and the receipt
     records that price rather than the retired free-equipment mode. */
- const finalPrice=g.finalPrice('potion');n.money=finalPrice;const goldBefore=g.run.money;
+ const finalPrice=g.finalPrice('lowpotion');n.money=finalPrice;const goldBefore=g.run.money;
  g.supplyFinal(n.id,g.run.inventory[0].id);
  assert.equal(n.history.at(-1).mode,'half');assert.equal(n.history.at(-1).paid,finalPrice);
  assert.equal(n.money,0);assert.equal(g.run.money,goldBefore+finalPrice);g.boss();const xp=g.account.xp;g.boss();assert.equal(g.account.xp,xp);const h=fresh();h.run.phase='closing';h.run.money=-1;h.run.inventory=[];h.closeDay();assert.equal(h.run.phase,'end');});
@@ -55,7 +55,7 @@ test('window deferral and expiration; purchases blocked during sale',()=>{const 
 test('fridge existing stock only once, future stock and expiry finite',()=>{const g=fresh();g.run.facilities=[];for(const x of g.run.inventory)delete x.extensions;const st=g.run.inventory.find(x=>x.item==='water'),before=st.expires;g.run.relicWindow={milestoneDay:5,candidateIds:['fridge'],candidatePrices:[0],purchased:null,expiryDay:10};g.buyRelic('fridge');assert.equal(st.expires,before+DATA.relicParams.fridge.shelfDays);assert.equal(DATA.relicParams.fridge.shelfDays,2,'대형 냉장고 is +2 days');g.run.day=2;g.morning();assert.equal(st.expires,before+2);g.stock('water',1);assert.equal(g.run.inventory.at(-1).expires,2+DATA.itemBy.water.days+2);});
 test('no pre-reveal; dead NPCs release active capacity; contradictory traits absent',()=>{const g=fresh();assert.ok(g.run.npcs.every(n=>!n.introduced));g.open();assert.equal(g.run.npcs.filter(n=>n.introduced).length,1);while(g.run.npcs.filter(n=>n.alive).length<22)g.addNPC();g.run.npcs[0].alive=false;assert.ok(g.addNPC());for(const n of g.run.npcs)for(const pair of DATA.traitExclusions)assert.ok(!pair.every(t=>n.traits.includes(t)));});
 test('tier bands and family diversity',()=>{for(let seed=0;seed<25;seed++){const g=fresh('tier-'+seed);assert.ok(g.run.dungeons.every(d=>d.tier===1));assert.equal(g.run.familyOrder.length,5);g.run.day=29;g.morning();assert.ok(g.run.dungeons.every(d=>d.tier>=2));if(!g.run.event?.effects.unknown)assert.equal(new Set(g.run.dungeons.map(d=>d.family)).size,g.run.dungeons.length);}});
-test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','delivery'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
+test('bulk discount quote equals actual debit; reroll does not farm pity',()=>{const g=fresh();g.run.facilities=['bulk','rerollTicket'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:5}];g.setQuantity(0,3);const total=g.cartTotal(),money=g.run.money;g.confirmOrder();assert.equal(money-g.run.money,total);assert.equal(g.run.inventory.reduce((v,st)=>v+st.cost,0),total);const pity=copy(g.run.pity);g.reroll(0);assert.deepEqual(g.run.pity,pity);});
 test('empty provisioning cannot grind knowledge',()=>{const g=fresh();g.open();while(g.run.phase==='sell')g.depart();assert.deepEqual(g.account.knowledge,{});});
 test('same SKU bulk across separate offers; board does not change rookie level',()=>{const g=fresh();g.run.facilities=['bulk'];g.run.inventory=[];g.run.offers=[{item:'water',price:25,quantity:2},{item:'water',price:25,quantity:2}];g.setQuantity(0,2);g.setQuantity(1,1);/* 25 + 25 + round(25 x (1 - 20%)) */assert.equal(g.cartTotal(),70);g.confirmOrder();assert.equal(g.run.inventory.reduce((a,x)=>a+x.cost,0),70);const a=fresh('board-level'),b=fresh('board-level');a.run.facilities=[];b.run.facilities=['board'];assert.equal(a.addNPC().level,b.addNPC().level);});
 /* ECONOMY_ORDER_v2.8 §ORDINARY NPC WALLET ON VISIT / SA-Q49, narrowed by the re-measure
@@ -137,9 +137,9 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
     roster is built no longer do. Any future move here without a change to point at means
     something leaked into the run stream. */
  for(const [seed,order,intro] of [
-  ['sig-0',['snow','spider','fire','slime','crypt'],[4,10]],
-  ['sig-1',['slime','spider','snow','fire','crypt'],[6,10]],
-  ['sig-2',['crypt','slime','spider','fire','snow'],[6,10]]]){
+  ['sig-0',['snow','spider','golem','slime','crypt'],[4,10]],
+  ['sig-1',['slime','spider','snow','golem','crypt'],[6,10]],
+  ['sig-2',['crypt','slime','spider','golem','snow'],[6,10]]]){
   const g=new Game();g.autosave=false;g.start(seed);
   assert.deepEqual(g.run.familyOrder,order,seed+' still draws the same Family order');
   assert.deepEqual(g.run.familyIntro,intro,seed+' still draws the same Family introduction Days');
@@ -282,8 +282,8 @@ test('META-Q07/Q08/Q09/Q10 + NPC-Q09: the 1/3/6 gates open exactly what they say
   'a fresh account generates only the four starting Jobs');
  assert.equal(DATA.items.filter(i=>Meta.itemUnlocked(a,i)).length, DATA.items.length - 3, 'all but coupon, premium, tree');
 assert.equal(Meta.itemUnlocked(a,DATA.itemBy.coupon),false);
-assert.equal(Meta.itemUnlocked(a,DATA.itemBy.premium),false);
-assert.equal(Meta.itemUnlocked(a,DATA.itemBy.tree),false);
+assert.equal(Meta.itemUnlocked(a,DATA.itemBy.guildlunch),false);
+assert.equal(Meta.itemUnlocked(a,DATA.itemBy.worldcharm),false);
  const bosses=Meta.BOSSES();
  const beat=n=>{const b=Meta.fresh();for(let i=0;i<n;i++)clear(b,bosses[i],['warrior']);return b;};
  assert.equal(Meta.itemUnlocked(beat(1),DATA.itemBy.coupon),true,'one distinct clear opens the coupon');
@@ -305,16 +305,16 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
- assert.ok(/wears\('dawnSign'\)\?D\.decorationParams\.dawnSign\.budgetShare:0/.test(src)&&DATA.decorationParams.dawnSign.budgetShare===.25,'sign: 25% of the purse as a that-visit extra budget');
- assert.ok(!/dawnSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.dawnSign),'and no longer adds ORDER candidates');
- assert.ok(/wears\('premiumCase'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
+ assert.ok(/wears\('sponsorSign'\)\?D\.decorationParams\.sponsorSign\.budgetShare:0/.test(src)&&DATA.decorationParams.sponsorSign.budgetShare===.25,'sign: 25% of the purse as a that-visit extra budget');
+ assert.ok(!/sponsorSign\.extraOffers/.test(src)&&!('extraOffers' in DATA.decorationParams.sponsorSign),'and no longer adds ORDER candidates');
+ assert.ok(/wears\('honorFrame'\)/.test(src),'the wall frame reuses the premium rare-NPC weighting');
  /* User 2026-09-24: 프리미엄 쇼케이스 lifts Rare and above only - 유망 keeps its ordinary 27 - so
     its copy can say 희귀 이상 13% -> 19% and be exactly true. Amended the same day: every grade
     above 평범 is lifted, 평범 60% -> 50%. Re-tuned 2026-09-25, v2.9.1 balance: each grade's lift
     x1.5, so 평범 60% -> 45%. */
  const adv=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/adventurer.js'),'utf8');
- const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.premiumCase.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
- assert.ok(/opts\.premium\?D\.decorationParams\.premiumCase\.weights/.test(adv),'the weights have one owner, the Decoration param');
+ const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
+ assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 평범 40% -> 65%, 영웅 · 전설 the most */
  assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[35,30,22,9,4],'평범 60% -> 35%, so above 평범 40% -> 65%');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');

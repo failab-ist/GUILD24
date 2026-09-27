@@ -231,7 +231,7 @@ test('CROSS-RUN META: one account really carries forward, and nothing is inserte
    drives it: real settlement through Game.end(), real Meta.buyDecoration, and the purchase
    order as an explicit input rather than a strategy the harness invents. */
 test('CROSS-RUN DECORATION: Capital is earned by the production path and spent by the real Meta call',()=>{
- const order=['dawnSign','guildPlaque','thriftSafe','premiumCase'];
+ const order=['sponsorSign','guildShelf','thriftSafe','honorFrame'];
  const t=Debug.trajectory({trajectories:4,runs:8,prefix:'test-deco',purchaseOrder:order});
  assert.deepEqual(t.purchaseOrder,order,'the order is measurement input, echoed back');
  assert.equal(t.acquisition.length,4,'one acquisition row per purchase position');

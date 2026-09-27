@@ -219,7 +219,7 @@ function playRun(g,out,ctx){
  /* aware: 야전 정비대 / 원정 전문 인증 multiply the Counter an Item brings to the Gate this
     adventurer enters - value that Hazard term by the same factor the game will apply. Only when
     supplying an adventurer (n given), not when ranking the order sheet. */
- if(aware&&n&&hz){const f=(owns('medicine')&&it.category==='gear'?RP.medicine.counterMult:1)*(owns('expeditionCert')&&G.Relics.directCounter(it,d.hazards)?RP.expeditionCert.counterMult:1);v+=hz*(f-1);}if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
+ if(aware&&n&&hz){const f=(owns('fieldRepair')&&it.category==='gear'?RP.fieldRepair.counterMult:1)*(owns('expeditionCert')&&G.Relics.directCounter(it,d.hazards)?RP.expeditionCert.counterMult:1);v+=hz*(f-1);}if(policy==='beginner')return it.sell*.03;if(policy==='greedy')return it.sell*.09;if(policy==='random')return (it.buy*13+seed+s.day)%37;if(policy==='skilled'){if(n?.traits.includes('eater')&&it.category==='food')v+=((it.effects.supply||0)+(it.effects.survival||0))*.4;}if(policy==='protective')v+=(it.effects.escape||0)*35+(it.effects.revive||0)*45;return v;}
  /* The counter guarantee overwrites the last slot, so whether it fired can only be read from the
     state BEFORE the sheet is rolled. Measurement only - the call is passed straight through. */
  const nominees={};

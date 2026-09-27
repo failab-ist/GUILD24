@@ -2,7 +2,7 @@
 
 DOC=SOURCE_ADOPTION_QA
 OWNER=qa,source_adoption,root_cause,playtest_recovery
-DOC_VERSION=2.9.2
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=DESIGN_QA_SPEC
 AUDIT_SOURCE_HEAD=af7bb7d5575b224740d659038f7f90078c2199d1
@@ -288,7 +288,7 @@ U+ Food/Drink = rarity>=1 and category food/drink; existing non-expired stock ex
 Classification: DESIGN ADOPTION
 
 Current Source:
-morning weighted selection multiplies new-NPC weight by 1.7 with rookieBoard.
+morning weighted selection multiplies new-NPC weight by 1.7 with firstVisitCoupon.
 
 Root cause:
 effect is probability-only and cannot truthfully explain a seen newcomer.
@@ -949,8 +949,8 @@ Owner: ECONOMY_ORDER_v2.8.0.md
 Classification: VISUAL IDENTITY ADOPTION
 
 Required:
-- `bar` -> meal/lunchbox identity
-- `herobar` -> bottled/mineral-water identity
+- `lunchbox` -> meal/lunchbox identity
+- `kingwater` -> bottled/mineral-water identity
 - mechanics/save IDs unchanged
 
 Owner: ITEM_v2.8.0.md

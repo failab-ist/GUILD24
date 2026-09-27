@@ -160,7 +160,6 @@ After v2.7 adoption, real browser progression must still complete:
 
 ```new
 Fresh Run starts with exactly:
-- launch current v8 build
 Real browser progression must still complete:
 ```
 
@@ -195,7 +194,6 @@ SETUP: leave v1~v6 save bytes with no valid v7 current save.
 ```
 
 ```new
-SETUP: leave v1~v7 save bytes with no valid v8 current save.
 ```
 
 ## REWORD — check headings moved under topic groups (level only)
@@ -278,7 +276,6 @@ Every check heading goes from `##` to `###`; text unchanged. Topic group heading
 ### RUN-Q13 — NIGHT RESOLUTION STABILITY
 ### RUN-Q19 — SAVE/RESUME COMPLETE STATE
 ### RUN-Q31 — BOSS RUN-STATE SAVE
-### RUN-Q70 — SAVE V8 EXACT
 ### RUN-Q62 — LEGACY SAVE SAFETY
 ### RUN-Q71 — LEGACY INTERNAL SAVE REJECTION / FRESH V8
 ### RUN-Q-v28-6 — ITEM ID REUSE / SAVE
@@ -357,4 +354,64 @@ Controlled Runs reaching cumulative Deaths 4 / 5 on D10, 5 on D11, 7 / 8 on D20,
 - the count never resets at a segment boundary; 5 Deaths by D10 ends the Run, 5 Deaths first reached on D11 does not
 - 추모 방명록 adds +2 to every segment; 위령제 adds +1 to every segment from its Day
 - MORNING and ORDER always show `사망 {n} / {limit} · D{end}까지` with the limit in force, warning color at one left
+```
+
+## AMENDMENT — v2.9.8 save schema v9 and version headers (User 2026-09-27)
+
+User 2026-09-27: v2.9.8 id cleanup - the save schema moves to v9; owner headers name the version that last touched them. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+Current meal/water identities reuse existing Item IDs.
+- current internal v8 save loads without requiring a new schema solely for those identity changes
+- active references resolve to current v2.8 Item identities
+- key `guild24.save.v8`
+- envelope 8
+- export 8
+- validation 8
+- new Run `run.version=8`
+PASS only if all are 8.
+- no valid current v8 save
+- valid current v7 internal-test save with known Account/Meta progression and active Run
+- v7 Run state does not continue
+- v7 Account/Meta progression is not imported into v8
+- a fresh current v8 Account/Meta is created
+- a fresh current v8 Run is created
+current v8 starts clean without compatibility logic for older internal-test progression.
+Use only a development fixture, development Save, or explicitly controlled migration/debug state that is already represented as v8 at D25+ but lacks the required Final prereveal state.
+- ordinary valid D25+ v8 Player Saves already contain the state
+- this repair path does not authorize v1~v7 Player Run continuation
+- allow game to initialize a new current v8 state
+- only legacy v1~v7 internal-test save remains
+- fresh v8 is created
+- tutorial is completed on a current v8 account
+```
+
+```new
+### RUN-Q70 — SAVE V9 EXACT
+(v8 until v2.9.8, User 2026-09-27.)
+- key `guild24.save.v9`
+- envelope 9
+- export 9
+- validation 9
+- new Run `run.version=9`
+PASS only if all are 9.
+SETUP: leave v1~v8 save bytes with no valid v9 current save.
+- no valid current v9 save
+- valid v8 internal-test save with known Account/Meta progression and active Run
+- v8 Run state does not continue
+- v8 Account/Meta progression is not imported into v9
+- a fresh current v9 Account/Meta is created
+- a fresh current v9 Run is created
+current v9 starts clean without compatibility logic for older internal-test progression.
+Superseded by v2.9.8 (User 2026-09-27): the meal / water ids were renamed (`bar` → `lunchbox`, `herobar` → `kingwater`)
+with the v9 schema, so no reused id remains to test.
+- no active Item carries a v2.8-reused id (`bar`, `herobar`)
+Use only a development fixture, development Save, or explicitly controlled migration/debug state that is already represented as v9 at D25+ but lacks the required Final prereveal state.
+- ordinary valid D25+ v9 Player Saves already contain the state
+- this repair path does not authorize v1~v8 Player Run continuation
+- allow game to initialize a new current v9 state
+- only legacy v1~v8 internal-test save remains
+- launch current v9 build
+- fresh v9 is created
+- tutorial is completed on a current v9 account
 ```

@@ -3,6 +3,22 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.8 — ids read as the current names (User 2026-09-27)
+
+Ids that had been carried over from an earlier Item, Decoration or name are renamed so each reads as what it is now.
+Save compatibility is broken on purpose: the schema moves to v9 and an older save shows the fresh-start guidance.
+- Items (ITEM §ITEM IDS): heat → hood, lava → dragonramen, bar → lunchbox, premium → guildlunch (and the D10 unlock
+  key), herobar → kingwater, tree → worldcharm (and the D14 unlock key), potion → lowpotion
+- Decorations (META §sign note) and their art files: dawnSign → sponsorSign, premiumCase → honorFrame, guildPlaque →
+  guildShelf, trainingRack → trainingSign, memorialBoard → memorialBook, firstAidKit → aidCabinet
+- Store Support (RELIC §STORE SUPPORT IDS): medicine → fieldRepair, dawnBulk → dawnRecovery, showcase → rareContract,
+  rookieBoard → firstVisitCoupon, groupFlyer → groupOrder, terminal → extraOrder, delivery → rerollTicket;
+  the Event tasting → halfPrice (effect key, halfPriceSupport, halfPriceUsed)
+- the 화염 골렘 광산 Family fire → golem, so it no longer shares its Hazard's id; fireCombat → golemCombat (DUNGEON_HAZARD)
+- save schema v9 (CORE_RUN §SAVE v9, CORE_RUN_QA RUN-Q70 / Q62 / Q71); build marker 2.9.8
+Replaced by context, never by blind text (commits 6a14231, ed954a5, 6402053, d310b26 and this one): `premium` stays as the
+store build tag / contract / pricing strategy, `potion` as the category / effect marker / art key, `fire` as the Hazard.
+
 ## v2.9.7 — decorations and Rarity (User 2026-09-26)
 
 After the decoration and Rarity review (reports/deco-balance-v296.md §1~7; `tools/deco-impact.cjs`, `tools/rarity-value.cjs`,
@@ -20,6 +36,14 @@ reader 800 runs per arm):
 - 구급품 진열장: up to ten times per Run an ordinary Injury the expedition would leave is not left (구급키트's 부상 -> 무사 step);
   it no longer turns a Death into 중상 (that overlapped 추모 방명록). A carried 구급키트 settles first.
 - Store-panel effect lines break between words (`word-break:keep-all`).
+- Counter ladder (User 2026-09-27, same version): every Gate family gets 초반 대응 (Common) / 초반 하이브리드 (Uncommon) /
+  중반 대응 (Rare) / 후반 하이브리드 (Epic), valued by the pressed Stat (ITEM §COUNTER LADDER): 방진마스크 → Common 독 10;
+  집중 사탕 · 얼음컵 8; 방수망토 12 · 9; 해독제 · 코팅제 23, 로프 · 장화 · 건전지 21, 불룡볶음면 21 (+강인함 6), 곡주 · 쿨링 ·
+  설원 고글 18, all Rare 95G; Epic hybrids 16 · 14 / 12 · 14 / 16 · 12, 마그마 냉각장비 화염 12. 상급 / 최상급 포션 195 / 235G.
+  A Rare ORDER offer holds 1~3 units (was 1; ECONOMY_ORDER §ORDER OFFER QUANTITY). Measured in reports/counter-ladder-v297.md.
+  Price review: 방수망토 75G, Epic hybrids 135G, 마그마 냉각장비 145G (were 80 / 165 / 175).
+  New Items: 중화 탄산수 (Common Drink, 부식 10 + Supply 1, 35G), 방독 작업장갑 (독 12 · 속박 9) and 축성 손전등 (공포 9 · 어둠 9),
+  both Uncommon 75G; 핫팩 becomes 방한 두건 (냉기 12 · 화이트아웃 9, 75G) under its id. 43 active Items (C11 / U8 / R12 / E11 / L1).
 - Build marker in 영업 설정 (User 2026-09-26, same version): the `v{version} · {commit}` line the opening screen shows also
   ends 영업 설정, so the build can be read mid-Run. UI_UX §BUILD MARKER, UI_UX_QA UI-Q-v29-36; ledgers; ui-guard.
 - SALE shelf order (User 2026-09-26, same version): rows sort by kind - 대응 장비, 음식, 음료, 포션, 보험, 특수 - then

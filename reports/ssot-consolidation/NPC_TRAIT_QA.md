@@ -227,6 +227,13 @@ With the `프리미엄 쇼케이스` Decoration active, the ordinary NPC rarity 
 ```
 
 ```new
-With the `명예 모험가 액자` Decoration (id premiumCase) active, the ordinary NPC rarity draw uses exactly (User 2026-09-26, v2.9.7; META §wall — 명예 모험가 액자):
 [35, 30, 22, 9, 4]
+```
+
+## AMENDMENT — v2.9.8 Decoration ids (User 2026-09-27)
+
+User 2026-09-27: Decoration ids and art files renamed to read as the current names; save schema v9. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+With the `명예 모험가 액자` Decoration (id honorFrame) active, the ordinary NPC rarity draw uses exactly (User 2026-09-26, v2.9.7; META §wall — 명예 모험가 액자):
 ```

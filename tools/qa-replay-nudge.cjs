@@ -25,7 +25,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
    const ending=async(i,day,revenue,d10)=>{
     await p.evaluate(([i,day,revenue,d10])=>{const g=Guild24.game;(g.account.tutorial??={}).skipped=true;g.start('qa-nudge-'+i);
-     if(d10)(g.run.dayUnlocked??=[]).push(DATA.itemBy.premium.name);g.run.day=day;g.run.stats.revenue=revenue;g.end(false,'qa');Guild24.render();},[i,day,revenue,d10]);
+     if(d10)(g.run.dayUnlocked??=[]).push(DATA.itemBy.guildlunch.name);g.run.day=day;g.run.stats.revenue=revenue;g.end(false,'qa');Guild24.render();},[i,day,revenue,d10]);
     for(let k=0;k<4;k++){const b=await p.$('#modal-root [data-action="boss-seen"]')||await p.$('#modal-root [data-action="dismiss"]');if(!b)break;await b.click();}
     await p.waitForSelector('.p-end');
     if(OUT)await p.screenshot({path:path.join(OUT,`nudge-${width}-${i}.png`),fullPage:true});
@@ -41,7 +41,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    await p.reload({waitUntil:'load'});await p.waitForSelector('.p-end');
    const again=await p.evaluate(()=>document.querySelector('.end-tape .replay')?.textContent||'');check(width+' 3 a reload of the ended Run prints the same line',again===r.line,again);
    r=await ending(4,18,1000);check(width+' 4 a tie prints nothing',r.line==='',r.line);
-   r=await ending(5,12,1000,true);check(width+' 5 a D10 open is listed in 본사 해금 and no line is added',r.opened.includes(await p.evaluate(()=>DATA.itemBy.premium.name))&&r.line==='',JSON.stringify(r));
+   r=await ending(5,12,1000,true);check(width+' 5 a D10 open is listed in 본사 해금 and no line is added',r.opened.includes(await p.evaluate(()=>DATA.itemBy.guildlunch.name))&&r.line==='',JSON.stringify(r));
    // 새 점포 준비: capital 500~749 -> the display Slot only
    await p.click('[data-action="new"]');await p.waitForSelector('#modal-root .deco-line');
    const marks=await p.evaluate(()=>({capital:Meta.storeCapital(Guild24.game.account),slots:[...document.querySelectorAll('#modal-root .deco-line')].map(li=>!!li.querySelector('.can-buy'))}));
