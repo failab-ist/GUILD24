@@ -21,6 +21,8 @@ confirmed by the User.
   panel over a backdrop is gone; the MORNING room carries the logo on its ceiling, the three lines on its board, each
   Decoration Slot at its own place (tagged, a control), the Store Capital on a counter plate and `첫 점포지원 고르기` in the
   dock; from the ending `결과 다시 보기` returns to the ending. New runtime check `tools/qa-prep-scene.cjs` in `qa:runtime`.
+- SALE on a phone (UI_UX §SALE — MOBILE AUTHORITY, UI_UX_QA UI-Q-v29-43): the outlook and the four Core Stats are one plate
+  instead of two stacked boxes; the shelf gets 46 px back (a short phone now shows two shelf rows at entry, not one).
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

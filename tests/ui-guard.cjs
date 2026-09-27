@@ -2980,6 +2980,17 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
 
 /* UI-Q-v29-42 (UI_UX §NEW STORE PREPARATION — STORE SCENE, User 2026-09-27, v2.9.9): 새 점포 준비 is the MORNING room, not a
    panel; the runtime geometry (no overlap, on screen, the ending round trip) is tools/qa-prep-scene.cjs. */
+/* UI-Q-v29-43 (UI_UX §SALE — MOBILE AUTHORITY, User 2026-09-27, v2.9.9): on a phone the outlook and the Core Stats are one
+   plate; the shelf-room measurement is runtime evidence (reports in the batch), this pins the construction */
+test('UI-Q-v29-43: the SALE phone outlook and Core Stats are one plate, the desk is untouched',()=>{
+ const block=css.slice(css.indexOf('\n.p-sale .dossier:not(.traits){background:#0d0904a6'),css.indexOf('}\n',css.indexOf('.p-sale .dossier:not(.traits)>.detail-stats{margin:0;'))+2);
+ assert.ok(/\.p-sale \.dossier:not\(\.traits\)\{background:#0d0904a6;box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12\}/.test(block),'the dossier is the one recessed plate');
+ assert.ok(/>\.readout\{margin:0;padding:9px 12px 7px;background:none;box-shadow:none\}/.test(block),'the outlook has no box of its own');
+ assert.ok(/>\.detail-stats\{margin:0;padding:2px 12px 8px;background:none;box-shadow:inset 0 1px 0 #ffffff26\}/.test(block),'the grid has no box, only the seam');
+ assert.ok(/@media\(min-width:1024px\)\{\n \.p-sale \.dossier:not\(\.traits\)\{background:none;box-shadow:none\}/.test(css),'and the desk column is restored as it was');
+ assert.ok(/'<div class="dossier">'\+returningSummary\(n\)\+readout\(n,st\?st\.item:null,'core-mob'\)\+statGrid\(n\)\+deepOfferUI\(n\)\+'<\/div>'/.test(fn('saleScreen')),'the same content in the same order');
+});
+
 test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, dock Action, the way back from the ending',()=>{
  const p=fn('prepScreen');
  assert.ok(!/modal==='new'|setModal\('new'\)/.test(app),'there is no preparation modal any more');

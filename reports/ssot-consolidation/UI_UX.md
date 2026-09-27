@@ -1501,3 +1501,13 @@ and the menu, the title block starting 21 px from the top; desk 320 px, starting
 - the opening screen (no Run: 새 점포 준비, v2.9.9 the store scene) shows `v{version} · {commit}` in its top-left
 corner, small (10 px) and muted, above the room so it stays readable; it is not a control, takes no space
 ```
+
+## AMENDMENT — v2.9.9 SALE PHONE OUTLOOK PLATE (User 2026-09-27)
+
+On a phone the SALE outlook and Core Stats become one plate; the shelf gets the space back. Lines below are new.
+
+```new
+- the outlook (`전투 전망` / `환경 대응`) and the four Core Stats are ONE recessed plate with one seam between them, not two
+stacked boxes; the space that frame and gap took goes to the shelf, which must never get less room than before (User
+2026-09-27, v2.9.9; acceptance -> UI_UX_QA UI-Q-v29-43). The desk layout is unchanged
+```

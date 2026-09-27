@@ -1414,6 +1414,21 @@ PASS:
 FAIL:
 - the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
 
+### UI-Q-v29-43 — SALE PHONE OUTLOOK PLATE
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §SALE — MOBILE AUTHORITY.)
+
+SETUP: a mid-Run SALE (Day 5+, six or more kinds on the shelf) at 360x640, 390x664, 390x844, 412x915 and 1280x880.
+
+PASS:
+- on a phone the outlook line and the four Core Stats sit on one recessed plate with a single seam; every `?` still opens
+  its note in place and each Stat row keeps its height
+- the shelf's first row starts higher and the room the shelf gets above the tray / dock is not smaller at any phone size
+  (measured before v2.9.9: 76 / 89 / 269 / 338 px); the desk layout is unchanged
+
+FAIL:
+- a second box around either part, a dropped or reordered line, or less shelf room at any phone size
+
 ### UI-Q-v29-42 — NEW STORE PREPARATION STORE SCENE
 
 (User 2026-09-27; owner `UI_UX_v2.8.0.md` §NEW STORE PREPARATION — STORE SCENE. Runtime check `tools/qa-prep-scene.cjs`,

@@ -464,6 +464,9 @@ Bag size change is presentation only; capacity does not change.
 - no duplicate environment/forecast blocks
 - ~44px-class repeat touch targets
 - the Bag stays in the customer-state strip at every width, one step larger than v2.8, never overflowing (User 2026-09-24, v2.9.0)
+- the outlook (`전투 전망` / `환경 대응`) and the four Core Stats are ONE recessed plate with one seam between them, not two
+  stacked boxes; the space that frame and gap took goes to the shelf, which must never get less room than before (User
+  2026-09-27, v2.9.9; acceptance -> UI_UX_QA UI-Q-v29-43). The desk layout is unchanged
 
 Same-Customer rerenders preserve scroll/focus.
 New-Customer transition may intentionally start at the top.
