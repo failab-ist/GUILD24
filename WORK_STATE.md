@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-27
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_CLOSEOUT_DONE_PR_OPEN(브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`, 머지는 User 컨펌 대기) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
 
 ## Current
 
@@ -35,7 +35,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_CLOSEOUT_DONE_PR_OPEN(브랜�
 시도했다가 뺀 것(User 결정): SALE 목적지 종이 쪽지(혼자 튐), 모험가 카드 합치기, SALE 손님 확대(폰에 자리 없음).
 3.0+로 넘긴 것과 미결: `reports/v3.0-prep.md` §2-4.
 
-closeout 완료(2026-09-27): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:visual 126장 통과. PR을 열었고 **머지는 User 컨펌 때만**.
+closeout 완료(2026-09-27): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:visual 126장 통과. User 컨펌으로 PR #20 머지.
 
 ## UX 재확인 — 닫힘 (User 2026-09-26, v2.9.3)
 
@@ -49,7 +49,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
 - 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
 
-다음 작업: v2.9.9 PR 머지(User 컨펌 후) → v3.0 준비(`reports/v3.0-prep.md`). 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
+다음 작업: v3.0 준비(`reports/v3.0-prep.md`). 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
 ### User 할 일
 
