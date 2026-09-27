@@ -127,7 +127,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      now read against the Deep requirement. There is no cancel: the nomination is final. */
   n.outlook=this.outlookFor(n);
   s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
- addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:this.wears('premiumCase'),levelBonus:this.wears('trainingRack')&&this.rng.next()<D.decorationParams.trainingRack.chance?D.decorationParams.trainingRack.levelBonus:0,...opts});
+ addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:this.wears('honorFrame'),levelBonus:this.wears('trainingSign')&&this.rng.next()<D.decorationParams.trainingSign.chance?D.decorationParams.trainingSign.levelBonus:0,...opts});
   const spare=G.Adventurer.EASTER.filter(e=>!s.npcs.some(x=>x.name===e.name));
   if(this.rng.next()<D.balance.easterChance&&spare.length)n.name=this.rng.pick(spare).name;
   else for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
@@ -224,7 +224,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* 단체 주문 창구: its own Morning roll too, independent of board, hub and the wall. */
   const flyerExtra=s.dayFacilities.includes('groupFlyer')&&this.rng.next()<D.relicParams.groupFlyer.visitorChance?1:0;
   /* META_v2.8 wall: its own Morning roll, independent of board and hub. */
-  const decoExtra=this.wears('guildPlaque')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
+  const decoExtra=this.wears('guildShelf')&&this.rng.next()<D.balance.wallVisitorChance?1:0;
   s.expectedVisitors=baseVisitors+hubExtra+flyerExtra+decoExtra;
   return {rawVisitors,baseVisitors,hubExtra,flyerExtra,decoExtra};
  }
@@ -381,7 +381,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  n.healedBy=null;if(n.injury===1&&this.wears('infirmaryPlaque')&&this.rng.next()<D.decorationParams.infirmaryPlaque.healChance){n.injury=0;n.status='건강';n.healedBy='infirmaryPlaque';this.run.daily.infirmaryHeals=(this.run.daily.infirmaryHeals||0)+1;}const ev=this.run.event?.effects||{};
   /* META §sign — 원정 지원금 간판 (User 2026-09-26, v2.9.7): the Event 추가 구매 channel - a share of the purse spendable this
      visit only, never taken from the purse and cleared every night, so nothing compounds; with the Event the shares add. */
-  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('dawnSign')?D.decorationParams.dawnSign.budgetShare:0)));const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
+  n.eventBudget=Math.round(n.money*((ev.wallet?ev.wallet-1:0)+(this.wears('sponsorSign')?D.decorationParams.sponsorSign.budgetShare:0)));const last=n.records.at(-1);this.run.say={npc:n.id,text:G.Copy.arrive(n,this.run.day,!n.newToday&&n.visits%6===0&&!!last?.heroProof,this.run)};}
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');

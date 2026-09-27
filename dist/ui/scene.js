@@ -85,7 +85,7 @@ function counter(){
    painted room's palette with a dark outline, so an equipped Decoration reads as a fitting of
    this store. No <text> in the files: the name is read in 점포 관리. The picture resolves through
    slot() like every other scene asset, so replacing a file changes no screen. */
-const DECO_IDS=['dawnSign','guildPlaque','thriftSafe','premiumCase','trainingRack','infirmaryPlaque','memorialBoard','firstAidKit'];
+const DECO_IDS=['sponsorSign','guildShelf','thriftSafe','honorFrame','trainingSign','infirmaryPlaque','memorialBook','aidCabinet'];
 const decoArt=Object.fromEntries(DECO_IDS.map(id=>[id,'ui/assets/deco/'+id+'.svg']));
 function decoration(id){if(!decoArt[id])return '';manifest['deco.'+id]??=decoArt[id];return slot('deco.'+id,()=>'','deco-art');}
 /* ---- a cardboard stock box that holds an item pictogram ---- */

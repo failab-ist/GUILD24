@@ -631,7 +631,7 @@ test('META_v2.8 §RETIRED: no player-facing copy describes a retired system as a
  // the visitor sources named to the player are the ones morning() actually composes
  const morning=read('dist/systems/shop.js');
  const composes=morning.slice(morning.indexOf('morningVisitors(){'),morning.indexOf('morningEvent(ids){'));
- assert.ok(/board/.test(composes)&&/hub/.test(composes)&&/guildPlaque/.test(composes),
+ assert.ok(/board/.test(composes)&&/hub/.test(composes)&&/guildShelf/.test(composes),
   'the visitor count is composed from Relics and the wall Decoration');
  assert.ok(!/contract/i.test(composes),'and from no Contract');
  const helpText=fn('help');

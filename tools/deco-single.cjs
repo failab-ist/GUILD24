@@ -1,6 +1,6 @@
 // Single-Decoration contribution — MEASUREMENT ONLY, dev tool, never part of npm test.
 // Same seeds; a fresh account wearing exactly one Decoration vs wearing none. Every Run is new.
-//   node tools/deco-single.cjs [seeds=1000] [--policy balanced] [--aware] [--set '{"memorialBoard":{"deathLimitBonus":1}}'] [--sets a+b+c+d,...] [--out file]
+//   node tools/deco-single.cjs [seeds=1000] [--policy balanced] [--aware] [--set '{"memorialBook":{"deathLimitBonus":1}}'] [--sets a+b+c+d,...] [--out file]
 // --sets: measure whole loadouts (ids joined with +) instead of one Decoration each.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),{fork}=require('node:child_process');
 const root=path.resolve(__dirname,'..');

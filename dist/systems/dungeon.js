@@ -506,7 +506,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  const incidentWeights=[{key:'accident',weight:Math.max(.02,.06-e.survival*.001)},...p.hazards.map(h=>({key:h.key,weight:h.gap*.012/Math.max(1,Math.sqrt(d.hazards.length))}))];let incidentCause=null;if(affected){let roll=envRoll/environment*incidentWeights.reduce((v,h)=>v+h.weight,0);for(const h of incidentWeights){roll-=h.weight;if(roll<=0&&h.weight>0){incidentCause=h.key;break;}}}
  if(!combatSuccess)p.why.push('전투에서 밀려 탈출 판정 진행');if(affected)p.why.push('원정 중 환경 사고가 있었다.');
  let escapeRoll,escapeChance,injuryRoll,deathRoll,bandRoll,rescued=false,deathChance=0,avoidedDeath=false;
- const aidKitReady=!!run&&(run.aidKitSaves||0)<D.decorationParams.firstAidKit.saves&&Object.values(run.loadout||{}).includes('firstAidKit');
+ const aidKitReady=!!run&&(run.aidKitSaves||0)<D.decorationParams.aidCabinet.saves&&Object.values(run.loadout||{}).includes('aidCabinet');
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
  const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<clamp(e.escape,.0,.96);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};

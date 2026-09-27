@@ -1127,7 +1127,7 @@ test('META_v2.8 §STORE CAPITAL: Gross Sales counts each real sale exactly once'
 
 test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run never re-reads it',()=>{
  const a=Meta.fresh();
- Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.dawnSign.price);
+ Meta.addCapital(a,DATA.decorationBy.thriftSafe.price+DATA.decorationBy.sponsorSign.price);
  Meta.buyDecoration(a,'thriftSafe');
  const g=new Game(a);g.autosave=false;g.start('loadout-freeze');
  assert.equal(g.run.money,700,'nothing is paid before DAY 1 opens');
@@ -1137,8 +1137,8 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  assert.deepEqual(g.run.loadout,{counter:'thriftSafe'},'and the loadout is frozen onto the Run');
  assert.equal(g.wears('thriftSafe'),true,'the Run reads its own frozen copy');
  // changing the Account mid-Run must not reach the Run that already started
- Meta.buyDecoration(a,'dawnSign');
- assert.equal(g.wears('dawnSign'),false,'a Decoration bought mid-Run does not join this Run');
+ Meta.buyDecoration(a,'sponsorSign');
+ assert.equal(g.wears('sponsorSign'),false,'a Decoration bought mid-Run does not join this Run');
  Meta.equipDecoration(a,'counter',null);
  assert.equal(g.wears('thriftSafe'),true,'and unequipping mid-Run does not remove it either');
  assert.deepEqual(reload(g).run.loadout,g.run.loadout,'the frozen loadout survives a reload');
@@ -1146,7 +1146,7 @@ test('CORE_RUN_v2.8 §PRE-RUN FLOW: the loadout is frozen at start and the Run n
  assert.ok(!g.run.facilities.includes('thriftSafe'),'no Decoration id is injected into facilities');
  assert.equal(g.has('thriftSafe'),false,'and `has` - the Relic question - does not answer for it');
  const next=new Game(a);next.autosave=false;next.start('loadout-freeze-2');
- assert.deepEqual(next.run.loadout,{sign:'dawnSign'},'the next Run picks up the current Account loadout');
+ assert.deepEqual(next.run.loadout,{sign:'sponsorSign'},'the next Run picks up the current Account loadout');
  assert.equal(next.run.money,700,'and the unequipped counter no longer pays out');
 });
 
@@ -1176,9 +1176,9 @@ test('RELIC_v2.8 §VISITOR RELICS: board floors the base roll, hub rolls one exc
  assert.ok(withHub>plain,'and it really is a cost');
  assert.ok(!src.includes("includes('hub')?35:0"),'the retired flat +35G is gone');
  /* board, hub and the wall Decoration are independent: none marks another owned or shares a slot. */
- assert.equal(g.wears('guildPlaque'),false,'holding the Relic does not equip the Decoration');
- const deco=Meta.fresh();Meta.addCapital(deco,DATA.decorationBy.guildPlaque.price);
- Meta.buyDecoration(deco,'guildPlaque');
+ assert.equal(g.wears('guildShelf'),false,'holding the Relic does not equip the Decoration');
+ const deco=Meta.fresh();Meta.addCapital(deco,DATA.decorationBy.guildShelf.price);
+ Meta.buyDecoration(deco,'guildShelf');
  const h=new Game(deco);h.autosave=false;h.start('deco-not-relic');
  assert.ok(!h.run.facilities.includes('board'),'and equipping the Decoration does not grant the Relic');
 });
@@ -1210,13 +1210,13 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
  assert.equal(legacySettle.gain,Math.round(3000*Meta.capitalRate(12)),'on its own Gross Sales');
  /* A live Run round-trips with both new fields intact. */
  const live=fresh('save-decoration');
- Meta.addCapital(live.account,DATA.decorationBy.dawnSign.price);
- Meta.buyDecoration(live.account,'dawnSign');
- live.run.loadout={sign:'dawnSign'};
+ Meta.addCapital(live.account,DATA.decorationBy.sponsorSign.price);
+ Meta.buyDecoration(live.account,'sponsorSign');
+ live.run.loadout={sign:'sponsorSign'};
  const round=reload(live);
  assert.deepEqual(round.run.loadout,live.run.loadout,'the frozen loadout survives export/import');
  assert.equal(Meta.storeCapital(round.account),0,'and the Account capital round-trips');
- assert.deepEqual(Meta.ownedDecorations(round.account),['dawnSign'],'with what it owns');
+ assert.deepEqual(Meta.ownedDecorations(round.account),['sponsorSign'],'with what it owns');
  assert.deepEqual(Meta.storeLoadout(round.account),Meta.storeLoadout(live.account),'and its planned loadout');
 });
 
@@ -1288,7 +1288,7 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
  assert.equal(Meta.storeCapital(a),start-d.price,'and deducts nothing');
  /* Cancel is the absence of a call, so what it must leave alone is measured here as the state
     a purchase never made: another Decoration is untouched by this one. */
- const other=DATA.decorationBy.dawnSign;
+ const other=DATA.decorationBy.sponsorSign;
  assert.equal(Meta.decorationOwned(a,other.id),false,'an unconfirmed purchase owns nothing');
  assert.equal(Meta.storeLoadout(a)[other.slot],null,'and equips nothing');
  assert.throws(()=>Meta.buyDecoration(a,other.id),/자본이 부족/,'what cannot be afforded cannot be bought');
@@ -1344,12 +1344,12 @@ const wearing=(ids,seed)=>{const a=Meta.fresh();for(const id of ids){Meta.addCap
 const past0=g=>{g.buyRelic(g.run.relicWindow.candidateIds[0]);g.run.facilities=[];return g;};
 test('추모 방명록: the Death line that ends a Run is two higher while it is worn',()=>{
  // CORE_RUN §DEATH LIMIT — SEGMENTED (v2.9.1 balance): both Runs start Day 1, so `base` is the
- // plain D1~10 segment limit; memorialBoard adds +2 to it now (was +1).
- const base=Meta.deathLimit(fresh('memorial-plain').run),g=wearing(['memorialBoard'],'memorial');
+ // plain D1~10 segment limit; memorialBook adds +2 to it now (was +1).
+ const base=Meta.deathLimit(fresh('memorial-plain').run),g=wearing(['memorialBook'],'memorial');
  assert.equal(Meta.deathLimit(g.run),base+2);
  assert.equal(Meta.deathLimit(fresh('memorial-plain-2').run),base,'without it the line is unchanged');
  g.run.phase='closing';g.run.stats.deaths=base;assert.equal(g.closeDay(),true,'at the plain line the store still trades');
- const h=wearing(['memorialBoard'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+2;h.closeDay();
+ const h=wearing(['memorialBook'],'memorial-2');h.run.phase='closing';h.run.stats.deaths=base+2;h.closeDay();
  assert.equal(h.run.phase,'end','at the bonused (+2) line, it closes');
 });
 test('의무실 현판: an ordinarily injured arrival may be healed at the door, 중상 never',()=>{
@@ -1370,34 +1370,34 @@ test('구급품 진열장: an ordinary Injury the expedition would leave is not 
  const find=want=>{for(let i=0;i<800;i++){const n=weak(),r=Dungeon.resolve(n,d,new RNG('aid-'+i));if(r.outcome===want&&(want!=='부상'||n.injury===1))return 'aid-'+i;}return null;};
  const hurt=find('부상'),dead=find('사망');
  assert.ok(hurt&&dead,'an Injury case and a Death case exist');
- const run={loadout:{display:'firstAidKit'}};
+ const run={loadout:{display:'aidCabinet'}};
  const healed=weak(),rep=Dungeon.resolve(healed,d,new RNG(hurt),[],run);
  assert.equal(rep.outcome,'부상','the Outcome is the same 부상');assert.equal(healed.injury,0,'but no Injury is left');
  assert.equal(run.aidKitSaves,1,'one of ten is spent');assert.ok(rep.events.some(e=>e.id==='aidKit'),'the record says why');
  const bare=weak();Dungeon.resolve(bare,d,new RNG(hurt),[],{loadout:{}});assert.equal(bare.injury,1,'without it the Injury stands');
  /* a carried 구급키트 settles first: the expedition it acted on spends nothing */
- const withKit=weak(['kit']),kitRun={loadout:{display:'firstAidKit'}};Dungeon.resolve(withKit,d,new RNG(hurt),[],kitRun);
+ const withKit=weak(['kit']),kitRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(withKit,d,new RNG(hurt),[],kitRun);
  assert.equal(withKit.injury,0);assert.equal(kitRun.aidKitSaves||0,0,'the Item took it, the count is untouched');
  /* 사망 is not its business any more */
- const died=weak(),deadRun={loadout:{display:'firstAidKit'}};Dungeon.resolve(died,d,new RNG(dead),[],deadRun);
+ const died=weak(),deadRun={loadout:{display:'aidCabinet'}};Dungeon.resolve(died,d,new RNG(dead),[],deadRun);
  assert.equal(died.alive,false,'a Death stands');assert.equal(deadRun.aidKitSaves||0,0);
  /* the tenth is the last */
- const late={loadout:{display:'firstAidKit'},aidKitSaves:9},tenth=weak();Dungeon.resolve(tenth,d,new RNG(hurt),[],late);
+ const late={loadout:{display:'aidCabinet'},aidKitSaves:9},tenth=weak();Dungeon.resolve(tenth,d,new RNG(hurt),[],late);
  assert.equal(tenth.injury,0);assert.equal(late.aidKitSaves,10);
  const eleventh=weak();Dungeon.resolve(eleventh,d,new RNG(hurt),[],late);assert.equal(eleventh.injury,1,'an eleventh is not');
- assert.equal(DATA.decorationParams.firstAidKit.saves,10);
+ assert.equal(DATA.decorationParams.aidCabinet.saves,10);
 });
 test('훈련소 제휴 간판: an adventurer created while it is worn is one Level higher with 65% chance (v2.9.1 balance; was 50%)',()=>{
- const P=DATA.decorationParams.trainingRack,saved=P.chance;
+ const P=DATA.decorationParams.trainingSign,saved=P.chance;
  try{
   // the roll is drawn either way while it is worn, so chance 1 and chance 0 share one stream
-  P.chance=1;const hit=wearing(['trainingRack'],'rack').run.npcs.map(n=>n.level);
-  P.chance=0;const miss=wearing(['trainingRack'],'rack').run.npcs.map(n=>n.level);
+  P.chance=1;const hit=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
+  P.chance=0;const miss=wearing(['trainingSign'],'rack').run.npcs.map(n=>n.level);
   assert.deepEqual(hit,miss.map(l=>l+1),'a hit is exactly +1 Level');
  }finally{P.chance=saved;}
  assert.equal(P.chance,.65);
- let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingRack'],'rack-rate-'+i);
-  P.chance=0;const base=wearing(['trainingRack'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
+ let up=0,all=0;for(let i=0;i<40;i++){const g=wearing(['trainingSign'],'rack-rate-'+i);
+  P.chance=0;const base=wearing(['trainingSign'],'rack-rate-'+i).run.npcs.map(n=>n.level);P.chance=saved;
   g.run.npcs.forEach((n,k)=>{all++;if(n.level>base[k])up++;});}
  assert.ok(up/all>.55&&up/all<.75,'about 65%: '+(up/all));
 });

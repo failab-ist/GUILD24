@@ -77,7 +77,7 @@ function deathLimitSegment(run){
  return D.balance.deathLimitSegments.find(s=>day<=s.maxDay)||D.balance.deathLimitSegments.at(-1);
 }
 const deathLimit=run=>deathLimitSegment(run).limit
- +(Object.values(run?.loadout||{}).includes('memorialBoard')?D.decorationParams.memorialBoard.deathLimitBonus:0)
+ +(Object.values(run?.loadout||{}).includes('memorialBook')?D.decorationParams.memorialBook.deathLimitBonus:0)
  +(run?.riteBonus||0);
 const deathLimitSegmentEnd=run=>deathLimitSegment(run).maxDay;
 /* META_v2.8 §STORE CAPITAL. The Day the Run reached picks the rate; nothing else does. */

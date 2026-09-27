@@ -17,8 +17,8 @@ const out={version:5,canonicalSet:'GUILD24_DESIGN_SSOT_v2.5.0',trajectories,runs
    reported - not a strategy this harness invents.
    `meta-farm` is the adversarial repeat-farm case: does a short low-engagement Run stay
    efficient when it is run over and over on the same account? */
-const STRONG_FIRST=['dawnSign','guildPlaque','thriftSafe','premiumCase'];
-const WEAK_FIRST=['premiumCase','thriftSafe','guildPlaque','dawnSign'];
+const STRONG_FIRST=['sponsorSign','guildShelf','thriftSafe','honorFrame'];
+const WEAK_FIRST=['honorFrame','thriftSafe','guildShelf','sponsorSign'];
 const plans=[
  {label:'engaged / 장식 없음',policy:'balanced',pricing:'adaptive',build:'hybrid',purchaseOrder:null,tag:'none'},
  {label:'engaged / 강한 것부터',policy:'balanced',pricing:'adaptive',build:'hybrid',purchaseOrder:STRONG_FIRST,tag:'strong'},
