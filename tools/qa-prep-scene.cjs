@@ -10,7 +10,7 @@ const PORT=Number(process.env.QA_PORT||5201),EXECUTABLE=process.env.QA_CHROMIUM|
 const results=[];const check=(name,ok,detail='')=>{results.push({name,ok});console.log((ok?'PASS ':'FAIL ')+name+(detail?' - '+detail:''));};
 function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'preview.cjs'),'--port',String(PORT)],{stdio:['ignore','pipe','inherit']});
  return new Promise((res,rej)=>{child.stdout.on('data',d=>String(d).includes('ready')&&res(child));setTimeout(()=>rej(Error('preview server did not start')),8000);});}
-const SIZES=[[360,640],[360,740],[375,667],[390,664],[390,844],[412,915],[430,740],[1024,768],[1280,800],[1280,880],[1920,1080]];
+const SIZES=[[360,640],[360,740],[375,667],[390,664],[390,844],[412,915],[430,740],[768,1024],[1023,768],[1024,768],[1280,800],[1280,880],[1920,1080]];
 const OWN=['sponsorSign','honorFrame','thriftSafe','guildShelf'],EQUIP=['sponsorSign','guildShelf'];
 const MEASURE=`(()=>{const R=e=>{const q=e.getBoundingClientRect();return {x:q.left,y:q.top,r:q.right,b:q.bottom,w:q.width,h:q.height}};
  const items={};for(const k of ['.opening-logo','.branchplate','.board','.capital-plate','.dock [data-action="start"]','.dock [data-action="prep-back"]','.menu-pin','.build-mark']){const e=document.querySelector(k);if(e)items[k]=R(e);}

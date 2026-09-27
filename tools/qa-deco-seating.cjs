@@ -1,7 +1,9 @@
 // LIVE STORE DECORATION SEATING (UI_UX §LIVE STORE DECORATION SEATING; UI-Q-v29-40) - runtime regression.
 // Dev-only. Both Decoration sets are equipped and a Run is played to its first MORNING at the phone widths in the heights a
 // phone browser actually leaves (bars showing: the painting is then cropped at the top and bottom, not the sides) and at the
-// desk widths. At each size: the sign and the plaque sit on the point of the painting they are placed by, the display and
+// portrait and landscape tablet sizes and the desk widths. At each size: the till housing stands on the painted counter top (the painting is
+// cropped top and bottom on a tablet, and the counter band follows it), the sign and the plaque sit on the point of the
+// painting they are placed by (the sign never above the stage's top edge), the branch plate clears the dock Action, the display and
 // counter pieces stand on the till housing's base line at least the gap away from it, and no piece overlaps the housing, its
 // label, the DAY sign (and its hangers), the board, the branch plate, the dock or another piece, or leaves the screen; the sign
 // keeps the gap from the DAY sign. Reduced motion.
@@ -12,10 +14,11 @@ const STEP=fs.readFileSync(path.join(__dirname,'qa-final-bosses.cjs'),'utf8').ma
 const results=[];const check=(name,ok,detail='')=>{results.push({name,ok});console.log((ok?'PASS ':'FAIL ')+name+(detail?' - '+detail:''));};
 function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'preview.cjs'),'--port',String(PORT)],{stdio:['ignore','pipe','inherit']});
  return new Promise((res,rej)=>{child.stdout.on('data',d=>String(d).includes('ready')&&res(child));setTimeout(()=>rej(Error('preview server did not start')),8000);});}
-const SIZES=[[360,640],[360,740],[375,667],[390,664],[390,844],[412,915],[430,740],[1024,768],[1280,880],[1920,1080]];
+const SIZES=[[360,640],[360,740],[375,667],[390,664],[390,844],[412,915],[430,740],[768,1024],[820,1180],[900,700],[1023,768],[1024,768],[1280,880],[1920,1080]];
 const SETS={economy:['sponsorSign','honorFrame','thriftSafe','guildShelf'],survival:['trainingSign','infirmaryPlaque','memorialBook','aidCabinet']};
 // the file's own points (ui.css §.decoplate.sign / .wall), per file
-const POINT={phone:{ar:941/1672,sign:[.15,.113],wall:[.76,.55]},wide:{ar:1672/941,sign:[.29,.093],wall:[.629,.44]}};
+// and the painted counter top the till's feet stand on, as a band of the file's height
+const POINT={phone:{ar:941/1672,sign:[.15,.113],wall:[.76,.55],counter:[.742,.762]},wide:{ar:1672/941,sign:[.29,.093],wall:[.629,.44],counter:[.827,.855]}};
 (async()=>{
  const playwright=require('playwright'),server=await serve();if(OUT)fs.mkdirSync(OUT,{recursive:true});
  const browser=await playwright.chromium.launch({executablePath:EXECUTABLE,args:['--no-sandbox','--font-render-hinting=none']});
@@ -41,11 +44,20 @@ const POINT={phone:{ar:941/1672,sign:[.15,.113],wall:[.76,.55]},wide:{ar:1672/94
     const other=Object.fromEntries(['.till','.till-cap','.daysign','.board','.branchplate','.dock .pull','.dock'].map(k=>[k,R(document.querySelector(k))]));
     other['.daysign hangers']=R(document.querySelector('.daysign'));if(other['.daysign hangers'])other['.daysign hangers'].y-=10;
     return {box,plates,other,gap:parseFloat(getComputedStyle(document.querySelector('.deco-layer')).getPropertyValue('--gap')),vw:innerWidth,vh:innerHeight};});
-   const P=desktop?POINT.wide:POINT.phone,ph=Math.max(m.box.h,m.box.w/P.ar),pw=ph*P.ar,px=m.box.x+(m.box.w-pw)/2,py=m.box.y+(m.box.h-ph)/2;
-   const till=m.other['.till'],ov=(a,b)=>a&&b&&a.x<b.r-.5&&b.x<a.r-.5&&a.y<b.b-.5&&b.y<a.b-.5;
+   // the wide file is the desk's framing and a landscape tablet's (768+ wide, 700+ high, landscape)
+   const wide=desktop||(width>=768&&height>=700&&width>height),P=wide?POINT.wide:POINT.phone,ph=Math.max(m.box.h,m.box.w/P.ar),pw=ph*P.ar,px=m.box.x+(m.box.w-pw)/2,py=m.box.y+(m.box.h-ph)/2;
+   const till=m.other['.till'];
+   if(till){const [c0,c1]=P.counter;check(tag+' till stands on the painted counter top',till.b>=py+c0*ph-1&&till.b<=py+c1*ph+1,
+    `feet ${till.b.toFixed(1)} counter ${(py+c0*ph).toFixed(1)}-${(py+c1*ph).toFixed(1)}`);}
+   {const bp=m.other['.branchplate'],pl=m.other['.dock .pull'];if(bp&&pl)check(tag+' branch plate clears the dock Action',
+    !(bp.x<pl.r&&pl.x<bp.r)||pl.y-bp.b>=6,`plate foot ${bp.b.toFixed(1)} Action top ${pl.y.toFixed(1)}`);}
+   // and at least 6 px under a counter piece it would otherwise read as standing on
+   {const bp=m.other['.branchplate'];for(const k of ['display','counter']){const q=m.plates[k];if(bp&&q&&bp.x<q.r&&q.x<bp.r)
+    check(tag+' branch plate clears the '+k+' piece',bp.y-q.b>=6,`plate top ${bp.y.toFixed(1)} piece foot ${q.b.toFixed(1)}`);}}
+   const ov=(a,b)=>a&&b&&a.x<b.r-.5&&b.x<a.r-.5&&a.y<b.b-.5&&b.y<a.b-.5;
    check(tag+' all four Decorations are drawn',['sign','wall','display','counter'].every(s=>m.plates[s]),Object.keys(m.plates).join(','));
    const day=m.other['.daysign'];
-   for(const s of ['sign','wall']){const q=m.plates[s];if(!q)continue;const [fx,fy]=P[s],ex=px+fx*pw,ey=py+fy*ph;
+   for(const s of ['sign','wall']){const q=m.plates[s];if(!q)continue;const [fx,fy]=P[s],ex=px+fx*pw,ey=s==='sign'?Math.max(m.box.y+m.gap,py+fy*ph):py+fy*ph;
     // the 간판 may stand left of its point, and only as far as keeps the gap from the DAY sign
     const held=s==='sign'&&day&&ex+q.w>day.x-m.gap+.5?day.x-m.gap-q.w:ex;
     check(tag+' '+s+' sits on its point of the painting'+(held!==ex?' (held at the gap from the DAY sign)':''),Math.abs(q.x-held)<=1&&Math.abs(q.y-ey)<=1,`at ${q.x.toFixed(1)},${q.y.toFixed(1)} expected ${held.toFixed(1)},${ey.toFixed(1)}`);

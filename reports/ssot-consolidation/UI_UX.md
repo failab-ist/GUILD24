@@ -1432,8 +1432,6 @@ on the housing's base line, sized by the same counter mount as the housing
 - each keeps its painted spot while there is room; where that spot would bring it closer to the housing than a fixed gap
 (6 px phone, 10 px desk) it stands at the gap instead - it never overlaps the housing, its label, another piece, or leaves
 the screen
-- phone 360~430 at the heights a browser leaves (640~932) and desk 1024~1920 are covered. The 768~1023 tablet framing is out
-of scope: there the till band itself floats above the painted counter (deferred finding, User 2026-09-27)
 ```
 
 ## AMENDMENT — v2.9.9 Decoration outline (User 2026-09-27)
@@ -1560,4 +1558,29 @@ their labels; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열�
 - `첫 점포지원 고르기` (`begin`, a knock and a rising ringing G-D-G) and `다음 점포 열기` (`newstore`, a latch and a short rising
 pair): each its own synthesised cue, because a Run's opening was silent and the way to the next store sounded like a
 tab click (User 2026-09-27, v2.9.9)
+```
+
+## AMENDMENT — LIVE STORE DECORATION SEATING — tablets (User 2026-09-27, v2.9.9)
+
+The deferred tablet finding is fixed: the counter band follows the painting, landscape tablets take the wide framing, the sign stays on screen, the branch plate clears the dock. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the till housing stands on the painted counter top under any crop (User 2026-09-27, v2.9.9 tablet batch): the counter
+band is sized by the drawn painting and moved down by the height the crop takes off its top, so on a portrait tablet the
+housing no longer floats above the counter; with no crop the band is the stage percentage it always was
+- a landscape tablet (768 px wide or more, 700 px high or more, landscape) takes the desk's wide framing of the room and its
+points: the tall file cropped to a landscape stage shows no counter at all. Below 700 px high the tall framing stays
+- where the crop takes the painted ceiling off the top of the stage, the 간판 hangs the gap below the stage's top edge
+- the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
+- covered: phone 360~430 at the heights a browser leaves (640~932), portrait tablet 768~912, landscape tablet 900~1023 and
+desk 1024~1920
+```
+
+## AMENDMENT — LIVE STORE DECORATION SEATING — tablets, review follow-up (User 2026-09-27, v2.9.9)
+
+The branch plate takes its desk size only on a stage 760 px high or more, so it clears the counter pieces on a 700-high stage. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+down behind the dock (a portrait tablet, a short desk) it rises to just above the Action instead; it takes its larger
+desk size only on a stage 760 px high or more, so on a 700-high stage it still clears the counter pieces above it
 ```

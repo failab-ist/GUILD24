@@ -11,7 +11,6 @@ confirmed by the User.
   the painting is cropped at the top and bottom, which moved the 간판 onto the DAY sign and pushed the 진열대 / 계산대 pieces
   into the till housing. The sign and plaque now follow the painting under either crop (the sign never nearer the DAY sign
   than the gap), and the counter pieces stand on the housing's base line and never closer to it than a fixed gap. New runtime check `tools/qa-deco-seating.cjs` in `qa:runtime`.
-  Deferred: at 768~1023 the till band itself floats above the painted counter.
 - Decoration outline (same owner section): the eight drawings' outer outline was a full near-black art pixel and read as a
   sticker on the painting. It is now half a pixel thick at 55% opacity, so the ceiling, wall or counter shows through;
   the 진열대 / 계산대 pieces keep their bottom line (and the safe its legs) whole and opaque to stay on the counter.
@@ -33,6 +32,12 @@ confirmed by the User.
 - One colour per button family (same owner section): `영업 시작` takes `발주 확정`'s steel and frost edge; `첫 점포지원 고르기`
   takes the BRICK bevel of `다음 날` / `다음 점포 열기` and keeps its rivets. Two new synthesised cues (UI_UX §SFX coverage):
   `begin` for `첫 점포지원 고르기`, which was silent, and `newstore` for `다음 점포 열기`, which played the tab click.
+- Tablets (UI_UX §LIVE STORE DECORATION SEATING, UI_UX_QA UI-Q-v29-40): on a portrait tablet the till band floated 60~90 px
+  above the painted counter, and on a landscape tablet the tall painting showed no counter at all. The counter band now
+  follows the painting under any crop, and a landscape tablet (768+ wide, 700+ high) takes the desk's wide framing; the
+  간판 stays on screen and the branch plate stays clear of the dock Action and the counter pieces (its desk size only on a
+  stage 760 px high or more). Tablet sizes added to `qa-deco-seating` and
+  `qa-prep-scene`.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

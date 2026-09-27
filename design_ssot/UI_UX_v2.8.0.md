@@ -1978,8 +1978,17 @@ sides on a stage narrower than the file, at the top and bottom on one wider than
   opaque, so its feet stay on the surface; a line another part of the drawing sits on (a trophy's stem, a sign's hangers)
   is outline along its whole length and stays whole where that part touches it, so nothing floats. Interior lines of the
   drawing are unchanged
-- phone 360~430 at the heights a browser leaves (640~932) and desk 1024~1920 are covered. The 768~1023 tablet framing is out
-  of scope: there the till band itself floats above the painted counter (deferred finding, User 2026-09-27)
+- the till housing stands on the painted counter top under any crop (User 2026-09-27, v2.9.9 tablet batch): the counter
+  band is sized by the drawn painting and moved down by the height the crop takes off its top, so on a portrait tablet the
+  housing no longer floats above the counter; with no crop the band is the stage percentage it always was
+- a landscape tablet (768 px wide or more, 700 px high or more, landscape) takes the desk's wide framing of the room and its
+  points: the tall file cropped to a landscape stage shows no counter at all. Below 700 px high the tall framing stays
+- where the crop takes the painted ceiling off the top of the stage, the 간판 hangs the gap below the stage's top edge
+- the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
+  down behind the dock (a portrait tablet, a short desk) it rises to just above the Action instead; it takes its larger
+  desk size only on a stage 760 px high or more, so on a 700-high stage it still clears the counter pieces above it
+- covered: phone 360~430 at the heights a browser leaves (640~932), portrait tablet 768~912, landscape tablet 900~1023 and
+  desk 1024~1920
 
 ### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
 

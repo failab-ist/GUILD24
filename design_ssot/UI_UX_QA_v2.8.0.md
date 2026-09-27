@@ -1496,18 +1496,24 @@ FAIL:
 SETUP:
 each Decoration set equipped (sponsorSign / honorFrame / thriftSafe / guildShelf, and trainingSign / infirmaryPlaque /
 memorialBook / aidCabinet), first MORNING, reduced motion, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915, 430x740,
-1024x768, 1280x880 and 1920x1080.
+768x1024, 820x1180, 900x700, 1023x768, 1024x768, 1280x880 and 1920x1080 (the tall file up to 820 wide, the wide file from
+900x700 on).
 
 PASS:
+- the till housing's feet on the painted counter top (the file's 74.2~76.2% tall, 82.7~85.5% wide) under the crop that
+  size produces
 - all four pieces drawn; 간판 and 벽면 within 1 px of their point of the painting under the crop that size produces (the 간판
-  left of it only where that keeps the gap from the DAY sign, and then exactly at the gap)
+  left of it only where that keeps the gap from the DAY sign, and then exactly at the gap; never above the gap below the
+  stage's top edge)
 - 진열대 and 계산대 feet within 1 px of the till housing's base line, at least the gap (6 px phone, 10 px desk) from it
 - no piece overlapping the till housing, its label, the DAY sign, the board, the branch plate, the dock or another piece; every
   piece on screen
+- the branch plate at least 6 px clear of the dock Action, and at least 6 px under a counter piece it sits below
 
 FAIL:
 - a piece on the housing or its label, standing on another line than the housing, or placed off its painted point when the
-  painting is cropped at the top and bottom; the 간판 touching the DAY sign
+  painting is cropped at the top and bottom; the 간판 touching the DAY sign; the till housing above or below the painted
+  counter; the branch plate on the dock Action
 
 ### UI-Q-v29-35 — BOSS REVEAL AFTER MORNING LANDS
 

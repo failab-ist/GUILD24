@@ -202,7 +202,14 @@
    the file this breakpoint is carrying: the DAY sign hangs from the art's ceiling, and the
    counter band starts where the art's counter top starts */
 .p-morning .band.ceiling{flex:0 0 21%}
-.p-morning .band.counter{flex:0 0 calc(var(--band-c) * 100%)}
+/* v2.9.9 (UI_UX §LIVE STORE DECORATION SEATING): the painting is `cover`, so on a stage wider than the file's aspect
+   (a tablet, a phone with its bars showing) it is cropped top and bottom and drawn taller than the stage. The counter
+   band is then sized by and moved to the painting's own counter - --ph is the drawn height, and the band is pushed
+   down by the height cropped off the top - so the till stands on the painted counter at any crop. With no crop
+   (--ph is the stage) this is exactly the band the stage percentage gave. */
+.p-morning .store{container-type:size;--ar:.5628;--ph:max(100cqh,100cqw / var(--ar));
+ --band-top:calc(50cqh + (.5 - var(--band-c)) * var(--ph))}
+.p-morning .band.counter{flex:0 0 calc(var(--band-c) * var(--ph));transform:translateY(calc((var(--ph) - 100cqh) / 2))}
 .p-morning .band.ceiling .mount,.p-morning .band.counter .mount{height:100%}
 .p-morning .store>.band{position:relative;z-index:0}
 /* THE TILL IS SEATED, NOT ANCHORED BY HABIT. Scene's published anchor put it in the middle of
@@ -262,24 +269,36 @@
    height.
    Quiet on purpose: a mark on the furniture, not a badge, and it never outranks the board, the
    float or the Action. */
-.p-morning .branchplate{right:7%;left:auto;top:52%;bottom:auto;padding:3px 9px;opacity:1;
+/* v2.9.9: on a portrait tablet the painted counter front runs down behind the dock, so the plate keeps its spot on the
+   front only while that clears the dock (--dock-room: the Action and a gap); otherwise it rises to just above it.
+   --band-top is the counter band's top edge in the stage, declared on .store with --ph (§.band.counter). */
+.p-morning{--dock-room:80px;--plate-h:18px}
+.p-morning .branchplate{right:7%;left:auto;top:min(52%,calc(100cqh - var(--dock-room) - var(--plate-h) - var(--band-top)));bottom:auto;padding:3px 9px;opacity:1;
  font:500 12px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;
  box-shadow:inset 0 0 0 1px #6b5029,inset 0 1px 0 #00000073,0 2px 0 #00000080}
 /* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
 .p-morning .store>.board{position:relative;z-index:2}
 .p-morning .daysign,.p-morning .till,.p-morning .till-cap,.p-morning .branchplate{z-index:2}
 
-/* DESKTOP / wide viewport takes the wide framing of the same store. The switch is the sheet's
+/* DESKTOP / wide viewport takes the wide framing of the same store - and so does a landscape tablet (v2.9.9, UI_UX
+   §LIVE STORE DECORATION SEATING: the tall file cropped to a landscape stage shows no counter at all). The switch is the sheet's
    existing 1024 breakpoint, and everything that moves with it is geometry the other file
    measures differently: its ceiling ends a little lower, and its counter top sits at 82.7-85.2%
    instead of 74.2-76.0%, so the band that seats the till starts there and the housing's feet
    land at 85% of the stage. Same live layer, same order, same store - the other framing of it. */
-@media(min-width:1024px){
+@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){
  .p-morning{background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
    url('assets/presentation/morning/store-bg-wide.png')}
  .p-morning .band.ceiling{flex:0 0 19%}
  .p-morning{--band-c:.30;--till-x:.32;--till-w:.36;--till-top:.233;--till-h:.267;--cap-top:.126;--cap-h:.107}
+ .p-morning .store{--ar:1.7768}
  /* the wide file's counter face starts lower inside its own band, and the plate has a wider
     surface to sit on here, so it takes one step up in size - a plate, still not a sign */
- .p-morning .branchplate{top:56%;padding:5px 13px;font-size:15px;letter-spacing:.02em}
+ .p-morning .branchplate{top:min(56%,calc(100cqh - var(--dock-room) - var(--plate-h) - var(--band-top)))}
+}
+/* the plate's desk size needs a tall enough stage: between the counter pieces and the dock Action a 700-high stage has
+   room only for the phone plate (v2.9.9, User 2026-09-27) */
+@media(min-width:1024px) and (min-height:760px),(min-width:768px) and (min-height:760px) and (orientation:landscape){
+ .p-morning{--plate-h:25px}
+ .p-morning .branchplate{padding:5px 13px;font-size:15px;letter-spacing:.02em}
 }

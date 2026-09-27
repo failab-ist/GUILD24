@@ -1463,14 +1463,11 @@ New owner rule and its acceptance: 간판 / 벽면 follow the painting under eit
 `qa:runtime`.)
 each Decoration set equipped (sponsorSign / honorFrame / thriftSafe / guildShelf, and trainingSign / infirmaryPlaque /
 memorialBook / aidCabinet), first MORNING, reduced motion, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915, 430x740,
-1024x768, 1280x880 and 1920x1080.
 - all four pieces drawn; 간판 and 벽면 within 1 px of their point of the painting under the crop that size produces (the 간판
-left of it only where that keeps the gap from the DAY sign, and then exactly at the gap)
 - 진열대 and 계산대 feet within 1 px of the till housing's base line, at least the gap (6 px phone, 10 px desk) from it
 - no piece overlapping the till housing, its label, the DAY sign, the board, the branch plate, the dock or another piece; every
 piece on screen
 - a piece on the housing or its label, standing on another line than the housing, or placed off its painted point when the
-painting is cropped at the top and bottom; the 간판 touching the DAY sign
 ```
 
 ## AMENDMENT — v2.9.9 OPENING TITLE LOGO (User 2026-09-27)
@@ -1554,4 +1551,27 @@ whose Action looks the same
 - `영업 시작` and `발주 확정` show the same steel face and frost edge; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열기` the same
 BRICK build (only the rivets differ); a disabled `영업 시작` casts nothing
 - pressing `첫 점포지원 고르기` plays `begin` and `다음 점포 열기` plays `newstore`, neither the navigation click
+```
+
+## AMENDMENT — LIVE STORE DECORATION SEATING — tablets (User 2026-09-27, v2.9.9)
+
+The deferred tablet finding is fixed: the counter band follows the painting, landscape tablets take the wide framing, the sign stays on screen, the branch plate clears the dock. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+768x1024, 820x1180, 900x700, 1023x768, 1024x768, 1280x880 and 1920x1080 (the tall file up to 820 wide, the wide file from
+900x700 on).
+- the till housing's feet on the painted counter top (the file's 74.2~76.2% tall, 82.7~85.5% wide) under the crop that
+size produces
+left of it only where that keeps the gap from the DAY sign, and then exactly at the gap; never above the gap below the
+stage's top edge)
+painting is cropped at the top and bottom; the 간판 touching the DAY sign; the till housing above or below the painted
+counter; the branch plate on the dock Action
+```
+
+## AMENDMENT — LIVE STORE DECORATION SEATING — tablets, review follow-up (User 2026-09-27, v2.9.9)
+
+The branch plate takes its desk size only on a stage 760 px high or more, so it clears the counter pieces on a 700-high stage. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the branch plate at least 6 px clear of the dock Action, and at least 6 px under a counter piece it sits below
 ```

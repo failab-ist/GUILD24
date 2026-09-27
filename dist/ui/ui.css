@@ -2310,7 +2310,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  --mw:min(100cqw,var(--counter-roomw,100cqw));
  --till-l:calc(50cqw + var(--mw) * (var(--till-x) - .5));
  --till-r:calc(50cqw + var(--mw) * (var(--till-x) + var(--till-w) - .5));
- --till-b:calc(100cqh * (1 - var(--band-c) * (1 - var(--till-top) - var(--till-h))));
+ --till-b:calc(50cqh + (.5 - var(--band-c) * (1 - var(--till-top) - var(--till-h))) * var(--ph));
  /* the DAY sign's left edge, from its published anchor, in the ceiling mount (the stage, or its cap on a desk) */
  --sign-l:calc(50cqw + min(100cqw,var(--ceiling-roomw,100cqw)) * (var(--daysign-x) - .5));
  --gap:6px}
@@ -2321,6 +2321,9 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the drawn painting. --x / --y are fractions of the file, --w a fraction of its width, --ar its aspect. */
 .decoplate.sign,.decoplate.wall{left:calc(50cqw + (var(--x) - .5) * var(--ph) * var(--ar));
  top:calc(50cqh + (var(--y) - .5) * var(--ph));width:calc(var(--w) * var(--ph) * var(--ar))}
+/* where the crop takes the painted ceiling off the top of the stage (a portrait tablet), the 간판 hangs the gap below
+   the stage's top edge instead of above it */
+.decoplate.sign{top:max(var(--gap),calc(50cqh + (var(--y) - .5) * var(--ph)))}
 /* the 간판 hangs from the same ceiling as the DAY sign: on its painted spot while there is room, and never nearer the
    DAY sign than the gap - on a short phone the painting's spot comes right up to it */
 .decoplate.sign{left:min(calc(50cqw + (var(--x) - .5) * var(--ph) * var(--ar)),
@@ -2339,7 +2342,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .decoplate.display{--cx:.18;--dw:.15}
 .decoplate.counter{--cx:.825;--dw:.15}
 /* wide file (1672x941): ceiling 0-19 */
-@media(min-width:1024px){
+@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){
  .deco-layer{--ar:1.7768;--gap:10px}
  .decoplate.sign{--x:.29;--y:.093;--w:.08}
  .decoplate.wall{--x:.629;--y:.44;--w:.038}
@@ -2383,7 +2386,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the 간판 hangs just above the board, so its tag is one line: under it on a phone (the branch plate is beside it),
    to its left on a desk (the board is right under it and the branch plate to its right) */
 .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:calc(100% + 3px);grid-auto-flow:column;align-items:baseline;gap:5px}
-@media(min-width:1024px){
+@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){
  .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:50%;left:auto;right:calc(100% + 6px);transform:translateY(-50%)}
  .p-prep .opening-logo{width:320px}
  .p-prep .band.ceiling .opening{padding-top:calc(env(safe-area-inset-top) + 14px)}

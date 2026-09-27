@@ -1380,7 +1380,8 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  assert.ok(/\.decoplate\.sign,\.decoplate\.wall\{left:calc\(50cqw \+ \(var\(--x\) - \.5\) \* var\(--ph\) \* var\(--ar\)\);\s*top:calc\(50cqh \+ \(var\(--y\) - \.5\) \* var\(--ph\)\)/.test(css),
   'the sign and the plaque follow the painting on both axes');
  // the counter pieces read the till's own numbers: feet on its base line, never nearer it than the gap
- assert.ok(/--till-b:calc\(100cqh \* \(1 - var\(--band-c\) \* \(1 - var\(--till-top\) - var\(--till-h\)\)\)\)/.test(css),'the till base line is derived, not copied');
+ // v2.9.9 tablets: in the painting's coordinates, so it stays on the painted counter under a top-and-bottom crop
+ assert.ok(/--till-b:calc\(50cqh \+ \(\.5 - var\(--band-c\) \* \(1 - var\(--till-top\) - var\(--till-h\)\)\) \* var\(--ph\)\)/.test(css),'the till base line is derived, not copied');
  assert.ok(/\.decoplate\.display,\.decoplate\.counter\{bottom:calc\(100cqh - var\(--till-b\)\)/.test(css),'the counter pieces stand on it');
  assert.ok(/\.decoplate\.display\{left:min\(var\(--spot\),calc\(var\(--till-l\) - var\(--gap\)/.test(css),'the display piece stops at the gap left of the till');
  assert.ok(/\.decoplate\.counter\{left:max\(var\(--spot\),calc\(var\(--till-r\) \+ var\(--gap\)\)\)/.test(css),'the counter piece stops at the gap right of it');
@@ -1388,6 +1389,17 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  assert.ok(fn('morningScreen').includes("'<div class=\"store\" style=\"--daysign-x:'+Scene.anchors.daysign.left/100+'\">'"),'the DAY sign edge comes from Scene.anchors');
  assert.ok(/\.decoplate\.sign\{left:min\([^;]*calc\(var\(--sign-l\) - var\(--gap\)/.test(css),'the 간판 keeps the gap from the DAY sign');
  const review=read('dist/ui/director-review.css');
+ /* v2.9.9 tablets (User 2026-09-27): the counter band is the painting's, moved down by what the crop takes off its top; a
+    landscape tablet takes the wide framing; the branch plate never sits on the dock Action; the 간판 stays on the stage */
+ assert.ok(/\.p-morning \.store\{container-type:size;--ar:\.5628;--ph:max\(100cqh,100cqw \/ var\(--ar\)\)/.test(review)
+  &&/\.p-morning \.band\.counter\{flex:0 0 calc\(var\(--band-c\) \* var\(--ph\)\);transform:translateY\(calc\(\(var\(--ph\) - 100cqh\) \/ 2\)\)\}/.test(review),
+  'the counter band follows the painting');
+ const LAND='@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){';
+ assert.ok(review.includes(LAND+"\n .p-morning{background-image")&&css.includes(LAND+'\n .deco-layer{--ar:1.7768')&&css.split(LAND).length===3,
+  'the wide framing, its points and the preparation scene\'s desk layout switch together');
+ assert.ok(/\.p-morning \.branchplate\{right:7%;left:auto;top:min\(52%,calc\(100cqh - var\(--dock-room\) - var\(--plate-h\) - var\(--band-top\)\)\)/.test(review),'the branch plate stays clear of the dock');
+ assert.ok(/\.decoplate\.sign\{top:max\(var\(--gap\),/.test(css),'the 간판 never hangs above the stage');
+ assert.ok(/@media\(min-width:1024px\) and \(min-height:760px\),\(min-width:768px\) and \(min-height:760px\) and \(orientation:landscape\)\{\n \.p-morning\{--plate-h:25px\}/.test(review),'the plate takes its desk size only on a tall enough stage');
  assert.ok(/\.p-morning \.till\{left:calc\(var\(--till-x\) \* 100%\)!important;width:calc\(var\(--till-w\) \* 100%\)!important;\s*top:calc\(var\(--till-top\) \* 100%\)!important;height:calc\(var\(--till-h\) \* 100%\)!important\}/.test(review),
   'and the housing is placed by the same numbers');
  for(const slot of D.decorationSlots){
