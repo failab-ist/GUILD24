@@ -869,7 +869,6 @@ The `투력 +10` on `마그마 냉각장비` is an explicit catalog exception; i
 User 2026-09-26: the SALE shelf sorts by kind (대응 장비, 음식, 음료, 포션, 보험, 특수), then nearest discard, then higher Rarity, held for the Day. Lines declared earlier and now superseded are removed from their fences above.
 
 ```new
-SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries `폐기 N일` (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
 ```
 
 ## AMENDMENT — v2.9.7 Counter ladder (User 2026-09-27)
@@ -1071,4 +1070,12 @@ The approved `lunchbox` (was `bar`) repurpose is Uncommon.
 | lowpotion | 하급 포션 | Potion | 3d |
 | hood | 방한 두건 | Field Gear | 4d |
 | worldcharm | 세계수 생환부적 | Insurance | 5d |
+```
+
+## AMENDMENT — v2.9.10 category tag, rarity colour, last sale day (User 2026-09-27)
+
+Every Item names its category on ORDER (with the rarity word in its colour), the SALE shelf rows and the tray; the tray tile edge takes the rarity colour; shelf life on stock reads as the last sale day; the guide line says 야외장비. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries its last sale day, `오늘까지 / 내일까지 / DAY {N}까지` (v2.9.10; exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
 ```

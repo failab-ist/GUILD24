@@ -1148,7 +1148,7 @@ item type
 Consumed physical unit:
 nearest expiry first
 
-SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries `폐기 N일` (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
+SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries its last sale day, `오늘까지 / 내일까지 / DAY {N}까지` (v2.9.10; exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
 
 Consumer slot limit is separate from inventory visibility.
 

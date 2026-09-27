@@ -377,7 +377,6 @@ retired. The revision-1 declarations this replaces were edited out of the fences
 User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistributed (삼각김밥 4 · 컵라면 2 · 간단 도시락 5 · 초코바 3 · 집중 사탕 2 · 불룡볶음면 2 with 강인함 +5 · 길드 특제 도시락 6; 영웅 결전 도시락 stays 9; Drinks unchanged); every Item expires (ITEM §SHELF LIFE — EXACT, 2~5 days); the SALE shelf is ordered by days left with a `폐기 N일` chip; operating cost dayBase 90 + 5 × (Day − 1); expedition Wallet multipliers keyed on the Outcome (대성공/성공 0.90 · 퇴각 0.35 · 부상 0.20 · 중상 0.10 · 사망 0); 세계수 생환부적 400 / 800. Earlier rows this batch supersedes were removed from the fences above in place.
 
 ```new
-Shelf order: rows are sorted by days left before discard, nearest first, ties in the existing order; every row carries `폐기 N일` and a row at 1 day or less is emphasized. This is stock management, never a best-fit or recommendation order; it does not change with the customer (User 2026-09-25, v2.9.0).
 ```
 
 ## AMENDMENT — v2.9.0 F6: fit emphasis retired / fixed effect order / category grammar once / transaction result stub (User decision 2026-09-24)
@@ -410,4 +409,12 @@ User 2026-09-25: minimum one visitor per open Gate when visitors ≥ Gates.
 
 ```new
 - when a Day has at least as many visitors as open Gates, every open Gate is some visitor's expected destination: a Gate the draw left empty takes one visitor from a Gate that holds two or more (`NPC_TRAIT_v2.8.0.md` destinationCoverage; User 2026-09-25 — the per-Gate visitor count showed Gates nobody would visit)
+```
+
+## AMENDMENT — v2.9.10 category tag, rarity colour, last sale day (User 2026-09-27)
+
+Every Item names its category on ORDER (with the rarity word in its colour), the SALE shelf rows and the tray; the tray tile edge takes the rarity colour; shelf life on stock reads as the last sale day; the guide line says 야외장비. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+Shelf order: rows are sorted by days left before discard, nearest first, ties in the existing order; every row carries its last sale day (`오늘까지 / 내일까지 / DAY {N}까지`, User 2026-09-27, v2.9.10) and a row on its last day is emphasized. This is stock management, never a best-fit or recommendation order; it does not change with the customer (User 2026-09-25, v2.9.0).
 ```

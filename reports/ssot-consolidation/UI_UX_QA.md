@@ -950,7 +950,6 @@ does the same (User 2026-09-24, v2.9.0)
 ### UI-Q101 / UI-Q09 — NEXT-DAY FORECAST — RETIRED
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown at MORNING or ORDER; FAIL if any next-day block, percentage or count appears. The individual-customer boundary (name, Job, Trait, Wallet, destination hidden; per-Gate visitor count public) is checked by UI-Q-v29-14 / ORD-Q84.
 ### UI-Q-v29-20 — ORDER ROW RARITY LINE / BLOCKED-QUANTITY REASON
-- every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
 - tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; an offer whose whole supply for today is already in the cart shows `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9)
 - the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
 - no `내일` block on ORDER
@@ -975,7 +974,6 @@ User decisions 2026-09-24/25 (v2.9.0 F4): Food/Drink Fatigue recovery redistribu
 ### UI-Q-v29-20 — SHELF EXPIRY ORDER
 (User 2026-09-25, v2.9.0)
 SALE with a shelf holding units stocked on different days (some at 1 day left), at 360 and 1280; the same shelf for two customers going to different Gates.
-- every row carries `폐기 N일`; a row at 1 day or less is emphasized in the warehouse `.soon` color
 - no `유통기한 없음` / `기한 없음` state appears on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
 - rows keep one name line + one effect line; no overflow at 360
 - an order that changes with the customer's Gate, or a recommendation word
@@ -1681,4 +1679,17 @@ landing (`rumble`, `supply`, `clash`, `counter`, `collapse`)
 - an item a member did not carry (or one missing), the bar giving the result away before the verdict, the bar rising, a
 clear that does not empty the bar, an empty bar on a failure, a damage number, a skip that does not work, or anything of
 the scene in the Save
+```
+
+## AMENDMENT — v2.9.10 category tag, rarity colour, last sale day (User 2026-09-27)
+
+Every Item names its category on ORDER (with the rarity word in its colour), the SALE shelf rows and the tray; the tray tile edge takes the rarity colour; shelf life on stock reads as the last sale day; the guide line says 야외장비. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- every offer row shows `{category} · {rarity}` in one small line under the Item name, the rarity word in its rarity colour
+(v2.9.10), no horizontal overflow at 360
+- every SALE shelf row and the tray carry the category tag; the tray tile's edge is the same rarity colour as its shelf row
+(v2.9.10)
+- every row carries its last sale day (`오늘까지` / `내일까지` / `DAY {N}까지`, v2.9.10), the tray and the 재고 정리 list the same;
+a row on its last day is emphasized in the warehouse `.soon` color
 ```

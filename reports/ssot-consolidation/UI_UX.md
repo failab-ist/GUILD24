@@ -947,7 +947,6 @@ Design intent:
 Still hidden:
 - next-day Family / exact Gate composition / Hazard set
 4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
-- the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
 - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 ```
 
@@ -1403,7 +1402,6 @@ gold at exactly 0 (User 2026-09-26) - each colour stated in CSS so reduced motio
 User 2026-09-26: the SALE shelf sorts by kind (대응 장비, 음식, 음료, 포션, 보험, 특수), then nearest discard, then higher Rarity, held for the Day. Lines declared earlier and now superseded are removed from their fences above.
 
 ```new
-- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
 ```
 
 ## AMENDMENT — v2.9.7 build marker in 영업 설정 (User 2026-09-26)
@@ -1744,4 +1742,20 @@ it should
 for three carrying six items), and a tap always skips it
 - sound: one cue per landing - a low `rumble` on the Boss card's landing, `supply` on each item, `clash` on each impact,
 `counter` on each counter, `collapse` on a clear; the departure's `final` cue and the ending's seal cue are unchanged
+```
+
+## AMENDMENT — v2.9.10 category tag, rarity colour, last sale day (User 2026-09-27)
+
+Every Item names its category on ORDER (with the rarity word in its colour), the SALE shelf rows and the tray; the tray tile edge takes the rarity colour; shelf life on stock reads as the last sale day; the guide line says 야외장비. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- one small line under the Item name: `{category} · {rarity}` — the category word (`음식 / 음료 / 포션 / 야외장비 / 보험 / 특수`,
+the words the Events and Store Supports already use; User 2026-09-27, v2.9.10) and the rarity name (`일반 / 고급 / 희귀 / 영웅 /
+전설`) in its rarity colour, a paper-legible shade of the shelf tile's hue — identity facts, not a role chip (User 2026-09-24,
+v2.9.0)
+- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the stock's last sale day - `오늘까지` / `내일까지` / `DAY {N}까지` (User 2026-09-27, v2.9.10; it was
+`폐기 N일`, which left open whether today counted; the tray and the 재고 정리 list read the same) - emphasized (the warehouse list's `.soon` color) on its last day; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
+- every shelf row and the tray name the Item's category in the same small tag after its name (`음식 / 음료 / 포션 / 야외장비 /
+보험 / 특수`, User 2026-09-27, v2.9.10); the icon tile's bottom edge is the Item's rarity colour on the shelf row and on the
+tray alike (the tray's had been a fixed gold)
 ```

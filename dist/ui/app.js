@@ -30,6 +30,9 @@ let prepOpen=false;
 let decoPending=null,decoFocus=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
+/* v2.9.10 (User 2026-09-27): shelf life on stock reads as the last day it can be sold - `오늘까지`, `내일까지`, then the DAY
+   itself - instead of a count of days that left open whether today was included. (ORDER keeps `유통기한 N일`.) */
+const lastSaleDay=left=>left<=1?'오늘까지':left===2?'내일까지':'DAY '+(game.run.day+left-1)+'까지';
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;x.cost=st.cost;}}return [...m.values()];};
 /* UI_UX §NIGHT LAYOUT — UNLOCK NOTICE: `새 상품 해금 · {상품명}` is two meaning units, so it is set as
    two lines - the fixed label, then the product - instead of one sentence the notice width
@@ -1142,7 +1145,7 @@ const coachSteps={
  /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself.
     Seen state is keyed by step id alone, so ORDER's gates step is `order-gates`: sharing MORNING's `gates` id marked it seen
     before the first ORDER ever opened (fixed 2026-09-26). */
- order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
+ order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
  /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
     (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
@@ -1445,7 +1448,7 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
         presentation rather than a generic rarity-attribution UI. */
      +'<span class="nm"><b>'+E(it.name)+'</b>'+(o.origin==='blackmarket'?'<i class="origin">암시장</i>':'')+'</span>'
      /* UI_UX §ORDER ITEM INFORMATION HIERARCHY (User 2026-09-24, v2.9.0): the rarity name as one small identity line, not a role chip */
-     +'<span class="kind">'+E(D.rarities[it.rarity])+'</span>'
+     +'<span class="kind">'+E(itemKind(it))+' · <i class="rar r'+it.rarity+'">'+E(D.rarities[it.rarity])+'</i></span>'
      /* UI-Q39: `야외채집 · 마력 보강 / 주문 제작` is the internal taxonomy the catalogue is
         organised by, not something a player decides with - and it never reaches a render path.
         The data stays: ordering weights and Relic conditions read `category`. What the row
@@ -1461,9 +1464,10 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
  +'<button class="rubber" data-action="reroll" '+(price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
  +'</div>';}
-/* Sparse player-facing grouping only where the distinction helps comparison. Internal
-   category/role taxonomy stays hidden; this reads the item's actual potion marker. */
-const itemKind=it=>it.effects?.potion?'포션':'';
+/* v2.9.10 (User 2026-09-27): every Item names its category (음식 / 음료 / 포션 / 야외장비 / 보험), the words the Events and
+   the Store Supports already speak in (`음식·음료`, `보험`, `야외장비`) - without it a first Run cannot tell which Items they
+   mean. The role taxonomy stays hidden. */
+const itemKind=it=>D.categories[it.category]||'';
 /* FINAL_EXPEDITION §3 Item truth. What one participant's Final snapshot (Boss participant-side
    modifier included, ENVY's party-wide target pass included) is now, and would be with this Item
    in the Bag - both read off game.finalPreRoll(), the pre-roll the resolution itself uses, so no
@@ -1502,7 +1506,7 @@ function shelf(isFinal=false){
      Final effect says so on its row before it is even opened. */
   return '<button class="good r'+it.rarity+(open?' open':'')+(noop?' final-noop':'')+'" data-action="select" data-id="'+st.id+'" '+(isFinal?'aria-expanded':'aria-pressed')+'="'+open+'">'
   +'<span class="tile">'+Art.itemIcon(it.id,32)+'</span><span class="what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b>'+(noop?'<span><em class="noop">'+E(Copy.finalPrep.noEffect)+'</em></span>':shelfEffects(Presentation.rows(isFinal&&n?finalItemEffects(n,it):it.effects,undefined,it.category)))+'</span>'
-  +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span><em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em></span></button>'+(open&&isFinal?till():'');}).join('')
+  +'<span class="price"><b>'+(isFinal?game.finalPrice(it.id):it.sell)+'G</b><span>재고 '+st.count+'</span><em class="expiry'+(left<=1?' soon':'')+'">'+lastSaleDay(left)+'</em></span></button>'+(open&&isFinal?till():'');}).join('')
  +'</div>'+(stocks.length?'':'<p class="muted">진열대가 비었다.</p>')+'</section>';}
 /* ITEM §PRESENTATION ORDER / UI_UX §SALE (User 2026-09-25): the shelf row states EVERY effect line, like the ORDER row
    and the codex - it used to stop at two, so a third effect (불룡볶음면's 냉기 대응) only appeared on the tray. The row
@@ -1559,10 +1563,10 @@ function tray(){const s=game.run,n=game.current(),st=groupStock().find(x=>x.id==
  const parts=moved.direct.map(r=>'<b class="'+[r.bad?'effect-bad':'',r.key==='supply'&&n.fatigue>0?'fatigue':''].filter(Boolean).join(' ')+'">'
   +E(r.label)+' '+Presentation.amount(r.key,r.before)+' → '+Presentation.amount(r.key,r.after)+'</b>');
  const shown=new Set(moved.direct.map(r=>r.key)),rest=Presentation.rows(it.effects,undefined,it.category).filter(r=>!shown.has(r.key));
- const life='폐기까지 '+(st.expires-s.day)+'일';
+ const life=lastSaleDay(st.expires-s.day);
  return '<div class="counter-tray'+(trayFolded?' folded':'')+'" role="region" aria-label="계산대">'
   +'<button type="button" class="tray-unfold" data-action="tray-open" aria-expanded="'+!trayFolded+'" aria-label="계산대 열기"></button>'
-  +'<div class="tray-item"><span class="tray-icon">'+Art.itemIcon(it.id,32)+'</span>'
+  +'<div class="tray-item"><span class="tray-icon r'+it.rarity+'">'+Art.itemIcon(it.id,32)+'</span>'
   +'<span class="tray-what"><b>'+E(it.name)+(kind?'<i class="item-kind">'+E(kind)+'</i>':'')+'</b><span>'+it.sell+'G · 재고 '+st.count+' · '+life+'</span></span>'
   +'<span class="tray-who"><b>'+E(n.name)+'에게</b> · '+walletChip(n)+'</span></div>'
   +'<p class="tray-delta"><span class="delta-src">판매 후 변화</span>'+(parts.length?parts.join('<i> · </i>'):'<b>현재 준비 변화 없음</b>')+'</p>'
@@ -1618,7 +1622,7 @@ function till(){const s=game.run,st=s.inventory.find(x=>x.id===selected),n=s.pha
    if(!rest.length)return '';
    return '<p class="delta-src">특수 효과</p><ul class="effects">'
     +rest.map(r=>'<li class="'+(r.bad?'effect-bad':'')+'"><span>'+E(r.label)+'</span><b>'+E(r.text)+'</b></li>').join('')+'</ul>';})()
- +'<p class="smalltext">폐기까지 '+(st.expires-s.day)+'일</p>'
+ +'<p class="smalltext">'+lastSaleDay(st.expires-s.day)+'</p>'
  +status+'<div class="tills">'+actions+'</div></div>';}
 function eventReveal(){const e=game.run.event;if(!e)return '';return '<div class="event-reveal"><p class="flavor">'+E(e.reveal)+'</p><p class="effect">'+E(e.description)+'</p></div>';}
 function ownedRelicView(){const owned=game.ownedRelics();if(!owned.length)return '';return '<details class="owned-relics"><summary>보유 점포지원 '+owned.length+'/7</summary>'+owned.map(r=>{const st=Relics.status(game,r.id);return '<div><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</div>';}).join('')+'</details>';}
@@ -1991,7 +1995,7 @@ function unlockBoard(){const {done,next}=unlockLists();
    not counted or shown. */
 const discoveryLines=a=>(a.discoveries||[]).map(e=>Presentation.eventLine(e)).filter(Boolean);
 function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexTab==='jobs'?D.jobs:codexTab==='facilities'?D.relics:[];return `<div class="row between wrap" style="margin-bottom:18px"><div><h3>본사 기록</h3><p class="smalltext">점포 자본 ${Meta.storeCapital(a).toLocaleString()} · 보유 장식 ${Meta.ownedDecorations(a).length} / ${D.decorations.length}</p><p class="smalltext">직업 숙련 ${Meta.totalJobMastery(a)} / 42 · 서로 다른 마왕 토벌 ${Meta.distinctBossClear(a)} / 7</p></div><span class="muted">${a.runs}회 영업 · ${a.wins}회 마왕 토벌</span></div><details><summary>발견 수첩 · ${discoveryLines(a).length}개</summary>${discoveryLines(a).map(t=>`<p class="discovery">${E(t)}</p>`).join('')||'<p>아직 기록된 발견이 없다.</p>'}</details><div class="tabs">${[['progress','진행도'],['items','상품 '+D.items.length],['jobs','직업 6'],['facilities','점포지원 '+D.relics.length],['store','점포 장식']].map(([id,label])=>btn(label,'codex-tab',codexTab===id?'small active':'small',`data-id="${id}"`)).join('')}</div><div class="unlock-grid">${codexTab==='progress'?progressPanel():codexTab==='store'?storePanel():list.map(it=>`<div class="unlock ${isLocked(it)?'locked':''}">${codexTab==='items'?Art.itemIcon(it.id,42):''}<h3>${E(it.name)}</h3>${it.effects?effectList(it):''}<p class="tale">${E(it.description||'길드 등록 직업.')}</p><p class="gold-text" style="margin-top:8px">${unlockProgress(it)}</p></div>`).join('')}</div>`;}
-function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에만 할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 잔고가 0 이상이 되면 그 자리에서 끝납니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${(st.expires-s.day)+'일 남음'}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
+function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에만 할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 잔고가 0 이상이 되면 그 자리에서 끝납니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${lastSaleDay(st.expires-s.day)}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired. What the player confirms
    before a Run is the Decoration loadout, read from the Account and frozen at start. */
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The store the Run is about to open, as the
@@ -2046,7 +2050,7 @@ function settings(){return `<div class="stack"><p>자동저장은 현재 브라�
    anchored popovers and coach marks already say in context. Approved text, verbatim. */
 /* v2.9.0 (COPY_AUDIT §8-0, UI_UX §GLOBAL HELP): the guide opens on 처음 3일 - five lines - and keeps the eight sections
    under a 자세히 disclosure, collapsed by default. The disclosure lives only inside this modal. */
-function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
+function help(){return `<div class="stack"><div class="first-days"><h3>처음 3일</h3><p>아침 — 오늘 열린 게이트의 위험을 본다.</p><p>발주 — 그 위험에 맞는 능력을 올리는 상품을 들인다.</p><p>판매 — 손님이 갈 게이트를 보고 상품과 가격을 정한다. 판 상품은 손님 가방에 들어간다.</p><p>밤 — 원정 결과와 손님의 변화를 본다.</p><p>마감 — 오늘 남은 돈을 확인하고 다음 날로 간다.</p><p class="grammar">음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.</p></div><details class="more"><summary>자세히</summary><h3>점포지원</h3><p>DAY 0 무료 1개. 이후 DAY 5·10·15·20·25·30에 구매 기회가 온다. 보류한 후보와 가격은 다음 구매 기회 전날까지 유지된다.</p><h3>발주</h3><p>오늘 손님과 게이트를 보고 수량을 정한다. 발주 확정 뒤에도 추가 발주와 후보 교환이 가능하다.</p><h3>판매</h3><p>상품 가격은 50%·100%·150% 중에서 정한다. 팔리면 단골도는 각각 +4·+1·-3.</p><p>손님이 한 번 거절한 가격과 그보다 비싼 가격은, 같은 상품으로 그날 다시 제안할 수 없다.</p><h3>단골</h3><p>단골도가 높을수록 다시 찾아올 가능성과 상품을 살 마음이 커진다. 단골도 51부터 \`단골\`로 표시된다.</p><h3>원정</h3><p>판매한 상품은 그날 원정에서 쓰고 사라진다. 결과는 밤에 확인한다.</p><h3>점포 종료</h3><p>적자 마감은 재고 정리로 회생할 수 있다. 한 영업 최대 3회. 돌아오지 못한 모험가가 사망 한도에 이르면 폐점한다. DAY 30 최종 원정이 끝나면 이번 점포 영업도 끝난다.</p><h3>다음 점포</h3><p>다음 점포에도 본사 기록·해금·직업 숙련·점포 자본·보유 장식은 남는다. 모험가·재고·골드·점포지원은 새로 시작한다.</p><h3>시간</h3><p>실시간 제한 없음.</p></details></div>`;}
 /* Which reveal this Day owes the player, if any. Seen state is persisted, so a reload
    cannot replay a reveal or reorder it (BOSS-Q02, UI-Q40). */
 function bossRevealDue(){const s=game.run;if(!s||!s.bossId||!s.bossReveal)return false;

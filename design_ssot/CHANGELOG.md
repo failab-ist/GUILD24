@@ -3,6 +3,19 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.10 — quick patch after v2.9.9 play (User 2026-09-27)
+
+- **Category on every Item** - UI_UX §ORDER — ITEM INFORMATION HIERARCHY / §SALE — COUNTER TRAY, UI_UX_QA UI-Q-v29-20: the
+  Events (보험·음식 수요) and the Store Supports (음식·음료, 야외장비, 보험) speak in categories the Items never showed, so a
+  first Run could not tell which Items they meant. ORDER's identity line reads `야외장비 · 고급` (the rarity word in its
+  rarity colour); every SALE shelf row and the tray carry the category tag that only 포션 had. The 점주 가이드 line says
+  `야외장비` as the Store Supports do (COPY_AUDIT §8-0). The role taxonomy stays hidden.
+- **One rarity colour per Item**: the tray tile's edge was a fixed gold while its shelf row showed the rarity colour; both
+  are the rarity colour now.
+- **Shelf life as the last sale day** - COPY_AUDIT §4-10, UI_UX §SALE — SHELF ORDER, SALE, ITEM: the shelf, the tray and the
+  재고 정리 list said `폐기 N일` / `폐기까지 N일` / `N일 남음`, which left open whether today counted. They read `오늘까지` /
+  `내일까지` / `DAY {N}까지`; ORDER keeps `유통기한 N일`.
+
 ## v2.9.9 — presentation: the store scene, the dock Actions, SALE, the FINAL clash (User 2026-09-27)
 
 From the reference review of 2026-09-27 (translate each Phase's act into a physical game object, tied together by one

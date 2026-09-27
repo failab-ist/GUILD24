@@ -64,10 +64,9 @@
    forecast while the register drawer was taller than the viewport, so they no longer float. */
 .tills{position:static;background:#0f0b06;padding-bottom:4px}
 
-/* A useful subtype is distinct from both the product name and its numeric effects. app.js
-   only emits this marker for items whose actual data carries the distinction (currently
-   potion-effect items), so this never revives the hidden category/role taxonomy. */
-.good .item-kind{display:inline-block;margin-left:7px;padding:2px 5px;vertical-align:1px;
+/* The Item's category (v2.9.10, User 2026-09-27: every Item, in the words the Events and Store Supports use),
+   distinct from both the product name and its numeric effects; the same small tag on the shelf row and the tray. */
+.good .item-kind,.tray-what .item-kind{display:inline-block;margin-left:7px;padding:2px 5px;vertical-align:1px;
  font:600 10px/1.35 var(--ui);font-style:normal;letter-spacing:.05em;color:#cbb98d;
  background:#00000047;box-shadow:inset 0 0 0 1px #ffffff1f}
 

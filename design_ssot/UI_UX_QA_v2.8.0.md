@@ -439,7 +439,10 @@ Today's situation is understandable and a meaningful Event is not buried among o
 (User 2026-09-24, v2.9.0)
 
 PASS:
-- every offer row shows the rarity name in one small line under the Item name, no horizontal overflow at 360
+- every offer row shows `{category} · {rarity}` in one small line under the Item name, the rarity word in its rarity colour
+  (v2.9.10), no horizontal overflow at 360
+- every SALE shelf row and the tray carry the category tag; the tray tile's edge is the same rarity colour as its shelf row
+  (v2.9.10)
 - tapping a `+ / 1 / 3 / 최대` blocked by Gold shows `발주 자금이 부족합니다. {N}G 부족.`; blocked by warehouse space shows `창고 칸이 부족합니다.`; an offer whose whole supply for today is already in the cart shows `오늘 공급 최대 수량입니다.` (COPY_AUDIT §3-9)
 - the dim look of a blocked control is unchanged; a supply-exhausted control stays non-interactive except for that toast
 - no `내일` block on ORDER
@@ -2496,7 +2499,8 @@ SALE with a shelf holding units stocked on different days (some at 1 day left), 
 PASS:
 - the shelf rows are ordered by kind (대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수), then days left before discard, nearest first, then higher Rarity; ties keep the existing order; the order is identical for both customers (v2.9.7)
 - selling units, including the last unit of an Item's oldest batch, moves no other row within the Day; a sold-out row leaves; the next Day sorts afresh (v2.9.7)
-- every row carries `폐기 N일`; a row at 1 day or less is emphasized in the warehouse `.soon` color
+- every row carries its last sale day (`오늘까지` / `내일까지` / `DAY {N}까지`, v2.9.10), the tray and the 재고 정리 list the same;
+  a row on its last day is emphasized in the warehouse `.soon` color
 - no `유통기한 없음` / `기한 없음` state appears on the tray, the ORDER row or the warehouse list (every Item expires, 2~5 days)
 - rows keep one name line + one effect line; no overflow at 360
 
