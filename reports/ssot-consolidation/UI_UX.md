@@ -1437,3 +1437,15 @@ the screen
 - phone 360~430 at the heights a browser leaves (640~932) and desk 1024~1920 are covered. The 768~1023 tablet framing is out
 of scope: there the till band itself floats above the painted counter (deferred finding, User 2026-09-27)
 ```
+
+## AMENDMENT — v2.9.9 Decoration outline (User 2026-09-27)
+
+The eight Decoration drawings' outer outline becomes half an art pixel at 55% opacity; standing pieces keep their foot line whole and opaque; a line another part sits on stays whole where it is touched. Lines below are new.
+
+```new
+- the pieces are added to a painted room, so their outer outline is light: half an art pixel thick at 55% opacity, the
+room showing through it (User 2026-09-27); a piece that stands on the counter keeps its bottom line (and legs) whole and
+opaque, so its feet stay on the surface; a line another part of the drawing sits on (a trophy's stem, a sign's hangers)
+is outline along its whole length and stays whole where that part touches it, so nothing floats. Interior lines of the
+drawing are unchanged
+```

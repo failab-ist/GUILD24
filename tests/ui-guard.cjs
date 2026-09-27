@@ -1350,6 +1350,19 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
   assert.ok(!/<text|<script|href=/.test(svg),d.name+' is a plain picture: no caption, no script, no external reference');
   assert.ok(!seen.has(svg),d.name+' is not drawn like '+seen.get(svg));seen.set(svg,d.name);
  }
+ /* UI_UX §LIVE STORE DECORATION SEATING (v2.9.9): the outer outline is half an art pixel at 55%, so the room shows through
+    it; a piece standing on the counter keeps its whole bottom line */
+ for(const d of D.decorations){
+  const svg=fs.readFileSync(path.resolve(__dirname,'../dist/ui/assets/deco/'+d.id+'.svg'),'utf8');
+  assert.ok(svg.includes('fill="#1b130c" opacity="0.55"'),d.name+' has the light outline');
+  const vb=svg.match(/viewBox="0 0 (\d+) (\d+)"/),rows=[...svg.matchAll(/<rect x="(\d+)" y="(\d+)" width="(\d+)" height="1" fill="([^"]+)"( opacity="([^"]+)")?/g)];
+  const bottom=Math.max(...rows.map(r=>+r[2])),H=+vb[2];
+  assert.ok(H%2===0&&+vb[1]%2===0,d.name+' is drawn on the half-pixel grid');
+  // standing pieces reach the drawing's bottom edge with their foot line; the others lose the outer half of it
+  if(['display','counter'].includes(d.slot))assert.ok(bottom===H-1&&rows.some(r=>+r[2]===H-1&&r[4]==='#1b130c'&&!r[6])
+   &&!rows.some(r=>+r[2]===H-1&&r[6]),d.name+' keeps its whole foot line, opaque');
+  else assert.equal(bottom,H-2,d.name+' has the half outline at its bottom as well');
+ }
  assert.equal(Scene.decoration('nosuch'),'','an id with no picture resolves to nothing, never a broken frame');
  assert.ok(!/function deco[A-Z]\w*\(\)\{/.test(read('dist/ui/scene.js')),'no Decoration is drawn by code any more');
  const plate=fn('decoPlate');

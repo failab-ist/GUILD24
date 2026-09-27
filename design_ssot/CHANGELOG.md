@@ -12,6 +12,9 @@ confirmed by the User.
   into the till housing. The sign and plaque now follow the painting under either crop (the sign never nearer the DAY sign
   than the gap), and the counter pieces stand on the housing's base line and never closer to it than a fixed gap. New runtime check `tools/qa-deco-seating.cjs` in `qa:runtime`.
   Deferred: at 768~1023 the till band itself floats above the painted counter.
+- Decoration outline (same owner section): the eight drawings' outer outline was a full near-black art pixel and read as a
+  sticker on the painting. It is now half a pixel thick at 55% opacity, so the ceiling, wall or counter shows through;
+  the 진열대 / 계산대 pieces keep their bottom line (and the safe its legs) whole and opaque to stay on the counter.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

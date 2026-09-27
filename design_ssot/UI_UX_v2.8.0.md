@@ -1970,6 +1970,11 @@ sides on a stage narrower than the file, at the top and bottom on one wider than
 - each keeps its painted spot while there is room; where that spot would bring it closer to the housing than a fixed gap
   (6 px phone, 10 px desk) it stands at the gap instead - it never overlaps the housing, its label, another piece, or leaves
   the screen
+- the pieces are added to a painted room, so their outer outline is light: half an art pixel thick at 55% opacity, the
+  room showing through it (User 2026-09-27); a piece that stands on the counter keeps its bottom line (and legs) whole and
+  opaque, so its feet stay on the surface; a line another part of the drawing sits on (a trophy's stem, a sign's hangers)
+  is outline along its whole length and stays whole where that part touches it, so nothing floats. Interior lines of the
+  drawing are unchanged
 - phone 360~430 at the heights a browser leaves (640~932) and desk 1024~1920 are covered. The 768~1023 tablet framing is out
   of scope: there the till band itself floats above the painted counter (deferred finding, User 2026-09-27)
 
