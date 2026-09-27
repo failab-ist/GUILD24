@@ -17,7 +17,7 @@ test('bulk engines require quantity/traffic/previous-day sales, and affect actua
  s.facilities=['rotation'];s.cart={0:3};for(const sales of [0,5,6,7,12]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'rotation never discounts, at '+sales+' previous sales');}
  s.previousSales=0;
  /* 2026-09-23 remakes: 단체 주문 창구 and 새벽 회수 계약 no longer discount an order */
- for(const id of ['groupFlyer','dawnBulk']){s.facilities=[id];s.queue=Array(8).fill('fixture');assert.equal(g.cartTotal(),base,id+' discounts nothing');}
+ for(const id of ['groupOrder','dawnRecovery']){s.facilities=[id];s.queue=Array(8).fill('fixture');assert.equal(g.cartTotal(),base,id+' discounts nothing');}
  s.facilities=['bulk'];s.queue=[];const quote=g.cartTotal(),before=s.money;g.confirmOrder();assert.equal(before-s.money,quote);assert.equal(s.inventory.slice(-3).reduce((v,x)=>v+x.cost,0),quote);
 });
 test('후방 창고 증설 adds 5 warehouse slots (User 2026-09-26, v2.9.2 fourth pass; was 10)',()=>{
@@ -27,9 +27,9 @@ test('후방 창고 증설 adds 5 warehouse slots (User 2026-09-26, v2.9.2 fourt
 });
 test('offer weights and quantities match relevant product roles',()=>{
  const g=fresh(),s=g.run,potion=DATA.itemBy.lowpotion,premium=DATA.itemBy.guildlunch;
- for(const [id,it]of [['showcase',premium],['coldcase',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
+ for(const [id,it]of [['rareContract',premium],['coldcase',premium]]){s.facilities=[];const base=Relics.offerWeight(g,it);s.facilities=[id];assert.ok(Relics.offerWeight(g,it)>base,id);}
  s.dungeons=[g.makeDungeon('spider',1)];s.facilities=[];const base=Relics.offerWeight(g,DATA.itemBy.antidote);s.facilities=['hazardBoard'];assert.ok(Relics.offerWeight(g,DATA.itemBy.antidote)>base);
- s.facilities=[];g.generateOffers();const n=s.offers.length;s.facilities=['terminal'];g.generateOffers();assert.equal(s.offers.length,n+2);
+ s.facilities=[];g.generateOffers();const n=s.offers.length;s.facilities=['extraOrder'];g.generateOffers();assert.equal(s.offers.length,n+2);
 });
 test('fresh Relics enhance nutrition but not unrelated counter/penalty',()=>{
  /* ITEM_v2.7 §FOOD / FRESH POSITIVE NATIVE-STAT COMPOSITION: the Fresh Relics raise a Food's
@@ -67,7 +67,7 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
     modifier - a 30G saving lands as 30G off this base. The expected figure is therefore
     derived from the rule AND its rounding, and the raw modifier each Relic contributes is
     asserted separately, so neither half can drift unnoticed. */
- const raw={showcase:0,hub:base.g.overheadBase()*DATA.balance.hubOverheadRate,efficiency:-30};
+ const raw={rareContract:0,hub:base.g.overheadBase()*DATA.balance.hubOverheadRate,efficiency:-30};
  const charged=x=>Math.round((base.g.overheadBase()+x)/10)*10;
  for(const [id,modifier] of Object.entries(raw)){
   assert.equal(nightWith([id]).g.run.daily.operating-base.g.run.daily.operating,
@@ -79,8 +79,8 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
    this asserts the whole membership directly rather than sampling windows and hoping: sampling
    can show that something DID appear, never that everything else still CAN. */
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
- const EXCLUDED=['stamp','member','guarantee','fridge','board','rookieBoard','groupFlyer',
-                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnBulk','lifetime',
+ const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
+                 'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime',
                  'royalCert','hub','efficiency'];
  assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (16)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
@@ -110,7 +110,7 @@ test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusio
  for(const sales of [0,5,6,7,8])for(const id of ['rotation','logisticsHQ'])
   assert.equal(eligibleAtD30(id,sales),true,id+' is not gated by '+sales+' previous sales at D30');
  /* a support that needs a legal D30 ORDER / Reroll action to pay is still eligible */
- for(const id of ['delivery','terminal','bulk','medicine','showcase','hazardBoard','expeditionCert'])
+ for(const id of ['rerollTicket','extraOrder','bulk','fieldRepair','rareContract','hazardBoard','expeditionCert'])
   assert.equal(eligibleAtD30(id,0),true,id+' realises its value through a legal D30 action');
 
  /* a future Store Support is included by DEFAULT, and leaves only by being named */
@@ -197,16 +197,16 @@ test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, excl
    An adventurer's first-ever visit: +30G on arrival and purchase intent +20%p for that visit. */
 test('REMAKE 첫 방문 쿠폰: first-ever visit +30G on arrival and intent +20%p, and no seating',()=>{
  const arrive=(introduced,fac)=>{const g=fresh('coupon'),s=g.run,n=s.npcs[0];n.traits=[];n.money=100;n.introduced=introduced;n.visits=introduced?3:0;s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return {g,n};};
- assert.equal(arrive(false,['rookieBoard']).n.money-arrive(false,[]).n.money,30,'first visit +30G');
- assert.equal(arrive(true,['rookieBoard']).n.money-arrive(true,[]).n.money,0,'a returning adventurer gets nothing');
+ assert.equal(arrive(false,['firstVisitCoupon']).n.money-arrive(false,[]).n.money,30,'first visit +30G');
+ assert.equal(arrive(true,['firstVisitCoupon']).n.money-arrive(true,[]).n.money,0,'a returning adventurer gets nothing');
  for(const introduced of [false,true]){
   const {g,n}=arrive(introduced,[]);n.injury=0;n.money=9999;g.run.dungeons=[{...g.makeDungeon('crypt',1),hazards:['fear']}];n.destination=0;n.claimedDestination=0;
-  const it=DATA.itemBy.rope,a=g.interest(n,it,'overcharge').chance;g.run.facilities=['rookieBoard'];
+  const it=DATA.itemBy.rope,a=g.interest(n,it,'overcharge').chance;g.run.facilities=['firstVisitCoupon'];
   const b=g.interest(n,it,'overcharge').chance;
   assert.ok(Math.abs(b-a-(introduced?0:.20))<1e-9,(introduced?'returning':'first visit')+' intent');
  }
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
- assert.ok(!/dayFacilities\.includes\('rookieBoard'\)/.test(src),'the support no longer seats anyone');
+ assert.ok(!/dayFacilities\.includes\('firstVisitCoupon'\)/.test(src),'the support no longer seats anyone');
 });
 
 /* 2026-09-23 remake: 단체 주문 창구 - its own 20% Morning roll for +1 visitor, and +15G commission
@@ -214,12 +214,12 @@ test('REMAKE 첫 방문 쿠폰: first-ever visit +30G on arrival and intent +20%
 test('REMAKE 단체 주문 창구: own 20% Morning roll +1 visitor; +15G per sale from the 5th',()=>{
  const g=fresh('group-window'),s=g.run;
  for(const [r,want] of [[0,1],[.1999,1],[.2,0],[.9,0]]){
-  s.dayFacilities=['groupFlyer'];g.rng={int:()=>3,next:()=>r};const v=g.morningVisitors();
+  s.dayFacilities=['groupOrder'];g.rng={int:()=>3,next:()=>r};const v=g.morningVisitors();
   assert.equal(v.flyerExtra,want,'r='+r);assert.equal(s.expectedVisitors,3+want);assert.equal(v.baseVisitors,3,'the base roll is untouched');
  }
  s.dayFacilities=[];g.rng={int:()=>3,next:()=>0};assert.equal(g.morningVisitors().flyerExtra,0,'not owned, no roll');
  // commission: sales 1-4 nothing, 5th and later +15G each
- const g2=fresh('group-commission'),t=g2.run;t.facilities=['groupFlyer'];t.dayFacilities=['groupFlyer'];t.phase='sell';t.daily.commission=0;
+ const g2=fresh('group-commission'),t=g2.run;t.facilities=['groupOrder'];t.dayFacilities=['groupOrder'];t.phase='sell';t.daily.commission=0;
  g2.rng={next:()=>0,int:(a)=>a,pick:x=>x[0],weighted:x=>x[0],shuffle:x=>x,state:0};
  const got=[];
  for(let i=0;i<7;i++){const n=t.npcs[i%t.npcs.length];n.traits=[];n.money=99999;n.pack=[];n.refused=[];n.history=[];n.destination=0;n.claimedDestination=0;
@@ -230,14 +230,14 @@ test('REMAKE 단체 주문 창구: own 20% Morning roll +1 visitor; +15G per sal
 /* 2026-09-23 remake: 새벽 회수 계약 - expiring Food/Drink is taken back at 50% of its cost instead
    of being wasted, and each Day's first offer generation carries one extra Food/Drink slot. */
 test('REMAKE 새벽 회수 계약: 50% recovery of expiring Food/Drink, and +1 Food/Drink slot on the first generation',()=>{
- const g=fresh('dawn-recovery'),s=g.run;s.facilities=['dawnBulk'];s.inventory=[];
+ const g=fresh('dawn-recovery'),s=g.run;s.facilities=['dawnRecovery'];s.inventory=[];
  g.stock('rice',2,40);g.stock('rope',1,50);for(const st of s.inventory)st.expires=s.day+1;
  const money=s.money,waste=s.stats.waste;s.day++;g.morningReset();
  assert.equal(s.money-money,40,'2 x 50% of 40G');assert.equal(s.daily.subsidy,40);
  assert.equal(s.daily.waste,1,'only the non-Food is waste');assert.equal(s.stats.waste-waste,1);assert.equal(s.daily.wasteCost,50);
  assert.equal(s.inventory.length,0,'all of it left the shelf');
  const h=fresh('dawn-offers'),t=h.run;t.facilities=[];t.event=null;h.generateOffers();const n=t.offers.length;
- for(let i=0;i<30;i++){t.facilities=['dawnBulk'];h.generateOffers();assert.equal(t.offers.length,n+1,'one extra slot');
+ for(let i=0;i<30;i++){t.facilities=['dawnRecovery'];h.generateOffers();assert.equal(t.offers.length,n+1,'one extra slot');
   assert.ok(Relics.food(DATA.itemBy[t.offers.at(-1).item]),'and it is Food/Drink');}
  t.phase='order';t.money=99999;h.reroll();assert.equal(t.offers.length,n,'a Reroll is not the first generation');
 });
@@ -307,13 +307,13 @@ test('REL-Q-v28-5 / 7: HQ commission is 20% of list (supplyCert) and 40% of the 
 
 test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the catalogue',()=>{
  /* User-approved Store Support rebalance 2026-09-23 */
- for(const [id,price] of [['bulk',130],['rotation',80],['stamp',130],['member',130],['showcase',140],
-                          ['guarantee',140],['hazardBoard',60],['medicine',80],['fridge',60],['kitchen',170],
-                          ['board',110],['rookieBoard',110],['groupFlyer',200],['memberBundle',190],
+ for(const [id,price] of [['bulk',130],['rotation',80],['stamp',130],['member',130],['rareContract',140],
+                          ['guarantee',140],['hazardBoard',60],['fieldRepair',80],['fridge',60],['kitchen',170],
+                          ['board',110],['firstVisitCoupon',110],['groupOrder',200],['memberBundle',190],
                           ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
-                          ['supplyCert',220],['dawnBulk',190],['logisticsHQ',300],['lifetime',310],
+                          ['supplyCert',220],['dawnRecovery',190],['logisticsHQ',300],['lifetime',310],
                           ['royalCert',320],['expeditionCert',290],['fresh24',360],['hub',340],
-                          ['warehouse',130],['terminal',130],['delivery',120],['efficiency',130]])
+                          ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
 });
 
@@ -428,12 +428,12 @@ test('희귀상품 입고 계약: Rare+ sale price +10%, paid by the customer, n
  const q=(it,mode,fac)=>{g.run.facilities=fac;return g.interest(n,it,mode);};
  const list=Math.round(rare.sell*1.1);
  for(const mode of ['half','full','overcharge']){
-  const plain=q(rare,mode,[]),lifted=q(rare,mode,['showcase']);
+  const plain=q(rare,mode,[]),lifted=q(rare,mode,['rareContract']);
   assert.equal(lifted.price,Math.round(list*DATA.pricing[mode].mult),mode+' charges 110% of list');
   assert.equal(lifted.debit,lifted.price,mode+': the customer pays all of it');
   assert.ok(lifted.chance<=plain.chance,mode+': a dearer offer is never easier to accept');}
- assert.equal(q(common,'full',['showcase']).price,common.sell,'below Rare nothing changes');
- const r=sellOnce(['showcase'],'full',rare.id);
+ assert.equal(q(common,'full',['rareContract']).price,common.sell,'below Rare nothing changes');
+ const r=sellOnce(['rareContract'],'full',rare.id);
  assert.equal(r.store,list,'the store receives the lifted price');assert.equal(r.paid,list,'all of it from the customer');
  assert.equal(r.last.subsidy||0,0,'HQ fills nothing');assert.equal(r.s.daily.commission||0,0,'and pays no commission');
 });
@@ -465,17 +465,17 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
 });
 
 test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime truth, COPY_AUDIT §11-32 exact',()=>{
- const g=fresh('status'),s=g.run;s.facilities=['rotation','logisticsHQ','guarantee','groupFlyer','delivery','bulk','memberBundle','medicine'];
+ const g=fresh('status'),s=g.run;s.facilities=['rotation','logisticsHQ','guarantee','groupOrder','rerollTicket','bulk','memberBundle','fieldRepair'];
  s.previousSales=3;assert.equal(Relics.status(g,'rotation'),'전날 판매 3건 · 오늘 미적용');s.previousSales=4;assert.equal(Relics.status(g,'rotation'),'전날 판매 4건 · 오늘 적용 중');
  assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건 · 오늘 미적용');s.previousSales=6;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 6건 · 오늘 적용 중');
  s.guaranteeUsed=false;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 1회 남음');s.guaranteeUsed=true;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 사용함');
- s.daily.sales=2;assert.equal(Relics.status(g,'groupFlyer'),'오늘 판매 2건 · 5번째부터 +15G');s.daily.sales=4;assert.equal(Relics.status(g,'groupFlyer'),'오늘 판매 4건 · 판매마다 +15G 지급 중');
- s.rerollCount=0;assert.equal(Relics.status(g,'delivery'),'오늘 무료 교환 남음');s.rerollCount=1;assert.equal(Relics.status(g,'delivery'),'오늘 무료 교환 사용함');
+ s.daily.sales=2;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 2건 · 5번째부터 +15G');s.daily.sales=4;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 4건 · 판매마다 +15G 지급 중');
+ s.rerollCount=0;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 남음');s.rerollCount=1;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 사용함');
  s.phase='sell';assert.equal(Relics.status(g,'bulk'),'','묶음발주 계약 speaks only at ORDER');
  s.phase='order';g.generateOffers();s.cart={};assert.equal(Relics.status(g,'bulk'),'지금 발주에서 적용 없음');s.cart={0:3};assert.equal(Relics.status(g,'bulk'),'지금 발주에서 1종 적용');
  assert.equal(Relics.status(g,'memberBundle'),'','단골 묶음혜택 speaks only at SALE');
  s.phase='sell';const n=s.npcs[0];s.queue=[n.id];s.cursor=0;n.loyalty=10;n.history=[];assert.equal(Relics.status(g,'memberBundle'),n.name+' · 단골 아님');
  n.loyalty=60;n.history=[{day:s.day,paid:50}];assert.equal(Relics.status(g,'memberBundle'),n.name+' · 단골 · 오늘 유료 구매 1건');
- assert.equal(Relics.status(g,'medicine'),'','an always-on support carries no line');
+ assert.equal(Relics.status(g,'fieldRepair'),'','an always-on support carries no line');
  assert.equal(Relics.status(g,'lifetime'),'','평생 단골제 has no daily use state to read');
 });

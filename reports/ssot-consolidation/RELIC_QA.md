@@ -582,23 +582,16 @@ the Day's first offer generation
 bulk 130
 stamp 130
 member 130
-showcase 140
 guarantee 140
 hazardBoard 60
-medicine 80
 kitchen 170
 board 110
-rookieBoard 110
-groupFlyer 200
 memberBundle 190
 premiumMember 200
 expeditionMeal 200
 coldcase 180
-dawnBulk 190
 fresh24 360
 warehouse 130
-terminal 130
-delivery 120
 If previous Day sales >= 4:
 - each newly generated ORDER offer, of every rarity, gets quantity +1
 If previous Day sales < 4:
@@ -714,4 +707,27 @@ User 2026-09-26: 원정 지원금 간판 (sign economy remake), wall / display e
 
 ```new
 - the Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 (v2.9.7); no Store Support is named 쇼케이스
+```
+
+## AMENDMENT — v2.9.8 Store Support / Event ids (User 2026-09-27)
+
+User 2026-09-27: Store Support ids and the 본사 반값 행사 Event id renamed to read as the current names; save schema v9. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+- showcase -> 희귀상품 입고 계약
+rookieBoard
+groupFlyer
+```
+
+```new
+firstVisitCoupon
+groupOrder
+- rareContract -> 희귀상품 입고 계약
+rareContract 140
+fieldRepair 80
+firstVisitCoupon 110
+groupOrder 200
+dawnRecovery 190
+extraOrder 130
+rerollTicket 120
 ```

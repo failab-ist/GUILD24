@@ -170,7 +170,7 @@ events:[
 ['festival','왕도 축제','왕도 쪽 음악이 게이트 앞까지 넘어온다. 원정 나서는 사람들 손에도 먹을 것이 들렸다.','오늘 음식·음료 구매 의사 +20%p',{foodDemand:0.2}],
 ['strike','길드 파업','길드 정문에 현수막이 걸리고 접수창구가 닫혔다.','오늘 방문객 -1',{visitors:-1}],
 ['unknown','미확인 게이트','새벽 순찰대가 지도에 없는 게이트를 발견했다. 아직 이름도 없다.','오늘 고위험·고보상 임시 게이트 +1',{unknown:1}],
-['tasting','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G',{tasting:1}],
+['halfPrice','본사 반값 행사','본사 지원 도장이 찍힌 반값 쿠폰이 한 장 내려왔다.','오늘 첫 50% 할인 판매 · 본사 지원 +50G',{halfPrice:1}],
 ['poisonfog','독안개','게이트 쪽 공기가 누렇게 흐려졌다. 경비병들이 천으로 입과 코를 가린다.','적용 가능한 게이트에 독 위험 추가',{poison:1}],
 ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보 +2',{offers:2}],
 ['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능',{wallet:1.2}],
@@ -257,7 +257,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,tastingSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90,
+G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],

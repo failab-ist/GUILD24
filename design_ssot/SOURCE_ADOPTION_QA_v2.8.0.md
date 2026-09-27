@@ -288,7 +288,7 @@ U+ Food/Drink = rarity>=1 and category food/drink; existing non-expired stock ex
 Classification: DESIGN ADOPTION
 
 Current Source:
-morning weighted selection multiplies new-NPC weight by 1.7 with rookieBoard.
+morning weighted selection multiplies new-NPC weight by 1.7 with firstVisitCoupon.
 
 Root cause:
 effect is probability-only and cannot truthfully explain a seen newcomer.

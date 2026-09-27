@@ -422,7 +422,7 @@ test('EVENT: the ordinary periodic newcomer is unchanged by the SA-Q45 seat acco
    const s=g.run;s.money=5000;
    if(s.phase==='morning'&&s.day>1&&s.day%3===0){
     sawPeriodic=true;
-    assert.ok(!s.dayFacilities.includes('rookieBoard'),'no support is seating here');
+    assert.ok(!s.dayFacilities.includes('firstVisitCoupon'),'no support is seating here');
     assert.equal(s.event,null,'and no Event is seating here either');
     // the queue is the ordinary min(intake, everyone who could come) - the newcomer included
     const able=s.npcs.filter(n=>n.alive&&!n.recovery).length;

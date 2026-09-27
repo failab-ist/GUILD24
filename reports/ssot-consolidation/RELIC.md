@@ -620,8 +620,6 @@ freeUseConsumesFirstRerollStep=YES
 ```
 
 ```new
-- 첫 방문 쿠폰 (rookieBoard)
-- 단체 주문 창구 (groupFlyer)
 - 묶음발주 계약: same SKU 3+ order -> 3rd and later units purchase price -20%
 Price = 80G
 trigger = previous Day sales >= 4
@@ -698,31 +696,22 @@ with 발주 교환권: 0 -> 50 -> 100 -> 200 -> 400 -> x2 thereafter
 Price = 130G
 +25% +50%
 => base positive native Stat ×1.75
-`board`, `hub`, `groupFlyer` and the `wall` Decoration are independent and may all be held at once.
 board      = base-roll floor
 hub        = probabilistic catchment, paid for in overhead
-groupFlyer = its own 20% Morning roll, +1 visitor
 wall       = 10% Morning proc (Decoration, not a Relic)
 | bulk | 묶음발주 계약 | 130G |
 | stamp | 단골 스탬프 기계 | 130G |
 | member | 회원 관리대장 | 130G |
-| showcase | 희귀상품 입고 계약 | 140G |
 | guarantee | 길드 보증 진열대 | 140G |
 | hazardBoard | 원정 위험 게시판 | 60G |
-| medicine | 야전 정비대 | 80G |
 | kitchen | 즉석식품 코너 | 170G |
 | board | 길드 전광판 | 110G |
-| rookieBoard | 첫 방문 쿠폰 | 110G |
-| groupFlyer | 단체 주문 창구 | 200G |
 | memberBundle | 단골 묶음혜택 | 190G |
 | premiumMember | 프리미엄 멤버십 | 200G |
 | expeditionMeal | 원정 도시락 코너 | 200G |
 | coldcase | 냉장 유통 계약 | 180G |
-| dawnBulk | 새벽 회수 계약 | 190G |
 | fresh24 | 24시간 신선체계 | 360G |
 | warehouse | 후방 창고 증설 | 130G |
-| terminal | 본사 추가발주권 | 130G |
-| delivery | 발주 교환권 | 120G |
 유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도 제외.
 하루 기본 최소 방문객을 4명으로 변경 (기존 3명).
 then the ordinary paid curve from its first step: 50G -> 100G -> 200G ...
@@ -747,7 +736,6 @@ the extra offer joins only the day's first offer generation (before the D30 wind
 support can change nothing on D30.
 
 ```new
-- 새벽 회수 계약 (dawnBulk)
 ```
 
 ## AMENDMENT — Store Support tuning round 2 (User decision 2026-09-24)
@@ -846,4 +834,28 @@ The Decoration named 프리미엄 쇼케이스 remains unchanged.
 
 ```new
 The Decoration once named 프리미엄 쇼케이스 is 명예 모험가 액자 since v2.9.7 (User 2026-09-26).
+```
+
+## AMENDMENT — v2.9.8 Store Support / Event ids (User 2026-09-27)
+
+User 2026-09-27: Store Support ids and the 본사 반값 행사 Event id renamed to read as the current names; save schema v9. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- 첫 방문 쿠폰 (firstVisitCoupon)
+- 단체 주문 창구 (groupOrder)
+- 새벽 회수 계약 (dawnRecovery)
+`board`, `hub`, `groupOrder` and the `wall` Decoration are independent and may all be held at once.
+groupOrder = its own 20% Morning roll, +1 visitor
+## STORE SUPPORT IDS (User 2026-09-27, v2.9.8)
+Ids read as the current names: `medicine` → `fieldRepair` (야전 정비대), `dawnBulk` → `dawnRecovery` (새벽 회수 계약),
+`showcase` → `rareContract` (희귀상품 입고 계약), `rookieBoard` → `firstVisitCoupon` (첫 방문 쿠폰), `groupFlyer` →
+`groupOrder` (단체 주문 창구), `terminal` → `extraOrder` (본사 추가발주권), `delivery` → `rerollTicket` (발주 교환권).
+The Event 본사 반값 행사 is `halfPrice` (was `tasting`, with its effect key and support value). Save schema v9.
+| rareContract | 희귀상품 입고 계약 | 140G |
+| fieldRepair | 야전 정비대 | 80G |
+| firstVisitCoupon | 첫 방문 쿠폰 | 110G |
+| groupOrder | 단체 주문 창구 | 200G |
+| dawnRecovery | 새벽 회수 계약 | 190G |
+| extraOrder | 본사 추가발주권 | 130G |
+| rerollTicket | 발주 교환권 | 120G |
 ```
