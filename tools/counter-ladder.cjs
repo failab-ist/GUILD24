@@ -7,6 +7,7 @@
 //   any arm + Q (V0+Q, V1+Q, V2+Q): a 희귀 ORDER slot holds 1~3 units instead of 1
 //   then + P (V1+Q+P): 상급 포션 195G / 최상급 포션 235G
 //   then + R (V2+Q+P+R): the Rarity bands give 희귀 +3 / +8 / +10 / +10 / +10 from D8, taken from 일반
+//   then + L (…+L): early hybrid 75G, late hybrid 135G, 마그마 145G
 //   then + C (…+C): the reader store stocks one direct Counter per Hazard on today's Gates first (reader only)
 // Every arm is applied to DATA in memory right after the catalog loads; the files on disk are untouched. New Items
 // (중화 탄산수 / 방독 작업장갑 / 축성 손전등) are appended, 핫팩 becomes 방한 두건 under its id, the mid rung moves to 희귀.
@@ -44,7 +45,7 @@ function apply(D,arm){if(!arm)return;
   it.rarity=rarity;if(buy!=null){it.buy=buy;it.sell=buy*2;}if(days!=null)it.days=days;
   for(const h of HZ)delete it.effects[h];Object.assign(it.effects,ctr,extra);}}
 const one=(src,a,b)=>{const n=src.split(a).length-1;if(n!==1)throw Error('patch point x'+n+': '+a.slice(0,60));return src.replace(a,b);};
-function load(arm){const cc=/\+C$/.test(arm);arm=arm.replace(/\+C$/,'');const rr=/\+R$/.test(arm);arm=arm.replace(/\+R$/,'');const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=/\+Q$/.test(arm);arm=arm.replace(/\+Q$/,'');for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
+function load(arm){const ll=/\+L$/.test(arm);arm=arm.replace(/\+L$/,'');const cc=/\+C$/.test(arm);arm=arm.replace(/\+C$/,'');const rr=/\+R$/.test(arm);arm=arm.replace(/\+R$/,'');const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=/\+Q$/.test(arm);arm=arm.replace(/\+Q$/,'');for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
   /* +Q: a 희귀 ORDER slot holds 1~3 units instead of 1 (User 2026-09-27 proposal); 영웅 / 전설 stay 1 */
   if(f==='systems/shop'&&q)src=one(src,'quantity:(it.rarity>=2?1:this.rng.int(2,4))','quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))');
   if(f==='systems/shop')src=one(src,'const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);',
@@ -59,6 +60,9 @@ function load(arm){const cc=/\+C$/.test(arm);arm=arm.replace(/\+C$/,'');const rr
   if(f==='data/catalog'){apply(globalThis.DATA,ARMS[arm]);
    /* +P: 상급 포션 175 -> 195, 최상급 포션 210 -> 235 (User 2026-09-27: 상급 above 길드 특제 도시락 185) */
    if(pp){const B=globalThis.DATA.itemBy;B.highpotion.buy=195;B.highpotion.sell=390;B.toppotion.buy=235;B.toppotion.sell=470;}
+   /* +L: 초반 하이브리드 80 -> 75G, 후반 하이브리드 165 -> 135G, 마그마 냉각장비 175 -> 145G (User 2026-09-27 price review) */
+   if(ll){const B=globalThis.DATA.itemBy;for(const id of ['cloak','webgloves','holylight','heat'])if(B[id]&&B[id].rarity===1&&Object.keys(B[id].effects).filter(k=>HZ.includes(k)).length===2){B[id].buy=75;B[id].sell=150;}
+    for(const id of ['spiderkit','slimesuit','cryptlantern','snowvisor']){B[id].buy=135;B[id].sell=270;}B.magmagear.buy=145;B.magmagear.sell=290;}
    /* +R: 희귀 rises from mid-Run, taken from 일반 (User 2026-09-27: 희귀 should turn up from the middle) */
    if(rr)globalThis.DATA.rarityBands=[{maxDay:3,weights:[68,24,7,1,0]},{maxDay:7,weights:[63,25,11,1,0]},{maxDay:12,weights:[55,27,15,2,1]},
     {maxDay:19,weights:[45,27,23,4,1]},{maxDay:24,weights:[36,26,27,10,1]},{maxDay:29,weights:[29,25,29,16,1]},{maxDay:30,weights:[24,24,31,20,1]}];}}}
