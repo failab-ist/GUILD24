@@ -1658,3 +1658,33 @@ case (a lit line over its shadow, 2 px inside the row's own padding), so the goo
 and its `점포지원 {n} / {m}` plate compact (24 px), so the shelf gets that height back. The plate keeps its own frame so it
 still reads as a control to press, and its touch target stays about 44 px through an invisible margin around it.
 ```
+
+## AMENDMENT — STRONG GREEN SEMANTIC brought to v2.9.9 (User 2026-09-27 review)
+
+Stale rules superseded by §PRIMARY ACTION GRAMMAR (v2.9.9): 영업 시작 is no longer green, the material table follows the dock Actions' current families. The superseded chain lines below are dropped.
+
+```text
+Strong GUILD24 Sign Green is reserved for:
+영업 시작
+Do not use Strong Green as the repeated primary treatment for:
+- 발주 확정
+Material direction:
+| 영업 시작 | Strong Sign Green |
+| 발주 확정 | Brass / Paper Transaction |
+| SALE 진행 | Dark Wood |
+| NIGHT 다음 | Slate / Dark Steel |
+| CLOSING 다음 날 | Dark Register / Steel + restrained Brass |
+```
+
+```new
+Strong GUILD24 Sign Green is store-sign / environment material and a beneficial semantic colour; it is not a primary-action
+treatment (v2.9.9: no dock Action uses it, `영업 시작` included). Do not use it as the repeated primary treatment for:
+- 영업 시작 / 발주 확정
+Material direction (the dock Actions follow §PRIMARY ACTION GRAMMAR, which owns them since v2.9.9):
+| MORNING 문 열기 | Wood shutter |
+| 영업 시작 / 발주 확정 | ORDER steel on the paper, frost lit edge (one face) |
+| SALE 손님 보내기 | Quiet dark counter key |
+| NIGHT 다음 | Muted cobalt, flat |
+| 첫 점포지원 고르기 / CLOSING 다음 날 / 다음 점포 열기 | BRICK (첫 점포지원 고르기 with its rivets) |
+| FINAL gate bar | its own red |
+```

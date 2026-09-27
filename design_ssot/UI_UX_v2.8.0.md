@@ -125,30 +125,26 @@ Do not create a new UI framework.
 
 ## STRONG GREEN SEMANTIC
 
-Strong GUILD24 Sign Green is reserved for:
-
-```text
-영업 시작
-```
-
-Do not use Strong Green as the repeated primary treatment for:
-- 발주 확정
+Strong GUILD24 Sign Green is store-sign / environment material and a beneficial semantic colour; it is not a primary-action
+treatment (v2.9.9: no dock Action uses it, `영업 시작` included). Do not use it as the repeated primary treatment for:
+- 영업 시작 / 발주 확정
 - Relic purchase
 - SALE progress/finalize
 - NIGHT next
 - CLOSING next day
 - save/export
 
-Material direction:
+Material direction (the dock Actions follow §PRIMARY ACTION GRAMMAR, which owns them since v2.9.9):
 
 | Action | Material direction |
 |---|---|
-| 영업 시작 | Strong Sign Green |
-| 발주 확정 | Brass / Paper Transaction |
+| MORNING 문 열기 | Wood shutter |
+| 영업 시작 / 발주 확정 | ORDER steel on the paper, frost lit edge (one face) |
 | 점포지원 구매 | Metal / Brass |
-| SALE 진행 | Dark Wood |
-| NIGHT 다음 | Slate / Dark Steel |
-| CLOSING 다음 날 | Dark Register / Steel + restrained Brass |
+| SALE 손님 보내기 | Quiet dark counter key |
+| NIGHT 다음 | Muted cobalt, flat |
+| 첫 점포지원 고르기 / CLOSING 다음 날 / 다음 점포 열기 | BRICK (첫 점포지원 고르기 with its rivets) |
+| FINAL gate bar | its own red |
 | Utility | Steel |
 | Destructive | Muted Red |
 

@@ -65,8 +65,9 @@ Mobile is not just shrunken desktop.
 ### UI-Q95 — STRONG GREEN SEMANTIC
 
 PASS:
-Strong Sign Green is reserved for `영업 시작`.
-Other routine primary actions use their material direction rather than generic green CTA repetition.
+No dock Action uses Strong Sign Green as its face - `영업 시작` / `발주 확정` are the ORDER steel with the frost edge (UI-Q-v29-44);
+green stays store-sign / environment material and beneficial semantic colour. Every routine primary action uses its material
+direction (UI_UX §STRONG GREEN SEMANTIC table) rather than a generic green CTA.
 
 ### UI-Q97 — TYPOGRAPHY EXACT
 

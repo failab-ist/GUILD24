@@ -4,7 +4,8 @@
 // logo; the board ends at least 6 px above the places under it and the Capital plate 6 px above the Action; the logo, the branch plate, board, Capital plate, Action, menu, build marker, each Slot place
 // (as drawn) and its tag overlap nothing else and stay on screen; every place is a tap target of at least 44 px. Then the ending round trip: 다음 점포
 // 열기 -> the scene with 결과 다시 보기 -> a place opens 점포 장식 on its Slot -> back to the scene -> 결과 다시 보기 returns to
-// the ending, and the ended Run is untouched throughout. Reduced motion.
+// the ending, and the ended Run is untouched throughout; a reload on the scene opened from the ending returns to the ending
+// (the scene is not saved). Reduced motion.
 //   node tools/qa-prep-scene.cjs [out-dir]
 const {spawn}=require('node:child_process'),path=require('node:path'),fs=require('node:fs');
 const PORT=Number(process.env.QA_PORT||5201),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',OUT=process.argv[2]?path.resolve(process.argv[2]):null;
@@ -85,6 +86,12 @@ function judge(tag,m){
    await p.click('.p-prep [data-action="prep-back"]');await p.waitForTimeout(200);
    check(tag+' 결과 다시 보기 returns to the ending',await p.evaluate(()=>!!document.querySelector('.stage.p-end')&&!document.querySelector('.stage.p-prep')));
    check(tag+' the ended Run is untouched',before===await p.evaluate(()=>JSON.stringify(Guild24.game.run)));
+   // a reload on the preparation scene opened from the ending lands back on the ending: the scene is a view, not saved state
+   await p.click('.p-end [data-action="new"]');await p.waitForTimeout(200);
+   await p.reload({waitUntil:'load'});await p.waitForTimeout(300);
+   for(let k=0;k<4;k++){const b=await p.$('#modal-root [data-action="boss-seen"]')||await p.$('#modal-root [data-action="dismiss"]');if(!b)break;await b.click();await p.waitForTimeout(100);}
+   check(tag+' a reload on the scene opened from the ending returns to the ending (nothing of the scene is saved)',await p.evaluate(()=>
+    !!document.querySelector('.stage.p-end')&&!document.querySelector('.stage.p-prep')&&!Object.values(localStorage).some(v=>/prepOpen/.test(v||''))));
    if(OUT)await p.screenshot({path:path.join(OUT,`ending-${width}.png`)});
    await ctx.close();}
  }finally{await browser.close();server.kill();}

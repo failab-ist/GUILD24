@@ -437,7 +437,6 @@ For each art/icon/crop/scale asset changed under the v2.8 polish pass:
 ```
 
 ```new
-Other routine primary actions use their material direction rather than generic green CTA repetition.
 For each art/icon/crop/scale asset changed under the polish pass:
 ```
 
@@ -1635,4 +1634,18 @@ The shelf lip is 2 px; the shelf head and its 점포지원 plate are compact; th
 - the shelf head is lower and its 점포지원 plate compact but still a framed plate with a ~44 px touch target; the room the
 shelf gets above the tray / dock is 12 px more than before (measured: 120 / 133 / 313 / 382 / 323 -> 132 / 145 / 325 /
 394 / 335 px)
+```
+
+## AMENDMENT — STRONG GREEN SEMANTIC brought to v2.9.9 (User 2026-09-27 review)
+
+Stale rules superseded by §PRIMARY ACTION GRAMMAR (v2.9.9): 영업 시작 is no longer green, the material table follows the dock Actions' current families. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+Strong Sign Green is reserved for `영업 시작`.
+```
+
+```new
+No dock Action uses Strong Sign Green as its face - `영업 시작` / `발주 확정` are the ORDER steel with the frost edge (UI-Q-v29-44);
+green stays store-sign / environment material and beneficial semantic colour. Every routine primary action uses its material
+direction (UI_UX §STRONG GREEN SEMANTIC table) rather than a generic green CTA.
 ```
