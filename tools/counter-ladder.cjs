@@ -7,6 +7,7 @@
 //   any arm + Q (V0+Q, V1+Q, V2+Q): a 희귀 ORDER slot holds 1~3 units instead of 1
 //   then + P (V1+Q+P): 상급 포션 195G / 최상급 포션 235G
 //   then + R (V2+Q+P+R): the Rarity bands give 희귀 +3 / +8 / +10 / +10 / +10 from D8, taken from 일반
+//   then + C (…+C): the reader store stocks one direct Counter per Hazard on today's Gates first (reader only)
 // Every arm is applied to DATA in memory right after the catalog loads; the files on disk are untouched. New Items
 // (중화 탄산수 / 방독 작업장갑 / 축성 손전등) are appended, 핫팩 becomes 방한 두건 under its id, the mid rung moves to 희귀.
 //   node tools/counter-ladder.cjs [runs=600] [--policy reader|skilled] [--arms V0,V1,V2] [--out file]
@@ -43,11 +44,16 @@ function apply(D,arm){if(!arm)return;
   it.rarity=rarity;if(buy!=null){it.buy=buy;it.sell=buy*2;}if(days!=null)it.days=days;
   for(const h of HZ)delete it.effects[h];Object.assign(it.effects,ctr,extra);}}
 const one=(src,a,b)=>{const n=src.split(a).length-1;if(n!==1)throw Error('patch point x'+n+': '+a.slice(0,60));return src.replace(a,b);};
-function load(arm){const rr=/\+R$/.test(arm);arm=arm.replace(/\+R$/,'');const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=/\+Q$/.test(arm);arm=arm.replace(/\+Q$/,'');for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
+function load(arm){const cc=/\+C$/.test(arm);arm=arm.replace(/\+C$/,'');const rr=/\+R$/.test(arm);arm=arm.replace(/\+R$/,'');const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=/\+Q$/.test(arm);arm=arm.replace(/\+Q$/,'');for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
   /* +Q: a 희귀 ORDER slot holds 1~3 units instead of 1 (User 2026-09-27 proposal); 영웅 / 전설 stay 1 */
   if(f==='systems/shop'&&q)src=one(src,'quantity:(it.rarity>=2?1:this.rng.int(2,4))','quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))');
   if(f==='systems/shop')src=one(src,'const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);',
    'const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);if(globalThis.__HZ)globalThis.__HZ(rep,d,s);');
+  /* +C: the reader store first stocks one direct Counter for each Hazard on today's Gates that the shelf has none of -
+     the strongest offered - before its meals (a player reading the Gates does this; the bot otherwise rarely orders a
+     95G Counter). Measurement only. */
+  if(f==='systems/simulation'&&cc)src=one(src,'if(reader){const meals=offers.filter(',
+   "if(reader){for(const h of [...new Set(s.dungeons.flatMap(d=>d.hazards))]){if(s.inventory.some(x=>(D.itemBy[x.item].effects[h]||0)>0))continue;const x=offers.filter(x=>x.o.quantity&&(D.itemBy[x.o.item].effects[h]||0)>0&&(s.cart?.[x.i]||0)<x.o.quantity).sort((a,b)=>D.itemBy[b.o.item].effects[h]-D.itemBy[a.o.item].effects[h])[0];if(x&&s.money-g.cartTotal()-x.o.price>=spend.cashFloor){try{g.setQuantity(x.i,(s.cart?.[x.i]||0)+1);act();(out.items[x.o.item]??={ordered:0,sold:0}).ordered++;}catch(e){}}}}\n   if(reader){const meals=offers.filter(");
   if(f==='systems/simulation')src=one(src,'for(let seed=0;seed<count;seed++){','for(let seed=opts?.from||0;seed<(opts?.from||0)+count;seed++){');
   vm.runInThisContext(src,{filename:f+'.js'});
   if(f==='data/catalog'){apply(globalThis.DATA,ARMS[arm]);
