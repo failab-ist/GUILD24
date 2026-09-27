@@ -2427,30 +2427,53 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* USER 2026-09-24: the room is a painting, so each Decoration is seated on a surface the
    painting draws - the sign hangs from the ceiling between two fixtures, the plaque is on bare
    wall, the display and counter pieces stand on the counter top either side of the till - and
-   it is placed in the painting's own coordinates. The painting is `cover` on the stage and at
-   every shipped width only its sides are cropped, so a point at (x, y) of the file is at
-   left = 50cqw + (x - .5) * 100cqh * aspect and top = y * 100cqh of the stage. --x / --y are
-   fractions of the file, --w a fraction of the file's width, --ar the file's aspect. Pieces
-   that stand on something are placed by their foot (--y is the surface). */
-.deco-layer{position:absolute;inset:0;z-index:1;pointer-events:none;container-type:size;--ar:.5628}
-.decoplate{position:absolute;line-height:0;pointer-events:none;
- left:calc(50cqw + (var(--x) - .5) * 100cqh * var(--ar));width:calc(var(--w) * 100cqh * var(--ar));
- filter:drop-shadow(0 3px 0 #0000004d)}
+   it is placed in the painting's own coordinates (v2.9.9: under either cover crop, and the counter pieces by the
+   till housing they stand beside - below). */
+.deco-layer{position:absolute;inset:0;z-index:1;pointer-events:none;container-type:size;--ar:.5628;
+ /* v2.9.9 (UI_UX §LIVE STORE DECORATION SEATING): the painting is `cover`, so it is cropped at the sides on a
+    stage narrower than the file and at the top and bottom on one wider than it (a phone browser with its bars
+    showing, a tablet). Its drawn height is whichever of the two fills the stage. */
+ --ph:max(100cqh,100cqw / var(--ar));
+ /* the till housing, in this layer's units, from the numbers the housing itself is placed by
+    (director-review.css §.p-morning .till); the counter mount is the stage, or its cap on a desk */
+ --mw:min(100cqw,var(--counter-roomw,100cqw));
+ --till-l:calc(50cqw + var(--mw) * (var(--till-x) - .5));
+ --till-r:calc(50cqw + var(--mw) * (var(--till-x) + var(--till-w) - .5));
+ --till-b:calc(100cqh * (1 - var(--band-c) * (1 - var(--till-top) - var(--till-h))));
+ /* the DAY sign's left edge, from its published anchor, in the ceiling mount (the stage, or its cap on a desk) */
+ --sign-l:calc(50cqw + min(100cqw,var(--ceiling-roomw,100cqw)) * (var(--daysign-x) - .5));
+ --gap:6px}
+.decoplate{position:absolute;line-height:0;pointer-events:none;filter:drop-shadow(0 3px 0 #0000004d)}
 .decoplate .deco-art{display:block;width:100%;height:auto;image-rendering:pixelated}
-.decoplate.sign,.decoplate.wall{top:calc(var(--y) * 100cqh)}
-.decoplate.counter,.decoplate.display{bottom:calc((1 - var(--y)) * 100cqh)}
-/* phone file (941x1672): ceiling 0-18.6, counter top 74.2-76.0 */
+/* The sign hangs from the painted ceiling and the plaque is on the painted wall, so both are placed in the
+   painting's own coordinates: (x, y) of the file is at 50cqw + (x - .5) * width and 50cqh + (y - .5) * height of
+   the drawn painting. --x / --y are fractions of the file, --w a fraction of its width, --ar its aspect. */
+.decoplate.sign,.decoplate.wall{left:calc(50cqw + (var(--x) - .5) * var(--ph) * var(--ar));
+ top:calc(50cqh + (var(--y) - .5) * var(--ph));width:calc(var(--w) * var(--ph) * var(--ar))}
+/* the 간판 hangs from the same ceiling as the DAY sign: on its painted spot while there is room, and never nearer the
+   DAY sign than the gap - on a short phone the painting's spot comes right up to it */
+.decoplate.sign{left:min(calc(50cqw + (var(--x) - .5) * var(--ph) * var(--ar)),
+ calc(var(--sign-l) - var(--gap) - var(--w) * var(--ph) * var(--ar)))}
+/* The display and counter pieces stand on the counter top with the till, so their feet are on the housing's
+   base line and they are sized by the same counter mount. Each keeps its painted spot (--cx, the piece's centre as
+   a fraction of the file's width) until that spot would bring it closer to the housing than the gap; then it
+   stands at the gap instead. Nothing that moves the till can make them overlap it or stand on another line. */
+.decoplate.display,.decoplate.counter{bottom:calc(100cqh - var(--till-b));width:calc(var(--dw) * var(--mw));
+ --spot:calc(50cqw + (var(--cx) - .5) * var(--ph) * var(--ar) - var(--dw) * var(--mw) / 2)}
+.decoplate.display{left:min(var(--spot),calc(var(--till-l) - var(--gap) - var(--dw) * var(--mw)))}
+.decoplate.counter{left:max(var(--spot),calc(var(--till-r) + var(--gap)))}
+/* phone file (941x1672): ceiling 0-18.6 */
 .decoplate.sign{--x:.15;--y:.113;--w:.16}
 .decoplate.wall{--x:.76;--y:.55;--w:.11}
-.decoplate.display{--x:.115;--y:.755;--w:.13}
-.decoplate.counter{--x:.76;--y:.755;--w:.13}
-/* wide file (1672x941): ceiling 0-19, counter top 82.7-85.2 */
+.decoplate.display{--cx:.18;--dw:.15}
+.decoplate.counter{--cx:.825;--dw:.15}
+/* wide file (1672x941): ceiling 0-19 */
 @media(min-width:1024px){
- .deco-layer{--ar:1.7768}
+ .deco-layer{--ar:1.7768;--gap:10px}
  .decoplate.sign{--x:.29;--y:.093;--w:.08}
  .decoplate.wall{--x:.629;--y:.44;--w:.038}
- .decoplate.display{--x:.222;--y:.835;--w:.085}
- .decoplate.counter{--x:.70;--y:.835;--w:.07}
+ .decoplate.display{--cx:.2645;--dw:.2}
+ .decoplate.counter{--cx:.735;--dw:.17}
 }
 /* UI_UX_v2.8 §DECORATION UI. Reuses the unlock board's block rhythm and the .effects row
    shape rather than introducing a new card language for one panel. */
@@ -2730,8 +2753,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     own art, capping it centres both of them on the screen. The caps are set from what the
     day and the float need in order to read, not from what it takes to fit the whole shop in
     frame: the shelving and the window behind them are allowed to crop. */
- .p-morning .band.ceiling .mount{--roomw:620px}
- .p-morning .band.counter .mount{--roomw:640px}
+ .p-morning{--ceiling-roomw:620px}
+ .p-morning .band.ceiling .mount{--roomw:var(--ceiling-roomw)}
+ .p-morning{--counter-roomw:640px}
+ .p-morning .band.counter .mount{--roomw:var(--counter-roomw)}
  /* the register is the only object left on this surface, so the float is set to fill it */
  .p-morning .till b{font-size:40px}
  .p-morning .till i{font-size:20px}

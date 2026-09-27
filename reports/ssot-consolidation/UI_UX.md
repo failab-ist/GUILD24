@@ -1417,3 +1417,23 @@ from the title
 - 영업 설정 (점포 메뉴 -> 설정) ends with the same `v{version} · {commit}` line, centred, small (11 px) and muted, so the build can
 be read mid-Run (User 2026-09-26, v2.9.7); no other screen shows it
 ```
+
+## AMENDMENT — v2.9.9 LIVE STORE DECORATION SEATING (User 2026-09-27)
+
+New owner rule and its acceptance: 간판 / 벽면 follow the painting under either cover crop (the 간판 never nearer the DAY sign than the gap), 진열대 / 계산대 stand on the till housing's base line at a fixed gap. Lines below are new.
+
+```new
+### LIVE STORE DECORATION SEATING
+(User 2026-09-27, v2.9.9; acceptance -> UI_UX_QA UI-Q-v29-40.) The store painting is `cover` on the stage: cropped at the
+sides on a stage narrower than the file, at the top and bottom on one wider than it (a phone browser with its bars showing).
+- 간판 and 벽면 pieces hang on the painted ceiling / wall, so each is placed at its own point of the painting under either
+crop and never on the DAY sign or the board; the 간판 hangs from the same ceiling as the DAY sign and moves left of its
+point only as far as keeps the gap below from the DAY sign
+- 진열대 and 계산대 pieces stand on the counter top with the till housing: 진열대 to its left, 계산대 to its right, their feet
+on the housing's base line, sized by the same counter mount as the housing
+- each keeps its painted spot while there is room; where that spot would bring it closer to the housing than a fixed gap
+(6 px phone, 10 px desk) it stands at the gap instead - it never overlaps the housing, its label, another piece, or leaves
+the screen
+- phone 360~430 at the heights a browser leaves (640~932) and desk 1024~1920 are covered. The 768~1023 tablet framing is out
+of scope: there the till band itself floats above the painted counter (deferred finding, User 2026-09-27)
+```

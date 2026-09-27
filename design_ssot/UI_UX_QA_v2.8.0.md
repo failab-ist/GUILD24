@@ -2,7 +2,7 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.7
+DOC_VERSION=2.9.9
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
@@ -1413,6 +1413,27 @@ PASS:
 
 FAIL:
 - the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
+
+### UI-Q-v29-40 — LIVE STORE DECORATION SEATING
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §LIVE STORE DECORATION SEATING. Runtime harness `tools/qa-deco-seating.cjs`, part of
+`qa:runtime`.)
+
+SETUP:
+each Decoration set equipped (sponsorSign / honorFrame / thriftSafe / guildShelf, and trainingSign / infirmaryPlaque /
+memorialBook / aidCabinet), first MORNING, reduced motion, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915, 430x740,
+1024x768, 1280x880 and 1920x1080.
+
+PASS:
+- all four pieces drawn; 간판 and 벽면 within 1 px of their point of the painting under the crop that size produces (the 간판
+  left of it only where that keeps the gap from the DAY sign, and then exactly at the gap)
+- 진열대 and 계산대 feet within 1 px of the till housing's base line, at least the gap (6 px phone, 10 px desk) from it
+- no piece overlapping the till housing, its label, the DAY sign, the board, the branch plate, the dock or another piece; every
+  piece on screen
+
+FAIL:
+- a piece on the housing or its label, standing on another line than the housing, or placed off its painted point when the
+  painting is cropped at the top and bottom; the 간판 touching the DAY sign
 
 ### UI-Q-v29-35 — BOSS REVEAL AFTER MORNING LANDS
 

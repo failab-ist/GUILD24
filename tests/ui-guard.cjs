@@ -1008,10 +1008,14 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  // the furniture stops growing with the window, which is what pushed the decision out
  assert.ok(/\.band \.mount\{[^}]*max-width:var\(--roomw/.test(css),'the art box is capped');
  const desktop=css.slice(css.indexOf('@media(min-width:600px)'));
- assert.ok(/\.p-morning \.band\.ceiling \.mount\{--roomw:(\d+)px/.test(desktop)
-        && /\.p-morning \.band\.counter \.mount\{--roomw:(\d+)px/.test(desktop),'both caps are desktop-only');
- const ceil=+desktop.match(/\.band\.ceiling \.mount\{--roomw:(\d+)px/)[1];
- const till=+desktop.match(/\.band\.counter \.mount\{--roomw:(\d+)px/)[1];
+ assert.ok(/\.p-morning \.band\.ceiling \.mount\{--roomw:var\(--ceiling-roomw\)/.test(desktop)
+        && /\.p-morning\{--ceiling-roomw:(\d+)px/.test(desktop)
+        && /\.p-morning \.band\.counter \.mount\{--roomw:var\(--counter-roomw\)/.test(desktop)
+        && /\.p-morning\{--counter-roomw:(\d+)px/.test(desktop),'both caps are desktop-only');
+ // v2.9.9: the counter cap is one number the Decorations beside the till read too (UI_UX §LIVE STORE DECORATION SEATING)
+ assert.ok(!/--(counter|ceiling)-roomw:\d/.test(css.slice(0,css.indexOf('@media(min-width:600px)'))),'neither cap is set on a phone');
+ const ceil=+desktop.match(/\.p-morning\{--ceiling-roomw:(\d+)px/)[1];
+ const till=+desktop.match(/\.p-morning\{--counter-roomw:(\d+)px/)[1];
  assert.ok(ceil<=820&&till<=820,'neither piece of furniture is free to grow with the window');
  /* ...and a wide window is not a reason to set the decision smaller so more of the shop
     fits in frame: the extra width goes to the notices, at a size that reads across a desk. */
@@ -1355,12 +1359,28 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  // one layer over the painting, each Slot placed by the painting's own coordinates, per file
  assert.ok(fn('morningScreen').includes('<div class="deco-layer">'),'the Decorations sit in one layer over the room');
  assert.ok(/\.deco-layer\{[^}]*container-type:size/.test(css),'the layer measures the stage it covers');
- assert.ok(/\.decoplate\{[^}]*left:calc\(50cqw \+ \(var\(--x\) - \.5\) \* 100cqh \* var\(--ar\)\)/.test(css),'x follows the cover-cropped painting');
+ /* UI_UX §LIVE STORE DECORATION SEATING (v2.9.9): the painting's drawn height is whichever cover crop fills the stage, so a
+    point of the file stays on its painted surface on a stage wider than the file as well as on a narrower one */
+ assert.ok(/\.deco-layer\{[^}]*--ph:max\(100cqh,100cqw \/ var\(--ar\)\)/.test(css),'the layer knows the drawn painting under either crop');
+ assert.ok(/\.decoplate\.sign,\.decoplate\.wall\{left:calc\(50cqw \+ \(var\(--x\) - \.5\) \* var\(--ph\) \* var\(--ar\)\);\s*top:calc\(50cqh \+ \(var\(--y\) - \.5\) \* var\(--ph\)\)/.test(css),
+  'the sign and the plaque follow the painting on both axes');
+ // the counter pieces read the till's own numbers: feet on its base line, never nearer it than the gap
+ assert.ok(/--till-b:calc\(100cqh \* \(1 - var\(--band-c\) \* \(1 - var\(--till-top\) - var\(--till-h\)\)\)\)/.test(css),'the till base line is derived, not copied');
+ assert.ok(/\.decoplate\.display,\.decoplate\.counter\{bottom:calc\(100cqh - var\(--till-b\)\)/.test(css),'the counter pieces stand on it');
+ assert.ok(/\.decoplate\.display\{left:min\(var\(--spot\),calc\(var\(--till-l\) - var\(--gap\)/.test(css),'the display piece stops at the gap left of the till');
+ assert.ok(/\.decoplate\.counter\{left:max\(var\(--spot\),calc\(var\(--till-r\) \+ var\(--gap\)\)\)/.test(css),'the counter piece stops at the gap right of it');
+ // and the 간판 stops at the gap left of the DAY sign, read from the sign's published anchor
+ assert.ok(fn('morningScreen').includes("'<div class=\"store\" style=\"--daysign-x:'+Scene.anchors.daysign.left/100+'\">'"),'the DAY sign edge comes from Scene.anchors');
+ assert.ok(/\.decoplate\.sign\{left:min\([^;]*calc\(var\(--sign-l\) - var\(--gap\)/.test(css),'the 간판 keeps the gap from the DAY sign');
+ const review=read('dist/ui/director-review.css');
+ assert.ok(/\.p-morning \.till\{left:calc\(var\(--till-x\) \* 100%\)!important;width:calc\(var\(--till-w\) \* 100%\)!important;\s*top:calc\(var\(--till-top\) \* 100%\)!important;height:calc\(var\(--till-h\) \* 100%\)!important\}/.test(review),
+  'and the housing is placed by the same numbers');
  for(const slot of D.decorationSlots){
-  const phone=(css.match(new RegExp('\\n\\.decoplate\\.'+slot+'\\{(--x:[^}]*)\\}'))||[])[1];
-  const wide=(css.match(new RegExp('\\n \\.decoplate\\.'+slot+'\\{(--x:[^}]*)\\}'))||[])[1];
-  assert.ok(phone&&/--y:/.test(phone)&&/--w:/.test(phone),slot+' has a place on the phone painting');
-  assert.ok(wide&&/--y:/.test(wide)&&/--w:/.test(wide),slot+' has a place on the wide painting');
+  const phone=(css.match(new RegExp('\\n\\.decoplate\\.'+slot+'\\{(--[^}]*)\\}'))||[])[1];
+  const wide=(css.match(new RegExp('\\n \\.decoplate\\.'+slot+'\\{(--[^}]*)\\}'))||[])[1];
+  const keys=['sign','wall'].includes(slot)?[/--x:/,/--y:/,/--w:/]:[/--cx:/,/--dw:/];
+  assert.ok(phone&&keys.every(k=>k.test(phone)),slot+' has a place on the phone painting');
+  assert.ok(wide&&keys.every(k=>k.test(wide)),slot+' has a place on the wide painting');
  }
  assert.ok(/\.decoplate \.deco-art\{[^}]*image-rendering:pixelated/.test(css),'the picture is not smoothed');
 });

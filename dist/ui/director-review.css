@@ -202,7 +202,7 @@
    the file this breakpoint is carrying: the DAY sign hangs from the art's ceiling, and the
    counter band starts where the art's counter top starts */
 .p-morning .band.ceiling{flex:0 0 21%}
-.p-morning .band.counter{flex:0 0 38%}
+.p-morning .band.counter{flex:0 0 calc(var(--band-c) * 100%)}
 .p-morning .band.ceiling .mount,.p-morning .band.counter .mount{height:100%}
 .p-morning .store>.band{position:relative;z-index:0}
 /* THE TILL IS SEATED, NOT ANCHORED BY HABIT. Scene's published anchor put it in the middle of
@@ -212,8 +212,13 @@
    visual harness checks that, and it is right to - and inside it the feet land at 35.5% of the
    band, which is 75.5% of the stage: the phone file's counter top plane, measured, not guessed.
    The inline anchor is a style attribute, so overriding it takes this much force and no less. */
-.p-morning .till{left:24%!important;width:52%!important;top:22.3%!important;height:14.5%!important}
-.p-morning .till-cap{left:24%!important;width:52%!important;top:15.5%!important;height:6.8%!important}
+/* v2.9.9: the housing's box is published as fractions, once, so the Decorations that stand beside it on the
+   same counter top (ui.css §.decoplate.display / .counter) read the same numbers instead of a copy of them. */
+.p-morning{--band-c:.38;--till-x:.24;--till-w:.52;--till-top:.223;--till-h:.145;--cap-top:.155;--cap-h:.068}
+.p-morning .till{left:calc(var(--till-x) * 100%)!important;width:calc(var(--till-w) * 100%)!important;
+ top:calc(var(--till-top) * 100%)!important;height:calc(var(--till-h) * 100%)!important}
+.p-morning .till-cap{left:calc(var(--till-x) * 100%)!important;width:calc(var(--till-w) * 100%)!important;
+ top:calc(var(--cap-top) * 100%)!important;height:calc(var(--cap-h) * 100%)!important}
 .p-morning .store:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
  background:radial-gradient(150% 108% at 50% 44%,#0000 58%,#12100b38 82%,#0e0a0685 100%)}
 /* The DAY sign's plate and the till's display housing were DRAWN INTO the procedural ceiling
@@ -273,10 +278,8 @@
  .p-morning{background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
    url('assets/presentation/morning/store-bg-wide.png')}
  .p-morning .band.ceiling{flex:0 0 19%}
- .p-morning .band.counter{flex:0 0 30%}
+ .p-morning{--band-c:.30;--till-x:.32;--till-w:.36;--till-top:.233;--till-h:.267;--cap-top:.126;--cap-h:.107}
  /* the wide file's counter face starts lower inside its own band, and the plate has a wider
     surface to sit on here, so it takes one step up in size - a plate, still not a sign */
  .p-morning .branchplate{top:56%;padding:5px 13px;font-size:15px;letter-spacing:.02em}
- .p-morning .till{left:32%!important;width:36%!important;top:23.3%!important;height:26.7%!important}
- .p-morning .till-cap{left:32%!important;width:36%!important;top:12.6%!important;height:10.7%!important}
 }

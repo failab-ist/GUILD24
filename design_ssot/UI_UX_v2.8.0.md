@@ -2,7 +2,7 @@
 
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
-DOC_VERSION=2.9.7
+DOC_VERSION=2.9.9
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
@@ -1957,6 +1957,21 @@ screen must exist. Mobile system/back navigation must not strand the Player on a
 
 Live store renders equipped Decorations at fixed store locations.
 No free-placement editor / levels / rarity ladder / random Decoration shop is added.
+
+### LIVE STORE DECORATION SEATING
+
+(User 2026-09-27, v2.9.9; acceptance -> UI_UX_QA UI-Q-v29-40.) The store painting is `cover` on the stage: cropped at the
+sides on a stage narrower than the file, at the top and bottom on one wider than it (a phone browser with its bars showing).
+- 간판 and 벽면 pieces hang on the painted ceiling / wall, so each is placed at its own point of the painting under either
+  crop and never on the DAY sign or the board; the 간판 hangs from the same ceiling as the DAY sign and moves left of its
+  point only as far as keeps the gap below from the DAY sign
+- 진열대 and 계산대 pieces stand on the counter top with the till housing: 진열대 to its left, 계산대 to its right, their feet
+  on the housing's base line, sized by the same counter mount as the housing
+- each keeps its painted spot while there is room; where that spot would bring it closer to the housing than a fixed gap
+  (6 px phone, 10 px desk) it stands at the gap instead - it never overlaps the housing, its label, another piece, or leaves
+  the screen
+- phone 360~430 at the heights a browser leaves (640~932) and desk 1024~1920 are covered. The 768~1023 tablet framing is out
+  of scope: there the till band itself floats above the painted counter (deferred finding, User 2026-09-27)
 
 ### Pre-Run Decoration empty-slot interaction
 

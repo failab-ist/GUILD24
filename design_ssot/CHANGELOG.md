@@ -3,6 +3,16 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.9 — presentation: store scene (User 2026-09-27)
+
+Screen-by-screen presentation work from the reference review of 2026-09-27; each batch is captured before and after and
+confirmed by the User.
+- Decoration seating (UI_UX §LIVE STORE DECORATION SEATING, UI_UX_QA UI-Q-v29-40): on a phone browser with its bars showing
+  the painting is cropped at the top and bottom, which moved the 간판 onto the DAY sign and pushed the 진열대 / 계산대 pieces
+  into the till housing. The sign and plaque now follow the painting under either crop (the sign never nearer the DAY sign
+  than the gap), and the counter pieces stand on the housing's base line and never closer to it than a fixed gap. New runtime check `tools/qa-deco-seating.cjs` in `qa:runtime`.
+  Deferred: at 768~1023 the till band itself floats above the painted counter.
+
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 
 Ids that had been carried over from an earlier Item, Decoration or name are renamed so each reads as what it is now.

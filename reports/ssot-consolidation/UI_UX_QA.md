@@ -1454,3 +1454,23 @@ User 2026-09-26: the build marker also ends 영업 설정, readable mid-Run. Lin
 - 영업 설정 ends with the same pair, before and during a Run (v2.9.7); no other screen shows it
 - the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
 ```
+
+## AMENDMENT — v2.9.9 LIVE STORE DECORATION SEATING (User 2026-09-27)
+
+New owner rule and its acceptance: 간판 / 벽면 follow the painting under either cover crop (the 간판 never nearer the DAY sign than the gap), 진열대 / 계산대 stand on the till housing's base line at a fixed gap. Lines below are new.
+
+```new
+### UI-Q-v29-40 — LIVE STORE DECORATION SEATING
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §LIVE STORE DECORATION SEATING. Runtime harness `tools/qa-deco-seating.cjs`, part of
+`qa:runtime`.)
+each Decoration set equipped (sponsorSign / honorFrame / thriftSafe / guildShelf, and trainingSign / infirmaryPlaque /
+memorialBook / aidCabinet), first MORNING, reduced motion, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915, 430x740,
+1024x768, 1280x880 and 1920x1080.
+- all four pieces drawn; 간판 and 벽면 within 1 px of their point of the painting under the crop that size produces (the 간판
+left of it only where that keeps the gap from the DAY sign, and then exactly at the gap)
+- 진열대 and 계산대 feet within 1 px of the till housing's base line, at least the gap (6 px phone, 10 px desk) from it
+- no piece overlapping the till housing, its label, the DAY sign, the board, the branch plate, the dock or another piece; every
+piece on screen
+- a piece on the housing or its label, standing on another line than the housing, or placed off its painted point when the
+painting is cropped at the top and bottom; the 간판 touching the DAY sign
+```
