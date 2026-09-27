@@ -1665,6 +1665,30 @@ PASS:
 FAIL:
 - a seal per member, the NIGHT death tape on a failure, a seal covering the headline, or a failure seal as crisp as a clear
 
+### UI-Q-v29-46 — FINAL CLASH SCENE
+
+(User 2026-09-27, v2.9.9; owner `UI_UX_v2.8.0.md` §FINAL — CLASH SCENE.)
+
+SETUP:
+A Final clear and a Final failure (a close one and a wide one) with 1-, 2- and 3-member parties, at 360x640, 390x844,
+1280x880 and 1920x1080, motion on and reduced motion; a tap mid-scene; a reload mid-scene.
+
+PASS:
+- the order is member 1 -> Boss counter -> member 2 -> Boss counter ... for every member in party order, the Boss
+  countering after the last member too
+- each impact shows that member's share as a white mark; the red drops to it after the counter, except on the last
+  exchange, whose drop comes after the stillness as the verdict
+- the bar ends at 1 - min(1, rolled Party Power / effective Boss Power): empty on a clear, at least 3% on a failure;
+  clear: the Boss card cracks and collapses; failure: the party's cards are pushed back and dimmed
+- the ending then plays as UI-Q-v29-30; the whole scene is 8 s or less
+- the scene stays inside the stage and nothing leaves the screen; no damage figure, no party bar, no new copy
+- a tap skips to the same ending at once; reduced motion shows no scene; a reload mid-scene opens the ending; one cue per
+  landing (`rumble`, `clash`, `counter`, `collapse`)
+
+FAIL:
+- the bar giving the result away before the verdict, a clear that does not empty the bar, an empty bar on a failure, a
+  damage number, a skip that does not work, or anything of the scene in the Save
+
 ### UI-Q-v29-28 — SALE COUNTER TRAY FOLD
 
 (User 2026-09-25; owner `UI_UX_v2.8.0.md` §SALE — COUNTER TRAY.)

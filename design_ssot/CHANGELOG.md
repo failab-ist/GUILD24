@@ -3,7 +3,7 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.9 — presentation: the store scene, the dock Actions, SALE (User 2026-09-27)
+## v2.9.9 — presentation: the store scene, the dock Actions, SALE, the FINAL clash (User 2026-09-27)
 
 From the reference review of 2026-09-27 (translate each Phase's act into a physical game object, tied together by one
 shared pixel grammar - not more borders or ornament). Every batch was captured before and after, reviewed by a separate
@@ -18,8 +18,8 @@ agent and confirmed by the User on the captures before it was committed.
   painting. It is now half a pixel thick at 55% opacity, so the ceiling, wall or counter shows through; the 진열대 / 계산대
   pieces keep their bottom line (and the safe its legs) whole and opaque to stay on the counter.
 - Tablets: on a portrait tablet the till band floated 60~90 px above the painted counter, and on a landscape tablet the
-  tall painting showed no counter at all. The counter band now follows the painting under any crop, a landscape tablet
-  (768+ wide, 700+ high) takes the desk's wide framing, the 간판 stays on screen, and the branch plate stays clear of the
+  tall painting showed no counter at all. The counter band now follows the painting under any crop, a landscape stage
+  768+ wide (a tablet, or a phone turned sideways - closeout) takes the desk's wide framing, the 간판 stays on screen, and the branch plate stays clear of the
   dock Action and the counter pieces (its desk size only on a stage 760 px high or more).
 
 **새 점포 준비** - UI_UX §NEW STORE PREPARATION — STORE SCENE / §OPENING TITLE LOGO, UI_UX_QA UI-Q-v29-41 / 42, COPY_AUDIT §1-9
@@ -53,6 +53,12 @@ agent and confirmed by the User on the captures before it was committed.
 - Each shelf row ends on the thin edge of a board (2 px), and the `진열대` head is lower with a compact, still framed
   점포지원 plate (touch target kept at ~44 px): the shelf gets 12 px more.
 
+**The FINAL clash** - PRESENTATION §GAME FEEL BEAT H7, UI_UX §FINAL — CLASH SCENE, UI_UX_QA UI-Q-v29-46
+- The Final used to cut from `마왕성으로 출발` straight to the ending. The resolved Final is now played out as a card
+  fight: each member lunges and the Boss counters every time, the Boss bar marks each hit in white and drops only after
+  the counter, and the last drop after a stillness is the verdict - a close clear and a close failure look alike until
+  then. No damage figure; a tap skips it; reduced motion drops it. The one exception to the per-beat game feel contract.
+
 **Checks** - new runtime harnesses in `qa:runtime` (12 now): `tools/qa-deco-seating.cjs` (phones, tablets, desks; the till
 on the painted counter, the pieces' seating, the branch plate's clearance), `tools/qa-prep-scene.cjs` (short and large
 stages; everything inside the stage, the plate under the title, the board / plate gaps, the status strip) and
@@ -63,7 +69,8 @@ stood out; the dark plate stays), an adventurer card merging the SALE customer, 
 separate parts read faster), and a larger SALE customer (no room on a phone without shrinking the shelf).
 
 **Not in v2.9.9**: SALE rebuilt as a counter scene with a larger customer, and a full-screen DAY transition (the GAME
-FEEL contract first) - v3.0+ candidates (reports/v3.0-prep.md). A landscape stage under 700 px high keeps the tall framing.
+FEEL contract first) - v3.0+ candidates (reports/v3.0-prep.md). A phone turned sideways (~500 px high or less) still crowds
+the Decoration pieces and the preparation scene - an open v3.0 finding.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

@@ -1697,3 +1697,37 @@ wide framing of the room and its points: the tall file cropped to a landscape st
 2026-09-27 closeout: at 844x390 / 932x430 the board, till and plate had left the screen). Below about 500 px high the
 Decoration pieces and the preparation scene still crowd the board and the dock there - an open v3.0 finding, not a rule
 ```
+
+## AMENDMENT — FINAL clash scene (User 2026-09-27, v2.9.9 H7)
+
+The resolved Final is played out as a card fight before the ending (UI_UX §FINAL — CLASH SCENE, UI_UX_QA UI-Q-v29-46, FINAL_EXPEDITION display order); the one exception to the per-beat contract (PRESENTATION §GAME FEEL BEAT H7).
+
+```new
+### FINAL — CLASH SCENE (v2.9.9 H7)
+(User 2026-09-27, v2.9.9; the exception to the per-beat contract -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT H7;
+acceptance -> UI_UX_QA UI-Q-v29-46.)
+The Final used to resolve in one cut: 발주 -> 원정대 -> the ending. After `마왕성으로 출발` the result the Final has already
+resolved is now played out as a card fight over the FINAL stage, then the ending follows as before (§FINAL RESULT — SEAL
+STAMP). Nothing is decided by the scene.
+- cast: the Boss card above (the Boss's art and name, one health bar) and the party's cards below in one row (portrait,
+name, Lv and job), one or two members centred; the Boss's own room stays behind them. No damage figure, no party bar,
+no new copy
+- entry (~1.2 s): the stage darkens, the Boss card drops and lands heavily, the party's cards rise one after another, then
+a held stillness
+- exchanges, one per member in party order: the member's card pulls back and lunges into the Boss card (~0.6 s); on the
+impact frame the Boss card flashes and that member's share appears on the bar as a white mark. The Boss counters
+(~0.5 s): its card strikes down and that member's card shakes and flashes red. After the counter the red drops to the
+white mark - on every exchange but the last. The Boss counters after the last member too, so a clear and a failure run
+the same way up to the verdict
+- verdict (~2.2 s): a stillness (~0.8 s) with the last white mark standing and the bar trembling, then the last drop.
+Clear: the bar empties and the Boss card cracks and collapses. Failure: the bar stops, the Boss card rises and shakes
+once, and the party's cards are pushed back and dimmed. Then the ending with its seal
+- the bar is the resolved Final: it loses min(1, rolled Party Power / effective Boss Power) in all, in equal shares per
+member, so a clear ends empty and a failure ends where the roll left it (never visibly empty: at least 3% stays)
+- length: about 4.5 / 5.6 / 6.7 s for 1 / 2 / 3 members, never over 8 s
+- sound: one cue per landing - a low `rumble` on the Boss card's landing, `clash` on each impact, `counter` on each
+counter, `collapse` on a clear; the departure's `final` cue and the ending's seal cue are unchanged
+- a tap anywhere skips to the ending at once, with the same end state; under reduced motion there is no scene. The Final is
+resolved and saved when `마왕성으로 출발` is pressed, so a reload during the scene opens the ending; the scene keeps no
+Save field
+```
