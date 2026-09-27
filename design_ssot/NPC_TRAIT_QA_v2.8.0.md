@@ -2,7 +2,7 @@
 
 DOC=NPC_TRAIT_QA
 OWNER=qa,npc,trait,roster,living_npc_cap,wallet,destination,condition,growth,revisit,recent_expedition,injury
-DOC_VERSION=2.9.7
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/NPC_TRAIT_QA_v2.8.0-patch.md,history/NPC_TRAIT_QA_v2.7.0.md,history/NPC_TRAIT_QA_v2.6.1.md,history/NPC_TRAIT_QA_v2.5.0.md

@@ -1525,7 +1525,7 @@ test('D-22 / §B-16: two player-owned buses under one master, and a level that i
  assert.equal(fresh.settings.muted,true,'sound still starts off, as the copy says');
  for(const k of ['bgm','sfx'])assert.equal(fresh.settings[k],1,k+' starts at its design maximum');
  // presentation preference, so it is checked for shape when present the way tutorial is
- const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:8}));
+ const Save=globalThis.Save,base=()=>JSON.parse(JSON.stringify({account:globalThis.Meta.fresh(),run:null,version:9}));
  const withSettings=v=>{const s=base();s.account.settings={muted:true,...v};return s;};
  assert.equal(Save.valid(withSettings({})),true,'a save with no levels at all is still a save');
  assert.equal(Save.valid(withSettings({bgm:.5,sfx:0})),true,'real levels are accepted');

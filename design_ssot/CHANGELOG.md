@@ -3,6 +3,22 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.8 — ids read as the current names (User 2026-09-27)
+
+Ids that had been carried over from an earlier Item, Decoration or name are renamed so each reads as what it is now.
+Save compatibility is broken on purpose: the schema moves to v9 and an older save shows the fresh-start guidance.
+- Items (ITEM §ITEM IDS): heat → hood, lava → dragonramen, bar → lunchbox, premium → guildlunch (and the D10 unlock
+  key), herobar → kingwater, tree → worldcharm (and the D14 unlock key), potion → lowpotion
+- Decorations (META §sign note) and their art files: dawnSign → sponsorSign, premiumCase → honorFrame, guildPlaque →
+  guildShelf, trainingRack → trainingSign, memorialBoard → memorialBook, firstAidKit → aidCabinet
+- Store Support (RELIC §STORE SUPPORT IDS): medicine → fieldRepair, dawnBulk → dawnRecovery, showcase → rareContract,
+  rookieBoard → firstVisitCoupon, groupFlyer → groupOrder, terminal → extraOrder, delivery → rerollTicket;
+  the Event tasting → halfPrice (effect key, halfPriceSupport, halfPriceUsed)
+- the 화염 골렘 광산 Family fire → golem, so it no longer shares its Hazard's id; fireCombat → golemCombat (DUNGEON_HAZARD)
+- save schema v9 (CORE_RUN §SAVE v9, CORE_RUN_QA RUN-Q70 / Q62 / Q71); build marker 2.9.8
+Replaced by context, never by blind text (commits 6a14231, ed954a5, 6402053, d310b26 and this one): `premium` stays as the
+store build tag / contract / pricing strategy, `potion` as the category / effect marker / art key, `fire` as the Hazard.
+
 ## v2.9.7 — decorations and Rarity (User 2026-09-26)
 
 After the decoration and Rarity review (reports/deco-balance-v296.md §1~7; `tools/deco-impact.cjs`, `tools/rarity-value.cjs`,

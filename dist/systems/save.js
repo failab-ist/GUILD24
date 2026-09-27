@@ -1,9 +1,9 @@
 (function(G){
-const VERSION=8,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup';
+const VERSION=9,KEY='guild24.save.v'+VERSION,BACKUP=KEY+'.backup';
 /* Every schema this game has ever written, current one apart. Read() uses it to tell a
    player their old save cannot be continued; reset() uses the same list to erase it, so a
    version bump is made in one place and both paths follow. */
-const LEGACY=['v1','v2','v3','v4','v5','v6','v7'];
+const LEGACY=['v1','v2','v3','v4','v5','v6','v7','v8'];
 
 /* Save validation. One clause out of line and the save is refused.
    Each check stands alone under its own name. This function was extended twice in v2.4

@@ -2,7 +2,7 @@
 
 DOC=CORE_RUN
 OWNER=run,phase,save,day_flow,abandon,final_timeline,fresh_init,tutorial_reset,meta_settlement,pre_run_loadout,boss_information_order
-DOC_VERSION=2.9.1
+DOC_VERSION=2.9.8
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/CORE_RUN_v2.8.0-patch.md,history/CORE_RUN_v2.7.0.md,history/CORE_RUN_v2.6.1.md,history/CORE_RUN_v2.5.0.md
@@ -397,14 +397,14 @@ Exact content -> BOSS_v2.8.0.md / COPY_WORLD_VOICE_v2.8.0.md.
 
 ## D25 STATE SAFETY
 
-For every normally created valid v8 Run:
+For every normally created valid v9 Run:
 - D25 Final generated state is persisted when created.
 - Save/Load cannot reroll it.
 - D30 reads that exact persisted state.
 
 ### Development / controlled-migration repair boundary
 
-If a development fixture, development Save, or explicitly controlled migration/debug state is already represented as a v8 Run at D25+ but lacks the required Final prereveal state:
+If a development fixture, development Save, or explicitly controlled migration/debug state is already represented as a v9 Run at D25+ but lacks the required Final prereveal state:
 
 ```text
 first valid entry
@@ -416,8 +416,8 @@ first valid entry
 Rules:
 - use the same authoritative seeded/fixed Final-selection principle as ordinary D25 generation
 - this is a one-time repair, never a reroll/fishing path
-- normal valid v8 Player Saves must already contain the D25 state
-- this boundary does not authorize v1~v7 Player Run continuation into v8
+- normal valid v9 Player Saves must already contain the D25 state
+- this boundary does not authorize v1~v8 Player Run continuation into v9
 - malformed ordinary Player state must not repeatedly regenerate the Final state on entry/reload
 
 ## D30 FINAL
@@ -490,15 +490,17 @@ Save/Load must not intentionally provide free rerolls.
 Save schema may invalidate incompatible local saves when schema changes.
 Do not maintain compatibility branches solely for unsupported save formats.
 
-### SAVE v8 — EXACT
+### SAVE v9 — EXACT
+
+(v8 until v2.9.8: the id cleanup renamed saved ids, User 2026-09-27.)
 
 ```text
-KEY = guild24.save.v8
-Envelope version = 8
-Export version = 8
-Validation version = 8
-run.version = 8
-LEGACY = v1~v7
+KEY = guild24.save.v9
+Envelope version = 9
+Export version = 9
+Validation version = 9
+run.version = 9
+LEGACY = v1~v8
 ```
 
 Current release-policy context:
@@ -509,27 +511,22 @@ v3.0.0 = current external-public-release target
 ```
 
 Rules:
-- New Run initializes `run.version=8`.
-- v1~v7 **Run state** cannot continue as a current v8 Run.
-- v1~v7 **Account/Meta state** is not migrated into v8.
+- New Run initializes `run.version=9`.
+- v1~v8 **Run state** cannot continue as a current v9 Run.
+- v1~v8 **Account/Meta state** is not migrated into v9.
 - Do not add compatibility conversion merely to preserve internal-test progression.
-- When only legacy v1~v7 data exists, initialize a fresh current v8 Account/Meta + fresh current v8 Run rather than importing legacy progression.
+- When only legacy v1~v8 data exists, initialize a fresh current v9 Account/Meta + fresh current v9 Run rather than importing legacy progression.
 - legacy bytes are not required to be destructively deleted merely to reject migration; storage cleanup remains under the existing reset/storage policy.
 - Full Data Reset remains the explicit game-owned current-data deletion action.
 
-Legacy v1~v7:
+Legacy v1~v8:
 - show old-version/fresh-start guidance
 - do not automatically delete original legacy bytes
 
 ### SAVE BOUNDARY
 
-Current internal save generation remains v8 unless Source adoption discovers a real incompatible
-schema need.
-
-The meal/water identity pass reuses existing Item IDs and does not itself require a migration
-or schema bump.
-
-Existing saved IDs resolve to current active identities.
+Current internal save generation is v9: the v2.9.8 id cleanup (User 2026-09-27) renamed saved Item, Decoration,
+Store Support, Event and Family ids, so the schema moved and no migration is kept.
 
 Do not choose a new save generation merely because player-facing names/effects changed.
 
@@ -612,9 +609,9 @@ Full Reset is the explicit action that deletes current/backup/legacy game-owned 
 A true fresh initialization must be tutorial-eligible.
 
 `Fresh initialization` includes:
-- no valid current v8 Account/Run exists and a new v8 state is created
+- no valid current v9 Account/Run exists and a new v9 state is created
 - Full Data Reset is completed and the game creates a new current state
-- only legacy v1~v7 internal-test state exists and current policy rejects migration, causing fresh v8 initialization
+- only legacy v1~v8 internal-test state exists and current policy rejects migration, causing fresh v9 initialization
 
 Exact tutorial boundary:
 
@@ -626,7 +623,7 @@ fresh current Account/Run
 
 Rules:
 - Full Data Reset must clear any game-owned tutorial-complete / tutorial-dismissed flag that would suppress the fresh tutorial
-- stale legacy tutorial flags must not suppress tutorial on a fresh v8 initialization
+- stale legacy tutorial flags must not suppress tutorial on a fresh v9 initialization
 - Run Abandon / ordinary new Run does **not** by itself reset tutorial completion while the same current Account/Meta remains
 - do not create a second tutorial system; reuse the existing tutorial implementation if it exists
 - implementation adoption must audit the current tutorial trigger/persistence path because current internal testing has observed fresh/reset states where the tutorial did not appear

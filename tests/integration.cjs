@@ -147,7 +147,7 @@ test('CORE_RUN §SAVE/LOAD: a v2.4 save is never read as a v2.5 save',()=>{
    assert.equal(Save.read(),null,label+' written by v2.4 does not load');
    assert.ok(Save.error&&/새 점포/.test(Save.error),label+': the player is told, not shown an error code');
    assert.equal(store.get('guild24.save.v5'),payload,label+': the v5 bytes are left untouched');
-   assert.equal(store.get('guild24.save.v8'),undefined,label+': nothing is migrated into the v7 key');
+   assert.equal(store.get('guild24.save.v9'),undefined,label+': nothing is migrated into the current key');
   }
   // the same shape is refused by the validator itself, not only by the key it sits under
   assert.equal(Save.valid({version:5,account,run:null}),false,'a v5 payload is not a valid v6 save');
@@ -168,14 +168,14 @@ test('CORE_RUN §SAVE/LOAD: an older schema is refused cleanly and the original 
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are left untouched');
   // A v6 write over an existing v6 save keeps the previous bytes under .backup.
   g.autosave=true;g.save();
-  const first=store.get('guild24.save.v8');
+  const first=store.get('guild24.save.v9');
   g.run.money+=1;g.save();
-  assert.equal(store.get('guild24.save.v8.backup'),first,'the previous save is preserved as a backup');
+  assert.equal(store.get('guild24.save.v9.backup'),first,'the previous save is preserved as a backup');
   assert.equal(store.get('guild24.save.v4'),legacy,'the v4 bytes are still there afterwards');
   // A corrupted head falls back to the backup rather than losing the run.
-  store.set('guild24.save.v8','{not json');
+  store.set('guild24.save.v9','{not json');
   const recovered=Save.read();
-  assert.ok(recovered&&recovered.version===8,'the backup is read when the head is unreadable');
+  assert.ok(recovered&&recovered.version===9,'the backup is read when the head is unreadable');
   assert.equal(recovered.run.money,g.run.money-1,'the recovered run is the previous save, not an invention');
  }finally{delete global.localStorage;}
 });
@@ -243,7 +243,7 @@ test('CORE_RUN §SAVE/LOAD: a full data reset leaves a true first launch behind'
   g.account.runs=3;g.autosave=true;g.save();
   for(const v of ['v1','v2','v3','v4','v5'])store.set('guild24.save.'+v,'{"version":'+v.slice(1)+'}');
   g.run.money+=1;g.save();   // so the .backup key exists too
-  assert.ok(store.get('guild24.save.v8')&&store.get('guild24.save.v8.backup'),'the precondition is a real save');
+  assert.ok(store.get('guild24.save.v9')&&store.get('guild24.save.v9.backup'),'the precondition is a real save');
 
   assert.equal(Save.reset(),true,'the reset reports success');
   assert.equal(store.size,0,'every key this game owns is gone - current, backup and legacy alike');
@@ -711,7 +711,7 @@ test('RESCUE: the count survives a save and a load, and a forged one is refused'
  const g=fresh('rescue-save'),s=g.run;
  g.stock('ramen',1);s.phase='closing';s.money=-10;g.liquidate(s.inventory[0].id);
  assert.equal(s.rescueUsed,1);
- const round=copy({version:8,account:g.account,run:s});
+ const round=copy({version:9,account:g.account,run:s});
  assert.ok(Save.valid(round),'a run carrying a rescue count is valid');
  assert.equal(round.run.rescueUsed,1,'and the count is what is written');
  for(const bad of [{rescueUsed:DATA.balance.rescueLimit+1},{rescueUsed:-1},{rescueUsed:1.5},{rescueUsed:undefined}]){
@@ -745,8 +745,8 @@ test('SAVE V7 EXACT CONTRACT', () => {
  g.autosave = false;
  g.start('v8-contract');
  
- // 1. new Run -> run.version === 8
- assert.equal(g.run.version, 8, 'a new run is created at version 8');
+ // 1. new Run -> run.version === 9 (v2.9.8 id cleanup, User 2026-09-27)
+ assert.equal(g.run.version, 9, 'a new run is created at version 9');
  
  // 2. Save.valid()가 run.version !== 8 reject
  const raw = JSON.parse(Save.export(g.account, g.run));
@@ -773,7 +773,7 @@ test('SAVE V7 EXACT CONTRACT', () => {
  const fresh = Meta.fresh();
  assert.equal(fresh.unlocks.guildlunch, false, 'fresh account premium is false boolean');
  assert.equal(fresh.unlocks.worldcharm, false, 'fresh account tree is false boolean');
- assert.ok(Save.valid({version:8, account:fresh, run:null}), 'fresh account alone is a valid save payload');
+ assert.ok(Save.valid({version:9, account:fresh, run:null}), 'fresh account alone is a valid save payload');
  
  // 5.1 extra keys in unlocks do not invalidate
  const extraRaw = JSON.parse(Save.export(g.account, g.run));
@@ -786,7 +786,7 @@ test('SAVE V7 EXACT CONTRACT', () => {
  const payload = Save.export(h.account, h.run);
  const loaded = Save.import(payload);
  assert.equal(loaded.account.unlocks.guildlunch, false);
- assert.equal(loaded.run.version, 8);
+ assert.equal(loaded.run.version, 9);
 });
 
 test('SALE_v2.7 §PRE-COMMIT / POST-COMMIT: the expedition outlook is frozen for the visit',()=>{
@@ -1188,11 +1188,11 @@ test('CORE_RUN_v2.8 §SAVE: the new Account and Run state fits inside v8 with sa
     frozen loadout, the settlement guard). None of it is a schema blocker, so v8 stands and no
     migration layer is invented for internal-development saves. */
  const fresh0=Meta.fresh();
- assert.equal(JSON.parse(Save.export(fresh0,null)).version,8,'the save generation is unchanged');
+ assert.equal(JSON.parse(Save.export(fresh0,null)).version,9,'the save generation is v9 (v2.9.8 id cleanup)');
  assert.ok(Save.valid(JSON.parse(Save.export(fresh0,null))),'an Account-only save validates');
  /* An existing v8 Account written before any of this must load and behave, not crash. */
  const legacy=Meta.fresh();delete legacy.store;
- const raw={version:8,account:legacy,run:null};
+ const raw={version:9,account:legacy,run:null};
  assert.ok(Save.valid(raw),'a v8 Account with no store block is still valid');
  const back=Save.import(JSON.stringify(raw));
  assert.equal(Meta.storeCapital(back.account),0,'capital defaults to zero');
@@ -1294,7 +1294,7 @@ test('META_v2.8 §DECORATION: Capital is spent exactly once, and ownership is pe
  assert.throws(()=>Meta.buyDecoration(a,other.id),/자본이 부족/,'what cannot be afforded cannot be bought');
  assert.equal(Meta.storeCapital(a),start-d.price,'a refused purchase deducts nothing');
  /* Reload: a save round trip carries ownership and the loadout, and carries no pending state. */
- const save={account:a,run:null,version:8};
+ const save={account:a,run:null,version:9};
  assert.equal(Save.valid(JSON.parse(JSON.stringify(save))),true,'the Account with a Decoration is a valid save');
  const back=JSON.parse(JSON.stringify(save)).account;
  assert.equal(Meta.decorationOwned(back,d.id),true,'ownership survives the reload');
