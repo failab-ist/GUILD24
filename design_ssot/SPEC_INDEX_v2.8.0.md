@@ -274,7 +274,11 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
 - v2.9.7 (User 2026-09-26): decorations remade / swapped, 구급품 진열장 injury rework, Rarity growth 0.10 -> CHANGELOG §v2.9.7.
 - v2.9.8 (User 2026-09-27): ids read as the current names (Items, Decorations, Store Support, the 반값 Event, the 골렘 Family)
   and the save schema moves to v9 -> CHANGELOG §v2.9.8.
-- v2.9.9 (User 2026-09-27): presentation of the store scene, batch by batch (Decoration seating first) -> CHANGELOG §v2.9.9.
+- v2.9.9 (User 2026-09-27): presentation from the reference review - the store room (Decoration seating / outline, tablets),
+  새 점포 준비 as the store scene with the title logo, one press grammar and one colour per family for the dock Actions (two
+  new cues), SALE's outlook plate, shelf lip and head -> CHANGELOG §v2.9.9 (owners UI_UX §LIVE STORE DECORATION SEATING,
+  §NEW STORE PREPARATION — STORE SCENE, §OPENING TITLE LOGO, §PRIMARY ACTION GRAMMAR, §SALE — MOBILE AUTHORITY / SHELF LIP /
+  SHELF HEAD; UI_UX_QA UI-Q-v29-40 ~ 45). Merge to `main` only on User confirmation.
 - v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
   (principles table, contract, H1~H6 rows). Routing per batch, in execution order:
 

@@ -3,51 +3,67 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
-## v2.9.9 — presentation: store scene (User 2026-09-27)
+## v2.9.9 — presentation: the store scene, the dock Actions, SALE (User 2026-09-27)
 
-Screen-by-screen presentation work from the reference review of 2026-09-27; each batch is captured before and after and
-confirmed by the User.
-- Decoration seating (UI_UX §LIVE STORE DECORATION SEATING, UI_UX_QA UI-Q-v29-40): on a phone browser with its bars showing
-  the painting is cropped at the top and bottom, which moved the 간판 onto the DAY sign and pushed the 진열대 / 계산대 pieces
-  into the till housing. The sign and plaque now follow the painting under either crop (the sign never nearer the DAY sign
-  than the gap), and the counter pieces stand on the housing's base line and never closer to it than a fixed gap. New runtime check `tools/qa-deco-seating.cjs` in `qa:runtime`.
-- Decoration outline (same owner section): the eight drawings' outer outline was a full near-black art pixel and read as a
-  sticker on the painting. It is now half a pixel thick at 55% opacity, so the ceiling, wall or counter shows through;
-  the 진열대 / 계산대 pieces keep their bottom line (and the safe its legs) whole and opaque to stay on the counter.
-- Opening title logo (UI_UX §OPENING TITLE LOGO, UI_UX_QA UI-Q-v29-41): the `던전 앞 편의점` title is the User-supplied logo;
-  its 점 받침, which read as ㅇ, was corrected to ㅁ (reports/ASSETS.md §Title logo).
-- 새 점포 준비 is the store scene (UI_UX §NEW STORE PREPARATION — STORE SCENE, UI_UX_QA UI-Q-v29-42, COPY_AUDIT §1-9): the
-  panel over a backdrop is gone; the MORNING room carries the logo on its ceiling, the three lines on its board, each
-  Decoration Slot at its own place (tagged, a control), the Store Capital on a counter plate and `첫 점포지원 고르기` in the
-  dock; from the ending `결과 다시 보기` returns to the ending. New runtime check `tools/qa-prep-scene.cjs` in `qa:runtime`.
-- SALE on a phone (UI_UX §SALE — MOBILE AUTHORITY, UI_UX_QA UI-Q-v29-43): the outlook and the four Core Stats are one plate
-  instead of two stacked boxes; the shelf gets 46 px back (a short phone now shows two shelf rows at entry, not one).
-- Primary Action grammar (UI_UX §PRIMARY ACTION GRAMMAR, UI_UX_QA UI-Q-v29-44): the eight Phase Actions in the dock now press
-  one way - one down-right cast, the press moving into it and leaving 1 px - at two sizes (56 / 60 px inside the Day, 64 /
-  72 px across a Day or Run boundary; 첫 점포지원 고르기 64 px) and three depths. The notch had been cutting the cast away,
-  so seven of them had shown no depth at all; the cut now takes it in. 새 점포 준비 and FINAL no longer drop straight down,
-  and the desk `다음 날` goes from 86 to 72 px. Steps inside the Day share one edge build (lit top, deep foot, no outline -
-  ORDER's frost ring becomes its lit edge) and a seated label; NIGHT's blue is a muted cobalt; the FINAL cast is its own
-  deep red. New runtime check `tools/qa-primary-grammar.cjs` in `qa:runtime`, reading the cast off the screen.
-- One colour per button family (same owner section): `영업 시작` takes `발주 확정`'s steel and frost edge; `첫 점포지원 고르기`
-  takes the BRICK bevel of `다음 날` / `다음 점포 열기` and keeps its rivets. Two new synthesised cues (UI_UX §SFX coverage):
-  `begin` for `첫 점포지원 고르기`, which was silent, and `newstore` for `다음 점포 열기`, which played the tab click.
-- Tablets (UI_UX §LIVE STORE DECORATION SEATING, UI_UX_QA UI-Q-v29-40): on a portrait tablet the till band floated 60~90 px
-  above the painted counter, and on a landscape tablet the tall painting showed no counter at all. The counter band now
-  follows the painting under any crop, and a landscape tablet (768+ wide, 700+ high) takes the desk's wide framing; the
-  간판 stays on screen and the branch plate stays clear of the dock Action and the counter pieces (its desk size only on a
-  stage 760 px high or more). Tablet sizes added to `qa-deco-seating` and
-  `qa-prep-scene`.
-- 새 점포 준비 on a short stage (same owner section): on a 1366x680 / 1280x700 browser or a landscape tablet the board covered
-  the 벽면 tag, the 간판 spot touched the title and the two plates crowded the Action. The branch plate now hangs right under
-  the title (User 2026-09-27), the board is one step tighter under 800 px high, and the 간판 keeps the gap from the title;
-  the Slot tags, the branch plate and the Capital plate keep their 360x640 share of a taller or wider stage (the tags
-  grow smoothly, the pixel-face plates step 12 -> 18 -> 24 / 17 -> 24 px).
-- SALE shelf (UI_UX §SALE — SHELF LIP / §SALE — SHELF HEAD, UI_UX_QA UI-Q-v29-45): each shelf row ends on a thin board
-  edge, and the `진열대` head is lower with a compact (still framed) 점포지원 plate, so the shelf gets 12 px more room. Tried and dropped (User 2026-09-27): the destination as MORNING's paper notice
-  (the one bright surface on the screen), an adventurer card merge and a larger customer (no room freed on a phone, and
-  the separate parts read faster).
-  Short-desk sizes added to `qa-prep-scene`.
+From the reference review of 2026-09-27 (translate each Phase's act into a physical game object, tied together by one
+shared pixel grammar - not more borders or ornament). Every batch was captured before and after, reviewed by a separate
+agent and confirmed by the User on the captures before it was committed.
+
+**The store room (MORNING and 새 점포 준비)** - UI_UX §LIVE STORE DECORATION SEATING, UI_UX_QA UI-Q-v29-40
+- Decoration seating: on a phone browser with its bars showing the painting is cropped at the top and bottom, which moved
+  the 간판 onto the DAY sign and pushed the 진열대 / 계산대 pieces into the till housing. The sign and plaque now follow the
+  painting under either crop (the sign never nearer the DAY sign than the gap), and the counter pieces stand on the
+  housing's base line and never closer to it than a fixed gap.
+- Decoration outline: the eight drawings' outer outline was a full near-black art pixel and read as a sticker on the
+  painting. It is now half a pixel thick at 55% opacity, so the ceiling, wall or counter shows through; the 진열대 / 계산대
+  pieces keep their bottom line (and the safe its legs) whole and opaque to stay on the counter.
+- Tablets: on a portrait tablet the till band floated 60~90 px above the painted counter, and on a landscape tablet the
+  tall painting showed no counter at all. The counter band now follows the painting under any crop, a landscape tablet
+  (768+ wide, 700+ high) takes the desk's wide framing, the 간판 stays on screen, and the branch plate stays clear of the
+  dock Action and the counter pieces (its desk size only on a stage 760 px high or more).
+
+**새 점포 준비** - UI_UX §NEW STORE PREPARATION — STORE SCENE / §OPENING TITLE LOGO, UI_UX_QA UI-Q-v29-41 / 42, COPY_AUDIT §1-9
+- Title logo: the `던전 앞 편의점` title is the User-supplied logo; its 점 받침, which read as ㅇ, was corrected to ㅁ
+  (reports/ASSETS.md §Title logo).
+- Store scene: the panel over a backdrop is gone; the MORNING room carries the logo on its ceiling, the three lines on its
+  board, each Decoration Slot at its own place (tagged, a control), the Store Capital on a counter plate and
+  `첫 점포지원 고르기` in the dock; from the ending `결과 다시 보기` returns to the ending.
+- Short and large stages: on a 1366x680 / 1280x700 browser or a landscape tablet the board covered the 벽면 tag, the 간판
+  spot touched the title and the two plates crowded the Action. The branch plate now hangs right under the title (User),
+  the note on the board is one step tighter under 800 px high (its status strip keeps its height), and the 간판 keeps the
+  gap from the title. The Slot tags, the branch plate and the Capital plate keep their 360x640 share of a taller or wider
+  stage (the tags grow smoothly up to 20 px; the pixel-face plates step 12 -> 18 -> 24 / 17 -> 24 px); the desk 간판 tag
+  stacks and stays inside the 1120-wide stage, clear of the painted ceiling fixture.
+
+**The dock Actions** - UI_UX §PRIMARY ACTION GRAMMAR / §SFX coverage, UI_UX_QA UI-Q-v29-44
+- One press grammar: the eight Phase Actions press one way - one down-right cast, the press moving into it and leaving
+  1 px - at two sizes (56 / 60 px inside the Day, 64 / 72 px across a Day or Run boundary; 첫 점포지원 고르기 64 px) and
+  three depths (5 / 4 / 3 px). The notch had been cutting the cast away, so seven of them had shown no depth at all; the
+  cut now takes it in. 새 점포 준비 and FINAL no longer drop straight down; the desk `다음 날` goes from 86 to 72 px.
+- Material: steps inside the Day share one edge build (lit top, deep foot, no outline) and a seated label; NIGHT's blue is
+  a muted cobalt; the FINAL cast is its own deep red. One colour per family: `영업 시작` takes `발주 확정`'s steel and frost
+  edge, `첫 점포지원 고르기` takes the BRICK bevel of `다음 날` / `다음 점포 열기` and keeps its rivets; the FINAL gate bar
+  stays its own red.
+- Sound: two new synthesised cues - `begin` for `첫 점포지원 고르기`, which was silent, and `newstore` for `다음 점포 열기`,
+  which played the tab click.
+
+**SALE** - UI_UX §SALE — MOBILE AUTHORITY / §SALE — SHELF LIP / §SALE — SHELF HEAD, UI_UX_QA UI-Q-v29-43 / 45
+- On a phone the outlook and the four Core Stats are one plate instead of two stacked boxes: the shelf gets 46 px back (a
+  short phone now shows two shelf rows at entry, not one).
+- Each shelf row ends on the thin edge of a board (2 px), and the `진열대` head is lower with a compact, still framed
+  점포지원 plate (touch target kept at ~44 px): the shelf gets 12 px more.
+
+**Checks** - new runtime harnesses in `qa:runtime` (12 now): `tools/qa-deco-seating.cjs` (phones, tablets, desks; the till
+on the painted counter, the pieces' seating, the branch plate's clearance), `tools/qa-prep-scene.cjs` (short and large
+stages; everything inside the stage, the plate under the title, the board / plate gaps, the status strip) and
+`tools/qa-primary-grammar.cjs` (cast, press, size and label per Action, read off the screen as well as the style).
+
+**Tried and dropped (User 2026-09-27)**: the SALE destination as MORNING's paper notice (it became the one surface that
+stood out; the dark plate stays), an adventurer card merging the SALE customer, status and bag (no room freed, and the
+separate parts read faster), and a larger SALE customer (no room on a phone without shrinking the shelf).
+
+**Not in v2.9.9**: SALE rebuilt as a counter scene with a larger customer, and a full-screen DAY transition (the GAME
+FEEL contract first) - v3.0+ candidates (reports/v3.0-prep.md). A landscape stage under 700 px high keeps the tall framing.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 
