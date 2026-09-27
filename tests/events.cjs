@@ -72,7 +72,7 @@ test('EVENT 9-1/9-2: Hazard Events skip ineligible Gates and are excluded when n
  const g=fresh('hazard'),s=g.run;
  const cold=DATA.events.find(e=>e.id==='coldwave'),fog=DATA.events.find(e=>e.id==='poisonfog');
  s.dungeons=[{...g.makeDungeon('snow',2)}];assert.equal(g.eventEligible(cold),false,'cold Gate only -> 한파 excluded');
- s.dungeons=[{...g.makeDungeon('fire',2)}];assert.equal(g.eventEligible(cold),false,'fire Gate only -> 한파 excluded');
+ s.dungeons=[{...g.makeDungeon('golem',2)}];assert.equal(g.eventEligible(cold),false,'fire Gate only -> 한파 excluded');
  s.dungeons=[{...g.makeDungeon('spider',2)}];assert.equal(g.eventEligible(cold),true);
  assert.equal(g.eventEligible(fog),false,'poison Gate only -> 독안개 excluded');
  s.dungeons=[{...g.makeDungeon('snow',2)}];assert.equal(g.eventEligible(fog),true);

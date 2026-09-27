@@ -137,9 +137,9 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
     roster is built no longer do. Any future move here without a change to point at means
     something leaked into the run stream. */
  for(const [seed,order,intro] of [
-  ['sig-0',['snow','spider','fire','slime','crypt'],[4,10]],
-  ['sig-1',['slime','spider','snow','fire','crypt'],[6,10]],
-  ['sig-2',['crypt','slime','spider','fire','snow'],[6,10]]]){
+  ['sig-0',['snow','spider','golem','slime','crypt'],[4,10]],
+  ['sig-1',['slime','spider','snow','golem','crypt'],[6,10]],
+  ['sig-2',['crypt','slime','spider','golem','snow'],[6,10]]]){
   const g=new Game();g.autosave=false;g.start(seed);
   assert.deepEqual(g.run.familyOrder,order,seed+' still draws the same Family order');
   assert.deepEqual(g.run.familyIntro,intro,seed+' still draws the same Family introduction Days');

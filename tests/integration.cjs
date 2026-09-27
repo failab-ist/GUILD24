@@ -1242,7 +1242,7 @@ test('META_v2.8 §RETIRED: a stale Contract or Franchise payload changes nothing
  /* A filled retired Franchise block must not unlock, discount or gate anything. */
  const filled=Meta.fresh();
  filled.franchise={sales:9999,overcharged:9999,returning:9999,relics:9999,
-  families:['spider','slime','fire','crypt','snow'],done:['nowaste','nodeath','allsupplied','grosssales']};
+  families:['spider','slime','golem','crypt','snow'],done:['nowaste','nodeath','allsupplied','grosssales']};
  const withPayload=new Game(filled);withPayload.autosave=false;withPayload.start(seed);
  assert.deepEqual(shape(withPayload),shape(base),'a filled Franchise payload changes no Run value');
  assert.deepEqual(Meta.opened(filled),Meta.opened(Meta.fresh()),'and unlocks nothing');

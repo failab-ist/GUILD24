@@ -6,7 +6,7 @@
    consistently worst by 10%p a further candidate is reported rather than applied. v2.5 final
    (H1): .92 -> .90, which narrowed the gap to the next Family by about a third. fire is still
    the hardest Family and ships that way, on the playtest follow-up. The factor
-   itself lives in D.balance.fireCombat so the balance harness can compare a candidate against
+   itself lives in D.balance.golemCombat so the balance harness can compare a candidate against
    it without a production edit - the same reason guarantee.minPrice carries a name. */
 const D=G.DATA,clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 class Game{
@@ -21,7 +21,7 @@ class Game{
  const startGold=700; /* CORE_RUN §START STATE (User 2026-09-25, v2.9.1 balance; was 1000G) */
  this.rng=new G.RNG(seed);this.run={version:8,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   for(const[id,num]of D.openingStock)this.stock(id,num);
- for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','fire','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
+ for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','golem','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
     stream derived from the run seed, so it costs the run stream nothing and a reload cannot
     re-roll it. Exactly one of D7/D14 and one of D21/D28, plus a third on a PASS3 weighting -
@@ -142,12 +142,12 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     after a reload - a Save/Load can never reroll it - and it costs the run stream no draw, so
     generating it five Days earlier does not move any other seeded result. */
  makeFinal(){const s=this.run,base=D.dungeonBy.final;
-  const families=new G.RNG(String(s.seed)+':final').shuffle(['spider','slime','fire','crypt','snow']).slice(0,2);
+  const families=new G.RNG(String(s.seed)+':final').shuffle(['spider','slime','golem','crypt','snow']).slice(0,2);
   const hazards=[...new Set(families.flatMap(id=>D.familyTiers[id][1]))];
   return {...base,families,familyNames:families.map(id=>D.dungeonBy[id].name),hazards,day:30,tier:2,family:'final',scale:4.6,power:D.balance.bossPower/3,reward:2};}
  makeDungeon(id,tier=null){const s=this.run,base=D.dungeonBy[id];
  if(tier===null){const weights=G.Dungeon.tierWeights(s.day);tier=this.rng.weighted([1,2,3],t=>weights[t-1]);}
- return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='fire'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='fire'?D.balance.fireCombat:1),reward:base.reward*(1+(tier-1)*.12)};
+ return {...base,name:base.name+' '+['','I','II','III'][tier],family:id,tier,hazards:[...D.familyTiers[id][tier-1]],day:s.day,scale:1+s.day*.10+(tier-1)*.6,stars:tier,...(this.burden(),{}),power:(21+G.Dungeon.gateDayTerm(s.day)+(tier-1)*5+(id==='golem'?6+(tier-1)*8:0)+(base.base-2)*1.3)*(id==='golem'?D.balance.golemCombat:1),reward:base.reward*(1+(tier-1)*.12)};
  }
  eventEligible(e){const s=this.run,fx=e.effects;
   if(fx.cold)return s.dungeons.some(d=>!d.hazards.includes('cold')&&!d.hazards.includes('fire'));
@@ -205,7 +205,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
      and never generates a new Pair. D25 grants no Counter Items, no free stock and no shop. */
   if(s.day>=25&&!s.final)s.final=this.makeFinal();
   if(s.day===30){s.event=null;s.eventSeen=true;s.pilgrimage=0;s.dungeons=[s.final||(s.final=this.makeFinal())];s.queue=[];return null;}
-  s.familyOrder??=this.rng.shuffle(['spider','slime','fire','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),odds=G.Dungeon.gateCountOdds(s.day),count=counts.length===1?counts[0]:odds[0]===odds[1]?this.rng.int(counts[0],counts.at(-1)):(this.rng.next()<odds[1]?counts[1]:counts[0]);s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
+  s.familyOrder??=this.rng.shuffle(['spider','slime','golem','crypt','snow']);s.familyIntro??=[5,10];const ids=s.familyOrder.slice(0,3+Number(s.day>=s.familyIntro[0])+Number(s.day>=s.familyIntro[1]));const counts=G.Dungeon.gateCountRule(s.day),odds=G.Dungeon.gateCountOdds(s.day),count=counts.length===1?counts[0]:odds[0]===odds[1]?this.rng.int(counts[0],counts.at(-1)):(this.rng.next()<odds[1]?counts[1]:counts[0]);s.dungeons=this.rng.shuffle(ids).slice(0,count).map(id=>this.makeDungeon(id));
   return ids;
  }
  /* How many people are coming, composed in one place so the order of the four sources can be

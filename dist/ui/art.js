@@ -118,7 +118,7 @@ function itemIcon(id,size=52){const it=DATA.itemBy[id];if(!it)return '';const p=
 // the interface never falls back to emoji for a game object (UI_UX ACCESSIBILITY/SIGNALS).
 function mark(family,size=32){const c=DATA.dungeonBy[family]?.color||'#cbd5b6';let s='';
  if(family==='spider')s=rect(12,10,8,8,c)+rect(10,14,12,4,c)+rect(4,8,4,4,c)+rect(8,12,2,2,c)+rect(24,8,4,4,c)+rect(22,12,2,2,c)+rect(4,20,4,4,c)+rect(8,18,2,2,c)+rect(24,20,4,4,c)+rect(22,18,2,2,c)+rect(14,20,4,6,c)+rect(13,4,2,4,c)+rect(17,4,2,4,c);
- if(family==='fire')s=rect(14,4,4,4,c)+rect(12,8,8,4,c)+rect(8,12,16,6,c)+rect(6,18,20,8,c)+rect(10,26,12,2,'#f3d78a')+rect(12,14,8,8,'#f6e3ab')+rect(14,18,4,4,'#fffbe8');
+ if(family==='golem')s=rect(14,4,4,4,c)+rect(12,8,8,4,c)+rect(8,12,16,6,c)+rect(6,18,20,8,c)+rect(10,26,12,2,'#f3d78a')+rect(12,14,8,8,'#f6e3ab')+rect(14,18,4,4,'#fffbe8');
  if(family==='crypt')s=rect(10,4,12,4,c)+rect(6,8,4,16,c)+rect(22,8,4,16,c)+rect(10,20,12,4,c)+rect(12,8,8,12,'#2a2436')+rect(14,10,4,4,c)+rect(4,24,24,4,c);
  if(family==='snow')s=rect(14,2,4,28,c)+rect(2,14,28,4,c)+rect(6,6,4,4,c)+rect(22,6,4,4,c)+rect(6,22,4,4,c)+rect(22,22,4,4,c)+rect(10,10,12,12,'#e6f6fb')+rect(14,14,4,4,c);
  if(family==='slime')s=rect(8,12,16,4,c)+rect(4,16,24,10,c)+rect(10,8,10,4,c)+rect(10,18,4,4,'#22392f')+rect(18,18,4,4,'#22392f')+rect(6,26,20,2,'#2c4a3d');

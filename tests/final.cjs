@@ -5,7 +5,7 @@ for(const f of ['data/catalog','data/relics','data/decorations','data/copy','sys
 let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 const copy=x=>JSON.parse(JSON.stringify(x));
 const read=p=>require('node:fs').readFileSync(require('node:path').join(__dirname,'..',p),'utf8');
-const FAMILIES=['spider','slime','fire','crypt','snow'];
+const FAMILIES=['spider','slime','golem','crypt','snow'];
 
 function atFinal(seed='final',eligible=5){
  const g=new Game();g.autosave=false;g.start(seed);g.buyRelic(g.run.relicWindow.candidateIds[0]);

@@ -12,7 +12,7 @@ test('DUN-Q04/Q19: exactly the 9 canonical Hazards, mire present, slow absent',(
  assert.deepEqual(Object.keys(DATA.hazards).sort(),[...CANON_HAZARDS].sort());
  assert.ok('mire' in DATA.hazards&&!('slow' in DATA.hazards));
  for(const [id,tiers] of Object.entries(DATA.familyTiers))for(const t of tiers)for(const h of t)assert.ok(CANON_HAZARDS.includes(h),id+' uses noncanonical hazard '+h);
- assert.deepEqual(DATA.familyTiers.fire,[['fire'],['fire'],['fire']],'FIRE second axis is Combat Power, not a Hazard');
+ assert.deepEqual(DATA.familyTiers.golem,[['fire'],['fire'],['fire']],'the golem (화염 골렘 광산) Family: its second axis is Combat Power, not a Hazard');
 });
 
 test('DUN-Q19/ITEM-Q17: no legacy resolution key survives on any active Item',()=>{

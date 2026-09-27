@@ -210,7 +210,6 @@ Gate required Combat Power carries a Family factor `fireCombat=0.90` (v2.5 final
 ```
 
 ```new
-Gate required Combat Power carries a Family factor `fireCombat=0.90`.
 ```
 
 ```text
@@ -637,13 +636,9 @@ Full required Power (Source-exact):
 Gate Power
 = (21 + Day term + (Tier - 1) × 5 + FireTerm + (familyBase - 2) × 1.3) × FamilyCombat
 × Event danger multiplier × (1 + (50 - region) × 0.001)
-FireTerm = 6 + (Tier - 1) × 8 for fire, else 0
-FamilyCombat = fireCombat 0.90 for fire, else 1
-familyBase: spider 2 · slime 2 · fire 3 · crypt 3 · snow 4
 region: 0..100, starts 50; each Night +2 per win, -4 per death, -1 per other result
 Gate scale = 1 + Day × 0.10 + (Tier - 1) × 0.6   (Final: 4.6)
 Gate reward multiplier = familyReward × (1 + (Tier - 1) × 0.12) × Event reward multiplier
-familyReward: spider 1 · slime 1 · fire 1.15 · crypt 1.10 · snow 1.25 · Final 2
 Day-term reference anchors:
 ```
 
@@ -1114,4 +1109,17 @@ above are edited in place (the levelFactor line is gone); the D19–29 Gate-coun
 ```new
 | D19–24 | 3 at 70%, otherwise 2 (User 2026-09-26, v2.9.2 fourth pass; was 2 or 3 at 50% / 50% through D29) |
 | D25–29 | exactly 3, no draw (User 2026-09-26, v2.9.2 fourth pass) |
+```
+
+## AMENDMENT — v2.9.8 Dungeon id golem (User 2026-09-27)
+
+User 2026-09-27: the 화염 골렘 광산 Family id is golem (was fire, the same word as its Hazard); golemCombat. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+Gate required Combat Power carries a Family factor `golemCombat=0.90` (화염 골렘 광산, id `golem`; the Family id was `fire`, the
+same word as its Hazard, until v2.9.8 - User 2026-09-27).
+FireTerm = 6 + (Tier - 1) × 8 for golem, else 0
+FamilyCombat = golemCombat 0.90 for golem, else 1
+familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
+familyReward: spider 1 · slime 1 · golem 1.15 · crypt 1.10 · snow 1.25 · Final 2
 ```

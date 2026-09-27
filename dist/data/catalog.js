@@ -133,7 +133,7 @@ traits:[
 ].map(([id,name,direction,effects,tones,note=''])=>({id,name,direction,effects,tones,note})),
 dungeons:[
 {id:'spider',name:'독거미 동굴',short:'독거미 동굴',base:2,icon:'🕷',color:'#a4b980',hazards:['poison','bind'],reward:1},
-{id:'fire',name:'화염 골렘 광산',short:'골렘 광산',base:3,icon:'◆',color:'#ea9561',hazards:['fire'],reward:1.15},
+{id:'golem',name:'화염 골렘 광산',short:'골렘 광산',base:3,icon:'◆',color:'#ea9561',hazards:['fire'],reward:1.15},
 {id:'crypt',name:'망자역 지하묘지',short:'망자역',base:3,icon:'☾',color:'#b3a1d0',hazards:['fear','dark'],tags:['undead'],reward:1.1},
 {id:'snow',name:'북부 설원 폐허',short:'설원 폐허',base:4,icon:'❄',color:'#a0d5e0',hazards:['cold','whiteout'],reward:1.25},
 {id:'slime',name:'슬라임 하수도',short:'슬라임 하수도',base:2,icon:'◉',color:'#8ac3a8',hazards:['corrosion','mire'],reward:1},
@@ -241,7 +241,7 @@ G.DATA.bossTuning={
 };
 /* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
    Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
-/* fireCombat is the §O easing of the fire Family's combat requirement. It is named here rather
+/* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
    the harness without editing production. The value is unchanged by that move. */
 /* ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION. The inherited fixed all-Run table is
@@ -257,7 +257,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,easterChance:.01,fireCombat:.90,
+G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,easterChance:.01,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],

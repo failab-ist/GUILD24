@@ -40,7 +40,7 @@ const ECO={warehouse:18,offers:5,rerollBase:50,sponsorBase:350,
 function withCandidate(fn){
  if(!CANDIDATE)return fn();
  const t=D.bossTuning,b=D.balance,proto=globalThis.Game.prototype;
- const saved={tuning:{...t},sloth:t.slothBossPower.slice(),fire:b.fireCombat,overhead:proto.overheadBase,
+ const saved={tuning:{...t},sloth:t.slothBossPower.slice(),fire:b.golemCombat,overhead:proto.overheadBase,
   warehouse:b.warehouse,offers:b.orderOffers,rerollBase:b.rerollBase,
   sponsorBase:D.deepTuning.sponsorBase,openingStock:D.openingStock,
   sponsorRarityStep:D.deepTuning.sponsorRarityStep,sponsorLevelStep:D.deepTuning.sponsorLevelStep};
@@ -59,13 +59,13 @@ function withCandidate(fn){
     threshold), and those values are now the live table. Keeping the old arm here would leave a
     superseded set of numbers standing as an alternate expectation, so the arm is removed
     rather than re-pointed; a future candidate gets its own arm against the current baseline. */
- if(USE.h1)b.fireCombat=0.90;
+ if(USE.h1)b.golemCombat=0.90;
  if(USE.e1)proto.overheadBase=function(){const core=this.coreRoster();
   const avgLevel=core.length?core.reduce((a,n)=>a+n.level,0)/core.length:1;
   const avgRarity=core.length?core.reduce((a,n)=>a+n.rarity,0)/core.length:0;
   return (90+1*(this.run.day-1))*(1+.05*(avgLevel-1))*(1+.12*avgRarity);};
  try{return fn();}
- finally{Object.assign(t,saved.tuning);t.slothBossPower=saved.sloth;b.fireCombat=saved.fire;
+ finally{Object.assign(t,saved.tuning);t.slothBossPower=saved.sloth;b.golemCombat=saved.fire;
   proto.overheadBase=saved.overhead;b.warehouse=saved.warehouse;b.orderOffers=saved.offers;
   b.rerollBase=saved.rerollBase;D.deepTuning.sponsorBase=saved.sponsorBase;D.openingStock=saved.openingStock;
   D.deepTuning.sponsorRarityStep=saved.sponsorRarityStep;D.deepTuning.sponsorLevelStep=saved.sponsorLevelStep;}
