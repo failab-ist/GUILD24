@@ -336,25 +336,44 @@ Canonical Dungeon behavior:
 
 Natural alternative = the one Stat each Hazard presses (3 / 3 / 3, 투력 never; 어둠 -> 기동 and 화염 -> 정신 per User 2026-09-24 revisions 3 / 5) -> `DUNGEON_HAZARD_v2.8.0.md` (User 2026-09-24, v2.9.0)
 
-| Hazard | Main / Upper | Lower | Hybrid / Natural alternative |
-|---|---|---|---|
-| poison | 농축 해독제 +30 | 방진마스크 +24 | 강인함 / 해독가 / 거미줄 방호세트 +22 |
-| bind | 경량 로프 +16 | — | 기동 / Stat support / 거미줄 방호세트 +18 |
-| corrosion | 부식 방지 코팅제 +24 | — | 방수망토 +6 / 강인함 / 연금 방수슈트 +22 |
-| mire | 원정용 장화 +20 | — | 방수망토 +6 / 기동 / 연금 방수슈트 +18 |
-| fire | 쿨링 이온음료 +26 | 얼음컵 +10 | 기동 / 내열성 / 마그마 냉각장비 +18 |
-| fear | 용사의 곡주 +20 | 집중 사탕 +10 | 정신 / 성화 랜턴 +18 |
-| dark | 랜턴 건전지 +16 | — | 정신 / 눈썰미 / 성화 랜턴 +18 |
-| cold | 핫팩 +24 | 컵라면 +10 | 불룡볶음면 +12 / 강인함 / 백설 방한고글 +22 |
-| whiteout | 설원 고글 +20 | — | 정신 / 눈썰미 / 백설 방한고글 +18 |
+### COUNTER LADDER (User 2026-09-27, v2.9.7)
 
-Counter values by Rarity (User 2026-09-25, v2.9.1 balance): within one Rarity, `Counter + the pressed Stat's
-defense contribution` is equal, so a 강인함-pressed Hazard (독 · 냉기 · 부식, 강인함 ÷3) carries +4 over a 기동- / 정신-pressed
-one (÷2). Field Gear and the Main Drink Counters: Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22
-(a hybrid stays below every specialist of the same or a higher Rarity for each Hazard it covers; it may exceed a
-Common Main such as 경량 로프 / 랜턴 건전지 — User 2026-09-25, v2.9.1). Food / Drink secondary Counters (컵라면, 집중 사탕,
-얼음컵, 방수망토) keep their values.
-불룡볶음면 냉기 +6 → +12 with 강인함 +8 → +6 (User 2026-09-26, v2.9.6): its Cold defense read below 컵라면's; it now sits between the Common Lower (10) and the Uncommon Main (24).
+Every Gate family carries the same four rungs; 화염 골렘 광산 has one Hazard, so it has no early hybrid. A Tier 1 Gate
+shows only its family's first Hazard (독 / 부식 / 냉기 / 공포 / 화염), so only those need an early Counter; the second
+Hazards (속박 / 진창 / 어둠 / 화이트아웃) start at Tier 2. Per Hazard the order is 중반 대응 > 후반 하이브리드 >
+초반 하이브리드 > 초반 대응. Each rung's role, read with the adventurer's own pressed-Stat share
+(`DUNGEON_HAZARD_v2.8.0.md` Hazard defense):
+
+- 초반 대응 (Common, one Hazard): clears a Tier 1 Hazard on its own
+- 초반 하이브리드 (Uncommon, both Hazards of a Gate): well short of Tier 2; only a well-grown adventurer clears Tier 2
+  with it from mid-Run
+- 중반 대응 (Rare, one Hazard): clears Tier 2 surely; from about D20 an average adventurer clears Tier 3 with it
+- 후반 하이브리드 (Epic, both Hazards): just short of Tier 2; late in the Run a top adventurer can try Tier 3 with it alone
+
+Values by the pressed Stat (강인함 ÷3 for 독 · 부식 · 냉기; 기동 ÷2 for 속박 · 진창 · 어둠; 정신 ÷2 for 공포 · 화이트아웃 · 화염):
+
+| Rung | 강인함 | 기동 | 정신 |
+|---|---:|---:|---:|
+| 초반 대응 | 10 | — | 8 |
+| 초반 하이브리드 | 12 | 9 | 9 |
+| 후반 하이브리드 | 16 | 14 | 12 |
+| 중반 대응 | 23 | 21 | 18 |
+
+A Food / Drink Counter keeps its Supply and reads one step lower where it also raises the pressed Stat: 불룡볶음면 냉기 21
+with 강인함 +6 (its own Stat is worth 냉기 +2).
+
+| Gate (Hazards) | 초반 대응 | 초반 하이브리드 | 중반 대응 | 후반 하이브리드 |
+|---|---|---|---|---|
+| 독거미 동굴 (독 · 속박) | 방진마스크 독 10 | 방독 작업장갑 독 12 · 속박 9 (new) | 농축 해독제 독 23 · 경량 로프 속박 21 | 거미줄 방호세트 16 · 14 |
+| 슬라임 하수도 (부식 · 진창) | 중화 탄산수 부식 10 (new) | 방수망토 부식 12 · 진창 9 | 부식 방지 코팅제 23 · 원정용 장화 21 | 연금 방수슈트 16 · 14 |
+| 망자역 지하묘지 (공포 · 어둠) | 집중 사탕 공포 8 | 축성 손전등 공포 9 · 어둠 9 (new) | 용사의 곡주 공포 18 · 랜턴 건전지 어둠 21 | 성화 랜턴 공포 12 · 어둠 14 |
+| 북부 설원 폐허 (냉기 · 화이트아웃) | 컵라면 냉기 10 | 방한 두건 냉기 12 · 화이트아웃 9 (핫팩 converted) | 불룡볶음면 냉기 21 · 설원 고글 화이트아웃 18 | 백설 방한고글 16 · 12 |
+| 화염 골렘 광산 (화염) | 얼음컵 화염 8 | — | 쿨링 이온음료 화염 18 | 마그마 냉각장비 화염 12 · 투력 10 |
+
+The Items marked (new) and the 핫팩 → 방한 두건 conversion are approved with this ladder (User 2026-09-27) and are
+added to the catalog as their own change; until then the catalog carries 핫팩 as the Uncommon 냉기 +24 specialist.
+Superseded: the v2.9.1 by-Rarity Counter values (Common 16 · Uncommon 20 / 24 · Rare 26 / 30 · Epic hybrid 18 / 22) and
+the v2.9.6 불룡볶음면 냉기 +12 line.
 
 The Natural alternative (the pressed Stat) is 관련 준비, never a Counter: no Counter multiplier, no Counter pity and no Counter-conditioned Store Support reads it; only the purchase acceptance floor and 원정 위험 게시판 do (`RELIC_v2.8.0.md` §COUNTER JUDGEMENT; (User 2026-09-24, v2.9.0)).
 
@@ -769,40 +788,40 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 
 | # | Item | Category / Rarity | Buy / Sell | Effect | Hazard Role |
 |---:|---|---|---:|---|---|
-| 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 3 | Cold Lower |
+| 3 | 컵라면 | Food C | 45 / 90 | 냉기 +10, Supply 3 | Cold 초반 대응 |
 | 5 | 초코바 | Food C | 30 / 60 | 기동 +8, Supply 3 | — |
 | 6 | 캔커피 | Drink C | 40 / 80 | 기동 +12, Supply 2 | Stat route |
 | 7 | 진정 허브티 | Drink C | 40 / 80 | 정신 +15, Supply 2 | Stat route |
 | 8 | 하급 포션 | Potion C | 70 / 140 | 투력 +8 | — |
-| 9 | 얼음컵 | Drink C | 30 / 60 | 화염 +10, Supply 1 | Fire Lower |
-| 10 | 랜턴 건전지 | Field Gear C | 45 / 90 | 어둠 +16 | Dark Main |
-| 11 | 경량 로프 | Field Gear C | 50 / 100 | 속박 +16 | Bind Main |
-| 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +10, Supply 2 | Fear Lower |
-| 13 | 불룡볶음면 | Food U | 80 / 160 | 강인함 +6, 냉기 +12, Supply 3 | Cold Hybrid |
+| 9 | 얼음컵 | Drink C | 30 / 60 | 화염 +8, Supply 1 | Fire 초반 대응 |
+| 10 | 랜턴 건전지 | Field Gear R | 95 / 190 | 어둠 +21 | Dark 중반 대응 |
+| 11 | 경량 로프 | Field Gear R | 95 / 190 | 속박 +21 | Bind 중반 대응 |
+| 12 | 집중 사탕 | Food C | 35 / 70 | 공포 +8, Supply 2 | Fear 초반 대응 |
+| 13 | 불룡볶음면 | Food R | 95 / 190 | 강인함 +6, 냉기 +21, Supply 3 | Cold 중반 대응 |
 | 14 | 에너지드링크 | Drink U | 80 / 160 | 기동 +17, Supply 2 | Stat route |
-| 15 | 용사의 곡주 | Drink U | 70 / 140 | 공포 +20, 기동 -4, Supply 1 | Fear Main / RiskReward |
+| 15 | 용사의 곡주 | Drink R | 95 / 190 | 공포 +18, 기동 -4, Supply 1 | Fear 중반 대응 / RiskReward |
 | 16 | 구급키트 | Insurance U | 80 / 160 | Outcome 1단계 완화 (중상 → 부상 · 부상 → 무사) Aftercare | Aftercare |
-| 17 | 방진마스크 | Field Gear U | 80 / 160 | 독 +24 | Poison Lower |
+| 17 | 방진마스크 | Field Gear C | 45 / 90 | 독 +10 | Poison 초반 대응 |
 | 18 | 핫팩 | Field Gear U | 70 / 140 | 냉기 +24 | Cold Main |
-| 19 | 방수망토 | Field Gear U | 75 / 150 | 부식 +6, 진창 +6 | Dual Hybrid |
-| 20 | 부식 방지 코팅제 | Field Gear U | 85 / 170 | 부식 +24 | Corrosion Main |
-| 21 | 원정용 장화 | Field Gear U | 75 / 150 | 진창 +20 | Mire Main |
-| 22 | 설원 고글 | Field Gear U | 70 / 140 | 화이트아웃 +20 | Whiteout Main |
-| 23 | 상급 포션 | Potion R | 175 / 350 | 투력 +20 | — |
-| 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +30 | Poison Main |
+| 19 | 방수망토 | Field Gear U | 80 / 160 | 부식 +12, 진창 +9 | Slime 초반 하이브리드 |
+| 20 | 부식 방지 코팅제 | Field Gear R | 95 / 190 | 부식 +23 | Corrosion 중반 대응 |
+| 21 | 원정용 장화 | Field Gear R | 95 / 190 | 진창 +21 | Mire 중반 대응 |
+| 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +18 | Whiteout 중반 대응 |
+| 23 | 상급 포션 | Potion R | 195 / 390 | 투력 +20 | — |
+| 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +23 | Poison 중반 대응 |
 | 25 | 귀환석 | Insurance R | 200 / 400 | Emergency Escape +50%p path | Severe/Death Insurance |
 | 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +14 | — |
-| 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +26, Supply 1 | Fire Main |
+| 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +18, Supply 1 | Fire 중반 대응 |
 | 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death -> Severe Injury once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
-| 31 | 거미줄 방호세트 | Field Gear E | 165 / 330 | 독 +22, 속박 +18 | Spider Hybrid |
-| 32 | 연금 방수슈트 | Field Gear E | 165 / 330 | 부식 +22, 진창 +18 | Slime Hybrid |
-| 33 | 성화 랜턴 | Field Gear E | 165 / 330 | 공포 +18, 어둠 +18 | Crypt Hybrid |
-| 34 | 백설 방한고글 | Field Gear E | 165 / 330 | 냉기 +22, 화이트아웃 +18 | Snow Hybrid |
-| 35 | 마그마 냉각장비 | Field Gear E | 175 / 350 | 화염 +18, 투력 +10 | Fire Hybrid |
+| 31 | 거미줄 방호세트 | Field Gear E | 165 / 330 | 독 +16, 속박 +14 | Spider 후반 하이브리드 |
+| 32 | 연금 방수슈트 | Field Gear E | 165 / 330 | 부식 +16, 진창 +14 | Slime 후반 하이브리드 |
+| 33 | 성화 랜턴 | Field Gear E | 165 / 330 | 공포 +12, 어둠 +14 | Crypt 후반 하이브리드 |
+| 34 | 백설 방한고글 | Field Gear E | 165 / 330 | 냉기 +16, 화이트아웃 +12 | Snow 후반 하이브리드 |
+| 35 | 마그마 냉각장비 | Field Gear E | 175 / 350 | 화염 +12, 투력 +10 | Fire 후반 하이브리드 |
 | 38 | 초고속 에너지드링크 | Drink E | 175 / 350 | 기동 +26, Supply 2 | Top-end mobility |
 | 39 | 대현자 허브엘릭서 | Drink E | 175 / 350 | 정신 +28, Supply 2 | Top-end spirit |
-| 40 | 최상급 포션 | Potion E | 210 / 420 | 투력 +28 | Top-end raw Power |
+| 40 | 최상급 포션 | Potion E | 235 / 470 | 투력 +28 | Top-end raw Power |
 
 Active catalog count is exactly 40.
 Retired active identities:
@@ -819,11 +838,14 @@ The approved `bar` repurpose is Uncommon.
 
 The active 40-Item distribution is therefore:
 
-    Common 11
-    Uncommon 12
-    Rare 5
+    Common 10
+    Uncommon 6
+    Rare 12
     Epic 11
     Legendary 1
+
+(User 2026-09-27, v2.9.7: the Counter ladder moves 방진마스크 to Common and 경량 로프 / 랜턴 건전지 / 부식 방지 코팅제 /
+원정용 장화 / 설원 고글 / 용사의 곡주 / 불룡볶음면 to Rare; it was C11 / U12 / R5 / E11 / L1.)
 
 Do not move another Item solely to alter these approved Common/Uncommon counts.
 
@@ -863,14 +885,14 @@ stocking day, and is discarded at the morning it runs out. The rule behind the t
 | midpotion | 중급 포션 | Potion | 4d |
 | highpotion | 상급 포션 | Potion | 5d |
 | toppotion | 최상급 포션 | Potion | 5d |
-| battery | 랜턴 건전지 | Field Gear | 3d |
-| rope | 경량 로프 | Field Gear | 3d |
-| mask | 방진마스크 | Field Gear | 4d |
+| battery | 랜턴 건전지 | Field Gear | 5d |
+| rope | 경량 로프 | Field Gear | 5d |
+| mask | 방진마스크 | Field Gear | 3d |
 | heat | 핫팩 | Field Gear | 4d |
 | cloak | 방수망토 | Field Gear | 4d |
-| coating | 부식 방지 코팅제 | Field Gear | 4d |
-| boots | 원정용 장화 | Field Gear | 4d |
-| snowgoggles | 설원 고글 | Field Gear | 4d |
+| coating | 부식 방지 코팅제 | Field Gear | 5d |
+| boots | 원정용 장화 | Field Gear | 5d |
+| snowgoggles | 설원 고글 | Field Gear | 5d |
 | antidote | 농축 해독제 | Field Gear | 5d |
 | spiderkit | 거미줄 방호세트 | Field Gear | 5d |
 | slimesuit | 연금 방수슈트 | Field Gear | 5d |

@@ -556,3 +556,18 @@ shared accessible-mode base need is not lowered for it:
 ## AMENDMENT — v2.9.2 balance: operating dayBase +12 per Day after DAY 15 (User decision 2026-09-26)
 
 User 2026-09-26 (after the `reader` harness review): the late term is added to the dayBase line declared above, edited in place.
+
+## AMENDMENT — v2.9.7 Counter ladder (User 2026-09-27)
+
+User 2026-09-27: the Counter ladder (초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드) replaces the by-Rarity Counter values; the Rare ORDER offer holds 1~3 units; potion prices 195 / 235.
+
+```new
+### ORDER OFFER QUANTITY
+(User 2026-09-27, v2.9.7.) The most one ORDER offer lets the store stock, rolled when the offer is made:
+| Rarity | Units |
+|---|---|
+| Common · Uncommon | 2~4 |
+| Rare | 1~3 (was 1; the mid-Run Hazard Counters sit here since v2.9.7) |
+| Epic · Legendary | 1 |
+Store Support that adds supply quantity (`RELIC_v2.8.0.md`) adds on top, unchanged.
+```

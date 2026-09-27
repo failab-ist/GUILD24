@@ -484,6 +484,18 @@ Final = 고급 준비물이 자주 보이지만 Legendary는 여전히 예외
 The purpose is not to make Epic mandatory.
 The purpose is to make late-Run high-slot-efficiency preparation actually appear often enough to become a decision.
 
+### ORDER OFFER QUANTITY
+
+(User 2026-09-27, v2.9.7.) The most one ORDER offer lets the store stock, rolled when the offer is made:
+
+| Rarity | Units |
+|---|---|
+| Common · Uncommon | 2~4 |
+| Rare | 1~3 (was 1; the mid-Run Hazard Counters sit here since v2.9.7) |
+| Epic · Legendary | 1 |
+
+Store Support that adds supply quantity (`RELIC_v2.8.0.md`) adds on top, unchanged.
+
 ### ORDER Rare+ pity — exact
 
 Pity counts canonical offer-set generations that contain no Rare+ Item.

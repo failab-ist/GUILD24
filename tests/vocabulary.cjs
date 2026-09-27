@@ -26,9 +26,10 @@ test('ITEM-Q71: ACTIVE CATALOG is exactly the canonical 40',()=>{
  assert.deepEqual(DATA.items.map(i=>i.name),CATALOG);
  assert.equal(new Set(DATA.items.map(i=>i.id)).size,40);
  /* ITEM_v2.8 §ACTIVE RARITY DISTRIBUTION - EXACT. The `bar` repurpose is Uncommon, so the
-    active 40 are C11 / U12 / R5 / E11 / L1 and no other Item moves to restore the old counts. */
- assert.deepEqual([0,1,2,3,4].map(v=>DATA.items.filter(i=>i.rarity===v).length),[11,12,5,11,1],
-  'active Rarity distribution is the approved C11/U12/R5/E11/L1');
+    active 40 were C11 / U12 / R5 / E11 / L1; the Counter ladder (User 2026-09-27, v2.9.7) moves 방진마스크 to Common and
+    seven mid Counters to Rare, so they are C10 / U6 / R12 / E11 / L1. */
+ assert.deepEqual([0,1,2,3,4].map(v=>DATA.items.filter(i=>i.rarity===v).length),[10,6,12,11,1],
+  'active Rarity distribution is the approved C10/U6/R12/E11/L1');
  /* ITEM §DIRECTOR DOCUMENT BASELINE - the six rebaselined active identities, to the digit
     (v2.9.1 balance, User 2026-09-25: Sell = Buy x 2 for every Item; bar/premium buy+effects rose;
     shelf lives from ITEM §SHELF LIFE — EXACT are unchanged). */
@@ -62,7 +63,7 @@ test('ITEM-Q02/Q03: every Item declares canonical roles and every effect is pres
 
 test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to the digit',()=>{
  const shelf={rice:2,ramen:3,bar:2,choco:2,candy:4,lava:3,premium:2,battlelunch:2,water:2,coffee:2,herbtea:2,ice:3,energy:3,wine:4,ion:5,herobar:3,hyperenergy:3,sageelixir:3,
-  potion:3,midpotion:4,highpotion:5,toppotion:5,battery:3,rope:3,mask:4,heat:4,cloak:4,coating:4,boots:4,snowgoggles:4,antidote:5,spiderkit:5,slimesuit:5,cryptlantern:5,snowvisor:5,magmagear:5,kit:4,stone:4,tree:5,coupon:5};
+  potion:3,midpotion:4,highpotion:5,toppotion:5,battery:5,rope:5,mask:3,heat:4,cloak:4,coating:5,boots:5,snowgoggles:5,antidote:5,spiderkit:5,slimesuit:5,cryptlantern:5,snowvisor:5,magmagear:5,kit:4,stone:4,tree:5,coupon:5};
  assert.equal(Object.keys(shelf).length,40);
  for(const it of DATA.items){assert.equal(it.days,shelf[it.id],it.id+' shelf life');assert.ok(it.days>=2&&it.days<=5,it.id+' within 2~5 days');}
  // the redistributed Fatigue recovery (ITEM §SUPPLY MODEL contract) and the two price / Stat moves
@@ -72,7 +73,7 @@ test('ITEM §SHELF LIFE — EXACT (v2.9.0 F4): every Item expires, 2~5 days, to 
  for(const it of DATA.items.filter(i=>i.category==='food'))assert.ok(it.effects.supply<=7||it.id==='battlelunch','no Food above 7 except 영웅 결전 도시락');
  for(const it of DATA.items.filter(i=>i.category==='drink'))assert.ok(it.effects.supply>=1&&it.effects.supply<=2,'a Drink recovers 1~2');
  assert.equal(DATA.itemBy.lava.effects.survival,6,'불룡볶음면 강인함 +6 (User 2026-09-26, v2.9.6: 냉기 +12 / 강인함 +6)');
- assert.equal(DATA.itemBy.lava.effects.cold,12,'불룡볶음면 냉기 +12, above 컵라면 +10 and below 핫팩 +24 (v2.9.6)');
+ assert.equal(DATA.itemBy.lava.effects.cold,21,'불룡볶음면 냉기 +21: the Cold 중반 대응, one step under the 강인함 rung 23 because its 강인함 +6 is worth 냉기 +2 (ITEM §COUNTER LADDER, User 2026-09-27)');
  assert.deepEqual([DATA.itemBy.tree.buy,DATA.itemBy.tree.sell],[400,800],'세계수 생환부적 400 / 800');
  // every stocked unit carries a finite expiry
  const g=new Game();g.autosave=false;g.start('shelf-life');g.run.facilities=[];
@@ -113,11 +114,9 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
   const statRoute=DATA.items.filter(i=>(i.effects[stat[h]]||0)>0&&!(i.effects[h]>0));
   assert.ok(counters.length-1+statRoute.length>=2,h+' lacks two alternative routes');
  }
- /* ITEM-Q73/ITEM-Q83/ITEM-Q15 (User 2026-09-25, v2.9.1 balance): a Hybrid stays weaker per
-    target than any dedicated specialist of the SAME OR HIGHER Rarity - it may now exceed a
-    Rarity strictly below its own. An Epic hybrid may therefore outscore a Common Main
-    (속박/어둠 +18 over 경량 로프/랜턴 건전지 +16 is the explicit named exception); it still may
-    not outscore any Uncommon-or-above specialist on that Hazard. */
+ /* ITEM §COUNTER LADDER (User 2026-09-27, v2.9.7): per Hazard 중반 대응 > 후반 하이브리드 > 초반 하이브리드 > 초반 대응.
+    The same-or-higher-Rarity rule below still holds; the ladder check after it pins the 후반 하이브리드 under the
+    Hazard's 중반 대응 and the 초반 하이브리드 (방수망토) under the 후반 하이브리드. */
  for(const id of EPIC_HYBRIDS){
   const hybridRarity=DATA.itemBy[id].rarity;
   for(const h of CANON_HAZARDS){const v=DATA.itemBy[id].effects[h]||0;if(!v)continue;
@@ -128,6 +127,9 @@ test('DUN-Q18: every Hazard keeps a Main specialist plus >=2 alternative routes'
    }
   }
  }
+ for(const id of EPIC_HYBRIDS)for(const h of CANON_HAZARDS){const v=DATA.itemBy[id].effects[h]||0;if(!v)continue;
+  assert.ok(v<DATA.itemBy[main[h]].effects[h],DATA.itemBy[id].name+' stays under the '+h+' 중반 대응 '+DATA.itemBy[main[h]].name);}
+ for(const h of ['corrosion','mire'])assert.ok(DATA.itemBy.cloak.effects[h]<DATA.itemBy.slimesuit.effects[h],'방수망토 (초반 하이브리드) stays under 연금 방수슈트 on '+h);
  // Hybrid must not beat either dedicated Main on its own Hazard - 방수망토 is Uncommon, so both
  // corrosion/mire Mains (coating U, boots U) are same-Rarity and the plain rule still applies.
  for(const h of ['corrosion','mire'])assert.ok(DATA.itemBy.cloak.effects[h]<DATA.itemBy[main[h]].effects[h],'방수망토 must not outperform the '+h+' Main');
