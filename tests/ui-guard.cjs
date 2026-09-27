@@ -2985,11 +2985,21 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
    tools/qa-primary-grammar.cjs (read off the screen), this pins the construction */
 test('UI-Q-v29-44: every Phase Action casts and presses down-right at its step',()=>{
  const rule=sel=>{const i=css.indexOf(sel);assert.ok(i>0,sel+' is a real rule');return css.slice(i,css.indexOf('}',i)+1);};
- const prep=css.slice(css.indexOf('.p-prep .dock [data-action="start"],\n.modal-footer [data-action="store-return"]{min-height'),css.indexOf('@media(min-width:1024px)',css.indexOf('.modal-footer [data-action="store-return"]:active{')));
- assert.ok(prep.length>0&&!/drop-shadow\(0 \dpx 0/.test(prep),'the Run\'s opening Action no longer casts straight down');
- for(const sel of ['.p-prep .dock [data-action="start"]:active,\n.modal-footer [data-action="store-return"]:active{','.p-final .dock .stamp:active{'])
-  assert.ok(/transform:translate\(4px,4px\)/.test(rule(sel)),'the press is diagonal: '+sel.split('\n')[0]);
- assert.ok(/filter:drop-shadow\(5px 5px 0 #00000099\)\}/.test(css),'새 점포 준비 casts the 5 px of a boundary step');
+ /* one colour per family (User 2026-09-27): the Run's opening Action is the BRICK build of 다음 날 / 다음 점포 열기 - its own
+    rule keeps the face, the label and the rivets, and draws no bevel, cast or press of its own */
+ const prep=rule('.p-prep .dock [data-action="start"],\n.modal-footer [data-action="store-return"]{min-height');
+ assert.ok(/background-color:var\(--brick\)/.test(prep)&&/background-size:9px 9px/.test(prep),'the brick face and its four rivets');
+ assert.ok(!/box-shadow|filter|clip-path/.test(prep)&&!css.includes('.p-prep .dock [data-action="start"]:active,\n'),
+  'and nothing of its own under them: the bevel, cast and press are the family\'s');
+ assert.ok(/\.p-closing \.dock \.stamp,\.p-end \.dock \.stamp\{text-shadow:0 2px 0 #5a221a\}/.test(css),'the three BRICK labels sit on one drop');
+ assert.ok(/transform:translate\(4px,4px\)/.test(rule('.p-final .dock .stamp:active{')),'the gate bar is thrown diagonally');
+ /* 영업 시작 is 발주 확정's steel: no face, edge or cast of its own, and a held cart's disabled plate casts nothing */
+ assert.ok(!/\.p-order \.dock \.stamp\.leave(:hover|:active)?\{/.test(css),'the leave control has no face of its own');
+ assert.ok(/\.p-order \.dock \.stamp\.leave\[disabled\]\{clip-path:var\(--stamp-cut\);filter:none;/.test(css),'a disabled 영업 시작 casts nothing');
+ /* two new cues, each on its own Action, neither the navigation click */
+ for(const c of ['begin','newstore'])assert.ok(Sound.cues.includes(c),c+' is a real cue');
+ assert.ok(/game\.start\(seed\);selected=null;setModal\(null\);sound\('begin'\)/.test(app),'첫 점포지원 고르기 plays begin');
+ assert.ok(/case'new':prepOpen=true;sound\('newstore'\)/.test(app),'다음 점포 열기 plays newstore');
  assert.ok(/\.pull\{flex:1;min-height:56px;/.test(css)&&/\.pull:active\{transform:translate\(3px,3px\)/.test(css),'문 열기 is a step inside the Day');
  assert.ok(/\.p-night \.dock \.stamp:active\{--nd:1px;transform:translate\(3px,3px\)/.test(css),'NIGHT keeps a 1 px cast when pressed');
  /* the notch cut every cast away (a filter draws before the clip): each notched Action's cut takes its --nd cast in */
@@ -3002,7 +3012,6 @@ test('UI-Q-v29-44: every Phase Action casts and presses down-right at its step',
  assert.ok(/background:#3a5f96;color:#f4f7ff;text-shadow:0 2px 0 #253f68;\n box-shadow:none;/.test(css),'NIGHT is a flat muted cobalt with a seated label');
  assert.ok(/\.p-final \.dock \.stamp\{[^}]*filter:drop-shadow\(5px 5px 0 #2e0d09\)/.test(css)&&/\.p-final \.dock \.stamp\[disabled\]\{[^}]*filter:none/.test(css),
   'the gate bar casts its own deep red, a step under its foot, and a shut gate casts nothing');
- assert.ok(/box-shadow:inset 0 3px 0 #6f98aa,inset 0 -4px 0 #2c343c\}/.test(css),'영업 시작 carries the frost on its lit edge too');
  const desk=css.slice(css.indexOf(' .p-morning .dock .pull{flex:0 0 auto'));
  assert.ok(/\.p-morning \.dock \.pull,\.p-order \.dock \.stamp,\.p-sale \.dock \.stamp,\.p-night \.dock \.stamp\{min-height:60px;font-size:20px\}/.test(desk),'a desk step inside the Day is 60 px');
  assert.ok(/width:344px;min-height:72px;font:600 22px\/1 var\(--ui\)/.test(desk),'and one across a boundary 72 px, not 86');
@@ -3037,7 +3046,7 @@ test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, d
  assert.ok(/\(fromEnd\?btn\('결과 다시 보기','prep-back','bare'\):''\)\+btn\('첫 점포지원 고르기','start','stamp'\)/.test(p),'the Action in the dock, and 결과 다시 보기 only from the ending');
  assert.ok(/const fromEnd=!!game\.run;/.test(p),'from the ending means a Run is still there');
  const act=app.slice(app.indexOf('async function action(el)'));
- assert.ok(/case'new':prepOpen=true;sound\('ui'\);render\(\);break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
+ assert.ok(/case'new':prepOpen=true;sound\('newstore'\);render\(\);break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
  const back=act.slice(act.indexOf("case'new'"),act.indexOf("case'prep-back'")+60);
  assert.ok(!/game\.(start|end|abandon)|Meta\./.test(back),'and neither changes the Run or the Account');
 });

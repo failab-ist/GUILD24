@@ -30,6 +30,9 @@ confirmed by the User.
   and the desk `다음 날` goes from 86 to 72 px. Steps inside the Day share one edge build (lit top, deep foot, no outline -
   ORDER's frost ring becomes its lit edge) and a seated label; NIGHT's blue is a muted cobalt; the FINAL cast is its own
   deep red. New runtime check `tools/qa-primary-grammar.cjs` in `qa:runtime`, reading the cast off the screen.
+- One colour per button family (same owner section): `영업 시작` takes `발주 확정`'s steel and frost edge; `첫 점포지원 고르기`
+  takes the BRICK bevel of `다음 날` / `다음 점포 열기` and keeps its rivets. Two new synthesised cues (UI_UX §SFX coverage):
+  `begin` for `첫 점포지원 고르기`, which was silent, and `newstore` for `다음 점포 열기`, which played the tab click.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

@@ -2143,7 +2143,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
- case'new':prepOpen=true;sound('ui');render();break;
+ case'new':prepOpen=true;sound('newstore');render();break;
  case'prep-back':prepOpen=false;sound('ui');render();break;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW: buying and equipping are only legal outside a Run, and
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
@@ -2167,7 +2167,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
      seed rather than re-rolling the DAY 0 support they have already seen. */
   const seed=plannedSeed();
   pendingSeed=null;                    // spent: a later new Run plans its own
-  preRunReturn=false;prepOpen=false;game.start(seed);selected=null;setModal(null);render();break;}
+  preRunReturn=false;prepOpen=false;game.start(seed);selected=null;setModal(null);sound('begin');render();break;}
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */

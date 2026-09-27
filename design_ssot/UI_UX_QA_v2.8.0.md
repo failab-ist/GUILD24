@@ -1430,6 +1430,9 @@ PASS:
   label wraps or is cut at 360 (a four-digit `발주 N G · 확정` included)
 - inside the Day: a 3 px lit top edge, a 4 px deep foot and no outline (NIGHT flat), labels seated on a 2 px drop
 - each Phase keeps its own face (wood / steel on paper with a frost edge / counter key / muted cobalt / BRICK / gate bar)
+- `영업 시작` and `발주 확정` show the same steel face and frost edge; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열기` the same
+  BRICK build (only the rivets differ); a disabled `영업 시작` casts nothing
+- pressing `첫 점포지원 고르기` plays `begin` and `다음 점포 열기` plays `newstore`, neither the navigation click
 
 FAIL:
 - a straight-down cast or press, a cast declared in the style but not on screen, a press that leaves no cast or moves by a

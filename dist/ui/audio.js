@@ -82,7 +82,11 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
  crate:[110],
  /* v2.9.2 H4: the CLOSING receipt prints as one pass, never a tick per row - a single dry paper
     tick, the same `order` stamp root played light and short */
- receipt:[110]};
+ receipt:[110],
+ /* v2.9.9 (User 2026-09-27): the two BRICK Actions that had no cue of their own. `begin` opens a Run - a wooden knock and
+    a rising G-D-G with a ringing octave, brighter than the Store Support fixture under it; `newstore` leaves the ending
+    for the next store - a latch click and a short rising pair, lighter than `begin` and nothing like the falling close */
+ begin:[392,587,784],newstore:[220,330]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
@@ -216,6 +220,9 @@ const shape={
  /* v2.9.2 H4: one quiet dry tick for the whole receipt body - lighter and shorter than `crate`,
     never repeated per row */
  receipt:{gain:.5,dur:.05,type:'square',attack:.003,noise:{at:0,dur:.04,gain:.3,hz:2400,q:.6,filter:'highpass'},duck:.15},
+ begin:{gain:.95,dur:.24,type:'triangle',step:.09,layer:{ratio:2,at:.2,dur:.8,gain:.22},
+  noise:{at:0,dur:.05,gain:.4,hz:900,q:.8,filter:'bandpass'},duck:.5},
+ newstore:{gain:.8,dur:.18,type:'triangle',step:.11,glide:1.03,noise:{at:0,dur:.04,gain:.45,hz:3000,q:.7,filter:'highpass'},duck:.35},
  final:{gain:1.1,dur:1,type:'sawtooth',step:.3,attack:.08,glide:.98,sampleGain:1.2,accent:true,
   layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also

@@ -2139,6 +2139,9 @@ it, vary where the Phase is recognised).
   foot, with no outline (ORDER's cool frost is the lit edge of both its Actions), and its label sits on a 2 px drop in that deep edge's ink;
   NIGHT's `다음` stays a flat plane (UI_UX_QA: no bevel on that control) and seats its label the same way; a step across a
   boundary keeps its heavier built bevel
+- one colour per family (User 2026-09-27): `발주 확정` and `영업 시작` are one steel face with one frost edge, told apart by
+  their labels; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열기` are one BRICK build (outline, bevel, cast, press, a label on a
+  2 px drop), `첫 점포지원 고르기` keeping only its four rivets; the FINAL gate bar stays its own red
 - kept per Phase: MORNING's wood shutter (square, no cut), ORDER's steel on the paper, SALE's quiet counter key, NIGHT's
   muted cobalt with its own deep cobalt cast, the BRICK of `다음 날` / `다음 점포 열기` / `첫 점포지원 고르기` (and its rivets), the
   FINAL gate bar with a cast in its own deep red, a step darker than its foot so the two do not merge (a black cast is lost
@@ -2559,6 +2562,9 @@ Required semantic coverage:
 - Item select
 - ordinary 50% / 100% / 150% sale distinctions: one register family, 1 / 2 / 3 coin ticks; no mode sounds like the correct answer (PRESENTATION_PRINCIPLES_v2.8.0.md §TRANSACTION BEAT A5; User 2026-09-24, v2.9.0)
 - `손님 보내기` customer exit (`depart`): recorded utility cue, door / step family (User 2026-09-24, v2.9.0)
+- `첫 점포지원 고르기` (`begin`, a knock and a rising ringing G-D-G) and `다음 점포 열기` (`newstore`, a latch and a short rising
+  pair): each its own synthesised cue, because a Run's opening was silent and the way to the next store sounded like a
+  tab click (User 2026-09-27, v2.9.9)
 - refusal
 - Gold gain vs spend distinction
 - Relic purchase

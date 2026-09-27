@@ -1545,3 +1545,13 @@ label wraps or is cut at 360 (a four-digit `발주 N G · 확정` included)
 different amount than the cast, a height or depth off its step, an outline around a step inside the Day, or two Phases
 whose Action looks the same
 ```
+
+## AMENDMENT — PRIMARY ACTION GRAMMAR — one colour per family, two new cues (User 2026-09-27, v2.9.9)
+
+영업 시작 shares 발주 확정's steel; the three BRICK Actions share one build; begin / newstore cues added to §SFX coverage.
+
+```new
+- `영업 시작` and `발주 확정` show the same steel face and frost edge; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열기` the same
+BRICK build (only the rivets differ); a disabled `영업 시작` casts nothing
+- pressing `첫 점포지원 고르기` plays `begin` and `다음 점포 열기` plays `newstore`, neither the navigation click
+```

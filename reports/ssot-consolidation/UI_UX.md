@@ -1548,3 +1548,16 @@ foot, with no outline (ORDER's cool frost is the lit edge of both its Actions), 
 FINAL gate bar with a cast in its own deep red, a step darker than its foot so the two do not merge (a black cast is lost
 on its black dock); each keeps its place in the dock
 ```
+
+## AMENDMENT — PRIMARY ACTION GRAMMAR — one colour per family, two new cues (User 2026-09-27, v2.9.9)
+
+영업 시작 shares 발주 확정's steel; the three BRICK Actions share one build; begin / newstore cues added to §SFX coverage.
+
+```new
+- one colour per family (User 2026-09-27): `발주 확정` and `영업 시작` are one steel face with one frost edge, told apart by
+their labels; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열기` are one BRICK build (outline, bevel, cast, press, a label on a
+2 px drop), `첫 점포지원 고르기` keeping only its four rivets; the FINAL gate bar stays its own red
+- `첫 점포지원 고르기` (`begin`, a knock and a rising ringing G-D-G) and `다음 점포 열기` (`newstore`, a latch and a short rising
+pair): each its own synthesised cue, because a Run's opening was silent and the way to the next store sounded like a
+tab click (User 2026-09-27, v2.9.9)
+```

@@ -637,26 +637,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-order .dock .stamp:active{transform:translate(3px,3px);background:#27303a;filter:drop-shadow(1px 1px 0 #2a2317bf);
  box-shadow:inset 0 3px 0 #5f8899,inset 0 -4px 0 #171d22}
 .p-order .dock .stamp:focus-visible{outline:3px solid #39434c;outline-offset:3px}
-/* BATCH 2A §ORDER LEAVE CONTROL — USER APPROVED 2026-09-23. Leaving the desk is the other act,
-   and the only enabled control once the order is committed. It used to carry a thin ring on a
-   flat fill, which beside an authored order commit read as a modern web rectangle on a supply
-   desk. It is the same fabricated steel now, built the way the commit is: ONE face plane, the
-   value difference outside it - a milled edge at the top, a shaded edge at the foot, and one
-   hard external depth. The depth is shorter than the commit's and the face is lighter, so with
-   both on the dock the commit still leads; alone it is still a plate that was made. */
-/* The drop is a filter, not a box-shadow: an offset box-shadow squares off behind the notch and
-   the clip then cuts it away, so this control was carrying a depth that never drew. It is the
-   same pixel drop the rest of the family uses, one step shorter than the commit's, and it
-   follows the cut corners. */
-.p-order .dock .stamp.leave{background:#434e58;color:#e6edf2;
- filter:drop-shadow(4px 4px 0 #000000a6);text-shadow:0 2px 0 #2c343c;
- box-shadow:inset 0 3px 0 #6f98aa,inset 0 -4px 0 #2c343c}
-.p-order .dock .stamp.leave:hover{background:#4d5964;color:#f4f8fa;
- filter:drop-shadow(4px 4px 0 #000000a6) brightness(1.1)}
-/* the press closes the depth, the way the commit's does */
-.p-order .dock .stamp.leave:active{transform:translate(3px,3px);background:#38424b;
- filter:drop-shadow(1px 1px 0 #000000a6);
- box-shadow:inset 0 3px 0 #5a7f90,inset 0 -4px 0 #232a30}
+/* UI_UX §PRIMARY ACTION GRAMMAR (v2.9.9, User 2026-09-27): 영업 시작 and 발주 확정 are never enabled together, so the
+   leave control is the commit's own steel - one face, one frost edge, one cast. It is told apart by its label and, while
+   a cart is held, by the disabled plate below. */
 /* USER, 2026-09-23 (second pass): the two dock controls differed in how their EDGES were built
    - the commit carries a 2px machined edge on all four sides, the leave control had only a top
    and a foot line, so their corners read as two different objects whatever the colour. Both are
@@ -675,7 +658,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    is left alone for every other control. Disabled changes four things and nothing else: the
    face contrast, the label contrast, the external depth (`.stamp:disabled` already drops the
    filter) and the press affordance. */
-.p-order .dock .stamp.leave[disabled]{clip-path:var(--stamp-cut);
+.p-order .dock .stamp.leave[disabled]{clip-path:var(--stamp-cut);filter:none;
  background:#8d959c;color:#3f464c;opacity:1;transform:none;text-shadow:none;
  box-shadow:inset 0 4px 0 #6e767d,inset 0 -3px 0 #a3aab0}
 /* =====================================================================
@@ -1598,6 +1581,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the paper is the receipt's job, not the button's. Only its measure is set here. */
 .p-closing .dock .stamp,.p-end .dock .stamp{margin:0 auto;width:min(100%,344px);min-width:0;
  min-height:64px;font:600 20px/1 var(--ui);white-space:nowrap}
+.p-closing .dock .stamp,.p-end .dock .stamp{text-shadow:0 2px 0 #5a221a}
 .p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
  --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 /* The ending's one way on. A modal footer is NOT a role: `.stamp` is worn there by the Run's
@@ -1820,47 +1804,18 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
    Action construction and is not this Batch's to re-cut. What it lacked here was room of its
    own: it sat tight against the sheet's last line of copy with no breathing plane under it. */
-/* §PRIMARY DECISION CONTROL. Third pass. The second one hung brass plaques on the ends and
-   the review was right: that is ornament stuck to a button, not a built control. What the
-   reference actually carries is proportion and one structural line - a dark outline, a single
-   thin gold edge inside it, a lit face and a hard bottom.
-   So the caps are gone. The corners are cut once, lightly, and the face keeps the brick with a
-   raised edge rather than an outline: a dark rim, a lit band standing proud of the face, one
-   dark step down into it, and then the FACE IS ONE PLANE. An earlier pass read the request
-   for more value separation as two big tonal bands inside the face; they split the plate and
-   buried the lower rivets, so they are gone. All that is left inside is a 2px lit edge where
-   the rim hands over to the face. The separation lives where it belongs: outside and under
-   the plate, as a hard zero-radius depth that follows the cut silhouette, clearly darker than
-   the face and never over it. That depth is what collapses on press - 6px to 2px, with the
-   plate travelling into it - instead of the face inverting its own shading.
-   The gold line is gone; gold on this screen belongs to the sheet and the section, not to the
-   Action. The four fixings are one drawn
-   9px rivet - dark rim, brass body, hard highlight up-left, hard shade down-right - placed four
-   times by CSS, not four CSS circles and not a fixed image of the whole button. An earlier
-   3px version of the same rivet shipped invisible; measured against the runtime, 9px is the
-   size at which a fixing reads as a fixing and still never arrives before the label.
-   The press travels 4px and trades its lit and deep edges. BRICK family and guard unchanged. */
+/* The Run's opening Action (and the ending's way back to the store): the BRICK family's plate with four fixings - one
+   drawn 9px rivet (dark rim, brass body, hard highlight up-left, hard shade down-right) placed four times by CSS. 9px is
+   the size at which a fixing reads as a fixing and still never arrives before the label. */
 .p-prep .dock [data-action="start"],
 .modal-footer [data-action="store-return"]{min-height:64px;
  font:600 20px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;padding:0 26px;
  background-color:var(--brick);
  background-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>");
  background-size:9px 9px;background-repeat:no-repeat;
- background-position:left 11px top 11px,right 11px top 11px,left 11px bottom 11px,right 11px bottom 11px;
- box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
-  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
- clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
-  100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
-  6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
- filter:drop-shadow(5px 5px 0 #00000099)}
-.p-prep .dock [data-action="start"]:hover,
-.modal-footer [data-action="store-return"]:hover{
- filter:drop-shadow(5px 5px 0 #00000099) brightness(1.08)}
-.p-prep .dock [data-action="start"]:active,
-.modal-footer [data-action="store-return"]:active{transform:translate(4px,4px);
- box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
-  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
- filter:drop-shadow(1px 1px 0 #1d0805) brightness(.96)}
+ background-position:left 11px top 11px,right 11px top 11px,left 11px bottom 12px,right 11px bottom 12px}
+/* UI_UX §PRIMARY ACTION GRAMMAR (v2.9.9, User 2026-09-27): the three BRICK Actions are one build - outline, lit
+   top-left, deep bottom-right, cast and press all come from `.stamp`; the rivets are what this one keeps of its own. */
 @media(min-width:1024px){
  /* the wide framing of the same shut store, and its window sits lower in frame than the
     portrait one's, so the pool that is let back in moves with it */
