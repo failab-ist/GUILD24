@@ -1990,8 +1990,10 @@ sides on a stage narrower than the file, at the top and bottom on one wider than
 - the till housing stands on the painted counter top under any crop (User 2026-09-27, v2.9.9 tablet batch): the counter
   band is sized by the drawn painting and moved down by the height the crop takes off its top, so on a portrait tablet the
   housing no longer floats above the counter; with no crop the band is the stage percentage it always was
-- a landscape tablet (768 px wide or more, 700 px high or more, landscape) takes the desk's wide framing of the room and its
-  points: the tall file cropped to a landscape stage shows no counter at all. Below 700 px high the tall framing stays
+- a landscape stage 768 px wide or more (a landscape tablet, and a phone turned sideways at any height) takes the desk's
+  wide framing of the room and its points: the tall file cropped to a landscape stage shows no counter at all (User
+  2026-09-27 closeout: at 844x390 / 932x430 the board, till and plate had left the screen). Below about 500 px high the
+  Decoration pieces and the preparation scene still crowd the board and the dock there - an open v3.0 finding, not a rule
 - where the crop takes the painted ceiling off the top of the stage, the 간판 hangs the gap below the stage's top edge
 - the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
   down behind the dock (a portrait tablet, a short desk) it rises to just above the Action instead; it takes its larger

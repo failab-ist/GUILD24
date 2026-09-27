@@ -1394,7 +1394,7 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  assert.ok(/\.p-morning \.store\{container-type:size;--ar:\.5628;--ph:max\(100cqh,100cqw \/ var\(--ar\)\)/.test(review)
   &&/\.p-morning \.band\.counter\{flex:0 0 calc\(var\(--band-c\) \* var\(--ph\)\);transform:translateY\(calc\(\(var\(--ph\) - 100cqh\) \/ 2\)\)\}/.test(review),
   'the counter band follows the painting');
- const LAND='@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){';
+ const LAND='@media(min-width:1024px),(min-width:768px) and (orientation:landscape){';   // a phone turned sideways too (closeout)
  assert.ok(review.includes(LAND+"\n .p-morning{background-image")&&css.includes(LAND+'\n .deco-layer{--ar:1.7768')&&css.split(LAND).length===3,
   'the wide framing, its points and the preparation scene\'s desk layout switch together');
  assert.ok(/\.p-morning \.branchplate\{right:7%;left:auto;top:min\(52%,calc\(100cqh - var\(--dock-room\) - var\(--plate-h\) - var\(--band-top\)\)\)/.test(review),'the branch plate stays clear of the dock');

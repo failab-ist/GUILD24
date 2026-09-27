@@ -1564,8 +1564,6 @@ The deferred tablet finding is fixed: the counter band follows the painting, lan
 - the till housing stands on the painted counter top under any crop (User 2026-09-27, v2.9.9 tablet batch): the counter
 band is sized by the drawn painting and moved down by the height the crop takes off its top, so on a portrait tablet the
 housing no longer floats above the counter; with no crop the band is the stage percentage it always was
-- a landscape tablet (768 px wide or more, 700 px high or more, landscape) takes the desk's wide framing of the room and its
-points: the tall file cropped to a landscape stage shows no counter at all. Below 700 px high the tall framing stays
 - where the crop takes the painted ceiling off the top of the stage, the 간판 hangs the gap below the stage's top edge
 - the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
 - covered: phone 360~430 at the heights a browser leaves (640~932), portrait tablet 768~912, landscape tablet 900~1023 and
@@ -1687,4 +1685,15 @@ Material direction (the dock Actions follow §PRIMARY ACTION GRAMMAR, which owns
 | NIGHT 다음 | Muted cobalt, flat |
 | 첫 점포지원 고르기 / CLOSING 다음 날 / 다음 점포 열기 | BRICK (첫 점포지원 고르기 with its rivets) |
 | FINAL gate bar | its own red |
+```
+
+## AMENDMENT — Landscape phone takes the wide framing (User 2026-09-27 closeout)
+
+The 700 px height floor on the wide framing is lifted: at 844x390 / 932x430 the tall file left the board, till and plate off screen. The crowding that remains below about 500 px high is recorded as an open v3.0 finding (reports/v3.0-prep.md §2-4). Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- a landscape stage 768 px wide or more (a landscape tablet, and a phone turned sideways at any height) takes the desk's
+wide framing of the room and its points: the tall file cropped to a landscape stage shows no counter at all (User
+2026-09-27 closeout: at 844x390 / 932x430 the board, till and plate had left the screen). Below about 500 px high the
+Decoration pieces and the preparation scene still crowd the board and the dock there - an open v3.0 finding, not a rule
 ```

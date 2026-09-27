@@ -2350,7 +2350,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .decoplate.display{--cx:.18;--dw:.15}
 .decoplate.counter{--cx:.825;--dw:.15}
 /* wide file (1672x941): ceiling 0-19 */
-@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){
+@media(min-width:1024px),(min-width:768px) and (orientation:landscape){
  .deco-layer{--ar:1.7768;--gap:10px}
  .decoplate.sign{--x:.29;--y:.093;--w:.08}
  .decoplate.wall{--x:.629;--y:.44;--w:.038}
@@ -2402,7 +2402,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* the 간판 hangs just above the board, so its tag is one line: under it on a phone (the branch plate is beside it),
    to its left on a desk (the board is right under it and the branch plate to its right) */
 .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:calc(100% + 3px);grid-auto-flow:column;align-items:baseline;gap:5px}
-@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){
+@media(min-width:1024px),(min-width:768px) and (orientation:landscape){
  .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:50%;left:auto;right:calc(100% + 6px);transform:translateY(-50%)}
  /* that tag runs left from the 간판 toward the stage's edge and sits under the painted ceiling fixture, so it stacks its
     two lines as the other tags do (only as wide as the name), is centred on the sign's plate rather than on its hangers

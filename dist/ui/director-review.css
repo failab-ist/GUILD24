@@ -280,13 +280,13 @@
 .p-morning .store>.board{position:relative;z-index:2}
 .p-morning .daysign,.p-morning .till,.p-morning .till-cap,.p-morning .branchplate{z-index:2}
 
-/* DESKTOP / wide viewport takes the wide framing of the same store - and so does a landscape tablet (v2.9.9, UI_UX
+/* DESKTOP / wide viewport takes the wide framing of the same store - and so does any landscape stage 768 wide or more, a phone turned sideways included (v2.9.9, UI_UX
    §LIVE STORE DECORATION SEATING: the tall file cropped to a landscape stage shows no counter at all). The switch is the sheet's
    existing 1024 breakpoint, and everything that moves with it is geometry the other file
    measures differently: its ceiling ends a little lower, and its counter top sits at 82.7-85.2%
    instead of 74.2-76.0%, so the band that seats the till starts there and the housing's feet
    land at 85% of the stage. Same live layer, same order, same store - the other framing of it. */
-@media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){
+@media(min-width:1024px),(min-width:768px) and (orientation:landscape){
  .p-morning{background-image:linear-gradient(180deg,#0a070573 0,#0a07051a 16%,#0000 40%,#0a07051a 78%,#0a070559 100%),
    url('assets/presentation/morning/store-bg-wide.png')}
  .p-morning .band.ceiling{flex:0 0 19%}
