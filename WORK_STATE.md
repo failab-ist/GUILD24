@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-27
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_IN_PROGRESS(브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`, 미머지) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_CLOSEOUT_DONE_PR_OPEN(브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`, 머지는 User 컨펌 대기) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
 
 ## Current
 
@@ -27,11 +27,15 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_IN_PROGRESS(브랜치 `claude/
 | `4c1ca31` | 태블릿: 계산대 띠가 그림 계산대를 따라감, 가로 태블릿은 가로 그림 | UI-Q-v29-40 |
 | `e13244b` | 새 점포 준비 낮은/큰 화면: 지점명은 타이틀 아래, 게시판 촘촘, 꼬리표·명판 360x640 비중 | UI-Q-v29-41/42 |
 | `c36b9e1` | SALE 선반 턱(2px), 진열대 머리 낮춤(진열대 +12px) | UI-Q-v29-45 |
+| `a68d463` | closeout 리뷰: 새로고침 회귀 검사, 패킷 정리, Strong Green 문서를 v2.9.9 버튼 문법으로 | `qa-prep-scene`, ssot |
+| `6db1607` | 가로로 눕힌 폰도 가로 그림(보드·계산대가 화면 밖으로 나가던 회귀) | ui-guard, `qa-deco-seating` |
+| `56fb8bd` `e46f3b2` | FINAL 교전 장면(H7): 보급 → 돌진·반격 → 판정(바닥 근처 멈칫). 판정 결과 재생만, 탭 건너뛰기 | UI-Q-v29-46, `qa-final-clash` |
+| `e6c0553` | 빌드 표시 2.9.9 | UI-Q-v29-36 |
 
 시도했다가 뺀 것(User 결정): SALE 목적지 종이 쪽지(혼자 튐), 모험가 카드 합치기, SALE 손님 확대(폰에 자리 없음).
 3.0+로 넘긴 것과 미결: `reports/v3.0-prep.md` §2-4.
 
-남은 계획: **2.9.9 닫기** — 빌드 표시 2.9.9, 전체 QA, PR(머지는 User 컨펌).
+closeout 완료(2026-09-27): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:visual 126장 통과. PR을 열었고 **머지는 User 컨펌 때만**.
 
 ## UX 재확인 — 닫힘 (User 2026-09-26, v2.9.3)
 
@@ -45,11 +49,11 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
 - 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
 
-다음 작업은 2.9.9 닫기(빌드 표시 2.9.9 → 전체 QA → PR, 머지는 User 컨펌). 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
+다음 작업: v2.9.9 PR 머지(User 컨펌 후) → v3.0 준비(`reports/v3.0-prep.md`). 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
 ### User 할 일
 
-1. 태그: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `229df97`, `v2.9.4` → `630b6d0`, `v2.9.8` → `621d007` (GitHub Releases에서 새 태그로 만들면 된다).
+1. 태그: `v2.9.2` → `d6fcfbd`, `v2.9.3` → `229df97`, `v2.9.4` → `630b6d0`, `v2.9.8` → `621d007` (GitHub Releases에서 새 태그로 만들면 된다). v2.9.9는 머지 커밋에.
 
 ### H1~H6에서 확인된 함정 (다음 프레젠테이션 작업에서 반복하지 말 것)
 
@@ -77,6 +81,8 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
   화면에 있을 때만 누르고, 없으면 `Guild24.render()`로 다시 그려 DAY 0 코치를 정리한다(16개 도구에 반영됨).
 - 새 점포 준비 분기처럼 `render()`에서 일찍 `return`하는 화면은 끝의 `showCoach`를 건너뛴다. 이전 화면의 안내 말풍선이 남지 않게 직접 부른다.
 - CSS는 모바일 우선: `@media(max-width…)`를 새로 쓰면 ui-guard가 막는다. 폰 규칙을 기본으로 두고 데스크는 `min-width:1024px`에서 되돌린다.
+- FINAL 교전 장면은 WAAPI(`el.animate`, fill `both`)를 쓴다. 채워진 애니메이션의 끝 상태는 인라인 스타일을 이긴다. 같은 속성을 나중에 인라인으로 바꾸면 무시되니, 값도 애니메이션 키프레임으로 준다(흰 표식 버그의 원인).
+- 런타임 검사 중 스크린샷을 찍으면 그 순간 rAF 프레임이 밀린다. 프레임 단위 측정을 하는 검사에서는 장면 도중에 캡처하지 않는다.
 - `director-review.css`는 `ui.css` 뒤에 로드된다. 같은 명시도면 뒤 파일이 이긴다 — `.p-morning.p-prep …`처럼 명시도를 올린다.
 - 원장 수정 도구(`$S/ledgerfix.py`)를 다시 돌리기 전에 원장 파일을 `git checkout`으로 되돌리면 이번 배치의 앞선 선언까지 지워진다. 되돌릴 땐 한 번에 전부 다시 선언한다.
 - 장식·로고 캡처 도구는 scratch에 있다(`deco-audit.cjs`, `prep-cap.cjs`, `prep-end-cap.cjs`, `sale-measure.cjs`).
