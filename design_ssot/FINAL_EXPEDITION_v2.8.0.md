@@ -604,6 +604,10 @@ Final Clear 자체가 Run Victory다.
 Display order (User 2026-09-25, v2.9.2 H5): on the ending tape one seal bearing the Boss's name is struck first - clean for a
 clear, faint and crooked for a failure, never one per member and never the NIGHT death tape - and the existing result
 sentence follows it. Result, wording and settlement are unchanged. Timing -> UI_UX_v2.8.0.md §FINAL RESULT — SEAL STAMP.
+Before the ending (User 2026-09-27, v2.9.9 H7) the resolved Final is played out once as a card fight - each member is
+handed what they carried, each member lunges, the Boss counters, the Boss bar ends at the resolved ratio - and a tap
+skips it; it decides nothing. ->
+UI_UX_v2.8.0.md §FINAL — CLASH SCENE.
 
 ## FINAL INSURANCE VALUE — EXACT
 

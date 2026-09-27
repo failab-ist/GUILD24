@@ -51,7 +51,7 @@ const ui=`(()=>{const st=document.querySelector('.stage.p-final');const t=st?st.
    await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
    await p.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
    await p.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
-   await p.click('#modal-root [data-action="start"]');await p.click('#modal-root [data-action="buy-relic"]');
+   await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
    await p.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
    for(let i=0;i<800;i++){if(await p.evaluate(`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`))break;await p.evaluate(`(${STEP})()`);}
    await p.evaluate(`(()=>{const g=Guild24.game,s=g.run;s.day=30;g.morning();if(s.event)s.eventSeen=true;s.bossReveal=s.bossReveal||{};

@@ -2,11 +2,11 @@
 
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.8
+DOC_VERSION=2.9.9
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) ; V2_9_2_CLOSED_2026-09-26 (main d6fcfbd; tag v2.9.2 pending, set by the User); V2_9_3_CLOSED_2026-09-26 (main; tag v2.9.3 pending, set by the User) (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture); V2_9_3_ADOPTED (balance fourth pass, Boss reveal hold, reset-seed fix, build marker — CHANGELOG §v2.9.3); V2_9_4_ADOPTED (replay nudge — CHANGELOG §v2.9.4)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture); V2_9_3_ADOPTED (balance fourth pass, Boss reveal hold, reset-seed fix, build marker — CHANGELOG §v2.9.3); V2_9_4_ADOPTED (replay nudge — CHANGELOG §v2.9.4); V2_9_5_ADOPTED (SALE strain line — CHANGELOG §v2.9.5); V2_9_6_ADOPTED (codex and Item Flavor cleanup — CHANGELOG §v2.9.6); V2_9_7_ADOPTED (decorations and Rarity — CHANGELOG §v2.9.7); V2_9_8_ADOPTED (ids read as the current names, save v9 — CHANGELOG §v2.9.8, main `621d007`, PR #19); V2_9_9_ADOPTED (presentation: store scene, dock Actions, SALE, FINAL clash — CHANGELOG §v2.9.9, merged to main by PR #20 on User confirmation 2026-09-27)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -274,6 +274,12 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
 - v2.9.7 (User 2026-09-26): decorations remade / swapped, 구급품 진열장 injury rework, Rarity growth 0.10 -> CHANGELOG §v2.9.7.
 - v2.9.8 (User 2026-09-27): ids read as the current names (Items, Decorations, Store Support, the 반값 Event, the 골렘 Family)
   and the save schema moves to v9 -> CHANGELOG §v2.9.8.
+- v2.9.9 (User 2026-09-27): presentation from the reference review - the store room (Decoration seating / outline, tablets),
+  새 점포 준비 as the store scene with the title logo, one press grammar and one colour per family for the dock Actions (two
+  new cues), SALE's outlook plate, shelf lip and head, the FINAL clash scene (H7, the one exception to the per-beat game
+  feel contract) -> CHANGELOG §v2.9.9 (owners UI_UX §LIVE STORE DECORATION SEATING, §NEW STORE PREPARATION — STORE SCENE,
+  §OPENING TITLE LOGO, §PRIMARY ACTION GRAMMAR, §SALE — MOBILE AUTHORITY / SHELF LIP / SHELF HEAD, §FINAL — CLASH SCENE;
+  PRESENTATION §GAME FEEL BEAT H7; UI_UX_QA UI-Q-v29-40 ~ 46). Merged to `main` (PR #20, User 2026-09-27).
 - v2.9.2 GAME FEEL (타격감): design and status -> PRESENTATION_PRINCIPLES_v2.8.0.md §GAME FEEL BEAT
   (principles table, contract, H1~H6 rows). Routing per batch, in execution order:
 
@@ -296,6 +302,8 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
   Save / RNG / proof change. Intensity by event weight (일반 / 중요 / 클라이맥스), the impact budget (one
   visual + one sound + at most one number / cause response per landing) and the two sequence reviews
   (last verdict → CLOSING → next day; FINAL result → clear screen) -> PRESENTATION §GAME FEEL BEAT.
+  v2.9.9 H7 FINAL 교전 (the resolved Final played out as a card fight before the ending) is the one scene exempt from the
+  per-beat length and the inside-the-card rule -> PRESENTATION §GAME FEEL BEAT H7 / UI_UX §FINAL — CLASH SCENE / UI-Q-v29-46.
   Not in v2.9.2: the `어제보다 +N` line (v3.0+ router), new copy, haptics (no iOS Safari support).
 
 ## v2.8 RELEASE ACCEPTANCE — HIGH LEVEL (CLOSED)

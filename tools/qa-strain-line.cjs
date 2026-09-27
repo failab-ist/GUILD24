@@ -22,7 +22,7 @@ const CASES=[['healthy',0,2,null],['first',1,0,null],['chain',1,2,'연속 부상
    const p=await ctx.newPage();p.on('pageerror',e=>check(width+' no page error',false,e.message));
    await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
    await p.evaluate(()=>{const g=Guild24.game;(g.account.tutorial??={}).skipped=true;g.start('qa-strain-1');Guild24.render();});
-   await p.click('#modal-root [data-action="start"]');await p.click('#modal-root [data-action="buy-relic"]');
+   await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
    await p.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();});
    for(let i=0;i<200;i++){if(await p.evaluate(`Guild24.game.run.phase==='sell'&&Guild24.game.run.day>=2`))break;await p.evaluate(`(${STEP})()`);}
    for(const [name,injury,chain,want] of CASES){

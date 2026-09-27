@@ -29,7 +29,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
    await p.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-sale-1');
    await p.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);
-   await p.click('#modal-root [data-action="start"]');await p.click('#modal-root [data-action="buy-relic"]');
+   await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
    await p.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
    for(let i=0;i<200;i++){if(await p.evaluate(`Guild24.game.run.phase==='sell'&&Guild24.game.run.day>=2`))break;await p.evaluate(`(${STEP})()`);}
    await p.evaluate(`(()=>{const g=Guild24.game,s=g.run,n=g.current();n.money=9999;n.pack=[];n.refused=[];

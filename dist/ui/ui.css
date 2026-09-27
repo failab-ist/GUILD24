@@ -217,25 +217,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    screen's Primary and must never read as four buttons competing with it. */
 .effects li.deco-line{padding:0}
 .deco-line+.deco-line{margin-top:4px}
-/* The four rows are slots cut in one track. The review found the previous attempt darker and
-   more cramped than what it replaced - a brass tab on every row was ornament, and the heavier
-   recess ate the reading. They are lighter than the sheet now, not darker: one hairline edge
-   in the sheet's own gold, one lit top, a clear label/value baseline, and the same geometry
-   four times. Still ranked under the Primary: one pixel of travel, no cast depth. */
-.deco-jump{position:relative;display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:12px;
- padding:10px 13px;min-height:44px;border:0;border-radius:0;text-align:left;
- font:inherit;color:#c6b89d;background:#00000026;
- box-shadow:inset 0 0 0 1px #00000047,inset 0 3px 0 #00000059,inset 0 -2px 0 #ffffff17;
- cursor:pointer;transition:background .08s steps(2)}
-.deco-jump:hover{background:#0000001a;color:#e0d2b7}
-.deco-jump:active{transform:none;background:#0000003d;
- box-shadow:inset 0 0 0 1px #00000059,inset 0 4px 0 #00000073,inset 0 -2px 0 #ffffff0f}
-.deco-jump>span{font:400 var(--t-sm)/1.4 var(--ui)}
-.deco-jump b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums;color:#f2e7cd}
-.deco-line.empty .deco-jump b{color:#8d8067;font-weight:400}
-/* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a small current-state mark beside the Slot's value, not a control */
-.deco-jump .can-buy{margin-left:auto;padding:3px 6px;font:600 11px/1 var(--ui);font-style:normal;letter-spacing:.04em;
- color:#e0c89c;box-shadow:inset 0 0 0 1px #e0c89c73;white-space:nowrap}
 .decoration-panel .slot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 /* UI-Q111. The one-tap reference to what the store is already running. It reads as a quiet
    reference control, not a decision key, so it never competes with the screen's primary
@@ -251,13 +232,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* USER, 2026-09-23: the count belongs to 진열대, so it sets right beside the title and the
    free space goes after it - the reference plate is pushed to the far end of the head instead.
    Read apart, the two stop looking like one object. */
-.shelf-head .relic-ref{margin-left:auto;align-self:center;min-height:30px;padding:5px 9px;
+/* v2.9.9 (User 2026-09-27, UI_UX §SALE — SHELF HEAD): the head is one step lower, so the plate is compact - still a pressable
+   plate with its own frame, and its touch target stays about 44 px through an invisible margin around it */
+.shelf-head .relic-ref{position:relative;margin-left:auto;align-self:center;min-height:24px;padding:3px 8px;
  font-size:11px;letter-spacing:.02em;background:#00000066;color:#bda882;
  box-shadow:inset 2px 2px 0 #00000080,inset -1px -1px 0 #ffffff14}
 .shelf-head .relic-ref b{font-size:12px;color:#d7b878}
 .shelf-head .relic-ref:hover{background:#00000066;color:#e2d0ab}
 .shelf-head .relic-ref:hover b{color:#ecc98a}
 .shelf-head .relic-ref:active{transform:none}
+.shelf-head .relic-ref:after{content:'';position:absolute;inset:-10px -4px}
 .relic-ref{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:7px 11px;
  border:0;border-radius:0;cursor:pointer;
  font:400 12px/1 var(--ui);color:#cbb98d;background:#00000047;
@@ -459,18 +443,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    FINAL gate bar, where a stripe pattern is not material. It is a flat solid plane now; the
    structure, size, action and hard press/depth are unchanged, and nothing is added in exchange:
    no border, no bevel, no ornament, just the stepped light/dark edge this control already had. */
-.pull{flex:1;min-height:58px;padding:0;background:#745535;color:#fdf6e3;
- box-shadow:inset 0 3px 0 #a37c4f,inset 0 -5px 0 #3f2c1a,4px 4px 0 #00000080}
+.pull{flex:1;min-height:56px;padding:0;background:#745535;color:#fdf6e3;
+ box-shadow:inset 0 3px 0 #a37c4f,inset 0 -4px 0 #3f2c1a,4px 4px 0 #00000080}
 /* BATCH 1: the label was centred in the box, not on the plane - the 3px lit edge and the 5px
    deep edge are not symmetrical, so a 58px line box sat the label two pixels above the face's
    optical centre. It is measured against the face now.
    And the press: `.pull` never declared one, so it fell to the base control's :active, which
    repaints a steel bevel over the shutter's own wood. Pressing it now collapses the shutter -
    the cast halves, the lit and deep edges trade - which is what opening a shutter looks like. */
-.pull span{display:block;font:600 20px/20px var(--ui);letter-spacing:.06em;padding:18px 0 20px}
+.pull span{display:block;font:600 18px/20px var(--ui);letter-spacing:.06em;padding:17px 0 19px;text-shadow:0 2px 0 #3f2c1a}
 .pull:hover{background:#83603c}
-.pull:active{transform:translate(2px,2px);background:#66492d;
- box-shadow:inset 0 3px 0 #3f2c1a,inset 0 -5px 0 #a37c4f,2px 2px 0 #00000080}
+.pull:active{transform:translate(3px,3px);background:#66492d;
+ box-shadow:inset 0 3px 0 #3f2c1a,inset 0 -4px 0 #a37c4f,1px 1px 0 #00000080}
 .brass{min-height:58px;padding:8px 12px;background:#8a7038;color:#2a2110;font:600 12px/1.45 var(--ui);
  box-shadow:inset 2px 2px 0 #e0c07a,inset -2px -2px 0 #4f3d17,4px 4px 0 #00000080}
 .brass:hover{background:#9a7e40}
@@ -645,35 +629,20 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 
    ORDER keeps its own paper / steel / frost language rather than a recoloured accent: the commit
    is the form's steel ink driven onto the paper, with a cool frost edge and real depth. */
-.p-order .dock .stamp{flex:1 1 140px;min-height:54px;font:600 clamp(15px,4.4vw,20px)/1.2 var(--ui);letter-spacing:.04em;
+/* the commit's label carries a Gold figure, so on the narrowest phones both labels may step down to 16 px rather than wrap */
+.p-order .dock .stamp{flex:1 1 140px;min-height:56px;padding:0 8px;font:600 clamp(16px,4.62vw,18px)/1.2 var(--ui);letter-spacing:.04em;
  display:inline-flex;align-items:center;justify-content:center;
  background:#2f3a44;color:#eef6fa;
- box-shadow:inset 0 0 0 2px #7fb0c4,inset 0 3px 0 #4a5a67,6px 6px 0 #2a2317bf}
-.p-order .dock .stamp:hover{background:#384652}
+ filter:drop-shadow(4px 4px 0 #2a2317bf);text-shadow:0 2px 0 #1f272e;
+ box-shadow:inset 0 3px 0 #7fb0c4,inset 0 -4px 0 #1f272e}
+.p-order .dock .stamp:hover{background:#384652;filter:drop-shadow(4px 4px 0 #2a2317bf) brightness(1.1)}
 /* the press travels and the depth closes: the stamp is driven into the form */
-.p-order .dock .stamp:active{transform:translate(4px,4px);background:#27303a;
- box-shadow:inset 0 0 0 2px #5f8899,inset 0 3px 0 #333f49,2px 2px 0 #2a2317bf}
+.p-order .dock .stamp:active{transform:translate(3px,3px);background:#27303a;filter:drop-shadow(1px 1px 0 #2a2317bf);
+ box-shadow:inset 0 3px 0 #5f8899,inset 0 -4px 0 #171d22}
 .p-order .dock .stamp:focus-visible{outline:3px solid #39434c;outline-offset:3px}
-/* BATCH 2A §ORDER LEAVE CONTROL — USER APPROVED 2026-09-23. Leaving the desk is the other act,
-   and the only enabled control once the order is committed. It used to carry a thin ring on a
-   flat fill, which beside an authored order commit read as a modern web rectangle on a supply
-   desk. It is the same fabricated steel now, built the way the commit is: ONE face plane, the
-   value difference outside it - a milled edge at the top, a shaded edge at the foot, and one
-   hard external depth. The depth is shorter than the commit's and the face is lighter, so with
-   both on the dock the commit still leads; alone it is still a plate that was made. */
-/* The drop is a filter, not a box-shadow: an offset box-shadow squares off behind the notch and
-   the clip then cuts it away, so this control was carrying a depth that never drew. It is the
-   same pixel drop the rest of the family uses, one step shorter than the commit's, and it
-   follows the cut corners. */
-.p-order .dock .stamp.leave{background:#434e58;color:#e6edf2;
- filter:drop-shadow(4px 4px 0 #000000a6);
- box-shadow:inset 0 0 0 2px #7b8894,inset 0 4px 0 #556370}
-.p-order .dock .stamp.leave:hover{background:#4d5964;color:#f4f8fa;
- filter:drop-shadow(4px 4px 0 #000000a6) brightness(1.1)}
-/* the press closes the depth, the way the commit's does */
-.p-order .dock .stamp.leave:active{transform:translate(3px,3px);background:#38424b;
- filter:drop-shadow(1px 1px 0 #000000a6);
- box-shadow:inset 0 0 0 2px #616e7a,inset 0 4px 0 #454f59}
+/* UI_UX §PRIMARY ACTION GRAMMAR (v2.9.9, User 2026-09-27): 영업 시작 and 발주 확정 are never enabled together, so the
+   leave control is the commit's own steel - one face, one frost edge, one cast. It is told apart by its label and, while
+   a cart is held, by the disabled plate below. */
 /* USER, 2026-09-23 (second pass): the two dock controls differed in how their EDGES were built
    - the commit carries a 2px machined edge on all four sides, the leave control had only a top
    and a foot line, so their corners read as two different objects whatever the colour. Both are
@@ -692,9 +661,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    is left alone for every other control. Disabled changes four things and nothing else: the
    face contrast, the label contrast, the external depth (`.stamp:disabled` already drops the
    filter) and the press affordance. */
-.p-order .dock .stamp.leave[disabled]{clip-path:var(--stamp-cut);
- background:#8d959c;color:#3f464c;opacity:1;transform:none;
- box-shadow:inset 0 0 0 2px #6e767d,inset 0 4px 0 #7d858c}
+.p-order .dock .stamp.leave[disabled]{clip-path:var(--stamp-cut);filter:none;
+ background:#8d959c;color:#3f464c;opacity:1;transform:none;text-shadow:none;
+ box-shadow:inset 0 4px 0 #6e767d,inset 0 -3px 0 #a3aab0}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
@@ -876,10 +845,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background-position:0 0,0 0,0 0,50% 50%;
  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
  background-origin:content-box}
-/* UI_UX §BUILD MARKER (v2.9.3): small, muted, not a control - the opening screen only. It sits above the preparation
-   panel's shade (60), which is always up on this screen and would otherwise sink it to ~1.5:1; under takeovers and coach marks. */
-.p-start .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:61;
- margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.8;pointer-events:none;white-space:nowrap}
 /* UI_UX §BUILD MARKER (User 2026-09-26, v2.9.7): the same pair at the foot of 영업 설정, readable mid-Run */
 .build-line{margin:4px 0 0;text-align:center;font-size:11px;line-height:1.3;letter-spacing:.04em;color:var(--muted);user-select:text}
 /* USER 2026-09-23: the menu pin was the last browser-like control left on this stage - a dark
@@ -898,7 +863,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-start .menu-pin:hover{background:linear-gradient(180deg,#44505a 0,#333d46 46%,#232a31 100%)}
 .p-start .menu-pin:active{transform:translate(2px,2px);filter:drop-shadow(1px 1px 0 #00000099);
  box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #4a3418,inset 0 -3px 0 #5b6a7280}
-.opening{position:relative;display:grid;justify-items:center;gap:8px;padding:34px 16px 14px;text-align:center}
+.opening{position:relative;display:grid;justify-items:center;gap:8px;padding:21px 16px 14px;text-align:center}
 /* The identity sits on the plane instead of floating over it: one hard pixel drop, the value
    the signage faces elsewhere already use. No blur - §EDGE / MATERIAL RULES. */
 /* USER 2026-09-23: a shop's name is a made object. Text with a drop shadow was the plateau -
@@ -911,32 +876,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    sits on the stage itself now - seated by one hard pixel drop, in the signage face, at the
    same measure and the same one line. Its sub-plate below it stays, because a branch tag IS a
    small plate and it is the only one up here now. */
-.opening-title{margin:0;white-space:nowrap;color:#f7eeda;
- font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none;
- text-shadow:0 4px 0 #0a0705,0 6px 0 #00000080}
-.opening-branch{margin:3px 0 0;padding:5px 13px 4px;color:#e0c89c;
- font:500 12px/1 var(--f-plate);letter-spacing:.2em;-webkit-font-smoothing:none;
- background:linear-gradient(180deg,#3b2918 0,#2a1c10 100%);
- box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #b08a42,0 3px 0 #00000080}
-/* One supporting rule closes the title block and gives the sheet below something to hang from:
-   a single seam with a raised centre notch, the same 2px seam weight the sheet's frame uses.
-   §TITLE / PLATE allows exactly one - this is it, and nothing else on this screen is framed. */
-.opening:after{content:'';width:min(300px,78%);height:9px;margin-top:8px;
- background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2213%22%20height%3D%229%22%20shape-rendering%3D%22crispEdges%22%3E%3Cpath%20d%3D%22M6%200h1v1h2v1h2v1h1v3h-1v1H9v1H7v1H6v-1H4v-1H2v-1H1V3h1V2h2V1h2z%22%20fill%3D%22%23a07c3c%22%2F%3E%3Cpath%20d%3D%22M6%201h1v1h2v1h1v1H3V3h1V2h2z%22%20fill%3D%22%23c9a45c%22%2F%3E%3C%2Fsvg%3E"),
-  linear-gradient(90deg,#00000000 0,#8a6a33 16%,#8a6a33 84%,#00000000 100%);
- background-size:13px 9px,100% 2px;background-position:50% 0,50% 4px;background-repeat:no-repeat}
-/* USER-APPROVED OPENING, line 3 of the three axes: what the 30 days are for. It is the one of
-   the three the modal was authored as a band, and the sheet had no rule for it at all, so it
-   rendered as ordinary body copy wedged between the supporting line and the 이번 영업의 장식
-   heading - the three axes read as one paragraph and the Run's endpoint had no rank of its own.
-   Presentation only; the approved text is untouched. */
-/* USER 2026-09-23: lines 2 and 3 explain the same thing at the same level - one supplies the
-   adventurers, the other says where they end up - so the third stops being a callout. The dark
-   plane, the gold bar and the container treatment are gone; it is the same paragraph as the
-   line above it in face, size, colour, alignment and leading. The only emphasis language left
-   on this sheet starts at the Decoration section, where it means something. */
-.welcome-band{margin:4px 0 16px;padding:0;background:none;box-shadow:none;
- font:400 var(--exp) var(--ui);color:#c6b89d;text-align:left}
+/* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the name is the drawn logo, not set type. The logo carries its own
+   outline and extrusion, so it takes no shadow here; its alt text is the name. */
+.opening-title{margin:0 0 -2px;line-height:0}
+/* phone: no wider than 210 px or 58% of the width, clear of the build marker and the menu; the file is cut to the drawn
+   letters (v2.9.9: the branch plate that sat under it is MORNING's counter plate now, UI_UX §NEW STORE PREPARATION) */
+.opening-logo{display:block;width:min(210px,58vw);height:auto}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
@@ -985,6 +930,19 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-sale .shelf-col{display:contents}
 .p-sale .dossier.traits{order:3}
 .dossier{margin:0 0 18px}
+/* v2.9.9 (User 2026-09-27, UI_UX §SALE — MOBILE AUTHORITY): on a phone the outlook and the four Core Stats are one
+   recessed plate, not two boxes stacked with a gap - one surface, one seam between the forecast line and the grid - and
+   what the second box's frame and the gap took goes to the shelf. Nothing is dropped or reordered. */
+.p-sale .dossier:not(.traits){background:#0d0904a6;box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12}
+.p-sale .dossier:not(.traits)>.readout{margin:0;padding:9px 12px 7px;background:none;box-shadow:none}
+.p-sale .dossier:not(.traits)>.readout .top{margin-bottom:0}
+.p-sale .dossier:not(.traits)>.detail-stats{margin:0;padding:2px 12px 8px;background:none;box-shadow:inset 0 1px 0 #ffffff26}
+/* the desk keeps its own column exactly as it was: the outlook is up in the front band there, and the grid is its own box */
+@media(min-width:1024px){
+ .p-sale .dossier:not(.traits){background:none;box-shadow:none}
+ .p-sale .dossier:not(.traits)>.detail-stats{margin:0 0 14px;padding:6px 12px 8px;background:#0d0904a6;
+  box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12}
+}
 .p-sale .dock{display:flex;align-items:center;gap:12px;background:#170f0a;box-shadow:inset 0 3px 0 #ffffff14}
 .p-sale .dock .queue{display:grid;gap:5px}
 .p-sale .dock .queue span{font:400 12px/1 var(--ui);color:#a2947c;font-variant-numeric:tabular-nums}
@@ -1006,15 +964,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    wearing the family's own 5px drop - DEEPER than the 4px the price keys carry, which inverts
    the rank this rule exists to fix. The drop is a filter now, and it is the shortest on the
    screen while a price decision is open. */
-.p-sale .dock .stamp{margin-left:auto;min-height:54px;min-width:158px;
+.p-sale .dock .stamp{margin-left:auto;min-height:56px;min-width:158px;
  font:600 18px/1 var(--ui);letter-spacing:.04em;background:#3c3122;color:#e7d9b8;
- filter:drop-shadow(3px 3px 0 #000000a6);
- box-shadow:inset 0 2px 0 #5c4b2c,inset 0 -2px 0 #241c11}
+ filter:drop-shadow(3px 3px 0 #000000a6);text-shadow:0 2px 0 #241c11;
+ box-shadow:inset 0 3px 0 #5c4b2c,inset 0 -4px 0 #241c11}
 .p-sale .dock .stamp:hover{background:#473a29;color:#f2e6c9;
  filter:drop-shadow(3px 3px 0 #000000a6) brightness(1.1)}
 .p-sale .dock .stamp:active{transform:translate(2px,2px);background:#342a1d;
  filter:drop-shadow(1px 1px 0 #000000a6);
- box-shadow:inset 0 2px 0 #463823,inset 0 -2px 0 #1f180e}
+ box-shadow:inset 0 3px 0 #463823,inset 0 -4px 0 #1f180e}
 .pips{display:flex;gap:3px;align-items:center}
 .pips i{width:9px;height:9px;background:#00000073;box-shadow:inset 1px 1px 0 #00000080;display:block}
 .pips i.on{background:var(--gold)}
@@ -1152,7 +1110,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 3px #6b5029,inset 0 0 0 6px #2a1e11,4px 4px 0 #00000066}
 .shelf:before{content:'';position:absolute;z-index:1;left:6px;right:6px;top:6px;height:30px;pointer-events:none;
  background:linear-gradient(180deg,#ffffff1c 0,#ffffff00 100%)}
-.shelf-head{display:flex;align-items:baseline;gap:8px;margin:0 -11px 6px;padding:8px 13px;
+.shelf-head{display:flex;align-items:baseline;gap:8px;margin:0 -11px 6px;padding:5px 13px;
  background:linear-gradient(180deg,#8d6c3b 0,#5b421f 100%);
  box-shadow:inset 0 2px 0 #ffffff33,inset 0 -3px 0 #00000080}
 .shelf-head h2{font:500 15px/1.3 var(--f-plate);-webkit-font-smoothing:none;color:#f8efd8}
@@ -1196,6 +1154,11 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the drawer that opens under it; between the two there is material and spacing, and no
    emphasis line at all. */
 .good.open{background:#00000066;box-shadow:inset 0 4px 0 #0000008c}
+/* v2.9.9 (User 2026-09-27, UI_UX §SALE — SHELF LIP): on SALE each row ends on the thin edge of a board of the display case -
+   a lit line over its shadow, 2 px inside the row's own padding - so the goods stand on a shelf; the row's dark face,
+   its type and its height are unchanged. The open row keeps its board under its own recess. */
+.p-sale .good{box-shadow:inset 0 -1px 0 #3a2814,inset 0 -2px 0 #a07a45}
+.p-sale .good.open{box-shadow:inset 0 4px 0 #0000008c,inset 0 -1px 0 #3a2814,inset 0 -2px 0 #a07a45}
 /* the register drawer: it opens under the chosen good and the three keys are the decision */
 /* BATCH 2B §SALE REGISTER DRAWER. It was a dark rectangle holding another dark rectangle -
    a second card under the product rather than the machine the sale is rung up on. It is one
@@ -1352,24 +1315,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    against the dim `전체 건너뛰기` beside it. Separation is the plane itself: no border, no inset
    outline, no bevel, no gloss. Exactly ONE bottom/right hard depth, which the press collapses as
    the control moves. */
-.p-night .dock .stamp{margin-left:auto;min-height:52px;min-width:132px;font:600 17px/1 var(--ui);
- background:#3f6fbe;color:#f4f7ff;
- box-shadow:none;filter:drop-shadow(4px 4px 0 #1f3564);
- /* the base notch clips everything outside the face, the drop shadow included - which is why no
-    depth ever showed here. This outline is the notched face UNION the same notch 4px down-right,
-    so the depth is kept by the clip instead of cut by it. */
- clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 4px,calc(100% - 2px) 4px,
-  calc(100% - 2px) 6px,100% 6px,100% 10px,calc(100% + 4px) 10px,calc(100% + 4px) calc(100% - 2px),
-  calc(100% - 2px) calc(100% - 2px),calc(100% - 2px) calc(100% + 4px),10px calc(100% + 4px),10px 100%,
-  6px 100%,6px calc(100% - 2px),4px calc(100% - 2px),4px calc(100% - 6px),0 calc(100% - 6px))}
+.p-night .dock .stamp{--nd:4px;margin-left:auto;min-height:56px;min-width:132px;font:600 18px/1 var(--ui);
+ background:#3a5f96;color:#f4f7ff;text-shadow:0 2px 0 #253f68;
+ box-shadow:none;filter:drop-shadow(var(--nd) var(--nd) 0 #1a2d4d)}
 /* BATCH 3 NIGHT: the depth used to be black on the near-black dock, and the base `.stamp` drop
    shadow stacked a second one under it - so the one hard edge the control owns could not be
    seen at all. It is now the plane's own deep cobalt, the ONLY depth (the base filter is
    replaced, the box-shadow is gone), and the press moves the plane into it until it is spent. */
 /* a pointer lift only: on a phone the tap that pressed 다음 leaves :hover stuck on the control
    that replaces it under the finger, and 마감으로 then looked like a different, paler button */
-@media (hover:hover){.p-night .dock .stamp:hover{background:#4a7bcb;filter:drop-shadow(4px 4px 0 #1f3564)}}
-.p-night .dock .stamp:active{transform:translate(4px,4px);background:#3a67b2;filter:none;clip-path:var(--stamp-cut)}
+@media (hover:hover){.p-night .dock .stamp:hover{background:#4269a3;filter:drop-shadow(var(--nd) var(--nd) 0 #1a2d4d)}}
+.p-night .dock .stamp:active{--nd:1px;transform:translate(3px,3px);background:#34568a;filter:drop-shadow(var(--nd) var(--nd) 0 #1a2d4d)}
 .p-night .dock .stamp:focus-visible{outline:3px solid #c9d8f5;outline-offset:3px}
 /* the rail of return tags: the night's progress as objects, one per adventurer out today */
 /* a short beat sits in the middle of the room rather than clinging to the top of it;
@@ -1632,7 +1588,8 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* BRICK. The day's last control is this screen's one flow Action, so it carries that family -
    the paper is the receipt's job, not the button's. Only its measure is set here. */
 .p-closing .dock .stamp,.p-end .dock .stamp{margin:0 auto;width:min(100%,344px);min-width:0;
- min-height:64px;font:600 19px/1 var(--ui);white-space:nowrap}
+ min-height:64px;font:600 20px/1 var(--ui);white-space:nowrap}
+.p-closing .dock .stamp,.p-end .dock .stamp{text-shadow:0 2px 0 #5a221a}
 .p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
  --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 /* The ending's one way on. A modal footer is NOT a role: `.stamp` is worn there by the Run's
@@ -1640,7 +1597,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the very mistake this system was built to stop. BRICK is named per Action, off the
    `data-action` Source already carries - no markup changes to say what a control means. */
 .p-end .dock .stamp,
-.modal-footer [data-action="start"],
+.p-prep .dock [data-action="start"],
 .modal-footer [data-action="store-return"],
 .modal-footer [data-action="event-seen"],
 .modal-footer [data-action="boss-go"]{--act:var(--brick);--act-lit:var(--brick-lit);
@@ -1744,7 +1701,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    is the phase's main Action, sitting it at the footer's end reads as a small button parked in
    a web footer. It is centred on the sheet instead and takes the width it can without becoming
    a full-bleed bar, so it reads as the thing to do on this screen. */
-.modal-footer [data-action="start"],
 .modal-footer [data-action="store-return"]{margin:0 auto;width:min(100%,420px);min-width:0;
  min-height:62px;font:600 19px/1 var(--ui)}
 /* BOSS CONFIRM. USER 2026-09-22: the two controls are the SAME design object - the same notch,
@@ -1852,119 +1808,23 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 1px #00000047,inset 0 3px 0 #0000005c,inset 0 -2px 0 #ffffff0f,
   inset 2px 0 0 #00000047}
 
-/* =====================================================================
-   PRESENTATION BATCH 1 / PREPARATION SHEET. Scoped by what the sheet actually contains,
-   not by `.narrow` - `.narrow` is worn by 도움말, 영업 설정 and every confirm alike, and
-   those are LOW-budget utility overlays that must not inherit a MEDIUM surface's frame.
-   `:has(.welcome-band)` is the pre-Run sheet and nothing else, so no markup changed.
-
-   The sheet was header / body / footer stacked on one wood plane. A 3px line and a 2px seam
-   made that tidy; they did not make it an object. Three CSS passes plateaued there, so the
-   perimeter is BUILT now, as the system's escalation says to do when CSS leaves the object
-   generic: a bespoke 56x56 pixel frame, sliced 18, carried by border-image.
-   It is drawn so the slicing cannot hurt it. The top and bottom planks run the full width and
-   the side stiles run the full height between them, and every band inside them is constant
-   along its own run - so `stretch` has nothing to distort, at any sheet height the day asks
-   for. The corners are fixed: a brass bracket set into each joint, with one rivet. The centre
-   is transparent and the sheet's own wood shows through it, clipped to the padding box, so no
-   frame sits inside another frame.
-   Live text and controls stay HTML. Nothing is baked into the graphic.
-   ===================================================================== */
-.modal.narrow:has(.welcome-band){background:var(--tex-wood),#33241a;background-size:32px 12px;
- border-style:solid;border-width:10px;
- border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='32' height='32' shape-rendering='crispEdges'><g fill='%230f0a05'><rect x='0' y='0' width='32' height='2'/><rect x='0' y='10' width='2' height='12'/><rect x='30' y='10' width='2' height='12'/><rect x='0' y='30' width='32' height='2'/></g><g fill='%235a4028'><rect x='0' y='2' width='2' height='1'/><rect x='7' y='2' width='18' height='1'/><rect x='30' y='2' width='2' height='1'/><rect x='2' y='10' width='1' height='12'/><rect x='29' y='10' width='1' height='12'/><rect x='0' y='29' width='2' height='1'/><rect x='7' y='29' width='18' height='1'/><rect x='30' y='29' width='2' height='1'/></g><g fill='%23e0bc70'><rect x='2' y='2' width='5' height='1'/><rect x='25' y='2' width='5' height='1'/><rect x='2' y='3' width='1' height='4'/><rect x='29' y='3' width='1' height='4'/><rect x='5' y='5' width='1' height='1'/><rect x='26' y='5' width='1' height='1'/><rect x='2' y='25' width='1' height='5'/><rect x='29' y='25' width='1' height='5'/><rect x='5' y='26' width='1' height='1'/><rect x='26' y='26' width='1' height='1'/><rect x='3' y='29' width='4' height='1'/><rect x='25' y='29' width='4' height='1'/></g><g fill='%2346301d'><rect x='0' y='3' width='2' height='2'/><rect x='7' y='3' width='18' height='2'/><rect x='30' y='3' width='2' height='2'/><rect x='4' y='4' width='3' height='1'/><rect x='25' y='4' width='3' height='1'/><rect x='3' y='10' width='2' height='12'/><rect x='27' y='10' width='2' height='12'/><rect x='0' y='27' width='2' height='2'/><rect x='4' y='27' width='24' height='1'/><rect x='30' y='27' width='2' height='2'/><rect x='7' y='28' width='18' height='1'/></g><g fill='%236b5029'><rect x='3' y='3' width='4' height='1'/><rect x='25' y='3' width='4' height='1'/><rect x='3' y='4' width='1' height='3'/><rect x='28' y='4' width='1' height='3'/><rect x='0' y='8' width='32' height='1'/><rect x='8' y='10' width='1' height='12'/><rect x='23' y='10' width='1' height='12'/><rect x='0' y='23' width='32' height='1'/><rect x='3' y='25' width='1' height='4'/><rect x='28' y='25' width='1' height='4'/><rect x='4' y='28' width='3' height='1'/><rect x='25' y='28' width='3' height='1'/></g><g fill='%233a2717'><rect x='0' y='5' width='2' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='6' y='5' width='20' height='1'/><rect x='27' y='5' width='1' height='1'/><rect x='30' y='5' width='2' height='1'/><rect x='5' y='10' width='1' height='12'/><rect x='26' y='10' width='1' height='12'/><rect x='0' y='26' width='2' height='1'/><rect x='4' y='26' width='1' height='1'/><rect x='6' y='26' width='20' height='1'/><rect x='27' y='26' width='1' height='1'/><rect x='30' y='26' width='2' height='1'/></g><g fill='%232a1a0f'><rect x='0' y='6' width='2' height='1'/><rect x='4' y='6' width='24' height='1'/><rect x='30' y='6' width='2' height='1'/><rect x='6' y='10' width='1' height='12'/><rect x='25' y='10' width='1' height='12'/><rect x='0' y='25' width='2' height='1'/><rect x='4' y='25' width='24' height='1'/><rect x='30' y='25' width='2' height='1'/></g><g fill='%23b08a42'><rect x='0' y='7' width='32' height='1'/><rect x='7' y='10' width='1' height='12'/><rect x='24' y='10' width='1' height='12'/><rect x='0' y='24' width='32' height='1'/></g><g fill='%23120c06'><rect x='0' y='9' width='32' height='1'/><rect x='9' y='10' width='1' height='13'/><rect x='22' y='10' width='1' height='13'/><rect x='0' y='22' width='9' height='1'/><rect x='10' y='22' width='12' height='1'/><rect x='23' y='22' width='9' height='1'/></g></svg>") 10 stretch;
- background-clip:padding-box;box-shadow:0 -6px 0 #0000008c}
-/* the header is a plank of the same object, not a caption above it: darker wood, a brass
-   under-rail, and the title seated on it */
-/* USER 2026-09-23: the header was a rectangle parked inside the frame. It is the frame's own
-   header band now - flush to the inner edge on three sides, so the join is the frame itself -
-   closed by one gold seam. No extra thickness anywhere, and the ring around it is gone. */
-.modal.narrow:has(.welcome-band) .modal-header{margin:0;padding:11px 13px 12px;
- background:linear-gradient(180deg,#43301e 0,#2c1e12 100%);
- box-shadow:inset 3px 0 0 #00000047,inset -3px 0 0 #00000047,
-  inset 0 -2px 0 #a8823e,inset 0 -4px 0 #12100a}
-.modal.narrow:has(.welcome-band) .modal-header h2{font-size:21px;letter-spacing:.02em;
- text-shadow:0 2px 0 #1b1109}
-.modal.narrow:has(.welcome-band) .modal-body{padding:15px 10px 14px;--exp:clamp(13.9px,4vw,15.5px)/1.52}
-.modal.narrow:has(.welcome-band) .modal-body>.muted{font:400 var(--exp) var(--ui);color:#c6b89d}
-/* The built frame takes 36px of width that the old flat rectangle did not, and at the 360
-   floor that pushed the two longest approved lines onto a second row. They are fluid now
-   rather than fixed, so they shrink by a step at the narrowest width and are unchanged from
-   376px up. Copy, order and emphasis are untouched - only the measure gives way. */
-.modal.narrow:has(.welcome-band) .welcome-title{font-size:clamp(18.5px,5.5vw,22px);line-height:1.35;margin-bottom:2px}
-
-/* the section heading is a rail, not a bare line of bold text: a brass tab at its head and a
-   seam running out to the sheet's inner edge - the same two-part language the frame's own
-   rails and the Slot rows use, so the object has one divider grammar instead of three. */
-.modal.narrow:has(.welcome-band) .modal-body h3{display:flex;align-items:center;gap:10px;
- font:600 15px/1 var(--ui);letter-spacing:.02em}
-.modal.narrow:has(.welcome-band) .modal-body h3:before{content:'';flex:0 0 auto;width:4px;height:15px;
- background:linear-gradient(180deg,#e6c176 0,#b08a42 42%,#6b5029 100%);box-shadow:1px 0 0 #12100a}
-.modal.narrow:has(.welcome-band) .modal-body h3:after{content:'';flex:1 1 auto;height:3px;
- background:linear-gradient(180deg,#b08a4247 0,#b08a4200 60%),#12100a80;
- box-shadow:0 1px 0 #b08a4233}
-/* the footer is the same plank at the other end of the object - the black web-modal bar is
-   gone, and the brass rail that closes the body is the same rail that opens the header */
-.modal.narrow:has(.welcome-band) .modal-footer{padding:12px 12px 13px;background:none;
- box-shadow:inset 0 1px 0 #a8823e59}
 /* §PRIMARY DECISION CONTROL: measure and seating only. The control's geometry - notch, hard
    outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
    Action construction and is not this Batch's to re-cut. What it lacked here was room of its
    own: it sat tight against the sheet's last line of copy with no breathing plane under it. */
-/* §PRIMARY DECISION CONTROL. Third pass. The second one hung brass plaques on the ends and
-   the review was right: that is ornament stuck to a button, not a built control. What the
-   reference actually carries is proportion and one structural line - a dark outline, a single
-   thin gold edge inside it, a lit face and a hard bottom.
-   So the caps are gone. The corners are cut once, lightly, and the face keeps the brick with a
-   raised edge rather than an outline: a dark rim, a lit band standing proud of the face, one
-   dark step down into it, and then the FACE IS ONE PLANE. An earlier pass read the request
-   for more value separation as two big tonal bands inside the face; they split the plate and
-   buried the lower rivets, so they are gone. All that is left inside is a 2px lit edge where
-   the rim hands over to the face. The separation lives where it belongs: outside and under
-   the plate, as a hard zero-radius depth that follows the cut silhouette, clearly darker than
-   the face and never over it. That depth is what collapses on press - 6px to 2px, with the
-   plate travelling into it - instead of the face inverting its own shading.
-   The gold line is gone; gold on this screen belongs to the sheet and the section, not to the
-   Action. The four fixings are one drawn
-   9px rivet - dark rim, brass body, hard highlight up-left, hard shade down-right - placed four
-   times by CSS, not four CSS circles and not a fixed image of the whole button. An earlier
-   3px version of the same rivet shipped invisible; measured against the runtime, 9px is the
-   size at which a fixing reads as a fixing and still never arrives before the label.
-   The press travels 4px and trades its lit and deep edges. BRICK family and guard unchanged. */
-.modal-footer [data-action="start"],
+/* The Run's opening Action (and the ending's way back to the store): the BRICK family's plate with four fixings - one
+   drawn 9px rivet (dark rim, brass body, hard highlight up-left, hard shade down-right) placed four times by CSS. 9px is
+   the size at which a fixing reads as a fixing and still never arrives before the label. */
+.p-prep .dock [data-action="start"],
 .modal-footer [data-action="store-return"]{min-height:64px;
  font:600 20px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;padding:0 26px;
  background-color:var(--brick);
  background-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>"),url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='9' height='9' shape-rendering='crispEdges'><g fill='%232a1c0c'><rect x='3' y='0' width='3' height='1'/><rect x='1' y='1' width='2' height='1'/><rect x='6' y='1' width='2' height='1'/><rect x='1' y='2' width='1' height='1'/><rect x='7' y='2' width='1' height='1'/><rect x='0' y='3' width='1' height='3'/><rect x='8' y='3' width='1' height='3'/><rect x='1' y='6' width='1' height='2'/><rect x='7' y='6' width='1' height='2'/><rect x='2' y='7' width='1' height='1'/><rect x='6' y='7' width='1' height='1'/><rect x='3' y='8' width='3' height='1'/></g><g fill='%23f0d38a'><rect x='3' y='1' width='3' height='1'/><rect x='2' y='2' width='3' height='1'/><rect x='1' y='3' width='3' height='1'/><rect x='1' y='4' width='2' height='1'/><rect x='1' y='5' width='1' height='1'/></g><g fill='%23b08a42'><rect x='5' y='2' width='2' height='2'/><rect x='4' y='3' width='1' height='3'/><rect x='3' y='4' width='1' height='3'/><rect x='5' y='4' width='1' height='1'/><rect x='2' y='5' width='1' height='2'/></g><g fill='%236b5029'><rect x='7' y='3' width='1' height='3'/><rect x='6' y='4' width='1' height='3'/><rect x='5' y='5' width='1' height='3'/><rect x='4' y='6' width='1' height='2'/><rect x='3' y='7' width='1' height='1'/></g></svg>");
  background-size:9px 9px;background-repeat:no-repeat;
- background-position:left 11px top 11px,right 11px top 11px,left 11px bottom 11px,right 11px bottom 11px;
- box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
-  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
- clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
-  100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
-  6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
- filter:drop-shadow(0 6px 0 #00000099)}
-.modal-footer [data-action="start"]:hover,
-.modal-footer [data-action="store-return"]:hover{
- filter:drop-shadow(0 6px 0 #00000099) brightness(1.08)}
-.modal-footer [data-action="start"]:active,
-.modal-footer [data-action="store-return"]:active{transform:translateY(4px);
- box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
-  inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
- filter:drop-shadow(0 2px 0 #1d0805) brightness(.96)}
+ background-position:left 11px top 11px,right 11px top 11px,left 11px bottom 12px,right 11px bottom 12px}
+/* UI_UX §PRIMARY ACTION GRAMMAR (v2.9.9, User 2026-09-27): the three BRICK Actions are one build - outline, lit
+   top-left, deep bottom-right, cast and press all come from `.stamp`; the rivets are what this one keeps of its own. */
 @media(min-width:1024px){
- /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
-    actually lit - §RESPONSIVE DETAILING. The stage's own falloff carries the width; the
-    composition, the order and the single vertical read are untouched. */
- .modal.narrow:has(.welcome-band){max-width:580px}
- /* the shade is a dimmer, not a lid: at 60% it flattened the plane this Batch just built back
-    into the black it replaced. It steps back far enough for the storefront to read behind the
-    sheet, and the sheet still holds the screen - it is the only lit object on it. */
- .modal-shade:has(.welcome-band){background:#05040373}
- /* the sign takes the width it now has, at Mulmaru's own design size so it stays crisp */
- .p-start .opening-title{font-size:48px}
- .p-start .opening-branch{padding:6px 16px 5px;letter-spacing:.24em}
- .p-start .opening:after{width:min(360px,60%)}
  /* the wide framing of the same shut store, and its window sits lower in frame than the
     portrait one's, so the pool that is let back in moves with it */
  .p-start{background-image:radial-gradient(62% 40% at 50% 49%,#ffd6a02e 0,#ffd6a00f 46%,#00000000 72%),
@@ -1973,9 +1833,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   background-size:auto,auto,cover;
   background-position:0 0,0 0,50% 50%;
   background-repeat:no-repeat,no-repeat,no-repeat}
- .modal.narrow:has(.welcome-band) .modal-body{padding:20px 20px 22px}
- .modal.narrow:has(.welcome-band) .modal-header{padding:15px 20px 13px}
- .modal.narrow:has(.welcome-band) .modal-footer{padding:15px 20px 16px}
 }
 
 /* =====================================================================
@@ -2186,25 +2043,47 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    it is the turning point of the Run. It is thrown downward on press. One control, one label,
    nothing added. */
 .p-final .dock .stamp{flex:1 1 auto;min-height:64px;font:500 21px/1 var(--f-sign);letter-spacing:.14em;
+ filter:drop-shadow(5px 5px 0 #2e0d09);
  -webkit-font-smoothing:none;
  background:#8a2f26;color:#ffeee9;text-shadow:0 2px 0 #00000080;
  box-shadow:inset 0 4px 0 #d4695b,inset 0 -6px 0 #45150f,
-  inset 6px 0 0 #a3372c,inset -6px 0 0 #5e1f16,5px 5px 0 #00000080}
+  inset 6px 0 0 #a3372c,inset -6px 0 0 #5e1f16}
 .p-final .dock .stamp:hover{background:#98342a;
  box-shadow:inset 0 4px 0 #e07a6b,inset 0 -6px 0 #4f1912,
-  inset 6px 0 0 #b23e31,inset -6px 0 0 #6b241a,5px 5px 0 #00000080}
+  inset 6px 0 0 #b23e31,inset -6px 0 0 #6b241a}
 /* the bar is thrown: it drops into its frame and the bevel inverts */
-.p-final .dock .stamp:active{transform:translateY(4px);background:#7a281f;
+.p-final .dock .stamp:active{transform:translate(4px,4px);background:#7a281f;filter:drop-shadow(1px 1px 0 #2e0d09);
  box-shadow:inset 0 4px 0 #45150f,inset 0 -3px 0 #d4695b,
-  inset 6px 0 0 #5e1f16,inset -6px 0 0 #a3372c,1px 1px 0 #00000080}
+  inset 6px 0 0 #5e1f16,inset -6px 0 0 #a3372c}
 /* A gate that cannot be opened yet is cold iron, not a faded red button - and per
    §PIXEL / 2D §STATE GRAMMAR its action plane must not look pressable either. It kept the raised
    bevel and a 3px hard drop, so the shut gate still stood off the dock like a key waiting to be
    hit. It is set INTO the dock now: no drop, the light edge on the inside, the ink still legible.
    No whole-element opacity. */
-.p-final .dock .stamp[disabled]{background:#2b211c;color:#8d7168;text-shadow:none;
+.p-final .dock .stamp[disabled]{background:#2b211c;color:#8d7168;text-shadow:none;filter:none;
  box-shadow:inset 0 5px 0 #14100e,inset 0 -3px 0 #4a3b33,
   inset 5px 0 0 #1c1614,inset -5px 0 0 #3a2e28}
+/* UI_UX §PRIMARY ACTION GRAMMAR (v2.9.9). A filter is drawn before the clip, so the notch cut every Phase Action's cast
+   away with its corners - only NIGHT, whose outline already took the cast in, and the unclipped MORNING shutter showed any
+   depth. Every notched Phase Action now takes NIGHT's outline: the notched face UNION the same notch --nd down-right, --nd
+   being its cast (5 across a boundary, 4 inside the Day, 3 for 손님 보내기); pressed it keeps the 1 px that is left. A
+   disabled control keeps its own cut. */
+.p-prep .dock [data-action="start"],.modal-footer [data-action="store-return"],
+.p-closing .dock .stamp:not([disabled]),.p-end .dock .stamp:not([disabled]),.p-final .dock .stamp:not([disabled]){--nd:5px}
+.p-order .dock .stamp:not([disabled]){--nd:4px}
+.p-sale .dock .stamp:not([disabled]){--nd:3px}
+.p-prep .dock [data-action="start"],.modal-footer [data-action="store-return"],.p-order .dock .stamp:not([disabled]),
+.p-sale .dock .stamp:not([disabled]),.p-night .dock .stamp:not([disabled]),.p-closing .dock .stamp:not([disabled]),
+.p-end .dock .stamp:not([disabled]),.p-final .dock .stamp:not([disabled]){
+ clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) var(--nd),calc(100% - 6px + var(--nd)) var(--nd),
+  calc(100% - 6px + var(--nd)) 6px,100% 6px,100% calc(6px + var(--nd)),calc(100% + var(--nd)) calc(6px + var(--nd)),
+  calc(100% + var(--nd)) calc(100% - 6px + var(--nd)),calc(100% - 6px + var(--nd)) calc(100% - 6px + var(--nd)),
+  calc(100% - 6px + var(--nd)) calc(100% + var(--nd)),calc(6px + var(--nd)) calc(100% + var(--nd)),calc(6px + var(--nd)) 100%,
+  6px 100%,6px calc(100% - 6px + var(--nd)),var(--nd) calc(100% - 6px + var(--nd)),var(--nd) calc(100% - 6px),0 calc(100% - 6px))}
+.p-prep .dock [data-action="start"]:active,.modal-footer [data-action="store-return"]:active,
+.p-order .dock .stamp:not([disabled]):active,.p-sale .dock .stamp:not([disabled]):active,
+.p-closing .dock .stamp:not([disabled]):active,.p-end .dock .stamp:not([disabled]):active,
+.p-final .dock .stamp:not([disabled]):active{--nd:1px}
 .p-final .dock .danger{min-height:52px;padding:12px 16px;background:#5c2a24;color:#f6dfd9;
  box-shadow:inset 2px 2px 0 #ffffff1a,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 /* the gate mouth, with whoever is standing in it. On a phone the art is sized against the
@@ -2427,31 +2306,164 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* USER 2026-09-24: the room is a painting, so each Decoration is seated on a surface the
    painting draws - the sign hangs from the ceiling between two fixtures, the plaque is on bare
    wall, the display and counter pieces stand on the counter top either side of the till - and
-   it is placed in the painting's own coordinates. The painting is `cover` on the stage and at
-   every shipped width only its sides are cropped, so a point at (x, y) of the file is at
-   left = 50cqw + (x - .5) * 100cqh * aspect and top = y * 100cqh of the stage. --x / --y are
-   fractions of the file, --w a fraction of the file's width, --ar the file's aspect. Pieces
-   that stand on something are placed by their foot (--y is the surface). */
-.deco-layer{position:absolute;inset:0;z-index:1;pointer-events:none;container-type:size;--ar:.5628}
-.decoplate{position:absolute;line-height:0;pointer-events:none;
- left:calc(50cqw + (var(--x) - .5) * 100cqh * var(--ar));width:calc(var(--w) * 100cqh * var(--ar));
- filter:drop-shadow(0 3px 0 #0000004d)}
+   it is placed in the painting's own coordinates (v2.9.9: under either cover crop, and the counter pieces by the
+   till housing they stand beside - below). */
+.deco-layer{position:absolute;inset:0;z-index:1;pointer-events:none;container-type:size;--ar:.5628;
+ /* v2.9.9 (UI_UX §LIVE STORE DECORATION SEATING): the painting is `cover`, so it is cropped at the sides on a
+    stage narrower than the file and at the top and bottom on one wider than it (a phone browser with its bars
+    showing, a tablet). Its drawn height is whichever of the two fills the stage. */
+ --ph:max(100cqh,100cqw / var(--ar));
+ /* the till housing, in this layer's units, from the numbers the housing itself is placed by
+    (director-review.css §.p-morning .till); the counter mount is the stage, or its cap on a desk */
+ --mw:min(100cqw,var(--counter-roomw,100cqw));
+ --till-l:calc(50cqw + var(--mw) * (var(--till-x) - .5));
+ --till-r:calc(50cqw + var(--mw) * (var(--till-x) + var(--till-w) - .5));
+ --till-b:calc(50cqh + (.5 - var(--band-c) * (1 - var(--till-top) - var(--till-h))) * var(--ph));
+ /* the DAY sign's left edge, from its published anchor, in the ceiling mount (the stage, or its cap on a desk) */
+ --sign-l:calc(50cqw + min(100cqw,var(--ceiling-roomw,100cqw)) * (var(--daysign-x) - .5));
+ --gap:6px}
+.decoplate{position:absolute;line-height:0;pointer-events:none;filter:drop-shadow(0 3px 0 #0000004d)}
 .decoplate .deco-art{display:block;width:100%;height:auto;image-rendering:pixelated}
-.decoplate.sign,.decoplate.wall{top:calc(var(--y) * 100cqh)}
-.decoplate.counter,.decoplate.display{bottom:calc((1 - var(--y)) * 100cqh)}
-/* phone file (941x1672): ceiling 0-18.6, counter top 74.2-76.0 */
+/* The sign hangs from the painted ceiling and the plaque is on the painted wall, so both are placed in the
+   painting's own coordinates: (x, y) of the file is at 50cqw + (x - .5) * width and 50cqh + (y - .5) * height of
+   the drawn painting. --x / --y are fractions of the file, --w a fraction of its width, --ar its aspect. */
+.decoplate.sign,.decoplate.wall{left:calc(50cqw + (var(--x) - .5) * var(--ph) * var(--ar));
+ top:calc(50cqh + (var(--y) - .5) * var(--ph));width:calc(var(--w) * var(--ph) * var(--ar))}
+/* where the crop takes the painted ceiling off the top of the stage (a portrait tablet), the 간판 hangs the gap below
+   the stage's top edge instead of above it */
+.decoplate.sign{top:max(var(--gap),calc(50cqh + (var(--y) - .5) * var(--ph)))}
+/* the 간판 hangs from the same ceiling as the DAY sign: on its painted spot while there is room, and never nearer the
+   DAY sign than the gap - on a short phone the painting's spot comes right up to it */
+.decoplate.sign{left:min(calc(50cqw + (var(--x) - .5) * var(--ph) * var(--ar)),
+ calc(var(--sign-l) - var(--gap) - var(--w) * var(--ph) * var(--ar)))}
+/* The display and counter pieces stand on the counter top with the till, so their feet are on the housing's
+   base line and they are sized by the same counter mount. Each keeps its painted spot (--cx, the piece's centre as
+   a fraction of the file's width) until that spot would bring it closer to the housing than the gap; then it
+   stands at the gap instead. Nothing that moves the till can make them overlap it or stand on another line. */
+.decoplate.display,.decoplate.counter{bottom:calc(100cqh - var(--till-b));width:calc(var(--dw) * var(--mw));
+ --spot:calc(50cqw + (var(--cx) - .5) * var(--ph) * var(--ar) - var(--dw) * var(--mw) / 2)}
+.decoplate.display{left:min(var(--spot),calc(var(--till-l) - var(--gap) - var(--dw) * var(--mw)))}
+.decoplate.counter{left:max(var(--spot),calc(var(--till-r) + var(--gap)))}
+/* phone file (941x1672): ceiling 0-18.6 */
 .decoplate.sign{--x:.15;--y:.113;--w:.16}
 .decoplate.wall{--x:.76;--y:.55;--w:.11}
-.decoplate.display{--x:.115;--y:.755;--w:.13}
-.decoplate.counter{--x:.76;--y:.755;--w:.13}
-/* wide file (1672x941): ceiling 0-19, counter top 82.7-85.2 */
-@media(min-width:1024px){
- .deco-layer{--ar:1.7768}
+.decoplate.display{--cx:.18;--dw:.15}
+.decoplate.counter{--cx:.825;--dw:.15}
+/* wide file (1672x941): ceiling 0-19 */
+@media(min-width:1024px),(min-width:768px) and (orientation:landscape){
+ .deco-layer{--ar:1.7768;--gap:10px}
  .decoplate.sign{--x:.29;--y:.093;--w:.08}
  .decoplate.wall{--x:.629;--y:.44;--w:.038}
- .decoplate.display{--x:.222;--y:.835;--w:.085}
- .decoplate.counter{--x:.70;--y:.835;--w:.07}
+ .decoplate.display{--cx:.2645;--dw:.2}
+ .decoplate.counter{--cx:.735;--dw:.17}
 }
+/* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The preparation screen is the MORNING room
+   (the stage carries both classes, so the painting, the bands and the Decoration seating are MORNING's own); only what
+   differs before a Run is set here. */
+.p-prep .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:5;
+ margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.8;pointer-events:none;white-space:nowrap}
+/* the name hangs from the ceiling where the DAY sign will */
+.p-prep .band.ceiling .opening{position:absolute;inset:0 0 auto;z-index:2;padding-top:calc(env(safe-area-inset-top) + 21px)}
+.p-prep .prep-note{padding-top:16px}
+.p-prep .prep-note .welcome-title{margin-bottom:6px;font:500 16px/1.4 var(--f-plate)}
+.p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{display:block;margin:0;font:400 13px/1.6 var(--ui);color:#5f5440;text-align:left}
+.p-prep .prep-status{margin:0;font:400 12px/1.4 var(--ui);color:#d9c9a8;text-align:center}
+/* each Slot is its place in the room: the Decoration standing there, or its empty spot, and a small tag naming it */
+/* a place is at least a 44 px target: it grows away from the surface it is seated on (the counter pieces and the plaque
+   upward from their foot / down from their nail, the 간판 up into the ceiling it hangs from), so its drawing does not move */
+.p-prep .deco-layer .prep-slot{pointer-events:auto;display:flex;flex-direction:column;justify-content:flex-end;padding:0;border:0;
+ background:none;box-shadow:none;color:inherit;cursor:pointer;min-width:44px;min-height:44px;filter:none}
+.p-prep .deco-layer .prep-slot.sign:not(.empty){--ah:calc(var(--w) * var(--ph) * var(--ar) * .55);
+ transform:translateY(calc(var(--ah) - max(44px, var(--ah))))}
+.p-prep .prep-slot .deco-art{filter:drop-shadow(0 3px 0 #0000004d)}
+/* an empty Slot draws no box: the room is simply bare there, and its tag stands on the spot (the button keeps a 44 px
+   target) */
+.p-prep .slot-empty{display:block;width:100%;min-height:44px;aspect-ratio:var(--slot-ar,1)}
+.p-prep .prep-slot.sign{--slot-ar:40/22}
+.p-prep .prep-slot.wall{--slot-ar:22/21}
+.p-prep .prep-slot.display{--slot-ar:26/25}
+.p-prep .prep-slot.counter{--slot-ar:28/17}
+/* v2.9.9 (User 2026-09-27): the tags keep the share of the stage they have on a 360x640 phone - their type grows with the
+   stage's height past 640 (1cqh = 1% of it) and, on a wide desk, with its width, never below its own size and never past
+   20 px; the padding is in em so it grows with it. The two plates are set in the pixel face, which is crisp only on its
+   12 px grid, so they step instead (the @container rules below) */
+.p-prep .slot-tag{position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);display:grid;justify-items:center;gap:1px;
+ padding:.36em .73em .45em;white-space:nowrap;font:500 min(20px,max(11px,1.72cqh,1.4cqw))/1.25 var(--ui);color:#e4cfa4;background:#2b1e13;
+ box-shadow:inset 0 0 0 1px #6b5029,0 2px 0 #00000080}
+.p-prep .slot-tag b{font-size:min(22px,max(12px,1.875cqh,1.5cqw))}
+/* a tag is anchored to its piece's edge that faces the middle of the room, so a piece standing near the screen's edge
+   never pushes its tag off it: the 간판 and 진열대 on the left, the plaque and the 계산대 piece on the right */
+.p-prep .prep-slot.sign .slot-tag,.p-prep .prep-slot.display .slot-tag{left:0;transform:none}
+.p-prep .prep-slot.wall .slot-tag,.p-prep .prep-slot.counter .slot-tag{left:auto;right:0;transform:none}
+.p-prep .prep-slot.empty .slot-tag{top:50%;transform:translateY(-50%)}
+/* the empty plaque's tag hangs from the top of its spot rather than its middle: the board is right above it, and a tag
+   grown with a tall or wide stage grows down onto bare wall instead of up into the board */
+.p-prep .prep-slot.wall.empty .slot-tag{top:0;transform:none}
+/* the 간판 hangs just above the board, so its tag is one line: under it on a phone (the branch plate is beside it),
+   to its left on a desk (the board is right under it and the branch plate to its right) */
+.p-prep .prep-slot.sign:not(.empty) .slot-tag{top:calc(100% + 3px);grid-auto-flow:column;align-items:baseline;gap:5px}
+@media(min-width:1024px),(min-width:768px) and (orientation:landscape){
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:50%;left:auto;right:calc(100% + 6px);transform:translateY(-50%)}
+ /* that tag runs left from the 간판 toward the stage's edge and sits under the painted ceiling fixture, so it stacks its
+    two lines as the other tags do (only as wide as the name), is centred on the sign's plate rather than on its hangers
+    (72% down the drawing, just under the fixture), and grows only with the stage's height and only as far as it still fits there */
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag{grid-auto-flow:row;gap:1px;top:72%}
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag{font-size:min(15px,max(12px,1.72cqh))}
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag b{font-size:min(16px,max(13px,1.875cqh))}
+ .p-prep .opening-logo{width:320px}
+ /* on the wide framing the title hangs at the 간판's height, so the 간판 keeps the gap from the title as it does from the
+    DAY sign on MORNING (a 1366x680 browser brought them together) */
+ .p-prep .deco-layer{--sign-l:calc(50cqw - 160px)}
+ .p-prep .band.ceiling .opening{padding-top:calc(env(safe-area-inset-top) + 14px)}
+ .p-prep .slot-tag{font-size:min(20px,max(12px,1.72cqh,1.4cqw))}
+ .p-prep .slot-tag b{font-size:min(22px,max(13px,1.875cqh,1.5cqw))}
+ .p-prep .prep-status{font-size:13px}
+ /* the board ends above the painted wall's plaque spot: on a stage under 800 high (a 1366x680 laptop browser, a landscape
+    tablet, a 768-high desk) the note is one step tighter - the same type, less air - while the status strip under it keeps
+    its full height; an 800-high stage gets the note's air back below */
+ .p-morning.p-prep .pinned{gap:6px;padding-bottom:9px}
+ .p-morning.p-prep .prep-note{padding:5px 12px 3px}
+ .p-prep .prep-note .welcome-title{margin-bottom:2px}
+ .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.4}
+}
+@media(min-width:1024px) and (min-height:800px),(min-width:768px) and (min-height:800px) and (orientation:landscape){
+ .p-morning.p-prep .pinned{gap:6px;padding-bottom:9px}
+ .p-morning.p-prep .prep-note{padding:12px 14px 10px}
+ .p-prep .prep-note .welcome-title{margin-bottom:6px}
+ .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.6}
+}
+.p-prep .slot-tag i{font-style:normal;color:#b99b6a}
+.p-prep .slot-tag b{font-weight:600}
+.p-prep .slot-tag .can-buy{margin-top:2px;padding:.27em .55em;font:600 min(20px,max(11px,1.72cqh,1.4cqw))/1 var(--ui);font-style:normal;color:#e0c89c;
+ box-shadow:inset 0 0 0 1px #e0c89c73}
+.p-prep .prep-slot:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.p-prep .prep-slot:active{translate:0 2px}
+/* the Store Capital is a small plate on the counter where the till will stand, not the till: before a Run there is no
+   float, and a register showing the Capital would read as the Run's money */
+.p-prep .capital-plate{position:absolute;z-index:2;left:50%;transform:translateX(-50%);margin:0;
+ bottom:calc((1 - var(--till-top) - var(--till-h)) * 100%);padding:9px 16px 8px;gap:9px;white-space:nowrap;
+ font:500 17px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;box-shadow:inset 0 0 0 1px #6b5029,inset 0 1px 0 #00000073,0 2px 0 #00000080}
+.p-prep .capital-plate b{color:var(--gold);font-weight:500}
+/* the branch plate is MORNING's, on the counter front; centred under the Capital here, because the Slot tags hang at the
+   counter's two ends */
+/* under the title, in the opening's own column - not placed on the counter like MORNING's */
+.p-morning.p-prep .opening .branchplate{position:static;top:auto;right:auto;bottom:auto;left:auto;transform:none;white-space:nowrap;
+ font-size:12px;padding:.25em .75em}
+/* the two pixel-face plates step with the stage (the store is the size container, at most 1120 wide on a desk): 12 -> 18 px
+   (crisp on a 2x screen) on a stage 800 high or 1000 wide, 24 px on a stage 1000 by 1000; the Capital plate 17 -> 24 px on
+   the same stages as the first step */
+@container (min-height:800px) or (min-width:1000px){
+ .p-morning.p-prep .opening .branchplate{font-size:18px}
+ .p-prep .capital-plate{font-size:24px;padding:.5em .9em .45em}
+}
+@container (min-height:1000px) and (min-width:1000px){
+ .p-morning.p-prep .opening .branchplate{font-size:24px}
+}
+.p-prep .dock{align-items:center}
+.p-prep .dock [data-action="start"]{flex:1 1 auto;max-width:420px;margin:0 auto}
+.p-prep .dock [data-action="prep-back"]{flex:0 0 auto;align-self:center;padding:10px 12px;color:#e4cfa4;background:#0b0806d9;
+ box-shadow:inset 0 0 0 1px #6b502999;text-decoration:underline;text-underline-offset:3px}
+.p-prep .dock [data-action="prep-back"]:hover{color:#f4e3bd}
 /* UI_UX_v2.8 §DECORATION UI. Reuses the unlock board's block rhythm and the .effects row
    shape rather than introducing a new card language for one panel. */
 /* The panel is rendered as a child of the codex's `.unlock-grid`, which becomes two and then
@@ -2722,6 +2734,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     has to belong to the leading button only - on every stamp each one pushes itself right and
     the pair straddles the dock. */
  .p-order .dock .stamp{flex:0 0 auto;min-width:300px}
+ /* UI_UX §PRIMARY ACTION GRAMMAR: a step inside the Day is 60 px on a desk, one across a Day or Run boundary 72 px */
+ .p-morning .dock .pull,.p-order .dock .stamp,.p-sale .dock .stamp,.p-night .dock .stamp{min-height:60px;font-size:20px}
+ .p-morning .dock .pull span{font-size:20px;padding:19px 0 21px}
+ .p-final .dock .stamp{min-height:72px}
  .p-order .dock .stamp:first-of-type{margin-left:auto}
  /* MORNING at tablet width and up. The room's furniture is art sized to the column, so left
     alone the ceiling and the counter grow with the window and the decision gets whatever is
@@ -2730,8 +2746,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     own art, capping it centres both of them on the screen. The caps are set from what the
     day and the float need in order to read, not from what it takes to fit the whole shop in
     frame: the shelving and the window behind them are allowed to crop. */
- .p-morning .band.ceiling .mount{--roomw:620px}
- .p-morning .band.counter .mount{--roomw:640px}
+ .p-morning{--ceiling-roomw:620px}
+ .p-morning .band.ceiling .mount{--roomw:var(--ceiling-roomw)}
+ .p-morning{--counter-roomw:640px}
+ .p-morning .band.counter .mount{--roomw:var(--counter-roomw)}
  /* the register is the only object left on this surface, so the float is set to fill it */
  .p-morning .till b{font-size:40px}
  .p-morning .till i{font-size:20px}
@@ -2807,7 +2825,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-night .dock{padding-left:max(var(--gutter),calc((100% - 880px) / 2));
   padding-right:max(var(--gutter),calc((100% - 880px) / 2));padding-top:14px}
  .p-night .dock .bare{font-size:16px;min-height:52px}
- .p-night .dock .stamp{min-height:60px;min-width:190px;font-size:20px}
+ .p-night .dock .stamp{min-width:190px}
  /* the unlock notice takes the same desktop step as the record it sits over: one type/padding
     class up (about 12-15%), same place, same two lines */
  #toast.unlock{padding:10px 20px 12px}
@@ -2862,7 +2880,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     The receipt keeps its phone measure here; the one desktop step below (Batch 3) scales the
     paper and this Action together, so they stay one column. */
  .p-closing .dock .stamp,.p-end .dock .stamp{flex:0 0 auto;
-  width:344px;min-height:86px;font:600 23px/1 var(--ui);letter-spacing:.06em}
+  width:344px;min-height:72px;font:600 22px/1 var(--ui);letter-spacing:.06em}
  /* BATCH 3 CLOSING — DESKTOP STEP (PRESENTATION_SYSTEM §RESPONSIVE DETAILING; the same one step
     NIGHT takes). At 1280 the phone-sized till printed its figures at 12-15px in the middle of
     the counter. The same tape, the same rows in the same order and the same single column take
@@ -2908,7 +2926,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-end .end-tape .opened b{font-size:16px}
  .p-end .end-tape .bare{font-size:15px;margin-top:4px}
  .p-end .end-tape{margin-bottom:16px}
- .p-end .dock .stamp{width:440px;min-height:72px;font-size:21px}
+ .p-end .dock .stamp{width:440px}
  /* a short till still names its own way out, under the same paper */
  .p-closing .dock{flex-wrap:wrap}
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
@@ -3269,3 +3287,39 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* v2.9.7 CLOSING: a desk under 960 tall (1280 x 880, 1440 x 900) holds the longest Day at desk type the same way */
 @media (min-width:1024px) and (max-height:960px){.p-closing .print .head{padding-bottom:10px;margin-bottom:8px}
  .p-closing .print .block{padding:7px 0}.p-closing .print .row{padding:1px 0}.p-closing .print .row.open{padding:7px 14px}.p-closing .purse{row-gap:6px;padding:12px 16px}}
+/* v2.9.9 H7 FINAL 교전 (UI_UX §FINAL — CLASH SCENE): the resolved Final played out as a card fight over the FINAL stage -
+   the Boss card above in its own room, the party's cards below; the motion is app.js clashScene(). The one scene the
+   per-beat contract lets use the whole stage. */
+.clash{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(64px,14vh,150px);
+ padding:calc(env(safe-area-inset-top) + max(20px,6vh)) 16px calc(env(safe-area-inset-bottom) + max(20px,8vh));overflow:hidden;cursor:pointer;
+ background:linear-gradient(180deg,#0d0a0cb8 0,#0d0a0c73 42%,#0d0a0ce6 100%),var(--room,none) center 30%/cover no-repeat,#0d0a0c;
+ -webkit-tap-highlight-color:transparent;user-select:none}
+.clash .flash{position:absolute;inset:0;opacity:0;pointer-events:none;mix-blend-mode:screen}
+.clash-boss{position:relative;display:grid;justify-items:center;gap:8px;width:min(300px,72%);padding:10px 10px 12px;
+ background:#2a1512;box-shadow:inset 0 0 0 2px #7a2c20,inset 0 0 0 4px #1a0a08,0 5px 0 #000000a6}
+.clash-boss img{display:block;height:min(28vh,240px);min-height:96px;width:auto;max-width:100%;object-fit:contain;
+ filter:drop-shadow(0 5px 0 #00000073)}
+.clash-boss b{font:500 18px/1.1 var(--f-plate);color:#f3dcc0;text-shadow:0 2px 0 #1a0a08}
+.clash-bar{position:relative;display:block;width:100%;height:12px;background:#1a0a08;box-shadow:0 0 0 2px #5a221a,inset 0 0 0 1px #000}
+.clash-bar i{position:absolute;top:1px;bottom:1px}
+.clash-bar .hp{left:1px;width:100%;max-width:calc(100% - 2px);background:#c8342a;box-shadow:inset 0 2px 0 #e8604a,inset 0 -2px 0 #8a1f18}
+.clash-boss .crack{position:absolute;left:10px;right:10px;top:10px;height:calc(100% - 74px);opacity:0;pointer-events:none;fill:none;stroke:#120604;
+ stroke-width:3px;stroke-linecap:square;stroke-linejoin:miter}
+.clash-boss .crack path{vector-effect:non-scaling-stroke}
+.clash-party{display:flex;justify-content:center;gap:10px;width:100%;max-width:480px}
+.clash-card{position:relative;flex:0 1 136px;min-width:0;display:grid;justify-items:center;gap:3px;padding:8px 6px 9px;
+ background:#2b1e13;box-shadow:inset 0 0 0 2px #6b5029,inset 0 0 0 4px #1a120b,0 4px 0 #000000a6;color:#e4cfa4}
+.clash-card b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:500 12px/1.3 var(--f-plate)}
+.clash-card small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 12px/1.3 var(--ui);color:#d2c29f}
+.clash-bag{display:flex;gap:4px;margin-top:3px}
+.clash-bag .slot{display:grid;place-items:center;width:26px;height:26px;background:#1a120b;box-shadow:inset 0 0 0 1px #4a3620}
+.clash-bag .got{display:block;opacity:0}
+.clash-bag .got svg{display:block;width:22px;height:22px}
+@media(min-width:1024px){
+ .clash-boss{width:340px}
+ .clash-boss img{height:min(32vh,280px)}
+ .clash-party{max-width:560px;gap:14px}
+ .clash-card{flex-basis:160px}
+ .clash-card .pfp{width:96px;height:96px}
+}
+

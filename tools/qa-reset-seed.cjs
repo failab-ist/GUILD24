@@ -4,7 +4,7 @@
 // stale seed and a fresh one can never coincide by timing luck.
 //   A  END -> 다음 점포 열기 (plan at T1) -> 닫기 -> menu -> 설정 -> 전체 데이터 초기화 -> 전부 지우기 (clock T2) -> start
 //      => the new Run's seed is planned at T2, never the pre-reset T1
-//   B  reopening the preparation panel without a reset keeps the T1 plan
+//   B  reopening the preparation scene without a reset keeps the T1 plan
 //   C  a trip through Store Management before start keeps the T1 plan
 //   D  once start consumed a plan, the next Run plans its own (T3)
 //   E  an in-progress Run reloads on its own persisted seed
@@ -40,32 +40,32 @@ const click=async(page,sel)=>{await page.waitForSelector(sel);await page.click(s
   // A - the bug path
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-a');await at(page,T1);
    await click(page,'[data-action="new"]');                                       // plan at T1
-   await click(page,'#modal-root [data-action="dismiss"]');await at(page,T2);
+   await click(page,'[data-action="prep-back"]');await at(page,T2);
    await click(page,'[data-action="menu"]');await click(page,'#modal-root [data-action="settings"]');
    await click(page,'#modal-root [data-action="reset"]');await click(page,'#modal-root [data-action="reset-go"]');
-   await click(page,'#modal-root [data-action="start"]');
+   await click(page,'.p-prep [data-action="start"]');
    const s=await seed(page);check('A full reset clears the pending seed: the next Run is planned after the reset',s===seedAt(T2),'seed '+s+' (pre-reset plan '+seedAt(T1)+')');
    await ctx.close();}
   // B - reopening without a reset keeps the plan
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-b');await at(page,T1);
-   await click(page,'[data-action="new"]');await click(page,'#modal-root [data-action="dismiss"]');await at(page,T2);
-   await click(page,'[data-action="new"]');await click(page,'#modal-root [data-action="start"]');
-   const s=await seed(page);check('B reopening the preparation panel keeps its memoized seed',s===seedAt(T1),'seed '+s);await ctx.close();}
+   await click(page,'[data-action="new"]');await click(page,'[data-action="prep-back"]');await at(page,T2);
+   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');
+   const s=await seed(page);check('B reopening the preparation scene keeps its memoized seed',s===seedAt(T1),'seed '+s);await ctx.close();}
   // C - Store Management before start keeps the plan
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-c');await at(page,T1);
    await click(page,'[data-action="new"]');await at(page,T2);
-   await click(page,'#modal-root [data-action="store-manage"]');await click(page,'#modal-root [data-action="store-return"]');
-   await click(page,'#modal-root [data-action="start"]');
+   await click(page,'.p-prep [data-action="store-manage"]');await click(page,'#modal-root [data-action="store-return"]');
+   await click(page,'.p-prep [data-action="start"]');
    const s=await seed(page);check('C a Store Management trip does not reroll the planned seed',s===seedAt(T1),'seed '+s);await ctx.close();}
   // D - start consumes the plan; the next Run plans its own
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-d');await at(page,T1);
-   await click(page,'[data-action="new"]');await click(page,'#modal-root [data-action="start"]');const first=await seed(page);
+   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');const first=await seed(page);
    await endNow(page);await at(page,T3);
-   await click(page,'[data-action="new"]');await click(page,'#modal-root [data-action="start"]');const second=await seed(page);
+   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');const second=await seed(page);
    check('D a started Run consumed its plan and the next Run plans its own',first===seedAt(T1)&&second===seedAt(T3),first+' -> '+second);await ctx.close();}
   // E - an in-progress Run keeps its persisted seed across a reload
   {const {ctx,page}=await open();await toEnd(page,'qa-reset-e');await at(page,T1);
-   await click(page,'[data-action="new"]');await click(page,'#modal-root [data-action="start"]');const before=await seed(page);
+   await click(page,'[data-action="new"]');await click(page,'.p-prep [data-action="start"]');const before=await seed(page);
    await page.evaluate(()=>Guild24.game.save());await at(page,T4);await page.reload({waitUntil:'load'});
    const after=await seed(page);check('E an in-progress Run reloads on its own persisted seed',before===after&&after===seedAt(T1),before+' / '+after);await ctx.close();}
  }finally{await browser.close();server.kill();}

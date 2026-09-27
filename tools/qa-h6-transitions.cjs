@@ -44,7 +44,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
 
    // DAY 0: the mandatory Store Support takeover ('첫 점포지원', modal==='relics') is the actual
    // DAY 0 screen; the preceding '새 점포 준비' panel is the ordinary pre-Run launcher, not DAY 0 itself
-   await p.click('#modal-root [data-action="start"]');
+   await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));
    if(CASES.includes('day0')){
     await p.screenshot({path:path.join(OUT,`day0-${width}-before.png`)});
     await p.click('#modal-root [data-action="buy-relic"]');

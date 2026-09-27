@@ -205,8 +205,10 @@ test('UI-Q-v28-26: the accepted Action composition holds',()=>{
  const solo=ruleFor('.modal-footer [data-action="store-return"]{');
  assert.ok(/margin:0 auto/.test(solo),'the phase\'s main Action is centred on the sheet');
  assert.ok(/width:min\(100%,\d+px\)/.test(solo),'and takes width without becoming a full-bleed bar');
- assert.ok(/\.modal-footer \[data-action="start"\],\n\.modal-footer \[data-action="store-return"\]\{/.test(css),
-  'and the Run\'s opening Action is set the same way');
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the Run's opening Action is in the preparation scene's dock
+    and keeps the built construction */
+ assert.ok(/\.p-prep \.dock \[data-action="start"\],\n\.modal-footer \[data-action="store-return"\]\{min-height:64px/.test(css),
+  'and the Run\'s opening Action is built the same way');
  /* D. BOSS CONFIRM: the two controls are the same design object - USER 2026-09-22 - so they carry
     the same geometry and differ by family and weight, and neither label may wrap. */
  assert.ok(/footer=btn\('보급으로 돌아가기','dismiss','stamp'\)\+btn\('최종 원정 시작','boss-go','stamp'\)/.test(app),
@@ -574,7 +576,7 @@ test('C04: a redraw keeps the keyboard where it was, on #app and inside an open 
 });
 
 test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is meant to inform',()=>{
- const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')modal='relics'"));
+ const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"));
  const boss=chain.indexOf("modal='boss'"),event=chain.indexOf("modal='event'"),relic=chain.indexOf("focusedRevealSeen");
  assert.ok(boss>=0&&event>=0&&relic>=0,'all three focused reveals are in one chain');
  assert.ok(boss<event&&boss<relic,'the Boss reveal is offered ahead of the Event and the Relic window');
@@ -773,7 +775,7 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  // Contract, so what that screen now confirms is the Decoration loadout.
  /* v2.9.0 F5 (User 2026-09-24): the DAY 0 choice is mandatory - no way back to the pre-Run screen,
     Decorations are managed from 새 점포 준비 before a Run (and after an abandon, which now discards the Run at once). */
- assert.ok(app.includes("if(phase==='foundation'&&modal!=='new')modal='relics'"),'the foundation takeover owns the screen (the pre-Run modal still wins only when it is already open, e.g. a boot into a fresh account)');
+ assert.ok(app.includes("if(phase==='foundation')modal='relics'"),'the foundation takeover owns the screen (v2.9.9: the preparation is a screen, not a modal, so nothing else can hold it)');
  assert.ok(!fn('relicTakeover').includes('장식 구성 다시 보기')&&!fn('relicTakeover').includes("'new'"),'the retired way back is gone from the DAY 0 surface');
  const back=app.slice(app.indexOf("case'new':"),app.indexOf("case'new':")+220);
  assert.ok(!/game\.end\(|runs\+\+/.test(back),'going back never spends the Run');
@@ -791,9 +793,9 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  assert.ok(/pendingSeed=null;/.test(start),'the plan is spent once the Run starts');
  /* SA-Q35 retired the Player-facing Seed control, so the carried seed is no longer SHOWN on
     the preparation screen - it is still the seed `case'start'` reuses, asserted just above. */
- assert.ok(!/id="seed"/.test(fn('newRun')),'the preparation screen exposes no Seed control');
+ assert.ok(!/id="seed"/.test(fn('prepScreen')),'the preparation screen exposes no Seed control');
  // an unopened store is not something the player is abandoning, so it is not described as one
- for(const f of [fn('newRun'),fn('renderModal')])
+ for(const f of [fn('prepScreen'),fn('renderModal')])
   if(f.includes('현재 지점 포기')||f.includes('모두 포기하고'))
    assert.ok(f.includes("'foundation'"),'the abandon wording is withheld before the store opens');
 
@@ -1008,10 +1010,14 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  // the furniture stops growing with the window, which is what pushed the decision out
  assert.ok(/\.band \.mount\{[^}]*max-width:var\(--roomw/.test(css),'the art box is capped');
  const desktop=css.slice(css.indexOf('@media(min-width:600px)'));
- assert.ok(/\.p-morning \.band\.ceiling \.mount\{--roomw:(\d+)px/.test(desktop)
-        && /\.p-morning \.band\.counter \.mount\{--roomw:(\d+)px/.test(desktop),'both caps are desktop-only');
- const ceil=+desktop.match(/\.band\.ceiling \.mount\{--roomw:(\d+)px/)[1];
- const till=+desktop.match(/\.band\.counter \.mount\{--roomw:(\d+)px/)[1];
+ assert.ok(/\.p-morning \.band\.ceiling \.mount\{--roomw:var\(--ceiling-roomw\)/.test(desktop)
+        && /\.p-morning\{--ceiling-roomw:(\d+)px/.test(desktop)
+        && /\.p-morning \.band\.counter \.mount\{--roomw:var\(--counter-roomw\)/.test(desktop)
+        && /\.p-morning\{--counter-roomw:(\d+)px/.test(desktop),'both caps are desktop-only');
+ // v2.9.9: the counter cap is one number the Decorations beside the till read too (UI_UX §LIVE STORE DECORATION SEATING)
+ assert.ok(!/--(counter|ceiling)-roomw:\d/.test(css.slice(0,css.indexOf('@media(min-width:600px)'))),'neither cap is set on a phone');
+ const ceil=+desktop.match(/\.p-morning\{--ceiling-roomw:(\d+)px/)[1];
+ const till=+desktop.match(/\.p-morning\{--counter-roomw:(\d+)px/)[1];
  assert.ok(ceil<=820&&till<=820,'neither piece of furniture is free to grow with the window');
  /* ...and a wide window is not a reason to set the decision smaller so more of the shop
     fits in frame: the extra width goes to the notices, at a size that reads across a desk. */
@@ -1346,6 +1352,19 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
   assert.ok(!/<text|<script|href=/.test(svg),d.name+' is a plain picture: no caption, no script, no external reference');
   assert.ok(!seen.has(svg),d.name+' is not drawn like '+seen.get(svg));seen.set(svg,d.name);
  }
+ /* UI_UX §LIVE STORE DECORATION SEATING (v2.9.9): the outer outline is half an art pixel at 55%, so the room shows through
+    it; a piece standing on the counter keeps its whole bottom line */
+ for(const d of D.decorations){
+  const svg=fs.readFileSync(path.resolve(__dirname,'../dist/ui/assets/deco/'+d.id+'.svg'),'utf8');
+  assert.ok(svg.includes('fill="#1b130c" opacity="0.55"'),d.name+' has the light outline');
+  const vb=svg.match(/viewBox="0 0 (\d+) (\d+)"/),rows=[...svg.matchAll(/<rect x="(\d+)" y="(\d+)" width="(\d+)" height="1" fill="([^"]+)"( opacity="([^"]+)")?/g)];
+  const bottom=Math.max(...rows.map(r=>+r[2])),H=+vb[2];
+  assert.ok(H%2===0&&+vb[1]%2===0,d.name+' is drawn on the half-pixel grid');
+  // standing pieces reach the drawing's bottom edge with their foot line; the others lose the outer half of it
+  if(['display','counter'].includes(d.slot))assert.ok(bottom===H-1&&rows.some(r=>+r[2]===H-1&&r[4]==='#1b130c'&&!r[6])
+   &&!rows.some(r=>+r[2]===H-1&&r[6]),d.name+' keeps its whole foot line, opaque');
+  else assert.equal(bottom,H-2,d.name+' has the half outline at its bottom as well');
+ }
  assert.equal(Scene.decoration('nosuch'),'','an id with no picture resolves to nothing, never a broken frame');
  assert.ok(!/function deco[A-Z]\w*\(\)\{/.test(read('dist/ui/scene.js')),'no Decoration is drawn by code any more');
  const plate=fn('decoPlate');
@@ -1355,12 +1374,40 @@ test('UI_UX_v2.8 §LIVE STORE: every Decoration is an authored picture, each as 
  // one layer over the painting, each Slot placed by the painting's own coordinates, per file
  assert.ok(fn('morningScreen').includes('<div class="deco-layer">'),'the Decorations sit in one layer over the room');
  assert.ok(/\.deco-layer\{[^}]*container-type:size/.test(css),'the layer measures the stage it covers');
- assert.ok(/\.decoplate\{[^}]*left:calc\(50cqw \+ \(var\(--x\) - \.5\) \* 100cqh \* var\(--ar\)\)/.test(css),'x follows the cover-cropped painting');
+ /* UI_UX §LIVE STORE DECORATION SEATING (v2.9.9): the painting's drawn height is whichever cover crop fills the stage, so a
+    point of the file stays on its painted surface on a stage wider than the file as well as on a narrower one */
+ assert.ok(/\.deco-layer\{[^}]*--ph:max\(100cqh,100cqw \/ var\(--ar\)\)/.test(css),'the layer knows the drawn painting under either crop');
+ assert.ok(/\.decoplate\.sign,\.decoplate\.wall\{left:calc\(50cqw \+ \(var\(--x\) - \.5\) \* var\(--ph\) \* var\(--ar\)\);\s*top:calc\(50cqh \+ \(var\(--y\) - \.5\) \* var\(--ph\)\)/.test(css),
+  'the sign and the plaque follow the painting on both axes');
+ // the counter pieces read the till's own numbers: feet on its base line, never nearer it than the gap
+ // v2.9.9 tablets: in the painting's coordinates, so it stays on the painted counter under a top-and-bottom crop
+ assert.ok(/--till-b:calc\(50cqh \+ \(\.5 - var\(--band-c\) \* \(1 - var\(--till-top\) - var\(--till-h\)\)\) \* var\(--ph\)\)/.test(css),'the till base line is derived, not copied');
+ assert.ok(/\.decoplate\.display,\.decoplate\.counter\{bottom:calc\(100cqh - var\(--till-b\)\)/.test(css),'the counter pieces stand on it');
+ assert.ok(/\.decoplate\.display\{left:min\(var\(--spot\),calc\(var\(--till-l\) - var\(--gap\)/.test(css),'the display piece stops at the gap left of the till');
+ assert.ok(/\.decoplate\.counter\{left:max\(var\(--spot\),calc\(var\(--till-r\) \+ var\(--gap\)\)\)/.test(css),'the counter piece stops at the gap right of it');
+ // and the 간판 stops at the gap left of the DAY sign, read from the sign's published anchor
+ assert.ok(fn('morningScreen').includes("'<div class=\"store\" style=\"--daysign-x:'+Scene.anchors.daysign.left/100+'\">'"),'the DAY sign edge comes from Scene.anchors');
+ assert.ok(/\.decoplate\.sign\{left:min\([^;]*calc\(var\(--sign-l\) - var\(--gap\)/.test(css),'the 간판 keeps the gap from the DAY sign');
+ const review=read('dist/ui/director-review.css');
+ /* v2.9.9 tablets (User 2026-09-27): the counter band is the painting's, moved down by what the crop takes off its top; a
+    landscape tablet takes the wide framing; the branch plate never sits on the dock Action; the 간판 stays on the stage */
+ assert.ok(/\.p-morning \.store\{container-type:size;--ar:\.5628;--ph:max\(100cqh,100cqw \/ var\(--ar\)\)/.test(review)
+  &&/\.p-morning \.band\.counter\{flex:0 0 calc\(var\(--band-c\) \* var\(--ph\)\);transform:translateY\(calc\(\(var\(--ph\) - 100cqh\) \/ 2\)\)\}/.test(review),
+  'the counter band follows the painting');
+ const LAND='@media(min-width:1024px),(min-width:768px) and (orientation:landscape){';   // a phone turned sideways too (closeout)
+ assert.ok(review.includes(LAND+"\n .p-morning{background-image")&&css.includes(LAND+'\n .deco-layer{--ar:1.7768')&&css.split(LAND).length===3,
+  'the wide framing, its points and the preparation scene\'s desk layout switch together');
+ assert.ok(/\.p-morning \.branchplate\{right:7%;left:auto;top:min\(52%,calc\(100cqh - var\(--dock-room\) - var\(--plate-h\) - var\(--band-top\)\)\)/.test(review),'the branch plate stays clear of the dock');
+ assert.ok(/\.decoplate\.sign\{top:max\(var\(--gap\),/.test(css),'the 간판 never hangs above the stage');
+ assert.ok(/@media\(min-width:1024px\) and \(min-height:760px\),\(min-width:768px\) and \(min-height:760px\) and \(orientation:landscape\)\{\n \.p-morning\{--plate-h:25px\}/.test(review),'the plate takes its desk size only on a tall enough stage');
+ assert.ok(/\.p-morning \.till\{left:calc\(var\(--till-x\) \* 100%\)!important;width:calc\(var\(--till-w\) \* 100%\)!important;\s*top:calc\(var\(--till-top\) \* 100%\)!important;height:calc\(var\(--till-h\) \* 100%\)!important\}/.test(review),
+  'and the housing is placed by the same numbers');
  for(const slot of D.decorationSlots){
-  const phone=(css.match(new RegExp('\\n\\.decoplate\\.'+slot+'\\{(--x:[^}]*)\\}'))||[])[1];
-  const wide=(css.match(new RegExp('\\n \\.decoplate\\.'+slot+'\\{(--x:[^}]*)\\}'))||[])[1];
-  assert.ok(phone&&/--y:/.test(phone)&&/--w:/.test(phone),slot+' has a place on the phone painting');
-  assert.ok(wide&&/--y:/.test(wide)&&/--w:/.test(wide),slot+' has a place on the wide painting');
+  const phone=(css.match(new RegExp('\\n\\.decoplate\\.'+slot+'\\{(--[^}]*)\\}'))||[])[1];
+  const wide=(css.match(new RegExp('\\n \\.decoplate\\.'+slot+'\\{(--[^}]*)\\}'))||[])[1];
+  const keys=['sign','wall'].includes(slot)?[/--x:/,/--y:/,/--w:/]:[/--cx:/,/--dw:/];
+  assert.ok(phone&&keys.every(k=>k.test(phone)),slot+' has a place on the phone painting');
+  assert.ok(wide&&keys.every(k=>k.test(wide)),slot+' has a place on the wide painting');
  }
  assert.ok(/\.decoplate \.deco-art\{[^}]*image-rendering:pixelated/.test(css),'the picture is not smoothed');
 });
@@ -1824,7 +1871,7 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 들일 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');
  assert.ok(/s\.bestBefore>0&&s\.day>s\.bestBefore/.test(r),'strictly above an existing record');
  assert.ok(!/d\.name|decorationBy/.test(r),'never a Decoration name');
- assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('newRun'))&&/x\.price<=capital/.test(fn('newRun')),'the pre-Run Slot mark reads the current capital');
+ assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('prepScreen'))&&/x\.price<=capital/.test(fn('prepScreen')),'the pre-Run Slot mark reads the current capital');
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
 });
 
@@ -1856,10 +1903,12 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
  assert.ok(/console\.info\('GUILD24 v'\+BUILD\.version\+' · '\+BUILD\.commit\)/.test(app),'printed once on load');
  assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,build:BUILD,/.test(app),'Guild24.build');
  const r=fn('render'),open=r.slice(0,r.indexOf('const phase=s.phase'));
- assert.ok(/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(open),'the opening screen (no Run) shows it');
+ /* v2.9.9: the opening screen is the preparation scene (UI_UX §NEW STORE PREPARATION — STORE SCENE) */
+ assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
+  &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
  assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
  assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'영업 설정 ends with the same pair, readable mid-Run (v2.9.7)');
- assert.ok(/\.p-start \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
+ assert.ok(/\.p-prep \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
  const wf=read('.github/workflows/pages.yml');
  assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');
 });
@@ -1930,6 +1979,28 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(!/receipt/.test(read('dist/systems/run.js'))&&!/receipt/.test(read('dist/systems/meta.js')),'presentation only: no Run or Meta field carries the new cue');
 });
 
+/* UI-Q-v29-46 (v2.9.9 H7, UI_UX §FINAL — CLASH SCENE): the resolved Final played out as a card fight before the ending;
+   the order, the bar and the skip are measured on the running page by tools/qa-final-clash.cjs */
+test('UI-Q-v29-46: the FINAL clash - after the resolution, the carried items, the resolved ratio only, skippable, no save, reduced motion none',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const cs=bare(fn('clashScene'));
+ assert.ok(/if\(!motionOK\(\)\|\|!host\|\|!rep\?\.members\?\.length\|\|!d\|\|!\(d\.bossPower>0\)\)return false;/.test(cs),'never under reduced motion, only on a resolved Final');
+ assert.ok(/const left=s\.win\?0:Math\.max\(\.03,1-Math\.max\(0,Math\.min\(1,d\.assault\/d\.bossPower\)\)\),share=\(1-left\)\/n;/.test(cs),'the bar is the resolved ratio split evenly; a failure keeps 3%');
+ assert.ok(!/game\.(save|boss|end)|\.rng|localStorage|s\.[a-zA-Z]+=(?!=)/.test(cs),'the scene reads the Run and writes nothing');
+ assert.ok(/if\(!last\)at\(t\+C\.lunge\+C\.counter,\(\)=>drain\(from,to,C\.drain\)\)/.test(cs)&&/const edge=s\.win\?Math\.min\(CLASH_EDGE,level\):left;/.test(cs)
+  &&/drain\(level,edge,C\.run,/.test(cs)&&/if\(s\.win\)\{drain\(edge,0,C\.snap,/.test(cs),'the red drops after each counter; the last share is held for the verdict, which hesitates near the bottom');
+ assert.ok(/const CLASH_EDGE=\.05;/.test(app)&&!/class="mark"/.test(cs),'a clear hesitates at 5%; no amount is marked on the bar');
+ assert.ok(/items=m\.items\|\|\[\]/.test(cs)&&/Art\.itemIcon\(items\[i\],22\)/.test(cs)&&/got\.forEach\(\(icon,i\)=>/.test(cs)&&/t\+i\*C\.item/.test(cs),'each member is handed what they carried, one item at a time');
+ assert.ok(/el\.addEventListener\('click',finishClash\)/.test(cs)&&/document\.addEventListener\('keydown',clashKey\)/.test(cs),'a tap or a key skips it');
+ assert.ok(/if\(clash\)return finishClash\(\);/.test(fn('render')),'a redraw during it lands on the ending');
+ const C=app.match(/const CLASH=\{([^}]*)\}/)[1],v=Object.fromEntries(C.split(',').map(x=>x.split(':').map(y=>y.trim())).map(([k,x])=>[k,Number(x)]));
+ /* no length ceiling (User 2026-09-27): its length follows the party and what they carry, and a tap always skips it */
+ assert.ok(v.item>0&&v.lunge>=700&&v.dim+v.drop+v.presence+v.rise+v.settle>=2000,'an unhurried entry, and a fixed time per item');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ for(const c of ['rumble','supply','clash','counter','collapse'])assert.ok(Sound.cues.includes(c)&&!Sound.samples[c]&&new RegExp("Sound\\.play\\('"+c+"'\\)").test(cs),c+' is a synthesised cue of the scene');
+ assert.ok(/\.clash\{position:absolute;inset:0;z-index:60;/.test(css),'the scene covers the FINAL stage, over its menu and dock');
+});
+
 /* UI-Q-v29-30 (v2.9.2 H5, UI_UX §FINAL RESULT — SEAL STAMP): one seal bearing the Boss's name on a Final ending tape */
 test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a failure, the sentence after it',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
@@ -1946,7 +2017,9 @@ test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a 
  assert.ok(!/tape|--tape/.test(end.replace(/end-tape|const seal=\$\('\.end-tape \.seal'\),tape=\$\('\.end-tape'\)|if\(tape\)A\(tape/g,'')),'no NIGHT death tape on a failure');
  assert.ok(/\.end-tape \.seal\{[^}]*rotate:-7deg/.test(css)&&/\.end-tape \.seal\.lost\{[^}]*rotate:9deg;[^}]*opacity:\.5;[^}]*clip-path/.test(css),'clear square-on and crisp; failure crooked, faint, partly printed');
  assert.ok(/\.end-tape \.print:has\(\.seal\) \.closed\{padding-right:84px\}/.test(css)&&/\.end-tape \.seal\{[^}]*transform-origin:100% 0\}/.test(css),'the headline keeps clear of the seal, and the fall stays on the tape');
- assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);render\(\);sealSound\(\);break;/.test(app),'the landing cue follows the departure once');
+ /* v2.9.9 H7: the FINAL clash plays first when it can; its end (or a skip) renders the ending and sounds the seal once */
+ assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);if\(!clashScene\(\)\)\{render\(\);sealSound\(\);\}break;/.test(app)
+  &&/c\.el\.remove\(\);render\(\);sealSound\(\);\}/.test(fn('finishClash')),'the landing cue follows the departure once');
  const ss=bare(fn('sealSound'));assert.ok(/clearTimeout\(sealCueAt\)/.test(ss)&&/Sound\.play\(kind\)/.test(ss)&&/FINAL_SEAL\.hold\+STAMP_FALL/.test(ss),'on the landing frame, never twice');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  for(const c of ['sealwin','sealfail'])assert.ok(Sound.cues.includes(c)&&!Sound.samples[c],c+' is a synthesised cue');
@@ -2300,34 +2373,33 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  assert.equal(plain,'소지 <b>100G</b>','with no Event budget the chip is unchanged');
 });
 
-/* SA-Q01 — PRE-RUN STORE-MANAGEMENT RETURN. The panel is opened from the new-Run preparation
-   modal and replaces it. During `foundation` the generic Close is suppressed and `dismiss` is a
-   no-op, which is right for the store-support takeover and left this one panel with an entry and
-   no exit. */
+/* SA-Q01 — PRE-RUN STORE-MANAGEMENT RETURN. The panel is opened from new-Run preparation (v2.9.9: the store scene, UI_UX
+   §NEW STORE PREPARATION — STORE SCENE) and sits over it. During `foundation` the generic Close is suppressed and `dismiss`
+   is a no-op, which is right for the store-support takeover and left this one panel with an entry and no exit. */
 test('SA-Q01: pre-Run Store Management has an explicit return to new-Run preparation',()=>{
  const act=app.slice(app.indexOf('async function action(el)'));
- // where it was opened from is remembered, and only when it was opened from preparation
- assert.ok(/case'store-manage':preRunReturn=modal==='new';/.test(act),
-  'entering from the preparation panel is what arms the return');
+ // where it was opened from is remembered, and only when it was opened from preparation (no Run, or from the ending)
+ assert.ok(/case'store-manage':preRunReturn=!game\.run\|\|prepOpen;/.test(act),
+  'entering from the preparation scene is what arms the return');
  // an explicit, visible control back to preparation
  assert.ok(/if\(preRunReturn\)footer=btn\('새 점포 준비로 돌아가기','store-return','stamp'\)/.test(app),
   'the panel carries a visible Back control');
- assert.ok(/case'store-return':preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;/.test(act),
-  'and it returns to the existing new-Run preparation modal');
+ assert.ok(/case'store-return':preRunReturn=false;codexTab='items';sound\('ui'\);setModal\(null\);break;/.test(act),
+  'and closing it uncovers the preparation scene underneath');
  // returning spends nothing, re-rolls nothing, reseeds nothing and starts nothing
  const ret=act.slice(act.indexOf("case'store-return'"),act.indexOf("break;",act.indexOf("case'store-return'")));
  for(const forbidden of ['game.start','Meta.buyDecoration','Meta.equipDecoration','decoPending=','game.save()','Save.write'])
   assert.ok(!ret.includes(forbidden),'returning must not '+forbidden);
  // the ordinary Close resolves to preparation too, instead of being the foundation no-op
- assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;\}/.test(act),
+ assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\(null\);break;\}/.test(act),
   'Close from this panel lands on preparation rather than doing nothing');
  // ...and the Close button is actually rendered there, which `foundation` used to suppress
- assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
- // no blank stage: with no Run the preparation modal is reopened by render itself
- assert.ok(/if\(!modal\)setModal\('new'\)/.test(app),'a runless app always re-opens preparation');
+ // no blank stage: with no Run the render itself draws preparation
+ assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(app),'a runless app always draws preparation');
  // starting the Run leaves preparation for good
- assert.ok(/preRunReturn=false;game\.start\(seed\)/.test(act),'starting clears the return state');
+ assert.ok(/preRunReturn=false;prepOpen=false;game\.start\(seed\)/.test(act),'starting clears the return state');
  // no second navigation layer was introduced for this
  assert.ok(!/pushState|replaceState|addEventListener\('popstate'/.test(app),
   'the fix adds no history/navigation layer');
@@ -2629,7 +2701,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  /* CORE_RUN §D0 — closing does not consume the beat, and ordinary Morning does not go on past
     it: no 닫기, no Escape and no dismiss while D0 is the open report */
  assert.ok(/!d0Owed\(\)\?btn\('닫기'/.test(app),'D0 carries no 닫기');
- assert.ok(/\(game\.run\|\|modal!=='new'\)&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
+ assert.ok(/game\.run\?\.phase!=='foundation'&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
  assert.ok(/phase==='foundation'\|\|d0Owed\(\)\)return/.test(app),'dismiss does not close D0');
  // the cadence table, and D30 reusing D25
  assert.ok(/\[5,'d5','identitySeen'\],\[10,'d10','combatSeen'\],\[15,'d15','traitSeen'\],\s*\[20,'d20','routeSeen'\],\[25,'final','familySeen'\]/.test(app),
@@ -2660,7 +2732,7 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
     shown BEFORE the same-Day Store Support decision. The chain is asserted in source and then
     resolved for each of the five Days with a Store Support window genuinely pending, because
     D10 and D20 are themselves acquisition Days and that is where the order actually matters. */
- const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
+ const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"),app.indexOf('renderModal();requestAnimationFrame'));
  assert.ok(chain.indexOf('bossRevealDue()')<chain.indexOf("relicWindow&&!s.relicWindow.focusedRevealSeen"),
   'the Boss beat is chosen before the Store Support window on the same Day');
  const resolve=(day,seen,final,windowPending)=>{
@@ -2890,22 +2962,31 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
    and, under it, the store this Run is about to open. The preparation modal then states the
    three axes of the game. */
 test('OPENING: the backdrop is the title card and names the store this Run will open',()=>{
- const back=app.slice(app.indexOf('if(!s){$(\'#app\').innerHTML=stage(\'start\''),app.indexOf('const phase=s.phase'));
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the title card is the store scene's ceiling */
+ const back=fn('prepScreen');
  // 1 / 2: the title, one deliberate line
- assert.ok(back.includes('<h1 class="opening-title">던전 앞 편의점</h1>'),'the backdrop carries the title');
- assert.ok(/\.opening-title\{[^}]*white-space:nowrap/.test(css),'the title is one line by rule, not by luck');
- assert.ok(/\.opening-title\{[^}]*var\(--f-plate\)/.test(css),'set in the shipped ATMOSPHERE face');
- assert.ok(/\.opening-title\{[^}]*clamp\(30px,[^)]*\)/.test(css),'fluid and clamped for mobile-first sizing');
+ /* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the title is the drawn logo; the name is its alt text */
+ assert.ok(back.includes('<h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1>'),
+  'the backdrop carries the title as the logo, named for a screen reader');
+ assert.ok(fs.existsSync(path.resolve(__dirname,'../dist/ui/assets/presentation/start/title-logo.png')),'the logo ships');
+ assert.ok(/\.opening-logo\{[^}]*width:min\(210px,58vw\);height:auto\}/.test(css),'sized to the phone, never wider than the screen');
  /* PRESENTATION_SYSTEM §TYPOGRAPHY / SPACING routes short object identity to the plate face,
     and PRESENTATION_POLISH_BATCH1 asks the Opening for a restrained sign/plate relationship.
     The branch is that identity, so it is a stamped plate now rather than fluid body copy -
     Mulmaru is crisp only at its design sizes, which is why this one is fixed rather than
     clamped. What the old clamp assertion was really protecting is unchanged and asserted
     here directly: the branch stays far under the title it sits below. */
- assert.ok(/\.opening-branch\{[^}]*var\(--f-plate\)/.test(css),'the branch is set in the plate face');
- assert.ok(/\.opening-branch\{[^}]*font:500 12px/.test(css),'at a crisp Mulmaru design size');
- assert.ok(/\.opening-title\{[^}]*clamp\(30px,9\.2vw,46px\)/.test(css),
-  'and the branch under it is visibly secondary: the title never drops under 30px');
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE; User 2026-09-27): the branch is MORNING's plate, in the plate face
+    at its crisp design size, hanging right under the title in the opening's own column - the counter carries the Capital */
+ assert.ok(/<\/h1>'\n\s*\+'<span class="branchplate">'\+E\(plannedBranch\(\)\)\+'<\/span><\/div>/.test(back),'the branch plate is under the title');
+ assert.ok(!/band counter[\s\S]*branchplate/.test(back),'and not on the counter');
+ assert.ok(/\.p-morning \.branchplate\{[^}]*font:500 12px\/1 var\(--f-plate\)/.test(read('dist/ui/director-review.css')),'in the plate face at a crisp Mulmaru design size');
+ assert.ok(/\.p-morning\.p-prep \.opening \.branchplate\{position:static;/.test(css),'in the opening\'s column, centred with the title');
+ // the tags keep their 360x640 share of a bigger stage; the pixel-face plates step on its 12 px grid (User 2026-09-27)
+ assert.ok(/\.p-prep \.slot-tag\{[^}]*font:500 min\(20px,max\(11px,1\.72cqh,1\.4cqw\)\)/.test(css),'the tags grow with the stage');
+ assert.ok(/@container \(min-height:800px\) or \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:18px\}\n \.p-prep \.capital-plate\{font-size:24px;/.test(css)
+  &&/@container \(min-height:1000px\) and \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:24px\}/.test(css),'the plates step 12 / 18 / 24 and 17 / 24');
+ assert.ok(/\.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{grid-auto-flow:row;gap:1px;top:72%\}\n \.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{font-size:min\(15px,/.test(css),'the desk 간판 tag stacks and stops growing where it would leave the stage');
  // 3: the branch comes from the existing catalogue, through the existing pick
  assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');
  assert.ok(/const plannedBranch=\(\)=>new RNG\(plannedSeed\(\)\)\.pick\(D\.brand\.branches\)/.test(app),
@@ -2923,7 +3004,7 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(/let pendingSeed=null;/.test(app),'declared empty');
  const ret=app.slice(app.indexOf("case'store-return'"),app.indexOf("break;",app.indexOf("case'store-return'")));
  assert.ok(!/pendingSeed|plannedSeed/.test(ret),'a Store Management round trip does not touch the plan');
- assert.ok(!/pendingSeed|plannedSeed/.test(fn('storePanel')+fn('newRun')),'and neither panel re-plans it');
+ assert.ok(!/pendingSeed|plannedSeed/.test(fn('storePanel')+fn('prepScreen')),'and neither panel re-plans it');
  // 4: the planned branch IS the branch the Run receives - the rule, run against the engine
  for(const seed of ['g24-abc','g24-zzz','opening-1','opening-2','opening-3']){
   const preview=new RNG(seed).pick(DATA.brand.branches);
@@ -2939,23 +3020,103 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(!/class="eyebrow"/.test(back),'and the backdrop carries no eyebrow');
 });
 
-test('OPENING: the preparation modal starts on the three axes, with no franchise eyebrow',()=>{
- const intro=fn('newRun');
- // 8: the eyebrow is gone from the modal
- assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation modal carries no 길드리테일 가맹점 eyebrow');
+/* UI-Q-v29-42 (UI_UX §NEW STORE PREPARATION — STORE SCENE, User 2026-09-27, v2.9.9): 새 점포 준비 is the MORNING room, not a
+   panel; the runtime geometry (no overlap, on screen, the ending round trip) is tools/qa-prep-scene.cjs. */
+/* UI-Q-v29-45 (UI_UX §SALE — SHELF LIP, User 2026-09-27, v2.9.9); the destination stays the dark plate (the paper notice was tried and dropped) */
+test('UI-Q-v29-45: the SALE shelf rows stand on boards, the head is lower, the destination stays the dark plate',()=>{
+ assert.ok(/\.p-sale \.good\{box-shadow:inset 0 -1px 0 #3a2814,inset 0 -2px 0 #a07a45\}/.test(css),'each row ends on a thin board edge');
+ assert.ok(/\.shelf-head\{[^}]*padding:5px 13px/.test(css)&&/\.shelf-head \.relic-ref\{position:relative;[^}]*min-height:24px/.test(css),'the head is lower and the plate compact');
+ assert.ok(/\.shelf-head \.relic-ref\{[^}]*box-shadow:inset 2px 2px 0 #00000080/.test(css)&&/\.shelf-head \.relic-ref:after\{content:'';position:absolute;inset:-10px -4px\}/.test(css),'still a framed plate, with a ~44 px touch target');
+ assert.ok(!/\.p-sale \.good\{[^}]*padding/.test(css),'without changing the row height');
+ assert.ok(!/\.p-sale \.dest-plate\{background:var\(--tex-paper\)/.test(css)&&!fn('destPlate').includes('class="pin"'),'the destination is not a paper notice');
+});
+/* UI-Q-v29-44 (UI_UX §PRIMARY ACTION GRAMMAR, User 2026-09-27, v2.9.9): the eight Phase Actions press one way - a
+   down-right cast and a diagonal press - at two sizes; the measured cast / press / height per Phase is runtime evidence in
+   tools/qa-primary-grammar.cjs (read off the screen), this pins the construction */
+test('UI-Q-v29-44: every Phase Action casts and presses down-right at its step',()=>{
+ const rule=sel=>{const i=css.indexOf(sel);assert.ok(i>0,sel+' is a real rule');return css.slice(i,css.indexOf('}',i)+1);};
+ /* one colour per family (User 2026-09-27): the Run's opening Action is the BRICK build of 다음 날 / 다음 점포 열기 - its own
+    rule keeps the face, the label and the rivets, and draws no bevel, cast or press of its own */
+ const prep=rule('.p-prep .dock [data-action="start"],\n.modal-footer [data-action="store-return"]{min-height');
+ assert.ok(/background-color:var\(--brick\)/.test(prep)&&/background-size:9px 9px/.test(prep),'the brick face and its four rivets');
+ assert.ok(!/box-shadow|filter|clip-path/.test(prep)&&!css.includes('.p-prep .dock [data-action="start"]:active,\n'),
+  'and nothing of its own under them: the bevel, cast and press are the family\'s');
+ assert.ok(/\.p-closing \.dock \.stamp,\.p-end \.dock \.stamp\{text-shadow:0 2px 0 #5a221a\}/.test(css),'the three BRICK labels sit on one drop');
+ assert.ok(/transform:translate\(4px,4px\)/.test(rule('.p-final .dock .stamp:active{')),'the gate bar is thrown diagonally');
+ /* 영업 시작 is 발주 확정's steel: no face, edge or cast of its own, and a held cart's disabled plate casts nothing */
+ assert.ok(!/\.p-order \.dock \.stamp\.leave(:hover|:active)?\{/.test(css),'the leave control has no face of its own');
+ assert.ok(/\.p-order \.dock \.stamp\.leave\[disabled\]\{clip-path:var\(--stamp-cut\);filter:none;/.test(css),'a disabled 영업 시작 casts nothing');
+ /* two new cues, each on its own Action, neither the navigation click */
+ for(const c of ['begin','newstore'])assert.ok(Sound.cues.includes(c),c+' is a real cue');
+ assert.ok(/game\.start\(seed\);selected=null;setModal\(null\);sound\('begin'\)/.test(app),'첫 점포지원 고르기 plays begin');
+ assert.ok(/case'new':prepOpen=true;sound\('newstore'\)/.test(app),'다음 점포 열기 plays newstore');
+ assert.ok(/\.pull\{flex:1;min-height:56px;/.test(css)&&/\.pull:active\{transform:translate\(3px,3px\)/.test(css),'문 열기 is a step inside the Day');
+ assert.ok(/\.p-night \.dock \.stamp:active\{--nd:1px;transform:translate\(3px,3px\)/.test(css),'NIGHT keeps a 1 px cast when pressed');
+ /* the notch cut every cast away (a filter draws before the clip): each notched Action's cut takes its --nd cast in */
+ const cut=css.slice(css.indexOf('.p-prep .dock [data-action="start"],.modal-footer [data-action="store-return"],.p-order .dock .stamp:not([disabled]),'));
+ assert.ok(/^[^{]*\.p-final \.dock \.stamp:not\(\[disabled\]\)\{\n clip-path:polygon\([^}]*calc\(100% \+ var\(--nd\)\)/.test(cut),'one cut that takes the cast in, for every notched Phase Action');
+ assert.ok(/\.p-final \.dock \.stamp:not\(\[disabled\]\):active\{--nd:1px\}/.test(css),'and keeps the 1 px when pressed');
+ assert.ok(!/\.p-order \.dock \.stamp[^{]*\{[^}]*inset 0 0 0 2px/.test(css.slice(css.indexOf('.p-order .dock .stamp{'),css.indexOf('.p-order .dock .stamp.leave[disabled]'))),
+  'a step inside the Day carries no outline; ORDER\'s frost is its lit edge');
+ assert.ok(/box-shadow:inset 0 3px 0 #7fb0c4,inset 0 -4px 0 #1f272e\}/.test(css),'lit 3 px top, deep 4 px foot');
+ assert.ok(/background:#3a5f96;color:#f4f7ff;text-shadow:0 2px 0 #253f68;\n box-shadow:none;/.test(css),'NIGHT is a flat muted cobalt with a seated label');
+ assert.ok(/\.p-final \.dock \.stamp\{[^}]*filter:drop-shadow\(5px 5px 0 #2e0d09\)/.test(css)&&/\.p-final \.dock \.stamp\[disabled\]\{[^}]*filter:none/.test(css),
+  'the gate bar casts its own deep red, a step under its foot, and a shut gate casts nothing');
+ const desk=css.slice(css.indexOf(' .p-morning .dock .pull{flex:0 0 auto'));
+ assert.ok(/\.p-morning \.dock \.pull,\.p-order \.dock \.stamp,\.p-sale \.dock \.stamp,\.p-night \.dock \.stamp\{min-height:60px;font-size:20px\}/.test(desk),'a desk step inside the Day is 60 px');
+ assert.ok(/width:344px;min-height:72px;font:600 22px\/1 var\(--ui\)/.test(desk),'and one across a boundary 72 px, not 86');
+});
+/* UI-Q-v29-43 (UI_UX §SALE — MOBILE AUTHORITY, User 2026-09-27, v2.9.9): on a phone the outlook and the Core Stats are one
+   plate; the shelf-room measurement is runtime evidence (reports in the batch), this pins the construction */
+test('UI-Q-v29-43: the SALE phone outlook and Core Stats are one plate, the desk is untouched',()=>{
+ const block=css.slice(css.indexOf('\n.p-sale .dossier:not(.traits){background:#0d0904a6'),css.indexOf('}\n',css.indexOf('.p-sale .dossier:not(.traits)>.detail-stats{margin:0;'))+2);
+ assert.ok(/\.p-sale \.dossier:not\(\.traits\)\{background:#0d0904a6;box-shadow:inset 3px 3px 0 #000000a6,inset -2px -2px 0 #ffffff12\}/.test(block),'the dossier is the one recessed plate');
+ assert.ok(/>\.readout\{margin:0;padding:9px 12px 7px;background:none;box-shadow:none\}/.test(block),'the outlook has no box of its own');
+ assert.ok(/>\.detail-stats\{margin:0;padding:2px 12px 8px;background:none;box-shadow:inset 0 1px 0 #ffffff26\}/.test(block),'the grid has no box, only the seam');
+ assert.ok(/@media\(min-width:1024px\)\{\n \.p-sale \.dossier:not\(\.traits\)\{background:none;box-shadow:none\}/.test(css),'and the desk column is restored as it was');
+ assert.ok(/'<div class="dossier">'\+returningSummary\(n\)\+readout\(n,st\?st\.item:null,'core-mob'\)\+statGrid\(n\)\+deepOfferUI\(n\)\+'<\/div>'/.test(fn('saleScreen')),'the same content in the same order');
+});
+
+test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, dock Action, the way back from the ending',()=>{
+ const p=fn('prepScreen');
+ assert.ok(!/modal==='new'|setModal\('new'\)/.test(app),'there is no preparation modal any more');
+ assert.ok(p.startsWith("function prepScreen(){")&&/'<div class="stage p-morning p-prep">'/.test(p),'the MORNING room, marked as the preparation');
+ assert.ok(/Scene\.ceiling\(\)/.test(p)&&/Scene\.wall\(1\)/.test(p)&&/Scene\.counter\(\)/.test(p),'the same bands');
+ assert.ok(/'<div class="store" style="--daysign-x:1">'/.test(p),'no DAY sign holds the 간판 back');
+ // each Slot is its place: a control opening 점포 장식 on that Slot, drawn or bare, tagged
+ assert.ok(/<button class="decoplate '\+slot\+' prep-slot'\+\(art\?'':' empty'\)\+'" data-action="store-manage" data-id="'\+E\(slot\)\+'"/.test(p),'a place is a control on its Slot');
+ assert.ok(/\(art\|\|'<span class="slot-empty" aria-hidden="true"><\/span>'\)/.test(p),'an empty Slot draws nothing but its spot');
+ assert.ok(/<span class="slot-tag"><i>'\+E\(SLOT_COPY\[slot\]\|\|slot\)\+'<\/i><b>'\+\(d\?E\(d\.name\):'비움'\)\+'<\/b>/.test(p),'its tag names the Slot and what is there');
+ assert.ok(/,loadout=Meta\.plannedLoadout\(a\)/.test(p)&&!/game\.run\.loadout/.test(p),'the Account\'s planned loadout, not a Run\'s');
+ assert.ok(/\.p-prep \.deco-layer \.prep-slot\{pointer-events:auto;/.test(css),'the places take taps though the layer does not');
+ assert.ok(/\.p-prep \.slot-empty\{display:block;width:100%;min-height:44px;/.test(css),'an empty place still has a 44 px target');
+ // the Capital is a plate where the till will stand, never the till
+ assert.ok(/<span class="store-capital capital-plate">/.test(p)&&!/class="till"/.test(p),'the Capital is a plate, not the till');
+ // the Action and the way back from the ending
+ assert.ok(/\(fromEnd\?btn\('결과 다시 보기','prep-back','bare'\):''\)\+btn\('첫 점포지원 고르기','start','stamp'\)/.test(p),'the Action in the dock, and 결과 다시 보기 only from the ending');
+ assert.ok(/const fromEnd=!!game\.run;/.test(p),'from the ending means a Run is still there');
+ const act=app.slice(app.indexOf('async function action(el)'));
+ assert.ok(/case'new':prepOpen=true;sound\('newstore'\);render\(\);break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
+ const back=act.slice(act.indexOf("case'new'"),act.indexOf("case'prep-back'")+60);
+ assert.ok(!/game\.(start|end|abandon)|Meta\./.test(back),'and neither changes the Run or the Account');
+});
+
+test('OPENING: the preparation scene starts on the three axes, with no franchise eyebrow',()=>{
+ const intro=fn('prepScreen');
+ // 8: the eyebrow is gone
+ assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation carries no 길드리테일 가맹점 eyebrow');
  assert.ok(!app.includes('길드리테일 가맹점'),'and it is gone from the build');
- assert.ok(/return `<h2 class="welcome-title">30일 동안/.test(intro),'the modal begins on the approved first line');
  for(const line of ['30일 동안 던전 앞 편의점을 운영한다.',
                     '찾아오는 모험가를 보급하고, 성장시킨다.',
                     '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
   assert.ok(intro.includes(line),'the approved line is present: '+line);
- assert.ok(/class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\./.test(intro),'line 1 is the welcome title');
- assert.ok(/class="muted">찾아오는 모험가를 보급하고, 성장시킨다\./.test(intro),'line 2 is the supporting text');
- assert.ok(/class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\./.test(intro),'line 3 is the welcome band');
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the three lines are one note pinned to the `새 점포 준비` board */
+ assert.ok(/<p class="board-rail">새 점포 준비<\/p>/.test(intro),'the board is titled 새 점포 준비');
+ assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
+ assert.ok(/<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다\.<\/span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\.<\/span>/.test(intro),'lines 2 and 3 follow it');
  // everything the change was scoped to keep
- assert.ok(intro.includes('이번 영업의 장식'),'the Decoration heading stays');
  assert.ok(/data-action="store-manage"/.test(intro),'the Store Management entry stays');
- assert.ok(/D\.decorationSlots\.map/.test(intro),'the Decoration rows stay');
+ assert.ok(/D\.decorationSlots\.map\(place\)/.test(intro),'every Slot has its place');
  assert.ok(/Meta\.storeCapital\(a\)/.test(intro),'and the Capital display stays');
 });
 

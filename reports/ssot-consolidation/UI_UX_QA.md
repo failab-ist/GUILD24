@@ -437,7 +437,6 @@ For each art/icon/crop/scale asset changed under the v2.8 polish pass:
 ```
 
 ```new
-Other routine primary actions use their material direction rather than generic green CTA repetition.
 For each art/icon/crop/scale asset changed under the polish pass:
 ```
 
@@ -1329,7 +1328,6 @@ User 2026-09-26: UI-Q-v29-36 is new. Nothing is dropped.
 
 PASS:
 - the opening screen shows `v{version} · {commit}` (the CHANGELOG head version) small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
-  the menu button and the preparation panel
 - the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair
 - the deployed site reads the deployed commit; a local build reads `dev`
 
@@ -1354,7 +1352,6 @@ capital that was already above that price, or an owned Decoration's price, print
 - with neither, a Run that beats the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`; a tie, the
 account's first ending and a manual 현재 지점 포기 print nothing and a manual abandon never moves the best Day
 - at most one of the two lines, never beside `본사 해금`; a reload of the ended Run prints the same line
-- 새 점포 준비: exactly the Slot rows with an affordable unowned Decoration carry `들일 수 있음`
 - no new motion, sound, screen or button
 - a Decoration named, a list of goals, a remaining-count, a second line, a line on an abandoned Run, or a mark on a Slot
 whose unowned Decorations cost more than the capital
@@ -1453,4 +1450,235 @@ User 2026-09-26: the build marker also ends 영업 설정, readable mid-Run. Lin
 ```new
 - 영업 설정 ends with the same pair, before and during a Run (v2.9.7); no other screen shows it
 - the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
+```
+
+## AMENDMENT — v2.9.9 LIVE STORE DECORATION SEATING (User 2026-09-27)
+
+New owner rule and its acceptance: 간판 / 벽면 follow the painting under either cover crop (the 간판 never nearer the DAY sign than the gap), 진열대 / 계산대 stand on the till housing's base line at a fixed gap. Lines below are new.
+
+```new
+### UI-Q-v29-40 — LIVE STORE DECORATION SEATING
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §LIVE STORE DECORATION SEATING. Runtime harness `tools/qa-deco-seating.cjs`, part of
+`qa:runtime`.)
+each Decoration set equipped (sponsorSign / honorFrame / thriftSafe / guildShelf, and trainingSign / infirmaryPlaque /
+memorialBook / aidCabinet), first MORNING, reduced motion, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915, 430x740,
+- all four pieces drawn; 간판 and 벽면 within 1 px of their point of the painting under the crop that size produces (the 간판
+- 진열대 and 계산대 feet within 1 px of the till housing's base line, at least the gap (6 px phone, 10 px desk) from it
+- no piece overlapping the till housing, its label, the DAY sign, the board, the branch plate, the dock or another piece; every
+piece on screen
+- a piece on the housing or its label, standing on another line than the housing, or placed off its painted point when the
+```
+
+## AMENDMENT — v2.9.9 OPENING TITLE LOGO (User 2026-09-27)
+
+The opening title becomes the User-supplied logo (corrected 점 받침), sized so the branch plate stays visible and close under it. Lines below are new.
+
+```new
+### UI-Q-v29-41 — OPENING TITLE LOGO
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §OPENING TITLE LOGO.)
+- the opening screen shows the logo as its title at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880, whole,
+`던전 앞 편의점` to a screen reader
+- the 점 받침 reads as ㅁ at the phone size
+```
+
+## AMENDMENT — v2.9.9 NEW STORE PREPARATION — STORE SCENE (User 2026-09-27)
+
+새 점포 준비 becomes the store scene; the lines that described the preparation panel (build marker, title logo and its branch plate, the Slot-row mark) now name the scene. Lines below are new. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- 새 점포 준비: exactly the Slot places (rows before v2.9.9) with an affordable unowned Decoration carry `들일 수 있음`
+the menu button and the preparation scene's board
+### UI-Q-v29-42 — NEW STORE PREPARATION STORE SCENE
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §NEW STORE PREPARATION — STORE SCENE. Runtime check `tools/qa-prep-scene.cjs`,
+part of `qa:runtime`.)
+no Decoration, and four Decorations owned with two equipped, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915,
+and the Run is unchanged
+- every place is a control of at least 44 px that opens 점포 장식 on its Slot, and the way back returns to the scene
+- no tag, place, plate, board, logo, branch plate or Action overlapping another, none off screen; no page error
+- the old panel, a place that is not a control, a tag cut off or covering something, the Capital shown in the till, or the
+ended Run changed before `첫 점포지원 고르기`
+centred, crisp, clear of the build marker and the menu button, on the store scene's ceiling, with the branch plate fully
+- the title rendered as text again, a cropped or stretched logo, the logo covered, or a missing file
+```
+
+## AMENDMENT — v2.9.9 SALE PHONE OUTLOOK PLATE (User 2026-09-27)
+
+On a phone the SALE outlook and Core Stats become one plate; the shelf gets the space back. Lines below are new.
+
+```new
+### UI-Q-v29-43 — SALE PHONE OUTLOOK PLATE
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §SALE — MOBILE AUTHORITY.)
+SETUP: a mid-Run SALE (Day 5+, six or more kinds on the shelf) at 360x640, 390x664, 390x844, 412x915 and 1280x880.
+- on a phone the outlook line and the four Core Stats sit on one recessed plate with a single seam; every `?` still opens
+its note in place and each Stat row keeps its height
+- the shelf's first row starts higher and the room the shelf gets above the tray / dock is not smaller at any phone size
+(measured before v2.9.9: 76 / 89 / 269 / 338 px); the desk layout is unchanged
+- a second box around either part, a dropped or reordered line, or less shelf room at any phone size
+```
+
+## AMENDMENT — PRIMARY ACTION GRAMMAR (User 2026-09-27, v2.9.9)
+
+New owner section §PRIMARY ACTION GRAMMAR and its acceptance UI-Q-v29-44: the eight Phase Actions press one way at two sizes, their casts drawn on screen.
+
+```new
+### UI-Q-v29-44 — PRIMARY ACTION GRAMMAR
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §PRIMARY ACTION GRAMMAR.)
+SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작` and `발주 확정`), SALE, NIGHT, CLOSING, END and FINAL
+(party not yet chosen) at 360x640, 390x844 and 1280x880; each held pressed.
+- at rest each casts one hard depth with equal right and down offsets: 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 /
+the gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음, 3 px for 손님 보내기 - and it is drawn: in the screenshot the
+pixels just right of and under the face differ from the same spot with the Action hidden, and nothing past the depth does
+- held, each moves right and down by its depth less 1 px, and the 1 px cast left is drawn
+- heights: 56 px (phone) / 60 px (desk) inside the Day, 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; no
+label wraps or is cut at 360 (a four-digit `발주 N G · 확정` included)
+- inside the Day: a 3 px lit top edge, a 4 px deep foot and no outline (NIGHT flat), labels seated on a 2 px drop
+- each Phase keeps its own face (wood / steel on paper with a frost edge / counter key / muted cobalt / BRICK / gate bar)
+- a straight-down cast or press, a cast declared in the style but not on screen, a press that leaves no cast or moves by a
+different amount than the cast, a height or depth off its step, an outline around a step inside the Day, or two Phases
+whose Action looks the same
+```
+
+## AMENDMENT — PRIMARY ACTION GRAMMAR — one colour per family, two new cues (User 2026-09-27, v2.9.9)
+
+영업 시작 shares 발주 확정's steel; the three BRICK Actions share one build; begin / newstore cues added to §SFX coverage.
+
+```new
+- `영업 시작` and `발주 확정` show the same steel face and frost edge; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열기` the same
+BRICK build (only the rivets differ); a disabled `영업 시작` casts nothing
+- pressing `첫 점포지원 고르기` plays `begin` and `다음 점포 열기` plays `newstore`, neither the navigation click
+```
+
+## AMENDMENT — LIVE STORE DECORATION SEATING — tablets (User 2026-09-27, v2.9.9)
+
+The deferred tablet finding is fixed: the counter band follows the painting, landscape tablets take the wide framing, the sign stays on screen, the branch plate clears the dock. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+768x1024, 820x1180, 900x700, 1023x768, 1024x768, 1280x880 and 1920x1080 (the tall file up to 820 wide, the wide file from
+900x700 on).
+- the till housing's feet on the painted counter top (the file's 74.2~76.2% tall, 82.7~85.5% wide) under the crop that
+size produces
+left of it only where that keeps the gap from the DAY sign, and then exactly at the gap; never above the gap below the
+stage's top edge)
+painting is cropped at the top and bottom; the 간판 touching the DAY sign; the till housing above or below the painted
+counter; the branch plate on the dock Action
+```
+
+## AMENDMENT — LIVE STORE DECORATION SEATING — tablets, review follow-up (User 2026-09-27, v2.9.9)
+
+The branch plate takes its desk size only on a stage 760 px high or more, so it clears the counter pieces on a 700-high stage. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the branch plate at least 6 px clear of the dock Action, and at least 6 px under a counter piece it sits below
+```
+
+## AMENDMENT — NEW STORE PREPARATION — short stages (User 2026-09-27, v2.9.9)
+
+The branch plate hangs under the title; the board is tighter under 800 px high; the 간판 keeps the gap from the title; short-desk sizes in acceptance. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+430x740, 768x1024, 900x700, 1023x768, 1024x768, 1280x700, 1280x720, 1366x680, 1280x800, 1280x880 and 1920x1080; the ending
+-> `다음 점포 열기`; a place -> 점포 장식 -> back.
+- no preparation panel: the store room with the logo on its ceiling and the branch plate right under it, centred, the
+`새 점포 준비` board, four Slot places, the Capital plate and `첫 점포지원 고르기`; with no Run no way back; from the ending `결과 다시 보기` returns to the ending
+- the board at least 6 px above the places under it, the Capital plate at least 6 px above the Action
+visible right under it (UI-Q-v29-42); the `h1` reads
+```
+
+## AMENDMENT — NEW STORE PREPARATION — tags and plate scale (User 2026-09-27, v2.9.9)
+
+The Slot tags and the branch plate keep their 360x640 share of the stage.
+
+```new
+```
+
+## AMENDMENT — NEW STORE PREPARATION — plates step on the pixel grid (User 2026-09-27, v2.9.9)
+
+The tags grow with height or desk width; the pixel-face plates step; the empty plaque tag hangs from its top. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the Slot tags, the branch plate and the Capital plate the same share of the stage as at 360x640 on a taller or wider
+```
+
+## AMENDMENT — NEW STORE PREPARATION — desk 간판 tag inside the stage (User 2026-09-27, v2.9.9)
+
+The desk 간판 tag stacks and caps its growth so it stays inside the 1120-wide stage; acceptance checks tags and plates against the stage. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+stage (390x844, 768x1024, 1366x680, 1920x1080), the plates on the pixel face's steps, still overlapping nothing and every
+tag and plate inside the stage (not only the window)
+```
+
+## AMENDMENT — SALE — DESTINATION SLIP / SHELF LIP (User 2026-09-27, v2.9.9)
+
+New owner sections and acceptance UI-Q-v29-45: the destination is the pinned paper Gate notice, the shelf rows stand on boards.
+
+```new
+```
+
+## AMENDMENT — SALE — destination slip dropped (User 2026-09-27, v2.9.9)
+
+The destination slip was reverted to the dark plate (User: it was the one surface that stood out); the shelf lip stays. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- a row turned to wood, a row taller than before, or less shelf room at any size
+```
+
+## AMENDMENT — SALE — shelf lip thinner, shelf head lower (User 2026-09-27, v2.9.9)
+
+The shelf lip is 2 px; the shelf head and its 점포지원 plate are compact; the shelf gets 12 px. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+### UI-Q-v29-45 — SALE SHELF LIP AND HEAD
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §SALE — SHELF LIP / §SALE — SHELF HEAD.)
+- every shelf row ends on a thin (2 px) board edge; row height and type unchanged
+- the shelf head is lower and its 점포지원 plate compact but still a framed plate with a ~44 px touch target; the room the
+shelf gets above the tray / dock is 12 px more than before (measured: 120 / 133 / 313 / 382 / 323 -> 132 / 145 / 325 /
+394 / 335 px)
+```
+
+## AMENDMENT — STRONG GREEN SEMANTIC brought to v2.9.9 (User 2026-09-27 review)
+
+Stale rules superseded by §PRIMARY ACTION GRAMMAR (v2.9.9): 영업 시작 is no longer green, the material table follows the dock Actions' current families. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+Strong Sign Green is reserved for `영업 시작`.
+```
+
+```new
+No dock Action uses Strong Sign Green as its face - `영업 시작` / `발주 확정` are the ORDER steel with the frost edge (UI-Q-v29-44);
+green stays store-sign / environment material and beneficial semantic colour. Every routine primary action uses its material
+direction (UI_UX §STRONG GREEN SEMANTIC table) rather than a generic green CTA.
+```
+
+## AMENDMENT — FINAL clash scene (User 2026-09-27, v2.9.9 H7)
+
+The resolved Final is played out as a card fight before the ending (UI_UX §FINAL — CLASH SCENE, UI_UX_QA UI-Q-v29-46, FINAL_EXPEDITION display order); the one exception to the per-beat contract (PRESENTATION §GAME FEEL BEAT H7).
+
+```new
+### UI-Q-v29-46 — FINAL CLASH SCENE
+(User 2026-09-27, v2.9.9; owner `UI_UX_v2.8.0.md` §FINAL — CLASH SCENE.)
+- the order is member 1 -> Boss counter -> member 2 -> Boss counter ... for every member in party order, the Boss
+countering after the last member too
+- the bar ends at 1 - min(1, rolled Party Power / effective Boss Power): empty on a clear, at least 3% on a failure;
+clear: the Boss card cracks and collapses; failure: the party's cards are pushed back and dimmed
+- the scene stays inside the stage and nothing leaves the screen; no damage figure, no party bar, no new copy
+- a tap skips to the same ending at once; reduced motion shows no scene; a reload mid-scene opens the ending; one cue per
+```
+
+## AMENDMENT — FINAL clash scene brought to the confirmed version (User 2026-09-27)
+
+After the User reviewed the videos: the supply beat (one item at a time, a fixed time each), no amount marked at an impact, the last member's share held for a verdict that hesitates near the bottom, an unhurried tempo, and no length ceiling. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+A Final clear and a Final failure (a close one and a wide one) with 1-, 2- and 3-member parties carrying full, partial and
+empty bags, at 360x640, 390x844, 1280x880 and 1920x1080, motion on and reduced motion; a tap mid-scene; a reload mid-scene.
+- each member's bag receives exactly the items that member carried, one at a time, before the first lunge
+- an impact marks no amount and never drops the red; the red drops by the member's share after each counter except the
+last, whose share waits for the verdict; the verdict hesitates near the bottom (5% on a clear, the resolved remainder on
+a failure) before it breaks or stays; the bar only ever falls
+- the ending then plays as UI-Q-v29-30
+landing (`rumble`, `supply`, `clash`, `counter`, `collapse`)
+- an item a member did not carry (or one missing), the bar giving the result away before the verdict, the bar rising, a
+clear that does not empty the bar, an empty bar on a failure, a damage number, a skip that does not work, or anything of
+the scene in the Save
 ```

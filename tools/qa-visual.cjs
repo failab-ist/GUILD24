@@ -83,21 +83,21 @@ async function drive(page,target,seed){
  /* Plant the seed as the store the pre-Run panel is PLANNING - an unopened store keeps its own
     seed, which app.js states - then press the real button, so the first-run flow is still the
     real one and the Run it opens is deterministic. */
- await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
- /* opening / pre-Run / Store Management are captured BEFORE a Run exists, so they stop here. */
+ /* opening / pre-Run / Store Management are captured BEFORE a Run exists, so they stop here. v2.9.9: that state is the
+    preparation scene itself (UI_UX §NEW STORE PREPARATION — STORE SCENE), and with the clock frozen its planned store
+    is deterministic, so no Run is started and discarded to reach it (that left the DAY 0 takeover open over it). */
  if(PRERUN.has(target)){
-  // drop back to the no-Run state, which is the opening backdrop under the preparation panel
-  await page.evaluate(`(()=>{const g=Guild24.game;g.run=null;g.save();Guild24.render();})()`);
   await page.waitForTimeout(120);
   if(target==='store'){
-   await page.click('#modal-root [data-action="store-manage"]');
+   await page.click('.p-prep [data-action="store-manage"]');
    await page.waitForTimeout(150);}
   return;
  }
+ await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
  /* the DAY 0 Store Support lesson sits over the takeover the drive clicks through; a player who
     reaches the captured Day has passed it (the coach capture keeps every later lesson) */
  await page.evaluate(t=>{const u=Guild24.game.account.tutorial??={};if(t!=='coach')u.skipped=true;else for(const k of ['relic-what','relic-card','relic-buy'])u['coach-'+k]=true;},target);
- await page.click('#modal-root [data-action="start"]');      // real first-run flow, on that seed
+ await page.$('.p-prep [data-action="start"]').then(b=>b?b.click():page.evaluate('Guild24.render()'));      // real first-run flow, on that seed
  await page.click('#modal-root [data-action="buy-relic"]'); // DAY 0 free store support
  // The coach marks are a first-use overlay; by the captured day a player has passed them.
  // UI-Q19/Q20 get their own capture below.
@@ -201,7 +201,7 @@ const GOAL={
 /* A capture is only evidence if it is the surface it claims to be. Each entry is something that
    exists on that surface and nowhere else, checked visible before anything else is judged. */
 const EXPECT={
- opening:'.stage.p-start .opening-title, #modal-root .welcome-title',
+ opening:'.stage.p-prep .opening-logo, .stage.p-prep .prep-note',
  store:'#modal-root .decoration-panel',
  morning:'.stage.p-morning .band.counter',
  order:'.stage.p-order #order-register',
@@ -504,7 +504,7 @@ async function d25OrderProbe(page){
  // same retired Seed control as drive(): plant the planned store, then press the real button
  await page.evaluate(`(()=>{Guild24.game.start('qa-d25-order');Guild24.render();})()`);
  await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
- await page.click('#modal-root [data-action="start"]');
+ await page.$('.p-prep [data-action="start"]').then(b=>b?b.click():page.evaluate('Guild24.render()'));
  await page.click('#modal-root [data-action="buy-relic"]');
  await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;
   /* every earlier reveal already seen, so what is on screen at D25 is the D25 beat alone.
@@ -647,7 +647,7 @@ async function coachProbe(page,label){
  // ---- Deep Expedition coach: a Morning that actually carries a Deep notice
  await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-coach-'+label);
  await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
- await page.click('#modal-root [data-action="start"]');
+ await page.$('.p-prep [data-action="start"]').then(b=>b?b.click():page.evaluate('Guild24.render()'));
  await page.click('#modal-root [data-action="buy-relic"]');
  await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;g.save();})()`);
  let reached=false;
@@ -695,7 +695,7 @@ async function coachProbe(page,label){
  await page.waitForFunction(`!!window.Guild24&&!!window.__coachTable`);
  await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},'qa-coach-great-'+label);
  await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
- await page.click('#modal-root [data-action="start"]');
+ await page.$('.p-prep [data-action="start"]').then(b=>b?b.click():page.evaluate('Guild24.render()'));
  await page.click('#modal-root [data-action="buy-relic"]');
  await page.evaluate(`(()=>{const g=Guild24.game;g.account.tutorial.skipped=true;g.save();Guild24.render();})()`);
  // walk counters until one of them raises the signal: which Items a Day happens to stock is a

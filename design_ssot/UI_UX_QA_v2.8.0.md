@@ -2,7 +2,7 @@
 
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
-DOC_VERSION=2.9.7
+DOC_VERSION=2.9.9
 DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
@@ -65,8 +65,9 @@ Mobile is not just shrunken desktop.
 ### UI-Q95 — STRONG GREEN SEMANTIC
 
 PASS:
-Strong Sign Green is reserved for `영업 시작`.
-Other routine primary actions use their material direction rather than generic green CTA repetition.
+No dock Action uses Strong Sign Green as its face - `영업 시작` / `발주 확정` are the ORDER steel with the frost edge (UI-Q-v29-44);
+green stays store-sign / environment material and beneficial semantic colour. Every routine primary action uses its material
+direction (UI_UX §STRONG GREEN SEMANTIC table) rather than a generic green CTA.
 
 ### UI-Q97 — TYPOGRAPHY EXACT
 
@@ -1393,7 +1394,7 @@ PASS:
 - with neither, a Run that beats the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`; a tie, the
   account's first ending and a manual 현재 지점 포기 print nothing and a manual abandon never moves the best Day
 - at most one of the two lines, never beside `본사 해금`; a reload of the ended Run prints the same line
-- 새 점포 준비: exactly the Slot rows with an affordable unowned Decoration carry `들일 수 있음`
+- 새 점포 준비: exactly the Slot places (rows before v2.9.9) with an affordable unowned Decoration carry `들일 수 있음`
 - no new motion, sound, screen or button
 
 FAIL:
@@ -1406,13 +1407,134 @@ FAIL:
 
 PASS:
 - the opening screen shows `v{version} · {commit}` (the CHANGELOG head version) small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
-  the menu button and the preparation panel
+  the menu button and the preparation scene's board
 - 영업 설정 ends with the same pair, before and during a Run (v2.9.7); no other screen shows it
 - the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair
 - the deployed site reads the deployed commit; a local build reads `dev`
 
 FAIL:
 - the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
+
+### UI-Q-v29-45 — SALE SHELF LIP AND HEAD
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §SALE — SHELF LIP / §SALE — SHELF HEAD.)
+
+SETUP: a mid-Run SALE (Day 5+, six or more kinds on the shelf) at 360x640, 390x664, 390x844, 412x915 and 1280x880.
+
+PASS:
+- every shelf row ends on a thin (2 px) board edge; row height and type unchanged
+- the shelf head is lower and its 점포지원 plate compact but still a framed plate with a ~44 px touch target; the room the
+  shelf gets above the tray / dock is 12 px more than before (measured: 120 / 133 / 313 / 382 / 323 -> 132 / 145 / 325 /
+  394 / 335 px)
+
+FAIL:
+- a row turned to wood, a row taller than before, or less shelf room at any size
+
+### UI-Q-v29-44 — PRIMARY ACTION GRAMMAR
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §PRIMARY ACTION GRAMMAR.)
+
+SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작` and `발주 확정`), SALE, NIGHT, CLOSING, END and FINAL
+(party not yet chosen) at 360x640, 390x844 and 1280x880; each held pressed.
+
+PASS:
+- at rest each casts one hard depth with equal right and down offsets: 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 /
+  the gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음, 3 px for 손님 보내기 - and it is drawn: in the screenshot the
+  pixels just right of and under the face differ from the same spot with the Action hidden, and nothing past the depth does
+- held, each moves right and down by its depth less 1 px, and the 1 px cast left is drawn
+- heights: 56 px (phone) / 60 px (desk) inside the Day, 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; no
+  label wraps or is cut at 360 (a four-digit `발주 N G · 확정` included)
+- inside the Day: a 3 px lit top edge, a 4 px deep foot and no outline (NIGHT flat), labels seated on a 2 px drop
+- each Phase keeps its own face (wood / steel on paper with a frost edge / counter key / muted cobalt / BRICK / gate bar)
+- `영업 시작` and `발주 확정` show the same steel face and frost edge; `첫 점포지원 고르기`, `다음 날` and `다음 점포 열기` the same
+  BRICK build (only the rivets differ); a disabled `영업 시작` casts nothing
+- pressing `첫 점포지원 고르기` plays `begin` and `다음 점포 열기` plays `newstore`, neither the navigation click
+
+FAIL:
+- a straight-down cast or press, a cast declared in the style but not on screen, a press that leaves no cast or moves by a
+  different amount than the cast, a height or depth off its step, an outline around a step inside the Day, or two Phases
+  whose Action looks the same
+
+### UI-Q-v29-43 — SALE PHONE OUTLOOK PLATE
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §SALE — MOBILE AUTHORITY.)
+
+SETUP: a mid-Run SALE (Day 5+, six or more kinds on the shelf) at 360x640, 390x664, 390x844, 412x915 and 1280x880.
+
+PASS:
+- on a phone the outlook line and the four Core Stats sit on one recessed plate with a single seam; every `?` still opens
+  its note in place and each Stat row keeps its height
+- the shelf's first row starts higher and the room the shelf gets above the tray / dock is not smaller at any phone size
+  (measured before v2.9.9: 76 / 89 / 269 / 338 px); the desk layout is unchanged
+
+FAIL:
+- a second box around either part, a dropped or reordered line, or less shelf room at any phone size
+
+### UI-Q-v29-42 — NEW STORE PREPARATION STORE SCENE
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §NEW STORE PREPARATION — STORE SCENE. Runtime check `tools/qa-prep-scene.cjs`,
+part of `qa:runtime`.)
+
+SETUP:
+no Decoration, and four Decorations owned with two equipped, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915,
+430x740, 768x1024, 900x700, 1023x768, 1024x768, 1280x700, 1280x720, 1366x680, 1280x800, 1280x880 and 1920x1080; the ending
+-> `다음 점포 열기`; a place -> 점포 장식 -> back.
+
+PASS:
+- no preparation panel: the store room with the logo on its ceiling and the branch plate right under it, centred, the
+  `새 점포 준비` board, four Slot places, the Capital plate and `첫 점포지원 고르기`; with no Run no way back; from the ending `결과 다시 보기` returns to the ending
+  and the Run is unchanged
+- every place is a control of at least 44 px that opens 점포 장식 on its Slot, and the way back returns to the scene
+- no tag, place, plate, board, logo, branch plate or Action overlapping another, none off screen; no page error
+- the board at least 6 px above the places under it, the Capital plate at least 6 px above the Action
+- the Slot tags, the branch plate and the Capital plate the same share of the stage as at 360x640 on a taller or wider
+  stage (390x844, 768x1024, 1366x680, 1920x1080), the plates on the pixel face's steps, still overlapping nothing and every
+  tag and plate inside the stage (not only the window)
+
+FAIL:
+- the old panel, a place that is not a control, a tag cut off or covering something, the Capital shown in the till, or the
+  ended Run changed before `첫 점포지원 고르기`
+
+### UI-Q-v29-41 — OPENING TITLE LOGO
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §OPENING TITLE LOGO.)
+
+PASS:
+- the opening screen shows the logo as its title at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880, whole,
+  centred, crisp, clear of the build marker and the menu button, on the store scene's ceiling, with the branch plate fully
+  visible right under it (UI-Q-v29-42); the `h1` reads
+  `던전 앞 편의점` to a screen reader
+- the 점 받침 reads as ㅁ at the phone size
+
+FAIL:
+- the title rendered as text again, a cropped or stretched logo, the logo covered, or a missing file
+
+### UI-Q-v29-40 — LIVE STORE DECORATION SEATING
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §LIVE STORE DECORATION SEATING. Runtime harness `tools/qa-deco-seating.cjs`, part of
+`qa:runtime`.)
+
+SETUP:
+each Decoration set equipped (sponsorSign / honorFrame / thriftSafe / guildShelf, and trainingSign / infirmaryPlaque /
+memorialBook / aidCabinet), first MORNING, reduced motion, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915, 430x740,
+768x1024, 820x1180, 900x700, 1023x768, 1024x768, 1280x880 and 1920x1080 (the tall file up to 820 wide, the wide file from
+900x700 on).
+
+PASS:
+- the till housing's feet on the painted counter top (the file's 74.2~76.2% tall, 82.7~85.5% wide) under the crop that
+  size produces
+- all four pieces drawn; 간판 and 벽면 within 1 px of their point of the painting under the crop that size produces (the 간판
+  left of it only where that keeps the gap from the DAY sign, and then exactly at the gap; never above the gap below the
+  stage's top edge)
+- 진열대 and 계산대 feet within 1 px of the till housing's base line, at least the gap (6 px phone, 10 px desk) from it
+- no piece overlapping the till housing, its label, the DAY sign, the board, the branch plate, the dock or another piece; every
+  piece on screen
+- the branch plate at least 6 px clear of the dock Action, and at least 6 px under a counter piece it sits below
+
+FAIL:
+- a piece on the housing or its label, standing on another line than the housing, or placed off its painted point when the
+  painting is cropped at the top and bottom; the 간판 touching the DAY sign; the till housing above or below the painted
+  counter; the branch plate on the dock Action
 
 ### UI-Q-v29-35 — BOSS REVEAL AFTER MORNING LANDS
 
@@ -1542,6 +1664,33 @@ PASS:
 
 FAIL:
 - a seal per member, the NIGHT death tape on a failure, a seal covering the headline, or a failure seal as crisp as a clear
+
+### UI-Q-v29-46 — FINAL CLASH SCENE
+
+(User 2026-09-27, v2.9.9; owner `UI_UX_v2.8.0.md` §FINAL — CLASH SCENE.)
+
+SETUP:
+A Final clear and a Final failure (a close one and a wide one) with 1-, 2- and 3-member parties carrying full, partial and
+empty bags, at 360x640, 390x844, 1280x880 and 1920x1080, motion on and reduced motion; a tap mid-scene; a reload mid-scene.
+
+PASS:
+- each member's bag receives exactly the items that member carried, one at a time, before the first lunge
+- the order is member 1 -> Boss counter -> member 2 -> Boss counter ... for every member in party order, the Boss
+  countering after the last member too
+- an impact marks no amount and never drops the red; the red drops by the member's share after each counter except the
+  last, whose share waits for the verdict; the verdict hesitates near the bottom (5% on a clear, the resolved remainder on
+  a failure) before it breaks or stays; the bar only ever falls
+- the bar ends at 1 - min(1, rolled Party Power / effective Boss Power): empty on a clear, at least 3% on a failure;
+  clear: the Boss card cracks and collapses; failure: the party's cards are pushed back and dimmed
+- the ending then plays as UI-Q-v29-30
+- the scene stays inside the stage and nothing leaves the screen; no damage figure, no party bar, no new copy
+- a tap skips to the same ending at once; reduced motion shows no scene; a reload mid-scene opens the ending; one cue per
+  landing (`rumble`, `supply`, `clash`, `counter`, `collapse`)
+
+FAIL:
+- an item a member did not carry (or one missing), the bar giving the result away before the verdict, the bar rising, a
+  clear that does not empty the bar, an empty bar on a failure, a damage number, a skip that does not work, or anything of
+  the scene in the Save
 
 ### UI-Q-v29-28 — SALE COUNTER TRAY FOLD
 

@@ -134,6 +134,17 @@ are never requested at runtime, and no pixel of them is reused in the UI.
   finish. Motifs are not copied by default; any motif reuse is judged by Phase/object fit and
   runtime visual improvement under the Presentation Asset / Visual Delta gates.
 
+### Title logo — user-provided, project-generated (v2.9.9)
+- shipped file: `dist/ui/assets/presentation/start/title-logo.png` — 960x179, PNG RGBA, 187 KB
+- source: provided by the User on 2026-09-27, generated with GPT image generation for this project (2172x724, PNG RGBA,
+  md5 `fc9c203b481a4ace7aee0905477502b5`). Not a third-party work: no external licence is claimed and none applies.
+- modification (User-approved, 2026-09-27): the 점 받침 read as ㅇ. Its counter was widened from 81x46 to 110x54 px of the
+  original (the walls thinned to the other strokes' weight: columns taken from the wall interiors, the counter's middle
+  column repeated; rows likewise) and its stepped top-left corner squared. No other glyph was touched. The corrected
+  image was trimmed to its drawn letters (alpha above 10; the supplied file carries a wide empty band above and below) and
+  resized to 960 px wide (Lanczos) for display.
+- role: the opening screen's title (UI_UX §OPENING TITLE LOGO), in place of the set-type title.
+
 ## Batch 1 presentation graphics
 
 No third-party asset is used. The inline graphic is a bespoke 13x9 pixel pip drawn in
