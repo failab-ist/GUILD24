@@ -6,6 +6,7 @@
 //   V1u V1 with the mid rung left at 고급 (isolates the 희귀 move)
 //   any arm + Q (V0+Q, V1+Q, V2+Q): a 희귀 ORDER slot holds 1~3 units instead of 1
 //   then + P (V1+Q+P): 상급 포션 195G / 최상급 포션 235G
+//   then + R (V2+Q+P+R): the Rarity bands give 희귀 +3 / +8 / +10 / +10 / +10 from D8, taken from 일반
 // Every arm is applied to DATA in memory right after the catalog loads; the files on disk are untouched. New Items
 // (중화 탄산수 / 방독 작업장갑 / 축성 손전등) are appended, 핫팩 becomes 방한 두건 under its id, the mid rung moves to 희귀.
 //   node tools/counter-ladder.cjs [runs=600] [--policy reader|skilled] [--arms V0,V1,V2] [--out file]
@@ -42,7 +43,7 @@ function apply(D,arm){if(!arm)return;
   it.rarity=rarity;if(buy!=null){it.buy=buy;it.sell=buy*2;}if(days!=null)it.days=days;
   for(const h of HZ)delete it.effects[h];Object.assign(it.effects,ctr,extra);}}
 const one=(src,a,b)=>{const n=src.split(a).length-1;if(n!==1)throw Error('patch point x'+n+': '+a.slice(0,60));return src.replace(a,b);};
-function load(arm){const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=/\+Q$/.test(arm);arm=arm.replace(/\+Q$/,'');for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
+function load(arm){const rr=/\+R$/.test(arm);arm=arm.replace(/\+R$/,'');const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=/\+Q$/.test(arm);arm=arm.replace(/\+Q$/,'');for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
   /* +Q: a 희귀 ORDER slot holds 1~3 units instead of 1 (User 2026-09-27 proposal); 영웅 / 전설 stay 1 */
   if(f==='systems/shop'&&q)src=one(src,'quantity:(it.rarity>=2?1:this.rng.int(2,4))','quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))');
   if(f==='systems/shop')src=one(src,'const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);',
@@ -51,7 +52,10 @@ function load(arm){const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=
   vm.runInThisContext(src,{filename:f+'.js'});
   if(f==='data/catalog'){apply(globalThis.DATA,ARMS[arm]);
    /* +P: 상급 포션 175 -> 195, 최상급 포션 210 -> 235 (User 2026-09-27: 상급 above 길드 특제 도시락 185) */
-   if(pp){const B=globalThis.DATA.itemBy;B.highpotion.buy=195;B.highpotion.sell=390;B.toppotion.buy=235;B.toppotion.sell=470;}}}}
+   if(pp){const B=globalThis.DATA.itemBy;B.highpotion.buy=195;B.highpotion.sell=390;B.toppotion.buy=235;B.toppotion.sell=470;}
+   /* +R: 희귀 rises from mid-Run, taken from 일반 (User 2026-09-27: 희귀 should turn up from the middle) */
+   if(rr)globalThis.DATA.rarityBands=[{maxDay:3,weights:[68,24,7,1,0]},{maxDay:7,weights:[63,25,11,1,0]},{maxDay:12,weights:[55,27,15,2,1]},
+    {maxDay:19,weights:[45,27,23,4,1]},{maxDay:24,weights:[36,26,27,10,1]},{maxDay:29,weights:[29,25,29,16,1]},{maxDay:30,weights:[24,24,31,20,1]}];}}}
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 if(process.env.CL_WORKER){
  process.on('message',({arm,policy,from,to})=>{globalThis.window=globalThis;load(arm);const D=DATA,acc={},items={};let exp=0,ctrCarried=0,statCarried=0;
@@ -62,7 +66,7 @@ if(process.env.CL_WORKER){
    for(const h of d.hazards){const c=cell(h,b),r=Dungeon.hazardRule(h),threat=12+day*.35+((d.tier||1)-1)*6,def=(e[h]||0)+(e[r.stat]||0)*r.coef;
     c.exp++;c.ratio+=def/threat;if(def>=threat)c.covered++;if(rep.items.some(id=>(D.itemBy[id].effects[h]||0)>0))c.carried++;}};
   const r=Debug.simulate(to-from,policy,null,'adaptive','hybrid',{relicAware:true,from});
-  process.send({acc,items,exp,ctrCarried,statCarried,runs:to-from,reach20:r.reach20*(to-from),reach30:r.reach30*(to-from),clear:r.clearsPerRun*(to-from),
+  process.send({acc,items,trade:r.items,exp,ctrCarried,statCarried,runs:to-from,reach20:r.reach20*(to-from),reach30:r.reach30*(to-from),clear:r.clearsPerRun*(to-from),
    day:r.averageDay*(to-from),bankrupt:r.endedBy.bankrupt,deathsEnd:r.endedBy.deaths,deaths:r.averageDeaths*(to-from),capital:mean(r.settlement.gains)*(to-from)},()=>process.exit(0));});
 }else{
  const args=process.argv.slice(2),opt=k=>{const i=args.indexOf(k);return i>=0?args[i+1]:null;};
@@ -73,6 +77,7 @@ if(process.env.CL_WORKER){
  for(let i=0;i<W;i++)next();
  const done=()=>{globalThis.window=globalThis;load('V0');const names={soda:'중화 탄산수',webgloves:'방독 작업장갑',holylight:'축성 손전등'};const nm=id=>(id==='heat'?'핫팩/방한 두건':names[id]||DATA.itemBy[id]?.name||id);
   const sum={};for(const arm of arms){const p=res[arm]||[],t={acc:{},items:{}};for(const k of ['runs','exp','ctrCarried','statCarried','reach20','reach30','clear','day','bankrupt','deathsEnd','deaths','capital'])t[k]=p.reduce((v,m)=>v+m[k],0);
+   t.trade={};for(const m of p)for(const id in m.trade){const x=(t.trade[id]??={ordered:0,sold:0});x.ordered+=m.trade[id].ordered||0;x.sold+=m.trade[id].sold||0;}
    for(const m of p){for(const h in m.acc)for(const b in m.acc[h]){const c=m.acc[h][b],x=((t.acc[h]??={})[b]??={exp:0,ratio:0,covered:0,carried:0});for(const k in c)x[k]+=c[k];}for(const id in m.items)t.items[id]=(t.items[id]||0)+m.items[id];}
    sum[arm]=t;}
   const pc=x=>(100*x).toFixed(1)+'%';
@@ -85,5 +90,7 @@ if(process.env.CL_WORKER){
   console.log('\ncounter items carried per 100 expeditions');
   const ids=[...new Set(arms.flatMap(a=>Object.keys(sum[a].items)))].filter(id=>{const it=DATA.itemBy[id];return !it||HZ.some(h=>it.effects[h]>0)||['soda','webgloves','holylight'].includes(id);});
   for(const id of ids.sort())console.log(nm(id).padEnd(12),arms.map(a=>(100*(sum[a].items[id]||0)/sum[a].exp).toFixed(1).padStart(6)).join(' '));
+  console.log('\ncounter items ordered / sold per Run (sold% of ordered)');
+  for(const id of ids.sort())console.log(nm(id).padEnd(12),arms.map(a=>{const x=sum[a].trade[id]||{ordered:0,sold:0};return ((x.ordered/sum[a].runs).toFixed(1)+'/'+(x.sold/sum[a].runs).toFixed(1)+' ('+(x.ordered?Math.round(100*x.sold/x.ordered):0)+'%)').padStart(16);}).join(' '));
   if(opt('--out'))fs.writeFileSync(opt('--out'),JSON.stringify({N,policy,arms,sum},null,1));};
 }
