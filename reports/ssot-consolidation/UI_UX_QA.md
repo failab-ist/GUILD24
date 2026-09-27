@@ -1329,7 +1329,6 @@ User 2026-09-26: UI-Q-v29-36 is new. Nothing is dropped.
 
 PASS:
 - the opening screen shows `v{version} · {commit}` (the CHANGELOG head version) small and muted in its top-left corner at 360 / 390 / 1280, clear of the title,
-  the menu button and the preparation panel
 - the console prints `GUILD24 v{version} · {commit}` once on load and `Guild24.build` returns the same pair
 - the deployed site reads the deployed commit; a local build reads `dev`
 
@@ -1354,7 +1353,6 @@ capital that was already above that price, or an owned Decoration's price, print
 - with neither, a Run that beats the account's best Day prints `지금까지 가장 오래 버틴 점포다 · DAY {N}`; a tie, the
 account's first ending and a manual 현재 지점 포기 print nothing and a manual abandon never moves the best Day
 - at most one of the two lines, never beside `본사 해금`; a reload of the ended Run prints the same line
-- 새 점포 준비: exactly the Slot rows with an affordable unowned Decoration carry `들일 수 있음`
 - no new motion, sound, screen or button
 - a Decoration named, a list of goals, a remaining-count, a second line, a line on an abandoned Run, or a mark on a Slot
 whose unowned Decorations cost more than the capital
@@ -1483,9 +1481,30 @@ The opening title becomes the User-supplied logo (corrected 점 받침), sized s
 ### UI-Q-v29-41 — OPENING TITLE LOGO
 (User 2026-09-27; owner `UI_UX_v2.8.0.md` §OPENING TITLE LOGO.)
 - the opening screen shows the logo as its title at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880, whole,
-centred, crisp, clear of the build marker and the menu button, with the branch plate fully above the preparation panel
-(and its rule too where the old title's rule was); the `h1` reads
 `던전 앞 편의점` to a screen reader
 - the 점 받침 reads as ㅁ at the phone size
-- the title rendered as text again, a cropped or stretched logo, the logo under the preparation panel, or a missing file
+```
+
+## AMENDMENT — v2.9.9 NEW STORE PREPARATION — STORE SCENE (User 2026-09-27)
+
+새 점포 준비 becomes the store scene; the lines that described the preparation panel (build marker, title logo and its branch plate, the Slot-row mark) now name the scene. Lines below are new. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- 새 점포 준비: exactly the Slot places (rows before v2.9.9) with an affordable unowned Decoration carry `들일 수 있음`
+the menu button and the preparation scene's board
+### UI-Q-v29-42 — NEW STORE PREPARATION STORE SCENE
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §NEW STORE PREPARATION — STORE SCENE. Runtime check `tools/qa-prep-scene.cjs`,
+part of `qa:runtime`.)
+no Decoration, and four Decorations owned with two equipped, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915,
+430x740, 1024x768, 1280x800, 1280x880 and 1920x1080; the ending -> `다음 점포 열기`; a place -> 점포 장식 -> back.
+- no preparation panel: the store room with the logo on its ceiling, the `새 점포 준비` board, four Slot places, the
+Capital plate with the branch plate under it and `첫 점포지원 고르기`; with no Run no way back; from the ending `결과 다시 보기` returns to the ending
+and the Run is unchanged
+- every place is a control of at least 44 px that opens 점포 장식 on its Slot, and the way back returns to the scene
+- no tag, place, plate, board, logo, branch plate or Action overlapping another, none off screen; no page error
+- the old panel, a place that is not a control, a tag cut off or covering something, the Capital shown in the till, or the
+ended Run changed before `첫 점포지원 고르기`
+centred, crisp, clear of the build marker and the menu button, on the store scene's ceiling, with the branch plate fully
+visible on the counter front (UI-Q-v29-42); the `h1` reads
+- the title rendered as text again, a cropped or stretched logo, the logo covered, or a missing file
 ```

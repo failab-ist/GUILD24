@@ -29,7 +29,7 @@ const POINT={phone:{ar:941/1672,sign:[.15,.113],wall:[.76,.55]},wide:{ar:1672/94
    await p.evaluate(ids=>{const g=Guild24.game,a=g.account;(a.tutorial??={}).skipped=true;
     for(const id of ids){Meta.addCapital(a,DATA.decorationBy[id].price);Meta.buyDecoration(a,id);Meta.equipDecoration(a,DATA.decorationBy[id].slot,id);}
     g.start('qa-deco-seating');Guild24.render();},ids);
-   await p.click('#modal-root [data-action="start"]');await p.click('#modal-root [data-action="buy-relic"]');
+   await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.click('#modal-root [data-action="buy-relic"]');
    await p.evaluate(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();Guild24.render();});
    for(let i=0;i<40;i++){if(await p.evaluate(`Guild24.game.run.phase==='morning'`))break;await p.evaluate(`(${STEP})()`);}
    for(let k=0;k<5;k++){const b=await p.$('#modal-root [data-action="boss-seen"]')||await p.$('#modal-root [data-action="dismiss"]');if(!b)break;await b.click();await p.waitForTimeout(100);}

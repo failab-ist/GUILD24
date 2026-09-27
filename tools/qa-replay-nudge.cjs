@@ -43,8 +43,9 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    r=await ending(4,18,1000);check(width+' 4 a tie prints nothing',r.line==='',r.line);
    r=await ending(5,12,1000,true);check(width+' 5 a D10 open is listed in 본사 해금 and no line is added',r.opened.includes(await p.evaluate(()=>DATA.itemBy.guildlunch.name))&&r.line==='',JSON.stringify(r));
    // 새 점포 준비: capital 500~749 -> the display Slot only
-   await p.click('[data-action="new"]');await p.waitForSelector('#modal-root .deco-line');
-   const marks=await p.evaluate(()=>({capital:Meta.storeCapital(Guild24.game.account),slots:[...document.querySelectorAll('#modal-root .deco-line')].map(li=>!!li.querySelector('.can-buy'))}));
+   // v2.9.9: the preparation is the store scene; each Slot is its place (UI_UX §NEW STORE PREPARATION — STORE SCENE)
+   await p.click('[data-action="new"]');await p.waitForSelector('.p-prep .prep-slot');
+   const marks=await p.evaluate(()=>({capital:Meta.storeCapital(Guild24.game.account),slots:DATA.decorationSlots.map(slot=>!!document.querySelector('.p-prep .prep-slot[data-id="'+slot+'"] .can-buy'))}));
    if(OUT)await p.screenshot({path:path.join(OUT,`nudge-${width}-prerun.png`)});
    check(width+' pre-run: only the Slot the capital covers carries 들일 수 있음',marks.capital>=500&&marks.capital<750&&JSON.stringify(marks.slots)===JSON.stringify([false,false,false,true]),JSON.stringify(marks));
    await ctx.close();}

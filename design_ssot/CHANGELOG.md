@@ -17,6 +17,10 @@ confirmed by the User.
   the 진열대 / 계산대 pieces keep their bottom line (and the safe its legs) whole and opaque to stay on the counter.
 - Opening title logo (UI_UX §OPENING TITLE LOGO, UI_UX_QA UI-Q-v29-41): the `던전 앞 편의점` title is the User-supplied logo;
   its 점 받침, which read as ㅇ, was corrected to ㅁ (reports/ASSETS.md §Title logo).
+- 새 점포 준비 is the store scene (UI_UX §NEW STORE PREPARATION — STORE SCENE, UI_UX_QA UI-Q-v29-42, COPY_AUDIT §1-9): the
+  panel over a backdrop is gone; the MORNING room carries the logo on its ceiling, the three lines on its board, each
+  Decoration Slot at its own place (tagged, a control), the Store Capital on a counter plate and `첫 점포지원 고르기` in the
+  dock; from the ending `결과 다시 보기` returns to the ending. New runtime check `tools/qa-prep-scene.cjs` in `qa:runtime`.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

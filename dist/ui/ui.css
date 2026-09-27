@@ -217,25 +217,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    screen's Primary and must never read as four buttons competing with it. */
 .effects li.deco-line{padding:0}
 .deco-line+.deco-line{margin-top:4px}
-/* The four rows are slots cut in one track. The review found the previous attempt darker and
-   more cramped than what it replaced - a brass tab on every row was ornament, and the heavier
-   recess ate the reading. They are lighter than the sheet now, not darker: one hairline edge
-   in the sheet's own gold, one lit top, a clear label/value baseline, and the same geometry
-   four times. Still ranked under the Primary: one pixel of travel, no cast depth. */
-.deco-jump{position:relative;display:flex;width:100%;justify-content:space-between;align-items:baseline;gap:12px;
- padding:10px 13px;min-height:44px;border:0;border-radius:0;text-align:left;
- font:inherit;color:#c6b89d;background:#00000026;
- box-shadow:inset 0 0 0 1px #00000047,inset 0 3px 0 #00000059,inset 0 -2px 0 #ffffff17;
- cursor:pointer;transition:background .08s steps(2)}
-.deco-jump:hover{background:#0000001a;color:#e0d2b7}
-.deco-jump:active{transform:none;background:#0000003d;
- box-shadow:inset 0 0 0 1px #00000059,inset 0 4px 0 #00000073,inset 0 -2px 0 #ffffff0f}
-.deco-jump>span{font:400 var(--t-sm)/1.4 var(--ui)}
-.deco-jump b{white-space:nowrap;font-family:var(--mono);font-variant-numeric:tabular-nums;color:#f2e7cd}
-.deco-line.empty .deco-jump b{color:#8d8067;font-weight:400}
-/* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a small current-state mark beside the Slot's value, not a control */
-.deco-jump .can-buy{margin-left:auto;padding:3px 6px;font:600 11px/1 var(--ui);font-style:normal;letter-spacing:.04em;
- color:#e0c89c;box-shadow:inset 0 0 0 1px #e0c89c73;white-space:nowrap}
 .decoration-panel .slot:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 /* UI-Q111. The one-tap reference to what the store is already running. It reads as a quiet
    reference control, not a decision key, so it never competes with the screen's primary
@@ -876,10 +857,6 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
  background-position:0 0,0 0,0 0,50% 50%;
  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat;
  background-origin:content-box}
-/* UI_UX §BUILD MARKER (v2.9.3): small, muted, not a control - the opening screen only. It sits above the preparation
-   panel's shade (60), which is always up on this screen and would otherwise sink it to ~1.5:1; under takeovers and coach marks. */
-.p-start .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:61;
- margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.8;pointer-events:none;white-space:nowrap}
 /* UI_UX §BUILD MARKER (User 2026-09-26, v2.9.7): the same pair at the foot of 영업 설정, readable mid-Run */
 .build-line{margin:4px 0 0;text-align:center;font-size:11px;line-height:1.3;letter-spacing:.04em;color:var(--muted);user-select:text}
 /* USER 2026-09-23: the menu pin was the last browser-like control left on this stage - a dark
@@ -914,32 +891,9 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 /* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the name is the drawn logo, not set type. The logo carries its own
    outline and extrusion, so it takes no shadow here; its alt text is the name. */
 .opening-title{margin:0 0 -2px;line-height:0}
-/* phone: no wider than 210 px or 58% of the width, clear of the build marker and the menu. The file is cut to the drawn letters and the title gives back 2 px, so
-   the branch plate sits 6 px under them instead of under a band of empty file */
+/* phone: no wider than 210 px or 58% of the width, clear of the build marker and the menu; the file is cut to the drawn
+   letters (v2.9.9: the branch plate that sat under it is MORNING's counter plate now, UI_UX §NEW STORE PREPARATION) */
 .opening-logo{display:block;width:min(210px,58vw);height:auto}
-.opening-branch{margin:3px 0 0;padding:5px 13px 4px;color:#e0c89c;
- font:500 12px/1 var(--f-plate);letter-spacing:.2em;-webkit-font-smoothing:none;
- background:linear-gradient(180deg,#3b2918 0,#2a1c10 100%);
- box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #b08a42,0 3px 0 #00000080}
-/* One supporting rule closes the title block and gives the sheet below something to hang from:
-   a single seam with a raised centre notch, the same 2px seam weight the sheet's frame uses.
-   §TITLE / PLATE allows exactly one - this is it, and nothing else on this screen is framed. */
-.opening:after{content:'';width:min(300px,78%);height:9px;margin-top:8px;
- background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2213%22%20height%3D%229%22%20shape-rendering%3D%22crispEdges%22%3E%3Cpath%20d%3D%22M6%200h1v1h2v1h2v1h1v3h-1v1H9v1H7v1H6v-1H4v-1H2v-1H1V3h1V2h2V1h2z%22%20fill%3D%22%23a07c3c%22%2F%3E%3Cpath%20d%3D%22M6%201h1v1h2v1h1v1H3V3h1V2h2z%22%20fill%3D%22%23c9a45c%22%2F%3E%3C%2Fsvg%3E"),
-  linear-gradient(90deg,#00000000 0,#8a6a33 16%,#8a6a33 84%,#00000000 100%);
- background-size:13px 9px,100% 2px;background-position:50% 0,50% 4px;background-repeat:no-repeat}
-/* USER-APPROVED OPENING, line 3 of the three axes: what the 30 days are for. It is the one of
-   the three the modal was authored as a band, and the sheet had no rule for it at all, so it
-   rendered as ordinary body copy wedged between the supporting line and the 이번 영업의 장식
-   heading - the three axes read as one paragraph and the Run's endpoint had no rank of its own.
-   Presentation only; the approved text is untouched. */
-/* USER 2026-09-23: lines 2 and 3 explain the same thing at the same level - one supplies the
-   adventurers, the other says where they end up - so the third stops being a callout. The dark
-   plane, the gold bar and the container treatment are gone; it is the same paragraph as the
-   line above it in face, size, colour, alignment and leading. The only emphasis language left
-   on this sheet starts at the Decoration section, where it means something. */
-.welcome-band{margin:4px 0 16px;padding:0;background:none;box-shadow:none;
- font:400 var(--exp) var(--ui);color:#c6b89d;text-align:left}
 .line-up{position:relative;z-index:1;display:grid;justify-items:end;gap:5px;padding-bottom:14px}
 .line-up .fan{display:flex;align-items:flex-end}
 .line-up .wait{display:block;width:calc(var(--cardw)*var(--deck));height:calc(var(--cardh)*var(--deck));
@@ -1643,7 +1597,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    the very mistake this system was built to stop. BRICK is named per Action, off the
    `data-action` Source already carries - no markup changes to say what a control means. */
 .p-end .dock .stamp,
-.modal-footer [data-action="start"],
+.p-prep .dock [data-action="start"],
 .modal-footer [data-action="store-return"],
 .modal-footer [data-action="event-seen"],
 .modal-footer [data-action="boss-go"]{--act:var(--brick);--act-lit:var(--brick-lit);
@@ -1747,7 +1701,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    is the phase's main Action, sitting it at the footer's end reads as a small button parked in
    a web footer. It is centred on the sheet instead and takes the width it can without becoming
    a full-bleed bar, so it reads as the thing to do on this screen. */
-.modal-footer [data-action="start"],
 .modal-footer [data-action="store-return"]{margin:0 auto;width:min(100%,420px);min-width:0;
  min-height:62px;font:600 19px/1 var(--ui)}
 /* BOSS CONFIRM. USER 2026-09-22: the two controls are the SAME design object - the same notch,
@@ -1855,61 +1808,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  box-shadow:inset 0 0 0 1px #00000047,inset 0 3px 0 #0000005c,inset 0 -2px 0 #ffffff0f,
   inset 2px 0 0 #00000047}
 
-/* =====================================================================
-   PRESENTATION BATCH 1 / PREPARATION SHEET. Scoped by what the sheet actually contains,
-   not by `.narrow` - `.narrow` is worn by 도움말, 영업 설정 and every confirm alike, and
-   those are LOW-budget utility overlays that must not inherit a MEDIUM surface's frame.
-   `:has(.welcome-band)` is the pre-Run sheet and nothing else, so no markup changed.
-
-   The sheet was header / body / footer stacked on one wood plane. A 3px line and a 2px seam
-   made that tidy; they did not make it an object. Three CSS passes plateaued there, so the
-   perimeter is BUILT now, as the system's escalation says to do when CSS leaves the object
-   generic: a bespoke 56x56 pixel frame, sliced 18, carried by border-image.
-   It is drawn so the slicing cannot hurt it. The top and bottom planks run the full width and
-   the side stiles run the full height between them, and every band inside them is constant
-   along its own run - so `stretch` has nothing to distort, at any sheet height the day asks
-   for. The corners are fixed: a brass bracket set into each joint, with one rivet. The centre
-   is transparent and the sheet's own wood shows through it, clipped to the padding box, so no
-   frame sits inside another frame.
-   Live text and controls stay HTML. Nothing is baked into the graphic.
-   ===================================================================== */
-.modal.narrow:has(.welcome-band){background:var(--tex-wood),#33241a;background-size:32px 12px;
- border-style:solid;border-width:10px;
- border-image:url("data:image/svg+xml,<svg xmlns='http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg' width='32' height='32' shape-rendering='crispEdges'><g fill='%230f0a05'><rect x='0' y='0' width='32' height='2'/><rect x='0' y='10' width='2' height='12'/><rect x='30' y='10' width='2' height='12'/><rect x='0' y='30' width='32' height='2'/></g><g fill='%235a4028'><rect x='0' y='2' width='2' height='1'/><rect x='7' y='2' width='18' height='1'/><rect x='30' y='2' width='2' height='1'/><rect x='2' y='10' width='1' height='12'/><rect x='29' y='10' width='1' height='12'/><rect x='0' y='29' width='2' height='1'/><rect x='7' y='29' width='18' height='1'/><rect x='30' y='29' width='2' height='1'/></g><g fill='%23e0bc70'><rect x='2' y='2' width='5' height='1'/><rect x='25' y='2' width='5' height='1'/><rect x='2' y='3' width='1' height='4'/><rect x='29' y='3' width='1' height='4'/><rect x='5' y='5' width='1' height='1'/><rect x='26' y='5' width='1' height='1'/><rect x='2' y='25' width='1' height='5'/><rect x='29' y='25' width='1' height='5'/><rect x='5' y='26' width='1' height='1'/><rect x='26' y='26' width='1' height='1'/><rect x='3' y='29' width='4' height='1'/><rect x='25' y='29' width='4' height='1'/></g><g fill='%2346301d'><rect x='0' y='3' width='2' height='2'/><rect x='7' y='3' width='18' height='2'/><rect x='30' y='3' width='2' height='2'/><rect x='4' y='4' width='3' height='1'/><rect x='25' y='4' width='3' height='1'/><rect x='3' y='10' width='2' height='12'/><rect x='27' y='10' width='2' height='12'/><rect x='0' y='27' width='2' height='2'/><rect x='4' y='27' width='24' height='1'/><rect x='30' y='27' width='2' height='2'/><rect x='7' y='28' width='18' height='1'/></g><g fill='%236b5029'><rect x='3' y='3' width='4' height='1'/><rect x='25' y='3' width='4' height='1'/><rect x='3' y='4' width='1' height='3'/><rect x='28' y='4' width='1' height='3'/><rect x='0' y='8' width='32' height='1'/><rect x='8' y='10' width='1' height='12'/><rect x='23' y='10' width='1' height='12'/><rect x='0' y='23' width='32' height='1'/><rect x='3' y='25' width='1' height='4'/><rect x='28' y='25' width='1' height='4'/><rect x='4' y='28' width='3' height='1'/><rect x='25' y='28' width='3' height='1'/></g><g fill='%233a2717'><rect x='0' y='5' width='2' height='1'/><rect x='4' y='5' width='1' height='1'/><rect x='6' y='5' width='20' height='1'/><rect x='27' y='5' width='1' height='1'/><rect x='30' y='5' width='2' height='1'/><rect x='5' y='10' width='1' height='12'/><rect x='26' y='10' width='1' height='12'/><rect x='0' y='26' width='2' height='1'/><rect x='4' y='26' width='1' height='1'/><rect x='6' y='26' width='20' height='1'/><rect x='27' y='26' width='1' height='1'/><rect x='30' y='26' width='2' height='1'/></g><g fill='%232a1a0f'><rect x='0' y='6' width='2' height='1'/><rect x='4' y='6' width='24' height='1'/><rect x='30' y='6' width='2' height='1'/><rect x='6' y='10' width='1' height='12'/><rect x='25' y='10' width='1' height='12'/><rect x='0' y='25' width='2' height='1'/><rect x='4' y='25' width='24' height='1'/><rect x='30' y='25' width='2' height='1'/></g><g fill='%23b08a42'><rect x='0' y='7' width='32' height='1'/><rect x='7' y='10' width='1' height='12'/><rect x='24' y='10' width='1' height='12'/><rect x='0' y='24' width='32' height='1'/></g><g fill='%23120c06'><rect x='0' y='9' width='32' height='1'/><rect x='9' y='10' width='1' height='13'/><rect x='22' y='10' width='1' height='13'/><rect x='0' y='22' width='9' height='1'/><rect x='10' y='22' width='12' height='1'/><rect x='23' y='22' width='9' height='1'/></g></svg>") 10 stretch;
- background-clip:padding-box;box-shadow:0 -6px 0 #0000008c}
-/* the header is a plank of the same object, not a caption above it: darker wood, a brass
-   under-rail, and the title seated on it */
-/* USER 2026-09-23: the header was a rectangle parked inside the frame. It is the frame's own
-   header band now - flush to the inner edge on three sides, so the join is the frame itself -
-   closed by one gold seam. No extra thickness anywhere, and the ring around it is gone. */
-.modal.narrow:has(.welcome-band) .modal-header{margin:0;padding:11px 13px 12px;
- background:linear-gradient(180deg,#43301e 0,#2c1e12 100%);
- box-shadow:inset 3px 0 0 #00000047,inset -3px 0 0 #00000047,
-  inset 0 -2px 0 #a8823e,inset 0 -4px 0 #12100a}
-.modal.narrow:has(.welcome-band) .modal-header h2{font-size:21px;letter-spacing:.02em;
- text-shadow:0 2px 0 #1b1109}
-.modal.narrow:has(.welcome-band) .modal-body{padding:15px 10px 14px;--exp:clamp(13.9px,4vw,15.5px)/1.52}
-.modal.narrow:has(.welcome-band) .modal-body>.muted{font:400 var(--exp) var(--ui);color:#c6b89d}
-/* The built frame takes 36px of width that the old flat rectangle did not, and at the 360
-   floor that pushed the two longest approved lines onto a second row. They are fluid now
-   rather than fixed, so they shrink by a step at the narrowest width and are unchanged from
-   376px up. Copy, order and emphasis are untouched - only the measure gives way. */
-.modal.narrow:has(.welcome-band) .welcome-title{font-size:clamp(18.5px,5.5vw,22px);line-height:1.35;margin-bottom:2px}
-
-/* the section heading is a rail, not a bare line of bold text: a brass tab at its head and a
-   seam running out to the sheet's inner edge - the same two-part language the frame's own
-   rails and the Slot rows use, so the object has one divider grammar instead of three. */
-.modal.narrow:has(.welcome-band) .modal-body h3{display:flex;align-items:center;gap:10px;
- font:600 15px/1 var(--ui);letter-spacing:.02em}
-.modal.narrow:has(.welcome-band) .modal-body h3:before{content:'';flex:0 0 auto;width:4px;height:15px;
- background:linear-gradient(180deg,#e6c176 0,#b08a42 42%,#6b5029 100%);box-shadow:1px 0 0 #12100a}
-.modal.narrow:has(.welcome-band) .modal-body h3:after{content:'';flex:1 1 auto;height:3px;
- background:linear-gradient(180deg,#b08a4247 0,#b08a4200 60%),#12100a80;
- box-shadow:0 1px 0 #b08a4233}
-/* the footer is the same plank at the other end of the object - the black web-modal bar is
-   gone, and the brass rail that closes the body is the same rail that opens the header */
-.modal.narrow:has(.welcome-band) .modal-footer{padding:12px 12px 13px;background:none;
- box-shadow:inset 0 1px 0 #a8823e59}
 /* §PRIMARY DECISION CONTROL: measure and seating only. The control's geometry - notch, hard
    outline, lit/deep bevel, 5px zero-radius offset, 4px press travel - is the game's shared
    Action construction and is not this Batch's to re-cut. What it lacked here was room of its
@@ -1934,7 +1832,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    3px version of the same rivet shipped invisible; measured against the runtime, 9px is the
    size at which a fixing reads as a fixing and still never arrives before the label.
    The press travels 4px and trades its lit and deep edges. BRICK family and guard unchanged. */
-.modal-footer [data-action="start"],
+.p-prep .dock [data-action="start"],
 .modal-footer [data-action="store-return"]{min-height:64px;
  font:600 20px/1 var(--ui);letter-spacing:.06em;text-shadow:0 2px 0 #5a221a;padding:0 26px;
  background-color:var(--brick);
@@ -1947,29 +1845,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
   6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
  filter:drop-shadow(0 6px 0 #00000099)}
-.modal-footer [data-action="start"]:hover,
+.p-prep .dock [data-action="start"]:hover,
 .modal-footer [data-action="store-return"]:hover{
  filter:drop-shadow(0 6px 0 #00000099) brightness(1.08)}
-.modal-footer [data-action="start"]:active,
+.p-prep .dock [data-action="start"]:active,
 .modal-footer [data-action="store-return"]:active{transform:translateY(4px);
  box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
   inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
  filter:drop-shadow(0 2px 0 #1d0805) brightness(.96)}
 @media(min-width:1024px){
- /* DESKTOP presence without a second column: the same sheet, larger, on a plane that is
-    actually lit - §RESPONSIVE DETAILING. The stage's own falloff carries the width; the
-    composition, the order and the single vertical read are untouched. */
- .modal.narrow:has(.welcome-band){max-width:580px}
- /* the shade is a dimmer, not a lid: at 60% it flattened the plane this Batch just built back
-    into the black it replaced. It steps back far enough for the storefront to read behind the
-    sheet, and the sheet still holds the screen - it is the only lit object on it. */
- .modal-shade:has(.welcome-band){background:#05040373}
- /* the logo is a little wider on a desk; the block starts higher so the branch plate and its rule stay clear of the
-    preparation sheet, which stands higher on a desk (UI_UX §OPENING TITLE LOGO) */
- .p-start .opening{padding-top:14px}
- .p-start .opening-logo{width:320px}
- .p-start .opening-branch{padding:6px 16px 5px;letter-spacing:.24em}
- .p-start .opening:after{width:min(360px,60%)}
  /* the wide framing of the same shut store, and its window sits lower in frame than the
     portrait one's, so the pool that is let back in moves with it */
  .p-start{background-image:radial-gradient(62% 40% at 50% 49%,#ffd6a02e 0,#ffd6a00f 46%,#00000000 72%),
@@ -1978,9 +1862,6 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
   background-size:auto,auto,cover;
   background-position:0 0,0 0,50% 50%;
   background-repeat:no-repeat,no-repeat,no-repeat}
- .modal.narrow:has(.welcome-band) .modal-body{padding:20px 20px 22px}
- .modal.narrow:has(.welcome-band) .modal-header{padding:15px 20px 13px}
- .modal.narrow:has(.welcome-band) .modal-footer{padding:15px 20px 16px}
 }
 
 /* =====================================================================
@@ -2480,6 +2361,74 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .decoplate.display{--cx:.2645;--dw:.2}
  .decoplate.counter{--cx:.735;--dw:.17}
 }
+/* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The preparation screen is the MORNING room
+   (the stage carries both classes, so the painting, the bands and the Decoration seating are MORNING's own); only what
+   differs before a Run is set here. */
+.p-prep .build-mark{position:absolute;top:calc(env(safe-area-inset-top) + 8px);left:calc(env(safe-area-inset-left) + 10px);z-index:5;
+ margin:0;font-size:10px;line-height:1.2;letter-spacing:.04em;color:#cdbfa4;opacity:.8;pointer-events:none;white-space:nowrap}
+/* the name hangs from the ceiling where the DAY sign will */
+.p-prep .band.ceiling .opening{position:absolute;inset:0 0 auto;z-index:2;padding-top:calc(env(safe-area-inset-top) + 21px)}
+.p-prep .prep-note{padding-top:16px}
+.p-prep .prep-note .welcome-title{margin-bottom:6px;font:500 16px/1.4 var(--f-plate)}
+.p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{display:block;margin:0;font:400 13px/1.6 var(--ui);color:#5f5440;text-align:left}
+.p-prep .prep-status{margin:0;font:400 12px/1.4 var(--ui);color:#d9c9a8;text-align:center}
+/* each Slot is its place in the room: the Decoration standing there, or its empty spot, and a small tag naming it */
+/* a place is at least a 44 px target: it grows away from the surface it is seated on (the counter pieces and the plaque
+   upward from their foot / down from their nail, the 간판 up into the ceiling it hangs from), so its drawing does not move */
+.p-prep .deco-layer .prep-slot{pointer-events:auto;display:flex;flex-direction:column;justify-content:flex-end;padding:0;border:0;
+ background:none;box-shadow:none;color:inherit;cursor:pointer;min-width:44px;min-height:44px;filter:none}
+.p-prep .deco-layer .prep-slot.sign:not(.empty){--ah:calc(var(--w) * var(--ph) * var(--ar) * .55);
+ transform:translateY(calc(var(--ah) - max(44px, var(--ah))))}
+.p-prep .prep-slot .deco-art{filter:drop-shadow(0 3px 0 #0000004d)}
+/* an empty Slot draws no box: the room is simply bare there, and its tag stands on the spot (the button keeps a 44 px
+   target) */
+.p-prep .slot-empty{display:block;width:100%;min-height:44px;aspect-ratio:var(--slot-ar,1)}
+.p-prep .prep-slot.sign{--slot-ar:40/22}
+.p-prep .prep-slot.wall{--slot-ar:22/21}
+.p-prep .prep-slot.display{--slot-ar:26/25}
+.p-prep .prep-slot.counter{--slot-ar:28/17}
+.p-prep .slot-tag{position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);display:grid;justify-items:center;gap:1px;
+ padding:4px 8px 5px;white-space:nowrap;font:500 11px/1.25 var(--ui);color:#e4cfa4;background:#2b1e13;
+ box-shadow:inset 0 0 0 1px #6b5029,0 2px 0 #00000080}
+/* a tag is anchored to its piece's edge that faces the middle of the room, so a piece standing near the screen's edge
+   never pushes its tag off it: the 간판 and 진열대 on the left, the plaque and the 계산대 piece on the right */
+.p-prep .prep-slot.sign .slot-tag,.p-prep .prep-slot.display .slot-tag{left:0;transform:none}
+.p-prep .prep-slot.wall .slot-tag,.p-prep .prep-slot.counter .slot-tag{left:auto;right:0;transform:none}
+.p-prep .prep-slot.empty .slot-tag{top:50%;transform:translateY(-50%)}
+/* the 간판 hangs just above the board, so its tag is one line: under it on a phone (the branch plate is beside it),
+   to its left on a desk (the board is right under it and the branch plate to its right) */
+.p-prep .prep-slot.sign:not(.empty) .slot-tag{top:calc(100% + 3px);grid-auto-flow:column;align-items:baseline;gap:5px}
+@media(min-width:1024px){
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:50%;left:auto;right:calc(100% + 6px);transform:translateY(-50%)}
+ .p-prep .opening-logo{width:320px}
+ .p-prep .band.ceiling .opening{padding-top:calc(env(safe-area-inset-top) + 14px)}
+ .p-prep .slot-tag{font-size:12px}
+ .p-prep .slot-tag b{font-size:13px}
+ .p-prep .prep-status{font-size:13px}
+ /* the board ends above the painted wall's plaque spot even on a 768-high desk */
+ .p-morning.p-prep .pinned{gap:6px;padding-bottom:9px}
+ .p-morning.p-prep .prep-note{padding:12px 14px 10px}
+}
+.p-prep .slot-tag i{font-style:normal;color:#b99b6a}
+.p-prep .slot-tag b{font-weight:600;font-size:12px}
+.p-prep .slot-tag .can-buy{margin-top:2px;padding:3px 6px;font:600 11px/1 var(--ui);font-style:normal;color:#e0c89c;
+ box-shadow:inset 0 0 0 1px #e0c89c73}
+.p-prep .prep-slot:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.p-prep .prep-slot:active{translate:0 2px}
+/* the Store Capital is a small plate on the counter where the till will stand, not the till: before a Run there is no
+   float, and a register showing the Capital would read as the Run's money */
+.p-prep .capital-plate{position:absolute;z-index:2;left:50%;transform:translateX(-50%);margin:0;
+ bottom:calc((1 - var(--till-top) - var(--till-h)) * 100%);padding:9px 16px 8px;gap:9px;white-space:nowrap;
+ font:500 17px/1 var(--f-plate);color:#e4cfa4;background:#2b1e13;box-shadow:inset 0 0 0 1px #6b5029,inset 0 1px 0 #00000073,0 2px 0 #00000080}
+.p-prep .capital-plate b{color:var(--gold);font-weight:500}
+/* the branch plate is MORNING's, on the counter front; centred under the Capital here, because the Slot tags hang at the
+   counter's two ends */
+.p-morning.p-prep .branchplate{left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}
+.p-prep .dock{align-items:center}
+.p-prep .dock [data-action="start"]{flex:1 1 auto;max-width:420px;margin:0 auto}
+.p-prep .dock [data-action="prep-back"]{flex:0 0 auto;align-self:center;padding:10px 12px;color:#e4cfa4;background:#0b0806d9;
+ box-shadow:inset 0 0 0 1px #6b502999;text-decoration:underline;text-underline-offset:3px}
+.p-prep .dock [data-action="prep-back"]:hover{color:#f4e3bd}
 /* UI_UX_v2.8 §DECORATION UI. Reuses the unlock board's block rhythm and the .effects row
    shape rather than introducing a new card language for one panel. */
 /* The panel is rendered as a child of the codex's `.unlock-grid`, which becomes two and then

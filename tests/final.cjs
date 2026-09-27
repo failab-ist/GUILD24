@@ -474,7 +474,7 @@ test('FINAL_EXPEDITION_v2.7 §D25: the Final state is generated and known from D
  assert.ok(/if\(stage==='final'&&!s\.final\)continue;/.test(app),'and only once the Final state exists');
  const stageFn=app.slice(app.indexOf('function bossRevealStage('),app.indexOf('function bossReveal('));
  assert.ok(!/s\.day>=30|day===30/.test(stageFn),'and no D30-only reveal path survives beside it');
- const precedence=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
+ const precedence=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"),app.indexOf('renderModal();requestAnimationFrame'));
  assert.ok(precedence.indexOf('bossRevealDue()')<precedence.indexOf("modal='relics'",precedence.indexOf('bossRevealDue()')),
   'and it is resolved ahead of the Relic window it exists to inform');
 });

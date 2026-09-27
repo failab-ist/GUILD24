@@ -38,7 +38,7 @@ async function scenario(browser,width,seed){
 async function fresh(page,seed){
  await page.evaluate(s=>{Guild24.game.start(s);Guild24.render();},seed);
  await page.evaluate(`(()=>{(Guild24.game.account.tutorial??={}).skipped=true;})()`);   // before the DAY 0 lesson can paint
- await page.click('#modal-root [data-action="start"]');
+ await page.$('.p-prep [data-action="start"]').then(b=>b?b.click():page.evaluate('Guild24.render()'));
  await page.evaluate(`(()=>{Guild24.game.account.tutorial.skipped=true;Guild24.game.save();})()`);
  await page.click('#modal-root [data-action="buy-relic"]');   // the first Store Support choice
  await page.waitForTimeout(600);   // let the shade finish settling before anything is read or captured

@@ -19,7 +19,7 @@ function serve(){const child=spawn(process.execPath,[path.resolve(__dirname,'pre
    const p=await ctx.newPage();p.on('pageerror',e=>check(tag+' no page error',false,e.message));
    await p.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
    await p.evaluate(()=>{(Guild24.game.account.tutorial??={}).skipped=true;Guild24.game.start('qa-boss-hold');Guild24.render();});
-   await p.click('#modal-root [data-action="start"]');await p.waitForSelector('#modal-root [data-action="buy-relic"]');
+   await p.$('.p-prep [data-action="start"]').then(b=>b?b.click():p.evaluate('Guild24.render()'));await p.waitForSelector('#modal-root [data-action="buy-relic"]');
    const t0=await p.evaluate(()=>performance.now());
    await p.click('#modal-root [data-action="buy-relic"]');
    const at=async ms=>{await p.waitForFunction(([t,x])=>performance.now()-t>=x,[t0,ms]);

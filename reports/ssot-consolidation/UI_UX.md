@@ -1308,8 +1308,6 @@ User 2026-09-26: §SETTINGS / DEBUG BOUNDARY is followed by the new BUILD MARKER
 
 (User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-36.) A QA marker so a play report can name the build it was played on.
 
-- the opening screen (no Run: the `던전 앞 편의점` title under the preparation panel) shows `v{version} · {commit}` in its top-left
-  corner, small (10 px) and muted, above the preparation panel's shade so it stays readable; it is not a control, takes no space
 - `{version}` is the current project version (the CHANGELOG head); `{commit}` is the deployed commit's first 7 hex characters, written into `build.js`
   by the Pages deploy step; a local or unstamped build reads `dev`
 - the console prints the same on load (`GUILD24 v{version} · {commit}`) and `Guild24.build` returns `{version, commit}`
@@ -1457,13 +1455,49 @@ The opening title becomes the User-supplied logo (corrected 점 받침), sized s
 ```new
 ### OPENING TITLE LOGO (v2.9.9)
 (User 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-41; asset record -> reports/ASSETS.md §Title logo.) The opening screen's
-`던전 앞 편의점` title is the User-supplied drawn logo, not set type.
 - one image, the name as its alt text inside the same `h1`; no extra shadow or frame (the logo carries its own outline and
 extrusion)
 - not larger than it needs to be (User 2026-09-27): phone at most 210 px wide or 58% of the width, clear of the build marker
-and the menu, the title block starting 21 px from the top; desk 320 px, starting 14 px from the top; the file is cut to the drawn letters and the branch plate
-sits 6 px under them
-- the branch plate keeps its size and treatment: visible, not emphasised
 - the shipped file is a display derivative (960 px wide, cut to the letters) of the supplied logo, whose 점 받침 was
 corrected to read as ㅁ
+```
+
+## AMENDMENT — v2.9.9 NEW STORE PREPARATION — STORE SCENE (User 2026-09-27)
+
+새 점포 준비 becomes the store scene; the lines that described the preparation panel (build marker, title logo and its branch plate, the Slot-row mark) now name the scene. Lines below are new. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+- each Slot row, including "비움", is actionable before a Run
+```
+
+```new
+### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
+(User 2026-09-27, the reference review of 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-42.) 새 점포 준비 is not a panel over a
+backdrop: it is the store about to open, the same painted room as MORNING (same framing per breakpoint, same bands, same
+Decoration seating -> §LIVE STORE DECORATION SEATING), shown whenever there is no Run and, from the ending, after
+`다음 점포 열기`.
+- the ceiling carries the title logo where MORNING hangs the DAY sign (§OPENING TITLE LOGO); the branch plate is MORNING's
+own plate on the counter front, centred under the Capital plate (the Slot tags hang at the counter's two ends)
+- the board is titled `새 점포 준비` and carries the three lines of the game as one pinned note, then one status line
+(`보유 장식 없음` / `영업이 시작되면 이번 영업에는 고정됩니다.`); a save error, when there is one, is pinned above the note
+- each Decoration Slot is its place in the room: an equipped Decoration is drawn there with a small tag naming the Slot and
+the Decoration; an empty Slot draws nothing and its tag (`{Slot} · 비움`) stands on the spot. Each place is a control
+(§Pre-Run Decoration empty-slot interaction) with at least a 44 px target; a tag is anchored to its piece's edge facing
+the middle of the room and never leaves the screen or covers the logo, the branch plate, the board, the Capital plate,
+the Action or another place. The loadout shown is the Account's planned one
+- the Store Capital is a small plate on the counter where the till will stand (`점포 자본 {N}`), not the till: before a
+Run there is no float
+- the Action `첫 점포지원 고르기` sits in the dock where MORNING's `문 열기` does. From the ending a secondary
+`결과 다시 보기` sits beside it and returns to the ending; with no Run there is no way back (the choice starts the Run)
+- 점포 장식 opened from a place returns to this scene (`새 점포 준비로 돌아가기` / 닫기)
+- nothing about the ended Run changes until `첫 점포지원 고르기`
+- each Slot row, including "비움", is actionable before a Run (v2.9.9: each Slot's place in the store scene, §NEW STORE
+PREPARATION — STORE SCENE)
+`던전 앞 편의점` title is the User-supplied drawn logo, not set type; since the store scene (§NEW STORE PREPARATION — STORE
+SCENE) it hangs from the room's ceiling.
+and the menu, the title block starting 21 px from the top; desk 320 px, starting 14 px from the top; the file is cut to the drawn letters
+- the branch name stays visible and not emphasised: since the store scene it is MORNING's plate on the counter front
+(§NEW STORE PREPARATION — STORE SCENE)
+- the opening screen (no Run: 새 점포 준비, v2.9.9 the store scene) shows `v{version} · {commit}` in its top-left
+corner, small (10 px) and muted, above the room so it stays readable; it is not a control, takes no space
 ```

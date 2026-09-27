@@ -21,6 +21,9 @@ const plannedBranch=()=>new RNG(plannedSeed()).pick(D.brand.branches);
    this one panel with an entry and no exit. Remembering where it was opened FROM is the whole
    fix: no new navigation layer, no second panel, and the return is the existing `new` modal. */
 let preRunReturn=false;
+/* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): the ending's `다음 점포 열기` shows the preparation scene over a Run
+   that has ended, with a way back to its result; nothing about the Run changes until `첫 점포지원 고르기`. */
+let prepOpen=false;
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
@@ -422,13 +425,10 @@ function stampPress(el){
 }
 function render(){
  const s=game.run;Sound.sync(game.account.settings.muted,s?.phase,game.account.settings);
- /* The runless screen is the title card behind the preparation modal, and it carries no dock.
-    It used to end on a `첫 영업 준비` stamp that no Player can ever press: with no Run the modal
-    prints no 닫기 (`(game.run||modal!=='new')` is false) and Escape is gated by the same test,
-    so the preparation modal cannot be dismissed, and the line below re-opens it on every draw
-    of this state anyway. The button was only ever an orphan control sitting behind the shade -
-    on a desk, in the bottom-left corner of the title card. */
- if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1><p class="opening-branch">'+E(plannedBranch())+'</p></div><p class="build-mark">v'+E(BUILD.version)+' · '+E(BUILD.commit)+'</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
+ /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): with no Run - and from the ending after `다음 점포 열기` - the
+    screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
+    Action starts one. */
+ if(!s||(s.phase==='end'&&prepOpen)){$('#app').innerHTML=prepScreen();requestAnimationFrame(showCoach);return;} // no lesson here: a mark left from the screen before is cleared
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
  /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
  const previousCols=['.p-sale .dossier-col','.p-sale .shelf-col'].map(q=>$(q)?.scrollTop||0);
@@ -477,7 +477,7 @@ function render(){
  /* a Boss-reveal hold belongs to the MORNING it started on: if the Day has left it (only a scripted path can) or nothing is
     owed any more, the hold ends at once rather than leaving the screen inert */
  if(bossHold&&(phase!=='morning'||!bossRevealDue())){clearTimeout(bossHold);bossHold=null;$('#app').inert=false;}
- if(phase==='foundation'&&modal!=='new')modal='relics';
+ if(phase==='foundation')modal='relics';
  /* UI_UX §BOSS REVEAL — MORNING LANDS FIRST (User 2026-09-26): a reveal due on a fresh MORNING entry waits for the
     shutter to land (BOSS_HOLD), so the dossier never opens in the same frame as the cut. Reduced motion opens it at once.
     The screen takes no input while it waits: the Day may not advance past an owed reveal (CORE_RUN §D0 briefing). */
@@ -1894,24 +1894,41 @@ function codex(){const a=game.account;let list=codexTab==='items'?D.items:codexT
 function stockModal(){const s=game.run;return `<p class="muted" style="margin-bottom:15px">유통기한은 입고일부터 계산합니다. 재고 정리는 <b>운영비가 모자란 마감</b>에만 할 수 있고, 그 재고를 사들인 값의 50%를 회수합니다. 잔고가 0 이상이 되면 그 자리에서 끝납니다. 한 영업에서 ${game.rescueLimit()}번까지, 지금까지 ${s.rescueUsed||0}번 썼습니다.</p><div class="unlock-grid">${groupStock().map(st=>{const it=D.itemBy[st.item];return `<div class="unlock">${Art.itemIcon(it.id,43)}<h3>${it.name} ×${st.count}</h3><p>${(st.expires-s.day)+'일 남음'}</p>${game.canRescue()?btn('1개 정리 +'+Math.round((st.cost??it.buy)*.5)+'G','liquidate','small',`data-id="${st.id}"`):''}</div>`;}).join('')||'<p>창고가 비어 있습니다.</p>'}</div>`;}
 /* CORE_RUN_v2.8 §PRE-RUN FLOW. Start Contract selection is retired. What the player confirms
    before a Run is the Decoration loadout, read from the Account and frozen at start. */
-function newRun(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta.ownedDecorations(a);
- /* An empty Slot is a neutral state, not a warning. It used to be marked .effect-bad, whose
-    own rule prefixes `주의 · ` and colours the value as a cost, so a player who simply owns
-    no 간판 yet was told `주의 · 간판 비움` in red. A Slot with nothing in it says so plainly.
-
-    Every Slot is also a control here, empty ones included: the row is what a player reaches
-    for when they want to change it, so it opens the 점포 장식 panel already scrolled to that
-    Slot rather than making them find it. During a Run the loadout is frozen, so the row is
-    still readable and still opens the panel - which states that it is read-only. */
+/* UI_UX §NEW STORE PREPARATION — STORE SCENE (User 2026-09-27, v2.9.9). The store the Run is about to open, as the
+   same painted room MORNING uses: the name hangs from its ceiling, the board carries the three lines of the game, each
+   Decoration Slot is its own place in the room, and the Store Capital is a small plate on the counter where the till
+   will stand. The loadout is the Account's planned one (the Run's is frozen only at start). An empty Slot is a neutral
+   state, not a warning; every Slot - empty ones included - opens 점포 장식 already on that Slot. */
+function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=Meta.ownedDecorations(a),capital=Meta.storeCapital(a);
  /* UI_UX §Pre-Run Decoration empty-slot interaction (v2.9.4): a Slot whose unowned Decoration the capital covers now says
     so - a current state, not a "new" flag, and no Decoration named. */
- const capital=Meta.storeCapital(a),canBuy=slot=>D.decorations.some(x=>x.slot===slot&&!Meta.decorationOwned(a,x.id)&&x.price<=capital);
- const lines=D.decorationSlots.map(slot=>{const id=loadout[slot],d=id&&D.decorationBy[id];
-  return '<li class="deco-line'+(d?'':' empty')+'">'
-   +'<button class="deco-jump" data-action="store-manage" data-id="'+E(slot)+'"'
-   +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+(canBuy(slot)?' · 들일 수 있음':'')+' · 점포 장식에서 보기">'
-   +'<span>'+E(SLOT_COPY[slot]||slot)+'</span>'+(canBuy(slot)?'<em class="can-buy">들일 수 있음</em>':'')+'<b>'+(d?E(d.name):'비움')+'</b></button></li>';}).join('');
- return `<h2 class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</h2><p class="muted">찾아오는 모험가를 보급하고, 성장시킨다.</p><div class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</div><h3 style="margin-bottom:10px">이번 영업의 장식</h3><ul class="effects">${lines}</ul><p class="smalltext">${owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음'}</p><p class="store-capital"><i class="coin-mark" aria-hidden="true"></i>점포 자본 ${Meta.storeCapital(a).toLocaleString()}</p>${game.run&&!['end','foundation'].includes(game.run.phase)?'<p class="danger-text" style="margin-top:14px">지금 진행 상황을 모두 포기하고 새로운 점포를 시작합니다. <b>점포 자본을 포함해 보상은 전혀 없습니다.</b></p><p class="smalltext">본사 기록은 그대로 남습니다. 도감 · 점포 자본 · 보유 장식은 지워지지 않습니다.</p>':''}`;}
+ const canBuy=slot=>D.decorations.some(x=>x.slot===slot&&!Meta.decorationOwned(a,x.id)&&x.price<=capital);
+ const place=slot=>{const id=loadout[slot],d=id&&D.decorationBy[id],art=d&&Scene.decoration(id),mark=canBuy(slot);
+  return '<button class="decoplate '+slot+' prep-slot'+(art?'':' empty')+'" data-action="store-manage" data-id="'+E(slot)+'"'
+   +' aria-label="'+E(SLOT_COPY[slot]||slot)+' '+(d?E(d.name):'비움')+(mark?' · 들일 수 있음':'')+' · 점포 장식에서 보기">'
+   +(art||'<span class="slot-empty" aria-hidden="true"></span>')
+   +'<span class="slot-tag"><i>'+E(SLOT_COPY[slot]||slot)+'</i><b>'+(d?E(d.name):'비움')+'</b>'+(mark?'<em class="can-buy">들일 수 있음</em>':'')+'</span></button>';};
+ const fromEnd=!!game.run;
+ return '<div class="stage p-morning p-prep">'+menuFab()
+ +'<p class="build-mark">v'+E(BUILD.version)+' · '+E(BUILD.commit)+'</p>'
+ /* no DAY sign on this ceiling, so the 간판 is held by nothing but its own painted spot */
+ +'<div class="store" style="--daysign-x:1">'
+  +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
+   +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1></div></span></div>'
+  +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
+   +'<p class="board-rail">새 점포 준비</p>'
+   +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
+    +'<div class="slip prep-note"><span class="pin"></span><b class="welcome-title">30일 동안 던전 앞 편의점을 운영한다.</b>'
+    +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>'
+    +'<p class="prep-status">'+(owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
+  +'<div class="band wall">'+Scene.wall(1)+'</div>'
+  /* the store's name is the plate screwed to the counter front, where MORNING carries it */
+  +'<div class="band counter"><span class="mount">'+Scene.counter()
+   +'<span class="branchplate">'+E(plannedBranch())+'</span>'
+   +'<span class="store-capital capital-plate"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
+  +'<div class="deco-layer">'+D.decorationSlots.map(place).join('')+'</div>'
+ +'</div>'
+ +'<div class="dock">'+(fromEnd?btn('결과 다시 보기','prep-back','bare'):'')+btn('첫 점포지원 고르기','start','stamp')+'</div></div>';}
 /* Two levels, one row each, with the number said out loud beside the control - the slider
    position alone is not a readable value. The master switch above them is the existing
    mute, so this adds controls and no fourth channel: there are no voices to balance. */
@@ -2062,7 +2079,6 @@ function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';
    body+='</div>';footer=btn('확인','shop','stamp');narrow=true;
   }
  }
- else if(modal==='new'){title='새 점포 준비';body=(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')+newRun();footer=btn('첫 점포지원 고르기','start','stamp');narrow=true;}
  else if(modal==='event'){title=E(s.event?.name||'오늘의 사건');body=eventReveal();footer=btn('오늘 상황 보기','event-seen','stamp');narrow=true;}
  else if(modal==='owned'){title='보유 점포지원';body=relicsModal();footer=btn('확인','dismiss','stamp');narrow=true;}
 else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-plates">'+s.dungeons.map(d=>gatePlate(d,true)).join('')+'</div>';}
@@ -2089,7 +2105,7 @@ else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-
  else if(modal==='resetConfirm'){title='전체 데이터를 초기화할까요?';body='<p>현재 영업과 본사 기록을 포함한 이 브라우저의 GUILD24 저장 데이터를 모두 지웁니다. 되돌릴 수 없습니다.</p>';footer=btn('저장 내보내기','export')+btn('취소','dismiss')+btn('전부 지우기','reset-go','danger');narrow=true;}
  else if(modal==='importConfirm'){title='저장 파일 가져오기';body='<p>현재 브라우저의 진행을 가져온 저장으로 교체합니다. 기존 진행을 남기려면 먼저 내보내 주세요.</p>';footer=btn('저장 내보내기','export')+btn('파일 선택','import-go','stamp');narrow=true;}
  else if(modal==='debug'){title='개발용 Debug · 일반 플레이 비노출';body=`<pre class="debug">${E(JSON.stringify({seed:s.seed,rngState:s.rngState,lastRNG:game.rng.last,offers:s.offers.map(o=>({...o,rarity:D.itemBy[o.item].rarity})),npc:game.current(),dungeons:s.dungeons,results:s.results.map(r=>({name:r.name,outcome:r.outcome,...r.debug})),boss:s.bossDebug},null,2))}</pre>`;}
- root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&(game.run||modal!=='new')&&!ownCancel.has(modal)&&!d0Owed()?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
+ root.innerHTML=`<div class="modal-shade"><section class="modal ${narrow?'narrow':''} ${doc?'doc doc-'+doc:''}" role="dialog" aria-modal="true" aria-label="${E(title)}"><div class="modal-header"><h2>${title}</h2>${(preRunReturn||game.run?.phase!=='foundation')&&!ownCancel.has(modal)&&!d0Owed()?btn('닫기','dismiss','bare','aria-label="창 닫기"'):''}</div><div class="modal-body">${body}</div>${footer?`<div class="modal-footer">${footer}</div>`:''}</section></div>`;document.body.style.overflow='hidden';restoreFocus(root,hold);
  /* A Slot row asked for this panel, so it opens on that Slot instead of at the top. The
     request is consumed here: a later redraw of the same panel must not keep yanking the
     player back to it while they read something else. */
@@ -2127,15 +2143,16 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
- case'new':setModal('new');break;
+ case'new':prepOpen=true;sound('ui');render();break;
+ case'prep-back':prepOpen=false;sound('ui');render();break;
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW: buying and equipping are only legal outside a Run, and
     outside a Run this screen is the only one there is - so the way into 점포 장식 has to be on
     it. Without this the panel is unreachable exactly when it is the one usable. */
  /* the Slot the player asked for, so the panel opens on it. UI-local, never saved. */
- case'store-manage':preRunReturn=modal==='new';codexTab='store';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
+ case'store-manage':preRunReturn=!game.run||prepOpen;codexTab='store';decoFocus=el.dataset.id||null;sound('ui');setModal('codex');break;
  /* Back to preparation. It only changes which panel is open: nothing is spent, no Decoration
     state is re-rolled, the Run is neither reseeded nor started. */
- case'store-return':preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;
+ case'store-return':preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;
  case'owned-relics':sound('ui');setModal('owned');break;
  /* CORE_RUN §CURRENT RUN ABANDON: starting a new Run while one is active abandons the
     current Run with no settlement. end() is deliberately NOT called - it is what settles the
@@ -2150,7 +2167,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
      seed rather than re-rolling the DAY 0 support they have already seen. */
   const seed=plannedSeed();
   pendingSeed=null;                    // spent: a later new Run plans its own
-  preRunReturn=false;game.start(seed);selected=null;setModal(null);render();break;}
+  preRunReturn=false;prepOpen=false;game.start(seed);selected=null;setModal(null);render();break;}
  /* UI_UX_v2.8 §PURCHASE / EQUIP FLOW. Both are Account actions and both refuse during a Run;
     the Capital is deducted exactly once, inside Meta. A purchase takes two steps — the button
     only asks, and `deco-confirm` is the single place that spends. */
@@ -2232,7 +2249,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
     quiet utility click confirms the switch instead; muting stays silent on its own, because
     sync() has already disabled playback by the time the cue is asked for. */
  case'sound':game.account.settings.muted=!game.account.settings.muted;game.save();sound('ui');render();break;
- case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal('new');break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
+ case'dismiss':if(preRunReturn&&modal==='codex'){preRunReturn=false;codexTab='items';sound('ui');setModal(null);break;}if(s?.phase==='foundation'||d0Owed())return;sound('ui');setModal(null);break;
  case'team':game.selectFinal(id);supplyNPC=s.team.includes(id)?id:s.team[0];sound('button');render();break;
  case'final-ordered':finalOrdered=true;sound('button');render();break;
  case'final-npc':sound('ui');setModal('npc:'+id);break;
@@ -2316,7 +2333,7 @@ document.addEventListener('focusin',ev=>{
 document.addEventListener('focusout',ev=>{
  const t=tipOf(ev.target);if(!t||t===tipOf(ev.relatedTarget)||t.matches(':hover'))return;
  t.open=false;});
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&(game.run||modal!=='new')&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
 window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a

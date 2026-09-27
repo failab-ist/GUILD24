@@ -205,8 +205,10 @@ test('UI-Q-v28-26: the accepted Action composition holds',()=>{
  const solo=ruleFor('.modal-footer [data-action="store-return"]{');
  assert.ok(/margin:0 auto/.test(solo),'the phase\'s main Action is centred on the sheet');
  assert.ok(/width:min\(100%,\d+px\)/.test(solo),'and takes width without becoming a full-bleed bar');
- assert.ok(/\.modal-footer \[data-action="start"\],\n\.modal-footer \[data-action="store-return"\]\{/.test(css),
-  'and the Run\'s opening Action is set the same way');
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the Run's opening Action is in the preparation scene's dock
+    and keeps the built construction */
+ assert.ok(/\.p-prep \.dock \[data-action="start"\],\n\.modal-footer \[data-action="store-return"\]\{min-height:64px/.test(css),
+  'and the Run\'s opening Action is built the same way');
  /* D. BOSS CONFIRM: the two controls are the same design object - USER 2026-09-22 - so they carry
     the same geometry and differ by family and weight, and neither label may wrap. */
  assert.ok(/footer=btn\('보급으로 돌아가기','dismiss','stamp'\)\+btn\('최종 원정 시작','boss-go','stamp'\)/.test(app),
@@ -574,7 +576,7 @@ test('C04: a redraw keeps the keyboard where it was, on #app and inside an open 
 });
 
 test('UI-Q40 / REL-Q41: the Boss reveal comes before the Relic decision it is meant to inform',()=>{
- const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')modal='relics'"));
+ const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"));
  const boss=chain.indexOf("modal='boss'"),event=chain.indexOf("modal='event'"),relic=chain.indexOf("focusedRevealSeen");
  assert.ok(boss>=0&&event>=0&&relic>=0,'all three focused reveals are in one chain');
  assert.ok(boss<event&&boss<relic,'the Boss reveal is offered ahead of the Event and the Relic window');
@@ -773,7 +775,7 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  // Contract, so what that screen now confirms is the Decoration loadout.
  /* v2.9.0 F5 (User 2026-09-24): the DAY 0 choice is mandatory - no way back to the pre-Run screen,
     Decorations are managed from 새 점포 준비 before a Run (and after an abandon, which now discards the Run at once). */
- assert.ok(app.includes("if(phase==='foundation'&&modal!=='new')modal='relics'"),'the foundation takeover owns the screen (the pre-Run modal still wins only when it is already open, e.g. a boot into a fresh account)');
+ assert.ok(app.includes("if(phase==='foundation')modal='relics'"),'the foundation takeover owns the screen (v2.9.9: the preparation is a screen, not a modal, so nothing else can hold it)');
  assert.ok(!fn('relicTakeover').includes('장식 구성 다시 보기')&&!fn('relicTakeover').includes("'new'"),'the retired way back is gone from the DAY 0 surface');
  const back=app.slice(app.indexOf("case'new':"),app.indexOf("case'new':")+220);
  assert.ok(!/game\.end\(|runs\+\+/.test(back),'going back never spends the Run');
@@ -791,9 +793,9 @@ test('UI_UX: the first store support is not a one-way door, and the menu names b
  assert.ok(/pendingSeed=null;/.test(start),'the plan is spent once the Run starts');
  /* SA-Q35 retired the Player-facing Seed control, so the carried seed is no longer SHOWN on
     the preparation screen - it is still the seed `case'start'` reuses, asserted just above. */
- assert.ok(!/id="seed"/.test(fn('newRun')),'the preparation screen exposes no Seed control');
+ assert.ok(!/id="seed"/.test(fn('prepScreen')),'the preparation screen exposes no Seed control');
  // an unopened store is not something the player is abandoning, so it is not described as one
- for(const f of [fn('newRun'),fn('renderModal')])
+ for(const f of [fn('prepScreen'),fn('renderModal')])
   if(f.includes('현재 지점 포기')||f.includes('모두 포기하고'))
    assert.ok(f.includes("'foundation'"),'the abandon wording is withheld before the store opens');
 
@@ -1857,7 +1859,7 @@ test('UI-Q-v29-37: replay nudge - one line, first that applies, no names, no goa
  assert.ok(/const reach=D\.decorations\.some\(d=>!G\.Meta\.decorationOwned\(this\.account,d\.id\)&&before<d\.price&&d\.price<=after\);/.test(run)&&/if\(st\?\.reach\)return '점포 자본으로 새 장식을 들일 수 있다\.';/.test(r),'an unowned price this settlement crossed, judged once at the settlement');
  assert.ok(/s\.bestBefore>0&&s\.day>s\.bestBefore/.test(r),'strictly above an existing record');
  assert.ok(!/d\.name|decorationBy/.test(r),'never a Decoration name');
- assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('newRun'))&&/x\.price<=capital/.test(fn('newRun')),'the pre-Run Slot mark reads the current capital');
+ assert.ok(/<em class="can-buy">들일 수 있음<\/em>/.test(fn('prepScreen'))&&/x\.price<=capital/.test(fn('prepScreen')),'the pre-Run Slot mark reads the current capital');
  assert.ok(/G\.Meta\.recordBestDay\(this\.account,s\)/.test(read('dist/systems/run.js'))&&!/recordBestDay/.test(read('dist/systems/run.js').slice(read('dist/systems/run.js').indexOf('P.abandon='),read('dist/systems/run.js').indexOf('P.abandon=')+200)),'the ending records the best Day; the abandon does not');
 });
 
@@ -1889,10 +1891,12 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
  assert.ok(/console\.info\('GUILD24 v'\+BUILD\.version\+' · '\+BUILD\.commit\)/.test(app),'printed once on load');
  assert.ok(/window\.Guild24=\{get game\(\)\{return game;\},render,build:BUILD,/.test(app),'Guild24.build');
  const r=fn('render'),open=r.slice(0,r.indexOf('const phase=s.phase'));
- assert.ok(/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(open),'the opening screen (no Run) shows it');
+ /* v2.9.9: the opening screen is the preparation scene (UI_UX §NEW STORE PREPARATION — STORE SCENE) */
+ assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(open)
+  &&/<p class="build-mark">v'\+E\(BUILD\.version\)\+' · '\+E\(BUILD\.commit\)\+'<\/p>/.test(fn('prepScreen')),'the opening screen (no Run) shows it');
  assert.equal((app.match(/build-mark/g)||[]).length,1,'and no other screen does');
  assert.ok(fn('settings').includes('<p class="build-line">v${E(BUILD.version)} · ${E(BUILD.commit)}</p>')&&(app.match(/build-line/g)||[]).length===1,'영업 설정 ends with the same pair, readable mid-Run (v2.9.7)');
- assert.ok(/\.p-start \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
+ assert.ok(/\.p-prep \.build-mark\{position:absolute;[^}]*left:[^}]*font-size:10px;[^}]*pointer-events:none/.test(css.replace(/\n\s*/g,'')),'small, top-left, not a control');
  const wf=read('.github/workflows/pages.yml');
  assert.ok(/sed -i "s\/commit:'dev'\/commit:'\$\{GITHUB_SHA::7\}'\/" dist\/build\.js/.test(wf)&&wf.indexOf('Stamp the build marker')>wf.indexOf('deploy:'),'the deploy job, not verify, stamps the commit');
 });
@@ -2333,34 +2337,33 @@ test('SA-Q18: SALE shows the persistent Wallet and the temporary Event budget se
  assert.equal(plain,'소지 <b>100G</b>','with no Event budget the chip is unchanged');
 });
 
-/* SA-Q01 — PRE-RUN STORE-MANAGEMENT RETURN. The panel is opened from the new-Run preparation
-   modal and replaces it. During `foundation` the generic Close is suppressed and `dismiss` is a
-   no-op, which is right for the store-support takeover and left this one panel with an entry and
-   no exit. */
+/* SA-Q01 — PRE-RUN STORE-MANAGEMENT RETURN. The panel is opened from new-Run preparation (v2.9.9: the store scene, UI_UX
+   §NEW STORE PREPARATION — STORE SCENE) and sits over it. During `foundation` the generic Close is suppressed and `dismiss`
+   is a no-op, which is right for the store-support takeover and left this one panel with an entry and no exit. */
 test('SA-Q01: pre-Run Store Management has an explicit return to new-Run preparation',()=>{
  const act=app.slice(app.indexOf('async function action(el)'));
- // where it was opened from is remembered, and only when it was opened from preparation
- assert.ok(/case'store-manage':preRunReturn=modal==='new';/.test(act),
-  'entering from the preparation panel is what arms the return');
+ // where it was opened from is remembered, and only when it was opened from preparation (no Run, or from the ending)
+ assert.ok(/case'store-manage':preRunReturn=!game\.run\|\|prepOpen;/.test(act),
+  'entering from the preparation scene is what arms the return');
  // an explicit, visible control back to preparation
  assert.ok(/if\(preRunReturn\)footer=btn\('새 점포 준비로 돌아가기','store-return','stamp'\)/.test(app),
   'the panel carries a visible Back control');
- assert.ok(/case'store-return':preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;/.test(act),
-  'and it returns to the existing new-Run preparation modal');
+ assert.ok(/case'store-return':preRunReturn=false;codexTab='items';sound\('ui'\);setModal\(null\);break;/.test(act),
+  'and closing it uncovers the preparation scene underneath');
  // returning spends nothing, re-rolls nothing, reseeds nothing and starts nothing
  const ret=act.slice(act.indexOf("case'store-return'"),act.indexOf("break;",act.indexOf("case'store-return'")));
  for(const forbidden of ['game.start','Meta.buyDecoration','Meta.equipDecoration','decoPending=','game.save()','Save.write'])
   assert.ok(!ret.includes(forbidden),'returning must not '+forbidden);
  // the ordinary Close resolves to preparation too, instead of being the foundation no-op
- assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\('new'\);break;\}/.test(act),
+ assert.ok(/case'dismiss':if\(preRunReturn&&modal==='codex'\)\{preRunReturn=false;codexTab='items';sound\('ui'\);setModal\(null\);break;\}/.test(act),
   'Close from this panel lands on preparation rather than doing nothing');
  // ...and the Close button is actually rendered there, which `foundation` used to suppress
- assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)&&\(game\.run\|\|modal!=='new'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
+ assert.ok(/\$\{\(preRunReturn\|\|game\.run\?\.phase!=='foundation'\)(&&!ownCancel\.has\(modal\))?(&&!d0Owed\(\))?\?btn\('닫기','dismiss'/.test(app),
   'the header Close is available on this panel during foundation');
- // no blank stage: with no Run the preparation modal is reopened by render itself
- assert.ok(/if\(!modal\)setModal\('new'\)/.test(app),'a runless app always re-opens preparation');
+ // no blank stage: with no Run the render itself draws preparation
+ assert.ok(/if\(!s\|\|\(s\.phase==='end'&&prepOpen\)\)\{\$\('#app'\)\.innerHTML=prepScreen\(\);requestAnimationFrame\(showCoach\);return;\}/.test(app),'a runless app always draws preparation');
  // starting the Run leaves preparation for good
- assert.ok(/preRunReturn=false;game\.start\(seed\)/.test(act),'starting clears the return state');
+ assert.ok(/preRunReturn=false;prepOpen=false;game\.start\(seed\)/.test(act),'starting clears the return state');
  // no second navigation layer was introduced for this
  assert.ok(!/pushState|replaceState|addEventListener\('popstate'/.test(app),
   'the fix adds no history/navigation layer');
@@ -2662,7 +2665,7 @@ test('BOSS cadence: D0 / D5 / D10 / D15 / D20 / D25 exist, D30 adds nothing',()=
  /* CORE_RUN §D0 — closing does not consume the beat, and ordinary Morning does not go on past
     it: no 닫기, no Escape and no dismiss while D0 is the open report */
  assert.ok(/!d0Owed\(\)\?btn\('닫기'/.test(app),'D0 carries no 닫기');
- assert.ok(/\(game\.run\|\|modal!=='new'\)&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
+ assert.ok(/game\.run\?\.phase!=='foundation'&&!d0Owed\(\)\)setModal\(null\)/.test(app),'Escape does not close D0');
  assert.ok(/phase==='foundation'\|\|d0Owed\(\)\)return/.test(app),'dismiss does not close D0');
  // the cadence table, and D30 reusing D25
  assert.ok(/\[5,'d5','identitySeen'\],\[10,'d10','combatSeen'\],\[15,'d15','traitSeen'\],\s*\[20,'d20','routeSeen'\],\[25,'final','familySeen'\]/.test(app),
@@ -2693,7 +2696,7 @@ test('BOSS cadence: each beat is seen once, precedes the Store Support decision,
     shown BEFORE the same-Day Store Support decision. The chain is asserted in source and then
     resolved for each of the five Days with a Store Support window genuinely pending, because
     D10 and D20 are themselves acquisition Days and that is where the order actually matters. */
- const chain=app.slice(app.indexOf("if(phase==='foundation'&&modal!=='new')"),app.indexOf('renderModal();requestAnimationFrame'));
+ const chain=app.slice(app.indexOf("if(phase==='foundation')modal='relics'"),app.indexOf('renderModal();requestAnimationFrame'));
  assert.ok(chain.indexOf('bossRevealDue()')<chain.indexOf("relicWindow&&!s.relicWindow.focusedRevealSeen"),
   'the Boss beat is chosen before the Store Support window on the same Day');
  const resolve=(day,seen,final,windowPending)=>{
@@ -2923,7 +2926,8 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
    and, under it, the store this Run is about to open. The preparation modal then states the
    three axes of the game. */
 test('OPENING: the backdrop is the title card and names the store this Run will open',()=>{
- const back=app.slice(app.indexOf('if(!s){$(\'#app\').innerHTML=stage(\'start\''),app.indexOf('const phase=s.phase'));
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the title card is the store scene's ceiling */
+ const back=fn('prepScreen');
  // 1 / 2: the title, one deliberate line
  /* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the title is the drawn logo; the name is its alt text */
  assert.ok(back.includes('<h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1>'),
@@ -2936,10 +2940,11 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
     Mulmaru is crisp only at its design sizes, which is why this one is fixed rather than
     clamped. What the old clamp assertion was really protecting is unchanged and asserted
     here directly: the branch stays far under the title it sits below. */
- assert.ok(/\.opening-branch\{[^}]*var\(--f-plate\)/.test(css),'the branch is set in the plate face');
- assert.ok(/\.opening-branch\{[^}]*font:500 12px/.test(css),'at a crisp Mulmaru design size');
- assert.ok(/\.opening-logo\{[^}]*width:min\(210px/.test(css),
-  'and the branch under it is visibly secondary: the logo is far wider than its 12px plate');
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the branch is MORNING's plate on the counter front, in the plate
+    face at its crisp design size, centred under the Capital because the Slot tags hang at the counter's ends */
+ assert.ok(/'<span class="branchplate">'\+E\(plannedBranch\(\)\)\+'<\/span>'/.test(back),'the branch is the counter plate');
+ assert.ok(/\.p-morning \.branchplate\{[^}]*font:500 12px\/1 var\(--f-plate\)/.test(read('dist/ui/director-review.css')),'in the plate face at a crisp Mulmaru design size');
+ assert.ok(/\.p-morning\.p-prep \.branchplate\{left:50%;right:auto;transform:translateX\(-50%\)/.test(css),'centred on the counter front');
  // 3: the branch comes from the existing catalogue, through the existing pick
  assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');
  assert.ok(/const plannedBranch=\(\)=>new RNG\(plannedSeed\(\)\)\.pick\(D\.brand\.branches\)/.test(app),
@@ -2957,7 +2962,7 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(/let pendingSeed=null;/.test(app),'declared empty');
  const ret=app.slice(app.indexOf("case'store-return'"),app.indexOf("break;",app.indexOf("case'store-return'")));
  assert.ok(!/pendingSeed|plannedSeed/.test(ret),'a Store Management round trip does not touch the plan');
- assert.ok(!/pendingSeed|plannedSeed/.test(fn('storePanel')+fn('newRun')),'and neither panel re-plans it');
+ assert.ok(!/pendingSeed|plannedSeed/.test(fn('storePanel')+fn('prepScreen')),'and neither panel re-plans it');
  // 4: the planned branch IS the branch the Run receives - the rule, run against the engine
  for(const seed of ['g24-abc','g24-zzz','opening-1','opening-2','opening-3']){
   const preview=new RNG(seed).pick(DATA.brand.branches);
@@ -2973,23 +2978,48 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
  assert.ok(!/class="eyebrow"/.test(back),'and the backdrop carries no eyebrow');
 });
 
-test('OPENING: the preparation modal starts on the three axes, with no franchise eyebrow',()=>{
- const intro=fn('newRun');
- // 8: the eyebrow is gone from the modal
- assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation modal carries no 길드리테일 가맹점 eyebrow');
+/* UI-Q-v29-42 (UI_UX §NEW STORE PREPARATION — STORE SCENE, User 2026-09-27, v2.9.9): 새 점포 준비 is the MORNING room, not a
+   panel; the runtime geometry (no overlap, on screen, the ending round trip) is tools/qa-prep-scene.cjs. */
+test('UI-Q-v29-42: the preparation is the store scene - places, Capital plate, dock Action, the way back from the ending',()=>{
+ const p=fn('prepScreen');
+ assert.ok(!/modal==='new'|setModal\('new'\)/.test(app),'there is no preparation modal any more');
+ assert.ok(p.startsWith("function prepScreen(){")&&/'<div class="stage p-morning p-prep">'/.test(p),'the MORNING room, marked as the preparation');
+ assert.ok(/Scene\.ceiling\(\)/.test(p)&&/Scene\.wall\(1\)/.test(p)&&/Scene\.counter\(\)/.test(p),'the same bands');
+ assert.ok(/'<div class="store" style="--daysign-x:1">'/.test(p),'no DAY sign holds the 간판 back');
+ // each Slot is its place: a control opening 점포 장식 on that Slot, drawn or bare, tagged
+ assert.ok(/<button class="decoplate '\+slot\+' prep-slot'\+\(art\?'':' empty'\)\+'" data-action="store-manage" data-id="'\+E\(slot\)\+'"/.test(p),'a place is a control on its Slot');
+ assert.ok(/\(art\|\|'<span class="slot-empty" aria-hidden="true"><\/span>'\)/.test(p),'an empty Slot draws nothing but its spot');
+ assert.ok(/<span class="slot-tag"><i>'\+E\(SLOT_COPY\[slot\]\|\|slot\)\+'<\/i><b>'\+\(d\?E\(d\.name\):'비움'\)\+'<\/b>/.test(p),'its tag names the Slot and what is there');
+ assert.ok(/,loadout=Meta\.plannedLoadout\(a\)/.test(p)&&!/game\.run\.loadout/.test(p),'the Account\'s planned loadout, not a Run\'s');
+ assert.ok(/\.p-prep \.deco-layer \.prep-slot\{pointer-events:auto;/.test(css),'the places take taps though the layer does not');
+ assert.ok(/\.p-prep \.slot-empty\{display:block;width:100%;min-height:44px;/.test(css),'an empty place still has a 44 px target');
+ // the Capital is a plate where the till will stand, never the till
+ assert.ok(/<span class="store-capital capital-plate">/.test(p)&&!/class="till"/.test(p),'the Capital is a plate, not the till');
+ // the Action and the way back from the ending
+ assert.ok(/\(fromEnd\?btn\('결과 다시 보기','prep-back','bare'\):''\)\+btn\('첫 점포지원 고르기','start','stamp'\)/.test(p),'the Action in the dock, and 결과 다시 보기 only from the ending');
+ assert.ok(/const fromEnd=!!game\.run;/.test(p),'from the ending means a Run is still there');
+ const act=app.slice(app.indexOf('async function action(el)'));
+ assert.ok(/case'new':prepOpen=true;sound\('ui'\);render\(\);break;/.test(act)&&/case'prep-back':prepOpen=false;sound\('ui'\);render\(\);break;/.test(act),'다음 점포 열기 opens it, 결과 다시 보기 leaves it');
+ const back=act.slice(act.indexOf("case'new'"),act.indexOf("case'prep-back'")+60);
+ assert.ok(!/game\.(start|end|abandon)|Meta\./.test(back),'and neither changes the Run or the Account');
+});
+
+test('OPENING: the preparation scene starts on the three axes, with no franchise eyebrow',()=>{
+ const intro=fn('prepScreen');
+ // 8: the eyebrow is gone
+ assert.ok(!intro.includes('길드리테일 가맹점'),'the preparation carries no 길드리테일 가맹점 eyebrow');
  assert.ok(!app.includes('길드리테일 가맹점'),'and it is gone from the build');
- assert.ok(/return `<h2 class="welcome-title">30일 동안/.test(intro),'the modal begins on the approved first line');
  for(const line of ['30일 동안 던전 앞 편의점을 운영한다.',
                     '찾아오는 모험가를 보급하고, 성장시킨다.',
                     '마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.'])
   assert.ok(intro.includes(line),'the approved line is present: '+line);
- assert.ok(/class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\./.test(intro),'line 1 is the welcome title');
- assert.ok(/class="muted">찾아오는 모험가를 보급하고, 성장시킨다\./.test(intro),'line 2 is the supporting text');
- assert.ok(/class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\./.test(intro),'line 3 is the welcome band');
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the three lines are one note pinned to the `새 점포 준비` board */
+ assert.ok(/<p class="board-rail">새 점포 준비<\/p>/.test(intro),'the board is titled 새 점포 준비');
+ assert.ok(/<div class="slip prep-note"><span class="pin"><\/span><b class="welcome-title">30일 동안 던전 앞 편의점을 운영한다\.<\/b>/.test(intro),'line 1 heads the pinned note');
+ assert.ok(/<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다\.<\/span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다\.<\/span>/.test(intro),'lines 2 and 3 follow it');
  // everything the change was scoped to keep
- assert.ok(intro.includes('이번 영업의 장식'),'the Decoration heading stays');
  assert.ok(/data-action="store-manage"/.test(intro),'the Store Management entry stays');
- assert.ok(/D\.decorationSlots\.map/.test(intro),'the Decoration rows stay');
+ assert.ok(/D\.decorationSlots\.map\(place\)/.test(intro),'every Slot has its place');
  assert.ok(/Meta\.storeCapital\(a\)/.test(intro),'and the Capital display stays');
 });
 
