@@ -23,6 +23,13 @@ confirmed by the User.
   dock; from the ending `결과 다시 보기` returns to the ending. New runtime check `tools/qa-prep-scene.cjs` in `qa:runtime`.
 - SALE on a phone (UI_UX §SALE — MOBILE AUTHORITY, UI_UX_QA UI-Q-v29-43): the outlook and the four Core Stats are one plate
   instead of two stacked boxes; the shelf gets 46 px back (a short phone now shows two shelf rows at entry, not one).
+- Primary Action grammar (UI_UX §PRIMARY ACTION GRAMMAR, UI_UX_QA UI-Q-v29-44): the eight Phase Actions in the dock now press
+  one way - one down-right cast, the press moving into it and leaving 1 px - at two sizes (56 / 60 px inside the Day, 64 /
+  72 px across a Day or Run boundary; 첫 점포지원 고르기 64 px) and three depths. The notch had been cutting the cast away,
+  so seven of them had shown no depth at all; the cut now takes it in. 새 점포 준비 and FINAL no longer drop straight down,
+  and the desk `다음 날` goes from 86 to 72 px. Steps inside the Day share one edge build (lit top, deep foot, no outline -
+  ORDER's frost ring becomes its lit edge) and a seated label; NIGHT's blue is a muted cobalt; the FINAL cast is its own
+  deep red. New runtime check `tools/qa-primary-grammar.cjs` in `qa:runtime`, reading the cast off the screen.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

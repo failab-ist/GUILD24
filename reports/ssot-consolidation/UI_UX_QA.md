@@ -1523,3 +1523,25 @@ its note in place and each Stat row keeps its height
 (measured before v2.9.9: 76 / 89 / 269 / 338 px); the desk layout is unchanged
 - a second box around either part, a dropped or reordered line, or less shelf room at any phone size
 ```
+
+## AMENDMENT — PRIMARY ACTION GRAMMAR (User 2026-09-27, v2.9.9)
+
+New owner section §PRIMARY ACTION GRAMMAR and its acceptance UI-Q-v29-44: the eight Phase Actions press one way at two sizes, their casts drawn on screen.
+
+```new
+### UI-Q-v29-44 — PRIMARY ACTION GRAMMAR
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §PRIMARY ACTION GRAMMAR.)
+SETUP: the dock Action of 새 점포 준비, MORNING, ORDER (both `영업 시작` and `발주 확정`), SALE, NIGHT, CLOSING, END and FINAL
+(party not yet chosen) at 360x640, 390x844 and 1280x880; each held pressed.
+- at rest each casts one hard depth with equal right and down offsets: 5 px for 첫 점포지원 고르기 / 다음 날 / 다음 점포 열기 /
+the gate bar, 4 px for 문 열기 / 영업 시작 / 발주 확정 / 다음, 3 px for 손님 보내기 - and it is drawn: in the screenshot the
+pixels just right of and under the face differ from the same spot with the Action hidden, and nothing past the depth does
+- held, each moves right and down by its depth less 1 px, and the 1 px cast left is drawn
+- heights: 56 px (phone) / 60 px (desk) inside the Day, 64 / 72 px across a boundary, 첫 점포지원 고르기 64 px everywhere; no
+label wraps or is cut at 360 (a four-digit `발주 N G · 확정` included)
+- inside the Day: a 3 px lit top edge, a 4 px deep foot and no outline (NIGHT flat), labels seated on a 2 px drop
+- each Phase keeps its own face (wood / steel on paper with a frost edge / counter key / muted cobalt / BRICK / gate bar)
+- a straight-down cast or press, a cast declared in the style but not on screen, a press that leaves no cast or moves by a
+different amount than the cast, a height or depth off its step, an outline around a step inside the Day, or two Phases
+whose Action looks the same
+```

@@ -2119,6 +2119,31 @@ SCENE) it hangs from the room's ceiling.
 - the shipped file is a display derivative (960 px wide, cut to the letters) of the supplied logo, whose 점 받침 was
   corrected to read as ㅁ
 
+### PRIMARY ACTION GRAMMAR (v2.9.9)
+
+(User 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-44.) Each Phase's one flow Action in the dock - `첫 점포지원 고르기`,
+`문 열기`, `영업 시작` (and `발주 확정` in its place), `손님 보내기`, NIGHT's `다음`, `다음 날`, `다음 점포 열기` and the FINAL gate bar -
+presses the same way; what differs by Phase is its material, colour, silhouette and place (unify where the hand learns
+it, vary where the Phase is recognised).
+- same for all: one hard depth cast down-right at 45 degrees, visible on screen (a notched control's cut takes its cast in
+  rather than cutting it away); the press moves the face into it diagonally by the depth less 1 px, leaving a 1 px cast;
+  label weight 600
+- two sizes by consequence: a step inside the Day (`문 열기`, `영업 시작`, `손님 보내기`, `다음`) is 56 px tall on a phone and 60 px on a
+  desk (label 18 / 20 px; ORDER's two labels may step down to 16 px on the narrowest phones so the commit's Gold figure never
+  wraps); a step across a Day or Run boundary (`다음 날`, `다음 점포 열기`, the FINAL gate bar) is 64 / 72 px (label 20 / 22 px;
+  the gate bar keeps its sign face at 21 px); `첫 점포지원 고르기` is 64 px / 20 px at every width, because the counter-front
+  plates of the preparation scene sit directly above the dock
+- depth: 5 px across a boundary, 4 px inside the Day; `손님 보내기` 3 px, below the price keys it must not outrank
+  (§SALE — COUNTER TRAY); ORDER's `발주 확정` and `영업 시작` are never enabled together and share the 4 px
+- edges in two tiers, like the sizes: a step inside the Day is its face, a 3 px lit edge at the top and a 4 px deep edge at the
+  foot, with no outline (ORDER's cool frost is the lit edge of both its Actions), and its label sits on a 2 px drop in that deep edge's ink;
+  NIGHT's `다음` stays a flat plane (UI_UX_QA: no bevel on that control) and seats its label the same way; a step across a
+  boundary keeps its heavier built bevel
+- kept per Phase: MORNING's wood shutter (square, no cut), ORDER's steel on the paper, SALE's quiet counter key, NIGHT's
+  muted cobalt with its own deep cobalt cast, the BRICK of `다음 날` / `다음 점포 열기` / `첫 점포지원 고르기` (and its rivets), the
+  FINAL gate bar with a cast in its own deep red, a step darker than its foot so the two do not merge (a black cast is lost
+  on its black dock); each keeps its place in the dock
+
 ### BUILD MARKER (v2.9.3)
 
 (User 2026-09-26; acceptance -> UI_UX_QA UI-Q-v29-36.) A QA marker so a play report can name the build it was played on.

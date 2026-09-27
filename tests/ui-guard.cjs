@@ -2980,6 +2980,33 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
 
 /* UI-Q-v29-42 (UI_UX §NEW STORE PREPARATION — STORE SCENE, User 2026-09-27, v2.9.9): 새 점포 준비 is the MORNING room, not a
    panel; the runtime geometry (no overlap, on screen, the ending round trip) is tools/qa-prep-scene.cjs. */
+/* UI-Q-v29-44 (UI_UX §PRIMARY ACTION GRAMMAR, User 2026-09-27, v2.9.9): the eight Phase Actions press one way - a
+   down-right cast and a diagonal press - at two sizes; the measured cast / press / height per Phase is runtime evidence in
+   tools/qa-primary-grammar.cjs (read off the screen), this pins the construction */
+test('UI-Q-v29-44: every Phase Action casts and presses down-right at its step',()=>{
+ const rule=sel=>{const i=css.indexOf(sel);assert.ok(i>0,sel+' is a real rule');return css.slice(i,css.indexOf('}',i)+1);};
+ const prep=css.slice(css.indexOf('.p-prep .dock [data-action="start"],\n.modal-footer [data-action="store-return"]{min-height'),css.indexOf('@media(min-width:1024px)',css.indexOf('.modal-footer [data-action="store-return"]:active{')));
+ assert.ok(prep.length>0&&!/drop-shadow\(0 \dpx 0/.test(prep),'the Run\'s opening Action no longer casts straight down');
+ for(const sel of ['.p-prep .dock [data-action="start"]:active,\n.modal-footer [data-action="store-return"]:active{','.p-final .dock .stamp:active{'])
+  assert.ok(/transform:translate\(4px,4px\)/.test(rule(sel)),'the press is diagonal: '+sel.split('\n')[0]);
+ assert.ok(/filter:drop-shadow\(5px 5px 0 #00000099\)\}/.test(css),'새 점포 준비 casts the 5 px of a boundary step');
+ assert.ok(/\.pull\{flex:1;min-height:56px;/.test(css)&&/\.pull:active\{transform:translate\(3px,3px\)/.test(css),'문 열기 is a step inside the Day');
+ assert.ok(/\.p-night \.dock \.stamp:active\{--nd:1px;transform:translate\(3px,3px\)/.test(css),'NIGHT keeps a 1 px cast when pressed');
+ /* the notch cut every cast away (a filter draws before the clip): each notched Action's cut takes its --nd cast in */
+ const cut=css.slice(css.indexOf('.p-prep .dock [data-action="start"],.modal-footer [data-action="store-return"],.p-order .dock .stamp:not([disabled]),'));
+ assert.ok(/^[^{]*\.p-final \.dock \.stamp:not\(\[disabled\]\)\{\n clip-path:polygon\([^}]*calc\(100% \+ var\(--nd\)\)/.test(cut),'one cut that takes the cast in, for every notched Phase Action');
+ assert.ok(/\.p-final \.dock \.stamp:not\(\[disabled\]\):active\{--nd:1px\}/.test(css),'and keeps the 1 px when pressed');
+ assert.ok(!/\.p-order \.dock \.stamp[^{]*\{[^}]*inset 0 0 0 2px/.test(css.slice(css.indexOf('.p-order .dock .stamp{'),css.indexOf('.p-order .dock .stamp.leave[disabled]'))),
+  'a step inside the Day carries no outline; ORDER\'s frost is its lit edge');
+ assert.ok(/box-shadow:inset 0 3px 0 #7fb0c4,inset 0 -4px 0 #1f272e\}/.test(css),'lit 3 px top, deep 4 px foot');
+ assert.ok(/background:#3a5f96;color:#f4f7ff;text-shadow:0 2px 0 #253f68;\n box-shadow:none;/.test(css),'NIGHT is a flat muted cobalt with a seated label');
+ assert.ok(/\.p-final \.dock \.stamp\{[^}]*filter:drop-shadow\(5px 5px 0 #2e0d09\)/.test(css)&&/\.p-final \.dock \.stamp\[disabled\]\{[^}]*filter:none/.test(css),
+  'the gate bar casts its own deep red, a step under its foot, and a shut gate casts nothing');
+ assert.ok(/box-shadow:inset 0 3px 0 #6f98aa,inset 0 -4px 0 #2c343c\}/.test(css),'영업 시작 carries the frost on its lit edge too');
+ const desk=css.slice(css.indexOf(' .p-morning .dock .pull{flex:0 0 auto'));
+ assert.ok(/\.p-morning \.dock \.pull,\.p-order \.dock \.stamp,\.p-sale \.dock \.stamp,\.p-night \.dock \.stamp\{min-height:60px;font-size:20px\}/.test(desk),'a desk step inside the Day is 60 px');
+ assert.ok(/width:344px;min-height:72px;font:600 22px\/1 var\(--ui\)/.test(desk),'and one across a boundary 72 px, not 86');
+});
 /* UI-Q-v29-43 (UI_UX §SALE — MOBILE AUTHORITY, User 2026-09-27, v2.9.9): on a phone the outlook and the Core Stats are one
    plate; the shelf-room measurement is runtime evidence (reports in the batch), this pins the construction */
 test('UI-Q-v29-43: the SALE phone outlook and Core Stats are one plate, the desk is untouched',()=>{

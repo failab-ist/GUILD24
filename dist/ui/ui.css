@@ -440,18 +440,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    FINAL gate bar, where a stripe pattern is not material. It is a flat solid plane now; the
    structure, size, action and hard press/depth are unchanged, and nothing is added in exchange:
    no border, no bevel, no ornament, just the stepped light/dark edge this control already had. */
-.pull{flex:1;min-height:58px;padding:0;background:#745535;color:#fdf6e3;
- box-shadow:inset 0 3px 0 #a37c4f,inset 0 -5px 0 #3f2c1a,4px 4px 0 #00000080}
+.pull{flex:1;min-height:56px;padding:0;background:#745535;color:#fdf6e3;
+ box-shadow:inset 0 3px 0 #a37c4f,inset 0 -4px 0 #3f2c1a,4px 4px 0 #00000080}
 /* BATCH 1: the label was centred in the box, not on the plane - the 3px lit edge and the 5px
    deep edge are not symmetrical, so a 58px line box sat the label two pixels above the face's
    optical centre. It is measured against the face now.
    And the press: `.pull` never declared one, so it fell to the base control's :active, which
    repaints a steel bevel over the shutter's own wood. Pressing it now collapses the shutter -
    the cast halves, the lit and deep edges trade - which is what opening a shutter looks like. */
-.pull span{display:block;font:600 20px/20px var(--ui);letter-spacing:.06em;padding:18px 0 20px}
+.pull span{display:block;font:600 18px/20px var(--ui);letter-spacing:.06em;padding:17px 0 19px;text-shadow:0 2px 0 #3f2c1a}
 .pull:hover{background:#83603c}
-.pull:active{transform:translate(2px,2px);background:#66492d;
- box-shadow:inset 0 3px 0 #3f2c1a,inset 0 -5px 0 #a37c4f,2px 2px 0 #00000080}
+.pull:active{transform:translate(3px,3px);background:#66492d;
+ box-shadow:inset 0 3px 0 #3f2c1a,inset 0 -4px 0 #a37c4f,1px 1px 0 #00000080}
 .brass{min-height:58px;padding:8px 12px;background:#8a7038;color:#2a2110;font:600 12px/1.45 var(--ui);
  box-shadow:inset 2px 2px 0 #e0c07a,inset -2px -2px 0 #4f3d17,4px 4px 0 #00000080}
 .brass:hover{background:#9a7e40}
@@ -626,14 +626,16 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 
    ORDER keeps its own paper / steel / frost language rather than a recoloured accent: the commit
    is the form's steel ink driven onto the paper, with a cool frost edge and real depth. */
-.p-order .dock .stamp{flex:1 1 140px;min-height:54px;font:600 clamp(15px,4.4vw,20px)/1.2 var(--ui);letter-spacing:.04em;
+/* the commit's label carries a Gold figure, so on the narrowest phones both labels may step down to 16 px rather than wrap */
+.p-order .dock .stamp{flex:1 1 140px;min-height:56px;padding:0 8px;font:600 clamp(16px,4.62vw,18px)/1.2 var(--ui);letter-spacing:.04em;
  display:inline-flex;align-items:center;justify-content:center;
  background:#2f3a44;color:#eef6fa;
- box-shadow:inset 0 0 0 2px #7fb0c4,inset 0 3px 0 #4a5a67,6px 6px 0 #2a2317bf}
-.p-order .dock .stamp:hover{background:#384652}
+ filter:drop-shadow(4px 4px 0 #2a2317bf);text-shadow:0 2px 0 #1f272e;
+ box-shadow:inset 0 3px 0 #7fb0c4,inset 0 -4px 0 #1f272e}
+.p-order .dock .stamp:hover{background:#384652;filter:drop-shadow(4px 4px 0 #2a2317bf) brightness(1.1)}
 /* the press travels and the depth closes: the stamp is driven into the form */
-.p-order .dock .stamp:active{transform:translate(4px,4px);background:#27303a;
- box-shadow:inset 0 0 0 2px #5f8899,inset 0 3px 0 #333f49,2px 2px 0 #2a2317bf}
+.p-order .dock .stamp:active{transform:translate(3px,3px);background:#27303a;filter:drop-shadow(1px 1px 0 #2a2317bf);
+ box-shadow:inset 0 3px 0 #5f8899,inset 0 -4px 0 #171d22}
 .p-order .dock .stamp:focus-visible{outline:3px solid #39434c;outline-offset:3px}
 /* BATCH 2A §ORDER LEAVE CONTROL — USER APPROVED 2026-09-23. Leaving the desk is the other act,
    and the only enabled control once the order is committed. It used to carry a thin ring on a
@@ -647,14 +649,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    same pixel drop the rest of the family uses, one step shorter than the commit's, and it
    follows the cut corners. */
 .p-order .dock .stamp.leave{background:#434e58;color:#e6edf2;
- filter:drop-shadow(4px 4px 0 #000000a6);
- box-shadow:inset 0 0 0 2px #7b8894,inset 0 4px 0 #556370}
+ filter:drop-shadow(4px 4px 0 #000000a6);text-shadow:0 2px 0 #2c343c;
+ box-shadow:inset 0 3px 0 #6f98aa,inset 0 -4px 0 #2c343c}
 .p-order .dock .stamp.leave:hover{background:#4d5964;color:#f4f8fa;
  filter:drop-shadow(4px 4px 0 #000000a6) brightness(1.1)}
 /* the press closes the depth, the way the commit's does */
 .p-order .dock .stamp.leave:active{transform:translate(3px,3px);background:#38424b;
  filter:drop-shadow(1px 1px 0 #000000a6);
- box-shadow:inset 0 0 0 2px #616e7a,inset 0 4px 0 #454f59}
+ box-shadow:inset 0 3px 0 #5a7f90,inset 0 -4px 0 #232a30}
 /* USER, 2026-09-23 (second pass): the two dock controls differed in how their EDGES were built
    - the commit carries a 2px machined edge on all four sides, the leave control had only a top
    and a foot line, so their corners read as two different objects whatever the colour. Both are
@@ -674,8 +676,8 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    face contrast, the label contrast, the external depth (`.stamp:disabled` already drops the
    filter) and the press affordance. */
 .p-order .dock .stamp.leave[disabled]{clip-path:var(--stamp-cut);
- background:#8d959c;color:#3f464c;opacity:1;transform:none;
- box-shadow:inset 0 0 0 2px #6e767d,inset 0 4px 0 #7d858c}
+ background:#8d959c;color:#3f464c;opacity:1;transform:none;text-shadow:none;
+ box-shadow:inset 0 4px 0 #6e767d,inset 0 -3px 0 #a3aab0}
 /* =====================================================================
    SALE — the customer at the counter.
    Three layers read down the screen. WHO IS HERE: the shop front, the waiting line as
@@ -976,15 +978,15 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    wearing the family's own 5px drop - DEEPER than the 4px the price keys carry, which inverts
    the rank this rule exists to fix. The drop is a filter now, and it is the shortest on the
    screen while a price decision is open. */
-.p-sale .dock .stamp{margin-left:auto;min-height:54px;min-width:158px;
+.p-sale .dock .stamp{margin-left:auto;min-height:56px;min-width:158px;
  font:600 18px/1 var(--ui);letter-spacing:.04em;background:#3c3122;color:#e7d9b8;
- filter:drop-shadow(3px 3px 0 #000000a6);
- box-shadow:inset 0 2px 0 #5c4b2c,inset 0 -2px 0 #241c11}
+ filter:drop-shadow(3px 3px 0 #000000a6);text-shadow:0 2px 0 #241c11;
+ box-shadow:inset 0 3px 0 #5c4b2c,inset 0 -4px 0 #241c11}
 .p-sale .dock .stamp:hover{background:#473a29;color:#f2e6c9;
  filter:drop-shadow(3px 3px 0 #000000a6) brightness(1.1)}
 .p-sale .dock .stamp:active{transform:translate(2px,2px);background:#342a1d;
  filter:drop-shadow(1px 1px 0 #000000a6);
- box-shadow:inset 0 2px 0 #463823,inset 0 -2px 0 #1f180e}
+ box-shadow:inset 0 3px 0 #463823,inset 0 -4px 0 #1f180e}
 .pips{display:flex;gap:3px;align-items:center}
 .pips i{width:9px;height:9px;background:#00000073;box-shadow:inset 1px 1px 0 #00000080;display:block}
 .pips i.on{background:var(--gold)}
@@ -1322,24 +1324,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    against the dim `전체 건너뛰기` beside it. Separation is the plane itself: no border, no inset
    outline, no bevel, no gloss. Exactly ONE bottom/right hard depth, which the press collapses as
    the control moves. */
-.p-night .dock .stamp{margin-left:auto;min-height:52px;min-width:132px;font:600 17px/1 var(--ui);
- background:#3f6fbe;color:#f4f7ff;
- box-shadow:none;filter:drop-shadow(4px 4px 0 #1f3564);
- /* the base notch clips everything outside the face, the drop shadow included - which is why no
-    depth ever showed here. This outline is the notched face UNION the same notch 4px down-right,
-    so the depth is kept by the clip instead of cut by it. */
- clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 4px,calc(100% - 2px) 4px,
-  calc(100% - 2px) 6px,100% 6px,100% 10px,calc(100% + 4px) 10px,calc(100% + 4px) calc(100% - 2px),
-  calc(100% - 2px) calc(100% - 2px),calc(100% - 2px) calc(100% + 4px),10px calc(100% + 4px),10px 100%,
-  6px 100%,6px calc(100% - 2px),4px calc(100% - 2px),4px calc(100% - 6px),0 calc(100% - 6px))}
+.p-night .dock .stamp{--nd:4px;margin-left:auto;min-height:56px;min-width:132px;font:600 18px/1 var(--ui);
+ background:#3a5f96;color:#f4f7ff;text-shadow:0 2px 0 #253f68;
+ box-shadow:none;filter:drop-shadow(var(--nd) var(--nd) 0 #1a2d4d)}
 /* BATCH 3 NIGHT: the depth used to be black on the near-black dock, and the base `.stamp` drop
    shadow stacked a second one under it - so the one hard edge the control owns could not be
    seen at all. It is now the plane's own deep cobalt, the ONLY depth (the base filter is
    replaced, the box-shadow is gone), and the press moves the plane into it until it is spent. */
 /* a pointer lift only: on a phone the tap that pressed 다음 leaves :hover stuck on the control
    that replaces it under the finger, and 마감으로 then looked like a different, paler button */
-@media (hover:hover){.p-night .dock .stamp:hover{background:#4a7bcb;filter:drop-shadow(4px 4px 0 #1f3564)}}
-.p-night .dock .stamp:active{transform:translate(4px,4px);background:#3a67b2;filter:none;clip-path:var(--stamp-cut)}
+@media (hover:hover){.p-night .dock .stamp:hover{background:#4269a3;filter:drop-shadow(var(--nd) var(--nd) 0 #1a2d4d)}}
+.p-night .dock .stamp:active{--nd:1px;transform:translate(3px,3px);background:#34568a;filter:drop-shadow(var(--nd) var(--nd) 0 #1a2d4d)}
 .p-night .dock .stamp:focus-visible{outline:3px solid #c9d8f5;outline-offset:3px}
 /* the rail of return tags: the night's progress as objects, one per adventurer out today */
 /* a short beat sits in the middle of the room rather than clinging to the top of it;
@@ -1602,7 +1597,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 /* BRICK. The day's last control is this screen's one flow Action, so it carries that family -
    the paper is the receipt's job, not the button's. Only its measure is set here. */
 .p-closing .dock .stamp,.p-end .dock .stamp{margin:0 auto;width:min(100%,344px);min-width:0;
- min-height:64px;font:600 19px/1 var(--ui);white-space:nowrap}
+ min-height:64px;font:600 20px/1 var(--ui);white-space:nowrap}
 .p-closing .dock .stamp{--act:var(--brick);--act-lit:var(--brick-lit);--act-deep:var(--brick-deep);
  --act-line:var(--brick-line);--act-ink:var(--brick-ink)}
 /* The ending's one way on. A modal footer is NOT a role: `.stamp` is worn there by the Run's
@@ -1857,15 +1852,15 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) 6px,100% 6px,
   100% calc(100% - 6px),calc(100% - 6px) calc(100% - 6px),calc(100% - 6px) 100%,
   6px 100%,6px calc(100% - 6px),0 calc(100% - 6px));
- filter:drop-shadow(0 6px 0 #00000099)}
+ filter:drop-shadow(5px 5px 0 #00000099)}
 .p-prep .dock [data-action="start"]:hover,
 .modal-footer [data-action="store-return"]:hover{
- filter:drop-shadow(0 6px 0 #00000099) brightness(1.08)}
+ filter:drop-shadow(5px 5px 0 #00000099) brightness(1.08)}
 .p-prep .dock [data-action="start"]:active,
-.modal-footer [data-action="store-return"]:active{transform:translateY(4px);
+.modal-footer [data-action="store-return"]:active{transform:translate(4px,4px);
  box-shadow:inset 0 0 0 2px #35130d,inset 0 3px 0 #f5b7a2,inset 0 -3px 0 #8a3527,
   inset 0 0 0 6px #dd8a74,inset 0 0 0 8px #7e3124,inset 0 10px 0 #c8604a;
- filter:drop-shadow(0 2px 0 #1d0805) brightness(.96)}
+ filter:drop-shadow(1px 1px 0 #1d0805) brightness(.96)}
 @media(min-width:1024px){
  /* the wide framing of the same shut store, and its window sits lower in frame than the
     portrait one's, so the pool that is let back in moves with it */
@@ -2085,25 +2080,47 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
    it is the turning point of the Run. It is thrown downward on press. One control, one label,
    nothing added. */
 .p-final .dock .stamp{flex:1 1 auto;min-height:64px;font:500 21px/1 var(--f-sign);letter-spacing:.14em;
+ filter:drop-shadow(5px 5px 0 #2e0d09);
  -webkit-font-smoothing:none;
  background:#8a2f26;color:#ffeee9;text-shadow:0 2px 0 #00000080;
  box-shadow:inset 0 4px 0 #d4695b,inset 0 -6px 0 #45150f,
-  inset 6px 0 0 #a3372c,inset -6px 0 0 #5e1f16,5px 5px 0 #00000080}
+  inset 6px 0 0 #a3372c,inset -6px 0 0 #5e1f16}
 .p-final .dock .stamp:hover{background:#98342a;
  box-shadow:inset 0 4px 0 #e07a6b,inset 0 -6px 0 #4f1912,
-  inset 6px 0 0 #b23e31,inset -6px 0 0 #6b241a,5px 5px 0 #00000080}
+  inset 6px 0 0 #b23e31,inset -6px 0 0 #6b241a}
 /* the bar is thrown: it drops into its frame and the bevel inverts */
-.p-final .dock .stamp:active{transform:translateY(4px);background:#7a281f;
+.p-final .dock .stamp:active{transform:translate(4px,4px);background:#7a281f;filter:drop-shadow(1px 1px 0 #2e0d09);
  box-shadow:inset 0 4px 0 #45150f,inset 0 -3px 0 #d4695b,
-  inset 6px 0 0 #5e1f16,inset -6px 0 0 #a3372c,1px 1px 0 #00000080}
+  inset 6px 0 0 #5e1f16,inset -6px 0 0 #a3372c}
 /* A gate that cannot be opened yet is cold iron, not a faded red button - and per
    §PIXEL / 2D §STATE GRAMMAR its action plane must not look pressable either. It kept the raised
    bevel and a 3px hard drop, so the shut gate still stood off the dock like a key waiting to be
    hit. It is set INTO the dock now: no drop, the light edge on the inside, the ink still legible.
    No whole-element opacity. */
-.p-final .dock .stamp[disabled]{background:#2b211c;color:#8d7168;text-shadow:none;
+.p-final .dock .stamp[disabled]{background:#2b211c;color:#8d7168;text-shadow:none;filter:none;
  box-shadow:inset 0 5px 0 #14100e,inset 0 -3px 0 #4a3b33,
   inset 5px 0 0 #1c1614,inset -5px 0 0 #3a2e28}
+/* UI_UX §PRIMARY ACTION GRAMMAR (v2.9.9). A filter is drawn before the clip, so the notch cut every Phase Action's cast
+   away with its corners - only NIGHT, whose outline already took the cast in, and the unclipped MORNING shutter showed any
+   depth. Every notched Phase Action now takes NIGHT's outline: the notched face UNION the same notch --nd down-right, --nd
+   being its cast (5 across a boundary, 4 inside the Day, 3 for 손님 보내기); pressed it keeps the 1 px that is left. A
+   disabled control keeps its own cut. */
+.p-prep .dock [data-action="start"],.modal-footer [data-action="store-return"],
+.p-closing .dock .stamp:not([disabled]),.p-end .dock .stamp:not([disabled]),.p-final .dock .stamp:not([disabled]){--nd:5px}
+.p-order .dock .stamp:not([disabled]){--nd:4px}
+.p-sale .dock .stamp:not([disabled]){--nd:3px}
+.p-prep .dock [data-action="start"],.modal-footer [data-action="store-return"],.p-order .dock .stamp:not([disabled]),
+.p-sale .dock .stamp:not([disabled]),.p-night .dock .stamp:not([disabled]),.p-closing .dock .stamp:not([disabled]),
+.p-end .dock .stamp:not([disabled]),.p-final .dock .stamp:not([disabled]){
+ clip-path:polygon(0 6px,6px 6px,6px 0,calc(100% - 6px) 0,calc(100% - 6px) var(--nd),calc(100% - 6px + var(--nd)) var(--nd),
+  calc(100% - 6px + var(--nd)) 6px,100% 6px,100% calc(6px + var(--nd)),calc(100% + var(--nd)) calc(6px + var(--nd)),
+  calc(100% + var(--nd)) calc(100% - 6px + var(--nd)),calc(100% - 6px + var(--nd)) calc(100% - 6px + var(--nd)),
+  calc(100% - 6px + var(--nd)) calc(100% + var(--nd)),calc(6px + var(--nd)) calc(100% + var(--nd)),calc(6px + var(--nd)) 100%,
+  6px 100%,6px calc(100% - 6px + var(--nd)),var(--nd) calc(100% - 6px + var(--nd)),var(--nd) calc(100% - 6px),0 calc(100% - 6px))}
+.p-prep .dock [data-action="start"]:active,.modal-footer [data-action="store-return"]:active,
+.p-order .dock .stamp:not([disabled]):active,.p-sale .dock .stamp:not([disabled]):active,
+.p-closing .dock .stamp:not([disabled]):active,.p-end .dock .stamp:not([disabled]):active,
+.p-final .dock .stamp:not([disabled]):active{--nd:1px}
 .p-final .dock .danger{min-height:52px;padding:12px 16px;background:#5c2a24;color:#f6dfd9;
  box-shadow:inset 2px 2px 0 #ffffff1a,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 /* the gate mouth, with whoever is standing in it. On a phone the art is sized against the
@@ -2712,6 +2729,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     has to belong to the leading button only - on every stamp each one pushes itself right and
     the pair straddles the dock. */
  .p-order .dock .stamp{flex:0 0 auto;min-width:300px}
+ /* UI_UX §PRIMARY ACTION GRAMMAR: a step inside the Day is 60 px on a desk, one across a Day or Run boundary 72 px */
+ .p-morning .dock .pull,.p-order .dock .stamp,.p-sale .dock .stamp,.p-night .dock .stamp{min-height:60px;font-size:20px}
+ .p-morning .dock .pull span{font-size:20px;padding:19px 0 21px}
+ .p-final .dock .stamp{min-height:72px}
  .p-order .dock .stamp:first-of-type{margin-left:auto}
  /* MORNING at tablet width and up. The room's furniture is art sized to the column, so left
     alone the ceiling and the counter grow with the window and the decision gets whatever is
@@ -2799,7 +2820,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-night .dock{padding-left:max(var(--gutter),calc((100% - 880px) / 2));
   padding-right:max(var(--gutter),calc((100% - 880px) / 2));padding-top:14px}
  .p-night .dock .bare{font-size:16px;min-height:52px}
- .p-night .dock .stamp{min-height:60px;min-width:190px;font-size:20px}
+ .p-night .dock .stamp{min-width:190px}
  /* the unlock notice takes the same desktop step as the record it sits over: one type/padding
     class up (about 12-15%), same place, same two lines */
  #toast.unlock{padding:10px 20px 12px}
@@ -2854,7 +2875,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     The receipt keeps its phone measure here; the one desktop step below (Batch 3) scales the
     paper and this Action together, so they stay one column. */
  .p-closing .dock .stamp,.p-end .dock .stamp{flex:0 0 auto;
-  width:344px;min-height:86px;font:600 23px/1 var(--ui);letter-spacing:.06em}
+  width:344px;min-height:72px;font:600 22px/1 var(--ui);letter-spacing:.06em}
  /* BATCH 3 CLOSING — DESKTOP STEP (PRESENTATION_SYSTEM §RESPONSIVE DETAILING; the same one step
     NIGHT takes). At 1280 the phone-sized till printed its figures at 12-15px in the middle of
     the counter. The same tape, the same rows in the same order and the same single column take
@@ -2900,7 +2921,7 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-end .end-tape .opened b{font-size:16px}
  .p-end .end-tape .bare{font-size:15px;margin-top:4px}
  .p-end .end-tape{margin-bottom:16px}
- .p-end .dock .stamp{width:440px;min-height:72px;font-size:21px}
+ .p-end .dock .stamp{width:440px}
  /* a short till still names its own way out, under the same paper */
  .p-closing .dock{flex-wrap:wrap}
  .p-closing .dock .danger-text{flex:1 1 100%;text-align:center}
