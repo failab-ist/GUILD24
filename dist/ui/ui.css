@@ -2375,31 +2375,58 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-prep .prep-slot.wall{--slot-ar:22/21}
 .p-prep .prep-slot.display{--slot-ar:26/25}
 .p-prep .prep-slot.counter{--slot-ar:28/17}
+/* v2.9.9 (User 2026-09-27): the tags keep the share of the stage they have on a 360x640 phone - their type grows with the
+   stage's height past 640 (1cqh = 1% of it) and, on a wide desk, with its width, never below its own size and never past
+   20 px; the padding is in em so it grows with it. The two plates are set in the pixel face, which is crisp only on its
+   12 px grid, so they step instead (the @container rules below) */
 .p-prep .slot-tag{position:absolute;top:calc(100% + 5px);left:50%;transform:translateX(-50%);display:grid;justify-items:center;gap:1px;
- padding:4px 8px 5px;white-space:nowrap;font:500 11px/1.25 var(--ui);color:#e4cfa4;background:#2b1e13;
+ padding:.36em .73em .45em;white-space:nowrap;font:500 min(20px,max(11px,1.72cqh,1.4cqw))/1.25 var(--ui);color:#e4cfa4;background:#2b1e13;
  box-shadow:inset 0 0 0 1px #6b5029,0 2px 0 #00000080}
+.p-prep .slot-tag b{font-size:min(22px,max(12px,1.875cqh,1.5cqw))}
 /* a tag is anchored to its piece's edge that faces the middle of the room, so a piece standing near the screen's edge
    never pushes its tag off it: the 간판 and 진열대 on the left, the plaque and the 계산대 piece on the right */
 .p-prep .prep-slot.sign .slot-tag,.p-prep .prep-slot.display .slot-tag{left:0;transform:none}
 .p-prep .prep-slot.wall .slot-tag,.p-prep .prep-slot.counter .slot-tag{left:auto;right:0;transform:none}
 .p-prep .prep-slot.empty .slot-tag{top:50%;transform:translateY(-50%)}
+/* the empty plaque's tag hangs from the top of its spot rather than its middle: the board is right above it, and a tag
+   grown with a tall or wide stage grows down onto bare wall instead of up into the board */
+.p-prep .prep-slot.wall.empty .slot-tag{top:0;transform:none}
 /* the 간판 hangs just above the board, so its tag is one line: under it on a phone (the branch plate is beside it),
    to its left on a desk (the board is right under it and the branch plate to its right) */
 .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:calc(100% + 3px);grid-auto-flow:column;align-items:baseline;gap:5px}
 @media(min-width:1024px),(min-width:768px) and (min-height:700px) and (orientation:landscape){
  .p-prep .prep-slot.sign:not(.empty) .slot-tag{top:50%;left:auto;right:calc(100% + 6px);transform:translateY(-50%)}
+ /* that tag runs left from the 간판 toward the stage's edge and sits under the painted ceiling fixture, so it stacks its
+    two lines as the other tags do (only as wide as the name), is centred on the sign's plate rather than on its hangers
+    (72% down the drawing, just under the fixture), and grows only with the stage's height and only as far as it still fits there */
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag{grid-auto-flow:row;gap:1px;top:72%}
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag{font-size:min(15px,max(12px,1.72cqh))}
+ .p-prep .prep-slot.sign:not(.empty) .slot-tag b{font-size:min(16px,max(13px,1.875cqh))}
  .p-prep .opening-logo{width:320px}
+ /* on the wide framing the title hangs at the 간판's height, so the 간판 keeps the gap from the title as it does from the
+    DAY sign on MORNING (a 1366x680 browser brought them together) */
+ .p-prep .deco-layer{--sign-l:calc(50cqw - 160px)}
  .p-prep .band.ceiling .opening{padding-top:calc(env(safe-area-inset-top) + 14px)}
- .p-prep .slot-tag{font-size:12px}
- .p-prep .slot-tag b{font-size:13px}
+ .p-prep .slot-tag{font-size:min(20px,max(12px,1.72cqh,1.4cqw))}
+ .p-prep .slot-tag b{font-size:min(22px,max(13px,1.875cqh,1.5cqw))}
  .p-prep .prep-status{font-size:13px}
- /* the board ends above the painted wall's plaque spot even on a 768-high desk */
+ /* the board ends above the painted wall's plaque spot: on a stage under 800 high (a 1366x680 laptop browser, a landscape
+    tablet, a 768-high desk) the note is one step tighter - the same type, less air - while the status strip under it keeps
+    its full height; an 800-high stage gets the note's air back below */
+ .p-morning.p-prep .pinned{gap:6px;padding-bottom:9px}
+ .p-morning.p-prep .prep-note{padding:5px 12px 3px}
+ .p-prep .prep-note .welcome-title{margin-bottom:2px}
+ .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.4}
+}
+@media(min-width:1024px) and (min-height:800px),(min-width:768px) and (min-height:800px) and (orientation:landscape){
  .p-morning.p-prep .pinned{gap:6px;padding-bottom:9px}
  .p-morning.p-prep .prep-note{padding:12px 14px 10px}
+ .p-prep .prep-note .welcome-title{margin-bottom:6px}
+ .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.6}
 }
 .p-prep .slot-tag i{font-style:normal;color:#b99b6a}
-.p-prep .slot-tag b{font-weight:600;font-size:12px}
-.p-prep .slot-tag .can-buy{margin-top:2px;padding:3px 6px;font:600 11px/1 var(--ui);font-style:normal;color:#e0c89c;
+.p-prep .slot-tag b{font-weight:600}
+.p-prep .slot-tag .can-buy{margin-top:2px;padding:.27em .55em;font:600 min(20px,max(11px,1.72cqh,1.4cqw))/1 var(--ui);font-style:normal;color:#e0c89c;
  box-shadow:inset 0 0 0 1px #e0c89c73}
 .p-prep .prep-slot:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .p-prep .prep-slot:active{translate:0 2px}
@@ -2411,7 +2438,19 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .p-prep .capital-plate b{color:var(--gold);font-weight:500}
 /* the branch plate is MORNING's, on the counter front; centred under the Capital here, because the Slot tags hang at the
    counter's two ends */
-.p-morning.p-prep .branchplate{left:50%;right:auto;transform:translateX(-50%);white-space:nowrap}
+/* under the title, in the opening's own column - not placed on the counter like MORNING's */
+.p-morning.p-prep .opening .branchplate{position:static;top:auto;right:auto;bottom:auto;left:auto;transform:none;white-space:nowrap;
+ font-size:12px;padding:.25em .75em}
+/* the two pixel-face plates step with the stage (the store is the size container, at most 1120 wide on a desk): 12 -> 18 px
+   (crisp on a 2x screen) on a stage 800 high or 1000 wide, 24 px on a stage 1000 by 1000; the Capital plate 17 -> 24 px on
+   the same stages as the first step */
+@container (min-height:800px) or (min-width:1000px){
+ .p-morning.p-prep .opening .branchplate{font-size:18px}
+ .p-prep .capital-plate{font-size:24px;padding:.5em .9em .45em}
+}
+@container (min-height:1000px) and (min-width:1000px){
+ .p-morning.p-prep .opening .branchplate{font-size:24px}
+}
 .p-prep .dock{align-items:center}
 .p-prep .dock [data-action="start"]{flex:1 1 auto;max-width:420px;margin:0 auto}
 .p-prep .dock [data-action="prep-back"]{flex:0 0 auto;align-self:center;padding:10px 12px;color:#e4cfa4;background:#0b0806d9;

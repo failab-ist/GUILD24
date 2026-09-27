@@ -1474,10 +1474,7 @@ corrected to read as ㅁ
 backdrop: it is the store about to open, the same painted room as MORNING (same framing per breakpoint, same bands, same
 Decoration seating -> §LIVE STORE DECORATION SEATING), shown whenever there is no Run and, from the ending, after
 `다음 점포 열기`.
-- the ceiling carries the title logo where MORNING hangs the DAY sign (§OPENING TITLE LOGO); the branch plate is MORNING's
-own plate on the counter front, centred under the Capital plate (the Slot tags hang at the counter's two ends)
 - the board is titled `새 점포 준비` and carries the three lines of the game as one pinned note, then one status line
-(`보유 장식 없음` / `영업이 시작되면 이번 영업에는 고정됩니다.`); a save error, when there is one, is pinned above the note
 - each Decoration Slot is its place in the room: an equipped Decoration is drawn there with a small tag naming the Slot and
 the Decoration; an empty Slot draws nothing and its tag (`{Slot} · 비움`) stands on the spot. Each place is a control
 (§Pre-Run Decoration empty-slot interaction) with at least a 44 px target; a tag is anchored to its piece's edge facing
@@ -1494,7 +1491,6 @@ PREPARATION — STORE SCENE)
 `던전 앞 편의점` title is the User-supplied drawn logo, not set type; since the store scene (§NEW STORE PREPARATION — STORE
 SCENE) it hangs from the room's ceiling.
 and the menu, the title block starting 21 px from the top; desk 320 px, starting 14 px from the top; the file is cut to the drawn letters
-- the branch name stays visible and not emphasised: since the store scene it is MORNING's plate on the counter front
 (§NEW STORE PREPARATION — STORE SCENE)
 - the opening screen (no Run: 새 점포 준비, v2.9.9 the store scene) shows `v{version} · {commit}` in its top-left
 corner, small (10 px) and muted, above the room so it stays readable; it is not a control, takes no space
@@ -1583,4 +1579,55 @@ The branch plate takes its desk size only on a stage 760 px high or more, so it 
 ```new
 down behind the dock (a portrait tablet, a short desk) it rises to just above the Action instead; it takes its larger
 desk size only on a stage 760 px high or more, so on a 700-high stage it still clears the counter pieces above it
+```
+
+## AMENDMENT — NEW STORE PREPARATION — short stages (User 2026-09-27, v2.9.9)
+
+The branch plate hangs under the title; the board is tighter under 800 px high; the 간판 keeps the gap from the title; short-desk sizes in acceptance. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the ceiling carries the title logo where MORNING hangs the DAY sign (§OPENING TITLE LOGO), and right under it, centred,
+the branch plate - MORNING's own plate, as the store's name under its title (User 2026-09-27, v2.9.9); the counter
+front carries only the Capital plate (the Slot tags hang at the counter's two ends). On the wide framing the title hangs
+at the 간판's height, so the 간판 keeps the gap from the title as it does from MORNING's DAY sign
+(`보유 장식 없음` / `영업이 시작되면 이번 영업에는 고정됩니다.`); a save error, when there is one, is pinned above the note.
+It ends at least 6 px above the Slot places under it: on the wide framing under 800 px high (a laptop browser, a
+landscape tablet) it is one step tighter - the same type, less air (User 2026-09-27, v2.9.9)
+- the branch name stays visible and not emphasised: in the store scene it is MORNING's plate hanging right under the logo
+```
+
+## AMENDMENT — NEW STORE PREPARATION — tags and plate scale (User 2026-09-27, v2.9.9)
+
+The Slot tags and the branch plate keep their 360x640 share of the stage.
+
+```new
+```
+
+## AMENDMENT — NEW STORE PREPARATION — plates step on the pixel grid (User 2026-09-27, v2.9.9)
+
+The tags grow with height or desk width; the pixel-face plates step; the empty plaque tag hangs from its top. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the Slot tags, the branch plate and the Capital plate keep the share of the stage they have on a 360x640 phone (User
+2026-09-27): the tags' type grows with the stage's height past 640 px and, on a wide desk, with its width (never below
+its own size, at most 20 px); the two plates are in the pixel face, crisp only on its 12 px grid, so they step - the
+branch plate 12 -> 18 px on a stage 800 high or 1000 wide and 24 px on one 1000 by 1000, the Capital plate 17 -> 24 px on
+```
+
+## AMENDMENT — NEW STORE PREPARATION — desk 간판 tag inside the stage (User 2026-09-27, v2.9.9)
+
+The desk 간판 tag stacks and caps its growth so it stays inside the 1120-wide stage; acceptance checks tags and plates against the stage. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+the first step. An empty plaque's tag hangs from the top of its spot, so a grown tag never reaches up into the board; on
+```
+
+## AMENDMENT — NEW STORE PREPARATION — desk 간판 tag under the fixture (User 2026-09-27, v2.9.9)
+
+The desk 간판 tag sits level with the sign's plate and grows only with the stage's height, clear of the painted ceiling fixture. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+the wide framing the 간판's tag, which runs left from it toward the stage's edge under the painted ceiling fixture,
+stacks its two lines, sits level with the sign's plate rather than its hangers and grows only with the stage's height, at
+most to 15 / 16 px, so it stays inside the stage (a desk caps the stage at 1120 px wide) and clear of the fixture
 ```

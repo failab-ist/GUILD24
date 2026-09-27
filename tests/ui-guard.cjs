@@ -2952,11 +2952,17 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
     Mulmaru is crisp only at its design sizes, which is why this one is fixed rather than
     clamped. What the old clamp assertion was really protecting is unchanged and asserted
     here directly: the branch stays far under the title it sits below. */
- /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE): the branch is MORNING's plate on the counter front, in the plate
-    face at its crisp design size, centred under the Capital because the Slot tags hang at the counter's ends */
- assert.ok(/'<span class="branchplate">'\+E\(plannedBranch\(\)\)\+'<\/span>'/.test(back),'the branch is the counter plate');
+ /* v2.9.9 (UI_UX §NEW STORE PREPARATION — STORE SCENE; User 2026-09-27): the branch is MORNING's plate, in the plate face
+    at its crisp design size, hanging right under the title in the opening's own column - the counter carries the Capital */
+ assert.ok(/<\/h1>'\n\s*\+'<span class="branchplate">'\+E\(plannedBranch\(\)\)\+'<\/span><\/div>/.test(back),'the branch plate is under the title');
+ assert.ok(!/band counter[\s\S]*branchplate/.test(back),'and not on the counter');
  assert.ok(/\.p-morning \.branchplate\{[^}]*font:500 12px\/1 var\(--f-plate\)/.test(read('dist/ui/director-review.css')),'in the plate face at a crisp Mulmaru design size');
- assert.ok(/\.p-morning\.p-prep \.branchplate\{left:50%;right:auto;transform:translateX\(-50%\)/.test(css),'centred on the counter front');
+ assert.ok(/\.p-morning\.p-prep \.opening \.branchplate\{position:static;/.test(css),'in the opening\'s column, centred with the title');
+ // the tags keep their 360x640 share of a bigger stage; the pixel-face plates step on its 12 px grid (User 2026-09-27)
+ assert.ok(/\.p-prep \.slot-tag\{[^}]*font:500 min\(20px,max\(11px,1\.72cqh,1\.4cqw\)\)/.test(css),'the tags grow with the stage');
+ assert.ok(/@container \(min-height:800px\) or \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:18px\}\n \.p-prep \.capital-plate\{font-size:24px;/.test(css)
+  &&/@container \(min-height:1000px\) and \(min-width:1000px\)\{\n \.p-morning\.p-prep \.opening \.branchplate\{font-size:24px\}/.test(css),'the plates step 12 / 18 / 24 and 17 / 24');
+ assert.ok(/\.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{grid-auto-flow:row;gap:1px;top:72%\}\n \.p-prep \.prep-slot\.sign:not\(\.empty\) \.slot-tag\{font-size:min\(15px,/.test(css),'the desk 간판 tag stacks and stops growing where it would leave the stage');
  // 3: the branch comes from the existing catalogue, through the existing pick
  assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');
  assert.ok(/const plannedBranch=\(\)=>new RNG\(plannedSeed\(\)\)\.pick\(D\.brand\.branches\)/.test(app),

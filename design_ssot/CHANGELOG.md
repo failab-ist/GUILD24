@@ -38,6 +38,12 @@ confirmed by the User.
   간판 stays on screen and the branch plate stays clear of the dock Action and the counter pieces (its desk size only on a
   stage 760 px high or more). Tablet sizes added to `qa-deco-seating` and
   `qa-prep-scene`.
+- 새 점포 준비 on a short stage (same owner section): on a 1366x680 / 1280x700 browser or a landscape tablet the board covered
+  the 벽면 tag, the 간판 spot touched the title and the two plates crowded the Action. The branch plate now hangs right under
+  the title (User 2026-09-27), the board is one step tighter under 800 px high, and the 간판 keeps the gap from the title;
+  the Slot tags, the branch plate and the Capital plate keep their 360x640 share of a taller or wider stage (the tags
+  grow smoothly, the pixel-face plates step 12 -> 18 -> 24 / 17 -> 24 px).
+  Short-desk sizes added to `qa-prep-scene`.
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

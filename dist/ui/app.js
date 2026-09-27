@@ -1914,7 +1914,9 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
  /* no DAY sign on this ceiling, so the 간판 is held by nothing but its own painted spot */
  +'<div class="store" style="--daysign-x:1">'
   +'<div class="band ceiling"><span class="mount">'+Scene.ceiling()
-   +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1></div></span></div>'
+   /* the store's name is a plate right under the title (User 2026-09-27): the counter front carries the Store Capital */
+   +'<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1>'
+   +'<span class="branchplate">'+E(plannedBranch())+'</span></div></span></div>'
   +'<div class="board" id="phase-content" tabindex="-1" aria-label="새 점포 준비">'
    +'<p class="board-rail">새 점포 준비</p>'
    +'<div class="pinned">'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':'')
@@ -1922,9 +1924,7 @@ function prepScreen(){const a=game.account,loadout=Meta.plannedLoadout(a),owned=
     +'<span class="flavor">찾아오는 모험가를 보급하고, 성장시킨다.</span><span class="welcome-band">마지막 날, 성장한 모험가들을 마왕 토벌에 보낸다.</span></div>'
     +'<p class="prep-status">'+(owned.length?'영업이 시작되면 이번 영업에는 고정됩니다.':'보유 장식 없음')+'</p></div></div>'
   +'<div class="band wall">'+Scene.wall(1)+'</div>'
-  /* the store's name is the plate screwed to the counter front, where MORNING carries it */
   +'<div class="band counter"><span class="mount">'+Scene.counter()
-   +'<span class="branchplate">'+E(plannedBranch())+'</span>'
    +'<span class="store-capital capital-plate"><i class="coin-mark" aria-hidden="true"></i>점포 자본 <b>'+capital.toLocaleString()+'</b></span></span></div>'
   +'<div class="deco-layer">'+D.decorationSlots.map(place).join('')+'</div>'
  +'</div>'

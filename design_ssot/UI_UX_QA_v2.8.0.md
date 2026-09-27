@@ -1461,14 +1461,19 @@ part of `qa:runtime`.)
 
 SETUP:
 no Decoration, and four Decorations owned with two equipped, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915,
-430x740, 1024x768, 1280x800, 1280x880 and 1920x1080; the ending -> `다음 점포 열기`; a place -> 점포 장식 -> back.
+430x740, 768x1024, 900x700, 1023x768, 1024x768, 1280x700, 1280x720, 1366x680, 1280x800, 1280x880 and 1920x1080; the ending
+-> `다음 점포 열기`; a place -> 점포 장식 -> back.
 
 PASS:
-- no preparation panel: the store room with the logo on its ceiling, the `새 점포 준비` board, four Slot places, the
-  Capital plate with the branch plate under it and `첫 점포지원 고르기`; with no Run no way back; from the ending `결과 다시 보기` returns to the ending
+- no preparation panel: the store room with the logo on its ceiling and the branch plate right under it, centred, the
+  `새 점포 준비` board, four Slot places, the Capital plate and `첫 점포지원 고르기`; with no Run no way back; from the ending `결과 다시 보기` returns to the ending
   and the Run is unchanged
 - every place is a control of at least 44 px that opens 점포 장식 on its Slot, and the way back returns to the scene
 - no tag, place, plate, board, logo, branch plate or Action overlapping another, none off screen; no page error
+- the board at least 6 px above the places under it, the Capital plate at least 6 px above the Action
+- the Slot tags, the branch plate and the Capital plate the same share of the stage as at 360x640 on a taller or wider
+  stage (390x844, 768x1024, 1366x680, 1920x1080), the plates on the pixel face's steps, still overlapping nothing and every
+  tag and plate inside the stage (not only the window)
 
 FAIL:
 - the old panel, a place that is not a control, a tag cut off or covering something, the Capital shown in the till, or the
@@ -1481,7 +1486,7 @@ FAIL:
 PASS:
 - the opening screen shows the logo as its title at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880, whole,
   centred, crisp, clear of the build marker and the menu button, on the store scene's ceiling, with the branch plate fully
-  visible on the counter front (UI-Q-v29-42); the `h1` reads
+  visible right under it (UI-Q-v29-42); the `h1` reads
   `던전 앞 편의점` to a screen reader
 - the 점 받침 reads as ㅁ at the phone size
 

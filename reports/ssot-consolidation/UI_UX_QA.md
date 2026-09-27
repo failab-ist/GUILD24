@@ -1493,16 +1493,12 @@ the menu button and the preparation scene's board
 (User 2026-09-27; owner `UI_UX_v2.8.0.md` §NEW STORE PREPARATION — STORE SCENE. Runtime check `tools/qa-prep-scene.cjs`,
 part of `qa:runtime`.)
 no Decoration, and four Decorations owned with two equipped, at 360x640, 360x740, 375x667, 390x664, 390x844, 412x915,
-430x740, 1024x768, 1280x800, 1280x880 and 1920x1080; the ending -> `다음 점포 열기`; a place -> 점포 장식 -> back.
-- no preparation panel: the store room with the logo on its ceiling, the `새 점포 준비` board, four Slot places, the
-Capital plate with the branch plate under it and `첫 점포지원 고르기`; with no Run no way back; from the ending `결과 다시 보기` returns to the ending
 and the Run is unchanged
 - every place is a control of at least 44 px that opens 점포 장식 on its Slot, and the way back returns to the scene
 - no tag, place, plate, board, logo, branch plate or Action overlapping another, none off screen; no page error
 - the old panel, a place that is not a control, a tag cut off or covering something, the Capital shown in the till, or the
 ended Run changed before `첫 점포지원 고르기`
 centred, crisp, clear of the build marker and the menu button, on the store scene's ceiling, with the branch plate fully
-visible on the counter front (UI-Q-v29-42); the `h1` reads
 - the title rendered as text again, a cropped or stretched logo, the logo covered, or a missing file
 ```
 
@@ -1574,4 +1570,41 @@ The branch plate takes its desk size only on a stage 760 px high or more, so it 
 
 ```new
 - the branch plate at least 6 px clear of the dock Action, and at least 6 px under a counter piece it sits below
+```
+
+## AMENDMENT — NEW STORE PREPARATION — short stages (User 2026-09-27, v2.9.9)
+
+The branch plate hangs under the title; the board is tighter under 800 px high; the 간판 keeps the gap from the title; short-desk sizes in acceptance. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+430x740, 768x1024, 900x700, 1023x768, 1024x768, 1280x700, 1280x720, 1366x680, 1280x800, 1280x880 and 1920x1080; the ending
+-> `다음 점포 열기`; a place -> 점포 장식 -> back.
+- no preparation panel: the store room with the logo on its ceiling and the branch plate right under it, centred, the
+`새 점포 준비` board, four Slot places, the Capital plate and `첫 점포지원 고르기`; with no Run no way back; from the ending `결과 다시 보기` returns to the ending
+- the board at least 6 px above the places under it, the Capital plate at least 6 px above the Action
+visible right under it (UI-Q-v29-42); the `h1` reads
+```
+
+## AMENDMENT — NEW STORE PREPARATION — tags and plate scale (User 2026-09-27, v2.9.9)
+
+The Slot tags and the branch plate keep their 360x640 share of the stage.
+
+```new
+```
+
+## AMENDMENT — NEW STORE PREPARATION — plates step on the pixel grid (User 2026-09-27, v2.9.9)
+
+The tags grow with height or desk width; the pixel-face plates step; the empty plaque tag hangs from its top. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the Slot tags, the branch plate and the Capital plate the same share of the stage as at 360x640 on a taller or wider
+```
+
+## AMENDMENT — NEW STORE PREPARATION — desk 간판 tag inside the stage (User 2026-09-27, v2.9.9)
+
+The desk 간판 tag stacks and caps its growth so it stays inside the 1120-wide stage; acceptance checks tags and plates against the stage. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+stage (390x844, 768x1024, 1366x680, 1920x1080), the plates on the pixel face's steps, still overlapping nothing and every
+tag and plate inside the stage (not only the window)
 ```
