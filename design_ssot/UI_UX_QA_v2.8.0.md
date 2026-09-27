@@ -1670,24 +1670,27 @@ FAIL:
 (User 2026-09-27, v2.9.9; owner `UI_UX_v2.8.0.md` §FINAL — CLASH SCENE.)
 
 SETUP:
-A Final clear and a Final failure (a close one and a wide one) with 1-, 2- and 3-member parties, at 360x640, 390x844,
-1280x880 and 1920x1080, motion on and reduced motion; a tap mid-scene; a reload mid-scene.
+A Final clear and a Final failure (a close one and a wide one) with 1-, 2- and 3-member parties carrying full, partial and
+empty bags, at 360x640, 390x844, 1280x880 and 1920x1080, motion on and reduced motion; a tap mid-scene; a reload mid-scene.
 
 PASS:
+- each member's bag receives exactly the items that member carried, one at a time, before the first lunge
 - the order is member 1 -> Boss counter -> member 2 -> Boss counter ... for every member in party order, the Boss
   countering after the last member too
-- each impact shows that member's share as a white mark; the red drops to it after the counter, except on the last
-  exchange, whose drop comes after the stillness as the verdict
+- an impact marks no amount and never drops the red; the red drops by the member's share after each counter except the
+  last, whose share waits for the verdict; the verdict hesitates near the bottom (5% on a clear, the resolved remainder on
+  a failure) before it breaks or stays; the bar only ever falls
 - the bar ends at 1 - min(1, rolled Party Power / effective Boss Power): empty on a clear, at least 3% on a failure;
   clear: the Boss card cracks and collapses; failure: the party's cards are pushed back and dimmed
-- the ending then plays as UI-Q-v29-30; the whole scene is 8 s or less
+- the ending then plays as UI-Q-v29-30
 - the scene stays inside the stage and nothing leaves the screen; no damage figure, no party bar, no new copy
 - a tap skips to the same ending at once; reduced motion shows no scene; a reload mid-scene opens the ending; one cue per
-  landing (`rumble`, `clash`, `counter`, `collapse`)
+  landing (`rumble`, `supply`, `clash`, `counter`, `collapse`)
 
 FAIL:
-- the bar giving the result away before the verdict, a clear that does not empty the bar, an empty bar on a failure, a
-  damage number, a skip that does not work, or anything of the scene in the Save
+- an item a member did not carry (or one missing), the bar giving the result away before the verdict, the bar rising, a
+  clear that does not empty the bar, an empty bar on a failure, a damage number, a skip that does not work, or anything of
+  the scene in the Save
 
 ### UI-Q-v29-28 — SALE COUNTER TRAY FOLD
 

@@ -86,7 +86,12 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
  /* v2.9.9 (User 2026-09-27): the two BRICK Actions that had no cue of their own. `begin` opens a Run - a wooden knock and
     a rising G-D-G with a ringing octave, brighter than the Store Support fixture under it; `newstore` leaves the ending
     for the next store - a latch click and a short rising pair, lighter than `begin` and nothing like the falling close */
- begin:[392,587,784],newstore:[220,330]};
+ begin:[392,587,784],newstore:[220,330],
+ /* v2.9.9 H7 FINAL 교전 (UI_UX §FINAL — CLASH SCENE): one cue per landing. `rumble` the Boss card landing, `clash` a
+    member's impact (a dry crack), `counter` the Boss's strike (lower and heavier), `collapse` a cleared Boss falling */
+ rumble:[55],clash:[196,147],counter:[98,73],collapse:[147,110,82],
+ /* v2.9.9 H7: one item landing in a member's bag - a short dry wooden tap, one per item */
+ supply:[330]};
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
@@ -223,6 +228,11 @@ const shape={
  begin:{gain:.95,dur:.24,type:'triangle',step:.09,layer:{ratio:2,at:.2,dur:.8,gain:.22},
   noise:{at:0,dur:.05,gain:.4,hz:900,q:.8,filter:'bandpass'},duck:.5},
  newstore:{gain:.8,dur:.18,type:'triangle',step:.11,glide:1.03,noise:{at:0,dur:.04,gain:.45,hz:3000,q:.7,filter:'highpass'},duck:.35},
+ rumble:{gain:1,dur:.7,type:'sine',attack:.01,noise:{at:0,dur:.6,gain:.55,hz:150,q:.5,filter:'lowpass'},duck:.5},
+ clash:{hit:1,gain:.9,dur:.09,type:'square',step:.04,attack:.002,glide:.9,noise:{at:0,dur:.08,gain:.75,hz:1800,q:.7,filter:'bandpass'},duck:.4},
+ counter:{hit:1,gain:1,dur:.16,type:'sawtooth',step:.06,attack:.003,glide:.9,noise:{at:0,dur:.14,gain:.6,hz:420,q:.6,filter:'lowpass'},duck:.45},
+ supply:{hit:1,gain:.6,dur:.05,type:'square',attack:.002,noise:{at:0,dur:.04,gain:.4,hz:1500,q:.8,filter:'bandpass'},duck:.2},
+ collapse:{gain:1,dur:.4,type:'sawtooth',step:.16,attack:.01,glide:.85,noise:{at:0,dur:.9,gain:.55,hz:300,q:.5,filter:'lowpass'},duck:.6},
  final:{gain:1.1,dur:1,type:'sawtooth',step:.3,attack:.08,glide:.98,sampleGain:1.2,accent:true,
   layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also

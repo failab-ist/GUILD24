@@ -1979,6 +1979,28 @@ test('UI-Q-v29-33: CLOSING receipt - one pass, one stamp, the settlement counts 
  assert.ok(!/receipt/.test(read('dist/systems/run.js'))&&!/receipt/.test(read('dist/systems/meta.js')),'presentation only: no Run or Meta field carries the new cue');
 });
 
+/* UI-Q-v29-46 (v2.9.9 H7, UI_UX §FINAL — CLASH SCENE): the resolved Final played out as a card fight before the ending;
+   the order, the bar and the skip are measured on the running page by tools/qa-final-clash.cjs */
+test('UI-Q-v29-46: the FINAL clash - after the resolution, the carried items, the resolved ratio only, skippable, no save, reduced motion none',()=>{
+ const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ const cs=bare(fn('clashScene'));
+ assert.ok(/if\(!motionOK\(\)\|\|!host\|\|!rep\?\.members\?\.length\|\|!d\|\|!\(d\.bossPower>0\)\)return false;/.test(cs),'never under reduced motion, only on a resolved Final');
+ assert.ok(/const left=s\.win\?0:Math\.max\(\.03,1-Math\.max\(0,Math\.min\(1,d\.assault\/d\.bossPower\)\)\),share=\(1-left\)\/n;/.test(cs),'the bar is the resolved ratio split evenly; a failure keeps 3%');
+ assert.ok(!/game\.(save|boss|end)|\.rng|localStorage|s\.[a-zA-Z]+=(?!=)/.test(cs),'the scene reads the Run and writes nothing');
+ assert.ok(/if\(!last\)at\(t\+C\.lunge\+C\.counter,\(\)=>drain\(from,to,C\.drain\)\)/.test(cs)&&/const edge=s\.win\?Math\.min\(CLASH_EDGE,level\):left;/.test(cs)
+  &&/drain\(level,edge,C\.run,/.test(cs)&&/if\(s\.win\)\{drain\(edge,0,C\.snap,/.test(cs),'the red drops after each counter; the last share is held for the verdict, which hesitates near the bottom');
+ assert.ok(/const CLASH_EDGE=\.05;/.test(app)&&!/class="mark"/.test(cs),'a clear hesitates at 5%; no amount is marked on the bar');
+ assert.ok(/items=m\.items\|\|\[\]/.test(cs)&&/Art\.itemIcon\(items\[i\],22\)/.test(cs)&&/got\.forEach\(\(icon,i\)=>/.test(cs)&&/t\+i\*C\.item/.test(cs),'each member is handed what they carried, one item at a time');
+ assert.ok(/el\.addEventListener\('click',finishClash\)/.test(cs)&&/document\.addEventListener\('keydown',clashKey\)/.test(cs),'a tap or a key skips it');
+ assert.ok(/if\(clash\)return finishClash\(\);/.test(fn('render')),'a redraw during it lands on the ending');
+ const C=app.match(/const CLASH=\{([^}]*)\}/)[1],v=Object.fromEntries(C.split(',').map(x=>x.split(':').map(y=>y.trim())).map(([k,x])=>[k,Number(x)]));
+ /* no length ceiling (User 2026-09-27): its length follows the party and what they carry, and a tap always skips it */
+ assert.ok(v.item>0&&v.lunge>=700&&v.dim+v.drop+v.presence+v.rise+v.settle>=2000,'an unhurried entry, and a fixed time per item');
+ const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
+ for(const c of ['rumble','supply','clash','counter','collapse'])assert.ok(Sound.cues.includes(c)&&!Sound.samples[c]&&new RegExp("Sound\\.play\\('"+c+"'\\)").test(cs),c+' is a synthesised cue of the scene');
+ assert.ok(/\.clash\{position:absolute;inset:0;z-index:60;/.test(css),'the scene covers the FINAL stage, over its menu and dock');
+});
+
 /* UI-Q-v29-30 (v2.9.2 H5, UI_UX §FINAL RESULT — SEAL STAMP): one seal bearing the Boss's name on a Final ending tape */
 test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a failure, the sentence after it',()=>{
  const bare=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
@@ -1995,7 +2017,9 @@ test('UI-Q-v29-30: the Final seal - one, named, clean on a clear and faint on a 
  assert.ok(!/tape|--tape/.test(end.replace(/end-tape|const seal=\$\('\.end-tape \.seal'\),tape=\$\('\.end-tape'\)|if\(tape\)A\(tape/g,'')),'no NIGHT death tape on a failure');
  assert.ok(/\.end-tape \.seal\{[^}]*rotate:-7deg/.test(css)&&/\.end-tape \.seal\.lost\{[^}]*rotate:9deg;[^}]*opacity:\.5;[^}]*clip-path/.test(css),'clear square-on and crisp; failure crooked, faint, partly printed');
  assert.ok(/\.end-tape \.print:has\(\.seal\) \.closed\{padding-right:84px\}/.test(css)&&/\.end-tape \.seal\{[^}]*transform-origin:100% 0\}/.test(css),'the headline keeps clear of the seal, and the fall stays on the tape');
- assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);render\(\);sealSound\(\);break;/.test(app),'the landing cue follows the departure once');
+ /* v2.9.9 H7: the FINAL clash plays first when it can; its end (or a skip) renders the ending and sounds the seal once */
+ assert.ok(/case'boss-go':sound\('final'\);game\.boss\(\);setModal\(null\);if\(!clashScene\(\)\)\{render\(\);sealSound\(\);\}break;/.test(app)
+  &&/c\.el\.remove\(\);render\(\);sealSound\(\);\}/.test(fn('finishClash')),'the landing cue follows the departure once');
  const ss=bare(fn('sealSound'));assert.ok(/clearTimeout\(sealCueAt\)/.test(ss)&&/Sound\.play\(kind\)/.test(ss)&&/FINAL_SEAL\.hold\+STAMP_FALL/.test(ss),'on the landing frame, never twice');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  for(const c of ['sealwin','sealfail'])assert.ok(Sound.cues.includes(c)&&!Sound.samples[c],c+' is a synthesised cue');

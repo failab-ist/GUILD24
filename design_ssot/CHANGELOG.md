@@ -55,9 +55,11 @@ agent and confirmed by the User on the captures before it was committed.
 
 **The FINAL clash** - PRESENTATION §GAME FEEL BEAT H7, UI_UX §FINAL — CLASH SCENE, UI_UX_QA UI-Q-v29-46
 - The Final used to cut from `마왕성으로 출발` straight to the ending. The resolved Final is now played out as a card
-  fight: each member lunges and the Boss counters every time, the Boss bar marks each hit in white and drops only after
-  the counter, and the last drop after a stillness is the verdict - a close clear and a close failure look alike until
-  then. No damage figure; a tap skips it; reduced motion drops it. The one exception to the per-beat game feel contract.
+  fight: the Boss lands, the party rises and is handed what each member carried, one item at a time; each member lunges
+  and the Boss counters every time; the red drops after each counter, the last member's share held back until the
+  verdict, where the bar runs down, hesitates near the bottom and breaks (a clear) or stays (a failure) - a close clear and
+  a close failure look alike until then. No damage figure, no length ceiling; a tap skips it; reduced motion drops it.
+  The one exception to the per-beat game feel contract.
 
 **Checks** - new runtime harnesses in `qa:runtime` (12 now): `tools/qa-deco-seating.cjs` (phones, tablets, desks; the till
 on the painted counter, the pieces' seating, the branch plate's clearance), `tools/qa-prep-scene.cjs` (short and large

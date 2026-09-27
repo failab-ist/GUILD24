@@ -1958,23 +1958,30 @@ The Final used to resolve in one cut: 발주 -> 원정대 -> the ending. After `
 resolved is now played out as a card fight over the FINAL stage, then the ending follows as before (§FINAL RESULT — SEAL
 STAMP). Nothing is decided by the scene.
 - cast: the Boss card above (the Boss's art and name, one health bar) and the party's cards below in one row (portrait,
-  name, Lv and job), one or two members centred; the Boss's own room stays behind them. No damage figure, no party bar,
-  no new copy
-- entry (~1.2 s): the stage darkens, the Boss card drops and lands heavily, the party's cards rise one after another, then
-  a held stillness
-- exchanges, one per member in party order: the member's card pulls back and lunges into the Boss card (~0.6 s); on the
-  impact frame the Boss card flashes and that member's share appears on the bar as a white mark. The Boss counters
-  (~0.5 s): its card strikes down and that member's card shakes and flashes red. After the counter the red drops to the
-  white mark - on every exchange but the last. The Boss counters after the last member too, so a clear and a failure run
-  the same way up to the verdict
-- verdict (~2.2 s): a stillness (~0.8 s) with the last white mark standing and the bar trembling, then the last drop.
-  Clear: the bar empties and the Boss card cracks and collapses. Failure: the bar stops, the Boss card rises and shakes
-  once, and the party's cards are pushed back and dimmed. Then the ending with its seal
+  name, Lv and job, and a bag of the member's slots under it), one or two members centred; the Boss's own room stays
+  behind them. No damage figure, no party bar, no new copy
+- entry (~2.1 s, unhurried - User 2026-09-27): the stage darkens, the Boss card drops and lands heavily and holds a moment,
+  the party's cards rise one after another, then a held stillness
+- supply: each item a member carried to the castle (the resolved Final's own record of their bags) comes up from the
+  bottom of the scene into that member's bag, one at a time and a fixed time each (~0.3 s), so a full party takes longer
+  rather than faster; an empty-handed member's slots stay empty
+- exchanges, one per member in party order: the member's card crouches and lunges to the Boss card's lower edge
+  (~0.7 s); the impact only says it landed - the Boss's art glints and the card and its bar jolt; no amount is marked. The
+  Boss counters (~0.55 s): its card strikes down and that member's card shakes and flashes red. After the counter the red
+  drops by that member's share - on every exchange but the last, whose share is held for the verdict. The Boss counters
+  after the last member too, so a clear and a failure run the same way up to the verdict
+- verdict (~2.7 s): a stillness (~0.9 s), then the red runs down and slows (~0.85 s) and hesitates near the bottom
+  (~0.5 s) - a clear at 5%, a failure where the roll left it - then a clear breaks to empty and the Boss card cracks
+  (stepped pixel lines inside its art) and collapses, and a failure stays: the Boss card rises and shakes once and the
+  party's cards are pushed back and dimmed. Then the ending with its seal
 - the bar is the resolved Final: it loses min(1, rolled Party Power / effective Boss Power) in all, in equal shares per
-  member, so a clear ends empty and a failure ends where the roll left it (never visibly empty: at least 3% stays)
-- length: about 4.5 / 5.6 / 6.7 s for 1 / 2 / 3 members, never over 8 s
-- sound: one cue per landing - a low `rumble` on the Boss card's landing, `clash` on each impact, `counter` on each
-  counter, `collapse` on a clear; the departure's `final` cue and the ending's seal cue are unchanged
+  member; it only ever falls; a clear ends empty and a failure ends where the roll left it (never visibly empty: at
+  least 3% stays). A close clear and a close failure look alike until the hesitation ends; a wide failure stops high, as
+  it should
+- length: no ceiling (User 2026-09-27) - it follows the party and what they carry (about 7 s for one member, about 10.5 s
+  for three carrying six items), and a tap always skips it
+- sound: one cue per landing - a low `rumble` on the Boss card's landing, `supply` on each item, `clash` on each impact,
+  `counter` on each counter, `collapse` on a clear; the departure's `final` cue and the ending's seal cue are unchanged
 - a tap anywhere skips to the ending at once, with the same end state; under reduced motion there is no scene. The Final is
   resolved and saved when `마왕성으로 출발` is pressed, so a reload during the scene opens the ending; the scene keeps no
   Save field
