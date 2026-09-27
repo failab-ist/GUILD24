@@ -4,6 +4,8 @@
 //   V1  the ladder as defined: early 10 / 8, early hybrid 12 / 9 / 9, mid 21 / 19 / 16, late hybrid 14 / 12 / 10
 //   V2  V1 with the mid and late rungs +2
 //   V1u V1 with the mid rung left at 고급 (isolates the 희귀 move)
+//   any arm + Q (V0+Q, V1+Q, V2+Q): a 희귀 ORDER slot holds 1~3 units instead of 1
+//   then + P (V1+Q+P): 상급 포션 195G / 최상급 포션 235G
 // Every arm is applied to DATA in memory right after the catalog loads; the files on disk are untouched. New Items
 // (중화 탄산수 / 방독 작업장갑 / 축성 손전등) are appended, 핫팩 becomes 방한 두건 under its id, the mid rung moves to 희귀.
 //   node tools/counter-ladder.cjs [runs=600] [--policy reader|skilled] [--arms V0,V1,V2] [--out file]
@@ -40,12 +42,16 @@ function apply(D,arm){if(!arm)return;
   it.rarity=rarity;if(buy!=null){it.buy=buy;it.sell=buy*2;}if(days!=null)it.days=days;
   for(const h of HZ)delete it.effects[h];Object.assign(it.effects,ctr,extra);}}
 const one=(src,a,b)=>{const n=src.split(a).length-1;if(n!==1)throw Error('patch point x'+n+': '+a.slice(0,60));return src.replace(a,b);};
-function load(arm){for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
+function load(arm){const pp=/\+P$/.test(arm);arm=arm.replace(/\+P$/,'');const q=/\+Q$/.test(arm);arm=arm.replace(/\+Q$/,'');for(const f of FILES){let src=fs.readFileSync(path.join(root,'dist',f+'.js'),'utf8');
+  /* +Q: a 희귀 ORDER slot holds 1~3 units instead of 1 (User 2026-09-27 proposal); 영웅 / 전설 stay 1 */
+  if(f==='systems/shop'&&q)src=one(src,'quantity:(it.rarity>=2?1:this.rng.int(2,4))','quantity:(it.rarity===2?this.rng.int(1,3):it.rarity>=2?1:this.rng.int(2,4))');
   if(f==='systems/shop')src=one(src,'const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);',
    'const rep=G.Dungeon.resolve(n,d,this.rng,s.facilities,s,assist);if(globalThis.__HZ)globalThis.__HZ(rep,d,s);');
   if(f==='systems/simulation')src=one(src,'for(let seed=0;seed<count;seed++){','for(let seed=opts?.from||0;seed<(opts?.from||0)+count;seed++){');
   vm.runInThisContext(src,{filename:f+'.js'});
-  if(f==='data/catalog')apply(globalThis.DATA,ARMS[arm]);}}
+  if(f==='data/catalog'){apply(globalThis.DATA,ARMS[arm]);
+   /* +P: 상급 포션 175 -> 195, 최상급 포션 210 -> 235 (User 2026-09-27: 상급 above 길드 특제 도시락 185) */
+   if(pp){const B=globalThis.DATA.itemBy;B.highpotion.buy=195;B.highpotion.sell=390;B.toppotion.buy=235;B.toppotion.sell=470;}}}}
 const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 if(process.env.CL_WORKER){
  process.on('message',({arm,policy,from,to})=>{globalThis.window=globalThis;load(arm);const D=DATA,acc={},items={};let exp=0,ctrCarried=0,statCarried=0;
