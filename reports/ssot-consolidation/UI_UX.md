@@ -1449,3 +1449,21 @@ opaque, so its feet stay on the surface; a line another part of the drawing sits
 is outline along its whole length and stays whole where that part touches it, so nothing floats. Interior lines of the
 drawing are unchanged
 ```
+
+## AMENDMENT — v2.9.9 OPENING TITLE LOGO (User 2026-09-27)
+
+The opening title becomes the User-supplied logo (corrected 점 받침), sized so the branch plate stays visible and close under it. Lines below are new.
+
+```new
+### OPENING TITLE LOGO (v2.9.9)
+(User 2026-09-27; acceptance -> UI_UX_QA UI-Q-v29-41; asset record -> reports/ASSETS.md §Title logo.) The opening screen's
+`던전 앞 편의점` title is the User-supplied drawn logo, not set type.
+- one image, the name as its alt text inside the same `h1`; no extra shadow or frame (the logo carries its own outline and
+extrusion)
+- not larger than it needs to be (User 2026-09-27): phone at most 210 px wide or 58% of the width, clear of the build marker
+and the menu, the title block starting 21 px from the top; desk 320 px, starting 14 px from the top; the file is cut to the drawn letters and the branch plate
+sits 6 px under them
+- the branch plate keeps its size and treatment: visible, not emphasised
+- the shipped file is a display derivative (960 px wide, cut to the letters) of the supplied logo, whose 점 받침 was
+corrected to read as ㅁ
+```

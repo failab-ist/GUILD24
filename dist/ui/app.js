@@ -428,7 +428,7 @@ function render(){
     so the preparation modal cannot be dismissed, and the line below re-opens it on every draw
     of this state anyway. The button was only ever an orphan control sitting behind the shade -
     on a desk, in the bottom-left corner of the title card. */
- if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title">던전 앞 편의점</h1><p class="opening-branch">'+E(plannedBranch())+'</p></div><p class="build-mark">v'+E(BUILD.version)+' · '+E(BUILD.commit)+'</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
+ if(!s){$('#app').innerHTML=stage('start','새 점포','','<div class="opening"><h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1><p class="opening-branch">'+E(plannedBranch())+'</p></div><p class="build-mark">v'+E(BUILD.version)+' · '+E(BUILD.commit)+'</p>'+(Save.error?'<p class="save-alert">'+E(Save.error)+'</p>':''),'');if(!modal)setModal('new');return;}
  const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
  /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
  const previousCols=['.p-sale .dossier-col','.p-sale .shelf-col'].map(q=>$(q)?.scrollTop||0);

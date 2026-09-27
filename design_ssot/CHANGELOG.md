@@ -15,6 +15,8 @@ confirmed by the User.
 - Decoration outline (same owner section): the eight drawings' outer outline was a full near-black art pixel and read as a
   sticker on the painting. It is now half a pixel thick at 55% opacity, so the ceiling, wall or counter shows through;
   the 진열대 / 계산대 pieces keep their bottom line (and the safe its legs) whole and opaque to stay on the counter.
+- Opening title logo (UI_UX §OPENING TITLE LOGO, UI_UX_QA UI-Q-v29-41): the `던전 앞 편의점` title is the User-supplied logo;
+  its 점 받침, which read as ㅇ, was corrected to ㅁ (reports/ASSETS.md §Title logo).
 
 ## v2.9.8 — ids read as the current names (User 2026-09-27)
 

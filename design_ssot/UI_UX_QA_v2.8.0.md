@@ -1414,6 +1414,20 @@ PASS:
 FAIL:
 - the marker overlapping or pushing the title, taking input, or appearing on a Run screen other than 영업 설정; a deployed build still reading `dev`
 
+### UI-Q-v29-41 — OPENING TITLE LOGO
+
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §OPENING TITLE LOGO.)
+
+PASS:
+- the opening screen shows the logo as its title at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880, whole,
+  centred, crisp, clear of the build marker and the menu button, with the branch plate fully above the preparation panel
+  (and its rule too where the old title's rule was); the `h1` reads
+  `던전 앞 편의점` to a screen reader
+- the 점 받침 reads as ㅁ at the phone size
+
+FAIL:
+- the title rendered as text again, a cropped or stretched logo, the logo under the preparation panel, or a missing file
+
 ### UI-Q-v29-40 — LIVE STORE DECORATION SEATING
 
 (User 2026-09-27; owner `UI_UX_v2.8.0.md` §LIVE STORE DECORATION SEATING. Runtime harness `tools/qa-deco-seating.cjs`, part of

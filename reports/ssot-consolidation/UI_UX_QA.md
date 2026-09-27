@@ -1474,3 +1474,18 @@ piece on screen
 - a piece on the housing or its label, standing on another line than the housing, or placed off its painted point when the
 painting is cropped at the top and bottom; the 간판 touching the DAY sign
 ```
+
+## AMENDMENT — v2.9.9 OPENING TITLE LOGO (User 2026-09-27)
+
+The opening title becomes the User-supplied logo (corrected 점 받침), sized so the branch plate stays visible and close under it. Lines below are new.
+
+```new
+### UI-Q-v29-41 — OPENING TITLE LOGO
+(User 2026-09-27; owner `UI_UX_v2.8.0.md` §OPENING TITLE LOGO.)
+- the opening screen shows the logo as its title at 360x640 / 360x740 / 375x667 / 390x664 / 390x844 / 1280x880, whole,
+centred, crisp, clear of the build marker and the menu button, with the branch plate fully above the preparation panel
+(and its rule too where the old title's rule was); the `h1` reads
+`던전 앞 편의점` to a screen reader
+- the 점 받침 reads as ㅁ at the phone size
+- the title rendered as text again, a cropped or stretched logo, the logo under the preparation panel, or a missing file
+```

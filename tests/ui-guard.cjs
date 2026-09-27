@@ -2925,10 +2925,11 @@ test('SA-Q28 / SA-Q31: Store Capital is not Gold, and the Deep surfaces are not 
 test('OPENING: the backdrop is the title card and names the store this Run will open',()=>{
  const back=app.slice(app.indexOf('if(!s){$(\'#app\').innerHTML=stage(\'start\''),app.indexOf('const phase=s.phase'));
  // 1 / 2: the title, one deliberate line
- assert.ok(back.includes('<h1 class="opening-title">던전 앞 편의점</h1>'),'the backdrop carries the title');
- assert.ok(/\.opening-title\{[^}]*white-space:nowrap/.test(css),'the title is one line by rule, not by luck');
- assert.ok(/\.opening-title\{[^}]*var\(--f-plate\)/.test(css),'set in the shipped ATMOSPHERE face');
- assert.ok(/\.opening-title\{[^}]*clamp\(30px,[^)]*\)/.test(css),'fluid and clamped for mobile-first sizing');
+ /* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the title is the drawn logo; the name is its alt text */
+ assert.ok(back.includes('<h1 class="opening-title"><img class="opening-logo" src="ui/assets/presentation/start/title-logo.png" width="960" height="179" alt="던전 앞 편의점"></h1>'),
+  'the backdrop carries the title as the logo, named for a screen reader');
+ assert.ok(fs.existsSync(path.resolve(__dirname,'../dist/ui/assets/presentation/start/title-logo.png')),'the logo ships');
+ assert.ok(/\.opening-logo\{[^}]*width:min\(210px,58vw\);height:auto\}/.test(css),'sized to the phone, never wider than the screen');
  /* PRESENTATION_SYSTEM §TYPOGRAPHY / SPACING routes short object identity to the plate face,
     and PRESENTATION_POLISH_BATCH1 asks the Opening for a restrained sign/plate relationship.
     The branch is that identity, so it is a stamped plate now rather than fluid body copy -
@@ -2937,8 +2938,8 @@ test('OPENING: the backdrop is the title card and names the store this Run will 
     here directly: the branch stays far under the title it sits below. */
  assert.ok(/\.opening-branch\{[^}]*var\(--f-plate\)/.test(css),'the branch is set in the plate face');
  assert.ok(/\.opening-branch\{[^}]*font:500 12px/.test(css),'at a crisp Mulmaru design size');
- assert.ok(/\.opening-title\{[^}]*clamp\(30px,9\.2vw,46px\)/.test(css),
-  'and the branch under it is visibly secondary: the title never drops under 30px');
+ assert.ok(/\.opening-logo\{[^}]*width:min\(210px/.test(css),
+  'and the branch under it is visibly secondary: the logo is far wider than its 12px plate');
  // 3: the branch comes from the existing catalogue, through the existing pick
  assert.ok(back.includes('plannedBranch()'),'the backdrop renders the planned branch');
  assert.ok(/const plannedBranch=\(\)=>new RNG\(plannedSeed\(\)\)\.pick\(D\.brand\.branches\)/.test(app),

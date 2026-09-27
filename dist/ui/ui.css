@@ -898,7 +898,7 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .p-start .menu-pin:hover{background:linear-gradient(180deg,#44505a 0,#333d46 46%,#232a31 100%)}
 .p-start .menu-pin:active{transform:translate(2px,2px);filter:drop-shadow(1px 1px 0 #00000099);
  box-shadow:inset 0 0 0 2px #12100a,inset 0 0 0 3px #4a3418,inset 0 -3px 0 #5b6a7280}
-.opening{position:relative;display:grid;justify-items:center;gap:8px;padding:34px 16px 14px;text-align:center}
+.opening{position:relative;display:grid;justify-items:center;gap:8px;padding:21px 16px 14px;text-align:center}
 /* The identity sits on the plane instead of floating over it: one hard pixel drop, the value
    the signage faces elsewhere already use. No blur - §EDGE / MATERIAL RULES. */
 /* USER 2026-09-23: a shop's name is a made object. Text with a drop shadow was the plateau -
@@ -911,9 +911,12 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
    sits on the stage itself now - seated by one hard pixel drop, in the signage face, at the
    same measure and the same one line. Its sub-plate below it stays, because a branch tag IS a
    small plate and it is the only one up here now. */
-.opening-title{margin:0;white-space:nowrap;color:#f7eeda;
- font:500 clamp(30px,9.2vw,46px)/1.15 var(--f-plate);letter-spacing:-.01em;-webkit-font-smoothing:none;
- text-shadow:0 4px 0 #0a0705,0 6px 0 #00000080}
+/* v2.9.9 (User 2026-09-27, UI_UX §OPENING TITLE LOGO): the name is the drawn logo, not set type. The logo carries its own
+   outline and extrusion, so it takes no shadow here; its alt text is the name. */
+.opening-title{margin:0 0 -2px;line-height:0}
+/* phone: no wider than 210 px or 58% of the width, clear of the build marker and the menu. The file is cut to the drawn letters and the title gives back 2 px, so
+   the branch plate sits 6 px under them instead of under a band of empty file */
+.opening-logo{display:block;width:min(210px,58vw);height:auto}
 .opening-branch{margin:3px 0 0;padding:5px 13px 4px;color:#e0c89c;
  font:500 12px/1 var(--f-plate);letter-spacing:.2em;-webkit-font-smoothing:none;
  background:linear-gradient(180deg,#3b2918 0,#2a1c10 100%);
@@ -1961,8 +1964,10 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
     into the black it replaced. It steps back far enough for the storefront to read behind the
     sheet, and the sheet still holds the screen - it is the only lit object on it. */
  .modal-shade:has(.welcome-band){background:#05040373}
- /* the sign takes the width it now has, at Mulmaru's own design size so it stays crisp */
- .p-start .opening-title{font-size:48px}
+ /* the logo is a little wider on a desk; the block starts higher so the branch plate and its rule stay clear of the
+    preparation sheet, which stands higher on a desk (UI_UX §OPENING TITLE LOGO) */
+ .p-start .opening{padding-top:14px}
+ .p-start .opening-logo{width:320px}
  .p-start .opening-branch{padding:6px 16px 5px;letter-spacing:.24em}
  .p-start .opening:after{width:min(360px,60%)}
  /* the wide framing of the same shut store, and its window sits lower in frame than the
