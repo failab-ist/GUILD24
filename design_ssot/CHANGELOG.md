@@ -13,6 +13,11 @@ From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.
 - **The 1+1 offer is marked** - EVENT §02, UI_UX §ORDER — ITEM INFORMATION HIERARCHY, UI_UX_QA UI-Q-v29-39, COPY_AUDIT §13-2: on a
   본사 1+1 행사 day the promoted offer was told only by `· 1+1` inside the muted metadata line, so the User could not find it (the
   Event asks for it to be shown clearly on ORDER). It now wears a red `1+1` sticker on its `매입` tag corner.
+- **Visual QA coach check steadied** - `tools/qa-visual.cjs` (harness only): the contextual coach check at 390 failed about one
+  run in four or five, on the base build too. The capture drives the Run through the engine and renders only now and then; the
+  Boss reveal's hold, which since v2.9.10 renders again once its art decodes, could land mid-loop and leave an earlier Day's Event
+  notice open, and the coach stands down under a modal. The check now closes any leftover takeover through its own control
+  before measuring, as a player would. No game change.
 
 ## v2.9.10 — quick patch after v2.9.9 play (User 2026-09-27)
 
