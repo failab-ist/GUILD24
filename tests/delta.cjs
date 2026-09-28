@@ -138,7 +138,8 @@ test('DUNGEON_HAZARD_v2.7 §NEXT-DAY GATE FORECAST: how many, never which',()=>{
    h.run.day=day-1;
    const f=h.gateForecast();
    h.run.day=day;h.morning();
-   const base=h.run.dungeons.filter(d=>!d.temporary).length;
+   /* EVENT 52 게이트 임시 폐쇄 (v2.9.11) closes one of the forecast Gates that morning, and its reveal says so */
+   const base=h.run.dungeons.filter(d=>!d.temporary).length+(h.run.event?.effects.closeGate?1:0);
    assert.ok(f.counts.some(c=>c.count===base),
     'D'+day+' generated '+base+' base Gates, which the forecast allowed');
    if(f.fixed!==null)assert.equal(base,f.fixed,'a confirmed count is actually confirmed');

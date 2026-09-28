@@ -40,6 +40,14 @@ the owner headers and in the git tag.
   2026-09-28): the daily chance on an eligible Day is 40% (was 35%; about 7.6-8.0 Events per Run), and an Event already met this
   Run leaves the pool - 길드 합동 위령제 included (it used to recur and add +1 each time). The Run keeps its Event log (an optional
   save field; a save without it reads as an empty log, the save version is unchanged). Seeded Runs' Event days and picks move.
+- **32 new Events (23 → 55)** - EVENT §CANONICAL EVENT CATALOG 24~55 / §EVENT MIX, COPY_AUDIT §13-24~§13-55 (User 2026-09-28,
+  third draft in `reports/v2.9.11-drafts.md` §B): Opportunity +12 (길드 의료단 순회 · 길드 의무관 당직 · 길드 위로금 ease an injury;
+  길드 연회 · 원정 교대 근무 · 길드 휴양일 ease Fatigue; 길드 특별 수당, 본사 물류 지원, 보험 공동 구매, 본사 원정용품 지원, 단골의 날,
+  길드 현상금), Pressure +11, Mixed +9 - 23 / 16 / 16 in all. The User's rule: opposites, shared channels and opposite combinations
+  are fine, only a strict superset / subset is not (five pairs were retuned for it). Each Event is automatic, lasts the Day, meets
+  a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
+  the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
+  line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)

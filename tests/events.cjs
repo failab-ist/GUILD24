@@ -8,10 +8,11 @@ function fresh(seed='events'){const g=new Game();g.autosave=false;g.start(seed);
 function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
 const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
-const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제'];
+const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제',
+ "길드 의료단 순회","길드 의무관 당직","길드 위로금","길드 특별 수당","본사 물류 지원","보험 공동 구매","본사 원정용품 지원","길드 연회","원정 교대 근무","길드 휴양일","단골의 날","길드 현상금","마왕의 징조","입고 지연","가뭄","길드 세금 징수","장맛비","본사 발주 제한","포스기 먹통","가격 단속","퇴각로 붕괴","길드 소집령","냉장고 고장","야시장","원정 징발령","본사 재고 떨이","정예 토벌령","폭염","게이트 임시 폐쇄","길드 훈련 주간","유통기한 임박 특가","게이트 안정화 작업"];
 
-test('EVENT-003: catalog is exactly the canonical 23 with the two rare easter eggs at 0.35',()=>{
- assert.equal(DATA.events.length,23);
+test('EVENT-003: catalog is exactly the canonical 55 (23 → 55 in v2.9.11) with the two rare easter eggs at 0.35',()=>{
+ assert.equal(DATA.events.length,55);
  assert.deepEqual(DATA.events.map(e=>e.name),CATALOG);
  const rare=DATA.events.filter(e=>e.weight!==1);
  assert.deepEqual(rare.map(e=>e.name),['늙은 음유시인','본사 야간 근무 수칙']);
@@ -57,6 +58,72 @@ test('EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): a Run never meets the 
  assert.doesNotThrow(()=>Save.import(JSON.stringify(old)),'a save from before the log still loads');
  const bad=JSON.parse(Save.export(h.account,h.run));bad.run.eventLog=['no-such-event'];
  assert.throws(()=>Save.import(JSON.stringify(bad)),'an unknown id in the log is refused');
+});
+
+/* EVENT 24~55 (User 2026-09-28, v2.9.11): each new effect does what its Function says, on the channel it names. */
+test('EVENT 24~55: every new Event effect moves its own channel',()=>{
+ const E=id=>DATA.events.find(e=>e.id===id);
+ const withEvent=(g,id,fn)=>{const s=g.run,was=s.event;s.event=id?E(id):null;try{return fn();}finally{s.event=was;}};
+ const g=fresh('new-events'),s=g.run;s.day=4;
+ // buy price by category, and on every Item
+ const price=(id,it)=>withEvent(g,id,()=>{const st=g.rng.state,p=g.offerFor(it).price;g.rng=new RNG(s.seed,st);return p;});
+ for(const [id,it,m] of [['insurebuy','kit',.7],['gearaid','rope',.7],['drought','water',1.3],['heatwave','water',1.35],['hqlogistics','rice',.85],['clearance','rice',.75],['nearexpiry','rice',.6]]){
+  const a=price(null,DATA.itemBy[it]),b=price(id,DATA.itemBy[it]);assert.ok(Math.abs(b-a*m)<=1,id+': '+it+' '+a+' -> '+b);}
+ assert.equal(price('insurebuy',DATA.itemBy.rice),price(null,DATA.itemBy.rice),'a category price leaves the other categories alone');
+ // operating cost
+ for(const [id,add] of [['guildtax',50],['nightmarket',60]])
+  assert.equal(g.expectedOperatingCost({event:E(id)})-g.expectedOperatingCost({event:null}),add,id+' +'+add+'G');
+ // the door: budget, heal, fatigue, feast
+ const door=(id,prep)=>{const h=fresh('door-'+id),t=h.run,n=t.npcs[0];n.traits=[];n.money=100;n.injury=0;n.status='건강';n.fatigue=12;prep&&prep(n);t.event=id?E(id):null;t.queue=[n.id];t.cursor=0;h.arrive();return n;};
+ assert.equal(door('guildbonus').eventBudget,40,'길드 특별 수당 +40G to spend');
+ assert.equal(door('consolation',n=>{n.injury=1;}).eventBudget,60,'길드 위로금 +60G for an injured visitor');
+ assert.equal(door('consolation').eventBudget,0,'and nothing for a healthy one');
+ const healed=door('medcorps',n=>{n.injury=1;n.status='부상';});assert.equal(healed.injury,0);assert.equal(healed.healedBy,'medcorps','길드 의료단 heals at the door');
+ assert.equal(door('spaday').fatigue,4,'길드 휴양일 피로 -8');assert.equal(door('spaday',n=>{n.fatigue=3;}).fatigue,0,'never below 0');
+ const fed=door('banquet'),d0=s.dungeons[0];fed.pack=['rice'];const plain={...fed,feast:0};
+ assert.equal(Dungeon.prepare(fed,d0,[]).effects.supply,2*Dungeon.prepare(plain,d0,[]).effects.supply,'길드 연회: a Food recovers double');
+ fed.pack=['water'];assert.equal(Dungeon.prepare(fed,d0,[]).effects.supply,Dungeon.prepare({...fed,feast:0},d0,[]).effects.supply,'a Drink is untouched');
+ // the night: fatigue halved, EXP x1.5, retreat -10%p, up to two injuries saved - same rolls with and without the Event
+ const night=(id,seed)=>{const h=fresh('night-'+seed),t=h.run,n=t.npcs[0],d=t.dungeons[0];n.traits=[];n.pack=[];n.fatigue=0;n.injury=0;
+  const run={event:id?E(id):null,daily:{},loadout:{},records:[]};return Dungeon.resolve(n,d,new RNG('same-'+seed),[],run);};
+ let fatigueSeen=0,xpSeen=0,escSeen=0,saved=0;
+ for(let i=0;i<300;i++){
+  const a=night(null,i),b=night('shiftrest',i);if(a.outcome===b.outcome&&a.rawOutcomeFatigueGain>0){assert.equal(b.rawOutcomeFatigueGain,Math.ceil(a.rawOutcomeFatigueGain*.5));fatigueSeen++;}
+  const x=night('trainingweek',i);if(a.outcome===x.outcome&&a.xp>0){assert.ok(Math.abs(x.xp-a.xp*1.5)<=1,'EXP x1.5');xpSeen++;}
+  const c=night('collapse',i);if(a.debug.escapeChance!=null&&c.debug.escapeChance!=null&&a.debug.escapeChance>.25&&a.debug.escapeChance<.94){assert.ok(Math.abs(a.debug.escapeChance-c.debug.escapeChance-.1)<1e-9,'퇴각 -10%p');escSeen++;}
+  const m=night('medicshift',i);if(a.outcome==='부상'&&!a.aftercare){assert.equal(m.injury,0,'길드 의무관: 부상 -> 무사');assert.ok(m.events.some(e=>e.id==='medic'));saved++;}
+ }
+ assert.ok(fatigueSeen&&xpSeen&&escSeen&&saved,'each night effect was observed: '+[fatigueSeen,xpSeen,escSeen,saved]);
+ const cap={event:E('medicshift'),daily:{medicSaves:2},loadout:{},records:[]};
+ for(let i=0;i<300;i++){const h=fresh('cap-'+i),n=h.run.npcs[0],d=h.run.dungeons[0];n.traits=[];n.pack=[];n.fatigue=0;n.injury=0;const r=Dungeon.resolve(n,d,new RNG('same-'+i),[],cap);assert.ok(!r.events.some(e=>e.id==='medic'),'no third save');}
+ // the Morning: gates, shelf life, the visitor list
+ const morning=(id,seed,prep)=>{const h=fresh(seed),t=h.run;force(h,id);prep&&prep(h);for(let k=0;k<40&&t.event?.id!==id;k++){t.money=99999;t.stats.deaths=0;advance(h);if(t.phase==='end')break;}return h;};
+ // the Morning, applied directly: a forced Event on a Morning whose Gates and shelf are set up by hand
+ const apply=(id,prep)=>{const h=fresh('ev-m-'+id),t=h.run;t.day=6;prep(h,t);h.rollEvent=()=>E(id);h.morningEvent(t.dungeons.map(d=>d.family));return t;};
+ {const t=apply('gateclosed',(h,t)=>{t.dungeons=['spider','slime','golem'].map(f=>h.makeDungeon(f,2));});
+  assert.equal(t.dungeons.length,2,'게이트 임시 폐쇄: one of three Gates closes');}
+ {const t=apply('safegates',(h,t)=>{t.dungeons=['spider','slime'].map(f=>h.makeDungeon(f,3));});
+  assert.ok(t.dungeons.every(d=>d.tier===1),'게이트 안정화 작업: every Gate Tier 1');
+  assert.deepEqual(t.dungeons.map(d=>d.family),['spider','slime'],'the Families stay');}
+ {const t=apply('fridgebreak',(h,t)=>{t.inventory=[];h.stock('rice',1);h.stock('rope',1);});
+  const [rice,rope]=t.inventory;assert.equal(rice.expires,6+2-1,'냉장고 고장: Food -1 Day');assert.equal(rope.expires,6+5,'Field Gear untouched');}
+ {const h=fresh('ev-near'),t=h.run;t.phase='order';t.event=E('nearexpiry');h.stock('rope',1);assert.equal(t.inventory.at(-1).expires,t.day+1,'유통기한 임박 특가: today only');t.event=null;}
+ // ORDER: same-SKU cap, no reroll
+ {const h=fresh('ev-order'),t=h.run;t.phase='order';t.money=99999;t.event=E('ordercap');const i=t.offers.findIndex(o=>o.quantity>=3);
+  if(i>=0){assert.throws(()=>h.validateCart({[i]:3}),/2개까지만 발주/);assert.doesNotThrow(()=>h.validateCart({[i]:2}));assert.equal(h.quantityLimit(i).reason,'cap');}
+  t.event=E('noreroll');assert.throws(()=>h.reroll(),/발주 교환을 할 수 없습니다/);t.event=null;}
+ // SALE: 바가지 closed, drink intent up
+ {const h=fresh('ev-sale'),t=h.run;t.phase='sell';const n=t.npcs[0];n.traits=[];n.money=9999;n.pack=[];n.refused=[];t.queue=[n.id];t.cursor=0;h.stock('water',1);
+  t.event=E('pricewatch');assert.equal(h.sell(t.inventory.at(-1).id,'overcharge'),false,'가격 단속: no 바가지 sale');assert.equal(n.pack.length,0);
+  /* a drink that does not meet the Gate's Hazard, so its chance is not the Counter ceiling */
+  const drink=['coffee','herbtea','energy'].find(id=>{t.event=null;return h.interest(n,DATA.itemBy[id],'full').chance<.87;});
+  t.event=null;const a=h.interest(n,DATA.itemBy[drink],'full').chance;t.event=E('heatwave');const b=h.interest(n,DATA.itemBy[drink],'full').chance;assert.ok(b>a,'폭염 raises drink intent: '+drink+' '+a+' -> '+b);t.event=null;}
+ // eligibility: an Event whose subject is absent today is out of the pool
+ {const h=fresh('ev-elig'),t=h.run;for(const n of t.npcs){n.injury=0;n.loyalty=0;}t.inventory=[];
+  for(const id of ['medcorps','consolation','regularday','fridgebreak'])assert.equal(h.eventEligible(E(id)),false,id+' needs its subject');
+  t.npcs[0].injury=1;assert.equal(h.eventEligible(E('medcorps')),true);t.npcs[1].loyalty=80;t.npcs[1].introduced=true;assert.equal(h.eventEligible(E('regularday')),true);
+  h.stock('rice',1);assert.equal(h.eventEligible(E('fridgebreak')),true);
+  t.dungeons=t.dungeons.slice(0,1);assert.equal(h.eventEligible(E('gateclosed')),false,'one Gate cannot close');}
 });
 
 test('EVENT §DEEP EXPEDITION DAY EXCLUSION: suppressing an Event costs the run stream no draw',()=>{

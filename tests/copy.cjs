@@ -80,6 +80,7 @@ const COMPOSED={
  '5-5':"presentation.js labels.loyaltyBonus + formatted value",
  '6-5':"presentation.js heroLine(): who+' 덕분에 '+said",
  '11-6':"relics.js: HQ price floor constant concatenated into the effect text",
+ '13-41':"shop.js validateCart / app.js BLOCK_REASON.cap: '오늘은 같은 상품을 '+cap+'개까지만 발주할 수 있습니다.' - the cap is the Event's own number (v2.9.11)",
  '9-5':"decorations.js name/effect are separate fields, rendered as separate elements (app.js loadoutModal / decoModal) - never joined with ' — '"};
 /* A composed line whose words ALSO occur, by coincidence, inside another shipped literal - so the
    substring search finds it although its own surface is still composed. Named, so the exact-set
@@ -679,7 +680,7 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
    Function. This is a 1:1 equality table: a paraphrase, a missed row or a stale example is a
    FAIL here rather than something a pattern absorbs. Mechanics are out of scope and untouched -
    the effects objects are asserted to be exactly what they were. */
-test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Function',()=>{
+test('SA-Q37 / COPY_AUDIT §13: all 55 Events carry the approved Flavor and Function',()=>{
  const APPROVED=[
   ['logistics','물류대란','북문 운송로가 막혔다. 오늘 들어온 상자마다 우회 운임 딱지가 붙어 있다.','오늘 모든 발주 매입가 +15%'],
   ['oneplus','본사 1+1 행사','입고표엔 한 상자였는데 두 상자가 왔다. 본사 행사품이라고 한다.','지정 발주 상품 1종 · 1개 발주 시 2개 입고'],
@@ -704,9 +705,42 @@ test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Func
   ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2'],
   ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G'],
   ['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','남은 영업 동안 사망 한도 +1'],
+  /* §13-24 … §13-55 (User 2026-09-28, v2.9.11) */
+  ["medcorps","길드 의료단 순회","길드 의료단 마차가 게이트 거리를 돈다. 줄 선 모험가들의 붕대가 하나둘 풀린다.","오늘 방문하는 부상 모험가 · 부상 회복"],
+  ["medicshift","길드 의무관 당직","의무관이 오늘 밤은 길드에 남는다고 했다. 붕대 상자가 접수대 옆에 놓였다.","오늘 밤 원정 결과 부상 최대 2회 · 무사로"],
+  ["consolation","길드 위로금","길드가 다친 조합원에게 위로금 봉투를 돌렸다. 봉투에는 '몸조심'이라고만 적혀 있다.","오늘 방문하는 부상 모험가 · 60G 추가 구매 가능"],
+  ["guildbonus","길드 특별 수당","길드가 원정 수당을 앞당겨 풀었다. 봉투가 생각보다 얇지는 않다.","오늘 방문 모험가 · 40G 추가 구매 가능"],
+  ["hqlogistics","본사 물류 지원","본사 트럭이 운임을 받지 않고 돌아갔다. 기사도 이유는 모른다.","오늘 모든 발주 매입가 -15%"],
+  ["insurebuy","보험 공동 구매","길드 보험 창구가 공동 구매를 돌렸다. 상자마다 할인 도장이 찍혀 있다.","오늘 보험 매입가 -30%"],
+  ["gearaid","본사 원정용품 지원","본사가 원정용품 창고를 정리한다며 장비 상자를 싸게 넘겼다.","오늘 야외장비 매입가 -30%"],
+  ["banquet","길드 연회","길드가 연회를 연다며 음식을 챙겨 가라고 했다. 오늘은 한 입이 두 입만큼 든든하다.","오늘 음식의 피로 회복 ×2"],
+  ["shiftrest","원정 교대 근무","길드가 원정대를 두 조로 나눠 교대로 쉬게 했다. 돌아오는 발걸음이 덜 무겁다.","오늘 원정으로 쌓이는 피로 절반"],
+  ["spaday","길드 휴양일","길드가 온천 이용권을 돌렸다. 오늘 오는 손님들은 어깨가 한결 가볍다.","오늘 방문 모험가 · 피로 -8"],
+  ["regularday","단골의 날","단골 손님이 오늘 들르겠다는 쪽지를 친구 편에 보냈다.","오늘 단골 1명 추가 방문"],
+  ["bounty","길드 현상금","게시판에 현상금 종이가 새로 붙었다. 액수 앞에서 발걸음이 느려진다.","오늘 원정 보상 +20%"],
+  ["omen","마왕의 징조","새벽 하늘이 붉게 물들었다. 게이트 안쪽이 조용해서 더 불안하다.","오늘 게이트 요구 전력 +8%"],
+  ["latedelivery","입고 지연","배송 마차 바퀴가 빠졌다. 오늘 들어온 건 사과 편지 한 장.","오늘 발주 후보 -2"],
+  ["drought","가뭄","우물 앞 줄이 길다. 생수 상자 값이 아침마다 오른다.","오늘 음료 매입가 +30%"],
+  ["guildtax","길드 세금 징수","징수원이 영업 시작 전에 왔다. 영수증은 주지 않았다.","오늘 운영비 +50G"],
+  ["monsoon","장맛비","비가 그치지 않는다. 우산 든 손님은 봉지를 들 손이 없다.","오늘 음식·음료 구매 의사 -15%p"],
+  ["ordercap","본사 발주 제한","본사 공문: 오늘은 품목당 두 상자까지만. 이유는 '사정상'.","오늘 같은 상품 발주 최대 2개"],
+  ["noreroll","포스기 먹통","포스기가 멈췄다. 오늘은 발주서를 바꿔 달라는 전화가 안 된다.","오늘 발주 교환 불가"],
+  ["pricewatch","가격 단속","길드 감시관이 가격표를 하나씩 들여다보고 있다.","오늘 바가지(150%) 판매 불가"],
+  ["collapse","퇴각로 붕괴","게이트 뒤편 샛길이 무너졌다. 오늘은 돌아 나올 길이 하나뿐이다.","오늘 원정 퇴각 확률 -10%p"],
+  ["summons","길드 소집령","길드가 실력자 한 명을 급히 불러갔다. 행선지는 비밀이라고 한다.","오늘 레벨이 가장 높은 모험가 대신 다른 모험가 방문"],
+  ["fridgebreak","냉장고 고장","냉장고 모터가 새벽부터 덜컹거린다. 수리 기사는 내일 온다고 했다.","오늘 음식·음료 재고 유통기한 -1일"],
+  ["nightmarket","야시장","게이트 거리에 야시장이 열렸다. 사람도 많고 자릿세도 붙었다.","오늘 방문객 +3 · 운영비 +60G"],
+  ["draft","원정 징발령","길드가 원정 인원을 모자라게 모았다. 남은 사람 몫이 커졌다.","오늘 원정 보상 +40% · 방문객 -1"],
+  ["clearance","본사 재고 떨이","본사 창고 정리 날이다. 싸게 주지만 고를 수는 없다.","오늘 모든 발주 매입가 -25% · 발주 후보 -3"],
+  ["eliteorder","정예 토벌령","왕도가 정예 토벌령을 내렸다. 게이트가 험해진 만큼 배우는 것도 많다.","오늘 게이트 요구 전력 +15% · 원정 경험치 +50%"],
+  ["heatwave","폭염","진열대 유리가 뜨겁다. 음료 칸 앞에서만 사람들이 오래 서 있다.","오늘 음료 구매 의사 +25%p · 음료 매입가 +35%"],
+  ["gateclosed","게이트 임시 폐쇄","경비대가 게이트 하나에 밧줄을 쳤다. 그쪽으로 가려던 모험가들이 다른 줄에 선다.","오늘 열린 게이트 1곳 폐쇄"],
+  ["trainingweek","길드 훈련 주간","교관들이 게이트 앞에 진을 쳤다. 배우는 건 많은데 챙겨 오는 건 적다.","오늘 원정 경험치 +50% · 원정 보상 -30%"],
+  ["nearexpiry","유통기한 임박 특가","본사가 날짜 임박 상품을 싸게 돌렸다. 스티커 날짜가 오늘이다.","오늘 발주 매입가 -40% · 오늘 들어온 재고는 오늘까지"],
+  ["safegates","게이트 안정화 작업","길드 공병대가 밤새 게이트를 다졌다. 안쪽이 조용해진 만큼 챙길 것도 적다.","오늘 모든 게이트 1단계 · 원정 보상 -40%"],
  ];
- assert.equal(APPROVED.length,23,'§13 audits all 23 Events');
- assert.deepEqual(DATA.events.map(e=>e.id),APPROVED.map(r=>r[0]),'the catalogue is exactly those 22, in order');
+ assert.equal(APPROVED.length,55,'§13 audits all 55 Events (23 → 55 in v2.9.11)');
+ assert.deepEqual(DATA.events.map(e=>e.id),APPROVED.map(r=>r[0]),'the catalogue is exactly those 55, in order');
  for(const [id,name,reveal,description] of APPROVED){
   const e=DATA.events.find(x=>x.id===id);
   assert.ok(e,'the catalogue still has '+id);
@@ -730,7 +764,41 @@ test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Func
   audit:{audit:1},festival:{foodDemand:0.2},strike:{visitors:-1},unknown:{unknown:1},
   halfPrice:{halfPrice:1},poisonfog:{poison:1},caravan:{offers:2},payday:{wallet:1.2},
   clinic:{medicalDemand:0.2},wastecover:{wasteDelay:1},bard:{visitors:2},nightshift:{overheadFree:1},
-  rite:{deathLimit:1}};
+  rite:{deathLimit:1},
+  /* v2.9.11 */
+  medcorps:{"healVisitors": 1},
+  medicshift:{"nightSaves": 2},
+  consolation:{"injuredBudget": 60},
+  guildbonus:{"flatBudget": 40},
+  hqlogistics:{"price": 0.85},
+  insurebuy:{"categoryPrice": {"insurance": 0.7}},
+  gearaid:{"categoryPrice": {"gear": 0.7}},
+  banquet:{"feast": 2},
+  shiftrest:{"outcomeFatigue": 0.5},
+  spaday:{"arrivalFatigue": 8},
+  regularday:{"regularVisit": 1},
+  bounty:{"reward": 1.2},
+  omen:{"danger": 1.08},
+  latedelivery:{"offers": -2},
+  drought:{"categoryPrice": {"drink": 1.3}},
+  guildtax:{"overheadAdd": 50},
+  monsoon:{"foodDemand": -0.15},
+  ordercap:{"orderCap": 2},
+  noreroll:{"noReroll": 1},
+  pricewatch:{"noOvercharge": 1},
+  collapse:{"escapeCut": 0.1},
+  summons:{"summons": 1},
+  fridgebreak:{"shelfCut": 1},
+  nightmarket:{"visitors": 3, "overheadAdd": 60},
+  draft:{"reward": 1.4, "visitors": -1},
+  clearance:{"price": 0.75, "offers": -3},
+  eliteorder:{"danger": 1.15, "xpMult": 1.5},
+  heatwave:{"drinkDemand": 0.25, "categoryPrice": {"drink": 1.35}},
+  gateclosed:{"closeGate": 1},
+  trainingweek:{"xpMult": 1.5, "reward": 0.7},
+  nearexpiry:{"price": 0.6, "sameDayStock": 1},
+  safegates:{"tierOne": 1, "reward": 0.6},
+  };
  for(const e of DATA.events)assert.deepEqual(e.effects,EFFECTS[e.id],e.id+' mechanics are unchanged');
  assert.deepEqual(DATA.events.filter(e=>e.weight!==1).map(e=>e.id).sort(),['bard','nightshift'],
   'and so are the two rare weights');
