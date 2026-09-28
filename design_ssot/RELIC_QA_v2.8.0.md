@@ -435,7 +435,7 @@ Verify these exact Store Support functions in RELIC_v2.8.0.md:
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
   the Day's first offer generation
-- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.25; no shelf life
+- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15 (v2.9.11); no shelf life
 - 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read (User 2026-09-28, v2.9.11)
 - 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so (v2.9.11)
 - 후방 창고 증설 -> inventory capacity +5 (User 2026-09-26, v2.9.2 fourth pass; was +10)
@@ -663,7 +663,7 @@ PASS:
 
 EXPECT:
 - no shelf-life effect and no operating-cost effect
-- Food/Drink ORDER price x1.25
+- Food/Drink ORDER price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
 - Supply (피로 회복) unchanged (User 2026-09-24, v2.9.0)
 - Counter unchanged
 

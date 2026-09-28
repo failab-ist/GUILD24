@@ -578,7 +578,7 @@ price, store receives the full charged price
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
 the Day's first offer generation
-- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.25; no shelf life
+- 24시간 신선체계 -> Food/Drink native Core-Stat +50%; Food/Drink ORDER price x1.15 (v2.9.11); no shelf life
 bulk 130
 stamp 130
 member 130
@@ -630,7 +630,7 @@ Per Food/Drink Item in the Bag:
 - no matching-Counter multiplier
 - a non-Food/Drink Item takes nothing
 - no shelf-life effect and no operating-cost effect
-- Food/Drink ORDER price x1.25
+- Food/Drink ORDER price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
 - 즉석식품 코너 native Core-Stat +25%
 - 원정 도시락 코너 adds no native Core-Stat bonus
 - kitchen + fresh24 => ×1.75 native positive Stat

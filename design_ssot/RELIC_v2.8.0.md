@@ -795,7 +795,7 @@ notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
 
 ```text
 no shelf-life effect and no operating-cost effect
-Food/Drink ORDER (purchase) price x1.25
+Food/Drink ORDER (purchase) price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
 Food/Drink positive native Core-Stat contribution +50%
 Supply (피로 회복) unchanged
 Hazard Counter unchanged
@@ -803,7 +803,7 @@ Insurance unchanged
 RiskReward penalty unchanged
 ```
 
-Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.` (User 2026-09-24, v2.9.0; +25% → +15% User 2026-09-28, v2.9.11)
 
 26. 지역 거점점 계약
 tag=Customer

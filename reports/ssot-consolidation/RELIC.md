@@ -688,7 +688,7 @@ Price = 290G
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 no shelf-life effect and no operating-cost effect
-Food/Drink ORDER (purchase) price x1.25
+Food/Drink ORDER (purchase) price x1.15 (User 2026-09-28, v2.9.11; was x1.25)
 Price = 340G
 freeUseConsumesFirstRerollStep=NO
 - after the free first use, same-Day Reroll follows the normal curve from its first step
@@ -774,7 +774,7 @@ Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / fl
 Supply (피로 회복) unchanged
 Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
 Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
-Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.` (User 2026-09-24, v2.9.0; +25% → +15% User 2026-09-28, v2.9.11)
 - Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
 ```
 

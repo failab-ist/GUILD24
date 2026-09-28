@@ -51,6 +51,11 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **24시간 신선체계 buy-price penalty +25% → +15%** - RELIC 25, RELIC_QA REL-Q75, COPY_AUDIT §11-25 (User 2026-09-28): the
+  Keystone's Food/Drink ORDER price x1.25 left it below zero (Store Capital −92G a Run, D30 −0.3%p, `reports/remeasure-v2911.md`
+  §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
+  (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
+  Food/Drink Stat bonus is unchanged.
 - **Event copy proofread** - COPY_AUDIT §13-24 / §13-26 / §13-45 / §13-48 / §13-54 (User 2026-09-28): 길드 의료단 순회 and
   길드 위로금 read `오늘 방문 부상 모험가 · …` like the other visitor lines; 길드 소집령 reads `실력자 한 명이 길드에 급히 불려
   갔다.` and `오늘 방문 예정이었던 최고 레벨 모험가 대신 다른 모험가 방문`; 원정 징발령 reads `길드가 모험가 몇 명을 징발해

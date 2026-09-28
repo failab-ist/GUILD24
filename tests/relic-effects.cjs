@@ -379,17 +379,17 @@ test('REWORK 즉석식품 코너: overheadBase +10% from the next Day, beside hu
  const g=fresh();g.run.dayFacilities=[];g.run.facilities=['kitchen'];
  assert.equal(g.expectedOperatingCost(),charged(0),'bought today: no overhead until the next Day');
 });
-test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.25, no shelf life, no overhead',()=>{
+test('REWORK 24시간 신선체계: Food/Drink ORDER price x1.15 (v2.9.11; was x1.25), no shelf life, no overhead',()=>{
  const g=fresh('fresh24'),s=g.run;s.facilities=['fresh24'];
  for(const id of ['rice','guildlunch','lowpotion','rope']){const it=DATA.itemBy[id];s.facilities=[];const plain=g.offerFor(it).price;s.facilities=['fresh24'];
-  assert.equal(g.offerFor(it).price,['food','drink'].includes(it.category)?Math.round(it.buy*1.25):plain,id+' order price');}
+  assert.equal(g.offerFor(it).price,['food','drink'].includes(it.category)?Math.round(it.buy*1.15):plain,id+' order price');}
  assert.equal(Relics.shelf(g,DATA.itemBy.rice),0,'no shelf-life effect');
  s.inventory=[];g.stock('rice',1);assert.equal(s.inventory[0].expires,s.day+DATA.itemBy.rice.days);
  assert.equal(nightWith(['fresh24']).g.run.daily.operating,nightWith([]).g.run.daily.operating,'no overhead');
  // acquisition reprices the Food/Drink offers already on the table, once
  s.facilities=[];s.phase='order';s.money=9999;s.offers=[{item:'rice',price:35,quantity:3},{item:'rope',price:50,quantity:3}];
  s.relicWindow={milestoneDay:5,slothSealOpportunity:false,candidateIds:['fresh24'],candidatePrices:[0],purchased:null,focusedRevealSeen:true,expiryDay:99};
- g.buyRelic('fresh24');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.25),50]);
+ g.buyRelic('fresh24');assert.deepEqual(s.offers.map(o=>o.price),[Math.round(35*1.15),50]);
 });
 test('REWORK 냉장 유통 계약: Uncommon+ Food/Drink purchase intent +16%p, no stat effect',()=>{
  const g=fresh('coldcase-intent'),n=g.run.npcs[0];n.traits=[];n.money=9999;n.loyalty=0;n.injury=0;

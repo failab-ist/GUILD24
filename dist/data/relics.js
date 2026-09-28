@@ -31,7 +31,7 @@ const rows=[
 ['lifetime','평생 단골제','keystone',['vip'],310,'단골 손님 생환 시 · 소지금 +50G · 다음 방문 가중치 +50%.'],
 ['royalCert','왕도 프리미엄 인증','keystone',['premium'],320,'바가지(150%) 판매 시 · 판매가의 40% 추가 지급 · 바가지 구매 의사 +16%p.'],
 ['expeditionCert','원정 전문 인증','keystone',['expedition'],290,'위험 대응 상품의 대응 수치 +60% · 그 상품을 산 손님의 다음 방문 시 소지금 +50G.'],
-['fresh24','24시간 신선체계','keystone',['fresh'],360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +25%.'],
+['fresh24','24시간 신선체계','keystone',['fresh'],360,'음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.'],
 ['hub','지역 거점점 계약','keystone',['customer'],340,'다음 날부터 · 방문객 +1명 45% · +2명 15% · 그대로 40% · 기본 운영비 +10%.'],
 ['warehouse','후방 창고 증설','utility',[],130,'창고 용량 +5칸.'],
 ['extraOrder','본사 추가발주권','utility',[],130,'다음 후보 생성부터 · 발주 후보 +2개.'],
@@ -75,7 +75,7 @@ D.relicParams={
  lifetime:{goldBonus:50,revisitMult:1.5},
  royalCert:{commissionRate:.40},
  expeditionCert:{counterMult:1.6,nextVisitGold:50},
- fresh24:{statBonus:.50,orderPriceMult:1.25},
+ fresh24:{statBonus:.50,orderPriceMult:1.15},
  hub:{p1:.45,p2:.15,overheadRate:.10},
  warehouse:{slots:5}, /* v2.9.2 fourth pass (User 2026-09-26): +10 -> +5 */
  extraOrder:{extraOffers:2},
