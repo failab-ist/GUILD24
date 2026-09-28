@@ -2,7 +2,8 @@
 // Dev-only. A seeded Run is played to a Day-2 SALE and the current customer's state is set on the page's own Game instance, so
 // each case states one condition: healthy with an injured chain behind it (no line), injured with no chain (no line - the first
 // injured departure adds nothing), injured with a chain of 2 (`연속 부상 출발 2회` directly under the readout `.top`, the same
-// number the NPC detail row reads). 390 and 1280, reduced motion.
+// number the NPC detail row reads); at 390 the forecast pin carries the same line once the readout scrolls away (v2.9.9 quick patch).
+// 390 and 1280, reduced motion.
 //   node tools/qa-strain-line.cjs [out-dir]
 const {spawn}=require('node:child_process'),path=require('node:path'),fs=require('node:fs');
 const PORT=Number(process.env.QA_PORT||5197),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium',OUT=process.argv[2]?path.resolve(process.argv[2]):null;
@@ -35,6 +36,13 @@ const CASES=[['healthy',0,2,null],['first',1,0,null],['chain',1,2,'연속 부상
       streak:Dungeon.injuredStreak(n.records)};},[injury,chain]);
     const ok=want?got.count===1&&got.text[0]===want&&got.afterTop&&got.text[0]==='연속 부상 출발 '+got.streak+'회':got.count===0;
     check(width+' '+name+(want?' shows `'+want+'` under the readout .top':' shows no line'),ok,JSON.stringify(got));
+    // v2.9.9 quick patch (UI-Q-v29-24): with the readout scrolled away on a phone, the forecast pin carries the same line
+    if(!desktop){await p.evaluate(()=>{const sc=document.querySelector('.stage-scroll');sc.scrollTop=sc.scrollHeight;});
+     await p.waitForFunction(()=>document.querySelector('.forecast-pin.show'),null,{timeout:3000}).catch(()=>{});
+     const pin=await p.evaluate(()=>{const s=document.querySelector('.forecast-pin.show .pin-strain');return {shown:!!document.querySelector('.forecast-pin.show'),text:s?s.textContent:null,visible:!!(s&&s.offsetParent)};});
+     check(width+' '+name+(want?' pin carries `'+want+'`':' pin carries no line'),pin.shown&&(want?pin.visible&&pin.text===want:pin.text===null),JSON.stringify(pin));
+     if(OUT)await p.screenshot({path:path.join(OUT,`strain-${width}-${name}-pin.png`)});
+     await p.evaluate(()=>{document.querySelector('.stage-scroll').scrollTop=0;});}
     // desk and dossier each carry a readout; one of them is hidden at each width
     if(OUT){for(const el of await p.$$('.p-sale .readout'))if(await el.isVisible()){await el.scrollIntoViewIfNeeded();break;}
      await p.screenshot({path:path.join(OUT,`strain-${width}-${name}.png`)});}

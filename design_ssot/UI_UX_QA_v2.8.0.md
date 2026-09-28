@@ -3,7 +3,7 @@
 DOC=UI_UX_QA
 OWNER=qa,ui,ux,event_reveal,mobile,menu_settings,runtime_continuity,sale_handling,tutorial,typography,visual_material,final_preparation_ui
 DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/UI_UX_QA_v2.8.0-patch.md,history/UI_UX_QA_v2.7.0.md,history/UI_UX_QA_v2.6.1.md,history/UI_UX_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX_QA.md
@@ -1375,6 +1375,7 @@ FAIL:
 PASS:
 - a customer departing injured with an injured-departure chain of {n} >= 1 shows exactly one `연속 부상 출발 {n}회` line directly
   under the readout `.top`, at 390 and 1280, with the same {n} as the NPC detail row
+- at 390, with the readout scrolled out of view, the forecast pin shows the same line under its two readings for the chain case and none for the healthy and first-injured cases (User 2026-09-28, v2.9.9 quick patch; UI-Q-v29-24)
 - a healthy customer (whatever chain their records hold) and an injured customer with no chain show no line
 - the readout `.top` still shows exactly the two cells; the line is small and muted, one line, no `?`
 - `node tools/qa-strain-line.cjs` (in qa:runtime)
@@ -2567,6 +2568,7 @@ PASS:
 - with the readout in view no pin is shown; with it out of view the pin reads the readout's two words in the readout's colours, at the top of the scrolled column
 - one tap shows only the `전망` chip; a second tap restores the line; scrolling back to the top hides the pin again, and after a fold, scrolling away again shows the full line, not the chip
 - at 1280 no pin is shown in any scroll state; no layout row moves when the pin appears; no runtime error
+- a customer with a `연속 부상 출발 {n}회` line on the readout carries the same line under the pin's two readings; one without it carries none; the folded chip reads `전망` only (User 2026-09-28, v2.9.9 quick patch)
 
 FAIL:
 - a pin while the readout is visible, a pin on a desk, values that differ from the readout, a pin that pushes the layout, or a Save / account field for the fold

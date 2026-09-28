@@ -13,6 +13,11 @@ stays 2.9.9.
   bankruptcy 24.8 → 21.5%, D29 Gold median 3,345 → 3,340; skilled-start D30 unchanged. The clear rate sits about 1%p above the
   GAME_VISION fresh / balanced reference (2~8%), accepted by the User. DUNGEON_HAZARD §expeditionWalletReward, DUNGEON_ITEM_QA
   (Reward PASS); ledgers; tests revision; `tools/measure-wallet-v299.cjs`.
+- SALE forecast pin strain line (User 2026-09-28): the strain line was hard to notice, and on a phone it scrolled away with the
+  readout. The pin now carries `연속 부상 출발 {n}회` under its two readings - the same condition (an injured departure with a chain
+  of 1 or more; the User kept the threshold), words, number and small muted type; the folded chip stays `전망`; a desk has no pin.
+  UI_UX §SALE — FORECAST PIN, UI_UX_QA UI-Q-v29-24 / UI-Q-v29-38, COPY_AUDIT §4-25; ledgers; ui-guard pin; `tools/qa-strain-line.cjs`
+  checks the pin at 390 (in qa:runtime). Captured before / after at 360 and 390 and confirmed by the User.
 
 ## v2.9.9 — presentation: the store scene, the dock Actions, SALE, the FINAL clash (User 2026-09-27)
 

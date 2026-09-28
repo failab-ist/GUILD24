@@ -1886,6 +1886,15 @@ test('UI-Q-v29-38: SALE strain line - injured with a chain only, the NPC detail 
  assert.ok(!/strain[^']*%|deathRisk[^;]*strain/.test(r),'no % on the line');
  assert.ok(/\.readout \.strain\{[^}]*font:500 12px/.test(css),'small');
 });
+/* UI-Q-v29-24 (UI_UX §SALE — FORECAST PIN, User 2026-09-28, v2.9.9 quick patch): the pin carries the readout's strain line under its
+   two readings - the same condition, wording and number; inside .pin-full, so the folded chip stays `전망` */
+test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and wording, folded away with the readings',()=>{
+ const p=fn('forecastPin');
+ assert.ok(p.includes("streak=n.injury===1?Dungeon.injuredStreak(n.records):0"),'injured only, the same injuredStreak');
+ assert.ok(p.includes("(streak>0?'<span class=\"pin-strain\">연속 부상 출발 '+streak+'회</span>':'')"),'a chain of 1 or more, the readout wording');
+ assert.ok(p.indexOf('pin-strain')<p.indexOf('pin-chip')&&p.indexOf('pin-strain')>p.indexOf('pin-full'),'inside the full line, not the chip');
+ assert.ok(/\.forecast-pin \.pin-strain\{[^}]*font:500 12px/.test(css),'small, as the readout line');
+});
 
 /* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
 test('UI-Q-v29-39: ORDER price tags - 매입 labelled on top, 판매 under it, no 매입 in the metadata line',()=>{
