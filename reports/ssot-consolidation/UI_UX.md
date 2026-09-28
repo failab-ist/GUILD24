@@ -1806,3 +1806,40 @@ User 2026-09-28, v2.9.10 quick patch); an explicit penalty keeps its place in th
 (User 2026-09-28, v2.9.10 quick patch; it had been a `· 1+1` fragment inside the muted metadata line and went unseen); the
 metadata line carries no `1+1`
 ```
+
+## AMENDMENT — v2.9.10 quick patch: SLOTH seal window and count (User 2026-09-28)
+
+봉인 해제 closes the Store Support window as 구매 does and a spent window shows 닫기; the owned Store Support list carries the SLOTH seal count once revealed.
+
+```new
+- `봉인 해제` spends the window as 구매 does and closes it as 구매 does; a window already spent (bought or a seal broken) shows
+`닫기`, never `나중에 결정` (User 2026-09-28, v2.9.10 quick patch - RUNTIME UX BUG: it redrew in place under a decision made)
+- the owned Store Support list (the `점포지원 N / 7` chip's sheet) opens, on a SLOTH Run whose seals are revealed (D15 Trait),
+with one line `슬로스 봉인 해제 {N} / 3`; the chip itself does not change (User 2026-09-28, v2.9.10 quick patch)
+```
+
+## AMENDMENT — v2.9.10 quick patch: seal surfaces without the edge bar (User 2026-09-28)
+
+The SLOTH seal choice and seal count lose the violet edge bar, and the count reads just 슬로스 봉인 해제 N / 3.
+
+```new
+```
+
+## AMENDMENT — v2.9.10 quick patch: the seal plate folds (User 2026-09-28)
+
+The SLOTH seal plate is a dark violet plate and folds to a chip on a tap on itself. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- the seal choice and the seal count carry no violet edge bar (User 2026-09-28, v2.9.10 quick patch); the seal choice is its own
+dark violet plate, set apart from the candidate list
+hidden on a phone); the chip unfolds it; a window opens unfolded and a tap on the candidates never folds it (User 2026-09-28,
+v2.9.10 quick patch)
+```
+
+## AMENDMENT — v2.9.10 quick patch: the seal plate's fold key (User 2026-09-28)
+
+A small 접기 key at the seal plate's top right says the plate folds. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- a small `접기 ▼` key at the seal plate's top right says it folds (User 2026-09-28); that key, or a tap on the seal plate anywhere but its `봉인 해제` key, folds it to a chip `봉인 해제 {N} / 3 ▲` (so the last candidate is not
+```
