@@ -266,7 +266,7 @@ function greatSuccessSignal(n,d,facilities=[]){
    the rest through it. v2.9.2 second pass (User 2026-09-26, after the `reader` harness review): 대성공 1.10 -> 1.00 and the
    combat-success path 1.00 -> 0.90 (성공, or a won fight that came home hurt); 퇴각 .38 and other living .5 unchanged. */
 const GREAT={xp:1.00},WIN={xp:.90};
-const WALLET_MULT={'대성공':1,'성공':1,'퇴각':.35,'부상':.20,'중상':.10,'사망':0};
+const WALLET_MULT={'대성공':1,'성공':1,'퇴각':.40,'부상':.25,'중상':.15,'사망':0};
 const DEATH={combat:.18,environment:.12,cap:.30,injured:.10,injuredCap:.40,exhausted:.10};
 /* DUNGEON_HAZARD §Healthy / injured failure Death chance - strainEscalation (User 2026-09-25,
    v2.9.1 balance): only CONSECUTIVE injured departures count now. A healthy departure - including

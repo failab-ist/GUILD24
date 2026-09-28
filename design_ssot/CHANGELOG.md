@@ -3,6 +3,17 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.9 quick patch — Wallet multipliers, SALE pin strain line (User 2026-09-28)
+
+After the review of the User's fresh Run ended by the Death limit on DAY 23 (reports/fresh-run-d23-review-v299.md). The build marker
+stays 2.9.9.
+- Wallet outcome multipliers (User 2026-09-28): 퇴각 0.35 → 0.40, 부상 0.20 → 0.25, 중상 0.10 → 0.15; 대성공 / 성공 1.00 and 사망 0
+  unchanged. It answers the D11~20 squeeze the User reported (customers too poor to buy, the store too tight not to overcharge) without
+  touching combat: `reader` 5,000 seeds, before → after (native): D20 29.4 → 32.9%, D30 12.2 → 13.6%, clear 8.3 → 9.4%, D11~20
+  bankruptcy 24.8 → 21.5%, D29 Gold median 3,345 → 3,340; skilled-start D30 unchanged. The clear rate sits about 1%p above the
+  GAME_VISION fresh / balanced reference (2~8%), accepted by the User. DUNGEON_HAZARD §expeditionWalletReward, DUNGEON_ITEM_QA
+  (Reward PASS); ledgers; tests revision; `tools/measure-wallet-v299.cjs`.
+
 ## v2.9.9 — presentation: the store scene, the dock Actions, SALE, the FINAL clash (User 2026-09-27)
 
 From the reference review of 2026-09-27 (translate each Phase's act into a physical game object, tied together by one

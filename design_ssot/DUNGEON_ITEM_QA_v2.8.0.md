@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_ITEM_QA
 OWNER=qa,dungeon,item,hazard,preparation,naked_run,fatigue,supply,injury,death_risk,great_success,deep_expedition,result_proof
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.6
+DOC_VERSION=2.9.9
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
 DOC_AUTHORITY=DESIGN_QA_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_ITEM_QA_v2.8.0-patch.md,history/DUNGEON_ITEM_QA_v2.7.0.md,history/DUNGEON_ITEM_QA_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_ITEM_QA.md
@@ -534,7 +534,7 @@ Reward PASS:
 - EXP base = 22 + Day×4.6
 - EXP outcome multipliers are Great 1.00 / Retreat 0.38 / combat-success 0.90 / other living 0.50 (User 2026-09-26, v2.9.2 balance; Great was 1.10, 1.40 before; combat-success was 1.00)
 - Wallet base = 35 + Day×8
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.1 balance)
+- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0 (User 2026-09-28, v2.9.9 quick patch; were 0.35 / 0.20 / 0.10 since v2.9.1)
 - explicit XP/Loot/Gate reward modifiers compose once
 - living combat-success equipment chance starts at 20% plus explicit rare-loot modifier
 - equipment gain on hit is seeded integer +2 through +5

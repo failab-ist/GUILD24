@@ -762,7 +762,6 @@ chain broken once by a healthy departure, and a Fatigue 20+ departure chain (Use
 - strainEscalation equals min(0.30, 0.08·max(0,c−1)) exactly, c = consecutive injured departures (0 when healthy)
 - failed-combat Severe branch uses 36% base before current modifiers (User 2026-09-25, v2.9.1 balance)
 - environment/other Severe branch uses 11% base before current modifiers
-- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.35 / 부상 0.20 / 중상 0.10 / 사망 0 (User 2026-09-25, v2.9.1 balance)
 ### DUN-Q-v29-BC1 — 만반의 준비 / LEVEL DEATH REDUCTION
 (User 2026-09-25, v2.9.1 balance; owner `DUNGEON_HAZARD_v2.8.0.md` §Preparation / Level Death reduction.)
 Controlled failed expeditions at Lv1 / Lv2 / Lv10 / Lv20, each with and without 만반의 준비 (healthy, Fatigue < 20, 2+ Items),
@@ -953,4 +952,12 @@ User 2026-09-27: Item ids renamed to read as the current Items (heat/lava/bar/pr
 - `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
 - `kingwater` reads visually as 왕도 천연암반수 / bottled water
 ### ITEM-Q10 — PREMIUM LUNCH (`guildlunch` / 길드 특제 도시락)
+```
+
+## AMENDMENT — v2.9.9 quick patch: Wallet outcome multipliers (User decision 2026-09-28)
+
+User 2026-09-28: 퇴각 / 부상 / 중상 Wallet multipliers 0.40 / 0.25 / 0.15 (owner DUNGEON_HAZARD). The line declared earlier is edited in place and removed from its fence above.
+
+```new
+- Wallet outcome multipliers are 대성공 / 성공 1.00 / 퇴각 0.40 / 부상 0.25 / 중상 0.15 / 사망 0 (User 2026-09-28, v2.9.9 quick patch; were 0.35 / 0.20 / 0.10 since v2.9.1)
 ```
