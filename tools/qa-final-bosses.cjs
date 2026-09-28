@@ -51,7 +51,7 @@ async function toFinal(page){
  for(let i=0;i<800;i++){
   if(await page.evaluate(`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`))break;
   await page.evaluate(`${STEP}()`);}
- return page.evaluate(`(()=>{const g=Guild24.game,s=g.run;g.run.day=30;g.morning();
+ return page.evaluate(`(()=>{const g=Guild24.game,s=g.run;g.run.day=30;g.run.inventory=g.run.inventory.filter(x=>x.expires===null||x.expires>30);/* the skipped Nights' discards (v2.9.11) */g.morning();
   if(s.event)s.eventSeen=true;s.bossReveal=s.bossReveal||{};
   for(const k of ['d0Seen','identitySeen','combatSeen','traitSeen','routeSeen','familySeen'])s.bossReveal[k]=true;
   if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;Guild24.render();return s.phase==='final';})()`);

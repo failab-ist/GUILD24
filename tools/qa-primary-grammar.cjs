@@ -101,7 +101,7 @@ const READ=`((sel,label)=>{const e=document.querySelector(sel);if(!e)return null
     await p.evaluate(`(${STEP})()`);}
    check(tag+' reached MORNING, ORDER, SALE, NIGHT and CLOSING',seen.size===5,[...seen].join(','));
    for(let i=0;i<120;i++){if(await p.evaluate(`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`))break;await p.evaluate(`(${STEP})()`);}
-   const atFinal=await p.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.morning();Guild24.render();return g.run.phase==='final';})()`);
+   const atFinal=await p.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.run.inventory=g.run.inventory.filter(x=>x.expires===null||x.expires>30);/* the skipped Nights' discards (v2.9.11) */g.morning();Guild24.render();return g.run.phase==='final';})()`);
    check(tag+' reached FINAL',atFinal);if(atFinal)await measure('final');
    await p.evaluate(()=>{Guild24.game.end(false,'운영비를 충당하지 못해 이번 점포를 마감했습니다.');});await measure('end');
    await ctx.close();}

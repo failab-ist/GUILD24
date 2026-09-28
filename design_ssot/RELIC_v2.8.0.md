@@ -2,8 +2,8 @@
 
 DOC=RELIC
 OWNER=relic,store_support,run_store_build,utility,foundation,hybrid,keystone,sloth_window
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
+DOC_VERSION=2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/RELIC_v2.8.0-patch.md,history/RELIC_v2.7.0.md,history/RELIC_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/RELIC.md
@@ -702,7 +702,8 @@ effect=Rare+ expedition-response items gain premium-economy viability
 20. 새벽 회수 계약
 tags=[Fresh,Rotation]
 - 새벽 회수 계약: Food/Drink stock whose shelf life ends is taken back at 50% of its cost instead of
-  being wasted (it is not counted as waste)
+  being wasted (it is not counted as waste); it is taken back that Night, with the discard (ITEM §SHELF LIFE, v2.9.11),
+  so the refund is on that Day's receipt
 - each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
 - it discounts no ORDER
 

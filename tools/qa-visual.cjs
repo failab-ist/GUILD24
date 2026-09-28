@@ -118,7 +118,7 @@ async function drive(page,target,seed){
  const beat=BOSS_BEAT[target];
  const d30=target==='final'||target==='end'||target==='endfail';
  let reached=await until(d30||beat?`Guild24.game.run.phase==='morning'&&Guild24.game.run.day>=5`:GOAL[target]);
- if(reached&&d30)reached=await page.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.morning();Guild24.render();return g.run.phase==='final';})()`);
+ if(reached&&d30)reached=await page.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.run.inventory=g.run.inventory.filter(x=>x.expires===null||x.expires>30);/* the skipped Nights' discards (v2.9.11) */g.morning();Guild24.render();return g.run.phase==='final';})()`);
  /* The same CONTROLLED SETUP the D30 captures use, for the same reason: this drive plays a
     cruder policy than the measured one and its Run ends legitimately around D15, so D20 and
     D25 are unreachable by playing. The Day is moved once and morning() opens the real beat. */
@@ -556,7 +556,7 @@ async function d25OrderProbe(page){
   fails.push('a reload rerolled the Final Hazard Pool');
 
  // D30 consumes the same state and stages no second Family reveal
- await page.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.morning();Guild24.render();})()`);
+ await page.evaluate(`(()=>{const g=Guild24.game;g.run.day=30;g.run.inventory=g.run.inventory.filter(x=>x.expires===null||x.expires>30);/* the skipped Nights' discards (v2.9.11) */g.morning();Guild24.render();})()`);
  await page.waitForTimeout(200);
  const d30=await seen();
  if(d30.family)fails.push('D30 revealed the Families a second time');

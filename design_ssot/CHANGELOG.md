@@ -3,6 +3,19 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
+
+- **Waste leaves the night it is due** - ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, EVENT §20,
+  RELIC 새벽 회수 계약: stock was discarded the morning after its last sale Day, so the Night receipt that said `오늘 폐기`
+  named stock the player had last seen a Day earlier - the opening stock, never ordered, made it look like waste from nowhere
+  (User play, 2026-09-28). Stock still unsold when SALE closes on its last sale Day (the shelf's `오늘까지`) now leaves that
+  Night and is that Day's `오늘 폐기`; nothing is discarded in the morning. How long an Item can be sold, warehouse room at
+  ORDER, 본사 폐기 유예 and the shelf wording are unchanged. What moves with it: 새벽 회수 계약's refund reaches the same
+  Night's Gold (before the Closing's bankruptcy check, a Day earlier than before); stock due tonight can no longer be sold off
+  in a short Closing's 재고 정리 (it has already gone); cumulative waste (본사 재고 감사) counts it a Day sooner. A save from an
+  earlier build that still holds stock past its day lets it go with that Night's waste.
+- **Build marker** 2.9.11.
+
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
 
 From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.

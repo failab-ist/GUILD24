@@ -182,17 +182,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   this.save();
  }
  /* Everything the new Day clears or carries over before anything is rolled: the ledger, the
-    Day's flags, what spoiled overnight, and each adventurer's own per-Day state. */
+    Day's flags, and each adventurer's own per-Day state (spoiled stock left the night before - nightDiscard). */
  morningReset(){const s=this.run;
   s.previousSales=s.daily.sales||0;s.dayFacilities=[...s.facilities];s.bulkUsed=false;s.guaranteeUsed=false;s.phase=s.day===30?'final':'morning';s.daily={revenue:0,spent:0,waste:0,operating:0,cogs:0,overcharge:0,discount:0,subsidy:0,liquidation:0,wasteCost:0,loyalty:0,sales:0,relicSpent:0,commission:0,greatSuccess:0,deepSponsor:0,unknownCosts:0};if(this.wears('thriftSafe')){const g=D.decorationParams.thriftSafe.dailyGold;s.money+=g;s.daily.safeGold=g;}s.nightCursor=0;s.say=null;s.closing=false;if(s.deep)s.deep.today=null;s.cart={};s.rerolled=false;s.rerollCount=0;s.halfPriceUsed=false;s.results=[];s.team=[];s.notice='DAY '+s.day+' · '+s.branch+'의 아침. 오늘의 던전을 확인하세요.';
-  let expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day);
-  /* 새벽 회수 계약: Food/Drink whose shelf life ends is taken back at 50% of what it cost instead
-     of being wasted - it leaves the shelf all the same, but it is not waste. */
-  if(this.has('dawnRecovery')){const back=expired.filter(x=>G.Relics.food(D.itemBy[x.item])),refund=back.reduce((a,x)=>a+Math.round((Number(x.cost)||0)*D.relicParams.dawnRecovery.refundRate),0);
-   s.money+=refund;s.daily.subsidy+=refund;expired=expired.filter(x=>!back.includes(x));s.inventory=s.inventory.filter(x=>!back.includes(x));}
-  s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);
-  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
-  s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day);
+  /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11): nothing is discarded in the morning any more - see nightDiscard(). */
   /* v2.9.0 rest recovery (DUNGEON_HAZARD §SUPPLY -> FATIGUE 6): a Severe-Injury rest day lowers Fatigue by 5, floor 0 */
   s.npcs.forEach(n=>{if(n.recovery>0){n.recovery--;if(!n.recovery){n.injury=0;n.status='건강';}}n.pack=[];n.refused=[];n.refusalReasons=[];n.pilgrim=false;n.eventBudget=0;});
  }
@@ -236,8 +229,8 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
    if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
   /* EVENT §20 본사 폐기 유예 (User 2026-09-28, v2.9.10 quick patch; was a refund of the overnight waste's cost, which the
-     player never saw and could not act on): stock whose last sale day is today - the shelf's `오늘까지`, discarded at the
-     next morning - gets one more day. Only that stock; nothing bought later today is touched. */
+     player never saw and could not act on): stock whose last sale day is today - the shelf's `오늘까지`, discarded tonight
+     (nightDiscard, v2.9.11) - gets one more day. Only that stock; nothing bought later today is touched. */
   if(ev.wasteDelay)for(const st of s.inventory)if(st.expires===s.day+1)st.expires+=1;
   if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
@@ -494,6 +487,18 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  /* SALE / NPC_TRAIT §NON-PURCHASE LOYALTY (2026-09-23): a visit that ends with a paid purchase
     today still adds +1 on departure; a visit without one adds nothing. Survival is +1. */
  depart(){const s=this.run;if(s.phase!=='sell')return;const n=this.current();if(n&&n.history.some(h=>h.day===s.day&&h.paid>0))this.loyal(n,1);s.cursor++;if(s.cursor>=s.queue.length)this.night();else this.arrive();this.save();}
+ /* ITEM §SHELF LIFE (User 2026-09-28, v2.9.11; was the next morning): stock whose last sale day is today - the shelf's
+    `오늘까지` - and that did not sell is discarded tonight, when SALE closes, so it lands on today's receipt as `오늘 폐기`.
+    A save from an earlier build may still hold stock past its day; it goes with tonight's. */
+ nightDiscard(){const s=this.run;
+  let expired=s.inventory.filter(x=>x.expires!==null&&x.expires<=s.day+1);
+  /* 새벽 회수 계약: Food/Drink whose shelf life ends is taken back at 50% of what it cost instead
+     of being wasted - it leaves the shelf all the same, but it is not waste. */
+  if(this.has('dawnRecovery')){const back=expired.filter(x=>G.Relics.food(D.itemBy[x.item])),refund=back.reduce((a,x)=>a+Math.round((Number(x.cost)||0)*D.relicParams.dawnRecovery.refundRate),0);
+   s.money+=refund;s.daily.subsidy+=refund;expired=expired.filter(x=>!back.includes(x));s.inventory=s.inventory.filter(x=>!back.includes(x));}
+  s.daily.waste=expired.length;s.daily.wasteCost=expired.reduce((a,x)=>a+x.cost,0);
+  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (v2.9.7): the receipt names what expired, so the Day keeps it per Item */
+  s.daily.wasteItems=expired.reduce((m,x)=>(m[x.item]=(m[x.item]||0)+1,m),{});s.stats.waste+=expired.length;s.inventory=s.inventory.filter(x=>x.expires===null||x.expires>s.day+1);}
  night(){const s=this.run;if(s.phase!=='sell')return;const ev=s.event?.effects||{};s.results=[];
   /* DUNGEON_HAZARD §BAD-LUCK PREPARATION ASSIST (hidden, User 2026-09-25, v2.9.1 balance): a
      per-Night chain of carried, non-성공/대성공 ordinary expeditions - reset once a Night, never
@@ -517,6 +522,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
    if(bonusWallet)n.money+=bonusWallet;
   }else if(d.deep)rep.deep={great:false,bonusXp:0,bonusWallet:0};
   s.results.push(rep);if(rep.storeBonus){s.money+=rep.storeBonus;s.daily.greatSuccess+=rep.storeBonus;}if(n.alive){this.loyal(n,1);if(n.visits>1&&n.history.some(h=>h.day===s.day&&h.paid>0)&&this.has('returnPoints')){this.loyal(n,D.relicParams.returnPoints.loyaltyBonus);n.money+=D.relicParams.returnPoints.goldBonus;}if(G.Adventurer.isTrustedRegular(n)&&this.has('lifetime'))n.money+=D.relicParams.lifetime.goldBonus;}else s.stats.deaths++;G.Meta.observe(this.account,rep,n);}
+ this.nightDiscard();
  s.daily.operating=this.expectedOperatingCost();
  s.money-=s.daily.operating;s.phase='night';s.reportHistory.push({day:s.day,...s.daily,balance:s.money});s.region=Math.max(0,Math.min(100,(s.region??50)+s.results.reduce((v,r)=>v+(r.won?2:r.outcome==='사망'?-4:-1),0)));s.regionReport=!s.results.length?'오늘은 원정에 나선 손님이 없었다.':s.results.filter(r=>r.won).length>=Math.ceil(s.results.length/2)?'공략 성과로 게이트 주변 통행이 안정됐습니다.':'원정대가 고전하며 게이트 앞 경계가 강화됐습니다.';s.notice='밤의 귀환 보고가 도착했습니다.';this.save();}
 }

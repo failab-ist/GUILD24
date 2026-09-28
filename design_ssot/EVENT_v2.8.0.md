@@ -2,8 +2,8 @@
 
 DOC=EVENT
 OWNER=event,daily_event,event_catalog,event_hazard,event_purchase_budget,event_order_source
-DOC_VERSION=2.9.1
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.11
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.11
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/EVENT_v2.8.0-patch.md,history/EVENT_v2.7.0.md,history/EVENT_v2.5.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/EVENT.md
@@ -990,7 +990,7 @@ WEIGHT: 1.0
 
 EFFECT:
 
-사건이 뜬 날 아침, 판매 마지막 날이 오늘인 재고(진열대 `오늘까지`, 다음 날 아침 폐기될 재고)만 유통기한 +1일.
+사건이 뜬 날 아침, 판매 마지막 날이 오늘인 재고(진열대 `오늘까지`, 오늘 밤 폐기될 재고 — ITEM §SHELF LIFE, v2.9.11)만 유통기한 +1일.
 그날 나중에 들어온 재고와 다른 재고는 그대로다. 유예된 재고도 늘어난 날이 지나면 평소처럼 폐기되고, 그때 폐기 수와
 누적 폐기(본사 재고 감사의 조건)에 정상적으로 들어간다. 해당 재고가 없는 날에는 효과가 없다.
 

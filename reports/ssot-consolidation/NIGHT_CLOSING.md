@@ -479,7 +479,9 @@ User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보�
 STAMP) - with `영업 손익 ±{N}G` inside it: the end Gold less the opening. Only the 영업 손익 figure is coloured: green
 above 0, red below 0, gold at exactly 0 (User 2026-09-26)
 4. `창고 재고 {n}개` on its own line, and `오늘 폐기 {n}개` on the next line when any - never Gold: an expired Item was
-paid for when it was ordered. After the count come the expired Items' names, most first, `×{n}` only when two or more
+paid for when it was ordered. `오늘 폐기` is the stock whose last sale Day was today and that was still unsold when
+SALE closed; it left tonight and is not in `창고 재고` (ITEM §SHELF LIFE, User 2026-09-28, v2.9.11). After the count
+come the expired Items' names, most first, `×{n}` only when two or more
 of one Item expired, at most three names then `외 {n}종`
 No 판매 원가 / 판매 마진 / 폐기 원가 row; 영업 손익 is the cash change, not an accounting profit. Exact calculation of each flow -> ECONOMY_ORDER_v2.8.0.md.
 Closing keeps only the cash-flow receipt above (v2.9.7): 영업 전 자금, the in / out rows, 보유 자금 with 영업 손익, 창고

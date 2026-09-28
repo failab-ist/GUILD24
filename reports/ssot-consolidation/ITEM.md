@@ -655,7 +655,10 @@ Buy / Sell = 400 / 800 (User 2026-09-24, v2.9.0; was 600 / 1200)
 Unlisted implementation-only flavor fields inherit the previous Item where identity remains unchanged, except where this spec states otherwise; shelf lives are the §SHELF LIFE — EXACT table (v2.9.0).
 ## SHELF LIFE — EXACT
 (User 2026-09-24/25, v2.9.0): no active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the
-stocking day, and is discarded at the morning it runs out. The rule behind the table:
+stocking day. A unit that is still unsold when SALE closes on its last sale Day (the shelf's `오늘까지`) is discarded that
+Night and counts as that Day's waste (`오늘 폐기` on its CLOSING receipt) (User 2026-09-28, v2.9.11; it used to go the
+next morning and reach the next Day's receipt, so the receipt named stock the player had last seen a Day earlier). The
+rule behind the table:
 - Food: 2 days unless it carries a Hazard Counter (컵라면 3, 집중 사탕 4, 불룡볶음면 3); 초코바 is 2
 - Potion: 3 / 4 / 5 / 5 by tier (하급 / 중급 / 상급 / 최상급)
 - Field Gear: 3 (Common), 4 (Uncommon), 5 (Rare and above)

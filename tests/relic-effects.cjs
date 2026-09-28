@@ -232,7 +232,7 @@ test('REMAKE 단체 주문 창구: own 20% Morning roll +1 visitor; +15G per sal
 test('REMAKE 새벽 회수 계약: 50% recovery of expiring Food/Drink, and +1 Food/Drink slot on the first generation',()=>{
  const g=fresh('dawn-recovery'),s=g.run;s.facilities=['dawnRecovery'];s.inventory=[];
  g.stock('rice',2,40);g.stock('rope',1,50);for(const st of s.inventory)st.expires=s.day+1;
- const money=s.money,waste=s.stats.waste;s.day++;g.morningReset();
+ const money=s.money,waste=s.stats.waste;g.nightDiscard(); // v2.9.11: the Night of the last sale day, not the next morning
  assert.equal(s.money-money,40,'2 x 50% of 40G');assert.equal(s.daily.subsidy,40);
  assert.equal(s.daily.waste,1,'only the non-Food is waste');assert.equal(s.stats.waste-waste,1);assert.equal(s.daily.wasteCost,50);
  assert.equal(s.inventory.length,0,'all of it left the shelf');

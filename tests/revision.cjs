@@ -25,12 +25,12 @@ test('warehouse capacity and finite shelf life; the Bag is fixed at two slots',(
  or Trait. The Lv10+ third slot is removed, not disabled or hidden. */
  for(const level of [1,5,9,10,11,30])assert.equal(Adventurer.slots({level,rarity:3,job:'warrior',traits:['eater']}),2,'Lv.'+level+' has two slots');
  assert.ok(!/level>=10/.test(require('node:fs').readFileSync(require('node:path').join(__dirname,'..','dist/systems/adventurer.js'),'utf8')),'no Level threshold survives in the slot rule');
- /* rice: D1 + 2 shelf days + 대형 냉장고 +2 -> gone on the D5 Morning */
- g.run.day=5;g.morning();assert.equal(g.run.inventory.length,0);});
+ /* rice: D1 + 2 shelf days + 대형 냉장고 +2 -> last sale Day D4, gone that Night (ITEM §SHELF LIFE, v2.9.11; was the D5 Morning) */
+ g.run.day=4;g.morning();assert.equal(g.run.inventory.length,2,'still on the shelf on its last sale Day');g.nightDiscard();assert.equal(g.run.inventory.length,0,'gone that Night');});
 test('night only once, empty night neutral, visitor forecast exact',()=>{const g=fresh();const count=g.run.queue.length;g.open();while(g.run.phase==='sell')g.depart();assert.equal(g.run.results.length,count);const money=g.run.money;g.night();assert.equal(g.run.money,money);const h=fresh();h.run.queue=[];h.open();assert.match(h.run.regionReport,/없었다/);});
 test('old prototype rejected; v6 cart and window resume intact',()=>{const g=fresh();g.setQuantity(0,1);g.save();const restored=Save.import(Save.export(g.account,g.run));assert.deepEqual(restored.run.cart,g.run.cart);assert.deepEqual(restored.run.relicWindow,g.run.relicWindow);assert.equal(restored.version,9);assert.throws(()=>Save.import(JSON.stringify({...restored,version:4})));});
 test('seed and mid-day save replay deterministic',()=>{let a=fresh('replay2'),b=fresh('replay2');a.order(0);b.order(0);b.save();const state=Save.import(Save.export(b.account,b.run));b=new Game(state.account,state.run);b.autosave=false;a.open();b.open();while(a.run.phase==='sell'){a.depart();b.depart();}assert.deepEqual(a.run,b.run);});
-test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.stock("lowpotion",1);
+test('bankruptcy, final supply and boss one-shot preserved',()=>{const g=fresh();g.run.phase='closing';g.run.day=5;g.closeDay();assert.equal(g.run.phase,'morning');assert.equal(g.run.day,6);g.run.day=30;const n=g.run.npcs[0];n.recovery=0;n.introduced=true;Adventurer.grow(n,10000,g.rng);g.morning();g.selectFinal(n.id);g.commitFinalParty();g.run.inventory=[];/* the jump to D30 skipped the Nights that discard the opening stock (v2.9.11) */g.stock("lowpotion",1);
  /* ECONOMY_ORDER_v2.7 §D30 FINAL PREPARATION: a Final transfer is a real paid transaction at
     the fixed 50% amount, so the participant has to be able to afford it and the receipt
     records that price rather than the retired free-equipment mode. */
