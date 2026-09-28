@@ -26,6 +26,9 @@ the owner headers and in the git tag.
   two arrival lines and two Night result lines (a clear, a setback) drawn from memes people actually use, on about half of
   their arrivals and living results, never on a Death; for those who do not know them it is a customer with an odd turn of
   phrase. The font subset takes the new glyphs.
+- **More ordinary lines** - COPY_AUDIT §16 / §19: the arrival and Night result pools grow by three to six lines each (54 in
+  all), so a repeated Run hears less of the same; a plain voice, with at most one lightly witty line per pool; none repeats
+  an existing line or its sense.
 - **The Boss dossier arrives** - UI_UX §BOSS REVEAL — MORNING LANDS FIRST, UI-Q-v29-35: it cut in after a 420 ms hold and read
   as a stutter. The hold is 200 ms and the sheet rises into place with the Boss's art on it; it also waits (at most 1.2 s)
   for that art, fetched ahead. The four fonts are fetched with the page (the digit face used to wait for DAY 0).
