@@ -1,17 +1,33 @@
 # WORK_STATE
 
 DATE: 2026-09-28
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(User 컨펌 2026-09-28) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_ON_BRANCH(머지는 User 컨펌 때만) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.9.8(PR #19, `621d007`, Pages 배포 완료). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- repository: `failab-ist/GUILD24`. main = v2.9.9 + v2.9.9 퀵패치(PR #20, PR #21). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.9). 닫힌 버전의 보고서·측정 도구는 `archive/`.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
 
-## v2.9.9 퀵패치 (User 2026-09-28, 프레쉬런 D23 검수에서 나옴)
+## v2.9.10 퀵패치 (User 2026-09-27~28, v2.9.9 플레이 뒤) — 브랜치에 있음, 머지 대기
+
+브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`(main `8acc8dc`에서 다시 시작, v2.9.9 퀵패치 main을 머지해 둠). 내용과 근거는
+`design_ssot/CHANGELOG.md` §v2.9.10. 빌드 표시 2.9.10.
+
+| 커밋 | 내용 | 검사 |
+|---|---|---|
+| `bcb97ea` | 모든 상품에 카테고리, 희귀도 색 하나로, 유통기한을 `폐기까지 N일`·`내일까지`·`오늘까지`로 | UI-Q-v29-20, ui-guard |
+| `aa8c4eb` | 손님 카드가 걸어 들어옴(초상화 대기 실루엣), 마왕 조사창 200ms·올라오기, 발주 `품절` 도장, 그림·폰트 미리 받기 | UI-Q-v29-35, ui-guard |
+| `f09e7cd` | Rare Reference 손님 3명(요화니우스·상혀크·진호르) 전용 대사 | COPY_AUDIT §25, copy |
+| `f111ab1` | 일반 방문·밤 결과 대사 54줄 추가 | COPY_AUDIT §16/§19, copy |
+| `a0c97e3` | 보험: 귀환석 = 성공 못 하면 퇴각 확률 +20%p로 한 번 더, 세계수 = 사망·중상 → 무사 퇴각, 구급키트 문구, `퇴각 확률` 라벨, 위트 대사 3줄 | ITEM-Q11/Q13/Q76, night, copy |
+| `49dc19a` | main(v2.9.9 퀵패치) 머지: CHANGELOG는 §v2.9.10 아래 §v2.9.9 quick patch, 원장은 양쪽 보존 | ssot 21/21 |
+
+closeout(2026-09-28): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:visual 126장 통과. 보험 측정은 `reader` 3000런 반사실(CHANGELOG 표).
+
+## v2.9.9 퀵패치 (머지됨, PR #21) (User 2026-09-28, 프레쉬런 D23 검수에서 나옴)
 
 브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `reports/fresh-run-d23-review-v299.md`, 내용 `design_ssot/CHANGELOG.md` §v2.9.9 quick patch.
 - 실패 보상 배율 퇴각 0.40 · 부상 0.25 · 중상 0.15 (`395de5f`). 측정 `tools/measure-wallet-v299.cjs`.
