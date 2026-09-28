@@ -1918,12 +1918,28 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
 
 /* UI-Q-v29-35 (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, User 2026-09-26): a reveal due on a fresh MORNING entry waits
    for the shutter to land; reduced motion opens it at once; no other modal jumps the queue while it waits */
+/* v2.9.10 (User 2026-09-27/28): the customer walks up and holds a silhouette until the portrait is decoded; a sold-out
+   ORDER offer carries a stamp instead of its controls */
+test('UI_UX §SALE — CUSTOMER ARRIVAL / ORDER sold out (v2.9.10)',()=>{
+ const pp=fn('playPhase');
+ assert.ok(/const WALK=560,waiting=fig&&fig\.tagName==='IMG'&&!\(fig\.complete&&fig\.naturalWidth\);/.test(pp)&&/A\(face,\{translateX:\[72,0\],duration:WALK/.test(pp)
+  &&/Promise\.race\(\[fig\.decode\(\)\.catch\(\(\)=>\{\}\),new Promise\(r=>setTimeout\(r,1500\)\)\]\)/.test(pp),'the card walks in and the portrait rises once decoded (at most 1.5 s)');
+ assert.ok(/<span class="figure-wait" aria-hidden="true"><\/span><img class="figure"/.test(app)&&/\.face\.waiting \.figure-wait\{display:block\}/.test(css),'a plain silhouette stands in meanwhile');
+ assert.ok(/const out=o\.quantity<=0;/.test(app)&&/\(out\?'<span class="dial"><em class="soldout-mark">품절<\/em><\/span><\/li>':/.test(app)&&/\.line\.soldout \.dial\{grid-column:3\/-1/.test(css),'a sold-out offer: the stamp under its metadata, no controls');
+});
+
 test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same frame as the cut',()=>{
  const src=read('dist/ui/app.js');
- assert.ok(/const BOSS_HOLD=420;let bossHold=null;/.test(src),'one 420 ms hold - the MORNING shutter\'s own length');
- assert.ok(/A\(shutter,\{translateY:\[-14,0\],duration:420,/.test(src),'and the shutter it waits for is still 420 ms');
+ /* v2.9.10 (User 2026-09-28): a 200 ms hold, then the dossier rises into place with its art (it cut in after 420 ms) */
+ assert.ok(/const BOSS_HOLD=200;let bossHold=null;/.test(src),'one 200 ms hold');
+ const rm=fn('renderModal');
+ assert.ok(/const opened=modal==='boss'&&dossierShown!==stageKey\(\);/.test(rm)&&/if\(opened&&motionOK\(\)\)\{const sheet=root\.querySelector\('\.modal'\);\s*if\(sheet\)sheet\.animate\(\[\{transform:'translateY\(18px\)',opacity:0\},\{transform:'none',opacity:1\}\],\{duration:260,/.test(rm)&&!/boss-art img/.test(rm),
+  'the dossier sheet rises once, when it opens, the art on it (no separate settle)');
+ assert.ok(/<link rel="preload" href="ui\/fonts\/MulmaruMono\.woff2" as="font" type="font\/woff2" crossorigin>/.test(html),'the fonts come with the page');
  const r=fn('render');
- assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;bossHold=setTimeout\(\(\)=>\{bossHold=null;\$\('#app'\)\.inert=false;render\(\);\},BOSS_HOLD\);\}else modal='boss';\}/.test(r),
+ /* v2.9.10: after the shutter the hold also waits for the Boss's art (never past BOSS_WAIT), so the dossier opens with it */
+ assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;\s*bossHold=setTimeout\(\(\)=>Promise\.race\(\[warm\(Scene\.bossArt\(s\.bossId,s\.day,s\.sealBreakCount\)\),new Promise\(r=>setTimeout\(r,BOSS_WAIT\)\)\]\)\s*\.then\(\(\)=>\{if\(!bossHold\)return;bossHold=null;\$\('#app'\)\.inert=false;render\(\);\}\),BOSS_HOLD\);\}else modal='boss';\}/.test(r)
+  &&/const BOSS_WAIT=1200,/.test(src)&&/warmAhead\(s,phase\);/.test(r),
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
  assert.ok(r.indexOf('bossRevealDue()')<r.indexOf("modal='event'")&&r.indexOf('bossRevealDue()')<r.indexOf("modal='relics';\n",r.indexOf('bossRevealDue()')),'the reveal keeps its place ahead of the Event and the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
@@ -2847,7 +2863,7 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!app.includes('이 손님의 준비는 달라지지 않는다'),'and its old sentence is gone');
  // §4-10: the shelf-life state only, with the FIFO explanation retired
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
- assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("left<=1?'오늘까지':left===2?'내일까지':'DAY '+(game.run.day+left-1)+'까지'"),'§4-10 the shelf-life state stays, as the last sale day (v2.9.10), and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
+ assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("left<=1?'오늘까지':left===2?'내일까지':'폐기까지 '+left+'일'"),'§4-10 the shelf-life state stays, as the last sale day (v2.9.10), and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
  // UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): kind, then nearest discard, then higher Rarity, held for the Day
  assert.ok(fn('shelf').includes('+shelfOrder(stocks).map(st=>{'),'the shelf reads its order from shelfOrder');
  assert.ok(app.includes("const SHELF_KIND=['gear','food','drink','potion','insurance','special']"),'대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수');

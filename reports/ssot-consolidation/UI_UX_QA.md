@@ -1303,7 +1303,6 @@ DAY 0 첫 점포지원 -> 구매 -> DAY 1 MORNING at 390 and 1280, motion on and
 the press.
 
 PASS:
-- motion on: at 120 ms MORNING is on screen with no modal; by 600 ms the `마왕 조사 개시` dossier is open
 - reduced motion: the dossier is open at 120 ms
 - the dossier, its copy and its `확인` are unchanged; after `확인` the Day continues exactly as before
 - no Event or Relic window opens during the hold
@@ -1690,6 +1689,18 @@ Every Item names its category on ORDER (with the rarity word in its colour), the
 (v2.9.10), no horizontal overflow at 360
 - every SALE shelf row and the tray carry the category tag; the tray tile's edge is the same rarity colour as its shelf row
 (v2.9.10)
-- every row carries its last sale day (`오늘까지` / `내일까지` / `DAY {N}까지`, v2.9.10), the tray and the 재고 정리 list the same;
 a row on its last day is emphasized in the warehouse `.soon` color
+```
+
+## AMENDMENT — v2.9.10 shelf life wording, sold out, customer arrival, dossier entry (User 2026-09-28)
+
+Shelf life reads 폐기까지 N일 / 내일까지 / 오늘까지; a sold-out ORDER offer carries a 품절 stamp; the customer card walks up and holds a silhouette until the portrait is decoded; the Boss dossier holds 200 ms, rises into place and waits for its art; fonts are preloaded. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- an offer whose whole supply was already ordered today shows the `품절` stamp under its metadata line and no quantity controls;
+its name, effects and prices are not greyed (v2.9.10)
+- motion on: at 120 ms MORNING is on screen with no modal; by 600 ms the `마왕 조사 개시` dossier is open, having risen into
+place with its art on it (v2.9.10: a 200 ms hold; on a cold phone network a reveal carrying the Boss's art may wait up to
+1.2 s more for it)
+- every row carries its shelf life (`폐기까지 N일`, then `내일까지` / `오늘까지`, v2.9.10), the tray and the 재고 정리 list the same;
 ```

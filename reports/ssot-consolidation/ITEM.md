@@ -1077,5 +1077,12 @@ The approved `lunchbox` (was `bar`) repurpose is Uncommon.
 Every Item names its category on ORDER (with the rarity word in its colour), the SALE shelf rows and the tray; the tray tile edge takes the rarity colour; shelf life on stock reads as the last sale day; the guide line says 야외장비. Lines declared earlier and now superseded are removed from their fences above.
 
 ```new
-SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries its last sale day, `오늘까지 / 내일까지 / DAY {N}까지` (v2.9.10; exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
+```
+
+## AMENDMENT — v2.9.10 shelf life wording, sold out, customer arrival, dossier entry (User 2026-09-28)
+
+Shelf life reads 폐기까지 N일 / 내일까지 / 오늘까지; a sold-out ORDER offer carries a 품절 stamp; the customer card walks up and holds a silhouette until the portrait is decoded; the Boss dossier holds 200 ms, rises into place and waits for its art; fonts are preloaded. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries its shelf life, `폐기까지 N일 / 내일까지 / 오늘까지` (v2.9.10; exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
 ```

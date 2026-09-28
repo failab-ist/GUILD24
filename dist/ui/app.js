@@ -30,9 +30,9 @@ let prepOpen=false;
 let decoPending=null,decoFocus=null;
 const badge=(r,npc=false)=>`<span class="rare-badge r${r}">${(npc?D.npcRarities:D.rarities)[r]}</span>`;
 const btn=(text,action,cls='',attrs='')=>`<button class="${cls}" data-action="${action}" ${attrs}>${text}</button>`;
-/* v2.9.10 (User 2026-09-27): shelf life on stock reads as the last day it can be sold - `오늘까지`, `내일까지`, then the DAY
-   itself - instead of a count of days that left open whether today was included. (ORDER keeps `유통기한 N일`.) */
-const lastSaleDay=left=>left<=1?'오늘까지':left===2?'내일까지':'DAY '+(game.run.day+left-1)+'까지';
+/* v2.9.10 (User 2026-09-27/28): shelf life on stock counts down `폐기까지 N일` and then names its last two days - `내일까지`,
+   `오늘까지` - so the day it is still sellable is never in doubt. (ORDER keeps `유통기한 N일`.) */
+const lastSaleDay=left=>left<=1?'오늘까지':left===2?'내일까지':'폐기까지 '+left+'일';
 const groupStock=()=>{const m=new Map();for(const st of game.run.inventory){if(!m.has(st.item))m.set(st.item,{...st,count:0});const x=m.get(st.item);x.count++;if(st.expires!==null&&(x.expires===null||st.expires<x.expires)){x.id=st.id;x.expires=st.expires;x.cost=st.cost;}}return [...m.values()];};
 /* UI_UX §NIGHT LAYOUT — UNLOCK NOTICE: `새 상품 해금 · {상품명}` is two meaning units, so it is set as
    two lines - the fixed label, then the product - instead of one sentence the notice width
@@ -277,7 +277,14 @@ function stage(phase,label,head,body,dock,attrs=''){
 // absent or the player asked for reduced motion, and none of them touch game state.
 const motionOK=()=>typeof anime==='object'&&!!anime.animate&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
 let lastTill=null;
-const BOSS_HOLD=420;let bossHold=null; // UI_UX §BOSS REVEAL — MORNING LANDS FIRST
+const BOSS_HOLD=200;let bossHold=null; // UI_UX §BOSS REVEAL — MORNING LANDS FIRST
+/* v2.9.10 (User 2026-09-27): a card's art used to be fetched only when its card was drawn. The art the next beats will show
+   is fetched and decoded ahead - the Boss's for today, and every living adventurer's (today's customers included, the
+   moment SALE opens) - and a held Boss reveal waits for its art as well as the shutter, never longer than BOSS_WAIT. */
+const BOSS_WAIT=1200,warmed=new Map();
+function warm(src){if(!src)return Promise.resolve();if(!warmed.has(src)){const im=new Image();im.src=src;warmed.set(src,(im.decode?im.decode():Promise.resolve()).catch(()=>{}));}return warmed.get(src);}
+function warmAhead(s,phase){warm(Scene.bossArt(s.bossId,s.day,s.sealBreakCount));
+ if(['morning','order','sell'].includes(phase))for(const n of s.npcs)if(n.alive)warm(Scene.npcArt(n));}
 function playPhase(phase){
  if(!motionOK())return;
  const A=anime.animate;
@@ -381,8 +388,17 @@ function playPhase(phase){
  // moves layers that are already laid out, so nothing shifts and no reflow is queued.
  if(phase==='sell'){
   const face=$('.who .face'),fig=$('.who .figure'),tag=$('.who .nameplate'),br=$('.bracket'),pool=$('.pool');
-  if(face)A(face,{translateX:[22,0],opacity:[0,1],duration:240,ease:'outQuad'});
-  if(fig)A(fig,{translateY:[10,0],opacity:[0,1],duration:280,delay:60,ease:'outQuad'});
+  /* v2.9.10 (User 2026-09-28): the customer's card walks up to the counter - a few steps in from the side - and a
+     newcomer's portrait, fetched only as they arrive, rises into it once decoded (at most 1.5 s); until then the card holds
+     their silhouette, so a slow network reads as someone still stepping up, not as a stalled screen. */
+  const WALK=560,waiting=fig&&fig.tagName==='IMG'&&!(fig.complete&&fig.naturalWidth);
+  if(face){A(face,{translateX:[72,0],duration:WALK,ease:'outSine'});A(face,{translateY:[0,-6,0,-6,0,-4,0],duration:WALK,ease:'linear'});
+   A(face,{opacity:[0,1],duration:160,ease:'outQuad'});}
+  const rise=delay=>A(fig,{translateY:[10,0],opacity:[0,1],duration:280,delay,ease:'outQuad'});
+  if(waiting){face.classList.add('waiting');fig.style.opacity=0;
+   Promise.race([fig.decode().catch(()=>{}),new Promise(r=>setTimeout(r,1500))]).then(()=>{if(!fig.isConnected)return;
+    face.classList.remove('waiting');fig.style.opacity='';rise(0);});}
+  else if(fig)rise(WALK-220);
   if(pool)A(pool,{opacity:[0,.42],duration:340,ease:'outQuad'});
   if(br)A(br,{opacity:[0,1],scale:[1.06,1],duration:220,delay:150,ease:'outQuad'});
   if(tag)A(tag,{translateY:[10,0],opacity:[0,1],duration:200,delay:120,ease:'outQuad'});
@@ -532,7 +548,7 @@ function render(){
     screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
     Action starts one. */
  if(!s||(s.phase==='end'&&prepOpen)){$('#app').innerHTML=prepScreen();requestAnimationFrame(showCoach);return;} // no lesson here: a mark left from the screen before is cleared
- const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;
+ const phase=s.phase,previousScroll=$('.stage-scroll')?.scrollTop||0;warmAhead(s,phase);
  /* UI_UX §SALE — DESK LAYOUT: on a desk the SALE columns are their own scrollers, so a redraw keeps theirs too */
  const previousCols=['.p-sale .dossier-col','.p-sale .shelf-col'].map(q=>$(q)?.scrollTop||0);
  /* SA-Q09: every LIVING Night result speaks through the same temporary balloon the SALE
@@ -584,7 +600,9 @@ function render(){
  /* UI_UX §BOSS REVEAL — MORNING LANDS FIRST (User 2026-09-26): a reveal due on a fresh MORNING entry waits for the
     shutter to land (BOSS_HOLD), so the dossier never opens in the same frame as the cut. Reduced motion opens it at once.
     The screen takes no input while it waits: the Day may not advance past an owed reveal (CORE_RUN §D0 briefing). */
- else if(bossRevealDue()){if(bossHold){}else if(changed&&phase==='morning'&&motionOK()){$('#app').inert=true;bossHold=setTimeout(()=>{bossHold=null;$('#app').inert=false;render();},BOSS_HOLD);}else modal='boss';}
+ else if(bossRevealDue()){if(bossHold){}else if(changed&&phase==='morning'&&motionOK()){$('#app').inert=true;
+  bossHold=setTimeout(()=>Promise.race([warm(Scene.bossArt(s.bossId,s.day,s.sealBreakCount)),new Promise(r=>setTimeout(r,BOSS_WAIT))])
+   .then(()=>{if(!bossHold)return;bossHold=null;$('#app').inert=false;render();}),BOSS_HOLD);}else modal='boss';}
  else if(phase==='morning'&&s.event&&!s.eventSeen)modal='event';
  else if(s.relicWindow&&!s.relicWindow.focusedRevealSeen&&['morning','order','final'].includes(phase))modal='relics';
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
@@ -913,7 +931,7 @@ function standee(n){
  +'<span class="face">'
   +'<span class="portrait">'
    +'<span class="pool" aria-hidden="true"></span>'
-   +(art?'<img class="figure" src="'+art+'" alt="" draggable="false">'
+   +(art?'<span class="figure-wait" aria-hidden="true"></span><img class="figure" src="'+art+'" alt="" draggable="false">'
         :'<span class="figure fallback">'+Art.avatar(n,140)+'</span>')
    +'<span class="stand" aria-hidden="true"></span>'
    +'<span class="bracket" aria-hidden="true"><i></i><i></i><i></i><i></i></span>'
@@ -1435,7 +1453,10 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
     /* data-offer is the row's handle across a redraw: the qty controls inside it flip
        between enabled and disabled as the quantity hits 0 or the cap, so the pressed
        button is not a stable anchor but its row is. */
-    return '<li class="line r'+it.rarity+(q?' on':'')+'" data-offer="'+i+'">'
+    /* v2.9.10 (User 2026-09-27): an offer whose whole supply was already ordered today reads as sold out - a quiet
+       stamp where the quantity controls were and the paper a shade worked - so it is not tapped again for more */
+    const out=o.quantity<=0;
+    return '<li class="line r'+it.rarity+(q?' on':'')+(out?' soldout':'')+'" data-offer="'+i+'">'
     +'<span class="no">'+String(i+1).padStart(2,'0')+'</span>'
     +Scene.crate(Art.itemIcon(it.id,30),46)
     +'<span class="col">'
@@ -1456,10 +1477,10 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
        +'<span class="fx">'+rows.map(r=>'<i class="'+(r.bad?'cost':'')+'">'+E(r.label+' '+r.text)+'</i>').join('<em> · </em>')+'</span>'
      +'<span class="have">수익 +'+(it.sell-o.price)+'G · 재고 '+s.inventory.filter(st=>st.item===it.id).length+' · 공급 '+o.quantity+(o.promo?' · 1+1':'')+' · <i>유통기한 '+sl+'일</i></span>'
   +'</span>'
-  +'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
+  +(out?'<span class="dial"><em class="soldout-mark">품절</em></span></li>':'<span class="dial">'+btn('-','qty','','data-index="'+i+'" data-q="'+Math.max(0,q-1)+'" aria-label="'+E(it.name)+' 수량 줄이기" '+(q?'':'disabled'))
    +'<output aria-label="'+E(it.name)+' 발주 수량">'+q+'</output>'
    +btn('+','qty','','data-index="'+i+'" data-q="'+(q+1)+'" aria-label="'+E(it.name)+' 수량 늘리기" '+(q>=max?block:''))
-   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>';
+   +'<span class="set">'+[1,3].map(v=>btn(v,'qty','','data-index="'+i+'" data-q="'+v+'" aria-label="'+E(it.name)+' '+v+'개" '+(v>max?block:''))).join('')+btn('최대','qty','','data-index="'+i+'" data-q="'+max+'" '+(max?'':block))+'</span></span></li>');
  }).join('')+'</ol>'
  +'<button class="rubber" data-action="reroll" '+(price>s.money?'aria-disabled="true" data-reason="money" data-lack="'+(price-s.money)+'"':'')+'>후보 전체 교환 · '+fmt(price)+'G'+(price?'':' · 발주 교환권')+'</button>'
  +(s.phase==='final'?'<button class="rubber" data-action="confirm-order" '+(held?'':'disabled')+'>발주 확정</button>':'')
@@ -2147,7 +2168,8 @@ function bossReveal(){const s=game.run,b=D.bossBy[s.bossId],c=Copy.boss,stage=bo
    control is the one cancel owner (돌아가기 / 보급으로 돌아가기). Escape still dismisses it (the
    keydown handler is separate). */
 const ownCancel=new Set(['underConfirm','bossConfirm']);
-function renderModal(){const root=$('#modal-root');if(!modal){root.innerHTML='';document.body.style.overflow='';return;}
+let dossierShown=null;const stageKey=()=>game.run?game.run.day+':'+bossRevealStage():null;
+function renderModal(){const root=$('#modal-root');if(!modal){dossierShown=null;root.innerHTML='';document.body.style.overflow='';return;}
  const hold=holdFocus(root);
  if(modal==='relics'){root.innerHTML=relicTakeover();document.body.style.overflow='hidden';restoreFocus(root,hold);return;}
  let title='',body='',footer='',narrow=false,doc='';const s=game.run;
@@ -2215,6 +2237,13 @@ else if(modal==='gates'){title='오늘 열린 게이트';body='<div class="gate-
     player back to it while they read something else. */
  if(decoFocus){const target=root.querySelector('.slot[data-slot="'+decoFocus+'"]');decoFocus=null;
   if(target){target.scrollIntoView({block:'start',behavior:'instant'});target.focus({preventScroll:true});}}
+ /* v2.9.10 (User 2026-09-27): the Boss dossier used to appear in one cut after the hold and read as a stutter. When it
+    opens it arrives: the shade is there at once and the sheet rises into place, the Boss's art with it (a separate,
+    later settle of the art read as a second stutter - User 2026-09-28). Only on the draw that opens it - a redraw of an
+    open dossier does not replay it. Reduced motion: at once, as before. */
+ const opened=modal==='boss'&&dossierShown!==stageKey();dossierShown=modal==='boss'?stageKey():null;
+ if(opened&&motionOK()){const sheet=root.querySelector('.modal');
+  if(sheet)sheet.animate([{transform:'translateY(18px)',opacity:0},{transform:'none',opacity:1}],{duration:260,easing:'cubic-bezier(.33,1,.68,1)'});}
 }
 async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* What the Run had opened before this click. Unlocks are credited by Meta.finish, which

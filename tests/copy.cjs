@@ -65,7 +65,7 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
    Source builds from parts cannot be found as one literal, so it is listed here with where it is
    built; the set must match exactly, so a newly unadopted line fails instead of joining it. */
 const COMPOSED={
- '4-10':"app.js lastSaleDay(): '오늘까지' / '내일까지' / 'DAY '+N+'까지' (v2.9.10)",
+ '4-10':"app.js lastSaleDay(): '폐기까지 '+N+'일' / '내일까지' / '오늘까지' (v2.9.10)",
  '4-18':'presentation.js rows(): labels.foodSupplyDelta / labels.supplyPerItem + the signed Trait value',
  '4-20':"app.js statGrid: the pressing Hazard names (D.hazards) joined with ' · '",
  '5-4':"presentation.js labels.visitGold + formatted value",

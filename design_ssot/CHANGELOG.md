@@ -12,9 +12,18 @@ the owner headers and in the git tag.
   `야외장비` as the Store Supports do (COPY_AUDIT §8-0). The role taxonomy stays hidden.
 - **One rarity colour per Item**: the tray tile's edge was a fixed gold while its shelf row showed the rarity colour; both
   are the rarity colour now.
-- **Shelf life as the last sale day** - COPY_AUDIT §4-10, UI_UX §SALE — SHELF ORDER, SALE, ITEM: the shelf, the tray and the
-  재고 정리 list said `폐기 N일` / `폐기까지 N일` / `N일 남음`, which left open whether today counted. They read `오늘까지` /
-  `내일까지` / `DAY {N}까지`; ORDER keeps `유통기한 N일`.
+- **Shelf life** - COPY_AUDIT §4-10, UI_UX §SALE — SHELF ORDER, SALE, ITEM: the shelf, the tray and the 재고 정리 list said
+  `폐기 N일` / `폐기까지 N일` / `N일 남음`, which left open whether today counted. They read `폐기까지 N일`, then `내일까지` /
+  `오늘까지` on the last two days (`DAY N까지` was tried and did not read as shelf life); ORDER keeps `유통기한 N일`.
+- **Sold out on ORDER** - UI_UX §ORDER — ITEM INFORMATION HIERARCHY, UI-Q-v29-20: an offer whose whole supply was already
+  ordered looked the same as one still open, so it was tapped again. It carries a quiet `품절` stamp under its metadata line
+  in place of the quantity controls, on paper a shade worked; nothing is greyed.
+- **The customer walks up** - UI_UX §SALE — CUSTOMER ARRIVAL: a newcomer's portrait is fetched as they arrive, so on a phone
+  network the card stood empty and read as lag. The card now walks in from the side, holds a silhouette until the portrait
+  is decoded (at most 1.5 s), and the Day's other customers are fetched the moment SALE opens.
+- **The Boss dossier arrives** - UI_UX §BOSS REVEAL — MORNING LANDS FIRST, UI-Q-v29-35: it cut in after a 420 ms hold and read
+  as a stutter. The hold is 200 ms and the sheet rises into place with the Boss's art on it; it also waits (at most 1.2 s)
+  for that art, fetched ahead. The four fonts are fetched with the page (the digit face used to wait for DAY 0).
 
 ## v2.9.9 — presentation: the store scene, the dock Actions, SALE, the FINAL clash (User 2026-09-27)
 
