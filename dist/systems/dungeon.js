@@ -130,12 +130,12 @@ function fatigueBand(f){const b=FATIGUE_BANDS.find(x=>(f||0)>=x.min)||FATIGUE_BA
 /* ---- 5. Condition modifiers -----------------------------------------------------------
    What the adventurer's own condition does to their own base Stats - percentages on the
    person, never on what the bag contributed. */
-function conditionModifiers(n,effectiveFatigue,traitSum,why){
+function conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty){
  let combatMod=1+traitSum('combatPercent'),survivalMod=1+traitSum('survivalPercent'),mobilityMod=1,spiritMod=1;
  if(n.injury===1){
   /* NPC_TRAIT §INJURY: this branch is injury===1 only. 중상 carries no Stat penalty - it
      keeps the adventurer home instead - so the line may not claim one on its behalf. */
-  const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=0.15;why.push('부상 페널티: 투력 -15%');}
+  const grit=traitSum('injuredCombatPercent');if(grit){combatMod+=grit;why.push('악바리: 부상 중 투력 +'+Math.round(grit*100)+'%');}else{combatMod-=injuryPenalty;why.push('부상 페널티: 투력 -'+Math.round(injuryPenalty*100)+'%');}
   survivalMod-=0.20;why.push('부상 페널티: 강인함 -20%');
  }
  const band=fatigueBand(effectiveFatigue);
@@ -148,7 +148,7 @@ function conditionModifiers(n,effectiveFatigue,traitSum,why){
 /* ---- 6. Presentation provenance -------------------------------------------------------
    Where each Core Stat came from, for the screen. Reads the state the calculation already
    produced and contributes nothing back to it. */
-function statSources(n,itemStats,effectiveFatigue,traitSum){
+function statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty){
  const sources={combat:[],survival:[],mobility:[],spirit:[]};
  if(n.equipment&&n.equipment.power)sources.combat.push({name:'장비 ('+n.equipment.name+')',v:n.equipment.power});
  for(const tid of n.traits){
@@ -159,7 +159,7 @@ function statSources(n,itemStats,effectiveFatigue,traitSum){
   if(n.injury===1&&eff.injuredCombatPercent)sources.combat.push({name:D.traitBy[tid].name,v:eff.injuredCombatPercent*100,isPct:true});
  }
  if(n.injury===1){
-  if(!traitSum('injuredCombatPercent'))sources.combat.push({name:'부상',v:-15,isPct:true});
+  if(!traitSum('injuredCombatPercent'))sources.combat.push({name:'부상',v:-Math.round(injuryPenalty*100),isPct:true});
   sources.survival.push({name:'부상',v:-20,isPct:true});
  }
  for(const st of itemStats)for(const k of STAT_KEYS)
@@ -182,10 +182,12 @@ function prepare(n,d,facilities=[]){
  const sup=supplyState(n,finalSupply);
  const {effectiveFatigue}=sup;
  e.supply=finalSupply;
- const mod=conditionModifiers(n,effectiveFatigue,traitSum,why);
+ /* NPC_TRAIT §INJURY: an ordinary Injury costs 투력 15%; RELIC 야전 들것 (v2.9.11) makes it 8% */
+ const injuryPenalty=facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
+ const mod=conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
- const sources=statSources(n,itemStats,effectiveFatigue,traitSum);
+ const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
 
  const hazards=d.hazards.map(h=>hazardState(h,e,d));let hazard=hazards.reduce((v,h)=>v+h.gap,0)/Math.max(1,Math.sqrt(hazards.length));
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))events.push({id:'eater-food',text:'대식가가 음식의 고유 효과를 30% 더 얻었다.'});

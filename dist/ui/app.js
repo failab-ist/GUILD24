@@ -972,7 +972,8 @@ function kitLine(n){const slots=Adventurer.slots(n),parts=[n.status];
  /* META §DECORATION 의무실 현판: an Injury healed at the door says so once, in the customer's own
     state strip, under the bag where no speech balloon or menu pin sits - one line, no modal,
     nothing to dismiss. `healedBy` is reset on every arrival. */
- const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>':'';
+ const heal=n.healedBy==='infirmaryPlaque'?'<p class="heal-note" role="status">의무실 현판 덕분에 부상이 나았다.</p>'
+  :n.healedBy==='firstAidDesk'?'<p class="heal-note" role="status">응급 처치대 덕분에 부상이 나았다.</p>':'';
  /* DUNGEON_HAZARD §Preparation / Level Death reduction / UI_UX §만반의 준비 TUTORIAL (v2.9.1
     balance): a state class only, no visible style of its own - it exists so the coach mark
     below can anchor to it the first time this customer's confirmed Bag actually reaches 만반의

@@ -181,6 +181,7 @@ Current explicit D30 no-effect exclusions:
 - 왕도 프리미엄 인증 (royalCert)
 - 지역 거점점 계약 (hub)
 - 운영 효율 매뉴얼 (efficiency)
+- 응급 처치대 (firstAidDesk) (v2.9.11: no SALE arrival on D30)
 
 All other current supports are D30-eligible when they satisfy ordinary acquisition eligibility.
 
@@ -329,10 +330,10 @@ Keystone:
 
 ## POOL ARCHITECTURE
 
-total=30
+total=32 (User 2026-09-28, v2.9.11: 야전 들것 and 응급 처치대 joined the Expedition line)
 
-Foundation=12
-- 6 Primary Build × 2
+Foundation=13
+- 6 Primary Build × 2, plus 야전 들것 (Expedition holds 3)
 - early direction setters
 - D0 eligible
 
@@ -340,8 +341,8 @@ Hybrid=8
 - connects 2 Build axes
 - pivot/flex value
 
-Keystone=6
-- 1 per Primary Build
+Keystone=7
+- 1 per Primary Build, plus 응급 처치대 (Expedition holds 2)
 - build engine/completion piece
 - eligible from D10
 
@@ -541,6 +542,13 @@ tag=Expedition
 - 야전 정비대: Hazard Counter values of Field Gear the adventurer carries from this store x1.40
 - it changes no ORDER offer weight and no offer quantity
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
+
+31. 야전 들것 (User 2026-09-28, v2.9.11)
+tag=Expedition
+- 야전 들것: an ordinary Injury costs the adventurer 투력 8% instead of 15% (NPC_TRAIT §INJURY); 강인함 -20% is unchanged
+- it applies wherever preparation is read: SALE outlook, NIGHT resolution and the D30 Final (so it is D30-eligible)
+- 악바리's injured 투력 bonus replaces the penalty as before; the support changes nothing for that Trait
+- measured (reports/v2.9.11-drafts.md §C, owned from D10, upper bound): D30 19.6 → 21.1%, clear 13.5 → 14.7%
 
 ### FRESH — Foundation
 9. 대형 냉장고
@@ -761,6 +769,22 @@ tag=Expedition
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 
+32. 응급 처치대 (User 2026-09-28, v2.9.11)
+tag=Expedition
+
+`DIRECTOR DOCUMENT BASELINE`
+
+응급 처치대:
+    Price = 300G
+
+- an injured (ordinary Injury, not 중상) adventurer arriving at SALE recovers with 20% (the 의무실 현판 door heal, drawn after it;
+  only for an injured arrival and only while owned)
+- the SALE state strip says so once (COPY_AUDIT §9-4b)
+- the Expedition line holds two Keystones (원정 전문 인증 and this one), User 2026-09-28
+- D30 has no SALE arrival, so it is in the D30 no-effect exclusion set
+- measured against the six Keystones (reports/v2.9.11-drafts.md §C-2, each owned from the D10 window): D30 19.6 → 25.2%,
+  clear 13.5 → 16.8% - at or just above the strongest Keystones (물류 본부계약, 원정 전문 인증: D30 24.0%)
+
 25. 24시간 신선체계
 tag=Fresh
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
@@ -952,7 +976,7 @@ priceFixedForWindow=YES
 relative direction:
 Foundation < Hybrid < Keystone; Utility is priced as a cheap support (User decision 2026-09-23)
 
-The following 20 Store Support base prices are the approved baseline.
+The following 21 Store Support base prices are the approved baseline.
 
 | ID | Store Support | Base Price |
 |---|---|---:|
@@ -976,8 +1000,9 @@ The following 20 Store Support base prices are the approved baseline.
 | warehouse | 후방 창고 증설 | 130G |
 | extraOrder | 본사 추가발주권 | 130G |
 | rerollTicket | 발주 교환권 | 120G |
+| fieldStretcher | 야전 들것 | 80G |
 
-The other 10 active support prices are exact in their Store Support entries above.
+The other 11 active support prices are exact in their Store Support entries above.
 
 Price should follow actual ROI, not label alone.
 

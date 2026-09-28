@@ -618,10 +618,13 @@ test('COPY_AUDIT §11: all 30 Store Support names / prices / descriptions are th
   ['warehouse','후방 창고 증설',130,'창고 용량 +5칸.'],
   ['extraOrder','본사 추가발주권',130,'다음 후보 생성부터 · 발주 후보 +2개.'],
   ['rerollTicket','발주 교환권',120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
-  ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 · 기본 운영비 -30G.']];
- /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30 exact */
- assert.equal(SUPPORTS.length,30,'§11 audits all 30 Store Supports');
- assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 30, in order');
+  ['efficiency','운영 효율 매뉴얼',130,'다음 날부터 · 기본 운영비 -30G.'],
+  /* v2.9.11 (User 2026-09-28): COPY_AUDIT §11-30b / §11-30c */
+  ['fieldStretcher','야전 들것',80,'부상 중인 모험가 · 투력 페널티 -15% → -8%.'],
+  ['firstAidDesk','응급 처치대',300,'부상 모험가가 방문하면 · 20% 확률로 부상 회복.']];
+ /* v2.9.0 I-4 (User 2026-09-25): condition first, then the effect - COPY_AUDIT §11-1 … §11-30c exact (32 since v2.9.11) */
+ assert.equal(SUPPORTS.length,32,'§11 audits all 32 Store Supports');
+ assert.deepEqual(DATA.relics.map(r=>r.id),SUPPORTS.map(r=>r[0]),'the catalogue is exactly those 32, in order');
  for(const [id,name,price,description] of SUPPORTS){
   const r=DATA.relicBy[id];
   assert.ok(r,'the catalogue still has '+id);

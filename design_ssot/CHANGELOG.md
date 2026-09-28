@@ -30,6 +30,12 @@ the owner headers and in the git tag.
   reference. The roll's one draw per customer created is kept, so a seeded Run keeps its stream unless its roster had dealt one of
   them (the revision anchor `sig-0` moves for that reason alone). A Run saved with one of them keeps the name and shows the
   placeholder portrait.
+- **Two Expedition Store Supports** - RELIC 31 / 32, POOL ARCHITECTURE, D30 exclusions, PRICE; RELIC_QA; COPY_AUDIT §11-30b /
+  §11-30c / §9-4b (User 2026-09-28): the injury spiral (부상 → 못 이김 → 돈 없음) is met by two optional supports, not by an easier
+  economy. 야전 들것 (Foundation, 80G): an ordinary Injury costs 투력 8% instead of 15%. 응급 처치대 (Keystone, 300G): an injured
+  SALE arrival recovers with 20%; the Expedition line now holds two Keystones. Measured on the `reader` bot, each owned from D10
+  (reports/v2.9.11-drafts.md §C): 야전 들것 D30 19.6 → 21.1%; 응급 처치대 D30 19.6 → 25.2%, at or just above the strongest Keystone.
+  The pool is 32 (Foundation 13, Keystone 7); any seeded Run's Store Support windows draw from the larger pool.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)

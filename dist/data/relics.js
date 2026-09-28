@@ -36,7 +36,10 @@ const rows=[
 ['warehouse','후방 창고 증설','utility',[],130,'창고 용량 +5칸.'],
 ['extraOrder','본사 추가발주권','utility',[],130,'다음 후보 생성부터 · 발주 후보 +2개.'],
 ['rerollTicket','발주 교환권','utility',[],120,'매일 첫 후보 교환 무료 · 이후 50G → 100G → 200G… 순으로 증가.'],
-['efficiency','운영 효율 매뉴얼','utility',[],130,'다음 날부터 · 기본 운영비 -30G.']
+['efficiency','운영 효율 매뉴얼','utility',[],130,'다음 날부터 · 기본 운영비 -30G.'],
+/* RELIC 31 / 32 (User 2026-09-28, v2.9.11): two Expedition supports that ease an injury - COPY_AUDIT §11-30b / §11-30c */
+['fieldStretcher','야전 들것','foundation',['expedition'],80,'부상 중인 모험가 · 투력 페널티 -15% → -8%.'],
+['firstAidDesk','응급 처치대','keystone',['expedition'],300,'부상 모험가가 방문하면 · 20% 확률로 부상 회복.']
 ];
 D.relics=rows.map(([id,name,kind,tags,price,description])=>({id,name,kind,tags,price,description,
  ...(id==='guarantee'?{minPrice:GUARANTEE_MIN_PRICE}:{})}));
@@ -54,6 +57,8 @@ D.relicParams={
  guarantee:{subsidyRate:.3},
  hazardBoard:{weightMult:1.5},
  fieldRepair:{counterMult:1.4},
+ fieldStretcher:{injuredCombatPenalty:.08},
+ firstAidDesk:{healChance:.20},
  fridge:{shelfDays:2},
  kitchen:{statBonus:.25,overheadRate:.10},
  board:{minVisitors:4},
@@ -88,7 +93,7 @@ Object.defineProperty(D.balance,'hubOverheadRate',{get:()=>D.relicParams.hub.ove
    acquisition and the Final Lock through which it could change anything - not merely when it
    looks weak that late. A future support joins D30 by existing; it leaves only by being added
    here after its own D30-to-Final review. */
-D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime','royalCert','hub','efficiency'];
+D.relicD30NoEffect=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder','memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime','royalCert','hub','efficiency','firstAidDesk'];
 D.buildNames={rotation:'박리다매',vip:'단골 육성',premium:'고마진',expedition:'원정 전문',fresh:'신선식품',customer:'상권'};
 /* ECONOMY_ORDER §NPC WALLET GLOBAL BASELINE raises the baseline from D1 so the default two
    purchase slots more often carry a real decision. 90 is the Stage 9 measurement baseline, not

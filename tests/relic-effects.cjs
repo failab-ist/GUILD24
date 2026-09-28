@@ -81,8 +81,8 @@ test('lifetime reward cannot repeat by re-resolving Night; overhead matches day 
 test('REL-Q-v28-18: D30 is default-include minus the explicit no-effect exclusions',()=>{
  const EXCLUDED=['stamp','member','guarantee','fridge','board','firstVisitCoupon','groupOrder',
                  'memberBundle','premiumMember','returnPoints','supplyCert','dawnRecovery','lifetime',
-                 'royalCert','hub','efficiency'];
- assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (16)');
+                 'royalCert','hub','efficiency','firstAidDesk'];
+ assert.deepEqual([...DATA.relicD30NoEffect].sort(),[...EXCLUDED].sort(),'the exclusion set is exactly the RELIC D30 list (17; 응급 처치대 joined in v2.9.11)');
  /* the model itself: no positive allowlist survives anywhere in the Store Support source */
  const read=f=>require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/'+f),'utf8');
  for(const f of ['data/relics.js','systems/relics.js','systems/shop.js','systems/run.js','ui/app.js']){
@@ -191,6 +191,31 @@ test('REL-Q-v28-17: 지역 거점점 계약 rolls +1 45% / +2 15% / +0 40%, excl
  assert.ok(Math.abs((.45*1+.15*2+.40*0)-0.75)<1e-12,'+0.75 visitors per applicable Day');
  assert.equal(DATA.relicBy.hub.price,340);
  assert.equal(DATA.balance.hubOverheadRate,.10,'the operating modifier stays overheadBase +10%');
+});
+
+/* RELIC 31 / 32 (User 2026-09-28, v2.9.11): 야전 들것 and 응급 처치대 ease an injury. */
+test('RELIC 31 야전 들것: an ordinary Injury costs 투력 8% instead of 15%, and only while owned',()=>{
+ const g=fresh('stretcher'),s=g.run,n=s.npcs.find(x=>!x.traits.length)||s.npcs[0],d=s.dungeons[0];n.traits=[];n.pack=[];n.fatigue=0;
+ const combat=(inj,fac)=>{n.injury=inj;return Dungeon.prepare(n,d,fac).effects.combat;};
+ const base=n.stats.combat+n.equipment.power;
+ assert.ok(Math.abs(combat(1,[])-base*.85)<1e-9,'without it an Injury is 투력 -15%');
+ assert.ok(Math.abs(combat(1,['fieldStretcher'])-base*.92)<1e-9,'with it the Injury is 투력 -8%');
+ assert.equal(combat(0,['fieldStretcher']),combat(0,[]),'a healthy adventurer is untouched');
+ n.injury=1;const src=Dungeon.prepare(n,d,['fieldStretcher']).sources.combat.find(x=>x.name==='부상');
+ assert.equal(src.v,-8,'the SALE / NPC source line reads the same -8%');
+ assert.equal(DATA.relicBy.fieldStretcher.kind,'foundation');assert.deepEqual(DATA.relicBy.fieldStretcher.tags,['expedition']);
+ assert.ok(!DATA.relicD30NoEffect.includes('fieldStretcher'),'the D30 Final reads preparation too, so it stays D30-eligible');
+});
+
+test('RELIC 32 응급 처치대: an injured arrival recovers at 20%, only while owned, and says so',()=>{
+ const run=(fac,seed)=>{const g=fresh(seed),s=g.run,n=s.npcs[0];n.traits=[];n.injury=1;n.status='부상';s.facilities=fac;s.queue=[n.id];s.cursor=0;g.arrive();return n;};
+ let healed=0;const N=4000;for(let i=0;i<N;i++){const n=run(['firstAidDesk'],'aid-'+i);if(n.injury===0){healed++;assert.equal(n.healedBy,'firstAidDesk');assert.equal(n.status,'건강');}}
+ assert.ok(Math.abs(healed/N-.20)<.025,'about 20% of injured arrivals: '+(healed/N).toFixed(3));
+ for(let i=0;i<200;i++)assert.equal(run([],'aid-'+i).injury,1,'without it nothing heals at the door');
+ assert.equal(DATA.relicBy.firstAidDesk.kind,'keystone');assert.deepEqual(DATA.relicBy.firstAidDesk.tags,['expedition']);
+ assert.equal(DATA.relicBy.firstAidDesk.price,300);
+ const app=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/ui/app.js'),'utf8');
+ assert.ok(app.includes("n.healedBy==='firstAidDesk'?'<p class=\"heal-note\" role=\"status\">응급 처치대 덕분에 부상이 나았다.</p>'"),'COPY_AUDIT §9-4b on the state strip');
 });
 
 /* 2026-09-23 remake: 첫 방문 쿠폰 replaces 신입 모집 게시판 (REL-Q-v28-3 seating retired with it).
@@ -313,7 +338,8 @@ test('REL-Q-v28-2 / 4 / 6 / 8: the approved Store Support prices are in the cata
                           ['premiumMember',200],['returnPoints',240],['expeditionMeal',200],['coldcase',180],
                           ['supplyCert',220],['dawnRecovery',190],['logisticsHQ',300],['lifetime',310],
                           ['royalCert',320],['expeditionCert',290],['fresh24',360],['hub',340],
-                          ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130]])
+                          ['warehouse',130],['extraOrder',130],['rerollTicket',120],['efficiency',130],
+                          ['fieldStretcher',80],['firstAidDesk',300]])
   assert.equal(DATA.relicBy[id].price,price,id+' price');
 });
 

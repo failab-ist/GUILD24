@@ -9,7 +9,7 @@ const path=require('node:path'),fs=require('node:fs'),vm=require('node:vm');cons
 const load=f=>{if(f!=='systems/dungeon')return require(path.join(ROOT,'dist',f+'.js'));
  let src=fs.readFileSync(path.join(ROOT,'dist/systems/dungeon.js'),'utf8');
  const swap=(a,b)=>{if(src.split(a).length!==2)throw Error('dungeon.js changed: '+a);src=src.replace(a,b);};
- swap('combatMod-=0.15','combatMod-=(globalThis.__injPen??0.15)');
+ swap('injuredCombatPenalty:.15;','injuredCombatPenalty:(globalThis.__injPen??.15);');
  swap('severeEscalation=departedInjured?.15:0','severeEscalation=departedInjured?(globalThis.__sevEsc??.15):0');
  vm.runInThisContext(src,{filename:'dungeon.js'});};
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])load(f);

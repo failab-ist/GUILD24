@@ -731,3 +731,13 @@ dawnRecovery 190
 extraOrder 130
 rerollTicket 120
 ```
+
+
+## v2.9.11 — Expedition Store Supports (User 2026-09-28)
+
+New:
+
+```new
+- 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read (User 2026-09-28, v2.9.11)
+- 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so (v2.9.11)
+```
