@@ -3,7 +3,7 @@
 DOC=UI_UX
 OWNER=ui,ux,phase_ui,mobile,tutorial,event_reveal,forecast_ui,menu_settings,typography,visual_material,final_preparation_ui,functional_design,visual,decoration_ui,store_growth_ui,sale_density,semantic_delta,popover,night_result
 DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.7
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/UI_UX_v2.8.0-patch.md,history/UI_UX_v2.7.0.md,history/UI_UX_v2.6.1.md,history/UI_UX_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/UI_UX.md
@@ -675,6 +675,7 @@ User-approved composition change (User 2026-09-24, v2.9.0): the per-row price pa
 - while the readout is on screen the pin is not shown; on a desk (≥1024) it is never shown (the readout sits beside the portrait there)
 - one tap folds it to a `전망` chip and back; the fold lasts only until the readout is on screen again — the next time the readout scrolls away the pin opens unfolded; no Save or account field
 - it floats over the top of the scrolled column and reserves no layout height; a row it covers is read by folding it; the touch target is at least 44px
+- the strain line rides along (User 2026-09-28, v2.9.9 quick patch): when the readout carries `연속 부상 출발 {n}회` (§SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT), the pin carries the same line under its two readings — the same condition, words, number and small muted type; the pin grows by that line and still reserves no layout height; the folded chip stays `전망`
 
 ### SALE — DESK LAYOUT
 

@@ -1781,3 +1781,11 @@ not open empty and reflow when its art arrives on a phone network (User 2026-09-
 ahead anyway, so on a warm cache there is no extra wait. The page fetches its four fonts with itself, so no screen's digits
 wait for their face.
 ```
+
+## AMENDMENT — v2.9.9 quick patch: the strain line in the SALE forecast pin (User decision 2026-09-28)
+
+User 2026-09-28 (after the D23 fresh-Run review: the strain line was hard to notice, and on a phone it scrolls away with the readout).
+
+```new
+- the strain line rides along (User 2026-09-28, v2.9.9 quick patch): when the readout carries `연속 부상 출발 {n}회` (§SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT), the pin carries the same line under its two readings — the same condition, words, number and small muted type; the pin grows by that line and still reserves no layout height; the folded chip stays `전망`
+```

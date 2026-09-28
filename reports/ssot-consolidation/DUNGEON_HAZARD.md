@@ -973,9 +973,6 @@ other surviving path = 0.18
 ```
 
 ```new
-퇴각 = 0.35
-부상 = 0.20
-중상 = 0.10
 사망 = 0
 ```
 
@@ -1137,4 +1134,16 @@ familyReward: spider 1 · slime 1 · golem 1.15 · crypt 1.10 · snow 1.25 · Fi
 귀환석 second retreat roll (User 2026-09-28, v2.9.10; the Item rule is owned by `ITEM_v2.8.0.md` §귀환석): an
 expedition whose Outcome is 부상 / 중상 / 사망 and whose Bag holds 귀환석 rolls once more, at the same escapeChance
 with the stone's bonus added (`escapeChance + 귀환석 escapeBonus`, same 0.15~0.94 clamp); a hit makes the Outcome 퇴각.
+```
+
+## AMENDMENT — v2.9.9 quick patch: Wallet outcome multipliers (User decision 2026-09-28)
+
+User 2026-09-28 (after the D23 fresh-Run review and the paired `reader` measurement, 5,000 seeds): 퇴각 0.35 → 0.40, 부상 0.20 → 0.25,
+중상 0.10 → 0.15; 대성공 / 성공 1.00 and 사망 0 unchanged. The three lines declared in the v2.9.0 F4 fence above are edited in place
+and removed from it.
+
+```new
+퇴각 = 0.40   (User 2026-09-28, v2.9.9 quick patch; was 0.35)
+부상 = 0.25   (User 2026-09-28, v2.9.9 quick patch; was 0.20)
+중상 = 0.15   (User 2026-09-28, v2.9.9 quick patch; was 0.10)
 ```

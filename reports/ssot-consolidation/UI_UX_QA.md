@@ -1704,3 +1704,12 @@ place with its art on it (v2.9.10: a 200 ms hold; on a cold phone network a reve
 1.2 s more for it)
 - every row carries its shelf life (`폐기까지 N일`, then `내일까지` / `오늘까지`, v2.9.10), the tray and the 재고 정리 list the same;
 ```
+
+## AMENDMENT — v2.9.9 quick patch: the strain line in the SALE forecast pin (User decision 2026-09-28)
+
+User 2026-09-28: UI-Q-v29-24 and UI-Q-v29-38 each gain one PASS line for the pin's strain line.
+
+```new
+- a customer with a `연속 부상 출발 {n}회` line on the readout carries the same line under the pin's two readings; one without it carries none; the folded chip reads `전망` only (User 2026-09-28, v2.9.9 quick patch)
+- at 390, with the readout scrolled out of view, the forecast pin shows the same line under its two readings for the chain case and none for the healthy and first-injured cases (User 2026-09-28, v2.9.9 quick patch; UI-Q-v29-24)
+```

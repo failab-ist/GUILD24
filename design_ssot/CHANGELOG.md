@@ -52,9 +52,26 @@ the owner headers and in the git tag.
   | 구급키트 | 29.7 | 39.9 | 0 | 11.2 |
 
   The bot seldom sells these Items, so the Run-level figures stay within noise (D30 reach 11.7 -> 11.8 %, clear 7.8 ->
-  8.2 %, deaths per Run 6.88 -> 6.88).
+  8.2 %, deaths per Run 6.88 -> 6.88). Measured on the base before the v2.9.9 Wallet quick patch below; the Wallet
+  multipliers pay on the Outcome and do not move these Outcome shares.
 - **Three witty lines** - COPY_AUDIT §16-4 / §19-4 / §19-8: one each for a regular's arrival, a Night 부상 and a Night
   growth result.
+
+## v2.9.9 quick patch — Wallet multipliers, SALE pin strain line (User 2026-09-28)
+
+After the review of the User's fresh Run ended by the Death limit on DAY 23 (reports/fresh-run-d23-review-v299.md). The build marker
+stays 2.9.9.
+- Wallet outcome multipliers (User 2026-09-28): 퇴각 0.35 → 0.40, 부상 0.20 → 0.25, 중상 0.10 → 0.15; 대성공 / 성공 1.00 and 사망 0
+  unchanged. It answers the D11~20 squeeze the User reported (customers too poor to buy, the store too tight not to overcharge) without
+  touching combat: `reader` 5,000 seeds, before → after (native): D20 29.4 → 32.9%, D30 12.2 → 13.6%, clear 8.3 → 9.4%, D11~20
+  bankruptcy 24.8 → 21.5%, D29 Gold median 3,345 → 3,340; skilled-start D30 unchanged. The clear rate sits about 1%p above the
+  GAME_VISION fresh / balanced reference (2~8%), accepted by the User. DUNGEON_HAZARD §expeditionWalletReward, DUNGEON_ITEM_QA
+  (Reward PASS); ledgers; tests revision; `tools/measure-wallet-v299.cjs`.
+- SALE forecast pin strain line (User 2026-09-28): the strain line was hard to notice, and on a phone it scrolled away with the
+  readout. The pin now carries `연속 부상 출발 {n}회` under its two readings - the same condition (an injured departure with a chain
+  of 1 or more; the User kept the threshold), words, number and small muted type; the folded chip stays `전망`; a desk has no pin.
+  UI_UX §SALE — FORECAST PIN, UI_UX_QA UI-Q-v29-24 / UI-Q-v29-38, COPY_AUDIT §4-25; ledgers; ui-guard pin; `tools/qa-strain-line.cjs`
+  checks the pin at 390 (in qa:runtime). Captured before / after at 360 and 390 and confirmed by the User.
 
 ## v2.9.9 — presentation: the store scene, the dock Actions, SALE, the FINAL clash (User 2026-09-27)
 

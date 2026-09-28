@@ -2,8 +2,8 @@
 
 DOC=DUNGEON_HAZARD
 OWNER=dungeon,family,hazard,forecast,counter,prepared_power,supply,fatigue,death,death_risk,great_success,result_proof,counterfactual
-DOC_VERSION=2.9.8
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.4
+DOC_VERSION=2.9.9
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
 DOC_AUTHORITY=AUTHORITATIVE_DESIGN_SPEC
 CONSOLIDATED_FROM=history/DUNGEON_HAZARD_v2.8.0-patch.md,history/DUNGEON_HAZARD_v2.7.0.md,history/DUNGEON_HAZARD_v2.6.0.md
 CONSOLIDATION_LEDGER=reports/ssot-consolidation/DUNGEON_HAZARD.md
@@ -811,9 +811,9 @@ Ordinary expedition Wallet reward:
 Outcome multiplier (User 2026-09-25, v2.9.0; keyed on the resolved Outcome, ordered 중상 < 부상 < 퇴각 < 성공; 대성공 / 성공 back to 1.00 in v2.9.1):
 
     대성공 / 성공 = 1.00
-    퇴각 = 0.35
-    부상 = 0.20
-    중상 = 0.10
+    퇴각 = 0.40   (User 2026-09-28, v2.9.9 quick patch; was 0.35)
+    부상 = 0.25   (User 2026-09-28, v2.9.9 quick patch; was 0.20)
+    중상 = 0.15   (User 2026-09-28, v2.9.9 quick patch; was 0.10)
     사망 = 0
 
 Then:

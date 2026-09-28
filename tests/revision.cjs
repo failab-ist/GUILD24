@@ -103,11 +103,12 @@ test('ECO-Q-v28-3B / SA-Q49 re-measure amendment: ordinary NPC Wallet on visit -
   const d={...DATA.dungeonBy.spider,day:r.int(1,29),tier:2,hazards:['poison'],scale:1.6,power:r.int(60,140),reward:1};
   const rep=Dungeon.resolve(npc,d,r,[]);
   if(rep.outcome==='퇴각'){
-   assert.equal(Dungeon.WALLET_MULT['퇴각'],.35,'v2.9.0 F4: 퇴각 Wallet multiplier');assert.equal(rep.loot,Math.round((35+d.day*8)*.35*(d.reward||1)),'a 퇴각 Loot follows its own formula');
+   assert.equal(Dungeon.WALLET_MULT['퇴각'],.40,'v2.9.9 quick patch: 퇴각 Wallet multiplier');assert.equal(rep.loot,Math.round((35+d.day*8)*.40*(d.reward||1)),'a 퇴각 Loot follows its own formula');
    sampled++;
   }
  }
  assert.ok(sampled>0,'sanity: at least one 퇴각 sample was observed to check');
+ assert.deepEqual({...Dungeon.WALLET_MULT},{'대성공':1,'성공':1,'퇴각':.40,'부상':.25,'중상':.15,'사망':0},'v2.9.9 quick patch: Wallet outcome multipliers (DUNGEON_HAZARD)');
 });
 test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other seeded result',()=>{
  const ids=new Set();
