@@ -305,7 +305,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  assert.equal(eff.counter.id,'thriftSafe');
  assert.equal(DATA.decorationParams.thriftSafe.dailyGold,50,'counter pays 50G every morning (User 2026-09-25, v2.9.1 balance; was 40G)');
  assert.ok(!('decorationStartGold' in DATA.balance),'the one-off starting Gold is gone');
- assert.equal(DATA.balance.wallVisitorChance,.30,'wall is the approved Morning chance (User 2026-09-25, v2.9.1 balance; was 25%)');
+ assert.equal(DATA.balance.wallVisitorChance,.45,'길드 추천 매대 is the approved Morning chance (User 2026-09-28, v2.9.11; 30% from v2.9.1, was 25%)');
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  /* v2.9.7 (User 2026-09-26, META §sign — 원정 지원금 간판): the sign pays a that-visit 추가 구매 budget through the Event channel
     instead of three ORDER candidates */
@@ -320,7 +320,7 @@ test('META_v2.8: the Decoration effects are the Start Contract positives, withou
  const nums=t=>t.slice(1,-1).split(",").map(Number),w=DATA.decorationParams.honorFrame.weights,base=nums(adv.match(/:(\[60,[^\]]+\])\)/)[1]);
  assert.ok(/opts\.premium\?D\.decorationParams\.honorFrame\.weights/.test(adv),'the weights have one owner, the Decoration param');
  /* v2.9.7 (User 2026-09-26, 명예 모험가 액자): above 평범 40% -> 65%, 영웅 · 전설 the most */
- assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[35,30,22,9,4],'평범 60% -> 35%, so above 평범 40% -> 65%');
+ assert.equal(w.reduce((a,b)=>a+b,0),100);assert.equal(base[0],60);assert.deepEqual(w,[25,30,26,13,6],'평범 60% -> 25%, so above 평범 40% -> 75% (v2.9.11; 65% in v2.9.7)');
  for(let i=1;i<5;i++)assert.ok(w[i]>base[i],'grade '+i+' is lifted');
  /* META_v2.8 §RETIRED START CONTRACT: removing the picker is not the requirement. A stale v8
     save may still carry `contract`, so no Contract branch may survive in the active path -

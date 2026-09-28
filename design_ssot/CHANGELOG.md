@@ -51,6 +51,10 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **The two weakest Decorations lifted** - META §display / §wall, NPC_TRAIT_QA NPC-Q-v28-10, COPY_AUDIT decoration lines (User
+  2026-09-28, `reports/remeasure-v2911.md` §10-3): at the 1.45 slope 길드 추천 매대 read D30 +5.3%p and 명예 모험가 액자 +4.2%p
+  beside the two signs' +25 / +31. 길드 추천 매대's Morning visitor +1 chance 30% → 45% (trial +6.5%p); 명예 모험가 액자's
+  rarity weights [35, 30, 22, 9, 4] → [25, 30, 26, 13, 6], above 평범 65% → 75% (trial +8.2%p).
 - **원정 도시락 코너 and 왕도 프리미엄 인증 retuned** - RELIC 17 / 23, RELIC_QA, COPY_AUDIT §11-17 / §11-23 (User 2026-09-28,
   `reports/remeasure-v2911.md` §9 / §10): 원정 도시락 코너 led every Store Support (D30 +13.7%p at the 1.45 slope, the second
   +8.0), mostly through Drink fatigue recovery; per Item it now gives Food Supply +2, Drink Supply +1 and +2 on every Hazard of
