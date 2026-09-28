@@ -1,7 +1,7 @@
 # WORK_STATE
 
 DATE: 2026-09-28
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) · V2_9_11_BRANCH_DONE(`claude/v3-0-prep-planning-g42z7y`, PR·머지는 User 컨펌 대기) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
 
 ## Current
 
@@ -10,6 +10,24 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
+
+## v2.9.11 — v3.0 준비 1차 (브랜치 완료, PR 전) (User 2026-09-28)
+
+브랜치 `claude/v3-0-prep-planning-g42z7y`. 내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.11. 빌드 표시 2.9.11.
+
+| 커밋 | 내용 |
+|---|---|
+| `2d3080a` | 폐기 = 마지막 판매일 밤(그날 영수증 `오늘 폐기`). 아침 폐기 없음 |
+| `e2e1260` `661e36a` | 부상 나선·초반 곡선 측정(`reports/growth-injury-v2911.md`) → 초반 게이트 기울기 1.50 → 1.40 |
+| `86e9e3a` | 실존 인물이 떠오르는 손님 이름 35개 교체(같은 자리, 초상 그대로) |
+| `f0fe493` | Rare Reference 손님 3명 제거(이름·초상·대사·확률) |
+| `ce94b11` | 원정 점포지원 2장: 야전 들것(Foundation 80G, 부상 투력 -8%) · 응급 처치대(Keystone 300G, 부상 방문 20% 회복) |
+| `4c6d870` | 사건 발생률 40%, 한 Run에 같은 사건 한 번 |
+| `e70123b` | 새 사건 32종(23 → 55) |
+
+검사(마지막 한 번, User 검증 리듬): `npm test` 전체, `ssot:check` 21/21, `qa:runtime` 13/13, `qa:visual` clean(126장). 390 캡처로
+점포지원 카드 2장·새 사건 공지·SALE 회복 한 줄 확인.
+초안·측정 원문: `reports/v2.9.11-drafts.md`(이름 §A · 사건 §B · 점포지원 §C).
 
 ## v2.9.10 퀵패치 2차 (머지됨, PR #24) (User 2026-09-28, v2.9.10 플레이 뒤)
 
@@ -81,7 +99,16 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - PR 머지는 User가 명시적으로 컨펌했을 때만 한다. 의견이 필요한 건 결정 항목과 의견을 먼저 정리해서 묻는다.
 - 이름·수치·문구는 실행 전에 보고한다. 화면 작업은 캡처를 보여주고 확인받은 뒤 커밋한다.
 
-다음 작업: v3.0 준비(`reports/v3.0-prep.md`). 연출 작업 전에 아래 함정 목록을 먼저 읽는다.
+- 검증 리듬 (User 2026-09-28): 배치마다 바뀐 영역의 테스트만 돌리고, 전체 `npm test`·`ssot:check`·`qa:runtime`·`qa:visual`은 모든 배치 뒤 PR 전에 한 번.
+- 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
+
+다음 작업:
+1. v2.9.11 브랜치 PR과 머지는 User 컨펌을 받는다. 머지 뒤 User 플레이로 새 사건·점포지원·1.40 곡선을 확인한다.
+2. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7): 세이브 호환성 경계(v9 유지 여부·공개 뒤 이관 정책·META §PRE-RELEASE의
+   "Save v8" 표기 정정·앱 네이티브 저장소) → 크레딧 화면·오류 보고 경로 → 앱 래퍼(Capacitor) → 사운드 결정 → 행정. 결정 항목은 표로 먼저 묻는다.
+3. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(커밋 `4c6d870`). 측정 규모에서 다시 볼지는 User 결정.
+
+연출 작업 전에 아래 함정 목록을 먼저 읽는다.
 
 ### User 할 일
 
