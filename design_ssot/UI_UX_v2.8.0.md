@@ -1823,6 +1823,15 @@ Do not present the Final confrontation as text/name-only when the authoritative 
 Rules:
 - do not show Relic choice first and reveal relevant Boss/Family information afterward
 - Sloth choice must visually communicate `Relic 획득` vs `봉인 해제` as mutually exclusive
+- the seal choice and the seal count carry no violet edge bar (User 2026-09-28, v2.9.10 quick patch); the seal choice is its own
+  dark violet plate, set apart from the candidate list
+- a small `접기 ▼` key at the seal plate's top right says it folds (User 2026-09-28); that key, or a tap on the seal plate anywhere but its `봉인 해제` key, folds it to a chip `봉인 해제 {N} / 3 ▲` (so the last candidate is not
+  hidden on a phone); the chip unfolds it; a window opens unfolded and a tap on the candidates never folds it (User 2026-09-28,
+  v2.9.10 quick patch)
+- `봉인 해제` spends the window as 구매 does and closes it as 구매 does; a window already spent (bought or a seal broken) shows
+  `닫기`, never `나중에 결정` (User 2026-09-28, v2.9.10 quick patch - RUNTIME UX BUG: it redrew in place under a decision made)
+- the owned Store Support list (the `점포지원 N / 7` chip's sheet) opens, on a SLOTH Run whose seals are revealed (D15 Trait),
+  with one line `슬로스 봉인 해제 {N} / 3`; the chip itself does not change (User 2026-09-28, v2.9.10 quick patch)
 - Boss reveal is not a new permanent Phase
 - reveal Seen state is stable across Save/Reload
 - Boss art must not push required decision information excessively below the fold on mobile

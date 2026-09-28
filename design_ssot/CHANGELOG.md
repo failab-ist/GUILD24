@@ -13,6 +13,15 @@ From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.
 - **The 1+1 offer is marked** - EVENT §02, UI_UX §ORDER — ITEM INFORMATION HIERARCHY, UI_UX_QA UI-Q-v29-39, COPY_AUDIT §13-2: on a
   본사 1+1 행사 day the promoted offer was told only by `· 1+1` inside the muted metadata line, so the User could not find it (the
   Event asks for it to be shown clearly on ORDER). It now wears a red `1+1` sticker on its `매입` tag corner.
+- **본사 폐기 유예** - EVENT §20, COPY_AUDIT §13-20: `본사 폐기 지원` refunded the cost of the stock discarded that morning, but no
+  폐기 비용 is shown anywhere in the game and the discard was already done before the Event appeared, so its `오늘 폐기 비용 0G`
+  meant nothing to the player. It now gives the stock whose last sale day is today (the shelf's `오늘까지`) one more day:
+  `오늘 밤 폐기될 상품에 한하여 유통기한 +1일`, flavour `유통기한 위에 새 스티커가 붙어 있다. 본사는 모르는 일이라고 한다.`
+- **슬로스 봉인 해제** - UI_UX §BOSS REVEAL rules: pressing `봉인 해제` left the Store Support window open with `나중에 결정`
+  under a choice already made (RUNTIME UX BUG); it now closes the window as 구매 does, and a spent window shows `닫기`. The owned
+  Store Support list (the `점포지원 N / 7` chip's sheet) now opens with `슬로스 봉인 해제 {N} / 3` on a SLOTH
+  Run once its seals are revealed; the chip is unchanged. The seal plate is its own dark violet plate (no edge bar) and a tap on
+  it, anywhere but its key, folds it to a `봉인 해제 {N} / 3 ▲` chip so it no longer hides the last candidate on a phone.
 - **Visual QA coach check steadied** - `tools/qa-visual.cjs` (harness only): the contextual coach check at 390 failed about one
   run in four or five, on the base build too. The capture drives the Run through the engine and renders only now and then; the
   Boss reveal's hold, which since v2.9.10 renders again once its art decodes, could land mid-loop and leave an earlier Day's Event

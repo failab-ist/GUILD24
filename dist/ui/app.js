@@ -243,7 +243,7 @@ function anchorOffer(key,y0){
    when a sheet opens over the screen, so one sheet opening another (메뉴 -> 영업 설정, 도감 ->
    새 점포 준비) still returns to the single origin the player came from. If that origin is gone
    by the time the sheet closes, the Phase's own content region takes focus rather than nothing. */
-function setModal(value){decoPending=null;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
+function setModal(value){decoPending=null;if(value==='relics')sealFolded=false;const jumped=!!value&&!!decoFocus;if(!value)decoFocus=null;if(modal==='event'&&value!=='event'&&game.run&&!game.run.eventSeen){game.run.eventSeen=true;game.save();}$('#coach-root').innerHTML='';if(value&&!modal)previousFocus=document.activeElement;modal=value;renderModal();/* a panel opened ON a Slot has already put focus there; do not yank it back to the top */
  if(value){document.body.style.overflow='hidden';if(!jumped)setTimeout(()=>$('#modal-root button, #modal-root input')?.focus(),0);}
  else{document.body.style.overflow='';const back=previousFocus;previousFocus=null;(back?.isConnected?back:$('#phase-content'))?.focus?.();}
  requestAnimationFrame(showCoach);}
@@ -1668,11 +1668,16 @@ const ABANDON_BODY='<p>이번 영업에서 얻을 보상은 없습니다. 모험
 function loadoutModal(){const lo=game.run?.loadout||{};
  return '<ul class="effects">'+D.decorationSlots.map(slot=>{const d=lo[slot]&&D.decorationBy[lo[slot]];
   return '<li class="deco-line'+(d?'':' empty')+'"><span>'+E(SLOT_COPY[slot]||slot)+'</span><b>'+(d?E(d.name):'비어 있음')+'</b>'+(d?'<p class="smalltext">'+E(d.effect)+'</p>':'')+'</li>';}).join('')+'</ul>';}
+/* v2.9.10 quick patch (User 2026-09-28): on a SLOTH Run whose seals are revealed (the D15 Trait), the owned list says how
+   many seals are broken - they took Store Support windows but hold no slot, so neither the 점포지원 N / 7 chip nor the list
+   showed them. The chip itself stays as it is. */
+function sealCount(){const s=game.run;if(s?.bossId!=='SLOTH'||!s.bossReveal?.traitSeen)return '';
+ return '<p class="seal-count">슬로스 봉인 해제 <b>'+(s.sealBreakCount||0)+' / 3</b></p>';}
 function relicsModal(){
    const owned=game.ownedRelics();
-   if(!owned.length) return '<div class="owned-relics"><p class="muted" style="padding:16px;text-align:center">보유한 점포지원이 없다.</p></div>';
+   if(!owned.length) return '<div class="owned-relics">'+sealCount()+'<p class="muted" style="padding:16px;text-align:center">보유한 점포지원이 없다.</p></div>';
    /* RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): one runtime line for a condition-type support, none otherwise */
-   return '<div class="owned-relics">'+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
+   return '<div class="owned-relics">'+sealCount()+owned.map(r=>{const st=Relics.status(game,r.id);return '<article class="slip"><b>'+E(r.name)+'</b><p>'+E(r.description)+'</p>'+(st?'<p class="status">'+E(st)+'</p>':'')+'</article>';}).join('')+'</div>';
   }
 function relicTakeover(){const s=game.run,w=s.relicWindow;
  if(!w)return '<div class="relic-takeover" role="dialog" aria-modal="true" aria-label="점포지원"><div class="scroll"><div class="relic-open"><span class="label">점포지원</span><h2>지금 고를 지원이 없다</h2><p>다음 지원은 5일 단위 영업일에 도착한다.</p></div></div><div class="close">'+btn('닫기','dismiss','stamp')+'</div></div>';
@@ -1707,16 +1712,24 @@ function relicTakeover(){const s=game.run,w=s.relicWindow;
   +btn(label,'buy-relic','stamp','data-id="'+id+'" '+(blocked?'disabled':''))+'</article>';}).join('')+'</div></div>'
  /* UI_UX §MENU (User 2026-09-24, v2.9.0): the DAY 0 choice is mandatory and has no way back - the
     return button to the pre-Run screen is retired; Decorations are managed from 새 점포 준비, before a Run. */
- +sealChoice() +'<div class="close">'+(first?'':'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
+ /* a window already spent (bought, or a Sloth seal broken) has nothing left to defer: it closes plainly */
+ +sealChoice() +'<div class="close">'+(first?'':w.purchased||w.consumedBySealBreak?btn('닫기','dismiss','stamp'):'<p>보류해도 후보와 가격은 그대로 남는다.</p>'+btn('나중에 결정','dismiss','stamp'))+'</div></div>';}
 
 /* Sloth's seal is not a second choice path: it is the other thing this window's one
    acquisition can be spent on, so it sits beside the candidates and says as much.
    Shown only on a Run that is actually facing SLOTH, and only on an opportunity Day. */
+/* v2.9.10 quick patch (User 2026-09-28): on a phone the seal panel sits under the list and hides the last candidate, so a
+   tap on the panel itself - anywhere but its 봉인 해제 key - folds it to a chip, and the chip unfolds it. A window opens
+   unfolded; the candidates never fold it. */
+let sealFolded=false;
+/* the small 접기 key at the plate's top right says the plate folds; the rest of the plate folds it too (User 2026-09-28) */
+const SEAL_FOLD_KEY='<button class="seal-fold" data-action="seal-fold" aria-label="봉인 칸 접기">접기</button>';
 function sealChoice(){const s=game.run,w=s.relicWindow;
  if(!w||!w.slothSealOpportunity)return '';
  const broken=s.sealBreakCount||0;
- if(w.consumedBySealBreak)return '<div class="seal-choice done"><b>봉인 해제 '+broken+' / 3</b><p>이번 점포지원은 받지 않는다.</p></div>';
- return '<div class="seal-choice"><b>봉인 해제 '+broken+' / 3</b>'
+ if(sealFolded)return '<button class="seal-chip" data-action="seal-fold" aria-expanded="false">봉인 해제 '+broken+' / 3</button>';
+ if(w.consumedBySealBreak)return '<div class="seal-choice done" data-action="seal-fold" aria-expanded="true">'+SEAL_FOLD_KEY+'<b>봉인 해제 '+broken+' / 3</b><p>이번 점포지원은 받지 않는다.</p></div>';
+ return '<div class="seal-choice" data-action="seal-fold" aria-expanded="true">'+SEAL_FOLD_KEY+'<b>봉인 해제 '+broken+' / 3</b>'
   +'<p>점포지원을 받는 대신 봉인 하나를 풀 수 있다. 둘 중 하나만 고를 수 있다.</p>'
   +btn('봉인 해제','break-seal','stamp',game.canBreakSeal()?'':'disabled')+'</div>';}
 /* The end of a store is a statement from head office, so it is printed on the same tape the
@@ -2271,7 +2284,10 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
      the Boss behind it, so no cue names anything the plate has not already shown. */
   sound(BOSS_MAJOR.has(st)?'bossmajor':'bosscompact');
   game.save();setModal(null);render();break;}
- case'break-seal':game.breakSeal();sound('boss');render();break;
+ /* v2.9.10 quick patch (User 2026-09-28, RUNTIME UX BUG): breaking a seal spends the window exactly as 구매 does, so it
+    closes the window as 구매 does - it used to redraw in place and leave `나중에 결정` under a decision already made */
+ case'break-seal':game.breakSeal();setModal(null);render();sound('boss');break;
+ case'seal-fold':sealFolded=!sealFolded;sound('ui');render();break;
  case'menu':sound('ui');setModal('menu');break;
  case'begin-order':game.beginOrder();sound('open');render();break;
  case'confirm-order':{/* H3: what the warehouse and the till held before the commit, for the cascade after it (playCue) */

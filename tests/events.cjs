@@ -8,7 +8,7 @@ function fresh(seed='events'){const g=new Game();g.autosave=false;g.start(seed);
 function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
 const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
-const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 지원','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제'];
+const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제'];
 
 test('EVENT-003: catalog is exactly the canonical 23 with the two rare easter eggs at 0.35',()=>{
  assert.equal(DATA.events.length,23);
@@ -156,16 +156,27 @@ test('EVENT 02: 본사 1+1 delivers double units for a single order cost',()=>{
  assert.equal(s.offers.filter(o=>o.promo).length,1,'exactly one designated SKU');
 });
 
-test('EVENT 20/22: 본사 폐기 지원 clears waste cost but not waste count; 야간 근무 수칙 zeroes overhead',()=>{
+test('EVENT 20/22: 본사 폐기 유예 gives only tonight\'s waste one more day; 야간 근무 수칙 zeroes overhead',()=>{
+ /* v2.9.10 quick patch (User 2026-09-28): the Event was a refund of the overnight waste's cost; it is now a one-day delay
+    for the stock whose last sale day is today, and only that stock */
  const g=fresh('subsidy'),s=g.run;force(g,'wastecover');
  while(s.day<2)advance(g);
- g.stock('rice',3);for(const st of s.inventory)if(DATA.itemBy[st.item].days)st.expires=s.day+1;
- const wasteBefore=s.stats.waste;
- advance(g); // next morning expires the stock, then the Event covers its cost
+ g.stock('rice',3);g.stock('ramen',2);
+ const rice=s.inventory.filter(st=>st.item==='rice'),ramen=s.inventory.filter(st=>st.item==='ramen');
+ for(const st of rice)st.expires=s.day+2;   // its last sale day is tomorrow, the Event's Day
+ for(const st of ramen)st.expires=s.day+3;  // it still has a day to spare then
+ advance(g); // the Event's morning
  assert.equal(s.event?.id,'wastecover');
- assert.equal(s.daily.wasteCost,0,'폐기 비용 0G');
- assert.ok(s.daily.waste>0,'폐기 수량은 정상 기록');
- assert.ok(s.stats.waste>wasteBefore,'누적 폐기도 정상 누적');
+ assert.equal(s.event.name,'본사 폐기 유예');
+ for(const st of rice)assert.equal(st.expires,s.day+2,'tonight\'s waste now lasts until tomorrow');
+ for(const st of ramen)assert.equal(st.expires,s.day+2,'stock that was not due tonight is untouched');
+ assert.equal(s.daily.subsidy||0,0,'no refund any more');
+ // the delayed units (a customer may buy some along the way - those simply leave with the customer)
+ const ids=new Set(rice.map(st=>st.id));
+ g.rollEvent=()=>null;s.money=5000;advance(g); // the next morning: the delayed stock is still on the shelf, on its last sale day
+ assert.ok(s.inventory.filter(st=>ids.has(st.id)).every(st=>st.expires===s.day+1),'kept one more day, not more');
+ s.money=5000;advance(g); // one more: the delay is spent and the stock goes as waste does
+ assert.ok(!s.inventory.some(st=>ids.has(st.id)),'the delayed stock leaves when its day runs out');
 
  const h=fresh('overhead');force(h,'nightshift');
  let guard=0;while(guard++<60){h.run.money=5000;advance(h);if(h.run.event?.id==='nightshift')break;}

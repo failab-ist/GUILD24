@@ -712,7 +712,7 @@ test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Func
   ['caravan','보급 상단 도착','예정보다 이른 상단이 해 뜨기 전에 들어왔다. 창고 앞이 모처럼 북적인다.','오늘 발주 후보 +2'],
   ['payday','길드 급여일','급여일 아침, 길드 출입문마다 동전주머니 소리가 난다.','오늘 방문 모험가 · 현재 소지금의 20%만큼 추가 구매 가능'],
   ['clinic','치유소 휴무','치유소 문에 휴무 팻말이 걸렸다. 보험 창구 앞줄이 금세 길어졌다.','오늘 보험 상품 구매 의사 +20%p'],
-  ['wastecover','본사 폐기 지원','본사가 오늘 폐기비를 대신 낸다. 점주는 공문 날짜를 두 번 확인했다.','오늘 폐기 비용 0G'],
+  ['wastecover','본사 폐기 유예','유통기한 위에 새 스티커가 붙어 있다. 본사는 모르는 일이라고 한다.','오늘 밤 폐기될 상품에 한하여 유통기한 +1일'],
   ['bard','늙은 음유시인','늙은 음유시인이 가게 앞에 자리를 잡았다.\n“너 누구야?”\n잠시 뒤,\n“후 알 유?”\n구경하던 모험가들이 하나둘 모여들었다.','오늘 방문객 +2'],
   ['nightshift','본사 야간 근무 수칙','본사 야간 근무 수칙\n1) 마감 전 창고 수량을 확인하십시오.\n2) 폐기 상품은 뒷문 옆 상자에 두십시오.\n3) 뒷문은 반드시 두 번 잠그십시오.\n5) 새벽 2시 이후 뒷문에서 세 번 노크가 들려도 열지 마십시오.\n4번 규정은 없습니다.','오늘 운영비 0G'],
   ['rite','길드 합동 위령제','길드가 광장에 위령제 제단을 세웠다. 오늘은 모험가들도 말수가 적다.','남은 영업 동안 사망 한도 +1'],
@@ -734,13 +734,14 @@ test('SA-Q37 / COPY_AUDIT §13: all 23 Events carry the approved Flavor and Func
  // §13-22 keeps the 1 -> 2 -> 3 -> 5 gap on screen, which is the whole joke
  const night=DATA.events.find(e=>e.id==='nightshift').reveal;
  assert.ok(/1\)[\s\S]*2\)[\s\S]*3\)[\s\S]*5\)/.test(night)&&!/\n4\)/.test(night),'the missing rule 4 survives');
- // mechanics are untouched: every Event keeps the exact effects and weight it had
+ // mechanics are untouched: every Event keeps the exact effects and weight it had (wastecover changed on purpose:
+ // User 2026-09-28, v2.9.10 quick patch - a refund became a one-day delay)
  const EFFECTS={logistics:{price:1.15},oneplus:{double:1},pilgrimage:{pilgrimage:1},
   overflow:{danger:1.12,reward:1.3},potionPrice:{potionPrice:1.35},coldwave:{cold:1},
   shortage:{potionWeight:0.08},rookie:{rookie:1},royal:{royal:1},blackmarket:{blackmarket:1},
   audit:{audit:1},festival:{foodDemand:0.2},strike:{visitors:-1},unknown:{unknown:1},
   halfPrice:{halfPrice:1},poisonfog:{poison:1},caravan:{offers:2},payday:{wallet:1.2},
-  clinic:{medicalDemand:0.2},wastecover:{wasteFree:1},bard:{visitors:2},nightshift:{overheadFree:1},
+  clinic:{medicalDemand:0.2},wastecover:{wasteDelay:1},bard:{visitors:2},nightshift:{overheadFree:1},
   rite:{deathLimit:1}};
  for(const e of DATA.events)assert.deepEqual(e.effects,EFFECTS[e.id],e.id+' mechanics are unchanged');
  assert.deepEqual(DATA.events.filter(e=>e.weight!==1).map(e=>e.id).sort(),['bard','nightshift'],

@@ -235,7 +235,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');
    if(ev.poison&&!d.hazards.includes('poison'))d.hazards.push('poison');});
-  if(ev.wasteFree&&s.daily.wasteCost){s.money+=s.daily.wasteCost;s.daily.subsidy+=s.daily.wasteCost;s.daily.wasteCost=0;}
+  /* EVENT §20 본사 폐기 유예 (User 2026-09-28, v2.9.10 quick patch; was a refund of the overnight waste's cost, which the
+     player never saw and could not act on): stock whose last sale day is today - the shelf's `오늘까지`, discarded at the
+     next morning - gets one more day. Only that stock; nothing bought later today is touched. */
+  if(ev.wasteDelay)for(const st of s.inventory)if(st.expires===s.day+1)st.expires+=1;
   if(ev.deathLimit)s.riteBonus=(s.riteBonus||0)+ev.deathLimit;
  }
  /* DUNGEON_HAZARD §DEEP EXPEDITION: today's Deep is one of today's own highest-Tier Gates,
