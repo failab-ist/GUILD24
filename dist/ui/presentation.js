@@ -50,10 +50,12 @@ function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e))
  const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));
  out.push({key:k,label:labels[k],text:(rounded>0&&k!=='supply'?'+':'')+rounded+suffix,tone,bad:tone==='cost'});}
- /* ITEM §PRESENTATION ORDER — EXACT (User 2026-09-24, v2.9.0): one fixed order by category, never by the
-    situation. Food leads with 피로 회복; a Drink ends with it; everything else keeps catalog order. */
- if(category==='food'){const i=out.findIndex(r=>r.key==='supply');if(i>0)out.unshift(...out.splice(i,1));}
- else if(category==='drink'){const i=out.findIndex(r=>r.key==='supply');if(i>=0&&i<out.length-1)out.push(...out.splice(i,1));}
+ /* ITEM §PRESENTATION ORDER — EXACT (User 2026-09-28, v2.9.10 quick patch; was Food-leads / Drink-ends since v2.9.0):
+    one order for every Item, the shelf's own kind order read as effects - Hazard Counter, then 피로 회복, then the
+    Core Stats in the stat panel's order, then anything else. Within a group the catalog order stands (a stable sort). */
+ if(category){const stat=['combat','survival','mobility','spirit'];
+  const rank=r=>r.key in D.hazards?0:r.key==='supply'?1:stat.includes(r.key)?2+stat.indexOf(r.key)/10:3;
+  out.sort((a,b)=>rank(a)-rank(b));}
  return out;}
 function traitEffects(id){const t=D.traitBy[id];return rows(t.effects,t.tones);}
 function traits(n){return n.traits;}

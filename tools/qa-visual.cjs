@@ -573,6 +573,20 @@ async function d25OrderProbe(page){
 const COACH_READY=`(()=>{const el=document.querySelector('#coach-root .coach-focus');
  if(!el)return false;const b=document.querySelector('#coach-root .coach-bubble');return !!b;})()`;
 
+/* The coach segments drive the Run through the engine (STEP) and render only now and then. A render
+   that lands asynchronously in the middle of that loop - the Boss reveal's hold resolves after its art
+   decodes (UI_UX §BOSS REVEAL, v2.9.10), at whatever Day the loop has reached by then - can open that
+   Day's takeover (e.g. the Event notice) and leave it open, since STEP never touches the UI. showCoach
+   stands down under a modal, so the mark then never painted: an intermittent FAIL that depended on the
+   decode timing (reproduced 2026-09-28: the D7 Morning still showed an earlier Day's Event notice).
+   A player closes these; the capture closes them the same way, through their own controls. */
+async function clearTakeovers(page){
+ for(let i=0;i<6;i++){
+  const b=await page.$('#modal-root [data-action="event-seen"]')||await page.$('#modal-root [data-action="boss-seen"]')
+   ||await page.$('#modal-root [data-action="dismiss"]');
+  if(!b)break;await b.click();await page.waitForTimeout(120);}
+}
+
 async function coachStep(page,phase,stepId,label){
  // mark every step of this phase BEFORE the one under test as seen, so it is the one shown
  await page.evaluate(([phase,stepId])=>{
@@ -664,6 +678,7 @@ async function coachProbe(page,label){
    if(s.relicWindow)s.relicWindow.focusedRevealSeen=true;Guild24.render();})()`);
   await page.evaluate(`(()=>{window.__coachIds={};for(const k of Object.keys(window.__coachTable))window.__coachIds[k]=window.__coachTable[k].map(x=>x[0]);
    window.__coachSteps=window.__coachTable[Guild24.game.run.phase]||[];})()`);
+  await clearTakeovers(page);
   const info=await coachStep(page,'morning','deep',label);
   captured.push(info);judgeCoach(info,fails,warn);
   /* a contextual mark that has no target must not hold back the lessons behind it: clear the
@@ -722,6 +737,7 @@ async function coachProbe(page,label){
    window.__coachIds={};for(const k of Object.keys(window.__coachTable))window.__coachIds[k]=window.__coachTable[k].map(x=>x[0]);
    window.__coachSteps=window.__coachTable[s.phase]||[];Guild24.render();})()`);
   await page.waitForTimeout(150);
+  await clearTakeovers(page);
  }
  if(!signal)fails.push(`${label}: no customer in this Run raised a Great Success signal to teach`);
  else{

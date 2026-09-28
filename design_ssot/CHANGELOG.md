@@ -3,6 +3,22 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
+
+From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.
+- **One effect order for every Item** - ITEM §PRESENTATION ORDER — EXACT, UI_UX §ORDER — ITEM INFORMATION HIERARCHY: a Food led
+  with 피로 회복 and a Drink ended with it, so `피로 회복 3 · 냉기 대응 +10` and `화염 대응 +8 · 피로 회복 1` sat on neighbouring
+  rows. Every Item now reads Hazard Counter → 피로 회복 → Core Stat (투력 · 강인함 · 기동 · 정신) → the rest, the shelf's own kind
+  order read as effects, on ORDER, the shelf, the tray and the codex.
+- **The 1+1 offer is marked** - EVENT §02, UI_UX §ORDER — ITEM INFORMATION HIERARCHY, UI_UX_QA UI-Q-v29-39, COPY_AUDIT §13-2: on a
+  본사 1+1 행사 day the promoted offer was told only by `· 1+1` inside the muted metadata line, so the User could not find it (the
+  Event asks for it to be shown clearly on ORDER). It now wears a red `1+1` sticker on its `매입` tag corner.
+- **Visual QA coach check steadied** - `tools/qa-visual.cjs` (harness only): the contextual coach check at 390 failed about one
+  run in four or five, on the base build too. The capture drives the Run through the engine and renders only now and then; the
+  Boss reveal's hold, which since v2.9.10 renders again once its art decodes, could land mid-loop and leave an earlier Day's Event
+  notice open, and the coach stands down under a modal. The check now closes any leftover takeover through its own control
+  before measuring, as a player would. No game change.
+
 ## v2.9.10 — quick patch after v2.9.9 play (User 2026-09-27)
 
 - **Category on every Item** - UI_UX §ORDER — ITEM INFORMATION HIERARCHY / §SALE — COUNTER TRAY, UI_UX_QA UI-Q-v29-20: the

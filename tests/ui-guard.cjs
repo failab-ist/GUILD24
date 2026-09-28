@@ -1901,7 +1901,11 @@ test('UI-Q-v29-24: the forecast pin carries the strain line - same condition and
 
 /* UI-Q-v29-39 (UI_UX §ORDER — ITEM INFORMATION HIERARCHY, User 2026-09-26, v2.9.6): 매입 on the tag, 판매 under it, 수익 leads the line */
 test('UI-Q-v29-39: ORDER price tags - 매입 labelled on top, 판매 under it, no 매입 in the metadata line',()=>{
- assert.ok(app.includes("'<span class=\"prices\">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')+'</span>'"),'the two labelled tags, buy price first');
+ assert.ok(app.includes("'<span class=\"prices\">'+Scene.priceTag('<small>매입</small>'+o.price+'<i>G</i>')+Scene.priceTag('<small>판매</small>'+it.sell+'<i>G</i>','sell')"),'the two labelled tags, buy price first');
+ // v2.9.10 quick patch (User 2026-09-28, EVENT §02): the 1+1 promo is a red sticker on the tags, not a metadata fragment
+ assert.ok(app.includes("+(o.promo?'<em class=\"promo-sticker\" aria-label=\"1+1 행사\">1+1</em>':'')+'</span>'"),'the promoted offer wears the 1+1 sticker');
+ assert.ok(!/o\.promo\?' · 1\+1'/.test(app),'the metadata line no longer carries 1+1');
+ assert.ok(/\.promo-sticker\{position:absolute;[^}]*background:#c23a2b/.test(css),'the sticker is red and sits on the tag corner');
  assert.ok(app.includes("+'<span class=\"have\">수익 +'"),'the metadata line starts with 수익');
  assert.ok(!/class="have">매입/.test(app),'and carries no 매입');
  assert.ok(!/Scene\.priceTag\(it\.sell\+'<i>G<\/i>'\)/.test(app),'no unlabelled sale-price tag');
@@ -3481,8 +3485,15 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/오늘 필요|추천/.test(of),'no badge or verdict word');
  // ITEM §PRESENTATION ORDER: every row passes its category, so the fixed order is the same everywhere
  for(const f of ['effectList','shelf','tray','till','orderForm'])assert.ok(fn(f).includes('Presentation.rows(')&&!/Presentation\.rows\(it\.effects\)/.test(fn(f)),f+' passes the category to rows()');
- assert.deepEqual(Presentation.rows(DATA.itemBy.lunchbox.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'Food leads with 피로 회복');
- assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','mobility','supply'],'a Drink ends with 피로 회복');
+ // v2.9.10 quick patch (User 2026-09-28): one order for every Item - Hazard Counter, 피로 회복, Core Stats, the rest
+ assert.deepEqual(Presentation.rows(DATA.itemBy.lunchbox.effects,undefined,'food').map(r=>r.key),['supply','survival','loot'],'피로 회복, then the stat, then the rest');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.wine.effects,undefined,'drink').map(r=>r.key),['fear','supply','mobility'],'Counter first, then 피로 회복, then the stat');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.dragonramen.effects,undefined,'food').map(r=>r.key),['cold','supply','survival'],'a Food Counter leads too');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.energy.effects,undefined,'drink').map(r=>r.key),['supply','mobility'],'a Drink stat follows 피로 회복');
+ assert.deepEqual(Presentation.rows(DATA.itemBy.magmagear.effects,undefined,'gear').map(r=>r.key),['fire','combat'],'gear keeps Counter then stat');
+ for(const it of DATA.items){const rank=k=>k in DATA.hazards?0:k==='supply'?1:['combat','survival','mobility','spirit'].includes(k)?2:3;
+  const ks=Presentation.rows(it.effects,undefined,it.category).map(r=>rank(r.key));
+  assert.deepEqual(ks,[...ks].sort((a,b)=>a-b),it.name+' follows Counter -> 피로 회복 -> stat -> rest');}
  // §TRANSACTION RESULT STUB
  assert.ok(/const who=game\.current\(\),wasM=who\?who\.money:0,wasL=who\?who\.loyalty:0;/.test(fn('action'))&&/stub=\{loyalty:who\.loyalty-wasL,from:wasM,to:who\.money\}/.test(fn('action')),'the stub reads the customer\'s real Loyalty and Wallet change');
  assert.ok(fn('showStub').includes("'단골도 '+(st.loyalty>=0?'+':'')+st.loyalty+' · 소지금 '+st.from+' → '+st.to")&&fn('showStub').includes('2500')&&fn('playCue').includes("$('.receipt-stub')"),'§4-24 exact format, about 2.5 s, motion only inside playCue');

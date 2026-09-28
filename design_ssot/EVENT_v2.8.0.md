@@ -564,7 +564,8 @@ EFFECT:
 
 추가 입고분의 매입 비용은 0G다.
 
-행사 대상 Item은 Order에서 명확하게 표시한다.
+행사 대상 Item은 Order에서 명확하게 표시한다: 그 발주 행의 `매입` 가격표 모서리에 빨간 `1+1` 딱지
+(User 2026-09-28, v2.9.10 quick patch; 모양 -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY).
 
 ### 03. 게이트 순례주간
 

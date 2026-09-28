@@ -1,15 +1,22 @@
 # WORK_STATE
 
 DATE: 2026-09-28
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(PR #21, User 컨펌 2026-09-28) · V2_9_10_MERGED(PR #22, `8c1d4ae`, User 컨펌 2026-09-28) · V2_9_10_QUICK_PATCH(PR #24, User 컨펌 2026-09-28) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
 
 ## Current
 
-- repository: `failab-ist/GUILD24`. main = v2.9.10(PR #22, `8c1d4ae`, Pages 배포 완료). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
+- repository: `failab-ist/GUILD24`. main = v2.9.10 + 퀵패치(PR #22, PR #24, Pages 배포). 배포 빌드는 첫 화면 왼쪽 위와 영업 설정 맨 아래 `v{버전} · 커밋`으로 확인한다.
 - 버전별 내용과 근거: `design_ssot/CHANGELOG.md`(v2.9.1 ~ v2.9.10). 닫힌 버전의 보고서·측정 도구는 `archive/`.
 - Design entry: `design_ssot/SPEC_INDEX_v2.8.0.md` (header: FREEZE_STATUS / SOURCE_ADOPTION_STATUS / UNRESOLVED)
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
+
+## v2.9.10 퀵패치 2차 (머지됨, PR #24) (User 2026-09-28, v2.9.10 플레이 뒤)
+
+- `b9d89e4` 효과 줄 순서 통일(대응 → 피로 회복 → 능력치 → 기타), 본사 1+1 행사 발주 행에 빨간 `1+1` 딱지. CHANGELOG §v2.9.10 quick patch.
+- `52de75c` `qa:visual` 코치 확인 간헐 실패 수정(점검 도구만). 빌드 표시는 2.9.10 그대로.
+- 같은 PR에 v3.0 준비 문서(`reports/v3.0-prep.md` §3-2 사운드, §6 상업 출시, §7 폴리싱; 채널 = 구글 플레이 먼저 + 웹 체험판, 유료 판매 잠정).
+- 다음: User가 직접 플레이로 폴리싱 점검(§7-2). 지적을 받아 배치로 나눈다.
 
 ## v2.9.10 퀵패치 (머지됨, PR #22) (User 2026-09-27~28, v2.9.9 플레이 뒤)
 

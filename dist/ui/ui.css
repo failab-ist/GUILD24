@@ -583,6 +583,10 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .line .prices .tone-sell b i{font-size:11px}
 .line .prices .tone-sell b small{color:#6e5f43;font-weight:600}
 .line .prices{gap:3px}
+/* v2.9.10 quick patch: the 본사 1+1 행사 sticker, stuck on the 매입 tag's corner the way a store marks a 1+1 shelf */
+.line .prices{position:relative}
+.promo-sticker{position:absolute;top:-7px;left:-10px;padding:1px 6px;font:700 12px/1.4 var(--ui);font-style:normal;color:#fff8ea;
+ background:#c23a2b;box-shadow:1px 1px 0 #5a1a12;transform:rotate(-8deg);pointer-events:none}
 /* 5 quantity. UI_UX §PER-PHASE APPLICATION RULES (ORDER) — QUANTITY WEIGHT, USER AMENDMENT
    2026-09-22: the cluster read too heavy. Its hierarchy is item information > readout / stepper
    > `1 / 3 / 최대`, and being a pixel UI is not a reason to box every control.

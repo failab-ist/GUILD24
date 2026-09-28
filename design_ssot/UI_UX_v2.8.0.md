@@ -350,12 +350,12 @@ Within an offer/item card, visual priority is:
      the words the Events and Store Supports already use; User 2026-09-27, v2.9.10) and the rarity name (`일반 / 고급 / 희귀 / 영웅 /
      전설`) in its rarity colour, a paper-legible shade of the shelf tile's hue — identity facts, not a role chip (User 2026-09-24,
      v2.9.0)
-2. exact actual effect
-   - Core Stat
-   - Hazard Counter
-   - 피로 회복 N (User 2026-09-24, v2.9.0)
-   - explicit penalty
+2. exact actual effect, in the ITEM §PRESENTATION ORDER — EXACT order (Hazard Counter → 피로 회복 → Core Stat → the rest;
+   User 2026-09-28, v2.9.10 quick patch); an explicit penalty keeps its place in that order and its cost colour
 3. economy / stock metadata
+   - the 본사 1+1 행사 offer (EVENT §02) wears a small red `1+1` sticker on the corner of its `매입` tag, as a store marks a 1+1 shelf
+     (User 2026-09-28, v2.9.10 quick patch; it had been a `· 1+1` fragment inside the muted metadata line and went unseen); the
+     metadata line carries no `1+1`
    - the price tag reads `매입 {N}G` - the offer's actual buy price today, what 발주 spends - and a smaller, muted tag under it reads `판매 {N}G`; the metadata line keeps `수익 +{N}G · 재고 · 공급 · 유통기한` and loses its `매입 {N}G` (User 2026-09-26, v2.9.6: the unlabelled tag showed the sale price on the screen that spends the buy price)
 4. quantity interaction
    - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
