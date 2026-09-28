@@ -48,6 +48,10 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **Korean text breaks between words everywhere** (User 2026-09-28): `word-break:keep-all` was set screen by screen; Events,
+  Store Support text, the guide, settings and the Night lines still broke inside words (297 cases over every screen and width,
+  e.g. `최 / 대 100G`, `포 / 션`; `reports/text-audit-v2911.md`). The page now keeps words whole (`overflow-wrap:break-word`
+  still splits a token too long for its box); no text spills, clips or scrolls sideways where it did not before.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
