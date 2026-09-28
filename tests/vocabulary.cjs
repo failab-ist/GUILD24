@@ -88,8 +88,8 @@ test('ITEM SUPPLY MODEL: every active Food/Drink has Supply > 0',()=>{
  for(const it of DATA.items)assert.ok(!('fatigue' in it.effects),it.id+' must not carry an item fatigue chain');
 });
 
-test('ITEM-Q11: Return Stone escape bonus is the approved +50%p',()=>{
- assert.equal(DATA.itemBy.stone.effects.escape,.5);
+test('ITEM-Q11: Return Stone escape bonus is the approved +20%p (User 2026-09-28, v2.9.10)',()=>{
+ assert.equal(DATA.itemBy.stone.effects.escape,.2);
  assert.deepEqual(DATA.itemBy.stone.roles,['insurance']);
  assert.equal(DATA.itemBy.worldcharm.effects.revive,1);
 });

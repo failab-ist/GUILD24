@@ -199,7 +199,6 @@ Uses approved v2.5 retained starting escapeBonus +50%p and raises escape/retreat
 PASS: no stale Stat bundle survives.
 - its gameplay identity is the dedicated Poison Hazard specialist
 - all 10 Epic preparation Items use the ordinary Epic pool
-Uses approved escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
 ±17.5% is used as the baseline and any later retune is supported by outcome evidence.
 ```
 
@@ -952,6 +951,32 @@ User 2026-09-27: Item ids renamed to read as the current Items (heat/lava/bar/pr
 - `lunchbox` reads visually as 간단 도시락 / meal-lunchbox
 - `kingwater` reads visually as 왕도 천연암반수 / bottled water
 ### ITEM-Q10 — PREMIUM LUNCH (`guildlunch` / 길드 특제 도시락)
+```
+
+## AMENDMENT — v2.9.10 insurance rules (User 2026-09-28)
+
+귀환석 now rolls once more for 퇴각 on any 부상 / 중상 / 사망 at the own retreat chance +20%p (the combat retreat roll reads the Traits only; the 0.96 rescue clamp is gone with the old crisis roll), 세계수 turns Death into 퇴각, and 구급키트's line says it does not stop Death. The superseded rule lines are replaced; CHANGELOG §v2.9.10 carries the measurement. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+2. Return Stone emergency escape may convert eligible crisis
+3. remaining Death may be converted by World Tree
+Death converts once to Severe Injury.
+```
+
+```new
+Uses approved escapeBonus +20%p (User 2026-09-28, v2.9.10): a 부상 / 중상 / 사망 Outcome rolls once more for 퇴각 at
+the adventurer's own escapeChance + 20%p (clamp 0.15~0.94); the combat-failure retreat roll itself carries no stone
+bonus; combat success is not increased.
+2. Return Stone second retreat roll may convert a 부상 / 중상 / 사망
+```
+
+## AMENDMENT — v2.9.10 World Tree covers 중상 too (User 2026-09-28)
+
+Death-only 세계수 still measured below 귀환석, so the Epic now turns a remaining 사망 or 중상 into 퇴각; a 부상 stays 부상. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+Death or Severe Injury converts to 퇴각 with no injury (User 2026-09-28, v2.9.10; was Death -> Severe Injury); a 부상 stays 부상.
+3. remaining Death or Severe Injury may be converted to 퇴각 by World Tree
 ```
 
 ## AMENDMENT — v2.9.9 quick patch: Wallet outcome multipliers (User decision 2026-09-28)

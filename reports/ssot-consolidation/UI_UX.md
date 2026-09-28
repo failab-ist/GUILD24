@@ -947,7 +947,6 @@ Design intent:
 Still hidden:
 - next-day Family / exact Gate composition / Hazard set
 4. (retired, User 2026-09-24, v2.9.0) no next-day forecast block
-- the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
 - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
 ```
 
@@ -1290,13 +1289,10 @@ User 2026-09-26 (the DAY 0 -> DAY 1 overlap the H6 capture reported, fixed on th
 
 (User 2026-09-26, the DAY 0 -> DAY 1 overlap reported by the H6 capture; acceptance -> UI_UX_QA UI-Q-v29-35.)
 
-A Boss reveal that is due when MORNING is entered opens once MORNING's own entry has landed: a 420 ms hold (the shutter's
-length) after the screen appears, then the dossier opens as it always has. It applies to every reveal stage (the D0 briefing
 and D5 ~ D25), because they share one mechanism; the reveal order is unchanged, and no Event or Relic window opens during the
 hold. MORNING is shown but takes no input during the hold - the reveal is already owed, and the Day does not advance past it
 before it is acknowledged (CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING); a second tap on the 구매 that cut to MORNING does
 nothing. The hold belongs to the MORNING it started on: if the Day leaves MORNING or the reveal is no longer owed (only a scripted
-path can do either), it ends at once. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
 ```
 
 ## AMENDMENT — build marker (User 2026-09-26, v2.9.3)
@@ -1403,7 +1399,6 @@ gold at exactly 0 (User 2026-09-26) - each colour stated in CSS so reduced motio
 User 2026-09-26: the SALE shelf sorts by kind (대응 장비, 음식, 음료, 포션, 보험, 특수), then nearest discard, then higher Rarity, held for the Day. Lines declared earlier and now superseded are removed from their fences above.
 
 ```new
-- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
 ```
 
 ## AMENDMENT — v2.9.7 build marker in 영업 설정 (User 2026-09-26)
@@ -1744,6 +1739,47 @@ it should
 for three carrying six items), and a tap always skips it
 - sound: one cue per landing - a low `rumble` on the Boss card's landing, `supply` on each item, `clash` on each impact,
 `counter` on each counter, `collapse` on a clear; the departure's `final` cue and the ending's seal cue are unchanged
+```
+
+## AMENDMENT — v2.9.10 category tag, rarity colour, last sale day (User 2026-09-27)
+
+Every Item names its category on ORDER (with the rarity word in its colour), the SALE shelf rows and the tray; the tray tile edge takes the rarity colour; shelf life on stock reads as the last sale day; the guide line says 야외장비. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- one small line under the Item name: `{category} · {rarity}` — the category word (`음식 / 음료 / 포션 / 야외장비 / 보험 / 특수`,
+the words the Events and Store Supports already use; User 2026-09-27, v2.9.10) and the rarity name (`일반 / 고급 / 희귀 / 영웅 /
+전설`) in its rarity colour, a paper-legible shade of the shelf tile's hue — identity facts, not a role chip (User 2026-09-24,
+v2.9.0)
+- every shelf row and the tray name the Item's category in the same small tag after its name (`음식 / 음료 / 포션 / 야외장비 /
+보험 / 특수`, User 2026-09-27, v2.9.10); the icon tile's bottom edge is the Item's rarity colour on the shelf row and on the
+tray alike (the tray's had been a fixed gold)
+```
+
+## AMENDMENT — v2.9.10 shelf life wording, sold out, customer arrival, dossier entry (User 2026-09-28)
+
+Shelf life reads 폐기까지 N일 / 내일까지 / 오늘까지; a sold-out ORDER offer carries a 품절 stamp; the customer card walks up and holds a silhouette until the portrait is decoded; the Boss dossier holds 200 ms, rises into place and waits for its art; fonts are preloaded. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+- an offer whose whole supply for today has already been ordered reads as sold out (User 2026-09-27, v2.9.10): the paper a
+shade worked and a quiet `품절` stamp under its metadata line instead of the quantity controls - name, effects and prices stay
+readable, nothing is greyed
+### SALE — CUSTOMER ARRIVAL (v2.9.10)
+(User 2026-09-28.) The customer's card walks up to the counter - a few steps in from the side (~0.56 s) - instead of sliding
+in. A newcomer's portrait is fetched only when they arrive (they do not exist before SALE opens), so until it is decoded the
+card holds a plain silhouette (head and shoulders, no art) and the portrait rises into it when ready, at most 1.5 s later;
+every other customer of the Day is fetched the moment SALE opens, so theirs is ready. No loading screen, no copy. Under
+reduced motion the card is simply there.
+- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the stock's shelf life - `폐기까지 N일`, then `내일까지` / `오늘까지` on its last two days (User 2026-09-27/28, v2.9.10;
+it was `폐기 N일`, which left open whether today counted; the tray and the 재고 정리 list read the same) - emphasized (the warehouse list's `.soon` color) on its last day; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
+A Boss reveal that is due when MORNING is entered opens once MORNING's own entry has landed: a 200 ms hold after the screen
+appears (v2.9.10, User 2026-09-28: it was 420 ms, the shutter's length, and the dossier then cut in and read as a stutter),
+then the dossier arrives - the shade at once, the sheet rising 18 px into place in 260 ms with the Boss's art on it (no
+separate, later settle of the art). It applies to every reveal stage (the D0 briefing
+path can do either), it ends at once. No new sound or copy. Under reduced motion the reveal opens at once, as before.
+After the hold the dossier also waits for the Boss's art to be fetched and decoded, never more than 1.2 s longer, so it does
+not open empty and reflow when its art arrives on a phone network (User 2026-09-27, v2.9.10); today's Boss art is fetched
+ahead anyway, so on a warm cache there is no extra wait. The page fetches its four fonts with itself, so no screen's digits
+wait for their face.
 ```
 
 ## AMENDMENT — v2.9.9 quick patch: the strain line in the SALE forecast pin (User decision 2026-09-28)

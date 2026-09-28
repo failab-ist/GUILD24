@@ -781,7 +781,6 @@ User decisions 2026-09-25 (v2.9.0 F3): 구급키트 lowers the resolved Outcome 
 
 ```new
 Concise player function (User 2026-09-25, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
-원정 후 중상 → 부상, 부상 → 무사 (사망 제외)
 ```
 
 ## AMENDMENT — Monster Knowledge leaves the codex (User 2026-09-26, v2.9.6)
@@ -816,4 +815,22 @@ User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보�
 
 ```new
 영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
+```
+
+## AMENDMENT — v2.9.10 Rare Reference lines (User 2026-09-28)
+
+The three Rare Reference customers own two arrival lines and two Night result lines each (COPY_AUDIT §25), used on about half of their arrivals and living results, never on a Death.
+
+```new
+전용 대사 (User 2026-09-28, v2.9.10): 세 이름은 각자 방문 대사 2줄과 밤 결과 대사 2줄(성공 계열 1 · 실패 계열 1)을 가진다.
+방문과 살아 돌아온 밤 결과에서 약 절반의 확률로 일반 대사 대신 나오고, 사망에는 쓰지 않는다. 밈을 직접 설명하지 않는다 —
+아는 사람은 알아보고, 모르는 사람에게는 말버릇이 조금 다른 손님이다. Exact lines -> COPY_AUDIT_APPROVED §25.
+```
+
+## AMENDMENT — v2.9.10 insurance rules (User 2026-09-28)
+
+귀환석 now rolls once more for 퇴각 on any 부상 / 중상 / 사망 at the own retreat chance +20%p (the combat retreat roll reads the Traits only; the 0.96 rescue clamp is gone with the old crisis roll), 세계수 turns Death into 퇴각, and 구급키트's line says it does not stop Death. The superseded rule lines are replaced; CHANGELOG §v2.9.10 carries the measurement. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)
 ```

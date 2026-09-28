@@ -285,7 +285,8 @@ test('UI-Q05 / UI-Q07 / UI-Q08 / UI-Q09: the Order form carries the canonical hi
  for(const label of ['운영비(예상)','창고 잔여 칸','보유','발주 금액','발주 후'])assert.ok(order.includes(label),'the register shows '+label);
  assert.ok(order.includes("data-action=\"gates\""),'today Gate/Hazard is reachable without leaving Order');
  assert.ok(!/내일|tierLine|gateLine/.test(order)&&!/function (tierLine|gateLine)\(/.test(app),'no next-day forecast block on ORDER (User 2026-09-24, v2.9.0)');
- assert.ok(/<span class="kind">'\+E\(D\.rarities\[it\.rarity\]\)\+'<\/span>/.test(order),'each offer row carries the rarity name line');
+ /* v2.9.10 (User 2026-09-27): the identity line reads `{category} · {rarity}`, the rarity word in its colour */
+ assert.ok(/<span class="kind">'\+E\(itemKind\(it\)\)\+' · <i class="rar r'\+it\.rarity\+'">'\+E\(D\.rarities\[it\.rarity\]\)\+'<\/i><\/span>/.test(order),'each offer row carries the category and rarity line');
  assert.ok(/lim=game\.quantityLimit\(i\)/.test(order)&&/aria-disabled="true" data-reason=/.test(order),'a blocked quantity control is dim but tappable, with its reason');
  for(const t of ['창고 칸이 부족합니다.','오늘 공급 최대 수량입니다.',"'발주 자금이 부족합니다. '+fmt(lack)+'G 부족.'"])assert.ok(app.includes(t),'§3-9 toast: '+t);
  assert.ok(/getAttribute\('aria-disabled'\)==='true'/.test(app),'the click listener answers a blocked control with the toast and nothing else');
@@ -830,7 +831,9 @@ test('UI-Q39 / UI-Q14 / ITEM-Q03: the decision material is said once, and the ta
  for(const label of Object.values(DATA.roles))
   assert.ok(!swept.includes("'"+label+"'")&&!swept.includes('>'+label+'<'),
    'internal role taxonomy is not rendered: '+label);
- assert.ok(!/D\.categories\[|D\.roles\[/.test(app),'and no render path looks it up');
+ assert.ok(!/D\.roles\[/.test(app),'and no render path looks the roles up');
+ /* v2.9.10 (User 2026-09-27): the category is the one table a render path reads, through itemKind alone */
+ assert.ok(/const itemKind=it=>D\.categories\[it\.category\]\|\|'';/.test(app)&&app.split('D.categories[').length===2,'the category is read in one place');
 
  /* D-10, as amended by UI-Q109. The rule it was written to protect is that the environment is
     stated ONCE - never a verdict beside the destination and a second summary in the outlook.
@@ -1924,12 +1927,28 @@ test('UI-Q-v29-36: build marker - opening screen corner, console, Guild24.build,
 
 /* UI-Q-v29-35 (UI_UX §BOSS REVEAL — MORNING LANDS FIRST, User 2026-09-26): a reveal due on a fresh MORNING entry waits
    for the shutter to land; reduced motion opens it at once; no other modal jumps the queue while it waits */
+/* v2.9.10 (User 2026-09-27/28): the customer walks up and holds a silhouette until the portrait is decoded; a sold-out
+   ORDER offer carries a stamp instead of its controls */
+test('UI_UX §SALE — CUSTOMER ARRIVAL / ORDER sold out (v2.9.10)',()=>{
+ const pp=fn('playPhase');
+ assert.ok(/const WALK=560,waiting=fig&&fig\.tagName==='IMG'&&!\(fig\.complete&&fig\.naturalWidth\);/.test(pp)&&/A\(face,\{translateX:\[72,0\],duration:WALK/.test(pp)
+  &&/Promise\.race\(\[fig\.decode\(\)\.catch\(\(\)=>\{\}\),new Promise\(r=>setTimeout\(r,1500\)\)\]\)/.test(pp),'the card walks in and the portrait rises once decoded (at most 1.5 s)');
+ assert.ok(/<span class="figure-wait" aria-hidden="true"><\/span><img class="figure"/.test(app)&&/\.face\.waiting \.figure-wait\{display:block\}/.test(css),'a plain silhouette stands in meanwhile');
+ assert.ok(/const out=o\.quantity<=0;/.test(app)&&/\(out\?'<span class="dial"><em class="soldout-mark">품절<\/em><\/span><\/li>':/.test(app)&&/\.line\.soldout \.dial\{grid-column:3\/-1/.test(css),'a sold-out offer: the stamp under its metadata, no controls');
+});
+
 test('UI-Q-v29-35: the Boss reveal opens after MORNING lands, never in the same frame as the cut',()=>{
  const src=read('dist/ui/app.js');
- assert.ok(/const BOSS_HOLD=420;let bossHold=null;/.test(src),'one 420 ms hold - the MORNING shutter\'s own length');
- assert.ok(/A\(shutter,\{translateY:\[-14,0\],duration:420,/.test(src),'and the shutter it waits for is still 420 ms');
+ /* v2.9.10 (User 2026-09-28): a 200 ms hold, then the dossier rises into place with its art (it cut in after 420 ms) */
+ assert.ok(/const BOSS_HOLD=200;let bossHold=null;/.test(src),'one 200 ms hold');
+ const rm=fn('renderModal');
+ assert.ok(/const opened=modal==='boss'&&dossierShown!==stageKey\(\);/.test(rm)&&/if\(opened&&motionOK\(\)\)\{const sheet=root\.querySelector\('\.modal'\);\s*if\(sheet\)sheet\.animate\(\[\{transform:'translateY\(18px\)',opacity:0\},\{transform:'none',opacity:1\}\],\{duration:260,/.test(rm)&&!/boss-art img/.test(rm),
+  'the dossier sheet rises once, when it opens, the art on it (no separate settle)');
+ assert.ok(/<link rel="preload" href="ui\/fonts\/MulmaruMono\.woff2" as="font" type="font\/woff2" crossorigin>/.test(html),'the fonts come with the page');
  const r=fn('render');
- assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;bossHold=setTimeout\(\(\)=>\{bossHold=null;\$\('#app'\)\.inert=false;render\(\);\},BOSS_HOLD\);\}else modal='boss';\}/.test(r),
+ /* v2.9.10: after the shutter the hold also waits for the Boss's art (never past BOSS_WAIT), so the dossier opens with it */
+ assert.ok(/else if\(bossRevealDue\(\)\)\{if\(bossHold\)\{\}else if\(changed&&phase==='morning'&&motionOK\(\)\)\{\$\('#app'\)\.inert=true;\s*bossHold=setTimeout\(\(\)=>Promise\.race\(\[warm\(Scene\.bossArt\(s\.bossId,s\.day,s\.sealBreakCount\)\),new Promise\(r=>setTimeout\(r,BOSS_WAIT\)\)\]\)\s*\.then\(\(\)=>\{if\(!bossHold\)return;bossHold=null;\$\('#app'\)\.inert=false;render\(\);\}\),BOSS_HOLD\);\}else modal='boss';\}/.test(r)
+  &&/const BOSS_WAIT=1200,/.test(src)&&/warmAhead\(s,phase\);/.test(r),
   'held only on a fresh MORNING entry with motion on, the screen inert while it waits (the Day may not advance past an owed reveal); otherwise it opens at once');
  assert.ok(r.indexOf('bossRevealDue()')<r.indexOf("modal='event'")&&r.indexOf('bossRevealDue()')<r.indexOf("modal='relics';\n",r.indexOf('bossRevealDue()')),'the reveal keeps its place ahead of the Event and the Relic window');
  assert.ok(/\|\|bossHold\)return;/.test(fn('showCoach')),'no coach mark flashes up under a reveal that is on its way');
@@ -2853,13 +2872,13 @@ test('COPY_AUDIT §3 / §4: the coach marks and the two SALE lines are the appro
  assert.ok(!app.includes('이 손님의 준비는 달라지지 않는다'),'and its old sentence is gone');
  // §4-10: the shelf-life state only, with the FIFO explanation retired
  assert.ok(!app.includes('가장 먼저 폐기될 재고부터 나간다'),'§4-10 the repeated FIFO explanation is gone');
- assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("'폐기까지 '"),'§4-10 the shelf-life state stays and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
+ assert.ok(!app.includes('유통기한 없음')&&!app.includes('기한 없음')&&app.includes("left<=1?'오늘까지':left===2?'내일까지':'폐기까지 '+left+'일'"),'§4-10 the shelf-life state stays, as the last sale day (v2.9.10), and no non-expiring state survives (ITEM §SHELF LIFE — EXACT, v2.9.0)');
  // UI_UX §SALE — SHELF ORDER (User 2026-09-26, v2.9.7): kind, then nearest discard, then higher Rarity, held for the Day
  assert.ok(fn('shelf').includes('+shelfOrder(stocks).map(st=>{'),'the shelf reads its order from shelfOrder');
  assert.ok(app.includes("const SHELF_KIND=['gear','food','drink','potion','insurance','special']"),'대응 장비 -> 음식 -> 음료 -> 포션 -> 보험 -> 특수');
  assert.ok(/key=s\.seed\+':'\+s\.day\+':'\+s\.phase/.test(fn('shelfOrder'))&&fn('shelfOrder').includes('if(!(st.item in at))at[st.item]=st.expires;'),'the discard day a row sorts by is held for the Day, so a sale never moves a row');
  assert.ok(fn('shelfOrder').includes('return x[0]-y[0]||x[1]-y[1]||x[2]-y[2];')&&fn('shelfOrder').includes('-it.rarity'),'kind, then nearest discard, then higher Rarity; ties stay stable');
- assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">폐기 '+left+'일</em>`),'every row carries 폐기 N일, emphasized at 1 day or less');
+ assert.ok(fn('shelf').includes(`<em class="expiry'+(left<=1?' soon':'')+'">'+lastSaleDay(left)+'</em>`),'every row carries its last sale day (v2.9.10), emphasized on its last day');
  assert.ok(!fn('shelf').includes('gate')||!/sort\([^)]*gate/.test(fn('shelf')),'the order never reads the customer\'s Gate');
  assert.ok(/\.good \.price em\.expiry\.soon\{color:#a8442f/.test(read('dist/ui/ui.css')),'the chip reuses the warehouse .soon color');
  assert.ok(read('dist/ui/app.js').includes("' · <i>유통기한 '+sl+'일</i></span>'"),'the ORDER row states the shelf life as days, never 없음');
@@ -2886,7 +2905,7 @@ test('SA-Q02/03/04/20/32: the NPC surfaces state only what is true and shown',()
  assert.ok(!/부상 '\+n\.injury/.test(kit),'the compact state does not repeat Injury as a number');
  assert.ok(/parts=\[n\.status\]/.test(kit),'it carries the state word itself');
  // SA-Q20: the exact First Aid primary function
- assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망 제외)'"),
+ assert.ok(read('dist/ui/presentation.js').includes("aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)'"),
   'the First Aid primary function is the approved sentence (COPY_AUDIT §4-22, User 2026-09-25)');
  // v2.9.0 F3 (User 2026-09-25): the NPC detail rows and the route-change line
  assert.ok(fn('npcDetail').includes("cond.push('피로 회복: 음식·음료')"),'§4-14 no rest recovery: Food/Drink only');
@@ -3398,7 +3417,7 @@ test('UI-Q-v29-18: the counter tray holds the chosen Item; the shelf never moves
  assert.ok(sale.indexOf("+'</main>'")<sale.indexOf('+tray()')&&sale.indexOf('+tray()')<sale.indexOf('<div class="dock">'),'the tray sits between the scrolled column and the dock');
  assert.ok(/open&&isFinal\?till\(\):''/.test(shelf),'an ordinary SALE row opens no panel of its own; FINAL keeps its panel');
  assert.ok(tray.includes('상품을 누르면 계산대에 올라온다.'),'the empty tray says what to do (COPY_AUDIT §4-23)');
- assert.ok(/class="tray-icon"/.test(tray)&&/'에게<\/b> · '\+walletChip\(n\)/.test(tray),'header: the Item and who is buying with what (COPY_AUDIT §4-24)');
+ assert.ok(/class="tray-icon r'\+it\.rarity\+'"/.test(tray)&&/\.tray-icon\{[^}]*inset 0 -3px 0 var\(--rare,var\(--r0\)\)\}/.test(css)&&/'에게<\/b> · '\+walletChip\(n\)/.test(tray),'header: the Item (its tile edge in its rarity colour, as on the shelf - v2.9.10) and who is buying with what (COPY_AUDIT §4-24)');
  assert.ok(/판매 후 변화/.test(tray)&&/parts\.join\('<i> · <\/i>'\)/.test(tray)&&/현재 준비 변화 없음/.test(tray),'one delta list on one wrapping line');
  assert.ok(/특수 효과/.test(tray)&&/priceKeys\(n,it,st\)/.test(tray),'특수 효과 and the same three price keys');
  assert.ok(fn('till').includes(':priceKeys(n,it,st);'),'the FINAL panel and the tray share the one price-key owner');
@@ -3426,7 +3445,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  // first-ORDER coach: gates -> offer -> quantity -> confirm -> reroll, no gold mark
  const order=/ order:\[(.*)\],\n/.exec(app)[1];
  assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['order-gates','.brief .when'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the five steps in order, on their anchors');
- assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 장비는 위험 대응, 보험은 실패 완화.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
+ assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
  // Hazard sentences (User 2026-09-24 revision 4, UI-Q-v29-19): the Gate-level requirement number first, N = ceil(Hazard Threat), n = 3 / 2 (Stat n당 대응 1)
  const rate={survival:3,mobility:2,spirit:2};

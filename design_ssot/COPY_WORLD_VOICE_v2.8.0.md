@@ -726,6 +726,10 @@ Reference NPC 이름 자체가 첫 번째 Easter Egg다.
 
 관련 NPC가 없는 Run에서 전용 Meme을 일반 System Message나 다른 NPC에게 출력하지 않는다.
 
+전용 대사 (User 2026-09-28, v2.9.10): 세 이름은 각자 방문 대사 2줄과 밤 결과 대사 2줄(성공 계열 1 · 실패 계열 1)을 가진다.
+방문과 살아 돌아온 밤 결과에서 약 절반의 확률로 일반 대사 대신 나오고, 사망에는 쓰지 않는다. 밈을 직접 설명하지 않는다 —
+아는 사람은 알아보고, 모르는 사람에게는 말버릇이 조금 다른 손님이다. Exact lines -> COPY_AUDIT_APPROVED §25.
+
 ## CULTURAL REFERENCE CONTEXT CHECK
 
 새 Reference를 Work가 임의로 추가하지 않는다.
@@ -1238,7 +1242,7 @@ unless an owning tutorial explicitly requires instructional text.
 
 Concise player function (User 2026-09-25, v2.9.0; exact string -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-22):
 
-    원정 후 중상 → 부상, 부상 → 무사 (사망 제외)
+    원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)
 
 Do not append redundant 원정 결과는 유지 prose on the primary Item line.
 

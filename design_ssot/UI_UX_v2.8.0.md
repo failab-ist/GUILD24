@@ -346,7 +346,10 @@ Do not add redundant role chips.
 Within an offer/item card, visual priority is:
 
 1. Item identity
-   - the rarity name (`일반 / 고급 / 희귀 / 영웅 / 전설`) as one small line under the Item name — an identity fact, not a role chip (User 2026-09-24, v2.9.0)
+   - one small line under the Item name: `{category} · {rarity}` — the category word (`음식 / 음료 / 포션 / 야외장비 / 보험 / 특수`,
+     the words the Events and Store Supports already use; User 2026-09-27, v2.9.10) and the rarity name (`일반 / 고급 / 희귀 / 영웅 /
+     전설`) in its rarity colour, a paper-legible shade of the shelf tile's hue — identity facts, not a role chip (User 2026-09-24,
+     v2.9.0)
 2. exact actual effect
    - Core Stat
    - Hazard Counter
@@ -356,6 +359,9 @@ Within an offer/item card, visual priority is:
    - the price tag reads `매입 {N}G` - the offer's actual buy price today, what 발주 spends - and a smaller, muted tag under it reads `판매 {N}G`; the metadata line keeps `수익 +{N}G · 재고 · 공급 · 유통기한` and loses its `매입 {N}G` (User 2026-09-26, v2.9.6: the unlabelled tag showed the sale price on the screen that spends the buy price)
 4. quantity interaction
    - a `+ / 1 / 3 / 최대` blocked by store Gold or warehouse space stays dim but answers a tap with the reason toast; an offer whose whole supply for today is already in the cart answers `오늘 공급 최대 수량입니다.` (exact lines COPY_AUDIT §3-9; User 2026-09-24, v2.9.0; supply line User 2026-09-25)
+   - an offer whose whole supply for today has already been ordered reads as sold out (User 2026-09-27, v2.9.10): the paper a
+     shade worked and a quiet `품절` stamp under its metadata line instead of the quantity controls - name, effects and prices stay
+     readable, nothing is greyed
 
 Examples such as `속박 대응 +16` already communicate function; do not add a second `속박 전문` chip.
 No today-fit / recommended badge, no verdict word, no reorder, no recommended row (User 2026-09-24, v2.9.0).
@@ -623,13 +629,25 @@ Retired (User 2026-09-24, v2.9.0): no effect text is emphasized against the cust
 (User 2026-09-24, v2.9.0): on each successful sale a receipt stub (`.receipt-stub`, paper texture, a stamp-in motion) appears over the counter band above the dock for about 2.5 seconds and reads `단골도 {±N} · 소지금 {A} → {B}` (COPY_AUDIT §4-24). It reserves no height (the tray keeps its own rules), never blocks input, is replaced by the next stub, and under `prefers-reduced-motion` appears and disappears without motion. On a refusal the customer's reply line (drawn from the engine's reason pool) is the result surface; no stub.
 ORDER offer rows follow the same rule against today's open Gates (§ORDER — ITEM INFORMATION HIERARCHY; User 2026-09-24, v2.9.0).
 
+### SALE — CUSTOMER ARRIVAL (v2.9.10)
+
+(User 2026-09-28.) The customer's card walks up to the counter - a few steps in from the side (~0.56 s) - instead of sliding
+in. A newcomer's portrait is fetched only when they arrive (they do not exist before SALE opens), so until it is decoded the
+card holds a plain silhouette (head and shoulders, no art) and the portrait rises into it when ready, at most 1.5 s later;
+every other customer of the Day is fetched the moment SALE opens, so theirs is ready. No loading screen, no copy. Under
+reduced motion the card is simply there.
+
 ### SALE — COUNTER TRAY
 
 User-approved composition change (User 2026-09-24, v2.9.0): the per-row price panel is replaced by one counter tray.
 
 - the counter tray is a fixed band directly above the dock, outside the scrolled column, at every width
 - tapping a shelf row puts that Item on the tray; the row is only highlighted, the shelf rows never change height
-- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the chip `폐기 N일`, emphasized (the warehouse list's `.soon` color) at 1 day or less; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
+- §SALE — SHELF ORDER (User 2026-09-26, v2.9.7; nearest-discard-only since v2.9.0): rows are ordered by kind - 대응 장비 (gear), 음식, 음료, 포션, 보험, 특수 - then days left before discard, nearest first, then higher Rarity, ties in the existing order, the same for every customer. The discard day a row sorts by is the one it showed when that Day's shelf first appeared, so no sale moves a row within the Day (a row only leaves when it sells out; the next Day sorts afresh); each row's price column carries the stock's shelf life - `폐기까지 N일`, then `내일까지` / `오늘까지` on its last two days (User 2026-09-27/28, v2.9.10;
+  it was `폐기 N일`, which left open whether today counted; the tray and the 재고 정리 list read the same) - emphasized (the warehouse list's `.soon` color) on its last day; no Item is non-expiring, so no `유통기한 없음` state survives on the tray, the ORDER row or the warehouse
+- every shelf row and the tray name the Item's category in the same small tag after its name (`음식 / 음료 / 포션 / 야외장비 /
+  보험 / 특수`, User 2026-09-27, v2.9.10); the icon tile's bottom edge is the Item's rarity colour on the shelf row and on the
+  tray alike (the tray's had been a fixed gold)
 - tray contents, top to bottom: one header line (Item icon · name · kind · sell price · stock · shelf life, and `{손님}에게 · 소지 {N}G` at the right), the `판매 후 변화` delta list (§SALE SELECTED-ITEM INFORMATION; may be one wrapping line), the `특수 효과` line when any, then the three price keys (§SALE — PRICE ROLE WORDS)
 - empty tray: on DAY 1~3 of a Run while the account tutorial is not skipped, one line (the exact prompt -> `COPY_AUDIT_APPROVED_v2.8.0.md` §4-23); otherwise the empty tray has no height (User 2026-09-24, v2.9.0)
 - the price keys therefore always sit in the same place; a successful sale clears the tray (the Item went into the Bag) and shows the transaction result stub (§SALE — TRANSACTION RESULT STUB); a refusal keeps the Item on the tray with the refused key locked
@@ -1600,13 +1618,19 @@ All Boss-information beats use the existing Guild investigation dossier family.
 
 (User 2026-09-26, the DAY 0 -> DAY 1 overlap reported by the H6 capture; acceptance -> UI_UX_QA UI-Q-v29-35.)
 
-A Boss reveal that is due when MORNING is entered opens once MORNING's own entry has landed: a 420 ms hold (the shutter's
-length) after the screen appears, then the dossier opens as it always has. It applies to every reveal stage (the D0 briefing
+A Boss reveal that is due when MORNING is entered opens once MORNING's own entry has landed: a 200 ms hold after the screen
+appears (v2.9.10, User 2026-09-28: it was 420 ms, the shutter's length, and the dossier then cut in and read as a stutter),
+then the dossier arrives - the shade at once, the sheet rising 18 px into place in 260 ms with the Boss's art on it (no
+separate, later settle of the art). It applies to every reveal stage (the D0 briefing
 and D5 ~ D25), because they share one mechanism; the reveal order is unchanged, and no Event or Relic window opens during the
 hold. MORNING is shown but takes no input during the hold - the reveal is already owed, and the Day does not advance past it
 before it is acknowledged (CORE_RUN §D0 FIRST-MORNING BOSS BRIEFING); a second tap on the 구매 that cut to MORNING does
 nothing. The hold belongs to the MORNING it started on: if the Day leaves MORNING or the reveal is no longer owed (only a scripted
-path can do either), it ends at once. No new motion, sound or copy. Under reduced motion the reveal opens at once, as before.
+path can do either), it ends at once. No new sound or copy. Under reduced motion the reveal opens at once, as before.
+After the hold the dossier also waits for the Boss's art to be fetched and decoded, never more than 1.2 s longer, so it does
+not open empty and reflow when its art arrives on a phone network (User 2026-09-27, v2.9.10); today's Boss art is fetched
+ahead anyway, so on a warm cache there is no extra wait. The page fetches its four fonts with itself, so no screen's digits
+wait for their face.
 
 ### D0 — FIRST MORNING BRIEFING
 

@@ -1207,7 +1207,9 @@ SETUP:
 Use in losing expeditions.
 
 EXPECT:
-Uses approved escapeBonus +50%p and raises escape/retreat chance without increasing combat success directly.
+Uses approved escapeBonus +20%p (User 2026-09-28, v2.9.10): a 부상 / 중상 / 사망 Outcome rolls once more for 퇴각 at
+the adventurer's own escapeChance + 20%p (clamp 0.15~0.94); the combat-failure retreat roll itself carries no stone
+bonus; combat success is not increased.
 
 PASS:
 Acts as probabilistic lower-tier insurance, not a success item or Death->Severe conversion.
@@ -1230,7 +1232,7 @@ SETUP:
 Trigger lethal outcome with Epic World Tree insurance active.
 
 EXPECT:
-Death converts once to Severe Injury.
+Death or Severe Injury converts to 퇴각 with no injury (User 2026-09-28, v2.9.10; was Death -> Severe Injury); a 부상 stays 부상.
 
 PASS:
 Clearly stronger survival tier than Return Stone and not treated as Food.
@@ -1261,8 +1263,8 @@ PASS:
 
 With overlapping Insurance, PASS only if:
 1. ordinary outcome resolves
-2. Return Stone emergency escape may convert eligible crisis
-3. remaining Death may be converted by World Tree
+2. Return Stone second retreat roll may convert a 부상 / 중상 / 사망
+3. remaining Death or Severe Injury may be converted to 퇴각 by World Tree
 4. First Aid Aftercare applies to final non-death Injury state
 
 No second full resolve after Aftercare.

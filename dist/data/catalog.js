@@ -47,7 +47,7 @@ item('snowgoggles','설원 고글',2,95,190,'gear',5,'goggles','귀환안심','�
 item('highpotion','상급 포션',2,195,390,'potion',5,'potionHigh','길드초이스','작은 병에 진하게 담았다.',{combat:20,potion:1}),
 /* Dedicated Poison specialist only: no generic Core Stat, and no poison cure subsystem. */
 item('antidote','농축 해독제',2,95,190,'gear',5,'antidote','귀환안심','한 모금이면 충분하다고 적혀 있다. 두 모금은 권하지 않는다.',{poison:23}),
-item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.5}),
+item('stone','귀환석',2,200,400,'insurance',4,'stone','귀환안심','깨뜨리기 전까지는 그냥 매끈한 돌멩이다.',{escape:0.2}),
 /* Takes the retired 마석 보조배터리 catalogue slot, but NOT its non-expiring shelf behaviour:
    it keeps the ordinary Potion-family shelf life. */
 item('midpotion','중급 포션',1,125,250,'potion',4,'potionMid','귀환안심','하급은 불안하고 상급은 비쌀 때.',{combat:14,potion:1}),

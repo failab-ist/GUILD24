@@ -3,10 +3,10 @@
 DOC=SPEC_INDEX
 OWNER=spec_index,design_ssot_routing,version_policy,source_access
 DOC_VERSION=2.9.9
-DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.9
+DESIGN_SSOT=GUILD24_DESIGN_SSOT_v2.9.10
 DOC_AUTHORITY=DESIGN_SSOT_INDEX
 FREEZE_STATUS=V2_9_0_IMPLEMENTATION_COMPLETE_2026-09-25 (balance moved to v2.9.1); V2_9_1_BALANCE_DECIDED_2026-09-25; OWNERS_AMENDED; V2_9_1_SOURCE_ADOPTED_2026-09-25; V2_9_1_CLOSED_TAGGED_2026-09-25 (main d23d076, tag v2.9.1) ; V2_9_2_CLOSED_2026-09-26 (main d6fcfbd; tag v2.9.2 pending, set by the User); V2_9_3_CLOSED_2026-09-26 (main; tag v2.9.3 pending, set by the User) (v2.8 canonical baseline closed 2026-09-24)
-SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture); V2_9_3_ADOPTED (balance fourth pass, Boss reveal hold, reset-seed fix, build marker — CHANGELOG §v2.9.3); V2_9_4_ADOPTED (replay nudge — CHANGELOG §v2.9.4); V2_9_5_ADOPTED (SALE strain line — CHANGELOG §v2.9.5); V2_9_6_ADOPTED (codex and Item Flavor cleanup — CHANGELOG §v2.9.6); V2_9_7_ADOPTED (decorations and Rarity — CHANGELOG §v2.9.7); V2_9_8_ADOPTED (ids read as the current names, save v9 — CHANGELOG §v2.9.8, main `621d007`, PR #19); V2_9_9_ADOPTED (presentation: store scene, dock Actions, SALE, FINAL clash — CHANGELOG §v2.9.9, merged to main by PR #20 on User confirmation 2026-09-27); V2_9_9_QUICK_PATCH (Wallet multipliers 0.40 / 0.25 / 0.15, the strain line in the SALE forecast pin — CHANGELOG §v2.9.9 quick patch, User 2026-09-28)
+SOURCE_ADOPTION_STATUS=V2_8_CLOSED; V2_9_0_ADOPTED; V2_9_1_ADOPTED (Source adoption complete 2026-09-25, branch claude/v291-balance-source-adoption, native remeasurement recorded — CHANGELOG §v2.9.1); V2_9_2_H1_H2_H3_H4_H5_H6_ADOPTED (2026-09-25/26, branch claude/v2-9-2-presentation-game-feel-4if32m + claude/v2-9-2-h4-closing-j24s8w; H6 targets FINAL only, User pick after the four-cut capture); V2_9_3_ADOPTED (balance fourth pass, Boss reveal hold, reset-seed fix, build marker — CHANGELOG §v2.9.3); V2_9_4_ADOPTED (replay nudge — CHANGELOG §v2.9.4); V2_9_5_ADOPTED (SALE strain line — CHANGELOG §v2.9.5); V2_9_6_ADOPTED (codex and Item Flavor cleanup — CHANGELOG §v2.9.6); V2_9_7_ADOPTED (decorations and Rarity — CHANGELOG §v2.9.7); V2_9_8_ADOPTED (ids read as the current names, save v9 — CHANGELOG §v2.9.8, main `621d007`, PR #19); V2_9_9_ADOPTED (presentation: store scene, dock Actions, SALE, FINAL clash — CHANGELOG §v2.9.9, merged to main by PR #20 on User confirmation 2026-09-27); V2_9_9_QUICK_PATCH (Wallet multipliers 0.40 / 0.25 / 0.15, the strain line in the SALE forecast pin — CHANGELOG §v2.9.9 quick patch, User 2026-09-28); V2_9_10_ON_BRANCH (quick patch — CHANGELOG §v2.9.10, merge on User confirmation)
 IMPLEMENTATION_BLOCKING_DESIGN_UNRESOLVED=NONE
 NONBLOCKING_CANONICAL_DETAIL_GAPS=NONE
 EXTERNAL_PUBLIC_RELEASE_TARGET=v3.0.0
@@ -274,6 +274,10 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
 - v2.9.7 (User 2026-09-26): decorations remade / swapped, 구급품 진열장 injury rework, Rarity growth 0.10 -> CHANGELOG §v2.9.7.
 - v2.9.8 (User 2026-09-27): ids read as the current names (Items, Decorations, Store Support, the 반값 Event, the 골렘 Family)
   and the save schema moves to v9 -> CHANGELOG §v2.9.8.
+- v2.9.10 (User 2026-09-27): quick patch - every Item's category on ORDER / SALE, one rarity colour per Item, shelf life as the
+  shelf life wording, sold-out offers, the customer walking up, the Boss dossier's entry, the Rare Reference customers' lines
+  -> CHANGELOG §v2.9.10 (owners UI_UX §ORDER — ITEM INFORMATION HIERARCHY, §SALE — COUNTER TRAY / SHELF ORDER / CUSTOMER
+  ARRIVAL, §BOSS REVEAL; UI_UX_QA UI-Q-v29-20 / 35; COPY_AUDIT §4-10 / §8-0 / §25; COPY_WORLD_VOICE §RARE REFERENCE NPC; SALE; ITEM).
 - v2.9.9 (User 2026-09-27): presentation from the reference review - the store room (Decoration seating / outline, tablets),
   새 점포 준비 as the store scene with the title logo, one press grammar and one colour per family for the dock Actions (two
   new cues), SALE's outlook plate, shelf lip and head, the FINAL clash scene (H7, the one exception to the per-beat game

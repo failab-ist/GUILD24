@@ -707,7 +707,7 @@ role=Insurance
 subrole=EscapeInsurance
 
 identity:
-`큰 실패를 퇴각으로 바꿀 가능성을 높이는 확률형 보험`
+`성공하지 못한 원정을 퇴각으로 돌릴 가능성을 높이는 확률형 보험`
 
 Rules:
 - does not increase combat success directly
@@ -715,13 +715,20 @@ Rules:
 - retreat loot ≈ almost none
 - does not own Death -> Severe conversion
 
-Rare Insurance identity:
-- emergency escape
-- +50%p escape contribution under its current resolution path
-- may convert eligible Severe/Death crisis to Retreat
+Rare Insurance identity (User 2026-09-28, v2.9.10 - the rule is what a player reads the line as):
+- an expedition that ends in neither 성공 nor 대성공 (부상 / 중상 / 사망) rolls once more for a retreat
+- that roll's chance = the adventurer's own retreat chance (`DUNGEON_HAZARD_v2.8.0.md` escapeChance: 기동, Traits,
+  Gate scale) + escapeBonus, clamped 0.15~0.94 as the retreat chance is
+- a hit makes the Outcome 퇴각
+- the stone no longer adds to the combat-failure retreat roll itself (that roll reads the Traits only)
 
-escapeBonus=+50%p
-finalEscapeCap=0.96 (귀환석 rescue roll clamp; the ordinary retreat roll clamps at 0.94)
+escapeBonus=+20%p (User 2026-09-28, v2.9.10; was +50%p on the combat retreat roll plus a 50% crisis roll on 중상/사망)
+player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
+
+Measured (v2.9.10, `reader` 3000-run counterfactual: every third expedition re-rolled with one Item added, 퇴각 / 부상 /
+중상 / 사망 %): own Bag 28.8 / 24.6 / 13.3 / 10.8 · old stone 61.1 / 12.6 / 1.8 / 5.5 · new stone 66.1 / 7.4 / 4.1 / 3.2 ·
+구급키트 29.7 / 39.9 / 0 / 11.2 (Death untouched) · 세계수 old 29.9 / 25.7 / 25.2 / 0, new 55.0 / 25.8 / 0 / 0.
+Harm total (부상+중상+사망) own 48.7 -> old stone 19.9 -> new stone 14.7.
 
 ### 세계수 생환부적
 rarity=Epic
@@ -731,7 +738,7 @@ subrole=DeathInsurance
 Buy / Sell = 400 / 800 (User 2026-09-24, v2.9.0; was 600 / 1200)
 
 core:
-Death -> Severe Injury
+Death or Severe Injury -> 퇴각 (무사 퇴각; no injury) (User 2026-09-28, v2.9.10; was Death -> Severe Injury)
 uses=1
 
 Rules:
@@ -741,7 +748,10 @@ Rules:
 
 Epic death-insurance identity:
 - one use
-- remaining Death -> Severe Injury
+- remaining Death or Severe Injury -> 퇴각: the heavy results are stopped outright, where 귀환석 only makes them less
+  likely (the Epic price bought a likely Severe Injury before, and Death-only still measured below 귀환석)
+- a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
+- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
 
 ### Insurance resolution order
 
@@ -749,8 +759,8 @@ Where multiple effects are present:
 
 ```text
 1. resolve ordinary expedition outcome
-2. 귀환석 emergency-escape conversion when eligible
-3. if Death remains, 세계수 생환부적 Death -> Severe Injury
+2. 귀환석 second retreat roll on 부상 / 중상 / 사망 (User 2026-09-28, v2.9.10)
+3. if Death or Severe Injury remains, 세계수 생환부적 -> 퇴각 (User 2026-09-28, v2.9.10)
 4. 구급키트 Aftercare lowers the final non-death Outcome one step (중상 -> 부상; a 부상 keeps its Outcome but leaves no injury); XP/Loot/Fatigue follow the lowered Outcome (User 2026-09-25, v2.9.0)
 ```
 
@@ -815,10 +825,10 @@ Any later change requires a new approved ITEM amendment; QA does not auto-tune i
 | 22 | 설원 고글 | Field Gear R | 95 / 190 | 화이트아웃 +18 | Whiteout 중반 대응 |
 | 23 | 상급 포션 | Potion R | 195 / 390 | 투력 +20 | — |
 | 24 | 농축 해독제 | Field Gear R | 95 / 190 | 독 +23 | Poison 중반 대응 |
-| 25 | 귀환석 | Insurance R | 200 / 400 | Emergency Escape +50%p path | Severe/Death Insurance |
+| 25 | 귀환석 | Insurance R | 200 / 400 | 부상·중상·사망 -> one more retreat roll at own retreat chance +20%p | Failure Insurance |
 | 26 | 중급 포션 | Potion U | 125 / 250 | 투력 +14 | — |
 | 28 | 쿨링 이온음료 | Drink R | 95 / 190 | 화염 +18, Supply 1 | Fire 중반 대응 |
-| 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death -> Severe Injury once | Death Insurance |
+| 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death / Severe Injury -> 퇴각 once | Death Insurance |
 | 30 | 황금 1+1 쿠폰 | Special L | 500 / 1000 | next explicit consumable effect duplication interaction | Utility |
 | 31 | 거미줄 방호세트 | Field Gear E | 135 / 270 | 독 +16, 속박 +14 | Spider 후반 하이브리드 |
 | 32 | 연금 방수슈트 | Field Gear E | 135 / 270 | 부식 +16, 진창 +14 | Slime 후반 하이브리드 |
@@ -1148,7 +1158,7 @@ item type
 Consumed physical unit:
 nearest expiry first
 
-SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries `폐기 N일` (exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
+SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries its shelf life, `폐기까지 N일 / 내일까지 / 오늘까지` (v2.9.10; exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
 
 Consumer slot limit is separate from inventory visibility.
 

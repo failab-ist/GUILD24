@@ -3,6 +3,60 @@
 Version policy: SPEC_INDEX §VERSION POLICY. Filenames are lineage names; the version lives here, in
 the owner headers and in the git tag.
 
+## v2.9.10 — quick patch after v2.9.9 play (User 2026-09-27)
+
+- **Category on every Item** - UI_UX §ORDER — ITEM INFORMATION HIERARCHY / §SALE — COUNTER TRAY, UI_UX_QA UI-Q-v29-20: the
+  Events (보험·음식 수요) and the Store Supports (음식·음료, 야외장비, 보험) speak in categories the Items never showed, so a
+  first Run could not tell which Items they meant. ORDER's identity line reads `야외장비 · 고급` (the rarity word in its
+  rarity colour); every SALE shelf row and the tray carry the category tag that only 포션 had. The 점주 가이드 line says
+  `야외장비` as the Store Supports do (COPY_AUDIT §8-0). The role taxonomy stays hidden.
+- **One rarity colour per Item**: the tray tile's edge was a fixed gold while its shelf row showed the rarity colour; both
+  are the rarity colour now.
+- **Shelf life** - COPY_AUDIT §4-10, UI_UX §SALE — SHELF ORDER, SALE, ITEM: the shelf, the tray and the 재고 정리 list said
+  `폐기 N일` / `폐기까지 N일` / `N일 남음`, which left open whether today counted. They read `폐기까지 N일`, then `내일까지` /
+  `오늘까지` on the last two days (`DAY N까지` was tried and did not read as shelf life); ORDER keeps `유통기한 N일`.
+- **Sold out on ORDER** - UI_UX §ORDER — ITEM INFORMATION HIERARCHY, UI-Q-v29-20: an offer whose whole supply was already
+  ordered looked the same as one still open, so it was tapped again. It carries a quiet `품절` stamp under its metadata line
+  in place of the quantity controls, on paper a shade worked; nothing is greyed.
+- **The customer walks up** - UI_UX §SALE — CUSTOMER ARRIVAL: a newcomer's portrait is fetched as they arrive, so on a phone
+  network the card stood empty and read as lag. The card now walks in from the side, holds a silhouette until the portrait
+  is decoded (at most 1.5 s), and the Day's other customers are fetched the moment SALE opens.
+- **The Rare Reference customers speak** - COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25: 요화니우스, 상혀크 and 진호르
+  (1% of new customers, each once per Run) differed only by name and portrait, so meeting one showed nothing. Each now has
+  two arrival lines and two Night result lines (a clear, a setback) drawn from memes people actually use, on about half of
+  their arrivals and living results, never on a Death; for those who do not know them it is a customer with an odd turn of
+  phrase. The font subset takes the new glyphs.
+- **More ordinary lines** - COPY_AUDIT §16 / §19: the arrival and Night result pools grow by three to six lines each (54 in
+  all), so a repeated Run hears less of the same; a plain voice, with at most one lightly witty line per pool; none repeats
+  an existing line or its sense.
+- **The Boss dossier arrives** - UI_UX §BOSS REVEAL — MORNING LANDS FIRST, UI-Q-v29-35: it cut in after a 420 ms hold and read
+  as a stutter. The hold is 200 ms and the sheet rises into place with the Boss's art on it; it also waits (at most 1.2 s)
+  for that art, fetched ahead. The four fonts are fetched with the page (the digit face used to wait for DAY 0).
+- **Insurance that does what it says** - ITEM §귀환석 / §세계수 생환부적 / §Insurance resolution order, DUNGEON_HAZARD,
+  DUNGEON_ITEM_QA ITEM-Q11 / Q13 / Q76, NIGHT_CLOSING, COPY_AUDIT §4-22 (User 2026-09-28): a player reads `실패` as anything
+  short of 성공, but 귀환석 helped only a lost fight and a 중상 / 사망 crisis, and 세계수 turned a paid-for Death into a likely
+  중상. 귀환석 now rolls once more for a retreat on any 부상 / 중상 / 사망, at the adventurer's own retreat chance +20%p
+  (was +50%p on the combat retreat roll plus a 50% crisis roll); the combat retreat roll reads the Traits only. 세계수
+  turns a 사망 or 중상 into 퇴각 (Death-only still measured below 귀환석). Lines: `성공하지 못하면 퇴각 확률 +20%p`,
+  `사망·중상 → 무사 퇴각 1회`, and 구급키트
+  `원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)`; the stat label `탈출 확률` reads `퇴각 확률` like the Outcome it
+  moves. Measured with the `reader` bot, 3000 runs; each expedition re-rolled with one Item added (퇴각 / 부상 / 중상 / 사망 %):
+
+  | Bag | 퇴각 | 부상 | 중상 | 사망 |
+  |---|---|---|---|---|
+  | own | 28.8 | 24.6 | 13.3 | 10.8 |
+  | 귀환석 before | 61.1 | 12.6 | 1.8 | 5.5 |
+  | 귀환석 now | 66.1 | 7.4 | 4.1 | 3.2 |
+  | 세계수 before | 29.9 | 25.7 | 25.2 | 0 |
+  | 세계수 now | 55.0 | 25.8 | 0 | 0 |
+  | 구급키트 | 29.7 | 39.9 | 0 | 11.2 |
+
+  The bot seldom sells these Items, so the Run-level figures stay within noise (D30 reach 11.7 -> 11.8 %, clear 7.8 ->
+  8.2 %, deaths per Run 6.88 -> 6.88). Measured on the base before the v2.9.9 Wallet quick patch below; the Wallet
+  multipliers pay on the Outcome and do not move these Outcome shares.
+- **Three witty lines** - COPY_AUDIT §16-4 / §19-4 / §19-8: one each for a regular's arrival, a Night 부상 and a Night
+  growth result.
+
 ## v2.9.9 quick patch — Wallet multipliers, SALE pin strain line (User 2026-09-28)
 
 After the review of the User's fresh Run ended by the Death limit on DAY 23 (reports/fresh-run-d23-review-v299.md). The build marker
