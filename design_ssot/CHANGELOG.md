@@ -24,6 +24,12 @@ the owner headers and in the git tag.
   and in the production name pool (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the two NAME_INDEX files, the id mapping,
   their checksums). The replacement table is `reports/v2.9.11-drafts.md` §A. A Run saved earlier keeps its old names; such an
   adventurer shows the placeholder portrait.
+- **Rare Reference customers removed** - COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25 (User 2026-09-28, before a paid
+  release): 요화니우스, 상혀크 and 진호르 evoked real people. Their names, portraits (source and shipped), own lines, the 1% roll,
+  the measurement counter and the manifest entry are gone; both owner sections now record the removal and forbid a new real-person
+  reference. The roll's one draw per customer created is kept, so a seeded Run keeps its stream unless its roster had dealt one of
+  them (the revision anchor `sig-0` moves for that reason alone). A Run saved with one of them keeps the name and shows the
+  placeholder portrait.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)

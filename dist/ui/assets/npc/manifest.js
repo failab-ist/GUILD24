@@ -3,7 +3,6 @@
 G.NPCAssets={
  base:'ui/assets/npc/',ext:'.webp',
  normal:{M:100,F:100},                       /* normal/<M|F>/<001..100> */
- easter:['E001','E002','E003'],              /* easter/<id> */
  boss:{WRATH:'B001',PRIDE:'B002',ENVY:'B003',GREED:'B004',
        GLUTTONY:'B005',LUST:'B006',SLOTH:'B007'},
  /* boss/<prefix>_<ID>_D05-D15 | _D30; SLOTH is <prefix>_SLOTH_D05-D15_SB0 for zero

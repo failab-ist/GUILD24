@@ -1,7 +1,7 @@
 // COPY_WORLD_VOICE §11 / §12 / §18 acceptance.
 // Chunk F adopted terminology, Item Flavor, the name voice and the Night debug-language rule.
 // This suite covers the part that was not adopted: the Dialogue and Result Variant Pools,
-// the approved Rare Reference names, and the §18 QA questions a Node process can answer.
+// the removed Rare Reference names (v2.9.11), and the §18 QA questions a Node process can answer.
 // Copy owns sentences only — every assertion here is about strings, never about a rule.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','ui/presentation'])require('../dist/'+f+'.js');
@@ -60,20 +60,12 @@ test('COPY_AUDIT §16-§20: every dialogue pool is exactly the approved `현재`
  assert.equal(allPools.length,Object.keys(POOL_SECTION).length,'no pool outside the approved set');
 });
 
-/* COPY_AUDIT §25 (User 2026-09-28, v2.9.10): the three Rare Reference customers' own lines, verbatim, reused nowhere else;
-   picked on about half of their arrivals and living Night results, never on a Death */
-test('COPY_AUDIT §25: the Rare Reference lines are the approved lists, and only those three names carry them',()=>{
- const R=Copy.rare,names=Adventurer.EASTER.map(e=>e.name);
- assert.deepEqual(Object.keys(R).sort(),[...names].sort(),'one set per Rare Reference name');
- let sec=1;for(const who of Object.keys(R))for(const part of ['arrive','win','lose'])
-  assert.deepEqual(R[who][part],approved['25-'+(sec++)],who+' '+part+' is COPY_AUDIT 25-'+(sec-1)+' verbatim');
- const lines=Object.values(R).flatMap(r=>[...r.arrive,...r.win,...r.lose]);
- assert.ok(lines.every(l=>!allLines.includes(l))&&new Set(lines).size===lines.length,'no Rare line is reused');
- const src=read('dist/data/copy.js');
- assert.ok(/const ref=rare\[n\.name\];if\(ref&&mix\(key\(n,'rare',day\)\)%2===0\)/.test(src),'about half of their arrivals');
- const night=src.slice(src.indexOf(' night(report,n,run){'));
- assert.ok(night.indexOf("if(report.outcome==='사망')")<night.indexOf('const ref=rare[n.name]'),'never on a Death');
- assert.ok(/pick\(\['퇴각','부상','중상'\]\.includes\(report\.outcome\)\?ref\.lose:ref\.win,k,ex\)/.test(night),'a setback line on 퇴각 / 부상 / 중상, a clear one otherwise');
+/* COPY_AUDIT §25 / COPY_WORLD_VOICE §RARE REFERENCE NPC (User 2026-09-28, v2.9.11): the Rare Reference customers and their
+   lines were removed before a paid release - no approved line is left and nothing in the build still speaks for them */
+test('COPY_AUDIT §25 (v2.9.11): the Rare Reference lines are gone',()=>{
+ assert.equal(Copy.rare,undefined,'copy.js exports no Rare Reference lines');
+ assert.equal(Object.keys(approved).filter(k=>k.startsWith('25-')).length,0,'COPY_AUDIT §25 approves no line');
+ assert.ok(!/rare\[n\.name\]/.test(read('dist/data/copy.js')),'no line is picked by a Rare Reference name');
 });
 
 /* The rest of COPY_AUDIT (every section outside the §16-§20 pools): each literal `현재…` line must
@@ -341,20 +333,13 @@ test('COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE / RECENT REPEAT — Save/Load re
  assert.doesNotThrow(()=>c.arrive(),'a reload from a pre-adoption save can still take a tracked ARRIVAL beat');
 });
 
-test('COPY-002 / §9: the approved Rare Reference names are reserved; their own lines live in copy.js alone',()=>{
+test('COPY-002 (v2.9.11): no Rare Reference name is left anywhere in the build',()=>{
  const src=read('dist/systems/adventurer.js');
- // §9 keeps these three as Rare Reference identities and makes their special copy eligible
- // only when such an NPC is actually in the Run. The production pool marks all three
- // random_eligible:false and gives each its own fixed portrait, so they are reserved rather
- // than drawn: no random visitor may ever be one of them.
  const names=JSON.parse(src.match(/const names=(\[[\s\S]*?\]);/)[1]);
- for(const name of ['요화니우스','상혀크','진호르'])
-  assert.ok(!names.includes(name),'Rare Reference name is reserved, not dealt at random: '+name);
- // §9 — the name itself is the easter egg. Since v2.9.10 (User 2026-09-28) each owns a few lines (COPY_AUDIT §25), keyed by
- // its own name in copy.js and nowhere else - nothing prints them at an unrelated NPC or through a system message.
- for(const file of ['dist/ui/app.js','dist/ui/presentation.js','dist/systems/shop.js','dist/systems/dungeon.js'])
-  for(const name of ['상혀크','진호르'])
-   assert.ok(!read(file).includes(name),file+' carries no dedicated copy for '+name);
+ for(const name of ['요화니우스','상혀크','진호르']){
+  assert.ok(!names.includes(name),'not a pool name: '+name);
+  for(const file of ['dist/systems/adventurer.js','dist/data/copy.js','dist/ui/app.js','dist/ui/presentation.js','dist/systems/shop.js','dist/systems/dungeon.js'])
+   assert.ok(!read(file).includes(name),file+' does not name '+name);}
 });
 
 test('§18: the help panel describes the rules the build actually has',()=>{

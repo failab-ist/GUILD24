@@ -493,7 +493,6 @@ Exact D15 Trait name:
 #### ITEM의 `불룡볶음면`
 #### 크림빵 계열
 ### LEVEL 3 — Game / eSports / Internet Easter Egg
-## RARE REFERENCE NPC
 ## CULTURAL REFERENCE CONTEXT CHECK
 ## NPC DIALOGUE & RESULT VARIATION
 ### NPC Dialogue Variation
@@ -822,9 +821,6 @@ User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보�
 The three Rare Reference customers own two arrival lines and two Night result lines each (COPY_AUDIT §25), used on about half of their arrivals and living results, never on a Death.
 
 ```new
-전용 대사 (User 2026-09-28, v2.9.10): 세 이름은 각자 방문 대사 2줄과 밤 결과 대사 2줄(성공 계열 1 · 실패 계열 1)을 가진다.
-방문과 살아 돌아온 밤 결과에서 약 절반의 확률로 일반 대사 대신 나오고, 사망에는 쓰지 않는다. 밈을 직접 설명하지 않는다 —
-아는 사람은 알아보고, 모르는 사람에게는 말버릇이 조금 다른 손님이다. Exact lines -> COPY_AUDIT_APPROVED §25.
 ```
 
 ## AMENDMENT — v2.9.10 insurance rules (User 2026-09-28)
@@ -833,4 +829,43 @@ The three Rare Reference customers own two arrival lines and two Night result li
 
 ```new
 원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)
+```
+
+
+## v2.9.11 — Rare Reference NPC removed (User 2026-09-28)
+
+Dropped (the removal itself):
+
+```text
+- Player-facing NPC Name Voice와 승인된 Rare Reference Name/Copy
+Player-facing Name Voice는 COPY_WORLD_VOICE가 소유한다.
+NPC의 Gameplay generation / stats / traits / progression은 NPC_TRAIT가 소유한다.
+다음 Exact Name은 Rare Reference NPC로 유지한다.
+초기 승인:
+- 요화니우스
+- 상혀크
+- 진호르
+중요:
+normal Name Pool의 기본 Voice 자체도 `한국식 + 판타지 + 유쾌한 비틀기`다.
+따라서 Rare Reference와 일반 이름이 완전히 다른 언어권처럼 느껴지면 안 된다.
+`요화니우스`는 일반 Name Voice의 강한 Tone Anchor이기도 하지만,
+이 Exact Name의 전용 Easter Egg 조건은 아래 Rare Reference 규칙을 따른다.
+모르는 Player에게는 그냥 이 세계의 자연스러운 NPC 이름처럼 보여야 한다.
+Reference NPC 이름 자체가 첫 번째 Easter Egg다.
+관련 Special Copy는 해당 NPC가 실제 Run에 존재할 때만 Eligible하다.
+관련 NPC가 없는 Run에서 전용 Meme을 일반 System Message나 다른 NPC에게 출력하지 않는다.
+> 진호르 중상.
+Rare Reference Name도 모르는 Player에게는
+normal Name Voice 안에서 자연스럽게 섞여 보여야 한다.
+아주 드물게 Rare Reference NPC를 발견한다.
+```
+
+New:
+
+```new
+- Player-facing NPC Name Voice
+## RARE REFERENCE NPC — REMOVED (User 2026-09-28, v2.9.11)
+The three Rare Reference NPCs (their names, portraits and own lines) evoked real people and were removed before a paid
+release; the game has none. Do not add a name, portrait or line that points at a real person.
+> 도하르 중상.
 ```

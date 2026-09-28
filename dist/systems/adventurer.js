@@ -31,16 +31,11 @@ const names=[
  "달고네","야콰","단쥬","주메니","비녜","노르게","바넬","실타렌","비자룬","누가렛",
  "양프네","데야","리보나","자게미","쿠레미","아프리마","레니콧","바라게","구세라","바울리"];
 function name(r,rarity){return r.pick(names);}
-/* COPY_WORLD_VOICE 9 - the Rare Reference identities. They are random_eligible:false, so they
-   are never in `names` and never consume one of the 200 normal slots; they carry their own
-   fixed asset id instead. Who may appear and how often is the Shop's business (SHOP.addNPC);
-   this file only owns who they are. Checked against the production pool by npc-assets.cjs. */
-const EASTER=[{id:'E001',name:'요화니우스'},{id:'E002',name:'상혀크'},{id:'E003',name:'진호르'}];
 /* Where a name's portrait lives. Nothing per-NPC is stored, so a save carried forward cannot
-   hold a portrait id that no longer addresses anything - a normal name resolves to its slot
-   from its position in the pool, a Rare Reference name to its own fixed asset id. */
+   hold a portrait id that no longer addresses anything - a name resolves to its slot from its
+   position in the pool; a name no longer in the pool (the Rare Reference customers, removed in
+   v2.9.11, or a renamed customer) resolves to nothing and the scene draws its placeholder. */
 const SLOTS=100,portraits=new Map(names.map((n,i)=>[n,{gender:i<SLOTS?'M':'F',slot:(i%SLOTS)+1}]));
-for(const e of EASTER)portraits.set(e.name,{easter:e.id});
 const portraitOf=name=>portraits.get(name)||null;
 /* META / NPC_TRAIT §JOB MASTERY (Stage 10, approved structure).
    Mastery does NOT multiply a Job's Base Stats or its Growth. What beating Bosses with a Job
@@ -86,7 +81,7 @@ function grow(n,xp,r){const old=n.level;n.xp+=xp;while(n.xp>=18+n.level*7){n.xp-
    rather than keeping a number of its own. */
 const TRUSTED_REGULAR=51;
 const isTrustedRegular=n=>!!n&&n.loyalty>=TRUSTED_REGULAR;
-G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,EASTER,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,
+G.Adventurer={create,MASTERY_SPAWN,masterySpawnBonus,name,names,portraitOf,grow,keys,isTrustedRegular,TRUSTED_REGULAR,
  /* SALE_v2.7 §NORMAL CONSUMER BAG and FINAL_EXPEDITION_v2.7: exactly two slots, for every NPC
     regardless of Level, Job, Rarity or Trait, and the Final uses the same two-slot handling.
     The Lv10+ third slot is gone - not disabled, not ghosted, not hidden. */

@@ -158,11 +158,10 @@ test('COPY-002: NPC name voice is Korean-flavoured fantasy, not a Western or syl
  const names=JSON.parse(src.match(/const names=(\[[\s\S]*?\]);/)[1]);
  assert.equal(new Set(names).size,names.length,'no duplicate names');
  assert.equal(names.length,200,'the pool is the full production pool, not a sample of it');
- // §15 lists four tone anchors as direction. Three of them are ordinary names and are in the
- // pool; 요화니우스 is also a §9 Rare Reference identity, which the production pool marks
- // random_eligible:false, so it is deliberately not among the names a visitor is drawn from.
+ // §15 lists the tone anchors as direction; all are ordinary names in the pool. 요화니우스 left the anchors with the Rare
+ // Reference customers (v2.9.11, User 2026-09-28) and is not a name in the game at all.
  for(const anchor of ['지오니아','민자이','고쉬스앵'])assert.ok(names.includes(anchor),'missing tone anchor '+anchor);
- assert.ok(!names.includes('요화니우스'),'the Rare Reference identity is not a random visitor');
+ assert.ok(!names.includes('요화니우스'),'the removed Rare Reference name is not in the pool');
  const suffix=names.filter(n=>/(우스|엘|리온)$/.test(n)).length;
  assert.ok(suffix/names.length<.25,'no -우스/-엘/-리온 monoculture: '+suffix+'/'+names.length);
  for(const n of names)assert.ok(n.length>=2&&n.length<=6&&!/\s/.test(n),'unreadable name: '+n);

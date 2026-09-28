@@ -137,8 +137,11 @@ test('BOSS-Q01: one Boss per Run, fixed, and dealt without disturbing any other 
     stocked item draws an id from the run stream, so two draws that used to happen before the
     roster is built no longer do. Any future move here without a change to point at means
     something leaked into the run stream. */
+ /* v2.9.11 (User 2026-09-28): the Rare Reference customers were removed. The roll's own draw stays, but a Run whose roster
+    once dealt one of them also drew the pick among them, and no longer does. Of these seeds only sig-0 did (one in its
+    opening roster), so only sig-0 moves; sig-1 / sig-2 are untouched. */
  for(const [seed,order,intro] of [
-  ['sig-0',['snow','spider','golem','slime','crypt'],[4,10]],
+  ['sig-0',['snow','crypt','slime','golem','spider'],[4,9]],
   ['sig-1',['slime','spider','snow','golem','crypt'],[6,10]],
   ['sig-2',['crypt','slime','spider','golem','snow'],[6,10]]]){
   const g=new Game();g.autosave=false;g.start(seed);
@@ -408,40 +411,13 @@ test('NPC-Q10: Job Mastery has no power channel yet, and no hidden account-wide 
 });
 
 test('v0.1 fixture intentionally rejected without reinterpretation',()=>{const fs=require('node:fs');const old=fs.readFileSync(require('node:path').join(__dirname,'fixtures/v01-sale.json'),'utf8');assert.throws(()=>Save.import(old));});
-test('COPY §9: a Rare Reference identity turns up rarely, once per Run, and changes nothing but the name',()=>{
- const EASTER=Adventurer.EASTER.map(e=>e.name),seen=new Set();
- let runs=0,visits=0,dupRuns=0;
- for(let i=0;i<250;i++){
-  const g=new Game();g.autosave=false;g.start('easter-'+i);
-  for(let step=0;step<45&&g.run.phase!=='end';step++){const s=g.run;
-   if(s.phase==='morning')g.beginOrder();else if(s.phase==='order')g.open();
-   else if(s.phase==='sell')g.depart();else if(s.phase==='night')g.finishNight();
-   else if(s.phase==='closing'){if(g.closeDay()===false)break;}else break;}
-  const found=g.run.npcs.filter(n=>EASTER.includes(n.name)).map(n=>n.name);
-  found.forEach(n=>seen.add(n));
-  if(new Set(found).size!==found.length)dupRuns++;
-  runs++;visits+=found.length;
- }
- assert.equal(dupRuns,0,'the same identity never appears twice in one Run');
- assert.ok(visits>0,'the identities are reachable at all');
- assert.equal(seen.size,3,'all three are reachable across Runs, not just the first');
- // rare, and rare because of the chance rather than because it is nearly impossible
- assert.ok(visits/runs<1,'a Rare Reference visitor stays rare: '+(visits/runs).toFixed(3)+' per Run');
- assert.equal(DATA.balance.easterChance,.01,'the approved starting chance, unchanged by Work');
-
- // Only the name differs. The identity is the whole easter egg: no stat, trait, rarity or
- // level rides on it, so a player who misses the reference loses nothing.
- const build=chance=>{const g=new Game();g.autosave=false;g.start('easter-shape');
-  DATA.balance.easterChance=chance;const n=g.addNPC();DATA.balance.easterChance=.01;return n;};
- const plain=build(0),rare=build(1);
- assert.ok(EASTER.includes(rare.name),'forcing the roll produces a Rare Reference visitor');
- assert.ok(!EASTER.includes(plain.name),'not forcing it produces an ordinary one');
- for(const k of ['job','rarity','level','traits','stats','potential','traitSlots'])
-  assert.deepEqual(rare[k],plain[k],'the identity changes nothing but the name: '+k);
-
- // it is a name, not a system: no phase, currency or unlock came with it
+test('COPY §9 (v2.9.11): the Rare Reference roll is gone, its one draw is kept',()=>{
+ assert.equal(Adventurer.EASTER,undefined,'no Rare Reference identity ships');
+ assert.equal(DATA.balance.easterChance,undefined,'no Rare Reference chance is left');
  const src=require('node:fs').readFileSync(__dirname+'/../dist/systems/shop.js','utf8');
- assert.ok(!/easterPhase|easterCurrency|easterUnlock/.test(src),'no Easter subsystem was introduced');
+ const add=src.slice(src.indexOf(' addNPC('),src.indexOf('s.npcs.push(n);return n;}'));
+ assert.ok(/this\.rng\.next\(\);/.test(add),'addNPC still draws the value the removed roll used, so seeded Runs keep their stream');
+ assert.ok(!/EASTER|easter/.test(add),'and reads nothing of the removed identities');
 });
 
 /* ECONOMY_ORDER §PURCHASE INTENT. The judged price is 정가's mechanism and only 정가's: the

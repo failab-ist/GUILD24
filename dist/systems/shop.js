@@ -74,11 +74,6 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  wears(id){return Object.values(this.run.loadout||{}).includes(id);}
  canStock(item,count=1){return this.run.inventory.length+count<=this.capacity();}
  stock(id,count,cost=null){const it=D.itemBy[id];for(let i=0;i<count;i++)this.run.inventory.push({id:'stock-'+this.run.day+'-'+this.run.nextNPC+'-'+this.run.inventory.length+'-'+this.rng.int(0,999999),item:id,expires:this.run.day+it.days+G.Relics.shelf(this,it),/* ITEM §SHELF LIFE — EXACT (v2.9.0): every Item expires */cost:cost??it.buy});}
- /* COPY_WORLD_VOICE 9: rarely the visitor is a Rare Reference identity instead of an ordinary
-    one. Only the name changes - no stat, trait, rarity or reward differs, so the reference is
-    the whole easter egg and a player who misses it loses nothing. The roll is always drawn so
-    the draw count of creating a customer does not depend on who is left; a given identity is
-    offered once per Run, dead or alive, because it is a fixed identity rather than a name. */
  /* The Gate a customer actually walks into. A Deep nominee keeps the base Gate's Family, Tier
     and Hazard set - only the required Combat Power rises, by one global factor - and this is the
     single object the forecast and the night result both read, so what the player was shown is
@@ -128,9 +123,10 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   n.outlook=this.outlookFor(n);
   s.notice=n.name+' 님이 심층원정에 나섭니다.';this.save();return true;}
  addNPC(opts={}){const s=this.run;if(s.npcs.filter(n=>n.alive).length>=22)return null;let n=G.Adventurer.create(this.rng,s.nextNPC++,s.day,this.account,{premium:this.wears('honorFrame'),levelBonus:this.wears('trainingSign')&&this.rng.next()<D.decorationParams.trainingSign.chance?D.decorationParams.trainingSign.levelBonus:0,...opts});
-  const spare=G.Adventurer.EASTER.filter(e=>!s.npcs.some(x=>x.name===e.name));
-  if(this.rng.next()<D.balance.easterChance&&spare.length)n.name=this.rng.pick(spare).name;
-  else for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
+  /* The Rare Reference roll is gone (v2.9.11, User 2026-09-28: removed before a paid release); its one draw stays, so a
+     seeded Run keeps the stream it had whenever that roll missed. */
+  this.rng.next();
+  for(let retry=0;s.npcs.some(x=>x.alive&&x.name===n.name)&&retry<200;retry++)n.name=G.Adventurer.name(this.rng,n.rarity);
   s.npcs.push(n);return n;}
  /* v2.9.0 (User 2026-09-24): no Gate requires Supply - the Supply Burden modifier is gone. The one
     draw it used to make is kept as a dead draw so every seeded stream and fixture stays identical. */

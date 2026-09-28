@@ -163,30 +163,15 @@ const night={
   '“잘 다녀왔습니다.”','“무사 귀환입니다.”','“이번엔 순조로웠어요.”','“오늘은 괜찮은 날이었네요.”',
   '“큰 문제 없이 끝냈습니다.”','“다녀오는 길까지 무사했습니다.”','“이번엔 마음 놓고 돌아왔네요.”','“오늘 원정은 여기까지입니다.”','“계획대로 다녀왔습니다.”','“준비한 만큼 풀렸어요.”','“길이 생각보다 순했습니다.”','“오늘은 발걸음이 가벼웠어요.”','“해 지기 전에 돌아왔네요.”','“몬스터들이 오늘은 휴무였나 봐요.”']};
 
-/* COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25 (User 2026-09-28, v2.9.10): the three Rare Reference customers' own
-   lines. They stand in for an ordinary line on about half of their arrivals and their living Night results (a clear
-   result or a setback), never on a Death; the reference is for those who know it, an ordinary customer's slightly odd
-   turn of phrase for those who do not. A stored-state hash decides, so a reload never changes a line - mixed first: the
-   plain hash's low bits are only the XOR of the characters' low bits, so an id and a Day of the same digits cancel out. */
-const mix=s=>{let h=fnv(s);h=Math.imul(h^(h>>>16),0x45d9f3b);h=Math.imul(h^(h>>>16),0x45d9f3b);return (h^(h>>>16))>>>0;};
-const rare={
- '요화니우스':{arrive:['“입구만 단단히 막아 두면 반은 이긴 거죠.”','“가게 앞에서 늘 두 번째로 오는 친구 못 보셨어요? 오늘도 저보다 늦겠죠.”'],
-  win:['“다들 황제라고 불러서 부담이었는데, 오늘은 체면이 좀 섰네요.”'],lose:['“세 번이나 들이밀었는데, 오늘은 안 뚫리네요.”']},
- '상혀크':{arrive:['“문득 생각이 나서 들렀습니다. 이유는 딱히 없어요.”','“다른 데서도 부르던데, 저는 여기가 편해요.”'],
-  win:['“젠장, 또 성공하고 말았습니다.”'],lose:['“오늘은 새삼 다들 대단하다고 느꼈습니다. 저만 빼고요.”']},
- '진호르':{arrive:['“또 왔습니다. 또 왔습니다. 어? 왜 두 번 말했지?”','“오늘은 폭풍처럼 다녀오겠습니다.”'],
-  win:['“오늘은 두 번째가 아니었습니다. 확실히요.”'],lose:['“콩 볶듯 몰아쳤는데, 한 끗이 모자랐네요.”']}};
-
 /* 선택 키는 전부 저장되는 상태에서만 만든다 — 그래야 불러오기가 문장을 바꾸지 않는다. */
 const key=(n,tag,day)=>n.id+':'+tag+':'+day;
 
 const Copy={
- pick,pools:{visit,sale,night},rare,
+ pick,pools:{visit,sale,night},
  /* 카운터에 도착한 손님의 한마디. Callback > Trait > 상태 > 일반 순으로 고른다. */
  arrive(n,day,hasCallback,run){
   const ex=exclusionFor(run,n,'arrival'),emit=line=>{remember(run,n,'arrival',line);return line;};
   if(hasCallback)return emit(pick(visit.helped,key(n,'callback',day),ex));
-  const ref=rare[n.name];if(ref&&mix(key(n,'rare',day))%2===0)return emit(pick(ref.arrive,key(n,'rarearrive',day),ex));
   for(const id of n.traits||[]){const pool=visit.trait[id];
    if(pool&&fnv(key(n,'traitgate',day))%3===0)return emit(pick(pool,key(n,'trait'+id,day),ex));}
   if(n.newToday)return emit(pick(visit.first,key(n,'first',day),ex));
@@ -210,7 +195,6 @@ const Copy={
    return emit(pick(n.history.length?night.deathTraded:n.records.length>1?night.deathKnown:night.deathStranger,k,ex));
   if(report.avoidedDeath)return emit(pick(night.avoided,k,ex));
   if(report.rescued)return emit(pick(night.rescued,k,ex));
-  const ref=rare[n.name];if(ref&&mix(k+':rare')%2===0)return emit(pick(['퇴각','부상','중상'].includes(report.outcome)?ref.lose:ref.win,k,ex));
   /* COPY_WORLD_VOICE_v2.8 §DIALOGUE EXPOSURE: 대성공 is its own named Pool now, distinct from
      an ordinary 성공's growth/plain lines - Source used to fall through to `grew`/`plain` for
      every non-injury success alike, with no line that actually said a 대성공 happened. */

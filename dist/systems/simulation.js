@@ -47,7 +47,7 @@ const contribution=p=>G.Dungeon.preparedPower(p.effects)
  -(p.hazards.length?p.hazards.reduce((v,h)=>v+h.gap,0)/p.hazards.length:0)*1.70;
 
 function blank(runs,policy,pricing,build){
- return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaStore:0,knowledge:0,revenue:0,spend:0,actions:0,easter:0,easterRuns:0,
+ return {deathsPerRun:[],deathFailDay:[],endedBy:{deaths:0,bankrupt:0,finalFail:0,cleared:0},runs,policy,pricing,build,relicOffers:{},relicPurchases:{},relicOutcomes:{},jobs:{},dungeons:{},wallets:{},offerRepeats:0,buildCounts:{},relicSpend:0,windowDiversity:[],reached30:0,wins:0,bankrupt:0,deaths:0,money:0,days:{},facilities:{},items:{},modes:{},impact:{samples:0,improved:0,saved:0,characterAbility:0,preparedAbility:0},capacityBlocked:0,stockouts:0,dayReached:{},metaMastery:0,metaDistinct:0,metaStore:0,knowledge:0,revenue:0,spend:0,actions:0,
   /* v2.8 Re-measure pass (SA-Q48/49/50 aggregate impact), measurement only. modesByBand and
      modesByLoyalty are the same acceptance/attempt counters `modes` already keeps, split by the
      Day band the attempt fell in and by the buyer's Loyalty at the moment of the attempt, so the
@@ -140,12 +140,12 @@ function sampleStats(xs){if(!xs||!xs.length)return {count:0,mean:0,median:0,p10:
 function derive(out,count){
  for(const [day,values]of Object.entries(out.wallets)){if(!Array.isArray(values))continue;values.sort((a,b)=>a-b);out.wallets[day]={count:values.length,mean:values.reduce((a,b)=>a+b,0)/values.length,p10:values[Math.floor(values.length*.1)],median:values[Math.floor(values.length*.5)],p90:values[Math.floor(values.length*.9)]};}
  const days=Object.entries(out.dayReached).reduce((a,[d,n])=>a+Number(d)*n,0);
- return {...out,averageDay:days/count,easterPerRun:out.easter/count,deepDaysPerRun:out.deepDays/count,deepTakenPerRun:out.deepTaken/count,deepOfferedPerRun:out.deepOffered/count,deepSponsorPerRun:out.deepSponsor/count,deepSkippedPerRun:out.deepSkipped/count,
+ return {...out,averageDay:days/count,deepDaysPerRun:out.deepDays/count,deepTakenPerRun:out.deepTaken/count,deepOfferedPerRun:out.deepOffered/count,deepSponsorPerRun:out.deepSponsor/count,deepSkippedPerRun:out.deepSkipped/count,
   deepCostP10:pct(out.deepCosts,.1),deepCostP25:pct(out.deepCosts,.25),deepCostMedian:pct(out.deepCosts,.5),
   deepCostP75:pct(out.deepCosts,.75),deepCostP90:pct(out.deepCosts,.9),
   greatSuccessRate:out.great.success?out.great.great/out.great.success:0,greatStoreGoldPerRun:out.great.storeGold/count,
   prepStartGoldMedian:pct(out.prepStartGold,.5),prepStartGoldP10:pct(out.prepStartGold,.1),prepStartGoldP25:pct(out.prepStartGold,.25),
-  prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),easterRunRate:out.easterRuns/count,masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,
+  prepStartGoldP75:pct(out.prepStartGold,.75),prepStartGoldP90:pct(out.prepStartGold,.9),masteryPerRun:out.metaMastery/count,distinctPerRun:out.metaDistinct/count,
   deathsP10:pct(out.deathsPerRun,.1),deathsMedian:pct(out.deathsPerRun,.5),deathsP90:pct(out.deathsPerRun,.9),
   deathFailRate:out.endedBy.deaths/count,deathFailDayMedian:pct(out.deathFailDay,.5),
   reach10:out.reachBy[10]/count,reach20:out.reachBy[20]/count,reach25:out.reachBy[25]/count,reach30:out.reachBy[30]/count,
@@ -556,9 +556,6 @@ function playRun(g,out,ctx){
  /* D25 is the Final Family/Hazard reveal, so it is its own band. */
  for(const d of [10,20,25,30])if(s.day>=d)out.reachBy[d]++;
  out.dayReached[s.day]=(out.dayReached[s.day]||0)+1;out.metaMastery+=G.Meta.totalJobMastery(g.account);out.metaDistinct+=G.Meta.distinctBossClear(g.account);out.metaStore+=(g.account.store?.owned||[]).length;out.knowledge+=Object.values(g.account.knowledge).reduce((a,b)=>a+b,0);out.revenue+=s.stats.revenue;out.spend+=s.stats.spent;
- /* measurement only - how often a Rare Reference identity actually turns up, so the starting
-    chance can be judged on evidence in Stage 9 rather than on the number itself. */
- {const seen=s.npcs.filter(n=>G.Adventurer.EASTER.some(e=>e.name===n.name)).length;out.easter+=seen;out.easterRuns+=Number(seen>0);}
  out.deepDays+=(s.deep?.days||[]).length;
  {const alive=s.npcs.filter(n=>n.alive&&n.introduced);out.npc.samples++;out.npc.alive+=alive.length;out.npc.level+=alive.reduce((a,n)=>a+n.level,0);out.npc.maxLevel+=alive.length?Math.max(...alive.map(n=>n.level)):0;out.npc.loyalty+=alive.reduce((a,n)=>a+n.loyalty,0);out.npc.regulars+=s.stats.regulars;out.npc.wallet+=alive.reduce((a,n)=>a+n.money,0);out.npc.growth+=alive.reduce((a,n)=>a+n.level-1,0);}
  if(s.bossDebug){out.final.resolved++;out.final.power+=s.bossDebug.power;out.final.assault+=s.bossDebug.assault;out.final.margin+=s.bossDebug.assault-s.bossDebug.bossPower;out.final.cleared+=Number(!!s.win);

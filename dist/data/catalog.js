@@ -239,8 +239,6 @@ G.DATA.bossTuning={
  lustStatFactor:0.95,           // LUST: a non-regular participant's four Stats x this
  slothBossPower:[200,189,171,149] // SLOTH: effective Boss Power by break count [0,1,2,3] (v2.9.1 balance, User 2026-09-25; were 225/210/190/165, 1-3 breaks scaled with WRATH 200 -> 180, 0 breaks set to 200 by decision)
 };
-/* easterChance is an approved STARTING VALUE, not a settled one: Stage 9 measures how often a
-   Rare Reference identity actually turns up per Run and reports candidates. Do not retune it here. */
 /* golemCombat is the §O easing of the 화염 골렘 광산 (golem) Family's combat requirement. It is named here rather
    than held as a constant inside shop.js so a balance candidate can be compared against it from
    the harness without editing production. The value is unchanged by that move. */
@@ -257,7 +255,7 @@ G.DATA.rarityBands=[
  {maxDay:24,weights:[46,26,17,10,1]},
  {maxDay:29,weights:[39,25,19,16,1]},
  {maxDay:30,weights:[34,24,21,20,1]}];
-G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,easterChance:.01,golemCombat:.90,
+G.DATA.balance={wallVisitorChance:.30,operating:60,frugalThreshold:120,halfPriceSupport:50,bossPower:180,combatNoise:.175,rerollBase:50,golemCombat:.90,
  /* CORE_RUN §DEATH LIMIT — SEGMENTED (User 2026-09-25, v2.9.1 balance): the cumulative Death
     count that ends a Run steps up with the Day it happened on; it never resets at a boundary. */
  deathLimitSegments:[{maxDay:10,limit:5},{maxDay:20,limit:8},{maxDay:30,limit:11}],

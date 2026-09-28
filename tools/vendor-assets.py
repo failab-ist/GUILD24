@@ -37,7 +37,7 @@ FACES=['Mulmaru','MulmaruMono']
 # copied at native size; nothing is ever enlarged.
 ART=os.path.join(ROOT,'GUILD24_NPC_PRODUCTION')
 NPC=os.path.join(ROOT,'dist','ui','assets','npc')
-CAP={'normal':492,'easter':492,'boss':1280}
+CAP={'normal':492,'boss':1280}
 QUALITY=90
 # encoder effort: 6 costs 5.1s an image for 4% fewer bytes than 4, which costs 0.08s.
 # 64x the build time is not worth 4% on a 12MB set, so the whole drop encodes in seconds.
@@ -157,16 +157,12 @@ def portraits():
         for f in sorted(os.listdir(os.path.join(ART,'02_NORMAL_WORK',g))):
             if f.endswith('.png'):jobs.append(('normal',os.path.join(ART,'02_NORMAL_WORK',g,f),
                                                os.path.join(NPC,'normal',g,f[:-4]+'.webp')))
-    for f in sorted(os.listdir(os.path.join(ART,'03_EASTER'))):
-        # the shipped path stays ASCII: the name lives in the name pool, not in a URL
-        if f.endswith('.png'):jobs.append(('easter',os.path.join(ART,'03_EASTER',f),
-                                           os.path.join(NPC,'easter',f.split('_')[0]+'.webp')))
     for f in sorted(os.listdir(os.path.join(ART,'04_BOSS'))):
         if f.endswith('.png'):jobs.append(('boss',os.path.join(ART,'04_BOSS',f),
                                            os.path.join(NPC,'boss',f[:-4]+'.webp')))
     # Regenerate wholly, but only what this step owns: dist/ui/assets/npc also holds
     # hand-kept placeholder art that Scene.npcPool still draws from.
-    for sub in ('normal','easter','boss'):
+    for sub in ('normal','easter','boss'):  # 'easter' only clears the folder the removed Rare Reference art (v2.9.11) left
         if os.path.isdir(os.path.join(NPC,sub)):shutil.rmtree(os.path.join(NPC,sub))
     src_bytes=out_bytes=0;shrunk=0
     for kind,src,dst in jobs:
@@ -188,7 +184,6 @@ MANIFEST='''(function(G){
 G.NPCAssets={
  base:'ui/assets/npc/',ext:'.webp',
  normal:{M:100,F:100},                       /* normal/<M|F>/<001..100> */
- easter:['E001','E002','E003'],              /* easter/<id> */
  boss:{WRATH:'B001',PRIDE:'B002',ENVY:'B003',GREED:'B004',
        GLUTTONY:'B005',LUST:'B006',SLOTH:'B007'},
  /* boss/<prefix>_<ID>_D05-D15 | _D30; SLOTH is <prefix>_SLOTH_D05-D15_SB0 for zero

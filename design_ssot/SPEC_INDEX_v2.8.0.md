@@ -279,7 +279,8 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
   -> CHANGELOG §v2.9.10 (owners UI_UX §ORDER — ITEM INFORMATION HIERARCHY, §SALE — COUNTER TRAY / SHELF ORDER / CUSTOMER
   ARRIVAL, §BOSS REVEAL; UI_UX_QA UI-Q-v29-20 / 35; COPY_AUDIT §4-10 / §8-0 / §25; COPY_WORLD_VOICE §RARE REFERENCE NPC; SALE; ITEM).
 - v2.9.11 (User 2026-09-28, in progress): the v3.0 prep line - unsold stock leaves on the Night of its last sale Day, on
-  that Day's receipt; the early Gate slope 1.50 -> 1.40 -> CHANGELOG §v2.9.11 (owners ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING
+  that Day's receipt; the early Gate slope 1.50 -> 1.40; 35 customer names replaced; the Rare Reference customers removed
+  -> CHANGELOG §v2.9.11 (owners COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25, ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING
   §CLOSING — CASH FLOW RECEIPT, EVENT §20, RELIC 새벽 회수 계약, DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE, DUNGEON_ITEM_QA).
 - v2.9.9 (User 2026-09-27): presentation from the reference review - the store room (Decoration seating / outline, tablets),
   새 점포 준비 as the store scene with the title logo, one press grammar and one colour per family for the dock Actions (two

@@ -7,7 +7,7 @@
     "normal_count": 200,
     "normal_m": 100,
     "normal_f": 100,
-    "easter_count": 3,
+    "easter_count": 0,
     "boss_count": 7
   },
   "binding_rule": {
@@ -1623,35 +1623,7 @@
       }
     ]
   },
-  "easter": [
-    {
-      "id": "E001",
-      "name": "요화니우스",
-      "gender": "M",
-      "pool": "easter",
-      "random_eligible": false,
-      "asset_gender_tag": "M",
-      "specific_asset_id": null
-    },
-    {
-      "id": "E002",
-      "name": "상혀크",
-      "gender": "M",
-      "pool": "easter",
-      "random_eligible": false,
-      "asset_gender_tag": "M",
-      "specific_asset_id": null
-    },
-    {
-      "id": "E003",
-      "name": "진호르",
-      "gender": "M",
-      "pool": "easter",
-      "random_eligible": false,
-      "asset_gender_tag": "M",
-      "specific_asset_id": null
-    }
-  ],
+  "easter": [],
   "boss": [
     {
       "id": "B001",
