@@ -3,7 +3,15 @@
 // worktree). It hooks only functions both versions have (morningEvent, arrive, boss, end) and changes nothing.
 //   node tools/remeasure-v2911.cjs <policy=reader|balanced> [runs=3000] [out.json]
 const path=require('node:path'),fs=require('node:fs');const ROOT=path.resolve(__dirname,'..');
-for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation'])require(path.join(ROOT,'dist',f+'.js'));
+// Trial values in memory only (the files on disk are untouched): REMEASURE_EARLY=1.45 swaps the early Gate slope in
+// systems/dungeon.js (exactly one patch point, else stop); REMEASURE_BALANCE='{"bossPower":190}' merges into DATA.balance.
+const EARLY=process.env.REMEASURE_EARLY,BAL=process.env.REMEASURE_BALANCE?JSON.parse(process.env.REMEASURE_BALANCE):null;
+for(const f of ['data/catalog','data/relics','data/decorations','data/copy','systems/rng','systems/adventurer','systems/dungeon','systems/meta','systems/save','systems/shop','systems/relics','systems/run','systems/simulation']){
+ const file=path.join(ROOT,'dist',f+'.js');
+ if(f==='systems/dungeon'&&EARLY){let src=fs.readFileSync(file,'utf8');const m=src.match(/early:\d+(\.\d+)?,/g)||[];if(m.length!==1)throw Error('early slope patch point x'+m.length);
+  src=src.replace(/early:\d+(\.\d+)?,/,'early:'+Number(EARLY)+',');require('node:vm').runInThisContext(src,{filename:file});}
+ else require(file);
+ if(f==='data/catalog'&&BAL)Object.assign(DATA.balance,BAL);}
 const policy=process.argv[2]||'reader',runs=Number(process.argv[3]||3000),out=process.argv[4];const P=Game.prototype;
 const cur={events:[],arrivals:[]};
 const me=P.morningEvent;P.morningEvent=function(){const r=me.apply(this,arguments);if(this.run.event)cur.events.push(this.run.event.id);return r;};
@@ -24,7 +32,7 @@ const N=rows.length,pc=(a,b=N)=>b?+(100*a/b).toFixed(1):null,med=a=>{const v=a.f
 const band=[[1,10],[11,20],[21,29]],names=['D1-10','D11-20','D21-29'];
 const bosses=[...new Set(rows.map(r=>r.boss))].sort();
 const F=rows.filter(r=>r.final);
-const res={policy,runs:N,
+const res={policy,trial:{early:EARLY?Number(EARLY):null,balance:BAL},runs:N,
  reach:{d10:pc(rows.filter(r=>r.day>=10).length),d20:pc(rows.filter(r=>r.day>=20).length),d30:pc(rows.filter(r=>r.day>=30).length)},
  clear:pc(rows.filter(r=>r.win).length),winGivenD30:pc(rows.filter(r=>r.win).length,rows.filter(r=>r.day>=30).length),
  ends:{deathLimit:pc(rows.filter(r=>r.end==='death').length),bankrupt:pc(rows.filter(r=>r.end==='bankrupt').length),finalLoss:pc(rows.filter(r=>r.end==='final').length)},
