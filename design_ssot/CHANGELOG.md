@@ -13,6 +13,10 @@ From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.
 - **The 1+1 offer is marked** - EVENT §02, UI_UX §ORDER — ITEM INFORMATION HIERARCHY, UI_UX_QA UI-Q-v29-39, COPY_AUDIT §13-2: on a
   본사 1+1 행사 day the promoted offer was told only by `· 1+1` inside the muted metadata line, so the User could not find it (the
   Event asks for it to be shown clearly on ORDER). It now wears a red `1+1` sticker on its `매입` tag corner.
+- **본사 폐기 유예** - EVENT §20, COPY_AUDIT §13-20: `본사 폐기 지원` refunded the cost of the stock discarded that morning, but no
+  폐기 비용 is shown anywhere in the game and the discard was already done before the Event appeared, so its `오늘 폐기 비용 0G`
+  meant nothing to the player. It now gives the stock whose last sale day is today (the shelf's `오늘까지`) one more day:
+  `오늘 밤 폐기될 상품에 한하여 유통기한 +1일`, flavour `유통기한 위에 새 스티커가 붙어 있다. 본사는 모르는 일이라고 한다.`
 - **Visual QA coach check steadied** - `tools/qa-visual.cjs` (harness only): the contextual coach check at 390 failed about one
   run in four or five, on the base build too. The capture drives the Run through the engine and renders only now and then; the
   Boss reveal's hold, which since v2.9.10 renders again once its art decodes, could land mid-loop and leave an earlier Day's Event
