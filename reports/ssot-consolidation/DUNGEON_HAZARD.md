@@ -1123,3 +1123,18 @@ FamilyCombat = golemCombat 0.90 for golem, else 1
 familyBase: spider 2 · slime 2 · golem 3 · crypt 3 · snow 4
 familyReward: spider 1 · slime 1 · golem 1.15 · crypt 1.10 · snow 1.25 · Final 2
 ```
+
+## AMENDMENT — v2.9.10 insurance rules (User 2026-09-28)
+
+귀환석 now rolls once more for 퇴각 on any 부상 / 중상 / 사망 at the own retreat chance +20%p (the combat retreat roll reads the Traits only; the 0.96 rescue clamp is gone with the old crisis roll), 세계수 turns Death into 퇴각, and 구급키트's line says it does not stop Death. The superseded rule lines are replaced; CHANGELOG §v2.9.10 carries the measurement. The superseded chain lines below are dropped.
+
+```text
++ explicit escape modifier
+```
+
+```new
++ explicit escape modifier (Traits only; 귀환석's bonus is not read here - User 2026-09-28, v2.9.10)
+귀환석 second retreat roll (User 2026-09-28, v2.9.10; the Item rule is owned by `ITEM_v2.8.0.md` §귀환석): an
+expedition whose Outcome is 부상 / 중상 / 사망 and whose Bag holds 귀환석 rolls once more, at the same escapeChance
+with the stone's bonus added (`escapeChance + 귀환석 escapeBonus`, same 0.15~0.94 clamp); a hit makes the Outcome 퇴각.
+```

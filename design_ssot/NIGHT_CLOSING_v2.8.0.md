@@ -312,19 +312,20 @@ Only a turned-away Death reverses (User 2026-09-25): those two result flags, and
 Timing -> UI_UX_v2.8.0.md §NIGHT LAYOUT — VERDICT STAMP.
 
 ### RETURN STONE
-When it actually changes escape/retreat outcome:
-show it as meaningful escape support.
+When it actually changes escape/retreat outcome (since v2.9.10 a 부상 / 중상 / 사망 turned into 퇴각, User 2026-09-28):
+show it as meaningful escape support (event `귀환석이 실패한 원정에서 퇴각을 도왔다.`).
 
 Do not claim:
 `귀환석이 죽음을 막았다`
 unless the actual resolution supports that causal claim.
 
 ### WORLD TREE INSURANCE
-When Death is actually converted to Severe Injury:
+When Death or Severe Injury is actually converted to 퇴각 (User 2026-09-28, v2.9.10; was Death -> Severe Injury, rule -> ITEM §세계수 생환부적):
 strong causal wording is allowed.
 
 Example meaning:
-`세계수의 생환 효과가 치명적인 결과를 중상으로 바꿨다.`
+`세계수 생환부적이 사망을 무사 퇴각으로 바꿨다.` / `세계수 생환부적이 중상을 무사 퇴각으로 바꿨다.` (proof cause chip
+`사망을 무사 퇴각으로` / `중상을 무사 퇴각으로`; only the Death one is a turned-away Death)
 
 No false hero attribution.
 

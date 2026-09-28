@@ -315,7 +315,6 @@ The table above is the approved DIRECTOR DOCUMENT BASELINE.
 Fresh / Food-affinity / Potionbody modifiers use their existing owned composition rules from these base Item values.
 There are 10 Epic preparation Items.
 No active Item creates a separate poison Condition/cure subsystem.
-Rare Insurance identity:
 Epic death-insurance identity:
 ```
 
@@ -496,7 +495,6 @@ Food/Drink nativeCore may include:
 ```
 
 ```new
-finalEscapeCap=0.96 (귀환석 rescue roll clamp; the ordinary retreat roll clamps at 0.94)
 - Supply, only where a Trait entry states it (e.g. 소식가 / 대식가 in NPC_TRAIT)
 Food/Drink nativeCore for Fresh Store Supports and category affinity is positive native Stat only.
 Supply stays its own channel; Fresh Store Supports leave Supply unchanged.
@@ -655,7 +653,6 @@ The redistributed values are the ACTIVE CATALOG rows (삼각김밥 4 · 컵라�
 Shelf Life = 2 (§SHELF LIFE — EXACT, v2.9.0)
 Buy / Sell = 400 / 800 (User 2026-09-24, v2.9.0; was 600 / 1200)
 Unlisted implementation-only flavor fields inherit the previous Item where identity remains unchanged, except where this spec states otherwise; shelf lives are the §SHELF LIFE — EXACT table (v2.9.0).
-| 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death -> Severe Injury once | Death Insurance |
 ## SHELF LIFE — EXACT
 (User 2026-09-24/25, v2.9.0): no active Item is non-expiring; every unit has a shelf life of 2 to 5 days, counted from the
 stocking day, and is discarded at the morning it runs out. The rule behind the table:
@@ -846,7 +843,6 @@ above; the superseded 귀환석 row below is dropped.
 
 ```new
 Epic Drink Stat +4 (User 2026-09-26, v2.9.6): 초고속 에너지드링크 기동 22 → 26, 대현자 허브엘릭서 정신 24 → 28, 왕도 천연암반수 강인함 20 → 24 - one Rarity step over the Uncommon Drink was +5 for 2.2× the price.
-| 25 | 귀환석 | Insurance R | 200 / 400 | Emergency Escape +50%p path | Severe/Death Insurance |
 ```
 
 ## AMENDMENT — 마그마 냉각장비 투력 +10 (User 2026-09-26, v2.9.6)
@@ -1085,4 +1081,59 @@ Shelf life reads 폐기까지 N일 / 내일까지 / 오늘까지; a sold-out ORD
 
 ```new
 SALE shelf order: by kind, then nearest expiry, then higher Rarity, held for the Day; each row carries its shelf life, `폐기까지 N일 / 내일까지 / 오늘까지` (v2.9.10; exact UI -> `UI_UX_v2.8.0.md` §SALE — SHELF ORDER) (User 2026-09-24/25, v2.9.0; order by kind User 2026-09-26, v2.9.7)
+```
+
+## AMENDMENT — v2.9.10 insurance rules (User 2026-09-28)
+
+귀환석 now rolls once more for 퇴각 on any 부상 / 중상 / 사망 at the own retreat chance +20%p (the combat retreat roll reads the Traits only; the 0.96 rescue clamp is gone with the old crisis roll), 세계수 turns Death into 퇴각, and 구급키트's line says it does not stop Death. The superseded rule lines are replaced; CHANGELOG §v2.9.10 carries the measurement. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+- emergency escape
+- +50%p escape contribution under its current resolution path
+- may convert eligible Severe/Death crisis to Retreat
+- remaining Death -> Severe Injury
+2. 귀환석 emergency-escape conversion when eligible
+3. if Death remains, 세계수 생환부적 Death -> Severe Injury
+`큰 실패를 퇴각으로 바꿀 가능성을 높이는 확률형 보험`
+escapeBonus=+50%p
+Death -> Severe Injury
+```
+
+```new
+`성공하지 못한 원정을 퇴각으로 돌릴 가능성을 높이는 확률형 보험`
+Rare Insurance identity (User 2026-09-28, v2.9.10 - the rule is what a player reads the line as):
+- an expedition that ends in neither 성공 nor 대성공 (부상 / 중상 / 사망) rolls once more for a retreat
+- that roll's chance = the adventurer's own retreat chance (`DUNGEON_HAZARD_v2.8.0.md` escapeChance: 기동, Traits,
+Gate scale) + escapeBonus, clamped 0.15~0.94 as the retreat chance is
+- a hit makes the Outcome 퇴각
+- the stone no longer adds to the combat-failure retreat roll itself (that roll reads the Traits only)
+escapeBonus=+20%p (User 2026-09-28, v2.9.10; was +50%p on the combat retreat roll plus a 50% crisis roll on 중상/사망)
+player line: `성공하지 못하면 퇴각 확률 +{N}%p` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
+Measured (v2.9.10, `reader` 3000-run counterfactual: every third expedition re-rolled with one Item added, 퇴각 / 부상 /
+중상 / 사망 %): own Bag 28.8 / 24.6 / 13.3 / 10.8 · old stone 61.1 / 12.6 / 1.8 / 5.5 · new stone 66.1 / 7.4 / 4.1 / 3.2 ·
+Harm total (부상+중상+사망) own 48.7 -> old stone 19.9 -> new stone 14.7.
+2. 귀환석 second retreat roll on 부상 / 중상 / 사망 (User 2026-09-28, v2.9.10)
+| 25 | 귀환석 | Insurance R | 200 / 400 | 부상·중상·사망 -> one more retreat roll at own retreat chance +20%p | Failure Insurance |
+```
+
+## AMENDMENT — v2.9.10 World Tree covers 중상 too (User 2026-09-28)
+
+Death-only 세계수 still measured below 귀환석, so the Epic now turns a remaining 사망 or 중상 into 퇴각; a 부상 stays 부상. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+Death or Severe Injury -> 퇴각 (무사 퇴각; no injury) (User 2026-09-28, v2.9.10; was Death -> Severe Injury)
+- remaining Death or Severe Injury -> 퇴각: the heavy results are stopped outright, where 귀환석 only makes them less
+likely (the Epic price bought a likely Severe Injury before, and Death-only still measured below 귀환석)
+- a 부상 stays 부상 - the broad, probabilistic cover is 귀환석's, the one-step cover 구급키트's
+- player line: `사망·중상 → 무사 퇴각 1회` (`COPY_AUDIT_APPROVED_v2.8.0.md` §4-22)
+3. if Death or Severe Injury remains, 세계수 생환부적 -> 퇴각 (User 2026-09-28, v2.9.10)
+| 29 | 세계수 생환부적 | Insurance E | 400 / 800 | Death / Severe Injury -> 퇴각 once | Death Insurance |
+```
+
+## AMENDMENT — v2.9.10 World Tree measurement (User 2026-09-28)
+
+The 세계수 measurement line carries the 사망·중상 rule's own 3000-run figures. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+구급키트 29.7 / 39.9 / 0 / 11.2 (Death untouched) · 세계수 old 29.9 / 25.7 / 25.2 / 0, new 55.0 / 25.8 / 0 / 0.
 ```

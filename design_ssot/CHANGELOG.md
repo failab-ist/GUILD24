@@ -32,6 +32,29 @@ the owner headers and in the git tag.
 - **The Boss dossier arrives** - UI_UX §BOSS REVEAL — MORNING LANDS FIRST, UI-Q-v29-35: it cut in after a 420 ms hold and read
   as a stutter. The hold is 200 ms and the sheet rises into place with the Boss's art on it; it also waits (at most 1.2 s)
   for that art, fetched ahead. The four fonts are fetched with the page (the digit face used to wait for DAY 0).
+- **Insurance that does what it says** - ITEM §귀환석 / §세계수 생환부적 / §Insurance resolution order, DUNGEON_HAZARD,
+  DUNGEON_ITEM_QA ITEM-Q11 / Q13 / Q76, NIGHT_CLOSING, COPY_AUDIT §4-22 (User 2026-09-28): a player reads `실패` as anything
+  short of 성공, but 귀환석 helped only a lost fight and a 중상 / 사망 crisis, and 세계수 turned a paid-for Death into a likely
+  중상. 귀환석 now rolls once more for a retreat on any 부상 / 중상 / 사망, at the adventurer's own retreat chance +20%p
+  (was +50%p on the combat retreat roll plus a 50% crisis roll); the combat retreat roll reads the Traits only. 세계수
+  turns a 사망 or 중상 into 퇴각 (Death-only still measured below 귀환석). Lines: `성공하지 못하면 퇴각 확률 +20%p`,
+  `사망·중상 → 무사 퇴각 1회`, and 구급키트
+  `원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)`; the stat label `탈출 확률` reads `퇴각 확률` like the Outcome it
+  moves. Measured with the `reader` bot, 3000 runs; each expedition re-rolled with one Item added (퇴각 / 부상 / 중상 / 사망 %):
+
+  | Bag | 퇴각 | 부상 | 중상 | 사망 |
+  |---|---|---|---|---|
+  | own | 28.8 | 24.6 | 13.3 | 10.8 |
+  | 귀환석 before | 61.1 | 12.6 | 1.8 | 5.5 |
+  | 귀환석 now | 66.1 | 7.4 | 4.1 | 3.2 |
+  | 세계수 before | 29.9 | 25.7 | 25.2 | 0 |
+  | 세계수 now | 55.0 | 25.8 | 0 | 0 |
+  | 구급키트 | 29.7 | 39.9 | 0 | 11.2 |
+
+  The bot seldom sells these Items, so the Run-level figures stay within noise (D30 reach 11.7 -> 11.8 %, clear 7.8 ->
+  8.2 %, deaths per Run 6.88 -> 6.88).
+- **Three witty lines** - COPY_AUDIT §16-4 / §19-4 / §19-8: one each for a regular's arrival, a Night 부상 and a Night
+  growth result.
 
 ## v2.9.9 — presentation: the store scene, the dock Actions, SALE, the FINAL clash (User 2026-09-27)
 

@@ -745,7 +745,7 @@ When combat fails:
     = clamp(
         0.48
         + prepared 기동 × 0.005
-        + explicit escape modifier
+        + explicit escape modifier (Traits only; 귀환석's bonus is not read here - User 2026-09-28, v2.9.10)
         - Gate scale × 0.024,
         0.15,
         0.94
@@ -753,6 +753,10 @@ When combat fails:
 
     escape succeeds -> 퇴각
     escape fails    -> 부상 branch
+
+귀환석 second retreat roll (User 2026-09-28, v2.9.10; the Item rule is owned by `ITEM_v2.8.0.md` §귀환석): an
+expedition whose Outcome is 부상 / 중상 / 사망 and whose Bag holds 귀환석 rolls once more, at the same escapeChance
+with the stone's bonus added (`escapeChance + 귀환석 escapeBonus`, same 0.15~0.94 clamp); a hit makes the Outcome 퇴각.
 
 On the failed-combat Injury branch:
 

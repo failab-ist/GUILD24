@@ -1,7 +1,7 @@
 (function(G){
 const D=G.DATA;
 /* v2.9.0 (COPY_AUDIT §4-13 / §4-18): Supply is shown as 피로 회복 N; the two Trait deltas name it too */
-const labels={supply:'피로 회복',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식의 피로 회복',supplyPerItem:'음식·음료의 피로 회복',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'탈출 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'원정 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'정가·50% 구매 시 단골도',overchargeBias:'바가지 구매 의사',visitGold:'방문 시 소지금',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
+const labels={supply:'피로 회복',combat:'투력',survival:'강인함',mobility:'기동',spirit:'정신',poison:'독 대응',bind:'속박 대응',corrosion:'부식 대응',mire:'진창 대응',fire:'화염 대응',fear:'공포 대응',dark:'어둠 대응',cold:'냉기 대응',whiteout:'화이트아웃 대응',fatigue:'누적 피로',foodMult:'음식의 능력치',potionMult:'포션의 능력치',foodSupplyDelta:'음식의 피로 회복',supplyPerItem:'음식·음료의 피로 회복',recoveryDelta:'중상 회복 기간',revisitMult:'재방문 가중치',rareBias:'희귀 이상 구매 의사',commonBias:'일반·고급 구매 의사',injuredCombat:'부상 중 투력',escape:'퇴각 확률',injuryGuard:'부상 방어',injuryRisk:'부상 확률',loot:'원정 소지금 획득',xpMult:'경험치',variance:'판정 변동폭',rareLoot:'장비 획득 보정',priceBias:D.balance.frugalThreshold+'G 초과 구매 의사',buyBias:'구매 의사',loyaltyBonus:'정가·50% 구매 시 단골도',overchargeBias:'바가지 구매 의사',visitGold:'방문 시 소지금',injuredCombatPercent:'부상시 투력 보정',combatPercent:'투력 보정',survivalPercent:'강인함 보정'};
 const percent=new Set(['escape','injuryGuard','injuryRisk','loot','variance','rareLoot','priceBias','buyBias','rareBias','commonBias','combatPercent','survivalPercent','injuredCombatPercent','overchargeBias']);
 const points=new Set(['priceBias','buyBias','overchargeBias','injuryGuard','injuryRisk','escape','rareLoot','rareBias','commonBias']);
 const days=new Set(['recoveryDelta']);
@@ -37,13 +37,15 @@ function pressedBy(keys){const m={};for(const k of keys){const s=hazardStat[k];i
    that leak. The player-visible '포션' identity is drawn elsewhere, off the same marker, as
    the item-kind badge, not as an effect row. */
 /* v2.9.0 (User 2026-09-24): the three numberless utility lines are compact - exact strings COPY_AUDIT §4-22 */
-const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망 제외)',duplicate:'다음 소비품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망 → 중상 1회'};
+const util={aftercare:'원정 후 중상 → 부상, 부상 → 무사 (사망은 못 막음)',duplicate:'다음 소비품 효과 2회 (1칸 사용 · 중첩 불가)',revive:'사망·중상 → 무사 퇴각 1회'};
 // `tones` is canonical semantic metadata. Meaning is never inferred from the numeric sign
 // when it is supplied; the sign fallback exists only for Item effects, which state their own costs.
 function rows(e,tones,category){const out=[];for(const[k,v]of Object.entries(e)){
  if(util[k]){out.push({key:k,label:util[k],text:'',tone:'neutral',bad:false,utility:true});continue;}
- /* v2.9.6 (User 2026-09-26, COPY_AUDIT §4-22): 귀환석's crisis roll was said only in its Flavor - the Item's escape row carries it */
- if(k==='escape'&&category==='insurance'&&v){out.push({key:k,label:labels[k]+' +'+Math.round(v*100)+'%p (사망·중상 위기에도 한 번 더 판정)',text:'',tone:'benefit',bad:false,utility:true});continue;}
+ /* v2.9.6 (User 2026-09-26, COPY_AUDIT §4-22): 귀환석's crisis roll was said only in its Flavor - the Item's escape row carries it.
+    v2.9.10 (User 2026-09-28): the rule changed to what a player reads it as - anything short of 성공 rolls once more for a
+    retreat, at the own retreat chance plus this bonus - and the row says just that */
+ if(k==='escape'&&category==='insurance'&&v){out.push({key:k,label:'성공하지 못하면 퇴각 확률 +'+Math.round(v*100)+'%p',text:'',tone:'benefit',bad:false,utility:true});continue;}
  if(!labels[k]||!v)continue;const value=mult.has(k)?(v-1)*100:percent.has(k)?v*100:v;const rounded=Math.round(value*10)/10;
  const suffix=mult.has(k)?'%':percent.has(k)?(points.has(k)?'%p':'%'):days.has(k)?'일':gold.has(k)?'G':'';
  const tone=tones&&tones[k]?tones[k]:(negative.has(k)?(value>0?'cost':'benefit'):(value<0?'cost':'benefit'));
@@ -253,7 +255,7 @@ function supplyEffect(ev,r){
   const proven=r.heroProof?.outcome?.items?.some(id=>(ev.items||[]).includes(id));
   return proven?names+' 피해 방지':null;}
  if(ev.id==='escape')return r.avoidedDeath?'사망 위기에서 생환':'퇴각에 기여';
- if(ev.id==='revive')return '사망을 중상으로';
+ if(ev.id==='revive')return (ev.from==='중상'?'중상':'사망')+'을 무사 퇴각으로';
  if(ev.id==='injury-guard')return '부상 완화';
  return null;}
 function supplyLines(r){const out=[];

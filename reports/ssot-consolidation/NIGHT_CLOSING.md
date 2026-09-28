@@ -512,3 +512,29 @@ User 2026-09-27: 중화 탄산수, 방독 작업장갑 and 축성 손전등 join
 ```new
 - 방한 두건 → 냉기 대응
 ```
+
+## AMENDMENT — v2.9.10 insurance rules (User 2026-09-28)
+
+귀환석 now rolls once more for 퇴각 on any 부상 / 중상 / 사망 at the own retreat chance +20%p (the combat retreat roll reads the Traits only; the 0.96 rescue clamp is gone with the old crisis roll), 세계수 turns Death into 퇴각, and 구급키트's line says it does not stop Death. The superseded rule lines are replaced; CHANGELOG §v2.9.10 carries the measurement. The superseded chain lines below are dropped.
+
+```text
+When it actually changes escape/retreat outcome:
+show it as meaningful escape support.
+When Death is actually converted to Severe Injury:
+`세계수의 생환 효과가 치명적인 결과를 중상으로 바꿨다.`
+```
+
+```new
+When it actually changes escape/retreat outcome (since v2.9.10 a 부상 / 중상 / 사망 turned into 퇴각, User 2026-09-28):
+show it as meaningful escape support (event `귀환석이 실패한 원정에서 퇴각을 도왔다.`).
+```
+
+## AMENDMENT — v2.9.10 World Tree covers 중상 too (User 2026-09-28)
+
+Death-only 세계수 still measured below 귀환석, so the Epic now turns a remaining 사망 or 중상 into 퇴각; a 부상 stays 부상. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+When Death or Severe Injury is actually converted to 퇴각 (User 2026-09-28, v2.9.10; was Death -> Severe Injury, rule -> ITEM §세계수 생환부적):
+`세계수 생환부적이 사망을 무사 퇴각으로 바꿨다.` / `세계수 생환부적이 중상을 무사 퇴각으로 바꿨다.` (proof cause chip
+`사망을 무사 퇴각으로` / `중상을 무사 퇴각으로`; only the Death one is a turned-away Death)
+```

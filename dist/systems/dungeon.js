@@ -15,7 +15,7 @@ const BEHAVIOUR_KEYS=new Set(['priceBias','buyBias','rareBias','commonBias','rev
    multipliers, and the two Supply deltas. Nothing about Items or the Gate is known here. */
 function traitModifiers(n){
  const mult={foodMult:1,potionMult:1};
- const e={supply:0,escape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,variance:0};
+ const e={supply:0,escape:0,itemEscape:0,injuryGuard:0,injuryRisk:0,loot:0,xpMult:1,variance:0};
  const sum=k=>n.traits.reduce((a,tid)=>a+(D.traitBy[tid].effects[k]||0),0);
  for(const tid of n.traits){for(const[k,v]of Object.entries(D.traitBy[tid].effects)){
   if(k in mult)mult[k]*=v;else if(BEHAVIOUR_KEYS.has(k))continue;else if(k==='xpMult')e.xpMult*=v;else e[k]=(e[k]||0)+v;}}
@@ -86,6 +86,9 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
    value*=nativeStatFactor(item,k,v,mult,facilities,d);
    value*=counterFactor(item,k,v,facilities,d);
    if(k==='supply')finalSupply+=value;else if(STAT_KEYS.includes(k)){itemE[k]+=value;from[k]=(from[k]||0)+value;}else e[k]=(e[k]||0)+value;
+   /* ITEM v2.9.10 (User 2026-09-28): an Item's escape is 귀환석's retreat bonus, kept apart from the Traits' own so the combat
+      retreat roll reads only the Traits and the stone's second roll reads both */
+   if(k==='escape')e.itemEscape+=value;
   }
   /* 원정 도시락 코너: per Food/Drink Item in the Bag, a flat Supply +2 and a flat +4 on every
      Hazard of the Gate the adventurer actually goes to. Flat, so no Counter multiplier reads it. */
@@ -343,6 +346,10 @@ function shadowOutcome(departure,d,facilities,pack,ev,severeEscalation){
 /* The settled shadow: the Outcome tier AND the persistent Injury it leaves, so the state proof
    reads the same 구급키트 step the real resolution applies (중상 -> 부상 keeps injury 1; a 부상
    leaves none) instead of re-deriving it. */
+/* ITEM v2.9.10 (User 2026-09-28): 귀환석 - an expedition that ends in neither 성공 nor 대성공 (부상/중상/사망) rolls once more
+   for a retreat, at the adventurer's own retreat chance (기동, Traits, Gate scale) plus the stone's bonus, capped as that
+   chance is. One formula for the real resolution and its proof. */
+function stoneChance(e,d){return clamp(.48+e.mobility*.005+e.escape-(d.scale||1)*.024,.15,.94);}
 function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sp=prepare({...departure,pack},d,facilities),se=sp.effects;
  const sAbility=preparedPower(se);
@@ -350,7 +357,7 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
  const sNoise=1+(ev.noiseRoll-.5)*(D.balance.combatNoise*2+se.variance*2);
  const sCombatSuccess=sAbility*(1+sAssist)*sNoise>=d.power;
  const sEnvironment=clamp(.06+sp.hazard*.012-se.survival*.001,.02,.48)*(1-sAssist),sAffected=ev.envRoll<sEnvironment;
- const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-(d.scale||1)*.024,.15,.94);
+ const sEscapeChance=clamp(.48+se.mobility*.005+se.escape-se.itemEscape-(d.scale||1)*.024,.15,.94);
  /* mirrors resolve()'s real order exactly: SUCCESS-vs-FAILURE first (never escape/injury
     evidence to decide THAT), then one Death roll immediately on entering failure, and only a
     Death miss goes on to settle which non-Death tier. Any evidence the actual expedition
@@ -402,11 +409,11 @@ function shadowSettle(departure,d,facilities,pack,ev,severeEscalation){
    sOutcome=ev.injuryRoll<clamp(.11-se.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
   }
  }
- if(['사망','중상'].includes(sOutcome)&&pack.some(id=>D.itemBy[id].effects.escape)){
+ if(['사망','중상','부상'].includes(sOutcome)&&pack.some(id=>D.itemBy[id].effects.escape)){
   if(ev.escapeItemRoll===undefined)return UNPROVEN;
-  if(ev.escapeItemRoll<clamp(se.escape,.0,.96))sOutcome='퇴각';
+  if(ev.escapeItemRoll<stoneChance(se,d))sOutcome='퇴각';
  }
- if(sOutcome==='사망'&&se.revive>=1)sOutcome='중상';
+ if(['사망','중상'].includes(sOutcome)&&se.revive>=1)sOutcome='퇴각';
  if(['부상','중상'].includes(sOutcome)&&se.injuryGuard>0){
   if(ev.injuryGuardRoll===undefined)return UNPROVEN;
   if(ev.injuryGuardRoll<clamp(se.injuryGuard,0,.9))sOutcome=sOutcome==='중상'?'부상':'퇴각';
@@ -508,7 +515,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
  let escapeRoll,escapeChance,injuryRoll,deathRoll,bandRoll,rescued=false,deathChance=0,avoidedDeath=false;
  const aidKitReady=!!run&&(run.aidKitSaves||0)<D.decorationParams.aidCabinet.saves&&Object.values(run.loadout||{}).includes('aidCabinet');
  let injuryRiskRoll,escapeItemRoll,injuryGuardRoll;
- const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<clamp(e.escape,.0,.96);};
+ const escapeItemCheck=()=>{escapeItemRoll=r.next();return escapeItemRoll<stoneChance(e,d);};
  const injuryGuardCheck=()=>{injuryGuardRoll=r.next();return injuryGuardRoll<clamp(e.injuryGuard,0,.9);};
  /* DUNGEON_HAZARD_v2.7 §INJURED RE-EXPEDITION SEVERE ESCALATION: applies wherever the
     Severe-vs-ordinary decision is made, on the departure state alone - still one decision
@@ -553,7 +560,7 @@ function resolve(n,d,r,facilities=[],run,assist=0){
     p.events.push({id:'prepared',text:G.Copy.josa(n.name,'은','는')+' 만반의 준비 덕분에 목숨을 건졌다.'});
    }
   }else if(!combatSuccess){
-   escapeRoll=r.next();escapeChance=clamp(.48+e.mobility*.005+e.escape-(d.scale||1)*.024,.15,.94);
+   escapeRoll=r.next();escapeChance=clamp(.48+e.mobility*.005+e.escape-e.itemEscape-(d.scale||1)*.024,.15,.94);
    outcome=escapeRoll<escapeChance?'퇴각':'부상';
    if(outcome==='부상'){
     injuryRoll=r.next();
@@ -578,8 +585,9 @@ function resolve(n,d,r,facilities=[],run,assist=0){
    outcome=injuryRoll<clamp(.11-e.injuryGuard*.12+severeEscalation,0,1)?'중상':'부상';
   }
  }
- if(['사망','중상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 사망·중상 위기에서 귀환을 도왔다.'});}
- if(outcome==='사망'&&e.revive>=1){avoidedDeath=true;outcome='중상';rescued=true;p.why.push('세계수 생환부적이 사망을 중상으로 변경');p.events.push({id:'revive',items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 사망을 중상으로 바꿨다.'});}
+ if(['사망','중상','부상'].includes(outcome)&&n.pack.some(id=>D.itemBy[id].effects.escape)&&escapeItemCheck()){avoidedDeath=outcome==='사망';outcome='퇴각';rescued=true;p.why.push('귀환석이 강제 귀환을 발동');p.events.push({id:'escape',items:n.pack.filter(id=>D.itemBy[id].effects.escape),text:'귀환석이 실패한 원정에서 퇴각을 도왔다.'});}
+ /* ITEM v2.9.10 (User 2026-09-28): 세계수 turns a remaining 사망 or 중상 into 퇴각 - the Epic stops the heavy results outright */
+ if(['사망','중상'].includes(outcome)&&e.revive>=1){const was=outcome;avoidedDeath=avoidedDeath||was==='사망';outcome='퇴각';rescued=true;p.why.push('세계수 생환부적이 '+was+'을 무사 퇴각으로 변경');p.events.push({id:'revive',from:was,items:n.pack.filter(id=>D.itemBy[id].effects.revive),text:'세계수 생환부적이 '+was+'을 무사 퇴각으로 바꿨다.'});}
  /* 강골 alone reaches this branch now. ITEM_v2.7 §INSURANCE HIERARCHY moved 구급키트 off the
     injuryGuard channel entirely - it may not change the resolved Outcome and carries no hidden
     injury-risk percentage - so the line no longer credits 치료용품 for a downgrade it no longer

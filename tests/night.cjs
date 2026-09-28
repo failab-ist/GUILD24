@@ -129,6 +129,22 @@ test('the sampled matrix actually covers every supported outcome and causal vari
   assert.ok(seen[k]>0,'sampled the '+k+' variant at least once');
 });
 
+/* ITEM v2.9.10 (User 2026-09-28): 세계수 생환부적 turns a remaining 사망 or 중상 into 퇴각; a 부상 stays 부상.
+   The sweep's World Tree Bags therefore never end heavy, and each conversion names what it stopped. */
+test('ITEM-Q13: a World Tree Bag never ends in 사망 or 중상, and names what it turned into 퇴각',()=>{
+ const tree=all.filter(({r})=>r.items.some(id=>D.itemBy[id].effects.revive));
+ assert.ok(tree.length>0,'the sweep carries World Tree Bags');
+ for(const {r} of tree)assert.ok(!['사망','중상'].includes(r.outcome),'World Tree Bag ended '+r.outcome);
+ const conv=tree.flatMap(({r})=>r.events.filter(e=>e.id==='revive').map(e=>({e,r})));
+ assert.ok(conv.length>0,'the sweep reaches a World Tree conversion');
+ for(const {e,r} of conv){
+  assert.ok(['사망','중상'].includes(e.from),'it records what it stopped');
+  assert.equal(r.outcome,'퇴각');
+  assert.equal(e.text,'세계수 생환부적이 '+e.from+'을 무사 퇴각으로 바꿨다.');
+  if(e.from==='사망')assert.ok(r.avoidedDeath,'a turned-away Death is flagged');
+ }
+});
+
 test('every resolved result is described the same way by label, story, cause and change',()=>{
  for(const {n,r} of all){ checkOne(r, n); }
 });
