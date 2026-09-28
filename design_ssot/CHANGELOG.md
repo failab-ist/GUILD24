@@ -14,11 +14,14 @@ the owner headers and in the git tag.
   Night's Gold (before the Closing's bankruptcy check, a Day earlier than before); stock due tonight can no longer be sold off
   in a short Closing's 재고 정리 (it has already gone); cumulative waste (본사 재고 감사) counts it a Day sooner. A save from an
   earlier build that still holds stock past its day lets it go with that Night's waste.
-- **Early Gate slope 1.50 → 1.40** - DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE, DUNGEON_ITEM_QA (User 2026-09-28): the User's
+- **Early Gate slope 1.50 → 1.45** - DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE, DUNGEON_ITEM_QA (User 2026-09-28): the User's
   play read as 부상 → 못 이김 → 돈 없음 → 못 들려줌. Measured on the `reader` bot (`reports/growth-injury-v2911.md`, same seeds,
   3000 Runs): at 1.50 45% of healthy D11~20 departures left below readiness 0.8 and healthy D11~20 success was 27.9%; at 1.40 it
   is 39% and 32.6%, D30 reach 13.8 → 19.6%, clear 9.6 → 13.5% (above the Difficulty Curve reference; the User chose it knowing
   that). The Day term is 0.90 lower from D9 on (D9 12.60, D29 31.60). Visitor Wallets barely move (injured D11~20 176 → 179G).
+  After the combined v2.9.11 re-measure (`reports/remeasure-v2911.md` §8: new Events, supports, 40%) the User set 1.45, Boss
+  Power kept: reader D30 16.2%, clear 11.7% (1.40: 19.6 / 14.8; v2.9.10: 13.8 / 9.6); the Day term is 0.45 lower than v2.9.10's
+  from D9 on (D9 13.05, D29 32.05).
 - **Customer names** (User 2026-09-28, before a paid release): 35 of the 200 names in the customer pool read as real people
   (athletes, actors, pro gamers). Each is replaced in place - same gender and portrait slot, no new glyphs - in the shipped pool
   and in the production name pool (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the two NAME_INDEX files, the id mapping,
