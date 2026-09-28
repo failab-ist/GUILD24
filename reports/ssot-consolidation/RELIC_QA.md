@@ -574,7 +574,7 @@ the charged price, Player still receives the full chosen sale price
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
 price, store receives the full charged price
 - 프리미엄 멤버십 -> 단골 arrival NPC Wallet +40G; 단골 Rare+ purchase intent +15%p
-- 원정 도시락 코너 -> per Food/Drink Item: Supply +2 (피로 회복 +2) and flat +4 on every Hazard of the actual Gate (User 2026-09-24, v2.9.0)
+- 원정 도시락 코너 -> per Food Item Supply +2, per Drink Item Supply +1 (피로 회복), and flat +2 on every Hazard of the actual Gate per Food/Drink Item (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28: was +2 for both and +4)
 - 냉장 유통 계약 -> Uncommon+ Food/Drink offer weight +80%, purchase intent +16%p, shelf life +1
 - 새벽 회수 계약 -> expiring Food/Drink recovered at 50% of cost (not waste); +1 Food/Drink offer on
 the Day's first offer generation
@@ -604,13 +604,13 @@ paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wa
 단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G
 Reads the Trusted Regular owner judgement; no second threshold.
 eligible Rare+ sale -> HQ commission = 20% of list price, buyer NPC Wallet +30G
-150% sale of any rarity -> HQ commission = 40% of the charged sale price
+150% sale of any rarity -> HQ commission = 60% of the charged sale price (v2.9.11; was 40%)
 the flat 150% purchase-intent penalty (-0.16) is lifted for the owner
 the 1.5x price burden and Loyalty -3 are unchanged
 Own `원정 전문 인증`; sell Counter and non-Counter Items for the customer's own Gate.
 - an Item that Counters a Hazard of the adventurer's Gate: Hazard Counter values x1.60
 - with `야전 정비대` on Field Gear: x1.40 x1.60
-- the flat `원정 도시락 코너` +4 is not multiplied
+- the flat `원정 도시락 코너` +2 is not multiplied
 - the buyer gets NPC Wallet +50G on the next living visit, once per purchase Day
 No ORDER offer guarantee and no unknown hazard reveal.
 Use 원정 위험 게시판 / 원정 도시락 코너 / 원정 전문 인증 across all Families.

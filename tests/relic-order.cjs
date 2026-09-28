@@ -114,24 +114,29 @@ test('REMAKE 야전 정비대: Field Gear Hazard Counter values x1.40, nothing e
  for(const it of [DATA.itemBy.lowpotion,DATA.itemBy.boots]){g.run.facilities=[];const st=g.rng.state,q=g.offerFor(it).quantity;g.run.facilities=['fieldRepair'];g.rng=new RNG(g.run.seed,st);assert.equal(g.offerFor(it).quantity,q);}
 });
 
-test('RELIC 17: 원정 도시락 코너 gives each Food/Drink flat Supply +2 and +4 on every destination Hazard',()=>{
+test('RELIC 17: 원정 도시락 코너 gives each Food Supply +2, each Drink +1 and +2 on every destination Hazard',()=>{
  /* 2026-09-23 rework: the old matching-Counter x1.25 and the Supply-Burden native-Stat +20% are
-    gone. Per Food/Drink Item in the Bag: Supply +2, and +4 defence on EVERY Hazard of the Gate
-    the adventurer goes to - flat, whether or not the Item Counters anything. */
+    gone. Per Food/Drink Item in the Bag: Supply +2 (Food) / +1 (Drink), and +2 defence on EVERY Hazard
+    of the Gate the adventurer goes to - flat, whether or not the Item Counters anything.
+    v2.9.11 (User 2026-09-28): Drink Supply +2 -> +1, Hazard +4 -> +2. */
  const g=fresh('meal'),n={...g.run.npcs[0],traits:[],pack:['dragonramen']};
  const cold={...g.makeDungeon('snow',2),requiredSupply:3},spider={...g.makeDungeon('spider',2),requiredSupply:0};
  for(const gate of [cold,spider]){
   const plain=Dungeon.prepare(n,gate),meal=Dungeon.prepare(n,gate,['expeditionMeal']);
-  for(const h of gate.hazards)assert.equal((meal.effects[h]||0)-(plain.effects[h]||0),4,gate.family+' '+h+' +4');
-  assert.equal(meal.effects.supply-plain.effects.supply,2,'Supply +2 per Food/Drink');
+  for(const h of gate.hazards)assert.equal((meal.effects[h]||0)-(plain.effects[h]||0),2,gate.family+' '+h+' +2');
+  assert.equal(meal.effects.supply-plain.effects.supply,2,'Supply +2 per Food');
   const off=['poison','fire','cold','corrosion','bind','mire','fear','dark','whiteout'].filter(h=>!gate.hazards.includes(h));
   for(const h of off)assert.equal(meal.effects[h]||0,plain.effects[h]||0,h+' is not a Hazard of this Gate and is untouched');
   assert.deepEqual(meal.itemStats,plain.itemStats,'no native Core-Stat bonus remains');
  }
- // two Food/Drink -> twice; a non-Food Item -> nothing
+ // a Drink alone -> Supply +1 and the same +2 Hazard defence
+ const drink={...n,pack:['water']};
+ assert.equal(Dungeon.prepare(drink,cold,['expeditionMeal']).effects.supply-Dungeon.prepare(drink,cold).effects.supply,1,'Supply +1 per Drink');
+ for(const h of cold.hazards)assert.equal(Dungeon.prepare(drink,cold,['expeditionMeal']).effects[h]-(Dungeon.prepare(drink,cold).effects[h]||0),2,h+' +2 for a Drink');
+ // a Food and a Drink -> Supply +3, Hazard +4; a non-Food Item -> nothing
  const two={...n,pack:['dragonramen','water']};
- assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects.supply-Dungeon.prepare(two,cold).effects.supply,4,'two Food/Drink give Supply +4');
- for(const h of cold.hazards)assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects[h]-(Dungeon.prepare(two,cold).effects[h]||0),8,h+' +8 for two');
+ assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects.supply-Dungeon.prepare(two,cold).effects.supply,3,'Food + Drink give Supply +3');
+ for(const h of cold.hazards)assert.equal(Dungeon.prepare(two,cold,['expeditionMeal']).effects[h]-(Dungeon.prepare(two,cold).effects[h]||0),4,h+' +4 for two');
  const gear={...n,pack:['rope']};
  assert.deepEqual(Dungeon.prepare(gear,cold,['expeditionMeal']).effects,Dungeon.prepare(gear,cold).effects,'a non-Food/Drink Item takes nothing');
 });
@@ -335,9 +340,9 @@ test('ECONOMY_ORDER_v2.7 §ORDER RARITY PROGRESSION: the offer Rarity follows th
 
 /* 2026-09-23 remake: 원정 전문 인증 replaces the 길드24 원정전문점 인증 offer guarantee (REL-Q-v28-16
    retired with it). The Counter values of an Item that Counters a Hazard of the adventurer's own
-   Gate x1.60, multiplying 야전 정비대 on Field Gear but never the flat 원정 도시락 코너 +4; and the
+   Gate x1.60, multiplying 야전 정비대 on Field Gear but never the flat 원정 도시락 코너 +2; and the
    buyer of such an Item gets +50G on their next visit, once per purchase Day. */
-test('REMAKE 원정 전문 인증: Gate Counters x1.60, stacks with 야전 정비대, not with the meal +4',()=>{
+test('REMAKE 원정 전문 인증: Gate Counters x1.60, stacks with 야전 정비대, not with the flat meal defence',()=>{
  const g=fresh('exp-cert'),n={...g.run.npcs[0],traits:[]};
  const spider={...g.makeDungeon('spider',2),requiredSupply:0},snow={...g.makeDungeon('snow',1),requiredSupply:0};
  const val=(pack,gate,fac,h)=>Dungeon.prepare({...n,pack},gate,fac).effects[h]||0;
@@ -347,7 +352,7 @@ test('REMAKE 원정 전문 인증: Gate Counters x1.60, stacks with 야전 정�
  assert.equal(val(['rope'],snow,['expeditionCert'],'bind'),val(['rope'],snow,[],'bind'),'no bonus when the Item Counters nothing on this Gate');
  const ramen=DATA.itemBy.ramen.effects.cold;                                   // Food, cold
  const meal=val(['ramen'],snow,['expeditionMeal'],'cold'),both=val(['ramen'],snow,['expeditionMeal','expeditionCert'],'cold');
- assert.ok(Math.abs(both-meal-ramen*.60)<1e-9,'the meal +4 is not multiplied');
+ assert.ok(Math.abs(both-meal-ramen*.60)<1e-9,'the flat meal defence is not multiplied');
  // no offer guarantee survives
  const src=require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8');
  assert.ok(!/has\('expeditionCert'\)&&hazards\.length/.test(src)&&!/guaranteedSlots/.test(src),'the offer guarantee is gone');

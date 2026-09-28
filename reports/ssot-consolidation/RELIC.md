@@ -657,10 +657,11 @@ Item purchase intent +15%p
 Price = 240G
 condition = paid returning customer today survives (no Loyalty threshold)
 Loyalty +5
-per Food/Drink Item in the Bag:
-Supply +2 (피로 회복 +2)
-+4 defence on every Hazard of the Gate the adventurer actually goes to
-The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
+per Food/Drink Item in the Bag (User 2026-09-28, v2.9.11; was Supply +2 for both and +4):
+Food:  Supply +2 (피로 회복 +2)
+Drink: Supply +1 (피로 회복 +1)
++2 defence on every Hazard of the Gate the adventurer actually goes to
+The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 - Uncommon+ Food/Drink purchase intent +16%p
 - no Stat effect
@@ -678,13 +679,13 @@ The internal purchase-price floor (45% of list) is unchanged.
 The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
 effect=successful 150% sale of any rarity -> extra premium commission
 Price = 320G
-HQ commission = 40% of the charged (150%) sale price
+HQ commission = 60% of the charged (150%) sale price (User 2026-09-28, v2.9.11; was 40%)
 the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
 the 1.5x price burden and Loyalty -3 are unchanged
 24. 원정 전문 인증
 원정 전문 인증:
 Price = 290G
-- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
+- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +2
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 no shelf-life effect and no operating-cost effect
@@ -773,7 +774,7 @@ identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep oper
 Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
 Supply (피로 회복) unchanged
 Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
-Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28)
 Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.` (User 2026-09-24, v2.9.0; +25% → +15% User 2026-09-28, v2.9.11)
 - Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
 ```

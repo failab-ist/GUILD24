@@ -51,6 +51,11 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **원정 도시락 코너 and 왕도 프리미엄 인증 retuned** - RELIC 17 / 23, RELIC_QA, COPY_AUDIT §11-17 / §11-23 (User 2026-09-28,
+  `reports/remeasure-v2911.md` §9 / §10): 원정 도시락 코너 led every Store Support (D30 +13.7%p at the 1.45 slope, the second
+  +8.0), mostly through Drink fatigue recovery; per Item it now gives Food Supply +2, Drink Supply +1 and +2 on every Hazard of
+  the Gate (was +2 / +2 / +4; trial D30 +12.0%p - the User kept the Food identity knowingly). 왕도 프리미엄 인증 paid 40% of
+  the 150% sale price and sat at the Keystone floor (D30 +1.0%p); it pays 60% (trial at 1.40: +5.0%p).
 - **24시간 신선체계 buy-price penalty +25% → +15%** - RELIC 25, RELIC_QA REL-Q75, COPY_AUDIT §11-25 (User 2026-09-28): the
   Keystone's Food/Drink ORDER price x1.25 left it below zero (Store Capital −92G a Run, D30 −0.3%p, `reports/remeasure-v2911.md`
   §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope

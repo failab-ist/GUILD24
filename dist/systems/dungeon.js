@@ -92,10 +92,11 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
       retreat roll reads only the Traits and the stone's second roll reads both */
    if(k==='escape')e.itemEscape+=value;
   }
-  /* 원정 도시락 코너: per Food/Drink Item in the Bag, a flat Supply +2 and a flat +4 on every
-     Hazard of the Gate the adventurer actually goes to. Flat, so no Counter multiplier reads it. */
+  /* 원정 도시락 코너: per Food Item in the Bag a flat Supply +2, per Drink +1, and per Food/Drink a flat +2 on every
+     Hazard of the Gate the adventurer actually goes to (v2.9.11, User 2026-09-28; was +2 for both and +4). Flat, so no
+     Counter multiplier reads it. */
   if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)){
-   const p=D.relicParams.expeditionMeal;finalSupply+=p.supplyPerItem;
+   const p=D.relicParams.expeditionMeal;finalSupply+=item.category==='drink'?p.drinkSupplyPerItem:p.supplyPerItem;
    for(const h of d.hazards)e[h]=(e[h]||0)+p.hazardDefense;}
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');

@@ -667,14 +667,15 @@ tags=[Fresh,Expedition]
 `원정 도시락 코너`:
 
 ```text
-per Food/Drink Item in the Bag:
-  Supply +2 (피로 회복 +2)
-  +4 defence on every Hazard of the Gate the adventurer actually goes to
+per Food/Drink Item in the Bag (User 2026-09-28, v2.9.11; was Supply +2 for both and +4):
+  Food:  Supply +2 (피로 회복 +2)
+  Drink: Supply +1 (피로 회복 +1)
+  +2 defence on every Hazard of the Gate the adventurer actually goes to
 ```
 
-Player card copy: `음식·음료 1개당 피로 회복 +2 · 갈 게이트의 모든 위험 대응 +4.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28)
 
-The +4 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
+The +2 is flat: it is not a Hazard Counter value and no Counter multiplier reads it.
 No native Core-Stat bonus and no matching-Counter multiplier.
 
 18. 냉장 유통 계약
@@ -752,7 +753,7 @@ refusal/inventoryRisk=REMAINS
 
 왕도 프리미엄 인증:
     Price = 320G
-    HQ commission = 40% of the charged (150%) sale price
+    HQ commission = 60% of the charged (150%) sale price (User 2026-09-28, v2.9.11; was 40%)
     the flat 150% purchase-intent penalty (-0.16) does not apply for the owner
     the 1.5x price burden and Loyalty -3 are unchanged
 
@@ -765,7 +766,7 @@ tag=Expedition
     Price = 290G
 
 - an Item that directly Counters a Hazard of the adventurer's own Gate (직접 대응, §COUNTER JUDGEMENT; a pressed-Stat Item does not qualify; (User 2026-09-24, v2.9.0)): its Hazard Counter values x1.60
-- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +4
+- multiplies with 야전 정비대 on Field Gear; does NOT multiply the flat 원정 도시락 코너 +2
 - the buyer of such an Item: on their next (living) visit, NPC Wallet +50G, once per purchase Day
 - it guarantees no ORDER offer
 
