@@ -21,6 +21,11 @@ the owner headers and in the git tag.
 - **The customer walks up** - UI_UX §SALE — CUSTOMER ARRIVAL: a newcomer's portrait is fetched as they arrive, so on a phone
   network the card stood empty and read as lag. The card now walks in from the side, holds a silhouette until the portrait
   is decoded (at most 1.5 s), and the Day's other customers are fetched the moment SALE opens.
+- **The Rare Reference customers speak** - COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25: 요화니우스, 상혀크 and 진호르
+  (1% of new customers, each once per Run) differed only by name and portrait, so meeting one showed nothing. Each now has
+  two arrival lines and two Night result lines (a clear, a setback) drawn from memes people actually use, on about half of
+  their arrivals and living results, never on a Death; for those who do not know them it is a customer with an odd turn of
+  phrase. The font subset takes the new glyphs.
 - **The Boss dossier arrives** - UI_UX §BOSS REVEAL — MORNING LANDS FIRST, UI-Q-v29-35: it cut in after a 420 ms hold and read
   as a stutter. The hold is 200 ms and the sheet rises into place with the Boss's art on it; it also waits (at most 1.2 s)
   for that art, fetched ahead. The four fonts are fetched with the page (the digit face used to wait for DAY 0).

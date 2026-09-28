@@ -275,8 +275,9 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
 - v2.9.8 (User 2026-09-27): ids read as the current names (Items, Decorations, Store Support, the 반값 Event, the 골렘 Family)
   and the save schema moves to v9 -> CHANGELOG §v2.9.8.
 - v2.9.10 (User 2026-09-27): quick patch - every Item's category on ORDER / SALE, one rarity colour per Item, shelf life as the
-  last sale day -> CHANGELOG §v2.9.10 (owners UI_UX §ORDER — ITEM INFORMATION HIERARCHY, §SALE — COUNTER TRAY / SHELF ORDER;
-  UI_UX_QA UI-Q-v29-20; COPY_AUDIT §4-10 / §8-0; SALE; ITEM).
+  shelf life wording, sold-out offers, the customer walking up, the Boss dossier's entry, the Rare Reference customers' lines
+  -> CHANGELOG §v2.9.10 (owners UI_UX §ORDER — ITEM INFORMATION HIERARCHY, §SALE — COUNTER TRAY / SHELF ORDER / CUSTOMER
+  ARRIVAL, §BOSS REVEAL; UI_UX_QA UI-Q-v29-20 / 35; COPY_AUDIT §4-10 / §8-0 / §25; COPY_WORLD_VOICE §RARE REFERENCE NPC; SALE; ITEM).
 - v2.9.9 (User 2026-09-27): presentation from the reference review - the store room (Decoration seating / outline, tablets),
   새 점포 준비 as the store scene with the title logo, one press grammar and one colour per family for the dock Actions (two
   new cues), SALE's outlook plate, shelf lip and head, the FINAL clash scene (H7, the one exception to the per-beat game

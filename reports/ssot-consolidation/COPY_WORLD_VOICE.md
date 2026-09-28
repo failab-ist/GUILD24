@@ -817,3 +817,13 @@ User 2026-09-26: the cash-flow receipt's labels become 영업 전 자금 / 보�
 ```new
 영업 전 자금과 보유 자금을 비교한다. 줄어든 날도 창고에 물건으로 남아 있을 수 있다.
 ```
+
+## AMENDMENT — v2.9.10 Rare Reference lines (User 2026-09-28)
+
+The three Rare Reference customers own two arrival lines and two Night result lines each (COPY_AUDIT §25), used on about half of their arrivals and living results, never on a Death.
+
+```new
+전용 대사 (User 2026-09-28, v2.9.10): 세 이름은 각자 방문 대사 2줄과 밤 결과 대사 2줄(성공 계열 1 · 실패 계열 1)을 가진다.
+방문과 살아 돌아온 밤 결과에서 약 절반의 확률로 일반 대사 대신 나오고, 사망에는 쓰지 않는다. 밈을 직접 설명하지 않는다 —
+아는 사람은 알아보고, 모르는 사람에게는 말버릇이 조금 다른 손님이다. Exact lines -> COPY_AUDIT_APPROVED §25.
+```
