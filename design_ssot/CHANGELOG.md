@@ -19,6 +19,11 @@ the owner headers and in the git tag.
   3000 Runs): at 1.50 45% of healthy D11~20 departures left below readiness 0.8 and healthy D11~20 success was 27.9%; at 1.40 it
   is 39% and 32.6%, D30 reach 13.8 → 19.6%, clear 9.6 → 13.5% (above the Difficulty Curve reference; the User chose it knowing
   that). The Day term is 0.90 lower from D9 on (D9 12.60, D29 31.60). Visitor Wallets barely move (injured D11~20 176 → 179G).
+- **Customer names** (User 2026-09-28, before a paid release): 35 of the 200 names in the customer pool read as real people
+  (athletes, actors, pro gamers). Each is replaced in place - same gender and portrait slot, no new glyphs - in the shipped pool
+  and in the production name pool (`GUILD24_NPC_PRODUCTION/00_NAME_POOL`: the JSON, the two NAME_INDEX files, the id mapping,
+  their checksums). The replacement table is `reports/v2.9.11-drafts.md` §A. A Run saved earlier keeps its old names; such an
+  adventurer shows the placeholder portrait.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
