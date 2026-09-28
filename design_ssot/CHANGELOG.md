@@ -48,6 +48,11 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **Event copy proofread** - COPY_AUDIT §13-24 / §13-26 / §13-45 / §13-48 / §13-54 (User 2026-09-28): 길드 의료단 순회 and
+  길드 위로금 read `오늘 방문 부상 모험가 · …` like the other visitor lines; 길드 소집령 reads `실력자 한 명이 길드에 급히 불려
+  갔다.` and `오늘 방문 예정이었던 최고 레벨 모험가 대신 다른 모험가 방문`; 원정 징발령 reads `길드가 모험가 몇 명을 징발해
+  갔다.`; 유통기한 임박 특가 reads `오늘 모든 발주 매입가 -40% · …` like the other order-price Events. Effects unchanged; the
+  font subsets take the new glyph.
 - **Korean text breaks between words everywhere** (User 2026-09-28): `word-break:keep-all` was set screen by screen; Events,
   Store Support text, the guide, settings and the Night lines still broke inside words (297 cases over every screen and width,
   e.g. `최 / 대 100G`, `포 / 션`; `reports/text-audit-v2911.md`). The page now keeps words whole (`overflow-wrap:break-word`
