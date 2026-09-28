@@ -1745,3 +1745,11 @@ for three carrying six items), and a tap always skips it
 - sound: one cue per landing - a low `rumble` on the Boss card's landing, `supply` on each item, `clash` on each impact,
 `counter` on each counter, `collapse` on a clear; the departure's `final` cue and the ending's seal cue are unchanged
 ```
+
+## AMENDMENT — v2.9.9 quick patch: the strain line in the SALE forecast pin (User decision 2026-09-28)
+
+User 2026-09-28 (after the D23 fresh-Run review: the strain line was hard to notice, and on a phone it scrolls away with the readout).
+
+```new
+- the strain line rides along (User 2026-09-28, v2.9.9 quick patch): when the readout carries `연속 부상 출발 {n}회` (§SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT), the pin carries the same line under its two readings — the same condition, words, number and small muted type; the pin grows by that line and still reserves no layout height; the folded chip stays `전망`
+```

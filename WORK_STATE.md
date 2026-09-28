@@ -1,7 +1,7 @@
 # WORK_STATE
 
-DATE: 2026-09-27
-STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
+DATE: 2026-09-28
+STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 2026-09-27) · V2_9_9_QUICK_PATCH(User 컨펌 2026-09-28) — v2.9.2~v2.9.8 태그는 User가 걸어야 함
 
 ## Current
 
@@ -11,9 +11,16 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
 
-## In Progress — v2.9.9 화면 개선 (User 2026-09-27, 레퍼런스 리뷰에서 나온 배치)
+## v2.9.9 퀵패치 (User 2026-09-28, 프레쉬런 D23 검수에서 나옴)
 
-내용 요약은 `design_ssot/CHANGELOG.md` §v2.9.9(화면별로 정리됨). 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`에 커밋·푸시됨, **머지 전**(머지는 User 컨펌 때만).
+브랜치 `claude/guild24-balance-review-0zo2o5`. 근거 `reports/fresh-run-d23-review-v299.md`, 내용 `design_ssot/CHANGELOG.md` §v2.9.9 quick patch.
+- 실패 보상 배율 퇴각 0.40 · 부상 0.25 · 중상 0.15 (`395de5f`). 측정 `tools/measure-wallet-v299.cjs`.
+- SALE 폰 플로팅 줄에 `연속 부상 출발 {n}회` (조건·문구는 판독 줄과 같음). 360/390 캡처 User 확인.
+- 남은 BALANCE FINDING 후보(결정 안 됨): D11~20 준비도 절벽, 부상 → 가난 → 회복 불가 고리(일반 부상은 성공해야만 풀림). 보고서 §2.
+
+## v2.9.9 화면 개선 (머지됨) (User 2026-09-27, 레퍼런스 리뷰에서 나온 배치)
+
+내용 요약은 `design_ssot/CHANGELOG.md` §v2.9.9(화면별로 정리됨). 브랜치 `claude/v2-9-2-presentation-game-feel-4if32m`에서 PR #20으로 머지됨(User 컨펌 2026-09-27).
 
 | 커밋 | 내용 | 검사 |
 |---|---|---|

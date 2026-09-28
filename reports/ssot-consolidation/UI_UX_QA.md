@@ -1682,3 +1682,12 @@ landing (`rumble`, `supply`, `clash`, `counter`, `collapse`)
 clear that does not empty the bar, an empty bar on a failure, a damage number, a skip that does not work, or anything of
 the scene in the Save
 ```
+
+## AMENDMENT — v2.9.9 quick patch: the strain line in the SALE forecast pin (User decision 2026-09-28)
+
+User 2026-09-28: UI-Q-v29-24 and UI-Q-v29-38 each gain one PASS line for the pin's strain line.
+
+```new
+- a customer with a `연속 부상 출발 {n}회` line on the readout carries the same line under the pin's two readings; one without it carries none; the folded chip reads `전망` only (User 2026-09-28, v2.9.9 quick patch)
+- at 390, with the readout scrolled out of view, the forecast pin shows the same line under its two readings for the chain case and none for the healthy and first-injured cases (User 2026-09-28, v2.9.9 quick patch; UI-Q-v29-24)
+```
