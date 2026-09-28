@@ -698,7 +698,6 @@ Closing may show only compact actual-supply-impact summary.
 ```
 
 ```new
-- 피로 회복 N (User 2026-09-24, v2.9.0)
 Actual expedition Resolve uses the final committed Items / Fatigue / Condition state (User 2026-09-24, v2.9.0).
 - direct Item Stat / Counter / 피로 회복 N
 피로 회복 N
@@ -1788,4 +1787,22 @@ User 2026-09-28 (after the D23 fresh-Run review: the strain line was hard to not
 
 ```new
 - the strain line rides along (User 2026-09-28, v2.9.9 quick patch): when the readout carries `연속 부상 출발 {n}회` (§SALE — PRE-SUPPLY EXPEDITION OUTLOOK — EXACT), the pin carries the same line under its two readings — the same condition, words, number and small muted type; the pin grows by that line and still reserves no layout height; the folded chip stays `전망`
+```
+
+## AMENDMENT — v2.9.10 quick patch: effect order, 1+1 sticker (User 2026-09-28)
+
+One effect order for every Item (Hazard Counter, 피로 회복, Core Stat, the rest) replaces the Food-leads / Drink-ends order; the 본사 1+1 행사 offer wears a red 1+1 sticker on its 매입 tag instead of a metadata fragment. Lines declared earlier and now superseded are removed from their fences above. The superseded chain lines below are dropped.
+
+```text
+2. exact actual effect
+- Core Stat
+- Hazard Counter
+```
+
+```new
+2. exact actual effect, in the ITEM §PRESENTATION ORDER — EXACT order (Hazard Counter → 피로 회복 → Core Stat → the rest;
+User 2026-09-28, v2.9.10 quick patch); an explicit penalty keeps its place in that order and its cost colour
+- the 본사 1+1 행사 offer (EVENT §02) wears a small red `1+1` sticker on the corner of its `매입` tag, as a store marks a 1+1 shelf
+(User 2026-09-28, v2.9.10 quick patch; it had been a `· 1+1` fragment inside the muted metadata line and went unseen); the
+metadata line carries no `1+1`
 ```

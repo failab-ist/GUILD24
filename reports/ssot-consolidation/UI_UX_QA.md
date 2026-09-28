@@ -1713,3 +1713,13 @@ User 2026-09-28: UI-Q-v29-24 and UI-Q-v29-38 each gain one PASS line for the pin
 - a customer with a `연속 부상 출발 {n}회` line on the readout carries the same line under the pin's two readings; one without it carries none; the folded chip reads `전망` only (User 2026-09-28, v2.9.9 quick patch)
 - at 390, with the readout scrolled out of view, the forecast pin shows the same line under its two readings for the chain case and none for the healthy and first-injured cases (User 2026-09-28, v2.9.9 quick patch; UI-Q-v29-24)
 ```
+
+## AMENDMENT — v2.9.10 quick patch: effect order, 1+1 sticker (User 2026-09-28)
+
+One effect order for every Item (Hazard Counter, 피로 회복, Core Stat, the rest) replaces the Food-leads / Drink-ends order; the 본사 1+1 행사 offer wears a red 1+1 sticker on its 매입 tag instead of a metadata fragment.
+
+```new
+- the 본사 1+1 행사 offer carries a red `1+1` sticker on its `매입` tag corner, readable at 360 / 390 / 1280 without covering the
+price; no other offer carries it; the metadata line has no `1+1` (User 2026-09-28, v2.9.10 quick patch)
+- the 1+1 offer only told apart by text inside the metadata line
+```

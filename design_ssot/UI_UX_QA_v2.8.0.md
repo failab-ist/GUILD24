@@ -1370,8 +1370,12 @@ PASS:
 - the metadata line starts `수익 +{N}G` and carries no `매입`
 - the ORDER total, the cart and the purchase are unchanged
 
+- the 본사 1+1 행사 offer carries a red `1+1` sticker on its `매입` tag corner, readable at 360 / 390 / 1280 without covering the
+  price; no other offer carries it; the metadata line has no `1+1` (User 2026-09-28, v2.9.10 quick patch)
+
 FAIL:
 - an unlabelled price, the sale price in the larger tag, or `매입` still in the metadata line
+- the 1+1 offer only told apart by text inside the metadata line
 
 ### UI-Q-v29-38 — SALE STRAIN LINE
 

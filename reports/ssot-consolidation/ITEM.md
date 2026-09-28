@@ -698,13 +698,6 @@ User decisions 2026-09-24 (v2.9.0 F6): the matching-effect / today-fit emphasis 
 
 ```new
 ### PRESENTATION ORDER — EXACT
-(User 2026-09-24, v2.9.0): an Item's effect lines are listed in one fixed order by category, the same on the ORDER offer row, the SALE shelf row, the counter tray's `특수 효과` line and the codex, never reordered or emphasized by the Gate or the customer:
-Food       : 피로 회복 N first, then the Item's other effects in catalog order
-Drink      : Stat / Hazard Counter effects in catalog order first, then 피로 회복 N
-Potion     : 투력 +N
-Field Gear : Hazard Counter effects in catalog order (a Hybrid keeps both)
-Insurance  : its one function line
-Special    : its one function line
 The order is identity information (what kind of Item this is), not advice.
 ```
 
@@ -1136,4 +1129,23 @@ The 세계수 measurement line carries the 사망·중상 rule's own 3000-run fi
 
 ```new
 구급키트 29.7 / 39.9 / 0 / 11.2 (Death untouched) · 세계수 old 29.9 / 25.7 / 25.2 / 0, new 55.0 / 25.8 / 0 / 0.
+```
+
+## AMENDMENT — v2.9.10 quick patch: effect order, 1+1 sticker (User 2026-09-28)
+
+One effect order for every Item (Hazard Counter, 피로 회복, Core Stat, the rest) replaces the Food-leads / Drink-ends order; the 본사 1+1 행사 offer wears a red 1+1 sticker on its 매입 tag instead of a metadata fragment. Lines declared earlier and now superseded are removed from their fences above.
+
+```new
+(User 2026-09-28, v2.9.10 quick patch; since User 2026-09-24, v2.9.0): an Item's effect lines are listed in **one order for
+every Item**, the same on the ORDER offer row, the SALE shelf row, the counter tray's `특수 효과` line and the codex, never
+reordered or emphasized by the Gate or the customer. The order reads the shelf's own kind order (대응 장비 → 음식·음료 → 포션)
+as effects:
+1. Hazard Counter  (catalog order)
+2. 피로 회복 N
+3. Core Stat       (투력 · 강인함 · 기동 · 정신 — the stat panel's order)
+4. anything else   (e.g. 원정 소지금 획득; catalog order)
+Insurance / Special: its one function line
+e.g. `냉기 대응 +21 · 피로 회복 3 · 강인함 +6`, `공포 대응 +18 · 피로 회복 1 · 기동 -4`, `피로 회복 2 · 기동 +17`,
+`화염 대응 +12 · 투력 +10`. (v2.9.0 led a Food with 피로 회복 and ended a Drink with it, so the same two effects read in
+opposite orders on neighbouring rows - User 2026-09-28.)
 ```

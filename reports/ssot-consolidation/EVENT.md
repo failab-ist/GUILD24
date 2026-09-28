@@ -543,3 +543,16 @@ User decision 2026-09-25 (v2.9.1): the Event is named 길드 합동 위령제; i
 Exact reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-23.
 - 길드 합동 위령제
 ```
+
+## AMENDMENT — v2.9.10 quick patch: effect order, 1+1 sticker (User 2026-09-28)
+
+One effect order for every Item (Hazard Counter, 피로 회복, Core Stat, the rest) replaces the Food-leads / Drink-ends order; the 본사 1+1 행사 offer wears a red 1+1 sticker on its 매입 tag instead of a metadata fragment. The superseded chain lines below are dropped.
+
+```text
+행사 대상 Item은 Order에서 명확하게 표시한다.
+```
+
+```new
+행사 대상 Item은 Order에서 명확하게 표시한다: 그 발주 행의 `매입` 가격표 모서리에 빨간 `1+1` 딱지
+(User 2026-09-28, v2.9.10 quick patch; 모양 -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY).
+```
