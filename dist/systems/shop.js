@@ -19,7 +19,7 @@ class Game{
  const loadout=G.Meta.plannedLoadout(this.account),contract='standard';
  /* 알뜰 금고 is paid by morningReset, which DAY 1 also runs once the DAY 0 pick is made */
  const startGold=700; /* CORE_RUN §START STATE (User 2026-09-25, v2.9.1 balance; was 1000G) */
- this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
+ this.rng=new G.RNG(seed);this.run={version:9,seed:String(seed),rngState:this.rng.state,branch:this.rng.pick(D.brand.branches),day:1,phase:'order',money:startGold,contract,loadout,settled:false,inventory:[],npcs:[],facilities:[],offers:[],queue:[],cursor:0,dungeons:[],event:null,eventLog:[],results:[],log:[],team:[],region:50,stats:{revenue:0,spent:0,waste:0,deaths:0,rare:0,legendary:0,discoveries:0,regulars:0},daily:{revenue:0,spent:0,waste:0,operating:0},pity:{rare:0,counter:0},nextNPC:1,rerolled:false,rewarded:false,rescueUsed:0,rescueDay:0,reportHistory:[],notice:'제7게이트의 첫 아침. 오늘 갈 던전을 보고 발주해 보세요.'};
   for(const[id,num]of D.openingStock)this.stock(id,num);
  for(let i=0;i<9;i++)this.addNPC();this.run.familyOrder=this.rng.shuffle(['spider','slime','golem','crypt','snow']);this.run.familyIntro=[this.rng.int(4,7),this.rng.int(8,12)];
  /* DUNGEON_HAZARD §DEEP EXPEDITION. Which Days this Run holds a 심층원정 is decided once, on a
@@ -158,8 +158,11 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
     compensated for the days this removes - Stage 9 measures the real count. */
  eventEligibleDay(day){return day>=3&&day<=29&&![5,10,15,20,25].includes(day)&&!this.deepDay(day);}
  deepDay(day){return (this.run?.deep?.days||[]).includes(day);}
- rollEvent(){const s=this.run,fired=this.rng.next()<.35;if(!this.eventEligibleDay(s.day)||!fired)return null;
-  const pool=D.events.filter(e=>this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
+ /* EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): 40% on an eligible Day (was 35%), and an Event that already happened this
+    Run is out of the pool - a Run never meets the same Event twice. The log is written where the Event applies (morningEvent),
+    so rolling alone records nothing; a save from before the log reads as an empty one. */
+ rollEvent(){const s=this.run,fired=this.rng.next()<.40;if(!this.eventEligibleDay(s.day)||!fired)return null;
+  const seen=s.eventLog||[],pool=D.events.filter(e=>!seen.includes(e.id)&&this.eventEligible(e));return pool.length?this.rng.weighted(pool,e=>e.weight):null;}
  /* The Morning is an orchestration of six things that each belong to a different system, and
     it had them all inline: the Day's state reset, the Gates, the Final state, how many people
     are coming, the Event, and who actually arrives. Each is a method below now, in the order
@@ -219,7 +222,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
  }
  /* Today's Event, and everything it does to a Day that is otherwise already decided. */
  morningEvent(ids){const s=this.run;
-  s.event=this.rollEvent();s.eventSeen=!s.event;s.pilgrimage=0;const ev=s.event?.effects||{};
+  s.event=this.rollEvent();s.eventSeen=!s.event;if(s.event)(s.eventLog??=[]).push(s.event.id);s.pilgrimage=0;const ev=s.event?.effects||{};
   if(ev.unknown){const unused=ids.filter(id=>!s.dungeons.some(d=>d.id===id));const d=this.makeDungeon(this.rng.pick(unused.length?unused:ids));d.name='미확인 '+d.short;d.power*=1.16;d.reward*=1.5;d.temporary=true;s.dungeons.push(d);}
   s.dungeons.forEach(d=>{d.power*=(ev.danger||1)*(1+(50-(s.region??50))*.001);d.reward*=ev.reward||1;
    if(ev.cold&&!d.hazards.includes('cold')&&!d.hazards.includes('fire'))d.hazards.push('cold');

@@ -27,13 +27,36 @@ test('EVENT-001 / §DEEP EXPEDITION DAY EXCLUSION: eligible days drop the Relic 
   const want=day>=3&&day<=29&&![5,10,15,20,25].includes(day)&&!deep.includes(day);
   assert.equal(g.eventEligibleDay(day),want,'day '+day);
  }
- // 22 was the pre-Deep baseline; a Run now carries 19 or 20 eligible Days, and the 35% chance
- // is deliberately NOT raised to compensate - Stage 9 measures what actually happens.
+ // 22 was the pre-Deep baseline; a Run now carries 19 or 20 eligible Days. The chance was not raised to compensate; it is
+ // 40% since v2.9.11 (User 2026-09-28), a decision taken with the larger Event pool, not a compensation.
  const eligible=[...Array(31).keys()].filter(d=>g.eventEligibleDay(d)).length;
  assert.equal(eligible,22-deep.length,'each Deep Day removes exactly one eligible Day');
  assert.ok(eligible>=19&&eligible<=20,'19-20 eligible Days per Run: '+eligible);
  // suppression does not depend on anyone being nominated, and costs the run stream no draw
  for(const day of deep)assert.equal(g.eventEligibleDay(day),false,'D'+day+' never rolls an Event');
+});
+
+test('EVENT §EVENT SELECTION (User 2026-09-28, v2.9.11): a Run never meets the same Event twice, and the log survives a save',()=>{
+ let events=0,repeats=0;
+ for(let i=0;i<60;i++){const g=fresh('norepeat-'+i),s=g.run;s.money=99999;
+  for(let d=0;d<30&&s.phase!=='end'&&s.day<29;d++){s.money=99999;s.stats.deaths=0;advance(g);}
+  const log=s.eventLog;events+=log.length;repeats+=log.length-new Set(log).size;
+  assert.ok(log.every(id=>DATA.events.some(e=>e.id===id)),'the log holds catalogue ids only');}
+ assert.ok(events>60,'Events did fire across the Runs: '+events);
+ assert.equal(repeats,0,'no Event fired twice in one Run');
+ // rolling alone records nothing: only the Morning that applies an Event writes the log
+ const g=fresh('norepeat-roll'),s=g.run;s.day=[...Array(30).keys()].find(d=>g.eventEligibleDay(d));
+ for(let i=0;i<50;i++)g.rollEvent();assert.deepEqual(s.eventLog,[],'rollEvent writes no log');
+ // an Event in the log is out of the pool, the others are not
+ const first=DATA.events.find(e=>g.eventEligible(e));s.eventLog=[first.id];
+ for(let i=0;i<400;i++){const e=g.rollEvent();assert.ok(!e||e.id!==first.id,'the logged Event never comes back');}
+ // the log is saved, and a save without it still loads (read as empty)
+ const h=fresh('norepeat-save');h.run.eventLog=['logistics','bard'];h.save();
+ const back=Save.import(Save.export(h.account,h.run));assert.deepEqual(back.run.eventLog,['logistics','bard'],'the log round-trips');
+ const old=JSON.parse(Save.export(h.account,h.run));delete old.run.eventLog;
+ assert.doesNotThrow(()=>Save.import(JSON.stringify(old)),'a save from before the log still loads');
+ const bad=JSON.parse(Save.export(h.account,h.run));bad.run.eventLog=['no-such-event'];
+ assert.throws(()=>Save.import(JSON.stringify(bad)),'an unknown id in the log is refused');
 });
 
 test('EVENT §DEEP EXPEDITION DAY EXCLUSION: suppressing an Event costs the run stream no draw',()=>{
@@ -47,14 +70,14 @@ test('EVENT §DEEP EXPEDITION DAY EXCLUSION: suppressing an Event costs the run 
  assert.notEqual(start,h.rng.state,'and on an ordinary eligible Day');
 });
 
-test('EVENT-001: daily chance is 35%, never the retired 74%',()=>{
+test('EVENT-001: daily chance is 40% (v2.9.11; was 35%), never the retired 74%',()=>{
  // an ordinary eligible Day for this Run: D7 is a candidate Deep window, and on a Run that
- // actually holds it the chance is 0 by design rather than 35%.
+ // actually holds it the chance is 0 by design rather than 40%.
  const g=fresh('rate');g.run.day=[...Array(30).keys()].find(d=>g.eventEligibleDay(d));
  let fired=0;const N=6000;
  for(let i=0;i<N;i++)if(g.rollEvent())fired++;
  const rate=fired/N;
- assert.ok(Math.abs(rate-.35)<.03,'observed daily event rate '+rate.toFixed(3));
+ assert.ok(Math.abs(rate-.40)<.03,'observed daily event rate '+rate.toFixed(3));
  g.run.day=10;assert.equal([...Array(400)].filter(()=>g.rollEvent()).length,0,'no Event on a Relic window day');
 });
 

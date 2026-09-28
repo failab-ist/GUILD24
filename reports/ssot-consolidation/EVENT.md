@@ -219,7 +219,6 @@ Any Event filter/copy that still uses `Medical` to mean the v2.7 Potion line is 
 
 ```new
 Mechanic:
-At 35%:
 - targets `Potion` category only
 Any Event filter/copy that still uses `Medical` to mean the Potion line is stale.
 ```
@@ -474,7 +473,7 @@ Stage 9 measures actual Event count; any later chance rebalance requires approva
 ```
 
 ```new
-실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
+실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 40%를 자동으로 바꾸지 않는다.
 Full-run balance measurement measures actual Event count; any later chance rebalance requires approval.
 ```
 
@@ -526,9 +525,8 @@ User decisions 2026-09-25 (v2.9.1): 위령제 follows the ordinary Event conditi
 
 ```new
 TYPE: Run / Opportunity
-발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 35% 발생 Roll, 같은 Weight 기반 선택.
-따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않고, 다른 Event처럼 한 Run에 다시 나올 수 있으며
-나올 때마다 +1이 더해진다.
+발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 40% 발생 Roll, 같은 Weight 기반 선택.
+따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않는다. 다른 Event처럼 한 Run에 한 번만 나온다
 23종은 다음 역할을 가진다.
 ```
 
@@ -576,4 +574,41 @@ The Event's refund of the overnight waste cost, which no player could see or act
 그날 나중에 들어온 재고와 다른 재고는 그대로다. 유예된 재고도 늘어난 날이 지나면 평소처럼 폐기되고, 그때 폐기 수와
 누적 폐기(본사 재고 감사의 조건)에 정상적으로 들어간다. 해당 재고가 없는 날에는 효과가 없다.
 - 본사 폐기 유예
+```
+
+
+## v2.9.11 — Event chance 40%, no repeat in a Run (User 2026-09-28)
+
+Dropped (the removal itself):
+
+```text
+dailyEventChance = 35%
+19–20 × 0.35 ≈ 6.65–7.0 Events / Run
+심층원정 통합 후 정상적인 30일 Run에서 약 6.7–7.0회의 Normal Event 기대값을 시작값으로 한다.
+- use ordinary EVENT eligibility / 35% roll
+expected Normal Events become approximately **6.65–7.0 per Run** before other
+- `dailyEventChance` remains 35% until later approved rebalance
+3. Event Eligible Day라면 35% 발생 Roll을 한다.
+4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다.
+콘텐츠를 더 자주 보여주기 위해 Event Chance를 올리지 않는다.
+```
+
+New:
+
+```new
+dailyEventChance = 40%
+(User 2026-09-28, v2.9.11: 35% → 40%, 사건 풀이 23종에서 늘어난 것과 함께.)
+19–20 × 0.40 ≈ 7.6–8.0 Events / Run
+심층원정 통합 후 정상적인 30일 Run에서 약 7.6–8.0회의 Normal Event 기대값을 시작값으로 한다.
+- use ordinary EVENT eligibility / 40% roll
+At 40% (v2.9.11):
+expected Normal Events become approximately **7.6–8.0 per Run** before other
+3. Event Eligible Day라면 40% 발생 Roll을 한다.
+4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다. **이번 Run에 이미 나온 Event는 Pool에서 빠진다**
+(User 2026-09-28, v2.9.11: 한 Run에 같은 Event는 한 번만. 발생 기록은 Run에 저장된다).
+(User 2026-09-28, v2.9.11; 이전에는 다시 나올 때마다 +1이 더해졌다).
+콘텐츠를 더 자주 보여주기 위해 Event Chance를 올리지 않는다. 예외: User 2026-09-28(v2.9.11)이 사건 풀 확장과 함께
+35% → 40%로 올렸다. 같은 사건이 한 Run에 두 번 나오지 않으므로 늘어난 발생은 다른 사건으로 채워진다.
+- `dailyEventChance` is 40% (User 2026-09-28, v2.9.11) until a later approved rebalance
+- an Event already met this Run never fires again that Run; a save carries the Run's Event log
 ```

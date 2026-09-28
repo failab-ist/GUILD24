@@ -36,6 +36,10 @@ the owner headers and in the git tag.
   SALE arrival recovers with 20%; the Expedition line now holds two Keystones. Measured on the `reader` bot, each owned from D10
   (reports/v2.9.11-drafts.md §C): 야전 들것 D30 19.6 → 21.1%; 응급 처치대 D30 19.6 → 25.2%, at or just above the strongest Keystone.
   The pool is 32 (Foundation 13, Keystone 7); any seeded Run's Store Support windows draw from the larger pool.
+- **Events: 40%, never twice in a Run** - EVENT §발생 확률 / §EVENT SELECTION / §23 / §RANDOMNESS GUARDRAIL / QA (User
+  2026-09-28): the daily chance on an eligible Day is 40% (was 35%; about 7.6-8.0 Events per Run), and an Event already met this
+  Run leaves the pool - 길드 합동 위령제 included (it used to recur and add +1 each time). The Run keeps its Event log (an optional
+  save field; a save without it reads as an empty log, the save version is unchanged). Seeded Runs' Event days and picks move.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)

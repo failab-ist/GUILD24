@@ -94,17 +94,19 @@ Eligible Day 수:
 ### 발생 확률
 
 ```text
-dailyEventChance = 35%
+dailyEventChance = 40%
 ```
+
+(User 2026-09-28, v2.9.11: 35% → 40%, 사건 풀이 23종에서 늘어난 것과 함께.)
 
 목표 평균:
 
 ```text
-19–20 × 0.35 ≈ 6.65–7.0 Events / Run
+19–20 × 0.40 ≈ 7.6–8.0 Events / Run
 ```
 
-심층원정 통합 후 정상적인 30일 Run에서 약 6.7–7.0회의 Normal Event 기대값을 시작값으로 한다.
-실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 35%를 자동 상향하지 않는다.
+심층원정 통합 후 정상적인 30일 Run에서 약 7.6–8.0회의 Normal Event 기대값을 시작값으로 한다.
+실제 분포는 전체 런 밸런스 측정에서 측정하며, 이를 이유로 40%를 자동으로 바꾸지 않는다.
 
 ### Deep Expedition Day exclusion
 
@@ -120,13 +122,13 @@ For D7 / D14 / D21 / D28:
    - skip Normal Event roll
    - do not select/apply Normal Event
 3. otherwise:
-   - use ordinary EVENT eligibility / 35% roll
+   - use ordinary EVENT eligibility / 40% roll
 
 With 2–3 Deep Expedition occurrences, actual Normal-Event eligible days are
 **19–20 per Run**.
 
-At 35%:
-expected Normal Events become approximately **6.65–7.0 per Run** before other
+At 40% (v2.9.11):
+expected Normal Events become approximately **7.6–8.0 per Run** before other
 eligibility exclusions.
 
 Do not automatically raise `dailyEventChance` to compensate.
@@ -151,8 +153,9 @@ Event를 Stack하지 않는다.
 
 1. 오늘 Gate / Roster / 누적 상태 등 필요한 Day State를 준비한다.
 2. 오늘 조건상 발생할 수 없는 Event를 Pool에서 제외한다.
-3. Event Eligible Day라면 35% 발생 Roll을 한다.
-4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다.
+3. Event Eligible Day라면 40% 발생 Roll을 한다.
+4. 성공 시 Eligible Pool에서 Weight 기반으로 1종을 선택한다. **이번 Run에 이미 나온 Event는 Pool에서 빠진다**
+   (User 2026-09-28, v2.9.11: 한 Run에 같은 Event는 한 번만. 발생 기록은 Run에 저장된다).
 5. 선택된 Event 하나만 적용한다.
 6. Event가 있다면 Event Reveal을 먼저 보여준다.
 7. 이후 Morning Situation을 보여준다.
@@ -1082,9 +1085,9 @@ EFFECT:
 
 사망 한도 구간과 추모 방명록 -> `CORE_RUN_v2.8.0.md` §DEATH LIMIT — SEGMENTED.
 
-발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 35% 발생 Roll, 같은 Weight 기반 선택.
-따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않고, 다른 Event처럼 한 Run에 다시 나올 수 있으며
-나올 때마다 +1이 더해진다.
+발생 조건은 다른 일반 Event와 같다 (User 2026-09-25): 같은 Eligible Day, 같은 40% 발생 Roll, 같은 Weight 기반 선택.
+따로 특별 취급하지 않는다 — 사망 여부로 Eligible을 거르지 않는다. 다른 Event처럼 한 Run에 한 번만 나온다
+(User 2026-09-28, v2.9.11; 이전에는 다시 나올 때마다 +1이 더해졌다).
 
 Exact reveal copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-23.
 
@@ -1161,12 +1164,13 @@ Randomness가 존재한다.
 - 발생 시 의미는 분명하게 한다.
 - 오늘의 판단을 실제로 바꾼다.
 
-콘텐츠를 더 자주 보여주기 위해 Event Chance를 올리지 않는다.
+콘텐츠를 더 자주 보여주기 위해 Event Chance를 올리지 않는다. 예외: User 2026-09-28(v2.9.11)이 사건 풀 확장과 함께
+35% → 40%로 올렸다. 같은 사건이 한 Run에 두 번 나오지 않으므로 늘어난 발생은 다른 사건으로 채워진다.
 
 Starting Canonical:
 
 ```text
-dailyEventChance = 35%
+dailyEventChance = 40%
 normalWeight = 1.0
 rareEasterEggWeight = 0.35
 ```
@@ -1377,7 +1381,8 @@ FAIL 시 우선순위:
 - scheduled Deep Day -> no Normal Event roll or Event selection
 - no nomination later that Day does not restore an Event
 - non-Deep D7/D14/D21/D28 still use ordinary Event rules
-- `dailyEventChance` remains 35% until later approved rebalance
+- `dailyEventChance` is 40% (User 2026-09-28, v2.9.11) until a later approved rebalance
+- an Event already met this Run never fires again that Run; a save carries the Run's Event log
 
 ### Event numeric acceptance
 
