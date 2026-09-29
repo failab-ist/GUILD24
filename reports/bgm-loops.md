@@ -16,11 +16,11 @@
 | NIGHT_valley_of_sunken_bells | S1E1 | 0.055초 | 168.168초 | 168.11초 | 98.3% |
 | CLOSE_the_stone_path | S1E1 | 0.047초 | 118.137초 | 118.09초 | 96.2% |
 | BOSS_beneath_the_stone_floor | 보류 | | | | |
-| BOSS2_beneath_the_heavy_arch | 미선택(2차 신규) | | | | |
-| SUCC_step_into_the_canopy | 미선택(2차 신규) | | | | |
-| FAIL_late_shift_at_the_dungeon_gate | 미선택(2차 신규) | | | | |
+| BOSS2_beneath_the_heavy_arch | 보류 | | | | |
+| SUCC_step_into_the_canopy | S1E2 | 0.043초 | 176.741초 | 176.70초 | 97.0% |
+| FAIL_late_shift_at_the_dungeon_gate | S1E2 | 0.043초 | 90.696초 | 90.65초 | 92.3% |
 
-- BOSS는 BOSS1과 BOSS2를 비교하는 중이다.
+- BOSS는 보류다. User 청감으로 BOSS1(S1 · S3 · S4)과 BOSS2(E1 · E2) 모두 이음새가 어색하다(User 2026-09-29).
   - BOSS1에는 User 의견("8~9초부터 멜로디가 들어오는 것 같다")으로 Start 후보 S3 · S4를 더했다.
 - SUCC는 런 종료 성공(마왕 퇴치) 전용, FAIL은 런 종료 실패(파산 · 죽음 한도 · 마왕 격퇴 실패 등) 전용이다.
 - 선택만 기록했다. 게임 연결은 하지 않았다.
@@ -250,7 +250,7 @@
 - End S1E2: 위 (마무리 타격) 자리를 S 기준 4박 묶음 경계로 내린 것(마디 위상 보정용 비교안)
 - 런 종료 성공 전용이다.
 - 0초 시작이고, 마무리 타격이 정확히 218박 뒤다(나머지 2).
-- E2(216박)는 E 앞이 쉼이라 음량 차가 −35.5dB로 크고, 화성 호환도 0.34로 낮다. E1을 우선 추천한다.
+- E2(216박)는 E 앞이 쉼이라 음량 차가 −35.5dB로 크고, 화성 호환도 0.34로 낮다. 수치로는 E1이 나았지만, User 청감으로 E2를 골랐다.
 
 ### FAIL_late_shift_at_the_dungeon_gate — 원본 98.19초
 
