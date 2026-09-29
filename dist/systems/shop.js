@@ -61,7 +61,9 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   const extras=-(facilities?.includes('efficiency')?D.relicParams.efficiency.overheadCut:0)+(ev.audit&&s.stats.waste>=6?Math.min(100,s.stats.waste*5):0)+(ev.overheadAdd||0);
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
-  const base=this.overheadBase(day),hub=facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;
+  /* 왕도 프리미엄 인증 (v2.9.11, User 2026-09-29) takes the same share of overheadBase, from the next Day, added to hub's */
+  const base=this.overheadBase(day),hub=(facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0)
+   +(facilities?.includes('royalCert')?base*D.relicParams.royalCert.overheadRate:0);
   return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): tomorrow's base operating cost - the same rule, the
     next Day, today's Store Support (tomorrow's frozen set) and roster, no Event (tomorrow's is not drawn yet). */
@@ -452,8 +454,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
     acceptance is floored/capped at 0.97 - even when a negative purchase Trait would otherwise
     lower rawChance. No new Counter floor is added to 바가지. */
  const counters=mode!=='overcharge'&&G.Relics.relatedPrep(it,d.hazards);
- /* 왕도 프리미엄 인증 lifts the flat 바가지 intent penalty for its owner; nothing else about 150% moves. */
- const flat=mode==='overcharge'&&this.has('royalCert')?0:rule.intent;
+ /* 왕도 프리미엄 인증 lifts the flat 바가지 intent penalty by +10%p for its owner (-0.16 -> -0.06; v2.9.11, User 2026-09-29 -
+    it lifted the whole penalty before); nothing else about 150% moves. */
+ const flat=mode==='overcharge'&&this.has('royalCert')?rule.intent+D.relicParams.royalCert.intentBonus:rule.intent;
  /* ECONOMY_ORDER §PURCHASE INTENT final scale (v2.9.2, User 2026-09-25): only 정가 carries one, applied after the
     floor/clamp so the whole 정가 purchase chance - 0.97 관련 준비 included - drops by the same ratio. */
  const chance=wallet<debit?0:(counters?.97:clamp(need+n.loyalty*.002+flat+burdenIntentBonus,.08,.97))*(rule.finalScale||1);

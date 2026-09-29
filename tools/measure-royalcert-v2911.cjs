@@ -1,4 +1,6 @@
 // 왕도 프리미엄 인증 (royalCert) value measurement (User 2026-09-29). Measurement only: no game file changes.
+// Written against main 81c50cf (60% / intent lifted / no operating cost); the chosen arm (+10%p, 45%, operating +10%) is now in
+// Source (User 2026-09-29), so the two patched lines below no longer match and `verify` / `arm` stop with that error by design.
 // The rule is varied in a scratch copy of dist/ in which exactly one line is parameterised; every module is loaded from
 // that copy only. The card replaces the bot's own pick in the first Store Support window from DAY 10 on in which the
 // bot actually buys, under the bot's own reserve (reader 380G), at the base price 320G - never an extra purchase.
