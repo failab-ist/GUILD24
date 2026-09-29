@@ -563,7 +563,7 @@ Use 원정 위험 게시판 / 원정 도시락 코너 / 길드24 원정전문점
 - 묶음발주 계약 -> same SKU 3+, 3rd+ units -20%
 - 단골 스탬프 기계 -> paid-purchase Loyalty gain +75%; survival Loyalty excluded
 - 회원 관리대장 -> returning revisit weight +70% from next Day
-- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale price +10% in every mode, paid by the customer (no HQ fill); no operating-cost modifier
+- 희귀상품 입고 계약 -> Rare+ ORDER weight +70%; Rare+ sale charged at the ordinary price, HQ pays +10% of the charged price (v2.9.11, User 2026-09-29); no operating-cost modifier
 - 길드 보증 진열대 -> once/Day first sale with a CHARGED price >=200G, HQ customer subsidy = 30% of
 the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee

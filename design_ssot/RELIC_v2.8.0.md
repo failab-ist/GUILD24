@@ -520,7 +520,7 @@ identityPreReveal=NO
 ### PREMIUM — Foundation
 5. 희귀상품 입고 계약
 tag=Premium
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; Rare+ sale price +10% in every mode, paid by the customer from their own Wallet (no HQ fill); no operating-cost modifier
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store 10% of the charged price on top, in every mode (User 2026-09-29, v2.9.11; was +10% paid by the customer); no operating-cost modifier
 
 6. 길드 보증 진열대
 tag=Premium

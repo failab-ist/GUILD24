@@ -628,7 +628,6 @@ effect = next generated ORDER offers for every Item rarity get supply quantity +
 - if previous Day sales < 4, this support adds no quantity
 - 단골 스탬프 기계: paid-purchase Loyalty gain +75%; survival Loyalty is excluded
 - 회원 관리대장: from next Day, returning-adventurer revisit weight +70%
-- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; Rare+ sale price +10% in every mode, paid by the customer from their own Wallet (no HQ fill); no operating-cost modifier
 - 길드 보증 진열대: once per Day, the first sale whose CHARGED sale price is >=200G -> HQ covers 30%
 of that charged price for the customer while the Player receives the full chosen sale price
 - the threshold reads the charged price, not the list price
@@ -922,4 +921,13 @@ New:
 
 ```new
 no operating-cost effect (User 2026-09-29, v2.9.11; was overheadBase × 0.10 from the next Day)
+```
+
+
+## v2.9.11 희귀상품 입고 계약 HQ-paid +10% (User 2026-09-29)
+
+New:
+
+```new
+- 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store 10% of the charged price on top, in every mode (User 2026-09-29, v2.9.11; was +10% paid by the customer); no operating-cost modifier
 ```

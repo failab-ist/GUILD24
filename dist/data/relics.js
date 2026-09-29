@@ -11,7 +11,7 @@ const rows=[
 ['rotation','회전 진열대','foundation',['rotation'],80,'전날 4건 이상 팔았을 때 · 다음 날 모든 상품 공급 수량 +1.'],
 ['stamp','단골 스탬프 기계','foundation',['vip'],130,'유료 구매로 오르는 단골도 +75% · 생환으로 오르는 단골도는 그대로.'],
 ['member','회원 관리대장','foundation',['vip'],130,'다음 날부터 · 이미 만난 손님의 재방문 가중치 +70%.'],
-['rareContract','희귀상품 입고 계약','foundation',['premium'],140,'희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매가 +10%, 인상분은 손님 부담.'],
+['rareContract','희귀상품 입고 계약','foundation',['premium'],140,'희귀 이상 상품 발주 가중치 +70% · 희귀 이상 상품 판매 시 · 판매가의 10% 추가 지급.'],
 ['guarantee','길드 보증 진열대','foundation',['premium'],140,'하루 첫 '+GUARANTEE_MIN_PRICE+'G 이상 판매 1건 · 손님은 판매가의 70%만 내고 점주는 전액 받는다.'],
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
 ['fieldRepair','야전 정비대','foundation',['expedition'],80,'판매한 야외장비의 위험 대응 수치 +40%.'],
@@ -53,7 +53,7 @@ D.relicParams={
  rotation:{supplyBonus:1},
  stamp:{loyaltyMult:1.75},
  member:{revisitMult:1.7},
- rareContract:{rareWeightMult:1.7,saleMult:1.1},
+ rareContract:{rareWeightMult:1.7,hqBonus:.10}, /* v2.9.11 (User 2026-09-29): was saleMult 1.1 paid by the customer */
  guarantee:{subsidyRate:.3},
  hazardBoard:{weightMult:1.5},
  fieldRepair:{counterMult:1.4},

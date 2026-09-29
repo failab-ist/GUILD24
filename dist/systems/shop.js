@@ -402,9 +402,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  current(){return this.run.npcs.find(n=>n.id===this.run.queue[this.run.cursor]);}
  interest(n,it,mode='full'){
  const rule=D.pricing[mode];if(!rule)throw Error('알 수 없는 판매 방식입니다.');
- /* 희귀상품 입고 계약: a Rare+ Item's sale price is 10% higher in every mode. The customer pays and
-    is judged on it out of their own Wallet - HQ fills nothing (User decision 2026-09-24). */
- const list=Math.round(it.sell*(this.has('rareContract')&&it.rarity>=2?D.relicParams.rareContract.saleMult:1));
+ const list=it.sell;
  const price=Math.round(list*rule.mult),d=this.gateFor(n)||this.run.dungeons[0],p=it.effects;
  /* What the customer weighs the offer against. Identical to `price` for 할인 and 바가지; for
     정가 it is the lower judged price the approved threshold sets. It never changes what is
@@ -480,6 +478,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
  let loyalty=D.pricing[mode].loyalty;if(n.traits.includes('honest')&&['full','half'].includes(mode))loyalty+=1;if(this.has('stamp')&&intent.price>0&&loyalty>0)loyalty=Math.round(loyalty*D.relicParams.stamp.loyaltyMult);
  if(s.event?.effects.halfPrice&&mode==='half'&&!s.halfPriceUsed){s.money+=D.balance.halfPriceSupport;s.daily.subsidy+=D.balance.halfPriceSupport;s.halfPriceUsed=true;}
  let commission=0;if(this.has('royalCert')&&mode==='overcharge')commission+=Math.round(intent.price*D.relicParams.royalCert.commissionRate);if(this.has('supplyCert')&&it.rarity>=2&&(G.Relics.directCounter(it,G.Relics.known(this))||it.effects.escape||it.effects.revive)){commission+=Math.round(it.sell*D.relicParams.supplyCert.commissionRate);n.money+=D.relicParams.supplyCert.goldBonus;}
+ /* 희귀상품 입고 계약 (v2.9.11, User 2026-09-29): a Rare+ sale is charged at the ordinary price and HQ pays the store 10%
+    of the charged price on top - the customer is never asked for it (it was a +10% the customer paid). */
+ if(this.has('rareContract')&&it.rarity>=2)commission+=Math.round(intent.price*D.relicParams.rareContract.hqBonus);
  if(this.has('groupOrder')&&s.daily.sales>=D.relicParams.groupOrder.commissionFrom)commission+=D.relicParams.groupOrder.commission;
  /* 원정 전문 인증: the buyer of a Counter for their own Gate collects +50G on the next visit, once per purchase Day */
  if(this.has('expeditionCert')&&G.Relics.directCounter(it,(this.gateFor(n)||s.dungeons[0]).hazards))n.certGoldDay=s.day;s.money+=commission;s.daily.commission=(s.daily.commission||0)+commission;

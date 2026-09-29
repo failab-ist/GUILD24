@@ -51,6 +51,10 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **희귀상품 입고 계약: HQ pays the +10%** - RELIC 5, RELIC_QA, COPY_AUDIT §11-5 (User 2026-09-29, `reports/remeasure-v2911.md`
+  §13-2): the Rare+ price +10% the customer paid made Rare+ offers harder to sell and left the card below zero (D30 −2.0%p,
+  Store Capital −40G). A Rare+ sale is now charged at the ordinary price and HQ pays the store 10% of the charged price on top
+  (trial +0.3%p / +7G). The Rare+ ORDER weight +70% is unchanged.
 - **즉석식품 코너 loses its operating-cost clause** - RELIC 10, RELIC_QA, COPY_AUDIT §11-10 (User 2026-09-29,
   `reports/remeasure-v2911.md` §13-2): the +10% of overheadBase from the next Day left the card below zero (D30 −1.0%p, Store
   Capital −21G); without it the trial read +4.0%p / +79G. The +25% Food/Drink Stat bonus is unchanged.

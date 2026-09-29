@@ -442,22 +442,21 @@ test('REWORK 길드 납품 인증 / 왕도 프리미엄 인증: buyer +30G; 150%
 
 console.log(count+' Relic effect groups passed');
 
-/* 2026-09-24 tuning (User): 희귀상품 입고 계약 raises a Rare+ Item's sale price 10% in every mode.
-   The customer pays it from their own Wallet - no HQ subsidy, no commission - and is judged on it. */
-test('희귀상품 입고 계약: Rare+ sale price +10%, paid by the customer, nothing from HQ',()=>{
+/* v2.9.11 (User 2026-09-29): 희귀상품 입고 계약 no longer raises the price the customer sees. A Rare+ sale is charged at
+   the ordinary price and HQ pays the store 10% of the charged price on top (it was a +10% the customer paid, 2026-09-24). */
+test('희귀상품 입고 계약: Rare+ sale at the ordinary price, HQ pays +10% of it',()=>{
  const g=fresh('showcase-price'),n=g.run.npcs[0];n.traits=[];n.money=9999;
  const rare=DATA.items.find(i=>i.rarity>=2),common=DATA.items.find(i=>i.rarity===0);
  const q=(it,mode,fac)=>{g.run.facilities=fac;return g.interest(n,it,mode);};
- const list=Math.round(rare.sell*1.1);
  for(const mode of ['half','full','overcharge']){
   const plain=q(rare,mode,[]),lifted=q(rare,mode,['rareContract']);
-  assert.equal(lifted.price,Math.round(list*DATA.pricing[mode].mult),mode+' charges 110% of list');
-  assert.equal(lifted.debit,lifted.price,mode+': the customer pays all of it');
-  assert.ok(lifted.chance<=plain.chance,mode+': a dearer offer is never easier to accept');}
- assert.equal(q(common,'full',['rareContract']).price,common.sell,'below Rare nothing changes');
+  assert.equal(lifted.price,plain.price,mode+': the customer is charged the ordinary price');
+  assert.equal(lifted.chance,plain.chance,mode+': and judges it the same');}
  const r=sellOnce(['rareContract'],'full',rare.id);
- assert.equal(r.store,list,'the store receives the lifted price');assert.equal(r.paid,list,'all of it from the customer');
- assert.equal(r.last.subsidy||0,0,'HQ fills nothing');assert.equal(r.s.daily.commission||0,0,'and pays no commission');
+ assert.equal(r.paid,rare.sell,'the customer pays list');
+ assert.equal(r.s.daily.commission,Math.round(rare.sell*.10),'HQ pays 10% of the charged price');
+ const c=sellOnce(['rareContract'],'full',common.id);
+ assert.equal(c.s.daily.commission||0,0,'below Rare nothing is paid');
 });
 
 test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관련 준비, and the 기동 exception is gone',()=>{
