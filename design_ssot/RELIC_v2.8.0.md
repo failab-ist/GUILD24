@@ -722,10 +722,10 @@ tag=Rotation
 
 `DIRECTOR DOCUMENT BASELINE`
 
-물류 본부계약:
+물류 본부계약 (remade User 2026-09-29, v2.9.11; was previous Day sales >= 6 -> same-SKU 3+ orders -25%):
     Price = 300G
-    trigger = previous Day sales >= 6
-    effect = today every same-SKU 3+ order purchase price -25% (not only the first)
+    effect = today every ORDER purchase price -3% per previous-Day sale, at most -30% (10+ sales)
+    no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
 
 The internal purchase-price floor (45% of list) is unchanged.
 

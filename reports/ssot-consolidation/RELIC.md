@@ -673,7 +673,6 @@ being wasted (it is not counted as waste); it is taken back that Night, with the
 so the refund is on that Day's receipt
 - each Day's first ORDER offer generation adds 1 extra Food/Drink offer; a Reroll does not
 Price = 300G
-effect = today every same-SKU 3+ order purchase price -25% (not only the first)
 The internal purchase-price floor (45% of list) is unchanged.
 단골 (Trusted Regular, Loyalty >= 51) survival condition
 The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
@@ -897,4 +896,22 @@ only for an injured arrival and only while owned)
 - measured against the six Keystones (reports/v2.9.11-drafts.md §C-2, each owned from the D10 window): D30 19.6 → 25.2%,
 clear 13.5 → 16.8% - at or just above the strongest Keystones (물류 본부계약, 원정 전문 인증: D30 24.0%)
 | fieldStretcher | 야전 들것 | 80G |
+```
+
+
+## v2.9.11 물류 본부계약 remake (User 2026-09-29)
+
+Dropped (the removal itself):
+
+```text
+trigger = previous Day sales >= 6
+물류 본부계약:
+```
+
+New:
+
+```new
+물류 본부계약 (remade User 2026-09-29, v2.9.11; was previous Day sales >= 6 -> same-SKU 3+ orders -25%):
+effect = today every ORDER purchase price -3% per previous-Day sale, at most -30% (10+ sales)
+no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
 ```

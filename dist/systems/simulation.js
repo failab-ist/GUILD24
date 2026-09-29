@@ -410,10 +410,10 @@ function playRun(g,out,ctx){
        warehouse ceiling - and setQuantity throws for it. Counting only the pre-check reported a
        flat zero while the ceiling was really binding, so the throw is counted here too. */
     try{g.setQuantity(i,(s.cart?.[i]||0)+1);act();(out.items[o.item]??={ordered:0,sold:0}).ordered++;
-     /* aware: 묶음발주 계약, or 물류 본부계약 once yesterday's sales armed it - an Item the policy
+     /* aware: 묶음발주 계약 (물류 본부계약 needs no quantity since its v2.9.11 remake) - an Item the policy
         already chose is rounded up to 3 of that SKU when this offer holds enough, the till still
         clears cashFloor after the discounted quote, and the warehouse takes it (validateCart). */
-     if(owns('bulk')||owns('logisticsHQ')&&s.previousSales>=6){
+     if(owns('bulk')){
       const cart=s.cart||{},same=Object.keys(cart).filter(j=>s.offers[j].item===o.item).reduce((a,j)=>a+cart[j],0),want=cart[i]+3-same;
       if(same<3&&want<=o.quantity&&s.money-g.cartTotal({...cart,[i]:want})>=spend.cashFloor)
        try{g.setQuantity(i,want);act();out.items[o.item].ordered+=3-same;}catch(e){}}}

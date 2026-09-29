@@ -51,6 +51,12 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **물류 본부계약 remade** - RELIC 21, RELIC_QA REL-Q-v28-15, COPY_AUDIT §11-21 / §11-32 (User 2026-09-29,
+  `reports/remeasure-v2911.md` §12-2 / §13-1): its trigger (previous Day 6+ sales) and scope (same-SKU 3+ orders) kept it at
+  the Keystone floor whatever the numbers (D30 +0.3%p; 4 or 3 sales, or −35%, barely moved it). Name, Keystone tier, rotation
+  tag and 300G are kept; it now takes 3% off every ORDER purchase price per previous-Day sale, at most 30% (trial D30 +4.0%p,
+  Store Capital +69G). The quick-view line reads `전날 판매 N건 · 오늘 매입가 -X%`. The bot no longer rounds orders up to 3
+  for it.
 - **The two weakest Decorations lifted** - META §display / §wall, NPC_TRAIT_QA NPC-Q-v28-10, COPY_AUDIT decoration lines (User
   2026-09-28, `reports/remeasure-v2911.md` §10-3): at the 1.45 slope 길드 추천 매대 read D30 +5.3%p and 명예 모험가 액자 +4.2%p
   beside the two signs' +25 / +31. 길드 추천 매대's Morning visitor +1 chance 30% → 45% (trial +6.5%p); 명예 모험가 액자's

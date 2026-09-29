@@ -10,10 +10,8 @@ let count=0;function test(name,fn){fn();count++;console.log('PASS '+name);}
 test('bulk engines require quantity/traffic/previous-day sales, and affect actual cost',()=>{
  const g=fresh(),s=g.run;g.beginOrder();s.offers=[{item:'rice',price:100,quantity:8}];s.cart={0:3};
  const base=g.cartTotal();s.facilities=['bulk'];assert.ok(g.cartTotal()<base);s.cart={0:2};assert.equal(g.cartTotal(),200);
- /* REL-Q-v28-15: the logistics keystone triggers at 6 previous-Day sales (2026-09-23 rebalance),
-    and it is the only bulk engine on previous-Day sales - REL-Q-v28-14 took 회전 진열대 off the
-    discount path entirely, so it must not move the quote at any sales figure. */
- for(const [id,threshold]of [['logisticsHQ',6]]){s.facilities=[id];s.cart={0:3};s.previousSales=threshold-1;assert.equal(g.cartTotal(),base);s.previousSales=threshold;assert.ok(g.cartTotal()<base);s.bulkUsed=true;assert.ok(g.cartTotal()<base,'not only the first bulk order');s.bulkUsed=false;}
+ /* REL-Q-v28-14 took 회전 진열대 off the discount path entirely, so it must not move the quote at any
+    sales figure (물류 본부계약's per-sale discount has its own test since the v2.9.11 remake). */
  s.facilities=['rotation'];s.cart={0:3};for(const sales of [0,5,6,7,12]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'rotation never discounts, at '+sales+' previous sales');}
  s.previousSales=0;
  /* 2026-09-23 remakes: 단체 주문 창구 and 새벽 회수 계약 no longer discount an order */
@@ -159,20 +157,19 @@ test('REL-Q-v28-14: 회전 진열대 adds +2 supply quantity to every offer on a
  assert.equal(g.cartTotal(),plainQuote,'and the support discounts nothing');
 });
 
-test('REL-Q-v28-15: 물류 본부계약 takes 25% off every same-SKU 3+ order, from 6 previous sales',()=>{
+test('REL-Q-v28-15: 물류 본부계약 takes 3% off every ORDER per previous-Day sale, at most 30% (v2.9.11 remake)',()=>{
  const g=fresh('logistics-hq'),s=g.run;g.beginOrder();
  s.offers=[{item:'rice',price:100,quantity:8},{item:'rice',price:100,quantity:8},{item:'water',price:40,quantity:8}];
- s.facilities=[];s.cart={0:3};const base=g.cartTotal();
+ s.facilities=[];s.cart={0:1};const base=g.cartTotal();assert.equal(base,100);
  s.facilities=['logisticsHQ'];
- for(const sales of [0,4,5]){s.previousSales=sales;assert.equal(g.cartTotal(),base,'no discount at '+sales+' previous sales');}
- s.previousSales=6;assert.equal(g.cartTotal(),Math.round(100*.75)*3,'exactly -25% at 6');
- s.cart={0:2};assert.equal(g.cartTotal(),200,'a 2-unit order is not a bulk order');
- // every bulk SKU of the Day, not only the first, and after an earlier bulk order
- s.cart={0:3,2:3};assert.equal(g.cartTotal(),Math.round(100*.75)*3+Math.round(40*.75)*3,'both 3+ SKUs are discounted');
- s.bulkUsed=true;s.cart={0:3};assert.equal(g.cartTotal(),Math.round(100*.75)*3,'an earlier bulk order today does not use it up');
- // with 묶음발주 계약 the two stack and the internal 45% floor is not reached
- s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),75+75+Math.round(100*.75*.8));
- assert.equal(DATA.relicBy.logisticsHQ.price,300,'the rebalanced price');
+ s.previousSales=0;assert.equal(g.cartTotal(),base,'no discount after a Day without sales');
+ for(const [sales,mult] of [[1,.97],[4,.88],[6,.82],[9,.73],[10,.70],[15,.70]]){s.previousSales=sales;
+  assert.equal(g.cartTotal(),Math.round(100*mult),sales+' previous sales -> x'+mult);}
+ // no quantity, SKU or rarity condition: a single unit and a second SKU are both discounted
+ s.previousSales=5;s.cart={0:1,2:2};assert.equal(g.cartTotal(),Math.round(100*.85)+2*Math.round(40*.85),'every ORDER line');
+ // with 묶음발주 계약 the two multiply and the internal 45% floor is not reached
+ s.previousSales=10;s.facilities=['logisticsHQ','bulk'];s.cart={0:3};assert.equal(g.cartTotal(),70+70+Math.round(100*.7*.8));
+ assert.equal(DATA.relicBy.logisticsHQ.price,300,'the price is kept');
 });
 
 /* REL-Q-v28-17. The three outcomes are one roll and mutually exclusive, so the boundaries are
@@ -493,7 +490,7 @@ test('RELIC §COUNTER JUDGEMENT (User 2026-09-24, v2.9.0): 직접 대응 vs 관�
 test('RELIC §QUICK VIEW STATUS LINE (User 2026-09-24, v2.9.0): the runtime truth, COPY_AUDIT §11-32 exact',()=>{
  const g=fresh('status'),s=g.run;s.facilities=['rotation','logisticsHQ','guarantee','groupOrder','rerollTicket','bulk','memberBundle','fieldRepair'];
  s.previousSales=3;assert.equal(Relics.status(g,'rotation'),'전날 판매 3건 · 오늘 미적용');s.previousSales=4;assert.equal(Relics.status(g,'rotation'),'전날 판매 4건 · 오늘 적용 중');
- assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건 · 오늘 미적용');s.previousSales=6;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 6건 · 오늘 적용 중');
+ assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 4건 · 오늘 매입가 -12%');s.previousSales=12;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 12건 · 오늘 매입가 -30%');s.previousSales=0;assert.equal(Relics.status(g,'logisticsHQ'),'전날 판매 0건 · 오늘 미적용');s.previousSales=6;
  s.guaranteeUsed=false;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 1회 남음');s.guaranteeUsed=true;assert.equal(Relics.status(g,'guarantee'),'오늘 지원 사용함');
  s.daily.sales=2;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 2건 · 5번째부터 +15G');s.daily.sales=4;assert.equal(Relics.status(g,'groupOrder'),'오늘 판매 4건 · 판매마다 +15G 지급 중');
  s.rerollCount=0;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 남음');s.rerollCount=1;assert.equal(Relics.status(g,'rerollTicket'),'오늘 무료 교환 사용함');

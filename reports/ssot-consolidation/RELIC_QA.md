@@ -192,7 +192,7 @@ Example:
 ### REL-Q-v28-1 — NAME COLLISION CLEANUP
 ### REL-Q26 — PRICE BAND
 ### REL-Q-v28-14 — ROTATION DISPLAY SUPPLY ENGINE
-### REL-Q-v28-15 — LOGISTICS HQ TRIGGER
+### REL-Q-v28-15 — LOGISTICS HQ PER-SALE DISCOUNT (remade User 2026-09-29, v2.9.11)
 ### REL-Q35 — ROTATION LOW-RARITY VIABILITY
 ### REL-Q-v28-4 — RETURN POINTS
 ### REL-Q-v28-6 — LIFETIME
@@ -595,11 +595,8 @@ warehouse 130
 If previous Day sales >= 4:
 - each newly generated ORDER offer, of every rarity, gets quantity +1
 If previous Day sales < 4:
-previous Day sales >= 6
--> today every same-SKU 3+ order -25%
+previous Day sales N
 Price 300G.
-- trigger differs from previous Day sales >= 6
-- only the first bulk order of the Day is discounted
 paid returning customer survives (no Loyalty threshold) -> Loyalty +5 and NPC Wallet +25G
 단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G
 Reads the Trusted Regular owner judgement; no second threshold.
@@ -740,4 +737,17 @@ New:
 ```new
 - 야전 들것 -> an ordinary Injury costs 투력 8% instead of 15% in every preparation read (User 2026-09-28, v2.9.11)
 - 응급 처치대 -> an injured SALE arrival recovers with 20%, after the 의무실 현판 roll; the state strip says so (v2.9.11)
+```
+
+
+## v2.9.11 물류 본부계약 remake (User 2026-09-29)
+
+New:
+
+```new
+-> today every ORDER purchase price x (1 - min(30%, 3% x N))
+N = 0 -> no discount; N >= 10 -> -30%
+- the discount needs a quantity, SKU or rarity condition
+- the discount exceeds 30%
+- the internal 45% purchase-price floor is bypassed
 ```

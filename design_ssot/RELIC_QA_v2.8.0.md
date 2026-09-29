@@ -500,17 +500,19 @@ FAIL:
 - any first-bulk discount effect is active on 회전 진열대
 - the support directly discounts Item price
 
-### REL-Q-v28-15 — LOGISTICS HQ TRIGGER
+### REL-Q-v28-15 — LOGISTICS HQ PER-SALE DISCOUNT (remade User 2026-09-29, v2.9.11)
 
 Expected:
-    previous Day sales >= 6
-    -> today every same-SKU 3+ order -25%
+    previous Day sales N
+    -> today every ORDER purchase price x (1 - min(30%, 3% x N))
+    N = 0 -> no discount; N >= 10 -> -30%
 
 Price 300G.
 
 FAIL:
-- trigger differs from previous Day sales >= 6
-- only the first bulk order of the Day is discounted
+- the discount needs a quantity, SKU or rarity condition
+- the discount exceeds 30%
+- the internal 45% purchase-price floor is bypassed
 
 ### REL-Q35 — ROTATION LOW-RARITY VIABILITY
 SETUP:
