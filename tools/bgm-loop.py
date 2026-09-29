@@ -15,7 +15,8 @@ MP3 (the 4 s before End, then the 4 s after Start). Similarity is only a support
 Nothing is written into the game; the source files stay untouched.
 
   pip install imageio-ffmpeg numpy
-  python3 tools/bgm-loop.py [--out DIR] [--json FILE] [--start NAME=SEC ...] [--search-end NAME ...] [--search-start NAME ...] [FILES...]
+  python3 tools/bgm-loop.py [--out DIR] [--json FILE] [--start NAME=SEC ...] [--search-end NAME ...] [--search-start NAME ...]
+                            [--xfade NAME=SEC ...] [--end-window NAME=SEC] [FILES...]
 """
 import argparse, glob, json, os, subprocess, sys
 import numpy as np
@@ -229,7 +230,7 @@ def pick_ends(sim, lvl, p5, M, o, fps, dur, s, beat, x44):
     return out, dict(final_hit=fh, last_core=lc, last_sound=(last + 1) * BLK)
 
 
-def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3, use_pre=True):
+def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3, use_pre=True, win=E_WIN, use_cut=True):
     """End re-search inside the last E_WIN seconds (User 2026-09-29, for joins that sound cut off,
     off-harmony or like a sudden mood change): every beat-grid point from S up to the final hit is
     scored by how much the original music right after E resembles the music right after S (harmony +
@@ -247,7 +248,7 @@ def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3, use_pre=True):
     lvl_s = db(s, s + 0.5)
     last = fh if fh is not None else dur - 3
     out = []
-    for n in range(int(np.ceil((dur - E_WIN - s) / beat)), int(np.floor((last - s) / beat + 0.15)) + 1):
+    for n in range(int(np.ceil((dur - win - s) / beat)), int(np.floor((last - s) / beat + 0.15)) + 1):
         e = s + n * beat
         cont = float(vec(e, e + 2) @ after_s)
         pre = float(vec(e - 2, e) @ before_s) if before_s is not None else 0.0
@@ -255,7 +256,8 @@ def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3, use_pre=True):
         step = db(e, e + 0.5) - lvl_s
         ot, _ = onset_near(o, fps, e, before=0.06, after=0.06, strong=0.2)
         cut = max(0.0, ring - (M - 10)) * (0.5 if ot is not None else 1.0)
-        score = cont + (0.3 * pre if use_pre else 0) - 0.03 * abs(step) - 0.02 * cut + (0.05 if n % 4 == 0 else 0)
+        # with a long crossfade the cut itself is masked, so only the overlap (harmony, level) counts
+        score = cont + (0.3 * pre if use_pre else 0) - 0.03 * abs(step) - (0.02 * cut if use_cut else 0) + (0.05 if n % 4 == 0 else 0)
         out.append((score, n, e, ot, cont, pre, ring, step))
     out.sort(reverse=True)
     picked = []
@@ -298,6 +300,8 @@ def seam(stereo, sr, s, e, path, pre=4.0, post=4.0, xf=0.01):
     head = stereo[max(0, ei - int(pre * sr)):ei].copy()
     cont = stereo[ei:ei + n] * np.cos(np.linspace(0, np.pi / 2, n))[:, None]
     tail = stereo[si:si + int(post * sr)].copy()
+    if xf >= 0.2:
+        fi = n   # a real crossfade (BOSS only, User 2026-09-29): S fades in over the same span
     tail[:fi] *= np.sin(np.linspace(0, np.pi / 2, fi))[:, None]
     tail[:n] += cont
     out = np.concatenate([head, tail]).astype('<f4')
@@ -314,10 +318,26 @@ def main():
                     help='also re-search End over the last 25 s on the beat grid (top 3 per Start)')
     ap.add_argument('--search-start', action='append', default=[], metavar='NAME',
                     help='with --search-end: also move Start over beat-grid onsets up to 15 s (top 3 Start/End pairs)')
+    ap.add_argument('--xfade', action='append', default=[], metavar='NAME=SEC',
+                    help='crossfade re-search for NAME (repeat for several lengths); cut penalty off, previews per length')
+    ap.add_argument('--xfade-also', action='append', default=[], metavar='NAME=ID',
+                    help='also render the --xfade lengths for an already listed candidate (e.g. S3R1, P1)')
+    ap.add_argument('--end-window', action='append', default=[], metavar='NAME=SEC',
+                    help='End window for the crossfade re-search (default 25 s)')
     ap.add_argument('--start', action='append', default=[], metavar='NAME=SEC',
                     help='extra Start to compare, e.g. a listener\'s suggestion; snapped to the onset at SEC -0.1/+0.3 s')
     a = ap.parse_args()
-    manual = {}
+    manual, xfades, endwin = {}, {}, {}
+    for m in a.xfade:
+        n, t = m.rsplit('=', 1)
+        xfades.setdefault(n, []).append(float(t))
+    also = {}
+    for m in a.xfade_also:
+        n, t = m.rsplit('=', 1)
+        also.setdefault(n, []).append(t)
+    for m in a.end_window:
+        n, t = m.rsplit('=', 1)
+        endwin[n] = float(t)
     for m in a.start:
         n, t = m.rsplit('=', 1)
         manual.setdefault(n, []).append(float(t))
@@ -434,6 +454,57 @@ def main():
                                   trim_end=round(dur - e['end'], 2), beat=round(beat1, 4), bpm=round(60 / beat1, 2),
                                   ok_start=bool(s_ <= S_MAX), ok_end=bool(e['end'] >= dur - E_WIN), seam=p,
                                   cont=e['cont'], ring_db=e['ring_db'], **sm))
+        if name in xfades:
+            # crossfade re-search (User 2026-09-29, BOSS only): End over the last `win` seconds; Start over
+            # the beat-grid onsets up to S_MAX with --search-start, else the Starts that get all Ends
+            win = endwin.get(name, E_WIN)
+            if name in a.search_start:
+                s0, sl = starts[0][0], []
+                for kb in range(0, int((S_MAX - s0) / beat1) + 1):
+                    ot, _ = onset_near(o, fps, s0 + kb * beat1, before=0.06, after=0.06, strong=0.2)
+                    if ot is not None or not kb:
+                        sl.append((s0 if not kb else hires(x44, ot), '크로스페이드 재탐색 Start: 자동 Start 격자의 %d박 뒤' % kb))
+            else:
+                # a suggested Start (--start) is what the listener preferred: use only it when given
+                sl = [(st[0], st[1]) for st in starts if st[2] and st[3]] or [(st[0], st[1]) for st in starts if st[2]]
+            pool = []
+            for s_, why in sl:
+                for e in search_ends(F, fps, x44, o, s_, beat1, dur, einfo['final_hit'], M, top=40, use_pre=False, win=win, use_cut=False):
+                    pool.append((e['score'], s_, why, e))
+            pool.sort(key=lambda t: -t[0])
+            picked = []
+            for sc, s_, why, e in pool:
+                # new Ends only: at least a 4-beat group away from every End already listed (heard) and picked
+                if any(abs(e['end'] - c['end']) < 4 * beat1 for c in cands) or any(abs(e['end'] - q[3]['end']) < 4 * beat1 for q in picked):
+                    continue
+                picked.append((sc, s_, why, e))
+                if len(picked) == 3:
+                    break
+            for xi, (sc, s_, why, e) in enumerate(picked):
+                sm = seam_metrics(stereo, 44100, s_, e['end'], M)
+                for xf in xfades[name]:
+                    tag = 'X%d-%gs' % (xi + 1, xf)
+                    p = os.path.join(a.out, '%s-%s.mp3' % (name, tag))
+                    seam(stereo, 44100, s_, e['end'], p, xf=xf)
+                    cands.append(dict(id=tag, start=round(s_, 3), start_reason=why + ' (%.3f초)' % s_,
+                                      end=e['end'], end_reason=e['reason'].replace('끝 구간 재탐색', '크로스페이드 재탐색(끝 %g초 · 끊김 감점 없음)' % win),
+                                      beats=e['beats'], beats_mod4=e['beats'] % 4, onset_at_end=bool(e['onset_at_end']),
+                                      onset_err_ms=e['onset_err_ms'], length=round(e['end'] - s_, 2),
+                                      kept_pct=round(100 * (e['end'] - s_) / dur, 1), trim_start=round(s_, 2),
+                                      trim_end=round(dur - e['end'], 2), beat=round(beat1, 4), bpm=round(60 / beat1, 2),
+                                      ok_start=bool(s_ <= S_MAX), ok_end=bool(e['end'] >= dur - win), seam=p,
+                                      cont=e['cont'], ring_db=e['ring_db'], **dict(sm, xfade_ms=int(xf * 1000))))
+        for cid in also.get(name, []):
+            base = next((c for c in cands if c['id'] == cid), None)
+            if base is None:
+                print('skip --xfade-also %s=%s: no such candidate' % (name, cid), file=sys.stderr)
+                continue
+            for xf in xfades.get(name, []):
+                tag = '%s-%gs' % (cid, xf)
+                p = os.path.join(a.out, '%s-%s.mp3' % (name, tag))
+                seam(stereo, 44100, base['start'], base['end'], p, xf=xf)
+                cands.append(dict(base, id=tag, seam=p, xfade_ms=int(xf * 1000),
+                                  end_reason=base['end_reason'] + ' — %g초 크로스페이드 판' % xf))
         rows.append(dict(file=f, name=name, duration=round(dur, 2), bpm_est=round(bpm0, 1), key=k, key_fit=kc,
                          lufs=lufs, lra=lra, core_level=round(M, 1), core_sim_p5=round(p5, 2), end_info=einfo, candidates=cands))
         print(name, json.dumps(rows[-1], ensure_ascii=False, default=float))

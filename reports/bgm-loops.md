@@ -22,6 +22,7 @@
 
 - BOSS는 보류다. User 청감으로 BOSS1(S1 · S3 · S4)과 BOSS2(E1 · E2) 모두 이음새가 어색하다(User 2026-09-29).
 - 3차(User 2026-09-29): 곡 전체 분위기는 BOSS2가 맞다 → BOSS2로 간다. BOSS2는 Start · End를 함께 다시 찾았고(P1~P3), 비교 대상은 BOSS1 S3R1 · S3R2다(User 청감으로 둘은 큰 차이 없음).
+- 4차(User 2026-09-29): P1~P3 · S3R1 · S3R2 모두 어색하다 → BOSS에만 크로스페이드(1초 · 2초)를 허용하고, End 범위를 끝 40초로 넓혀 다시 찾았다.
   - BOSS1에는 User 의견("8~9초부터 멜로디가 들어오는 것 같다")으로 Start 후보 S3 · S4를 더했다.
 - SUCC는 런 종료 성공(마왕 퇴치) 전용, FAIL은 런 종료 실패(파산 · 죽음 한도 · 마왕 격퇴 실패 등) 전용이다.
 - 선택만 기록했다. 게임 연결은 하지 않았다.
@@ -316,7 +317,14 @@
 - S1R1은 기존 E1보다 한 박 앞(198박)이다.
 - S1R2(182박)는 보존율 88.9%다.
 
-## BOSS2 Start · End 함께 재탐색 (User 2026-09-29, 3차)
+## BOSS 크로스페이드 재탐색 (끝 40초, 1초 · 2초)
+python3 tools/bgm-loop.py --start BOSS_beneath_the_stone_floor=9.52 \
+  --search-end BOSS_beneath_the_stone_floor --search-end BOSS2_beneath_the_heavy_arch --search-start BOSS2_beneath_the_heavy_arch \
+  --xfade BOSS2_beneath_the_heavy_arch=1 --xfade BOSS2_beneath_the_heavy_arch=2 --xfade BOSS_beneath_the_stone_floor=1 --xfade BOSS_beneath_the_stone_floor=2 \
+  --end-window BOSS2_beneath_the_heavy_arch=40 --end-window BOSS_beneath_the_stone_floor=40 \
+  --xfade-also BOSS_beneath_the_stone_floor=S3R1 --xfade-also BOSS_beneath_the_stone_floor=S3R2 --xfade-also BOSS2_beneath_the_heavy_arch=P1 \
+  --out <폴더> assets-src/bgm/BOSS_beneath_the_stone_floor.mp3 assets-src/bgm/BOSS2_beneath_the_heavy_arch.mp3
+# BOSS2 Start · End 함께 재탐색 (User 2026-09-29, 3차)
 
 - 이전 재탐색은 Start를 0초로 고정했다. 이번에는 Start도 함께 옮겼다(`--search-start`).
 - Start 후보는 자동 Start 박 격자의 온셋 중 15초 이내다. 온셋이 없는 격자점은 쓰지 않는다.
@@ -359,6 +367,48 @@
   - P1~P3 중 끝 → 처음 넘어갈 때 가장 덜 튀는 것
   - BOSS2의 60ms 페이드로 '뚝 끊김'이 충분히 가려지는지
 
+## BOSS 크로스페이드 재탐색 (User 2026-09-29, 4차)
+
+- User 결정(BOSS에만 적용하는 예외)
+  - 크로스페이드는 1초와 2초로 들어 본다.
+  - End 범위는 끝 25초에서 **끝 40초**로 넓힌다.
+  - 다른 곡의 규칙(짧은 페이드, 끝 25초)은 그대로다.
+- 크로스페이드 방식
+  - E 뒤 원곡은 페이드아웃, S는 페이드인이다. 둘 다 같은 길이의 등전력 곡선이다.
+  - 겹치는 동안 두 부분의 박이 맞도록 E − S는 정수 박이다.
+- 재탐색 방법(`--xfade` · `--end-window`)
+  - 크로스페이드가 끊김을 가리므로 '끊기는 소리' 감점은 뺐다.
+  - 겹치는 구간의 화성 · 음색(E 뒤 ↔ S 뒤)과 음량 차로 순위를 매긴다.
+  - 이미 들은 End에서 4박 이상 떨어진 **새 자리만** 골랐다. 40초로 넓혀도 1~3위는 이미 들은 자리였기 때문이다.
+  - Start
+    - BOSS2: 15초 안의 박 온셋 전체
+    - BOSS1: User가 고른 S3(9.535초)만
+- 들었던 후보의 크로스페이드 판(`--xfade-also`)도 만들었다: BOSS1 S3R1 · S3R2, BOSS2 P1(각 1초 · 2초).
+
+| 곡 | 후보 | Start | End | 보존 | 박 | 닮은 정도 | 화성 | preview |
+|---|---|---|---|---|---|---|---|---|
+| BOSS2 | X1 | 7.228초 | 103.795초 | 78.6% | 161 (1) | 0.80 | 0.85 | 1초 · 2초 |
+| BOSS2 | X2 | 0.612초 | 101.377초 | 82.0% | 168 (0) | 0.61 | 0.91 | 1초 · 2초 |
+| BOSS2 | X3 | 1.803초 | 85.775초 | 68.4% | 140 (0) | 0.37 | 0.81 | 1초 · 2초 |
+| BOSS1 | X1 | 9.535초 | 144.499초 | 74.6% | 180 (0) | 0.23 | 0.78 | 1초 · 2초 |
+| BOSS1 | X2 | 9.535초 | 162.493초 | 84.6% | 204 (0) | 0.22 | 0.33 | 1초 · 2초 |
+| BOSS1 | X3 | 9.535초 | 150.497초 | 78.0% | 188 (0) | 0.13 | 0.34 | 1초 · 2초 |
+
+- **BOSS2 X1**(7.228초 → 103.795초)
+  - 새 자리 중 닮은 정도가 0.80으로 가장 높다.
+  - 끝 19초를 빼서 보존율은 78.6%다.
+  - 이음새 앞뒤의 음량 차도 가장 작다(preview 기준 약 −8dB, P1은 약 −15dB).
+- BOSS2 X2(0.80 → 0.61)와 X3(0.37, 68.4%)은 수치가 약하다.
+- **BOSS1 S3의 새 End는 모두 약하다.**
+  - 닮은 정도가 0.13~0.23이고, 이음새 음량 차가 +18~+21dB다.
+  - BOSS1은 새 End보다 S3R1 · S3R2에 크로스페이드를 준 판이 낫다.
+- 들어볼 점
+  - BOSS2 X1 1초 · 2초
+  - BOSS2 P1 1초 · 2초
+  - BOSS1 S3R1 · S3R2 1초 · 2초
+  - 위 넷 중에서 끝 → 처음이 가장 자연스러운 것을 고르면 된다.
+- 클릭 점검: 이음새 구간(2초 크로스페이드 포함)의 최대 샘플 변화가 모두 같은 파일 다른 곳의 최대치 이하다.
+
 ## 한계 · 확인 필요
 
 - **템포 · 박자는 기계 추정이다.**
@@ -378,7 +428,7 @@
 
 ## seam preview
 
-- `<곡>-<후보>.mp3`로 24개다. BOSS 재탐색(`R`) 8개와 BOSS2 쌍 재탐색(`P`) 3개는 따로 있다. 각 파일은 8초이고, 4초 지점이 이음새다.
+- `<곡>-<후보>.mp3`로 24개다. BOSS 재탐색(`R`) 8개와 BOSS2 쌍 재탐색(`P`) 3개, BOSS 크로스페이드 판(`X` · `-1s` · `-2s`) 18개는 따로 있다. 각 파일은 8초이고, 4초 지점이 이음새다.
 - 저장소 밖 스크래치 폴더에 만들었다(원본 · 저장소 변경 없음).
 - 다시 만드는 명령:
 
@@ -389,6 +439,13 @@ python3 tools/bgm-loop.py --start BOSS_beneath_the_stone_floor=9.52 --start BOSS
 # BOSS 끝 구간 재탐색
 python3 tools/bgm-loop.py --start BOSS_beneath_the_stone_floor=9.52 \
   --search-end BOSS_beneath_the_stone_floor --search-end BOSS2_beneath_the_heavy_arch \
+  --out <폴더> assets-src/bgm/BOSS_beneath_the_stone_floor.mp3 assets-src/bgm/BOSS2_beneath_the_heavy_arch.mp3
+# BOSS 크로스페이드 재탐색 (끝 40초, 1초 · 2초)
+python3 tools/bgm-loop.py --start BOSS_beneath_the_stone_floor=9.52 \
+  --search-end BOSS_beneath_the_stone_floor --search-end BOSS2_beneath_the_heavy_arch --search-start BOSS2_beneath_the_heavy_arch \
+  --xfade BOSS2_beneath_the_heavy_arch=1 --xfade BOSS2_beneath_the_heavy_arch=2 --xfade BOSS_beneath_the_stone_floor=1 --xfade BOSS_beneath_the_stone_floor=2 \
+  --end-window BOSS2_beneath_the_heavy_arch=40 --end-window BOSS_beneath_the_stone_floor=40 \
+  --xfade-also BOSS_beneath_the_stone_floor=S3R1 --xfade-also BOSS_beneath_the_stone_floor=S3R2 --xfade-also BOSS2_beneath_the_heavy_arch=P1 \
   --out <폴더> assets-src/bgm/BOSS_beneath_the_stone_floor.mp3 assets-src/bgm/BOSS2_beneath_the_heavy_arch.mp3
 # BOSS2 Start · End 함께 재탐색
 python3 tools/bgm-loop.py --search-end BOSS2_beneath_the_heavy_arch --search-start BOSS2_beneath_the_heavy_arch \
