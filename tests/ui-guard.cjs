@@ -1800,8 +1800,12 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
  const of=fn('orderForm');
- assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+'"><span class="rail-line">'\+deathLimitItem\(true\)\+'<\/span>'\s*\+'<span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b>'\+todayLine\(counts\)\+'<\/b><\/span>'\s*\+'<span class="rail-line rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
+ assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+\(railFolded\(\)\?' folded':''\)\+'">'[\s\S]{0,400}?\+'<span class="rail-line">'\+deathLimitItem\(true\)\+'<\/span>'\s*\+'<span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b>'\+todayLine\(counts\)\+'<\/b><\/span>'\s*\+'<span class="rail-line rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
   'Death first, then 오늘, then 발주 후 last - each a label and a value; 발주 후 is the ledger\'s own `after`, short in the ledger\'s warning');
+ // the fold (User 2026-09-29): the whole box - the Death line too - to a 요약 chip; the account keeps it across Days and reloads
+ assert.ok(/const railFolded=\(\)=>game\.account\.settings\.orderRailFolded===true;/.test(app)&&/'<span class="rail-chip">요약<\/span><\/button>'/.test(of),'a 요약 chip, folded state on the account');
+ assert.ok(/case'rail-fold':\{const st=game\.account\.settings,f=!railFolded\(\);st\.orderRailFolded=f;game\.save\(\);/.test(app),'one tap folds or opens it and saves the choice');
+ assert.ok(/\.death-limit-row\.folded \.rail-line\{display:none\}/.test(css)&&/\n\.death-limit-row \.rail-fold\{right:26px\}\n\.death-limit-row\.folded\{margin-right:42px\}/.test(css)&&/ \.death-limit-row \.rail-fold\{right:0\}\n \.death-limit-row\.folded\{margin-right:16px\}/.test(css),'every line folds; on a phone the key and chip clear the menu pin');
  assert.ok(/'<p>'\+todayLine\(counts,'b'\)/.test(of),'one owner writes both copies');
  const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/const gone=!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w)&&/rail\.classList\.toggle\(e\.target===brief\?'show-today':'show-gold',gone\)/.test(w),'each shown only once its own source has gone above, under the rail');
  assert.ok(/orderWatch\.observe\(brief\);if\(out\)orderWatch\.observe\(out\)/.test(w)&&/\$\('\.p-order #order-register \.out'\)/.test(w),'발주 후 watches the ledger line, 오늘 its own block');
@@ -3628,6 +3632,8 @@ test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, ph
  // a steel rack: not the floating box's brown (#4a3018), not the 발주서's paper
  const rk=/\.p-order\{--rack:(#[0-9a-f]{6});/.exec(css);assert.ok(rk&&!['#4a3018','#efe7d2','#e6ddc6'].includes(rk[1]),'its own material');
  assert.ok((css.match(/background:var\(--tex-metal\),var\(--rack\)/g)||[]).length===3,'handle, sheet and column are the steel rack');
+ // PRESENTATION §Edge / material (User 2026-09-29): no decorative stripe, no border + inset + bevel stack - one hard cast edge
+ assert.ok(!/rack-beam|rack-hi/.test(css),'no decorative stripe or edge highlights on the rack');
  assert.ok(/@media\(min-width:1024px\)\{\n \.p-order \.stage-scroll\{display:grid;grid-template-columns:minmax\(0,1\.45fr\) minmax\(300px,1fr\)/.test(css)
   &&/\.p-order \.order-desk \.form\{max-width:none;margin:0\}/.test(css),'desk: the form set left, a large warehouse column on its right');
  assert.ok(/\.stock-side\{display:block;position:sticky;top:46px;margin-top:46px;/.test(css)&&/\.p-order \.dock \.stock-handle,\.p-order \.dock \.stock-sheet\{display:none\}/.test(css),'desk: open, following the scroll, below the menu pin, no handle');

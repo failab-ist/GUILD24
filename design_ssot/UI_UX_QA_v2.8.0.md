@@ -1624,6 +1624,8 @@ PASS:
 - scrolled past the ledger, `발주 후` joins last, under its own rule and label; it equals the ledger's value, follows every
   quantity tap without the box blinking, and turns the short color below zero (v2.9.11 quick patch, User 2026-09-29)
 - no scroll position where a source is hidden under the box without its copy, or shown twice
+- one tap on the key folds the whole box, Death line included, to a `요약` chip and back; a quantity tap, the next Day's ORDER
+  and a reload keep it folded; the key and the chip clear the menu pin on a phone (User 2026-09-29)
 - the three labels share one column and one style, the three values one size; the box stays tight
 
 FAIL:
@@ -1640,7 +1642,8 @@ PASS:
 - phone: the `창고` handle sits on top of the dock from the top of the form and covers no offer row; it opens the list rising
   from the dock, at most 45% of the screen; the rows above it scroll and take taps; a quantity tap keeps it open; the handle
   or Escape closes it; a fresh account starts folded and the next Day keeps the player's choice
-- handle, sheet and column read as a steel storage rack, not the floating box's brown or the 발주서's paper; one cell per slot,
+- handle, sheet and column read as a steel storage rack - material and value apart from the floating box's brown and the
+  발주서's paper, with no decorative stripe or stacked frame (PRESENTATION §Edge / material); one cell per slot,
   a held unit per filled cell, the empty cells equal the room left
 - the rack equals the warehouse; no console or runtime error
 

@@ -709,6 +709,7 @@ function deepOfferUI(n){
    includes 추모 방명록 and 위령제 (Meta.deathLimit). Warning color only at count = limit - 1. */
 /* `labelled`: the ORDER floating box sets 사망 as its line label, in the column 오늘 and 발주 후 share (User 2026-09-29) -
    the same words, split into label and value */
+const railFolded=()=>game.account.settings.orderRailFolded===true;
 function deathLimitItem(labelled){const s=game.run,n=s.stats.deaths,limit=Meta.deathLimit(s),end=Meta.deathLimitSegmentEnd(s),warn=n===limit-1?' warn':'';
  return labelled?'<i>사망</i><b class="death-limit'+warn+'">'+n+' / '+limit+' · D'+end+'까지</b>'
   :'<b class="death-limit'+warn+'">사망 '+n+' / '+limit+' · D'+end+'까지</b>';}
@@ -1483,7 +1484,13 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the rail floats while the order is scrolled; once the
       `오늘` block has gone under it, the same line rides in the rail's own box under a rule, so the Gates and their
       visitors stay in view while the player orders. Hidden while the block itself is on screen. */
-   +'<p class="board-rail death-limit-row'+railShown+'"><span class="rail-line">'+deathLimitItem(true)+'</span>'
+   /* v2.9.11 quick patch (User 2026-09-29): with the warehouse beside it the order rows can feel squeezed, so the whole box
+      folds to a small `요약` chip and back - the Death line folds with it, by the User's call (§DEATH LIMIT — ALWAYS VISIBLE
+      makes this one exception); folded is the account's choice, kept across Days and reloads until the player opens it */
+   +'<p class="board-rail death-limit-row'+railShown+(railFolded()?' folded':'')+'">'
+     +'<button type="button" class="rail-fold" data-action="rail-fold" aria-expanded="'+!railFolded()+'" aria-label="'+(railFolded()?'요약 열기':'요약 접기')+'">'
+     +'<span class="rail-chip">요약</span></button>'
+     +'<span class="rail-line">'+deathLimitItem(true)+'</span>'
      +'<span class="rail-line rail-today" aria-hidden="true"><i>오늘</i><b>'+todayLine(counts)+'</b></span>'
      +'<span class="rail-line rail-gold'+(after<0?' short':'')+'" aria-hidden="true"><i>발주 후</i><b>'+fmt(after)+'G</b></span></p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
@@ -2403,6 +2410,9 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
  /* UI_UX_v2.8 §ORDER: `.set` holds the 1 / 3 / 최대 shortcuts, so they take the stepper's own
     tick one step quieter and never outrank it; audio.js holds both to a minimum retrigger gap. */
  case'stock-sheet':setStockSheet(!sheetOpen());sound('ui');break;
+ case'rail-fold':{const st=game.account.settings,f=!railFolded();st.orderRailFolded=f;game.save();const r=$('.p-order .death-limit-row');
+  if(r){r.classList.toggle('folded',f);const b=r.querySelector('.rail-fold');b?.setAttribute('aria-expanded',String(!f));b?.setAttribute('aria-label',f?'요약 열기':'요약 접기');}
+  sound('ui');watchOrderToday();break;}
  case'qty':{const row=el.closest('[data-offer]'),key=row?.dataset.offer,y0=row?.getBoundingClientRect().top;
   game.setQuantity(Number(el.dataset.index),Number(el.dataset.q));sound(el.closest('.set')?'quantset':'quantity');render();
   anchorOffer(key,y0);break;}

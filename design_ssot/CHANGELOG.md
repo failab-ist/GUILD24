@@ -142,6 +142,9 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **ORDER floating box folds** - UI_UX §DEATH LIMIT — ALWAYS VISIBLE (one exception) / §ORDER — FLOATING TODAY LINE,
+  UI-Q-v29-29 (User 2026-09-29): with the warehouse beside the form the order rows could feel squeezed, so the floating
+  box folds - the Death line too - to a `요약` chip and back; folded is the account's choice, kept across Days and reloads.
 - **ORDER warehouse panel** - UI_UX §ORDER — WAREHOUSE PANEL / WAREHOUSE DISCLOSURE, UI-Q-v29-50 / UI-Q-v29-17 (User
   2026-09-29): scrolling down the offers, the player compares them with the warehouse, which sat above them in the form. It
   is off the form now and held apart like a game's storage - a steel rack of 칸, one cell per slot, a held unit in each

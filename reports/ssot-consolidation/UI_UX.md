@@ -1170,7 +1170,7 @@ User 2026-09-25: the filled SALE tray folds to its header while the shelf is rea
 User 2026-09-25: the 오늘 line joins the floating Death box while its block is out of view.
 
 ```new
-- ORDER — FLOATING TODAY LINE (User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button. v2.9.11 quick patch (User 2026-09-29): the ledger's `발주 후` joins the box the same way, last (under `오늘`), once the ledger line has gone under it - the same value, moving with every quantity tap, in the ledger's short color when below zero; the Death line stays first. Each copy appears only while its own source is under the rail. The box has one type ladder (User 2026-09-29): every line is a small label - `사망`, `오늘`, `발주 후` - in one shared column, and its value in one face and size (the Death line's own words, split into label and value); tight padding and a hairline between lines
+- ORDER — FLOATING TODAY LINE (User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button. v2.9.11 quick patch (User 2026-09-29): the ledger's `발주 후` joins the box the same way, last (under `오늘`), once the ledger line has gone under it - the same value, moving with every quantity tap, in the ledger's short color when below zero; the Death line stays first. Each copy appears only while its own source is under the rail. The box has one type ladder (User 2026-09-29): every line is a small label - `사망`, `오늘`, `발주 후` - in one shared column, and its value in one face and size (the Death line's own words, split into label and value); tight padding and a hairline between lines. Fold (User 2026-09-29): a key at the box's top-right folds the whole box - the Death line too - to a small `요약` chip on its right and back; folded is an account-level presentation choice kept across Days and reloads until the player opens it again; on a phone the key and the chip keep clear of the menu pin
 ```
 
 ## AMENDMENT — v2.9.2 H5: FINAL result seal stamp (User decision 2026-09-25)
@@ -2010,4 +2010,14 @@ one cell per slot the store has, each held unit in its own cell (its icon and da
 color), grouped by Item; the empty cells are the room left. The icon is the one the offer rows show; the Item's name is the
 cell's reader label (nothing is hover-only).
 PANEL): the warehouse is a rack of 칸, so the SKU's new cells - the ones past its prior count - drop in together on its one
+```
+
+
+## v2.9.11 quick patch — ORDER box folds; rack material (User 2026-09-29)
+
+New:
+
+```new
+- one exception (User 2026-09-29, v2.9.11 quick patch): on ORDER the player may fold the floating box, Death line included,
+to a `요약` chip (ORDER — FLOATING TODAY LINE); the count is back with one tap
 ```

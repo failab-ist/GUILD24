@@ -402,6 +402,21 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .death-limit-row .rail-today,.death-limit-row .rail-gold{display:none;margin-top:4px;padding-top:4px;box-shadow:inset 0 1px 0 #f0dcb233}
 .board-rail.show-today .rail-today,.board-rail.show-gold .rail-gold{display:grid}
 .death-limit-row .rail-gold.short b{color:#e8907c}
+/* v2.9.11 quick patch (User 2026-09-29): the whole box - the Death line too - folds to a `요약` chip on its right and back;
+   the fold key sits at the box's top-right corner (a 44 px target through an invisible margin) */
+.death-limit-row .rail-fold{position:absolute;top:0;right:0;min-width:44px;min-height:34px;padding:0 10px;border:0;background:none;box-shadow:none;filter:none;
+ color:#c9ad7c;cursor:pointer;display:flex;align-items:center;justify-content:flex-end;gap:6px}
+.death-limit-row .rail-fold:after{content:'';border:5px solid transparent;border-bottom-color:currentColor;border-top-width:0}
+.death-limit-row .rail-chip{display:none}
+.death-limit-row.folded{width:max-content;margin-left:auto;padding:0}
+.death-limit-row.folded .rail-line{display:none}
+.death-limit-row.folded .rail-fold{position:static;min-height:40px;padding:0 12px}
+.death-limit-row.folded .rail-fold:after{border-bottom-width:0;border-top-width:5px;border-top-color:currentColor;border-bottom-color:transparent}
+.death-limit-row.folded .rail-chip{display:block;font:600 12px/1 var(--ui);letter-spacing:.08em;color:#f0dcb2}
+/* on a phone the menu pin sits over the stuck box's top-right corner, so the key and the folded chip keep clear of it
+   (a desk puts the pin outside the form; see the ORDER desk block) */
+.death-limit-row .rail-fold{right:26px}
+.death-limit-row.folded{margin-right:42px}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;
@@ -2302,30 +2317,30 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .menu-list button.danger:hover{background:#6b322b}
 /* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is off the 발주서, held apart like a game's storage - a
    steel rack of 칸, one cell per slot the store has, a held unit in each (icon, days left), the empty cells the room left.
-   Steel with an orange beam, apart from the brown floating Death box and the 발주서's paper. Phone: a slim handle on top of
+   It reads apart from the 발주서 by material and value - the existing steel texture, dark against the paper - with one hard
+   cast edge and recessed read-only cells, no decorative stripe or stacked frame (PRESENTATION §Edge / material). Phone: a slim handle on top of
    the dock (a row of the dock, so it covers no offer row) opening the rack as a sheet that rises from it, 45% of the
    screen at most with its own scroll; the form above keeps scrolling and taking taps. Desk: a large rack beside the form. */
-.p-order{--rack:#4d5760;--rack-hi:#6c7780;--rack-beam:#c9772e;--cell:#252b31;--cell-hi:#3a434b;--rack-ink:#eef2f4;--rack-mute:#b3bec7;--rack-soon:#ff9e82}
+.p-order{--rack:#4d5760;--cell:#252b31;--rack-ink:#eef2f4;--rack-mute:#b3bec7;--rack-soon:#ff9e82}
 .stock-side{display:none}
 .stock-head{display:flex;align-items:baseline;gap:8px;margin:0}
 .stock-head i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.08em;color:var(--rack-mute)}
 .stock-head b{font:500 13px/1.35 var(--ui);color:var(--rack-ink);font-variant-numeric:tabular-nums;letter-spacing:0}
 .stock-head em{font-style:normal;font:400 13px/1.35 var(--ui);color:var(--rack-mute)}
 .p-order .dock .stock-handle{display:flex;flex:1 0 100%;order:-1;align-items:center;min-height:44px;margin-top:-6px;padding:0 12px;
- border:0;background:var(--tex-metal),var(--rack);color:var(--rack-ink);cursor:pointer;text-align:left;
- box-shadow:inset 0 3px 0 var(--rack-beam),inset 0 -2px 0 #00000059,0 3px 0 #00000073}
+ border:0;background:var(--tex-metal),var(--rack);color:var(--rack-ink);cursor:pointer;text-align:left;box-shadow:0 3px 0 #00000073}
+.p-order .dock .stock-handle:active{transform:translateY(2px);box-shadow:0 1px 0 #00000073}
 .stock-toggle{margin-left:auto;font:500 13px/1 var(--ui);color:var(--rack-ink)}
 .stock-toggle:after{content:'';display:inline-block;margin-left:7px;border:5px solid transparent;border-bottom-color:currentColor;
  border-top-width:0;vertical-align:2px}
 .stock-handle[aria-expanded="true"] .stock-toggle:after{border-bottom-width:0;border-top-width:5px;border-top-color:currentColor;border-bottom-color:transparent}
 .stock-sheet{position:absolute;left:0;right:0;bottom:100%;z-index:7;max-height:45dvh;overflow-y:auto;overscroll-behavior:contain;
- padding:10px var(--gutter) 12px;background:var(--tex-metal),var(--rack);box-shadow:0 -4px 0 #00000059,inset 0 3px 0 var(--rack-beam)}
+ padding:10px var(--gutter) 12px;background:var(--tex-metal),var(--rack);box-shadow:0 -4px 0 #00000059}
 .stock-sheet[hidden]{display:none}
 /* the rack: square cells, a held unit's icon centred, its days left in the corner */
 .wh-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:5px;margin:0;padding:0;list-style:none}
-.wh-slot{position:relative;aspect-ratio:1;display:grid;place-items:center;background:var(--cell);
- box-shadow:inset 2px 2px 0 #00000080,inset -1px -1px 0 var(--cell-hi)}
-.wh-slot.empty{background:#2c333a;box-shadow:inset 1px 1px 0 #0000004d,inset -1px -1px 0 #ffffff0d;opacity:.7}
+.wh-slot{position:relative;aspect-ratio:1;display:grid;place-items:center;background:var(--cell);box-shadow:inset 2px 2px 0 #00000080}
+.wh-slot.empty{background:#30383f;box-shadow:inset 1px 1px 0 #0000004d}
 .wh-slot>svg,.wh-slot>.item-art{width:62%;height:auto}
 .wh-slot em{position:absolute;right:2px;bottom:1px;font:600 10px/1 var(--ui);font-style:normal;color:var(--rack-mute);
  text-shadow:0 1px 0 #000}
@@ -2337,10 +2352,12 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-order .stage-scroll{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);column-gap:24px;align-items:start}
  .p-order .order-desk{min-width:0}
  .p-order .order-desk .form{max-width:none;margin:0}
+ .death-limit-row .rail-fold{right:0}
+ .death-limit-row.folded{margin-right:16px}
  /* set below the menu pin, which sits over the stage's top-right corner */
  .stock-side{display:block;position:sticky;top:46px;margin-top:46px;padding:12px 16px 16px;background:var(--tex-metal),var(--rack);
-  box-shadow:inset 0 4px 0 var(--rack-beam),inset 3px 0 0 var(--rack-hi),inset -3px 0 0 var(--rack-hi),0 4px 0 #00000080}
- .stock-side .stock-head{padding:4px 0 10px}
+  box-shadow:0 4px 0 #00000080}
+ .stock-side .stock-head{padding:4px 0 10px;margin-bottom:10px;box-shadow:inset 0 -1px 0 #ffffff1a}
  .stock-side .stock-head i{font-size:12px}
  .stock-side .stock-head b{font-size:18px}
  .stock-side .stock-head em{font-size:15px}
