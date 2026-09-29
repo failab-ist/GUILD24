@@ -430,7 +430,7 @@ let cue=null,handoff=null;
 let stub=null,stubTimer=null;
 /* UI_UX §SALE — FORECAST PIN (User 2026-09-25, v2.9.0): whether the Player folded the floating 전망 line to its chip.
    Presentation only, cleared whenever the readout is back on screen - no Save or account field. */
-let pinFolded=false,pinWatch=null,orderWatch=null;
+let pinFolded=false,pinWatch=null,orderWatch=null,railShown='';
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): on a phone the filled tray folds to its header line while the
    player scrolls the shelf or taps elsewhere, and any shelf row (the same one included) or the folded tray opens it
    again. Presentation only: which Item is selected does not change, and nothing here is saved. */
@@ -630,7 +630,7 @@ function render(){
  const sayMs=cue==='sale'||cue==='refuse'?SAY_REPLY_MS:SAY_MS;
  renderModal();requestAnimationFrame(showCoach);if(changed)playPhase(phase);playCue();armSpeech(sayMs);
  if(phase==='sell'){watchForecastPin();watchTray();}else{pinWatch?.disconnect();pinWatch=null;}
- if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;}
+ if(phase==='order')watchOrderToday();else{orderWatch?.disconnect();orderWatch=null;railShown='';}
 }
 // Every named Hazard states its canonical pressure inline. Nothing is hover-only,
 // nothing is left name-only (UI-005, UI-Q35, DUN-Q21).
@@ -1434,12 +1434,21 @@ function gateCounts(){const s=game.run,c=new Map();for(const id of s.queue){cons
 /* today's visitors and where they claim to go - one owner for the 오늘 block and its floating copy */
 function todayLine(counts,tag='em'){const s=game.run;
  return '<'+tag+'>'+s.queue.length+'명</'+tag+'> · '+(counts?s.dungeons.map(d=>E(d.name)+' '+(counts.get(d.id)||0)).join(' · '):E(s.dungeons.map(d=>d.name).join(' / ')));}
+/* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후 line rides at the rail's foot the same way, once the
+   ledger has gone under it. Each copy watches its own source (the ledger leaves before the 오늘 block does). A line
+   joining or leaving changes the rail's height, so the watch is set again against the new edge - otherwise the 오늘 block
+   could sit hidden under a grown rail without being counted as gone. What is shown is carried across the redraw a
+   quantity tap makes (`railShown`), so the rail does not blink on every tap. */
 function watchOrderToday(){orderWatch?.disconnect();orderWatch=null;
- const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),sc=$('.p-order .stage-scroll');
+ const rail=$('.p-order .death-limit-row'),brief=$('.p-order .form .brief'),out=$('.p-order #order-register .out'),sc=$('.p-order .stage-scroll');
  if(!rail||!brief||!sc||typeof IntersectionObserver!=='function')return;
- orderWatch=new IntersectionObserver(([e])=>{rail.classList.toggle('show-today',!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+rail.offsetHeight+4);},
-  {root:sc,rootMargin:'-'+(rail.offsetHeight+4)+'px 0px 0px 0px',threshold:0});
- orderWatch.observe(brief);}
+ /* the stuck rail sits under the scroll box's top padding, so its lower edge is that padding plus its own height */
+ const h=rail.offsetHeight,edge=(parseFloat(getComputedStyle(sc).paddingTop)||0)+h;
+ orderWatch=new IntersectionObserver(es=>{for(const e of es)rail.classList.toggle(e.target===brief?'show-today':'show-gold',!e.isIntersecting&&e.boundingClientRect.top<(e.rootBounds?.top??0)+edge);
+  railShown=['show-today','show-gold'].filter(c=>rail.classList.contains(c)).map(c=>' '+c).join('');
+  if(rail.offsetHeight!==h)watchOrderToday();},
+  {root:sc,rootMargin:'-'+edge+'px 0px 0px 0px',threshold:0});
+ orderWatch.observe(brief);if(out)orderWatch.observe(out);}
 function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total,price=game.rerollPrice(),held=total;
  /* v2.9.0 ORDER today-fit emphasis (UI_UX §ORDER — ITEM INFORMATION HIERARCHY): the same rule as SALE, against today's Gates */
  const counts=s.dungeons.length>=2?gateCounts():null;
@@ -1451,8 +1460,9 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the rail floats while the order is scrolled; once the
       `오늘` block has gone under it, the same line rides in the rail's own box under a rule, so the Gates and their
       visitors stay in view while the player orders. Hidden while the block itself is on screen. */
-   +'<p class="board-rail death-limit-row">'+deathLimitItem()
-     +'<span class="rail-today" aria-hidden="true"><i>오늘</i>'+todayLine(counts)+'</span></p>'
+   +'<p class="board-rail death-limit-row'+railShown+'">'+deathLimitItem()
+     +'<span class="rail-today" aria-hidden="true"><i>오늘</i>'+todayLine(counts)+'</span>'
+     +'<span class="rail-gold'+(after<0?' short':'')+'" aria-hidden="true"><i>발주 후</i><b>'+fmt(after)+'G</b></span></p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
    +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'

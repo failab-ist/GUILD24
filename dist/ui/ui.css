@@ -396,6 +396,14 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .rail-today i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.12em;color:#c9ad7c;margin-right:8px}
 .rail-today em{font-style:normal;font-weight:600;color:#fff0c9}
 .board-rail.show-today .rail-today{display:block}
+/* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후, last in the rail - the Death count and 오늘 are what the
+   order is read against, this is the number each tap moves, so it sits nearest the rows being tapped */
+.rail-gold{display:none;flex:1 0 100%;margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #f0dcb24d;
+ font:400 13px/1.4 var(--ui);color:#f0dcb2;-webkit-font-smoothing:antialiased}
+.rail-gold i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.12em;color:#c9ad7c;margin-right:8px}
+.rail-gold b{margin-left:0;font:600 16px/1.2 var(--ui);color:#fff0c9}
+.rail-gold.short b{color:#e8907c}
+.board-rail.show-gold .rail-gold{display:block}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;

@@ -1796,12 +1796,17 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
  assert.ok(/if\(phase!=='final'\)finalOrdered=false;/.test(app)&&!/run\.finalOrdered|s\.finalOrdered/.test(app),'the step is presentation, never saved');
 });
 
-/* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25) */
-test('ORDER: the 오늘 line rides in the floating Death rail only while its own block is out of view',()=>{
+/* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
+test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
  const of=fn('orderForm');
- assert.ok(/'<p class="board-rail death-limit-row">'\+deathLimitItem\(\)\s*\+'<span class="rail-today" aria-hidden="true"><i>오늘<\/i>'\+todayLine\(counts\)/.test(of),'the same line, in the Death rail\'s own box, under its own label');
+ assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+'">'\+deathLimitItem\(\)\s*\+'<span class="rail-today" aria-hidden="true"><i>오늘<\/i>'\+todayLine\(counts\)\+'<\/span>'\s*\+'<span class="rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
+  'Death first, then 오늘, then 발주 후 last - the ledger\'s own `after`, short in the ledger\'s warning');
  assert.ok(/'<p>'\+todayLine\(counts,'b'\)/.test(of),'one owner writes both copies');
- const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/show-today',!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w),'shown only once the block has gone above, under the rail');
+ const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/e\.target===brief\?'show-today':'show-gold',!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w),'each shown only once its own source has gone above, under the rail');
+ assert.ok(/orderWatch\.observe\(brief\);if\(out\)orderWatch\.observe\(out\)/.test(w)&&/\$\('\.p-order #order-register \.out'\)/.test(w),'발주 후 watches the ledger line, 오늘 its own block');
+ assert.ok(/edge=\(parseFloat\(getComputedStyle\(sc\)\.paddingTop\)\|\|0\)\+h/.test(w)&&/if\(rail\.offsetHeight!==h\)watchOrderToday\(\)/.test(w),'measured against the stuck rail\'s real edge, set again when the rail grows or shrinks');
+ assert.ok(/railShown=\['show-today','show-gold'\]/.test(w)&&/railShown='';/.test(app),'a quantity redraw keeps what is shown; leaving ORDER forgets it');
+ assert.ok(/\.rail-gold\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-gold \.rail-gold\{display:block\}/.test(css)&&/\.rail-gold\.short b\{color:/.test(css),'hidden by default, set apart by a rule, short reads as short');
  assert.ok(/if\(phase==='order'\)watchOrderToday\(\)/.test(app),'watched on ORDER only');
  assert.ok(/\.rail-today\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today\{display:block\}/.test(css),'hidden by default, set apart by a rule');
 });

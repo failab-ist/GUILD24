@@ -1825,3 +1825,15 @@ New:
 - decision and result cues (a sale, a refusal, a NIGHT outcome, the Boss seal) read clearly above the music; NIGHT does not
 feel louder than the other phases
 ```
+
+
+## v2.9.11 quick patch — ORDER floating 발주 후 (User 2026-09-29)
+
+New:
+
+```new
+- scrolled past the ledger, `발주 후` joins last, under its own rule and label; it equals the ledger's value, follows every
+quantity tap without the box blinking, and turns the short color below zero (v2.9.11 quick patch, User 2026-09-29)
+- no scroll position where a source is hidden under the box without its copy, or shown twice
+- `발주 후` in the box differs from the ledger, lags a tap, or sits above the Death line
+```
