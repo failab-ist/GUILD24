@@ -2033,7 +2033,7 @@ test('UI-Q-v29-46: the FINAL clash - after the resolution, the carried items, th
  assert.ok(/const left=s\.win\?0:Math\.max\(\.03,1-Math\.max\(0,Math\.min\(1,d\.assault\/d\.bossPower\)\)\),share=\(1-left\)\/n;/.test(cs),'the bar is the resolved ratio split evenly; a failure keeps 3%');
  assert.ok(!/game\.(save|boss|end)|\.rng|localStorage|s\.[a-zA-Z]+=(?!=)/.test(cs),'the scene reads the Run and writes nothing');
  assert.ok(/if\(!last\)at\(t\+C\.lunge\+C\.counter,\(\)=>drain\(from,to,C\.drain\)\)/.test(cs)&&/const edge=s\.win\?Math\.min\(CLASH_EDGE,level\):left;/.test(cs)
-  &&/drain\(level,edge,C\.run,/.test(cs)&&/if\(s\.win\)\{drain\(edge,0,C\.snap,/.test(cs),'the red drops after each counter; the last share is held for the verdict, which hesitates near the bottom');
+  &&/drain\(level,edge,C\.run,/.test(cs)&&/if\(s\.win\)at\(t,\(\)=>drain\(edge,0,C\.snap,/.test(cs)&&/at\(s\.win\?t\+C\.snap:t,/.test(cs),'the red drops after each counter; the last share is held for the verdict, which hesitates near the bottom');
  assert.ok(/const CLASH_EDGE=\.05;/.test(app)&&!/class="mark"/.test(cs),'a clear hesitates at 5%; no amount is marked on the bar');
  assert.ok(/items=m\.items\|\|\[\]/.test(cs)&&/Art\.itemIcon\(items\[i\],22\)/.test(cs)&&/got\.forEach\(\(icon,i\)=>/.test(cs)&&/t\+i\*C\.item/.test(cs),'each member is handed what they carried, one item at a time');
  assert.ok(/el\.addEventListener\('click',finishClash\)/.test(cs)&&/document\.addEventListener\('keydown',clashKey\)/.test(cs),'a tap or a key skips it');

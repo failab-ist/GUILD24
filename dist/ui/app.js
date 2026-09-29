@@ -183,7 +183,10 @@ function clashScene(){
  at(t+C.wait,()=>drain(level,edge,C.run,'cubic-bezier(.25,.8,.35,1)'));
  at(t+C.wait+C.run,()=>tremble(C.hesitate));
  t+=C.wait+C.run+C.hesitate;
- at(t,()=>{if(s.win){drain(edge,0,C.snap,'ease-in');Sound.play('collapse');
+ // a clear: the red runs out first, and only then does the crack show and the Boss fall (v3.0 prep §2-4-5 - the crack
+ // used to start with the snap and showed while 5% of the red was still there)
+ if(s.win)at(t,()=>drain(edge,0,C.snap,'ease-in'));
+ at(s.win?t+C.snap:t,()=>{if(s.win){Sound.play('collapse');
    go(boss.querySelector('.crack'),[{opacity:0},{opacity:1}],{duration:120});
    go(boss,[{transform:'none',filter:'none',opacity:1},{transform:'translateX(-4px)',offset:.08},{transform:'translateX(4px)',offset:.16},
     {transform:'translateX(-2px)',filter:'brightness(.8)',opacity:1,offset:.26},{transform:'translateY(6px) rotate(-1.5deg)',offset:.4,easing:'cubic-bezier(.5,0,1,.5)'},
