@@ -81,6 +81,9 @@ the owner headers and in the git tag.
   §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
   (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
   Food/Drink Stat bonus is unchanged.
+- **The DAY sign rolls** - UI_UX §MORNING — DAY SIGN FLIP, UI-Q-v29-48 (User 2026-09-29): arriving at a new Day's MORNING,
+  the ceiling DAY sign's number rolls once from yesterday's to today's (300 ms, inside the sign, no sound; reload, redraw
+  and reduced motion show the still sign). The full-screen DAY transition stays unadopted.
 - **The opening stock is named** - UI_UX §TUTORIAL — FIRST-ORDER COACH ORDER, COPY_AUDIT §3-7 STOCK, UI-Q-v29-11 (User 2026-09-29):
   the first Day's warehouse holds the opening stock nobody ordered, and no screen said so. The first-ORDER coach now teaches it
   second, on the 창고 summary: `창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.`

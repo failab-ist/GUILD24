@@ -3567,4 +3567,18 @@ test('v3.0 BGM: one recorded track per phase, looped between its measured points
  assert.ok(!/Sound\.sync\([^)]*\?\.phase/.test(app)&&!/Sound\.sync\([^)]*s\.phase/.test(app),'every sync goes through audioPhase()');
 });
 
+// UI_UX §MORNING — DAY SIGN FLIP (User 2026-09-29): a roll inside the sign when a new Day's MORNING is reached in the
+// session - never on a reload or a redraw, never under reduced motion, within the game-feel beat length, and it lands on
+// the plain number.
+test('UI-Q-v29-48: the DAY sign rolls once on arriving at a MORNING, inside the sign, and lands plain',()=>{
+ const f=fn('dayFlip'),r=fn('render'),css=read('dist/ui/ui.css');
+ assert.ok(/arrived=lastPhase!==null&&changed/.test(r)&&/if\(phase==='morning'&&arrived\)dayFlip\(s\.day\)/.test(r),'only on arriving, never on a reload or a redraw');
+ assert.ok(/!motionOK\(\)/.test(f),'reduced motion never starts it');
+ const d=[...f.matchAll(/duration:(\d+)/g)].map(m=>+m[1]);assert.ok(d.length===2&&d.every(x=>x<=320),'within the beat length: '+d);
+ assert.equal(new Set([...f.matchAll(/easing:(\w+)/g)].map(m=>m[1])).size,1,'one curve for both numbers, so they never overlap');
+ assert.ok(/\.daysign b\.flip\{[^}]*overflow:hidden/.test(css),'the roll stays inside the number box');
+ assert.ok(/b\.textContent=now/.test(f)&&/aria-hidden="true"/.test(f),'it lands on the plain number; the outgoing one is hidden from readers');
+ assert.ok(!/Sound\.|sound\(/.test(f)&&!/game\.|s\.[a-z]+=/.test(f),'no sound of its own and nothing written');
+});
+
 console.log(count+' ui guard groups passed');

@@ -2735,3 +2735,21 @@ FAIL:
 - an audible click, gap or double-play at a join or a phase change
 - a phase that goes silent because a file failed to load
 - music that masks a decision or result cue
+
+### UI-Q-v29-48 — MORNING DAY SIGN FLIP (User 2026-09-29, v2.9.11)
+
+Verify UI_UX §MORNING — DAY SIGN FLIP at 390 and 1280.
+
+PASS:
+- pressing `다음 날` and arriving at the next MORNING rolls the sign once, from yesterday's number to today's
+- the two numbers never overlap mid-roll, and nothing moves outside the sign
+- the sign lands on the plain number
+- a redraw of the same MORNING and a reload show the still sign
+- reduced motion shows the still sign
+- no console or runtime error
+- runtime evidence: `tools/qa-day-flip.cjs` (in `npm run qa:runtime`)
+
+FAIL:
+- the roll plays on every redraw or on a reload
+- the numbers overlap, or the sign's size jumps
+- the roll runs longer than 320 ms or plays a sound of its own

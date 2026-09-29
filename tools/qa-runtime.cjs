@@ -4,7 +4,7 @@
 // the v2.8 presentation review tools now in archive/v2.8/tools/) are review tools, not pass/fail, and are
 // not run here.
 const {spawnSync}=require('node:child_process'),os=require('node:os'),path=require('node:path');
-const HARNESSES=['qa-d0-flow','qa-bgm','qa-final-prep','qa-boss-confirm','qa-final-end','qa-final-bosses','qa-reset-seed','qa-boss-hold','qa-replay-nudge','qa-strain-line','qa-deco-seating','qa-prep-scene','qa-primary-grammar','qa-final-clash'];
+const HARNESSES=['qa-d0-flow','qa-bgm','qa-day-flip','qa-final-prep','qa-boss-confirm','qa-final-end','qa-final-bosses','qa-reset-seed','qa-boss-hold','qa-replay-nudge','qa-strain-line','qa-deco-seating','qa-prep-scene','qa-primary-grammar','qa-final-clash'];
 const OUT=process.argv[2]||path.join(os.tmpdir(),'guild24-qa-runtime');
 const failed=[];
 for(const h of HARNESSES){

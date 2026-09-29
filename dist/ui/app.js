@@ -544,6 +544,20 @@ const KEY_PRESS={y:3,down:60,up:60};
    writes (and A6's shake with it), so the key drops it for the rest of its life - it is redrawn on the next render */
 const keyPress=(A,key,more={})=>(key.style.transition='none',A(key,{translateY:[{from:0,to:KEY_PRESS.y,duration:KEY_PRESS.down,ease:'out(2)'},{to:0,duration:KEY_PRESS.up,ease:'outQuad'}],...more}));
 // the approval stamp lands before the phase advances
+/* UI_UX §MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11): arriving at a new Day's MORNING within the session, the
+   sign's number rolls - yesterday's rises out as today's rises in, one curve for both so they stay one line apart and
+   never overlap - inside the sign (its own overflow), 300 ms, no sound (the MORNING shutter already sounds). A reload
+   lands on the still sign; reduced motion never starts it. The number's own text is put back when it lands, so the DOM
+   ends as it began. Presentation only: it reads s.day and writes nothing. */
+function dayFlip(day){
+ const b=$('.daysign b');if(!b||!motionOK()||day<1)return;
+ const now=b.textContent,prev=String(day-1).padStart(2,'0');
+ b.classList.add('flip');b.innerHTML='<span class="old" aria-hidden="true">'+prev+'</span><span class="new">'+now+'</span>';
+ const ease='cubic-bezier(.45,0,.2,1)',o=b.querySelector('.old'),n=b.querySelector('.new');
+ o.animate([{transform:'translateY(0)'},{transform:'translateY(-100%)'}],{duration:300,easing:ease,fill:'forwards'});
+ n.animate([{transform:'translateY(100%)'},{transform:'translateY(0)'}],{duration:300,easing:ease,fill:'forwards'})
+  .finished.then(()=>{if(b.isConnected){b.classList.remove('flip');b.textContent=now;}},()=>{});
+}
 function stampPress(el){
  if(!motionOK()||!el)return;
  anime.animate(el,{scale:[1.08,1],duration:180,ease:'outQuad'});
@@ -578,7 +592,8 @@ function render(){
  const focusHold=holdFocus($('#app'));
  $('#app').innerHTML=phase==='morning'?morningScreen():phase==='order'?orderScreen():phase==='sell'?saleScreen():phase==='night'?nightScreen():phase==='closing'?closingScreen():phase==='final'?finalScreen():phase==='end'?endScreen():stage('start','첫 점포지원','','<div class="relic-open"><span class="label">DAY 0</span><h2>첫 점포지원</h2><p class="muted">이번 영업에 쓸 지원 하나를 고르세요.</p></div>','');
  if(phase!=='final')finalOrdered=false;
- const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey;lastPhase=viewKey;
+ const viewKey=phase+':'+(phase==='sell'?s.cursor:phase==='night'?s.nightCursor:'');const changed=lastPhase!==viewKey,arrived=lastPhase!==null&&changed;lastPhase=viewKey;
+ if(phase==='morning'&&arrived)dayFlip(s.day);
  const scroller=$('.stage-scroll');if(scroller){scroller.scrollTop=changed?0:previousScroll;if(changed)$('#phase-content').focus({preventScroll:true});}
  ['.p-sale .dossier-col','.p-sale .shelf-col'].forEach((q,i)=>{const el=$(q);if(el)el.scrollTop=changed?0:previousCols[i];});
  /* The control that answered the last press is often disabled by it (a quantity driven to

@@ -231,6 +231,18 @@ not only in the 도감.
 - exact placement is settled by the screenshot review of the implementing batch (PRESENTATION_PRINCIPLES)
 - ORDER — FLOATING TODAY LINE (User 2026-09-25; confirmed as built, User 2026-09-26, v2.9.3): the Death line floats at the top of the scrolled 발주서; once the `오늘` block (visitors and the per-Gate count) has gone under it, the same `오늘` line joins that floating box under a thin rule with its own small `오늘` label, so it reads as a second fact, not part of the Death count. While the block itself is on screen the box carries the Death line only. No new copy; the line is the block's own text without the `위험 보기` button
 
+### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
+
+Arriving at a new Day's MORNING within the session, the ceiling DAY sign's number rolls once: yesterday's number rises
+out as today's rises in.
+- One easing curve for both numbers, so they stay one line apart and never overlap.
+- 300 ms, inside the number's own box, no sound (the MORNING shutter already sounds). It keeps PRESENTATION §GAME FEEL
+  BEAT's general contract: at most 320 ms, inside its panel, never blocks input.
+- A reload or a redraw of the same MORNING shows the still sign; reduced motion never starts it.
+- When it lands, the number is plain text again (the DOM ends as it began).
+- Presentation only: it reads the Day and writes nothing.
+- The full-screen DAY transition stays unadopted (it would need a GAME FEEL contract exception).
+
 ### MORNING — NEXT-DAY GATE FORECAST — RETIRED
 
 (User 2026-09-24, v2.9.0) No next-day Gate-count or Tier forecast is shown anywhere, MORNING or ORDER. Today's open Gates, their numbered Hazard rows and the visitor count per open Gate are the whole preparation context; the Gate-count / Tier generation rules in `DUNGEON_HAZARD_v2.8.0.md` are unchanged and stay internal.
