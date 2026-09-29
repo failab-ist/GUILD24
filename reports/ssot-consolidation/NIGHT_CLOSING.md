@@ -540,3 +540,18 @@ When Death or Severe Injury is actually converted to 퇴각 (User 2026-09-28, v2
 `세계수 생환부적이 사망을 무사 퇴각으로 바꿨다.` / `세계수 생환부적이 중상을 무사 퇴각으로 바꿨다.` (proof cause chip
 `사망을 무사 퇴각으로` / `중상을 무사 퇴각으로`; only the Death one is a turned-away Death)
 ```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+게이트 순례주간:
+```
+
+New:
+
+```new
+게이트 순례 주간:
+```

@@ -1244,13 +1244,13 @@ Player reads effects and makes the judgment.
 
 ### UI-Q33 — DESTINATION UNCERTAINTY / PILGRIMAGE RESULT
 SETUP:
-Trigger the destination reliability tutorial, 허세, and 게이트 순례주간.
+Trigger the destination reliability tutorial, 허세, and 게이트 순례 주간.
 
 EXPECT:
 - Tutorial says: `이 손님이 향할 게이트. 특성·당일 상황에 따라 바뀔 수 있다.`
 - Tutorial does not frame 허세 as the whole destination system
 - Sale label uses 예상 목적지 where uncertainty is possible
-- 게이트 순례주간 Morning reveal states 1–3 affected range
+- 게이트 순례 주간 Morning reveal states 1–3 affected range
 - actual N / affected identity / changed Gate remain hidden until Night
 - Night shows actual changed count and expected -> actual destination on affected NPC results
 
@@ -2378,7 +2378,7 @@ FAIL:
 (User 2026-09-24, v2.9.0)
 
 SETUP:
-ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례주간 reroute where available.
+ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
 
 EXPECT:
 The ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21.

@@ -291,7 +291,7 @@ Sale에 영향을 주는 Effect만 Compact하게 유지한다.
 ### NIGHT
 
 원정 결과에 Event가 실제 영향을 줬다면 Causality에 필요할 때만 표시한다.
-`게이트 순례주간`은 예외적으로 실제 변경 인원 N과 affected NPC의 예상->실제 목적지를 Night에서 공개한다.
+`게이트 순례 주간`은 예외적으로 실제 변경 인원 N과 affected NPC의 예상->실제 목적지를 Night에서 공개한다.
 새 Result Phase를 만들지 않고 기존 Night presentation을 재사용한다.
 
 ### CLOSING
@@ -570,7 +570,7 @@ EFFECT:
 행사 대상 Item은 Order에서 명확하게 표시한다: 그 발주 행의 `매입` 가격표 모서리에 빨간 `1+1` 딱지
 (User 2026-09-28, v2.9.10 quick patch; 모양 -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY).
 
-### 03. 게이트 순례주간
+### 03. 게이트 순례 주간
 
 TYPE: Destination / Uncertainty + Preparation  
 WEIGHT: 1.0
@@ -591,7 +591,7 @@ EFFECT:
 - this Event does not alter Trait, Wallet, Loyalty, purchase preference, or Living NPC Cap
 
 NIGHT RESULT:
-- Night displays `게이트 순례주간 · 실제 변경 N명`
+- Night displays `게이트 순례 주간 · 실제 변경 N명`
 - each affected NPC result identifies `예상 목적지 -> 실제 목적지`
 - unaffected NPCs do not need extra Event copy
 - this uses the existing Night result presentation; no separate Event-result phase/screen
@@ -1593,7 +1593,7 @@ Do not broaden category events to unrelated Items merely to preserve old source 
 
 ### Mixed / RiskReward
 
-- 게이트 순례주간
+- 게이트 순례 주간
 - 몬스터 범람
 - 한파
 - 독안개
@@ -1803,7 +1803,7 @@ NO라면 제거 / 수정 후보.
 - Roster Cap을 무시하지 않는가?
 - Regular 형성을 해치지 않는가?
 - 장기 투자 NPC 가치를 파괴하지 않는가?
-- 게이트 순례주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
+- 게이트 순례 주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
 - Morning에 1~3명 범위는 공개하되 실제 N/대상/변경 Gate는 숨기는가?
 - 실제 affectedCount가 seeded RNG 1~3으로 결정되는가?
 - affected NPC는 다른 열린 Gate로만 이동하는가?

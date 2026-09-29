@@ -1216,7 +1216,7 @@ Hierarchy:
 Importance hierarchy:
 - routine success=compact
 - meaningful growth/injury/death/decisive Item/callback=stronger visual emphasis
-- on 게이트 순례주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
+- on 게이트 순례 주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
 
 Avoid:
 - debug log layout

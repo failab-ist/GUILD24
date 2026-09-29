@@ -312,7 +312,7 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
    if(selected.some(n=>n.claimedDestination===g))continue;
    const movable=selected.filter(n=>n.destination===n.claimedDestination&&selected.filter(m=>m.claimedDestination===n.claimedDestination).length>1);
    if(!movable.length)continue;const n=this.rng.pick(movable);n.destination=n.claimedDestination=g;}
-  /* EVENT §03 게이트 순례주간: "actual destination changes to a different currently open Gate"
+  /* EVENT §03 게이트 순례 주간: "actual destination changes to a different currently open Gate"
      reads against the expected/reported destination (claimedDestination) - the one thing the
      Player was shown - not against the current actual n.destination, which a 거짓말쟁이 may
      already have secretly diverted. Filtering on n.destination let a 거짓말쟁이's own reroute

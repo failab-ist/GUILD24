@@ -61,7 +61,7 @@ Zero-result Night:
 softlock=NO
 즉시 Closing으로 진행 가능해야 한다.
 
-게이트 순례주간:
+게이트 순례 주간:
 - Night header/summary may show `실제 변경 N명`
 - affected NPC result shows `예상 목적지 -> 실제 목적지`
 - the route-change line (User 2026-09-25, v2.9.0; exact -> `COPY_AUDIT_APPROVED_v2.8.0.md` §14-10): `순례 행렬을 따라 {name}{은/는} 예상 목적지 {A} 대신 {B}{으로/로} 향했다.` for a pilgrimage reroute, `거짓말쟁이 {name}{은/는} 말했던 {A} 대신 {B}{으로/로} 향했다.` for the Trait; the retired name 허세 never appears and the particles follow the final consonant

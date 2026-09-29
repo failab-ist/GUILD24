@@ -8,7 +8,7 @@ function fresh(seed='events'){const g=new Game();g.autosave=false;g.start(seed);
 function advance(g){const s=g.run;if(s.phase==='end')return;g.beginOrder();g.finishOrder();while(s.phase==='sell')g.depart();g.finishNight();g.closeDay();}
 // force WHICH Event fires; the canonical day gate and per-event eligibility still decide WHETHER it fires
 const force=(g,id)=>{const e=DATA.events.find(x=>x.id===id);g.rollEvent=()=>g.eventEligibleDay(g.run.day)&&g.eventEligible(e)?e:null;};
-const CATALOG=['물류대란','본사 1+1 행사','게이트 순례주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제',
+const CATALOG=['물류대란','본사 1+1 행사','게이트 순례 주간','몬스터 범람','포션 가격 폭등','한파','포션 공급 중단','신입 모험가 시즌','왕립 기사단 방문','암시장 상인','본사 재고 감사','왕도 축제','길드 파업','미확인 게이트','본사 반값 행사','독안개','보급 상단 도착','길드 급여일','치유소 휴무','본사 폐기 유예','늙은 음유시인','본사 야간 근무 수칙','길드 합동 위령제',
  "길드 의료단 순회","길드 의무관 당직","길드 위로금","길드 특별 수당","본사 물류 지원","보험 공동 구매","본사 원정용품 지원","길드 연회","원정 교대 근무","길드 휴양일","단골의 날","길드 현상금","마왕의 징조","입고 지연","가뭄","길드 세금 징수","장맛비","본사 발주 제한","포스기 먹통","가격 단속","퇴각로 붕괴","길드 소집령","냉장고 고장","야시장","원정 징발령","본사 재고 떨이","정예 토벌령","폭염","게이트 임시 폐쇄","길드 훈련 주간","유통기한 임박 특가","게이트 안정화 작업"];
 
 test('EVENT-003: catalog is exactly the canonical 55 (23 → 55 in v2.9.11) with the two rare easter eggs at 0.35',()=>{
@@ -181,7 +181,7 @@ test('EVENT 8-1: an Event-revealed Hazard is immediately Known and never doubled
  assert.ok(Relics.known(g).includes('cold'),'Event Hazard is inside Known Hazards for coverage/pity logic');
 });
 
-test('EVENT 03: 게이트 순례주간 needs two Gates and three expected visitors, and hides the change until Night',()=>{
+test('EVENT 03: 게이트 순례 주간 needs two Gates and three expected visitors, and hides the change until Night',()=>{
  const g=fresh('pilgrim'),s=g.run,pil=DATA.events.find(e=>e.id==='pilgrimage');
  s.dungeons=[g.makeDungeon('spider',1)];s.expectedVisitors=5;assert.equal(g.eventEligible(pil),false,'one Gate -> excluded');
  s.dungeons=[g.makeDungeon('spider',1),g.makeDungeon('snow',1)];s.expectedVisitors=2;assert.equal(g.eventEligible(pil),false,'too few visitors -> excluded');

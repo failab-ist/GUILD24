@@ -65,6 +65,11 @@ the owner headers and in the git tag.
   §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
   (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
   Food/Drink Stat bonus is unchanged.
+- **Item and Event copy proofread, batch 1** (User 2026-09-29, `reports/copy-proofread-v2911.md` #1~#10): 게이트 순례주간 is
+  `게이트 순례 주간` (like 길드 훈련 주간; every owner, screen line and test that names it); spacing in 에너지드링크's, 길드
+  급여일's and 단골의 날's text; 포스기 먹통 reads `…바꿔 달라고 전화할 수도 없다.`; 한파, 독안개 and 본사 1+1 행사's Function
+  lines start with `오늘` like every other one-Day Event; 본사 재고 감사 reads `오늘 누적 폐기 6건 이상이면 운영비 +폐기 수 ×5G ·
+  최대 100G`; 본사 폐기 유예 drops `에 한하여`. Effects unchanged.
 - **Event copy proofread** - COPY_AUDIT §13-24 / §13-26 / §13-45 / §13-48 / §13-54 (User 2026-09-28): 길드 의료단 순회 and
   길드 위로금 read `오늘 방문 부상 모험가 · …` like the other visitor lines; 길드 소집령 reads `실력자 한 명이 길드에 급히 불려
   갔다.` and `오늘 방문 예정이었던 최고 레벨 모험가 대신 다른 모험가 방문`; 원정 징발령 reads `길드가 모험가 몇 명을 징발해

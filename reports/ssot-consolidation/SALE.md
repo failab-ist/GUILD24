@@ -425,3 +425,18 @@ Shelf life reads 폐기까지 N일 / 내일까지 / 오늘까지; a sold-out ORD
 ```new
 Shelf order: rows are sorted by days left before discard, nearest first, ties in the existing order; every row carries its shelf life (`폐기까지 N일 / 내일까지 / 오늘까지`, User 2026-09-27/28, v2.9.10) and a row on its last day is emphasized. This is stock management, never a best-fit or recommendation order; it does not change with the customer (User 2026-09-25, v2.9.0).
 ```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+On `게이트 순례주간`:
+```
+
+New:
+
+```new
+On `게이트 순례 주간`:
+```

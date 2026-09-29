@@ -1009,7 +1009,7 @@ function nightScreen(){
  +'<main class="stage-scroll" id="phase-content" tabindex="-1" aria-label="밤">'
   +taskLine('night')+rail
   +'<div class="beat-room">'
-   +(s.pilgrimage?'<p class="event-note">게이트 순례주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
+   +(s.pilgrimage?'<p class="event-note">게이트 순례 주간 · 실제 변경 '+s.pilgrimage+'명</p>':'')
    +(r?beat(r):'<p class="muted">오늘은 원정에 나선 손님이 없었다.</p>')
   +'</div>'
  +'</main><div class="dock">'+dock+'</div></div>';}

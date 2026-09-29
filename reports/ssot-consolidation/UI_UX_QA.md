@@ -790,7 +790,7 @@ The same rule and style as UI-Q-v29-6, judged against today's open Gates instead
 - no badge, no `오늘 필요` or other verdict word, no row reorder, no recommended row
 - a badge / word / reorder marks the fit, or a non-matching effect is emphasised
 ### UI-Q-v29-13 — ORDER PER-GATE VISITOR COUNTS
-ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례주간 reroute where available.
+ORDER on a one-Gate day and on a day with two or more open Gates; compare the counts with the destinations the SALE queue's customers claim; include a 거짓말쟁이 and a 게이트 순례 주간 reroute where available.
 The ORDER 오늘 line follows `COPY_AUDIT_APPROVED_v2.8.0.md` §4-21.
 - one Gate: the line reads `{N}명 · {Gate}` with no per-Gate count
 - two or more Gates: `{N}명 · {Gate A} {a} · {Gate B} {b}`; the per-Gate numbers sum to N
@@ -1722,4 +1722,21 @@ One effect order for every Item (Hazard Counter, 피로 회복, Core Stat, the r
 - the 본사 1+1 행사 offer carries a red `1+1` sticker on its `매입` tag corner, readable at 360 / 390 / 1280 without covering the
 price; no other offer carries it; the metadata line has no `1+1` (User 2026-09-28, v2.9.10 quick patch)
 - the 1+1 offer only told apart by text inside the metadata line
+```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+Trigger the destination reliability tutorial, 허세, and 게이트 순례주간.
+- 게이트 순례주간 Morning reveal states 1–3 affected range
+```
+
+New:
+
+```new
+Trigger the destination reliability tutorial, 허세, and 게이트 순례 주간.
+- 게이트 순례 주간 Morning reveal states 1–3 affected range
 ```

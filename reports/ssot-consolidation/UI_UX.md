@@ -1843,3 +1843,18 @@ A small 접기 key at the seal plate's top right says the plate folds. Lines dec
 ```new
 - a small `접기 ▼` key at the seal plate's top right says it folds (User 2026-09-28); that key, or a tap on the seal plate anywhere but its `봉인 해제` key, folds it to a chip `봉인 해제 {N} / 3 ▲` (so the last candidate is not
 ```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+- on 게이트 순례주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
+```
+
+New:
+
+```new
+- on 게이트 순례 주간, Night may show one compact Event summary line with actual changed count; affected NPC cards show expected -> actual destination
+```

@@ -510,3 +510,18 @@ Exact generation values (User 2026-09-26, v2.9.7; the step was 0.06 in Source an
 - no Trait-slot field: Traits are only drawn at spawn (the per-Level Trait slot was dropped by the User earlier)
 - Rarity's costs stay where they are owned: operating cost (ECONOMY_ORDER, × (1 + 0.06 × core average Rarity)) and Deep sponsorship (+20% a step)
 ```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+게이트 순례주간:
+```
+
+New:
+
+```new
+게이트 순례 주간:
+```

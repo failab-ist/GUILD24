@@ -405,7 +405,7 @@ hold the v2.5 HAZARD EVENT QA, the Deep-Day embedded QA and the v2.8 numeric acc
 ## CANONICAL EVENT CATALOG
 ### 01. 물류대란
 ### 02. 본사 1+1 행사
-### 03. 게이트 순례주간
+### 03. 게이트 순례 주간
 ### 04. 몬스터 범람
 ### 06. 한파
 ### 07. 포션 공급 중단
@@ -767,4 +767,25 @@ Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md` §13-55.
 - 유통기한 임박 특가
 - 게이트 안정화 작업
 - 55종 Event Catalog
+```
+
+
+## v2.9.11 copy proofread batch 1 (User 2026-09-29): 게이트 순례주간 -> 게이트 순례 주간
+
+Dropped (the removal itself):
+
+```text
+`게이트 순례주간`은 예외적으로 실제 변경 인원 N과 affected NPC의 예상->실제 목적지를 Night에서 공개한다.
+- Night displays `게이트 순례주간 · 실제 변경 N명`
+- 게이트 순례주간
+- 게이트 순례주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
+```
+
+New:
+
+```new
+`게이트 순례 주간`은 예외적으로 실제 변경 인원 N과 affected NPC의 예상->실제 목적지를 Night에서 공개한다.
+- Night displays `게이트 순례 주간 · 실제 변경 N명`
+- 게이트 순례 주간
+- 게이트 순례 주간이 >=2 Gate / >=3 visitor 조건에서만 발생하는가?
 ```
