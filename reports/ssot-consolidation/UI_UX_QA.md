@@ -1740,3 +1740,29 @@ New:
 Trigger the destination reliability tutorial, 허세, and 게이트 순례 주간.
 - 게이트 순례 주간 Morning reveal states 1–3 affected range
 ```
+
+
+## v3.0 PHASE BGM (User 2026-09-29)
+
+New:
+
+```new
+### UI-Q-v29-47 — PHASE BGM (v3.0, User 2026-09-29)
+Verify UI_UX §AUDIO FEEDBACK — PHASE BGM on a real phone and on desktop.
+Listen to at least:
+- the store about to open → 첫 점포지원 → MORNING → ORDER → SALE → NIGHT → CLOSING
+- FINAL through at least one loop join
+- a cleared ending and a failed ending
+- each screen plays the track the mapping names; a cleared Run ends on SUCC and any failed Run ends on FAIL
+- a loop join is not heard as a cut, click or gap (BOSS: its 1 s crossfade)
+- the tracks sound equally loud, and at BGM 100% / SFX 100% the music is clearly audible while decision cues still read above
+it (UI-Q114)
+- a phase change does not overlap two tracks for longer than its fade
+- mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
+- no audio-related console or runtime error
+- runtime evidence: `tools/qa-bgm.cjs` (in `npm run qa:runtime`)
+- a loop that plays an excerpt from the middle of a track instead of the track
+- an audible click, gap or double-play at a join or a phase change
+- a phase that goes silent because a file failed to load
+- music that masks a decision or result cue
+```

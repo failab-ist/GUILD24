@@ -280,8 +280,9 @@ ledgers and UI-Q-v29 ids, so they do not run in parallel); that condition is met
   ARRIVAL, §BOSS REVEAL; UI_UX_QA UI-Q-v29-20 / 35; COPY_AUDIT §4-10 / §8-0 / §25; COPY_WORLD_VOICE §RARE REFERENCE NPC; SALE; ITEM).
 - v2.9.11 (User 2026-09-28, in progress): the v3.0 prep line - unsold stock leaves on the Night of its last sale Day, on
   that Day's receipt; the early Gate slope 1.50 -> 1.45; 35 customer names replaced; the Rare Reference customers removed; two Expedition Store
-  Supports; Events at 40%, once per Run, 55 in all -> CHANGELOG §v2.9.11 (owners RELIC 31 / 32, EVENT 24~55, COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25, ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING
-  §CLOSING — CASH FLOW RECEIPT, EVENT §20, RELIC 새벽 회수 계약, DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE, DUNGEON_ITEM_QA).
+  Supports; Events at 40%, once per Run, 55 in all; recorded phase BGM (User 2026-09-29) -> CHANGELOG §v2.9.11 (owners RELIC 31 / 32, EVENT 24~55, COPY_WORLD_VOICE §RARE REFERENCE NPC, COPY_AUDIT §25, ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING
+  §CLOSING — CASH FLOW RECEIPT, EVENT §20, RELIC 새벽 회수 계약, DUNGEON_HAZARD §GATE POWER — LATE-DAY SLOPE, DUNGEON_ITEM_QA,
+  PRESENTATION §AUDIO PRESENTATION, UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47).
 - v2.9.9 (User 2026-09-27): presentation from the reference review - the store room (Decoration seating / outline, tablets),
   새 점포 준비 as the store scene with the title logo, one press grammar and one colour per family for the dock Actions (two
   new cues), SALE's outlook plate, shelf lip and head, the FINAL clash scene (H7, the one exception to the per-beat game

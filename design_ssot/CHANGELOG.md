@@ -105,6 +105,15 @@ the owner headers and in the git tag.
   Store Support text, the guide, settings and the Night lines still broke inside words (297 cases over every screen and width,
   e.g. `최 / 대 100G`, `포 / 션`; `reports/text-audit-v2911.md`). The page now keeps words whole (`overflow-wrap:break-word`
   still splits a token too long for its box); no text spills, clips or scrolls sideways where it did not before.
+- **Phase BGM, recorded** - PRESENTATION §AUDIO PRESENTATION (AI-generated music), UI_UX §AUDIO FEEDBACK — PHASE BGM,
+  UI_UX_QA UI-Q-v29-47 (User 2026-09-29, v3.0 sound).
+  - The synthesised phase beds give way to the User's Gemini (Lyria) tracks, one per screen: TITLE, MORNING, ORDER, SALE,
+    NIGHT, CLOSE, BOSS (FINAL). The ending splits into SUCC for a cleared Run and FAIL for any failed one.
+  - Each loop keeps the whole track: Start moves only past a short intro, and End only drops the ending chord and tail
+    (`reports/bgm-loops.md`). Joins use a short fade; BOSS alone crossfades for 1 s.
+  - Every track plays at one loudness. The synthesised bed stays as the fallback when a file cannot load.
+  - Provenance: `reports/ASSETS.md`. The per-track account (free / Plus) is still to be supplied by the User.
+  - BOSS2 was evaluated and not adopted.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)

@@ -2652,6 +2652,41 @@ External audio, if used:
 - retain source/license attribution in the repository
 - keep file size and mobile load cost reasonable
 - preserve day / night / boss mood separation rather than one generic loop
+- AI-generated music the User made for this project is allowed under PRESENTATION §AUDIO PRESENTATION (User 2026-09-29)
+
+### PHASE BGM (v3.0, User 2026-09-29)
+
+Every phase plays a recorded track (`dist/ui/assets/bgm/`, provenance in `reports/ASSETS.md`):
+
+| screen | track |
+| --- | --- |
+| no Run · 첫 점포지원 · the store about to open (NEW STORE PREPARATION) | TITLE |
+| MORNING | MORNING |
+| ORDER | ORDER |
+| SALE | SALE |
+| NIGHT | NIGHT |
+| CLOSING | CLOSE |
+| FINAL | BOSS |
+| the ending of a cleared Run | SUCC |
+| the ending of any failed Run (bankruptcy, the death limit, a failed Final) | FAIL |
+
+Loop rule: a loop keeps the whole track. It is never a section taken from the middle.
+- Start stays at the first sound, and moves only past a short, clearly different intro (at most 15 s).
+- End stays near the original end (within its last 25 s; BOSS 40 s) and drops only the ending chord, tail or fade.
+- Both cuts sit on a beat.
+- The chosen points per track and how they were found are in `reports/bgm-loops.md`; the live values are in
+  `dist/ui/audio.js`.
+
+Join: a short fade only (at most 60 ms). BOSS alone joins with a 1 s crossfade (User 2026-09-29). A long crossfade is
+never the default fix for a join that does not fit.
+
+Playback:
+- Every track plays at the same loudness.
+- BGM stays under the decision and result cues, and the existing ducking applies.
+- A phase change fades the old track out.
+- Mute or a hidden page stops the music, and coming back resumes it.
+- A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
+- Playback changes no gameplay state and consumes no Gameplay RNG.
 
 ### SFX coverage
 
