@@ -87,6 +87,10 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
+/* iOS Safari (User 2026-09-29): a quick second tap (quantity +) must not zoom the page - pinch zoom stays - and a long
+   press on a portrait or painting does not open the save-image menu. */
+html{touch-action:manipulation}
+img{-webkit-touch-callout:none}
 body{overflow:hidden;background:var(--soil);color:var(--text);min-width:320px;-webkit-text-size-adjust:100%}
 /* v2.9.11 (User 2026-09-28): Korean breaks between words everywhere - 297 mid-word breaks across Events, Store Supports, the
    guide and settings (reports/text-audit-v2911.md); break-word still splits a token too long for its box. */

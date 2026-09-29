@@ -2623,6 +2623,10 @@ Mobile QA must include:
 - sticky footer overlap
 - clipped header/action bar
 
+iPhone Safari (User 2026-09-29):
+- a quick second tap on a control (quantity +, a repeated price step) never zooms the page; pinch zoom stays available
+- a long press on a portrait or a painting opens no save-image menu
+
 ## ACCESSIBILITY / SIGNALS
 
 Do not rely on color alone for:
@@ -2699,6 +2703,10 @@ Playback:
 - BGM stays under the decision and result cues, and the existing ducking applies.
 - A phase change fades the old track out.
 - Mute or a hidden page stops the music, and coming back resumes it.
+- Coming back from a call or another app resumes the sound without waiting for a tap where the browser allows it
+  (iOS Safari leaves the audio suspended); otherwise the next tap resumes it (User 2026-09-29).
+- The iPhone silent switch keeps Safari's default: while it is on, the game is silent, and it never stops another app's
+  music (User 2026-09-29).
 - A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
 - The web build ships 128 kb/s copies and fetches the next phase's file ahead, so a phase change does not wait on the
   network; the app ships the originals (User 2026-09-29).

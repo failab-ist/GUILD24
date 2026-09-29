@@ -3581,4 +3581,14 @@ test('UI-Q-v29-48: the DAY sign rolls once on arriving at a MORNING, inside the 
  assert.ok(!/Sound\.|sound\(/.test(f)&&!/game\.|s\.[a-z]+=/.test(f),'no sound of its own and nothing written');
 });
 
+// UI-Q-v29-49 (User 2026-09-29): iPhone Safari - no double-tap zoom, no save-image menu, a suspended context resumes on return.
+test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
+ const css=read('dist/ui/ui.css'),audio=read('dist/ui/audio.js'),app=read('dist/ui/app.js');
+ assert.ok(/(^|\n)html\{touch-action:manipulation\}/.test(css),'a quick second tap does not zoom the page');
+ assert.ok(!/user-scalable|maximum-scale/.test(read('dist/index.html')),'pinch zoom stays');
+ assert.ok(/(^|\n)img\{-webkit-touch-callout:none\}/.test(css),'a long press on art opens no save-image menu');
+ assert.ok(/function wake\(\)\{if\(ctx&&enabled&&!document\.hidden&&ctx\.state!=='running'\)ctx\.resume\(\)/.test(audio),'wake resumes only a live, unmuted, visible context');
+ assert.ok(/addEventListener\('visibilitychange',[^\n]*Sound\.sync\([^\n]*\);Sound\.wake\(\);\}\)/.test(app),'coming back to the page wakes it');
+ assert.ok(!/audioSession/.test(audio),'the silent switch keeps the Safari default (User 2026-09-29)');
+});
 console.log(count+' ui guard groups passed');

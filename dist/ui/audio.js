@@ -339,5 +339,8 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
  pending=next;
  bgmLoad(next).then(buf=>{if(pending!==next||track!==next||!enabled)return;pending='';bgmStart(next,buf);bgmAhead(next);})
   .catch(()=>{if(pending===next&&track===next){pending='';bedStart(next);}});}
-G.Sound={play,sync,mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
+/* Coming back to the page (a call, another app) tries to resume the context at once rather than waiting for the next tap:
+   iOS Safari leaves it `interrupted` (User 2026-09-29). A browser that refuses without a gesture resumes on the next tap (play). */
+function wake(){if(ctx&&enabled&&!document.hidden&&ctx.state!=='running')ctx.resume().catch(()=>{});}
+G.Sound={play,sync,wake,mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

@@ -1933,3 +1933,18 @@ BEAT's general contract: at most 320 ms, inside its panel, never blocks input.
 - Presentation only: it reads the Day and writes nothing.
 - The full-screen DAY transition stays unadopted (it would need a GAME FEEL contract exception).
 ```
+
+
+## v2.9.11 quick patch — iPhone Safari (User 2026-09-29)
+
+New:
+
+```new
+iPhone Safari (User 2026-09-29):
+- a quick second tap on a control (quantity +, a repeated price step) never zooms the page; pinch zoom stays available
+- a long press on a portrait or a painting opens no save-image menu
+- Coming back from a call or another app resumes the sound without waiting for a tap where the browser allows it
+(iOS Safari leaves the audio suspended); otherwise the next tap resumes it (User 2026-09-29).
+- The iPhone silent switch keeps Safari's default: while it is on, the game is silent, and it never stops another app's
+music (User 2026-09-29).
+```

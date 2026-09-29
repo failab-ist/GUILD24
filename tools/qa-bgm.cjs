@@ -7,6 +7,7 @@
 //   - one track at a time; a phase change fades the old track out
 //   - the next phase's file is fetched ahead (bytes only), so the day's chain never waits on the network
 //   - mute and a hidden page stop the music; coming back resumes the same track
+//   - coming back to the page resumes a suspended context without waiting for a tap (iOS `interrupted`)
 //   - a file that cannot load falls back to the synthesised bed, never silence
 //   - no page error, no console error
 //   node tools/qa-bgm.cjs [out-dir]
@@ -21,7 +22,7 @@ function serve(){
 // them at once; nothing about the engine itself is changed.
 const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
  const st=AudioBufferSourceNode.prototype.start;
- AudioBufferSourceNode.prototype.start=function(when,offset){const b=this.buffer;
+ AudioBufferSourceNode.prototype.start=function(when,offset){const b=this.buffer;__bgm.ctx=this.context;
   if(b&&b.duration>30)__bgm.starts.push({when,offset,dur:b.duration,rate:b.sampleRate,ctxNow:this.context.currentTime});
   return st.apply(this,arguments);};
  const cv=AudioParam.prototype.setValueCurveAtTime;
@@ -102,6 +103,11 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   check('unmuting resumes BOSS from the decoded buffer (no refetch)',await waitStart(n0+1)&&fetched.length===f0);
   s=await p.evaluate(n=>__bgm.starts[n],n0);
   check('and from where it was (past s, inside the loop)',s&&s.offset>music.boss.s+.5&&s.offset<music.boss.e,s&&s.offset.toFixed(3));
+  // a call or another app leaves the context suspended (iOS Safari: `interrupted`); coming back resumes it at once
+  await p.evaluate(()=>__bgm.ctx.suspend());
+  const woke=await p.evaluate(async()=>{const before=__bgm.ctx.state;document.dispatchEvent(new Event('visibilitychange'));
+   for(let i=0;i<20&&__bgm.ctx.state!=='running';i++)await new Promise(r=>setTimeout(r,50));return [before,__bgm.ctx.state];});
+  check('coming back to the page resumes a suspended context without a tap',woke[0]==='suspended'&&woke[1]==='running',woke.join(' -> '));
   // a phase change fades the old one out: the out gain ramps to 0 over BGM_SWAP; only one track is audible afterwards
   // (checked indirectly: the new start happens and no second track is started for the same key)
   // fallback: a file that cannot load plays the synthesised bed

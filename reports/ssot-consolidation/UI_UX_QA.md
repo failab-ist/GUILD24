@@ -1795,3 +1795,23 @@ Verify UI_UX §MORNING — DAY SIGN FLIP at 390 and 1280.
 - the numbers overlap, or the sign's size jumps
 - the roll runs longer than 320 ms or plays a sound of its own
 ```
+
+
+## v2.9.11 quick patch — iPhone Safari (User 2026-09-29)
+
+New:
+
+```new
+### UI-Q-v29-49 — IPHONE SAFARI (User 2026-09-29)
+Verify UI_UX §TOUCH / INTERACTION (iPhone Safari) and §AUDIO FEEDBACK — PHASE BGM on a real iPhone (iOS 16 or later).
+- tapping quantity + quickly several times changes the quantity and never zooms the page; pinch zoom still works
+- a long press on a customer portrait or the FINAL Boss opens no save-image menu
+- `소리 켜기` starts the sound on the first tap
+- after a phone call or another app, the music comes back on return or at the latest on the next tap
+- with the silent switch on, the game is silent and music from another app keeps playing
+- runtime evidence (Chromium): `tools/qa-bgm.cjs` resumes a suspended context on return; `tests/ui-guard.cjs` UI-Q-v29-49
+- the page zooms on a quick double tap
+- the save-image menu opens on art
+- the sound stays off after coming back and tapping
+- the game stops another app's music
+```

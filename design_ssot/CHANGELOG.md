@@ -132,6 +132,13 @@ the owner headers and in the git tag.
     store text must disclose the AI music. The app ships the originals.
 - **Build marker** 2.9.11.
 
+## v2.9.11 quick patch — iPhone Safari (User 2026-09-29, in progress)
+
+- **iPhone Safari touch and sound** - UI_UX §TOUCH / INTERACTION, §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-49: the web build was
+  checked for iPhone Safari (`reports/ios-safari-v2911.md`). A quick second tap no longer zooms the page (pinch zoom stays), a
+  long press on art opens no save-image menu, and coming back from a call or another app resumes the sound without waiting for
+  a tap. The silent switch keeps Safari's default (the game is silent; another app's music is never stopped). No gameplay change.
+
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
 
 From the User's play of v2.9.10 (`c3e9cc0`). The build marker stays 2.9.10.
