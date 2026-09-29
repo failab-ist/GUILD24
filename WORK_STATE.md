@@ -103,6 +103,29 @@ closeout 완료(2026-09-27): npm test, ssot 21/21, audit, qa:runtime 13/13, qa:v
 게이트 방문 최소 1명(NPC_TRAIT destinationCoverage), D30 흐름(FINAL_EXPEDITION §D30 PLAYER FLOW, COPY_AUDIT §14-9), 진열대 요약 문구,
 H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(CHANGELOG §v2.9.3).
 
+## v3.0 사운드 — 녹음 BGM 연결 (User 2026-09-29)
+
+- 곡: User가 제미나이(Lyria)로 만든 곡이다. 원본은 `assets-src/bgm/`, 배포본은 `dist/ui/assets/bgm/`(바이트 동일, 9곡 33 MB)다. 출처는 `reports/ASSETS.md`에 있다.
+- 루프 선택: `reports/bgm-loops.md`(원곡 전체 보존 방식, `tools/bgm-loop.py`)
+  - TITLE · SALE · NIGHT · CLOSE = S1E1
+  - MORNING = S1E3
+  - ORDER = S1E2
+  - SUCC · FAIL = S1E2
+  - BOSS = BOSS1 S3R2 + 1초 크로스페이드(BOSS만 예외). BOSS2는 미채택.
+- 엔진(`dist/ui/audio.js`)
+  - 한 번에 한 곡만 32 kHz로 디코드하고, 오디오 시계로 s → e를 반복한다.
+  - 페이즈별 곡은 `audioPhase()`로 고른다. 결말은 SUCC / FAIL로 나뉜다.
+  - 곡마다 음량을 BGM_LUFS −24로 맞춘다. 페이즈 전환은 0.6초 페이드다.
+  - 로드에 실패하면 신스로 대체한다.
+- 문서: PRESENTATION §AUDIO PRESENTATION(AI 음악 조항), UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47, CHANGELOG §v2.9.11
+- 최종 QA (2026-09-29, HEAD `4c2704b`)
+  - 전체 `npm test` PASS · revision 39 · `ssot:check` 21/21
+  - `qa:runtime` 14/14(`qa-bgm` 29/29 새로 추가) · `qa:visual` clean(126장)
+- 남은 것(User)
+  - 실기기 청취: UI-Q114 · UI-Q-v29-47. 음량 −24 LUFS와 이음새를 확인해야 한다.
+  - 곡별 생성 계정(무료 / Plus)
+  - 배포 용량 33 MB를 그대로 둘지 재인코딩할지
+
 ## Next
 
 **User 규칙 (2026-09-26~27):**
@@ -120,7 +143,7 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
    - 생존 · 경제 장식만 모으는 궤적의 낮은 클리어(§12-3-5)
 4. v3.0 준비의 남은 순서(`reports/v3.0-prep.md` §6-7)
-   - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드 → 행정
+   - 세이브 호환성 경계 → 크레딧 · 오류 보고 → 앱 래퍼 → 사운드(BGM 연결 완료, 실기기 청취 남음) → 행정
    - 출시 준비 외 작업은 §8.
 5. 참고: `tests/simulation.cjs` RUN-Q15의 표본 가정은 v2.9.11에서 TEST GAP으로 고쳤다(`4c6d870`).
 
