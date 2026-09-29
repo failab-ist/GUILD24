@@ -244,6 +244,17 @@ test('EVENT 02: 본사 1+1 delivers double units for a single order cost',()=>{
  assert.equal(s.inventory.length,before+2,'two units arrive');
  assert.equal(s.money,gold-price,'only one unit is paid for');
  assert.equal(s.offers.filter(o=>o.promo).length,1,'exactly one designated SKU');
+ // User 2026-09-29: a Reroll ends the promotion - the new sheet carries no 1+1, and a second Reroll does not bring it back
+ s.money=5000;g.reroll();assert.equal(s.offers.filter(o=>o.promo).length,0,'a Reroll ends the 1+1');
+ g.reroll();assert.equal(s.offers.filter(o=>o.promo).length,0,'and it does not come back');
+});
+
+test('EVENT 10: 암시장 keeps its one special slot through a Reroll (User 2026-09-29)',()=>{
+ const g=fresh('bm');force(g,'blackmarket');
+ let guard=0;while(guard++<60){g.run.money=5000;g.run.stats.deaths=0;advance(g);if(g.run.event?.id==='blackmarket'||g.run.phase==='end')break;}
+ const s=g.run;assert.equal(s.event?.id,'blackmarket','the Event was reached');
+ g.beginOrder();assert.equal(s.offers.filter(o=>o.origin==='blackmarket').length,1,'one special slot');
+ s.money=5000;g.reroll();assert.equal(s.offers.filter(o=>o.origin==='blackmarket').length,1,'still one after a Reroll');
 });
 
 test('EVENT 20/22: 본사 폐기 유예 gives only tonight\'s waste one more day; 야간 근무 수칙 zeroes overhead',()=>{

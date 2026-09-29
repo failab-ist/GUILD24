@@ -322,7 +322,9 @@ n.money=Math.min(2000,Math.round((n.introduced?n.money:180)+n.level*8+this.rng.i
   s.special=null;
  }
  generateOffers({advancePity=true}={}){const s=this.run,ev=s.event?.effects||{};const num=Math.max(3,D.balance.orderOffers+(this.has('extraOrder')?D.relicParams.extraOrder.extraOffers:0)+(ev.offers||0));s.offers=[];for(let i=0;i<num;i++)s.offers.push(this.rollOffer());
- if(ev.double){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
+ /* EVENT §02 (User 2026-09-29): HQ names its 1+1 SKU on the Day's first sheet only. A Reroll ends the promotion - rolling
+    again for a 1+1 on the SKU the player wanted is not the Event's play. Same rule as 새벽 회수 계약's extra slot below. */
+ if(ev.double&&advancePity){const x=s.offers.find(o=>D.itemBy[o.item].rarity===0)||s.offers[0];if(x)x.promo=true;}
  /* EVENT 암시장 appends ONE extra Event-origin slot after the ordinary ones. Everything below
     works on the ordinary slots alone, so no Counter guarantee can consume that special offer -
     which is exactly what writing to `s.offers.length-1` used to do the moment the Event fired.

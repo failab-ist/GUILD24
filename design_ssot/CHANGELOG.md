@@ -138,6 +138,11 @@ the owner headers and in the git tag.
   checked for iPhone Safari (`reports/ios-safari-v2911.md`). A quick second tap no longer zooms the page (pinch zoom stays), a
   long press on art opens no save-image menu, and coming back from a call or another app resumes the sound without waiting for
   a tap. The silent switch keeps Safari's default (the game is silent; another app's music is never stopped). No gameplay change.
+- **1+1 ends on a Reroll** - EVENT §02 / §10 (User 2026-09-29, bug report): a Reroll named a new 1+1 SKU on every new
+  sheet, so the player could roll until the wanted SKU carried it. HQ now names it on the Day's first sheet only; a Reroll
+  ends the promotion. 암시장 keeps its special slot through a Reroll (its Item is drawn again), by the User's call. The
+  other twelve offer-side Events are Day-wide ("오늘 모든 발주" / a whole category / the sheet size) and rightly hold on a
+  rerolled sheet.
 - **ORDER floating rail carries 발주 후** - UI_UX §DEATH LIMIT — ALWAYS VISIBLE (ORDER — FLOATING TODAY LINE), UI-Q-v29-29
   (User 2026-09-29): scrolled past the ledger, the floating box adds the ledger's `발주 후` last, under `오늘` - the number each
   tap moves, nearest the rows being tapped. The box is tightened to one type ladder: `사망` / `오늘` / `발주 후` as labels in

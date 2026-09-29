@@ -567,6 +567,9 @@ EFFECT:
 
 추가 입고분의 매입 비용은 0G다.
 
+행사 상품은 그날 첫 발주 후보에서만 지정한다. 발주 교환을 하면 행사가 끝나고, 새 후보에는 1+1이 없다 (User 2026-09-29:
+교환을 반복해 원하는 상품에 1+1을 붙이는 것은 이 이벤트의 노림수가 아니다).
+
 행사 대상 Item은 Order에서 명확하게 표시한다: 그 발주 행의 `매입` 가격표 모서리에 빨간 `1+1` 딱지
 (User 2026-09-28, v2.9.10 quick patch; 모양 -> `UI_UX_v2.8.0.md` §ORDER — ITEM INFORMATION HIERARCHY).
 
@@ -757,6 +760,8 @@ Mechanic:
 - exactly one special Rare+ Order offer
 - that offer buy price +35%
 - the special offer is an Event-origin slot, not a global Rare weighting
+- a Reroll keeps the one special slot and draws its Item again (User 2026-09-29: it takes an Order slot at +35%, so a
+  fresh draw is a fair cost, not an exploit)
 
 The Order row must be able to identify its source as 암시장.
 This is permitted existing special-offer presentation, not a new generic rarity-attribution UI.
