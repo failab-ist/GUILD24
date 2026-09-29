@@ -1635,17 +1635,19 @@ FAIL:
 Verify UI_UX §ORDER — WAREHOUSE PANEL at 360 / 390 / 375×548 and 1280, with stock held.
 
 PASS:
-- desk: the list is open beside the form and stays in view while the form scrolls; the form's own `창고` block is not shown;
-  the column clears the menu pin
-- phone: the `창고` handle is absent while the form's `창고` block is on screen, then sits on top of the dock and covers no offer row; it opens the list rising from the dock, at most
-  45% of the screen; the rows above it scroll and take taps; a quantity tap keeps it open; the handle or Escape closes it;
-  leaving ORDER closes it
-- the list equals the form's `창고` block; no console or runtime error
+- the 발주서 carries no warehouse block at any width
+- desk: the form is set left; the warehouse rack is large, open, stays in view while the form scrolls and clears the menu pin
+- phone: the `창고` handle sits on top of the dock from the top of the form and covers no offer row; it opens the list rising
+  from the dock, at most 45% of the screen; the rows above it scroll and take taps; a quantity tap keeps it open; the handle
+  or Escape closes it; a fresh account starts folded and the next Day keeps the player's choice
+- handle, sheet and column read as a steel storage rack, not the floating box's brown or the 발주서's paper; one cell per slot,
+  a held unit per filled cell, the empty cells equal the room left
+- the rack equals the warehouse; no console or runtime error
 
 FAIL:
 - the handle or sheet covers an offer control that cannot be scrolled clear, the sheet dims or locks the form, or a
   quantity tap closes it
-- two copies of the list on a desk
+- a second copy of the warehouse on screen
 
 ### UI-Q-v29-32 — ORDER CONFIRM CASCADE
 
@@ -2476,7 +2478,8 @@ Fresh account, first ORDER at 360 and 1280; open the list; reload; next Day's OR
 
 PASS:
 - the held-stock list is collapsed on first ORDER and the summary line (used / total slots, kinds) is visible
-- at 360 the first offer row is reachable without scrolling past an open list
+- at 360 the first offer row is reachable without scrolling past an open list (v2.9.11 quick patch: the list is the phone's
+  warehouse sheet, which never pushes the rows - UI-Q-v29-50)
 - opening it persists across the reload and the next Day until the player folds it
 
 FAIL:

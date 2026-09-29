@@ -2300,60 +2300,54 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
 .menu-list button.danger{margin-top:13px;background:#5c2a24;color:#f6dfd9;
  box-shadow:inset 2px 2px 0 #ffffff1f,inset -2px -2px 0 #00000073,3px 3px 0 #00000073}
 .menu-list button.danger:hover{background:#6b322b}
-/* what is already on the shelf, on the form that decides what to add to it */
-/* BATCH 2A. The warehouse was a ringed grey panel dropped onto the paper. It is a section of
-   the same document now - full-bleed between two printed rules, on the form's own gutter. */
-.stock-brief{margin:0 0 2px;background:#2c241808;
- box-shadow:inset 0 2px 0 var(--paper-rule),inset 0 -2px 0 var(--paper-rule)}
-.stock-brief summary{display:flex;align-items:baseline;gap:9px;padding:9px 11px;cursor:pointer;
- font:600 12px/1 var(--ui);letter-spacing:.1em;color:#6b6350;list-style:none}
-.stock-brief summary::-webkit-details-marker{display:none}
-.stock-brief summary b{margin-left:auto;font:500 15px/1 var(--f-led);font-variant-numeric:tabular-nums;color:#2c2418;letter-spacing:0}
-.stock-brief summary i{font:400 12px/1 var(--ui);font-style:normal;color:#8a7d61;letter-spacing:0}
-.stock-brief ul{display:grid;gap:2px;padding:0 11px 10px}
-.stock-brief li{display:flex;align-items:center;gap:8px;font:400 13px/1.5 var(--ui);color:#5f5847}
-.stock-brief li b{font-weight:400;color:#2c2418}
-.stock-brief li span{margin-left:auto;font-variant-numeric:tabular-nums}
-.stock-brief li em{min-width:4.2em;text-align:right;font-style:normal;color:#8a7d61}
-.stock-brief li em.soon{color:#a8442f;font-weight:600}
-.stock-brief .none{padding:0 11px 10px;font:400 13px/1.5 var(--ui);color:#8a7d61}
-/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse held apart from the 발주서, like an inventory. Phone: a
-   slim handle on top of the dock (part of the dock, so it covers no offer row), shown once the form's own 창고 block has
-   scrolled away, opening the list as a sheet that rises from it, 45% of the screen at most with its own scroll; the form above keeps scrolling and taking taps. Desk: a column beside
-   the form, always open. Same type ladder as the floating Death box: 11 px labels, 13 px values, on the same brown. */
+/* UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is off the 발주서, held apart like a game's storage - a
+   steel rack of 칸, one cell per slot the store has, a held unit in each (icon, days left), the empty cells the room left.
+   Steel with an orange beam, apart from the brown floating Death box and the 발주서's paper. Phone: a slim handle on top of
+   the dock (a row of the dock, so it covers no offer row) opening the rack as a sheet that rises from it, 45% of the
+   screen at most with its own scroll; the form above keeps scrolling and taking taps. Desk: a large rack beside the form. */
+.p-order{--rack:#4d5760;--rack-hi:#6c7780;--rack-beam:#c9772e;--cell:#252b31;--cell-hi:#3a434b;--rack-ink:#eef2f4;--rack-mute:#b3bec7;--rack-soon:#ff9e82}
 .stock-side{display:none}
 .stock-head{display:flex;align-items:baseline;gap:8px;margin:0}
-.stock-head i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.08em;color:#c9ad7c}
-.stock-head b{font:500 13px/1.35 var(--ui);color:#fff0c9;font-variant-numeric:tabular-nums;letter-spacing:0}
-.stock-head em{font-style:normal;font:400 13px/1.35 var(--ui);color:#c9ad7c}
-.p-order .dock .stock-handle{display:none;flex:1 0 100%;order:-1;align-items:center;min-height:44px;margin-top:-6px;padding:0 12px;border:0;
- background:#4a3018;color:#f0dcb2;cursor:pointer;text-align:left;box-shadow:inset 0 2px 0 #ffffff21,0 3px 0 #00000073}
-.p-order .dock .stock-handle.show,.p-order .dock .stock-handle[aria-expanded="true"]{display:flex}
-.stock-toggle{margin-left:auto;font:500 13px/1 var(--ui);color:#f0dcb2}
+.stock-head i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.08em;color:var(--rack-mute)}
+.stock-head b{font:500 13px/1.35 var(--ui);color:var(--rack-ink);font-variant-numeric:tabular-nums;letter-spacing:0}
+.stock-head em{font-style:normal;font:400 13px/1.35 var(--ui);color:var(--rack-mute)}
+.p-order .dock .stock-handle{display:flex;flex:1 0 100%;order:-1;align-items:center;min-height:44px;margin-top:-6px;padding:0 12px;
+ border:0;background:var(--tex-metal),var(--rack);color:var(--rack-ink);cursor:pointer;text-align:left;
+ box-shadow:inset 0 3px 0 var(--rack-beam),inset 0 -2px 0 #00000059,0 3px 0 #00000073}
+.stock-toggle{margin-left:auto;font:500 13px/1 var(--ui);color:var(--rack-ink)}
 .stock-toggle:after{content:'';display:inline-block;margin-left:7px;border:5px solid transparent;border-bottom-color:currentColor;
  border-top-width:0;vertical-align:2px}
 .stock-handle[aria-expanded="true"] .stock-toggle:after{border-bottom-width:0;border-top-width:5px;border-top-color:currentColor;border-bottom-color:transparent}
 .stock-sheet{position:absolute;left:0;right:0;bottom:100%;z-index:7;max-height:45dvh;overflow-y:auto;overscroll-behavior:contain;
- padding:4px var(--gutter) 10px;background:#3a2614;color:#f0dcb2;box-shadow:0 -4px 0 #00000059,inset 0 2px 0 #ffffff1a}
+ padding:10px var(--gutter) 12px;background:var(--tex-metal),var(--rack);box-shadow:0 -4px 0 #00000059,inset 0 3px 0 var(--rack-beam)}
 .stock-sheet[hidden]{display:none}
-.stock-sheet ul,.stock-side ul{display:grid;gap:2px;margin:0;padding:6px 0 0;list-style:none}
-.stock-sheet li,.stock-side li{display:flex;align-items:center;gap:8px;font:400 13px/1.5 var(--ui);color:#f0dcb2}
-.stock-sheet li b,.stock-side li b{font-weight:500;color:#fff0c9}
-.stock-sheet li span,.stock-side li span{margin-left:auto;font-variant-numeric:tabular-nums}
-.stock-sheet li em,.stock-side li em{min-width:3.4em;text-align:right;font-style:normal;color:#c9ad7c}
-.stock-sheet li em.soon,.stock-side li em.soon{color:#e8907c;font-weight:600}
-.stock-sheet .none,.stock-side .none{margin:0;padding:6px 0 0;font:400 13px/1.5 var(--ui);color:#c9ad7c}
+/* the rack: square cells, a held unit's icon centred, its days left in the corner */
+.wh-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:5px;margin:0;padding:0;list-style:none}
+.wh-slot{position:relative;aspect-ratio:1;display:grid;place-items:center;background:var(--cell);
+ box-shadow:inset 2px 2px 0 #00000080,inset -1px -1px 0 var(--cell-hi)}
+.wh-slot.empty{background:#2c333a;box-shadow:inset 1px 1px 0 #0000004d,inset -1px -1px 0 #ffffff0d;opacity:.7}
+.wh-slot>svg,.wh-slot>.item-art{width:62%;height:auto}
+.wh-slot em{position:absolute;right:2px;bottom:1px;font:600 10px/1 var(--ui);font-style:normal;color:var(--rack-mute);
+ text-shadow:0 1px 0 #000}
+.wh-slot em.soon{color:var(--rack-soon)}
 /* the rows under an open sheet can still be scrolled up above it */
 .p-order:has(#stock-sheet:not([hidden])) .stage-scroll{padding-bottom:calc(45dvh + 30px)}
+/* desk: the 발주서 is no longer centred; it takes the left, and the warehouse is a large rack on its right */
 @media(min-width:1024px){
- .p-order .stage-scroll{display:grid;grid-template-columns:minmax(0,860px) 220px;justify-content:center;column-gap:18px;align-items:start}
+ .p-order .stage-scroll{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(300px,1fr);column-gap:24px;align-items:start}
  .p-order .order-desk{min-width:0}
+ .p-order .order-desk .form{max-width:none;margin:0}
  /* set below the menu pin, which sits over the stage's top-right corner */
- .stock-side{display:block;position:sticky;top:46px;margin-top:46px;padding:8px 12px 12px;background:#4a3018;
-  box-shadow:inset 0 2px 0 #ffffff21,0 3px 0 #00000073}
- .stock-side .stock-head{padding-bottom:6px;box-shadow:inset 0 -1px 0 #f0dcb233}
- .p-order .form .stock-brief,.p-order .dock .stock-handle,.p-order .dock .stock-handle.show,.p-order .dock .stock-handle[aria-expanded="true"],
- .p-order .dock .stock-sheet{display:none}
+ .stock-side{display:block;position:sticky;top:46px;margin-top:46px;padding:12px 16px 16px;background:var(--tex-metal),var(--rack);
+  box-shadow:inset 0 4px 0 var(--rack-beam),inset 3px 0 0 var(--rack-hi),inset -3px 0 0 var(--rack-hi),0 4px 0 #00000080}
+ .stock-side .stock-head{padding:4px 0 10px}
+ .stock-side .stock-head i{font-size:12px}
+ .stock-side .stock-head b{font-size:18px}
+ .stock-side .stock-head em{font-size:15px}
+ .stock-side .wh-slots{grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:6px}
+ .stock-side .wh-slot em{font-size:11px;right:3px;bottom:2px}
+ .p-order .dock .stock-handle,.p-order .dock .stock-sheet{display:none}
+}
 }
 .lost-count{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-bottom:11px;
  padding:9px 11px;background:#00000047;box-shadow:inset 0 0 0 2px #ffffff14;

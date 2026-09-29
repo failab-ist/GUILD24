@@ -233,18 +233,21 @@ not only in the 도감.
 
 ### ORDER — WAREHOUSE PANEL (User 2026-09-29, v2.9.11 quick patch)
 
-The warehouse is held apart from the 발주서, like an inventory, so it can be read against the offer rows while ordering.
-- Desk (1024 px and wider): a column beside the form, always open, following the scroll; the form's own `창고` block is
-  not shown there (one copy). It sits below the menu pin.
-- Phone: a slim `창고 N / M칸 · K종` handle on top of the dock. It is a row of the dock, so it never covers an offer row. Like
-  the floating Death box's copies, it shows only once the form's own `창고` block has scrolled up under the rail (one copy
-  on screen), and stays while its sheet is open.
-  It opens the same list as a sheet rising from the dock, at most 45% of the screen, with its own scroll.
+The warehouse is off the 발주서 and held apart, like a game's storage, so it can be read against the offer rows while
+ordering. It is a steel rack of 칸 with an orange beam, apart from the floating Death box's brown and the 발주서's paper:
+one cell per slot the store has, each held unit in its own cell (its icon and days left, 1 day or less in the warning
+color), grouped by Item; the empty cells are the room left. The icon is the one the offer rows show; the Item's name is the
+cell's reader label (nothing is hover-only).
+- Desk (1024 px and wider): the 발주서 is set left, no longer centred, and the warehouse is a large rack on its right,
+  always open, following the scroll, below the menu pin.
+- Phone: a slim `창고 N / M칸 · K종` handle on top of the dock, always there. It is a row of the dock, so it never covers an
+  offer row. It opens the rack as a sheet rising from the dock, at most 45% of the screen, with its own scroll.
   - The sheet does not dim or lock the form: the rows above it still scroll and take taps, and the rows under it can be
     scrolled above it. Only the handle (`열기` / `닫기`) or Escape closes it; a quantity tap keeps it open.
-  - Leaving ORDER closes it. The form's own `창고` block stays (the first-ORDER stock lesson points at it).
-- The list is the `창고` block's own: icon, name, count, days left (1 day or less in the warning color). The same type
-  ladder as the floating Death box: 11 px labels, 13 px values, on the same brown. No new copy.
+  - Open or folded follows ORDER — WAREHOUSE DISCLOSURE: folded on a fresh account, then as the player last left it.
+- The header: small `창고` label, `N / M칸`, `K종` - the floating Death box's label / value ladder. No new copy.
+- ORDER CONFIRM's crates drop into the new cells of the rack on screen (the desk column or the open sheet); with the sheet
+  folded, the handle's figures move on the last landing.
 
 ### MORNING — DAY SIGN FLIP (User 2026-09-29, v2.9.11)
 
@@ -404,13 +407,17 @@ Example:
 ```
 
 The individual held-stock list is collapsible at every width and starts collapsed; opening it is an account-level presentation choice that persists across Days and reloads until the player folds it again (User 2026-09-24, v2.9.0).
+Since the v2.9.11 quick patch the summary and the list live in the ORDER — WAREHOUSE PANEL (the phone's handle and sheet, the
+desk's column), not on the 발주서; the collapse rule above is the phone sheet's.
 - the collapsed summary line still states the held-stock summary
 - used/remaining capacity is never hidden inside the collapsed detail
 - ORDER CONFIRM (User 2026-09-25, v2.9.2 H3; principle, contract and impact budget -> PRESENTATION_PRINCIPLES §GAME FEEL BEAT H3;
   acceptance -> UI_UX_QA UI-Q-v29-32): on 발주 확정 one crate per ordered SKU - its warehouse row's icon - falls onto its row
   (the NIGHT stamp's 90 ms fall) in a cascade whose step is at most 70 ms and shrinks so the last landing is within 320 ms;
   each row's count goes from its prior value straight to the resolved one on its crate's landing (never a unit at a time), and
-  a SKU new to the warehouse brings its row in with its crate. The warehouse figures - the summary `N / M칸` and `N종` and the
+  a SKU new to the warehouse brings its row in with its crate. v2.9.11 quick patch (User 2026-09-29, §ORDER — WAREHOUSE
+  PANEL): the warehouse is a rack of 칸, so the SKU's new cells - the ones past its prior count - drop in together on its one
+  landing; the beat per SKU, its step and its budget are unchanged. The warehouse figures - the summary `N / M칸` and `N종` and the
   register's 창고 잔여 칸 - move together on the last landing (a folded list shows only those). At most three landings are audible (the `order` stamp, then the short `crate` of the same family); the rest
   are silent. The till's 보유 골드 counts down to the resolved value in 220 ms. The `발주 완료.` line is unchanged. 일반
   intensity: no hold. Under reduced motion the `order` stamp plays once and every value is resolved at once

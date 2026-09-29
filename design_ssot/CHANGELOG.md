@@ -142,11 +142,13 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
-- **ORDER warehouse panel** - UI_UX §ORDER — WAREHOUSE PANEL, UI-Q-v29-50 (User 2026-09-29): scrolling down the offers, the
-  player compares them with the warehouse, which sat above them in the form. It is now held apart like an inventory: a
-  column beside the form on a desk, and on a phone a `창고` handle on top of the dock - shown once the form's own block has
-  scrolled away - that opens the list as a sheet rising from it (45% of the screen at most) without locking the form. The
-  ORDER confirm crates land in whichever list is on screen.
+- **ORDER warehouse panel** - UI_UX §ORDER — WAREHOUSE PANEL / WAREHOUSE DISCLOSURE, UI-Q-v29-50 / UI-Q-v29-17 (User
+  2026-09-29): scrolling down the offers, the player compares them with the warehouse, which sat above them in the form. It
+  is off the form now and held apart like a game's storage - a steel rack of 칸, one cell per slot, a held unit in each
+  (icon, days left), the empty cells the room left: on a desk the form is set left and the rack is large beside it; on a
+  phone a `창고` handle on top of the dock opens the rack as a sheet rising from it (45% of the screen at most) without
+  locking the form. Open or folded is still the account's choice (starts
+  folded). The ORDER confirm crates drop into the new cells of the rack on screen.
 - **1+1 ends on a Reroll** - EVENT §02 / §10 (User 2026-09-29, bug report): a Reroll named a new 1+1 SKU on every new
   sheet, so the player could roll until the wanted SKU carried it. HQ now names it on the Day's first sheet only; a Reroll
   ends the promotion. 암시장 keeps its special slot through a Reroll (its Item is drawn again), by the User's call. The

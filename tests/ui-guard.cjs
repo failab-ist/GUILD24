@@ -1243,18 +1243,18 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
     the shelf and the stock modal read. Director review: it opens for a player who has never
     folded it, and once folded it stays folded on later Days and across a reload until they
     open it again - a presentation preference on the account, not run state. */
- assert.ok(fn('orderForm').includes('stockBrief()'),'the order form shows the warehouse');
- const brief=fn('stockBrief');
- assert.ok(brief.includes('groupStock()'),'reusing the existing grouping, not a second one');
- assert.ok(brief.includes('game.capacity()')&&brief.includes('s.inventory.length'),'used against total slots');
- assert.ok(brief.includes("settings.stockBriefOpen===true")&&brief.includes("(opened?'open':'')")&&app.includes("stock.open=game.account.settings.stockBriefOpen===true"),
-  'collapsed by default (UI-Q-v29-17, v2.9.0), and foldable');
- assert.ok(/stock\.addEventListener\('toggle'[\s\S]{0,200}stockBriefOpen=stock\.open;game\.save\(\)/.test(app),
-  'folding it writes the preference so the next Day and the next reload honour it');
- // eleven products used to be eleven rows: the override sheet reads them across instead
- const review=read('dist/ui/director-review.css');
- assert.ok(/\.stock-brief ul\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/.test(review),'two columns on a phone');
- assert.ok(/@media\(min-width:600px\)\{[\s\S]*?\.stock-brief ul\{grid-template-columns:repeat\(3,minmax\(0,1fr\)\)\}/.test(review),'three on a wider form');
+ // User 2026-09-29 (UI_UX §ORDER — WAREHOUSE PANEL): the warehouse left the form for its own panel - a desk column and a
+ // phone handle + sheet - still from the one grouping, still against total slots, still folded until the player opens it
+ assert.ok(!fn('orderForm').includes('stock'),'the form no longer carries the warehouse');
+ const whList=fn('stockSlots'),whHead=fn('stockHead');
+ assert.ok(whList.includes('groupStock()'),'reusing the existing grouping, not a second one');
+ assert.ok(whHead.includes('game.capacity()')&&whHead.includes('s.inventory.length'),'used against total slots');
+ assert.ok(/const sheetOpen=\(\)=>game\.account\.settings\.stockBriefOpen===true;/.test(app)&&/\(open\?'':' hidden'\)/.test(fn('stockSheetKey')),
+  'folded by default (UI-Q-v29-17, v2.9.0), and foldable');
+ assert.ok(/st\.stockBriefOpen=open;game\.save\(\)/.test(fn('setStockSheet')),'opening or folding writes the preference so the next Day and the next reload honour it');
+ // eleven products used to be eleven rows: the rack reads them across
+ const whCss=read('dist/ui/ui.css');
+ assert.ok(/\.wh-slots\{display:grid;grid-template-columns:repeat\(auto-fill,minmax\(44px,1fr\)\)/.test(whCss),'cells fill the width, never a list');
 
  /* D-15. A codex entry is three things - the name, what it does, the story about it - and they
     were all one weight, with the tale sitting above the effects as though it were a rule. */
@@ -1846,12 +1846,12 @@ test('UI-Q-v29-32: ORDER confirm - a crate per SKU, prior -> resolved on its lan
  assert.ok(/step=Math\.min\(ORDER_BEAT\.step,\(ORDER_BEAT\.total-STAMP_FALL\)\/Math\.max\(1,k\.length-1\)\)/.test(o),'the step shrinks so the last landing stays within the cap');
  assert.ok(/k\.forEach\(\(item,i\)=>/.test(o)&&!/quantity|cart\[/.test(o),'one crate per SKU, never per unit');
  assert.ok(/translateY:\{from:-10,to:0,duration:STAMP_FALL,delay:at,ease:'in\(3\)'\}/.test(o),'the crate reuses the NIGHT stamp fall');
- assert.ok(/cnt\.textContent=was\+'개'/.test(o)&&/onComplete:\(\)=>\{cnt\.textContent=now;\}/.test(o),'prior value, then the resolved one on the landing');
+ assert.ok(/querySelectorAll\('li\.wh-slot\[data-item="'\+item\+'"\]'\)\]\.slice\(h\.before\?\.\[item\]\|\|0\)/.test(o),'the SKU\'s new cells - past its prior count - drop in on its one landing (v2.9.11 rack)');
  assert.ok(/if\(i<ORDER_BEAT\.hits\)orderCueAt\.push\(setTimeout\(\(\)=>Sound\.play\(i\?'crate':'order'\),land\)\)/.test(o),'at most three audible landings');
  assert.ok(/A\(box,\{v:game\.run\.money,duration:ORDER_BEAT\.till/.test(o),'the till counts down');
- assert.ok(/summary i/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
+ assert.ok(/\.stock-head em/.test(o)&&/\.stock-head b/.test(o)&&/창고 잔여 칸/.test(o)&&/A\(\{t:0\},\{t:1,duration:last/.test(o),'N / M칸, N종 and 창고 잔여 칸 move together on the last landing');
  assert.ok(/if\(motionOK\(\)\)\{cue='order';handoff=\{before,used,gold,skus\}/.test(app)&&/\}else sound\('order'\);/.test(app),'reduced motion: the stamp once, no cascade');
- assert.ok(/'<li data-item="'\+it\.id\+'">'/.test(fn('stockList')),'rows are addressable by SKU');
+ assert.ok(/'<li class="wh-slot" data-item="'\+it\.id\+'"/.test(fn('stockSlots')),'cells are addressable by SKU');
  const Sound=require('../dist/ui/audio.js')&&globalThis.Sound;assert.ok(Sound.cues.includes('crate')&&!Sound.samples.crate,'crate is a synthesised cue');
  assert.ok(/s\.notice='발주 완료\.'/.test(read('dist/systems/shop.js')),'the 발주 완료. line is unchanged');
 });
@@ -3468,7 +3468,7 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/task-line[^\n]*data-action/.test(app),'not a button, not a coach mark');
  // first-ORDER coach: gates -> stock (v2.9.11; the desk's warehouse column when the form's block is not shown) -> offer -> quantity -> confirm -> reroll, no gold mark
  const order=/ order:\[(.*)\],\n/.exec(app)[1];
- assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['order-gates','.brief .when'],['order-stock','.stock-brief summary,.stock-side .stock-head'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the six steps in order, on their anchors');
+ assert.deepEqual([...order.matchAll(/\['([a-z-]+)','([^']+)'/g)].map(m=>[m[1],m[2]]),[['order-gates','.brief .when'],['order-stock','.stock-handle,.stock-side .stock-head'],['offer','.lines .line'],['quantity','.dial'],['confirm','[data-action="confirm-order"]'],['reroll','.rubber']],'the six steps in order, on their anchors');
  assert.ok(order.includes("'창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'"),'the stock line is the approved one (COPY_AUDIT §3-7 STOCK)');
  assert.ok(order.includes("'오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'")&&order.includes("'음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'"),'GATES / OFFER lines verbatim (COPY_AUDIT §3-7)');
  assert.ok(!order.includes('#order-register')&&!app.includes('보유 골드와 현재 발주 후 잔액을 확인한다.'),'the 보유 골드 mark is retired');
@@ -3611,21 +3611,26 @@ test('v2.9.11 mix: effects over music, NIGHT under, a phase change fades out the
  assert.ok(/at=Math\.max\(now,swapEnd\)/.test(audio)&&/swapEnd=now\+fade;/.test(audio),'the next track waits for the old fade');
  assert.ok(/linearRampToValueAtTime\(full\*\(i\/8\)\*\*2,at\+BGM_IN\*i\/8\)/.test(audio),'the rise is a squared curve, never a hard start');
 });
-// UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse held apart like an inventory - a desk column, a phone
-// handle in the dock with a sheet that rises from it and never locks the form
-test('ORDER warehouse panel: one list, a desk column, a phone handle and sheet',()=>{
+// UI_UX §ORDER — WAREHOUSE PANEL (User 2026-09-29): the warehouse is off the form, held apart like an inventory - a large
+// desk column beside a left-set form, a phone handle in the dock with a sheet that rises from it and never locks the form
+test('ORDER warehouse panel: off the form; a steel rack of 칸 - desk column, phone handle and sheet',()=>{
  const css=read('dist/ui/ui.css');
- assert.ok(/\+stockList\(\)\+'<\/details>'/.test(fn('stockBrief'))&&/stockList\(\)/.test(fn('stockSide'))&&/stockList\(\)/.test(fn('stockSheetKey')),'one list for the block, the column and the sheet');
+ assert.ok(!/stockBrief\(|stock-brief/.test(app)&&!/stock-brief/.test(css+read('dist/ui/director-review.css')),'the form block is gone, code and styles');
+ assert.ok(/stockSlots\(\)/.test(fn('stockSide'))&&/stockSlots\(\)/.test(fn('stockSheetKey')),'one rack for the column and the sheet');
+ const sl=fn('stockSlots');assert.ok(/cap=game\.capacity\(\)/.test(sl)&&/'<li class="wh-slot empty" aria-hidden="true"><\/li>'\.repeat\(Math\.max\(0,cap-units\.length\)\)/.test(sl)&&/units\.push\(\.\.\.s\.inventory\.filter/.test(sl),'one cell per slot: a held unit in each, the rest empty');
  const os=fn('orderScreen');assert.ok(/'<div class="order-desk">'\+orderForm\(\)\+'<\/div>'\+stockSide\(\)/.test(os)&&/stockSheetKey\(\)\+/.test(os),'the column beside the form, the handle in the dock');
- assert.ok(/class="stock-handle stock-head'\+handleShown\+'" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+stockSheet\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
- assert.ok(/case'stock-sheet':stockSheet=!stockSheet;syncStockSheet\(\);/.test(app)&&/if\(ev\.key==='Escape'&&stockSheet\)\{stockSheet=false;syncStockSheet\(\);\}/.test(app),'the handle and Escape toggle it without a redraw');
- assert.ok(/railShown='';handleShown='';stockSheet=false;/.test(app),'leaving ORDER forgets it; a quantity redraw keeps it');
- assert.ok(/if\(e\.target===stock\)\{handle\?\.classList\.toggle\('show',gone\);handleShown=/.test(fn('watchOrderToday'))&&/\.p-order \.dock \.stock-handle\{display:none;/.test(css)&&/\.stock-handle\.show,\.p-order \.dock \.stock-handle\[aria-expanded="true"\]\{display:flex\}/.test(css),'the handle shows once the form\'s block has gone under the rail, and stays while open');
- assert.ok(/\.p-order \.dock \.stock-handle\{display:none;flex:1 0 100%;order:-1;/.test(css),'the handle is a row of the dock, so it covers no offer row');
+ assert.ok(/class="stock-handle stock-head" data-action="stock-sheet" aria-controls="stock-sheet" aria-expanded="'\+open\+'"/.test(fn('stockSheetKey')),'the handle names the sheet it opens and its state');
+ assert.ok(/case'stock-sheet':setStockSheet\(!sheetOpen\(\)\);/.test(app)&&/if\(ev\.key==='Escape'&&game\.run\?\.phase==='order'&&sheetOpen\(\)\)setStockSheet\(false\);/.test(app),'the handle and Escape toggle it without a redraw');
+ assert.ok(/\.p-order \.dock \.stock-handle\{display:flex;flex:1 0 100%;order:-1;/.test(css),'the handle is always a row of the dock, so it covers no offer row');
  assert.ok(/\.stock-sheet\{position:absolute;left:0;right:0;bottom:100%;[^}]*max-height:45dvh;overflow-y:auto/.test(css),'the sheet rises from the dock, 45% at most, its own scroll');
  assert.ok(!/\.stock-sheet[^{]*\{[^}]*(backdrop|inert|pointer-events:none)/.test(css)&&!/stock-sheet[^\n]*inert/.test(app),'no dimming or lock over the form');
  assert.ok(/\.p-order:has\(#stock-sheet:not\(\[hidden\]\)\) \.stage-scroll\{padding-bottom:calc\(45dvh \+ 30px\)\}/.test(css),'the rows under the sheet can be scrolled above it');
- assert.ok(/@media\(min-width:1024px\)\{\n \.p-order \.stage-scroll\{display:grid;grid-template-columns:minmax\(0,860px\) 220px/.test(css)&&/\.stock-side\{display:block;position:sticky/.test(css)&&/\.p-order \.form \.stock-brief,\.p-order \.dock \.stock-handle,\.p-order \.dock \.stock-handle\.show,\.p-order \.dock \.stock-handle\[aria-expanded="true"\],\n \.p-order \.dock \.stock-sheet\{display:none\}/.test(css),'desk: an open column that follows the scroll, no second copy, no handle');
- assert.ok(/\['order-stock','\.stock-brief summary,\.stock-side \.stock-head',/.test(app),'the stock lesson points at whichever is on screen');
+ // a steel rack: not the floating box's brown (#4a3018), not the 발주서's paper
+ const rk=/\.p-order\{--rack:(#[0-9a-f]{6});/.exec(css);assert.ok(rk&&!['#4a3018','#efe7d2','#e6ddc6'].includes(rk[1]),'its own material');
+ assert.ok((css.match(/background:var\(--tex-metal\),var\(--rack\)/g)||[]).length===3,'handle, sheet and column are the steel rack');
+ assert.ok(/@media\(min-width:1024px\)\{\n \.p-order \.stage-scroll\{display:grid;grid-template-columns:minmax\(0,1\.45fr\) minmax\(300px,1fr\)/.test(css)
+  &&/\.p-order \.order-desk \.form\{max-width:none;margin:0\}/.test(css),'desk: the form set left, a large warehouse column on its right');
+ assert.ok(/\.stock-side\{display:block;position:sticky;top:46px;margin-top:46px;/.test(css)&&/\.p-order \.dock \.stock-handle,\.p-order \.dock \.stock-sheet\{display:none\}/.test(css),'desk: open, following the scroll, below the menu pin, no handle');
+ assert.ok(/\['order-stock','\.stock-handle,\.stock-side \.stock-head',/.test(app),'the stock lesson points at whichever is on screen');
 });
 console.log(count+' ui guard groups passed');
