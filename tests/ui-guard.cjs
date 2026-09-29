@@ -2515,7 +2515,7 @@ test('SA-Q13/SA-Q46: 단골 has one owner at 51, and Loyalty reads in the compac
  assert.ok(/isTrustedRegular\(n\)&&this\.has\('lifetime'\)/.test(shop),'평생 단골제 asks the 단골 owner');
  assert.ok(/this\.has\('premiumMember'\)&&it\.rarity>=2&&G\.Adventurer\.isTrustedRegular\(n\)/.test(shop),'so does 프리미엄 멤버십');
  for(const id of ['lifetime','premiumMember','memberBundle'])
-  assert.ok(DATA.relicBy[id].description.startsWith('단골 손님'),id+' says 단골 in its copy');
+  assert.ok(DATA.relicBy[id].description.startsWith('단골'),id+' says 단골 in its copy');
 
  // the compact state: Injury, Fatigue, Loyalty - and no progress bar
  const kit=fn('kitLine');

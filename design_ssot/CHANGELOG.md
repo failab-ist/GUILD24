@@ -81,6 +81,11 @@ the owner headers and in the git tag.
   §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
   (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
   Food/Drink Stat bonus is unchanged.
+- **Store Support and Decoration copy proofread, batch 2** (User 2026-09-29, `reports/copy-proofread-v2911.md` 2-1~2-7): 희귀상품
+  입고 계약 reads `희귀 이상 상품 · 발주 가중치 +70% · 판매 시 판매가의 10% 추가 지급.`; the three 단골 cards say `단골` (the
+  screen term) instead of `단골 손님`; 단체 주문 창구 says `매일 아침`, 야전 들것 `부상 모험가`, 대형 냉장고 `(보유 재고도 1회
+  연장)` like its peers; 길드 납품 인증's condition is shorter; 구급품 진열장 reads `한 영업 동안 부상 최대 10회 → 무사.` (the
+  cap is per Run, not per Day). Effects unchanged.
 - **Item and Event copy proofread, batch 1** (User 2026-09-29, `reports/copy-proofread-v2911.md` #1~#10): 게이트 순례주간 is
   `게이트 순례 주간` (like 길드 훈련 주간; every owner, screen line and test that names it); spacing in 에너지드링크's, 길드
   급여일's and 단골의 날's text; 포스기 먹통 reads `…바꿔 달라고 전화할 수도 없다.`; 한파, 독안개 and 본사 1+1 행사's Function

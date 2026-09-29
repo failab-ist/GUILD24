@@ -29,7 +29,7 @@ G.DATA.decorations=[
   text:'길드 의무관이 들르는 날이 적혀 있다. 운이 좋으면 가게에서 붕대를 푼다.'},
  {id:'memorialBook', kind:'survival', slot:'counter', name:'추모 방명록',   price:750, effect:'사망 한도 +2명.',
   text:'계산대 옆 방명록과 초. 사람들은 이 점포가 잊지 않는다는 걸 안다.'},
- {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:'영업마다 부상 최대 10회를 무사로 바꿈.',
+ {id:'aidCabinet', kind:'survival', slot:'display',  name:'구급품 진열장',   price:500, effect:'한 영업 동안 부상 최대 10회 → 무사.',
   text:'붉은 상자가 놓인 유리장. 붕대 한 번이면 다음 원정이 가벼워진다.'}];
 /* The numbers the four alternatives read. Presentation copy above states the same values. */
 /* The numbers every Decoration reads (User 2026-09-24, effects re-tuned 2026-09-25 v2.9.1
