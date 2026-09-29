@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
-"""BGM check and loop-point search - MEASUREMENT ONLY, dev tool (User 2026-09-29, v3.0 sound).
+"""BGM check and loop-point candidates - MEASUREMENT ONLY, dev tool (User 2026-09-29, v3.0 sound).
 
-For each source MP3 (assets-src/bgm/) it reports length, leading / trailing silence, the intro and
-outro (fade) spans, a tempo estimate, a key estimate and loudness, then searches loop candidates:
-a start S after the intro and an end E before the outro where the music around E sounds like the
-music around S (chroma + band-energy similarity, same loudness), E - S a whole number of beats,
-then refined to the sample by waveform cross-correlation. For the top candidate of each track it
-writes a seam preview MP3 (the 4 s before E followed by the 4 s after S) so a human can listen to
-the join. Nothing is written into the game; the files stay untouched.
+Loops keep the whole track (User 2026-09-29): no section is excerpted from the middle.
+  - Start stays at the first sound unless the track opens with a clearly different short intro
+    (quieter than the core by 6 dB AND a different timbre, ending within 15 s); then Start is the
+    first onset of the core entry.
+  - End stays near the original end: the final hit (the last strong onset before the closing decay,
+    where the ending chord would start), with two comparison candidates - the 4-beat group boundary
+    from Start, and where the core state last holds when a coda sits before the final hit. End never
+    moves earlier than duration - 25 s.
+  - Cuts sit 5 ms before an onset on a beat grid refined from Start; the seam needs only a short fade.
+Per candidate it reports the trims, % kept, the reasons and seam metrics, and writes a seam preview
+MP3 (the 4 s before End, then the 4 s after Start). Similarity is only a supporting measure.
+Nothing is written into the game; the source files stay untouched.
 
   pip install imageio-ffmpeg numpy
-  python3 tools/bgm-loop.py [--out DIR] [--md reports/bgm-loops.md] [FILES...]
+  python3 tools/bgm-loop.py [--out DIR] [--json FILE] [FILES...]
 """
 import argparse, glob, json, os, subprocess, sys
 import numpy as np
@@ -92,89 +97,163 @@ def envelope(x, sr, win=0.5):
     return 20 * np.log10(np.sqrt((x[:m * n].reshape(m, n) ** 2).mean(1)) + 1e-9), win
 
 
-def spans(env, win):
-    # silence: below -55 dBFS at the ends; intro / outro: until within 4 dB of the track's median level
-    med = np.median(env)
-    lead = next((i for i, v in enumerate(env) if v > -55), 0) * win
-    tail = next((i for i, v in enumerate(env[::-1]) if v > -55), 0) * win
-    # intro / outro: the first point where the NEXT 8 s average reaches within 4 dB of the track's
-    # upper-quartile level (a loud first hit over a quiet build does not end the intro), and the same
-    # from the end backwards
-    ref, k = np.percentile(env, 75), max(1, int(8 / win))
-    ahead = [env[i:i + k].mean() for i in range(len(env))]
-    behind = [env[max(0, len(env) - i - k):len(env) - i].mean() for i in range(len(env))]
-    intro = next((i for i, v in enumerate(ahead) if v > ref - 4), 0) * win
-    outro = next((i for i, v in enumerate(behind) if v > ref - 4), 0) * win
-    return lead, tail, intro, outro, med
+BLK = 0.5             # level / similarity block, seconds
+S_MAX = 15.0          # Start never moves past this (User 2026-09-29)
+E_WIN = 25.0          # End never moves earlier than duration - this
 
 
-def search(chroma, bands, rms_db, beat_s, dur, intro, outro, top=3):
-    fps = SR_A / HOP
-    F = np.concatenate([chroma * 3, (bands - bands.mean(0)) / (bands.std(0) + 1e-9) * 0.25], 1)
-    F /= np.linalg.norm(F, axis=1, keepdims=True) + 1e-9
-    W = int(3 * fps)                      # compare 3 s on each side
-    beat = beat_s * fps
-    s_lo, s_hi = int((intro + 2) * fps), int(min(intro + 40, dur * 0.4) * fps)
-    e_hi = int((dur - outro - 3) * fps)
-    min_len = max(45.0, dur * 0.45) * fps
-    cands = []
-    for s in np.arange(s_lo, s_hi, beat / 2):
-        s = int(round(s))
-        if s - W < 0:
-            continue
-        A = F[s - W:s + W]
-        nbeats = np.arange(int(min_len / beat), int((e_hi - s) / beat) + 1)
-        for nb in nbeats:
-            e = int(round(s + nb * beat))
-            if e + W >= len(F) or e > e_hi:
-                continue
-            B = F[e - W:e + W]
-            sim = float((A * B).sum(1).mean())
-            lvl = abs(float(rms_db[s] - rms_db[e]))
-            score = sim - 0.02 * lvl + 0.02 * (nb * beat_s) / dur   # prefer longer loops a little
-            cands.append((score, sim, lvl, s / fps, e / fps, int(nb)))
-    cands.sort(reverse=True)
-    picked = []
-    for c in cands:
-        if all(abs(c[3] - p[3]) > 4 or abs(c[4] - p[4]) > 4 for p in picked):
-            picked.append(c)
-        if len(picked) == top:
+def blocks(F, env, fps):
+    # 0.5 s blocks: timbre / harmony similarity to the core profile (the middle 70 % of the track)
+    k = int(BLK * fps)
+    m = min(len(F) // k, len(env))
+    B = F[:m * k].reshape(m, k, -1).mean(1)
+    B /= np.linalg.norm(B, axis=1, keepdims=True) + 1e-9
+    lo, hi = int(m * .15), int(m * .85)
+    core = B[lo:hi].mean(0)
+    core /= np.linalg.norm(core)
+    sim = B @ core
+    lvl = env[:m]
+    return sim, lvl, float(np.percentile(sim[lo:hi], 5)), float(np.median(lvl[lo:hi]))
+
+
+def onset_env(mag):
+    o = np.maximum(0, np.diff(np.log1p(mag), axis=0)).sum(1)
+    o = np.concatenate([[0], o])
+    return o / (np.percentile(o, 99) + 1e-9)
+
+
+def onset_near(o, fps, t, before=0.25, after=0.5, strong=0.35):
+    # first clear onset (local flux peak above `strong`) in [t - before, t + after]
+    a, b = max(1, int((t - before) * fps)), min(len(o) - 1, int((t + after) * fps))
+    for i in range(a, b):
+        if o[i] >= strong and o[i] >= o[i - 1] and o[i] >= o[i + 1]:
+            return i / fps, float(o[i])
+    return None, 0.0
+
+
+def hires(x44, t, rad=0.03):
+    # sharpen an onset to ~2 ms: steepest rise of the 2 ms RMS envelope within +-rad, minus 5 ms pre-roll
+    sr, h = 44100, 88
+    a = max(0, int((t - rad - 0.01) * sr))
+    seg = x44[a:int((t + rad) * sr)]
+    n = len(seg) // h
+    if n < 4:
+        return t
+    e = np.sqrt((seg[:n * h].reshape(n, h) ** 2).mean(1) + 1e-12)
+    d = np.diff(20 * np.log10(e))
+    return max(0.0, (a + (int(np.argmax(d)) + 1) * h) / sr - 0.005)
+
+
+def beat_period(o, fps, beat0, s):
+    # refine the beat period to ~0.01 %: comb sum of the onset envelope on a grid anchored at S
+    om = np.maximum(np.maximum(o, np.roll(o, 1)), np.roll(o, -1))
+    idx = np.arange(len(om))
+    best = (-1, beat0)
+    for r in np.arange(0.97, 1.03, 0.0001):
+        p = beat0 * r * fps
+        k = np.arange(-int(s * fps / p), int((len(om) - s * fps) / p))
+        g = s * fps + k * p
+        g = g[(g >= 0) & (g < len(om) - 1)]
+        v = float(np.interp(g, idx, om).mean())
+        if v > best[0]:
+            best = (v, beat0 * r)
+    return best[1], best[0]
+
+
+def pick_start(sim, lvl, p5, M, o, fps, first):
+    """0 s unless the track opens with a clearly different short intro: quieter than the core by 6 dB
+    AND a different timbre (similarity under the core's 5th percentile), ending within S_MAX."""
+    pw = 10 * np.log10(np.array([np.mean(10 ** (lvl[i:i + 8] / 10)) for i in range(len(lvl))]) + 1e-12)
+    Mp = float(np.median(pw[int(len(pw) * .15):int(len(pw) * .85)]))
+    f0 = int(first / BLK)
+    if pw[f0] >= Mp - 6:
+        return first, None, dict(kind='none', reason='첫 소리부터 core 음량(4초 평균 %.0f dB, core %.0f dB)이라 intro로 보지 않음 → 0초 유지' % (pw[f0], Mp))
+    # the quiet opening ends where the forward 4 s power reaches the core, at the first block that is itself loud
+    j = next((i for i in range(f0, len(pw)) if pw[i] >= Mp - 6), None)
+    k = next((i for i in range(j, len(lvl)) if lvl[i] >= M - 6), j)
+    intro_end = k * BLK
+    isim = float(sim[f0:k].mean())
+    gap = max((len(r) for r in ''.join('1' if v < M - 20 else '0' for v in lvl[f0:k]).split('0')), default=0) * BLK
+    desc = '앞 %.1f초가 core보다 조용함(4초 평균 %.0f dB, core %.0f dB), 음색·화성 유사도 %.2f(core 하위 5%% %.2f)' % (
+        intro_end, pw[f0], Mp, isim, p5)
+    if gap >= 1.5:
+        desc += ', 그 안에 %.1f초 동안 core −20 dB 아래로 잦아드는 구간' % gap
+    if isim >= p5:
+        return first, None, dict(kind='none', reason=desc + ' → 음색은 core와 같아 intro로 보지 않음 → 0초 유지')
+    if intro_end > S_MAX:
+        return first, None, dict(kind='long', reason=desc + ' → %.0f초 넘게 이어지는 곡 구성 구간이라 자르지 않음(Start는 %.0f초 이내 규칙) → 0초 유지' % (S_MAX, S_MAX))
+    t, st = onset_near(o, fps, intro_end)
+    s = t if t is not None else intro_end
+    return s, first, dict(kind='intro', intro_end=intro_end, reason=desc + ' → 이질적 intro로 판정, core 첫 진입 온셋을 Start로')
+
+
+def pick_ends(sim, lvl, p5, M, o, fps, dur, s, beat, x44):
+    """End candidates, latest first, all within the last E_WIN seconds:
+    (a) the final hit - the last strong onset before the closing decay, i.e. where the ending chord
+        would start; the loop jumps to S there instead (on the beat grid from S, else the beat before);
+    (b) the 4-beat grid from S at or before (a), when (a) is not a whole number of 4-beat groups;
+    (c) where the core state last holds, when a coda / ending gesture sits between it and (a)."""
+    last = next(i for i in range(len(lvl) - 1, -1, -1) if lvl[i] >= M - 20)
+    # final hit: last strong onset at a level still within 20 dB of the core
+    fh = None
+    for i in range(min(len(o) - 2, int((last + 1) * BLK * fps)), int((dur - E_WIN) * fps), -1):
+        if o[i] >= 0.35 and o[i] >= o[i - 1] and o[i] >= o[i + 1] and lvl[min(len(lvl) - 1, int(i / fps / BLK))] >= M - 20:
+            fh = i / fps
             break
-    return picked
+    # last core block: 1 s level within 6 dB of the core and 2 s similarity at least the core's 5th percentile
+    lc = None
+    for i in range(last, int((dur - E_WIN) / BLK), -1):
+        if 10 * np.log10(np.mean(10 ** (lvl[i - 1:i + 1] / 10))) >= M - 6 and sim[i - 3:i + 1].mean() >= p5:
+            lc = (i + 1) * BLK
+            break
+    out = []
+
+    def add(nb, why):
+        e = s + nb * beat
+        ot, st = onset_near(o, fps, e, before=0.06, after=0.06, strong=0.2)
+        e2 = hires(x44, ot) if ot is not None else e
+        if e2 < dur - E_WIN or any(abs(e2 - c['end']) < beat / 2 for c in out):
+            return
+        out.append(dict(end=round(e2, 3), beats=int(nb), grid_end=round(e, 3), onset_at_end=ot is not None,
+                        onset_err_ms=round((ot - e) * 1000) if ot is not None else None, reason=why))
+    if fh is not None:
+        fb = (fh - s) / beat
+        off = fb - round(fb)
+        if abs(off) <= 0.15:
+            add(round(fb), '마지막 강한 온셋(마무리 타격) %.2f초가 S에서 정확히 %d박 뒤(오차 %+.2f박) → 마무리 타격 자리에서 S로 돌아감, 그 뒤 %.1f초(마무리 화음·잔향) 제외' % (fh, round(fb), off, dur - fh))
+        else:
+            add(np.floor(fb), '마지막 강한 온셋(마무리 타격) %.2f초가 S 기준 박 격자에서 %+.2f박 어긋남(당김 또는 템포 배수 오판 가능) → 그 앞 박 격자점, 그 뒤 %.1f초 제외' % (fh, off, dur - fh))
+        add(4 * np.floor((fb + 0.15) / 4), '위 (마무리 타격) 자리를 S 기준 4박 묶음 경계로 내린 것(마디 위상 보정용 비교안)')
+    if lc is not None and (fh is None or fh - lc > 2 * beat):
+        add(4 * np.floor(((lc - s) / beat + 0.15) / 4), 'core 상태(1초 음량 core −6 dB 이내 · 2초 유사도 하위 5%% 이상)가 마지막으로 이어지는 %.1f초 → 그 앞 4박 경계, 그 뒤 %.1f초(코다·마무리 제스처) 제외' % (lc, dur - lc))
+    return out, dict(final_hit=fh, last_core=lc, last_sound=(last + 1) * BLK)
 
 
-def refine(full, sr, s, e, beat_s):
-    # move E by up to half a beat so the waveform after E lines up with the waveform after S
-    L = int(0.25 * sr)
-    si = int(s * sr)
-    a = full[si:si + L]
-    best = (-1, int(e * sr))
-    rad = int(beat_s / 2 * sr)
-    ei0 = int(e * sr)
-    for d in range(-rad, rad + 1, 8):
-        b = full[ei0 + d:ei0 + d + L]
-        if len(b) < L:
-            continue
-        c = float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-9))
-        if c > best[0]:
-            best = (c, ei0 + d)
-    # then to the sample around that
-    ei = best[1]
-    for d in range(-8, 9):
-        b = full[ei + d:ei + d + L]
-        c = float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-9))
-        if c > best[0]:
-            best = (c, ei + d)
-    return best[1] / sr, best[0]
+def seam_metrics(stereo, sr, s, e, M):
+    def db(a):
+        return 20 * np.log10(np.sqrt((a ** 2).mean()) + 1e-9)
+    m = stereo.mean(1)
+    pre, post = m[int((e - 0.25) * sr):int(e * sr)], m[int(s * sr):int((s + 0.25) * sr)]
+    d = db(pre) - db(post)
+    # harmony: 2 s chroma before E vs after S
+    def chroma(a):
+        mag = stft_mag(a[::2].astype(np.float32))
+        return features(mag)[0].mean(0)
+    ca, cb = chroma(m[int((e - 2) * sr):int(e * sr)]), chroma(m[int(s * sr):int((s + 2) * sr)])
+    hc = float(ca @ cb / (np.linalg.norm(ca) * np.linalg.norm(cb) + 1e-9))
+    return dict(pre_db=round(db(pre), 1), post_db=round(db(post), 1), level_diff_db=round(d, 1), harmony=round(hc, 2))
 
 
-def seam(stereo, sr, s, e, path, pre=4.0, post=4.0, xf=0.03):
-    si, ei, n = int(s * sr), int(e * sr), int(xf * sr)
-    head = stereo[max(0, ei - int(pre * sr)):ei + n].copy()
+def seam(stereo, sr, s, e, path, pre=4.0, post=4.0, xf=0.01):
+    # E-4 s .. E, then S .. S+4 s. S gets a 5 ms fade-in (S already sits 5 ms before its onset, so the
+    # attack is intact); the original continuation after E fades out under it over xf.
+    si, ei, n, fi = int(s * sr), int(e * sr), int(xf * sr), int(0.005 * sr)
+    head = stereo[max(0, ei - int(pre * sr)):ei].copy()
+    cont = stereo[ei:ei + n] * np.cos(np.linspace(0, np.pi / 2, n))[:, None]
     tail = stereo[si:si + int(post * sr)].copy()
-    t = np.linspace(0, np.pi / 2, n)[:, None]
-    head[-n:] = head[-n:] * np.cos(t) + tail[:n] * np.sin(t)
-    out = np.concatenate([head, tail[n:]]).astype('<f4')
+    tail[:fi] *= np.sin(np.linspace(0, np.pi / 2, fi))[:, None]
+    tail[:n] += cont
+    out = np.concatenate([head, tail]).astype('<f4')
     subprocess.run([FF, '-v', 'error', '-y', '-f', 'f32le', '-ac', '2', '-ar', str(sr), '-i', '-',
                     '-b:a', '192k', path], input=out.tobytes(), check=True)
 
@@ -183,11 +262,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('files', nargs='*')
     ap.add_argument('--out', default='/tmp/guild24-bgm-seams')
-    ap.add_argument('--md')
     ap.add_argument('--json')
     a = ap.parse_args()
     files = a.files or sorted(glob.glob('assets-src/bgm/*.mp3'))
     os.makedirs(a.out, exist_ok=True)
+    fps = SR_A / HOP
     rows = []
     for f in files:
         name = os.path.splitext(os.path.basename(f))[0]
@@ -195,32 +274,45 @@ def main():
         dur = len(mono) / SR_A
         mag = stft_mag(mono)
         chroma, bands = features(mag)
-        bpm, beat_s = tempo(mag)
-        env, w = envelope(mono, SR_A)
-        lead, tail, intro, outro, med = spans(env, w)
-        rms_db = np.repeat(env, int(w * SR_A / HOP) + 1)[:len(chroma)]
-        rms_db = np.pad(rms_db, (0, max(0, len(chroma) - len(rms_db))), mode='edge')
+        bpm0, beat0 = tempo(mag)
+        env, _ = envelope(mono, SR_A, BLK)
+        F = np.concatenate([chroma * 3, (bands - bands.mean(0)) / (bands.std(0) + 1e-9) * 0.25], 1)
+        sim, lvl, p5, M = blocks(F, env, fps)
+        o = onset_env(mag)
         k, kc = key(chroma)
         lufs, lra = loudness(f)
-        cands = search(chroma, bands, rms_db, beat_s, dur, intro, outro)
-        full = decode(f, 44100, 1)
         stereo = decode(f, 44100, 2)
-        out = []
-        for i, (score, sim, lvl, s, e, nb) in enumerate(cands):
-            e2, corr = refine(full, 44100, s, e, beat_s)
-            item = dict(rank=i + 1, start=round(s, 3), end=round(e2, 3), length=round(e2 - s, 2), beats=nb,
-                        similarity=round(sim, 3), level_diff_db=round(lvl, 1), wave_corr=round(corr, 3))
-            if i == 0:
-                p = os.path.join(a.out, name + '-seam1.mp3')
-                seam(stereo, 44100, s, e2, p)
-                item['seam'] = p
-            out.append(item)
-        rows.append(dict(file=f, name=name, duration=round(dur, 2), lead_silence=lead, tail_silence=tail,
-                         intro=intro, outro=outro, bpm=round(bpm, 1), beat=round(beat_s, 3), key=k, key_fit=kc,
-                         lufs=lufs, lra=lra, candidates=out))
-        print(name, json.dumps(rows[-1], ensure_ascii=False))
+        x44 = stereo.mean(1)
+        first_t, _ = onset_near(o, fps, next(i for i, v in enumerate(lvl) if v > -50) * BLK, before=0.5, after=1.0, strong=0.1)
+        first = hires(x44, first_t or 0.0)
+        starts = []
+        s, alt, sinfo = pick_start(sim, lvl, p5, M, o, fps, first)
+        s = hires(x44, s) if sinfo['kind'] == 'intro' else first
+        starts.append((s, sinfo['reason'] + ' (%.3f초)' % s))
+        if alt is not None:
+            starts.append((first, '비교용: intro까지 모두 보존(첫 소리 %.2f초), End는 첫 후보만' % first))
+        cands = []
+        for si, (s, sr_) in enumerate(starts):
+            beat, comb = beat_period(o, fps, beat0, s)
+            ends, einfo = pick_ends(sim, lvl, p5, M, o, fps, dur, s, beat, x44)
+            for ei, e in enumerate(ends[:1] if si else ends):
+                sm = seam_metrics(stereo, 44100, s, e['end'], M)
+                # a cut just before an onset only needs the pre-roll faded; a cut inside a held sound, a little more
+                sm['xfade_ms'] = 10 if e['onset_at_end'] else 60
+                tag = 'S%dE%d' % (si + 1, ei + 1)
+                p = os.path.join(a.out, '%s-%s.mp3' % (name, tag))
+                seam(stereo, 44100, s, e['end'], p, xf=sm['xfade_ms'] / 1000)
+                cands.append(dict(id=tag, start=round(s, 3), start_reason=sr_, end=e['end'], end_reason=e['reason'],
+                                  beats=e['beats'], beats_mod4=e['beats'] % 4, onset_at_end=bool(e['onset_at_end']),
+                                  onset_err_ms=e['onset_err_ms'], length=round(e['end'] - s, 2),
+                                  kept_pct=round(100 * (e['end'] - s) / dur, 1), trim_start=round(s, 2),
+                                  trim_end=round(dur - e['end'], 2), beat=round(beat, 4), bpm=round(60 / beat, 2),
+                                  ok_start=bool(s <= S_MAX), ok_end=bool(e['end'] >= dur - E_WIN), seam=p, **sm))
+        rows.append(dict(file=f, name=name, duration=round(dur, 2), bpm_est=round(bpm0, 1), key=k, key_fit=kc,
+                         lufs=lufs, lra=lra, core_level=round(M, 1), core_sim_p5=round(p5, 2), end_info=einfo, candidates=cands))
+        print(name, json.dumps(rows[-1], ensure_ascii=False, default=float))
     if a.json:
-        json.dump(rows, open(a.json, 'w'), ensure_ascii=False, indent=1)
+        json.dump(rows, open(a.json, 'w'), ensure_ascii=False, indent=1, default=float)
 
 
 if __name__ == '__main__':
