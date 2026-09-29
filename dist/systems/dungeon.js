@@ -74,7 +74,7 @@ function supplyContribution(item,value,foodSupplyDelta,supplyPerItem){
    without touching what the bag added. */
 function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,why){
  const itemStats=[],itemE={combat:0,survival:0,mobility:0,spirit:0};
- let duplicate=0,finalSupply=0;
+ let duplicate=0,finalSupply=0,mealFinal=0;
  for(const id of n.pack){
   const item=D.itemBy[id];if(item.effects.duplicate){duplicate=1;continue;}
   const copies=1+duplicate;duplicate=0;if(copies>1)why.push('황금 1+1: '+item.name+' 효과 '+copies+'회');
@@ -94,15 +94,16 @@ function itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,w
   }
   /* 원정 도시락 코너: per Food Item in the Bag a flat Supply +2, per Drink +1, and per Food/Drink a flat +2 on every
      Hazard of the Gate the adventurer actually goes to (v2.9.11, User 2026-09-28; was +2 for both and +4). Flat, so no
-     Counter multiplier reads it. */
+     Counter multiplier reads it. At the 마왕성 (the Final) the +2 goes to one Hazard only - counted here, placed in
+     prepare() once the adventurer's Stats exist (v2.9.11, User 2026-09-29). */
   if(facilities.includes('expeditionMeal')&&['food','drink'].includes(item.category)){
    const p=D.relicParams.expeditionMeal;finalSupply+=item.category==='drink'?p.drinkSupplyPerItem:p.supplyPerItem;
-   for(const h of d.hazards)e[h]=(e[h]||0)+p.hazardDefense;}
+   if(d.family==='final')mealFinal++;else for(const h of d.hazards)e[h]=(e[h]||0)+p.hazardDefense;}
   if(Object.keys(from).length)itemStats.push({item:item.id,rarity:item.rarity,stats:from});
   const matches=d.hazards.filter(h=>(item.effects[h]||0)>0);if(matches.length)why.push(item.name+': '+matches.map(h=>D.hazards[h]).join('·')+' 대응');
   if(item.effects.survival>=10)why.push(item.name+': 생존 능력 보강');
  }
- return {itemStats,itemE,finalSupply};
+ return {itemStats,itemE,finalSupply,mealFinal};
 }
 
 /* ---- 4. Supply / Fatigue state --------------------------------------------------------
@@ -181,7 +182,7 @@ function prepare(n,d,facilities=[]){
  const why=[],events=[];
  const {mult,e,sum:traitSum,foodSupplyDelta,supplyPerItem}=traitModifiers(n);
  const baseE={combat:n.stats.combat+n.equipment.power,survival:n.stats.survival,mobility:n.stats.mobility,spirit:n.stats.spirit};
- const {itemStats,itemE,finalSupply}=itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,why);
+ const {itemStats,itemE,finalSupply,mealFinal}=itemContributions(n,d,facilities,mult,foodSupplyDelta,supplyPerItem,e,why);
  const sup=supplyState(n,finalSupply);
  const {effectiveFatigue}=sup;
  e.supply=finalSupply;
@@ -189,6 +190,10 @@ function prepare(n,d,facilities=[]){
  const injuryPenalty=facilities.includes('fieldStretcher')?D.relicParams.fieldStretcher.injuredCombatPenalty:.15;
  const mod=conditionModifiers(n,effectiveFatigue,traitSum,why,injuryPenalty);
  for(const k of STAT_KEYS)e[k]=baseE[k]*mod[k]+itemE[k];
+ /* RELIC 원정 도시락 코너 at the 마왕성 (v2.9.11, User 2026-09-29): every Food/Drink's +2 lands on this adventurer's most
+    취약 Hazard - the largest gap before the bonus, the Final's own Hazard order on a tie. */
+ if(mealFinal){const gaps=d.hazards.map(h=>hazardState(h,e,d).gap),i=gaps.indexOf(Math.max(...gaps)),h=d.hazards[i];
+  e[h]=(e[h]||0)+D.relicParams.expeditionMeal.hazardDefense*mealFinal;}
  if(n.traits.includes('eater')&&n.pack.some(id=>D.itemBy[id].category==='food'))why.push('대식가: 음식 고유 효과 +30% · 음식의 피로 회복 -1');
  const sources=statSources(n,itemStats,effectiveFatigue,traitSum,injuryPenalty);
 

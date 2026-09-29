@@ -5,6 +5,14 @@ the owner headers and in the git tag.
 
 ## v2.9.11 — v3.0 prep line (User 2026-09-28, in progress)
 
+- **왕도 프리미엄 인증 and 원정 도시락 코너** (balance review session, User 2026-09-29; after the D30 fresh clear
+  `reports/fresh-run-d23-review-v299.md` §7-8): 왕도 프리미엄 인증 becomes a 꾸준형 card - commission 60% → 45% of the charged
+  150% price, the owner's 바가지 intent +16%p → +10%p (-0.16 → -0.06), and base operating cost +10% of overheadBase from the
+  next Day (the 지역 거점점 계약 rule, added to it). Measured (`tools/measure-royalcert-v2911.cjs`, `reader` 3,000 each, the card
+  replacing the bot's own D10+ pick): 바가지 acceptance with the card 65.3% (55.4% without; 71.9% before), commission per owning
+  Run median 948G (1,881G before). 원정 도시락 코너 keeps its effect; at the 마왕성 each Food/Drink's +2 lands on the adventurer's
+  most 취약 Hazard only (it counted four times on the Final's four Hazards). RELIC §17 / §23, RELIC_QA REL-Q-v28-7, COPY_AUDIT
+  §11-17 / §11-23; ledgers; tests copy / relic-effects.
 - **Waste leaves the night it is due** - ITEM §SHELF LIFE — EXACT, NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT, EVENT §20,
   RELIC 새벽 회수 계약: stock was discarded the morning after its last sale Day, so the Night receipt that said `오늘 폐기`
   named stock the player had last seen a Day earlier - the opening stock, never ordered, made it look like waste from nowhere
