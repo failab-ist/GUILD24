@@ -112,7 +112,7 @@ the owner headers and in the git tag.
   - Each loop keeps the whole track: Start moves only past a short intro, and End only drops the ending chord and tail
     (`reports/bgm-loops.md`). Joins use a short fade; BOSS alone crossfades for 1 s.
   - Every track plays at one loudness. The synthesised bed stays as the fallback when a file cannot load.
-  - Provenance: `reports/ASSETS.md`. The per-track account (free / Plus) is still to be supplied by the User.
+  - Provenance, including each track's account (free / Plus): `reports/ASSETS.md`.
   - BOSS2 was evaluated and not adopted.
 - **Build marker** 2.9.11.
 

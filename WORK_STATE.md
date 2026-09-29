@@ -123,7 +123,6 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
   - `qa:runtime` 14/14(`qa-bgm` 29/29 새로 추가) · `qa:visual` clean(126장)
 - 남은 것(User)
   - 실기기 청취: UI-Q114 · UI-Q-v29-47. 음량 −24 LUFS와 이음새를 확인해야 한다.
-  - 곡별 생성 계정(무료 / Plus)
   - 배포 용량 33 MB를 그대로 둘지 재인코딩할지
 
 ## Next
