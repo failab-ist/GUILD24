@@ -138,6 +138,10 @@ the owner headers and in the git tag.
   checked for iPhone Safari (`reports/ios-safari-v2911.md`). A quick second tap no longer zooms the page (pinch zoom stays), a
   long press on art opens no save-image menu, and coming back from a call or another app resumes the sound without waiting for
   a tap. The silent switch keeps Safari's default (the game is silent; another app's music is never stopped). No gameplay change.
+- **D30 sheet drops no-effect Insurance** - FINAL_EXPEDITION §Final-specific Item boundary (User 2026-09-29): the Final prep
+  shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
+  measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
+  them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
 - **ORDER warehouse panel** - UI_UX §ORDER — WAREHOUSE PANEL, UI-Q-v29-50 (User 2026-09-29): scrolling down the offers, the
   player compares them with the warehouse, which sat above them in the form. It is now held apart like an inventory: a
   column beside the form on a desk, and on a phone a `창고` handle on top of the dock - shown once the form's own block has

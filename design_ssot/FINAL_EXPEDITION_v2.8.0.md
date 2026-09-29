@@ -310,6 +310,10 @@ Current no-effect Insurance:
 - 귀환석
 - 세계수 생환부적
 
+The D30 ORDER sheet never offers these, on its first sheet or after a Reroll (User 2026-09-29): D30 has no SALE and they
+cannot go in a Final Bag, so buying one was spending with no possible use. Same explicit no-effect exclusion D30 Store
+Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
+
 Player-facing copy must not use the internal term `Final`.
 Exact copy -> `COPY_AUDIT_APPROVED_v2.8.0.md`.
 

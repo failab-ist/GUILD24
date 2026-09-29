@@ -370,3 +370,14 @@ Before the ending (User 2026-09-27, v2.9.9 H7) the resolved Final is played out 
 handed what they carried, each member lunges, the Boss counters, the Boss bar ends at the resolved ratio - and a tap
 skips it; it decides nothing. ->
 ```
+
+
+## v2.9.11 quick patch — D30 sheet drops no-effect Insurance (User 2026-09-29)
+
+New:
+
+```new
+The D30 ORDER sheet never offers these, on its first sheet or after a Reroll (User 2026-09-29): D30 has no SALE and they
+cannot go in a Final Bag, so buying one was spending with no possible use. Same explicit no-effect exclusion D30 Store
+Supports use (RELIC §D30 CANDIDATE ELIGIBILITY).
+```

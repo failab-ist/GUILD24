@@ -610,7 +610,19 @@ test('FINAL_EXPEDITION FINAL-Q74: no-effect Insurance is blocked from a Final Ba
  assert.equal(n.pack.length,0);
  assert.equal(g.finalNoEffect('lowpotion'),false,'ordinary Items stay transferable');
  // ordinary (non-Final) SALE of the same Insurance is untouched
- assert.ok(!read('dist/systems/shop.js').includes('finalNoEffect'),'the block is Final-only');
+ // ordinary SALE is untouched: the one use in shop.js is the D30 offer exclusion below (User 2026-09-29)
+ const shop=read('dist/systems/shop.js');
+ assert.equal((shop.match(/finalNoEffect/g)||[]).length,1,'shop.js reads it once');
+ assert.ok(/!\(s\.day>=30&&this\.finalNoEffect\(it\.id\)\)/.test(shop),'and only for the D30 sheet');
+});
+
+test('FINAL_EXPEDITION (User 2026-09-29): the D30 order sheet never offers an Item with no Final effect, rerolls included',()=>{
+ let sheets=0;
+ for(let k=0;k<60;k++){const g=atFinal('final-d30-offer-'+k,3),s=g.run;s.money=99999;
+  for(let r=0;r<4;r++){sheets++;
+   assert.ok(!s.offers.some(o=>g.finalNoEffect(o.item)),'no 구급키트 / 귀환석 / 세계수 생환부적 on a D30 sheet ('+s.offers.map(o=>o.item)+')');
+   try{g.reroll();}catch(e){break;}}}
+ assert.ok(sheets>=60,'sheets checked: '+sheets);
 });
 
 test('FINAL §3: seven Bosses - the Item preview is the resolution truth, shelf and till read one helper',()=>{
