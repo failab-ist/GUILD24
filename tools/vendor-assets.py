@@ -66,6 +66,22 @@ AUDIO=[('typing','tick'),        # ORDER quantity: the shortest thing in the set
        ('select','key'),         # ordinary pick
        ('send','door')]          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
 
+# v3.0 BGM (User 2026-09-29): the Gemini (Lyria) tracks the User generated for this project, kept untouched under
+# assets-src/bgm/. dist gets byte-identical copies under the ROLE name, so the loop points in dist/ui/audio.js - measured
+# on these same bytes by tools/bgm-loop.py (reports/bgm-loops.md) - hold without re-deriving them. BOSS2 was evaluated
+# and not adopted, so it never reaches dist.
+BGM_SRC=os.path.join(ROOT,'assets-src','bgm')
+BGM_OUT=os.path.join(ROOT,'dist','ui','assets','bgm')
+BGM=[('TITLE_beneath_the_root','title'),                   # no Run / 첫 점포지원 / the store about to open
+     ('MORNING_the_sunken_courtyard','morning'),
+     ('ORDER_before_the_next_turn','order'),
+     ('SALE_copper_key','sale'),
+     ('NIGHT_valley_of_sunken_bells','night'),
+     ('CLOSE_the_stone_path','close'),
+     ('BOSS_beneath_the_stone_floor','boss'),               # FINAL
+     ('SUCC_step_into_the_canopy','succ'),                  # the ending, a cleared Run
+     ('FAIL_late_shift_at_the_dungeon_gate','fail')]        # the ending, any failed Run
+
 def glyphs():
     chars=set()
     for path in glob.glob(os.path.join(ROOT,'dist','**','*.js'),recursive=True)+ \
@@ -122,6 +138,7 @@ def main():
     shutil.copyfile(os.path.join(ROOT,'node_modules','animejs','LICENSE.md'),os.path.join(VEN,'anime.LICENSE.md'))
     print(f'  anime.umd.min.js  {os.path.getsize(anime)//1024}K')
     audio()
+    bgm()
     portraits()
 
 def audio():
@@ -141,6 +158,19 @@ def audio():
     # the CC0 dedication travels with the files it releases, exactly as the OFL does
     shutil.copyfile(os.path.join(SFX,'LICENSE-AUDIO'),os.path.join(AUD,'LICENSE-CC0.txt'))
     print(f'  audio  {len(AUDIO)} cues  {total//1024}K')
+
+def bgm():
+    """Copy the adopted BGM sources out of assets-src/bgm/. Nothing is re-encoded or trimmed: the loop is played from
+    the decoded buffer, so the shipped bytes stay the User's bytes (`modification: none, renamed only`)."""
+    os.makedirs(BGM_OUT,exist_ok=True)
+    total=0
+    for src_name,role in BGM:
+        src=os.path.join(BGM_SRC,src_name+'.mp3')
+        if not os.path.exists(src):
+            sys.exit('assets-src/bgm is missing %s.mp3'%src_name)
+        dst=os.path.join(BGM_OUT,role+'.mp3')
+        shutil.copyfile(src,dst); total+=os.path.getsize(dst)
+    print(f'  bgm  {len(BGM)} tracks  {total//1024}K')
 
 def portraits():
     """Derive the shipped portrait set. Source filenames are the binding, so the output
