@@ -2760,6 +2760,8 @@ PASS:
   feel louder than the other phases
 - cues of one tier sound as one loudness (§SFX LEVELS) - none jumps out, none disappears; runtime evidence
   `tools/qa-sfx-mix.cjs`
+- on a phone speaker (User 2026-09-29, Galaxy): the low cues (사망, the Boss beats, the clash scene, the FAIL ending) are
+  heard at their tier, and no cue buzzes, tears or crackles - alone or landing together
 - cues that mean different things are told apart by ear (§DISTINCT CUES): a Decoration fitted is not a FINAL hit, a SLOTH
   seal breaking is not a Boss reveal, the CLOSING receipt is not an ORDER crate, a menu click is not a quantity tick
 - mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
@@ -2771,6 +2773,7 @@ FAIL:
 - an audible click, gap or double-play at a join or a phase change
 - a phase that goes silent because a file failed to load
 - music that masks a decision or result cue
+- a cue that tears or buzzes on a phone speaker, or clips when cues land together
 
 ### UI-Q-v29-48 — MORNING DAY SIGN FLIP (User 2026-09-29, v2.9.11)
 

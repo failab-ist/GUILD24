@@ -2048,20 +2048,19 @@ New:
 ```new
 ### SFX LEVELS (User 2026-09-29)
 The cues were authored 24 dB apart; each now has its own level so a tier sounds as one loudness and every tier sits where
-PRESENTATION §Mix puts it. Measured as the cue's loudest K-weighted 100 ms window; audibility as its best 1/3-octave band
-over the music it is heard with (that music's loud 90th percentile, less the cue's own ducking). The music plays at
--30 LUFS (NIGHT -33).
+PRESENTATION §Mix puts it. Measured as a phone speaker plays the cue (User 2026-09-29, round 4): its loudest 100 ms window
+280 Hz up over the music it is heard with (that music's loud 90th percentile, less the cue's own ducking). The music plays
+at -30 LUFS (NIGHT -33).
 | tier | cues | level | clears its music by |
 | --- | --- | --- | --- |
-| result | the NIGHT outcomes, the seal and ending cues, the Boss beats, `final`, `collapse` | -17 | 8 dB |
-| decision | ORDER / SALE commits (`order`, the price modes, `refusal`), purchases, open / close, `begin` / `newstore`, `rescue` | -19 | 8 dB |
-| action | `depart` / `return`, Gold, the ORDER crate, the receipt, `heal`, `fixture`, the clash beats, `supply` | -23 | 5 dB |
-| utility | `button`, `ui` | -27 | 3 dB |
-| rapid repeat | `quantity`, `quantset` | -29 | 3 dB |
+| result | the NIGHT outcomes, the seal and ending cues, the Boss beats, `final`, `collapse` | -19 | 8 dB |
+| decision | ORDER / SALE commits (`order`, the price modes, `refusal`), purchases, open / close, `begin` / `newstore`, `rescue` | -21 | 8 dB |
+| action | `depart` / `return`, Gold, the ORDER crate, the receipt, `heal`, `fixture`, the clash beats, `supply` | -25 | 5 dB |
+| utility | `button`, `ui` | -29 | 3 dB |
+| rapid repeat | `quantity`, `quantset` | -31 | 3 dB |
 - each cue lands from 1.5 dB under its level to 3 dB over it (a cue may be lifted up to 3 dB to be heard over its music)
 - a cue lifted to that ceiling and still masked is its sound, not its level: it is reported for a User decision, never
 lifted further past its tier
-- the loudest cue over the loudest music peak stays under -3 dBFS
 - the fitted levels live in `dist/ui/audio.js` (`LEVEL`); the measurement is `tools/qa-sfx-mix.cjs` (in `npm run qa:runtime`)
 ```
 
@@ -2083,4 +2082,19 @@ the CLOSING `receipt` (one short printer pass) from the ORDER `crate`; the `ui` 
 (the recorded ones were masked); the retired files are listed in `reports/ASSETS.md`
 - measured by `tools/qa-sfx-mix.cjs` (spectrum shape x loudness contour): every `apart` pair below 0.6; the shared families
 are reported
+```
+
+
+## effects flattened as a phone plays them (User 2026-09-29)
+
+New:
+
+```new
+with nothing under 300 Hz counted (the BS.1770 shelf and a 300 Hz high-pass); audibility as its best 1/3-octave band from
+- no cue is mostly bass a phone cannot play: its full-range (K-weighted) loudness stays within 6 dB over its level. A low
+cue is heard on a phone through its own overtones at the same pitch and loses what is under its own low cut; the
+effects bus drops everything under 120 Hz (User 2026-09-29: the round-3 fit raised the low cues until they tore)
+- the output has a limiter at -3 dBFS, transparent under it; no cue alone peaks over -4.5 dBFS, and the worst moments of
+cues landing together (a sale and its Gold, quantity taps into the ORDER commit, NIGHT outcomes in a row, the clash
+scene, the seal into the ending cue) stay under -1 dBFS over their phase's music at full sliders
 ```

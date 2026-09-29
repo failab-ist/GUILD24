@@ -1544,7 +1544,8 @@ test('UI_UX_v2.8 §PURCHASE CONFIRMATION: the buy button asks, and only the conf
 test('D-22 / §B-16: two player-owned buses under one master, and a level that is saved',()=>{
  const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  assert.ok(/bgmBus=ctx\.createGain\(\)/.test(audio)&&/sfxBus=ctx\.createGain\(\)/.test(audio),'music and effects have their own gain');
- assert.ok(/bgmBus\.connect\(master\)/.test(audio)&&/sfxBus\.connect\(master\)/.test(audio),'both buses run through one master');
+ assert.ok(/bgmBus\.connect\(master\)/.test(audio)&&/sfxBus\.connect\(low\);low\.connect\(master\)/.test(audio),'both buses run through one master (the effects through their low cut)');
+ assert.ok(/master\.connect\(lim\);lim\.connect\(back\);back\.connect\(ctx\.destination\)/.test(audio),'the master reaches the output through its limiter');
  // every tone() call has to name a bus; the default falls to the effects bus, never to the output
  assert.ok(/gain\.connect\(bus\|\|sfxBus\|\|ctx\.destination\)/.test(audio),'a voice reaches the output through a bus');
  assert.equal((audio.match(/connect\(ctx\.destination\)/g)||[]).length,1,'only the master touches the destination');
@@ -3616,10 +3617,18 @@ test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a
  // SFX LEVELS: every cue has its own fitted level and goes through it; tools/qa-sfx-mix.cjs holds the measurement
  assert.deepEqual(Object.keys(Sound.levels).sort(),[...Sound.cues].sort(),'a level for every cue, and no stray one');
  assert.ok(Object.values(Sound.levels).every(v=>v>0&&v<20),'levels are gains, not dB');
- assert.ok(/const out=ctx\.createGain\(\);out\.gain\.value=LEVEL\[kind\]\?\?1;out\.connect\(sfxBus\);/.test(audio)
+ assert.ok(/const out=ctx\.createGain\(\);out\.gain\.value=LEVEL\[kind\]\?\?1;let to=sfxBus;/.test(audio)&&/out\.connect\(to\);/.test(audio)
   &&/sampleVoice\(file,t0,SAMPLE_VOICE\*\(sh\.sampleGain\?\?1\),out\)/.test(audio)&&/for\(const nz of \[\]\.concat\(sh\.noise\|\|\[\]\)\)noiseVoice\([^\n]*SFX_VOICE\*\(nz\.gain\?\?1\),nz,out\);/.test(audio)
   &&!/play\([\s\S]{0,1500}'sine',sfxBus/.test(audio.slice(audio.indexOf('function play('),audio.indexOf('function play(')+2000)),'every voice of a cue goes through its level');
  assert.ok(read('tools/qa-runtime.cjs').includes("'qa-sfx-mix'"),'the measurement runs in qa:runtime');
+ // round 4 (User 2026-09-29: "still uneven, and it tears"): measured as a phone plays it, the bass a phone cannot play cut,
+ // and a limiter on the output so cues landing together never clip
+ const mixTool=read('tools/qa-sfx-mix.cjs');
+ assert.ok(/result:\{target:-19,/.test(mixTool)&&/decision:\{target:-21,/.test(mixTool)&&/action:\{target:-25,/.test(mixTool)&&/utility:\{target:-29,/.test(mixTool)&&/repeat:\{target:-31,/.test(mixTool),'the tier targets, 2 dB down');
+ assert.ok(/this\.hp\(300,\.5412,rate\),this\.hp\(300,1\.3066,rate\)/.test(mixTool),'loudness is read through a phone speaker (300 Hz)');
+ assert.ok(/LIMIT=-3;/.test(audio)&&/lim\.threshold\.value=LIMIT;lim\.knee\.value=0;lim\.ratio\.value=20;/.test(audio)&&/back\.gain\.value=10\*\*\(\.6\*LIMIT\*\(1-1\/20\)\/20\)/.test(audio),'a -3 dBFS limiter, its make-up gain taken back');
+ assert.ok(/low\.type='highpass';low\.frequency\.value=120;/.test(audio),'the effects bus drops what a phone cannot play');
+ assert.ok(/if\(sh\.cut\)\{to=ctx\.createBiquadFilter\(\);to\.type='highpass';to\.frequency\.value=sh\.cut;/.test(audio)&&/if\(sh\.over\)sh\.over\.forEach/.test(audio),'a bass-heavy cue has its own low cut and its overtones');
  for(const [k,t] of Object.entries(Sound.music))assert.equal(t.trim||0,k==='night'?-3:0,k+(k==='night'?': NIGHT 3 dB under':': no extra trim'));
  assert.ok(/full=Math\.pow\(10,\(BGM_LUFS-t\.lufs\+\(t\.trim\|\|0\)\)\/20\)/.test(audio),'the trim is applied');
  assert.deepEqual(Sound.fades,{out:1,in:1.5},'1 s out, 1.5 s in');

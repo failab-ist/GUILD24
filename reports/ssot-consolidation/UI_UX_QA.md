@@ -1925,3 +1925,14 @@ New:
 - cues that mean different things are told apart by ear (§DISTINCT CUES): a Decoration fitted is not a FINAL hit, a SLOTH
 seal breaking is not a Boss reveal, the CLOSING receipt is not an ORDER crate, a menu click is not a quantity tick
 ```
+
+
+## effects flattened as a phone plays them (User 2026-09-29)
+
+New:
+
+```new
+- on a phone speaker (User 2026-09-29, Galaxy): the low cues (사망, the Boss beats, the clash scene, the FAIL ending) are
+heard at their tier, and no cue buzzes, tears or crackles - alone or landing together
+- a cue that tears or buzzes on a phone speaker, or clips when cues land together
+```

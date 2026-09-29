@@ -63,15 +63,16 @@ const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='e
    rises over BGM_IN on a squared curve, so it does not start on a hard downbeat. */
 const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5;
 /* UI_UX §AUDIO FEEDBACK — SFX LEVELS (User 2026-09-29): each cue's own level, fitted by tools/qa-sfx-mix.cjs so every cue
-   sits within 1.5 dB of its tier's target (K-weighted 100 ms peak: result -17 / decision -19 / action -23 / utility -27 /
-   rapid repeat -29) and clears the music it is heard over. The cues were authored at levels 24 dB apart; this flattens
-   them without touching a timbre. Refit after changing a cue's shape or sample. */
+   sits within 1.5 dB of its tier's target as a phone speaker plays it (100 ms peak, nothing under 300 Hz: result -19 /
+   decision -21 / action -25 / utility -29 / rapid repeat -31) and clears the music it is heard over. Round 4: the first
+   fit counted bass a phone cannot play, so the low cues were raised until they tore; they now carry `over` / `cut` in
+   their shapes. Refit after changing a cue's shape or sample. */
 const LEVEL={
- /* result */ great:6.592,retreat:6.533,injury:9.365,severe:7.736,death:5.245,sealwin:6.776,sealfail:7.666,endwin:4.811,endfail:4.365,bossmajor:8.124,final:1.998,boss:5.263,collapse:10.574,
- /* decision */ order:2.074,sale:1.49,overcharge:1.49,half:1.494,refusal:1.378,purchase:1.894,support:1.527,unlock:1.776,open:1.601,close:1.54,begin:7.705,newstore:10.811,bosscompact:14.77,rescue:6.091,
- /* action */ depart:1.324,return:4.141,gold:5.086,spend:5.08,crate:6.634,receipt:18.991,heal:5.746,fixture:11.26,rumble:4.678,clash:4.238,counter:5.852,supply:13.818,
- /* utility */ button:0.863,ui:6.984,
- /* repeat */ quantity:10.443,quantset:12.464,};
+ /* result */ great:5.074,retreat:5.195,injury:8.199,severe:5.019,death:4.709,sealwin:6.074,sealfail:7.238,endwin:3.828,endfail:3.774,bossmajor:6.638,final:5.165,boss:4.211,collapse:9.646,
+ /* decision */ order:2.759,sale:1.158,overcharge:1.159,half:1.161,refusal:1.997,purchase:1.631,support:4.365,unlock:1.518,open:2.667,close:1.517,begin:5.733,newstore:10.485,bosscompact:9.578,rescue:4.769,
+ /* action */ depart:1.26,return:3.694,gold:4.203,spend:4.191,crate:5.353,receipt:15.137,heal:4.536,fixture:18.203,rumble:17.187,clash:3.933,counter:4.493,supply:8.562,
+ /* utility */ button:0.711,ui:5.564,
+ /* repeat */ quantity:6.357,quantset:7.962,};
 const bgm={
  title:{s:.069,e:116.704,xf:.01,lufs:-13.8},
  morning:{s:9.748,e:162.88,xf:.01,lufs:-11.8},
@@ -94,7 +95,7 @@ const RISE=curve(Math.sin),FALL=curve(Math.cos);
    music voices are raised toward the effects voice rather than the effects being pulled down.
    Attenuating SFX would have made the mix quieter overall and faked loud music, which the
    owner names as a FAIL. The effects voice is unchanged. */
-const BGM_VOICE=.035,BGM_BASS=.044,SFX_VOICE=.035;
+const BGM_VOICE=.035,BGM_BASS=.044,SFX_VOICE=.035,LIMIT=-3;
 /* UI-Q114 §SOFT UI / §STORE SYSTEM. `ui` is the one quiet shared click for reference and
    navigation - opening a panel, a tab, the next coach step - so those stop being silent
    without every press earning a sound of its own. `fixture` is a short double knock for
@@ -169,8 +170,16 @@ function sampleVoice(file,when,volume,bus){const buf=buffers.get(file);if(!buf)r
  const g=ctx.createGain();g.gain.value=volume;src.connect(g);g.connect(bus||sfxBus||ctx.destination);
  src.start(when);return true;}
 function buses(force){if(!ctx)return;
- if(!master){master=ctx.createGain();master.gain.value=1;master.connect(ctx.destination);
-  bgmBus=ctx.createGain();sfxBus=ctx.createGain();bgmBus.connect(master);sfxBus.connect(master);force=true;}
+ if(!master){master=ctx.createGain();master.gain.value=1;
+  /* v2.9.11 (User 2026-09-29, UI_UX §AUDIO FEEDBACK — SFX LEVELS): a limiter after the master, so cues landing together
+     never clip the output. Under LIMIT it is transparent: the compressor's own make-up gain (the Web Audio spec's
+     0.6 power of its full-range gain) is taken back by the gain after it. */
+  const lim=ctx.createDynamicsCompressor(),back=ctx.createGain();lim.threshold.value=LIMIT;lim.knee.value=0;lim.ratio.value=20;
+  lim.attack.value=.003;lim.release.value=.15;back.gain.value=10**(.6*LIMIT*(1-1/20)/20);
+  master.connect(lim);lim.connect(back);back.connect(ctx.destination);
+  /* and the effects lose what a phone speaker cannot play (under 120 Hz), so no cue drives the speaker with it */
+  const low=ctx.createBiquadFilter();low.type='highpass';low.frequency.value=120;low.Q.value=.707;
+  bgmBus=ctx.createGain();sfxBus=ctx.createGain();bgmBus.connect(master);sfxBus.connect(low);low.connect(master);force=true;}
  /* Only written when the player actually moved a slider. render() syncs on every redraw, and
     assigning .value there would cancel a ducking ramp mid-flight on every frame of a redraw. */
  if(force||appliedBgm!==level.bgm){bgmBus.gain.cancelScheduledValues(ctx.currentTime);bgmBus.gain.value=level.bgm;appliedBgm=level.bgm;}
@@ -220,14 +229,14 @@ const shape={
  /* utility: the quietest things in the build */
  ui:{gain:.45,dur:.045,type:'sine',step:.028,attack:.002,repeat:.04},
  button:{gain:.7,dur:.12,type:'triangle',sampleGain:.7},
- fixture:{gain:.8,dur:.06,type:'sine',step:.1,attack:.002,noise:[{at:0,dur:.04,gain:1,hz:640,q:1.8,filter:'bandpass'},{at:.1,dur:.04,gain:.8,hz:560,q:1.8,filter:'bandpass'}]},
+ fixture:{cut:300,gain:.8,dur:.06,type:'sine',step:.1,attack:.002,noise:[{at:0,dur:.04,gain:1,hz:640,q:1.8,filter:'bandpass'},{at:.1,dur:.04,gain:.8,hz:560,q:1.8,filter:'bandpass'}]},
  /* ORDER quantity: one short bright tick, so a rapid tap is one dry tick and nothing else. Quick-set is the SAME material
     one step down, so a shortcut can never outrank the stepper it stands in for. */
  quantity:{gain:.5,dur:.02,type:'triangle',attack:.001,repeat:.045,noise:{at:0,dur:.012,gain:.45,hz:5200,q:1,filter:'highpass'}},
  quantset:{gain:.42,dur:.02,type:'triangle',attack:.001,repeat:.045,noise:{at:0,dur:.012,gain:.38,hz:4800,q:1,filter:'highpass'}},
  /* ORDER confirmation: a low knock on paper. The recorded stamp is the body; the synthesised
     paper brush and the fifth under it are the accent that makes it a commit rather than a tap. */
- order:{gain:1.1,dur:.14,type:'square',step:.09,attack:.003,glide:.97,sampleGain:1,accent:true,
+ order:{cut:300,gain:1.1,dur:.14,type:'square',over:[.4,.3],step:.09,attack:.003,glide:.97,sampleGain:1,accent:true,
   noise:{at:.02,dur:.11,gain:.8,hz:2600,q:.6,filter:'highpass'},duck:.5},
  /* SALE. Every price mode commits on the same register body at the same level, so no mode is
     made to sound like the correct answer; the accent is the same two notes for all three.
@@ -239,17 +248,17 @@ const shape={
  overcharge:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:3,tickLate:.04,tickLow:.75},
  half:{gain:.7,dur:.16,type:'sine',step:.06,sampleGain:1,accent:true,duck:.35,ticks:1},
  /* refusal: clearly not a sale, and deliberately not a failure buzzer - a short dry cancel */
- refusal:{gain:.85,dur:.3,type:'sawtooth',step:.13,attack:.035,glide:.93,sampleGain:1,duck:.45},
+ refusal:{cut:300,gain:.85,dur:.3,type:'sawtooth',over:[.3,.2],step:.13,attack:.035,glide:.93,sampleGain:1,duck:.45},
  /* STORE SUPPORT: securing a fixture into the store. Heavier than the ordinary purchase below,
     and not the same sound as either it or the unlock. */
- support:{gain:1,dur:.3,type:'triangle',step:.12,sampleGain:1.1,accent:true,
+ support:{cut:300,gain:1,dur:.3,type:'triangle',over:[.5,.3],step:.12,sampleGain:.8,accent:true,
   layer:{ratio:2,at:.2,dur:.9,gain:.26},duck:.55},
  purchase:{gain:.8,dur:.18,type:'triangle',step:.09,sampleGain:.85,accent:true,duck:.35},
  unlock:{gain:.85,dur:.2,type:'sine',step:.09,sampleGain:.9,accent:true,
   layer:{ratio:2,at:.16,dur:.7,gain:.24},duck:.4},
  /* MORNING: a latch and a shutter. CLOSING: the drawer and the page settling, which is a
     closure and not a reward - the accent falls, and nothing rings on after it. */
- open:{gain:.7,dur:.22,type:'sine',step:.08,sampleGain:.95,accent:true,duck:.35},
+ open:{cut:300,gain:.7,dur:.22,type:'sine',over:[.4],step:.08,sampleGain:.95,accent:true,duck:.35},
  close:{gain:.7,dur:.2,type:'triangle',step:.085,sampleGain:.95,accent:true,
   noise:{at:.06,dur:.16,gain:.3,hz:3200,q:.8,filter:'highpass'},duck:.35},
  gold:{gain:.9,dur:.16,type:'triangle',step:.07},
@@ -262,36 +271,36 @@ const shape={
     louder; every note, interval and step is unchanged. 사망 keeps its slow restrained attack. */
  great:{hit:1,gain:1.05,dur:.26,type:'sine',step:.09,layer:{ratio:2,at:.2,dur:1.1,gain:.32},noise:{at:.26,dur:.6,gain:.22,hz:6200,q:1,filter:'highpass'},duck:.5},
  retreat:{hit:1,gain:1,dur:.11,type:'square',step:.065,attack:.005,noise:{at:0,dur:.34,gain:.4,hz:900,q:.5,filter:'bandpass'},duck:.4},
- injury:{hit:1,gain:1,dur:.24,type:'triangle',step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
- severe:{hit:1,gain:1.1,dur:.4,type:'sawtooth',step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.55,hz:280,q:.7,filter:'lowpass'},duck:.5},
+ injury:{cut:250,hit:1,gain:1,dur:.24,type:'triangle',over:[.4,.2],step:.11,glide:.96,noise:{at:0,dur:.1,gain:.35,hz:520,q:.8},duck:.35},
+ severe:{cut:250,hit:1,gain:1.1,dur:.4,type:'sawtooth',over:[.3,.2],step:.16,attack:.04,glide:.94,noise:{at:0,dur:.28,gain:.3,hz:280,q:.7,filter:'lowpass'},duck:.5},
  /* restrained low drop: no boom, no fanfare, and the only cue allowed to be this long */
- death:{gain:1.1,dur:1.4,type:'sine',step:.5,attack:.06,layer:{ratio:.5,at:0,dur:2,gain:.45},noise:{at:0,dur:1,gain:.2,hz:180,q:.6,filter:'lowpass'},duck:.75},
+ death:{cut:200,gain:1.1,dur:1.4,type:'sine',over:[.7,.5,.3],step:.5,attack:.06,layer:{ratio:.5,at:0,dur:2,gain:.45},noise:{at:0,dur:1,gain:.2,hz:180,q:.6,filter:'lowpass'},duck:.75},
  rescue:{gain:.9,dur:.3,type:'sine',step:.09,layer:{ratio:2,at:.12,dur:.7,gain:.28},duck:.3},
  heal:{gain:.7,dur:.22,type:'sine',step:.1,attack:.02,layer:{ratio:2,at:.1,dur:.45,gain:.18},duck:.2},
  /* Boss motif, two strengths: the major one adds the low layer and the rumble, the compact one
     is the same interval read short. D10 / D20 must stay smaller than D5 / D15 / D25. */
- bossmajor:{gain:1.1,dur:.34,type:'sawtooth',step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1,gain:.4},noise:{at:0,dur:.45,gain:.3,hz:230,q:.6,filter:'lowpass'},duck:.55},
- bosscompact:{gain:.75,dur:.16,type:'sawtooth',step:.1,attack:.02,duck:.3},
+ bossmajor:{cut:250,gain:1.1,dur:.34,type:'sawtooth',over:[.3,.2],step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1,gain:.4},noise:{at:0,dur:.45,gain:.15,hz:230,q:.6,filter:'lowpass'},duck:.55},
+ bosscompact:{cut:250,gain:.75,dur:.16,type:'sawtooth',over:[.3,.2],step:.1,attack:.02,duck:.3},
  boss:{gain:.9,dur:.28,type:'triangle',step:.05,attack:.002,glide:.9,noise:[{at:0,dur:.22,gain:1,hz:4200,q:.7,filter:'highpass'},{at:.1,dur:.5,gain:.35,hz:140,q:.6,filter:'lowpass'}],duck:.6},
  /* FINAL commit: the heaviest mechanical close in the build, with the tension under it. It adds
     no information - D25 already revealed everything it stands on. */
  sealwin:{hit:1,gain:1.1,dur:.34,type:'triangle',step:.08,layer:{ratio:2,at:.24,dur:1.2,gain:.3},noise:{at:0,dur:.12,gain:.5,hz:1800,q:.7,filter:'bandpass'},duck:.6},
- sealfail:{hit:1,gain:1,dur:.5,type:'sawtooth',step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
+ sealfail:{cut:250,hit:1,gain:1,dur:.5,type:'sawtooth',over:[.3,.2],step:.2,attack:.02,glide:.95,noise:{at:0,dur:.14,gain:.45,hz:700,q:.6,filter:'bandpass'},duck:.5},
  endwin:{gain:1.15,dur:.9,type:'triangle',step:.12,attack:.01,layer:{ratio:2,at:.04,dur:1.6,gain:.34},noise:{at:.48,dur:.8,gain:.18,hz:6000,q:1,filter:'highpass'},duck:.85},
- endfail:{gain:1.1,dur:1.1,type:'sine',step:.26,attack:.04,glide:.985,layer:{ratio:.5,at:0,dur:2.2,gain:.5},noise:{at:0,dur:1.2,gain:.22,hz:180,q:.6,filter:'lowpass'},duck:.85},
- crate:{hit:1,gain:.8,dur:.07,type:'square',step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.45,hz:2600,q:.6,filter:'highpass'},duck:.3},
+ endfail:{cut:180,gain:1.1,dur:1.1,type:'sine',over:[.4,.25],step:.26,attack:.04,glide:.985,layer:{ratio:.5,at:0,dur:2.2,gain:.5},noise:{at:0,dur:1.2,gain:.22,hz:180,q:.6,filter:'lowpass'},duck:.85},
+ crate:{cut:180,hit:1,gain:.8,dur:.07,type:'square',over:[.4,.3],step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.7,hz:2600,q:.6,filter:'highpass'},duck:.3},
  /* v2.9.2 H4: one quiet dry tick for the whole receipt body - lighter and shorter than `crate`,
     never repeated per row */
  receipt:{noise:[{at:0,dur:.13,gain:.8,hz:2300,q:1.4,filter:'bandpass'},{at:.1,dur:.02,gain:.6,hz:3600,q:2,filter:'bandpass'}],duck:.15},
  begin:{gain:.95,dur:.24,type:'triangle',step:.09,layer:{ratio:2,at:.2,dur:.8,gain:.22},
   noise:{at:0,dur:.05,gain:.4,hz:900,q:.8,filter:'bandpass'},duck:.5},
  newstore:{gain:.8,dur:.18,type:'triangle',step:.11,glide:1.03,noise:{at:0,dur:.04,gain:.45,hz:3000,q:.7,filter:'highpass'},duck:.35},
- rumble:{gain:1,dur:.7,type:'sine',attack:.01,noise:{at:0,dur:.6,gain:.55,hz:150,q:.5,filter:'lowpass'},duck:.5},
- clash:{hit:1,gain:.9,dur:.09,type:'square',step:.04,attack:.002,glide:.9,noise:{at:0,dur:.08,gain:.75,hz:1800,q:.7,filter:'bandpass'},duck:.4},
- counter:{hit:1,gain:1,dur:.16,type:'sawtooth',step:.06,attack:.003,glide:.9,noise:{at:0,dur:.14,gain:.6,hz:420,q:.6,filter:'lowpass'},duck:.45},
+ rumble:{cut:250,gain:1,dur:.7,type:'sine',attack:.01,noise:[{at:0,dur:.6,gain:.55,hz:150,q:.5,filter:'lowpass'},{at:0,dur:.55,gain:.8,hz:480,q:.8,filter:'bandpass'}],duck:.5},
+ clash:{cut:180,hit:1,gain:.9,dur:.09,type:'square',over:[.5,.3],step:.04,attack:.002,glide:.9,noise:{at:0,dur:.08,gain:.75,hz:1800,q:.7,filter:'bandpass'},duck:.4},
+ counter:{cut:180,hit:1,gain:1,dur:.16,type:'sawtooth',over:[.5,.4,.3],step:.06,attack:.003,glide:.9,noise:{at:0,dur:.14,gain:.6,hz:420,q:.6,filter:'lowpass'},duck:.45},
  supply:{hit:1,gain:.6,dur:.05,type:'square',attack:.002,noise:{at:0,dur:.04,gain:.4,hz:1500,q:.8,filter:'bandpass'},duck:.2},
- collapse:{gain:1,dur:.4,type:'sawtooth',step:.16,attack:.01,glide:.85,noise:{at:0,dur:.9,gain:.55,hz:300,q:.5,filter:'lowpass'},duck:.6},
- final:{gain:1.1,dur:1,type:'sawtooth',step:.3,attack:.08,glide:.98,sampleGain:1.2,accent:true,
+ collapse:{cut:300,gain:1,dur:.4,type:'sawtooth',over:[.3,.2],step:.16,attack:.01,glide:.85,noise:{at:0,dur:.9,gain:.3,hz:300,q:.5,filter:'lowpass'},duck:.6},
+ final:{cut:300,gain:1.1,dur:1,type:'sawtooth',over:[.5,.4,.3],step:.3,attack:.08,glide:.98,sampleGain:.8,accent:true,
   layer:{ratio:.5,at:0,dur:2.2,gain:.45},noise:{at:0,dur:1.4,gain:.25,hz:160,q:.5,filter:'lowpass'},duck:.8}};
 /* `delay` exists for the one case Canonical allows a second cue: a NIGHT result that also
    carries proven rescue evidence plays its own Outcome first and the accent behind it. */
@@ -301,13 +310,20 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
  if(sh.repeat){if(t0-(lastAt.get(kind)||-1)<sh.repeat)return;lastAt.set(kind,t0);}
  /* the cue's own level (LEVEL): every voice of it - sample, notes, noise, ticks - goes through one gain on its way to the
     effects bus, so the cue's loudness is set in one place without touching its timbre */
- const out=ctx.createGain();out.gain.value=LEVEL[kind]??1;out.connect(sfxBus);
+ /* `cut`: a bass-heavy cue's own low cut - what a phone cannot play is what made it boom and tear once it was brought up to
+    its tier (User 2026-09-29, SFX LEVELS); the body above it, and `over`, carry the cue */
+ const out=ctx.createGain();out.gain.value=LEVEL[kind]??1;let to=sfxBus;
+ if(sh.cut){to=ctx.createBiquadFilter();to.type='highpass';to.frequency.value=sh.cut;to.Q.value=.707;to.connect(sfxBus);}
+ out.connect(to);
  const file=sample[kind];
  const body=file?sampleVoice(file,t0,SAMPLE_VOICE*(sh.sampleGain??1),out):false;
  /* The notes are the accent when a recorded body carried the cue, and the whole cue when it
     did not - so a cue is never silent because a file has not arrived yet. */
  if(!body||sh.accent)notes.forEach((hz,i)=>{const at=t0+i*(sh.step??.07),hit=sh.hit&&!i;
   tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1),sh.type||'triangle',out,hit?{...sh,attack:.002}:sh);
+  /* `over`: the note's 2nd, 3rd, 4th ... harmonics at these gains, on the note's own envelope - a low note a phone speaker
+     cannot play is heard through them at the same pitch (User 2026-09-29, SFX LEVELS) */
+  if(sh.over)sh.over.forEach((g,k)=>g&&tone(hz*(k+2),at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1)*g,'sine',out,hit?{...sh,attack:.002}:sh));
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',out);});
  for(const nz of [].concat(sh.noise||[]))noiseVoice(t0+(nz.at??0),nz.dur??.09,SFX_VOICE*(nz.gain??1),nz,out);
  /* coin ticks: the same ping, the same level, only the count differs between price modes. v2.9.2 H2: the first tick is

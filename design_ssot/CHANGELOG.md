@@ -142,6 +142,15 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **Effects flattened as a phone plays them; nothing tears** - UI_UX §AUDIO FEEDBACK — SFX LEVELS, UI-Q-v29-47 (User
+  2026-09-29, from play on a Galaxy: "still uneven, and some of it tears"): the round-3 fit counted bass a phone speaker
+  cannot play, so the low cues were raised until they tore while still sounding small - on a phone 사망 sat 25 dB under its
+  tier and the Boss card's `rumble` 34 dB under. The measurement now reads a cue as a phone plays it (nothing under 300 Hz)
+  and keeps a full-range reading beside it. The low cues carry their own overtones (same notes, same pitch) and their own
+  low cut; the effects bus drops what is under 120 Hz; a -3 dBFS limiter on the output keeps cues landing together from
+  clipping. Every tier comes down 2 dB (result -19 / decision -21 / action -25 / utility -29 / rapid repeat -31), the order
+  of the tiers unchanged. Checked: every cue at its tier on the phone reading, none more than 6 dB over it full-range, none
+  alone over -4.5 dBFS, the worst moments of cues together under -1 dBFS over their music.
 - **Cues that mean different things sound different** - UI_UX §AUDIO FEEDBACK — DISTINCT CUES, UI-Q-v29-47 (User 2026-09-29,
   from play): three pairs meant different things but shared one sound (measured alike 0.75 / 0.997 / 0.993) - the Decoration
   fixture and the FINAL clash, the SLOTH seal-break and the Boss information motif, the CLOSING receipt and the ORDER crate.
