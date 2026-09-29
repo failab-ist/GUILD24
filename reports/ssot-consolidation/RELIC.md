@@ -638,7 +638,6 @@ of that charged price for the customer while the Player receives the full chosen
 - it multiplies with 원정 전문 인증 on a Field Gear Counter
 base Price = 60G
 Food/Drink positive native Core-Stat contribution +25%
-from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
 12. 첫 방문 쿠폰
 첫 방문 쿠폰 exact rule:
 - on an adventurer's first-ever visit: NPC Wallet +30G on arrival
@@ -772,7 +771,7 @@ Supply efficiency / shelf-life control / broad usability / flexible prep
 identity=Food/Drink Fatigue recovery (Supply) / native-stat / flexible-prep operation (User 2026-09-24, v2.9.0)
 Fatigue-recovery (Supply) efficiency / shelf-life control / broad usability / flexible prep
 Supply (피로 회복) unchanged
-Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).` (User 2026-09-24, v2.9.0; operating cost clause removed v2.9.11)
 Player card copy: `음식 1개당 피로 회복 +2 · 음료 1개당 +1 · 갈 게이트의 모든 위험 대응 +2.` (User 2026-09-24, v2.9.0; v2.9.11, User 2026-09-28)
 Player card copy: `음식·음료의 능력치 효과 +50% (피로 회복·위험 대응은 그대로) · 음식·음료 매입가 +15%.` (User 2026-09-24, v2.9.0; +25% → +15% User 2026-09-28, v2.9.11)
 - Food/Drink Supply (Fatigue recovery) is not a Hazard key; it belongs to Fresh or Fresh+Expedition interaction (User 2026-09-24, v2.9.0)
@@ -914,4 +913,13 @@ New:
 물류 본부계약 (remade User 2026-09-29, v2.9.11; was previous Day sales >= 6 -> same-SKU 3+ orders -25%):
 effect = today every ORDER purchase price -3% per previous-Day sale, at most -30% (10+ sales)
 no Item, rarity or quantity condition; it stacks with 묶음발주 계약 multiplicatively
+```
+
+
+## v2.9.11 즉석식품 코너 operating-cost clause removed (User 2026-09-29)
+
+New:
+
+```new
+no operating-cost effect (User 2026-09-29, v2.9.11; was overheadBase × 0.10 from the next Day)
 ```

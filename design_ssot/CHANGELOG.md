@@ -51,6 +51,9 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **즉석식품 코너 loses its operating-cost clause** - RELIC 10, RELIC_QA, COPY_AUDIT §11-10 (User 2026-09-29,
+  `reports/remeasure-v2911.md` §13-2): the +10% of overheadBase from the next Day left the card below zero (D30 −1.0%p, Store
+  Capital −21G); without it the trial read +4.0%p / +79G. The +25% Food/Drink Stat bonus is unchanged.
 - **물류 본부계약 remade** - RELIC 21, RELIC_QA REL-Q-v28-15, COPY_AUDIT §11-21 / §11-32 (User 2026-09-29,
   `reports/remeasure-v2911.md` §12-2 / §13-1): its trigger (previous Day 6+ sales) and scope (same-SKU 3+ orders) kept it at
   the Keystone floor whatever the numbers (D30 +0.3%p; 4 or 3 sales, or −35%, barely moved it). Name, Keystone tier, rotation

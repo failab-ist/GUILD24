@@ -62,9 +62,7 @@ this.run.phase='foundation';this.relicWindow(0);return this.run;
   /* RELIC_v2.7 §VISITOR RELICS: hub costs a share of overheadBase, taken on that base alone -
      never on the flat extras, and never compounded with another percentage modifier. */
   const base=this.overheadBase(day),hub=facilities?.includes('hub')?base*D.relicParams.hub.overheadRate:0;
-  /* 즉석식품 코너 costs the same way as hub: a share of overheadBase alone, from the next Day. */
-  const kitchen=facilities?.includes('kitchen')?base*D.relicParams.kitchen.overheadRate:0;
-  return ev.overheadFree?0:Math.round((base+hub+kitchen+extras)/10)*10;}
+  return ev.overheadFree?0:Math.round((base+hub+extras)/10)*10;}
  /* NIGHT_CLOSING §CLOSING — CASH FLOW RECEIPT (User 2026-09-26, v2.9.7): tomorrow's base operating cost - the same rule, the
     next Day, today's Store Support (tomorrow's frozen set) and roster, no Event (tomorrow's is not drawn yet). */
  tomorrowOperatingCost(){const s=this.run;return this.expectedOperatingCost({day:s.day+1,facilities:[...s.facilities],event:null});}

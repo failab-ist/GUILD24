@@ -16,7 +16,7 @@ const rows=[
 ['hazardBoard','원정 위험 게시판','foundation',['expedition'],60,'오늘 위험에 대응하는 상품의 발주 후보 가중치 +50%.'],
 ['fieldRepair','야전 정비대','foundation',['expedition'],80,'판매한 야외장비의 위험 대응 수치 +40%.'],
 ['fridge','대형 냉장고','foundation',['fresh'],60,'음식·음료 유통기한 +2일 · 확보 시 보유 재고도 1회 연장.'],
-['kitchen','즉석식품 코너','foundation',['fresh'],170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.'],
+['kitchen','즉석식품 코너','foundation',['fresh'],170,'음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).'],
 ['board','길드 전광판','foundation',['customer'],110,'하루 기본 최소 방문객 4명 (기존 3명).'],
 ['firstVisitCoupon','첫 방문 쿠폰','foundation',['customer'],110,'처음 온 손님 · 소지금 +30G · 구매 의사 +20%p.'],
 ['groupOrder','단체 주문 창구','hybrid',['rotation','customer'],200,'아침마다 20% 확률로 방문객 +1명 · 하루 5번째 판매부터 판매마다 +15G.'],
@@ -60,7 +60,7 @@ D.relicParams={
  fieldStretcher:{injuredCombatPenalty:.08},
  firstAidDesk:{healChance:.20},
  fridge:{shelfDays:2},
- kitchen:{statBonus:.25,overheadRate:.10},
+ kitchen:{statBonus:.25}, /* v2.9.11 (User 2026-09-29): the +10% operating-cost clause is gone */
  board:{minVisitors:4},
  firstVisitCoupon:{arrivalGold:30,intentBonus:.20},
  groupOrder:{visitorChance:.20,commissionFrom:5,commission:15},

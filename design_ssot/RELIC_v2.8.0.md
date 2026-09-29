@@ -583,10 +583,10 @@ Supply (피로 회복) unchanged
 Hazard Counter unchanged
 Insurance unchanged
 RiskReward penalty unchanged
-from next Day, operating cost + overheadBase × 0.10 (the same rule as 지역 거점점 계약)
+no operating-cost effect (User 2026-09-29, v2.9.11; was overheadBase × 0.10 from the next Day)
 ```
 
-Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로) · 다음 날부터 기본 운영비 +10%.` (User 2026-09-24, v2.9.0)
+Player card copy: `음식·음료의 능력치 효과 +25% (피로 회복·위험 대응은 그대로).` (User 2026-09-24, v2.9.0; operating cost clause removed v2.9.11)
 
 notAutomatic=[HazardCounter,RiskRewardPenalty,Insurance,unrelatedAttachedEffect]
 newCombatSystem=NO

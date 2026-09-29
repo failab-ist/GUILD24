@@ -568,7 +568,7 @@ Use 원정 위험 게시판 / 원정 도시락 코너 / 길드24 원정전문점
 the charged price, Player still receives the full chosen sale price
 - 원정 위험 게시판 -> today's Gate Hazard matching offer weight +50%, never a guarantee
 - 야전 정비대 -> carried Field Gear Hazard Counter values x1.40; no offer weight / quantity effect
-- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; from next Day operating cost + overheadBase × 0.10
+- 즉석식품 코너 -> Food/Drink native Core-Stat +25%; no operating-cost effect (v2.9.11, User 2026-09-29; was overheadBase × 0.10)
 - 첫 방문 쿠폰 -> first-ever visit: NPC Wallet +30G on arrival, purchase intent +20%p for that visit
 - 단체 주문 창구 -> own 20% Morning roll for +1 visitor; +15G HQ commission per sale from the Day's 5th
 - 단골 묶음혜택 -> 단골's second paid purchase that Day: customer pays / is judged on half the charged
