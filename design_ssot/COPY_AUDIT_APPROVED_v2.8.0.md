@@ -196,6 +196,9 @@ ORDER coach group order (User 2026-09-24, v2.9.0): GATES → OFFER → QUANTITY 
 ### GATES (User 2026-09-24, v2.9.0: anchor = the ORDER 오늘 brief block)
 > 오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.
 
+### STOCK (User 2026-09-29, v2.9.11: anchor = the ORDER 창고 summary, right after GATES — the first Day's opening stock)
+> 창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.
+
 ### OFFER (User 2026-09-24, v2.9.0: anchor = the first offer row; the category grammar, taught once — the same sentence as §8-0)
 > 음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.
 

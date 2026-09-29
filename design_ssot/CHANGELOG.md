@@ -81,6 +81,9 @@ the owner headers and in the git tag.
   §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
   (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
   Food/Drink Stat bonus is unchanged.
+- **The opening stock is named** - UI_UX §TUTORIAL — FIRST-ORDER COACH ORDER, COPY_AUDIT §3-7 STOCK, UI-Q-v29-11 (User 2026-09-29):
+  the first Day's warehouse holds the opening stock nobody ordered, and no screen said so. The first-ORDER coach now teaches it
+  second, on the 창고 summary: `창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.`
 - **Customer dialogue proofread, batch 4** - COPY_AUDIT §16-1 / §17-6 / §17-9 / §19-1 / §19-2 / §19-3 / §19-6 / §19-7 / §20-1
   (User 2026-09-29, `reports/copy-proofread-v2911.md` 4-1~4-14):
   - Eleven lines space `-아/어 + 주다 · 보다 · 오다` like the rest of the dialogue already did (`와 봤습니다`, `가 보죠`,

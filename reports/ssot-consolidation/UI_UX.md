@@ -802,7 +802,7 @@ On DAY 1, 2 and 3 of a Run, while the account tutorial is not skipped (`tutorial
 - the one User-approved exception to "tutorial does not add page height" (exactly one line)
 Exact strings (`오늘 할 일 — …` per phase) -> COPY_AUDIT_APPROVED_v2.8.0.md §3.
 ### TUTORIAL — FIRST-ORDER COACH ORDER
-The first-ORDER coach group is, in this order: `gates` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0).
+The first-ORDER coach group is, in this order: `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll` (User 2026-09-24, v2.9.0;
 - `gates` anchors the ORDER 오늘 brief block; `offer` anchors the first offer row
 - `quantity` and `confirm` keep their approved lines; `reroll` keeps its line and is now last
 - the `gold` mark is retired (the register reads itself)
@@ -1894,4 +1894,14 @@ Playback:
 - Mute or a hidden page stops the music, and coming back resumes it.
 - A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
 - Playback changes no gameplay state and consumes no Gameplay RNG.
+```
+
+
+## v2.9.11 ORDER STOCK COACH (User 2026-09-29)
+
+New:
+
+```new
+`stock` User 2026-09-29, v2.9.11).
+- `stock` anchors the 창고 summary: the first Day's warehouse already holds the opening stock, which no screen named before
 ```

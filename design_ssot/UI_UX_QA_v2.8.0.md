@@ -2342,11 +2342,12 @@ SETUP:
 Fresh account, first ORDER at 360 and 1280; step through the coach.
 
 EXPECT:
-The ORDER coach group runs `gates` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
+The ORDER coach group runs `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
 
 PASS:
 - the steps appear in exactly that order and nothing else is in the group
 - `gates` (step id `order-gates`, apart from MORNING's `gates`, so seeing one never marks the other seen) highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
+- `stock` (step id `order-stock`) highlights the ORDER 창고 summary and reads the COPY_AUDIT §3-7 STOCK line (User 2026-09-29, v2.9.11)
 - `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
 - `quantity` / `confirm` / `reroll` keep their approved lines (COPY_AUDIT §3-7 QUANTITY / §3-2 / COPY_WORLD_VOICE §TUTORIAL COACH COPY); `reroll` is last
 - no `gold` mark: `#order-register` carries no coach step

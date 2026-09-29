@@ -776,7 +776,7 @@ One fixed text line at the top of the phase content (under the menu pin, above t
 - the line is a coach mark / spotlight / button, or wraps at 360
 ### UI-Q-v29-11 — FIRST-ORDER COACH ORDER / TARGETS
 Fresh account, first ORDER at 360 and 1280; step through the coach.
-The ORDER coach group runs `gates` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
+The ORDER coach group runs `gates` → `stock` → `offer` → `quantity` → `confirm` → `reroll`, one concept per step.
 - the steps appear in exactly that order and nothing else is in the group
 - `gates` (step id `order-gates`, apart from MORNING's `gates`, so seeing one never marks the other seen) highlights the ORDER 오늘 brief block and reads `오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.`
 - `offer` highlights the first offer row and reads `후보 상품의 효과. 오늘 위험에 맞는 효과는 굵게 보인다.`
@@ -1765,4 +1765,13 @@ it (UI-Q114)
 - an audible click, gap or double-play at a join or a phase change
 - a phase that goes silent because a file failed to load
 - music that masks a decision or result cue
+```
+
+
+## v2.9.11 ORDER STOCK COACH (User 2026-09-29)
+
+New:
+
+```new
+- `stock` (step id `order-stock`) highlights the ORDER 창고 summary and reads the COPY_AUDIT §3-7 STOCK line (User 2026-09-29, v2.9.11)
 ```

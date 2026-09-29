@@ -1171,8 +1171,10 @@ const coachSteps={
  morning:[['visitors','#visitor-count','오늘 올 손님 수. 점포지원·장식·사건에 따라 달라진다.'],['gates','.slip.gate','열린 게이트의 위험을 보고 오늘 필요한 상품을 준비한다.'],['deep','.slip.deep','같은 게이트의 더 깊은 원정. 손님 1명을 후원하면 성공 시 더 성장한다.']],
  /* v2.9.0 (User 2026-09-24): gates -> offer -> quantity -> confirm -> reroll; the 보유 골드 mark is retired, the register reads itself.
     Seen state is keyed by step id alone, so ORDER's gates step is `order-gates`: sharing MORNING's `gates` id marked it seen
-    before the first ORDER ever opened (fixed 2026-09-26). */
- order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
+    before the first ORDER ever opened (fixed 2026-09-26).
+    v2.9.11 (User 2026-09-29): `order-stock` after the gates - the Day 1 warehouse already holds the opening stock nobody ordered,
+    and nothing said so; the mark sits on the 창고 summary the ORDER screen already shows. */
+ order:[['order-gates','.brief .when','오늘 열린 게이트와 위험. 위험 보기를 누르면 무엇으로 막는지 나온다.'],['order-stock','.stock-brief summary','창고에 있는 재고. 첫날에는 본사가 넣어 둔 기본 상품이 있다. 발주한 상품도 여기에 쌓인다.'],['offer','.lines .line','음식은 피로 회복, 음료는 능력치·위험 보조와 약간의 피로 회복, 포션은 투력, 야외장비는 위험 대응, 보험은 실패 완화.'],['quantity','.dial','오늘 손님과 게이트를 보고 수량을 정한다. ‘최대’는 이 후보에서 지금 발주할 수 있는 최대 수량이다.'],['confirm','[data-action="confirm-order"]','카트의 상품만 발주한다. 확정 뒤에도 추가 발주와 후보 교환이 가능하다.'],['reroll','.rubber','후보 전체를 교환한다. 같은 날 반복하면 비용이 오른다.']],
  /* USER 2026-09-24 (first-sale coach diet): the first SALE teaches four marks - the destination
     (COPY_WORLD_VOICE §Tutorial: the rule that a destination can change is taught here, never
     through one Trait's name), the Hazard rows, the frozen outlook and the price - in the order
