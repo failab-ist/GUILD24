@@ -15,7 +15,7 @@ MP3 (the 4 s before End, then the 4 s after Start). Similarity is only a support
 Nothing is written into the game; the source files stay untouched.
 
   pip install imageio-ffmpeg numpy
-  python3 tools/bgm-loop.py [--out DIR] [--json FILE] [FILES...]
+  python3 tools/bgm-loop.py [--out DIR] [--json FILE] [--start NAME=SEC ...] [FILES...]
 """
 import argparse, glob, json, os, subprocess, sys
 import numpy as np
@@ -263,7 +263,13 @@ def main():
     ap.add_argument('files', nargs='*')
     ap.add_argument('--out', default='/tmp/guild24-bgm-seams')
     ap.add_argument('--json')
+    ap.add_argument('--start', action='append', default=[], metavar='NAME=SEC',
+                    help='extra Start to compare, e.g. a listener\'s suggestion; snapped to the onset at SEC -0.1/+0.3 s')
     a = ap.parse_args()
+    manual = {}
+    for m in a.start:
+        n, t = m.rsplit('=', 1)
+        manual.setdefault(n, []).append(float(t))
     files = a.files or sorted(glob.glob('assets-src/bgm/*.mp3'))
     os.makedirs(a.out, exist_ok=True)
     fps = SR_A / HOP
@@ -288,14 +294,33 @@ def main():
         starts = []
         s, alt, sinfo = pick_start(sim, lvl, p5, M, o, fps, first)
         s = hires(x44, s) if sinfo['kind'] == 'intro' else first
-        starts.append((s, sinfo['reason'] + ' (%.3f초)' % s))
+        starts.append((s, sinfo['reason'] + ' (%.3f초)' % s, True, False))
         if alt is not None:
-            starts.append((first, '비교용: intro까지 모두 보존(첫 소리 %.2f초), End는 첫 후보만' % first))
+            starts.append((first, '비교용: intro까지 모두 보존(첫 소리 %.2f초), End는 첫 후보만' % first, False, False))
+        for t in manual.get(name, []):
+            ot, _ = onset_near(o, fps, t, before=0.1, after=0.3, strong=0.15)
+            if ot is None:
+                print('skip manual start %s=%.2f: no onset near it' % (name, t), file=sys.stderr)
+                continue
+            ms = hires(x44, ot)
+            if ms > S_MAX:
+                print('skip manual start %s=%.2f: past %.0f s' % (name, ms, S_MAX), file=sys.stderr)
+                continue
+            i = int(ms / BLK)
+            pre = 10 * np.log10(np.mean(10 ** (lvl[:i] / 10))) if i else float('nan')
+            starts.append((ms, '제안 Start: %.2f초 부근 → 온셋 %.3f초. 그 앞 0~%.1f초는 평균 %.0f dB(core %.0f dB), 음색·화성 유사도 %.2f(core 하위 5%% %.2f)' % (
+                t, ms, ms, pre, M, float(sim[:i].mean()) if i else float('nan'), p5), True, True))
         cands = []
-        for si, (s, sr_) in enumerate(starts):
-            beat, comb = beat_period(o, fps, beat0, s)
+        for si, (s, sr_, all_ends, man) in enumerate(starts):
+            # a suggested Start may sit on a weak onset: keep the beat period measured from the automatic Start
+            if not man:
+                beat, comb = beat_period(o, fps, beat0, s)
+                if si == 0:
+                    beat1 = beat
+            else:
+                beat = beat1
             ends, einfo = pick_ends(sim, lvl, p5, M, o, fps, dur, s, beat, x44)
-            for ei, e in enumerate(ends[:1] if si else ends):
+            for ei, e in enumerate(ends if all_ends else ends[:1]):
                 sm = seam_metrics(stereo, 44100, s, e['end'], M)
                 # a cut just before an onset only needs the pre-roll faded; a cut inside a held sound, a little more
                 sm['xfade_ms'] = 10 if e['onset_at_end'] else 60
