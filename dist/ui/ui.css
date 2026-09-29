@@ -2516,6 +2516,17 @@ details.detail-stat>summary:focus-visible{outline:2px solid var(--gold);outline-
  .p-prep .prep-note .welcome-title{margin-bottom:6px}
  .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.6}
 }
+/* UI_UX §SHORT PHONE (User 2026-09-29, iPhone SE: a 375x548 stage with Safari's bars). The painting is cropped top and
+   bottom, its ceiling comes up under the title and the board keeps only the wall between the ceiling and the counter:
+   the note takes the tighter step the short desk takes (same type, less air), so the status line stays on the board, and
+   the 간판 keeps the gap from the title as it does on the wide framing - the title is where its painted spot lands */
+@media (max-height:639px) and (orientation:portrait){
+ .p-morning.p-prep .pinned{gap:6px;padding-bottom:9px}
+ .p-morning.p-prep .prep-note{padding:5px 12px 3px}
+ .p-prep .prep-note .welcome-title{margin-bottom:2px}
+ .p-prep .prep-note .flavor,.p-prep .prep-note .welcome-band{line-height:1.4}
+ .p-prep .deco-layer{--sign-l:calc(50cqw - min(210px,58vw) / 2)}
+}
 .p-prep .slot-tag i{font-style:normal;color:#b99b6a}
 .p-prep .slot-tag b{font-weight:600}
 .p-prep .slot-tag .can-buy{margin-top:2px;padding:.27em .55em;font:600 min(20px,max(11px,1.72cqh,1.4cqw))/1 var(--ui);font-style:normal;color:#e0c89c;

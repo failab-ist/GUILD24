@@ -1809,7 +1809,7 @@ Verify UI_UX §TOUCH / INTERACTION (iPhone Safari) and §AUDIO FEEDBACK — PHAS
 - `소리 켜기` starts the sound on the first tap
 - after a phone call or another app, the music comes back on return or at the latest on the next tap
 - with the silent switch on, the game is silent and music from another app keeps playing
-- runtime evidence (Chromium): `tools/qa-bgm.cjs` resumes a suspended context on return; `tests/ui-guard.cjs` UI-Q-v29-49
+- runtime evidence (Chromium): `tools/qa-bgm.cjs` resumes a suspended context on return; `tests/ui-guard.cjs` UI-Q-v29-49;
 - the page zooms on a quick double tap
 - the save-image menu opens on art
 - the sound stays off after coming back and tapping
@@ -1935,4 +1935,16 @@ New:
 - on a phone speaker (User 2026-09-29, Galaxy): the low cues (사망, the Boss beats, the clash scene, the FAIL ending) are
 heard at their tier, and no cue buzzes, tears or crackles - alone or landing together
 - a cue that tears or buzzes on a phone speaker, or clips when cues land together
+```
+
+
+## iPhone SE short phone (User 2026-09-29)
+
+New:
+
+```new
+- on an iPhone SE (UI_UX §SHORT PHONE): 새 점포 준비 shows the title clear of the 간판 and its tag, and the status line on
+the board; MORNING shows the Event whole (its effect line included) and the top of the first Gate without scrolling
+`tools/qa-visual.cjs` runs every screen at 375x548
+- on an iPhone SE, a tag or a line over the title or off the board, or the Event's effect line cut on MORNING
 ```

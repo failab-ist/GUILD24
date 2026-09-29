@@ -2105,8 +2105,8 @@ sides on a stage narrower than the file, at the top and bottom on one wider than
 - the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
   down behind the dock (a portrait tablet, a short desk) it rises to just above the Action instead; it takes its larger
   desk size only on a stage 760 px high or more, so on a 700-high stage it still clears the counter pieces above it
-- covered: phone 360~430 at the heights a browser leaves (640~932), portrait tablet 768~912, landscape tablet 900~1023 and
-  desk 1024~1920
+- covered: phone 360~430 at the heights a browser leaves (640~932), and the iPhone SE stage 375x548 (§SHORT PHONE), portrait
+  tablet 768~912, landscape tablet 900~1023 and desk 1024~1920
 
 ### NEW STORE PREPARATION — STORE SCENE (v2.9.9)
 
@@ -2622,6 +2622,20 @@ At each width verify with actual browser screenshot/manual inspection:
 - no desktop composition merely scaled down
 - no clipped sticky action / safe-area overlap
 - game scene remains useful, not a space-consuming poster above the decision
+
+### SHORT PHONE (User 2026-09-29)
+
+The shortest supported phone stage is an iPhone SE with Safari's bars showing: 375x548 (the User's call: "SE까지 지원").
+It runs in the visual gate beside the 780-high widths. On a portrait stage under 640 high:
+- MORNING: the board may run down to 8 px above the till's label, over the painted wall, so the day's Event (its effect line
+  included) reads whole and the first Gate plate shows under it. The till, the branch plate and the Decoration pieces stay
+  where §LIVE STORE DECORATION SEATING puts them; a 벽면 piece hanging there is behind the board on a day the board fills
+  it - the situation reads before the room (§MORNING; User 2026-09-29)
+- 새 점포 준비: the note takes the tighter step of the short desk (same type, less air), so the status line stays on the
+  board, and the 간판 keeps the gap from the title as it does on the wide framing (the cropped ceiling brings the title
+  down onto its painted spot)
+- every other screen already holds at this height: SALE keeps its sale-first order (the shelf under the fold),
+  §MOBILE SALE PLAYABILITY
 
 ## TOUCH / INTERACTION
 

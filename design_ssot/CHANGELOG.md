@@ -142,6 +142,13 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **iPhone SE supported** - UI_UX §SHORT PHONE, §LIVE STORE DECORATION SEATING, UI-Q-v29-49 (User 2026-09-29, "SE까지
+  지원"; `reports/ios-safari-v2911.md` batch 2): at 375x548 (an SE with Safari's bars) the cropped painting brought the title
+  down onto the 간판's spot, so its tag covered the logo; the 새 점포 준비 status line fell off the board; MORNING cut the
+  Event's effect line and hid the Gates under the fold. On a portrait stage under 640 high the MORNING board now runs down
+  to just above the till (a 벽면 piece is behind it on a full day - the situation first, the User's call), the 새 점포 준비
+  note takes the short desk's tighter step, and the 간판 keeps the gap from the title. The visual gate runs every screen at
+  375x548 too. Nothing changes at 640 high or more.
 - **Effects flattened as a phone plays them; nothing tears** - UI_UX §AUDIO FEEDBACK — SFX LEVELS, UI-Q-v29-47 (User
   2026-09-29, from play on a Galaxy: "still uneven, and some of it tears"): the round-3 fit counted bass a phone speaker
   cannot play, so the low cues were raised until they tore while still sounding small - on a phone 사망 sat 25 dB under its

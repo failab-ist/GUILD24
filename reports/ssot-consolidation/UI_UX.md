@@ -1561,8 +1561,7 @@ band is sized by the drawn painting and moved down by the height the crop takes 
 housing no longer floats above the counter; with no crop the band is the stage percentage it always was
 - where the crop takes the painted ceiling off the top of the stage, the 간판 hangs the gap below the stage's top edge
 - the branch plate keeps its spot on the counter front while it clears the dock Action; where the painted counter runs
-- covered: phone 360~430 at the heights a browser leaves (640~932), portrait tablet 768~912, landscape tablet 900~1023 and
-desk 1024~1920
+- covered: phone 360~430 at the heights a browser leaves (640~932), and the iPhone SE stage 375x548 (§SHORT PHONE), portrait
 ```
 
 ## AMENDMENT — LIVE STORE DECORATION SEATING — tablets, review follow-up (User 2026-09-27, v2.9.9)
@@ -2097,4 +2096,25 @@ effects bus drops everything under 120 Hz (User 2026-09-29: the round-3 fit rais
 - the output has a limiter at -3 dBFS, transparent under it; no cue alone peaks over -4.5 dBFS, and the worst moments of
 cues landing together (a sale and its Gold, quantity taps into the ORDER commit, NIGHT outcomes in a row, the clash
 scene, the seal into the ending cue) stay under -1 dBFS over their phase's music at full sliders
+```
+
+
+## iPhone SE short phone (User 2026-09-29)
+
+New:
+
+```new
+tablet 768~912, landscape tablet 900~1023 and desk 1024~1920
+### SHORT PHONE (User 2026-09-29)
+The shortest supported phone stage is an iPhone SE with Safari's bars showing: 375x548 (the User's call: "SE까지 지원").
+It runs in the visual gate beside the 780-high widths. On a portrait stage under 640 high:
+- MORNING: the board may run down to 8 px above the till's label, over the painted wall, so the day's Event (its effect line
+included) reads whole and the first Gate plate shows under it. The till, the branch plate and the Decoration pieces stay
+where §LIVE STORE DECORATION SEATING puts them; a 벽면 piece hanging there is behind the board on a day the board fills
+it - the situation reads before the room (§MORNING; User 2026-09-29)
+- 새 점포 준비: the note takes the tighter step of the short desk (same type, less air), so the status line stays on the
+board, and the 간판 keeps the gap from the title as it does on the wide framing (the cropped ceiling brings the title
+down onto its painted spot)
+- every other screen already holds at this height: SALE keeps its sale-first order (the shelf under the fold),
+§MOBILE SALE PLAYABILITY
 ```

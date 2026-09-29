@@ -3,13 +3,16 @@
 // from the outside through tools/preview.cjs. Never part of `npm test`.
 // Chromium is preinstalled at /opt/pw-browsers — never run `playwright install`.
 const {spawn}=require('node:child_process'),fs=require('node:fs'),path=require('node:path');
-// The gate runs 360 / 390 / 430 x 780. QA_WIDTHS / QA_HEIGHT / QA_SCREENS sweep wider by
+// The gate runs 360 / 390 / 430 x 780 (and 375 x 548, below). QA_WIDTHS / QA_HEIGHT / QA_SCREENS sweep wider by
 // hand — e.g. a landscape phone, a 320 handset, a tablet — without editing this file.
 const list=(v,d)=>v?String(v).split(',').map(x=>x.trim()).filter(Boolean):d;
 /* UI-Q-v28-26 minimum: 360 / 390 / 412 phone class, the 1024 breakpoint and a 1280-class
    desktop. 430 stays in the gate as an extra phone; it does not stand in for 412, and 1280
    does not stand in for 1024. */
 const WIDTHS=list(process.env.QA_WIDTHS,[360,390,412,430,1024,1280]).map(Number);
+/* UI_UX §SHORT PHONE (User 2026-09-29): the shortest supported phone stage, an iPhone SE with Safari's bars (375x548), runs
+   in the gate at its own height; a hand sweep (QA_WIDTHS / QA_HEIGHT) leaves it out unless QA_SHORT names it */
+const SHORT=list(process.env.QA_SHORT,process.env.QA_WIDTHS||process.env.QA_HEIGHT?[]:['375x548']).map(s=>s.split('x').map(Number));
 const HEIGHT=Number(process.env.QA_HEIGHT||780),PORT=Number(process.env.QA_PORT||5199);
 const CAPTURE_ONLY=process.env.QA_CAPTURE_ONLY==='1';
 const FIXED_NOW=Number(process.env.QA_FIXED_NOW||1790112000000);
@@ -821,8 +824,8 @@ async function focusProbe(page){
  const browser=await playwright.chromium.launch({executablePath:EXECUTABLE,args:['--no-sandbox','--font-render-hinting=none']});
  const results=[];let failed=0;
  try{
-  for(const width of WIDTHS){
-   const desktop=isDesktop(width),height=heightFor(width);
+  for(const [width,height,size] of [...WIDTHS.map(w=>[w,heightFor(w),String(w)]),...SHORT.map(([w,h])=>[w,h,w+'x'+h])]){
+   const desktop=isDesktop(width);
    /* The capture clock is frozen (see drive()) so BEFORE and AFTER render the same content.
       anime's engine reads that same clock, so under the freeze an entry animation applies its
       FROM value and never advances: `opacity:[0,1]` stays 0 for as long as the page lives, and
@@ -835,16 +838,16 @@ async function focusProbe(page){
    const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:desktop?1:2,
     isMobile:!desktop,hasTouch:!desktop,locale:'ko-KR',reducedMotion:'reduce'});
    const page=await context.newPage();
-   page.on('pageerror',e=>{console.error(`  page error @${width}: ${e.message}`);failed++;});
+   page.on('pageerror',e=>{console.error(`  page error @${size}: ${e.message}`);failed++;});
    await page.goto(`http://127.0.0.1:${PORT}/index.html`,{waitUntil:'load'});
    for(const screen of SCREENS){
     await drive(page,screen,SEED_OVERRIDE[screen]||'qa-v24-'+screen);
-    const file=path.join(OUT,`${screen}-${width}.png`);
+    const file=path.join(OUT,`${screen}-${size}.png`);
     await page.screenshot({path:file});
     const {fails,warn}=await audit(page,width,screen,desktop);
-    results.push({screen,width,fails,warn});
+    results.push({screen,width,height,fails,warn});
     failed+=fails.length;
-    console.log(`${fails.length?'FAIL':'PASS'} ${screen} @${width}${fails.length?'\n  - '+fails.join('\n  - '):''}${warn.length?'\n  ? '+warn.join('\n  ? '):''}`);
+    console.log(`${fails.length?'FAIL':'PASS'} ${screen} @${size}${fails.length?'\n  - '+fails.join('\n  - '):''}${warn.length?'\n  ? '+warn.join('\n  ? '):''}`);
    }
    await context.close();
   }
@@ -894,8 +897,8 @@ async function focusProbe(page){
  }finally{
   await browser.close();server.kill();
  }
- fs.writeFileSync(path.join(OUT,'qa-visual.json'),JSON.stringify({widths:WIDTHS,height:HEIGHT,captured:new Date().toISOString().slice(0,10),results},null,1));
- console.log(`\n${results.length} captures at ${WIDTHS.join(' / ')} -> reports/ui/`);
+ fs.writeFileSync(path.join(OUT,'qa-visual.json'),JSON.stringify({widths:WIDTHS,height:HEIGHT,short:SHORT.map(([w,h])=>w+'x'+h),captured:new Date().toISOString().slice(0,10),results},null,1));
+ console.log(`\n${results.length} captures at ${[...WIDTHS,...SHORT.map(([w,h])=>w+'x'+h)].join(' / ')} -> reports/ui/`);
  if(failed){console.error(`${failed} visual QA problems`);process.exit(1);}
  console.log('visual QA clean');
 })();

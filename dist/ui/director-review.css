@@ -257,6 +257,15 @@
 /* the daysign, the till and the board are the room's lit subjects and stay out of the falloff */
 .p-morning .store>.board{position:relative;z-index:2}
 .p-morning .daysign,.p-morning .till,.p-morning .till-cap,.p-morning .branchplate{z-index:2}
+/* UI_UX §SHORT PHONE (User 2026-09-29, iPhone SE: a 375x548 stage). The painting is cropped top and bottom, so the counter
+   band hangs 59 px past its layout box and the board kept only the wall above it - the Event's effect line cut, the Gates
+   under the fold. On a stage under 640 high the counter band lends the board the room down to 8 px over the till's
+   label (past the board's own 6 px overlap): it gives up that much layout height at its top - the band itself stays
+   seated at the stage's foot, so the till, the plate and the pieces stay where they stand. The situation reads before the room (UI_UX §MORNING): a 벽면 piece
+   hanging there is behind the board. */
+@media (max-height:639px) and (orientation:portrait){
+ .p-morning:not(.p-prep) .band.counter{margin-top:calc(-1 * max(0px,calc((var(--ph) - 100cqh) / 2 + var(--cap-top) * var(--band-c) * var(--ph) - 14px)))}
+}
 
 /* DESKTOP / wide viewport takes the wide framing of the same store - and so does any landscape stage 768 wide or more, a phone turned sideways included (v2.9.9, UI_UX
    §LIVE STORE DECORATION SEATING: the tall file cropped to a landscape stage shows no counter at all). The switch is the sheet's

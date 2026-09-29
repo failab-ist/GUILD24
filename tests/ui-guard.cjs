@@ -3606,6 +3606,14 @@ test('UI-Q-v29-49: iPhone Safari touch and audio return',()=>{
  assert.ok(/function wake\(\)\{if\(ctx&&enabled&&!document\.hidden&&ctx\.state!=='running'\)ctx\.resume\(\)/.test(audio),'wake resumes only a live, unmuted, visible context');
  assert.ok(/addEventListener\('visibilitychange',[^\n]*Sound\.sync\([^\n]*\);Sound\.wake\(\);\}\)/.test(app),'coming back to the page wakes it');
  assert.ok(!/audioSession/.test(audio),'the silent switch keeps the Safari default (User 2026-09-29)');
+ // UI_UX §SHORT PHONE (User 2026-09-29, "SE까지 지원"): only a portrait stage under 640 high takes these, so 640+ is unchanged
+ const review=read('dist/ui/director-review.css'),short='@media (max-height:639px) and (orientation:portrait){';
+ const mb=review.slice(review.indexOf(short),review.indexOf('}\n}',review.indexOf(short))+3),pb=css.slice(css.indexOf(short),css.indexOf('}\n}',css.indexOf(short))+3);
+ assert.ok(/\.p-morning:not\(\.p-prep\) \.band\.counter\{margin-top:calc\(-1 \* max\(0px,calc\(\(var\(--ph\) - 100cqh\) \/ 2 \+ var\(--cap-top\) \* var\(--band-c\) \* var\(--ph\) - 14px\)\)\)\}/.test(mb)&&!/transform/.test(mb),
+  'MORNING: the counter band lends the board the room down to the till label, and does not move');
+ assert.ok(/\.p-morning\.p-prep \.prep-note\{padding:5px 12px 3px\}/.test(pb)&&/\.p-prep \.deco-layer\{--sign-l:calc\(50cqw - min\(210px,58vw\) \/ 2\)\}/.test(pb)
+  &&/\.opening-logo\{display:block;width:min\(210px,58vw\)/.test(css),'새 점포 준비: the tighter note, and the 간판 keeps the gap from the title (the logo\'s own width)');
+ assert.ok(/\['375x548'\]/.test(read('tools/qa-visual.cjs')),'the visual gate runs the SE stage');
 });
 // v2.9.11 quick patch mix (User 2026-09-29, reports/bgm-sfx-mix-v2911.md): decision and result cues read above the music
 // (PRESENTATION §Mix) - the music 3 dB down, the effects bus 6 dB up, NIGHT a further 3 dB down; a phase change fades
