@@ -15,14 +15,18 @@
 | SALE_copper_key | S1E1 | 0.069초 | 171.966초 | 171.90초 | 97.6% |
 | NIGHT_valley_of_sunken_bells | S1E1 | 0.055초 | 168.168초 | 168.11초 | 98.3% |
 | CLOSE_the_stone_path | S1E1 | 0.047초 | 118.137초 | 118.09초 | 96.2% |
-| BOSS_beneath_the_stone_floor | 비교용(S3R1 · S3R2) | | | | |
-| BOSS2_beneath_the_heavy_arch | 채택 방향, 후보 청감 비교 중 | | | | |
+| BOSS_beneath_the_stone_floor | S3R2 + 1초 크로스페이드 | 9.535초 | 171.492초 | 161.96초 | 89.6% |
+| BOSS2_beneath_the_heavy_arch | 미채택(분위기는 맞으나 연결이 어색함. 원곡에 처음 주제로 돌아오는 구조가 없음) | | | | |
 | SUCC_step_into_the_canopy | S1E2 | 0.043초 | 176.741초 | 176.70초 | 97.0% |
 | FAIL_late_shift_at_the_dungeon_gate | S1E2 | 0.043초 | 90.696초 | 90.65초 | 92.3% |
 
 - BOSS는 보류다. User 청감으로 BOSS1(S1 · S3 · S4)과 BOSS2(E1 · E2) 모두 이음새가 어색하다(User 2026-09-29).
 - 3차(User 2026-09-29): 곡 전체 분위기는 BOSS2가 맞다 → BOSS2로 간다. BOSS2는 Start · End를 함께 다시 찾았고(P1~P3), 비교 대상은 BOSS1 S3R1 · S3R2다(User 청감으로 둘은 큰 차이 없음).
 - 4차(User 2026-09-29): P1~P3 · S3R1 · S3R2 모두 어색하다 → BOSS에만 크로스페이드(1초 · 2초)를 허용하고, End 범위를 끝 40초로 넓혀 다시 찾았다.
+- **5차 결정(User 2026-09-29): BOSS = BOSS1 S3R2, 1초 크로스페이드.** 크로스페이드는 BOSS에만 허용한 예외다.
+  - FINAL 화면은 팀 구성 · 보급으로 오래 머무는 화면이라 이음새가 반복해서 들린다. 루프가 길수록 덜 자주 들린다(S3R2 약 162초, BOSS2 X1 약 97초).
+  - 보존율이 더 높다(89.6% 대 78.6%).
+  - User 청감으로 S3R2 1초가 가장 낫다.
   - BOSS1에는 User 의견("8~9초부터 멜로디가 들어오는 것 같다")으로 Start 후보 S3 · S4를 더했다.
 - SUCC는 런 종료 성공(마왕 퇴치) 전용, FAIL은 런 종료 실패(파산 · 죽음 한도 · 마왕 격퇴 실패 등) 전용이다.
 - 선택만 기록했다. 게임 연결은 하지 않았다.
@@ -425,6 +429,7 @@ python3 tools/bgm-loop.py --start BOSS_beneath_the_stone_floor=9.52 \
   - 지금 `end` 페이즈 하나를 성공 · 실패 두 곡으로 나누는 매핑은 UI_UX §PHASE AUDIO 개정이 필요하다.
   - MP3는 인코더 패딩이 있다. 그래서 파일을 잘라 쓰지 않고, 디코드한 버퍼에서 loopStart / loopEnd로 반복한다.
   - 위 이음새 페이드(S 5ms 페이드인, E 뒤 10 · 60ms 페이드아웃)는 WebAudio 기본 loop로는 안 된다. 재생 소스 두 개를 예약해야 한다.
+  - BOSS(S3R2)만 1초 등전력 크로스페이드로 재생한다. 나머지 곡은 위 짧은 페이드다.
 
 ## seam preview
 
