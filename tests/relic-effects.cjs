@@ -54,6 +54,10 @@ test('return points excludes first visit, no-sale and free transfer',()=>{
  const low=(facilities)=>{const g=fresh(),s=g.run,n=s.npcs[0];n.introduced=true;n.visits=2;n.traits=[];n.stats={combat:1000,survival:1000,mobility:1000,spirit:1000};n.loyalty=5;n.money=100;n.destination=0;n.claimedDestination=0;n.history=[{day:s.day,item:'rice',paid:35,mode:'half'}];s.queue=[n.id];s.phase='sell';s.facilities=facilities;s.dayFacilities=facilities;g.night();return n;};
  const lb=low([]),lr=low(['returnPoints']);assert.equal(lr.loyalty-lb.loyalty,5,'no Loyalty threshold');assert.equal(lr.money-lb.money,25);
 });
+test('RELIC 22 / REL-Q-v28-6: 평생 단골제 doubles the next-visit weight (v2.9.11, User 2026-09-29; was +50%)',()=>{
+ assert.equal(DATA.relicParams.lifetime.revisitMult,2.0,'next-visit weight +100%');
+ assert.ok(/includes\('lifetime'\)\?D\.relicParams\.lifetime\.revisitMult:1/.test(require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../dist/systems/shop.js'),'utf8')),'and visitor selection reads it');
+});
 test('lifetime reward cannot repeat by re-resolving Night; overhead matches day effects',()=>{
  const base=nightWith([]),boost=nightWith(['lifetime']);assert.equal(boost.n.money-base.n.money,50);const money=boost.n.money;boost.g.night();assert.equal(boost.n.money,money);
  /* 2026-09-23 rebalance: the condition is 단골 (Loyalty >= 51, the NPC_TRAIT owner), not 60 */

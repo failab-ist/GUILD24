@@ -535,7 +535,7 @@ Expected:
 
 Expected:
     단골 (Loyalty >= 51, Trusted Regular owner) survival -> NPC Wallet +50G
-    revisit weight +50% unchanged
+    revisit weight +100% (v2.9.11, User 2026-09-29; was +50%)
 
 Reads the Trusted Regular owner judgement; no second threshold.
 

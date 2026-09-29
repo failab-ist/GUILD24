@@ -51,6 +51,9 @@ the owner headers and in the git tag.
   a Run once and leaves the pool when its subject is absent. New small effect keys reuse the Morning, ORDER, SALE and NIGHT channels;
   the SALE outlook and the Night read the same values (길드 연회 is read off the adventurer it met). Four screen lines: the 의료단 heal
   line, the 의무관 Night line, the ORDER cap / no-exchange reasons and the closed 바가지 key. The font subsets take the new glyphs.
+- **평생 단골제 next-visit weight +50% → +100%** - RELIC 22, RELIC_QA REL-Q-v28-6, COPY_AUDIT §11-22 (User 2026-09-29,
+  `reports/remeasure-v2911.md` §13-2): the Keystone read D30 +0.3%p; the trial at +100% read +2.7%p. The +50G is unchanged.
+  (지역 거점점 계약 stays as it is for now - no number moved it past +1%p, User 2026-09-29.)
 - **희귀상품 입고 계약: HQ pays the +10%** - RELIC 5, RELIC_QA, COPY_AUDIT §11-5 (User 2026-09-29, `reports/remeasure-v2911.md`
   §13-2): the Rare+ price +10% the customer paid made Rare+ offers harder to sell and left the card below zero (D30 −2.0%p,
   Store Capital −40G). A Rare+ sale is now charged at the ordinary price and HQ pays the store 10% of the charged price on top

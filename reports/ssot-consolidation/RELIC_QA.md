@@ -751,3 +751,18 @@ N = 0 -> no discount; N >= 10 -> -30%
 - the discount exceeds 30%
 - the internal 45% purchase-price floor is bypassed
 ```
+
+
+## v2.9.11 평생 단골제 next-visit weight +100% (User 2026-09-29)
+
+Dropped (the removal itself):
+
+```text
+revisit weight +50% unchanged
+```
+
+New:
+
+```new
+revisit weight +100% (v2.9.11, User 2026-09-29; was +50%)
+```

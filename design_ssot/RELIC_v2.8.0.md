@@ -740,7 +740,7 @@ snowballCap=required
     Price = 310G
     단골 (Trusted Regular, Loyalty >= 51) survival condition
     NPC Wallet +50G
-    next-visit weight +50%
+    next-visit weight +100% (User 2026-09-29, v2.9.11; was +50%)
 
 The condition reads the Trusted Regular owner judgement; NPC_TRAIT_v2.8.0.md owns 단골 at 51.
 

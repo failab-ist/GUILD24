@@ -416,7 +416,6 @@ Price = 760G unchanged
 
 ```new
 Price = 310G
-next-visit weight +50%
 ```
 
 ## REWORD — price-table framing (version tag / "already ... current v2.8 owner sections" removed)
@@ -930,4 +929,13 @@ New:
 
 ```new
 - 희귀상품 입고 계약: Rare+ ORDER offer weight +70%; a Rare+ sale is charged at the ordinary price and HQ pays the store 10% of the charged price on top, in every mode (User 2026-09-29, v2.9.11; was +10% paid by the customer); no operating-cost modifier
+```
+
+
+## v2.9.11 평생 단골제 next-visit weight +100% (User 2026-09-29)
+
+New:
+
+```new
+next-visit weight +100% (User 2026-09-29, v2.9.11; was +50%)
 ```
