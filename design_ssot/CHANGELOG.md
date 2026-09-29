@@ -81,6 +81,13 @@ the owner headers and in the git tag.
   §4); the sale price never followed the buy price, so the penalty only thinned the margin. Measured with the 1.45 slope
   (balanced, 300 seeds): Store Capital −10G a Run, D30 +1.0±1.6%p - out of the red, still the weakest Keystone band. The +50%
   Food/Drink Stat bonus is unchanged.
+- **Customer dialogue proofread, batch 4** - COPY_AUDIT §16-1 / §17-6 / §17-9 / §19-1 / §19-2 / §19-3 / §19-6 / §19-7 / §20-1
+  (User 2026-09-29, `reports/copy-proofread-v2911.md` 4-1~4-14):
+  - Eleven lines space `-아/어 + 주다 · 보다 · 오다` like the rest of the dialogue already did (`와 봤습니다`, `가 보죠`,
+    `챙겨 와야죠`, `알려 주세요`, `따라 줬네요`, `챙겨 준`, `버텨 줬어요`), and `잘됐어요` is one word.
+  - The three death narrations that said `그는 / 그의 / 그가` - read for women customers too - drop the pronoun
+    (`오늘 산 물건이 마지막 구매가 됐다.`).
+  - The 겁쟁이 line `중요한 건 꺾이지 않는 마음이라던데…` stays (User decision): a common idiom, no name or likeness.
 - **Screen copy proofread, batch 3** (User 2026-09-29, `reports/copy-proofread-v2911.md` 3-1~3-5): the guide's 단골 line showed
   raw backticks and now reads ‘단골’; the empty Store Support window says `다음 지원은 DAY 5·10·15·20·25·30에 도착한다.`; the
   coupon's `다음 소비품 효과 2회` is `다음 소모품 효과 2회` (COPY_AUDIT §4, UI_UX); the adventurer's injury line names every way

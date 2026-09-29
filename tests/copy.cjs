@@ -667,7 +667,7 @@ test('SA-Q23/Q24: no arrival line implies a mechanic the game does not have',()=
   [V.trait.eater,'“원정 끝나면 밥부터 먹어야겠어요.”'],
   [V.trait.eater,'“배고픈 채로 돌아오는 건 딱 질색입니다.”'],
   [V.trait.greed,'“오늘은 빈손으로 돌아올 생각 없습니다.”'],
-  [V.trait.greed,'“이번엔 전리품 좀 제대로 챙겨와야죠.”'],
+  [V.trait.greed,'“이번엔 전리품 좀 제대로 챙겨 와야죠.”'],   // 4배치 띄어쓰기 (User 2026-09-29)
   [V.regular,'“이 정도면 단골 맞죠?”']])
   assert.ok(pool.includes(line),'the approved replacement is in its own pool: '+line);
  // no Favorite-SKU state was invented by the replacement, then or since
