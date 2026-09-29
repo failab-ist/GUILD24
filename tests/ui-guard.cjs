@@ -3533,16 +3533,23 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
 // success and failure, the loop points stay inside the full-track rule the User set, only BOSS joins with a long
 // crossfade, the recorded music goes through the player's BGM bus, and a failed load still has a synthesised bed.
 test('v3.0 BGM: one recorded track per phase, looped between its measured points',()=>{
- const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound,crypto=require('node:crypto');
+ const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound;
  const phases={prep:'title',foundation:'title',morning:'morning',order:'order',sell:'sale',night:'night',closing:'close',final:'boss','end-win':'succ','end-fail':'fail'};
  for(const [ph,key] of Object.entries(phases))assert.equal(Sound.trackFor(ph),key,ph+' plays '+key);
  assert.equal(Sound.trackFor(undefined),'title','no Run plays the title');
  const src={title:'TITLE_beneath_the_root',morning:'MORNING_the_sunken_courtyard',order:'ORDER_before_the_next_turn',sale:'SALE_copper_key',
   night:'NIGHT_valley_of_sunken_bells',close:'CLOSE_the_stone_path',boss:'BOSS_beneath_the_stone_floor',succ:'SUCC_step_into_the_canopy',fail:'FAIL_late_shift_at_the_dungeon_gate'};
- const md5=f=>crypto.createHash('md5').update(fs.readFileSync(path.join(__dirname,'..',f))).digest('hex');
+ // the web build ships 128 kb/s CBR re-encodes with no tags (User 2026-09-29); the app ships the originals. The first MPEG
+ // frame header says the bitrate: MPEG-1 Layer III, bitrate index 9 = 128 kb/s.
+ const kbps=f=>{const b=fs.readFileSync(path.join(__dirname,'..',f));let i=0;
+  if(b.slice(0,3).toString()==='ID3')i=10+((b[6]&127)<<21|(b[7]&127)<<14|(b[8]&127)<<7|(b[9]&127));
+  while(i<b.length-4&&!(b[i]===0xff&&(b[i+1]&0xe0)===0xe0))i++;
+  return {tagged:b.slice(0,3).toString()==='ID3',v1:(b[i+1]>>3&3)===3,l3:(b[i+1]>>1&3)===1,rate:[0,32,40,48,56,64,80,96,112,128,160,192,224,256,320][b[i+2]>>4]};};
  assert.deepEqual(Object.keys(Sound.music).sort(),Object.keys(src).sort(),'every music key has a loop entry');
  for(const [key,name] of Object.entries(src)){
-  assert.equal(md5('dist/ui/assets/bgm/'+key+'.mp3'),md5('assets-src/bgm/'+name+'.mp3'),key+'.mp3 is the User\'s bytes, renamed only');
+  assert.ok(fs.existsSync(path.join(__dirname,'..','assets-src/bgm/'+name+'.mp3')),key+': the User\'s original stays in assets-src');
+  const h=kbps('dist/ui/assets/bgm/'+key+'.mp3');
+  assert.ok(h.v1&&h.l3&&h.rate===128&&!h.tagged,key+'.mp3 is the 128 kb/s web copy with no tags ('+JSON.stringify(h)+')');
   const t=Sound.music[key];
   assert.ok(t.s>=0&&t.s<=15,key+': Start stays within the first 15 s');
   assert.ok(t.e>t.s+60,key+': the loop keeps the track, not an excerpt');
@@ -3551,6 +3558,8 @@ test('v3.0 BGM: one recorded track per phase, looped between its measured points
   assert.ok(t.cross?t.xf===1:t.xf<=.06,key+': the join fade');}
  assert.ok(!fs.existsSync(path.join(__dirname,'..','dist/ui/assets/bgm/boss2.mp3')),'BOSS2 was not adopted and does not ship');
  assert.ok(/out\.connect\(bgmBus\)/.test(audio),'the recorded music goes through the player-owned BGM bus');
+ // the next phase's file is fetched ahead as bytes only - never a second decoded track in memory
+ assert.ok(/bgmStart\(next,buf\);bgmAhead\(next\);/.test(audio)&&/ahead=\{key:k,bytes\}/.test(audio)&&!/bgmAhead[^\n]*bgmDecode/.test(audio),'the next track is fetched ahead, not decoded ahead');
  assert.ok(/bedStart\(next\)/.test(audio)&&/tunes\[bedFor\[key\]\|\|key\]/.test(audio),'a failed load falls back to the synthesised bed');
  assert.ok(!/https?:\/\//.test(audio.match(/BGM_DIR='([^']*)'/)[1]),'the music is read from this build, never a host');
  const app=read('dist/ui/app.js');

@@ -531,6 +531,8 @@ music tool (Gemini / Lyria), a free account's output included. Conditions:
 - its watermark (SynthID) is never stripped or defeated
 - no track closely imitates an existing song
 - the music is never presented as human-composed
+- where a shipped copy cannot carry the source's AI provenance (the web build's re-encodes lose its C2PA manifest), the
+  game's credits and the store text disclose the AI-generated music (User 2026-09-29)
 Phase BGM mapping, loop and join rules -> UI_UX §AUDIO FEEDBACK — PHASE BGM.
 
 ### Voice

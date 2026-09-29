@@ -5,6 +5,7 @@
 //     the old pass fades out over `xf` and the new one fades in (5 ms, BOSS 1 s) - checked by releasing the
 //     2 s-ahead pass timer early instead of waiting three minutes
 //   - one track at a time; a phase change fades the old track out
+//   - the next phase's file is fetched ahead (bytes only), so the day's chain never waits on the network
 //   - mute and a hidden page stop the music; coming back resumes the same track
 //   - a file that cannot load falls back to the synthesised bed, never silence
 //   - no page error, no console error
@@ -53,6 +54,9 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   check('the title track starts with no Run',await waitStart(1));
   let s=await p.evaluate(()=>__bgm.starts[0]);
   check('title.mp3 is the file fetched',fetched[0]==='title',fetched.join(','));
+  // the next phase's file is fetched ahead while this one plays (bytes only)
+  for(let i=0;i<50&&!fetched.includes('morning');i++)await p.waitForTimeout(100);
+  check('while the title plays, morning.mp3 is fetched ahead',fetched.includes('morning'),fetched.join(','));
   check('decoded at 32 kHz (memory on a phone)',s&&s.rate===32000,s&&String(s.rate));
   check('the title starts at its loop start',s&&Math.abs(s.offset-music.title.s)<.002,s&&s.offset.toFixed(3));
   check('one fade-in of 5 ms on the first pass',await p.evaluate(()=>__bgm.curves.some(c=>c.rise&&Math.abs(c.duration-.005)<1e-6)));
@@ -66,7 +70,10 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
    if(key==='title'){check('첫 점포지원 keeps the title playing (no refetch, no restart)',fetched.length===fetchedBefore&&await p.evaluate(b=>__bgm.starts.length===b,before));continue;}
    const ok=await waitStart(before+1);
    s=await p.evaluate(b=>__bgm.starts[b],before);
-   check(`${phase} plays ${key}.mp3 from its loop start`,ok&&fetched.slice(fetchedBefore).includes(key)&&Math.abs(s.offset-music[key].s)<.002,
+   // the day's chain (morning -> order -> sale -> night -> close) is fetched ahead, once; the rest when the phase comes
+   const chain=['morning','order','sale','night','close'].includes(key);
+   if(chain)check(`${key}.mp3 was fetched ahead of its phase, and only once`,fetched.slice(0,fetchedBefore).includes(key)&&fetched.filter(k=>k===key).length===1,fetched.join(','));
+   check(`${phase} plays ${key}.mp3 from its loop start`,ok&&fetched.includes(key)&&Math.abs(s.offset-music[key].s)<.002,
     ok?`offset ${s.offset.toFixed(3)} / s ${music[key].s}`:'no start');
   }
   // the ending through the real app key: a cleared Run and a failed one pick their own track
@@ -108,7 +115,7 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   const fe=fetched.length;
   await p.evaluate(()=>{const s=Guild24.game.run;s.phase='end';s.win=false;s.endReason='qa';Guild24.render();});
   await p.waitForTimeout(800);
-  check('render() on a failed ending asks for fail.mp3 or keeps it decoded',fetched.slice(fe).every(k=>k==='fail'));
+  check('render() on a failed ending asks for fail.mp3 (and the title ahead) or keeps it decoded',fetched.slice(fe).every(k=>k==='fail'||k==='title'));
   check('no page or console error',errors.length===0,errors.slice(0,3).join(' | '));
  }finally{await browser.close();server.kill();}
  const failed=results.filter(x=>!x).length;

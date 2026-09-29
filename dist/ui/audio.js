@@ -51,19 +51,24 @@ const trackFor=phase=>phase==='final'?'boss':phase==='end-win'?'succ':phase==='e
    with a 1 s equal-power crossfade (`cross`, User 2026-09-29). `lufs` is each file's measured integrated loudness,
    trimmed to BGM_LUFS so every phase plays at the same loudness (USER 2026-09-24). One track is decoded at a time, at
    BGM_RATE to keep a three-minute track in memory on a phone. A file that cannot load falls back to the synthesised
-   bed below (`bedFor`), so a phase is never silent because of a network or decode failure. */
+   bed below (`bedFor`), so a phase is never silent because of a network or decode failure.
+   The web build ships 128 kb/s copies (User 2026-09-29; tools/vendor-assets.py): they decode sample-aligned with the
+   originals the points were measured on, and `lufs` is measured on these copies. While a phase plays, the next phase's
+   file is fetched ahead (`nextOf`) - the bytes only, never a second decoded track - so a phase change does not wait on
+   the network. */
 const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-24,BGM_RATE=32000,BGM_SWAP=.6;
 const bgm={
- title:{s:.069,e:116.704,xf:.01,lufs:-13.4},
- morning:{s:9.748,e:162.88,xf:.01,lufs:-11.4},
- order:{s:.045,e:176.014,xf:.01,lufs:-12.4},
- sale:{s:.069,e:171.966,xf:.01,lufs:-11.9},
- night:{s:.055,e:168.168,xf:.01,lufs:-12.5},
- close:{s:.047,e:118.137,xf:.06,lufs:-11.7},
- boss:{s:9.535,e:171.492,xf:1,cross:true,lufs:-12.3},
- succ:{s:.043,e:176.741,xf:.01,lufs:-12.8},
- fail:{s:.043,e:90.696,xf:.01,lufs:-13}};
+ title:{s:.069,e:116.704,xf:.01,lufs:-13.8},
+ morning:{s:9.748,e:162.88,xf:.01,lufs:-11.8},
+ order:{s:.045,e:176.014,xf:.01,lufs:-12.8},
+ sale:{s:.069,e:171.966,xf:.01,lufs:-12.3},
+ night:{s:.055,e:168.168,xf:.01,lufs:-12.9},
+ close:{s:.047,e:118.137,xf:.06,lufs:-12.1},
+ boss:{s:9.535,e:171.492,xf:1,cross:true,lufs:-12.8},
+ succ:{s:.043,e:176.741,xf:.01,lufs:-13.2},
+ fail:{s:.043,e:90.696,xf:.01,lufs:-13.5}};
 const bedFor={title:'morning',close:'morning',succ:'boss',fail:'boss'};
+const nextOf={title:'morning',morning:'order',order:'sale',sale:'night',night:'close',close:'morning',succ:'title',fail:'title'};
 const curve=f=>{const c=new Float32Array(64);for(let i=0;i<64;i++)c[i]=f(i/63*Math.PI/2);return c;};
 const RISE=curve(Math.sin),FALL=curve(Math.cos);
 /* Music used to be mixed a quarter as loud as the smallest button click, which is why it
@@ -281,13 +286,17 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
     whole run moves, so the 70 ms spacing that states the count is kept. */
  if(sh.ticks)for(let i=0;i<sh.ticks;i++)tone(i?2637:2637*(sh.tickLow??1),t0+.14+(sh.tickLate??0)+i*.07,.04,SFX_VOICE*.5*(i?1:1.3),'sine',sfxBus,{attack:.002});
  if(sh.duck)duck(t0,sh.duck);}
-let music=null,pending='',decoded={key:'',buf:null};const resumeAt={};
+let music=null,pending='',decoded={key:'',buf:null},ahead={key:'',bytes:null};const resumeAt={};
 function bgmDecode(bytes){const Off=window.OfflineAudioContext||window.webkitOfflineAudioContext;let dc=ctx;
  try{if(Off)dc=new Off(2,1,BGM_RATE);}catch(e){dc=ctx;}
  return new Promise((ok,no)=>{const p=dc.decodeAudioData(bytes,ok,no);if(p&&p.catch)p.catch(no);});}
+const bgmFetch=key=>fetch(BGM_DIR+key+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status));
 function bgmLoad(key){if(decoded.key===key)return Promise.resolve(decoded.buf);
- return fetch(BGM_DIR+key+'.mp3').then(r=>r.ok?r.arrayBuffer():Promise.reject(r.status)).then(bgmDecode)
-  .then(buf=>{decoded={key,buf};return buf;});}
+ const bytes=ahead.key===key&&ahead.bytes?ahead.bytes:bgmFetch(key);ahead={key:'',bytes:null};
+ return bytes.then(bgmDecode).then(buf=>{decoded={key,buf};return buf;});}
+/* the next phase's file, fetched while this one plays; a failed fetch is dropped, the phase change fetches again */
+function bgmAhead(key){const k=nextOf[key];if(!k||ahead.key===k||typeof fetch!=='function')return;
+ const bytes=bgmFetch(k);ahead={key:k,bytes};bytes.catch(()=>{if(ahead.bytes===bytes)ahead={key:'',bytes:null};});}
 /* One pass from `from` to e. Scheduled on the audio clock; the next pass is queued 2 s ahead of the join. */
 function bgmPass(m,at,from,fadeIn){const t=bgm[m.key],src=ctx.createBufferSource(),g=ctx.createGain();
  src.buffer=m.buf;src.connect(g);g.connect(m.out);
@@ -328,7 +337,7 @@ function sync(muted,phase,settings){if(settings)mix(settings);enabled=!muted;
  track=next;bedStop();bgmStop(BGM_SWAP,false);
  if(!bgm[next]||typeof fetch!=='function'){bedStart(next);return;}
  pending=next;
- bgmLoad(next).then(buf=>{if(pending!==next||track!==next||!enabled)return;pending='';bgmStart(next,buf);})
+ bgmLoad(next).then(buf=>{if(pending!==next||track!==next||!enabled)return;pending='';bgmStart(next,buf);bgmAhead(next);})
   .catch(()=>{if(pending===next&&track===next){pending='';bedStart(next);}});}
 G.Sound={play,sync,mix,trackFor,cues:Object.keys(sfx),tracks:Object.keys(tunes),music:JSON.parse(JSON.stringify(bgm)),samples:Object.assign({},sample),defaults:{bgm:DEFAULT.bgm,sfx:DEFAULT.sfx}};
 })(globalThis);

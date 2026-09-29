@@ -67,9 +67,11 @@ AUDIO=[('typing','tick'),        # ORDER quantity: the shortest thing in the set
        ('send','door')]          # SALE 손님 보내기: the customer leaves (v2.9.0 TRANSACTION BEAT A4)
 
 # v3.0 BGM (User 2026-09-29): the Gemini (Lyria) tracks the User generated for this project, kept untouched under
-# assets-src/bgm/. dist gets byte-identical copies under the ROLE name, so the loop points in dist/ui/audio.js - measured
-# on these same bytes by tools/bgm-loop.py (reports/bgm-loops.md) - hold without re-deriving them. BOSS2 was evaluated
-# and not adopted, so it never reaches dist.
+# assets-src/bgm/. dist is the web build, so it gets 128 kb/s re-encodes under the ROLE name (User 2026-09-29: 33 MB -> 22 MB
+# for the web; the app ships the originals). LAME's gapless header keeps the decoded audio sample-aligned with the original
+# (0-sample shift and the same length, measured in ffmpeg and Chromium), so the loop points in dist/ui/audio.js - measured
+# on the originals by tools/bgm-loop.py (reports/bgm-loops.md) - hold. BOSS2 was evaluated and not adopted, so it never
+# reaches dist.
 BGM_SRC=os.path.join(ROOT,'assets-src','bgm')
 BGM_OUT=os.path.join(ROOT,'dist','ui','assets','bgm')
 BGM=[('TITLE_beneath_the_root','title'),                   # no Run / 첫 점포지원 / the store about to open
@@ -160,8 +162,10 @@ def audio():
     print(f'  audio  {len(AUDIO)} cues  {total//1024}K')
 
 def bgm():
-    """Copy the adopted BGM sources out of assets-src/bgm/. Nothing is re-encoded or trimmed: the loop is played from
-    the decoded buffer, so the shipped bytes stay the User's bytes (`modification: none, renamed only`)."""
+    """Re-encode the adopted BGM sources out of assets-src/bgm/ for the web build: MP3 128 kb/s CBR, 44.1 kHz stereo, no
+    tags. Nothing is trimmed - the loop is played from the decoded buffer. The app build ships the originals instead."""
+    import subprocess, imageio_ffmpeg
+    ff=imageio_ffmpeg.get_ffmpeg_exe()
     os.makedirs(BGM_OUT,exist_ok=True)
     total=0
     for src_name,role in BGM:
@@ -169,8 +173,12 @@ def bgm():
         if not os.path.exists(src):
             sys.exit('assets-src/bgm is missing %s.mp3'%src_name)
         dst=os.path.join(BGM_OUT,role+'.mp3')
-        shutil.copyfile(src,dst); total+=os.path.getsize(dst)
-    print(f'  bgm  {len(BGM)} tracks  {total//1024}K')
+        # no ID3 tag (the gapless LAME header stays). The source's C2PA manifest is bound to the source bytes and cannot
+        # carry over; the web copies go without it and the AI disclosure rides the credits (User 2026-09-29, ASSETS.md)
+        subprocess.run([ff,'-v','error','-y','-i',src,'-map_metadata','-1','-id3v2_version','0','-c:a','libmp3lame',
+                        '-b:a','128k','-ar','44100','-ac','2',dst],check=True)
+        total+=os.path.getsize(dst)
+    print(f'  bgm  {len(BGM)} tracks  {total//1024}K (128 kb/s)')
 
 def portraits():
     """Derive the shipped portrait set. Source filenames are the binding, so the output

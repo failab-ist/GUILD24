@@ -2688,6 +2688,8 @@ Playback:
 - A phase change fades the old track out.
 - Mute or a hidden page stops the music, and coming back resumes it.
 - A track that cannot load falls back to the synthesised bed; a phase is never silent because of a load failure.
+- The web build ships 128 kb/s copies and fetches the next phase's file ahead, so a phase change does not wait on the
+  network; the app ships the originals (User 2026-09-29).
 - Playback changes no gameplay state and consumes no Gameplay RNG.
 
 ### SFX coverage

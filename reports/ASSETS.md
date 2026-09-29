@@ -98,10 +98,17 @@ Regenerate the vendored copies with `npm run assets`.
   - no track may closely imitate an existing song
   - never present the music as human-composed
   Being AI-generated, the tracks carry weak copyright protection and no infringement warranty.
-- shipped runtime files: `dist/ui/assets/bgm/*.mp3` (9 files, 33 MB), copied by `tools/vendor-assets.py` `bgm()`.
-  - Modification status: **none**. The bytes are identical and only the file name changes to the role.
-  - The loop is played from the decoded buffer (`dist/ui/audio.js`). Loop points, fades and the per-track loudness trim
-    live there. The points were measured on these same bytes by `tools/bgm-loop.py` (`reports/bgm-loops.md`).
+- shipped runtime files (web build): `dist/ui/assets/bgm/*.mp3` (9 files, 22 MB), made by `tools/vendor-assets.py` `bgm()`.
+  - Modification status (User 2026-09-29): **re-encoded** to MP3 128 kb/s CBR, 44.1 kHz stereo, with no tags; not trimmed.
+    The decoded audio is sample-aligned with the original (0-sample shift, same length, measured in ffmpeg and Chromium),
+    so the loop points measured on the originals by `tools/bgm-loop.py` (`reports/bgm-loops.md`) hold.
+  - The originals carry a **C2PA manifest** (Content Credentials) that marks them as AI-generated. It is bound to the
+    original bytes, so the web copies do not carry it. The AI disclosure for the web build rides the game's credits and
+    the store text (User 2026-09-29) - a requirement of the credits work.
+  - The app build ships the originals from `assets-src/bgm/`, C2PA included (User 2026-09-29). Re-measure the loudness
+    trim there: the originals read about 0.4 dB louder than the web copies.
+  - The loop is played from the decoded buffer (`dist/ui/audio.js`): loop points, fades and the per-track loudness trim
+    (measured on the web copies) live there.
 - not adopted: `BOSS2_beneath_the_heavy_arch.mp3`. Its mood fit, but no loop join sounded natural (User 2026-09-29), so
   it stays in `assets-src/bgm/` and never reaches dist.
 - commercial release: the same AI-content disclosure as the portraits applies (Steam Content Survey, pre-generated audio).

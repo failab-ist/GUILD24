@@ -1905,3 +1905,13 @@ New:
 `stock` User 2026-09-29, v2.9.11).
 - `stock` anchors the 창고 summary: the first Day's warehouse already holds the opening stock, which no screen named before
 ```
+
+
+## v3.0 WEB BGM 128 kb/s (User 2026-09-29)
+
+New:
+
+```new
+- The web build ships 128 kb/s copies and fetches the next phase's file ahead, so a phase change does not wait on the
+network; the app ships the originals (User 2026-09-29).
+```

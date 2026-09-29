@@ -124,6 +124,9 @@ the owner headers and in the git tag.
   - Every track plays at one loudness. The synthesised bed stays as the fallback when a file cannot load.
   - Provenance, including each track's account (free / Plus): `reports/ASSETS.md`.
   - BOSS2 was evaluated and not adopted.
+  - Web build (User 2026-09-29): 128 kb/s copies (33 -> 22 MB), sample-aligned with the originals so the loop points
+    hold; the next phase's file is fetched ahead. The copies lose the originals' C2PA manifest, so the credits and the
+    store text must disclose the AI music. The app ships the originals.
 - **Build marker** 2.9.11.
 
 ## v2.9.10 quick patch — effect order, the 1+1 sticker (User 2026-09-28)
