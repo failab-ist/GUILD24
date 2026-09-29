@@ -11,7 +11,7 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 - v2.9.8(머지됨): 대응 사다리(초반 대응 / 초반 하이브리드 / 중반 대응 / 후반 하이브리드), 신규 대응 상품 3종 + 방한 두건, id 정리, 세이브 v9.
   근거 `reports/hazard-coverage-v297.md`, `reports/counter-ladder-v297.md`.
 
-## v2.9.11 — v3.0 준비 1차 (브랜치 진행 중, PR 전) (User 2026-09-28~29)
+## v2.9.11 — v3.0 준비 1차 (브랜치 완료 · 최종 QA 통과, PR 전) (User 2026-09-28~29)
 
 브랜치 `claude/v3-0-prep-planning-g42z7y`. 내용과 근거는 `design_ssot/CHANGELOG.md` §v2.9.11. 빌드 표시 2.9.11.
 
@@ -30,13 +30,14 @@ STATE: V2_9_8_MERGED(PR #19, `621d007`) · V2_9_9_MERGED(PR #20, User 컨펌 202
 
 줄바꿈 점검: `tools/qa-text.cjs`, `reports/text-audit-v2911.md`.
 
-문구 교정 후보: `reports/copy-proofread-v2911.md`
-- 1배치는 반영했다.
-- 2배치(점포지원 · 장식 7건)와 3배치(화면 5건)는 User 컨펌을 기다린다.
+문구 교정: `reports/copy-proofread-v2911.md`
+- 1배치(상품 · 사건) · 2배치(점포지원 · 장식) · 3배치(화면)를 모두 반영했다(`f762b85` · `9d9a4d9` · `5ff4d6e`).
+- 4배치(NPC 대사)는 남아 있다.
 
-검사 상태
-- 배치마다 전체 `npm test`와 `ssot:check` 21/21을 통과했다.
-- 전체 `qa:runtime` · `qa:visual`은 곡선 · 카드 · 문구 변경 뒤 아직 돌리지 않았다. 문구 컨펌 반영 뒤 PR 전에 한 번 돌린다.
+최종 QA (2026-09-29, HEAD `5ff4d6e`)
+- 전체 `npm test` PASS · `tests/revision.cjs` PASS · `ssot:check` 21/21
+- `qa:runtime` 13/13 · `qa:visual` clean(126장)
+- `tools/qa-text.cjs`: 단어 중간 줄바꿈 0 · 한 글자 줄 0. 넘침 · 잘림은 이전과 같은 오탐 두 항목(SALE 칩, FINAL 이름표)뿐이다.
 
 ## v2.9.10 퀵패치 2차 (머지됨, PR #24) (User 2026-09-28, v2.9.10 플레이 뒤)
 
@@ -112,13 +113,8 @@ H5 봉인 세부. owner의 "to reconfirm" 표기는 확정 표기로 바꿨다(C
 - 보고·핸드오프는 한글(AGENTS §11-A). 이름·사건·수치는 초안을 보여주고 컨펌 뒤 적용한다.
 
 다음 작업:
-1. 문구 교정 2 · 3배치 후보(`reports/copy-proofread-v2911.md`) 컨펌 → 확정분 반영.
-   - 반영 대상: COPY_AUDIT owner · 소스 · `tests/copy.cjs` · 새 글자가 있으면 폰트 단계
-   - 4배치(NPC 대사, COPY_AUDIT §16~§21)는 그 뒤에 한다.
-2. PR 전 한 번
-   - 전체 `npm test` · `ssot:check` · `qa:runtime` · `qa:visual`, 필요하면 `tools/qa-text.cjs`
-   - 세션 스크래치의 옛 비교 트리(v2.9.10 worktree) 정리
-   - v2.9.11 PR과 머지는 User 컨펌을 받는다. 머지 뒤 User 플레이로 1.45 곡선 · 새 사건 · 점포지원 변경을 확인한다.
+1. v2.9.11 PR 생성과 머지는 User 컨펌을 받는다(최종 QA 통과, 위 표). 머지 뒤 User 플레이로 1.45 곡선 · 새 사건 · 점포지원 변경을 확인한다.
+2. 문구 교정 4배치(NPC 대사, COPY_AUDIT §16~§21, `dist/data/copy.js`)는 후보표 → 컨펌 → 반영 순서로 한다.
 3. 보류 · 결정 대기
    - 지역 거점점 계약 리메이크(수치로는 D30 +1%p를 못 넘음, §13-2) — User가 보류
    - 마왕별 승률 폭(SLOTH 56.7 ~ LUST 81.8%) — 마왕 전력 유지로 결정, 기록만
