@@ -12,7 +12,7 @@
 //   node tools/qa-sfx-mix.cjs [--fit]      --fit prints the LEVEL table that meets the targets from the current one
 const {spawn}=require('node:child_process'),path=require('node:path');
 const PORT=Number(process.env.QA_PORT||5197),EXECUTABLE=process.env.QA_CHROMIUM||'/opt/pw-browsers/chromium';
-const FIT=process.argv.includes('--fit');
+const FIT=process.argv.includes('--fit'),SIMILAR=process.argv.includes('--similar');
 const TIERS={
  result:{target:-17,margin:8,cues:['great','retreat','injury','severe','death','sealwin','sealfail','endwin','endfail','bossmajor','final','boss','collapse']},
  decision:{target:-19,margin:8,cues:['order','sale','overcharge','half','refusal','purchase','support','unlock','open','close','begin','newstore','bosscompact','rescue']},
@@ -20,6 +20,14 @@ const TIERS={
  utility:{target:-27,margin:3,cues:['button','ui']},
  repeat:{target:-29,margin:3,cues:['quantity','quantset']}};
 const UNDER=1.5,OVER=3,PEAK=-3;
+/* UI_UX §AUDIO FEEDBACK — DISTINCT CUES (User 2026-09-29): cues that mean different things must not sound alike; cues that
+   share a family on purpose are reported, not failed (the price modes: PRESENTATION A5; the quantity pair: one act; the
+   Boss information motif). Alike = spectrum shape x 20 ms loudness contour, both cosines; before the split these pairs
+   measured 0.754 / 0.997 / 0.993, the intended families 0.99+. */
+const DISTINCT=[['fixture','clash'],['boss','bossmajor'],['crate','receipt'],
+ /* and the new sounds against their neighbours, so a split never lands on another cue */
+ ['ui','quantity'],['receipt','quantity'],['fixture','support'],['fixture','final'],['boss','counter']],ALIKE_MAX=.6;
+const FAMILY=[['sale','overcharge'],['sale','half'],['quantity','quantset'],['bossmajor','bosscompact']];
 // the music each cue is heard over (where the app plays it); utility clicks are heard everywhere: the loudest bed
 const MUSIC={order:['order','quantity','quantset','crate'],sale:['sale','overcharge','half','refusal','depart','heal','gold','spend'],
  night:['great','retreat','injury','severe','death','rescue','return'],close:['close','receipt'],morning:['open'],
@@ -62,7 +70,10 @@ const PAGE=()=>{window.__mix={
    const buf=await __off.startRendering(),rate=buf.sampleRate,chs=[buf.getChannelData(0),buf.getChannelData(1)];
    const cue={};cues.forEach((c,i)=>{const from=Math.round((.5+i*SLOT)*rate),to=from+Math.round((SLOT-.1)*rate);
     const b=__mix.bands(chs,rate,from,to,1024),top=__mix.centers.map((_,k)=>Math.max(...b.map(f=>f[k])));
-    cue[c]={fast:__mix.fast(chs,rate,from,to),peak:__mix.peak(chs,from,to),bands:top};});
+    /* what the cue sounds like, for telling cues apart: its spectrum (bands in use) and its loudness contour (20 ms) */
+    const on=b.filter(f=>Math.max(...f)>Math.max(...top)-20),spec=__mix.centers.map((_,k)=>on.reduce((a,f)=>a+10**(f[k]/10),0)/Math.max(1,on.length));
+    const env=[];for(let w=0;w<80;w++){const a=from+Math.round(w*.02*rate),z=a+Math.round(.02*rate);let e=0;for(const ch of chs)for(let j=a;j<z;j++)e+=ch[j]*ch[j];env.push(Math.sqrt(e));}
+    cue[c]={fast:__mix.fast(chs,rate,from,to),peak:__mix.peak(chs,from,to),bands:top,spec,env};});
    // the music, at its shipped trim, loud frames per band
    const music={};for(const key of Object.keys(MUSIC)){const t=Sound.music[key],bytes=await (await fetch('ui/assets/bgm/'+key+'.mp3')).arrayBuffer();
     const dec=await new OfflineAudioContext(2,1,48000).decodeAudioData(bytes),g=10**((Sound.bgmLufs-t.lufs+(t.trim||0))/20),r=dec.sampleRate;
@@ -75,6 +86,11 @@ const PAGE=()=>{window.__mix={
    return Math.min(...keys.map(k=>Math.max(...cb.map((v,i)=>v<top-20?-99:v+shift-(m.music[k].bands[i]+duck)))));};
   const tierOf=c=>Object.entries(TIERS).find(([,t])=>t.cues.includes(c));
   for(const c of cues)if(!tierOf(c))check(`${c} has a tier`,false);
+  /* how alike two cues sound: spectrum shape (cosine of band power) times loudness contour (cosine of the 20 ms envelope) */
+  const cos=(a,b)=>{let x=0,y=0,z=0;for(let i=0;i<a.length;i++){x+=a[i]*b[i];y+=a[i]*a[i];z+=b[i]*b[i];}return x/Math.sqrt((y||1e-30)*(z||1e-30));};
+  const alike=(a,b)=>cos(m.cue[a].spec.map(Math.sqrt),m.cue[b].spec.map(Math.sqrt))*cos(m.cue[a].env,m.cue[b].env);
+  if(SIMILAR){const pairs=[];for(let i=0;i<cues.length;i++)for(let j=i+1;j<cues.length;j++)pairs.push([cues[i],cues[j],alike(cues[i],cues[j])]);
+   pairs.sort((a,b)=>b[2]-a[2]);console.log('most alike pairs:');for(const [a,b,v] of pairs.slice(0,30))console.log(`  ${v.toFixed(3)}  ${a} ~ ${b}`);}
   if(FIT){const table={};for(const c of cues){const [,t]=tierOf(c),cur=m.levels[c]??1;let db=t.target-m.cue[c].fast;const mg=margin(c,db);if(mg<t.margin+.2)db+=Math.min(OVER-.1,t.margin+.2-mg);
     table[c]=+(cur*10**(db/20)).toFixed(3);}
    console.log('LEVEL='+JSON.stringify(table));}
@@ -95,6 +111,8 @@ const PAGE=()=>{window.__mix={
    const hot=cues.filter(c=>sum(c)>PEAK);check(`the loudest cue over the loudest music peak stays under ${PEAK} dBFS`,!hot.length,
     hot.map(c=>c+' '+sum(c).toFixed(1)).join(', ')||'worst '+Math.max(...cues.map(sum)).toFixed(1)+' dBFS');
    const beds=Object.entries(m.music).map(([k,v])=>k+' '+v.fast.toFixed(1));console.log('music loud-window (100 ms) peaks: '+beds.join(' · '));
+   for(const [a,b] of DISTINCT){const v=alike(a,b);check(`${a} and ${b} sound apart (alike ${v.toFixed(3)} < ${ALIKE_MAX})`,v<ALIKE_MAX);}
+   console.log('intended families (reported): '+FAMILY.map(([a,b])=>`${a}~${b} ${alike(a,b).toFixed(3)}`).join(' · '));
    check('no page error',!errors.length,errors.join(' | '));}
  }finally{await browser.close();server.kill();}
  const failed=results.filter(x=>!x).length;

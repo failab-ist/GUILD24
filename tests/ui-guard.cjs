@@ -1726,8 +1726,12 @@ test('UI-Q-v28-22: one engine, a real hierarchy, and no cue that stacks on a fas
  assert.ok(/if\(sh\.repeat\)\{if\(t0-\(lastAt\.get\(kind\)\|\|-1\)<sh\.repeat\)return;/.test(code),
   'and the engine actually drops the retrigger inside it');
  // the material cues carry a recorded object; the tonal families stay synthesised and in tune
- for(const m of ['order','sale','refusal','support','open','close','final','quantity'])
+ for(const m of ['order','sale','refusal','support','open','close','final'])
   assert.ok(Sound.samples[m],m+' plays a recorded body');
+ // User 2026-09-29: the recorded quantity tick and UI click were masked by the music at their loudest - both are
+ // synthesised now, the two files no longer ship (reports/ASSETS.md)
+ for(const t of ['quantity','quantset','ui'])assert.ok(!Sound.samples[t],t+' is synthesised');
+ for(const f of ['tick','soft'])assert.ok(!fs.existsSync(path.join(root,'dist/ui/assets/audio',f+'.mp3')),f+'.mp3 no longer ships');
  for(const t of ['great','retreat','injury','severe','death','rescue','bossmajor','bosscompact'])
   assert.ok(!Sound.samples[t],t+' stays synthesised, so its family stays in tune');
  // and no sampled cue can go silent when its file is missing
@@ -3613,7 +3617,7 @@ test('v2.9.11 mix: every cue at its tier level over music at -30, NIGHT under, a
  assert.deepEqual(Object.keys(Sound.levels).sort(),[...Sound.cues].sort(),'a level for every cue, and no stray one');
  assert.ok(Object.values(Sound.levels).every(v=>v>0&&v<20),'levels are gains, not dB');
  assert.ok(/const out=ctx\.createGain\(\);out\.gain\.value=LEVEL\[kind\]\?\?1;out\.connect\(sfxBus\);/.test(audio)
-  &&/sampleVoice\(file,t0,SAMPLE_VOICE\*\(sh\.sampleGain\?\?1\),out\)/.test(audio)&&/SFX_VOICE\*\(sh\.noise\.gain\?\?1\),sh\.noise,out\);/.test(audio)
+  &&/sampleVoice\(file,t0,SAMPLE_VOICE\*\(sh\.sampleGain\?\?1\),out\)/.test(audio)&&/for\(const nz of \[\]\.concat\(sh\.noise\|\|\[\]\)\)noiseVoice\([^\n]*SFX_VOICE\*\(nz\.gain\?\?1\),nz,out\);/.test(audio)
   &&!/play\([\s\S]{0,1500}'sine',sfxBus/.test(audio.slice(audio.indexOf('function play('),audio.indexOf('function play(')+2000)),'every voice of a cue goes through its level');
  assert.ok(read('tools/qa-runtime.cjs').includes("'qa-sfx-mix'"),'the measurement runs in qa:runtime');
  for(const [k,t] of Object.entries(Sound.music))assert.equal(t.trim||0,k==='night'?-3:0,k+(k==='night'?': NIGHT 3 dB under':': no extra trim'));

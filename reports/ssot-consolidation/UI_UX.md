@@ -2064,3 +2064,23 @@ lifted further past its tier
 - the loudest cue over the loudest music peak stays under -3 dBFS
 - the fitted levels live in `dist/ui/audio.js` (`LEVEL`); the measurement is `tools/qa-sfx-mix.cjs` (in `npm run qa:runtime`)
 ```
+
+
+## v2.9.11 quick patch — distinct cues (User 2026-09-29)
+
+New:
+
+```new
+### DISTINCT CUES (User 2026-09-29)
+Cues that mean different things do not sound alike; a shared sound is kept only where sharing is the point.
+- apart: the Decoration `fixture` (a wooden double knock) from the FINAL `clash` and from the Store Support `support`; the
+SLOTH seal-break `boss` (shattering glass over a low thud) from the Boss information motif and from the Boss's `counter`;
+the CLOSING `receipt` (one short printer pass) from the ORDER `crate`; the `ui` click (a two-note blip) from the
+`quantity` tick (a bright noise tick)
+- shared on purpose: the three SALE price modes (PRESENTATION §TRANSACTION BEAT A5), the quantity stepper and its quick-set
+(one act, the quick-set one step down), the Boss information motif across its strengths
+- `ui` and the quantity ticks are synthesised, bright and short, so they are heard over the music at their utility level
+(the recorded ones were masked); the retired files are listed in `reports/ASSETS.md`
+- measured by `tools/qa-sfx-mix.cjs` (spectrum shape x loudness contour): every `apart` pair below 0.6; the shared families
+are reported
+```

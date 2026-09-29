@@ -1915,3 +1915,13 @@ New:
 - cues of one tier sound as one loudness (§SFX LEVELS) - none jumps out, none disappears; runtime evidence
 `tools/qa-sfx-mix.cjs`
 ```
+
+
+## v2.9.11 quick patch — distinct cues (User 2026-09-29)
+
+New:
+
+```new
+- cues that mean different things are told apart by ear (§DISTINCT CUES): a Decoration fitted is not a FINAL hit, a SLOTH
+seal breaking is not a Boss reveal, the CLOSING receipt is not an ORDER crate, a menu click is not a quantity tick
+```

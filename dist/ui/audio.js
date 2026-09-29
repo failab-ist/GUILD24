@@ -67,11 +67,11 @@ const BGM_DIR='ui/assets/bgm/',BGM_LUFS=-30,BGM_RATE=32000,BGM_SWAP=1,BGM_IN=1.5
    rapid repeat -29) and clears the music it is heard over. The cues were authored at levels 24 dB apart; this flattens
    them without touching a timbre. Refit after changing a cue's shape or sample. */
 const LEVEL={
- /* result */ great:6.592,retreat:6.533,injury:9.365,severe:7.736,death:5.245,sealwin:6.776,sealfail:7.666,endwin:4.811,endfail:4.365,bossmajor:8.124,final:1.998,boss:7.337,collapse:10.574,
+ /* result */ great:6.592,retreat:6.533,injury:9.365,severe:7.736,death:5.245,sealwin:6.776,sealfail:7.666,endwin:4.811,endfail:4.365,bossmajor:8.124,final:1.998,boss:5.263,collapse:10.574,
  /* decision */ order:2.074,sale:1.49,overcharge:1.49,half:1.494,refusal:1.378,purchase:1.894,support:1.527,unlock:1.776,open:1.601,close:1.54,begin:7.705,newstore:10.811,bosscompact:14.77,rescue:6.091,
- /* action */ depart:1.324,return:4.141,gold:5.086,spend:5.08,crate:6.634,receipt:13.496,heal:5.746,fixture:4.621,rumble:4.678,clash:4.238,counter:5.852,supply:13.818,
- /* utility */ button:0.863,ui:3.513,
- /* repeat */ quantity:3.722,quantset:4.802,};
+ /* action */ depart:1.324,return:4.141,gold:5.086,spend:5.08,crate:6.634,receipt:18.991,heal:5.746,fixture:11.26,rumble:4.678,clash:4.238,counter:5.852,supply:13.818,
+ /* utility */ button:0.863,ui:6.984,
+ /* repeat */ quantity:10.443,quantset:12.464,};
 const bgm={
  title:{s:.069,e:116.704,xf:.01,lufs:-13.8},
  morning:{s:9.748,e:162.88,xf:.01,lufs:-11.8},
@@ -102,10 +102,16 @@ const BGM_VOICE=.035,BGM_BASS=.044,SFX_VOICE=.035;
    because fitting something you already own is not buying it. */
 /* Utility family: one quiet, short click for navigation and reference. AUDIO HIERARCHY puts it
    under every Decision cue, which is a gain, not a different idea. */
-const sfx={button:[440],ui:[520],fixture:[196,147],
+/* v2.9.11 quick patch (User 2026-09-29, UI_UX §AUDIO FEEDBACK — DISTINCT CUES): cues that mean different things no longer
+   share a sound - the Decoration fixture is a wooden knock (not the FINAL clash), the SLOTH seal-break is a crack and a
+   shattering glass over a low thud (not the Boss information motif or the Boss's strike), the CLOSING receipt is one short
+   printer pass (not the ORDER crate). The UI click (a two-note blip) and the quantity tick (a noise tick) are new and bright,
+   with their energy where the music leaves room (2 ~ 5 kHz), and apart from each other: the old recorded ones were masked
+   by the music even at their tier's ceiling. */
+const sfx={button:[440],ui:[1760,2217],fixture:[233,208],
  /* MATERIAL DECISION CUES. Each of these carries a recorded object; the notes here are the
     accent that sits with it, and the fallback that stands in when the sample is not loaded. */
- quantity:[880],quantset:[784],order:[110,164.81],sale:[523,659],refusal:[233,175],
+ quantity:[2794],quantset:[2489],order:[110,164.81],sale:[523,659],refusal:[233,175],
  overcharge:[523,659],half:[523,659],support:[196,262,392],purchase:[392,523],unlock:[523,659,784],
  open:[330,392,523],close:[392,330,262],
  gold:[659,784],spend:[784,659],depart:[392,330],return:[330,392],
@@ -121,7 +127,7 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
     Strength belongs to the beat, never to the Boss behind it, so neither cue can name anything
     the plate has not already shown. `boss` is the seal-break decision, which is not an
     information beat, and `final` is the D30 commit. */
- bossmajor:[165,196,147],bosscompact:[165,196],boss:[165,196,147],final:[98,123.47,146.83],
+ bossmajor:[165,196,147],bosscompact:[165,196],boss:[1318.5,987.8,740],final:[98,123.47,146.83],
  /* v2.9.2 H5: the Final seal on the ending tape - a clear rings up out of the Boss motif's root, a failure falls
     under it. Both land on the stamp's frame with the NIGHT `hit`; neither plays anywhere else. */
  sealwin:[165,247,330,494],sealfail:[165,147],
@@ -133,7 +139,7 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
  crate:[110],
  /* v2.9.2 H4: the CLOSING receipt prints as one pass, never a tick per row - a single dry paper
     tick, the same `order` stamp root played light and short */
- receipt:[110],
+ receipt:[],
  /* v2.9.9 (User 2026-09-27): the two BRICK Actions that had no cue of their own. `begin` opens a Run - a wooden knock and
     a rising G-D-G with a ringing octave, brighter than the Store Support fixture under it; `newstore` leaves the ending
     for the next store - a latch click and a short rising pair, lighter than `begin` and nothing like the falling close */
@@ -146,9 +152,9 @@ const sfx={button:[440],ui:[520],fixture:[196,147],
 /* The sample voice. The shipped name is the cue's ROLE, so swapping an asset never reaches this
    file's logic. A cue with no entry here is synthesised exactly as it always was. */
 const SAMPLE_DIR='ui/assets/audio/',SAMPLE_VOICE=.55;
-const sample={quantity:'tick',quantset:'tick',order:'stamp',sale:'register',overcharge:'register',
+const sample={order:'stamp',sale:'register',overcharge:'register',
  half:'register',refusal:'refuse',support:'secure',purchase:'cart',unlock:'unlock',
- open:'shutter',close:'settle',final:'gate',ui:'soft',button:'key',
+ open:'shutter',close:'settle',final:'gate',button:'key',
  /* v2.9.0 TRANSACTION BEAT A4: 손님 보내기 carries a recorded utility object (door / step family) */
  depart:'door'};
 const buffers=new Map(),lastAt=new Map();
@@ -212,14 +218,13 @@ function mix(settings){if(settings){const b=clamp(settings.bgm),s=clamp(settings
    stack itself into a harsh overlapping tone. */
 const shape={
  /* utility: the quietest things in the build */
- ui:{gain:.45,dur:.06,type:'square',sampleGain:.55,repeat:.04},
+ ui:{gain:.45,dur:.045,type:'sine',step:.028,attack:.002,repeat:.04},
  button:{gain:.7,dur:.12,type:'triangle',sampleGain:.7},
- fixture:{gain:.8,dur:.09,type:'square',step:.05},
- /* ORDER quantity. The recorded tick is the shortest file in the set; the accent is off, so a
-    rapid tap is one dry tick and nothing else. Quick-set is the SAME material one step down,
-    so a shortcut can never outrank the stepper it stands in for. */
- quantity:{gain:.5,dur:.035,type:'square',attack:.002,sampleGain:.8,repeat:.045},
- quantset:{gain:.42,dur:.035,type:'square',attack:.002,sampleGain:.62,repeat:.045},
+ fixture:{gain:.8,dur:.06,type:'sine',step:.1,attack:.002,noise:[{at:0,dur:.04,gain:1,hz:640,q:1.8,filter:'bandpass'},{at:.1,dur:.04,gain:.8,hz:560,q:1.8,filter:'bandpass'}]},
+ /* ORDER quantity: one short bright tick, so a rapid tap is one dry tick and nothing else. Quick-set is the SAME material
+    one step down, so a shortcut can never outrank the stepper it stands in for. */
+ quantity:{gain:.5,dur:.02,type:'triangle',attack:.001,repeat:.045,noise:{at:0,dur:.012,gain:.45,hz:5200,q:1,filter:'highpass'}},
+ quantset:{gain:.42,dur:.02,type:'triangle',attack:.001,repeat:.045,noise:{at:0,dur:.012,gain:.38,hz:4800,q:1,filter:'highpass'}},
  /* ORDER confirmation: a low knock on paper. The recorded stamp is the body; the synthesised
     paper brush and the fifth under it are the accent that makes it a commit rather than a tap. */
  order:{gain:1.1,dur:.14,type:'square',step:.09,attack:.003,glide:.97,sampleGain:1,accent:true,
@@ -267,7 +272,7 @@ const shape={
     is the same interval read short. D10 / D20 must stay smaller than D5 / D15 / D25. */
  bossmajor:{gain:1.1,dur:.34,type:'sawtooth',step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1,gain:.4},noise:{at:0,dur:.45,gain:.3,hz:230,q:.6,filter:'lowpass'},duck:.55},
  bosscompact:{gain:.75,dur:.16,type:'sawtooth',step:.1,attack:.02,duck:.3},
- boss:{gain:1.15,dur:.36,type:'sawtooth',step:.13,attack:.03,layer:{ratio:.5,at:0,dur:1.1,gain:.45},noise:{at:0,dur:.5,gain:.35,hz:220,q:.6,filter:'lowpass'},duck:.6},
+ boss:{gain:.9,dur:.28,type:'triangle',step:.05,attack:.002,glide:.9,noise:[{at:0,dur:.22,gain:1,hz:4200,q:.7,filter:'highpass'},{at:.1,dur:.5,gain:.35,hz:140,q:.6,filter:'lowpass'}],duck:.6},
  /* FINAL commit: the heaviest mechanical close in the build, with the tension under it. It adds
     no information - D25 already revealed everything it stands on. */
  sealwin:{hit:1,gain:1.1,dur:.34,type:'triangle',step:.08,layer:{ratio:2,at:.24,dur:1.2,gain:.3},noise:{at:0,dur:.12,gain:.5,hz:1800,q:.7,filter:'bandpass'},duck:.6},
@@ -277,7 +282,7 @@ const shape={
  crate:{hit:1,gain:.8,dur:.07,type:'square',step:.05,attack:.003,glide:.97,noise:{at:0,dur:.05,gain:.45,hz:2600,q:.6,filter:'highpass'},duck:.3},
  /* v2.9.2 H4: one quiet dry tick for the whole receipt body - lighter and shorter than `crate`,
     never repeated per row */
- receipt:{gain:.5,dur:.05,type:'square',attack:.003,noise:{at:0,dur:.04,gain:.3,hz:2400,q:.6,filter:'highpass'},duck:.15},
+ receipt:{noise:[{at:0,dur:.13,gain:.8,hz:2300,q:1.4,filter:'bandpass'},{at:.1,dur:.02,gain:.6,hz:3600,q:2,filter:'bandpass'}],duck:.15},
  begin:{gain:.95,dur:.24,type:'triangle',step:.09,layer:{ratio:2,at:.2,dur:.8,gain:.22},
   noise:{at:0,dur:.05,gain:.4,hz:900,q:.8,filter:'bandpass'},duck:.5},
  newstore:{gain:.8,dur:.18,type:'triangle',step:.11,glide:1.03,noise:{at:0,dur:.04,gain:.45,hz:3000,q:.7,filter:'highpass'},duck:.35},
@@ -304,7 +309,7 @@ function play(kind='button',delay=0){if(!enabled||!ctx)return;ctx.resume().catch
  if(!body||sh.accent)notes.forEach((hz,i)=>{const at=t0+i*(sh.step??.07),hit=sh.hit&&!i;
   tone(hz,at,sh.dur??.16,SFX_VOICE*(sh.gain??1)*(hit?1.3:1),sh.type||'triangle',out,hit?{...sh,attack:.002}:sh);
   if(sh.layer)tone(hz*sh.layer.ratio,at+(sh.layer.at??.06),sh.layer.dur??.5,SFX_VOICE*(sh.gain??1)*sh.layer.gain,sh.layer.type||'sine',out);});
- if(sh.noise)noiseVoice(t0+(sh.noise.at??0),sh.noise.dur??.09,SFX_VOICE*(sh.noise.gain??1),sh.noise,out);
+ for(const nz of [].concat(sh.noise||[]))noiseVoice(t0+(nz.at??0),nz.dur??.09,SFX_VOICE*(nz.gain??1),nz,out);
  /* coin ticks: the same ping, the same level, only the count differs between price modes. v2.9.2 H2: the first tick is
     the register's impact (x1.3, like `hit`); 바가지's run starts `tickLate` later on a lower first tick (`tickLow`) - the
     whole run moves, so the 70 ms spacing that states the count is kept. */

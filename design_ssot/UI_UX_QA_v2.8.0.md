@@ -2760,6 +2760,8 @@ PASS:
   feel louder than the other phases
 - cues of one tier sound as one loudness (§SFX LEVELS) - none jumps out, none disappears; runtime evidence
   `tools/qa-sfx-mix.cjs`
+- cues that mean different things are told apart by ear (§DISTINCT CUES): a Decoration fitted is not a FINAL hit, a SLOTH
+  seal breaking is not a Boss reveal, the CLOSING receipt is not an ORDER crate, a menu click is not a quantity tick
 - mute, the BGM slider, a hidden page and coming back behave as UI-Q-v28-22 requires
 - no audio-related console or runtime error
 - runtime evidence: `tools/qa-bgm.cjs` (in `npm run qa:runtime`)

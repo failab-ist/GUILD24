@@ -142,6 +142,12 @@ the owner headers and in the git tag.
   shelf blocked 구급키트 / 귀환석 / 세계수 생환부적 as it should, but the D30 order sheet still offered them unmarked (207 of 800
   measured D30 sheets, 26%) - D30 has no SALE, so each was Gold with no use. The D30 sheet, rerolls included, no longer offers
   them; D30 Store Supports already worked this way and were rechecked (17-support exclusion set matches RELIC).
+- **Cues that mean different things sound different** - UI_UX §AUDIO FEEDBACK — DISTINCT CUES, UI-Q-v29-47 (User 2026-09-29,
+  from play): three pairs meant different things but shared one sound (measured alike 0.75 / 0.997 / 0.993) - the Decoration
+  fixture and the FINAL clash, the SLOTH seal-break and the Boss information motif, the CLOSING receipt and the ORDER crate.
+  Each got its own synthesised sound, checked against its neighbours (all below 0.6). The UI click and the quantity ticks,
+  masked by the music even at their tier's loudest, are new bright synthesised sounds now heard over it; their two recorded
+  files no longer ship. The SALE price modes and the quantity pair stay one family on purpose.
 - **The ending waits for its result** - UI_UX §AUDIO FEEDBACK — PHASE BGM, §ENDING CUE, UI-Q-v29-47 (User 2026-09-29): the
   ending track must not tell the result early. The screen the ending came from keeps its music (BOSS through the Final and
   the clash, CLOSE after a bankruptcy, NIGHT after the Death limit) until the result lands - the seal's landing, or one beat
