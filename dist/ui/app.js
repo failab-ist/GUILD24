@@ -24,6 +24,10 @@ let preRunReturn=false;
 /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): the ending's `다음 점포 열기` shows the preparation scene over a Run
    that has ended, with a way back to its result; nothing about the Run changes until `첫 점포지원 고르기`. */
 let prepOpen=false;
+/* v3.0 BGM (User 2026-09-29): the key the music follows. The ending plays the success or the failure track, and the
+   screens with no phase of their own - no Run, 첫 점포지원, the store about to open - play the title. */
+function audioPhase(){const s=game.run;if(!s||s.phase==='foundation'||(s.phase==='end'&&prepOpen))return 'prep';
+ return s.phase==='end'?(s.win?'end-win':'end-fail'):s.phase;}
 /* UI_UX_v2.8 §PURCHASE CONFIRMATION. Which Decoration is waiting for a confirmation, if any.
    Deliberately not persisted: a reload is a cancel, so a reopened page can never resume a
    half-finished purchase and spend the Capital a second time. */
@@ -44,7 +48,7 @@ function toast(msg){const t=$('#toast'),m=String(msg);
   t.innerHTML='<b class="toast-label">'+E(UNLOCK_LABEL)+'</b><span class="toast-name">'+E(m.slice(UNLOCK_LABEL.length+3))+'</span>';}
  else{t.classList.remove('unlock');t.textContent=m;}
  $('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),3400);}
-function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,game.run?.phase,st);Sound.play(kind);}
+function sound(kind='sale'){const st=game.account.settings;Sound.sync(st.muted,audioPhase(),st);Sound.play(kind);}
 /* the heal accent sits behind the arrival's own cue, the same way `rescue` sits behind an Outcome */
 function healCue(){const s=game.run,n=s?.phase==='sell'&&game.current();if(n?.healedBy)Sound.play('heal',.22);}
 /* UI_UX_v2.8 §NIGHT OUTCOME AUDIO. The Outcome is what the cue says, always. There are two ways
@@ -543,7 +547,7 @@ function stampPress(el){
 }
 function render(){
  if(clash)return finishClash(); // a redraw during the FINAL clash lands on the ending it was playing toward
- const s=game.run;Sound.sync(game.account.settings.muted,s?.phase,game.account.settings);
+ const s=game.run;Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
  /* UI_UX §NEW STORE PREPARATION — STORE SCENE (v2.9.9): with no Run - and from the ending after `다음 점포 열기` - the
     screen is the store about to open, not a panel over a title card. It has no way back when there is no Run: its
     Action starts one. */
@@ -2297,7 +2301,7 @@ async function action(el){const a=el.dataset.action,id=el.dataset.id,s=game.run;
   const before=Object.fromEntries(groupStock().map(st=>[st.item,st.count])),used=s.inventory.length,gold=s.money,
    skus=[...new Set(Object.entries(s.cart||{}).filter(([,q])=>q).map(([i])=>s.offers[i].item))];
   orderCueAt.forEach(clearTimeout);orderCueAt=[];game.confirmOrder();
-  if(motionOK()){cue='order';handoff={before,used,gold,skus};Sound.sync(game.account.settings.muted,s.phase,game.account.settings);}else sound('order');
+  if(motionOK()){cue='order';handoff={before,used,gold,skus};Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);}else sound('order');
   render();break;}
  case'open-store':game.open();sound('open');render();break;
  case'shop':setModal(null);break;
@@ -2495,14 +2499,14 @@ document.addEventListener('focusout',ev=>{
  t.open=false;});
 document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeTips(null);if(ev.ctrlKey&&ev.shiftKey&&ev.code==='KeyD'&&game.run){ev.preventDefault();setModal('debug');return;}if(ev.key==='Escape'&&modal&&game.run?.phase!=='foundation'&&!d0Owed())setModal(null);if(ev.key==='Tab'&&modal){const els=[...$('#modal-root').querySelectorAll('button:not(:disabled),input,select,summary,[tabindex="0"]')].filter(e=>e.getClientRects().length),first=els[0],last=els.at(-1);if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last?.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first?.focus();}}});
 $('#save-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{const save=Save.import(await file.text());game=new Game(save.account,save.run);game.save();selected=null;setModal(null);render();toast('이어서 영업할 준비가 됐습니다.');}catch(e){toast('저장 파일을 읽지 못했습니다. '+e.message);}ev.target.value='';});
-window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,game.run?.phase);});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);});
+window.addEventListener('pagehide',()=>{game.save();Sound.sync(true,audioPhase());});document.addEventListener('visibilitychange',()=>{if(document.hidden)game.save();Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);});
 /* The two volume sliders. Dragging one is audible at once and saved when it is let go, so a
    drag is not a hundred writes to storage. Neither slider re-renders the screen: a redraw
    would replace the control under the pointer and end the drag. */
 document.addEventListener('input',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  const key=el.dataset.mix,v=Math.min(100,Math.max(0,Number(el.value)||0))/100;
  game.account.settings[key]=v;
- Sound.sync(game.account.settings.muted,game.run?.phase,game.account.settings);
+ Sound.sync(game.account.settings.muted,audioPhase(),game.account.settings);
  const out=$('#'+el.id+'-val');if(out)out.textContent=Math.round(v*100)+'%';});
 document.addEventListener('change',ev=>{const el=ev.target.closest('[data-mix]');if(!el)return;
  game.save();if(el.dataset.mix==='sfx')sound('button');});

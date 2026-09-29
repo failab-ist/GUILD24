@@ -1706,9 +1706,10 @@ test('UI-Q-v28-22: one engine, a real hierarchy, and no cue that stacks on a fas
  const code=audio.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
  assert.ok(!/Math\.random/.test(code),'no cue draws a random number');
  assert.ok(!/XMLHttpRequest|new Audio\(|<audio/i.test(code),'no second playback path was introduced');
- // one fetch, of this build's own vendored files, and never of a remote host
- assert.equal((code.match(/fetch\(/g)||[]).length,1,'there is exactly one loader');
- assert.ok(/SAMPLE_DIR='ui\/assets\/audio\/'/.test(code)&&!/https?:\/\//.test(code),'and it only reads this build');
+ // two fetches - the cue samples and, since v3.0 (User 2026-09-29), the phase music - both of this build's own vendored
+ // files, and never of a remote host
+ assert.equal((code.match(/fetch\(/g)||[]).length,2,'one loader for the cue samples, one for the phase music');
+ assert.ok(/SAMPLE_DIR='ui\/assets\/audio\/'/.test(code)&&/BGM_DIR='ui\/assets\/bgm\/'/.test(code)&&!/https?:\/\//.test(code),'and they only read this build');
  assert.ok(/if\(loaded\|\|!ctx/.test(code),'it runs once, and never before there is a context');
  const shp=audio.slice(audio.indexOf('const shape={'),audio.indexOf('function play('));
  const spec=name=>{const i=shp.indexOf('\n '+name+':{');assert.ok(i>0,name+' names its own shape');
@@ -3525,5 +3526,35 @@ test('UI-Q-v29-10..13: task line, first-ORDER coach order, Hazard sentences and 
  assert.ok(!/gateCounts\(/.test(fn('morningScreen')),'MORNING states the total only');
 });
 
+
+// v3.0 BGM (User 2026-09-29): a recorded track per phase, played between measured loop points from the decoded buffer.
+// The contract: every music key has its own shipped file, byte-identical to the User's source, the ending splits into
+// success and failure, the loop points stay inside the full-track rule the User set, only BOSS joins with a long
+// crossfade, the recorded music goes through the player's BGM bus, and a failed load still has a synthesised bed.
+test('v3.0 BGM: one recorded track per phase, looped between its measured points',()=>{
+ const audio=read('dist/ui/audio.js'),Sound=require('../dist/ui/audio.js')&&globalThis.Sound,crypto=require('node:crypto');
+ const phases={prep:'title',foundation:'title',morning:'morning',order:'order',sell:'sale',night:'night',closing:'close',final:'boss','end-win':'succ','end-fail':'fail'};
+ for(const [ph,key] of Object.entries(phases))assert.equal(Sound.trackFor(ph),key,ph+' plays '+key);
+ assert.equal(Sound.trackFor(undefined),'title','no Run plays the title');
+ const src={title:'TITLE_beneath_the_root',morning:'MORNING_the_sunken_courtyard',order:'ORDER_before_the_next_turn',sale:'SALE_copper_key',
+  night:'NIGHT_valley_of_sunken_bells',close:'CLOSE_the_stone_path',boss:'BOSS_beneath_the_stone_floor',succ:'SUCC_step_into_the_canopy',fail:'FAIL_late_shift_at_the_dungeon_gate'};
+ const md5=f=>crypto.createHash('md5').update(fs.readFileSync(path.join(__dirname,'..',f))).digest('hex');
+ assert.deepEqual(Object.keys(Sound.music).sort(),Object.keys(src).sort(),'every music key has a loop entry');
+ for(const [key,name] of Object.entries(src)){
+  assert.equal(md5('dist/ui/assets/bgm/'+key+'.mp3'),md5('assets-src/bgm/'+name+'.mp3'),key+'.mp3 is the User\'s bytes, renamed only');
+  const t=Sound.music[key];
+  assert.ok(t.s>=0&&t.s<=15,key+': Start stays within the first 15 s');
+  assert.ok(t.e>t.s+60,key+': the loop keeps the track, not an excerpt');
+  assert.ok(Number.isFinite(t.lufs),key+': a measured loudness to trim against');
+  assert.equal(!!t.cross,key==='boss',key+(key==='boss'?': BOSS alone crossfades':': short join'));
+  assert.ok(t.cross?t.xf===1:t.xf<=.06,key+': the join fade');}
+ assert.ok(!fs.existsSync(path.join(__dirname,'..','dist/ui/assets/bgm/boss2.mp3')),'BOSS2 was not adopted and does not ship');
+ assert.ok(/out\.connect\(bgmBus\)/.test(audio),'the recorded music goes through the player-owned BGM bus');
+ assert.ok(/bedStart\(next\)/.test(audio)&&/tunes\[bedFor\[key\]\|\|key\]/.test(audio),'a failed load falls back to the synthesised bed');
+ assert.ok(!/https?:\/\//.test(audio.match(/BGM_DIR='([^']*)'/)[1]),'the music is read from this build, never a host');
+ const app=read('dist/ui/app.js');
+ assert.ok(/s\.phase==='end'\?\(s\.win\?'end-win':'end-fail'\)/.test(app),'the ending hands in success or failure');
+ assert.ok(!/Sound\.sync\([^)]*\?\.phase/.test(app)&&!/Sound\.sync\([^)]*s\.phase/.test(app),'every sync goes through audioPhase()');
+});
 
 console.log(count+' ui guard groups passed');
