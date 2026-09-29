@@ -5,6 +5,7 @@
 //     the old pass fades out over `xf` and the new one fades in (5 ms, BOSS 1 s) - checked by releasing the
 //     2 s-ahead pass timer early instead of waiting three minutes
 //   - one track at a time; a phase change fades the old track out, and the next one starts only after that fade
+//   - leaving the ending for the next store (다음 점포 열기) does the same: the title comes in after the ending track's fade
 //   - the next phase's file is fetched ahead (bytes only), so the day's chain never waits on the network
 //   - mute and a hidden page stop the music; coming back resumes the same track
 //   - coming back to the page resumes a suspended context without waiting for a tap (iOS `interrupted`)
@@ -131,6 +132,15 @@ const SPY=()=>{window.__bgm={starts:[],curves:[],held:[],osc:0};
   await p.waitForTimeout(700);
   check('when the result lands, the ending cue plays and FAIL comes in',await p.evaluate(()=>__cues.includes('endfail'))&&fetched.slice(fe).includes('fail'),fetched.slice(fe).join(','));
   check('render() on a failed ending asks for fail.mp3 (and the title ahead) or keeps it decoded',fetched.slice(fe).every(k=>k==='fail'||k==='title'));
+  // User 2026-09-29 ("클리어하고 타이틀로 넘어오는데 브금 시작이 이상한데"): leaving the ending for the next store, the title
+  // comes in only after the ending track's fade-out - the two never sound at once (the deployed v2.9.11 started it on decode)
+  {await waitStart(await p.evaluate(()=>__bgm.starts.length));await p.waitForTimeout(400);
+   const n=await p.evaluate(()=>__bgm.starts.length);
+   const at=await p.evaluate(()=>{const b=document.querySelector('[data-action="new"]');const t=__bgm.ctx.currentTime;b&&b.click();return b?t:null;});
+   const ok=at!==null&&await waitStart(n+1),s=ok&&await p.evaluate(k=>__bgm.starts[k],n);
+   check(`다음 점포 열기: the title starts after the ending track's ${fades.out} s fade-out (never both at once)`,
+    !!s&&s.when>=at+fades.out-.05,s?`starts ${(s.when-at).toFixed(2)} s after the press`:'no start');
+   check('and at its loop start',!!s&&Math.abs(s.offset-music.title.s)<.002,s&&s.offset.toFixed(3));}
   check('no page or console error',errors.length===0,errors.slice(0,3).join(' | '));
  }finally{await browser.close();server.kill();}
  const failed=results.filter(x=>!x).length;
