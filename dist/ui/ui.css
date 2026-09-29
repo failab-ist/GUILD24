@@ -390,20 +390,18 @@ input[type=text],.seed-field{background:#0b0806;border:0;box-shadow:inset 2px 2p
 .board-rail.death-limit-row{margin:10px 16px 0}
 .board-rail.death-limit-row b{margin-left:0}
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the 오늘 line joins the floating rail only while its own block
-   is out of view; a rule and its own small label keep it apart from the Death count above it */
-.rail-today{display:none;flex:1 0 100%;margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #f0dcb24d;
- font:400 13px/1.4 var(--ui);letter-spacing:0;color:#f0dcb2;-webkit-font-smoothing:antialiased}
-.rail-today i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.12em;color:#c9ad7c;margin-right:8px}
-.rail-today em{font-style:normal;font-weight:600;color:#fff0c9}
-.board-rail.show-today .rail-today{display:block}
-/* v2.9.11 quick patch (User 2026-09-29): the ledger's 발주 후, last in the rail - the Death count and 오늘 are what the
-   order is read against, this is the number each tap moves, so it sits nearest the rows being tapped */
-.rail-gold{display:none;flex:1 0 100%;margin-top:6px;padding-top:6px;box-shadow:inset 0 1px 0 #f0dcb24d;
- font:400 13px/1.4 var(--ui);color:#f0dcb2;-webkit-font-smoothing:antialiased}
-.rail-gold i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.12em;color:#c9ad7c;margin-right:8px}
-.rail-gold b{margin-left:0;font:600 16px/1.2 var(--ui);color:#fff0c9}
-.rail-gold.short b{color:#e8907c}
-.board-rail.show-gold .rail-gold{display:block}
+   is out of view, and the ledger's 발주 후 last (v2.9.11 quick patch, User 2026-09-29) - the Death count and 오늘 are what
+   the order is read against, 발주 후 is the number each tap moves, so it sits nearest the rows being tapped.
+   User 2026-09-29: one type ladder for the whole box - every line is a small label (사망 / 오늘 / 발주 후) in one column and
+   its value in one face and size - on a tight box, a hairline between lines. */
+.board-rail.death-limit-row{display:block;padding:6px 12px}
+.death-limit-row .rail-line{display:grid;grid-template-columns:44px 1fr;column-gap:8px;align-items:baseline}
+.death-limit-row .rail-line i{font-style:normal;font:600 11px/1 var(--ui);letter-spacing:.08em;color:#c9ad7c;-webkit-font-smoothing:antialiased}
+.death-limit-row .rail-line b{margin:0;font:500 13px/1.35 var(--ui);letter-spacing:0;color:#fff0c9;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.death-limit-row .rail-line b em{font-style:normal}
+.death-limit-row .rail-today,.death-limit-row .rail-gold{display:none;margin-top:4px;padding-top:4px;box-shadow:inset 0 1px 0 #f0dcb233}
+.board-rail.show-today .rail-today,.board-rail.show-gold .rail-gold{display:grid}
+.death-limit-row .rail-gold.short b{color:#e8907c}
 .pinned{display:grid;gap:12px;padding:12px 10px 14px}
 /* a pinned paper slip */
 .slip{position:relative;display:block;width:100%;text-align:left;padding:14px 12px 12px;

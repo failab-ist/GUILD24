@@ -707,8 +707,11 @@ function deepOfferUI(n){
 /* UI_UX §DEATH LIMIT — ALWAYS VISIBLE (MORNING/ORDER, v2.9.1 balance): one compact item, the
    same line on both screens - count / current segment limit / the Day it ends. The limit already
    includes 추모 방명록 and 위령제 (Meta.deathLimit). Warning color only at count = limit - 1. */
-function deathLimitItem(){const s=game.run,n=s.stats.deaths,limit=Meta.deathLimit(s),end=Meta.deathLimitSegmentEnd(s);
- return '<b class="death-limit'+(n===limit-1?' warn':'')+'">사망 '+n+' / '+limit+' · D'+end+'까지</b>';}
+/* `labelled`: the ORDER floating box sets 사망 as its line label, in the column 오늘 and 발주 후 share (User 2026-09-29) -
+   the same words, split into label and value */
+function deathLimitItem(labelled){const s=game.run,n=s.stats.deaths,limit=Meta.deathLimit(s),end=Meta.deathLimitSegmentEnd(s),warn=n===limit-1?' warn':'';
+ return labelled?'<i>사망</i><b class="death-limit'+warn+'">'+n+' / '+limit+' · D'+end+'까지</b>'
+  :'<b class="death-limit'+warn+'">사망 '+n+' / '+limit+' · D'+end+'까지</b>';}
 /* The board is hung high on the wall, directly under the day sign, because that is the
    order the morning is read in: DAY, then today's expedition, then the Gates and their
    Hazards, then the float on the counter, then the shutter. The scenery keeps whatever
@@ -1460,9 +1463,9 @@ function orderForm(){const s=game.run,total=game.cartTotal(),after=s.money-total
    /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25): the rail floats while the order is scrolled; once the
       `오늘` block has gone under it, the same line rides in the rail's own box under a rule, so the Gates and their
       visitors stay in view while the player orders. Hidden while the block itself is on screen. */
-   +'<p class="board-rail death-limit-row'+railShown+'">'+deathLimitItem()
-     +'<span class="rail-today" aria-hidden="true"><i>오늘</i>'+todayLine(counts)+'</span>'
-     +'<span class="rail-gold'+(after<0?' short':'')+'" aria-hidden="true"><i>발주 후</i><b>'+fmt(after)+'G</b></span></p>'
+   +'<p class="board-rail death-limit-row'+railShown+'"><span class="rail-line">'+deathLimitItem(true)+'</span>'
+     +'<span class="rail-line rail-today" aria-hidden="true"><i>오늘</i><b>'+todayLine(counts)+'</b></span>'
+     +'<span class="rail-line rail-gold'+(after<0?' short':'')+'" aria-hidden="true"><i>발주 후</i><b>'+fmt(after)+'G</b></span></p>'
    +'<div class="ledger" id="order-register" aria-label="발주 대금">'
    +'<div><span>운영비(예상)</span><b>'+fmt(game.expectedOperatingCost())+'</b></div>'
    +'<div><span>창고 잔여 칸</span><b style="font-size:16px">'+(game.capacity()-s.inventory.length)+' / '+game.capacity()+'</b></div>'

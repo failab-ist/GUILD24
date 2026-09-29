@@ -140,7 +140,8 @@ the owner headers and in the git tag.
   a tap. The silent switch keeps Safari's default (the game is silent; another app's music is never stopped). No gameplay change.
 - **ORDER floating rail carries 발주 후** - UI_UX §DEATH LIMIT — ALWAYS VISIBLE (ORDER — FLOATING TODAY LINE), UI-Q-v29-29
   (User 2026-09-29): scrolled past the ledger, the floating box adds the ledger's `발주 후` last, under `오늘` - the number each
-  tap moves, nearest the rows being tapped. Each copy is now measured against the stuck box's real lower edge and set again
+  tap moves, nearest the rows being tapped. The box is tightened to one type ladder: `사망` / `오늘` / `발주 후` as labels in
+  one column, every value in one face and size. Each copy is now measured against the stuck box's real lower edge and set again
   when the box grows, which also closes a 10~20 px stretch where the `오늘` block sat under the box with no copy.
 - **BGM / SFX mix** - UI_UX §AUDIO FEEDBACK — PHASE BGM, UI-Q-v29-47 (User 2026-09-29, from play): measured on the page's own
   output (`reports/bgm-sfx-mix-v2911.md`), most decision and result cues landed under the music, against PRESENTATION §Mix.

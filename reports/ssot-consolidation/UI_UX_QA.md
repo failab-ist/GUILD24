@@ -1837,3 +1837,12 @@ quantity tap without the box blinking, and turns the short color below zero (v2.
 - no scroll position where a source is hidden under the box without its copy, or shown twice
 - `발주 후` in the box differs from the ledger, lags a tap, or sits above the Death line
 ```
+
+
+## v2.9.11 quick patch — ORDER floating box type ladder (User 2026-09-29)
+
+New:
+
+```new
+- the three labels share one column and one style, the three values one size; the box stays tight
+```

@@ -1232,10 +1232,11 @@ test('UI_UX §RESPONSIVE / §PHASE UI: the decision gets the room, at every widt
  assert.ok(dl.includes('Meta.deathLimit(s)')&&dl.includes('Meta.deathLimitSegmentEnd(s)'),
   'the line reads the segment table through Meta, not a copy of it');
  assert.ok(/'">사망 '\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'exact COPY_AUDIT §4-23 format');
- assert.ok(/n===limit-1\?' warn':''/.test(dl),'warning color exactly at count = limit - 1');
+ assert.ok(/warn=n===limit-1\?' warn':''/.test(dl),'warning color exactly at count = limit - 1');
  assert.ok(!/popover|badge|title=/.test(dl),'no popover, badge or extra text');
  assert.ok(fn('morningScreen').includes('deathLimitItem()'),'MORNING shows the line, always on screen');
- assert.ok(fn('orderForm').includes('deathLimitItem()'),'ORDER shows the same line');
+ assert.ok(fn('orderForm').includes('deathLimitItem(true)'),'ORDER shows the same line, 사망 set as its label (User 2026-09-29)');
+ assert.ok(/labelled\?'<i>사망<\/i><b class="death-limit'\+warn\+'">'\+n\+' \/ '\+limit\+' · D'\+end\+'까지<\/b>'/.test(dl),'the same words, split into label and value');
 
  /* D-6 / ECONOMY_ORDER §ORDER. Half of what to order is decided by what is on the shelf, and
     the form showed only a per-SKU 재고 N. The warehouse is on it now, from the same grouping
@@ -1799,16 +1800,17 @@ test('FINAL: the last order first, the pick from the notebook, the Stat grid whi
 /* UI_UX §ORDER — FLOATING TODAY LINE (User 2026-09-25; 발주 후 joins it, v2.9.11 quick patch, User 2026-09-29) */
 test('ORDER: the 오늘 line and 발주 후 ride in the floating Death rail only while their own source is out of view',()=>{
  const of=fn('orderForm');
- assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+'">'\+deathLimitItem\(\)\s*\+'<span class="rail-today" aria-hidden="true"><i>오늘<\/i>'\+todayLine\(counts\)\+'<\/span>'\s*\+'<span class="rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
-  'Death first, then 오늘, then 발주 후 last - the ledger\'s own `after`, short in the ledger\'s warning');
+ assert.ok(/'<p class="board-rail death-limit-row'\+railShown\+'"><span class="rail-line">'\+deathLimitItem\(true\)\+'<\/span>'\s*\+'<span class="rail-line rail-today" aria-hidden="true"><i>오늘<\/i><b>'\+todayLine\(counts\)\+'<\/b><\/span>'\s*\+'<span class="rail-line rail-gold'\+\(after<0\?' short':''\)\+'" aria-hidden="true"><i>발주 후<\/i><b>'\+fmt\(after\)\+'G<\/b><\/span><\/p>'/.test(of),
+  'Death first, then 오늘, then 발주 후 last - each a label and a value; 발주 후 is the ledger\'s own `after`, short in the ledger\'s warning');
  assert.ok(/'<p>'\+todayLine\(counts,'b'\)/.test(of),'one owner writes both copies');
  const w=fn('watchOrderToday');assert.ok(/new IntersectionObserver/.test(w)&&/e\.target===brief\?'show-today':'show-gold',!e\.isIntersecting&&e\.boundingClientRect\.top</.test(w),'each shown only once its own source has gone above, under the rail');
  assert.ok(/orderWatch\.observe\(brief\);if\(out\)orderWatch\.observe\(out\)/.test(w)&&/\$\('\.p-order #order-register \.out'\)/.test(w),'발주 후 watches the ledger line, 오늘 its own block');
  assert.ok(/edge=\(parseFloat\(getComputedStyle\(sc\)\.paddingTop\)\|\|0\)\+h/.test(w)&&/if\(rail\.offsetHeight!==h\)watchOrderToday\(\)/.test(w),'measured against the stuck rail\'s real edge, set again when the rail grows or shrinks');
  assert.ok(/railShown=\['show-today','show-gold'\]/.test(w)&&/railShown='';/.test(app),'a quantity redraw keeps what is shown; leaving ORDER forgets it');
- assert.ok(/\.rail-gold\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-gold \.rail-gold\{display:block\}/.test(css)&&/\.rail-gold\.short b\{color:/.test(css),'hidden by default, set apart by a rule, short reads as short');
+ assert.ok(/\.death-limit-row \.rail-today,\.death-limit-row \.rail-gold\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today,\.board-rail\.show-gold \.rail-gold\{display:grid\}/.test(css)&&/\.rail-gold\.short b\{color:/.test(css),'hidden by default, set apart by a rule, short reads as short');
+ // one type ladder (User 2026-09-29): every label in one column and style, every value in one face and size
+ assert.ok(/\.death-limit-row \.rail-line\{display:grid;grid-template-columns:44px 1fr/.test(css)&&/\.death-limit-row \.rail-line i\{[^}]*font:600 11px/.test(css)&&/\.death-limit-row \.rail-line b\{[^}]*font:500 13px/.test(css),'one label column, one value size');
  assert.ok(/if\(phase==='order'\)watchOrderToday\(\)/.test(app),'watched on ORDER only');
- assert.ok(/\.rail-today\{display:none;[^}]*box-shadow:inset 0 1px 0/.test(css)&&/\.board-rail\.show-today \.rail-today\{display:block\}/.test(css),'hidden by default, set apart by a rule');
 });
 
 /* UI_UX §SALE — COUNTER TRAY FOLD (User 2026-09-25): scrolling the shelf or tapping elsewhere folds the tray to its header */

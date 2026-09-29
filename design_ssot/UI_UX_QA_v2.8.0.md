@@ -1624,6 +1624,7 @@ PASS:
 - scrolled past the ledger, `발주 후` joins last, under its own rule and label; it equals the ledger's value, follows every
   quantity tap without the box blinking, and turns the short color below zero (v2.9.11 quick patch, User 2026-09-29)
 - no scroll position where a source is hidden under the box without its copy, or shown twice
+- the three labels share one column and one style, the three values one size; the box stays tight
 
 FAIL:
 - the 오늘 line doubled while its block is on screen, merged into the Death sentence, or a count that differs from the block
