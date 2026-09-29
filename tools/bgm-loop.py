@@ -15,7 +15,7 @@ MP3 (the 4 s before End, then the 4 s after Start). Similarity is only a support
 Nothing is written into the game; the source files stay untouched.
 
   pip install imageio-ffmpeg numpy
-  python3 tools/bgm-loop.py [--out DIR] [--json FILE] [--start NAME=SEC ...] [--search-end NAME ...] [FILES...]
+  python3 tools/bgm-loop.py [--out DIR] [--json FILE] [--start NAME=SEC ...] [--search-end NAME ...] [--search-start NAME ...] [FILES...]
 """
 import argparse, glob, json, os, subprocess, sys
 import numpy as np
@@ -229,7 +229,7 @@ def pick_ends(sim, lvl, p5, M, o, fps, dur, s, beat, x44):
     return out, dict(final_hit=fh, last_core=lc, last_sound=(last + 1) * BLK)
 
 
-def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3):
+def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3, use_pre=True):
     """End re-search inside the last E_WIN seconds (User 2026-09-29, for joins that sound cut off,
     off-harmony or like a sudden mood change): every beat-grid point from S up to the final hit is
     scored by how much the original music right after E resembles the music right after S (harmony +
@@ -255,7 +255,7 @@ def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3):
         step = db(e, e + 0.5) - lvl_s
         ot, _ = onset_near(o, fps, e, before=0.06, after=0.06, strong=0.2)
         cut = max(0.0, ring - (M - 10)) * (0.5 if ot is not None else 1.0)
-        score = cont + 0.3 * pre - 0.03 * abs(step) - 0.02 * cut + (0.05 if n % 4 == 0 else 0)
+        score = cont + (0.3 * pre if use_pre else 0) - 0.03 * abs(step) - 0.02 * cut + (0.05 if n % 4 == 0 else 0)
         out.append((score, n, e, ot, cont, pre, ring, step))
     out.sort(reverse=True)
     picked = []
@@ -269,6 +269,7 @@ def search_ends(F, fps, x44, o, s, beat, dur, fh, M, top=3):
         e2 = hires(x44, ot) if ot is not None else e
         res.append(dict(end=round(e2, 3), beats=int(n), grid_end=round(e, 3), onset_at_end=ot is not None,
                         onset_err_ms=round((ot - e) * 1000) if ot is not None else None, score=round(score, 3),
+                        cont=round(cont, 2), pre=round(pre, 2) if before_s is not None else None, ring_db=round(ring, 1),
                         reason='끝 구간 재탐색: E 뒤 원곡 2초가 S 뒤 2초와 닮은 정도 %.2f%s, 끊기는 소리 %.0f dB(core %.0f dB)%s, E 뒤 원곡 대비 S 음량 차 %+.1f dB, %d박(나머지 %d) → 점수 %.2f' % (
                             cont, ', E 앞 2초와 S 앞 2초 %.2f' % pre if before_s is not None else '', ring, M,
                             ', E에 온셋 있음' if ot is not None else '', -step, n, n % 4, score)))
@@ -311,6 +312,8 @@ def main():
     ap.add_argument('--json')
     ap.add_argument('--search-end', action='append', default=[], metavar='NAME',
                     help='also re-search End over the last 25 s on the beat grid (top 3 per Start)')
+    ap.add_argument('--search-start', action='append', default=[], metavar='NAME',
+                    help='with --search-end: also move Start over beat-grid onsets up to 15 s (top 3 Start/End pairs)')
     ap.add_argument('--start', action='append', default=[], metavar='NAME=SEC',
                     help='extra Start to compare, e.g. a listener\'s suggestion; snapped to the onset at SEC -0.1/+0.3 s')
     a = ap.parse_args()
@@ -396,6 +399,41 @@ def main():
                                       kept_pct=round(100 * (e['end'] - s) / dur, 1), trim_start=round(s, 2),
                                       trim_end=round(dur - e['end'], 2), beat=round(beat, 4), bpm=round(60 / beat, 2),
                                       ok_start=bool(s <= S_MAX), ok_end=bool(e['end'] >= dur - E_WIN), seam=p, **sm))
+        if name in a.search_start and name in a.search_end:
+            # Start and End together: every beat-grid onset of the automatic Start's grid up to S_MAX,
+            # each with its best Ends; ranked without the pre-context term so a 0 s Start compares fairly
+            s0, pool = starts[0][0], []
+            for kb in range(0, int((S_MAX - s0) / beat1) + 1):
+                g = s0 + kb * beat1
+                ot, _ = onset_near(o, fps, g, before=0.06, after=0.06, strong=0.2)
+                if ot is None and kb:
+                    continue
+                s_ = s0 if kb == 0 else hires(x44, ot)
+                for e in search_ends(F, fps, x44, o, s_, beat1, dur, einfo['final_hit'], M, top=3, use_pre=False):
+                    pool.append((e['score'], s_, kb, e))
+            pool.sort(key=lambda t: -t[0])
+            picked = []
+            for sc, s_, kb, e in pool:
+                if any(abs(c['start'] - round(s_, 3)) < beat1 / 2 and abs(c['end'] - e['end']) < beat1 / 2 for c in cands):
+                    continue
+                if all(abs(s_ - q[1]) >= 2 * beat1 or abs(e['end'] - q[3]['end']) >= 2 * beat1 for q in picked):
+                    picked.append((sc, s_, kb, e))
+                if len(picked) == 3:
+                    break
+            for pi, (sc, s_, kb, e) in enumerate(picked):
+                sm = seam_metrics(stereo, 44100, s_, e['end'], M)
+                sm['xfade_ms'] = 10 if e['onset_at_end'] else 60
+                tag = 'P%d' % (pi + 1)
+                p = os.path.join(a.out, '%s-%s.mp3' % (name, tag))
+                seam(stereo, 44100, s_, e['end'], p, xf=sm['xfade_ms'] / 1000)
+                cands.append(dict(id=tag, start=round(s_, 3), start_reason='Start · End 함께 재탐색: 자동 Start 격자의 %d박 뒤 온셋 %.3f초' % (kb, s_),
+                                  end=e['end'], end_reason=e['reason'].replace('끝 구간 재탐색', '쌍 재탐색(앞 맥락은 순위에서 제외)'),
+                                  beats=e['beats'], beats_mod4=e['beats'] % 4, onset_at_end=bool(e['onset_at_end']),
+                                  onset_err_ms=e['onset_err_ms'], length=round(e['end'] - s_, 2),
+                                  kept_pct=round(100 * (e['end'] - s_) / dur, 1), trim_start=round(s_, 2),
+                                  trim_end=round(dur - e['end'], 2), beat=round(beat1, 4), bpm=round(60 / beat1, 2),
+                                  ok_start=bool(s_ <= S_MAX), ok_end=bool(e['end'] >= dur - E_WIN), seam=p,
+                                  cont=e['cont'], ring_db=e['ring_db'], **sm))
         rows.append(dict(file=f, name=name, duration=round(dur, 2), bpm_est=round(bpm0, 1), key=k, key_fit=kc,
                          lufs=lufs, lra=lra, core_level=round(M, 1), core_sim_p5=round(p5, 2), end_info=einfo, candidates=cands))
         print(name, json.dumps(rows[-1], ensure_ascii=False, default=float))
